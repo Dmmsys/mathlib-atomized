@@ -84,10 +84,10 @@ structure DiscreteQuotient
 
 中文:
 结构 DiscreteQuotient
-  参数: (X : 类型) [TopologicalSpace X]
-  继承: Setoid X
+  参数: (X : 类型) [拓扑空间 X]
+  继承: 集合等价关系 X
   公理与运算 (1 个):
-    - isOpen_setOfPred_rel : 对任意 x, IsOpen (Set.ofPred (toSetoid x))
+    - isOpen_setOfPred_rel : 对任意 x, 是开集 (集合.ofPred (toSetoid x))
 -/
 structure DiscreteQuotient (X : Type*) [TopologicalSpace X] extends Setoid X where
   /-- For every point `x`, the set `{ y | Rel x y }` is an open set. -/
@@ -109,7 +109,7 @@ lemma toSetoid_injective
 
 中文:
 引理 toSetoid_injective
-  结论: Function.Injective (@toSetoid X _)
+  结论: 函数.单射 (@toSetoid X _)
 -/
 lemma toSetoid_injective : Function.Injective (@toSetoid X _)
   | ⟨_, _⟩, ⟨_, _⟩, _ => by congr
@@ -125,7 +125,7 @@ definition ofIsClopen
 
 中文:
 定义 ofIsClopen
-  签名: {A : Set X} (h : IsClopen A)
+  签名: {A : 集合 X} (h : IsClopen A)
   定义体: ⟨fun x y => x in A ↔ y in A, fun _ => Iff.rfl, Iff.symm, Iff.trans⟩
   isOpen_setOfPred_rel x := by by_cases hx : x in A <;> simp [hx, h.1, h.2, ← compl_ofPred]
 
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (DiscreteQuotient X) (Type _)
+  签名: CoeSort (DiscreteQuotient X) (类型 _)
   定义体: ⟨fun S => Quotient S.toSetoid⟩
 
 Depends on / 依赖: Quotient, S.toSetoid, toSetoid
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace S
+  签名: 拓扑空间 S
   定义体: inferInstanceAs (TopologicalSpace (Quotient S.toSetoid))
 
 Depends on / 依赖: Quotient, S.toSetoid, TopologicalSpace, toSetoid
@@ -258,7 +258,7 @@ theorem fiber_eq
 中文:
 定理 fiber_eq
   条件: (x : X)
-  结论: S.proj ⁻¹' {S.proj x} = Set.ofPred (S.toSetoid x)
+  结论: S.proj ⁻¹' {S.proj x} = 集合.ofPred (S.toSetoid x)
   证明: Set.ext fun _ => eq_comm.trans Quotient.eq''
 
 Depends on / 依赖: Quotient, Quotient.eq, Set.ext, eq_comm, eq_comm.trans
@@ -276,7 +276,7 @@ theorem proj_surjective
 
 中文:
 定理 proj_surjective
-  结论: Function.Surjective S.proj
+  结论: 函数.满射 S.proj
   证明: Quotient.mk''_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective
@@ -294,7 +294,7 @@ theorem proj_isQuotientMap
 
 中文:
 定理 proj_isQuotientMap
-  结论: IsQuotientMap S.proj
+  结论: 是商映射 S.proj
   证明: isQuotientMap_quot_mk
 
 Depends on / 依赖: isQuotientMap_quot_mk
@@ -312,7 +312,7 @@ theorem proj_continuous
 
 中文:
 定理 proj_continuous
-  结论: Continuous S.proj
+  结论: 连续 S.proj
   证明: S.proj_isQuotientMap.continuous
 
 Depends on / 依赖: S.proj_isQuotientMap.continuous, continuous, proj_isQuotientMap
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology S
+  签名: 离散拓扑 S
   定义体: discreteTopology_iff_isOpen_singleton.2 S.proj_surjective.forall.2 fun x => by
     rw [← S.proj_isQuotientMap.isOpen_preimage]; rw [fiber_eq]
     exact S.isOpen_setOfPred_rel _
@@ -373,7 +373,7 @@ theorem isClopen_preimage
 
 中文:
 定理 isClopen_preimage
-  条件: (A : Set S)
+  条件: (A : 集合 S)
   结论: IsClopen (S.proj ⁻¹' A)
   证明: (isClopen_discrete A).preimage S.proj_continuous
 
@@ -393,8 +393,8 @@ theorem isOpen_preimage
 
 中文:
 定理 isOpen_preimage
-  条件: (A : Set S)
-  结论: IsOpen (S.proj ⁻¹' A)
+  条件: (A : 集合 S)
+  结论: 是开集 (S.proj ⁻¹' A)
   证明: (S.isClopen_preimage A).2
 
 Depends on / 依赖: S.isClopen_preimage, isClopen_preimage
@@ -413,8 +413,8 @@ theorem isClosed_preimage
 
 中文:
 定理 isClosed_preimage
-  条件: (A : Set S)
-  结论: IsClosed (S.proj ⁻¹' A)
+  条件: (A : 集合 S)
+  结论: 是闭集 (S.proj ⁻¹' A)
   证明: (S.isClopen_preimage A).1
 
 Depends on / 依赖: S.isClopen_preimage, isClopen_preimage
@@ -439,7 +439,7 @@ alias isClopen_setOf_rel := isClopen_setOfPred_rel
 中文:
 定理 isClopen_setOfPred_rel
   条件: (x : X)
-  结论: IsClopen (Set.ofPred (S.toSetoid x))
+  结论: IsClopen (集合.ofPred (S.toSetoid x))
   证明: by
   rw [← fiber_eq]
   apply isClopen_preimage
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (DiscreteQuotient X)
+  签名: 最小值 (DiscreteQuotient X)
   定义体: ⟨fun S₁ S₂ => ⟨S₁.1 ⊓ S₂.1, fun x => (S₁.2 x).inter (S₂.2 x)⟩⟩
 -/
 instance : Min (DiscreteQuotient X) :=
@@ -482,7 +482,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (DiscreteQuotient X)
+  签名: 偏序 (DiscreteQuotient X)
   定义体: PartialOrder.lift _ toSetoid_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, toSetoid_injective
@@ -519,7 +519,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (DiscreteQuotient X)
+  签名: 有顶序 (DiscreteQuotient X)
   定义体: ⟨⊤, fun _ => isOpen_univ⟩
   le_top a := by tauto
 
@@ -539,7 +539,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (DiscreteQuotient X)
+  签名: 可居 (DiscreteQuotient X)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (DiscreteQuotient X) := ⟨⊤⟩
@@ -554,7 +554,7 @@ instance inhabitedQuotient
 
 中文:
 实例 inhabitedQuotient
-  签名: [Inhabited X]
+  签名: [可居 X]
   定义体: ⟨S.proj default⟩
 
 Depends on / 依赖: S.proj
@@ -571,8 +571,8 @@ instance [Nonempty
   body: Nonempty.map S.proj ‹_›
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty S
+实例 [非空
+  签名: X] : 非空 S
   定义体: Nonempty.map S.proj ‹_›
 
 Depends on / 依赖: Nonempty, Nonempty.map, S.proj
@@ -589,7 +589,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (⊤ : DiscreteQuotient X)
+  签名: 子单例 (⊤ : DiscreteQuotient X)
   定义体: by rintro ⟨_⟩ ⟨_⟩; exact Quotient.sound trivial
 
 Depends on / 依赖: Quotient, Quotient.sound
@@ -639,7 +639,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: S.comap (ContinuousMap.id X) = S
+  结论: S.comap (连续映射.id X) = S
   证明: rfl
 
 @[simp]
@@ -820,7 +820,7 @@ theorem ofLE_continuous
 中文:
 定理 ofLE_continuous
   条件: (h : A <= B)
-  结论: Continuous (ofLE h)
+  结论: 连续 (ofLE h)
   证明: continuous_of_discreteTopology
 
 @[simp]
@@ -892,8 +892,8 @@ instance [LocallyConnectedSpace
   bot_le S := fun x y (h : connectedComponent x = conne
 
 中文:
-实例 [LocallyConnectedSpace
-  签名: X] : OrderBot (DiscreteQuotient X) where
+实例 [局部连通空间
+  签名: X] : 有底序 (DiscreteQuotient X) where
   定义体: { toSetoid := connectedComponentSetoid X
       isOpen_setOfPred_rel := fun x => by
         convert! isOpen_connectedComponent (x := x)
@@ -925,7 +925,7 @@ theorem proj_bot_eq
 
 中文:
 定理 proj_bot_eq
-  条件: [LocallyConnectedSpace X] {x y : X}
+  条件: [局部连通空间 X] {x y : X}
   证明: Quotient.eq''
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -945,7 +945,7 @@ theorem proj_bot_inj
 
 中文:
 定理 proj_bot_inj
-  条件: [DiscreteTopology X] {x y : X}
+  条件: [离散拓扑 X] {x y : X}
   结论: proj ⊥ x = proj ⊥ y ↔ x = y
   证明: by simp
 -/
@@ -962,8 +962,8 @@ theorem proj_bot_injective
 
 中文:
 定理 proj_bot_injective
-  条件: [DiscreteTopology X]
-  结论: Injective (⊥ : DiscreteQuotient X).proj
+  条件: [离散拓扑 X]
+  结论: 单射 (⊥ : DiscreteQuotient X).proj
   证明: fun _ _ => proj_bot_inj.1
 
 Depends on / 依赖: proj_bot_inj
@@ -982,8 +982,8 @@ theorem proj_bot_bijective
 
 中文:
 定理 proj_bot_bijective
-  条件: [DiscreteTopology X]
-  结论: Bijective (⊥ : DiscreteQuotient X).proj
+  条件: [离散拓扑 X]
+  结论: 双射 (⊥ : DiscreteQuotient X).proj
   证明: ⟨proj_bot_injective, proj_surjective _⟩
 
 Depends on / 依赖: proj_bot_injective, proj_surjective
@@ -1043,7 +1043,7 @@ theorem leComap_id_iff
 
 中文:
 定理 leComap_id_iff
-  结论: LEComap (ContinuousMap.id X) A A' ↔ A <= A'
+  结论: LEComap (连续映射.id X) A A' ↔ A <= A'
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1122,7 +1122,7 @@ theorem map_continuous
 中文:
 定理 map_continuous
   条件: (cond : LEComap f A B)
-  结论: Continuous (map f cond)
+  结论: 连续 (map f cond)
   证明: continuous_of_discreteTopology
 
 @[simp]
@@ -1333,8 +1333,8 @@ theorem eq_of_forall_proj_eq
   exact (Quotient.exact' (h (ofIsClopen hU1))).mpr hU2
 
 中文:
-定理 eq_of_forall_proj_eq
-  结论: [T2Space X] [CompactSpace X] [disc : TotallyDisconnectedSpace X]
+定理 eq_of_对任意_proj_eq
+  结论: [T2空间 X] [紧空间 X] [disc : 全不连通空间 X]
   证明: by
   rw [← mem_singleton_iff]; rw [← connectedComponent_eq_singleton]; rw [connectedComponent_eq_iInter_isClopen]; rw [mem_iInter]
   rintro ⟨U, hU1, hU2⟩
@@ -1390,8 +1390,8 @@ theorem exists_of_compat
      
 
 中文:
-定理 exists_of_compat
-  结论: [CompactSpace X] (Qs : (Q : DiscreteQuotient X) -> Q)
+定理 存在_of_compat
+  结论: [紧空间 X] (Qs : (Q : DiscreteQuotient X) -> Q)
   证明: by
   have H₁ : forall Q₁ Q₂, Q₁ <= Q₂ -> proj Q₁ ⁻¹' {Qs Q₁} subseteq proj Q₂ ⁻¹' {Qs Q₂} := fun _ _ h => by
     rw [← compat _ _ h]
@@ -1426,8 +1426,8 @@ instance [CompactSpace
   rwa [← isCompact_univ_iff, isCompact_iff_finite, finite_univ_iff] at this
 
 中文:
-实例 [CompactSpace
-  签名: X] : Finite S
+实例 [紧空间
+  签名: X] : 有限 S
   定义体: by
   have : CompactSpace S := Quotient.compactSpace
   rwa [← isCompact_univ_iff, isCompact_iff_finite, finite_univ_iff] at this
@@ -1452,7 +1452,7 @@ definition finsetClopens
 
 中文:
 定义 finsetClopens
-  签名: [CompactSpace X]
+  签名: [紧空间 X]
   定义体: have : Fintype d := Fintype.ofFinite _
   (Set.range (fun (x : d) => ⟨_, d.isClopen_preimage {x}⟩) : Set (Clopens X)).toFinset
 
@@ -1480,7 +1480,7 @@ lemma comp_finsetClopens
 
 中文:
 引理 comp_finsetClopens
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   证明: by
   ext d
   simp only [Setoid.classes, Set.mem_ofPred_eq, Function.comp_apply,
@@ -1522,7 +1522,7 @@ theorem finsetClopens_inj
 
 中文:
 定理 finsetClopens_inj
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   证明: by
   apply Function.Injective.of_comp (f := Set.image (fun (t : Clopens X) => t.carrier) ∘ (↑))
   rw [comp_finsetClopens]
@@ -1559,7 +1559,7 @@ definition equivFinsetClopens
 
 中文:
 定义 equivFinsetClopens
-  签名: [CompactSpace X]
+  签名: [紧空间 X]
   定义体: Equiv.ofInjective _ (finsetClopens_inj X)
 
 Depends on / 依赖: Equiv.ofInjective, finsetClopens_inj, ofInjective
@@ -1603,7 +1603,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : LocallyConstant f.discreteQuotient α
+  签名: : 局部常数 f.discreteQuotient α
   定义体: ⟨fun a => Quotient.liftOn' a f fun _ _ => id, fun _ => isOpen_discrete _⟩
 
 @[simp]

@@ -48,7 +48,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: : Submonoid M where
+  签名: : 子幺半群 M where
   定义体: S.centralizer
   one_mem' := S.one_mem_centralizer
   mul_mem' := Set.mul_mem_centralizer
@@ -94,7 +94,7 @@ theorem centralizer_toSubsemigroup
 
 中文:
 定理 centralizer_toSubsemigroup
-  结论: (centralizer S).toSubsemigroup = Subsemigroup.centralizer S
+  结论: (centralizer S).toSubsemigroup = 子半群.centralizer S
   证明: rfl
 -/
 theorem centralizer_toSubsemigroup : (centralizer S).toSubsemigroup = Subsemigroup.centralizer S :=
@@ -165,7 +165,7 @@ instance decidableMemCentralizer
 
 中文:
 实例 decidableMemCentralizer
-  签名: (a) [Decidable <| 对任意 b in S, b * a = a * b]
+  签名: (a) [可判定 <| 对任意 b in S, b * a = a * b]
   定义体: decidable_of_iff' _ mem_centralizer_iff
 
 @[to_additive]
@@ -213,7 +213,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   结论: centralizer s = ⊤ ↔ s subseteq center M
   证明: SetLike.ext'_iff.trans Set.centralizer_eq_top_iff_subset
 
@@ -237,7 +237,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer Set.univ = center M
+  结论: centralizer 集合.univ = center M
   证明: SetLike.ext' (Set.centralizer_univ M)
 
 @[to_additive]
@@ -261,8 +261,8 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: {s : Submonoid M}
-  结论: s <= centralizer (centralizer (s : Set M))
+  条件: {s : 子幺半群 M}
+  结论: s <= centralizer (centralizer (s : 集合 M))
   证明: Set.subset_centralizer_centralizer
 
 @[to_additive (attr := simp)]
@@ -285,7 +285,7 @@ lemma centralizer_centralizer_centralizer
 
 中文:
 引理 centralizer_centralizer_centralizer
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   证明: by
   apply SetLike.coe_injective
   simp only [coe_centralizer, Set.centralizer_centralizer_centralizer]
@@ -309,7 +309,7 @@ lemma closure_le_centralizer_centralizer
 
 中文:
 引理 closure_le_centralizer_centralizer
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: closure_le.mpr Set.subset_centralizer_centralizer
 
 Depends on / 依赖: Set.subset_centralizer_centralizer, closure_le, closure_le.mpr, subset_centralizer_centralizer
@@ -334,7 +334,7 @@ theorem isMulCommutative_closure
 
 中文:
 定理 isMulCommutative_closure
-  条件: {s : Set M} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  条件: {s : 集合 M} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   证明: have := closure_le_centralizer_centralizer s
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -365,7 +365,7 @@ abbreviation closureCommMonoidOfComm
 
 中文:
 缩写 closureCommMonoidOfComm
-  签名: {s : Set M} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  签名: {s : 集合 M} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   定义体: haveI := isMulCommutative_closure _ hcomm
   inferInstance
 
@@ -389,7 +389,7 @@ instance instIsMulCommutative_closure
 
 中文:
 实例 instIsMulCommutative_closure
-  签名: {S : 类型} [SetLike S M] [MulMemClass S M] (s : S)
+  签名: {S : 类型} [集合状 S M] [MulMem类 S M] (s : S)
   定义体: isMulCommutative_closure _ fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 Depends on / 依赖: isMulCommutative_closure, setLike_mul_comm

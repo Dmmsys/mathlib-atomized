@@ -93,7 +93,7 @@ definition inlCompFromSum
 
 中文:
 定义 inlCompFromSum
-  签名: : Sum.inl_ C D ⋙ fromSum C D ≅ inclLeft C D
+  签名: : 和.inl_ C D ⋙ fromSum C D ≅ inclLeft C D
   定义体: Functor.inlCompSum' _ _
 
 Depends on / 依赖: Functor, Functor.inlCompSum, inlCompSum
@@ -112,7 +112,7 @@ definition inrCompFromSum
 
 中文:
 定义 inrCompFromSum
-  签名: : Sum.inr_ C D ⋙ fromSum C D ≅ inclRight C D
+  签名: : 和.inr_ C D ⋙ fromSum C D ≅ inclRight C D
   定义体: Functor.inrCompSum' _ _
 
 Depends on / 依赖: Functor, Functor.inrCompSum, inrCompSum
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromSum C D).EssSurj
+  签名: (fromSum C D).本质满射
 -/
 instance : (fromSum C D).EssSurj where
   mem_essImage
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromSum C D).Faithful
+  签名: (fromSum C D).忠实
   定义体: by
     cases h <;> cases h'
     all_goals

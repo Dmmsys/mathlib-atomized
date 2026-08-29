@@ -33,8 +33,8 @@ instance IntermediateField.continuousSMul
   body: M.toSubfield.continuousSMul X
 
 中文:
-实例 IntermediateField.continuousSMul
-  签名: (M : 整数ermediateField K L)
+实例 中间域.continuousSMul
+  签名: (M : 中间域 K L)
   定义体: M.toSubfield.continuousSMul X
 
 Depends on / 依赖: M.toSubfield.continuousSMul, continuousSMul, toSubfield
@@ -52,8 +52,8 @@ instance IntermediateField.botContinuousSMul
     (M := (⊥ : IntermediateField K L)) Topology.IsInducing.subtypeVal continuous_id rfl
 
 中文:
-实例 IntermediateField.botContinuousSMul
-  签名: (M : 整数ermediateField K L)
+实例 中间域.botContinuousSMul
+  签名: (M : 中间域 K L)
   定义体: Topology.IsInducing.continuousSMul (X := L) (N := (⊥ : IntermediateField K L)) (Y := M)
     (M := (⊥ : IntermediateField K L)) Topology.IsInducing.subtypeVal continuous_id rfl
 

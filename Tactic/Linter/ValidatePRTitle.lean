@@ -38,7 +38,7 @@ definition prTitle
 
 中文:
 定义 prTitle
-  签名: : Parser (String × Option String × String)
+  签名: : Parser (String × 选项类型 String × String)
   定义体: do
   let kind ←
     ["feat", "chore", "perf", "refactor", "style", "fix", "doc", "test", "ci"].firstM pstring

@@ -57,7 +57,7 @@ structure GeneratingSections
   公理与运算 (3 个):
     - I : 类型u
     - s : I -> M.sections
-    - epi : Epi (M.freeHomEquiv.symm s)  [默认: by infer_instance]
+    - epi : 满态射 (M.freeHomEquiv.symm s)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -108,7 +108,7 @@ definition ofEpi
 
 中文:
 定义 ofEpi
-  签名: (σ : M.GeneratingSections) (p : M ⟶ N) [Epi p]
+  签名: (σ : M.GeneratingSections) (p : M ⟶ N) [满态射 p]
   定义体: σ.I
   s i := sectionsMap p (σ.s i)
   epi := by
@@ -151,7 +151,7 @@ lemma opEpi_comp
 
 中文:
 引理 opEpi_comp
-  条件: (σ : M.GeneratingSections) (p : M ⟶ N) (q : N ⟶ P) [Epi p] [Epi q]
+  条件: (σ : M.GeneratingSections) (p : M ⟶ N) (q : N ⟶ P) [满态射 p] [满态射 q]
   证明: rfl
 
 @[simp]
@@ -171,7 +171,7 @@ lemma ofEpi_π
 
 中文:
 引理 ofEpi_π
-  条件: (σ : M.GeneratingSections) (p : M ⟶ N) [Epi p]
+  条件: (σ : M.GeneratingSections) (p : M ⟶ N) [满态射 p]
   证明: by
   simp [ofEpi, freeHomEquiv_symm_comp]
 
@@ -231,10 +231,10 @@ class IsFiniteType
     - finite : Finite σ.I  [default: by infer_instance]
 
 中文:
-类 IsFiniteType
+类 是有限型
   参数: (σ : M.GeneratingSections)
   公理与运算 (1 个):
-    - finite : Finite σ.I  [默认: by infer_instance]
+    - finite : 有限 σ.I  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -270,7 +270,7 @@ structure LocalGeneratorsData
 结构 LocalGeneratorsData
   参数: where
   公理与运算 (4 个):
-    - I : Type w
+    - I : 类型 w
     - X : I -> C
     - coversTop : J.CoversTop X
     - generators((i : I)) : (M.over (X i)).GeneratingSections
@@ -302,7 +302,7 @@ definition LocalGeneratorsData.shrink
 
 中文:
 定义 LocalGeneratorsData.shrink
-  签名: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
+  签名: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
   定义体: Set.range q.X
   X i := q.X i.2.choose
   coversTop X := by
@@ -334,10 +334,10 @@ class LocalGeneratorsData.IsFiniteType
     - isFiniteType((i : p.I)) : (p.generators i).IsFiniteType  [default: by infer_instance]
 
 中文:
-类 LocalGeneratorsData.IsFiniteType
+类 LocalGeneratorsData.是有限型
   参数: (p : M.LocalGeneratorsData)
   公理与运算 (1 个):
-    - isFiniteType((i : p.I)) : (p.generators i).IsFiniteType  [默认: by infer_instance]
+    - isFiniteType((i : p.I)) : (p.generators i).是有限型  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -354,10 +354,10 @@ class IsFiniteType
     - exists_localGeneratorsData((M)) : exists (σ : (LocalGeneratorsData.{u'} M)), σ.IsFiniteType
 
 中文:
-类 IsFiniteType
-  参数: (M : SheafOfModules.{u} R)
+类 是有限型
+  参数: (M : 模层.{u} R)
   公理与运算 (1 个):
-    - exists_localGeneratorsData((M)) : 存在 (σ : (LocalGeneratorsData.{u'} M)), σ.IsFiniteType
+    - exists_localGeneratorsData((M)) : 存在 (σ : (LocalGeneratorsData.{u'} M)), σ.是有限型
 
 Depends on / 依赖: M.obj, isModule
 -/
@@ -439,8 +439,8 @@ instance [G.IsFiniteType]
   body: inferInstanceAs (Finite G.I)
 
 中文:
-实例 [G.IsFiniteType]
-  签名: : (G.map F η).IsFiniteType where
+实例 [G.是有限型]
+  签名: : (G.map F η).是有限型 where
   定义体: inferInstanceAs (Finite G.I)
 
 Depends on / 依赖: Finite
@@ -478,8 +478,8 @@ instance [IsIso
   infer_instance
 
 中文:
-实例 [IsIso
-  签名: G.π] : IsIso (G.map F η).π
+实例 [是同构
+  签名: G.π] : 是同构 (G.map F η).π
   定义体: by
   rw [GeneratingSections.map_π_eq]
   infer_instance
@@ -509,7 +509,7 @@ coversTop _ := GrothendieckTopology.covering_of_eq_top J by simp
 
 中文:
 定义 GeneratingSections.localGeneratorsData
-  签名: {M : SheafOfModules.{u} R} (G : M.GeneratingSections)
+  签名: {M : 模层.{u} R} (G : M.GeneratingSections)
   定义体: C
   X := id
 coversTop _ := GrothendieckTopology.covering_of_eq_top J by simp

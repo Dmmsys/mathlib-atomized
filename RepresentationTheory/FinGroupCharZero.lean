@@ -170,7 +170,7 @@ lemma simple_iff_char_is_norm_one
 
 中文:
 引理 simple_iff_char_is_norm_one
-  条件: [CharZero k] [Fintype G] (V : FDRep k G)
+  条件: [特征零 k] [有限类型 G] (V : FDRep k G)
   证明: by
   have := invertibleOfNonzero (NeZero.ne (Nat.card G : k))
   constructor <;> intro h

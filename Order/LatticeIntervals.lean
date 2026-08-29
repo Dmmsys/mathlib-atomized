@@ -69,7 +69,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: [SemilatticeInf α] {a b : α} {x y : Ico a b}
+  条件: [SemilatticeInf α] {a b : α} {x y : 左闭右开区间 a b}
   证明: rfl
 -/
 protected lemma coe_inf [SemilatticeInf α] {a b : α} {x y : Ico a b} :
@@ -88,7 +88,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [PartialOrder α] {a b : α} [Fact (a < b)]
+  签名: [偏序 α] {a b : α} [Fact (a < b)]
   定义体: (isLeast_Ico Fact.out).orderBot
 
 @[simp, norm_cast]
@@ -110,8 +110,8 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  条件: [PartialOrder α] (a b : α) [Fact (a < b)]
-  结论: ↑(⊥ : Ico a b) = a
+  条件: [偏序 α] (a b : α) [Fact (a < b)]
+  结论: ↑(⊥ : 左闭右开区间 a b) = a
   证明: rfl
 -/
 protected lemma coe_bot [PartialOrder α] (a b : α) [Fact (a < b)] : ↑(⊥ : Ico a b) = a := rfl
@@ -127,7 +127,7 @@ lemma disjoint_iff
 
 中文:
 引理 disjoint_iff
-  条件: [SemilatticeInf α] {a b : α} [Fact (a < b)] {x y : Ico a b}
+  条件: [SemilatticeInf α] {a b : α} [Fact (a < b)] {x y : 左闭右开区间 a b}
   证明: by
   simp [_root_.disjoint_iff, Subtype.ext_iff]
 -/
@@ -172,7 +172,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: [SemilatticeInf α] {a : α} {x y : Iio a}
+  条件: [SemilatticeInf α] {a : α} {x y : 左无界右开区间 a}
   证明: rfl
 -/
 protected lemma coe_inf [SemilatticeInf α] {a : α} {x y : Iio a} :
@@ -216,7 +216,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: [SemilatticeSup α] {a b : α} {x y : Ioc a b}
+  条件: [SemilatticeSup α] {a b : α} {x y : 左开右闭区间 a b}
   证明: rfl
 -/
 protected lemma coe_sup [SemilatticeSup α] {a b : α} {x y : Ioc a b} :
@@ -235,7 +235,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [PartialOrder α] {a b : α} [Fact (a < b)]
+  签名: [偏序 α] {a b : α} [Fact (a < b)]
   定义体: (isGreatest_Ioc Fact.out).orderTop
 
 @[simp, norm_cast]
@@ -257,8 +257,8 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  条件: [PartialOrder α] (a b : α) [Fact (a < b)]
-  结论: ↑(⊤ : Ioc a b) = b
+  条件: [偏序 α] (a b : α) [Fact (a < b)]
+  结论: ↑(⊤ : 左开右闭区间 a b) = b
   证明: rfl
 -/
 protected lemma coe_top [PartialOrder α] (a b : α) [Fact (a < b)] : ↑(⊤ : Ioc a b) = b := rfl
@@ -274,7 +274,7 @@ lemma codisjoint_iff
 
 中文:
 引理 codisjoint_iff
-  条件: [SemilatticeSup α] {a b : α} [Fact (a < b)] {x y : Ioc a b}
+  条件: [SemilatticeSup α] {a b : α} [Fact (a < b)] {x y : 左开右闭区间 a b}
   证明: by
   simp [_root_.codisjoint_iff, Subtype.ext_iff]
 -/
@@ -319,7 +319,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: [SemilatticeSup α] {a : α} {x y : Ioi a}
+  条件: [SemilatticeSup α] {a : α} {x y : 左开右无界区间 a}
   证明: rfl
 -/
 protected lemma coe_sup [SemilatticeSup α] {a : α} {x y : Ioi a} :
@@ -365,7 +365,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: [SemilatticeInf α] {x y : Iic a}
+  条件: [SemilatticeInf α] {x y : 左无界右闭区间 a}
   证明: rfl
 -/
 protected lemma coe_inf [SemilatticeInf α] {x y : Iic a} :
@@ -405,7 +405,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: [SemilatticeSup α] {x y : Iic a}
+  条件: [SemilatticeSup α] {x y : 左无界右闭区间 a}
   证明: rfl
 -/
 protected lemma coe_sup [SemilatticeSup α] {x y : Iic a} :
@@ -421,8 +421,8 @@ instance [Lattice
   body: { Iic.semilatticeInf, Iic.semilatticeSup with }
 
 中文:
-实例 [Lattice
-  签名: α] : Lattice (Iic a)
+实例 [格
+  签名: α] : 格 (左无界右闭区间 a)
   定义体: { Iic.semilatticeInf, Iic.semilatticeSup with }
 
 Depends on / 依赖: Iic.semilatticeInf, Iic.semilatticeSup, semilatticeInf, semilatticeSup
@@ -443,7 +443,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: ⟨a, le_refl a⟩
   le_top x := x.prop
 
@@ -468,8 +468,8 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  条件: [Preorder α] (a : α)
-  结论: (⊤ : Iic a) = a
+  条件: [预序 α] (a : α)
+  结论: (⊤ : 左无界右闭区间 a) = a
   证明: rfl
 -/
 protected lemma coe_top [Preorder α] (a : α) : (⊤ : Iic a) = a := rfl
@@ -485,7 +485,7 @@ lemma eq_top_iff
 
 中文:
 引理 eq_top_iff
-  条件: [Preorder α] {x : Iic a}
+  条件: [预序 α] {x : 左无界右闭区间 a}
   证明: by
   simp [Subtype.ext_iff]
 -/
@@ -506,7 +506,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [Preorder α] [OrderBot α]
+  签名: [预序 α] [有底序 α]
   定义体: ⟨⊥, bot_le⟩
   bot_le := fun ⟨_, _⟩ => Subtype.mk_le_mk.2 bot_le
 
@@ -531,8 +531,8 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  条件: [Preorder α] [OrderBot α] (a : α)
-  结论: (⊥ : Iic a) = (⊥ : α)
+  条件: [预序 α] [有底序 α] (a : α)
+  结论: (⊥ : 左无界右闭区间 a) = (⊥ : α)
   证明: rfl
 -/
 protected lemma coe_bot [Preorder α] [OrderBot α] (a : α) : (⊥ : Iic a) = (⊥ : α) := rfl
@@ -546,8 +546,8 @@ instance [Preorder
   body: { Iic.orderTop, Iic.orderBot with }
 
 中文:
-实例 [Preorder
-  签名: α] [OrderBot α] : BoundedOrder (Iic a)
+实例 [预序
+  签名: α] [有底序 α] : 有界序 (左无界右闭区间 a)
   定义体: { Iic.orderTop, Iic.orderBot with }
 
 Depends on / 依赖: Iic.orderBot, Iic.orderTop, orderBot, orderTop
@@ -566,7 +566,7 @@ lemma disjoint_iff
 
 中文:
 引理 disjoint_iff
-  条件: [SemilatticeInf α] [OrderBot α] {x y : Iic a}
+  条件: [SemilatticeInf α] [有底序 α] {x y : 左无界右闭区间 a}
   证明: by
   simp [_root_.disjoint_iff, Subtype.ext_iff]
 -/
@@ -585,7 +585,7 @@ lemma codisjoint_iff
 
 中文:
 引理 codisjoint_iff
-  条件: [SemilatticeSup α] {x y : Iic a}
+  条件: [SemilatticeSup α] {x y : 左无界右闭区间 a}
   证明: by
   simpa only [_root_.codisjoint_iff] using! Iic.eq_top_iff
 -/
@@ -604,7 +604,7 @@ lemma isCompl_iff
 
 中文:
 引理 isCompl_iff
-  条件: [Lattice α] [OrderBot α] {x y : Iic a}
+  条件: [格 α] [有底序 α] {x y : 左无界右闭区间 a}
   证明: by
   rw [_root_.isCompl_iff]; rw [Iic.disjoint_iff]; rw [Iic.codisjoint_iff]
 -/
@@ -624,7 +624,7 @@ lemma complementedLattice_iff
 
 中文:
 引理 complementedLattice_iff
-  条件: [Lattice α] [OrderBot α]
+  条件: [格 α] [有底序 α]
   证明: by
   simp_rw [complementedLattice_iff, Iic.isCompl_iff, Subtype.forall, Subtype.exists, disjoint_iff,
     exists_prop, Set.mem_Iic]
@@ -671,7 +671,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: [SemilatticeInf α] {a : α} {x y : Ici a}
+  条件: [SemilatticeInf α] {a : α} {x y : 左闭右无界区间 a}
   证明: rfl
 -/
 protected lemma coe_inf [SemilatticeInf α] {a : α} {x y : Ici a} :
@@ -711,7 +711,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: [SemilatticeSup α] {a : α} {x y : Ici a}
+  条件: [SemilatticeSup α] {a : α} {x y : 左闭右无界区间 a}
   证明: rfl
 -/
 protected lemma coe_sup [SemilatticeSup α] {a : α} {x y : Ici a} :
@@ -728,7 +728,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: [Lattice α] {a : α}
+  签名: [格 α] {a : α}
   定义体: { Ici.semilatticeInf, Ici.semilatticeSup with }
 
 Depends on / 依赖: Ici.semilatticeInf, Ici.semilatticeSup, semilatticeInf, semilatticeSup
@@ -746,7 +746,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: [DistribLattice α] {a : α}
+  签名: [Distrib格 α] {a : α}
   定义体: { Ici.lattice with le_sup_inf := fun _ _ _ => le_sup_inf }
 
 Depends on / 依赖: Ici.lattice, lattice, le_sup_inf
@@ -767,7 +767,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [Preorder α] {a : α}
+  签名: [预序 α] {a : α}
   定义体: ⟨a, le_refl a⟩
   bot_le x := x.prop
 
@@ -792,8 +792,8 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  条件: [Preorder α] (a : α)
-  结论: ↑(⊥ : Ici a) = a
+  条件: [预序 α] (a : α)
+  结论: ↑(⊥ : 左闭右无界区间 a) = a
   证明: rfl
 -/
 protected lemma coe_bot [Preorder α] (a : α) : ↑(⊥ : Ici a) = a := rfl
@@ -811,7 +811,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [Preorder α] [OrderTop α] {a : α}
+  签名: [预序 α] [有顶序 α] {a : α}
   定义体: ⟨⊤, le_top⟩
   le_top := fun ⟨_, _⟩ => Subtype.mk_le_mk.2 le_top
 
@@ -836,8 +836,8 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  条件: [Preorder α] [OrderTop α] (a : α)
-  结论: ↑(⊤ : Ici a) = (⊤ : α)
+  条件: [预序 α] [有顶序 α] (a : α)
+  结论: ↑(⊤ : 左闭右无界区间 a) = (⊤ : α)
   证明: rfl
 -/
 protected lemma coe_top [Preorder α] [OrderTop α] (a : α) : ↑(⊤ : Ici a) = (⊤ : α) := rfl
@@ -852,7 +852,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [Preorder α] [OrderTop α] {a : α}
+  签名: [预序 α] [有顶序 α] {a : α}
   定义体: { Ici.orderTop, Ici.orderBot with }
 
 Depends on / 依赖: Ici.orderBot, Ici.orderTop, orderBot, orderTop
@@ -871,7 +871,7 @@ lemma disjoint_iff
 
 中文:
 引理 disjoint_iff
-  条件: [SemilatticeInf α] {a : α} {x y : Ici a}
+  条件: [SemilatticeInf α] {a : α} {x y : 左闭右无界区间 a}
   证明: by
   simp [_root_.disjoint_iff, Subtype.ext_iff]
 
@@ -892,7 +892,7 @@ lemma codisjoint_iff
 
 中文:
 引理 codisjoint_iff
-  条件: [SemilatticeSup α] [OrderTop α] {a : α} {x y : Ici a}
+  条件: [SemilatticeSup α] [有顶序 α] {a : α} {x y : 左闭右无界区间 a}
   证明: by
   simp [_root_.codisjoint_iff, Subtype.ext_iff]
 -/
@@ -911,7 +911,7 @@ lemma isCompl_iff
 
 中文:
 引理 isCompl_iff
-  条件: [Lattice α] [OrderTop α] {a : α} {x y : Ici a}
+  条件: [格 α] [有顶序 α] {a : α} {x y : 左闭右无界区间 a}
   证明: by
   rw [_root_.isCompl_iff]; rw [Ici.disjoint_iff]; rw [Ici.codisjoint_iff]
 -/
@@ -958,7 +958,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: [SemilatticeInf α] {x y : Icc a b}
+  条件: [SemilatticeInf α] {x y : 闭区间 a b}
   证明: rfl
 -/
 protected lemma coe_inf [SemilatticeInf α] {x y : Icc a b} :
@@ -998,7 +998,7 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: [SemilatticeSup α] {x y : Icc a b}
+  条件: [SemilatticeSup α] {x y : 闭区间 a b}
   证明: rfl
 -/
 protected lemma coe_sup [SemilatticeSup α] {x y : Icc a b} :
@@ -1015,7 +1015,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: [Lattice α]
+  签名: [格 α]
   定义体: { Icc.semilatticeInf, Icc.semilatticeSup with }
 
 Depends on / 依赖: Icc.semilatticeInf, Icc.semilatticeSup, semilatticeInf, semilatticeSup
@@ -1034,8 +1034,8 @@ instance [Preorder
 @[simp, norm_cast]
 
 中文:
-实例 [Preorder
-  签名: α] [Fact (a <= b)] : OrderBot (Icc a b)
+实例 [预序
+  签名: α] [Fact (a <= b)] : 有底序 (闭区间 a b)
   定义体: (isLeast_Icc Fact.out).orderBot
 
 @[simp, norm_cast]
@@ -1057,8 +1057,8 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  条件: [Preorder α] (a b : α) [Fact (a <= b)]
-  结论: ↑(⊥ : Icc a b) = a
+  条件: [预序 α] (a b : α) [Fact (a <= b)]
+  结论: ↑(⊥ : 闭区间 a b) = a
   证明: rfl
 -/
 protected lemma coe_bot [Preorder α] (a b : α) [Fact (a <= b)] : ↑(⊥ : Icc a b) = a := rfl
@@ -1074,8 +1074,8 @@ instance [Preorder
 @[simp, norm_cast]
 
 中文:
-实例 [Preorder
-  签名: α] [Fact (a <= b)] : OrderTop (Icc a b)
+实例 [预序
+  签名: α] [Fact (a <= b)] : 有顶序 (闭区间 a b)
   定义体: (isGreatest_Icc Fact.out).orderTop
 
 @[simp, norm_cast]
@@ -1097,8 +1097,8 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  条件: [Preorder α] (a b : α) [Fact (a <= b)]
-  结论: ↑(⊤ : Icc a b) = b
+  条件: [预序 α] (a b : α) [Fact (a <= b)]
+  结论: ↑(⊤ : 闭区间 a b) = b
   证明: rfl
 -/
 protected lemma coe_top [Preorder α] (a b : α) [Fact (a <= b)] : ↑(⊤ : Icc a b) = b := rfl
@@ -1111,8 +1111,8 @@ instance [Preorder
   signature: α] [Fact (a <= b)] : BoundedOrder (Icc a b) where
 
 中文:
-实例 [Preorder
-  签名: α] [Fact (a <= b)] : BoundedOrder (Icc a b) where
+实例 [预序
+  签名: α] [Fact (a <= b)] : 有界序 (闭区间 a b) where
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, _root_, _root_.disjoint_iff, disjoint_iff, ext_iff
 -/
@@ -1129,7 +1129,7 @@ lemma disjoint_iff
 
 中文:
 引理 disjoint_iff
-  条件: [SemilatticeInf α] [Fact (a <= b)] {x y : Icc a b}
+  条件: [SemilatticeInf α] [Fact (a <= b)] {x y : 闭区间 a b}
   证明: by
   simp [_root_.disjoint_iff, Subtype.ext_iff]
 -/
@@ -1148,7 +1148,7 @@ lemma codisjoint_iff
 
 中文:
 引理 codisjoint_iff
-  条件: [SemilatticeSup α] [Fact (a <= b)] {x y : Icc a b}
+  条件: [SemilatticeSup α] [Fact (a <= b)] {x y : 闭区间 a b}
   证明: by
   simp [_root_.codisjoint_iff, Subtype.ext_iff]
 -/
@@ -1167,7 +1167,7 @@ lemma isCompl_iff
 
 中文:
 引理 isCompl_iff
-  条件: [Lattice α] [Fact (a <= b)] {x y : Icc a b}
+  条件: [格 α] [Fact (a <= b)] {x y : 闭区间 a b}
   证明: by
   rw [_root_.isCompl_iff]; rw [Icc.disjoint_iff]; rw [Icc.codisjoint_iff]
 -/

@@ -42,7 +42,7 @@ theorem Ici_add_bij
 
 中文:
 定理 Ici_add_bij
-  结论: BijOn (· + d) (Ici a) (Ici (a + d))
+  结论: 双射限制 (· + d) (左闭右无界区间 a) (左闭右无界区间 (a + d))
   证明: by
   refine ⟨by simp [MapsTo], by simp, fun _ h => ?_⟩
   obtain ⟨c, rfl⟩ := exists_add_of_le (mem_Ici.mp h)
@@ -71,7 +71,7 @@ theorem Ioi_add_bij
 
 中文:
 定理 Ioi_add_bij
-  结论: BijOn (· + d) (Ioi a) (Ioi (a + d))
+  结论: 双射限制 (· + d) (左开右无界区间 a) (左开右无界区间 (a + d))
   证明: by
   refine ⟨by simp [MapsTo], by simp, fun _ h => ?_⟩
   obtain ⟨c, rfl⟩ := exists_add_of_le (mem_Ioi.mp h).le
@@ -98,7 +98,7 @@ theorem Icc_add_bij
 
 中文:
 定理 Icc_add_bij
-  结论: BijOn (· + d) (Icc a b) (Icc (a + d) (b + d))
+  结论: 双射限制 (· + d) (闭区间 a b) (闭区间 (a + d) (b + d))
   证明: by
   rw [← Ici_inter_Iic]; rw [← Ici_inter_Iic]
   exact (Ici_add_bij a d).inter_mapsTo (by simp [MapsTo]) fun x hx => le_of_add_le_add_right hx.2
@@ -121,7 +121,7 @@ theorem Ioo_add_bij
 
 中文:
 定理 Ioo_add_bij
-  结论: BijOn (· + d) (Ioo a b) (Ioo (a + d) (b + d))
+  结论: 双射限制 (· + d) (开区间 a b) (开区间 (a + d) (b + d))
   证明: by
   rw [← Ioi_inter_Iio]; rw [← Ioi_inter_Iio]
   exact (Ioi_add_bij a d).inter_mapsTo (by simp [MapsTo]) fun x hx => lt_of_add_lt_add_right hx.2
@@ -144,7 +144,7 @@ theorem Ioc_add_bij
 
 中文:
 定理 Ioc_add_bij
-  结论: BijOn (· + d) (Ioc a b) (Ioc (a + d) (b + d))
+  结论: 双射限制 (· + d) (左开右闭区间 a b) (左开右闭区间 (a + d) (b + d))
   证明: by
   rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]
   exact (Ioi_add_bij a d).inter_mapsTo (by simp [MapsTo]) fun x hx => le_of_add_le_add_right hx.2
@@ -167,7 +167,7 @@ theorem Ico_add_bij
 
 中文:
 定理 Ico_add_bij
-  结论: BijOn (· + d) (Ico a b) (Ico (a + d) (b + d))
+  结论: 双射限制 (· + d) (左闭右开区间 a b) (左闭右开区间 (a + d) (b + d))
   证明: by
   rw [← Ici_inter_Iio]; rw [← Ici_inter_Iio]
   exact (Ici_add_bij a d).inter_mapsTo (by simp [MapsTo]) fun x hx => lt_of_add_lt_add_right hx.2
@@ -196,7 +196,7 @@ theorem image_add_const_Ici
 
 中文:
 定理 image_add_const_Ici
-  结论: (fun x => x + a) '' Ici b = Ici (b + a)
+  结论: (fun x => x + a) '' 左闭右无界区间 b = 左闭右无界区间 (b + a)
   证明: (Ici_add_bij _ _).image_eq
 
 @[simp]
@@ -219,7 +219,7 @@ theorem image_add_const_Ioi
 
 中文:
 定理 image_add_const_Ioi
-  结论: (fun x => x + a) '' Ioi b = Ioi (b + a)
+  结论: (fun x => x + a) '' 左开右无界区间 b = 左开右无界区间 (b + a)
   证明: (Ioi_add_bij _ _).image_eq
 
 @[simp]
@@ -242,7 +242,7 @@ theorem image_add_const_Icc
 
 中文:
 定理 image_add_const_Icc
-  结论: (fun x => x + a) '' Icc b c = Icc (b + a) (c + a)
+  结论: (fun x => x + a) '' 闭区间 b c = 闭区间 (b + a) (c + a)
   证明: (Icc_add_bij _ _ _).image_eq
 
 @[simp]
@@ -265,7 +265,7 @@ theorem image_add_const_Ico
 
 中文:
 定理 image_add_const_Ico
-  结论: (fun x => x + a) '' Ico b c = Ico (b + a) (c + a)
+  结论: (fun x => x + a) '' 左闭右开区间 b c = 左闭右开区间 (b + a) (c + a)
   证明: (Ico_add_bij _ _ _).image_eq
 
 @[simp]
@@ -288,7 +288,7 @@ theorem image_add_const_Ioc
 
 中文:
 定理 image_add_const_Ioc
-  结论: (fun x => x + a) '' Ioc b c = Ioc (b + a) (c + a)
+  结论: (fun x => x + a) '' 左开右闭区间 b c = 左开右闭区间 (b + a) (c + a)
   证明: (Ioc_add_bij _ _ _).image_eq
 
 @[simp]
@@ -309,7 +309,7 @@ theorem image_add_const_Ioo
 
 中文:
 定理 image_add_const_Ioo
-  结论: (fun x => x + a) '' Ioo b c = Ioo (b + a) (c + a)
+  结论: (fun x => x + a) '' 开区间 b c = 开区间 (b + a) (c + a)
   证明: (Ioo_add_bij _ _ _).image_eq
 
 Depends on / 依赖: Ioo_add_bij, image_eq
@@ -336,7 +336,7 @@ theorem image_const_add_Ici
 
 中文:
 定理 image_const_add_Ici
-  结论: (fun x => a + x) '' Ici b = Ici (a + b)
+  结论: (fun x => a + x) '' 左闭右无界区间 b = 左闭右无界区间 (a + b)
   证明: by
   simp only [add_comm a, image_add_const_Ici]
 
@@ -361,7 +361,7 @@ theorem image_const_add_Ioi
 
 中文:
 定理 image_const_add_Ioi
-  结论: (fun x => a + x) '' Ioi b = Ioi (a + b)
+  结论: (fun x => a + x) '' 左开右无界区间 b = 左开右无界区间 (a + b)
   证明: by
   simp only [add_comm a, image_add_const_Ioi]
 
@@ -386,7 +386,7 @@ theorem image_const_add_Icc
 
 中文:
 定理 image_const_add_Icc
-  结论: (fun x => a + x) '' Icc b c = Icc (a + b) (a + c)
+  结论: (fun x => a + x) '' 闭区间 b c = 闭区间 (a + b) (a + c)
   证明: by
   simp only [add_comm a, image_add_const_Icc]
 
@@ -411,7 +411,7 @@ theorem image_const_add_Ico
 
 中文:
 定理 image_const_add_Ico
-  结论: (fun x => a + x) '' Ico b c = Ico (a + b) (a + c)
+  结论: (fun x => a + x) '' 左闭右开区间 b c = 左闭右开区间 (a + b) (a + c)
   证明: by
   simp only [add_comm a, image_add_const_Ico]
 
@@ -436,7 +436,7 @@ theorem image_const_add_Ioc
 
 中文:
 定理 image_const_add_Ioc
-  结论: (fun x => a + x) '' Ioc b c = Ioc (a + b) (a + c)
+  结论: (fun x => a + x) '' 左开右闭区间 b c = 左开右闭区间 (a + b) (a + c)
   证明: by
   simp only [add_comm a, image_add_const_Ioc]
 
@@ -459,7 +459,7 @@ theorem image_const_add_Ioo
 
 中文:
 定理 image_const_add_Ioo
-  结论: (fun x => a + x) '' Ioo b c = Ioo (a + b) (a + c)
+  结论: (fun x => a + x) '' 开区间 b c = 开区间 (a + b) (a + c)
   证明: by
   simp only [add_comm a, image_add_const_Ioo]
 

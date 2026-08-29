@@ -54,8 +54,8 @@ theorem isLocalRing_eqLocus
 
 中文:
 定理 isLocalRing_eqLocus
-  条件: [IsLocalRing R] (f g : R ->+* T)
-  结论: IsLocalRing (f.eqLocus g)
+  条件: [是局部环 R] (f g : R ->+* T)
+  结论: 是局部环 (f.eqLocus g)
   证明: (f.eqLocus g).subtype.domain_isLocalRing
 
 Depends on / 依赖: domain_isLocalRing, eqLocus, f.eqLocus, subtype, subtype.domain_isLocalRing
@@ -169,7 +169,7 @@ instance isLocalHom_pullbackFst
 
 中文:
 实例 isLocalHom_pullbackFst
-  签名: (f : R ->+* T) (g : S ->+* T) [IsLocalHom g]
+  签名: (f : R ->+* T) (g : S ->+* T) [是Local态射 g]
   定义体: fun ⟨⟨_, _⟩, h_in⟩ ha =>
     (isUnit_pullback_mk_iff f g h_in).mpr ⟨ha, isUnit_of_map_unit g _ (h_in ▸ ha.map f)⟩
 
@@ -191,7 +191,7 @@ instance isLocalHom_pullbackSnd
 
 中文:
 实例 isLocalHom_pullbackSnd
-  签名: (f : R ->+* T) (g : S ->+* T) [IsLocalHom f]
+  签名: (f : R ->+* T) (g : S ->+* T) [是Local态射 f]
   定义体: fun ⟨⟨_, _⟩, h_in⟩ ha =>
     (isUnit_pullback_mk_iff f g h_in).mpr ⟨isUnit_of_map_unit f _ (h_in.symm ▸ ha.map g), ha⟩
 
@@ -289,7 +289,7 @@ theorem isLocalRing_pullback
 
 中文:
 定理 isLocalRing_pullback
-  条件: [IsLocalRing R] (f : R ->+* T) (g : S ->+* T) [IsLocalHom g]
+  条件: [是局部环 R] (f : R ->+* T) (g : S ->+* T) [是Local态射 g]
   证明: (f.pullbackFst g).domain_isLocalRing
 
 Depends on / 依赖: domain_isLocalRing, f.pullbackFst, pullbackFst
@@ -456,7 +456,7 @@ theorem isLocalRing_pullback
 
 中文:
 定理 isLocalRing_pullback
-  结论: [IsLocalRing A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
+  结论: [是局部环 A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
   证明: RingHom.isLocalRing_pullback (f : A ->+* C) (g : B ->+* C)
 
 Depends on / 依赖: RingHom, RingHom.isLocalRing_pullback, isLocalRing_pullback

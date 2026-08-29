@@ -569,7 +569,7 @@ theorem midpoint_le_midpoint
 
 中文:
 定理 midpoint_le_midpoint
-  条件: [Invertible (2 : k)] (ha : a <= a') (hb : b <= b')
+  条件: [可逆 (2 : k)] (ha : a <= a') (hb : b <= b')
   证明: lineMap_mono_endpoints ha hb (invOf_nonneg.2 zero_le_two) invOf_le_one one_le_two
 
 Depends on / 依赖: invOf_le_one, invOf_nonneg, lineMap_mono_endpoints, one_le_two, zero_le_two
@@ -1110,7 +1110,7 @@ lemma slope_pos_iff
 
 中文:
 引理 slope_pos_iff
-  结论: {𝕜} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   simp [slope, hb]
 -/
@@ -1130,7 +1130,7 @@ lemma slope_pos_iff_gt
 
 中文:
 引理 slope_pos_iff_gt
-  结论: {𝕜} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   rw [slope_comm]; rw [slope_pos_iff hb]
 
@@ -1152,7 +1152,7 @@ lemma pos_of_slope_pos
 
 中文:
 引理 pos_of_slope_pos
-  结论: {𝕜} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   simp_all [slope]
 -/
@@ -1173,7 +1173,7 @@ lemma neg_of_slope_pos
 
 中文:
 引理 neg_of_slope_pos
-  结论: {𝕜} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   rwa [slope_pos_iff_gt, hf] at hbf
   exact hb

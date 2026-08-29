@@ -468,7 +468,7 @@ class GuitartExact
 类 GuitartExact
   参数: : 命题 where
   公理与运算 (1 个):
-    - isConnected_rightwards({X₂ : C₂} {X₃ : C₃} (g : R.obj X₂ ⟶ B.obj X₃)) : IsConnected (w.StructuredArrowRightwards g)
+    - isConnected_rightwards({X₂ : C₂} {X₃ : C₃} (g : R.obj X₂ ⟶ B.obj X₃)) : 是连通 (w.StructuredArrowRightwards g)
 -/
 class GuitartExact : Prop where
   isConnected_rightwards {X₂ : C₂} {X₃ : C₃} (g : R.obj X₂ ⟶ B.obj X₃) :
@@ -551,7 +551,7 @@ instance [hw
 
 中文:
 实例 [hw
-  签名: : w.GuitartExact] {X₂ : C₂} (g : StructuredArrow (R.obj X₂) B) :
+  签名: : w.GuitartExact] {X₂ : C₂} (g : 结构化箭头 (R.obj X₂) B) :
   定义体: by
   rw [guitartExact_iff_isConnected_downwards] at hw
   apply hw

@@ -59,7 +59,7 @@ definition toMatrix
 
 中文:
 定义 toMatrix
-  签名: [DecidableEq n] [Zero α] [One α] (f : m ≃. n)
+  签名: [DecidableEq n] [零 α] [幺 α] (f : m ≃. n)
   定义体: of fun i j => if j in f i then (1 : α) else 0
 -/
 def toMatrix [DecidableEq n] [Zero α] [One α] (f : m ≃. n) : Matrix m n α :=
@@ -77,7 +77,7 @@ theorem toMatrix_apply
 
 中文:
 定理 toMatrix_apply
-  条件: [DecidableEq n] [Zero α] [One α] (f : m ≃. n) (i j)
+  条件: [DecidableEq n] [零 α] [幺 α] (f : m ≃. n) (i j)
   证明: rfl
 -/
 theorem toMatrix_apply [DecidableEq n] [Zero α] [One α] (f : m ≃. n) (i j) :
@@ -98,7 +98,7 @@ theorem toMatrix_mul_apply
 
 中文:
 定理 toMatrix_mul_apply
-  结论: [Fintype m] [DecidableEq m] [NonAssocSemiring α] (f : l ≃. m) (i j)
+  结论: [有限类型 m] [DecidableEq m] [非结合半环 α] (f : l ≃. m) (i j)
   证明: by
   dsimp [toMatrix, Matrix.mul_apply]
   rcases h : f i with - | fi
@@ -132,7 +132,7 @@ theorem mul_toMatrix_apply
 
 中文:
 定理 mul_toMatrix_apply
-  结论: [Fintype m] [NonAssocSemiring α] [DecidableEq n] (M : Matrix l m α)
+  结论: [有限类型 m] [非结合半环 α] [DecidableEq n] (M : 矩阵 l m α)
   证明: by
   dsimp [Matrix.mul_apply, toMatrix_apply]
   rcases h : f.symm j with - | fj
@@ -171,7 +171,7 @@ theorem toMatrix_symm
 
 中文:
 定理 toMatrix_symm
-  条件: [DecidableEq m] [DecidableEq n] [Zero α] [One α] (f : m ≃. n)
+  条件: [DecidableEq m] [DecidableEq n] [零 α] [幺 α] (f : m ≃. n)
   证明: by
   ext
   simp only [transpose, mem_iff_mem f, toMatrix_apply]
@@ -202,7 +202,7 @@ theorem toMatrix_refl
 
 中文:
 定理 toMatrix_refl
-  条件: [DecidableEq n] [Zero α] [One α]
+  条件: [DecidableEq n] [零 α] [幺 α]
   证明: by
   ext
   simp [toMatrix_apply, one_apply]
@@ -231,7 +231,7 @@ theorem toMatrix_toPEquiv_apply
 
 中文:
 定理 toMatrix_toPEquiv_apply
-  条件: [DecidableEq n] [Zero α] [One α] (f : m ≃ n) (i)
+  条件: [DecidableEq n] [零 α] [幺 α] (f : m ≃ n) (i)
   证明: by
   ext
   simp [toMatrix_apply, Pi.single_apply, eq_comm]
@@ -281,7 +281,7 @@ theorem toMatrix_toPEquiv_mul
 
 中文:
 定理 toMatrix_toPEquiv_mul
-  结论: [Fintype m] [DecidableEq m]
+  结论: [有限类型 m] [DecidableEq m]
   证明: by
   ext i j
   rw [toMatrix_mul_apply]; rw [Equiv.toPEquiv_apply]; rw [submatrix_apply]; rw [id]
@@ -305,7 +305,7 @@ theorem mul_toMatrix_toPEquiv
 
 中文:
 定理 mul_toMatrix_toPEquiv
-  结论: [Fintype m] [DecidableEq n]
+  结论: [有限类型 m] [DecidableEq n]
   证明: Matrix.ext fun i j => by
     rw [PEquiv.mul_toMatrix_apply]; rw [← Equiv.toPEquiv_symm]; rw [Equiv.toPEquiv_apply]; rw [Matrix.submatrix_apply]; rw [id]
 
@@ -329,7 +329,7 @@ lemma toMatrix_toPEquiv_mulVec
 
 中文:
 引理 toMatrix_toPEquiv_mulVec
-  结论: [DecidableEq n] [Fintype n]
+  结论: [DecidableEq n] [有限类型 n]
   证明: by
   ext j
   simp [toMatrix, mulVec, dotProduct]
@@ -355,7 +355,7 @@ lemma vecMul_toMatrix_toPEquiv
 
 中文:
 引理 vecMul_toMatrix_toPEquiv
-  结论: [DecidableEq n] [Fintype m]
+  结论: [DecidableEq n] [有限类型 m]
   证明: by
   classical
   ext j
@@ -386,7 +386,7 @@ theorem toMatrix_trans
 
 中文:
 定理 toMatrix_trans
-  结论: [Fintype m] [DecidableEq m] [DecidableEq n] [NonAssocSemiring α] (f : l ≃. m)
+  结论: [有限类型 m] [DecidableEq m] [DecidableEq n] [非结合半环 α] (f : l ≃. m)
   证明: by
   ext i j
   rw [toMatrix_mul_apply]
@@ -415,7 +415,7 @@ theorem toMatrix_bot
 
 中文:
 定理 toMatrix_bot
-  条件: [DecidableEq n] [Zero α] [One α]
+  条件: [DecidableEq n] [零 α] [幺 α]
   证明: rfl
 -/
 theorem toMatrix_bot [DecidableEq n] [Zero α] [One α] :
@@ -444,7 +444,7 @@ theorem toMatrix_injective
 
 中文:
 定理 toMatrix_injective
-  条件: [DecidableEq n] [MulZeroOneClass α] [Nontrivial α]
+  条件: [DecidableEq n] [乘零幺类 α] [非平凡 α]
   证明: by
   intro f g
   refine not_imp_not.1 ?_
@@ -492,7 +492,7 @@ theorem toMatrix_swap
 
 中文:
 定理 toMatrix_swap
-  条件: [DecidableEq n] [AddGroupWithOne α] (i j : n)
+  条件: [DecidableEq n] [加法带幺群 α] (i j : n)
   证明: by
   ext
   dsimp [toMatrix, single, Equiv.swap_apply_def, Equiv.toPEquiv, Matrix.one_apply]
@@ -522,7 +522,7 @@ theorem single_mul_single
 
 中文:
 定理 single_mul_single
-  结论: [Fintype n] [DecidableEq k] [DecidableEq m] [DecidableEq n]
+  结论: [有限类型 n] [DecidableEq k] [DecidableEq m] [DecidableEq n]
   证明: by
   rw [← toMatrix_trans]; rw [single_trans_single]
 
@@ -544,7 +544,7 @@ theorem single_mul_single_of_ne
 
 中文:
 定理 single_mul_single_of_ne
-  结论: [Fintype n] [DecidableEq n] [DecidableEq k] [DecidableEq m]
+  结论: [有限类型 n] [DecidableEq n] [DecidableEq k] [DecidableEq m]
   证明: by
   rw [← toMatrix_trans]; rw [single_trans_single_of_ne hb]; rw [toMatrix_bot]
 
@@ -569,7 +569,7 @@ theorem single_mul_single_right
 
 中文:
 定理 single_mul_single_right
-  结论: [Fintype n] [Fintype k] [DecidableEq n] [DecidableEq k]
+  结论: [有限类型 n] [有限类型 k] [DecidableEq n] [DecidableEq k]
   证明: by
   rw [← Matrix.mul_assoc]; rw [single_mul_single]
 
@@ -592,7 +592,7 @@ theorem toMatrix_toPEquiv_eq
 
 中文:
 定理 toMatrix_toPEquiv_eq
-  条件: [DecidableEq n] [Zero α] [One α] (σ : Equiv.Perm n)
+  条件: [DecidableEq n] [零 α] [幺 α] (σ : 等价.置换 n)
   证明: Matrix.ext fun _ _ => if_congr Option.some_inj rfl rfl
 
 @[simp]
@@ -616,7 +616,7 @@ lemma map_toMatrix
 
 中文:
 引理 map_toMatrix
-  结论: [DecidableEq n] [NonAssocSemiring α] [NonAssocSemiring β]
+  结论: [DecidableEq n] [非结合半环 α] [非结合半环 β]
   证明: by
   ext i j
   simp

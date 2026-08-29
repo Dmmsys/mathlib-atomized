@@ -35,8 +35,8 @@ abbreviation Function.Injective.mulZeroClass
 mul_zero a := hf by simp only [mul, zero, mul_zero]
 
 中文:
-缩写 Function.Injective.mulZeroClass
-  签名: [Mul M₀'] [Zero M₀'] (f : M₀' -> M₀)
+缩写 函数.单射.mulZeroClass
+  签名: [乘法 M₀'] [零 M₀'] (f : M₀' -> M₀)
   定义体: hf by simp only [mul, zero, zero_mul]
 mul_zero a := hf by simp only [mul, zero, mul_zero]
 -/
@@ -56,8 +56,8 @@ abbreviation Function.Surjective.mulZeroClass
   zero_mul := hf.forall.2 fun x => by simp only [← zero, ← mul, zero_mul]
 
 中文:
-缩写 Function.Surjective.mulZeroClass
-  签名: [Mul M₀'] [Zero M₀'] (f : M₀ -> M₀')
+缩写 函数.满射.mulZeroClass
+  签名: [乘法 M₀'] [零 M₀'] (f : M₀ -> M₀')
   定义体: hf.forall.2 fun x => by simp only [← zero, ← mul, mul_zero]
   zero_mul := hf.forall.2 fun x => by simp only [← zero, ← mul, zero_mul]
 -/
@@ -88,9 +88,9 @@ theorem Function.Injective.noZeroDivisors
 (fun H => hf <| by rwa [zero]) fun H => hf by rwa [zero]
 
 中文:
-定理 Function.Injective.noZeroDivisors
-  条件: [NoZeroDivisors M₀']
-  结论: NoZeroDivisors M₀ where
+定理 函数.单射.noZeroDivisors
+  条件: [无零因子 M₀']
+  结论: 无零因子 M₀ where
   证明: have : f a * f b = 0 := by rw [← mul, H, zero]
     (eq_zero_or_eq_zero_of_mul_eq_zero this).imp
 (fun H => hf <| by rwa [zero]) fun H => hf by rwa [zero]
@@ -112,7 +112,7 @@ theorem Function.Injective.isLeftCancelMulZero
     exact hf (mul_left_cancel₀ (fun Hfa => Hne <| hf <| by rw [Hfa, zero]) this)
 
 中文:
-定理 Function.Injective.isLeftCancelMulZero
+定理 函数.单射.isLeftCancelMulZero
   证明: by
     have := congr_arg f He
     rw [mul]; rw [mul] at this
@@ -136,7 +136,7 @@ theorem Function.Injective.isRightCancelMulZero
     exact hf (mul_right_cancel₀ (fun Hfa => Hne <| hf <| by rw [Hfa, zero]) this)
 
 中文:
-定理 Function.Injective.isRightCancelMulZero
+定理 函数.单射.isRightCancelMulZero
   证明: by
     have := congr_arg f He
     rw [mul]; rw [mul] at this
@@ -158,7 +158,7 @@ theorem Function.Injective.isCancelMulZero
   __ := hf.isRightCancelMulZero f zero mul
 
 中文:
-定理 Function.Injective.isCancelMulZero
+定理 函数.单射.isCancelMulZero
   证明: hf.isLeftCancelMulZero f zero mul
   __ := hf.isRightCancelMulZero f zero mul
 -/
@@ -182,8 +182,8 @@ abbreviation Function.Injective.mulZeroOneClass
   body: { hf.mulZeroClass f zero mul, hf.mulOneClass f one mul with }
 
 中文:
-缩写 Function.Injective.mulZeroOneClass
-  签名: [Mul M₀'] [Zero M₀'] [One M₀'] (f : M₀' -> M₀)
+缩写 函数.单射.mulZeroOneClass
+  签名: [乘法 M₀'] [零 M₀'] [幺 M₀'] (f : M₀' -> M₀)
   定义体: { hf.mulZeroClass f zero mul, hf.mulOneClass f one mul with }
 -/
 protected abbrev Function.Injective.mulZeroOneClass [Mul M₀'] [Zero M₀'] [One M₀'] (f : M₀' -> M₀)
@@ -200,8 +200,8 @@ abbreviation Function.Surjective.mulZeroOneClass
   body: { hf.mulZeroClass f zero mul, hf.mulOneClass f one mul with }
 
 中文:
-缩写 Function.Surjective.mulZeroOneClass
-  签名: [Mul M₀'] [Zero M₀'] [One M₀'] (f : M₀ -> M₀')
+缩写 函数.满射.mulZeroOneClass
+  签名: [乘法 M₀'] [零 M₀'] [幺 M₀'] (f : M₀ -> M₀')
   定义体: { hf.mulZeroClass f zero mul, hf.mulOneClass f one mul with }
 -/
 protected abbrev Function.Surjective.mulZeroOneClass [Mul M₀'] [Zero M₀'] [One M₀'] (f : M₀ -> M₀')
@@ -222,8 +222,8 @@ abbreviation Function.Injective.semigroupWithZero
   body: { hf.mulZeroClass f zero mul, ‹Zero M₀'›, hf.semigroup f mul with }
 
 中文:
-缩写 Function.Injective.semigroupWithZero
-  签名: [Zero M₀'] [Mul M₀'] [SemigroupWithZero M₀]
+缩写 函数.单射.semigroupWithZero
+  签名: [零 M₀'] [乘法 M₀'] [带零半群 M₀]
   定义体: { hf.mulZeroClass f zero mul, ‹Zero M₀'›, hf.semigroup f mul with }
 -/
 protected abbrev Function.Injective.semigroupWithZero [Zero M₀'] [Mul M₀'] [SemigroupWithZero M₀]
@@ -240,8 +240,8 @@ abbreviation Function.Surjective.semigroupWithZero
   body: { hf.mulZeroClass f zero mul, ‹Zero M₀'›, hf.semigroup f mul with }
 
 中文:
-缩写 Function.Surjective.semigroupWithZero
-  签名: [SemigroupWithZero M₀] [Zero M₀'] [Mul M₀']
+缩写 函数.满射.semigroupWithZero
+  签名: [带零半群 M₀] [零 M₀'] [乘法 M₀']
   定义体: { hf.mulZeroClass f zero mul, ‹Zero M₀'›, hf.semigroup f mul with }
 -/
 protected abbrev Function.Surjective.semigroupWithZero [SemigroupWithZero M₀] [Zero M₀'] [Mul M₀']
@@ -262,8 +262,8 @@ abbreviation Function.Injective.monoidWithZero
   body: { hf.monoid f one mul npow, hf.mulZeroClass f zero mul with }
 
 中文:
-缩写 Function.Injective.monoidWithZero
-  签名: [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' 自然数]
+缩写 函数.单射.monoidWithZero
+  签名: [零 M₀'] [乘法 M₀'] [幺 M₀'] [幂 M₀' 自然数]
   定义体: { hf.monoid f one mul npow, hf.mulZeroClass f zero mul with }
 -/
 protected abbrev Function.Injective.monoidWithZero [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' Nat]
@@ -281,8 +281,8 @@ abbreviation Function.Surjective.monoidWithZero
   body: { hf.monoid f one mul npow, hf.mulZeroClass f zero mul with }
 
 中文:
-缩写 Function.Surjective.monoidWithZero
-  签名: [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' 自然数]
+缩写 函数.满射.monoidWithZero
+  签名: [零 M₀'] [乘法 M₀'] [幺 M₀'] [幂 M₀' 自然数]
   定义体: { hf.monoid f one mul npow, hf.mulZeroClass f zero mul with }
 -/
 protected abbrev Function.Surjective.monoidWithZero [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' Nat]
@@ -300,8 +300,8 @@ abbreviation Function.Injective.commMonoidWithZero
   body: { hf.commMonoid f one mul npow, hf.mulZeroClass f zero mul with }
 
 中文:
-缩写 Function.Injective.commMonoidWithZero
-  签名: [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' 自然数]
+缩写 函数.单射.commMonoidWithZero
+  签名: [零 M₀'] [乘法 M₀'] [幺 M₀'] [幂 M₀' 自然数]
   定义体: { hf.commMonoid f one mul npow, hf.mulZeroClass f zero mul with }
 -/
 protected abbrev Function.Injective.commMonoidWithZero [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' Nat]
@@ -319,8 +319,8 @@ abbreviation Function.Surjective.commMonoidWithZero
   body: { hf.commMonoid f one mul npow, hf.mulZeroClass f zero mul with }
 
 中文:
-缩写 Function.Surjective.commMonoidWithZero
-  签名: [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' 自然数]
+缩写 函数.满射.commMonoidWithZero
+  签名: [零 M₀'] [乘法 M₀'] [幺 M₀'] [幂 M₀' 自然数]
   定义体: { hf.commMonoid f one mul npow, hf.mulZeroClass f zero mul with }
 -/
 protected abbrev Function.Surjective.commMonoidWithZero [Zero M₀'] [Mul M₀'] [One M₀'] [Pow M₀' Nat]
@@ -349,8 +349,8 @@ mul_inv_cancel := fun x hx => hf by
       rw [one]; rw [mul]; rw [inv]; rw [mul_inv_cancel₀ ((hf.ne_iff' zero).2 hx)] }
 
 中文:
-缩写 Function.Injective.groupWithZero
-  签名: [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀'] [Div G₀']
+缩写 函数.单射.groupWithZero
+  签名: [零 G₀'] [乘法 G₀'] [幺 G₀'] [取逆 G₀'] [除法 G₀']
   定义体: { hf.monoidWithZero f zero one mul npow,
     hf.divInvMonoid f one mul inv div npow zpow,
     domain_nontrivial f zero one with
@@ -383,8 +383,8 @@ abbreviation Function.Surjective.groupWithZero
    
 
 中文:
-缩写 Function.Surjective.groupWithZero
-  签名: [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']
+缩写 函数.满射.groupWithZero
+  签名: [零 G₀'] [乘法 G₀'] [幺 G₀'] [取逆 G₀']
   定义体: { hf.monoidWithZero f zero one mul npow, hf.divInvMonoid f one mul inv div npow zpow with
     inv_zero := by rw [← zero, ← inv, inv_zero],
     mul_inv_cancel := hf.forall.2 fun x hx => by
@@ -418,8 +418,8 @@ abbreviation Function.Injective.commGroupWithZero
   body: { hf.groupWithZero f zero one mul inv div npow zpow, hf.commSemigroup f mul with }
 
 中文:
-缩写 Function.Injective.commGroupWithZero
-  签名: [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']
+缩写 函数.单射.commGroupWithZero
+  签名: [零 G₀'] [乘法 G₀'] [幺 G₀'] [取逆 G₀']
   定义体: { hf.groupWithZero f zero one mul inv div npow zpow, hf.commSemigroup f mul with }
 -/
 protected abbrev Function.Injective.commGroupWithZero [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']
@@ -441,8 +441,8 @@ definition Function.Surjective.commGroupWithZero
   body: { hf.groupWithZero h01 f zero one mul inv div npow zpow, hf.commSemigroup f mul with }
 
 中文:
-定义 Function.Surjective.commGroupWithZero
-  签名: [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']
+定义 函数.满射.commGroupWithZero
+  签名: [零 G₀'] [乘法 G₀'] [幺 G₀'] [取逆 G₀']
   定义体: { hf.groupWithZero h01 f zero one mul inv div npow zpow, hf.commSemigroup f mul with }
 -/
 protected def Function.Surjective.commGroupWithZero [Zero G₀'] [Mul G₀'] [One G₀'] [Inv G₀']

@@ -56,7 +56,7 @@ definition FreeCoequalizer.topMap
 
 中文:
 定义 FreeCoequalizer.topMap
-  签名: : (Monad.free T).obj (T.obj X.A) ⟶ (Monad.free T).obj X.A
+  签名: : (单子.free T).obj (T.obj X.A) ⟶ (单子.free T).obj X.A
   定义体: (Monad.free T).map X.a
 
 Depends on / 依赖: Monad.free
@@ -77,7 +77,7 @@ definition FreeCoequalizer.bottomMap
 
 中文:
 定义 FreeCoequalizer.bottomMap
-  签名: : (Monad.free T).obj (T.obj X.A) ⟶ (Monad.free T).obj X.A where
+  签名: : (单子.free T).obj (T.obj X.A) ⟶ (单子.free T).obj X.A where
   定义体: T.μ.app X.A
   h := T.assoc X.A
 -/
@@ -98,7 +98,7 @@ definition FreeCoequalizer.π
 
 中文:
 定义 FreeCoequalizer.π
-  签名: : (Monad.free T).obj X.A ⟶ X where
+  签名: : (单子.free T).obj X.A ⟶ X where
   定义体: X.a
   h := X.assoc.symm
 -/
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsReflexivePair (FreeCoequalizer.topMap X) (FreeCoequalizer.bottomMap X)
+  签名: 是ReflexivePair (FreeCoequalizer.topMap X) (FreeCoequalizer.bottomMap X)
   定义体: by
   apply IsReflexivePair.mk' _ _ _
   · apply (free T).map (T.η.app X.A)
@@ -177,7 +177,7 @@ definition beckAlgebraCofork
 
 中文:
 定义 beckAlgebraCofork
-  签名: : Cofork (FreeCoequalizer.topMap X) (FreeCoequalizer.bottomMap X)
+  签名: : 余叉 (FreeCoequalizer.topMap X) (FreeCoequalizer.bottomMap X)
   定义体: Cofork.ofπ _ (FreeCoequalizer.condition X)
 
 Depends on / 依赖: Cofork, Cofork.of, FreeCoequalizer, FreeCoequalizer.condition, condition
@@ -203,7 +203,7 @@ definition beckAlgebraCoequalizer
 
 中文:
 定义 beckAlgebraCoequalizer
-  签名: : IsColimit (beckAlgebraCofork X)
+  签名: : 是余极限 (beckAlgebraCofork X)
   定义体: Cofork.IsColimit.mk' _ fun s => by
     have h₁ : (T : C ⥤ C).map X.a ≫ s.π.f = T.μ.app X.A ≫ s.π.f :=
       congr_arg Monad.Algebra.Hom.f s.condition
@@ -240,7 +240,7 @@ definition beckSplitCoequalizer
 
 中文:
 定义 beckSplitCoequalizer
-  签名: : IsSplitCoequalizer (T.map X.a) (T.μ.app _) X.a
+  签名: : 是SplitCoequalizer (T.map X.a) (T.μ.app _) X.a
   定义体: ⟨T.η.app _, T.η.app _, X.assoc.symm, X.unit, T.left_unit _, (T.η.naturality _).symm⟩
 
 Depends on / 依赖: T.left_unit, X.assoc.symm, X.unit, left_unit, naturality
@@ -262,7 +262,7 @@ definition beckCofork
 
 中文:
 定义 beckCofork
-  签名: : Cofork (T.map X.a) (T.μ.app _)
+  签名: : 余叉 (T.map X.a) (T.μ.app _)
   定义体: (beckSplitCoequalizer X).asCofork
 
 @[simp]
@@ -301,7 +301,7 @@ definition beckCoequalizer
 
 中文:
 定义 beckCoequalizer
-  签名: : IsColimit (beckCofork X)
+  签名: : 是余极限 (beckCofork X)
   定义体: (beckSplitCoequalizer X).isCoequalizer
 
 @[simp]
@@ -322,7 +322,7 @@ theorem beckCoequalizer_desc
 
 中文:
 定理 beckCoequalizer_desc
-  条件: (s : Cofork (T.toFunctor.map X.a) (T.μ.app X.A))
+  条件: (s : 余叉 (T.toFunctor.map X.a) (T.μ.app X.A))
   证明: rfl
 -/
 theorem beckCoequalizer_desc (s : Cofork (T.toFunctor.map X.a) (T.μ.app X.A)) :

@@ -68,7 +68,7 @@ notation:25 E " ->L_c[" R "] " F => CompactConvergenceCLM (RingHom.id R) E F
 
 中文:
 缩写 CompactConvergenceCLM
-  签名: [TopologicalSpace E] [TopologicalSpace F]
+  签名: [拓扑空间 E] [拓扑空间 F]
   定义体: UniformConvergenceCLM σ F {S : Set E | IsCompact S}
 
 @[inherit_doc]
@@ -128,7 +128,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: [TopologicalSpace E] [TopologicalSpace F]
+  签名: [拓扑空间 E] [拓扑空间 F]
   定义体: UniformConvergenceCLM.continuousEvalConst σ F _ sUnion_isCompact_eq_univ
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.continuousEvalConst, continuousEvalConst, sUnion_isCompact_eq_univ
@@ -147,7 +147,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [TopologicalSpace E] [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 E] [拓扑空间 F] [是拓扑加群 F]
   定义体: UniformConvergenceCLM.t2Space σ F _ sUnion_isCompact_eq_univ
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.t2Space, sUnion_isCompact_eq_univ, t2Space
@@ -168,7 +168,7 @@ theorem hasBasis_nhds_zero_of_basis
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
-  结论: [TopologicalSpace E] [TopologicalSpace F]
+  结论: [拓扑空间 E] [拓扑空间 F]
   证明: UniformConvergenceCLM.hasBasis_nhds_zero_of_basis σ F { S | IsCompact S }
     ⟨∅, isCompact_empty⟩
     (directedOn_of_sup_mem fun _ _ => IsCompact.union) h
@@ -192,7 +192,7 @@ theorem hasBasis_nhds_zero
 
 中文:
 定理 hasBasis_nhds_zero
-  结论: [TopologicalSpace E] [TopologicalSpace F]
+  结论: [拓扑空间 E] [拓扑空间 F]
   证明: CompactConvergenceCLM.hasBasis_nhds_zero_of_basis (𝓝 0).basis_sets
 -/
 protected theorem hasBasis_nhds_zero [TopologicalSpace E] [TopologicalSpace F]
@@ -229,8 +229,8 @@ alias precomp_compactConvergenceCLM := precompCompactConvergenceCLM
 alias precomp_compactConvergenceCLM_apply := precompCompactConvergenceCLM_apply
 
 中文:
-定义 ContinuousLinearMap.precompCompactConvergenceCLM
-  签名: [IsTopologicalAddGroup G]
+定义 连续线性映射.precompCompactConvergenceCLM
+  签名: [是拓扑加群 G]
   定义体: L.precompUniformConvergenceCLM G _ _ (fun _ hs => hs.image L.continuous)
 
 @[deprecated (since := "2026-01-27")]
@@ -270,8 +270,8 @@ alias postcomp_compactConvergenceCLM := postcompCompactConvergenceCLM
 alias postcomp_compactConvergenceCLM_apply := postcompCompactConvergenceCLM_apply
 
 中文:
-定义 ContinuousLinearMap.postcompCompactConvergenceCLM
-  签名: [IsTopologicalAddGroup F]
+定义 连续线性映射.postcompCompactConvergenceCLM
+  签名: [是拓扑加群 F]
   定义体: L.postcompUniformConvergenceCLM _
 
 @[deprecated (since := "2026-01-27")]

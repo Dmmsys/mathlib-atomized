@@ -143,7 +143,7 @@ theorem comap_coe_nhdsLT_of_Ioo_subset
 
 中文:
 定理 comap_coe_nhdsLT_of_Ioo_subset
-  结论: (hsb : s subseteq Iio b) (hs : s.Nonempty -> 存在 a < b, Ioo a b subseteq s)
+  结论: (hsb : s subseteq 左无界右开区间 b) (hs : s.非空 -> 存在 a < b, 开区间 a b subseteq s)
   证明: by
   rw [comap_coe_nhdsLT_eq_atTop_iff]
   refine ⟨hsb, fun hsne a ha => ?_⟩
@@ -176,7 +176,7 @@ theorem comap_coe_nhdsGT_of_Ioo_subset
 
 中文:
 定理 comap_coe_nhdsGT_of_Ioo_subset
-  结论: (hsa : s subseteq Ioi a) (hs : s.Nonempty -> 存在 b > a, Ioo a b subseteq s)
+  结论: (hsa : s subseteq 左开右无界区间 a) (hs : s.非空 -> 存在 b > a, 开区间 a b subseteq s)
   证明: by
   refine comap_coe_nhdsLT_of_Ioo_subset (show ofDual ⁻¹' s subseteq Iio (toDual a) from hsa) ?_ ha.dual
   simpa only [OrderDual.exists, Ioo_toDual]
@@ -204,7 +204,7 @@ theorem map_coe_atTop_of_Ioo_subset
 
 中文:
 定理 map_coe_atTop_of_Ioo_subset
-  结论: (hsb : s subseteq Iio b) (hs : 对任意 a' < b, 存在 a < b, Ioo a b subseteq s)
+  结论: (hsb : s subseteq 左无界右开区间 b) (hs : 对任意 a' < b, 存在 a < b, 开区间 a b subseteq s)
   证明: by
   rcases eq_empty_or_nonempty (Iio b) with (hb' | ⟨a, ha⟩)
   · have : IsEmpty s := ⟨fun x => hb'.subset (hsb x.2)⟩
@@ -237,7 +237,7 @@ theorem map_coe_atBot_of_Ioo_subset
 
 中文:
 定理 map_coe_atBot_of_Ioo_subset
-  结论: (hsa : s subseteq Ioi a) (hs : 对任意 b' > a, 存在 b > a, Ioo a b subseteq s)
+  结论: (hsa : s subseteq 左开右无界区间 a) (hs : 对任意 b' > a, 存在 b > a, 开区间 a b subseteq s)
   证明: by
   refine map_coe_atTop_of_Ioo_subset (s := ofDual ⁻¹' s) (b := toDual a) hsa ?_ ha.dual
   intro b' hb'
@@ -566,7 +566,7 @@ theorem tendsto_Ioo_atTop
 
 中文:
 定理 tendsto_Ioo_atTop
-  条件: {f : α -> Ioo a b} (hb : IsSuccPrelimit b := by exact .of_dense _)
+  条件: {f : α -> 开区间 a b} (hb : IsSuccPrelimit b := by exact .of_dense _)
   证明: by
   rw [← comap_coe_Ioo_nhdsLT a b hb]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -592,7 +592,7 @@ theorem tendsto_Ioo_atBot
 
 中文:
 定理 tendsto_Ioo_atBot
-  条件: {f : α -> Ioo a b} (ha : IsPredPrelimit a := by exact .of_dense _)
+  条件: {f : α -> 开区间 a b} (ha : IsPredPrelimit a := by exact .of_dense _)
   证明: by
   rw [← comap_coe_Ioo_nhdsGT a b ha]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -618,7 +618,7 @@ theorem tendsto_Ioi_atBot
 
 中文:
 定理 tendsto_Ioi_atBot
-  条件: {f : α -> Ioi a} (ha : IsPredPrelimit a := by exact .of_dense _)
+  条件: {f : α -> 左开右无界区间 a} (ha : IsPredPrelimit a := by exact .of_dense _)
   证明: by
   rw [← comap_coe_Ioi_nhdsGT a ha]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -642,7 +642,7 @@ theorem tendsto_Iio_atTop
 
 中文:
 定理 tendsto_Iio_atTop
-  条件: {f : α -> Iio a} (ha : IsSuccPrelimit a := by exact .of_dense _)
+  条件: {f : α -> 左无界右开区间 a} (ha : IsSuccPrelimit a := by exact .of_dense _)
   证明: by
   rw [← comap_coe_Iio_nhdsLT a ha]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 

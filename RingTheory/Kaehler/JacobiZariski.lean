@@ -91,7 +91,7 @@ lemma Cotangent.surjective_map_ofComp
   exact ⟨.mk ⟨x, hx'⟩, Extension.Cotangent.map_mk _ _⟩
 
 中文:
-引理 Cotangent.surjective_map_ofComp
+引理 余切.surjective_map_ofComp
   证明: by
   intro x
   obtain ⟨⟨x, hx⟩, rfl⟩ := Extension.Cotangent.mk_surjective x
@@ -131,7 +131,7 @@ lemma Cotangent.exact
     co
 
 中文:
-引理 Cotangent.exact
+引理 余切.exact
   证明: by
   apply LinearMap.exact_of_comp_of_mem_range
   · rw [LinearMap.liftBaseChange_comp, ← Extension.Cotangent.map_comp,
@@ -582,7 +582,7 @@ lemma δAux_toAlgHom
 
 中文:
 引理 δAux_toAlgHom
-  条件: (f : Hom Q Q') (x)
+  条件: (f : 态射 Q Q') (x)
   证明: by
   let : AddCommGroup (T otimes[S] Ω[S⁄R]) := inferInstance
   have : IsScalarTower Q.Ring Q.Ring T := IsScalarTower.left _
@@ -631,7 +631,7 @@ lemma δAux_ofComp
 
 中文:
 引理 δAux_ofComp
-  条件: (x : (Q.comp P).Ring)
+  条件: (x : (Q.comp P).环)
   证明: by
   let : AddCommGroup (T otimes[S] Ω[S⁄R]) := inferInstance
   have : IsScalarTower (Q.comp P).Ring (Q.comp P).Ring T := IsScalarTower.left _
@@ -987,7 +987,7 @@ lemma δ_map
 
 中文:
 引理 δ_map
-  条件: (f : Hom Q' Q) (x)
+  条件: (f : 态射 Q' Q) (x)
   证明: by
   let : AddCommGroup (T otimes[S] Ω[S⁄R]) := inferInstance
   obtain ⟨x, hx⟩ := x
@@ -1044,7 +1044,7 @@ lemma exact_map_δ'
 
 中文:
 引理 exact_map_δ'
-  条件: (f : Hom W Q)
+  条件: (f : 态射 W Q)
   证明: by
   refine (H1Cotangent.equiv (Q.comp P) W).surjective.comp_exact_iff_exact.mp ?_
   change Function.Exact ((Extension.H1Cotangent.map f.toExtensionHom).restrictScalars T ∘ₗ
@@ -1147,7 +1147,7 @@ theorem exact_liftBaseChange_map_of_flat
 
 中文:
 定理 exact_liftBaseChange_map_of_flat
-  条件: [Module.Flat S T]
+  条件: [模.平坦 S T]
   证明: by
   rw [exact_iff]
   refine le_antisymm ?_ (liftBaseChange_range_le Q P)
@@ -1190,7 +1190,7 @@ theorem exact_liftBaseChange_map_of_flat'
 
 中文:
 定理 exact_liftBaseChange_map_of_flat'
-  条件: [Module.Flat S T] (f : Hom W Q) (g : Hom P W)
+  条件: [模.平坦 S T] (f : 态射 W Q) (g : 态射 P W)
   证明: by
   rw [← LinearEquiv.conj_exact_iff_exact _ _ (H1Cotangent.equiv W (Q.comp P))]
   convert! exact_liftBaseChange_map_of_flat Q P
@@ -1253,7 +1253,7 @@ lemma H1Cotangent.exact_map_δ
 
 中文:
 引理 H1Cotangent.exact_map_δ
-  结论: Function.Exact (map R S T T) (δ R S T)
+  结论: 函数.正合 (map R S T T) (δ R S T)
   证明: Generators.H1Cotangent.exact_map_δ' (Generators.self S T)
     (Generators.self R S) (Generators.self R T) (Generators.defaultHom _ _)
 
@@ -1277,7 +1277,7 @@ lemma H1Cotangent.exact_δ_mapBaseChange
 
 中文:
 引理 H1Cotangent.exact_δ_mapBaseChange
-  结论: Function.Exact (δ R S T) (mapBaseChange R S T)
+  结论: 函数.正合 (δ R S T) (mapBaseChange R S T)
   证明: Generators.H1Cotangent.exact_δ_map (Generators.self S T) (Generators.self R S)
 
 Depends on / 依赖: Generators, Generators.H1Cotangent.exact_, Generators.self, H1Cotangent
@@ -1301,7 +1301,7 @@ lemma H1Cotangent.exact_liftBaseChange_map_of_flat
 
 中文:
 引理 H1Cotangent.exact_liftBaseChange_map_of_flat
-  条件: [Module.Flat S T]
+  条件: [模.平坦 S T]
   证明: Generators.H1Cotangent.exact_liftBaseChange_map_of_flat'
     (Generators.self S T) (Generators.self R S) (Generators.self R T)
     (Generators.defaultHom _ _) (Generators.defaultHom _ _)

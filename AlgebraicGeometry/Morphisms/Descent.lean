@@ -56,8 +56,8 @@ lemma Scheme.exists_hom_isAffine_of_isZariskiLocalAtSource
     rw [← Scheme.H
 
 中文:
-引理 Scheme.exists_hom_isAffine_of_isZariskiLocalAtSource
-  结论: (X : Scheme.{u}) [CompactSpace X]
+引理 概形.存在_hom_isAffine_of_isZariskiLocalAtSource
+  结论: (X : 概形.{u}) [紧空间 X]
   证明: by
   let 𝒰 := X.affineCover.finiteSubcover
   let p : ∐ (fun i : 𝒰.I₀ => 𝒰.X i) ⟶ X := Sigma.desc (fun i => 𝒰.f i)
@@ -99,7 +99,7 @@ lemma IsZariskiLocalAtTarget.descendsAlong
 
 中文:
 引理 IsZariskiLocalAtTarget.descendsAlong
-  结论: [IsZariskiLocalAtTarget P] [P'.IsStableUnderBaseChange]
+  结论: [IsZariskiLocalAtTarget P] [P'.是StableUnderBaseChange]
   证明: by
   apply MorphismProperty.DescendsAlong.mk'
   introv h hf
@@ -203,7 +203,7 @@ lemma IsStableUnderBaseChange.of_pullback_fst_of_isAffine
     exact P.pullback_fst _ _ hf
 
 中文:
-引理 IsStableUnderBaseChange.of_pullback_fst_of_isAffine
+引理 是StableUnderBaseChange.of_pullback_fst_of_isAffine
   结论: [P'.RespectsIso]
   证明: by
   apply H ((T.isoSpec.inv ≫ p) ≫ f)

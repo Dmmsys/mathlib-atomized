@@ -100,7 +100,7 @@ definition checkVersoSyntax
 
 中文:
 定义 checkVersoSyntax
-  签名: (docComment : String) (fileName : Option String := none)
+  签名: (docComment : String) (fileName : 选项类型 String := none)
   定义体: do
   let fileName := fileName.getD (← getFileName)
   let env ← getEnv
@@ -163,7 +163,7 @@ let trimmedStr := Std.Iter.fold (· ++ ·) ""
 
 中文:
 定义 lintVersoSyntax
-  签名: (docComment : String) (fileName : Option String := none)
+  签名: (docComment : String) (fileName : 选项类型 String := none)
   定义体: do
   -- Drop anything that looks like an autolink: this is not supported by Verso. Adding full links
   -- everywhere would be very noisy.

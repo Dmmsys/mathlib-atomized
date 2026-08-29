@@ -77,10 +77,10 @@ class CompletelyRegularSpace
     - completely_regular : forall (x : X), forall K : Set X, IsClosed K -> x ∉ K -> exists f : X -> I, Continuous f ∧ f x = 0 ∧ EqOn f 1 K
 
 中文:
-类 CompletelyRegularSpace
-  参数: (X : 类型u) [TopologicalSpace X]
+类 余mpletelyRegular空间
+  参数: (X : 类型u) [拓扑空间 X]
   公理与运算 (1 个):
-    - completely_regular : 对任意 (x : X), 对任意 K : Set X, IsClosed K -> x ∉ K -> 存在 f : X -> I, Continuous f ∧ f x = 0 ∧ EqOn f 1 K
+    - completely_regular : 对任意 (x : X), 对任意 K : 集合 X, 是闭集 K -> x ∉ K -> 存在 f : X -> I, 连续 f ∧ f x = 0 ∧ EqOn f 1 K
 -/
 class CompletelyRegularSpace (X : Type u) [TopologicalSpace X] : Prop where
   completely_regular : forall (x : X), forall K : Set X, IsClosed K -> x ∉ K ->
@@ -99,7 +99,7 @@ lemma completelyRegularSpace_iff_isOpen
 
 中文:
 引理 completelyRegularSpace_iff_isOpen
-  结论: CompletelyRegularSpace X ↔
+  结论: 余mpletelyRegular空间 X ↔
   证明: by
   conv_lhs => tactic =>
     simp_rw +singlePass [completelyRegularSpace_iff, compl_surjective.forall, isClosed_compl_iff,
@@ -123,8 +123,8 @@ lemma CompletelyRegularSpace.completely_regular_isOpen
   proof: completelyRegularSpace_iff_isOpen.mp inferInstance
 
 中文:
-引理 CompletelyRegularSpace.completely_regular_isOpen
-  条件: [CompletelyRegularSpace X]
+引理 余mpletelyRegular空间.completely_regular_isOpen
+  条件: [余mpletelyRegular空间 X]
   证明: completelyRegularSpace_iff_isOpen.mp inferInstance
 
 Depends on / 依赖: completelyRegularSpace_iff_isOpen, completelyRegularSpace_iff_isOpen.mp
@@ -149,8 +149,8 @@ instance CompletelyRegularSpace.instRegularSpace
   exact disjoint_nhds_nhds.mpr (hf.symm ▸ zero_ne_one).symm
 
 中文:
-实例 CompletelyRegularSpace.instRegularSpace
-  签名: [CompletelyRegularSpace X]
+实例 余mpletelyRegular空间.instRegularSpace
+  签名: [余mpletelyRegular空间 X]
   定义体: by
   rw [regularSpace_iff]
   intro s a hs ha
@@ -187,8 +187,8 @@ instance NormalSpace.instCompletelyRegularSpace
   let ⟨⟨f, cf⟩, hfx, hf
 
 中文:
-实例 NormalSpace.instCompletelyRegularSpace
-  签名: [NormalSpace X] [R0Space X]
+实例 正规空间.instCompletelyRegularSpace
+  签名: [正规空间 X] [R0空间 X]
   定义体: by
   rw [completelyRegularSpace_iff]
   intro x K hK hx
@@ -232,7 +232,7 @@ lemma Topology.IsInducing.completelyRegularSpace
 exact hgK.comp_r
 
 中文:
-引理 Topology.IsInducing.completelyRegularSpace
+引理 拓扑.是Inducing.completelyRegularSpace
   证明: by
     rw [hf.isClosed_iff] at hK
     obtain ⟨K, hK, rfl⟩ := hK
@@ -294,7 +294,7 @@ lemma completelyRegularSpace_iInf
 
 中文:
 引理 completelyRegularSpace_iInf
-  结论: {ι X : 类型} {t : ι -> TopologicalSpace X}
+  结论: {ι X : 类型} {t : ι -> 拓扑空间 X}
   证明: by
   let := (⨅ i, t i) -- register this as default topological space to reduce `@`s
   rw [completelyRegularSpace_iff_isOpen]
@@ -342,7 +342,7 @@ lemma completelyRegularSpace_inf
 
 中文:
 引理 completelyRegularSpace_inf
-  结论: {X : 类型} {t₁ t₂ : TopologicalSpace X}
+  结论: {X : 类型} {t₁ t₂ : 拓扑空间 X}
   证明: by
   rw [inf_eq_iInf]; apply completelyRegularSpace_iInf; simp [*]
 
@@ -381,7 +381,7 @@ lemma isInducing_stoneCechUnit
 
 中文:
 引理 isInducing_stoneCechUnit
-  条件: [CompletelyRegularSpace X]
+  条件: [余mpletelyRegular空间 X]
   证明: by
   rw [isInducing_iff_nhds]
   intro x
@@ -422,7 +422,7 @@ lemma isDenseInducing_stoneCechUnit
 
 中文:
 引理 isDenseInducing_stoneCechUnit
-  条件: [CompletelyRegularSpace X]
+  条件: [余mpletelyRegular空间 X]
   证明: isInducing_stoneCechUnit
   dense := denseRange_stoneCechUnit
 
@@ -465,7 +465,7 @@ theorem CompletelyRegularSpace.of_isTopologicalBasis_clopens
     · exact (mem_compl_iff s x).mpr fun hs => hsK hs hx
 
 中文:
-定理 CompletelyRegularSpace.of_isTopologicalBasis_clopens
+定理 余mpletelyRegular空间.of_isTopologicalBasis_clopens
   证明: by
     obtain ⟨s, hs, hx, hsK⟩ := h.exists_subset_of_mem_open hx hK.isOpen_compl
     refine ⟨sᶜ.indicator 1, ?_, by simpa, fun x hx => indicator_of_mem ?_ _⟩
@@ -498,7 +498,7 @@ theorem CompletelyRegularSpace.isTopologicalBasis_clopens_of_cardinalMk_lt_conti
     simpa [R] us
 
 中文:
-定理 CompletelyRegularSpace.isTopologicalBasis_clopens_of_cardinalMk_lt_continuum
+定理 余mpletelyRegular空间.isTopologicalBasis_clopens_of_cardinalMk_lt_continuum
   证明: by
   refine isTopologicalBasis_of_isOpen_of_nhds (fun x s => IsClopen.isOpen s) (fun x s hxs hs => ?_)
   choose f hf using completely_regular_isOpen x s hs hxs
@@ -542,9 +542,9 @@ class T35Space
   (no additional axioms)
 
 中文:
-类 T35Space
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: T0Space X, CompletelyRegularSpace X
+类 T35空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: T0空间 X, 余mpletelyRegular空间 X
   (无附加公理)
 -/
 class T35Space (X : Type u) [TopologicalSpace X] : Prop extends T0Space X, CompletelyRegularSpace X
@@ -557,8 +557,8 @@ instance T35Space.instT3space
   signature: [T35Space X]
 
 中文:
-实例 T35Space.instT3space
-  签名: [T35Space X]
+实例 T35空间.instT3space
+  签名: [T35空间 X]
 -/
 instance T35Space.instT3space [T35Space X] : T3Space X where
 
@@ -570,8 +570,8 @@ instance T4Space.instT35Space
   signature: [T4Space X]
 
 中文:
-实例 T4Space.instT35Space
-  签名: [T4Space X]
+实例 T4空间.instT35Space
+  签名: [T4空间 X]
 -/
 instance T4Space.instT35Space [T4Space X] : T35Space X where
 
@@ -583,7 +583,7 @@ lemma Topology.IsEmbedding.t35Space
   proof: @T35Space.mk _ _ hf.t0Space hf.isInducing.completelyRegularSpace
 
 中文:
-引理 Topology.IsEmbedding.t35Space
+引理 拓扑.是嵌入.t35Space
   证明: @T35Space.mk _ _ hf.t0Space hf.isInducing.completelyRegularSpace
 
 Depends on / 依赖: T35Space, T35Space.mk, completelyRegularSpace, hf.isInducing.completelyRegularSpace, hf.t0Space, isInducing, t0Space
@@ -615,7 +615,7 @@ lemma separatesPoints_continuous_of_t35Space
 
 中文:
 引理 separatesPoints_continuous_of_t35Space
-  条件: [T35Space X]
+  条件: [T35空间 X]
   证明: by
   intro x y x_ne_y
   obtain ⟨f, f_cont, f_zero, f_one⟩ :=
@@ -645,7 +645,7 @@ lemma separatesPoints_continuous_of_t35Space_Icc
 
 中文:
 引理 separatesPoints_continuous_of_t35Space_Icc
-  条件: [T35Space X]
+  条件: [T35空间 X]
   证明: by
   intro x y x_ne_y
   obtain ⟨f, f_cont, f_zero, f_one⟩ :=
@@ -675,7 +675,7 @@ lemma injective_stoneCechUnit_of_t35Space
 
 中文:
 引理 injective_stoneCechUnit_of_t35Space
-  条件: [T35Space X]
+  条件: [T35空间 X]
   证明: by
   intro a b hab
   contrapose hab
@@ -702,7 +702,7 @@ lemma isEmbedding_stoneCechUnit
 
 中文:
 引理 isEmbedding_stoneCechUnit
-  条件: [T35Space X]
+  条件: [T35空间 X]
   证明: isInducing_stoneCechUnit
   injective := injective_stoneCechUnit_of_t35Space
 
@@ -724,7 +724,7 @@ lemma isDenseEmbedding_stoneCechUnit
 
 中文:
 引理 isDenseEmbedding_stoneCechUnit
-  条件: [T35Space X]
+  条件: [T35空间 X]
   证明: isDenseInducing_stoneCechUnit
   injective := injective_stoneCechUnit_of_t35Space
 

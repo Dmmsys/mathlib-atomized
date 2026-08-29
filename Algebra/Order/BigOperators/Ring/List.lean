@@ -26,7 +26,7 @@ lemma CanonicallyOrderedAdd.list_prod_pos
   statement: {α : Type*}
 
 中文:
-引理 CanonicallyOrderedAdd.list_prod_pos
+引理 典范有序加法.list_prod_pos
   结论: {α : 类型}
 -/
 @[simp] lemma CanonicallyOrderedAdd.list_prod_pos {α : Type*}

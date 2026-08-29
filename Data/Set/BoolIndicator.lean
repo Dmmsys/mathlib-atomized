@@ -141,7 +141,7 @@ theorem preimage_boolIndicator_eq_union
 
 中文:
 定理 preimage_boolIndicator_eq_union
-  条件: (t : Set 布尔)
+  条件: (t : 集合 布尔值)
   证明: by
   ext x
   simp only [boolIndicator, mem_preimage]
@@ -167,7 +167,7 @@ theorem preimage_boolIndicator
 
 中文:
 定理 preimage_boolIndicator
-  条件: (t : Set 布尔)
+  条件: (t : 集合 布尔值)
   证明: by
   simp only [preimage_boolIndicator_eq_union]
   split_ifs <;> simp [s.union_compl_self]

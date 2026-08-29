@@ -30,7 +30,7 @@ definition kerIsKernel
 
 中文:
 定义 kerIsKernel
-  签名: [HasKernels C]
+  签名: [有Kernels C]
   定义体: evaluationJointlyReflectsLimits _ fun f => (KernelFork.isLimitMapConeEquiv ..).2
 (kernelIsKernel f.hom).ofIsoLimit Fork.ext .refl _
 
@@ -53,7 +53,7 @@ definition cokerIsCokernel
 
 中文:
 定义 cokerIsCokernel
-  签名: [HasCokernels C]
+  签名: [有余kernels C]
   定义体: evaluationJointlyReflectsColimits _ fun f => (CokernelCofork.isColimitMapCoconeEquiv ..).2
 (cokernelIsCokernel f.hom).ofIsoColimit Cofork.ext .refl _
 

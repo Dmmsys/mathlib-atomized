@@ -32,7 +32,7 @@ deriving Inhabited
 
 中文:
 定义 HomRel
-  签名: (C) [Quiver C]
+  签名: (C) [箭图 C]
   定义体: forall ⦃X Y : C⦄, (X ⟶ Y) -> (X ⟶ Y) -> Prop
 deriving Inhabited
 -/
@@ -59,7 +59,7 @@ definition Functor.homRel
 @[simp]
 
 中文:
-定义 Functor.homRel
+定义 函子.homRel
   签名: : HomRel C
   定义体: fun _ _ f g => F.map f = F.map g
 
@@ -80,7 +80,7 @@ lemma Functor.homRel_iff
   proof: Iff.rfl
 
 中文:
-引理 Functor.homRel_iff
+引理 函子.homRel_iff
   条件: {X Y : C} (f g : X ⟶ Y)
   证明: Iff.rfl
 
@@ -105,7 +105,7 @@ class IsStableUnderPrecomp
     - comp_left({X Y Z} (f : X ⟶ Y) {g g' : Y ⟶ Z}) : r g g' -> r (f ≫ g) (f ≫ g')
 
 中文:
-类 IsStableUnderPrecomp
+类 是StableUnderPrecomp
   参数: : 命题 where
   公理与运算 (1 个):
     - comp_left({X Y Z} (f : X ⟶ Y) {g g' : Y ⟶ Z}) : r g g' -> r (f ≫ g) (f ≫ g')
@@ -123,7 +123,7 @@ class IsStableUnderPostcomp
     - comp_right({X Y Z} {f f' : X ⟶ Y} (g : Y ⟶ Z)) : r f f' -> r (f ≫ g) (f' ≫ g)
 
 中文:
-类 IsStableUnderPostcomp
+类 是StableUnderPostcomp
   参数: : 命题 where
   公理与运算 (1 个):
     - comp_right({X Y Z} {f f' : X ⟶ Y} (g : Y ⟶ Z)) : r f f' -> r (f ≫ g) (f' ≫ g)
@@ -144,10 +144,10 @@ inductive CompClosure
     - intro: {s t : C} (a b : C) (f : s ⟶ a) (m₁ m₂ : a ⟶ b) (g : b ⟶ t) (h : r m₁ m₂) : CompClosure r (f ≫ m₁ ≫ g) (f ≫ m₂ ≫ g)
 
 中文:
-归纳类型 CompClosure
+归纳类型 余mpClosure
   参数: (r : HomRel C)
   构造子 (1 个):
-    - intro: {s t : C} (a b : C) (f : s ⟶ a) (m₁ m₂ : a ⟶ b) (g : b ⟶ t) (h : r m₁ m₂) : CompClosure r (f ≫ m₁ ≫ g) (f ≫ m₂ ≫ g)
+    - intro: {s t : C} (a b : C) (f : s ⟶ a) (m₁ m₂ : a ⟶ b) (g : b ⟶ t) (h : r m₁ m₂) : 余mpClosure r (f ≫ m₁ ≫ g) (f ≫ m₂ ≫ g)
 -/
 inductive CompClosure (r : HomRel C) : HomRel C
   | intro {s t : C} (a b : C) (f : s ⟶ a) (m₁ m₂ : a ⟶ b) (g : b ⟶ t) (h : r m₁ m₂) :
@@ -165,9 +165,9 @@ theorem CompClosure.of
   simpa using CompClosure.intro _ _ (𝟙 _) m₁ m₂ (𝟙 _) h
 
 中文:
-定理 CompClosure.of
+定理 余mpClosure.of
   条件: {a b : C} {m₁ m₂ : a ⟶ b} (h : r m₁ m₂)
-  结论: CompClosure r m₁ m₂
+  结论: 余mpClosure r m₁ m₂
   证明: by
   simpa using CompClosure.intro _ _ (𝟙 _) m₁ m₂ (𝟙 _) h
 
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderPrecomp (CompClosure r)
+  签名: 是StableUnderPrecomp (余mpClosure r)
   定义体: by
     rintro a b e f _ _ ⟨c, d, g, h₁, h₂, i, h⟩
     simpa using CompClosure.intro _ _ (f ≫ g) _ _ i h
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderPostcomp (CompClosure r)
+  签名: 是StableUnderPostcomp (余mpClosure r)
   定义体: by
     rintro a d e _ _ g ⟨b, c, f, g₁, g₂, i, h⟩
     simpa using CompClosure.intro _ _ f _ _ (i ≫ g) h
@@ -300,11 +300,11 @@ class Congruence
     - equivalence : forall {X Y}, _root_.Equivalence (@r X Y)
 
 中文:
-类 Congruence
+类 余ngruence
   参数: : 命题
-  继承: HomRel.IsStableUnderPrecomp r, HomRel.IsStableUnderPostcomp r
+  继承: HomRel.是StableUnderPrecomp r, HomRel.是StableUnderPostcomp r
   公理与运算 (1 个):
-    - equivalence : 对任意 {X Y}, _root_.Equivalence (@r X Y)
+    - equivalence : 对任意 {X Y}, _root_.等价 (@r X Y)
 -/
 class Congruence : Prop
     extends HomRel.IsStableUnderPrecomp r, HomRel.IsStableUnderPostcomp r where
@@ -324,8 +324,8 @@ instance Functor.congruence_homRel
   comp_right := by aesop
 
 中文:
-实例 Functor.congruence_homRel
-  签名: {C D : 类型} [Category* C] [Category* D] (F : C ⥤ D)
+实例 函子.congruence_homRel
+  签名: {C D : 类型} [范畴* C] [范畴* D] (F : C ⥤ D)
   定义体: { refl := fun _ => rfl
       symm := by aesop
       trans := by aesop }
@@ -355,7 +355,7 @@ structure Quotient
     - as : C
 
 中文:
-结构 Quotient
+结构 商
   参数: (r : HomRel C)
   公理与运算 (1 个):
     - as : C
@@ -373,8 +373,8 @@ instance [Inhabited
   body: ⟨{ as := default }⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (Quotient r)
+实例 [可居
+  签名: C] : 可居 (商 r)
   定义体: ⟨{ as := default }⟩
 -/
 instance [Inhabited C] : Inhabited (Quotient r) :=
@@ -391,8 +391,8 @@ definition Hom
   body: Quot @HomRel.CompClosure C _ r s.as t.as
 
 中文:
-定义 Hom
-  签名: (s t : Quotient r)
+定义 态射
+  签名: (s t : 商 r)
   定义体: Quot @HomRel.CompClosure C _ r s.as t.as
 
 Depends on / 依赖: CompClosure, HomRel, HomRel.CompClosure, s.as, t.as
@@ -448,7 +448,7 @@ theorem comp_mk
 
 中文:
 定理 comp_mk
-  条件: {a b c : Quotient r} (f : a.as ⟶ b.as) (g : b.as ⟶ c.as)
+  条件: {a b c : 商 r} (f : a.as ⟶ b.as) (g : b.as ⟶ c.as)
   证明: rfl
 
 Depends on / 依赖: IsBasis, M.IsBasis, _iff_isBasis_inter_ground, aesop_mat, inter_eq_self_of_subset_left, isBasis
@@ -473,7 +473,7 @@ assoc f g h := Quot.inductionOn f Quot.inductionOn g Quot.inductionOn h by simp
 
 中文:
 实例 category
-  签名: : Category (Quotient r) where
+  签名: : 范畴 (商 r) where
   定义体: Hom r
   id a := Quot.mk _ (𝟙 a.as)
   comp := @comp _ _ r
@@ -502,7 +502,7 @@ noncomputable section
 
 中文:
 定义 equiv
-  签名: {C : Type _} [Category* C] (r : HomRel C)
+  签名: {C : 类型 _} [范畴* C] (r : HomRel C)
   定义体: x.1
   invFun x := ⟨x⟩
 
@@ -533,7 +533,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: {X Y : Quotient r} (f : X ⟶ Y)
+  签名: {X Y : 商 r} (f : X ⟶ Y)
   定义体: Quot.liftOn f (fun f' => Quot.mk _ (Groupoid.inv f')) (fun _ _ con => by
     obtain ⟨_, _, a, f, g, b, hfg⟩ := con
     simpa using! (Quot.sound (HomRel.CompClosure.intro _ _
@@ -560,7 +560,7 @@ theorem inv_mk
 
 中文:
 定理 inv_mk
-  条件: {X Y : Quotient r} (f : X.as ⟶ Y.as)
+  条件: {X Y : 商 r} (f : X.as ⟶ Y.as)
   证明: rfl
 
 Depends on / 依赖: Eq.symm, eq_of_subset_indep, hI.eq_of_subset_indep, hI.subset, insert_eq_self, insert_subset, subset, subset_insert
@@ -582,7 +582,7 @@ comp_inv f := Quot.inductionOn f by simp [CategoryStruct.comp, CategoryStruct.id
 
 中文:
 实例 groupoid
-  签名: : Groupoid (Quotient r) where
+  签名: : 群胚 (商 r) where
   定义体: Quotient.inv r f
 inv_comp f := Quot.inductionOn f by simp [CategoryStruct.comp, CategoryStruct.id]
 comp_inv f := Quot.inductionOn f by simp [CategoryStruct.comp, CategoryStruct.id]
@@ -609,7 +609,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : C ⥤ Quotient r where
+  签名: : C ⥤ 商 r where
   定义体: { as := a }
   map f := Quot.mk _ f
 -/
@@ -628,7 +628,7 @@ instance full_functor
 
 中文:
 实例 full_functor
-  签名: : (functor r).Full where
+  签名: : (functor r).满 where
   定义体: ⟨Quot.out f, by simp [functor]⟩
 
 Depends on / 依赖: Quot.out, functor
@@ -646,7 +646,7 @@ instance essSurj_functor
 
 中文:
 实例 essSurj_functor
-  签名: : (functor r).EssSurj where
+  签名: : (functor r).本质满射 where
   定义体: ⟨Y.as, ⟨eqToIso rfl⟩⟩
 
 Depends on / 依赖: Y.as, eqToIso
@@ -663,8 +663,8 @@ instance [Unique
   body: by ext; subsingleton
 
 中文:
-实例 [Unique
-  签名: C] : Unique (Quotient r) where
+实例 [唯一
+  签名: C] : 唯一 (商 r) where
   定义体: by ext; subsingleton
 
 Depends on / 依赖: subsingleton
@@ -681,8 +681,8 @@ instance [forall
   body: (full_functor r).map_surjective.subsingleton
 
 中文:
-实例 [forall
-  签名: (x y : C), Subsingleton (x ⟶ y)] (x y
+实例 [对任意
+  签名: (x y : C), 子单例 (x ⟶ y)] (x y
   定义体: (full_functor r).map_surjective.subsingleton
 
 Depends on / 依赖: full_functor, map_surjective, map_surjective.subsingleton, subsingleton
@@ -702,7 +702,7 @@ theorem induction
 
 中文:
 定理 induction
-  结论: {P : 对任意 {a b : Quotient r}, (a ⟶ b) -> 命题}
+  结论: {P : 对任意 {a b : 商 r}, (a ⟶ b) -> 命题}
   证明: by
   rintro ⟨x⟩ ⟨y⟩ ⟨f⟩
   exact h f
@@ -748,7 +748,7 @@ theorem functor_map_eq_iff
 
 中文:
 定理 functor_map_eq_iff
-  条件: [h : Congruence r] {X Y : C} (f f' : X ⟶ Y)
+  条件: [h : 余ngruence r] {X Y : C} (f f' : X ⟶ Y)
   证明: by
   dsimp [functor]
   rw [Equivalence.quot_mk_eq_iff]; rw [HomRel.compClosure_eq_self r]
@@ -898,7 +898,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (Φ : Quotient r ⥤ D) (hΦ : functor r ⋙ Φ = F)
+  条件: (Φ : 商 r ⥤ D) (hΦ : functor r ⋙ Φ = F)
   结论: Φ = lift r F H
   证明: by
   subst_vars
@@ -942,7 +942,7 @@ lemma lift_unique'
 
 中文:
 引理 lift_unique'
-  条件: (F₁ F₂ : Quotient r ⥤ D) (h : functor r ⋙ F₁ = functor r ⋙ F₂)
+  条件: (F₁ F₂ : 商 r ⥤ D) (h : functor r ⋙ F₁ = functor r ⋙ F₂)
   证明: by
   rw [lift_unique r (functor r ⋙ F₂) _ F₂ rfl]; swap
   · rintro X Y f g h
@@ -1072,7 +1072,7 @@ lemma natTrans_ext
 
 中文:
 引理 natTrans_ext
-  结论: {F G : Quotient r ⥤ D} (τ₁ τ₂ : F ⟶ G)
+  结论: {F G : 商 r ⥤ D} (τ₁ τ₂ : F ⟶ G)
   证明: NatTrans.ext (by ext1 ⟨X⟩; exact NatTrans.congr_app h X)
 
 Depends on / 依赖: NatTrans, NatTrans.congr_app, NatTrans.ext, congr_app
@@ -1098,7 +1098,7 @@ definition natTransLift
 
 中文:
 定义 natTransLift
-  签名: {F G : Quotient r ⥤ D} (τ : Quotient.functor r ⋙ F ⟶ Quotient.functor r ⋙ G)
+  签名: {F G : 商 r ⥤ D} (τ : 商.functor r ⋙ F ⟶ 商.functor r ⋙ G)
   定义体: fun ⟨X⟩ => τ.app X
   naturality := fun ⟨X⟩ ⟨Y⟩ => by
     rintro ⟨f⟩
@@ -1126,7 +1126,7 @@ lemma natTransLift_app
 
 中文:
 引理 natTransLift_app
-  结论: (F G : Quotient r ⥤ D)
+  结论: (F G : 商 r ⥤ D)
   证明: rfl
 
 @[reassoc]
@@ -1148,7 +1148,7 @@ lemma comp_natTransLift
 
 中文:
 引理 comp_natTransLift
-  结论: {F G H : Quotient r ⥤ D}
+  结论: {F G H : 商 r ⥤ D}
   证明: by cat_disch
 
 @[simp]
@@ -1171,7 +1171,7 @@ lemma natTransLift_id
 
 中文:
 引理 natTransLift_id
-  条件: (F : Quotient r ⥤ D)
+  条件: (F : 商 r ⥤ D)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -1195,7 +1195,7 @@ definition natIsoLift
 
 中文:
 定义 natIsoLift
-  签名: {F G : Quotient r ⥤ D} (τ : Quotient.functor r ⋙ F ≅ Quotient.functor r ⋙ G)
+  签名: {F G : 商 r ⥤ D} (τ : 商.functor r ⋙ F ≅ 商.functor r ⋙ G)
   定义体: natTransLift _ τ.hom
   inv := natTransLift _ τ.inv
   hom_inv_id := by rw [comp_natTransLift, τ.hom_inv_id, natTransLift_id]
@@ -1267,8 +1267,8 @@ instance [L.Full]
     exact ⟨(Quotient.functor _).map f, rfl⟩
 
 中文:
-实例 [L.Full]
-  签名: : (Quotient.lift L.homRel L (by simp)).Full where
+实例 [L.满]
+  签名: : (商.lift L.homRel L (by simp)).满 where
   定义体: by
     rintro ⟨X⟩ ⟨Y⟩ (f : L.obj X ⟶ L.obj Y)
     obtain ⟨f, rfl⟩ := L.map_surjective f
@@ -1294,7 +1294,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Quotient.lift L.homRel L (by simp)).Faithful
+  签名: (商.lift L.homRel L (by simp)).忠实
   定义体: by
     rintro ⟨_⟩ ⟨_⟩ ⟨_⟩ ⟨_⟩ h
     exact Quotient.sound _ h
@@ -1315,8 +1315,8 @@ instance [L.EssSurj]
   body: ⟨(Quotient.functor _).obj (L.objPreimage X), ⟨L.objObjPreimageIso X⟩⟩
 
 中文:
-实例 [L.EssSurj]
-  签名: : (Quotient.lift L.homRel L (by simp)).EssSurj where
+实例 [L.本质满射]
+  签名: : (商.lift L.homRel L (by simp)).本质满射 where
   定义体: ⟨(Quotient.functor _).obj (L.objPreimage X), ⟨L.objObjPreimageIso X⟩⟩
 
 Depends on / 依赖: L.objObjPreimageIso, L.objPreimage, Quotient, Quotient.functor, functor, objObjPreimageIso, objPreimage
@@ -1333,8 +1333,8 @@ instance [L.Full]
   signature: [L.EssSurj]
 
 中文:
-实例 [L.Full]
-  签名: [L.EssSurj]
+实例 [L.满]
+  签名: [L.本质满射]
 -/
 instance [L.Full] [L.EssSurj] : (Quotient.lift L.homRel L (by simp)).IsEquivalence where
 

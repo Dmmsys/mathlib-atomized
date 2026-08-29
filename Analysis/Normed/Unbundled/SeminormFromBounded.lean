@@ -118,7 +118,7 @@ exact h1 this.antisymm (f_nonneg 1)
 
 中文:
 定理 map_pow_ne_zero
-  结论: (f_nonneg : 0 <= f) {x : R} (hx : IsUnit x) (hfx : f x != 0) (n : 自然数)
+  结论: (f_nonneg : 0 <= f) {x : R} (hx : 是单位 x) (hfx : f x != 0) (n : 自然数)
   证明: by
   have h1 : f 1 != 0 := map_one_ne_zero (Function.ne_iff.mpr ⟨x, hfx⟩) f_nonneg f_mul
   intro hxn

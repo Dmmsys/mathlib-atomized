@@ -71,10 +71,10 @@ class HasExactColimitsOfShape
     - preservesFiniteLimits : PreservesFiniteLimits (colim (J := J) (C := C))
 
 中文:
-类 HasExactColimitsOfShape
-  参数: (J : 类型u') [Category.{v'} J] (C : 类型u) [Category.{v} C]
+类 有ExactColimitsOfShape
+  参数: (J : 类型u') [范畴.{v'} J] (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - preservesFiniteLimits : PreservesFiniteLimits (colim (J := J) (C := C))
+    - preservesFiniteLimits : 保持FiniteLimits (colim (J := J) (C := C))
 -/
 class HasExactColimitsOfShape (J : Type u') [Category.{v'} J] (C : Type u) [Category.{v} C]
     [HasColimitsOfShape J C] where
@@ -91,10 +91,10 @@ class HasExactLimitsOfShape
     - preservesFiniteColimits : PreservesFiniteColimits (lim (J := J) (C := C))
 
 中文:
-类 HasExactLimitsOfShape
-  参数: (J : 类型u') [Category.{v'} J] (C : 类型u) [Category.{v} C]
+类 有ExactLimitsOfShape
+  参数: (J : 类型u') [范畴.{v'} J] (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - preservesFiniteColimits : PreservesFiniteColimits (lim (J := J) (C := C))
+    - preservesFiniteColimits : 保持FiniteColimits (lim (J := J) (C := C))
 -/
 class HasExactLimitsOfShape (J : Type u') [Category.{v'} J] (C : Type u) [Category.{v} C]
     [HasLimitsOfShape J C] where
@@ -120,8 +120,8 @@ lemma HasExactColimitsOfShape.domain_of_functor
       exact 
 
 中文:
-引理 HasExactColimitsOfShape.domain_of_functor
-  结论: {D : 类型} (J : 类型) [Category* J] [Category* D]
+引理 有ExactColimitsOfShape.domain_of_functor
+  结论: {D : 类型} (J : 类型) [范畴* J] [范畴* D]
   证明: { preservesFiniteLimits I := { preservesLimit {G} := {
     preserves {c} hc := by
       constructor
@@ -163,8 +163,8 @@ lemma HasExactLimitsOfShape.domain_of_functor
     
 
 中文:
-引理 HasExactLimitsOfShape.domain_of_functor
-  结论: {D : 类型} (J : 类型) [Category* D] [Category* J]
+引理 有ExactLimitsOfShape.domain_of_functor
+  结论: {D : 类型} (J : 类型) [范畴* D] [范畴* J]
   证明: { preservesFiniteColimits I := { preservesColimit {G} := {
     preserves {c} hc := by
       constructor
@@ -206,8 +206,8 @@ lemma HasExactColimitsOfShape.of_domain_equivalence
   ⟨preservesFiniteLimits_of_natIso (Functor.Final.colimIso e.functor)⟩
 
 中文:
-引理 HasExactColimitsOfShape.of_domain_equivalence
-  结论: {J J' : 类型} [Category* J] [Category* J']
+引理 有ExactColimitsOfShape.of_domain_equivalence
+  结论: {J J' : 类型} [范畴* J] [范畴* J']
   证明: hasColimitsOfShape_of_equivalence e
     HasExactColimitsOfShape J' C :=
   haveI : HasColimitsOfShape J' C := hasColimitsOfShape_of_equivalence e
@@ -236,8 +236,8 @@ lemma HasExactColimitsOfShape.of_codomain_equivalence
   refine preservesLimit_of_natIso K (?_ : e.congrRight.inverse ⋙ colim ⋙ e.f
 
 中文:
-引理 HasExactColimitsOfShape.of_codomain_equivalence
-  结论: (J : 类型) [Category* J] {D : 类型}
+引理 有ExactColimitsOfShape.of_codomain_equivalence
+  结论: (J : 类型) [范畴* J] {D : 类型}
   证明: Adjunction.hasColimitsOfShape_of_equivalence e.inverse
     HasExactColimitsOfShape J D := by
   have : HasColimitsOfShape J D := Adjunction.hasColimitsOfShape_of_equivalence e.inverse
@@ -268,8 +268,8 @@ lemma HasExactLimitsOfShape.of_domain_equivalence
   ⟨preservesFiniteColimits_of_natIso (Functor.Initial.limIso e.functor)⟩
 
 中文:
-引理 HasExactLimitsOfShape.of_domain_equivalence
-  结论: {J J' : 类型} [Category* J] [Category* J']
+引理 有ExactLimitsOfShape.of_domain_equivalence
+  结论: {J J' : 类型} [范畴* J] [范畴* J']
   证明: hasLimitsOfShape_of_equivalence e
     HasExactLimitsOfShape J' C :=
   haveI : HasLimitsOfShape J' C := hasLimitsOfShape_of_equivalence e
@@ -298,8 +298,8 @@ lemma HasExactLimitsOfShape.of_codomain_equivalence
   refine preservesColimit_of_natIso K (?_ : e.congrRight.inverse ⋙ lim ⋙ e.functor ≅
 
 中文:
-引理 HasExactLimitsOfShape.of_codomain_equivalence
-  结论: (J : 类型) [Category* J] {D : 类型}
+引理 有ExactLimitsOfShape.of_codomain_equivalence
+  结论: (J : 类型) [范畴* J] {D : 类型}
   证明: Adjunction.hasLimitsOfShape_of_equivalence e.inverse
     HasExactLimitsOfShape J D := by
   have : HasLimitsOfShape J D := Adjunction.hasLimitsOfShape_of_equivalence e.inverse
@@ -336,7 +336,7 @@ lemma hasExactColimitsOfShape
 
 中文:
 引理 hasExactColimitsOfShape
-  结论: (adj : F ⊣ G) [G.Full] [G.Faithful]
+  结论: (adj : F ⊣ G) [G.满] [G.忠实]
   证明: ⟨fun K _ _ => ⟨fun {H} => by
     have : PreservesLimitsOfSize.{0, 0} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{v', u'} F := adj.leftAdjoint_preservesColimits
@@ -373,7 +373,7 @@ lemma hasExactLimitsOfShape
 
 中文:
 引理 hasExactLimitsOfShape
-  结论: (adj : F ⊣ G) [F.Full] [F.Faithful]
+  结论: (adj : F ⊣ G) [F.满] [F.忠实]
   证明: ⟨fun K _ _ => ⟨fun {H} => by
     have : PreservesLimitsOfSize.{v', u'} G := adj.rightAdjoint_preservesLimits
     have : PreservesColimitsOfSize.{0, 0} F := adj.leftAdjoint_preservesColimits
@@ -417,7 +417,7 @@ class AB4OfSize
 类 AB4OfSize
   参数: [HasCoproducts.{w} C]
   公理与运算 (1 个):
-    - ofShape((α : Type w)) : HasExactColimitsOfShape (Discrete α) C
+    - ofShape((α : 类型 w)) : 有ExactColimitsOfShape (离散 α) C
 -/
 class AB4OfSize [HasCoproducts.{w} C] where
   ofShape (α : Type w) : HasExactColimitsOfShape (Discrete α) C
@@ -460,7 +460,7 @@ lemma AB4OfSize_shrink
 
 中文:
 引理 AB4OfSize_shrink
-  条件: [HasCoproducts.{max w w'} C] [AB4OfSize.{max w w'} C]
+  条件: [HasCoproducts.{最大值 w w'} C] [AB4OfSize.{最大值 w w'} C]
   证明: hasCoproducts_shrink.{w, w'}
     AB4OfSize.{w} C :=
   haveI := hasCoproducts_shrink.{w, w'} (C := C)
@@ -496,7 +496,7 @@ class AB4StarOfSize
 类 AB4StarOfSize
   参数: [HasProducts.{w} C]
   公理与运算 (1 个):
-    - ofShape((α : Type w)) : HasExactLimitsOfShape (Discrete α) C
+    - ofShape((α : 类型 w)) : 有ExactLimitsOfShape (离散 α) C
 -/
 class AB4StarOfSize [HasProducts.{w} C] where
   ofShape (α : Type w) : HasExactLimitsOfShape (Discrete α) C
@@ -534,7 +534,7 @@ lemma AB4StarOfSize_shrink
 
 中文:
 引理 AB4StarOfSize_shrink
-  条件: [HasProducts.{max w w'} C] [AB4StarOfSize.{max w w'} C]
+  条件: [HasProducts.{最大值 w w'} C] [AB4StarOfSize.{最大值 w w'} C]
   证明: hasProducts_shrink.{w, w'}
     AB4StarOfSize.{w} C :=
   haveI := hasProducts_shrink.{w, w'} (C := C)
@@ -564,10 +564,10 @@ class CountableAB4
     - ofShape((α : Type) [Countable α]) : HasExactColimitsOfShape (Discrete α) C
 
 中文:
-类 CountableAB4
-  参数: [HasCountableCoproducts C]
+类 余untableAB4
+  参数: [有余untableCoproducts C]
   公理与运算 (1 个):
-    - ofShape((α : Type) [Countable α]) : HasExactColimitsOfShape (Discrete α) C
+    - ofShape((α : 类型) [可数 α]) : 有ExactColimitsOfShape (离散 α) C
 -/
 class CountableAB4 [HasCountableCoproducts C] where
   ofShape (α : Type) [Countable α] : HasExactColimitsOfShape (Discrete α) C
@@ -585,10 +585,10 @@ class CountableAB4Star
     - ofShape((α : Type) [Countable α]) : HasExactLimitsOfShape (Discrete α) C
 
 中文:
-类 CountableAB4Star
-  参数: [HasCountableProducts C]
+类 余untableAB4Star
+  参数: [有余untableProducts C]
   公理与运算 (1 个):
-    - ofShape((α : Type) [Countable α]) : HasExactLimitsOfShape (Discrete α) C
+    - ofShape((α : 类型) [可数 α]) : 有ExactLimitsOfShape (离散 α) C
 -/
 class CountableAB4Star [HasCountableProducts C] where
   ofShape (α : Type) [Countable α] : HasExactLimitsOfShape (Discrete α) C
@@ -617,9 +617,9 @@ class AB5OfSize
 
 中文:
 类 AB5OfSize
-  参数: [HasFilteredColimitsOfSize.{w, w'} C]
+  参数: [有FilteredColimitsOfSize.{w, w'} C]
   公理与运算 (1 个):
-    - ofShape((J : Type w') [Category.{w} J] [IsFiltered J]) : HasExactColimitsOfShape J C
+    - ofShape((J : 类型 w') [范畴.{w} J] [是Filtered J]) : 有ExactColimitsOfShape J C
 -/
 class AB5OfSize [HasFilteredColimitsOfSize.{w, w'} C] where
   ofShape (J : Type w') [Category.{w} J] [IsFiltered J] : HasExactColimitsOfShape J C
@@ -664,7 +664,7 @@ lemma AB5OfSize_of_univLE
 
 中文:
 引理 AB5OfSize_of_univLE
-  结论: [HasFilteredColimitsOfSize.{w₂, w₂'} C] [UnivLE.{w, w₂}]
+  结论: [有FilteredColimitsOfSize.{w₂, w₂'} C] [UnivLE.{w, w₂}]
   证明: hasFilteredColimitsOfSize_of_univLE.{w}
     AB5OfSize.{w, w'} C := by
   have : HasFilteredColimitsOfSize.{w, w'} C := hasFilteredColimitsOfSize_of_univLE.{w}
@@ -699,7 +699,7 @@ lemma AB5OfSize_shrink
 
 中文:
 引理 AB5OfSize_shrink
-  结论: [HasFilteredColimitsOfSize.{max w w₂, max w' w₂'} C]
+  结论: [有FilteredColimitsOfSize.{最大值 w w₂, 最大值 w' w₂'} C]
   证明: hasFilteredColimitsOfSize_shrink
     AB5OfSize.{w, w'} C :=
   AB5OfSize_of_univLE C
@@ -728,9 +728,9 @@ class AB5StarOfSize
 
 中文:
 类 AB5StarOfSize
-  参数: [HasCofilteredLimitsOfSize.{w, w'} C]
+  参数: [有余filteredLimitsOfSize.{w, w'} C]
   公理与运算 (1 个):
-    - ofShape((J : Type w') [Category.{w} J] [IsCofiltered J]) : HasExactLimitsOfShape J C
+    - ofShape((J : 类型 w') [范畴.{w} J] [是余filtered J]) : 有ExactLimitsOfShape J C
 -/
 class AB5StarOfSize [HasCofilteredLimitsOfSize.{w, w'} C] where
   ofShape (J : Type w') [Category.{w} J] [IsCofiltered J] : HasExactLimitsOfShape J C
@@ -770,7 +770,7 @@ lemma AB5StarOfSize_of_univLE
 
 中文:
 引理 AB5StarOfSize_of_univLE
-  结论: [HasCofilteredLimitsOfSize.{w₂, w₂'} C] [UnivLE.{w, w₂}]
+  结论: [有余filteredLimitsOfSize.{w₂, w₂'} C] [UnivLE.{w, w₂}]
   证明: hasCofilteredLimitsOfSize_of_univLE.{w}
     AB5StarOfSize.{w, w'} C := by
   have : HasCofilteredLimitsOfSize.{w, w'} C := hasCofilteredLimitsOfSize_of_univLE.{w}
@@ -805,7 +805,7 @@ lemma AB5StarOfSize_shrink
 
 中文:
 引理 AB5StarOfSize_shrink
-  结论: [HasCofilteredLimitsOfSize.{max w w₂, max w' w₂'} C]
+  结论: [有余filteredLimitsOfSize.{最大值 w w₂, 最大值 w' w₂'} C]
   证明: hasCofilteredLimitsOfSize_shrink
     AB5StarOfSize.{w, w'} C :=
   AB5StarOfSize_of_univLE C
@@ -830,7 +830,7 @@ lemma hasExactColimitsOfShape_of_final
 
 中文:
 引理 hasExactColimitsOfShape_of_final
-  结论: [HasFiniteLimits C]
+  结论: [有有限极限 C]
   证明: letI : PreservesFiniteLimits ((whiskeringLeft J J' C).obj F) := ⟨fun _ => inferInstance⟩
     letI := comp_preservesFiniteLimits ((whiskeringLeft J J' C).obj F) colim
     preservesFiniteLimits_of_natIso (Functor.Final.colimIso F)
@@ -858,7 +858,7 @@ lemma hasExactLimitsOfShape_of_initial
 
 中文:
 引理 hasExactLimitsOfShape_of_initial
-  结论: [HasFiniteColimits C] {J J' : 类型} [Category* J]
+  结论: [有有限余极限 C] {J J' : 类型} [范畴* J]
   证明: letI : PreservesFiniteColimits ((whiskeringLeft J J' C).obj F) := ⟨fun _ => inferInstance⟩
     letI := comp_preservesFiniteColimits ((whiskeringLeft J J' C).obj F) lim
     preservesFiniteColimits_of_natIso (Functor.Initial.limIso F)
@@ -893,7 +893,7 @@ instance preservesFiniteLimits_liftToFinset
 
 中文:
 实例 preservesFiniteLimits_liftToFinset
-  签名: : PreservesFiniteLimits (liftToFinset C α)
+  签名: : 保持FiniteLimits (liftToFinset C α)
   定义体: preservesFiniteLimits_of_evaluation _ fun I =>
     letI : PreservesFiniteLimits (colim (J := Discrete I) (C := C)) :=
       preservesFiniteLimits_of_natIso HasBiproductsOfShape.colimIsoLim.symm
@@ -952,7 +952,7 @@ lemma AB4.of_AB5
 
 中文:
 引理 AB4.of_AB5
-  结论: [HasFilteredColimitsOfSize.{w, w} C]
+  结论: [有FilteredColimitsOfSize.{w, w} C]
   证明: hasExactColimitsOfShape_discrete_of_hasExactColimitsOfShape_finset_discrete _ _
 
 Depends on / 依赖: hasExactColimitsOfShape_discrete_of_hasExactColimitsOfShape_finset_discrete
@@ -974,8 +974,8 @@ lemma CountableAB4.of_countableAB5
     hasExactColimitsOfShape_discrete_o
 
 中文:
-引理 CountableAB4.of_countableAB5
-  结论: [HasColimitsOfShape 自然数 C] [HasExactColimitsOfShape 自然数 C]
+引理 余untableAB4.of_countableAB5
+  结论: [有形状余极限 自然数 C] [有ExactColimitsOfShape 自然数 C]
   证明: have : HasColimitsOfShape (Finset (Discrete J)) C :=
       Functor.Final.hasColimitsOfShape_of_final
         (IsFiltered.sequentialFunctor (Finset (Discrete J)))
@@ -1015,7 +1015,7 @@ instance preservesFiniteColimits_liftToFinset
 
 中文:
 实例 preservesFiniteColimits_liftToFinset
-  签名: : PreservesFiniteColimits (liftToFinset C α)
+  签名: : 保持FiniteColimits (liftToFinset C α)
   定义体: preservesFiniteColimits_of_evaluation _ fun ⟨I⟩ =>
     letI : PreservesFiniteColimits (lim (J := Discrete I) (C := C)) :=
       preservesFiniteColimits_of_natIso HasBiproductsOfShape.colimIsoLim
@@ -1074,7 +1074,7 @@ lemma AB4Star.of_AB5Star
 
 中文:
 引理 AB4Star.of_AB5Star
-  条件: [HasCofilteredLimitsOfSize.{w, w} C] [AB5StarOfSize.{w, w} C]
+  条件: [有余filteredLimitsOfSize.{w, w} C] [AB5StarOfSize.{w, w} C]
   证明: hasExactLimitsOfShape_discrete_of_hasExactLimitsOfShape_finset_discrete_op _ _
 
 Depends on / 依赖: hasExactLimitsOfShape_discrete_of_hasExactLimitsOfShape_finset_discrete_op
@@ -1097,8 +1097,8 @@ lemma CountableAB4Star.of_countableAB5Star
     hasExactLimitsOfShap
 
 中文:
-引理 CountableAB4Star.of_countableAB5Star
-  结论: [HasLimitsOfShape 自然数ᵒᵖ C] [HasExactLimitsOfShape 自然数ᵒᵖ C]
+引理 余untableAB4Star.of_countableAB5Star
+  结论: [有形状极限 自然数ᵒᵖ C] [有ExactLimitsOfShape 自然数ᵒᵖ C]
   证明: have : HasLimitsOfShape (Finset (Discrete J))ᵒᵖ C :=
       Functor.Initial.hasLimitsOfShape_of_initial
         (IsFiltered.sequentialFunctor (Finset (Discrete J))).op
@@ -1135,8 +1135,8 @@ lemma CountableAB4.of_hasExactColimitsOfShape_nat_and_finite
       exact hasExactColimitsOfShape_of_final C (Discrete.equivalence (Denumerable.eqv J)).inverse
 
 中文:
-引理 CountableAB4.of_hasExactColimitsOfShape_nat_and_finite
-  结论: [HasCountableCoproducts C]
+引理 余untableAB4.of_hasExactColimitsOfShape_nat_and_finite
+  结论: [有余untableCoproducts C]
   证明: by
     by_cases h : Finite J
     · infer_instance
@@ -1174,8 +1174,8 @@ lemma CountableAB4Star.of_hasExactLimitsOfShape_nat_and_finite
       exact hasExactLimitsOfShape_of_initial C (Discrete.equivalence (Denumerable.eqv J)).inverse
 
 中文:
-引理 CountableAB4Star.of_hasExactLimitsOfShape_nat_and_finite
-  结论: [HasCountableProducts C]
+引理 余untableAB4Star.of_hasExactLimitsOfShape_nat_and_finite
+  结论: [有余untableProducts C]
   证明: by
     by_cases h : Finite J
     · infer_instance
@@ -1215,7 +1215,7 @@ instance hasExactColimitsOfShape_discrete_finite
 
 中文:
 实例 hasExactColimitsOfShape_discrete_finite
-  签名: (J : 类型) [Finite J]
+  签名: (J : 类型) [有限 J]
   定义体: preservesFiniteLimits_of_natIso HasBiproductsOfShape.colimIsoLim.symm
 
 Depends on / 依赖: HasBiproductsOfShape, HasBiproductsOfShape.colimIsoLim.symm, colimIsoLim, preservesFiniteLimits_of_natIso
@@ -1234,7 +1234,7 @@ instance hasExactLimitsOfShape_discrete_finite
 
 中文:
 实例 hasExactLimitsOfShape_discrete_finite
-  签名: {J : 类型} [Finite J]
+  签名: {J : 类型} [有限 J]
   定义体: preservesFiniteColimits_of_natIso HasBiproductsOfShape.colimIsoLim
 
 Depends on / 依赖: HasBiproductsOfShape, HasBiproductsOfShape.colimIsoLim, colimIsoLim, preservesFiniteColimits_of_natIso
@@ -1254,8 +1254,8 @@ lemma CountableAB4.of_hasExactColimitsOfShape_nat
   exact fun _ => inferInstance
 
 中文:
-引理 CountableAB4.of_hasExactColimitsOfShape_nat
-  结论: [HasFiniteLimits C] [HasCountableCoproducts C]
+引理 余untableAB4.of_hasExactColimitsOfShape_nat
+  结论: [有有限极限 C] [有余untableCoproducts C]
   证明: by
   apply +allowSynthFailures CountableAB4.of_hasExactColimitsOfShape_nat_and_finite
   exact fun _ => inferInstance
@@ -1278,8 +1278,8 @@ lemma CountableAB4Star.of_hasExactLimitsOfShape_nat
   exact fun _ => inferInstance
 
 中文:
-引理 CountableAB4Star.of_hasExactLimitsOfShape_nat
-  结论: [HasFiniteColimits C]
+引理 余untableAB4Star.of_hasExactLimitsOfShape_nat
+  结论: [有有限余极限 C]
   证明: by
   apply +allowSynthFailures CountableAB4Star.of_hasExactLimitsOfShape_nat_and_finite
   exact fun _ => inferInstance
@@ -1311,7 +1311,7 @@ lemma hasExactColimitsOfShape_of_preservesMono
 
 中文:
 引理 hasExactColimitsOfShape_of_preservesMono
-  结论: [HasColimitsOfShape J C]
+  结论: [有形状余极限 J C]
   证明: by
     apply +allowSynthFailures preservesFiniteLimits_of_preservesHomology
     · exact preservesHomology_of_preservesMonos_and_cokernels _
@@ -1339,7 +1339,7 @@ lemma hasExactLimitsOfShape_of_preservesEpi
 
 中文:
 引理 hasExactLimitsOfShape_of_preservesEpi
-  结论: [HasLimitsOfShape J C]
+  结论: [有形状极限 J C]
   证明: by
     apply +allowSynthFailures preservesFiniteColimits_of_preservesHomology
     · exact preservesHomology_of_preservesEpis_and_kernels _

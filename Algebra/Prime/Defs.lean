@@ -47,7 +47,7 @@ definition Prime
   body: p != 0 ∧ ¬IsUnit p ∧ forall a b, p ∣ a * b -> p ∣ a ∨ p ∣ b
 
 中文:
-定义 Prime
+定义 素
   签名: (p : M)
   定义体: p != 0 ∧ ¬IsUnit p ∧ forall a b, p ∣ a * b -> p ∣ a ∨ p ∣ b
 
@@ -90,7 +90,7 @@ alias not_unit := not_isUnit
 
 中文:
 定理 not_isUnit
-  结论: ¬IsUnit p
+  结论: ¬是单位 p
   证明: hp.2.1
 
 @[deprecated (since := "2026-08-02")]
@@ -302,7 +302,7 @@ theorem not_prime_zero
 
 中文:
 定理 not_prime_zero
-  结论: ¬Prime (0 : M)
+  结论: ¬素 (0 : M)
   证明: fun h => h.ne_zero rfl
 
 @[simp]
@@ -322,7 +322,7 @@ theorem not_prime_one
 
 中文:
 定理 not_prime_one
-  结论: ¬Prime (1 : M)
+  结论: ¬素 (1 : M)
   证明: fun h => h.not_isUnit isUnit_one
 
 Depends on / 依赖: h.not_isUnit, isUnit_one, not_isUnit
@@ -340,8 +340,8 @@ theorem Irreducible.not_dvd_isUnit
   proof: mt (isUnit_of_dvd_unit · hu) hp.not_isUnit
 
 中文:
-定理 Irreducible.not_dvd_isUnit
-  条件: [CommMonoid M] {p u : M} (hp : Irreducible p) (hu : IsUnit u)
+定理 不可约.not_dvd_isUnit
+  条件: [交换幺半群 M] {p u : M} (hp : 不可约 p) (hu : 是单位 u)
   证明: mt (isUnit_of_dvd_unit · hu) hp.not_isUnit
 
 Depends on / 依赖: hp.not_isUnit, isUnit_of_dvd_unit, not_isUnit
@@ -360,8 +360,8 @@ theorem Irreducible.not_dvd_one
   proof: hp.not_dvd_isUnit isUnit_one
 
 中文:
-定理 Irreducible.not_dvd_one
-  条件: [CommMonoid M] {p : M} (hp : Irreducible p)
+定理 不可约.not_dvd_one
+  条件: [交换幺半群 M] {p : M} (hp : 不可约 p)
   结论: ¬p ∣ 1
   证明: hp.not_dvd_isUnit isUnit_one
 
@@ -381,8 +381,8 @@ theorem Irreducible.not_dvd_unit
 @[simp]
 
 中文:
-定理 Irreducible.not_dvd_unit
-  条件: [CommMonoid M] {p : M} (u : Mˣ) (hp : Irreducible p)
+定理 不可约.not_dvd_unit
+  条件: [交换幺半群 M] {p : M} (u : Mˣ) (hp : 不可约 p)
   证明: hp.not_dvd_isUnit u.isUnit
 
 @[simp]
@@ -406,8 +406,8 @@ theorem not_irreducible_zero
 
 中文:
 定理 not_irreducible_zero
-  条件: [MonoidWithZero M]
-  结论: ¬Irreducible (0 : M)
+  条件: [带零幺半群 M]
+  结论: ¬不可约 (0 : M)
   证明: h (mul_zero 0).symm
     this.elim hn0 hn0
 
@@ -427,9 +427,9 @@ theorem Irreducible.ne_zero
   statement: forall {p : M}, Irreducible p -> p != 0
 
 中文:
-定理 Irreducible.ne_zero
-  条件: [MonoidWithZero M]
-  结论: 对任意 {p : M}, Irreducible p -> p != 0
+定理 不可约.ne_zero
+  条件: [带零幺半群 M]
+  结论: 对任意 {p : M}, 不可约 p -> p != 0
 -/
 theorem Irreducible.ne_zero [MonoidWithZero M] : forall {p : M}, Irreducible p -> p != 0
   | _, hp, rfl => not_irreducible_zero hp
@@ -445,8 +445,8 @@ theorem Irreducible.dvd_symm
   rw [IsUnit.mul_right_dvd (Or.resolve_left (of_irreducible_mul hq) hp.not_isUnit)]
 
 中文:
-定理 Irreducible.dvd_symm
-  条件: [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q)
+定理 不可约.dvd_symm
+  条件: [幺半群 M] {p q : M} (hp : 不可约 p) (hq : 不可约 q)
   证明: by
   rintro ⟨q', rfl⟩
   rw [IsUnit.mul_right_dvd (Or.resolve_left (of_irreducible_mul hq) hp.not_isUnit)]
@@ -467,8 +467,8 @@ theorem Irreducible.dvd_comm
   proof: ⟨hp.dvd_symm hq, hq.dvd_symm hp⟩
 
 中文:
-定理 Irreducible.dvd_comm
-  条件: [Monoid M] {p q : M} (hp : Irreducible p) (hq : Irreducible q)
+定理 不可约.dvd_comm
+  条件: [幺半群 M] {p q : M} (hp : 不可约 p) (hq : 不可约 q)
   证明: ⟨hp.dvd_symm hq, hq.dvd_symm hp⟩
 
 Depends on / 依赖: dvd_symm, hp.dvd_symm, hq.dvd_symm
@@ -492,7 +492,7 @@ theorem Irreducible.prime_of_isPrimal
     exact (of_irreducible_mul irr).symm.imp (·.mul_right_dvd.mpr h₁) (·.mul_left_dvd.mpr h₂)⟩
 
 中文:
-定理 Irreducible.prime_of_isPrimal
+定理 不可约.prime_of_isPrimal
   结论: {a : M}
   证明: ⟨irr.ne_zero, irr.not_isUnit, fun a b dvd => by
     obtain ⟨d₁, d₂, h₁, h₂, rfl⟩ := primal dvd
@@ -516,9 +516,9 @@ theorem Irreducible.prime
   proof: irr.prime_of_isPrimal (DecompositionMonoid.primal a)
 
 中文:
-定理 Irreducible.prime
-  条件: [DecompositionMonoid M] {a : M} (irr : Irreducible a)
-  结论: Prime a
+定理 不可约.prime
+  条件: [分解幺半群 M] {a : M} (irr : 不可约 a)
+  结论: 素 a
   证明: irr.prime_of_isPrimal (DecompositionMonoid.primal a)
 
 Depends on / 依赖: DecompositionMonoid, DecompositionMonoid.primal, irr.prime_of_isPrimal, primal, prime_of_isPrimal
@@ -547,9 +547,9 @@ theorem Prime.irreducible
       (isUnit_of_dvd_one <| (mul_dvd_mul_iff_left <| left_ne_zero_of_mul hp.ne_zero).
 
 中文:
-定理 Prime.irreducible
-  条件: (hp : Prime p)
-  结论: Irreducible p
+定理 素.irreducible
+  条件: (hp : 素 p)
+  结论: 不可约 p
   证明: ⟨hp.not_isUnit, fun a b => by
     rintro rfl
     exact (hp.dvd_or_dvd dvd_rfl).symm.imp
@@ -577,8 +577,8 @@ theorem irreducible_iff_prime
 
 中文:
 定理 irreducible_iff_prime
-  条件: [DecompositionMonoid M] {a : M}
-  结论: Irreducible a ↔ Prime a
+  条件: [分解幺半群 M] {a : M}
+  结论: 不可约 a ↔ 素 a
   证明: ⟨Irreducible.prime, Prime.irreducible⟩
 
 Depends on / 依赖: Irreducible, Irreducible.prime, Prime.irreducible, irreducible

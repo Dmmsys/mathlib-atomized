@@ -213,8 +213,8 @@ definition ChartedSpace.locallyRingedSpace
 alias IsManifold.locallyRingedSpace := ChartedSpace.locallyRingedSpace
 
 中文:
-定义 ChartedSpace.locallyRingedSpace
-  签名: : LocallyRingedSpace where
+定义 Charted空间.locallyRingedSpace
+  签名: : LocallyRinged空间 where
   定义体: TopCat.of M
   presheaf := smoothPresheafCommRing IM 𝓘(𝕜) M 𝕜
   IsSheaf := (smoothSheafCommRing IM 𝓘(𝕜) M 𝕜).property
@@ -248,7 +248,7 @@ definition ChartedSpace.locallyRingedSpaceMapAux
   c := (hf.smoothSheafCommRingHom _ _ f).hom
 
 中文:
-定义 ChartedSpace.locallyRingedSpaceMapAux
+定义 Charted空间.locallyRingedSpaceMapAux
   签名: (f : M -> N) (hf : ContMDiff IM IN ∞ f)
   定义体: TopCat.ofHom ⟨f, hf.continuous⟩
   c := (hf.smoothSheafCommRingHom _ _ f).hom
@@ -277,7 +277,7 @@ lemma ChartedSpace.stalkMap_locallyRingedSpaceMapAux
   apply smoothSheafCommRing.evalHom_germ
 
 中文:
-引理 ChartedSpace.stalkMap_locallyRingedSpaceMapAux
+引理 Charted空间.stalkMap_locallyRingedSpaceMapAux
   结论: (f : M -> N) (hf : ContMDiff IM IN ∞ f)
   证明: by
   apply TopCat.Presheaf.stalk_hom_ext
@@ -320,7 +320,7 @@ definition ChartedSpace.locallyRingedSpaceMap
 @[reassoc (attr := simp)]
 
 中文:
-定义 ChartedSpace.locallyRingedSpaceMap
+定义 Charted空间.locallyRingedSpaceMap
   签名: (f : M -> N) (hf : ContMDiff IM IN ∞ f)
   定义体: locallyRingedSpaceMapAux f hf
   prop x := by
@@ -352,7 +352,7 @@ lemma ChartedSpace.stalkMap_locallyRingedSpaceMap_evalHom
   proof: stalkMap_locallyRingedSpaceMapAux f hf x
 
 中文:
-引理 ChartedSpace.stalkMap_locallyRingedSpaceMap_evalHom
+引理 Charted空间.stalkMap_locallyRingedSpaceMap_evalHom
   结论: (f : M -> N) (hf : ContMDiff IM IN ∞ f)
   证明: stalkMap_locallyRingedSpaceMapAux f hf x
 
@@ -374,7 +374,7 @@ lemma ChartedSpace.locallyRingedSpace_id
   proof: rfl
 
 中文:
-引理 ChartedSpace.locallyRingedSpace_id
+引理 Charted空间.locallyRingedSpace_id
   证明: rfl
 
 Depends on / 依赖: contMDiff_id
@@ -392,7 +392,7 @@ lemma ChartedSpace.locallyRingedSpace_comp
   proof: rfl
 
 中文:
-引理 ChartedSpace.locallyRingedSpace_comp
+引理 Charted空间.locallyRingedSpace_comp
   结论: {f : M -> N} (hf : ContMDiff IM IN ∞ f)
   证明: rfl
 -/
@@ -444,7 +444,7 @@ definition ChartedSpace.restrictLocallyRingedSpaceIso
     (locallyRingedSpaceMap _ contMDiff_subtype_va
 
 中文:
-定义 ChartedSpace.restrictLocallyRingedSpaceIso
+定义 Charted空间.restrictLocallyRingedSpaceIso
   签名: (U : Opens M)
   定义体: LocallyRingedSpace.IsOpenImmersion.lift
     (locallyRingedSpaceMap _ contMDiff_subtype_val)

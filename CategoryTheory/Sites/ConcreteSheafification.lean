@@ -107,7 +107,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {X} {P : Cᵒᵖ ⥤ D} {S : J.Cover X} (x y : Meq P S) (h : 对任意 I : S.Arrow, x I = y I)
+  条件: {X} {P : Cᵒᵖ ⥤ D} {S : J.Cover X} (x y : Meq P S) (h : 对任意 I : S.箭头, x I = y I)
   证明: Subtype.ext funext h
 
 Depends on / 依赖: Subtype, Subtype.ext, cardinalMk_sdiff_comm, hIX.isBasis_inter_ground.cardinalMk_sdiff_comm, hJX.isBasis_inter_ground, isBasis_inter_ground
@@ -126,7 +126,7 @@ theorem condition
 
 中文:
 定理 condition
-  条件: {X} {P : Cᵒᵖ ⥤ D} {S : J.Cover X} (x : Meq P S) (I : S.Relation)
+  条件: {X} {P : Cᵒᵖ ⥤ D} {S : J.Cover X} (x : Meq P S) (I : S.关系)
   证明: x.2 _
 -/
 theorem condition {X} {P : Cᵒᵖ ⥤ D} {S : J.Cover X} (x : Meq P S) (I : S.Relation) :
@@ -275,7 +275,7 @@ theorem mk_apply
 
 中文:
 定理 mk_apply
-  条件: {X : C} {P : Cᵒᵖ ⥤ D} (S : J.Cover X) (x : ToType (P.obj (op X))) (I : S.Arrow)
+  条件: {X : C} {P : Cᵒᵖ ⥤ D} (S : J.Cover X) (x : ToType (P.obj (op X))) (I : S.箭头)
   证明: rfl
 -/
 theorem mk_apply {X : C} {P : Cᵒᵖ ⥤ D} (S : J.Cover X) (x : ToType (P.obj (op X))) (I : S.Arrow) :
@@ -504,7 +504,7 @@ theorem toPlus_apply
 
 中文:
 定理 toPlus_apply
-  条件: {X : C} {P : Cᵒᵖ ⥤ D} (S : J.Cover X) (x : Meq P S) (I : S.Arrow)
+  条件: {X : C} {P : Cᵒᵖ ⥤ D} (S : J.Cover X) (x : Meq P S) (I : S.箭头)
   证明: by
   dsimp only [toPlus, plusObj]
   delta Cover.toMultiequalizer
@@ -567,7 +567,7 @@ theorem exists_rep
   simp
 
 中文:
-定理 exists_rep
+定理 存在_rep
   条件: {X : C} {P : Cᵒᵖ ⥤ D} (x : ToType ((J.plusObj P).obj (op X)))
   证明: by
   obtain ⟨S, y, h⟩ := Concrete.colimit_exists_rep (J.diagram P X) x
@@ -606,7 +606,7 @@ theorem eq_mk_iff_exists
       rw [← ConcreteCategory.comp_apply
 
 中文:
-定理 eq_mk_iff_exists
+定理 eq_mk_iff_存在
   条件: {X : C} {P : Cᵒᵖ ⥤ D} {S T : J.Cover X} (x : Meq P S) (y : Meq P T)
   证明: by
   constructor
@@ -832,7 +832,7 @@ theorem exists_of_sep
   -- provide the
 
 中文:
-定理 exists_of_sep
+定理 存在_of_sep
   结论: (P : Cᵒᵖ ⥤ D)
   证明: by
   have inj : forall X : C, Function.Injective ((J.toPlus P).app (op X)) := inj_of_sep _ hsep
@@ -982,7 +982,7 @@ theorem isSheaf_plus_plus
 中文:
 定理 isSheaf_plus_plus
   条件: (P : Cᵒᵖ ⥤ D)
-  结论: Presheaf.IsSheaf J (J.plusObj (J.plusObj P))
+  结论: 预层.是层 J (J.plusObj (J.plusObj P))
   证明: by
   apply isSheaf_of_sep
   intro X S x y
@@ -1268,8 +1268,8 @@ theorem isIso_toSheafify
 
 中文:
 定理 isIso_toSheafify
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
-  结论: IsIso (J.toSheafify P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
+  结论: 是同构 (J.toSheafify P)
   证明: by
   dsimp [toSheafify]
   have := isIso_toPlus_of_isSheaf J P hP
@@ -1297,7 +1297,7 @@ definition isoSheafify
 
 中文:
 定义 isoSheafify
-  签名: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  签名: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   定义体: letI := isIso_toSheafify J hP
   asIso (J.toSheafify P)
 
@@ -1320,7 +1320,7 @@ theorem isoSheafify_hom
 
 中文:
 定理 isoSheafify_hom
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   证明: rfl
 
 Depends on / 依赖: eRk_eq_encard, encard_eq_eRk, hIX.encard_eq_eRk, hIX.indep.eRk_eq_encard
@@ -1339,7 +1339,7 @@ definition sheafifyLift
 
 中文:
 定义 sheafifyLift
-  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   定义体: J.plusLift (J.plusLift η hQ) hQ
 
 Depends on / 依赖: J.plusLift, plusLift
@@ -1362,7 +1362,7 @@ theorem toSheafify_sheafifyLift
 
 中文:
 定理 toSheafify_sheafifyLift
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   dsimp only [sheafifyLift, toSheafify]
   simp
@@ -1392,7 +1392,7 @@ theorem sheafifyLift_unique
 
 中文:
 定理 sheafifyLift_unique
-  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   intro h
   apply plusLift_unique
@@ -1425,7 +1425,7 @@ theorem isoSheafify_inv
 
 中文:
 定理 isoSheafify_inv
-  条件: {P : Cᵒᵖ ⥤ D} (hP : Presheaf.IsSheaf J P)
+  条件: {P : Cᵒᵖ ⥤ D} (hP : 预层.是层 J P)
   证明: by
   apply J.sheafifyLift_unique
   simp [Iso.comp_inv_eq]
@@ -1454,7 +1454,7 @@ theorem sheafify_hom_ext
 
 中文:
 定理 sheafify_hom_ext
-  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : J.sheafify P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : J.sheafify P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   apply J.plus_hom_ext _ _ hQ
   apply J.plus_hom_ext _ _ hQ
@@ -1519,9 +1519,9 @@ theorem GrothendieckTopology.sheafify_isSheaf
   proof: GrothendieckTopology.Plus.isSheaf_plus_plus _ _
 
 中文:
-定理 GrothendieckTopology.sheafify_isSheaf
+定理 Grothendieck拓扑.sheafify_isSheaf
   条件: (P : Cᵒᵖ ⥤ D)
-  结论: Presheaf.IsSheaf J (J.sheafify P)
+  结论: 预层.是层 J (J.sheafify P)
   证明: GrothendieckTopology.Plus.isSheaf_plus_plus _ _
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Plus.isSheaf_plus_plus, isSheaf_plus_plus
@@ -1544,7 +1544,7 @@ definition plusPlusSheaf
 
 中文:
 定义 plusPlusSheaf
-  签名: : (Cᵒᵖ ⥤ D) ⥤ Sheaf J D where
+  签名: : (Cᵒᵖ ⥤ D) ⥤ 层 J D where
   定义体: ⟨J.sheafify P, J.sheafify_isSheaf P⟩
   map η := ⟨J.sheafifyMap η⟩
 
@@ -1569,7 +1569,7 @@ instance plusPlusSheaf_preservesZeroMorphisms
 
 中文:
 实例 plusPlusSheaf_preservesZeroMorphisms
-  签名: [Preadditive D]
+  签名: [预加性 D]
   定义体: by
     ext : 3
     refine colimit.hom_ext (fun j => ?_)
@@ -1639,7 +1639,7 @@ instance sheafToPresheaf_isRightAdjoint
 
 中文:
 实例 sheafToPresheaf_isRightAdjoint
-  签名: : (sheafToPresheaf J D).IsRightAdjoint
+  签名: : (sheafToPresheaf J D).是右伴随
   定义体: (plusPlusAdjunction J D).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, plusPlusAdjunction
@@ -1659,7 +1659,7 @@ include instCC in
 
 中文:
 实例 presheaf_mono_of_mono
-  签名: {F G : Sheaf J D} (f : F ⟶ G) [Mono f]
+  签名: {F G : 层 J D} (f : F ⟶ G) [单态射 f]
   定义体: (sheafToPresheaf J D).map_mono _
 
 include instCC in
@@ -1680,9 +1680,9 @@ theorem Sheaf.Hom.mono_iff_presheaf_mono
   proof: ⟨fun m => by infer_instance, fun m => by exact Sheaf.Hom.mono_of_presheaf_mono J D f⟩
 
 中文:
-定理 Sheaf.Hom.mono_iff_presheaf_mono
-  条件: {F G : Sheaf J D} (f : F ⟶ G)
-  结论: Mono f ↔ Mono f.1
+定理 层.态射.mono_iff_presheaf_mono
+  条件: {F G : 层 J D} (f : F ⟶ G)
+  结论: 单态射 f ↔ 单态射 f.1
   证明: ⟨fun m => by infer_instance, fun m => by exact Sheaf.Hom.mono_of_presheaf_mono J D f⟩
 
 Depends on / 依赖: Sheaf.Hom.mono_of_presheaf_mono, infer_instance, mono_of_presheaf_mono

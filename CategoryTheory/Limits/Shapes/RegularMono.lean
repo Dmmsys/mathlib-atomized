@@ -67,14 +67,14 @@ structure RegularMono
     - isLimit : IsLimit (Fork.ofι f w)
 
 中文:
-结构 RegularMono
+结构 正则单态射
   参数: (f : X ⟶ Y)
   公理与运算 (5 个):
     - Z : C
     - left : Y ⟶ Z
     - right : Y ⟶ Z
     - w : f ≫ left = f ≫ right  [默认: by cat_disch]
-    - isLimit : IsLimit (Fork.ofι f w)
+    - isLimit : 是极限 (叉.ofι f w)
 
 Depends on / 依赖: cat_disch
 -/
@@ -102,9 +102,9 @@ lemma RegularMono.mono
   proof: mono_of_isLimit_fork h.isLimit
 
 中文:
-引理 RegularMono.mono
-  条件: {f : X ⟶ Y} (h : RegularMono f)
-  结论: Mono f
+引理 正则单态射.mono
+  条件: {f : X ⟶ Y} (h : 正则单态射 f)
+  结论: 单态射 f
   证明: mono_of_isLimit_fork h.isLimit
 
 Depends on / 依赖: h.isLimit, isLimit, mono_of_isLimit_fork
@@ -125,7 +125,7 @@ definition RegularMono.ofIso
   isLimit := Fork.IsLimit.mk _ (fun s => s.ι ≫ e.inv) (by simp) fun s m w => by simp [← w]
 
 中文:
-定义 RegularMono.ofIso
+定义 正则单态射.ofIso
   签名: (e : X ≅ Y)
   定义体: Y
   left := 𝟙 Y
@@ -153,7 +153,7 @@ definition RegularMono.ofArrowIso
     (Arrow.rightFunc.mapIso e) (Iso.refl _) (Arrow.leftFunc.mapIso e)
 
 中文:
-定义 RegularMono.ofArrowIso
+定义 正则单态射.ofArrowIso
   签名: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
   定义体: h.Z
   left := e.inv.right ≫ h.left
@@ -182,10 +182,10 @@ class IsRegularMono
     - regularMono : Nonempty (RegularMono f)
 
 中文:
-类 IsRegularMono
+类 是正则单态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - regularMono : Nonempty (RegularMono f)
+    - regularMono : 非空 (正则单态射 f)
 -/
 class IsRegularMono {X Y : C} (f : X ⟶ Y) : Prop where
   regularMono : Nonempty (RegularMono f)
@@ -203,7 +203,7 @@ definition MorphismProperty.regularMono
 
 中文:
 定义 MorphismProperty.regularMono
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => IsRegularMono f
 
 @[simp]
@@ -281,8 +281,8 @@ lemma isRegularMono_of_regularMono
 
 中文:
 引理 isRegularMono_of_regularMono
-  条件: {f : X ⟶ Y} (h : RegularMono f)
-  结论: IsRegularMono f
+  条件: {f : X ⟶ Y} (h : 正则单态射 f)
+  结论: 是正则单态射 f
   证明: ⟨⟨h⟩⟩
 
 Depends on / 依赖: hasCardinalLT_union
@@ -298,8 +298,8 @@ definition IsRegularMono.getStruct
   body: IsRegularMono.regularMono.some
 
 中文:
-定义 IsRegularMono.getStruct
-  签名: (f : X ⟶ Y) [IsRegularMono f]
+定义 是正则单态射.getStruct
+  签名: (f : X ⟶ Y) [是正则单态射 f]
   定义体: IsRegularMono.regularMono.some
 
 Depends on / 依赖: IsRegularMono, IsRegularMono.regularMono.some, regularMono
@@ -320,8 +320,8 @@ definition Fork.IsLimit.regularMono
   w := c.condition
 
 中文:
-定义 Fork.IsLimit.regularMono
-  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : Fork p₁ p₂} (h : IsLimit c)
+定义 叉.是极限.regularMono
+  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : 叉 p₁ p₂} (h : 是极限 c)
   定义体: B
   left := p₁
   right := p₂
@@ -365,7 +365,7 @@ definition IsRegularMono.Z
   body: (IsRegularMono.getStruct f).Z
 
 中文:
-定义 IsRegularMono.Z
+定义 是正则单态射.Z
   签名: : C
   定义体: (IsRegularMono.getStruct f).Z
 
@@ -382,7 +382,7 @@ definition IsRegularMono.left
   body: (IsRegularMono.getStruct f).left
 
 中文:
-定义 IsRegularMono.left
+定义 是正则单态射.left
   签名: : Y ⟶ Z f
   定义体: (IsRegularMono.getStruct f).left
 
@@ -399,7 +399,7 @@ definition IsRegularMono.right
   body: (IsRegularMono.getStruct f).right
 
 中文:
-定义 IsRegularMono.right
+定义 是正则单态射.right
   签名: : Y ⟶ Z f
   定义体: (IsRegularMono.getStruct f).right
 
@@ -416,7 +416,7 @@ lemma IsRegularMono.w
   proof: (IsRegularMono.getStruct f).w
 
 中文:
-引理 IsRegularMono.w
+引理 是正则单态射.w
   结论: f ≫ left f = f ≫ right f
   证明: (IsRegularMono.getStruct f).w
 
@@ -433,8 +433,8 @@ definition IsRegularMono.isLimit
   body: (IsRegularMono.getStruct f).isLimit
 
 中文:
-定义 IsRegularMono.isLimit
-  签名: : IsLimit Fork.ofι _ (w f)
+定义 是正则单态射.isLimit
+  签名: : 是极限 叉.ofι _ (w f)
   定义体: (IsRegularMono.getStruct f).isLimit
 
 Depends on / 依赖: IsRegularMono, IsRegularMono.getStruct, getStruct, isLimit
@@ -452,8 +452,8 @@ definition IsRegularMono.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsRegularMono.lift
-  签名: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
+定义 是正则单态射.lift
+  签名: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
   定义体: Fork.IsLimit.lift (isLimit f) k h
 
 @[reassoc (attr := simp)]
@@ -474,8 +474,8 @@ lemma IsRegularMono.fac
   proof: Fork.IsLimit.lift_ι (isLimit f)
 
 中文:
-引理 IsRegularMono.fac
-  结论: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
+引理 是正则单态射.fac
+  结论: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
   证明: Fork.IsLimit.lift_ι (isLimit f)
 
 Depends on / 依赖: Fork.IsLimit.lift_, IsLimit, isLimit
@@ -494,8 +494,8 @@ lemma IsRegularMono.uniq
   proof: .unique hm by simp Fork.IsLimit.existsUnique (isLimit f) k h
 
 中文:
-引理 IsRegularMono.uniq
-  结论: {W : C} (f : X ⟶ Y) [IsRegularMono f] (k : W ⟶ Y)
+引理 是正则单态射.uniq
+  结论: {W : C} (f : X ⟶ Y) [是正则单态射 f] (k : W ⟶ Y)
   证明: .unique hm by simp Fork.IsLimit.existsUnique (isLimit f) k h
 
 Depends on / 依赖: Fork.IsLimit.existsUnique, IsLimit, existsUnique, isLimit, unique
@@ -523,8 +523,8 @@ definition RegularMono.equalizer
       simp [← w]
 
 中文:
-定义 RegularMono.equalizer
-  签名: (g h : X ⟶ Y) [HasLimit (parallelPair g h)]
+定义 正则单态射.equalizer
+  签名: (g h : X ⟶ Y) [有极限 (parallelPair g h)]
   定义体: Y
   left := g
   right := h
@@ -561,8 +561,8 @@ definition RegularMono.ofIsSplitMono
   isLimit := isSplitMonoEqualizes f
 
 中文:
-定义 RegularMono.ofIsSplitMono
-  签名: (f : X ⟶ Y) [IsSplitMono f]
+定义 正则单态射.ofIsSplitMono
+  签名: (f : X ⟶ Y) [是分裂单态射 f]
   定义体: Y
   left := 𝟙 Y
   right := retraction f ≫ f
@@ -588,8 +588,8 @@ definition RegularMono.lift'
   body: Fork.IsLimit.lift' hf.isLimit _ h
 
 中文:
-定义 RegularMono.lift'
-  签名: {W : C} {f : X ⟶ Y} (hf : RegularMono f) (k : W ⟶ Y)
+定义 正则单态射.lift'
+  签名: {W : C} {f : X ⟶ Y} (hf : 正则单态射 f) (k : W ⟶ Y)
   定义体: Fork.IsLimit.lift' hf.isLimit _ h
 
 Depends on / 依赖: Fork.IsLimit.lift, IsLimit, hf.isLimit, isLimit
@@ -698,9 +698,9 @@ lemma RegularMono.strongMono
   
 
 中文:
-引理 RegularMono.strongMono
-  条件: {f : X ⟶ Y} (h : RegularMono f)
-  结论: StrongMono f
+引理 正则单态射.strongMono
+  条件: {f : X ⟶ Y} (h : 正则单态射 f)
+  结论: 强单态射 f
   证明: have := h.mono
   StrongMono.mk' (by
       intro A B z hz u v sq
@@ -740,8 +740,8 @@ theorem isIso_of_regularMono_of_epi
 
 中文:
 定理 isIso_of_regularMono_of_epi
-  条件: (f : X ⟶ Y) (h : RegularMono f) [Epi f]
-  结论: IsIso f
+  条件: (f : X ⟶ Y) (h : 正则单态射 f) [满态射 f]
+  结论: 是同构 f
   证明: have := RegularMono.strongMono h
   isIso_of_epi_of_strongMono _
 
@@ -765,10 +765,10 @@ class IsRegularMonoCategory
     - regularMonoOfMono : forall {X Y : C} (f : X ⟶ Y) [Mono f], IsRegularMono f
 
 中文:
-类 IsRegularMonoCategory
+类 是正则单态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - regularMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f], IsRegularMono f
+    - regularMonoOfMono : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 是正则单态射 f
 -/
 class IsRegularMonoCategory : Prop where
   /-- Every monomorphism is a regular monomorphism -/
@@ -787,7 +787,7 @@ definition regularMonoOfMono
 
 中文:
 定义 regularMonoOfMono
-  签名: [IsRegularMonoCategory C] (f : X ⟶ Y) [Mono f]
+  签名: [是正则单态射范畴 C] (f : X ⟶ Y) [单态射 f]
   定义体: have := IsRegularMonoCategory.regularMonoOfMono f
   IsRegularMono.getStruct f
 
@@ -821,13 +821,13 @@ structure RegularEpi
     - isColimit : IsColimit (Cofork.ofπ f w)
 
 中文:
-结构 RegularEpi
+结构 正则满态射
   参数: (f : X ⟶ Y)
   公理与运算 (4 个):
     - W : C
     - (left(right) : W ⟶ X)
     - w : left ≫ f = right ≫ f  [默认: by cat_disch]
-    - isColimit : IsColimit (Cofork.ofπ f w)
+    - isColimit : 是余极限 (余叉.ofπ f w)
 
 Depends on / 依赖: cat_disch
 -/
@@ -853,9 +853,9 @@ lemma RegularEpi.epi
   proof: epi_of_isColimit_cofork h.isColimit
 
 中文:
-引理 RegularEpi.epi
-  条件: (f : X ⟶ Y) (h : RegularEpi f)
-  结论: Epi f
+引理 正则满态射.epi
+  条件: (f : X ⟶ Y) (h : 正则满态射 f)
+  结论: 满态射 f
   证明: epi_of_isColimit_cofork h.isColimit
 
 Depends on / 依赖: epi_of_isColimit_cofork, h.isColimit, isColimit
@@ -877,7 +877,7 @@ definition RegularEpi.ofIso
     simp [← w]
 
 中文:
-定义 RegularEpi.ofIso
+定义 正则满态射.ofIso
   签名: (e : X ≅ Y)
   定义体: X
   left := 𝟙 X
@@ -909,7 +909,7 @@ definition RegularEpi.ofArrowIso
     (Iso.refl _) (Arrow.leftFunc.mapIso e) (Arrow.rightFunc.mapIso e)
 
 中文:
-定义 RegularEpi.ofArrowIso
+定义 正则满态射.ofArrowIso
   签名: {X'} {Y'} {f : X ⟶ Y} {g : X' ⟶ Y'}
   定义体: h.W
   left := h.left ≫ e.hom.left
@@ -942,10 +942,10 @@ class IsRegularEpi
     - regularEpi : Nonempty (RegularEpi f)
 
 中文:
-类 IsRegularEpi
+类 是正则满态射
   参数: {X Y : C} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - regularEpi : Nonempty (RegularEpi f)
+    - regularEpi : 非空 (正则满态射 f)
 -/
 class IsRegularEpi {X Y : C} (f : X ⟶ Y) : Prop where
   regularEpi : Nonempty (RegularEpi f)
@@ -963,7 +963,7 @@ definition MorphismProperty.regularEpi
 
 中文:
 定义 MorphismProperty.regularEpi
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => IsRegularEpi f
 
 @[simp]
@@ -1041,8 +1041,8 @@ lemma isRegularEpi_of_regularEpi
 
 中文:
 引理 isRegularEpi_of_regularEpi
-  条件: {f : X ⟶ Y} (h : RegularEpi f)
-  结论: IsRegularEpi f
+  条件: {f : X ⟶ Y} (h : 正则满态射 f)
+  结论: 是正则满态射 f
   证明: ⟨⟨h⟩⟩
 -/
 lemma isRegularEpi_of_regularEpi {f : X ⟶ Y} (h : RegularEpi f) : IsRegularEpi f := ⟨⟨h⟩⟩
@@ -1056,8 +1056,8 @@ definition IsRegularEpi.getStruct
   body: h.regularEpi.some
 
 中文:
-定义 IsRegularEpi.getStruct
-  签名: (f : X ⟶ Y) [h : IsRegularEpi f]
+定义 是正则满态射.getStruct
+  签名: (f : X ⟶ Y) [h : 是正则满态射 f]
   定义体: h.regularEpi.some
 
 Depends on / 依赖: h.regularEpi.some, regularEpi
@@ -1078,8 +1078,8 @@ definition Cofork.IsColimit.regularEpi
   w := c.condition
 
 中文:
-定义 Cofork.IsColimit.regularEpi
-  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : Cofork p₁ p₂} (h : IsColimit c)
+定义 余叉.是余极限.regularEpi
+  签名: {A B : C} {p₁ p₂ : A ⟶ B} {c : 余叉 p₁ p₂} (h : 是余极限 c)
   定义体: A
   left := p₁
   right := p₂
@@ -1123,7 +1123,7 @@ definition IsRegularEpi.W
   body: (IsRegularEpi.getStruct f).W
 
 中文:
-定义 IsRegularEpi.W
+定义 是正则满态射.W
   签名: : C
   定义体: (IsRegularEpi.getStruct f).W
 
@@ -1140,7 +1140,7 @@ definition IsRegularEpi.left
   body: (IsRegularEpi.getStruct f).left
 
 中文:
-定义 IsRegularEpi.left
+定义 是正则满态射.left
   签名: : W f ⟶ X
   定义体: (IsRegularEpi.getStruct f).left
 
@@ -1157,7 +1157,7 @@ definition IsRegularEpi.right
   body: (IsRegularEpi.getStruct f).right
 
 中文:
-定义 IsRegularEpi.right
+定义 是正则满态射.right
   签名: : W f ⟶ X
   定义体: (IsRegularEpi.getStruct f).right
 
@@ -1174,7 +1174,7 @@ lemma IsRegularEpi.w
   proof: (IsRegularEpi.getStruct f).w
 
 中文:
-引理 IsRegularEpi.w
+引理 是正则满态射.w
   结论: left f ≫ f = right f ≫ f
   证明: (IsRegularEpi.getStruct f).w
 
@@ -1191,8 +1191,8 @@ definition IsRegularEpi.isColimit
   body: (IsRegularEpi.getStruct f).isColimit
 
 中文:
-定义 IsRegularEpi.isColimit
-  签名: : IsColimit Cofork.ofπ _ (w f)
+定义 是正则满态射.isColimit
+  签名: : 是余极限 余叉.ofπ _ (w f)
   定义体: (IsRegularEpi.getStruct f).isColimit
 
 Depends on / 依赖: IsRegularEpi, IsRegularEpi.getStruct, getStruct, isColimit
@@ -1210,8 +1210,8 @@ definition IsRegularEpi.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsRegularEpi.desc
-  签名: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
+定义 是正则满态射.desc
+  签名: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
   定义体: Cofork.IsColimit.desc (isColimit f) k h
 
 @[reassoc (attr := simp)]
@@ -1232,8 +1232,8 @@ lemma IsRegularEpi.fac
   proof: Cofork.IsColimit.π_desc (isColimit f)
 
 中文:
-引理 IsRegularEpi.fac
-  结论: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
+引理 是正则满态射.fac
+  结论: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
   证明: Cofork.IsColimit.π_desc (isColimit f)
 
 Depends on / 依赖: Cofork, Cofork.IsColimit, IsColimit, isColimit
@@ -1252,8 +1252,8 @@ lemma IsRegularEpi.uniq
   proof: .unique hm by simp Cofork.IsColimit.existsUnique (isColimit f) k h
 
 中文:
-引理 IsRegularEpi.uniq
-  结论: {Z : C} (f : X ⟶ Y) [IsRegularEpi f] (k : X ⟶ Z)
+引理 是正则满态射.uniq
+  结论: {Z : C} (f : X ⟶ Y) [是正则满态射 f] (k : X ⟶ Z)
   证明: .unique hm by simp Cofork.IsColimit.existsUnique (isColimit f) k h
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.existsUnique, IsColimit, existsUnique, isColimit, unique
@@ -1282,7 +1282,7 @@ definition coequalizerRegular
 
 中文:
 定义 coequalizerRegular
-  签名: (g h : X ⟶ Y) [HasColimit (parallelPair g h)]
+  签名: (g h : X ⟶ Y) [有余极限 (parallelPair g h)]
   定义体: X
   left := g
   right := h
@@ -1352,8 +1352,8 @@ refine ⟨⟨regularEpiOfKernelPair _ Cofork.IsColimit.mk' _ fun s => ?_⟩⟩
   rwa [← cancel_epi f, hg]
 
 中文:
-引理 IsRegularEpi.of_epi_of_exists
-  结论: {X B : C} {f : X ⟶ B} [HasPullback f f] [Epi f]
+引理 是正则满态射.of_epi_of_存在
+  结论: {X B : C} {f : X ⟶ B} [HasPullback f f] [满态射 f]
   证明: by
 refine ⟨⟨regularEpiOfKernelPair _ Cofork.IsColimit.mk' _ fun s => ?_⟩⟩
   choose g hg using h s.condition
@@ -1384,7 +1384,7 @@ definition effectiveEpiStructOfRegularEpi
 
 中文:
 定义 effectiveEpiStructOfRegularEpi
-  签名: {B X : C} {f : X ⟶ B} (hf : RegularEpi f)
+  签名: {B X : C} {f : X ⟶ B} (hf : 正则满态射 f)
   定义体: Cofork.IsColimit.desc hf.isColimit _ (h _ _ hf.w)
   fac _ _ := Cofork.IsColimit.π_desc' hf.isColimit _ _
   uniq _ _ _ hg := Cofork.IsColimit.hom_ext hf.isColimit (hg.trans
@@ -1409,9 +1409,9 @@ lemma RegularEpi.effectiveEpi
   proof: ⟨⟨effectiveEpiStructOfRegularEpi h⟩⟩
 
 中文:
-引理 RegularEpi.effectiveEpi
-  条件: {B X : C} {f : X ⟶ B} (h : RegularEpi f)
-  结论: EffectiveEpi f
+引理 正则满态射.effectiveEpi
+  条件: {B X : C} {f : X ⟶ B} (h : 正则满态射 f)
+  结论: 有效满态射 f
   证明: ⟨⟨effectiveEpiStructOfRegularEpi h⟩⟩
 
 Depends on / 依赖: effectiveEpiStructOfRegularEpi
@@ -1457,7 +1457,7 @@ definition isColimitCoforkOfEffectiveEpi
 
 中文:
 定义 isColimitCoforkOfEffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [EffectiveEpi f]
+  签名: {B X : C} (f : X ⟶ B) [有效满态射 f]
   定义体: EffectiveEpi.desc f (s.ι.app WalkingParallelPair.one) fun g₁ g₂ hg => (by
       simp only [Cofork.app_one_eq_π]
       rw [← PullbackCone.IsLimit.lift_snd hc g₁ g₂ hg]; rw [Category.assoc]; rw [← Cofork.app_zero_eq_comp_π_right]
@@ -1593,8 +1593,8 @@ definition RegularEpi.ofSplitEpi
   isColimit := isSplitEpiCoequalizes f
 
 中文:
-定义 RegularEpi.ofSplitEpi
-  签名: (f : X ⟶ Y) [IsSplitEpi f]
+定义 正则满态射.ofSplitEpi
+  签名: (f : X ⟶ Y) [是分裂满态射 f]
   定义体: X
   left := 𝟙 X
   right := f ≫ section_ f
@@ -1620,8 +1620,8 @@ definition RegularEpi.desc'
   body: Cofork.IsColimit.desc' hf.isColimit _ h
 
 中文:
-定义 RegularEpi.desc'
-  签名: {W : C} {f : X ⟶ Y} (hf : RegularEpi f) (k : X ⟶ W)
+定义 正则满态射.desc'
+  签名: {W : C} {f : X ⟶ Y} (hf : 正则满态射 f) (k : X ⟶ W)
   定义体: Cofork.IsColimit.desc' hf.isColimit _ h
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.desc, IsColimit, hf.isColimit, isColimit
@@ -1721,8 +1721,8 @@ theorem isIso_of_regularEpi_of_mono
 
 中文:
 定理 isIso_of_regularEpi_of_mono
-  条件: (f : X ⟶ Y) (h : RegularEpi f) [Mono f]
-  结论: IsIso f
+  条件: (f : X ⟶ Y) (h : 正则满态射 f) [单态射 f]
+  结论: 是同构 f
   证明: have := isRegularEpi_of_regularEpi h
   isIso_of_mono_of_strongEpi _
 
@@ -1747,8 +1747,8 @@ definition RegularMono.op
   isColimit := Fork.isLimitOfιEquivIsColimitOp _ _ hf.w _ rfl hf.isLimit
 
 中文:
-定义 RegularMono.op
-  签名: {X Y : C} {f : X ⟶ Y} (hf : RegularMono f)
+定义 正则单态射.op
+  签名: {X Y : C} {f : X ⟶ Y} (hf : 正则单态射 f)
   定义体: .op hf.Z
   left := hf.left.op
   right := hf.right.op
@@ -1778,8 +1778,8 @@ definition RegularMono.unop
   isColimit := Fork.isLimitOfιEquivIsColimitUnop _ _ hf.w _ rfl hf.isLimit
 
 中文:
-定义 RegularMono.unop
-  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularMono f)
+定义 正则单态射.unop
+  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : 正则单态射 f)
   定义体: hf.Z.unop
   left := hf.left.unop
   right := hf.right.unop
@@ -1809,8 +1809,8 @@ definition RegularEpi.op
   isLimit := Cofork.isColimitOfπEquivIsLimitOp _ _ hf.w _ rfl hf.isColimit
 
 中文:
-定义 RegularEpi.op
-  签名: {X Y : C} {f : X ⟶ Y} (hf : RegularEpi f)
+定义 正则满态射.op
+  签名: {X Y : C} {f : X ⟶ Y} (hf : 正则满态射 f)
   定义体: .op hf.W
   left := hf.left.op
   right := hf.right.op
@@ -1842,8 +1842,8 @@ definition RegularEpi.unop
 @[simp]
 
 中文:
-定义 RegularEpi.unop
-  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : RegularEpi f)
+定义 正则满态射.unop
+  签名: {X Y : Cᵒᵖ} {f : X ⟶ Y} (hf : 正则满态射 f)
   定义体: hf.W.unop
   left := hf.left.unop
   right := hf.right.unop
@@ -1970,10 +1970,10 @@ class IsRegularEpiCategory
     - regularEpiOfEpi : forall {X Y : C} (f : X ⟶ Y) [Epi f], IsRegularEpi f
 
 中文:
-类 IsRegularEpiCategory
+类 是正则满态射范畴
   参数: : 命题 where
   公理与运算 (1 个):
-    - regularEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [Epi f], IsRegularEpi f
+    - regularEpiOfEpi : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 是正则满态射 f
 -/
 class IsRegularEpiCategory : Prop where
   /-- Everyone epimorphism is a regular epimorphism -/
@@ -1992,7 +1992,7 @@ definition regularEpiOfEpi
 
 中文:
 定义 regularEpiOfEpi
-  签名: [IsRegularEpiCategory C] (f : X ⟶ Y) [Epi f]
+  签名: [是正则满态射范畴 C] (f : X ⟶ Y) [满态射 f]
   定义体: have := IsRegularEpiCategory.regularEpiOfEpi f
   IsRegularEpi.getStruct f
 

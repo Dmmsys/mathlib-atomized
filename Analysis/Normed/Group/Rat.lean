@@ -30,7 +30,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: : NormedAddCommGroup Rat where
+  签名: : 赋范交换加群 有理数 where
   定义体: ‖(r : Real)‖
   dist_eq r₁ r₂ := by
     simp only [dist_eq, norm, cast_add, cast_neg]
@@ -60,7 +60,7 @@ theorem norm_cast_real
 
 中文:
 定理 norm_cast_real
-  条件: (r : Rat)
+  条件: (r : 有理数)
   结论: ‖(r : 实数)‖ = ‖r‖
   证明: rfl
 
@@ -81,9 +81,9 @@ theorem _root_.Int.norm_cast_rat
   rw [← Rat.norm_cast_real]; rw [← Int.norm_cast_real]; congr 1
 
 中文:
-定理 _root_.Int.norm_cast_rat
+定理 _root_.整数.norm_cast_rat
   条件: (m : 整数)
-  结论: ‖(m : Rat)‖ = ‖m‖
+  结论: ‖(m : 有理数)‖ = ‖m‖
   证明: by
   rw [← Rat.norm_cast_real]; rw [← Int.norm_cast_real]; congr 1
 

@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Multiset α)
+  签名: 加法 (Multiset α)
   定义体: ⟨Multiset.add⟩
 
 @[simp]
@@ -99,8 +99,8 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: (s t : List α)
-  结论: (s + t : Multiset α) = (s ++ t : List α)
+  条件: (s t : 列表 α)
+  结论: (s + t : Multiset α) = (s ++ t : 列表 α)
   证明: rfl
 
 @[simp]
@@ -347,7 +347,7 @@ theorem le_iff_exists_add
 @[simp]
 
 中文:
-定理 le_iff_exists_add
+定理 le_iff_存在_add
   条件: {s t : Multiset α}
   结论: s <= t ↔ 存在 u, t = s + u
   证明: ⟨fun h =>
@@ -586,7 +586,7 @@ theorem coe_erase
 
 中文:
 定理 coe_erase
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   结论: erase (l : Multiset α) a = l.erase a
   证明: rfl
 
@@ -1048,7 +1048,7 @@ instance :
 
 中文:
 实例 :
-  签名: RightCommutative erase (α := α)
+  签名: 右交换 erase (α := α)
   定义体: ⟨erase_comm⟩
 
 @[gcongr]
@@ -1310,7 +1310,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Multiset α)
+  签名: 减法 (Multiset α)
   定义体: ⟨.sub⟩
 
 @[simp]
@@ -1329,7 +1329,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: (s t : List α)
+  条件: (s t : 列表 α)
   结论: (s - t : Multiset α) = s.diff t
   证明: rfl
 -/
@@ -1787,9 +1787,9 @@ theorem Rel.add
   | cons hab hst ih => simpa using ih.cons hab
 
 中文:
-定理 Rel.add
-  条件: {s t u v} (hst : Rel r s t) (huv : Rel r u v)
-  结论: Rel r (s + u) (t + v)
+定理 关系.add
+  条件: {s t u v} (hst : 关系 r s t) (huv : 关系 r u v)
+  结论: 关系 r (s + u) (t + v)
   证明: by
   induction hst with
   | zero => simpa using huv

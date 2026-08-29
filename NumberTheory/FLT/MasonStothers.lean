@@ -94,7 +94,7 @@ theorem Polynomial.abc
   have hca : I
 
 中文:
-定理 Polynomial.abc
+定理 多项式.abc
   证明: by
   set w := wronskian a b with wab
   have hbc : IsCoprime b c := by

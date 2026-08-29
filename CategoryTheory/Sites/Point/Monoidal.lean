@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (OplaxMonoidal.η (Φ.presheafFiber (A := A)))
+  签名: 是同构 (反松弛幺半群.η (Φ.presheafFiber (A := A)))
   定义体: (IsColimit.coconePointUniqueUpToIso (Φ.isColimitPresheafFiberCocone (𝟙_ _))
     (isColimitConstCocone _ (𝟙_ A))).isIso_hom
 -/
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.presheafFiber (A := A)).Monoidal
+  签名: (Φ.presheafFiber (A := A)).幺半群
   定义体: .ofOplaxMonoidal _
 
 Depends on / 依赖: Monoidal
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Φ.sheafFiber (A := A)).Monoidal
+  签名: (Φ.sheafFiber (A := A)).幺半群
   定义体: Localization.Monoidal.functorMonoidalOfComp (presheafToSheaf J A) J.W
     Φ.sheafFiber Φ.presheafFiber
 
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal (Φ.presheafToSheafCompSheafFiberIso A).hom
+  签名: 自然变换.是幺半群 (Φ.presheafToSheafCompSheafFiberIso A).hom
   定义体: Localization.Monoidal.lifting_isMonoidal (presheafToSheaf J A) J.W
     Φ.sheafFiber Φ.presheafFiber
 

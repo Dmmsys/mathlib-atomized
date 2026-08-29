@@ -57,8 +57,8 @@ instance _root_.PUnit.algebra
 @[simp]
 
 中文:
-实例 _root_.PUnit.algebra
-  签名: : Algebra R PUnit.{v + 1} where
+实例 _root_.命题单元.algebra
+  签名: : 代数 R 命题单元.{v + 1} where
   定义体: { toFun _ := PUnit.unit
     map_one' := rfl
     map_mul' _ _ := rfl
@@ -94,7 +94,7 @@ theorem algebraMap_pUnit
 中文:
 定理 algebraMap_pUnit
   条件: (r : R)
-  结论: algebraMap R PUnit r = PUnit.unit
+  结论: algebraMap R 命题单元 r = 命题单元.unit
   证明: rfl
 -/
 theorem algebraMap_pUnit (r : R) : algebraMap R PUnit r = PUnit.unit :=
@@ -118,8 +118,8 @@ commutes' := fun r x => ULift.down_injective Algebra.commutes r x.down
 smul_def' := fun r x => ULift.down_injective Algebra.s
 
 中文:
-实例 _root_.ULift.algebra
-  签名: : Algebra R (ULift A)
+实例 _root_.类型层提升.algebra
+  签名: : 代数 R (类型层提升 A)
   定义体: { ULift.module' with
     algebraMap :=
     { (ULift.ringEquiv : ULift A ≃+* A).symm.toRingHom.comp (algebraMap R A) with
@@ -148,7 +148,7 @@ theorem _root_.ULift.algebraMap_eq
 @[simp]
 
 中文:
-定理 _root_.ULift.algebraMap_eq
+定理 _root_.类型层提升.algebraMap_eq
   条件: (r : R)
   证明: rfl
 
@@ -169,9 +169,9 @@ theorem _root_.ULift.down_algebraMap
   proof: rfl
 
 中文:
-定理 _root_.ULift.down_algebraMap
+定理 _root_.类型层提升.down_algebraMap
   条件: (r : R)
-  结论: (algebraMap R (ULift A) r).down = algebraMap R A r
+  结论: (algebraMap R (类型层提升 A) r).down = algebraMap R A r
   证明: rfl
 -/
 theorem _root_.ULift.down_algebraMap (r : R) : (algebraMap R (ULift A) r).down = algebraMap R A r :=
@@ -194,8 +194,8 @@ definition _root_.ULift.algebra'
   smul_def' _ _ := Algebra.smul_def' ..
 
 中文:
-定义 _root_.ULift.algebra'
-  签名: : Algebra (ULift.{u} R) A where
+定义 _root_.类型层提升.algebra'
+  签名: : 代数 (类型层提升.{u} R) A where
   定义体: ULift.module
   algebraMap := (algebraMap R A).comp ULift.ringEquiv.toRingHom
   commutes' _ _ := Algebra.commutes ..
@@ -221,8 +221,8 @@ lemma _root_.ULift.algebraMap_apply'
   proof: rfl
 
 中文:
-引理 _root_.ULift.algebraMap_apply'
-  条件: (r : ULift R)
+引理 _root_.类型层提升.algebraMap_apply'
+  条件: (r : 类型层提升 R)
   证明: rfl
 -/
 lemma _root_.ULift.algebraMap_apply' (r : ULift R) :
@@ -250,7 +250,7 @@ theorem algebraMap_ofSubsemiring
 
 中文:
 定理 algebraMap_ofSubsemiring
-  条件: (S : Subsemiring R)
+  条件: (S : 子半环 R)
   证明: rfl
 -/
 theorem algebraMap_ofSubsemiring (S : Subsemiring R) :
@@ -269,7 +269,7 @@ theorem coe_algebraMap_ofSubsemiring
 中文:
 定理 coe_algebraMap_ofSubsemiring
   条件: (S : C)
-  结论: (algebraMap S R : S -> R) = Subtype.val
+  结论: (algebraMap S R : S -> R) = 子类型.val
   证明: rfl
 -/
 theorem coe_algebraMap_ofSubsemiring (S : C) : (algebraMap S R : S -> R) = Subtype.val :=
@@ -303,7 +303,7 @@ theorem algebraMap_ofSubring
 
 中文:
 定理 algebraMap_ofSubring
-  条件: {R : 类型} [CommRing R] (S : Subring R)
+  条件: {R : 类型} [交换环 R] (S : 子环 R)
   证明: rfl
 -/
 theorem algebraMap_ofSubring {R : Type*} [CommRing R] (S : Subring R) :
@@ -322,7 +322,7 @@ definition algebraMapSubmonoid
 
 中文:
 定义 algebraMapSubmonoid
-  签名: (S : 类型) [Semiring S] [Algebra R S] (M : Submonoid R)
+  签名: (S : 类型) [半环 S] [代数 R S] (M : 子幺半群 R)
   定义体: M.map (algebraMap R S)
 
 Depends on / 依赖: M.map, algebraMap
@@ -344,7 +344,7 @@ theorem mem_algebraMapSubmonoid_of_mem
 
 中文:
 定理 mem_algebraMapSubmonoid_of_mem
-  结论: {M : Submonoid R}
+  结论: {M : 子幺半群 R}
   证明: Set.mem_image_of_mem (algebraMap R S) x.2
 
 @[simp]
@@ -369,8 +369,8 @@ lemma algebraMapSubmonoid_self
 
 中文:
 引理 algebraMapSubmonoid_self
-  条件: (M : Submonoid R)
-  结论: Algebra.algebraMapSubmonoid R M = M
+  条件: (M : 子幺半群 R)
+  结论: 代数.algebraMapSubmonoid R M = M
   证明: Submonoid.map_id M
 
 @[simp]
@@ -440,7 +440,7 @@ theorem mul_sub_algebraMap_commutes
 
 中文:
 定理 mul_sub_algebraMap_commutes
-  条件: [Ring A] [Algebra R A] (x : A) (r : R)
+  条件: [环 A] [代数 R A] (x : A) (r : R)
   证明: by rw [mul_sub, ← commutes, sub_mul]
 
 Depends on / 依赖: commutes, mul_sub, sub_mul
@@ -462,7 +462,7 @@ theorem mul_sub_algebraMap_pow_commutes
 
 中文:
 定理 mul_sub_algebraMap_pow_commutes
-  条件: [Ring A] [Algebra R A] (x : A) (r : R) (n : 自然数)
+  条件: [环 A] [代数 R A] (x : A) (r : R) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -496,7 +496,7 @@ abbreviation semiringToRing
 
 中文:
 缩写 semiringToRing
-  签名: (R : 类型) [CommRing R] [Semiring A] [Algebra R A]
+  签名: (R : 类型) [交换环 R] [半环 A] [代数 R A]
   定义体: { __ := (inferInstance : Semiring A)
     __ := Module.addCommMonoidToAddCommGroup R
     intCast := fun z => algebraMap R A z
@@ -523,8 +523,8 @@ abbreviation _root_.RingHom.commSemiringToCommRing
     mul_comm := CommMonoid.mul_comm }
 
 中文:
-缩写 _root_.RingHom.commSemiringToCommRing
-  签名: {R A : 类型} [CommRing R] [CommSemiring A]
+缩写 _root_.环态射.commSemiringToCommRing
+  签名: {R A : 类型} [交换环 R] [交换半环 A]
   定义体: let _ : Algebra R A := RingHom.toAlgebra φ
   { __ := Algebra.semiringToRing R
     mul_comm := CommMonoid.mul_comm }
@@ -569,7 +569,7 @@ instance End.instAlgebra
 
 中文:
 实例 End.instAlgebra
-  签名: : Algebra R (Module.End S M)
+  签名: : 代数 R (模.End S M)
   定义体: Algebra.ofModule smul_mul_assoc fun r f g => (smul_comm r f g).symm
 
 Depends on / 依赖: Algebra, Algebra.ofModule, ofModule, smul_comm, smul_mul_assoc
@@ -594,7 +594,7 @@ theorem algebraMap_end_eq_smul_id
 中文:
 定理 algebraMap_end_eq_smul_id
   条件: (a : R)
-  结论: algebraMap R (End S M) a = a • LinearMap.id
+  结论: algebraMap R (End S M) a = a • 线性映射.id
   证明: rfl
 
 @[simp]
@@ -636,7 +636,7 @@ theorem ker_algebraMap_end
 
 中文:
 定理 ker_algebraMap_end
-  结论: (K : 类型u) (V : 类型v) [Semifield K] [AddCommMonoid V] [Module K V]
+  结论: (K : 类型u) (V : 类型v) [半域 K] [加法交换幺半群 V] [模 K V]
   证明: LinearMap.ker_smul _ _ ha
 
 Depends on / 依赖: LinearMap, LinearMap.ker_smul, ker_smul
@@ -791,7 +791,7 @@ instance nat_algebra_subsingleton
 
 中文:
 实例 nat_algebra_subsingleton
-  签名: : Subsingleton (Algebra 自然数 R)
+  签名: : 子单例 (代数 自然数 R)
   定义体: ⟨fun P Q => by ext; simp⟩
 
 @[simp]
@@ -811,7 +811,7 @@ lemma algebraMap_comp_natCast
 
 中文:
 引理 algebraMap_comp_natCast
-  条件: (R A : 类型) [CommSemiring R] [Semiring A] [Algebra R A]
+  条件: (R A : 类型) [交换半环 R] [半环 A] [代数 R A]
   证明: by
   ext; simp
 -/
@@ -866,7 +866,7 @@ instance int_algebra_subsingleton
 
 中文:
 实例 int_algebra_subsingleton
-  签名: : Subsingleton (Algebra 整数 R)
+  签名: : 子单例 (代数 整数 R)
   定义体: ⟨fun P Q => Algebra.algebra_ext P Q RingHom.congr_fun Subsingleton.elim _ _⟩
 
 @[simp]
@@ -888,7 +888,7 @@ lemma algebraMap_comp_intCast
 
 中文:
 引理 algebraMap_comp_intCast
-  条件: (R A : 类型) [CommRing R] [Ring A] [Algebra R A]
+  条件: (R A : 类型) [交换环 R] [环 A] [代数 R A]
   证明: by
   ext; simp
 -/
@@ -911,7 +911,7 @@ theorem _root_.NeZero.of_faithfulSMul
 
 中文:
 定理 _root_.NeZero.of_faithfulSMul
-  结论: (R A : 类型) [Semiring R] [Semiring A] [Module R A]
+  结论: (R A : 类型) [半环 R] [半环 A] [模 R A]
   证明: NeZero.nat_of_injective (f := ringHomEquivModuleIsScalarTower.symm ⟨_, ‹_›⟩)
     (faithfulSMul_iff_injective_smul_one R A).mp ‹_›
 
@@ -936,7 +936,7 @@ lemma faithfulSMul_iff_algebraMap_injective
 
 中文:
 引理 faithfulSMul_iff_algebraMap_injective
-  结论: FaithfulSMul R A ↔ Injective (algebraMap R A)
+  结论: 忠实标量乘法 R A ↔ 单射 (algebraMap R A)
   证明: by
   rw [faithfulSMul_iff_injective_smul_one]; rw [Algebra.algebraMap_eq_smul_one']
 
@@ -961,7 +961,7 @@ lemma algebraMap_injective
 
 中文:
 引理 algebraMap_injective
-  结论: Injective (algebraMap R A)
+  结论: 单射 (algebraMap R A)
   证明: (faithfulSMul_iff_algebraMap_injective R A).mp inferInstance
 
 @[simp]
@@ -1040,7 +1040,7 @@ definition mulSemiringActionOfSmulDistribClass
 
 中文:
 定义 mulSemiringActionOfSmulDistribClass
-  签名: (G : 类型) [Monoid G]
+  签名: (G : 类型) [幺半群 G]
   定义体: by
     apply FaithfulSMul.algebraMap_injective R A
     rw [algebraMap.smul']; rw [one_smul]
@@ -1136,9 +1136,9 @@ lemma Algebra.charZero_of_charZero
   ⟨this ▸ (FaithfulSMul.algebraMap_injective R A).comp CharZero.cast_injective⟩
 
 中文:
-引理 Algebra.charZero_of_charZero
-  条件: [CharZero R]
-  结论: CharZero A
+引理 代数.charZero_of_charZero
+  条件: [特征零 R]
+  结论: 特征零 A
   证明: have := algebraMap_comp_natCast R A
   ⟨this ▸ (FaithfulSMul.algebraMap_injective R A).comp CharZero.cast_injective⟩
 
@@ -1158,8 +1158,8 @@ instance [CharZero
   simpa only [faithfulSMul_iff_algebraMap_injective] using (algebraMap Nat R).injective_nat
 
 中文:
-实例 [CharZero
-  签名: R] : FaithfulSMul 自然数 R
+实例 [特征零
+  签名: R] : 忠实标量乘法 自然数 R
   定义体: by
   simpa only [faithfulSMul_iff_algebraMap_injective] using (algebraMap Nat R).injective_nat
 
@@ -1306,9 +1306,9 @@ lemma NoZeroDivisors.of_faithfulSMul
   proof: (FaithfulSMul.algebraMap_injective R A).noZeroDivisors _ (by simp) (by simp)
 
 中文:
-引理 NoZeroDivisors.of_faithfulSMul
-  条件: [NoZeroDivisors A]
-  结论: NoZeroDivisors R
+引理 无零因子.of_faithfulSMul
+  条件: [无零因子 A]
+  结论: 无零因子 R
   证明: (FaithfulSMul.algebraMap_injective R A).noZeroDivisors _ (by simp) (by simp)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, noZeroDivisors
@@ -1326,9 +1326,9 @@ lemma IsCancelMulZero.of_faithfulSMul
   proof: (FaithfulSMul.algebraMap_injective R A).isCancelMulZero _ (by simp) (by simp)
 
 中文:
-引理 IsCancelMulZero.of_faithfulSMul
-  条件: [IsCancelMulZero A]
-  结论: IsCancelMulZero R
+引理 是乘零消去.of_faithfulSMul
+  条件: [是乘零消去 A]
+  结论: 是乘零消去 R
   证明: (FaithfulSMul.algebraMap_injective R A).isCancelMulZero _ (by simp) (by simp)
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, isCancelMulZero
@@ -1346,9 +1346,9 @@ lemma IsDomain.of_faithfulSMul
   proof: (FaithfulSMul.algebraMap_injective R A).isDomain
 
 中文:
-引理 IsDomain.of_faithfulSMul
-  条件: [IsDomain A]
-  结论: IsDomain R
+引理 是整环.of_faithfulSMul
+  条件: [是整环 A]
+  结论: 是整环 R
   证明: (FaithfulSMul.algebraMap_injective R A).isDomain
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, isDomain
@@ -1366,8 +1366,8 @@ lemma Module.IsTorsionFree.of_faithfulSMul
     (by simp [Algebra.algebraMap_eq_smul_one])
 
 中文:
-引理 Module.IsTorsionFree.of_faithfulSMul
-  结论: [Semiring S] [Module S R] [Module S A]
+引理 模.是无挠.of_faithfulSMul
+  结论: [半环 S] [模 S R] [模 S A]
   证明: (FaithfulSMul.algebraMap_injective R A).moduleIsTorsionFree _
     (by simp [Algebra.algebraMap_eq_smul_one])
 
@@ -1387,8 +1387,8 @@ lemma Module.IsTorsionFree.trans_faithfulSMul
   proof: .comap (algebraMap R A) (fun r hr => .of_ne_zero <| by simpa using hr.ne_zero) (by simp)
 
 中文:
-引理 Module.IsTorsionFree.trans_faithfulSMul
-  结论: [Nontrivial R] [IsCancelMulZero A] [AddCommMonoid M]
+引理 模.是无挠.trans_faithfulSMul
+  结论: [非平凡 R] [是乘零消去 A] [加法交换幺半群 M]
   证明: .comap (algebraMap R A) (fun r hr => .of_ne_zero <| by simpa using hr.ne_zero) (by simp)
 
 Depends on / 依赖: algebraMap, hr.ne_zero, ne_zero, of_ne_zero
@@ -1422,7 +1422,7 @@ lemma isTorsionFree_iff_faithfulSMul
 
 中文:
 引理 isTorsionFree_iff_faithfulSMul
-  结论: IsTorsionFree R A ↔ FaithfulSMul R A
+  结论: 是无挠 R A ↔ 忠实标量乘法 R A
   证明: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 -/
 lemma isTorsionFree_iff_faithfulSMul : IsTorsionFree R A ↔ FaithfulSMul R A :=
@@ -1439,7 +1439,7 @@ lemma isTorsionFree_iff_algebraMap_injective
 
 中文:
 引理 isTorsionFree_iff_algebraMap_injective
-  结论: IsTorsionFree R A ↔ Injective (algebraMap R A)
+  结论: 是无挠 R A ↔ 单射 (algebraMap R A)
   证明: by
   rw [isTorsionFree_iff_faithfulSMul]; rw [faithfulSMul_iff_algebraMap_injective]
 
@@ -1477,7 +1477,7 @@ abbreviation Invertible.algebraMapOfInvertibleAlgebraMap
   mul_invOf_self := by rw [← Algebra.smul_def, ← map_smul, Algebra.smul_def, mul_invOf_self, hf]
 
 中文:
-缩写 Invertible.algebraMapOfInvertibleAlgebraMap
+缩写 可逆.algebraMapOfInvertibleAlgebraMap
   签名: (f : A ->ₗ[R] B) (hf : f 1 = 1) {r : R}
   定义体: f ⅟(algebraMap R A r)
   invOf_mul_self := by rw [← Algebra.commutes, ← Algebra.smul_def, ← map_smul, Algebra.smul_def,
@@ -1504,7 +1504,7 @@ lemma IsUnit.algebraMap_of_algebraMap
   isUnit_of_invertible _
 
 中文:
-引理 IsUnit.algebraMap_of_algebraMap
+引理 是单位.algebraMap_of_algebraMap
   结论: (f : A ->ₗ[R] B) (hf : f 1 = 1) {r : R}
   证明: let ⟨i⟩ := nonempty_invertible h
   letI := Invertible.algebraMapOfInvertibleAlgebraMap f hf i
@@ -1535,7 +1535,7 @@ theorem injective_algebraMap_of_linearMap
 
 中文:
 定理 injective_algebraMap_of_linearMap
-  条件: (hb : Injective b)
+  条件: (hb : 单射 b)
   证明: fun x y e => hb by
   rw [← mul_one x]; rw [← mul_one y]; rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [map_smul]; rw [map_smul]; rw [Algebra.smul_def]; rw [Algebra.smul_def]; rw [e]
 
@@ -1562,7 +1562,7 @@ theorem surjective_algebraMap_of_linearMap
 
 中文:
 定理 surjective_algebraMap_of_linearMap
-  条件: (hb : Surjective b)
+  条件: (hb : 满射 b)
   证明: fun x => by
   obtain ⟨x, rfl⟩ := hb x
   obtain ⟨y, hy⟩ := hb (b 1 * b 1)
@@ -1595,7 +1595,7 @@ theorem bijective_algebraMap_of_linearMap
 
 中文:
 定理 bijective_algebraMap_of_linearMap
-  条件: (hb : Bijective b)
+  条件: (hb : 双射 b)
   证明: ⟨injective_algebraMap_of_linearMap b hb.1, surjective_algebraMap_of_linearMap b hb.2⟩
 
 Depends on / 依赖: injective_algebraMap_of_linearMap, surjective_algebraMap_of_linearMap
@@ -1643,8 +1643,8 @@ definition LinearMap.extendScalarsOfSurjectiveEquiv
   invFun f := f.restrictScalars S
 
 中文:
-定义 LinearMap.extendScalarsOfSurjectiveEquiv
-  签名: (h : Surjective (algebraMap R S))
+定义 线性映射.extendScalarsOfSurjectiveEquiv
+  签名: (h : 满射 (algebraMap R S))
   定义体: { __ := f, map_smul' := fun r x => by obtain ⟨r, rfl⟩ := h r; simp }
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1668,8 +1668,8 @@ abbreviation LinearMap.extendScalarsOfSurjective
   body: extendScalarsOfSurjectiveEquiv h l
 
 中文:
-缩写 LinearMap.extendScalarsOfSurjective
-  签名: (h : Surjective (algebraMap R S))
+缩写 线性映射.extendScalarsOfSurjective
+  签名: (h : 满射 (algebraMap R S))
   定义体: extendScalarsOfSurjectiveEquiv h l
 
 Depends on / 依赖: extendScalarsOfSurjectiveEquiv
@@ -1688,8 +1688,8 @@ definition LinearEquiv.extendScalarsOfSurjective
   map_smul' r x := by obtain ⟨r, rfl⟩ := h r; simp
 
 中文:
-定义 LinearEquiv.extendScalarsOfSurjective
-  签名: (h : Surjective (algebraMap R S))
+定义 线性等价.extendScalarsOfSurjective
+  签名: (h : 满射 (algebraMap R S))
   定义体: f
   map_smul' r x := by obtain ⟨r, rfl⟩ := h r; simp
 -/
@@ -1712,7 +1712,7 @@ lemma LinearMap.extendScalarsOfSurjective_apply
 @[simp]
 
 中文:
-引理 LinearMap.extendScalarsOfSurjective_apply
+引理 线性映射.extendScalarsOfSurjective_apply
   条件: (l : M ->ₗ[R] N) (x)
   证明: rfl
 
@@ -1733,7 +1733,7 @@ lemma LinearEquiv.extendScalarsOfSurjective_apply
 @[simp]
 
 中文:
-引理 LinearEquiv.extendScalarsOfSurjective_apply
+引理 线性等价.extendScalarsOfSurjective_apply
   条件: (f : M ≃ₗ[R] N) (x)
   证明: rfl
 
@@ -1752,7 +1752,7 @@ lemma LinearEquiv.extendScalarsOfSurjective_symm
   proof: rfl
 
 中文:
-引理 LinearEquiv.extendScalarsOfSurjective_symm
+引理 线性等价.extendScalarsOfSurjective_symm
   条件: (f : M ≃ₗ[R] N)
   证明: rfl
 -/

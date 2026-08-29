@@ -37,7 +37,7 @@ definition Polynomial.int
   toFinsupp.coeff.mem_support_toFun n := by rw [ne_eq, ← Subring.coe_eq_zero_iff, mem_support_iff]
 
 中文:
-定义 Polynomial.int
+定义 多项式.int
   签名: (P : K[X]) (hP : 对任意 n : 自然数, P.coeff n in R)
   定义体: ⟨P.coeff n, hP n⟩
   toFinsupp.coeff.support := P.support

@@ -447,7 +447,7 @@ lemma residueClass_apply
 
 中文:
 引理 residueClass_apply
-  条件: (ha : IsUnit a) (n : 自然数)
+  条件: (ha : 是单位 a) (n : 自然数)
   证明: by
   rw [eq_inv_mul_iff_mul_eq₀ <| mod_cast (Nat.totient_pos.mpr q.pos_of_neZero).ne']
   simp +contextual only [residueClass, Set.indicator_apply, Set.mem_ofPred_eq, apply_ite,
@@ -477,7 +477,7 @@ lemma residueClass_eq
 
 中文:
 引理 residueClass_eq
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   证明: by
   ext1 n
   simpa only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul, ← mul_assoc]
@@ -507,7 +507,7 @@ lemma LSeries_residueClass_eq
 
 中文:
 引理 LSeries_residueClass_eq
-  条件: (ha : IsUnit a) {s : Complex} (hs : 1 < s.re)
+  条件: (ha : 是单位 a) {s : 复形} (hs : 1 < s.re)
   证明: by
   simp only [deriv_LFunction_eq_deriv_LSeries _ hs, LFunction_eq_LSeries _ hs, neg_mul, ← mul_neg,
     ← Finset.sum_neg_distrib, ← neg_div, ← LSeries_twist_vonMangoldt_eq _ hs]
@@ -550,7 +550,7 @@ abbreviation LFunctionResidueClassAux
 
 中文:
 缩写 LFunctionResidueClassAux
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: (q.totient : Complex)⁻¹ * (-deriv (LFunctionTrivChar₁ q) s / LFunctionTrivChar₁ q s -
     ∑ χ in ({1}ᶜ : Finset (DirichletCharacter Complex q)), χ a⁻¹ * deriv (LFunction χ) s / LFunction χ s)
 
@@ -654,7 +654,7 @@ lemma eqOn_LFunctionResidueClassAux
 
 中文:
 引理 eqOn_LFunctionResidueClassAux
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   证明: by
   intro s hs
   replace hs := Set.mem_ofPred.mp hs
@@ -702,7 +702,7 @@ lemma LFunctionResidueClassAux_real
 
 中文:
 引理 LFunctionResidueClassAux_real
-  条件: (ha : IsUnit a) {x : 实数} (hx : 1 < x)
+  条件: (ha : 是单位 a) {x : 实数} (hx : 1 < x)
   证明: by
   rw [eqOn_LFunctionResidueClassAux ha hx]
   simp only [sub_re, ofReal_sub]
@@ -749,7 +749,7 @@ lemma LSeries_residueClass_lower_bound
 
 中文:
 引理 LSeries_residueClass_lower_bound
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   证明: by
   have H {x : Real} (hx : 1 < x) :
       ∑' n, residueClass a n / (n : Real) ^ x =
@@ -805,7 +805,7 @@ lemma not_summable_residueClass_prime_div
 
 中文:
 引理 not_summable_residueClass_prime_div
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   证明: by
   intro H
   have key : Summable fun n : Nat => residueClass a n / n := by
@@ -881,7 +881,7 @@ alias infinite_setOf_prime_and_eq_mod := infinite_setOfPred_prime_and_eq_mod
 
 中文:
 定理 infinite_setOfPred_prime_and_eq_mod
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   证明: by
   by_contra! H
 exact not_summable_residueClass_prime_div ha
@@ -912,8 +912,8 @@ theorem forall_exists_prime_gt_and_eq_mod
   exact ⟨p, hp₂.gt, Set.mem_ofPred.mp hp₁⟩
 
 中文:
-定理 forall_exists_prime_gt_and_eq_mod
-  条件: (ha : IsUnit a) (n : 自然数)
+定理 对任意_存在_prime_gt_and_eq_mod
+  条件: (ha : 是单位 a) (n : 自然数)
   证明: by
   obtain ⟨p, hp₁, hp₂⟩ := Set.infinite_iff_exists_gt.mp (infinite_setOfPred_prime_and_eq_mod ha) n
   exact ⟨p, hp₂.gt, Set.mem_ofPred.mp hp₁⟩
@@ -940,7 +940,7 @@ theorem forall_exists_prime_gt_and_zmodEq
   simpa [← ZMod.intCast_eq_intCast_iff] using heq
 
 中文:
-定理 forall_exists_prime_gt_and_zmodEq
+定理 对任意_存在_prime_gt_and_zmodEq
   条件: (n : 自然数) {q : 自然数} {a : 整数} (hq : q != 0) (h : IsCoprime a q)
   证明: by
   have : NeZero q := ⟨hq⟩
@@ -971,7 +971,7 @@ theorem forall_exists_prime_gt_and_modEq
   simpa using forall_exists_prime_gt_and_zmodEq n (q := q) (a := a) hq (by simpa)
 
 中文:
-定理 forall_exists_prime_gt_and_modEq
+定理 对任意_存在_prime_gt_and_modEq
   条件: (n : 自然数) {q a : 自然数} (hq : q != 0) (h : a.Coprime q)
   证明: by
   simpa using forall_exists_prime_gt_and_zmodEq n (q := q) (a := a) hq (by simpa)

@@ -45,7 +45,7 @@ theorem pi_univ_Ici
 
 中文:
 定理 pi_univ_Ici
-  结论: (pi univ fun i => Ici (x i)) = Ici x
+  结论: (pi univ fun i => 左闭右无界区间 (x i)) = 左闭右无界区间 x
   证明: ext fun y => by simp [Pi.le_def]
 
 @[to_dual self, simp]
@@ -68,7 +68,7 @@ theorem pi_univ_Icc
 
 中文:
 定理 pi_univ_Icc
-  结论: (pi univ fun i => Icc (x i) (y i)) = Icc x y
+  结论: (pi univ fun i => 闭区间 (x i) (y i)) = 闭区间 x y
   证明: ext fun y => by simp [Pi.le_def, forall_and]
 
 @[to_dual self]
@@ -92,7 +92,7 @@ theorem piecewise_mem_Icc
 
 中文:
 定理 piecewise_mem_Icc
-  结论: {s : Set ι} [对任意 j, Decidable (j in s)] {f₁ f₂ g₁ g₂ : 对任意 i, α i}
+  结论: {s : 集合 ι} [对任意 j, 可判定 (j in s)] {f₁ f₂ g₁ g₂ : 对任意 i, α i}
   证明: ⟨le_piecewise (fun i hi => (h₁ i hi).1) fun i hi => (h₂ i hi).1,
     piecewise_le (fun i hi => (h₁ i hi).2) fun i hi => (h₂ i hi).2⟩
 
@@ -117,7 +117,7 @@ theorem piecewise_mem_Icc'
 
 中文:
 定理 piecewise_mem_Icc'
-  结论: {s : Set ι} [对任意 j, Decidable (j in s)] {f₁ f₂ g₁ g₂ : 对任意 i, α i}
+  结论: {s : 集合 ι} [对任意 j, 可判定 (j in s)] {f₁ f₂ g₁ g₂ : 对任意 i, α i}
   证明: piecewise_mem_Icc (fun _ _ => ⟨h₁.1 _, h₁.2 _⟩) fun _ _ => ⟨h₂.1 _, h₂.2 _⟩
 
 Depends on / 依赖: piecewise_mem_Icc
@@ -144,8 +144,8 @@ theorem pi_univ_Ioi_subset
 
 中文:
 定理 pi_univ_Ioi_subset
-  条件: [Nonempty ι]
-  结论: (pi univ fun i => Ioi (x i)) subseteq Ioi x
+  条件: [非空 ι]
+  结论: (pi univ fun i => 左开右无界区间 (x i)) subseteq 左开右无界区间 x
   证明: fun _ hz =>
 ⟨fun i => le_of_lt hz i trivial, fun h =>
     (‹Nonempty ι›.elim) fun i => not_lt_of_ge (h i) (hz i trivial)⟩
@@ -171,8 +171,8 @@ theorem pi_univ_Ioo_subset
 
 中文:
 定理 pi_univ_Ioo_subset
-  条件: [Nonempty ι]
-  结论: (pi univ fun i => Ioo (x i) (y i)) subseteq Ioo x y
+  条件: [非空 ι]
+  结论: (pi univ fun i => 开区间 (x i) (y i)) subseteq 开区间 x y
   证明: fun _ hx =>
   ⟨(pi_univ_Ioi_subset _) fun i hi => (hx i hi).1, (pi_univ_Iio_subset _) fun i hi => (hx i hi).2⟩
 
@@ -194,8 +194,8 @@ theorem pi_univ_Ioc_subset
 
 中文:
 定理 pi_univ_Ioc_subset
-  条件: [Nonempty ι]
-  结论: (pi univ fun i => Ioc (x i) (y i)) subseteq Ioc x y
+  条件: [非空 ι]
+  结论: (pi univ fun i => 左开右闭区间 (x i) (y i)) subseteq 左开右闭区间 x y
   证明: fun _ hx =>
   ⟨(pi_univ_Ioi_subset _) fun i hi => (hx i hi).1, fun i => (hx i trivial).2⟩
 -/
@@ -1029,7 +1029,7 @@ theorem pi_univ_Ioc_update_union
 
 中文:
 定理 pi_univ_Ioc_update_union
-  条件: (x y : 对任意 i, α i) (i₀ : ι) (m : α i₀) (hm : m in Icc (x i₀) (y i₀))
+  条件: (x y : 对任意 i, α i) (i₀ : ι) (m : α i₀) (hm : m in 闭区间 (x i₀) (y i₀))
   证明: by
   simp_rw [pi_univ_Ioc_update_left hm.1, pi_univ_Ioc_update_right hm.2, ← union_inter_distrib_right,
     ← ofPred_or, le_or_gt, ofPred_true, univ_inter]

@@ -908,7 +908,7 @@ definition AffineMap.ofMapMidpoint
         apply_rules [Continuous.vadd, Continuous.vsub, continuous_
 
 中文:
-定义 AffineMap.ofMapMidpoint
+定义 仿射映射.ofMapMidpoint
   签名: (f : P -> Q) (h : 对任意 x y, f (midpoint 实数 x y) = midpoint 实数 (f x) (f y))
   定义体: let c := Classical.arbitrary P
   AffineMap.mk' f (↑((AddMonoidHom.ofMapMidpoint Real Real
@@ -955,7 +955,7 @@ definition DilationEquiv.smulTorsor
     exact edi
 
 中文:
-定义 DilationEquiv.smulTorsor
+定义 Dilation等价.smulTorsor
   签名: (c : P) {k : 𝕜} (hk : k != 0)
   定义体: (k • · +ᵥ c)
   invFun := k⁻¹ • (· -ᵥ c)
@@ -986,7 +986,7 @@ lemma DilationEquiv.smulTorsor_ratio
 @[simp]
 
 中文:
-引理 DilationEquiv.smulTorsor_ratio
+引理 Dilation等价.smulTorsor_ratio
   结论: {c : P} {k : 𝕜} (hk : k != 0) {x y : E}
   证明: Eq.symm ratio_unique_of_dist_ne_zero h by simp [dist_eq_norm, ← smul_sub, norm_smul]
 
@@ -1009,7 +1009,7 @@ lemma DilationEquiv.smulTorsor_preimage_ball
   aesop (add simp norm_smul)
 
 中文:
-引理 DilationEquiv.smulTorsor_preimage_ball
+引理 Dilation等价.smulTorsor_preimage_ball
   条件: {c : P} {k : 𝕜} (hk : k != 0)
   证明: by
   aesop (add simp norm_smul)

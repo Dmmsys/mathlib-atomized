@@ -40,7 +40,7 @@ theorem IntervalIntegrable.intervalIntegrable_slope
 .const_mul (c := c⁻¹)
 
 中文:
-定理 IntervalIntegrable.intervalIntegrable_slope
+定理 整数erval整数egrable.interval整数egrable_slope
   结论: {f : 实数 -> 实数} {a b c : 实数}
   证明: by
   simp only [slope, add_sub_cancel_left, vsub_eq_sub, smul_eq_mul]
@@ -65,7 +65,7 @@ theorem MonotoneOn.intervalIntegrable_slope
   proof: .intervalIntegrable.intervalIntegrable_slope hab hc uIcc_of_le (show a <= b + c by linarith) ▸ hf
 
 中文:
-定理 MonotoneOn.intervalIntegrable_slope
+定理 MonotoneOn.interval整数egrable_slope
   结论: {f : 实数 -> 实数} {a b c : 实数}
   证明: .intervalIntegrable.intervalIntegrable_slope hab hc uIcc_of_le (show a <= b + c by linarith) ▸ hf
 
@@ -91,7 +91,7 @@ theorem MonotoneOn.intervalIntegral_slope_le
   simp only [slope, add_sub_cancel_left, vsub_eq_sub, smu
 
 中文:
-定理 MonotoneOn.intervalIntegral_slope_le
+定理 MonotoneOn.interval整数egral_slope_le
   结论: {f : 实数 -> 实数} {a b c : 实数}
   证明: by
   rcases eq_or_lt_of_le hc with hc | hc

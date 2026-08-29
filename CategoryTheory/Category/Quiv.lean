@@ -86,7 +86,7 @@ definition of
 
 中文:
 定义 of
-  签名: (C : 类型u) [Quiver.{v} C]
+  签名: (C : 类型u) [箭图.{v} C]
   定义体: Bundled.of C
 
 Depends on / 依赖: Bundled, Bundled.of
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Quiv
+  签名: 可居 Quiv
   定义体: ⟨Quiv.of (Quiver.Empty PEmpty)⟩
 
 Depends on / 依赖: PEmpty, Quiv.of, Quiver, Quiver.Empty
@@ -124,7 +124,7 @@ instance category
 
 中文:
 实例 category
-  签名: : LargeCategory.{max v u} Quiv.{v, u} where
+  签名: : 大范畴.{最大值 v u} Quiv.{v, u} where
   定义体: Prefunctor C D
   id C := Prefunctor.id C
   comp F G := Prefunctor.comp F G
@@ -207,7 +207,7 @@ definition toQuivHom
 
 中文:
 定义 toQuivHom
-  签名: {C D : 类型u} [Quiver.{v} C] [Quiver.{v} D] (F : C ⥤q D)
+  签名: {C D : 类型u} [箭图.{v} C] [箭图.{v} D] (F : C ⥤q D)
   定义体: F
 -/
 def toQuivHom {C D : Type u} [Quiver.{v} C] [Quiver.{v} D] (F : C ⥤q D) :
@@ -255,7 +255,7 @@ theorem of_toQuivHom
 
 中文:
 定理 of_toQuivHom
-  条件: {C D : Type} [Quiver C] [Quiver D] (F : C ⥤q D)
+  条件: {C D : 类型} [箭图 C] [箭图 D] (F : C ⥤q D)
   证明: rfl
 -/
 @[simp] theorem of_toQuivHom {C D : Type} [Quiver C] [Quiver D] (F : C ⥤q D) :
@@ -278,7 +278,7 @@ definition freeMap
 
 中文:
 定义 freeMap
-  签名: {V W : 类型} [Quiver V] [Quiver W] (F : V ⥤q W)
+  签名: {V W : 类型} [箭图 V] [箭图 W] (F : V ⥤q W)
   定义体: F.obj
   map := F.mapPath
   map_comp f g := F.mapPath_comp f g
@@ -305,7 +305,7 @@ definition freeMapIdIso
 
 中文:
 定义 freeMapIdIso
-  签名: (V : 类型) [Quiver V]
+  签名: (V : 类型) [箭图 V]
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -324,7 +324,7 @@ theorem freeMap_id
 
 中文:
 定理 freeMap_id
-  条件: (V : 类型) [Quiver V]
+  条件: (V : 类型) [箭图 V]
   证明: Functor.ext_of_iso (freeMapIdIso V) (fun _ => rfl)
 
 Depends on / 依赖: Functor, Functor.ext_of_iso, ext_of_iso, freeMapIdIso
@@ -401,7 +401,7 @@ definition free
 
 中文:
 定义 free
-  签名: : Quiv.{v, u} ⥤ Cat.{max u v, u} where
+  签名: : Quiv.{v, u} ⥤ Cat.{最大值 u v, u} where
   定义体: Cat.of (Paths V)
   map F := Functor.toCatHom (freeMap (Prefunctor.ofQuivHom F))
   map_id _ := congr($(freeMap_id _).toCatHom)
@@ -662,7 +662,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {V : 类型u} [Quiver.{v} V] {C : 类型u₁} [Category.{v₁} C]
+  签名: {V : 类型u} [箭图.{v} V] {C : 类型u₁} [范畴.{v₁} C]
   定义体: F.obj X
   map f := composePath (F.mapPath f)
 
@@ -684,7 +684,7 @@ definition pathCompositionNaturality
   body: Paths.liftNatIso (fun _ => Iso.refl _) (by simp)
 
 中文:
-定义 pathCompositionNaturality
+定义 pathComposition自然数urality
   签名: {C : 类型u} {D : 类型u₁}
   定义体: Paths.liftNatIso (fun _ => Iso.refl _) (by simp)
 
@@ -744,7 +744,7 @@ definition freeMapPathsOfCompPathCompositionIso
 
 中文:
 定义 freeMapPathsOfCompPathCompositionIso
-  签名: (V : 类型u) [Quiver.{v} V]
+  签名: (V : 类型u) [箭图.{v} V]
   定义体: Paths.liftNatIso (fun v => Iso.refl _) (by simp)
 
 Depends on / 依赖: Iso.refl, Paths.liftNatIso, liftNatIso
@@ -765,7 +765,7 @@ lemma freeMap_pathsOf_pathComposition
 
 中文:
 引理 freeMap_pathsOf_pathComposition
-  条件: (V : 类型u) [Quiver.{v} V]
+  条件: (V : 类型u) [箭图.{v} V]
   证明: Paths.ext_functor rfl (by simp)
 
 Depends on / 依赖: HasLimitsOfSize, hasLimits_of_completeLattice, pathComposition
@@ -788,7 +788,7 @@ lemma pathsOf_pathComposition_toPrefunctor
 
 中文:
 引理 pathsOf_pathComposition_toPrefunctor
-  条件: (C : 类型u) [Category.{v} C]
+  条件: (C : 类型u) [范畴.{v} C]
   证明: by
   dsimp only [Prefunctor.comp]
   congr
@@ -868,7 +868,7 @@ definition pathsEquiv
 
 中文:
 定义 pathsEquiv
-  签名: {V : 类型u} {C : 类型u₁} [Quiver.{v} V] [Category.{v₁} C]
+  签名: {V : 类型u} {C : 类型u₁} [箭图.{v} V] [范畴.{v₁} C]
   定义体: (Paths.of V).comp F.toPrefunctor
   invFun G := Cat.freeMap G ⋙ pathComposition C
   left_inv F := by
@@ -901,7 +901,7 @@ lemma adj_homEquiv
 
 中文:
 引理 adj_homEquiv
-  条件: {V C : 类型u} [Quiver.{max u v} V] [Category.{max u v} C]
+  条件: {V C : 类型u} [箭图.{最大值 u v} V] [范畴.{最大值 u v} C]
   证明: rfl
 
 Depends on / 依赖: HasZeroMorphisms, MonoCoprod, monoCoprodOfHasZeroMorphisms

@@ -46,10 +46,10 @@ class MeasurableSup
 
 中文:
 类 MeasurableSup
-  参数: (M : 类型) [MeasurableSpace M] [Max M]
+  参数: (M : 类型) [可测空间 M] [最大值 M]
   公理与运算 (2 个):
-    - measurable_const_sup : 对任意 c : M, Measurable (c ⊔ ·)  [默认: by intro c; fun_prop]
-    - measurable_sup_const : 对任意 c : M, Measurable (· ⊔ c)  [默认: by intro c; fun_prop]
+    - measurable_const_sup : 对任意 c : M, 可测 (c ⊔ ·)  [默认: by intro c; fun_prop]
+    - measurable_sup_const : 对任意 c : M, 可测 (· ⊔ c)  [默认: by intro c; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_sup_const
 -/
@@ -68,9 +68,9 @@ class MeasurableSup₂
 
 中文:
 类 MeasurableSup₂
-  参数: (M : 类型) [MeasurableSpace M] [Max M]
+  参数: (M : 类型) [可测空间 M] [最大值 M]
   公理与运算 (1 个):
-    - measurable_sup : Measurable fun p : M × M => p.1 ⊔ p.2  [默认: by intro p; fun_prop]
+    - measurable_sup : 可测 fun p : M × M => p.1 ⊔ p.2  [默认: by intro p; fun_prop]
 
 Depends on / 依赖: fun_prop
 -/
@@ -93,10 +93,10 @@ class MeasurableInf
 
 中文:
 类 MeasurableInf
-  参数: (M : 类型) [MeasurableSpace M] [Min M]
+  参数: (M : 类型) [可测空间 M] [最小值 M]
   公理与运算 (2 个):
-    - measurable_const_inf : 对任意 c : M, Measurable (c ⊓ ·)  [默认: by intro c; fun_prop]
-    - measurable_inf_const : 对任意 c : M, Measurable (· ⊓ c)  [默认: by intro c; fun_prop]
+    - measurable_const_inf : 对任意 c : M, 可测 (c ⊓ ·)  [默认: by intro c; fun_prop]
+    - measurable_inf_const : 对任意 c : M, 可测 (· ⊓ c)  [默认: by intro c; fun_prop]
 
 Depends on / 依赖: Measurable, fun_prop, measurable_inf_const
 -/
@@ -115,9 +115,9 @@ class MeasurableInf₂
 
 中文:
 类 MeasurableInf₂
-  参数: (M : 类型) [MeasurableSpace M] [Min M]
+  参数: (M : 类型) [可测空间 M] [最小值 M]
   公理与运算 (1 个):
-    - measurable_inf : Measurable fun p : M × M => p.1 ⊓ p.2  [默认: by intro p; fun_prop]
+    - measurable_inf : 可测 fun p : M × M => p.1 ⊓ p.2  [默认: by intro p; fun_prop]
 
 Depends on / 依赖: fun_prop
 -/
@@ -173,9 +173,9 @@ theorem Measurable.const_sup
 @[fun_prop]
 
 中文:
-定理 Measurable.const_sup
-  条件: (hf : Measurable f) (c : M)
-  结论: Measurable fun x => c ⊔ f x
+定理 可测.const_sup
+  条件: (hf : 可测 f) (c : M)
+  结论: 可测 fun x => c ⊔ f x
   证明: (measurable_const_sup c).comp hf
 
 @[fun_prop]
@@ -197,8 +197,8 @@ theorem AEMeasurable.const_sup
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.const_sup
-  条件: (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.const_sup
+  条件: (hf : 几乎处处可测 f μ) (c : M)
   证明: (MeasurableSup.measurable_const_sup c).comp_aemeasurable hf
 
 @[fun_prop]
@@ -222,9 +222,9 @@ theorem Measurable.sup_const
 @[fun_prop]
 
 中文:
-定理 Measurable.sup_const
-  条件: (hf : Measurable f) (c : M)
-  结论: Measurable fun x => f x ⊔ c
+定理 可测.sup_const
+  条件: (hf : 可测 f) (c : M)
+  结论: 可测 fun x => f x ⊔ c
   证明: (measurable_sup_const c).comp hf
 
 @[fun_prop]
@@ -244,8 +244,8 @@ theorem AEMeasurable.sup_const
   proof: (measurable_sup_const c).comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.sup_const
-  条件: (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.sup_const
+  条件: (hf : 几乎处处可测 f μ) (c : M)
   证明: (measurable_sup_const c).comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_sup_const
@@ -275,9 +275,9 @@ theorem Measurable.sup
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 Measurable.sup
-  条件: (hf : Measurable f) (hg : Measurable g)
-  结论: Measurable (f ⊔ g)
+定理 可测.上确界
+  条件: (hf : 可测 f) (hg : 可测 g)
+  结论: 可测 (f ⊔ g)
   证明: measurable_sup.comp (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias Measurable.sup' := Measurable.sup
@@ -303,8 +303,8 @@ theorem AEMeasurable.sup
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.sup' := AEMeasurable.sup
 
 中文:
-定理 AEMeasurable.sup
-  条件: (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+定理 几乎处处可测.上确界
+  条件: (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: measurable_sup.comp_aemeasurable (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.sup' := AEMeasurable.sup
@@ -344,9 +344,9 @@ theorem Measurable.const_inf
 @[fun_prop]
 
 中文:
-定理 Measurable.const_inf
-  条件: (hf : Measurable f) (c : M)
-  结论: Measurable fun x => c ⊓ f x
+定理 可测.const_inf
+  条件: (hf : 可测 f) (c : M)
+  结论: 可测 fun x => c ⊓ f x
   证明: (measurable_const_inf c).comp hf
 
 @[fun_prop]
@@ -368,8 +368,8 @@ theorem AEMeasurable.const_inf
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.const_inf
-  条件: (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.const_inf
+  条件: (hf : 几乎处处可测 f μ) (c : M)
   证明: (MeasurableInf.measurable_const_inf c).comp_aemeasurable hf
 
 @[fun_prop]
@@ -393,9 +393,9 @@ theorem Measurable.inf_const
 @[fun_prop]
 
 中文:
-定理 Measurable.inf_const
-  条件: (hf : Measurable f) (c : M)
-  结论: Measurable fun x => f x ⊓ c
+定理 可测.inf_const
+  条件: (hf : 可测 f) (c : M)
+  结论: 可测 fun x => f x ⊓ c
   证明: (measurable_inf_const c).comp hf
 
 @[fun_prop]
@@ -415,8 +415,8 @@ theorem AEMeasurable.inf_const
   proof: (measurable_inf_const c).comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.inf_const
-  条件: (hf : AEMeasurable f μ) (c : M)
+定理 几乎处处可测.inf_const
+  条件: (hf : 几乎处处可测 f μ) (c : M)
   证明: (measurable_inf_const c).comp_aemeasurable hf
 
 Depends on / 依赖: comp_aemeasurable, measurable_inf_const
@@ -446,9 +446,9 @@ theorem Measurable.inf
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 Measurable.inf
-  条件: (hf : Measurable f) (hg : Measurable g)
-  结论: Measurable (f ⊓ g)
+定理 可测.下确界
+  条件: (hf : 可测 f) (hg : 可测 g)
+  结论: 可测 (f ⊓ g)
   证明: measurable_inf.comp (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias Measurable.inf' := Measurable.inf
@@ -474,8 +474,8 @@ theorem AEMeasurable.inf
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.inf' := AEMeasurable.inf
 
 中文:
-定理 AEMeasurable.inf
-  条件: (hf : AEMeasurable f μ) (hg : AEMeasurable g μ)
+定理 几乎处处可测.下确界
+  条件: (hf : 几乎处处可测 f μ) (hg : 几乎处处可测 g μ)
   证明: measurable_inf.comp_aemeasurable (hf.prodMk hg)
 
 @[deprecated (since := "2026-06-26")] alias AEMeasurable.inf' := AEMeasurable.inf
@@ -512,8 +512,8 @@ theorem Finset.measurable_sup'
 @[fun_prop]
 
 中文:
-定理 Finset.measurable_sup'
-  结论: {ι : 类型} {s : Finset ι} (hs : s.Nonempty) {f : ι -> δ -> α}
+定理 有限集.measurable_sup'
+  结论: {ι : 类型} {s : 有限集 ι} (hs : s.非空) {f : ι -> δ -> α}
   证明: Finset.sup'_induction hs _ (fun _f hf _g hg => hf.sup hg) fun n hn => hf n hn
 
 @[fun_prop]
@@ -538,8 +538,8 @@ theorem Finset.measurable_range_sup'
 @[fun_prop]
 
 中文:
-定理 Finset.measurable_range_sup'
-  条件: {f : 自然数 -> δ -> α} {n : 自然数} (hf : 对任意 k <= n, Measurable (f k))
+定理 有限集.measurable_range_sup'
+  条件: {f : 自然数 -> δ -> α} {n : 自然数} (hf : 对任意 k <= n, 可测 (f k))
   证明: by
   refine Finset.measurable_sup' _ ?_
   simpa [Finset.mem_range]
@@ -566,8 +566,8 @@ theorem Finset.measurable_range_sup''
   simp
 
 中文:
-定理 Finset.measurable_range_sup''
-  条件: {f : 自然数 -> δ -> α} {n : 自然数} (hf : 对任意 k <= n, Measurable (f k))
+定理 有限集.measurable_range_sup''
+  条件: {f : 自然数 -> δ -> α} {n : 自然数} (hf : 对任意 k <= n, 可测 (f k))
   证明: by
   convert! Finset.measurable_range_sup' hf using 1
   ext x

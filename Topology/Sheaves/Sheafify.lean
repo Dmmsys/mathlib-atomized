@@ -98,7 +98,7 @@ definition sheafify
 
 中文:
 定义 sheafify
-  签名: : Sheaf (类型v) X
+  签名: : 层 (类型v) X
   定义体: subsheafToTypes (Sheafify.isLocallyGerm F)
 
 Depends on / 依赖: Sheafify, Sheafify.isLocallyGerm, isLocallyGerm, subsheafToTypes
@@ -179,7 +179,7 @@ theorem stalkToFiber_surjective
 中文:
 定理 stalkToFiber_surjective
   条件: (x : X)
-  结论: Function.Surjective (F.stalkToFiber x)
+  结论: 函数.满射 (F.stalkToFiber x)
   证明: by
   apply TopCat.stalkToFiber_surjective
   intro t
@@ -221,7 +221,7 @@ theorem stalkToFiber_injective
 中文:
 定理 stalkToFiber_injective
   条件: (x : X)
-  结论: Function.Injective (F.stalkToFiber x)
+  结论: 函数.单射 (F.stalkToFiber x)
   证明: by
   apply TopCat.stalkToFiber_injective
   intro U V fU hU fV hV e
@@ -296,7 +296,7 @@ theorem stalkFunctor_map_unit_toSheafify_isIso
 
 中文:
 定理 stalkFunctor_map_unit_toSheafify_isIso
-  结论: IsIso ((Presheaf.stalkFunctor C p₀).map
+  结论: 是同构 ((预层.stalkFunctor C p₀).map
   证明: by
   classical
   exact Adjunction.isIso_map_unit_of_isLeftAdjoint_comp (sheafificationAdjunction _ C)

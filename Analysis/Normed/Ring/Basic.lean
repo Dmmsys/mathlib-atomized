@@ -46,9 +46,9 @@ class NonUnitalSeminormedRing
     - norm_mul_le : forall a b, norm (a * b) <= norm a * norm b
 
 中文:
-类 NonUnitalSeminormedRing
+类 非幺Seminormed环
   参数: (α : 类型)
-  继承: Norm α, NonUnitalRing α, 
+  继承: 范数 α, 非幺环 α, 
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul_le : 对任意 a b, norm (a * b) <= norm a * norm b
@@ -75,9 +75,9 @@ class SeminormedRing
     - norm_mul_le : forall a b, norm (a * b) <= norm a * norm b
 
 中文:
-类 SeminormedRing
+类 Seminormed环
   参数: (α : 类型)
-  继承: Norm α, Ring α, PseudoMetricSpace α
+  继承: 范数 α, 环 α, 伪度量空间 α
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul_le : 对任意 a b, norm (a * b) <= norm a * norm b
@@ -109,9 +109,9 @@ class NonUnitalNormedRing
     - norm_mul_le : forall a b, norm (a * b) <= norm a * norm b
 
 中文:
-类 NonUnitalNormedRing
+类 非幺赋范环
   参数: (α : 类型)
-  继承: Norm α, NonUnitalRing α, MetricSpace α
+  继承: 范数 α, 非幺环 α, 度量空间 α
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul_le : 对任意 a b, norm (a * b) <= norm a * norm b
@@ -143,9 +143,9 @@ class NormedRing
     - norm_mul_le : forall a b, norm (a * b) <= norm a * norm b
 
 中文:
-类 NormedRing
+类 赋范环
   参数: (α : 类型)
-  继承: Norm α, Ring α, MetricSpace α
+  继承: 范数 α, 环 α, 度量空间 α
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul_le : 对任意 a b, norm (a * b) <= norm a * norm b
@@ -180,9 +180,9 @@ class NonUnitalSeminormedCommRing
   (no additional axioms)
 
 中文:
-类 NonUnitalSeminormedCommRing
+类 非幺SeminormedComm环
   参数: (α : 类型)
-  继承: NonUnitalSeminormedRing α, NonUnitalCommRing α
+  继承: 非幺Seminormed环 α, 非幺交换环 α
   (无附加公理)
 -/
 class NonUnitalSeminormedCommRing (α : Type*)
@@ -201,9 +201,9 @@ class NonUnitalNormedCommRing
   (no additional axioms)
 
 中文:
-类 NonUnitalNormedCommRing
+类 非幺NormedComm环
   参数: (α : 类型)
-  继承: NonUnitalNormedRing α, NonUnitalCommRing α
+  继承: 非幺赋范环 α, 非幺交换环 α
   (无附加公理)
 -/
 class NonUnitalNormedCommRing (α : Type*) extends NonUnitalNormedRing α, NonUnitalCommRing α where
@@ -227,9 +227,9 @@ class SeminormedCommRing
   (no additional axioms)
 
 中文:
-类 SeminormedCommRing
+类 SeminormedComm环
   参数: (α : 类型)
-  继承: SeminormedRing α, CommRing α
+  继承: Seminormed环 α, 交换环 α
   (无附加公理)
 -/
 class SeminormedCommRing (α : Type*) extends SeminormedRing α, CommRing α where
@@ -247,9 +247,9 @@ class NormedCommRing
   (no additional axioms)
 
 中文:
-类 NormedCommRing
+类 NormedComm环
   参数: (α : 类型)
-  继承: NormedRing α, CommRing α
+  继承: 赋范环 α, 交换环 α
   (无附加公理)
 -/
 class NormedCommRing (α : Type*) extends NormedRing α, CommRing α where
@@ -285,8 +285,8 @@ instance PUnit.normedCommRing
     norm_mul_le _ _ := by simp }
 
 中文:
-实例 PUnit.normedCommRing
-  签名: : NormedCommRing PUnit
+实例 命题单元.normedCommRing
+  签名: : NormedComm环 命题单元
   定义体: { PUnit.normedAddCommGroup, PUnit.commRing with
     norm_mul_le _ _ := by simp }
 
@@ -308,8 +308,8 @@ class NormOneClass
     - norm_one : ‖(1 : α)‖ = 1
 
 中文:
-类 NormOneClass
-  参数: (α : 类型) [Norm α] [One α]
+类 NormOne类
+  参数: (α : 类型) [范数 α] [幺 α]
   公理与运算 (1 个):
     - norm_one : ‖(1 : α)‖ = 1
 -/
@@ -362,8 +362,8 @@ theorem NormOneClass.nontrivial
   proof: nontrivial_of_ne 0 1 ne_of_apply_ne norm by simp
 
 中文:
-定理 NormOneClass.nontrivial
-  结论: Nontrivial G
+定理 NormOne类.nontrivial
+  结论: 非平凡 G
   证明: nontrivial_of_ne 0 1 ne_of_apply_ne norm by simp
 
 Depends on / 依赖: ne_of_apply_ne, nontrivial_of_ne
@@ -394,8 +394,8 @@ instance ULift.normOneClass
   body: ⟨by simp [ULift.norm_def]⟩
 
 中文:
-实例 ULift.normOneClass
-  签名: [SeminormedAddCommGroup α] [One α] [NormOneClass α]
+实例 类型层提升.normOneClass
+  签名: [SeminormedAddComm群 α] [幺 α] [NormOne类 α]
   定义体: ⟨by simp [ULift.norm_def]⟩
 
 Depends on / 依赖: ULift.norm_def, norm_def
@@ -413,8 +413,8 @@ instance Prod.normOneClass
   body: ⟨by simp [Prod.norm_def]⟩
 
 中文:
-实例 Prod.normOneClass
-  签名: [SeminormedAddCommGroup α] [One α] [NormOneClass α]
+实例 积类型.normOneClass
+  签名: [SeminormedAddComm群 α] [幺 α] [NormOne类 α]
   定义体: ⟨by simp [Prod.norm_def]⟩
 
 Depends on / 依赖: Prod.norm_def, norm_def
@@ -432,8 +432,8 @@ instance Pi.normOneClass
   body: ⟨by simpa [Pi.norm_def] using Finset.sup_const Finset.univ_nonempty 1⟩
 
 中文:
-实例 Pi.normOneClass
-  签名: {ι : 类型} {α : ι -> 类型} [Nonempty ι] [Fintype ι]
+实例 依赖函数类型.normOneClass
+  签名: {ι : 类型} {α : ι -> 类型} [非空 ι] [有限类型 ι]
   定义体: ⟨by simpa [Pi.norm_def] using Finset.sup_const Finset.univ_nonempty 1⟩
 
 Depends on / 依赖: Finset, Finset.sup_const, Finset.univ_nonempty, Pi.norm_def, norm_def, sup_const, univ_nonempty
@@ -453,7 +453,7 @@ instance MulOpposite.normOneClass
 
 中文:
 实例 MulOpposite.normOneClass
-  签名: [SeminormedAddCommGroup α] [One α] [NormOneClass α]
+  签名: [SeminormedAddComm群 α] [幺 α] [NormOne类 α]
   定义体: ⟨@norm_one α _ _ _⟩
 
 Depends on / 依赖: norm_one
@@ -590,7 +590,7 @@ theorem one_le_norm_one
 
 中文:
 定理 one_le_norm_one
-  条件: (β) [NormedRing β] [Nontrivial β]
+  条件: (β) [赋范环 β] [非平凡 β]
   结论: 1 <= ‖(1 : β)‖
   证明: (le_mul_iff_one_le_left <| norm_pos_iff.mpr (one_ne_zero : (1 : β) != 0)).mp
     (by simpa only [mul_one] using norm_mul_le (1 : β) 1)
@@ -612,7 +612,7 @@ theorem one_le_nnnorm_one
 
 中文:
 定理 one_le_nnnorm_one
-  条件: (β) [NormedRing β] [Nontrivial β]
+  条件: (β) [赋范环 β] [非平凡 β]
   结论: 1 <= ‖(1 : β)‖₊
   证明: one_le_norm_one β
 
@@ -633,7 +633,7 @@ theorem mulLeft_bound
 中文:
 定理 mulLeft_bound
   条件: (x : α)
-  结论: 对任意 y : α, ‖AddMonoidHom.mulLeft x y‖ <= ‖x‖ * ‖y‖
+  结论: 对任意 y : α, ‖加法幺半群态射.mulLeft x y‖ <= ‖x‖ * ‖y‖
   证明: norm_mul_le x
 
 Depends on / 依赖: norm_mul_le
@@ -655,7 +655,7 @@ theorem mulRight_bound
 中文:
 定理 mulRight_bound
   条件: (x : α)
-  结论: 对任意 y : α, ‖AddMonoidHom.mulRight x y‖ <= ‖x‖ * ‖y‖
+  结论: 对任意 y : α, ‖加法幺半群态射.mulRight x y‖ <= ‖x‖ * ‖y‖
   证明: fun y => by
   rw [mul_comm]
   exact norm_mul_le y x
@@ -676,8 +676,8 @@ instance NonUnitalSubalgebra.nonUnitalSeminormedRing
     norm_mul_le a b := norm_mul_le a.1 b.1 }
 
 中文:
-实例 NonUnitalSubalgebra.nonUnitalSeminormedRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型}
+实例 NonUnital子代数.nonUnitalSeminormedRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型}
   定义体: { s.toSubmodule.seminormedAddCommGroup, s.toNonUnitalRing with
     norm_mul_le a b := norm_mul_le a.1 b.1 }
 
@@ -710,8 +710,8 @@ instance NonUnitalSubalgebra.nonUnitalNormedRing
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 NonUnitalSubalgebra.nonUnitalNormedRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型}
+实例 NonUnital子代数.nonUnitalNormedRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型}
   定义体: { s.nonUnitalSeminormedRing with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -741,8 +741,8 @@ instance ULift.nonUnitalSeminormedRing
     norm_mul_le x y := norm_mul_le x.down y.down }
 
 中文:
-实例 ULift.nonUnitalSeminormedRing
-  签名: : NonUnitalSeminormedRing (ULift α)
+实例 类型层提升.nonUnitalSeminormedRing
+  签名: : 非幺Seminormed环 (类型层提升 α)
   定义体: { ULift.seminormedAddCommGroup, ULift.nonUnitalRing with
     norm_mul_le x y := norm_mul_le x.down y.down }
 
@@ -767,8 +767,8 @@ instance Prod.nonUnitalSeminormedRing
       _ = max (
 
 中文:
-实例 Prod.nonUnitalSeminormedRing
-  签名: [NonUnitalSeminormedRing β]
+实例 积类型.nonUnitalSeminormedRing
+  签名: [非幺Seminormed环 β]
   定义体: { seminormedAddCommGroup, instNonUnitalRing with
     norm_mul_le x y := calc
       ‖x * y‖ = ‖(x.1 * y.1, x.2 * y.2)‖ := rfl
@@ -806,7 +806,7 @@ instance MulOpposite.instNonUnitalSeminormedRing
 
 中文:
 实例 MulOpposite.instNonUnitalSeminormedRing
-  签名: : NonUnitalSeminormedRing αᵐᵒᵖ where
+  签名: : 非幺Seminormed环 αᵐᵒᵖ where
   定义体: instNonUnitalRing
   __ := instSeminormedAddCommGroup
   norm_mul_le := MulOpposite.rec' fun x => MulOpposite.rec' fun y =>
@@ -836,8 +836,8 @@ instance Subalgebra.seminormedRing
     norm_mul_le a b := norm_mul_le a.1 b.1 }
 
 中文:
-实例 Subalgebra.seminormedRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型} [SeminormedRing E]
+实例 子代数.seminormedRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型} [Seminormed环 E]
   定义体: { s.toSubmodule.seminormedAddCommGroup, s.toRing with
     norm_mul_le a b := norm_mul_le a.1 b.1 }
 
@@ -868,8 +868,8 @@ instance Subalgebra.normedRing
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 Subalgebra.normedRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型} [NormedRing E]
+实例 子代数.normedRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型} [赋范环 E]
   定义体: { s.seminormedRing with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -897,7 +897,7 @@ theorem Nat.norm_cast_le
   statement: forall n : Nat, ‖(n : α)‖ <= n * ‖(1 : α)‖
 
 中文:
-定理 Nat.norm_cast_le
+定理 自然数.norm_cast_le
   结论: 对任意 n : 自然数, ‖(n : α)‖ <= n * ‖(1 : α)‖
 -/
 theorem Nat.norm_cast_le : forall n : Nat, ‖(n : α)‖ <= n * ‖(1 : α)‖
@@ -914,8 +914,8 @@ theorem List.norm_prod_le'
   statement: forall {l : List α}, l != [] -> ‖l.prod‖ <= (l.map norm).prod
 
 中文:
-定理 List.norm_prod_le'
-  结论: 对任意 {l : List α}, l != [] -> ‖l.prod‖ <= (l.map norm).prod
+定理 列表.norm_prod_le'
+  结论: 对任意 {l : 列表 α}, l != [] -> ‖l.乘积‖ <= (l.map norm).乘积
 -/
 theorem List.norm_prod_le' : forall {l : List α}, l != [] -> ‖l.prod‖ <= (l.map norm).prod
   | [], h => (h rfl).elim
@@ -935,9 +935,9 @@ theorem List.nnnorm_prod_le'
   proof: (List.norm_prod_le' hl).trans_eq by simp [NNReal.coe_list_prod, List.map_map]
 
 中文:
-定理 List.nnnorm_prod_le'
-  条件: {l : List α} (hl : l != [])
-  结论: ‖l.prod‖₊ <= (l.map nnnorm).prod
+定理 列表.nnnorm_prod_le'
+  条件: {l : 列表 α} (hl : l != [])
+  结论: ‖l.乘积‖₊ <= (l.map nnnorm).乘积
   证明: (List.norm_prod_le' hl).trans_eq by simp [NNReal.coe_list_prod, List.map_map]
 
 Depends on / 依赖: List.map_map, List.norm_prod_le, NNReal, NNReal.coe_list_prod, coe_list_prod, map_map, norm_prod_le, trans_eq
@@ -954,9 +954,9 @@ theorem List.norm_prod_le
   statement: forall l : List α, ‖l.prod‖ <= (l.map norm).prod
 
 中文:
-定理 List.norm_prod_le
-  条件: [NormOneClass α]
-  结论: 对任意 l : List α, ‖l.prod‖ <= (l.map norm).prod
+定理 列表.norm_prod_le
+  条件: [NormOne类 α]
+  结论: 对任意 l : 列表 α, ‖l.乘积‖ <= (l.map norm).乘积
 -/
 theorem List.norm_prod_le [NormOneClass α] : forall l : List α, ‖l.prod‖ <= (l.map norm).prod
   | [] => by simp
@@ -972,9 +972,9 @@ theorem List.nnnorm_prod_le
   proof: l.norm_prod_le.trans_eq by simp [NNReal.coe_list_prod, List.map_map]
 
 中文:
-定理 List.nnnorm_prod_le
-  条件: [NormOneClass α] (l : List α)
-  结论: ‖l.prod‖₊ <= (l.map nnnorm).prod
+定理 列表.nnnorm_prod_le
+  条件: [NormOne类 α] (l : 列表 α)
+  结论: ‖l.乘积‖₊ <= (l.map nnnorm).乘积
   证明: l.norm_prod_le.trans_eq by simp [NNReal.coe_list_prod, List.map_map]
 
 Depends on / 依赖: List.map_map, NNReal, NNReal.coe_list_prod, coe_list_prod, l.norm_prod_le.trans_eq, map_map, norm_prod_le, trans_eq
@@ -994,8 +994,8 @@ theorem Finset.norm_prod_le'
   simpa using! List.norm_prod_le' this
 
 中文:
-定理 Finset.norm_prod_le'
-  结论: {α : 类型} [NormedCommRing α] (s : Finset ι) (hs : s.Nonempty)
+定理 有限集.norm_prod_le'
+  结论: {α : 类型} [NormedComm环 α] (s : 有限集 ι) (hs : s.非空)
   证明: by
   rcases s with ⟨⟨l⟩, hl⟩
   have : l.map f != [] := by simpa using! hs
@@ -1018,8 +1018,8 @@ theorem Finset.nnnorm_prod_le'
   proof: (s.norm_prod_le' hs f).trans_eq by simp [NNReal.coe_prod]
 
 中文:
-定理 Finset.nnnorm_prod_le'
-  结论: {α : 类型} [NormedCommRing α] (s : Finset ι) (hs : s.Nonempty)
+定理 有限集.nnnorm_prod_le'
+  结论: {α : 类型} [NormedComm环 α] (s : 有限集 ι) (hs : s.非空)
   证明: (s.norm_prod_le' hs f).trans_eq by simp [NNReal.coe_prod]
 
 Depends on / 依赖: NNReal, NNReal.coe_prod, coe_prod, norm_prod_le, s.norm_prod_le, trans_eq
@@ -1039,8 +1039,8 @@ theorem Finset.norm_prod_le
   simpa using! (l.map f).norm_prod_le
 
 中文:
-定理 Finset.norm_prod_le
-  结论: {α : 类型} [NormedCommRing α] [NormOneClass α] (s : Finset ι)
+定理 有限集.norm_prod_le
+  结论: {α : 类型} [NormedComm环 α] [NormOne类 α] (s : 有限集 ι)
   证明: by
   rcases s with ⟨⟨l⟩, hl⟩
   simpa using! (l.map f).norm_prod_le
@@ -1061,8 +1061,8 @@ theorem Finset.nnnorm_prod_le
   proof: (s.norm_prod_le f).trans_eq by simp [NNReal.coe_prod]
 
 中文:
-定理 Finset.nnnorm_prod_le
-  结论: {α : 类型} [NormedCommRing α] [NormOneClass α] (s : Finset ι)
+定理 有限集.nnnorm_prod_le
+  结论: {α : 类型} [NormedComm环 α] [NormOne类 α] (s : 有限集 ι)
   证明: (s.norm_prod_le f).trans_eq by simp [NNReal.coe_prod]
 
 Depends on / 依赖: NNReal, NNReal.coe_prod, coe_prod, norm_prod_le, s.norm_prod_le, trans_eq
@@ -1188,7 +1188,7 @@ theorem nnnorm_pow_le
 
 中文:
 定理 nnnorm_pow_le
-  条件: [NormOneClass α] (a : α) (n : 自然数)
+  条件: [NormOne类 α] (a : α) (n : 自然数)
   结论: ‖a ^ n‖₊ <= ‖a‖₊ ^ n
   证明: Nat.recOn n (by simp)
     fun k _hk => nnnorm_pow_le' a k.succ_pos
@@ -1233,7 +1233,7 @@ theorem norm_pow_le
 
 中文:
 定理 norm_pow_le
-  条件: [NormOneClass α] (a : α) (n : 自然数)
+  条件: [NormOne类 α] (a : α) (n : 自然数)
   结论: ‖a ^ n‖ <= ‖a‖ ^ n
   证明: Nat.recOn n (by simp)
     fun n _hn => norm_pow_le' a n.succ_pos
@@ -1273,8 +1273,8 @@ instance ULift.seminormedRing
   body: { ULift.nonUnitalSeminormedRing, ULift.ring with }
 
 中文:
-实例 ULift.seminormedRing
-  签名: : SeminormedRing (ULift α)
+实例 类型层提升.seminormedRing
+  签名: : Seminormed环 (类型层提升 α)
   定义体: { ULift.nonUnitalSeminormedRing, ULift.ring with }
 
 Depends on / 依赖: ULift.nonUnitalSeminormedRing, ULift.ring, nonUnitalSeminormedRing
@@ -1291,8 +1291,8 @@ instance Prod.seminormedRing
   body: { nonUnitalSeminormedRing, instRing with }
 
 中文:
-实例 Prod.seminormedRing
-  签名: [SeminormedRing β]
+实例 积类型.seminormedRing
+  签名: [Seminormed环 β]
   定义体: { nonUnitalSeminormedRing, instRing with }
 
 Depends on / 依赖: instRing, nonUnitalSeminormedRing
@@ -1311,7 +1311,7 @@ instance MulOpposite.instSeminormedRing
 
 中文:
 实例 MulOpposite.instSeminormedRing
-  签名: : SeminormedRing αᵐᵒᵖ where
+  签名: : Seminormed环 αᵐᵒᵖ where
   定义体: instRing
   __ := instNonUnitalSeminormedRing
 
@@ -1482,8 +1482,8 @@ definition RingHom.IsBounded
   body: exists C : Real, 0 < C ∧ forall x : α, norm (f x) <= C * norm x
 
 中文:
-定义 RingHom.IsBounded
-  签名: {α : 类型} [SeminormedRing α] {β : 类型} [SeminormedRing β]
+定义 环态射.IsBounded
+  签名: {α : 类型} [Seminormed环 α] {β : 类型} [Seminormed环 β]
   定义体: exists C : Real, 0 < C ∧ forall x : α, norm (f x) <= C * norm x
 -/
 def RingHom.IsBounded {α : Type*} [SeminormedRing α] {β : Type*} [SeminormedRing β]
@@ -1505,8 +1505,8 @@ instance ULift.nonUnitalNormedRing
   body: { ULift.nonUnitalSeminormedRing, ULift.normedAddCommGroup with }
 
 中文:
-实例 ULift.nonUnitalNormedRing
-  签名: : NonUnitalNormedRing (ULift α)
+实例 类型层提升.nonUnitalNormedRing
+  签名: : 非幺赋范环 (类型层提升 α)
   定义体: { ULift.nonUnitalSeminormedRing, ULift.normedAddCommGroup with }
 
 Depends on / 依赖: ULift.nonUnitalSeminormedRing, ULift.normedAddCommGroup, nonUnitalSeminormedRing, normedAddCommGroup
@@ -1523,8 +1523,8 @@ instance Prod.nonUnitalNormedRing
   body: { Prod.nonUnitalSeminormedRing, Prod.normedAddCommGroup with }
 
 中文:
-实例 Prod.nonUnitalNormedRing
-  签名: [NonUnitalNormedRing β]
+实例 积类型.nonUnitalNormedRing
+  签名: [非幺赋范环 β]
   定义体: { Prod.nonUnitalSeminormedRing, Prod.normedAddCommGroup with }
 
 Depends on / 依赖: Prod.nonUnitalSeminormedRing, Prod.normedAddCommGroup, nonUnitalSeminormedRing, normedAddCommGroup
@@ -1544,7 +1544,7 @@ instance MulOpposite.instNonUnitalNormedRing
 
 中文:
 实例 MulOpposite.instNonUnitalNormedRing
-  签名: : NonUnitalNormedRing αᵐᵒᵖ where
+  签名: : 非幺赋范环 αᵐᵒᵖ where
   定义体: instNonUnitalRing
   __ := instNonUnitalSeminormedRing
   __ := instNormedAddCommGroup
@@ -1572,8 +1572,8 @@ theorem Units.norm_pos
   proof: norm_pos_iff.mpr (Units.ne_zero x)
 
 中文:
-定理 Units.norm_pos
-  条件: [Nontrivial α] (x : αˣ)
+定理 单位群.norm_pos
+  条件: [非平凡 α] (x : αˣ)
   结论: 0 < ‖(x : α)‖
   证明: norm_pos_iff.mpr (Units.ne_zero x)
 
@@ -1592,8 +1592,8 @@ theorem Units.nnnorm_pos
   proof: x.norm_pos
 
 中文:
-定理 Units.nnnorm_pos
-  条件: [Nontrivial α] (x : αˣ)
+定理 单位群.nnnorm_pos
+  条件: [非平凡 α] (x : αˣ)
   结论: 0 < ‖(x : α)‖₊
   证明: x.norm_pos
 
@@ -1611,8 +1611,8 @@ instance ULift.normedRing
   body: { ULift.seminormedRing, ULift.normedAddCommGroup with }
 
 中文:
-实例 ULift.normedRing
-  签名: : NormedRing (ULift α)
+实例 类型层提升.normedRing
+  签名: : 赋范环 (类型层提升 α)
   定义体: { ULift.seminormedRing, ULift.normedAddCommGroup with }
 
 Depends on / 依赖: ULift.normedAddCommGroup, ULift.seminormedRing, normedAddCommGroup, seminormedRing
@@ -1629,8 +1629,8 @@ instance Prod.normedRing
   body: { nonUnitalNormedRing, instRing with }
 
 中文:
-实例 Prod.normedRing
-  签名: [NormedRing β]
+实例 积类型.normedRing
+  签名: [赋范环 β]
   定义体: { nonUnitalNormedRing, instRing with }
 
 Depends on / 依赖: instRing, nonUnitalNormedRing
@@ -1650,7 +1650,7 @@ instance MulOpposite.instNormedRing
 
 中文:
 实例 MulOpposite.instNormedRing
-  签名: : NormedRing αᵐᵒᵖ where
+  签名: : 赋范环 αᵐᵒᵖ where
   定义体: instRing
   __ := instSeminormedRing
   __ := instNormedAddCommGroup
@@ -1677,8 +1677,8 @@ instance ULift.nonUnitalSeminormedCommRing
   body: { ULift.nonUnitalSeminormedRing, ULift.nonUnitalCommRing with }
 
 中文:
-实例 ULift.nonUnitalSeminormedCommRing
-  签名: : NonUnitalSeminormedCommRing (ULift α)
+实例 类型层提升.nonUnitalSeminormedCommRing
+  签名: : 非幺SeminormedComm环 (类型层提升 α)
   定义体: { ULift.nonUnitalSeminormedRing, ULift.nonUnitalCommRing with }
 
 Depends on / 依赖: ULift.nonUnitalCommRing, ULift.nonUnitalSeminormedRing, nonUnitalCommRing, nonUnitalSeminormedRing
@@ -1695,8 +1695,8 @@ instance Prod.nonUnitalSeminormedCommRing
   body: { nonUnitalSeminormedRing, instNonUnitalCommRing with }
 
 中文:
-实例 Prod.nonUnitalSeminormedCommRing
-  签名: [NonUnitalSeminormedCommRing β]
+实例 积类型.nonUnitalSeminormedCommRing
+  签名: [非幺SeminormedComm环 β]
   定义体: { nonUnitalSeminormedRing, instNonUnitalCommRing with }
 
 Depends on / 依赖: instNonUnitalCommRing, nonUnitalSeminormedRing
@@ -1716,7 +1716,7 @@ instance MulOpposite.instNonUnitalSeminormedCommRing
 
 中文:
 实例 MulOpposite.instNonUnitalSeminormedCommRing
-  签名: : NonUnitalSeminormedCommRing αᵐᵒᵖ where
+  签名: : 非幺SeminormedComm环 αᵐᵒᵖ where
   定义体: instNonUnitalSeminormedRing
   __ := instNonUnitalCommRing
 
@@ -1741,8 +1741,8 @@ instance NonUnitalSubalgebra.nonUnitalSeminormedCommRing
   body: { s.nonUnitalSeminormedRing, s.toNonUnitalCommRing with }
 
 中文:
-实例 NonUnitalSubalgebra.nonUnitalSeminormedCommRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型}
+实例 NonUnital子代数.nonUnitalSeminormedCommRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型}
   定义体: { s.nonUnitalSeminormedRing, s.toNonUnitalCommRing with }
 
 Depends on / 依赖: nonUnitalSeminormedRing, s.nonUnitalSeminormedRing, s.toNonUnitalCommRing, toNonUnitalCommRing
@@ -1761,8 +1761,8 @@ instance NonUnitalSubalgebra.nonUnitalNormedCommRing
   body: { s.nonUnitalSeminormedCommRing, s.nonUnitalNormedRing with }
 
 中文:
-实例 NonUnitalSubalgebra.nonUnitalNormedCommRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型}
+实例 NonUnital子代数.nonUnitalNormedCommRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型}
   定义体: { s.nonUnitalSeminormedCommRing, s.nonUnitalNormedRing with }
 
 Depends on / 依赖: nonUnitalNormedRing, nonUnitalSeminormedCommRing, s.nonUnitalNormedRing, s.nonUnitalSeminormedCommRing
@@ -1781,8 +1781,8 @@ instance ULift.nonUnitalNormedCommRing
   body: { ULift.nonUnitalSeminormedCommRing, ULift.normedAddCommGroup with }
 
 中文:
-实例 ULift.nonUnitalNormedCommRing
-  签名: : NonUnitalNormedCommRing (ULift α)
+实例 类型层提升.nonUnitalNormedCommRing
+  签名: : 非幺NormedComm环 (类型层提升 α)
   定义体: { ULift.nonUnitalSeminormedCommRing, ULift.normedAddCommGroup with }
 
 Depends on / 依赖: ULift.nonUnitalSeminormedCommRing, ULift.normedAddCommGroup, nonUnitalSeminormedCommRing, normedAddCommGroup
@@ -1799,8 +1799,8 @@ instance Prod.nonUnitalNormedCommRing
   body: { Prod.nonUnitalSeminormedCommRing, Prod.normedAddCommGroup with }
 
 中文:
-实例 Prod.nonUnitalNormedCommRing
-  签名: [NonUnitalNormedCommRing β]
+实例 积类型.nonUnitalNormedCommRing
+  签名: [非幺NormedComm环 β]
   定义体: { Prod.nonUnitalSeminormedCommRing, Prod.normedAddCommGroup with }
 
 Depends on / 依赖: Prod.nonUnitalSeminormedCommRing, Prod.normedAddCommGroup, nonUnitalSeminormedCommRing, normedAddCommGroup
@@ -1820,7 +1820,7 @@ instance MulOpposite.instNonUnitalNormedCommRing
 
 中文:
 实例 MulOpposite.instNonUnitalNormedCommRing
-  签名: : NonUnitalNormedCommRing αᵐᵒᵖ where
+  签名: : 非幺NormedComm环 αᵐᵒᵖ where
   定义体: instNonUnitalNormedRing
   __ := instNonUnitalSeminormedCommRing
 
@@ -1845,8 +1845,8 @@ instance ULift.seminormedCommRing
   body: { ULift.nonUnitalSeminormedRing, ULift.commRing with }
 
 中文:
-实例 ULift.seminormedCommRing
-  签名: : SeminormedCommRing (ULift α)
+实例 类型层提升.seminormedCommRing
+  签名: : SeminormedComm环 (类型层提升 α)
   定义体: { ULift.nonUnitalSeminormedRing, ULift.commRing with }
 
 Depends on / 依赖: ULift.commRing, ULift.nonUnitalSeminormedRing, commRing, nonUnitalSeminormedRing
@@ -1863,8 +1863,8 @@ instance Prod.seminormedCommRing
   body: { Prod.nonUnitalSeminormedCommRing, instCommRing with }
 
 中文:
-实例 Prod.seminormedCommRing
-  签名: [SeminormedCommRing β]
+实例 积类型.seminormedCommRing
+  签名: [SeminormedComm环 β]
   定义体: { Prod.nonUnitalSeminormedCommRing, instCommRing with }
 
 Depends on / 依赖: Prod.nonUnitalSeminormedCommRing, instCommRing, nonUnitalSeminormedCommRing
@@ -1883,7 +1883,7 @@ instance MulOpposite.instSeminormedCommRing
 
 中文:
 实例 MulOpposite.instSeminormedCommRing
-  签名: : SeminormedCommRing αᵐᵒᵖ where
+  签名: : SeminormedComm环 αᵐᵒᵖ where
   定义体: instSeminormedRing
   __ := instNonUnitalSeminormedCommRing
 
@@ -1906,8 +1906,8 @@ instance Subalgebra.seminormedCommRing
   body: { s.seminormedRing, s.toCommRing with }
 
 中文:
-实例 Subalgebra.seminormedCommRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型} [SeminormedCommRing E]
+实例 子代数.seminormedCommRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型} [SeminormedComm环 E]
   定义体: { s.seminormedRing, s.toCommRing with }
 
 Depends on / 依赖: s.seminormedRing, s.toCommRing, seminormedRing, toCommRing
@@ -1925,8 +1925,8 @@ instance Subalgebra.normedCommRing
   body: { s.seminormedCommRing, s.normedRing with }
 
 中文:
-实例 Subalgebra.normedCommRing
-  签名: {𝕜 : 类型} [CommRing 𝕜] {E : 类型} [NormedCommRing E]
+实例 子代数.normedCommRing
+  签名: {𝕜 : 类型} [交换环 𝕜] {E : 类型} [NormedComm环 E]
   定义体: { s.seminormedCommRing, s.normedRing with }
 
 Depends on / 依赖: normedRing, s.normedRing, s.seminormedCommRing, seminormedCommRing
@@ -1946,8 +1946,8 @@ instance ULift.normedCommRing
   body: { ULift.normedRing (α := α), ULift.seminormedCommRing with }
 
 中文:
-实例 ULift.normedCommRing
-  签名: : NormedCommRing (ULift α)
+实例 类型层提升.normedCommRing
+  签名: : NormedComm环 (类型层提升 α)
   定义体: { ULift.normedRing (α := α), ULift.seminormedCommRing with }
 
 Depends on / 依赖: ULift.normedRing, ULift.seminormedCommRing, normedRing, seminormedCommRing
@@ -1964,8 +1964,8 @@ instance Prod.normedCommRing
   body: { nonUnitalNormedRing, instCommRing with }
 
 中文:
-实例 Prod.normedCommRing
-  签名: [NormedCommRing β]
+实例 积类型.normedCommRing
+  签名: [NormedComm环 β]
   定义体: { nonUnitalNormedRing, instCommRing with }
 
 Depends on / 依赖: instCommRing, nonUnitalNormedRing
@@ -1984,7 +1984,7 @@ instance MulOpposite.instNormedCommRing
 
 中文:
 实例 MulOpposite.instNormedCommRing
-  签名: : NormedCommRing αᵐᵒᵖ where
+  签名: : NormedComm环 αᵐᵒᵖ where
   定义体: instNormedRing
   __ := instSeminormedCommRing
 
@@ -2005,7 +2005,7 @@ theorem IsPowMul.restriction
 
 中文:
 定理 IsPowMul.restriction
-  结论: {R S : 类型} [CommRing R] [Ring S] [Algebra R S]
+  结论: {R S : 类型} [交换环 R] [环 S] [代数 R S]
   证明: fun x n hn => by
   simpa using hf_pm (↑x) hn
 
@@ -2027,8 +2027,8 @@ instance Real.normedCommRing
   body: { Real.normedAddCommGroup, Real.commRing with norm_mul_le x y := (abs_mul x y).le }
 
 中文:
-实例 Real.normedCommRing
-  签名: : NormedCommRing 实数
+实例 实数.normedCommRing
+  签名: : NormedComm环 实数
   定义体: { Real.normedAddCommGroup, Real.commRing with norm_mul_le x y := (abs_mul x y).le }
 
 Depends on / 依赖: Real.commRing, Real.normedAddCommGroup, abs_mul, commRing, norm_mul_le, normedAddCommGroup
@@ -2103,8 +2103,8 @@ theorem NormedAddCommGroup.tendsto_atTop
   proof: (atTop_basis.tendsto_iff Metric.nhds_basis_ball).trans (by simp [dist_eq_norm])
 
 中文:
-定理 NormedAddCommGroup.tendsto_atTop
-  结论: [Nonempty α] [Preorder α] [IsDirectedOrder α]
+定理 赋范交换加群.tendsto_atTop
+  结论: [非空 α] [预序 α] [IsDirectedOrder α]
   证明: (atTop_basis.tendsto_iff Metric.nhds_basis_ball).trans (by simp [dist_eq_norm])
 
 Depends on / 依赖: Metric, Metric.nhds_basis_ball, atTop_basis, atTop_basis.tendsto_iff, dist_eq_norm, nhds_basis_ball, tendsto_iff
@@ -2123,8 +2123,8 @@ theorem NormedAddCommGroup.tendsto_atTop'
   proof: (atTop_basis_Ioi.tendsto_iff Metric.nhds_basis_ball).trans (by simp [dist_eq_norm])
 
 中文:
-定理 NormedAddCommGroup.tendsto_atTop'
-  结论: [Nonempty α] [Preorder α] [IsDirectedOrder α]
+定理 赋范交换加群.tendsto_atTop'
+  结论: [非空 α] [预序 α] [IsDirectedOrder α]
   证明: (atTop_basis_Ioi.tendsto_iff Metric.nhds_basis_ball).trans (by simp [dist_eq_norm])
 
 Depends on / 依赖: Metric, Metric.nhds_basis_ball, atTop_basis_Ioi, atTop_basis_Ioi.tendsto_iff, dist_eq_norm, nhds_basis_ball, tendsto_iff
@@ -2149,7 +2149,7 @@ class RingHomIsometric
 
 中文:
 类 RingHomIsometric
-  参数: [Semiring R₁] [Semiring R₂] [Norm R₁] [Norm R₂] (σ : R₁ ->+* R₂)
+  参数: [半环 R₁] [半环 R₂] [范数 R₁] [范数 R₂] (σ : R₁ ->+* R₂)
   公理与运算 (1 个):
     - norm_map : 对任意 {x : R₁}, ‖σ x‖ = ‖x‖
 -/
@@ -2172,7 +2172,7 @@ theorem RingHomIsometric.nnnorm_map
 
 中文:
 定理 RingHomIsometric.nnnorm_map
-  结论: [SeminormedRing R₁] [SeminormedRing R₂] (σ : R₁ ->+* R₂)
+  结论: [Seminormed环 R₁] [Seminormed环 R₂] (σ : R₁ ->+* R₂)
   证明: NNReal.eq norm_map
 
 @[simp]
@@ -2194,7 +2194,7 @@ theorem RingHomIsometric.enorm_map
 
 中文:
 定理 RingHomIsometric.enorm_map
-  结论: [SeminormedRing R₁] [SeminormedRing R₂] (σ : R₁ ->+* R₂)
+  结论: [Seminormed环 R₁] [Seminormed环 R₂] (σ : R₁ ->+* R₂)
   证明: congrArg ENNReal.ofNNReal nnnorm_map σ x
 
 Depends on / 依赖: ENNReal, ENNReal.ofNNReal, nnnorm_map, ofNNReal
@@ -2215,7 +2215,7 @@ instance RingHomIsometric.ids
 
 中文:
 实例 RingHomIsometric.ids
-  签名: : RingHomIsometric (RingHom.id R₁)
+  签名: : RingHomIsometric (环态射.id R₁)
   定义体: ⟨rfl⟩
 -/
 instance RingHomIsometric.ids : RingHomIsometric (RingHom.id R₁) :=
@@ -2235,8 +2235,8 @@ class NormMulClass
     - norm_mul : forall (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
 
 中文:
-类 NormMulClass
-  参数: (α : 类型) [Norm α] [Mul α]
+类 NormMul类
+  参数: (α : 类型) [范数 α] [乘法 α]
   公理与运算 (1 个):
     - norm_mul : 对任意 (a b : α), ‖a * b‖ = ‖a‖ * ‖b‖
 -/
@@ -2254,7 +2254,7 @@ lemma norm_mul
 
 中文:
 引理 norm_mul
-  条件: [Norm α] [Mul α] [NormMulClass α] (a b : α)
+  条件: [范数 α] [乘法 α] [NormMul类 α] (a b : α)
   证明: NormMulClass.norm_mul a b
 -/
 @[simp] lemma norm_mul [Norm α] [Mul α] [NormMulClass α] (a b : α) :
@@ -2432,9 +2432,9 @@ theorem List.norm_prod
   proof: map_list_prod (normHom.toMonoidHom : α ->* Real) _
 
 中文:
-定理 List.norm_prod
-  条件: (l : List α)
-  结论: ‖l.prod‖ = (l.map norm).prod
+定理 列表.norm_prod
+  条件: (l : 列表 α)
+  结论: ‖l.乘积‖ = (l.map norm).乘积
   证明: map_list_prod (normHom.toMonoidHom : α ->* Real) _
 -/
 protected theorem List.norm_prod (l : List α) : ‖l.prod‖ = (l.map norm).prod :=
@@ -2450,9 +2450,9 @@ theorem List.nnnorm_prod
   proof: map_list_prod (nnnormHom.toMonoidHom : α ->* Real>=0) _
 
 中文:
-定理 List.nnnorm_prod
-  条件: (l : List α)
-  结论: ‖l.prod‖₊ = (l.map nnnorm).prod
+定理 列表.nnnorm_prod
+  条件: (l : 列表 α)
+  结论: ‖l.乘积‖₊ = (l.map nnnorm).乘积
   证明: map_list_prod (nnnormHom.toMonoidHom : α ->* Real>=0) _
 -/
 protected theorem List.nnnorm_prod (l : List α) : ‖l.prod‖₊ = (l.map nnnorm).prod :=
@@ -2478,7 +2478,7 @@ theorem norm_prod
 
 中文:
 定理 norm_prod
-  条件: (s : Finset β) (f : β -> α)
+  条件: (s : 有限集 β) (f : β -> α)
   结论: ‖∏ b in s, f b‖ = ∏ b in s, ‖f b‖
   证明: map_prod normHom.toMonoidHom f s
 
@@ -2501,7 +2501,7 @@ theorem nnnorm_prod
 
 中文:
 定理 nnnorm_prod
-  条件: (s : Finset β) (f : β -> α)
+  条件: (s : 有限集 β) (f : β -> α)
   结论: ‖∏ b in s, f b‖₊ = ∏ b in s, ‖f b‖₊
   证明: map_prod nnnormHom.toMonoidHom f s
 
@@ -2526,8 +2526,8 @@ lemma NormMulClass.toNormOneClass
     simpa [mul_eq_left₀ (norm_ne_zero_iff.mpr hu)] using (norm_mul u 1).symm
 
 中文:
-引理 NormMulClass.toNormOneClass
-  结论: NormOneClass α where
+引理 NormMul类.toNormOneClass
+  结论: NormOne类 α where
   证明: by
     obtain ⟨u, hu⟩ := exists_ne (0 : α)
     simpa [mul_eq_left₀ (norm_ne_zero_iff.mpr hu)] using (norm_mul u 1).symm
@@ -2556,8 +2556,8 @@ instance NormMulClass.isAbsoluteValue_norm
   abv_mul' := norm_mul
 
 中文:
-实例 NormMulClass.isAbsoluteValue_norm
-  签名: : IsAbsoluteValue (norm : α -> 实数) where
+实例 NormMul类.isAbsoluteValue_norm
+  签名: : 是绝对值 (norm : α -> 实数) where
   定义体: norm_nonneg
   abv_eq_zero' := norm_eq_zero
   abv_add' := norm_add_le
@@ -2581,8 +2581,8 @@ instance NormMulClass.toNoZeroDivisors
     simpa only [← norm_eq_zero (E := α), norm_mul, mul_eq_zero] using h
 
 中文:
-实例 NormMulClass.toNoZeroDivisors
-  签名: : NoZeroDivisors α where
+实例 NormMul类.toNoZeroDivisors
+  签名: : 无零因子 α where
   定义体: by
     simpa only [← norm_eq_zero (E := α), norm_mul, mul_eq_zero] using h
 
@@ -2613,8 +2613,8 @@ abbreviation NonUnitalSeminormedRing.induced
     norm_mul_le x y := show ‖f _‖ <= _ from (map_mul f x y).symm ▸ norm_mul_le (f x) (f y) }
 
 中文:
-缩写 NonUnitalSeminormedRing.induced
-  签名: [NonUnitalRing R] [NonUnitalSeminormedRing S]
+缩写 非幺Seminormed环.induced
+  签名: [非幺环 R] [非幺Seminormed环 S]
   定义体: fast_instance%
   { SeminormedAddCommGroup.induced R S f, ‹NonUnitalRing R› with
     norm_mul_le x y := show ‖f _‖ <= _ from (map_mul f x y).symm ▸ norm_mul_le (f x) (f y) }
@@ -2636,8 +2636,8 @@ abbreviation NonUnitalNormedRing.induced
   { NonUnitalSeminormedRing.induced R S f, NormedAddCommGroup.induced R S f hf with }
 
 中文:
-缩写 NonUnitalNormedRing.induced
-  签名: [NonUnitalRing R] [NonUnitalNormedRing S]
+缩写 非幺赋范环.induced
+  签名: [非幺环 R] [非幺赋范环 S]
   定义体: fast_instance%
   { NonUnitalSeminormedRing.induced R S f, NormedAddCommGroup.induced R S f hf with }
 
@@ -2658,8 +2658,8 @@ abbreviation SeminormedRing.induced
   { NonUnitalSeminormedRing.induced R S f, SeminormedAddCommGroup.induced R S f, ‹Ring R› with }
 
 中文:
-缩写 SeminormedRing.induced
-  签名: [Ring R] [SeminormedRing S] [NonUnitalRingHomClass F R S] (f : F)
+缩写 Seminormed环.induced
+  签名: [环 R] [Seminormed环 S] [非幺环态射类 F R S] (f : F)
   定义体: fast_instance%
   { NonUnitalSeminormedRing.induced R S f, SeminormedAddCommGroup.induced R S f, ‹Ring R› with }
 
@@ -2679,8 +2679,8 @@ abbreviation NormedRing.induced
   { NonUnitalSeminormedRing.induced R S f, NormedAddCommGroup.induced R S f hf, ‹Ring R› with }
 
 中文:
-缩写 NormedRing.induced
-  签名: [Ring R] [NormedRing S] [NonUnitalRingHomClass F R S] (f : F)
+缩写 赋范环.induced
+  签名: [环 R] [赋范环 S] [非幺环态射类 F R S] (f : F)
   定义体: fast_instance%
   { NonUnitalSeminormedRing.induced R S f, NormedAddCommGroup.induced R S f hf, ‹Ring R› with }
 
@@ -2700,8 +2700,8 @@ abbreviation NonUnitalSeminormedCommRing.induced
   { NonUnitalSeminormedRing.induced R S f, ‹NonUnitalCommRing R› with }
 
 中文:
-缩写 NonUnitalSeminormedCommRing.induced
-  签名: [NonUnitalCommRing R] [NonUnitalSeminormedCommRing S]
+缩写 非幺SeminormedComm环.induced
+  签名: [非幺交换环 R] [非幺SeminormedComm环 S]
   定义体: fast_instance%
   { NonUnitalSeminormedRing.induced R S f, ‹NonUnitalCommRing R› with }
 
@@ -2721,8 +2721,8 @@ abbreviation NonUnitalNormedCommRing.induced
   { NonUnitalNormedRing.induced R S f hf, ‹NonUnitalCommRing R› with }
 
 中文:
-缩写 NonUnitalNormedCommRing.induced
-  签名: [NonUnitalCommRing R] [NonUnitalNormedCommRing S]
+缩写 非幺NormedComm环.induced
+  签名: [非幺交换环 R] [非幺NormedComm环 S]
   定义体: fast_instance%
   { NonUnitalNormedRing.induced R S f hf, ‹NonUnitalCommRing R› with }
 
@@ -2742,8 +2742,8 @@ abbreviation SeminormedCommRing.induced
   { NonUnitalSeminormedRing.induced R S f, SeminormedAddCommGroup.induced R S f, ‹CommRing R› with }
 
 中文:
-缩写 SeminormedCommRing.induced
-  签名: [CommRing R] [SeminormedRing S] [NonUnitalRingHomClass F R S]
+缩写 SeminormedComm环.induced
+  签名: [交换环 R] [Seminormed环 S] [非幺环态射类 F R S]
   定义体: fast_instance%
   { NonUnitalSeminormedRing.induced R S f, SeminormedAddCommGroup.induced R S f, ‹CommRing R› with }
 
@@ -2763,8 +2763,8 @@ abbreviation NormedCommRing.induced
   { SeminormedCommRing.induced R S f, NormedAddCommGroup.induced R S f hf with }
 
 中文:
-缩写 NormedCommRing.induced
-  签名: [CommRing R] [NormedRing S] [NonUnitalRingHomClass F R S] (f : F)
+缩写 NormedComm环.induced
+  签名: [交换环 R] [赋范环 S] [非幺环态射类 F R S] (f : F)
   定义体: fast_instance%
   { SeminormedCommRing.induced R S f, NormedAddCommGroup.induced R S f hf with }
 
@@ -2784,8 +2784,8 @@ theorem NormOneClass.induced
   { norm_one := (congr_arg norm (map_one f)).trans norm_one }
 
 中文:
-定理 NormOneClass.induced
-  结论: {F : 类型} (R S : 类型) [Ring R] [SeminormedRing S]
+定理 NormOne类.induced
+  结论: {F : 类型} (R S : 类型) [环 R] [Seminormed环 S]
   证明: let _ : SeminormedRing R := SeminormedRing.induced R S f
   { norm_one := (congr_arg norm (map_one f)).trans norm_one }
 
@@ -2807,8 +2807,8 @@ theorem NormMulClass.induced
   { norm_mul x y := (congr_arg norm (map_mul f x y)).trans <| norm_mul _ _ }
 
 中文:
-定理 NormMulClass.induced
-  结论: {F : 类型} (R S : 类型) [Ring R] [SeminormedRing S]
+定理 NormMul类.induced
+  结论: {F : 类型} (R S : 类型) [环 R] [Seminormed环 S]
   证明: let _ : SeminormedRing R := SeminormedRing.induced R S f
   { norm_mul x y := (congr_arg norm (map_mul f x y)).trans <| norm_mul _ _ }
 
@@ -2836,7 +2836,7 @@ instance toSeminormedRing
 
 中文:
 实例 toSeminormedRing
-  签名: [SeminormedRing R] [SubringClass S R] (s : S)
+  签名: [Seminormed环 R] [子环类 S R] (s : S)
   定义体: fast_instance% SeminormedRing.induced s R (SubringClass.subtype s)
 
 Depends on / 依赖: SeminormedRing, SeminormedRing.induced, SubringClass, SubringClass.subtype, fast_instance, induced, subtype
@@ -2854,7 +2854,7 @@ instance toNormedRing
 
 中文:
 实例 toNormedRing
-  签名: [NormedRing R] [SubringClass S R] (s : S)
+  签名: [赋范环 R] [子环类 S R] (s : S)
   定义体: fast_instance% NormedRing.induced s R (SubringClass.subtype s) Subtype.val_injective
 
 Depends on / 依赖: NormedRing, NormedRing.induced, SubringClass, SubringClass.subtype, Subtype, Subtype.val_injective, fast_instance, induced, subtype, val_injective
@@ -2872,7 +2872,7 @@ instance toSeminormedCommRing
 
 中文:
 实例 toSeminormedCommRing
-  签名: [SeminormedCommRing R] [_h : SubringClass S R] (s : S)
+  签名: [SeminormedComm环 R] [_h : 子环类 S R] (s : S)
   定义体: fast_instance% SeminormedCommRing.induced s R (SubringClass.subtype s)
 
 Depends on / 依赖: SeminormedCommRing, SeminormedCommRing.induced, SubringClass, SubringClass.subtype, fast_instance, induced, subtype
@@ -2891,7 +2891,7 @@ instance toNormedCommRing
 
 中文:
 实例 toNormedCommRing
-  签名: [NormedCommRing R] [SubringClass S R] (s : S)
+  签名: [NormedComm环 R] [子环类 S R] (s : S)
   定义体: fast_instance% NormedCommRing.induced s R (SubringClass.subtype s) Subtype.val_injective
 
 Depends on / 依赖: NormedCommRing, NormedCommRing.induced, SubringClass, SubringClass.subtype, Subtype, Subtype.val_injective, fast_instance, induced, subtype, val_injective
@@ -2909,7 +2909,7 @@ instance toNormOneClass
 
 中文:
 实例 toNormOneClass
-  签名: [SeminormedRing R] [NormOneClass R] [SubringClass S R] (s : S)
+  签名: [Seminormed环 R] [NormOne类 R] [子环类 S R] (s : S)
   定义体: .induced s R SubringClass.subtype _
 
 Depends on / 依赖: SubringClass, SubringClass.subtype, induced, subtype
@@ -2928,7 +2928,7 @@ instance toNormMulClass
 
 中文:
 实例 toNormMulClass
-  签名: [SeminormedRing R] [NormMulClass R] [SubringClass S R] (s : S)
+  签名: [Seminormed环 R] [NormMul类 R] [子环类 S R] (s : S)
   定义体: .induced s R SubringClass.subtype _
 
 Depends on / 依赖: SubringClass, SubringClass.subtype, induced, subtype
@@ -2960,7 +2960,7 @@ definition toNormedRing
 
 中文:
 定义 toNormedRing
-  签名: {R : 类型} [Ring R] (v : AbsoluteValue R 实数)
+  签名: {R : 类型} [环 R] (v : 绝对值 R 实数)
   定义体: v
   dist x y := v (-x + y)
   dist_eq _ _ := rfl
@@ -3009,7 +3009,7 @@ lemma iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg
 
 中文:
 引理 iSup_fun_mul_eq_iSup_mul_iSup_of_nonneg
-  结论: {F : 类型} [FunLike F R 实数]
+  结论: {F : 类型} [函数状 F R 实数]
   证明: by
   simp_rw [Real.iSup_mul_of_nonneg (iSup_nonneg fun i => apply_nonneg v (y i)),
     Real.mul_iSup_of_nonneg (apply_nonneg v _), map_mul, Finite.ciSup_prod]
@@ -3089,7 +3089,7 @@ lemma iSup_prod_eq_prod_iSup_of_nonnegHomClass
 
 中文:
 引理 iSup_prod_eq_prod_iSup_of_nonnegHomClass
-  结论: {F : 类型} [FunLike F R 实数]
+  结论: {F : 类型} [函数状 F R 实数]
   证明: Real.iSup_prod_eq_prod_iSup_of_nonneg (f := fun a i => v (x a i)) (fun _ _ => apply_nonneg v _)
 
 Depends on / 依赖: Real.iSup_prod_eq_prod_iSup_of_nonneg, apply_nonneg, iSup_prod_eq_prod_iSup_of_nonneg

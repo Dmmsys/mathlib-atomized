@@ -91,7 +91,7 @@ definition tensor
 
 中文:
 定义 tensor
-  签名: : (relations₁.tensor relations₂).Solution (M₁ otimes[A] M₂) where
+  签名: : (relations₁.tensor relations₂).解 (M₁ otimes[A] M₂) where
   定义体: fun ⟨g₁, g₂⟩ => solution₁.var g₁ otimesₜ solution₂.var g₂
   linearCombination_var_relation := by
     rintro (⟨r₁, g₂⟩ | ⟨g₁, r₂⟩)
@@ -178,8 +178,8 @@ lemma IsPresentation.tensor
   proof: (isPresentationCoreTensor h₁ h₂).isPresentation
 
 中文:
-引理 IsPresentation.tensor
-  结论: (solution₁.tensor solution₂).IsPresentation
+引理 是呈现.tensor
+  结论: (solution₁.tensor solution₂).是呈现
   证明: (isPresentationCoreTensor h₁ h₂).isPresentation
 
 Depends on / 依赖: isPresentation, isPresentationCoreTensor
@@ -212,7 +212,7 @@ definition tensor
 
 中文:
 定义 tensor
-  签名: : Presentation A (M₁ otimes[A] M₂) where
+  签名: : 呈现 A (M₁ otimes[A] M₂) where
   定义体: _
   R := _
   relation := _

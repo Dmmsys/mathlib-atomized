@@ -65,7 +65,7 @@ theorem lsingle_range_le_ker_lapply
 
 中文:
 定理 lsingle_range_le_ker_lapply
-  条件: (s t : Set α) (h : Disjoint s t)
+  条件: (s t : 集合 α) (h : Disjoint s t)
   证明: by
   refine iSup_le fun a₁ => iSup_le fun h₁ => range_le_iff_comap.2 ?_
   simp only [(ker_comp _ _).symm, eq_top_iff, SetLike.le_def, mem_ker, comap_iInf, mem_iInf]
@@ -120,7 +120,7 @@ refine eq_top_iff.2 SetLike.le_def.2 fun f _ => ?_
 
 中文:
 定理 iSup_lsingle_range
-  结论: ⨆ a, LinearMap.range (lsingle a : M ->ₗ[R] α ->₀ M) = ⊤
+  结论: ⨆ a, 线性映射.range (lsingle a : M ->ₗ[R] α ->₀ M) = ⊤
   证明: by
 refine eq_top_iff.2 SetLike.le_def.2 fun f _ => ?_
   rw [← sum_single f]
@@ -153,7 +153,7 @@ theorem disjoint_lsingle_lsingle
 
 中文:
 定理 disjoint_lsingle_lsingle
-  条件: (s t : Set α) (hs : Disjoint s t)
+  条件: (s t : 集合 α) (hs : Disjoint s t)
   证明: by
   refine
     (Disjoint.mono
@@ -196,7 +196,7 @@ theorem span_single_image
 
 中文:
 定理 span_single_image
-  条件: (s : Set M) (a : α)
+  条件: (s : 集合 M) (a : α)
   证明: by
   rw [← span_image]; rfl
 
@@ -310,8 +310,8 @@ theorem exists_finset_of_mem_iSup
   exact this hm
 
 中文:
-定理 exists_finset_of_mem_iSup
-  结论: {ι : Sort _} (p : ι -> Submodule R M) {m : M}
+定理 存在_finset_of_mem_iSup
+  结论: {ι : 类型层 _} (p : ι -> 子模 R M) {m : M}
   证明: by
   have :=
     CompleteLattice.IsCompactElement.exists_finset_of_le_iSup (Submodule R M)
@@ -339,8 +339,8 @@ theorem mem_iSup_iff_exists_finset
     iSup_mono (fun i => (iSup_const_le : _ <= p i)) hs⟩
 
 中文:
-定理 mem_iSup_iff_exists_finset
-  条件: {ι : Sort _} {p : ι -> Submodule R M} {m : M}
+定理 mem_iSup_iff_存在_finset
+  条件: {ι : 类型层 _} {p : ι -> 子模 R M} {m : M}
   证明: ⟨Submodule.exists_finset_of_mem_iSup p, fun ⟨_, hs⟩ =>
     iSup_mono (fun i => (iSup_const_le : _ <= p i)) hs⟩
 
@@ -365,8 +365,8 @@ theorem mem_sSup_iff_exists_finset
   · suffices m in ⨆ (i) (hi : i in S) (_ : ⟨i
 
 中文:
-定理 mem_sSup_iff_exists_finset
-  条件: {S : Set (Submodule R M)} {m : M}
+定理 mem_sSup_iff_存在_finset
+  条件: {S : 集合 (子模 R M)} {m : M}
   证明: by
   rw [sSup_eq_iSup]; rw [iSup_subtype']; rw [Submodule.mem_iSup_iff_exists_finset]
   refine ⟨fun ⟨s, hs⟩ => ⟨s.map (Function.Embedding.subtype (· in S)), ?_, ?_⟩,
@@ -434,7 +434,7 @@ theorem image_smul_top_eq_range_lsum
 
 中文:
 定理 image_smul_top_eq_range_lsum
-  条件: (s : Set σ) (f : σ -> R)
+  条件: (s : 集合 σ) (f : σ -> R)
   证明: by
   simpa [Set.range_comp] using (range_lsum_smul (.id (R := R) (M := M)) (f ∘ (↑) : s -> R)).symm
 
@@ -456,7 +456,7 @@ theorem smul_top_eq_range_lsum
 
 中文:
 定理 smul_top_eq_range_lsum
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   simpa using image_smul_top_eq_range_lsum (M := M) s id
 

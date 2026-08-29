@@ -43,7 +43,7 @@ definition prod
     {(b₁.f i, b₂.f (eι i)) | i : ι₁}
 
 中文:
-定义 prod
+定义 乘积
   签名: :
   定义体: .lieSpan _ _
     {(b₁.h i, b₂.h (eι i)) | i : ι₁} union
@@ -72,7 +72,7 @@ definition prodSymmEquiv
 
 中文:
 定义 prodSymmEquiv
-  签名: : prod eι.symm b₂ b₁ ≃ₗ⁅R⁆ b₁.prod eι b₂
+  签名: : 乘积 eι.symm b₂ b₁ ≃ₗ⁅R⁆ b₁.乘积 eι b₂
   定义体: have : (prod eι.symm b₂ b₁).map (LieEquiv.prodComm R L₂ L₁) = b₁.prod eι b₂ := by
     rw [prod]; rw [prod]; rw [map_lieSpan]; congr; ext; aesop
   (LieEquiv.lieSubalgebraMap (prod eι.symm b₂ b₁) (LieEquiv.prodComm _ _ _)).trans
@@ -99,7 +99,7 @@ lemma prodSymmEquiv_symm_apply
 
 中文:
 引理 prodSymmEquiv_symm_apply
-  条件: {y : b₁.prod eι b₂}
+  条件: {y : b₁.乘积 eι b₂}
   证明: rfl
 -/
 lemma prodSymmEquiv_symm_apply {y : b₁.prod eι b₂} :
@@ -554,7 +554,7 @@ lemma prod_lt_top
 
 中文:
 引理 prod_lt_top
-  条件: [Nontrivial L₂]
+  条件: [非平凡 L₂]
   证明: by
   /- This innocent-looking result is the key. The informal literature seems only to contain
   somewhat heavy-weight proofs (e.g., [Chapter IV, Theorem 14.2](humphreys1972) makes an

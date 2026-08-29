@@ -40,7 +40,7 @@ definition pretopology
 
 中文:
 定义 pretopology
-  签名: (P : Morphism命题erty Scheme.{u}) [P.IsStableUnderBaseChange]
+  签名: (P : MorphismProperty 概形.{u}) [P.是StableUnderBaseChange]
   定义体: (precoverage P).toPretopology
 
 Depends on / 依赖: precoverage, toPretopology
@@ -59,7 +59,7 @@ abbreviation grothendieckTopology
 
 中文:
 缩写 grothendieckTopology
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: (precoverage P).toGrothendieck
 
 Depends on / 依赖: precoverage, toGrothendieck
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: jointlySurjectivePrecoverage.IsStableUnderBaseChange
+  签名: jointlySurjectivePrecoverage.是StableUnderBaseChange
   定义体: isStableUnderBaseChange_comap_jointlySurjectivePrecoverage _
     fun f g _ => pullbackComparison_forget_surjective f g
 
@@ -99,7 +99,7 @@ definition jointlySurjectivePretopology
 
 中文:
 定义 jointlySurjectivePretopology
-  签名: : Pretopology Scheme.{u}
+  签名: : Pretopology 概形.{u}
   定义体: jointlySurjectivePrecoverage.toPretopology
 
 Depends on / 依赖: jointlySurjectivePrecoverage, jointlySurjectivePrecoverage.toPretopology, toPretopology
@@ -120,7 +120,7 @@ lemma Cover.mem_grothendieckTopology
 
 中文:
 引理 Cover.mem_grothendieckTopology
-  条件: {X : Scheme.{u}} (𝒰 : X.Cover (precoverage P))
+  条件: {X : 概形.{u}} (𝒰 : X.Cover (precoverage P))
   证明: Precoverage.generate_mem_toGrothendieck 𝒰.mem₀
 
 Depends on / 依赖: Precoverage, Precoverage.generate_mem_toGrothendieck, generate_mem_toGrothendieck
@@ -142,7 +142,7 @@ lemma bot_mem_grothendieckTopology
 
 中文:
 引理 bot_mem_grothendieckTopology
-  条件: (X : Scheme.{u}) [IsEmpty X]
+  条件: (X : 概形.{u}) [是空 X]
   结论: ⊥ in grothendieckTopology P X
   证明: by
   rw [← Sieve.generate_bot]
@@ -167,7 +167,7 @@ lemma Cover.mem_pretopology
 
 中文:
 引理 Cover.mem_pretopology
-  条件: {X : Scheme.{u}} {𝒰 : X.Cover (precoverage P)}
+  条件: {X : 概形.{u}} {𝒰 : X.Cover (precoverage P)}
   证明: 𝒰.mem₀
 -/
 lemma Cover.mem_pretopology {X : Scheme.{u}} {𝒰 : X.Cover (precoverage P)} :
@@ -186,7 +186,7 @@ alias ⟨exists_cover_of_mem_pretopology, _⟩ := mem_pretopology_iff
 
 中文:
 引理 mem_pretopology_iff
-  条件: {X : Scheme.{u}} {R : Presieve X}
+  条件: {X : 概形.{u}} {R : Presieve X}
   证明: Precoverage.mem_iff_exists_zeroHypercover
 
 alias ⟨exists_cover_of_mem_pretopology, _⟩ := mem_pretopology_iff
@@ -215,7 +215,7 @@ lemma mem_grothendieckTopology_iff
 
 中文:
 引理 mem_grothendieckTopology_iff
-  条件: {X : Scheme.{u}} {S : Sieve X}
+  条件: {X : 概形.{u}} {S : 筛 X}
   证明: by
   simp_rw [grothendieckTopology, Precoverage.mem_toGrothendieck_iff_of_isStableUnderComposition]
   refine ⟨fun ⟨R, hR, hle⟩ => ?_, fun ⟨𝒰, hle⟩ => ⟨.ofArrows 𝒰.X 𝒰.f, 𝒰.mem_pretopology, hle⟩⟩
@@ -253,7 +253,7 @@ definition jointlySurjectiveTopology
 
 中文:
 定义 jointlySurjectiveTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: jointlySurjectivePretopology.toGrothendieck.copy
 (fun X => {s | ↑s in jointlySurjectivePretopology X})
     funext fun _ => Set.ext fun s =>

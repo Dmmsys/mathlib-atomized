@@ -37,7 +37,7 @@ definition typesGrothendieckTopology
 
 中文:
 定义 typesGrothendieckTopology
-  签名: : GrothendieckTopology (类型u) where
+  签名: : Grothendieck拓扑 (类型u) where
   定义体: {S | forall x : α, S <| ↾fun _ : PUnit => x}
   top_mem' _ _ := trivial
   pullback_stable' _ _ _ f hs x := hs (f x)
@@ -174,7 +174,7 @@ theorem Presheaf.isSheaf_yoneda'
   exact Presieve.isSheaf_yoneda'
 
 中文:
-定理 Presheaf.isSheaf_yoneda'
+定理 预层.isSheaf_yoneda'
   条件: {α : 类型u}
   证明: by
   rw [isSheaf_iff_isSheaf_of_type]
@@ -202,7 +202,7 @@ definition yoneda'
 
 中文:
 定义 yoneda'
-  签名: : 类型u ⥤ Sheaf typesGrothendieckTopology (类型u) where
+  签名: : 类型u ⥤ 层 typesGrothendieckTopology (类型u) where
   定义体: ⟨yoneda.obj α, Presheaf.isSheaf_yoneda'⟩
   map f := ⟨yoneda.map f⟩
 
@@ -464,7 +464,7 @@ definition equivYoneda'
 
 中文:
 定义 equivYoneda'
-  签名: (S : Sheaf typesGrothendieckTopology (类型u))
+  签名: (S : 层 typesGrothendieckTopology (类型u))
   定义体: ⟨(equivYoneda S.1 S.2).hom⟩
   inv := ⟨(equivYoneda S.1 S.2).inv⟩
   hom_inv_id := by ext1; apply (equivYoneda S.1 S.2).hom_inv_id
@@ -489,7 +489,7 @@ theorem eval_app
 
 中文:
 定理 eval_app
-  结论: (S₁ S₂ : Sheaf typesGrothendieckTopology (类型u)) (f : S₁ ⟶ S₂)
+  结论: (S₁ S₂ : 层 typesGrothendieckTopology (类型u)) (f : S₁ ⟶ S₂)
   证明: (ConcreteCategory.congr_hom (f.hom.naturality (↾fun _ => x).op) s).symm
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, f.hom.naturality, naturality
@@ -522,7 +522,7 @@ counitIso := Iso.symm
 
 中文:
 定义 typeEquiv
-  签名: : 类型u ≌ Sheaf typesGrothendieckTopology (类型u) where
+  签名: : 类型u ≌ 层 typesGrothendieckTopology (类型u) where
   定义体: yoneda'
   inverse := sheafToPresheaf _ _ ⋙ (evaluation _ _).obj (op (PUnit))
   unitIso := dsimp% NatIso.ofComponents
@@ -565,7 +565,7 @@ instance subcanonical_typesGrothendieckTopology
 
 中文:
 实例 subcanonical_typesGrothendieckTopology
-  签名: : typesGrothendieckTopology.{u}.Subcanonical
+  签名: : typesGrothendieckTopology.{u}.子典范
   定义体: GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj _ fun _ => Presieve.isSheaf_yoneda'
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, Presieve, Presieve.isSheaf_yoneda, Subcanonical, isSheaf_yoneda, of_isSheaf_yoneda_obj

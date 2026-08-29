@@ -64,7 +64,7 @@ lemma orderIsoSingleton_apply
 
 中文:
 引理 orderIsoSingleton_apply
-  条件: (a : α) (i : Fin 1)
+  条件: (a : α) (i : 有限集 1)
   证明: rfl
 -/
 lemma orderIsoSingleton_apply (a : α) (i : Fin 1) :

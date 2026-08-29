@@ -66,7 +66,7 @@ abbreviation HasEval
   body: IsTopologicallyNilpotent a
 
 中文:
-缩写 HasEval
+缩写 有Eval
   签名: (a : S)
   定义体: IsTopologicallyNilpotent a
 
@@ -86,7 +86,7 @@ theorem hasEval_def
 中文:
 定理 hasEval_def
   条件: (a : S)
-  结论: HasEval a ↔ IsTopologicallyNilpotent a
+  结论: 有Eval a ↔ IsTopologicallyNilpotent a
   证明: .rfl
 
 Depends on / 依赖: Ultrafilter, X.str
@@ -122,7 +122,7 @@ theorem hasEval
 
 中文:
 定理 hasEval
-  条件: {a : S} (ha : HasEval a)
+  条件: {a : S} (ha : 有Eval a)
   证明: hasEval_iff.mp ha
 
 Depends on / 依赖: X.str, hasEval_iff, hasEval_iff.mp, isCompact_iff_ultrafilter_le_nhds, le_nhds_iff
@@ -141,8 +141,8 @@ theorem HasEval.mono
   exact ha.mono h
 
 中文:
-定理 HasEval.mono
-  结论: {S : 类型} [CommRing S] {a : S}
+定理 有Eval.mono
+  结论: {S : 类型} [交换环 S] {a : S}
   证明: by
   simp only [hasEval_iff] at ha ⊢
   exact ha.mono h
@@ -163,8 +163,8 @@ theorem HasEval.zero
     rw [hasEval_iff]; exact MvPowerSeries.HasEval.zero
 
 中文:
-定理 HasEval.zero
-  结论: HasEval (0 : S)
+定理 有Eval.zero
+  结论: 有Eval (0 : S)
   证明: by
     rw [hasEval_iff]; exact MvPowerSeries.HasEval.zero
 -/
@@ -182,8 +182,8 @@ theorem HasEval.add
   exact ha.add hb
 
 中文:
-定理 HasEval.add
-  结论: [ContinuousAdd S] [IsLinearTopology S S]
+定理 有Eval.add
+  结论: [连续加法 S] [是线性拓扑 S S]
   证明: by
   simp only [hasEval_iff] at ha hb ⊢
   exact ha.add hb
@@ -204,8 +204,8 @@ theorem HasEval.mul_left
   exact hx.mul_left _
 
 中文:
-定理 HasEval.mul_left
-  结论: [IsLinearTopology S S]
+定理 有Eval.mul_left
+  结论: [是线性拓扑 S S]
   证明: by
   simp only [hasEval_iff] at hx ⊢
   exact hx.mul_left _
@@ -228,8 +228,8 @@ theorem HasEval.mul_right
   exact hx.mul_right _
 
 中文:
-定理 HasEval.mul_right
-  结论: [IsLinearTopology S S]
+定理 有Eval.mul_right
+  结论: [是线性拓扑 S S]
   证明: by
   simp only [hasEval_iff] at hx ⊢
   exact hx.mul_right _
@@ -250,8 +250,8 @@ theorem HasEval.map
   exact ha.map hφ
 
 中文:
-定理 HasEval.map
-  条件: (hφ : Continuous φ) {a : R} (ha : HasEval a)
+定理 有Eval.map
+  条件: (hφ : 连续 φ) {a : R} (ha : 有Eval a)
   证明: by
   simp only [hasEval_iff] at ha ⊢
   exact ha.map hφ
@@ -271,7 +271,7 @@ theorem HasEval.X
   exact MvPowerSeries.HasEval.X
 
 中文:
-定理 HasEval.X
+定理 有Eval.X
   证明: by
   rw [hasEval_iff]
   exact MvPowerSeries.HasEval.X
@@ -299,7 +299,7 @@ definition hasEvalIdeal
 
 中文:
 定义 hasEvalIdeal
-  签名: : Ideal S where
+  签名: : 理想 S where
   定义体: {a | HasEval a}
   add_mem' := HasEval.add
   zero_mem' := HasEval.zero
@@ -353,7 +353,7 @@ definition eval₂
 
 中文:
 定义 eval₂
-  签名: : PowerSeries R -> S
+  签名: : 幂级数 R -> S
   定义体: MvPowerSeries.eval₂ φ (fun _ => a)
 
 @[simp]
@@ -380,7 +380,7 @@ theorem eval₂_coe
 
 中文:
 定理 eval₂_coe
-  条件: (f : Polynomial R)
+  条件: (f : 多项式 R)
   结论: eval₂ φ a f = f.eval₂ φ a
   证明: by
   rw [← (MvPolynomial.uniqueAlgEquiv R Unit).apply_symm_apply f]
@@ -458,7 +458,7 @@ definition eval₂Hom
 
 中文:
 定义 eval₂Hom
-  签名: (hφ : Continuous φ) (ha : HasEval a)
+  签名: (hφ : 连续 φ) (ha : 有Eval a)
   定义体: MvPowerSeries.eval₂Hom hφ (hasEval ha)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.eval, hasEval
@@ -477,7 +477,7 @@ theorem coe_eval₂Hom
 
 中文:
 定理 coe_eval₂Hom
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: MvPowerSeries.coe_eval₂Hom hφ (hasEval ha)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.coe_eval, hasEval
@@ -499,7 +499,7 @@ theorem uniformContinuous_eval₂
 
 中文:
 定理 uniformContinuous_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: MvPowerSeries.uniformContinuous_eval₂ hφ (hasEval ha)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.uniformContinuous_eval, hasEval
@@ -518,7 +518,7 @@ theorem continuous_eval₂
 
 中文:
 定理 continuous_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a)
+  条件: (hφ : 连续 φ) (ha : 有Eval a)
   证明: (uniformContinuous_eval₂ hφ ha).continuous
 
 Depends on / 依赖: continuous
@@ -543,7 +543,7 @@ theorem hasSum_eval₂
 
 中文:
 定理 hasSum_eval₂
-  条件: (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R)
+  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : 幂级数 R)
   证明: by
   have := MvPowerSeries.hasSum_eval₂ hφ (hasEval ha) f
   simp only [PowerSeries.eval₂]
@@ -573,7 +573,7 @@ theorem eval₂_eq_tsum
 
 中文:
 定理 eval₂_eq_tsum
-  条件: (hφ : Continuous φ) (ha : HasEval a) (f : PowerSeries R)
+  条件: (hφ : 连续 φ) (ha : 有Eval a) (f : 幂级数 R)
   证明: (hasSum_eval₂ hφ ha f).tsum_eq.symm
 
 Depends on / 依赖: tsum_eq, tsum_eq.symm
@@ -595,7 +595,7 @@ theorem eval₂_unique
 
 中文:
 定理 eval₂_unique
-  结论: (hφ : Continuous φ) (ha : HasEval a)
+  结论: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   refine MvPowerSeries.eval₂_unique hφ (hasEval ha) hε (fun p => ?_)
   rw [MvPolynomial.toMvPowerSeries_pUnitAlgEquiv]; rw [h]; rw [← MvPolynomial.eval₂_uniqueAlgEquiv]
@@ -622,7 +622,7 @@ theorem comp_eval₂
 
 中文:
 定理 comp_eval₂
-  结论: (hφ : Continuous φ) (ha : HasEval a)
+  结论: (hφ : 连续 φ) (ha : 有Eval a)
   证明: by
   refine eval₂_unique (by simp only [RingHom.coe_comp, hε.comp hφ]) (ha.map hε)
     (hε.comp (continuous_eval₂ hφ ha)) (fun p => ?_)
@@ -651,7 +651,7 @@ definition aeval
 
 中文:
 定义 aeval
-  签名: (ha : HasEval a)
+  签名: (ha : 有Eval a)
   定义体: MvPowerSeries.aeval (hasEval ha)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.aeval, hasEval
@@ -670,7 +670,7 @@ theorem coe_aeval
 
 中文:
 定理 coe_aeval
-  条件: (ha : HasEval a)
+  条件: (ha : 有Eval a)
   证明: MvPowerSeries.coe_aeval (hasEval ha)
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.coe_aeval, coe_aeval, hasEval
@@ -691,7 +691,7 @@ theorem continuous_aeval
 
 中文:
 定理 continuous_aeval
-  条件: (ha : HasEval a)
+  条件: (ha : 有Eval a)
   证明: MvPowerSeries.continuous_aeval (hasEval ha)
 
 @[simp]
@@ -714,7 +714,7 @@ theorem aeval_coe
 
 中文:
 定理 aeval_coe
-  条件: (ha : HasEval a) (p : Polynomial R)
+  条件: (ha : 有Eval a) (p : 多项式 R)
   证明: by
   rw [coe_aeval]; rw [Polynomial.aeval_def]; rw [eval₂_coe]
 
@@ -734,7 +734,7 @@ theorem aeval_unique
 
 中文:
 定理 aeval_unique
-  条件: {ε : PowerSeries R ->ₐ[R] S} (hε : Continuous ε)
+  条件: {ε : 幂级数 R ->ₐ[R] S} (hε : 连续 ε)
   证明: MvPowerSeries.aeval_unique hε
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.aeval_unique, aeval_unique
@@ -755,7 +755,7 @@ theorem hasSum_aeval
 
 中文:
 定理 hasSum_aeval
-  条件: (ha : HasEval a) (f : PowerSeries R)
+  条件: (ha : 有Eval a) (f : 幂级数 R)
   证明: by
   simp_rw [coe_aeval, ← algebraMap_smul (R := R) S, smul_eq_mul]
   exact hasSum_eval₂ (continuous_algebraMap R S) ha f
@@ -777,7 +777,7 @@ theorem aeval_eq_sum
 
 中文:
 定理 aeval_eq_sum
-  条件: (ha : HasEval a) (f : PowerSeries R)
+  条件: (ha : 有Eval a) (f : 幂级数 R)
   证明: (hasSum_aeval ha f).tsum_eq.symm
 
 Depends on / 依赖: hasSum_aeval, tsum_eq, tsum_eq.symm
@@ -796,7 +796,7 @@ theorem comp_aeval
 
 中文:
 定理 comp_aeval
-  结论: (ha : HasEval a)
+  结论: (ha : 有Eval a)
   证明: MvPowerSeries.comp_aeval (hasEval ha) hε
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.comp_aeval, comp_aeval, hasEval

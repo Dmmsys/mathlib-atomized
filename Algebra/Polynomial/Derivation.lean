@@ -46,7 +46,7 @@ definition derivative'
 
 中文:
 定义 derivative'
-  签名: : Derivation R R[X] R[X] where
+  签名: : 导子 R R[X] R[X] where
   定义体: derivative
   map_add' _ _ := derivative_add
   map_smul' := derivative_smul
@@ -78,7 +78,7 @@ theorem derivation_C
 
 中文:
 定理 derivation_C
-  条件: (D : Derivation R R[X] A) (a : R)
+  条件: (D : 导子 R R[X] A) (a : R)
   结论: D (C a) = 0
   证明: D.map_algebraMap a
 
@@ -104,7 +104,7 @@ theorem C_smul_derivation_apply
 
 中文:
 定理 C_smul_derivation_apply
-  条件: (D : Derivation R R[X] A) (a : R) (f : R[X])
+  条件: (D : 导子 R R[X] A) (a : R) (f : R[X])
   证明: by
   have : C a • D f = D (C a * f) := by simp
   rw [this]; rw [C_mul']; rw [D.map_smul]
@@ -131,7 +131,7 @@ theorem derivation_ext
 
 中文:
 定理 derivation_ext
-  条件: {D₁ D₂ : Derivation R R[X] A} (h : D₁ X = D₂ X)
+  条件: {D₁ D₂ : 导子 R R[X] A} (h : D₁ X = D₂ X)
   结论: D₁ = D₂
   证明: Derivation.ext fun f => Derivation.eqOn_adjoin (Set.eqOn_singleton.2 h) by
     simp only [adjoin_X, Algebra.coe_top, Set.mem_univ]
@@ -157,7 +157,7 @@ definition mkDerivation
 
 中文:
 定义 mkDerivation
-  签名: : A ->ₗ[R] Derivation R R[X] A where
+  签名: : A ->ₗ[R] 导子 R R[X] A where
   定义体: fun a => (LinearMap.toSpanSingleton R[X] A a).compDer derivative'
   map_add' := fun a b => by ext; simp
   map_smul' := fun t a => by ext; simp
@@ -277,7 +277,7 @@ left_inv := fun _ => derivation_ext mkDerivation_X _ _
 
 中文:
 定义 mkDerivationEquiv
-  签名: : A ≃ₗ[R] Derivation R R[X] A
+  签名: : A ≃ₗ[R] 导子 R R[X] A
   定义体: LinearEquiv.symm
     { invFun := mkDerivation R
       toFun := fun D => D X
@@ -326,7 +326,7 @@ lemma mkDerivationEquiv_symm_apply
 
 中文:
 引理 mkDerivationEquiv_symm_apply
-  条件: (D : Derivation R R[X] A)
+  条件: (D : 导子 R R[X] A)
   证明: rfl
 -/
 @[simp] lemma mkDerivationEquiv_symm_apply (D : Derivation R R[X] A) :
@@ -371,7 +371,7 @@ definition compAEval
 
 中文:
 定义 compAEval
-  签名: : Derivation R R[X] AEval R M a where
+  签名: : 导子 R R[X] AEval R M a where
   定义体: AEval.of R M a (d (aeval a f))
   map_add' := by simp
   map_smul' := by simp
@@ -398,7 +398,7 @@ theorem compAEval_eq
 
 中文:
 定理 compAEval_eq
-  条件: (d : Derivation R A M) (f : R[X])
+  条件: (d : 导子 R A M) (f : R[X])
   证明: by
   simpa using AEval.of_aeval_smul _ _ _
 
@@ -420,7 +420,7 @@ theorem comp_aeval_eq
 
 中文:
 定理 comp_aeval_eq
-  条件: (d : Derivation R A M) (f : R[X])
+  条件: (d : 导子 R A M) (f : R[X])
   证明: calc
     _ = (AEval.of R M a).symm (d.compAEval a f) := rfl
     _ = _ := by simp [-compAEval_apply, compAEval_eq]

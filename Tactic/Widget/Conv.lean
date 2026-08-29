@@ -68,8 +68,8 @@ definition Path.ofSubExprPosArray
   body: go expr 0
 
 中文:
-定义 Path.ofSubExprPosArray
-  签名: (expr : Expr) (pos : Array 自然数)
+定义 道路.ofSubExprPosArray
+  签名: (expr : Expr) (pos : 数组 自然数)
   定义体: go expr 0
 -/
 partial def Path.ofSubExprPosArray (expr : Expr) (pos : Array Nat) : MetaM Path :=

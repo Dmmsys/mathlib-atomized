@@ -47,7 +47,7 @@ definition notConvergentSeq
 
 中文:
 定义 notConvergentSeq
-  签名: [Preorder ι] (f : ι -> α -> β) (g : α -> β) (n : 自然数) (j : ι)
+  签名: [预序 ι] (f : ι -> α -> β) (g : α -> β) (n : 自然数) (j : ι)
   定义体: ⋃ (k) (_ : j <= k), { x | (n : Real>=0∞)⁻¹ < edist (f k x) (g x) }
 -/
 def notConvergentSeq [Preorder ι] (f : ι -> α -> β) (g : α -> β) (n : Nat) (j : ι) : Set α :=
@@ -66,7 +66,7 @@ theorem mem_notConvergentSeq_iff
 
 中文:
 定理 mem_notConvergentSeq_iff
-  条件: [Preorder ι] {x : α}
+  条件: [预序 ι] {x : α}
   证明: by
   simp_rw [notConvergentSeq, Set.mem_iUnion, exists_prop, mem_ofPred]
 
@@ -87,8 +87,8 @@ theorem notConvergentSeq_antitone
 
 中文:
 定理 notConvergentSeq_antitone
-  条件: [Preorder ι]
-  结论: Antitone (notConvergentSeq f g n)
+  条件: [预序 ι]
+  结论: 递减 (notConvergentSeq f g n)
   证明: fun _ _ hjk => Set.iUnion₂_mono' fun l hl => ⟨l, le_trans hjk hl, Set.Subset.rfl⟩
 
 Depends on / 依赖: Set.Subset.rfl, Set.iUnion, Subset, le_trans
@@ -114,7 +114,7 @@ theorem measure_inter_notConvergentSeq_eq_zero
 
 中文:
 定理 measure_inter_notConvergentSeq_eq_zero
-  结论: [SemilatticeSup ι] [Nonempty ι]
+  结论: [SemilatticeSup ι] [非空 ι]
   证明: by
   simp_rw [EMetric.tendsto_atTop, ae_iff] at hfg
   rw [← nonpos_iff_eq_zero]; rw [← hfg]
@@ -151,7 +151,7 @@ measurableSet_lt measurable_const hf k
 
 中文:
 定理 notConvergentSeq_measurableSet
-  结论: [Preorder ι] [Countable ι]
+  结论: [预序 ι] [可数 ι]
   证明: MeasurableSet.iUnion fun k => MeasurableSet.iUnion fun _ =>
 measurableSet_lt measurable_const hf k
 
@@ -180,7 +180,7 @@ theorem measure_notConvergentSeq_tendsto_zero
 
 中文:
 定理 measure_notConvergentSeq_tendsto_zero
-  结论: [SemilatticeSup ι] [Countable ι]
+  结论: [SemilatticeSup ι] [可数 ι]
   证明: by
   rcases isEmpty_or_nonempty ι with h | h
   · have : (fun j => μ (s inter notConvergentSeq f g n j)) = fun j => 0 := by
@@ -223,7 +223,7 @@ theorem exists_notConvergentSeq_lt
   exact ⟨N, (hN N le_rfl).2⟩
 
 中文:
-定理 exists_notConvergentSeq_lt
+定理 存在_notConvergentSeq_lt
   结论: (hε : 0 < ε)
   证明: by
   have ⟨N, hN⟩ := (ENNReal.tendsto_atTop ENNReal.zero_ne_top).1
@@ -518,7 +518,7 @@ theorem tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist'
 
 中文:
 定理 tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist'
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   have ⟨t, _, ht, htendsto⟩ :=
     tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist hf MeasurableSet.univ
@@ -549,7 +549,7 @@ theorem tendstoUniformlyOn_of_ae_tendsto'
 
 中文:
 定理 tendstoUniformlyOn_of_ae_tendsto'
-  结论: [IsFiniteMeasure μ] (hf : 对任意 n, StronglyMeasurable (f n))
+  结论: [是有限测度 μ] (hf : 对任意 n, StronglyMeasurable (f n))
   证明: tendstoUniformlyOn_of_ae_tendsto_of_measurable_edist' (fun n => ((hf n).edist hg).measurable)
     hfg hε
 

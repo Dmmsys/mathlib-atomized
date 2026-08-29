@@ -32,7 +32,7 @@ definition elabOptAttrArg
 
 中文:
 定义 elabOptAttrArg
-  签名: : TSyntax ``optAttrArg -> TermElabM (Array Attribute)
+  签名: : TSyntax ``optAttrArg -> TermElabM (数组 Attribute)
 
 Depends on / 依赖: elabAttrs
 -/

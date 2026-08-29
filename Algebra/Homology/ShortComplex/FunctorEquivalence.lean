@@ -47,7 +47,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : ShortComplex (J ⥤ C) ⥤ J ⥤ ShortComplex C where
+  签名: : 短复形 (J ⥤ C) ⥤ J ⥤ 短复形 C where
   定义体: { obj := fun j => S.map ((evaluation J C).obj j)
       map := fun f => S.mapNatTrans ((evaluation J C).map f) }
   map φ :=
@@ -80,7 +80,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : (J ⥤ ShortComplex C) ⥤ ShortComplex (J ⥤ C) where
+  签名: : (J ⥤ 短复形 C) ⥤ 短复形 (J ⥤ C) where
   定义体: { f := whiskerLeft F π₁Toπ₂
       g := whiskerLeft F π₂Toπ₃
       zero := by cat_disch }
@@ -180,7 +180,7 @@ definition functorEquivalence
 
 中文:
 定义 functorEquivalence
-  签名: : ShortComplex (J ⥤ C) ≌ J ⥤ ShortComplex C where
+  签名: : 短复形 (J ⥤ C) ≌ J ⥤ 短复形 C where
   定义体: FunctorEquivalence.functor J C
   inverse := FunctorEquivalence.inverse J C
   unitIso := FunctorEquivalence.unitIso J C

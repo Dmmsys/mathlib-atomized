@@ -73,7 +73,7 @@ theorem measurable_resolvent
 
 中文:
 定理 measurable_resolvent
-  结论: {a : A} [OpensMeasurableSpace 𝕜] [NormedRing A] [NormedAlgebra 𝕜 A]
+  结论: {a : A} [OpensMeasurable空间 𝕜] [赋范环 A] [赋范代数 𝕜 A]
   证明: by
   classical
   have h1 : ContinuousOn (resolvent (R := 𝕜) a) (resolventSet 𝕜 a) :=
@@ -114,7 +114,7 @@ theorem norm_resolvent_le_inv_infDist_support
 
 中文:
 定理 norm_resolvent_le_inv_infDist_support
-  结论: {μ : Measure 𝕜} {a : A}
+  结论: {μ : 测度 𝕜} {a : A}
   证明: by
   have : 0 < infDist a (algebraMap 𝕜 A '' μ.support) := by
     refine (IsClosed.notMem_iff_infDist_pos ?_ ((Set.nonempty_of_mem hx).image _)).mp hz
@@ -149,7 +149,7 @@ theorem integrable_resolvent
 
 中文:
 定理 integrable_resolvent
-  结论: [HereditarilyLindelofSpace 𝕜] [OpensMeasurableSpace 𝕜]
+  结论: [HereditarilyLindelof空间 𝕜] [OpensMeasurable空间 𝕜]
   证明: by
   refine ⟨by fun_prop, ?_⟩
   apply HasFiniteIntegral.of_bounded
@@ -184,7 +184,7 @@ definition resolventTransform
 
 中文:
 定义 resolventTransform
-  签名: (μ : Measure 𝕜) (a : A)
+  签名: (μ : 测度 𝕜) (a : A)
   定义体: ∫ x, resolvent a x ∂μ
 
 Depends on / 依赖: resolvent
@@ -202,7 +202,7 @@ lemma resolventTransform_def
 
 中文:
 引理 resolventTransform_def
-  条件: (μ : Measure 𝕜)
+  条件: (μ : 测度 𝕜)
   证明: by rfl
 -/
 lemma resolventTransform_def (μ : Measure 𝕜) :
@@ -220,7 +220,7 @@ lemma resolventTransform_apply
 
 中文:
 引理 resolventTransform_apply
-  条件: (μ : Measure 𝕜) (a : A)
+  条件: (μ : 测度 𝕜) (a : A)
   证明: by rfl
 
 @[simp]
@@ -243,7 +243,7 @@ lemma resolventTransform_zero_measure
 
 中文:
 引理 resolventTransform_zero_measure
-  结论: resolventTransform (0 : Measure 𝕜) = (0 : A -> A)
+  结论: resolventTransform (0 : 测度 𝕜) = (0 : A -> A)
   证明: by
   ext
   simp [resolventTransform_def]
@@ -268,7 +268,7 @@ lemma resolventTransform_dirac
 
 中文:
 引理 resolventTransform_dirac
-  结论: [MeasurableSingletonClass 𝕜] [CompleteSpace A]
+  结论: [MeasurableSingleton类 𝕜] [完备空间 A]
   证明: by
   simp [resolventTransform_def]
 
@@ -301,7 +301,7 @@ theorem hasDerivAt_resolventTransform
 
 中文:
 定理 hasDerivAt_resolventTransform
-  结论: [RCLike A] [NormedAlgebra 𝕜 A] {μ : Measure 𝕜}
+  结论: [RCLike A] [赋范代数 𝕜 A] {μ : 测度 𝕜}
   证明: by
   by_cases! h : μ.support.Nonempty; swap
   · simp [support_eq_empty_iff.mp h]
@@ -372,7 +372,7 @@ theorem analyticOn_resolventTransform
 
 中文:
 定理 analyticOn_resolventTransform
-  条件: [NormedAlgebra 𝕜 Complex] {μ : Measure 𝕜} [IsFiniteMeasure μ]
+  条件: [赋范代数 𝕜 复形] {μ : 测度 𝕜} [是有限测度 μ]
   证明: by
   rw [analyticOn_iff_differentiableOn]
   · intro z hz

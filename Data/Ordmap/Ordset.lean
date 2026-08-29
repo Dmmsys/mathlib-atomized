@@ -60,7 +60,7 @@ structure Valid'
 结构 Valid'
   参数: (lo : WithBot α) (t : Ordnode α) (hi : WithTop α)
   公理与运算 (3 个):
-    - ord : t.Bounded lo hi
+    - ord : t.有界 lo hi
     - sz : t.Sized
     - bal : t.Balanced
 -/
@@ -131,7 +131,7 @@ theorem Valid'.trans_left
 
 中文:
 定理 Valid'.trans_left
-  结论: {t₁ t₂ : Ordnode α} {x : α} {o₁ o₂} (h : Bounded t₁ o₁ x)
+  结论: {t₁ t₂ : Ordnode α} {x : α} {o₁ o₂} (h : 有界 t₁ o₁ x)
   证明: ⟨h.trans_left H.1, H.2, H.3⟩
 -/
 theorem Valid'.trans_left {t₁ t₂ : Ordnode α} {x : α} {o₁ o₂} (h : Bounded t₁ o₁ x)
@@ -165,7 +165,7 @@ theorem Valid'.of_lt
 
 中文:
 定理 Valid'.of_lt
-  结论: {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : Bounded nil o₁ x)
+  结论: {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : 有界 nil o₁ x)
   证明: ⟨H.1.of_lt h₁ h₂, H.2, H.3⟩
 -/
 theorem Valid'.of_lt {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : Bounded nil o₁ x)
@@ -182,7 +182,7 @@ theorem Valid'.of_gt
 
 中文:
 定理 Valid'.of_gt
-  结论: {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : Bounded nil x o₂)
+  结论: {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : 有界 nil x o₂)
   证明: ⟨H.1.of_gt h₁ h₂, H.2, H.3⟩
 -/
 theorem Valid'.of_gt {t : Ordnode α} {x : α} {o₁ o₂} (H : Valid' o₁ t o₂) (h₁ : Bounded nil x o₂)
@@ -218,7 +218,7 @@ theorem valid'_nil
 
 中文:
 定理 valid'_nil
-  条件: {o₁ o₂} (h : Bounded nil o₁ o₂)
+  条件: {o₁ o₂} (h : 有界 nil o₁ o₂)
   结论: Valid' o₁ (@nil α) o₂
   证明: ⟨h, ⟨⟩, ⟨⟩⟩
 -/
@@ -447,7 +447,7 @@ theorem valid'_singleton
 
 中文:
 定理 valid'_singleton
-  条件: {x : α} {o₁ o₂} (h₁ : Bounded nil o₁ x) (h₂ : Bounded nil x o₂)
+  条件: {x : α} {o₁ o₂} (h₁ : 有界 nil o₁ x) (h₂ : 有界 nil x o₂)
   证明: (valid'_nil h₁).node (valid'_nil h₂) (Or.inl zero_le_one) rfl
 -/
 theorem valid'_singleton {x : α} {o₁ o₂} (h₁ : Bounded nil o₁ x) (h₂ : Bounded nil x o₂) :
@@ -1427,7 +1427,7 @@ theorem insertWith.valid_aux
 
 中文:
 定理 insertWith.valid_aux
-  结论: [@Std.Total α (· <= ·)] [DecidableLE α] (f : α -> α) (x : α)
+  结论: [@Std.全 α (· <= ·)] [DecidableLE α] (f : α -> α) (x : α)
   证明: lt_of_le_not_ge ((total_of (· <= ·) _ _).resolve_left h_1) h_1
       rcases insertWith.valid_aux f x hf h.right this br with ⟨vr, e⟩
       suffices H : _ by
@@ -1476,7 +1476,7 @@ theorem insertWith.valid
 
 中文:
 定理 insertWith.valid
-  结论: [@Std.Total α (· <= ·)] [DecidableLE α] (f : α -> α) (x : α)
+  结论: [@Std.全 α (· <= ·)] [DecidableLE α] (f : α -> α) (x : α)
   证明: (insertWith.valid_aux _ _ hf h ⟨⟩ ⟨⟩).1
 
 Depends on / 依赖: insertWith, insertWith.valid_aux, valid_aux
@@ -1513,7 +1513,7 @@ theorem insert.valid
 
 中文:
 定理 insert.valid
-  条件: [@Std.Total α (· <= ·)] [DecidableLE α] (x : α) {t} (h : Valid t)
+  条件: [@Std.全 α (· <= ·)] [DecidableLE α] (x : α) {t} (h : Valid t)
   证明: by
   rw [insert_eq_insertWith]; exact insertWith.valid _ _ (fun _ _ => ⟨le_rfl, le_rfl⟩) h
 
@@ -1551,7 +1551,7 @@ theorem insert'.valid
 
 中文:
 定理 insert'.valid
-  结论: [@Std.Total α (· <= ·)] [DecidableLE α]
+  结论: [@Std.全 α (· <= ·)] [DecidableLE α]
   证明: by
   rw [insert'_eq_insertWith]; exact insertWith.valid _ _ (fun _ => id) h
 
@@ -1581,7 +1581,7 @@ theorem Valid'.map_aux
 
 中文:
 定理 Valid'.map_aux
-  结论: {β} [Preorder β] {f : α -> β} (f_strict_mono : StrictMono f) {t a₁ a₂}
+  结论: {β} [预序 β] {f : α -> β} (f_strict_mono : 严格递增 f) {t a₁ a₂}
   证明: by
   induction t generalizing a₁ a₂ with
   | nil =>
@@ -1634,7 +1634,7 @@ theorem map.valid
 
 中文:
 定理 map.valid
-  条件: {β} [Preorder β] {f : α -> β} (f_strict_mono : StrictMono f) {t} (h : Valid t)
+  条件: {β} [预序 β] {f : α -> β} (f_strict_mono : 严格递增 f) {t} (h : Valid t)
   证明: (Valid'.map_aux f_strict_mono h).1
 
 Depends on / 依赖: f_strict_mono, map_aux
@@ -1815,7 +1815,7 @@ definition Ordset
 
 中文:
 定义 Ordset
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: { t : Ordnode α // t.Valid }
 
 Depends on / 依赖: Ordnode, t.Valid
@@ -1891,7 +1891,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (Ordset α)
+  签名: : 可居 (Ordset α)
   定义体: ⟨nil⟩
 -/
 instance instInhabited : Inhabited (Ordset α) :=
@@ -1907,7 +1907,7 @@ instance instSingleton
 
 中文:
 实例 instSingleton
-  签名: : Singleton α (Ordset α)
+  签名: : 单例 α (Ordset α)
   定义体: ⟨Ordset.singleton⟩
 
 Depends on / 依赖: Ordset, Ordset.singleton, singleton
@@ -1924,7 +1924,7 @@ definition Empty
   body: s = ∅
 
 中文:
-定义 Empty
+定义 空
   签名: (s : Ordset α)
   定义体: s = ∅
 -/
@@ -1963,8 +1963,8 @@ instance Empty.instDecidablePred
   body: fun _ => decidable_of_iff' _ empty_iff
 
 中文:
-实例 Empty.instDecidablePred
-  签名: : DecidablePred (@Empty α _)
+实例 空.instDecidablePred
+  签名: : DecidablePred (@空 α _)
   定义体: fun _ => decidable_of_iff' _ empty_iff
 
 Depends on / 依赖: decidable_of_iff, empty_iff
@@ -1982,7 +1982,7 @@ definition insert
 
 中文:
 定义 insert
-  签名: [@Std.Total α (· <= ·)] [DecidableLE α] (x : α) (s : Ordset α)
+  签名: [@Std.全 α (· <= ·)] [DecidableLE α] (x : α) (s : Ordset α)
   定义体: ⟨Ordnode.insert x s.1, insert.valid _ s.2⟩
 -/
 protected def insert [@Std.Total α (· <= ·)] [DecidableLE α] (x : α) (s : Ordset α) :
@@ -1999,7 +1999,7 @@ instance instInsert
 
 中文:
 实例 instInsert
-  签名: [@Std.Total α (· <= ·)] [DecidableLE α]
+  签名: [@Std.全 α (· <= ·)] [DecidableLE α]
   定义体: ⟨Ordset.insert⟩
 
 Depends on / 依赖: Ordset, Ordset.insert, insert
@@ -2140,7 +2140,7 @@ definition map
 
 中文:
 定义 map
-  签名: {β} [Preorder β] (f : α -> β) (f_strict_mono : StrictMono f) (s : Ordset α)
+  签名: {β} [预序 β] (f : α -> β) (f_strict_mono : 严格递增 f) (s : Ordset α)
   定义体: ⟨Ordnode.map f s.val, Ordnode.map.valid f_strict_mono s.property⟩
 
 Depends on / 依赖: Ordnode, Ordnode.map, Ordnode.map.valid, f_strict_mono, property, s.property, s.val

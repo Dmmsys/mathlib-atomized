@@ -280,8 +280,8 @@ instance [Inhabited
   body: ⟨show X from default⟩
 
 中文:
-实例 [Inhabited
-  签名: X] : Inhabited (ActionCategory M X)
+实例 [可居
+  签名: X] : 可居 (ActionCategory M X)
   定义体: ⟨show X from default⟩
 -/
 instance [Inhabited X] : Inhabited (ActionCategory M X) :=
@@ -296,8 +296,8 @@ instance [Nonempty
   body: Nonempty.map (objEquiv M X) inferInstance
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty (ActionCategory M X)
+实例 [非空
+  签名: X] : 非空 (ActionCategory M X)
   定义体: Nonempty.map (objEquiv M X) inferInstance
 
 Depends on / 依赖: Nonempty, Nonempty.map, objEquiv
@@ -385,7 +385,7 @@ theorem id_val
 中文:
 定理 id_val
   条件: (x : ActionCategory M X)
-  结论: Subtype.val (𝟙 x) = 1
+  结论: 子类型.val (𝟙 x) = 1
   证明: rfl
 
 @[simp]
@@ -422,8 +422,8 @@ Relation.ReflTransGen.single
 Or.inl nonempty_subtype.mpr (show _ from exists_smul_eq M x.back y.back)
 
 中文:
-实例 [IsPretransitive
-  签名: M X] [Nonempty X] : IsConnected (ActionCategory M X)
+实例 [是Pretransitive
+  签名: M X] [非空 X] : 是连通 (ActionCategory M X)
   定义体: zigzag_isConnected fun x y =>
 Relation.ReflTransGen.single
 Or.inl nonempty_subtype.mpr (show _ from exists_smul_eq M x.back y.back)
@@ -449,7 +449,7 @@ instance :
 
 中文:
 实例 :
-  签名: Groupoid (ActionCategory G X)
+  签名: 群胚 (ActionCategory G X)
   定义体: CategoryTheory.groupoidOfElements _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.groupoidOfElements, groupoidOfElements
@@ -469,7 +469,7 @@ definition endMulEquivSubgroup
 
 中文:
 定义 endMulEquivSubgroup
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: MulEquiv.trans (stabilizerIsoEnd G ((1 : G) : G ⧸ H)).symm
     (MulEquiv.subgroupCongr <| stabilizer_quotient H)
 
@@ -536,7 +536,7 @@ definition cases
 
 中文:
 定义 cases
-  签名: {P : 对任意 ⦃a b : ActionCategory G X⦄, (a ⟶ b) -> Sort*}
+  签名: {P : 对任意 ⦃a b : ActionCategory G X⦄, (a ⟶ b) -> 类型层*}
   定义体: by
   refine cast ?_ (hyp b.back f.val)
   rcases a with ⟨⟨⟩, a : X⟩

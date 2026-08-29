@@ -135,8 +135,8 @@ theorem AntitoneOn.intervalIntegrable_subset
   apply Icc_subset_Icc <;> simp [-Nat.cast_add, hk]
 
 中文:
-定理 AntitoneOn.intervalIntegrable_subset
-  结论: (hf : AntitoneOn f (Icc x₀ (x₀ + a)))
+定理 AntitoneOn.interval整数egrable_subset
+  结论: (hf : AntitoneOn f (闭区间 x₀ (x₀ + a)))
   证明: by
   refine (hf.mono ?_).intervalIntegrable
   rw [uIcc_of_le (by simp)]
@@ -164,7 +164,7 @@ theorem AntitoneOn.integral_le_sum
 
 中文:
 定理 AntitoneOn.integral_le_sum
-  条件: (hf : AntitoneOn f (Icc x₀ (x₀ + a)))
+  条件: (hf : AntitoneOn f (闭区间 x₀ (x₀ + a)))
   证明: calc
   _ = ∑ i in .range a, ∫ x in x₀ + i..x₀ + ↑(i + 1), f x := by
     convert! (sum_integral_adjacent_intervals hf.intervalIntegrable_subset).symm
@@ -200,7 +200,7 @@ theorem AntitoneOn.integral_le_sum_Ico
 
 中文:
 定理 AntitoneOn.integral_le_sum_Ico
-  条件: (hab : a <= b) (hf : AntitoneOn f (Set.Icc a b))
+  条件: (hab : a <= b) (hf : AntitoneOn f (集合.闭区间 a b))
   证明: by
   suffices ∫ x in a..a + ↑(b - a), f x <= ∑ x in .Ico (0 + a) (b - a + a), f x by simp_all
   rw [← Finset.sum_Ico_add]; rw [Nat.Ico_zero_eq_range]
@@ -233,7 +233,7 @@ theorem AntitoneOn.sum_le_integral
 
 中文:
 定理 AntitoneOn.sum_le_integral
-  条件: (hf : AntitoneOn f (Icc x₀ (x₀ + a)))
+  条件: (hf : AntitoneOn f (闭区间 x₀ (x₀ + a)))
   证明: calc
   _ = ∑ i in .range a, ∫ _ in x₀ + i..x₀ + ↑(i + 1), f (x₀ + ↑(i + 1)) := by simp
   _ <= ∑ i in .range a, ∫ x in x₀ + i..x₀ + ↑(i + 1), f x := by
@@ -270,7 +270,7 @@ theorem AntitoneOn.sum_le_integral_Ico
 
 中文:
 定理 AntitoneOn.sum_le_integral_Ico
-  条件: (hab : a <= b) (hf : AntitoneOn f (Icc a b))
+  条件: (hab : a <= b) (hf : AntitoneOn f (闭区间 a b))
   证明: by
   suffices ∑ i in .Ico (0 + a) (b - a + a), f ↑(i + 1) <= ∫ x in a..a + ↑(b - a), f x by simp_all
   simp_rw [← Finset.sum_Ico_add, Nat.Ico_zero_eq_range, add_assoc]
@@ -298,7 +298,7 @@ theorem MonotoneOn.sum_le_integral
 
 中文:
 定理 MonotoneOn.sum_le_integral
-  条件: (hf : MonotoneOn f (Icc x₀ (x₀ + a)))
+  条件: (hf : MonotoneOn f (闭区间 x₀ (x₀ + a)))
   证明: by
   rw [← neg_le_neg_iff]; rw [← Finset.sum_neg_distrib]; rw [← intervalIntegral.integral_neg]
   exact hf.neg.integral_le_sum
@@ -322,7 +322,7 @@ theorem MonotoneOn.sum_le_integral_Ico
 
 中文:
 定理 MonotoneOn.sum_le_integral_Ico
-  条件: (hab : a <= b) (hf : MonotoneOn f (Set.Icc a b))
+  条件: (hab : a <= b) (hf : MonotoneOn f (集合.闭区间 a b))
   证明: by
   rw [← neg_le_neg_iff]; rw [← Finset.sum_neg_distrib]; rw [← intervalIntegral.integral_neg]
   exact hf.neg.integral_le_sum_Ico hab
@@ -346,7 +346,7 @@ theorem MonotoneOn.integral_le_sum
 
 中文:
 定理 MonotoneOn.integral_le_sum
-  条件: (hf : MonotoneOn f (Icc x₀ (x₀ + a)))
+  条件: (hf : MonotoneOn f (闭区间 x₀ (x₀ + a)))
   证明: by
   rw [← neg_le_neg_iff]; rw [← Finset.sum_neg_distrib]; rw [← intervalIntegral.integral_neg]
   exact hf.neg.sum_le_integral
@@ -370,7 +370,7 @@ theorem MonotoneOn.integral_le_sum_Ico
 
 中文:
 定理 MonotoneOn.integral_le_sum_Ico
-  条件: (hab : a <= b) (hf : MonotoneOn f (Set.Icc a b))
+  条件: (hab : a <= b) (hf : MonotoneOn f (集合.闭区间 a b))
   证明: by
   rw [← neg_le_neg_iff]; rw [← Finset.sum_neg_distrib]; rw [← intervalIntegral.integral_neg]
   exact hf.neg.sum_le_integral_Ico hab
@@ -499,7 +499,7 @@ lemma AntitoneOn.sum_Ico_le_integral
 
 中文:
 引理 AntitoneOn.sum_Ico_le_integral
-  结论: {a b : 自然数} (anti : AntitoneOn f (Icc a b))
+  结论: {a b : 自然数} (anti : AntitoneOn f (闭区间 a b))
   证明: by
   by_cases! hab : b < a
   · simpa [Finset.Ico_eq_empty_of_le hab.le] using setIntegral_nonneg measurableSet_Ioi nonneg
@@ -531,7 +531,7 @@ lemma AntitoneOn.sum_range_le_integral
 
 中文:
 引理 AntitoneOn.sum_range_le_integral
-  结论: {N : 自然数} (anti : AntitoneOn f (Icc 0 (N : 实数)))
+  结论: {N : 自然数} (anti : AntitoneOn f (闭区间 0 (N : 实数)))
   证明: by
   rw [Finset.range_eq_Ico]
   exact_mod_cast AntitoneOn.sum_Ico_le_integral (a := 0) (mod_cast anti)
@@ -561,7 +561,7 @@ theorem AntitoneOn.summable_of_integrableOn_Ioi
 
 中文:
 定理 AntitoneOn.summable_of_integrableOn_Ioi
-  结论: {N : 自然数} (anti : AntitoneOn f (Ici (N : 实数)))
+  结论: {N : 自然数} (anti : AntitoneOn f (左闭右无界区间 (N : 实数)))
   证明: by
   rw [← summable_nat_add_iff (N + 1)]
   refine summable_of_sum_range_le (c := ∫ t in Ioi (N : Real), f t) (by grind) fun M => ?_
@@ -590,7 +590,7 @@ theorem AntitoneOn.summable_of_integrableOn_Ioi_zero
 
 中文:
 定理 AntitoneOn.summable_of_integrableOn_Ioi_zero
-  结论: (anti : AntitoneOn f (Ici 0))
+  结论: (anti : AntitoneOn f (左闭右无界区间 0))
   证明: summable_of_integrableOn_Ioi (N := 0) (mod_cast anti) (mod_cast integrable) (mod_cast nonneg)
 
 Depends on / 依赖: integrable, mod_cast, nonneg, summable_of_integrableOn_Ioi
@@ -617,7 +617,7 @@ sum_le_
 
 中文:
 定理 AntitoneOn.tsum_comp_add_le_integral
-  结论: (N : 自然数) (anti : AntitoneOn f (Ici (N : 实数)))
+  结论: (N : 自然数) (anti : AntitoneOn f (左闭右无界区间 (N : 实数)))
   证明: by
   refine tsum_le_of_sum_le' (integral_nonneg_of_ae ?_) fun s => ?_
   · filter_upwards [ae_restrict_mem measurableSet_Ioi] using nonneg
@@ -653,7 +653,7 @@ theorem AntitoneOn.tsum_add_one_le_integral
 
 中文:
 定理 AntitoneOn.tsum_add_one_le_integral
-  结论: (anti : AntitoneOn f (Ici 0))
+  结论: (anti : AntitoneOn f (左闭右无界区间 0))
   证明: by
   exact_mod_cast AntitoneOn.tsum_comp_add_le_integral 0 (mod_cast anti) (mod_cast integrable)
     (mod_cast nonneg)
@@ -678,7 +678,7 @@ theorem AntitoneOn.tsum_le_integral
 
 中文:
 定理 AntitoneOn.tsum_le_integral
-  结论: (anti : AntitoneOn f (Ici 0))
+  结论: (anti : AntitoneOn f (左闭右无界区间 0))
   证明: by
   grind [(anti.summable_of_integrableOn_Ioi_zero integrable nonneg).tsum_eq_zero_add,
     anti.tsum_add_one_le_integral integrable nonneg]
@@ -739,7 +739,7 @@ theorem AntitoneOn.integrableOn_Ioi_of_summable_comp_add
 
 中文:
 定理 AntitoneOn.integrableOn_Ioi_of_summable_comp_add
-  结论: {N : 自然数} (anti : AntitoneOn f (Ici (N : 实数)))
+  结论: {N : 自然数} (anti : AntitoneOn f (左闭右无界区间 (N : 实数)))
   证明: by
   refine integrableOn_Ioi_of_intervalIntegral_norm_bounded (∑' (n : Nat), f (n + N : Nat)) _ ?_
     (tendsto_atTop_add_const_right atTop (N : Real) tendsto_natCast_atTop_atTop) ?_
@@ -777,7 +777,7 @@ theorem AntitoneOn.integrableOn_Ioi_zero_of_summable
 
 中文:
 定理 AntitoneOn.integrableOn_Ioi_zero_of_summable
-  结论: (anti : AntitoneOn f (Ici 0))
+  结论: (anti : AntitoneOn f (左闭右无界区间 0))
   证明: mod_cast AntitoneOn.integrableOn_Ioi_of_summable_comp_add (N := 0) (mod_cast anti) summable
     (mod_cast nonneg)
 
@@ -805,7 +805,7 @@ theorem AntitoneOn.integral_le_tsum_comp_add
 
 中文:
 定理 AntitoneOn.integral_le_tsum_comp_add
-  结论: (N : 自然数) (anti : AntitoneOn f (Ici (N : 实数)))
+  结论: (N : 自然数) (anti : AntitoneOn f (左闭右无界区间 (N : 实数)))
   证明: by
   rw [← summable_nat_add_iff N] at summable
   have lim := summable.tendsto_sum_tsum_nat
@@ -841,7 +841,7 @@ theorem AntitoneOn.integral_le_tsum
 
 中文:
 定理 AntitoneOn.integral_le_tsum
-  结论: (anti : AntitoneOn f (Ici 0))
+  结论: (anti : AntitoneOn f (左闭右无界区间 0))
   证明: mod_cast AntitoneOn.integral_le_tsum_comp_add 0 (mod_cast anti) summable (mod_cast nonneg)
 
 Depends on / 依赖: AntitoneOn, AntitoneOn.integral_le_tsum_comp_add, integral_le_tsum_comp_add, mod_cast, nonneg, summable

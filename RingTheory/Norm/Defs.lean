@@ -90,7 +90,7 @@ theorem norm_apply
 中文:
 定理 norm_apply
   条件: (x : S)
-  结论: norm R x = LinearMap.det (lmul R S x)
+  结论: norm R x = 线性映射.det (lmul R S x)
   证明: rfl
 
 @[simp]
@@ -110,7 +110,7 @@ theorem norm_self
 
 中文:
 定理 norm_self
-  结论: Algebra.norm R = MonoidHom.id R
+  结论: 代数.norm R = 幺半群态射.id R
   证明: by
   ext
   simp [norm_apply]
@@ -130,8 +130,8 @@ theorem norm_eq_one_of_not_exists_basis
   proof: by rw [norm_apply, LinearMap.det]; split_ifs <;> trivial
 
 中文:
-定理 norm_eq_one_of_not_exists_basis
-  条件: (h : ¬存在 s : Finset S, Nonempty (Basis s R S)) (x : S)
+定理 norm_eq_one_of_not_存在_basis
+  条件: (h : ¬存在 s : 有限集 S, 非空 (基 s R S)) (x : S)
   证明: by rw [norm_apply, LinearMap.det]; split_ifs <;> trivial
 
 Depends on / 依赖: LinearMap, LinearMap.det, norm_apply, split_ifs
@@ -155,7 +155,7 @@ theorem norm_eq_one_of_not_module_finite
 
 中文:
 定理 norm_eq_one_of_not_module_finite
-  条件: (h : ¬Module.Finite R S) (x : S)
+  条件: (h : ¬模.有限 R S) (x : S)
   结论: norm R x = 1
   证明: by
   refine norm_eq_one_of_not_exists_basis _ (mt ?_ h) _
@@ -181,7 +181,7 @@ theorem norm_eq_matrix_det
 
 中文:
 定理 norm_eq_matrix_det
-  条件: [Fintype ι] [DecidableEq ι] (b : Basis ι R S) (s : S)
+  条件: [有限类型 ι] [DecidableEq ι] (b : 基 ι R S) (s : S)
   证明: by
   rw [norm_apply]; rw [← LinearMap.det_toMatrix b]; rw [← toMatrix_lmul_eq]; rfl
 
@@ -204,7 +204,7 @@ theorem norm_algebraMap_of_basis
 
 中文:
 定理 norm_algebraMap_of_basis
-  条件: [Fintype ι] (b : Basis ι R S) (x : R)
+  条件: [有限类型 ι] (b : 基 ι R S) (x : R)
   证明: by
   have := Classical.decEq ι
   rw [norm_apply]; rw [← det_toMatrix b]; rw [lmul_algebraMap]
@@ -259,7 +259,7 @@ lemma norm_natCast
 中文:
 引理 norm_natCast
   条件: (n : 自然数)
-  结论: norm R (n : S) = n ^ Module.finrank R S
+  结论: norm R (n : S) = n ^ 模.finrank R S
   证明: by
   rw [← map_natCast (algebraMap R S)]; rw [Algebra.norm_algebraMap]
 -/

@@ -42,7 +42,7 @@ theorem compactOpen_eq_generateFrom
 
 中文:
 定理 compactOpen_eq_generateFrom
-  结论: {S : Set (Set X)} {T : Set (Set Y)}
+  结论: {S : 集合 (集合 X)} {T : 集合 (集合 Y)}
   证明: by
   apply le_antisymm
   · apply_rules [generateFrom_anti, image2_subset_iff.mpr]
@@ -109,7 +109,7 @@ theorem secondCountableTopology
 
 中文:
 定理 secondCountableTopology
-  结论: [SecondCountableTopology Y]
+  结论: [第二可数拓扑 Y]
   证明: by
     rcases hX with ⟨S, hScount, hScomp, hS⟩
     refine ⟨_, ?_, compactOpen_eq_generateFrom (S := S) hScomp (isBasis_countableBasis _) ?_⟩
@@ -148,7 +148,7 @@ instance instSecondCountableTopology
 
 中文:
 实例 instSecondCountableTopology
-  签名: [SecondCountableTopology X] [LocallyCompactSpace X]
+  签名: [第二可数拓扑 X] [局部紧空间 X]
   定义体: by
   apply secondCountableTopology
   have (U : countableBasis X) : LocallyCompactSpace U.1 :=
@@ -193,7 +193,7 @@ instance instSeparableSpace
 
 中文:
 实例 instSeparableSpace
-  签名: [SecondCountableTopology X] [LocallyCompactSpace X]
+  签名: [第二可数拓扑 X] [局部紧空间 X]
   定义体: inferInstance
 -/
 instance instSeparableSpace [SecondCountableTopology X] [LocallyCompactSpace X]

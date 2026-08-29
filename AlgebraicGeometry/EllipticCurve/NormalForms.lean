@@ -116,7 +116,7 @@ class IsCharNeTwoNF
     - a₃ : W.a₃ = 0
 
 中文:
-类 IsCharNeTwoNF
+类 是CharNeTwoNF
   参数: : 命题 where
   公理与运算 (2 个):
     - a₁ : W.a₁ = 0
@@ -394,7 +394,7 @@ instance toCharNeTwoNF_spec
 
 中文:
 实例 toCharNeTwoNF_spec
-  签名: : (W.toCharNeTwoNF • W).IsCharNeTwoNF
+  签名: : (W.toCharNeTwoNF • W).是CharNeTwoNF
   定义体: by
   constructor <;> simp [variableChange_a₁, variableChange_a₃]
 -/
@@ -410,8 +410,8 @@ theorem exists_variableChange_isCharNeTwoNF
   proof: ⟨_, W.toCharNeTwoNF_spec⟩
 
 中文:
-定理 exists_variableChange_isCharNeTwoNF
-  结论: 存在 C : VariableChange R, (C • W).IsCharNeTwoNF
+定理 存在_variableChange_isCharNeTwoNF
+  结论: 存在 C : VariableChange R, (C • W).是CharNeTwoNF
   证明: ⟨_, W.toCharNeTwoNF_spec⟩
 
 Depends on / 依赖: W.toCharNeTwoNF_spec, toCharNeTwoNF_spec
@@ -441,7 +441,7 @@ class IsShortNF
     - a₃ : W.a₃ = 0
 
 中文:
-类 IsShortNF
+类 是ShortNF
   参数: : 命题 where
   公理与运算 (3 个):
     - a₁ : W.a₁ = 0
@@ -467,7 +467,7 @@ instance isCharNeTwoNF_of_isShortNF
 
 中文:
 实例 isCharNeTwoNF_of_isShortNF
-  签名: : W.IsCharNeTwoNF
+  签名: : W.是CharNeTwoNF
   定义体: ⟨IsShortNF.a₁, IsShortNF.a₃⟩
 
 Depends on / 依赖: IsShortNF, IsShortNF.a
@@ -820,7 +820,7 @@ theorem j_of_isShortNF_of_char_three
 
 中文:
 定理 j_of_isShortNF_of_char_three
-  条件: [CharP F 3]
+  条件: [特征p F 3]
   结论: W.j = 0
   证明: by
   rw [j]; rw [c₄_of_isShortNF_of_char_three]; simp
@@ -864,7 +864,7 @@ instance toShortNF_spec
 
 中文:
 实例 toShortNF_spec
-  签名: : (W.toShortNF • W).IsShortNF
+  签名: : (W.toShortNF • W).是ShortNF
   定义体: by
   rw [toShortNF]; rw [mul_smul]
   constructor <;> simp [variableChange_a₁, variableChange_a₂, variableChange_a₃]
@@ -884,8 +884,8 @@ theorem exists_variableChange_isShortNF
   proof: ⟨_, W.toShortNF_spec⟩
 
 中文:
-定理 exists_variableChange_isShortNF
-  结论: 存在 C : VariableChange R, (C • W).IsShortNF
+定理 存在_variableChange_isShortNF
+  结论: 存在 C : VariableChange R, (C • W).是ShortNF
   证明: ⟨_, W.toShortNF_spec⟩
 
 Depends on / 依赖: W.toShortNF_spec, toShortNF_spec
@@ -912,7 +912,7 @@ class IsCharThreeJNeZeroNF
     - a₄ : W.a₄ = 0
 
 中文:
-类 IsCharThreeJNeZeroNF
+类 是CharThreeJNeZeroNF
   参数: : 命题 where
   公理与运算 (3 个):
     - a₁ : W.a₁ = 0
@@ -940,7 +940,7 @@ instance isCharNeTwoNF_of_isCharThreeJNeZeroNF
 
 中文:
 实例 isCharNeTwoNF_of_isCharThreeJNeZeroNF
-  签名: : W.IsCharNeTwoNF
+  签名: : W.是CharNeTwoNF
   定义体: ⟨IsCharThreeJNeZeroNF.a₁, IsCharThreeJNeZeroNF.a₃⟩
 
 Depends on / 依赖: IsCharThreeJNeZeroNF, IsCharThreeJNeZeroNF.a
@@ -1357,7 +1357,7 @@ instance isCharThreeNF_of_isCharThreeJNeZeroNF
 
 中文:
 实例 isCharThreeNF_of_isCharThreeJNeZeroNF
-  签名: [W.IsCharThreeJNeZeroNF]
+  签名: [W.是CharThreeJNeZeroNF]
   定义体: IsCharThreeNF.of_j_ne_zero
 
 Depends on / 依赖: IsCharThreeNF, IsCharThreeNF.of_j_ne_zero, of_j_ne_zero
@@ -1375,7 +1375,7 @@ instance isCharThreeNF_of_isShortNF
 
 中文:
 实例 isCharThreeNF_of_isShortNF
-  签名: [W.IsShortNF]
+  签名: [W.是ShortNF]
   定义体: IsCharThreeNF.of_j_eq_zero
 
 Depends on / 依赖: IsCharThreeNF, IsCharThreeNF.of_j_eq_zero, of_j_eq_zero
@@ -1470,7 +1470,7 @@ theorem toShortNFOfCharThree_spec
 中文:
 定理 toShortNFOfCharThree_spec
   条件: (hb₂ : W.b₂ = 0)
-  结论: (W.toShortNFOfCharThree • W).IsShortNF
+  结论: (W.toShortNFOfCharThree • W).是ShortNF
   证明: by
   have h : (2 : R) * 2 = 1 := by linear_combination CharP.cast_eq_zero R 3
   let : Invertible (2 : R) := ⟨2, h, h⟩
@@ -1567,7 +1567,7 @@ theorem toCharThreeNF_spec_of_b₂_eq_zero
 中文:
 定理 toCharThreeNF_spec_of_b₂_eq_zero
   条件: (hb₂ : W.b₂ = 0)
-  结论: (W.toCharThreeNF • W).IsShortNF
+  结论: (W.toCharThreeNF • W).是ShortNF
   证明: by
   rw [toCharThreeNF]; rw [toShortNFOfCharThree_a₂]; rw [hb₂]; rw [div_zero]; rw [← VariableChange.one_def]; rw [one_mul]
   exact W.toShortNFOfCharThree_spec hb₂
@@ -1619,7 +1619,7 @@ theorem exists_variableChange_isCharThreeNF
   proof: ⟨_, W.toCharThreeNF_spec⟩
 
 中文:
-定理 exists_variableChange_isCharThreeNF
+定理 存在_variableChange_isCharThreeNF
   结论: 存在 C : VariableChange F, (C • W).IsCharThreeNF
   证明: ⟨_, W.toCharThreeNF_spec⟩
 
@@ -1647,7 +1647,7 @@ class IsCharTwoJNeZeroNF
     - a₄ : W.a₄ = 0
 
 中文:
-类 IsCharTwoJNeZeroNF
+类 是CharTwoJNeZeroNF
   参数: : 命题 where
   公理与运算 (3 个):
     - a₁ : W.a₁ = 1
@@ -2094,7 +2094,7 @@ class IsCharTwoJEqZeroNF
     - a₂ : W.a₂ = 0
 
 中文:
-类 IsCharTwoJEqZeroNF
+类 是CharTwoJEqZeroNF
   参数: : 命题 where
   公理与运算 (2 个):
     - a₁ : W.a₁ = 0
@@ -2471,7 +2471,7 @@ theorem j_of_isCharTwoJEqZeroNF_of_char_two
 
 中文:
 定理 j_of_isCharTwoJEqZeroNF_of_char_two
-  条件: [CharP F 2]
+  条件: [特征p F 2]
   结论: W.j = 0
   证明: by
   rw [j]; rw [c₄_of_isCharTwoJEqZeroNF_of_char_two]; simp
@@ -2510,7 +2510,7 @@ instance isCharTwoNF_of_isCharTwoJNeZeroNF
 
 中文:
 实例 isCharTwoNF_of_isCharTwoJNeZeroNF
-  签名: [W.IsCharTwoJNeZeroNF]
+  签名: [W.是CharTwoJNeZeroNF]
   定义体: IsCharTwoNF.of_j_ne_zero
 
 Depends on / 依赖: IsCharTwoNF, IsCharTwoNF.of_j_ne_zero, of_j_ne_zero
@@ -2528,7 +2528,7 @@ instance isCharTwoNF_of_isCharTwoJEqZeroNF
 
 中文:
 实例 isCharTwoNF_of_isCharTwoJEqZeroNF
-  签名: [W.IsCharTwoJEqZeroNF]
+  签名: [W.是CharTwoJEqZeroNF]
   定义体: IsCharTwoNF.of_j_eq_zero
 
 Depends on / 依赖: IsCharTwoNF, IsCharTwoNF.of_j_eq_zero, of_j_eq_zero, weakEquivalence_iff_of_objectProperty
@@ -2708,7 +2708,7 @@ theorem exists_variableChange_isCharTwoNF
   exact ⟨_, W.toCharTwoNF_spec⟩
 
 中文:
-定理 exists_variableChange_isCharTwoNF
+定理 存在_variableChange_isCharTwoNF
   结论: 存在 C : VariableChange F, (C • W).IsCharTwoNF
   证明: by
   classical

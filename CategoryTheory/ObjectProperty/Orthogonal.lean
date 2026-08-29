@@ -45,7 +45,7 @@ definition rightOrthogonal
 
 中文:
 定义 rightOrthogonal
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun Y => forall ⦃X : C⦄ (f : X ⟶ Y), P X -> f = 0
 -/
 def rightOrthogonal : ObjectProperty C :=
@@ -82,7 +82,7 @@ definition leftOrthogonal
 
 中文:
 定义 leftOrthogonal
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => forall ⦃Y : C⦄ (f : X ⟶ Y), P Y -> f = 0
 -/
 def leftOrthogonal : ObjectProperty C :=
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.rightOrthogonal.IsClosedUnderIsomorphisms
+  签名: P.rightOrthogonal.在同构下封闭
   定义体: by
     rw [← cancel_mono e.inv]; rw [zero_comp]
     exact h _ hX
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.leftOrthogonal.IsClosedUnderIsomorphisms
+  签名: P.leftOrthogonal.在同构下封闭
   定义体: by
     rw [← cancel_epi e.hom]; rw [comp_zero]
     exact h _ hY
@@ -163,8 +163,8 @@ instance [HasZeroObject
   body: ⟨0, isZero_zero _, fun _ _ _ => by ext⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : P.rightOrthogonal.ContainsZero where
+实例 [有ZeroObject
+  签名: C] : P.rightOrthogonal.余ntainsZero where
   定义体: ⟨0, isZero_zero _, fun _ _ _ => by ext⟩
 
 Depends on / 依赖: isZero_zero
@@ -181,8 +181,8 @@ instance [HasZeroObject
   body: ⟨0, isZero_zero _, fun _ _ _ => by ext⟩
 
 中文:
-实例 [HasZeroObject
-  签名: C] : P.leftOrthogonal.ContainsZero where
+实例 [有ZeroObject
+  签名: C] : P.leftOrthogonal.余ntainsZero where
   定义体: ⟨0, isZero_zero _, fun _ _ _ => by ext⟩
 
 Depends on / 依赖: isZero_zero

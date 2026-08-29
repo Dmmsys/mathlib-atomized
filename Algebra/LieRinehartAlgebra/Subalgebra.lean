@@ -42,9 +42,9 @@ structure LieRinehartSubalgebra
     - lie_mem'({a b}) : a in carrier -> b in carrier -> ⁅a, b⁆ in carrier
 
 中文:
-结构 LieRinehartSubalgebra
-  参数: extends Submodule A L
-  继承: Submodule A L
+结构 LieRinehart子代数
+  参数: extends 子模 A L
+  继承: 子模 A L
   公理与运算 (1 个):
     - lie_mem'({a b}) : a in carrier -> b in carrier -> ⁅a, b⁆ in carrier
 -/
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (LieRinehartSubalgebra A L)
+  签名: 零 (LieRinehart子代数 A L)
   定义体: ⟨⟨0, fun {x y hx _hy} => by simp [(Submodule.mem_bot A).mp hx]⟩⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_bot, mem_bot
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LieRinehartSubalgebra A L)
+  签名: 可居 (LieRinehart子代数 A L)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (LieRinehartSubalgebra A L) :=
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (LieRinehartSubalgebra A L) L
+  签名: 集合状 (LieRinehart子代数 A L) L
   定义体: L'.carrier
   coe_injective L' L'' h := by
     rcases L'
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (LieRinehartSubalgebra A L)
+  签名: 偏序 (LieRinehart子代数 A L)
   定义体: .ofSetLike (LieRinehartSubalgebra A L) L
 
 Depends on / 依赖: LieRinehartSubalgebra, ofSetLike
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSubgroupClass (LieRinehartSubalgebra A L) L
+  签名: 加法子群类 (LieRinehart子代数 A L) L
   定义体: Submodule.add_mem _
   zero_mem L' := L'.zero_mem'
   neg_mem {L'} x hx := show -x in L'.toSubmodule from neg_mem hx
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (LieRinehartSubalgebra A L) A L
+  签名: SMulMem类 (LieRinehart子代数 A L) A L
   定义体: SMulMemClass.smul_mem (s := s.toSubmodule)
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, s.toSubmodule, smul_mem, toSubmodule
@@ -193,7 +193,7 @@ instance lieRing
 
 中文:
 实例 lieRing
-  签名: (L' : LieRinehartSubalgebra A L)
+  签名: (L' : LieRinehart子代数 A L)
   定义体: ⟨⁅x.val, y.val⁆, L'.lie_mem' x.property y.property⟩
   lie_add x y z := by aesop
   add_lie x y z := by aesop
@@ -314,7 +314,7 @@ theorem mem_carrier
 中文:
 定理 mem_carrier
   条件: {x : L}
-  结论: x in L'.carrier ↔ x in (L' : Set L)
+  结论: x in L'.carrier ↔ x in (L' : 集合 L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -334,7 +334,7 @@ theorem mem_mk_iff
 
 中文:
 定理 mem_mk_iff
-  条件: (S : Set L) (h₁ h₂ h₃ h₄) {x : L}
+  条件: (S : 集合 L) (h₁ h₂ h₃ h₄) {x : L}
   证明: Iff.rfl
 
 @[simp]
@@ -381,7 +381,7 @@ theorem mem_mk_iff'
 
 中文:
 定理 mem_mk_iff'
-  条件: (p : Submodule A L) (h) {x : L}
+  条件: (p : 子模 A L) (h) {x : L}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -404,7 +404,7 @@ theorem mem_coe
 中文:
 定理 mem_coe
   条件: {x : L}
-  结论: x in (L' : Set L) ↔ x in L'
+  结论: x in (L' : 集合 L) ↔ x in L'
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -487,7 +487,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (L₁' L₂' : LieRinehartSubalgebra A L) (h : 对任意 x, x in L₁' ↔ x in L₂')
+  条件: (L₁' L₂' : LieRinehart子代数 A L) (h : 对任意 x, x in L₁' ↔ x in L₂')
   结论: L₁' = L₂'
   证明: SetLike.ext h
 
@@ -509,7 +509,7 @@ theorem ext_iff'
 
 中文:
 定理 ext_iff'
-  条件: (L₁' L₂' : LieRinehartSubalgebra A L)
+  条件: (L₁' L₂' : LieRinehart子代数 A L)
   结论: L₁' = L₂' ↔ 对任意 x, x in L₁' ↔ x in L₂'
   证明: SetLike.ext_iff
 
@@ -531,7 +531,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (S : Set L) (h₁ h₂ h₃ h₄)
+  条件: (S : 集合 L) (h₁ h₂ h₃ h₄)
   证明: rfl
 -/
 theorem mk_coe (S : Set L) (h₁ h₂ h₃ h₄) :
@@ -548,7 +548,7 @@ theorem toSubmodule_mk
 
 中文:
 定理 toSubmodule_mk
-  条件: (p : Submodule A L) (h)
+  条件: (p : 子模 A L) (h)
   证明: rfl
 
 Depends on / 依赖: LieRinehartSubalgebra, toSubmodule
@@ -568,7 +568,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : LieRinehartSubalgebra A L -> Set L)
+  结论: 函数.单射 ((↑) : LieRinehart子代数 A L -> 集合 L)
   证明: SetLike.coe_injective
 
 @[norm_cast]
@@ -590,8 +590,8 @@ theorem coe_set_eq
 
 中文:
 定理 coe_set_eq
-  条件: (L₁' L₂' : LieRinehartSubalgebra A L)
-  结论: (L₁' : Set L) = L₂' ↔ L₁' = L₂'
+  条件: (L₁' L₂' : LieRinehart子代数 A L)
+  结论: (L₁' : 集合 L) = L₂' ↔ L₁' = L₂'
   证明: SetLike.coe_set_eq
 
 Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
@@ -613,7 +613,7 @@ theorem toSubmodule_injective
 
 中文:
 定理 toSubmodule_injective
-  结论: Function.Injective (toSubmodule (A := A) (L := L))
+  结论: 函数.单射 (toSubmodule (A := A) (L := L))
   证明: by
   intro L₁' L₂' h
   rw [SetLike.ext'_iff] at h
@@ -638,7 +638,7 @@ theorem coe_toSubmodule
 
 中文:
 定理 coe_toSubmodule
-  结论: (L'.toSubmodule : Set L) = L'
+  结论: (L'.toSubmodule : 集合 L) = L'
   证明: rfl
 -/
 theorem coe_toSubmodule : (L'.toSubmodule : Set L) = L' :=
@@ -697,7 +697,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLieTower L' L M
+  签名: 是LieTower L' L M
   定义体: leibniz_lie x.val y m
 
 Depends on / 依赖: leibniz_lie, x.val
@@ -717,7 +717,7 @@ instance lieRingModule
 
 中文:
 实例 lieRingModule
-  签名: : LieRingModule L' M where
+  签名: : Lie环模 L' M where
   定义体: add_lie (x : L) y m
   lie_add x y m := lie_add (x : L) y m
   leibniz_lie x y m := leibniz_lie x (y : L) m
@@ -745,7 +745,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRinehartRing A L'
+  签名: LieRinehart环 A L'
   定义体: LieRinehartRing.lie_smul_eq_mul a b (x : L)
   leibniz_mul_right' x a b := LieRinehartRing.leibniz_mul_right (x : L) a b
   leibniz_smul_right' _ _ _ := by simp [ext_iff]
@@ -769,7 +769,7 @@ instance lieAlgebra
 
 中文:
 实例 lieAlgebra
-  签名: : LieAlgebra R L' where
+  签名: : Lie代数 R L' where
   定义体: by aesop
 -/
 instance lieAlgebra : LieAlgebra R L' where
@@ -786,7 +786,7 @@ definition toLieSubalgebra
 
 中文:
 定义 toLieSubalgebra
-  签名: : LieSubalgebra R L where
+  签名: : Lie子代数 R L where
   定义体: L'.toSubmodule.restrictScalars R
   lie_mem' := L'.lie_mem'
 -/
@@ -809,7 +809,7 @@ theorem toLieSubalgebra_injective
 
 中文:
 定理 toLieSubalgebra_injective
-  结论: Function.Injective (fun L' =>
+  结论: 函数.单射 (fun L' =>
   证明: fun L₁' L₂' h => by
   rw [SetLike.ext'_iff] at h
   rw [← coe_set_eq]
@@ -836,7 +836,7 @@ theorem toLieSubalgebra_inj
 
 中文:
 定理 toLieSubalgebra_inj
-  条件: (L₁' L₂' : LieRinehartSubalgebra A L)
+  条件: (L₁' L₂' : LieRinehart子代数 A L)
   证明: (toLieSubalgebra_injective R).eq_iff
 
 Depends on / 依赖: eq_iff, toLieSubalgebra_injective
@@ -855,7 +855,7 @@ theorem coe_toLieSubalgebra
 
 中文:
 定理 coe_toLieSubalgebra
-  结论: ((L'.toLieSubalgebra R) : Set L) = L'
+  结论: ((L'.toLieSubalgebra R) : 集合 L) = L'
   证明: rfl
 -/
 theorem coe_toLieSubalgebra : ((L'.toLieSubalgebra R) : Set L) = L' := rfl
@@ -876,7 +876,7 @@ instance lieModule
 
 中文:
 实例 lieModule
-  签名: [LieModule R L M]
+  签名: [Lie模 R L M]
   定义体: by
     rw [coe_bracket_of_module]; rw [Submodule.coe_smul_of_tower]; rw [smul_lie]; rw [coe_bracket_of_module]
   lie_smul t x m := by simp only [coe_bracket_of_module, lie_smul]
@@ -899,7 +899,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRinehartAlgebra R A L'
+  签名: LieRinehart代数 R A L'
 -/
 instance : LieRinehartAlgebra R A L' where
 
@@ -918,7 +918,7 @@ definition incl
 
 中文:
 定义 incl
-  签名: : L' ->ₗ⁅(AlgHom.id R A)⁆ L where
+  签名: : L' ->ₗ⁅(代数态射.id R A)⁆ L where
   定义体: L'.toSubmodule.subtype.restrictScalars R
   map_lie' {x y} := coe_bracket L' x y
   map_smul_apply' a x := L'.toSubmodule.subtype.map_smul a x

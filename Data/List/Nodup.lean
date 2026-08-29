@@ -33,8 +33,8 @@ theorem Pairwise.nodup
   proof: h.imp ne_of_irrefl
 
 中文:
-定理 Pairwise.nodup
-  条件: {l : List α} {r : α -> α -> 命题} [Std.Irrefl r] (h : Pairwise r l)
+定理 两两.nodup
+  条件: {l : 列表 α} {r : α -> α -> 命题} [Std.Irrefl r] (h : 两两 r l)
   证明: h.imp ne_of_irrefl
 -/
 protected theorem Pairwise.nodup {l : List α} {r : α -> α -> Prop} [Std.Irrefl r] (h : Pairwise r l) :
@@ -198,7 +198,7 @@ fun al => h a (singleton_sublist.2 al).cons_cons _⟩
 
 中文:
 定理 nodup_iff_sublist
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Nodup l ↔ 对任意 a, ¬[a, a] <+ l
   证明: ⟨fun d a h => not_nodup_pair a (d.sublist h),
     by
@@ -233,7 +233,7 @@ protected alias ⟨_, Nodup.mergeSort⟩ := nodup_mergeSort
 
 中文:
 定理 nodup_mergeSort
-  条件: {l : List α} {le : α -> α -> 布尔}
+  条件: {l : 列表 α} {le : α -> α -> 布尔值}
   结论: (l.mergeSort le).Nodup ↔ l.Nodup
   证明: (mergeSort_perm l le).nodup_iff
 
@@ -263,7 +263,7 @@ theorem nodup_iff_injective_getElem
 
 中文:
 定理 nodup_iff_injective_getElem
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: pairwise_iff_getElem.trans
     ⟨fun h i j hg => by
       obtain ⟨i, hi⟩ := i; obtain ⟨j, hj⟩ := j
@@ -297,8 +297,8 @@ theorem nodup_iff_injective_get
 
 中文:
 定理 nodup_iff_injective_get
-  条件: {l : List α}
-  结论: Nodup l ↔ Function.Injective l.get
+  条件: {l : 列表 α}
+  结论: Nodup l ↔ 函数.单射 l.get
   证明: nodup_iff_injective_getElem
 
 Depends on / 依赖: nodup_iff_injective_getElem
@@ -317,8 +317,8 @@ theorem Nodup.injective_get
 
 中文:
 定理 Nodup.injective_get
-  条件: {l : List α} (h : Nodup l)
-  结论: Function.Injective l.get
+  条件: {l : 列表 α} (h : Nodup l)
+  结论: 函数.单射 l.get
   证明: nodup_iff_injective_get.mp h
 -/
 protected theorem Nodup.injective_get {l : List α} (h : Nodup l) : Function.Injective l.get :=
@@ -333,8 +333,8 @@ theorem _root_.Function.Injective.nodup
   proof: nodup_iff_injective_get.mpr h
 
 中文:
-定理 _root_.Function.Injective.nodup
-  结论: {l : List α}
+定理 _root_.函数.单射.nodup
+  结论: {l : 列表 α}
   证明: nodup_iff_injective_get.mpr h
 -/
 protected theorem _root_.Function.Injective.nodup {l : List α}
@@ -350,7 +350,7 @@ theorem Nodup.get_inj_iff
 
 中文:
 定理 Nodup.get_inj_iff
-  条件: {l : List α} (h : Nodup l) {i j : Fin l.length}
+  条件: {l : 列表 α} (h : Nodup l) {i j : 有限集 l.length}
   证明: (nodup_iff_injective_get.1 h).eq_iff
 
 Depends on / 依赖: eq_iff, nodup_iff_injective_get
@@ -371,7 +371,7 @@ theorem Nodup.getElem_inj_iff
 
 中文:
 定理 Nodup.getElem_inj_iff
-  结论: {l : List α} (h : Nodup l)
+  结论: {l : 列表 α} (h : Nodup l)
   证明: by
   have := @Nodup.get_inj_iff _ _ h ⟨i, hi⟩ ⟨j, hj⟩
   simpa
@@ -395,7 +395,7 @@ theorem nodup_iff_getElem?_ne_getElem?
 
 中文:
 定理 nodup_iff_getElem?_ne_getElem?
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   grind [List.pairwise_iff_getElem]
 
@@ -425,7 +425,7 @@ theorem Nodup.ne_singleton_iff
 
 中文:
 定理 Nodup.ne_singleton_iff
-  条件: {l : List α} (h : Nodup l) (x : α)
+  条件: {l : 列表 α} (h : Nodup l) (x : α)
   证明: by
   induction l with
   | nil => simp
@@ -466,7 +466,7 @@ theorem not_nodup_of_get_eq_of_ne
 
 中文:
 定理 not_nodup_of_get_eq_of_ne
-  结论: (xs : List α) (n m : Fin xs.length)
+  结论: (xs : 列表 α) (n m : 有限集 xs.length)
   证明: by
   rw [nodup_iff_injective_get]
   exact fun hinj => hne (hinj h)
@@ -510,7 +510,7 @@ theorem get_idxOf
 
 中文:
 定理 get_idxOf
-  条件: [BEq α] [LawfulBEq α] {l : List α} (H : Nodup l) (i : Fin l.length)
+  条件: [BEq α] [LawfulBEq α] {l : 列表 α} (H : Nodup l) (i : 有限集 l.length)
   证明: by
   simp [H]
 -/
@@ -532,7 +532,7 @@ theorem nodup_iff_count_le_one
 
 中文:
 定理 nodup_iff_count_le_one
-  条件: [BEq α] [LawfulBEq α] {l : List α}
+  条件: [BEq α] [LawfulBEq α] {l : 列表 α}
   结论: Nodup l ↔ 对任意 a, count a l <= 1
   证明: nodup_iff_sublist.trans
     forall_congr' fun a =>
@@ -582,7 +582,7 @@ fun a => mem_iff_get.mp List.one_le_count_iff.mp by grind⟩⟩
 中文:
 定理 get_bijective_iff
   条件: [BEq α] [LawfulBEq α]
-  结论: l.get.Bijective ↔ 对任意 a, l.count a = 1
+  结论: l.get.双射 ↔ 对任意 a, l.count a = 1
   证明: ⟨fun h a => (nodup_iff_count_eq_one.mp <| nodup_iff_injective_get.mpr h.injective)
 a mem_iff_get.mpr h.surjective a,
 fun h => ⟨nodup_iff_injective_get.mp nodup_iff_count_eq_one.mpr fun a _ => h a,
@@ -630,7 +630,7 @@ theorem count_eq_one_of_mem
 
 中文:
 定理 count_eq_one_of_mem
-  条件: [BEq α] [LawfulBEq α] {a : α} {l : List α} (d : Nodup l) (h : a in l)
+  条件: [BEq α] [LawfulBEq α] {a : α} {l : 列表 α} (d : Nodup l) (h : a in l)
   证明: nodup_iff_count_eq_one.mp d a h
 
 Depends on / 依赖: nodup_iff_count_eq_one, nodup_iff_count_eq_one.mp
@@ -686,7 +686,7 @@ theorem nodup_append'
 
 中文:
 定理 nodup_append'
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   证明: by
   simp only [Nodup, pairwise_append, disjoint_iff_ne]
 
@@ -709,7 +709,7 @@ protected alias Nodup.disjoint := disjoint_of_nodup_append
 
 中文:
 定理 disjoint_of_nodup_append
-  条件: {l₁ l₂ : List α} (d : Nodup (l₁ ++ l₂))
+  条件: {l₁ l₂ : 列表 α} (d : Nodup (l₁ ++ l₂))
   结论: Disjoint l₁ l₂
   证明: (nodup_append'.1 d).2.2
 
@@ -754,7 +754,7 @@ theorem nodup_append_comm
 
 中文:
 定理 nodup_append_comm
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: Nodup (l₁ ++ l₂) ↔ Nodup (l₂ ++ l₁)
   证明: by
   simp only [nodup_append', and_left_comm, disjoint_comm]
@@ -776,7 +776,7 @@ theorem nodup_middle
 
 中文:
 定理 nodup_middle
-  条件: {a : α} {l₁ l₂ : List α}
+  条件: {a : α} {l₁ l₂ : 列表 α}
   证明: by
   simp only [nodup_append', not_or, and_left_comm, and_assoc, nodup_cons, mem_append,
     disjoint_cons_right]
@@ -799,7 +799,7 @@ theorem Nodup.of_map
 
 中文:
 定理 Nodup.of_map
-  条件: (f : α -> β) {l : List α}
+  条件: (f : α -> β) {l : 列表 α}
   结论: Nodup (map f l) -> Nodup l
   证明: (Pairwise.of_map f) fun _ _ => mt congr_arg f
 
@@ -847,7 +847,7 @@ theorem inj_on_of_nodup_map
 
 中文:
 定理 inj_on_of_nodup_map
-  条件: {f : α -> β} {l : List α} (d : Nodup (map f l))
+  条件: {f : α -> β} {l : 列表 α} (d : Nodup (map f l))
   证明: by
   induction l with
   | nil => simp
@@ -885,7 +885,7 @@ theorem nodup_map_iff_inj_on
 
 中文:
 定理 nodup_map_iff_inj_on
-  条件: {f : α -> β} {l : List α} (d : Nodup l)
+  条件: {f : α -> β} {l : 列表 α} (d : Nodup l)
   证明: ⟨inj_on_of_nodup_map, fun h => d.map_on h⟩
 
 Depends on / 依赖: d.map_on, inj_on_of_nodup_map, map_on
@@ -905,7 +905,7 @@ theorem Nodup.map
 
 中文:
 定理 Nodup.map
-  条件: {f : α -> β} (hf : Injective f)
+  条件: {f : α -> β} (hf : 单射 f)
   结论: Nodup l -> Nodup (map f l)
   证明: Nodup.map_on fun _ _ _ _ h => hf h
 -/
@@ -925,7 +925,7 @@ theorem nodup_map_iff
 
 中文:
 定理 nodup_map_iff
-  条件: {f : α -> β} {l : List α} (hf : Injective f)
+  条件: {f : α -> β} {l : 列表 α} (hf : 单射 f)
   结论: Nodup (map f l) ↔ Nodup l
   证明: ⟨Nodup.of_map _, Nodup.map hf⟩
 
@@ -951,7 +951,7 @@ protected alias ⟨Nodup.of_attach, Nodup.attach⟩ := nodup_attach
 
 中文:
 定理 nodup_attach
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Nodup (attach l) ↔ Nodup l
   证明: ⟨fun h => attach_map_subtype_val l ▸ h.map fun _ _ => Subtype.ext, fun h =>
     Nodup.of_map Subtype.val ((attach_map_subtype_val l).symm ▸ h)⟩
@@ -977,7 +977,7 @@ theorem Nodup.pmap
 
 中文:
 定理 Nodup.pmap
-  结论: {p : α -> 命题} {f : 对任意 a, p a -> β} {l : List α} {H}
+  结论: {p : α -> 命题} {f : 对任意 a, p a -> β} {l : 列表 α} {H}
   证明: by
   grind
 -/
@@ -999,7 +999,7 @@ theorem Nodup.filter
 
 中文:
 定理 Nodup.filter
-  条件: (p : α -> 布尔) {l}
+  条件: (p : α -> 布尔值) {l}
   结论: Nodup l -> Nodup (filter p l)
   证明: by
   simpa using! Pairwise.filter p
@@ -1023,7 +1023,7 @@ theorem nodup_reverse
 
 中文:
 定理 nodup_reverse
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Nodup (reverse l) ↔ Nodup l
   证明: pairwise_reverse.trans by simp only [Nodup, Ne, eq_comm]
 
@@ -1045,7 +1045,7 @@ theorem nodup_concat
 
 中文:
 定理 nodup_concat
-  条件: (l : List α) (u : α)
+  条件: (l : 列表 α) (u : α)
   结论: (l.concat u).Nodup ↔ u ∉ l ∧ l.Nodup
   证明: by
   rw [← nodup_reverse]
@@ -1068,7 +1068,7 @@ lemma Nodup.tail
 
 中文:
 引理 Nodup.tail
-  条件: {l : List α} (h : Nodup l)
+  条件: {l : 列表 α} (h : Nodup l)
   结论: Nodup l.tail
   证明: l.tail_sublist.nodup h
 -/
@@ -1094,7 +1094,7 @@ lemma nodup_tail_reverse
 
 中文:
 引理 nodup_tail_reverse
-  条件: (l : List α) (h : l[0]? = l.getLast?)
+  条件: (l : 列表 α) (h : l[0]? = l.getLast?)
   证明: by
   induction l with
   | nil => simp
@@ -1246,7 +1246,7 @@ theorem Nodup.erase_getElem
 
 中文:
 定理 Nodup.erase_getElem
-  结论: [BEq α] [LawfulBEq α] {l : List α} (hl : l.Nodup)
+  结论: [BEq α] [LawfulBEq α] {l : 列表 α} (hl : l.Nodup)
   证明: by
   induction l generalizing i with
   | nil => simp
@@ -1277,7 +1277,7 @@ theorem Nodup.erase_get
 
 中文:
 定理 Nodup.erase_get
-  条件: [BEq α] [LawfulBEq α] {l : List α} (hl : l.Nodup) (i : Fin l.length)
+  条件: [BEq α] [LawfulBEq α] {l : 列表 α} (hl : l.Nodup) (i : 有限集 l.length)
   证明: by
   simp [erase_getElem, hl]
 
@@ -1318,7 +1318,7 @@ theorem nodup_flatten
 
 中文:
 定理 nodup_flatten
-  条件: {L : List (List α)}
+  条件: {L : 列表 (列表 α)}
   证明: by
   simp only [Nodup, pairwise_flatten, disjoint_left.symm, forall_mem_ne]
 
@@ -1342,7 +1342,7 @@ from forall_comm.trans forall_congr' fun _ => forall_eq']
 
 中文:
 定理 nodup_flatMap
-  条件: {l₁ : List α} {f : α -> List β}
+  条件: {l₁ : 列表 α} {f : α -> 列表 β}
   证明: by
   simp only [List.flatMap, nodup_flatten, pairwise_map, and_comm, mem_map,
     exists_imp, and_imp]
@@ -1374,7 +1374,7 @@ theorem Nodup.product
 
 中文:
 定理 Nodup.product
-  条件: {l₂ : List β} (d₁ : l₁.Nodup) (d₂ : l₂.Nodup)
+  条件: {l₂ : 列表 β} (d₁ : l₁.Nodup) (d₂ : l₂.Nodup)
   证明: nodup_flatMap.2
 ⟨fun a _ => d₂.map LeftInverse.injective fun b => (rfl : (a, b).2 = b),
       d₁.imp fun {a₁ a₂} n x h₁ h₂ => by
@@ -1406,7 +1406,7 @@ theorem Nodup.sigma
 
 中文:
 定理 Nodup.sigma
-  结论: {σ : α -> 类型} {l₂ : 对任意 a, List (σ a)} (d₁ : Nodup l₁)
+  结论: {σ : α -> 类型} {l₂ : 对任意 a, 列表 (σ a)} (d₁ : Nodup l₁)
   证明: nodup_flatMap.2
     ⟨fun a _ => (d₂ a).map fun b b' h => by injection h with _ h,
       d₁.imp fun {a₁ a₂} n x h₁ h₂ => by
@@ -1435,7 +1435,7 @@ theorem Nodup.filterMap
 
 中文:
 定理 Nodup.filterMap
-  条件: {f : α -> Option β} (h : 对任意 a a' b, b in f a -> b in f a' -> a = a')
+  条件: {f : α -> 选项类型 β} (h : 对任意 a a' b, b in f a -> b in f a' -> a = a')
   证明: (Pairwise.filterMap f) @fun a a' n b bm b' bm' e => n h a a' b' (by rw [← e]; exact bm) bm'
 -/
 protected theorem Nodup.filterMap {f : α -> Option β} (h : forall a a' b, b in f a -> b in f a' -> a = a') :
@@ -1497,7 +1497,7 @@ theorem Nodup.union
 
 中文:
 定理 Nodup.union
-  条件: [BEq α] [LawfulBEq α] (l₁ : List α) (h : Nodup l₂)
+  条件: [BEq α] [LawfulBEq α] (l₁ : 列表 α) (h : Nodup l₂)
   结论: (l₁ union l₂).Nodup
   证明: by
   induction l₁ generalizing l₂ with
@@ -1522,7 +1522,7 @@ theorem Nodup.inter
 
 中文:
 定理 Nodup.inter
-  条件: [BEq α] (l₂ : List α)
+  条件: [BEq α] (l₂ : 列表 α)
   结论: Nodup l₁ -> Nodup (l₁ inter l₂)
   证明: Nodup.filter _
 
@@ -1616,7 +1616,7 @@ theorem Nodup.map_update
 
 中文:
 定理 Nodup.map_update
-  条件: [DecidableEq α] {l : List α} (hl : l.Nodup) (f : α -> β) (x : α) (y : β)
+  条件: [DecidableEq α] {l : 列表 α} (hl : l.Nodup) (f : α -> β) (x : α) (y : β)
   证明: by
   induction l with | nil => simp | cons hd tl ihl => ?_
   rw [nodup_cons] at hl
@@ -1649,8 +1649,8 @@ theorem Nodup.pairwise_of_forall_ne
   grind [List.pairwise_iff_forall_sublist]
 
 中文:
-定理 Nodup.pairwise_of_forall_ne
-  结论: {l : List α} {r : α -> α -> 命题} (hl : l.Nodup)
+定理 Nodup.pairwise_of_对任意_ne
+  结论: {l : 列表 α} {r : α -> α -> 命题} (hl : l.Nodup)
   证明: by
   grind [List.pairwise_iff_forall_sublist]
 
@@ -1698,8 +1698,8 @@ theorem Option.toList_nodup
   statement: forall o : Option α, o.toList.Nodup
 
 中文:
-定理 Option.toList_nodup
-  结论: 对任意 o : Option α, o.toList.Nodup
+定理 选项类型.toList_nodup
+  结论: 对任意 o : 选项类型 α, o.toList.Nodup
 -/
 theorem Option.toList_nodup : forall o : Option α, o.toList.Nodup
   | none => List.nodup_nil

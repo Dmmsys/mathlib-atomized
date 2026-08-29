@@ -95,7 +95,7 @@ lemma toAlgHom_id
 中文:
 引理 toAlgHom_id
   条件: (A : Under R)
-  结论: toAlgHom (𝟙 A) = AlgHom.id R A
+  结论: toAlgHom (𝟙 A) = 代数态射.id R A
   证明: rfl
 
 @[simp]
@@ -156,7 +156,7 @@ definition mkUnder
 
 中文:
 定义 mkUnder
-  签名: (A : 类型u) [CommRing A] [Algebra R A]
+  签名: (A : 类型u) [交换环 A] [代数 R A]
   定义体: Under.mk (CommRingCat.ofHom <| algebraMap R A)
 
 @[ext]
@@ -179,7 +179,7 @@ lemma mkUnder_ext
 
 中文:
 引理 mkUnder_ext
-  结论: {A : 类型u} [CommRing A] [Algebra R A] {B : Under R}
+  结论: {A : 类型u} [交换环 A] [代数 R A] {B : Under R}
   证明: by
   ext x
   exact h x
@@ -208,7 +208,7 @@ definition toUnder
 
 中文:
 定义 toUnder
-  签名: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
+  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
   定义体: Under.homMk (CommRingCat.ofHom f.toRingHom) by
     ext a
     exact f.commutes' a
@@ -236,7 +236,7 @@ lemma toUnder_right
 
 中文:
 引理 toUnder_right
-  结论: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A]
+  结论: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A]
   证明: rfl
 
 @[simp]
@@ -257,7 +257,7 @@ lemma toUnder_comp
 
 中文:
 引理 toUnder_comp
-  结论: {A B C : 类型u} [CommRing A] [CommRing B] [CommRing C]
+  结论: {A B C : 类型u} [交换环 A] [交换环 B] [交换环 C]
   证明: rfl
 -/
 lemma toUnder_comp {A B C : Type u} [CommRing A] [CommRing B] [CommRing C]
@@ -282,7 +282,7 @@ definition toUnder
 
 中文:
 定义 toUnder
-  签名: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
+  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
   定义体: f.toAlgHom.toUnder
   inv := f.symm.toAlgHom.toUnder
 
@@ -309,7 +309,7 @@ lemma toUnder_hom_right_apply
 
 中文:
 引理 toUnder_hom_right_apply
-  结论: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A]
+  结论: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A]
   证明: rfl
 
 @[simp]
@@ -331,7 +331,7 @@ lemma toUnder_inv_right_apply
 
 中文:
 引理 toUnder_inv_right_apply
-  结论: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A]
+  结论: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A]
   证明: rfl
 
 @[simp]
@@ -351,7 +351,7 @@ lemma toUnder_trans
 
 中文:
 引理 toUnder_trans
-  结论: {A B C : 类型u} [CommRing A] [CommRing B] [CommRing C]
+  结论: {A B C : 类型u} [交换环 A] [交换环 B] [交换环 C]
   证明: rfl
 -/
 lemma toUnder_trans {A B C : Type u} [CommRing A] [CommRing B] [CommRing C]

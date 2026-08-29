@@ -57,7 +57,7 @@ theorem discreteTopology_subtype_iff
 
 中文:
 定理 discreteTopology_subtype_iff
-  条件: {S : Set Y}
+  条件: {S : 集合 Y}
   证明: by
   simp_rw [discreteTopology_iff_nhds_ne, SetCoe.forall', nhds_ne_subtype_eq_bot_iff]
 
@@ -78,7 +78,7 @@ theorem isDiscrete_iff_nhdsNE
 
 中文:
 定理 isDiscrete_iff_nhdsNE
-  条件: {S : Set Y}
+  条件: {S : 集合 Y}
   证明: by
   rw [isDiscrete_iff_discreteTopology]; rw [discreteTopology_subtype_iff]
 
@@ -99,7 +99,7 @@ lemma discreteTopology_of_noAccPts
 
 中文:
 引理 discreteTopology_of_noAccPts
-  结论: {X : 类型} [TopologicalSpace X] {E : Set X}
+  结论: {X : 类型} [拓扑空间 X] {E : 集合 X}
   证明: by
   simpa [discreteTopology_subtype_iff, AccPt] using h
 
@@ -121,7 +121,7 @@ lemma discreteTopology_subtype_iff'
 
 中文:
 引理 discreteTopology_subtype_iff'
-  条件: {S : Set Y}
+  条件: {S : 集合 Y}
   证明: by
   simp [discreteTopology_iff_isOpen_singleton, isOpen_induced_iff, Set.ext_iff]
   grind
@@ -146,8 +146,8 @@ theorem isDiscrete_iff_forall_mem_exists_isOpen
 alias isDiscrete_iff_forall_exists_isOpen := isDiscrete_iff_forall_mem_exists_isOpen
 
 中文:
-定理 isDiscrete_iff_forall_mem_exists_isOpen
-  条件: {s : Set Y}
+定理 isDiscrete_iff_对任意_mem_存在_isOpen
+  条件: {s : 集合 Y}
   证明: by
   rw [isDiscrete_iff_discreteTopology]; rw [discreteTopology_subtype_iff']
 
@@ -175,8 +175,8 @@ theorem isDiscrete_iff_forall_subset_exists_isOpen
     Subtype.forall_set_subtype (p := fun t => exists u, IsOpen u ∧ s inter u = t), inter_comm]
 
 中文:
-定理 isDiscrete_iff_forall_subset_exists_isOpen
-  条件: {s : Set X}
+定理 isDiscrete_iff_对任意_subset_存在_isOpen
+  条件: {s : 集合 X}
   证明: by
   simp_rw [isDiscrete_iff_discreteTopology, discreteTopology_iff_forall_isOpen,
     isOpen_induced_iff, ← image_eq_image (Subtype.val_injective), Subtype.image_preimage_coe,
@@ -205,8 +205,8 @@ theorem isDiscrete_iff_forall_mem_exists_isClosed
 
 
 中文:
-定理 isDiscrete_iff_forall_mem_exists_isClosed
-  条件: {S : Set X}
+定理 isDiscrete_iff_对任意_mem_存在_isClosed
+  条件: {S : 集合 X}
   证明: by
   rw [isDiscrete_iff_forall_subset_exists_isOpen]
   constructor <;> intro h s sS
@@ -239,7 +239,7 @@ theorem isClosed_of_subset_discrete_closed
 
 中文:
 定理 isClosed_of_subset_discrete_closed
-  结论: {s t : Set X} (sd : s subseteq t)
+  结论: {s t : 集合 X} (sd : s subseteq t)
   证明: by
   obtain ⟨_, rp, rt⟩ := isDiscrete_iff_forall_mem_exists_isClosed.mp ht s sd
   rw [← rt]
@@ -264,9 +264,9 @@ lemma Set.Subsingleton.isDiscrete
   ⟨inferInstance⟩
 
 中文:
-引理 Set.Subsingleton.isDiscrete
-  条件: (hs : s.Subsingleton)
-  结论: IsDiscrete s
+引理 集合.子单例.isDiscrete
+  条件: (hs : s.子单例)
+  结论: 是离散 s
   证明: have : Subsingleton s := (Set.subsingleton_coe s).mpr hs
   ⟨inferInstance⟩
 
@@ -292,7 +292,7 @@ protected alias ⟨IsDiscrete.nhdsWithin, _⟩ := isDiscrete_iff_nhdsWithi
 
 中文:
 引理 isDiscrete_iff_nhdsWithin
-  结论: IsDiscrete s ↔ 对任意 x in s, 𝓝[s] x = pure x
+  结论: 是离散 s ↔ 对任意 x in s, 𝓝[s] x = pure x
   证明: by
   simp [isDiscrete_iff_discreteTopology, discreteTopology_iff_isOpen_singleton,
     isOpen_singleton_iff_nhds_eq_pure, nhds_induced,
@@ -321,9 +321,9 @@ lemma IsDiscrete.of_nhdsWithin
   proof: isDiscrete_iff_nhdsWithin.mpr fun x hx => (H x hx).antisymm (pure_le_nhdsWithin hx)
 
 中文:
-引理 IsDiscrete.of_nhdsWithin
+引理 是离散.of_nhdsWithin
   条件: (H : 对任意 x in s, 𝓝[s] x <= pure x)
-  结论: IsDiscrete s
+  结论: 是离散 s
   证明: isDiscrete_iff_nhdsWithin.mpr fun x hx => (H x hx).antisymm (pure_le_nhdsWithin hx)
 
 Depends on / 依赖: antisymm, isDiscrete_iff_nhdsWithin, isDiscrete_iff_nhdsWithin.mpr, pure_le_nhdsWithin
@@ -343,7 +343,7 @@ lemma isDiscrete_univ_iff
 
 中文:
 引理 isDiscrete_univ_iff
-  结论: IsDiscrete (Set.univ : Set X) ↔ DiscreteTopology X
+  结论: 是离散 (集合.univ : 集合 X) ↔ 离散拓扑 X
   证明: by
   simp [isDiscrete_iff_nhdsWithin, discreteTopology_iff_isOpen_singleton,
     isOpen_singleton_iff_nhds_eq_pure]
@@ -365,9 +365,9 @@ lemma IsDiscrete.univ
   rwa [isDiscrete_univ_iff]
 
 中文:
-引理 IsDiscrete.univ
-  条件: [DiscreteTopology X]
-  结论: IsDiscrete (Set.univ : Set X)
+引理 是离散.univ
+  条件: [离散拓扑 X]
+  结论: 是离散 (集合.univ : 集合 X)
   证明: by
   rwa [isDiscrete_univ_iff]
 
@@ -389,8 +389,8 @@ lemma IsDiscrete.image_of_isOpenMap
   grw [hf.nhds_le x]
 
 中文:
-引理 IsDiscrete.image_of_isOpenMap
-  结论: (hs : IsDiscrete s) (hf : IsOpenMap f)
+引理 是离散.image_of_isOpenMap
+  结论: (hs : 是离散 s) (hf : 是开映射 f)
   证明: by
   refine .of_nhdsWithin ?_
   rintro _ ⟨x, hx, rfl⟩
@@ -419,8 +419,8 @@ lemma IsDiscrete.image_of_isOpenMap_of_isOpen
   exact hf.nhds_le x
 
 中文:
-引理 IsDiscrete.image_of_isOpenMap_of_isOpen
-  结论: (hs : IsDiscrete s) (hf : IsOpenMap f)
+引理 是离散.image_of_isOpenMap_of_isOpen
+  结论: (hs : 是离散 s) (hf : 是开映射 f)
   证明: by
   refine .of_nhdsWithin ?_
   rintro _ ⟨x, hx, rfl⟩
@@ -446,8 +446,8 @@ lemma IsOpenMap.isDiscrete_range
   simpa using IsDiscrete.univ.image_of_isOpenMap_of_isOpen hf isOpen_univ
 
 中文:
-引理 IsOpenMap.isDiscrete_range
-  条件: [DiscreteTopology X] (hf : IsOpenMap f)
+引理 是开映射.isDiscrete_range
+  条件: [离散拓扑 X] (hf : 是开映射 f)
   证明: by
   simpa using IsDiscrete.univ.image_of_isOpenMap_of_isOpen hf isOpen_univ
 
@@ -468,9 +468,9 @@ lemma IsDiscrete.image
   simp_all [isDiscrete_iff_nhdsWithin, ← hf.map_nhdsWithin_eq s]
 
 中文:
-引理 IsDiscrete.image
-  条件: (hs : IsDiscrete s) (hf : IsInducing f)
-  结论: IsDiscrete (f '' s)
+引理 是离散.像
+  条件: (hs : 是离散 s) (hf : 是Inducing f)
+  结论: 是离散 (f '' s)
   证明: by
   simp_all [isDiscrete_iff_nhdsWithin, ← hf.map_nhdsWithin_eq s]
 
@@ -492,8 +492,8 @@ lemma Topology.IsInducing.isDiscrete_range
 IsEmbedding.isDiscrete_range := IsInducing.isDiscrete_range
 
 中文:
-引理 Topology.IsInducing.isDiscrete_range
-  条件: [DiscreteTopology X] (hf : IsInducing f)
+引理 拓扑.是Inducing.isDiscrete_range
+  条件: [离散拓扑 X] (hf : 是Inducing f)
   证明: by
   simpa using IsDiscrete.univ.image hf
 
@@ -521,8 +521,8 @@ lemma IsDiscrete.preimage
   exact (hf.continuousWithinAt hx).tendsto_nhdsWithin (Set.mapsTo_preimage _ _)
 
 中文:
-引理 IsDiscrete.preimage
-  结论: {s : Set Y} (hs : IsDiscrete s)
+引理 是离散.原像
+  结论: {s : 集合 Y} (hs : 是离散 s)
   证明: by
   refine .of_nhdsWithin fun x hx => ?_
   rw [← map_le_map_iff hf']; rw [map_pure]; rw [← hs.nhdsWithin _ hx]; rw [← Tendsto]
@@ -551,8 +551,8 @@ lemma IsDiscrete.preimage'
   exact h
 
 中文:
-引理 IsDiscrete.preimage'
-  结论: {s : Set Y} (hs : IsDiscrete s)
+引理 是离散.原像'
+  结论: {s : 集合 Y} (hs : 是离散 s)
   证明: by
   refine .of_nhdsWithin fun x hx => ?_
   have h := ((H (f x)).nhdsWithin _ rfl).le
@@ -583,8 +583,8 @@ lemma IsDiscrete.eq_of_specializes
     true_iff] using specializes_iff_eq (X := s) (x := ⟨a, ha⟩) (y := ⟨b, hb⟩)
 
 中文:
-引理 IsDiscrete.eq_of_specializes
-  结论: (hs : IsDiscrete s)
+引理 是离散.eq_of_specializes
+  结论: (hs : 是离散 s)
   证明: by
   let := hs.1
   simpa only [← Topology.IsInducing.subtypeVal.specializes_iff, hab, Subtype.mk.injEq,
@@ -640,8 +640,8 @@ lemma Continuous.discrete_of_tendsto_cofinite_cocompact
     Fin
 
 中文:
-引理 Continuous.discrete_of_tendsto_cofinite_cocompact
-  结论: [T1Space X] [WeaklyLocallyCompactSpace Y]
+引理 连续.discrete_of_tendsto_cofinite_cocompact
+  结论: [T1空间 X] [WeaklyLocallyCompact空间 Y]
   证明: by
   refine discreteTopology_iff_isOpen_singleton.mpr (fun x => ?_)
   obtain ⟨K : Set Y, hK : IsCompact K, hK' : K in 𝓝 (f x)⟩ := exists_compact_mem_nhds (f x)
@@ -673,7 +673,7 @@ lemma tendsto_cofinite_cocompact_of_discrete
 
 中文:
 引理 tendsto_cofinite_cocompact_of_discrete
-  结论: [DiscreteTopology X]
+  结论: [离散拓扑 X]
   证明: by
   convert! hf
   rw [cocompact_eq_cofinite X]
@@ -695,7 +695,7 @@ lemma IsClosed.tendsto_coe_cofinite_of_isDiscrete
   tendsto_cofinite_cocompact_of_discrete hs.isClosedEmbedding_subtypeVal.tendsto_cocompact
 
 中文:
-引理 IsClosed.tendsto_coe_cofinite_of_isDiscrete
+引理 是闭集.tendsto_coe_cofinite_of_isDiscrete
   证明: haveI := hs'.to_subtype
   tendsto_cofinite_cocompact_of_discrete hs.isClosedEmbedding_subtypeVal.tendsto_cocompact
 
@@ -717,8 +717,8 @@ lemma IsClosed.tendsto_coe_cofinite_iff
    fun hs' => hs.tendsto_coe_cofinite_of_isDiscrete hs'⟩
 
 中文:
-引理 IsClosed.tendsto_coe_cofinite_iff
-  结论: [T1Space X] [WeaklyLocallyCompactSpace X]
+引理 是闭集.tendsto_coe_cofinite_iff
+  结论: [T1空间 X] [WeaklyLocallyCompact空间 X]
   证明: ⟨fun h => ⟨continuous_subtype_val.discrete_of_tendsto_cofinite_cocompact h⟩,
    fun hs' => hs.tendsto_coe_cofinite_of_isDiscrete hs'⟩
 
@@ -750,7 +750,7 @@ theorem isClosed_and_discrete_iff
 
 中文:
 定理 isClosed_and_discrete_iff
-  条件: {S : Set X}
+  条件: {S : 集合 X}
   证明: by
   rw [isDiscrete_iff_nhdsNE]; rw [isClosed_iff_clusterPt]; rw [← forall_and]
   congrm (forall x, ?_)
@@ -781,8 +781,8 @@ definition Filter.codiscreteWithin
   body: ⨆ x in S, 𝓝[S \ {x}] x
 
 中文:
-定义 Filter.codiscreteWithin
-  签名: (S : Set X)
+定义 滤子.codiscreteWithin
+  签名: (S : 集合 X)
   定义体: ⨆ x in S, 𝓝[S \ {x}] x
 -/
 def Filter.codiscreteWithin (S : Set X) : Filter X := ⨆ x in S, 𝓝[S \ {x}] x
@@ -801,7 +801,7 @@ lemma mem_codiscreteWithin
 
 中文:
 引理 mem_codiscreteWithin
-  条件: {S T : Set X}
+  条件: {S T : 集合 X}
   证明: by
   simp only [codiscreteWithin, mem_iSup, mem_nhdsWithin, disjoint_principal_right, subset_def,
     Set.mem_sdiff, mem_inter_iff, mem_compl_iff]
@@ -827,8 +827,8 @@ theorem mem_codiscreteWithin_iff_forall_mem_nhdsNE
   simp_rw [mem_codiscreteWithin, disjoint_principal_right, Set.compl_sdiff]
 
 中文:
-定理 mem_codiscreteWithin_iff_forall_mem_nhdsNE
-  条件: {S T : Set X}
+定理 mem_codiscreteWithin_iff_对任意_mem_nhdsNE
+  条件: {S T : 集合 X}
   证明: by
   simp_rw [mem_codiscreteWithin, disjoint_principal_right, Set.compl_sdiff]
 
@@ -849,7 +849,7 @@ lemma mem_codiscreteWithin_accPt
 
 中文:
 引理 mem_codiscreteWithin_accPt
-  条件: {S T : Set X}
+  条件: {S T : 集合 X}
   证明: by
   simp only [mem_codiscreteWithin, disjoint_iff, AccPt, not_neBot]
 
@@ -870,8 +870,8 @@ theorem Filter.self_mem_codiscreteWithin
   proof: by simp [mem_codiscreteWithin]
 
 中文:
-定理 Filter.self_mem_codiscreteWithin
-  条件: (U : Set X)
+定理 滤子.self_mem_codiscreteWithin
+  条件: (U : 集合 X)
   证明: by simp [mem_codiscreteWithin]
 
 Depends on / 依赖: mem_codiscreteWithin
@@ -895,8 +895,8 @@ refine (biSup_mono hU).trans iSup₂_mono fun _ _ => ?_
 alias Filter.codiscreteWithin.mono := Filter.codiscreteWithin_mono
 
 中文:
-引理 Filter.codiscreteWithin_mono
-  条件: {U₁ U : Set X} (hU : U₁ subseteq U)
+引理 滤子.codiscreteWithin_mono
+  条件: {U₁ U : 集合 X} (hU : U₁ subseteq U)
   证明: by
 refine (biSup_mono hU).trans iSup₂_mono fun _ _ => ?_
   gcongr
@@ -927,7 +927,7 @@ theorem isDiscrete_of_codiscreteWithin
 
 中文:
 定理 isDiscrete_of_codiscreteWithin
-  条件: {U s : Set X} (h : sᶜ in Filter.codiscreteWithin U)
+  条件: {U s : 集合 X} (h : sᶜ in 滤子.codiscreteWithin U)
   证明: by
   rw [(by simp : ((s inter U) : Set X) = ((sᶜ union Uᶜ)ᶜ : Set X))]; rw [isDiscrete_iff_nhdsNE]
   simp_rw [← Filter.mem_iff_inf_principal_compl]
@@ -956,7 +956,7 @@ lemma codiscreteWithin_iff_locallyEmptyComplementWithin
 
 中文:
 引理 codiscreteWithin_iff_locallyEmptyComplementWithin
-  条件: {s U : Set X}
+  条件: {s U : 集合 X}
   证明: by
   simp only [mem_codiscreteWithin, disjoint_principal_right]
   refine ⟨fun h z hz => ⟨(U \ s)ᶜ, h z hz, by simp⟩, fun h z hz => ?_⟩
@@ -994,7 +994,7 @@ theorem isClosed_sdiff_of_codiscreteWithin
 
 中文:
 定理 isClosed_sdiff_of_codiscreteWithin
-  结论: {s U : Set X} (hs : s in codiscreteWithin U)
+  结论: {s U : 集合 X} (hs : s in codiscreteWithin U)
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_eventually]
   intro x hx
@@ -1044,7 +1044,7 @@ theorem nhdsNE_of_nhdsNE_sdiff_finite
 
 中文:
 定理 nhdsNE_of_nhdsNE_sdiff_finite
-  结论: {X : 类型} [TopologicalSpace X] [T1Space X] {x : X}
+  结论: {X : 类型} [拓扑空间 X] [T1空间 X] {x : X}
   证明: by
   rw [mem_nhdsWithin] at hU ⊢
   obtain ⟨t, ht, h₁ts, h₂ts⟩ := hU
@@ -1086,7 +1086,7 @@ theorem codiscreteWithin_iff_locallyFiniteComplementWithin
 
 中文:
 定理 codiscreteWithin_iff_locallyFiniteComplementWithin
-  条件: [T1Space X] {s U : Set X}
+  条件: [T1空间 X] {s U : 集合 X}
   证明: by
   rw [codiscreteWithin_iff_locallyEmptyComplementWithin]
   constructor
@@ -1129,8 +1129,8 @@ theorem Set.Subsingleton.mem_codiscreteWithin
   use univ \ t, nhdsNE_of_nhdsNE_sdiff_finite univ_mem h.finite, by aesop
 
 中文:
-定理 Set.Subsingleton.mem_codiscreteWithin
-  结论: [T1Space X] {s t : Set X}
+定理 集合.子单例.mem_codiscreteWithin
+  结论: [T1空间 X] {s t : 集合 X}
   证明: by
   rw [codiscreteWithin_iff_locallyEmptyComplementWithin]
   intro z hz
@@ -1161,7 +1161,7 @@ theorem compl_singleton_mem_codiscreteWithin
 
 中文:
 定理 compl_singleton_mem_codiscreteWithin
-  结论: {X : 类型} [TopologicalSpace X] [T1Space X]
+  结论: {X : 类型} [拓扑空间 X] [T1空间 X]
   证明: by
   rw [codiscreteWithin_iff_locallyEmptyComplementWithin]
   intro z hz
@@ -1193,7 +1193,7 @@ theorem compl_finite_mem_codiscreteWithin
 
 中文:
 定理 compl_finite_mem_codiscreteWithin
-  结论: {X : 类型} [TopologicalSpace X] [T1Space X]
+  结论: {X : 类型} [拓扑空间 X] [T1空间 X]
   证明: by
   apply h.induction_on (motive := fun t _ => tᶜ in codiscreteWithin s)
   · simp
@@ -1221,8 +1221,8 @@ definition Filter.codiscrete
   body: codiscreteWithin Set.univ
 
 中文:
-定义 Filter.codiscrete
-  签名: (X : 类型) [TopologicalSpace X]
+定义 滤子.codiscrete
+  签名: (X : 类型) [拓扑空间 X]
   定义体: codiscreteWithin Set.univ
 
 Depends on / 依赖: Set.univ, codiscreteWithin
@@ -1240,7 +1240,7 @@ lemma mem_codiscrete
 
 中文:
 引理 mem_codiscrete
-  条件: {S : Set X}
+  条件: {S : 集合 X}
   证明: by
   simp [codiscrete, mem_codiscreteWithin, compl_eq_univ_sdiff]
 
@@ -1335,7 +1335,7 @@ lemma mem_codiscrete_accPt
 
 中文:
 引理 mem_codiscrete_accPt
-  条件: {S : Set X}
+  条件: {S : 集合 X}
   证明: by
   simp only [mem_codiscrete, disjoint_iff, AccPt, not_neBot]
 
@@ -1356,7 +1356,7 @@ lemma mem_codiscrete'
 
 中文:
 引理 mem_codiscrete'
-  条件: {S : Set X}
+  条件: {S : 集合 X}
   证明: by
   rw [mem_codiscrete]; rw [← isClosed_compl_iff]; rw [isClosed_and_discrete_iff]
 
@@ -1377,7 +1377,7 @@ lemma compl_mem_codiscrete_iff
 
 中文:
 引理 compl_mem_codiscrete_iff
-  条件: {S : Set X}
+  条件: {S : 集合 X}
   证明: by
   rw [mem_codiscrete]; rw [compl_compl]; rw [isClosed_and_discrete_iff]
 
@@ -1398,7 +1398,7 @@ lemma codiscreteWithin_le_codiscrete_inf_principal
 
 中文:
 引理 codiscreteWithin_le_codiscrete_inf_principal
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   simp [codiscrete, codiscreteWithin_mono]
 
@@ -1419,8 +1419,8 @@ theorem Topology.IsEmbedding.image_mem_codiscreteWithin
     ← hf.mapClusterPt_iff, MapClusterPt, map_principal, image_sdiff hf.injective, image_singleton]
 
 中文:
-定理 Topology.IsEmbedding.image_mem_codiscreteWithin
-  结论: {f : X -> Y} (hf : IsEmbedding f)
+定理 拓扑.是嵌入.image_mem_codiscreteWithin
+  结论: {f : X -> Y} (hf : 是嵌入 f)
   证明: by
   simp only [mem_codiscreteWithin_accPt, forall_mem_image, accPt_principal_iff_clusterPt,
     ← hf.mapClusterPt_iff, MapClusterPt, map_principal, image_sdiff hf.injective, image_singleton]
@@ -1442,8 +1442,8 @@ theorem Topology.IsEmbedding.image_mem_codiscreteWithin_range
   rw [← image_univ]; rw [hf.image_mem_codiscreteWithin]; rw [codiscrete]
 
 中文:
-定理 Topology.IsEmbedding.image_mem_codiscreteWithin_range
-  结论: {f : X -> Y} (hf : IsEmbedding f)
+定理 拓扑.是嵌入.image_mem_codiscreteWithin_range
+  结论: {f : X -> Y} (hf : 是嵌入 f)
   证明: by
   rw [← image_univ]; rw [hf.image_mem_codiscreteWithin]; rw [codiscrete]
 
@@ -1466,7 +1466,7 @@ lemma mem_codiscrete_subtype_iff_mem_codiscreteWithin
 
 中文:
 引理 mem_codiscrete_subtype_iff_mem_codiscreteWithin
-  条件: {S : Set X} {U : Set S}
+  条件: {S : 集合 X} {U : 集合 S}
   证明: by
   simp [← Topology.IsEmbedding.subtypeVal.image_mem_codiscreteWithin_range]
 
@@ -1491,8 +1491,8 @@ theorem codiscreteWithin_eq_bot_iff
 
 中文:
 定理 codiscreteWithin_eq_bot_iff
-  条件: {S : Set X}
-  结论: codiscreteWithin S = ⊥ ↔ IsDiscrete S
+  条件: {S : 集合 X}
+  结论: codiscreteWithin S = ⊥ ↔ 是离散 S
   证明: by
   simp [isDiscrete_iff_nhdsNE, codiscreteWithin, ← nhdsWithin_inter', Set.sdiff_eq, inter_comm]
 
@@ -1541,8 +1541,8 @@ lemma Set.Finite.compl_mem_codiscrete
   proof: codiscrete_le_cofinite (by simpa)
 
 中文:
-引理 Set.Finite.compl_mem_codiscrete
-  条件: {S : Set X} (hs : S.Finite)
+引理 集合.有限.compl_mem_codiscrete
+  条件: {S : 集合 X} (hs : S.有限)
   结论: Sᶜ in codiscrete X
   证明: codiscrete_le_cofinite (by simpa)
 
@@ -1565,9 +1565,9 @@ lemma Set.Infinite.of_accPt
   exact this _ h
 
 中文:
-引理 Set.Infinite.of_accPt
-  条件: {S : Set X} {x : X} (h : AccPt x (𝓟 S))
-  结论: S.Infinite
+引理 集合.无限.of_accPt
+  条件: {S : 集合 X} {x : X} (h : 聚点 x (𝓟 S))
+  结论: S.无限
   证明: by
   intro hs
   have := hs.compl_mem_codiscrete
@@ -1604,7 +1604,7 @@ alias finite_diff_of_mem_codiscreteWithin := finite_sdiff_of_mem_codiscreteWithi
 
 中文:
 定理 finite_sdiff_of_mem_codiscreteWithin
-  条件: (hK : IsCompact K) (hs : s in codiscreteWithin K)
+  条件: (hK : 是紧集 K) (hs : s in codiscreteWithin K)
   证明: by
   rw [mem_codiscreteWithin_accPt] at hs
   contrapose! hs
@@ -1636,7 +1636,7 @@ theorem cofinite_inf_le_codiscreteWithin
 
 中文:
 定理 cofinite_inf_le_codiscreteWithin
-  条件: (hK : IsCompact K)
+  条件: (hK : 是紧集 K)
   证明: by
   intro s hs
   simpa [mem_inf_principal, compl_ofPred] using! hK.finite_sdiff_of_mem_codiscreteWithin hs
@@ -1661,7 +1661,7 @@ theorem codiscreteWithin_eq
 
 中文:
 定理 codiscreteWithin_eq
-  条件: [T1Space X] (hK : IsCompact K)
+  条件: [T1空间 X] (hK : 是紧集 K)
   证明: by
   refine le_antisymm ?_ hK.cofinite_inf_le_codiscreteWithin
   grw [← codiscrete_le_cofinite]
@@ -1689,7 +1689,7 @@ theorem cofinite_le_codiscrete
 
 中文:
 定理 cofinite_le_codiscrete
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   结论: cofinite <= codiscrete X
   证明: by
   simpa using! isCompact_univ.cofinite_inf_le_codiscreteWithin
@@ -1711,7 +1711,7 @@ theorem codiscrete_eq_cofinite
 
 中文:
 定理 codiscrete_eq_cofinite
-  条件: [T1Space X] [CompactSpace X]
+  条件: [T1空间 X] [紧空间 X]
   结论: codiscrete X = cofinite
   证明: by
   simpa using! isCompact_univ.codiscreteWithin_eq
@@ -1738,8 +1738,8 @@ theorem IsDiscrete.iUnion
   simp [compl_mem_codiscrete_iff, *]
 
 中文:
-定理 IsDiscrete.iUnion
-  结论: {ι : Sort*} [Finite ι] {s : ι -> Set X} (hs : 对任意 i, IsDiscrete (s i))
+定理 是离散.iUnion
+  结论: {ι : 类型层*} [有限 ι] {s : ι -> 集合 X} (hs : 对任意 i, 是离散 (s i))
   证明: by
   suffices (⋃ i, s i)ᶜ in codiscrete X from (compl_mem_codiscrete_iff.mp this).2
   simp [compl_mem_codiscrete_iff, *]
@@ -1762,8 +1762,8 @@ theorem IsDiscrete.union
   exact .iUnion (by simp [*]) (by simp [*])
 
 中文:
-定理 IsDiscrete.union
-  结论: {s t : Set X} (hs : IsDiscrete s) (ht : IsDiscrete t)
+定理 是离散.union
+  结论: {s t : 集合 X} (hs : 是离散 s) (ht : 是离散 t)
   证明: by
   rw [union_eq_iUnion]
   exact .iUnion (by simp [*]) (by simp [*])
@@ -1787,8 +1787,8 @@ theorem IsDiscrete.biUnion
   exact .iUnion hs hsc
 
 中文:
-定理 IsDiscrete.biUnion
-  结论: {ι : 类型} {I : Set ι} {s : ι -> Set X} (hI : I.Finite)
+定理 是离散.biUnion
+  结论: {ι : 类型} {I : 集合 ι} {s : ι -> 集合 X} (hI : I.有限)
   证明: by
   have := hI.to_subtype
   simp only [biUnion_eq_iUnion, Subtype.forall'] at *
@@ -1812,8 +1812,8 @@ theorem IsDiscrete.biUnion_finset
   proof: .biUnion I.finite_toSet hs hsc
 
 中文:
-定理 IsDiscrete.biUnion_finset
-  结论: {ι : 类型} {I : Finset ι} {s : ι -> Set X}
+定理 是离散.biUnion_finset
+  结论: {ι : 类型} {I : 有限集 ι} {s : ι -> 集合 X}
   证明: .biUnion I.finite_toSet hs hsc
 
 Depends on / 依赖: I.finite_toSet, biUnion, finite_toSet
@@ -1837,7 +1837,7 @@ theorem discreteTopology_union
 
 中文:
 定理 discreteTopology_union
-  结论: {S T : Set X} (hs : DiscreteTopology S) (ht : DiscreteTopology T)
+  结论: {S T : 集合 X} (hs : 离散拓扑 S) (ht : 离散拓扑 T)
   证明: by
   rw [← isDiscrete_iff_discreteTopology] at *
   exact hs.union ht hs' ht'
@@ -1863,7 +1863,7 @@ theorem discreteTopology_biUnion_finset
 
 中文:
 定理 discreteTopology_biUnion_finset
-  结论: {ι : 类型} {I : Finset ι} {s : ι -> Set X}
+  结论: {ι : 类型} {I : 有限集 ι} {s : ι -> 集合 X}
   证明: by
   simp only [← isDiscrete_iff_discreteTopology] at *
   exact .biUnion_finset hs hs'
@@ -1890,7 +1890,7 @@ theorem discreteTopology_iUnion_finite
 
 中文:
 定理 discreteTopology_iUnion_finite
-  结论: {ι : 类型} [Finite ι] {s : ι -> Set X}
+  结论: {ι : 类型} [有限 ι] {s : ι -> 集合 X}
   证明: by
   simp only [← isDiscrete_iff_discreteTopology] at *
   exact .iUnion hs hs'

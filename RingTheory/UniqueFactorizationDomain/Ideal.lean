@@ -37,8 +37,8 @@ theorem Ideal.IsPrime.exists_mem_prime_of_ne_bot
   obtain ⟨p : R, hp₁ : p in factors a
 
 中文:
-定理 Ideal.IsPrime.exists_mem_prime_of_ne_bot
-  结论: {R : 类型} [CommSemiring R]
+定理 理想.是素.存在_mem_prime_of_ne_bot
+  结论: {R : 类型} [交换半环 R]
   证明: by
   obtain ⟨a : R, ha₁ : a in I, ha₂ : a != 0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hI
   replace ha₁ : (factors a).prod in I := by
@@ -77,8 +77,8 @@ lemma Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
   exact Ideal.span_singleton_lt_span
 
 中文:
-引理 Ideal.setOfPred_isPrincipal_wellFoundedOn_gt
-  条件: [CommSemiring α] [WfDvdMonoid α] [IsDomain α]
+引理 理想.setOfPred_isPrincipal_wellFoundedOn_gt
+  条件: [交换半环 α] [WfDvdMonoid α] [是整环 α]
   证明: by
   have : {I : Ideal α | I.IsPrincipal} = ((fun a => Ideal.span {a}) '' Set.univ) := by
     ext
@@ -121,7 +121,7 @@ alias WfDvdMonoid.of_setOf_isPrincipal
 
 中文:
 引理 WfDvdMonoid.of_setOfPred_isPrincipal_wellFoundedOn_gt
-  结论: [CommSemiring α] [IsDomain α]
+  结论: [交换半环 α] [是整环 α]
   证明: by
   have : WellFounded (α := {I : Ideal α // I.IsPrincipal}) (· > ·) := h
   constructor

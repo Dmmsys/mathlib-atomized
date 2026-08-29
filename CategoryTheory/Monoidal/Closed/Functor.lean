@@ -258,10 +258,10 @@ class MonoidalClosedFunctor
     - comparison_iso : forall A, IsIso (expComparison F A).natTrans
 
 中文:
-类 MonoidalClosedFunctor
+类 幺半群闭函子
   参数: : 命题 where
   公理与运算 (1 个):
-    - comparison_iso : 对任意 A, IsIso (expComparison F A).natTrans
+    - comparison_iso : 对任意 A, 是同构 (expComparison F A).natTrans
 -/
 class MonoidalClosedFunctor : Prop where
   comparison_iso : forall A, IsIso (expComparison F A).natTrans
@@ -386,7 +386,7 @@ theorem cartesianClosedFunctorOfLeftAdjointPreservesBinaryProducts
 
 中文:
 定理 cartesianClosedFunctorOfLeftAdjointPreservesBinaryProducts
-  结论: (h : L ⊣ F) [F.Full] [F.Faithful]
+  结论: (h : L ⊣ F) [F.满] [F.忠实]
   证明: expComparison_iso_of_frobeniusMorphism_iso F h _
 
 Depends on / 依赖: expComparison_iso_of_frobeniusMorphism_iso

@@ -65,8 +65,8 @@ structure CentroidHom
     - map_mul_right'((a b : α)) : toFun (a * b) = toFun a * b
 
 中文:
-结构 CentroidHom
-  参数: (α : 类型) [NonUnitalNonAssocSemiring α]
+结构 Centroid态射
+  参数: (α : 类型) [非幺非结合半环 α]
   继承: α ->+ α
   公理与运算 (2 个):
     - map_mul_left'((a b : α)) : toFun (a * b) = a * toFun b
@@ -92,9 +92,9 @@ class CentroidHomClass
     - map_mul_right((f : F) (a b : α)) : f (a * b) = f a * b
 
 中文:
-类 CentroidHomClass
+类 Centroid态射类
   参数: (F : 类型) (α : outParam 类型)
-  继承: AddMonoidHomClass F α α
+  继承: 加法幺半群态射类 F α α
   公理与运算 (2 个):
     - map_mul_left((f : F) (a b : α)) : f (a * b) = a * f b
     - map_mul_right((f : F) (a b : α)) : f (a * b) = f a * b
@@ -122,8 +122,8 @@ instance [NonUnitalNonAssocSemiring
       map_mul_right' := map_mul_right f }⟩
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: α] [FunLike F α α] [CentroidHomClass F α] :
+实例 [非幺非结合半环
+  签名: α] [函数状 F α α] [Centroid态射类 F α] :
   定义体: ⟨fun f =>
     { (f : α ->+ α) with
       toFun := f
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CentroidHom α) α α
+  签名: 函数状 (Centroid态射 α) α α
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: CentroidHomClass (CentroidHom α) α
+  签名: Centroid态射类 (Centroid态射 α) α
   定义体: f.map_zero'
   map_add f := f.map_add'
   map_mul_left f := f.map_mul_left'
@@ -221,7 +221,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : CentroidHom α}
+  条件: {f : Centroid态射 α}
   结论: f.toFun = f
   证明: rfl
 
@@ -243,7 +243,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : CentroidHom α} (h : 对任意 a, f a = g a)
+  条件: {f g : Centroid态射 α} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -268,7 +268,7 @@ theorem coe_toAddMonoidHom
 
 中文:
 定理 coe_toAddMonoidHom
-  条件: (f : CentroidHom α)
+  条件: (f : Centroid态射 α)
   结论: ⇑(f : α ->+ α) = f
   证明: rfl
 
@@ -289,7 +289,7 @@ theorem toAddMonoidHom_eq_coe
 
 中文:
 定理 toAddMonoidHom_eq_coe
-  条件: (f : CentroidHom α)
+  条件: (f : Centroid态射 α)
   结论: f.toAddMonoidHom = f
   证明: rfl
 -/
@@ -308,7 +308,7 @@ theorem coe_toAddMonoidHom_injective
 
 中文:
 定理 coe_toAddMonoidHom_injective
-  结论: Injective ((↑) : CentroidHom α -> α ->+ α)
+  结论: 单射 ((↑) : Centroid态射 α -> α ->+ α)
   证明: fun _f _g h => ext fun a =>
     haveI := DFunLike.congr_fun h a
     this
@@ -330,7 +330,7 @@ definition toEnd
 
 中文:
 定义 toEnd
-  签名: (f : CentroidHom α)
+  签名: (f : Centroid态射 α)
   定义体: (f : α ->+ α)
 -/
 def toEnd (f : CentroidHom α) : AddMonoid.End α :=
@@ -346,7 +346,7 @@ theorem toEnd_injective
 
 中文:
 定理 toEnd_injective
-  结论: Injective (CentroidHom.toEnd : CentroidHom α -> AddMonoid.End α)
+  结论: 单射 (Centroid态射.toEnd : Centroid态射 α -> 加法幺半群.End α)
   证明: coe_toAddMonoidHom_injective
 
 Depends on / 依赖: coe_toAddMonoidHom_injective
@@ -369,7 +369,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : CentroidHom α) (f' : α -> α) (h : f' = f)
+  签名: (f : Centroid态射 α) (f' : α -> α) (h : f' = f)
   定义体: { f.toAddMonoidHom.copy f' <| h with
     toFun := f'
     map_mul_left' := fun a b => by simp_rw [h, map_mul_left]
@@ -395,7 +395,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : CentroidHom α) (f' : α -> α) (h : f' = f)
+  条件: (f : Centroid态射 α) (f' : α -> α) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -413,7 +413,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : CentroidHom α) (f' : α -> α) (h : f' = f)
+  条件: (f : Centroid态射 α) (f' : α -> α) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -436,7 +436,7 @@ definition id
 
 中文:
 定义 id
-  签名: : CentroidHom α
+  签名: : Centroid态射 α
   定义体: { AddMonoidHom.id α with
     map_mul_left' := fun _ _ => rfl
     map_mul_right' := fun _ _ => rfl }
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CentroidHom α)
+  签名: 可居 (Centroid态射 α)
   定义体: ⟨CentroidHom.id α⟩
 
 @[simp, norm_cast]
@@ -481,7 +481,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(CentroidHom.id α) = id
+  结论: ⇑(Centroid态射.id α) = id
   证明: rfl
 
 @[simp, norm_cast]
@@ -500,7 +500,7 @@ theorem toAddMonoidHom_id
 
 中文:
 定理 toAddMonoidHom_id
-  结论: (CentroidHom.id α : α ->+ α) = AddMonoidHom.id α
+  结论: (Centroid态射.id α : α ->+ α) = 加法幺半群态射.id α
   证明: rfl
 -/
 theorem toAddMonoidHom_id : (CentroidHom.id α : α ->+ α) = AddMonoidHom.id α :=
@@ -521,7 +521,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: CentroidHom.id α a = a
+  结论: Centroid态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : CentroidHom.id α a = a :=
@@ -542,7 +542,7 @@ map_mul_left' := fun _a _b => (congr_arg g <| f.map_mul_left' _ _).trans g.map_m
 
 中文:
 定义 comp
-  签名: (g f : CentroidHom α)
+  签名: (g f : Centroid态射 α)
   定义体: { g.toAddMonoidHom.comp f.toAddMonoidHom with
 map_mul_left' := fun _a _b => (congr_arg g <| f.map_mul_left' _ _).trans g.map_mul_left' _ _
     map_mul_right' := fun _a _b =>
@@ -572,7 +572,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (g f : CentroidHom α)
+  条件: (g f : Centroid态射 α)
   结论: ⇑(g.comp f) = g ∘ f
   证明: rfl
 
@@ -595,7 +595,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (g f : CentroidHom α) (a : α)
+  条件: (g f : Centroid态射 α) (a : α)
   结论: g.comp f a = g (f a)
   证明: rfl
 
@@ -618,7 +618,7 @@ theorem coe_comp_addMonoidHom
 
 中文:
 定理 coe_comp_addMonoidHom
-  条件: (g f : CentroidHom α)
+  条件: (g f : Centroid态射 α)
   结论: (g.comp f : α ->+ α) = (g : α ->+ α).comp f
   证明: rfl
 
@@ -641,7 +641,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (h g f : CentroidHom α)
+  条件: (h g f : Centroid态射 α)
   结论: (h.comp g).comp f = h.comp (g.comp f)
   证明: rfl
 
@@ -664,8 +664,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : CentroidHom α)
-  结论: f.comp (CentroidHom.id α) = f
+  条件: (f : Centroid态射 α)
+  结论: f.comp (Centroid态射.id α) = f
   证明: rfl
 
 @[simp]
@@ -687,8 +687,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : CentroidHom α)
-  结论: (CentroidHom.id α).comp f = f
+  条件: (f : Centroid态射 α)
+  结论: (Centroid态射.id α).comp f = f
   证明: rfl
 
 @[simp]
@@ -709,7 +709,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ f : CentroidHom α} (hf : Surjective f)
+  条件: {g₁ g₂ f : Centroid态射 α} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun a => congrFun (congrArg comp a) f⟩
 
 @[simp]
@@ -731,7 +731,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g f₁ f₂ : CentroidHom α} (hg : Injective g)
+  条件: {g f₁ f₂ : Centroid态射 α} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -752,7 +752,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (CentroidHom α)
+  签名: 零 (Centroid态射 α)
   定义体: ⟨{ (0 : α ->+ α) with
       map_mul_left' := fun _a _b => (mul_zero _).symm
       map_mul_right' := fun _a _b => (zero_mul _).symm }⟩
@@ -774,7 +774,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (CentroidHom α)
+  签名: 幺 (Centroid态射 α)
   定义体: ⟨CentroidHom.id α⟩
 
 Depends on / 依赖: CentroidHom, CentroidHom.id
@@ -797,7 +797,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (CentroidHom α)
+  签名: 加法 (Centroid态射 α)
   定义体: ⟨fun f g =>
     { (f + g : α ->+ α) with
       map_mul_left' := fun a b => by
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (CentroidHom α)
+  签名: 乘法 (Centroid态射 α)
   定义体: ⟨comp⟩
 -/
 instance : Mul (CentroidHom α) :=
@@ -852,7 +852,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul M (CentroidHom α) where
+  签名: : 标量乘法 M (Centroid态射 α) where
   定义体: { (n • f : α ->+ α) with
       map_mul_left' := fun a b => by
         change n • f (a * b) = a * n • f b
@@ -882,8 +882,8 @@ instance [SMul
   body: ext fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: M N] [IsScalarTower M N α] : IsScalarTower M N (CentroidHom α) where
+实例 [标量乘法
+  签名: M N] [标量塔 M N α] : 标量塔 M N (Centroid态射 α) where
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -900,8 +900,8 @@ instance [SMulCommClass
   body: ext fun _ => smul_comm _ _ _
 
 中文:
-实例 [SMulCommClass
-  签名: M N α] : SMulCommClass M N (CentroidHom α) where
+实例 [标量交换类
+  签名: M N α] : 标量交换类 M N (Centroid态射 α) where
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -918,8 +918,8 @@ instance [DistribMulAction
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [DistribMulAction
-  签名: Mᵐᵒᵖ α] [IsCentralScalar M α] : IsCentralScalar M (CentroidHom α) where
+实例 [分配乘法作用
+  签名: Mᵐᵒᵖ α] [中心标量 M α] : 中心标量 M (Centroid态射 α) where
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul, untrop
@@ -937,7 +937,7 @@ instance isScalarTowerRight
 
 中文:
 实例 isScalarTowerRight
-  签名: : IsScalarTower M (CentroidHom α) (CentroidHom α) where
+  签名: : 标量塔 M (Centroid态射 α) (Centroid态射 α) where
   定义体: rfl
 -/
 instance isScalarTowerRight : IsScalarTower M (CentroidHom α) (CentroidHom α) where
@@ -960,8 +960,8 @@ instance hasNPowNat
       map_mul_right' := fun a b =
 
 中文:
-实例 hasNPowNat
-  签名: : Pow (CentroidHom α) 自然数
+实例 hasNPow自然数
+  签名: : 幂 (Centroid态射 α) 自然数
   定义体: ⟨fun f n =>
     { toAddMonoidHom := (f.toEnd ^ n : AddMonoid.End α)
       map_mul_left' := fun a b => by
@@ -1003,7 +1003,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ⇑(0 : CentroidHom α) = 0
+  结论: ⇑(0 : Centroid态射 α) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -1024,7 +1024,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ⇑(1 : CentroidHom α) = id
+  结论: ⇑(1 : Centroid态射 α) = id
   证明: rfl
 
 @[simp, norm_cast]
@@ -1046,7 +1046,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: (f g : CentroidHom α)
+  条件: (f g : Centroid态射 α)
   结论: ⇑(f + g) = f + g
   证明: rfl
 
@@ -1069,7 +1069,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (f g : CentroidHom α)
+  条件: (f g : Centroid态射 α)
   结论: ⇑(f * g) = f ∘ g
   证明: rfl
 
@@ -1092,7 +1092,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: (n : M) (f : CentroidHom α)
+  条件: (n : M) (f : Centroid态射 α)
   结论: ⇑(n • f) = n • ⇑f
   证明: rfl
 
@@ -1116,7 +1116,7 @@ theorem zero_apply
 中文:
 定理 zero_apply
   条件: (a : α)
-  结论: (0 : CentroidHom α) a = 0
+  结论: (0 : Centroid态射 α) a = 0
   证明: rfl
 
 @[simp]
@@ -1139,7 +1139,7 @@ theorem one_apply
 中文:
 定理 one_apply
   条件: (a : α)
-  结论: (1 : CentroidHom α) a = a
+  结论: (1 : Centroid态射 α) a = a
   证明: rfl
 
 @[simp]
@@ -1161,7 +1161,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: (f g : CentroidHom α) (a : α)
+  条件: (f g : Centroid态射 α) (a : α)
   结论: (f + g) a = f a + g a
   证明: rfl
 
@@ -1184,7 +1184,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: (f g : CentroidHom α) (a : α)
+  条件: (f g : Centroid态射 α) (a : α)
   结论: (f * g) a = f (g a)
   证明: rfl
 
@@ -1209,7 +1209,7 @@ example : SMul Nat (CentroidHom α) := instSMul
 
 中文:
 定理 smul_apply
-  条件: (n : M) (f : CentroidHom α) (a : α)
+  条件: (n : M) (f : Centroid态射 α) (a : α)
   结论: (n • f) a = n • f a
   证明: rfl
 
@@ -1235,7 +1235,7 @@ theorem toEnd_zero
 
 中文:
 定理 toEnd_zero
-  结论: (0 : CentroidHom α).toEnd = 0
+  结论: (0 : Centroid态射 α).toEnd = 0
   证明: rfl
 
 @[simp]
@@ -1255,7 +1255,7 @@ theorem toEnd_add
 
 中文:
 定理 toEnd_add
-  条件: (x y : CentroidHom α)
+  条件: (x y : Centroid态射 α)
   结论: (x + y).toEnd = x.toEnd + y.toEnd
   证明: rfl
 -/
@@ -1273,7 +1273,7 @@ theorem toEnd_smul
 
 中文:
 定理 toEnd_smul
-  条件: (m : M) (x : CentroidHom α)
+  条件: (m : M) (x : Centroid态射 α)
   结论: (m • x).toEnd = m • x.toEnd
   证明: rfl
 -/
@@ -1290,7 +1290,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (CentroidHom α)
+  签名: 加法交换幺半群 (Centroid态射 α)
   定义体: coe_toAddMonoidHom_injective.addCommMonoid _ toEnd_zero toEnd_add (swap toEnd_smul)
 
 Depends on / 依赖: addCommMonoid, coe_toAddMonoidHom_injective, coe_toAddMonoidHom_injective.addCommMonoid, toEnd_add, toEnd_smul, toEnd_zero
@@ -1310,7 +1310,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (CentroidHom α)
+  签名: 自然数嵌入 (Centroid态射 α)
   定义体: n • (1 : CentroidHom α)
 
 @[simp, norm_cast]
@@ -1332,7 +1332,7 @@ theorem coe_natCast
 中文:
 定理 coe_natCast
   条件: (n : 自然数)
-  结论: ⇑(n : CentroidHom α) = n • (CentroidHom.id α)
+  结论: ⇑(n : Centroid态射 α) = n • (Centroid态射.id α)
   证明: rfl
 -/
 theorem coe_natCast (n : Nat) : ⇑(n : CentroidHom α) = n • (CentroidHom.id α) :=
@@ -1352,7 +1352,7 @@ theorem natCast_apply
 中文:
 定理 natCast_apply
   条件: (n : 自然数) (m : α)
-  结论: (n : CentroidHom α) m = n • m
+  结论: (n : Centroid态射 α) m = n • m
   证明: rfl
 
 @[simp]
@@ -1373,7 +1373,7 @@ theorem toEnd_one
 
 中文:
 定理 toEnd_one
-  结论: (1 : CentroidHom α).toEnd = 1
+  结论: (1 : Centroid态射 α).toEnd = 1
   证明: rfl
 
 @[simp]
@@ -1395,7 +1395,7 @@ theorem toEnd_mul
 
 中文:
 定理 toEnd_mul
-  条件: (x y : CentroidHom α)
+  条件: (x y : Centroid态射 α)
   结论: (x * y).toEnd = x.toEnd * y.toEnd
   证明: rfl
 
@@ -1420,7 +1420,7 @@ theorem toEnd_pow
 
 中文:
 定理 toEnd_pow
-  条件: (x : CentroidHom α) (n : 自然数)
+  条件: (x : Centroid态射 α) (n : 自然数)
   结论: (x ^ n).toEnd = x.toEnd ^ n
   证明: rfl
 
@@ -1442,7 +1442,7 @@ theorem toEnd_natCast
 中文:
 定理 toEnd_natCast
   条件: (n : 自然数)
-  结论: (n : CentroidHom α).toEnd = ↑n
+  结论: (n : Centroid态射 α).toEnd = ↑n
   证明: rfl
 -/
 theorem toEnd_natCast (n : Nat) : (n : CentroidHom α).toEnd = ↑n :=
@@ -1460,7 +1460,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (CentroidHom α)
+  签名: 半环 (Centroid态射 α)
   定义体: toEnd_injective.semiring _ toEnd_zero toEnd_one toEnd_add toEnd_mul toEnd_smul toEnd_pow
     toEnd_natCast
 
@@ -1487,7 +1487,7 @@ definition toEndRingHom
 
 中文:
 定义 toEndRingHom
-  签名: : CentroidHom α ->+* AddMonoid.End α where
+  签名: : Centroid态射 α ->+* 加法幺半群.End α where
   定义体: toEnd
   map_zero' := toEnd_zero
   map_one' := toEnd_one
@@ -1514,7 +1514,7 @@ theorem comp_mul_comm
 
 中文:
 定理 comp_mul_comm
-  条件: (T S : CentroidHom α) (a b : α)
+  条件: (T S : Centroid态射 α) (a b : α)
   结论: (T ∘ S) (a * b) = (S ∘ T) (a * b)
   证明: by
   simp only [Function.comp_apply]
@@ -1536,7 +1536,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction M (CentroidHom α)
+  签名: 分配乘法作用 M (Centroid态射 α)
   定义体: toEnd_injective.distribMulAction (toEndRingHom α).toAddMonoidHom toEnd_smul
 
 Depends on / 依赖: distribMulAction, toAddMonoidHom, toEndRingHom, toEnd_injective, toEnd_injective.distribMulAction, toEnd_smul
@@ -1554,7 +1554,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (CentroidHom α)
+  签名: 模 R (Centroid态射 α)
   定义体: toEnd_injective.module R (toEndRingHom α).toAddMonoidHom toEnd_smul
 
 Depends on / 依赖: module, toAddMonoidHom, toEndRingHom, toEnd_injective, toEnd_injective.module, toEnd_smul
@@ -1585,7 +1585,7 @@ instance applyModule
 
 中文:
 实例 applyModule
-  签名: : Module (CentroidHom α) α where
+  签名: : 模 (Centroid态射 α) α where
   定义体: T a
   add_smul _ _ _ := rfl
   zero_smul _ := rfl
@@ -1617,7 +1617,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (T : CentroidHom α) (a : α)
+  条件: (T : Centroid态射 α) (a : α)
   结论: T • a = T a
   证明: rfl
 -/
@@ -1633,7 +1633,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass (CentroidHom α) α α
+  签名: 标量交换类 (Centroid态射 α) α α
   定义体: map_mul_left _ _ _
 
 Depends on / 依赖: map_mul_left
@@ -1651,7 +1651,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass α (CentroidHom α) α
+  签名: 标量交换类 α (Centroid态射 α) α
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -1668,7 +1668,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower (CentroidHom α) α α
+  签名: 标量塔 (Centroid态射 α) α α
   定义体: (map_mul_right _ _ _).symm
 
 Depends on / 依赖: map_mul_right
@@ -1698,8 +1698,8 @@ definition _root_.Module.toCentroidHom
   body: RingHom.smulOneHom
 
 中文:
-定义 _root_.Module.toCentroidHom
-  签名: : R ->+* CentroidHom α
+定义 _root_.模.toCentroidHom
+  签名: : R ->+* Centroid态射 α
   定义体: RingHom.smulOneHom
 
 Depends on / 依赖: RingHom, RingHom.smulOneHom, smulOneHom
@@ -1822,7 +1822,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Subsemiring.center (CentroidHom α)) α α
+  签名: 函数状 (子半环.center (Centroid态射 α)) α α
   定义体: f.val.toFun
   coe_injective f g h := by
     cases f
@@ -1850,7 +1850,7 @@ lemma centerToCentroidCenter_apply
 
 中文:
 引理 centerToCentroidCenter_apply
-  条件: (z : NonUnitalSubsemiring.center α) (a : α)
+  条件: (z : NonUnital子半环.center α) (a : α)
   证明: rfl
 -/
 lemma centerToCentroidCenter_apply (z : NonUnitalSubsemiring.center α) (a : α) :
@@ -1868,7 +1868,7 @@ definition centerToCentroid
 
 中文:
 定义 centerToCentroid
-  签名: : NonUnitalSubsemiring.center α ->ₙ+* CentroidHom α
+  签名: : NonUnital子半环.center α ->ₙ+* Centroid态射 α
   定义体: NonUnitalRingHom.comp
     (SubsemiringClass.subtype (Subsemiring.center (CentroidHom α))).toNonUnitalRingHom
     centerToCentroidCenter
@@ -1890,7 +1890,7 @@ lemma centerToCentroid_apply
 
 中文:
 引理 centerToCentroid_apply
-  条件: (z : NonUnitalSubsemiring.center α) (a : α)
+  条件: (z : NonUnital子半环.center α) (a : α)
   证明: rfl
 -/
 lemma centerToCentroid_apply (z : NonUnitalSubsemiring.center α) (a : α) :
@@ -1913,7 +1913,7 @@ lemma _root_.NonUnitalNonAssocSemiring.mem_center_iff
     case co
 
 中文:
-引理 _root_.NonUnitalNonAssocSemiring.mem_center_iff
+引理 _root_.非幺非结合半环.mem_center_iff
   条件: (a : α)
   证明: by
   constructor
@@ -1962,7 +1962,7 @@ lemma _root_.NonUnitalNonAssocCommSemiring.mem_center_iff
   aesop
 
 中文:
-引理 _root_.NonUnitalNonAssocCommSemiring.mem_center_iff
+引理 _root_.非幺非结合交换半环.mem_center_iff
   条件: (a : α)
   证明: by
   rw [NonUnitalNonAssocSemiring.mem_center_iff]; rw [CentroidHom.centroid_eq_centralizer_mulLeftRight]; rw [Subsemiring.mem_centralizer_iff]; rw [AddMonoid.End.mulRight_eq_mulLeft]; rw [Set.union_self]
@@ -1997,7 +1997,7 @@ right_inv := fun T => Centro
 
 中文:
 定义 centerIsoCentroid
-  签名: : Subsemiring.center α ≃+* CentroidHom α
+  签名: : 子半环.center α ≃+* Centroid态射 α
   定义体: { centerToCentroid with
     invFun := fun T =>
       ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
@@ -2037,7 +2037,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (CentroidHom α)
+  签名: 取负 (Centroid态射 α)
   定义体: ⟨fun f =>
     { (-f : α ->+ α) with
       map_mul_left' := fun a b => by
@@ -2070,7 +2070,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (CentroidHom α)
+  签名: 减法 (Centroid态射 α)
   定义体: ⟨fun f g =>
     { (f - g : α ->+ α) with
       map_mul_left' := fun a b => by
@@ -2100,7 +2100,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (CentroidHom α)
+  签名: 整数嵌入 (Centroid态射 α)
   定义体: z • (1 : CentroidHom α)
 
 @[simp, norm_cast]
@@ -2122,7 +2122,7 @@ theorem coe_intCast
 中文:
 定理 coe_intCast
   条件: (z : 整数)
-  结论: ⇑(z : CentroidHom α) = z • (CentroidHom.id α)
+  结论: ⇑(z : Centroid态射 α) = z • (Centroid态射.id α)
   证明: rfl
 -/
 theorem coe_intCast (z : Int) : ⇑(z : CentroidHom α) = z • (CentroidHom.id α) :=
@@ -2142,7 +2142,7 @@ theorem intCast_apply
 中文:
 定理 intCast_apply
   条件: (z : 整数) (m : α)
-  结论: (z : CentroidHom α) m = z • m
+  结论: (z : Centroid态射 α) m = z • m
   证明: rfl
 
 @[simp]
@@ -2164,7 +2164,7 @@ theorem toEnd_neg
 
 中文:
 定理 toEnd_neg
-  条件: (x : CentroidHom α)
+  条件: (x : Centroid态射 α)
   结论: (-x).toEnd = -x.toEnd
   证明: rfl
 
@@ -2185,7 +2185,7 @@ theorem toEnd_sub
 
 中文:
 定理 toEnd_sub
-  条件: (x y : CentroidHom α)
+  条件: (x y : Centroid态射 α)
   结论: (x - y).toEnd = x.toEnd - y.toEnd
   证明: rfl
 -/
@@ -2205,7 +2205,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (CentroidHom α)
+  签名: 加法交换群 (Centroid态射 α)
   定义体: toEnd_injective.addCommGroup _
     toEnd_zero toEnd_add toEnd_neg toEnd_sub (swap toEnd_smul) (swap toEnd_smul)
 
@@ -2231,7 +2231,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  条件: (f : CentroidHom α)
+  条件: (f : Centroid态射 α)
   结论: ⇑(-f) = -f
   证明: rfl
 
@@ -2254,7 +2254,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  条件: (f g : CentroidHom α)
+  条件: (f g : Centroid态射 α)
   结论: ⇑(f - g) = f - g
   证明: rfl
 
@@ -2277,7 +2277,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: (f : CentroidHom α) (a : α)
+  条件: (f : Centroid态射 α) (a : α)
   结论: (-f) a = -f a
   证明: rfl
 
@@ -2300,7 +2300,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: (f g : CentroidHom α) (a : α)
+  条件: (f g : Centroid态射 α) (a : α)
   结论: (f - g) a = f a - g a
   证明: rfl
 
@@ -2322,7 +2322,7 @@ theorem toEnd_intCast
 中文:
 定理 toEnd_intCast
   条件: (z : 整数)
-  结论: (z : CentroidHom α).toEnd = ↑z
+  结论: (z : Centroid态射 α).toEnd = ↑z
   证明: rfl
 -/
 theorem toEnd_intCast (z : Int) : (z : CentroidHom α).toEnd = ↑z :=
@@ -2339,7 +2339,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (CentroidHom α)
+  签名: : 环 (Centroid态射 α)
   定义体: toEnd_injective.ring _ toEnd_zero toEnd_one toEnd_add toEnd_mul toEnd_neg toEnd_sub
     toEnd_smul toEnd_smul toEnd_pow toEnd_natCast toEnd_intCast
 

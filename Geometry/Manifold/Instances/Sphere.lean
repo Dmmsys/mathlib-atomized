@@ -338,7 +338,7 @@ theorem contDiff_stereoInvFunAux
 中文:
 定理 contDiff_stereoInvFunAux
   条件: {m : 自然数∞ω}
-  结论: ContDiff 实数 m (stereoInvFunAux v)
+  结论: 连续可微 实数 m (stereoInvFunAux v)
   证明: by
   have h₀ : ContDiff Real ω fun w : E => ‖w‖ ^ 2 := contDiff_norm_sq Real
   have h₁ : ContDiff Real ω fun w : E => (‖w‖ ^ 2 + 4)⁻¹ := by
@@ -457,7 +457,7 @@ theorem continuous_stereoInvFun
 中文:
 定理 continuous_stereoInvFun
   条件: (hv : ‖v‖ = 1)
-  结论: Continuous (stereoInvFun hv)
+  结论: 连续 (stereoInvFun hv)
   证明: continuous_induced_rng.2
     ((contDiff_stereoInvFunAux (m := 0)).continuous.comp continuous_subtype_val)
 
@@ -676,7 +676,7 @@ theorem stereographic_target
 中文:
 定理 stereographic_target
   条件: (hv : ‖v‖ = 1)
-  结论: (stereographic hv).target = Set.univ
+  结论: (stereographic hv).target = 集合.univ
   证明: rfl
 
 @[simp]
@@ -1384,7 +1384,7 @@ theorem finrank_real_complex_fact'
 
 中文:
 定理 finrank_real_complex_fact'
-  结论: Fact (finrank 实数 Complex = 1 + 1)
+  结论: Fact (finrank 实数 复形 = 1 + 1)
   证明: finrank_real_complex_fact
 
 Depends on / 依赖: finrank_real_complex_fact
@@ -1404,7 +1404,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChartedSpace (EuclideanSpace 实数 (Fin 1)) Circle
+  签名: Charted空间 (EuclideanSpace 实数 (有限集 1)) Circle
   定义体: inferInstanceAs ChartedSpace _ (sphere _ _)
 
 Depends on / 依赖: ChartedSpace, sphere
@@ -1422,7 +1422,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsManifold (𝓡 1) ω Circle
+  签名: 是流形 (𝓡 1) ω Circle
   定义体: EuclideanSpace.instIsManifoldSphere (E := Complex)
 
 Depends on / 依赖: EuclideanSpace, EuclideanSpace.instIsManifoldSphere, instIsManifoldSphere
@@ -1445,7 +1445,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieGroup (𝓡 1) ω Circle
+  签名: Lie群 (𝓡 1) ω Circle
   定义体: by
     apply ContMDiff.codRestrict_sphere
     let c : Circle -> Complex := (↑)

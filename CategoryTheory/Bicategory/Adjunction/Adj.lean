@@ -47,8 +47,8 @@ structure Adj
     - obj : B
 
 中文:
-结构 Adj
-  参数: (B : 类型u) [Bicategory.{w, v} B]
+结构 伴随
+  参数: (B : 类型u) [双范畴.{w, v} B]
   公理与运算 (1 个):
     - obj : B
 -/
@@ -71,7 +71,7 @@ lemma mk_obj
 
 中文:
 引理 mk_obj
-  条件: (b : Adj B)
+  条件: (b : 伴随 B)
   结论: mk b.obj = b
   证明: rfl
 -/
@@ -93,7 +93,7 @@ structure Hom
     - adj : l ⊣ r
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (3 个):
     - {l : a ⟶ b}
@@ -123,7 +123,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryStruct (Adj B)
+  签名: CategoryStruct (伴随 B)
   定义体: Hom a.obj b.obj
   id a := .mk (Adjunction.id a.obj)
   comp f g := .mk (f.adj.comp g.adj)
@@ -266,7 +266,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (a ⟶ b)
+  签名: 范畴 (a ⟶ b)
 -/
 instance : Category (a ⟶ b) where
 
@@ -463,7 +463,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory (Adj B)
+  签名: 双范畴 (伴随 B)
   定义体: Bicategory.whiskerLeft
   whiskerRight := Bicategory.whiskerRight
   associator := Bicategory.associator
@@ -495,7 +495,7 @@ definition forget₁
 
 中文:
 定义 forget₁
-  签名: : Adj B ⥤ᵖ B where
+  签名: : 伴随 B ⥤ᵖ B where
   定义体: a.obj
   map x := x.l
   map₂ α := α.τl
@@ -529,7 +529,7 @@ definition lIso
 
 中文:
 定义 lIso
-  签名: {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
+  签名: {a b : 伴随 B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
   定义体: e.hom.τl
   inv := e.inv.τl
   hom_inv_id := by rw [← comp_τl, e.hom_inv_id, id_τl]
@@ -559,7 +559,7 @@ definition rIso
 
 中文:
 定义 rIso
-  签名: {a b : Adj B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
+  签名: {a b : 伴随 B} {adj₁ adj₂ : a ⟶ b} (e : adj₁ ≅ adj₂)
   定义体: e.inv.τr
   inv := e.hom.τr
   hom_inv_id := by rw [← comp_τr, e.hom_inv_id, id_τr]

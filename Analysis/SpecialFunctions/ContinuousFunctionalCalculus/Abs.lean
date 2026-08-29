@@ -120,7 +120,7 @@ lemma abs_star
 
 中文:
 引理 abs_star
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   结论: abs (star a) = abs a
   证明: by
   simp [abs, star_comm_self']
@@ -240,7 +240,7 @@ lemma commute_abs_self
 
 中文:
 引理 commute_abs_self
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: .cfcAbs_left (.refl a) ha.star_comm_self.symm
 
 Depends on / 依赖: Commute, cfcAbs_left, cfc_tac, ha.star_comm_self.symm, star_comm_self
@@ -287,7 +287,7 @@ lemma abs_mul_self
 
 中文:
 引理 abs_mul_self
-  条件: (a : A) (ha : IsStarNormal a := by cfc_tac)
+  条件: (a : A) (ha : 是StarNormal a := by cfc_tac)
   证明: by
   rw [Commute.cfcAbs_mul_eq (.refl a) ha.star_comm_self.symm]; rw [abs_mul_abs]
 
@@ -553,7 +553,7 @@ lemma abs_smul_nonneg
 
 中文:
 引理 abs_smul_nonneg
-  结论: {R : 类型} [Semiring R] [SMulWithZero R 实数>=0] [SMul R A]
+  结论: {R : 类型} [半环 R] [带零标量乘法 R 实数>=0] [标量乘法 R A]
   证明: by
   suffices forall r : Real>=0, abs (r • a) = r • abs a by simpa using this (r • 1)
   intro r
@@ -897,7 +897,7 @@ lemma abs_ofNat
 @[simp]
 
 中文:
-引理 abs_ofNat
+引理 abs_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: abs (of自然数(n) : A) = of自然数(n)
   证明: by
@@ -1066,7 +1066,7 @@ lemma continuous_abs
 
 中文:
 引理 continuous_abs
-  结论: Continuous (CFC.abs : A -> A)
+  结论: 连续 (CFC.abs : A -> A)
   证明: continuousOn_sqrt.comp_continuous (by fun_prop) (by cfc_tac)
 -/
 protected lemma continuous_abs : Continuous (CFC.abs : A -> A) :=

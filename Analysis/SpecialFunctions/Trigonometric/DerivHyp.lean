@@ -48,7 +48,7 @@ theorem hasStrictDerivAt_sinh
 
 中文:
 定理 hasStrictDerivAt_sinh
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: HasStrictDerivAt sinh (cosh x) x
   证明: by
   simp only [cosh, div_eq_mul_inv]
@@ -75,8 +75,8 @@ theorem hasDerivAt_sinh
 
 中文:
 定理 hasDerivAt_sinh
-  条件: (x : Complex)
-  结论: HasDerivAt sinh (cosh x) x
+  条件: (x : 复形)
+  结论: 在点处可导 sinh (cosh x) x
   证明: (hasStrictDerivAt_sinh x).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sinh
@@ -120,7 +120,7 @@ theorem contDiff_sinh
 中文:
 定理 contDiff_sinh
   条件: {n}
-  结论: ContDiff Complex n sinh
+  结论: 连续可微 复形 n sinh
   证明: (contDiff_exp.sub contDiff_neg.cexp).div_const _
 
 @[simp]
@@ -143,7 +143,7 @@ theorem differentiable_sinh
 
 中文:
 定理 differentiable_sinh
-  结论: Differentiable Complex sinh
+  结论: 可微 复形 sinh
   证明: fun x => (hasDerivAt_sinh x).differentiableAt
 
 @[simp]
@@ -164,8 +164,8 @@ theorem differentiableAt_sinh
 
 中文:
 定理 differentiableAt_sinh
-  条件: {x : Complex}
-  结论: DifferentiableAt Complex sinh x
+  条件: {x : 复形}
+  结论: DifferentiableAt 复形 sinh x
   证明: differentiable_sinh x
 
 Depends on / 依赖: differentiable_sinh
@@ -186,8 +186,8 @@ lemma analyticAt_sinh
 
 中文:
 引理 analyticAt_sinh
-  条件: {x : Complex}
-  结论: AnalyticAt Complex sinh x
+  条件: {x : 复形}
+  结论: AnalyticAt 复形 sinh x
   证明: contDiff_sinh.contDiffAt.analyticAt
 
 Depends on / 依赖: analyticAt, contDiffAt, contDiff_sinh, contDiff_sinh.contDiffAt.analyticAt
@@ -206,8 +206,8 @@ lemma analyticWithinAt_sinh
 
 中文:
 引理 analyticWithinAt_sinh
-  条件: {x : Complex} {s : Set Complex}
-  结论: AnalyticWithinAt Complex sinh s x
+  条件: {x : 复形} {s : 集合 复形}
+  结论: AnalyticWithinAt 复形 sinh s x
   证明: contDiff_sinh.contDiffWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_sinh, contDiff_sinh.contDiffWithinAt.analyticWithinAt
@@ -226,8 +226,8 @@ theorem analyticOnNhd_sinh
 
 中文:
 定理 analyticOnNhd_sinh
-  条件: {s : Set Complex}
-  结论: AnalyticOnNhd Complex sinh s
+  条件: {s : 集合 复形}
+  结论: AnalyticOnNhd 复形 sinh s
   证明: fun _ _ => analyticAt_sinh
 
 Depends on / 依赖: analyticAt_sinh
@@ -248,8 +248,8 @@ lemma analyticOn_sinh
 
 中文:
 引理 analyticOn_sinh
-  条件: {s : Set Complex}
-  结论: AnalyticOn Complex sinh s
+  条件: {s : 集合 复形}
+  结论: AnalyticOn 复形 sinh s
   证明: contDiff_sinh.contDiffOn.analyticOn
 
 @[simp]
@@ -293,7 +293,7 @@ theorem hasStrictDerivAt_cosh
 
 中文:
 定理 hasStrictDerivAt_cosh
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: HasStrictDerivAt cosh (sinh x) x
   证明: by
   simp only [sinh, div_eq_mul_inv]
@@ -322,8 +322,8 @@ theorem hasDerivAt_cosh
 
 中文:
 定理 hasDerivAt_cosh
-  条件: (x : Complex)
-  结论: HasDerivAt cosh (sinh x) x
+  条件: (x : 复形)
+  结论: 在点处可导 cosh (sinh x) x
   证明: (hasStrictDerivAt_cosh x).hasDerivAt
 
 @[fun_prop]
@@ -348,7 +348,7 @@ theorem contDiff_cosh
 中文:
 定理 contDiff_cosh
   条件: {n}
-  结论: ContDiff Complex n cosh
+  结论: 连续可微 复形 n cosh
   证明: (contDiff_exp.add contDiff_neg.cexp).div_const _
 
 @[simp]
@@ -371,7 +371,7 @@ theorem differentiable_cosh
 
 中文:
 定理 differentiable_cosh
-  结论: Differentiable Complex cosh
+  结论: 可微 复形 cosh
   证明: fun x => (hasDerivAt_cosh x).differentiableAt
 
 @[simp]
@@ -392,8 +392,8 @@ theorem differentiableAt_cosh
 
 中文:
 定理 differentiableAt_cosh
-  条件: {x : Complex}
-  结论: DifferentiableAt Complex cosh x
+  条件: {x : 复形}
+  结论: DifferentiableAt 复形 cosh x
   证明: differentiable_cosh x
 
 Depends on / 依赖: differentiable_cosh
@@ -414,8 +414,8 @@ lemma analyticAt_cosh
 
 中文:
 引理 analyticAt_cosh
-  条件: {x : Complex}
-  结论: AnalyticAt Complex cosh x
+  条件: {x : 复形}
+  结论: AnalyticAt 复形 cosh x
   证明: contDiff_cosh.contDiffAt.analyticAt
 
 Depends on / 依赖: analyticAt, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt.analyticAt
@@ -434,8 +434,8 @@ lemma analyticWithinAt_cosh
 
 中文:
 引理 analyticWithinAt_cosh
-  条件: {x : Complex} {s : Set Complex}
-  结论: AnalyticWithinAt Complex cosh s x
+  条件: {x : 复形} {s : 集合 复形}
+  结论: AnalyticWithinAt 复形 cosh s x
   证明: contDiff_cosh.contDiffWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_cosh, contDiff_cosh.contDiffWithinAt.analyticWithinAt
@@ -454,8 +454,8 @@ theorem analyticOnNhd_cosh
 
 中文:
 定理 analyticOnNhd_cosh
-  条件: {s : Set Complex}
-  结论: AnalyticOnNhd Complex cosh s
+  条件: {s : 集合 复形}
+  结论: AnalyticOnNhd 复形 cosh s
   证明: fun _ _ => analyticAt_cosh
 
 Depends on / 依赖: analyticAt_cosh
@@ -476,8 +476,8 @@ lemma analyticOn_cosh
 
 中文:
 引理 analyticOn_cosh
-  条件: {s : Set Complex}
-  结论: AnalyticOn Complex cosh s
+  条件: {s : 集合 复形}
+  结论: AnalyticOn 复形 cosh s
   证明: contDiff_cosh.contDiffOn.analyticOn
 
 @[simp]
@@ -543,8 +543,8 @@ theorem HasDerivAt.ccosh
   proof: (Complex.hasDerivAt_cosh (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.ccosh
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.ccosh
+  条件: (hf : 在点处可导 f f' x)
   证明: (Complex.hasDerivAt_cosh (f x)).comp x hf
 
 Depends on / 依赖: Complex.hasDerivAt_cosh, hasDerivAt_cosh
@@ -584,7 +584,7 @@ theorem derivWithin_ccosh
 
 中文:
 定理 derivWithin_ccosh
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasDerivWithinAt.ccosh.derivWithin hxs
 
 @[simp]
@@ -606,7 +606,7 @@ theorem deriv_ccosh
 
 中文:
 定理 deriv_ccosh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasDerivAt.ccosh.deriv
 
 Depends on / 依赖: hasDerivAt, hc.hasDerivAt.ccosh.deriv
@@ -644,8 +644,8 @@ theorem HasDerivAt.csinh
   proof: (Complex.hasDerivAt_sinh (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.csinh
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.csinh
+  条件: (hf : 在点处可导 f f' x)
   证明: (Complex.hasDerivAt_sinh (f x)).comp x hf
 
 Depends on / 依赖: Complex.hasDerivAt_sinh, hasDerivAt_sinh
@@ -685,7 +685,7 @@ theorem derivWithin_csinh
 
 中文:
 定理 derivWithin_csinh
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasDerivWithinAt.csinh.derivWithin hxs
 
 @[simp]
@@ -707,7 +707,7 @@ theorem deriv_csinh
 
 中文:
 定理 deriv_csinh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasDerivAt.csinh.deriv
 
 Depends on / 依赖: hasDerivAt, hc.hasDerivAt.csinh.deriv
@@ -754,8 +754,8 @@ theorem HasFDerivAt.ccosh
   proof: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.ccosh
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.ccosh
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Complex.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Complex.hasDerivAt_cosh, comp_hasFDerivAt, hasDerivAt_cosh
@@ -795,7 +795,7 @@ theorem DifferentiableWithinAt.ccosh
 
 中文:
 定理 DifferentiableWithinAt.ccosh
-  条件: (hf : DifferentiableWithinAt Complex f s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x)
   证明: hf.hasFDerivWithinAt.ccosh.differentiableWithinAt
 
 @[simp, fun_prop]
@@ -817,7 +817,7 @@ theorem DifferentiableAt.ccosh
 
 中文:
 定理 DifferentiableAt.ccosh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.ccosh.differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.ccosh.differentiableAt
@@ -838,7 +838,7 @@ theorem DifferentiableOn.ccosh
 
 中文:
 定理 DifferentiableOn.ccosh
-  条件: (hc : DifferentiableOn Complex f s)
+  条件: (hc : DifferentiableOn 复形 f s)
   证明: fun x h => (hc x h).ccosh
 
 @[simp, fun_prop]
@@ -856,8 +856,8 @@ theorem Differentiable.ccosh
   proof: fun x => (hc x).ccosh
 
 中文:
-定理 Differentiable.ccosh
-  条件: (hc : Differentiable Complex f)
+定理 可微.ccosh
+  条件: (hc : 可微 复形 f)
   证明: fun x => (hc x).ccosh
 -/
 theorem Differentiable.ccosh (hc : Differentiable Complex f) :
@@ -875,7 +875,7 @@ theorem fderivWithin_ccosh
 
 中文:
 定理 fderivWithin_ccosh
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasFDerivWithinAt.ccosh.fderivWithin hxs
 
 @[simp]
@@ -897,7 +897,7 @@ theorem fderiv_ccosh
 
 中文:
 定理 fderiv_ccosh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.ccosh.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.ccosh.fderiv
@@ -916,9 +916,9 @@ theorem ContDiff.ccosh
   proof: Complex.contDiff_cosh.comp h
 
 中文:
-定理 ContDiff.ccosh
-  条件: {n} (h : ContDiff Complex n f)
-  结论: ContDiff Complex n fun x => Complex.cosh (f x)
+定理 连续可微.ccosh
+  条件: {n} (h : 连续可微 复形 n f)
+  结论: 连续可微 复形 n fun x => 复形.cosh (f x)
   证明: Complex.contDiff_cosh.comp h
 
 Depends on / 依赖: Complex.contDiff_cosh.comp, contDiff_cosh
@@ -936,7 +936,7 @@ theorem ContDiffAt.ccosh
 
 中文:
 定理 ContDiffAt.ccosh
-  条件: {n} (hf : ContDiffAt Complex n f x)
+  条件: {n} (hf : ContDiffAt 复形 n f x)
   证明: Complex.contDiff_cosh.contDiffAt.comp x hf
 
 Depends on / 依赖: Complex.contDiff_cosh.contDiffAt.comp, contDiffAt, contDiff_cosh
@@ -955,7 +955,7 @@ theorem ContDiffOn.ccosh
 
 中文:
 定理 ContDiffOn.ccosh
-  条件: {n} (hf : ContDiffOn Complex n f s)
+  条件: {n} (hf : ContDiffOn 复形 n f s)
   证明: Complex.contDiff_cosh.comp_contDiffOn hf
 
 Depends on / 依赖: Complex.contDiff_cosh.comp_contDiffOn, comp_contDiffOn, contDiff_cosh
@@ -974,7 +974,7 @@ theorem ContDiffWithinAt.ccosh
 
 中文:
 定理 ContDiffWithinAt.ccosh
-  条件: {n} (hf : ContDiffWithinAt Complex n f s x)
+  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
   证明: Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: Complex.contDiff_cosh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_cosh
@@ -1012,8 +1012,8 @@ theorem HasFDerivAt.csinh
   proof: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.csinh
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.csinh
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Complex.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Complex.hasDerivAt_sinh, comp_hasFDerivAt, hasDerivAt_sinh
@@ -1053,7 +1053,7 @@ theorem DifferentiableWithinAt.csinh
 
 中文:
 定理 DifferentiableWithinAt.csinh
-  条件: (hf : DifferentiableWithinAt Complex f s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x)
   证明: hf.hasFDerivWithinAt.csinh.differentiableWithinAt
 
 @[simp, fun_prop]
@@ -1075,7 +1075,7 @@ theorem DifferentiableAt.csinh
 
 中文:
 定理 DifferentiableAt.csinh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.csinh.differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.csinh.differentiableAt
@@ -1096,7 +1096,7 @@ theorem DifferentiableOn.csinh
 
 中文:
 定理 DifferentiableOn.csinh
-  条件: (hc : DifferentiableOn Complex f s)
+  条件: (hc : DifferentiableOn 复形 f s)
   证明: fun x h => (hc x h).csinh
 
 @[simp, fun_prop]
@@ -1114,8 +1114,8 @@ theorem Differentiable.csinh
   proof: fun x => (hc x).csinh
 
 中文:
-定理 Differentiable.csinh
-  条件: (hc : Differentiable Complex f)
+定理 可微.csinh
+  条件: (hc : 可微 复形 f)
   证明: fun x => (hc x).csinh
 -/
 theorem Differentiable.csinh (hc : Differentiable Complex f) :
@@ -1133,7 +1133,7 @@ theorem fderivWithin_csinh
 
 中文:
 定理 fderivWithin_csinh
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasFDerivWithinAt.csinh.fderivWithin hxs
 
 @[simp]
@@ -1155,7 +1155,7 @@ theorem fderiv_csinh
 
 中文:
 定理 fderiv_csinh
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.csinh.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.csinh.fderiv
@@ -1174,9 +1174,9 @@ theorem ContDiff.csinh
   proof: Complex.contDiff_sinh.comp h
 
 中文:
-定理 ContDiff.csinh
-  条件: {n} (h : ContDiff Complex n f)
-  结论: ContDiff Complex n fun x => Complex.sinh (f x)
+定理 连续可微.csinh
+  条件: {n} (h : 连续可微 复形 n f)
+  结论: 连续可微 复形 n fun x => 复形.sinh (f x)
   证明: Complex.contDiff_sinh.comp h
 
 Depends on / 依赖: Complex.contDiff_sinh.comp, contDiff_sinh
@@ -1194,7 +1194,7 @@ theorem ContDiffAt.csinh
 
 中文:
 定理 ContDiffAt.csinh
-  条件: {n} (hf : ContDiffAt Complex n f x)
+  条件: {n} (hf : ContDiffAt 复形 n f x)
   证明: Complex.contDiff_sinh.contDiffAt.comp x hf
 
 Depends on / 依赖: Complex.contDiff_sinh.contDiffAt.comp, contDiffAt, contDiff_sinh
@@ -1213,7 +1213,7 @@ theorem ContDiffOn.csinh
 
 中文:
 定理 ContDiffOn.csinh
-  条件: {n} (hf : ContDiffOn Complex n f s)
+  条件: {n} (hf : ContDiffOn 复形 n f s)
   证明: Complex.contDiff_sinh.comp_contDiffOn hf
 
 Depends on / 依赖: Complex.contDiff_sinh.comp_contDiffOn, comp_contDiffOn, contDiff_sinh
@@ -1232,7 +1232,7 @@ theorem ContDiffWithinAt.csinh
 
 中文:
 定理 ContDiffWithinAt.csinh
-  条件: {n} (hf : ContDiffWithinAt Complex n f s x)
+  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
   证明: Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: Complex.contDiff_sinh.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_sinh
@@ -1279,7 +1279,7 @@ theorem hasDerivAt_sinh
 中文:
 定理 hasDerivAt_sinh
   条件: (x : 实数)
-  结论: HasDerivAt sinh (cosh x) x
+  结论: 在点处可导 sinh (cosh x) x
   证明: (Complex.hasDerivAt_sinh x).real_of_complex
 
 Depends on / 依赖: Complex.hasDerivAt_sinh, EffectiveEpi, hasDerivAt_sinh, real_of_complex, strongEpi_of_effectiveEpi
@@ -1323,7 +1323,7 @@ theorem contDiff_sinh
 中文:
 定理 contDiff_sinh
   条件: {n}
-  结论: ContDiff 实数 n sinh
+  结论: 连续可微 实数 n sinh
   证明: Complex.contDiff_sinh.real_of_complex
 
 @[simp]
@@ -1346,7 +1346,7 @@ theorem differentiable_sinh
 
 中文:
 定理 differentiable_sinh
-  结论: Differentiable 实数 sinh
+  结论: 可微 实数 sinh
   证明: fun x => (hasDerivAt_sinh x).differentiableAt
 
 @[simp]
@@ -1405,7 +1405,7 @@ lemma analyticWithinAt_sinh
 
 中文:
 引理 analyticWithinAt_sinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 sinh s x
   证明: contDiff_sinh.contDiffWithinAt.analyticWithinAt
 
@@ -1425,7 +1425,7 @@ theorem analyticOnNhd_sinh
 
 中文:
 定理 analyticOnNhd_sinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOnNhd 实数 sinh s
   证明: fun _ _ => analyticAt_sinh
 
@@ -1447,7 +1447,7 @@ lemma analyticOn_sinh
 
 中文:
 引理 analyticOn_sinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOn 实数 sinh s
   证明: contDiff_sinh.contDiffOn.analyticOn
 
@@ -1511,7 +1511,7 @@ theorem hasDerivAt_cosh
 中文:
 定理 hasDerivAt_cosh
   条件: (x : 实数)
-  结论: HasDerivAt cosh (sinh x) x
+  结论: 在点处可导 cosh (sinh x) x
   证明: (Complex.hasDerivAt_cosh x).real_of_complex
 
 @[fun_prop]
@@ -1536,7 +1536,7 @@ theorem contDiff_cosh
 中文:
 定理 contDiff_cosh
   条件: {n}
-  结论: ContDiff 实数 n cosh
+  结论: 连续可微 实数 n cosh
   证明: Complex.contDiff_cosh.real_of_complex
 
 @[simp]
@@ -1559,7 +1559,7 @@ theorem differentiable_cosh
 
 中文:
 定理 differentiable_cosh
-  结论: Differentiable 实数 cosh
+  结论: 可微 实数 cosh
   证明: fun x => (hasDerivAt_cosh x).differentiableAt
 
 @[simp]
@@ -1618,7 +1618,7 @@ lemma analyticWithinAt_cosh
 
 中文:
 引理 analyticWithinAt_cosh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 cosh s x
   证明: contDiff_cosh.contDiffWithinAt.analyticWithinAt
 
@@ -1638,7 +1638,7 @@ theorem analyticOnNhd_cosh
 
 中文:
 定理 analyticOnNhd_cosh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOnNhd 实数 cosh s
   证明: fun _ _ => analyticAt_cosh
 
@@ -1660,7 +1660,7 @@ lemma analyticOn_cosh
 
 中文:
 引理 analyticOn_cosh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOn 实数 cosh s
   证明: contDiff_cosh.contDiffOn.analyticOn
 
@@ -1700,7 +1700,7 @@ theorem sinh_strictMono
 
 中文:
 定理 sinh_strictMono
-  结论: StrictMono sinh
+  结论: 严格递增 sinh
   证明: strictMono_of_deriv_pos by rw [Real.deriv_sinh]; exact cosh_pos
 
 Depends on / 依赖: Real.deriv_sinh, cosh_pos, deriv_sinh, strictMono_of_deriv_pos
@@ -1720,7 +1720,7 @@ theorem sinh_injective
 
 中文:
 定理 sinh_injective
-  结论: Function.Injective sinh
+  结论: 函数.单射 sinh
   证明: sinh_strictMono.injective
 
 @[simp]
@@ -1950,7 +1950,7 @@ theorem cosh_strictMonoOn
 
 中文:
 定理 cosh_strictMonoOn
-  结论: StrictMonoOn cosh (Ici 0)
+  结论: StrictMonoOn cosh (左闭右无界区间 0)
   证明: strictMonoOn_of_deriv_pos (convex_Ici _) continuous_cosh.continuousOn fun x hx => by
     rw [interior_Ici]; rw [mem_Ioi] at hx; rwa [deriv_cosh, sinh_pos_iff]
 
@@ -2067,7 +2067,7 @@ theorem sinh_sub_id_strictMono
 
 中文:
 定理 sinh_sub_id_strictMono
-  结论: StrictMono fun x => sinh x - x
+  结论: 严格递增 fun x => sinh x - x
   证明: by
   refine strictMono_of_odd_strictMonoOn_nonneg (fun x => by simp; abel) ?_
   refine strictMonoOn_of_deriv_pos (convex_Ici _) ?_ fun x hx => ?_
@@ -2650,7 +2650,7 @@ theorem iteratedDerivWithin_sinh_Icc
 
 中文:
 定理 iteratedDerivWithin_sinh_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in Icc a b)
+  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_sinh.contDiffAt hx
 
 @[simp]
@@ -2674,7 +2674,7 @@ theorem iteratedDerivWithin_cosh_Icc
 
 中文:
 定理 iteratedDerivWithin_cosh_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in Icc a b)
+  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_cosh.contDiffAt hx
 
 @[simp]
@@ -2698,7 +2698,7 @@ theorem iteratedDerivWithin_sinh_Ioo
 
 中文:
 定理 iteratedDerivWithin_sinh_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in Ioo a b)
+  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_sinh.contDiffAt hx
 
 @[simp]
@@ -2720,7 +2720,7 @@ theorem iteratedDerivWithin_cosh_Ioo
 
 中文:
 定理 iteratedDerivWithin_cosh_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in Ioo a b)
+  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_cosh.contDiffAt hx
 
 Depends on / 依赖: F.effectiveEpiFamily_of_map, G.effectiveEpiFamily_of_map, contDiffAt, contDiff_cosh, contDiff_cosh.contDiffAt, effectiveEpiFamily_of_map, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Ioo
@@ -2768,8 +2768,8 @@ theorem HasDerivAt.cosh
   proof: (Real.hasDerivAt_cosh (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.cosh
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.cosh
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_cosh (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_cosh, hasDerivAt_cosh
@@ -2869,8 +2869,8 @@ theorem HasDerivAt.sinh
   proof: (Real.hasDerivAt_sinh (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.sinh
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.sinh
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_sinh (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_sinh, hasDerivAt_sinh
@@ -2979,8 +2979,8 @@ theorem HasFDerivAt.cosh
   proof: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.cosh
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.cosh
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Real.hasDerivAt_cosh (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Real.hasDerivAt_cosh, comp_hasFDerivAt, hasDerivAt_cosh
@@ -3082,9 +3082,9 @@ theorem Differentiable.cosh
   proof: fun x => (hc x).cosh
 
 中文:
-定理 Differentiable.cosh
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => 实数.cosh (f x)
+定理 可微.cosh
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => 实数.cosh (f x)
   证明: fun x => (hc x).cosh
 -/
 theorem Differentiable.cosh (hc : Differentiable Real f) : Differentiable Real fun x => Real.cosh (f x) :=
@@ -3143,9 +3143,9 @@ theorem ContDiff.cosh
   proof: Real.contDiff_cosh.comp h
 
 中文:
-定理 ContDiff.cosh
-  条件: {n} (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => 实数.cosh (f x)
+定理 连续可微.cosh
+  条件: {n} (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => 实数.cosh (f x)
   证明: Real.contDiff_cosh.comp h
 
 Depends on / 依赖: Real.contDiff_cosh.comp, contDiff_cosh
@@ -3239,8 +3239,8 @@ theorem HasFDerivAt.sinh
   proof: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.sinh
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.sinh
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Real.hasDerivAt_sinh (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Real.hasDerivAt_sinh, comp_hasFDerivAt, hasDerivAt_sinh
@@ -3342,9 +3342,9 @@ theorem Differentiable.sinh
   proof: fun x => (hc x).sinh
 
 中文:
-定理 Differentiable.sinh
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => 实数.sinh (f x)
+定理 可微.sinh
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => 实数.sinh (f x)
   证明: fun x => (hc x).sinh
 -/
 theorem Differentiable.sinh (hc : Differentiable Real f) : Differentiable Real fun x => Real.sinh (f x) :=
@@ -3403,9 +3403,9 @@ theorem ContDiff.sinh
   proof: Real.contDiff_sinh.comp h
 
 中文:
-定理 ContDiff.sinh
-  条件: {n} (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => 实数.sinh (f x)
+定理 连续可微.sinh
+  条件: {n} (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => 实数.sinh (f x)
   证明: Real.contDiff_sinh.comp h
 
 Depends on / 依赖: Real.contDiff_sinh.comp, contDiff_sinh
@@ -3486,8 +3486,8 @@ theorem Complex.logDeriv_cosh
 @[simp]
 
 中文:
-定理 Complex.logDeriv_cosh
-  结论: logDeriv (Complex.cosh) = Complex.tanh
+定理 复形.logDeriv_cosh
+  结论: logDeriv (复形.cosh) = 复形.tanh
   证明: by
   ext
   rw [logDeriv]; rw [Complex.deriv_cosh]; rw [Pi.div_apply]; rw [Complex.tanh]
@@ -3512,7 +3512,7 @@ theorem Real.logDeriv_cosh
   rw [logDeriv]; rw [Real.deriv_cosh]; rw [Pi.div_apply]; rw [Real.tanh_eq_sinh_div_cosh]
 
 中文:
-定理 Real.logDeriv_cosh
+定理 实数.logDeriv_cosh
   结论: logDeriv (实数.cosh) = 实数.tanh
   证明: by
   ext

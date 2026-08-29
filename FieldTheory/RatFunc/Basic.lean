@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero K⟮X⟯
+  签名: 零 K⟮X⟯
   定义体: ⟨RatFunc.zero⟩
 
 Depends on / 依赖: RatFunc, RatFunc.zero
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add K⟮X⟯
+  签名: 加法 K⟮X⟯
   定义体: ⟨RatFunc.add⟩
 
 Depends on / 依赖: RatFunc, RatFunc.add
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub K⟮X⟯
+  签名: 减法 K⟮X⟯
   定义体: ⟨RatFunc.sub⟩
 
 Depends on / 依赖: RatFunc, RatFunc.sub
@@ -200,7 +200,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg K⟮X⟯
+  签名: 取负 K⟮X⟯
   定义体: ⟨RatFunc.neg⟩
 
 Depends on / 依赖: RatFunc, RatFunc.neg
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: One K⟮X⟯
+  签名: 幺 K⟮X⟯
   定义体: ⟨RatFunc.one⟩
 
 Depends on / 依赖: RatFunc, RatFunc.one
@@ -281,7 +281,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul K⟮X⟯
+  签名: 乘法 K⟮X⟯
   定义体: ⟨RatFunc.mul⟩
 
 Depends on / 依赖: RatFunc, RatFunc.mul
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div K⟮X⟯
+  签名: 除法 K⟮X⟯
   定义体: ⟨RatFunc.div⟩
 
 Depends on / 依赖: RatFunc, RatFunc.div
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv K⟮X⟯
+  签名: 取逆 K⟮X⟯
   定义体: ⟨RatFunc.inv⟩
 
 Depends on / 依赖: RatFunc, RatFunc.inv
@@ -442,8 +442,8 @@ instance [SMul
   body: ⟨RatFunc.smul⟩
 
 中文:
-实例 [SMul
-  签名: R (FractionRing K[X])] : SMul R K⟮X⟯
+实例 [标量乘法
+  签名: R (FractionRing K[X])] : 标量乘法 R K⟮X⟯
   定义体: ⟨RatFunc.smul⟩
 
 Depends on / 依赖: RatFunc, RatFunc.smul
@@ -461,7 +461,7 @@ theorem ofFractionRing_smul
 
 中文:
 定理 ofFractionRing_smul
-  条件: [SMul R (FractionRing K[X])] (c : R) (p : FractionRing K[X])
+  条件: [标量乘法 R (FractionRing K[X])] (c : R) (p : FractionRing K[X])
   证明: (smul_def _ _).symm
 
 Depends on / 依赖: smul_def
@@ -482,7 +482,7 @@ theorem toFractionRing_smul
 
 中文:
 定理 toFractionRing_smul
-  条件: [SMul R (FractionRing K[X])] (c : R) (p : K⟮X⟯)
+  条件: [标量乘法 R (FractionRing K[X])] (c : R) (p : K⟮X⟯)
   证明: by
   cases p
   rw [← ofFractionRing_smul]
@@ -509,7 +509,7 @@ theorem smul_eq_C_smul
 中文:
 定理 smul_eq_C_smul
   条件: (x : K⟮X⟯) (r : K)
-  结论: r • x = Polynomial.C r • x
+  结论: r • x = 多项式.C r • x
   证明: by
   obtain ⟨x⟩ := x
   induction x using Localization.induction_on
@@ -545,7 +545,7 @@ theorem mk_smul
 中文:
 定理 mk_smul
   条件: (c : R) (p q : K[X])
-  结论: RatFunc.mk (c • p) q = c • RatFunc.mk p q
+  结论: 有理函数.mk (c • p) q = c • 有理函数.mk p q
   证明: by
   let : SMulZeroClass R (FractionRing K[X]) := inferInstance
   by_cases hq : q = 0
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R K[X] K⟮X⟯
+  签名: 标量塔 R K[X] K⟮X⟯
   定义体: ⟨fun c p q => q.induction_on' fun q r _ => by rw [← mk_smul, smul_assoc, mk_smul, mk_smul]⟩
 
 Depends on / 依赖: induction_on, mk_smul, q.induction_on, smul_assoc
@@ -595,8 +595,8 @@ instance [Subsingleton
   body: toFractionRing_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: K] : Subsingleton K⟮X⟯
+实例 [子单例
+  签名: K] : 子单例 K⟮X⟯
   定义体: toFractionRing_injective.subsingleton
 
 Depends on / 依赖: subsingleton, toFractionRing_injective, toFractionRing_injective.subsingleton
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited K⟮X⟯
+  签名: 可居 K⟮X⟯
   定义体: ⟨0⟩
 -/
 instance : Inhabited K⟮X⟯ :=
@@ -630,7 +630,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial K]
+  签名: [非平凡 K]
   定义体: ofFractionRing_injective.nontrivial
 
 Depends on / 依赖: nontrivial, ofFractionRing_injective, ofFractionRing_injective.nontrivial
@@ -722,7 +722,7 @@ definition instCommMonoid
 
 中文:
 定义 instCommMonoid
-  签名: : CommMonoid K⟮X⟯ where
+  签名: : 交换幺半群 K⟮X⟯ where
   定义体: by frac_tac
   mul_comm := by frac_tac
   one_mul := by frac_tac
@@ -763,7 +763,7 @@ definition instAddCommGroup
 
 中文:
 定义 instAddCommGroup
-  签名: : AddCommGroup K⟮X⟯ where
+  签名: : 加法交换群 K⟮X⟯ where
   定义体: by frac_tac
   add_comm := by frac_tac
   zero_add := by frac_tac
@@ -806,7 +806,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing K⟮X⟯
+  签名: : 交换环 K⟮X⟯
   定义体: { instCommMonoid K, instAddCommGroup K with
     zero_mul := by frac_tac
     mul_zero := by frac_tac
@@ -848,7 +848,7 @@ definition map
 
 中文:
 定义 map
-  签名: [MonoidHomClass F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
+  签名: [幺半群态射类 F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
   定义体: RatFunc.liftOn f
       (fun n d => if h : φ d in S[X]⁰ then ofFractionRing (Localization.mk (φ n) ⟨φ d, h⟩) else 0)
       fun {p q p' q'} hq hq' h => by
@@ -896,7 +896,7 @@ theorem map_apply_ofFractionRing_mk
 
 中文:
 定理 map_apply_ofFractionRing_mk
-  结论: [MonoidHomClass F R[X] S[X]] (φ : F)
+  结论: [幺半群态射类 F R[X] S[X]] (φ : F)
   证明: by
   simp only [map, MonoidHom.coe_mk, OneHom.coe_mk, liftOn_ofFractionRing_mk,
     Submonoid.mem_comap.mp (hφ d.2), ↓reduceDIte]
@@ -926,7 +926,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  结论: [MonoidHomClass F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
+  结论: [幺半群态射类 F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
   证明: by
   rintro ⟨x⟩ ⟨y⟩ h
   induction x using Localization.induction_on
@@ -963,7 +963,7 @@ definition mapRingHom
 
 中文:
 定义 mapRingHom
-  签名: [RingHomClass F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
+  签名: [环态射类 F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
   定义体: { map φ hφ with
     map_zero' := by
       simp_rw [MonoidHom.toFun_eq_coe, ← ofFractionRing_zero, ← Localization.mk_zero (1 : R[X]⁰),
@@ -1001,7 +1001,7 @@ theorem coe_mapRingHom_eq_coe_map
 
 中文:
 定理 coe_mapRingHom_eq_coe_map
-  条件: [RingHomClass F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
+  条件: [环态射类 F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ)
   证明: rfl
 -/
 theorem coe_mapRingHom_eq_coe_map [RingHomClass F R[X] S[X]] (φ : F) (hφ : R[X]⁰ <= S[X]⁰.comap φ) :
@@ -1091,7 +1091,7 @@ theorem liftMonoidWithZeroHom_injective
 
 中文:
 定理 liftMonoidWithZeroHom_injective
-  结论: [Nontrivial R] (φ : R[X] ->*₀ G₀) (hφ : Function.Injective φ)
+  结论: [非平凡 R] (φ : R[X] ->*₀ G₀) (hφ : 函数.单射 φ)
   证明: by
   rintro ⟨x⟩ ⟨y⟩
   cases x using Localization.induction_on
@@ -1222,7 +1222,7 @@ theorem liftRingHom_injective
 
 中文:
 定理 liftRingHom_injective
-  结论: [Nontrivial R] (φ : R[X] ->+* L) (hφ : Function.Injective φ)
+  结论: [非平凡 R] (φ : R[X] ->+* L) (hφ : 函数.单射 φ)
   证明: liftMonoidWithZeroHom_injective _ hφ
 
 Depends on / 依赖: nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
@@ -1254,7 +1254,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: [IsDomain K]
+  签名: [是整环 K]
   定义体: by frac_tac
   div_eq_mul_inv := by frac_tac
   mul_inv_cancel _ := mul_inv_cancel
@@ -1311,7 +1311,7 @@ definition coePolynomial
 
 中文:
 定义 coePolynomial
-  签名: (P : Polynomial K)
+  签名: (P : 多项式 K)
   定义体: algebraMap _ _ P
 
 Depends on / 依赖: algebraMap
@@ -1328,7 +1328,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Polynomial K) K⟮X⟯
+  签名: Coe (多项式 K) K⟮X⟯
   定义体: ⟨coePolynomial⟩
 
 Depends on / 依赖: coePolynomial
@@ -1347,7 +1347,7 @@ theorem mk_one
 中文:
 定理 mk_one
   条件: (x : K[X])
-  结论: RatFunc.mk x 1 = algebraMap _ _ x
+  结论: 有理函数.mk x 1 = algebraMap _ _ x
   证明: rfl
 -/
 theorem mk_one (x : K[X]) : RatFunc.mk x 1 = algebraMap _ _ x :=
@@ -1394,7 +1394,7 @@ definition toFractionRingAlgEquiv
 
 中文:
 定义 toFractionRingAlgEquiv
-  签名: (R : 类型) [CommSemiring R] [Algebra R K[X]]
+  签名: (R : 类型) [交换半环 R] [代数 R K[X]]
   定义体: RatFunc.toFractionRingRingEquiv K
   commutes' r := by
     change (RatFunc.mk (algebraMap R K[X] r) 1).toFractionRing = _
@@ -1427,7 +1427,7 @@ theorem mk_eq_div
 中文:
 定理 mk_eq_div
   条件: (p q : K[X])
-  结论: RatFunc.mk p q = algebraMap _ _ p / algebraMap _ _ q
+  结论: 有理函数.mk p q = algebraMap _ _ p / algebraMap _ _ q
   证明: by
   simp only [mk_eq_div', ofFractionRing_div, ofFractionRing_algebraMap]
 
@@ -1450,7 +1450,7 @@ theorem div_smul
 
 中文:
 定理 div_smul
-  结论: {R} [Monoid R] [DistribMulAction R K[X]] [IsScalarTower R K[X] K[X]] (c : R)
+  结论: {R} [幺半群 R] [分配乘法作用 R K[X]] [标量塔 R K[X] K[X]] (c : R)
   证明: by
   rw [← mk_eq_div]; rw [mk_smul]; rw [mk_eq_div]
 
@@ -1474,7 +1474,7 @@ theorem algebraMap_apply
 
 中文:
 定理 algebraMap_apply
-  条件: {R : 类型} [CommSemiring R] [Algebra R K[X]] (x : R)
+  条件: {R : 类型} [交换半环 R] [代数 R K[X]] (x : R)
   证明: by
   rw [← mk_eq_div]
   rfl
@@ -1501,7 +1501,7 @@ theorem map_apply_div_ne_zero
 
 中文:
 定理 map_apply_div_ne_zero
-  结论: {R F : 类型} [CommRing R] [IsDomain R]
+  结论: {R F : 类型} [交换环 R] [是整环 R]
   证明: by
   have hq' : φ q != 0 := nonZeroDivisors.ne_zero (hφ (mem_nonZeroDivisors_iff_ne_zero.mpr hq))
   simp only [← mk_eq_div, mk_eq_localization_mk _ hq, map_apply_ofFractionRing_mk,
@@ -1534,7 +1534,7 @@ theorem map_apply_div
 
 中文:
 定理 map_apply_div
-  结论: {R F : 类型} [CommRing R] [IsDomain R]
+  结论: {R F : 类型} [交换环 R] [是整环 R]
   证明: by
   rcases eq_or_ne q 0 with (rfl | hq)
   · have : (0 : K⟮X⟯) = algebraMap K[X] _ 0 / algebraMap K[X] _ 1 := by simp
@@ -1569,7 +1569,7 @@ theorem liftMonoidWithZeroHom_apply_div
 
 中文:
 定理 liftMonoidWithZeroHom_apply_div
-  结论: {L : 类型} [CommGroupWithZero L]
+  结论: {L : 类型} [带零交换群 L]
   证明: by
   rcases eq_or_ne q 0 with (rfl | hq)
   · simp only [div_zero, map_zero]
@@ -1600,7 +1600,7 @@ theorem liftMonoidWithZeroHom_apply_div'
 
 中文:
 定理 liftMonoidWithZeroHom_apply_div'
-  结论: {L : 类型} [CommGroupWithZero L]
+  结论: {L : 类型} [带零交换群 L]
   证明: by
   rw [← map_div₀]; rw [liftMonoidWithZeroHom_apply_div]
 
@@ -1623,7 +1623,7 @@ theorem liftRingHom_apply_div
 
 中文:
 定理 liftRingHom_apply_div
-  结论: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  结论: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: liftMonoidWithZeroHom_apply_div _ hφ _ _
 
 Depends on / 依赖: liftMonoidWithZeroHom_apply_div
@@ -1643,7 +1643,7 @@ theorem liftRingHom_apply_div'
 
 中文:
 定理 liftRingHom_apply_div'
-  结论: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  结论: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: liftMonoidWithZeroHom_apply_div' _ hφ _ _
 
 Depends on / 依赖: liftMonoidWithZeroHom_apply_div
@@ -1666,7 +1666,7 @@ lemma liftRingHom_algebraMap
 
 中文:
 引理 liftRingHom_algebraMap
-  结论: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  结论: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: by
   simpa using liftRingHom_apply_div' φ hφ x 1
 
@@ -1688,7 +1688,7 @@ lemma liftRingHom_comp_algebraMap
 
 中文:
 引理 liftRingHom_comp_algebraMap
-  条件: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  条件: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: RingHom.ext fun _ => liftRingHom_algebraMap _ hφ _
 
 Depends on / 依赖: RingHom, RingHom.ext, liftRingHom_algebraMap
@@ -1728,7 +1728,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: Function.Injective (algebraMap K[X] K⟮X⟯)
+  结论: 函数.单射 (algebraMap K[X] K⟮X⟯)
   证明: by
   rw [← ofFractionRing_comp_algebraMap]
   exact ofFractionRing_injective.comp (IsFractionRing.injective _ _)
@@ -1849,7 +1849,7 @@ theorem liftAlgHom_injective
 
 中文:
 定理 liftAlgHom_injective
-  结论: (φ : K[X] ->ₐ[S] L) (hφ : Function.Injective φ)
+  结论: (φ : K[X] ->ₐ[S] L) (hφ : 函数.单射 φ)
   证明: liftMonoidWithZeroHom_injective _ hφ
 
 Depends on / 依赖: nonZeroDivisors_le_comap_nonZeroDivisors_of_injective
@@ -1982,7 +1982,7 @@ theorem liftOn_div
 
 中文:
 定理 liftOn_div
-  结论: {P : Sort v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
+  结论: {P : 类型层 v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
   证明: by
   rw [← mk_eq_div]; rw [liftOn_mk _ _ f f0 @H']
 
@@ -2010,7 +2010,7 @@ theorem liftOn'_div
 
 中文:
 定理 liftOn'_div
-  结论: {P : Sort v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
+  结论: {P : 类型层 v} (p q : K[X]) (f : K[X] -> K[X] -> P) (f0 : 对任意 p, f p 0 = f 0 1)
   证明: by
   rw [RatFunc.liftOn']; rw [liftOn_div _ _ _ f0]
   apply liftOn_condition_of_liftOn'_condition H
@@ -2073,7 +2073,7 @@ theorem mk_eq_mk'
 
 中文:
 定理 mk_eq_mk'
-  条件: (f : Polynomial K) {g : Polynomial K} (hg : g != 0)
+  条件: (f : 多项式 K) {g : 多项式 K} (hg : g != 0)
   证明: by
   simp only [mk_eq_div, IsFractionRing.mk'_eq_div]
 
@@ -2215,7 +2215,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: (K E : 类型) [Field K] [Field E] [Algebra K E]
+  签名: (K E : 类型) [域 K] [域 E] [代数 K E]
   定义体: (faithfulSMul_iff_algebraMap_injective ..).mpr
     (IsFractionRing.injective E[X] _).comp
       (Polynomial.map_injective _ <| FaithfulSMul.algebraMap_injective K E)
@@ -2246,7 +2246,7 @@ theorem rank_ratFunc_ratFunc
 
 中文:
 定理 rank_ratFunc_ratFunc
-  结论: Module.rank k⟮X⟯ K⟮X⟯ = Module.rank k K
+  结论: 模.rank k⟮X⟯ K⟮X⟯ = 模.rank k K
   证明: by
   rw [Algebra.IsAlgebraic.rank_of_isFractionRing k[X] k⟮X⟯ K[X] K⟮X⟯,
     rank_polynomial_polynomial]
@@ -2273,7 +2273,7 @@ theorem finrank_ratFunc_ratFunc
 
 中文:
 定理 finrank_ratFunc_ratFunc
-  结论: Module.finrank k⟮X⟯ K⟮X⟯ = Module.finrank k K
+  结论: 模.finrank k⟮X⟯ K⟮X⟯ = 模.finrank k K
   证明: by
   by_cases hf : Module.Finite k⟮X⟯ K⟮X⟯
   · have hrank := rank_ratFunc_ratFunc k K
@@ -3396,7 +3396,7 @@ theorem map_denom_ne_zero
 
 中文:
 定理 map_denom_ne_zero
-  结论: {L F : 类型} [Zero L] [FunLike F K[X] L] [ZeroHomClass F K[X] L]
+  结论: {L F : 类型} [零 L] [函数状 F K[X] L] [保零态射类 F K[X] L]
   证明: fun H =>
   (denom_ne_zero f) ((map_eq_zero_iff φ hφ).mp H)
 -/
@@ -3416,7 +3416,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  结论: {R F : 类型} [CommRing R] [IsDomain R]
+  结论: {R F : 类型} [交换环 R] [是整环 R]
   证明: by
   rw [← num_div_denom f]; rw [map_apply_div_ne_zero]; rw [num_div_denom f]
   exact denom_ne_zero _
@@ -3441,7 +3441,7 @@ theorem liftMonoidWithZeroHom_apply
 
 中文:
 定理 liftMonoidWithZeroHom_apply
-  结论: {L : 类型} [CommGroupWithZero L] (φ : K[X] ->*₀ L)
+  结论: {L : 类型} [带零交换群 L] (φ : K[X] ->*₀ L)
   证明: by
   rw [← num_div_denom f]; rw [liftMonoidWithZeroHom_apply_div]; rw [num_div_denom]
 
@@ -3463,7 +3463,7 @@ theorem liftRingHom_apply
 
 中文:
 定理 liftRingHom_apply
-  结论: {L : 类型} [Field L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
+  结论: {L : 类型} [域 L] (φ : K[X] ->+* L) (hφ : K[X]⁰ <= L⁰.comap φ)
   证明: liftMonoidWithZeroHom_apply _ hφ _
 
 Depends on / 依赖: liftMonoidWithZeroHom_apply
@@ -3483,7 +3483,7 @@ theorem liftAlgHom_apply
 
 中文:
 定理 liftAlgHom_apply
-  结论: {L S : 类型} [Field L] [CommSemiring S] [Algebra S K[X]] [Algebra S L]
+  结论: {L S : 类型} [域 L] [交换半环 S] [代数 S K[X]] [代数 S L]
   证明: liftMonoidWithZeroHom_apply _ hφ _
 
 Depends on / 依赖: liftMonoidWithZeroHom_apply
@@ -3536,7 +3536,7 @@ instance [Field
   body: charP_of_injective_algebraMap' K p
 
 中文:
-实例 [Field
+实例 [域
   签名: K] {p
   定义体: charP_of_injective_algebraMap' K p
 
@@ -3554,7 +3554,7 @@ instance [Field
   body: ExpChar.of_injective_algebraMap' K p
 
 中文:
-实例 [Field
+实例 [域
   签名: K] {p
   定义体: ExpChar.of_injective_algebraMap' K p
 
@@ -3572,8 +3572,8 @@ instance [Field
   body: Algebra.charZero_of_charZero K _
 
 中文:
-实例 [Field
-  签名: K] [CharZero K] : CharZero K⟮X⟯
+实例 [域
+  签名: K] [特征零 K] : 特征零 K⟮X⟯
   定义体: Algebra.charZero_of_charZero K _
 
 Depends on / 依赖: Algebra, Algebra.charZero_of_charZero, charZero_of_charZero

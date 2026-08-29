@@ -59,7 +59,7 @@ definition tensorObj
 
 中文:
 定义 tensorObj
-  签名: (M N : SemimoduleCat R)
+  签名: (M N : Semimodule范畴 R)
   定义体: SemimoduleCat.of R (M otimes[R] N)
 
 Depends on / 依赖: SemimoduleCat, SemimoduleCat.of, otimes
@@ -77,7 +77,7 @@ definition tensorHom
 
 中文:
 定义 tensorHom
-  签名: {M N M' N' : SemimoduleCat R} (f : M ⟶ N) (g : M' ⟶ N')
+  签名: {M N M' N' : Semimodule范畴 R} (f : M ⟶ N) (g : M' ⟶ N')
   定义体: ofHom TensorProduct.map f.hom g.hom
 
 Depends on / 依赖: TensorProduct, TensorProduct.map, f.hom, g.hom
@@ -96,7 +96,7 @@ definition whiskerLeft
 
 中文:
 定义 whiskerLeft
-  签名: (M : SemimoduleCat R) {N₁ N₂ : SemimoduleCat R} (f : N₁ ⟶ N₂)
+  签名: (M : Semimodule范畴 R) {N₁ N₂ : Semimodule范畴 R} (f : N₁ ⟶ N₂)
   定义体: ofHom f.hom.lTensor M
 
 Depends on / 依赖: f.hom.lTensor, lTensor
@@ -115,7 +115,7 @@ definition whiskerRight
 
 中文:
 定义 whiskerRight
-  签名: {M₁ M₂ : SemimoduleCat R} (f : M₁ ⟶ M₂) (N : SemimoduleCat R)
+  签名: {M₁ M₂ : Semimodule范畴 R} (f : M₁ ⟶ M₂) (N : Semimodule范畴 R)
   定义体: ofHom f.hom.rTensor N
 
 Depends on / 依赖: f.hom.rTensor, rTensor
@@ -138,7 +138,7 @@ theorem id_tensorHom_id
 
 中文:
 定理 id_tensorHom_id
-  条件: (M N : SemimoduleCat R)
+  条件: (M N : Semimodule范畴 R)
   证明: by
   ext : 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): even with high priority `ext` fails to find this.
@@ -166,7 +166,7 @@ theorem tensorHom_comp_tensorHom
 
 中文:
 定理 tensorHom_comp_tensorHom
-  结论: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : SemimoduleCat R} (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂)
+  结论: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : Semimodule范畴 R} (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂)
   证明: by
   ext : 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): even with high priority `ext` fails to find this.
@@ -191,7 +191,7 @@ definition associator
 
 中文:
 定义 associator
-  签名: (M : SemimoduleCat.{v} R) (N : SemimoduleCat.{w} R) (K : SemimoduleCat.{x} R)
+  签名: (M : Semimodule范畴.{v} R) (N : Semimodule范畴.{w} R) (K : Semimodule范畴.{x} R)
   定义体: (TensorProduct.assoc R M N K).toModuleIsoₛ
 
 Depends on / 依赖: TensorProduct, TensorProduct.assoc
@@ -210,7 +210,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: (M : SemimoduleCat.{u} R)
+  签名: (M : Semimodule范畴.{u} R)
   定义体: (TensorProduct.lid R M).toModuleIsoₛ
 
 Depends on / 依赖: TensorProduct, TensorProduct.lid
@@ -230,7 +230,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: (M : SemimoduleCat.{u} R)
+  签名: (M : Semimodule范畴.{u} R)
   定义体: (TensorProduct.rid R M).toModuleIsoₛ
 
 @[simps -isSimp]
@@ -258,7 +258,7 @@ instance instMonoidalCategoryStruct
 
 中文:
 实例 instMonoidalCategoryStruct
-  签名: : MonoidalCategoryStruct (SemimoduleCat.{u} R) where
+  签名: : 幺半群范畴结构 (Semimodule范畴.{u} R) where
   定义体: tensorObj
   whiskerLeft := whiskerLeft
   whiskerRight := whiskerRight
@@ -294,7 +294,7 @@ theorem associator_naturality
 
 中文:
 定理 associator_naturality
-  结论: {X₁ X₂ X₃ Y₁ Y₂ Y₃ : SemimoduleCat R} (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂)
+  结论: {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Semimodule范畴 R} (f₁ : X₁ ⟶ Y₁) (f₂ : X₂ ⟶ Y₂)
   证明: by
   ext : 1
   apply TensorProduct.ext_threefold
@@ -326,7 +326,7 @@ theorem pentagon
 
 中文:
 定理 pentagon
-  条件: (W X Y Z : SemimoduleCat R)
+  条件: (W X Y Z : Semimodule范畴 R)
   证明: by
   ext : 1
   apply TensorProduct.ext_fourfold
@@ -359,7 +359,7 @@ theorem leftUnitor_naturality
 
 中文:
 定理 leftUnitor_naturality
-  条件: {M N : SemimoduleCat R} (f : M ⟶ N)
+  条件: {M N : Semimodule范畴 R} (f : M ⟶ N)
   证明: by
   ext : 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): broken ext
@@ -390,7 +390,7 @@ theorem rightUnitor_naturality
 
 中文:
 定理 rightUnitor_naturality
-  条件: {M N : SemimoduleCat R} (f : M ⟶ N)
+  条件: {M N : Semimodule范畴 R} (f : M ⟶ N)
   证明: by
   ext : 1
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): broken ext
@@ -420,7 +420,7 @@ theorem triangle
 
 中文:
 定理 triangle
-  条件: (M N : SemimoduleCat.{u} R)
+  条件: (M N : Semimodule范畴.{u} R)
   证明: by
   ext : 1
   apply TensorProduct.ext_threefold
@@ -455,7 +455,7 @@ instance monoidalCategory
 
 中文:
 实例 monoidalCategory
-  签名: : MonoidalCategory (SemimoduleCat.{u} R)
+  签名: : 幺半群范畴 (Semimodule范畴.{u} R)
   定义体: MonoidalCategory.ofTensorHom
   (id_tensorHom_id := fun M N => id_tensorHom_id M N)
   (tensorHom_comp_tensorHom := fun f g h => MonoidalCategory.tensorHom_comp_tensorHom f g h)
@@ -483,7 +483,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring ((𝟙_ (SemimoduleCat.{u} R) : SemimoduleCat.{u} R) : 类型u)
+  签名: 交换半环 ((𝟙_ (Semimodule范畴.{u} R) : Semimodule范畴.{u} R) : 类型u)
   定义体: inferInstanceAs CommSemiring R
 
 Depends on / 依赖: CommSemiring
@@ -501,7 +501,7 @@ theorem hom_tensorHom
 
 中文:
 定理 hom_tensorHom
-  条件: {K L M N : SemimoduleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N)
+  条件: {K L M N : Semimodule范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N)
   证明: rfl
 -/
 theorem hom_tensorHom {K L M N : SemimoduleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) :
@@ -518,7 +518,7 @@ theorem hom_whiskerLeft
 
 中文:
 定理 hom_whiskerLeft
-  条件: (L : SemimoduleCat.{u} R) {M N : SemimoduleCat.{u} R} (f : M ⟶ N)
+  条件: (L : Semimodule范畴.{u} R) {M N : Semimodule范畴.{u} R} (f : M ⟶ N)
   证明: rfl
 -/
 theorem hom_whiskerLeft (L : SemimoduleCat.{u} R) {M N : SemimoduleCat.{u} R} (f : M ⟶ N) :
@@ -535,7 +535,7 @@ theorem hom_whiskerRight
 
 中文:
 定理 hom_whiskerRight
-  条件: {L M : SemimoduleCat.{u} R} (f : L ⟶ M) (N : SemimoduleCat.{u} R)
+  条件: {L M : Semimodule范畴.{u} R} (f : L ⟶ M) (N : Semimodule范畴.{u} R)
   证明: rfl
 -/
 theorem hom_whiskerRight {L M : SemimoduleCat.{u} R} (f : L ⟶ M) (N : SemimoduleCat.{u} R) :
@@ -552,7 +552,7 @@ theorem hom_hom_leftUnitor
 
 中文:
 定理 hom_hom_leftUnitor
-  条件: {M : SemimoduleCat.{u} R}
+  条件: {M : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_leftUnitor {M : SemimoduleCat.{u} R} :
@@ -569,7 +569,7 @@ theorem hom_inv_leftUnitor
 
 中文:
 定理 hom_inv_leftUnitor
-  条件: {M : SemimoduleCat.{u} R}
+  条件: {M : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_leftUnitor {M : SemimoduleCat.{u} R} :
@@ -586,7 +586,7 @@ theorem hom_hom_rightUnitor
 
 中文:
 定理 hom_hom_rightUnitor
-  条件: {M : SemimoduleCat.{u} R}
+  条件: {M : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_rightUnitor {M : SemimoduleCat.{u} R} :
@@ -603,7 +603,7 @@ theorem hom_inv_rightUnitor
 
 中文:
 定理 hom_inv_rightUnitor
-  条件: {M : SemimoduleCat.{u} R}
+  条件: {M : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_rightUnitor {M : SemimoduleCat.{u} R} :
@@ -620,7 +620,7 @@ theorem hom_hom_associator
 
 中文:
 定理 hom_hom_associator
-  条件: {M N K : SemimoduleCat.{u} R}
+  条件: {M N K : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_associator {M N K : SemimoduleCat.{u} R} :
@@ -637,7 +637,7 @@ theorem hom_inv_associator
 
 中文:
 定理 hom_inv_associator
-  条件: {M N K : SemimoduleCat.{u} R}
+  条件: {M N K : Semimodule范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_associator {M N K : SemimoduleCat.{u} R} :
@@ -659,7 +659,7 @@ theorem tensorHom_tmul
 
 中文:
 定理 tensorHom_tmul
-  条件: {K L M N : SemimoduleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) (k : K) (m : M)
+  条件: {K L M N : Semimodule范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N) (k : K) (m : M)
   证明: rfl
 
 @[simp]
@@ -681,7 +681,7 @@ theorem whiskerLeft_apply
 
 中文:
 定理 whiskerLeft_apply
-  结论: (L : SemimoduleCat.{u} R) {M N : SemimoduleCat.{u} R} (f : M ⟶ N)
+  结论: (L : Semimodule范畴.{u} R) {M N : Semimodule范畴.{u} R} (f : M ⟶ N)
   证明: rfl
 
 @[simp]
@@ -704,7 +704,7 @@ theorem whiskerRight_apply
 
 中文:
 定理 whiskerRight_apply
-  结论: {L M : SemimoduleCat.{u} R} (f : L ⟶ M) (N : SemimoduleCat.{u} R)
+  结论: {L M : Semimodule范畴.{u} R} (f : L ⟶ M) (N : Semimodule范畴.{u} R)
   证明: rfl
 
 @[simp]
@@ -727,7 +727,7 @@ theorem leftUnitor_hom_apply
 
 中文:
 定理 leftUnitor_hom_apply
-  条件: {M : SemimoduleCat.{u} R} (r : R) (m : M)
+  条件: {M : Semimodule范畴.{u} R} (r : R) (m : M)
   证明: TensorProduct.lid_tmul m r
 
 @[simp]
@@ -751,7 +751,7 @@ theorem leftUnitor_inv_apply
 
 中文:
 定理 leftUnitor_inv_apply
-  条件: {M : SemimoduleCat.{u} R} (m : M)
+  条件: {M : Semimodule范畴.{u} R} (m : M)
   证明: TensorProduct.lid_symm_apply m
 
 @[simp]
@@ -775,7 +775,7 @@ theorem rightUnitor_hom_apply
 
 中文:
 定理 rightUnitor_hom_apply
-  条件: {M : SemimoduleCat.{u} R} (m : M) (r : R)
+  条件: {M : Semimodule范畴.{u} R} (m : M) (r : R)
   证明: TensorProduct.rid_tmul m r
 
 @[simp]
@@ -799,7 +799,7 @@ theorem rightUnitor_inv_apply
 
 中文:
 定理 rightUnitor_inv_apply
-  条件: {M : SemimoduleCat.{u} R} (m : M)
+  条件: {M : Semimodule范畴.{u} R} (m : M)
   证明: TensorProduct.rid_symm_apply m
 
 @[simp]
@@ -823,7 +823,7 @@ theorem associator_hom_apply
 
 中文:
 定理 associator_hom_apply
-  条件: {M N K : SemimoduleCat.{u} R} (m : M) (n : N) (k : K)
+  条件: {M N K : Semimodule范畴.{u} R} (m : M) (n : N) (k : K)
   证明: rfl
 
 @[simp]
@@ -843,7 +843,7 @@ theorem associator_inv_apply
 
 中文:
 定理 associator_inv_apply
-  条件: {M N K : SemimoduleCat.{u} R} (m : M) (n : N) (k : K)
+  条件: {M N K : Semimodule范畴.{u} R} (m : M) (n : N) (k : K)
   证明: rfl
 -/
 theorem associator_inv_apply {M N K : SemimoduleCat.{u} R} (m : M) (n : N) (k : K) :
@@ -988,7 +988,7 @@ tensorHom f g := ofHom TensorProduct.map f.hom g.hom
   leftUnitor M := (TensorProduct.lid R M).toMo
 
 中文:
-实例 MonoidalCategory.instMonoidalCategoryStruct
+实例 幺半群范畴.instMonoidalCategoryStruct
   签名: :
   定义体: of R (TensorProduct R M N)
 whiskerLeft M _ _ f := ofHom f.hom.lTensor M
@@ -1026,7 +1026,7 @@ instance monoidalCategory
 
 中文:
 实例 monoidalCategory
-  签名: : MonoidalCategory (ModuleCat.{u} R)
+  签名: : 幺半群范畴 (模范畴.{u} R)
   定义体: Monoidal.induced equivalenceSemimoduleCat.functor
   { μIso _ _ := .refl _
     εIso := .refl _
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing ((𝟙_ (ModuleCat.{u} R) : ModuleCat.{u} R) : 类型u)
+  签名: 交换环 ((𝟙_ (模范畴.{u} R) : 模范畴.{u} R) : 类型u)
   定义体: inferInstanceAs CommRing R
 
 Depends on / 依赖: CommRing
@@ -1074,7 +1074,7 @@ theorem hom_tensorHom
 
 中文:
 定理 hom_tensorHom
-  条件: {K L M N : ModuleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N)
+  条件: {K L M N : 模范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N)
   证明: rfl
 -/
 theorem hom_tensorHom {K L M N : ModuleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) :
@@ -1091,7 +1091,7 @@ theorem hom_whiskerLeft
 
 中文:
 定理 hom_whiskerLeft
-  条件: (L : ModuleCat.{u} R) {M N : ModuleCat.{u} R} (f : M ⟶ N)
+  条件: (L : 模范畴.{u} R) {M N : 模范畴.{u} R} (f : M ⟶ N)
   证明: rfl
 -/
 theorem hom_whiskerLeft (L : ModuleCat.{u} R) {M N : ModuleCat.{u} R} (f : M ⟶ N) :
@@ -1108,7 +1108,7 @@ theorem hom_whiskerRight
 
 中文:
 定理 hom_whiskerRight
-  条件: {L M : ModuleCat.{u} R} (f : L ⟶ M) (N : ModuleCat.{u} R)
+  条件: {L M : 模范畴.{u} R} (f : L ⟶ M) (N : 模范畴.{u} R)
   证明: rfl
 -/
 theorem hom_whiskerRight {L M : ModuleCat.{u} R} (f : L ⟶ M) (N : ModuleCat.{u} R) :
@@ -1125,7 +1125,7 @@ theorem hom_hom_leftUnitor
 
 中文:
 定理 hom_hom_leftUnitor
-  条件: {M : ModuleCat.{u} R}
+  条件: {M : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_leftUnitor {M : ModuleCat.{u} R} :
@@ -1142,7 +1142,7 @@ theorem hom_inv_leftUnitor
 
 中文:
 定理 hom_inv_leftUnitor
-  条件: {M : ModuleCat.{u} R}
+  条件: {M : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_leftUnitor {M : ModuleCat.{u} R} :
@@ -1159,7 +1159,7 @@ theorem hom_hom_rightUnitor
 
 中文:
 定理 hom_hom_rightUnitor
-  条件: {M : ModuleCat.{u} R}
+  条件: {M : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_rightUnitor {M : ModuleCat.{u} R} :
@@ -1176,7 +1176,7 @@ theorem hom_inv_rightUnitor
 
 中文:
 定理 hom_inv_rightUnitor
-  条件: {M : ModuleCat.{u} R}
+  条件: {M : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_rightUnitor {M : ModuleCat.{u} R} :
@@ -1193,7 +1193,7 @@ theorem hom_hom_associator
 
 中文:
 定理 hom_hom_associator
-  条件: {M N K : ModuleCat.{u} R}
+  条件: {M N K : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_associator {M N K : ModuleCat.{u} R} :
@@ -1210,7 +1210,7 @@ theorem hom_inv_associator
 
 中文:
 定理 hom_inv_associator
-  条件: {M N K : ModuleCat.{u} R}
+  条件: {M N K : 模范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_associator {M N K : ModuleCat.{u} R} :
@@ -1232,7 +1232,7 @@ theorem tensorHom_tmul
 
 中文:
 定理 tensorHom_tmul
-  条件: {K L M N : ModuleCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) (k : K) (m : M)
+  条件: {K L M N : 模范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N) (k : K) (m : M)
   证明: rfl
 
 @[simp]
@@ -1254,7 +1254,7 @@ theorem whiskerLeft_apply
 
 中文:
 定理 whiskerLeft_apply
-  结论: (L : ModuleCat.{u} R) {M N : ModuleCat.{u} R} (f : M ⟶ N)
+  结论: (L : 模范畴.{u} R) {M N : 模范畴.{u} R} (f : M ⟶ N)
   证明: rfl
 
 @[simp]
@@ -1277,7 +1277,7 @@ theorem whiskerRight_apply
 
 中文:
 定理 whiskerRight_apply
-  结论: {L M : ModuleCat.{u} R} (f : L ⟶ M) (N : ModuleCat.{u} R)
+  结论: {L M : 模范畴.{u} R} (f : L ⟶ M) (N : 模范畴.{u} R)
   证明: rfl
 
 @[simp]
@@ -1300,7 +1300,7 @@ theorem leftUnitor_hom_apply
 
 中文:
 定理 leftUnitor_hom_apply
-  条件: {M : ModuleCat.{u} R} (r : R) (m : M)
+  条件: {M : 模范畴.{u} R} (r : R) (m : M)
   证明: TensorProduct.lid_tmul m r
 
 @[simp]
@@ -1324,7 +1324,7 @@ theorem leftUnitor_inv_apply
 
 中文:
 定理 leftUnitor_inv_apply
-  条件: {M : ModuleCat.{u} R} (m : M)
+  条件: {M : 模范畴.{u} R} (m : M)
   证明: TensorProduct.lid_symm_apply m
 
 @[simp]
@@ -1348,7 +1348,7 @@ theorem rightUnitor_hom_apply
 
 中文:
 定理 rightUnitor_hom_apply
-  条件: {M : ModuleCat.{u} R} (m : M) (r : R)
+  条件: {M : 模范畴.{u} R} (m : M) (r : R)
   证明: TensorProduct.rid_tmul m r
 
 @[simp]
@@ -1372,7 +1372,7 @@ theorem rightUnitor_inv_apply
 
 中文:
 定理 rightUnitor_inv_apply
-  条件: {M : ModuleCat.{u} R} (m : M)
+  条件: {M : 模范畴.{u} R} (m : M)
   证明: TensorProduct.rid_symm_apply m
 
 @[simp]
@@ -1396,7 +1396,7 @@ theorem associator_hom_apply
 
 中文:
 定理 associator_hom_apply
-  条件: {M N K : ModuleCat.{u} R} (m : M) (n : N) (k : K)
+  条件: {M N K : 模范畴.{u} R} (m : M) (n : N) (k : K)
   证明: rfl
 
 @[simp]
@@ -1416,7 +1416,7 @@ theorem associator_inv_apply
 
 中文:
 定理 associator_inv_apply
-  条件: {M N K : ModuleCat.{u} R} (m : M) (n : N) (k : K)
+  条件: {M N K : 模范畴.{u} R} (m : M) (n : N) (k : K)
   证明: rfl
 -/
 theorem associator_inv_apply {M N K : ModuleCat.{u} R} (m : M) (n : N) (k : K) :
@@ -1560,7 +1560,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalPreadditive (ModuleCat.{u} R)
+  签名: 幺半群预加性 (模范畴.{u} R)
   定义体: by
   refine ⟨?_, ?_, ?_, ?_⟩
   · intros
@@ -1613,7 +1613,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalLinear R (ModuleCat.{u} R)
+  签名: 幺半群线性 R (模范畴.{u} R)
   定义体: by
   refine ⟨?_, ?_⟩
   · intros
@@ -1648,7 +1648,7 @@ lemma ofHom₂_compr₂
 
 中文:
 引理 ofHom₂_compr₂
-  条件: {M N P Q : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) (g : P ->ₗ[R] Q)
+  条件: {M N P Q : 模范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) (g : P ->ₗ[R] Q)
   证明: rfl
 -/
 @[simp] lemma ofHom₂_compr₂ {M N P Q : ModuleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) (g : P ->ₗ[R] Q) :

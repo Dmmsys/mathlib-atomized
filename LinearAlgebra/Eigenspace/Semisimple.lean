@@ -165,8 +165,8 @@ lemma IsSemisimple.iSup_maxGenEigenspace_eq_top_iff
   proof: hf.isFinitelySemisimple.iSup_maxGenEigenspace_eq_top_iff
 
 中文:
-引理 IsSemisimple.iSup_maxGenEigenspace_eq_top_iff
-  条件: (hf : f.IsSemisimple)
+引理 是半单.iSup_maxGenEigenspace_eq_top_iff
+  条件: (hf : f.是半单)
   证明: hf.isFinitelySemisimple.iSup_maxGenEigenspace_eq_top_iff
 
 Depends on / 依赖: hf.isFinitelySemisimple.iSup_maxGenEigenspace_eq_top_iff, iSup_maxGenEigenspace_eq_top_iff, isFinitelySemisimple
@@ -191,8 +191,8 @@ lemma IsSemisimple.iSup_eigenspace_eq_top
     iSup_maxGenEigenspace_eq_top f
 
 中文:
-引理 IsSemisimple.iSup_eigenspace_eq_top
-  条件: (hf : f.IsSemisimple)
+引理 是半单.iSup_eigenspace_eq_top
+  条件: (hf : f.是半单)
   证明: by
   simpa only [(isFinitelySemisimple_iff_isSemisimple.mpr hf).maxGenEigenspace_eq_eigenspace] using
     iSup_maxGenEigenspace_eq_top f
@@ -221,8 +221,8 @@ lemma IsSemisimple.eq_zero_iff_forall_eigenvalue
     suffices f.eigenspace 0 = ⊤ by rwa [eigenspace_zero, LinearMap.ker_eq_top]
 
 中文:
-引理 IsSemisimple.eq_zero_iff_forall_eigenvalue
-  条件: (hf : f.IsSemisimple)
+引理 是半单.eq_zero_iff_对任意_eigenvalue
+  条件: (hf : f.是半单)
   证明: by
   constructor
   · rintro rfl μ hμ

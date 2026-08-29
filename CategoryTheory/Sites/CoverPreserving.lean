@@ -62,10 +62,10 @@ structure CoverPreserving
     - cover_preserve : forall {U : C} {S : Sieve U} (_ : S in J U), S.functorPushforward G in K (G.obj U)
 
 中文:
-结构 CoverPreserving
+结构 余verPreserving
   参数: (G : C ⥤ D)
   公理与运算 (1 个):
-    - cover_preserve : 对任意 {U : C} {S : Sieve U} (_ : S in J U), S.functorPushforward G in K (G.obj U)
+    - cover_preserve : 对任意 {U : C} {S : 筛 U} (_ : S in J U), S.functorPushforward G in K (G.obj U)
 -/
 structure CoverPreserving (G : C ⥤ D) : Prop where
   cover_preserve : forall {U : C} {S : Sieve U} (_ : S in J U), S.functorPushforward G in K (G.obj U)
@@ -80,7 +80,7 @@ theorem idCoverPreserving
 
 中文:
 定理 idCoverPreserving
-  结论: CoverPreserving J J (𝟭 _)
+  结论: 余verPreserving J J (𝟭 _)
   证明: ⟨fun hS => by simpa using! hS⟩
 -/
 theorem idCoverPreserving : CoverPreserving J J (𝟭 _) :=
@@ -97,8 +97,8 @@ theorem CoverPreserving.comp
     exact hG.cover_preserve (hF.cover_preserve hS)⟩
 
 中文:
-定理 CoverPreserving.comp
-  条件: {F} (hF : CoverPreserving J K F) {G} (hG : CoverPreserving K L G)
+定理 余verPreserving.comp
+  条件: {F} (hF : 余verPreserving J K F) {G} (hG : 余verPreserving K L G)
   证明: ⟨fun hS => by
     rw [Sieve.functorPushforward_comp]
     exact hG.cover_preserve (hF.cover_preserve hS)⟩
@@ -121,10 +121,10 @@ structure CompatiblePreserving
     - compatible : forall (ℱ : Sheaf K (Type w)) {Z} {T : Presieve Z} {x : FamilyOfElements (G.op ⋙ ℱ.obj) T} (_ : x.Compatible) {Y₁ Y₂} {X} (f₁ : X ⟶ G.obj Y₁) (f₂ : X ⟶ G.obj Y₂) {g₁ : Y₁ ⟶ Z} {g₂ : Y₂ ⟶ Z} (hg₁ : T g₁) (hg₂ : T g₂) (_ : f₁ ≫ G.map g₁ = f₂ ≫ G.map g₂), ℱ.obj.map f₁.op (x g₁ hg₁) = ℱ.obj.map f₂.op (x g₂ hg₂)
 
 中文:
-结构 CompatiblePreserving
-  参数: (K : GrothendieckTopology D) (G : C ⥤ D)
+结构 余mpatiblePreserving
+  参数: (K : Grothendieck拓扑 D) (G : C ⥤ D)
   公理与运算 (1 个):
-    - compatible : 对任意 (ℱ : Sheaf K (Type w)) {Z} {T : Presieve Z} {x : FamilyOfElements (G.op ⋙ ℱ.obj) T} (_ : x.Compatible) {Y₁ Y₂} {X} (f₁ : X ⟶ G.obj Y₁) (f₂ : X ⟶ G.obj Y₂) {g₁ : Y₁ ⟶ Z} {g₂ : Y₂ ⟶ Z} (hg₁ : T g₁) (hg₂ : T g₂) (_ : f₁ ≫ G.map g₁ = f₂ ≫ G.map g₂), ℱ.obj.map f₁.op (x g₁ hg₁) = ℱ.obj.map f₂.op (x g₂ hg₂)
+    - compatible : 对任意 (ℱ : 层 K (类型 w)) {Z} {T : Presieve Z} {x : FamilyOfElements (G.op ⋙ ℱ.obj) T} (_ : x.余mpatible) {Y₁ Y₂} {X} (f₁ : X ⟶ G.obj Y₁) (f₂ : X ⟶ G.obj Y₂) {g₁ : Y₁ ⟶ Z} {g₂ : Y₂ ⟶ Z} (hg₁ : T g₁) (hg₂ : T g₂) (_ : f₁ ≫ G.map g₁ = f₂ ≫ G.map g₂), ℱ.obj.map f₁.op (x g₁ hg₁) = ℱ.obj.map f₂.op (x g₂ hg₂)
 -/
 structure CompatiblePreserving (K : GrothendieckTopology D) (G : C ⥤ D) : Prop where
   compatible :
@@ -151,7 +151,7 @@ theorem Presieve.FamilyOfElements.Compatible.functorPushforward
   suffices ℱ.obj.map (g₁ ≫ h₁).op (x f₁ hf₁) = ℱ.obj.map (g₂ ≫ h₂).op 
 
 中文:
-定理 Presieve.FamilyOfElements.Compatible.functorPushforward
+定理 Presieve.FamilyOfElements.余mpatible.functorPushforward
   证明: by
   rintro Z₁ Z₂ W g₁ g₂ f₁' f₂' H₁ H₂ eq
   unfold FamilyOfElements.functorPushforward
@@ -186,7 +186,7 @@ theorem CompatiblePreserving.apply_map
   simpa using hG.compatible ℱ h f' (𝟙 _) hg hf (by simp [eq])
 
 中文:
-定理 CompatiblePreserving.apply_map
+定理 余mpatiblePreserving.apply_map
   条件: {Y : C} {f : Y ⟶ Z} (hf : T f)
   证明: by
   unfold FamilyOfElements.functorPushforward
@@ -226,7 +226,7 @@ theorem compatiblePreservingOfFlat
 
 中文:
 定理 compatiblePreservingOfFlat
-  结论: {C : 类型u₁} [Category.{v₁} C] {D : 类型u₂} [Category.{v₂} D]
+  结论: {C : 类型u₁} [范畴.{v₁} C] {D : 类型u₂} [范畴.{v₂} D]
   证明: by
   constructor
   intro ℱ Z T x hx Y₁ Y₂ X f₁ f₂ g₁ g₂ hg₁ hg₂ e
@@ -283,7 +283,7 @@ theorem compatiblePreservingOfDownwardsClosed
 
 中文:
 定理 compatiblePreservingOfDownwardsClosed
-  结论: (F : C ⥤ D) [F.Full] [F.Faithful]
+  结论: (F : C ⥤ D) [F.满] [F.忠实]
   证明: by
   constructor
   introv hx he
@@ -325,8 +325,8 @@ lemma Functor.isContinuous_of_coverPreserving
      
 
 中文:
-引理 Functor.isContinuous_of_coverPreserving
-  结论: (hF₁ : CompatiblePreserving.{max u₁ v₁ u₂ v₂} K F)
+引理 函子.isContinuous_of_coverPreserving
+  结论: (hF₁ : 余mpatiblePreserving.{最大值 u₁ v₁ u₂ v₂} K F)
   证明: by
     apply existsUnique_of_exists_of_unique
     · have H := (isSheaf_iff_isSheaf_of_type _ _).1 G.2 _ (hF₂.cover_preserve hS)
@@ -364,9 +364,9 @@ lemma CoverPreserving.of_isContinuous
     have := Functor.op_comp_isSheaf_of_isSheaf_type F J (class
 
 中文:
-引理 CoverPreserving.of_isContinuous
-  条件: [F.IsContinuous J K]
-  结论: CoverPreserving J K F where
+引理 余verPreserving.of_isContinuous
+  条件: [F.是连续 J K]
+  结论: 余verPreserving J K F where
   证明: by
     rw [K.mem_iff_isSheafFor_closedSieves]
     obtain ⟨ι, Y, f, rfl⟩ := S.exists_eq_ofArrows
@@ -398,7 +398,7 @@ lemma Functor.isContinuous_iff_coverPreserving
   apply Functor.isContinuous_of_coverPreserving (compatiblePreservingOfFlat _ _) h
 
 中文:
-引理 Functor.isContinuous_iff_coverPreserving
+引理 函子.isContinuous_iff_coverPreserving
   条件: [RepresentablyFlat F]
   证明: by
   refine ⟨fun h => .of_isContinuous _ _ _, fun h => ?_⟩
@@ -427,8 +427,8 @@ lemma Functor.PreservesOneHypercovers.of_coverPreserving
       hasPullback_of_preservesPullba
 
 中文:
-引理 Functor.PreservesOneHypercovers.of_coverPreserving
-  结论: [HasPullbacks C]
+引理 函子.PreservesOneHypercovers.of_coverPreserving
+  结论: [有Pullbacks C]
   证明: by
   refine fun {U} E => ⟨?_, fun i₁ i₂ W p₁ p₂ h => ?_⟩
   · simp [PreZeroHypercover.sieve₀_map, H.cover_preserve E.mem₀]

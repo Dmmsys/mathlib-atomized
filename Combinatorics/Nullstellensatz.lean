@@ -79,7 +79,7 @@ theorem eq_zero_of_eval_zero_at_prod_finset
 
 中文:
 定理 eq_zero_of_eval_zero_at_prod_finset
-  结论: {σ : 类型} [Finite σ] [IsDomain R]
+  结论: {σ : 类型} [有限 σ] [是整环 R]
   证明: by
   induction σ using Finite.induction_empty_option with
   | @of_equiv σ τ e h =>
@@ -182,7 +182,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Alon.P (S : Finset R) (i : σ)
+  签名: def Alon.P (S : 有限集 R) (i : σ)
   定义体: ∏ r in S, (X i - C r)
 -/
 private noncomputable def Alon.P (S : Finset R) (i : σ) : MvPolynomial σ R :=
@@ -204,7 +204,7 @@ theorem Alon.degree_P
 
 中文:
 定理 Alon.degree_P
-  条件: [Nontrivial R] (m : MonomialOrder σ) (S : Finset R) (i : σ)
+  条件: [非平凡 R] (m : 单项式序 σ) (S : 有限集 R) (i : σ)
   证明: by
   simp only [P]
   rw [degree_prod_of_regular]
@@ -232,7 +232,7 @@ theorem Alon.monic_P
 
 中文:
 定理 Alon.monic_P
-  条件: (m : MonomialOrder σ) (S : Finset R) (i : σ)
+  条件: (m : 单项式序 σ) (S : 有限集 R) (i : σ)
   证明: Monic.prod (fun r _ => m.monic_X_sub_C i r)
 -/
 private theorem Alon.monic_P (m : MonomialOrder σ) (S : Finset R) (i : σ) :
@@ -255,7 +255,7 @@ lemma Alon.of_mem_P_support
 
 中文:
 引理 Alon.of_mem_P_support
-  结论: {ι : 类型} (i : ι) (S : Finset R) (m : ι ->₀ 自然数)
+  结论: {ι : 类型} (i : ι) (S : 有限集 R) (m : ι ->₀ 自然数)
   证明: by
   classical
   have hP : Alon.P S i = .rename (fun _ => i) (Alon.P S ()) := by simp [Alon.P]
@@ -304,7 +304,7 @@ theorem combinatorial_nullstellensatz_exists_linearCombination
     exact ⟨f
 
 中文:
-定理 combinatorial_nullstellensatz_exists_linearCombination
+定理 combinatorial_nullstellensatz_存在_linearCombination
   证明: by
   let : LinearOrder σ := WellOrderingRel.isWellOrder.linearOrder
   obtain ⟨h, r, hf, hh, hr⟩ := degLex.div (b := fun i => Alon.P (S i) i)
@@ -359,8 +359,8 @@ theorem combinatorial_nullstellensatz_exists_eval_nonzero
   rw [linearCombination_app
 
 中文:
-定理 combinatorial_nullstellensatz_exists_eval_nonzero
-  结论: [IsDomain R]
+定理 combinatorial_nullstellensatz_存在_eval_nonzero
+  结论: [是整环 R]
   证明: by
   let _ : LinearOrder σ := WellOrderingRel.isWellOrder.linearOrder
   by_contra! Heval

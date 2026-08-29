@@ -48,11 +48,11 @@ structure SFinKer
 
 中文:
 结构 SFinKer
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [str : MeasurableSpace carrier]
+    - [str : 可测空间 carrier]
 -/
 structure SFinKer : Type (u + 1) where
   of ::
@@ -95,11 +95,11 @@ structure Hom
     - property : IsSFiniteKernel hom
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : SFinKer.{u})
   公理与运算 (2 个):
-    - hom : Kernel X Y
-    - property : IsSFiniteKernel hom
+    - hom : 核 X Y
+    - property : 是SFiniteKernel hom
 -/
 structure Hom (X Y : SFinKer.{u}) where
   /-- The underlying morphism. -/
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory SFinKer
+  签名: 大范畴 SFinKer
   定义体: Hom X Y
   id X := ⟨Kernel.id, inferInstance⟩
   comp κ η := ⟨η.1 ∘ₖ κ.1, inferInstance⟩
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory SFinKer.{u}
+  签名: 幺半群范畴 SFinKer.{u}
   定义体: SFinKer.of (X × Y)
   whiskerLeft X Y₁ Y₂ κ := ⟨Kernel.id ∥ₖ κ.1, inferInstance⟩
   whiskerRight κ Y := ⟨κ.1 ∥ₖ Kernel.id, inferInstance⟩
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory SFinKer.{u}
+  签名: 对称范畴 SFinKer.{u}
   定义体: by
     refine ⟨⟨Kernel.swap _ _, by rw [Kernel.swap]; infer_instance⟩,
       ⟨Kernel.swap _ _, by rw [Kernel.swap]; infer_instance⟩, ?_, ?_⟩
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: CopyDiscardCategory SFinKer.{u}
+  签名: 余pyDiscard范畴 SFinKer.{u}
   定义体: ⟨by ext : 1; dsimp; exact Kernel.swap_copy⟩
   copy_tensor X Y := by
     ext : 1; dsimp [MonoidalCategory.tensorμ]
@@ -423,7 +423,7 @@ instance deterministic_deterministic
 
 中文:
 实例 deterministic_deterministic
-  签名: (X Y : SFinKer) (κ : Kernel X Y)
+  签名: (X Y : SFinKer) (κ : 核 X Y)
   定义体: by
     ext : 1; dsimp
     rw [Kernel.id_parallelComp_comp_parallelComp_id]
@@ -447,7 +447,7 @@ lemma deterministic_id_map
 
 中文:
 引理 deterministic_id_map
-  条件: (X Y : SFinKer) (f : X.carrier -> Y.carrier) (hf : Measurable f)
+  条件: (X Y : SFinKer) (f : X.carrier -> Y.carrier) (hf : 可测 f)
   证明: by cat_disch
 
 Depends on / 依赖: Kernel, Kernel.id.map
@@ -469,7 +469,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (α_ X Y Z).hom
+  签名: 确定性 (α_ X Y Z).hom
   定义体: deterministic_deterministic ((X otimes Y) otimes Z)
     (X otimes Y otimes Z) (Kernel.deterministic MeasurableEquiv.prodAssoc (MeasurableEquiv.measurable _))
 
@@ -489,7 +489,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (fun_ X ).hom
+  签名: 确定性 (fun_ X ).hom
   定义体: deterministic_id_map (𝟙_ SFinKer otimes X) X Prod.snd (by fun_prop)
 
 Depends on / 依赖: Prod.snd, SFinKer, deterministic_id_map, fun_prop, otimes
@@ -507,7 +507,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (ρ_ X ).hom
+  签名: 确定性 (ρ_ X ).hom
   定义体: deterministic_id_map (X otimes 𝟙_ SFinKer) X Prod.fst (by fun_prop)
 
 Depends on / 依赖: Prod.fst, SFinKer, deterministic_id_map, fun_prop, otimes
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (β_ X Y).hom
+  签名: 确定性 (β_ X Y).hom
   定义体: deterministic_deterministic (X otimes Y) (Y otimes X) (Kernel.deterministic Prod.swap (by fun_prop))
 
 Depends on / 依赖: Kernel, Kernel.deterministic, Prod.swap, deterministic, deterministic_deterministic, fun_prop, otimes
@@ -544,7 +544,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (ε[X])
+  签名: 确定性 (ε[X])
   定义体: deterministic_deterministic X (𝟙_ SFinKer)
     (Kernel.deterministic (fun (x : X) => PUnit.unit) (by fun_prop))
 
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (Δ[X])
+  签名: 确定性 (Δ[X])
   定义体: deterministic_deterministic X (X otimes X) (Kernel.deterministic (fun (x : X) => (x, x)) (by fun_prop))
 
 Depends on / 依赖: Kernel, Kernel.deterministic, deterministic, deterministic_deterministic, fun_prop, otimes

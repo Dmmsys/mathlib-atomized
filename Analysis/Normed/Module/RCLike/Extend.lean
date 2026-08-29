@@ -36,8 +36,8 @@ theorem Module.Dual.norm_extendRCLike_le_seminorm
     _
 
 中文:
-定理 Module.Dual.norm_extendRCLike_le_seminorm
-  结论: [AddCommGroup E] [Module 𝕜 E] [Module 实数 E]
+定理 模.对偶.norm_extendRCLike_le_seminorm
+  结论: [加法交换群 E] [模 𝕜 E] [模 实数 E]
   证明: by
   by_cases hx : fr.extendRCLike (𝕜 := 𝕜) x = 0
   · simp [hx]
@@ -81,7 +81,7 @@ definition extendRCLikeL
 
 中文:
 定义 extendRCLikeL
-  签名: {𝕜 F : 类型} [RCLike 𝕜] [TopologicalSpace F]
+  签名: {𝕜 F : 类型} [RCLike 𝕜] [拓扑空间 F]
   定义体: extendRCLikeₗ
   continuous_toFun := by
     rw [(ContinuousLinearMap.isEmbedding_restrictScalars Real).continuous_iff]
@@ -113,7 +113,7 @@ lemma toLinearEquiv_extendRCLikeL
 
 中文:
 引理 toLinearEquiv_extendRCLikeL
-  结论: {𝕜 F : 类型} [RCLike 𝕜] [TopologicalSpace F]
+  结论: {𝕜 F : 类型} [RCLike 𝕜] [拓扑空间 F]
   证明: rfl
 
 Depends on / 依赖: toLinearEquiv
@@ -133,7 +133,7 @@ theorem norm_extendRCLike_le_seminorm
 
 中文:
 定理 norm_extendRCLike_le_seminorm
-  结论: [AddCommGroup E] [Module 𝕜 E] [Module 实数 E]
+  结论: [加法交换群 E] [模 𝕜 E] [模 实数 E]
   证明: Dual.norm_extendRCLike_le_seminorm fr hp x
 
 Depends on / 依赖: Dual.norm_extendRCLike_le_seminorm, norm_extendRCLike_le_seminorm

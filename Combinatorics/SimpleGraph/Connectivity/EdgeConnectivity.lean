@@ -287,7 +287,7 @@ lemma isEdgeConnected_one
 
 中文:
 引理 isEdgeConnected_one
-  结论: G.IsEdgeConnected 1 ↔ G.Preconnected
+  结论: G.IsEdgeConnected 1 ↔ G.预连通
   证明: by
   simp [IsEdgeConnected, Preconnected]
 
@@ -334,7 +334,7 @@ lemma IsEdgeReachable.of_subsingleton
 
 中文:
 引理 IsEdgeReachable.of_subsingleton
-  条件: [Subsingleton V]
+  条件: [子单例 V]
   结论: G.IsEdgeReachable k u v
   证明: fun _ _ => .of_subsingleton
 
@@ -357,7 +357,7 @@ lemma IsEdgeConnected.of_subsingleton
 
 中文:
 引理 IsEdgeConnected.of_subsingleton
-  条件: [Subsingleton V]
+  条件: [子单例 V]
   结论: G.IsEdgeConnected k
   证明: fun _ _ => .of_subsingleton
 
@@ -378,7 +378,7 @@ lemma IsEdgeConnected.preconnected
 中文:
 引理 IsEdgeConnected.preconnected
   条件: (hk : k != 0) (h : G.IsEdgeConnected k)
-  结论: G.Preconnected
+  结论: G.预连通
   证明: fun u v => (h u v).reachable hk
 
 Depends on / 依赖: reachable
@@ -396,7 +396,7 @@ lemma IsEdgeConnected.connected
 
 中文:
 引理 IsEdgeConnected.connected
-  条件: [Nonempty V] (hk : k != 0) (h : G.IsEdgeConnected k)
+  条件: [非空 V] (hk : k != 0) (h : G.IsEdgeConnected k)
   证明: h.preconnected hk
 
 Depends on / 依赖: h.preconnected, preconnected
@@ -420,7 +420,7 @@ simpa using w.adj_snd mt Walk.Nil.eq huv
 
 中文:
 引理 IsEdgeReachable.le_degree
-  结论: [Fintype (G.neighborSet u)] (h : G.IsEdgeReachable k u v)
+  结论: [有限类型 (G.neighborSet u)] (h : G.IsEdgeReachable k u v)
   证明: by
   classical
   by_contra! hh
@@ -450,7 +450,7 @@ lemma IsEdgeConnected.le_degree
 
 中文:
 引理 IsEdgeConnected.le_degree
-  结论: [Fintype (G.neighborSet u)] [Nontrivial V]
+  结论: [有限类型 (G.neighborSet u)] [非平凡 V]
   证明: by
   obtain ⟨v, hv⟩ := exists_ne u
   exact (h u v).le_degree hv.symm
@@ -561,7 +561,7 @@ lemma isBridge_iff_not_isEdgeReachable_two
 
 中文:
 引理 isBridge_iff_not_isEdgeReachable_two
-  条件: (huv : G.Adj u v)
+  条件: (huv : G.伴随 u v)
   证明: by
   refine ⟨fun h => h.not_isEdgeReachable_two, fun hc hr => hc fun s hs₂ => ?_⟩
   by_cases! hs₁ : s.encard != (1 : Nat)
@@ -619,7 +619,7 @@ lemma isEdgeConnected_two
 
 中文:
 引理 isEdgeConnected_two
-  结论: G.IsEdgeConnected 2 ↔ 对任意 e, (G.deleteEdges {e}).Preconnected
+  结论: G.IsEdgeConnected 2 ↔ 对任意 e, (G.deleteEdges {e}).预连通
   证明: by
   simp [isEdgeConnected_add_one]
 
@@ -644,7 +644,7 @@ refine Reachable.trans (h hs) .reachable.symm w.tail.toDeleteEdge _ (fun hh => ?
  
 
 中文:
-引理 exists_adj_isEdgeReachable_two
+引理 存在_adj_isEdgeReachable_two
   条件: (hne : u != v) (h : G.IsEdgeReachable 2 u v)
   证明: by
 .exists_isPath obtain ⟨w, hw⟩ := h.reachable (by simp)
@@ -698,8 +698,8 @@ he (isEdgeReachable_two.1 huv _).trans hvy
     ((w.takeUntil x _).mem_edges_of_not_re
 
 中文:
-引理 IsTrail.isEdgeReachable_two_of_isEdgeReachable_two_aux
-  结论: (hw : w.IsTrail)
+引理 是Trail.isEdgeReachable_two_of_isEdgeReachable_two_aux
+  结论: (hw : w.是Trail)
   证明: by
   classical
   contrapose huy
@@ -730,8 +730,8 @@ lemma IsTrail.isEdgeReachable_two_of_isEdgeReachable_two
     (hw.isEdgeReachable_two_of_isEdgeReachable_two_aux huv hy)
 
 中文:
-引理 IsTrail.isEdgeReachable_two_of_isEdgeReachable_two
-  结论: (hw : w.IsTrail)
+引理 是Trail.isEdgeReachable_two_of_isEdgeReachable_two
+  结论: (hw : w.是Trail)
   证明: (hw.isEdgeReachable_two_of_isEdgeReachable_two_aux huv hx).symm.trans
     (hw.isEdgeReachable_two_of_isEdgeReachable_two_aux huv hy)
 
@@ -755,8 +755,8 @@ lemma IsTrail.not_mem_edges_of_not_isEdgeReachable_two
   proof: mt (hw.isEdgeReachable_two_of_isEdgeReachable_two_aux huv) huy
 
 中文:
-引理 IsTrail.not_mem_edges_of_not_isEdgeReachable_two
-  结论: (hw : w.IsTrail)
+引理 是Trail.not_mem_edges_of_not_isEdgeReachable_two
+  结论: (hw : w.是Trail)
   证明: mt (hw.isEdgeReachable_two_of_isEdgeReachable_two_aux huv) huy
 
 Depends on / 依赖: hw.isEdgeReachable_two_of_isEdgeReachable_two_aux, isEdgeReachable_two_of_isEdgeReachable_two_aux
@@ -774,8 +774,8 @@ lemma IsTrail.isEdgeReachable_two
   proof: hw.isEdgeReachable_two_of_isEdgeReachable_two .rfl hx hy
 
 中文:
-引理 IsTrail.isEdgeReachable_two
-  结论: {w : G.Walk u u} (hw : w.IsTrail) (hx : x in w.support)
+引理 是Trail.isEdgeReachable_two
+  结论: {w : G.途径 u u} (hw : w.是Trail) (hx : x in w.support)
   证明: hw.isEdgeReachable_two_of_isEdgeReachable_two .rfl hx hy
 
 Depends on / 依赖: hw.isEdgeReachable_two_of_isEdgeReachable_two, isEdgeReachable_two_of_isEdgeReachable_two

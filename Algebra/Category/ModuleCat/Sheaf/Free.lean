@@ -139,7 +139,7 @@ definition freeHomEquiv
 
 中文:
 定义 freeHomEquiv
-  签名: (M : SheafOfModules.{u} R) {I : 类型u}
+  签名: (M : 模层.{u} R) {I : 类型u}
   定义体: M.unitHomEquiv (ιFree i ≫ f)
   invFun s := Cofan.IsColimit.desc (isColimitFreeCofan I) (fun i => M.unitHomEquiv.symm (s i))
   left_inv s := Cofan.IsColimit.hom_ext (isColimitFreeCofan I) _ _
@@ -166,7 +166,7 @@ lemma freeHomEquiv_comp_apply
 
 中文:
 引理 freeHomEquiv_comp_apply
-  结论: {M N : SheafOfModules.{u} R} {I : 类型u}
+  结论: {M N : 模层.{u} R} {I : 类型u}
   证明: rfl
 -/
 lemma freeHomEquiv_comp_apply {M N : SheafOfModules.{u} R} {I : Type u}
@@ -184,7 +184,7 @@ lemma freeHomEquiv_symm_comp
 
 中文:
 引理 freeHomEquiv_symm_comp
-  结论: {M N : SheafOfModules.{u} R} {I : 类型u} (s : I -> M.sections)
+  结论: {M N : 模层.{u} R} {I : 类型u} (s : I -> M.sections)
   证明: N.freeHomEquiv.injective (by ext; simp [freeHomEquiv_comp_apply])
 
 Depends on / 依赖: N.freeHomEquiv.injective, freeHomEquiv, freeHomEquiv_comp_apply, injective
@@ -222,7 +222,7 @@ lemma freeHomEquiv_apply
 
 中文:
 引理 freeHomEquiv_apply
-  结论: {M : SheafOfModules.{u} R} {I : 类型u}
+  结论: {M : 模层.{u} R} {I : 类型u}
   证明: rfl
 -/
 lemma freeHomEquiv_apply {M : SheafOfModules.{u} R} {I : Type u}
@@ -384,7 +384,7 @@ definition freeFunctor
 
 中文:
 定义 freeFunctor
-  签名: : 类型u ⥤ SheafOfModules.{u} R
+  签名: : 类型u ⥤ 模层.{u} R
   定义体: sigmaConst.obj (unit R)
 
 @[simp]
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize.{v₂, u₂} (freeFunctor (R := R))
+  签名: 保持余limitsOfSize.{v₂, u₂} (freeFunctor (R := R))
   定义体: inferInstanceAs (PreservesColimitsOfSize.{v₂, u₂} (sigmaConst.obj _))
 -/
 instance : PreservesColimitsOfSize.{v₂, u₂} (freeFunctor (R := R)) :=

@@ -124,7 +124,7 @@ theorem map_nhds_eq_of_surj
 
 中文:
 定理 map_nhds_eq_of_surj
-  结论: [CompleteSpace E] [CompleteSpace F] {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
+  结论: [完备空间 E] [完备空间 F] {f : E -> F} {f' : E ->L[𝕜] F} {a : E}
   证明: by
   let f'symm := f'.nonlinearRightInverseOfSurjective h
   set c : Real>=0 := f'symm.nnnorm⁻¹ / 2 with hc
@@ -513,7 +513,7 @@ theorem isOpenMap_of_hasStrictFDerivAt_equiv
 
 中文:
 定理 isOpenMap_of_hasStrictFDerivAt_equiv
-  结论: [CompleteSpace E] {f : E -> F} {f' : E -> E ≃L[𝕜] F}
+  结论: [完备空间 E] {f : E -> F} {f' : E -> E ≃L[𝕜] F}
   证明: isOpenMap_iff_nhds_le.2 fun x => (hf x).map_nhds_eq_of_equiv.ge
 
 Depends on / 依赖: isOpenMap_iff_nhds_le, map_nhds_eq_of_equiv, map_nhds_eq_of_equiv.ge

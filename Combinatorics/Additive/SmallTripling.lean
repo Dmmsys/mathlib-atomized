@@ -327,7 +327,7 @@ lemma small_alternating_pow_of_small_tripling
 
 中文:
 引理 small_alternating_pow_of_small_tripling
-  结论: (hm : 3 <= m) (hA : #(A ^ 3) <= K * #A) (ε : Fin m -> 整数)
+  结论: (hm : 3 <= m) (hA : #(A ^ 3) <= K * #A) (ε : 有限集 m -> 整数)
   证明: by
   have hm₀ : m != 0 := by positivity
   have hε₀ i : ε i != 0 := fun h => by simpa [h] using hε i

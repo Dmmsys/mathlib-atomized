@@ -39,7 +39,7 @@ theorem exists_out_continuousLinearMap
   exact ⟨⟨f, isInducing_mk.continuous_iff.2 (by continuity)⟩, DFunLike.ext' hf⟩
 
 中文:
-定理 exists_out_continuousLinearMap
+定理 存在_out_continuousLinearMap
   证明: by
   rcases (mkCLM K E).toLinearMap.exists_rightInverse_of_surjective
     (LinearMap.range_eq_top.mpr surjective_mk) with ⟨f, hf⟩
@@ -154,7 +154,7 @@ theorem postcomp_mkCLM_surjective
 
 中文:
 定理 postcomp_mkCLM_surjective
-  结论: {L : 类型} [Semiring L] (σ : L ->+* K)
+  结论: {L : 类型} [半环 L] (σ : L ->+* K)
   证明: by
   intro f
   use (outCLM K E).comp f
@@ -179,7 +179,7 @@ theorem isEmbedding_outCLM
 
 中文:
 定理 isEmbedding_outCLM
-  结论: IsEmbedding (outCLM K E)
+  结论: 是嵌入 (outCLM K E)
   证明: Function.LeftInverse.isEmbedding (mk_outCLM K) continuous_mk (map_continuous _)
 
 Depends on / 依赖: Function, Function.LeftInverse.isEmbedding, LeftInverse, continuous_mk, isEmbedding, map_continuous, mk_outCLM
@@ -197,7 +197,7 @@ theorem outCLM_injective
 
 中文:
 定理 outCLM_injective
-  结论: Function.Injective (outCLM K E)
+  结论: 函数.单射 (outCLM K E)
   证明: (isEmbedding_outCLM K E).injective
 
 Depends on / 依赖: injective, isEmbedding_outCLM
@@ -227,7 +227,7 @@ theorem outCLM_isUniformInducing
 
 中文:
 定理 outCLM_isUniformInducing
-  结论: IsUniformInducing (outCLM K E)
+  结论: 是UniformInducing (outCLM K E)
   证明: by
   rw [← isUniformInducing_mk.of_comp_iff]; rw [mk_comp_outCLM]
   exact .id
@@ -254,7 +254,7 @@ theorem outCLM_isUniformEmbedding
 
 中文:
 定理 outCLM_isUniformEmbedding
-  结论: IsUniformEmbedding (outCLM K E) where
+  结论: 是一致嵌入 (outCLM K E) where
   证明: outCLM_injective K E
   toIsUniformInducing := outCLM_isUniformInducing K E
 
@@ -277,7 +277,7 @@ theorem outCLM_uniformContinuous
 
 中文:
 定理 outCLM_uniformContinuous
-  结论: UniformContinuous (outCLM K E)
+  结论: 一致连续 (outCLM K E)
   证明: (outCLM_isUniformInducing K E).uniformContinuous
 
 Depends on / 依赖: outCLM_isUniformInducing, uniformContinuous

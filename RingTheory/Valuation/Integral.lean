@@ -49,7 +49,7 @@ lemma isIntegral_iff_v_le_one
     simp
 
 中文:
-引理 isIntegral_iff_v_le_one
+引理 is整数egral_iff_v_le_one
   条件: {x : R}
   证明: by
   nontriviality R
@@ -99,7 +99,7 @@ theorem mem_of_integral
 
 中文:
 定理 mem_of_integral
-  条件: {x : R} (hx : Is整数egral O x)
+  条件: {x : R} (hx : 是整 O x)
   结论: x in v.integer
   证明: hv.isIntegral_iff_v_le_one.mp hx
 
@@ -152,8 +152,8 @@ theorem isIntegrallyClosed
     (IsIntegrallyClosed.integralClosure_eq_bot_iff K).mp (Valuation.Integers.integralClosure hv)
 
 中文:
-定理 isIntegrallyClosed
-  结论: Is整数egrallyClosed O
+定理 is整数egrallyClosed
+  结论: 是整闭 O
   证明: by
   have : IsFractionRing O K := hv.isFractionRing
   exact
@@ -175,8 +175,8 @@ instance isIntegrallyClosed_integers
   body: (Valuation.integer.integers v).isIntegrallyClosed
 
 中文:
-实例 isIntegrallyClosed_integers
-  签名: (v : Valuation K Γ₀)
+实例 is整数egrallyClosed_integers
+  签名: (v : 赋值 K Γ₀)
   定义体: (Valuation.integer.integers v).isIntegrallyClosed
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers, isIntegrallyClosed

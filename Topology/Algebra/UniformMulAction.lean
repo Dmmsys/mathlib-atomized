@@ -46,10 +46,10 @@ class UniformContinuousConstVAdd
     - uniformContinuous_const_vadd : forall c : M, UniformContinuous (c +ᵥ · : X -> X)
 
 中文:
-类 UniformContinuousConstVAdd
-  参数: [VAdd M X]
+类 一致连续常数向量加法
+  参数: [向量加法 M X]
   公理与运算 (1 个):
-    - uniformContinuous_const_vadd : 对任意 c : M, UniformContinuous (c +ᵥ · : X -> X)
+    - uniformContinuous_const_vadd : 对任意 c : M, 一致连续 (c +ᵥ · : X -> X)
 -/
 class UniformContinuousConstVAdd [VAdd M X] : Prop where
   uniformContinuous_const_vadd : forall c : M, UniformContinuous (c +ᵥ · : X -> X)
@@ -67,10 +67,10 @@ class UniformContinuousConstSMul
     - uniformContinuous_const_smul : forall c : M, UniformContinuous (c • · : X -> X)
 
 中文:
-类 UniformContinuousConstSMul
-  参数: [SMul M X]
+类 一致连续常数标量乘法
+  参数: [标量乘法 M X]
   公理与运算 (1 个):
-    - uniformContinuous_const_smul : 对任意 c : M, UniformContinuous (c • · : X -> X)
+    - uniformContinuous_const_smul : 对任意 c : M, 一致连续 (c • · : X -> X)
 -/
 class UniformContinuousConstSMul [SMul M X] : Prop where
   uniformContinuous_const_smul : forall c : M, UniformContinuous (c • · : X -> X)
@@ -88,8 +88,8 @@ instance AddMonoid.uniformContinuousConstSMul_nat
   body: ⟨uniformContinuous_const_nsmul⟩
 
 中文:
-实例 AddMonoid.uniformContinuousConstSMul_nat
-  签名: [AddGroup X] [IsUniformAddGroup X]
+实例 加法幺半群.uniformContinuousConstSMul_nat
+  签名: [加法群 X] [是UniformAdd群 X]
   定义体: ⟨uniformContinuous_const_nsmul⟩
 
 Depends on / 依赖: uniformContinuous_const_nsmul
@@ -107,8 +107,8 @@ instance AddGroup.uniformContinuousConstSMul_int
   body: ⟨uniformContinuous_const_zsmul⟩
 
 中文:
-实例 AddGroup.uniformContinuousConstSMul_int
-  签名: [AddGroup X] [IsUniformAddGroup X]
+实例 加法群.uniformContinuousConstSMul_int
+  签名: [加法群 X] [是UniformAdd群 X]
   定义体: ⟨uniformContinuous_const_zsmul⟩
 
 Depends on / 依赖: uniformContinuous_const_zsmul
@@ -129,7 +129,7 @@ theorem uniformContinuousConstSMul_of_continuousConstSMul
 
 中文:
 定理 uniformContinuousConstSMul_of_continuousConstSMul
-  结论: [AddGroup M]
+  结论: [加法群 M]
   证明: ⟨fun r =>
     uniformContinuous_of_continuousAt_zero (DistribSMul.toAddMonoidHom M r)
       (Continuous.continuousAt (continuous_const_smul r))⟩
@@ -152,8 +152,8 @@ instance Ring.uniformContinuousConstSMul
   body: uniformContinuousConstSMul_of_continuousConstSMul _ _
 
 中文:
-实例 Ring.uniformContinuousConstSMul
-  签名: [Ring R] [UniformSpace R] [IsUniformAddGroup R]
+实例 环.uniformContinuousConstSMul
+  签名: [环 R] [一致空间 R] [是UniformAdd群 R]
   定义体: uniformContinuousConstSMul_of_continuousConstSMul _ _
 
 Depends on / 依赖: uniformContinuousConstSMul_of_continuousConstSMul
@@ -171,8 +171,8 @@ instance Ring.uniformContinuousConstSMul_op
   body: uniformContinuousConstSMul_of_continuousConstSMul _ _
 
 中文:
-实例 Ring.uniformContinuousConstSMul_op
-  签名: [Ring R] [UniformSpace R] [IsUniformAddGroup R]
+实例 环.uniformContinuousConstSMul_op
+  签名: [环 R] [一致空间 R] [是UniformAdd群 R]
   定义体: uniformContinuousConstSMul_of_continuousConstSMul _ _
 
 Depends on / 依赖: uniformContinuousConstSMul_of_continuousConstSMul
@@ -204,8 +204,8 @@ theorem UniformContinuous.const_smul
 @[to_additive]
 
 中文:
-定理 UniformContinuous.const_smul
-  结论: [UniformContinuousConstSMul M X] {f : Y -> X}
+定理 一致连续.const_smul
+  结论: [一致连续常数标量乘法 M X] {f : Y -> X}
   证明: (uniformContinuous_const_smul c).comp hf
 
 @[to_additive]
@@ -228,8 +228,8 @@ lemma IsUniformInducing.uniformContinuousConstSMul
       using! hf.uniformContinuous.const_smul c
 
 中文:
-引理 IsUniformInducing.uniformContinuousConstSMul
-  结论: [SMul M Y] [UniformContinuousConstSMul M Y]
+引理 是UniformInducing.uniformContinuousConstSMul
+  结论: [标量乘法 M Y] [一致连续常数标量乘法 M Y]
   证明: by
     simpa only [hf.uniformContinuous_iff, Function.comp_def, hsmul]
       using! hf.uniformContinuous.const_smul c
@@ -263,7 +263,7 @@ MulOpposite.uniformContinuous_op.comp MulOpposite.uniformContinuous_unop.const_s
 
 中文:
 实例 MulOpposite.uniformContinuousConstSMul
-  签名: [UniformContinuousConstSMul M X]
+  签名: [一致连续常数标量乘法 M X]
   定义体: ⟨fun c =>
 MulOpposite.uniformContinuous_op.comp MulOpposite.uniformContinuous_unop.const_smul c⟩
 
@@ -286,8 +286,8 @@ instance IsUniformGroup.instUniformContinuousConstSMul
   body: ⟨fun _ => uniformContinuous_const.mul uniformContinuous_id⟩
 
 中文:
-实例 IsUniformGroup.instUniformContinuousConstSMul
-  签名: {G : 类型u} [Group G] [UniformSpace G]
+实例 是一致群.instUniformContinuousConstSMul
+  签名: {G : 类型u} [群 G] [一致空间 G]
   定义体: ⟨fun _ => uniformContinuous_const.mul uniformContinuous_id⟩
 
 Depends on / 依赖: uniformContinuous_const, uniformContinuous_const.mul, uniformContinuous_id
@@ -312,8 +312,8 @@ theorem UniformContinuous.const_mul'
 @[fun_prop]
 
 中文:
-定理 UniformContinuous.const_mul'
-  结论: [UniformContinuousConstSMul R R] {f : β -> R}
+定理 一致连续.const_mul'
+  结论: [一致连续常数标量乘法 R R] {f : β -> R}
   证明: hf.const_smul a
 
 @[fun_prop]
@@ -334,8 +334,8 @@ theorem UniformContinuous.mul_const'
   proof: hf.const_smul (MulOpposite.op a)
 
 中文:
-定理 UniformContinuous.mul_const'
-  结论: [UniformContinuousConstSMul Rᵐᵒᵖ R] {f : β -> R}
+定理 一致连续.mul_const'
+  结论: [一致连续常数标量乘法 Rᵐᵒᵖ R] {f : β -> R}
   证明: hf.const_smul (MulOpposite.op a)
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, const_smul, hf.const_smul
@@ -354,7 +354,7 @@ theorem uniformContinuous_mul_left'
 
 中文:
 定理 uniformContinuous_mul_left'
-  条件: [UniformContinuousConstSMul R R] (a : R)
+  条件: [一致连续常数标量乘法 R R] (a : R)
   证明: uniformContinuous_id.const_mul' _
 
 Depends on / 依赖: const_mul, uniformContinuous_id, uniformContinuous_id.const_mul
@@ -375,7 +375,7 @@ theorem uniformContinuous_mul_right'
 
 中文:
 定理 uniformContinuous_mul_right'
-  条件: [UniformContinuousConstSMul Rᵐᵒᵖ R] (a : R)
+  条件: [一致连续常数标量乘法 Rᵐᵒᵖ R] (a : R)
   证明: uniformContinuous_id.mul_const' _
 
 @[fun_prop]
@@ -397,8 +397,8 @@ theorem UniformContinuous.div_const'
   simpa [div_eq_mul_inv] using hf.mul_const' a⁻¹
 
 中文:
-定理 UniformContinuous.div_const'
-  结论: {R β : 类型} [DivisionRing R] [UniformSpace R]
+定理 一致连续.div_const'
+  结论: {R β : 类型} [除环 R] [一致空间 R]
   证明: by
   simpa [div_eq_mul_inv] using hf.mul_const' a⁻¹
 
@@ -420,7 +420,7 @@ theorem uniformContinuous_div_const'
 
 中文:
 定理 uniformContinuous_div_const'
-  结论: {R : 类型} [DivisionRing R] [UniformSpace R]
+  结论: {R : 类型} [除环 R] [一致空间 R]
   证明: uniformContinuous_id.div_const' _
 
 Depends on / 依赖: div_const, uniformContinuous_id, uniformContinuous_id.div_const
@@ -453,8 +453,8 @@ le_antisymm cU by simpa [smul_smul, hcd] using Filter.smul_filter_le_smul_filter
 @[to_additive (attr := simp)]
 
 中文:
-定理 IsUnit.smul_uniformity
-  结论: [Monoid M] [MulAction M X] [UniformContinuousConstSMul M X] {c : M}
+定理 是单位.smul_uniformity
+  结论: [幺半群 M] [乘法作用 M X] [一致连续常数标量乘法 M X] {c : M}
   证明: let ⟨d, hcd⟩ := hc.exists_right_inv
   have cU : c • 𝓤 X <= 𝓤 X := uniformContinuous_const_smul c
   have dU : d • 𝓤 X <= 𝓤 X := uniformContinuous_const_smul d
@@ -482,7 +482,7 @@ theorem smul_uniformity
 
 中文:
 定理 smul_uniformity
-  条件: [Group M] [MulAction M X] [UniformContinuousConstSMul M X] (c : M)
+  条件: [群 M] [乘法作用 M X] [一致连续常数标量乘法 M X] (c : M)
   证明: .smul_uniformity Group.isUnit _
 
 Depends on / 依赖: Group.isUnit, isUnit, smul_uniformity
@@ -501,7 +501,7 @@ theorem smul_uniformity₀
 
 中文:
 定理 smul_uniformity₀
-  结论: [GroupWithZero M] [MulAction M X] [UniformContinuousConstSMul M X] {c : M}
+  结论: [带零群 M] [乘法作用 M X] [一致连续常数标量乘法 M X] {c : M}
   证明: hc.isUnit.smul_uniformity
 
 Depends on / 依赖: hc.isUnit.smul_uniformity, isUnit, smul_uniformity
@@ -533,7 +533,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul M (Completion X)
+  签名: 标量乘法 M (完备化 X)
   定义体: ⟨fun c => Completion.map (c • ·)⟩
 
 @[to_additive]
@@ -557,8 +557,8 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: (c : M) (x : Completion X)
-  结论: c • x = Completion.map (c • ·) x
+  条件: (c : M) (x : 完备化 X)
+  结论: c • x = 完备化.map (c • ·) x
   证明: rfl
 
 @[to_additive]
@@ -579,7 +579,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformContinuousConstSMul M (Completion X)
+  签名: 一致连续常数标量乘法 M (完备化 X)
   定义体: ⟨fun _ => uniformContinuous_map⟩
 
 @[to_additive]
@@ -606,7 +606,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul N X] [SMul M N] [UniformContinuousConstSMul M X]
+  签名: [标量乘法 N X] [标量乘法 M N] [一致连续常数标量乘法 M X]
   定义体: ⟨fun m n x => by
     have : _ = (_ : Completion X -> Completion X) :=
       map_comp (uniformContinuous_const_smul m) (uniformContinuous_const_smul n)
@@ -639,8 +639,8 @@ instance [SMul
     · exact congr_arg (fun f => Co
 
 中文:
-实例 [SMul
-  签名: N X] [SMulCommClass M N X] [UniformContinuousConstSMul M X]
+实例 [标量乘法
+  签名: N X] [标量交换类 M N X] [一致连续常数标量乘法 M X]
   定义体: ⟨fun m n x => by
     have hmn : m • n • x = (Completion.map (SMul.smul m) ∘ Completion.map (SMul.smul n)) x := rfl
     have hnm : n • m • x = (Completion.map (SMul.smul n) ∘ Completion.map (SMul.smul m)) x := rfl
@@ -668,8 +668,8 @@ instance [SMul
   body: ⟨fun c a => (congr_arg fun f => Completion.map f a) funext (op_smul_eq_smul c)⟩
 
 中文:
-实例 [SMul
-  签名: Mᵐᵒᵖ X] [IsCentralScalar M X] : IsCentralScalar M (Completion X)
+实例 [标量乘法
+  签名: Mᵐᵒᵖ X] [中心标量 M X] : 中心标量 M (完备化 X)
   定义体: ⟨fun c a => (congr_arg fun f => Completion.map f a) funext (op_smul_eq_smul c)⟩
 
 Depends on / 依赖: Completion, Completion.map, congr_arg, op_smul_eq_smul
@@ -693,7 +693,7 @@ theorem coe_smul
 中文:
 定理 coe_smul
   条件: (c : M) (x : X)
-  结论: (↑(c • x) : Completion X) = c • (x : Completion X)
+  结论: (↑(c • x) : 完备化 X) = c • (x : 完备化 X)
   证明: (map_coe (uniformContinuous_const_smul c) x).symm
 
 Depends on / 依赖: map_coe, uniformContinuous_const_smul
@@ -716,8 +716,8 @@ instance [Monoid
       simp only [← coe_smul, mul_smul]
 
 中文:
-实例 [Monoid
-  签名: M] [MulAction M X] [UniformContinuousConstSMul M X] :
+实例 [幺半群
+  签名: M] [乘法作用 M X] [一致连续常数标量乘法 M X] :
   定义体: ext' (continuous_const_smul _) continuous_id fun a => by rw [← coe_smul, one_smul]
   mul_smul x y :=
     ext' (continuous_const_smul _) ((continuous_const_smul _).fun_const_smul _) fun a => by

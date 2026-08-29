@@ -31,7 +31,7 @@ theorem meromorphicNFOn_tan
 
 中文:
 定理 meromorphicNFOn_tan
-  结论: MeromorphicNFOn tan Set.univ
+  结论: MeromorphicNFOn tan 集合.univ
   证明: by
   intro x _
   refine MeromorphicNFOn.div analyticAt_sin analyticAt_cos.meromorphicNFAt ?_
@@ -57,7 +57,7 @@ theorem meromorphicAt_tan
 
 中文:
 定理 meromorphicAt_tan
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: MeromorphicAt tan z
   证明: (meromorphicNFOn_tan (Set.mem_univ z)).meromorphicAt
 
@@ -78,7 +78,7 @@ theorem meromorphic_tan
 
 中文:
 定理 meromorphic_tan
-  结论: Meromorphic tan
+  结论: 亚纯 tan
   证明: meromorphicAt_tan
 
 Depends on / 依赖: meromorphicAt_tan
@@ -98,7 +98,7 @@ theorem meromorphicNFOn_tanh
 
 中文:
 定理 meromorphicNFOn_tanh
-  结论: MeromorphicNFOn tanh Set.univ
+  结论: MeromorphicNFOn tanh 集合.univ
   证明: by
   intro x _
   refine MeromorphicNFOn.div analyticAt_sinh analyticAt_cosh.meromorphicNFAt ?_
@@ -124,7 +124,7 @@ theorem meromorphicAt_tanh
 
 中文:
 定理 meromorphicAt_tanh
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: MeromorphicAt tanh z
   证明: (meromorphicNFOn_tanh (Set.mem_univ z)).meromorphicAt
 
@@ -145,7 +145,7 @@ theorem meromorphic_tanh
 
 中文:
 定理 meromorphic_tanh
-  结论: Meromorphic tanh
+  结论: 亚纯 tanh
   证明: meromorphicAt_tanh
 
 Depends on / 依赖: meromorphicAt_tanh

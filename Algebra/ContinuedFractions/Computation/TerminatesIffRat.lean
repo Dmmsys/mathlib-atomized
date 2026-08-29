@@ -107,7 +107,7 @@ theorem exists_gcf_pair_rat_eq_nth_conts
 rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v n + 1
 
 中文:
-定理 exists_gcf_pair_rat_eq_nth_conts
+定理 存在_gcf_pair_rat_eq_nth_conts
   证明: by
 rw [nth_cont_eq_succ_nth_contAux]; exact exists_gcf_pair_rat_eq_of_nth_contsAux v n + 1
 
@@ -129,8 +129,8 @@ theorem exists_rat_eq_nth_num
   simp [num_eq_conts_a, nth_cont_eq]
 
 中文:
-定理 exists_rat_eq_nth_num
-  结论: 存在 q : Rat, (of v).nums n = (q : K)
+定理 存在_rat_eq_nth_num
+  结论: 存在 q : 有理数, (of v).nums n = (q : K)
   证明: by
   rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨a, _⟩, nth_cont_eq⟩
   use a
@@ -155,8 +155,8 @@ theorem exists_rat_eq_nth_den
   simp [den_eq_conts_b, nth_cont_eq]
 
 中文:
-定理 exists_rat_eq_nth_den
-  结论: 存在 q : Rat, (of v).dens n = (q : K)
+定理 存在_rat_eq_nth_den
+  结论: 存在 q : 有理数, (of v).dens n = (q : K)
   证明: by
   rcases exists_gcf_pair_rat_eq_nth_conts v n with ⟨⟨_, b⟩, nth_cont_eq⟩
   use b
@@ -182,8 +182,8 @@ theorem exists_rat_eq_nth_conv
   simp [nth_num_eq, nth_den_eq, conv_eq_num_div_den]
 
 中文:
-定理 exists_rat_eq_nth_conv
-  结论: 存在 q : Rat, (of v).convs n = (q : K)
+定理 存在_rat_eq_nth_conv
+  结论: 存在 q : 有理数, (of v).convs n = (q : K)
   证明: by
   rcases exists_rat_eq_nth_num v n with ⟨Aₙ, nth_num_eq⟩
   rcases exists_rat_eq_nth_den v n with ⟨Bₙ, nth_den_eq⟩
@@ -214,9 +214,9 @@ theorem exists_rat_eq_of_terminates
   use q, this
 
 中文:
-定理 exists_rat_eq_of_terminates
+定理 存在_rat_eq_of_terminates
   条件: (terminates : (of v).Terminates)
-  结论: 存在 q : Rat, v = ↑q
+  结论: 存在 q : 有理数, v = ↑q
   证明: by
   obtain ⟨n, v_eq_conv⟩ : exists n, v = (of v).convs n := of_correctness_of_terminates terminates
   obtain ⟨q, conv_eq_q⟩ : exists q : Rat, (of v).convs n = (↑q : K) := exists_rat_eq_nth_conv v n
@@ -372,7 +372,7 @@ theorem coe_of_h_rat_eq
 中文:
 定理 coe_of_h_rat_eq
   条件: (v_eq_q : v = (↑q : K))
-  结论: (↑((of q).h : Rat) : K) = (of v).h
+  结论: (↑((of q).h : 有理数) : K) = (of v).h
   证明: by
   simp_all
 -/
@@ -473,7 +473,7 @@ theorem of_terminates_iff_of_rat_terminates
 
 中文:
 定理 of_terminates_iff_of_rat_terminates
-  条件: {v : K} {q : Rat} (v_eq_q : v = (q : K))
+  条件: {v : K} {q : 有理数} (v_eq_q : v = (q : K))
   证明: by
   refine exists_congr fun n => ?_
   rcases h : (of q).s.get? n <;> grind [Stream'.Seq.TerminatedAt, coe_of_s_get?_rat_eq v_eq_q n]
@@ -542,7 +542,7 @@ theorem stream_succ_nth_fr_num_lt_nth_fr_num_rat
 
 中文:
 定理 stream_succ_nth_fr_num_lt_nth_fr_num_rat
-  结论: {ifp_n ifp_succ_n : 整数FractPair Rat}
+  结论: {ifp_n ifp_succ_n : 整数FractPair 有理数}
   证明: by
   obtain ⟨ifp_n', stream_nth_eq', ifp_n_fract_ne_zero, IntFractPair.of_eq_ifp_succ_n⟩ :
     exists ifp_n',
@@ -634,8 +634,8 @@ theorem exists_nth_stream_eq_none_of_rat
     have 
 
 中文:
-定理 exists_nth_stream_eq_none_of_rat
-  条件: (q : Rat)
+定理 存在_nth_stream_eq_none_of_rat
+  条件: (q : 有理数)
   结论: 存在 n : 自然数, 整数FractPair.stream q n = none
   证明: by
   let fract_q_num := (Int.fract q).num; let n := fract_q_num.natAbs + 1
@@ -679,7 +679,7 @@ theorem terminates_of_rat
 
 中文:
 定理 terminates_of_rat
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (of q).Terminates
   证明: Exists.elim (IntFractPair.exists_nth_stream_eq_none_of_rat q) fun n stream_nth_eq_none =>
     Exists.intro n
@@ -710,7 +710,7 @@ theorem terminates_iff_rat
 
 中文:
 定理 terminates_iff_rat
-  条件: [IsStrictOrderedRing K] (v : K)
+  条件: [是StrictOrdered环 K] (v : K)
   证明: Iff.intro exists_rat_eq_of_terminates
     fun exists_q_eq_v : exists q : Rat, v = (↑q : K) =>
     Exists.elim exists_q_eq_v fun q => fun v_eq_q : v = ↑q =>

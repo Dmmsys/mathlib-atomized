@@ -338,7 +338,7 @@ theorem strictMonoOn_arcosh
 
 中文:
 定理 strictMonoOn_arcosh
-  结论: StrictMonoOn arcosh (Ioi 0)
+  结论: StrictMonoOn arcosh (左开右无界区间 0)
   证明: by
   refine strictMonoOn_log.comp ?_ fun x (hx : 0 < x) => show 0 < x + √(x ^ 2 - 1) by positivity
   exact strictMonoOn_id.add_monotone fun x (hx : 0 < x) y (hy : 0 < y) hxy => by gcongr
@@ -406,7 +406,7 @@ definition coshPartialEquiv
 
 中文:
 定义 coshPartialEquiv
-  签名: : PartialEquiv 实数 实数 where
+  签名: : 部分等价 实数 实数 where
   定义体: cosh
   invFun := arcosh
   source := Ici 0
@@ -438,7 +438,7 @@ theorem continuousOn_arcosh
 
 中文:
 定理 continuousOn_arcosh
-  结论: ContinuousOn arcosh (Ici 1)
+  结论: ContinuousOn arcosh (左闭右无界区间 1)
   证明: have {x : Real} (hx : x in Ici 1) : 0 < x + √(x ^ 2 - 1) :=
     add_pos_of_pos_of_nonneg (show 0 < x by grind) (sqrt_nonneg _)
   continuousOn_log.comp (by fun_prop) (by grind [MapsTo])
@@ -509,7 +509,7 @@ theorem hasStrictDerivAt_arcosh
 
 中文:
 定理 hasStrictDerivAt_arcosh
-  条件: {x : 实数} (hx : x in Ioi 1)
+  条件: {x : 实数} (hx : x in 左开右无界区间 1)
   证明: by
   rw [← sinh_arcosh (le_of_lt hx)]
   refine coshOpenPartialHomeomorph.hasStrictDerivAt_symm hx ?_ (hasStrictDerivAt_cosh _)
@@ -536,8 +536,8 @@ theorem hasDerivAt_arcosh
 
 中文:
 定理 hasDerivAt_arcosh
-  条件: {x : 实数} (hx : x in Ioi 1)
-  结论: HasDerivAt arcosh (√(x ^ 2 - 1))⁻¹ x
+  条件: {x : 实数} (hx : x in 左开右无界区间 1)
+  结论: 在点处可导 arcosh (√(x ^ 2 - 1))⁻¹ x
   证明: (hasStrictDerivAt_arcosh hx).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_arcosh
@@ -556,7 +556,7 @@ theorem differentiableAt_arcosh
 
 中文:
 定理 differentiableAt_arcosh
-  条件: {x : 实数} (hx : x in Ioi 1)
+  条件: {x : 实数} (hx : x in 左开右无界区间 1)
   结论: DifferentiableAt 实数 arcosh x
   证明: (hasDerivAt_arcosh hx).differentiableAt
 
@@ -576,7 +576,7 @@ theorem differentiableOn_arcosh
 
 中文:
 定理 differentiableOn_arcosh
-  结论: DifferentiableOn 实数 arcosh (Ioi 1)
+  结论: DifferentiableOn 实数 arcosh (左开右无界区间 1)
   证明: fun _ hx =>
   (differentiableAt_arcosh hx).differentiableWithinAt
 -/
@@ -598,7 +598,7 @@ theorem contDiffAt_arcosh
 
 中文:
 定理 contDiffAt_arcosh
-  条件: {n : WithTop 自然数∞} {x : 实数} (hx : x in Ioi 1)
+  条件: {n : WithTop 自然数∞} {x : 实数} (hx : x in 左开右无界区间 1)
   结论: ContDiffAt 实数 n arcosh x
   证明: by
   refine coshOpenPartialHomeomorph.contDiffAt_symm_deriv ?_ hx (hasDerivAt_cosh _)
@@ -627,7 +627,7 @@ theorem contDiffOn_arcosh
 中文:
 定理 contDiffOn_arcosh
   条件: {n : WithTop 自然数∞}
-  结论: ContDiffOn 实数 n arcosh (Ioi 1)
+  结论: ContDiffOn 实数 n arcosh (左开右无界区间 1)
   证明: fun _ hx =>
   (contDiffAt_arcosh hx).contDiffWithinAt
 -/
@@ -647,7 +647,7 @@ lemma analyticAt_arcosh
 
 中文:
 引理 analyticAt_arcosh
-  条件: {x : 实数} (hx : x in Ioi 1)
+  条件: {x : 实数} (hx : x in 左开右无界区间 1)
   结论: AnalyticAt 实数 arcosh x
   证明: (contDiffAt_arcosh hx).analyticAt
 
@@ -666,7 +666,7 @@ lemma analyticWithinAt_arcosh
 
 中文:
 引理 analyticWithinAt_arcosh
-  条件: {s : Set 实数} {x : 实数} (hx : x in Ioi 1)
+  条件: {s : 集合 实数} {x : 实数} (hx : x in 左开右无界区间 1)
   证明: (contDiffAt_arcosh hx).contDiffWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, contDiffAt_arcosh, contDiffWithinAt, contDiffWithinAt.analyticWithinAt
@@ -686,7 +686,7 @@ theorem analyticOnNhd_arcosh
 
 中文:
 定理 analyticOnNhd_arcosh
-  条件: {s : Set 实数} (hs : s subseteq Ioi 1)
+  条件: {s : 集合 实数} (hs : s subseteq 左开右无界区间 1)
   结论: AnalyticOnNhd 实数 arcosh s
   证明: fun _ hx => analyticAt_arcosh (hs hx)
 
@@ -706,7 +706,7 @@ lemma analyticOn_arcosh
 
 中文:
 引理 analyticOn_arcosh
-  条件: {s : Set 实数} (hs : s subseteq Ioi 1)
+  条件: {s : 集合 实数} (hs : s subseteq 左开右无界区间 1)
   结论: AnalyticOn 实数 arcosh s
   证明: contDiffOn_arcosh.analyticOn.mono hs
 
@@ -725,7 +725,7 @@ theorem cosh_bijOn
 
 中文:
 定理 cosh_bijOn
-  结论: BijOn cosh (Ici 0) (Ici 1)
+  结论: 双射限制 cosh (左闭右无界区间 0) (左闭右无界区间 1)
   证明: coshPartialEquiv.bijOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.bijOn
@@ -742,7 +742,7 @@ theorem cosh_injOn
 
 中文:
 定理 cosh_injOn
-  结论: InjOn cosh (Ici 0)
+  结论: 单射限制 cosh (左闭右无界区间 0)
   证明: coshPartialEquiv.injOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.injOn
@@ -759,7 +759,7 @@ theorem cosh_surjOn
 
 中文:
 定理 cosh_surjOn
-  结论: SurjOn cosh (Ici 0) (Ici 1)
+  结论: 满射限制 cosh (左闭右无界区间 0) (左闭右无界区间 1)
   证明: coshPartialEquiv.surjOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.surjOn, surjOn
@@ -776,7 +776,7 @@ theorem arcosh_bijOn
 
 中文:
 定理 arcosh_bijOn
-  结论: BijOn arcosh (Ici 1) (Ici 0)
+  结论: 双射限制 arcosh (左闭右无界区间 1) (左闭右无界区间 0)
   证明: coshPartialEquiv.symm.bijOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.symm.bijOn
@@ -793,7 +793,7 @@ theorem arcosh_injOn
 
 中文:
 定理 arcosh_injOn
-  结论: InjOn arcosh (Ici 1)
+  结论: 单射限制 arcosh (左闭右无界区间 1)
   证明: coshPartialEquiv.symm.injOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.symm.injOn
@@ -810,7 +810,7 @@ theorem arcosh_surjOn
 
 中文:
 定理 arcosh_surjOn
-  结论: SurjOn arcosh (Ici 1) (Ici 0)
+  结论: 满射限制 arcosh (左闭右无界区间 1) (左闭右无界区间 0)
   证明: coshPartialEquiv.symm.surjOn
 
 Depends on / 依赖: coshPartialEquiv, coshPartialEquiv.symm.surjOn, surjOn

@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R V⟦Γ⟧
+  签名: 标量乘法 R V⟦Γ⟧
   定义体: ⟨fun r x =>
     { coeff := r • x.coeff
       isPWO_support' := x.isPWO_support.mono (Function.support_const_smul_subset ..) }⟩
@@ -81,7 +81,7 @@ theorem support_smul_subset
 
 中文:
 定理 support_smul_subset
-  条件: (r : R) (x : HahnSeries Γ V)
+  条件: (r : R) (x : Hahn级数 Γ V)
   结论: (r • x).support subseteq x.support
   证明: Function.support_const_smul_subset ..
 
@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulZeroClass R V⟦Γ⟧
+  签名: SMulZero类 R V⟦Γ⟧
   定义体: by
     ext
     simp only [coeff_smul, coeff_zero, smul_zero]
@@ -205,7 +205,7 @@ theorem orderTop_le_orderTop_smul
 
 中文:
 定理 orderTop_le_orderTop_smul
-  条件: {Γ} [LinearOrder Γ] (r : R) (x : V⟦Γ⟧)
+  条件: {Γ} [线性序 Γ] (r : R) (x : V⟦Γ⟧)
   证明: le_of_not_gt orderTop_smul_not_lt r x
 
 Depends on / 依赖: le_of_not_gt, orderTop_smul_not_lt
@@ -227,7 +227,7 @@ theorem order_smul_not_lt
 
 中文:
 定理 order_smul_not_lt
-  条件: [Zero Γ] (r : R) (x : V⟦Γ⟧) (h : r • x != 0)
+  条件: [零 Γ] (r : R) (x : V⟦Γ⟧) (h : r • x != 0)
   证明: by
   have hx : x != 0 := right_ne_zero_of_smul h
   simp_all only [order, dite_false]
@@ -251,7 +251,7 @@ theorem le_order_smul
 
 中文:
 定理 le_order_smul
-  条件: {Γ} [Zero Γ] [LinearOrder Γ] (r : R) (x : V⟦Γ⟧) (h : r • x != 0)
+  条件: {Γ} [零 Γ] [线性序 Γ] (r : R) (x : V⟦Γ⟧) (h : r • x != 0)
   证明: le_of_not_gt (order_smul_not_lt r x h)
 
 Depends on / 依赖: le_of_not_gt, order_smul_not_lt
@@ -297,7 +297,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add R⟦Γ⟧
+  签名: 加法 R⟦Γ⟧
   定义体: { coeff := x.coeff + y.coeff
       isPWO_support' := (x.isPWO_support.union y.isPWO_support).mono (Function.support_add ..) }
 
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid R⟦Γ⟧
+  签名: 加法幺半群 R⟦Γ⟧
   定义体: fast_instance%
   coeff_injective.addMonoid _
     coeff_zero' coeff_add' (fun _ _ => coeff_smul' _ _)
@@ -450,7 +450,7 @@ lemma map_add
 
 中文:
 引理 map_add
-  条件: [AddMonoid S] (f : R ->+ S) {x y : R⟦Γ⟧}
+  条件: [加法幺半群 S] (f : R ->+ S) {x y : R⟦Γ⟧}
   证明: by
   ext; simp
 -/
@@ -695,7 +695,7 @@ theorem min_le_min_add
 
 中文:
 定理 min_le_min_add
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧} (hx : x != 0)
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧} (hx : x != 0)
   证明: by
   rw [← Set.IsWF.min_union]
   exact Set.IsWF.min_le_min_of_subset (support_add_subset (x := x) (y := y))
@@ -723,7 +723,7 @@ theorem min_orderTop_le_orderTop_add
 
 中文:
 定理 min_orderTop_le_orderTop_add
-  条件: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  条件: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   by_cases hx : x = 0; · simp [hx]
   by_cases hy : y = 0; · simp [hy]
@@ -755,7 +755,7 @@ theorem min_order_le_order_add
 
 中文:
 定理 min_order_le_order_add
-  结论: {Γ} [Zero Γ] [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [零 Γ] [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   by_cases hx : x = 0; · simp [hx]
   by_cases hy : y = 0; · simp [hy]
@@ -786,7 +786,7 @@ theorem orderTop_add_eq_left
 
 中文:
 定理 orderTop_add_eq_left
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   have hx : x != 0 := orderTop_ne_top.1 hxy.ne_top
   let g : Γ := Set.IsWF.min x.isWF_support (support_nonempty_iff.2 hx)
@@ -821,7 +821,7 @@ theorem orderTop_add_eq_right
 
 中文:
 定理 orderTop_add_eq_right
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   simpa [← map_add, ← AddOpposite.op_add, hxy] using orderTop_add_eq_left
     (x := addOppositeEquiv.symm (.op y))
@@ -851,7 +851,7 @@ theorem leadingCoeff_add_eq_left
 
 中文:
 定理 leadingCoeff_add_eq_left
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   have hx : x != 0 := orderTop_ne_top.1 hxy.ne_top
   have ho : (x + y).orderTop = x.orderTop := orderTop_add_eq_left hxy
@@ -885,7 +885,7 @@ theorem leadingCoeff_add_eq_right
 
 中文:
 定理 leadingCoeff_add_eq_right
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   simpa [← map_add, ← AddOpposite.op_add, hxy] using leadingCoeff_add_eq_left
     (x := addOppositeEquiv.symm (.op y))
@@ -912,7 +912,7 @@ theorem ne_zero_of_eq_add_single
 
 中文:
 定理 ne_zero_of_eq_add_single
-  结论: [Zero Γ] {x y : R⟦Γ⟧}
+  结论: [零 Γ] {x y : R⟦Γ⟧}
   证明: by
   by_contra h
   simp only [h, order_zero, leadingCoeff_zero, map_zero, add_zero] at hxy
@@ -937,7 +937,7 @@ theorem coeff_order_of_eq_add_single
 
 中文:
 定理 coeff_order_of_eq_add_single
-  结论: {R} [AddCancelCommMonoid R] [Zero Γ] {x y : R⟦Γ⟧}
+  结论: {R} [加法消去交换幺半群 R] [零 Γ] {x y : R⟦Γ⟧}
   证明: by
   simpa [← leadingCoeff_eq] using congr(($hxy).coeff x.order)
 
@@ -964,7 +964,7 @@ have hyne : single y.order y.leadingCoeff != 0 := single_ne_zero leadingCoeff_ne
 
 中文:
 定理 order_lt_order_of_eq_add_single
-  结论: {R} {Γ} [LinearOrder Γ] [Zero Γ] [AddCancelCommMonoid R]
+  结论: {R} {Γ} [线性序 Γ] [零 Γ] [加法消去交换幺半群 R]
   证明: by
   have : x.order != y.order := by
     intro h
@@ -1123,7 +1123,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid R⟦Γ⟧
+  签名: 加法交换幺半群 R⟦Γ⟧
   定义体: by
     ext
     apply add_comm
@@ -1148,7 +1148,7 @@ theorem coeff_sum
 
 中文:
 定理 coeff_sum
-  条件: {s : Finset α} {x : α -> R⟦Γ⟧} (g : Γ)
+  条件: {s : 有限集 α} {x : α -> R⟦Γ⟧} (g : Γ)
   证明: cons_induction rfl (fun i s his hsum => by rw [sum_cons, sum_cons, coeff_add, hsum]) s
 
 Depends on / 依赖: coeff_add, cons_induction, sum_cons
@@ -1173,7 +1173,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg R⟦Γ⟧
+  签名: 取负 R⟦Γ⟧
   定义体: x.map (-ZeroHom.id _)
 
 Depends on / 依赖: ZeroHom, ZeroHom.id, x.map
@@ -1259,7 +1259,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub R⟦Γ⟧
+  签名: 减法 R⟦Γ⟧
   定义体: { coeff := x.coeff - y.coeff
       isPWO_support' := (x.isPWO_support.union y.isPWO_support).mono (Function.support_sub ..) }
 
@@ -1346,7 +1346,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup R⟦Γ⟧
+  签名: 加法群 R⟦Γ⟧
   定义体: fast_instance%
   coeff_injective.addGroup _
     coeff_zero' coeff_add' coeff_neg' coeff_sub'
@@ -1453,7 +1453,7 @@ lemma map_neg
 
 中文:
 引理 map_neg
-  条件: [AddGroup S] (f : R ->+ S) {x : R⟦Γ⟧}
+  条件: [加法群 S] (f : R ->+ S) {x : R⟦Γ⟧}
   证明: by
   ext; simp
 
@@ -1506,7 +1506,7 @@ theorem order_neg
 
 中文:
 定理 order_neg
-  条件: [Zero Γ] {f : R⟦Γ⟧}
+  条件: [零 Γ] {f : R⟦Γ⟧}
   结论: (-f).order = f.order
   证明: by
   classical
@@ -1560,7 +1560,7 @@ lemma map_sub
 
 中文:
 引理 map_sub
-  条件: [AddGroup S] (f : R ->+ S) {x y : R⟦Γ⟧}
+  条件: [加法群 S] (f : R ->+ S) {x y : R⟦Γ⟧}
   证明: by
   ext; simp
 -/
@@ -1580,7 +1580,7 @@ theorem min_orderTop_le_orderTop_sub
 
 中文:
 定理 min_orderTop_le_orderTop_sub
-  条件: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  条件: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   rw [sub_eq_add_neg]; rw [← orderTop_neg (x := y)]
   exact min_orderTop_le_orderTop_add
@@ -1605,7 +1605,7 @@ theorem orderTop_sub
 
 中文:
 定理 orderTop_sub
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   rw [sub_eq_add_neg]
   rw [← orderTop_neg (x := y)] at hxy
@@ -1632,7 +1632,7 @@ theorem leadingCoeff_sub
 
 中文:
 定理 leadingCoeff_sub
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧}
   证明: by
   rw [sub_eq_add_neg]
   rw [← orderTop_neg (x := y)] at hxy
@@ -1694,7 +1694,7 @@ theorem le_orderTop_of_leadingCoeff_eq
 
 中文:
 定理 le_orderTop_of_leadingCoeff_eq
-  结论: {Γ} [LinearOrder Γ] {x y : R⟦Γ⟧} {g : Γ}
+  结论: {Γ} [线性序 Γ] {x y : R⟦Γ⟧} {g : Γ}
   证明: lt_of_le_of_ne (le_of_eq_of_le (by rw [hxg, hyg, inf_idem]) min_orderTop_le_orderTop_sub)
     (orderTop_sub_ne hxg hyg hxyc).symm
 
@@ -1716,8 +1716,8 @@ instance [AddCommGroup
   signature: R] : AddCommGroup R⟦Γ⟧ where
 
 中文:
-实例 [AddCommGroup
-  签名: R] : AddCommGroup R⟦Γ⟧ where
+实例 [加法交换群
+  签名: R] : 加法交换群 R⟦Γ⟧ where
 -/
 instance [AddCommGroup R] : AddCommGroup R⟦Γ⟧ where
 
@@ -1748,7 +1748,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction R V⟦Γ⟧
+  签名: 分配乘法作用 R V⟦Γ⟧
   定义体: by
     ext
     simp
@@ -1791,8 +1791,8 @@ instance [SMul
     simp⟩
 
 中文:
-实例 [SMul
-  签名: R S] [IsScalarTower R S V] : IsScalarTower R S V⟦Γ⟧
+实例 [标量乘法
+  签名: R S] [标量塔 R S V] : 标量塔 R S V⟦Γ⟧
   定义体: ⟨fun r s a => by
     ext
     simp⟩
@@ -1813,8 +1813,8 @@ instance [SMulCommClass
     simp [smul_comm]⟩
 
 中文:
-实例 [SMulCommClass
-  签名: R S V] : SMulCommClass R S V⟦Γ⟧
+实例 [标量交换类
+  签名: R S V] : 标量交换类 R S V⟦Γ⟧
   定义体: ⟨fun r s a => by
     ext
     simp [smul_comm]⟩
@@ -1847,7 +1847,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R V⟦Γ⟧
+  签名: 模 R V⟦Γ⟧
   定义体: by
     ext
     simp
@@ -1930,7 +1930,7 @@ lemma map_smul
 
 中文:
 引理 map_smul
-  条件: [AddCommMonoid U] [Module R U] (f : U ->ₗ[R] V) {r : R} {x : U⟦Γ⟧}
+  条件: [加法交换幺半群 U] [模 R U] (f : U ->ₗ[R] V) {r : R} {x : U⟦Γ⟧}
   证明: by
   ext; simp
 -/

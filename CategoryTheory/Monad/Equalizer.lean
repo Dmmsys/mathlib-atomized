@@ -56,7 +56,7 @@ definition CofreeEqualizer.topMap
 
 中文:
 定义 CofreeEqualizer.topMap
-  签名: : (Comonad.cofree T).obj X.A ⟶ (Comonad.cofree T).obj (T.obj X.A)
+  签名: : (余单子.cofree T).obj X.A ⟶ (余单子.cofree T).obj (T.obj X.A)
   定义体: (Comonad.cofree T).map X.a
 
 Depends on / 依赖: Comonad, Comonad.cofree, cofree
@@ -99,7 +99,7 @@ definition CofreeEqualizer.ι
 
 中文:
 定义 CofreeEqualizer.ι
-  签名: : X ⟶ (Comonad.cofree T).obj X.A where
+  签名: : X ⟶ (余单子.cofree T).obj X.A where
   定义体: X.a
   h := X.coassoc.symm
 -/
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCoreflexivePair (CofreeEqualizer.topMap X) (CofreeEqualizer.bottomMap X)
+  签名: 是余reflexivePair (CofreeEqualizer.topMap X) (CofreeEqualizer.bottomMap X)
   定义体: by
   apply IsCoreflexivePair.mk' _ _ _
   · apply (cofree T).map (T.ε.app X.A)
@@ -178,7 +178,7 @@ definition beckCoalgebraFork
 
 中文:
 定义 beckCoalgebraFork
-  签名: : Fork (CofreeEqualizer.topMap X) (CofreeEqualizer.bottomMap X)
+  签名: : 叉 (CofreeEqualizer.topMap X) (CofreeEqualizer.bottomMap X)
   定义体: Fork.ofι _ (CofreeEqualizer.condition X)
 
 Depends on / 依赖: CofreeEqualizer, CofreeEqualizer.condition, Fork.of, condition
@@ -204,7 +204,7 @@ definition beckCoalgebraEqualizer
 
 中文:
 定义 beckCoalgebraEqualizer
-  签名: : IsLimit (beckCoalgebraFork X)
+  签名: : 是极限 (beckCoalgebraFork X)
   定义体: Fork.IsLimit.mk' _ fun s => by
     have h₁ : s.ι.f ≫ (T : C ⥤ C).map X.a = s.ι.f ≫ T.δ.app X.A :=
       congr_arg Comonad.Coalgebra.Hom.f s.condition
@@ -244,7 +244,7 @@ definition beckSplitEqualizer
 
 中文:
 定义 beckSplitEqualizer
-  签名: : IsSplitEqualizer (T.map X.a) (T.δ.app _) X.a
+  签名: : 是SplitEqualizer (T.map X.a) (T.δ.app _) X.a
   定义体: ⟨T.ε.app _, T.ε.app _, X.coassoc.symm, X.counit, T.left_counit _, (T.ε.naturality _)⟩
 
 Depends on / 依赖: T.left_counit, X.coassoc.symm, X.counit, coassoc, counit, left_counit, naturality
@@ -266,7 +266,7 @@ definition beckFork
 
 中文:
 定义 beckFork
-  签名: : Fork (T.map X.a) (T.δ.app _)
+  签名: : 叉 (T.map X.a) (T.δ.app _)
   定义体: (beckSplitEqualizer X).asFork
 
 @[simp]
@@ -305,7 +305,7 @@ definition beckEqualizer
 
 中文:
 定义 beckEqualizer
-  签名: : IsLimit (beckFork X)
+  签名: : 是极限 (beckFork X)
   定义体: (beckSplitEqualizer X).isEqualizer
 
 @[simp]
@@ -326,7 +326,7 @@ theorem beckEqualizer_lift
 
 中文:
 定理 beckEqualizer_lift
-  条件: (s : Fork (T.toFunctor.map X.a) (T.δ.app X.A))
+  条件: (s : 叉 (T.toFunctor.map X.a) (T.δ.app X.A))
   证明: rfl
 -/
 theorem beckEqualizer_lift (s : Fork (T.toFunctor.map X.a) (T.δ.app X.A)) :

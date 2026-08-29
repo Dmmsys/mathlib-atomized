@@ -36,9 +36,9 @@ class NonUnitalCStarAlgebra
   (no additional axioms)
 
 中文:
-类 NonUnitalCStarAlgebra
+类 非幺CStar代数
   参数: (A : 类型)
-  继承: NonUnitalNormedRing A, StarRing A, CompleteSpace A, 
+  继承: 非幺赋范环 A, 对合环 A, 完备空间 A, 
   (无附加公理)
 -/
 class NonUnitalCStarAlgebra (A : Type*) extends NonUnitalNormedRing A, StarRing A, CompleteSpace A,
@@ -53,7 +53,7 @@ class NonUnitalCommCStarAlgebra
   (no additional axioms)
 
 中文:
-类 NonUnitalCommCStarAlgebra
+类 非幺交换CStar代数
   参数: (A : 类型)
   (无附加公理)
 -/
@@ -70,9 +70,9 @@ class CStarAlgebra
   (no additional axioms)
 
 中文:
-类 CStarAlgebra
+类 CStar代数
   参数: (A : 类型)
-  继承: NormedRing A, StarRing A, CompleteSpace A, CStarRing A, 
+  继承: 赋范环 A, 对合环 A, 完备空间 A, CStar环 A, 
   (无附加公理)
 -/
 class CStarAlgebra (A : Type*) extends NormedRing A, StarRing A, CompleteSpace A, CStarRing A,
@@ -88,9 +88,9 @@ class CommCStarAlgebra
   (no additional axioms)
 
 中文:
-类 CommCStarAlgebra
+类 交换CStar代数
   参数: (A : 类型)
-  继承: NormedCommRing A, CStarAlgebra A
+  继承: NormedComm环 A, CStar代数 A
   (无附加公理)
 -/
 class CommCStarAlgebra (A : Type*) extends NormedCommRing A, CStarAlgebra A
@@ -111,8 +111,8 @@ instance StarSubalgebra.cstarAlgebra
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
 
 中文:
-实例 StarSubalgebra.cstarAlgebra
-  签名: {S A : 类型} [CStarAlgebra A]
+实例 对合子代数.cstarAlgebra
+  签名: {S A : 类型} [CStar代数 A]
   定义体: h_closed.completeSpace_coe
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
 
@@ -135,8 +135,8 @@ instance StarSubalgebra.commCStarAlgebra
 mul_comm _ _ := Subtype.ext mul_comm _ _
 
 中文:
-实例 StarSubalgebra.commCStarAlgebra
-  签名: {S A : 类型} [CommCStarAlgebra A]
+实例 对合子代数.commCStarAlgebra
+  签名: {S A : 类型} [交换CStar代数 A]
   定义体: h_closed.completeSpace_coe
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
 mul_comm _ _ := Subtype.ext mul_comm _ _
@@ -160,7 +160,7 @@ instance NonUnitalStarSubalgebra.nonUnitalCStarAlgebra
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
 
 中文:
-实例 NonUnitalStarSubalgebra.nonUnitalCStarAlgebra
+实例 非幺对合子代数.nonUnitalCStarAlgebra
   签名: {S A : 类型}
   定义体: h_closed.completeSpace_coe
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
@@ -184,7 +184,7 @@ instance NonUnitalStarSubalgebra.nonUnitalCommCStarAlgebra
 mul_comm _ _ := Subtype.ext mul_comm _ _
 
 中文:
-实例 NonUnitalStarSubalgebra.nonUnitalCommCStarAlgebra
+实例 非幺对合子代数.nonUnitalCommCStarAlgebra
   签名: {S A : 类型}
   定义体: h_closed.completeSpace_coe
 .symm.le norm_mul_self_le x := CStarRing.norm_star_mul_self (x := (x : A))
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommCStarAlgebra Complex
+  签名: 交换CStar代数 复形
 -/
 noncomputable instance : CommCStarAlgebra Complex where
 
@@ -225,7 +225,7 @@ instance [CStarAlgebra
   body: StarSubalgebra.cstarAlgebra _ (h_closed := StarAlgebra.elemental.isClosed Complex x)
 
 中文:
-实例 [CStarAlgebra
+实例 [CStar代数
   签名: A] (x
   定义体: StarSubalgebra.cstarAlgebra _ (h_closed := StarAlgebra.elemental.isClosed Complex x)
 
@@ -245,7 +245,7 @@ instance [NonUnitalCStarAlgebra
     (h_closed := NonUnitalStarAlgebra.elemental.isClosed Complex x)
 
 中文:
-实例 [NonUnitalCStarAlgebra
+实例 [非幺CStar代数
   签名: A] (x
   定义体: NonUnitalStarSubalgebra.nonUnitalCStarAlgebra _
     (h_closed := NonUnitalStarAlgebra.elemental.isClosed Complex x)
@@ -265,7 +265,7 @@ instance [CStarAlgebra
   signature: A] (x
 
 中文:
-实例 [CStarAlgebra
+实例 [CStar代数
   签名: A] (x
 -/
 noncomputable instance [CStarAlgebra A] (x : A) [IsStarNormal x] :
@@ -279,7 +279,7 @@ instance [NonUnitalCStarAlgebra
   signature: A] (x
 
 中文:
-实例 [NonUnitalCStarAlgebra
+实例 [非幺CStar代数
   签名: A] (x
 -/
 noncomputable instance [NonUnitalCStarAlgebra A] (x : A) [IsStarNormal x] :
@@ -300,7 +300,7 @@ instance [(i
 
 中文:
 实例 [(i
-  签名: : ι) -> NonUnitalCStarAlgebra (A i)] :
+  签名: : ι) -> 非幺CStar代数 (A i)] :
 -/
 noncomputable instance [(i : ι) -> NonUnitalCStarAlgebra (A i)] :
     NonUnitalCStarAlgebra (Π i, A i) where
@@ -314,7 +314,7 @@ instance [(i
 
 中文:
 实例 [(i
-  签名: : ι) -> NonUnitalCommCStarAlgebra (A i)] :
+  签名: : ι) -> 非幺交换CStar代数 (A i)] :
 -/
 noncomputable instance [(i : ι) -> NonUnitalCommCStarAlgebra (A i)] :
     NonUnitalCommCStarAlgebra (Π i, A i) where
@@ -328,7 +328,7 @@ instance [(i
 
 中文:
 实例 [(i
-  签名: : ι) -> CStarAlgebra (A i)] : CStarAlgebra (Π i, A i) where
+  签名: : ι) -> CStar代数 (A i)] : CStar代数 (Π i, A i) where
 -/
 noncomputable instance [(i : ι) -> CStarAlgebra (A i)] : CStarAlgebra (Π i, A i) where
 
@@ -341,7 +341,7 @@ instance [(i
 
 中文:
 实例 [(i
-  签名: : ι) -> CommCStarAlgebra (A i)] : CommCStarAlgebra (Π i, A i) where
+  签名: : ι) -> 交换CStar代数 (A i)] : 交换CStar代数 (Π i, A i) where
 -/
 noncomputable instance [(i : ι) -> CommCStarAlgebra (A i)] : CommCStarAlgebra (Π i, A i) where
 
@@ -359,8 +359,8 @@ instance [NonUnitalCStarAlgebra
   signature: A] [NonUnitalCStarAlgebra B] :
 
 中文:
-实例 [NonUnitalCStarAlgebra
-  签名: A] [NonUnitalCStarAlgebra B] :
+实例 [非幺CStar代数
+  签名: A] [非幺CStar代数 B] :
 -/
 noncomputable instance [NonUnitalCStarAlgebra A] [NonUnitalCStarAlgebra B] :
     NonUnitalCStarAlgebra (A × B) where
@@ -373,8 +373,8 @@ instance [NonUnitalCommCStarAlgebra
   signature: A] [NonUnitalCommCStarAlgebra B] :
 
 中文:
-实例 [NonUnitalCommCStarAlgebra
-  签名: A] [NonUnitalCommCStarAlgebra B] :
+实例 [非幺交换CStar代数
+  签名: A] [非幺交换CStar代数 B] :
 -/
 noncomputable instance [NonUnitalCommCStarAlgebra A] [NonUnitalCommCStarAlgebra B] :
     NonUnitalCommCStarAlgebra (A × B) where
@@ -387,8 +387,8 @@ instance [CStarAlgebra
   signature: A] [CStarAlgebra B] : CStarAlgebra (A × B) where
 
 中文:
-实例 [CStarAlgebra
-  签名: A] [CStarAlgebra B] : CStarAlgebra (A × B) where
+实例 [CStar代数
+  签名: A] [CStar代数 B] : CStar代数 (A × B) where
 -/
 noncomputable instance [CStarAlgebra A] [CStarAlgebra B] : CStarAlgebra (A × B) where
 
@@ -400,8 +400,8 @@ instance [CommCStarAlgebra
   signature: A] [CommCStarAlgebra B] : CommCStarAlgebra (A × B) where
 
 中文:
-实例 [CommCStarAlgebra
-  签名: A] [CommCStarAlgebra B] : CommCStarAlgebra (A × B) where
+实例 [交换CStar代数
+  签名: A] [交换CStar代数 B] : 交换CStar代数 (A × B) where
 -/
 noncomputable instance [CommCStarAlgebra A] [CommCStarAlgebra B] : CommCStarAlgebra (A × B) where
 
@@ -419,8 +419,8 @@ instance [NonUnitalCStarAlgebra
   signature: A] : NonUnitalCStarAlgebra Aᵐᵒᵖ where
 
 中文:
-实例 [NonUnitalCStarAlgebra
-  签名: A] : NonUnitalCStarAlgebra Aᵐᵒᵖ where
+实例 [非幺CStar代数
+  签名: A] : 非幺CStar代数 Aᵐᵒᵖ where
 -/
 noncomputable instance [NonUnitalCStarAlgebra A] : NonUnitalCStarAlgebra Aᵐᵒᵖ where
 
@@ -432,8 +432,8 @@ instance [NonUnitalCommCStarAlgebra
   signature: A] : NonUnitalCommCStarAlgebra Aᵐᵒᵖ where
 
 中文:
-实例 [NonUnitalCommCStarAlgebra
-  签名: A] : NonUnitalCommCStarAlgebra Aᵐᵒᵖ where
+实例 [非幺交换CStar代数
+  签名: A] : 非幺交换CStar代数 Aᵐᵒᵖ where
 -/
 noncomputable instance [NonUnitalCommCStarAlgebra A] : NonUnitalCommCStarAlgebra Aᵐᵒᵖ where
 
@@ -445,8 +445,8 @@ instance [CStarAlgebra
   signature: A] : CStarAlgebra Aᵐᵒᵖ where
 
 中文:
-实例 [CStarAlgebra
-  签名: A] : CStarAlgebra Aᵐᵒᵖ where
+实例 [CStar代数
+  签名: A] : CStar代数 Aᵐᵒᵖ where
 -/
 noncomputable instance [CStarAlgebra A] : CStarAlgebra Aᵐᵒᵖ where
 
@@ -458,8 +458,8 @@ instance [CommCStarAlgebra
   signature: A] : CommCStarAlgebra Aᵐᵒᵖ where
 
 中文:
-实例 [CommCStarAlgebra
-  签名: A] : CommCStarAlgebra Aᵐᵒᵖ where
+实例 [交换CStar代数
+  签名: A] : 交换CStar代数 Aᵐᵒᵖ where
 -/
 noncomputable instance [CommCStarAlgebra A] : CommCStarAlgebra Aᵐᵒᵖ where
 

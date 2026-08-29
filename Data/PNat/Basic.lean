@@ -36,7 +36,7 @@ instance instCancelCommMonoid
 
 中文:
 实例 instCancelCommMonoid
-  签名: : CancelCommMonoid 自然数+ where
+  签名: : 消去交换幺半群 自然数+ where
 -/
 instance instCancelCommMonoid : CancelCommMonoid Nat+ where
 
@@ -105,7 +105,7 @@ theorem natPred_strictMono
 
 中文:
 定理 natPred_strictMono
-  结论: StrictMono natPred
+  结论: 严格递增 natPred
   证明: fun m _ h => Nat.pred_lt_pred m.2.ne' h
 
 @[gcongr, mono]
@@ -125,7 +125,7 @@ theorem natPred_monotone
 
 中文:
 定理 natPred_monotone
-  结论: Monotone natPred
+  结论: 递增 natPred
   证明: natPred_strictMono.monotone
 
 Depends on / 依赖: monotone, natPred_strictMono, natPred_strictMono.monotone
@@ -145,7 +145,7 @@ theorem natPred_injective
 
 中文:
 定理 natPred_injective
-  结论: Function.Injective natPred
+  结论: 函数.单射 natPred
   证明: natPred_strictMono.injective
 
 @[simp]
@@ -242,7 +242,7 @@ lemma val_ofNat
 @[simp]
 
 中文:
-引理 val_ofNat
+引理 val_of自然数
   条件: (n : 自然数) [NeZero n]
   证明: rfl
 
@@ -262,7 +262,7 @@ lemma mk_ofNat
   proof: rfl
 
 中文:
-引理 mk_ofNat
+引理 mk_of自然数
   条件: (n : 自然数) (h : 0 < n)
   证明: rfl
 
@@ -288,8 +288,8 @@ theorem succPNat_strictMono
 @[gcongr, mono]
 
 中文:
-定理 succPNat_strictMono
-  结论: StrictMono succP自然数
+定理 succP自然数_strictMono
+  结论: 严格递增 succP自然数
   证明: fun _ _ => Nat.succ_lt_succ
 
 @[gcongr, mono]
@@ -310,8 +310,8 @@ theorem succPNat_mono
 @[simp]
 
 中文:
-定理 succPNat_mono
-  结论: Monotone succP自然数
+定理 succP自然数_mono
+  结论: 递增 succP自然数
   证明: succPNat_strictMono.monotone
 
 @[simp]
@@ -334,7 +334,7 @@ theorem succPNat_lt_succPNat
 @[simp]
 
 中文:
-定理 succPNat_lt_succPNat
+定理 succP自然数_lt_succP自然数
   条件: {m n : 自然数}
   结论: m.succP自然数 < n.succP自然数 ↔ m < n
   证明: succPNat_strictMono.lt_iff_lt
@@ -357,7 +357,7 @@ theorem succPNat_le_succPNat
   proof: succPNat_strictMono.le_iff_le
 
 中文:
-定理 succPNat_le_succPNat
+定理 succP自然数_le_succP自然数
   条件: {m n : 自然数}
   结论: m.succP自然数 <= n.succP自然数 ↔ m <= n
   证明: succPNat_strictMono.le_iff_le
@@ -378,8 +378,8 @@ theorem succPNat_injective
 @[simp]
 
 中文:
-定理 succPNat_injective
-  结论: Function.Injective succP自然数
+定理 succP自然数_injective
+  结论: 函数.单射 succP自然数
   证明: succPNat_strictMono.injective
 
 @[simp]
@@ -400,7 +400,7 @@ theorem succPNat_inj
   proof: succPNat_injective.eq_iff
 
 中文:
-定理 succPNat_inj
+定理 succP自然数_inj
   条件: {n m : 自然数}
   结论: succP自然数 n = succP自然数 m ↔ n = m
   证明: succPNat_injective.eq_iff
@@ -478,7 +478,7 @@ definition coeAddHom
 
 中文:
 定义 coeAddHom
-  签名: : AddHom 自然数+ 自然数 where
+  签名: : 加法半群态射 自然数+ 自然数 where
   定义体: (↑)
   map_add' := add_coe
 -/
@@ -500,7 +500,7 @@ definition _root_.OrderIso.pnatIsoNat
 @[simp]
 
 中文:
-定义 _root_.OrderIso.pnatIsoNat
+定义 _root_.OrderIso.pnatIso自然数
   签名: : 自然数+ ≃o 自然数 where
   定义体: Equiv.pnatEquivNat
   map_rel_iff' := natPred_le_natPred
@@ -523,7 +523,7 @@ theorem _root_.OrderIso.pnatIsoNat_symm_apply
   proof: rfl
 
 中文:
-定理 _root_.OrderIso.pnatIsoNat_symm_apply
+定理 _root_.OrderIso.pnatIso自然数_symm_apply
   结论: OrderIso.pnatIso自然数.symm = 自然数.succP自然数
   证明: rfl
 -/
@@ -575,7 +575,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot 自然数+ where
+  签名: : 有底序 自然数+ where
   定义体: 1
   bot_le a := a.property
 -/
@@ -595,7 +595,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBotOneClass 自然数+
+  签名: 是BotOne类 自然数+
   定义体: a.2
 
 @[simp]
@@ -637,7 +637,7 @@ definition caseStrongInductionOn
 
 中文:
 定义 caseStrongInductionOn
-  签名: {p : 自然数+ -> Sort*} (a : 自然数+) (hz : p 1)
+  签名: {p : 自然数+ -> 类型层*} (a : 自然数+) (hz : p 1)
   定义体: by
   apply strongInductionOn a
   rintro ⟨k, kprop⟩ hk
@@ -681,7 +681,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: (n : 自然数+) {p : 自然数+ -> Sort*} (one : p 1) (succ : 对任意 n, p n -> p (n + 1))
+  签名: (n : 自然数+) {p : 自然数+ -> 类型层*} (one : p 1) (succ : 对任意 n, p n -> p (n + 1))
   定义体: by
   rcases n with ⟨n, h⟩
   induction n with
@@ -719,7 +719,7 @@ theorem recOn_one
 中文:
 定理 recOn_one
   条件: {p} (one succ)
-  结论: @P自然数.recOn 1 p one succ = one
+  结论: @正自然数.recOn 1 p one succ = one
   证明: rfl
 
 @[simp]
@@ -742,7 +742,7 @@ theorem recOn_succ
 
 中文:
 定理 recOn_succ
-  条件: (n : 自然数+) {p : 自然数+ -> Sort*} (one succ)
+  条件: (n : 自然数+) {p : 自然数+ -> 类型层*} (one succ)
   证明: by
   obtain ⟨n, h⟩ := n
   cases n <;> [exact absurd h (by decide); rfl]
@@ -768,7 +768,7 @@ theorem ofNat_le_ofNat
 @[simp]
 
 中文:
-定理 ofNat_le_ofNat
+定理 of自然数_le_of自然数
   条件: {m n : 自然数} [NeZero m] [NeZero n]
   证明: .rfl
 
@@ -790,7 +790,7 @@ theorem ofNat_lt_ofNat
 @[simp]
 
 中文:
-定理 ofNat_lt_ofNat
+定理 of自然数_lt_of自然数
   条件: {m n : 自然数} [NeZero m] [NeZero n]
   证明: .rfl
 
@@ -812,7 +812,7 @@ theorem ofNat_inj
 @[simp, norm_cast]
 
 中文:
-定理 ofNat_inj
+定理 of自然数_inj
   条件: {m n : 自然数} [NeZero m] [NeZero n]
   证明: Subtype.mk_eq_mk
 
@@ -1046,7 +1046,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub 自然数+
+  签名: : 减法 自然数+
   定义体: ⟨fun a b => toPNat' (a - b : Nat)⟩
 
 Depends on / 依赖: toPNat
@@ -1234,7 +1234,7 @@ theorem exists_eq_succ_of_ne_one
   statement: forall {n : Nat+} (_ : n != 1), exists k : Nat+, n = k + 1
 
 中文:
-定理 exists_eq_succ_of_ne_one
+定理 存在_eq_succ_of_ne_one
   结论: 对任意 {n : 自然数+} (_ : n != 1), 存在 k : 自然数+, n = k + 1
 -/
 theorem exists_eq_succ_of_ne_one : forall {n : Nat+} (_ : n != 1), exists k : Nat+, n = k + 1

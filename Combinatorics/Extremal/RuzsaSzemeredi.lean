@@ -136,8 +136,8 @@ lemma SimpleGraph.LocallyLinear.le_ruzsaSzemerediNumber
   exact le_findGreatest card_cliqueFinset_le ⟨G, inferInstance, by congr, hG⟩
 
 中文:
-引理 SimpleGraph.LocallyLinear.le_ruzsaSzemerediNumber
-  结论: [DecidableRel G.Adj]
+引理 简单图.LocallyLinear.le_ruzsaSzemerediNumber
+  结论: [DecidableRel G.伴随]
   证明: by
   classical
   exact le_findGreatest card_cliqueFinset_le ⟨G, inferInstance, by congr, hG⟩
@@ -217,7 +217,7 @@ definition ruzsaSzemerediNumberNat
 @[simp]
 
 中文:
-定义 ruzsaSzemerediNumberNat
+定义 ruzsaSzemerediNumber自然数
   签名: (n : 自然数)
   定义体: ruzsaSzemerediNumber (Fin n)
 
@@ -239,7 +239,7 @@ lemma ruzsaSzemerediNumberNat_card
 @[gcongr]
 
 中文:
-引理 ruzsaSzemerediNumberNat_card
+引理 ruzsaSzemerediNumber自然数_card
   结论: ruzsaSzemerediNumber自然数 (card α) = ruzsaSzemerediNumber α
   证明: ruzsaSzemerediNumber_congr (Fintype.equivFin _).symm
 
@@ -261,8 +261,8 @@ lemma ruzsaSzemerediNumberNat_mono
   ruzsaSzemerediNumber_mono (Fin.castLEEmb h)
 
 中文:
-引理 ruzsaSzemerediNumberNat_mono
-  结论: Monotone ruzsaSzemerediNumber自然数
+引理 ruzsaSzemerediNumber自然数_mono
+  结论: 递增 ruzsaSzemerediNumber自然数
   证明: fun _m _n h =>
   ruzsaSzemerediNumber_mono (Fin.castLEEmb h)
 -/
@@ -278,7 +278,7 @@ lemma ruzsaSzemerediNumberNat_le
   proof: ruzsaSzemerediNumber_le.trans_eq by rw [Fintype.card_fin]
 
 中文:
-引理 ruzsaSzemerediNumberNat_le
+引理 ruzsaSzemerediNumber自然数_le
   结论: ruzsaSzemerediNumber自然数 n <= n.choose 3
   证明: ruzsaSzemerediNumber_le.trans_eq by rw [Fintype.card_fin]
 
@@ -296,7 +296,7 @@ lemma ruzsaSzemerediNumberNat_zero
   proof: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 
 中文:
-引理 ruzsaSzemerediNumberNat_zero
+引理 ruzsaSzemerediNumber自然数_zero
   结论: ruzsaSzemerediNumber自然数 0 = 0
   证明: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 -/
@@ -312,7 +312,7 @@ lemma ruzsaSzemerediNumberNat_one
   proof: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 
 中文:
-引理 ruzsaSzemerediNumberNat_one
+引理 ruzsaSzemerediNumber自然数_one
   结论: ruzsaSzemerediNumber自然数 1 = 0
   证明: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 -/
@@ -328,7 +328,7 @@ lemma ruzsaSzemerediNumberNat_two
   proof: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 
 中文:
-引理 ruzsaSzemerediNumberNat_two
+引理 ruzsaSzemerediNumber自然数_two
   结论: ruzsaSzemerediNumber自然数 2 = 0
   证明: le_zero_iff.1 ruzsaSzemerediNumberNat_le
 -/
@@ -358,7 +358,7 @@ definition triangleIndices
 
 中文:
 定义 triangleIndices
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: (univ ×ˢ s).map
     ⟨fun xa => (xa.1, xa.1 + xa.2, xa.1 + 2 * xa.2), by
       rintro ⟨x, a⟩ ⟨y, b⟩ h
@@ -430,7 +430,7 @@ lemma noAccidental
 
 中文:
 引理 noAccidental
-  条件: (hs : ThreeAPFree (s : Set α))
+  条件: (hs : ThreeAPFree (s : 集合 α))
   证明: by
     simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
     rintro _ _ _ _ _ _ d a ha rfl rfl rfl b' b hb rfl rfl h₁ d' c hc rfl h₂ rfl
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: ExplicitDisjoint (triangleIndices s : Finset (α × α × α))
+  签名: ExplicitDisjoint (triangleIndices s : 有限集 (α × α × α))
   定义体: by
     simp only [mem_triangleIndices, Prod.mk_inj, forall_exists_index, and_imp]
     rintro _ _ _ _ x a ha rfl rfl rfl y b hb rfl h₁ h₂
@@ -498,7 +498,7 @@ lemma locallyLinear
 
 中文:
 引理 locallyLinear
-  条件: (hs : ThreeAPFree (s : Set α))
+  条件: (hs : ThreeAPFree (s : 集合 α))
   证明: haveI := noAccidental hs; TripartiteFromTriangles.locallyLinear _
 -/
 private lemma locallyLinear (hs : ThreeAPFree (s : Set α)) :
@@ -517,7 +517,7 @@ lemma card_edgeFinset
 
 中文:
 引理 card_edgeFinset
-  条件: (hs : ThreeAPFree (s : Set α)) [DecidableEq α]
+  条件: (hs : ThreeAPFree (s : 集合 α)) [DecidableEq α]
   证明: by
   have := noAccidental hs
   rw [(locallyLinear hs).card_edgeFinset]; rw [card_triangles]; rw [card_triangleIndices]; rw [mul_assoc]
@@ -576,7 +576,7 @@ lemma rothNumberNat_le_ruzsaSzemerediNumberNat
     _ = Fintype.card α * addRothNumber (Iio (⟨n,
 
 中文:
-引理 rothNumberNat_le_ruzsaSzemerediNumberNat
+引理 rothNumber自然数_le_ruzsaSzemerediNumber自然数
   条件: (n : 自然数)
   证明: by
   let α := Fin (2 * n + 1)
@@ -620,7 +620,7 @@ theorem rothNumberNat_le_ruzsaSzemerediNumberNat'
       rw [← div_add_one (three_ne_zero' Real)]; rw [← le_sub_iff
 
 中文:
-定理 rothNumberNat_le_ruzsaSzemerediNumberNat'
+定理 rothNumber自然数_le_ruzsaSzemerediNumber自然数'
   证明: mul_le_mul_of_nonneg_right ?_ (Nat.cast_nonneg _)
       _ <= (ruzsaSzemerediNumberNat (6 * (n / 6) + 3) : Real) := ?_
       _ <= _ := by grw [Nat.mul_div_le]
@@ -663,7 +663,7 @@ theorem ruzsaSzemerediNumberNat_lower_bound
       (rothNumberNat_le_ruzsaSzemerediNumberNat' _)
 
 中文:
-定理 ruzsaSzemerediNumberNat_lower_bound
+定理 ruzsaSzemerediNumber自然数_lower_bound
   条件: (n : 自然数)
   证明: by
   rw [mul_assoc]
@@ -703,7 +703,7 @@ theorem ruzsaSzemerediNumberNat_asymptotic_lower_bound
   
 
 中文:
-定理 ruzsaSzemerediNumberNat_asymptotic_lower_bound
+定理 ruzsaSzemerediNumber自然数_asymptotic_lower_bound
   证明: by
   trans fun n => (n / 3 - 2) * ↑((n - 3) / 6) * exp (-4 * √(log ↑((n - 3) / 6)))
   · simp_rw [sq]

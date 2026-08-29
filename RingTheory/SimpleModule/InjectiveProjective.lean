@@ -31,7 +31,7 @@ theorem injective_of_isSemisimpleRing
 
 中文:
 定理 injective_of_isSemisimpleRing
-  结论: Module.Injective R M where
+  结论: 模.单射 R M where
   证明: let ⟨h, comp⟩ := IsSemisimpleModule.extension_property f hf g
     ⟨h, fun _ => by rw [← comp, LinearMap.comp_apply]⟩
 
@@ -52,7 +52,7 @@ theorem projective_of_isSemisimpleRing
 
 中文:
 定理 projective_of_isSemisimpleRing
-  结论: Module.Projective R M
+  结论: 模.投射 R M
   证明: .of_lifting_property'' (IsSemisimpleModule.lifting_property · · _)
 
 Depends on / 依赖: IsSemisimpleModule, IsSemisimpleModule.lifting_property, lifting_property, of_lifting_property

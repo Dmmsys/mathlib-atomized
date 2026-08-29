@@ -32,7 +32,7 @@ definition exteriorPower.cofactorLinear
 
 中文:
 定义 exteriorPower.cofactorLinear
-  签名: (bN : Module.Basis (Fin n) R N)
+  签名: (bN : 模.基 (有限集 n) R N)
   定义体: (bN.det.compLinearMap (LinearMap.snd R M N)).smulRight x.1
   map_add' x y := AlternatingMap.ext fun _ => by simp
   map_smul' c x := AlternatingMap.ext fun _ => by simp [smul_smul, mul_comm]
@@ -55,7 +55,7 @@ definition exteriorPower.cofactorToLeft
 
 中文:
 定义 exteriorPower.cofactorToLeft
-  签名: (bN : Module.Basis (Fin n) R N)
+  签名: (bN : 模.基 (有限集 n) R N)
   定义体: exteriorPower.alternatingMapLinearEquiv (AlternatingMap.alternatizeUncurryFin (cofactorLinear bN))
 
 Depends on / 依赖: AlternatingMap, AlternatingMap.alternatizeUncurryFin, alternatingMapLinearEquiv, alternatizeUncurryFin, cofactorLinear, exteriorPower, exteriorPower.alternatingMapLinearEquiv
@@ -76,7 +76,7 @@ lemma exteriorPower.cofactorToLeft_ιMulti_cons
 
 中文:
 引理 exteriorPower.cofactorToLeft_ιMulti_cons
-  条件: (bN : Module.Basis (Fin n) R N) (m : M)
+  条件: (bN : 模.基 (有限集 n) R N) (m : M)
   证明: by
   simp [cofactorToLeft, cofactorLinear, AlternatingMap.alternatizeUncurryFin_apply,
     Fin.sum_univ_succ, Module.Basis.det_self]

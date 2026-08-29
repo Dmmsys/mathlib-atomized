@@ -49,7 +49,7 @@ structure IsSl2Triple
     - lie_h_f_nsmul : ⁅h, f⁆ = -(2 • f)
 
 中文:
-结构 IsSl2Triple
+结构 是Sl2Triple
   参数: (h e f : L)
   公理与运算 (4 个):
     - h_ne_zero : h != 0
@@ -82,8 +82,8 @@ lemma symm
 
 中文:
 引理 symm
-  条件: (ht : IsSl2Triple h e f)
-  结论: IsSl2Triple (-h) f e where
+  条件: (ht : 是Sl2Triple h e f)
+  结论: 是Sl2Triple (-h) f e where
   证明: by simpa using ht.h_ne_zero
   lie_e_f := by rw [← neg_eq_iff_eq_neg, lie_skew, ht.lie_e_f]
   lie_h_e_nsmul := by rw [neg_lie, neg_eq_iff_eq_neg, ht.lie_h_f_nsmul]
@@ -107,7 +107,7 @@ lemma symm_iff
 
 中文:
 引理 symm_iff
-  结论: IsSl2Triple (-h) f e ↔ IsSl2Triple h e f
+  结论: 是Sl2Triple (-h) f e ↔ 是Sl2Triple h e f
   证明: ⟨fun t => neg_neg h ▸ t.symm, symm⟩
 -/
 @[simp] lemma symm_iff : IsSl2Triple (-h) f e ↔ IsSl2Triple h e f :=
@@ -125,7 +125,7 @@ lemma lie_h_e_smul
 
 中文:
 引理 lie_h_e_smul
-  条件: (t : IsSl2Triple h e f)
+  条件: (t : 是Sl2Triple h e f)
   结论: ⁅h, e⁆ = (2 : R) • e
   证明: by
   simp [t.lie_h_e_nsmul, two_smul]
@@ -147,7 +147,7 @@ lemma lie_lie_smul_f
 
 中文:
 引理 lie_lie_smul_f
-  条件: (t : IsSl2Triple h e f)
+  条件: (t : 是Sl2Triple h e f)
   结论: ⁅h, f⁆ = -((2 : R) • f)
   证明: by
   simp [t.lie_h_f_nsmul, two_smul]
@@ -171,7 +171,7 @@ lemma e_ne_zero
 
 中文:
 引理 e_ne_zero
-  条件: (t : IsSl2Triple h e f)
+  条件: (t : 是Sl2Triple h e f)
   结论: e != 0
   证明: by
   have := t.h_ne_zero
@@ -199,7 +199,7 @@ lemma f_ne_zero
 
 中文:
 引理 f_ne_zero
-  条件: (t : IsSl2Triple h e f)
+  条件: (t : 是Sl2Triple h e f)
   结论: f != 0
   证明: by
   have := t.h_ne_zero
@@ -227,8 +227,8 @@ structure HasPrimitiveVectorWith
     - lie_e : ⁅e, m⁆ = 0
 
 中文:
-结构 HasPrimitiveVectorWith
-  参数: (t : IsSl2Triple h e f) (m : M) (μ : R)
+结构 有PrimitiveVectorWith
+  参数: (t : 是Sl2Triple h e f) (m : M) (μ : R)
   公理与运算 (3 个):
     - ne_zero : m != 0
     - lie_h : ⁅h, m⁆ = μ • m
@@ -252,8 +252,8 @@ lemma HasPrimitiveVectorWith.mk'
     rw [← nsmul_lie]; rw [← t.lie_h_e_nsmul]; rw [lie_lie]; rw [hm']; rw [lie_smul]; rw [he]; rw [lie_smul]; rw [hm']; rw [smul_smul]; rw [smul_smul]; rw [mul_comm ρ μ]; rw [sub_self]
 
 中文:
-引理 HasPrimitiveVectorWith.mk'
-  结论: [IsAddTorsionFree M] (t : IsSl2Triple h e f) (m : M) (μ ρ : R)
+引理 有PrimitiveVectorWith.mk'
+  结论: [是加法无挠 M] (t : 是Sl2Triple h e f) (m : M) (μ ρ : R)
   证明: hm
   lie_h := hm'
   lie_e := by
@@ -287,7 +287,7 @@ definition toLieSubalgebra
 
 中文:
 定义 toLieSubalgebra
-  签名: (t : IsSl2Triple h e f)
+  签名: (t : 是Sl2Triple h e f)
   定义体: span R {e, f, h}
   lie_mem' {x y} hx hy := by
     simp only [carrier_eq_coe, SetLike.mem_coe] at hx hy ⊢
@@ -345,7 +345,7 @@ lemma mem_toLieSubalgebra_iff
 
 中文:
 引理 mem_toLieSubalgebra_iff
-  条件: {x : L} {t : IsSl2Triple h e f}
+  条件: {x : L} {t : 是Sl2Triple h e f}
   证明: by
   simp_rw [t.lie_e_f, toLieSubalgebra, ← LieSubalgebra.mem_toSubmodule, Submodule.mem_span_triple,
     eq_comm]
@@ -377,7 +377,7 @@ lemma lie_f_pow_toEnd_f
 
 中文:
 引理 lie_f_pow_toEnd_f
-  条件: (P : HasPrimitiveVectorWith t m μ) (n : 自然数)
+  条件: (P : 有PrimitiveVectorWith t m μ) (n : 自然数)
   证明: by
   simp [pow_succ']
 
@@ -479,8 +479,8 @@ lemma exists_nat
     rw [hn₂]; rw [lie_zero]; rw [eq_comm]; rw [smul_eq_zero_iff_left hn₁]; rw [mul_eq_zero]; rw [sub_eq_zero] 
 
 中文:
-引理 exists_nat
-  条件: [IsNoetherian R M] [IsTorsionFree R M] [IsDomain R] [CharZero R]
+引理 存在_nat
+  条件: [是Noether R M] [是无挠 R M] [是整环 R] [特征零 R]
   证明: by
   suffices exists n : Nat, (ψ n) = 0 by
     obtain ⟨n, hn₁, hn₂⟩ := Nat.exists_not_and_succ_of_not_zero_of_exists P.ne_zero this
@@ -525,7 +525,7 @@ lemma pow_toEnd_f_ne_zero_of_eq_nat
 
 中文:
 引理 pow_toEnd_f_ne_zero_of_eq_nat
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   intro H
   induction i
@@ -568,7 +568,7 @@ lemma pow_toEnd_f_eq_zero_of_eq_nat
 
 中文:
 引理 pow_toEnd_f_eq_zero_of_eq_nat
-  结论: [IsDomain R] [CharZero R] [IsNoetherian R M] [IsTorsionFree R M]
+  结论: [是整环 R] [特征零 R] [是Noether R M] [是无挠 R M]
   证明: by
   by_contra h
   have : t.HasPrimitiveVectorWith (ψ (n + 1)) (n - 2 * (n + 1) : R) :=
@@ -633,7 +633,7 @@ lemma lie_h_pow_toEnd_e
 
 中文:
 引理 lie_h_pow_toEnd_e
-  结论: (t : IsSl2Triple h e f)
+  结论: (t : 是Sl2Triple h e f)
   证明: by
   induction n with
   | zero => simpa using hm
@@ -675,7 +675,7 @@ lemma exists_hasPrimitiveVectorWith
     
 
 中文:
-引理 exists_hasPrimitiveVectorWith
+引理 存在_hasPrimitiveVectorWith
   证明: by
   obtain ⟨μ₀, hμ₀⟩ := IsTriangularizable.exists_hasEigenvalue R L M h
   obtain ⟨m₀, hm₀⟩ := hμ₀.exists_hasEigenvector

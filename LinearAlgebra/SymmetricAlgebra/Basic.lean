@@ -103,7 +103,7 @@ lemma algHom_surjective
 
 中文:
 引理 algHom_surjective
-  结论: Function.Surjective (algHom R M)
+  结论: 函数.满射 (algHom R M)
   证明: Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
@@ -189,7 +189,7 @@ have := Rin
 
 中文:
 实例 :
-  签名: CommSemiring (SymmetricAlgebra R M)
+  签名: 交换半环 (SymmetricAlgebra R M)
   定义体: by
     change Commute a b
     induction b using SymmetricAlgebra.induction with
@@ -499,8 +499,8 @@ instance [Nontrivial
   body: (algebraMap_leftInverse M).injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (SymmetricAlgebra R M)
+实例 [非平凡
+  签名: R] : 非平凡 (SymmetricAlgebra R M)
   定义体: (algebraMap_leftInverse M).injective.nontrivial
 
 Depends on / 依赖: algebraMap_leftInverse, injective, injective.nontrivial, nontrivial

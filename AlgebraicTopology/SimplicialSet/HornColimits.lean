@@ -51,7 +51,7 @@ lemma sq
 
 中文:
 引理 sq
-  结论: Subcomplex.BicartSq.{u} (stdSimplex.face {0}) (stdSimplex.face {0, 1})
+  结论: 子复形.BicartSq.{u} (stdSimplex.face {0}) (stdSimplex.face {0, 1})
   证明: by
     apply le_antisymm
     · rw [sup_le_iff]
@@ -166,7 +166,7 @@ lemma sq
 
 中文:
 引理 sq
-  结论: Subcomplex.BicartSq.{u} (stdSimplex.face {1}) (stdSimplex.face {0, 1})
+  结论: 子复形.BicartSq.{u} (stdSimplex.face {1}) (stdSimplex.face {0, 1})
   证明: by
     apply le_antisymm
     · rw [sup_le_iff]
@@ -281,7 +281,7 @@ lemma sq
 
 中文:
 引理 sq
-  结论: Subcomplex.BicartSq.{u} (stdSimplex.face {2}) (stdSimplex.face {0, 2})
+  结论: 子复形.BicartSq.{u} (stdSimplex.face {2}) (stdSimplex.face {0, 2})
   证明: by
     apply le_antisymm
     · rw [sup_le_iff]
@@ -391,7 +391,7 @@ lemma multicoequalizerDiagram
 
 中文:
 引理 multicoequalizerDiagram
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: by rw [horn_eq_iSup]
   eq_inf j k := by
     rw [stdSimplex.face_inter_face]
@@ -420,7 +420,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: (i : Fin (n + 1))
+  签名: (i : 有限集 (n + 1))
   定义体: (multicoequalizerDiagram i).isColimit'
 
 Depends on / 依赖: isColimit, multicoequalizerDiagram
@@ -446,7 +446,7 @@ lemma hom_ext'
 
 中文:
 引理 hom_ext'
-  结论: {i : Fin (n + 2)} {f g : (Λ[n + 1, i] : SSet) ⟶ X}
+  结论: {i : 有限集 (n + 2)} {f g : (Λ[n + 1, i] : SSet) ⟶ X}
   证明: by
   refine Multicofork.IsColimit.hom_ext (isColimit i) (fun ⟨j, hj⟩ => ?_)
   simpa only [faceSingletonComplIso_inv_ι_assoc] using!
@@ -505,7 +505,7 @@ lemma isCompatible_zero_iff_true
 
 中文:
 引理 isCompatible_zero_iff_true
-  条件: {i : Fin 2} (f : 对任意 (j : Fin 2) (_ : j != i), Δ[0] ⟶ X)
+  条件: {i : 有限集 2} (f : 对任意 (j : 有限集 2) (_ : j != i), Δ[0] ⟶ X)
   证明: Iff.rfl
 
 @[simp]
@@ -556,7 +556,7 @@ lemma of_hom
 
 中文:
 引理 of_hom
-  条件: {i : Fin (n + 2)} (g : (Λ[n + 1, i] : SSet) ⟶ X)
+  条件: {i : 有限集 (n + 2)} (g : (Λ[n + 1, i] : SSet) ⟶ X)
   证明: by
   obtain _ | n := n
   · simp
@@ -591,7 +591,7 @@ lemma δ_pred_comp
 
 中文:
 引理 δ_pred_comp
-  结论: {i : Fin (n + 3)} {f : 对任意 (j : Fin (n + 3)) (_ : j != i), (Δ[n + 1] : SSet) ⟶ X}
+  结论: {i : 有限集 (n + 3)} {f : 对任意 (j : 有限集 (n + 3)) (_ : j != i), (Δ[n + 1] : SSet) ⟶ X}
   证明: hf j k hj hk hjk
 
 Depends on / 依赖: Fin.ne_last_of_lt, Fin.ne_zero_of_lt, castPred, j.castPred, k.pred, ne_last_of_lt, ne_zero_of_lt, stdSimplex
@@ -659,7 +659,7 @@ lemma exists_desc
     simpa using! (horn.isColimit.{u} i).fac hf.multicofork (.right ⟨j, hj⟩)⟩
 
 中文:
-引理 exists_desc
+引理 存在_desc
   条件: (hf : horn.IsCompatible f)
   证明: ⟨(horn.isColimit.{u} i).desc hf.multicofork, fun j hj => by
     rw [← cancel_epi (stdSimplex.faceSingletonComplIso j).inv]
@@ -710,7 +710,7 @@ lemma ι_desc
 
 中文:
 引理 ι_desc
-  条件: (hf : horn.IsCompatible f) (j : Fin (n + 2)) (hj : j != i)
+  条件: (hf : horn.IsCompatible f) (j : 有限集 (n + 2)) (hj : j != i)
   证明: hf.exists_desc.choose_spec j hj
 
 Depends on / 依赖: choose_spec, exists_desc, hf.exists_desc.choose_spec
@@ -998,7 +998,7 @@ lemma exists_desc
   proof: ⟨desc f₀ f₂ f₃ h₁₂ h₁₃ h₂₃, by simp⟩
 
 中文:
-引理 exists_desc
+引理 存在_desc
   结论: 存在 (φ : (Λ[3, 1] : SSet) ⟶ X),
   证明: ⟨desc f₀ f₂ f₃ h₁₂ h₁₃ h₂₃, by simp⟩
 -/
@@ -1282,7 +1282,7 @@ lemma exists_desc
   proof: ⟨desc f₀ f₁ f₃ h₀₂ h₁₂ h₂₃, by simp⟩
 
 中文:
-引理 exists_desc
+引理 存在_desc
   结论: 存在 (φ : (Λ[3, 2] : SSet) ⟶ X),
   证明: ⟨desc f₀ f₁ f₃ h₀₂ h₁₂ h₂₃, by simp⟩
 -/

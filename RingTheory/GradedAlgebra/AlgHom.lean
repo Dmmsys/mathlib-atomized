@@ -33,7 +33,7 @@ structure GradedAlgHom
   (no additional axioms)
 
 中文:
-结构 GradedAlgHom
+结构 GradedAlg态射
   参数: (R : 类型) {A B ι : 类型}
   继承: A ->ₐ[R] B, 𝒜 ->+*ᵍ ℬ
   (无附加公理)
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (𝒜 ->ₐᵍ[R] ℬ) A B
+  签名: 函数状 (𝒜 ->ₐᵍ[R] ℬ) A B
   定义体: f.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨⟨⟨⟨_, _⟩, _⟩, _, _⟩, _⟩, _⟩
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: AlgHomClass (𝒜 ->ₐᵍ[R] ℬ) R A B
+  签名: 代数态射类 (𝒜 ->ₐᵍ[R] ℬ) R A B
   定义体: f.map_add
   map_zero f := f.map_zero
   map_mul f := f.map_mul
@@ -189,7 +189,7 @@ lemma toAlgHom_ofClass
 
 中文:
 引理 toAlgHom_ofClass
-  结论: {F : 类型} [FunLike F A B] [GradedFunLike F 𝒜 ℬ]
+  结论: {F : 类型} [函数状 F A B] [GradedFunLike F 𝒜 ℬ]
   证明: rfl
 -/
 @[simp] lemma toAlgHom_ofClass {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ]
@@ -207,7 +207,7 @@ initialize_simps_projections GradedAlgHom (toFun -> apply)
 
 中文:
 引理 toGradedRingHom_ofClass
-  结论: {F : 类型} [FunLike F A B] [GradedFunLike F 𝒜 ℬ]
+  结论: {F : 类型} [函数状 F A B] [GradedFunLike F 𝒜 ℬ]
   证明: rfl
 
 initialize_simps_projections GradedAlgHom (toFun -> apply)
@@ -228,7 +228,7 @@ theorem coe_ofClass
 
 中文:
 定理 coe_ofClass
-  结论: {F : 类型} [FunLike F A B] [GradedFunLike F 𝒜 ℬ]
+  结论: {F : 类型} [函数状 F A B] [GradedFunLike F 𝒜 ℬ]
   证明: rfl
 -/
 @[simp] theorem coe_ofClass {F : Type*} [FunLike F A B] [GradedFunLike F 𝒜 ℬ]
@@ -327,7 +327,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> (A -> B))
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> (A -> B))
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -367,7 +367,7 @@ theorem coe_toAlgHom_injective
 
 中文:
 定理 coe_toAlgHom_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->ₐ[R] B)
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->ₐ[R] B)
   证明: fun _ _ h => coe_fn_injective congr($h)
 
 @[deprecated (since := "2026-05-05")] alias coe_algHom_injective := coe_toAlgHom_injective
@@ -389,7 +389,7 @@ theorem toGradedRingHom_injective
 
 中文:
 定理 toGradedRingHom_injective
-  结论: Function.Injective (toGradedRingHom (𝒜 := 𝒜) (ℬ := ℬ))
+  结论: 函数.单射 (toGradedRingHom (𝒜 := 𝒜) (ℬ := ℬ))
   证明: fun _ _ h => coe_fn_injective congr($h)
 -/
 theorem toGradedRingHom_injective : Function.Injective (toGradedRingHom (𝒜 := 𝒜) (ℬ := ℬ)) :=
@@ -405,7 +405,7 @@ theorem coe_linearMap_injective
 
 中文:
 定理 coe_linearMap_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->ₗ[R] B)
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->ₗ[R] B)
   证明: AlgHom.toLinearMap_injective.comp coe_toAlgHom_injective
 
 Depends on / 依赖: AlgHom, AlgHom.toLinearMap_injective.comp, coe_toAlgHom_injective, toLinearMap_injective
@@ -423,7 +423,7 @@ theorem coe_ringHom_injective
 
 中文:
 定理 coe_ringHom_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->+* B)
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->+* B)
   证明: AlgHom.coe_ringHom_injective.comp coe_toAlgHom_injective
 
 Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective.comp, coe_ringHom_injective, coe_toAlgHom_injective
@@ -441,7 +441,7 @@ theorem coe_monoidHom_injective
 
 中文:
 定理 coe_monoidHom_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->* B)
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->* B)
   证明: AlgHom.coe_monoidHom_injective.comp coe_toAlgHom_injective
 
 Depends on / 依赖: AlgHom, AlgHom.coe_monoidHom_injective.comp, coe_monoidHom_injective, coe_toAlgHom_injective
@@ -459,7 +459,7 @@ theorem coe_addMonoidHom_injective
 
 中文:
 定理 coe_addMonoidHom_injective
-  结论: Function.Injective ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->+ B)
+  结论: 函数.单射 ((↑) : (𝒜 ->ₐᵍ[R] ℬ) -> A ->+ B)
   证明: AlgHom.coe_addMonoidHom_injective.comp coe_toAlgHom_injective
 
 Depends on / 依赖: AlgHom, AlgHom.coe_addMonoidHom_injective.comp, coe_addMonoidHom_injective, coe_toAlgHom_injective
@@ -585,7 +585,7 @@ theorem comp_ofId
 
 中文:
 定理 comp_ofId
-  结论: (f : A ->ₐ[R] B).comp (Algebra.ofId R A) = Algebra.ofId R B
+  结论: (f : A ->ₐ[R] B).comp (代数.ofId R A) = 代数.ofId R B
   证明: AlgHom.ext f.commutes
 
 Depends on / 依赖: AlgHom, AlgHom.ext, commutes, f.commutes
@@ -669,7 +669,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(GradedAlgHom.id R 𝒜) = id
+  结论: ⇑(GradedAlg态射.id R 𝒜) = id
   证明: rfl
 
 @[simp]
@@ -687,7 +687,7 @@ theorem id_toAlgHom
 
 中文:
 定理 id_toAlgHom
-  结论: (GradedAlgHom.id R 𝒜 : A ->ₐ[R] A) = AlgHom.id R A
+  结论: (GradedAlg态射.id R 𝒜 : A ->ₐ[R] A) = 代数态射.id R A
   证明: rfl
 -/
 theorem id_toAlgHom : (GradedAlgHom.id R 𝒜 : A ->ₐ[R] A) = AlgHom.id R A := rfl
@@ -802,7 +802,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  结论: (GradedAlgHom.id R ℬ).comp f = f
+  结论: (GradedAlg态射.id R ℬ).comp f = f
   证明: rfl
 -/
 theorem id_comp : (GradedAlgHom.id R ℬ).comp f = f := rfl
@@ -842,7 +842,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (𝒜 ->ₐᵍ[R] 𝒜)
+  签名: 幺半群 (𝒜 ->ₐᵍ[R] 𝒜)
   定义体: comp
   one := .id R 𝒜
   mul_assoc _ _ _ := rfl
@@ -916,7 +916,7 @@ lemma cancel_right
 
 中文:
 引理 cancel_right
-  条件: {g₁ g₂ : ℬ ->ₐᵍ[R] 𝒞} {f : 𝒜 ->ₐᵍ[R] ℬ} (hf : Function.Surjective f)
+  条件: {g₁ g₂ : ℬ ->ₐᵍ[R] 𝒞} {f : 𝒜 ->ₐᵍ[R] ℬ} (hf : 函数.满射 f)
   证明: ⟨fun h => coe_toAlgHom_injective (AlgHom.cancel_right hf).1 congr($h), fun h => h ▸ rfl⟩
 
 Depends on / 依赖: AlgHom, AlgHom.cancel_right, cancel_right, coe_toAlgHom_injective
@@ -935,7 +935,7 @@ lemma cancel_left
 
 中文:
 引理 cancel_left
-  条件: {g₁ g₂ : 𝒜 ->ₐᵍ[R] ℬ} {f : ℬ ->ₐᵍ[R] 𝒞} (hf : Function.Injective f)
+  条件: {g₁ g₂ : 𝒜 ->ₐᵍ[R] ℬ} {f : ℬ ->ₐᵍ[R] 𝒞} (hf : 函数.单射 f)
   证明: ⟨fun h => coe_toAlgHom_injective (AlgHom.cancel_left hf).1 congr($h), fun h => h ▸ rfl⟩
 
 Depends on / 依赖: AlgHom, AlgHom.cancel_left, cancel_left, coe_toAlgHom_injective
@@ -983,7 +983,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (𝒜 ->ₐᵍ[R] ℬ)
+  签名: 唯一 (𝒜 ->ₐᵍ[R] ℬ)
   定义体: { (default : A ->ₐ[R] B) with map_mem hx := by aesop }
   uniq _ := ext fun _ => Subsingleton.elim _ _
 
@@ -1028,7 +1028,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (R₀ : 类型) [CommSemiring R₀] [Algebra R₀ R]
+  签名: (R₀ : 类型) [交换半环 R₀] [代数 R₀ R]
   定义体: { f.toAlgHom.restrictScalars R₀, f with }
 -/
 @[coe, simps!] def restrictScalars (R₀ : Type*) [CommSemiring R₀] [Algebra R₀ R]

@@ -53,8 +53,8 @@ instance [PseudoEMetricSpace
   edi
 
 中文:
-实例 [PseudoEMetricSpace
-  签名: X] : PseudoEMetricSpace (WithLp p <| ι ->₀ X) where
+实例 [PseudoEMetric空间
+  签名: X] : PseudoEMetric空间 (WithLp p <| ι ->₀ X) where
   定义体: ((f.ofLp.zipWith edist (edist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real)
   edist_self f := by
     have : 0 < p := zero_lt_one.trans_le Fact.out
@@ -101,7 +101,7 @@ lemma edist_def
 
 中文:
 引理 edist_def
-  结论: [PseudoEMetricSpace X] {p : 实数>=0} [Fact (1 <= p)]
+  结论: [PseudoEMetric空间 X] {p : 实数>=0} [Fact (1 <= p)]
   证明: rfl
 -/
 lemma edist_def [PseudoEMetricSpace X] {p : Real>=0} [Fact (1 <= p)]
@@ -118,8 +118,8 @@ instance [EMetricSpace
   body: by simp_all [edist_def, sum, WithLp.ext_iff, DFunLike.ext_iff]
 
 中文:
-实例 [EMetricSpace
-  签名: X] : EMetricSpace (WithLp p <| ι ->₀ X) where
+实例 [广义度量空间
+  签名: X] : 广义度量空间 (WithLp p <| ι ->₀ X) where
   定义体: by simp_all [edist_def, sum, WithLp.ext_iff, DFunLike.ext_iff]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, WithLp, WithLp.ext_iff, edist_def, ext_iff
@@ -139,8 +139,8 @@ instance [PseudoMetricSpace
       simp only [edist_def, sum, zipWith_apply, ← coe_nnreal_ennreal_nndist, NNReal.zero_l
 
 中文:
-实例 [PseudoMetricSpace
-  签名: X] : PseudoMetricSpace (WithLp p <| ι ->₀ X)
+实例 [伪度量空间
+  签名: X] : 伪度量空间 (WithLp p <| ι ->₀ X)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
     (fun f g => by dsimp [sum]; positivity) fun f g => by
@@ -169,7 +169,7 @@ lemma dist_def
 
 中文:
 引理 dist_def
-  条件: [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X)
+  条件: [伪度量空间 X] (f g : WithLp p <| ι ->₀ X)
   证明: rfl
 -/
 lemma dist_def [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X) :
@@ -191,7 +191,7 @@ lemma nndist_def
 
 中文:
 引理 nndist_def
-  条件: [PseudoMetricSpace X] (f g : WithLp p <| ι ->₀ X)
+  条件: [伪度量空间 X] (f g : WithLp p <| ι ->₀ X)
   证明: by
   ext
   simp only [coe_nndist, dist_def, sum, zipWith_apply, NNReal.coe_sum, NNReal.coe_rpow]
@@ -221,8 +221,8 @@ instance [MetricSpace
     (fun f g => by dsimp [sum]; positivity) fun f g => by rw [edist_dist, dist_def]
 
 中文:
-实例 [MetricSpace
-  签名: X] : MetricSpace (WithLp p <| ι ->₀ X)
+实例 [度量空间
+  签名: X] : 度量空间 (WithLp p <| ι ->₀ X)
   定义体: EMetricSpace.toMetricSpaceOfDist
     (fun f g => ((f.ofLp.zipWith dist (dist_self _) g.ofLp).sum fun i r => r ^ (p : Real)) ^ (p⁻¹ : Real))
     (fun f g => by dsimp [sum]; positivity) fun f g => by rw [edist_dist, dist_def]

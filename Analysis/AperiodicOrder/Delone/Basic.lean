@@ -80,12 +80,12 @@ structure DeloneSet
 
 中文:
 结构 DeloneSet
-  参数: (X : 类型) [MetricSpace X]
+  参数: (X : 类型) [度量空间 X]
   公理与运算 (7 个):
-    - carrier : Set X
+    - carrier : 集合 X
     - packingRadius : 实数>=0
     - packingRadius_pos : 0 < packingRadius
-    - isSeparated_packingRadius : IsSeparated packingRadius carrier
+    - isSeparated_packingRadius : 是分离 packingRadius carrier
     - coveringRadius : 实数>=0
     - coveringRadius_pos : 0 < coveringRadius
     - isCover_coveringRadius : IsCover coveringRadius .univ carrier
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (DeloneSet X) (Set X)
+  签名: Coe (DeloneSet X) (集合 X)
   定义体: DeloneSet.toSet
 
 Depends on / 依赖: DeloneSet, DeloneSet.toSet
@@ -170,7 +170,7 @@ lemma mem_coe
 中文:
 引理 mem_coe
   条件: {D : DeloneSet X} {x : X}
-  结论: x in (D : Set X) ↔ x in D
+  结论: x in (D : 集合 X) ↔ x in D
   证明: .rfl
 -/
 lemma mem_coe {D : DeloneSet X} {x : X} : x in (D : Set X) ↔ x in D := .rfl
@@ -202,8 +202,8 @@ lemma nonempty
 
 中文:
 引理 nonempty
-  条件: [Nonempty X] (D : DeloneSet X)
-  结论: (D : Set X).Nonempty
+  条件: [非空 X] (D : DeloneSet X)
+  结论: (D : 集合 X).非空
   证明: D.isCover_coveringRadius.nonempty Set.univ_nonempty
 
 Depends on / 依赖: D.isCover_coveringRadius.nonempty, Set.univ_nonempty, isCover_coveringRadius, nonempty, univ_nonempty
@@ -227,7 +227,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (D : DeloneSet X) (carrier : Set X) (packingRadius coveringRadius : 实数>=0)
+  签名: (D : DeloneSet X) (carrier : 集合 X) (packingRadius coveringRadius : 实数>=0)
   定义体: carrier
   packingRadius := packingRadius
   packingRadius_pos := by simpa [h_packing] using D.packingRadius_pos
@@ -309,7 +309,7 @@ lemma exists_dist_le_coveringRadius
   exact ⟨y, hy, by simpa [edist_dist] using hdist⟩
 
 中文:
-引理 exists_dist_le_coveringRadius
+引理 存在_dist_le_coveringRadius
   条件: (D : DeloneSet X) (x : X)
   证明: by
   obtain ⟨y, hy, hdist⟩ := D.isCover_coveringRadius (x := x) (by trivial)
@@ -450,7 +450,7 @@ lemma mapBilipschitz_trans
 
 中文:
 引理 mapBilipschitz_trans
-  结论: {Z : 类型} [MetricSpace Z] (D : DeloneSet X)
+  结论: {Z : 类型} [度量空间 Z] (D : DeloneSet X)
   证明: by
   ext
   · simp only [mapBilipschitz_carrier, Equiv.trans_apply, Set.mem_image]
@@ -562,7 +562,7 @@ lemma mapIsometry_trans
 
 中文:
 引理 mapIsometry_trans
-  条件: {Z : 类型} [MetricSpace Z] (D : DeloneSet X) (f : X ≃ᵢ Y) (g : Y ≃ᵢ Z)
+  条件: {Z : 类型} [度量空间 Z] (D : DeloneSet X) (f : X ≃ᵢ Y) (g : Y ≃ᵢ Z)
   证明: by
   ext <;> simp [mapIsometry, DeloneSet.copy]
 

@@ -53,7 +53,7 @@ structure CategoryTheory.Adjunction.Quadruple
     - adj₃ : G ⊣ R
 
 中文:
-结构 CategoryTheory.Adjunction.Quadruple
+结构 范畴论.伴随.四元组
   参数: where
   公理与运算 (3 个):
     - adj₁ : L ⊣ F
@@ -85,7 +85,7 @@ definition leftTriple
 
 中文:
 定义 leftTriple
-  签名: : Triple L F G where
+  签名: : 三元组 L F G where
   定义体: q.adj₁
   adj₂ := q.adj₂
 
@@ -108,7 +108,7 @@ definition rightTriple
 
 中文:
 定义 rightTriple
-  签名: : Triple F G R where
+  签名: : 三元组 F G R where
   定义体: q.adj₂
   adj₂ := q.adj₃
 
@@ -135,7 +135,7 @@ definition op
 
 中文:
 定义 op
-  签名: : Quadruple R.op G.op F.op L.op where
+  签名: : 四元组 R.op G.op F.op L.op where
   定义体: q.adj₃.op
   adj₂ := q.adj₂.op
   adj₃ := q.adj₁.op
@@ -240,7 +240,7 @@ lemma epi_leftTriple_rightToLeft_iff_mono_rightTriple_leftToRight
 
 中文:
 引理 epi_leftTriple_rightToLeft_iff_mono_rightTriple_leftToRight
-  条件: [HasPullbacks C] [HasPushouts D]
+  条件: [有Pullbacks C] [有Pushouts D]
   证明: by
   rw [NatTrans.epi_iff_epi_app]; rw [NatTrans.mono_iff_mono_app]
   exact q.epi_leftTriple_rightToLeft_app_iff_mono_rightTriple_leftToRight_app
@@ -299,7 +299,7 @@ lemma epi_leftTriple_leftToRight_iff_mono_rightTriple_rightToLeft
 
 中文:
 引理 epi_leftTriple_leftToRight_iff_mono_rightTriple_rightToLeft
-  条件: [HasPullbacks C] [HasPushouts D]
+  条件: [有Pullbacks C] [有Pushouts D]
   证明: by
   rw [NatTrans.epi_iff_epi_app]; rw [NatTrans.mono_iff_mono_app]
   exact q.epi_leftTriple_leftToRight_app_iff_mono_rightTriple_rightToLeft_app

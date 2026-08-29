@@ -87,8 +87,8 @@ theorem Semiring.toGrindSemiring_ofNat
   | n + 2 => rfl
 
 中文:
-定理 Semiring.toGrindSemiring_ofNat
-  条件: [Semiring α] (n : 自然数)
+定理 半环.toGrindSemiring_of自然数
+  条件: [半环 α] (n : 自然数)
   证明: by
   match n with
   | 0 => simp

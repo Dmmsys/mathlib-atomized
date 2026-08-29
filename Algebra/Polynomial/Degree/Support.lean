@@ -102,7 +102,7 @@ mem_range.2 (le_natDegree_of_mem_supp _ hn).trans_lt h
 中文:
 定理 supp_subset_range
   条件: (h : natDegree p < m)
-  结论: p.support subseteq Finset.range m
+  结论: p.support subseteq 有限集.range m
   证明: fun _n hn =>
 mem_range.2 (le_natDegree_of_mem_supp _ hn).trans_lt h
 -/
@@ -119,7 +119,7 @@ theorem supp_subset_range_natDegree_succ
 
 中文:
 定理 supp_subset_range_natDegree_succ
-  结论: p.support subseteq Finset.range (natDegree p + 1)
+  结论: p.support subseteq 有限集.range (natDegree p + 1)
   证明: supp_subset_range (Nat.lt_succ_self _)
 
 Depends on / 依赖: Nat.lt_succ_self, lt_succ_self, supp_subset_range
@@ -180,7 +180,7 @@ theorem sum_over_range'
 
 中文:
 定理 sum_over_range'
-  结论: [AddCommMonoid S] (p : R[X]) {f : 自然数 -> R -> S} (h : 对任意 n, f n 0 = 0) (n : 自然数)
+  结论: [加法交换幺半群 S] (p : R[X]) {f : 自然数 -> R -> S} (h : 对任意 n, f n 0 = 0) (n : 自然数)
   证明: by
   have := supp_subset_range hn
   simp only [Polynomial.sum, support, coeff] at this ⊢
@@ -204,7 +204,7 @@ theorem sum_over_range
 
 中文:
 定理 sum_over_range
-  条件: [AddCommMonoid S] (p : R[X]) {f : 自然数 -> R -> S} (h : 对任意 n, f n 0 = 0)
+  条件: [加法交换幺半群 S] (p : R[X]) {f : 自然数 -> R -> S} (h : 对任意 n, f n 0 = 0)
   证明: sum_over_range' p h (p.natDegree + 1) (lt_add_one _)
 
 Depends on / 依赖: lt_add_one, natDegree, p.natDegree, sum_over_range
@@ -229,7 +229,7 @@ theorem sum_fin
 
 中文:
 定理 sum_fin
-  结论: [AddCommMonoid S] (f : 自然数 -> R -> S) (hf : 对任意 i, f i 0 = 0) {n : 自然数} {p : R[X]}
+  结论: [加法交换幺半群 S] (f : 自然数 -> R -> S) (hf : 对任意 i, f i 0 = 0) {n : 自然数} {p : R[X]}
   证明: by
   by_cases hp : p = 0
   · rw [hp, sum_zero_index, Finset.sum_eq_zero]
@@ -425,7 +425,7 @@ theorem nonempty_support_iff
 
 中文:
 定理 nonempty_support_iff
-  结论: p.support.Nonempty ↔ p != 0
+  结论: p.support.非空 ↔ p != 0
   证明: by
   rw [Ne]; rw [nonempty_iff_ne_empty]; rw [Ne]; rw [← support_eq_empty]
 

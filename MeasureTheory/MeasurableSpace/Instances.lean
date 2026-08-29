@@ -28,8 +28,8 @@ instance Empty.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Empty.instMeasurableSpace
-  签名: : MeasurableSpace Empty
+实例 空.instMeasurableSpace
+  签名: : 可测空间 空
   定义体: ⊤
 -/
 instance Empty.instMeasurableSpace : MeasurableSpace Empty := ⊤
@@ -43,8 +43,8 @@ instance PUnit.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 PUnit.instMeasurableSpace
-  签名: : MeasurableSpace PUnit
+实例 命题单元.instMeasurableSpace
+  签名: : 可测空间 命题单元
   定义体: ⊤
 -/
 instance PUnit.instMeasurableSpace : MeasurableSpace PUnit := ⊤
@@ -58,8 +58,8 @@ instance Bool.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Bool.instMeasurableSpace
-  签名: : MeasurableSpace 布尔
+实例 布尔值.instMeasurableSpace
+  签名: : 可测空间 布尔值
   定义体: ⊤
 -/
 instance Bool.instMeasurableSpace : MeasurableSpace Bool := ⊤
@@ -73,8 +73,8 @@ instance Prop.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Prop.instMeasurableSpace
-  签名: : MeasurableSpace 命题
+实例 命题.instMeasurableSpace
+  签名: : 可测空间 命题
   定义体: ⊤
 -/
 instance Prop.instMeasurableSpace : MeasurableSpace Prop := ⊤
@@ -88,8 +88,8 @@ instance Nat.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Nat.instMeasurableSpace
-  签名: : MeasurableSpace 自然数
+实例 自然数.instMeasurableSpace
+  签名: : 可测空间 自然数
   定义体: ⊤
 -/
 instance Nat.instMeasurableSpace : MeasurableSpace Nat := ⊤
@@ -103,8 +103,8 @@ instance ENat.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 ENat.instMeasurableSpace
-  签名: : MeasurableSpace 自然数∞
+实例 E自然数.instMeasurableSpace
+  签名: : 可测空间 自然数∞
   定义体: ⊤
 -/
 instance ENat.instMeasurableSpace : MeasurableSpace Nat∞ := ⊤
@@ -118,7 +118,7 @@ instance Fin.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Fin.instMeasurableSpace
+实例 有限集.instMeasurableSpace
   签名: (n : 自然数)
   定义体: ⊤
 -/
@@ -148,8 +148,8 @@ instance Int.instMeasurableSpace
   body: ⊤
 
 中文:
-实例 Int.instMeasurableSpace
-  签名: : MeasurableSpace 整数
+实例 整数.instMeasurableSpace
+  签名: : 可测空间 整数
   定义体: ⊤
 -/
 instance Int.instMeasurableSpace : MeasurableSpace Int := ⊤
@@ -165,8 +165,8 @@ instance Rat.instMeasurableSpace
 @[to_additive]
 
 中文:
-实例 Rat.instMeasurableSpace
-  签名: : MeasurableSpace Rat
+实例 有理数.instMeasurableSpace
+  签名: : 可测空间 有理数
   定义体: ⊤
 
 @[to_additive]
@@ -226,8 +226,8 @@ instance Bool.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Bool.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass 布尔
+实例 布尔值.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 布尔值
   定义体: ⟨fun _ => trivial⟩
 -/
 instance Bool.instMeasurableSingletonClass : MeasurableSingletonClass Bool := ⟨fun _ => trivial⟩
@@ -241,8 +241,8 @@ instance Prop.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Prop.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass 命题
+实例 命题.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 命题
   定义体: ⟨fun _ => trivial⟩
 -/
 instance Prop.instMeasurableSingletonClass : MeasurableSingletonClass Prop := ⟨fun _ => trivial⟩
@@ -256,8 +256,8 @@ instance Nat.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Nat.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass 自然数
+实例 自然数.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 自然数
   定义体: ⟨fun _ => trivial⟩
 -/
 instance Nat.instMeasurableSingletonClass : MeasurableSingletonClass Nat := ⟨fun _ => trivial⟩
@@ -271,8 +271,8 @@ instance ENat.instDiscreteMeasurableSpace
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 ENat.instDiscreteMeasurableSpace
-  签名: : DiscreteMeasurableSpace 自然数∞
+实例 E自然数.instDiscreteMeasurableSpace
+  签名: : DiscreteMeasurable空间 自然数∞
   定义体: ⟨fun _ => trivial⟩
 -/
 instance ENat.instDiscreteMeasurableSpace : DiscreteMeasurableSpace Nat∞ := ⟨fun _ => trivial⟩
@@ -286,8 +286,8 @@ instance ENat.instMeasurableSingletonClass
   body: inferInstance
 
 中文:
-实例 ENat.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass 自然数∞
+实例 E自然数.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 自然数∞
   定义体: inferInstance
 -/
 instance ENat.instMeasurableSingletonClass : MeasurableSingletonClass Nat∞ := inferInstance
@@ -301,7 +301,7 @@ instance Fin.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Fin.instMeasurableSingletonClass
+实例 有限集.instMeasurableSingletonClass
   签名: (n : 自然数)
   定义体: ⟨fun _ => trivial⟩
 -/
@@ -333,8 +333,8 @@ instance Int.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Int.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass 整数
+实例 整数.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 整数
   定义体: ⟨fun _ => trivial⟩
 -/
 instance Int.instMeasurableSingletonClass : MeasurableSingletonClass Int := ⟨fun _ => trivial⟩
@@ -348,8 +348,8 @@ instance Rat.instMeasurableSingletonClass
   body: ⟨fun _ => trivial⟩
 
 中文:
-实例 Rat.instMeasurableSingletonClass
-  签名: : MeasurableSingletonClass Rat
+实例 有理数.instMeasurableSingletonClass
+  签名: : MeasurableSingleton类 有理数
   定义体: ⟨fun _ => trivial⟩
 -/
 instance Rat.instMeasurableSingletonClass : MeasurableSingletonClass Rat := ⟨fun _ => trivial⟩

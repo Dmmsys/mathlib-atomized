@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: (weakEquivalences (Plus C)).HasTwoOutOfThree命题erty
+  签名: (weakEquivalences (Plus C)).有TwoOutOfThreeProperty
   定义体: inferInstanceAs (quasiIso C).HasTwoOutOfThreeProperty
 
 Depends on / 依赖: HasTwoOutOfThreeProperty, quasiIso
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: (weakEquivalences (Plus C)).IsStableUnderRetracts
+  签名: (weakEquivalences (Plus C)).是StableUnderRetracts
   定义体: inferInstanceAs (quasiIso C).IsStableUnderRetracts
 
 Depends on / 依赖: IsStableUnderRetracts, quasiIso
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations (Plus C)).IsStableUnderRetracts
+  签名: (cofibrations (Plus C)).是StableUnderRetracts
   定义体: inferInstanceAs (MorphismProperty.monomorphisms _).IsStableUnderRetracts
 
 Depends on / 依赖: IsStableUnderRetracts, MorphismProperty, MorphismProperty.monomorphisms, monomorphisms
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fibrations (Plus C)).IsStableUnderRetracts
+  签名: (fibrations (Plus C)).是StableUnderRetracts
   定义体: inferInstanceAs (degreewiseEpiWithInjectiveKernel.inverseImage (ι C)).IsStableUnderRetracts
 
 Depends on / 依赖: IsStableUnderRetracts, degreewiseEpiWithInjectiveKernel, degreewiseEpiWithInjectiveKernel.inverseImage, inverseImage
@@ -229,7 +229,7 @@ lemma lifting
 
 中文:
 引理 lifting
-  结论: {A B X Y : CochainComplex.Plus C} (i : A ⟶ B) (p : X ⟶ Y)
+  结论: {A B X Y : 上链复形.Plus C} (i : A ⟶ B) (p : X ⟶ Y)
   证明: by
     /- The proof is similar in both cases (whether `i` or `p` is a quasi-isomorphism).
     We first transform the variables so as to get a commutative square in `CochainComplex C ℤ`
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: (trivialCofibrations (Plus C)).HasFactorization (fibrations (Plus C))
+  签名: (trivialCofibrations (Plus C)).有分解 (fibrations (Plus C))
   定义体: by
     intro ⟨K, n, hn⟩ ⟨L, m, hm⟩ ⟨f⟩
     obtain ⟨d, _, _⟩ : exists (d : Int), K.IsStrictlyGE (d + 1) ∧ L.IsStrictlyGE d :=
@@ -375,7 +375,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cofibrations (Plus C)).HasFactorization (trivialFibrations (Plus C))
+  签名: (cofibrations (Plus C)).有分解 (trivialFibrations (Plus C))
   定义体: by
     intro ⟨K, n, hn⟩ ⟨L, m, hm⟩ ⟨f⟩
     obtain ⟨d, _, _⟩ : exists (d : Int), K.IsStrictlyGE (d + 1) ∧ L.IsStrictlyGE d :=

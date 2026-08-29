@@ -59,9 +59,9 @@ structure OplaxFunctor
     - map₂_rightUnitor : forall {a b : B} (f : a ⟶ b), map₂ (ρ_ f).hom = mapComp f (𝟙 b) ≫ map f ◁ mapId b ≫ (ρ_ (map f)).hom  [default: by cat_disch]
 
 中文:
-结构 OplaxFunctor
-  参数: (B : 类型u₁) [Bicategory.{w₁, v₁} B] (C : 类型u₂)
-  继承: PrelaxFunctor B C
+结构 Oplax函子
+  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂)
+  继承: 预松弛函子 B C
   公理与运算 (7 个):
     - mapId((a : B)) : map (𝟙 a) ⟶ 𝟙 (obj a)
     - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map (f ≫ g) ⟶ map f ≫ map g
@@ -261,7 +261,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B]
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
   定义体: PrelaxFunctor.id B
   mapId := fun a => 𝟙 (𝟙 a)
   mapComp := fun f g => 𝟙 (f ≫ g)
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (B ⥤ᵒᵖᴸ B)
+  签名: 可居 (B ⥤ᵒᵖᴸ B)
   定义体: ⟨id B⟩
 -/
 instance : Inhabited (B ⥤ᵒᵖᴸ B) :=

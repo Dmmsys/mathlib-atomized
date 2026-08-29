@@ -71,7 +71,7 @@ definition pairMap
 
 中文:
 定义 pairMap
-  签名: (t : Finset σ × σ)
+  签名: (t : 有限集 σ × σ)
   定义体: if h : t.snd in t.fst then (t.fst.erase t.snd, t.snd) else (t.fst.cons t.snd h, t.snd)
 -/
 private def pairMap (t : Finset σ × σ) : Finset σ × σ :=
@@ -91,7 +91,7 @@ lemma pairMap_ne_self
 
 中文:
 引理 pairMap_ne_self
-  条件: (t : Finset σ × σ)
+  条件: (t : 有限集 σ × σ)
   结论: pairMap σ t != t
   证明: by
   rw [pairMap]
@@ -114,7 +114,7 @@ lemma pairMap_of_snd_mem_fst
 
 中文:
 引理 pairMap_of_snd_mem_fst
-  条件: {t : Finset σ × σ} (h : t.snd in t.fst)
+  条件: {t : 有限集 σ × σ} (h : t.snd in t.fst)
   证明: by
   simp [pairMap, h]
 -/
@@ -135,7 +135,7 @@ lemma pairMap_of_snd_notMem_fst
 
 中文:
 引理 pairMap_of_snd_notMem_fst
-  条件: {t : Finset σ × σ} (h : t.snd ∉ t.fst)
+  条件: {t : 有限集 σ × σ} (h : t.snd ∉ t.fst)
   证明: by
   simp [pairMap, h]
 
@@ -163,7 +163,7 @@ theorem pairMap_involutive
 
 中文:
 定理 pairMap_involutive
-  结论: (pairMap σ).Involutive
+  结论: (pairMap σ).对合
   证明: by
   intro t
   rw [pairMap]; rw [pairMap]
@@ -216,7 +216,7 @@ lemma mem_pairs
 
 中文:
 引理 mem_pairs
-  条件: (k : 自然数) (t : Finset σ × σ)
+  条件: (k : 自然数) (t : 有限集 σ × σ)
   证明: by
   simp [pairs]
 -/
@@ -234,7 +234,7 @@ definition weight
 
 中文:
 定义 weight
-  签名: (k : 自然数) (t : Finset σ × σ)
+  签名: (k : 自然数) (t : 有限集 σ × σ)
   定义体: (-1) ^ #t.1 * ((∏ a in t.fst, X a) * X t.snd ^ (k - #t.1))
 -/
 private def weight (k : Nat) (t : Finset σ × σ) : MvPolynomial σ R :=
@@ -258,7 +258,7 @@ theorem pairMap_mem_pairs
 
 中文:
 定理 pairMap_mem_pairs
-  条件: {k : 自然数} (t : Finset σ × σ) (h : t in pairs σ k)
+  条件: {k : 自然数} (t : 有限集 σ × σ) (h : t in pairs σ k)
   证明: by
   rw [mem_pairs] at h ⊢
   rcases (em (t.snd in t.fst)) with h1 | h1
@@ -302,7 +302,7 @@ theorem weight_add_weight_pairMap
 
 中文:
 定理 weight_add_weight_pairMap
-  条件: {k : 自然数} (t : Finset σ × σ) (h : t in pairs σ k)
+  条件: {k : 自然数} (t : 有限集 σ × σ) (h : t in pairs σ k)
   证明: by
   rw [weight]; rw [weight]
   rw [mem_pairs] at h
@@ -517,7 +517,7 @@ theorem esymm_summand_to_weight
 
 中文:
 定理 esymm_summand_to_weight
-  条件: (k : 自然数) (A : Finset σ) (h : A in powersetCard k univ)
+  条件: (k : 自然数) (A : 有限集 σ) (h : A in powersetCard k univ)
   证明: by
   simp [weight, mem_powersetCard_univ.mp h, mul_assoc]
 -/

@@ -125,7 +125,7 @@ lemma cartanMatrixIn_apply_same
 
 中文:
 引理 cartanMatrixIn_apply_same
-  条件: [FaithfulSMul S R] (i : b.support)
+  条件: [忠实标量乘法 S R] (i : b.support)
   证明: FaithfulSMul.algebraMap_injective S R by simp [cartanMatrixIn_def, map_ofNat]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, cartanMatrixIn_def, map_ofNat
@@ -146,7 +146,7 @@ lemma cartanMatrixIn_mul_diagonal_eq
 
 中文:
 引理 cartanMatrixIn_mul_diagonal_eq
-  结论: {P : RootPairing ι R M N} [P.IsRootSystem] [P.IsValuedIn S]
+  结论: {P : RootPairing ι R M N} [P.是RootSystem] [P.是ValuedIn S]
   证明: by
   ext
   simp [B.two_mul_apply_root_root]
@@ -176,7 +176,7 @@ lemma cartanMatrixIn_nondegenerate
 
 中文:
 引理 cartanMatrixIn_nondegenerate
-  结论: [IsDomain R] [NeZero (2 : R)] [FaithfulSMul S R] [IsDomain S]
+  结论: [是整环 R] [NeZero (2 : R)] [忠实标量乘法 S R] [是整环 S]
   证明: by
   classical
   obtain ⟨B, hB⟩ : exists B : P.InvariantForm, B.form.Nondegenerate :=
@@ -495,7 +495,7 @@ lemma cartanMatrix_mul_diagonal_eq
 
 中文:
 引理 cartanMatrix_mul_diagonal_eq
-  条件: [Fintype ι] [DecidableEq ι] [P.IsRootSystem]
+  条件: [有限类型 ι] [DecidableEq ι] [P.是RootSystem]
   证明: fun i => P.RootFormIn Int (P.rootSpanMem Int i) (P.rootSpanMem Int i)
     b.cartanMatrix * diagonal d =
       (2 : Int) • (P.posRootForm Int).posForm.toMatrix b.toWeightBasisInt := by
@@ -531,8 +531,8 @@ lemma exists_cartanMatrix_mul_diagaonal_posDef
   · rw [cartanMatrix_mul_di
 
 中文:
-引理 exists_cartanMatrix_mul_diagaonal_posDef
-  条件: [DecidableEq ι] [P.IsRootSystem]
+引理 存在_cartanMatrix_mul_diagaonal_posDef
+  条件: [DecidableEq ι] [P.是RootSystem]
   证明: by
   have _i : Fintype ι := Fintype.ofFinite ι
   set d : b.support -> Int := fun i => P.RootFormIn Int (P.rootSpanMem Int i) (P.rootSpanMem Int i) with hd
@@ -570,8 +570,8 @@ lemma exists_cartanMatrix_diagaonal_mul_posDef
   aesop
 
 中文:
-引理 exists_cartanMatrix_diagaonal_mul_posDef
-  条件: [DecidableEq ι] [P.IsRootSystem]
+引理 存在_cartanMatrix_diagaonal_mul_posDef
+  条件: [DecidableEq ι] [P.是RootSystem]
   证明: by
   obtain ⟨d, hd, hd'⟩ := b.flip.exists_cartanMatrix_mul_diagaonal_posDef
   refine ⟨d, hd, ?_⟩
@@ -603,7 +603,7 @@ lemma det_four_sub_cartanMatrix_ne_zero
 
 中文:
 引理 det_four_sub_cartanMatrix_ne_zero
-  条件: [DecidableEq ι] [P.IsRootSystem]
+  条件: [DecidableEq ι] [P.是RootSystem]
   证明: by
   suffices ¬ HasEigenvalue b.cartanMatrix.toLin' 4 by
     have aux : (4 - b.cartanMatrix).toLin' = - (b.cartanMatrix.toLin' - (4 : Int) • 1) := by ext; simp
@@ -643,7 +643,7 @@ refine ⟨fun hk => ?_, fun hk => subset_span by simpa⟩
 
 中文:
 引理 induction_on_cartanMatrix
-  结论: [P.IsReduced] [P.IsIrreducible]
+  结论: [P.是既约] [P.是不可约]
   证明: by
   let q : Submodule R M := span R (P.root ∘ (↑) '' {i | p i})
 have hq₀ : q != ⊥ := q.ne_bot_iff.mpr ⟨P.root i, subset_span by simpa, P.ne_zero i⟩
@@ -712,7 +712,7 @@ lemma injective_pairingIn
 
 中文:
 引理 injective_pairingIn
-  结论: {P : RootPairing ι R M N} [P.IsRootSystem] [P.IsCrystallographic]
+  结论: {P : RootPairing ι R M N} [P.是RootSystem] [P.IsCrystallographic]
   证明: by
   classical
   intro i j hij
@@ -772,7 +772,7 @@ lemma exists_mem_span_pairingIn_ne_zero_and_pairwise_ne
   suffices exists d in p, forall i, f
 
 中文:
-引理 exists_mem_span_pairingIn_ne_zero_and_pairwise_ne
+引理 存在_mem_span_pairingIn_ne_zero_and_pairwise_ne
   证明: by
   set p := span K (range fun (i : b.support) j => (P.pairingIn Int j i : K))
   let f : ι oplus {(i, j) : ι × ι | i != j} -> Module.Dual K (ι -> K) := Sum.elim
@@ -873,7 +873,7 @@ definition equivOfCartanMatrixEq
 
 中文:
 定义 equivOfCartanMatrixEq
-  签名: [Finite ι₂] [P₂.IsRootSystem] [P₂.IsReduced]
+  签名: [有限 ι₂] [P₂.是RootSystem] [P₂.是既约]
   定义体: let f : M ≃ₗ[R] M₂ := b.toWeightBasis.equiv b₂.toWeightBasis e
   have hf : forall m, f m in range P₂.root ↔ m in range P.root := by
     refine fun m => ⟨fun h => ?_, fun h => ?_⟩

@@ -45,7 +45,7 @@ definition UniformConvexOn
 
 中文:
 定义 UniformConvexOn
-  签名: (s : Set E) (φ : 实数 -> 实数) (f : E -> 实数)
+  签名: (s : 集合 E) (φ : 实数 -> 实数) (f : E -> 实数)
   定义体: Convex Real s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> forall ⦃a b : Real⦄, 0 <= a -> 0 <= b -> a + b = 1 ->
     f (a • x + b • y) <= a • f x + b • f y - a * b * φ ‖x - y‖
 
@@ -66,7 +66,7 @@ definition UniformConcaveOn
 
 中文:
 定义 UniformConcaveOn
-  签名: (s : Set E) (φ : 实数 -> 实数) (f : E -> 实数)
+  签名: (s : 集合 E) (φ : 实数 -> 实数) (f : E -> 实数)
   定义体: Convex Real s ∧ forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> forall ⦃a b : Real⦄, 0 <= a -> 0 <= b -> a + b = 1 ->
     a • f x + b • f y + a * b * φ ‖x - y‖ <= f (a • x + b • y)
 
@@ -411,7 +411,7 @@ definition StrongConvexOn
 
 中文:
 定义 StrongConvexOn
-  签名: (s : Set E) (m : 实数)
+  签名: (s : 集合 E) (m : 实数)
   定义体: UniformConvexOn s fun r => m / (2 : Real) * r ^ 2
 
 Depends on / 依赖: UniformConvexOn
@@ -429,7 +429,7 @@ definition StrongConcaveOn
 
 中文:
 定义 StrongConcaveOn
-  签名: (s : Set E) (m : 实数)
+  签名: (s : 集合 E) (m : 实数)
   定义体: UniformConcaveOn s fun r => m / (2 : Real) * r ^ 2
 
 Depends on / 依赖: UniformConcaveOn

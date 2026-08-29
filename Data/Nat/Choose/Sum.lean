@@ -122,7 +122,7 @@ theorem add_pow
 
 中文:
 定理 add_pow
-  条件: [CommSemiring R] (x y : R) (n : 自然数)
+  条件: [交换半环 R] (x y : R) (n : 自然数)
   证明: (Commute.all x y).add_pow n
 
 Depends on / 依赖: Commute, Commute.all, add_pow
@@ -148,7 +148,7 @@ theorem sub_pow
 
 中文:
 定理 sub_pow
-  条件: [CommRing R] (x y : R) (n : 自然数)
+  条件: [交换环 R] (x y : R) (n : 自然数)
   证明: by
   rw [sub_eq_add_neg]; rw [add_pow]
   congr! 1 with m hm
@@ -321,7 +321,7 @@ theorem sum_Icc_choose
 中文:
 定理 sum_Icc_choose
   条件: (n k : 自然数)
-  结论: ∑ m in Icc k n, m.choose k = (n + 1).choose (k + 1)
+  结论: ∑ m in 闭区间 k n, m.choose k = (n + 1).choose (k + 1)
   证明: by
   rcases lt_or_ge n k with h | h
   · rw [choose_eq_zero_of_lt (by lia), Icc_eq_empty_of_lt h, sum_empty]
@@ -466,7 +466,7 @@ theorem Int.alternating_sum_range_choose_eq_choose
     grind
 
 中文:
-定理 Int.alternating_sum_range_choose_eq_choose
+定理 整数.alternating_sum_range_choose_eq_choose
   条件: {n m : 自然数}
   证明: by
   induction m with
@@ -497,7 +497,7 @@ theorem Int.alternating_sum_range_choose
   | succ n => simp [Int.alternating_sum_range_choose_eq_choose]
 
 中文:
-定理 Int.alternating_sum_range_choose
+定理 整数.alternating_sum_range_choose
   条件: {n : 自然数}
   证明: by
   cases n with
@@ -522,7 +522,7 @@ theorem Int.alternating_sum_range_choose_of_ne
   rw [Int.alternating_sum_range_choose]; rw [if_neg h0]
 
 中文:
-定理 Int.alternating_sum_range_choose_of_ne
+定理 整数.alternating_sum_range_choose_of_ne
   条件: {n : 自然数} (h0 : n != 0)
   证明: by
   rw [Int.alternating_sum_range_choose]; rw [if_neg h0]
@@ -553,7 +553,7 @@ theorem sum_powerset_apply_card
 
 中文:
 定理 sum_powerset_apply_card
-  条件: {α β : 类型} [AddCommMonoid α] (f : 自然数 -> α) {x : Finset β}
+  条件: {α β : 类型} [加法交换幺半群 α] (f : 自然数 -> α) {x : 有限集 β}
   证明: by
   trans ∑ m in range (#x + 1), ∑ j in x.powerset with #j = m, f #j
   · refine (sum_fiberwise_of_maps_to ?_ _).symm
@@ -591,7 +591,7 @@ theorem sum_powerset_neg_one_pow_card
 
 中文:
 定理 sum_powerset_neg_one_pow_card
-  条件: {α : 类型} [DecidableEq α] {x : Finset α}
+  条件: {α : 类型} [DecidableEq α] {x : 有限集 α}
   证明: by
   rw [sum_powerset_apply_card]
   simp only [nsmul_eq_mul', ← card_eq_zero, Int.alternating_sum_range_choose]
@@ -616,7 +616,7 @@ theorem sum_powerset_neg_one_pow_card_of_nonempty
 
 中文:
 定理 sum_powerset_neg_one_pow_card_of_nonempty
-  条件: {α : 类型} {x : Finset α} (h0 : x.Nonempty)
+  条件: {α : 类型} {x : 有限集 α} (h0 : x.非空)
   证明: by
   classical
   rw [sum_powerset_neg_one_pow_card]
@@ -648,7 +648,7 @@ theorem prod_pow_choose_succ
 
 中文:
 定理 prod_pow_choose_succ
-  条件: {M : 类型} [CommMonoid M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
+  条件: {M : 类型} [交换幺半群 M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
   证明: by
   have A : (∏ i in range (n + 1), f (i + 1) (n - i) ^ (n.choose (i + 1))) * f 0 (n + 1) =
       ∏ i in range (n + 1), f i (n + 1 - i) ^ (n.choose i) := by
@@ -685,7 +685,7 @@ theorem prod_antidiagonal_pow_choose_succ
 
 中文:
 定理 prod_antidiagonal_pow_choose_succ
-  条件: {M : 类型} [CommMonoid M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
+  条件: {M : 类型} [交换幺半群 M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
   证明: by
   simp only [Nat.prod_antidiagonal_eq_prod_range_succ_mk, prod_pow_choose_succ]
   have : forall i in range (n + 1), i <= n := fun i hi => by simpa [Nat.lt_succ_iff] using hi

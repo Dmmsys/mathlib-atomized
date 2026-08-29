@@ -60,7 +60,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (Completion α)
+  签名: : 幺 (完备化 α)
   定义体: ⟨(1 : α)⟩
 -/
 instance one : One (Completion α) :=
@@ -78,7 +78,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (Completion α)
+  签名: : 乘法 (完备化 α)
   定义体: ⟨curry (isDenseInducing_coe.prodMap isDenseInducing_coe).extend ((↑) ∘ uncurry (· * ·))⟩
 
 @[norm_cast]
@@ -99,7 +99,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : α) : Completion α) = 1
+  结论: ((1 : α) : 完备化 α) = 1
   证明: rfl
 -/
 theorem coe_one : ((1 : α) : Completion α) = 1 :=
@@ -116,8 +116,8 @@ lemma coe_eq_one_iff
 
 中文:
 引理 coe_eq_one_iff
-  条件: [T0Space α] {x : α}
-  结论: (x : Completion α) = 1 ↔ x = 1
+  条件: [T0空间 α] {x : α}
+  结论: (x : 完备化 α) = 1 ↔ x = 1
   证明: Completion.coe_inj
 -/
 @[simp] lemma coe_eq_one_iff [T0Space α] {x : α} : (x : Completion α) = 1 ↔ x = 1 :=
@@ -141,7 +141,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (a b : α)
-  结论: ((a * b : α) : Completion α) = a * b
+  结论: ((a * b : α) : 完备化 α) = a * b
   证明: ((isDenseInducing_coe.prodMap isDenseInducing_coe).extend_eq
       ((continuous_coe α).comp (@continuous_mul α _ _ _)) (a, b)).symm
 
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul (Completion α)
+  签名: 连续乘法 (完备化 α)
   定义体: by
     let m := (AddMonoidHom.mul : α ->+ α ->+ α).compr₂ toCompl
     have : Continuous fun p : α × α => m p.1 p.2 := (continuous_coe α).comp continuous_mul
@@ -197,7 +197,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: : Ring (Completion α)
+  签名: : 环 (完备化 α)
   定义体: { AddMonoidWithOne.unary, ((inferInstance : AddCommGroup (Completion α))),
       ((inferInstance : Mul (Completion α))), ((inferInstance : One (Completion α))) with
     zero_mul a :=
@@ -250,7 +250,7 @@ definition coeRingHom
 
 中文:
 定义 coeRingHom
-  签名: : α ->+* Completion α where
+  签名: : α ->+* 完备化 α where
   定义体: (↑)
   map_one' := coe_one α
   map_zero' := coe_zero
@@ -274,7 +274,7 @@ theorem continuous_coeRingHom
 
 中文:
 定理 continuous_coeRingHom
-  结论: Continuous (coeRingHom : α -> Completion α)
+  结论: 连续 (coeRingHom : α -> 完备化 α)
   证明: continuous_coe α
 
 Depends on / 依赖: continuous_coe
@@ -301,7 +301,7 @@ definition extensionHom
 
 中文:
 定义 extensionHom
-  签名: [CompleteSpace β] [T0Space β]
+  签名: [完备空间 β] [T0空间 β]
   定义体: have hf' : Continuous (f : α ->+ β) := hf
   -- helping the elaborator
   have hf : UniformContinuous f := uniformContinuous_addMonoidHom_of_continuous hf'
@@ -340,7 +340,7 @@ UniformSpace.Completion.extension_coe uniformContinuous_addMonoidHom_of_continuo
 
 中文:
 定理 extensionHom_coe
-  条件: [CompleteSpace β] [T0Space β] (a : α)
+  条件: [完备空间 β] [T0空间 β] (a : α)
   证明: by
   simp only [Completion.extensionHom, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk,
 UniformSpace.Completion.extension_coe uniformContinuous_addMonoidHom_of_continuous hf]
@@ -363,7 +363,7 @@ instance topologicalRing
 
 中文:
 实例 topologicalRing
-  签名: : IsTopologicalRing (Completion α) where
+  签名: : 是拓扑环 (完备化 α) where
   定义体: continuous_add
   continuous_mul := continuous_mul
 
@@ -383,7 +383,7 @@ definition mapRingHom
 
 中文:
 定义 mapRingHom
-  签名: (hf : Continuous f)
+  签名: (hf : 连续 f)
   定义体: extensionHom (coeRingHom.comp f) (continuous_coeRingHom.comp hf)
 
 Depends on / 依赖: coeRingHom, coeRingHom.comp, continuous_coeRingHom, continuous_coeRingHom.comp, extensionHom
@@ -402,7 +402,7 @@ theorem mapRingHom_apply
 
 中文:
 定理 mapRingHom_apply
-  条件: {x : Completion α}
+  条件: {x : 完备化 α}
   结论: mapRingHom f hf x = .map f x
   证明: rfl
 -/
@@ -417,7 +417,7 @@ theorem coe_mapRingHom
 
 中文:
 定理 coe_mapRingHom
-  结论: mapRingHom f hf = Completion.map f
+  结论: mapRingHom f hf = 完备化.map f
   证明: rfl
 -/
 theorem coe_mapRingHom : mapRingHom f hf = Completion.map f := rfl
@@ -436,7 +436,7 @@ theorem mapRingHom_coe
 
 中文:
 定理 mapRingHom_coe
-  条件: (hf : Continuous f) (a : α)
+  条件: (hf : 连续 f) (a : α)
   结论: mapRingHom f hf a = f a
   证明: by
   rw [mapRingHom_apply]; rw [map_coe (uniformContinuous_addMonoidHom_of_continuous hf)]
@@ -458,7 +458,7 @@ theorem mapRingHom_comp
 
 中文:
 定理 mapRingHom_comp
-  结论: {γ : 类型} [UniformSpace γ] [Ring γ] [IsUniformAddGroup γ]
+  结论: {γ : 类型} [一致空间 γ] [环 γ] [是UniformAdd群 γ]
   证明: DFunLike.ext' map_comp
     (uniformContinuous_addMonoidHom_of_continuous hg)
     (uniformContinuous_addMonoidHom_of_continuous hf)
@@ -487,7 +487,7 @@ theorem mapRingHom_id
 
 中文:
 定理 mapRingHom_id
-  结论: mapRingHom (.id α) continuous_id = .id (Completion α)
+  结论: mapRingHom (.id α) continuous_id = .id (完备化 α)
   证明: by
   simp [RingHom.ext_iff, mapRingHom_apply]
 
@@ -515,7 +515,7 @@ definition mapRingEquiv
 
 中文:
 定义 mapRingEquiv
-  签名: (f : α ≃+* β) (hf : Continuous f) (hf' : Continuous f.symm)
+  签名: (f : α ≃+* β) (hf : 连续 f) (hf' : 连续 f.symm)
   定义体: .ofRingHom (mapRingHom f.toRingHom hf) (mapRingHom f.symm.toRingHom hf')
     (by simp [mapRingHom_comp]) (by simp [mapRingHom_comp])
 
@@ -576,7 +576,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra R (Completion A) where
+  签名: : 代数 R (完备化 A) where
   定义体: (UniformSpace.Completion.coeRingHom : A ->+* Completion A).comp (algebraMap R A)
   commutes' := fun r x =>
     Completion.induction_on x (isClosed_eq (continuous_const_mul _) (continuous_mul_const _))
@@ -630,7 +630,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing (Completion R)
+  签名: : 交换环 (完备化 R)
   定义体: { Completion.ring with
     mul_comm a b :=
       Completion.induction_on₂ a b
@@ -656,7 +656,7 @@ instance algebra'
 
 中文:
 实例 algebra'
-  签名: : Algebra R (Completion R)
+  签名: : 代数 R (完备化 R)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -683,7 +683,7 @@ addGroup_inseparable_iff.trans .trans (by rfl) (Submodule.quotientRel_def _).sym
 
 中文:
 定理 inseparableSetoid_ring
-  条件: (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α]
+  条件: (α) [环 α] [拓扑空间 α] [是拓扑环 α]
   证明: Setoid.ext fun x y =>
 addGroup_inseparable_iff.trans .trans (by rfl) (Submodule.quotientRel_def _).symm
 
@@ -708,7 +708,7 @@ continuous_invFun := continuous_id.quotient_map' by
 
 中文:
 定义 sepQuotHomeomorphRingQuot
-  签名: (α) [Ring α] [TopologicalSpace α] [IsTopologicalRing α]
+  签名: (α) [环 α] [拓扑空间 α] [是拓扑环 α]
   定义体: Quotient.congrRight fun x y => by rw [inseparableSetoid_ring]
 continuous_toFun := continuous_id.quotient_map' by
     rw [inseparableSetoid_ring]; exact fun _ _ => id
@@ -737,7 +737,7 @@ definition sepQuotRingEquivRingQuot
 
 中文:
 定义 sepQuotRingEquivRingQuot
-  签名: (α) [CommRing α] [TopologicalSpace α] [IsTopologicalRing α]
+  签名: (α) [交换环 α] [拓扑空间 α] [是拓扑环 α]
   定义体: sepQuotHomeomorphRingQuot α
   map_mul' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
   map_add' := SeparationQuotient.surjective_mk.forall₂.2 (fun _ _ => rfl)
@@ -775,7 +775,7 @@ definition IsDenseInducing.extendRingHom
  
 
 中文:
-定义 IsDenseInducing.extendRingHom
+定义 是DenseInducing.extendRingHom
   签名: {i : α ->+* β} {f : α ->+* γ}
   定义体: (ue.isDenseInducing dr).extend f
   map_one' := by

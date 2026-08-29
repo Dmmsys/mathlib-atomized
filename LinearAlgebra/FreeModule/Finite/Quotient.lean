@@ -46,7 +46,7 @@ definition quotientEquivPiSpan
 
 中文:
 定义 quotientEquivPiSpan
-  签名: (N : Submodule R M) (b : Basis ι R M)
+  签名: (N : 子模 R M) (b : 基 ι R M)
   定义体: by
   haveI := Fintype.ofFinite ι
   -- Choose `e : M ≃ₗ N` and a basis `b'` for `M` that turns the map
@@ -113,7 +113,7 @@ definition quotientEquivPiZMod
 
 中文:
 定义 quotientEquivPiZMod
-  签名: (N : Submodule 整数 M) (b : Basis ι 整数 M)
+  签名: (N : 子模 整数 M) (b : 基 ι 整数 M)
   定义体: let a := smithNormalFormCoeffs b h
   let e := N.quotientEquivPiSpan b h
   let e' : (forall i : ι, Int ⧸ Ideal.span ({a i} : Set Int)) ≃+ forall i : ι, ZMod (a i).natAbs :=
@@ -147,7 +147,7 @@ theorem finiteQuotientOfFreeOfRankEq
 
 中文:
 定理 finiteQuotientOfFreeOfRankEq
-  结论: [Module.Free 整数 M] [Module.Finite 整数 M]
+  结论: [模.自由 整数 M] [模.有限 整数 M]
   证明: by
   let b := Module.Free.chooseBasis Int M
   let a := smithNormalFormCoeffs b h
@@ -182,7 +182,7 @@ refine ⟨fun h => le_antisymm (finrank_le N)
 
 中文:
 定理 finiteQuotient_iff
-  条件: [Module.Free 整数 M] [Module.Finite 整数 M] (N : Submodule 整数 M)
+  条件: [模.自由 整数 M] [模.有限 整数 M] (N : 子模 整数 M)
   证明: by
 refine ⟨fun h => le_antisymm (finrank_le N)
     ((LinearMap.lsmul Int M (Nat.card (M ⧸ N))).codRestrict N
@@ -218,7 +218,7 @@ definition quotientEquivDirectSum
 
 中文:
 定义 quotientEquivDirectSum
-  签名: (h : Module.finrank R N = Module.finrank R M)
+  签名: (h : 模.finrank R N = 模.finrank R M)
   定义体: by
   haveI := Fintype.ofFinite ι
   exact ((N.quotientEquivPiSpan b _).restrictScalars F).trans
@@ -243,7 +243,7 @@ theorem finrank_quotient_eq_sum
 
 中文:
 定理 finrank_quotient_eq_sum
-  结论: {ι} [Fintype ι] (b : Basis ι R M) [Nontrivial F]
+  结论: {ι} [有限类型 ι] (b : 基 ι R M) [非平凡 F]
   证明: by
   rw [LinearEquiv.finrank_eq <| quotientEquivDirectSum F b h]; rw [Module.finrank_directSum]
 

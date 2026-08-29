@@ -59,7 +59,7 @@ theorem eq_of_le_of_cast_pow_eq_zero
 
 中文:
 定理 eq_of_le_of_cast_pow_eq_zero
-  结论: [CharP R p] (i : 自然数) (hin : i <= n)
+  结论: [特征p R p] (i : 自然数) (hin : i <= n)
   证明: by
   contrapose! hpi
   replace hin := lt_of_le_of_ne hin hpi; clear hpi
@@ -98,7 +98,7 @@ theorem card_zmod
 
 中文:
 定理 card_zmod
-  结论: Fintype.card (TruncatedWittVector p n (ZMod p)) = p ^ n
+  结论: 有限类型.card (TruncatedWittVector p n (ZMod p)) = p ^ n
   证明: by
   rw [card]; rw [ZMod.card]
 
@@ -117,7 +117,7 @@ theorem charP_zmod
 
 中文:
 定理 charP_zmod
-  结论: CharP (TruncatedWittVector p n (ZMod p)) (p ^ n)
+  结论: 特征p (TruncatedWittVector p n (ZMod p)) (p ^ n)
   证明: charP_of_prime_pow_injective _ _ _ (card_zmod _ _) (eq_of_le_of_cast_pow_eq_zero p n (ZMod p))
 
 Depends on / 依赖: card_zmod, charP_of_prime_pow_injective, eq_of_le_of_cast_pow_eq_zero
@@ -326,7 +326,7 @@ definition toPadicInt
   body: PadicInt.lift toZModPow_compat p
 
 中文:
-定义 toPadicInt
+定义 toPadic整数
   签名: : 𝕎 (ZMod p) ->+* 整数_[p]
   定义体: PadicInt.lift toZModPow_compat p
 
@@ -368,7 +368,7 @@ definition fromPadicInt
     zmodEquivTrunc_compat _
 
 中文:
-定义 fromPadicInt
+定义 fromPadic整数
   签名: : 整数_[p] ->+* 𝕎 (ZMod p)
   定义体: (WittVector.lift fun k => (zmodEquivTrunc p k).toRingHom.comp (PadicInt.toZModPow k))
     zmodEquivTrunc_compat _
@@ -394,8 +394,8 @@ theorem toPadicInt_comp_fromPadicInt
   simp only [RingEquiv.symm_toRingHom_comp_to
 
 中文:
-定理 toPadicInt_comp_fromPadicInt
-  结论: (toPadic整数 p).comp (fromPadic整数 p) = RingHom.id 整数_[p]
+定理 toPadic整数_comp_fromPadic整数
+  结论: (toPadic整数 p).comp (fromPadic整数 p) = 环态射.id 整数_[p]
   证明: by
   rw [← PadicInt.toZModPow_eq_iff_ext]
   intro n
@@ -424,7 +424,7 @@ theorem toPadicInt_comp_fromPadicInt_ext
   rw [toPadicInt_comp_fromPadicInt]
 
 中文:
-定理 toPadicInt_comp_fromPadicInt_ext
+定理 toPadic整数_comp_fromPadic整数_ext
   条件: (x)
   证明: by
   rw [toPadicInt_comp_fromPadicInt]
@@ -448,7 +448,7 @@ theorem fromPadicInt_comp_toPadicInt
     RingHom.comp_assoc, RingEquiv.toRingHom_comp_symm_toRingHom]
 
 中文:
-定理 fromPadicInt_comp_toPadicInt
+定理 fromPadic整数_comp_toPadic整数
   证明: by
   apply WittVector.hom_ext
   intro n
@@ -476,7 +476,7 @@ theorem fromPadicInt_comp_toPadicInt_ext
   rw [fromPadicInt_comp_toPadicInt]
 
 中文:
-定理 fromPadicInt_comp_toPadicInt_ext
+定理 fromPadic整数_comp_toPadic整数_ext
   条件: (x)
   证明: by
   rw [fromPadicInt_comp_toPadicInt]

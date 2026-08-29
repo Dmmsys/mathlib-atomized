@@ -143,7 +143,7 @@ theorem isRoot_of_hasEigenvalue
 
 中文:
 定理 isRoot_of_hasEigenvalue
-  结论: [IsDomain R] [IsTorsionFree R M] {f : End R M} {μ : R}
+  结论: [是整环 R] [是无挠 R M] {f : End R M} {μ : R}
   证明: by
   rcases (Submodule.ne_bot_iff _).1 h with ⟨w, ⟨H, ne0⟩⟩
   refine Or.resolve_right (smul_eq_zero.1 ?_) ne0
@@ -244,7 +244,7 @@ lemma finite_hasEigenvalue
 
 中文:
 引理 finite_hasEigenvalue
-  结论: Set.Finite {μ | f.HasEigenvalue μ}
+  结论: 集合.有限 {μ | f.HasEigenvalue μ}
   证明: by
   have h : minpoly R f != 0 := minpoly.ne_zero (Algebra.IsIntegral.isIntegral (R := R) f)
   refine ((minpoly R f).rootSet_finite R).subset ?_
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype f.Eigenvalues
+  签名: 有限类型 f.Eigenvalues
   定义体: Set.Finite.fintype f.finite_hasEigenvalue
 
 Depends on / 依赖: Finite, Set.Finite.fintype, f.finite_hasEigenvalue, finite_hasEigenvalue, fintype
@@ -343,8 +343,8 @@ theorem Module.End.finite_spectrum
   exact Module.End.hasEigenvalue_iff_mem_spectrum.symm
 
 中文:
-定理 Module.End.finite_spectrum
-  结论: {K : 类型v} {V : Type w} [Field K] [AddCommGroup V]
+定理 模.End.finite_spectrum
+  结论: {K : 类型v} {V : 类型 w} [域 K] [加法交换群 V]
   证明: by
   convert! f.finite_hasEigenvalue using 1
   ext x
@@ -373,9 +373,9 @@ theorem Matrix.finite_spectrum
   exact Module.End.finite_spectrum _
 
 中文:
-定理 Matrix.finite_spectrum
-  条件: (A : Matrix n n R)
-  结论: Set.Finite (spectrum R A)
+定理 矩阵.finite_spectrum
+  条件: (A : 矩阵 n n R)
+  结论: 集合.有限 (spectrum R A)
   证明: by
   rw [← AlgEquiv.spectrum_eq (Matrix.toLinAlgEquiv <| Pi.basisFun R n) A]
   exact Module.End.finite_spectrum _
@@ -395,8 +395,8 @@ instance Matrix.instFiniteSpectrum
   body: Set.finite_coe_iff.mpr (Matrix.finite_spectrum A)
 
 中文:
-实例 Matrix.instFiniteSpectrum
-  签名: (A : Matrix n n R)
+实例 矩阵.instFiniteSpectrum
+  签名: (A : 矩阵 n n R)
   定义体: Set.finite_coe_iff.mpr (Matrix.finite_spectrum A)
 
 Depends on / 依赖: Matrix, Matrix.finite_spectrum, Set.finite_coe_iff.mpr, finite_coe_iff, finite_spectrum

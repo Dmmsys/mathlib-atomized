@@ -163,7 +163,7 @@ theorem not_pseudoperfect_iff_forall
   grind [Pseudoperfect]
 
 中文:
-定理 not_pseudoperfect_iff_forall
+定理 not_pseudoperfect_iff_对任意
   证明: by
   grind [Pseudoperfect]
 
@@ -479,8 +479,8 @@ theorem Perfect.pseudoperfect
   proof: ⟨h.2, ⟨properDivisors n, ⟨fun _ a => a, h.1⟩⟩⟩
 
 中文:
-定理 Perfect.pseudoperfect
-  条件: (h : Perfect n)
+定理 完美.pseudoperfect
+  条件: (h : 完美 n)
   结论: Pseudoperfect n
   证明: ⟨h.2, ⟨properDivisors n, ⟨fun _ a => a, h.1⟩⟩⟩
 
@@ -499,8 +499,8 @@ theorem Prime.not_abundant
   proof: fun h1 => (h.one_lt.trans h1).ne' (sum_properDivisors_eq_one_iff_prime.mpr h)
 
 中文:
-定理 Prime.not_abundant
-  条件: (h : Prime n)
+定理 素.not_abundant
+  条件: (h : 素 n)
   结论: ¬ Abundant n
   证明: fun h1 => (h.one_lt.trans h1).ne' (sum_properDivisors_eq_one_iff_prime.mpr h)
 
@@ -520,8 +520,8 @@ theorem Prime.not_weird
   grind [Weird, h.not_abundant]
 
 中文:
-定理 Prime.not_weird
-  条件: (h : Prime n)
+定理 素.not_weird
+  条件: (h : 素 n)
   结论: ¬ Weird n
   证明: by
   grind [Weird, h.not_abundant]
@@ -545,8 +545,8 @@ theorem Prime.not_pseudoperfect
   simpa using Finset.sum_le_sum_of_subset hs
 
 中文:
-定理 Prime.not_pseudoperfect
-  条件: (h : Prime p)
+定理 素.not_pseudoperfect
+  条件: (h : 素 p)
   结论: ¬ Pseudoperfect p
   证明: by
   rw [not_pseudoperfect_iff_forall]
@@ -572,9 +572,9 @@ theorem Prime.not_perfect
   proof: fun hp => h.not_pseudoperfect hp.pseudoperfect
 
 中文:
-定理 Prime.not_perfect
-  条件: (h : Prime p)
-  结论: ¬ Perfect p
+定理 素.not_perfect
+  条件: (h : 素 p)
+  结论: ¬ 完美 p
   证明: fun hp => h.not_pseudoperfect hp.pseudoperfect
 
 Depends on / 依赖: h.not_pseudoperfect, hp.pseudoperfect, not_pseudoperfect, pseudoperfect
@@ -599,8 +599,8 @@ theorem Prime.deficient_pow
       _ = (n ^ m - 1) / (n - 1) := (Nat.ge
 
 中文:
-定理 Prime.deficient_pow
-  条件: (h : Prime n)
+定理 素.deficient_pow
+  条件: (h : 素 n)
   结论: Deficient (n ^ m)
   证明: by
   rcases Nat.eq_zero_or_pos m with (rfl | _)
@@ -659,8 +659,8 @@ theorem Prime.deficient
   proof: (pow_one n) ▸ h.deficient_pow
 
 中文:
-定理 Prime.deficient
-  条件: (h : Prime n)
+定理 素.deficient
+  条件: (h : 素 n)
   结论: Deficient n
   证明: (pow_one n) ▸ h.deficient_pow
 
@@ -683,7 +683,7 @@ theorem infinite_deficient
 
 中文:
 定理 infinite_deficient
-  结论: {n : 自然数 | n.Deficient}.Infinite
+  结论: {n : 自然数 | n.Deficient}.无限
   证明: by
   rw [Set.infinite_iff_exists_gt]
   intro a
@@ -716,7 +716,7 @@ theorem infinite_even_deficient
 
 中文:
 定理 infinite_even_deficient
-  结论: {n : 自然数 | Even n ∧ n.Deficient}.Infinite
+  结论: {n : 自然数 | Even n ∧ n.Deficient}.无限
   证明: by
   rw [Set.infinite_iff_exists_gt]
   intro n
@@ -754,7 +754,7 @@ theorem infinite_odd_deficient
 
 中文:
 定理 infinite_odd_deficient
-  结论: {n : 自然数 | Odd n ∧ n.Deficient}.Infinite
+  结论: {n : 自然数 | Odd n ∧ n.Deficient}.无限
   证明: by
   rw [Set.infinite_iff_exists_gt]
   intro n
@@ -925,7 +925,7 @@ theorem infinite_even_abundant
 
 中文:
 定理 infinite_even_abundant
-  结论: {n : 自然数 | Even n ∧ n.Abundant}.Infinite
+  结论: {n : 自然数 | Even n ∧ n.Abundant}.无限
   证明: by
   rw [Set.infinite_iff_exists_gt]
   intro a
@@ -957,7 +957,7 @@ theorem infinite_odd_abundant
 
 中文:
 定理 infinite_odd_abundant
-  结论: {n : 自然数 | Odd n ∧ n.Abundant}.Infinite
+  结论: {n : 自然数 | Odd n ∧ n.Abundant}.无限
   证明: by
   rw [Set.infinite_iff_exists_gt]
   intro a

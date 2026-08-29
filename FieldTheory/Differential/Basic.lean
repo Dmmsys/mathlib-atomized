@@ -262,7 +262,7 @@ lemma logDeriv_prod
 
 中文:
 引理 logDeriv_prod
-  条件: (ι : 类型) (s : Finset ι) (f : ι -> R) (h : 对任意 x in s, f x != 0)
+  条件: (ι : 类型) (s : 有限集 ι) (f : ι -> R) (h : 对任意 x in s, f x != 0)
   证明: logDeriv_multisetProd _ h
 
 Depends on / 依赖: logDeriv_multisetProd
@@ -282,7 +282,7 @@ lemma logDeriv_prod_of_eq_zero
 
 中文:
 引理 logDeriv_prod_of_eq_zero
-  条件: (ι : 类型) (s : Finset ι) (f : ι -> R) (h : 对任意 x in s, f x = 0)
+  条件: (ι : 类型) (s : 有限集 ι) (f : ι -> R) (h : 对任意 x in s, f x = 0)
   证明: by
   unfold logDeriv
   simp_all
@@ -308,7 +308,7 @@ lemma logDeriv_algebraMap
 
 中文:
 引理 logDeriv_algebraMap
-  结论: {F K : 类型} [Field F] [Field K] [Differential F] [Differential K]
+  结论: {F K : 类型} [域 F] [域 K] [微分 F] [微分 K]
   证明: by
   unfold logDeriv
   simp [deriv_algebraMap]
@@ -334,7 +334,7 @@ lemma _root_.algebraMap.coe_logDeriv
 
 中文:
 引理 _root_.algebraMap.coe_logDeriv
-  结论: {F K : 类型} [Field F] [Field K] [Differential F]
+  结论: {F K : 类型} [域 F] [域 K] [微分 F]
   证明: (logDeriv_algebraMap a).symm
 
 Depends on / 依赖: logDeriv_algebraMap
@@ -401,7 +401,7 @@ definition differentialFiniteDimensional
 
 中文:
 定义 differentialFiniteDimensional
-  签名: [FiniteDimensional F K]
+  签名: [有限维 F K]
   定义体: let k := (Field.exists_primitive_element F K).choose
   have h : F⟮k⟯ = ⊤ := (Field.exists_primitive_element F K).choose_spec
   have : Fact (minpoly F k).Monic := ⟨minpoly.monic (IsAlgebraic.of_finite ..).isIntegral⟩
@@ -435,7 +435,7 @@ lemma differentialAlgebraFiniteDimensional
 
 中文:
 引理 differentialAlgebraFiniteDimensional
-  条件: [FiniteDimensional F K]
+  条件: [有限维 F K]
   证明: differentialFiniteDimensional F K
     DifferentialAlgebra F K := by
   let k := (Field.exists_primitive_element F K).choose
@@ -476,7 +476,7 @@ definition uniqueDifferentialAlgebraFiniteDimensional
 
 中文:
 定义 uniqueDifferentialAlgebraFiniteDimensional
-  签名: [FiniteDimensional F K]
+  签名: [有限维 F K]
   定义体: by
   let default : {_a : Differential K // DifferentialAlgebra F K} :=
       ⟨differentialFiniteDimensional F K, differentialAlgebraFiniteDimensional⟩
@@ -526,8 +526,8 @@ instance [Differential
     exact Subtype.val_injective
 
 中文:
-实例 [Differential
-  签名: K] [DifferentialAlgebra F K] (B
+实例 [微分
+  签名: K] [微分代数 F K] (B
   定义体: by
     change (B.val a)′ = B.val a′
     rw [algHom_deriv']

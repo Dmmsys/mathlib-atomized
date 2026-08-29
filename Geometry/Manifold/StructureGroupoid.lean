@@ -98,13 +98,13 @@ structure StructureGroupoid
 
 中文:
 结构 StructureGroupoid
-  参数: (H : 类型) [TopologicalSpace H]
+  参数: (H : 类型) [拓扑空间 H]
   公理与运算 (6 个):
-    - members : Set (OpenPartialHomeomorph H H)
+    - members : 集合 (OpenPartialHomeomorph H H)
     - trans' : 对任意 e e' : OpenPartialHomeomorph H H, e in members -> e' in members -> e ≫ₕ e' in members
     - symm' : 对任意 e : OpenPartialHomeomorph H H, e in members -> e.symm in members
     - id_mem' : OpenPartialHomeomorph.refl H in members
-    - locality' : 对任意 e : OpenPartialHomeomorph H H, (对任意 x in e.source, 存在 s, IsOpen s ∧ x in s ∧ e.restr s in members) -> e in members
+    - locality' : 对任意 e : OpenPartialHomeomorph H H, (对任意 x in e.source, 存在 s, 是开集 s ∧ x in s ∧ e.restr s in members) -> e in members
     - mem_of_eqOnSource' : 对任意 e e' : OpenPartialHomeomorph H H, e in members -> e' ≈ e -> e' in members
 -/
 structure StructureGroupoid (H : Type*) [TopologicalSpace H] where
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (StructureGroupoid H)
+  签名: 最小值 (StructureGroupoid H)
   定义体: ⟨fun G G' => StructureGroupoid.mk
     (members := G.members inter G'.members)
     (trans' := fun e e' he he' =>
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (StructureGroupoid H)
+  签名: 下确界集 (StructureGroupoid H)
   定义体: ⟨fun S => StructureGroupoid.mk
     (members := ⋂ s in S, s.members)
     (trans' := by
@@ -388,7 +388,7 @@ instance StructureGroupoid.partialOrder
 
 中文:
 实例 StructureGroupoid.partialOrder
-  签名: : PartialOrder (StructureGroupoid H)
+  签名: : 偏序 (StructureGroupoid H)
   定义体: PartialOrder.lift StructureGroupoid.members fun a b h => by
     cases a
     cases b
@@ -442,7 +442,7 @@ definition idGroupoid
 
 中文:
 定义 idGroupoid
-  签名: (H : 类型) [TopologicalSpace H]
+  签名: (H : 类型) [拓扑空间 H]
   定义体: {OpenPartialHomeomorph.refl H} union { e : OpenPartialHomeomorph H H | e.source = ∅ }
   trans' e e' he he' := by
     rcases he with he | he
@@ -523,7 +523,7 @@ instance instStructureGroupoidOrderBot
 
 中文:
 实例 instStructureGroupoidOrderBot
-  签名: : OrderBot (StructureGroupoid H) where
+  签名: : 有底序 (StructureGroupoid H) where
   定义体: idGroupoid H
   bot_le := by
     intro u f hf
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (StructureGroupoid H)
+  签名: 可居 (StructureGroupoid H)
   定义体: ⟨idGroupoid H⟩
 
 Depends on / 依赖: idGroupoid
@@ -585,13 +585,13 @@ structure Pregroupoid
 
 中文:
 结构 Pregroupoid
-  参数: (H : 类型) [TopologicalSpace H]
+  参数: (H : 类型) [拓扑空间 H]
   公理与运算 (5 个):
-    - property : (H -> H) -> Set H -> 命题
-    - comp : 对任意 {f g u v}, property f u -> property g v -> IsOpen u -> IsOpen v -> IsOpen (u inter f ⁻¹' v) -> property (g ∘ f) (u inter f ⁻¹' v)
+    - property : (H -> H) -> 集合 H -> 命题
+    - comp : 对任意 {f g u v}, property f u -> property g v -> 是开集 u -> 是开集 v -> 是开集 (u inter f ⁻¹' v) -> property (g ∘ f) (u inter f ⁻¹' v)
     - id_mem : property id univ
-    - locality : 对任意 {f u}, IsOpen u -> (对任意 x in u, 存在 v, IsOpen v ∧ x in v ∧ property f (u inter v)) -> property f u
-    - congr : 对任意 {f g : H -> H} {u}, IsOpen u -> (对任意 x in u, g x = f x) -> property f u -> property g u
+    - locality : 对任意 {f u}, 是开集 u -> (对任意 x in u, 存在 v, 是开集 v ∧ x in v ∧ property f (u inter v)) -> property f u
+    - congr : 对任意 {f g : H -> H} {u}, 是开集 u -> (对任意 x in u, g x = f x) -> property f u -> property g u
 -/
 structure Pregroupoid (H : Type*) [TopologicalSpace H] where
   /-- Property describing membership in this groupoid: the pregroupoid "contains"
@@ -754,7 +754,7 @@ abbreviation continuousPregroupoid
 
 中文:
 缩写 continuousPregroupoid
-  签名: (H : 类型) [TopologicalSpace H]
+  签名: (H : 类型) [拓扑空间 H]
   定义体: True
   comp _ _ _ _ _ := trivial
   id_mem := trivial
@@ -781,7 +781,7 @@ definition continuousGroupoid
 
 中文:
 定义 continuousGroupoid
-  签名: (H : 类型) [TopologicalSpace H]
+  签名: (H : 类型) [拓扑空间 H]
   定义体: Pregroupoid.groupoid (continuousPregroupoid H)
 
 Depends on / 依赖: Pregroupoid, Pregroupoid.groupoid, continuousPregroupoid, groupoid
@@ -800,7 +800,7 @@ instance instStructureGroupoidOrderTop
 
 中文:
 实例 instStructureGroupoidOrderTop
-  签名: : OrderTop (StructureGroupoid H) where
+  签名: : 有顶序 (StructureGroupoid H) where
   定义体: continuousGroupoid H
   le_top _ _ _ := ⟨trivial, trivial⟩
 
@@ -827,7 +827,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (StructureGroupoid H)
+  签名: 完备格 (StructureGroupoid H)
   定义体: { completeLatticeOfInf _ (by
       exact fun s =>
       ⟨fun S Ss F hF => mem_iInter₂.mp hF S Ss,
@@ -868,7 +868,7 @@ class ClosedUnderRestriction
 类 ClosedUnderRestriction
   参数: (G : StructureGroupoid H)
   公理与运算 (1 个):
-    - closedUnderRestriction : 对任意 {e : OpenPartialHomeomorph H H}, e in G -> 对任意 s : Set H, IsOpen s -> e.restr s in G
+    - closedUnderRestriction : 对任意 {e : OpenPartialHomeomorph H H}, e in G -> 对任意 s : 集合 H, 是开集 s -> e.restr s in G
 -/
 class ClosedUnderRestriction (G : StructureGroupoid H) : Prop where
   closedUnderRestriction :
@@ -982,7 +982,7 @@ theorem idRestrGroupoid_mem
 
 中文:
 定理 idRestrGroupoid_mem
-  条件: {s : Set H} (hs : IsOpen s)
+  条件: {s : 集合 H} (hs : 是开集 s)
   结论: ofSet s hs in @idRestrGroupoid H _
   证明: ⟨s, hs, refl _⟩
 -/

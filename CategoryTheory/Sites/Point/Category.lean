@@ -45,7 +45,7 @@ structure Hom
     - hom : Φ₂.fiber ⟶ Φ₁.fiber
 
 中文:
-结构 Hom
+结构 态射
   参数: (Φ₁ Φ₂ : Point.{w} J)
   公理与运算 (1 个):
     - hom : Φ₂.fiber ⟶ Φ₁.fiber
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Point.{w} J)
+  签名: 范畴 (Point.{w} J)
   定义体: Hom
   id _ := ⟨𝟙 _⟩
   comp f g := ⟨g.hom ≫ f.hom⟩
@@ -120,7 +120,7 @@ lemma id_hom
 中文:
 引理 id_hom
   条件: (Φ : Point.{w} J)
-  结论: Hom.hom (𝟙 Φ) = 𝟙 _
+  结论: 态射.hom (𝟙 Φ) = 𝟙 _
   证明: rfl
 
 @[simp, reassoc]

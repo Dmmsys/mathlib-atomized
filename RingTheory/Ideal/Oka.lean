@@ -46,11 +46,11 @@ structure IsOka
     - oka({I : Ideal R} {a : R}) : P (I ⊔ span {a}) -> P (I.colon (span {a})) -> P I
 
 中文:
-结构 IsOka
-  参数: (P : Ideal R -> 命题)
+结构 是Oka
+  参数: (P : 理想 R -> 命题)
   公理与运算 (2 个):
     - top : P ⊤
-    - oka({I : Ideal R} {a : R}) : P (I ⊔ span {a}) -> P (I.colon (span {a})) -> P I
+    - oka({I : 理想 R} {a : R}) : P (I ⊔ span {a}) -> P (I.colon (span {a})) -> P I
 -/
 structure IsOka (P : Ideal R -> Prop) : Prop where
   top : P ⊤
@@ -79,8 +79,8 @@ have h₂ : P (I.colon (span {a})) := of_not_not hI.not_prop_of_gt lt_of_le_of_n
 
 中文:
 定理 isPrime_of_maximal_not
-  条件: {I : Ideal R} (hI : Maximal (¬P ·) I)
-  结论: I.IsPrime where
+  条件: {I : 理想 R} (hI : 极大 (¬P ·) I)
+  结论: I.是素 where
   证明: hI.prop (hI' ▸ hP.top)
   mem_or_mem' := by
     by_contra! ⟨a, b, hab, ha, hb⟩
@@ -111,8 +111,8 @@ theorem forall_of_forall_prime
 exact hI.prop hprime I (hP.isPrime_of_maximal_not hI)
 
 中文:
-定理 forall_of_forall_prime
-  结论: (hmax : 对任意 I, ¬P I -> 存在 I, Maximal (¬P ·) I)
+定理 对任意_of_对任意_prime
+  结论: (hmax : 对任意 I, ¬P I -> 存在 I, 极大 (¬P ·) I)
   证明: by
   by_contra hI
   obtain ⟨I, hI⟩ := hmax I hI
@@ -140,7 +140,7 @@ theorem forall_of_forall_prime'
     exact hC
 
 中文:
-定理 forall_of_forall_prime'
+定理 对任意_of_对任意_prime'
   证明: by
   refine forall_of_forall_prime hP (fun I hI => ?_) hprime
   obtain ⟨M, _, hM⟩ : exists M, I <= M ∧ Maximal (¬P ·) M := by

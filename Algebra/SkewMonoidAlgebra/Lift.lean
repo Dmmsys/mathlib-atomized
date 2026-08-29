@@ -37,7 +37,7 @@ definition liftNCAlgHom
 
 中文:
 定义 liftNCAlgHom
-  签名: [MulSemiringAction G A] [SMulCommClass G k A] (f : A ->ₐ[k] B)
+  签名: [MulSemiring作用 G A] [标量交换类 G k A] (f : A ->ₐ[k] B)
   定义体: liftNCRingHom (f : A ->+* B) g h_comm
   commutes' := by simp [liftNCRingHom]
 
@@ -72,7 +72,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (G ->* A) ≃ (AlgHom k (SkewMonoidAlgebra k G) A) where
+  签名: : (G ->* A) ≃ (代数态射 k (斜幺半群代数 k G) A) where
   定义体: (f : SkewMonoidAlgebra k G ->* A).comp (of k G)
   toFun F := by
     apply liftNCAlgHom (Algebra.ofId k A) F
@@ -111,7 +111,7 @@ theorem lift_apply'
 
 中文:
 定理 lift_apply'
-  条件: (F : G ->* A) (f : SkewMonoidAlgebra k G)
+  条件: (F : G ->* A) (f : 斜幺半群代数 k G)
   证明: rfl
 -/
 theorem lift_apply' (F : G ->* A) (f : SkewMonoidAlgebra k G) :
@@ -127,7 +127,7 @@ theorem lift_apply
 
 中文:
 定理 lift_apply
-  条件: (F : G ->* A) (f : SkewMonoidAlgebra k G)
+  条件: (F : G ->* A) (f : 斜幺半群代数 k G)
   证明: by simp [lift_apply', Algebra.smul_def]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, lift_apply, smul_def
@@ -149,7 +149,7 @@ theorem lift_def
 中文:
 定理 lift_def
   条件: (F : G ->* A)
-  结论: (lift k G A F : SkewMonoidAlgebra k G -> A) =
+  结论: (lift k G A F : 斜幺半群代数 k G -> A) =
   证明: rfl
 
 @[simp]
@@ -168,7 +168,7 @@ theorem lift_symm_apply
 
 中文:
 定理 lift_symm_apply
-  条件: (F : AlgHom k (SkewMonoidAlgebra k G) A) (x : G)
+  条件: (F : 代数态射 k (斜幺半群代数 k G) A) (x : G)
   证明: rfl
 -/
 theorem lift_symm_apply (F : AlgHom k (SkewMonoidAlgebra k G) A) (x : G) :
@@ -233,7 +233,7 @@ theorem lift_unique'
 
 中文:
 定理 lift_unique'
-  条件: (F : AlgHom k (SkewMonoidAlgebra k G) A)
+  条件: (F : 代数态射 k (斜幺半群代数 k G) A)
   证明: ((lift k G A).apply_symm_apply F).symm
 
 Depends on / 依赖: apply_symm_apply
@@ -255,7 +255,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (F : AlgHom k (SkewMonoidAlgebra k G) A)
+  结论: (F : 代数态射 k (斜幺半群代数 k G) A)
   证明: by
   conv_lhs =>
     rw [lift_unique' F]
@@ -283,7 +283,7 @@ definition mapDomainAlgHom
 
 中文:
 定义 mapDomainAlgHom
-  签名: (k A : 类型) [CommSemiring k] [Semiring A] [Algebra k A] {H F : 类型}
+  签名: (k A : 类型) [交换半环 k] [半环 A] [代数 k A] {H F : 类型}
   定义体: mapDomainRingHom hf
   commutes' := by simp [mapDomainRingHom]
 
@@ -319,7 +319,7 @@ definition equivMapDomain
 
 中文:
 定义 equivMapDomain
-  签名: (f : G ≃ H) (l : SkewMonoidAlgebra k G)
+  签名: (f : G ≃ H) (l : 斜幺半群代数 k G)
   定义体: l.coeff.equivMapDomain f
 
 @[deprecated (since := "2026-07-06")] alias toFinsupp_equivMapDomain := coeff_equivMapDomain
@@ -345,7 +345,7 @@ theorem equivMapDomain_eq_mapDomain
 
 中文:
 定理 equivMapDomain_eq_mapDomain
-  条件: (f : G ≃ H) (l : SkewMonoidAlgebra k G)
+  条件: (f : G ≃ H) (l : 斜幺半群代数 k G)
   证明: by
   apply coeff_injective
   ext x
@@ -400,8 +400,8 @@ theorem equivMapDomain_refl
 
 中文:
 定理 equivMapDomain_refl
-  条件: (l : SkewMonoidAlgebra k G)
-  结论: equivMapDomain (Equiv.refl _) l = l
+  条件: (l : 斜幺半群代数 k G)
+  结论: equivMapDomain (等价.refl _) l = l
   证明: by
   ext x; rfl
 
@@ -459,7 +459,7 @@ definition domCongr
 
 中文:
 定义 domCongr
-  签名: [AddCommMonoid A] (e : G ≃ H)
+  签名: [加法交换幺半群 A] (e : G ≃ H)
   定义体: equivMapDomain e
   invFun := equivMapDomain e.symm
   left_inv v := by simp [← equivMapDomain_trans]
@@ -488,7 +488,7 @@ definition domLCongr
 
 中文:
 定义 domLCongr
-  签名: [Semiring k] [AddCommMonoid A] [Module k A] (e : G ≃ H)
+  签名: [半环 k] [加法交换幺半群 A] [模 k A] (e : G ≃ H)
   定义体: (domCongr e : SkewMonoidAlgebra A G ≃+ SkewMonoidAlgebra A H).toLinearEquiv by
     simp only [domCongr_apply]
     intro c x
@@ -676,7 +676,7 @@ definition submoduleOfSmulMem
 
 中文:
 定义 submoduleOfSmulMem
-  签名: (W : Submodule k V) (h : 对任意 (g : G) (v : V), v in W -> of k G g • v in W)
+  签名: (W : 子模 k V) (h : 对任意 (g : G) (v : V), v in W -> of k G g • v in W)
   定义体: W
   zero_mem' := W.zero_mem'
   add_mem' := W.add_mem'

@@ -104,8 +104,8 @@ definition Matrix.vecMulBilin
 @[simp]
 
 中文:
-定义 Matrix.vecMulBilin
-  签名: [Fintype m]
+定义 矩阵.vecMulBilin
+  签名: [有限类型 m]
   定义体: { toFun M := x ᵥ* M
     map_add' _ _ := vecMul_add _ _ _
     map_smul' _ _ := vecMul_smul _ _ _ }
@@ -136,8 +136,8 @@ theorem Matrix.vecMulBilin_apply
 example {A} [Semiring A] [Fintype m] := (vecMulBilin A Aᵐᵒᵖ : _ ->ₗ[_] Matrix m n A ->ₗ[_] _)
 
 中文:
-定理 Matrix.vecMulBilin_apply
-  条件: [Fintype m] (v : m -> A) (M : Matrix m n A)
+定理 矩阵.vecMulBilin_apply
+  条件: [有限类型 m] (v : m -> A) (M : 矩阵 m n A)
   证明: rfl
 
 example {A} [Semiring A] [Fintype m] := (vecMulBilin A Aᵐᵒᵖ : _ ->ₗ[_] Matrix m n A ->ₗ[_] _)
@@ -162,8 +162,8 @@ definition Matrix.mulVecBilin
 @[simp]
 
 中文:
-定义 Matrix.mulVecBilin
-  签名: [Fintype n]
+定义 矩阵.mulVecBilin
+  签名: [有限类型 n]
   定义体: { toFun x := M *ᵥ x
     map_add' _ _ := mulVec_add _ _ _
     map_smul' _ _ := mulVec_smul _ _ _ }
@@ -194,8 +194,8 @@ theorem Matrix.mulVecBilin_apply
 example {A} [Semiring A] [Fintype n] := (mulVecBilin A Aᵐᵒᵖ : Matrix m n A ->ₗ[_] _ ->ₗ[_] _)
 
 中文:
-定理 Matrix.mulVecBilin_apply
-  条件: [Fintype n] (M : Matrix m n A) (v : n -> A)
+定理 矩阵.mulVecBilin_apply
+  条件: [有限类型 n] (M : 矩阵 m n A) (v : n -> A)
   证明: rfl
 
 example {A} [Semiring A] [Fintype n] := (mulVecBilin A Aᵐᵒᵖ : Matrix m n A ->ₗ[_] _ ->ₗ[_] _)
@@ -225,7 +225,7 @@ example {A} [Semiring A] := (vecMulVecBilin A Aᵐᵒᵖ : (m -> A
 
 中文:
 定义 vecMulVecBilin
-  签名: : (m -> A) ->ₗ[R] (n -> A) ->ₗ[S] Matrix m n A where
+  签名: : (m -> A) ->ₗ[R] (n -> A) ->ₗ[S] 矩阵 m n A where
   定义体: { toFun y := vecMulVec x y
       map_add' _ _ := vecMulVec_add _ _ _
       map_smul' _ _ := vecMulVec_smul _ _ _ }
@@ -266,7 +266,7 @@ example {A} [Semiring A] [Fintype m] := (dotProductBili
 
 中文:
 定义 dotProductBilin
-  签名: [Fintype m]
+  签名: [有限类型 m]
   定义体: { toFun y := dotProduct x y
       map_add' _ _ := dotProduct_add _ _ _
       map_smul' _ _ := dotProduct_smul _ _ _ }
@@ -302,8 +302,8 @@ abbreviation Matrix.vecMulLinear
   body: .flip M Matrix.vecMulBilin R Rᵐᵒᵖ
 
 中文:
-缩写 Matrix.vecMulLinear
-  签名: [Fintype m] (M : Matrix m n R)
+缩写 矩阵.vecMulLinear
+  签名: [有限类型 m] (M : 矩阵 m n R)
   定义体: .flip M Matrix.vecMulBilin R Rᵐᵒᵖ
 
 Depends on / 依赖: Matrix, Matrix.vecMulBilin, vecMulBilin
@@ -320,8 +320,8 @@ theorem Matrix.vecMulLinear_apply
   proof: rfl
 
 中文:
-定理 Matrix.vecMulLinear_apply
-  条件: [Fintype m] (M : Matrix m n R) (x : m -> R)
+定理 矩阵.vecMulLinear_apply
+  条件: [有限类型 m] (M : 矩阵 m n R) (x : m -> R)
   证明: rfl
 -/
 @[simp] theorem Matrix.vecMulLinear_apply [Fintype m] (M : Matrix m n R) (x : m -> R) :
@@ -336,8 +336,8 @@ theorem Matrix.coe_vecMulLinear
   proof: rfl
 
 中文:
-定理 Matrix.coe_vecMulLinear
-  条件: [Fintype m] (M : Matrix m n R)
+定理 矩阵.coe_vecMulLinear
+  条件: [有限类型 m] (M : 矩阵 m n R)
   证明: rfl
 -/
 theorem Matrix.coe_vecMulLinear [Fintype m] (M : Matrix m n R) :
@@ -361,7 +361,7 @@ theorem range_vecMulLinear
 
 中文:
 定理 range_vecMulLinear
-  条件: (M : Matrix m n R)
+  条件: (M : 矩阵 m n R)
   证明: by
   let := Classical.decEq m
   simp_rw [range_eq_map, ← iSup_range_single, Submodule.map_iSup, range_eq_map, ←
@@ -393,8 +393,8 @@ theorem Matrix.vecMul_injective_iff
   exact funext fun _ => Matrix.vecMul_eq_sum _ _
 
 中文:
-定理 Matrix.vecMul_injective_iff
-  条件: {M : Matrix m n R}
+定理 矩阵.vecMul_injective_iff
+  条件: {M : 矩阵 m n R}
   证明: by
   rw [← coe_vecMulLinear]; rw [linearIndependent_iff_injective_fintypeLinearCombination]
   congr! 1
@@ -419,8 +419,8 @@ lemma Matrix.linearIndependent_rows_of_isUnit
   exact Matrix.vecMul_injective_of_isUnit ha
 
 中文:
-引理 Matrix.linearIndependent_rows_of_isUnit
-  结论: {A : Matrix m m R}
+引理 矩阵.linearIndependent_rows_of_isUnit
+  结论: {A : 矩阵 m m R}
   证明: by
   rw [← Matrix.vecMul_injective_iff]
   exact Matrix.vecMul_injective_of_isUnit ha
@@ -456,7 +456,7 @@ definition LinearMap.toMatrixRight'
   map_smul' c f
 
 中文:
-定义 LinearMap.toMatrixRight'
+定义 线性映射.toMatrixRight'
   签名: [DecidableEq m]
   定义体: f (single R (fun _ => R) i 1) j
   invFun := Matrix.vecMulLinear
@@ -500,7 +500,7 @@ abbreviation Matrix.toLinearMapRight'
   body: LinearEquiv.symm LinearMap.toMatrixRight'
 
 中文:
-缩写 Matrix.toLinearMapRight'
+缩写 矩阵.toLinearMapRight'
   签名: [DecidableEq m]
   定义体: LinearEquiv.symm LinearMap.toMatrixRight'
 
@@ -523,8 +523,8 @@ theorem Matrix.toLinearMapRight'_apply
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapRight'_apply
-  条件: (M : Matrix m n R) (v : m -> R)
+定理 矩阵.toLinearMapRight'_apply
+  条件: (M : 矩阵 m n R) (v : m -> R)
   证明: rfl
 
 @[simp]
@@ -542,8 +542,8 @@ theorem Matrix.toLinearMapRight'_mul
   proof: LinearMap.ext fun _x => (vecMul_vecMul _ M N).symm
 
 中文:
-定理 Matrix.toLinearMapRight'_mul
-  结论: [Fintype l] [DecidableEq l] (M : Matrix l m R)
+定理 矩阵.toLinearMapRight'_mul
+  结论: [有限类型 l] [DecidableEq l] (M : 矩阵 l m R)
   证明: LinearMap.ext fun _x => (vecMul_vecMul _ M N).symm
 -/
 theorem Matrix.toLinearMapRight'_mul [Fintype l] [DecidableEq l] (M : Matrix l m R)
@@ -562,8 +562,8 @@ theorem Matrix.toLinearMapRight'_mul_apply
 @[simp]
 
 中文:
-定理 Matrix.toLinearMapRight'_mul_apply
-  结论: [Fintype l] [DecidableEq l] (M : Matrix l m R)
+定理 矩阵.toLinearMapRight'_mul_apply
+  结论: [有限类型 l] [DecidableEq l] (M : 矩阵 l m R)
   证明: (vecMul_vecMul _ M N).symm
 
 @[simp]
@@ -585,8 +585,8 @@ theorem LinearMap.toMatrixRight'_comp
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixRight'_comp
-  结论: [Fintype l] [DecidableEq l] (f : (l -> R) ->ₗ[R] m -> R)
+定理 线性映射.toMatrixRight'_comp
+  结论: [有限类型 l] [DecidableEq l] (f : (l -> R) ->ₗ[R] m -> R)
   证明: Matrix.toLinearMapRight'.injective by simp
 
 @[simp]
@@ -606,7 +606,7 @@ theorem Matrix.toLinearMapRight'_one
   simp
 
 中文:
-定理 Matrix.toLinearMapRight'_one
+定理 矩阵.toLinearMapRight'_one
   证明: by
   ext
   simp
@@ -625,8 +625,8 @@ theorem LinearMap.toMatrixRight'_id
   proof: Matrix.toLinearMapRight'.injective by simp
 
 中文:
-定理 LinearMap.toMatrixRight'_id
-  结论: (@LinearMap.id R (m -> R)).toMatrixRight' = 1
+定理 线性映射.toMatrixRight'_id
+  结论: (@线性映射.id R (m -> R)).toMatrixRight' = 1
   证明: Matrix.toLinearMapRight'.injective by simp
 -/
 @[simp] theorem LinearMap.toMatrixRight'_id : (@LinearMap.id R (m -> R)).toMatrixRight' = 1 :=
@@ -650,8 +650,8 @@ definition Matrix.toLinearEquivRight'OfInv
       rw [← 
 
 中文:
-定义 Matrix.toLinearEquivRight'OfInv
-  签名: [Fintype n] [DecidableEq n] {M : Matrix m n R}
+定义 矩阵.toLinearEquivRight'OfInv
+  签名: [有限类型 n] [DecidableEq n] {M : 矩阵 m n R}
   定义体: { LinearMap.toMatrixRight'.symm M' with
     toFun := Matrix.toLinearMapRight' M'
     invFun := Matrix.toLinearMapRight' M
@@ -696,8 +696,8 @@ abbreviation Matrix.mulVecLin
   body: mulVecBilin R R M
 
 中文:
-缩写 Matrix.mulVecLin
-  签名: [Fintype n] (M : Matrix m n R)
+缩写 矩阵.mulVecLin
+  签名: [有限类型 n] (M : 矩阵 m n R)
   定义体: mulVecBilin R R M
 
 Depends on / 依赖: mulVecBilin
@@ -715,8 +715,8 @@ theorem Matrix.coe_mulVecLin
 @[simp]
 
 中文:
-定理 Matrix.coe_mulVecLin
-  条件: [Fintype n] (M : Matrix m n R)
+定理 矩阵.coe_mulVecLin
+  条件: [有限类型 n] (M : 矩阵 m n R)
   证明: rfl
 
 @[simp]
@@ -736,8 +736,8 @@ theorem Matrix.mulVecLin_apply
 @[simp]
 
 中文:
-定理 Matrix.mulVecLin_apply
-  条件: [Fintype n] (M : Matrix m n R) (v : n -> R)
+定理 矩阵.mulVecLin_apply
+  条件: [有限类型 n] (M : 矩阵 m n R) (v : n -> R)
   证明: rfl
 
 @[simp]
@@ -759,9 +759,9 @@ theorem Matrix.mulVecLin_zero
 @[simp]
 
 中文:
-定理 Matrix.mulVecLin_zero
-  条件: [Fintype n]
-  结论: Matrix.mulVecLin (0 : Matrix m n R) = 0
+定理 矩阵.mulVecLin_zero
+  条件: [有限类型 n]
+  结论: 矩阵.mulVecLin (0 : 矩阵 m n R) = 0
   证明: LinearMap.ext zero_mulVec
 
 @[simp]
@@ -781,8 +781,8 @@ theorem Matrix.mulVecLin_add
   proof: LinearMap.ext fun _ => add_mulVec _ _ _
 
 中文:
-定理 Matrix.mulVecLin_add
-  条件: [Fintype n] (M N : Matrix m n R)
+定理 矩阵.mulVecLin_add
+  条件: [有限类型 n] (M N : 矩阵 m n R)
   证明: LinearMap.ext fun _ => add_mulVec _ _ _
 
 Depends on / 依赖: LinearMap, LinearMap.ext, add_mulVec
@@ -801,8 +801,8 @@ theorem Matrix.mulVecLin_transpose
   ext; simp [mulVec_transpose]
 
 中文:
-定理 Matrix.mulVecLin_transpose
-  条件: [Fintype m] (M : Matrix m n R)
+定理 矩阵.mulVecLin_transpose
+  条件: [有限类型 m] (M : 矩阵 m n R)
   证明: by
   ext; simp [mulVec_transpose]
 -/
@@ -820,8 +820,8 @@ theorem Matrix.vecMulLinear_transpose
   ext; simp [vecMul_transpose]
 
 中文:
-定理 Matrix.vecMulLinear_transpose
-  条件: [Fintype n] (M : Matrix m n R)
+定理 矩阵.vecMulLinear_transpose
+  条件: [有限类型 n] (M : 矩阵 m n R)
   证明: by
   ext; simp [vecMul_transpose]
 -/
@@ -838,8 +838,8 @@ theorem Matrix.mulVecLin_submatrix
   proof: LinearMap.ext fun _ => submatrix_mulVec_equiv _ _ _ _
 
 中文:
-定理 Matrix.mulVecLin_submatrix
-  结论: [Fintype n] [Fintype l] (f₁ : m -> k) (e₂ : n ≃ l)
+定理 矩阵.mulVecLin_submatrix
+  结论: [有限类型 n] [有限类型 l] (f₁ : m -> k) (e₂ : n ≃ l)
   证明: LinearMap.ext fun _ => submatrix_mulVec_equiv _ _ _ _
 
 Depends on / 依赖: LinearMap, LinearMap.ext, submatrix_mulVec_equiv
@@ -858,8 +858,8 @@ theorem Matrix.mulVecLin_reindex
   proof: Matrix.mulVecLin_submatrix _ _ _
 
 中文:
-定理 Matrix.mulVecLin_reindex
-  结论: [Fintype n] [Fintype l] (e₁ : k ≃ m) (e₂ : l ≃ n)
+定理 矩阵.mulVecLin_reindex
+  结论: [有限类型 n] [有限类型 l] (e₁ : k ≃ m) (e₂ : l ≃ n)
   证明: Matrix.mulVecLin_submatrix _ _ _
 
 Depends on / 依赖: Matrix, Matrix.mulVecLin_submatrix, mulVecLin_submatrix
@@ -886,7 +886,7 @@ theorem Matrix.mulVecLin_one
 @[simp]
 
 中文:
-定理 Matrix.mulVecLin_one
+定理 矩阵.mulVecLin_one
   条件: [DecidableEq n]
   证明: by
   ext; simp [Matrix.one_apply, Pi.single_apply, eq_comm]
@@ -909,8 +909,8 @@ theorem Matrix.mulVecLin_mul
   proof: LinearMap.ext fun _ => (mulVec_mulVec _ _ _).symm
 
 中文:
-定理 Matrix.mulVecLin_mul
-  条件: [Fintype m] (M : Matrix l m R) (N : Matrix m n R)
+定理 矩阵.mulVecLin_mul
+  条件: [有限类型 m] (M : 矩阵 l m R) (N : 矩阵 m n R)
   证明: LinearMap.ext fun _ => (mulVec_mulVec _ _ _).symm
 
 Depends on / 依赖: LinearMap, LinearMap.ext, mulVec_mulVec
@@ -929,8 +929,8 @@ theorem Matrix.ker_mulVecLin_eq_bot_iff
   simp only [Submodule.eq_bot_iff, LinearMap.mem_ker, Matrix.mulVecLin_apply]
 
 中文:
-定理 Matrix.ker_mulVecLin_eq_bot_iff
-  条件: {M : Matrix m n R}
+定理 矩阵.ker_mulVecLin_eq_bot_iff
+  条件: {M : 矩阵 m n R}
   证明: by
   simp only [Submodule.eq_bot_iff, LinearMap.mem_ker, Matrix.mulVecLin_apply]
 
@@ -950,8 +950,8 @@ theorem Matrix.range_mulVecLin
   rw [← vecMulLinear_transpose]; rw [range_vecMulLinear]; rw [row_transpose]
 
 中文:
-定理 Matrix.range_mulVecLin
-  条件: (M : Matrix m n R)
+定理 矩阵.range_mulVecLin
+  条件: (M : 矩阵 m n R)
   证明: by
   rw [← vecMulLinear_transpose]; rw [range_vecMulLinear]; rw [row_transpose]
 
@@ -972,8 +972,8 @@ theorem Matrix.mulVec_injective_iff
   simp_rw [← M.vecMul_transpose, vecMul_injective_iff, row_transpose]
 
 中文:
-定理 Matrix.mulVec_injective_iff
-  条件: {M : Matrix m n R}
+定理 矩阵.mulVec_injective_iff
+  条件: {M : 矩阵 m n R}
   证明: by
   change Function.Injective (fun x => _) ↔ _
   simp_rw [← M.vecMul_transpose, vecMul_injective_iff, row_transpose]
@@ -996,8 +996,8 @@ lemma Matrix.linearIndependent_cols_of_isUnit
   exact Matrix.mulVec_injective_of_isUnit ha
 
 中文:
-引理 Matrix.linearIndependent_cols_of_isUnit
-  结论: [Fintype m]
+引理 矩阵.linearIndependent_cols_of_isUnit
+  结论: [有限类型 m]
   证明: by
   rw [← Matrix.mulVec_injective_iff]
   exact Matrix.mulVec_injective_of_isUnit ha
@@ -1034,8 +1034,8 @@ definition LinearMap.toMatrix'
     simp only [Pi.basisFun_apply, Matrix.mulVec_s
 
 中文:
-定义 LinearMap.toMatrix'
-  签名: : ((n -> R) ->ₗ[R] m -> R) ≃ₗ[R] Matrix m n R where
+定义 线性映射.toMatrix'
+  签名: : ((n -> R) ->ₗ[R] m -> R) ≃ₗ[R] 矩阵 m n R where
   定义体: of fun i j => f (Pi.single j 1) i
   invFun := Matrix.mulVecLin
   right_inv M := by
@@ -1073,8 +1073,8 @@ definition Matrix.toLin'
   body: LinearMap.toMatrix'.symm
 
 中文:
-定义 Matrix.toLin'
-  签名: : Matrix m n R ≃ₗ[R] (n -> R) ->ₗ[R] m -> R
+定义 矩阵.toLin'
+  签名: : 矩阵 m n R ≃ₗ[R] (n -> R) ->ₗ[R] m -> R
   定义体: LinearMap.toMatrix'.symm
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, toMatrix
@@ -1094,9 +1094,9 @@ theorem Matrix.toLin'_apply'
 @[simp]
 
 中文:
-定理 Matrix.toLin'_apply'
-  条件: (M : Matrix m n R)
-  结论: Matrix.toLin' M = M.mulVecLin
+定理 矩阵.toLin'_apply'
+  条件: (M : 矩阵 m n R)
+  结论: 矩阵.toLin' M = M.mulVecLin
   证明: rfl
 
 @[simp]
@@ -1115,7 +1115,7 @@ theorem LinearMap.toMatrix'_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_symm
+定理 线性映射.toMatrix'_symm
   证明: rfl
 
 @[simp]
@@ -1135,7 +1135,7 @@ theorem Matrix.toLin'_symm
 @[simp]
 
 中文:
-定理 Matrix.toLin'_symm
+定理 矩阵.toLin'_symm
   证明: rfl
 
 @[simp]
@@ -1157,9 +1157,9 @@ theorem LinearMap.toMatrix'_toLin'
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_toLin'
-  条件: (M : Matrix m n R)
-  结论: LinearMap.toMatrix' (Matrix.toLin' M) = M
+定理 线性映射.toMatrix'_toLin'
+  条件: (M : 矩阵 m n R)
+  结论: 线性映射.toMatrix' (矩阵.toLin' M) = M
   证明: LinearMap.toMatrix'.apply_symm_apply M
 
 @[simp]
@@ -1179,7 +1179,7 @@ theorem Matrix.toLin'_toMatrix'
 @[simp]
 
 中文:
-定理 Matrix.toLin'_toMatrix'
+定理 矩阵.toLin'_toMatrix'
   条件: (f : (n -> R) ->ₗ[R] m -> R)
   证明: Matrix.toLin'.apply_symm_apply f
 
@@ -1201,7 +1201,7 @@ theorem LinearMap.toMatrix'_apply
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_apply
+定理 线性映射.toMatrix'_apply
   条件: (f : (n -> R) ->ₗ[R] m -> R) (i j)
   证明: rfl
 
@@ -1224,9 +1224,9 @@ theorem Matrix.toLin'_apply
 @[simp]
 
 中文:
-定理 Matrix.toLin'_apply
-  条件: (M : Matrix m n R) (v : n -> R)
-  结论: Matrix.toLin' M v = M *ᵥ v
+定理 矩阵.toLin'_apply
+  条件: (M : 矩阵 m n R) (v : n -> R)
+  结论: 矩阵.toLin' M v = M *ᵥ v
   证明: rfl
 
 @[simp]
@@ -1247,7 +1247,7 @@ theorem LinearMap.toMatrix'_mulVec
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_mulVec
+定理 线性映射.toMatrix'_mulVec
   条件: (f : (n -> R) ->ₗ[R] m -> R) (v : n -> R)
   证明: by
   rw [← toLin'_apply]; rw [toLin'_toMatrix']
@@ -1270,8 +1270,8 @@ theorem Matrix.toLin'_one
 @[simp]
 
 中文:
-定理 Matrix.toLin'_one
-  结论: Matrix.toLin' (1 : Matrix n n R) = LinearMap.id
+定理 矩阵.toLin'_one
+  结论: 矩阵.toLin' (1 : 矩阵 n n R) = 线性映射.id
   证明: Matrix.mulVecLin_one
 
 @[simp]
@@ -1293,8 +1293,8 @@ theorem LinearMap.toMatrix'_id
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_id
-  结论: LinearMap.toMatrix' (LinearMap.id : (n -> R) ->ₗ[R] n -> R) = 1
+定理 线性映射.toMatrix'_id
+  结论: 线性映射.toMatrix' (线性映射.id : (n -> R) ->ₗ[R] n -> R) = 1
   证明: by
   ext
   rw [Matrix.one_apply]; rw [LinearMap.toMatrix'_apply]; rw [id_apply]; rw [Pi.single_apply]
@@ -1317,8 +1317,8 @@ theorem LinearMap.toMatrix'_one
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix'_one
-  结论: LinearMap.toMatrix' (1 : (n -> R) ->ₗ[R] n -> R) = 1
+定理 线性映射.toMatrix'_one
+  结论: 线性映射.toMatrix' (1 : (n -> R) ->ₗ[R] n -> R) = 1
   证明: LinearMap.toMatrix'_id
 
 @[simp]
@@ -1338,8 +1338,8 @@ theorem Matrix.toLin'_mul
 @[simp]
 
 中文:
-定理 Matrix.toLin'_mul
-  条件: [Fintype m] [DecidableEq m] (M : Matrix l m R) (N : Matrix m n R)
+定理 矩阵.toLin'_mul
+  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 l m R) (N : 矩阵 m n R)
   证明: Matrix.mulVecLin_mul _ _
 
 @[simp]
@@ -1363,8 +1363,8 @@ theorem Matrix.toLin'_pow
 @[simp]
 
 中文:
-定理 Matrix.toLin'_pow
-  条件: (M : Matrix n n R) (k : 自然数)
+定理 矩阵.toLin'_pow
+  条件: (M : 矩阵 n n R) (k : 自然数)
   证明: by
   induction k with
   | zero => simp [End.one_eq_id]
@@ -1388,8 +1388,8 @@ theorem Matrix.toLin'_submatrix
   proof: Matrix.mulVecLin_submatrix _ _ _
 
 中文:
-定理 Matrix.toLin'_submatrix
-  结论: [Fintype l] [DecidableEq l] (f₁ : m -> k) (e₂ : n ≃ l)
+定理 矩阵.toLin'_submatrix
+  结论: [有限类型 l] [DecidableEq l] (f₁ : m -> k) (e₂ : n ≃ l)
   证明: Matrix.mulVecLin_submatrix _ _ _
 -/
 theorem Matrix.toLin'_submatrix [Fintype l] [DecidableEq l] (f₁ : m -> k) (e₂ : n ≃ l)
@@ -1407,8 +1407,8 @@ theorem Matrix.toLin'_reindex
   proof: Matrix.mulVecLin_reindex _ _ _
 
 中文:
-定理 Matrix.toLin'_reindex
-  结论: [Fintype l] [DecidableEq l] (e₁ : k ≃ m) (e₂ : l ≃ n)
+定理 矩阵.toLin'_reindex
+  结论: [有限类型 l] [DecidableEq l] (e₁ : k ≃ m) (e₂ : l ≃ n)
   证明: Matrix.mulVecLin_reindex _ _ _
 -/
 theorem Matrix.toLin'_reindex [Fintype l] [DecidableEq l] (e₁ : k ≃ m) (e₂ : l ≃ n)
@@ -1428,8 +1428,8 @@ theorem Matrix.toLin'_mul_apply
   rw [Matrix.toLin'_mul]; rw [LinearMap.comp_apply]
 
 中文:
-定理 Matrix.toLin'_mul_apply
-  结论: [Fintype m] [DecidableEq m] (M : Matrix l m R) (N : Matrix m n R)
+定理 矩阵.toLin'_mul_apply
+  结论: [有限类型 m] [DecidableEq m] (M : 矩阵 l m R) (N : 矩阵 m n R)
   证明: by
   rw [Matrix.toLin'_mul]; rw [LinearMap.comp_apply]
 -/
@@ -1449,8 +1449,8 @@ theorem LinearMap.toMatrix'_comp
   rw [Matrix.toLin'_mul]; rw [Matrix.toLin'_toMatrix']; rw [Matrix.toLin'_toMatrix']
 
 中文:
-定理 LinearMap.toMatrix'_comp
-  结论: [Fintype l] [DecidableEq l] (f : (n -> R) ->ₗ[R] m -> R)
+定理 线性映射.toMatrix'_comp
+  结论: [有限类型 l] [DecidableEq l] (f : (n -> R) ->ₗ[R] m -> R)
   证明: by
   suffices f.comp g = Matrix.toLin' (LinearMap.toMatrix' f * LinearMap.toMatrix' g) by
     rw [this]; rw [LinearMap.toMatrix'_toLin']
@@ -1472,8 +1472,8 @@ theorem LinearMap.toMatrix'_mul
   proof: LinearMap.toMatrix'_comp f g
 
 中文:
-定理 LinearMap.toMatrix'_mul
-  条件: [Fintype m] [DecidableEq m] (f g : (m -> R) ->ₗ[R] m -> R)
+定理 线性映射.toMatrix'_mul
+  条件: [有限类型 m] [DecidableEq m] (f g : (m -> R) ->ₗ[R] m -> R)
   证明: LinearMap.toMatrix'_comp f g
 -/
 theorem LinearMap.toMatrix'_mul [Fintype m] [DecidableEq m] (f g : (m -> R) ->ₗ[R] m -> R) :
@@ -1492,7 +1492,7 @@ theorem LinearMap.toMatrix'_algebraMap
   simp [Module.algebraMap_end_eq_smul_id, smul_eq_diagonal_mul]
 
 中文:
-定理 LinearMap.toMatrix'_algebraMap
+定理 线性映射.toMatrix'_algebraMap
   条件: (x : R)
   证明: by
   simp [Module.algebraMap_end_eq_smul_id, smul_eq_diagonal_mul]
@@ -1510,8 +1510,8 @@ theorem Matrix.ker_toLin'_eq_bot_iff
   proof: Matrix.ker_mulVecLin_eq_bot_iff
 
 中文:
-定理 Matrix.ker_toLin'_eq_bot_iff
-  条件: {M : Matrix n n R}
+定理 矩阵.ker_toLin'_eq_bot_iff
+  条件: {M : 矩阵 n n R}
   证明: Matrix.ker_mulVecLin_eq_bot_iff
 
 Depends on / 依赖: Matrix, Matrix.ker_mulVecLin_eq_bot_iff, ker_mulVecLin_eq_bot_iff
@@ -1529,8 +1529,8 @@ theorem Matrix.range_toLin'
   proof: Matrix.range_mulVecLin _
 
 中文:
-定理 Matrix.range_toLin'
-  条件: (M : Matrix m n R)
+定理 矩阵.range_toLin'
+  条件: (M : 矩阵 m n R)
   证明: Matrix.range_mulVecLin _
 
 Depends on / 依赖: Matrix, Matrix.range_mulVecLin, range_mulVecLin
@@ -1556,8 +1556,8 @@ definition Matrix.toLin'OfInv
       rw [← Matrix.toLin'_mul_apply]; rw [hM'M]; rw [Matrix.toLin'_one]; rw [id_apply] }
 
 中文:
-定义 Matrix.toLin'OfInv
-  签名: [Fintype m] [DecidableEq m] {M : Matrix m n R} {M' : Matrix n m R}
+定义 矩阵.toLin'OfInv
+  签名: [有限类型 m] [DecidableEq m] {M : 矩阵 m n R} {M' : 矩阵 n m R}
   定义体: { Matrix.toLin' M' with
     toFun := Matrix.toLin' M'
     invFun := Matrix.toLin' M
@@ -1583,8 +1583,8 @@ definition LinearMap.toMatrixAlgEquiv'
   body: AlgEquiv.ofLinearEquiv LinearMap.toMatrix' LinearMap.toMatrix'_one LinearMap.toMatrix'_mul
 
 中文:
-定义 LinearMap.toMatrixAlgEquiv'
-  签名: : ((n -> R) ->ₗ[R] n -> R) ≃ₐ[R] Matrix n n R
+定义 线性映射.toMatrixAlgEquiv'
+  签名: : ((n -> R) ->ₗ[R] n -> R) ≃ₐ[R] 矩阵 n n R
   定义体: AlgEquiv.ofLinearEquiv LinearMap.toMatrix' LinearMap.toMatrix'_one LinearMap.toMatrix'_mul
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.ofLinearEquiv, LinearMap, LinearMap.toMatrix, _mul, _one, ofLinearEquiv, toMatrix
@@ -1603,8 +1603,8 @@ definition Matrix.toLinAlgEquiv'
 @[simp]
 
 中文:
-定义 Matrix.toLinAlgEquiv'
-  签名: : Matrix n n R ≃ₐ[R] (n -> R) ->ₗ[R] n -> R
+定义 矩阵.toLinAlgEquiv'
+  签名: : 矩阵 n n R ≃ₐ[R] (n -> R) ->ₗ[R] n -> R
   定义体: LinearMap.toMatrixAlgEquiv'.symm
 
 @[simp]
@@ -1625,7 +1625,7 @@ theorem LinearMap.toMatrixAlgEquiv'_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_symm
+定理 线性映射.toMatrixAlgEquiv'_symm
   证明: rfl
 
 @[simp]
@@ -1645,7 +1645,7 @@ theorem Matrix.toLinAlgEquiv'_symm
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv'_symm
+定理 矩阵.toLinAlgEquiv'_symm
   证明: rfl
 
 @[simp]
@@ -1666,8 +1666,8 @@ theorem LinearMap.toMatrixAlgEquiv'_toLinAlgEquiv'
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_toLinAlgEquiv'
-  条件: (M : Matrix n n R)
+定理 线性映射.toMatrixAlgEquiv'_toLinAlgEquiv'
+  条件: (M : 矩阵 n n R)
   证明: LinearMap.toMatrixAlgEquiv'.apply_symm_apply M
 
 @[simp]
@@ -1688,7 +1688,7 @@ theorem Matrix.toLinAlgEquiv'_toMatrixAlgEquiv'
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv'_toMatrixAlgEquiv'
+定理 矩阵.toLinAlgEquiv'_toMatrixAlgEquiv'
   条件: (f : (n -> R) ->ₗ[R] n -> R)
   证明: Matrix.toLinAlgEquiv'.apply_symm_apply f
 
@@ -1710,7 +1710,7 @@ theorem LinearMap.toMatrixAlgEquiv'_apply
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_apply
+定理 线性映射.toMatrixAlgEquiv'_apply
   条件: (f : (n -> R) ->ₗ[R] n -> R) (i j)
   证明: rfl
 
@@ -1730,8 +1730,8 @@ theorem Matrix.toLinAlgEquiv'_apply
   proof: rfl
 
 中文:
-定理 Matrix.toLinAlgEquiv'_apply
-  条件: (M : Matrix n n R) (v : n -> R)
+定理 矩阵.toLinAlgEquiv'_apply
+  条件: (M : 矩阵 n n R) (v : n -> R)
   证明: rfl
 -/
 theorem Matrix.toLinAlgEquiv'_apply (M : Matrix n n R) (v : n -> R) :
@@ -1749,8 +1749,8 @@ theorem Matrix.toLinAlgEquiv'_one
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv'_one
-  结论: Matrix.toLinAlgEquiv' (1 : Matrix n n R) = LinearMap.id
+定理 矩阵.toLinAlgEquiv'_one
+  结论: 矩阵.toLinAlgEquiv' (1 : 矩阵 n n R) = 线性映射.id
   证明: Matrix.toLin'_one
 
 @[simp]
@@ -1767,7 +1767,7 @@ theorem LinearMap.toMatrixAlgEquiv'_id
   proof: LinearMap.toMatrix'_id
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_id
+定理 线性映射.toMatrixAlgEquiv'_id
   证明: LinearMap.toMatrix'_id
 -/
 theorem LinearMap.toMatrixAlgEquiv'_id :
@@ -1783,7 +1783,7 @@ theorem LinearMap.toMatrixAlgEquiv'_comp
   proof: LinearMap.toMatrix'_comp _ _
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_comp
+定理 线性映射.toMatrixAlgEquiv'_comp
   条件: (f g : (n -> R) ->ₗ[R] n -> R)
   证明: LinearMap.toMatrix'_comp _ _
 -/
@@ -1803,7 +1803,7 @@ theorem LinearMap.toMatrixAlgEquiv'_mul
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv'_mul
+定理 线性映射.toMatrixAlgEquiv'_mul
   条件: (f g : (n -> R) ->ₗ[R] n -> R)
   证明: LinearMap.toMatrixAlgEquiv'_comp f g
 
@@ -1827,9 +1827,9 @@ theorem LinearMap.isUnit_toMatrix'_iff
 @[simp]
 
 中文:
-定理 LinearMap.isUnit_toMatrix'_iff
+定理 线性映射.isUnit_toMatrix'_iff
   条件: {f : (n -> R) ->ₗ[R] n -> R}
-  结论: IsUnit f.toMatrix' ↔ IsUnit f
+  结论: 是单位 f.toMatrix' ↔ 是单位 f
   证明: isUnit_map_iff LinearMap.toMatrixAlgEquiv' f
 
 @[simp]
@@ -1850,9 +1850,9 @@ theorem Matrix.isUnit_toLin'_iff
   proof: isUnit_map_iff LinearMap.toMatrixAlgEquiv'.symm M
 
 中文:
-定理 Matrix.isUnit_toLin'_iff
-  条件: {M : Matrix n n R}
-  结论: IsUnit M.toLin' ↔ IsUnit M
+定理 矩阵.isUnit_toLin'_iff
+  条件: {M : 矩阵 n n R}
+  结论: 是单位 M.toLin' ↔ 是单位 M
   证明: isUnit_map_iff LinearMap.toMatrixAlgEquiv'.symm M
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrixAlgEquiv, isUnit_map_iff, toMatrixAlgEquiv
@@ -1880,8 +1880,8 @@ definition LinearMap.toMatrix
   body: LinearEquiv.trans (LinearEquiv.arrowCongr v₁.equivFun v₂.equivFun) LinearMap.toMatrix'
 
 中文:
-定义 LinearMap.toMatrix
-  签名: : (M₁ ->ₗ[R] M₂) ≃ₗ[R] Matrix m n R
+定义 线性映射.toMatrix
+  签名: : (M₁ ->ₗ[R] M₂) ≃ₗ[R] 矩阵 m n R
   定义体: LinearEquiv.trans (LinearEquiv.arrowCongr v₁.equivFun v₂.equivFun) LinearMap.toMatrix'
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.arrowCongr, LinearEquiv.trans, LinearMap, LinearMap.toMatrix, arrowCongr, equivFun, toMatrix
@@ -1897,7 +1897,7 @@ theorem LinearMap.toMatrix_eq_toMatrix'
   proof: rfl
 
 中文:
-定理 LinearMap.toMatrix_eq_toMatrix'
+定理 线性映射.toMatrix_eq_toMatrix'
   证明: rfl
 -/
 @[simp] theorem LinearMap.toMatrix_eq_toMatrix' :
@@ -1913,8 +1913,8 @@ definition Matrix.toLin
   body: (LinearMap.toMatrix v₁ v₂).symm
 
 中文:
-定义 Matrix.toLin
-  签名: : Matrix m n R ≃ₗ[R] M₁ ->ₗ[R] M₂
+定义 矩阵.toLin
+  签名: : 矩阵 m n R ≃ₗ[R] M₁ ->ₗ[R] M₂
   定义体: (LinearMap.toMatrix v₁ v₂).symm
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, toMatrix
@@ -1933,8 +1933,8 @@ theorem Matrix.toLin_eq_toLin'
 @[simp]
 
 中文:
-定理 Matrix.toLin_eq_toLin'
-  结论: Matrix.toLin (Pi.basisFun R n) (Pi.basisFun R m) = Matrix.toLin'
+定理 矩阵.toLin_eq_toLin'
+  结论: 矩阵.toLin (依赖函数类型.basisFun R n) (依赖函数类型.basisFun R m) = 矩阵.toLin'
   证明: rfl
 
 @[simp]
@@ -1954,8 +1954,8 @@ theorem LinearMap.toMatrix_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix_symm
-  结论: (LinearMap.toMatrix v₁ v₂).symm = Matrix.toLin v₁ v₂
+定理 线性映射.toMatrix_symm
+  结论: (线性映射.toMatrix v₁ v₂).symm = 矩阵.toLin v₁ v₂
   证明: rfl
 
 @[simp]
@@ -1975,8 +1975,8 @@ theorem Matrix.toLin_symm
 @[simp]
 
 中文:
-定理 Matrix.toLin_symm
-  结论: (Matrix.toLin v₁ v₂).symm = LinearMap.toMatrix v₁ v₂
+定理 矩阵.toLin_symm
+  结论: (矩阵.toLin v₁ v₂).symm = 线性映射.toMatrix v₁ v₂
   证明: rfl
 
 @[simp]
@@ -1997,7 +1997,7 @@ theorem Matrix.toLin_toMatrix
 @[simp]
 
 中文:
-定理 Matrix.toLin_toMatrix
+定理 矩阵.toLin_toMatrix
   条件: (f : M₁ ->ₗ[R] M₂)
   证明: by
   rw [← Matrix.toLin_symm]; rw [LinearEquiv.apply_symm_apply]
@@ -2021,8 +2021,8 @@ theorem LinearMap.toMatrix_toLin
   rw [← Matrix.toLin_symm]; rw [LinearEquiv.symm_apply_apply]
 
 中文:
-定理 LinearMap.toMatrix_toLin
-  条件: (M : Matrix m n R)
+定理 线性映射.toMatrix_toLin
+  条件: (M : 矩阵 m n R)
   证明: by
   rw [← Matrix.toLin_symm]; rw [LinearEquiv.symm_apply_apply]
 
@@ -2042,7 +2042,7 @@ theorem LinearMap.toMatrix_apply
   simp [toMatrix]
 
 中文:
-定理 LinearMap.toMatrix_apply
+定理 线性映射.toMatrix_apply
   条件: (f : M₁ ->ₗ[R] M₂) (i : m) (j : n)
   证明: by
   simp [toMatrix]
@@ -2062,7 +2062,7 @@ theorem LinearMap.toMatrix_transpose_apply
   proof: funext fun i => f.toMatrix_apply _ _ i j
 
 中文:
-定理 LinearMap.toMatrix_transpose_apply
+定理 线性映射.toMatrix_transpose_apply
   条件: (f : M₁ ->ₗ[R] M₂) (j : n)
   证明: funext fun i => f.toMatrix_apply _ _ i j
 
@@ -2081,7 +2081,7 @@ theorem LinearMap.toMatrix_apply'
   proof: LinearMap.toMatrix_apply v₁ v₂ f i j
 
 中文:
-定理 LinearMap.toMatrix_apply'
+定理 线性映射.toMatrix_apply'
   条件: (f : M₁ ->ₗ[R] M₂) (i : m) (j : n)
   证明: LinearMap.toMatrix_apply v₁ v₂ f i j
 
@@ -2100,7 +2100,7 @@ theorem LinearMap.toMatrix_transpose_apply'
   proof: LinearMap.toMatrix_transpose_apply v₁ v₂ f j
 
 中文:
-定理 LinearMap.toMatrix_transpose_apply'
+定理 线性映射.toMatrix_transpose_apply'
   条件: (f : M₁ ->ₗ[R] M₂) (j : n)
   证明: LinearMap.toMatrix_transpose_apply v₁ v₂ f j
 
@@ -2123,8 +2123,8 @@ theorem LinearMap.toMatrix_id
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix_id
-  结论: LinearMap.toMatrix v₁ v₁ id = 1
+定理 线性映射.toMatrix_id
+  结论: 线性映射.toMatrix v₁ v₁ id = 1
   证明: by
   ext i j
   simp [LinearMap.toMatrix_apply, Matrix.one_apply, Finsupp.single_apply, eq_comm]
@@ -2149,8 +2149,8 @@ theorem LinearMap.toMatrix_one
 @[simp]
 
 中文:
-定理 LinearMap.toMatrix_one
-  结论: LinearMap.toMatrix v₁ v₁ 1 = 1
+定理 线性映射.toMatrix_one
+  结论: 线性映射.toMatrix v₁ v₁ 1 = 1
   证明: LinearMap.toMatrix_id v₁
 
 @[simp]
@@ -2173,8 +2173,8 @@ lemma LinearMap.toMatrix_singleton
 @[simp]
 
 中文:
-引理 LinearMap.toMatrix_singleton
-  条件: {ι : 类型} [Unique ι] (f : R ->ₗ[R] R) (i j : ι)
+引理 线性映射.toMatrix_singleton
+  条件: {ι : 类型} [唯一 ι] (f : R ->ₗ[R] R) (i j : ι)
   证明: by
   simp [toMatrix, Subsingleton.elim j default]
 
@@ -2197,8 +2197,8 @@ theorem Matrix.toLin_one
   rw [← LinearMap.toMatrix_id v₁]; rw [Matrix.toLin_toMatrix]
 
 中文:
-定理 Matrix.toLin_one
-  结论: Matrix.toLin v₁ v₁ 1 = LinearMap.id
+定理 矩阵.toLin_one
+  结论: 矩阵.toLin v₁ v₁ 1 = 线性映射.id
   证明: by
   rw [← LinearMap.toMatrix_id v₁]; rw [Matrix.toLin_toMatrix]
 
@@ -2218,9 +2218,9 @@ theorem Matrix.toLin_scalar
   proof: (LinearMap.toMatrix v₁ v₁).injective (by simp [toMatrix_id, smul_one_eq_diagonal])
 
 中文:
-定理 Matrix.toLin_scalar
+定理 矩阵.toLin_scalar
   条件: (r : R)
-  结论: Matrix.toLin v₁ v₁ (scalar n r) = r • LinearMap.id
+  结论: 矩阵.toLin v₁ v₁ (scalar n r) = r • 线性映射.id
   证明: (LinearMap.toMatrix v₁ v₁).injective (by simp [toMatrix_id, smul_one_eq_diagonal])
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, injective, smul_one_eq_diagonal, toMatrix, toMatrix_id
@@ -2238,7 +2238,7 @@ theorem LinearMap.toMatrix_reindexRange
   simp_rw [LinearMap.toMatrix_apply, Basis.reindexRange_self, Basis.reindexRange_repr]
 
 中文:
-定理 LinearMap.toMatrix_reindexRange
+定理 线性映射.toMatrix_reindexRange
   条件: [DecidableEq M₁] (f : M₁ ->ₗ[R] M₂) (k : m) (i : n)
   证明: by
   simp_rw [LinearMap.toMatrix_apply, Basis.reindexRange_self, Basis.reindexRange_repr]
@@ -2263,7 +2263,7 @@ theorem LinearMap.toMatrix_algebraMap
   simp [Module.algebraMap_end_eq_smul_id, LinearMap.toMatrix_id, smul_eq_diagonal_mul]
 
 中文:
-定理 LinearMap.toMatrix_algebraMap
+定理 线性映射.toMatrix_algebraMap
   条件: (x : R)
   证明: by
   simp [Module.algebraMap_end_eq_smul_id, LinearMap.toMatrix_id, smul_eq_diagonal_mul]
@@ -2287,7 +2287,7 @@ theorem LinearMap.toMatrix_mulVec_repr
   exact v₁.equivFun.symm_apply_apply x
 
 中文:
-定理 LinearMap.toMatrix_mulVec_repr
+定理 线性映射.toMatrix_mulVec_repr
   条件: (f : M₁ ->ₗ[R] M₂) (x : M₁)
   证明: by
   ext i
@@ -2316,8 +2316,8 @@ theorem Matrix.repr_toLin
 @[simp]
 
 中文:
-定理 Matrix.repr_toLin
-  条件: (M : Matrix m n R) (x : M₁)
+定理 矩阵.repr_toLin
+  条件: (M : 矩阵 m n R) (x : M₁)
   证明: by
   rw [← toMatrix_mulVec_repr v₁]; rw [toMatrix_toLin]
 
@@ -2341,8 +2341,8 @@ theorem LinearMap.toMatrix_basis_equiv
   simp [LinearMap.toMatrix_apply, Matrix.one_apply, Finsupp.single_apply, eq_comm]
 
 中文:
-定理 LinearMap.toMatrix_basis_equiv
-  结论: [Fintype l] [DecidableEq l] (b : Basis l R M₁)
+定理 线性映射.toMatrix_basis_equiv
+  结论: [有限类型 l] [DecidableEq l] (b : 基 l R M₁)
   证明: by
   ext i j
   simp [LinearMap.toMatrix_apply, Matrix.one_apply, Finsupp.single_apply, eq_comm]
@@ -2365,8 +2365,8 @@ theorem LinearMap.toMatrix_smulBasis_left
   rfl
 
 中文:
-定理 LinearMap.toMatrix_smulBasis_left
-  结论: {G} [Group G] [DistribMulAction G M₁]
+定理 线性映射.toMatrix_smulBasis_left
+  结论: {G} [群 G] [分配乘法作用 G M₁]
   证明: by
   rfl
 -/
@@ -2386,8 +2386,8 @@ theorem LinearMap.toMatrix_smulBasis_right
   rfl
 
 中文:
-定理 LinearMap.toMatrix_smulBasis_right
-  结论: {G} [Group G] [DistribMulAction G M₂]
+定理 线性映射.toMatrix_smulBasis_right
+  结论: {G} [群 G] [分配乘法作用 G M₂]
   证明: by
   rfl
 -/
@@ -2409,7 +2409,7 @@ theorem LinearMap.toMatrix_map_left
   rfl
 
 中文:
-定理 LinearMap.toMatrix_map_left
+定理 线性映射.toMatrix_map_left
   条件: (f : M₃ ->ₗ[R] M₂) (g : M₁ ≃ₗ[R] M₃)
   证明: by
   rfl
@@ -2428,7 +2428,7 @@ theorem LinearMap.toMatrix_map_right
   rfl
 
 中文:
-定理 LinearMap.toMatrix_map_right
+定理 线性映射.toMatrix_map_right
   条件: (f : M₁ ->ₗ[R] M₃) (g : M₂ ≃ₗ[R] M₃)
   证明: by
   rfl
@@ -2455,8 +2455,8 @@ theorem LinearMap.toMatrix_toSpanSingleton
   ext; simp [toMatrix_apply, vecMulVec_apply, mul_comm]
 
 中文:
-定理 LinearMap.toMatrix_toSpanSingleton
-  结论: [Finite m] (v₁ : Basis n R R) (v₂ : Basis m R M₂)
+定理 线性映射.toMatrix_toSpanSingleton
+  结论: [有限 m] (v₁ : 基 n R R) (v₂ : 基 m R M₂)
   证明: by
   ext; simp [toMatrix_apply, vecMulVec_apply, mul_comm]
 
@@ -2479,8 +2479,8 @@ lemma LinearMap.toMatrix_smulRight
   simpa [toMatrix_apply, vecMulVec_apply] using mul_comm _ _
 
 中文:
-引理 LinearMap.toMatrix_smulRight
-  条件: [Finite m] (f : M₁ ->ₗ[R] R) (x : M₂)
+引理 线性映射.toMatrix_smulRight
+  条件: [有限 m] (f : M₁ ->ₗ[R] R) (x : M₂)
   证明: by
   ext i j
   simpa [toMatrix_apply, vecMulVec_apply] using mul_comm _ _
@@ -2504,8 +2504,8 @@ theorem Matrix.toLin_apply
 @[simp]
 
 中文:
-定理 Matrix.toLin_apply
-  条件: [Fintype m] (M : Matrix m n R) (v : M₁)
+定理 矩阵.toLin_apply
+  条件: [有限类型 m] (M : 矩阵 m n R) (v : M₁)
   证明: show v₂.equivFun.symm (Matrix.toLin' M (v₁.repr v)) = _ by
     rw [Matrix.toLin'_apply]; rw [v₂.equivFun_symm_apply]
 
@@ -2534,8 +2534,8 @@ theorem Matrix.toLin_self
     have :
 
 中文:
-定理 Matrix.toLin_self
-  条件: [Fintype m] (M : Matrix m n R) (i : n)
+定理 矩阵.toLin_self
+  条件: [有限类型 m] (M : 矩阵 m n R) (i : n)
   证明: by
   rw [Matrix.toLin_apply]; rw [Finset.sum_congr rfl fun j _hj => ?_]
   rw [Basis.repr_self]; rw [Matrix.mulVec]; rw [dotProduct]; rw [Finset.sum_eq_single i]; rw [Finsupp.single_eq_same]; rw [mul_one]
@@ -2568,8 +2568,8 @@ theorem Matrix.toLin_apply_eq_zero_iff
   exact ⟨Fintype.linearIndependent_iff.mp v₂.linearIndependent _, fun h => by simp [h]⟩
 
 中文:
-定理 Matrix.toLin_apply_eq_zero_iff
-  结论: {R M₁ M₂ : 类型} [Finite m] [CommRing R]
+定理 矩阵.toLin_apply_eq_zero_iff
+  结论: {R M₁ M₂ : 类型} [有限 m] [交换环 R]
   证明: by
   have := Fintype.ofFinite m
   rw [toLin_apply]
@@ -2600,8 +2600,8 @@ theorem LinearMap.toMatrix_comp
   rw [LinearEquiv.arrowCongr_comp _ v₂.equivFun]; rw [LinearMap.toMatrix'_comp]
 
 中文:
-定理 LinearMap.toMatrix_comp
-  条件: [Finite l] [DecidableEq m] (f : M₂ ->ₗ[R] M₃) (g : M₁ ->ₗ[R] M₂)
+定理 线性映射.toMatrix_comp
+  条件: [有限 l] [DecidableEq m] (f : M₂ ->ₗ[R] M₃) (g : M₁ ->ₗ[R] M₂)
   证明: by
   simp_rw [LinearMap.toMatrix, LinearEquiv.trans_apply]
   rw [LinearEquiv.arrowCongr_comp _ v₂.equivFun]; rw [LinearMap.toMatrix'_comp]
@@ -2624,7 +2624,7 @@ theorem LinearMap.toMatrix_mul
   rw [Module.End.mul_eq_comp]; rw [LinearMap.toMatrix_comp v₁ v₁ v₁ f g]
 
 中文:
-定理 LinearMap.toMatrix_mul
+定理 线性映射.toMatrix_mul
   条件: (f g : M₁ ->ₗ[R] M₁)
   证明: by
   rw [Module.End.mul_eq_comp]; rw [LinearMap.toMatrix_comp v₁ v₁ v₁ f g]
@@ -2647,7 +2647,7 @@ lemma LinearMap.toMatrix_pow
   | succ k ih => rw [pow_succ, pow_succ, ih, ← toMatrix_mul]
 
 中文:
-引理 LinearMap.toMatrix_pow
+引理 线性映射.toMatrix_pow
   条件: (f : M₁ ->ₗ[R] M₁) (k : 自然数)
   证明: by
   induction k with
@@ -2677,8 +2677,8 @@ theorem Matrix.toLin_mul
 @[simp]
 
 中文:
-定理 Matrix.toLin_mul
-  条件: [Finite l] [DecidableEq m] (A : Matrix l m R) (B : Matrix m n R)
+定理 矩阵.toLin_mul
+  条件: [有限 l] [DecidableEq m] (A : 矩阵 l m R) (B : 矩阵 m n R)
   证明: by
   apply (LinearMap.toMatrix v₁ v₃).injective
   have : DecidableEq l := fun _ _ => Classical.propDecidable _
@@ -2709,8 +2709,8 @@ theorem Matrix.toLin_pow
   | succ n ih => rw [pow_succ, pow_succ, toLin_mul v₁ v₁, ih, Module.End.mul_eq_comp]
 
 中文:
-定理 Matrix.toLin_pow
-  条件: (A : Matrix n n R) (k : 自然数)
+定理 矩阵.toLin_pow
+  条件: (A : 矩阵 n n R) (k : 自然数)
   证明: by
   induction k with
   | zero => simp only [pow_zero, toLin_one, End.one_eq_id]
@@ -2734,8 +2734,8 @@ theorem Matrix.toLin_mul_apply
   rw [Matrix.toLin_mul v₁ v₂]; rw [LinearMap.comp_apply]
 
 中文:
-定理 Matrix.toLin_mul_apply
-  结论: [Finite l] [DecidableEq m] (A : Matrix l m R) (B : Matrix m n R)
+定理 矩阵.toLin_mul_apply
+  结论: [有限 l] [DecidableEq m] (A : 矩阵 l m R) (B : 矩阵 m n R)
   证明: by
   rw [Matrix.toLin_mul v₁ v₂]; rw [LinearMap.comp_apply]
 
@@ -2762,8 +2762,8 @@ definition Matrix.toLinOfInv
       rw [← Matrix.toLin_mul_apply]; rw [hMM']; rw [Matrix.toLin_one]; rw [id_app
 
 中文:
-定义 Matrix.toLinOfInv
-  签名: [DecidableEq m] {M : Matrix m n R} {M' : Matrix n m R} (hMM' : M * M' = 1)
+定义 矩阵.toLinOfInv
+  签名: [DecidableEq m] {M : 矩阵 m n R} {M' : 矩阵 n m R} (hMM' : M * M' = 1)
   定义体: { Matrix.toLin v₁ v₂ M with
     toFun := Matrix.toLin v₁ v₂ M
     invFun := Matrix.toLin v₂ v₁ M'
@@ -2792,8 +2792,8 @@ definition LinearMap.toMatrixAlgEquiv
     (LinearMap.toMatrix v₁ v₁) (LinearMap.toMatrix_one v₁) (LinearMap.toMatrix_mul v₁)
 
 中文:
-定义 LinearMap.toMatrixAlgEquiv
-  签名: : (M₁ ->ₗ[R] M₁) ≃ₐ[R] Matrix n n R
+定义 线性映射.toMatrixAlgEquiv
+  签名: : (M₁ ->ₗ[R] M₁) ≃ₐ[R] 矩阵 n n R
   定义体: AlgEquiv.ofLinearEquiv
     (LinearMap.toMatrix v₁ v₁) (LinearMap.toMatrix_one v₁) (LinearMap.toMatrix_mul v₁)
 
@@ -2814,8 +2814,8 @@ definition Matrix.toLinAlgEquiv
 @[simp]
 
 中文:
-定义 Matrix.toLinAlgEquiv
-  签名: : Matrix n n R ≃ₐ[R] M₁ ->ₗ[R] M₁
+定义 矩阵.toLinAlgEquiv
+  签名: : 矩阵 n n R ≃ₐ[R] M₁ ->ₗ[R] M₁
   定义体: (LinearMap.toMatrixAlgEquiv v₁).symm
 
 @[simp]
@@ -2836,7 +2836,7 @@ theorem LinearMap.toMatrixAlgEquiv_symm
 @[simp]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_symm
+定理 线性映射.toMatrixAlgEquiv_symm
   证明: rfl
 
 @[simp]
@@ -2856,7 +2856,7 @@ theorem Matrix.toLinAlgEquiv_symm
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv_symm
+定理 矩阵.toLinAlgEquiv_symm
   证明: rfl
 
 @[simp]
@@ -2878,7 +2878,7 @@ theorem Matrix.toLinAlgEquiv_toMatrixAlgEquiv
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv_toMatrixAlgEquiv
+定理 矩阵.toLinAlgEquiv_toMatrixAlgEquiv
   条件: (f : M₁ ->ₗ[R] M₁)
   证明: by
   rw [← Matrix.toLinAlgEquiv_symm]; rw [AlgEquiv.apply_symm_apply]
@@ -2902,8 +2902,8 @@ theorem LinearMap.toMatrixAlgEquiv_toLinAlgEquiv
   rw [← Matrix.toLinAlgEquiv_symm]; rw [AlgEquiv.symm_apply_apply]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_toLinAlgEquiv
-  条件: (M : Matrix n n R)
+定理 线性映射.toMatrixAlgEquiv_toLinAlgEquiv
+  条件: (M : 矩阵 n n R)
   证明: by
   rw [← Matrix.toLinAlgEquiv_symm]; rw [AlgEquiv.symm_apply_apply]
 
@@ -2923,7 +2923,7 @@ theorem LinearMap.toMatrixAlgEquiv_apply
   simp [LinearMap.toMatrixAlgEquiv, LinearMap.toMatrix_apply]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_apply
+定理 线性映射.toMatrixAlgEquiv_apply
   条件: (f : M₁ ->ₗ[R] M₁) (i j : n)
   证明: by
   simp [LinearMap.toMatrixAlgEquiv, LinearMap.toMatrix_apply]
@@ -2943,7 +2943,7 @@ theorem LinearMap.toMatrixAlgEquiv_transpose_apply
   proof: funext fun i => f.toMatrix_apply _ _ i j
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_transpose_apply
+定理 线性映射.toMatrixAlgEquiv_transpose_apply
   条件: (f : M₁ ->ₗ[R] M₁) (j : n)
   证明: funext fun i => f.toMatrix_apply _ _ i j
 
@@ -2962,7 +2962,7 @@ theorem LinearMap.toMatrixAlgEquiv_apply'
   proof: LinearMap.toMatrixAlgEquiv_apply v₁ f i j
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_apply'
+定理 线性映射.toMatrixAlgEquiv_apply'
   条件: (f : M₁ ->ₗ[R] M₁) (i j : n)
   证明: LinearMap.toMatrixAlgEquiv_apply v₁ f i j
 
@@ -2981,7 +2981,7 @@ theorem LinearMap.toMatrixAlgEquiv_transpose_apply'
   proof: LinearMap.toMatrixAlgEquiv_transpose_apply v₁ f j
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_transpose_apply'
+定理 线性映射.toMatrixAlgEquiv_transpose_apply'
   条件: (f : M₁ ->ₗ[R] M₁) (j : n)
   证明: LinearMap.toMatrixAlgEquiv_transpose_apply v₁ f j
 
@@ -3003,8 +3003,8 @@ theorem Matrix.toLinAlgEquiv_apply
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv_apply
-  条件: (M : Matrix n n R) (v : M₁)
+定理 矩阵.toLinAlgEquiv_apply
+  条件: (M : 矩阵 n n R) (v : M₁)
   证明: show v₁.equivFun.symm (Matrix.toLinAlgEquiv' M (v₁.repr v)) = _ by
     rw [Matrix.toLinAlgEquiv'_apply]; rw [v₁.equivFun_symm_apply]
 
@@ -3027,8 +3027,8 @@ theorem Matrix.toLinAlgEquiv_self
   proof: Matrix.toLin_self _ _ _ _
 
 中文:
-定理 Matrix.toLinAlgEquiv_self
-  条件: (M : Matrix n n R) (i : n)
+定理 矩阵.toLinAlgEquiv_self
+  条件: (M : 矩阵 n n R) (i : n)
   证明: Matrix.toLin_self _ _ _ _
 
 Depends on / 依赖: Matrix, Matrix.toLin_self, toLin_self
@@ -3047,8 +3047,8 @@ theorem LinearMap.toMatrixAlgEquiv_id
   simp_rw [LinearMap.toMatrixAlgEquiv, AlgEquiv.ofLinearEquiv_apply, LinearMap.toMatrix_id]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_id
-  结论: LinearMap.toMatrixAlgEquiv v₁ id = 1
+定理 线性映射.toMatrixAlgEquiv_id
+  结论: 线性映射.toMatrixAlgEquiv v₁ id = 1
   证明: by
   simp_rw [LinearMap.toMatrixAlgEquiv, AlgEquiv.ofLinearEquiv_apply, LinearMap.toMatrix_id]
 
@@ -3067,8 +3067,8 @@ theorem Matrix.toLinAlgEquiv_one
   rw [← LinearMap.toMatrixAlgEquiv_id v₁]; rw [Matrix.toLinAlgEquiv_toMatrixAlgEquiv]
 
 中文:
-定理 Matrix.toLinAlgEquiv_one
-  结论: Matrix.toLinAlgEquiv v₁ 1 = LinearMap.id
+定理 矩阵.toLinAlgEquiv_one
+  结论: 矩阵.toLinAlgEquiv v₁ 1 = 线性映射.id
   证明: by
   rw [← LinearMap.toMatrixAlgEquiv_id v₁]; rw [Matrix.toLinAlgEquiv_toMatrixAlgEquiv]
 
@@ -3087,7 +3087,7 @@ theorem LinearMap.toMatrixAlgEquiv_reindexRange
   simp_rw [LinearMap.toMatrixAlgEquiv_apply, Basis.reindexRange_self, Basis.reindexRange_repr]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_reindexRange
+定理 线性映射.toMatrixAlgEquiv_reindexRange
   条件: [DecidableEq M₁] (f : M₁ ->ₗ[R] M₁) (k i : n)
   证明: by
   simp_rw [LinearMap.toMatrixAlgEquiv_apply, Basis.reindexRange_self, Basis.reindexRange_repr]
@@ -3110,7 +3110,7 @@ theorem LinearMap.toMatrixAlgEquiv_comp
   simp [LinearMap.toMatrixAlgEquiv, LinearMap.toMatrix_comp v₁ v₁ v₁ f g]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_comp
+定理 线性映射.toMatrixAlgEquiv_comp
   条件: (f g : M₁ ->ₗ[R] M₁)
   证明: by
   simp [LinearMap.toMatrixAlgEquiv, LinearMap.toMatrix_comp v₁ v₁ v₁ f g]
@@ -3132,7 +3132,7 @@ theorem LinearMap.toMatrixAlgEquiv_mul
   rw [Module.End.mul_eq_comp]; rw [LinearMap.toMatrixAlgEquiv_comp v₁ f g]
 
 中文:
-定理 LinearMap.toMatrixAlgEquiv_mul
+定理 线性映射.toMatrixAlgEquiv_mul
   条件: (f g : M₁ ->ₗ[R] M₁)
   证明: by
   rw [Module.End.mul_eq_comp]; rw [LinearMap.toMatrixAlgEquiv_comp v₁ f g]
@@ -3156,8 +3156,8 @@ theorem Matrix.toLinAlgEquiv_mul
 @[simp]
 
 中文:
-定理 Matrix.toLinAlgEquiv_mul
-  条件: (A B : Matrix n n R)
+定理 矩阵.toLinAlgEquiv_mul
+  条件: (A B : 矩阵 n n R)
   证明: by
   convert! Matrix.toLin_mul v₁ v₁ v₁ A B
 
@@ -3183,9 +3183,9 @@ theorem LinearMap.isUnit_toMatrix_iff
 @[simp]
 
 中文:
-定理 LinearMap.isUnit_toMatrix_iff
+定理 线性映射.isUnit_toMatrix_iff
   条件: {f : M₁ ->ₗ[R] M₁}
-  结论: IsUnit (f.toMatrix v₁ v₁) ↔ IsUnit f
+  结论: 是单位 (f.toMatrix v₁ v₁) ↔ 是单位 f
   证明: isUnit_map_iff (LinearMap.toMatrixAlgEquiv _) f
 
 @[simp]
@@ -3208,9 +3208,9 @@ theorem Matrix.isUnit_toLin_iff
 @[simp]
 
 中文:
-定理 Matrix.isUnit_toLin_iff
-  条件: {M : Matrix n n R}
-  结论: IsUnit (M.toLin v₁ v₁) ↔ IsUnit M
+定理 矩阵.isUnit_toLin_iff
+  条件: {M : 矩阵 n n R}
+  结论: 是单位 (M.toLin v₁ v₁) ↔ 是单位 M
   证明: isUnit_map_iff (LinearMap.toMatrixAlgEquiv _).symm M
 
 @[simp]
@@ -3231,7 +3231,7 @@ theorem Matrix.toLin_finTwoProd_apply
   simp [Matrix.toLin_apply, Matrix.mulVec, dotProduct]
 
 中文:
-定理 Matrix.toLin_finTwoProd_apply
+定理 矩阵.toLin_finTwoProd_apply
   条件: (a b c d : R) (x : R × R)
   证明: by
   simp [Matrix.toLin_apply, Matrix.mulVec, dotProduct]
@@ -3254,7 +3254,7 @@ theorem Matrix.toLin_finTwoProd
 @[simp]
 
 中文:
-定理 Matrix.toLin_finTwoProd
+定理 矩阵.toLin_finTwoProd
   条件: (a b c d : R)
   证明: LinearMap.ext Matrix.toLin_finTwoProd_apply _ _ _ _
 
@@ -3304,7 +3304,7 @@ lemma LinearMap.toMatrix_prodMap
   ext (i | i) (j | j) <;> simp [toMatrix]
 
 中文:
-引理 LinearMap.toMatrix_prodMap
+引理 线性映射.toMatrix_prodMap
   结论: [DecidableEq m] [DecidableEq (n oplus m)]
   证明: by
   ext (i | i) (j | j) <;> simp [toMatrix]
@@ -3391,7 +3391,7 @@ definition leftMulMatrix
 
 中文:
 定义 leftMulMatrix
-  签名: : S ->ₐ[R] Matrix m m R where
+  签名: : S ->ₐ[R] 矩阵 m m R where
   定义体: LinearMap.toMatrix b b (Algebra.lmul R S x)
   map_zero' := by
     rw [map_zero]; rw [map_zero]
@@ -3432,7 +3432,7 @@ theorem leftMulMatrix_apply
 中文:
 定理 leftMulMatrix_apply
   条件: (x : S)
-  结论: leftMulMatrix b x = LinearMap.toMatrix b b (lmul R S x)
+  结论: leftMulMatrix b x = 线性映射.toMatrix b b (lmul R S x)
   证明: rfl
 -/
 theorem leftMulMatrix_apply (x : S) : leftMulMatrix b x = LinearMap.toMatrix b b (lmul R S x) :=
@@ -3521,7 +3521,7 @@ theorem leftMulMatrix_injective
 
 中文:
 定理 leftMulMatrix_injective
-  结论: Function.Injective (leftMulMatrix b)
+  结论: 函数.单射 (leftMulMatrix b)
   证明: fun x x' h =>
   calc
     x = Algebra.lmul R S x 1 := (mul_one x).symm
@@ -3551,7 +3551,7 @@ theorem smul_leftMulMatrix
 
 中文:
 定理 smul_leftMulMatrix
-  结论: {G} [Group G] [DistribMulAction G S]
+  结论: {G} [群 G] [分配乘法作用 G S]
   证明: by
   ext
   simp_rw [leftMulMatrix_apply, LinearMap.toMatrix_apply, coe_lmul_eq_mul, LinearMap.mul_apply',
@@ -3584,7 +3584,7 @@ lemma _root_.LinearMap.restrictScalars_toMatrix
     Basis.smulTower'_repr, Basis.smulTower'_apply, mul_comm]
 
 中文:
-引理 _root_.LinearMap.restrictScalars_toMatrix
+引理 _root_.线性映射.restrictScalars_toMatrix
   条件: (f : M ->ₗ[A] M)
   证明: by
   ext; simp [toMatrix, Algebra.leftMulMatrix_apply,
@@ -3727,7 +3727,7 @@ definition algEquivMatrix'
 
 中文:
 定义 algEquivMatrix'
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: LinearMap.toMatrixAlgEquiv'
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrixAlgEquiv, toMatrixAlgEquiv
@@ -3745,7 +3745,7 @@ definition algEquivMatrix
 
 中文:
 定义 algEquivMatrix
-  签名: [Fintype n] (h : Basis n R M)
+  签名: [有限类型 n] (h : 基 n R M)
   定义体: (h.equivFun.conjAlgEquiv R).trans algEquivMatrix'
 
 Depends on / 依赖: algEquivMatrix, conjAlgEquiv, equivFun, h.equivFun.conjAlgEquiv
@@ -3784,7 +3784,7 @@ definition linearMap
 
 中文:
 定义 linearMap
-  签名: (b₁ : Basis ι₁ R M₁) (b₂ : Basis ι₂ R M₂)
+  签名: (b₁ : 基 ι₁ R M₁) (b₂ : 基 ι₂ R M₂)
   定义体: (Matrix.stdBasis R ι₂ ι₁).map (LinearMap.toMatrix b₁ b₂).symm
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, Matrix, Matrix.stdBasis, stdBasis, toMatrix
@@ -3865,7 +3865,7 @@ abbreviation «end»
 
 中文:
 缩写 «end»
-  签名: (b : Basis ι R M)
+  签名: (b : 基 ι R M)
   定义体: b.linearMap b
 -/
 abbrev «end» (b : Basis ι R M) : Basis (ι × ι) R (Module.End R M) :=
@@ -3883,7 +3883,7 @@ lemma end_apply
 中文:
 引理 end_apply
   条件: (ij : ι × ι)
-  结论: (b.end ij) = (Matrix.toLin b b) (Matrix.stdBasis R ι ι ij)
+  结论: (b.end ij) = (矩阵.toLin b b) (矩阵.stdBasis R ι ι ij)
   证明: linearMap_apply b b ij
 
 Depends on / 依赖: linearMap_apply
@@ -3927,7 +3927,7 @@ lemma lie_end_of_apply_eq_smul
 
 中文:
 引理 lie_end_of_apply_eq_smul
-  结论: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   refine b.ext fun k => ?_
   simp only [Ring.lie_def, LinearMap.sub_apply, End.mul_apply, LinearMap.smul_apply,
@@ -4078,7 +4078,7 @@ definition matrixAlgEquivEndVecMulOpposite
 
 中文:
 定义 matrixAlgEquivEndVecMulOpposite
-  签名: : Matrix ι ι A ≃ₐ[R] (Module.End A (ι -> A))ᵐᵒᵖ
+  签名: : 矩阵 ι ι A ≃ₐ[R] (模.End A (ι -> A))ᵐᵒᵖ
   定义体: .trans (.opOp R _) .op .trans (.symm .mopMatrix) .trans
 (.mapMatrix <| .moduleEndSelf _) .symm endVecAlgEquivMatrixEnd ..
 
@@ -4098,7 +4098,7 @@ definition matrixRingEquivEndVecMulOpposite
 
 中文:
 定义 matrixRingEquivEndVecMulOpposite
-  签名: : Matrix ι ι A ≃+* (Module.End A (ι -> A))ᵐᵒᵖ
+  签名: : 矩阵 ι ι A ≃+* (模.End A (ι -> A))ᵐᵒᵖ
   定义体: (matrixAlgEquivEndVecMulOpposite Nat).toRingEquiv
 
 Depends on / 依赖: matrixAlgEquivEndVecMulOpposite, toRingEquiv
@@ -4181,8 +4181,8 @@ theorem Module.End.injective_of_surjective_fin
   proof: isStablyFiniteRing_iff_injective_of_surjective.mp ‹_› n f hf
 
 中文:
-定理 Module.End.injective_of_surjective_fin
-  结论: [IsStablyFiniteRing A] {n}
+定理 模.End.injective_of_surjective_fin
+  结论: [是StablyFinite环 A] {n}
   证明: isStablyFiniteRing_iff_injective_of_surjective.mp ‹_› n f hf
 
 Depends on / 依赖: Nat.one_div, Nat.one_div_pos_of_nat, PseudoMetricSpace, TopologicalSpace, TopologicalSpace.pseudoMetrizableSpacePseudoMetric, isStablyFiniteRing_iff_injective_of_surjective, isStablyFiniteRing_iff_injective_of_surjective.mp, one_div, one_div_pos_of_nat, one_le_thickenedIndicator_apply, pseudoMetrizableSpacePseudoMetric, thickenedIndicator, thickenedIndicator_le_one, thickenedIndicator_tendsto_indicator_closure

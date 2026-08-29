@@ -107,7 +107,7 @@ definition orderIsoFunOnFinite
 
 中文:
 定义 orderIsoFunOnFinite
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: equivFunOnFinite
   map_rel_iff' := Iff.rfl
 
@@ -133,7 +133,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: : Preorder (ι ->₀ M) where
+  签名: : 预序 (ι ->₀ M) where
   定义体: le_rfl
   le_trans _ _ _ hfg hgh i := (hfg i).trans (hgh i)
 
@@ -184,7 +184,7 @@ lemma coe_mono
 
 中文:
 引理 coe_mono
-  结论: Monotone (Finsupp.toFun : (ι ->₀ M) -> ι -> M)
+  结论: 递增 (有限支撑.toFun : (ι ->₀ M) -> ι -> M)
   证明: fun _ _ => id
 -/
 lemma coe_mono : Monotone (Finsupp.toFun : (ι ->₀ M) -> ι -> M) := fun _ _ => id
@@ -199,7 +199,7 @@ lemma coe_strictMono
 
 中文:
 引理 coe_strictMono
-  结论: Monotone (Finsupp.toFun : (ι ->₀ M) -> ι -> M)
+  结论: 递增 (有限支撑.toFun : (ι ->₀ M) -> ι -> M)
   证明: fun _ _ => id
 -/
 lemma coe_strictMono : Monotone (Finsupp.toFun : (ι ->₀ M) -> ι -> M) := fun _ _ => id
@@ -216,7 +216,7 @@ instance partialorder
 
 中文:
 实例 partialorder
-  签名: [PartialOrder M]
+  签名: [偏序 M]
   定义体: ext fun i => (hfg i).antisymm (hgf i)
 
 Depends on / 依赖: antisymm
@@ -341,7 +341,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: : Lattice (ι ->₀ M) where
+  签名: : 格 (ι ->₀ M) where
   定义体: Finsupp.semilatticeInf
   __ := Finsupp.semilatticeSup
 

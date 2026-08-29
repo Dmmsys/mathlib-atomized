@@ -32,7 +32,7 @@ lemma sup_mul_le_mul_sup_of_nonneg
 
 中文:
 引理 sup_mul_le_mul_sup_of_nonneg
-  结论: [SemilatticeSup M₀] [OrderBot M₀] [PosMulMono M₀] [MulPosMono M₀]
+  结论: [SemilatticeSup M₀] [有底序 M₀] [正乘递增 M₀] [乘正递增 M₀]
   证明: Finset.sup_le fun _i hi =>
     mul_le_mul (le_sup hi) (le_sup hi) (hb _ hi) ((ha _ hi).trans <| le_sup hi)
 
@@ -53,7 +53,7 @@ lemma mul_inf_le_inf_mul_of_nonneg
 
 中文:
 引理 mul_inf_le_inf_mul_of_nonneg
-  结论: [SemilatticeInf M₀] [OrderTop M₀] [PosMulMono M₀] [MulPosMono M₀]
+  结论: [SemilatticeInf M₀] [有顶序 M₀] [正乘递增 M₀] [乘正递增 M₀]
   证明: Finset.le_inf fun i hi => mul_le_mul (inf_le hi) (inf_le hi) (Finset.le_inf hb) (ha i hi)
 
 Depends on / 依赖: Finset, Finset.le_inf, inf_le, le_inf, mul_le_mul
@@ -72,8 +72,8 @@ lemma sup'_mul_le_mul_sup'_of_nonneg
     mul_le_mul (le_sup' _ hi) (le_sup' _ hi) (hb _ hi) ((ha _ hi).trans <| le_sup' _ hi)
 
 中文:
-引理 sup'_mul_le_mul_sup'_of_nonneg
-  结论: [SemilatticeSup M₀] [PosMulMono M₀] [MulPosMono M₀]
+引理 上确界'_mul_le_mul_sup'_of_nonneg
+  结论: [SemilatticeSup M₀] [正乘递增 M₀] [乘正递增 M₀]
   证明: sup'_le _ _ fun _i hi =>
     mul_le_mul (le_sup' _ hi) (le_sup' _ hi) (hb _ hi) ((ha _ hi).trans <| le_sup' _ hi)
 -/
@@ -92,8 +92,8 @@ lemma inf'_mul_le_mul_inf'_of_nonneg
   proof: le_inf' _ _ fun _i hi => mul_le_mul (inf'_le _ hi) (inf'_le _ hi) (le_inf' _ _ hb) (ha _ hi)
 
 中文:
-引理 inf'_mul_le_mul_inf'_of_nonneg
-  结论: [SemilatticeInf M₀] [PosMulMono M₀] [MulPosMono M₀]
+引理 下确界'_mul_le_mul_inf'_of_nonneg
+  结论: [SemilatticeInf M₀] [正乘递增 M₀] [乘正递增 M₀]
   证明: le_inf' _ _ fun _i hi => mul_le_mul (inf'_le _ hi) (inf'_le _ hi) (le_inf' _ _ hb) (ha _ hi)
 -/
 lemma inf'_mul_le_mul_inf'_of_nonneg [SemilatticeInf M₀] [PosMulMono M₀] [MulPosMono M₀]
@@ -118,8 +118,8 @@ lemma sup'_mul₀
   exact map_finset_sup' (OrderIso.mulRight₀ _ (lt_of_le_of_ne ha h)) hs f
 
 中文:
-引理 sup'_mul₀
-  条件: [MulPosReflectLT G₀] (ha : 0 <= a) (f : ι -> G₀) (s : Finset ι) (hs)
+引理 上确界'_mul₀
+  条件: [乘正反映严格偏序 G₀] (ha : 0 <= a) (f : ι -> G₀) (s : 有限集 ι) (hs)
   证明: by
   by_cases! h : 0 = a
   · simp [← h]
@@ -145,7 +145,7 @@ lemma mul₀_sup'
 
 中文:
 引理 mul₀_sup'
-  条件: [PosMulReflectLT G₀] (ha : 0 <= a) (f : ι -> G₀) (s : Finset ι) (hs)
+  条件: [正乘反映严格偏序 G₀] (ha : 0 <= a) (f : ι -> G₀) (s : 有限集 ι) (hs)
   证明: by
   by_cases! h : 0 = a
   · simp [← h]
@@ -171,8 +171,8 @@ lemma sup'_div₀
   exact map_finset_sup' (OrderIso.divRight₀ _ (lt_of_le_of_ne ha h)) hs f
 
 中文:
-引理 sup'_div₀
-  条件: [MulPosReflectLT G₀] (ha : 0 <= a) (f : ι -> G₀) (s : Finset ι) (hs)
+引理 上确界'_div₀
+  条件: [乘正反映严格偏序 G₀] (ha : 0 <= a) (f : ι -> G₀) (s : 有限集 ι) (hs)
   证明: by
   by_cases! h : 0 = a
   · simp [← h]
@@ -199,7 +199,7 @@ lemma sup_div₀
 
 中文:
 引理 sup_div₀
-  结论: [LinearOrderedCommGroupWithZero G₀] {a : G₀} (ha : 0 <= a)
+  结论: [带零LinearOrderedComm群 G₀] {a : G₀} (ha : 0 <= a)
   证明: by
   obtain rfl | hs := s.eq_empty_or_nonempty
   · simp [bot_eq_zero]

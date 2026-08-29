@@ -49,8 +49,8 @@ theorem IsLocalization.exists_smul_mem_of_mem_adjoin
     Algebra.pow_smul_mem_of_smul_subset_of_mem_adjoin (y : S) (s :
 
 中文:
-定理 IsLocalization.exists_smul_mem_of_mem_adjoin
-  结论: [Algebra R S']
+定理 是Localization.存在_smul_mem_of_mem_adjoin
+  结论: [代数 R S']
   证明: by
   let g : S ->ₐ[R] S' := IsScalarTower.toAlgHom R S S'
   let y := IsLocalization.commonDenomOfFinset M s
@@ -96,8 +96,8 @@ theorem IsLocalization.lift_mem_adjoin_finsetIntegerMultiple
   simpa only [Submonoid.smul_def, algebraMap_smu
 
 中文:
-定理 IsLocalization.lift_mem_adjoin_finsetIntegerMultiple
-  结论: [Algebra R S']
+定理 是Localization.lift_mem_adjoin_finset整数egerMultiple
+  结论: [代数 R S']
   证明: by
   obtain ⟨⟨_, a, ha, rfl⟩, e⟩ :=
     IsLocalization.exists_smul_mem_of_mem_adjoin (M.map (algebraMap R S)) x s (Algebra.adjoin R _)
@@ -133,8 +133,8 @@ lemma Algebra.FiniteType.of_span_eq_top_target
   -- Say `t r : Finset Sᵣ` generates
 
 中文:
-引理 Algebra.FiniteType.of_span_eq_top_target
-  结论: (s : Set S) (hs : Ideal.span (s : Set S) = ⊤)
+引理 代数.有限型.of_span_eq_top_target
+  结论: (s : 集合 S) (hs : 理想.span (s : 集合 S) = ⊤)
   证明: by
   obtain ⟨s, h₁, hs⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
   replace h (i : s) : Algebra.FiniteType R (Localization.Away i.val) := h i (h₁ i.property)
@@ -215,8 +215,8 @@ lemma Algebra.FiniteType.of_span_eq_top_source
   let 
 
 中文:
-引理 Algebra.FiniteType.of_span_eq_top_source
-  结论: (s : Set R) (hs : Ideal.span (s : Set R) = ⊤)
+引理 代数.有限型.of_span_eq_top_source
+  结论: (s : 集合 R) (hs : 理想.span (s : 集合 R) = ⊤)
   证明: by
   obtain ⟨s, h₁, hs⟩ := (Ideal.span_eq_top_iff_finite s).mp hs
   replace h (i : s) := h i.val (h₁ i.property)

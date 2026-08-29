@@ -54,7 +54,7 @@ theorem adjoin_prod_le
 
 中文:
 定理 adjoin_prod_le
-  条件: (s : Set A) (t : Set B)
+  条件: (s : 集合 A) (t : 集合 B)
   证明: adjoin_le Set.prod_mono subset_adjoin subset_adjoin
 
 Depends on / 依赖: Set.prod_mono, adjoin_le, prod_mono, subset_adjoin
@@ -121,7 +121,7 @@ theorem adjoin_algebraMap
 
 中文:
 定理 adjoin_algebraMap
-  条件: (s : Set S)
+  条件: (s : 集合 S)
   证明: adjoin_image R (IsScalarTower.toAlgHom R S A) s
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, adjoin_image, toAlgHom
@@ -145,7 +145,7 @@ theorem adjoin_algebraMap_image_union_eq_adjoin_adjoin
 
 中文:
 定理 adjoin_algebraMap_image_union_eq_adjoin_adjoin
-  条件: (s : Set S) (t : Set A)
+  条件: (s : 集合 S) (t : 集合 A)
   证明: le_antisymm
     (closure_mono <|
       Set.union_subset (Set.range_subset_iff.2 fun r => Or.inl ⟨algebraMap R (adjoin R s) r,
@@ -182,8 +182,8 @@ theorem adjoin_adjoin_of_tower
 
 中文:
 定理 adjoin_adjoin_of_tower
-  条件: (s : Set A)
-  结论: adjoin S (adjoin R s : Set A) = adjoin S s
+  条件: (s : 集合 A)
+  结论: adjoin S (adjoin R s : 集合 A) = adjoin S s
   证明: by
   apply le_antisymm (adjoin_le _)
   · exact adjoin_mono subset_adjoin
@@ -212,8 +212,8 @@ theorem Subalgebra.restrictScalars_adjoin
 (Subalgebra.mem_restrictScalars _).mp hx) (sup_le ?_ adjoin_le sub
 
 中文:
-定理 Subalgebra.restrictScalars_adjoin
-  条件: {s : Set A}
+定理 子代数.restrictScalars_adjoin
+  条件: {s : 集合 A}
   证明: by
   refine le_antisymm (fun _ hx => adjoin_induction
     (fun x hx => le_sup_right (α := Subalgebra R A) (subset_adjoin hx))
@@ -247,7 +247,7 @@ theorem adjoin_top
 
 中文:
 定理 adjoin_top
-  条件: {A} [Semiring A] [Algebra S A] (t : Set A)
+  条件: {A} [半环 A] [代数 S A] (t : 集合 A)
   证明: let equivTop : Subalgebra (⊤ : Subalgebra R S) A ≃o Subalgebra S A :=
     { toFun := fun s => { s with algebraMap_mem' := fun r => s.algebraMap_mem ⟨r, trivial⟩ }
       invFun := fun s => s.restrictScalars _
@@ -309,7 +309,7 @@ theorem adjoin_eq_adjoin_union
 
 中文:
 定理 adjoin_eq_adjoin_union
-  结论: [CommSemiring B] [Algebra R B] [Algebra A B]
+  结论: [交换半环 B] [代数 R B] [代数 A B]
   证明: by
   have := congr_arg (Subalgebra.map (IsScalarTower.toAlgHom R A B)) hS
   rw [Algebra.map_top]; rw [AlgHom.map_adjoin]; rw [IsScalarTower.coe_toAlgHom'] at this
@@ -340,7 +340,7 @@ theorem pow_smul_mem_of_smul_subset_of_mem_adjoin
 
 中文:
 定理 pow_smul_mem_of_smul_subset_of_mem_adjoin
-  结论: [CommSemiring B] [Algebra R B] [Algebra A B]
+  结论: [交换半环 B] [代数 R B] [代数 A B]
   证明: by
   change x in Subalgebra.toSubmodule (adjoin R s) at hx
   rw [adjoin_eq_span]; rw [Finsupp.mem_span_iff_linearCombination] at hx
@@ -381,7 +381,7 @@ theorem pow_smul_mem_adjoin_smul
 
 中文:
 定理 pow_smul_mem_adjoin_smul
-  条件: (r : R) (s : Set A) {x : A} (hx : x in adjoin R s)
+  条件: (r : R) (s : 集合 A) {x : A} (hx : x in adjoin R s)
   证明: pow_smul_mem_of_smul_subset_of_mem_adjoin r s _ subset_adjoin hx (Subalgebra.algebraMap_mem _ _)
 
 Depends on / 依赖: Subalgebra, Subalgebra.algebraMap_mem, algebraMap_mem, pow_smul_mem_of_smul_subset_of_mem_adjoin, subset_adjoin
@@ -401,7 +401,7 @@ lemma adjoin_nonUnitalSubalgebra_eq_span
 
 中文:
 引理 adjoin_nonUnitalSubalgebra_eq_span
-  条件: (s : NonUnitalSubalgebra R A)
+  条件: (s : NonUnital子代数 R A)
   证明: by
   rw [adjoin_eq_span]; rw [Submonoid.closure_eq_one_union]; rw [span_union]; rw [← NonUnitalAlgebra.adjoin_eq_span]; rw [NonUnitalAlgebra.adjoin_eq]
 
@@ -434,8 +434,8 @@ theorem Subalgebra.adjoin_eq_span_basis
       using! congr_arg (Submodule.map (L.val : L ->ₗ[F] K)) bL.span_eq.symm
 
 中文:
-定理 Subalgebra.adjoin_eq_span_basis
-  条件: {ι : 类型} (bL : Basis ι F L)
+定理 子代数.adjoin_eq_span_basis
+  条件: {ι : 类型} (bL : 基 ι F L)
   证明: L.adjoin_eq_span_of_eq_span E by
     simpa only [← L.range_val, Submodule.map_span, Submodule.map_top, ← Set.range_comp]
       using! congr_arg (Submodule.map (L.val : L ->ₗ[F] K)) bL.span_eq.symm
@@ -458,8 +458,8 @@ theorem Algebra.restrictScalars_adjoin
   conv_lhs => rw [← Algebra.adjoin_eq K, ← Algebra.adjoin_union_eq_adjoin_adjoin]
 
 中文:
-定理 Algebra.restrictScalars_adjoin
-  结论: (F : 类型) [CommSemiring F] {E : 类型} [CommSemiring E]
+定理 代数.restrictScalars_adjoin
+  结论: (F : 类型) [交换半环 F] {E : 类型} [交换半环 E]
   证明: by
   conv_lhs => rw [← Algebra.adjoin_eq K, ← Algebra.adjoin_union_eq_adjoin_adjoin]
 
@@ -481,7 +481,7 @@ theorem Algebra.restrictScalars_adjoin_of_algEquiv
   rw [hi]; rw [Set.range_comp]; rw [EquivLike.range_eq_univ]; rw [Set.image_univ]
 
 中文:
-定理 Algebra.restrictScalars_adjoin_of_algEquiv
+定理 代数.restrictScalars_adjoin_of_algEquiv
   证明: by
   apply_fun Subalgebra.toSubsemiring using fun K K' h => by rwa [SetLike.ext'_iff] at h ⊢
   change Subsemiring.closure _ = Subsemiring.closure _

@@ -270,7 +270,7 @@ lemma of_hComp
 
 中文:
 引理 of_hComp
-  条件: [B₁.EssSurj] [w.GuitartExact] [(w ≫ₕ w').GuitartExact]
+  条件: [B₁.本质满射] [w.GuitartExact] [(w ≫ₕ w').GuitartExact]
   证明: by
   rw [guitartExact_iff_final]
   intro Y₂
@@ -329,7 +329,7 @@ lemma hComp_iff_of_essSurj
 
 中文:
 引理 hComp_iff_of_essSurj
-  条件: [B₁.EssSurj] [w.GuitartExact]
+  条件: [B₁.本质满射] [w.GuitartExact]
   证明: ⟨fun _ => of_hComp w w', fun _ => inferInstance⟩
 
 Depends on / 依赖: of_hComp

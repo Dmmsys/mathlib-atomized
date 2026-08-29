@@ -30,9 +30,9 @@ lemma IsHausdorff.of_le_jacobson
   proof: ⟨fun x hx => (Ideal.iInf_pow_smul_eq_bot_of_le_jacobson I h).le (by simpa [SModEq.zero] using hx)⟩
 
 中文:
-引理 IsHausdorff.of_le_jacobson
-  条件: (h : I <= Ideal.jacobson ⊥)
-  结论: IsHausdorff I M
+引理 是豪斯多夫.of_le_jacobson
+  条件: (h : I <= 理想.jacobson ⊥)
+  结论: 是豪斯多夫 I M
   证明: ⟨fun x hx => (Ideal.iInf_pow_smul_eq_bot_of_le_jacobson I h).le (by simpa [SModEq.zero] using hx)⟩
 
 Depends on / 依赖: Ideal.iInf_pow_smul_eq_bot_of_le_jacobson, SModEq, SModEq.zero, iInf_pow_smul_eq_bot_of_le_jacobson
@@ -50,9 +50,9 @@ theorem IsHausdorff.of_isLocalRing
   proof: of_le_jacobson I M ((le_maximalIdeal h).trans (maximalIdeal_le_jacobson _))
 
 中文:
-定理 IsHausdorff.of_isLocalRing
-  条件: [IsLocalRing R] (h : I != ⊤)
-  结论: IsHausdorff I M
+定理 是豪斯多夫.of_isLocalRing
+  条件: [是局部环 R] (h : I != ⊤)
+  结论: 是豪斯多夫 I M
   证明: of_le_jacobson I M ((le_maximalIdeal h).trans (maximalIdeal_le_jacobson _))
 
 Depends on / 依赖: le_maximalIdeal, maximalIdeal_le_jacobson, of_le_jacobson
@@ -69,8 +69,8 @@ instance [IsLocalRing
   body: .of_le_jacobson _ _ (maximalIdeal_le_jacobson _)
 
 中文:
-实例 [IsLocalRing
-  签名: R] : IsHausdorff (maximalIdeal R) M
+实例 [是局部环
+  签名: R] : 是豪斯多夫 (maximalIdeal R) M
   定义体: .of_le_jacobson _ _ (maximalIdeal_le_jacobson _)
 
 Depends on / 依赖: maximalIdeal_le_jacobson, of_le_jacobson
@@ -88,9 +88,9 @@ lemma IsHausdorff.of_isTorsionFree
   proof: ⟨fun x hx => (I.iInf_pow_smul_eq_bot_of_isTorsionFree h).le (by simpa [SModEq.zero] using hx)⟩
 
 中文:
-引理 IsHausdorff.of_isTorsionFree
-  条件: [IsDomain R] [IsTorsionFree R M] (h : I != ⊤)
-  结论: IsHausdorff I M
+引理 是豪斯多夫.of_isTorsionFree
+  条件: [是整环 R] [是无挠 R M] (h : I != ⊤)
+  结论: 是豪斯多夫 I M
   证明: ⟨fun x hx => (I.iInf_pow_smul_eq_bot_of_isTorsionFree h).le (by simpa [SModEq.zero] using hx)⟩
 
 Depends on / 依赖: I.iInf_pow_smul_eq_bot_of_isTorsionFree, SModEq, SModEq.zero, iInf_pow_smul_eq_bot_of_isTorsionFree
@@ -108,9 +108,9 @@ theorem IsHausdorff.of_isDomain
   proof: .of_isTorsionFree I R h
 
 中文:
-定理 IsHausdorff.of_isDomain
-  条件: [IsDomain R] (h : I != ⊤)
-  结论: IsHausdorff I R
+定理 是豪斯多夫.of_isDomain
+  条件: [是整环 R] (h : I != ⊤)
+  结论: 是豪斯多夫 I R
   证明: .of_isTorsionFree I R h
 
 Depends on / 依赖: of_isTorsionFree

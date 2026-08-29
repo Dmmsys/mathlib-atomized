@@ -60,8 +60,8 @@ lemma isOpen_Ico_zero
 
 中文:
 引理 isOpen_Ico_zero
-  条件: {x : NN实数}
-  结论: IsOpen (Set.Ico 0 x)
+  条件: {x : 非负实数}
+  结论: 是开集 (集合.左闭右开区间 0 x)
   证明: Ico_bot (a := x) ▸ isOpen_Iio
 
 Depends on / 依赖: Ico_bot, isOpen_Iio
@@ -81,8 +81,8 @@ theorem _root_.continuous_real_toNNReal
   proof: (continuous_id.max continuous_const).subtype_mk _
 
 中文:
-定理 _root_.continuous_real_toNNReal
-  结论: Continuous 实数.toNN实数
+定理 _root_.continuous_real_toNN实数
+  结论: 连续 实数.toNN实数
   证明: (continuous_id.max continuous_const).subtype_mk _
 
 Depends on / 依赖: continuous_const, continuous_id, continuous_id.max, subtype_mk
@@ -103,7 +103,7 @@ definition _root_.ContinuousMap.realToNNReal
 @[simp]
 
 中文:
-定义 _root_.ContinuousMap.realToNNReal
+定义 _root_.连续映射.realToNN实数
   签名: : C(实数, 实数>=0)
   定义体: .mk Real.toNNReal continuous_real_toNNReal
 
@@ -175,8 +175,8 @@ lemma _root_.ContinuousOn.ofReal_map_toNNReal
 @[simp, norm_cast]
 
 中文:
-引理 _root_.ContinuousOn.ofReal_map_toNNReal
-  结论: {f : 实数>=0 -> 实数>=0} {s : Set 实数} {t : Set 实数>=0}
+引理 _root_.ContinuousOn.of实数_map_toNN实数
+  结论: {f : 实数>=0 -> 实数>=0} {s : 集合 实数} {t : 集合 实数>=0}
   证明: continuous_subtype_val.comp_continuousOn hf.comp continuous_real_toNNReal.continuousOn h
 
 @[simp, norm_cast]
@@ -199,7 +199,7 @@ theorem tendsto_coe
 
 中文:
 定理 tendsto_coe
-  条件: {f : Filter α} {m : α -> 实数>=0} {x : 实数>=0}
+  条件: {f : 滤子 α} {m : α -> 实数>=0} {x : 实数>=0}
   证明: tendsto_subtype_rng.symm
 
 Depends on / 依赖: tendsto_subtype_rng, tendsto_subtype_rng.symm
@@ -218,7 +218,7 @@ theorem tendsto_coe'
 
 中文:
 定理 tendsto_coe'
-  条件: {f : Filter α} [NeBot f] {m : α -> 实数>=0} {x : 实数}
+  条件: {f : 滤子 α} [NeBot f] {m : α -> 实数>=0} {x : 实数}
   证明: ⟨fun h => ⟨ge_of_tendsto' h fun c => (m c).2, tendsto_coe.1 h⟩, fun ⟨_, hm⟩ => tendsto_coe.2 hm⟩
 
 Depends on / 依赖: ge_of_tendsto, tendsto_coe
@@ -279,7 +279,7 @@ theorem tendsto_coe_atTop
 
 中文:
 定理 tendsto_coe_atTop
-  条件: {f : Filter α} {m : α -> 实数>=0}
+  条件: {f : 滤子 α} {m : α -> 实数>=0}
   证明: tendsto_Ici_atTop.symm
 
 Depends on / 依赖: tendsto_Ici_atTop, tendsto_Ici_atTop.symm
@@ -299,8 +299,8 @@ theorem _root_.tendsto_real_toNNReal
 @[simp]
 
 中文:
-定理 _root_.tendsto_real_toNNReal
-  条件: {f : Filter α} {m : α -> 实数} {x : 实数} (h : Tendsto m f (𝓝 x))
+定理 _root_.tendsto_real_toNN实数
+  条件: {f : 滤子 α} {m : α -> 实数} {x : 实数} (h : 收敛 m f (𝓝 x))
   证明: (continuous_real_toNNReal.tendsto _).comp h
 
 @[simp]
@@ -322,7 +322,7 @@ theorem _root_.Real.map_toNNReal_atTop
   rw [← map_coe_atTop]; rw [Function.LeftInverse.filter_map @Real.toNNReal_coe]
 
 中文:
-定理 _root_.Real.map_toNNReal_atTop
+定理 _root_.实数.map_toNN实数_atTop
   结论: map 实数.toNN实数 atTop = atTop
   证明: by
   rw [← map_coe_atTop]; rw [Function.LeftInverse.filter_map @Real.toNNReal_coe]
@@ -343,8 +343,8 @@ theorem _root_.tendsto_real_toNNReal_atTop
 @[simp]
 
 中文:
-定理 _root_.tendsto_real_toNNReal_atTop
-  结论: Tendsto 实数.toNN实数 atTop atTop
+定理 _root_.tendsto_real_toNN实数_atTop
+  结论: 收敛 实数.toNN实数 atTop atTop
   证明: Real.map_toNNReal_atTop.le
 
 @[simp]
@@ -370,7 +370,7 @@ theorem _root_.Real.comap_toNNReal_atTop
 @[simp]
 
 中文:
-定理 _root_.Real.comap_toNNReal_atTop
+定理 _root_.实数.comap_toNN实数_atTop
   结论: comap 实数.toNN实数 atTop = atTop
   证明: by
   refine le_antisymm ?_ tendsto_real_toNNReal_atTop.le_comap
@@ -399,8 +399,8 @@ theorem _root_.Real.tendsto_toNNReal_atTop_iff
   rw [← Real.comap_toNNReal_atTop]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
 中文:
-定理 _root_.Real.tendsto_toNNReal_atTop_iff
-  条件: {l : Filter α} {f : α -> 实数}
+定理 _root_.实数.tendsto_toNN实数_atTop_iff
+  条件: {l : 滤子 α} {f : α -> 实数}
   证明: by
   rw [← Real.comap_toNNReal_atTop]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -419,8 +419,8 @@ theorem _root_.Real.tendsto_toNNReal_atTop
   proof: Real.tendsto_toNNReal_atTop_iff.2 tendsto_id
 
 中文:
-定理 _root_.Real.tendsto_toNNReal_atTop
-  结论: Tendsto 实数.toNN实数 atTop atTop
+定理 _root_.实数.tendsto_toNN实数_atTop
+  结论: 收敛 实数.toNN实数 atTop atTop
   证明: Real.tendsto_toNNReal_atTop_iff.2 tendsto_id
 
 Depends on / 依赖: Real.tendsto_toNNReal_atTop_iff, tendsto_id, tendsto_toNNReal_atTop_iff
@@ -438,7 +438,7 @@ theorem nhds_zero
 
 中文:
 定理 nhds_zero
-  结论: 𝓝 (0 : 实数>=0) = ⨅ (a : 实数>=0) (_ : a != 0), 𝓟 (Iio a)
+  结论: 𝓝 (0 : 实数>=0) = ⨅ (a : 实数>=0) (_ : a != 0), 𝓟 (左无界右开区间 a)
   证明: nhds_bot_order.trans by simp only [bot_lt_iff_ne_bot]; rfl
 
 Depends on / 依赖: bot_lt_iff_ne_bot, nhds_bot_order, nhds_bot_order.trans
@@ -459,7 +459,7 @@ theorem nhds_zero_basis
 
 中文:
 定理 nhds_zero_basis
-  结论: (𝓝 (0 : 实数>=0)).HasBasis (fun a : 实数>=0 => 0 < a) fun a => Iio a
+  结论: (𝓝 (0 : 实数>=0)).有基 (fun a : 实数>=0 => 0 < a) fun a => 左无界右开区间 a
   证明: nhds_bot_basis
 
 
@@ -507,7 +507,7 @@ theorem _root_.HasSum.toNNReal
   · simp [HasSum, hL]
 
 中文:
-定理 _root_.HasSum.toNNReal
+定理 _root_.HasSum.toNN实数
   结论: {f : α -> 实数} {y : 实数} (hf₀ : 对任意 n, 0 <= f n)
   证明: by
   rcases L.neBot_or_eq_bot with _ | hL
@@ -535,7 +535,7 @@ theorem hasSum_real_toNNReal_of_nonneg
 @[norm_cast]
 
 中文:
-定理 hasSum_real_toNNReal_of_nonneg
+定理 hasSum_real_toNN实数_of_nonneg
   结论: {f : α -> 实数} (hf_nonneg : 对任意 n, 0 <= f n)
   证明: hf.hasSum.toNNReal hf_nonneg
 
@@ -766,7 +766,7 @@ theorem iInf_real_pos_eq_iInf_nnreal_pos
 
 中文:
 定理 iInf_real_pos_eq_iInf_nnreal_pos
-  条件: [CompleteLattice α] {f : 实数 -> α}
+  条件: [完备格 α] {f : 实数 -> α}
   证明: le_antisymm (iInf_mono' fun r => ⟨r, le_rfl⟩) (iInf₂_mono' fun r hr => ⟨⟨r, hr.le⟩, hr, le_rfl⟩)
 
 Depends on / 依赖: hr.le, iInf_mono, le_antisymm, le_rfl
@@ -815,7 +815,7 @@ theorem tendsto_atTop_zero_of_summable
 中文:
 定理 tendsto_atTop_zero_of_summable
   条件: {f : 自然数 -> 实数>=0} (hf : Summable f)
-  结论: Tendsto f atTop (𝓝 0)
+  结论: 收敛 f atTop (𝓝 0)
   证明: by
   rw [← Nat.cofinite_eq_atTop]
   exact tendsto_cofinite_zero_of_summable hf
@@ -873,8 +873,8 @@ theorem _root_.Real.tendsto_of_bddAbove_monotone
   proof: ⟨iSup f, tendsto_atTop_ciSup h_mon h_bdd⟩
 
 中文:
-定理 _root_.Real.tendsto_of_bddAbove_monotone
-  结论: {f : 自然数 -> 实数} (h_bdd : BddAbove (Set.range f))
+定理 _root_.实数.tendsto_of_bddAbove_monotone
+  结论: {f : 自然数 -> 实数} (h_bdd : BddAbove (集合.range f))
   证明: ⟨iSup f, tendsto_atTop_ciSup h_mon h_bdd⟩
 
 Depends on / 依赖: h_bdd, h_mon, tendsto_atTop_ciSup
@@ -894,8 +894,8 @@ theorem _root_.Real.tendsto_of_bddBelow_antitone
   proof: ⟨iInf f, tendsto_atTop_ciInf h_ant h_bdd⟩
 
 中文:
-定理 _root_.Real.tendsto_of_bddBelow_antitone
-  结论: {f : 自然数 -> 实数} (h_bdd : BddBelow (Set.range f))
+定理 _root_.实数.tendsto_of_bddBelow_antitone
+  结论: {f : 自然数 -> 实数} (h_bdd : BddBelow (集合.range f))
   证明: ⟨iInf f, tendsto_atTop_ciInf h_ant h_bdd⟩
 
 Depends on / 依赖: h_ant, h_bdd, tendsto_atTop_ciInf
@@ -918,7 +918,7 @@ theorem tendsto_of_antitone
 
 中文:
 定理 tendsto_of_antitone
-  条件: {f : 自然数 -> 实数>=0} (h_ant : Antitone f)
+  条件: {f : 自然数 -> 实数>=0} (h_ant : 递减 f)
   证明: ⟨iInf f, tendsto_atTop_ciInf h_ant (by simp)⟩
 
 Depends on / 依赖: h_ant, tendsto_atTop_ciInf
@@ -962,7 +962,7 @@ lemma iSup_pow
 
 中文:
 引理 iSup_pow
-  条件: [Nonempty ι] (f : ι -> 实数>=0) (n : 自然数)
+  条件: [非空 ι] (f : ι -> 实数>=0) (n : 自然数)
   结论: (⨆ i, f i) ^ n = ⨆ i, f i ^ n
   证明: by
   by_cases hn : n = 0
@@ -1037,7 +1037,7 @@ lemma iSup_pow
 
 中文:
 引理 iSup_pow
-  条件: [Nonempty ι] (f : ι -> 实数>=0∞) (n : 自然数)
+  条件: [非空 ι] (f : ι -> 实数>=0∞) (n : 自然数)
   结论: (⨆ i, f i) ^ n = ⨆ i, f i ^ n
   证明: by
   by_cases hn : n = 0
@@ -1061,7 +1061,7 @@ lemma iSup₂_pow_of_ne_zero
 
 中文:
 引理 iSup₂_pow_of_ne_zero
-  条件: {κ : ι -> Sort*} (f : (i : ι) -> κ i -> 实数>=0∞) {n : 自然数} (hn : n != 0)
+  条件: {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 实数>=0∞) {n : 自然数} (hn : n != 0)
   证明: (powOrderIso n hn).map_iSup₂ f
 
 Depends on / 依赖: powOrderIso
@@ -1083,8 +1083,8 @@ lemma Real.iSup_pow
   lift f to ι -> Real>=0 using hf; dsimp; exact mod_cast NNReal.iSup_pow f n
 
 中文:
-引理 Real.iSup_pow
-  条件: [Nonempty ι] {f : ι -> 实数} (hf : 对任意 i, 0 <= f i) (n : 自然数)
+引理 实数.iSup_pow
+  条件: [非空 ι] {f : ι -> 实数} (hf : 对任意 i, 0 <= f i) (n : 自然数)
   证明: by
   lift f to ι -> Real>=0 using hf; dsimp; exact mod_cast NNReal.iSup_pow f n
 
@@ -1106,7 +1106,7 @@ lemma Real.iSup_pow_of_ne_zero
   · exact iSup_pow hf _
 
 中文:
-引理 Real.iSup_pow_of_ne_zero
+引理 实数.iSup_pow_of_ne_zero
   条件: {f : ι -> 实数} (hf : 对任意 i, 0 <= f i) (hn : n != 0)
   证明: by
   cases isEmpty_or_nonempty ι

@@ -182,7 +182,7 @@ lemma eq_iff_sMk_eq
 
 中文:
 引理 eq_iff_sMk_eq
-  条件: {X : SSet.{u}} {A : X.Subcomplex} (x y : A.N)
+  条件: {X : SSet.{u}} {A : X.子复形} (x y : A.N)
   证明: by
   rw [N.ext_iff]; rw [SSet.N.ext_iff]
 
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder A.N
+  签名: 偏序 A.N
   定义体: PartialOrder.lift toN (fun _ _ => by simp [ext_iff])
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, ext_iff
@@ -355,7 +355,7 @@ definition orderIsoOfIso
 
 中文:
 定义 orderIsoOfIso
-  签名: {Y : SSet.{u}} {B : Y.Subcomplex} (e : X ≅ Y)
+  签名: {Y : SSet.{u}} {B : Y.子复形} (e : X ≅ Y)
   定义体: N.mk' (SSet.N.orderIsoOfIso e x.toN) (by subst hA; exact x.notMem)
   invFun y := N.mk' ((SSet.N.orderIsoOfIso e).symm y.toN) (by
     obtain rfl : A.preimage e.inv = B := by aesop
@@ -390,8 +390,8 @@ lemma existsN
   simpa using h
 
 中文:
-引理 existsN
-  结论: {X : SSet.{u}} {n : 自然数} (s : X _⦋n⦌) {A : X.Subcomplex}
+引理 存在N
+  结论: {X : SSet.{u}} {n : 自然数} (s : X _⦋n⦌) {A : X.子复形}
   证明: by
   refine ⟨⟨(S.mk s).toN, fun h => hs ?_⟩, ⟨(S.mk s).toNπ, inferInstance, S.map_toNπ_op_apply _⟩⟩
   simp only [← ofSimplex_le_iff] at h ⊢

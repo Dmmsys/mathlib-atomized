@@ -92,7 +92,7 @@ theorem squarefree_iff_prime_squarefree
 中文:
 定理 squarefree_iff_prime_squarefree
   条件: {n : 自然数}
-  结论: Squarefree n ↔ 对任意 x, Prime x -> ¬x * x ∣ n
+  结论: Squarefree n ↔ 对任意 x, 素 x -> ¬x * x ∣ n
   证明: squarefree_iff_irreducible_sq_not_dvd_of_exists_irreducible ⟨_, prime_two⟩
 
 Depends on / 依赖: prime_two, squarefree_iff_irreducible_sq_not_dvd_of_exists_irreducible
@@ -156,7 +156,7 @@ lemma factorization_eq_one_of_squarefree
 
 中文:
 引理 factorization_eq_one_of_squarefree
-  条件: (hn : Squarefree n) (hp : p.Prime) (hpn : p ∣ n)
+  条件: (hn : Squarefree n) (hp : p.素) (hpn : p ∣ n)
   证明: (hn.natFactorization_le_one _).antisymm (hp.dvd_iff_one_le_factorization hn.ne_zero).1 hpn
 
 Depends on / 依赖: antisymm, dvd_iff_one_le_factorization, hn.natFactorization_le_one, hn.ne_zero, hp.dvd_iff_one_le_factorization, natFactorization_le_one, ne_zero
@@ -307,7 +307,7 @@ theorem squarefree_and_prime_pow_iff_prime
 中文:
 定理 squarefree_and_prime_pow_iff_prime
   条件: {n : 自然数}
-  结论: Squarefree n ∧ IsPrimePow n ↔ Prime n
+  结论: Squarefree n ∧ IsPrimePow n ↔ 素 n
   证明: by
   refine ⟨?_, fun hn => ⟨hn.squarefree, hn.isPrimePow⟩⟩
   rw [isPrimePow_nat_iff]
@@ -342,7 +342,7 @@ termination
 
 中文:
 定义 minSqFacAux
-  签名: : 自然数 -> 自然数 -> Option 自然数
+  签名: : 自然数 -> 自然数 -> 选项类型 自然数
   定义体: by
         exact Nat.minFac_lemma n k h
       if k ∣ n then
@@ -429,7 +429,7 @@ theorem minSqFacProp_div
 
 中文:
 定理 minSqFacProp_div
-  结论: (n) {k} (pk : Prime k) (dk : k ∣ n) (dkk : ¬k * k ∣ n) {o}
+  结论: (n) {k} (pk : 素 k) (dk : k ∣ n) (dkk : ¬k * k ∣ n) {o}
   证明: by
   have : forall p, Prime p -> p * p ∣ n -> k * (p * p) ∣ n := fun p pp dp =>
     have :=
@@ -541,7 +541,7 @@ theorem minSqFac_has_prop
 中文:
 定理 minSqFac_has_prop
   条件: (n : 自然数)
-  结论: MinSqFac命题 n (minSqFac n)
+  结论: MinSqFacProp n (minSqFac n)
   证明: by
   dsimp only [minSqFac]; split_ifs with d2 d4
   · exact ⟨prime_two, (dvd_div_iff_mul_dvd d2).1 d4, fun p pp _ => pp.two_le⟩
@@ -584,7 +584,7 @@ theorem minSqFac_prime
 中文:
 定理 minSqFac_prime
   条件: {n d : 自然数} (h : n.minSqFac = some d)
-  结论: Prime d
+  结论: 素 d
   证明: by
   have := minSqFac_has_prop n
   rw [h] at this
@@ -852,7 +852,7 @@ theorem sum_divisors_filter_squarefree
 
 中文:
 定理 sum_divisors_filter_squarefree
-  结论: {n : 自然数} (h0 : n != 0) {α : 类型} [AddCommMonoid α]
+  结论: {n : 自然数} (h0 : n != 0) {α : 类型} [加法交换幺半群 α]
   证明: by
   rw [Finset.sum_eq_multiset_sum]; rw [divisors_filter_squarefree h0]; rw [Multiset.map_map]; rw [Finset.sum_eq_multiset_sum]
   rfl
@@ -1060,7 +1060,7 @@ coprime_of_squarefree_mul by simpa [Nat.div_mul_cancel, gcd_dvd_left]
 中文:
 引理 coprime_div_gcd_of_squarefree
   条件: (hm : Squarefree m) (hn : n != 0)
-  结论: Coprime (m / gcd m n) n
+  结论: Coprime (m / 最大公约数 m n) n
   证明: by
   have : Coprime (m / gcd m n) (gcd m n) :=
 coprime_of_squarefree_mul by simpa [Nat.div_mul_cancel, gcd_dvd_left]
@@ -1114,7 +1114,7 @@ lemma primeFactors_prod
 
 中文:
 引理 primeFactors_prod
-  条件: (hs : 对任意 p in s, p.Prime)
+  条件: (hs : 对任意 p in s, p.素)
   结论: primeFactors (∏ p in s, p) = s
   证明: by
   have hn : ∏ p in s, p != 0 := prod_ne_zero_iff.2 fun p hp => (hs _ hp).ne_zero
@@ -1248,7 +1248,7 @@ refine symm Nat.div_eq_of_eq_mul_left (Finset.prod_pos
 
 中文:
 定理 prod_primeFactors_sdiff_of_squarefree
-  结论: {n : 自然数} (hn : Squarefree n) {t : Finset 自然数}
+  结论: {n : 自然数} (hn : Squarefree n) {t : 有限集 自然数}
   证明: by
 refine symm Nat.div_eq_of_eq_mul_left (Finset.prod_pos
     fun p hp => (prime_of_mem_primeFactorsList (List.mem_toFinset.mp (ht hp))).pos) ?_
@@ -1374,7 +1374,7 @@ theorem squarefree_helper_0
 
 中文:
 定理 squarefree_helper_0
-  条件: {k} (k0 : 0 < k) {p : 自然数} (pp : 自然数.Prime p) (h : bit1 k <= p)
+  条件: {k} (k0 : 0 < k) {p : 自然数} (pp : 自然数.素 p) (h : bit1 k <= p)
   证明: by
   rcases lt_or_eq_of_le h with ((hp : _ + 1 <= _) | hp)
   · rw [bit1, bit0_eq_two_mul] at hp

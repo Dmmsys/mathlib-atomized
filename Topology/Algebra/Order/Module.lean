@@ -26,8 +26,8 @@ instance [ContinuousConstSMul
   body: continuous_const_smul r.1
 
 中文:
-实例 [ContinuousConstSMul
-  签名: R α] : ContinuousConstSMul {r
+实例 [连续常数标量乘法
+  签名: R α] : 连续常数标量乘法 {r
   定义体: continuous_const_smul r.1
 
 Depends on / 依赖: continuous_const_smul
@@ -44,8 +44,8 @@ instance [TopologicalSpace
   body: continuous_smul (M := R).comp continuous_subtype_val.prodMap continuous_id
 
 中文:
-实例 [TopologicalSpace
-  签名: R] [ContinuousSMul R α] : ContinuousSMul {r
+实例 [拓扑空间
+  签名: R] [连续标量乘法 R α] : 连续标量乘法 {r
   定义体: continuous_smul (M := R).comp continuous_subtype_val.prodMap continuous_id
 
 Depends on / 依赖: continuous_id, continuous_smul, continuous_subtype_val, continuous_subtype_val.prodMap, prodMap

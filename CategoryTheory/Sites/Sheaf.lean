@@ -84,7 +84,7 @@ definition IsSheaf
   body: forall E : A, Presieve.IsSheaf J (P ⋙ coyoneda.obj (op E))
 
 中文:
-定义 IsSheaf
+定义 是层
   签名: (P : Cᵒᵖ ⥤ A)
   定义体: forall E : A, Presieve.IsSheaf J (P ⋙ coyoneda.obj (op E))
 
@@ -103,7 +103,7 @@ definition IsSeparated
     (forall (Y : C) (f : Y ⟶ X) (_ : S f), P.map f.op x = P.map f.op y) -> x = y
 
 中文:
-定义 IsSeparated
+定义 是分离
   签名: (P : Cᵒᵖ ⥤ A) {FA : A -> A -> 类型} {CA : A -> 类型}
   定义体: forall (X : C) (S : Sieve X) (_ : S in J X) (x y : ToType (P.obj (op X))),
     (forall (Y : C) (f : Y ⟶ X) (_ : S f), P.map f.op x = P.map f.op y) -> x = y
@@ -180,7 +180,7 @@ definition _root_.CategoryTheory.Presieve.FamilyOfElements.SieveCompatible.cone
   π := (conesEquivSieveCompatibleFamily P S E).invFun ⟨x, hx⟩
 
 中文:
-定义 _root_.CategoryTheory.Presieve.FamilyOfElements.SieveCompatible.cone
+定义 _root_.范畴论.Presieve.FamilyOfElements.SieveCompatible.cone
   签名: :
   定义体: E.unop
   π := (conesEquivSieveCompatibleFamily P S E).invFun ⟨x, hx⟩
@@ -383,7 +383,7 @@ theorem isSheaf_iff_isLimit_pretopology
 
 中文:
 定理 isSheaf_iff_isLimit_pretopology
-  条件: [HasPullbacks C] (K : Pretopology C)
+  条件: [有Pullbacks C] (K : Pretopology C)
   证明: by
   dsimp [IsSheaf]
   simp_rw [isSheaf_pretopology]
@@ -419,8 +419,8 @@ definition IsSheaf.amalgamate
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsSheaf.amalgamate
-  签名: {A : 类型u₂} [Category.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
+定义 是层.amalgamate
+  签名: {A : 类型u₂} [范畴.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
   定义体: (hP _ _ S.condition).amalgamate (fun Y f hf => x ⟨Y, f, hf⟩) fun _ _ _ _ _ _ _ h₁ h₂ w =>
     @hx { hf := h₁, .. } { hf := h₂, .. } { w := w, .. }
 
@@ -446,8 +446,8 @@ theorem IsSheaf.amalgamate_map
   apply (hP _ _ S.condition).valid_glue
 
 中文:
-定理 IsSheaf.amalgamate_map
-  结论: {A : 类型u₂} [Category.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
+定理 是层.amalgamate_map
+  结论: {A : 类型u₂} [范畴.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
   证明: by
   apply (hP _ _ S.condition).valid_glue
 
@@ -470,8 +470,8 @@ theorem IsSheaf.hom_ext
   proof: (hP _ _ S.condition).isSeparatedFor.ext fun Y f hf => h ⟨Y, f, hf⟩
 
 中文:
-定理 IsSheaf.hom_ext
-  结论: {A : 类型u₂} [Category.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
+定理 是层.hom_ext
+  结论: {A : 类型u₂} [范畴.{v₂} A] {E : A} {X : C} {P : Cᵒᵖ ⥤ A}
   证明: (hP _ _ S.condition).isSeparatedFor.ext fun Y f hf => h ⟨Y, f, hf⟩
 
 Depends on / 依赖: S.condition, condition, isSeparatedFor, isSeparatedFor.ext
@@ -493,7 +493,7 @@ lemma IsSheaf.hom_ext_ofArrows
   rw [P.map_comp]; rw [reassoc_of% (h i)]
 
 中文:
-引理 IsSheaf.hom_ext_ofArrows
+引理 是层.hom_ext_ofArrows
   证明: by
   apply hP.hom_ext ⟨_, hf⟩
   rintro ⟨Z, _, _, g, _, ⟨i⟩, rfl⟩
@@ -530,7 +530,7 @@ lemma IsSheaf.existsUnique_amalgamation_ofArrows
     ((Presieve.isSheafFor_iff_generate _).2 (hP E _ hf)) x (fun _ _ _ _ _ w => hx _ _ w)
 
 中文:
-引理 IsSheaf.existsUnique_amalgamation_ofArrows
+引理 是层.存在Unique_amalgamation_ofArrows
   证明: (Presieve.isSheafFor_arrows_iff _ _).1
     ((Presieve.isSheafFor_iff_generate _).2 (hP E _ hf)) x (fun _ _ _ _ _ w => hx _ _ w)
 
@@ -552,7 +552,7 @@ definition IsSheaf.amalgamateOfArrows
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsSheaf.amalgamateOfArrows
+定义 是层.amalgamateOfArrows
   签名: : E ⟶ P.obj (op S)
   定义体: (hP.existsUnique_amalgamation_ofArrows f hf x hx).choose
 
@@ -573,7 +573,7 @@ lemma IsSheaf.amalgamateOfArrows_map
   proof: (hP.existsUnique_amalgamation_ofArrows f hf x hx).choose_spec.1 i
 
 中文:
-引理 IsSheaf.amalgamateOfArrows_map
+引理 是层.amalgamateOfArrows_map
   条件: (i : I)
   证明: (hP.existsUnique_amalgamation_ofArrows f hf x hx).choose_spec.1 i
 
@@ -599,7 +599,7 @@ theorem isSheaf_of_iso_iff
 中文:
 定理 isSheaf_of_iso_iff
   条件: {P P' : Cᵒᵖ ⥤ A} (e : P ≅ P')
-  结论: IsSheaf J P ↔ IsSheaf J P'
+  结论: 是层 J P ↔ 是层 J P'
   证明: forall_congr' fun _ =>
     ⟨Presieve.isSheaf_iso J (Functor.isoWhiskerRight e _),
       Presieve.isSheaf_iso J (Functor.isoWhiskerRight e.symm _)⟩
@@ -624,7 +624,7 @@ theorem isSheaf_of_isTerminal
 
 中文:
 定理 isSheaf_of_isTerminal
-  条件: {X : A} (hX : IsTerminal X)
+  条件: {X : A} (hX : 是终止 X)
   证明: fun _ _ _ _ _ _ =>
   ⟨hX.from _, fun _ _ _ => hX.hom_ext _ _, fun _ _ => hX.hom_ext _ _⟩
 -/
@@ -646,7 +646,7 @@ abbreviation Sheaf
   body: ObjectProperty.FullSubcategory (Presheaf.IsSheaf J (A := A))
 
 中文:
-缩写 Sheaf
+缩写 层
   定义体: ObjectProperty.FullSubcategory (Presheaf.IsSheaf J (A := A))
 
 Depends on / 依赖: FullSubcategory, IsSheaf, ObjectProperty, ObjectProperty.FullSubcategory, Presheaf, Presheaf.IsSheaf
@@ -670,8 +670,8 @@ abbreviation Sheaf.val
 @[deprecated "Use ObjectProperty.FullSubcategory.property" (since := "2026-03-03")]
 
 中文:
-缩写 Sheaf.val
-  签名: (F : Sheaf J A)
+缩写 层.val
+  签名: (F : 层 J A)
   定义体: F.obj
 
 @[deprecated "Use ObjectProperty.FullSubcategory.property" (since := "2026-03-03")]
@@ -694,9 +694,9 @@ lemma Sheaf.cond
 alias Sheaf.Hom.mk := ObjectProperty.homMk
 
 中文:
-引理 Sheaf.cond
-  条件: (F : Sheaf J A)
-  结论: Presheaf.IsSheaf J F.obj
+引理 层.cond
+  条件: (F : 层 J A)
+  结论: 预层.是层 J F.obj
   证明: F.property
 
 @[deprecated (since := "2026-03-03")]
@@ -719,8 +719,8 @@ lemma Sheaf.hom_ext_iff
   cat_disch
 
 中文:
-引理 Sheaf.hom_ext_iff
-  条件: {F G : Sheaf J A} {f g : F ⟶ G}
+引理 层.hom_ext_iff
+  条件: {F G : 层 J A} {f g : F ⟶ G}
   证明: by
   cat_disch
 
@@ -740,8 +740,8 @@ lemma Sheaf.hom_ext
   cat_disch
 
 中文:
-引理 Sheaf.hom_ext
-  条件: {F G : Sheaf J A} {f g : F ⟶ G} (h : f.hom = g.hom)
+引理 层.hom_ext
+  条件: {F G : 层 J A} {f g : F ⟶ G} (h : f.hom = g.hom)
   证明: by
   cat_disch
 
@@ -763,7 +763,7 @@ abbreviation sheafToPresheaf
 
 中文:
 缩写 sheafToPresheaf
-  签名: : Sheaf J A ⥤ Cᵒᵖ ⥤ A
+  签名: : 层 J A ⥤ Cᵒᵖ ⥤ A
   定义体: ObjectProperty.ι _
 
 Depends on / 依赖: ObjectProperty
@@ -780,7 +780,7 @@ abbreviation sheafSections
 
 中文:
 缩写 sheafSections
-  签名: : Cᵒᵖ ⥤ Sheaf J A ⥤ A
+  签名: : Cᵒᵖ ⥤ 层 J A ⥤ A
   定义体: (sheafToPresheaf J A).flip
 
 Depends on / 依赖: sheafToPresheaf
@@ -798,7 +798,7 @@ definition sheafSectionsNatIsoEvaluation
   body: Iso.refl _
 
 中文:
-定义 sheafSectionsNatIsoEvaluation
+定义 sheafSections自然数IsoEvaluation
   签名: {X : C}
   定义体: Iso.refl _
 
@@ -818,7 +818,7 @@ abbreviation fullyFaithfulSheafToPresheaf
 
 中文:
 缩写 fullyFaithfulSheafToPresheaf
-  签名: : (sheafToPresheaf J A).FullyFaithful
+  签名: : (sheafToPresheaf J A).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
@@ -841,8 +841,8 @@ abbreviation Sheaf.homEquiv
 #adaptation_note
 
 中文:
-缩写 Sheaf.homEquiv
-  签名: {X Y : Sheaf J A}
+缩写 层.homEquiv
+  签名: {X Y : 层 J A}
   定义体: (fullyFaithfulSheafToPresheaf J A).homEquiv
 
 #adaptation_note
@@ -895,7 +895,7 @@ lemma sheafToPresheafCompYonedaCompWhiskeringLeftSheafToPresheaf_app_app
 
 中文:
 引理 sheafToPresheafCompYonedaCompWhiskeringLeftSheafToPresheaf_app_app
-  条件: {X Y : Sheaf J A}
+  条件: {X Y : 层 J A}
   证明: rfl
 
 #adaptation_note
@@ -947,7 +947,7 @@ lemma sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf_app_app
 
 中文:
 引理 sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf_app_app
-  条件: {X Y : Sheaf J A}
+  条件: {X Y : 层 J A}
   证明: rfl
 -/
 lemma sheafToPresheafCompCoyonedaCompWhiskeringLeftSheafToPresheaf_app_app {X Y : Sheaf J A} :
@@ -967,9 +967,9 @@ theorem Sheaf.Hom.mono_of_presheaf_mono
   proof: (sheafToPresheaf J A).mono_of_mono_map h
 
 中文:
-定理 Sheaf.Hom.mono_of_presheaf_mono
-  条件: {F G : Sheaf J A} (f : F ⟶ G) [h : Mono f.1]
-  结论: Mono f
+定理 层.态射.mono_of_presheaf_mono
+  条件: {F G : 层 J A} (f : F ⟶ G) [h : 单态射 f.1]
+  结论: 单态射 f
   证明: (sheafToPresheaf J A).mono_of_mono_map h
 
 Depends on / 依赖: mono_of_mono_map, sheafToPresheaf
@@ -986,8 +986,8 @@ instance Sheaf.Hom.epi_of_presheaf_epi
   body: (sheafToPresheaf J A).epi_of_epi_map h
 
 中文:
-实例 Sheaf.Hom.epi_of_presheaf_epi
-  签名: {F G : Sheaf J A} (f : F ⟶ G) [h : Epi f.1]
+实例 层.态射.epi_of_presheaf_epi
+  签名: {F G : 层 J A} (f : F ⟶ G) [h : 满态射 f.1]
   定义体: (sheafToPresheaf J A).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map, sheafToPresheaf
@@ -1015,7 +1015,7 @@ theorem isSheaf_iff_isSheaf_of_type
 
 中文:
 定理 isSheaf_iff_isSheaf_of_type
-  条件: (P : Cᵒᵖ ⥤ Type w)
+  条件: (P : Cᵒᵖ ⥤ 类型 w)
   证明: by
   constructor
   · intro hP
@@ -1068,7 +1068,7 @@ definition sheafOver
 
 中文:
 定义 sheafOver
-  签名: {A : 类型u₂} [Category.{v₂} A] {J : GrothendieckTopology C} (ℱ : Sheaf J A) (E : A)
+  签名: {A : 类型u₂} [范畴.{v₂} A] {J : Grothendieck拓扑 C} (ℱ : 层 J A) (E : A)
   定义体: ℱ.obj ⋙ coyoneda.obj (op E)
   property := by
     rw [isSheaf_iff_isSheaf_of_type]
@@ -1095,8 +1095,8 @@ lemma Presheaf.IsSheaf.isSheafFor
   exact hP S hS
 
 中文:
-引理 Presheaf.IsSheaf.isSheafFor
-  结论: {P : Cᵒᵖ ⥤ Type w} (hP : Presheaf.IsSheaf J P)
+引理 预层.是层.isSheafFor
+  结论: {P : Cᵒᵖ ⥤ 类型 w} (hP : 预层.是层 J P)
   证明: by
   rw [isSheaf_iff_isSheaf_of_type] at hP
   exact hP S hS
@@ -1119,9 +1119,9 @@ lemma Presheaf.isSheaf_bot
   proof: fun _ => Presieve.isSheaf_bot
 
 中文:
-引理 Presheaf.isSheaf_bot
+引理 预层.isSheaf_bot
   条件: (P : Cᵒᵖ ⥤ A)
-  结论: IsSheaf ⊥ P
+  结论: 是层 ⊥ P
   证明: fun _ => Presieve.isSheaf_bot
 
 Depends on / 依赖: Presieve, Presieve.isSheaf_bot, isSheaf_bot
@@ -1138,8 +1138,8 @@ lemma Presheaf.IsSheaf.of_le
   proof: fun _ _ _ hS => h _ _ (hle _ hS)
 
 中文:
-引理 Presheaf.IsSheaf.of_le
-  结论: {K : GrothendieckTopology C} {F : Cᵒᵖ ⥤ A} (hle : J <= K)
+引理 预层.是层.of_le
+  结论: {K : Grothendieck拓扑 C} {F : Cᵒᵖ ⥤ A} (hle : J <= K)
   证明: fun _ _ _ hS => h _ _ (hle _ hS)
 -/
 lemma Presheaf.IsSheaf.of_le {K : GrothendieckTopology C} {F : Cᵒᵖ ⥤ A} (hle : J <= K)
@@ -1168,7 +1168,7 @@ definition sheafBotEquivalence
 
 中文:
 定义 sheafBotEquivalence
-  签名: : Sheaf (⊥ : GrothendieckTopology C) A ≌ Cᵒᵖ ⥤ A where
+  签名: : 层 (⊥ : Grothendieck拓扑 C) A ≌ Cᵒᵖ ⥤ A where
   定义体: sheafToPresheaf _ _
   inverse :=
     { obj := fun P => ⟨P, Presheaf.isSheaf_bot P⟩
@@ -1196,7 +1196,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Sheaf (⊥ : GrothendieckTopology C) (Type w))
+  签名: 可居 (层 (⊥ : Grothendieck拓扑 C) (类型 w))
   定义体: ⟨(sheafBotEquivalence _).inverse.obj ((Functor.const _).obj default)⟩
 
 Depends on / 依赖: Functor, Functor.const, inverse, inverse.obj, sheafBotEquivalence
@@ -1219,8 +1219,8 @@ definition Sheaf.isTerminalOfBotCover
   exact ⟨⟨t⟩, fun a => h.2 a (by tauto)⟩
 
 中文:
-定义 Sheaf.isTerminalOfBotCover
-  签名: (F : Sheaf J A) (X : C) (H : ⊥ in J X)
+定义 层.isTerminalOfBotCover
+  签名: (F : 层 J A) (X : C) (H : ⊥ in J X)
   定义体: by
   refine @IsTerminal.ofUnique _ _ _ ?_
   intro Y
@@ -1249,8 +1249,8 @@ definition Sheaf.terminal
   property := Presheaf.isSheaf_of_isTerminal J hX
 
 中文:
-定义 Sheaf.terminal
-  签名: {X : A} (hX : IsTerminal X)
+定义 层.terminal
+  签名: {X : A} (hX : 是终止 X)
   定义体: (CategoryTheory.Functor.const _).obj X
   property := Presheaf.isSheaf_of_isTerminal J hX
 
@@ -1273,8 +1273,8 @@ definition Sheaf.isTerminalTerminal
 @[simp]
 
 中文:
-定义 Sheaf.isTerminalTerminal
-  签名: {X : A} (hX : IsTerminal X)
+定义 层.isTerminalTerminal
+  签名: {X : A} (hX : 是终止 X)
   定义体: .ofUniqueHom (⟨(Functor.isTerminalConst _ hX).from ·.obj⟩)
     (by intros; ext; simpa using! hX.hom_ext _ _)
 
@@ -1296,8 +1296,8 @@ lemma Sheaf.isTerminalTerminal_from_hom
   proof: rfl
 
 中文:
-引理 Sheaf.isTerminalTerminal_from_hom
-  条件: {X : A} (hX : IsTerminal X) (G : Sheaf J A)
+引理 层.isTerminalTerminal_from_hom
+  条件: {X : A} (hX : 是终止 X) (G : 层 J A)
   证明: rfl
 -/
 lemma Sheaf.isTerminalTerminal_from_hom {X : A} (hX : IsTerminal X) (G : Sheaf J A) :
@@ -1317,8 +1317,8 @@ definition Sheaf.isTerminalOfEqTop
 @[simp]
 
 中文:
-定义 Sheaf.isTerminalOfEqTop
-  签名: (H : J = ⊤) (F : Sheaf J A)
+定义 层.isTerminalOfEqTop
+  签名: (H : J = ⊤) (F : 层 J A)
   定义体: by
   refine IsTerminal.isTerminalOfObj (sheafToPresheaf _ _) _ ?_
   refine Functor.isTerminal fun X => Sheaf.isTerminalOfBotCover _ _ ?_
@@ -1344,8 +1344,8 @@ theorem Sheaf.Hom.add_app
   proof: rfl
 
 中文:
-定理 Sheaf.Hom.add_app
-  条件: [Preadditive A] {P Q : Sheaf J A} (f g : P ⟶ Q) (U : Cᵒᵖ)
+定理 层.态射.add_app
+  条件: [预加性 A] {P Q : 层 J A} (f g : P ⟶ Q) (U : Cᵒᵖ)
   证明: rfl
 -/
 theorem Sheaf.Hom.add_app [Preadditive A] {P Q : Sheaf J A} (f g : P ⟶ Q) (U : Cᵒᵖ) :
@@ -1398,7 +1398,7 @@ definition isLimitOfIsSheaf
 
 中文:
 定义 isLimitOfIsSheaf
-  签名: {X : C} (S : J.Cover X) (hP : IsSheaf J P)
+  签名: {X : C} (S : J.Cover X) (hP : 是层 J P)
   定义体: fun E : Multifork _ => hP.amalgamate S (fun _ => E.ι _)
     (fun _ _ r => E.condition ⟨r⟩)
   fac := by
@@ -1494,7 +1494,7 @@ definition IsSheaf.isLimitMultifork
   exact (hP X S).some
 
 中文:
-定义 IsSheaf.isLimitMultifork
+定义 是层.isLimitMultifork
   定义体: by
   rw [Presheaf.isSheaf_iff_multifork] at hP
   exact (hP X S).some
@@ -1714,7 +1714,7 @@ definition IsSheaf'
   body: forall (U : C) (R : Presieve U) (_ : generate R in J U), Nonempty (IsLimit (Fork.ofι _ (w R P)))
 
 中文:
-定义 IsSheaf'
+定义 是层'
   签名: (P : Cᵒᵖ ⥤ A)
   定义体: forall (U : C) (R : Presieve U) (_ : generate R in J U), Nonempty (IsLimit (Fork.ofι _ (w R P)))
 
@@ -1742,7 +1742,7 @@ definition isSheafForIsSheafFor'
 
 中文:
 定义 isSheafForIsSheafFor'
-  签名: (P : Cᵒᵖ ⥤ A) (s : A ⥤ Type (max v₁ u₁))
+  签名: (P : Cᵒᵖ ⥤ A) (s : A ⥤ 类型 (最大值 v₁ u₁))
   定义体: by
   let e : parallelPair (s.map (firstMap R P)) (s.map (secondMap R P)) ≅
     parallelPair (Equalizer.Presieve.firstMap (P ⋙ s) R)
@@ -1794,7 +1794,7 @@ theorem isSheaf_iff_isSheaf'
 
 中文:
 定理 isSheaf_iff_isSheaf'
-  结论: IsSheaf J P' ↔ IsSheaf' J P'
+  结论: 是层 J P' ↔ 是层' J P'
   证明: by
   constructor
   · intro h U R hR
@@ -1844,7 +1844,7 @@ theorem isSheaf_of_isSheaf_comp
 
 中文:
 定理 isSheaf_of_isSheaf_comp
-  结论: (s : A ⥤ B) [ReflectsLimitsOfSize.{v₁, max v₁ u₁} s]
+  结论: (s : A ⥤ B) [ReflectsLimitsOfSize.{v₁, 最大值 v₁ u₁} s]
   证明: by
   rw [isSheaf_iff_isLimit] at h ⊢
   exact fun X S hS => (h S hS).map fun t => isLimitOfReflects s t
@@ -1868,7 +1868,7 @@ theorem isSheaf_comp_of_isSheaf
 
 中文:
 定理 isSheaf_comp_of_isSheaf
-  结论: (s : A ⥤ B) [PreservesLimitsOfSize.{v₁, max v₁ u₁} s]
+  结论: (s : A ⥤ B) [保持LimitsOfSize.{v₁, 最大值 v₁ u₁} s]
   证明: by
   rw [isSheaf_iff_isLimit] at h ⊢
   apply fun X S hS => (h S hS).map fun t => isLimitOfPreserves s t
@@ -1892,7 +1892,7 @@ theorem isSheaf_iff_isSheaf_comp
 
 中文:
 定理 isSheaf_iff_isSheaf_comp
-  结论: (s : A ⥤ B) [HasLimitsOfSize.{v₁, max v₁ u₁} A]
+  结论: (s : A ⥤ B) [有LimitsOfSize.{v₁, 最大值 v₁ u₁} A]
   证明: by
   let : ReflectsLimitsOfSize s := reflectsLimits_of_reflectsIsomorphisms
   exact ⟨isSheaf_comp_of_isSheaf J P s, isSheaf_of_isSheaf_comp J P s⟩
@@ -1918,7 +1918,7 @@ theorem isSheaf_iff_isSheaf_forget
 
 中文:
 定理 isSheaf_iff_isSheaf_forget
-  结论: (s : A' ⥤ Type (max v₁ u₁)) [HasLimits A'] [PreservesLimits s]
+  结论: (s : A' ⥤ 类型 (最大值 v₁ u₁)) [有极限 A'] [PreservesLimits s]
   证明: by
   have : HasLimitsOfSize.{v₁, max v₁ u₁} A' := hasLimitsOfSizeShrink.{_, _, u₁, 0} A'
   have : PreservesLimitsOfSize.{v₁, max v₁ u₁} s := preservesLimitsOfSize_shrink.{_, 0, _, u₁} s

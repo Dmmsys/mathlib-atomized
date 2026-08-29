@@ -80,8 +80,8 @@ theorem exists_convs_eq_rat
   exact ⟨n, hn.symm ▸ convs_eq_convergent ξ n⟩
 
 中文:
-定理 exists_convs_eq_rat
-  结论: {q : Rat}
+定理 存在_convs_eq_rat
+  结论: {q : 有理数}
   证明: by
   obtain ⟨n, hn⟩ := exists_rat_eq_convergent h
   exact ⟨n, hn.symm ▸ convs_eq_convergent ξ n⟩

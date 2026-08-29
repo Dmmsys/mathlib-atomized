@@ -70,7 +70,7 @@ definition completedRiemannZeta₀
 
 中文:
 定义 completedRiemannZeta₀
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: completedHurwitzZetaEven₀ 0 s
 -/
 def completedRiemannZeta₀ (s : Complex) : Complex := completedHurwitzZetaEven₀ 0 s
@@ -85,7 +85,7 @@ definition completedRiemannZeta
 
 中文:
 定义 completedRiemannZeta
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: completedHurwitzZetaEven 0 s
 
 Depends on / 依赖: completedHurwitzZetaEven
@@ -102,7 +102,7 @@ lemma HurwitzZeta.completedHurwitzZetaEven_zero
 
 中文:
 引理 HurwitzZeta.completedHurwitzZetaEven_zero
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: rfl
 -/
 lemma HurwitzZeta.completedHurwitzZetaEven_zero (s : Complex) :
@@ -118,7 +118,7 @@ lemma HurwitzZeta.completedHurwitzZetaEven₀_zero
 
 中文:
 引理 HurwitzZeta.completedHurwitzZetaEven₀_zero
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: rfl
 -/
 lemma HurwitzZeta.completedHurwitzZetaEven₀_zero (s : Complex) :
@@ -135,7 +135,7 @@ lemma HurwitzZeta.completedCosZeta_zero
 
 中文:
 引理 HurwitzZeta.completedCosZeta_zero
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rw [completedRiemannZeta]; rw [completedHurwitzZetaEven]; rw [completedCosZeta]; rw [hurwitzEvenFEPair_zero_symm]
 
@@ -156,7 +156,7 @@ lemma HurwitzZeta.completedCosZeta₀_zero
 
 中文:
 引理 HurwitzZeta.completedCosZeta₀_zero
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rw [completedRiemannZeta₀]; rw [completedHurwitzZetaEven₀]; rw [completedCosZeta₀]; rw [hurwitzEvenFEPair_zero_symm]
 
@@ -177,7 +177,7 @@ lemma completedRiemannZeta_eq
 
 中文:
 引理 completedRiemannZeta_eq
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   simp_rw [completedRiemannZeta, completedRiemannZeta₀, completedHurwitzZetaEven_eq, if_true]
 
@@ -197,7 +197,7 @@ theorem differentiable_completedZeta₀
 
 中文:
 定理 differentiable_completedZeta₀
-  结论: Differentiable Complex completedRiemannZeta₀
+  结论: 可微 复形 completedRiemannZeta₀
   证明: differentiable_completedHurwitzZetaEven₀ 0
 -/
 theorem differentiable_completedZeta₀ : Differentiable Complex completedRiemannZeta₀ :=
@@ -213,7 +213,7 @@ theorem differentiableAt_completedZeta
 
 中文:
 定理 differentiableAt_completedZeta
-  条件: {s : Complex} (hs : s != 0) (hs' : s != 1)
+  条件: {s : 复形} (hs : s != 0) (hs' : s != 1)
   证明: differentiableAt_completedHurwitzZetaEven 0 (Or.inl hs) hs'
 
 Depends on / 依赖: Or.inl, differentiableAt_completedHurwitzZetaEven
@@ -233,7 +233,7 @@ theorem completedRiemannZeta₀_one_sub
 
 中文:
 定理 completedRiemannZeta₀_one_sub
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rw [← completedHurwitzZetaEven₀_zero]; rw [← completedCosZeta₀_zero]; rw [completedHurwitzZetaEven₀_one_sub]
 -/
@@ -252,7 +252,7 @@ theorem completedRiemannZeta_one_sub
 
 中文:
 定理 completedRiemannZeta_one_sub
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rw [← completedHurwitzZetaEven_zero]; rw [← completedCosZeta_zero]; rw [completedHurwitzZetaEven_one_sub]
 
@@ -395,8 +395,8 @@ theorem differentiableAt_riemannZeta
 
 中文:
 定理 differentiableAt_riemannZeta
-  条件: {s : Complex} (hs' : s != 1)
-  结论: DifferentiableAt Complex riemannZeta s
+  条件: {s : 复形} (hs' : s != 1)
+  结论: DifferentiableAt 复形 riemannZeta s
   证明: differentiableAt_hurwitzZetaEven _ hs'
 
 Depends on / 依赖: differentiableAt_hurwitzZetaEven
@@ -469,7 +469,7 @@ lemma riemannZeta_def_of_ne_zero
 
 中文:
 引理 riemannZeta_def_of_ne_zero
-  条件: {s : Complex} (hs : s != 0)
+  条件: {s : 复形} (hs : s != 0)
   证明: by
   rw [riemannZeta]; rw [hurwitzZetaEven]; rw [Function.update_of_ne hs]; rw [completedHurwitzZetaEven_zero]
 
@@ -491,7 +491,7 @@ lemma riemannZeta_eq_completedRiemannZeta₀
 
 中文:
 引理 riemannZeta_eq_completedRiemannZeta₀
-  条件: {s : Complex} (hs : s != 0)
+  条件: {s : 复形} (hs : s != 0)
   结论: riemannZeta s =
   证明: by
   rw [riemannZeta_def_of_ne_zero hs]; rw [completedRiemannZeta_eq]; rw [GammaReal]
@@ -516,7 +516,7 @@ lemma riemannZeta_eq_mul_completedRiemannZeta₀
 
 中文:
 引理 riemannZeta_eq_mul_completedRiemannZeta₀
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   rcases eq_or_ne s 0 with rfl | hs
   · simp [riemannZeta_zero]
@@ -564,7 +564,7 @@ theorem riemannZeta_one_sub
 
 中文:
 定理 riemannZeta_one_sub
-  条件: {s : Complex} (hs : 对任意 n : 自然数, s != -n) (hs' : s != 1)
+  条件: {s : 复形} (hs : 对任意 n : 自然数, s != -n) (hs' : s != 1)
   证明: by
   rw [riemannZeta]; rw [hurwitzZetaEven_one_sub 0 hs (Or.inr hs')]; rw [cosZeta_zero]; rw [hurwitzZetaEven_zero]
 
@@ -613,7 +613,7 @@ theorem completedZeta_eq_tsum_of_one_lt_re
 
 中文:
 定理 completedZeta_eq_tsum_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < re s)
+  条件: {s : 复形} (hs : 1 < re s)
   证明: by
   have := (hasSum_nat_completedCosZeta 0 hs).tsum_eq.symm
   simp only [QuotientAddGroup.mk_zero, completedCosZeta_zero] at this
@@ -649,7 +649,7 @@ theorem zeta_eq_tsum_one_div_nat_cpow
 
 中文:
 定理 zeta_eq_tsum_one_div_nat_cpow
-  条件: {s : Complex} (hs : 1 < re s)
+  条件: {s : 复形} (hs : 1 < re s)
   证明: by
   simpa only [QuotientAddGroup.mk_zero, cosZeta_zero, mul_zero, zero_mul, Real.cos_zero,
     ofReal_one] using (hasSum_nat_cosZeta 0 hs).tsum_eq.symm
@@ -675,7 +675,7 @@ theorem zeta_eq_tsum_one_div_nat_add_one_cpow
 
 中文:
 定理 zeta_eq_tsum_one_div_nat_add_one_cpow
-  条件: {s : Complex} (hs : 1 < re s)
+  条件: {s : 复形} (hs : 1 < re s)
   证明: by
   have := zeta_eq_tsum_one_div_nat_cpow hs
   rw [Summable.tsum_eq_zero_add] at this
@@ -770,7 +770,7 @@ lemma riemannZeta_residue_one
 
 中文:
 引理 riemannZeta_residue_one
-  结论: Tendsto (fun s => (s - 1) * riemannZeta s) (𝓝[!=] 1) (𝓝 1)
+  结论: 收敛 (fun s => (s - 1) * riemannZeta s) (𝓝[!=] 1) (𝓝 1)
   证明: by
   exact hurwitzZetaEven_residue_one 0
 

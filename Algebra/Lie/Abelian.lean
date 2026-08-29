@@ -46,8 +46,8 @@ class LieModule.IsTrivial
     - trivial : forall (x : L) (m : M), ⁅x, m⁆ = 0
 
 中文:
-类 LieModule.IsTrivial
-  参数: (L : 类型v) (M : Type w) [Bracket L M] [Zero M]
+类 Lie模.是平凡
+  参数: (L : 类型v) (M : 类型 w) [Bracket L M] [零 M]
   公理与运算 (1 个):
     - trivial : 对任意 (x : L) (m : M), ⁅x, m⁆ = 0
 -/
@@ -64,7 +64,7 @@ theorem trivial_lie_zero
 
 中文:
 定理 trivial_lie_zero
-  结论: (L : 类型v) (M : Type w) [Bracket L M] [Zero M] [LieModule.IsTrivial L M]
+  结论: (L : 类型v) (M : 类型 w) [Bracket L M] [零 M] [Lie模.是平凡 L M]
   证明: LieModule.IsTrivial.trivial x m
 
 Depends on / 依赖: IsTrivial, LieModule, LieModule.IsTrivial.trivial
@@ -82,7 +82,7 @@ instance LieModule.instIsTrivialOfSubsingleton
   body: ⟨fun x m => by rw [Subsingleton.eq_zero x, zero_lie]⟩
 
 中文:
-实例 LieModule.instIsTrivialOfSubsingleton
+实例 Lie模.instIsTrivialOfSubsingleton
   签名: {L M : 类型}
   定义体: ⟨fun x m => by rw [Subsingleton.eq_zero x, zero_lie]⟩
 
@@ -101,7 +101,7 @@ instance LieModule.instIsTrivialOfSubsingleton'
   body: ⟨fun x m => by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
 
 中文:
-实例 LieModule.instIsTrivialOfSubsingleton'
+实例 Lie模.instIsTrivialOfSubsingleton'
   签名: {L M : 类型}
   定义体: ⟨fun x m => by simp_rw [Subsingleton.eq_zero m, lie_zero]⟩
 
@@ -121,7 +121,7 @@ abbreviation IsLieAbelian
 
 中文:
 缩写 IsLieAbelian
-  签名: (L : 类型v) [Bracket L L] [Zero L]
+  签名: (L : 类型v) [Bracket L L] [零 L]
   定义体: LieModule.IsTrivial L L
 
 Depends on / 依赖: IsTrivial, LieModule, LieModule.IsTrivial
@@ -139,7 +139,7 @@ instance LieIdeal.isLieAbelian_of_trivial
 
 中文:
 实例 LieIdeal.isLieAbelian_of_trivial
-  签名: (R : 类型u) (L : 类型v) [CommRing R] [LieRing L]
+  签名: (R : 类型u) (L : 类型v) [交换环 R] [Lie环 L]
   定义体: by apply h.trivial
 
 Depends on / 依赖: h.trivial
@@ -161,8 +161,8 @@ theorem Function.Injective.isLieAbelian
         _ = f 0 := (map_zero _).symm }
 
 中文:
-定理 Function.Injective.isLieAbelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : Type w} [CommRing R]
+定理 函数.单射.isLieAbelian
+  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
   证明: { trivial := fun x y => h₁ <|
       calc
         f ⁅x, y⁆ = ⁅f x, f y⁆ := LieHom.map_lie f x y
@@ -192,8 +192,8 @@ theorem Function.Surjective.isLieAbelian
       rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero] }
 
 中文:
-定理 Function.Surjective.isLieAbelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : Type w} [CommRing R]
+定理 函数.满射.isLieAbelian
+  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
   证明: { trivial := fun x y => by
       obtain ⟨u, rfl⟩ := h₁ x
       obtain ⟨v, rfl⟩ := h₁ y
@@ -219,7 +219,7 @@ theorem lie_abelian_iff_equiv_lie_abelian
 
 中文:
 定理 lie_abelian_iff_equiv_lie_abelian
-  结论: {R : 类型u} {L₁ : 类型v} {L₂ : Type w} [CommRing R]
+  结论: {R : 类型u} {L₁ : 类型v} {L₂ : 类型 w} [交换环 R]
   证明: ⟨e.symm.injective.isLieAbelian, e.injective.isLieAbelian⟩
 
 Depends on / 依赖: e.injective.isLieAbelian, e.symm.injective.isLieAbelian, injective, isLieAbelian
@@ -244,7 +244,7 @@ alias commutative_ring_iff_abelian_lie_ring := isMulCommutative_iff_isLieAbelian
 
 中文:
 定理 isMulCommutative_iff_isLieAbelian
-  条件: {A : 类型v} [Ring A]
+  条件: {A : 类型v} [环 A]
   证明: by
   have : IsLieAbelian A ↔ forall a b : A, ⁅a, b⁆ = 0 := ⟨(·.trivial), (⟨·⟩)⟩
   simp [this, isMulCommutative_iff, LieRing.of_associative_ring_bracket, sub_eq_zero]
@@ -276,7 +276,7 @@ theorem LieSubalgebra.isLieAbelian_lieSpan_iff
   · induction hx usi
 
 中文:
-定理 LieSubalgebra.isLieAbelian_lieSpan_iff
+定理 Lie子代数.isLieAbelian_lieSpan_iff
   证明: by
   refine ⟨fun h x hx y hy => ?_, fun h => ⟨fun ⟨x, hx⟩ ⟨y, hy⟩ => ?_⟩⟩
   · let x' : lieSpan R L s := ⟨x, subset_lieSpan hx⟩
@@ -365,7 +365,7 @@ theorem mem_ker
 中文:
 定理 mem_ker
   条件: (x : L)
-  结论: x in LieModule.ker R L M ↔ 对任意 m : M, ⁅x, m⁆ = 0
+  结论: x in Lie模.ker R L M ↔ 对任意 m : M, ⁅x, m⁆ = 0
   证明: by
   simp only [LieModule.ker, LieHom.mem_ker, LinearMap.ext_iff, LinearMap.zero_apply,
     toEnd_apply_apply]
@@ -422,7 +422,7 @@ lemma isFaithful_iff_ker_eq_bot
 
 中文:
 引理 isFaithful_iff_ker_eq_bot
-  结论: IsFaithful R L M ↔ LieModule.ker R L M = ⊥
+  结论: 是忠实 R L M ↔ Lie模.ker R L M = ⊥
   证明: by
   rw [isFaithful_iff']; rw [LieSubmodule.ext_iff]
   aesop
@@ -443,7 +443,7 @@ lemma ker_eq_bot
 
 中文:
 引理 ker_eq_bot
-  条件: [IsFaithful R L M]
+  条件: [是忠实 R L M]
   证明: (isFaithful_iff_ker_eq_bot R L M).mp inferInstance
 -/
 @[simp] lemma ker_eq_bot [IsFaithful R L M] :
@@ -466,7 +466,7 @@ definition maxTrivSubmodule
 
 中文:
 定义 maxTrivSubmodule
-  签名: : LieSubmodule R L M where
+  签名: : Lie子模 R L M where
   定义体: { m | forall x : L, ⁅x, m⁆ = 0 }
   zero_mem' x := lie_zero x
   add_mem' {x y} hx hy z := by rw [lie_add, hx, hy, add_zero]
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrivial L (maxTrivSubmodule R L M)
+  签名: 是平凡 L (maxTrivSubmodule R L M)
   定义体: Subtype.ext (m.property x)
 
 @[simp]
@@ -568,7 +568,7 @@ theorem le_max_triv_iff_bracket_eq_bot
 
 中文:
 定理 le_max_triv_iff_bracket_eq_bot
-  条件: {N : LieSubmodule R L M}
+  条件: {N : Lie子模 R L M}
   证明: by
   refine ⟨fun h => ?_, fun h m hm => ?_⟩
   · rw [← le_bot_iff, ← ideal_oper_maxTrivSubmodule_eq_bot R L M ⊤]
@@ -599,7 +599,7 @@ theorem trivial_iff_le_maximal_trivial
 
 中文:
 定理 trivial_iff_le_maximal_trivial
-  条件: (N : LieSubmodule R L M)
+  条件: (N : Lie子模 R L M)
   证明: ⟨fun h m hm x => IsTrivial.casesOn h fun h => Subtype.ext_iff.mp (h x ⟨m, hm⟩), fun h =>
     { trivial := fun x m => Subtype.ext (h m.2 x) }⟩
 
@@ -624,7 +624,7 @@ theorem isTrivial_iff_max_triv_eq_top
 
 中文:
 定理 isTrivial_iff_max_triv_eq_top
-  结论: IsTrivial L M ↔ maxTrivSubmodule R L M = ⊤
+  结论: 是平凡 L M ↔ maxTrivSubmodule R L M = ⊤
   证明: by
   constructor
   · rintro ⟨h⟩; ext; simp only [mem_maxTrivSubmodule, h, forall_const, LieSubmodule.mem_top]
@@ -968,7 +968,7 @@ theorem ad_ker_eq_self_module_ker
 
 中文:
 定理 ad_ker_eq_self_module_ker
-  结论: (ad R L).ker = LieModule.ker R L L
+  结论: (ad R L).ker = Lie模.ker R L L
   证明: rfl
 
 @[simp]
@@ -989,7 +989,7 @@ theorem self_module_ker_eq_center
 
 中文:
 定理 self_module_ker_eq_center
-  结论: LieModule.ker R L L = center R L
+  结论: Lie模.ker R L L = center R L
   证明: by
   ext y
   simp only [LieModule.mem_maxTrivSubmodule, LieModule.mem_ker, ← lie_skew _ y, neg_eq_zero]
@@ -1054,7 +1054,7 @@ theorem isFaithful_self_iff
 
 中文:
 定理 isFaithful_self_iff
-  结论: LieModule.IsFaithful R L L ↔ center R L = ⊥
+  结论: Lie模.是忠实 R L L ↔ center R L = ⊥
   证明: by
   rw [LieModule.isFaithful_iff_ker_eq_bot]; rw [self_module_ker_eq_center]
 
@@ -1076,7 +1076,7 @@ theorem center_eq_bot
 
 中文:
 定理 center_eq_bot
-  条件: [LieModule.IsFaithful R L L]
+  条件: [Lie模.是忠实 R L L]
   证明: (isFaithful_self_iff R L).mp inferInstance
 
 Depends on / 依赖: isFaithful_self_iff
@@ -1157,8 +1157,8 @@ theorem LieSubmodule.trivial_lie_oper_zero
   rintro m ⟨x, n, h⟩; rw [trivial_lie_zero] at h; simp [← h]
 
 中文:
-定理 LieSubmodule.trivial_lie_oper_zero
-  条件: [LieModule.IsTrivial L M]
+定理 Lie子模.trivial_lie_oper_zero
+  条件: [Lie模.是平凡 L M]
   结论: ⁅I, N⁆ = ⊥
   证明: by
   suffices ⁅I, N⁆ <= ⊥ from le_bot_iff.mp this
@@ -1188,7 +1188,7 @@ theorem LieSubmodule.lie_abelian_iff_lie_self_eq_bot
           ((coe_zero
 
 中文:
-定理 LieSubmodule.lie_abelian_iff_lie_self_eq_bot
+定理 Lie子模.lie_abelian_iff_lie_self_eq_bot
   结论: IsLieAbelian I ↔ ⁅I, I⁆ = ⊥
   证明: by
   simp only [_root_.eq_bot_iff, lieIdeal_oper_eq_span, LieSubmodule.lieSpan_le,
@@ -1243,7 +1243,7 @@ lemma lie_eq_self_of_isAtom_of_nonabelian
 
 中文:
 引理 lie_eq_self_of_isAtom_of_nonabelian
-  结论: {R L : 类型} [CommRing R] [LieRing L] [LieAlgebra R L]
+  结论: {R L : 类型} [交换环 R] [Lie环 L] [Lie代数 R L]
   证明: lie_eq_self_of_isAtom_of_ne_bot hI not_imp_not.mpr (lie_abelian_iff_lie_self_eq_bot I).mpr h
 
 Depends on / 依赖: lie_abelian_iff_lie_self_eq_bot, lie_eq_self_of_isAtom_of_ne_bot, not_imp_not, not_imp_not.mpr
@@ -1289,7 +1289,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (TrivialLieModule R L M)
+  签名: 加法交换群 (TrivialLieModule R L M)
   定义体: inferInstanceAs (AddCommGroup M)
 
 Depends on / 依赖: AddCommGroup
@@ -1306,7 +1306,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (TrivialLieModule R L M)
+  签名: 模 R (TrivialLieModule R L M)
   定义体: inferInstanceAs (Module R M)
 
 Depends on / 依赖: Module
@@ -1343,7 +1343,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRingModule L (TrivialLieModule R L M)
+  签名: Lie环模 L (TrivialLieModule R L M)
   定义体: 0
   add_lie := by simp
   lie_add := by simp
@@ -1365,7 +1365,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule.IsTrivial L (TrivialLieModule R L M)
+  签名: Lie模.是平凡 L (TrivialLieModule R L M)
   定义体: rfl
 -/
 instance : LieModule.IsTrivial L (TrivialLieModule R L M) where
@@ -1382,7 +1382,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule R L (TrivialLieModule R L M)
+  签名: Lie模 R L (TrivialLieModule R L M)
   定义体: by simp [trivial_lie_zero]
   lie_smul := by simp [trivial_lie_zero]
 

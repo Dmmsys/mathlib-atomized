@@ -95,8 +95,8 @@ theorem _root_.Finset.esymm_map_val
   simp only [Function.comp_apply, Finset.prod_map_val, Finset.sum_map_val]
 
 中文:
-定理 _root_.Finset.esymm_map_val
-  条件: {σ} (f : σ -> R) (s : Finset σ) (n : 自然数)
+定理 _root_.有限集.esymm_map_val
+  条件: {σ} (f : σ -> R) (s : 有限集 σ) (n : 自然数)
   证明: by
   simp only [esymm, powersetCard_map, ← Finset.map_val_val_powersetCard, map_map]
   simp only [Function.comp_apply, Finset.prod_map_val, Finset.sum_map_val]
@@ -123,7 +123,7 @@ lemma pow_smul_esymm
 
 中文:
 引理 pow_smul_esymm
-  结论: {S : 类型} [Monoid S] [DistribMulAction S R] [IsScalarTower S R R]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S R] [标量塔 S R R]
   证明: by
   rw [esymm]; rw [smul_sum]; rw [map_map]
   trans ((powersetCard n m).map (fun x : Multiset R => s ^ card x • x.prod)).sum
@@ -197,7 +197,7 @@ definition IsSymmetric
 
 中文:
 定义 IsSymmetric
-  签名: [CommSemiring R] (φ : MvPolynomial σ R)
+  签名: [交换半环 R] (φ : 多元多项式 σ R)
   定义体: forall e : Perm σ, rename e φ = φ
 -/
 def IsSymmetric [CommSemiring R] (φ : MvPolynomial σ R) : Prop :=
@@ -218,7 +218,7 @@ definition symmetricSubalgebra
 
 中文:
 定义 symmetricSubalgebra
-  签名: (σ R : 类型) [CommSemiring R]
+  签名: (σ R : 类型) [交换半环 R]
   定义体: Set.ofPred IsSymmetric
   algebraMap_mem' r e := rename_C e r
   mul_mem' ha hb e := by rw [map_mul, ha, hb]
@@ -245,7 +245,7 @@ theorem mem_symmetricSubalgebra
 
 中文:
 定理 mem_symmetricSubalgebra
-  条件: [CommSemiring R] (p : MvPolynomial σ R)
+  条件: [交换半环 R] (p : 多元多项式 σ R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -275,7 +275,7 @@ theorem C
 中文:
 定理 C
   条件: (r : R)
-  结论: IsSymmetric (C r : MvPolynomial σ R)
+  结论: IsSymmetric (C r : 多元多项式 σ R)
   证明: (symmetricSubalgebra σ R).algebraMap_mem r
 
 @[simp]
@@ -298,7 +298,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: IsSymmetric (0 : MvPolynomial σ R)
+  结论: IsSymmetric (0 : 多元多项式 σ R)
   证明: (symmetricSubalgebra σ R).zero_mem
 
 @[simp]
@@ -319,7 +319,7 @@ theorem one
 
 中文:
 定理 one
-  结论: IsSymmetric (1 : MvPolynomial σ R)
+  结论: IsSymmetric (1 : 多元多项式 σ R)
   证明: (symmetricSubalgebra σ R).one_mem
 
 Depends on / 依赖: one_mem, symmetricSubalgebra
@@ -454,7 +454,7 @@ theorem _root_.MvPolynomial.isSymmetric_rename
   proof: ⟨fun h => by simpa using (IsSymmetric.rename (R := R) h e.symm), (IsSymmetric.rename · e)⟩
 
 中文:
-定理 _root_.MvPolynomial.isSymmetric_rename
+定理 _root_.多元多项式.isSymmetric_rename
   条件: {e : σ ≃ τ}
   证明: ⟨fun h => by simpa using (IsSymmetric.rename (R := R) h e.symm), (IsSymmetric.rename · e)⟩
 
@@ -531,7 +531,7 @@ definition renameSymmetricSubalgebra
 
 中文:
 定义 renameSymmetricSubalgebra
-  签名: [CommSemiring R] (e : σ ≃ τ)
+  签名: [交换半环 R] (e : σ ≃ τ)
   定义体: AlgEquiv.ofAlgHom
     (((rename e).comp (symmetricSubalgebra σ R).val).codRestrict _ <| fun x => x.2.rename e)
     (((rename e.symm).comp <| Subalgebra.val _).codRestrict _ <| fun x => x.2.rename e.symm)
@@ -582,7 +582,7 @@ definition esymmPart
 
 中文:
 定义 esymmPart
-  签名: {n : 自然数} (μ : n.Partition)
+  签名: {n : 自然数} (μ : n.分拆)
   定义体: (μ.parts.map (esymm σ R)).prod
 
 Depends on / 依赖: parts.map
@@ -620,7 +620,7 @@ theorem aeval_esymm_eq_multiset_esymm
 
 中文:
 定理 aeval_esymm_eq_multiset_esymm
-  条件: [Algebra R S] (n : 自然数) (f : σ -> S)
+  条件: [代数 R S] (n : 自然数) (f : σ -> S)
   证明: by
   simp_rw [esymm, aeval_sum, aeval_prod, aeval_X, esymm_map_val]
 
@@ -859,7 +859,7 @@ theorem support_esymm''
 
 中文:
 定理 support_esymm''
-  条件: [DecidableEq σ] [Nontrivial R] (n : 自然数)
+  条件: [DecidableEq σ] [非平凡 R] (n : 自然数)
   证明: by
   rw [esymm_eq_sum_monomial]
   simp only [← single_eq_monomial]
@@ -902,7 +902,7 @@ theorem support_esymm'
 
 中文:
 定理 support_esymm'
-  条件: [DecidableEq σ] [Nontrivial R] (n : 自然数)
+  条件: [DecidableEq σ] [非平凡 R] (n : 自然数)
   结论: (esymm σ R n).support =
   证明: by
   rw [support_esymm'']
@@ -932,7 +932,7 @@ theorem support_esymm
 
 中文:
 定理 support_esymm
-  条件: [DecidableEq σ] [Nontrivial R] (n : 自然数)
+  条件: [DecidableEq σ] [非平凡 R] (n : 自然数)
   结论: (esymm σ R n).support =
   证明: by
   rw [support_esymm']
@@ -963,7 +963,7 @@ theorem degrees_esymm
 
 中文:
 定理 degrees_esymm
-  条件: [Nontrivial R] {n : 自然数} (hpos : 0 < n) (hn : n <= Fintype.card σ)
+  条件: [非平凡 R] {n : 自然数} (hpos : 0 < n) (hn : n <= 有限类型.card σ)
   证明: by
   classical
     have :
@@ -1026,7 +1026,7 @@ definition hsymmPart
 
 中文:
 定义 hsymmPart
-  签名: {n : 自然数} (μ : n.Partition)
+  签名: {n : 自然数} (μ : n.分拆)
   定义体: (μ.parts.map (hsymm σ R)).prod
 
 @[simp]
@@ -1230,7 +1230,7 @@ definition psumPart
 
 中文:
 定义 psumPart
-  签名: {n : 自然数} (μ : n.Partition)
+  签名: {n : 自然数} (μ : n.分拆)
   定义体: (μ.parts.map (psum σ R)).prod
 
 @[simp]
@@ -1252,7 +1252,7 @@ theorem psum_zero
 
 中文:
 定理 psum_zero
-  结论: psum σ R 0 = Fintype.card σ
+  结论: psum σ R 0 = 有限类型.card σ
   证明: by simp [psum]
 
 @[simp]
@@ -1384,7 +1384,7 @@ definition msymm
 
 中文:
 定义 msymm
-  签名: (μ : n.Partition)
+  签名: (μ : n.分拆)
   定义体: ∑ s : {a : Sym σ n // .ofSym a = μ}, (s.1.1.map X).prod
 
 @[simp]
@@ -1478,7 +1478,7 @@ theorem rename_msymm
 
 中文:
 定理 rename_msymm
-  条件: (μ : n.Partition) (e : σ ≃ τ)
+  条件: (μ : n.分拆) (e : σ ≃ τ)
   证明: by
   rw [msymm]; rw [map_sum]
   apply Fintype.sum_equiv (Nat.Partition.ofSymShapeEquiv μ e)
@@ -1507,7 +1507,7 @@ theorem msymm_isSymmetric
 
 中文:
 定理 msymm_isSymmetric
-  条件: (μ : n.Partition)
+  条件: (μ : n.分拆)
   结论: IsSymmetric (msymm σ R μ)
   证明: rename_msymm _ _ μ
 

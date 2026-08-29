@@ -34,7 +34,7 @@ IO.println m.toString ++ ":"
 
 中文:
 定义 printNameHashMap
-  签名: (h : Std.HashMap Name (Array Name))
+  签名: (h : Std.HashMap Name (数组 Name))
   定义体: for (m, names) in h.toList do
     IO.println "----"
 IO.println m.toString ++ ":"

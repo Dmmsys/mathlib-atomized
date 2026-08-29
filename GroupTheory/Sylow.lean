@@ -62,11 +62,11 @@ structure Sylow
 
 中文:
 结构 Sylow
-  参数: extends Subgroup G
-  继承: Subgroup G
+  参数: extends 子群 G
+  继承: 子群 G
   公理与运算 (2 个):
-    - isPGroup' : IsPGroup p toSubgroup
-    - is_maximal' : 对任意 {Q : Subgroup G}, IsPGroup p Q -> toSubgroup <= Q -> Q = toSubgroup
+    - isPGroup' : 是p群 p toSubgroup
+    - is_maximal' : 对任意 {Q : 子群 G}, 是p群 p Q -> toSubgroup <= Q -> Q = toSubgroup
 -/
 structure Sylow extends Subgroup G where
   isPGroup' : IsPGroup p toSubgroup
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (Sylow p G) (Subgroup G)
+  签名: CoeOut (Sylow p G) (子群 G)
   定义体: ⟨toSubgroup⟩
 
 @[ext]
@@ -112,7 +112,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {P Q : Sylow p G} (h : (P : Subgroup G) = Q)
+  条件: {P Q : Sylow p G} (h : (P : 子群 G) = Q)
   结论: P = Q
   证明: by cases P; cases Q; congr
 -/
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Sylow p G) G
+  签名: 集合状 (Sylow p G) G
   定义体: (↑)
   coe_injective _ _ h := ext (SetLike.coe_injective h)
 -/
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Sylow p G)
+  签名: 偏序 (Sylow p G)
   定义体: .ofSetLike (Sylow p G) G
 
 Depends on / 依赖: ofSetLike
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (Sylow p G) G
+  签名: 子群类 (Sylow p G) G
   定义体: Subgroup.mul_mem _
   one_mem _ := Subgroup.one_mem _
   inv_mem := Subgroup.inv_mem _
@@ -195,7 +195,7 @@ theorem coe_coe
 中文:
 定理 coe_coe
   条件: (P : Sylow p G)
-  结论: (P : Subgroup G) = (P : Set G)
+  结论: (P : 子群 G) = (P : 集合 G)
   证明: rfl
 -/
 protected theorem coe_coe (P : Sylow p G) : (P : Subgroup G) = (P : Set G) :=
@@ -217,8 +217,8 @@ definition _root_.IsPGroup.toSylow
    
 
 中文:
-定义 _root_.IsPGroup.toSylow
-  签名: [Fact p.Prime] {P : Subgroup G}
+定义 _root_.是p群.toSylow
+  签名: [Fact p.素] {P : 子群 G}
   定义体: { P with
     isPGroup' := hP1
     is_maximal' := by
@@ -252,8 +252,8 @@ theorem _root_.IsPGroup.toSylow_coe
   proof: rfl
 
 中文:
-定理 _root_.IsPGroup.toSylow_coe
-  结论: [Fact p.Prime] {P : Subgroup G}
+定理 _root_.是p群.toSylow_coe
+  结论: [Fact p.素] {P : 子群 G}
   证明: rfl
 -/
 @[simp] theorem _root_.IsPGroup.toSylow_coe [Fact p.Prime] {P : Subgroup G}
@@ -269,8 +269,8 @@ theorem _root_.IsPGroup.mem_toSylow
   proof: .rfl
 
 中文:
-定理 _root_.IsPGroup.mem_toSylow
-  结论: [Fact p.Prime] {P : Subgroup G}
+定理 _root_.是p群.mem_toSylow
+  结论: [Fact p.素] {P : 子群 G}
   证明: .rfl
 -/
 @[simp] theorem _root_.IsPGroup.mem_toSylow [Fact p.Prime] {P : Subgroup G}
@@ -286,8 +286,8 @@ theorem _root_.IsPGroup.le_sylow_of_normal
   proof: sup_eq_right.mp H.is_maximal' (h.to_sup_of_normal_left H.isPGroup') le_sup_right
 
 中文:
-定理 _root_.IsPGroup.le_sylow_of_normal
-  结论: {N : Subgroup G} [N.Normal] (h : IsPGroup p N)
+定理 _root_.是p群.le_sylow_of_normal
+  结论: {N : 子群 G} [N.正规] (h : 是p群 p N)
   证明: sup_eq_right.mp H.is_maximal' (h.to_sup_of_normal_left H.isPGroup') le_sup_right
 
 Depends on / 依赖: H.isPGroup, H.is_maximal, h.to_sup_of_normal_left, isPGroup, is_maximal, le_sup_right, sup_eq_right, sup_eq_right.mp, to_sup_of_normal_left
@@ -310,7 +310,7 @@ definition ofCard
 
 中文:
 定义 ofCard
-  签名: [Finite G] {p : 自然数} [Fact p.Prime] (H : Subgroup G)
+  签名: [有限 G] {p : 自然数} [Fact p.素] (H : 子群 G)
   定义体: (IsPGroup.of_card card_eq).toSylow (by
     rw [← mul_dvd_mul_iff_left (Nat.card_pos (α := H)).ne']; rw [card_mul_index]; rw [card_eq]; rw [← pow_succ]
     exact Nat.pow_succ_factorization_not_dvd Nat.card_pos.ne' Fact.out)
@@ -336,7 +336,7 @@ theorem coe_ofCard
 
 中文:
 定理 coe_ofCard
-  结论: [Finite G] {p : 自然数} [Fact p.Prime] (H : Subgroup G)
+  结论: [有限 G] {p : 自然数} [Fact p.素] (H : 子群 G)
   证明: rfl
 -/
 theorem coe_ofCard [Finite G] {p : Nat} [Fact p.Prime] (H : Subgroup G)
@@ -355,7 +355,7 @@ theorem eq_top_of_zero
 中文:
 定理 eq_top_of_zero
   条件: (H : Sylow 0 G)
-  结论: (H : Subgroup G) = ⊤
+  结论: (H : 子群 G) = ⊤
   证明: (H.is_maximal' (.zero _) le_top).symm
 
 Depends on / 依赖: H.is_maximal, is_maximal, le_top, piCongrLeft
@@ -376,7 +376,7 @@ theorem eq_bot_of_one
 中文:
 定理 eq_bot_of_one
   条件: (H : Sylow 1 G)
-  结论: (H : Subgroup G) = ⊥
+  结论: (H : 子群 G) = ⊥
   证明: have := isPGroup_one_iff_subsingleton.mp H.isPGroup'
   eq_bot_of_subsingleton _
 
@@ -452,7 +452,7 @@ theorem coe_symm_equivProdPrimeFactors_apply
 
 中文:
 定理 coe_symm_equivProdPrimeFactors_apply
-  条件: (h : p != 0) (H : Sylow (p.primeFactors.prod id) G)
+  条件: (h : p != 0) (H : Sylow (p.primeFactors.乘积 id) G)
   证明: rfl
 -/
 theorem coe_symm_equivProdPrimeFactors_apply (h : p != 0) (H : Sylow (p.primeFactors.prod id) G) :
@@ -480,7 +480,7 @@ definition comapOfKerIsPGroup
 
 中文:
 定义 comapOfKerIsPGroup
-  签名: (hϕ : IsPGroup p ϕ.ker) (h : P <= ϕ.range)
+  签名: (hϕ : 是p群 p ϕ.ker) (h : P <= ϕ.range)
   定义体: { P.1.comap ϕ with
     isPGroup' := P.2.comap_of_ker_isPGroup ϕ hϕ
     is_maximal' := fun {Q} hQ hle => by
@@ -511,7 +511,7 @@ theorem coe_comapOfKerIsPGroup
 
 中文:
 定理 coe_comapOfKerIsPGroup
-  条件: (hϕ : IsPGroup p ϕ.ker) (h : P <= ϕ.range)
+  条件: (hϕ : 是p群 p ϕ.ker) (h : P <= ϕ.range)
   证明: rfl
 -/
 theorem coe_comapOfKerIsPGroup (hϕ : IsPGroup p ϕ.ker) (h : P <= ϕ.range) :
@@ -530,7 +530,7 @@ definition comapOfInjective
 
 中文:
 定义 comapOfInjective
-  签名: (hϕ : Function.Injective ϕ) (h : P <= ϕ.range)
+  签名: (hϕ : 函数.单射 ϕ) (h : P <= ϕ.range)
   定义体: P.comapOfKerIsPGroup ϕ (IsPGroup.ker_isPGroup_of_injective hϕ) h
 
 @[simp]
@@ -551,7 +551,7 @@ theorem coe_comapOfInjective
 
 中文:
 定理 coe_comapOfInjective
-  条件: (hϕ : Function.Injective ϕ) (h : P <= ϕ.range)
+  条件: (hϕ : 函数.单射 ϕ) (h : P <= ϕ.range)
   证明: rfl
 -/
 theorem coe_comapOfInjective (hϕ : Function.Injective ϕ) (h : P <= ϕ.range) :
@@ -639,8 +639,8 @@ theorem IsPGroup.exists_le_sylow
             mul_mem' := fun {_}
 
 中文:
-定理 IsPGroup.exists_le_sylow
-  条件: {P : Subgroup G} (hP : IsPGroup p P)
+定理 是p群.存在_le_sylow
+  条件: {P : 子群 G} (hP : 是p群 p P)
   结论: 存在 Q : Sylow p G, P <= Q
   证明: Exists.elim
     (zorn_le_nonempty₀ { Q : Subgroup G | IsPGroup p Q }
@@ -680,7 +680,7 @@ instance nonempty
 
 中文:
 实例 nonempty
-  签名: : Nonempty (Sylow p G)
+  签名: : 非空 (Sylow p G)
   定义体: IsPGroup.of_bot.exists_le_sylow.nonempty
 
 Depends on / 依赖: IsPGroup, IsPGroup.of_bot.exists_le_sylow.nonempty, exists_le_sylow, nonempty, of_bot
@@ -698,7 +698,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (Sylow p G)
+  签名: : 可居 (Sylow p G)
   定义体: Classical.inhabited_of_nonempty nonempty
 
 Depends on / 依赖: Classical, Classical.inhabited_of_nonempty, inhabited_of_nonempty, nonempty
@@ -716,8 +716,8 @@ theorem exists_comap_eq_of_ker_isPGroup
     (P.2.map f).exists_le_sylow
 
 中文:
-定理 exists_comap_eq_of_ker_isPGroup
-  结论: {H : 类型} [Group H] (P : Sylow p H) {f : H ->* G}
+定理 存在_comap_eq_of_ker_isPGroup
+  结论: {H : 类型} [群 H] (P : Sylow p H) {f : H ->* G}
   证明: Exists.imp (fun Q hQ => P.3 (Q.2.comap_of_ker_isPGroup f hf) (map_le_iff_le_comap.mp hQ))
     (P.2.map f).exists_le_sylow
 
@@ -737,8 +737,8 @@ theorem exists_comap_eq_of_injective
   proof: P.exists_comap_eq_of_ker_isPGroup (IsPGroup.ker_isPGroup_of_injective hf)
 
 中文:
-定理 exists_comap_eq_of_injective
-  结论: {H : 类型} [Group H] (P : Sylow p H) {f : H ->* G}
+定理 存在_comap_eq_of_injective
+  结论: {H : 类型} [群 H] (P : Sylow p H) {f : H ->* G}
   证明: P.exists_comap_eq_of_ker_isPGroup (IsPGroup.ker_isPGroup_of_injective hf)
 
 Depends on / 依赖: IsPGroup, IsPGroup.ker_isPGroup_of_injective, P.exists_comap_eq_of_ker_isPGroup, exists_comap_eq_of_ker_isPGroup, ker_isPGroup_of_injective
@@ -756,8 +756,8 @@ theorem exists_comap_subtype_eq
   proof: P.exists_comap_eq_of_injective Subtype.coe_injective
 
 中文:
-定理 exists_comap_subtype_eq
-  条件: {H : Subgroup G} (P : Sylow p H)
+定理 存在_comap_subtype_eq
+  条件: {H : 子群 G} (P : Sylow p H)
   证明: P.exists_comap_eq_of_injective Subtype.coe_injective
 
 Depends on / 依赖: P.exists_comap_eq_of_injective, Subtype, Subtype.coe_injective, coe_injective, exists_comap_eq_of_injective
@@ -777,7 +777,7 @@ H'.isPGroup'.to_le iSup_le (h · |>.le_sylow_of_normal H')
 
 中文:
 定理 iSup_of_normal
-  结论: {ι : 类型} (H : ι -> Subgroup G) [对任意 i, (H i).Normal]
+  结论: {ι : 类型} (H : ι -> 子群 G) [对任意 i, (H i).正规]
   证明: have H' := Classical.arbitrary Sylow p G
 H'.isPGroup'.to_le iSup_le (h · |>.le_sylow_of_normal H')
 
@@ -801,7 +801,7 @@ theorem biSup_of_normal
 
 中文:
 定理 biSup_of_normal
-  结论: {ι : 类型} (s : Set ι) (H : ι -> Subgroup G) (h : 对任意 i in s, IsPGroup p (H i))
+  结论: {ι : 类型} (s : 集合 ι) (H : ι -> 子群 G) (h : 对任意 i in s, 是p群 p (H i))
   证明: by
   rw [← iSup_subtype'']
   have : forall i : s, (H i).Normal := fun i => hn i i.property
@@ -827,7 +827,7 @@ theorem sSup_of_normal
 
 中文:
 定理 sSup_of_normal
-  结论: (Hs : Set (Subgroup G)) (h : 对任意 H in Hs, IsPGroup p H)
+  结论: (Hs : 集合 (子群 G)) (h : 对任意 H in Hs, 是p群 p H)
   证明: by
   rw [sSup_eq_iSup]
   exact biSup_of_normal Hs id h hn
@@ -852,7 +852,7 @@ theorem finite_of_ker_is_pGroup
 
 中文:
 定理 finite_of_ker_is_pGroup
-  结论: {H : 类型} [Group H] {f : H ->* G}
+  结论: {H : 类型} [群 H] {f : H ->* G}
   证明: let h_exists := fun P : Sylow p H => P.exists_comap_eq_of_ker_isPGroup hf
   let g : Sylow p H -> Sylow p G := fun P => Classical.choose (h_exists P)
   have hg : forall P : Sylow p H, (g P).1.comap f = P := fun P => Classical.choose_spec (h_exists P)
@@ -877,7 +877,7 @@ theorem finite_of_injective
 
 中文:
 定理 finite_of_injective
-  结论: {H : 类型} [Group H] {f : H ->* G}
+  结论: {H : 类型} [群 H] {f : H ->* G}
   证明: finite_of_ker_is_pGroup (IsPGroup.ker_isPGroup_of_injective hf)
 
 Depends on / 依赖: IsPGroup, IsPGroup.ker_isPGroup_of_injective, finite_of_ker_is_pGroup, ker_isPGroup_of_injective
@@ -905,7 +905,7 @@ theorem finite_of_finiteIndex
 中文:
 定理 finite_of_finiteIndex
   条件: (P : Sylow p G) [P.FiniteIndex]
-  结论: Finite (Sylow p G)
+  结论: 有限 (Sylow p G)
   证明: by
   apply finite_of_ker_is_pGroup (f := QuotientGroup.mk' P.normalCore)
   rw [QuotientGroup.ker_mk']
@@ -935,7 +935,7 @@ instance pointwiseMulAction
 
 中文:
 实例 pointwiseMulAction
-  签名: {α : 类型} [Group α] [MulDistribMulAction α G]
+  签名: {α : 类型} [群 α] [MulDistribMul作用 α G]
   定义体: ⟨g • P.toSubgroup, P.2.map _, fun {Q} hQ hS =>
       inv_smul_eq_iff.mp
         (P.3 (hQ.map _) fun s hs =>
@@ -966,7 +966,7 @@ theorem pointwise_smul_def
 
 中文:
 定理 pointwise_smul_def
-  结论: {α : 类型} [Group α] [MulDistribMulAction α G] {g : α}
+  结论: {α : 类型} [群 α] [MulDistribMul作用 α G] {g : α}
   证明: rfl
 -/
 theorem pointwise_smul_def {α : Type*} [Group α] [MulDistribMulAction α G] {g : α}
@@ -983,7 +983,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: : MulAction G (Sylow p G)
+  签名: : 乘法作用 G (Sylow p G)
   定义体: compHom _ MulAut.conj
 
 Depends on / 依赖: MulAut, MulAut.conj, compHom
@@ -1038,7 +1038,7 @@ theorem coe_smul
 中文:
 定理 coe_smul
   条件: {g : G} {P : Sylow p G}
-  结论: ↑(g • P) = MulAut.conj g • (P : Set G)
+  结论: ↑(g • P) = MulAut.conj g • (P : 集合 G)
   证明: rfl
 -/
 theorem coe_smul {g : G} {P : Sylow p G} : ↑(g • P) = MulAut.conj g • (P : Set G) :=
@@ -1055,7 +1055,7 @@ theorem smul_le
 
 中文:
 定理 smul_le
-  条件: {P : Sylow p G} {H : Subgroup G} (hP : P <= H) (h : H)
+  条件: {P : Sylow p G} {H : 子群 G} (hP : P <= H) (h : H)
   结论: ↑(h • P) <= H
   证明: Subgroup.conj_smul_le_of_le hP h
 
@@ -1074,7 +1074,7 @@ theorem smul_subtype
 
 中文:
 定理 smul_subtype
-  条件: {P : Sylow p G} {H : Subgroup G} (hP : P <= H) (h : H)
+  条件: {P : Sylow p G} {H : 子群 G} (hP : P <= H) (h : H)
   证明: ext (Subgroup.conj_smul_subgroupOf hP h)
 
 Depends on / 依赖: Subgroup, Subgroup.conj_smul_subgroupOf, conj_smul_subgroupOf
@@ -1131,7 +1131,7 @@ theorem smul_eq_of_normal
 
 中文:
 定理 smul_eq_of_normal
-  条件: {g : G} {P : Sylow p G} [h : P.Normal]
+  条件: {g : G} {P : Sylow p G} [h : P.正规]
   结论: g • P = P
   证明: by
   simp only [smul_eq_iff_mem_normalizer, ← P.coe_coe, P.normalizer_eq_top, mem_top]
@@ -1153,8 +1153,8 @@ theorem Subgroup.sylow_mem_fixedPoints_iff
   simp_rw [SetLike.le_def, ← Sylow.smul_eq_iff_mem_normalizer]; exact Subtype.forall
 
 中文:
-定理 Subgroup.sylow_mem_fixedPoints_iff
-  条件: (H : Subgroup G) {P : Sylow p G}
+定理 子群.sylow_mem_fixedPoints_iff
+  条件: (H : 子群 G) {P : Sylow p G}
   证明: by
   simp_rw [SetLike.le_def, ← Sylow.smul_eq_iff_mem_normalizer]; exact Subtype.forall
 
@@ -1177,8 +1177,8 @@ theorem IsPGroup.inf_normalizer_sylow
     (inf_le_inf_left P le_normalizer)
 
 中文:
-定理 IsPGroup.inf_normalizer_sylow
-  条件: {P : Subgroup G} (hP : IsPGroup p P) (Q : Sylow p G)
+定理 是p群.inf_normalizer_sylow
+  条件: {P : 子群 G} (hP : 是p群 p P) (Q : Sylow p G)
   证明: le_antisymm
     (le_inf inf_le_left
       (sup_eq_right.mp
@@ -1205,8 +1205,8 @@ theorem IsPGroup.sylow_mem_fixedPoints_iff
   rw [P.sylow_mem_fixedPoints_iff]; rw [← inf_eq_left]; rw [hP.inf_normalizer_sylow]; rw [inf_eq_left]
 
 中文:
-定理 IsPGroup.sylow_mem_fixedPoints_iff
-  条件: {P : Subgroup G} (hP : IsPGroup p P) {Q : Sylow p G}
+定理 是p群.sylow_mem_fixedPoints_iff
+  条件: {P : 子群 G} (hP : 是p群 p P) {Q : Sylow p G}
   证明: by
   rw [P.sylow_mem_fixedPoints_iff]; rw [← inf_eq_left]; rw [hP.inf_normalizer_sylow]; rw [inf_eq_left]
 
@@ -1232,7 +1232,7 @@ instance Sylow.isPretransitive_of_finite
 
 中文:
 实例 Sylow.isPretransitive_of_finite
-  签名: [hp : Fact p.Prime] [Finite (Sylow p G)]
+  签名: [hp : Fact p.素] [有限 (Sylow p G)]
   定义体: ⟨fun P Q => by
     have H := fun {R : Sylow p G} {S : orbit G P} =>
       calc
@@ -1286,7 +1286,7 @@ theorem card_sylow_modEq_one
 
 中文:
 定理 card_sylow_modEq_one
-  条件: [Fact p.Prime] [Finite (Sylow p G)]
+  条件: [Fact p.素] [有限 (Sylow p G)]
   证明: by
   refine Sylow.nonempty.elim fun P : Sylow p G => ?_
   have : fixedPoints P.1 (Sylow p G) = {P} :=
@@ -1325,7 +1325,7 @@ theorem not_dvd_card_sylow
 
 中文:
 定理 not_dvd_card_sylow
-  条件: [hp : Fact p.Prime] [Finite (Sylow p G)]
+  条件: [hp : Fact p.素] [有限 (Sylow p G)]
   结论: ¬p ∣ 自然数.card (Sylow p G)
   证明: fun h =>
   hp.1.ne_one
@@ -1364,7 +1364,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: [Fact p.Prime] [Finite (Sylow p G)] (P Q : Sylow p G)
+  签名: [Fact p.素] [有限 (Sylow p G)] (P Q : Sylow p G)
   定义体: by
   rw [← Classical.choose_spec (exists_smul_eq G P Q)]
   exact P.equivSMul (Classical.choose (exists_smul_eq G P Q))
@@ -1389,7 +1389,7 @@ theorem orbit_eq_top
 
 中文:
 定理 orbit_eq_top
-  条件: [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  条件: [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   结论: orbit G P = ⊤
   证明: top_le_iff.mp fun Q _ => exists_smul_eq G P Q
 
@@ -1435,7 +1435,7 @@ theorem conj_eq_normalizer_conj_of_mem_centralizer
 
 中文:
 定理 conj_eq_normalizer_conj_of_mem_centralizer
-  结论: [Fact p.Prime] [Finite (Sylow p G)]
+  结论: [Fact p.素] [有限 (Sylow p G)]
   证明: by
   have h1 : P <= centralizer (zpowers x : Set G) := by rwa [le_centralizer_iff, zpowers_le]
   have h2 : ↑(g • P) <= centralizer (zpowers x : Set G) := by
@@ -1474,7 +1474,7 @@ theorem conj_eq_normalizer_conj_of_mem
 
 中文:
 定理 conj_eq_normalizer_conj_of_mem
-  结论: [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  结论: [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: P.conj_eq_normalizer_conj_of_mem_centralizer x g
     (P.le_centralizer hx) (P.le_centralizer hy)
 
@@ -1500,7 +1500,7 @@ definition equivQuotientNormalizer
 
 中文:
 定义 equivQuotientNormalizer
-  签名: [Fact p.Prime] [Finite (Sylow p G)]
+  签名: [Fact p.素] [有限 (Sylow p G)]
   定义体: calc
     Sylow p G ≃ (⊤ : Set (Sylow p G)) := (Equiv.Set.univ (Sylow p G)).symm
     _ ≃ orbit G P := Equiv.setCongr P.orbit_eq_top.symm
@@ -1527,7 +1527,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: p.Prime] [Finite (Sylow p G)] (P
+  签名: p.素] [有限 (Sylow p G)] (P
   定义体: Finite.of_equiv (Sylow p G) P.equivQuotientNormalizer
 
 Depends on / 依赖: Finite, Finite.of_equiv, P.equivQuotientNormalizer, equivQuotientNormalizer, of_equiv
@@ -1546,7 +1546,7 @@ theorem card_eq_card_quotient_normalizer
 
 中文:
 定理 card_eq_card_quotient_normalizer
-  结论: [Fact p.Prime] [Finite (Sylow p G)]
+  结论: [Fact p.素] [有限 (Sylow p G)]
   证明: Nat.card_congr P.equivQuotientNormalizer
 
 Depends on / 依赖: Nat.card_congr, P.equivQuotientNormalizer, card_congr, equivQuotientNormalizer
@@ -1565,7 +1565,7 @@ theorem card_eq_index_normalizer
 
 中文:
 定理 card_eq_index_normalizer
-  条件: [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  条件: [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: P.card_eq_card_quotient_normalizer
 
 Depends on / 依赖: P.card_eq_card_quotient_normalizer, card_eq_card_quotient_normalizer
@@ -1585,7 +1585,7 @@ theorem card_dvd_index
 
 中文:
 定理 card_dvd_index
-  条件: [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  条件: [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: ((congr_arg _ P.card_eq_index_normalizer).mp dvd_rfl).trans
     (index_dvd_of_le le_normalizer)
 
@@ -1612,7 +1612,7 @@ theorem not_dvd_index_aux
 
 中文:
 定理 not_dvd_index_aux
-  结论: [hp : Fact p.Prime] (P : Sylow p G) [P.Normal]
+  结论: [hp : Fact p.素] (P : Sylow p G) [P.正规]
   证明: by
   intro h
   rw [P.index_eq_card] at h
@@ -1653,7 +1653,7 @@ theorem not_dvd_index'
 
 中文:
 定理 not_dvd_index'
-  结论: [hp : Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  结论: [hp : Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: by
   rw [← relIndex_mul_index le_normalizer]; rw [P.coe_coe]; rw [← card_eq_index_normalizer]
   have : (P.subtype le_normalizer).Normal :=
@@ -1685,7 +1685,7 @@ theorem not_dvd_index
 
 中文:
 定理 not_dvd_index
-  条件: [Fact p.Prime] (P : Sylow p G) [P.FiniteIndex]
+  条件: [Fact p.素] (P : Sylow p G) [P.FiniteIndex]
   证明: by
   have := P.finite_of_finiteIndex
   exact P.not_dvd_index' Nat.card_pos.ne'
@@ -1714,7 +1714,7 @@ definition mapSurjective
 
 中文:
 定义 mapSurjective
-  签名: [Fact p.Prime] (P : Sylow p G)
+  签名: [Fact p.素] (P : Sylow p G)
   定义体: { P.1.map f with
     isPGroup' := P.2.map f
     is_maximal' := fun hQ hPQ => ((P.2.map f).toSylow
@@ -1739,7 +1739,7 @@ theorem coe_mapSurjective
 
 中文:
 定理 coe_mapSurjective
-  条件: [Fact p.Prime] (P : Sylow p G)
+  条件: [Fact p.素] (P : Sylow p G)
   结论: P.mapSurjective hf = P.map f
   证明: rfl
 -/
@@ -1762,7 +1762,7 @@ theorem mapSurjective_surjective
 
 中文:
 定理 mapSurjective_surjective
-  条件: (p : 自然数) [Fact p.Prime]
+  条件: (p : 自然数) [Fact p.素]
   证明: by
   have : Finite G' := Finite.of_surjective f hf
   intro P
@@ -1806,7 +1806,7 @@ theorem normalizer_sup_eq_top
 
 中文:
 定理 normalizer_sup_eq_top
-  结论: {p : 自然数} [Fact p.Prime] {N : Subgroup G} [N.Normal]
+  结论: {p : 自然数} [Fact p.素] {N : 子群 G} [N.正规]
   证明: by
   refine top_le_iff.mp fun g _ => ?_
   obtain ⟨n, hn⟩ := exists_smul_eq N ((MulAut.conjNormal g : MulAut N) • P) P
@@ -1840,7 +1840,7 @@ theorem normalizer_sup_eq_top'
 
 中文:
 定理 normalizer_sup_eq_top'
-  结论: {p : 自然数} [Fact p.Prime] {N : Subgroup G} [N.Normal]
+  结论: {p : 自然数} [Fact p.素] {N : 子群 G} [N.正规]
   证明: by
   rw [← normalizer_sup_eq_top (P.subtype hP)]; rw [P.coe_subtype]; rw [subgroupOf_map_subtype]; rw [inf_of_le_left hP]; rw [P.coe_coe]
 
@@ -1870,8 +1870,8 @@ theorem QuotientGroup.card_preimage_mk
   rw [← Nat.card_prod]; rw [Nat.card_congr (preimageMkEquivSubgroupProdSet _ _)]
 
 中文:
-定理 QuotientGroup.card_preimage_mk
-  条件: (s : Subgroup G) (t : Set (G ⧸ s))
+定理 商群.card_preimage_mk
+  条件: (s : 子群 G) (t : 集合 (G ⧸ s))
   证明: by
   rw [← Nat.card_prod]; rw [Nat.card_congr (preimageMkEquivSubgroupProdSet _ _)]
 
@@ -1898,7 +1898,7 @@ theorem mem_fixedPoints_mul_left_cosets_iff_mem_normalizer
 
 中文:
 定理 mem_fixedPoints_mul_left_cosets_iff_mem_normalizer
-  结论: {H : Subgroup G} [Finite (H : Set G)]
+  结论: {H : 子群 G} [有限 (H : 集合 G)]
   证明: ⟨fun hx =>
     have ha : forall {y : G ⧸ H}, y in orbit H (x : G ⧸ H) -> y = x := mem_fixedPoints'.1 hx _
     (inv_mem_iff (G := G)).1
@@ -1947,7 +1947,7 @@ definition fixedPointsMulLeftCosetsEquivQuotient
 
 中文:
 定义 fixedPointsMulLeftCosetsEquivQuotient
-  签名: (H : Subgroup G) [Finite (H : Set G)]
+  签名: (H : 子群 G) [有限 (H : 集合 G)]
   定义体: @subtypeQuotientEquivQuotientSubtype G (· in normalizer H) (_) (_)
     (· in MulAction.fixedPoints H (G ⧸ H))
     (fun _ => (@mem_fixedPoints_mul_left_cosets_iff_mem_normalizer _ _ _ ‹_› _).symm)
@@ -1982,7 +1982,7 @@ theorem card_quotient_normalizer_modEq_card_quotient
 
 中文:
 定理 card_quotient_normalizer_modEq_card_quotient
-  结论: [Finite G] {p : 自然数} {n : 自然数} [hp : Fact p.Prime]
+  结论: [有限 G] {p : 自然数} {n : 自然数} [hp : Fact p.素]
   证明: by
   rw [← Nat.card_congr (fixedPointsMulLeftCosetsEquivQuotient H)]
   exact ((IsPGroup.of_card hH).card_modEq_card_fixedPoints _).symm
@@ -2009,7 +2009,7 @@ theorem card_normalizer_modEq_card
 
 中文:
 定理 card_normalizer_modEq_card
-  结论: [Finite G] {p : 自然数} {n : 自然数} [hp : Fact p.Prime] {H : Subgroup G}
+  结论: [有限 G] {p : 自然数} {n : 自然数} [hp : Fact p.素] {H : 子群 G}
   证明: by
   have : H.subgroupOf (normalizer H) ≃ H := (subgroupOfEquivOfLe le_normalizer).toEquiv
   rw [card_eq_card_quotient_mul_card_subgroup H]; rw [card_eq_card_quotient_mul_card_subgroup (H.subgroupOf (normalizer H))]; rw [Nat.card_congr this]; rw [hH]; rw [pow_succ']
@@ -2039,7 +2039,7 @@ theorem prime_dvd_card_quotient_normalizer
 
 中文:
 定理 prime_dvd_card_quotient_normalizer
-  结论: [Finite G] {p : 自然数} {n : 自然数} [Fact p.Prime]
+  结论: [有限 G] {p : 自然数} {n : 自然数} [Fact p.素]
   证明: let ⟨s, hs⟩ := exists_eq_mul_left_of_dvd hdvd
   have hcard : Nat.card (G ⧸ H) = s * p :=
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
@@ -2073,7 +2073,7 @@ theorem prime_pow_dvd_card_normalizer
 
 中文:
 定理 prime_pow_dvd_card_normalizer
-  结论: [Finite G] {p : 自然数} {n : 自然数} [_hp : Fact p.Prime]
+  结论: [有限 G] {p : 自然数} {n : 自然数} [_hp : Fact p.素]
   证明: Nat.modEq_zero_iff_dvd.1 ((card_normalizer_modEq_card hH).trans hdvd.modEq_zero_nat)
 
 Depends on / 依赖: Nat.modEq_zero_iff_dvd, card_normalizer_modEq_card, hdvd.modEq_zero_nat, modEq_zero_iff_dvd, modEq_zero_nat
@@ -2097,8 +2097,8 @@ theorem exists_subgroup_card_pow_succ
   have hm
 
 中文:
-定理 exists_subgroup_card_pow_succ
-  结论: [Finite G] {p : 自然数} {n : 自然数} [hp : Fact p.Prime]
+定理 存在_subgroup_card_pow_succ
+  结论: [有限 G] {p : 自然数} {n : 自然数} [hp : Fact p.素]
   证明: let ⟨s, hs⟩ := exists_eq_mul_left_of_dvd hdvd
   have hcard : Nat.card (G ⧸ H) = s * p :=
     (mul_left_inj' (show Nat.card H != 0 from Nat.card_pos.ne')).1
@@ -2148,8 +2148,8 @@ theorem exists_subgroup_card_pow_prime_le
   given: [Finite G] (p : Nat)
 
 中文:
-定理 exists_subgroup_card_pow_prime_le
-  条件: [Finite G] (p : 自然数)
+定理 存在_subgroup_card_pow_prime_le
+  条件: [有限 G] (p : 自然数)
 
 Depends on / 依赖: lt_of_le_of_lt, n.zero_le, zero_le
 -/
@@ -2180,8 +2180,8 @@ theorem exists_subgroup_card_pow_prime
   ⟨K, hK.1⟩
 
 中文:
-定理 exists_subgroup_card_pow_prime
-  结论: [Finite G] (p : 自然数) {n : 自然数} [Fact p.Prime]
+定理 存在_subgroup_card_pow_prime
+  结论: [有限 G] (p : 自然数) {n : 自然数} [Fact p.素]
   证明: let ⟨K, hK⟩ := exists_subgroup_card_pow_prime_le p hdvd ⊥
     (by rw [card_bot, pow_zero]) n.zero_le
   ⟨K, hK.1⟩
@@ -2209,8 +2209,8 @@ have : Finite G := Nat.finite_of_card_ne_zero by linarith [Nat.one_le_pow n p hp
 exact pow_dvd_pow _ (Nat.pow_le_pow_iff_right hp.one_lt).1 hn
 
 中文:
-引理 exists_subgroup_card_pow_prime_of_le_card
-  结论: {n p : 自然数} (hp : p.Prime) (h : IsPGroup p G)
+引理 存在_subgroup_card_pow_prime_of_le_card
+  结论: {n p : 自然数} (hp : p.素) (h : 是p群 p G)
   证明: by
   have : Fact p.Prime := ⟨hp⟩
 have : Finite G := Nat.finite_of_card_ne_zero by linarith [Nat.one_le_pow n p hp.pos]
@@ -2244,8 +2244,8 @@ lemma exists_subgroup_le_card_pow_prime_of_le_card
   exact Nat.card_congr e.symm.toEquiv
 
 中文:
-引理 exists_subgroup_le_card_pow_prime_of_le_card
-  结论: {n p : 自然数} (hp : p.Prime) (h : IsPGroup p G)
+引理 存在_subgroup_le_card_pow_prime_of_le_card
+  结论: {n p : 自然数} (hp : p.素) (h : 是p群 p G)
   证明: by
   obtain ⟨H', H'card⟩ := exists_subgroup_card_pow_prime_of_le_card hp (h.to_subgroup H) hn
   refine ⟨H'.map H.subtype, map_subtype_le _, ?_⟩
@@ -2277,8 +2277,8 @@ lemma exists_subgroup_le_card_le
   simpa only [pow_succ', H'card] using And.intr
 
 中文:
-引理 exists_subgroup_le_card_le
-  结论: {k p : 自然数} (hp : p.Prime) (h : IsPGroup p G) {H : Subgroup G}
+引理 存在_subgroup_le_card_le
+  结论: {k p : 自然数} (hp : p.素) (h : 是p群 p G) {H : 子群 G}
   证明: by
   obtain ⟨m, hmk, hkm⟩ : exists s, p ^ s <= k ∧ k < p ^ (s + 1) :=
     exists_nat_pow_near (Nat.one_le_iff_ne_zero.2 hk₀) hp.one_lt
@@ -2308,7 +2308,7 @@ theorem pow_dvd_card_of_pow_dvd_card
 
 中文:
 定理 pow_dvd_card_of_pow_dvd_card
-  结论: [Finite G] {p n : 自然数} [hp : Fact p.Prime] (P : Sylow p G)
+  结论: [有限 G] {p n : 自然数} [hp : Fact p.素] (P : Sylow p G)
   证明: by
   rw [← index_mul_card P.1] at hdvd
   exact (hp.1.coprime_pow_of_not_dvd P.not_dvd_index).symm.dvd_of_dvd_mul_left hdvd
@@ -2333,7 +2333,7 @@ theorem dvd_card_of_dvd_card
 
 中文:
 定理 dvd_card_of_dvd_card
-  结论: [Finite G] {p : 自然数} [Fact p.Prime] (P : Sylow p G)
+  结论: [有限 G] {p : 自然数} [Fact p.素] (P : Sylow p G)
   证明: by
   rw [← pow_one p] at hdvd
   have key := P.pow_dvd_card_of_pow_dvd_card hdvd
@@ -2358,7 +2358,7 @@ theorem card_coprime_index
 
 中文:
 定理 card_coprime_index
-  条件: [Finite G] {p : 自然数} [hp : Fact p.Prime] (P : Sylow p G)
+  条件: [有限 G] {p : 自然数} [hp : Fact p.素] (P : Sylow p G)
   证明: let ⟨_n, hn⟩ := IsPGroup.iff_card.mp P.2
   hn.symm ▸ (hp.1.coprime_pow_of_not_dvd P.not_dvd_index).symm
 
@@ -2382,7 +2382,7 @@ theorem ne_bot_of_dvd_card
 
 中文:
 定理 ne_bot_of_dvd_card
-  结论: [Finite G] {p : 自然数} [hp : Fact p.Prime] (P : Sylow p G)
+  结论: [有限 G] {p : 自然数} [hp : Fact p.素] (P : Sylow p G)
   证明: by
   refine fun h => hp.out.not_dvd_one ?_
   have key : p ∣ Nat.card P := P.dvd_card_of_dvd_card hdvd
@@ -2410,7 +2410,7 @@ theorem card_eq_multiplicity
 
 中文:
 定理 card_eq_multiplicity
-  条件: [Finite G] {p : 自然数} [hp : Fact p.Prime] (P : Sylow p G)
+  条件: [有限 G] {p : 自然数} [hp : Fact p.素] (P : Sylow p G)
   证明: by
   obtain ⟨n, heq : Nat.card P = _⟩ := IsPGroup.iff_card.mp P.isPGroup'
   refine Nat.dvd_antisymm ?_ (P.pow_dvd_card_of_pow_dvd_card (Nat.ordProj_dvd _ p))
@@ -2444,8 +2444,8 @@ theorem _root_.Group.card_dvd_prod_orderOf
 .dvd_orderOf 
 
 中文:
-定理 _root_.Group.card_dvd_prod_orderOf
-  条件: [Fintype G]
+定理 _root_.群.card_dvd_prod_orderOf
+  条件: [有限类型 G]
   结论: 自然数.card G ∣ ∏ g : G, orderOf g
   证明: by
   classical
@@ -2487,7 +2487,7 @@ definition unique_of_normal
 
 中文:
 定义 unique_of_normal
-  签名: {p : 自然数} [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  签名: {p : 自然数} [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   定义体: by
   refine { uniq := fun Q => ?_ }
   obtain ⟨x, h1⟩ := exists_smul_eq G P Q
@@ -2518,7 +2518,7 @@ instance characteristic_of_subsingleton
 
 中文:
 实例 characteristic_of_subsingleton
-  签名: {p : 自然数} [Subsingleton (Sylow p G)] (P : Sylow p G)
+  签名: {p : 自然数} [子单例 (Sylow p G)] (P : Sylow p G)
   定义体: by
   refine Subgroup.characteristic_iff_map_eq.mpr fun ϕ => ?_
   have h := Subgroup.pointwise_smul_def (a := ϕ) (P : Subgroup G)
@@ -2542,7 +2542,7 @@ theorem normal_of_subsingleton
 
 中文:
 定理 normal_of_subsingleton
-  条件: {p : 自然数} [Subsingleton (Sylow p G)] (P : Sylow p G)
+  条件: {p : 自然数} [子单例 (Sylow p G)] (P : Sylow p G)
   证明: Subgroup.normal_of_characteristic _
 
 Depends on / 依赖: Subgroup, Subgroup.normal_of_characteristic, normal_of_characteristic
@@ -2563,7 +2563,7 @@ theorem characteristic_of_normal
 
 中文:
 定理 characteristic_of_normal
-  结论: {p : 自然数} [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  结论: {p : 自然数} [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: by
   have _ := unique_of_normal P h
   exact characteristic_of_subsingleton _
@@ -2588,7 +2588,7 @@ theorem normal_of_normalizer_normal
 
 中文:
 定理 normal_of_normalizer_normal
-  结论: {p : 自然数} [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  结论: {p : 自然数} [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: by
   rw [← normalizer_eq_top_iff]; rw [← normalizer_sup_eq_top' P le_normalizer]; rw [P.coe_coe]; rw [sup_idem]
 
@@ -2614,7 +2614,7 @@ theorem normalizer_normalizer
 
 中文:
 定理 normalizer_normalizer
-  条件: {p : 自然数} [Fact p.Prime] [Finite (Sylow p G)] (P : Sylow p G)
+  条件: {p : 自然数} [Fact p.素] [有限 (Sylow p G)] (P : Sylow p G)
   证明: by
   have := normal_of_normalizer_normal (P.subtype (le_normalizer.trans le_normalizer))
   rw [← (P.subtype _).coe_coe]; rw [coe_subtype]; rw [normal_subgroupOf_iff_le_normalizer (le_normalizer.trans le_normalizer)]; rw [← subgroupOf_normalizer_eq (le_normalizer.trans le_normalizer)] at this
@@ -2646,7 +2646,7 @@ theorem normal_of_all_max_subgroups_normal
 
 中文:
 定理 normal_of_all_max_subgroups_normal
-  结论: [Finite G]
+  结论: [有限 G]
   证明: normalizer_eq_top_iff.mp
     (by
       rcases eq_top_or_exists_le_coatom (normalizer (P : Set G))
@@ -2683,7 +2683,7 @@ normalizerCondition_iff_only_full_group_self_normalizing.mp hnc _ normalizer_nor
 
 中文:
 定理 normal_of_normalizerCondition
-  结论: (hnc : NormalizerCondition G) {p : 自然数} [Fact p.Prime]
+  结论: (hnc : NormalizerCondition G) {p : 自然数} [Fact p.素]
   证明: normalizer_eq_top_iff.mp
 normalizerCondition_iff_only_full_group_self_normalizing.mp hnc _ normalizer_normalizer _
 
@@ -2710,7 +2710,7 @@ definition directProductOfNormal
 
 中文:
 定义 directProductOfNormal
-  签名: [Finite G]
+  签名: [有限 G]
   定义体: by
   have := Fintype.ofFinite G
   set ps := (Nat.card G).primeFactors

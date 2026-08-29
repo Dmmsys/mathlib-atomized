@@ -49,7 +49,7 @@ theorem closure_isCycle
 
 中文:
 定理 closure_isCycle
-  结论: closure { σ : Perm β | IsCycle σ } = ⊤
+  结论: closure { σ : 置换 β | 是环 σ } = ⊤
   证明: by
   classical
     cases nonempty_fintype β
@@ -81,7 +81,7 @@ theorem closure_cycle_adjacent_swap
 
 中文:
 定理 closure_cycle_adjacent_swap
-  条件: {σ : Perm α} (h1 : IsCycle σ) (h2 : σ.support = univ) (x : α)
+  条件: {σ : 置换 α} (h1 : 是环 σ) (h2 : σ.support = univ) (x : α)
   证明: by
   let H := closure ({σ, swap x (σ x)} : Set (Perm α))
   have h3 : σ in H := subset_closure (Set.mem_insert σ _)
@@ -158,7 +158,7 @@ theorem closure_cycle_coprime_swap
 
 中文:
 定理 closure_cycle_coprime_swap
-  结论: {n : 自然数} {σ : Perm α} (h0 : 自然数.Coprime n (Fintype.card α))
+  结论: {n : 自然数} {σ : 置换 α} (h0 : 自然数.Coprime n (有限类型.card α))
   证明: by
   rw [← Finset.card_univ]; rw [← h2]; rw [← h1.orderOf] at h0
   obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h0
@@ -200,7 +200,7 @@ theorem closure_prime_cycle_swap
 
 中文:
 定理 closure_prime_cycle_swap
-  结论: {σ τ : Perm α} (h0 : (Fintype.card α).Prime) (h1 : IsCycle σ)
+  结论: {σ τ : 置换 α} (h0 : (有限类型.card α).素) (h1 : 是环 σ)
   证明: by
   obtain ⟨x, y, h4, h5⟩ := h3
   obtain ⟨i, hi⟩ :=

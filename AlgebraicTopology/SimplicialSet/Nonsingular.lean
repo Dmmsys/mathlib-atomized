@@ -53,10 +53,10 @@ class Nonsingular
     - mono({n : Nat} (x : X.nonDegenerate n)) : Mono (yonedaEquiv.symm x.val)
 
 中文:
-类 Nonsingular
+类 非奇异
   参数: where
   公理与运算 (1 个):
-    - mono({n : 自然数} (x : X.nonDegenerate n)) : Mono (yonedaEquiv.symm x.val)
+    - mono({n : 自然数} (x : X.nonDegenerate n)) : 单态射 (yonedaEquiv.symm x.val)
 -/
 class Nonsingular where
   mono {n : Nat} (x : X.nonDegenerate n) : Mono (yonedaEquiv.symm x.val)
@@ -74,8 +74,8 @@ lemma Nonsingular.mono'
 @[kerodon 02MK]
 
 中文:
-引理 Nonsingular.mono'
-  结论: [X.Nonsingular]
+引理 非奇异.mono'
+  结论: [X.非奇异]
   证明: mono ⟨x, hx⟩
 
 @[kerodon 02MK]
@@ -99,8 +99,8 @@ lemma Nonsingular.of_mono
     exact mono_of_mono _ f
 
 中文:
-引理 Nonsingular.of_mono
-  条件: (f : X ⟶ Y) [Mono f] [Y.Nonsingular]
+引理 非奇异.of_mono
+  条件: (f : X ⟶ Y) [单态射 f] [Y.非奇异]
   证明: by
     intro n ⟨x, hx⟩
     rw [← nonDegenerate_iff_of_mono f] at hx
@@ -129,9 +129,9 @@ lemma Nonsingular.of_iso
   proof: .of_mono e.inv
 
 中文:
-引理 Nonsingular.of_iso
-  条件: (e : X ≅ Y) [X.Nonsingular]
-  结论: Y.Nonsingular
+引理 非奇异.of_iso
+  条件: (e : X ≅ Y) [X.非奇异]
+  结论: Y.非奇异
   证明: .of_mono e.inv
 
 Depends on / 依赖: e.inv, of_mono
@@ -175,7 +175,7 @@ lemma nonDegenerate_δ
 
 中文:
 引理 nonDegenerate_δ
-  结论: [X.Nonsingular]
+  结论: [X.非奇异]
   证明: by
   have := Nonsingular.mono' x hx
   have : X.δ i x = (yonedaEquiv.symm x).app _
@@ -207,8 +207,8 @@ lemma Nonsingular.δ_injective
   exact injective_of_mono ((yonedaEquiv.symm x).app _) hij
 
 中文:
-引理 Nonsingular.δ_injective
-  结论: [X.Nonsingular]
+引理 非奇异.δ_injective
+  结论: [X.非奇异]
   证明: by
   apply SimplexCategory.δ_injective
   apply stdSimplex.objEquiv.symm.injective
@@ -238,7 +238,7 @@ lemma Nonsingular.injective_map
   simpa [yonedaEquiv_comp, yonedaEquiv_map]
 
 中文:
-引理 Nonsingular.injective_map
+引理 非奇异.injective_map
   证明: by
   have := Nonsingular.mono' x hx
   apply stdSimplex.{u}.map_injective
@@ -270,8 +270,8 @@ lemma Nonsingular.isIso_toOfSimplex
   exact Nonsingular.mono' x hx
 
 中文:
-引理 Nonsingular.isIso_toOfSimplex
-  结论: [X.Nonsingular]
+引理 非奇异.isIso_toOfSimplex
+  结论: [X.非奇异]
   证明: by
   rw [Subcomplex.isIso_toOfSimplex_iff]
   exact Nonsingular.mono' x hx
@@ -296,7 +296,7 @@ definition Nonsingular.iso
   asIso (Subcomplex.toOfSimplex x)
 
 中文:
-定义 Nonsingular.iso
+定义 非奇异.iso
   定义体: letI := Nonsingular.isIso_toOfSimplex x hx
   asIso (Subcomplex.toOfSimplex x)
 
@@ -324,7 +324,7 @@ lemma existsUnique_of_le
     exact Nonsingular.injective_map _ y.nonDegenerate (by rw [hf₁, hf₂]))
 
 中文:
-引理 existsUnique_of_le
+引理 存在Unique_of_le
   证明: existsUnique_of_exists_of_unique (by
     obtain ⟨f, _, hf⟩ := le_iff_exists_mono.1 h
     exact ⟨f, inferInstance, hf⟩) (fun f₁ f₂ ⟨_, hf₁⟩ ⟨_, hf₂⟩ => by
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (monoOfLE h)
+  签名: 单态射 (monoOfLE h)
   定义体: (existsUnique_of_le h).exists.choose_spec.1
 
 @[simp]
@@ -434,7 +434,7 @@ lemma monoOfLE_eq_iff
 
 中文:
 引理 monoOfLE_eq_iff
-  条件: (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [Mono g]
+  条件: (h : x <= y) (g : ⦋x.dim⦌ ⟶ ⦋y.dim⦌) [单态射 g]
   证明: ⟨by rintro rfl; simp,
     fun h' => (existsUnique_of_le h).unique ⟨inferInstance, by simp⟩ ⟨inferInstance, h'⟩⟩
 

@@ -52,7 +52,7 @@ theorem of_is_product
 
 中文:
 定理 of_is_product
-  条件: {c : BinaryFan X Y} (h : Limits.IsLimit c) (t : IsTerminal Z)
+  条件: {c : BinaryFan X Y} (h : Limits.是极限 c) (t : 是终止 Z)
   证明: of_isLimit
     (isPullbackOfIsTerminalIsProduct _ _ _ _ t
       (IsLimit.ofIsoLimit h
@@ -81,7 +81,7 @@ theorem of_is_product'
 
 中文:
 定理 of_is_product'
-  条件: (h : Limits.IsLimit (BinaryFan.mk fst snd)) (t : IsTerminal Z)
+  条件: (h : Limits.是极限 (BinaryFan.mk fst snd)) (t : 是终止 Z)
   证明: of_is_product h t
 
 Depends on / 依赖: of_is_product
@@ -101,7 +101,7 @@ theorem of_hasBinaryProduct'
 
 中文:
 定理 of_hasBinaryProduct'
-  条件: [HasBinaryProduct X Y] [HasTerminal C]
+  条件: [HasBinaryProduct X Y] [有终止 C]
   证明: of_is_product (limit.isLimit _) terminalIsTerminal
 
 Depends on / 依赖: isLimit, limit.isLimit, of_is_product, terminalIsTerminal
@@ -122,7 +122,7 @@ theorem of_iso_pullback
 
 中文:
 定理 of_iso_pullback
-  结论: (h : CommSq fst snd f g) [HasPullback f g] (i : P ≅ pullback f g)
+  结论: (h : 交换Sq fst snd f g) [HasPullback f g] (i : P ≅ pullback f g)
   证明: of_isLimit' h
     (Limits.IsLimit.ofIsoLimit (limit.isLimit _)
       (@PullbackCone.ext _ _ _ _ _ _ _ (PullbackCone.mk _ _ _) _ i w₁.symm w₂.symm).symm)
@@ -151,7 +151,7 @@ theorem of_horiz_isIso_mono
 
 中文:
 定理 of_horiz_isIso_mono
-  条件: [IsIso fst] [Mono g] (sq : CommSq fst snd f g)
+  条件: [是同构 fst] [单态射 g] (sq : 交换Sq fst snd f g)
   证明: of_isLimit' sq
     (by
       refine
@@ -180,7 +180,7 @@ theorem of_horiz_isIso
 
 中文:
 定理 of_horiz_isIso
-  条件: [IsIso fst] [IsIso g] (sq : CommSq fst snd f g)
+  条件: [是同构 fst] [是同构 g] (sq : 交换Sq fst snd f g)
   证明: of_horiz_isIso_mono sq
 
 Depends on / 依赖: of_horiz_isIso_mono
@@ -205,7 +205,7 @@ lemma of_iso
 
 中文:
 引理 of_iso
-  结论: (h : IsPullback fst snd f g)
+  结论: (h : 是拉回 fst snd f g)
   证明: by
     rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commfst]; rw [← commf]; rw [← reassoc_of% commsnd]; rw [← commg]; rw [h.w_assoc]
   isLimit' :=
@@ -250,7 +250,7 @@ lemma of_iso'
 
 中文:
 引理 of_iso'
-  结论: (h : IsPullback fst snd f g)
+  结论: (h : 是拉回 fst snd f g)
   证明: by
   apply h.of_iso e₁.symm e₂.symm e₃.symm e₄.symm
   · simp only [Iso.symm_hom, Iso.comp_inv_eq, Category.assoc, ← commfst, Iso.inv_hom_id_assoc]
@@ -287,7 +287,7 @@ lemma isIso_fst_of_mono
 
 中文:
 引理 isIso_fst_of_mono
-  条件: (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance)
+  条件: (h : 是拉回 fst snd f f) (inst : 单态射 f := by infer_instance)
   证明: h.cone.isIso_fst_of_mono_of_isLimit h.isLimit
 
 Depends on / 依赖: h.cone.isIso_fst_of_mono_of_isLimit, h.isLimit, infer_instance, isIso_fst_of_mono_of_isLimit, isLimit
@@ -305,7 +305,7 @@ lemma isIso_snd_iso_of_mono
 
 中文:
 引理 isIso_snd_iso_of_mono
-  条件: (h : IsPullback fst snd f f) (inst : Mono f := by infer_instance)
+  条件: (h : 是拉回 fst snd f f) (inst : 单态射 f := by infer_instance)
   证明: h.cone.isIso_snd_of_mono_of_isLimit h.isLimit
 
 Depends on / 依赖: HasPullback, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsPullback, IsPullback.hasPullback, IsPullback.of_hasPullback, IsPullback.paste_horiz, P.pullback_snd, h.cone.isIso_snd_of_mono_of_isLimit, h.isLimit, hasPullback, infer_instance, isIso_snd_of_mono_of_isLimit, isLimit, of_hasPullback, paste_horiz, pullback, pullback.snd, pullback_snd
@@ -330,7 +330,7 @@ lemma mono_fst_of_mono
 
 中文:
 引理 mono_fst_of_mono
-  条件: (h : IsPullback fst snd f g) (inst : Mono g := by infer_instance)
+  条件: (h : 是拉回 fst snd f g) (inst : 单态射 g := by infer_instance)
   证明: by
   constructor
   intro W fst' snd' heq
@@ -354,7 +354,7 @@ lemma mono_snd_of_mono
 
 中文:
 引理 mono_snd_of_mono
-  条件: (h : IsPullback fst snd f g) (inst : Mono f := by infer_instance)
+  条件: (h : 是拉回 fst snd f g) (inst : 单态射 f := by infer_instance)
   证明: h.flip.mono_fst_of_mono
 
 Depends on / 依赖: HasPushout, HasPushoutsAlong, HasPushoutsAlong.hasPushout, IsPushout, IsPushout.hasPushout, IsPushout.paste_vert, P.pushout_inr, h.flip.mono_fst_of_mono, hasPushout, infer_instance, mono_fst_of_mono, of_hasPushout, paste_vert, pushout, pushout.inr, pushout_inr
@@ -376,7 +376,7 @@ lemma isIso_fst_of_isIso
 
 中文:
 引理 isIso_fst_of_isIso
-  条件: (h : IsPullback fst snd f g) (inst : IsIso g := by infer_instance)
+  条件: (h : 是拉回 fst snd f g) (inst : 是同构 g := by infer_instance)
   证明: by
   have := h.hasPullback
   rw [← h.isoPullback_hom_fst]
@@ -400,7 +400,7 @@ lemma isIso_snd_of_isIso
 
 中文:
 引理 isIso_snd_of_isIso
-  条件: (h : IsPullback fst snd f g) (inst : IsIso f := by infer_instance)
+  条件: (h : 是拉回 fst snd f g) (inst : 是同构 f := by infer_instance)
   证明: h.flip.isIso_fst_of_isIso
 
 Depends on / 依赖: h.flip.isIso_fst_of_isIso, infer_instance, isIso_fst_of_isIso
@@ -593,7 +593,7 @@ instance [HasPullbacksAlong
     (IsPullback.of_hasPullback g f))
 
 中文:
-实例 [HasPullbacksAlong
+实例 [有PullbacksAlong
   签名: f] (h
   定义体: IsPullback.hasPullback (IsPullback.of_bot' (IsPullback.of_hasPullback (h ≫ g) f)
     (IsPullback.of_hasPullback g f))
@@ -614,7 +614,7 @@ theorem of_vert_isIso_mono
 
 中文:
 定理 of_vert_isIso_mono
-  条件: [IsIso snd] [Mono f] (sq : CommSq fst snd f g)
+  条件: [是同构 snd] [单态射 f] (sq : 交换Sq fst snd f g)
   证明: IsPullback.flip (of_horiz_isIso_mono sq.flip)
 
 Depends on / 依赖: IsPullback, IsPullback.flip, of_horiz_isIso_mono, sq.flip
@@ -633,7 +633,7 @@ theorem of_vert_isIso
 
 中文:
 定理 of_vert_isIso
-  条件: [IsIso snd] [IsIso f] (sq : CommSq fst snd f g)
+  条件: [是同构 snd] [是同构 f] (sq : 交换Sq fst snd f g)
   证明: of_vert_isIso_mono sq
 
 Depends on / 依赖: of_vert_isIso_mono
@@ -652,7 +652,7 @@ lemma of_id_fst
 
 中文:
 引理 of_id_fst
-  结论: IsPullback (𝟙 _) f f (𝟙 _)
+  结论: 是拉回 (𝟙 _) f f (𝟙 _)
   证明: IsPullback.of_horiz_isIso ⟨by simp⟩
 
 Depends on / 依赖: IsPullback, IsPullback.of_horiz_isIso, of_horiz_isIso
@@ -669,7 +669,7 @@ lemma of_id_snd
 
 中文:
 引理 of_id_snd
-  结论: IsPullback f (𝟙 _) (𝟙 _) f
+  结论: 是拉回 f (𝟙 _) (𝟙 _) f
   证明: IsPullback.of_vert_isIso ⟨by simp⟩
 
 Depends on / 依赖: IsPullback, IsPullback.of_vert_isIso, of_vert_isIso
@@ -688,7 +688,7 @@ lemma id_vert
 中文:
 引理 id_vert
   条件: (f : X ⟶ Z)
-  结论: IsPullback f (𝟙 X) (𝟙 Z) f
+  结论: 是拉回 f (𝟙 X) (𝟙 Z) f
   证明: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_vert_isIso
@@ -708,7 +708,7 @@ lemma id_horiz
 中文:
 引理 id_horiz
   条件: (f : X ⟶ Z)
-  结论: IsPullback (𝟙 X) f f (𝟙 Z)
+  结论: 是拉回 (𝟙 X) f f (𝟙 Z)
   证明: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_horiz_isIso
@@ -933,7 +933,7 @@ theorem of_is_coproduct
 
 中文:
 定理 of_is_coproduct
-  条件: {c : BinaryCofan X Y} (h : Limits.IsColimit c) (t : IsInitial Z)
+  条件: {c : BinaryCofan X Y} (h : Limits.是余极限 c) (t : IsInitial Z)
   证明: of_isColimit
     (isPushoutOfIsInitialIsCoproduct _ _ _ _ t
       (IsColimit.ofIsoColimit h
@@ -962,7 +962,7 @@ theorem of_is_coproduct'
 
 中文:
 定理 of_is_coproduct'
-  条件: (h : Limits.IsColimit (BinaryCofan.mk inl inr)) (t : IsInitial Z)
+  条件: (h : Limits.是余极限 (BinaryCofan.mk inl inr)) (t : IsInitial Z)
   证明: of_is_coproduct h t
 
 Depends on / 依赖: of_is_coproduct
@@ -1003,7 +1003,7 @@ theorem of_iso_pushout
 
 中文:
 定理 of_iso_pushout
-  结论: (h : CommSq f g inl inr) [HasPushout f g] (i : P ≅ pushout f g)
+  结论: (h : 交换Sq f g inl inr) [HasPushout f g] (i : P ≅ pushout f g)
   证明: of_isColimit' h
     (Limits.IsColimit.ofIsoColimit (colimit.isColimit _)
       (PushoutCocone.ext (s := PushoutCocone.mk ..) i w₁ w₂).symm)
@@ -1033,7 +1033,7 @@ lemma of_iso
 
 中文:
 引理 of_iso
-  结论: (h : IsPushout f g inl inr)
+  结论: (h : 是推出 f g inl inr)
   证明: by
     rw [← cancel_epi e₁.hom]; rw [← reassoc_of% commf]; rw [← comminl]; rw [← reassoc_of% commg]; rw [← comminr]; rw [h.w_assoc]
   isColimit' :=
@@ -1112,7 +1112,7 @@ lemma isIso_inl_iso_of_epi
 
 中文:
 引理 isIso_inl_iso_of_epi
-  条件: (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance)
+  条件: (h : 是推出 f f inl inr) (inst : 满态射 f := by infer_instance)
   证明: h.cocone.isIso_inl_of_epi_of_isColimit h.isColimit
 
 Depends on / 依赖: cocone, h.cocone.isIso_inl_of_epi_of_isColimit, h.isColimit, infer_instance, isColimit, isIso_inl_of_epi_of_isColimit
@@ -1130,7 +1130,7 @@ lemma isIso_inr_iso_of_epi
 
 中文:
 引理 isIso_inr_iso_of_epi
-  条件: (h : IsPushout f f inl inr) (inst : Epi f := by infer_instance)
+  条件: (h : 是推出 f f inl inr) (inst : 满态射 f := by infer_instance)
   证明: h.cocone.isIso_inr_of_epi_of_isColimit h.isColimit
 
 Depends on / 依赖: cocone, h.cocone.isIso_inr_of_epi_of_isColimit, h.isColimit, infer_instance, isColimit, isIso_inr_of_epi_of_isColimit
@@ -1155,7 +1155,7 @@ lemma epi_inl_of_epi
 
 中文:
 引理 epi_inl_of_epi
-  条件: (h : IsPushout f g inl inr) (inst : Epi g := by infer_instance)
+  条件: (h : 是推出 f g inl inr) (inst : 满态射 g := by infer_instance)
   证明: by
   constructor
   intro W fst' snd' heq
@@ -1179,7 +1179,7 @@ lemma epi_inr_of_epi
 
 中文:
 引理 epi_inr_of_epi
-  条件: (h : IsPushout f g inl inr) (inst : Epi f := by infer_instance)
+  条件: (h : 是推出 f g inl inr) (inst : 满态射 f := by infer_instance)
   证明: h.flip.epi_inl_of_epi
 
 Depends on / 依赖: epi_inl_of_epi, h.flip.epi_inl_of_epi, infer_instance
@@ -1200,7 +1200,7 @@ lemma isIso_inl_of_isIso
 
 中文:
 引理 isIso_inl_of_isIso
-  条件: (h : IsPushout f g inl inr) (inst : IsIso g := by infer_instance)
+  条件: (h : 是推出 f g inl inr) (inst : 是同构 g := by infer_instance)
   证明: by
   have := h.hasPushout
   rw [← h.inl_isoPushout_inv]
@@ -1224,7 +1224,7 @@ lemma isIso_inr_of_isIso
 
 中文:
 引理 isIso_inr_of_isIso
-  条件: (h : IsPushout f g inl inr) (inst : IsIso f := by infer_instance)
+  条件: (h : 是推出 f g inl inr) (inst : 是同构 f := by infer_instance)
   证明: h.flip.isIso_inl_of_isIso
 
 Depends on / 依赖: h.flip.isIso_inl_of_isIso, infer_instance, isIso_inl_of_isIso
@@ -1424,8 +1424,8 @@ theorem of_horiz_isIso_epi
 
 中文:
 定理 of_horiz_isIso_epi
-  条件: [Epi f] [IsIso inr] (sq : CommSq f g inl inr)
-  结论: IsPushout f g inl inr
+  条件: [满态射 f] [是同构 inr] (sq : 交换Sq f g inl inr)
+  结论: 是推出 f g inl inr
   证明: of_isColimit' sq
     (by
       refine
@@ -1454,8 +1454,8 @@ theorem of_horiz_isIso
 
 中文:
 定理 of_horiz_isIso
-  条件: [IsIso f] [IsIso inr] (sq : CommSq f g inl inr)
-  结论: IsPushout f g inl inr
+  条件: [是同构 f] [是同构 inr] (sq : 交换Sq f g inl inr)
+  结论: 是推出 f g inl inr
   证明: of_horiz_isIso_epi sq
 
 Depends on / 依赖: of_horiz_isIso_epi
@@ -1474,8 +1474,8 @@ theorem of_vert_isIso_epi
 
 中文:
 定理 of_vert_isIso_epi
-  条件: [Epi g] [IsIso inl] (sq : CommSq f g inl inr)
-  结论: IsPushout f g inl inr
+  条件: [满态射 g] [是同构 inl] (sq : 交换Sq f g inl inr)
+  结论: 是推出 f g inl inr
   证明: (of_horiz_isIso_epi sq.flip).flip
 
 Depends on / 依赖: of_horiz_isIso_epi, sq.flip
@@ -1494,8 +1494,8 @@ theorem of_vert_isIso
 
 中文:
 定理 of_vert_isIso
-  条件: [IsIso g] [IsIso inl] (sq : CommSq f g inl inr)
-  结论: IsPushout f g inl inr
+  条件: [是同构 g] [是同构 inl] (sq : 交换Sq f g inl inr)
+  结论: 是推出 f g inl inr
   证明: of_vert_isIso_epi sq
 
 Depends on / 依赖: of_vert_isIso_epi
@@ -1513,7 +1513,7 @@ lemma of_id_fst
 
 中文:
 引理 of_id_fst
-  结论: IsPushout (𝟙 _) f f (𝟙 _)
+  结论: 是推出 (𝟙 _) f f (𝟙 _)
   证明: IsPushout.of_horiz_isIso ⟨by simp⟩
 
 Depends on / 依赖: IsPushout, IsPushout.of_horiz_isIso, of_horiz_isIso
@@ -1530,7 +1530,7 @@ lemma of_id_snd
 
 中文:
 引理 of_id_snd
-  结论: IsPushout f (𝟙 _) (𝟙 _) f
+  结论: 是推出 f (𝟙 _) (𝟙 _) f
   证明: IsPushout.of_vert_isIso ⟨by simp⟩
 
 Depends on / 依赖: IsPushout, IsPushout.of_vert_isIso, of_vert_isIso
@@ -1549,7 +1549,7 @@ lemma id_vert
 中文:
 引理 id_vert
   条件: (f : X ⟶ Z)
-  结论: IsPushout f (𝟙 X) (𝟙 Z) f
+  结论: 是推出 f (𝟙 X) (𝟙 Z) f
   证明: of_vert_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_vert_isIso
@@ -1569,7 +1569,7 @@ lemma id_horiz
 中文:
 引理 id_horiz
   条件: (f : X ⟶ Z)
-  结论: IsPushout (𝟙 X) f f (𝟙 Z)
+  结论: 是推出 (𝟙 X) f f (𝟙 Z)
   证明: of_horiz_isIso ⟨by simp only [Category.id_comp, Category.comp_id]⟩
 
 Depends on / 依赖: Category, Category.comp_id, Category.id_comp, comp_id, id_comp, of_horiz_isIso
@@ -1729,8 +1729,8 @@ definition IsPullback.isLimitFork
       exact H.isLimit.fac _ _
 
 中文:
-定义 IsPullback.isLimitFork
-  签名: (H : IsPullback f f g g')
+定义 是拉回.isLimitFork
+  签名: (H : 是拉回 f f g g')
   定义体: by
   fapply Fork.IsLimit.mk
   · exact fun s => H.isLimit.lift (PullbackCone.mk s.ι s.ι s.condition)
@@ -1764,8 +1764,8 @@ definition IsPushout.isLimitFork
       exact H.isColimit.fac _ _
 
 中文:
-定义 IsPushout.isLimitFork
-  签名: (H : IsPushout f f' g g)
+定义 是推出.isLimitFork
+  签名: (H : 是推出 f f' g g)
   定义体: by
   fapply Cofork.IsColimit.mk
   · exact fun s => H.isColimit.desc (PushoutCocone.mk s.π s.π s.condition)
@@ -1809,8 +1809,8 @@ theorem Functor.map_isPullback
   · simp
 
 中文:
-定理 Functor.map_isPullback
-  条件: [PreservesLimit (cospan h i) F] (s : IsPullback f g h i)
+定理 函子.map_isPullback
+  条件: [保持极限 (cospan h i) F] (s : 是拉回 f g h i)
   证明: by
   refine
     IsPullback.of_isLimit' (F.map_commSq s.toCommSq)
@@ -1854,8 +1854,8 @@ alias IsPullback.map := Functor.map_isPullback
 alias IsPushout.map := Fun
 
 中文:
-定理 Functor.map_isPushout
-  条件: [PreservesColimit (span f g) F] (s : IsPushout f g h i)
+定理 函子.map_isPushout
+  条件: [保持余极限 (span f g) F] (s : 是推出 f g h i)
   证明: by
   refine
     IsPushout.of_isColimit' (F.map_commSq s.toCommSq)
@@ -1900,8 +1900,8 @@ refine ⟨⟨e⟩, ⟨isLimitOfReflects F ?_⟩⟩
     (Category.comp_id _).trans (Category.id_comp _).symm]
 
 中文:
-定理 IsPullback.of_map
-  结论: [ReflectsLimit (cospan h i) F] (e : f ≫ h = g ≫ i)
+定理 是拉回.of_map
+  结论: [反映极限 (cospan h i) F] (e : f ≫ h = g ≫ i)
   证明: by
 refine ⟨⟨e⟩, ⟨isLimitOfReflects F ?_⟩⟩
   refine
@@ -1928,8 +1928,8 @@ theorem IsPullback.of_map_of_faithful
   proof: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
 
 中文:
-定理 IsPullback.of_map_of_faithful
-  结论: [ReflectsLimit (cospan h i) F] [F.Faithful]
+定理 是拉回.of_map_of_faithful
+  结论: [反映极限 (cospan h i) F] [F.忠实]
   证明: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
 
 Depends on / 依赖: F.map_comp, F.map_injective, H.of_map, map_comp, map_injective, of_map
@@ -1947,8 +1947,8 @@ theorem IsPullback.map_iff
   proof: ⟨fun h => h.of_map F e, fun h => h.map F⟩
 
 中文:
-定理 IsPullback.map_iff
-  结论: {D : 类型} [Category* D] (F : C ⥤ D) [PreservesLimit (cospan h i) F]
+定理 是拉回.map_iff
+  结论: {D : 类型} [范畴* D] (F : C ⥤ D) [保持极限 (cospan h i) F]
   证明: ⟨fun h => h.of_map F e, fun h => h.map F⟩
 -/
 theorem IsPullback.map_iff {D : Type*} [Category* D] (F : C ⥤ D) [PreservesLimit (cospan h i) F]
@@ -1971,8 +1971,8 @@ refine ⟨⟨e⟩, ⟨isColimitOfReflects F ?_⟩⟩
     (Category.comp_id _).trans (Category.id_comp _)]
 
 中文:
-定理 IsPushout.of_map
-  结论: [ReflectsColimit (span f g) F] (e : f ≫ h = g ≫ i)
+定理 是推出.of_map
+  结论: [反映余极限 (span f g) F] (e : f ≫ h = g ≫ i)
   证明: by
 refine ⟨⟨e⟩, ⟨isColimitOfReflects F ?_⟩⟩
   refine
@@ -1999,8 +1999,8 @@ theorem IsPushout.of_map_of_faithful
   proof: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
 
 中文:
-定理 IsPushout.of_map_of_faithful
-  结论: [ReflectsColimit (span f g) F] [F.Faithful]
+定理 是推出.of_map_of_faithful
+  结论: [反映余极限 (span f g) F] [F.忠实]
   证明: H.of_map F (F.map_injective <| by simpa only [F.map_comp] using H.w)
 
 Depends on / 依赖: F.map_comp, F.map_injective, H.of_map, map_comp, map_injective, of_map
@@ -2018,8 +2018,8 @@ theorem IsPushout.map_iff
   proof: ⟨fun h => h.of_map F e, fun h => h.map F⟩
 
 中文:
-定理 IsPushout.map_iff
-  结论: {D : 类型} [Category* D] (F : C ⥤ D) [PreservesColimit (span f g) F]
+定理 是推出.map_iff
+  结论: {D : 类型} [范畴* D] (F : C ⥤ D) [保持余极限 (span f g) F]
   证明: ⟨fun h => h.of_map F e, fun h => h.map F⟩
 -/
 theorem IsPushout.map_iff {D : Type*} [Category* D] (F : C ⥤ D) [PreservesColimit (span f g) F]
@@ -2040,7 +2040,7 @@ lemma IsPullback.preservesLimit_cospan_iff
   exact (PullbackCone.isLimitMapConeEquiv _ _).symm hF.isLimit
 
 中文:
-引理 IsPullback.preservesLimit_cospan_iff
+引理 是拉回.preservesLimit_cospan_iff
   结论: {P X Y Z : C} {fst : P ⟶ X}
   证明: by
   refine ⟨fun _ => h.map _, fun hF => ?_⟩
@@ -2069,7 +2069,7 @@ lemma IsPushout.preservesColimit_span_iff
   exact (PushoutCocone.isColimitMapCoconeEquiv _ _).symm hF.isColimit
 
 中文:
-引理 IsPushout.preservesColimit_span_iff
+引理 是推出.preservesColimit_span_iff
   结论: {P X Y Z : C} {inl : X ⟶ P}
   证明: by
   refine ⟨fun _ => h.map _, fun hF => ?_⟩
@@ -2100,7 +2100,7 @@ lemma Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback
   rwa [h.preservesLimit_cospan_iff]
 
 中文:
-引理 Limits.preservesLimitsOfShape_walkingCospan_of_forall_isPullback
+引理 Limits.preservesLimitsOfShape_walkingCospan_of_对任意_isPullback
   证明: by
   suffices h : forall {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z), PreservesLimit (cospan f g) F from
     ⟨fun {K} => preservesLimit_of_iso_diagram _ (Limits.diagramIsoCospan K).symm⟩
@@ -2138,7 +2138,7 @@ lemma Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout
   rwa [h.preservesColimit_span_iff]
 
 中文:
-引理 Limits.preservesColimitsOfShape_walkingCospan_of_forall_isPushout
+引理 Limits.preservesColimitsOfShape_walkingCospan_of_对任意_isPushout
   证明: by
   suffices h : forall {X Y Z : C} (f : Z ⟶ X) (g : Z ⟶ Y), PreservesColimit (span f g) F from
     ⟨fun {K} => preservesColimit_of_iso_diagram _ (diagramIsoSpan K).symm⟩
@@ -2170,8 +2170,8 @@ lemma IsPullback.app
   proof: h.map ((evaluation _ _).obj X)
 
 中文:
-引理 IsPullback.app
-  结论: [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
+引理 是拉回.app
+  结论: [有Pullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: h.map ((evaluation _ _).obj X)
 
 Depends on / 依赖: evaluation, h.map
@@ -2194,7 +2194,7 @@ lemma IsPullback.of_forall_isPullback_app
     (PullbackCone.isLimitMapConeEquiv _ _).symm (h X).isLimit⟩
 
 中文:
-引理 IsPullback.of_forall_isPullback_app
+引理 是拉回.of_对任意_isPullback_app
   结论: {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: by
     ext X
@@ -2223,8 +2223,8 @@ lemma IsPullback.iff_app
   proof: ⟨.app, .of_forall_isPullback_app⟩
 
 中文:
-引理 IsPullback.iff_app
-  结论: [HasPullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
+引理 是拉回.iff_app
+  结论: [有Pullbacks D] {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: ⟨.app, .of_forall_isPullback_app⟩
 
 Depends on / 依赖: A.hom, A.prop, HasPullbacksAlong, HasPullbacksAlong.hasPullback, IsPullback, IsPullback.of_hasPullback, IsStableUnderBaseChangeAlong, IsStableUnderBaseChangeAlong.of_isPullback, hasPullback, of_forall_isPullback_app, of_hasPullback, of_isPullback, pullback, pullback.snd
@@ -2243,8 +2243,8 @@ lemma IsPushout.app
   proof: h.map ((evaluation _ _).obj X)
 
 中文:
-引理 IsPushout.app
-  结论: [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
+引理 是推出.app
+  结论: [有Pushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: h.map ((evaluation _ _).obj X)
 
 Depends on / 依赖: evaluation, h.map
@@ -2267,7 +2267,7 @@ lemma IsPushout.of_forall_isPushout_app
     (PushoutCocone.isColimitMapCoconeEquiv _ _).symm (h X).isColimit⟩
 
 中文:
-引理 IsPushout.of_forall_isPushout_app
+引理 是推出.of_对任意_isPushout_app
   结论: {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: by
     ext X
@@ -2296,8 +2296,8 @@ lemma IsPushout.iff_app
   proof: ⟨.app, .of_forall_isPushout_app⟩
 
 中文:
-引理 IsPushout.iff_app
-  结论: [HasPushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
+引理 是推出.iff_app
+  结论: [有Pushouts D] {F₁ F₂ F₃ F₄ : C ⥤ D}
   证明: ⟨.app, .of_forall_isPushout_app⟩
 
 Depends on / 依赖: of_forall_isPushout_app
@@ -2502,7 +2502,7 @@ lemma iff_exists_over_iso
     exact of_over_iso e
 
 中文:
-引理 iff_exists_over_iso
+引理 iff_存在_over_iso
   条件: {P : C} {p : P ⟶ X} {q : P ⟶ Y}
   证明: by
   constructor

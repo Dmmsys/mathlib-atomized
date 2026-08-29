@@ -71,8 +71,8 @@ theorem univLE_iff_exists_embedding
   exact lift_mk_le'
 
 中文:
-定理 univLE_iff_exists_embedding
-  结论: UnivLE.{u, v} ↔ Nonempty (Ordinal.{u} ↪ Ordinal.{v})
+定理 univLE_iff_存在_embedding
+  结论: UnivLE.{u, v} ↔ 非空 (序数.{u} ↪ 序数.{v})
   证明: by
   rw [univLE_iff_cardinal_le]
   exact lift_mk_le'
@@ -92,8 +92,8 @@ theorem Ordinal.univLE_of_injective
   proof: univLE_iff_exists_embedding.2 ⟨f, h⟩
 
 中文:
-定理 Ordinal.univLE_of_injective
-  条件: {f : Ordinal.{u} -> Ordinal.{v}} (h : f.Injective)
+定理 序数.univLE_of_injective
+  条件: {f : 序数.{u} -> 序数.{v}} (h : f.单射)
   证明: univLE_iff_exists_embedding.2 ⟨f, h⟩
 
 Depends on / 依赖: univLE_iff_exists_embedding

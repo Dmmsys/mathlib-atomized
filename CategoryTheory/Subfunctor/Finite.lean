@@ -45,7 +45,7 @@ definition IsGeneratedBy
   body: ⨆ (i : ι), ofSection (x i) = G
 
 中文:
-定义 IsGeneratedBy
+定义 是GeneratedBy
   签名: : 命题
   定义体: ⨆ (i : ι), ofSection (x i) = G
 
@@ -63,7 +63,7 @@ lemma isGeneratedBy_iff
 
 中文:
 引理 isGeneratedBy_iff
-  结论: G.IsGeneratedBy x ↔ ⨆ (i : ι), ofSection (x i) = G
+  结论: G.是GeneratedBy x ↔ ⨆ (i : ι), ofSection (x i) = G
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -152,7 +152,7 @@ lemma of_equiv
 
 中文:
 引理 of_equiv
-  条件: {ι' : Type w''} (e : ι' ≃ ι)
+  条件: {ι' : 类型 w''} (e : ι' ≃ ι)
   证明: by
   rw [isGeneratedBy_iff]; rw [← h.iSup_eq]
   exact Equiv.iSup_congr e (congrFun rfl)
@@ -174,8 +174,8 @@ lemma image
   simp only [isGeneratedBy_iff, ← h.iSup_eq, image_iSup, ofSection_image]
 
 中文:
-引理 image
-  条件: {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F')
+引理 像
+  条件: {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F')
   证明: by
   simp only [isGeneratedBy_iff, ← h.iSup_eq, image_iSup, ofSection_image]
 
@@ -199,10 +199,10 @@ class IsFinite
     - exists_isGeneratedBy : exists (ι : Type) (_ : Finite ι) (X : ι -> Cᵒᵖ) (x : (i : ι) -> F.obj (X i)), Nonempty (G.IsGeneratedBy x)
 
 中文:
-类 IsFinite
+类 是有限
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_isGeneratedBy : 存在 (ι : Type) (_ : Finite ι) (X : ι -> Cᵒᵖ) (x : (i : ι) -> F.obj (X i)), Nonempty (G.IsGeneratedBy x)
+    - exists_isGeneratedBy : 存在 (ι : 类型) (_ : 有限 ι) (X : ι -> Cᵒᵖ) (x : (i : ι) -> F.obj (X i)), 非空 (G.是GeneratedBy x)
 -/
 class IsFinite : Prop where
   exists_isGeneratedBy :
@@ -223,7 +223,7 @@ definition Index
 
 中文:
 定义 Index
-  签名: : Type
+  签名: : 类型
   定义体: hG.exists_isGeneratedBy.choose
 
 Depends on / 依赖: exists_isGeneratedBy, hG.exists_isGeneratedBy.choose
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (Index G)
+  签名: 有限 (Index G)
   定义体: hG.exists_isGeneratedBy.choose_spec.choose
 
 Depends on / 依赖: choose_spec, exists_isGeneratedBy, hG.exists_isGeneratedBy.choose_spec.choose
@@ -297,7 +297,7 @@ lemma isGeneratedBy_of_isFinite
 
 中文:
 引理 isGeneratedBy_of_isFinite
-  条件: [hG : G.IsFinite]
+  条件: [hG : G.是有限]
   证明: hG.exists_isGeneratedBy.choose_spec.choose_spec.choose_spec.choose_spec.some
 -/
 lemma isGeneratedBy_of_isFinite [hG : G.IsFinite] :
@@ -314,7 +314,7 @@ lemma IsGeneratedBy.isFinite
   exact ⟨Fin n, inferInstance, _, _, ⟨h.of_equiv e.symm⟩⟩
 
 中文:
-引理 IsGeneratedBy.isFinite
+引理 是GeneratedBy.isFinite
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin ι
   exact ⟨Fin n, inferInstance, _, _, ⟨h.of_equiv e.symm⟩⟩
@@ -337,7 +337,7 @@ lemma image_isFinite
 
 中文:
 引理 image_isFinite
-  条件: [G.IsFinite] {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F')
+  条件: [G.是有限] {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F')
   证明: ((isGeneratedBy_of_isFinite G).image f).isFinite
 
 Depends on / 依赖: isFinite, isGeneratedBy_of_isFinite
@@ -388,7 +388,7 @@ lemma range
 
 中文:
 引理 range
-  结论: (Subfunctor.range f).IsGeneratedBy (fun i => f.app _ (x i))
+  结论: (子函子.range f).是GeneratedBy (fun i => f.app _ (x i))
   证明: by
   simpa only [← Subfunctor.image_top] using h.image f
 
@@ -409,7 +409,7 @@ lemma of_epi
 
 中文:
 引理 of_epi
-  条件: [Epi f]
+  条件: [满态射 f]
   结论: PresheafIsGeneratedBy F' (fun i => f.app _ (x i))
   证明: by
   simpa only [Subfunctor.range_eq_top f] using h.range f
@@ -466,8 +466,8 @@ lemma Subfunctor.range_isFinite
   proof: ((presheafIsGeneratedBy_of_isFinite F).range f).isFinite
 
 中文:
-引理 Subfunctor.range_isFinite
-  条件: [PresheafIsFinite F] {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F')
+引理 子函子.range_isFinite
+  条件: [PresheafIsFinite F] {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F')
   证明: ((presheafIsGeneratedBy_of_isFinite F).range f).isFinite
 
 Depends on / 依赖: isFinite, presheafIsGeneratedBy_of_isFinite
@@ -486,7 +486,7 @@ lemma presheafIsFinite_of_epi
 
 中文:
 引理 presheafIsFinite_of_epi
-  条件: [PresheafIsFinite F] {F' : Cᵒᵖ ⥤ Type w} (f : F ⟶ F') [Epi f]
+  条件: [PresheafIsFinite F] {F' : Cᵒᵖ ⥤ 类型 w} (f : F ⟶ F') [满态射 f]
   证明: ((presheafIsGeneratedBy_of_isFinite F).of_epi f).isFinite
 
 Depends on / 依赖: isFinite, of_epi, presheafIsGeneratedBy_of_isFinite

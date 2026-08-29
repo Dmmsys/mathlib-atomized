@@ -76,11 +76,11 @@ structure Bundle.Pretrivialization
 中文:
 结构 Bundle.Pretrivialization
   参数: (proj : Z -> B)
-  继承: PartialEquiv Z (B × F)
+  继承: 部分等价 Z (B × F)
   公理与运算 (6 个):
-    - open_target : IsOpen target
-    - baseSet : Set B
-    - open_baseSet : IsOpen baseSet
+    - open_target : 是开集 target
+    - baseSet : 集合 B
+    - open_baseSet : 是开集 baseSet
     - source_eq : source = proj ⁻¹' baseSet
     - target_eq : target = baseSet ×ˢ univ
     - proj_toFun : 对任意 p in source, (toFun p).1 = proj p
@@ -201,7 +201,7 @@ lemma toPartialEquiv_injective
 
 中文:
 引理 toPartialEquiv_injective
-  条件: [Nonempty F]
+  条件: [非空 F]
   证明: by
   refine fun e e' h => ext' _ _ h ?_
   simpa only [fst_image_prod, univ_nonempty, target_eq]
@@ -308,7 +308,7 @@ theorem eqOn
 
 中文:
 定理 eqOn
-  结论: EqOn (Prod.fst ∘ e) proj e.source
+  结论: EqOn (积类型.fst ∘ e) proj e.source
   证明: fun _ hx => e.coe_fst hx
 
 @[simp]
@@ -461,8 +461,8 @@ theorem proj_surjOn_baseSet
 
 中文:
 定理 proj_surjOn_baseSet
-  条件: [Nonempty F]
-  结论: Set.SurjOn proj e.source e.baseSet
+  条件: [非空 F]
+  结论: 集合.满射限制 proj e.source e.baseSet
   证明: fun b hb =>
   let ⟨y⟩ := ‹Nonempty F›
 ⟨e.toPartialEquiv.symm (b, y), e.toPartialEquiv.map_target e.mem_target.2 hb,
@@ -616,7 +616,7 @@ theorem preimage_symm_proj_inter
 
 中文:
 定理 preimage_symm_proj_inter
-  条件: (s : Set B)
+  条件: (s : 集合 B)
   证明: by
   ext ⟨x, y⟩
   suffices x in e.baseSet -> (proj (e.toPartialEquiv.symm (x, y)) in s ↔ x in s) by
@@ -983,7 +983,7 @@ theorem symm_proj_apply
 
 中文:
 定理 symm_proj_apply
-  结论: (e : Pretrivialization F (π F E)) (z : TotalSpace F E)
+  结论: (e : Pretrivialization F (π F E)) (z : 全空间 F E)
   证明: by
   rw [e.symm_apply hz]; rw [cast_eq_iff_heq]; rw [e.mk_proj_snd' hz]; rw [e.symm_apply_apply (e.mem_source.mpr hz)]
 
@@ -1059,7 +1059,7 @@ definition restrictPreimage'
 
 中文:
 定义 restrictPreimage'
-  签名: (e : Pretrivialization F proj) (s : Set B)
+  签名: (e : Pretrivialization F proj) (s : 集合 B)
   定义体: (⟨proj z, z.2⟩, (e z).2)
   invFun x := by classical exact if h : (x.1.1, x.2) in e.target then ⟨e.invFun (x.1, x.2), by
       simpa only [mem_preimage, ← e.proj_toFun _ (e.map_target' h), e.right_inv' h] using! x.1.2⟩
@@ -1107,7 +1107,7 @@ definition restrictPreimage
 
 中文:
 定义 restrictPreimage
-  签名: (e : Pretrivialization F proj) {s : Set B}
+  签名: (e : Pretrivialization F proj) {s : 集合 B}
   定义体: have : Nonempty (F -> proj ⁻¹' s) := .intro fun f => Nonempty.some have ⟨z, hzs, hzb⟩ := hs
 ⟨⟨e.invFun ⟨z, f⟩, Set.mem_preimage.mpr (e.proj_symm_apply' hzb).symm ▸ hzs⟩⟩
   e.restrictPreimage' s
@@ -1139,7 +1139,7 @@ definition domExtend
 
 中文:
 定义 domExtend
-  签名: {s : Set B} (e : Pretrivialization F fun z : proj ⁻¹' s => proj z)
+  签名: {s : 集合 B} (e : Pretrivialization F fun z : proj ⁻¹' s => proj z)
   定义体: by classical exact if h : proj z in s then e ⟨z, h⟩
     else (proj z, Classical.arbitrary (Z -> F) z)
   invFun x := e.invFun x
@@ -1190,7 +1190,7 @@ definition codExtend'
 
 中文:
 定义 codExtend'
-  签名: {s : Set B} (hs : IsOpen s) {proj : Z -> s}
+  签名: {s : 集合 B} (hs : 是开集 s) {proj : Z -> s}
   定义体: ⟨(e z).1, (e z).2⟩
   invFun x := by classical exact if h : x.1 in s then e.invFun (⟨x.1, h⟩, x.2)
     else Classical.arbitrary (B -> F -> Z) x.1 x.2
@@ -1231,7 +1231,7 @@ definition codExtend
 
 中文:
 定义 codExtend
-  签名: {s : Set B} (hs : IsOpen s) (nonempty : s.Nonempty) {proj : Z -> s}
+  签名: {s : 集合 B} (hs : 是开集 s) (nonempty : s.非空) {proj : Z -> s}
   定义体: have : Nonempty (F -> Z) := .intro fun f => e.invFun (⟨_, nonempty.some_mem⟩, f)
   e.codExtend' hs
 
@@ -1265,8 +1265,8 @@ structure Trivialization
   参数: (proj : Z -> B)
   继承: OpenPartialHomeomorph Z (B × F)
   公理与运算 (5 个):
-    - baseSet : Set B
-    - open_baseSet : IsOpen baseSet
+    - baseSet : 集合 B
+    - open_baseSet : 是开集 baseSet
     - source_eq : source = proj ⁻¹' baseSet
     - target_eq : target = baseSet ×ˢ univ
     - proj_toFun : 对任意 p in source, (toOpenPartialHomeomorph p).1 = proj p
@@ -1488,7 +1488,7 @@ theorem eqOn
 
 中文:
 定理 eqOn
-  结论: EqOn (Prod.fst ∘ e) proj e.source
+  结论: EqOn (积类型.fst ∘ e) proj e.source
   证明: fun _x hx => e.coe_fst hx
 -/
 protected theorem eqOn : EqOn (Prod.fst ∘ e) proj e.source := fun _x hx => e.coe_fst hx
@@ -1587,7 +1587,7 @@ theorem source_inter_preimage_target_inter
 
 中文:
 定理 source_inter_preimage_target_inter
-  条件: (s : Set (B × F))
+  条件: (s : 集合 (B × F))
   证明: e.toOpenPartialHomeomorph.source_inter_preimage_target_inter s
 
 @[simp, mfld_simps]
@@ -1707,8 +1707,8 @@ theorem proj_surjOn_baseSet
 
 中文:
 定理 proj_surjOn_baseSet
-  条件: [Nonempty F]
-  结论: Set.SurjOn proj e.source e.baseSet
+  条件: [非空 F]
+  结论: 集合.满射限制 proj e.source e.baseSet
   证明: e.toPretrivialization.proj_surjOn_baseSet
 
 @[simp, mfld_simps]
@@ -1836,7 +1836,7 @@ theorem coe_fst_eventuallyEq_proj
 中文:
 定理 coe_fst_eventuallyEq_proj
   条件: (ex : x in e.source)
-  结论: Prod.fst ∘ e =ᶠ[𝓝 x] proj
+  结论: 积类型.fst ∘ e =ᶠ[𝓝 x] proj
   证明: mem_nhds_iff.2 ⟨e.source, fun _y hy => e.coe_fst hy, e.open_source, ex⟩
 
 Depends on / 依赖: coe_fst, e.coe_fst, e.open_source, e.source, mem_nhds_iff, open_source, source
@@ -1856,7 +1856,7 @@ theorem coe_fst_eventuallyEq_proj'
 中文:
 定理 coe_fst_eventuallyEq_proj'
   条件: (ex : proj x in e.baseSet)
-  结论: Prod.fst ∘ e =ᶠ[𝓝 x] proj
+  结论: 积类型.fst ∘ e =ᶠ[𝓝 x] proj
   证明: e.coe_fst_eventuallyEq_proj (e.mem_source.2 ex)
 
 Depends on / 依赖: coe_fst_eventuallyEq_proj, e.coe_fst_eventuallyEq_proj, e.mem_source, mem_source
@@ -1897,7 +1897,7 @@ theorem preimage_subset_source
 
 中文:
 定理 preimage_subset_source
-  条件: {s : Set B} (hb : s subseteq e.baseSet)
+  条件: {s : 集合 B} (hb : s subseteq e.baseSet)
   结论: proj ⁻¹' s subseteq e.source
   证明: fun _p hp => e.mem_source.mpr (hb hp)
 
@@ -1921,7 +1921,7 @@ theorem image_preimage_eq_prod_univ
 
 中文:
 定理 image_preimage_eq_prod_univ
-  条件: {s : Set B} (hb : s subseteq e.baseSet)
+  条件: {s : 集合 B} (hb : s subseteq e.baseSet)
   证明: Subset.antisymm
     (image_subset_iff.mpr fun p hp =>
       ⟨(e.proj_toFun p (e.preimage_subset_source hb hp)).symm ▸ hp, trivial⟩)
@@ -1955,7 +1955,7 @@ theorem tendsto_nhds_iff
 
 中文:
 定理 tendsto_nhds_iff
-  条件: {α : 类型} {l : Filter α} {f : α -> Z} {z : Z} (hz : z in e.source)
+  条件: {α : 类型} {l : 滤子 α} {f : α -> Z} {z : Z} (hz : z in e.source)
   证明: by
   rw [e.nhds_eq_comap_inf_principal hz]; rw [tendsto_inf]; rw [tendsto_comap_iff]; rw [Prod.tendsto_iff]; rw [coe_coe]; rw [tendsto_principal]; rw [coe_fst _ hz]
   by_cases hl : forallᶠ x in l, f x in e.source
@@ -2018,7 +2018,7 @@ definition preimageHomeomorph
 
 中文:
 定义 preimageHomeomorph
-  签名: {s : Set B} (hb : s subseteq e.baseSet)
+  签名: {s : 集合 B} (hb : s subseteq e.baseSet)
   定义体: (e.toOpenPartialHomeomorph.homeomorphOfImageSubsetSource (e.preimage_subset_source hb)
         (e.image_preimage_eq_prod_univ hb)).trans
     ((Homeomorph.Set.prod s univ).trans ((Homeomorph.refl s).prodCongr (Homeomorph.Set.univ F)))
@@ -2043,7 +2043,7 @@ theorem preimageHomeomorph_apply
 
 中文:
 定理 preimageHomeomorph_apply
-  条件: {s : Set B} (hb : s subseteq e.baseSet) (p : proj ⁻¹' s)
+  条件: {s : 集合 B} (hb : s subseteq e.baseSet) (p : proj ⁻¹' s)
   证明: Prod.ext (Subtype.ext (e.proj_toFun p (e.mem_source.mpr (hb p.2)))) rfl
 
 Depends on / 依赖: Prod.ext, Subtype, Subtype.ext, e.mem_source.mpr, e.proj_toFun, mem_source, proj_toFun
@@ -2064,7 +2064,7 @@ definition preimageHomeomorph_symm_apply.aux
 
 中文:
 定义 preimageHomeomorph_symm_apply.aux
-  签名: {s : Set B} (hb : s subseteq e.baseSet)
+  签名: {s : 集合 B} (hb : s subseteq e.baseSet)
   定义体: (e.preimageHomeomorph hb).symm
 
 @[simp]
@@ -2083,7 +2083,7 @@ theorem preimageHomeomorph_symm_apply
 
 中文:
 定理 preimageHomeomorph_symm_apply
-  条件: {s : Set B} (hb : s subseteq e.baseSet) (p : s × F)
+  条件: {s : 集合 B} (hb : s subseteq e.baseSet) (p : s × F)
   证明: rfl
 -/
 theorem preimageHomeomorph_symm_apply {s : Set B} (hb : s subseteq e.baseSet) (p : s × F) :
@@ -2332,7 +2332,7 @@ definition compHomeomorph
 
 中文:
 定义 compHomeomorph
-  签名: {Z' : 类型} [TopologicalSpace Z'] (h : Z' ≃ₜ Z)
+  签名: {Z' : 类型} [拓扑空间 Z'] (h : Z' ≃ₜ Z)
   定义体: h.transOpenPartialHomeomorph e.toOpenPartialHomeomorph
   baseSet := e.baseSet
   open_baseSet := e.open_baseSet
@@ -2368,7 +2368,7 @@ definition homeomorphComp
 
 中文:
 定义 homeomorphComp
-  签名: {B' : 类型} [TopologicalSpace B'] (h : B ≃ₜ B')
+  签名: {B' : 类型} [拓扑空间 B'] (h : B ≃ₜ B')
   定义体: e.toOpenPartialHomeomorph.transHomeomorph (h.prodCongr <| .refl _)
   baseSet := h.symm ⁻¹' e.baseSet
   open_baseSet := e.open_baseSet.preimage h.continuous_symm
@@ -2400,7 +2400,7 @@ theorem continuousAt_of_comp_right
 
 中文:
 定理 continuousAt_of_comp_right
-  结论: {X : 类型} [TopologicalSpace X] {f : Z -> X} {z : Z}
+  结论: {X : 类型} [拓扑空间 X] {f : Z -> X} {z : Z}
   证明: by
   have hez : z in e.toPartialEquiv.symm.target := by
     rw [PartialEquiv.symm_target]; rw [e.mem_source]
@@ -2433,7 +2433,7 @@ theorem continuousAt_of_comp_left
 
 中文:
 定理 continuousAt_of_comp_left
-  结论: {X : 类型} [TopologicalSpace X] {f : X -> Z} {x : X}
+  结论: {X : 类型} [拓扑空间 X] {f : X -> Z} {x : X}
   证明: by
   rw [e.continuousAt_iff_continuousAt_comp_left]
   · exact hf
@@ -2543,7 +2543,7 @@ theorem symm_apply_apply
 
 中文:
 定理 symm_apply_apply
-  条件: {x : TotalSpace F E} (hx : x in e'.source)
+  条件: {x : 全空间 F E} (hx : x in e'.source)
   证明: e'.toPartialEquiv.left_inv hx
 
 @[simp, mfld_simps]
@@ -2683,7 +2683,7 @@ theorem symm_proj_apply
 
 中文:
 定理 symm_proj_apply
-  结论: (e : Trivialization F (π F E)) (z : TotalSpace F E)
+  结论: (e : Trivialization F (π F E)) (z : 全空间 F E)
   证明: e.toPretrivialization.symm_proj_apply z hz
 
 @[simp, mfld_simps]
@@ -2796,7 +2796,7 @@ definition transFiberHomeomorph
 
 中文:
 定义 transFiberHomeomorph
-  签名: {F' : 类型} [TopologicalSpace F'] (e : Trivialization F proj)
+  签名: {F' : 类型} [拓扑空间 F'] (e : Trivialization F proj)
   定义体: e.toOpenPartialHomeomorph.transHomeomorph (Homeomorph.refl _).prodCongr h
   baseSet := e.baseSet
   open_baseSet := e.open_baseSet
@@ -2829,7 +2829,7 @@ theorem transFiberHomeomorph_apply
 
 中文:
 定理 transFiberHomeomorph_apply
-  结论: {F' : 类型} [TopologicalSpace F'] (e : Trivialization F proj)
+  结论: {F' : 类型} [拓扑空间 F'] (e : Trivialization F proj)
   证明: rfl
 -/
 theorem transFiberHomeomorph_apply {F' : Type*} [TopologicalSpace F'] (e : Trivialization F proj)
@@ -3074,7 +3074,7 @@ theorem isImage_preimage_prod
 
 中文:
 定理 isImage_preimage_prod
-  条件: (e : Trivialization F proj) (s : Set B)
+  条件: (e : Trivialization F proj) (s : 集合 B)
   证明: fun x hx => by simp [hx]
 -/
 theorem isImage_preimage_prod (e : Trivialization F proj) (s : Set B) :
@@ -3095,7 +3095,7 @@ definition restrOpen
 
 中文:
 定义 restrOpen
-  签名: (e : Trivialization F proj) (s : Set B) (hs : IsOpen s)
+  签名: (e : Trivialization F proj) (s : 集合 B) (hs : 是开集 s)
   定义体: ((e.isImage_preimage_prod s).symm.restr (IsOpen.inter e.open_target (hs.prod isOpen_univ))).symm
   baseSet := e.baseSet inter s
   open_baseSet := IsOpen.inter e.open_baseSet hs
@@ -3129,7 +3129,7 @@ continuousOn_toFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_
 
 中文:
 定义 restrictPreimage'
-  签名: (e : Trivialization F proj) (s : Set B)
+  签名: (e : Trivialization F proj) (s : 集合 B)
   定义体: e.toPretrivialization.restrictPreimage' s
 open_source := e.open_source.preimage by fun_prop
 continuousOn_toFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn_iff.mpr
@@ -3163,7 +3163,7 @@ definition restrictPreimage
 
 中文:
 定义 restrictPreimage
-  签名: (e : Trivialization F proj) {s : Set B}
+  签名: (e : Trivialization F proj) {s : 集合 B}
   定义体: have : Nonempty (F -> proj ⁻¹' s) := .intro fun f => Nonempty.some have ⟨z, hzs, hzb⟩ := hs
 ⟨⟨e.invFun ⟨z, f⟩, Set.mem_preimage.mpr (e.proj_symm_apply' hzb).symm ▸ hzs⟩⟩
   e.restrictPreimage' s
@@ -3194,7 +3194,7 @@ c
 
 中文:
 定义 domExtend
-  签名: {s : Set B} (hps : IsOpen (proj ⁻¹' s))
+  签名: {s : 集合 B} (hps : 是开集 (proj ⁻¹' s))
   定义体: e.toPretrivialization.domExtend
   open_source := hps.isOpenMap_subtype_val _ e.open_source
 continuousOn_toFun := Topology.IsInducing.subtypeVal.continuousOn_image_iff.mpr by
@@ -3234,7 +3234,7 @@ continuousOn_invFun := (Topology.IsInducing.subtypeVal.prodMap .id).continuousOn
 
 中文:
 定义 codExtend'
-  签名: {s : Set B} (hs : IsOpen s) {proj : Z -> s} (e : Trivialization F proj)
+  签名: {s : 集合 B} (hs : 是开集 s) {proj : Z -> s} (e : Trivialization F proj)
   定义体: e.toPretrivialization.codExtend' hs
   open_source := e.open_source
   continuousOn_toFun :=
@@ -3266,7 +3266,7 @@ definition codExtend
 
 中文:
 定义 codExtend
-  签名: {s : Set B} (hs : IsOpen s) (nonempty : s.Nonempty) {proj : Z -> s}
+  签名: {s : 集合 B} (hs : 是开集 s) (nonempty : s.非空) {proj : Z -> s}
   定义体: have : Nonempty (F -> Z) := .intro fun f => e.invFun (⟨_, nonempty.some_mem⟩, f)
   e.codExtend' hs
 
@@ -3290,7 +3290,7 @@ theorem frontier_preimage
 
 中文:
 定理 frontier_preimage
-  条件: (e : Trivialization F proj) (s : Set B)
+  条件: (e : Trivialization F proj) (s : 集合 B)
   证明: by
   rw [← (e.isImage_preimage_prod s).frontier.preimage_eq]; rw [frontier_prod_univ_eq]; rw [(e.isImage_preimage_prod _).preimage_eq]; rw [e.source_eq]; rw [preimage_inter]
 
@@ -3316,7 +3316,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: (e e' : Trivialization F proj) (s : Set B)
+  签名: (e e' : Trivialization F proj) (s : 集合 B)
   定义体: e.toOpenPartialHomeomorph.piecewise e'.toOpenPartialHomeomorph (proj ⁻¹' s) (s ×ˢ univ)
       (e.isImage_preimage_prod s) (e'.isImage_preimage_prod s)
       (by rw [e.frontier_preimage, e'.frontier_preimage, Hs]) (by rwa [e.frontier_preimage])
@@ -3353,7 +3353,7 @@ fun p hp => Heq p frontier_Iic_subset _ hp.2
 
 中文:
 定义 piecewiseLeOfEq
-  签名: [LinearOrder B] [OrderTopology B] (e e' : Trivialization F proj)
+  签名: [线性序 B] [Order拓扑 B] (e e' : Trivialization F proj)
   定义体: e.piecewise e' (Iic a)
     (Set.ext fun x => and_congr_left_iff.2 fun hx => by
       obtain rfl : x = a := mem_singleton_iff.1 (frontier_Iic_subset _ hx)
@@ -3385,7 +3385,7 @@ definition piecewiseLe
 
 中文:
 定义 piecewiseLe
-  签名: [LinearOrder B] [OrderTopology B] (e e' : Trivialization F proj)
+  签名: [线性序 B] [Order拓扑 B] (e e' : Trivialization F proj)
   定义体: e.piecewiseLeOfEq (e'.transFiberHomeomorph (e'.coordChangeHomeomorph e He' He)) a He He' by
     rintro p rfl
     ext1

@@ -126,7 +126,7 @@ theorem normDet_eq_norm_det_toMatrix_rangeRestrict
 
 中文:
 定理 normDet_eq_norm_det_toMatrix_rangeRestrict
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι]
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
   have hrank : finrank 𝕜 U = finrank 𝕜 f.range := by
     rw [finrank_eq_nat_card_basis bu.toBasis]; rw [finrank_eq_nat_card_basis bv.toBasis]
@@ -296,7 +296,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def orthonormalBasis_range {ι : 类型} [Fintype ι] {f : U ->ₗ[𝕜] V}
+  签名: def orthonormalBasis_range {ι : 类型} [有限类型 ι] {f : U ->ₗ[𝕜] V}
   定义体: let h : Nonempty (OrthonormalBasis (Fin (finrank 𝕜 U)) 𝕜 f.range) :=
     (f.normDet_ne_zero_tfae.out 1 3).mp hf
   h.some.reindex (Fintype.equivFinOfCardEq <| (Module.finrank_eq_card_basis b.toBasis).symm).symm
@@ -370,7 +370,7 @@ theorem normDet_eq_norm_det_toMatrix
 
 中文:
 定理 normDet_eq_norm_det_toMatrix
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (f : U ->ₗ[𝕜] V)
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (f : U ->ₗ[𝕜] V)
   证明: by
   have : FiniteDimensional 𝕜 V := bv.toBasis.finiteDimensional_of_finite
   by_cases! hrank : finrank 𝕜 U = finrank 𝕜 f.range
@@ -444,7 +444,7 @@ exact Matrix.det_of_mem_unitary (f.equivRange).toMatrix_mem_unitaryGroup _ _
 @[simp]
 
 中文:
-定理 _root_.LinearIsometry.normDet_eq_one
+定理 _root_.线性等距.normDet_eq_one
   条件: (f : U ->ₗᵢ[𝕜] V)
   结论: f.toLinearMap.normDet = 1
   证明: by
@@ -500,7 +500,7 @@ theorem normDet_subtype
 
 中文:
 定理 normDet_subtype
-  条件: (p : Submodule 𝕜 U)
+  条件: (p : 子模 𝕜 U)
   结论: p.subtype.normDet = 1
   证明: p.subtypeₗᵢ.normDet_eq_one
 
@@ -528,7 +528,7 @@ theorem normDet_of_subsingleton
 
 中文:
 定理 normDet_of_subsingleton
-  条件: [Subsingleton U] (f : U ->ₗ[𝕜] V)
+  条件: [子单例 U] (f : U ->ₗ[𝕜] V)
   结论: f.normDet = 1
   证明: by
   have h : f.ker = ⊥ := Submodule.eq_bot_of_subsingleton
@@ -660,8 +660,8 @@ theorem _root_.ContinuousLinearMap.normDet_sq
   · obtain ⟨b⟩ := (f.normDet
 
 中文:
-定理 _root_.ContinuousLinearMap.normDet_sq
-  条件: [CompleteSpace V] (f : U ->L[𝕜] V)
+定理 _root_.连续线性映射.normDet_sq
+  条件: [完备空间 V] (f : U ->L[𝕜] V)
   证明: FiniteDimensional.complete 𝕜 U
     ↑(f.normDet ^ 2) = (f.adjoint ∘L f).det := by
   have : CompleteSpace U := FiniteDimensional.complete 𝕜 U
@@ -702,7 +702,7 @@ theorem normDet_sq
 
 中文:
 定理 normDet_sq
-  条件: [FiniteDimensional 𝕜 V] (f : U ->ₗ[𝕜] V)
+  条件: [有限维 𝕜 V] (f : U ->ₗ[𝕜] V)
   证明: by
   have : CompleteSpace V := FiniteDimensional.complete 𝕜 V
   exact f.toContinuousLinearMap.normDet_sq
@@ -730,7 +730,7 @@ theorem normDet_sq_eq_det_gram
 
 中文:
 定理 normDet_sq_eq_det_gram
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] (f : U ->ₗ[𝕜] V)
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] (f : U ->ₗ[𝕜] V)
   证明: by
   suffices ↑(f.normDet ^ 2) = (Matrix.gram 𝕜 (f.rangeRestrict <| b ·)).det by
     simpa
@@ -829,7 +829,7 @@ theorem normDet_comp_of_finrank_eq
 
 中文:
 定理 normDet_comp_of_finrank_eq
-  结论: [FiniteDimensional 𝕜 V] (f : U ->ₗ[𝕜] V) (g : V ->ₗ[𝕜] W)
+  结论: [有限维 𝕜 V] (f : U ->ₗ[𝕜] V) (g : V ->ₗ[𝕜] W)
   证明: by
   by_cases htop : f.range = ⊤
   · rw [normDet_comp]
@@ -875,7 +875,7 @@ theorem normDet_codRestrict
 
 中文:
 定理 normDet_codRestrict
-  条件: {p : Submodule 𝕜 V} {f : U ->ₗ[𝕜] V} (h : 对任意 c, f c in p)
+  条件: {p : 子模 𝕜 V} {f : U ->ₗ[𝕜] V} (h : 对任意 c, f c in p)
   证明: by
   have : f = p.subtype ∘ₗ f.codRestrict p h := rfl
   conv_rhs => rw [this]
@@ -909,7 +909,7 @@ theorem normDet_eq_prod_singularValues
 
 中文:
 定理 normDet_eq_prod_singularValues
-  条件: [FiniteDimensional 𝕜 V] (f : U ->ₗ[𝕜] V)
+  条件: [有限维 𝕜 V] (f : U ->ₗ[𝕜] V)
   证明: by
   rw [← sq_eq_sq₀ f.normDet_nonneg (Finset.prod_nonneg fun i _ => f.singularValues_nonneg i)]; rw [← RCLike.ofReal_inj (K := 𝕜)]; rw [← Finset.prod_pow]; rw [← Fin.prod_univ_eq_prod_range]; rw [normDet_sq]
   simp_rw [sq_singularValues_fin]
@@ -969,7 +969,7 @@ theorem hausdorffMeasure_image
 
 中文:
 定理 hausdorffMeasure_image
-  结论: [MeasurableSpace U] [BorelSpace U] [MeasurableSpace V] [BorelSpace V]
+  结论: [可测空间 U] [Borel空间 U] [可测空间 V] [Borel空间 V]
   证明: by
   by_cases h : f.ker = ⊥
   · have hrank : finrank Real ↥f.range = finrank Real U := (f.normDet_ne_zero_tfae.out 1 2).mp h
@@ -1013,7 +1013,7 @@ theorem euclideanHausdorffMeasure_image
 
 中文:
 定理 euclideanHausdorffMeasure_image
-  结论: [MeasurableSpace U] [BorelSpace U] [MeasurableSpace V]
+  结论: [可测空间 U] [Borel空间 U] [可测空间 V]
   证明: by
   simp_rw [euclideanHausdorffMeasure_def, Measure.smul_apply, nnreal_smul_coe_apply,
     hausdorffMeasure_image]
@@ -1039,7 +1039,7 @@ theorem euclideanHausdorffMeasure_image_eq_normDet_mul_volume
 
 中文:
 定理 euclideanHausdorffMeasure_image_eq_normDet_mul_volume
-  结论: [MeasurableSpace U] [BorelSpace U]
+  结论: [可测空间 U] [Borel空间 U]
   证明: by
   rw [f.euclideanHausdorffMeasure_image]; rw [InnerProductSpace.euclideanHausdorffMeasure_eq_volume]
 

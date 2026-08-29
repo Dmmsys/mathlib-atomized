@@ -248,7 +248,7 @@ definition Lex.rec
 
 中文:
 定义 Lex.rec
-  签名: {β : Lex α -> Sort*} (h : 对任意 a, β (toLex a))
+  签名: {β : Lex α -> 类型层*} (h : 对任意 a, β (toLex a))
   定义体: fun a => h (ofLex a)
 -/
 protected def Lex.rec {β : Lex α -> Sort*} (h : forall a, β (toLex a)) : forall a, β a := fun a => h (ofLex a)
@@ -263,7 +263,7 @@ lemma Lex.forall
   proof: Iff.rfl
 
 中文:
-引理 Lex.forall
+引理 Lex.对任意
   条件: {p : Lex α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (toLex a)
   证明: Iff.rfl
@@ -279,7 +279,7 @@ lemma Lex.exists
   proof: Iff.rfl
 
 中文:
-引理 Lex.exists
+引理 Lex.存在
   条件: {p : Lex α -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (toLex a)
   证明: Iff.rfl
@@ -493,7 +493,7 @@ definition Colex.rec
 
 中文:
 定义 Colex.rec
-  签名: {β : Colex α -> Sort*} (h : 对任意 a, β (toColex a))
+  签名: {β : Colex α -> 类型层*} (h : 对任意 a, β (toColex a))
   定义体: fun a => h (ofColex a)
 -/
 protected def Colex.rec {β : Colex α -> Sort*} (h : forall a, β (toColex a)) : forall a, β a :=
@@ -509,7 +509,7 @@ lemma Colex.forall
   proof: Iff.rfl
 
 中文:
-引理 Colex.forall
+引理 Colex.对任意
   条件: {p : Colex α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (toColex a)
   证明: Iff.rfl
@@ -525,7 +525,7 @@ lemma Colex.exists
   proof: Iff.rfl
 
 中文:
-引理 Colex.exists
+引理 Colex.存在
   条件: {p : Colex α -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (toColex a)
   证明: Iff.rfl

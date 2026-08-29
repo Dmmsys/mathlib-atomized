@@ -133,10 +133,10 @@ class IsIdempotent
     - isIso_whiskerLeft_r_ι : IsIso (Functor.whiskerLeft Φ.r Φ.ι)
 
 中文:
-类 IsIdempotent
+类 是幂等
   参数: : 命题 where
   公理与运算 (1 个):
-    - isIso_whiskerLeft_r_ι : IsIso (Functor.whiskerLeft Φ.r Φ.ι)
+    - isIso_whiskerLeft_r_ι : 是同构 (函子.whiskerLeft Φ.r Φ.ι)
 -/
 class IsIdempotent : Prop where
   isIso_whiskerLeft_r_ι : IsIso (Functor.whiskerLeft Φ.r Φ.ι)
@@ -152,7 +152,7 @@ instance [Φ.IsIdempotent]
   body: inferInstanceAs (IsIso ((Functor.whiskerLeft Φ.r Φ.ι).app X))
 
 中文:
-实例 [Φ.IsIdempotent]
+实例 [Φ.是幂等]
   签名: (X : C)
   定义体: inferInstanceAs (IsIso ((Functor.whiskerLeft Φ.r Φ.ι).app X))
 
@@ -173,7 +173,7 @@ instance [Φ.IsIdempotent]
   infer_instance
 
 中文:
-实例 [Φ.IsIdempotent]
+实例 [Φ.是幂等]
   签名: (X : C)
   定义体: by
   rw [r_map_ι_app]

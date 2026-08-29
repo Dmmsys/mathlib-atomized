@@ -247,7 +247,7 @@ theorem sym_bijective
 
 中文:
 定理 sym_bijective
-  结论: Bijective (sym : α -> αˢʸᵐ)
+  结论: 双射 (sym : α -> αˢʸᵐ)
   证明: sym.bijective
 
 Depends on / 依赖: bijective, sym.bijective
@@ -265,7 +265,7 @@ theorem unsym_bijective
 
 中文:
 定理 unsym_bijective
-  结论: Bijective (unsym : αˢʸᵐ -> α)
+  结论: 双射 (unsym : αˢʸᵐ -> α)
   证明: unsym.symm.bijective
 
 Depends on / 依赖: IsAffineHom, MorphismProperty, MorphismProperty.pullback_snd, bijective, isAffine_of_isAffineHom, pullback, pullback.snd, pullback_snd, unsym.symm.bijective
@@ -283,7 +283,7 @@ theorem sym_injective
 
 中文:
 定理 sym_injective
-  结论: Injective (sym : α -> αˢʸᵐ)
+  结论: 单射 (sym : α -> αˢʸᵐ)
   证明: sym.injective
 
 Depends on / 依赖: IsAffineHom, MorphismProperty, MorphismProperty.pullback_fst, injective, isAffine_of_isAffineHom, pullback, pullback.fst, pullback_fst, sym.injective
@@ -301,7 +301,7 @@ theorem sym_surjective
 
 中文:
 定理 sym_surjective
-  结论: Surjective (sym : α -> αˢʸᵐ)
+  结论: 满射 (sym : α -> αˢʸᵐ)
   证明: sym.surjective
 
 Depends on / 依赖: surjective, sym.surjective
@@ -319,7 +319,7 @@ theorem unsym_injective
 
 中文:
 定理 unsym_injective
-  结论: Injective (unsym : αˢʸᵐ -> α)
+  结论: 单射 (unsym : αˢʸᵐ -> α)
   证明: unsym.injective
 
 Depends on / 依赖: injective, unsym.injective
@@ -337,7 +337,7 @@ theorem unsym_surjective
 
 中文:
 定理 unsym_surjective
-  结论: Surjective (unsym : αˢʸᵐ -> α)
+  结论: 满射 (unsym : αˢʸᵐ -> α)
   证明: unsym.surjective
 
 Depends on / 依赖: IsAffine, Scheme, Scheme.Hom.comp_apply, comp_apply, convert, coprod, coprod.map, coprodMk, hW.preimage, isAffineOpen_opensRange, le_antisymm, preimage, replace, surjective, toScheme, unsym.surjective
@@ -394,8 +394,8 @@ instance [Nontrivial
   body: sym_injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial αˢʸᵐ
+实例 [非平凡
+  签名: α] : 非平凡 αˢʸᵐ
   定义体: sym_injective.nontrivial
 
 Depends on / 依赖: nontrivial, sym_injective, sym_injective.nontrivial
@@ -412,8 +412,8 @@ instance [Inhabited
   body: ⟨sym default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited αˢʸᵐ
+实例 [可居
+  签名: α] : 可居 αˢʸᵐ
   定义体: ⟨sym default⟩
 -/
 instance [Inhabited α] : Inhabited αˢʸᵐ :=
@@ -428,8 +428,8 @@ instance [Subsingleton
   body: unsym_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton αˢʸᵐ
+实例 [子单例
+  签名: α] : 子单例 αˢʸᵐ
   定义体: unsym_injective.subsingleton
 
 Depends on / 依赖: subsingleton, unsym_injective, unsym_injective.subsingleton
@@ -446,8 +446,8 @@ instance [Unique
   body: Unique.mk' _
 
 中文:
-实例 [Unique
-  签名: α] : Unique αˢʸᵐ
+实例 [唯一
+  签名: α] : 唯一 αˢʸᵐ
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -466,8 +466,8 @@ instance [IsEmpty
 @[to_additive]
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty αˢʸᵐ
+实例 [是空
+  签名: α] : 是空 αˢʸᵐ
   定义体: Function.isEmpty unsym
 
 @[to_additive]
@@ -487,8 +487,8 @@ instance [One
   body: sym 1
 
 中文:
-实例 [One
-  签名: α] : One αˢʸᵐ where one
+实例 [幺
+  签名: α] : 幺 αˢʸᵐ where one
   定义体: sym 1
 -/
 instance [One α] : One αˢʸᵐ where one := sym 1
@@ -502,8 +502,8 @@ instance [Add
   body: sym (unsym a + unsym b)
 
 中文:
-实例 [Add
-  签名: α] : Add αˢʸᵐ where add a b
+实例 [加法
+  签名: α] : 加法 αˢʸᵐ where add a b
   定义体: sym (unsym a + unsym b)
 -/
 instance [Add α] : Add αˢʸᵐ where add a b := sym (unsym a + unsym b)
@@ -517,8 +517,8 @@ instance [Sub
   body: sym (unsym a - unsym b)
 
 中文:
-实例 [Sub
-  签名: α] : Sub αˢʸᵐ where sub a b
+实例 [减法
+  签名: α] : 减法 αˢʸᵐ where sub a b
   定义体: sym (unsym a - unsym b)
 -/
 instance [Sub α] : Sub αˢʸᵐ where sub a b := sym (unsym a - unsym b)
@@ -532,8 +532,8 @@ instance [Neg
   body: sym (-unsym a)
 
 中文:
-实例 [Neg
-  签名: α] : Neg αˢʸᵐ where neg a
+实例 [取负
+  签名: α] : 取负 αˢʸᵐ where neg a
   定义体: sym (-unsym a)
 -/
 instance [Neg α] : Neg αˢʸᵐ where neg a := sym (-unsym a)
@@ -550,8 +550,8 @@ instance [Add
 @[to_additive existing]
 
 中文:
-实例 [Add
-  签名: α] [Mul α] [One α] [Of自然数 α 2] [Invertible (2 : α)] : Mul αˢʸᵐ where
+实例 [加法
+  签名: α] [乘法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] : 乘法 αˢʸᵐ where
   定义体: sym (⅟2 * (unsym a * unsym b + unsym b * unsym a))
 
 @[to_additive existing]
@@ -569,8 +569,8 @@ instance [Inv
   body: sym (unsym a)⁻¹
 
 中文:
-实例 [Inv
-  签名: α] : Inv αˢʸᵐ where inv a
+实例 [取逆
+  签名: α] : 取逆 αˢʸᵐ where inv a
   定义体: sym (unsym a)⁻¹
 -/
 instance [Inv α] : Inv αˢʸᵐ where inv a := sym (unsym a)⁻¹
@@ -591,7 +591,7 @@ theorem sym_one
 
 中文:
 定理 sym_one
-  条件: [One α]
+  条件: [幺 α]
   结论: sym (1 : α) = 1
   证明: rfl
 
@@ -614,7 +614,7 @@ theorem unsym_one
 
 中文:
 定理 unsym_one
-  条件: [One α]
+  条件: [幺 α]
   结论: unsym (1 : αˢʸᵐ) = 1
   证明: rfl
 
@@ -637,7 +637,7 @@ theorem sym_add
 
 中文:
 定理 sym_add
-  条件: [Add α] (a b : α)
+  条件: [加法 α] (a b : α)
   结论: sym (a + b) = sym a + sym b
   证明: rfl
 
@@ -660,7 +660,7 @@ theorem unsym_add
 
 中文:
 定理 unsym_add
-  条件: [Add α] (a b : αˢʸᵐ)
+  条件: [加法 α] (a b : αˢʸᵐ)
   结论: unsym (a + b) = unsym a + unsym b
   证明: rfl
 
@@ -683,7 +683,7 @@ theorem sym_sub
 
 中文:
 定理 sym_sub
-  条件: [Sub α] (a b : α)
+  条件: [减法 α] (a b : α)
   结论: sym (a - b) = sym a - sym b
   证明: rfl
 
@@ -706,7 +706,7 @@ theorem unsym_sub
 
 中文:
 定理 unsym_sub
-  条件: [Sub α] (a b : αˢʸᵐ)
+  条件: [减法 α] (a b : αˢʸᵐ)
   结论: unsym (a - b) = unsym a - unsym b
   证明: rfl
 
@@ -729,7 +729,7 @@ theorem sym_neg
 
 中文:
 定理 sym_neg
-  条件: [Neg α] (a : α)
+  条件: [取负 α] (a : α)
   结论: sym (-a) = -sym a
   证明: rfl
 
@@ -750,7 +750,7 @@ theorem unsym_neg
 
 中文:
 定理 unsym_neg
-  条件: [Neg α] (a : αˢʸᵐ)
+  条件: [取负 α] (a : αˢʸᵐ)
   结论: unsym (-a) = -unsym a
   证明: rfl
 -/
@@ -767,7 +767,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: [Add α] [Mul α] [One α] [Of自然数 α 2] [Invertible (2 : α)] (a b : αˢʸᵐ)
+  条件: [加法 α] [乘法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : αˢʸᵐ)
   证明: rfl
 -/
 theorem mul_def [Add α] [Mul α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ) :
@@ -783,7 +783,7 @@ theorem unsym_mul
 
 中文:
 定理 unsym_mul
-  条件: [Mul α] [Add α] [One α] [Of自然数 α 2] [Invertible (2 : α)] (a b : αˢʸᵐ)
+  条件: [乘法 α] [加法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : αˢʸᵐ)
   证明: rfl
 -/
 theorem unsym_mul [Mul α] [Add α] [One α] [OfNat α 2] [Invertible (2 : α)] (a b : αˢʸᵐ) :
@@ -801,7 +801,7 @@ theorem sym_mul_sym
 
 中文:
 定理 sym_mul_sym
-  条件: [Mul α] [Add α] [One α] [Of自然数 α 2] [Invertible (2 : α)] (a b : α)
+  条件: [乘法 α] [加法 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)] (a b : α)
   证明: rfl
 
 @[simp, to_additive existing]
@@ -824,7 +824,7 @@ theorem sym_inv
 
 中文:
 定理 sym_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: sym a⁻¹ = (sym a)⁻¹
   证明: rfl
 
@@ -847,7 +847,7 @@ theorem unsym_inv
 
 中文:
 定理 unsym_inv
-  条件: [Inv α] (a : αˢʸᵐ)
+  条件: [取逆 α] (a : αˢʸᵐ)
   结论: unsym a⁻¹ = (unsym a)⁻¹
   证明: rfl
 
@@ -870,7 +870,7 @@ theorem sym_smul
 
 中文:
 定理 sym_smul
-  条件: {R : 类型} [SMul R α] (c : R) (a : α)
+  条件: {R : 类型} [标量乘法 R α] (c : R) (a : α)
   结论: sym (c • a) = c • sym a
   证明: rfl
 
@@ -893,7 +893,7 @@ theorem unsym_smul
 
 中文:
 定理 unsym_smul
-  条件: {R : 类型} [SMul R α] (c : R) (a : αˢʸᵐ)
+  条件: {R : 类型} [标量乘法 R α] (c : R) (a : αˢʸᵐ)
   结论: unsym (c • a) = c • unsym a
   证明: rfl
 
@@ -916,7 +916,7 @@ theorem unsym_eq_one_iff
 
 中文:
 定理 unsym_eq_one_iff
-  条件: [One α] (a : αˢʸᵐ)
+  条件: [幺 α] (a : αˢʸᵐ)
   结论: unsym a = 1 ↔ a = 1
   证明: unsym_injective.eq_iff' rfl
 
@@ -941,7 +941,7 @@ theorem sym_eq_one_iff
 
 中文:
 定理 sym_eq_one_iff
-  条件: [One α] (a : α)
+  条件: [幺 α] (a : α)
   结论: sym a = 1 ↔ a = 1
   证明: sym_injective.eq_iff' rfl
 
@@ -966,7 +966,7 @@ theorem unsym_ne_one_iff
 
 中文:
 定理 unsym_ne_one_iff
-  条件: [One α] (a : αˢʸᵐ)
+  条件: [幺 α] (a : αˢʸᵐ)
   结论: unsym a != (1 : α) ↔ a != (1 : αˢʸᵐ)
   证明: not_congr unsym_eq_one_iff a
 
@@ -989,7 +989,7 @@ theorem sym_ne_one_iff
 
 中文:
 定理 sym_ne_one_iff
-  条件: [One α] (a : α)
+  条件: [幺 α] (a : α)
   结论: sym a != (1 : αˢʸᵐ) ↔ a != (1 : α)
   证明: not_congr sym_eq_one_iff a
 
@@ -1008,7 +1008,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: unsym_injective.addCommSemigroup _ unsym_add
 
 Depends on / 依赖: addCommSemigroup, unsym_add, unsym_injective, unsym_injective.addCommSemigroup
@@ -1026,7 +1026,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: [AddMonoid α]
+  签名: [加法幺半群 α]
   定义体: unsym_injective.addMonoid _ unsym_zero unsym_add fun _ _ => rfl
 
 Depends on / 依赖: addMonoid, unsym_add, unsym_injective, unsym_injective.addMonoid, unsym_zero
@@ -1045,7 +1045,7 @@ instance addGroup
 
 中文:
 实例 addGroup
-  签名: [AddGroup α]
+  签名: [加法群 α]
   定义体: unsym_injective.addGroup _ unsym_zero unsym_add unsym_neg unsym_sub (fun _ _ => rfl) fun _ _ =>
     rfl
 
@@ -1065,7 +1065,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: { SymAlg.addCommSemigroup, SymAlg.addMonoid with }
 
 Depends on / 依赖: SymAlg, SymAlg.addCommSemigroup, SymAlg.addMonoid, addCommSemigroup, addMonoid
@@ -1083,7 +1083,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: [AddCommGroup α]
+  签名: [加法交换群 α]
   定义体: { SymAlg.addCommMonoid, SymAlg.addGroup with }
 
 Depends on / 依赖: SymAlg, SymAlg.addCommMonoid, SymAlg.addGroup, addCommMonoid, addGroup
@@ -1107,8 +1107,8 @@ instance [Mul
     rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
 
 中文:
-实例 [Mul
-  签名: α] [AddMonoidWithOne α] [Invertible (2 : α)] (a
+实例 [乘法
+  签名: α] [加法带幺幺半群 α] [可逆 (2 : α)] (a
   定义体: sym (⅟a)
   invOf_mul_self := by
     rw [sym_mul_sym]; rw [mul_invOf_self]; rw [invOf_mul_self]; rw [one_add_one_eq_two]; rw [invOf_mul_self]; rw [sym_one]
@@ -1134,7 +1134,7 @@ theorem invOf_sym
 
 中文:
 定理 invOf_sym
-  条件: [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a]
+  条件: [乘法 α] [加法带幺幺半群 α] [可逆 (2 : α)] (a : α) [可逆 a]
   证明: rfl
 -/
 theorem invOf_sym [Mul α] [AddMonoidWithOne α] [Invertible (2 : α)] (a : α) [Invertible a] :
@@ -1156,7 +1156,7 @@ instance nonAssocSemiring
 
 中文:
 实例 nonAssocSemiring
-  签名: [Semiring α] [Invertible (2 : α)]
+  签名: [半环 α] [可逆 (2 : α)]
   定义体: { SymAlg.addCommMonoid with
     zero_mul := fun _ => by
       rw [mul_def]; rw [unsym_zero]; rw [zero_mul]; rw [mul_zero]; rw [add_zero]; rw [mul_zero]; rw [sym_zero]
@@ -1195,8 +1195,8 @@ instance [Ring
   body: { SymAlg.nonAssocSemiring, SymAlg.addCommGroup with }
 
 中文:
-实例 [Ring
-  签名: α] [Invertible (2 : α)] : NonAssocRing αˢʸᵐ
+实例 [环
+  签名: α] [可逆 (2 : α)] : 非结合环 αˢʸᵐ
   定义体: { SymAlg.nonAssocSemiring, SymAlg.addCommGroup with }
 
 Depends on / 依赖: SymAlg, SymAlg.addCommGroup, SymAlg.nonAssocSemiring, addCommGroup, nonAssocSemiring
@@ -1217,7 +1217,7 @@ theorem unsym_mul_self
 
 中文:
 定理 unsym_mul_self
-  条件: [Semiring α] [Invertible (2 : α)] (a : αˢʸᵐ)
+  条件: [半环 α] [可逆 (2 : α)] (a : αˢʸᵐ)
   证明: by
   rw [mul_def]; rw [unsym_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
 
@@ -1239,7 +1239,7 @@ theorem sym_mul_self
 
 中文:
 定理 sym_mul_self
-  条件: [Semiring α] [Invertible (2 : α)] (a : α)
+  条件: [半环 α] [可逆 (2 : α)] (a : α)
   结论: sym (a * a) = sym a * sym a
   证明: by
   rw [sym_mul_sym]; rw [← two_mul]; rw [invOf_mul_cancel_left]
@@ -1259,7 +1259,7 @@ theorem mul_comm
 
 中文:
 定理 mul_comm
-  结论: [Mul α] [AddCommSemigroup α] [One α] [Of自然数 α 2] [Invertible (2 : α)]
+  结论: [乘法 α] [加法交换半群 α] [幺 α] [Of自然数 α 2] [可逆 (2 : α)]
   证明: by rw [mul_def, mul_def, add_comm]
 
 Depends on / 依赖: add_comm, mul_def
@@ -1277,8 +1277,8 @@ instance [Ring
   body: SymAlg.mul_comm
 
 中文:
-实例 [Ring
-  签名: α] [Invertible (2 : α)] : CommMagma αˢʸᵐ where
+实例 [环
+  签名: α] [可逆 (2 : α)] : 交换原群 αˢʸᵐ where
   定义体: SymAlg.mul_comm
 
 Depends on / 依赖: SymAlg, SymAlg.mul_comm, mul_comm
@@ -1302,8 +1302,8 @@ instance [Ring
           unsym b * unsym a * 
 
 中文:
-实例 [Ring
-  签名: α] [Invertible (2 : α)] : IsCommJordan αˢʸᵐ where
+实例 [环
+  签名: α] [可逆 (2 : α)] : 是交换Jordan αˢʸᵐ where
   定义体: by
     have commute_half_left := fun a : α => by
       have := (Commute.one_left a).add_left (Commute.one_left a)

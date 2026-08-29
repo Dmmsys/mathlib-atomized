@@ -33,7 +33,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: [PartialOrder β]
+  签名: [偏序 β]
   定义体: fast_instance%
   PartialOrder.lift (fun f => f.toFun) (fun f g _ => by aesop)
 
@@ -53,7 +53,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: [PartialOrder β] {f g : C(α, β)}
+  条件: [偏序 β] {f g : C(α, β)}
   结论: f <= g ↔ 对任意 a, f a <= g a
   证明: Pi.le_def
 
@@ -73,7 +73,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: [PartialOrder β] {f g : C(α, β)}
+  条件: [偏序 β] {f g : C(α, β)}
   结论: f < g ↔ (对任意 a, f a <= g a) ∧ 存在 a, f a < g a
   证明: Pi.lt_def
 
@@ -94,8 +94,8 @@ instance sup
   body: { toFun := fun a => f a ⊔ g a }
 
 中文:
-实例 sup
-  签名: : Max C(α, β) where max f g
+实例 上确界
+  签名: : 最大值 C(α, β) where 最大值 f g
   定义体: { toFun := fun a => f a ⊔ g a }
 -/
 instance sup : Max C(α, β) where max f g := { toFun := fun a => f a ⊔ g a }
@@ -165,8 +165,8 @@ lemma sup'_apply
 @[simp, norm_cast]
 
 中文:
-引理 sup'_apply
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C(α, β)) (a : α)
+引理 上确界'_apply
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C(α, β)) (a : α)
   证明: Finset.apply_sup'_eq_sup'_comp H (fun g : C(α, β) => g a) fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -188,7 +188,7 @@ lemma coe_sup'
 
 中文:
 引理 coe_sup'
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C(α, β))
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C(α, β))
   证明: by ext; simp [sup'_apply]
 
 Depends on / 依赖: _apply
@@ -210,8 +210,8 @@ instance inf
   body: { toFun := fun a => f a ⊓ g a }
 
 中文:
-实例 inf
-  签名: : Min C(α, β) where min f g
+实例 下确界
+  签名: : 最小值 C(α, β) where 最小值 f g
   定义体: { toFun := fun a => f a ⊓ g a }
 -/
 instance inf : Min C(α, β) where min f g := { toFun := fun a => f a ⊓ g a }
@@ -281,8 +281,8 @@ lemma inf'_apply
 @[simp, norm_cast]
 
 中文:
-引理 inf'_apply
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C(α, β)) (a : α)
+引理 下确界'_apply
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C(α, β)) (a : α)
   证明: Finset.apply_inf'_eq_inf'_comp H (fun g : C(α, β) => g a) fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -304,7 +304,7 @@ lemma coe_inf'
 
 中文:
 引理 coe_inf'
-  条件: {ι : 类型} {s : Finset ι} (H : s.Nonempty) (f : ι -> C(α, β))
+  条件: {ι : 类型} {s : 有限集 ι} (H : s.非空) (f : ι -> C(α, β))
   证明: by ext; simp [inf'_apply]
 
 Depends on / 依赖: _apply
@@ -322,8 +322,8 @@ instance [Lattice
   signature: β] [TopologicalLattice β] : Lattice C(α, β) where
 
 中文:
-实例 [Lattice
-  签名: β] [TopologicalLattice β] : Lattice C(α, β) where
+实例 [格
+  签名: β] [拓扑格 β] : 格 C(α, β) where
 -/
 instance [Lattice β] [TopologicalLattice β] : Lattice C(α, β) where
 
@@ -345,7 +345,7 @@ definition IccExtend
 
 中文:
 定义 IccExtend
-  签名: (f : C(Set.Icc a b, β))
+  签名: (f : C(集合.闭区间 a b, β))
   定义体: Set.IccExtend h f
 
 @[simp]
@@ -366,7 +366,7 @@ theorem coe_IccExtend
 
 中文:
 定理 coe_IccExtend
-  条件: (f : C(Set.Icc a b, β))
+  条件: (f : C(集合.闭区间 a b, β))
   证明: rfl
 -/
 theorem coe_IccExtend (f : C(Set.Icc a b, β)) :

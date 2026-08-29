@@ -73,7 +73,7 @@ instance QCat.catEnrichedOrdinaryCategory
 
 中文:
 实例 QCat.catEnrichedOrdinaryCategory
-  签名: : EnrichedOrdinaryCategory Cat QCat
+  签名: : EnrichedOrdinary范畴 Cat QCat
   定义体: TransportEnrichment.enrichedOrdinaryCategory QCat hoFunctor.{u}
     (hoFunctor.unitHomEquiv · |>.trans <| Functor.equivCatHom _ _)
       (congrArg (Functor.toCatHom) <| hoFunctor.unitHomEquiv_eq · ·)
@@ -113,7 +113,7 @@ instance QCat.bicategory
 
 中文:
 实例 QCat.bicategory
-  签名: : Bicategory QCat
+  签名: : 双范畴 QCat
   定义体: CatEnrichedOrdinary.instBicategory
 
 Depends on / 依赖: CatEnrichedOrdinary, CatEnrichedOrdinary.instBicategory, instBicategory
@@ -131,7 +131,7 @@ instance QCat.strictBicategory
 
 中文:
 实例 QCat.strictBicategory
-  签名: : Bicategory.Strict QCat
+  签名: : 双范畴.Strict QCat
   定义体: CatEnrichedOrdinary.instStrict
 
 Depends on / 依赖: CatEnrichedOrdinary, CatEnrichedOrdinary.instStrict, instStrict

@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (AbstractMeasure X R E) C(X, R) E
+  签名: 函数状 (AbstractMeasure X R E) C(X, R) E
   定义体: inferInstanceAs (FunLike (C(X, R) ->L[R] E) C(X, R) E)
 
 Depends on / 依赖: FunLike
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (AbstractMeasure X R E)
+  签名: 加法交换群 (AbstractMeasure X R E)
   定义体: inferInstanceAs (AddCommGroup (C(X, R) ->L[R] E))
 
 Depends on / 依赖: AddCommGroup
@@ -122,7 +122,7 @@ instance isAddApply
 
 中文:
 实例 isAddApply
-  签名: : IsAddApply (AbstractMeasure X R E) C(X, R) E where
+  签名: : 是加法Apply (AbstractMeasure X R E) C(X, R) E where
   定义体: rfl
 -/
 instance isAddApply : IsAddApply (AbstractMeasure X R E) C(X, R) E where
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (AbstractMeasure X R E)
+  签名: 模 R (AbstractMeasure X R E)
   定义体: inferInstanceAs (Module R (C(X, R) ->L[R] E))
 
 Depends on / 依赖: Module
@@ -162,7 +162,7 @@ instance isSMulApply
 
 中文:
 实例 isSMulApply
-  签名: : IsSMulApply R (AbstractMeasure X R E) C(X, R) E where
+  签名: : 是SMulApply R (AbstractMeasure X R E) C(X, R) E where
   定义体: rfl
 -/
 instance isSMulApply : IsSMulApply R (AbstractMeasure X R E) C(X, R) E where
@@ -311,7 +311,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  结论: {Z : 类型} [TopologicalSpace Z]
+  结论: {Z : 类型} [拓扑空间 Z]
   证明: (rfl)
 
 @[simp]

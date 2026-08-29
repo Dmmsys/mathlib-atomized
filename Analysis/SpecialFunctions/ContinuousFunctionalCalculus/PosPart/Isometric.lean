@@ -44,7 +44,7 @@ lemma CStarAlgebra.norm_posPart_le
     exact NonUnitalIsometricContinuousF
 
 中文:
-引理 CStarAlgebra.norm_posPart_le
+引理 CStar代数.norm_posPart_le
   条件: (a : A)
   结论: ‖a⁺‖ <= ‖a‖
   证明: by
@@ -79,7 +79,7 @@ lemma CStarAlgebra.norm_negPart_le
   simpa [CFC.negPart_neg] using norm_posPart_le (-a)
 
 中文:
-引理 CStarAlgebra.norm_negPart_le
+引理 CStar代数.norm_negPart_le
   条件: (a : A)
   结论: ‖a⁻‖ <= ‖a‖
   证明: by

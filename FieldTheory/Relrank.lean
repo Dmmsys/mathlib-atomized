@@ -78,7 +78,7 @@ theorem relfinrank_eq_toNat_relrank
   proof: rfl
 
 中文:
-定理 relfinrank_eq_toNat_relrank
+定理 relfinrank_eq_to自然数_relrank
   结论: relfinrank A B = to自然数 (relrank A B)
   证明: rfl
 -/
@@ -146,7 +146,7 @@ theorem relrank_eq_rank_of_le
 中文:
 定理 relrank_eq_rank_of_le
   条件: (h : A <= B)
-  结论: relrank A B = Module.rank A (extendScalars h)
+  结论: relrank A B = 模.rank A (extendScalars h)
   证明: by
   rw [relrank]
   have := inf_of_le_left h
@@ -375,7 +375,7 @@ theorem relrank_mul_rank_top
 中文:
 定理 relrank_mul_rank_top
   条件: (h : A <= B)
-  结论: relrank A B * Module.rank B E = Module.rank A E
+  结论: relrank A B * 模.rank B E = 模.rank A E
   证明: by
   rw [relrank_eq_rank_of_le h]
   let : Algebra A B := (inclusion h).toAlgebra
@@ -472,7 +472,7 @@ theorem relrank_top_right
 
 中文:
 定理 relrank_top_right
-  结论: relrank A ⊤ = Module.rank A E
+  结论: relrank A ⊤ = 模.rank A E
   证明: by
   rw [relrank_eq_rank_of_le (show A <= ⊤ from le_top)]; rw [extendScalars_top]; rw [IntermediateField.topEquiv.toLinearEquiv.rank_eq]
 
@@ -538,7 +538,7 @@ theorem relrank_map_map
 
 中文:
 定理 relrank_map_map
-  条件: {L : 类型v} [Field L] (f : E ->+* L)
+  条件: {L : 类型v} [域 L] (f : E ->+* L)
   证明: by
   simpa only [lift_id] using lift_relrank_map_map A B f
 
@@ -559,7 +559,7 @@ theorem lift_relrank_comap
 
 中文:
 定理 lift_relrank_comap
-  条件: (f : L ->+* E) (B : Subfield L)
+  条件: (f : L ->+* E) (B : 子域 L)
   证明: (lift_relrank_map_map _ _ f).symm.trans congr_arg lift relrank_eq_of_inf_eq by
     rw [map_comap_eq]; rw [f.fieldRange_eq_map]; rw [inf_assoc]; rw [← map_inf]; rw [top_inf_eq]
 
@@ -581,7 +581,7 @@ theorem relrank_comap
 
 中文:
 定理 relrank_comap
-  结论: {L : 类型v} [Field L] (f : L ->+* E)
+  结论: {L : 类型v} [域 L] (f : L ->+* E)
   证明: by
   simpa only [lift_id] using A.lift_relrank_comap f B
 
@@ -602,7 +602,7 @@ theorem relfinrank_comap
 
 中文:
 定理 relfinrank_comap
-  条件: (f : L ->+* E) (B : Subfield L)
+  条件: (f : L ->+* E) (B : 子域 L)
   证明: by
   simpa using! congr(toNat $(lift_relrank_comap A f B))
 
@@ -644,7 +644,7 @@ theorem rank_comap
 
 中文:
 定理 rank_comap
-  条件: {L : 类型v} [Field L] (f : L ->+* E)
+  条件: {L : 类型v} [域 L] (f : L ->+* E)
   证明: by
   simpa only [lift_id] using A.lift_rank_comap f
 
@@ -904,7 +904,7 @@ theorem relrank_dvd_rank_top_of_le
 中文:
 定理 relrank_dvd_rank_top_of_le
   条件: (h : A <= B)
-  结论: relrank A B ∣ Module.rank A E
+  结论: relrank A B ∣ 模.rank A E
   证明: dvd_of_mul_right_eq _ (relrank_mul_rank_top h)
 
 Depends on / 依赖: dvd_of_mul_right_eq, relrank_mul_rank_top
@@ -1211,7 +1211,7 @@ theorem relfinrank_eq_toNat_relrank
   proof: rfl
 
 中文:
-定理 relfinrank_eq_toNat_relrank
+定理 relfinrank_eq_to自然数_relrank
   结论: relfinrank A B = to自然数 (relrank A B)
   证明: rfl
 -/
@@ -1271,7 +1271,7 @@ theorem relrank_eq_rank_of_le
 中文:
 定理 relrank_eq_rank_of_le
   条件: (h : A <= B)
-  结论: relrank A B = Module.rank A (extendScalars h)
+  结论: relrank A B = 模.rank A (extendScalars h)
   证明: Subfield.relrank_eq_rank_of_le h
 
 Depends on / 依赖: Subfield, Subfield.relrank_eq_rank_of_le, relrank_eq_rank_of_le
@@ -1501,7 +1501,7 @@ theorem rank_comap
 
 中文:
 定理 rank_comap
-  条件: {L : 类型v} [Field L] [Algebra F L] (f : L ->ₐ[F] E)
+  条件: {L : 类型v} [域 L] [代数 F L] (f : L ->ₐ[F] E)
   证明: by
   simpa only [lift_id] using A.lift_rank_comap f
 
@@ -1543,7 +1543,7 @@ theorem lift_relrank_comap
 
 中文:
 定理 lift_relrank_comap
-  条件: (f : L ->ₐ[F] E) (B : 整数ermediateField F L)
+  条件: (f : L ->ₐ[F] E) (B : 中间域 F L)
   证明: A.toSubfield.lift_relrank_comap f.toRingHom B.toSubfield
 
 Depends on / 依赖: A.toSubfield.lift_relrank_comap, B.toSubfield, f.toRingHom, lift_relrank_comap, toRingHom, toSubfield
@@ -1563,7 +1563,7 @@ theorem relrank_comap
 
 中文:
 定理 relrank_comap
-  结论: {L : 类型v} [Field L] [Algebra F L] (f : L ->ₐ[F] E)
+  结论: {L : 类型v} [域 L] [代数 F L] (f : L ->ₐ[F] E)
   证明: by
   simpa only [lift_id] using A.lift_relrank_comap f B
 
@@ -1584,7 +1584,7 @@ theorem relfinrank_comap
 
 中文:
 定理 relfinrank_comap
-  条件: (f : L ->ₐ[F] E) (B : 整数ermediateField F L)
+  条件: (f : L ->ₐ[F] E) (B : 中间域 F L)
   证明: by
   simpa using! congr(toNat $(lift_relrank_comap A f B))
 
@@ -1626,7 +1626,7 @@ theorem relrank_map_map
 
 中文:
 定理 relrank_map_map
-  条件: {L : 类型v} [Field L] [Algebra F L] (f : E ->ₐ[F] L)
+  条件: {L : 类型v} [域 L] [代数 F L] (f : E ->ₐ[F] L)
   证明: by
   simpa only [lift_id] using lift_relrank_map_map A B f
 
@@ -1851,7 +1851,7 @@ theorem relrank_mul_rank_top
 中文:
 定理 relrank_mul_rank_top
   条件: (h : A <= B)
-  结论: relrank A B * Module.rank B E = Module.rank A E
+  结论: relrank A B * 模.rank B E = 模.rank A E
   证明: Subfield.relrank_mul_rank_top h
 
 Depends on / 依赖: Subfield, Subfield.relrank_mul_rank_top, relrank_mul_rank_top
@@ -1898,7 +1898,7 @@ theorem rank_bot_mul_relrank
 中文:
 定理 rank_bot_mul_relrank
   条件: (h : A <= B)
-  结论: Module.rank F A * relrank A B = Module.rank F B
+  结论: 模.rank F A * relrank A B = 模.rank F B
   证明: by
   rw [relrank_eq_rank_of_le h]
   let : Algebra A B := (inclusion h).toAlgebra
@@ -1947,7 +1947,7 @@ theorem relrank_dvd_rank_top_of_le
 中文:
 定理 relrank_dvd_rank_top_of_le
   条件: (h : A <= B)
-  结论: relrank A B ∣ Module.rank A E
+  结论: relrank A B ∣ 模.rank A E
   证明: dvd_of_mul_right_eq _ (relrank_mul_rank_top h)
 
 Depends on / 依赖: dvd_of_mul_right_eq, relrank_mul_rank_top
@@ -1986,7 +1986,7 @@ theorem relrank_dvd_rank_bot
 
 中文:
 定理 relrank_dvd_rank_bot
-  结论: relrank A B ∣ Module.rank F B
+  结论: relrank A B ∣ 模.rank F B
   证明: inf_relrank_right A B ▸ dvd_of_mul_left_eq _ (rank_bot_mul_relrank inf_le_right)
 
 Depends on / 依赖: dvd_of_mul_left_eq, inf_le_right, inf_relrank_right, rank_bot_mul_relrank
@@ -2241,7 +2241,7 @@ theorem relrank_top_right
 
 中文:
 定理 relrank_top_right
-  结论: relrank A ⊤ = Module.rank A E
+  结论: relrank A ⊤ = 模.rank A E
   证明: by
   rw [← relrank_mul_rank_top (show A <= ⊤ from le_top)]; rw [IntermediateField.rank_top]; rw [mul_one]
 
@@ -2291,7 +2291,7 @@ theorem relrank_bot_left
 
 中文:
 定理 relrank_bot_left
-  结论: relrank ⊥ A = Module.rank F A
+  结论: relrank ⊥ A = 模.rank F A
   证明: by
   rw [← rank_bot_mul_relrank (show ⊥ <= A from bot_le)]; rw [IntermediateField.rank_bot]; rw [one_mul]
 

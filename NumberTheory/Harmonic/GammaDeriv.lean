@@ -157,7 +157,7 @@ lemma hasDerivAt_Gamma_one
 
 中文:
 引理 hasDerivAt_Gamma_one
-  结论: HasDerivAt Gamma (-γ) 1
+  结论: 在点处可导 Gamma (-γ) 1
   证明: by
   simpa only [factorial_zero, cast_one, harmonic_zero, Rat.cast_zero, add_zero, mul_neg, one_mul,
     cast_zero, zero_add] using hasDerivAt_Gamma_nat 0
@@ -182,7 +182,7 @@ lemma hasDerivAt_Gamma_one_half
 
 中文:
 引理 hasDerivAt_Gamma_one_half
-  结论: HasDerivAt Gamma (-√π * (γ + 2 * log 2)) (1 / 2)
+  结论: 在点处可导 Gamma (-√π * (γ + 2 * log 2)) (1 / 2)
   证明: by
   have h_diff {s : Real} (hs : 0 < s) : DifferentiableAt Real Gamma s :=
     differentiableAt_Gamma fun m => ((neg_nonpos.mpr m.cast_nonneg).trans_lt hs).ne'
@@ -254,8 +254,8 @@ lemma HasDerivAt.complex_of_real
   exact hg.ofReal_comp.deriv
 
 中文:
-引理 HasDerivAt.complex_of_real
-  结论: {f : Complex -> Complex} {g : 实数 -> 实数} {g' s : 实数}
+引理 在点处可导.complex_of_real
+  结论: {f : 复形 -> 复形} {g : 实数 -> 实数} {g' s : 实数}
   证明: by
   refine HasDerivAt.congr_deriv hf.hasDerivAt ?_
   rw [← (funext hfg ▸ hf.hasDerivAt.comp_ofReal.deriv :)]
@@ -356,7 +356,7 @@ lemma hasDerivAt_Gamma_one
 
 中文:
 引理 hasDerivAt_Gamma_one
-  结论: HasDerivAt Gamma (-γ) 1
+  结论: 在点处可导 Gamma (-γ) 1
   证明: by
   simpa only [factorial_zero, cast_one, harmonic_zero, Rat.cast_zero, add_zero, mul_neg, one_mul,
     cast_zero, zero_add] using hasDerivAt_Gamma_nat 0
@@ -383,7 +383,7 @@ lemma hasDerivAt_Gamma_one_half
 
 中文:
 引理 hasDerivAt_Gamma_one_half
-  结论: HasDerivAt Gamma (-√π * (γ + 2 * log 2)) (1 / 2)
+  结论: 在点处可导 Gamma (-√π * (γ + 2 * log 2)) (1 / 2)
   证明: by
   have := HasDerivAt.complex_of_real
     (differentiableAt_Gamma _ ?_) Real.hasDerivAt_Gamma_one_half Gamma_ofReal
@@ -418,7 +418,7 @@ lemma hasDerivAt_GammaComplex_one
 
 中文:
 引理 hasDerivAt_GammaComplex_one
-  结论: HasDerivAt GammaComplex (-(γ + log (2 * π)) / π) 1
+  结论: 在点处可导 GammaComplex (-(γ + log (2 * π)) / π) 1
   证明: by
   let f (s : Complex) : Complex := 2 * (2 * π) ^ (-s)
   have : HasDerivAt (fun s : Complex => 2 * (2 * π : Complex) ^ (-s)) (-log (2 * π) / π) 1 := by
@@ -453,8 +453,8 @@ lemma hasDerivAt_GammaReal_one
   have aux2 : (√π : Complex)
 
 中文:
-引理 hasDerivAt_GammaReal_one
-  结论: HasDerivAt Gamma实数 (-(γ + log (4 * π)) / 2) 1
+引理 hasDerivAt_Gamma实数_one
+  结论: 在点处可导 Gamma实数 (-(γ + log (4 * π)) / 2) 1
   证明: by
   let f (s : Complex) : Complex := π ^ (-s / 2)
   let g (s : Complex) : Complex := Gamma (s / 2)

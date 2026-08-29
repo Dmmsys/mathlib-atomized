@@ -42,7 +42,7 @@ definition uniqueEquiv
 
 中文:
 定义 uniqueEquiv
-  签名: : Matrix m n A ≃ A where
+  签名: : 矩阵 m n A ≃ A where
   定义体: M default default
   invFun a := .of fun _ _ => a
   left_inv M := by ext i j; simp [Subsingleton.elim i default, Subsingleton.elim j default]
@@ -67,7 +67,7 @@ definition uniqueAddEquiv
 
 中文:
 定义 uniqueAddEquiv
-  签名: [Add A]
+  签名: [加法 A]
   定义体: uniqueEquiv
   map_add' := by simp
 
@@ -90,7 +90,7 @@ definition uniqueLinearEquiv
 
 中文:
 定义 uniqueLinearEquiv
-  签名: [Semiring R] [AddCommMonoid A] [Module R A]
+  签名: [半环 R] [加法交换幺半群 A] [模 R A]
   定义体: uniqueAddEquiv
   map_smul' := by simp
 
@@ -113,7 +113,7 @@ definition uniqueRingEquiv
 
 中文:
 定义 uniqueRingEquiv
-  签名: [NonUnitalNonAssocSemiring A]
+  签名: [非幺非结合半环 A]
   定义体: uniqueAddEquiv
   map_mul' := by simp [mul_apply]
 
@@ -136,7 +136,7 @@ definition uniqueAlgEquiv
 
 中文:
 定义 uniqueAlgEquiv
-  签名: [Semiring A] [CommSemiring R] [Algebra R A]
+  签名: [半环 A] [交换半环 R] [代数 R A]
   定义体: uniqueRingEquiv
   commutes' r := by aesop
 

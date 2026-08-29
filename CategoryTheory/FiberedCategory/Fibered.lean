@@ -59,10 +59,10 @@ class Functor.IsPreFibered
     - exists_isCartesian'({a : 𝒳} {R : 𝒮} (f : R ⟶ p.obj a)) : exists (b : 𝒳) (φ : b ⟶ a), IsCartesian p f φ
 
 中文:
-类 Functor.IsPreFibered
+类 函子.是PreFibered
   参数: (p : 𝒳 ⥤ 𝒮)
   公理与运算 (1 个):
-    - exists_isCartesian'({a : 𝒳} {R : 𝒮} (f : R ⟶ p.obj a)) : 存在 (b : 𝒳) (φ : b ⟶ a), IsCartesian p f φ
+    - exists_isCartesian'({a : 𝒳} {R : 𝒮} (f : R ⟶ p.obj a)) : 存在 (b : 𝒳) (φ : b ⟶ a), 是Cartesian p f φ
 
 Depends on / 依赖: IsPreFibered, IsPreFibered.exists_isCartesian, exists_isCartesian
 -/
@@ -79,8 +79,8 @@ lemma IsPreFibered.exists_isCartesian
   subst ha; exact IsPreFibered.exists_isCartesian' f
 
 中文:
-引理 IsPreFibered.exists_isCartesian
-  结论: (p : 𝒳 ⥤ 𝒮) [p.IsPreFibered] {a : 𝒳} {R S : 𝒮}
+引理 是PreFibered.存在_isCartesian
+  结论: (p : 𝒳 ⥤ 𝒮) [p.是PreFibered] {a : 𝒳} {R S : 𝒮}
   证明: by
   subst ha; exact IsPreFibered.exists_isCartesian' f
 -/
@@ -99,11 +99,11 @@ class Functor.IsFibered
     - comp({R S T : 𝒮} (f : R ⟶ S) (g : S ⟶ T) {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsCartesian p f φ] [IsCartesian p g ψ]) : IsCartesian p (f ≫ g) (φ ≫ ψ)
 
 中文:
-类 Functor.IsFibered
+类 函子.是Fibered
   参数: (p : 𝒳 ⥤ 𝒮)
-  继承: IsPreFibered p
+  继承: 是PreFibered p
   公理与运算 (1 个):
-    - comp({R S T : 𝒮} (f : R ⟶ S) (g : S ⟶ T) {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [IsCartesian p f φ] [IsCartesian p g ψ]) : IsCartesian p (f ≫ g) (φ ≫ ψ)
+    - comp({R S T : 𝒮} (f : R ⟶ S) (g : S ⟶ T) {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c) [是Cartesian p f φ] [是Cartesian p g ψ]) : 是Cartesian p (f ≫ g) (φ ≫ ψ)
 -/
 class Functor.IsFibered (p : 𝒳 ⥤ 𝒮) : Prop extends IsPreFibered p where
   comp {R S T : 𝒮} (f : R ⟶ S) (g : S ⟶ T) {a b c : 𝒳} (φ : a ⟶ b) (ψ : b ⟶ c)
@@ -162,8 +162,8 @@ instance pullbackMap.IsCartesian
   body: Classical.choose_spec (Classical.choose_spec (IsPreFibered.exists_isCartesian p ha f))
 
 中文:
-实例 pullbackMap.IsCartesian
-  签名: : IsCartesian p f (pullbackMap ha f)
+实例 pullbackMap.是Cartesian
+  签名: : 是Cartesian p f (pullbackMap ha f)
   定义体: Classical.choose_spec (Classical.choose_spec (IsPreFibered.exists_isCartesian p ha f))
 
 Depends on / 依赖: Classical, Classical.choose_spec, IsPreFibered, IsPreFibered.exists_isCartesian, choose_spec, exists_isCartesian
@@ -211,7 +211,7 @@ instance isStronglyCartesian_of_isCartesian
 
 中文:
 实例 isStronglyCartesian_of_isCartesian
-  签名: (p : 𝒳 ⥤ 𝒮) [p.IsFibered] {R S : 𝒮} (f : R ⟶ S)
+  签名: (p : 𝒳 ⥤ 𝒮) [p.是Fibered] {R S : 𝒮} (f : R ⟶ S)
   定义体: by
     -- Let `ψ` be a Cartesian arrow lying over `g`
     let ψ := pullbackMap (domain_eq p f φ) g
@@ -256,7 +256,7 @@ lemma isStronglyCartesian_of_exists_isCartesian
   let τ' := IsStronglyCartesian.map p (p.map φ) ψ (f' := g ≫ p
 
 中文:
-引理 isStronglyCartesian_of_exists_isCartesian
+引理 isStronglyCartesian_of_存在_isCartesian
   结论: (p : 𝒳 ⥤ 𝒮) (h : 对任意 (a : 𝒳) (R : 𝒮)
   证明: by
   constructor
@@ -307,7 +307,7 @@ lemma of_exists_isStronglyCartesian
     have : p.IsStronglyCartesian g ψ := isStronglyCartesian_of_exists_isCartesian 
 
 中文:
-引理 of_exists_isStronglyCartesian
+引理 of_存在_isStronglyCartesian
   结论: {p : 𝒳 ⥤ 𝒮}
   证明: by
     intro a R f
@@ -343,7 +343,7 @@ definition pullbackPullbackIso
 
 中文:
 定义 pullbackPullbackIso
-  签名: {p : 𝒳 ⥤ 𝒮} [IsFibered p]
+  签名: {p : 𝒳 ⥤ 𝒮} [是Fibered p]
   定义体: domainUniqueUpToIso p (g ≫ f) (pullbackMap (pullbackObj_proj ha f) g ≫ pullbackMap ha f)
     (pullbackMap ha (g ≫ f))
 

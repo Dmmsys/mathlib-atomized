@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ConjRootClass K L)
+  签名: 零 (ConjRootClass K L)
   定义体: ⟨mk K 0⟩
 
 @[elab_as_elim, cases_eliminator, induction_eliminator]
@@ -195,8 +195,8 @@ instance [Normal
   body: Quotient.decidableEq (d := IsConjRoot.decidable)
 
 中文:
-实例 [Normal
-  签名: K L] [DecidableEq L] [Fintype Gal(L/K)] : DecidableEq (ConjRootClass K L)
+实例 [正规
+  签名: K L] [DecidableEq L] [有限类型 Gal(L/K)] : DecidableEq (ConjRootClass K L)
   定义体: Quotient.decidableEq (d := IsConjRoot.decidable)
 
 Depends on / 依赖: IsConjRoot, IsConjRoot.decidable, Quotient, Quotient.decidableEq, decidable, decidableEq
@@ -285,7 +285,7 @@ theorem carrier_inj
 
 中文:
 定理 carrier_inj
-  结论: Function.Injective (carrier (K := K) (L := L))
+  结论: 函数.单射 (carrier (K := K) (L := L))
   证明: by
   intro x y H
   induction x with | h x => ?_
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (ConjRootClass K L)
+  签名: 取负 (ConjRootClass K L)
   定义体: Quotient.map (fun x => -x) (fun _ _ => IsConjRoot.neg)
 
 Depends on / 依赖: IsConjRoot, IsConjRoot.neg, Quotient, Quotient.map
@@ -402,7 +402,7 @@ theorem exists_mem_carrier_add_eq_zero
     | h y => exact ⟨-y, mk_neg y, y, rfl, neg_add_cancel _⟩
 
 中文:
-定理 exists_mem_carrier_add_eq_zero
+定理 存在_mem_carrier_add_eq_zero
   条件: (x y : ConjRootClass K L)
   证明: by
   simp_rw [mem_carrier]
@@ -435,8 +435,8 @@ instance [Normal
   decidable_of_iff (mk K x = c) (by simp)
 
 中文:
-实例 [Normal
-  签名: K L] [DecidableEq L] [Fintype Gal(L/K)] (c
+实例 [正规
+  签名: K L] [DecidableEq L] [有限类型 Gal(L/K)] (c
   定义体: fun x =>
   decidable_of_iff (mk K x = c) (by simp)
 -/
@@ -456,8 +456,8 @@ instance [Normal
       (fun _ => by simp [← isConjRoot_iff_exists_algEquiv, ← mk_eq_mk])
 
 中文:
-实例 [Normal
-  签名: K L] [DecidableEq L] [Fintype Gal(L/K)] (c
+实例 [正规
+  签名: K L] [DecidableEq L] [有限类型 Gal(L/K)] (c
   定义体: Quotient.recOnSubsingleton c fun x =>
     .ofFinset
       ((Finset.univ (α := Gal(L/K))).image (· x))
@@ -556,7 +556,7 @@ theorem minpoly_injective
 
 中文:
 定理 minpoly_injective
-  结论: Function.Injective (ConjRootClass.minpoly (K := K) (L := L))
+  结论: 函数.单射 (ConjRootClass.minpoly (K := K) (L := L))
   证明: fun _ _ => minpoly_inj.mp
 -/
 theorem minpoly_injective : Function.Injective (ConjRootClass.minpoly (K := K) (L := L)) :=
@@ -575,7 +575,7 @@ theorem splits_minpoly
 
 中文:
 定理 splits_minpoly
-  条件: [n : Normal K L] (c : ConjRootClass K L)
+  条件: [n : 正规 K L] (c : ConjRootClass K L)
   证明: by
   induction c
   rw [minpoly_mk]
@@ -656,7 +656,7 @@ theorem irreducible_minpoly
 中文:
 定理 irreducible_minpoly
   条件: (c : ConjRootClass K L)
-  结论: Irreducible c.minpoly
+  结论: 不可约 c.minpoly
   证明: by
   induction c
   rw [minpoly_mk]
@@ -740,7 +740,7 @@ theorem separable_minpoly
 中文:
 定理 separable_minpoly
   条件: (c : ConjRootClass K L)
-  结论: Separable c.minpoly
+  结论: 可分 c.minpoly
   证明: by
   induction c
   exact Algebra.IsSeparable.isSeparable K _
@@ -784,7 +784,7 @@ theorem aroots_minpoly_eq_carrier_val
 
 中文:
 定理 aroots_minpoly_eq_carrier_val
-  条件: (c : ConjRootClass K L) [Fintype c.carrier]
+  条件: (c : ConjRootClass K L) [有限类型 c.carrier]
   证明: by
   classical
   simp_rw [← rootSet_minpoly_eq_carrier, rootSet_def, Finset.toFinset_coe, Multiset.toFinset_val,
@@ -809,7 +809,7 @@ theorem carrier_eq_mk_aroots_minpoly
 
 中文:
 定理 carrier_eq_mk_aroots_minpoly
-  条件: (c : ConjRootClass K L) [Fintype c.carrier]
+  条件: (c : ConjRootClass K L) [有限类型 c.carrier]
   证明: by
   simp only [aroots_minpoly_eq_carrier_val]
 
@@ -834,7 +834,7 @@ theorem minpoly.map_eq_prod
 
 中文:
 定理 minpoly.map_eq_prod
-  条件: [Normal K L] (c : ConjRootClass K L) [Fintype c.carrier]
+  条件: [正规 K L] (c : ConjRootClass K L) [有限类型 c.carrier]
   证明: by
   classical
   simp_rw [← rootSet_minpoly_eq_carrier, Finset.prod_eq_multiset_prod, rootSet_def,

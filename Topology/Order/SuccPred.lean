@@ -45,7 +45,7 @@ theorem isOpen_singleton_of_not_isSuccPrelimit
 中文:
 定理 isOpen_singleton_of_not_isSuccPrelimit
   条件: (ha : ¬ IsSuccPrelimit a)
-  结论: IsOpen {a}
+  结论: 是开集 {a}
   证明: by
   obtain ⟨b, hb⟩ := not_isSuccPrelimit_iff.1 ha
   by_cases ha' : IsMax a
@@ -86,7 +86,7 @@ theorem isOpen_singleton_iff
 
 中文:
 定理 isOpen_singleton_iff
-  结论: IsOpen {a} ↔ ¬ IsSuccLimit a
+  结论: 是开集 {a} ↔ ¬ 是SuccLimit a
   证明: by
   nontriviality α
   refine ⟨fun h ha => ?_, fun ha => ?_⟩
@@ -127,7 +127,7 @@ theorem nhds_eq_pure
 中文:
 定理 nhds_eq_pure
   条件: {a : α}
-  结论: 𝓝 a = pure a ↔ ¬ IsSuccLimit a
+  结论: 𝓝 a = pure a ↔ ¬ 是SuccLimit a
   证明: (isOpen_singleton_iff_nhds_eq_pure _).symm.trans isOpen_singleton_iff
 
 @[to_dual]
@@ -181,7 +181,7 @@ theorem nhds_bot
 
 中文:
 定理 nhds_bot
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: 𝓝 (⊥ : α) = pure ⊥
   证明: nhds_of_isMin isMin_bot
 
@@ -211,8 +211,8 @@ refine isOpen_iff_mem_nhds.trans forall₂_congr fun o ho => ?_
 
 中文:
 定理 isOpen_iff
-  条件: {s : Set α}
-  结论: IsOpen s ↔
+  条件: {s : 集合 α}
+  结论: 是开集 s ↔
   证明: by
 refine isOpen_iff_mem_nhds.trans forall₂_congr fun o ho => ?_
   by_cases ho' : IsSuccLimit o
@@ -251,7 +251,7 @@ theorem accPt_principal
 
 中文:
 定理 accPt_principal
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   证明: by
   rw [accPt_iff_frequently]
   by_cases ha : IsMin a
@@ -286,8 +286,8 @@ theorem _root_.AccPt.not_isMin
 @[to_dual]
 
 中文:
-定理 _root_.AccPt.not_isMin
-  条件: {a : α} {s : Set α} (h : AccPt a (𝓟 s))
+定理 _root_.聚点.not_isMin
+  条件: {a : α} {s : 集合 α} (h : 聚点 a (𝓟 s))
   结论: ¬ IsMin a
   证明: (accPt_principal.1 h).1
 
@@ -314,9 +314,9 @@ theorem _root_.AccPt.isSuccLimit
 @[to_dual]
 
 中文:
-定理 _root_.AccPt.isSuccLimit
-  条件: {a : α} {s : Set α} (h : AccPt a (𝓟 s))
-  结论: IsSuccLimit a
+定理 _root_.聚点.isSuccLimit
+  条件: {a : α} {s : 集合 α} (h : 聚点 a (𝓟 s))
+  结论: 是SuccLimit a
   证明: by
   rw [isSuccLimit_iff]; rw [IsSuccPrelimit]
   simp_rw [accPt_principal, Set.Nonempty] at h
@@ -346,8 +346,8 @@ theorem isSuccLimit_of_mem_frontier
 
 中文:
 定理 isSuccLimit_of_mem_frontier
-  条件: {a : α} {s : Set α} (ha : a in frontier s)
-  结论: IsSuccLimit a
+  条件: {a : α} {s : 集合 α} (ha : a in frontier s)
+  结论: 是SuccLimit a
   证明: by
   rw [← isOpen_singleton_iff.not_left]
   rw [frontier_eq_closure_inter_closure] at ha

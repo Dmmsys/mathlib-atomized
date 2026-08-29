@@ -32,7 +32,7 @@ definition braiding
 
 中文:
 定义 braiding
-  签名: (M N : SemimoduleCat.{u} R)
+  签名: (M N : Semimodule范畴.{u} R)
   定义体: LinearEquiv.toModuleIsoₛ (TensorProduct.comm R M N)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toModuleIso, TensorProduct, TensorProduct.comm
@@ -59,7 +59,7 @@ theorem braiding_naturality
 
 中文:
 定理 braiding_naturality
-  条件: {X₁ X₂ Y₁ Y₂ : SemimoduleCat.{u} R} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
+  条件: {X₁ X₂ Y₁ Y₂ : Semimodule范畴.{u} R} (f : X₁ ⟶ Y₁) (g : X₂ ⟶ Y₂)
   证明: by
   ext : 1
   apply TensorProduct.ext'
@@ -92,7 +92,7 @@ theorem braiding_naturality_left
 
 中文:
 定理 braiding_naturality_left
-  条件: {X Y : SemimoduleCat R} (f : X ⟶ Y) (Z : SemimoduleCat R)
+  条件: {X Y : Semimodule范畴 R} (f : X ⟶ Y) (Z : Semimodule范畴 R)
   证明: by
   simp_rw [← id_tensorHom]
   apply braiding_naturality
@@ -121,7 +121,7 @@ theorem braiding_naturality_right
 
 中文:
 定理 braiding_naturality_right
-  条件: (X : SemimoduleCat R) {Y Z : SemimoduleCat R} (f : Y ⟶ Z)
+  条件: (X : Semimodule范畴 R) {Y Z : Semimodule范畴 R} (f : Y ⟶ Z)
   证明: by
   simp_rw [← id_tensorHom]
   apply braiding_naturality
@@ -152,7 +152,7 @@ theorem hexagon_forward
 
 中文:
 定理 hexagon_forward
-  条件: (X Y Z : SemimoduleCat.{u} R)
+  条件: (X Y Z : Semimodule范畴.{u} R)
   证明: by
   ext : 1
   apply TensorProduct.ext_threefold
@@ -187,7 +187,7 @@ theorem hexagon_reverse
 
 中文:
 定理 hexagon_reverse
-  条件: (X Y Z : SemimoduleCat.{u} R)
+  条件: (X Y Z : Semimodule范畴.{u} R)
   证明: by
   apply (cancel_epi (α_ X Y Z).hom).1
   ext : 1
@@ -224,7 +224,7 @@ instance symmetricCategory
 
 中文:
 实例 symmetricCategory
-  签名: : SymmetricCategory (SemimoduleCat.{u} R) where
+  签名: : 对称范畴 (Semimodule范畴.{u} R) where
   定义体: braiding
   braiding_naturality_left := braiding_naturality_left
   braiding_naturality_right := braiding_naturality_right
@@ -261,7 +261,7 @@ theorem braiding_hom_apply
 
 中文:
 定理 braiding_hom_apply
-  条件: {M N : SemimoduleCat.{u} R} (m : M) (n : N)
+  条件: {M N : Semimodule范畴.{u} R} (m : M) (n : N)
   证明: rfl
 
 @[simp]
@@ -281,7 +281,7 @@ theorem braiding_inv_apply
 
 中文:
 定理 braiding_inv_apply
-  条件: {M N : SemimoduleCat.{u} R} (m : M) (n : N)
+  条件: {M N : Semimodule范畴.{u} R} (m : M) (n : N)
   证明: rfl
 -/
 theorem braiding_inv_apply {M N : SemimoduleCat.{u} R} (m : M) (n : N) :
@@ -301,7 +301,7 @@ TensorProduct.ext LinearMap.ext₂ fun _ _ => rfl
 
 中文:
 定理 tensorμ_eq_tensorTensorTensorComm
-  条件: {A B C D : SemimoduleCat R}
+  条件: {A B C D : Semimodule范畴 R}
   证明: SemimoduleCat.hom_ext TensorProduct.ext TensorProduct.ext LinearMap.ext₂ fun _ _ =>
 TensorProduct.ext LinearMap.ext₂ fun _ _ => rfl
 
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (ModuleCat.{u} R)
+  签名: 辫范畴 (模范畴.{u} R)
   定义体: .ofFaithful equivalenceSemimoduleCat.functor (fun M N => (TensorProduct.comm R M N).toModuleIso)
 
 Depends on / 依赖: TensorProduct, TensorProduct.comm, equivalenceSemimoduleCat, equivalenceSemimoduleCat.functor, functor, ofFaithful, toModuleIso
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: equivalenceSemimoduleCat (R := R).functor.Braided
+  签名: equivalenceSemimoduleCat (R := R).functor.辫
 
 Depends on / 依赖: Braided, functor, functor.Braided
 -/
@@ -383,7 +383,7 @@ instance symmetricCategory
 
 中文:
 实例 symmetricCategory
-  签名: : SymmetricCategory (ModuleCat.{u} R)
+  签名: : 对称范畴 (模范畴.{u} R)
   定义体: .ofFaithful equivalenceSemimoduleCat.functor
 
 @[simp]
@@ -406,7 +406,7 @@ theorem braiding_hom_apply
 
 中文:
 定理 braiding_hom_apply
-  条件: {M N : ModuleCat.{u} R} (m : M) (n : N)
+  条件: {M N : 模范畴.{u} R} (m : M) (n : N)
   证明: rfl
 
 @[simp]
@@ -426,7 +426,7 @@ theorem braiding_inv_apply
 
 中文:
 定理 braiding_inv_apply
-  条件: {M N : ModuleCat.{u} R} (m : M) (n : N)
+  条件: {M N : 模范畴.{u} R} (m : M) (n : N)
   证明: rfl
 -/
 theorem braiding_inv_apply {M N : ModuleCat.{u} R} (m : M) (n : N) :
@@ -446,7 +446,7 @@ TensorProduct.ext LinearMap.ext₂ fun _ _ => rfl
 
 中文:
 定理 tensorμ_eq_tensorTensorTensorComm
-  条件: {A B C D : ModuleCat R}
+  条件: {A B C D : 模范畴 R}
   证明: ModuleCat.hom_ext TensorProduct.ext TensorProduct.ext LinearMap.ext₂ fun _ _ =>
 TensorProduct.ext LinearMap.ext₂ fun _ _ => rfl
 

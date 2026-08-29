@@ -50,7 +50,7 @@ zero_smul _ := unop_injective zero_smul _ _
 
 中文:
 实例 instModule
-  签名: : Module R Mᵐᵒᵖ where
+  签名: : 模 R Mᵐᵒᵖ where
   定义体: unop_injective add_smul _ _ _
 zero_smul _ := unop_injective zero_smul _ _
 

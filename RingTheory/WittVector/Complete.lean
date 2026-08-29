@@ -208,7 +208,7 @@ lemma ker_constantCoeff
 
 中文:
 引理 ker_constantCoeff
-  结论: RingHom.ker constantCoeff = Ideal.span {(p : 𝕎 k)}
+  结论: 环态射.ker constantCoeff = 理想.span {(p : 𝕎 k)}
   证明: by
   ext
   simp [mem_span_p_iff_coeff_zero_eq_zero]
@@ -232,7 +232,7 @@ definition quotientPEquiv
 
 中文:
 定义 quotientPEquiv
-  签名: : 𝕎 k ⧸ Ideal.span {(p : 𝕎 k)} ≃+* k
+  签名: : 𝕎 k ⧸ 理想.span {(p : 𝕎 k)} ≃+* k
   定义体: (Ideal.quotEquivOfEq ker_constantCoeff.symm).trans
     (RingHom.quotientKerEquivOfSurjective (constantCoeff_surjective p))
 
@@ -257,7 +257,7 @@ lemma quotientPEquiv_mk
 中文:
 引理 quotientPEquiv_mk
   条件: (x : 𝕎 k)
-  结论: quotientPEquiv (Quot.mk _ x) = constantCoeff x
+  结论: quotientPEquiv (商.mk _ x) = constantCoeff x
   证明: rfl
 -/
 lemma quotientPEquiv_mk (x : 𝕎 k) : quotientPEquiv (Quot.mk _ x) = constantCoeff x := rfl
@@ -282,7 +282,7 @@ instance isAdicCompleteIdealSpanP
 
 中文:
 实例 isAdicCompleteIdealSpanP
-  签名: : IsAdicComplete (Ideal.span {(p : 𝕎 k)}) (𝕎 k) where
+  签名: : 是AdicComplete (理想.span {(p : 𝕎 k)}) (𝕎 k) where
   定义体: by
     intro _ h
     ext n

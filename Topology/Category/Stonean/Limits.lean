@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitFiniteCoproducts.{w, u} (fun Y => ExtremallyDisconnected Y)
+  签名: 有ExplicitFiniteCoproducts.{w, u} (fun Y => ExtremallyDisconnected Y)
   定义体: { hasProp := show ExtremallyDisconnected (Σ (_a : _), _) from inferInstance }
 
 Depends on / 依赖: ExtremallyDisconnected, hasProp
@@ -58,7 +58,7 @@ lemma extremallyDisconnected_preimage
 
 中文:
 引理 extremallyDisconnected_preimage
-  结论: ExtremallyDisconnected (i ⁻¹' (Set.range f)) where
+  结论: ExtremallyDisconnected (i ⁻¹' (集合.range f)) where
   证明: by
     have h : IsClopen (i ⁻¹' (Set.range f)) :=
       ⟨IsClosed.preimage i.hom.hom.continuous (isCompact_range f.hom.hom.continuous).isClosed,
@@ -127,7 +127,7 @@ noncomputable example : PreservesFini
 
 中文:
 实例 :
-  签名: HasExplicitPullbacksOfInclusions (fun (Y : TopCat.{u}) => ExtremallyDisconnected Y)
+  签名: 有ExplicitPullbacksOfInclusions (fun (Y : 顶元素范畴.{u}) => ExtremallyDisconnected Y)
   定义体: by
   apply CompHausLike.hasPullbacksOfInclusions
   intro _ _ _ _ _ hi

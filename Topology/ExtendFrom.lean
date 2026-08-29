@@ -45,7 +45,7 @@ definition extendFrom
 
 中文:
 定义 extendFrom
-  签名: (A : Set X) (f : X -> Y)
+  签名: (A : 集合 X) (f : X -> Y)
   定义体: fun x => @limUnder _ _ _ ⟨f x⟩ (𝓝[A] x) f
 
 Depends on / 依赖: limUnder
@@ -63,7 +63,7 @@ theorem tendsto_extendFrom
 
 中文:
 定理 tendsto_extendFrom
-  条件: {A : Set X} {f : X -> Y} {x : X} (h : 存在 y, Tendsto f (𝓝[A] x) (𝓝 y))
+  条件: {A : 集合 X} {f : X -> Y} {x : X} (h : 存在 y, 收敛 f (𝓝[A] x) (𝓝 y))
   证明: tendsto_nhds_limUnder h
 
 Depends on / 依赖: tendsto_nhds_limUnder
@@ -83,7 +83,7 @@ theorem extendFrom_eq
 
 中文:
 定理 extendFrom_eq
-  结论: [T2Space Y] {A : Set X} {f : X -> Y} {x : X} {y : Y} (hx : x in closure A)
+  结论: [T2空间 Y] {A : 集合 X} {f : X -> Y} {x : X} {y : Y} (hx : x in closure A)
   证明: haveI := mem_closure_iff_nhdsWithin_neBot.mp hx
   tendsto_nhds_unique (tendsto_nhds_limUnder ⟨y, hf⟩) hf
 
@@ -104,7 +104,7 @@ theorem extendFrom_extends
 
 中文:
 定理 extendFrom_extends
-  条件: [T2Space Y] {f : X -> Y} {A : Set X} (hf : ContinuousOn f A)
+  条件: [T2空间 Y] {f : X -> Y} {A : 集合 X} (hf : ContinuousOn f A)
   证明: fun x x_in => extendFrom_eq (subset_closure x_in) (hf x x_in)
 
 Depends on / 依赖: extendFrom_eq, subset_closure, x_in
@@ -129,7 +129,7 @@ theorem continuousOn_extendFrom
 
 中文:
 定理 continuousOn_extendFrom
-  结论: [RegularSpace Y] {f : X -> Y} {A B : Set X} (hB : B subseteq closure A)
+  结论: [正则空间 Y] {f : X -> Y} {A B : 集合 X} (hB : B subseteq closure A)
   证明: by
   set φ := extendFrom A f
   intro x x_in
@@ -172,7 +172,7 @@ theorem continuous_extendFrom
 
 中文:
 定理 continuous_extendFrom
-  结论: [RegularSpace Y] {f : X -> Y} {A : Set X} (hA : Dense A)
+  结论: [正则空间 Y] {f : X -> Y} {A : 集合 X} (hA : 稠密 A)
   证明: by
   rw [← continuousOn_univ]
   exact continuousOn_extendFrom (fun x _ => hA x) (by simpa using hf)

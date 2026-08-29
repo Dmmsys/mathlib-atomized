@@ -306,7 +306,7 @@ theorem xgcdAux_fst
 中文:
 定理 xgcdAux_fst
   条件: (x y)
-  结论: 对任意 s t s' t', (xgcdAux x s t y s' t').1 = gcd x y
+  结论: 对任意 s t s' t', (xgcdAux x s t y s' t').1 = 最大公约数 x y
   证明: gcd.induction x y (by simp) fun x y h IH s t s' t' => by
     simp only [h, xgcdAux_rec, IH]
     rw [← gcd_rec]
@@ -331,7 +331,7 @@ theorem xgcdAux_val
 中文:
 定理 xgcdAux_val
   条件: (x y)
-  结论: xgcdAux x 1 0 y 0 1 = (gcd x y, xgcd x y)
+  结论: xgcdAux x 1 0 y 0 1 = (最大公约数 x y, xgcd x y)
   证明: by
   rw [xgcd]; rw [← xgcdAux_fst x y 1 0 0 1]
 
@@ -427,7 +427,7 @@ theorem gcd_eq_gcd_ab
 
 中文:
 定理 gcd_eq_gcd_ab
-  结论: (gcd x y : 整数) = x * gcdA x y + y * gcdB x y
+  结论: (最大公约数 x y : 整数) = x * gcdA x y + y * gcdB x y
   证明: by
   have := @xgcdAux_P x y x y 1 0 0 1 (by simp [P]) (by simp [P])
   rwa [xgcdAux_val, xgcd_val] at this
@@ -454,9 +454,9 @@ theorem exists_mul_mod_eq_gcd
   refine ⟨(n.gcdA k % k).toNat, ?_, (Int.ofNat_inj.1 ?_).trans key.symm
 
 中文:
-定理 exists_mul_mod_eq_gcd
-  条件: {k n : 自然数} (hk : gcd n k < k)
-  结论: 存在 m < k, n * m % k = gcd n k
+定理 存在_mul_mod_eq_gcd
+  条件: {k n : 自然数} (hk : 最大公约数 n k < k)
+  结论: 存在 m < k, n * m % k = 最大公约数 n k
   证明: by
   have hk' := Int.ofNat_ne_zero.2 (Nat.zero_lt_of_lt hk).ne'
   have key := congr(($(gcd_eq_gcd_ab n k) % k).toNat)
@@ -484,7 +484,7 @@ theorem exists_mul_mod_eq_one_of_coprime
   simpa [hkn, hk] using exists_mul_mod_eq_gcd (k := k) (n := n)
 
 中文:
-定理 exists_mul_mod_eq_one_of_coprime
+定理 存在_mul_mod_eq_one_of_coprime
   条件: {k n : 自然数} (hkn : Coprime n k) (hk : 1 < k)
   证明: by
   simpa [hkn, hk] using exists_mul_mod_eq_gcd (k := k) (n := n)
@@ -509,7 +509,7 @@ theorem exists_mul_mod_eq_of_coprime
   rw [mul_mod]; rw [mod_mod]; rw [← mul_mod]; rw [← mul_assoc]; rw [mul_mod]; rw [hm]; rw [one_mul]; rw [mod_mod]
 
 中文:
-定理 exists_mul_mod_eq_of_coprime
+定理 存在_mul_mod_eq_of_coprime
   条件: {k n : 自然数} (r : 自然数) (hkn : Coprime n k) (hk : k != 0)
   证明: by
   obtain rfl | hk : k = 1 ∨ 1 < k := by lia
@@ -547,7 +547,7 @@ theorem gcd_def
 中文:
 定理 gcd_def
   条件: (i j : 整数)
-  结论: gcd i j = 自然数.gcd i.natAbs j.natAbs
+  结论: 最大公约数 i j = 自然数.最大公约数 i.natAbs j.natAbs
   证明: rfl
 -/
 theorem gcd_def (i j : Int) : gcd i j = Nat.gcd i.natAbs j.natAbs := rfl
@@ -591,7 +591,7 @@ theorem gcd_eq_gcd_ab
 
 中文:
 定理 gcd_eq_gcd_ab
-  结论: 对任意 x y : 整数, (gcd x y : 整数) = x * gcdA x y + y * gcdB x y
+  结论: 对任意 x y : 整数, (最大公约数 x y : 整数) = x * gcdA x y + y * gcdB x y
 -/
 theorem gcd_eq_gcd_ab : forall x y : Int, (gcd x y : Int) = x * gcdA x y + y * gcdB x y
   | (m : Nat), (n : Nat) => Nat.gcd_eq_gcd_ab _ _
@@ -619,7 +619,7 @@ alias gcd_div_gcd_div_gcd := gcd_ediv_gcd_ediv_gcd
 中文:
 定理 lcm_def
   条件: (i j : 整数)
-  结论: lcm i j = 自然数.lcm (natAbs i) (natAbs j)
+  结论: 最小公倍数 i j = 自然数.最小公倍数 (natAbs i) (natAbs j)
   证明: rfl
 
 alias gcd_div := gcd_ediv
@@ -641,7 +641,7 @@ theorem gcd_eq_one_of_gcd_mul_right_eq_one_left
 
 中文:
 定理 gcd_eq_one_of_gcd_mul_right_eq_one_left
-  条件: {a : 整数} {m n : 自然数} (h : a.gcd (m * n) = 1)
+  条件: {a : 整数} {m n : 自然数} (h : a.最大公约数 (m * n) = 1)
   证明: Nat.dvd_one.mp h ▸ gcd_dvd_gcd_mul_right_right a m n
 
 Depends on / 依赖: Nat.dvd_one.mp, dvd_one, gcd_dvd_gcd_mul_right_right
@@ -660,7 +660,7 @@ theorem gcd_eq_one_of_gcd_mul_right_eq_one_right
 
 中文:
 定理 gcd_eq_one_of_gcd_mul_right_eq_one_right
-  条件: {a : 整数} {m n : 自然数} (h : a.gcd (m * n) = 1)
+  条件: {a : 整数} {m n : 自然数} (h : a.最大公约数 (m * n) = 1)
   证明: Nat.dvd_one.mp h ▸ gcd_dvd_gcd_mul_left_right a n m
 
 Depends on / 依赖: Nat.dvd_one.mp, dvd_one, gcd_dvd_gcd_mul_left_right
@@ -682,7 +682,7 @@ theorem ne_zero_of_gcd
 
 中文:
 定理 ne_zero_of_gcd
-  条件: {x y : 整数} (hc : gcd x y != 0)
+  条件: {x y : 整数} (hc : 最大公约数 x y != 0)
   结论: x != 0 ∨ y != 0
   证明: by
   contrapose! hc
@@ -704,8 +704,8 @@ theorem exists_gcd_one
     (Int.ediv_mul_cancel (gcd_dvd_right ..)).symm⟩
 
 中文:
-定理 exists_gcd_one
-  条件: {m n : 整数} (H : 0 < gcd m n)
+定理 存在_gcd_one
+  条件: {m n : 整数} (H : 0 < 最大公约数 m n)
   证明: ⟨_, _, gcd_div_gcd_div_gcd H, (Int.ediv_mul_cancel (gcd_dvd_left ..)).symm,
     (Int.ediv_mul_cancel (gcd_dvd_right ..)).symm⟩
 
@@ -726,8 +726,8 @@ theorem exists_gcd_one'
   ⟨_, m', n', H, h⟩
 
 中文:
-定理 exists_gcd_one'
-  条件: {m n : 整数} (H : 0 < gcd m n)
+定理 存在_gcd_one'
+  条件: {m n : 整数} (H : 0 < 最大公约数 m n)
   证明: let ⟨m', n', h⟩ := exists_gcd_one H
   ⟨_, m', n', H, h⟩
 
@@ -757,7 +757,7 @@ theorem gcd_dvd_iff
 中文:
 定理 gcd_dvd_iff
   条件: {a b : 整数} {n : 自然数}
-  结论: gcd a b ∣ n ↔ 存在 x y : 整数, ↑n = a * x + b * y
+  结论: 最大公约数 a b ∣ n ↔ 存在 x y : 整数, ↑n = a * x + b * y
   证明: by
   constructor
   · intro h
@@ -816,7 +816,7 @@ theorem dvd_of_dvd_mul_left_of_gcd_one
 
 中文:
 定理 dvd_of_dvd_mul_left_of_gcd_one
-  条件: {a b c : 整数} (habc : a ∣ b * c) (hab : gcd a c = 1)
+  条件: {a b c : 整数} (habc : a ∣ b * c) (hab : 最大公约数 a c = 1)
   证明: by
   have := gcd_eq_gcd_ab a c
   simp only [hab, Int.ofNat_zero, Int.natCast_succ, zero_add] at this
@@ -846,7 +846,7 @@ theorem dvd_of_dvd_mul_right_of_gcd_one
 
 中文:
 定理 dvd_of_dvd_mul_right_of_gcd_one
-  条件: {a b c : 整数} (habc : a ∣ b * c) (hab : gcd a b = 1)
+  条件: {a b c : 整数} (habc : a ∣ b * c) (hab : 最大公约数 a b = 1)
   证明: by
   rw [mul_comm] at habc
   exact dvd_of_dvd_mul_left_of_gcd_one habc hab
@@ -916,7 +916,7 @@ lemma pow_gcd_eq_one
 
 中文:
 引理 pow_gcd_eq_one
-  结论: a ^ m.gcd n = 1 ↔ a ^ m = 1 ∧ a ^ n = 1 where
+  结论: a ^ m.最大公约数 n = 1 ↔ a ^ m = 1 ∧ a ^ n = 1 where
   证明: by
     constructor
     · rw [← Nat.mul_div_cancel' (m.gcd_dvd_left n), pow_mul, hmn, one_pow]
@@ -983,7 +983,7 @@ lemma pow_intGCD_eq_one
 
 中文:
 引理 pow_intGCD_eq_one
-  结论: a ^ m.gcd n = 1 ↔ a ^ m = 1 ∧ a ^ n = 1
+  结论: a ^ m.最大公约数 n = 1 ↔ a ^ m = 1 ∧ a ^ n = 1
   证明: by
   obtain m | m := m <;> obtain n | n := n <;> simp
 -/

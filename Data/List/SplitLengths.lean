@@ -33,7 +33,7 @@ definition splitLengths
 
 中文:
 定义 splitLengths
-  签名: : List 自然数 -> List α -> List (List α)
+  签名: : 列表 自然数 -> 列表 α -> 列表 (列表 α)
   定义体: x.splitAt n
     x0 :: ns.splitLengths x1
 
@@ -207,7 +207,7 @@ theorem flatten_splitLengths
 
 中文:
 定理 flatten_splitLengths
-  条件: (h : l.length <= sz.sum)
+  条件: (h : l.length <= sz.求和)
   结论: (sz.splitLengths l).flatten = l
   证明: by
   induction sz generalizing l
@@ -245,7 +245,7 @@ theorem map_splitLengths_length
 
 中文:
 定理 map_splitLengths_length
-  条件: (h : sz.sum <= l.length)
+  条件: (h : sz.求和 <= l.length)
   证明: by
   induction sz generalizing l
   · simp
@@ -320,7 +320,7 @@ theorem splitLengths_length_getElem
 
 中文:
 定理 splitLengths_length_getElem
-  结论: {α : 类型} (l : List α) (sz : List 自然数)
+  结论: {α : 类型} (l : 列表 α) (sz : 列表 自然数)
   证明: by
   have := map_splitLengths_length l sz h
   rw [← List.getElem_map List.length]
@@ -352,7 +352,7 @@ theorem length_mem_splitLengths
 
 中文:
 定理 length_mem_splitLengths
-  结论: {α : 类型} (l : List α) (sz : List 自然数) (b : 自然数)
+  结论: {α : 类型} (l : 列表 α) (sz : 列表 自然数) (b : 自然数)
   证明: by
   rw [List.forall_mem_iff_forall_getElem]
   intro i hi

@@ -86,10 +86,10 @@ class HasCountableSeparatingOn
     - exists_countable_separating : exists S : Set (Set α), S.Countable ∧ (forall s in S, p s) ∧ forall x in t, forall y in t, (forall s in S, x in s ↔ y in s) -> x = y
 
 中文:
-类 HasCountableSeparatingOn
-  参数: (α : 类型) (p : Set α -> 命题) (t : Set α)
+类 有余untableSeparatingOn
+  参数: (α : 类型) (p : 集合 α -> 命题) (t : 集合 α)
   公理与运算 (1 个):
-    - exists_countable_separating : 存在 S : Set (Set α), S.Countable ∧ (对任意 s in S, p s) ∧ 对任意 x in t, 对任意 y in t, (对任意 s in S, x in s ↔ y in s) -> x = y
+    - exists_countable_separating : 存在 S : 集合 (集合 α), S.可数 ∧ (对任意 s in S, p s) ∧ 对任意 x in t, 对任意 y in t, (对任意 s in S, x in s ↔ y in s) -> x = y
 -/
 class HasCountableSeparatingOn (α : Type*) (p : Set α -> Prop) (t : Set α) : Prop where
   exists_countable_separating : exists S : Set (Set α), S.Countable ∧ (forall s in S, p s) ∧
@@ -104,8 +104,8 @@ theorem exists_countable_separating
   proof: h.1
 
 中文:
-定理 exists_countable_separating
-  结论: (α : 类型) (p : Set α -> 命题) (t : Set α)
+定理 存在_countable_separating
+  结论: (α : 类型) (p : 集合 α -> 命题) (t : 集合 α)
   证明: h.1
 -/
 theorem exists_countable_separating (α : Type*) (p : Set α -> Prop) (t : Set α)
@@ -125,8 +125,8 @@ theorem exists_nonempty_countable_separating
 fun x hx y hy hxy => hSt x hx y hy forall_of_forall_insert hxy⟩
 
 中文:
-定理 exists_nonempty_countable_separating
-  结论: (α : 类型) {p : Set α -> 命题} {s₀} (hp : p s₀)
+定理 存在_nonempty_countable_separating
+  结论: (α : 类型) {p : 集合 α -> 命题} {s₀} (hp : p s₀)
   证明: let ⟨S, hSc, hSp, hSt⟩ := exists_countable_separating α p t
   ⟨insert s₀ S, insert_nonempty _ _, hSc.insert _, forall_insert_of_forall hSp hp,
 fun x hx y hy hxy => hSt x hx y hy forall_of_forall_insert hxy⟩
@@ -154,8 +154,8 @@ theorem exists_seq_separating
   simpa only [forall_mem_range] using hS
 
 中文:
-定理 exists_seq_separating
-  结论: (α : 类型) {p : Set α -> 命题} {s₀} (hp : p s₀) (t : Set α)
+定理 存在_seq_separating
+  结论: (α : 类型) {p : 集合 α -> 命题} {s₀} (hp : p s₀) (t : 集合 α)
   证明: by
   rcases exists_nonempty_countable_separating α hp t with ⟨S, hSne, hSc, hS⟩
   rcases hSc.exists_eq_range hSne with ⟨S, rfl⟩
@@ -182,8 +182,8 @@ theorem HasCountableSeparatingOn.mono
     ⟨S, hSc, fun s hs => hp s (hSp s hs), fun x hx y hy => hSt x (ht hx) y (ht hy)⟩
 
 中文:
-定理 HasCountableSeparatingOn.mono
-  结论: {α} {p₁ p₂ : Set α -> 命题} {t₁ t₂ : Set α}
+定理 有余untableSeparatingOn.mono
+  结论: {α} {p₁ p₂ : 集合 α -> 命题} {t₁ t₂ : 集合 α}
   证明: let ⟨S, hSc, hSp, hSt⟩ := h.1
     ⟨S, hSc, fun s hs => hp s (hSp s hs), fun x hx y hy => hSt x (ht hx) y (ht hy)⟩
 -/
@@ -209,8 +209,8 @@ theorem HasCountableSeparatingOn.of_subtype
   exact h _ (mem_image_of_m
 
 中文:
-定理 HasCountableSeparatingOn.of_subtype
-  结论: {α : 类型} {p : Set α -> 命题} {t : Set α}
+定理 有余untableSeparatingOn.of_subtype
+  结论: {α : 类型} {p : 集合 α -> 命题} {t : 集合 α}
   证明: by
   rcases h.1 with ⟨S, hSc, hSq, hS⟩
   choose! V hpV hV using fun s hs => hpq s (hSq s hs)
@@ -248,8 +248,8 @@ theorem HasCountableSeparatingOn.subtype_iff
 exact Subtype.val_injective hS _ (Subtype.coe_prop _) _ (Subtype.coe_prop 
 
 中文:
-定理 HasCountableSeparatingOn.subtype_iff
-  条件: {α : 类型} {p : Set α -> 命题} {t : Set α}
+定理 有余untableSeparatingOn.subtype_iff
+  条件: {α : 类型} {p : 集合 α -> 命题} {t : 集合 α}
   证明: by
   constructor <;> intro h
 · exact h.of_subtype fun s => id
@@ -296,8 +296,8 @@ theorem exists_subset_subsingleton_mem_of_forall_separating
 
 
 中文:
-定理 exists_subset_subsingleton_mem_of_forall_separating
-  结论: (p : Set α -> 命题)
+定理 存在_subset_subsingleton_mem_of_对任意_separating
+  结论: (p : 集合 α -> 命题)
   证明: by
   rcases h.1 with ⟨S, hSc, hSp, hS⟩
   refine ⟨s inter ⋂₀ (S inter l.sets) inter ⋂ (U in S) (_ : Uᶜ in l), Uᶜ, ?_, ?_, ?_⟩
@@ -338,8 +338,8 @@ theorem exists_mem_singleton_mem_of_mem_of_nonempty_of_forall_separating
   · exact ⟨x, hts rfl, htl⟩
 
 中文:
-定理 exists_mem_singleton_mem_of_mem_of_nonempty_of_forall_separating
-  结论: (p : Set α -> 命题)
+定理 存在_mem_singleton_mem_of_mem_of_nonempty_of_对任意_separating
+  结论: (p : 集合 α -> 命题)
   证明: by
   rcases exists_subset_subsingleton_mem_of_forall_separating p hs hl with ⟨t, hts, ht, htl⟩
   rcases ht.eq_empty_or_singleton with rfl | ⟨x, rfl⟩
@@ -369,8 +369,8 @@ theorem exists_singleton_mem_of_mem_of_forall_separating
       And.right
 
 中文:
-定理 exists_singleton_mem_of_mem_of_forall_separating
-  结论: [Nonempty α] (p : Set α -> 命题)
+定理 存在_singleton_mem_of_mem_of_对任意_separating
+  结论: [非空 α] (p : 集合 α -> 命题)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hne
   · exact ‹Nonempty α›.elim fun a => ⟨a, mem_of_superset hs (empty_subset _)⟩
@@ -397,8 +397,8 @@ theorem exists_subsingleton_mem_of_forall_separating
   ⟨t, hts, htl⟩
 
 中文:
-定理 exists_subsingleton_mem_of_forall_separating
-  结论: (p : Set α -> 命题)
+定理 存在_subsingleton_mem_of_对任意_separating
+  结论: (p : 集合 α -> 命题)
   证明: let ⟨t, _, hts, htl⟩ := exists_subset_subsingleton_mem_of_forall_separating p univ_mem hl
   ⟨t, hts, htl⟩
 
@@ -419,8 +419,8 @@ theorem exists_singleton_mem_of_forall_separating
   proof: exists_singleton_mem_of_mem_of_forall_separating p univ_mem hl
 
 中文:
-定理 exists_singleton_mem_of_forall_separating
-  结论: [Nonempty α] (p : Set α -> 命题)
+定理 存在_singleton_mem_of_对任意_separating
+  结论: [非空 α] (p : 集合 α -> 命题)
   证明: exists_singleton_mem_of_mem_of_forall_separating p univ_mem hl
 
 Depends on / 依赖: exists_singleton_mem_of_mem_of_forall_separating, univ_mem
@@ -440,8 +440,8 @@ theorem exists_mem_eventuallyEq_const_of_eventually_mem_of_forall_separating
   proof: exists_mem_singleton_mem_of_mem_of_nonempty_of_forall_separating p (l := map f l) hs hne h
 
 中文:
-定理 exists_mem_eventuallyEq_const_of_eventually_mem_of_forall_separating
-  结论: (p : Set β -> 命题)
+定理 存在_mem_eventuallyEq_const_of_eventually_mem_of_对任意_separating
+  结论: (p : 集合 β -> 命题)
   证明: exists_mem_singleton_mem_of_mem_of_nonempty_of_forall_separating p (l := map f l) hs hne h
 
 Depends on / 依赖: exists_mem_singleton_mem_of_mem_of_nonempty_of_forall_separating
@@ -461,8 +461,8 @@ theorem exists_eventuallyEq_const_of_eventually_mem_of_forall_separating
   proof: exists_singleton_mem_of_mem_of_forall_separating (l := map f l) p hs h
 
 中文:
-定理 exists_eventuallyEq_const_of_eventually_mem_of_forall_separating
-  结论: [Nonempty β]
+定理 存在_eventuallyEq_const_of_eventually_mem_of_对任意_separating
+  结论: [非空 β]
   证明: exists_singleton_mem_of_mem_of_forall_separating (l := map f l) p hs h
 
 Depends on / 依赖: exists_singleton_mem_of_mem_of_forall_separating
@@ -482,8 +482,8 @@ theorem exists_eventuallyEq_const_of_forall_separating
   proof: exists_singleton_mem_of_forall_separating (l := map f l) p h
 
 中文:
-定理 exists_eventuallyEq_const_of_forall_separating
-  结论: [Nonempty β] (p : Set β -> 命题)
+定理 存在_eventuallyEq_const_of_对任意_separating
+  结论: [非空 β] (p : 集合 β -> 命题)
   证明: exists_singleton_mem_of_forall_separating (l := map f l) p h
 
 Depends on / 依赖: exists_singleton_mem_of_forall_separating
@@ -510,8 +510,8 @@ theorem of_eventually_mem_of_forall_separating_mem_iff
   filter_upwards [H, hf, hg] with x hx hxf hxg using hS _ hxf _ hxg hx
 
 中文:
-定理 of_eventually_mem_of_forall_separating_mem_iff
-  结论: (p : Set β -> 命题) {s : Set β}
+定理 of_eventually_mem_of_对任意_separating_mem_iff
+  结论: (p : 集合 β -> 命题) {s : 集合 β}
   证明: by
   rcases h'.1 with ⟨S, hSc, hSp, hS⟩
   have H : forallᶠ x in l, forall s in S, f x in s ↔ g x in s :=
@@ -537,8 +537,8 @@ theorem of_forall_separating_mem_iff
   proof: of_eventually_mem_of_forall_separating_mem_iff p (s := univ) univ_mem univ_mem h
 
 中文:
-定理 of_forall_separating_mem_iff
-  结论: (p : Set β -> 命题)
+定理 of_对任意_separating_mem_iff
+  结论: (p : 集合 β -> 命题)
   证明: of_eventually_mem_of_forall_separating_mem_iff p (s := univ) univ_mem univ_mem h
 
 Depends on / 依赖: of_eventually_mem_of_forall_separating_mem_iff, univ_mem
@@ -557,8 +557,8 @@ theorem of_eventually_mem_of_forall_separating_preimage
   proof: of_eventually_mem_of_forall_separating_mem_iff p hf hg fun U hU => (h U hU).mem_iff
 
 中文:
-定理 of_eventually_mem_of_forall_separating_preimage
-  结论: (p : Set β -> 命题) {s : Set β}
+定理 of_eventually_mem_of_对任意_separating_preimage
+  结论: (p : 集合 β -> 命题) {s : 集合 β}
   证明: of_eventually_mem_of_forall_separating_mem_iff p hf hg fun U hU => (h U hU).mem_iff
 
 Depends on / 依赖: mem_iff, of_eventually_mem_of_forall_separating_mem_iff
@@ -577,8 +577,8 @@ theorem of_forall_separating_preimage
   proof: of_eventually_mem_of_forall_separating_preimage p (s := univ) univ_mem univ_mem h
 
 中文:
-定理 of_forall_separating_preimage
-  结论: (p : Set β -> 命题) [HasCountableSeparatingOn β p univ]
+定理 of_对任意_separating_preimage
+  结论: (p : 集合 β -> 命题) [有余untableSeparatingOn β p univ]
   证明: of_eventually_mem_of_forall_separating_preimage p (s := univ) univ_mem univ_mem h
 
 Depends on / 依赖: of_eventually_mem_of_forall_separating_preimage, univ_mem

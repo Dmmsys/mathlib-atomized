@@ -44,7 +44,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: : TwoSidedIdeal R
+  签名: : TwoSided理想 R
   定义体: .ofRingCon
   -- TODO: use `RingCon.ker`
   { r := fun x y => f x = f y
@@ -120,7 +120,7 @@ lemma ker_eq_bot
 
 中文:
 引理 ker_eq_bot
-  结论: ker f = ⊥ ↔ Function.Injective f
+  结论: ker f = ⊥ ↔ 函数.单射 f
   证明: by
   fconstructor
   · intro h x y hxy
@@ -156,7 +156,7 @@ lemma ker_ringCon_mk'
 
 中文:
 引理 ker_ringCon_mk'
-  条件: (I : TwoSidedIdeal R)
+  条件: (I : TwoSided理想 R)
   结论: ker I.ringCon.mk' = I
   证明: le_antisymm
     (fun _ h => by simpa using I.rel_iff _ _ |>.1 (Quotient.eq'.1 h))

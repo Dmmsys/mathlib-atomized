@@ -52,7 +52,7 @@ definition addSubMap
 
 中文:
 定义 addSubMap
-  签名: : Fin 3 -> MvPolynomial (Fin 3) R
+  签名: : 有限集 3 -> 多元多项式 (有限集 3) R
   定义体: ![s ^ 2 - C W.b₄ * s * u - C W.b₆ * t * u - C W.b₈ * u ^ 2,
     C 2 * t * s + C W.b₂ * s * u + C W.b₄ * t * u + C W.b₆ * u ^ 2,
     t ^ 2 - C 4 * s * u]
@@ -75,7 +75,7 @@ definition addSubMapCoeff
 
 中文:
 定义 addSubMapCoeff
-  签名: : Fin 3 × Fin 3 -> MvPolynomial (Fin 3) R
+  签名: : 有限集 3 × 有限集 3 -> 多元多项式 (有限集 3) R
   定义体: ![![C (-W.b₂ ^ 2 * W.b₈ + 9 * W.b₂ * W.b₄ * W.b₆ - 8 * W.b₄ ^ 3 - 27 * W.b₆ ^ 2) * s ^ 2 +
         C (2 * W.b₂ * W.b₄ * W.b₈ - 2 * W.b₄ ^ 2 * W.b₆ - 10 * W.b₆ * W.b₈) * s * t +
         C (-W.b₂ * W.b₆ * W.b₈ + W.b₄ * W.b₆ ^ 2) * s * u +
@@ -118,7 +118,7 @@ lemma CXX
 
 中文:
 引理 CXX
-  条件: {i : Fin 3} {a : R}
+  条件: {i : 有限集 3} {a : R}
   结论: (C a * X (R := R) i ^ 2).IsHomogeneous 2
   证明: isHomogeneous_C_mul_X_pow ..
 
@@ -138,7 +138,7 @@ lemma CXY
 
 中文:
 引理 CXY
-  条件: {i j : Fin 3} {a : R}
+  条件: {i j : 有限集 3} {a : R}
   结论: (C a * X (R := R) i * X j).IsHomogeneous 2
   证明: .mul (isHomogeneous_C_mul_X ..) (isHomogeneous_X ..)
 -/
@@ -163,7 +163,7 @@ lemma isHomogeneous_addSubMap
 
 中文:
 引理 isHomogeneous_addSubMap
-  条件: (i : Fin 3)
+  条件: (i : 有限集 3)
   结论: (addSubMap W i).IsHomogeneous 2
   证明: by
   simp only [addSubMap]
@@ -200,7 +200,7 @@ lemma isHomogeneous_addSubMapCoeff
 
 中文:
 引理 isHomogeneous_addSubMapCoeff
-  条件: (ij : Fin 3 × Fin 3)
+  条件: (ij : 有限集 3 × 有限集 3)
   证明: by
   simp only [addSubMapCoeff]
   fin_cases ij <;>
@@ -244,7 +244,7 @@ lemma addSubMapCoeff_condition
 
 中文:
 引理 addSubMapCoeff_condition
-  条件: (x : Fin 3 -> R) (i : Fin 3)
+  条件: (x : 有限集 3 -> R) (i : 有限集 3)
   证明: by
   simp only [eval_mul, eval_C, mul_assoc]
   rw [← Finset.mul_sum]; rw [Units.inv_mul_eq_iff_eq_mul]; rw [Fin.sum_univ_three]; rw [addSubMap]; rw [addSubMapCoeff]; rw [Function.uncurry_apply_pair]; rw [coe_Δ']; rw [Δ]
@@ -272,7 +272,7 @@ lemma addSubMap_ne_zero
 
 中文:
 引理 addSubMap_ne_zero
-  条件: [IsReduced R] {x : Fin 3 -> R} (hx : x != 0)
+  条件: [是既约 R] {x : 有限集 3 -> R} (hx : x != 0)
   证明: by
   contrapose! hx
   ext i
@@ -365,7 +365,7 @@ lemma sym2x_zero_some
 
 中文:
 引理 sym2x_zero_some
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   证明: by
   simp [sym2x]
 
@@ -389,7 +389,7 @@ lemma sym2x_some_zero
 
 中文:
 引理 sym2x_some_zero
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   证明: by
   simp [sym2x]
 
@@ -411,7 +411,7 @@ lemma sym2x_some_some
 
 中文:
 引理 sym2x_some_some
-  条件: {x y x' y' : R} (h : W'.Nonsingular x y) (h' : W'.Nonsingular x' y')
+  条件: {x y x' y' : R} (h : W'.非奇异 x y) (h' : W'.非奇异 x' y')
   证明: by
   simp [sym2x]
 -/
@@ -431,7 +431,7 @@ lemma sym2x_ne_zero
 
 中文:
 引理 sym2x_ne_zero
-  条件: [Nontrivial R] (P Q : W'.Point)
+  条件: [非平凡 R] (P Q : W'.Point)
   结论: P.sym2x Q != 0
   证明: by
   cases P <;> cases Q <;> simp [sym2x, xRep]

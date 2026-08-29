@@ -200,7 +200,7 @@ lemma mabs_ite
 
 中文:
 引理 mabs_ite
-  条件: (p : 命题) [Decidable p]
+  条件: (p : 命题) [可判定 p]
   证明: apply_ite _ _ _ _
 -/
 @[to_additive] lemma mabs_ite (p : Prop) [Decidable p] :
@@ -217,7 +217,7 @@ lemma mabs_dite
 
 中文:
 引理 mabs_dite
-  条件: (p : 命题) [Decidable p] (a : p -> α) (b : ¬p -> α)
+  条件: (p : 命题) [可判定 p] (a : p -> α) (b : ¬p -> α)
   证明: apply_dite _ _ _ _
 -/
 @[to_additive] lemma mabs_dite (p : Prop) [Decidable p] (a : p -> α) (b : ¬p -> α) :
@@ -706,7 +706,7 @@ lemma mabs_eq_max_inv
 
 中文:
 引理 mabs_eq_max_inv
-  结论: |a|ₘ = max a a⁻¹
+  结论: |a|ₘ = 最大值 a a⁻¹
   证明: rfl
 -/
 @[to_additive] lemma mabs_eq_max_inv : |a|ₘ = max a a⁻¹ := rfl
@@ -830,7 +830,7 @@ lemma map_mabs
 
 中文:
 引理 map_mabs
-  结论: {β F : 类型} [Group β] [LinearOrder β] [FunLike F α β]
+  结论: {β F : 类型} [群 β] [线性序 β] [函数状 F α β]
   证明: by
   rw [mabs]; rw [mabs]; rw [(OrderHomClass.mono f).map_max]; rw [map_inv]
 -/
@@ -1086,7 +1086,7 @@ lemma max_div_min_eq_mabs'
 中文:
 引理 max_div_min_eq_mabs'
   条件: (a b : α)
-  结论: max a b / min a b = |a / b|ₘ
+  结论: 最大值 a b / 最小值 a b = |a / b|ₘ
   证明: by
   rcases le_total a b with ab | ba
   · rw [max_eq_right ab, min_eq_left ab, mabs_of_le_one, inv_div]
@@ -1114,7 +1114,7 @@ lemma max_div_min_eq_mabs
 中文:
 引理 max_div_min_eq_mabs
   条件: (a b : α)
-  结论: max a b / min a b = |b / a|ₘ
+  结论: 最大值 a b / 最小值 a b = |b / a|ₘ
   证明: by
   rw [mabs_div_comm]; rw [max_div_min_eq_mabs']
 -/
@@ -1135,8 +1135,8 @@ definition IsSolid
   body: forall ⦃x⦄, x in s -> forall ⦃y⦄, |y| <= |x| -> y in s
 
 中文:
-定义 IsSolid
-  签名: (s : Set α)
+定义 是Solid
+  签名: (s : 集合 α)
   定义体: forall ⦃x⦄, x in s -> forall ⦃y⦄, |y| <= |x| -> y in s
 -/
 def IsSolid (s : Set α) : Prop := forall ⦃x⦄, x in s -> forall ⦃y⦄, |y| <= |x| -> y in s
@@ -1151,7 +1151,7 @@ definition solidClosure
 
 中文:
 定义 solidClosure
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {y | exists x in s, |y| <= |x|}
 -/
 def solidClosure (s : Set α) : Set α := {y | exists x in s, |y| <= |x|}
@@ -1167,8 +1167,8 @@ lemma isSolid_solidClosure
 
 中文:
 引理 isSolid_solidClosure
-  条件: (s : Set α)
-  结论: IsSolid (solidClosure s)
+  条件: (s : 集合 α)
+  结论: 是Solid (solidClosure s)
   证明: fun _ ⟨y, hy, hxy⟩ _ hzx => ⟨y, hy, hzx.trans hxy⟩
 
 Depends on / 依赖: hzx.trans
@@ -1187,7 +1187,7 @@ lemma solidClosure_min
 
 中文:
 引理 solidClosure_min
-  条件: (hst : s subseteq t) (ht : IsSolid t)
+  条件: (hst : s subseteq t) (ht : 是Solid t)
   结论: solidClosure s subseteq t
   证明: fun _ ⟨_, hy, hxy⟩ => ht (hst hy) hxy
 -/
@@ -1214,7 +1214,7 @@ lemma mabs_apply
 
 中文:
 引理 mabs_apply
-  条件: [对任意 i, Lattice (α i)] (i : ι)
+  条件: [对任意 i, 格 (α i)] (i : ι)
   结论: |f|ₘ i = |f i|ₘ
   证明: rfl
 
@@ -1236,7 +1236,7 @@ lemma mabs_def
 
 中文:
 引理 mabs_def
-  条件: [对任意 i, Lattice (α i)]
+  条件: [对任意 i, 格 (α i)]
   结论: |f|ₘ = fun i => |f i|ₘ
   证明: rfl
 
@@ -1255,7 +1255,7 @@ lemma mabs_eq_one
 
 中文:
 引理 mabs_eq_one
-  条件: [对任意 i, LinearOrder (α i)] [对任意 i, MulLeftMono (α i)] [对任意 i, MulRightMono (α i)]
+  条件: [对任意 i, 线性序 (α i)] [对任意 i, MulLeftMono (α i)] [对任意 i, MulRightMono (α i)]
   证明: ⟨fun h => funext fun i => by simpa using congr_fun h i, fun h => funext fun i => by simp [h]⟩
 
 Depends on / 依赖: congr_fun

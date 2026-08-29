@@ -120,7 +120,7 @@ lemma homogenize_smul
 
 中文:
 引理 homogenize_smul
-  条件: {S : 类型} [Semiring S] [Module S R] (c : S) (p : R[X]) (n : 自然数)
+  条件: {S : 类型} [半环 S] [模 S R] (c : S) (p : R[X]) (n : 自然数)
   证明: by
   simp [homogenize, Finset.smul_sum, MvPolynomial.smul_monomial]
 
@@ -171,7 +171,7 @@ lemma homogenize_finsetSum
 
 中文:
 引理 homogenize_finsetSum
-  条件: {ι : 类型} (s : Finset ι) (p : ι -> R[X]) (n : 自然数)
+  条件: {ι : 类型} (s : 有限集 ι) (p : ι -> R[X]) (n : 自然数)
   证明: _root_.map_sum (homogenizeLM n) p s
 
 Depends on / 依赖: _root_, _root_.map_sum, homogenizeLM, map_sum
@@ -193,7 +193,7 @@ lemma homogenize_map
 
 中文:
 引理 homogenize_map
-  条件: {S : 类型} [CommSemiring S] (f : R ->+* S) (p : R[X]) (n : 自然数)
+  条件: {S : 类型} [交换半环 S] (f : R ->+* S) (p : R[X]) (n : 自然数)
   证明: by
   simp [homogenize]
 
@@ -416,7 +416,7 @@ lemma coeff_homogenize
 
 中文:
 引理 coeff_homogenize
-  条件: (p : R[X]) (n : 自然数) (m : Fin 2 ->₀ 自然数)
+  条件: (p : R[X]) (n : 自然数) (m : 有限集 2 ->₀ 自然数)
   证明: by
   induction p using Polynomial.induction_on' with
   | add p q ihp ihq =>
@@ -515,7 +515,7 @@ lemma eval₂_homogenize_of_eq_one
 
 中文:
 引理 eval₂_homogenize_of_eq_one
-  结论: {S : 类型} [CommSemiring S] {p : R[X]} {n : 自然数}
+  结论: {S : 类型} [交换半环 S] {p : R[X]} {n : 自然数}
   证明: by
   apply Polynomial.induction_with_natDegree_le
     (fun p => MvPolynomial.eval₂ f g (p.homogenize n) = p.eval₂ f (g 0)) (N := n)
@@ -547,7 +547,7 @@ lemma aeval_homogenize_of_eq_one
 
 中文:
 引理 aeval_homogenize_of_eq_one
-  结论: {A : 类型} [CommSemiring A] [Algebra R A] {p : R[X]} {n : 自然数}
+  结论: {A : 类型} [交换半环 A] [代数 R A] {p : R[X]} {n : 自然数}
   证明: by
   apply eval₂_homogenize_of_eq_one <;> assumption
 
@@ -639,7 +639,7 @@ obtain rfl : m.weight 1 = n := hq by simpa using hm
 
 中文:
 引理 homogenize_eq_of_isHomogeneous
-  结论: {p : R[X]} {n : 自然数} {q : MvPolynomial (Fin 2) R}
+  结论: {p : R[X]} {n : 自然数} {q : 多元多项式 (有限集 2) R}
   证明: by
   subst p
   rw [q.as_sum]
@@ -710,7 +710,7 @@ lemma homogenize_finsetProd
 
 中文:
 引理 homogenize_finsetProd
-  结论: {ι : 类型} {s : Finset ι} {p : ι -> R[X]} {n : ι -> 自然数}
+  结论: {ι : 类型} {s : 有限集 ι} {p : ι -> R[X]} {n : ι -> 自然数}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -747,7 +747,7 @@ lemma homogenize_dvd
 
 中文:
 引理 homogenize_dvd
-  条件: [NoZeroDivisors R] {p q : R[X]} (h : p ∣ q)
+  条件: [无零因子 R] {p q : R[X]} (h : p ∣ q)
   证明: by
   rcases h with ⟨r, rfl⟩
   obtain rfl | rfl | ⟨hp₀, hr₀⟩ : p = 0 ∨ r = 0 ∨ p != 0 ∧ r != 0 := by tauto
@@ -838,7 +838,7 @@ lemma eval_homogenize
 
 中文:
 引理 eval_homogenize
-  条件: {p : K[X]} {n : 自然数} (hn : p.natDegree <= n) (x : Fin 2 -> K) (hx : x 1 != 0)
+  条件: {p : K[X]} {n : 自然数} (hn : p.natDegree <= n) (x : 有限集 2 -> K) (hx : x 1 != 0)
   证明: by
   simp only [homogenize, Polynomial.eval_eq_sum_range' (Nat.lt_succ_iff.mpr hn),
     Finset.Nat.sum_antidiagonal_eq_sum_range_succ_mk, Finset.sum_mul, MvPolynomial.eval_sum]
@@ -933,7 +933,7 @@ alias isHomogenous_toTupleMvPolynomial := isHomogeneous_toTupleMvPolynomial
 
 中文:
 引理 isHomogeneous_toTupleMvPolynomial
-  条件: (p : R[X]) (i : Fin 2)
+  条件: (p : R[X]) (i : 有限集 2)
   证明: by
   fin_cases i
   · simp [toTupleMvPolynomial]
@@ -986,7 +986,7 @@ lemma eval_eq_div_eval_toTupleMvPolynomial
 
 中文:
 引理 eval_eq_div_eval_toTupleMvPolynomial
-  条件: {R : 类型} [Field R] (p : R[X]) (x : R)
+  条件: {R : 类型} [域 R] (p : R[X]) (x : R)
   证明: by
   simp [toTupleMvPolynomial, eval_homogenize]
 
@@ -1009,7 +1009,7 @@ lemma sum_eq_natDegree_of_mem_support_homogenize
 
 中文:
 引理 sum_eq_natDegree_of_mem_support_homogenize
-  结论: (p : R[X]) {s : Fin 2 ->₀ 自然数}
+  结论: (p : R[X]) {s : 有限集 2 ->₀ 自然数}
   证明: by
   simp [(isHomogeneous_homogenize p).degree_eq_sum_deg_support hs, ← Finsupp.degree_apply,
         Finsupp.degree_eq_sum]
@@ -1037,7 +1037,7 @@ lemma finsuppSum_homogenize_eq
 
 中文:
 引理 finsuppSum_homogenize_eq
-  条件: {M : 类型} [AddCommMonoid M] (p : R[X]) {f : R -> M}
+  条件: {M : 类型} [加法交换幺半群 M] (p : R[X]) {f : R -> M}
   证明: by
   rw [MvPolynomial.sum_def]; rw [sum_def p]
   -- We set up a bijection between the sets indexing the terms on both sides

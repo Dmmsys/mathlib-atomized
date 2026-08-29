@@ -107,7 +107,7 @@ theorem HasDerivAtFilter.scomp_of_eq
 
 中文:
 定理 HasDerivAtFilter.scomp_of_eq
-  结论: {L : Filter 𝕜} {L' : Filter 𝕜'}
+  结论: {L : 滤子 𝕜} {L' : 滤子 𝕜'}
   证明: hg.scomp hh .prodMap hL by simp [hy]
 
 Depends on / 依赖: hg.scomp, prodMap
@@ -216,8 +216,8 @@ theorem HasDerivAt.scomp
   proof: HasDerivAtFilter.scomp hg hh hh.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
 中文:
-定理 HasDerivAt.scomp
-  条件: (hg : HasDerivAt g₁ g₁' (h x)) (hh : HasDerivAt h h' x)
+定理 在点处可导.scomp
+  条件: (hg : 在点处可导 g₁ g₁' (h x)) (hh : 在点处可导 h h' x)
   证明: HasDerivAtFilter.scomp hg hh hh.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.scomp, continuousAt, hh.continuousAt.tendsto.prodMap, prodMap, tendsto, tendsto_pure_pure
@@ -235,7 +235,7 @@ theorem HasDerivAt.scomp_of_eq
   rw [hy] at hg; exact hg.scomp x hh
 
 中文:
-定理 HasDerivAt.scomp_of_eq
+定理 在点处可导.scomp_of_eq
   证明: by
   rw [hy] at hg; exact hg.scomp x hh
 
@@ -297,8 +297,8 @@ theorem HasDerivAt.scomp_hasDerivWithinAt
   proof: HasDerivWithinAt.scomp x hg.hasDerivWithinAt hh (mapsTo_univ _ _)
 
 中文:
-定理 HasDerivAt.scomp_hasDerivWithinAt
-  结论: (hg : HasDerivAt g₁ g₁' (h x))
+定理 在点处可导.scomp_hasDerivWithinAt
+  结论: (hg : 在点处可导 g₁ g₁' (h x))
   证明: HasDerivWithinAt.scomp x hg.hasDerivWithinAt hh (mapsTo_univ _ _)
 
 Depends on / 依赖: HasDerivWithinAt, HasDerivWithinAt.scomp, hasDerivWithinAt, hg.hasDerivWithinAt, mapsTo_univ
@@ -317,8 +317,8 @@ theorem HasDerivAt.scomp_hasDerivWithinAt_of_eq
   rw [hy] at hg; exact hg.scomp_hasDerivWithinAt x hh
 
 中文:
-定理 HasDerivAt.scomp_hasDerivWithinAt_of_eq
-  结论: (hg : HasDerivAt g₁ g₁' y)
+定理 在点处可导.scomp_hasDerivWithinAt_of_eq
+  结论: (hg : 在点处可导 g₁ g₁' y)
   证明: by
   rw [hy] at hg; exact hg.scomp_hasDerivWithinAt x hh
 
@@ -525,7 +525,7 @@ theorem HasDerivAt.comp_hasFDerivAt
   proof: hh.comp_hasFDerivAtFilter hf hf.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
 中文:
-定理 HasDerivAt.comp_hasFDerivAt
+定理 在点处可导.comp_hasFDerivAt
   结论: {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x)
   证明: hh.comp_hasFDerivAtFilter hf hf.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
@@ -545,7 +545,7 @@ theorem HasDerivAt.comp_hasFDerivAt_of_eq
   rw [hy] at hh; exact hh.comp_hasFDerivAt x hf
 
 中文:
-定理 HasDerivAt.comp_hasFDerivAt_of_eq
+定理 在点处可导.comp_hasFDerivAt_of_eq
   结论: {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} (x)
   证明: by
   rw [hy] at hh; exact hh.comp_hasFDerivAt x hf
@@ -566,7 +566,7 @@ theorem HasDerivAt.comp_hasFDerivWithinAt
   proof: hh.comp_hasFDerivAtFilter hf hf.continuousWithinAt.tendsto.prodMap tendsto_pure_pure _ _
 
 中文:
-定理 HasDerivAt.comp_hasFDerivWithinAt
+定理 在点处可导.comp_hasFDerivWithinAt
   结论: {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x)
   证明: hh.comp_hasFDerivAtFilter hf hf.continuousWithinAt.tendsto.prodMap tendsto_pure_pure _ _
 
@@ -587,7 +587,7 @@ theorem HasDerivAt.comp_hasFDerivWithinAt_of_eq
   rw [hy] at hh; exact hh.comp_hasFDerivWithinAt x hf
 
 中文:
-定理 HasDerivAt.comp_hasFDerivWithinAt_of_eq
+定理 在点处可导.comp_hasFDerivWithinAt_of_eq
   结论: {f : E -> 𝕜'} {f' : E ->L[𝕜] 𝕜'} {s} (x)
   证明: by
   rw [hy] at hh; exact hh.comp_hasFDerivWithinAt x hf
@@ -731,7 +731,7 @@ theorem HasDerivAtFilter.comp_of_eq
 
 中文:
 定理 HasDerivAtFilter.comp_of_eq
-  结论: {L : Filter 𝕜} {L' : Filter 𝕜'}
+  结论: {L : 滤子 𝕜} {L' : 滤子 𝕜'}
   证明: hh₂.comp hh hL.prodMap by simp [hy]
 
 Depends on / 依赖: hL.prodMap, prodMap
@@ -796,8 +796,8 @@ theorem HasDerivAt.comp
   proof: HasDerivAtFilter.comp hh₂ hh hh.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
 中文:
-定理 HasDerivAt.comp
-  条件: (hh₂ : HasDerivAt h₂ h₂' (h x)) (hh : HasDerivAt h h' x)
+定理 在点处可导.comp
+  条件: (hh₂ : 在点处可导 h₂ h₂' (h x)) (hh : 在点处可导 h h' x)
   证明: HasDerivAtFilter.comp hh₂ hh hh.continuousAt.tendsto.prodMap tendsto_pure_pure _ _
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.comp, continuousAt, hh.continuousAt.tendsto.prodMap, prodMap, tendsto, tendsto_pure_pure
@@ -815,7 +815,7 @@ theorem HasDerivAt.comp_of_eq
   rw [hy] at hh₂; exact hh₂.comp x hh
 
 中文:
-定理 HasDerivAt.comp_of_eq
+定理 在点处可导.comp_of_eq
   证明: by
   rw [hy] at hh₂; exact hh₂.comp x hh
 -/
@@ -875,8 +875,8 @@ theorem HasDerivAt.comp_hasDerivWithinAt
   proof: hh₂.hasDerivWithinAt.comp x hh (mapsTo_univ _ _)
 
 中文:
-定理 HasDerivAt.comp_hasDerivWithinAt
-  结论: (hh₂ : HasDerivAt h₂ h₂' (h x))
+定理 在点处可导.comp_hasDerivWithinAt
+  结论: (hh₂ : 在点处可导 h₂ h₂' (h x))
   证明: hh₂.hasDerivWithinAt.comp x hh (mapsTo_univ _ _)
 
 Depends on / 依赖: hasDerivWithinAt, hasDerivWithinAt.comp, mapsTo_univ
@@ -895,8 +895,8 @@ theorem HasDerivAt.comp_hasDerivWithinAt_of_eq
   rw [hy] at hh₂; exact hh₂.comp_hasDerivWithinAt x hh
 
 中文:
-定理 HasDerivAt.comp_hasDerivWithinAt_of_eq
-  结论: (hh₂ : HasDerivAt h₂ h₂' y)
+定理 在点处可导.comp_hasDerivWithinAt_of_eq
+  结论: (hh₂ : 在点处可导 h₂ h₂' y)
   证明: by
   rw [hy] at hh₂; exact hh₂.comp_hasDerivWithinAt x hh
 
@@ -1132,7 +1132,7 @@ theorem HasFDerivWithinAt.comp_hasDerivWithinAt
 
 中文:
 定理 HasFDerivWithinAt.comp_hasDerivWithinAt
-  结论: {t : Set F} (hl : HasFDerivWithinAt l l' t (f x))
+  结论: {t : 集合 F} (hl : HasFDerivWithinAt l l' t (f x))
   证明: by
   simpa using (hl.comp x hf.hasFDerivWithinAt hst).hasDerivWithinAt
 
@@ -1154,7 +1154,7 @@ theorem HasFDerivWithinAt.comp_hasDerivWithinAt_of_eq
 
 中文:
 定理 HasFDerivWithinAt.comp_hasDerivWithinAt_of_eq
-  结论: {t : Set F}
+  结论: {t : 集合 F}
   证明: by
   rw [hy] at hl; exact hl.comp_hasDerivWithinAt x hf hst
 
@@ -1177,7 +1177,7 @@ theorem HasFDerivWithinAt.comp_hasDerivAt
 
 中文:
 定理 HasFDerivWithinAt.comp_hasDerivAt
-  结论: {t : Set F} (hl : HasFDerivWithinAt l l' t (f x))
+  结论: {t : 集合 F} (hl : HasFDerivWithinAt l l' t (f x))
   证明: by
   simpa using (hl.comp_hasFDerivAt x hf.hasFDerivAt ht).hasDerivAt
 
@@ -1198,7 +1198,7 @@ theorem HasFDerivWithinAt.comp_hasDerivAt_of_eq
 
 中文:
 定理 HasFDerivWithinAt.comp_hasDerivAt_of_eq
-  结论: {t : Set F} (hl : HasFDerivWithinAt l l' t y)
+  结论: {t : 集合 F} (hl : HasFDerivWithinAt l l' t y)
   证明: by
   subst y; exact hl.comp_hasDerivAt x hf ht
 
@@ -1218,8 +1218,8 @@ theorem HasFDerivAt.comp_hasDerivWithinAt
   proof: hl.hasFDerivWithinAt.comp_hasDerivWithinAt x hf (mapsTo_univ _ _)
 
 中文:
-定理 HasFDerivAt.comp_hasDerivWithinAt
-  结论: (hl : HasFDerivAt l l' (f x))
+定理 在点处Fréchet可导.comp_hasDerivWithinAt
+  结论: (hl : 在点处Fréchet可导 l l' (f x))
   证明: hl.hasFDerivWithinAt.comp_hasDerivWithinAt x hf (mapsTo_univ _ _)
 
 Depends on / 依赖: comp_hasDerivWithinAt, hasFDerivWithinAt, hl.hasFDerivWithinAt.comp_hasDerivWithinAt, mapsTo_univ
@@ -1238,8 +1238,8 @@ theorem HasFDerivAt.comp_hasDerivWithinAt_of_eq
   rw [hy] at hl; exact hl.comp_hasDerivWithinAt x hf
 
 中文:
-定理 HasFDerivAt.comp_hasDerivWithinAt_of_eq
-  结论: (hl : HasFDerivAt l l' y)
+定理 在点处Fréchet可导.comp_hasDerivWithinAt_of_eq
+  结论: (hl : 在点处Fréchet可导 l l' y)
   证明: by
   rw [hy] at hl; exact hl.comp_hasDerivWithinAt x hf
 
@@ -1259,8 +1259,8 @@ theorem HasFDerivAt.comp_hasDerivAt
   proof: hasDerivWithinAt_univ.mp hl.comp_hasDerivWithinAt x hf.hasDerivWithinAt
 
 中文:
-定理 HasFDerivAt.comp_hasDerivAt
-  条件: (hl : HasFDerivAt l l' (f x)) (hf : HasDerivAt f f' x)
+定理 在点处Fréchet可导.comp_hasDerivAt
+  条件: (hl : 在点处Fréchet可导 l l' (f x)) (hf : 在点处可导 f f' x)
   证明: hasDerivWithinAt_univ.mp hl.comp_hasDerivWithinAt x hf.hasDerivWithinAt
 
 Depends on / 依赖: comp_hasDerivWithinAt, hasDerivWithinAt, hasDerivWithinAt_univ, hasDerivWithinAt_univ.mp, hf.hasDerivWithinAt, hl.comp_hasDerivWithinAt
@@ -1278,7 +1278,7 @@ theorem HasFDerivAt.comp_hasDerivAt_of_eq
   rw [hy] at hl; exact hl.comp_hasDerivAt x hf
 
 中文:
-定理 HasFDerivAt.comp_hasDerivAt_of_eq
+定理 在点处Fréchet可导.comp_hasDerivAt_of_eq
   证明: by
   rw [hy] at hl; exact hl.comp_hasDerivAt x hf
 
@@ -1345,7 +1345,7 @@ theorem fderivWithin_comp_derivWithin
 
 中文:
 定理 fderivWithin_comp_derivWithin
-  结论: {t : Set F} (hl : DifferentiableWithinAt 𝕜 l t (f x))
+  结论: {t : 集合 F} (hl : DifferentiableWithinAt 𝕜 l t (f x))
   证明: by
   by_cases hsx : UniqueDiffWithinAt 𝕜 s x
   · exact (hl.hasFDerivWithinAt.comp_hasDerivWithinAt x hf.hasDerivWithinAt hs).derivWithin hsx
@@ -1371,7 +1371,7 @@ theorem fderivWithin_comp_derivWithin_of_eq
 
 中文:
 定理 fderivWithin_comp_derivWithin_of_eq
-  结论: {t : Set F} (hl : DifferentiableWithinAt 𝕜 l t y)
+  结论: {t : 集合 F} (hl : DifferentiableWithinAt 𝕜 l t y)
   证明: by
   rw [hy] at hl; exact fderivWithin_comp_derivWithin x hl hf hs
 

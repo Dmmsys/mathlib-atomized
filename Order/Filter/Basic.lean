@@ -86,7 +86,7 @@ instance inhabitedMem
 
 中文:
 实例 inhabitedMem
-  签名: : Inhabited { s : Set α // s in f }
+  签名: : 可居 { s : 集合 α // s in f }
   定义体: ⟨⟨univ, f.univ_sets⟩⟩
 
 Depends on / 依赖: f.univ_sets, univ_sets
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: Trans (· ⊇ ·) ((· in ·) : Set α -> Filter α -> 命题) (· in ·)
+  签名: Trans (· ⊇ ·) ((· in ·) : 集合 α -> 滤子 α -> 命题) (· in ·)
   定义体: mem_of_superset h₂ h₁
 
 Depends on / 依赖: mem_of_superset
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Trans Membership.mem (· subseteq ·) (Membership.mem : Filter α -> Set α -> 命题)
+  签名: Trans Membership.mem (· subseteq ·) (Membership.mem : 滤子 α -> 集合 α -> 命题)
   定义体: mem_of_superset h₁ h₂
 
 @[simp]
@@ -212,7 +212,7 @@ theorem inter_mem_iff
 
 中文:
 定理 inter_mem_iff
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s inter t in f ↔ s in f ∧ t in f
   证明: ⟨fun h => ⟨mem_of_superset h inter_subset_left, mem_of_superset h inter_subset_right⟩,
     and_imp.2 inter_mem⟩
@@ -236,7 +236,7 @@ theorem sdiff_mem
 
 中文:
 定理 sdiff_mem
-  条件: {s t : Set α} (hs : s in f) (ht : tᶜ in f)
+  条件: {s t : 集合 α} (hs : s in f) (ht : tᶜ in f)
   结论: s \ t in f
   证明: inter_mem hs ht
 
@@ -301,8 +301,8 @@ theorem biInter_mem'
   apply Subsingleton.induction_on hf <;> simp
 
 中文:
-定理 biInter_mem'
-  条件: {β : 类型v} {s : β -> Set α} {is : Set β} (hf : is.Subsingleton)
+定理 bi整数er_mem'
+  条件: {β : 类型v} {s : β -> 集合 α} {is : 集合 β} (hf : is.子单例)
   证明: by
   apply Subsingleton.induction_on hf <;> simp
 
@@ -322,8 +322,8 @@ theorem iInter_mem'
   rw [← sInter_range]; rw [sInter_eq_biInter]; rw [biInter_mem' (subsingleton_range s)]; rw [forall_mem_range]
 
 中文:
-定理 iInter_mem'
-  条件: {β : Sort v} {s : β -> Set α} [Subsingleton β]
+定理 i整数er_mem'
+  条件: {β : 类型层 v} {s : β -> 集合 α} [子单例 β]
   证明: by
   rw [← sInter_range]; rw [sInter_eq_biInter]; rw [biInter_mem' (subsingleton_range s)]; rw [forall_mem_range]
 
@@ -342,7 +342,7 @@ theorem exists_mem_subset_iff
   proof: ⟨fun ⟨_, ht, ts⟩ => mem_of_superset ht ts, fun hs => ⟨s, hs, Subset.rfl⟩⟩
 
 中文:
-定理 exists_mem_subset_iff
+定理 存在_mem_subset_iff
   结论: (存在 t in f, t subseteq s) ↔ s in f
   证明: ⟨fun ⟨_, ht, ts⟩ => mem_of_superset ht ts, fun hs => ⟨s, hs, Subset.rfl⟩⟩
 
@@ -363,8 +363,8 @@ theorem monotone_mem
 
 中文:
 定理 monotone_mem
-  条件: {f : Filter α}
-  结论: Monotone fun s => s in f
+  条件: {f : 滤子 α}
+  结论: 递增 fun s => s in f
   证明: fun _ _ hst h =>
   mem_of_superset h hst
 -/
@@ -386,8 +386,8 @@ theorem exists_mem_and_iff
     exact ⟨⟨u, huf, hPu⟩, u, huf, hQu⟩
 
 中文:
-定理 exists_mem_and_iff
-  结论: {P : Set α -> 命题} {Q : Set α -> 命题} (hP : Antitone P)
+定理 存在_mem_and_iff
+  结论: {P : 集合 α -> 命题} {Q : 集合 α -> 命题} (hP : 递减 P)
   证明: by
   constructor
   · rintro ⟨⟨u, huf, hPu⟩, v, hvf, hQv⟩
@@ -425,7 +425,7 @@ theorem mem_principal_self
 
 中文:
 定理 mem_principal_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s in 𝓟 s
   证明: Subset.rfl
 
@@ -444,7 +444,7 @@ theorem eventually_mem_principal
 
 中文:
 定理 eventually_mem_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 对任意ᶠ x in 𝓟 s, x in s
   证明: mem_principal_self s
 
@@ -485,12 +485,12 @@ inductive GenerateSets
 
 中文:
 归纳类型 GenerateSets
-  参数: (g : Set (Set α))
+  参数: (g : 集合 (集合 α))
   构造子 (4 个):
-    - basic: {s : Set α} : s in g -> GenerateSets g s
+    - basic: {s : 集合 α} : s in g -> GenerateSets g s
     - univ: GenerateSets g univ
-    - superset: {s t : Set α} : GenerateSets g s -> s subseteq t -> GenerateSets g t
-    - inter: {s t : Set α} : GenerateSets g s -> GenerateSets g t -> GenerateSets g (s inter t)
+    - superset: {s t : 集合 α} : GenerateSets g s -> s subseteq t -> GenerateSets g t
+    - inter: {s t : 集合 α} : GenerateSets g s -> GenerateSets g t -> GenerateSets g (s inter t)
 -/
 inductive GenerateSets (g : Set (Set α)) : Set α -> Prop
   | basic {s : Set α} : s in g -> GenerateSets g s
@@ -511,7 +511,7 @@ definition generate
 
 中文:
 定义 generate
-  签名: (g : Set (Set α))
+  签名: (g : 集合 (集合 α))
   定义体: {s | GenerateSets g s}
   univ_sets := GenerateSets.univ
   sets_of_superset := GenerateSets.superset
@@ -535,7 +535,7 @@ lemma mem_generate_of_mem
 
 中文:
 引理 mem_generate_of_mem
-  条件: {s : Set <| Set α} {U : Set α} (h : U in s)
+  条件: {s : 集合 <| 集合 α} {U : 集合 α} (h : U in s)
   证明: GenerateSets.basic h
 
 Depends on / 依赖: GenerateSets, GenerateSets.basic
@@ -556,7 +556,7 @@ theorem le_generate_iff
 
 中文:
 定理 le_generate_iff
-  条件: {s : Set (Set α)} {f : Filter α}
+  条件: {s : 集合 (集合 α)} {f : 滤子 α}
   结论: f <= generate s ↔ s subseteq f.sets
   证明: Iff.intro (fun h _ hu => h <| GenerateSets.basic <| hu) fun h _ hu =>
     hu.recOn (fun h' => h h') univ_mem (fun _ hxy => by gcongr) fun _ _ hx hy =>
@@ -581,7 +581,7 @@ le_generate_iff.2 singleton_subset_iff.2 Subset.rfl
 
 中文:
 引理 generate_singleton
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: generate {s} = 𝓟 s
   证明: le_antisymm (fun _t ht => mem_of_superset (mem_generate_of_mem <| mem_singleton _) ht)
 le_generate_iff.2 singleton_subset_iff.2 Subset.rfl
@@ -603,7 +603,7 @@ definition mkOfClosure
 
 中文:
 定义 mkOfClosure
-  签名: (s : Set (Set α)) (hs : (generate s).sets = s)
+  签名: (s : 集合 (集合 α)) (hs : (generate s).sets = s)
   定义体: s
   univ_sets := hs ▸ univ_mem
   sets_of_superset := hs ▸ mem_of_superset
@@ -626,7 +626,7 @@ theorem mkOfClosure_sets
 
 中文:
 定理 mkOfClosure_sets
-  条件: {s : Set (Set α)} {hs : (generate s).sets = s}
+  条件: {s : 集合 (集合 α)} {hs : (generate s).sets = s}
   证明: Filter.ext fun u =>
     show u in (Filter.mkOfClosure s hs).sets ↔ u in (generate s).sets from hs.symm ▸ Iff.rfl
 
@@ -676,7 +676,7 @@ theorem mem_inf_iff
 
 中文:
 定理 mem_inf_iff
-  条件: {f g : Filter α} {s : Set α}
+  条件: {f g : 滤子 α} {s : 集合 α}
   结论: s in f ⊓ g ↔ 存在 t₁ in f, 存在 t₂ in g, s = t₁ inter t₂
   证明: Iff.rfl
 
@@ -696,7 +696,7 @@ theorem mem_inf_of_left
 
 中文:
 定理 mem_inf_of_left
-  条件: {f g : Filter α} {s : Set α} (h : s in f)
+  条件: {f g : 滤子 α} {s : 集合 α} (h : s in f)
   结论: s in f ⊓ g
   证明: ⟨s, h, univ, univ_mem, (inter_univ s).symm⟩
 
@@ -716,7 +716,7 @@ theorem mem_inf_of_right
 
 中文:
 定理 mem_inf_of_right
-  条件: {f g : Filter α} {s : Set α} (h : s in g)
+  条件: {f g : 滤子 α} {s : 集合 α} (h : s in g)
   结论: s in f ⊓ g
   证明: ⟨univ, univ_mem, s, h, (univ_inter s).symm⟩
 
@@ -735,7 +735,7 @@ theorem inter_mem_inf
 
 中文:
 定理 inter_mem_inf
-  条件: {α : 类型u} {f g : Filter α} {s t : Set α} (hs : s in f) (ht : t in g)
+  条件: {α : 类型u} {f g : 滤子 α} {s t : 集合 α} (hs : s in f) (ht : t in g)
   证明: ⟨s, hs, t, ht, rfl⟩
 -/
 theorem inter_mem_inf {α : Type u} {f g : Filter α} {s t : Set α} (hs : s in f) (ht : t in g) :
@@ -752,7 +752,7 @@ theorem mem_inf_of_inter
 
 中文:
 定理 mem_inf_of_inter
-  结论: {f g : Filter α} {s t u : Set α} (hs : s in f) (ht : t in g)
+  结论: {f g : 滤子 α} {s t u : 集合 α} (hs : s in f) (ht : t in g)
   证明: mem_of_superset (inter_mem_inf hs ht) h
 
 Depends on / 依赖: inter_mem_inf, mem_of_superset
@@ -772,7 +772,7 @@ theorem mem_inf_iff_superset
 
 中文:
 定理 mem_inf_iff_superset
-  条件: {f g : Filter α} {s : Set α}
+  条件: {f g : 滤子 α} {s : 集合 α}
   证明: ⟨fun ⟨t₁, h₁, t₂, h₂, Eq⟩ => ⟨t₁, h₁, t₂, h₂, Eq ▸ Subset.rfl⟩, fun ⟨_, h₁, _, h₂, sub⟩ =>
     mem_inf_of_inter h₁ h₂ sub⟩
 
@@ -794,7 +794,7 @@ theorem mem_sdiff_iff_union
 
 中文:
 定理 mem_sdiff_iff_union
-  条件: {f g : Filter α} {s : Set α}
+  条件: {f g : 滤子 α} {s : 集合 α}
   证明: ⟨fun hs _ ht => hs (mem_of_superset ht subset_union_right) subset_union_left,
     fun h t htg hst => union_eq_right.2 hst ▸ h t htg⟩
 
@@ -818,7 +818,7 @@ lemma isLUB_sSup
 
 中文:
 引理 isLUB_sSup
-  条件: (s : Set (Filter α))
+  条件: (s : 集合 (滤子 α))
   结论: IsLUB s (sSup s)
   证明: ⟨fun _ h₁ _ h₂ => h₂ h₁, fun _ h₁ _ h₂ _ h₃ => h₁ h₃ h₂⟩
 -/
@@ -836,7 +836,7 @@ lemma isGLB_sInf
 
 中文:
 引理 isGLB_sInf
-  条件: (s : Set (Filter α))
+  条件: (s : 集合 (滤子 α))
   结论: IsGLB s (sInf s)
   证明: isLUB_lowerBounds.mp (Filter.sSup_lowerBounds _ ▸ Filter.isLUB_sSup _)
 -/
@@ -861,7 +861,7 @@ instance instCompleteLatticeFilter
 
 中文:
 实例 instCompleteLatticeFilter
-  签名: : CompleteLattice (Filter α) where
+  签名: : 完备格 (滤子 α) where
   定义体: min a b
   sup a b := max a b
   le_sup_left _ _ _ h := h.1
@@ -896,7 +896,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Filter α)
+  签名: 可居 (滤子 α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Filter α) := ⟨⊥⟩
@@ -916,7 +916,7 @@ theorem NeBot.ne
 
 中文:
 定理 NeBot.ne
-  条件: {f : Filter α} (hf : NeBot f)
+  条件: {f : 滤子 α} (hf : NeBot f)
   结论: f != ⊥
   证明: hf.ne'
 
@@ -940,7 +940,7 @@ theorem not_neBot
 
 中文:
 定理 not_neBot
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: ¬f.NeBot ↔ f = ⊥
   证明: neBot_iff.not_left
 
@@ -962,7 +962,7 @@ theorem NeBot.mono
 
 中文:
 定理 NeBot.mono
-  条件: {f g : Filter α} (hf : NeBot f) (hg : f <= g)
+  条件: {f g : 滤子 α} (hf : NeBot f) (hg : f <= g)
   结论: NeBot g
   证明: ⟨ne_bot_of_le_ne_bot hf.1 hg⟩
 
@@ -982,7 +982,7 @@ theorem neBot_of_le
 
 中文:
 定理 neBot_of_le
-  条件: {f g : Filter α} [hf : NeBot f] (hg : f <= g)
+  条件: {f g : 滤子 α} [hf : NeBot f] (hg : f <= g)
   结论: NeBot g
   证明: hf.mono hg
 
@@ -1003,7 +1003,7 @@ theorem sup_neBot
 
 中文:
 定理 sup_neBot
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   结论: NeBot (f ⊔ g) ↔ NeBot f ∨ NeBot g
   证明: by
   simp only [neBot_iff, not_and_or, Ne, sup_eq_bot_iff]
@@ -1021,7 +1021,7 @@ instance neBot_sup_of_left
 
 中文:
 实例 neBot_sup_of_left
-  签名: {f g : Filter α} [f.NeBot]
+  签名: {f g : 滤子 α} [f.NeBot]
   定义体: by simp [*]
 -/
 instance neBot_sup_of_left {f g : Filter α} [f.NeBot] : NeBot (f ⊔ g) := by simp [*]
@@ -1035,7 +1035,7 @@ instance neBot_sup_of_right
 
 中文:
 实例 neBot_sup_of_right
-  签名: {f g : Filter α} [g.NeBot]
+  签名: {f g : 滤子 α} [g.NeBot]
   定义体: by simp [*]
 -/
 instance neBot_sup_of_right {f g : Filter α} [g.NeBot] : NeBot (f ⊔ g) := by simp [*]
@@ -1067,7 +1067,7 @@ theorem bot_sets_eq
 
 中文:
 定理 bot_sets_eq
-  结论: (⊥ : Filter α).sets = univ
+  结论: (⊥ : 滤子 α).sets = univ
   证明: rfl
 -/
 theorem bot_sets_eq : (⊥ : Filter α).sets = univ := rfl
@@ -1083,7 +1083,7 @@ theorem eq_or_neBot
 
 中文:
 定理 eq_or_neBot
-  条件: (f : Filter α)
+  条件: (f : 滤子 α)
   结论: f = ⊥ ∨ NeBot f
   证明: (eq_or_ne f ⊥).imp_right NeBot.mk
 
@@ -1102,7 +1102,7 @@ theorem sup_sets_eq
 
 中文:
 定理 sup_sets_eq
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   结论: (f ⊔ g).sets = f.sets inter g.sets
   证明: (giGenerate α).gc.u_inf
 
@@ -1122,8 +1122,8 @@ theorem sSup_sets_eq
 
 中文:
 定理 sSup_sets_eq
-  条件: {s : Set (Filter α)}
-  结论: (sSup s).sets = ⋂ f in s, (f : Filter α).sets
+  条件: {s : 集合 (滤子 α)}
+  结论: (sSup s).sets = ⋂ f in s, (f : 滤子 α).sets
   证明: (giGenerate α).gc.u_sInf
 
 Depends on / 依赖: gc.u_sInf, giGenerate, u_sInf
@@ -1142,7 +1142,7 @@ theorem iSup_sets_eq
 
 中文:
 定理 iSup_sets_eq
-  条件: {f : ι -> Filter α}
+  条件: {f : ι -> 滤子 α}
   结论: (iSup f).sets = ⋂ i, (f i).sets
   证明: (giGenerate α).gc.u_iInf
 
@@ -1161,7 +1161,7 @@ theorem generate_empty
 
 中文:
 定理 generate_empty
-  结论: Filter.generate ∅ = (⊤ : Filter α)
+  结论: 滤子.generate ∅ = (⊤ : 滤子 α)
   证明: (giGenerate α).gc.l_bot
 
 Depends on / 依赖: gc.l_bot, giGenerate, l_bot
@@ -1179,7 +1179,7 @@ theorem generate_univ
 
 中文:
 定理 generate_univ
-  结论: Filter.generate univ = (⊥ : Filter α)
+  结论: 滤子.generate univ = (⊥ : 滤子 α)
   证明: bot_unique fun _ _ => GenerateSets.basic (mem_univ _)
 
 Depends on / 依赖: GenerateSets, GenerateSets.basic, bot_unique, mem_univ
@@ -1197,7 +1197,7 @@ theorem generate_union
 
 中文:
 定理 generate_union
-  条件: {s t : Set (Set α)}
+  条件: {s t : 集合 (集合 α)}
   证明: (giGenerate α).gc.l_sup
 
 Depends on / 依赖: gc.l_sup, giGenerate, l_sup
@@ -1218,7 +1218,7 @@ theorem generate_iUnion
 
 中文:
 定理 generate_iUnion
-  条件: {s : ι -> Set (Set α)}
+  条件: {s : ι -> 集合 (集合 α)}
   证明: (giGenerate α).gc.l_iSup
 
 @[simp]
@@ -1241,7 +1241,7 @@ theorem mem_sup
 
 中文:
 定理 mem_sup
-  条件: {f g : Filter α} {s : Set α}
+  条件: {f g : 滤子 α} {s : 集合 α}
   结论: s in f ⊔ g ↔ s in f ∧ s in g
   证明: Iff.rfl
 
@@ -1263,7 +1263,7 @@ theorem union_mem_sup
 
 中文:
 定理 union_mem_sup
-  条件: {f g : Filter α} {s t : Set α} (hs : s in f) (ht : t in g)
+  条件: {f g : 滤子 α} {s t : 集合 α} (hs : s in f) (ht : t in g)
   结论: s union t in f ⊔ g
   证明: ⟨mem_of_superset hs subset_union_left, mem_of_superset ht subset_union_right⟩
 
@@ -1289,7 +1289,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {x : Set α} {f : ι -> Filter α}
+  条件: {x : 集合 α} {f : ι -> 滤子 α}
   结论: x in iSup f ↔ 对任意 i, x in f i
   证明: by
   simp only [← Filter.mem_sets, iSup_sets_eq, mem_iInter]
@@ -1314,7 +1314,7 @@ theorem iSup_neBot
 
 中文:
 定理 iSup_neBot
-  条件: {f : ι -> Filter α}
+  条件: {f : ι -> 滤子 α}
   结论: (⨆ i, f i).NeBot ↔ 存在 i, (f i).NeBot
   证明: by
   simp [neBot_iff]
@@ -1335,7 +1335,7 @@ theorem iInf_eq_generate
 
 中文:
 定理 iInf_eq_generate
-  条件: (s : ι -> Filter α)
+  条件: (s : ι -> 滤子 α)
   结论: iInf s = generate (⋃ i, (s i).sets)
   证明: eq_of_forall_le_iff fun _ => by simp [le_generate_iff]
 
@@ -1357,7 +1357,7 @@ theorem mem_iInf_of_mem
 
 中文:
 定理 mem_iInf_of_mem
-  条件: {f : ι -> Filter α} (i : ι) {s} (hs : s in f i)
+  条件: {f : ι -> 滤子 α} (i : ι) {s} (hs : s in f i)
   结论: s in ⨅ i, f i
   证明: iInf_le f i hs
 
@@ -1384,7 +1384,7 @@ theorem iInf_sets_induct
 
 中文:
 定理 iInf_sets_induct
-  结论: {f : ι -> Filter α} {s : Set α} (hs : s in iInf f) {p : Set α -> 命题}
+  结论: {f : ι -> 滤子 α} {s : 集合 α} (hs : s in iInf f) {p : 集合 α -> 命题}
   证明: by
   have p_of_f : forall i, forall s in f i, p s := fun i s hs => by simpa using ins hs uni
   let q : Set α -> Prop := fun t => t in iInf f ∧ forall t', t subseteq t' -> p t'
@@ -1437,7 +1437,7 @@ theorem le_principal_iff
 
 中文:
 定理 le_principal_iff
-  条件: {s : Set α} {f : Filter α}
+  条件: {s : 集合 α} {f : 滤子 α}
   结论: f <= 𝓟 s ↔ s in f
   证明: ⟨fun h => h Subset.rfl, fun hs _ ht => mem_of_superset hs ht⟩
 
@@ -1459,8 +1459,8 @@ theorem Iic_principal
 
 中文:
 定理 Iic_principal
-  条件: (s : Set α)
-  结论: Iic (𝓟 s) = { l | s in l }
+  条件: (s : 集合 α)
+  结论: 左无界右闭区间 (𝓟 s) = { l | s in l }
   证明: Set.ext fun _ => le_principal_iff
 
 @[gcongr]
@@ -1485,7 +1485,7 @@ theorem principal_mono
 
 中文:
 定理 principal_mono
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 s <= 𝓟 t ↔ s subseteq t
   证明: by
   simp only [le_principal_iff, mem_principal]
@@ -1508,7 +1508,7 @@ theorem monotone_principal
 
 中文:
 定理 monotone_principal
-  结论: Monotone (𝓟 : Set α -> Filter α)
+  结论: 递增 (𝓟 : 集合 α -> 滤子 α)
   证明: fun _ _ => principal_mono.2
 
 Depends on / 依赖: principal_mono
@@ -1527,7 +1527,7 @@ theorem principal_eq_iff_eq
 
 中文:
 定理 principal_eq_iff_eq
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 s = 𝓟 t ↔ s = t
   证明: by
   simp only [le_antisymm_iff, le_principal_iff, mem_principal]
@@ -1546,7 +1546,7 @@ theorem join_principal_eq_sSup
 
 中文:
 定理 join_principal_eq_sSup
-  条件: {s : Set (Filter α)}
+  条件: {s : 集合 (滤子 α)}
   结论: join (𝓟 s) = sSup s
   证明: rfl
 -/
@@ -1564,7 +1564,7 @@ theorem principal_univ
 
 中文:
 定理 principal_univ
-  结论: 𝓟 (univ : Set α) = ⊤
+  结论: 𝓟 (univ : 集合 α) = ⊤
   证明: top_unique by simp only [le_principal_iff, mem_top]
 
 @[simp]
@@ -1583,7 +1583,7 @@ theorem principal_empty
 
 中文:
 定理 principal_empty
-  结论: 𝓟 (∅ : Set α) = ⊥
+  结论: 𝓟 (∅ : 集合 α) = ⊥
   证明: bot_unique fun _ _ => empty_subset _
 
 Depends on / 依赖: bot_unique, empty_subset
@@ -1602,7 +1602,7 @@ theorem generate_eq_biInf
 
 中文:
 定理 generate_eq_biInf
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: generate S = ⨅ s in S, 𝓟 s
   证明: eq_of_forall_le_iff fun f => by simp [le_generate_iff, le_principal_iff, subset_def]
 
@@ -1623,7 +1623,7 @@ theorem empty_mem_iff_bot
 
 中文:
 定理 empty_mem_iff_bot
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: ∅ in f ↔ f = ⊥
   证明: ⟨fun h => bot_unique fun s _ => mem_of_superset h (empty_subset s), fun h => h.symm ▸ mem_bot⟩
 
@@ -1643,8 +1643,8 @@ theorem nonempty_of_mem
 
 中文:
 定理 nonempty_of_mem
-  条件: {f : Filter α} [hf : NeBot f] {s : Set α} (hs : s in f)
-  结论: s.Nonempty
+  条件: {f : 滤子 α} [hf : NeBot f] {s : 集合 α} (hs : s in f)
+  结论: s.非空
   证明: s.eq_empty_or_nonempty.elim (fun h => absurd hs (h.symm ▸ mt empty_mem_iff_bot.mp hf.1)) id
 
 Depends on / 依赖: absurd, empty_mem_iff_bot, empty_mem_iff_bot.mp, eq_empty_or_nonempty, h.symm, s.eq_empty_or_nonempty.elim
@@ -1665,8 +1665,8 @@ theorem NeBot.nonempty_of_mem
 
 中文:
 定理 NeBot.nonempty_of_mem
-  条件: {f : Filter α} (hf : NeBot f) {s : Set α} (hs : s in f)
-  结论: s.Nonempty
+  条件: {f : 滤子 α} (hf : NeBot f) {s : 集合 α} (hs : s in f)
+  结论: s.非空
   证明: @Filter.nonempty_of_mem α f hf s hs
 
 @[simp]
@@ -1688,7 +1688,7 @@ theorem empty_notMem
 
 中文:
 定理 empty_notMem
-  条件: (f : Filter α) [NeBot f]
+  条件: (f : 滤子 α) [NeBot f]
   结论: ∅ ∉ f
   证明: fun h => (nonempty_of_mem h).ne_empty rfl
 
@@ -1707,8 +1707,8 @@ theorem nonempty_of_neBot
 
 中文:
 定理 nonempty_of_neBot
-  条件: (f : Filter α) [NeBot f]
-  结论: Nonempty α
+  条件: (f : 滤子 α) [NeBot f]
+  结论: 非空 α
   证明: Exists.nonempty nonempty_of_mem (univ_mem : univ in f)
 
 Depends on / 依赖: Exists, Exists.nonempty, nonempty, nonempty_of_mem, univ_mem
@@ -1728,7 +1728,7 @@ theorem compl_notMem
 
 中文:
 定理 compl_notMem
-  条件: {f : Filter α} {s : Set α} [NeBot f] (h : s in f)
+  条件: {f : 滤子 α} {s : 集合 α} [NeBot f] (h : s in f)
   结论: sᶜ ∉ f
   证明: fun hsc =>
 (nonempty_of_mem (inter_mem h hsc)).ne_empty inter_compl_self s
@@ -1749,7 +1749,7 @@ theorem filter_eq_bot_of_isEmpty
 
 中文:
 定理 filter_eq_bot_of_isEmpty
-  条件: [IsEmpty α] (f : Filter α)
+  条件: [是空 α] (f : 滤子 α)
   结论: f = ⊥
   证明: empty_mem_iff_bot.mp univ_mem' isEmptyElim
 
@@ -1771,7 +1771,7 @@ lemma disjoint_iff
 
 中文:
 引理 disjoint_iff
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   结论: Disjoint f g ↔ 存在 s in f, 存在 t in g, Disjoint s t
   证明: by
   simp only [disjoint_iff, ← empty_mem_iff_bot, mem_inf_iff, inf_eq_inter, bot_eq_empty,
@@ -1791,7 +1791,7 @@ theorem disjoint_of_disjoint_of_mem
 
 中文:
 定理 disjoint_of_disjoint_of_mem
-  结论: {f g : Filter α} {s t : Set α} (h : Disjoint s t) (hs : s in f)
+  结论: {f g : 滤子 α} {s t : 集合 α} (h : Disjoint s t) (hs : s in f)
   证明: Filter.disjoint_iff.mpr ⟨s, hs, t, ht, h⟩
 
 Depends on / 依赖: Filter, Filter.disjoint_iff.mpr, M.inv_mul, Quotient, Quotient.eq.mp, disjoint_iff, inv_mul, some.toLinearEquiv
@@ -1834,7 +1834,7 @@ theorem inf_eq_bot_iff
 
 中文:
 定理 inf_eq_bot_iff
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   结论: f ⊓ g = ⊥ ↔ 存在 U in f, 存在 V in g, U inter V = ∅
   证明: by
   simp only [← disjoint_iff, Filter.disjoint_iff, Set.disjoint_iff_inter_eq_empty]
@@ -1855,7 +1855,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: ⊥
   uniq := filter_eq_bot_of_isEmpty
 
@@ -1876,8 +1876,8 @@ theorem NeBot.nonempty
 
 中文:
 定理 NeBot.nonempty
-  条件: (f : Filter α) [hf : f.NeBot]
-  结论: Nonempty α
+  条件: (f : 滤子 α) [hf : f.NeBot]
+  结论: 非空 α
   证明: not_isEmpty_iff.mp fun _ => hf.ne (Subsingleton.elim _ _)
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, hf.ne, not_isEmpty_iff, not_isEmpty_iff.mp
@@ -1899,7 +1899,7 @@ theorem eq_top_of_neBot
 
 中文:
 定理 eq_top_of_neBot
-  条件: [Subsingleton α] (l : Filter α) [NeBot l]
+  条件: [子单例 α] (l : 滤子 α) [NeBot l]
   结论: l = ⊤
   证明: by
   refine top_unique fun s hs => ?_
@@ -1922,8 +1922,8 @@ theorem forall_mem_nonempty_iff_neBot
   proof: ⟨fun h => ⟨fun hf => not_nonempty_empty (h ∅ <| hf.symm ▸ mem_bot)⟩, @nonempty_of_mem _ _⟩
 
 中文:
-定理 forall_mem_nonempty_iff_neBot
-  条件: {f : Filter α}
+定理 对任意_mem_nonempty_iff_neBot
+  条件: {f : 滤子 α}
   证明: ⟨fun h => ⟨fun hf => not_nonempty_empty (h ∅ <| hf.symm ▸ mem_bot)⟩, @nonempty_of_mem _ _⟩
 
 Depends on / 依赖: hf.symm, mem_bot, nonempty_of_mem, not_nonempty_empty
@@ -1942,7 +1942,7 @@ instance instNeBotTop
 
 中文:
 实例 instNeBotTop
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: forall_mem_nonempty_iff_neBot.1 fun s hs => by rwa [mem_top.1 hs, ← nonempty_iff_univ_nonempty]
 
 Depends on / 依赖: forall_mem_nonempty_iff_neBot, mem_top, nonempty_iff_univ_nonempty
@@ -1960,7 +1960,7 @@ instance instNontrivialFilter
 
 中文:
 实例 instNontrivialFilter
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: ⟨⟨⊤, ⊥, instNeBotTop.ne⟩⟩
 
 Depends on / 依赖: instNeBotTop, instNeBotTop.ne
@@ -1982,7 +1982,7 @@ theorem nontrivial_iff_nonempty
 
 中文:
 定理 nontrivial_iff_nonempty
-  结论: Nontrivial (Filter α) ↔ Nonempty α
+  结论: 非平凡 (滤子 α) ↔ 非空 α
   证明: ⟨fun _ =>
     by_contra fun h' =>
       haveI := not_nonempty_iff.1 h'
@@ -2008,8 +2008,8 @@ theorem eq_sInf_of_mem_iff_exists_mem
     fun _ hs => let ⟨_, hf, hs⟩ := h.1 hs; (sInf_le hf) hs
 
 中文:
-定理 eq_sInf_of_mem_iff_exists_mem
-  结论: {S : Set (Filter α)} {l : Filter α}
+定理 eq_sInf_of_mem_iff_存在_mem
+  结论: {S : 集合 (滤子 α)} {l : 滤子 α}
   证明: le_antisymm (le_sInf fun f hf _ hs => h.2 ⟨f, hf, hs⟩)
     fun _ hs => let ⟨_, hf, hs⟩ := h.1 hs; (sInf_le hf) hs
 
@@ -2029,8 +2029,8 @@ theorem eq_iInf_of_mem_iff_exists_mem
   proof: eq_sInf_of_mem_iff_exists_mem h.trans (exists_range_iff (p := (_ in ·))).symm
 
 中文:
-定理 eq_iInf_of_mem_iff_exists_mem
-  结论: {f : ι -> Filter α} {l : Filter α}
+定理 eq_iInf_of_mem_iff_存在_mem
+  结论: {f : ι -> 滤子 α} {l : 滤子 α}
   证明: eq_sInf_of_mem_iff_exists_mem h.trans (exists_range_iff (p := (_ in ·))).symm
 
 Depends on / 依赖: eq_sInf_of_mem_iff_exists_mem, exists_range_iff, h.trans
@@ -2050,8 +2050,8 @@ theorem eq_biInf_of_mem_iff_exists_mem
   exact eq_iInf_of_mem_iff_exists_mem fun {_} => by simp only [Subtype.exists, h, exists_prop]
 
 中文:
-定理 eq_biInf_of_mem_iff_exists_mem
-  结论: {f : ι -> Filter α} {p : ι -> 命题} {l : Filter α}
+定理 eq_biInf_of_mem_iff_存在_mem
+  结论: {f : ι -> 滤子 α} {p : ι -> 命题} {l : 滤子 α}
   证明: by
   rw [iInf_subtype']
   exact eq_iInf_of_mem_iff_exists_mem fun {_} => by simp only [Subtype.exists, h, exists_prop]
@@ -2082,7 +2082,7 @@ theorem iInf_sets_eq
 
 中文:
 定理 iInf_sets_eq
-  条件: {f : ι -> Filter α} (h : Directed (· >= ·) f) [ne : Nonempty ι]
+  条件: {f : ι -> 滤子 α} (h : Directed (· >= ·) f) [ne : 非空 ι]
   证明: let ⟨i⟩ := ne
   let u :=
     { sets := ⋃ i, (f i).sets
@@ -2124,7 +2124,7 @@ theorem mem_iInf_of_directed
 
 中文:
 定理 mem_iInf_of_directed
-  条件: {f : ι -> Filter α} (h : Directed (· >= ·) f) [Nonempty ι] (s)
+  条件: {f : ι -> 滤子 α} (h : Directed (· >= ·) f) [非空 ι] (s)
   证明: by
   simp only [← Filter.mem_sets, iInf_sets_eq h, mem_iUnion]
 
@@ -2146,7 +2146,7 @@ theorem mem_biInf_of_directed
 
 中文:
 定理 mem_biInf_of_directed
-  结论: {f : β -> Filter α} {s : Set β} (h : DirectedOn (f ⁻¹'o (· >= ·)) s)
+  结论: {f : β -> 滤子 α} {s : 集合 β} (h : DirectedOn (f ⁻¹'o (· >= ·)) s)
   证明: by
   have := ne.to_subtype
   simp_rw [iInf_subtype', mem_iInf_of_directed h.directed_val, Subtype.exists, exists_prop]
@@ -2170,7 +2170,7 @@ theorem biInf_sets_eq
 
 中文:
 定理 biInf_sets_eq
-  结论: {f : β -> Filter α} {s : Set β} (h : DirectedOn (f ⁻¹'o (· >= ·)) s)
+  结论: {f : β -> 滤子 α} {s : 集合 β} (h : DirectedOn (f ⁻¹'o (· >= ·)) s)
   证明: ext fun t => by simp [mem_biInf_of_directed h ne]
 
 @[simp]
@@ -2195,7 +2195,7 @@ theorem sup_join
 
 中文:
 定理 sup_join
-  条件: {f₁ f₂ : Filter (Filter α)}
+  条件: {f₁ f₂ : 滤子 (滤子 α)}
   结论: join f₁ ⊔ join f₂ = join (f₁ ⊔ f₂)
   证明: Filter.ext fun x => by simp only [mem_sup, mem_join]
 
@@ -2218,7 +2218,7 @@ theorem iSup_join
 
 中文:
 定理 iSup_join
-  条件: {ι : Sort w} {f : ι -> Filter (Filter α)}
+  条件: {ι : 类型层 w} {f : ι -> 滤子 (滤子 α)}
   结论: ⨆ x, join (f x) = join (⨆ x, f x)
   证明: Filter.ext fun x => by simp only [mem_iSup, mem_join]
 
@@ -2243,7 +2243,7 @@ instance instCoframe
 
 中文:
 实例 instCoframe
-  签名: : Coframe (Filter α) where
+  签名: : 余frame (滤子 α) where
   定义体: ⟨fun h s hs => h hs.right hs.left (subset_refl s),
       fun h s hsc t htb hst => h ⟨htb, mem_of_superset hsc hst⟩⟩
   top_sdiff f := by
@@ -2274,7 +2274,7 @@ theorem iInf_neBot_of_directed'
 
 中文:
 定理 iInf_neBot_of_directed'
-  条件: {f : ι -> Filter α} [Nonempty ι] (hd : Directed (· >= ·) f)
+  条件: {f : ι -> 滤子 α} [非空 ι] (hd : Directed (· >= ·) f)
   证明: not_imp_not.1 by simpa only [not_forall, not_neBot, ← empty_mem_iff_bot,
     mem_iInf_of_directed hd] using id
 
@@ -2299,7 +2299,7 @@ theorem iInf_neBot_of_directed
 
 中文:
 定理 iInf_neBot_of_directed
-  结论: {f : ι -> Filter α} [hn : Nonempty α] (hd : Directed (· >= ·) f)
+  结论: {f : ι -> 滤子 α} [hn : 非空 α] (hd : Directed (· >= ·) f)
   证明: by
   cases isEmpty_or_nonempty ι
   · constructor
@@ -2327,7 +2327,7 @@ theorem sInf_neBot_of_directed'
 
 中文:
 定理 sInf_neBot_of_directed'
-  结论: {s : Set (Filter α)} (hne : s.Nonempty) (hd : DirectedOn (· >= ·) s)
+  结论: {s : 集合 (滤子 α)} (hne : s.非空) (hd : DirectedOn (· >= ·) s)
   证明: (sInf_eq_iInf' s).symm ▸
     @iInf_neBot_of_directed' _ _ _ hne.to_subtype hd.directed_val fun ⟨_, hf⟩ =>
       ⟨ne_of_mem_of_not_mem hf hbot⟩
@@ -2351,7 +2351,7 @@ theorem sInf_neBot_of_directed
 
 中文:
 定理 sInf_neBot_of_directed
-  结论: [Nonempty α] {s : Set (Filter α)} (hd : DirectedOn (· >= ·) s)
+  结论: [非空 α] {s : 集合 (滤子 α)} (hd : DirectedOn (· >= ·) s)
   证明: (sInf_eq_iInf' s).symm ▸
     iInf_neBot_of_directed hd.directed_val fun ⟨_, hf⟩ => ⟨ne_of_mem_of_not_mem hf hbot⟩
 
@@ -2372,7 +2372,7 @@ theorem iInf_neBot_iff_of_directed'
 
 中文:
 定理 iInf_neBot_iff_of_directed'
-  条件: {f : ι -> Filter α} [Nonempty ι] (hd : Directed (· >= ·) f)
+  条件: {f : ι -> 滤子 α} [非空 ι] (hd : Directed (· >= ·) f)
   证明: ⟨fun H i => H.mono (iInf_le _ i), iInf_neBot_of_directed' hd⟩
 
 Depends on / 依赖: H.mono, iInf_le, iInf_neBot_of_directed
@@ -2391,7 +2391,7 @@ theorem iInf_neBot_iff_of_directed
 
 中文:
 定理 iInf_neBot_iff_of_directed
-  条件: {f : ι -> Filter α} [Nonempty α] (hd : Directed (· >= ·) f)
+  条件: {f : ι -> 滤子 α} [非空 α] (hd : Directed (· >= ·) f)
   证明: ⟨fun H i => H.mono (iInf_le _ i), iInf_neBot_of_directed hd⟩
 
 Depends on / 依赖: H.mono, iInf_le, iInf_neBot_of_directed
@@ -2418,7 +2418,7 @@ theorem inf_principal
 
 中文:
 定理 inf_principal
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 s ⊓ 𝓟 t = 𝓟 (s inter t)
   证明: le_antisymm
     (by simp only [le_principal_iff, mem_inf_iff]; exact ⟨s, Subset.rfl, t, Subset.rfl, rfl⟩)
@@ -2447,7 +2447,7 @@ theorem sup_principal
 
 中文:
 定理 sup_principal
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 s ⊔ 𝓟 t = 𝓟 (s union t)
   证明: Filter.ext fun u => by simp only [union_subset_iff, mem_sup, mem_principal]
 
@@ -2472,7 +2472,7 @@ theorem iSup_principal
 
 中文:
 定理 iSup_principal
-  条件: {ι : Sort w} {s : ι -> Set α}
+  条件: {ι : 类型层 w} {s : ι -> 集合 α}
   结论: ⨆ x, 𝓟 (s x) = 𝓟 (⋃ i, s i)
   证明: Filter.ext fun x => by simp only [mem_iSup, mem_principal, iUnion_subset_iff]
 
@@ -2497,7 +2497,7 @@ theorem principal_sdiff_principal
 
 中文:
 定理 principal_sdiff_principal
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 s \ 𝓟 t = 𝓟 (s \ t)
   证明: Filter.ext fun _ => by simp [← le_principal_iff, principal_mono]
 
@@ -2523,7 +2523,7 @@ theorem hnot_principal
 
 中文:
 定理 hnot_principal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: ￢𝓟 s = 𝓟 sᶜ
   证明: by
   simpa [← compl_eq_univ_sdiff] using @principal_sdiff_principal _ univ s
@@ -2549,7 +2549,7 @@ theorem principal_eq_bot_iff
 
 中文:
 定理 principal_eq_bot_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓟 s = ⊥ ↔ s = ∅
   证明: empty_mem_iff_bot.symm.trans mem_principal.trans subset_empty_iff
 
@@ -2574,8 +2574,8 @@ alias ⟨_, _root_.Set.Nonempty.principal_neBot⟩ := principal_neBot_iff
 
 中文:
 定理 principal_neBot_iff
-  条件: {s : Set α}
-  结论: NeBot (𝓟 s) ↔ s.Nonempty
+  条件: {s : 集合 α}
+  结论: NeBot (𝓟 s) ↔ s.非空
   证明: neBot_iff.trans (not_congr principal_eq_bot_iff).trans nonempty_iff_ne_empty.symm
 
 alias ⟨_, _root_.Set.Nonempty.principal_neBot⟩ := principal_neBot_iff
@@ -2599,8 +2599,8 @@ theorem isCompl_principal
 
 中文:
 定理 isCompl_principal
-  条件: (s : Set α)
-  结论: IsCompl (𝓟 s) (𝓟 sᶜ)
+  条件: (s : 集合 α)
+  结论: 是补集 (𝓟 s) (𝓟 sᶜ)
   证明: IsCompl.of_eq (by rw [inf_principal, inter_compl_self, principal_empty]) by
     rw [sup_principal]; rw [union_compl_self]; rw [principal_univ]
 
@@ -2623,7 +2623,7 @@ theorem mem_inf_principal'
 
 中文:
 定理 mem_inf_principal'
-  条件: {f : Filter α} {s t : Set α}
+  条件: {f : 滤子 α} {s t : 集合 α}
   结论: s in f ⊓ 𝓟 t ↔ tᶜ union s in f
   证明: by
   simp only [← le_principal_iff, (isCompl_principal s).le_left_iff, disjoint_assoc, inf_principal,
@@ -2647,7 +2647,7 @@ lemma mem_inf_principal
 
 中文:
 引理 mem_inf_principal
-  条件: {f : Filter α} {s t : Set α}
+  条件: {f : 滤子 α} {s t : 集合 α}
   结论: s in f ⊓ 𝓟 t ↔ { x | x in t -> x in s } in f
   证明: by
   simp only [mem_inf_principal', imp_iff_not_or, ofPred_or, compl_def, ofPred_mem_eq]
@@ -2670,7 +2670,7 @@ lemma iSup_inf_principal
 
 中文:
 引理 iSup_inf_principal
-  条件: (f : ι -> Filter α) (s : Set α)
+  条件: (f : ι -> 滤子 α) (s : 集合 α)
   结论: ⨆ i, f i ⊓ 𝓟 s = (⨆ i, f i) ⊓ 𝓟 s
   证明: by
   ext
@@ -2695,7 +2695,7 @@ theorem inf_principal_eq_bot
 
 中文:
 定理 inf_principal_eq_bot
-  条件: {f : Filter α} {s : Set α}
+  条件: {f : 滤子 α} {s : 集合 α}
   结论: f ⊓ 𝓟 s = ⊥ ↔ sᶜ in f
   证明: by
   rw [← empty_mem_iff_bot]; rw [mem_inf_principal]
@@ -2719,7 +2719,7 @@ theorem mem_of_eq_bot
 
 中文:
 定理 mem_of_eq_bot
-  条件: {f : Filter α} {s : Set α} (h : f ⊓ 𝓟 sᶜ = ⊥)
+  条件: {f : 滤子 α} {s : 集合 α} (h : f ⊓ 𝓟 sᶜ = ⊥)
   结论: s in f
   证明: by
   rwa [inf_principal_eq_bot, compl_compl] at h
@@ -2742,7 +2742,7 @@ alias diff_mem_inf_principal_compl := sdiff_mem_inf_principal_compl
 
 中文:
 定理 sdiff_mem_inf_principal_compl
-  条件: {f : Filter α} {s : Set α} (hs : s in f) (t : Set α)
+  条件: {f : 滤子 α} {s : 集合 α} (hs : s in f) (t : 集合 α)
   证明: inter_mem_inf hs mem_principal_self tᶜ
 
 @[deprecated (since := "2026-06-03")]
@@ -2769,7 +2769,7 @@ theorem principal_le_iff
 
 中文:
 定理 principal_le_iff
-  条件: {s : Set α} {f : Filter α}
+  条件: {s : 集合 α} {f : 滤子 α}
   结论: 𝓟 s <= f ↔ 对任意 V in f, s subseteq V
   证明: by
   simp_rw [le_def, mem_principal]
@@ -2793,7 +2793,7 @@ theorem join_mono
 
 中文:
 定理 join_mono
-  条件: {f₁ f₂ : Filter (Filter α)} (h : f₁ <= f₂)
+  条件: {f₁ f₂ : 滤子 (滤子 α)} (h : f₁ <= f₂)
   结论: join f₁ <= join f₂
   证明: fun _ hs => h hs
 -/
@@ -2813,7 +2813,7 @@ theorem eventually_iff
 
 中文:
 定理 eventually_iff
-  条件: {f : Filter α} {P : α -> 命题}
+  条件: {f : 滤子 α} {P : α -> 命题}
   结论: (对任意ᶠ x in f, P x) ↔ { x | P x } in f
   证明: Iff.rfl
 
@@ -2836,7 +2836,7 @@ theorem eventually_mem_set
 
 中文:
 定理 eventually_mem_set
-  条件: {s : Set α} {l : Filter α}
+  条件: {s : 集合 α} {l : 滤子 α}
   结论: (对任意ᶠ x in l, x in s) ↔ s in l
   证明: Iff.rfl
 
@@ -2855,7 +2855,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: {f₁ f₂ : Filter α}
+  结论: {f₁ f₂ : 滤子 α}
   证明: Filter.ext Set.ofPred_bijective.surjective.forall.mpr h
 -/
 protected theorem ext' {f₁ f₂ : Filter α}
@@ -2872,7 +2872,7 @@ theorem Eventually.filter_mono
 
 中文:
 定理 Eventually.filter_mono
-  结论: {f₁ f₂ : Filter α} (h : f₁ <= f₂) {p : α -> 命题}
+  结论: {f₁ f₂ : 滤子 α} (h : f₁ <= f₂) {p : α -> 命题}
   证明: h hp
 -/
 theorem Eventually.filter_mono {f₁ f₂ : Filter α} (h : f₁ <= f₂) {p : α -> Prop}
@@ -2889,7 +2889,7 @@ theorem eventually_of_mem
 
 中文:
 定理 eventually_of_mem
-  结论: {f : Filter α} {P : α -> 命题} {U : Set α} (hU : U in f)
+  结论: {f : 滤子 α} {P : α -> 命题} {U : 集合 α} (hU : U in f)
   证明: mem_of_superset hU h
 
 Depends on / 依赖: mem_of_superset
@@ -2908,7 +2908,7 @@ theorem Eventually.and
 
 中文:
 定理 Eventually.and
-  条件: {p q : α -> 命题} {f : Filter α}
+  条件: {p q : α -> 命题} {f : 滤子 α}
   证明: inter_mem
 -/
 protected theorem Eventually.and {p q : α -> Prop} {f : Filter α} :
@@ -2926,8 +2926,8 @@ theorem eventually_true
 
 中文:
 定理 eventually_true
-  条件: (f : Filter α)
-  结论: 对任意ᶠ _ in f, True
+  条件: (f : 滤子 α)
+  结论: 对任意ᶠ _ in f, 真
   证明: univ_mem
 -/
 @[simp] theorem eventually_true (f : Filter α) : forallᶠ _ in f, True := univ_mem
@@ -2944,8 +2944,8 @@ theorem Eventually.of_forall
 @[simp]
 
 中文:
-定理 Eventually.of_forall
-  条件: {p : α -> 命题} {f : Filter α} (hp : 对任意 x, p x)
+定理 Eventually.of_对任意
+  条件: {p : α -> 命题} {f : 滤子 α} (hp : 对任意 x, p x)
   结论: 对任意ᶠ x in f, p x
   证明: univ_mem' hp
 
@@ -2970,8 +2970,8 @@ theorem eventually_false_iff_eq_bot
 
 中文:
 定理 eventually_false_iff_eq_bot
-  条件: {f : Filter α}
-  结论: (对任意ᶠ _ in f, False) ↔ f = ⊥
+  条件: {f : 滤子 α}
+  结论: (对任意ᶠ _ in f, 假) ↔ f = ⊥
   证明: empty_mem_iff_bot
 
 @[simp]
@@ -2994,7 +2994,7 @@ theorem eventually_const
 
 中文:
 定理 eventually_const
-  条件: {f : Filter α} [t : NeBot f] {p : 命题}
+  条件: {f : 滤子 α} [t : NeBot f] {p : 命题}
   结论: (对任意ᶠ _ in f, p) ↔ p
   证明: by
   by_cases h : p <;> simp [h, t.ne]
@@ -3013,8 +3013,8 @@ theorem eventually_iff_exists_mem
   proof: exists_mem_subset_iff.symm
 
 中文:
-定理 eventually_iff_exists_mem
-  条件: {p : α -> 命题} {f : Filter α}
+定理 eventually_iff_存在_mem
+  条件: {p : α -> 命题} {f : 滤子 α}
   证明: exists_mem_subset_iff.symm
 
 Depends on / 依赖: exists_mem_subset_iff, exists_mem_subset_iff.symm
@@ -3032,8 +3032,8 @@ theorem Eventually.exists_mem
   proof: eventually_iff_exists_mem.1 hp
 
 中文:
-定理 Eventually.exists_mem
-  条件: {p : α -> 命题} {f : Filter α} (hp : 对任意ᶠ x in f, p x)
+定理 Eventually.存在_mem
+  条件: {p : α -> 命题} {f : 滤子 α} (hp : 对任意ᶠ x in f, p x)
   证明: eventually_iff_exists_mem.1 hp
 
 Depends on / 依赖: eventually_iff_exists_mem
@@ -3054,7 +3054,7 @@ theorem Eventually.mp
 
 中文:
 定理 Eventually.mp
-  结论: {p q : α -> 命题} {f : Filter α} (hp : 对任意ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (hp : 对任意ᶠ x in f, p x)
   证明: mp_mem hp hq
 
 @[gcongr]
@@ -3076,7 +3076,7 @@ theorem Eventually.mono
 
 中文:
 定理 Eventually.mono
-  结论: {p q : α -> 命题} {f : Filter α} (hp : 对任意ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (hp : 对任意ᶠ x in f, p x)
   证明: hp.mp (Eventually.of_forall hq)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, hp.mp, of_forall
@@ -3096,8 +3096,8 @@ theorem forall_eventually_of_eventually_forall
 @[simp]
 
 中文:
-定理 forall_eventually_of_eventually_forall
-  结论: {f : Filter α} {p : α -> β -> 命题}
+定理 对任意_eventually_of_eventually_对任意
+  结论: {f : 滤子 α} {p : α -> β -> 命题}
   证明: fun y => h.mono fun _ h => h y
 
 @[simp]
@@ -3119,7 +3119,7 @@ theorem eventually_and
 
 中文:
 定理 eventually_and
-  条件: {p q : α -> 命题} {f : Filter α}
+  条件: {p q : α -> 命题} {f : 滤子 α}
   证明: inter_mem_iff
 
 Depends on / 依赖: inter_mem_iff
@@ -3138,7 +3138,7 @@ theorem Eventually.congr
 
 中文:
 定理 Eventually.congr
-  结论: {f : Filter α} {p q : α -> 命题} (h' : 对任意ᶠ x in f, p x)
+  结论: {f : 滤子 α} {p q : α -> 命题} (h' : 对任意ᶠ x in f, p x)
   证明: h'.mp (h.mono fun _ hx => hx.mp)
 
 Depends on / 依赖: h.mono, hx.mp
@@ -3159,7 +3159,7 @@ theorem eventually_congr
 
 中文:
 定理 eventually_congr
-  条件: {f : Filter α} {p q : α -> 命题} (h : 对任意ᶠ x in f, p x ↔ q x)
+  条件: {f : 滤子 α} {p q : α -> 命题} (h : 对任意ᶠ x in f, p x ↔ q x)
   证明: ⟨fun hp => hp.congr h, fun hq => hq.congr by simpa only [Iff.comm] using h⟩
 
 @[simp]
@@ -3183,7 +3183,7 @@ theorem eventually_or_distrib_left
 
 中文:
 定理 eventually_or_distrib_left
-  条件: {f : Filter α} {p : 命题} {q : α -> 命题}
+  条件: {f : 滤子 α} {p : 命题} {q : α -> 命题}
   证明: by_cases (fun h : p => by simp [h]) fun h => by simp [h]
 
 @[simp]
@@ -3204,7 +3204,7 @@ theorem eventually_or_distrib_right
 
 中文:
 定理 eventually_or_distrib_right
-  条件: {f : Filter α} {p : α -> 命题} {q : 命题}
+  条件: {f : 滤子 α} {p : α -> 命题} {q : 命题}
   证明: by
   simp only [@or_comm _ q, eventually_or_distrib_left]
 
@@ -3227,7 +3227,7 @@ theorem eventually_imp_distrib_left
 
 中文:
 定理 eventually_imp_distrib_left
-  条件: {f : Filter α} {p : 命题} {q : α -> 命题}
+  条件: {f : 滤子 α} {p : 命题} {q : α -> 命题}
   证明: by
   simp only [imp_iff_not_or, eventually_or_distrib_left]
 
@@ -3302,7 +3302,7 @@ theorem eventually_sup
 
 中文:
 定理 eventually_sup
-  条件: {p : α -> 命题} {f g : Filter α}
+  条件: {p : α -> 命题} {f g : 滤子 α}
   证明: Iff.rfl
 
 @[simp]
@@ -3326,7 +3326,7 @@ theorem eventually_sSup
 
 中文:
 定理 eventually_sSup
-  条件: {p : α -> 命题} {fs : Set (Filter α)}
+  条件: {p : α -> 命题} {fs : 集合 (滤子 α)}
   证明: Iff.rfl
 
 @[simp]
@@ -3350,7 +3350,7 @@ theorem eventually_iSup
 
 中文:
 定理 eventually_iSup
-  条件: {p : α -> 命题} {fs : ι -> Filter α}
+  条件: {p : α -> 命题} {fs : ι -> 滤子 α}
   证明: mem_iSup
 
 @[simp]
@@ -3373,7 +3373,7 @@ theorem eventually_principal
 
 中文:
 定理 eventually_principal
-  条件: {a : Set α} {p : α -> 命题}
+  条件: {a : 集合 α} {p : α -> 命题}
   结论: (对任意ᶠ x in 𝓟 a, p x) ↔ 对任意 x in a, p x
   证明: Iff.rfl
 
@@ -3391,8 +3391,8 @@ theorem Eventually.forall_mem
   proof: Filter.eventually_principal.mp (hP.filter_mono hf)
 
 中文:
-定理 Eventually.forall_mem
-  结论: {α : 类型} {f : Filter α} {s : Set α} {P : α -> 命题}
+定理 Eventually.对任意_mem
+  结论: {α : 类型} {f : 滤子 α} {s : 集合 α} {P : α -> 命题}
   证明: Filter.eventually_principal.mp (hP.filter_mono hf)
 
 Depends on / 依赖: Filter, Filter.eventually_principal.mp, eventually_principal, filter_mono, hP.filter_mono
@@ -3411,7 +3411,7 @@ theorem eventually_inf
 
 中文:
 定理 eventually_inf
-  条件: {f g : Filter α} {p : α -> 命题}
+  条件: {f g : 滤子 α} {p : α -> 命题}
   证明: mem_inf_iff_superset
 
 Depends on / 依赖: mem_inf_iff_superset
@@ -3430,7 +3430,7 @@ theorem eventually_inf_principal
 
 中文:
 定理 eventually_inf_principal
-  条件: {f : Filter α} {p : α -> 命题} {s : Set α}
+  条件: {f : 滤子 α} {p : α -> 命题} {s : 集合 α}
   证明: mem_inf_principal
 
 Depends on / 依赖: mem_inf_principal
@@ -3450,7 +3450,7 @@ theorem eventually_iff_all_subsets
 
 中文:
 定理 eventually_iff_all_subsets
-  条件: {f : Filter α} {p : α -> 命题}
+  条件: {f : 滤子 α} {p : α -> 命题}
   证明: by filter_upwards [h] with _ pa _ using pa
   mpr h := by filter_upwards [h univ] with _ pa using pa (by simp)
 
@@ -3472,7 +3472,7 @@ theorem Eventually.frequently
 
 中文:
 定理 Eventually.frequently
-  条件: {f : Filter α} [NeBot f] {p : α -> 命题} (h : 对任意ᶠ x in f, p x)
+  条件: {f : 滤子 α} [NeBot f] {p : α -> 命题} (h : 对任意ᶠ x in f, p x)
   证明: compl_notMem h
 
 Depends on / 依赖: compl_notMem
@@ -3490,8 +3490,8 @@ theorem Frequently.of_forall
   proof: Eventually.frequently (Eventually.of_forall h)
 
 中文:
-定理 Frequently.of_forall
-  条件: {f : Filter α} [NeBot f] {p : α -> 命题} (h : 对任意 x, p x)
+定理 Frequently.of_对任意
+  条件: {f : 滤子 α} [NeBot f] {p : α -> 命题} (h : 对任意 x, p x)
   证明: Eventually.frequently (Eventually.of_forall h)
 
 Depends on / 依赖: Eventually, Eventually.frequently, Eventually.of_forall, frequently, of_forall
@@ -3510,7 +3510,7 @@ theorem Frequently.mp
 
 中文:
 定理 Frequently.mp
-  结论: {p q : α -> 命题} {f : Filter α} (h : 存在ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (h : 存在ᶠ x in f, p x)
   证明: mt (fun hq => hq.mp <| hpq.mono fun _ => mt) h
 
 Depends on / 依赖: hpq.mono, hq.mp
@@ -3529,7 +3529,7 @@ lemma frequently_congr
 
 中文:
 引理 frequently_congr
-  条件: {p q : α -> 命题} {f : Filter α} (h : 对任意ᶠ x in f, p x ↔ q x)
+  条件: {p q : α -> 命题} {f : 滤子 α} (h : 对任意ᶠ x in f, p x ↔ q x)
   证明: ⟨fun h' => h'.mp (h.mono fun _ => Iff.mp), fun h' => h'.mp (h.mono fun _ => Iff.mpr)⟩
 
 Depends on / 依赖: Iff.mp, Iff.mpr, h.mono
@@ -3550,7 +3550,7 @@ theorem Frequently.filter_mono
 
 中文:
 定理 Frequently.filter_mono
-  条件: {p : α -> 命题} {f g : Filter α} (h : 存在ᶠ x in f, p x) (hle : f <= g)
+  条件: {p : α -> 命题} {f g : 滤子 α} (h : 存在ᶠ x in f, p x) (hle : f <= g)
   证明: mt (fun h' => h'.filter_mono hle) h
 
 @[gcongr]
@@ -3572,7 +3572,7 @@ theorem Frequently.mono
 
 中文:
 定理 Frequently.mono
-  结论: {p q : α -> 命题} {f : Filter α} (h : 存在ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (h : 存在ᶠ x in f, p x)
   证明: h.mp (Eventually.of_forall hpq)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, h.mp, of_forall
@@ -3593,7 +3593,7 @@ theorem Frequently.and_eventually
 
 中文:
 定理 Frequently.and_eventually
-  结论: {p q : α -> 命题} {f : Filter α} (hp : 存在ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (hp : 存在ᶠ x in f, p x)
   证明: by
   refine mt (fun h => hq.mp <| h.mono ?_) hp
   exact fun x hpq hq hp => hpq ⟨hp, hq⟩
@@ -3616,7 +3616,7 @@ theorem Eventually.and_frequently
 
 中文:
 定理 Eventually.and_frequently
-  结论: {p q : α -> 命题} {f : Filter α} (hp : 对任意ᶠ x in f, p x)
+  结论: {p q : α -> 命题} {f : 滤子 α} (hp : 对任意ᶠ x in f, p x)
   证明: by
   simpa only [and_comm] using hq.and_eventually hp
 
@@ -3639,8 +3639,8 @@ theorem Frequently.exists
   exact hp H
 
 中文:
-定理 Frequently.exists
-  条件: {p : α -> 命题} {f : Filter α} (hp : 存在ᶠ x in f, p x)
+定理 Frequently.存在
+  条件: {p : α -> 命题} {f : 滤子 α} (hp : 存在ᶠ x in f, p x)
   结论: 存在 x, p x
   证明: by
   by_contra H
@@ -3663,8 +3663,8 @@ theorem Eventually.exists
   proof: hp.frequently.exists
 
 中文:
-定理 Eventually.exists
-  条件: {p : α -> 命题} {f : Filter α} [NeBot f] (hp : 对任意ᶠ x in f, p x)
+定理 Eventually.存在
+  条件: {p : α -> 命题} {f : 滤子 α} [NeBot f] (hp : 对任意ᶠ x in f, p x)
   证明: hp.frequently.exists
 
 Depends on / 依赖: frequently, hp.frequently.exists
@@ -3684,7 +3684,7 @@ lemma frequently_iff_neBot
 
 中文:
 引理 frequently_iff_neBot
-  条件: {l : Filter α} {p : α -> 命题}
+  条件: {l : 滤子 α} {p : α -> 命题}
   证明: by
   rw [neBot_iff]; rw [Ne]; rw [inf_principal_eq_bot]; rfl
 
@@ -3705,7 +3705,7 @@ lemma frequently_mem_iff_neBot
 
 中文:
 引理 frequently_mem_iff_neBot
-  条件: {l : Filter α} {s : Set α}
+  条件: {l : 滤子 α} {s : 集合 α}
   结论: (存在ᶠ x in l, x in s) ↔ NeBot (l ⊓ 𝓟 s)
   证明: frequently_iff_neBot
 
@@ -3724,8 +3724,8 @@ theorem frequently_iff_forall_eventually_exists_and
     simpa only [and_not_self_iff, exists_false] using H hp⟩
 
 中文:
-定理 frequently_iff_forall_eventually_exists_and
-  条件: {p : α -> 命题} {f : Filter α}
+定理 frequently_iff_对任意_eventually_存在_and
+  条件: {p : α -> 命题} {f : 滤子 α}
   证明: ⟨fun hp _ hq => (hp.and_eventually hq).exists, fun H hp => by
     simpa only [and_not_self_iff, exists_false] using H hp⟩
 
@@ -3750,7 +3750,7 @@ theorem frequently_iff
 
 中文:
 定理 frequently_iff
-  条件: {f : Filter α} {P : α -> 命题}
+  条件: {f : 滤子 α} {P : α -> 命题}
   证明: by
   simp only [frequently_iff_forall_eventually_exists_and, @and_comm (P _),
     Set.ofPred_bijective.surjective.forall, Filter.Eventually, mem_ofPred]
@@ -3779,7 +3779,7 @@ theorem not_eventually
 
 中文:
 定理 not_eventually
-  条件: {p : α -> 命题} {f : Filter α}
+  条件: {p : α -> 命题} {f : 滤子 α}
   结论: (¬对任意ᶠ x in f, p x) ↔ 存在ᶠ x in f, ¬p x
   证明: by
   simp [Filter.Frequently]
@@ -3806,7 +3806,7 @@ theorem not_frequently
 
 中文:
 定理 not_frequently
-  条件: {p : α -> 命题} {f : Filter α}
+  条件: {p : α -> 命题} {f : 滤子 α}
   结论: (¬存在ᶠ x in f, p x) ↔ 对任意ᶠ x in f, ¬p x
   证明: by
   simp only [Filter.Frequently, not_not]
@@ -3833,8 +3833,8 @@ theorem frequently_true_iff_neBot
 
 中文:
 定理 frequently_true_iff_neBot
-  条件: (f : Filter α)
-  结论: (存在ᶠ _ in f, True) ↔ NeBot f
+  条件: (f : 滤子 α)
+  结论: (存在ᶠ _ in f, 真) ↔ NeBot f
   证明: by
   simp [frequently_iff_neBot]
 
@@ -3859,8 +3859,8 @@ theorem frequently_false
 
 中文:
 定理 frequently_false
-  条件: (f : Filter α)
-  结论: ¬存在ᶠ _ in f, False
+  条件: (f : 滤子 α)
+  结论: ¬存在ᶠ _ in f, 假
   证明: by simp
 
 @[simp]
@@ -3882,7 +3882,7 @@ theorem frequently_const
 
 中文:
 定理 frequently_const
-  条件: {f : Filter α} [NeBot f] {p : 命题}
+  条件: {f : 滤子 α} [NeBot f] {p : 命题}
   结论: (存在ᶠ _ in f, p) ↔ p
   证明: by
   by_cases p <;> simp [*]
@@ -3904,7 +3904,7 @@ theorem frequently_or_distrib
 
 中文:
 定理 frequently_or_distrib
-  条件: {f : Filter α} {p q : α -> 命题}
+  条件: {f : 滤子 α} {p q : α -> 命题}
   证明: by
   simp only [Filter.Frequently, ← not_and_or, not_or, eventually_and]
 
@@ -3924,7 +3924,7 @@ theorem frequently_or_distrib_left
 
 中文:
 定理 frequently_or_distrib_left
-  条件: {f : Filter α} [NeBot f] {p : 命题} {q : α -> 命题}
+  条件: {f : 滤子 α} [NeBot f] {p : 命题} {q : α -> 命题}
   证明: by simp
 -/
 theorem frequently_or_distrib_left {f : Filter α} [NeBot f] {p : Prop} {q : α -> Prop} :
@@ -3940,7 +3940,7 @@ theorem frequently_or_distrib_right
 
 中文:
 定理 frequently_or_distrib_right
-  条件: {f : Filter α} [NeBot f] {p : α -> 命题} {q : 命题}
+  条件: {f : 滤子 α} [NeBot f] {p : α -> 命题} {q : 命题}
   证明: by simp
 -/
 theorem frequently_or_distrib_right {f : Filter α} [NeBot f] {p : α -> Prop} {q : Prop} :
@@ -3957,7 +3957,7 @@ theorem frequently_imp_distrib
 
 中文:
 定理 frequently_imp_distrib
-  条件: {f : Filter α} {p q : α -> 命题}
+  条件: {f : 滤子 α} {p q : α -> 命题}
   证明: by
   simp [imp_iff_not_or]
 
@@ -3977,7 +3977,7 @@ theorem frequently_imp_distrib_left
 
 中文:
 定理 frequently_imp_distrib_left
-  条件: {f : Filter α} [NeBot f] {p : 命题} {q : α -> 命题}
+  条件: {f : 滤子 α} [NeBot f] {p : 命题} {q : α -> 命题}
   证明: by simp [frequently_imp_distrib]
 
 Depends on / 依赖: frequently_imp_distrib
@@ -3996,7 +3996,7 @@ theorem frequently_imp_distrib_right
 
 中文:
 定理 frequently_imp_distrib_right
-  条件: {f : Filter α} [NeBot f] {p : α -> 命题} {q : 命题}
+  条件: {f : 滤子 α} [NeBot f] {p : α -> 命题} {q : 命题}
   证明: by
   simp only [frequently_imp_distrib, frequently_const]
 
@@ -4019,7 +4019,7 @@ theorem eventually_imp_distrib_right
 
 中文:
 定理 eventually_imp_distrib_right
-  条件: {f : Filter α} {p : α -> 命题} {q : 命题}
+  条件: {f : 滤子 α} {p : α -> 命题} {q : 命题}
   证明: by
   simp only [imp_iff_not_or, eventually_or_distrib_right, not_frequently]
 
@@ -4045,7 +4045,7 @@ theorem frequently_and_distrib_left
 
 中文:
 定理 frequently_and_distrib_left
-  条件: {f : Filter α} {p : 命题} {q : α -> 命题}
+  条件: {f : 滤子 α} {p : 命题} {q : α -> 命题}
   证明: by
   simp only [Filter.Frequently, not_and, eventually_imp_distrib_left, Classical.not_imp]
 
@@ -4071,7 +4071,7 @@ theorem frequently_and_distrib_right
 
 中文:
 定理 frequently_and_distrib_right
-  条件: {f : Filter α} {p : α -> 命题} {q : 命题}
+  条件: {f : 滤子 α} {p : α -> 命题} {q : 命题}
   证明: by
   simp only [@and_comm _ q, frequently_and_distrib_left]
 
@@ -4142,7 +4142,7 @@ theorem frequently_principal
 
 中文:
 定理 frequently_principal
-  条件: {a : Set α} {p : α -> 命题}
+  条件: {a : 集合 α} {p : α -> 命题}
   结论: (存在ᶠ x in 𝓟 a, p x) ↔ 存在 x in a, p x
   证明: by
   simp [Filter.Frequently, not_forall]
@@ -4165,7 +4165,7 @@ alias ⟨Frequently.of_inf_principal, Frequently.inf_principal⟩ := frequently_
 
 中文:
 定理 frequently_inf_principal
-  条件: {f : Filter α} {s : Set α} {p : α -> 命题}
+  条件: {f : 滤子 α} {s : 集合 α} {p : α -> 命题}
   证明: by
   simp only [Filter.Frequently, eventually_inf_principal, not_and]
 
@@ -4192,7 +4192,7 @@ theorem frequently_sup
 
 中文:
 定理 frequently_sup
-  条件: {p : α -> 命题} {f g : Filter α}
+  条件: {p : α -> 命题} {f g : 滤子 α}
   证明: by
   simp only [Filter.Frequently, eventually_sup, not_and_or]
 
@@ -4218,7 +4218,7 @@ theorem frequently_sSup
 
 中文:
 定理 frequently_sSup
-  条件: {p : α -> 命题} {fs : Set (Filter α)}
+  条件: {p : α -> 命题} {fs : 集合 (滤子 α)}
   证明: by
   simp only [Filter.Frequently, not_forall, eventually_sSup, exists_prop]
 
@@ -4242,7 +4242,7 @@ theorem frequently_iSup
 
 中文:
 定理 frequently_iSup
-  条件: {p : α -> 命题} {fs : β -> Filter α}
+  条件: {p : α -> 命题} {fs : β -> 滤子 α}
   证明: by
   simp only [Filter.Frequently, eventually_iSup, not_forall]
 
@@ -4265,7 +4265,7 @@ theorem Eventually.choice
 
 中文:
 定理 Eventually.choice
-  条件: {r : α -> β -> 命题} {l : Filter α} [l.NeBot] (h : 对任意ᶠ x in l, 存在 y, r x y)
+  条件: {r : α -> β -> 命题} {l : 滤子 α} [l.NeBot] (h : 对任意ᶠ x in l, 存在 y, r x y)
   证明: by
   have : Nonempty β := let ⟨_, hx⟩ := h.exists; hx.nonempty
   choose! f hf using fun x (hx : exists y, r x y) => hx
@@ -4294,7 +4294,7 @@ lemma skolem
 
 中文:
 引理 skolem
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, Nonempty (α i)]
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 非空 (α i)]
   证明: by
   classical
   refine ⟨fun H => ?_, fun ⟨b, hb⟩ => hb.mp (.of_forall fun x a => ⟨_, a⟩)⟩
@@ -4362,7 +4362,7 @@ theorem EventuallyEq.rw
 
 中文:
 定理 EventuallyEq.rw
-  结论: {l : Filter α} {f g : α -> β} (h : f =ᶠ[l] g) (p : α -> β -> 命题)
+  结论: {l : 滤子 α} {f g : α -> β} (h : f =ᶠ[l] g) (p : α -> β -> 命题)
   证明: hf.congr h.mono fun _ hx => hx ▸ Iff.rfl
 
 Depends on / 依赖: Iff.rfl, h.mono, hf.congr
@@ -4386,7 +4386,7 @@ alias ⟨EventuallyEq.mem_iff, Eventually.set_eq⟩ := eventuallyEq_set
 
 中文:
 定理 eventuallyEq_set
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   结论: s =ᶠ[l] t ↔ 对任意ᶠ x in l, x in s ↔ x in t
   证明: eventually_congr Eventually.of_forall fun _ => eq_iff_iff
 
@@ -4414,7 +4414,7 @@ theorem eventuallyEq_univ
 
 中文:
 定理 eventuallyEq_univ
-  条件: {s : Set α} {l : Filter α}
+  条件: {s : 集合 α} {l : 滤子 α}
   结论: s =ᶠ[l] univ ↔ s in l
   证明: by
   simp [eventuallyEq_set]
@@ -4433,8 +4433,8 @@ theorem EventuallyEq.exists_mem
   proof: Eventually.exists_mem h
 
 中文:
-定理 EventuallyEq.exists_mem
-  条件: {l : Filter α} {f g : α -> β} (h : f =ᶠ[l] g)
+定理 EventuallyEq.存在_mem
+  条件: {l : 滤子 α} {f g : α -> β} (h : f =ᶠ[l] g)
   证明: Eventually.exists_mem h
 
 Depends on / 依赖: Eventually, Eventually.exists_mem, exists_mem
@@ -4453,7 +4453,7 @@ theorem eventuallyEq_of_mem
 
 中文:
 定理 eventuallyEq_of_mem
-  条件: {l : Filter α} {f g : α -> β} {s : Set α} (hs : s in l) (h : EqOn f g s)
+  条件: {l : 滤子 α} {f g : α -> β} {s : 集合 α} (hs : s in l) (h : EqOn f g s)
   证明: eventually_of_mem hs h
 
 Depends on / 依赖: eventually_of_mem
@@ -4471,8 +4471,8 @@ theorem eventuallyEq_iff_exists_mem
   proof: eventually_iff_exists_mem
 
 中文:
-定理 eventuallyEq_iff_exists_mem
-  条件: {l : Filter α} {f g : α -> β}
+定理 eventuallyEq_iff_存在_mem
+  条件: {l : 滤子 α} {f g : α -> β}
   证明: eventually_iff_exists_mem
 
 Depends on / 依赖: eventually_iff_exists_mem
@@ -4493,7 +4493,7 @@ theorem EventuallyEq.filter_mono
 
 中文:
 定理 EventuallyEq.filter_mono
-  条件: {l l' : Filter α} {f g : α -> β} (h₁ : f =ᶠ[l] g) (h₂ : l' <= l)
+  条件: {l l' : 滤子 α} {f g : α -> β} (h₁ : f =ᶠ[l] g) (h₂ : l' <= l)
   证明: h₂ h₁
 
 @[refl, simp]
@@ -4514,7 +4514,7 @@ theorem EventuallyEq.refl
 
 中文:
 定理 EventuallyEq.refl
-  条件: (l : Filter α) (f : α -> β)
+  条件: (l : 滤子 α) (f : α -> β)
   结论: f =ᶠ[l] f
   证明: Eventually.of_forall fun _ => rfl
 
@@ -4534,7 +4534,7 @@ theorem EventuallyEq.rfl
 
 中文:
 定理 EventuallyEq.rfl
-  条件: {l : Filter α} {f : α -> β}
+  条件: {l : 滤子 α} {f : α -> β}
   结论: f =ᶠ[l] f
   证明: EventuallyEq.refl l f
 -/
@@ -4555,7 +4555,7 @@ alias _root_.Eq.eventuallyEq := EventuallyEq.of_eq
 
 中文:
 定理 EventuallyEq.of_eq
-  条件: {l : Filter α} {f g : α -> β} (h : f = g)
+  条件: {l : 滤子 α} {f g : α -> β} (h : f = g)
   结论: f =ᶠ[l] g
   证明: h ▸ .rfl
 alias _root_.Eq.eventuallyEq := EventuallyEq.of_eq
@@ -4577,7 +4577,7 @@ theorem EventuallyEq.symm
 
 中文:
 定理 EventuallyEq.symm
-  条件: {f g : α -> β} {l : Filter α} (H : f =ᶠ[l] g)
+  条件: {f g : α -> β} {l : 滤子 α} (H : f =ᶠ[l] g)
   结论: g =ᶠ[l] f
   证明: H.mono fun _ => Eq.symm
 
@@ -4599,7 +4599,7 @@ lemma eventuallyEq_comm
 
 中文:
 引理 eventuallyEq_comm
-  条件: {f g : α -> β} {l : Filter α}
+  条件: {f g : α -> β} {l : 滤子 α}
   结论: f =ᶠ[l] g ↔ g =ᶠ[l] f
   证明: ⟨.symm, .symm⟩
 
@@ -4618,7 +4618,7 @@ theorem EventuallyEq.trans
 
 中文:
 定理 EventuallyEq.trans
-  条件: {l : Filter α} {f g h : α -> β} (H₁ : f =ᶠ[l] g) (H₂ : g =ᶠ[l] h)
+  条件: {l : 滤子 α} {f g h : α -> β} (H₁ : f =ᶠ[l] g) (H₂ : g =ᶠ[l] h)
   证明: H₂.rw (fun x y => f x = y) H₁
 -/
 theorem EventuallyEq.trans {l : Filter α} {f g h : α -> β} (H₁ : f =ᶠ[l] g) (H₂ : g =ᶠ[l] h) :
@@ -4635,7 +4635,7 @@ theorem EventuallyEq.congr_left
 
 中文:
 定理 EventuallyEq.congr_left
-  条件: {l : Filter α} {f g h : α -> β} (H : f =ᶠ[l] g)
+  条件: {l : 滤子 α} {f g h : α -> β} (H : f =ᶠ[l] g)
   证明: ⟨H.symm.trans, H.trans⟩
 
 Depends on / 依赖: H.symm.trans, H.trans
@@ -4654,7 +4654,7 @@ theorem EventuallyEq.congr_right
 
 中文:
 定理 EventuallyEq.congr_right
-  条件: {l : Filter α} {f g h : α -> β} (H : g =ᶠ[l] h)
+  条件: {l : 滤子 α} {f g h : α -> β} (H : g =ᶠ[l] h)
   证明: ⟨(·.trans H), (·.trans H.symm)⟩
 
 Depends on / 依赖: H.symm
@@ -4708,7 +4708,7 @@ theorem EventuallyEq.fun_comp
 
 中文:
 定理 EventuallyEq.fun_comp
-  条件: {f g : α -> β} {l : Filter α} (H : f =ᶠ[l] g) (h : β -> γ)
+  条件: {f g : α -> β} {l : 滤子 α} (H : f =ᶠ[l] g) (h : β -> γ)
   证明: H.mono fun _ hx => congr_arg h hx
 
 Depends on / 依赖: H.mono, congr_arg
@@ -4753,7 +4753,7 @@ theorem EventuallyEq.mul
 
 中文:
 定理 EventuallyEq.mul
-  结论: [Mul β] {f f' g g' : α -> β} {l : Filter α} (h : f =ᶠ[l] g)
+  结论: [乘法 β] {f f' g g' : α -> β} {l : 滤子 α} (h : f =ᶠ[l] g)
   证明: h.comp₂ (· * ·) h'
 
 @[to_additive]
@@ -4777,7 +4777,7 @@ lemma EventuallyEq.mul_left
 
 中文:
 引理 EventuallyEq.mul_left
-  条件: [Mul β] {f₁ f₂ f₃ : α -> β} (h : f₁ =ᶠ[l] f₂)
+  条件: [乘法 β] {f₁ f₂ f₃ : α -> β} (h : f₁ =ᶠ[l] f₂)
   证明: EventuallyEq.mul (by rfl) h
 
 @[to_additive]
@@ -4800,7 +4800,7 @@ lemma EventuallyEq.mul_right
 
 中文:
 引理 EventuallyEq.mul_right
-  条件: [Mul β] {f₁ f₂ f₃ : α -> β} (h : f₁ =ᶠ[l] f₂)
+  条件: [乘法 β] {f₁ f₂ f₃ : α -> β} (h : f₁ =ᶠ[l] f₂)
   证明: EventuallyEq.mul h (by rfl)
 
 @[to_additive (attr := gcongr, to_fun, to_additive) const_smul]
@@ -4823,7 +4823,7 @@ theorem EventuallyEq.pow_const
 
 中文:
 定理 EventuallyEq.pow_const
-  条件: {γ} [Pow β γ] {f g : α -> β} {l : Filter α} (h : f =ᶠ[l] g) (c : γ)
+  条件: {γ} [幂 β γ] {f g : α -> β} {l : 滤子 α} (h : f =ᶠ[l] g) (c : γ)
   证明: h.fun_comp (· ^ c)
 
 @[to_additive (attr := gcongr, to_fun)]
@@ -4848,7 +4848,7 @@ theorem EventuallyEq.inv
 
 中文:
 定理 EventuallyEq.inv
-  条件: [Inv β] {f g : α -> β} {l : Filter α} (h : f =ᶠ[l] g)
+  条件: [取逆 β] {f g : α -> β} {l : 滤子 α} (h : f =ᶠ[l] g)
   结论: f⁻¹ =ᶠ[l] g⁻¹
   证明: h.fun_comp Inv.inv
 
@@ -4872,7 +4872,7 @@ theorem EventuallyEq.div
 
 中文:
 定理 EventuallyEq.div
-  结论: [Div β] {f f' g g' : α -> β} {l : Filter α} (h : f =ᶠ[l] g)
+  结论: [除法 β] {f f' g g' : α -> β} {l : 滤子 α} (h : f =ᶠ[l] g)
   证明: h.comp₂ (· / ·) h'
 
 @[to_additive]
@@ -4896,7 +4896,7 @@ theorem EventuallyEq.smul
 
 中文:
 定理 EventuallyEq.smul
-  结论: {𝕜} [SMul 𝕜 β] {l : Filter α} {f f' : α -> 𝕜} {g g' : α -> β}
+  结论: {𝕜} [标量乘法 𝕜 β] {l : 滤子 α} {f f' : α -> 𝕜} {g g' : α -> β}
   证明: hf.comp₂ (· • ·) hg
 
 @[gcongr, to_fun]
@@ -4920,7 +4920,7 @@ theorem EventuallyEq.star
 
 中文:
 定理 EventuallyEq.star
-  结论: {R : 类型} [Star R]
+  结论: {R : 类型} [对合 R]
   证明: h.fun_comp Star.star
 
 @[gcongr]
@@ -4940,8 +4940,8 @@ theorem EventuallyEq.sup
 @[gcongr]
 
 中文:
-定理 EventuallyEq.sup
-  结论: [Max β] {l : Filter α} {f f' g g' : α -> β} (hf : f =ᶠ[l] f')
+定理 EventuallyEq.上确界
+  结论: [最大值 β] {l : 滤子 α} {f f' g g' : α -> β} (hf : f =ᶠ[l] f')
   证明: hf.comp₂ (· ⊔ ·) hg
 
 @[gcongr]
@@ -4964,8 +4964,8 @@ theorem EventuallyEq.inf
 @[gcongr]
 
 中文:
-定理 EventuallyEq.inf
-  结论: [Min β] {l : Filter α} {f f' g g' : α -> β} (hf : f =ᶠ[l] f')
+定理 EventuallyEq.下确界
+  结论: [最小值 β] {l : 滤子 α} {f f' g g' : α -> β} (hf : f =ᶠ[l] f')
   证明: hf.comp₂ (· ⊓ ·) hg
 
 @[gcongr]
@@ -4988,8 +4988,8 @@ theorem EventuallyEq.preimage
 @[gcongr]
 
 中文:
-定理 EventuallyEq.preimage
-  条件: {l : Filter α} {f g : α -> β} (h : f =ᶠ[l] g) (s : Set β)
+定理 EventuallyEq.原像
+  条件: {l : 滤子 α} {f g : α -> β} (h : f =ᶠ[l] g) (s : 集合 β)
   证明: h.fun_comp s
 
 @[gcongr]
@@ -5013,7 +5013,7 @@ theorem EventuallyEq.inter
 
 中文:
 定理 EventuallyEq.inter
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
   证明: h.comp₂ (· ∧ ·) h'
 
 @[gcongr]
@@ -5037,7 +5037,7 @@ theorem EventuallyEq.union
 
 中文:
 定理 EventuallyEq.union
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
   证明: h.comp₂ (· ∨ ·) h'
 
 @[gcongr]
@@ -5061,7 +5061,7 @@ theorem EventuallyEq.compl
 
 中文:
 定理 EventuallyEq.compl
-  条件: {s t : Set α} {l : Filter α} (h : s =ᶠ[l] t)
+  条件: {s t : 集合 α} {l : 滤子 α} (h : s =ᶠ[l] t)
   证明: h.fun_comp Not
 
 @[gcongr]
@@ -5085,7 +5085,7 @@ theorem EventuallyEq.diff
 
 中文:
 定理 EventuallyEq.diff
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s =ᶠ[l] t) (h' : s' =ᶠ[l] t')
   证明: h.inter h'.compl
 
 @[gcongr]
@@ -5107,7 +5107,7 @@ theorem EventuallyEq.symmDiff
 
 中文:
 定理 EventuallyEq.symmDiff
-  结论: {s t s' t' : Set α} {l : Filter α}
+  结论: {s t s' t' : 集合 α} {l : 滤子 α}
   证明: (h.diff h').union (h'.diff h)
 -/
 protected theorem EventuallyEq.symmDiff {s t s' t' : Set α} {l : Filter α}
@@ -5125,8 +5125,8 @@ theorem eventuallyEq_empty
 
 中文:
 定理 eventuallyEq_empty
-  条件: {s : Set α} {l : Filter α}
-  结论: s =ᶠ[l] (∅ : Set α) ↔ 对任意ᶠ x in l, x ∉ s
+  条件: {s : 集合 α} {l : 滤子 α}
+  结论: s =ᶠ[l] (∅ : 集合 α) ↔ 对任意ᶠ x in l, x ∉ s
   证明: eventuallyEq_set.trans by simp
 
 Depends on / 依赖: eventuallyEq_set, eventuallyEq_set.trans
@@ -5145,7 +5145,7 @@ theorem inter_eventuallyEq_left
 
 中文:
 定理 inter_eventuallyEq_left
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   证明: by
   simp only [eventuallyEq_set, mem_inter_iff, and_iff_left_iff_imp]
 
@@ -5168,7 +5168,7 @@ theorem inter_eventuallyEq_right
 
 中文:
 定理 inter_eventuallyEq_right
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   证明: by
   rw [inter_comm]; rw [inter_eventuallyEq_left]
 
@@ -5192,7 +5192,7 @@ theorem eventuallyEq_principal
 
 中文:
 定理 eventuallyEq_principal
-  条件: {s : Set α} {f g : α -> β}
+  条件: {s : 集合 α} {f g : α -> β}
   结论: f =ᶠ[𝓟 s] g ↔ EqOn f g s
   证明: Iff.rfl
 
@@ -5211,7 +5211,7 @@ theorem eventuallyEq_inf_principal_iff
 
 中文:
 定理 eventuallyEq_inf_principal_iff
-  条件: {F : Filter α} {s : Set α} {f g : α -> β}
+  条件: {F : 滤子 α} {s : 集合 α} {f g : α -> β}
   证明: eventually_inf_principal
 
 Depends on / 依赖: IsBezout, IsBezout.of_isPrincipalIdealRing, IsPrincipalIdealRing, eventually_inf_principal, of_isPrincipalIdealRing
@@ -5230,7 +5230,7 @@ theorem EventuallyEq.sub_eq
 
 中文:
 定理 EventuallyEq.sub_eq
-  条件: [AddGroup β] {f g : α -> β} {l : Filter α} (h : f =ᶠ[l] g)
+  条件: [加法群 β] {f g : α -> β} {l : 滤子 α} (h : f =ᶠ[l] g)
   证明: by simpa using ((EventuallyEq.refl l f).sub h).symm
 
 Depends on / 依赖: DivisionSemiring, DivisionSemiring.isPrincipalIdealRing, EventuallyEq, EventuallyEq.refl, isPrincipalIdealRing
@@ -5248,7 +5248,7 @@ theorem eventuallyEq_iff_sub
 
 中文:
 定理 eventuallyEq_iff_sub
-  条件: [AddGroup β] {f g : α -> β} {l : Filter α}
+  条件: [加法群 β] {f g : α -> β} {l : 滤子 α}
   证明: ⟨fun h => h.sub_eq, fun h => by simpa using h.add (EventuallyEq.refl l g)⟩
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, h.add, h.sub_eq, sub_eq
@@ -5267,7 +5267,7 @@ theorem eventuallyEq_iff_all_subsets
 
 中文:
 定理 eventuallyEq_iff_all_subsets
-  条件: {f g : α -> β} {l : Filter α}
+  条件: {f g : α -> β} {l : 滤子 α}
   证明: eventually_iff_all_subsets
 
 Depends on / 依赖: eventually_iff_all_subsets
@@ -5339,7 +5339,7 @@ theorem eventuallyLE_iff_all_subsets
 
 中文:
 定理 eventuallyLE_iff_all_subsets
-  条件: {f g : α -> β} {l : Filter α}
+  条件: {f g : α -> β} {l : 滤子 α}
   证明: eventually_iff_all_subsets
 
 Depends on / 依赖: eventually_iff_all_subsets
@@ -5391,7 +5391,7 @@ theorem EventuallyLE.refl
 
 中文:
 定理 EventuallyLE.refl
-  条件: (l : Filter α) (f : α -> β)
+  条件: (l : 滤子 α) (f : α -> β)
   结论: f <=ᶠ[l] f
   证明: EventuallyEq.rfl.le
 
@@ -5552,7 +5552,7 @@ theorem EventuallyLE.antisymm
 
 中文:
 定理 EventuallyLE.antisymm
-  结论: [PartialOrder β] {l : Filter α} {f g : α -> β} (h₁ : f <=ᶠ[l] g)
+  结论: [偏序 β] {l : 滤子 α} {f g : α -> β} (h₁ : f <=ᶠ[l] g)
   证明: h₂.mp h₁.mono fun _ => le_antisymm
 
 @[to_dual none]
@@ -5577,7 +5577,7 @@ theorem eventuallyLE_antisymm_iff
 
 中文:
 定理 eventuallyLE_antisymm_iff
-  条件: [PartialOrder β] {l : Filter α} {f g : α -> β}
+  条件: [偏序 β] {l : 滤子 α} {f g : α -> β}
   证明: by
   simp only [EventuallyEq, EventuallyLE, le_antisymm_iff, eventually_and]
 
@@ -5602,7 +5602,7 @@ theorem EventuallyLE.ge_iff_eq
 
 中文:
 定理 EventuallyLE.ge_iff_eq
-  条件: [PartialOrder β] {l : Filter α} {f g : α -> β} (h : f <=ᶠ[l] g)
+  条件: [偏序 β] {l : 滤子 α} {f g : α -> β} (h : f <=ᶠ[l] g)
   证明: ⟨fun h' => h.antisymm h', EventuallyEq.ge⟩
 
 @[to_dual ne_of_gt]
@@ -5626,7 +5626,7 @@ theorem Eventually.ne_of_lt
 
 中文:
 定理 Eventually.ne_of_lt
-  条件: [Preorder β] {l : Filter α} {f g : α -> β} (h : 对任意ᶠ x in l, f x < g x)
+  条件: [预序 β] {l : 滤子 α} {f g : α -> β} (h : 对任意ᶠ x in l, f x < g x)
   证明: h.mono fun _ hx => hx.ne
 
 @[to_dual ne_bot_of_gt]
@@ -5650,7 +5650,7 @@ theorem Eventually.ne_top_of_lt
 
 中文:
 定理 Eventually.ne_top_of_lt
-  结论: [Preorder β] [OrderTop β] {l : Filter α} {f g : α -> β}
+  结论: [预序 β] [有顶序 β] {l : 滤子 α} {f g : α -> β}
   证明: h.mono fun _ hx => hx.ne_top
 
 @[to_dual bot_lt_of_ne]
@@ -5674,7 +5674,7 @@ theorem Eventually.lt_top_of_ne
 
 中文:
 定理 Eventually.lt_top_of_ne
-  结论: [PartialOrder β] [OrderTop β] {l : Filter α} {f : α -> β}
+  结论: [偏序 β] [有顶序 β] {l : 滤子 α} {f : α -> β}
   证明: h.mono fun _ hx => hx.lt_top
 
 @[to_dual bot_lt_iff_ne_bot]
@@ -5698,7 +5698,7 @@ theorem Eventually.lt_top_iff_ne_top
 
 中文:
 定理 Eventually.lt_top_iff_ne_top
-  条件: [PartialOrder β] [OrderTop β] {l : Filter α} {f : α -> β}
+  条件: [偏序 β] [有顶序 β] {l : 滤子 α} {f : α -> β}
   证明: ⟨Eventually.ne_of_lt, Eventually.lt_top_of_ne⟩
 
 @[gcongr, mono]
@@ -5722,7 +5722,7 @@ theorem EventuallyLE.inter
 
 中文:
 定理 EventuallyLE.inter
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s <=ᶠ[l] t) (h' : s' <=ᶠ[l] t')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s <=ᶠ[l] t) (h' : s' <=ᶠ[l] t')
   证明: h'.mp h.mono fun _ => And.imp
 
 @[gcongr, mono]
@@ -5746,7 +5746,7 @@ theorem EventuallyLE.union
 
 中文:
 定理 EventuallyLE.union
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s <=ᶠ[l] t) (h' : s' <=ᶠ[l] t')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s <=ᶠ[l] t) (h' : s' <=ᶠ[l] t')
   证明: h'.mp h.mono fun _ => Or.imp
 
 @[gcongr, mono]
@@ -5770,7 +5770,7 @@ theorem EventuallyLE.compl
 
 中文:
 定理 EventuallyLE.compl
-  条件: {s t : Set α} {l : Filter α} (h : s <=ᶠ[l] t)
+  条件: {s t : 集合 α} {l : 滤子 α} (h : s <=ᶠ[l] t)
   证明: h.mono fun _ => mt
 
 @[gcongr, mono]
@@ -5792,7 +5792,7 @@ theorem EventuallyLE.diff
 
 中文:
 定理 EventuallyLE.diff
-  条件: {s t s' t' : Set α} {l : Filter α} (h : s <=ᶠ[l] t) (h' : t' <=ᶠ[l] s')
+  条件: {s t s' t' : 集合 α} {l : 滤子 α} (h : s <=ᶠ[l] t) (h' : t' <=ᶠ[l] s')
   证明: h.inter h'.compl
 
 Depends on / 依赖: h.inter
@@ -5811,7 +5811,7 @@ theorem set_eventuallyLE_iff_mem_inf_principal
 
 中文:
 定理 set_eventuallyLE_iff_mem_inf_principal
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   证明: eventually_inf_principal.symm
 
 Depends on / 依赖: eventually_inf_principal, eventually_inf_principal.symm
@@ -5831,7 +5831,7 @@ theorem set_eventuallyLE_iff_inf_principal_le
 
 中文:
 定理 set_eventuallyLE_iff_inf_principal_le
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   证明: set_eventuallyLE_iff_mem_inf_principal.trans by
     simp only [le_inf_iff, inf_le_left, true_and, le_principal_iff]
 
@@ -5856,7 +5856,7 @@ theorem set_eventuallyEq_iff_inf_principal
 
 中文:
 定理 set_eventuallyEq_iff_inf_principal
-  条件: {s t : Set α} {l : Filter α}
+  条件: {s t : 集合 α} {l : 滤子 α}
   证明: by
   simp only [eventuallyLE_antisymm_iff, le_antisymm_iff, set_eventuallyLE_iff_inf_principal_le]
 
@@ -5881,8 +5881,8 @@ theorem EventuallyLE.sup
 @[to_dual le_inf]
 
 中文:
-定理 EventuallyLE.sup
-  结论: [SemilatticeSup β] {l : Filter α} {f₁ f₂ g₁ g₂ : α -> β} (hf : f₁ <=ᶠ[l] f₂)
+定理 EventuallyLE.上确界
+  结论: [SemilatticeSup β] {l : 滤子 α} {f₁ f₂ g₁ g₂ : α -> β} (hf : f₁ <=ᶠ[l] f₂)
   证明: by
   filter_upwards [hf, hg] with x hfx hgx using sup_le_sup hfx hgx
 
@@ -5908,7 +5908,7 @@ theorem EventuallyLE.sup_le
 
 中文:
 定理 EventuallyLE.sup_le
-  结论: [SemilatticeSup β] {l : Filter α} {f g h : α -> β} (hf : f <=ᶠ[l] h)
+  结论: [SemilatticeSup β] {l : 滤子 α} {f g h : α -> β} (hf : f <=ᶠ[l] h)
   证明: by
   filter_upwards [hf, hg] with x hfx hgx using _root_.sup_le hfx hgx
 
@@ -5933,7 +5933,7 @@ theorem EventuallyLE.le_sup_of_le_left
 
 中文:
 定理 EventuallyLE.le_sup_of_le_left
-  结论: [SemilatticeSup β] {l : Filter α} {f g h : α -> β}
+  结论: [SemilatticeSup β] {l : 滤子 α} {f g h : α -> β}
   证明: hf.mono fun _ => _root_.le_sup_of_le_left
 
 @[to_dual inf_le_of_right_le]
@@ -5955,7 +5955,7 @@ theorem EventuallyLE.le_sup_of_le_right
 
 中文:
 定理 EventuallyLE.le_sup_of_le_right
-  结论: [SemilatticeSup β] {l : Filter α} {f g h : α -> β}
+  结论: [SemilatticeSup β] {l : 滤子 α} {f g h : α -> β}
   证明: hg.mono fun _ => _root_.le_sup_of_le_right
 
 Depends on / 依赖: _root_, _root_.le_sup_of_le_right, hg.mono, le_sup_of_le_right
@@ -5975,7 +5975,7 @@ theorem join_le
 
 中文:
 定理 join_le
-  条件: {f : Filter (Filter α)} {l : Filter α} (h : 对任意ᶠ m in f, m <= l)
+  条件: {f : 滤子 (滤子 α)} {l : 滤子 α} (h : 对任意ᶠ m in f, m <= l)
   结论: join f <= l
   证明: fun _ hs => h.mono fun _ hm => hm hs
 
@@ -6000,8 +6000,8 @@ theorem Set.EqOn.eventuallyEq
   proof: h
 
 中文:
-定理 Set.EqOn.eventuallyEq
-  条件: {α β} {s : Set α} {f g : α -> β} (h : EqOn f g s)
+定理 集合.EqOn.eventuallyEq
+  条件: {α β} {s : 集合 α} {f g : α -> β} (h : EqOn f g s)
   结论: f =ᶠ[𝓟 s] g
   证明: h
 -/
@@ -6017,8 +6017,8 @@ theorem Set.EqOn.eventuallyEq_of_mem
   proof: h.eventuallyEq.filter_mono Filter.le_principal_iff.2 hl
 
 中文:
-定理 Set.EqOn.eventuallyEq_of_mem
-  结论: {α β} {s : Set α} {l : Filter α} {f g : α -> β} (h : EqOn f g s)
+定理 集合.EqOn.eventuallyEq_of_mem
+  结论: {α β} {s : 集合 α} {l : 滤子 α} {f g : α -> β} (h : EqOn f g s)
   证明: h.eventuallyEq.filter_mono Filter.le_principal_iff.2 hl
 
 Depends on / 依赖: Filter, Filter.le_principal_iff, eventuallyEq, filter_mono, h.eventuallyEq.filter_mono, le_principal_iff
@@ -6040,7 +6040,7 @@ theorem LE.le.eventuallyLE
 
 中文:
 定理 LE.le.eventuallyLE
-  条件: {α} {l : Filter α} {s t : Set α} (h : s subseteq t)
+  条件: {α} {l : 滤子 α} {s t : 集合 α} (h : s subseteq t)
   结论: s <=ᶠ[l] t
   证明: Filter.Eventually.of_forall h
 
@@ -6068,7 +6068,7 @@ lemma compl_mem_comk
 
 中文:
 引理 compl_mem_comk
-  条件: {p : Set α -> 命题} {he hmono hunion s}
+  条件: {p : 集合 α -> 命题} {he hmono hunion s}
   证明: by
   simp
 -/

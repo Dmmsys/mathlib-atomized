@@ -33,7 +33,7 @@ definition Substring.Raw.getRange
 
 中文:
 定义 Substring.Raw.getRange
-  签名: : Substring.Raw -> Syntax.Range
+  签名: : Substring.Raw -> Syntax.值域
 
 Depends on / 依赖: stopPos
 -/
@@ -66,7 +66,7 @@ definition filterMapM
 
 中文:
 定义 filterMapM
-  签名: {m : Type -> Type} [Monad m] {α} (stx : Syntax) (f : Syntax -> m (Option α))
+  签名: {m : 类型 -> 类型} [单子 m] {α} (stx : Syntax) (f : Syntax -> m (选项类型 α))
   定义体: do
   let nargs := (← stx.getArgs.mapM (·.filterMapM f)).flatten
   match ← f stx with
@@ -90,7 +90,7 @@ definition filterMap
 
 中文:
 定义 filterMap
-  签名: {α} (stx : Syntax) (f : Syntax -> Option α)
+  签名: {α} (stx : Syntax) (f : Syntax -> 选项类型 α)
   定义体: Id.run stx.filterMapM fun x => pure (f x)
 
 Depends on / 依赖: Id.run, filterMapM, stx.filterMapM
@@ -108,7 +108,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (stx : Syntax) (f : Syntax -> 布尔)
+  签名: (stx : Syntax) (f : Syntax -> 布尔值)
   定义体: stx.filterMap fun s => if f s then some s else none
 
 Depends on / 依赖: filterMap, stx.filterMap

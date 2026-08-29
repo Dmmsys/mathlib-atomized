@@ -143,7 +143,7 @@ lemma lsingle_comp_chainsMap_f
 
 中文:
 引理 lsingle_comp_chainsMap_f
-  条件: (n : 自然数) (x : Fin n -> G)
+  条件: (n : 自然数) (x : 有限集 n -> G)
   证明: by
   ext
   simp [chainsMap_f]
@@ -169,7 +169,7 @@ lemma chainsMap_f_single
 
 中文:
 引理 chainsMap_f_single
-  条件: (n : 自然数) (x : Fin n -> G) (a : A)
+  条件: (n : 自然数) (x : 有限集 n -> G) (a : A)
   证明: by
   simp [chainsMap_f]
 
@@ -243,7 +243,7 @@ lemma chainsMap_comp
 
 中文:
 引理 chainsMap_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   ext
   simp [chainsMap_f, Function.comp_assoc]
@@ -315,7 +315,7 @@ lemma chainsMap_f_map_mono
 
 中文:
 引理 chainsMap_f_map_mono
-  条件: (hf : Function.Injective f) [Mono φ] (i : 自然数)
+  条件: (hf : 函数.单射 f) [单态射 φ] (i : 自然数)
   证明: by
   simpa [ModuleCat.mono_iff_injective] using!
     (mapRange_injective φ.hom (map_zero _) <| (Rep.mono_iff_injective φ).1
@@ -339,7 +339,7 @@ instance chainsMap_id_f_map_mono
 
 中文:
 实例 chainsMap_id_f_map_mono
-  签名: {A B : Rep k G} (φ : A ⟶ B) [Mono φ] (i : 自然数)
+  签名: {A B : Rep k G} (φ : A ⟶ B) [单态射 φ] (i : 自然数)
   定义体: chainsMap_f_map_mono (MonoidHom.id G) φ (fun _ _ h => h) _
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, chainsMap_f_map_mono
@@ -361,7 +361,7 @@ lemma chainsMap_f_map_epi
 
 中文:
 引理 chainsMap_f_map_epi
-  条件: (hf : Function.Surjective f) [Epi φ] (i : 自然数)
+  条件: (hf : 函数.满射 f) [满态射 φ] (i : 自然数)
   证明: by
   simpa [ModuleCat.epi_iff_surjective] using!
     (mapRange_surjective φ.hom (map_zero _) ((Rep.epi_iff_surjective φ).1 inferInstance)).comp
@@ -385,7 +385,7 @@ instance chainsMap_id_f_map_epi
 
 中文:
 实例 chainsMap_id_f_map_epi
-  签名: {A B : Rep k G} (φ : A ⟶ B) [Epi φ] (i : 自然数)
+  签名: {A B : Rep k G} (φ : A ⟶ B) [满态射 φ] (i : 自然数)
   定义体: chainsMap_f_map_epi _ _ (fun x => ⟨x, rfl⟩) _
 
 Depends on / 依赖: chainsMap_f_map_epi
@@ -431,7 +431,7 @@ lemma cyclesMap_id
 
 中文:
 引理 cyclesMap_id
-  结论: cyclesMap (MonoidHom.id G) (𝟙 A) n = 𝟙 _
+  结论: cyclesMap (幺半群态射.id G) (𝟙 A) n = 𝟙 _
   证明: by
   simp [cyclesMap]
 
@@ -454,7 +454,7 @@ lemma cyclesMap_comp
 
 中文:
 引理 cyclesMap_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   simp [cyclesMap, ← HomologicalComplex.cyclesMap_comp, ← chainsMap_comp]
 
@@ -566,7 +566,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (MonoidHom.id G) (𝟙 A) n = 𝟙 _
+  结论: map (幺半群态射.id G) (𝟙 A) n = 𝟙 _
   证明: by
   simp [map, groupHomology]
 
@@ -588,7 +588,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   simp [map, ← HomologicalComplex.homologyMap_comp, ← chainsMap_comp]
 
@@ -675,7 +675,7 @@ abbreviation chainsMap₁
 
 中文:
 缩写 chainsMap₁
-  签名: : ModuleCat.of k (G ->₀ A) ⟶ ModuleCat.of k (H ->₀ B)
+  签名: : 模范畴.of k (G ->₀ A) ⟶ 模范畴.of k (H ->₀ B)
   定义体: ModuleCat.ofHom mapRange.linearMap φ.hom.toLinearMap ∘ₗ lmapDomain A k f
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, hom.toLinearMap, linearMap, lmapDomain, mapRange, mapRange.linearMap, toLinearMap
@@ -693,7 +693,7 @@ abbreviation chainsMap₂
 
 中文:
 缩写 chainsMap₂
-  签名: : ModuleCat.of k (G × G ->₀ A) ⟶ ModuleCat.of k (H × H ->₀ B)
+  签名: : 模范畴.of k (G × G ->₀ A) ⟶ 模范畴.of k (H × H ->₀ B)
   定义体: ModuleCat.ofHom mapRange.linearMap φ.hom.toLinearMap ∘ₗ lmapDomain A k (Prod.map f f)
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, Prod.map, hom.toLinearMap, linearMap, lmapDomain, mapRange, mapRange.linearMap, toLinearMap
@@ -940,7 +940,7 @@ instance epi_map_0_of_epi
 
 中文:
 实例 epi_map_0_of_epi
-  签名: {A B : Rep k G} (f : A ⟶ B) [Epi f]
+  签名: {A B : Rep k G} (f : A ⟶ B) [满态射 f]
   定义体: by
     simp only [← cancel_epi (H0π A)] at hgh
     simp_all [cancel_epi]
@@ -1057,7 +1057,7 @@ theorem mapShortComplexH1_id
 
 中文:
 定理 mapShortComplexH1_id
-  结论: mapShortComplexH1 (MonoidHom.id G) (𝟙 A) = 𝟙 _
+  结论: mapShortComplexH1 (幺半群态射.id G) (𝟙 A) = 𝟙 _
   证明: by
   ext <;> simp [shortComplexH1]
 
@@ -1082,7 +1082,7 @@ theorem mapShortComplexH1_comp
 
 中文:
 定理 mapShortComplexH1_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   refine ShortComplex.hom_ext _ _ ?_ ?_ rfl
   all_goals
@@ -1179,7 +1179,7 @@ lemma mapCycles₁_comp
 
 中文:
 引理 mapCycles₁_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   rw [← cyclesMap'_comp]; rw [← mapShortComplexH1_comp]
 
@@ -1689,7 +1689,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (H1CoresCoinf A S).g
+  签名: 满态射 (H1CoresCoinf A S).g
   定义体: by
   rw [ModuleCat.epi_iff_surjective]
   intro x
@@ -1947,7 +1947,7 @@ theorem mapShortComplexH2_id
 
 中文:
 定理 mapShortComplexH2_id
-  结论: mapShortComplexH2 (MonoidHom.id _) (𝟙 A) = 𝟙 _
+  结论: mapShortComplexH2 (幺半群态射.id _) (𝟙 A) = 𝟙 _
   证明: by
   refine ShortComplex.hom_ext _ _ ?_ ?_ ?_
   all_goals
@@ -1980,7 +1980,7 @@ theorem mapShortComplexH2_comp
 
 中文:
 定理 mapShortComplexH2_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   refine ShortComplex.hom_ext _ _ ?_ ?_ ?_
   all_goals
@@ -2077,7 +2077,7 @@ lemma mapCycles₂_comp
 
 中文:
 引理 mapCycles₂_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: by
   rw [← cyclesMap'_comp]; rw [← mapShortComplexH2_comp]
 
@@ -2243,7 +2243,7 @@ instance :
 
 中文:
 实例 :
-  签名: (chainsFunctor k G).PreservesZeroMorphisms
+  签名: (chainsFunctor k G).保持ZeroMorphisms
   定义体: chainsMap_zero (MonoidHom.id G)
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, chainsMap_zero
@@ -2312,7 +2312,7 @@ definition coresNatTrans
       ← chainsMap_comp, Category.i
 
 中文:
-定义 coresNatTrans
+定义 cores自然数Trans
   签名: (n : 自然数)
   定义体: map f (𝟙 _) n
   naturality {X Y} φ := by
@@ -2348,8 +2348,8 @@ definition coinfNatTrans
       ← HomologicalComplex.cyclesMap_comp
 
 中文:
-定义 coinfNatTrans
-  签名: (S : Subgroup G) [S.Normal] (n : 自然数)
+定义 coinf自然数Trans
+  签名: (S : 子群 G) [S.正规] (n : 自然数)
   定义体: map (QuotientGroup.mk' S) (Rep.toCoinvariantsMkQ _ _) n
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupHomology.π _ n),

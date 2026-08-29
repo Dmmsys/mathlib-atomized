@@ -55,7 +55,7 @@ lemma Ico_succ_left_eq_Ioo
 中文:
 引理 Ico_succ_left_eq_Ioo
   条件: (a b : α)
-  结论: Ico (succ a) b = Ioo a b
+  结论: 左闭右开区间 (succ a) b = 开区间 a b
   证明: coe_injective by simpa using Set.Ico_succ_left_eq_Ioo _ _
 
 Depends on / 依赖: Ico_succ_left_eq_Ioo, Set.Ico_succ_left_eq_Ioo, coe_injective
@@ -75,7 +75,7 @@ lemma Icc_succ_left_eq_Ioc_of_not_isMax
 中文:
 引理 Icc_succ_left_eq_Ioc_of_not_isMax
   条件: (ha : ¬ IsMax a) (b : α)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: coe_injective by simpa using Set.Icc_succ_left_eq_Ioc_of_not_isMax ha _
 
 Depends on / 依赖: Icc_succ_left_eq_Ioc_of_not_isMax, Set.Icc_succ_left_eq_Ioc_of_not_isMax, coe_injective
@@ -95,7 +95,7 @@ lemma Ico_succ_right_eq_Icc_of_not_isMax
 中文:
 引理 Ico_succ_right_eq_Icc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: coe_injective by simpa using Set.Ico_succ_right_eq_Icc_of_not_isMax hb _
 
 Depends on / 依赖: Ico_succ_right_eq_Icc_of_not_isMax, Set.Ico_succ_right_eq_Icc_of_not_isMax, coe_injective
@@ -115,7 +115,7 @@ lemma Ioo_succ_right_eq_Ioc_of_not_isMax
 中文:
 引理 Ioo_succ_right_eq_Ioc_of_not_isMax
   条件: (hb : ¬ IsMax b) (a : α)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: coe_injective by simpa using Set.Ioo_succ_right_eq_Ioc_of_not_isMax hb _
 
 Depends on / 依赖: Ioo_succ_right_eq_Ioc_of_not_isMax, Set.Ioo_succ_right_eq_Ioc_of_not_isMax, coe_injective
@@ -155,7 +155,7 @@ lemma insert_Icc_succ_left_eq_Icc
 中文:
 引理 insert_Icc_succ_left_eq_Icc
   条件: (h : a <= b)
-  结论: insert a (Icc (succ a) b) = Icc a b
+  结论: insert a (闭区间 (succ a) b) = 闭区间 a b
   证明: coe_injective by simpa using Set.insert_Icc_succ_left_eq_Icc h
 
 Depends on / 依赖: Set.insert_Icc_succ_left_eq_Icc, coe_injective, insert_Icc_succ_left_eq_Icc
@@ -175,7 +175,7 @@ lemma insert_Icc_right_eq_Icc_succ
 中文:
 引理 insert_Icc_right_eq_Icc_succ
   条件: (h : a <= succ b)
-  结论: insert (succ b) (Icc a b) = Icc a (succ b)
+  结论: insert (succ b) (闭区间 a b) = 闭区间 a (succ b)
   证明: coe_injective by simpa using Set.insert_Icc_right_eq_Icc_succ h
 
 Depends on / 依赖: Set.insert_Icc_right_eq_Icc_succ, coe_injective, insert_Icc_right_eq_Icc_succ
@@ -214,7 +214,7 @@ lemma insert_Ico_succ_left_eq_Ico
 中文:
 引理 insert_Ico_succ_left_eq_Ico
   条件: (h : a < b)
-  结论: insert a (Ico (succ a) b) = Ico a b
+  结论: insert a (左闭右开区间 (succ a) b) = 左闭右开区间 a b
   证明: coe_injective by simpa using Set.insert_Ico_succ_left_eq_Ico h
 
 Depends on / 依赖: Set.insert_Ico_succ_left_eq_Ico, coe_injective, insert_Ico_succ_left_eq_Ico
@@ -253,7 +253,7 @@ lemma insert_Ioc_succ_left_eq_Ioc
 中文:
 引理 insert_Ioc_succ_left_eq_Ioc
   条件: (h : a < b)
-  结论: insert (succ a) (Ioc (succ a) b) = Ioc a b
+  结论: insert (succ a) (左开右闭区间 (succ a) b) = 左开右闭区间 a b
   证明: coe_injective by simpa using Set.insert_Ioc_succ_left_eq_Ioc h
 
 Depends on / 依赖: Set.insert_Ioc_succ_left_eq_Ioc, coe_injective, insert_Ioc_succ_left_eq_Ioc
@@ -281,7 +281,7 @@ lemma Icc_succ_left_eq_Ioc
 中文:
 引理 Icc_succ_left_eq_Ioc
   条件: (a b : α)
-  结论: Icc (succ a) b = Ioc a b
+  结论: 闭区间 (succ a) b = 左开右闭区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -299,7 +299,7 @@ lemma Ico_succ_right_eq_Icc
 中文:
 引理 Ico_succ_right_eq_Icc
   条件: (a b : α)
-  结论: Ico a (succ b) = Icc a b
+  结论: 左闭右开区间 a (succ b) = 闭区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -317,7 +317,7 @@ lemma Ioo_succ_right_eq_Ioc
 中文:
 引理 Ioo_succ_right_eq_Ioc
   条件: (a b : α)
-  结论: Ioo a (succ b) = Ioc a b
+  结论: 开区间 a (succ b) = 左开右闭区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -335,7 +335,7 @@ lemma Ico_succ_succ_eq_Ioc
 中文:
 引理 Ico_succ_succ_eq_Ioc
   条件: (a b : α)
-  结论: Ico (succ a) (succ b) = Ioc a b
+  结论: 左闭右开区间 (succ a) (succ b) = 左开右闭区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -355,7 +355,7 @@ lemma insert_Ico_right_eq_Ico_succ
 中文:
 引理 insert_Ico_right_eq_Ico_succ
   条件: (h : a <= b)
-  结论: insert b (Ico a b) = Ico a (succ b)
+  结论: insert b (左闭右开区间 a b) = 左闭右开区间 a (succ b)
   证明: coe_injective by simpa using Set.insert_Ico_right_eq_Ico_succ h
 
 Depends on / 依赖: Set.insert_Ico_right_eq_Ico_succ, coe_injective, insert_Ico_right_eq_Ico_succ
@@ -375,7 +375,7 @@ lemma insert_Ioc_right_eq_Ioc_succ
 中文:
 引理 insert_Ioc_right_eq_Ioc_succ
   条件: (h : a <= b)
-  结论: insert (succ b) (Ioc a b) = Ioc a (succ b)
+  结论: insert (succ b) (左开右闭区间 a b) = 左开右闭区间 a (succ b)
   证明: coe_injective by simpa using Set.insert_Ioc_right_eq_Ioc_succ h
 
 Depends on / 依赖: Set.insert_Ioc_right_eq_Ioc_succ, coe_injective, insert_Ioc_right_eq_Ioc_succ
@@ -401,7 +401,7 @@ lemma Ioc_pred_right_eq_Ioo
 中文:
 引理 Ioc_pred_right_eq_Ioo
   条件: (a b : α)
-  结论: Ioc a (pred b) = Ioo a b
+  结论: 左开右闭区间 a (pred b) = 开区间 a b
   证明: coe_injective by simpa using Set.Ioc_pred_right_eq_Ioo _ _
 
 Depends on / 依赖: Ioc_pred_right_eq_Ioo, Set.Ioc_pred_right_eq_Ioo, coe_injective
@@ -421,7 +421,7 @@ lemma Icc_pred_right_eq_Ico_of_not_isMin
 中文:
 引理 Icc_pred_right_eq_Ico_of_not_isMin
   条件: (hb : ¬ IsMin b) (a : α)
-  结论: Icc a (pred b) = Ico a b
+  结论: 闭区间 a (pred b) = 左闭右开区间 a b
   证明: coe_injective by simpa using Set.Icc_pred_right_eq_Ico_of_not_isMin hb _
 
 Depends on / 依赖: Icc_pred_right_eq_Ico_of_not_isMin, Set.Icc_pred_right_eq_Ico_of_not_isMin, coe_injective
@@ -441,7 +441,7 @@ lemma Ioc_pred_left_eq_Icc_of_not_isMin
 中文:
 引理 Ioc_pred_left_eq_Icc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioc (pred a) b = Icc a b
+  结论: 左开右闭区间 (pred a) b = 闭区间 a b
   证明: coe_injective by simpa using Set.Ioc_pred_left_eq_Icc_of_not_isMin ha _
 
 Depends on / 依赖: Ioc_pred_left_eq_Icc_of_not_isMin, Set.Ioc_pred_left_eq_Icc_of_not_isMin, coe_injective
@@ -461,7 +461,7 @@ lemma Ioo_pred_left_eq_Ioc_of_not_isMin
 中文:
 引理 Ioo_pred_left_eq_Ioc_of_not_isMin
   条件: (ha : ¬ IsMin a) (b : α)
-  结论: Ioo (pred a) b = Ico a b
+  结论: 开区间 (pred a) b = 左闭右开区间 a b
   证明: coe_injective by simpa using Set.Ioo_pred_left_eq_Ioc_of_not_isMin ha _
 
 Depends on / 依赖: Ioo_pred_left_eq_Ioc_of_not_isMin, Set.Ioo_pred_left_eq_Ioc_of_not_isMin, coe_injective
@@ -501,7 +501,7 @@ lemma insert_Icc_pred_right_eq_Icc
 中文:
 引理 insert_Icc_pred_right_eq_Icc
   条件: (h : a <= b)
-  结论: insert b (Icc a (pred b)) = Icc a b
+  结论: insert b (闭区间 a (pred b)) = 闭区间 a b
   证明: coe_injective by simpa using Set.insert_Icc_pred_right_eq_Icc h
 
 Depends on / 依赖: Set.insert_Icc_pred_right_eq_Icc, coe_injective, insert_Icc_pred_right_eq_Icc
@@ -521,7 +521,7 @@ lemma insert_Icc_left_eq_Icc_pred
 中文:
 引理 insert_Icc_left_eq_Icc_pred
   条件: (h : pred a <= b)
-  结论: insert (pred a) (Icc a b) = Icc (pred a) b
+  结论: insert (pred a) (闭区间 a b) = 闭区间 (pred a) b
   证明: coe_injective by simpa using Set.insert_Icc_left_eq_Icc_pred h
 
 Depends on / 依赖: Set.insert_Icc_left_eq_Icc_pred, coe_injective, insert_Icc_left_eq_Icc_pred
@@ -560,7 +560,7 @@ lemma insert_Ioc_pred_right_eq_Ioc
 中文:
 引理 insert_Ioc_pred_right_eq_Ioc
   条件: (h : a < b)
-  结论: insert b (Ioc a (pred b)) = Ioc a b
+  结论: insert b (左开右闭区间 a (pred b)) = 左开右闭区间 a b
   证明: coe_injective by simpa using Set.insert_Ioc_pred_right_eq_Ioc h
 
 Depends on / 依赖: Set.insert_Ioc_pred_right_eq_Ioc, coe_injective, insert_Ioc_pred_right_eq_Ioc
@@ -599,7 +599,7 @@ lemma insert_Ico_pred_right_eq_Ico
 中文:
 引理 insert_Ico_pred_right_eq_Ico
   条件: (h : a < b)
-  结论: insert (pred b) (Ico a (pred b)) = Ico a b
+  结论: insert (pred b) (左闭右开区间 a (pred b)) = 左闭右开区间 a b
   证明: coe_injective by simpa using Set.insert_Ico_pred_right_eq_Ico h
 
 Depends on / 依赖: Set.insert_Ico_pred_right_eq_Ico, coe_injective, insert_Ico_pred_right_eq_Ico
@@ -627,7 +627,7 @@ lemma Icc_pred_right_eq_Ico
 中文:
 引理 Icc_pred_right_eq_Ico
   条件: (a b : α)
-  结论: Icc a (pred b) = Ico a b
+  结论: 闭区间 a (pred b) = 左闭右开区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -645,7 +645,7 @@ lemma Ioc_pred_left_eq_Icc
 中文:
 引理 Ioc_pred_left_eq_Icc
   条件: (a b : α)
-  结论: Ioc (pred a) b = Icc a b
+  结论: 左开右闭区间 (pred a) b = 闭区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -663,7 +663,7 @@ lemma Ioo_pred_left_eq_Ioc
 中文:
 引理 Ioo_pred_left_eq_Ioc
   条件: (a b : α)
-  结论: Ioo (pred a) b = Ico a b
+  结论: 开区间 (pred a) b = 左闭右开区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -681,7 +681,7 @@ lemma Ioc_pred_pred_eq_Ico
 中文:
 引理 Ioc_pred_pred_eq_Ico
   条件: (a b : α)
-  结论: Ioc (pred a) (pred b) = Ico a b
+  结论: 左开右闭区间 (pred a) (pred b) = 左闭右开区间 a b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -701,7 +701,7 @@ lemma insert_Ioc_left_eq_Ioc_pred
 中文:
 引理 insert_Ioc_left_eq_Ioc_pred
   条件: (h : a <= b)
-  结论: insert a (Ioc a b) = Ioc (pred a) b
+  结论: insert a (左开右闭区间 a b) = 左开右闭区间 (pred a) b
   证明: coe_injective by simpa using Set.insert_Ioc_left_eq_Ioc_pred h
 
 Depends on / 依赖: Set.insert_Ioc_left_eq_Ioc_pred, coe_injective, insert_Ioc_left_eq_Ioc_pred
@@ -721,7 +721,7 @@ lemma insert_Ico_left_eq_Ico_pred
 中文:
 引理 insert_Ico_left_eq_Ico_pred
   条件: (h : a <= b)
-  结论: insert (pred a) (Ico a b) = Ico (pred a) b
+  结论: insert (pred a) (左闭右开区间 a b) = 左闭右开区间 (pred a) b
   证明: insert_Ico_left_eq_Ico_pred_of_not_isMin h (not_isMin _)
 
 Depends on / 依赖: insert_Ico_left_eq_Ico_pred_of_not_isMin, not_isMin
@@ -746,7 +746,7 @@ lemma Icc_succ_pred_eq_Ioo
 中文:
 引理 Icc_succ_pred_eq_Ioo
   条件: (a b : α)
-  结论: Icc (succ a) (pred b) = Ioo a b
+  结论: 闭区间 (succ a) (pred b) = 开区间 a b
   证明: coe_injective by simpa using Set.Icc_succ_pred_eq_Ioo _ _
 
 Depends on / 依赖: Icc_succ_pred_eq_Ioo, Set.Icc_succ_pred_eq_Ioo, coe_injective
@@ -777,7 +777,7 @@ lemma Iio_succ_eq_Iic_of_not_isMax
 中文:
 引理 Iio_succ_eq_Iic_of_not_isMax
   条件: (hb : ¬ IsMax b)
-  结论: Iio (succ b) = Iic b
+  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
   证明: coe_injective by simpa using Set.Iio_succ_eq_Iic_of_not_isMax hb
 
 Depends on / 依赖: Iio_succ_eq_Iic_of_not_isMax, Set.Iio_succ_eq_Iic_of_not_isMax, coe_injective
@@ -799,7 +799,7 @@ lemma Iio_succ_eq_Iic
 中文:
 引理 Iio_succ_eq_Iic
   条件: (b : α)
-  结论: Iio (succ b) = Iic b
+  结论: 左无界右开区间 (succ b) = 左无界右闭区间 b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -823,7 +823,7 @@ lemma Iic_pred_eq_Iio_of_not_isMin
 中文:
 引理 Iic_pred_eq_Iio_of_not_isMin
   条件: (hb : ¬ IsMin b)
-  结论: Iic (pred b) = Iio b
+  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
   证明: coe_injective by simpa using Set.Iic_pred_eq_Iio_of_not_isMin hb
 
 Depends on / 依赖: Iic_pred_eq_Iio_of_not_isMin, Set.Iic_pred_eq_Iio_of_not_isMin, coe_injective
@@ -845,7 +845,7 @@ lemma Iic_pred_eq_Iio
 中文:
 引理 Iic_pred_eq_Iio
   条件: (b : α)
-  结论: Iic (pred b) = Iio b
+  结论: 左无界右闭区间 (pred b) = 左无界右开区间 b
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -875,7 +875,7 @@ lemma Ici_succ_eq_Ioi_of_not_isMax
 中文:
 引理 Ici_succ_eq_Ioi_of_not_isMax
   条件: (ha : ¬ IsMax a)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: coe_injective by simpa using Set.Ici_succ_eq_Ioi_of_not_isMax ha
 
 Depends on / 依赖: Ici_succ_eq_Ioi_of_not_isMax, Set.Ici_succ_eq_Ioi_of_not_isMax, coe_injective
@@ -897,7 +897,7 @@ lemma Ici_succ_eq_Ioi
 中文:
 引理 Ici_succ_eq_Ioi
   条件: (a : α)
-  结论: Ici (succ a) = Ioi a
+  结论: 左闭右无界区间 (succ a) = 左开右无界区间 a
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective
@@ -921,7 +921,7 @@ lemma Ioi_pred_eq_Ici_of_not_isMin
 中文:
 引理 Ioi_pred_eq_Ici_of_not_isMin
   条件: (ha : ¬ IsMin a)
-  结论: Ioi (pred a) = Ici a
+  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
   证明: coe_injective by simpa using Set.Ioi_pred_eq_Ici_of_not_isMin ha
 
 Depends on / 依赖: Ioi_pred_eq_Ici_of_not_isMin, Set.Ioi_pred_eq_Ici_of_not_isMin, coe_injective
@@ -943,7 +943,7 @@ lemma Ioi_pred_eq_Ici
 中文:
 引理 Ioi_pred_eq_Ici
   条件: (a : α)
-  结论: Ioi (pred a) = Ici a
+  结论: 左开右无界区间 (pred a) = 左闭右无界区间 a
   证明: coe_injective by simp
 
 Depends on / 依赖: coe_injective

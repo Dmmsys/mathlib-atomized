@@ -76,7 +76,7 @@ definition HasLineDerivWithinAt
 
 中文:
 定义 HasLineDerivWithinAt
-  签名: (f : E -> F) (f' : F) (s : Set E) (x : E) (v : E)
+  签名: (f : E -> F) (f' : F) (s : 集合 E) (x : E) (v : E)
   定义体: HasDerivWithinAt (fun t => f (x + t • v)) f' ((fun t => x + t • v) ⁻¹' s) (0 : 𝕜)
 
 Depends on / 依赖: HasDerivWithinAt
@@ -112,7 +112,7 @@ definition LineDifferentiableWithinAt
 
 中文:
 定义 LineDifferentiableWithinAt
-  签名: (f : E -> F) (s : Set E) (x : E) (v : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E) (v : E)
   定义体: DifferentiableWithinAt 𝕜 (fun t => f (x + t • v)) ((fun t => x + t • v) ⁻¹' s) (0 : 𝕜)
 
 Depends on / 依赖: DifferentiableWithinAt
@@ -148,7 +148,7 @@ definition lineDerivWithin
 
 中文:
 定义 lineDerivWithin
-  签名: (f : E -> F) (s : Set E) (x : E) (v : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E) (v : E)
   定义体: derivWithin (fun t => f (x + t • v)) ((fun t => x + t • v) ⁻¹' s) (0 : 𝕜)
 
 Depends on / 依赖: derivWithin
@@ -204,7 +204,7 @@ lemma HasLineDerivAt.hasLineDerivWithinAt
 
 中文:
 引理 HasLineDerivAt.hasLineDerivWithinAt
-  条件: (hf : HasLineDerivAt 𝕜 f f' x v) (s : Set E)
+  条件: (hf : HasLineDerivAt 𝕜 f f' x v) (s : 集合 E)
   证明: HasDerivAt.hasDerivWithinAt hf
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.hasDerivWithinAt, hasDerivWithinAt
@@ -661,7 +661,7 @@ theorem HasLineDerivAt.tendsto_slope_zero_right
 
 中文:
 定理 HasLineDerivAt.tendsto_slope_zero_right
-  条件: [Preorder 𝕜] (h : HasLineDerivAt 𝕜 f f' x v)
+  条件: [预序 𝕜] (h : HasLineDerivAt 𝕜 f f' x v)
   证明: h.tendsto_slope_zero.mono_left (nhdsGT_le_nhdsNE 0)
 
 Depends on / 依赖: h.tendsto_slope_zero.mono_left, mono_left, nhdsGT_le_nhdsNE, tendsto_slope_zero
@@ -680,7 +680,7 @@ theorem HasLineDerivAt.tendsto_slope_zero_left
 
 中文:
 定理 HasLineDerivAt.tendsto_slope_zero_left
-  条件: [Preorder 𝕜] (h : HasLineDerivAt 𝕜 f f' x v)
+  条件: [预序 𝕜] (h : HasLineDerivAt 𝕜 f f' x v)
   证明: h.tendsto_slope_zero.mono_left (nhdsLT_le_nhdsNE 0)
 
 Depends on / 依赖: h.tendsto_slope_zero.mono_left, mono_left, nhdsLT_le_nhdsNE, tendsto_slope_zero
@@ -846,8 +846,8 @@ lemma HasFDerivAt.hasLineDerivAt
   exact hf.hasFDerivWithinAt.hasLineDerivWithinAt v
 
 中文:
-引理 HasFDerivAt.hasLineDerivAt
-  条件: (hf : HasFDerivAt f L x) (v : E)
+引理 在点处Fréchet可导.hasLineDerivAt
+  条件: (hf : 在点处Fréchet可导 f L x) (v : E)
   证明: by
   rw [← hasLineDerivWithinAt_univ]
   exact hf.hasFDerivWithinAt.hasLineDerivWithinAt v
@@ -953,7 +953,7 @@ theorem lineDerivWithin_of_isOpen
 
 中文:
 定理 lineDerivWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   证明: lineDerivWithin_of_mem_nhds (hs.mem_nhds hx)
 
 Depends on / 依赖: hs.mem_nhds, lineDerivWithin_of_mem_nhds, mem_nhds
@@ -1070,7 +1070,7 @@ theorem Filter.EventuallyEq.hasLineDerivAt_iff
   exact B.preimage_mem_nhds this
 
 中文:
-定理 Filter.EventuallyEq.hasLineDerivAt_iff
+定理 滤子.EventuallyEq.hasLineDerivAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁)
   证明: by
   apply hasDerivAt_iff
@@ -1099,7 +1099,7 @@ theorem Filter.EventuallyEq.lineDifferentiableAt_iff
   fun h' => (h.hasLineDerivAt_iff.2 h'.hasLineDerivAt).lineDifferentiableAt⟩
 
 中文:
-定理 Filter.EventuallyEq.lineDifferentiableAt_iff
+定理 滤子.EventuallyEq.lineDifferentiableAt_iff
   条件: (h : f₀ =ᶠ[𝓝 x] f₁)
   证明: ⟨fun h' => (h.hasLineDerivAt_iff.1 h'.hasLineDerivAt).lineDifferentiableAt,
   fun h' => (h.hasLineDerivAt_iff.2 h'.hasLineDerivAt).lineDifferentiableAt⟩
@@ -1124,7 +1124,7 @@ theorem Filter.EventuallyEq.hasLineDerivWithinAt_iff
   · simpa using hx
 
 中文:
-定理 Filter.EventuallyEq.hasLineDerivWithinAt_iff
+定理 滤子.EventuallyEq.hasLineDerivWithinAt_iff
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : f₀ x = f₁ x)
   证明: by
   apply hasDerivWithinAt_iff
@@ -1150,7 +1150,7 @@ theorem Filter.EventuallyEq.hasLineDerivWithinAt_iff_of_mem
   proof: h.hasLineDerivWithinAt_iff (h.eq_of_nhdsWithin hx)
 
 中文:
-定理 Filter.EventuallyEq.hasLineDerivWithinAt_iff_of_mem
+定理 滤子.EventuallyEq.hasLineDerivWithinAt_iff_of_mem
   条件: (h : f₀ =ᶠ[𝓝[s] x] f₁) (hx : x in s)
   证明: h.hasLineDerivWithinAt_iff (h.eq_of_nhdsWithin hx)
 
@@ -1169,7 +1169,7 @@ theorem Filter.EventuallyEq.lineDifferentiableWithinAt_iff
   fun h' => ((h.hasLineDerivWithinAt_iff hx).2 h'.hasLineDerivWithinAt).lineDifferentiableWithinAt⟩
 
 中文:
-定理 Filter.EventuallyEq.lineDifferentiableWithinAt_iff
+定理 滤子.EventuallyEq.lineDifferentiableWithinAt_iff
   证明: ⟨fun h' => ((h.hasLineDerivWithinAt_iff hx).1 h'.hasLineDerivWithinAt).lineDifferentiableWithinAt,
   fun h' => ((h.hasLineDerivWithinAt_iff hx).2 h'.hasLineDerivWithinAt).lineDifferentiableWithinAt⟩
 
@@ -1189,7 +1189,7 @@ theorem Filter.EventuallyEq.lineDifferentiableWithinAt_iff_of_mem
   proof: h.lineDifferentiableWithinAt_iff (h.eq_of_nhdsWithin hx)
 
 中文:
-定理 Filter.EventuallyEq.lineDifferentiableWithinAt_iff_of_mem
+定理 滤子.EventuallyEq.lineDifferentiableWithinAt_iff_of_mem
   证明: h.lineDifferentiableWithinAt_iff (h.eq_of_nhdsWithin hx)
 
 Depends on / 依赖: eq_of_nhdsWithin, h.eq_of_nhdsWithin, h.lineDifferentiableWithinAt_iff, lineDifferentiableWithinAt_iff
@@ -1286,7 +1286,7 @@ theorem Filter.EventuallyEq.lineDerivWithin_eq
   exact A.continuousWithinAt.preimage_mem_nhdsWithin'' hs (by simp)
 
 中文:
-定理 Filter.EventuallyEq.lineDerivWithin_eq
+定理 滤子.EventuallyEq.lineDerivWithin_eq
   条件: (hs : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: by
   apply derivWithin_eq ?_ (by simpa using hx)
@@ -1310,7 +1310,7 @@ theorem Filter.EventuallyEq.lineDerivWithin_eq_nhds
   proof: (h.filter_mono nhdsWithin_le_nhds).lineDerivWithin_eq h.self_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.lineDerivWithin_eq_nhds
+定理 滤子.EventuallyEq.lineDerivWithin_eq_nhds
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   证明: (h.filter_mono nhdsWithin_le_nhds).lineDerivWithin_eq h.self_of_nhds
 
@@ -1330,7 +1330,7 @@ theorem Filter.EventuallyEq.lineDeriv_eq
   rw [← lineDerivWithin_univ]; rw [← lineDerivWithin_univ]; rw [h.lineDerivWithin_eq_nhds]
 
 中文:
-定理 Filter.EventuallyEq.lineDeriv_eq
+定理 滤子.EventuallyEq.lineDeriv_eq
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   证明: by
   rw [← lineDerivWithin_univ]; rw [← lineDerivWithin_univ]; rw [h.lineDerivWithin_eq_nhds]
@@ -1469,7 +1469,7 @@ theorem norm_lineDeriv_le_of_lipschitzOn
 
 中文:
 定理 norm_lineDeriv_le_of_lipschitzOn
-  结论: {f : E -> F} {x₀ : E} {s : Set E} (hs : s in 𝓝 x₀)
+  结论: {f : E -> F} {x₀ : E} {s : 集合 E} (hs : s in 𝓝 x₀)
   证明: by
   refine norm_lineDeriv_le_of_lip' 𝕜 C.coe_nonneg ?_
   filter_upwards [hs] with x hx using hlip.norm_sub_le hx (mem_of_mem_nhds hs)

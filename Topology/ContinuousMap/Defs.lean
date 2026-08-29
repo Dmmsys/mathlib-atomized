@@ -35,11 +35,11 @@ structure ContinuousMap
     - continuous_toFun : Continuous toFun  [default: by fun_prop]
 
 中文:
-结构 ContinuousMap
-  参数: (X Y : 类型) [TopologicalSpace X] [TopologicalSpace Y]
+结构 连续映射
+  参数: (X Y : 类型) [拓扑空间 X] [拓扑空间 Y]
   公理与运算 (2 个):
     - toFun : X -> Y
-    - continuous_toFun : Continuous toFun  [默认: by fun_prop]
+    - continuous_toFun : 连续 toFun  [默认: by fun_prop]
 
 Depends on / 依赖: fun_prop
 -/
@@ -64,10 +64,10 @@ class ContinuousMapClass
     - map_continuous((f : F)) : Continuous f
 
 中文:
-类 ContinuousMapClass
+类 连续映射类
   参数: (F : 类型) (X Y : outParam 类型)
   公理与运算 (1 个):
-    - map_continuous((f : F)) : Continuous f
+    - map_continuous((f : F)) : 连续 f
 -/
 class ContinuousMapClass (F : Type*) (X Y : outParam Type*)
     [TopologicalSpace X] [TopologicalSpace Y] [FunLike F X Y] : Prop where
@@ -135,7 +135,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike C(X, Y) X Y where
+  签名: : 函数状 C(X, Y) X Y where
   定义体: ContinuousMap.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -157,7 +157,7 @@ instance instContinuousMapClass
 
 中文:
 实例 instContinuousMapClass
-  签名: : ContinuousMapClass C(X, Y) X Y where
+  签名: : 连续映射类 C(X, Y) X Y where
   定义体: ContinuousMap.continuous_toFun
 
 @[simp]
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (X -> Y) C(X, Y) DFunLike.coe Continuous
+  签名: CanLift (X -> Y) C(X, Y) 依赖函数状.coe 连续
   定义体: ⟨fun f hf => ⟨⟨f, hf⟩, rfl⟩⟩
 -/
 instance : CanLift (X -> Y) C(X, Y) DFunLike.coe Continuous := ⟨fun f hf => ⟨⟨f, hf⟩, rfl⟩⟩
@@ -230,7 +230,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [FunLike F X Y] [ContinuousMapClass F X Y] (f : F)
+  条件: {F : 类型} [函数状 F X Y] [连续映射类 F X Y] (f : F)
   证明: rfl
 -/
 protected theorem coe_coe {F : Type*} [FunLike F X Y] [ContinuousMapClass F X Y] (f : F) :
@@ -247,7 +247,7 @@ theorem coe_apply
 
 中文:
 定理 coe_apply
-  条件: {F : 类型} [FunLike F X Y] [ContinuousMapClass F X Y] (f : F) (x : X)
+  条件: {F : 类型} [函数状 F X Y] [连续映射类 F X Y] (f : F) (x : X)
   证明: rfl
 -/
 protected theorem coe_apply {F : Type*} [FunLike F X Y] [ContinuousMapClass F X Y] (f : F) (x : X) :
@@ -266,7 +266,7 @@ theorem coe_injective'
 
 中文:
 定理 coe_injective'
-  条件: {F : 类型} [FunLike F X Y] [ContinuousMapClass F X Y]
+  条件: {F : 类型} [函数状 F X Y] [连续映射类 F X Y]
   证明: .of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 @[ext]
@@ -370,7 +370,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : C(X, Y))
-  结论: Continuous f
+  结论: 连续 f
   证明: f.continuous_toFun
 -/
 protected theorem continuous (f : C(X, Y)) : Continuous f :=
@@ -424,7 +424,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective (DFunLike.coe : C(X, Y) -> (X -> Y))
+  结论: 函数.单射 (依赖函数状.coe : C(X, Y) -> (X -> Y))
   证明: DFunLike.coe_injective
 
 @[simp]
@@ -446,7 +446,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f : X -> Y) (h : Continuous f)
+  条件: (f : X -> Y) (h : 连续 f)
   结论: ⇑(⟨f, h⟩ : C(X, Y)) = f
   证明: rfl
 -/
@@ -462,8 +462,8 @@ instance [Subsingleton
   body: DFunLike.subsingleton_cod
 
 中文:
-实例 [Subsingleton
-  签名: Y] : Subsingleton C(X, Y)
+实例 [子单例
+  签名: Y] : 子单例 C(X, Y)
   定义体: DFunLike.subsingleton_cod
 
 Depends on / 依赖: DFunLike, DFunLike.subsingleton_cod, subsingleton_cod
@@ -478,8 +478,8 @@ instance [IsEmpty
   body: DFunLike.subsingleton_dom
 
 中文:
-实例 [IsEmpty
-  签名: X] : Subsingleton C(X, Y)
+实例 [是空
+  签名: X] : 子单例 C(X, Y)
   定义体: DFunLike.subsingleton_dom
 
 Depends on / 依赖: DFunLike, DFunLike.subsingleton_dom, subsingleton_dom

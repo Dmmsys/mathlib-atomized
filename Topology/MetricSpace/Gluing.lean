@@ -115,7 +115,7 @@ theorem glueDist_glued_points
 
 中文:
 定理 glueDist_glued_points
-  条件: [Nonempty Z] (Φ : Z -> X) (Ψ : Z -> Y) (ε : 实数) (p : Z)
+  条件: [非空 Z] (Φ : Z -> X) (Ψ : Z -> Y) (ε : 实数) (p : Z)
   证明: by
   have : ⨅ q, dist (Φ p) (Φ q) + dist (Ψ p) (Ψ q) = 0 := by
     have A : forall q, 0 <= dist (Φ p) (Φ q) + dist (Ψ p) (Ψ q) := fun _ => by positivity
@@ -353,8 +353,8 @@ theorem Sum.mem_uniformity_iff_glueDist
   
 
 中文:
-定理 Sum.mem_uniformity_iff_glueDist
-  条件: (hε : 0 < ε) (s : Set ((X oplus Y) × (X oplus Y)))
+定理 和.mem_uniformity_iff_glueDist
+  条件: (hε : 0 < ε) (s : 集合 ((X oplus Y) × (X oplus Y)))
   证明: by
   simp only [Sum.uniformity, Filter.mem_sup, Filter.mem_map, mem_uniformity_dist, mem_preimage]
   constructor
@@ -403,7 +403,7 @@ uniformity_dist := uniformity_dist_of_mem_uniformity _ _ Sum.mem_unif
 
 中文:
 定义 glueMetricApprox
-  签名: [Nonempty Z] (Φ : Z -> X) (Ψ : Z -> Y) (ε : 实数) (ε0 : 0 < ε)
+  签名: [非空 Z] (Φ : Z -> X) (Ψ : Z -> Y) (ε : 实数) (ε0 : 0 < ε)
   定义体: glueDist Φ Ψ ε
   dist_self := glueDist_self Φ Ψ ε
   dist_comm := glueDist_comm Φ Ψ ε
@@ -447,7 +447,7 @@ definition Sum.dist
   signature: : X oplus Y -> X oplus Y -> Real
 
 中文:
-定义 Sum.dist
+定义 和.dist
   签名: : X oplus Y -> X oplus Y -> 实数
 -/
 protected def Sum.dist : X oplus Y -> X oplus Y -> Real
@@ -467,7 +467,7 @@ theorem Sum.dist_eq_glueDist
     add_left_comm, add_assoc]
 
 中文:
-定理 Sum.dist_eq_glueDist
+定理 和.dist_eq_glueDist
   条件: {p q : X oplus Y} (x : X) (y : Y)
   证明: by
   cases p <;> cases q <;> first | rfl | simp [Sum.dist, glueDist, dist_comm, add_comm,
@@ -493,9 +493,9 @@ theorem Sum.dist_comm
   cases x <;> cases y <;> simp [Sum.dist, _root_.dist_comm, add_comm, add_left_comm]
 
 中文:
-定理 Sum.dist_comm
+定理 和.dist_comm
   条件: (x y : X oplus Y)
-  结论: Sum.dist x y = Sum.dist y x
+  结论: 和.dist x y = 和.dist y x
   证明: by
   cases x <;> cases y <;> simp [Sum.dist, _root_.dist_comm, add_comm, add_left_comm]
 -/
@@ -513,9 +513,9 @@ theorem Sum.one_le_dist_inl_inr
   grw [Sum.dist, ← le_add_of_nonneg_right dist_nonneg, ← le_add_of_nonneg_left dist_nonneg]
 
 中文:
-定理 Sum.one_le_dist_inl_inr
+定理 和.one_le_dist_inl_inr
   条件: {x : X} {y : Y}
-  结论: 1 <= Sum.dist (.inl x) (.inr y)
+  结论: 1 <= 和.dist (.inl x) (.inr y)
   证明: by
   grw [Sum.dist, ← le_add_of_nonneg_right dist_nonneg, ← le_add_of_nonneg_left dist_nonneg]
 
@@ -535,9 +535,9 @@ theorem Sum.one_le_dist_inr_inl
   rw [Sum.dist_comm]; exact Sum.one_le_dist_inl_inr
 
 中文:
-定理 Sum.one_le_dist_inr_inl
+定理 和.one_le_dist_inr_inl
   条件: {x : X} {y : Y}
-  结论: 1 <= Sum.dist (.inr y) (.inl x)
+  结论: 1 <= 和.dist (.inr y) (.inl x)
   证明: by
   rw [Sum.dist_comm]; exact Sum.one_le_dist_inl_inr
 
@@ -563,8 +563,8 @@ theorem Sum.mem_uniformity
     · exact hX (lt_of_lt_of_le h (le_trans (min_
 
 中文:
-定理 Sum.mem_uniformity
-  条件: (s : Set ((X oplus Y) × (X oplus Y)))
+定理 和.mem_uniformity
+  条件: (s : 集合 ((X oplus Y) × (X oplus Y)))
   证明: by
   constructor
   · rintro ⟨hsX, hsY⟩
@@ -613,7 +613,7 @@ definition metricSpaceSum
 
 中文:
 定义 metricSpaceSum
-  签名: : MetricSpace (X oplus Y) where
+  签名: : 度量空间 (X oplus Y) where
   定义体: Sum.dist
   dist_self x := by cases x <;> simp only [Sum.dist, dist_self]
   dist_comm := Sum.dist_comm
@@ -663,9 +663,9 @@ theorem Sum.dist_eq
   proof: rfl
 
 中文:
-定理 Sum.dist_eq
+定理 和.dist_eq
   条件: {x y : X oplus Y}
-  结论: dist x y = Sum.dist x y
+  结论: dist x y = 和.dist x y
   证明: rfl
 -/
 theorem Sum.dist_eq {x y : X oplus Y} : dist x y = Sum.dist x y := rfl
@@ -680,7 +680,7 @@ theorem isometry_inl
 
 中文:
 定理 isometry_inl
-  结论: Isometry (Sum.inl : X -> X oplus Y)
+  结论: 等距 (和.inl : X -> X oplus Y)
   证明: Isometry.of_dist_eq fun _ _ => rfl
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -698,7 +698,7 @@ theorem isometry_inr
 
 中文:
 定理 isometry_inr
-  结论: Isometry (Sum.inr : Y -> X oplus Y)
+  结论: 等距 (和.inr : Y -> X oplus Y)
   证明: Isometry.of_dist_eq fun _ _ => rfl
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -781,7 +781,7 @@ theorem dist_same
 中文:
 定理 dist_same
   条件: (i : ι) (x y : E i)
-  结论: dist (Sigma.mk i x) ⟨i, y⟩ = dist x y
+  结论: dist (依赖和类型.mk i x) ⟨i, y⟩ = dist x y
   证明: by
   simp [Dist.dist, Sigma.dist]
 
@@ -942,7 +942,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (s : Set (Σ i, E i))
+  条件: (s : 集合 (Σ i, E i))
   证明: by
   constructor
   · rintro hs ⟨i, x⟩ hx
@@ -999,7 +999,7 @@ definition metricSpace
 
 中文:
 定义 metricSpace
-  签名: : MetricSpace (Σ i, E i)
+  签名: : 度量空间 (Σ i, E i)
   定义体: by
   refine MetricSpace.ofDistTopology Sigma.dist ?_ ?_ Sigma.dist_triangle Sigma.isOpen_iff ?_
   · rintro ⟨i, x⟩
@@ -1045,7 +1045,7 @@ theorem isometry_mk
 中文:
 定理 isometry_mk
   条件: (i : ι)
-  结论: Isometry (Sigma.mk i : E i -> Σ k, E k)
+  结论: 等距 (依赖和类型.mk i : E i -> Σ k, E k)
   证明: Isometry.of_dist_eq fun x y => by simp
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -1070,8 +1070,8 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  条件: [对任意 i, CompleteSpace (E i)]
-  结论: CompleteSpace (Σ i, E i)
+  条件: [对任意 i, 完备空间 (E i)]
+  结论: 完备空间 (Σ i, E i)
   证明: by
   set s : ι -> Set (Σ i, E i) := fun i => Sigma.fst ⁻¹' {i}
   set U := { p : (Σ k, E k) × Σ k, E k | dist p.1 p.2 < 1 }
@@ -1119,7 +1119,7 @@ definition gluePremetric
 
 中文:
 定义 gluePremetric
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ)
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ)
   定义体: glueDist Φ Ψ 0
   dist_self := glueDist_self Φ Ψ 0
   dist_comm := glueDist_comm Φ Ψ 0
@@ -1143,7 +1143,7 @@ definition GlueSpace
 
 中文:
 定义 GlueSpace
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ)
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ)
   定义体: @SeparationQuotient _ (gluePremetric hΦ hΨ).toUniformSpace.toTopologicalSpace
 
 Depends on / 依赖: SeparationQuotient, gluePremetric, toTopologicalSpace, toUniformSpace, toUniformSpace.toTopologicalSpace
@@ -1165,7 +1165,7 @@ definition toGlueL
 
 中文:
 定义 toGlueL
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ) (x : X)
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ) (x : X)
   定义体: Quotient.mk'' (.inl x)
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1183,7 +1183,7 @@ definition toGlueR
 
 中文:
 定义 toGlueR
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ) (y : Y)
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ) (y : Y)
   定义体: Quotient.mk'' (.inr y)
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1201,7 +1201,7 @@ instance inhabitedLeft
 
 中文:
 实例 inhabitedLeft
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ) [Inhabited X]
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ) [可居 X]
   定义体: ⟨toGlueL _ _ default⟩
 
 Depends on / 依赖: toGlueL
@@ -1220,7 +1220,7 @@ instance inhabitedRight
 
 中文:
 实例 inhabitedRight
-  签名: (hΦ : Isometry Φ) (hΨ : Isometry Ψ) [Inhabited Y]
+  签名: (hΦ : 等距 Φ) (hΨ : 等距 Ψ) [可居 Y]
   定义体: ⟨toGlueR _ _ default⟩
 
 Depends on / 依赖: toGlueR
@@ -1245,7 +1245,7 @@ theorem toGlue_commute
 
 中文:
 定理 toGlue_commute
-  条件: (hΦ : Isometry Φ) (hΨ : Isometry Ψ)
+  条件: (hΦ : 等距 Φ) (hΨ : 等距 Ψ)
   证明: by
   let i : PseudoMetricSpace (X oplus Y) := gluePremetric hΦ hΨ
   let _ := i.toUniformSpace.toTopologicalSpace
@@ -1276,8 +1276,8 @@ theorem toGlueL_isometry
 
 中文:
 定理 toGlueL_isometry
-  条件: (hΦ : Isometry Φ) (hΨ : Isometry Ψ)
-  结论: Isometry (toGlueL hΦ hΨ)
+  条件: (hΦ : 等距 Φ) (hΨ : 等距 Ψ)
+  结论: 等距 (toGlueL hΦ hΨ)
   证明: Isometry.of_dist_eq fun _ _ => rfl
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -1296,8 +1296,8 @@ theorem toGlueR_isometry
 
 中文:
 定理 toGlueR_isometry
-  条件: (hΦ : Isometry Φ) (hΨ : Isometry Ψ)
-  结论: Isometry (toGlueR hΦ hΨ)
+  条件: (hΦ : 等距 Φ) (hΨ : 等距 Ψ)
+  结论: 等距 (toGlueR hΦ hΨ)
   证明: Isometry.of_dist_eq fun _ _ => rfl
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -1370,7 +1370,7 @@ theorem inductiveLimitDist_eq_dist
 
 中文:
 定理 inductiveLimitDist_eq_dist
-  条件: (I : 对任意 n, Isometry (f n)) (x y : Σ n, X n)
+  条件: (I : 对任意 n, 等距 (f n)) (x y : Σ n, X n)
   证明: x; obtain ⟨j, y⟩ := y
     obtain rfl : i = 0 := nonpos_iff_eq_zero.1 hx
     obtain rfl : j = 0 := nonpos_iff_eq_zero.1 hy
@@ -1420,7 +1420,7 @@ definition inductivePremetric
 
 中文:
 定义 inductivePremetric
-  签名: (I : 对任意 n, Isometry (f n))
+  签名: (I : 对任意 n, 等距 (f n))
   定义体: inductiveLimitDist f
   dist_self x := by simp [inductiveLimitDist]
   dist_comm x y := by
@@ -1463,7 +1463,7 @@ definition InductiveLimit
 
 中文:
 定义 InductiveLimit
-  签名: (I : 对任意 n, Isometry (f n))
+  签名: (I : 对任意 n, 等距 (f n))
   定义体: @SeparationQuotient _ (inductivePremetric I).toUniformSpace.toTopologicalSpace
 
 Depends on / 依赖: SeparationQuotient, inductivePremetric, toTopologicalSpace, toUniformSpace, toUniformSpace.toTopologicalSpace
@@ -1485,7 +1485,7 @@ definition toInductiveLimit
 
 中文:
 定义 toInductiveLimit
-  签名: (I : 对任意 n, Isometry (f n)) (n : 自然数) (x : X n)
+  签名: (I : 对任意 n, 等距 (f n)) (n : 自然数) (x : X n)
   定义体: Quotient.mk'' (Sigma.mk n x)
 
 Depends on / 依赖: Quotient, Quotient.mk, Sigma.mk
@@ -1508,7 +1508,7 @@ theorem toInductiveLimit_isometry
 
 中文:
 定理 toInductiveLimit_isometry
-  条件: (I : 对任意 n, Isometry (f n)) (n : 自然数)
+  条件: (I : 对任意 n, 等距 (f n)) (n : 自然数)
   证明: Isometry.of_dist_eq fun x y => by
     change inductiveLimitDist f ⟨n, x⟩ ⟨n, y⟩ = dist x y
     rw [inductiveLimitDist_eq_dist I ⟨n]; rw [x⟩ ⟨n]; rw [y⟩ n (le_refl n) (le_refl n)]; rw [leRecOn_self]; rw [leRecOn_self]
@@ -1538,7 +1538,7 @@ theorem toInductiveLimit_commute
 
 中文:
 定理 toInductiveLimit_commute
-  条件: (I : 对任意 n, Isometry (f n)) (n : 自然数)
+  条件: (I : 对任意 n, 等距 (f n)) (n : 自然数)
   证明: by
   let h := inductivePremetric I
   let _ := h.toUniformSpace.toTopologicalSpace

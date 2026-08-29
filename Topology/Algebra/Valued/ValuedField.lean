@@ -65,7 +65,7 @@ theorem Valuation.inversion_estimate
   have x_ne :
 
 中文:
-定理 Valuation.inversion_estimate
+定理 赋值.inversion_estimate
   结论: {x y : K} {γ : Γ₀ˣ} (y_ne : y != 0)
   证明: by
   have hyp1 : v (x - y) < γ * (v y * v y) := lt_of_lt_of_le h (min_le_left _ _)
@@ -112,7 +112,7 @@ theorem Valuation.inversion_estimate'
     _ = v s := div_mul_cancel₀ _ (by simpa)
 
 中文:
-定理 Valuation.inversion_estimate'
+定理 赋值.inversion_estimate'
   结论: {x y r s : K} (y_ne : y != 0) (hr : r != 0) (hs : s != 0)
   证明: by
   have hr' : 0 < v r := by simp [zero_lt_iff, hr]
@@ -187,8 +187,8 @@ theorem Valued.continuous_valuation
   · have v_ne : (v.restrict x : ValueGroup₀ (.ofClass h
 
 中文:
-定理 Valued.continuous_valuation
-  条件: [hv : Valued K Γ₀]
+定理 赋值.continuous_valuation
+  条件: [hv : 赋值 K Γ₀]
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -234,8 +234,8 @@ theorem Valued.continuous_valuation_of_surjective
     use Units.mk0 (restrict₀ (.ofClass hv.v) x) (by s
 
 中文:
-定理 Valued.continuous_valuation_of_surjective
-  结论: [hv : Valued K Γ₀]
+定理 赋值.continuous_valuation_of_surjective
+  结论: [hv : 赋值 K Γ₀]
   证明: by
   rw [continuous_iff_continuousAt]
   intro x
@@ -338,7 +338,7 @@ lemma valuation_isClosedMap
 
 中文:
 引理 valuation_isClosedMap
-  结论: IsClosedMap (v.restrict : K -> (ValueGroup₀ (.ofClass hv.v)))
+  结论: 是闭映射 (v.restrict : K -> (ValueGroup₀ (.ofClass hv.v)))
   证明: by
   refine IsClosedMap.of_nonempty ?_
   intro U hU hU'
@@ -397,7 +397,7 @@ theorem continuous_extension
 
 中文:
 定理 continuous_extension
-  结论: Continuous (Valued.extension : hat K -> _)
+  结论: 连续 (赋值.extension : hat K -> _)
   证明: by
   refine Completion.isDenseInducing_coe.continuous_extend ?_
   intro x₀
@@ -522,7 +522,7 @@ definition extensionValuation
 
 中文:
 定义 extensionValuation
-  签名: : Valuation (hat K) Γ₀ where
+  签名: : 赋值 (hat K) Γ₀ where
   定义体: ValueGroup₀.embedding ∘ Valued.extension
   map_zero' := by
     rw [Function.comp_apply]; rw [map_eq_zero]; rw [← v.restrict.map_zero (R := K)]; rw [← Valued.extension_extends (0 : K)]; rw [Completion.coe_zero]
@@ -575,7 +575,7 @@ lemma extensionValuation_toFun
 中文:
 引理 extensionValuation_toFun
   条件: (x : hat K)
-  结论: Valued.extensionValuation x =
+  结论: 赋值.extensionValuation x =
   证明: rfl
 -/
 lemma extensionValuation_toFun (x : hat K) : Valued.extensionValuation x =
@@ -672,7 +672,7 @@ lemma exists_coe_eq_v
       have hr (r : K) : ValueGroup₀.embedding (restrict₀ (
 
 中文:
-引理 exists_coe_eq_v
+引理 存在_coe_eq_v
   条件: (x : hat K)
   结论: 存在 r : K, extensionValuation x = v r
   证明: by
@@ -955,7 +955,7 @@ instance valuedCompletion
 
 中文:
 实例 valuedCompletion
-  签名: : Valued (hat K) Γ₀ where
+  签名: : 赋值 (hat K) Γ₀ where
   定义体: extensionValuation
   is_topological_valuation s := by
     suffices HasBasis (𝓝 (0 : hat K)) (fun _ => True)
@@ -1031,7 +1031,7 @@ theorem valuedCompletion_apply
 中文:
 定理 valuedCompletion_apply
   条件: (x : K)
-  结论: Valued.v (x : hat K) = v x
+  结论: 赋值.v (x : hat K) = v x
   证明: by
   simp [Valued.v]
 
@@ -1120,7 +1120,7 @@ scoped notation "𝒪[" K "]" => Valued.integer K
 
 中文:
 定义 integer
-  签名: : Subring K
+  签名: : 子环 K
   定义体: (vK.v).integer
 
 @[inherit_doc]
@@ -1149,7 +1149,7 @@ scoped notation "𝓂[" K "]" => maximalIdeal K
 
 中文:
 定义 maximalIdeal
-  签名: : Ideal 𝒪[K]
+  签名: : 理想 𝒪[K]
   定义体: IsLocalRing.maximalIdeal 𝒪[K]
 
 @[inherit_doc]

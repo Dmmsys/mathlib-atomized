@@ -47,7 +47,7 @@ theorem lintegral_iSup
 
 中文:
 定理 lintegral_iSup
-  条件: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, Measurable (f n)) (h_mono : Monotone f)
+  条件: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, 可测 (f n)) (h_mono : 递增 f)
   证明: by
   set c : Real>=0 -> Real>=0∞ := (↑)
   set F := fun a : α => ⨆ n, f n a
@@ -137,7 +137,7 @@ theorem lintegral_iSup'
 
 中文:
 定理 lintegral_iSup'
-  结论: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, AEMeasurable (f n) μ)
+  结论: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, 几乎处处可测 (f n) μ)
   证明: by
   simp_rw [← iSup_apply]
   let p : α -> (Nat -> Real>=0∞) -> Prop := fun _ f' => Monotone f'
@@ -227,7 +227,7 @@ theorem lintegral_iSup_ae
 
 中文:
 定理 lintegral_iSup_ae
-  结论: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, Measurable (f n))
+  结论: {f : 自然数 -> α -> 实数>=0∞} (hf : 对任意 n, 可测 (f n))
   证明: by
   classical
   let ⟨s, hs⟩ := exists_measurable_superset_of_null (ae_iff.1 (ae_all_iff.2 h_mono))
@@ -279,7 +279,7 @@ theorem lintegral_iSup_directed_of_measurable
 
 中文:
 定理 lintegral_iSup_directed_of_measurable
-  结论: [Countable β] {f : β -> α -> 实数>=0∞}
+  结论: [可数 β] {f : β -> α -> 实数>=0∞}
   证明: by
   cases nonempty_encodable β
   cases isEmpty_or_nonempty β
@@ -329,7 +329,7 @@ theorem lintegral_iSup_directed
 
 中文:
 定理 lintegral_iSup_directed
-  结论: [Countable β] {f : β -> α -> 实数>=0∞} (hf : 对任意 b, AEMeasurable (f b) μ)
+  结论: [可数 β] {f : β -> α -> 实数>=0∞} (hf : 对任意 b, 几乎处处可测 (f b) μ)
   证明: by
   simp_rw [← iSup_apply]
   let p : α -> (β -> ENNReal) -> Prop := fun x f' => Directed LE.le f'
@@ -383,7 +383,7 @@ theorem lintegral_liminf_nat_le'
 
 中文:
 定理 lintegral_liminf_nat_le'
-  条件: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, AEMeasurable (f n) μ)
+  条件: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, 几乎处处可测 (f n) μ)
   证明: calc
     ∫⁻ a, liminf (fun n => f n a) atTop ∂μ = ∫⁻ a, ⨆ n : Nat, ⨅ i >= n, f i a ∂μ := by
       simp only [liminf_eq_iSup_iInf_of_nat]
@@ -420,7 +420,7 @@ theorem lintegral_liminf_le'
 
 中文:
 定理 lintegral_liminf_le'
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {u : Filter ι}
+  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {u : 滤子 ι}
   证明: by
   by_cases! hu : ¬ u.NeBot
   · simp_all
@@ -459,7 +459,7 @@ theorem lintegral_liminf_le
 
 中文:
 定理 lintegral_liminf_le
-  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {u : Filter ι}
+  结论: {ι : 类型} {f : ι -> α -> 实数>=0∞} {u : 滤子 ι}
   证明: lintegral_liminf_le' fun n => (h_meas n).aemeasurable
 
 Depends on / 依赖: aemeasurable, h_meas, lintegral_liminf_le
@@ -491,7 +491,7 @@ theorem lintegral_eq_iSup_eapprox_lintegral
 
 中文:
 定理 lintegral_eq_iSup_eapprox_lintegral
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: calc
     ∫⁻ a, f a ∂μ = ∫⁻ a, ⨆ n, (eapprox f n : α -> Real>=0∞) a ∂μ := by
       congr; ext a; rw [iSup_eapprox_apply hf]
@@ -528,7 +528,7 @@ theorem lintegral_eq_iSup_eapprox_lintegral'
 
 中文:
 定理 lintegral_eq_iSup_eapprox_lintegral'
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   rw [lintegral_congr_ae hf.ae_eq_mk]; rw [lintegral_eq_iSup_eapprox_lintegral hf.measurable_mk]
 
@@ -550,7 +550,7 @@ lemma lintegral_eapprox_le_lintegral
 
 中文:
 引理 lintegral_eapprox_le_lintegral
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (n : 自然数)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (n : 自然数)
   证明: by
   rw [lintegral_eq_iSup_eapprox_lintegral hf]
   exact le_iSup (fun n => (eapprox f n).lintegral μ) n
@@ -573,7 +573,7 @@ lemma measure_support_eapprox_lt_top
 
 中文:
 引理 measure_support_eapprox_lt_top
-  结论: {f : α -> 实数>=0∞} (hf_meas : Measurable f)
+  结论: {f : α -> 实数>=0∞} (hf_meas : 可测 f)
   证明: measure_support_lt_top_of_lintegral_ne_top
     ((lintegral_eapprox_le_lintegral hf_meas n).trans_lt hf.lt_top).ne
 
@@ -632,7 +632,7 @@ theorem lintegral_add_aux
 
 中文:
 定理 lintegral_add_aux
-  条件: {f g : α -> 实数>=0∞} (hf : Measurable f) (hg : Measurable g)
+  条件: {f g : α -> 实数>=0∞} (hf : 可测 f) (hg : 可测 g)
   证明: calc
     ∫⁻ a, f a + g a ∂μ =
         ∫⁻ a, (⨆ n, (eapprox f n : α -> Real>=0∞) a) + ⨆ n, (eapprox g n : α -> Real>=0∞) a ∂μ := by
@@ -694,7 +694,7 @@ theorem lintegral_add_left
 
 中文:
 定理 lintegral_add_left
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (g : α -> 实数>=0∞)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (g : α -> 实数>=0∞)
   证明: by
   refine le_antisymm ?_ (le_lintegral_add _ _)
   rcases exists_measurable_le_lintegral_eq μ fun a => f a + g a with ⟨φ, hφm, hφ_le, hφ_eq⟩
@@ -726,7 +726,7 @@ theorem lintegral_add_left'
 
 中文:
 定理 lintegral_add_left'
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (g : α -> 实数>=0∞)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (g : α -> 实数>=0∞)
   证明: by
   rw [lintegral_congr_ae hf.ae_eq_mk]; rw [← lintegral_add_left hf.measurable_mk]; rw [lintegral_congr_ae (hf.ae_eq_mk.fun_add (ae_eq_refl g))]
 
@@ -747,7 +747,7 @@ theorem lintegral_add_right'
 
 中文:
 定理 lintegral_add_right'
-  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : AEMeasurable g μ)
+  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : 几乎处处可测 g μ)
   证明: by
   simpa only [add_comm] using lintegral_add_left' hg f
 
@@ -771,7 +771,7 @@ theorem lintegral_add_right
 
 中文:
 定理 lintegral_add_right
-  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : Measurable g)
+  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : 可测 g)
   证明: lintegral_add_right' f hg.aemeasurable
 
 Depends on / 依赖: aemeasurable, hg.aemeasurable, lintegral_add_right
@@ -799,7 +799,7 @@ theorem lintegral_finsetSum'
 
 中文:
 定理 lintegral_finsetSum'
-  结论: (s : Finset β) {f : β -> α -> 实数>=0∞}
+  结论: (s : 有限集 β) {f : β -> α -> 实数>=0∞}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -838,7 +838,7 @@ theorem lintegral_finsetSum
 
 中文:
 定理 lintegral_finsetSum
-  条件: (s : Finset β) {f : β -> α -> 实数>=0∞} (hf : 对任意 b in s, Measurable (f b))
+  条件: (s : 有限集 β) {f : β -> α -> 实数>=0∞} (hf : 对任意 b in s, 可测 (f b))
   证明: lintegral_finsetSum' s fun b hb => (hf b hb).aemeasurable
 
 @[deprecated (since := "2026-04-08")] alias lintegral_finset_sum := lintegral_finsetSum
@@ -871,7 +871,7 @@ theorem lintegral_tsum
 
 中文:
 定理 lintegral_tsum
-  条件: [Countable β] {f : β -> α -> 实数>=0∞} (hf : 对任意 i, AEMeasurable (f i) μ)
+  条件: [可数 β] {f : β -> α -> 实数>=0∞} (hf : 对任意 i, 几乎处处可测 (f i) μ)
   证明: by
   classical
   simp only [ENNReal.tsum_eq_iSup_sum]
@@ -925,7 +925,7 @@ theorem lintegral_const_mul
 
 中文:
 定理 lintegral_const_mul
-  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: calc
     ∫⁻ a, r * f a ∂μ = ∫⁻ a, ⨆ n, (const α r * eapprox f n) a ∂μ := by
       congr
@@ -975,7 +975,7 @@ theorem lintegral_const_mul''
 
 中文:
 定理 lintegral_const_mul''
-  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   have A : ∫⁻ a, f a ∂μ = ∫⁻ a, hf.mk f a ∂μ := lintegral_congr_ae hf.ae_eq_mk
   have B : ∫⁻ a, r * f a ∂μ = ∫⁻ a, r * hf.mk f a ∂μ :=
@@ -1089,7 +1089,7 @@ theorem lintegral_mul_const
 
 中文:
 定理 lintegral_mul_const
-  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: by simp_rw [mul_comm, lintegral_const_mul r hf]
 
 Depends on / 依赖: lintegral_const_mul, mul_comm, simp_rw
@@ -1107,7 +1107,7 @@ theorem lintegral_mul_const''
 
 中文:
 定理 lintegral_mul_const''
-  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by simp_rw [mul_comm, lintegral_const_mul'' r hf]
 
 Depends on / 依赖: lintegral_const_mul, mul_comm, simp_rw
@@ -1165,7 +1165,7 @@ theorem lintegral_lintegral_mul
 
 中文:
 定理 lintegral_lintegral_mul
-  结论: {β} [MeasurableSpace β] {ν : Measure β} {f : α -> 实数>=0∞}
+  结论: {β} [可测空间 β] {ν : 测度 β} {f : α -> 实数>=0∞}
   证明: by
   simp [lintegral_const_mul'' _ hg, lintegral_mul_const'' _ hf]
 
@@ -1197,7 +1197,7 @@ theorem lintegral_trim
 
 中文:
 定理 lintegral_trim
-  条件: {μ : Measure α} (hm : m <= m0) {f : α -> 实数>=0∞} (hf : Measurable[m] f)
+  条件: {μ : 测度 α} (hm : m <= m0) {f : α -> 实数>=0∞} (hf : 可测[m] f)
   证明: by
   refine
     @Measurable.ennreal_induction α m (fun f => ∫⁻ a, f a ∂μ.trim hm = ∫⁻ a, f a ∂μ) ?_ ?_ ?_ f hf
@@ -1236,7 +1236,7 @@ theorem lintegral_trim_ae
 
 中文:
 定理 lintegral_trim_ae
-  结论: {μ : Measure α} (hm : m <= m0) {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} (hm : m <= m0) {f : α -> 实数>=0∞}
   证明: by
   rw [lintegral_congr_ae (ae_eq_of_ae_eq_trim hf.ae_eq_mk)]; rw [lintegral_congr_ae hf.ae_eq_mk]; rw [lintegral_trim hm hf.measurable_mk]
 
@@ -1258,8 +1258,8 @@ theorem setLIntegral_trim_ae
   exact hf.restrict
 
 中文:
-定理 setLIntegral_trim_ae
-  结论: {μ : Measure α} (hm : m <= m0) {f : α -> 实数>=0∞}
+定理 setL整数egral_trim_ae
+  结论: {μ : 测度 α} (hm : m <= m0) {f : α -> 实数>=0∞}
   证明: by
   rw [← lintegral_trim_ae hm]
   all_goals rw [← restrict_trim hm _ hs]
@@ -1283,8 +1283,8 @@ theorem setLIntegral_trim
   proof: setLIntegral_trim_ae _ hf.aemeasurable hs
 
 中文:
-定理 setLIntegral_trim
-  结论: {μ : Measure α} (hm : m <= m0) {f : α -> 实数>=0∞}
+定理 setL整数egral_trim
+  结论: {μ : 测度 α} (hm : m <= m0) {f : α -> 实数>=0∞}
   证明: setLIntegral_trim_ae _ hf.aemeasurable hs
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, setLIntegral_trim_ae

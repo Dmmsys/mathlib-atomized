@@ -121,8 +121,8 @@ lemma isNat_factorial
   simp only [h₁.out, cast_id, ← h₂, one_ascFactorial]
 
 中文:
-引理 isNat_factorial
-  条件: {n x : 自然数} (h₁ : Is自然数 n x) (a : 自然数) (h₂ : (1).ascFactorial x = a)
+引理 is自然数_factorial
+  条件: {n x : 自然数} (h₁ : 是自然数 n x) (a : 自然数) (h₂ : (1).ascFactorial x = a)
   证明: by
   constructor
   simp only [h₁.out, cast_id, ← h₂, one_ascFactorial]
@@ -150,7 +150,7 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.factorial 
   let ⟨_, val, ascPrf⟩ := proveAscFactorial 1 ex.natLit! q(nat_lit
 
 中文:
-定义 evalNatFactorial
+定义 eval自然数Factorial
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app _ (x : Q(Nat)) ← Meta.whnfR e | failure
@@ -178,8 +178,8 @@ lemma isNat_ascFactorial
   simp [h₁.out, h₂.out, ← p]
 
 中文:
-引理 isNat_ascFactorial
-  结论: {n x l y : 自然数} (h₁ : Is自然数 n x) (h₂ : Is自然数 l y) (a : 自然数)
+引理 is自然数_ascFactorial
+  结论: {n x l y : 自然数} (h₁ : 是自然数 n x) (h₂ : 是自然数 l y) (a : 自然数)
   证明: by
   constructor
   simp [h₁.out, h₂.out, ← p]
@@ -208,7 +208,7 @@ have : u =QL 0 := ⟨⟩; have : α =Q Nat := ⟨⟩; have : e =Q Nat.ascFactori
   le
 
 中文:
-定义 evalNatAscFactorial
+定义 eval自然数AscFactorial
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -238,8 +238,8 @@ lemma isNat_descFactorial
   simpa [h₁.out, h₂.out, ← p, h₃] using Nat.add_descFactorial_eq_ascFactorial _ _
 
 中文:
-引理 isNat_descFactorial
-  结论: {n x l y : 自然数} (z : 自然数) (h₁ : Is自然数 n x) (h₂ : Is自然数 l y)
+引理 is自然数_descFactorial
+  结论: {n x l y : 自然数} (z : 自然数) (h₁ : 是自然数 n x) (h₂ : 是自然数 l y)
   证明: by
   constructor
   simpa [h₁.out, h₂.out, ← p, h₃] using Nat.add_descFactorial_eq_ascFactorial _ _
@@ -262,8 +262,8 @@ lemma isNat_descFactorial_zero
   simp [h₁.out, h₂.out, h₃]
 
 中文:
-引理 isNat_descFactorial_zero
-  结论: {n x l y : 自然数} (z : 自然数) (h₁ : Is自然数 n x) (h₂ : Is自然数 l y)
+引理 is自然数_descFactorial_zero
+  结论: {n x l y : 自然数} (z : 自然数) (h₁ : 是自然数 n x) (h₂ : 是自然数 l y)
   证明: by
   constructor
   simp [h₁.out, h₂.out, h₃]
@@ -287,7 +287,7 @@ have : zp1 =Q z + 1 := ⟨⟩
   ⟨val, q(isNat_descFactorial $z $px $py rfl $val $ascPrf)⟩
 
 中文:
-定义 evalNatDescFactorialNotZero
+定义 eval自然数DescFactorialNotZero
   签名: {x' y' : Q(自然数)} (x y z : Q(自然数))
   定义体: have zp1 :Q(Nat) := mkRawNatLit (z.natLit! + 1)
 have : zp1 =Q z + 1 := ⟨⟩
@@ -312,7 +312,7 @@ definition evalNatDescFactorialZero
   body: ⟨q(nat_lit 0), q(isNat_descFactorial_zero $z $px $py rfl)⟩
 
 中文:
-定义 evalNatDescFactorialZero
+定义 eval自然数DescFactorialZero
   签名: {x' y' : Q(自然数)} (x y z : Q(自然数))
   定义体: ⟨q(nat_lit 0), q(isNat_descFactorial_zero $z $px $py rfl)⟩
 -/
@@ -341,7 +341,7 @@ have : e =Q Nat.descFactorial x' y' := ⟨⟩
  
 
 中文:
-定义 evalNatDescFactorial
+定义 eval自然数DescFactorial
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x' : Q(Nat))) (y' : Q(Nat)) ← Meta.whnfR e | failure

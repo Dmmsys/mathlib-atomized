@@ -280,7 +280,7 @@ definition indResHomEquiv
 
 中文:
 定义 indResHomEquiv
-  签名: (A : Rep.{max w v' u} k G) (B : Rep.{max w v' u} k H)
+  签名: (A : Rep.{最大值 w v' u} k G) (B : Rep.{最大值 w v' u} k H)
   定义体: Rep.ofHom ⟨f.hom.toLinearMap ∘ₗ IndV.mk φ A.ρ 1, fun g => by
     ext x
     have := (hom_comm_apply f (φ g) (IndV.mk φ A.ρ 1 x)).symm
@@ -328,7 +328,7 @@ definition indResAdjunction
 
 中文:
 定义 indResAdjunction
-  签名: : indFunctor k φ ⊣ resFunctor.{max w v' u} φ
+  签名: : indFunctor k φ ⊣ resFunctor.{最大值 w v' u} φ
   定义体: Adjunction.mkOfHomEquiv {
     homEquiv A B := (indResHomEquiv φ A B).toEquiv
     homEquiv_naturality_left_symm _ _ := by
@@ -358,7 +358,7 @@ instance :
 
 中文:
 实例 :
-  签名: (indFunctor.{max u v' w} k φ).IsLeftAdjoint
+  签名: (indFunctor.{最大值 u v' w} k φ).是左伴随
   定义体: (indResAdjunction k φ).isLeftAdjoint
 
 Depends on / 依赖: indResAdjunction, isLeftAdjoint
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: (resFunctor.{max u v' w} (k := k) φ).IsRightAdjoint
+  签名: (resFunctor.{最大值 u v' w} (k := k) φ).是右伴随
   定义体: (indResAdjunction k φ).isRightAdjoint
 
 Depends on / 依赖: IsRightAdjoint
@@ -586,7 +586,7 @@ definition coinvariantsTensorIndNatIso
     simp [coinvariantsTensorIndHom, coinvariantsTensorMk, hom_comm_apply]
 
 中文:
-定义 coinvariantsTensorIndNatIso
+定义 coinvariantsTensorInd自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun B => coinvariantsTensorIndIso φ A B) fun {X Y} f => by
     ext

@@ -33,11 +33,11 @@ class IsTopologicalAddTorsor
     - continuous_vsub : Continuous (fun x : P × P => x.1 -ᵥ x.2)
 
 中文:
-类 IsTopologicalAddTorsor
-  参数: {V : 类型} [AddGroup V] [TopologicalSpace V]
-  继承: ContinuousVAdd V P
+类 是TopologicalAddTorsor
+  参数: {V : 类型} [加法群 V] [拓扑空间 V]
+  继承: 连续向量加法 V P
   公理与运算 (1 个):
-    - continuous_vsub : Continuous (fun x : P × P => x.1 -ᵥ x.2)
+    - continuous_vsub : 连续 (fun x : P × P => x.1 -ᵥ x.2)
 -/
 class IsTopologicalAddTorsor {V : Type*} [AddGroup V] [TopologicalSpace V]
     (P : Type*) [AddTorsor V P] [TopologicalSpace P] extends ContinuousVAdd V P where
@@ -56,11 +56,11 @@ class IsTopologicalTorsor
     - continuous_sdiv : Continuous (fun x : P × P => x.1 /ₛ x.2)
 
 中文:
-类 IsTopologicalTorsor
-  参数: {V : 类型} [Group V] [TopologicalSpace V]
-  继承: ContinuousSMul V P
+类 是TopologicalTorsor
+  参数: {V : 类型} [群 V] [拓扑空间 V]
+  继承: 连续标量乘法 V P
   公理与运算 (1 个):
-    - continuous_sdiv : Continuous (fun x : P × P => x.1 /ₛ x.2)
+    - continuous_sdiv : 连续 (fun x : P × P => x.1 /ₛ x.2)
 -/
 class IsTopologicalTorsor {V : Type*} [Group V] [TopologicalSpace V]
     (P : Type*) [Torsor V P] [TopologicalSpace P] extends ContinuousSMul V P where
@@ -86,8 +86,8 @@ theorem Filter.Tendsto.sdiv
   proof: (continuous_sdiv.tendsto (x, y)).comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.sdiv
-  结论: {l : Filter α} {f g : α -> P} {x y : P} (hf : Tendsto f l (𝓝 x))
+定理 滤子.收敛.sdiv
+  结论: {l : 滤子 α} {f g : α -> P} {x y : P} (hf : 收敛 f l (𝓝 x))
   证明: (continuous_sdiv.tendsto (x, y)).comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuous_sdiv, continuous_sdiv.tendsto, hf.prodMk_nhds, prodMk_nhds, tendsto
@@ -117,8 +117,8 @@ nonrec theorem ContinuousAt.sdiv {f g : α -> P} {x : α} (hf : ContinuousAt f x
 nonrec theorem ContinuousWithinAt.s
 
 中文:
-定理 Continuous.sdiv
-  条件: {f g : α -> P} (hf : Continuous f) (hg : Continuous g)
+定理 连续.sdiv
+  条件: {f g : α -> P} (hf : 连续 f) (hg : 连续 g)
   证明: continuous_sdiv.comp₂ hf hg
 
 @[to_additive (attr := fun_prop)]
@@ -162,7 +162,7 @@ include P in
 
 中文:
 定理 ContinuousOn.sdiv
-  结论: {f g : α -> P} {s : Set α} (hf : ContinuousOn f s)
+  结论: {f g : α -> P} {s : 集合 α} (hf : ContinuousOn f s)
   证明: fun x hx =>
   (hf x hx).sdiv (hg x hx)
 
@@ -197,8 +197,8 @@ theorem IsTopologicalTorsor.to_isTopologicalGroup
       equals p /ₛ (v • p) => rw [sdiv_smul_eq_sdiv
 
 中文:
-定理 IsTopologicalTorsor.to_isTopologicalGroup
-  结论: IsTopologicalGroup V where
+定理 是TopologicalTorsor.to_isTopologicalGroup
+  结论: 是拓扑群 V where
   证明: by
     have ⟨p⟩ : Nonempty P := inferInstance
     conv =>
@@ -238,7 +238,7 @@ definition Homeomorph.smulConst
   body: Equiv.smulConst p
 
 中文:
-定义 Homeomorph.smulConst
+定义 同胚.smulConst
   签名: (p : P)
   定义体: Equiv.smulConst p
 
@@ -262,7 +262,7 @@ definition Homeomorph.constSDiv
     fun_prop
 
 中文:
-定义 Homeomorph.constSDiv
+定义 同胚.constSDiv
   签名: (p : P)
   定义体: Equiv.constSDiv p
   continuous_invFun := by
@@ -288,8 +288,8 @@ definition Homeomorph.pointReflection
 @[simp]
 
 中文:
-定义 Homeomorph.pointReflection
-  签名: {V P : 类型} [AddGroup V] [TopologicalSpace V] [AddTorsor V P]
+定义 同胚.pointReflection
+  签名: {V P : 类型} [加法群 V] [拓扑空间 V] [加法Torsor V P]
   定义体: (Homeomorph.constVSub p).trans (Homeomorph.vaddConst p)
 
 @[simp]
@@ -310,8 +310,8 @@ lemma Homeomorph.coe_pointReflection
   proof: rfl
 
 中文:
-引理 Homeomorph.coe_pointReflection
-  结论: {V P : 类型} [AddGroup V] [TopologicalSpace V] [AddTorsor V P]
+引理 同胚.coe_pointReflection
+  结论: {V P : 类型} [加法群 V] [拓扑空间 V] [加法Torsor V P]
   证明: rfl
 -/
 lemma Homeomorph.coe_pointReflection {V P : Type*} [AddGroup V] [TopologicalSpace V] [AddTorsor V P]
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalTorsor G
+  签名: 是TopologicalTorsor G
   定义体: by simp only [sdiv_eq_div]; fun_prop
 
 Depends on / 依赖: fun_prop, sdiv_eq_div
@@ -366,7 +366,7 @@ instance instIsTopologicalTorsorProd
 
 中文:
 实例 instIsTopologicalTorsorProd
-  签名: : IsTopologicalTorsor (P × Q) where
+  签名: : 是TopologicalTorsor (P × Q) where
   定义体: Continuous.prodMk (by fun_prop) (by fun_prop)
   continuous_sdiv := Continuous.prodMk (by fun_prop) (by fun_prop)
 
@@ -397,7 +397,7 @@ continuous_sdiv := continuous_pi by simp only [Pi.sdiv_apply]; fun_prop
 
 中文:
 实例 :
-  签名: IsTopologicalTorsor ((i : ι) -> P i)
+  签名: 是TopologicalTorsor ((i : ι) -> P i)
   定义体: continuous_pi by simp only [Pi.smul_apply']; fun_prop
 continuous_sdiv := continuous_pi by simp only [Pi.sdiv_apply]; fun_prop
 

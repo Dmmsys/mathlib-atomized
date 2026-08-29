@@ -49,8 +49,8 @@ lemma Finset.sum_div
   proof: by simp only [div_eq_mul_inv, sum_mul]
 
 中文:
-引理 Finset.sum_div
-  条件: (s : Finset ι) (f : ι -> K) (a : K)
+引理 有限集.sum_div
+  条件: (s : 有限集 ι) (f : ι -> K) (a : K)
   证明: by simp only [div_eq_mul_inv, sum_mul]
 
 Depends on / 依赖: div_eq_mul_inv, sum_mul
@@ -75,7 +75,7 @@ lemma dens_disjiUnion
 
 中文:
 引理 dens_disjiUnion
-  条件: (s : Finset α) (t : α -> Finset β) (h)
+  条件: (s : 有限集 α) (t : α -> 有限集 β) (h)
   证明: by
   simp [dens, sum_div]
 
@@ -98,7 +98,7 @@ lemma dens_biUnion
 
 中文:
 引理 dens_biUnion
-  条件: [DecidableEq β] (h : (s : Set α).PairwiseDisjoint t)
+  条件: [DecidableEq β] (h : (s : 集合 α).PairwiseDisjoint t)
   证明: by
   simp [dens, card_biUnion h, sum_div]
 
@@ -147,7 +147,7 @@ lemma dens_eq_sum_dens_fiberwise
 
 中文:
 引理 dens_eq_sum_dens_fiberwise
-  结论: [DecidableEq α] {f : β -> α} {t : Finset β}
+  结论: [DecidableEq α] {f : β -> α} {t : 有限集 β}
   证明: by
   simp [dens, ← sum_div, card_eq_sum_card_fiberwise h]
 
@@ -167,7 +167,7 @@ lemma dens_eq_sum_dens_image
 
 中文:
 引理 dens_eq_sum_dens_image
-  条件: [DecidableEq α] (f : β -> α) (t : Finset β)
+  条件: [DecidableEq α] (f : β -> α) (t : 有限集 β)
   证明: dens_eq_sum_dens_fiberwise fun _ => mem_image_of_mem _
 
 Depends on / 依赖: dens_eq_sum_dens_fiberwise, mem_image_of_mem

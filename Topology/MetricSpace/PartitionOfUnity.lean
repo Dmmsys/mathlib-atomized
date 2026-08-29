@@ -51,8 +51,8 @@ theorem eventually_nhds_zero_forall_closedEBall_subset
     rintr
 
 中文:
-定理 eventually_nhds_zero_forall_closedEBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 eventually_nhds_zero_对任意_closedEBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: by
   suffices forall i, x in K i -> forallᶠ p : Real>=0∞ × X in 𝓝 0 ×ˢ 𝓝 x, closedEBall p.2 p.1 subseteq U i by
     apply mp_mem ((eventually_all_finite (hfin.point_finite x)).2 this)
@@ -97,8 +97,8 @@ theorem exists_forall_closedEBall_subset_aux₁
   rwa [mem_preimage, mem_iInter₂]
 
 中文:
-定理 exists_forall_closedEBall_subset_aux₁
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_对任意_closedEBall_subset_aux₁
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: by
   have := (ENNReal.continuous_ofReal.tendsto' 0 0 ENNReal.ofReal_zero).eventually
     (eventually_nhds_zero_forall_closedEBall_subset hK hU hKU hfin x).curry
@@ -129,7 +129,7 @@ theorem exists_forall_closedEBall_subset_aux₂
       ordConnected_setOfPred_closedEBall_subset y (U i)
 
 中文:
-定理 exists_forall_closedEBall_subset_aux₂
+定理 存在_对任意_closedEBall_subset_aux₂
   条件: (y : X)
   证明: (convex_Ioi _).inter OrdConnected.convex OrdConnected.preimage_ennreal_ofReal
     ordConnected_iInter fun i => ordConnected_iInter fun (_ : y in K i) =>
@@ -156,8 +156,8 @@ theorem exists_continuous_real_forall_closedEBall_subset
       (exists_forall_closedEBall_subset_aux₁ hK hU hKU hfin)
 
 中文:
-定理 exists_continuous_real_forall_closedEBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_continuous_real_对任意_closedEBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: by
   simpa only [mem_inter_iff, forall_and, mem_preimage, mem_iInter, @forall_comm ι X] using!
     exists_continuous_forall_mem_convex_of_local_const exists_forall_closedEBall_subset_aux₂
@@ -186,8 +186,8 @@ theorem exists_continuous_nnreal_forall_closedEBall_subset
   simpa only [← ENNReal.ofReal_coe_nnreal] using! hδ i x hi
 
 中文:
-定理 exists_continuous_nnreal_forall_closedEBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_continuous_nnreal_对任意_closedEBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: by
   rcases exists_continuous_real_forall_closedEBall_subset hK hU hKU hfin with ⟨δ, hδ₀, hδ⟩
   lift δ to C(X, Real>=0) using fun x => (hδ₀ x).le
@@ -214,8 +214,8 @@ theorem exists_continuous_ennreal_forall_closedEBall_subset
   ⟨ContinuousMap.comp ⟨Coe.coe, ENNReal.continuous_coe⟩ δ, fun x => ENNReal.coe_pos.2 (hδ₀ x), hδ⟩
 
 中文:
-定理 exists_continuous_ennreal_forall_closedEBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_continuous_ennreal_对任意_closedEBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: let ⟨δ, hδ₀, hδ⟩ := exists_continuous_nnreal_forall_closedEBall_subset hK hU hKU hfin
   ⟨ContinuousMap.comp ⟨Coe.coe, ENNReal.continuous_coe⟩ δ, fun x => ENNReal.coe_pos.2 (hδ₀ x), hδ⟩
 
@@ -273,8 +273,8 @@ theorem exists_continuous_nnreal_forall_closedBall_subset
   exact hδ i x hx
 
 中文:
-定理 exists_continuous_nnreal_forall_closedBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_continuous_nnreal_对任意_closedBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: by
   rcases Metric.exists_continuous_nnreal_forall_closedEBall_subset hK hU hKU hfin with ⟨δ, hδ0, hδ⟩
   refine ⟨δ, hδ0, fun i x hx => ?_⟩
@@ -301,8 +301,8 @@ theorem exists_continuous_real_forall_closedBall_subset
   ⟨ContinuousMap.comp ⟨Coe.coe, NNReal.continuous_coe⟩ δ, hδ₀, hδ⟩
 
 中文:
-定理 exists_continuous_real_forall_closedBall_subset
-  结论: (hK : 对任意 i, IsClosed (K i))
+定理 存在_continuous_real_对任意_closedBall_subset
+  结论: (hK : 对任意 i, 是闭集 (K i))
   证明: let ⟨δ, hδ₀, hδ⟩ := exists_continuous_nnreal_forall_closedBall_subset hK hU hKU hfin
   ⟨ContinuousMap.comp ⟨Coe.coe, NNReal.continuous_coe⟩ δ, hδ₀, hδ⟩
 

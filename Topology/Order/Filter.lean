@@ -35,8 +35,8 @@ theorem tendsto_nhds_atTop
 
 中文:
 定理 tendsto_nhds_atTop
-  条件: [NoMaxOrder X]
-  结论: Tendsto 𝓝 (atTop : Filter X) (𝓝 atTop)
+  条件: [NoMax序 X]
+  结论: 收敛 𝓝 (atTop : 滤子 X) (𝓝 atTop)
   证明: Filter.tendsto_nhds_atTop_iff.2 fun x => (eventually_gt_atTop x).mono fun _ => le_mem_nhds
 -/
 protected theorem tendsto_nhds_atTop [NoMaxOrder X] : Tendsto 𝓝 (atTop : Filter X) (𝓝 atTop) :=
@@ -53,8 +53,8 @@ theorem tendsto_nhds_atBot
 
 中文:
 定理 tendsto_nhds_atBot
-  条件: [NoMinOrder X]
-  结论: Tendsto 𝓝 (atBot : Filter X) (𝓝 atBot)
+  条件: [NoMin序 X]
+  结论: 收敛 𝓝 (atBot : 滤子 X) (𝓝 atBot)
   证明: @Filter.tendsto_nhds_atTop Xᵒᵈ _ _ _ _
 -/
 protected theorem tendsto_nhds_atBot [NoMinOrder X] : Tendsto 𝓝 (atBot : Filter X) (𝓝 atBot) :=
@@ -69,8 +69,8 @@ theorem Tendsto.nhds_atTop
   proof: Filter.tendsto_nhds_atTop.comp h
 
 中文:
-定理 Tendsto.nhds_atTop
-  条件: [NoMaxOrder X] {f : α -> X} {l : Filter α} (h : Tendsto f l atTop)
+定理 收敛.nhds_atTop
+  条件: [NoMax序 X] {f : α -> X} {l : 滤子 α} (h : 收敛 f l atTop)
   证明: Filter.tendsto_nhds_atTop.comp h
 
 Depends on / 依赖: Filter, Filter.tendsto_nhds_atTop.comp, tendsto_nhds_atTop
@@ -88,8 +88,8 @@ theorem Tendsto.nhds_atBot
   proof: @Tendsto.nhds_atTop α Xᵒᵈ _ _ _ _ _ _ h
 
 中文:
-定理 Tendsto.nhds_atBot
-  条件: [NoMinOrder X] {f : α -> X} {l : Filter α} (h : Tendsto f l atBot)
+定理 收敛.nhds_atBot
+  条件: [NoMin序 X] {f : α -> X} {l : 滤子 α} (h : 收敛 f l atBot)
   证明: @Tendsto.nhds_atTop α Xᵒᵈ _ _ _ _ _ _ h
 
 Depends on / 依赖: Tendsto, Tendsto.nhds_atTop, nhds_atTop

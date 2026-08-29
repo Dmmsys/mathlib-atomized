@@ -85,7 +85,7 @@ definition T
 
 中文:
 定义 T
-  签名: (p : 实数) (f : (对任意 i, A i) -> 实数>=0∞) (s : Finset ι)
+  签名: (p : 实数) (f : (对任意 i, A i) -> 实数>=0∞) (s : 有限集 ι)
   定义体: ∫⋯∫⁻_s, f ^ (1 - (s.card - 1 : Real) * p) * ∏ i in s, (∫⋯∫⁻_{i}, f ∂μ) ^ p ∂μ
 
 Depends on / 依赖: s.card
@@ -106,7 +106,7 @@ lemma T_univ
 
 中文:
 引理 T_univ
-  条件: [Fintype ι] [对任意 i, SigmaFinite (μ i)] (f : (对任意 i, A i) -> 实数>=0∞) (x : 对任意 i, A i)
+  条件: [有限类型 ι] [对任意 i, σ有限 (μ i)] (f : (对任意 i, A i) -> 实数>=0∞) (x : 对任意 i, A i)
   证明: by
   simp [T, lmarginal_singleton]
 -/
@@ -149,7 +149,7 @@ theorem T_insert_le_T_lmarginal_singleton
 
 中文:
 定理 T_insert_le_T_lmarginal_singleton
-  结论: [对任意 i, SigmaFinite (μ i)] (hp₀ : 0 <= p) (s : Finset ι)
+  结论: [对任意 i, σ有限 (μ i)] (hp₀ : 0 <= p) (s : 有限集 ι)
   证明: by
   /- The proof is a tricky computation that relies on Hölder's inequality at its heart.
   The left-hand-side is an `|s|+1`-times iterated integral. Let `xᵢ` denote the `i`-th variable.
@@ -273,7 +273,7 @@ theorem T_lmarginal_antitone
 
 中文:
 定理 T_lmarginal_antitone
-  结论: [Fintype ι] [对任意 i, SigmaFinite (μ i)]
+  结论: [有限类型 ι] [对任意 i, σ有限 (μ i)]
   证明: by
   -- Reformulate (by induction): a function is decreasing on `Finset ι` if it decreases under the
   -- insertion of any element to any set.
@@ -361,7 +361,7 @@ theorem lintegral_prod_lintegral_pow_le
 
 中文:
 定理 lintegral_prod_lintegral_pow_le
-  结论: [Fintype ι] [对任意 i, SigmaFinite (μ i)]
+  结论: [有限类型 ι] [对任意 i, σ有限 (μ i)]
   证明: by
   have : Nontrivial ι :=
     Fintype.one_lt_card_iff_nontrivial.mp (by exact_mod_cast hp.lt)
@@ -410,7 +410,7 @@ theorem lintegral_pow_le_pow_lintegral_fderiv_aux
 
 中文:
 定理 lintegral_pow_le_pow_lintegral_fderiv_aux
-  结论: [Fintype ι]
+  结论: [有限类型 ι]
   证明: by
   classical
   /- For a function `f` in one variable and `t ∈ ℝ` we have
@@ -581,7 +581,7 @@ theorem eLpNorm_le_eLpNorm_fderiv_one
 
 中文:
 定理 eLpNorm_le_eLpNorm_fderiv_one
-  结论: {u : E -> F} (hu : ContDiff 实数 1 u) (h2u : HasCompactSupport u)
+  结论: {u : E -> F} (hu : 连续可微 实数 1 u) (h2u : HasCompactSupport u)
   证明: by
   have h0p : 0 < (p : Real) := hp.coe.symm.pos
   rw [eLpNorm_one_eq_lintegral_enorm]; rw [← ENNReal.rpow_le_rpow_iff h0p]; rw [ENNReal.mul_rpow_of_nonneg _ _ h0p.le]; rw [← ENNReal.coe_rpow_of_nonneg _ h0p.le]; rw [eLpNormLESNormFDerivOneConst]; rw [← NNReal.rpow_mul]; rw [eLpNorm_nnreal_pow_eq_l
@@ -779,7 +779,7 @@ let F' := EuclideanSpace Real Fin finrank Real F
 
 中文:
 定理 eLpNorm_le_eLpNorm_fderiv_of_eq
-  结论: [FiniteDimensional 实数 F]
+  结论: [有限维 实数 F]
   证明: by
   /- Here we reduce the GNS-inequality with a Hilbert space as codomain to the case with a
   finite-dimensional normed space as codomain, by transferring the result along the equivalence
@@ -855,7 +855,7 @@ theorem eLpNorm_le_eLpNorm_fderiv_of_le
 
 中文:
 定理 eLpNorm_le_eLpNorm_fderiv_of_le
-  结论: [FiniteDimensional 实数 F]
+  结论: [有限维 实数 F]
   证明: by
   by_cases hq0 : q = 0
   · simp [hq0]
@@ -926,7 +926,7 @@ theorem eLpNorm_le_eLpNorm_fderiv
 
 中文:
 定理 eLpNorm_le_eLpNorm_fderiv
-  结论: [FiniteDimensional 实数 F]
+  结论: [有限维 实数 F]
   证明: by
   refine eLpNorm_le_eLpNorm_fderiv_of_le μ hu h2u hp h2p ?_ hs
   norm_cast

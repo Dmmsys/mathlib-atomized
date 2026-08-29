@@ -56,11 +56,11 @@ class IsAddKleinFour
     - exponent_two : AddMonoid.exponent G = 2
 
 中文:
-类 IsAddKleinFour
-  参数: (G : 类型) [AddGroup G]
+类 是加法KleinFour
+  参数: (G : 类型) [加法群 G]
   公理与运算 (2 个):
     - card_four : 自然数.card G = 4
-    - exponent_two : AddMonoid.exponent G = 2
+    - exponent_two : 加法幺半群.exponent G = 2
 -/
 class IsAddKleinFour (G : Type*) [AddGroup G] : Prop where
   card_four : Nat.card G = 4
@@ -79,11 +79,11 @@ class IsKleinFour
     - exponent_two : Monoid.exponent G = 2
 
 中文:
-类 IsKleinFour
-  参数: (G : 类型) [Group G]
+类 是KleinFour
+  参数: (G : 类型) [群 G]
   公理与运算 (2 个):
     - card_four : 自然数.card G = 4
-    - exponent_two : Monoid.exponent G = 2
+    - exponent_two : 幺半群.exponent G = 2
 -/
 class IsKleinFour (G : Type*) [Group G] : Prop where
   card_four : Nat.card G = 4
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddKleinFour (ZMod 2 × ZMod 2)
+  签名: 是加法KleinFour (ZMod 2 × ZMod 2)
   定义体: by simp
   exponent_two := by simp [AddMonoid.exponent_prod]
 
@@ -134,7 +134,7 @@ theorem isMulCommutative
 
 中文:
 定理 isMulCommutative
-  条件: {G : 类型} [Group G] [IsKleinFour G]
+  条件: {G : 类型} [群 G] [是KleinFour G]
   证明: mul_comm_of_exponent_two exponent_two
 
 Depends on / 依赖: exponent_two, mul_comm_of_exponent_two
@@ -160,7 +160,7 @@ lemma card_four'
 
 中文:
 引理 card_four'
-  条件: {G : 类型} [Group G] [Fintype G] [IsKleinFour G]
+  条件: {G : 类型} [群 G] [有限类型 G] [是KleinFour G]
   证明: Nat.card_eq_fintype_card (α := G).symm ▸ IsKleinFour.card_four
 
 Depends on / 依赖: IsKleinFour, IsKleinFour.card_four, Nat.card_eq_fintype_card, card_eq_fintype_card, card_four
@@ -186,7 +186,7 @@ lemma not_isCyclic
 
 中文:
 引理 not_isCyclic
-  结论: ¬IsCyclic G
+  结论: ¬是循环 G
   证明: fun h => by simpa using h.exponent_eq_card
 
 @[to_additive]
@@ -267,7 +267,7 @@ lemma eq_finset_univ
 
 中文:
 引理 eq_finset_univ
-  结论: [Fintype G] [DecidableEq G]
+  结论: [有限类型 G] [DecidableEq G]
   证明: by
   apply Finset.eq_univ_of_card
   rw [card_four']
@@ -342,7 +342,7 @@ definition mulEquiv'
 
 中文:
 定义 mulEquiv'
-  签名: (e : G₁ ≃ G₂) (he : e 1 = 1) (h : Monoid.exponent G₂ = 2)
+  签名: (e : G₁ ≃ G₂) (he : e 1 = 1) (h : 幺半群.exponent G₂ = 2)
   定义体: e
   map_mul' := by
     let _inst₁ := Fintype.ofFinite G₁
@@ -387,7 +387,7 @@ abbreviation mulEquiv
 
 中文:
 缩写 mulEquiv
-  签名: [IsKleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1)
+  签名: [是KleinFour G₂] (e : G₁ ≃ G₂) (he : e 1 = 1)
   定义体: mulEquiv' e he exponent_two
 
 Depends on / 依赖: exponent_two, mulEquiv
@@ -412,8 +412,8 @@ exact ⟨mulEquiv ((Fintype.equivOfCardEq <| by simp).setValue 1 1) by simp⟩
 
 中文:
 引理 nonempty_mulEquiv
-  条件: [IsKleinFour G₂]
-  结论: Nonempty (G₁ ≃* G₂)
+  条件: [是KleinFour G₂]
+  结论: 非空 (G₁ ≃* G₂)
   证明: by
   classical
   let _inst₁ := Fintype.ofFinite G₁

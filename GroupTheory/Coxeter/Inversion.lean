@@ -582,7 +582,7 @@ definition rightInvSeq
 
 中文:
 定义 rightInvSeq
-  签名: (ω : List B)
+  签名: (ω : 列表 B)
   定义体: match ω with
   | [] => []
   | i :: ω => (π ω)⁻¹ * (s i) * (π ω) :: rightInvSeq ω
@@ -609,7 +609,7 @@ local prefix:100 "lis " => cs.leftInvSeq
 
 中文:
 定义 leftInvSeq
-  签名: (ω : List B)
+  签名: (ω : 列表 B)
   定义体: match ω with
   | [] => []
   | i :: ω => s i :: List.map (MulAut.conj (s i)) (leftInvSeq ω)
@@ -709,7 +709,7 @@ theorem rightInvSeq_concat
 
 中文:
 定理 rightInvSeq_concat
-  条件: (ω : List B) (i : B)
+  条件: (ω : 列表 B) (i : B)
   证明: by
   induction ω with
   | nil => simp
@@ -748,7 +748,7 @@ theorem leftInvSeq_eq_reverse_rightInvSeq_reverse
 
 中文:
 定理 leftInvSeq_eq_reverse_rightInvSeq_reverse
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   证明: by
   induction ω with
   | nil => simp
@@ -775,7 +775,7 @@ theorem leftInvSeq_concat
 
 中文:
 定理 leftInvSeq_concat
-  条件: (ω : List B) (i : B)
+  条件: (ω : 列表 B) (i : B)
   证明: by
   simp [leftInvSeq_eq_reverse_rightInvSeq_reverse, rightInvSeq]
 
@@ -796,7 +796,7 @@ theorem rightInvSeq_reverse
 
 中文:
 定理 rightInvSeq_reverse
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   证明: by
   simp [leftInvSeq_eq_reverse_rightInvSeq_reverse]
 
@@ -817,7 +817,7 @@ theorem leftInvSeq_reverse
 
 中文:
 定理 leftInvSeq_reverse
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   证明: by
   simp [leftInvSeq_eq_reverse_rightInvSeq_reverse]
 
@@ -841,7 +841,7 @@ theorem length_rightInvSeq
 
 中文:
 定理 length_rightInvSeq
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   结论: (ris ω).length = ω.length
   证明: by
   induction ω with
@@ -865,7 +865,7 @@ theorem length_leftInvSeq
 
 中文:
 定理 length_leftInvSeq
-  条件: (ω : List B)
+  条件: (ω : 列表 B)
   结论: (lis ω).length = ω.length
   证明: by
   simp [leftInvSeq_eq_reverse_rightInvSeq_reverse]
@@ -891,7 +891,7 @@ theorem getD_rightInvSeq
 
 中文:
 定理 getD_rightInvSeq
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   induction ω generalizing j with
   | nil => simp
@@ -929,7 +929,7 @@ lemma getElem_rightInvSeq
 
 中文:
 引理 getElem_rightInvSeq
-  条件: (ω : List B) (j : 自然数) (h : j < ω.length)
+  条件: (ω : 列表 B) (j : 自然数) (h : j < ω.length)
   证明: by
   rw [← List.getD_eq_getElem (ris ω) 1]; rw [getD_rightInvSeq]
 
@@ -963,7 +963,7 @@ theorem getD_leftInvSeq
 
 中文:
 定理 getD_leftInvSeq
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   induction ω generalizing j with
   | nil => simp
@@ -1008,7 +1008,7 @@ lemma getElem_leftInvSeq
 
 中文:
 引理 getElem_leftInvSeq
-  条件: (ω : List B) (j : 自然数) (h : j < ω.length)
+  条件: (ω : 列表 B) (j : 自然数) (h : j < ω.length)
   证明: by
   rw [← List.getD_eq_getElem (lis ω) 1]; rw [getD_leftInvSeq]
   simp [h]
@@ -1037,7 +1037,7 @@ theorem getD_rightInvSeq_mul_self
 
 中文:
 定理 getD_rightInvSeq_mul_self
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   simp_rw [getD_rightInvSeq, mul_assoc]
   rcases em (j < ω.length) with hj | nhj
@@ -1073,7 +1073,7 @@ theorem getD_leftInvSeq_mul_self
 
 中文:
 定理 getD_leftInvSeq_mul_self
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   simp_rw [getD_leftInvSeq, mul_assoc]
   rcases em (j < ω.length) with hj | nhj
@@ -1109,7 +1109,7 @@ theorem rightInvSeq_drop
 
 中文:
 定理 rightInvSeq_drop
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   induction j generalizing ω with
   | zero => simp
@@ -1144,7 +1144,7 @@ theorem leftInvSeq_take
 
 中文:
 定理 leftInvSeq_take
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   simp only [leftInvSeq_eq_reverse_rightInvSeq_reverse]
   rw [List.take_reverse]
@@ -1180,7 +1180,7 @@ theorem isReflection_of_mem_rightInvSeq
 
 中文:
 定理 isReflection_of_mem_rightInvSeq
-  条件: (ω : List B) {t : W} (ht : t in ris ω)
+  条件: (ω : 列表 B) {t : W} (ht : t in ris ω)
   证明: by
   induction ω with
   | nil => simp at ht
@@ -1216,7 +1216,7 @@ theorem isReflection_of_mem_leftInvSeq
 
 中文:
 定理 isReflection_of_mem_leftInvSeq
-  条件: (ω : List B) {t : W} (ht : t in lis ω)
+  条件: (ω : 列表 B) {t : W} (ht : t in lis ω)
   证明: by
   simp only [leftInvSeq_eq_reverse_rightInvSeq_reverse, mem_reverse] at ht
   exact cs.isReflection_of_mem_rightInvSeq ω.reverse ht
@@ -1246,7 +1246,7 @@ theorem wordProd_mul_getD_rightInvSeq
 
 中文:
 定理 wordProd_mul_getD_rightInvSeq
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   rw [getD_rightInvSeq]; rw [eraseIdx_eq_take_drop_succ]
   nth_rw 1 [← take_append_drop (j + 1) ω]
@@ -1288,7 +1288,7 @@ theorem getD_leftInvSeq_mul_wordProd
 
 中文:
 定理 getD_leftInvSeq_mul_wordProd
-  条件: (ω : List B) (j : 自然数)
+  条件: (ω : 列表 B) (j : 自然数)
   证明: by
   rw [getD_leftInvSeq]; rw [eraseIdx_eq_take_drop_succ]
   nth_rw 4 [← take_append_drop (j + 1) ω]
@@ -1330,7 +1330,7 @@ theorem isRightInversion_of_mem_rightInvSeq
 
 中文:
 定理 isRightInversion_of_mem_rightInvSeq
-  结论: {ω : List B} (hω : cs.IsReduced ω) {t : W}
+  结论: {ω : 列表 B} (hω : cs.是既约 ω) {t : W}
   证明: by
   constructor
   · exact cs.isReflection_of_mem_rightInvSeq ω ht
@@ -1374,7 +1374,7 @@ theorem isLeftInversion_of_mem_leftInvSeq
 
 中文:
 定理 isLeftInversion_of_mem_leftInvSeq
-  结论: {ω : List B} (hω : cs.IsReduced ω) {t : W}
+  结论: {ω : 列表 B} (hω : cs.是既约 ω) {t : W}
   证明: by
   constructor
   · exact cs.isReflection_of_mem_leftInvSeq ω ht
@@ -1414,8 +1414,8 @@ theorem prod_rightInvSeq
 
 中文:
 定理 prod_rightInvSeq
-  条件: (ω : List B)
-  结论: prod (ris ω) = (π ω)⁻¹
+  条件: (ω : 列表 B)
+  结论: 乘积 (ris ω) = (π ω)⁻¹
   证明: by
   induction ω with
   | nil => simp
@@ -1445,8 +1445,8 @@ theorem prod_leftInvSeq
 
 中文:
 定理 prod_leftInvSeq
-  条件: (ω : List B)
-  结论: prod (lis ω) = (π ω)⁻¹
+  条件: (ω : 列表 B)
+  结论: 乘积 (lis ω) = (π ω)⁻¹
   证明: by
   simp only [leftInvSeq_eq_reverse_rightInvSeq_reverse, prod_reverse_noncomm, inv_inj]
   have : List.map (fun x => x⁻¹) (ris ω.reverse) = ris ω.reverse := calc
@@ -1486,9 +1486,9 @@ theorem IsReduced.nodup_rightInvSeq
   rw [getElem?_eq_getElem (by simp; lia)]; rw [getElem?_eq_getElem (by
 
 中文:
-定理 IsReduced.nodup_rightInvSeq
-  条件: {ω : List B} (rω : cs.IsReduced ω)
-  结论: List.Nodup (ris ω)
+定理 是既约.nodup_rightInvSeq
+  条件: {ω : 列表 B} (rω : cs.是既约 ω)
+  结论: 列表.Nodup (ris ω)
   证明: by
   apply List.nodup_iff_getElem?_ne_getElem?.mpr
   intro j j' j_lt_j' j'_lt_length (dup : (rightInvSeq cs ω)[j]? = (rightInvSeq cs ω)[j']?)
@@ -1540,9 +1540,9 @@ theorem IsReduced.nodup_leftInvSeq
   rwa [isReduced_reverse_iff]
 
 中文:
-定理 IsReduced.nodup_leftInvSeq
-  条件: {ω : List B} (rω : cs.IsReduced ω)
-  结论: List.Nodup (lis ω)
+定理 是既约.nodup_leftInvSeq
+  条件: {ω : 列表 B} (rω : cs.是既约 ω)
+  结论: 列表.Nodup (lis ω)
   证明: by
   simp only [leftInvSeq_eq_reverse_rightInvSeq_reverse, nodup_reverse]
   apply nodup_rightInvSeq

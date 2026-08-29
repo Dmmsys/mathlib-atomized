@@ -72,8 +72,8 @@ structure IsTangentAt
     - le_orthRadius : as <= s.orthRadius p
 
 中文:
-结构 IsTangentAt
-  参数: (s : Sphere P) (p : P) (as : AffineSubspace 实数 P)
+结构 是TangentAt
+  参数: (s : 球面 P) (p : P) (as : 仿射子空间 实数 P)
   公理与运算 (3 个):
     - mem_sphere : p in s
     - mem_space : p in as
@@ -94,7 +94,7 @@ lemma isTangentAt_orthRadius_iff_mem
 
 中文:
 引理 isTangentAt_orthRadius_iff_mem
-  条件: {s : Sphere P} {p : P}
+  条件: {s : 球面 P} {p : P}
   证明: ⟨fun h => h.mem_sphere, fun h => ⟨h, self_mem_orthRadius _ _, le_rfl⟩⟩
 -/
 @[simp] lemma isTangentAt_orthRadius_iff_mem {s : Sphere P} {p : P} :
@@ -110,8 +110,8 @@ lemma IsTangentAt.inner_left_eq_zero_of_mem
   proof: mem_orthRadius_iff_inner_left.1 (h.le_orthRadius hx)
 
 中文:
-引理 IsTangentAt.inner_left_eq_zero_of_mem
-  结论: {s : Sphere P} {p : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.inner_left_eq_zero_of_mem
+  结论: {s : 球面 P} {p : P} {as : 仿射子空间 实数 P}
   证明: mem_orthRadius_iff_inner_left.1 (h.le_orthRadius hx)
 
 Depends on / 依赖: h.le_orthRadius, le_orthRadius, mem_orthRadius_iff_inner_left
@@ -129,8 +129,8 @@ lemma IsTangentAt.inner_right_eq_zero_of_mem
   proof: mem_orthRadius_iff_inner_right.1 (h.le_orthRadius hx)
 
 中文:
-引理 IsTangentAt.inner_right_eq_zero_of_mem
-  结论: {s : Sphere P} {p : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.inner_right_eq_zero_of_mem
+  结论: {s : 球面 P} {p : P} {as : 仿射子空间 实数 P}
   证明: mem_orthRadius_iff_inner_right.1 (h.le_orthRadius hx)
 
 Depends on / 依赖: h.le_orthRadius, le_orthRadius, mem_orthRadius_iff_inner_right
@@ -152,8 +152,8 @@ lemma IsTangentAt.eq_of_isTangentAt
   simpa using hqp
 
 中文:
-引理 IsTangentAt.eq_of_isTangentAt
-  结论: {s : Sphere P} {p q : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.eq_of_isTangentAt
+  结论: {s : 球面 P} {p q : P} {as : 仿射子空间 实数 P}
   证明: by
   have hqp := hp.inner_left_eq_zero_of_mem hq.mem_space
   have hpq := hq.inner_left_eq_zero_of_mem hp.mem_space
@@ -187,7 +187,7 @@ lemma isTangentAt_center_iff
 
 中文:
 引理 isTangentAt_center_iff
-  条件: {s : Sphere P} {as : AffineSubspace 实数 P}
+  条件: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   refine ⟨?_, ?_⟩
   · rintro ⟨hr, hm, -⟩
@@ -222,8 +222,8 @@ lemma IsTangentAt.dist_sq_eq_of_mem
   exact s.dist_sq_eq_of_mem_orthRadius (SetLike.le_def.1 h.le_orthRadius hq)
 
 中文:
-引理 IsTangentAt.dist_sq_eq_of_mem
-  结论: {s : Sphere P} {p q : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.dist_sq_eq_of_mem
+  结论: {s : 球面 P} {p q : P} {as : 仿射子空间 实数 P}
   证明: by
   rw [← h.mem_sphere]
   exact s.dist_sq_eq_of_mem_orthRadius (SetLike.le_def.1 h.le_orthRadius hq)
@@ -251,8 +251,8 @@ lemma IsTangentAt.mem_and_mem_iff_eq
     exact ⟨h.mem_sphere, h.mem_space⟩
 
 中文:
-引理 IsTangentAt.mem_and_mem_iff_eq
-  结论: {s : Sphere P} {p q : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.mem_and_mem_iff_eq
+  结论: {s : 球面 P} {p q : P} {as : 仿射子空间 实数 P}
   证明: by
   refine ⟨fun ⟨hs, has⟩ => ?_, ?_⟩
   · have hd := h.dist_sq_eq_of_mem has
@@ -281,8 +281,8 @@ lemma IsTangentAt.eq_of_mem_of_mem
   proof: h.mem_and_mem_iff_eq.1 ⟨hs, has⟩
 
 中文:
-引理 IsTangentAt.eq_of_mem_of_mem
-  结论: {s : Sphere P} {p q : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.eq_of_mem_of_mem
+  结论: {s : 球面 P} {p q : P} {as : 仿射子空间 实数 P}
   证明: h.mem_and_mem_iff_eq.1 ⟨hs, has⟩
 
 Depends on / 依赖: h.mem_and_mem_iff_eq, mem_and_mem_iff_eq
@@ -303,8 +303,8 @@ lemma IsTangentAt.dist_eq_of_mem_of_mem
   rwa [h1, add_left_cancel_iff, sq_eq_sq₀ dist_nonneg dist_nonneg] at h2
 
 中文:
-引理 IsTangentAt.dist_eq_of_mem_of_mem
-  结论: {s : Sphere P} {p₁ p₂ q : P}
+引理 是TangentAt.dist_eq_of_mem_of_mem
+  结论: {s : 球面 P} {p₁ p₂ q : P}
   证明: by
   have h1 := dist_sq_eq_of_mem h₁ hq_mem₁
   have h2 := dist_sq_eq_of_mem h₂ hq_mem₂
@@ -334,8 +334,8 @@ lemma IsTangentAt.radius_lt_dist_center
   simp [hqp]
 
 中文:
-引理 IsTangentAt.radius_lt_dist_center
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P} {p q : P}
+引理 是TangentAt.radius_lt_dist_center
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P} {p q : P}
   证明: by
   suffices s.radius ^ 2 < dist q s.center ^ 2 by
     simpa [sq_lt_sq, abs_of_nonneg (s.radius_nonneg_of_mem h.mem_sphere)] using this
@@ -365,8 +365,8 @@ lemma IsTangentAt.eq_orthRadius_of_finrank_add_one_eq
     (Submodule.eq_of
 
 中文:
-引理 IsTangentAt.eq_orthRadius_of_finrank_add_one_eq
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.eq_orthRadius_of_finrank_add_one_eq
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   have : FiniteDimensional Real V := Module.finite_of_finrank_eq_succ hfr.symm
   have hp : p != s.center := fun h => (h ▸ s.center_mem_iff).not.2 hr ht.mem_sphere
@@ -396,7 +396,7 @@ definition IsTangent
 
 中文:
 定义 IsTangent
-  签名: (s : Sphere P) (as : AffineSubspace 实数 P)
+  签名: (s : 球面 P) (as : 仿射子空间 实数 P)
   定义体: exists p, s.IsTangentAt p as
 
 Depends on / 依赖: IsTangentAt, s.IsTangentAt
@@ -413,8 +413,8 @@ lemma IsTangentAt.isTangent
   proof: ⟨p, h⟩
 
 中文:
-引理 IsTangentAt.isTangent
-  结论: {s : Sphere P} {p : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.isTangent
+  结论: {s : 球面 P} {p : P} {as : 仿射子空间 实数 P}
   证明: ⟨p, h⟩
 -/
 lemma IsTangentAt.isTangent {s : Sphere P} {p : P} {as : AffineSubspace Real P}
@@ -438,7 +438,7 @@ lemma isTangent_orthRadius_iff_mem
 
 中文:
 引理 isTangent_orthRadius_iff_mem
-  条件: {s : Sphere P} {p : P}
+  条件: {s : 球面 P} {p : P}
   证明: by
   refine ⟨?_, fun h => (isTangentAt_orthRadius_iff_mem.2 h).isTangent⟩
   rintro ⟨q, hs, hsp, hle⟩
@@ -472,7 +472,7 @@ lemma IsTangent.radius_le_dist_center
 
 中文:
 引理 IsTangent.radius_le_dist_center
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P} (h : s.IsTangent as)
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P} (h : s.IsTangent as)
   证明: by
   obtain ⟨x, h⟩ := h
   refine le_of_sq_le_sq ?_ dist_nonneg
@@ -500,7 +500,7 @@ lemma IsTangent.notMem_of_dist_lt
 
 中文:
 引理 IsTangent.notMem_of_dist_lt
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P} (h : s.IsTangent as)
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P} (h : s.IsTangent as)
   证明: by
   contrapose! hp
   exact h.radius_le_dist_center hp
@@ -531,7 +531,7 @@ lemma IsTangent.infDist_eq_radius
 
 中文:
 引理 IsTangent.infDist_eq_radius
-  条件: {s : Sphere P} {as : AffineSubspace 实数 P} (h : s.IsTangent as)
+  条件: {s : 球面 P} {as : 仿射子空间 实数 P} (h : s.IsTangent as)
   证明: by
   obtain ⟨p, h⟩ := h
   refine le_antisymm ?_ ?_
@@ -573,7 +573,7 @@ lemma dist_orthogonalProjection_eq_radius_iff_isTangentAt
 
 中文:
 引理 dist_orthogonalProjection_eq_radius_iff_isTangentAt
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P}
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · refine ⟨?_, orthogonalProjection_mem _, fun p hp => ?_⟩
@@ -608,7 +608,7 @@ lemma dist_orthogonalProjection_eq_radius_iff_isTangent
 
 中文:
 引理 dist_orthogonalProjection_eq_radius_iff_isTangent
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P}
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   refine ⟨fun h => (dist_orthogonalProjection_eq_radius_iff_isTangentAt.1 h).isTangent, fun h => ?_⟩
   rw [dist_orthogonalProjection_eq_infDist]; rw [h.infDist_eq_radius]
@@ -632,7 +632,7 @@ lemma infDist_eq_radius_iff_isTangent
 
 中文:
 引理 infDist_eq_radius_iff_isTangent
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P}
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   rw [← dist_orthogonalProjection_eq_infDist]; rw [dist_orthogonalProjection_eq_radius_iff_isTangent]
 
@@ -656,7 +656,7 @@ alias ⟨IsTangent.isTangentAt, _⟩ := isTangent_iff_isTangentAt_orthogonalProj
 
 中文:
 引理 isTangent_iff_isTangentAt_orthogonalProjection
-  结论: {s : Sphere P} {as : AffineSubspace 实数 P}
+  结论: {s : 球面 P} {as : 仿射子空间 实数 P}
   证明: by
   rw [← dist_orthogonalProjection_eq_radius_iff_isTangent]; rw [dist_orthogonalProjection_eq_radius_iff_isTangentAt]
 
@@ -689,7 +689,7 @@ lemma IsTangent.eq_orthRadius_or_eq_orthRadius_pointReflection_of_parallel_orthR
 
 中文:
 引理 IsTangent.eq_orthRadius_or_eq_orthRadius_pointReflection_of_parallel_orthRadius
-  结论: {s : Sphere P}
+  结论: {s : 球面 P}
   证明: by
   rcases h with ⟨q, hqs, hqas, hqo⟩
   have hd := direction_le hqo
@@ -748,8 +748,8 @@ lemma IsTangentAt.eq_orthogonalProjection
   rwa [isTangent_iff_isTangentAt_orthogonalProjection] at h'
 
 中文:
-引理 IsTangentAt.eq_orthogonalProjection
-  结论: {s : Sphere P} {p : P} {as : AffineSubspace 实数 P}
+引理 是TangentAt.eq_orthogonalProjection
+  结论: {s : 球面 P} {p : P} {as : 仿射子空间 实数 P}
   证明: by
   refine h.eq_of_isTangentAt ?_
   have h' := h.isTangent
@@ -776,7 +776,7 @@ definition tangentSet
 
 中文:
 定义 tangentSet
-  签名: (s : Sphere P)
+  签名: (s : 球面 P)
   定义体: s.orthRadius '' s
 
 Depends on / 依赖: orthRadius, s.orthRadius
@@ -794,7 +794,7 @@ lemma mem_tangentSet_iff
 
 中文:
 引理 mem_tangentSet_iff
-  条件: {as : AffineSubspace 实数 P} {s : Sphere P}
+  条件: {as : 仿射子空间 实数 P} {s : 球面 P}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -815,7 +815,7 @@ lemma isTangent_of_mem_tangentSet
 
 中文:
 引理 isTangent_of_mem_tangentSet
-  结论: {as : AffineSubspace 实数 P} {s : Sphere P}
+  结论: {as : 仿射子空间 实数 P} {s : 球面 P}
   证明: by
   rcases h with ⟨p, hps, rfl⟩
   exact isTangent_orthRadius_iff_mem.2 hps
@@ -837,7 +837,7 @@ definition tangentsFrom
 
 中文:
 定义 tangentsFrom
-  签名: (s : Sphere P) (p : P)
+  签名: (s : 球面 P) (p : P)
   定义体: {as in s.tangentSet | p in as}
 
 Depends on / 依赖: s.tangentSet, tangentSet
@@ -855,7 +855,7 @@ lemma mem_tangentsFrom_iff
 
 中文:
 引理 mem_tangentsFrom_iff
-  条件: {as : AffineSubspace 实数 P} {s : Sphere P} {p : P}
+  条件: {as : 仿射子空间 实数 P} {s : 球面 P} {p : P}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -874,7 +874,7 @@ lemma mem_tangentSet_of_mem_tangentsFrom
 
 中文:
 引理 mem_tangentSet_of_mem_tangentsFrom
-  结论: {as : AffineSubspace 实数 P} {s : Sphere P} {p : P}
+  结论: {as : 仿射子空间 实数 P} {s : 球面 P} {p : P}
   证明: h.1
 -/
 lemma mem_tangentSet_of_mem_tangentsFrom {as : AffineSubspace Real P} {s : Sphere P} {p : P}
@@ -891,7 +891,7 @@ lemma mem_of_mem_tangentsFrom
 
 中文:
 引理 mem_of_mem_tangentsFrom
-  结论: {as : AffineSubspace 实数 P} {s : Sphere P} {p : P}
+  结论: {as : 仿射子空间 实数 P} {s : 球面 P} {p : P}
   证明: h.2
 -/
 lemma mem_of_mem_tangentsFrom {as : AffineSubspace Real P} {s : Sphere P} {p : P}
@@ -908,7 +908,7 @@ lemma isTangent_of_mem_tangentsFrom
 
 中文:
 引理 isTangent_of_mem_tangentsFrom
-  结论: {as : AffineSubspace 实数 P} {s : Sphere P} {p : P}
+  结论: {as : 仿射子空间 实数 P} {s : 球面 P} {p : P}
   证明: isTangent_of_mem_tangentSet h.1
 
 Depends on / 依赖: isTangent_of_mem_tangentSet
@@ -929,7 +929,7 @@ definition commonTangents
 
 中文:
 定义 commonTangents
-  签名: (s₁ s₂ : Sphere P)
+  签名: (s₁ s₂ : 球面 P)
   定义体: s₁.tangentSet inter s₂.tangentSet
 
 Depends on / 依赖: tangentSet
@@ -947,7 +947,7 @@ lemma mem_commonTangents_iff
 
 中文:
 引理 mem_commonTangents_iff
-  条件: {as : AffineSubspace 实数 P} {s₁ s₂ : Sphere P}
+  条件: {as : 仿射子空间 实数 P} {s₁ s₂ : 球面 P}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -967,7 +967,7 @@ lemma commonTangents_comm
 
 中文:
 引理 commonTangents_comm
-  条件: (s₁ s₂ : Sphere P)
+  条件: (s₁ s₂ : 球面 P)
   结论: s₁.commonTangents s₂ = s₂.commonTangents s₁
   证明: Set.inter_comm _ _
 
@@ -985,8 +985,8 @@ definition commonIntTangents
   body: {as in s₁.commonTangents s₂ | exists p in as, Wbtw Real s₁.center p s₂.center}
 
 中文:
-定义 commonIntTangents
-  签名: (s₁ s₂ : Sphere P)
+定义 common整数Tangents
+  签名: (s₁ s₂ : 球面 P)
   定义体: {as in s₁.commonTangents s₂ | exists p in as, Wbtw Real s₁.center p s₂.center}
 
 Depends on / 依赖: center, commonTangents
@@ -1004,7 +1004,7 @@ definition commonExtTangents
 
 中文:
 定义 commonExtTangents
-  签名: (s₁ s₂ : Sphere P)
+  签名: (s₁ s₂ : 球面 P)
   定义体: {as in s₁.commonTangents s₂ | forall p in as, ¬Sbtw Real s₁.center p s₂.center}
 
 Depends on / 依赖: center, commonTangents
@@ -1021,8 +1021,8 @@ lemma mem_commonIntTangents_iff
   proof: Iff.rfl
 
 中文:
-引理 mem_commonIntTangents_iff
-  条件: {as : AffineSubspace 实数 P} {s₁ s₂ : Sphere P}
+引理 mem_common整数Tangents_iff
+  条件: {as : 仿射子空间 实数 P} {s₁ s₂ : 球面 P}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1042,7 +1042,7 @@ lemma mem_commonExtTangents_iff
 
 中文:
 引理 mem_commonExtTangents_iff
-  条件: {as : AffineSubspace 实数 P} {s₁ s₂ : Sphere P}
+  条件: {as : 仿射子空间 实数 P} {s₁ s₂ : 球面 P}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1069,8 +1069,8 @@ lemma commonIntTangents_union_commonExtTangents
     exact mt Sbtw.wbtw (h p h
 
 中文:
-引理 commonIntTangents_union_commonExtTangents
-  条件: (s₁ s₂ : Sphere P)
+引理 common整数Tangents_union_commonExtTangents
+  条件: (s₁ s₂ : 球面 P)
   证明: by
   ext as
   rw [Set.mem_union]; rw [mem_commonIntTangents_iff]; rw [mem_commonExtTangents_iff]; rw [← and_or_left]; rw [and_iff_left_iff_imp]
@@ -1104,8 +1104,8 @@ structure IsExtTangentAt
     - wbtw : Wbtw Real s₁.center p s₂.center
 
 中文:
-结构 IsExtTangentAt
-  参数: (s₁ s₂ : Sphere P) (p : P)
+结构 是ExtTangentAt
+  参数: (s₁ s₂ : 球面 P) (p : P)
   公理与运算 (3 个):
     - mem_left : p in s₁
     - mem_right : p in s₂
@@ -1127,8 +1127,8 @@ lemma IsExtTangentAt.symm
   wbtw := h.wbtw.symm
 
 中文:
-引理 IsExtTangentAt.symm
-  条件: {s₁ s₂ : Sphere P} {p : P} (h : s₁.IsExtTangentAt s₂ p)
+引理 是ExtTangentAt.symm
+  条件: {s₁ s₂ : 球面 P} {p : P} (h : s₁.是ExtTangentAt s₂ p)
   证明: h.mem_right
   mem_right := h.mem_left
   wbtw := h.wbtw.symm
@@ -1151,7 +1151,7 @@ lemma isExtTangentAt_comm
 
 中文:
 引理 isExtTangentAt_comm
-  条件: {s₁ s₂ : Sphere P} {p : P}
+  条件: {s₁ s₂ : 球面 P} {p : P}
   证明: ⟨IsExtTangentAt.symm, IsExtTangentAt.symm⟩
 
 Depends on / 依赖: IsExtTangentAt, IsExtTangentAt.symm
@@ -1178,7 +1178,7 @@ lemma isExtTangentAt_center_iff
 
 中文:
 引理 isExtTangentAt_center_iff
-  条件: {s₁ s₂ : Sphere P}
+  条件: {s₁ s₂ : 球面 P}
   证明: by
   refine ⟨?_, ?_⟩
   · rintro ⟨h₁, h₂, -⟩
@@ -1214,8 +1214,8 @@ structure IsIntTangentAt
     - wbtw : Wbtw Real s₂.center s₁.center p
 
 中文:
-结构 IsIntTangentAt
-  参数: (s₁ s₂ : Sphere P) (p : P)
+结构 是整数TangentAt
+  参数: (s₁ s₂ : 球面 P) (p : P)
   公理与运算 (3 个):
     - mem_left : p in s₁
     - mem_right : p in s₂
@@ -1243,8 +1243,8 @@ lemma isIntTangentAt_center_iff
     · simp
 
 中文:
-引理 isIntTangentAt_center_iff
-  条件: {s₁ s₂ : Sphere P}
+引理 is整数TangentAt_center_iff
+  条件: {s₁ s₂ : 球面 P}
   证明: by
   refine ⟨?_, ?_⟩
   · rintro ⟨h₁, h₂, -⟩
@@ -1277,8 +1277,8 @@ lemma isIntTangentAt_self_iff_mem
   proof: ⟨fun ⟨h, _, _⟩ => h, fun h => ⟨h, h, by simp⟩⟩
 
 中文:
-引理 isIntTangentAt_self_iff_mem
-  条件: {s : Sphere P} {p : P}
+引理 is整数TangentAt_self_iff_mem
+  条件: {s : 球面 P} {p : P}
   证明: ⟨fun ⟨h, _, _⟩ => h, fun h => ⟨h, h, by simp⟩⟩
 -/
 @[simp] lemma isIntTangentAt_self_iff_mem {s : Sphere P} {p : P} :
@@ -1295,7 +1295,7 @@ definition IsExtTangent
 
 中文:
 定义 IsExtTangent
-  签名: (s₁ s₂ : Sphere P)
+  签名: (s₁ s₂ : 球面 P)
   定义体: exists p, s₁.IsExtTangentAt s₂ p
 
 Depends on / 依赖: IsExtTangentAt
@@ -1316,7 +1316,7 @@ lemma IsExtTangent.symm
 
 中文:
 引理 IsExtTangent.symm
-  条件: {s₁ s₂ : Sphere P} (h : s₁.IsExtTangent s₂)
+  条件: {s₁ s₂ : 球面 P} (h : s₁.IsExtTangent s₂)
   结论: s₂.IsExtTangent s₁
   证明: by
   rcases h with ⟨p, hp⟩
@@ -1339,7 +1339,7 @@ lemma isExtTangent_comm
 
 中文:
 引理 isExtTangent_comm
-  条件: {s₁ s₂ : Sphere P}
+  条件: {s₁ s₂ : 球面 P}
   结论: s₁.IsExtTangent s₂ ↔ s₂.IsExtTangent s₁
   证明: ⟨IsExtTangent.symm, IsExtTangent.symm⟩
 
@@ -1357,8 +1357,8 @@ definition IsIntTangent
   body: exists p, s₁.IsIntTangentAt s₂ p
 
 中文:
-定义 IsIntTangent
-  签名: (s₁ s₂ : Sphere P)
+定义 Is整数Tangent
+  签名: (s₁ s₂ : 球面 P)
   定义体: exists p, s₁.IsIntTangentAt s₂ p
 
 Depends on / 依赖: IsIntTangentAt
@@ -1375,8 +1375,8 @@ lemma IsExtTangentAt.isExtTangent
   proof: ⟨p, h⟩
 
 中文:
-引理 IsExtTangentAt.isExtTangent
-  条件: {s₁ s₂ : Sphere P} {p : P} (h : s₁.IsExtTangentAt s₂ p)
+引理 是ExtTangentAt.isExtTangent
+  条件: {s₁ s₂ : 球面 P} {p : P} (h : s₁.是ExtTangentAt s₂ p)
   证明: ⟨p, h⟩
 -/
 lemma IsExtTangentAt.isExtTangent {s₁ s₂ : Sphere P} {p : P} (h : s₁.IsExtTangentAt s₂ p) :
@@ -1392,8 +1392,8 @@ lemma IsIntTangentAt.isIntTangent
   proof: ⟨p, h⟩
 
 中文:
-引理 IsIntTangentAt.isIntTangent
-  条件: {s₁ s₂ : Sphere P} {p : P} (h : s₁.Is整数TangentAt s₂ p)
+引理 是整数TangentAt.is整数Tangent
+  条件: {s₁ s₂ : 球面 P} {p : P} (h : s₁.是整数TangentAt s₂ p)
   证明: ⟨p, h⟩
 -/
 lemma IsIntTangentAt.isIntTangent {s₁ s₂ : Sphere P} {p : P} (h : s₁.IsIntTangentAt s₂ p) :
@@ -1412,8 +1412,8 @@ lemma isIntTangent_self_iff
   simp [Set.Nonempty]
 
 中文:
-引理 isIntTangent_self_iff
-  条件: [Nontrivial V] {s : Sphere P}
+引理 is整数Tangent_self_iff
+  条件: [非平凡 V] {s : 球面 P}
   证明: by
   simp_rw [IsIntTangent, isIntTangentAt_self_iff_mem]
   rw [← nonempty_iff]
@@ -1438,7 +1438,7 @@ lemma IsExtTangent.dist_center
 
 中文:
 引理 IsExtTangent.dist_center
-  条件: {s₁ s₂ : Sphere P} (h : s₁.IsExtTangent s₂)
+  条件: {s₁ s₂ : 球面 P} (h : s₁.IsExtTangent s₂)
   证明: by
   rcases h with ⟨p, h₁, h₂, h⟩
   rw [← dist_add_dist_eq_iff] at h
@@ -1464,8 +1464,8 @@ lemma IsIntTangent.dist_center
   simp [← h, dist_comm]
 
 中文:
-引理 IsIntTangent.dist_center
-  条件: {s₁ s₂ : Sphere P} (h : s₁.Is整数Tangent s₂)
+引理 Is整数Tangent.dist_center
+  条件: {s₁ s₂ : 球面 P} (h : s₁.Is整数Tangent s₂)
   证明: by
   rcases h with ⟨p, h₁, h₂, h⟩
   rw [← dist_add_dist_eq_iff]; rw [mem_sphere'.1 h₁]; rw [mem_sphere'.1 h₂] at h
@@ -1497,7 +1497,7 @@ lemma isExtTangent_iff_dist_center
 
 中文:
 引理 isExtTangent_iff_dist_center
-  条件: {s₁ s₂ : Sphere P}
+  条件: {s₁ s₂ : 球面 P}
   结论: s₁.IsExtTangent s₂ ↔
   证明: by
   refine ⟨fun h => ⟨h.dist_center, ?_⟩, ?_⟩
@@ -1551,8 +1551,8 @@ lemma isIntTangent_iff_dist_center
      
 
 中文:
-引理 isIntTangent_iff_dist_center
-  条件: [Nontrivial V] {s₁ s₂ : Sphere P}
+引理 is整数Tangent_iff_dist_center
+  条件: [非平凡 V] {s₁ s₂ : 球面 P}
   结论: s₁.Is整数Tangent s₂ ↔
   证明: by
   refine ⟨fun h => ⟨h.dist_center, ?_⟩, ?_⟩

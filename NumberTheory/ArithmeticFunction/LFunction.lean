@@ -160,7 +160,7 @@ theorem ofPowerSeries_apply
 
 中文:
 定理 ofPowerSeries_apply
-  条件: {q : 自然数} (hq : 1 < q) (f : PowerSeries R) (n : 自然数)
+  条件: {q : 自然数} (hq : 1 < q) (f : 幂级数 R) (n : 自然数)
   证明: by
   simp [ofPowerSeries, dif_pos hq]
 
@@ -181,7 +181,7 @@ theorem ofPowerSeries_apply_pow
 
 中文:
 定理 ofPowerSeries_apply_pow
-  条件: {q : 自然数} (hq : 1 < q) (f : PowerSeries R) (k : 自然数)
+  条件: {q : 自然数} (hq : 1 < q) (f : 幂级数 R) (k : 自然数)
   证明: by
   rw [ofPowerSeries_apply hq]; rw [(Nat.pow_right_injective hq).extend_apply]
 
@@ -203,7 +203,7 @@ theorem ofPowerSeries_apply_zero
 
 中文:
 定理 ofPowerSeries_apply_zero
-  条件: (q : 自然数) (f : PowerSeries R)
+  条件: (q : 自然数) (f : 幂级数 R)
   结论: ofPowerSeries q f 0 = 0
   证明: by
   simp
@@ -227,7 +227,7 @@ theorem ofPowerSeries_apply_one
 
 中文:
 定理 ofPowerSeries_apply_one
-  条件: (q : 自然数) (f : PowerSeries R)
+  条件: (q : 自然数) (f : 幂级数 R)
   证明: by
   by_cases hq : 1 < q
   · rw [← pow_zero q, ofPowerSeries_apply_pow hq, PowerSeries.coeff_zero_eq_constantCoeff]
@@ -265,7 +265,7 @@ theorem ofPowerSeries_pow
 
 中文:
 定理 ofPowerSeries_pow
-  条件: (q : 自然数) {k : 自然数} (hk : k != 0) (f : PowerSeries R)
+  条件: (q : 自然数) {k : 自然数} (hk : k != 0) (f : 幂级数 R)
   证明: by
   by_cases hq : 1 < q
   · ext n

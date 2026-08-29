@@ -490,7 +490,7 @@ theorem Nat.cast_le_pow_sub_div_sub
 le_sub_left_of_add_le one_add_mul_sub_le_pow ((neg_le_self zero_le_one).trans H.le) _
 
 中文:
-定理 Nat.cast_le_pow_sub_div_sub
+定理 自然数.cast_le_pow_sub_div_sub
   条件: (H : 1 < a) (n : 自然数)
   结论: (n : α) <= (a ^ n - 1) / (a - 1)
   证明: (le_div_iff₀ (sub_pos.2 H)).2
@@ -513,7 +513,7 @@ theorem Nat.cast_le_pow_div_sub
     div_le_div_of_nonneg_right (sub_le_self _ zero_le_one) (sub_nonneg.2 H.le)
 
 中文:
-定理 Nat.cast_le_pow_div_sub
+定理 自然数.cast_le_pow_div_sub
   条件: (H : 1 < a) (n : 自然数)
   结论: (n : α) <= a ^ n / (a - 1)
   证明: (n.cast_le_pow_sub_div_sub H).trans

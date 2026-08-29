@@ -58,7 +58,7 @@ theorem wellQuasiOrdered_of_isEmpty
 
 中文:
 定理 wellQuasiOrdered_of_isEmpty
-  条件: [IsEmpty α] (r : α -> α -> 命题)
+  条件: [是空 α] (r : α -> α -> 命题)
   结论: WellQuasiOrdered r
   证明: fun f => isEmptyElim (f 0)
 
@@ -81,7 +81,7 @@ theorem IsAntichain.finite_of_wellQuasiOrdered
 
 中文:
 定理 IsAntichain.finite_of_wellQuasiOrdered
-  结论: {s : Set α} (hs : IsAntichain r s)
+  结论: {s : 集合 α} (hs : IsAntichain r s)
   证明: by
   by_contra! hi
   obtain ⟨m, n, hmn, h⟩ := hr fun n => hi.natEmbedding _ n
@@ -110,8 +110,8 @@ theorem Finite.wellQuasiOrdered
   exact ⟨m, n, h, hf ▸ refl _⟩
 
 中文:
-定理 Finite.wellQuasiOrdered
-  条件: (r : α -> α -> 命题) [Finite α] [Std.Refl r]
+定理 有限.wellQuasiOrdered
+  条件: (r : α -> α -> 命题) [有限 α] [Std.Refl r]
   证明: by
   intro f
   obtain ⟨m, n, h, hf⟩ := Set.finite_univ.exists_lt_map_eq_of_forall_mem (f := f)
@@ -142,8 +142,8 @@ theorem WellQuasiOrdered.exists_monotone_subseq
     cases h2 m n hlt hle
 
 中文:
-定理 WellQuasiOrdered.exists_monotone_subseq
-  结论: [IsPreorder α r] (h : WellQuasiOrdered r)
+定理 WellQuasiOrdered.存在_monotone_subseq
+  结论: [是预序 α r] (h : WellQuasiOrdered r)
   证明: by
   obtain ⟨g, h1 | h2⟩ := exists_increasing_or_nonincreasing_subseq r f
   · refine ⟨g, fun m n hle => ?_⟩
@@ -176,8 +176,8 @@ theorem wellQuasiOrdered_iff_exists_monotone_subseq
     exact ⟨_, _, g.strictMono Nat.zero_lt_one, gmon _ _ (Nat.zero_le 1)⟩
 
 中文:
-定理 wellQuasiOrdered_iff_exists_monotone_subseq
-  条件: [IsPreorder α r]
+定理 wellQuasiOrdered_iff_存在_monotone_subseq
+  条件: [是预序 α r]
   证明: by
   constructor <;> intro h f
   · exact h.exists_monotone_subseq f
@@ -206,8 +206,8 @@ theorem WellQuasiOrdered.prod
   exact ⟨g m, g n, g.strictMono h, h₁ _ _ h.le, hf⟩
 
 中文:
-定理 WellQuasiOrdered.prod
-  条件: [IsPreorder α r] (hr : WellQuasiOrdered r) (hs : WellQuasiOrdered s)
+定理 WellQuasiOrdered.乘积
+  条件: [是预序 α r] (hr : WellQuasiOrdered r) (hs : WellQuasiOrdered s)
   证明: by
   intro f
   obtain ⟨g, h₁⟩ := hr.exists_monotone_subseq (Prod.fst ∘ f)
@@ -239,7 +239,7 @@ theorem WellQuasiOrdered.pi
 
 中文:
 定理 WellQuasiOrdered.pi
-  结论: {ι : 类型} {α : ι -> 类型} [Finite ι] {r : 对任意 i, (α i -> α i -> 命题)}
+  结论: {ι : 类型} {α : ι -> 类型} [有限 ι] {r : 对任意 i, (α i -> α i -> 命题)}
   证明: by
   have := Fintype.ofFinite ι
   have : IsPreorder (forall i, α i) (fun a b : forall i, α i => forall i, r i (a i) (b i)) :=
@@ -341,7 +341,7 @@ class WellQuasiOrderedLE
     - wqo : @WellQuasiOrdered α (· <= ·)
 
 中文:
-类 WellQuasiOrderedLE
+类 良拟序
   参数: (α : 类型) [LE α]
   公理与运算 (1 个):
     - wqo : @WellQuasiOrdered α (· <= ·)
@@ -360,7 +360,7 @@ theorem wellQuasiOrdered_le
 
 中文:
 定理 wellQuasiOrdered_le
-  条件: [LE α] [h : WellQuasiOrderedLE α]
+  条件: [LE α] [h : 良拟序 α]
   结论: @WellQuasiOrdered α (· <= ·)
   证明: h.wqo
 
@@ -405,9 +405,9 @@ lemma Finite.to_wellQuasiOrderedLE
   proof: Finite.wellQuasiOrdered _
 
 中文:
-引理 Finite.to_wellQuasiOrderedLE
-  条件: [Finite α]
-  结论: WellQuasiOrderedLE α where
+引理 有限.to_wellQuasiOrderedLE
+  条件: [有限 α]
+  结论: 良拟序 α where
   证明: Finite.wellQuasiOrdered _
 
 Depends on / 依赖: Finite, Finite.wellQuasiOrdered, wellQuasiOrdered
@@ -438,7 +438,7 @@ theorem WellQuasiOrdered.wellFounded
 
 中文:
 定理 WellQuasiOrdered.wellFounded
-  结论: {α : 类型} {r : α -> α -> 命题} [IsPreorder α r]
+  结论: {α : 类型} {r : α -> α -> 命题} [是预序 α r]
   证明: by
   let _ : Preorder α :=
     { le := r
@@ -467,8 +467,8 @@ theorem WellQuasiOrderedLE.finite_of_isAntichain
   proof: h.finite_of_wellQuasiOrdered wellQuasiOrdered_le
 
 中文:
-定理 WellQuasiOrderedLE.finite_of_isAntichain
-  结论: [WellQuasiOrderedLE α] {s : Set α}
+定理 良拟序.finite_of_isAntichain
+  结论: [良拟序 α] {s : 集合 α}
   证明: h.finite_of_wellQuasiOrdered wellQuasiOrdered_le
 
 Depends on / 依赖: finite_of_wellQuasiOrdered, h.finite_of_wellQuasiOrdered, wellQuasiOrdered_le
@@ -532,8 +532,8 @@ instance [WellQuasiOrderedLE
   body: ⟨wellQuasiOrdered_le.prod wellQuasiOrdered_le⟩
 
 中文:
-实例 [WellQuasiOrderedLE
-  签名: α] [Preorder β] [WellQuasiOrderedLE β] : WellQuasiOrderedLE (α × β)
+实例 [良拟序
+  签名: α] [预序 β] [良拟序 β] : 良拟序 (α × β)
   定义体: ⟨wellQuasiOrdered_le.prod wellQuasiOrdered_le⟩
 
 Depends on / 依赖: IsReduced, IsReduced.eq_zero, congr_fun, eq_zero, wellQuasiOrdered_le, wellQuasiOrdered_le.prod
@@ -550,8 +550,8 @@ theorem Monotone.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
   proof: ⟨wellQuasiOrdered_le.of_surjective ⟨_, (mono ·)⟩ hf⟩
 
 中文:
-定理 Monotone.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
-  结论: [Preorder β]
+定理 递增.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
+  结论: [预序 β]
   证明: ⟨wellQuasiOrdered_le.of_surjective ⟨_, (mono ·)⟩ hf⟩
 
 Depends on / 依赖: of_surjective, wellQuasiOrdered_le, wellQuasiOrdered_le.of_surjective
@@ -570,8 +570,8 @@ theorem OrderHom.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
   proof: f.monotone.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective hf
 
 中文:
-定理 OrderHom.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
-  结论: [Preorder β]
+定理 序态射.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
+  结论: [预序 β]
   证明: f.monotone.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective hf
 
 Depends on / 依赖: f.monotone.wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective, monotone, wellQuasiOrderedLE_of_wellQuasiOrderedLE_of_surjective
@@ -598,7 +598,7 @@ theorem wellQuasiOrderedLE_iff_wellFoundedLT
 
 中文:
 定理 wellQuasiOrderedLE_iff_wellFoundedLT
-  结论: WellQuasiOrderedLE α ↔ WellFoundedLT α
+  结论: 良拟序 α ↔ WellFoundedLT α
   证明: by
   rw [wellQuasiOrderedLE_iff]; rw [and_iff_left_iff_imp]
   exact fun _ s hs => hs.subsingleton.finite
@@ -619,7 +619,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : WellFoundedLT α] : WellQuasiOrderedLE α
+  签名: : WellFoundedLT α] : 良拟序 α
   定义体: wellQuasiOrderedLE_iff_wellFoundedLT.mpr h
 
 Depends on / 依赖: wellQuasiOrderedLE_iff_wellFoundedLT, wellQuasiOrderedLE_iff_wellFoundedLT.mpr
@@ -638,8 +638,8 @@ instance Pi.wellQuasiOrderedLE
   body: ⟨WellQuasiOrdered.pi fun i => (h i).wqo⟩
 
 中文:
-实例 Pi.wellQuasiOrderedLE
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Preorder (α i)]
+实例 依赖函数类型.wellQuasiOrderedLE
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 预序 (α i)]
   定义体: ⟨WellQuasiOrdered.pi fun i => (h i).wqo⟩
 
 Depends on / 依赖: WellQuasiOrdered, WellQuasiOrdered.pi

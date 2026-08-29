@@ -31,8 +31,8 @@ lemma Fibration.isLowerSet_image
 alias _root_.IsLowerSet.image_fibration := Fibration.isLowerSet_image
 
 中文:
-引理 Fibration.isLowerSet_image
-  结论: [LE α] [LE β] (hf : Fibration (· <= ·) (· <= ·) f)
+引理 纤维化.isLowerSet_image
+  结论: [LE α] [LE β] (hf : 纤维化 (· <= ·) (· <= ·) f)
   证明: by
   rintro _ y' e ⟨x, hx, rfl⟩; obtain ⟨y, e', rfl⟩ := hf e; exact ⟨_, hs e' hx, rfl⟩
 
@@ -54,7 +54,7 @@ lemma fibration_iff_isLowerSet_image_Iic
 
 中文:
 引理 fibration_iff_isLowerSet_image_Iic
-  条件: [Preorder α] [LE β]
+  条件: [预序 α] [LE β]
   证明: ⟨fun h x => (isLowerSet_Iic x).image_fibration h, fun H x _ e => H x e ⟨x, le_rfl, rfl⟩⟩
 
 Depends on / 依赖: image_fibration, isLowerSet_Iic, le_rfl
@@ -74,7 +74,7 @@ lemma fibration_iff_isLowerSet_image
 
 中文:
 引理 fibration_iff_isLowerSet_image
-  条件: [Preorder α] [LE β]
+  条件: [预序 α] [LE β]
   证明: ⟨Fibration.isLowerSet_image,
     fun H => fibration_iff_isLowerSet_image_Iic.mpr (H _ <| isLowerSet_Iic ·)⟩
 
@@ -97,7 +97,7 @@ lemma fibration_iff_image_Iic
 
 中文:
 引理 fibration_iff_image_Iic
-  条件: [Preorder α] [Preorder β] (hf : Monotone f)
+  条件: [预序 α] [预序 β] (hf : 递增 f)
   证明: ⟨fun H x => le_antisymm (fun _ ⟨_, hy, e⟩ => e ▸ hf hy)
     ((H.isLowerSet_image (isLowerSet_Iic x)).Iic_subset ⟨x, le_rfl, rfl⟩),
     fun H => fibration_iff_isLowerSet_image_Iic.mpr (fun x => (H x).symm ▸ isLowerSet_Iic (f x))⟩
@@ -121,8 +121,8 @@ lemma Fibration.isUpperSet_image
 alias _root_.IsUpperSet.image_fibration := Fibration.isUpperSet_image
 
 中文:
-引理 Fibration.isUpperSet_image
-  结论: [LE α] [LE β] (hf : Fibration (· >= ·) (· >= ·) f)
+引理 纤维化.isUpperSet_image
+  结论: [LE α] [LE β] (hf : 纤维化 (· >= ·) (· >= ·) f)
   证明: @Fibration.isLowerSet_image αᵒᵈ βᵒᵈ _ _ _ hf s hs
 
 alias _root_.IsUpperSet.image_fibration := Fibration.isUpperSet_image
@@ -145,7 +145,7 @@ lemma fibration_iff_isUpperSet_image_Ici
 
 中文:
 引理 fibration_iff_isUpperSet_image_Ici
-  条件: [Preorder α] [LE β]
+  条件: [预序 α] [LE β]
   证明: @fibration_iff_isLowerSet_image_Iic αᵒᵈ βᵒᵈ _ _ _
 
 Depends on / 依赖: fibration_iff_isLowerSet_image_Iic
@@ -164,7 +164,7 @@ lemma fibration_iff_isUpperSet_image
 
 中文:
 引理 fibration_iff_isUpperSet_image
-  条件: [Preorder α] [LE β]
+  条件: [预序 α] [LE β]
   证明: @fibration_iff_isLowerSet_image αᵒᵈ βᵒᵈ _ _ _
 
 Depends on / 依赖: fibration_iff_isLowerSet_image
@@ -183,7 +183,7 @@ lemma fibration_iff_image_Ici
 
 中文:
 引理 fibration_iff_image_Ici
-  条件: [Preorder α] [Preorder β] (hf : Monotone f)
+  条件: [预序 α] [预序 β] (hf : 递增 f)
   证明: fibration_iff_image_Iic hf.dual
 
 Depends on / 依赖: fibration_iff_image_Iic, hf.dual

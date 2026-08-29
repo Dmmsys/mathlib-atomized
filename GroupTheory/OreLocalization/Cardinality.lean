@@ -51,7 +51,7 @@ theorem oreDiv_one_surjective_of_finite_left
 
 中文:
 定理 oreDiv_one_surjective_of_finite_left
-  条件: [Finite S]
+  条件: [有限 S]
   证明: by
   refine OreLocalization.ind fun x s => ?_
   obtain ⟨i, j, hne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (α := Nat) (s ^ ·)
@@ -94,7 +94,7 @@ theorem oreDiv_one_surjective_of_finite_right
 
 中文:
 定理 oreDiv_one_surjective_of_finite_right
-  条件: [Finite X]
+  条件: [有限 X]
   证明: by
   refine OreLocalization.ind fun x s => ?_
   obtain ⟨i, j, hne, heq⟩ := Finite.exists_ne_map_eq_of_infinite (α := Nat) (s ^ · • x)
@@ -133,8 +133,8 @@ theorem numeratorHom_surjective_of_finite
 
 中文:
 定理 numeratorHom_surjective_of_finite
-  条件: [Finite S]
-  结论: Surjective (numeratorHom (S := S))
+  条件: [有限 S]
+  结论: 满射 (numeratorHom (S := S))
   证明: oreDiv_one_surjective_of_finite_left S R
 
 @[to_additive]
@@ -159,7 +159,7 @@ theorem cardinalMk_le_max
 
 中文:
 定理 cardinalMk_le_max
-  结论: #(OreLocalization S X) <= max (lift.{v} #S) (lift.{u} #X)
+  结论: #(OreLocalization S X) <= 最大值 (lift.{v} #S) (lift.{u} #X)
   证明: by
   rcases finite_or_infinite X with _ | _
   · have := lift_mk_le_lift_mk_of_surjective (oreDiv_one_surjective_of_finite_right S X)

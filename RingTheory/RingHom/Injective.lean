@@ -22,7 +22,7 @@ lemma _root_.RingHom.injective_stableUnderComposition
   exact Function.Injective.comp hg hf
 
 中文:
-引理 _root_.RingHom.injective_stableUnderComposition
+引理 _root_.环态射.injective_stableUnderComposition
   证明: by
   intro R S T _ _ _ f g hf hg
   simp only [RingHom.coe_comp]
@@ -47,7 +47,7 @@ lemma _root_.RingHom.injective_respectsIso
   exact e.bijective.injective
 
 中文:
-引理 _root_.RingHom.injective_respectsIso
+引理 _root_.环态射.injective_respectsIso
   证明: by
   apply RingHom.injective_stableUnderComposition.respectsIso
   intro R S _ _ e

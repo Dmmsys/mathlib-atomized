@@ -233,7 +233,7 @@ definition reduce_rec
 
 中文:
 定义 reduce_rec
-  签名: {C : Δ m -> Sort*}
+  签名: {C : Δ m -> 类型层*}
   定义体: fun A => by
   by_cases h : (A.1 1 0) = 0
   · exact base _ h
@@ -455,7 +455,7 @@ suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
 
 中文:
 引理 reps_entries_le_m'
-  条件: {A : Δ m} (h : A in reps m) (i j : Fin 2)
+  条件: {A : Δ m} (h : A in reps m) (i j : 有限集 2)
   证明: by
 suffices |A.1 i j| <= |m| from Finset.mem_Icc.mpr abs_le.mp this
   obtain ⟨h10, h00, h01, h11⟩ := h
@@ -827,7 +827,7 @@ lemma reps_one_id
 
 中文:
 引理 reps_one_id
-  结论: (A : FixedDetMatrix (Fin 2) 整数 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
+  结论: (A : FixedDetMatrix (有限集 2) 整数 1) (a1 : A.1 1 0 = 0) (a4 : 0 < A.1 0 0)
   证明: by
   have := Int.mul_eq_one_iff_eq_one_or_neg_one.mp (A_c_eq_zero a1)
   ext i j

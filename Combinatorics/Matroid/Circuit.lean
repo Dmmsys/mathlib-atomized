@@ -66,8 +66,8 @@ definition IsCircuit
   body: Minimal M.Dep
 
 中文:
-定义 IsCircuit
-  签名: (M : Matroid α)
+定义 是Circuit
+  签名: (M : 拟阵 α)
   定义体: Minimal M.Dep
 
 Depends on / 依赖: M.Dep, Minimal
@@ -84,7 +84,7 @@ lemma isCircuit_def
 
 中文:
 引理 isCircuit_def
-  结论: M.IsCircuit C ↔ Minimal M.Dep C
+  结论: M.是Circuit C ↔ 极小 M.Dep C
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -101,8 +101,8 @@ lemma IsCircuit.dep
   proof: hC.prop
 
 中文:
-引理 IsCircuit.dep
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.dep
+  条件: (hC : M.是Circuit C)
   结论: M.Dep C
   证明: hC.prop
 
@@ -121,8 +121,8 @@ lemma IsCircuit.not_indep
   proof: hC.dep.not_indep
 
 中文:
-引理 IsCircuit.not_indep
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.not_indep
+  条件: (hC : M.是Circuit C)
   结论: ¬ M.Indep C
   证明: hC.dep.not_indep
 
@@ -143,9 +143,9 @@ lemma IsCircuit.minimal
 @[aesop unsafe 20% (rule_sets := [Matroid])]
 
 中文:
-引理 IsCircuit.minimal
-  条件: (hC : M.IsCircuit C)
-  结论: Minimal M.Dep C
+引理 是Circuit.minimal
+  条件: (hC : M.是Circuit C)
+  结论: 极小 M.Dep C
   证明: hC
 
 @[aesop unsafe 20% (rule_sets := [Matroid])]
@@ -164,8 +164,8 @@ lemma IsCircuit.subset_ground
   proof: hC.dep.subset_ground
 
 中文:
-引理 IsCircuit.subset_ground
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.subset_ground
+  条件: (hC : M.是Circuit C)
   结论: C subseteq M.E
   证明: hC.dep.subset_ground
 
@@ -184,9 +184,9 @@ lemma IsCircuit.nonempty
   proof: hC.dep.nonempty
 
 中文:
-引理 IsCircuit.nonempty
-  条件: (hC : M.IsCircuit C)
-  结论: C.Nonempty
+引理 是Circuit.nonempty
+  条件: (hC : M.是Circuit C)
+  结论: C.非空
   证明: hC.dep.nonempty
 
 Depends on / 依赖: hC.dep.nonempty, nonempty
@@ -205,8 +205,8 @@ lemma empty_not_isCircuit
 
 中文:
 引理 empty_not_isCircuit
-  条件: (M : Matroid α)
-  结论: ¬M.IsCircuit ∅
+  条件: (M : 拟阵 α)
+  结论: ¬M.是Circuit ∅
   证明: fun h => by simpa using h.nonempty
 
 Depends on / 依赖: h.nonempty, nonempty
@@ -225,7 +225,7 @@ lemma isCircuit_iff
 
 中文:
 引理 isCircuit_iff
-  结论: M.IsCircuit C ↔ M.Dep C ∧ 对任意 ⦃D⦄, M.Dep D -> D subseteq C -> D = C
+  结论: M.是Circuit C ↔ M.Dep C ∧ 对任意 ⦃D⦄, M.Dep D -> D subseteq C -> D = C
   证明: by
   simp_rw [isCircuit_def, minimal_subset_iff, eq_comm (a := C)]
 
@@ -246,8 +246,8 @@ lemma IsCircuit.ssubset_indep
   exact fun h => hXC.ne ((isCircuit_iff.1 hC).2 h hXC.subset)
 
 中文:
-引理 IsCircuit.ssubset_indep
-  条件: (hC : M.IsCircuit C) (hXC : X ⊂ C)
+引理 是Circuit.ssubset_indep
+  条件: (hC : M.是Circuit C) (hXC : X ⊂ C)
   结论: M.Indep X
   证明: by
   rw [← not_dep_iff (hXC.subset.trans hC.subset_ground)]
@@ -271,9 +271,9 @@ lemma IsCircuit.minimal_not_indep
   exact fun ⦃t⦄ a => ssubset_indep hC a
 
 中文:
-引理 IsCircuit.minimal_not_indep
-  条件: (hC : M.IsCircuit C)
-  结论: Minimal (¬ M.Indep ·) C
+引理 是Circuit.minimal_not_indep
+  条件: (hC : M.是Circuit C)
+  结论: 极小 (¬ M.Indep ·) C
   证明: by
   simp_rw [minimal_iff_forall_ssubset, and_iff_right hC.not_indep, not_not]
   exact fun ⦃t⦄ a => ssubset_indep hC a
@@ -297,7 +297,7 @@ lemma isCircuit_iff_minimal_not_indep
 中文:
 引理 isCircuit_iff_minimal_not_indep
   条件: (hCE : C subseteq M.E)
-  结论: M.IsCircuit C ↔ Minimal (¬ M.Indep ·) C
+  结论: M.是Circuit C ↔ 极小 (¬ M.Indep ·) C
   证明: ⟨IsCircuit.minimal_not_indep, fun h => ⟨(not_indep_iff hCE).1 h.prop,
     fun _ hJ hJC => (h.eq_of_superset hJ.not_indep hJC).le⟩⟩
 
@@ -320,8 +320,8 @@ lemma IsCircuit.sdiff_singleton_indep
 alias IsCircuit.diff_singleton_indep := IsCircuit.sdiff_singleton_indep
 
 中文:
-引理 IsCircuit.sdiff_singleton_indep
-  条件: (hC : M.IsCircuit C) (he : e in C)
+引理 是Circuit.sdiff_singleton_indep
+  条件: (hC : M.是Circuit C) (he : e in C)
   结论: M.Indep (C \ {e})
   证明: hC.ssubset_indep (sdiff_singleton_ssubset.2 he)
 
@@ -348,8 +348,8 @@ lemma isCircuit_iff_forall_ssubset
     fun h I hIC => (h hIC).not_dep⟩
 
 中文:
-引理 isCircuit_iff_forall_ssubset
-  结论: M.IsCircuit C ↔ M.Dep C ∧ 对任意 ⦃I⦄, I ⊂ C -> M.Indep I
+引理 isCircuit_iff_对任意_ssubset
+  结论: M.是Circuit C ↔ M.Dep C ∧ 对任意 ⦃I⦄, I ⊂ C -> M.Indep I
   证明: by
   rw [IsCircuit]; rw [minimal_iff_forall_ssubset]; rw [and_congr_right_iff]
   exact fun h => ⟨fun h' I hIC => ((not_dep_iff (hIC.subset.trans h.subset_ground)).1 (h' hIC)),
@@ -372,7 +372,7 @@ lemma isCircuit_antichain
 
 中文:
 引理 isCircuit_antichain
-  结论: IsAntichain (· subseteq ·) (Set.ofPred M.IsCircuit)
+  结论: IsAntichain (· subseteq ·) (集合.ofPred M.是Circuit)
   证明: fun _ hC _ hC' hne hss => hne (IsCircuit.minimal hC').eq_of_subset hC.dep hss
 
 Depends on / 依赖: IsCircuit, IsCircuit.minimal, eq_of_subset, hC.dep, minimal
@@ -389,8 +389,8 @@ lemma IsCircuit.eq_of_not_indep_subset
   proof: eq_of_le_of_not_lt hXC (hX ∘ hC.ssubset_indep)
 
 中文:
-引理 IsCircuit.eq_of_not_indep_subset
-  条件: (hC : M.IsCircuit C) (hX : ¬ M.Indep X) (hXC : X subseteq C)
+引理 是Circuit.eq_of_not_indep_subset
+  条件: (hC : M.是Circuit C) (hX : ¬ M.Indep X) (hXC : X subseteq C)
   证明: eq_of_le_of_not_lt hXC (hX ∘ hC.ssubset_indep)
 
 Depends on / 依赖: eq_of_le_of_not_lt, hC.ssubset_indep, ssubset_indep
@@ -409,8 +409,8 @@ lemma IsCircuit.eq_of_dep_subset
   proof: hC.eq_of_not_indep_subset hX.not_indep hXC
 
 中文:
-引理 IsCircuit.eq_of_dep_subset
-  条件: (hC : M.IsCircuit C) (hX : M.Dep X) (hXC : X subseteq C)
+引理 是Circuit.eq_of_dep_subset
+  条件: (hC : M.是Circuit C) (hX : M.Dep X) (hXC : X subseteq C)
   结论: X = C
   证明: hC.eq_of_not_indep_subset hX.not_indep hXC
 
@@ -429,8 +429,8 @@ lemma IsCircuit.not_ssubset
   proof: fun h' => h'.ne (hC.eq_of_dep_subset hC'.dep h'.subset)
 
 中文:
-引理 IsCircuit.not_ssubset
-  条件: (hC : M.IsCircuit C) (hC' : M.IsCircuit C')
+引理 是Circuit.not_ssubset
+  条件: (hC : M.是Circuit C) (hC' : M.是Circuit C')
   结论: ¬C' ⊂ C
   证明: fun h' => h'.ne (hC.eq_of_dep_subset hC'.dep h'.subset)
 
@@ -448,8 +448,8 @@ lemma IsCircuit.eq_of_subset_isCircuit
   proof: hC'.eq_of_dep_subset hC.dep h
 
 中文:
-引理 IsCircuit.eq_of_subset_isCircuit
-  条件: (hC : M.IsCircuit C) (hC' : M.IsCircuit C') (h : C subseteq C')
+引理 是Circuit.eq_of_subset_isCircuit
+  条件: (hC : M.是Circuit C) (hC' : M.是Circuit C') (h : C subseteq C')
   证明: hC'.eq_of_dep_subset hC.dep h
 
 Depends on / 依赖: eq_of_dep_subset, hC.dep
@@ -467,8 +467,8 @@ lemma IsCircuit.eq_of_superset_isCircuit
   proof: (hC'.eq_of_subset_isCircuit hC h).symm
 
 中文:
-引理 IsCircuit.eq_of_superset_isCircuit
-  条件: (hC : M.IsCircuit C) (hC' : M.IsCircuit C') (h : C' subseteq C)
+引理 是Circuit.eq_of_superset_isCircuit
+  条件: (hC : M.是Circuit C) (hC' : M.是Circuit C') (h : C' subseteq C)
   证明: (hC'.eq_of_subset_isCircuit hC h).symm
 
 Depends on / 依赖: eq_of_subset_isCircuit
@@ -492,7 +492,7 @@ lemma isCircuit_iff_dep_forall_sdiff_singleton_indep
 @[depr
 
 中文:
-引理 isCircuit_iff_dep_forall_sdiff_singleton_indep
+引理 isCircuit_iff_dep_对任意_sdiff_singleton_indep
   证明: by
   wlog hCE : C subseteq M.E
   · exact iff_of_false (hCE ∘ IsCircuit.subset_ground) (fun h => hCE h.1.subset_ground)
@@ -531,7 +531,7 @@ lemma Indep.insert_isCircuit_of_forall
   exact ⟨mem_gr
 
 中文:
-引理 Indep.insert_isCircuit_of_forall
+引理 Indep.insert_isCircuit_of_对任意
   结论: (hI : M.Indep I) (heI : e ∉ I) (he : e in M.closure I)
   证明: by
   rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [hI.insert_dep_iff]; rw [and_iff_right ⟨he]; rw [heI⟩]
@@ -562,8 +562,8 @@ lemma Indep.insert_isCircuit_of_forall_of_nontrivial
   exact h f hf (mem_closure_of_mem' _ (by simp [heI, hne.symm]))
 
 中文:
-引理 Indep.insert_isCircuit_of_forall_of_nontrivial
-  结论: (hI : M.Indep I) (h整数 : I.Nontrivial)
+引理 Indep.insert_isCircuit_of_对任意_of_nontrivial
+  结论: (hI : M.Indep I) (h整数 : I.非平凡)
   证明: by
   refine hI.insert_isCircuit_of_forall (fun heI => ?_) he h
   obtain ⟨f, hf, hne⟩ := hInt.exists_ne e
@@ -592,8 +592,8 @@ lemma IsCircuit.sdiff_singleton_isBasis
 alias IsCircuit.diff_singleton_isBasis := IsCircuit.sdiff_s
 
 中文:
-引理 IsCircuit.sdiff_singleton_isBasis
-  条件: (hC : M.IsCircuit C) (he : e in C)
+引理 是Circuit.sdiff_singleton_isBasis
+  条件: (hC : M.是Circuit C) (he : e in C)
   证明: by
   nth_rw 2 [← insert_eq_of_mem he]
   rw [← insert_sdiff_singleton]; rw [(hC.sdiff_singleton_indep he).isBasis_insert_iff]; rw [insert_sdiff_singleton]; rw [insert_eq_of_mem he]
@@ -628,8 +628,8 @@ lemma IsCircuit.isBasis_iff_eq_sdiff_singleton
   rintro ⟨e, he, rf
 
 中文:
-引理 IsCircuit.isBasis_iff_eq_sdiff_singleton
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.isBasis_iff_eq_sdiff_singleton
+  条件: (hC : M.是Circuit C)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · obtain ⟨e, he⟩ := exists_of_ssubset
@@ -667,8 +667,8 @@ lemma IsCircuit.isBasis_iff_insert_eq
   rw [hC]; rw [insert_sdiff_self_of_notMem he.2]
 
 中文:
-引理 IsCircuit.isBasis_iff_insert_eq
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.isBasis_iff_insert_eq
+  条件: (hC : M.是Circuit C)
   证明: by
   rw [hC.isBasis_iff_eq_sdiff_singleton]
   refine ⟨fun ⟨e, he, hI⟩ => ⟨e, ⟨he, fun heI => (hI.subset heI).2 rfl⟩, ?_⟩,
@@ -698,8 +698,8 @@ lemma IsCircuit.isCircuit_restrict_of_subset
   exact ⟨⟨hC.1.1, hCR⟩, fun I hI _ hIC => hC.2 hI (hIC.trans hC.1.2) hIC⟩
 
 中文:
-引理 IsCircuit.isCircuit_restrict_of_subset
-  条件: (hC : M.IsCircuit C) (hCR : C subseteq R)
+引理 是Circuit.isCircuit_restrict_of_subset
+  条件: (hC : M.是Circuit C) (hCR : C subseteq R)
   证明: by
   simp_rw [isCircuit_iff, restrict_dep_iff, dep_iff, and_imp] at *
   exact ⟨⟨hC.1.1, hCR⟩, fun I hI _ hIC => hC.2 hI (hIC.trans hC.1.2) hIC⟩
@@ -750,7 +750,7 @@ definition fundCircuit
 
 中文:
 定义 fundCircuit
-  签名: (M : Matroid α) (e : α) (I : Set α)
+  签名: (M : 拟阵 α) (e : α) (I : 集合 α)
   定义体: insert e (I inter ⋂₀ {J | J subseteq I ∧ M.closure {e} subseteq M.closure J})
 
 Depends on / 依赖: M.closure, closure, insert, subseteq
@@ -771,7 +771,7 @@ lemma fundCircuit_eq_sInter
   rw [inter_eq_self_of_subset_right (sInter_subset_of_mem (by simpa))]
 
 中文:
-引理 fundCircuit_eq_sInter
+引理 fundCircuit_eq_s整数er
   条件: (he : e in M.closure I)
   证明: by
   rw [fundCircuit]
@@ -798,7 +798,7 @@ lemma fundCircuit_subset_insert
 
 中文:
 引理 fundCircuit_subset_insert
-  条件: (M : Matroid α) (e : α) (I : Set α)
+  条件: (M : 拟阵 α) (e : α) (I : 集合 α)
   证明: insert_subset_insert inter_subset_left
 
 Depends on / 依赖: insert_subset_insert, inter_subset_left
@@ -837,7 +837,7 @@ lemma mem_fundCircuit
 
 中文:
 引理 mem_fundCircuit
-  条件: (M : Matroid α) (e : α) (I : Set α)
+  条件: (M : 拟阵 α) (e : α) (I : 集合 α)
   结论: e in fundCircuit M e I
   证明: mem_insert ..
 
@@ -859,7 +859,7 @@ lemma fundCircuit_sdiff_eq_inter
 
 中文:
 引理 fundCircuit_sdiff_eq_inter
-  条件: (M : Matroid α) (heI : e ∉ I)
+  条件: (M : 拟阵 α) (heI : e ∉ I)
   证明: (subset_inter sdiff_subset (by simp [fundCircuit_subset_insert])).antisymm
     (subset_sdiff_singleton inter_subset_left (by simp [heI]))
 
@@ -1014,7 +1014,7 @@ lemma IsBase.fundCircuit_isCircuit
 
 中文:
 引理 IsBase.fundCircuit_isCircuit
-  条件: {B : Set α} (hB : M.IsBase B) (hxE : x in M.E) (hxB : x ∉ B)
+  条件: {B : 集合 α} (hB : M.IsBase B) (hxE : x in M.E) (hxB : x ∉ B)
   证明: hB.indep.fundCircuit_isCircuit (by rwa [hB.closure_eq]) hxB
 
 Depends on / 依赖: closure_eq, fundCircuit_isCircuit, hB.closure_eq, hB.indep.fundCircuit_isCircuit
@@ -1038,8 +1038,8 @@ lemma IsCircuit.eq_fundCircuit_of_subset
       exact .inl (hC.dep.supers
 
 中文:
-引理 IsCircuit.eq_fundCircuit_of_subset
-  结论: (hC : M.IsCircuit C) (hI : M.Indep I)
+引理 是Circuit.eq_fundCircuit_of_subset
+  结论: (hC : M.是Circuit C) (hI : M.Indep I)
   证明: by
   obtain hCI | ⟨heC, hCeI⟩ := subset_insert_iff.1 hCs
   · exact (hC.not_indep (hI.subset hCI)).elim
@@ -1082,7 +1082,7 @@ lemma fundCircuit_restrict
 
 中文:
 引理 fundCircuit_restrict
-  条件: {R : Set α} (hIR : I subseteq R) (heR : e in R) (hR : R subseteq M.E)
+  条件: {R : 集合 α} (hIR : I subseteq R) (heR : e in R) (hR : R subseteq M.E)
   证明: by
   simp_rw [fundCircuit, M.restrict_closure_eq (R := R) (X := {e}) (by simpa)]
   apply subset_antisymm
@@ -1123,7 +1123,7 @@ lemma fundCircuit_restrict_univ
 
 中文:
 引理 fundCircuit_restrict_univ
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   证明: by
   have aux (A B) : M.closure A subseteq B union univ \ M.E ↔ M.closure A subseteq B := by
     refine ⟨fun h => ?_, fun h => h.trans subset_union_left⟩
@@ -1155,9 +1155,9 @@ lemma Dep.exists_isCircuit_subset
     hI.indep.fundCircuit_isCircuit (hI.sub
 
 中文:
-引理 Dep.exists_isCircuit_subset
+引理 Dep.存在_isCircuit_subset
   条件: (hX : M.Dep X)
-  结论: 存在 C, C subseteq X ∧ M.IsCircuit C
+  结论: 存在 C, C subseteq X ∧ M.是Circuit C
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis X
   obtain ⟨e, heX, heI⟩ := exists_of_ssubset
@@ -1204,7 +1204,7 @@ lemma dep_iff_superset_isCircuit'
 
 中文:
 引理 dep_iff_superset_isCircuit'
-  结论: M.Dep X ↔ (存在 C, C subseteq X ∧ M.IsCircuit C) ∧ X subseteq M.E
+  结论: M.Dep X ↔ (存在 C, C subseteq X ∧ M.是Circuit C) ∧ X subseteq M.E
   证明: ⟨fun h => ⟨h.exists_isCircuit_subset, h.subset_ground⟩,
     fun ⟨⟨C, hCX, hC⟩, h⟩ => hC.dep.superset hCX⟩
 
@@ -1224,7 +1224,7 @@ lemma indep_iff_forall_subset_not_isCircuit'
   aesop
 
 中文:
-引理 indep_iff_forall_subset_not_isCircuit'
+引理 indep_iff_对任意_subset_not_isCircuit'
   证明: by
   simp_rw [indep_iff_not_dep, dep_iff_superset_isCircuit']
   aesop
@@ -1246,7 +1246,7 @@ lemma indep_iff_forall_subset_not_isCircuit
   rw [indep_iff_forall_subset_not_isCircuit']; rw [and_iff_left hI]
 
 中文:
-引理 indep_iff_forall_subset_not_isCircuit
+引理 indep_iff_对任意_subset_not_isCircuit
   条件: (hI : I subseteq M.E := by aesop_mat)
   证明: by
   rw [indep_iff_forall_subset_not_isCircuit']; rw [and_iff_left hI]
@@ -1272,8 +1272,8 @@ lemma IsCircuit.closure_sdiff_singleton_eq
 alias IsCircuit.closure_diff_singleton_eq := IsCircuit.closure_sdiff_singleton_eq
 
 中文:
-引理 IsCircuit.closure_sdiff_singleton_eq
-  条件: (hC : M.IsCircuit C) (e : α)
+引理 是Circuit.closure_sdiff_singleton_eq
+  条件: (hC : M.是Circuit C) (e : α)
   证明: (em (e in C)).elim
     (fun he => by rw [(hC.sdiff_singleton_isBasis he).closure_eq_closure])
     (fun he => by rw [sdiff_singleton_eq_self he])
@@ -1306,8 +1306,8 @@ lemma IsCircuit.subset_closure_sdiff_singleton
 alias IsCircuit.subset_closure_diff_singleton := IsCircuit.subset_closure_sdiff_singleton
 
 中文:
-引理 IsCircuit.subset_closure_sdiff_singleton
-  条件: (hC : M.IsCircuit C) (e : α)
+引理 是Circuit.subset_closure_sdiff_singleton
+  条件: (hC : M.是Circuit C) (e : α)
   证明: by
   rw [hC.closure_sdiff_singleton_eq]
   exact M.subset_closure _ hC.subset_ground
@@ -1337,8 +1337,8 @@ lemma IsCircuit.mem_closure_sdiff_singleton_of_mem
 alias IsCircuit.mem_closure_diff_singleton_of_mem := IsCircuit.mem_closure_sdiff_singleton_of_mem
 
 中文:
-引理 IsCircuit.mem_closure_sdiff_singleton_of_mem
-  条件: (hC : M.IsCircuit C) (heC : e in C)
+引理 是Circuit.mem_closure_sdiff_singleton_of_mem
+  条件: (hC : M.是Circuit C) (heC : e in C)
   证明: hC.subset_closure_sdiff_singleton e heC
 
 @[deprecated (since := "2026-06-03")]
@@ -1365,7 +1365,7 @@ lemma exists_isCircuit_of_mem_closure
     hI.subset heX), M.mem_fundCircuit e I⟩
 
 中文:
-引理 exists_isCircuit_of_mem_closure
+引理 存在_isCircuit_of_mem_closure
   条件: (he : e in M.closure X) (heX : e ∉ X)
   证明: let ⟨I, hI⟩ := M.exists_isBasis' X
   ⟨_, (fundCircuit_subset_insert ..).trans (insert_subset_insert hI.subset),
@@ -1391,7 +1391,7 @@ lemma mem_closure_iff_exists_isCircuit
     (hC.mem_closure_sdiff_singleton_of_mem heC) (M.closure_subset_closure (by simpa))⟩
 
 中文:
-引理 mem_closure_iff_exists_isCircuit
+引理 mem_closure_iff_存在_isCircuit
   条件: (he : e ∉ X)
   证明: ⟨fun h => exists_isCircuit_of_mem_closure h he, fun ⟨C, hCX, hC, heC⟩ => mem_of_mem_of_subset
     (hC.mem_closure_sdiff_singleton_of_mem heC) (M.closure_subset_closure (by simpa))⟩
@@ -1419,7 +1419,7 @@ lemma ext_isCircuit
 
 中文:
 引理 ext_isCircuit
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: by
   have h' {C} : M₁.IsCircuit C ↔ M₂.IsCircuit C :=
     (em (C subseteq M₁.E)).elim (h (C := C)) (fun hC => iff_of_false (mt IsCircuit.subset_ground hC)
@@ -1452,7 +1452,7 @@ lemma ext_isCircuit_not_indep
 
 中文:
 引理 ext_isCircuit_not_indep
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: by
   refine ext_isCircuit hE fun C hCE => ⟨fun hC => ?_, fun hC => ?_⟩
   · obtain ⟨C', hC'C, hC'⟩ := ((not_indep_iff (by rwa [← hE])).1 (h₁ C hC)).exists_isCircuit_subset
@@ -1480,7 +1480,7 @@ lemma ext_iff_isCircuit
 
 中文:
 引理 ext_iff_isCircuit
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   证明: ⟨fun h => by simp [h], fun h => ext_isCircuit h.1 fun C hC => h.2 (C := C)⟩
 
 Depends on / 依赖: ext_isCircuit
@@ -1509,8 +1509,8 @@ lemma IsCircuit.strong_multi_elimination_insert
   suffices hcl : z in M.closure ((⋃ i, I i) union (J \ {z})) 
 
 中文:
-引理 IsCircuit.strong_multi_elimination_insert
-  结论: (x : ι -> α) (I : ι -> Set α) (z : α)
+引理 是Circuit.strong_multi_elimination_insert
+  结论: (x : ι -> α) (I : ι -> 集合 α) (z : α)
   证明: by
   -- we may assume that `ι` is nonempty, and it suffices to show that
   -- `z` is spanned by the union of the `I` and `J \ {z}`.
@@ -1554,8 +1554,8 @@ lemma IsCircuit.strong_multi_elimination
     refine union_subset (sdiff_subset_sdiff_l
 
 中文:
-引理 IsCircuit.strong_multi_elimination
-  结论: (hC₀ : M.IsCircuit C₀) (x : ι -> α) (C : ι -> Set α) (z : α)
+引理 是Circuit.strong_multi_elimination
+  结论: (hC₀ : M.是Circuit C₀) (x : ι -> α) (C : ι -> 集合 α) (z : α)
   证明: by
   have hwin := IsCircuit.strong_multi_elimination_insert (M := M) x (fun i => (C i \ {x i}))
     (J := C₀ \ range x) (z := z) (by simp) (fun i => ?_) ?_ ⟨hzC₀, ?_⟩ ?_
@@ -1604,8 +1604,8 @@ lemma IsCircuit.strong_multi_elimination_set
    
 
 中文:
-引理 IsCircuit.strong_multi_elimination_set
-  结论: (hC₀ : M.IsCircuit C₀) (X : Set α) (S : Set (Set α))
+引理 是Circuit.strong_multi_elimination_set
+  结论: (hC₀ : M.是Circuit C₀) (X : 集合 α) (S : 集合 (集合 α))
   证明: by
   choose! C hC using hX
   simp only [forall_and] at hC
@@ -1646,8 +1646,8 @@ lemma IsCircuit.strong_elimination
   exact ⟨C, hCs.trans (sdiff_subset_sdiff (by simp) (by simp)), hC, hfC⟩
 
 中文:
-引理 IsCircuit.strong_elimination
-  结论: (hC₁ : M.IsCircuit C₁) (hC₂ : M.IsCircuit C₂) (heC₁ : e in C₁)
+引理 是Circuit.strong_elimination
+  结论: (hC₁ : M.是Circuit C₁) (hC₂ : M.是Circuit C₂) (heC₁ : e in C₁)
   证明: by
   obtain ⟨C, hCs, hC, hfC⟩ := hC₁.strong_multi_elimination (fun i : Unit => e) (fun _ => C₂) f
     (by simpa) (by simpa) (by simpa) (by simp) (by simpa) (by simpa)
@@ -1678,8 +1678,8 @@ have hnss : ¬ (C₁ subseteq C₂) := fun hss => h hC₁.eq_of_subset_isCircuit
     exact ⟨C₂, subs
 
 中文:
-引理 IsCircuit.elimination
-  条件: (hC₁ : M.IsCircuit C₁) (hC₂ : M.IsCircuit C₂) (h : C₁ != C₂) (e : α)
+引理 是Circuit.elimination
+  条件: (hC₁ : M.是Circuit C₁) (hC₂ : M.是Circuit C₂) (h : C₁ != C₂) (e : α)
   证明: by
 have hnss : ¬ (C₁ subseteq C₂) := fun hss => h hC₁.eq_of_subset_isCircuit hC₂ hss
   obtain ⟨f, hf₁, hf₂⟩ := not_subset.1 hnss
@@ -1721,9 +1721,9 @@ lemma IsCircuit.finite
   rwa [← hC.eq_of_not_indep_subset hJ hJC]
 
 中文:
-引理 IsCircuit.finite
-  条件: [Finitary M] (hC : M.IsCircuit C)
-  结论: C.Finite
+引理 是Circuit.finite
+  条件: [Finitary M] (hC : M.是Circuit C)
+  结论: C.有限
   证明: by
   have hi := hC.dep.not_indep
   rw [indep_iff_forall_finite_subset_indep] at hi; push Not at hi
@@ -1752,8 +1752,8 @@ exact hC.dep.not_indep hI _ hCI (h C hC)
   simpa using (hI {x} (by simpa) (finite_singleton _)).subset_ground
 
 中文:
-引理 finitary_iff_forall_isCircuit_finite
-  结论: M.Finitary ↔ 对任意 C, M.IsCircuit C -> C.Finite
+引理 finitary_iff_对任意_isCircuit_finite
+  结论: M.Finitary ↔ 对任意 C, M.是Circuit C -> C.有限
   证明: by
   refine ⟨fun _ _ => IsCircuit.finite, fun h =>
     ⟨fun I hI => indep_iff_not_dep.2 ⟨fun hd => ?_,fun x hx => ?_⟩⟩⟩
@@ -1785,7 +1785,7 @@ lemma exists_mem_finite_closure_of_mem_closure
   exact ⟨C \ {e}, by simpa, hC
 
 中文:
-引理 exists_mem_finite_closure_of_mem_closure
+引理 存在_mem_finite_closure_of_mem_closure
   条件: [M.Finitary] (he : e in M.closure X)
   证明: by
   by_cases heY : e in X
@@ -1821,8 +1821,8 @@ lemma exists_subset_finite_closure_of_subset_closure
   refine Finite.induction_on_subset X hX ⟨
 
 中文:
-引理 exists_subset_finite_closure_of_subset_closure
-  结论: [M.Finitary] (hX : X.Finite)
+引理 存在_subset_finite_closure_of_subset_closure
+  结论: [M.Finitary] (hX : X.有限)
   证明: by
   suffices aux : exists T subseteq Y, T.Finite ∧ X subseteq M.closure T by
     obtain ⟨T, hT, hTfin, hXT⟩ := aux
@@ -1860,7 +1860,7 @@ abbreviation IsCocircuit
 
 中文:
 缩写 IsCocircuit
-  签名: (M : Matroid α) (K : Set α)
+  签名: (M : 拟阵 α) (K : 集合 α)
   定义体: M✶.IsCircuit K
 
 Depends on / 依赖: IsCircuit
@@ -1877,7 +1877,7 @@ lemma isCocircuit_def
 
 中文:
 引理 isCocircuit_def
-  结论: M.IsCocircuit K ↔ M✶.IsCircuit K
+  结论: M.IsCocircuit K ↔ M✶.是Circuit K
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1896,7 +1896,7 @@ lemma IsCocircuit.isCircuit
 中文:
 引理 IsCocircuit.isCircuit
   条件: (hK : M.IsCocircuit K)
-  结论: M✶.IsCircuit K
+  结论: M✶.是Circuit K
   证明: hK
 -/
 lemma IsCocircuit.isCircuit (hK : M.IsCocircuit K) : M✶.IsCircuit K :=
@@ -1913,8 +1913,8 @@ lemma IsCircuit.isCocircuit
   rwa [isCocircuit_def, dual_dual]
 
 中文:
-引理 IsCircuit.isCocircuit
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.isCocircuit
+  条件: (hC : M.是Circuit C)
   结论: M✶.IsCocircuit C
   证明: by
   rwa [isCocircuit_def, dual_dual]
@@ -1938,7 +1938,7 @@ lemma IsCocircuit.nonempty
 中文:
 引理 IsCocircuit.nonempty
   条件: (hC : M.IsCocircuit C)
-  结论: C.Nonempty
+  结论: C.非空
   证明: hC.isCircuit.nonempty
 
 @[aesop unsafe 10% (rule_sets := [Matroid])]
@@ -1980,7 +1980,7 @@ lemma dual_isCocircuit_iff
 
 中文:
 引理 dual_isCocircuit_iff
-  结论: M✶.IsCocircuit C ↔ M.IsCircuit C
+  结论: M✶.IsCocircuit C ↔ M.是Circuit C
   证明: by
   rw [isCocircuit_def]; rw [dual_dual]
 -/
@@ -1995,7 +1995,7 @@ lemma coindep_iff_forall_subset_not_isCocircuit
   proof: indep_iff_forall_subset_not_isCircuit'
 
 中文:
-引理 coindep_iff_forall_subset_not_isCocircuit
+引理 coindep_iff_对任意_subset_not_isCocircuit
   证明: indep_iff_forall_subset_not_isCircuit'
 
 Depends on / 依赖: indep_iff_forall_subset_not_isCircuit
@@ -2149,8 +2149,8 @@ lemma IsCircuit.inter_isCocircuit_ne_singleton
   
 
 中文:
-引理 IsCircuit.inter_isCocircuit_ne_singleton
-  条件: (hC : M.IsCircuit C) (hK : M.IsCocircuit K)
+引理 是Circuit.inter_isCocircuit_ne_singleton
+  条件: (hC : M.是Circuit C) (hK : M.IsCocircuit K)
   证明: by
   intro he
   have heC : e in C := (he.symm.subset rfl).1
@@ -2191,8 +2191,8 @@ lemma IsCircuit.isCocircuit_inter_nontrivial
   exact hC.inter_isCocircuit_ne_singleton hK
 
 中文:
-引理 IsCircuit.isCocircuit_inter_nontrivial
-  结论: (hC : M.IsCircuit C) (hK : M.IsCocircuit K)
+引理 是Circuit.isCocircuit_inter_nontrivial
+  结论: (hC : M.是Circuit C) (hK : M.IsCocircuit K)
   证明: by
   obtain ⟨e, heCK⟩ := hCK
   rw [nontrivial_iff_ne_singleton heCK]
@@ -2217,8 +2217,8 @@ lemma IsCircuit.isCocircuit_disjoint_or_nontrivial_inter
   exact hC.isCocircuit_inter_nontrivial hK
 
 中文:
-引理 IsCircuit.isCocircuit_disjoint_or_nontrivial_inter
-  结论: (hC : M.IsCircuit C)
+引理 是Circuit.isCocircuit_disjoint_or_nontrivial_inter
+  结论: (hC : M.是Circuit C)
   证明: by
   rw [or_iff_not_imp_left]; rw [disjoint_iff_inter_eq_empty]; rw [← ne_eq]; rw [← nonempty_iff_ne_empty]
   exact hC.isCocircuit_inter_nontrivial hK
@@ -2241,8 +2241,8 @@ lemma dual_rankPos_iff_exists_isCircuit
   exact ⟨fun h C _ => h C, fun h C hC => h C hC.subset_ground hC⟩
 
 中文:
-引理 dual_rankPos_iff_exists_isCircuit
-  结论: M✶.RankPos ↔ 存在 C, M.IsCircuit C
+引理 dual_rankPos_iff_存在_isCircuit
+  结论: M✶.RankPos ↔ 存在 C, M.是Circuit C
   证明: by
   rw [rankPos_iff]; rw [dual_isBase_iff]; rw [sdiff_empty]; rw [not_iff_comm]; rw [not_exists]; rw [← ground_indep_iff_isBase]; rw [indep_iff_forall_subset_not_isCircuit]
   exact ⟨fun h C _ => h C, fun h C hC => h C hC.subset_ground hC⟩
@@ -2263,8 +2263,8 @@ lemma IsCircuit.dual_rankPos
   proof: dual_rankPos_iff_exists_isCircuit.mpr ⟨C, hC⟩
 
 中文:
-引理 IsCircuit.dual_rankPos
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.dual_rankPos
+  条件: (hC : M.是Circuit C)
   结论: M✶.RankPos
   证明: dual_rankPos_iff_exists_isCircuit.mpr ⟨C, hC⟩
 
@@ -2283,9 +2283,9 @@ lemma exists_isCircuit
   proof: dual_rankPos_iff_exists_isCircuit.1 (by assumption)
 
 中文:
-引理 exists_isCircuit
+引理 存在_isCircuit
   条件: [RankPos M✶]
-  结论: 存在 C, M.IsCircuit C
+  结论: 存在 C, M.是Circuit C
   证明: dual_rankPos_iff_exists_isCircuit.1 (by assumption)
 
 Depends on / 依赖: dual_rankPos_iff_exists_isCircuit
@@ -2303,7 +2303,7 @@ lemma rankPos_iff_exists_isCocircuit
   rw [← dual_dual M]; rw [dual_rankPos_iff_exists_isCircuit]; rw [dual_dual M]
 
 中文:
-引理 rankPos_iff_exists_isCocircuit
+引理 rankPos_iff_存在_isCocircuit
   结论: M.RankPos ↔ 存在 K, M.IsCocircuit K
   证明: by
   rw [← dual_dual M]; rw [dual_rankPos_iff_exists_isCircuit]; rw [dual_dual M]
@@ -2323,7 +2323,7 @@ definition fundCocircuit
 
 中文:
 定义 fundCocircuit
-  签名: (M : Matroid α) (e : α) (B : Set α)
+  签名: (M : 拟阵 α) (e : α) (B : 集合 α)
   定义体: M✶.fundCircuit e (M✶.E \ B)
 
 Depends on / 依赖: fundCircuit
@@ -2368,7 +2368,7 @@ lemma mem_fundCocircuit
 
 中文:
 引理 mem_fundCocircuit
-  条件: (M : Matroid α) (e : α) (B : Set α)
+  条件: (M : 拟阵 α) (e : α) (B : 集合 α)
   结论: e in M.fundCocircuit e B
   证明: mem_insert _ _
 
@@ -2387,7 +2387,7 @@ lemma fundCocircuit_subset_insert_compl
 
 中文:
 引理 fundCocircuit_subset_insert_compl
-  条件: (M : Matroid α) (e : α) (B : Set α)
+  条件: (M : 拟阵 α) (e : α) (B : 集合 α)
   证明: fundCircuit_subset_insert ..
 
 Depends on / 依赖: fundCircuit_subset_insert
@@ -2409,7 +2409,7 @@ lemma fundCocircuit_inter_eq
 
 中文:
 引理 fundCocircuit_inter_eq
-  条件: (M : Matroid α) {B : Set α} (he : e in B)
+  条件: (M : 拟阵 α) {B : 集合 α} (he : e in B)
   证明: by
   refine subset_antisymm ?_ (singleton_subset_iff.2 ⟨M.mem_fundCocircuit _ _, he⟩)
   refine (inter_subset_inter_left _ (M.fundCocircuit_subset_insert_compl _ _)).trans ?_
@@ -2434,7 +2434,7 @@ lemma fundCocircuit_eq_of_notMem_ground
 
 中文:
 引理 fundCocircuit_eq_of_notMem_ground
-  条件: (X : Set α) (he : e ∉ M.E)
+  条件: (X : 集合 α) (he : e ∉ M.E)
   证明: by
   rwa [fundCocircuit, fundCircuit_eq_of_notMem_ground]
 
@@ -2459,7 +2459,7 @@ lemma fundCocircuit_eq_of_notMem
 
 中文:
 引理 fundCocircuit_eq_of_notMem
-  条件: (M : Matroid α) (heX : e ∉ X)
+  条件: (M : 拟阵 α) (heX : e ∉ X)
   结论: M.fundCocircuit e X = {e}
   证明: by
   by_cases he : e in M.E
@@ -2488,7 +2488,7 @@ lemma Indep.exists_isCocircuit_inter_eq_mem
     (mem_fundCocircuit _ _ _)]; rw [singleton_subset_iff]; rw [and_iff_left
 
 中文:
-引理 Indep.exists_isCocircuit_inter_eq_mem
+引理 Indep.存在_isCocircuit_inter_eq_mem
   条件: (hI : M.Indep I) (heI : e in I)
   证明: by
   obtain ⟨B, hB, hIB⟩ := hI.exists_isBase_superset

@@ -63,8 +63,8 @@ structure DFinsupp
   (no additional axioms)
 
 中文:
-结构 DFinsupp
-  参数: [对任意 i, Zero (β i)]
+结构 直和有限支撑
+  参数: [对任意 i, 零 (β i)]
   (无附加公理)
 -/
 structure DFinsupp [forall i, Zero (β i)] : Type max u v where mk' ::
@@ -97,7 +97,7 @@ instance instDFunLike
 
 中文:
 实例 instDFunLike
-  签名: : DFunLike (Π₀ i, β i) ι β
+  签名: : 依赖函数状 (Π₀ i, β i) ι β
   定义体: ⟨fun f => f.toFun, fun ⟨f₁, s₁⟩ ⟨f₂, s₁⟩ => fun (h : f₁ = f₂) => by
     subst h
     congr
@@ -186,7 +186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Π₀ i, β i)
+  签名: 零 (Π₀ i, β i)
   定义体: ⟨⟨0, Trunc.mk ⟨∅, fun _ => Or.inr rfl⟩⟩⟩
 
 Depends on / 依赖: Or.inr, Trunc.mk
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Π₀ i, β i)
+  签名: 可居 (Π₀ i, β i)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (Π₀ i, β i) :=
@@ -528,8 +528,8 @@ instance [forall
   body: ⟨zipWith (fun _ => (· + ·)) fun _ => add_zero 0⟩
 
 中文:
-实例 [forall
-  签名: i, AddZeroClass (β i)] : Add (Π₀ i, β i)
+实例 [对任意
+  签名: i, 加法零类 (β i)] : 加法 (Π₀ i, β i)
   定义体: ⟨zipWith (fun _ => (· + ·)) fun _ => add_zero 0⟩
 
 Depends on / 依赖: add_zero, zipWith
@@ -549,7 +549,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [对任意 i, AddZeroClass (β i)] (g₁ g₂ : Π₀ i, β i) (i : ι)
+  条件: [对任意 i, 加法零类 (β i)] (g₁ g₂ : Π₀ i, β i) (i : ι)
   证明: rfl
 
 @[simp, norm_cast]
@@ -570,7 +570,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: [对任意 i, AddZeroClass (β i)] (g₁ g₂ : Π₀ i, β i)
+  条件: [对任意 i, 加法零类 (β i)] (g₁ g₂ : Π₀ i, β i)
   结论: ⇑(g₁ + g₂) = g₁ + g₂
   证明: rfl
 -/
@@ -587,7 +587,7 @@ instance addZeroClass
 
 中文:
 实例 addZeroClass
-  签名: [对任意 i, AddZeroClass (β i)]
+  签名: [对任意 i, 加法零类 (β i)]
   定义体: DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addZeroClass, addZeroClass, coe_add, coe_injective, coe_zero
@@ -605,7 +605,7 @@ instance instIsLeftCancelAdd
 
 中文:
 实例 instIsLeftCancelAdd
-  签名: [对任意 i, AddZeroClass (β i)] [对任意 i, IsLeftCancelAdd (β i)]
+  签名: [对任意 i, 加法零类 (β i)] [对任意 i, 是左消去加法 (β i)]
   定义体: ext fun x => add_left_cancel DFunLike.congr_fun h x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_left_cancel, congr_fun
@@ -624,7 +624,7 @@ instance instIsRightCancelAdd
 
 中文:
 实例 instIsRightCancelAdd
-  签名: [对任意 i, AddZeroClass (β i)] [对任意 i, IsRightCancelAdd (β i)]
+  签名: [对任意 i, 加法零类 (β i)] [对任意 i, 是右消去加法 (β i)]
   定义体: ext fun x => add_right_cancel DFunLike.congr_fun h x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_right_cancel, congr_fun
@@ -642,7 +642,7 @@ instance instIsCancelAdd
 
 中文:
 实例 instIsCancelAdd
-  签名: [对任意 i, AddZeroClass (β i)] [对任意 i, IsCancelAdd (β i)]
+  签名: [对任意 i, 加法零类 (β i)] [对任意 i, 是消去加法 (β i)]
 -/
 instance instIsCancelAdd [forall i, AddZeroClass (β i)] [forall i, IsCancelAdd (β i)] :
     IsCancelAdd (Π₀ i, β i) where
@@ -656,8 +656,8 @@ instance hasNatScalar
   body: ⟨fun c v => v.mapRange (fun _ => (c • ·)) fun _ => nsmul_zero _⟩
 
 中文:
-实例 hasNatScalar
-  签名: [对任意 i, AddMonoid (β i)]
+实例 has自然数Scalar
+  签名: [对任意 i, 加法幺半群 (β i)]
   定义体: ⟨fun c v => v.mapRange (fun _ => (c • ·)) fun _ => nsmul_zero _⟩
 
 Depends on / 依赖: mapRange, nsmul_zero, v.mapRange
@@ -678,7 +678,7 @@ theorem nsmul_apply
 
 中文:
 定理 nsmul_apply
-  条件: [对任意 i, AddMonoid (β i)] (b : 自然数) (v : Π₀ i, β i) (i : ι)
+  条件: [对任意 i, 加法幺半群 (β i)] (b : 自然数) (v : Π₀ i, β i) (i : ι)
   结论: (b • v) i = b • v i
   证明: rfl
 
@@ -699,7 +699,7 @@ theorem coe_nsmul
 
 中文:
 定理 coe_nsmul
-  条件: [对任意 i, AddMonoid (β i)] (b : 自然数) (v : Π₀ i, β i)
+  条件: [对任意 i, 加法幺半群 (β i)] (b : 自然数) (v : Π₀ i, β i)
   结论: ⇑(b • v) = b • ⇑v
   证明: rfl
 -/
@@ -715,8 +715,8 @@ instance [forall
   body: DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => coe_nsmul _ _
 
 中文:
-实例 [forall
-  签名: i, AddMonoid (β i)] : AddMonoid (Π₀ i, β i)
+实例 [对任意
+  签名: i, 加法幺半群 (β i)] : 加法幺半群 (Π₀ i, β i)
   定义体: DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => coe_nsmul _ _
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addMonoid, addMonoid, coe_add, coe_injective, coe_nsmul, coe_zero
@@ -738,7 +738,7 @@ definition coeFnAddMonoidHom
 
 中文:
 定义 coeFnAddMonoidHom
-  签名: [对任意 i, AddZeroClass (β i)]
+  签名: [对任意 i, 加法零类 (β i)]
   定义体: (⇑)
   map_zero' := coe_zero
   map_add' := coe_add
@@ -762,7 +762,7 @@ lemma coeFnAddMonoidHom_apply
 
 中文:
 引理 coeFnAddMonoidHom_apply
-  条件: [对任意 i, AddZeroClass (β i)] (v : Π₀ i, β i)
+  条件: [对任意 i, 加法零类 (β i)] (v : Π₀ i, β i)
   结论: coeFnAddMonoidHom v = v
   证明: rfl
 -/
@@ -779,7 +779,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [对任意 i, AddCommMonoid (β i)]
+  签名: [对任意 i, 加法交换幺半群 (β i)]
   定义体: fast_instance% DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => coe_nsmul _ _
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addCommMonoid, addCommMonoid, coe_add, coe_injective, coe_nsmul, coe_zero, fast_instance
@@ -796,8 +796,8 @@ instance [forall
   body: ⟨fun f => f.mapRange (fun _ => Neg.neg) fun _ => neg_zero⟩
 
 中文:
-实例 [forall
-  签名: i, AddGroup (β i)] : Neg (Π₀ i, β i)
+实例 [对任意
+  签名: i, 加法群 (β i)] : 取负 (Π₀ i, β i)
   定义体: ⟨fun f => f.mapRange (fun _ => Neg.neg) fun _ => neg_zero⟩
 
 Depends on / 依赖: Neg.neg, f.mapRange, mapRange, neg_zero
@@ -816,7 +816,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [对任意 i, AddGroup (β i)] (g : Π₀ i, β i) (i : ι)
+  条件: [对任意 i, 加法群 (β i)] (g : Π₀ i, β i) (i : ι)
   结论: (-g) i = -g i
   证明: rfl
 -/
@@ -834,7 +834,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: [对任意 i, AddGroup (β i)] (g : Π₀ i, β i)
+  条件: [对任意 i, 加法群 (β i)] (g : Π₀ i, β i)
   结论: ⇑(-g) = -g
   证明: rfl
 -/
@@ -849,8 +849,8 @@ instance [forall
   body: ⟨zipWith (fun _ => Sub.sub) fun _ => sub_zero 0⟩
 
 中文:
-实例 [forall
-  签名: i, AddGroup (β i)] : Sub (Π₀ i, β i)
+实例 [对任意
+  签名: i, 加法群 (β i)] : 减法 (Π₀ i, β i)
   定义体: ⟨zipWith (fun _ => Sub.sub) fun _ => sub_zero 0⟩
 
 Depends on / 依赖: Sub.sub, sub_zero, zipWith
@@ -871,7 +871,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: [对任意 i, AddGroup (β i)] (g₁ g₂ : Π₀ i, β i) (i : ι)
+  条件: [对任意 i, 加法群 (β i)] (g₁ g₂ : Π₀ i, β i) (i : ι)
   结论: (g₁ - g₂) i = g₁ i - g₂ i
   证明: rfl
 
@@ -892,7 +892,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  条件: [对任意 i, AddGroup (β i)] (g₁ g₂ : Π₀ i, β i)
+  条件: [对任意 i, 加法群 (β i)] (g₁ g₂ : Π₀ i, β i)
   结论: ⇑(g₁ - g₂) = g₁ - g₂
   证明: rfl
 -/
@@ -908,8 +908,8 @@ instance hasIntScalar
   body: ⟨fun c v => v.mapRange (fun _ => (c • ·)) fun _ => zsmul_zero _⟩
 
 中文:
-实例 hasIntScalar
-  签名: [对任意 i, AddGroup (β i)]
+实例 has整数Scalar
+  签名: [对任意 i, 加法群 (β i)]
   定义体: ⟨fun c v => v.mapRange (fun _ => (c • ·)) fun _ => zsmul_zero _⟩
 
 Depends on / 依赖: mapRange, v.mapRange, zsmul_zero
@@ -930,7 +930,7 @@ theorem zsmul_apply
 
 中文:
 定理 zsmul_apply
-  条件: [对任意 i, AddGroup (β i)] (b : 整数) (v : Π₀ i, β i) (i : ι)
+  条件: [对任意 i, 加法群 (β i)] (b : 整数) (v : Π₀ i, β i) (i : ι)
   结论: (b • v) i = b • v i
   证明: rfl
 
@@ -951,7 +951,7 @@ theorem coe_zsmul
 
 中文:
 定理 coe_zsmul
-  条件: [对任意 i, AddGroup (β i)] (b : 整数) (v : Π₀ i, β i)
+  条件: [对任意 i, 加法群 (β i)] (b : 整数) (v : Π₀ i, β i)
   结论: ⇑(b • v) = b • ⇑v
   证明: rfl
 -/
@@ -968,8 +968,8 @@ instance [forall
     (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
 
 中文:
-实例 [forall
-  签名: i, AddGroup (β i)] : AddGroup (Π₀ i, β i)
+实例 [对任意
+  签名: i, 加法群 (β i)] : 加法群 (Π₀ i, β i)
   定义体: fast_instance% DFunLike.coe_injective.addGroup _ coe_zero coe_add coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
 
@@ -990,7 +990,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: [对任意 i, AddCommGroup (β i)]
+  签名: [对任意 i, 加法交换群 (β i)]
   定义体: fast_instance% DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub
     (fun _ _ => coe_nsmul _ _) fun _ _ => coe_zsmul _ _
 
@@ -1018,7 +1018,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: [对任意 i, Zero (β i)] (p : ι -> 命题) [DecidablePred p] (x : Π₀ i, β i)
+  签名: [对任意 i, 零 (β i)] (p : ι -> 命题) [DecidablePred p] (x : Π₀ i, β i)
   定义体: ⟨fun i => if p i then x i else 0,
     x.support'.map fun xs =>
       ⟨xs.1, fun i => (xs.prop i).imp_right fun H : x i = 0 => by simp only [H, ite_self]⟩⟩
@@ -1043,7 +1043,7 @@ theorem filter_apply
 
 中文:
 定理 filter_apply
-  条件: [对任意 i, Zero (β i)] (p : ι -> 命题) [DecidablePred p] (i : ι) (f : Π₀ i, β i)
+  条件: [对任意 i, 零 (β i)] (p : ι -> 命题) [DecidablePred p] (i : ι) (f : Π₀ i, β i)
   证明: rfl
 -/
 theorem filter_apply [forall i, Zero (β i)] (p : ι -> Prop) [DecidablePred p] (i : ι) (f : Π₀ i, β i) :
@@ -1060,7 +1060,7 @@ theorem filter_apply_pos
 
 中文:
 定理 filter_apply_pos
-  结论: [对任意 i, Zero (β i)] {p : ι -> 命题} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
+  结论: [对任意 i, 零 (β i)] {p : ι -> 命题} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
   证明: by grind
 -/
 theorem filter_apply_pos [forall i, Zero (β i)] {p : ι -> Prop} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
@@ -1076,7 +1076,7 @@ theorem filter_apply_neg
 
 中文:
 定理 filter_apply_neg
-  结论: [对任意 i, Zero (β i)] {p : ι -> 命题} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
+  结论: [对任意 i, 零 (β i)] {p : ι -> 命题} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
   证明: by grind
 -/
 theorem filter_apply_neg [forall i, Zero (β i)] {p : ι -> Prop} [DecidablePred p] (f : Π₀ i, β i) {i : ι}
@@ -1097,7 +1097,7 @@ theorem filter_add_filter_not
 
 中文:
 定理 filter_add_filter_not
-  结论: [对任意 i, AddZeroClass (β i)] (f : Π₀ i, β i) (p : ι -> 命题)
+  结论: [对任意 i, 加法零类 (β i)] (f : Π₀ i, β i) (p : ι -> 命题)
   证明: ext fun i => by
     simp only [add_apply, filter_apply]; split_ifs <;> simp only [add_zero, zero_add]
 
@@ -1127,7 +1127,7 @@ theorem filter_zero
 
 中文:
 定理 filter_zero
-  条件: [对任意 i, Zero (β i)] (p : ι -> 命题) [DecidablePred p]
+  条件: [对任意 i, 零 (β i)] (p : ι -> 命题) [DecidablePred p]
   证明: by
   ext
   simp
@@ -1152,7 +1152,7 @@ theorem filter_add
 
 中文:
 定理 filter_add
-  条件: [对任意 i, AddZeroClass (β i)] (p : ι -> 命题) [DecidablePred p] (f g : Π₀ i, β i)
+  条件: [对任意 i, 加法零类 (β i)] (p : ι -> 命题) [DecidablePred p] (f g : Π₀ i, β i)
   证明: by
   ext
   simp [ite_add_zero]
@@ -1180,7 +1180,7 @@ definition filterAddMonoidHom
 
 中文:
 定义 filterAddMonoidHom
-  签名: [对任意 i, AddZeroClass (β i)] (p : ι -> 命题) [DecidablePred p]
+  签名: [对任意 i, 加法零类 (β i)] (p : ι -> 命题) [DecidablePred p]
   定义体: filter p
   map_zero' := filter_zero p
   map_add' := filter_add p
@@ -1208,7 +1208,7 @@ theorem filter_neg
 
 中文:
 定理 filter_neg
-  条件: [对任意 i, AddGroup (β i)] (p : ι -> 命题) [DecidablePred p] (f : Π₀ i, β i)
+  条件: [对任意 i, 加法群 (β i)] (p : ι -> 命题) [DecidablePred p] (f : Π₀ i, β i)
   证明: (filterAddMonoidHom β p).map_neg f
 
 @[simp]
@@ -1230,7 +1230,7 @@ theorem filter_sub
 
 中文:
 定理 filter_sub
-  条件: [对任意 i, AddGroup (β i)] (p : ι -> 命题) [DecidablePred p] (f g : Π₀ i, β i)
+  条件: [对任意 i, 加法群 (β i)] (p : ι -> 命题) [DecidablePred p] (f g : Π₀ i, β i)
   证明: (filterAddMonoidHom β p).map_sub f g
 
 Depends on / 依赖: filterAddMonoidHom, map_sub
@@ -1254,7 +1254,7 @@ definition subtypeDomain
 
 中文:
 定义 subtypeDomain
-  签名: [对任意 i, Zero (β i)] (p : ι -> 命题) [DecidablePred p] (x : Π₀ i, β i)
+  签名: [对任意 i, 零 (β i)] (p : ι -> 命题) [DecidablePred p] (x : Π₀ i, β i)
   定义体: ⟨fun i => x (i : ι),
     x.support'.map fun xs =>
       ⟨(Multiset.filter p xs.1).attach.map fun j => ⟨j.1, (Multiset.mem_filter.1 j.2).2⟩, fun i =>
@@ -1286,7 +1286,7 @@ theorem subtypeDomain_zero
 
 中文:
 定理 subtypeDomain_zero
-  条件: [对任意 i, Zero (β i)] {p : ι -> 命题} [DecidablePred p]
+  条件: [对任意 i, 零 (β i)] {p : ι -> 命题} [DecidablePred p]
   证明: rfl
 
 @[simp]
@@ -1308,7 +1308,7 @@ theorem subtypeDomain_apply
 
 中文:
 定理 subtypeDomain_apply
-  结论: [对任意 i, Zero (β i)] {p : ι -> 命题} [DecidablePred p] {i : Subtype p}
+  结论: [对任意 i, 零 (β i)] {p : ι -> 命题} [DecidablePred p] {i : 子类型 p}
   证明: rfl
 
 @[simp]
@@ -1328,7 +1328,7 @@ theorem subtypeDomain_add
 
 中文:
 定理 subtypeDomain_add
-  结论: [对任意 i, AddZeroClass (β i)] {p : ι -> 命题} [DecidablePred p]
+  结论: [对任意 i, 加法零类 (β i)] {p : ι -> 命题} [DecidablePred p]
   证明: DFunLike.coe_injective rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -1353,7 +1353,7 @@ definition subtypeDomainAddMonoidHom
 
 中文:
 定义 subtypeDomainAddMonoidHom
-  签名: [对任意 i, AddZeroClass (β i)] (p : ι -> 命题) [DecidablePred p]
+  签名: [对任意 i, 加法零类 (β i)] (p : ι -> 命题) [DecidablePred p]
   定义体: subtypeDomain p
   map_zero' := subtypeDomain_zero
   map_add' := subtypeDomain_add
@@ -1381,7 +1381,7 @@ theorem subtypeDomain_neg
 
 中文:
 定理 subtypeDomain_neg
-  条件: [对任意 i, AddGroup (β i)] {p : ι -> 命题} [DecidablePred p] {v : Π₀ i, β i}
+  条件: [对任意 i, 加法群 (β i)] {p : ι -> 命题} [DecidablePred p] {v : Π₀ i, β i}
   证明: DFunLike.coe_injective rfl
 
 @[simp]
@@ -1403,7 +1403,7 @@ theorem subtypeDomain_sub
 
 中文:
 定理 subtypeDomain_sub
-  结论: [对任意 i, AddGroup (β i)] {p : ι -> 命题} [DecidablePred p]
+  结论: [对任意 i, 加法群 (β i)] {p : ι -> 命题} [DecidablePred p]
   证明: DFunLike.coe_injective rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -1431,7 +1431,7 @@ theorem finite_support
 中文:
 定理 finite_support
   条件: (f : Π₀ i, β i)
-  结论: Set.Finite { i | f i != 0 }
+  结论: 集合.有限 { i | f i != 0 }
   证明: Trunc.induction_on f.support' fun xs =>
     xs.1.finite_toSet.subset fun i H => ((xs.prop i).resolve_right H)
 
@@ -1455,7 +1455,7 @@ Trunc.mk ⟨s.1, fun i => if H : i in s then Or.inl H else Or.inr dif_neg H⟩�
 
 中文:
 定义 mk
-  签名: (s : Finset ι) (x : 对任意 i : (↑s : Set ι), β (i : ι))
+  签名: (s : 有限集 ι) (x : 对任意 i : (↑s : 集合 ι), β (i : ι))
   定义体: ⟨fun i => if H : i in s then x ⟨i, H⟩ else 0,
 Trunc.mk ⟨s.1, fun i => if H : i in s then Or.inl H else Or.inr dif_neg H⟩⟩
 
@@ -1539,8 +1539,8 @@ theorem mk_injective
 
 中文:
 定理 mk_injective
-  条件: (s : Finset ι)
-  结论: Function.Injective (@mk ι β _ _ s)
+  条件: (s : 有限集 ι)
+  结论: 函数.单射 (@mk ι β _ _ s)
   证明: by
   intro x y H
   ext i
@@ -1565,7 +1565,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [对任意 i, Subsingleton (β i)]
+  签名: [对任意 i, 子单例 (β i)]
   定义体: DFunLike.coe_injective.unique
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.unique, coe_injective, unique
@@ -1583,7 +1583,7 @@ instance uniqueOfIsEmpty
 
 中文:
 实例 uniqueOfIsEmpty
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: DFunLike.coe_injective.unique
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.unique, coe_injective, unique
@@ -1608,7 +1608,7 @@ invFun f := ⟨f, Trunc.mk ⟨Finset.univ.1, fun _ => Or.inl Finset.mem_univ_val
 
 中文:
 定义 equivFunOnFintype
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: (⇑)
 invFun f := ⟨f, Trunc.mk ⟨Finset.univ.1, fun _ => Or.inl Finset.mem_univ_val _⟩⟩
   left_inv _ := DFunLike.coe_injective rfl
@@ -1632,7 +1632,7 @@ theorem equivFunOnFintype_symm_coe
 
 中文:
 定理 equivFunOnFintype_symm_coe
-  条件: [Fintype ι] (f : Π₀ i, β i)
+  条件: [有限类型 ι] (f : Π₀ i, β i)
   结论: equivFunOnFintype.symm f = f
   证明: Equiv.symm_apply_apply _ _
 
@@ -1678,7 +1678,7 @@ theorem single_eq_pi_single
 中文:
 定理 single_eq_pi_single
   条件: {i b}
-  结论: ⇑(single i b : Π₀ i, β i) = Pi.single i b
+  结论: ⇑(single i b : Π₀ i, β i) = 依赖函数类型.single i b
   证明: rfl
 
 @[simp, grind =]
@@ -1789,7 +1789,7 @@ Pi.single_injective i DFunLike.coe_injective.eq_iff.mpr H
 中文:
 定理 single_injective
   条件: {i}
-  结论: Function.Injective (single i : β i -> Π₀ i, β i)
+  结论: 函数.单射 (single i : β i -> Π₀ i, β i)
   证明: fun _ _ H =>
 Pi.single_injective i DFunLike.coe_injective.eq_iff.mpr H
 -/
@@ -2006,7 +2006,7 @@ theorem single_eq_of_sigma_eq
 
 中文:
 定理 single_eq_of_sigma_eq
-  条件: {i j} {xi : β i} {xj : β j} (h : (⟨i, xi⟩ : Sigma β) = ⟨j, xj⟩)
+  条件: {i j} {xi : β i} {xj : β j} (h : (⟨i, xi⟩ : 依赖和类型 β) = ⟨j, xj⟩)
   证明: by
   cases h
   rfl
@@ -2031,7 +2031,7 @@ theorem equivFunOnFintype_single
 
 中文:
 定理 equivFunOnFintype_single
-  条件: [Fintype ι] (i : ι) (m : β i)
+  条件: [有限类型 ι] (i : ι) (m : β i)
   证明: rfl
 
 @[simp]
@@ -2051,7 +2051,7 @@ theorem equivFunOnFintype_symm_single
 
 中文:
 定理 equivFunOnFintype_symm_single
-  条件: [Fintype ι] (i : ι) (m : β i)
+  条件: [有限类型 ι] (i : ι) (m : β i)
   证明: by
   simp only [← single_eq_pi_single, equivFunOnFintype_symm_coe]
 
@@ -2263,7 +2263,7 @@ theorem erase_eq_sub_single
 
 中文:
 定理 erase_eq_sub_single
-  条件: {β : ι -> 类型} [对任意 i, AddGroup (β i)] (f : Π₀ i, β i) (i : ι)
+  条件: {β : ι -> 类型} [对任意 i, 加法群 (β i)] (f : Π₀ i, β i) (i : ι)
   证明: by
   ext j
   rcases eq_or_ne j i with (rfl | h)
@@ -2484,7 +2484,7 @@ lemma coe_update
 
 中文:
 引理 coe_update
-  结论: (f.update i b : 对任意 i : ι, β i) = Function.update f i b
+  结论: (f.update i b : 对任意 i : ι, β i) = 函数.update f i b
   证明: rfl
 
 @[simp]
@@ -2561,7 +2561,7 @@ theorem update_eq_single_add_erase
 
 中文:
 定理 update_eq_single_add_erase
-  结论: {β : ι -> 类型} [对任意 i, AddZeroClass (β i)] (f : Π₀ i, β i)
+  结论: {β : ι -> 类型} [对任意 i, 加法零类 (β i)] (f : Π₀ i, β i)
   证明: by
   ext j
   rcases eq_or_ne i j with (rfl | h)
@@ -2591,7 +2591,7 @@ theorem update_eq_erase_add_single
 
 中文:
 定理 update_eq_erase_add_single
-  结论: {β : ι -> 类型} [对任意 i, AddZeroClass (β i)] (f : Π₀ i, β i)
+  结论: {β : ι -> 类型} [对任意 i, 加法零类 (β i)] (f : Π₀ i, β i)
   证明: by
   ext j
   rcases eq_or_ne i j with (rfl | h)
@@ -2618,7 +2618,7 @@ theorem update_eq_sub_add_single
 
 中文:
 定理 update_eq_sub_add_single
-  结论: {β : ι -> 类型} [对任意 i, AddGroup (β i)] (f : Π₀ i, β i) (i : ι)
+  结论: {β : ι -> 类型} [对任意 i, 加法群 (β i)] (f : Π₀ i, β i) (i : ι)
   证明: by
   rw [update_eq_erase_add_single f i b]; rw [erase_eq_sub_single f i]
 
@@ -2752,7 +2752,7 @@ theorem single_neg
 
 中文:
 定理 single_neg
-  条件: {β : ι -> 类型v} [对任意 i, AddGroup (β i)] (i : ι) (x : β i)
+  条件: {β : ι -> 类型v} [对任意 i, 加法群 (β i)] (i : ι) (x : β i)
   证明: (singleAddHom β i).map_neg x
 
 @[simp]
@@ -2776,7 +2776,7 @@ theorem single_sub
 
 中文:
 定理 single_sub
-  条件: {β : ι -> 类型v} [对任意 i, AddGroup (β i)] (i : ι) (x y : β i)
+  条件: {β : ι -> 类型v} [对任意 i, 加法群 (β i)] (i : ι) (x y : β i)
   证明: (singleAddHom β i).map_sub x y
 
 @[simp]
@@ -2800,7 +2800,7 @@ theorem erase_neg
 
 中文:
 定理 erase_neg
-  条件: {β : ι -> 类型v} [对任意 i, AddGroup (β i)] (i : ι) (f : Π₀ i, β i)
+  条件: {β : ι -> 类型v} [对任意 i, 加法群 (β i)] (i : ι) (f : Π₀ i, β i)
   证明: (eraseAddHom β i).map_neg f
 
 @[simp]
@@ -2822,7 +2822,7 @@ theorem erase_sub
 
 中文:
 定理 erase_sub
-  条件: {β : ι -> 类型v} [对任意 i, AddGroup (β i)] (i : ι) (f g : Π₀ i, β i)
+  条件: {β : ι -> 类型v} [对任意 i, 加法群 (β i)] (i : ι) (f g : Π₀ i, β i)
   证明: (eraseAddHom β i).map_sub f g
 
 Depends on / 依赖: eraseAddHom, map_sub
@@ -3008,7 +3008,7 @@ theorem mk_add
 
 中文:
 定理 mk_add
-  条件: [对任意 i, AddZeroClass (β i)] {s : Finset ι} {x y : 对任意 i : (↑s : Set ι), β i}
+  条件: [对任意 i, 加法零类 (β i)] {s : 有限集 ι} {x y : 对任意 i : (↑s : 集合 ι), β i}
   证明: ext fun i => by simp only [add_apply, mk_apply]; split_ifs <;> [rfl; rw [zero_add]]
 
 @[simp]
@@ -3033,8 +3033,8 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  条件: [对任意 i, Zero (β i)] {s : Finset ι}
-  结论: mk s (0 : 对任意 i : (↑s : Set ι), β i.1) = 0
+  条件: [对任意 i, 零 (β i)] {s : 有限集 ι}
+  结论: mk s (0 : 对任意 i : (↑s : 集合 ι), β i.1) = 0
   证明: ext fun i => by simp only [mk_apply]; split_ifs <;> rfl
 
 @[simp]
@@ -3057,7 +3057,7 @@ theorem mk_neg
 
 中文:
 定理 mk_neg
-  条件: [对任意 i, AddGroup (β i)] {s : Finset ι} {x : 对任意 i : (↑s : Set ι), β i.1}
+  条件: [对任意 i, 加法群 (β i)] {s : 有限集 ι} {x : 对任意 i : (↑s : 集合 ι), β i.1}
   证明: ext fun i => by simp only [neg_apply, mk_apply]; split_ifs <;> [rfl; rw [neg_zero]]
 
 @[simp]
@@ -3079,7 +3079,7 @@ theorem mk_sub
 
 中文:
 定理 mk_sub
-  条件: [对任意 i, AddGroup (β i)] {s : Finset ι} {x y : 对任意 i : (↑s : Set ι), β i.1}
+  条件: [对任意 i, 加法群 (β i)] {s : 有限集 ι} {x y : 对任意 i : (↑s : 集合 ι), β i.1}
   证明: ext fun i => by simp only [sub_apply, mk_apply]; split_ifs <;> [rfl; rw [sub_zero]]
 
 Depends on / 依赖: mk_apply, split_ifs, sub_apply, sub_zero
@@ -3100,7 +3100,7 @@ definition mkAddGroupHom
 
 中文:
 定义 mkAddGroupHom
-  签名: [对任意 i, AddGroup (β i)] (s : Finset ι)
+  签名: [对任意 i, 加法群 (β i)] (s : 有限集 ι)
   定义体: mk s
   map_zero' := mk_zero
   map_add' _ _ := mk_add
@@ -3168,7 +3168,7 @@ theorem support_mk_subset
 
 中文:
 定理 support_mk_subset
-  条件: {s : Finset ι} {x : 对任意 i : (↑s : Set ι), β i.1}
+  条件: {s : 有限集 ι} {x : 对任意 i : (↑s : 集合 ι), β i.1}
   结论: (mk s x).support subseteq s
   证明: fun _ H => Multiset.mem_toFinset.1 (Finset.mem_filter.1 H).1
 
@@ -3273,7 +3273,7 @@ definition subtypeSupportEqEquiv
 
 中文:
 定义 subtypeSupportEqEquiv
-  签名: (s : Finset ι)
+  签名: (s : 有限集 ι)
   定义体: ⟨mk s fun i => (f i).1, Finset.ext fun i => by
     -- TODO: `simp` fails to use `(f _).2` inside `∃ _, _`
     calc
@@ -3318,7 +3318,7 @@ definition sigmaFinsetFunEquiv
 
 中文:
 定义 sigmaFinsetFunEquiv
-  签名: : (Π₀ i, β i) ≃ Σ s : Finset ι, 对任意 i : s, {x : β i // x != 0}
+  签名: : (Π₀ i, β i) ≃ Σ s : 有限集 ι, 对任意 i : s, {x : β i // x != 0}
   定义体: (Equiv.sigmaFiberEquiv DFinsupp.support).symm.trans (.sigmaCongrRight subtypeSupportEqEquiv)
 
 @[simp]
@@ -3427,7 +3427,7 @@ decidable_of_iff (forall i in s.val, f i = 0) by
 
 中文:
 实例 decidableZero
-  签名: [对任意 (i) (x : β i), Decidable (x = 0)] (f : Π₀ i, β i)
+  签名: [对任意 (i) (x : β i), 可判定 (x = 0)] (f : Π₀ i, β i)
   定义体: f.support'.recOnSubsingleton fun s =>
 decidable_of_iff (forall i in s.val, f i = 0) by
       constructor
@@ -3466,7 +3466,7 @@ theorem support_subset_iff
 
 中文:
 定理 support_subset_iff
-  条件: {s : Set ι} {f : Π₀ i, β i}
+  条件: {s : 集合 ι} {f : Π₀ i, β i}
   结论: ↑f.support subseteq s ↔ 对任意 i ∉ s, f i = 0
   证明: by
   simpa [Set.subset_def] using forall_congr' fun i => not_imp_comm
@@ -3543,7 +3543,7 @@ theorem mapRange_def
 
 中文:
 定理 mapRange_def
-  结论: [对任意 (i) (x : β₁ i), Decidable (x != 0)] {f : 对任意 i, β₁ i -> β₂ i}
+  结论: [对任意 (i) (x : β₁ i), 可判定 (x != 0)] {f : 对任意 i, β₁ i -> β₂ i}
   证明: by
   ext
   simp_all
@@ -3824,7 +3824,7 @@ theorem support_update
 
 中文:
 定理 support_update
-  条件: (f : Π₀ i, β i) (i : ι) (b : β i) [Decidable (b = 0)]
+  条件: (f : Π₀ i, β i) (i : ι) (b : β i) [可判定 (b = 0)]
   证明: by
   ext j
   split_ifs with hb
@@ -3953,7 +3953,7 @@ theorem support_add
 
 中文:
 定理 support_add
-  结论: [对任意 i, AddZeroClass (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法零类 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: support_zipWith
 
 @[simp]
@@ -3975,7 +3975,7 @@ theorem support_neg
 
 中文:
 定理 support_neg
-  条件: [对任意 i, AddGroup (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] {f : Π₀ i, β i}
+  条件: [对任意 i, 加法群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] {f : Π₀ i, β i}
   证明: by ext; simp
 -/
 theorem support_neg [forall i, AddGroup (β i)] [forall (i) (x : β i), Decidable (x != 0)] {f : Π₀ i, β i} :
@@ -3994,8 +3994,8 @@ instance [forall
       have hg : g i = 0 := by rwa [h₁, mem_support_iff, not_not] at h
 
 中文:
-实例 [forall
-  签名: i, Zero (β i)] [对任意 i, DecidableEq (β i)] : DecidableEq (Π₀ i, β i)
+实例 [对任意
+  签名: i, 零 (β i)] [对任意 i, DecidableEq (β i)] : DecidableEq (Π₀ i, β i)
   定义体: fun f g =>
   decidable_of_iff (f.support = g.support ∧ forall i in f.support, f i = g i)
     ⟨fun ⟨h₁, h₂⟩ => ext fun i => if h : i in f.support then h₂ i h else by
@@ -4034,7 +4034,7 @@ definition comapDomain
 
 中文:
 定义 comapDomain
-  签名: [对任意 i, Zero (β i)] (h : κ -> ι) (hh : Function.Injective h)
+  签名: [对任意 i, 零 (β i)] (h : κ -> ι) (hh : 函数.单射 h)
   定义体: f (h x)
   support' :=
     f.support'.map fun s =>
@@ -4064,7 +4064,7 @@ theorem comapDomain_apply
 
 中文:
 定理 comapDomain_apply
-  结论: [对任意 i, Zero (β i)] (h : κ -> ι) (hh : Function.Injective h) (f : Π₀ i, β i)
+  结论: [对任意 i, 零 (β i)] (h : κ -> ι) (hh : 函数.单射 h) (f : Π₀ i, β i)
   证明: rfl
 
 @[simp]
@@ -4088,7 +4088,7 @@ theorem comapDomain_zero
 
 中文:
 定理 comapDomain_zero
-  条件: [对任意 i, Zero (β i)] (h : κ -> ι) (hh : Function.Injective h)
+  条件: [对任意 i, 零 (β i)] (h : κ -> ι) (hh : 函数.单射 h)
   证明: by
   ext
   rw [zero_apply]; rw [comapDomain_apply]; rw [zero_apply]
@@ -4117,7 +4117,7 @@ theorem comapDomain_add
 
 中文:
 定理 comapDomain_add
-  结论: [对任意 i, AddZeroClass (β i)] (h : κ -> ι) (hh : Function.Injective h)
+  结论: [对任意 i, 加法零类 (β i)] (h : κ -> ι) (hh : 函数.单射 h)
   证明: by
   ext
   rw [add_apply]; rw [comapDomain_apply]; rw [comapDomain_apply]; rw [comapDomain_apply]; rw [add_apply]
@@ -4147,7 +4147,7 @@ theorem comapDomain_single
 
 中文:
 定理 comapDomain_single
-  结论: [DecidableEq ι] [DecidableEq κ] [对任意 i, Zero (β i)] (h : κ -> ι)
+  结论: [DecidableEq ι] [DecidableEq κ] [对任意 i, 零 (β i)] (h : κ -> ι)
   证明: by
   ext i
   rw [comapDomain_apply]
@@ -4182,7 +4182,7 @@ definition comapDomain'
 
 中文:
 定义 comapDomain'
-  签名: [对任意 i, Zero (β i)] (h : κ -> ι) {h' : ι -> κ} (hh' : Function.LeftInverse h' h)
+  签名: [对任意 i, 零 (β i)] (h : κ -> ι) {h' : ι -> κ} (hh' : 函数.左逆 h' h)
   定义体: f (h x)
   support' :=
     f.support'.map fun s =>
@@ -4212,7 +4212,7 @@ theorem comapDomain'_apply
 
 中文:
 定理 comapDomain'_apply
-  结论: [对任意 i, Zero (β i)] (h : κ -> ι) {h' : ι -> κ}
+  结论: [对任意 i, 零 (β i)] (h : κ -> ι) {h' : ι -> κ}
   证明: rfl
 
 @[simp]
@@ -4236,7 +4236,7 @@ theorem comapDomain'_zero
 
 中文:
 定理 comapDomain'_zero
-  结论: [对任意 i, Zero (β i)] (h : κ -> ι) {h' : ι -> κ}
+  结论: [对任意 i, 零 (β i)] (h : κ -> ι) {h' : ι -> κ}
   证明: by
   ext
   rw [zero_apply]; rw [comapDomain'_apply]; rw [zero_apply]
@@ -4263,7 +4263,7 @@ theorem comapDomain'_add
 
 中文:
 定理 comapDomain'_add
-  结论: [对任意 i, AddZeroClass (β i)] (h : κ -> ι) {h' : ι -> κ}
+  结论: [对任意 i, 加法零类 (β i)] (h : κ -> ι) {h' : ι -> κ}
   证明: by
   ext
   rw [add_apply]; rw [comapDomain'_apply]; rw [comapDomain'_apply]; rw [comapDomain'_apply]; rw [add_apply]
@@ -4288,7 +4288,7 @@ theorem comapDomain'_single
 
 中文:
 定理 comapDomain'_single
-  结论: [DecidableEq ι] [DecidableEq κ] [对任意 i, Zero (β i)] (h : κ -> ι)
+  结论: [DecidableEq ι] [DecidableEq κ] [对任意 i, 零 (β i)] (h : κ -> ι)
   证明: by
   grind
 -/
@@ -4319,7 +4319,7 @@ definition equivCongrLeft
 
 中文:
 定义 equivCongrLeft
-  签名: [对任意 i, Zero (β i)] (h : ι ≃ κ)
+  签名: [对任意 i, 零 (β i)] (h : ι ≃ κ)
   定义体: comapDomain' h.symm h.right_inv
   invFun f :=
     mapRange (fun i => Equiv.cast <| congr_arg β <| h.symm_apply_apply i)
@@ -4362,7 +4362,7 @@ definition extendWith
 
 中文:
 定义 extendWith
-  签名: [对任意 i, Zero (α i)] (a : α none) (f : Π₀ i, α (some i))
+  签名: [对任意 i, 零 (α i)] (a : α none) (f : Π₀ i, α (some i))
   定义体: fun i => match i with | none => a | some _ => f _
   support' :=
     f.support'.map fun s =>
@@ -4394,7 +4394,7 @@ theorem extendWith_none
 
 中文:
 定理 extendWith_none
-  条件: [对任意 i, Zero (α i)] (f : Π₀ i, α (some i)) (a : α none)
+  条件: [对任意 i, 零 (α i)] (f : Π₀ i, α (some i)) (a : α none)
   证明: rfl
 
 @[simp]
@@ -4416,7 +4416,7 @@ theorem extendWith_some
 
 中文:
 定理 extendWith_some
-  条件: [对任意 i, Zero (α i)] (f : Π₀ i, α (some i)) (a : α none) (i : ι)
+  条件: [对任意 i, 零 (α i)] (f : Π₀ i, α (some i)) (a : α none) (i : ι)
   证明: rfl
 
 @[simp]
@@ -4444,7 +4444,7 @@ theorem extendWith_single_zero
 
 中文:
 定理 extendWith_single_zero
-  条件: [DecidableEq ι] [对任意 i, Zero (α i)] (i : ι) (x : α (some i))
+  条件: [DecidableEq ι] [对任意 i, 零 (α i)] (i : ι) (x : α (some i))
   证明: by
   ext (_ | j)
   · rw [extendWith_none, single_eq_of_ne (Option.some_ne_none _).symm]
@@ -4480,7 +4480,7 @@ theorem extendWith_zero
 
 中文:
 定理 extendWith_zero
-  条件: [DecidableEq ι] [对任意 i, Zero (α i)] (x : α none)
+  条件: [DecidableEq ι] [对任意 i, 零 (α i)] (x : α none)
   证明: by
   ext (_ | j)
   · rw [extendWith_none, single_eq_same]
@@ -4518,7 +4518,7 @@ definition equivProdDFinsupp
 
 中文:
 定义 equivProdDFinsupp
-  签名: [对任意 i, Zero (α i)]
+  签名: [对任意 i, 零 (α i)]
   定义体: (f none, comapDomain some (Option.some_injective _) f)
   invFun f := f.2.extendWith f.1
   left_inv f := by
@@ -4557,7 +4557,7 @@ theorem equivProdDFinsupp_add
 
 中文:
 定理 equivProdDFinsupp_add
-  条件: [对任意 i, AddZeroClass (α i)] (f g : Π₀ i, α i)
+  条件: [对任意 i, 加法零类 (α i)] (f g : Π₀ i, α i)
   证明: Prod.ext (add_apply _ _ _) (comapDomain_add _ (Option.some_injective _) _ _)
 
 Depends on / 依赖: Option.some_injective, Prod.ext, add_apply, comapDomain_add, some_injective

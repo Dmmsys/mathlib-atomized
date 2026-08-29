@@ -81,7 +81,7 @@ definition term
 
 中文:
 定义 term
-  签名: (f : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  签名: (f : 自然数 -> 复形) (s : 复形) (n : 自然数)
   定义体: if n = 0 then 0 else f n / n ^ s
 -/
 def term (f : Nat -> Complex) (s : Complex) (n : Nat) : Complex :=
@@ -97,7 +97,7 @@ lemma term_def
 
 中文:
 引理 term_def
-  条件: (f : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: rfl
 -/
 lemma term_def (f : Nat -> Complex) (s : Complex) (n : Nat) :
@@ -118,7 +118,7 @@ lemma term_def₀
 
 中文:
 引理 term_def₀
-  条件: {f : 自然数 -> Complex} (hf : f 0 = 0) (s : Complex) (n : 自然数)
+  条件: {f : 自然数 -> 复形} (hf : f 0 = 0) (s : 复形) (n : 自然数)
   证明: by
   rw [LSeries.term]
   split_ifs with h <;> simp [h, hf, cpow_neg, div_eq_inv_mul, mul_comm]
@@ -144,7 +144,7 @@ lemma term_zero
 
 中文:
 引理 term_zero
-  条件: (f : 自然数 -> Complex) (s : Complex)
+  条件: (f : 自然数 -> 复形) (s : 复形)
   结论: term f s 0 = 0
   证明: rfl
 -/
@@ -162,7 +162,7 @@ lemma term_of_ne_zero
 
 中文:
 引理 term_of_ne_zero
-  条件: {n : 自然数} (hn : n != 0) (f : 自然数 -> Complex) (s : Complex)
+  条件: {n : 自然数} (hn : n != 0) (f : 自然数 -> 复形) (s : 复形)
   证明: if_neg hn
 
 Depends on / 依赖: if_neg
@@ -184,7 +184,7 @@ lemma term_of_ne_zero'
 
 中文:
 引理 term_of_ne_zero'
-  条件: {s : Complex} (hs : s != 0) (f : 自然数 -> Complex) (n : 自然数)
+  条件: {s : 复形} (hs : s != 0) (f : 自然数 -> 复形) (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · rw [term_zero, Nat.cast_zero, zero_cpow hs, div_zero]
@@ -209,7 +209,7 @@ lemma term_congr
 
 中文:
 引理 term_congr
-  条件: {f g : 自然数 -> Complex} (h : 对任意 {n}, n != 0 -> f n = g n) (s : Complex) (n : 自然数)
+  条件: {f g : 自然数 -> 复形} (h : 对任意 {n}, n != 0 -> f n = g n) (s : 复形) (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with hn | hn <;> simp [hn, h]
 
@@ -230,7 +230,7 @@ lemma pow_mul_term_eq
 
 中文:
 引理 pow_mul_term_eq
-  条件: (f : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: by
   simp [term, natCast_add_one_cpow_ne_zero n _, mul_div_assoc']
 
@@ -253,7 +253,7 @@ lemma norm_term_eq
 
 中文:
 引理 norm_term_eq
-  条件: (f : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp
@@ -281,7 +281,7 @@ lemma norm_term_le
 
 中文:
 引理 norm_term_le
-  条件: {f g : 自然数 -> Complex} (s : Complex) {n : 自然数} (h : ‖f n‖ <= ‖g n‖)
+  条件: {f g : 自然数 -> 复形} (s : 复形) {n : 自然数} (h : ‖f n‖ <= ‖g n‖)
   证明: by
   simp only [norm_term_eq]
   split
@@ -311,7 +311,7 @@ lemma norm_term_le_of_re_le_re
 
 中文:
 引理 norm_term_le_of_re_le_re
-  条件: (f : 自然数 -> Complex) {s s' : Complex} (h : s.re <= s'.re) (n : 自然数)
+  条件: (f : 自然数 -> 复形) {s s' : 复形} (h : s.re <= s'.re) (n : 自然数)
   证明: by
   simp only [norm_term_eq]
   split
@@ -345,7 +345,7 @@ lemma term_nonneg
 
 中文:
 引理 term_nonneg
-  条件: {a : 自然数 -> Complex} {n : 自然数} (h : 0 <= a n) (x : 实数)
+  条件: {a : 自然数 -> 复形} {n : 自然数} (h : 0 <= a n) (x : 实数)
   结论: 0 <= term a x n
   证明: by
   rw [term_def]
@@ -371,7 +371,7 @@ simpa only [term_of_ne_zero hn] using! mul_pos h inv_natCast_cpow_ofReal_pos hn 
 
 中文:
 引理 term_pos
-  条件: {a : 自然数 -> Complex} {n : 自然数} (hn : n != 0) (h : 0 < a n) (x : 实数)
+  条件: {a : 自然数 -> 复形} {n : 自然数} (hn : n != 0) (h : 0 < a n) (x : 实数)
   结论: 0 < term a x n
   证明: by
 simpa only [term_of_ne_zero hn] using! mul_pos h inv_natCast_cpow_ofReal_pos hn x
@@ -409,7 +409,7 @@ definition LSeries
 
 中文:
 定义 LSeries
-  签名: (f : 自然数 -> Complex) (s : Complex)
+  签名: (f : 自然数 -> 复形) (s : 复形)
   定义体: ∑' n, term f s n
 -/
 def LSeries (f : Nat -> Complex) (s : Complex) : Complex :=
@@ -425,7 +425,7 @@ lemma LSeries_congr
 
 中文:
 引理 LSeries_congr
-  条件: {f g : 自然数 -> Complex} (h : 对任意 {n}, n != 0 -> f n = g n) (s : Complex)
+  条件: {f g : 自然数 -> 复形} (h : 对任意 {n}, n != 0 -> f n = g n) (s : 复形)
   证明: tsum_congr term_congr h s
 
 Depends on / 依赖: term_congr, tsum_congr
@@ -445,7 +445,7 @@ lemma LSeries_def₀
 
 中文:
 引理 LSeries_def₀
-  条件: {f : 自然数 -> Complex} (hf : f 0 = 0) (s : Complex)
+  条件: {f : 自然数 -> 复形} (hf : f 0 = 0) (s : 复形)
   证明: by
   simp [LSeries, LSeries.term_def₀ hf, cpow_neg, div_eq_mul_inv]
 
@@ -465,7 +465,7 @@ definition LSeriesSummable
 
 中文:
 定义 LSeriesSummable
-  签名: (f : 自然数 -> Complex) (s : Complex)
+  签名: (f : 自然数 -> 复形) (s : 复形)
   定义体: Summable (term f s)
 
 Depends on / 依赖: Summable
@@ -483,7 +483,7 @@ lemma LSeriesSummable_congr
 
 中文:
 引理 LSeriesSummable_congr
-  条件: {f g : 自然数 -> Complex} (s : Complex) (h : 对任意 {n}, n != 0 -> f n = g n)
+  条件: {f g : 自然数 -> 复形} (s : 复形) (h : 对任意 {n}, n != 0 -> f n = g n)
   证明: summable_congr term_congr h s
 
 Depends on / 依赖: summable_congr, term_congr
@@ -509,7 +509,7 @@ refine ⟨S \ {0}, sdiff_mem hS (Set.finite_singleton 0).compl_mem_cofinite, f
 
 中文:
 引理 LSeriesSummable.congr'
-  条件: {f g : 自然数 -> Complex} (s : Complex) (h : f =ᶠ[atTop] g) (hf : LSeriesSummable f s)
+  条件: {f g : 自然数 -> 复形} (s : 复形) (h : f =ᶠ[atTop] g) (hf : LSeriesSummable f s)
   证明: by
   rw [← Nat.cofinite_eq_atTop] at h
   refine (summable_norm_iff.mpr hf).of_norm_bounded_eventually ?_
@@ -543,7 +543,7 @@ lemma LSeriesSummable_congr'
 
 中文:
 引理 LSeriesSummable_congr'
-  条件: {f g : 自然数 -> Complex} (s : Complex) (h : f =ᶠ[atTop] g)
+  条件: {f g : 自然数 -> 复形} (s : 复形) (h : f =ᶠ[atTop] g)
   证明: ⟨fun H => H.congr' s h, fun H => H.congr' s h.symm⟩
 
 Depends on / 依赖: H.congr, h.symm
@@ -564,7 +564,7 @@ theorem LSeries.eq_zero_of_not_LSeriesSummable
 
 中文:
 定理 LSeries.eq_zero_of_not_LSeriesSummable
-  条件: (f : 自然数 -> Complex) (s : Complex)
+  条件: (f : 自然数 -> 复形) (s : 复形)
   证明: tsum_eq_zero_of_not_summable
 
 @[simp]
@@ -588,7 +588,7 @@ theorem LSeriesSummable_zero
 
 中文:
 定理 LSeriesSummable_zero
-  条件: {s : Complex}
+  条件: {s : 复形}
   结论: LSeriesSummable 0 s
   证明: by
   simp [LSeriesSummable, funext (term_def 0 s), summable_zero]
@@ -608,7 +608,7 @@ definition LSeriesHasSum
 
 中文:
 定义 LSeriesHasSum
-  签名: (f : 自然数 -> Complex) (s a : Complex)
+  签名: (f : 自然数 -> 复形) (s a : 复形)
   定义体: HasSum (term f s) a
 
 Depends on / 依赖: HasSum
@@ -626,7 +626,7 @@ lemma LSeriesHasSum.LSeriesSummable
 
 中文:
 引理 LSeriesHasSum.LSeriesSummable
-  结论: {f : 自然数 -> Complex} {s a : Complex}
+  结论: {f : 自然数 -> 复形} {s a : 复形}
   证明: h.summable
 
 Depends on / 依赖: h.summable, summable
@@ -645,7 +645,7 @@ lemma LSeriesHasSum.LSeries_eq
 
 中文:
 引理 LSeriesHasSum.LSeries_eq
-  结论: {f : 自然数 -> Complex} {s a : Complex}
+  结论: {f : 自然数 -> 复形} {s a : 复形}
   证明: h.tsum_eq
 
 Depends on / 依赖: h.tsum_eq, tsum_eq
@@ -664,7 +664,7 @@ lemma LSeriesSummable.LSeriesHasSum
 
 中文:
 引理 LSeriesSummable.LSeriesHasSum
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : LSeriesSummable f s)
   证明: h.hasSum
 
 Depends on / 依赖: h.hasSum, hasSum
@@ -683,7 +683,7 @@ lemma LSeriesHasSum_iff
 
 中文:
 引理 LSeriesHasSum_iff
-  条件: {f : 自然数 -> Complex} {s a : Complex}
+  条件: {f : 自然数 -> 复形} {s a : 复形}
   证明: ⟨fun H => ⟨H.LSeriesSummable, H.LSeries_eq⟩, fun ⟨H₁, H₂⟩ => H₂ ▸ H₁.LSeriesHasSum⟩
 
 Depends on / 依赖: H.LSeriesSummable, H.LSeries_eq, LSeriesHasSum, LSeriesSummable, LSeries_eq
@@ -703,7 +703,7 @@ lemma LSeriesHasSum_congr
 
 中文:
 引理 LSeriesHasSum_congr
-  条件: {f g : 自然数 -> Complex} (s a : Complex) (h : 对任意 {n}, n != 0 -> f n = g n)
+  条件: {f g : 自然数 -> 复形} (s a : 复形) (h : 对任意 {n}, n != 0 -> f n = g n)
   证明: by
   simp [LSeriesHasSum_iff, LSeriesSummable_congr s h, LSeries_congr h s]
 
@@ -725,7 +725,7 @@ lemma LSeriesSummable.of_re_le_re
 
 中文:
 引理 LSeriesSummable.of_re_le_re
-  结论: {f : 自然数 -> Complex} {s s' : Complex} (h : s.re <= s'.re)
+  结论: {f : 自然数 -> 复形} {s s' : 复形} (h : s.re <= s'.re)
   证明: by
   rw [LSeriesSummable]; rw [← summable_norm_iff] at hf ⊢
   exact hf.of_nonneg_of_le (fun _ => norm_nonneg _) (norm_term_le_of_re_le_re f h)
@@ -747,7 +747,7 @@ theorem LSeriesSummable_iff_of_re_eq_re
 
 中文:
 定理 LSeriesSummable_iff_of_re_eq_re
-  条件: {f : 自然数 -> Complex} {s s' : Complex} (h : s.re = s'.re)
+  条件: {f : 自然数 -> 复形} {s s' : 复形} (h : s.re = s'.re)
   证明: ⟨fun H => H.of_re_le_re h.le, fun H => H.of_re_le_re h.symm.le⟩
 
 Depends on / 依赖: H.of_re_le_re, h.le, h.symm.le, of_re_le_re
@@ -840,7 +840,7 @@ lemma term_delta
 
 中文:
 引理 term_delta
-  条件: (s : Complex) (n : 自然数)
+  条件: (s : 复形) (n : 自然数)
   结论: term δ s n = if n = 1 then 1 else 0
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
@@ -870,7 +870,7 @@ lemma mul_delta_eq_smul_delta
 
 中文:
 引理 mul_delta_eq_smul_delta
-  条件: {f : 自然数 -> Complex}
+  条件: {f : 自然数 -> 复形}
   结论: f * δ = f 1 • δ
   证明: by
   ext n
@@ -894,7 +894,7 @@ lemma mul_delta
 
 中文:
 引理 mul_delta
-  条件: {f : 自然数 -> Complex} (h : f 1 = 1)
+  条件: {f : 自然数 -> 复形} (h : f 1 = 1)
   结论: f * δ = δ
   证明: by
   rw [mul_delta_eq_smul_delta]; rw [h]; rw [one_smul]
@@ -915,7 +915,7 @@ lemma delta_mul_eq_smul_delta
 
 中文:
 引理 delta_mul_eq_smul_delta
-  条件: {f : 自然数 -> Complex}
+  条件: {f : 自然数 -> 复形}
   结论: δ * f = f 1 • δ
   证明: mul_comm δ f ▸ mul_delta_eq_smul_delta
 
@@ -935,7 +935,7 @@ lemma delta_mul
 
 中文:
 引理 delta_mul
-  条件: {f : 自然数 -> Complex} (h : f 1 = 1)
+  条件: {f : 自然数 -> 复形} (h : f 1 = 1)
   结论: δ * f = δ
   证明: mul_comm δ f ▸ mul_delta h
 
@@ -994,7 +994,7 @@ lemma LSeriesSummable.le_const_mul_rpow
 
 中文:
 引理 LSeriesSummable.le_const_mul_rpow
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : LSeriesSummable f s)
   证明: by
   replace h := h.norm
   use tsum fun n => ‖term f s n‖
@@ -1029,7 +1029,7 @@ refine Asymptotics.IsBigO.of_bound C eventually_atTop.mpr ⟨1, fun n hn => ?_�
 
 中文:
 引理 LSeriesSummable.isBigO_rpow
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : LSeriesSummable f s)
   证明: by
   obtain ⟨C, hC⟩ := h.le_const_mul_rpow
 refine Asymptotics.IsBigO.of_bound C eventually_atTop.mpr ⟨1, fun n hn => ?_⟩
@@ -1061,7 +1061,7 @@ refin
 
 中文:
 引理 LSeriesSummable_of_le_const_mul_rpow
-  结论: {f : 自然数 -> Complex} {x : 实数} {s : Complex} (hs : x < s.re)
+  结论: {f : 自然数 -> 复形} {x : 实数} {s : 复形} (hs : x < s.re)
   证明: by
   obtain ⟨C, hC⟩ := h
 have hC₀ : 0 <= C := (norm_nonneg <| f 1).trans by simpa using hC 1 one_ne_zero
@@ -1112,7 +1112,7 @@ have hC'₀ : 0 <= C' := (le_max' _ _ (mem_insert.mpr (Or.inl rfl))).trans le_ma
 
 中文:
 引理 LSeriesSummable_of_isBigO_rpow
-  结论: {f : 自然数 -> Complex} {x : 实数} {s : Complex} (hs : x < s.re)
+  结论: {f : 自然数 -> 复形} {x : 实数} {s : 复形} (hs : x < s.re)
   证明: by
   obtain ⟨C, hC⟩ := Asymptotics.isBigO_iff.mp h
   obtain ⟨m, hm⟩ := eventually_atTop.mp hC
@@ -1152,7 +1152,7 @@ theorem LSeriesSummable_of_bounded_of_one_lt_re
 
 中文:
 定理 LSeriesSummable_of_bounded_of_one_lt_re
-  结论: {f : 自然数 -> Complex} {m : 实数}
+  结论: {f : 自然数 -> 复形} {m : 实数}
   证明: LSeriesSummable_of_le_const_mul_rpow hs ⟨m, fun n hn => by simp [h n hn]⟩
 
 Depends on / 依赖: LSeriesSummable_of_le_const_mul_rpow
@@ -1172,7 +1172,7 @@ theorem LSeriesSummable_of_bounded_of_one_lt_real
 
 中文:
 定理 LSeriesSummable_of_bounded_of_one_lt_real
-  结论: {f : 自然数 -> Complex} {m : 实数}
+  结论: {f : 自然数 -> 复形} {m : 实数}
   证明: LSeriesSummable_of_bounded_of_one_lt_re h by simp [hs]
 
 Depends on / 依赖: LSeriesSummable_of_bounded_of_one_lt_re

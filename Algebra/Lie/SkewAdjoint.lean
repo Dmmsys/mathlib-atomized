@@ -57,8 +57,8 @@ theorem LinearMap.BilinForm.isSkewAdjoint_bracket
   change IsAdjointPair B B (f * g - g * f) (-(f * g - g * f)); rw [neg_s
 
 中文:
-定理 LinearMap.BilinForm.isSkewAdjoint_bracket
-  结论: {f g : Module.End R M}
+定理 线性映射.BilinForm.isSkewAdjoint_bracket
+  结论: {f g : 模.End R M}
   证明: by
   rw [mem_skewAdjointSubmodule] at *
   have hfg : IsAdjointPair B B (f * g) (g * f) := by rw [← neg_mul_neg g f]; exact hg.comp hf
@@ -89,7 +89,7 @@ definition skewAdjointLieSubalgebra
 
 中文:
 定义 skewAdjointLieSubalgebra
-  签名: : LieSubalgebra R (Module.End R M)
+  签名: : Lie子代数 R (模.End R M)
   定义体: { B.skewAdjointSubmodule with
     lie_mem' := B.isSkewAdjoint_bracket }
 
@@ -199,8 +199,8 @@ theorem Matrix.lie_transpose
   proof: show (A * B - B * A)ᵀ = Bᵀ * Aᵀ - Aᵀ * Bᵀ by simp
 
 中文:
-定理 Matrix.lie_transpose
-  条件: (A B : Matrix n n R)
+定理 矩阵.lie_transpose
+  条件: (A B : 矩阵 n n R)
   结论: ⁅A, B⁆ᵀ = ⁅Bᵀ, Aᵀ⁆
   证明: show (A * B - B * A)ᵀ = Bᵀ * Aᵀ - Aᵀ * Bᵀ by simp
 -/
@@ -223,8 +223,8 @@ theorem Matrix.isSkewAdjoint_bracket
   rw [Matrix.lie_transpose]; rw [LieRing.of_associative_ring_bracket]; rw [LieRing.of_associative_ring_bracket]; rw [sub_mul]; rw [mul_assoc];
 
 中文:
-定理 Matrix.isSkewAdjoint_bracket
-  结论: {A B : Matrix n n R} (hA : A in skewAdjointMatricesSubmodule J)
+定理 矩阵.isSkewAdjoint_bracket
+  结论: {A B : 矩阵 n n R} (hA : A in skewAdjointMatricesSubmodule J)
   证明: by
   simp only [mem_skewAdjointMatricesSubmodule] at *
   change ⁅A, B⁆ᵀ * J = J * (-⁅A, B⁆)
@@ -258,7 +258,7 @@ definition skewAdjointMatricesLieSubalgebra
 
 中文:
 定义 skewAdjointMatricesLieSubalgebra
-  签名: : LieSubalgebra R (Matrix n n R)
+  签名: : Lie子代数 R (矩阵 n n R)
   定义体: { skewAdjointMatricesSubmodule J with
     lie_mem' := J.isSkewAdjoint_bracket }
 
@@ -281,7 +281,7 @@ theorem mem_skewAdjointMatricesLieSubalgebra
 
 中文:
 定理 mem_skewAdjointMatricesLieSubalgebra
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -306,7 +306,7 @@ definition skewAdjointMatricesLieSubalgebraEquiv
 
 中文:
 定义 skewAdjointMatricesLieSubalgebraEquiv
-  签名: (P : Matrix n n R) (h : Invertible P)
+  签名: (P : 矩阵 n n R) (h : 可逆 P)
   定义体: LieEquiv.ofSubalgebras _ _ (P.lieConj h).symm by
     ext A
     suffices P.lieConj h A in skewAdjointMatricesSubmodule J ↔
@@ -338,7 +338,7 @@ theorem skewAdjointMatricesLieSubalgebraEquiv_apply
 
 中文:
 定理 skewAdjointMatricesLieSubalgebraEquiv_apply
-  结论: (P : Matrix n n R) (h : Invertible P)
+  结论: (P : 矩阵 n n R) (h : 可逆 P)
   证明: by
   simp [skewAdjointMatricesLieSubalgebraEquiv]
 
@@ -364,7 +364,7 @@ definition skewAdjointMatricesLieSubalgebraEquivTranspose
 
 中文:
 定义 skewAdjointMatricesLieSubalgebraEquivTranspose
-  签名: {m : Type w} [DecidableEq m] [Fintype m]
+  签名: {m : 类型 w} [DecidableEq m] [有限类型 m]
   定义体: LieEquiv.ofSubalgebras _ _ e.toLieEquiv by
     ext A
     suffices J.IsSkewAdjoint (e.symm A) ↔ (e J).IsSkewAdjoint A by
@@ -395,7 +395,7 @@ theorem skewAdjointMatricesLieSubalgebraEquivTranspose_apply
 
 中文:
 定理 skewAdjointMatricesLieSubalgebraEquivTranspose_apply
-  结论: {m : Type w} [DecidableEq m]
+  结论: {m : 类型 w} [DecidableEq m]
   证明: rfl
 -/
 theorem skewAdjointMatricesLieSubalgebraEquivTranspose_apply {m : Type w} [DecidableEq m]
@@ -419,7 +419,7 @@ theorem mem_skewAdjointMatricesLieSubalgebra_unit_smul
 
 中文:
 定理 mem_skewAdjointMatricesLieSubalgebra_unit_smul
-  条件: (u : Rˣ) (J A : Matrix n n R)
+  条件: (u : Rˣ) (J A : 矩阵 n n R)
   证明: by
   change A in skewAdjointMatricesSubmodule (u • J) ↔ A in skewAdjointMatricesSubmodule J
   simp only [mem_skewAdjointMatricesSubmodule, Matrix.IsSkewAdjoint, Matrix.IsAdjointPair]

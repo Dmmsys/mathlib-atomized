@@ -54,7 +54,7 @@ definition ofSheafLightProfinite
 
 中文:
 定义 ofSheafLightProfinite
-  签名: (F : LightProfinite.{u}ᵒᵖ ⥤ A) [PreservesFiniteProducts F]
+  签名: (F : LightProfinite.{u}ᵒᵖ ⥤ A) [保持FiniteProducts F]
   定义体: F
   property := by
     rw [isSheaf_iff_preservesFiniteProducts_and_equalizerCondition F]
@@ -165,7 +165,7 @@ abbreviation ofSheafLightProfinite
 
 中文:
 缩写 ofSheafLightProfinite
-  签名: (F : LightProfinite.{u}ᵒᵖ ⥤ ModuleCat.{u} R)
+  签名: (F : LightProfinite.{u}ᵒᵖ ⥤ 模范畴.{u} R)
   定义体: LightCondensed.ofSheafLightProfinite F hF
 
 Depends on / 依赖: LightCondensed, LightCondensed.ofSheafLightProfinite, ofSheafLightProfinite
@@ -188,7 +188,7 @@ abbreviation ofSheafLightProfinite
 
 中文:
 缩写 ofSheafLightProfinite
-  签名: (F : LightProfiniteᵒᵖ ⥤ ModuleCat 整数)
+  签名: (F : LightProfiniteᵒᵖ ⥤ 模范畴 整数)
   定义体: LightCondMod.ofSheafLightProfinite Int F hF
 
 Depends on / 依赖: LightCondMod, LightCondMod.ofSheafLightProfinite, ofSheafLightProfinite

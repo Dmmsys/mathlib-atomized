@@ -58,11 +58,11 @@ inductive Rel
     - smul: {r : R} {a : M} : Rel (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: : FreeAlgebra R M -> FreeAlgebra R M -> 命题
   构造子 (2 个):
-    - add: {a b : M} : Rel (FreeAlgebra.ι R (a + b)) (FreeAlgebra.ι R a + FreeAlgebra.ι R b)
-    - smul: {r : R} {a : M} : Rel (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
+    - add: {a b : M} : 关系 (FreeAlgebra.ι R (a + b)) (FreeAlgebra.ι R a + FreeAlgebra.ι R b)
+    - smul: {r : R} {a : M} : 关系 (FreeAlgebra.ι R (r • a)) (algebraMap R (FreeAlgebra R M) r * FreeAlgebra.ι R a)
 -/
 inductive Rel : FreeAlgebra R M -> FreeAlgebra R M -> Prop
   -- force `ι` to be linear
@@ -114,7 +114,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: {R A M} [CommSemiring R] [AddCommMonoid M] [CommSemiring A]
+  签名: {R A M} [交换半环 R] [加法交换幺半群 M] [交换半环 A]
   定义体: inferInstanceAs Algebra R (RingCon.Quotient _)
 
 Depends on / 依赖: Algebra, Quotient, RingCon, RingCon.Quotient
@@ -205,7 +205,7 @@ RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
 
 中文:
 定义 lift
-  签名: {A : 类型} [Semiring A] [Algebra R A]
+  签名: {A : 类型} [半环 A] [代数 R A]
   定义体: { toFun f :=
 RingCon.liftₐ (ringCon R M) (FreeAlgebra.lift R (f)) by
         grw [ringCon, RingCon.ringConGen_le]
@@ -255,7 +255,7 @@ theorem ι_comp_lift
 
 中文:
 定理 ι_comp_lift
-  条件: {A : 类型} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
+  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
   证明: by
   convert! (lift R).symm_apply_apply f
 
@@ -280,7 +280,7 @@ theorem lift_ι_apply
 
 中文:
 定理 lift_ι_apply
-  条件: {A : 类型} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A) (x)
+  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A) (x)
   证明: by
   conv_rhs => rw [← ι_comp_lift f]
   rfl
@@ -306,7 +306,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: {A : 类型} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
+  结论: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
   证明: by
   rw [← (lift R).symm_apply_eq]
   simp only [lift, Equiv.coe_fn_symm_mk]
@@ -334,7 +334,7 @@ theorem lift_comp_ι
 
 中文:
 定理 lift_comp_ι
-  条件: {A : 类型} [Semiring A] [Algebra R A] (g : TensorAlgebra R M ->ₐ[R] A)
+  条件: {A : 类型} [半环 A] [代数 R A] (g : TensorAlgebra R M ->ₐ[R] A)
   证明: by
   rw [← lift_symm_apply]
   exact (lift R).apply_symm_apply g
@@ -360,7 +360,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: {A : 类型} [Semiring A] [Algebra R A] {f g : TensorAlgebra R M ->ₐ[R] A}
+  结论: {A : 类型} [半环 A] [代数 R A] {f g : TensorAlgebra R M ->ₐ[R] A}
   证明: by
   rw [← lift_symm_apply]; rw [← lift_symm_apply] at w
   exact (lift R).symm.injective w
@@ -443,7 +443,7 @@ theorem adjoin_range_ι
 
 中文:
 定理 adjoin_range_ι
-  结论: Algebra.adjoin R (Set.range (ι R (M := M))) = ⊤
+  结论: 代数.adjoin R (集合.range (ι R (M := M))) = ⊤
   证明: by
   refine top_unique fun x hx => ?_; clear hx
   induction x using induction with
@@ -477,7 +477,7 @@ theorem range_lift
 
 中文:
 定理 range_lift
-  条件: {A : 类型} [Semiring A] [Algebra R A] (f : M ->ₗ[R] A)
+  条件: {A : 类型} [半环 A] [代数 R A] (f : M ->ₗ[R] A)
   证明: by
   simp_rw [← Algebra.map_top, ← adjoin_range_ι, AlgHom.map_adjoin, ← Set.range_comp,
     Function.comp_def, lift_ι_apply]
@@ -609,8 +609,8 @@ instance [Nontrivial
   body: (algebraMap_leftInverse M).injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (TensorAlgebra R M)
+实例 [非平凡
+  签名: R] : 非平凡 (TensorAlgebra R M)
   定义体: (algebraMap_leftInverse M).injective.nontrivial
 
 Depends on / 依赖: algebraMap_leftInverse, injective, injective.nontrivial, nontrivial
@@ -632,7 +632,7 @@ definition toTrivSqZeroExt
 
 中文:
 定义 toTrivSqZeroExt
-  签名: [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
+  签名: [模 Rᵐᵒᵖ M] [中心标量 R M]
   定义体: lift R (TrivSqZeroExt.inrHom R M)
 
 @[simp]
@@ -654,7 +654,7 @@ theorem toTrivSqZeroExt_ι
 
 中文:
 定理 toTrivSqZeroExt_ι
-  条件: (x : M) [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
+  条件: (x : M) [模 Rᵐᵒᵖ M] [中心标量 R M]
   证明: lift_ι_apply _ _
 -/
 theorem toTrivSqZeroExt_ι (x : M) [Module Rᵐᵒᵖ M] [IsCentralScalar R M] :
@@ -698,7 +698,7 @@ theorem ι_leftInverse
 
 中文:
 定理 ι_leftInverse
-  结论: Function.LeftInverse ιInv (ι R : M -> TensorAlgebra R M)
+  结论: 函数.左逆 ιInv (ι R : M -> TensorAlgebra R M)
   证明: fun x => by
   simp [ιInv]
 -/
@@ -809,7 +809,7 @@ theorem ι_ne_one
 
 中文:
 定理 ι_ne_one
-  条件: [Nontrivial R] (x : M)
+  条件: [非平凡 R] (x : M)
   结论: ι R x != 1
   证明: by
   rw [← (algebraMap R (TensorAlgebra R M)).map_one]; rw [Ne]; rw [ι_eq_algebraMap_iff]
@@ -886,8 +886,8 @@ theorem tprod_apply
 
 中文:
 定理 tprod_apply
-  条件: {n : 自然数} (x : Fin n -> M)
-  结论: tprod R M n x = (List.ofFn fun i => ι R (x i)).prod
+  条件: {n : 自然数} (x : 有限集 n -> M)
+  结论: tprod R M n x = (列表.ofFn fun i => ι R (x i)).乘积
   证明: rfl
 -/
 theorem tprod_apply {n : Nat} (x : Fin n -> M) : tprod R M n x = (List.ofFn fun i => ι R (x i)).prod :=

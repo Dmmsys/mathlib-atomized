@@ -74,7 +74,7 @@ theorem characteristic_congr_codiscrete
 
 中文:
 定理 characteristic_congr_codiscrete
-  条件: {r : 实数} (hfg : f =ᶠ[codiscrete Complex] g) (hr : r != 0)
+  条件: {r : 实数} (hfg : f =ᶠ[codiscrete 复形] g) (hr : r != 0)
   证明: by
   simp [characteristic, proximity_congr_codiscrete hfg hr, logCounting_congr_codiscrete hfg]
 
@@ -100,7 +100,7 @@ lemma characteristic_sub_characteristic_eq_proximity_sub_proximity
 
 中文:
 引理 characteristic_sub_characteristic_eq_proximity_sub_proximity
-  条件: (h : Meromorphic f) (a₀ : E)
+  条件: (h : 亚纯 f) (a₀ : E)
   证明: by
   simp [← Pi.sub_def, characteristic, logCounting_sub_const h]
 
@@ -184,7 +184,7 @@ theorem characteristic_sum_top_le
 
 中文:
 定理 characteristic_sum_top_le
-  结论: {α : 类型} (s : Finset α) (f : α -> Complex -> E) {r : 实数}
+  结论: {α : 类型} (s : 有限集 α) (f : α -> 复形 -> E) {r : 实数}
   证明: by
   simp only [characteristic, Pi.add_apply, Finset.sum_apply]
   calc proximity (∑ a in s, f a) ⊤ r + logCounting (∑ a in s, f a) ⊤ r
@@ -221,7 +221,7 @@ theorem characteristic_sum_top_eventuallyLE
 
 中文:
 定理 characteristic_sum_top_eventuallyLE
-  结论: {α : 类型} (s : Finset α) (f : α -> Complex -> E)
+  结论: {α : 类型} (s : 有限集 α) (f : α -> 复形 -> E)
   证明: by
   filter_upwards [Filter.eventually_ge_atTop 1]
     using fun _ hr => characteristic_sum_top_le s f hf hr
@@ -248,7 +248,7 @@ theorem characteristic_add_top_le
 
 中文:
 定理 characteristic_add_top_le
-  结论: {f₁ f₂ : Complex -> E} {r : 实数} (h₁f₁ : Meromorphic f₁)
+  结论: {f₁ f₂ : 复形 -> E} {r : 实数} (h₁f₁ : 亚纯 f₁)
   证明: by
   have h_meromorphic : forall a in Finset.univ, Meromorphic (![f₁, f₂] a) := by
     simpa using ⟨h₁f₁, h₁f₂⟩
@@ -275,7 +275,7 @@ theorem characteristic_add_top_eventuallyLE
 
 中文:
 定理 characteristic_add_top_eventuallyLE
-  结论: {f₁ f₂ : Complex -> E} (h₁f₁ : Meromorphic f₁)
+  结论: {f₁ f₂ : 复形 -> E} (h₁f₁ : 亚纯 f₁)
   证明: by
   filter_upwards [Filter.eventually_ge_atTop 1] with r hr
     using characteristic_add_top_le h₁f₁ h₁f₂ hr
@@ -303,7 +303,7 @@ theorem characteristic_mul_zero_le
 
 中文:
 定理 characteristic_mul_zero_le
-  结论: {f₁ f₂ : Complex -> Complex} {r : 实数} (hr : 1 <= r)
+  结论: {f₁ f₂ : 复形 -> 复形} {r : 实数} (hr : 1 <= r)
   证明: by
   simp only [characteristic, Pi.add_apply]
   rw [add_add_add_comm]
@@ -333,7 +333,7 @@ theorem characteristic_mul_zero_eventuallyLE
 
 中文:
 定理 characteristic_mul_zero_eventuallyLE
-  结论: {f₁ f₂ : Complex -> Complex}
+  结论: {f₁ f₂ : 复形 -> 复形}
   证明: by
   filter_upwards [Filter.eventually_ge_atTop 1]
     using fun _ hr => characteristic_mul_zero_le hr h₁f₁ h₂f₁ h₁f₂ h₂f₂
@@ -361,7 +361,7 @@ theorem characteristic_mul_top_le
 
 中文:
 定理 characteristic_mul_top_le
-  结论: {f₁ f₂ : Complex -> Complex} {r : 实数} (hr : 1 <= r)
+  结论: {f₁ f₂ : 复形 -> 复形} {r : 实数} (hr : 1 <= r)
   证明: by
   simp only [characteristic, Pi.add_apply]
   rw [add_add_add_comm]
@@ -391,7 +391,7 @@ theorem characteristic_mul_top_eventuallyLE
 
 中文:
 定理 characteristic_mul_top_eventuallyLE
-  结论: {f₁ f₂ : Complex -> Complex}
+  结论: {f₁ f₂ : 复形 -> 复形}
   证明: by
   filter_upwards [Filter.eventually_ge_atTop 1]
     using fun _ hr => characteristic_mul_top_le hr h₁f₁ h₂f₁ h₁f₂ h₂f₂
@@ -421,7 +421,7 @@ theorem characteristic_pow_zero
 
 中文:
 定理 characteristic_pow_zero
-  条件: {f : Complex -> Complex} {n : 自然数} (hf : Meromorphic f)
+  条件: {f : 复形 -> 复形} {n : 自然数} (hf : 亚纯 f)
   证明: by
   simp_all [characteristic]
 
@@ -447,7 +447,7 @@ theorem characteristic_pow_top
 
 中文:
 定理 characteristic_pow_top
-  条件: {f : Complex -> Complex} {n : 自然数} (hf : Meromorphic f)
+  条件: {f : 复形 -> 复形} {n : 自然数} (hf : 亚纯 f)
   证明: by
   simp_all [characteristic]
 

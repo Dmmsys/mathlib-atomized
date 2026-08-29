@@ -35,10 +35,10 @@ class ChosenCoendsOfShape
 
 中文:
 类 ChosenCoendsOfShape
-  参数: (J : 类型) [Category* J] (C : 类型) [Category* C]
+  参数: (J : 类型) [范畴* J] (C : 类型) [范畴* C]
   公理与运算 (2 个):
     - cowedge((F : Jᵒᵖ ⥤ J ⥤ C)) : Cowedge F
-    - isCoend((F : Jᵒᵖ ⥤ J ⥤ C)) : IsColimit (cowedge F)
+    - isCoend((F : Jᵒᵖ ⥤ J ⥤ C)) : 是余极限 (cowedge F)
 -/
 class ChosenCoendsOfShape (J : Type*) [Category* J] (C : Type*) [Category* C] where
   /-- The chosen cowedge for each functor `Jᵒᵖ ⥤ J ⥤ C`. -/
@@ -59,7 +59,7 @@ abbreviation ChosenCoends
 
 中文:
 缩写 ChosenCoends
-  签名: (C : 类型) [Category* C]
+  签名: (C : 类型) [范畴* C]
   定义体: forall {J : Type u} [Category.{v} J], ChosenCoendsOfShape J C
 
 Depends on / 依赖: Category, ChosenCoendsOfShape
@@ -342,10 +342,10 @@ class ChosenEndsOfShape
 
 中文:
 类 ChosenEndsOfShape
-  参数: (J : 类型) [Category* J] (C : 类型) [Category* C]
+  参数: (J : 类型) [范畴* J] (C : 类型) [范畴* C]
   公理与运算 (2 个):
     - wedge((F : Jᵒᵖ ⥤ J ⥤ C)) : Wedge F
-    - isEnd((F : Jᵒᵖ ⥤ J ⥤ C)) : IsLimit (wedge F)
+    - isEnd((F : Jᵒᵖ ⥤ J ⥤ C)) : 是极限 (wedge F)
 -/
 class ChosenEndsOfShape (J : Type*) [Category* J] (C : Type*) [Category* C] where
   /-- The chosen wedge for each functor `Jᵒᵖ ⥤ J ⥤ C`. -/
@@ -366,7 +366,7 @@ abbreviation ChosenEnds
 
 中文:
 缩写 ChosenEnds
-  签名: (C : 类型) [Category* C]
+  签名: (C : 类型) [范畴* C]
   定义体: forall {J : Type u} [Category.{v} J], ChosenEndsOfShape J C
 
 Depends on / 依赖: Category, ChosenEndsOfShape

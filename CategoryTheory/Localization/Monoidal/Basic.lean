@@ -50,9 +50,9 @@ class IsMonoidal
     - whiskerRight({X₁ X₂ : C} (f : X₁ ⟶ X₂) (hf : W f) (Y : C)) : W (f ▷ Y)
 
 中文:
-类 IsMonoidal
-  参数: : 命题 extends W.IsMultiplicative where
-  继承: W.IsMultiplicative
+类 是幺半群
+  参数: : 命题 extends W.是Multiplicative where
+  继承: W.是Multiplicative
   公理与运算 (2 个):
     - whiskerLeft((X : C) {Y₁ Y₂ : C} (g : Y₁ ⟶ Y₂) (hg : W g)) : W (X ◁ g)
     - whiskerRight({X₁ X₂ : C} (f : X₁ ⟶ X₂) (hf : W f) (Y : C)) : W (f ▷ Y)
@@ -71,8 +71,8 @@ lemma IsMonoidal.mk'
   whiskerRight f hf Y := by simpa using h f (𝟙 Y) hf (W.id_mem _)
 
 中文:
-引理 IsMonoidal.mk'
-  结论: [W.IsMultiplicative]
+引理 是幺半群.mk'
+  结论: [W.是Multiplicative]
   证明: by simpa using h (𝟙 X) g (W.id_mem _) hg
   whiskerRight f hf Y := by simpa using h f (𝟙 Y) hf (W.id_mem _)
 
@@ -177,7 +177,7 @@ definition LocalizedMonoidal
 
 中文:
 定义 LocalizedMonoidal
-  签名: (L : C ⥤ D) (W : Morphism命题erty C)
+  签名: (L : C ⥤ D) (W : MorphismProperty C)
   定义体: D
 -/
 def LocalizedMonoidal (L : C ⥤ D) (W : MorphismProperty C)
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (LocalizedMonoidal L W ε)
+  签名: 范畴 (LocalizedMonoidal L W ε)
   定义体: inferInstanceAs (Category D)
 
 Depends on / 依赖: Category
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L').IsLocalization W
+  签名: (L').是Localization W
   定义体: inferInstanceAs (L.IsLocalization W)
 
 Depends on / 依赖: IsLocalization, L.IsLocalization
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lifting₂ L' L' W W (curriedTensor C ⋙ (Functor.whiskeringRight C C
+  签名: Lifting₂ L' L' W W (curriedTensor C ⋙ (函子.whiskeringRight C C
   定义体: inferInstanceAs (Lifting₂ L L W W (curriedTensor C ⋙ (Functor.whiskeringRight C C D).obj L')
     (Localization.lift₂ _ (isInvertedBy₂ L W ε) L L))
 
@@ -1127,7 +1127,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L').EssSurj
+  签名: (L').本质满射
   定义体: Localization.essSurj L' W
 
 Depends on / 依赖: Localization, Localization.essSurj, essSurj
@@ -1454,7 +1454,7 @@ local notation "L'" => toMonoidalCat
 
 中文:
 实例 :
-  签名: (toMonoidalCategory L W ε).Monoidal
+  签名: (toMonoidalCategory L W ε).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := ε.symm
       μIso X Y := μ L W ε X Y

@@ -108,7 +108,7 @@ theorem ker_coeMulHom
 中文:
 定理 ker_coeMulHom
   条件: (f : F)
-  结论: ker (f : MulHom M N) = ker f
+  结论: ker (f : 乘法半群态射 M N) = ker f
   证明: rfl
 -/
 theorem ker_coeMulHom (f : F) : ker (f : MulHom M N) = ker f := rfl
@@ -208,7 +208,7 @@ definition mapOfSurjective
 
 中文:
 定义 mapOfSurjective
-  签名: {c : Con M} (f : F) (h : ker f <= c) (hf : Surjective f)
+  签名: {c : Con M} (f : F) (h : ker f <= c) (hf : 满射 f)
   定义体: c.toSetoid.mapOfSurjective f h hf
   mul' h₁ h₂ := by
     rcases h₁ with ⟨a, b, h1, rfl, rfl⟩
@@ -239,7 +239,7 @@ theorem mapOfSurjective_eq_mapGen
 
 中文:
 定理 mapOfSurjective_eq_mapGen
-  条件: {c : Con M} {f : F} (h : ker f <= c) (hf : Surjective f)
+  条件: {c : Con M} {f : F} (h : ker f <= c) (hf : 满射 f)
   证明: by
   rw [← conGen_of_con (c.mapOfSurjective f h hf)]; rfl
 
@@ -333,7 +333,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: : M ->* c.Quotient where
+  签名: : M ->* c.商 where
   定义体: mkMulHom c
   map_one' := rfl
 
@@ -385,7 +385,7 @@ theorem mk'_surjective
 
 中文:
 定理 mk'_surjective
-  结论: Surjective c.mk'
+  结论: 满射 c.mk'
   证明: Quotient.mk''_surjective
 
 @[to_additive (attr := simp)]
@@ -406,7 +406,7 @@ theorem coe_mk'
 
 中文:
 定理 coe_mk'
-  结论: (c.mk' : M -> c.Quotient) = ((↑) : M -> c.Quotient)
+  结论: (c.mk' : M -> c.商) = ((↑) : M -> c.商)
   证明: rfl
 
 @[to_additive]
@@ -580,7 +580,7 @@ theorem lift_apply_mk'
 
 中文:
 定理 lift_apply_mk'
-  条件: (f : c.Quotient ->* P)
+  条件: (f : c.商 ->* P)
   证明: by
   ext x; rcases x with ⟨⟩; rfl
 -/
@@ -605,7 +605,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {f g : c.Quotient ->* P} (h : f.comp c.mk' = g.comp c.mk')
+  条件: {f g : c.商 ->* P} (h : f.comp c.mk' = g.comp c.mk')
   结论: f = g
   证明: by
   rw [← lift_apply_mk' f]; rw [← lift_apply_mk' g]
@@ -632,7 +632,7 @@ theorem lift_funext
 
 中文:
 定理 lift_funext
-  条件: (f g : c.Quotient ->* P) (h : 对任意 a : M, f a = g a)
+  条件: (f g : c.商 ->* P) (h : 对任意 a : M, f a = g a)
   结论: f = g
   证明: hom_ext DFunLike.ext _ _ h
 
@@ -653,7 +653,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (H : c <= ker f) (g : c.Quotient ->* P) (Hg : g.comp c.mk' = f)
+  条件: (H : c <= ker f) (g : c.商 ->* P) (Hg : g.comp c.mk' = f)
   证明: hom_ext Hg
 
 Depends on / 依赖: Finset, Finset.mul_sum, Finset.sum_congr, Matrix, Matrix.mulVec, Matrix.toLinearMap, _apply, dotProduct, hom_ext, mulVec, mul_assoc, mul_comm, mul_sum, simp_rw, smul_eq_mul, sum_congr
@@ -677,7 +677,7 @@ theorem lift_surjective_of_surjective
 
 中文:
 定理 lift_surjective_of_surjective
-  条件: (h : c <= ker f) (hf : Surjective f)
+  条件: (h : c <= ker f) (hf : 满射 f)
   证明: fun y =>
   (Exists.elim (hf y)) fun w hw => ⟨w, (lift_mk' h w).symm ▸ hw⟩
 
@@ -705,7 +705,7 @@ theorem ker_eq_lift_of_injective
 
 中文:
 定理 ker_eq_lift_of_injective
-  条件: (H : c <= ker f) (h : Injective (c.lift f H))
+  条件: (H : c <= ker f) (h : 单射 (c.lift f H))
   结论: ker f = c
   证明: toSetoid_injective Setoid.ker_eq_lift_of_injective f H h
 
@@ -729,7 +729,7 @@ definition kerLift
 
 中文:
 定义 kerLift
-  签名: : (ker f).Quotient ->* P
+  签名: : (ker f).商 ->* P
   定义体: ((ker f).lift f) fun _ _ => id
 -/
 def kerLift : (ker f).Quotient ->* P :=
@@ -778,7 +778,7 @@ theorem kerLift_injective
 中文:
 定理 kerLift_injective
   条件: (f : M ->* P)
-  结论: Injective (kerLift f)
+  结论: 单射 (kerLift f)
   证明: fun x y =>
   Quotient.inductionOn₂' x y fun _ _ => (ker f).eq.2
 

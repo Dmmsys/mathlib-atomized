@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (SubMulAction R M)
+  签名: 幺 (SubMul作用 R M)
   定义体: { carrier := Set.range fun r : R => r • (1 : M)
       smul_mem' := fun r _ ⟨r', hr'⟩ => hr' ▸ ⟨r * r', mul_smul _ _ _⟩ }
 
@@ -65,7 +65,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : SubMulAction R M) = Set.range fun r : R => r • (1 : M)
+  结论: ↑(1 : SubMul作用 R M) = 集合.range fun r : R => r • (1 : M)
   证明: rfl
 
 @[simp]
@@ -86,7 +86,7 @@ theorem mem_one
 中文:
 定理 mem_one
   条件: {x : M}
-  结论: x in (1 : SubMulAction R M) ↔ 存在 r : R, r • (1 : M) = x
+  结论: x in (1 : SubMul作用 R M) ↔ 存在 r : R, r • (1 : M) = x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -105,7 +105,7 @@ theorem subset_coe_one
 
 中文:
 定理 subset_coe_one
-  结论: (1 : Set M) subseteq (1 : SubMulAction R M)
+  结论: (1 : 集合 M) subseteq (1 : SubMul作用 R M)
   证明: fun _ hx =>
   ⟨1, (one_smul _ _).trans hx.symm⟩
 -/
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (SubMulAction R M)
+  签名: 乘法 (SubMul作用 R M)
   定义体: { carrier := Set.image2 (· * ·) p q
       smul_mem' := fun r _ ⟨m₁, hm₁, m₂, hm₂, h⟩ =>
         h ▸ smul_mul_assoc r m₁ m₂ ▸ Set.mul_mem_mul (p.smul_mem _ hm₁) hm₂ }
@@ -159,8 +159,8 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (p q : SubMulAction R M)
-  结论: ↑(p * q) = (p * q : Set M)
+  条件: (p q : SubMul作用 R M)
+  结论: ↑(p * q) = (p * q : 集合 M)
   证明: rfl
 -/
 theorem coe_mul (p q : SubMulAction R M) : ↑(p * q) = (p * q : Set M) :=
@@ -177,7 +177,7 @@ theorem mem_mul
 
 中文:
 定理 mem_mul
-  条件: {p q : SubMulAction R M} {x : M}
+  条件: {p q : SubMul作用 R M} {x : M}
   结论: x in p * q ↔ 存在 y in p, 存在 z in q, y * z = x
   证明: Set.mem_mul
 
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulOneClass (SubMulAction R M)
+  签名: MulOne类 (SubMul作用 R M)
   定义体: by
     ext x
     simp only [mem_mul, mem_one, mul_smul_comm, exists_exists_eq_and, mul_one]
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup (SubMulAction R M)
+  签名: 半群 (SubMul作用 R M)
   定义体: SetLike.coe_injective (mul_assoc (_ : Set _) _ _)
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, mul_assoc
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (SubMulAction R M)
+  签名: 幺半群 (SubMul作用 R M)
   定义体: { }
 -/
 instance : Monoid (SubMulAction R M) := { }
@@ -298,8 +298,8 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: (p : SubMulAction R M)
-  结论: 对任意 {n : 自然数} (_ : n != 0), ↑(p ^ n) = (p : Set M) ^ n
+  条件: (p : SubMul作用 R M)
+  结论: 对任意 {n : 自然数} (_ : n != 0), ↑(p ^ n) = (p : 集合 M) ^ n
 -/
 theorem coe_pow (p : SubMulAction R M) : forall {n : Nat} (_ : n != 0), ↑(p ^ n) = (p : Set M) ^ n
   | 0, hn => (hn rfl).elim
@@ -317,8 +317,8 @@ theorem subset_coe_pow
 
 中文:
 定理 subset_coe_pow
-  条件: (p : SubMulAction R M)
-  结论: 对任意 {n : 自然数}, (p : Set M) ^ n subseteq ↑(p ^ n)
+  条件: (p : SubMul作用 R M)
+  结论: 对任意 {n : 自然数}, (p : 集合 M) ^ n subseteq ↑(p ^ n)
 -/
 theorem subset_coe_pow (p : SubMulAction R M) : forall {n : Nat}, (p : Set M) ^ n subseteq ↑(p ^ n)
   | 0 => by

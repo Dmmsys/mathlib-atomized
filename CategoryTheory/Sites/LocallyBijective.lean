@@ -161,7 +161,7 @@ class WEqualsLocallyBijective
 类 WEqualsLocallyBijective
   参数: : 命题 where
   公理与运算 (1 个):
-    - iff({X Y : Cᵒᵖ ⥤ A} (f : X ⟶ Y)) : J.W f ↔ Presheaf.IsLocallyInjective J f ∧ Presheaf.IsLocallySurjective J f
+    - iff({X Y : Cᵒᵖ ⥤ A} (f : X ⟶ Y)) : J.W f ↔ 预层.是LocallyInjective J f ∧ 预层.是LocallySurjective J f
 -/
 class WEqualsLocallyBijective : Prop where
   iff {X Y : Cᵒᵖ ⥤ A} (f : X ⟶ Y) :
@@ -203,7 +203,7 @@ lemma W_of_isLocallyBijective
 
 中文:
 引理 W_of_isLocallyBijective
-  结论: [Presheaf.IsLocallyInjective J f]
+  结论: [预层.是LocallyInjective J f]
   证明: by
   rw [W_iff_isLocallyBijective]
   constructor <;> infer_instance
@@ -229,7 +229,7 @@ lemma W.isLocallyInjective
 中文:
 引理 W.isLocallyInjective
   条件: (hf : J.W f)
-  结论: Presheaf.IsLocallyInjective J f
+  结论: 预层.是LocallyInjective J f
   证明: ((J.W_iff_isLocallyBijective f).1 hf).1
 
 Depends on / 依赖: J.W_iff_isLocallyBijective, W_iff_isLocallyBijective
@@ -249,7 +249,7 @@ lemma W.isLocallySurjective
 中文:
 引理 W.isLocallySurjective
   条件: (hf : J.W f)
-  结论: Presheaf.IsLocallySurjective J f
+  结论: 预层.是LocallySurjective J f
   证明: ((J.W_iff_isLocallyBijective f).1 hf).2
 
 Depends on / 依赖: J.W_iff_isLocallyBijective, W_iff_isLocallyBijective
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: Presheaf.IsLocallyInjective J (CategoryTheory.toSheafify J P)
+  签名: 预层.是LocallyInjective J (范畴论.toSheafify J P)
   定义体: (J.W_toSheafify P).isLocallyInjective
 
 Depends on / 依赖: J.W_toSheafify, W_toSheafify, isLocallyInjective
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Presheaf.IsLocallySurjective J (CategoryTheory.toSheafify J P)
+  签名: 预层.是LocallySurjective J (范畴论.toSheafify J P)
   定义体: (J.W_toSheafify P).isLocallySurjective
 
 Depends on / 依赖: J.W_toSheafify, W_toSheafify, isLocallySurjective
@@ -308,7 +308,7 @@ lemma WEqualsLocallyBijective.mk'
 
 中文:
 引理 WEqualsLocallyBijective.mk'
-  结论: [HasWeakSheafify J A] [(forget A).ReflectsIsomorphisms]
+  结论: [HasWeakSheafify J A] [(forget A).反映同构]
   证明: by
     rw [W_iff]; rw [← Sheaf.isLocallyBijective_iff_isIso (A := A)]; rw [← Presheaf.isLocallyInjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [← Presheaf.isLocallySurjective_comp_iff J f (CategoryTheory.toSheafify J Q)]; rw [CategoryTheory.toSheafify_naturality]; rw [Presheaf.comp_isLoc
 
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: J.WEqualsLocallyBijective (Type (max u v))
+  签名: J.WEqualsLocallyBijective (类型 (最大值 u v))
   定义体: inferInstance
 -/
 instance : J.WEqualsLocallyBijective (Type (max u v)) :=

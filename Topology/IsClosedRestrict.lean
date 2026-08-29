@@ -46,7 +46,7 @@ definition reorderRestrictProd
 
 中文:
 定义 reorderRestrictProd
-  签名: (S : Set ι) (s : Set (Π j, α j))
+  签名: (S : 集合 ι) (s : 集合 (Π j, α j))
   定义体: fun j => if h : j in S
     then (p.2 : Π j : ↑(S : Set ι), α j) ⟨j, h⟩
     else (p.1 : Π j : ↑(Sᶜ : Set ι), α j) ⟨j, h⟩
@@ -104,7 +104,7 @@ lemma reorderRestrictProd_of_compl
 
 中文:
 引理 reorderRestrictProd_of_compl
-  条件: (p : Sᶜ.domRestrict '' s × (Π i : S, α i)) (j : (Sᶜ : Set ι))
+  条件: (p : Sᶜ.domRestrict '' s × (Π i : S, α i)) (j : (Sᶜ : 集合 ι))
   证明: by
   have hj : ↑j ∉ S := j.prop
   simp [reorderRestrictProd, hj]
@@ -150,7 +150,7 @@ lemma continuous_reorderRestrictProd
 
 中文:
 引理 continuous_reorderRestrictProd
-  条件: [对任意 i, TopologicalSpace (α i)]
+  条件: [对任意 i, 拓扑空间 (α i)]
   证明: by
   refine continuous_pi fun j => ?_
   simp only [reorderRestrictProd]
@@ -237,8 +237,8 @@ definition _root_.Homeomorph.preimageImageRestrict
     rw
 
 中文:
-定义 _root_.Homeomorph.preimageImageRestrict
-  签名: (α : ι -> 类型) [对任意 i, TopologicalSpace (α i)]
+定义 _root_.同胚.preimageImageRestrict
+  签名: (α : ι -> 类型) [对任意 i, 拓扑空间 (α i)]
   定义体: ⟨⟨Sᶜ.domRestrict x, x.2⟩, fun i => (x : Π j, α j) i⟩
   invFun p := ⟨reorderRestrictProd S s p, reorderRestrictProd_mem_preimage_image_restrict p⟩
   left_inv x := by ext; simp
@@ -279,7 +279,7 @@ lemma image_snd_preimageImageRestrict
 
 中文:
 引理 image_snd_preimageImageRestrict
-  条件: [对任意 i, TopologicalSpace (α i)]
+  条件: [对任意 i, 拓扑空间 (α i)]
   证明: by
   ext x
   simp only [Homeomorph.preimageImageRestrict, Homeomorph.homeomorph_mk_coe, Equiv.coe_fn_mk,
@@ -326,8 +326,8 @@ theorem IsCompact.isClosed_image_restrict
   exact hs_closed.preimage continuous_
 
 中文:
-定理 IsCompact.isClosed_image_restrict
-  结论: (S : Set ι)
+定理 是紧集.isClosed_image_restrict
+  结论: (S : 集合 ι)
   证明: by
   rw [← Topology.image_snd_preimageImageRestrict]
   have : CompactSpace (Sᶜ.domRestrict '' s) :=
@@ -362,7 +362,7 @@ exact isClosedMap_fst_of_compactSpace _ (Homeomorph.isClosed_image _).mpr hs
 
 中文:
 引理 isClosedMap_restrict_of_compactSpace
-  条件: [对任意 i, CompactSpace (α i)]
+  条件: [对任意 i, 紧空间 (α i)]
   证明: fun s hs => by
   classical
   have : S.domRestrict (π := α) = Prod.fst ∘ (Homeomorph.piEquivPiSubtypeProd (· in S) α) := rfl
@@ -391,7 +391,7 @@ lemma IsClosed.isClosed_image_eval
   exact hs_compact.isClosed_image_restrict {i} hs_closed
 
 中文:
-引理 IsClosed.isClosed_image_eval
+引理 是闭集.isClosed_image_eval
   结论: (i : ι)
   证明: by
   suffices IsClosed (Set.domRestrict {i} '' s) by

@@ -99,7 +99,7 @@ lemma list_mul_sum
 
 中文:
 引理 list_mul_sum
-  条件: {R : 类型} [Semiring R] {T : 类型} (l : List T) (y : R) (x : R)
+  条件: {R : 类型} [半环 R] {T : 类型} (l : 列表 T) (y : R) (x : R)
   证明: by
   simp_rw [← smul_eq_mul, List.smul_sum, List.mapIdx_eq_zipIdx_map]
   congr 1
@@ -126,7 +126,7 @@ lemma list_geom
 
 中文:
 引理 list_geom
-  条件: {T : 类型} {F : 类型} [DivisionRing F] (l : List T) {y : F} (hy : y != 1)
+  条件: {T : 类型} {F : 类型} [除环 F] (l : 列表 T) {y : F} (hy : y != 1)
   证明: by
   rw [← geom_sum_eq hy l.length]; rw [List.mapIdx_eq_zipIdx_map]; rw [Finset.sum_range]; rw [← Fin.sum_univ_fun_getElem]
   simp only
@@ -191,8 +191,8 @@ lemma exists_nat_rpow_iff_isEquiv
   rw [← Rat.num_div_den x]; rw [map_div₀]; rw [map_div₀]; rw [div_rpow (by positivity) (by positivity)]; rw [h x.den]; rw [← apply_natAbs_eq]; rw [← apply_natAbs_eq]; rw 
 
 中文:
-引理 exists_nat_rpow_iff_isEquiv
-  结论: (存在 c : 实数, 0 < c ∧ 对任意 n : 自然数, f n ^ c = g n) ↔ f.IsEquiv g
+引理 存在_nat_rpow_iff_isEquiv
+  结论: (存在 c : 实数, 0 < c ∧ 对任意 n : 自然数, f n ^ c = g n) ↔ f.Is等价 g
   证明: by
   rw [isEquiv_iff_exists_rpow_eq]
   refine ⟨fun ⟨c, hc, h⟩ => ⟨c, hc, ?_⟩, fun ⟨c, hc, h⟩ => ⟨c, hc, (congrFun h ·)⟩⟩
@@ -231,7 +231,7 @@ fun H => cast_eq_zero.mpr H ▸ padicNorm.zero (p := p)⟩
 
 中文:
 定义 padic
-  签名: (p : 自然数) [Fact p.Prime]
+  签名: (p : 自然数) [Fact p.素]
   定义体: (padicNorm p x : Real)
   map_mul' := by simp only [padicNorm.mul, Rat.cast_mul, forall_const]
 nonneg' x := cast_nonneg.mpr padicNorm.nonneg x
@@ -262,7 +262,7 @@ lemma padic_eq_padicNorm
 
 中文:
 引理 padic_eq_padicNorm
-  条件: (p : 自然数) [Fact p.Prime] (r : Rat)
+  条件: (p : 自然数) [Fact p.素] (r : 有理数)
   结论: padic p r = padicNorm p r
   证明: rfl
 -/
@@ -281,7 +281,7 @@ lemma padic_le_one
 
 中文:
 引理 padic_le_one
-  条件: (p : 自然数) [Fact p.Prime] (n : 整数)
+  条件: (p : 自然数) [Fact p.素] (n : 整数)
   结论: padic p n <= 1
   证明: by
   simp only [padic_eq_padicNorm]
@@ -312,7 +312,7 @@ refine (isNontrivial_iff_ne_trivial f).not_left.mpr eq_on_nat_iff_eq.mp fun n =>
     · simp
 
 中文:
-引理 exists_minimal_nat_zero_lt_and_lt_one
+引理 存在_minimal_nat_zero_lt_and_lt_one
   证明: by
   -- There is a positive integer with absolute value different from one.
   obtain ⟨n, hn1, hn2⟩ : exists n : Nat, n != 0 ∧ f n != 1 := by
@@ -359,7 +359,7 @@ lemma is_prime_of_minimal_nat_zero_lt_and_lt_one
 
 中文:
 引理 is_prime_of_minimal_nat_zero_lt_and_lt_one
-  结论: p.Prime
+  结论: p.素
   证明: by
   have hp2 : 2 <= p := by
     by_contra! hp
@@ -476,7 +476,7 @@ exact ⟨-logb p (f p), neg_pos.mpr logb_neg hp hp0 hp1, by
     simpa using (rpow_logb (zero_lt_one.trans hp) hp.ne' hp0).symm⟩
 
 中文:
-引理 exists_pos_eq_pow_neg
+引理 存在_pos_eq_pow_neg
   结论: 存在 t : 实数, 0 < t ∧ f p = p ^ (-t)
   证明: by
   have hp : (1 : Real) < p :=
@@ -564,7 +564,7 @@ definition real
 
 中文:
 定义 real
-  签名: : AbsoluteValue Rat 实数 where
+  签名: : 绝对值 有理数 实数 where
   定义体: |x|
   map_mul' := by simp
   nonneg' := by simp
@@ -589,7 +589,7 @@ lemma real_eq_abs
 
 中文:
 引理 real_eq_abs
-  条件: (r : Rat)
+  条件: (r : 有理数)
   结论: real r = |r|
   证明: (cast_abs r).symm
 -/
@@ -912,7 +912,7 @@ theorem equiv_real_of_unbounded
 
 中文:
 定理 equiv_real_of_unbounded
-  结论: f.IsEquiv real
+  结论: f.Is等价 real
   证明: by
   obtain ⟨m, hm⟩ := Classical.exists_not_of_not_forall notbdd
   have hfm1 : 1 < f m := lt_of_not_ge hm
@@ -967,7 +967,7 @@ theorem equiv_real_or_padic
 
 中文:
 定理 equiv_real_or_padic
-  条件: (f : AbsoluteValue Rat 实数) (hf_nontriv : f.IsNontrivial)
+  条件: (f : 绝对值 有理数 实数) (hf_nontriv : f.是非平凡)
   证明: by
   by_cases bdd : forall n : Nat, f n <= 1
 · exact .inr equiv_padic_of_bounded hf_nontriv bdd
@@ -997,8 +997,8 @@ lemma not_real_isEquiv_padic
 
 中文:
 引理 not_real_isEquiv_padic
-  条件: (p : 自然数) [Fact p.Prime]
-  结论: ¬ real.IsEquiv (padic p)
+  条件: (p : 自然数) [Fact p.素]
+  结论: ¬ real.Is等价 (padic p)
   证明: by
   rw [isEquiv_iff_exists_rpow_eq]
   rintro ⟨c, hc₀, hc⟩

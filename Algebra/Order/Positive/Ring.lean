@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add { x : M // 0 < x }
+  签名: 加法 { x : M // 0 < x }
   定义体: ⟨fun x y => ⟨x + y, add_pos x.2 y.2⟩⟩
 
 @[simp, norm_cast]
@@ -82,7 +82,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: : AddSemigroup { x : M // 0 < x }
+  签名: : 加法半群 { x : M // 0 < x }
   定义体: fast_instance%
   Subtype.coe_injective.addSemigroup _ coe_add
 
@@ -102,7 +102,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: {M : 类型} [AddCommMonoid M] [Preorder M]
+  签名: {M : 类型} [加法交换幺半群 M] [预序 M]
   定义体: fast_instance%
   Subtype.coe_injective.addCommSemigroup _ coe_add
 
@@ -123,7 +123,7 @@ instance addLeftCancelSemigroup
 
 中文:
 实例 addLeftCancelSemigroup
-  签名: {M : 类型} [AddLeftCancelMonoid M] [Preorder M]
+  签名: {M : 类型} [加法左消去幺半群 M] [预序 M]
   定义体: fast_instance%
   Subtype.coe_injective.addLeftCancelSemigroup _ coe_add
 
@@ -144,7 +144,7 @@ instance addRightCancelSemigroup
 
 中文:
 实例 addRightCancelSemigroup
-  签名: {M : 类型} [AddRightCancelMonoid M] [Preorder M]
+  签名: {M : 类型} [加法右消去幺半群 M] [预序 M]
   定义体: fast_instance%
   Subtype.coe_injective.addRightCancelSemigroup _ coe_add
 
@@ -236,7 +236,7 @@ instance addLeftReflectLE
 
 中文:
 实例 addLeftReflectLE
-  签名: [AddLeftReflectLE M]
+  签名: [加法LeftReflectLE M]
   定义体: Subtype.coe_le_coe.mp le_of_add_le_add_left h
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, le_of_add_le_add_left
@@ -254,7 +254,7 @@ instance addRightReflectLE
 
 中文:
 实例 addRightReflectLE
-  签名: [AddRightReflectLE M]
+  签名: [加法RightReflectLE M]
   定义体: Subtype.coe_le_coe.mp le_of_add_le_add_right h
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, le_of_add_le_add_right
@@ -274,7 +274,7 @@ instance addLeftMono
 
 中文:
 实例 addLeftMono
-  签名: [AddMonoid M] [PartialOrder M] [AddLeftStrictMono M]
+  签名: [加法幺半群 M] [偏序 M] [AddLeftStrictMono M]
   定义体: ⟨@fun _ _ _ h₁ => StrictMono.monotone (fun _ _ h => add_lt_add_right h _) h₁⟩
 
 Depends on / 依赖: StrictMono, StrictMono.monotone, add_lt_add_right, monotone
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul { x : R // 0 < x }
+  签名: 乘法 { x : R // 0 < x }
   定义体: ⟨fun x y => ⟨x * y, mul_pos x.2 y.2⟩⟩
 
 @[simp]
@@ -340,7 +340,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow { x : R // 0 < x } 自然数
+  签名: 幂 { x : R // 0 < x } 自然数
   定义体: ⟨fun x n => ⟨(x : R) ^ n, pow_pos x.2 n⟩⟩
 
 @[simp]
@@ -379,7 +379,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup { x : R // 0 < x }
+  签名: 半群 { x : R // 0 < x }
   定义体: fast_instance%
   Subtype.coe_injective.semigroup Subtype.val val_mul
 
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: One { x : R // 0 < x }
+  签名: 幺 { x : R // 0 < x }
   定义体: ⟨⟨1, one_pos⟩⟩
 
 @[simp]
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid { x : R // 0 < x }
+  签名: 幺半群 { x : R // 0 < x }
   定义体: fast_instance%
   Subtype.coe_injective.monoid _ val_one val_mul val_pow
 
@@ -482,7 +482,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: fast_instance%
   Subtype.coe_injective.commMonoid (M₂ := R) (Subtype.val) val_one val_mul val_pow
 
@@ -502,7 +502,7 @@ instance isOrderedMonoid
 
 中文:
 实例 isOrderedMonoid
-  签名: [CommSemiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: [交换半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: Subtype.coe_le_coe.1 mul_le_mul_of_nonneg_right hxy c.2.le
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe, coe_le_coe, mul_le_mul_of_nonneg_right
@@ -521,7 +521,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]
+  签名: [交换半环 R] [线性序 R] [是StrictOrdered环 R]
   定义体: (mul_le_mul_iff_right₀ a.2).1
 -/
 instance isOrderedCancelMonoid [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R] :

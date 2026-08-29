@@ -413,8 +413,8 @@ theorem domRestrict
 
 中文:
 定理 domRestrict
-  条件: (h : Monotone f) (s : Set α)
-  结论: Monotone (s.domRestrict f)
+  条件: (h : 递增 f) (s : 集合 α)
+  结论: 递增 (s.domRestrict f)
   证明: fun _ _ hxy => h hxy
 
 @[deprecated (since := "2026-07-19")] alias restrict := Monotone.domRestrict
@@ -434,7 +434,7 @@ theorem codRestrict
 
 中文:
 定理 codRestrict
-  条件: (h : Monotone f) {s : Set β} (hs : 对任意 x, f x in s)
+  条件: (h : 递增 f) {s : 集合 β} (hs : 对任意 x, f x in s)
   证明: h
 -/
 protected theorem codRestrict (h : Monotone f) {s : Set β} (hs : forall x, f x in s) :
@@ -452,8 +452,8 @@ theorem rangeFactorization
 
 中文:
 定理 rangeFactorization
-  条件: (h : Monotone f)
-  结论: Monotone (Set.rangeFactorization f)
+  条件: (h : 递增 f)
+  结论: 递增 (集合.rangeFactorization f)
   证明: h
 -/
 protected theorem rangeFactorization (h : Monotone f) : Monotone (Set.rangeFactorization f) :=
@@ -483,7 +483,7 @@ alias _root_.Str
 
 中文:
 定理 strictMono_domRestrict
-  结论: StrictMono (s.domRestrict f) ↔ StrictMonoOn f s
+  结论: 严格递增 (s.domRestrict f) ↔ StrictMonoOn f s
   证明: by
   simp [Set.domRestrict, StrictMono, StrictMonoOn]
 
@@ -515,8 +515,8 @@ theorem StrictMono.codRestrict
   proof: hf
 
 中文:
-定理 StrictMono.codRestrict
-  结论: (hf : StrictMono f)
+定理 严格递增.codRestrict
+  结论: (hf : 严格递增 f)
   证明: hf
 -/
 theorem StrictMono.codRestrict (hf : StrictMono f)
@@ -579,7 +579,7 @@ lemma strictMonoOn_insert_iff_of_forall_le
   tauto
 
 中文:
-引理 strictMonoOn_insert_iff_of_forall_le
+引理 strictMonoOn_insert_iff_of_对任意_le
   条件: {a : α} (ha : 对任意 x in s, x <= a)
   证明: by
   rw [strictMonoOn_insert_iff]
@@ -612,7 +612,7 @@ lemma strictMonoOn_insert_iff_of_forall_ge
   tauto
 
 中文:
-引理 strictMonoOn_insert_iff_of_forall_ge
+引理 strictMonoOn_insert_iff_of_对任意_ge
   条件: {a : α} (ha : 对任意 x in s, a <= x)
   证明: by
   rw [strictMonoOn_insert_iff]
@@ -645,7 +645,7 @@ lemma strictAntiOn_insert_iff_of_forall_le
   tauto
 
 中文:
-引理 strictAntiOn_insert_iff_of_forall_le
+引理 strictAntiOn_insert_iff_of_对任意_le
   条件: {a : α} (ha : 对任意 x in s, x <= a)
   证明: by
   rw [strictAntiOn_insert_iff]
@@ -678,7 +678,7 @@ lemma strictAntiOn_insert_iff_of_forall_ge
   tauto
 
 中文:
-引理 strictAntiOn_insert_iff_of_forall_ge
+引理 strictAntiOn_insert_iff_of_对任意_ge
   条件: {a : α} (ha : 对任意 x in s, a <= x)
   证明: by
   rw [strictAntiOn_insert_iff]
@@ -720,7 +720,7 @@ theorem monotoneOn_of_rightInvOn_of_mapsTo
 
 中文:
 定理 monotoneOn_of_rightInvOn_of_mapsTo
-  结论: {α β : 类型} [PartialOrder α] [LinearOrder β]
+  结论: {α β : 类型} [偏序 α] [线性序 β]
   证明: by
   rintro x xs y ys l
   rcases le_total (ψ x) (ψ y) with (ψxy | ψyx)
@@ -753,7 +753,7 @@ theorem antitoneOn_of_rightInvOn_of_mapsTo
 
 中文:
 定理 antitoneOn_of_rightInvOn_of_mapsTo
-  结论: [PartialOrder α] [LinearOrder β]
+  结论: [偏序 α] [线性序 β]
   证明: (monotoneOn_of_rightInvOn_of_mapsTo hφ.dual_left φψs ψts).dual_right
 
 Depends on / 依赖: dual_left, dual_right, monotoneOn_of_rightInvOn_of_mapsTo

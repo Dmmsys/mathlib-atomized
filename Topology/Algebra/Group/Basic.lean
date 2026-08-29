@@ -59,8 +59,8 @@ refine isClosed_imp (by simp) isClosed_eq ?_ ?_
   all_goals fun_prop
 
 中文:
-引理 Set.isClosed_centralizer
-  结论: {M : 类型} (s : Set M) [Mul M] [TopologicalSpace M]
+引理 集合.isClosed_centralizer
+  结论: {M : 类型} (s : 集合 M) [乘法 M] [拓扑空间 M]
   证明: by
   rw [centralizer]; rw [ofPred_forall]
   refine isClosed_sInter ?_
@@ -102,7 +102,7 @@ definition Homeomorph.mulLeft
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.mulLeft
+定义 同胚.mulLeft
   签名: (a : G)
   定义体: { Equiv.mulLeft a with }
 
@@ -124,9 +124,9 @@ theorem Homeomorph.coe_mulLeft
 @[to_additive]
 
 中文:
-定理 Homeomorph.coe_mulLeft
+定理 同胚.coe_mulLeft
   条件: (a : G)
-  结论: ⇑(Homeomorph.mulLeft a) = (a * ·)
+  结论: ⇑(同胚.mulLeft a) = (a * ·)
   证明: rfl
 
 @[to_additive]
@@ -149,9 +149,9 @@ theorem Homeomorph.mulLeft_symm
 @[to_additive]
 
 中文:
-定理 Homeomorph.mulLeft_symm
+定理 同胚.mulLeft_symm
   条件: (a : G)
-  结论: (Homeomorph.mulLeft a).symm = Homeomorph.mulLeft a⁻¹
+  结论: (同胚.mulLeft a).symm = 同胚.mulLeft a⁻¹
   证明: by
   ext
   rfl
@@ -177,7 +177,7 @@ lemma isOpenMap_mul_left
 中文:
 引理 isOpenMap_mul_left
   条件: (a : G)
-  结论: IsOpenMap (a * ·)
+  结论: 是开映射 (a * ·)
   证明: (Homeomorph.mulLeft a).isOpenMap
 
 @[to_additive IsOpen.left_addCoset]
@@ -199,9 +199,9 @@ theorem IsOpen.leftCoset
 @[to_additive]
 
 中文:
-定理 IsOpen.leftCoset
-  条件: {U : Set G} (h : IsOpen U) (x : G)
-  结论: IsOpen (x • U)
+定理 是开集.leftCoset
+  条件: {U : 集合 G} (h : 是开集 U) (x : G)
+  结论: 是开集 (x • U)
   证明: isOpenMap_mul_left x _ h
 
 @[to_additive]
@@ -226,7 +226,7 @@ lemma isClosedMap_mul_left
 中文:
 引理 isClosedMap_mul_left
   条件: (a : G)
-  结论: IsClosedMap (a * ·)
+  结论: 是闭映射 (a * ·)
   证明: (Homeomorph.mulLeft a).isClosedMap
 
 @[to_additive IsClosed.left_addCoset]
@@ -248,9 +248,9 @@ theorem IsClosed.leftCoset
 @[to_additive (attr := simp)]
 
 中文:
-定理 IsClosed.leftCoset
-  条件: {U : Set G} (h : IsClosed U) (x : G)
-  结论: IsClosed (x • U)
+定理 是闭集.leftCoset
+  条件: {U : 集合 G} (h : 是闭集 U) (x : G)
+  结论: 是闭集 (x • U)
   证明: isClosedMap_mul_left x _ h
 
 @[to_additive (attr := simp)]
@@ -272,7 +272,7 @@ theorem Filter.map_mul_left_nhdsNE
   simp
 
 中文:
-定理 Filter.map_mul_left_nhdsNE
+定理 滤子.map_mul_left_nhdsNE
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.mulLeft c).isEmbedding.map_nhdsWithin_eq .. using 2
@@ -298,7 +298,7 @@ definition Homeomorph.mulRight
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.mulRight
+定义 同胚.mulRight
   签名: (a : G)
   定义体: { Equiv.mulRight a with }
 
@@ -320,9 +320,9 @@ lemma Homeomorph.coe_mulRight
 @[to_additive]
 
 中文:
-引理 Homeomorph.coe_mulRight
+引理 同胚.coe_mulRight
   条件: (a : G)
-  结论: ⇑(Homeomorph.mulRight a) = (· * a)
+  结论: ⇑(同胚.mulRight a) = (· * a)
   证明: rfl
 
 @[to_additive]
@@ -343,7 +343,7 @@ theorem Homeomorph.mulRight_symm
 @[to_additive]
 
 中文:
-定理 Homeomorph.mulRight_symm
+定理 同胚.mulRight_symm
   条件: (a : G)
   证明: by
   ext
@@ -371,7 +371,7 @@ theorem isOpenMap_mul_right
 中文:
 定理 isOpenMap_mul_right
   条件: (a : G)
-  结论: IsOpenMap (· * a)
+  结论: 是开映射 (· * a)
   证明: (Homeomorph.mulRight a).isOpenMap
 
 @[to_additive IsOpen.right_addCoset]
@@ -394,9 +394,9 @@ theorem IsOpen.rightCoset
 @[to_additive]
 
 中文:
-定理 IsOpen.rightCoset
-  条件: {U : Set G} (h : IsOpen U) (x : G)
-  结论: IsOpen (op x • U)
+定理 是开集.rightCoset
+  条件: {U : 集合 G} (h : 是开集 U) (x : G)
+  结论: 是开集 (op x • U)
   证明: isOpenMap_mul_right x _ h
 
 @[to_additive]
@@ -421,7 +421,7 @@ theorem isClosedMap_mul_right
 中文:
 定理 isClosedMap_mul_right
   条件: (a : G)
-  结论: IsClosedMap (· * a)
+  结论: 是闭映射 (· * a)
   证明: (Homeomorph.mulRight a).isClosedMap
 
 @[to_additive IsClosed.right_addCoset]
@@ -444,9 +444,9 @@ theorem IsClosed.rightCoset
 @[to_additive (attr := simp)]
 
 中文:
-定理 IsClosed.rightCoset
-  条件: {U : Set G} (h : IsClosed U) (x : G)
-  结论: IsClosed (op x • U)
+定理 是闭集.rightCoset
+  条件: {U : 集合 G} (h : 是闭集 U) (x : G)
+  结论: 是闭集 (op x • U)
   证明: isClosedMap_mul_right x _ h
 
 @[to_additive (attr := simp)]
@@ -470,7 +470,7 @@ theorem Filter.map_mul_right_nhdsNE
 @[to_additive]
 
 中文:
-定理 Filter.map_mul_right_nhdsNE
+定理 滤子.map_mul_right_nhdsNE
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.mulRight c).isEmbedding.map_nhdsWithin_eq .. using 2
@@ -498,7 +498,7 @@ theorem discreteTopology_iff_isOpen_singleton_one
 
 中文:
 定理 discreteTopology_iff_isOpen_singleton_one
-  结论: DiscreteTopology G ↔ IsOpen ({1} : Set G)
+  结论: 离散拓扑 G ↔ 是开集 ({1} : 集合 G)
   证明: MulAction.IsPretransitive.discreteTopology_iff G 1
 
 @[to_additive]
@@ -521,7 +521,7 @@ theorem discreteTopology_of_isOpen_singleton_one
 
 中文:
 定理 discreteTopology_of_isOpen_singleton_one
-  条件: (h : IsOpen ({1} : Set G))
+  条件: (h : 是开集 ({1} : 集合 G))
   证明: discreteTopology_iff_isOpen_singleton_one.mpr h
 
 @[to_additive]
@@ -599,8 +599,8 @@ lemma Filter.tendsto_mul_const_iff
 @[to_additive]
 
 中文:
-引理 Filter.tendsto_mul_const_iff
-  条件: (b : G) {c : G} {f : α -> G} {l : Filter α}
+引理 滤子.tendsto_mul_const_iff
+  条件: (b : G) {c : G} {f : α -> G} {l : 滤子 α}
   证明: by
   refine ⟨?_, Tendsto.mul_const b⟩
   convert! Tendsto.mul_const b⁻¹ using 3 <;> rw [mul_inv_cancel_right]
@@ -626,8 +626,8 @@ lemma Filter.tendsto_const_mul_iff
   convert! Tendsto.const_mul b⁻¹ using 3 <;> rw [inv_mul_cancel_left]
 
 中文:
-引理 Filter.tendsto_const_mul_iff
-  条件: (b : G) {c : G} {f : α -> G} {l : Filter α}
+引理 滤子.tendsto_const_mul_iff
+  条件: (b : G) {c : G} {f : α -> G} {l : 滤子 α}
   证明: by
   refine ⟨?_, Tendsto.const_mul b⟩
   convert! Tendsto.const_mul b⁻¹ using 3 <;> rw [inv_mul_cancel_left]
@@ -665,8 +665,8 @@ theorem ContinuousInv.induced
 @[to_additive]
 
 中文:
-定理 ContinuousInv.induced
-  结论: {α : 类型} {β : 类型} {F : 类型} [FunLike F α β] [Group α]
+定理 连续取逆.induced
+  结论: {α : 类型} {β : 类型} {F : 类型} [函数状 F α β] [群 α]
   证明: by
   let _tα := tβ.induced f
   refine ⟨continuous_induced_rng.2 ?_⟩
@@ -721,9 +721,9 @@ theorem Inseparable.inv
 @[to_additive]
 
 中文:
-定理 Inseparable.inv
-  条件: {x y : G} (h : Inseparable x y)
-  结论: Inseparable (x⁻¹) (y⁻¹)
+定理 不可分.inv
+  条件: {x y : G} (h : 不可分 x y)
+  结论: 不可分 (x⁻¹) (y⁻¹)
   证明: h.map continuous_inv
 
 @[to_additive]
@@ -741,7 +741,7 @@ theorem Specializes.zpow
 
 中文:
 定理 Specializes.zpow
-  结论: {G : 类型} [DivInvMonoid G] [TopologicalSpace G]
+  结论: {G : 类型} [除逆幺半群 G] [拓扑空间 G]
 -/
 protected theorem Specializes.zpow {G : Type*} [DivInvMonoid G] [TopologicalSpace G]
     [ContinuousMul G] [ContinuousInv G] {x y : G} (h : x ⤳ y) : forall m : Int, (x ^ m) ⤳ (y ^ m)
@@ -760,8 +760,8 @@ theorem Inseparable.zpow
 @[to_additive]
 
 中文:
-定理 Inseparable.zpow
-  结论: {G : 类型} [DivInvMonoid G] [TopologicalSpace G]
+定理 不可分.zpow
+  结论: {G : 类型} [除逆幺半群 G] [拓扑空间 G]
   证明: (h.specializes.zpow m).antisymm (h.specializes'.zpow m)
 
 @[to_additive]
@@ -784,7 +784,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousInv (ULift G)
+  签名: 连续取逆 (类型层提升 G)
   定义体: ⟨continuous_uliftUp.comp (continuous_inv.comp continuous_uliftDown)⟩
 
 @[to_additive]
@@ -808,8 +808,8 @@ theorem continuousOn_inv
 
 中文:
 定理 continuousOn_inv
-  条件: {s : Set G}
-  结论: ContinuousOn Inv.inv s
+  条件: {s : 集合 G}
+  结论: ContinuousOn 取逆.inv s
   证明: continuous_inv.continuousOn
 
 @[to_additive]
@@ -833,8 +833,8 @@ theorem continuousWithinAt_inv
 
 中文:
 定理 continuousWithinAt_inv
-  条件: {s : Set G} {x : G}
-  结论: ContinuousWithinAt Inv.inv s x
+  条件: {s : 集合 G} {x : G}
+  结论: ContinuousWithinAt 取逆.inv s x
   证明: continuous_inv.continuousWithinAt
 
 @[to_additive]
@@ -859,7 +859,7 @@ theorem continuousAt_inv
 中文:
 定理 continuousAt_inv
   条件: {x : G}
-  结论: ContinuousAt Inv.inv x
+  结论: ContinuousAt 取逆.inv x
   证明: continuous_inv.continuousAt
 
 @[to_additive]
@@ -882,7 +882,7 @@ theorem tendsto_inv
 中文:
 定理 tendsto_inv
   条件: (a : G)
-  结论: Tendsto Inv.inv (𝓝 a) (𝓝 a⁻¹)
+  结论: 收敛 取逆.inv (𝓝 a) (𝓝 a⁻¹)
   证明: continuousAt_inv
 
 Depends on / 依赖: continuousAt_inv
@@ -905,7 +905,7 @@ instance OrderDual.instContinuousInv
 
 中文:
 实例 OrderDual.instContinuousInv
-  签名: : ContinuousInv Gᵒᵈ
+  签名: : 连续取逆 Gᵒᵈ
   定义体: ‹ContinuousInv G›
 
 @[to_additive]
@@ -924,8 +924,8 @@ instance Prod.continuousInv
   body: ⟨continuous_inv.fst'.prodMk continuous_inv.snd'⟩
 
 中文:
-实例 Prod.continuousInv
-  签名: [TopologicalSpace H] [Inv H] [ContinuousInv H]
+实例 积类型.continuousInv
+  签名: [拓扑空间 H] [取逆 H] [连续取逆 H]
   定义体: ⟨continuous_inv.fst'.prodMk continuous_inv.snd'⟩
 
 Depends on / 依赖: continuous_inv, continuous_inv.fst, continuous_inv.snd, prodMk
@@ -946,8 +946,8 @@ instance Pi.continuousInv
   body: continuous_pi fun i => (continuous_apply i).inv
 
 中文:
-实例 Pi.continuousInv
-  签名: {C : ι -> 类型} [对任意 i, TopologicalSpace (C i)] [对任意 i, Inv (C i)]
+实例 依赖函数类型.continuousInv
+  签名: {C : ι -> 类型} [对任意 i, 拓扑空间 (C i)] [对任意 i, 取逆 (C i)]
   定义体: continuous_pi fun i => (continuous_apply i).inv
 
 Depends on / 依赖: continuous_apply, continuous_pi
@@ -972,8 +972,8 @@ instance Pi.has_continuous_inv'
 @[to_additive]
 
 中文:
-实例 Pi.has_continuous_inv'
-  签名: : ContinuousInv (ι -> G)
+实例 依赖函数类型.has_continuous_inv'
+  签名: : 连续取逆 (ι -> G)
   定义体: Pi.continuousInv
 
 @[to_additive]
@@ -1034,7 +1034,7 @@ alias isClosed_setOf_map_neg := isClosed_
 
 中文:
 定理 isClosed_setOfPred_map_inv
-  条件: [Inv G₁] [Inv G₂] [ContinuousInv G₂]
+  条件: [取逆 G₁] [取逆 G₂] [连续取逆 G₂]
   证明: by
   simp only [ofPred_forall]
   exact isClosed_iInter fun i => isClosed_eq (continuous_apply _) (continuous_apply _).inv
@@ -1069,8 +1069,8 @@ instance [TopologicalSpace
   body: @continuous_inv H _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: H] [Inv H] [ContinuousInv H] : ContinuousNeg (Additive H) where
+实例 [拓扑空间
+  签名: H] [取逆 H] [连续取逆 H] : 连续取负 (加性 H) where
   定义体: @continuous_inv H _ _ _
 
 Depends on / 依赖: continuous_inv
@@ -1087,8 +1087,8 @@ instance [TopologicalSpace
   body: @continuous_neg H _ _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: H] [Neg H] [ContinuousNeg H] : ContinuousInv (Multiplicative H) where
+实例 [拓扑空间
+  签名: H] [取负 H] [连续取负 H] : 连续取逆 (Multiplicative H) where
   定义体: @continuous_neg H _ _ _
 
 Depends on / 依赖: continuous_neg
@@ -1115,7 +1115,7 @@ theorem tendsto_inv_iff
 
 中文:
 定理 tendsto_inv_iff
-  条件: {l : Filter α} {m : α -> G} {a : G}
+  条件: {l : 滤子 α} {m : α -> G} {a : G}
   证明: ⟨fun h => by simpa only [inv_inv] using h.inv, Tendsto.inv⟩
 
 @[to_additive]
@@ -1139,9 +1139,9 @@ theorem IsCompact.inv
   exact hs.image continuous_inv
 
 中文:
-定理 IsCompact.inv
-  条件: (hs : IsCompact s)
-  结论: IsCompact s⁻¹
+定理 是紧集.inv
+  条件: (hs : 是紧集 s)
+  结论: 是紧集 s⁻¹
   证明: by
   rw [← image_inv_eq_inv]
   exact hs.image continuous_inv
@@ -1167,8 +1167,8 @@ definition Homeomorph.inv
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.inv
-  签名: (G : 类型) [TopologicalSpace G] [InvolutiveInv G]
+定义 同胚.inv
+  签名: (G : 类型) [拓扑空间 G] [InvolutiveInv G]
   定义体: { Equiv.inv G with }
 
 @[to_additive (attr := simp)]
@@ -1189,8 +1189,8 @@ lemma Homeomorph.symm_inv
 @[to_additive (attr := simp)]
 
 中文:
-引理 Homeomorph.symm_inv
-  条件: {G : 类型} [TopologicalSpace G] [InvolutiveInv G] [ContinuousInv G]
+引理 同胚.symm_inv
+  条件: {G : 类型} [拓扑空间 G] [InvolutiveInv G] [连续取逆 G]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1210,8 +1210,8 @@ lemma Homeomorph.coe_inv
 @[to_additive]
 
 中文:
-引理 Homeomorph.coe_inv
-  条件: {G : 类型} [TopologicalSpace G] [InvolutiveInv G] [ContinuousInv G]
+引理 同胚.coe_inv
+  条件: {G : 类型} [拓扑空间 G] [InvolutiveInv G] [连续取逆 G]
   证明: rfl
 
 @[to_additive]
@@ -1257,7 +1257,7 @@ theorem isOpenMap_inv
 
 中文:
 定理 isOpenMap_inv
-  结论: IsOpenMap (Inv.inv : G -> G)
+  结论: 是开映射 (取逆.inv : G -> G)
   证明: (Homeomorph.inv _).isOpenMap
 
 @[to_additive]
@@ -1278,7 +1278,7 @@ theorem isClosedMap_inv
 
 中文:
 定理 isClosedMap_inv
-  结论: IsClosedMap (Inv.inv : G -> G)
+  结论: 是闭映射 (取逆.inv : G -> G)
   证明: (Homeomorph.inv _).isClosedMap
 
 Depends on / 依赖: Homeomorph, Homeomorph.inv, isClosedMap
@@ -1301,9 +1301,9 @@ theorem IsOpen.inv
 @[to_additive]
 
 中文:
-定理 IsOpen.inv
-  条件: (hs : IsOpen s)
-  结论: IsOpen s⁻¹
+定理 是开集.inv
+  条件: (hs : 是开集 s)
+  结论: 是开集 s⁻¹
   证明: hs.preimage continuous_inv
 
 @[to_additive]
@@ -1326,9 +1326,9 @@ theorem IsClosed.inv
 @[to_additive]
 
 中文:
-定理 IsClosed.inv
-  条件: (hs : IsClosed s)
-  结论: IsClosed s⁻¹
+定理 是闭集.inv
+  条件: (hs : 是闭集 s)
+  结论: 是闭集 s⁻¹
   证明: hs.preimage continuous_inv
 
 @[to_additive]
@@ -1349,7 +1349,7 @@ theorem inv_closure
 
 中文:
 定理 inv_closure
-  结论: 对任意 s : Set G, (closure s)⁻¹ = closure s⁻¹
+  结论: 对任意 s : 集合 G, (closure s)⁻¹ = closure s⁻¹
   证明: (Homeomorph.inv G).preimage_closure
 
 Depends on / 依赖: Homeomorph, Homeomorph.inv, preimage_closure
@@ -1372,7 +1372,7 @@ lemma continuous_inv_iff
 
 中文:
 引理 continuous_inv_iff
-  结论: Continuous f⁻¹ ↔ Continuous f
+  结论: 连续 f⁻¹ ↔ 连续 f
   证明: (Homeomorph.inv G).comp_continuous_iff
 
 @[to_additive (attr := simp)]
@@ -1452,7 +1452,7 @@ theorem Filter.inv_nhdsNE
   simp
 
 中文:
-定理 Filter.inv_nhdsNE
+定理 滤子.inv_nhdsNE
   条件: {a : G}
   结论: (𝓝[!=] a)⁻¹ = 𝓝[!=] (a⁻¹)
   证明: by
@@ -1487,7 +1487,7 @@ theorem continuousInv_sInf
 
 中文:
 定理 continuousInv_sInf
-  结论: {ts : Set (TopologicalSpace G)}
+  结论: {ts : 集合 (拓扑空间 G)}
   证明: letI := sInf ts
   { continuous_inv :=
       continuous_sInf_rng.2 fun t ht =>
@@ -1519,7 +1519,7 @@ theorem continuousInv_iInf
 
 中文:
 定理 continuousInv_iInf
-  结论: {ts' : ι' -> TopologicalSpace G}
+  结论: {ts' : ι' -> 拓扑空间 G}
   证明: by
   rw [← sInf_range]
   exact continuousInv_sInf (Set.forall_mem_range.mpr h')
@@ -1547,7 +1547,7 @@ theorem continuousInv_inf
 
 中文:
 定理 continuousInv_inf
-  结论: {t₁ t₂ : TopologicalSpace G} (h₁ : @ContinuousInv G t₁ _)
+  结论: {t₁ t₂ : 拓扑空间 G} (h₁ : @连续取逆 G t₁ _)
   证明: by
   rw [inf_eq_iInf]
   refine continuousInv_iInf fun b => ?_
@@ -1573,8 +1573,8 @@ theorem Topology.IsInducing.continuousInv
   proof: ⟨hf.continuous_iff.2 by simpa only [Function.comp_def, hf_inv] using hf.continuous.fun_inv⟩
 
 中文:
-定理 Topology.IsInducing.continuousInv
-  结论: {G H : 类型} [Inv G] [Inv H] [TopologicalSpace G]
+定理 拓扑.是Inducing.continuousInv
+  结论: {G H : 类型} [取逆 G] [取逆 H] [拓扑空间 G]
   证明: ⟨hf.continuous_iff.2 by simpa only [Function.comp_def, hf_inv] using hf.continuous.fun_inv⟩
 
 Depends on / 依赖: Function, Function.comp_def, comp_def, continuous, continuous_iff, fun_inv, hf.continuous.fun_inv, hf.continuous_iff, hf_inv
@@ -1606,7 +1606,7 @@ instance ConjAct.units_continuousConstSMul
 
 中文:
 实例 ConjAct.units_continuousConstSMul
-  签名: {M} [Monoid M] [TopologicalSpace M]
+  签名: {M} [幺半群 M] [拓扑空间 M]
   定义体: ⟨fun _ => (continuous_const.mul continuous_id).mul continuous_const⟩
 
 Depends on / 依赖: continuous_const, continuous_const.mul, continuous_id
@@ -1630,8 +1630,8 @@ instance [Group
     simp
 
 中文:
-实例 [Group
-  签名: G] [Group H] [TopologicalSpace G] [MulDistribMulAction H G]
+实例 [群
+  签名: G] [群 H] [拓扑空间 G] [MulDistribMul作用 H G]
   定义体: by
   simp only [← SetLike.coe_sort_coe, ← isDiscrete_iff_discreteTopology] at *
   refine IsDiscrete.image_of_isOpenMap ‹_› ?_ fun x y => by simp
@@ -1662,8 +1662,8 @@ theorem IsTopologicalGroup.continuous_conj_prod
   proof: continuous_mul.mul (continuous_inv.comp continuous_fst)
 
 中文:
-定理 IsTopologicalGroup.continuous_conj_prod
-  条件: [ContinuousMul G] [ContinuousInv G]
+定理 是拓扑群.continuous_conj_prod
+  条件: [连续乘法 G] [连续取逆 G]
   证明: continuous_mul.mul (continuous_inv.comp continuous_fst)
 
 Depends on / 依赖: continuous_fst, continuous_inv, continuous_inv.comp, continuous_mul, continuous_mul.mul
@@ -1684,7 +1684,7 @@ theorem IsTopologicalGroup.continuous_conj
   proof: (continuous_mul_const g⁻¹).comp (continuous_const_mul g)
 
 中文:
-定理 IsTopologicalGroup.continuous_conj
+定理 是拓扑群.continuous_conj
   条件: [SeparatelyContinuousMul G] (g : G)
   证明: (continuous_mul_const g⁻¹).comp (continuous_const_mul g)
 
@@ -1712,8 +1712,8 @@ theorem IsTopologicalGroup.continuous_conj'
   proof: (continuous_mul_const h).mul continuous_inv
 
 中文:
-定理 IsTopologicalGroup.continuous_conj'
-  条件: [ContinuousMul G] [ContinuousInv G] (h : G)
+定理 是拓扑群.continuous_conj'
+  条件: [连续乘法 G] [连续取逆 G] (h : G)
   证明: (continuous_mul_const h).mul continuous_inv
 
 Depends on / 依赖: DFunLike, DFunLike.ext, continuous_inv, continuous_mul_const, subtype_mk
@@ -1736,7 +1736,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalGroup (ULift G)
+  签名: 是拓扑群 (类型层提升 G)
 
 Depends on / 依赖: RegularSpace, UniformSpace, UniformSpace.to_regularSpace, to_regularSpace
 -/
@@ -1754,7 +1754,7 @@ theorem continuous_zpow
 
 中文:
 定理 continuous_zpow
-  结论: 对任意 z : 整数, Continuous fun a : G => a ^ z
+  结论: 对任意 z : 整数, 连续 fun a : G => a ^ z
 -/
 theorem continuous_zpow : forall z : Int, Continuous fun a : G => a ^ z
   | Int.ofNat n => by simpa using continuous_pow n
@@ -1769,8 +1769,8 @@ instance AddGroup.continuousConstSMul_int
   body: ⟨continuous_zsmul⟩
 
 中文:
-实例 AddGroup.continuousConstSMul_int
-  签名: {A} [AddGroup A] [TopologicalSpace A]
+实例 加法群.continuousConstSMul_int
+  签名: {A} [加法群 A] [拓扑空间 A]
   定义体: ⟨continuous_zsmul⟩
 
 Depends on / 依赖: UniformSpace, UniformSpace.completelyNormalSpace_of_isCountablyGenerated_uniformity, completelyNormalSpace_of_isCountablyGenerated_uniformity, continuous_zsmul
@@ -1790,8 +1790,8 @@ instance AddGroup.continuousSMul_int
 @[to_fun (attr := to_additive (attr := continuity, fun_prop))]
 
 中文:
-实例 AddGroup.continuousSMul_int
-  签名: {A} [AddGroup A] [TopologicalSpace A]
+实例 加法群.continuousSMul_int
+  签名: {A} [加法群 A] [拓扑空间 A]
   定义体: ⟨continuous_prod_of_discrete_left.mpr continuous_zsmul⟩
 
 @[to_fun (attr := to_additive (attr := continuity, fun_prop))]
@@ -1815,9 +1815,9 @@ theorem Continuous.zpow
 @[to_additive]
 
 中文:
-定理 Continuous.zpow
-  条件: {f : α -> G} (h : Continuous f) (z : 整数)
-  结论: Continuous (f ^ z)
+定理 连续.zpow
+  条件: {f : α -> G} (h : 连续 f) (z : 整数)
+  结论: 连续 (f ^ z)
   证明: (continuous_zpow z).comp h
 
 @[to_additive]
@@ -1841,7 +1841,7 @@ theorem continuousOn_zpow
 
 中文:
 定理 continuousOn_zpow
-  条件: {s : Set G} (z : 整数)
+  条件: {s : 集合 G} (z : 整数)
   结论: ContinuousOn (fun x => x ^ z) s
   证明: (continuous_zpow z).continuousOn
 
@@ -1889,8 +1889,8 @@ theorem Filter.Tendsto.zpow
 @[to_fun (attr := to_additive (attr := fun_prop))]
 
 中文:
-定理 Filter.Tendsto.zpow
-  结论: {α} {l : Filter α} {f : α -> G} {x : G} (hf : Tendsto f l (𝓝 x))
+定理 滤子.收敛.zpow
+  结论: {α} {l : 滤子 α} {f : α -> G} {x : G} (hf : 收敛 f l (𝓝 x))
   证明: (continuousAt_zpow _ _).tendsto.comp hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1914,7 +1914,7 @@ theorem ContinuousWithinAt.zpow
 
 中文:
 定理 ContinuousWithinAt.zpow
-  结论: {f : α -> G} {x : α} {s : Set α} (hf : ContinuousWithinAt f s x)
+  结论: {f : α -> G} {x : α} {s : 集合 α} (hf : ContinuousWithinAt f s x)
   证明: Filter.Tendsto.zpow hf z
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1960,7 +1960,7 @@ theorem ContinuousOn.zpow
 
 中文:
 定理 ContinuousOn.zpow
-  条件: {f : α -> G} {s : Set α} (hf : ContinuousOn f s) (z : 整数)
+  条件: {f : α -> G} {s : 集合 α} (hf : ContinuousOn f s) (z : 整数)
   证明: fun x hx => (hf x hx).zpow z
 -/
 theorem ContinuousOn.zpow {f : α -> G} {s : Set α} (hf : ContinuousOn f s) (z : Int) :
@@ -1991,7 +1991,7 @@ theorem Filter.map_mul_left_nhdsGT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_mul_left_nhdsGT
+定理 滤子.map_mul_left_nhdsGT
   条件: {c a : H}
   结论: map (c * ·) (𝓝[>] a) = 𝓝[>] (c * a)
   证明: by
@@ -2021,7 +2021,7 @@ theorem Filter.map_mul_left_nhdsLT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_mul_left_nhdsLT
+定理 滤子.map_mul_left_nhdsLT
   条件: {c a : H}
   结论: map (c * ·) (𝓝[<] a) = 𝓝[<] (c * a)
   证明: by
@@ -2051,7 +2051,7 @@ theorem Filter.map_mul_right_nhdsGT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_mul_right_nhdsGT
+定理 滤子.map_mul_right_nhdsGT
   条件: {c a : H}
   结论: map (· * c) (𝓝[>] a) = 𝓝[>] (a * c)
   证明: by
@@ -2079,7 +2079,7 @@ theorem Filter.map_mul_right_nhdsLT
   simp
 
 中文:
-定理 Filter.map_mul_right_nhdsLT
+定理 滤子.map_mul_right_nhdsLT
   条件: {c a : H}
   结论: map (· * c) (𝓝[<] a) = 𝓝[<] (a * c)
   证明: by
@@ -2113,7 +2113,7 @@ theorem Filter.inv_nhdsGT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.inv_nhdsGT
+定理 滤子.inv_nhdsGT
   条件: {a : H}
   结论: (𝓝[>] a)⁻¹ = 𝓝[<] (a⁻¹)
   证明: by
@@ -2143,7 +2143,7 @@ theorem Filter.inv_nhdsLT
 @[to_additive]
 
 中文:
-定理 Filter.inv_nhdsLT
+定理 滤子.inv_nhdsLT
   条件: {a : H}
   结论: (𝓝[<] a)⁻¹ = 𝓝[>] (a⁻¹)
   证明: by
@@ -2173,7 +2173,7 @@ theorem tendsto_inv_nhdsGT
 中文:
 定理 tendsto_inv_nhdsGT
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[>] a) (𝓝[<] a⁻¹)
+  结论: 收敛 取逆.inv (𝓝[>] a) (𝓝[<] a⁻¹)
   证明: (continuous_inv.tendsto a).inf by simp
 
 @[to_additive]
@@ -2198,7 +2198,7 @@ theorem tendsto_inv_nhdsLT
 中文:
 定理 tendsto_inv_nhdsLT
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[<] a) (𝓝[>] a⁻¹)
+  结论: 收敛 取逆.inv (𝓝[<] a) (𝓝[>] a⁻¹)
   证明: (continuous_inv.tendsto a).inf by simp
 
 @[to_additive]
@@ -2224,7 +2224,7 @@ theorem tendsto_inv_nhdsGT_inv
 中文:
 定理 tendsto_inv_nhdsGT_inv
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[>] a⁻¹) (𝓝[<] a)
+  结论: 收敛 取逆.inv (𝓝[>] a⁻¹) (𝓝[<] a)
   证明: by
   simpa only [inv_inv] using tendsto_inv_nhdsGT (a := a⁻¹)
 
@@ -2251,7 +2251,7 @@ theorem tendsto_inv_nhdsLT_inv
 中文:
 定理 tendsto_inv_nhdsLT_inv
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[<] a⁻¹) (𝓝[>] a)
+  结论: 收敛 取逆.inv (𝓝[<] a⁻¹) (𝓝[>] a)
   证明: by
   simpa only [inv_inv] using tendsto_inv_nhdsLT (a := a⁻¹)
 
@@ -2277,7 +2277,7 @@ theorem tendsto_inv_nhdsGE
 中文:
 定理 tendsto_inv_nhdsGE
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[>=] a) (𝓝[<=] a⁻¹)
+  结论: 收敛 取逆.inv (𝓝[>=] a) (𝓝[<=] a⁻¹)
   证明: (continuous_inv.tendsto a).inf by simp
 
 @[to_additive]
@@ -2302,7 +2302,7 @@ theorem tendsto_inv_nhdsLE
 中文:
 定理 tendsto_inv_nhdsLE
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[<=] a) (𝓝[>=] a⁻¹)
+  结论: 收敛 取逆.inv (𝓝[<=] a) (𝓝[>=] a⁻¹)
   证明: (continuous_inv.tendsto a).inf by simp
 
 @[to_additive]
@@ -2328,7 +2328,7 @@ theorem tendsto_inv_nhdsGE_inv
 中文:
 定理 tendsto_inv_nhdsGE_inv
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[>=] a⁻¹) (𝓝[<=] a)
+  结论: 收敛 取逆.inv (𝓝[>=] a⁻¹) (𝓝[<=] a)
   证明: by
   simpa only [inv_inv] using tendsto_inv_nhdsGE (a := a⁻¹)
 
@@ -2355,7 +2355,7 @@ alias tendsto_inv_nhdsWithin_Iic_inv := tendsto_inv_nhdsLE_inv
 中文:
 定理 tendsto_inv_nhdsLE_inv
   条件: {a : H}
-  结论: Tendsto Inv.inv (𝓝[<=] a⁻¹) (𝓝[>=] a)
+  结论: 收敛 取逆.inv (𝓝[<=] a⁻¹) (𝓝[>=] a)
   证明: by
   simpa only [inv_inv] using tendsto_inv_nhdsLE (a := a⁻¹)
 
@@ -2384,8 +2384,8 @@ instance Prod.instIsTopologicalGroup
 @[to_additive]
 
 中文:
-实例 Prod.instIsTopologicalGroup
-  签名: [TopologicalSpace H] [Group H] [IsTopologicalGroup H]
+实例 积类型.instIsTopologicalGroup
+  签名: [拓扑空间 H] [群 H] [是拓扑群 H]
   定义体: continuous_inv.prodMap continuous_inv
 
 @[to_additive]
@@ -2406,7 +2406,7 @@ instance OrderDual.instIsTopologicalGroup
 
 中文:
 实例 OrderDual.instIsTopologicalGroup
-  签名: : IsTopologicalGroup Gᵒᵈ where
+  签名: : 是拓扑群 Gᵒᵈ where
 -/
 instance OrderDual.instIsTopologicalGroup : IsTopologicalGroup Gᵒᵈ where
 
@@ -2420,8 +2420,8 @@ instance Pi.topologicalGroup
   body: continuous_pi fun i => (continuous_apply i).inv
 
 中文:
-实例 Pi.topologicalGroup
-  签名: {C : β -> 类型} [对任意 b, TopologicalSpace (C b)] [对任意 b, Group (C b)]
+实例 依赖函数类型.topologicalGroup
+  签名: {C : β -> 类型} [对任意 b, 拓扑空间 (C b)] [对任意 b, 群 (C b)]
   定义体: continuous_pi fun i => (continuous_apply i).inv
 
 Depends on / 依赖: continuous_apply, continuous_pi, dif_pos, lift_mk
@@ -2442,8 +2442,8 @@ instance [Inv
   body: opHomeomorph.symm.isInducing.continuousInv unop_inv
 
 中文:
-实例 [Inv
-  签名: α] [ContinuousInv α] : ContinuousInv αᵐᵒᵖ
+实例 [取逆
+  签名: α] [连续取逆 α] : 连续取逆 αᵐᵒᵖ
   定义体: opHomeomorph.symm.isInducing.continuousInv unop_inv
 
 Depends on / 依赖: continuousInv, isInducing, opHomeomorph, opHomeomorph.symm.isInducing.continuousInv, unop_inv
@@ -2461,8 +2461,8 @@ instance [Group
   signature: α] [IsTopologicalGroup α] : IsTopologicalGroup αᵐᵒᵖ where
 
 中文:
-实例 [Group
-  签名: α] [IsTopologicalGroup α] : IsTopologicalGroup αᵐᵒᵖ where
+实例 [群
+  签名: α] [是拓扑群 α] : 是拓扑群 αᵐᵒᵖ where
 -/
 instance [Group α] [IsTopologicalGroup α] : IsTopologicalGroup αᵐᵒᵖ where
 
@@ -2481,7 +2481,7 @@ theorem nhds_one_symm
 
 中文:
 定理 nhds_one_symm
-  结论: comap Inv.inv (𝓝 (1 : G)) = 𝓝 (1 : G)
+  结论: comap 取逆.inv (𝓝 (1 : G)) = 𝓝 (1 : G)
   证明: ((Homeomorph.inv G).comap_nhds_eq _).trans (congr_arg 𝓝 inv_one)
 
 @[to_additive]
@@ -2504,7 +2504,7 @@ theorem nhds_one_symm'
 
 中文:
 定理 nhds_one_symm'
-  结论: map Inv.inv (𝓝 (1 : G)) = 𝓝 (1 : G)
+  结论: map 取逆.inv (𝓝 (1 : G)) = 𝓝 (1 : G)
   证明: ((Homeomorph.inv G).map_nhds_eq _).trans (congr_arg 𝓝 inv_one)
 
 @[to_additive]
@@ -2527,7 +2527,7 @@ theorem inv_mem_nhds_one
 
 中文:
 定理 inv_mem_nhds_one
-  条件: {S : Set G} (hS : S in (𝓝 1 : Filter G))
+  条件: {S : 集合 G} (hS : S in (𝓝 1 : 滤子 G))
   结论: S⁻¹ in 𝓝 (1 : G)
   证明: by
   rwa [← nhds_one_symm'] at hS
@@ -2551,7 +2551,7 @@ definition Homeomorph.shearMulRight
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.shearMulRight
+定义 同胚.shearMulRight
   签名: : G × G ≃ₜ G × G
   定义体: { Equiv.prodShear (Equiv.refl _) Equiv.mulLeft with }
 
@@ -2571,7 +2571,7 @@ theorem Homeomorph.shearMulRight_coe
 @[to_additive (attr := simp)]
 
 中文:
-定理 Homeomorph.shearMulRight_coe
+定理 同胚.shearMulRight_coe
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2589,7 +2589,7 @@ theorem Homeomorph.shearMulRight_symm_coe
   proof: rfl
 
 中文:
-定理 Homeomorph.shearMulRight_symm_coe
+定理 同胚.shearMulRight_symm_coe
   证明: rfl
 -/
 theorem Homeomorph.shearMulRight_symm_coe :
@@ -2611,8 +2611,8 @@ theorem Topology.IsInducing.topologicalGroup
 @[to_additive]
 
 中文:
-定理 Topology.IsInducing.topologicalGroup
-  结论: {F : 类型} [Group H] [TopologicalSpace H]
+定理 拓扑.是Inducing.topologicalGroup
+  结论: {F : 类型} [群 H] [拓扑空间 H]
   证明: { toContinuousMul := hf.continuousMul _
     toContinuousInv := hf.continuousInv (map_inv f) }
 
@@ -2635,7 +2635,7 @@ theorem topologicalGroup_induced
 
 中文:
 定理 topologicalGroup_induced
-  结论: {F : 类型} [Group H] [FunLike F H G] [MonoidHomClass F H G]
+  结论: {F : 类型} [群 H] [函数状 F H G] [幺半群态射类 F H G]
   证明: letI := induced f ‹_›
   IsInducing.topologicalGroup f ⟨rfl⟩
 
@@ -2673,8 +2673,8 @@ definition Subgroup.topologicalClosure
 @[to_additive (attr := simp)]
 
 中文:
-定义 Subgroup.topologicalClosure
-  签名: (s : Subgroup G)
+定义 子群.topologicalClosure
+  签名: (s : 子群 G)
   定义体: { s.toSubmonoid.topologicalClosure with
     carrier := _root_.closure (s : Set G)
     inv_mem' := fun {g} hg => by simpa only [← Set.mem_inv, inv_closure, inv_coe_set] using hg }
@@ -2700,8 +2700,8 @@ theorem Subgroup.topologicalClosure_coe
 @[to_additive]
 
 中文:
-定理 Subgroup.topologicalClosure_coe
-  条件: {s : Subgroup G}
+定理 子群.topologicalClosure_coe
+  条件: {s : 子群 G}
   证明: rfl
 
 @[to_additive]
@@ -2723,8 +2723,8 @@ theorem Subgroup.le_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subgroup.le_topologicalClosure
-  条件: (s : Subgroup G)
+定理 子群.le_topologicalClosure
+  条件: (s : 子群 G)
   结论: s <= s.topologicalClosure
   证明: _root_.subset_closure
 
@@ -2747,8 +2747,8 @@ theorem Subgroup.isClosed_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subgroup.isClosed_topologicalClosure
-  条件: (s : Subgroup G)
+定理 子群.isClosed_topologicalClosure
+  条件: (s : 子群 G)
   证明: isClosed_closure
 
 @[to_additive]
@@ -2770,8 +2770,8 @@ theorem Subgroup.topologicalClosure_minimal
 @[to_additive (attr := gcongr)]
 
 中文:
-定理 Subgroup.topologicalClosure_minimal
-  结论: (s : Subgroup G) {t : Subgroup G} (h : s <= t)
+定理 子群.topologicalClosure_minimal
+  结论: (s : 子群 G) {t : 子群 G} (h : s <= t)
   证明: closure_minimal h ht
 
 @[to_additive (attr := gcongr)]
@@ -2794,8 +2794,8 @@ theorem Subgroup.topologicalClosure_mono
 @[to_additive]
 
 中文:
-定理 Subgroup.topologicalClosure_mono
-  条件: {s t : Subgroup G} (h : s <= t)
+定理 子群.topologicalClosure_mono
+  条件: {s t : 子群 G} (h : s <= t)
   证明: _root_.closure_mono h
 
 @[to_additive]
@@ -2820,7 +2820,7 @@ theorem DenseRange.topologicalClosure_map_subgroup
 
 中文:
 定理 DenseRange.topologicalClosure_map_subgroup
-  结论: [Group H] [TopologicalSpace H]
+  结论: [群 H] [拓扑空间 H]
   证明: by
   rw [SetLike.ext'_iff] at hs ⊢
   simp only [Subgroup.topologicalClosure_coe, Subgroup.coe_top, ← dense_iff_closure_eq] at hs ⊢
@@ -2850,8 +2850,8 @@ theorem Subgroup.is_normal_topologicalClosure
 @[to_additive]
 
 中文:
-定理 Subgroup.is_normal_topologicalClosure
-  结论: {G : 类型} [TopologicalSpace G] [Group G]
+定理 子群.is_normal_topologicalClosure
+  结论: {G : 类型} [拓扑空间 G] [群 G]
   证明: by
     apply map_mem_closure (IsTopologicalGroup.continuous_conj g) hn
     exact fun m hm => Subgroup.Normal.conj_mem inferInstance m hm g
@@ -2884,7 +2884,7 @@ theorem mul_mem_connectedComponent_one
 
 中文:
 定理 mul_mem_connectedComponent_one
-  结论: {G : 类型} [TopologicalSpace G] [MulOneClass G]
+  结论: {G : 类型} [拓扑空间 G] [MulOne类 G]
   证明: by
   rw [connectedComponent_eq hg]
   have hmul : g in connectedComponent (g * h) := by
@@ -2920,7 +2920,7 @@ theorem inv_mem_connectedComponent_one
 
 中文:
 定理 inv_mem_connectedComponent_one
-  结论: {G : 类型} [TopologicalSpace G] [DivisionMonoid G]
+  结论: {G : 类型} [拓扑空间 G] [Division幺半群 G]
   证明: by
   rw [← inv_one]
   exact
@@ -2951,8 +2951,8 @@ definition Subgroup.connectedComponentOfOne
   inv_mem' hg := inv_mem_connectedComponent_one hg
 
 中文:
-定义 Subgroup.connectedComponentOfOne
-  签名: (G : 类型) [TopologicalSpace G] [Group G]
+定义 子群.connectedComponentOfOne
+  签名: (G : 类型) [拓扑空间 G] [群 G]
   定义体: connectedComponent (1 : G)
   one_mem' := mem_connectedComponent
   mul_mem' hg hh := mul_mem_connectedComponent_one hg hh
@@ -2984,8 +2984,8 @@ abbreviation Subgroup.commGroupTopologicalClosure
   body: { s.topologicalClosure.toGroup, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 中文:
-缩写 Subgroup.commGroupTopologicalClosure
-  签名: [T2Space G] (s : Subgroup G)
+缩写 子群.commGroupTopologicalClosure
+  签名: [T2空间 G] (s : 子群 G)
   定义体: { s.topologicalClosure.toGroup, s.toSubmonoid.commMonoidTopologicalClosure hs with }
 
 Depends on / 依赖: commMonoidTopologicalClosure, s.toSubmonoid.commMonoidTopologicalClosure, s.topologicalClosure.toGroup, toGroup, toSubmonoid, topologicalClosure
@@ -3006,7 +3006,7 @@ lemma Subgroup.coe_topologicalClosure_bot
 @[to_additive exists_nhds_half_neg]
 
 中文:
-引理 Subgroup.coe_topologicalClosure_bot
+引理 子群.coe_topologicalClosure_bot
   证明: by simp
 
 @[to_additive exists_nhds_half_neg]
@@ -3030,8 +3030,8 @@ theorem exists_nhds_split_inv
 @[to_additive]
 
 中文:
-定理 exists_nhds_split_inv
-  条件: {s : Set G} (hs : s in 𝓝 (1 : G))
+定理 存在_nhds_split_inv
+  条件: {s : 集合 G} (hs : s in 𝓝 (1 : G))
   证明: by
   have : (fun p : G × G => p.1 * p.2⁻¹) ⁻¹' s in 𝓝 ((1, 1) : G × G) :=
     continuousAt_fst.mul continuousAt_snd.inv (by simpa)
@@ -3208,8 +3208,8 @@ theorem Filter.HasBasis.nhds_of_one
 @[to_additive]
 
 中文:
-定理 Filter.HasBasis.nhds_of_one
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set G}
+定理 滤子.有基.nhds_of_one
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 G}
   证明: by
   rw [← nhds_translation_mul_inv]
   simp_rw [div_eq_mul_inv]
@@ -3239,7 +3239,7 @@ theorem mem_closure_iff_nhds_one
 
 中文:
 定理 mem_closure_iff_nhds_one
-  条件: {x : G} {s : Set G}
+  条件: {x : G} {s : 集合 G}
   证明: by
   rw [mem_closure_iff_nhds_basis ((𝓝 1 : Filter G).basis_sets.nhds_of_one x)]
   simp_rw [Set.mem_ofPred, id]
@@ -3278,7 +3278,7 @@ theorem continuous_of_tendsto_nhds_one
 
 中文:
 定理 continuous_of_tendsto_nhds_one
-  结论: {M hom : 类型} [MulOneClass M] [TopologicalSpace M]
+  结论: {M hom : 类型} [MulOne类 M] [拓扑空间 M]
   证明: continuous_iff_continuousAt.2 fun x => by
     simpa only [ContinuousAt, ← map_mul_left_nhds_one x, tendsto_map'_iff, Function.comp_def,
       map_mul, mul_one] using hf.const_mul (f x)
@@ -3313,7 +3313,7 @@ theorem continuous_of_continuousAt_one
 
 中文:
 定理 continuous_of_continuousAt_one
-  结论: {M hom : 类型} [MulOneClass M] [TopologicalSpace M]
+  结论: {M hom : 类型} [MulOne类 M] [拓扑空间 M]
   证明: continuous_of_tendsto_nhds_one f by simpa using hf.tendsto
 
 @[to_additive continuous_of_continuousAt_zero₂]
@@ -3341,7 +3341,7 @@ theorem continuous_of_continuousAt_one₂
 
 中文:
 定理 continuous_of_continuousAt_one₂
-  结论: {H M : 类型} [CommMonoid M] [TopologicalSpace M]
+  结论: {H M : 类型} [交换幺半群 M] [拓扑空间 M]
   证明: continuous_iff_continuousAt.2 fun (x, y) => by
   simp only [ContinuousAt, nhds_prod_eq, ← map_mul_left_nhds_one x, ← map_mul_left_nhds_one y,
     prod_map_map_eq, tendsto_map'_iff, Function.comp_def, map_mul, MonoidHom.mul_apply] at *
@@ -3377,7 +3377,7 @@ lemma IsTopologicalGroup.isInducing_iff_nhds_one
 @[to_additive]
 
 中文:
-引理 IsTopologicalGroup.isInducing_iff_nhds_one
+引理 是拓扑群.isInducing_iff_nhds_one
   证明: by
   rw [Topology.isInducing_iff_nhds]
   refine ⟨(map_one f ▸ · 1), fun hf x => ?_⟩
@@ -3413,7 +3413,7 @@ lemma IsTopologicalGroup.isOpenMap_iff_nhds_one
   rw [
 
 中文:
-引理 IsTopologicalGroup.isOpenMap_iff_nhds_one
+引理 是拓扑群.isOpenMap_iff_nhds_one
   证明: by
   refine ⟨fun H => map_one f ▸ H.nhds_le 1, fun h => IsOpenMap.of_nhds_le fun x => ?_⟩
   have : Filter.map (f x * ·) (𝓝 1) = 𝓝 (f x) := by
@@ -3459,8 +3459,8 @@ lemma MonoidHom.isOpenQuotientMap_of_isQuotientMap
       -- a
 
 中文:
-引理 MonoidHom.isOpenQuotientMap_of_isQuotientMap
-  结论: {A : 类型} [Group A]
+引理 幺半群态射.isOpenQuotientMap_of_isQuotientMap
+  结论: {A : 类型} [群 A]
   证明: hφ.surjective
     continuous := hφ.continuous
     isOpenMap := by
@@ -3510,8 +3510,8 @@ lemma MonoidHom.isOpenQuotientMap_iff_isQuotientMap
 @[to_additive]
 
 中文:
-引理 MonoidHom.isOpenQuotientMap_iff_isQuotientMap
-  结论: {A : 类型} [Group A]
+引理 幺半群态射.isOpenQuotientMap_iff_isQuotientMap
+  结论: {A : 类型} [群 A]
   证明: ⟨fun hf => hf.isQuotientMap, MonoidHom.isOpenQuotientMap_of_isQuotientMap⟩
 
 @[to_additive]
@@ -3537,8 +3537,8 @@ theorem IsTopologicalGroup.ext
 @[to_additive]
 
 中文:
-定理 IsTopologicalGroup.ext
-  结论: {G : 类型} [Group G] {t t' : TopologicalSpace G}
+定理 是拓扑群.ext
+  结论: {G : 类型} [群 G] {t t' : 拓扑空间 G}
   证明: TopologicalSpace.ext_nhds fun x => by
     rw [← @nhds_translation_mul_inv G t _ _ x]; rw [← @nhds_translation_mul_inv G t' _ _ x]; rw [← h]
 
@@ -3564,8 +3564,8 @@ theorem IsTopologicalGroup.ext_iff
 @[to_additive]
 
 中文:
-定理 IsTopologicalGroup.ext_iff
-  结论: {G : 类型} [Group G] {t t' : TopologicalSpace G}
+定理 是拓扑群.ext_iff
+  结论: {G : 类型} [群 G] {t t' : 拓扑空间 G}
   证明: ⟨fun h => h ▸ rfl, tg.ext tg'⟩
 
 @[to_additive]
@@ -3592,8 +3592,8 @@ theorem ContinuousInv.of_nhds_one
     mul_inv_rev
 
 中文:
-定理 ContinuousInv.of_nhds_one
-  结论: {G : 类型} [Group G] [TopologicalSpace G]
+定理 连续取逆.of_nhds_one
+  结论: {G : 类型} [群 G] [拓扑空间 G]
   证明: by
   refine ⟨continuous_iff_continuousAt.2 fun x₀ => ?_⟩
   have : Tendsto (fun x => x₀⁻¹ * (x₀ * x⁻¹ * x₀⁻¹)) (𝓝 1) (map (x₀⁻¹ * ·) (𝓝 1)) :=
@@ -3629,8 +3629,8 @@ theorem IsTopologicalGroup.of_nhds_one'
               map_map]; r
 
 中文:
-定理 IsTopologicalGroup.of_nhds_one'
-  结论: {G : 类型u} [Group G] [TopologicalSpace G]
+定理 是拓扑群.of_nhds_one'
+  结论: {G : 类型u} [群 G] [拓扑空间 G]
   证明: { toContinuousMul := ContinuousMul.of_nhds_one hmul hleft hright
     toContinuousInv :=
       ContinuousInv.of_nhds_one hinv hleft fun x₀ =>
@@ -3671,8 +3671,8 @@ theorem IsTopologicalGroup.of_nhds_one
 
 
 中文:
-定理 IsTopologicalGroup.of_nhds_one
-  结论: {G : 类型u} [Group G] [TopologicalSpace G]
+定理 是拓扑群.of_nhds_one
+  结论: {G : 类型u} [群 G] [拓扑空间 G]
   证明: by
   refine IsTopologicalGroup.of_nhds_one' hmul hinv hleft fun x₀ => ?_
   replace hconj : forall x₀ : G, map (x₀ * · * x₀⁻¹) (𝓝 1) = 𝓝 1 :=
@@ -3704,8 +3704,8 @@ theorem IsTopologicalGroup.of_comm_of_nhds_one
   proof: IsTopologicalGroup.of_nhds_one hmul hinv hleft (by simpa using! tendsto_id)
 
 中文:
-定理 IsTopologicalGroup.of_comm_of_nhds_one
-  结论: {G : 类型u} [CommGroup G] [TopologicalSpace G]
+定理 是拓扑群.of_comm_of_nhds_one
+  结论: {G : 类型u} [交换群 G] [拓扑空间 G]
   证明: IsTopologicalGroup.of_nhds_one hmul hinv hleft (by simpa using! tendsto_id)
 
 Depends on / 依赖: IsTopologicalGroup, IsTopologicalGroup.of_nhds_one, of_nhds_one, tendsto_id
@@ -3741,8 +3741,8 @@ theorem IsTopologicalGroup.exists_antitone_basis_nhds_one
  
 
 中文:
-定理 IsTopologicalGroup.exists_antitone_basis_nhds_one
-  条件: [FirstCountableTopology G]
+定理 是拓扑群.存在_antitone_basis_nhds_one
+  条件: [第一可数拓扑 G]
   证明: by
   rcases (𝓝 (1 : G)).exists_antitone_basis with ⟨u, hu, u_anti⟩
   have :=
@@ -3787,8 +3787,8 @@ theorem Filter.Tendsto.div_const'
   proof: h.div' tendsto_const_nhds
 
 中文:
-定理 Filter.Tendsto.div_const'
-  结论: {c : G} {f : α -> G} {l : Filter α} (h : Tendsto f l (𝓝 c))
+定理 滤子.收敛.div_const'
+  结论: {c : G} {f : α -> G} {l : 滤子 α} (h : 收敛 f l (𝓝 c))
   证明: h.div' tendsto_const_nhds
 
 Depends on / 依赖: h.div, tendsto_const_nhds
@@ -3810,7 +3810,7 @@ lemma Filter.tendsto_div_const_iff
 @[to_additive tendsto_sub_const_iff]
 
 中文:
-引理 Filter.tendsto_div_const_iff
+引理 滤子.tendsto_div_const_iff
   结论: {G : 类型}
   证明: by
   refine ⟨fun h => ?_, fun h => Filter.Tendsto.div_const' h b⟩
@@ -3841,7 +3841,7 @@ lemma Filter.tendsto_div_const_iff'
 @[to_additive const_sub]
 
 中文:
-引理 Filter.tendsto_div_const_iff'
+引理 滤子.tendsto_div_const_iff'
   结论: {G : 类型}
   证明: by
   refine ⟨fun h => ?_, fun h => Filter.Tendsto.div_const' h b⟩
@@ -3870,8 +3870,8 @@ theorem Filter.Tendsto.const_div'
 @[to_additive (attr := continuity) continuous_sub_left]
 
 中文:
-定理 Filter.Tendsto.const_div'
-  结论: (b : G) {c : G} {f : α -> G} {l : Filter α}
+定理 滤子.收敛.const_div'
+  结论: (b : G) {c : G} {f : α -> G} {l : 滤子 α}
   证明: tendsto_const_nhds.div' h
 
 @[to_additive (attr := continuity) continuous_sub_left]
@@ -3897,7 +3897,7 @@ lemma continuous_div_left'
 中文:
 引理 continuous_div_left'
   条件: (a : G)
-  结论: Continuous (a / ·)
+  结论: 连续 (a / ·)
   证明: by fun_prop
 
 @[to_additive (attr := continuity) continuous_sub_right]
@@ -3919,7 +3919,7 @@ lemma continuous_div_right'
 中文:
 引理 continuous_div_right'
   条件: (a : G)
-  结论: Continuous (· / a)
+  结论: 连续 (· / a)
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -3947,8 +3947,8 @@ lemma Filter.tendsto_const_div_iff'
 alias Filter.tendsto_const_div_iff := Filter.tendsto_const_div_iff'
 
 中文:
-引理 Filter.tendsto_const_div_iff'
-  条件: (b : G) {c : G} {f : α -> G} {l : Filter α}
+引理 滤子.tendsto_const_div_iff'
+  条件: (b : G) {c : G} {f : α -> G} {l : 滤子 α}
   证明: by
   refine ⟨fun h => ?_, Filter.Tendsto.const_div' b⟩
   convert! h.inv.mul_const b with k <;> rw [inv_div, div_mul_cancel]
@@ -3980,7 +3980,7 @@ definition Homeomorph.divLeft
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.divLeft
+定义 同胚.divLeft
   签名: (x : G)
   定义体: { Equiv.divLeft x with }
 
@@ -4004,9 +4004,9 @@ theorem Homeomorph.coe_divLeft
 @[to_additive]
 
 中文:
-定理 Homeomorph.coe_divLeft
+定理 同胚.coe_divLeft
   条件: (a : G)
-  结论: ⇑(Homeomorph.divLeft a) = (a / ·)
+  结论: ⇑(同胚.divLeft a) = (a / ·)
   证明: rfl
 
 @[to_additive]
@@ -4029,7 +4029,7 @@ theorem isOpenMap_div_left
 中文:
 定理 isOpenMap_div_left
   条件: (a : G)
-  结论: IsOpenMap (a / ·)
+  结论: 是开映射 (a / ·)
   证明: (Homeomorph.divLeft _).isOpenMap
 
 @[to_additive]
@@ -4052,7 +4052,7 @@ theorem isClosedMap_div_left
 中文:
 定理 isClosedMap_div_left
   条件: (a : G)
-  结论: IsClosedMap (a / ·)
+  结论: 是闭映射 (a / ·)
   证明: (Homeomorph.divLeft _).isClosedMap
 
 Depends on / 依赖: Homeomorph, Homeomorph.divLeft, divLeft, isClosedMap
@@ -4074,7 +4074,7 @@ definition Homeomorph.divRight
 @[to_additive (attr := simp)]
 
 中文:
-定义 Homeomorph.divRight
+定义 同胚.divRight
   签名: (x : G)
   定义体: { Equiv.divRight x with }
 
@@ -4098,9 +4098,9 @@ theorem Homeomorph.coe_divRight
 @[to_additive]
 
 中文:
-定理 Homeomorph.coe_divRight
+定理 同胚.coe_divRight
   条件: (a : G)
-  结论: ⇑(Homeomorph.divRight a) = (· / a)
+  结论: ⇑(同胚.divRight a) = (· / a)
   证明: rfl
 
 @[to_additive]
@@ -4123,7 +4123,7 @@ lemma isOpenMap_div_right
 中文:
 引理 isOpenMap_div_right
   条件: (a : G)
-  结论: IsOpenMap (· / a)
+  结论: 是开映射 (· / a)
   证明: (Homeomorph.divRight a).isOpenMap
 
 @[to_additive]
@@ -4147,7 +4147,7 @@ lemma isClosedMap_div_right
 中文:
 引理 isClosedMap_div_right
   条件: (a : G)
-  结论: IsClosedMap (· / a)
+  结论: 是闭映射 (· / a)
   证明: (Homeomorph.divRight a).isClosedMap
 
 @[to_additive]
@@ -4168,7 +4168,7 @@ theorem tendsto_div_nhds_one_iff
 
 中文:
 定理 tendsto_div_nhds_one_iff
-  条件: {α : 类型} {l : Filter α} {x : G} {u : α -> G}
+  条件: {α : 类型} {l : 滤子 α} {x : G} {u : α -> G}
   证明: haveI A : Tendsto (fun _ : α => x) l (𝓝 x) := tendsto_const_nhds
   ⟨fun h => by simpa using h.mul A, fun h => by simpa using h.div' A⟩
 
@@ -4198,7 +4198,7 @@ alias ⟨eq_of_tendsto_div_nhds_one, _⟩ := tendsto_div_nhds_one_iff_eq
 
 中文:
 定理 tendsto_div_nhds_one_iff_eq
-  结论: {α : 类型} {l : Filter α} [l.NeBot] [T2Space G]
+  结论: {α : 类型} {l : 滤子 α} [l.NeBot] [T2空间 G]
   证明: ⟨fun hfg => tendsto_nhds_unique hf by simpa using hfg.mul hg,
    fun h => by subst h; simpa using hf.div' hg⟩
 
@@ -4259,7 +4259,7 @@ theorem Filter.map_divRight_nhdsGT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divRight_nhdsGT
+定理 滤子.map_divRight_nhdsGT
   条件: {c a : H}
   结论: map (· / c) (𝓝[>] a) = 𝓝[>] (a / c)
   证明: by
@@ -4289,7 +4289,7 @@ theorem Filter.map_divRight_nhdsLT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divRight_nhdsLT
+定理 滤子.map_divRight_nhdsLT
   条件: {c a : H}
   结论: map (· / c) (𝓝[<] a) = 𝓝[<] (a / c)
   证明: by
@@ -4318,7 +4318,7 @@ theorem Filter.map_divRight_nhdsNE
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divRight_nhdsNE
+定理 滤子.map_divRight_nhdsNE
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.divRight c).isEmbedding.map_nhdsWithin_eq .. using 2
@@ -4346,7 +4346,7 @@ theorem Filter.map_divRight_nhds
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divRight_nhds
+定理 滤子.map_divRight_nhds
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.divRight c).map_nhds_eq .. using 2
@@ -4374,7 +4374,7 @@ theorem Filter.map_divLeft_nhdsGT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divLeft_nhdsGT
+定理 滤子.map_divLeft_nhdsGT
   条件: {c a : H}
   结论: map (c / ·) (𝓝[>] a) = 𝓝[<] (c / a)
   证明: by
@@ -4404,7 +4404,7 @@ theorem Filter.map_divLeft_nhdsLT
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divLeft_nhdsLT
+定理 滤子.map_divLeft_nhdsLT
   条件: {c a : H}
   结论: map (c / ·) (𝓝[<] a) = 𝓝[>] (c / a)
   证明: by
@@ -4433,7 +4433,7 @@ theorem Filter.map_divLeft_nhdsNE
 @[to_additive (attr := simp)]
 
 中文:
-定理 Filter.map_divLeft_nhdsNE
+定理 滤子.map_divLeft_nhdsNE
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.divLeft c).isEmbedding.map_nhdsWithin_eq .. using 2
@@ -4459,7 +4459,7 @@ theorem Filter.map_divLeft_nhds
   convert! (Homeomorph.divLeft c).map_nhds_eq .. using 2
 
 中文:
-定理 Filter.map_divLeft_nhds
+定理 滤子.map_divLeft_nhds
   条件: {c a : G}
   证明: by
   convert! (Homeomorph.divLeft c).map_nhds_eq .. using 2
@@ -4489,9 +4489,9 @@ theorem IsTopologicalGroup.t1Space
   proof: ⟨fun x => by simpa using isClosedMap_mul_right x _ h⟩
 
 中文:
-定理 IsTopologicalGroup.t1Space
-  条件: (h : @IsClosed G _ {1})
-  结论: T1Space G
+定理 是拓扑群.t1Space
+  条件: (h : @是闭集 G _ {1})
+  结论: T1空间 G
   证明: ⟨fun x => by simpa using isClosedMap_mul_right x _ h⟩
 
 Depends on / 依赖: isClosedMap_mul_right
@@ -4529,8 +4529,8 @@ theorem Subgroup.properlyDiscontinuousSMul_of_tendsto_cofinite
       simp only [image_smul, mem_ofPred_eq, coe_subtype, mem_preimage, me
 
 中文:
-定理 Subgroup.properlyDiscontinuousSMul_of_tendsto_cofinite
-  结论: (S : Subgroup G)
+定理 子群.properlyDiscontinuousSMul_of_tendsto_cofinite
+  结论: (S : 子群 G)
   证明: { finite_disjoint_inter_image := by
       intro K L hK hL
       have H : Set.Finite _ := hS ((hL.prod hK).image continuous_div').compl_mem_cocompact
@@ -4579,8 +4579,8 @@ theorem Subgroup.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
       simp only [preimage_compl, compl
 
 中文:
-定理 Subgroup.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
-  结论: (S : Subgroup G)
+定理 子群.properlyDiscontinuousSMul_opposite_of_tendsto_cofinite
+  结论: (S : 子群 G)
   证明: { finite_disjoint_inter_image := by
       intro K L hK hL
       have : Continuous fun p : G × G => (p.1⁻¹, p.2) := continuous_inv.prodMap continuous_id
@@ -4637,7 +4637,7 @@ theorem compact_open_separated_mul_right
 
 中文:
 定理 compact_open_separated_mul_right
-  结论: {K U : Set G} (hK : IsCompact K) (hU : IsOpen U)
+  结论: {K U : 集合 G} (hK : 是紧集 K) (hU : 是开集 U)
   证明: by
   refine hK.induction_on ?_ ?_ ?_ ?_
   · exact ⟨univ, by simp⟩
@@ -4692,7 +4692,7 @@ theorem compact_open_separated_mul_left
 
 中文:
 定理 compact_open_separated_mul_left
-  结论: {K U : Set G} (hK : IsCompact K) (hU : IsOpen U)
+  结论: {K U : 集合 G} (hK : 是紧集 K) (hU : 是开集 U)
   证明: by
   rcases compact_open_separated_mul_right (hK.image continuous_op) (opHomeomorph.isOpenMap U hU)
       (image_mono hKU) with
@@ -4738,7 +4738,7 @@ theorem compact_covered_by_mul_left_translates
 
 中文:
 定理 compact_covered_by_mul_left_translates
-  结论: {K V : Set G} (hK : IsCompact K)
+  结论: {K V : 集合 G} (hK : 是紧集 K)
   证明: by
   obtain ⟨t, ht⟩ : exists t : Finset G, K subseteq ⋃ x in t, interior ((x * ·) ⁻¹' V) := by
     refine
@@ -4800,8 +4800,8 @@ theorem exists_disjoint_smul_of_isCompact
   refine ⟨g * b, ha, b⁻¹, by simpa only [Set.mem_i
 
 中文:
-定理 exists_disjoint_smul_of_isCompact
-  结论: [NoncompactSpace G] {K L : Set G} (hK : IsCompact K)
+定理 存在_disjoint_smul_of_isCompact
+  结论: [Noncompact空间 G] {K L : 集合 G} (hK : 是紧集 K)
   证明: by
   have A : ¬K * L⁻¹ = univ := (hK.mul hL.inv).ne_univ
   obtain ⟨g, hg⟩ : exists g, g ∉ K * L⁻¹ := by
@@ -4882,7 +4882,7 @@ definition nhdsMulHom
 
 中文:
 定义 nhdsMulHom
-  签名: : G ->ₙ* Filter G where
+  签名: : G ->ₙ* 滤子 G where
   定义体: 𝓝
   map_mul' _ _ := nhds_mul _ _
 -/
@@ -4916,7 +4916,7 @@ definition toUnits_homeomorph
 
 中文:
 定义 toUnits_homeomorph
-  签名: [Group G] [TopologicalSpace G] [ContinuousInv G]
+  签名: [群 G] [拓扑空间 G] [连续取逆 G]
   定义体: toUnits.toEquiv
   continuous_toFun := Units.continuous_iff.2 ⟨continuous_id, continuous_inv⟩
 
@@ -4935,8 +4935,8 @@ theorem Units.isEmbedding_val
   proof: toUnits_homeomorph.symm.isEmbedding
 
 中文:
-定理 Units.isEmbedding_val
-  条件: [Group G] [TopologicalSpace G] [ContinuousInv G]
+定理 单位群.isEmbedding_val
+  条件: [群 G] [拓扑空间 G] [连续取逆 G]
   证明: toUnits_homeomorph.symm.isEmbedding
 -/
 @[to_additive] theorem Units.isEmbedding_val [Group G] [TopologicalSpace G] [ContinuousInv G] :
@@ -4956,8 +4956,8 @@ lemma Continuous.of_coeHom_comp
   exact MulOpposite.continuous_op.comp (hf.comp continuous_inv)
 
 中文:
-引理 Continuous.of_coeHom_comp
-  结论: [Group G] [Monoid H] [TopologicalSpace G] [TopologicalSpace H]
+引理 连续.of_coeHom_comp
+  结论: [群 G] [幺半群 H] [拓扑空间 G] [拓扑空间 H]
   证明: by
   apply continuous_induced_rng.mpr ?_
   refine continuous_prodMk.mpr ⟨hf, ?_⟩
@@ -4989,7 +4989,7 @@ theorem range_embedProduct
 
 中文:
 定理 range_embedProduct
-  条件: [Monoid α]
+  条件: [幺半群 α]
   证明: .mpr Set.range_eq_iff _ _
     ⟨fun a => ⟨a.mul_inv, a.inv_mul⟩, fun p hp => ⟨⟨p.1, unop p.2, hp.1, hp.2⟩, rfl⟩⟩
 
@@ -5014,8 +5014,8 @@ instance [ContinuousMul
 @[to_additive]
 
 中文:
-实例 [ContinuousMul
-  签名: α] : IsTopologicalGroup αˣ where
+实例 [连续乘法
+  签名: α] : 是拓扑群 αˣ where
   定义体: Units.continuous_iff.2 ⟨continuous_coe_inv, continuous_val⟩
 
 @[to_additive]
@@ -5040,7 +5040,7 @@ theorem isClosedEmbedding_embedProduct
 
 中文:
 定理 isClosedEmbedding_embedProduct
-  条件: [T1Space α] [ContinuousMul α]
+  条件: [T1空间 α] [连续乘法 α]
   证明: isEmbedding_embedProduct
   isClosed_range := by
     rw [range_embedProduct]
@@ -5071,8 +5071,8 @@ lemma _root_.Topology.IsClosedEmbedding.units_map
 @[to_additive]
 
 中文:
-引理 _root_.Topology.IsClosedEmbedding.units_map
-  结论: [ContinuousMul α] [T1Space α] {f : α ->* β}
+引理 _root_.拓扑.是闭嵌入.units_map
+  结论: [连续乘法 α] [T1空间 α] {f : α ->* β}
   证明: by
   refine .of_comp isEmbedding_embedProduct ?_
   exact (hf.prodMap (opHomeomorph.isClosedEmbedding.comp
@@ -5100,8 +5100,8 @@ instance [T1Space
 @[to_additive]
 
 中文:
-实例 [T1Space
-  签名: α] [ContinuousMul α] [CompactSpace α] : CompactSpace αˣ
+实例 [T1空间
+  签名: α] [连续乘法 α] [紧空间 α] : 紧空间 αˣ
   定义体: isClosedEmbedding_embedProduct.compactSpace
 
 @[to_additive]
@@ -5123,8 +5123,8 @@ instance [T1Space
 @[to_additive]
 
 中文:
-实例 [T1Space
-  签名: α] [ContinuousMul α] [WeaklyLocallyCompactSpace α] :
+实例 [T1空间
+  签名: α] [连续乘法 α] [WeaklyLocallyCompact空间 α] :
   定义体: isClosedEmbedding_embedProduct.weaklyLocallyCompactSpace
 
 @[to_additive]
@@ -5145,8 +5145,8 @@ instance [T1Space
   body: isClosedEmbedding_embedProduct.locallyCompactSpace
 
 中文:
-实例 [T1Space
-  签名: α] [ContinuousMul α] [LocallyCompactSpace α] : LocallyCompactSpace αˣ
+实例 [T1空间
+  签名: α] [连续乘法 α] [局部紧空间 α] : 局部紧空间 αˣ
   定义体: isClosedEmbedding_embedProduct.locallyCompactSpace
 
 Depends on / 依赖: isClosedEmbedding_embedProduct, isClosedEmbedding_embedProduct.locallyCompactSpace, locallyCompactSpace
@@ -5165,8 +5165,8 @@ lemma _root_.Submonoid.units_isCompact
   exact isClosedEmbedding_embedProduct.isCompact_preimage this
 
 中文:
-引理 _root_.Submonoid.units_isCompact
-  结论: [T1Space α] [ContinuousMul α] {S : Submonoid α}
+引理 _root_.子幺半群.units_isCompact
+  结论: [T1空间 α] [连续乘法 α] {S : 子幺半群 α}
   证明: by
   have : IsCompact (S ×ˢ S.op) := hS.prod (opHomeomorph.isCompact_preimage.mp hS)
   exact isClosedEmbedding_embedProduct.isCompact_preimage this
@@ -5198,7 +5198,7 @@ definition _root_.Homeomorph.prodUnits
   toEquiv := MulEquiv.pr
 
 中文:
-定义 _root_.Homeomorph.prodUnits
+定义 _root_.同胚.prodUnits
   签名: : (α × β)ˣ ≃ₜ αˣ × βˣ where
   定义体: (continuous_fst.units_map (MonoidHom.fst α β)).prodMk
       (continuous_snd.units_map (MonoidHom.snd α β))
@@ -5244,7 +5244,7 @@ theorem topologicalGroup_sInf
 
 中文:
 定理 topologicalGroup_sInf
-  结论: {ts : Set (TopologicalSpace G)}
+  结论: {ts : 集合 (拓扑空间 G)}
   证明: letI := sInf ts
   { toContinuousInv :=
 @continuousInv_sInf _ _ _ fun t ht => @IsTopologicalGroup.toContinuousInv G t _ h t ht
@@ -5280,7 +5280,7 @@ theorem topologicalGroup_iInf
 
 中文:
 定理 topologicalGroup_iInf
-  结论: {ts' : ι -> TopologicalSpace G}
+  结论: {ts' : ι -> 拓扑空间 G}
   证明: by
   rw [← sInf_range]
   exact topologicalGroup_sInf (Set.forall_mem_range.mpr h')
@@ -5308,7 +5308,7 @@ theorem topologicalGroup_inf
 
 中文:
 定理 topologicalGroup_inf
-  结论: {t₁ t₂ : TopologicalSpace G} (h₁ : @IsTopologicalGroup G t₁ _)
+  结论: {t₁ t₂ : 拓扑空间 G} (h₁ : @是拓扑群 G t₁ _)
   证明: by
   rw [inf_eq_iInf]
   refine topologicalGroup_iInf fun b => ?_

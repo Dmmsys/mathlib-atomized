@@ -42,7 +42,7 @@ definition subcategoryAcyclic
 
 中文:
 定义 subcategoryAcyclic
-  签名: : Object命题erty (HomotopyCategory C (ComplexShape.up 整数))
+  签名: : ObjectProperty (HomotopyCategory C (余mplexShape.up 整数))
   定义体: (homologyFunctor C (ComplexShape.up Int) 0).homologicalKernel
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, homologicalKernel, homologyFunctor
@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: (subcategoryAcyclic C).IsTriangulated
+  签名: (subcategoryAcyclic C).是三角
   定义体: by
   dsimp [subcategoryAcyclic]
   infer_instance
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: (subcategoryAcyclic C).IsClosedUnderIsomorphisms
+  签名: (subcategoryAcyclic C).在同构下封闭
   定义体: by
   dsimp [subcategoryAcyclic]
   infer_instance
@@ -108,7 +108,7 @@ lemma mem_subcategoryAcyclic_iff
 
 中文:
 引理 mem_subcategoryAcyclic_iff
-  条件: (X : HomotopyCategory C (ComplexShape.up 整数))
+  条件: (X : HomotopyCategory C (余mplexShape.up 整数))
   证明: Functor.mem_homologicalKernel_iff _ X
 
 Depends on / 依赖: Functor, Functor.mem_homologicalKernel_iff, mem_homologicalKernel_iff
@@ -131,7 +131,7 @@ lemma quotient_obj_mem_subcategoryAcyclic_iff_exactAt
 
 中文:
 引理 quotient_obj_mem_subcategoryAcyclic_iff_exactAt
-  条件: (K : CochainComplex C 整数)
+  条件: (K : 上链复形 C 整数)
   证明: by
   rw [mem_subcategoryAcyclic_iff]
   refine forall_congr' (fun n => ?_)
@@ -157,7 +157,7 @@ lemma quotient_obj_mem_subcategoryAcyclic_iff_acyclic
 
 中文:
 引理 quotient_obj_mem_subcategoryAcyclic_iff_acyclic
-  条件: (K : CochainComplex C 整数)
+  条件: (K : 上链复形 C 整数)
   证明: quotient_obj_mem_subcategoryAcyclic_iff_exactAt _
 
 Depends on / 依赖: quotient_obj_mem_subcategoryAcyclic_iff_exactAt
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso C (ComplexShape.up 整数)).IsCompatibleWithShift 整数
+  签名: (quasiIso C (余mplexShape.up 整数)).是余mpatibleWithShift 整数
   定义体: by
   rw [quasiIso_eq_trW_subcategoryAcyclic]
   infer_instance

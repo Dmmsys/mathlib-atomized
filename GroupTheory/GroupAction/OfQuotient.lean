@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (G ⧸ H) (fixedPoints H A)
+  签名: 乘法作用 (G ⧸ H) (fixedPoints H A)
   定义体: ofEndHom
     QuotientGroup.lift H (toEndHom : G ->* Function.End (fixedPoints H A))
     (fun g hg => by funext a; ext; exact a.2 ⟨g, hg⟩)
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (G ⧸ H) (FixedPoints.submonoid H A)
+  签名: MulDistribMul作用 (G ⧸ H) (FixedPoints.submonoid H A)
   定义体: (inferInstance : MulAction (G ⧸ H) (fixedPoints H A))
   smul_mul g a b := g.induction_on fun g => Subtype.ext (smul_mul g a.1 b.1)
   smul_one g := g.induction_on fun g => Subtype.ext (smul_one g)
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulDistribMulAction (G ⧸ H) (FixedPoints.subgroup H α)
+  签名: MulDistribMul作用 (G ⧸ H) (FixedPoints.subgroup H α)
   定义体: inferInstanceAs MulDistribMulAction (G ⧸ H) (FixedPoints.submonoid H α)
 
 Depends on / 依赖: FixedPoints, FixedPoints.submonoid, MulDistribMulAction, submonoid

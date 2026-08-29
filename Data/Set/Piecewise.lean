@@ -39,7 +39,7 @@ theorem piecewise_empty
 
 中文:
 定理 piecewise_empty
-  条件: [对任意 i : α, Decidable (i in (∅ : Set α))]
+  条件: [对任意 i : α, 可判定 (i in (∅ : 集合 α))]
   结论: piecewise ∅ f g = g
   证明: by
   ext i
@@ -66,7 +66,7 @@ theorem piecewise_univ
 
 中文:
 定理 piecewise_univ
-  条件: [对任意 i : α, Decidable (i in (Set.univ : Set α))]
+  条件: [对任意 i : α, 可判定 (i in (集合.univ : 集合 α))]
   证明: by
   ext i
   simp [piecewise]
@@ -88,7 +88,7 @@ theorem piecewise_insert_self
 
 中文:
 定理 piecewise_insert_self
-  条件: {j : α} [对任意 i, Decidable (i in insert j s)]
+  条件: {j : α} [对任意 i, 可判定 (i in insert j s)]
   证明: by simp [piecewise]
 
 Depends on / 依赖: piecewise
@@ -116,7 +116,7 @@ theorem piecewise_insert
 
 中文:
 定理 piecewise_insert
-  条件: [DecidableEq α] (j : α) [对任意 i, Decidable (i in insert j s)]
+  条件: [DecidableEq α] (j : α) [对任意 i, 可判定 (i in insert j s)]
   证明: by
   simp +unfoldPartialApp only [piecewise, mem_insert_iff]
   ext i
@@ -199,7 +199,7 @@ theorem piecewise_singleton
 
 中文:
 定理 piecewise_singleton
-  结论: (x : α) [对任意 y, Decidable (y in ({x} : Set α))] [DecidableEq α]
+  结论: (x : α) [对任意 y, 可判定 (y in ({x} : 集合 α))] [DecidableEq α]
   证明: by
   ext y
   by_cases hy : y = x
@@ -265,7 +265,7 @@ theorem piecewise_le
 
 中文:
 定理 piecewise_le
-  结论: {δ : α -> 类型} [对任意 i, Preorder (δ i)] {s : Set α} [对任意 j, Decidable (j in s)]
+  结论: {δ : α -> 类型} [对任意 i, 预序 (δ i)] {s : 集合 α} [对任意 j, 可判定 (j in s)]
   证明: fun i => if h : i in s then by simp [*] else by simp [*]
 -/
 theorem piecewise_le {δ : α -> Type*} [forall i, Preorder (δ i)] {s : Set α} [forall j, Decidable (j in s)]
@@ -284,7 +284,7 @@ theorem le_piecewise
 
 中文:
 定理 le_piecewise
-  结论: {δ : α -> 类型} [对任意 i, Preorder (δ i)] {s : Set α} [对任意 j, Decidable (j in s)]
+  结论: {δ : α -> 类型} [对任意 i, 预序 (δ i)] {s : 集合 α} [对任意 j, 可判定 (j in s)]
   证明: @piecewise_le α (fun i => (δ i)ᵒᵈ) _ s _ _ _ _ h₁ h₂
 
 @[gcongr]
@@ -310,7 +310,7 @@ theorem piecewise_mono
 
 中文:
 定理 piecewise_mono
-  结论: {δ : α -> 类型} [对任意 i, Preorder (δ i)] {s : Set α}
+  结论: {δ : α -> 类型} [对任意 i, 预序 (δ i)] {s : 集合 α}
   证明: by
   apply piecewise_le <;> intros <;> simp [*]
 
@@ -336,7 +336,7 @@ theorem piecewise_insert_of_ne
 
 中文:
 定理 piecewise_insert_of_ne
-  条件: {i j : α} (h : i != j) [对任意 i, Decidable (i in insert j s)]
+  条件: {i j : α} (h : i != j) [对任意 i, 可判定 (i in insert j s)]
   证明: by simp [piecewise, h]
 
 @[simp]
@@ -360,7 +360,7 @@ theorem piecewise_compl
 
 中文:
 定理 piecewise_compl
-  条件: [对任意 i, Decidable (i in sᶜ)]
+  条件: [对任意 i, 可判定 (i in sᶜ)]
   结论: sᶜ.piecewise f g = s.piecewise g f
   证明: funext fun x => if hx : x in s then by simp [hx] else by simp [hx]
 
@@ -380,7 +380,7 @@ theorem piecewise_range_comp
 
 中文:
 定理 piecewise_range_comp
-  结论: {ι : Sort*} (f : ι -> α) [对任意 j, Decidable (j in range f)]
+  结论: {ι : 类型层*} (f : ι -> α) [对任意 j, 可判定 (j in range f)]
   证明: (piecewise_eqOn ..).comp_eq
 
 Depends on / 依赖: comp_eq, piecewise_eqOn
@@ -422,8 +422,8 @@ theorem MapsTo.piecewise_ite
     (piecewise_eqOn_compl s f₁ f₂).symm.mono inter_subset_right]
 
 中文:
-定理 MapsTo.piecewise_ite
-  结论: {s s₁ s₂ : Set α} {t t₁ t₂ : Set β} {f₁ f₂ : α -> β}
+定理 映射到.piecewise_ite
+  结论: {s s₁ s₂ : 集合 α} {t t₁ t₂ : 集合 β} {f₁ f₂ : α -> β}
   证明: by
   refine (h₁.congr ?_).union_union (h₂.congr ?_)
   exacts [(piecewise_eqOn s f₁ f₂).symm.mono inter_subset_right,
@@ -534,7 +534,7 @@ theorem apply_piecewise
 
 中文:
 定理 apply_piecewise
-  条件: {δ' : α -> Sort*} (h : 对任意 i, δ i -> δ' i) {x : α}
+  条件: {δ' : α -> 类型层*} (h : 对任意 i, δ i -> δ' i) {x : α}
   证明: by
   by_cases hx : x in s <;> simp [hx]
 -/
@@ -553,7 +553,7 @@ theorem apply_piecewise₂
 
 中文:
 定理 apply_piecewise₂
-  结论: {δ' δ'' : α -> Sort*} (f' g' : 对任意 i, δ' i) (h : 对任意 i, δ i -> δ' i -> δ'' i)
+  结论: {δ' δ'' : α -> 类型层*} (f' g' : 对任意 i, δ' i) (h : 对任意 i, δ i -> δ' i -> δ'' i)
   证明: by
   by_cases hx : x in s <;> simp [hx]
 -/
@@ -573,7 +573,7 @@ theorem piecewise_op
 
 中文:
 定理 piecewise_op
-  条件: {δ' : α -> Sort*} (h : 对任意 i, δ i -> δ' i)
+  条件: {δ' : α -> 类型层*} (h : 对任意 i, δ i -> δ' i)
   证明: funext fun _ => (apply_piecewise _ _ _ _).symm
 
 Depends on / 依赖: apply_piecewise
@@ -594,7 +594,7 @@ theorem piecewise_op₂
 
 中文:
 定理 piecewise_op₂
-  条件: {δ' δ'' : α -> Sort*} (f' g' : 对任意 i, δ' i) (h : 对任意 i, δ i -> δ' i -> δ'' i)
+  条件: {δ' δ'' : α -> 类型层*} (f' g' : 对任意 i, δ' i) (h : 对任意 i, δ i -> δ' i -> δ'' i)
   证明: funext fun _ => (apply_piecewise₂ _ _ _ _ _ _).symm
 
 @[simp]
@@ -697,7 +697,7 @@ theorem piecewise_mem_pi
 
 中文:
 定理 piecewise_mem_pi
-  结论: {δ : α -> 类型} {t : Set α} {t' : 对任意 i, Set (δ i)} {f g} (hf : f in pi t t')
+  结论: {δ : α -> 类型} {t : 集合 α} {t' : 对任意 i, 集合 (δ i)} {f g} (hf : f in pi t t')
   证明: by
   intro i ht
   by_cases hs : i in s <;> simp [hf i ht, hg i ht, hs]
@@ -720,7 +720,7 @@ theorem pi_piecewise
 
 中文:
 定理 pi_piecewise
-  结论: {ι : 类型} {α : ι -> 类型} (s s' : Set ι) (t t' : 对任意 i, Set (α i))
+  结论: {ι : 类型} {α : ι -> 类型} (s s' : 集合 ι) (t t' : 对任意 i, 集合 (α i))
   证明: pi_if _ _ _
 
 Depends on / 依赖: pi_if
@@ -740,7 +740,7 @@ theorem univ_pi_piecewise
 
 中文:
 定理 univ_pi_piecewise
-  结论: {ι : 类型} {α : ι -> 类型} (s : Set ι) (t t' : 对任意 i, Set (α i))
+  结论: {ι : 类型} {α : ι -> 类型} (s : 集合 ι) (t t' : 对任意 i, 集合 (α i))
   证明: by
   simp [compl_eq_univ_sdiff]
 
@@ -760,7 +760,7 @@ theorem univ_pi_piecewise_univ
 
 中文:
 定理 univ_pi_piecewise_univ
-  结论: {ι : 类型} {α : ι -> 类型} (s : Set ι) (t : 对任意 i, Set (α i))
+  结论: {ι : 类型} {α : ι -> 类型} (s : 集合 ι) (t : 对任意 i, 集合 (α i))
   证明: by simp
 -/
 theorem univ_pi_piecewise_univ {ι : Type*} {α : ι -> Type*} (s : Set ι) (t : forall i, Set (α i))

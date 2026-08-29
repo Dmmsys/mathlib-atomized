@@ -59,8 +59,8 @@ lemma Ideal.Quotient.factor_ker
   · rcases mem_image_of_mem_map_of_surjective _ Ideal.Quotient.mk_surje
 
 中文:
-引理 Ideal.Quotient.factor_ker
-  条件: (H : I <= J) [I.IsTwoSided] [J.IsTwoSided]
+引理 理想.商.factor_ker
+  条件: (H : I <= J) [I.是TwoSided] [J.是TwoSided]
   证明: by
   ext x
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -104,8 +104,8 @@ lemma Submodule.eq_factor_of_eq_factor_succ
 
 
 中文:
-引理 Submodule.eq_factor_of_eq_factor_succ
-  结论: {p : 自然数 -> Submodule R M}
+引理 子模.eq_factor_of_eq_factor_succ
+  结论: {p : 自然数 -> 子模 R M}
   证明: by
   have : n = m + (n - m) := (Nat.add_sub_of_le g).symm
   induction hmn : n - m generalizing m n with
@@ -146,8 +146,8 @@ lemma Ideal.Quotient.eq_factor_of_eq_factor_succ
   proof: Submodule.eq_factor_of_eq_factor_succ hI x h g
 
 中文:
-引理 Ideal.Quotient.eq_factor_of_eq_factor_succ
-  结论: {I : 自然数 -> Ideal R} [对任意 n, (I n).IsTwoSided]
+引理 理想.商.eq_factor_of_eq_factor_succ
+  结论: {I : 自然数 -> 理想 R} [对任意 n, (I n).是TwoSided]
   证明: Submodule.eq_factor_of_eq_factor_succ hI x h g
 
 Depends on / 依赖: Submodule, Submodule.eq_factor_of_eq_factor_succ, eq_factor_of_eq_factor_succ
@@ -172,8 +172,8 @@ lemma Ideal.map_mk_comap_factor
     rcases mem_image_of_mem_map_of_surjective (mk K) Quotient.mk_surjectiv
 
 中文:
-引理 Ideal.map_mk_comap_factor
-  条件: [J.IsTwoSided] [K.IsTwoSided] (hIJ : J <= I) (hJK : K <= J)
+引理 理想.map_mk_comap_factor
+  条件: [J.是TwoSided] [K.是TwoSided] (hIJ : J <= I) (hJK : K <= J)
   证明: by
   ext x
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -235,7 +235,7 @@ theorem factor_eq_factor
 
 中文:
 定理 factor_eq_factor
-  条件: [I.IsTwoSided] [J.IsTwoSided] (h : I <= J) (x : R ⧸ I)
+  条件: [I.是TwoSided] [J.是TwoSided] (h : I <= J) (x : R ⧸ I)
   证明: rfl
 -/
 theorem factor_eq_factor [I.IsTwoSided] [J.IsTwoSided] (h : I <= J) (x : R ⧸ I) :
@@ -257,7 +257,7 @@ lemma pow_smul_top_le
 中文:
 引理 pow_smul_top_le
   条件: {m n : 自然数} (h : m <= n)
-  结论: (I ^ n • ⊤ : Submodule R M) <= I ^ m • ⊤
+  结论: (I ^ n • ⊤ : 子模 R M) <= I ^ m • ⊤
   证明: smul_mono_left (Ideal.pow_le_pow_right h)
 
 Depends on / 依赖: Ideal.pow_le_pow_right, pow_le_pow_right, smul_mono_left
@@ -365,7 +365,7 @@ lemma Ideal.map_mk_comap_factorPow
   exact pow_le_self (Nat.ne_zero_of_lt apos)
 
 中文:
-引理 Ideal.map_mk_comap_factorPow
+引理 理想.map_mk_comap_factorPow
   条件: {a b : 自然数} (apos : 0 < a) (le : a <= b)
   证明: by
   apply Ideal.map_mk_comap_factor
@@ -441,7 +441,7 @@ definition powSMulQuotInclusion
 
 中文:
 定义 powSMulQuotInclusion
-  签名: (h : c = b + a) (N : Submodule R M)
+  签名: (h : c = b + a) (N : 子模 R M)
   定义体: mapQ _ _ (I ^ a • N).subtype by simp [← map_le_iff_le_comap, h, pow_add, mul_smul]
 
 @[simp]
@@ -463,7 +463,7 @@ theorem powSMulQuotInclusion_mk
 
 中文:
 定理 powSMulQuotInclusion_mk
-  结论: (h : c = b + a) (N : Submodule R M)
+  结论: (h : c = b + a) (N : 子模 R M)
   证明: rfl
 -/
 theorem powSMulQuotInclusion_mk (h : c = b + a) (N : Submodule R M)
@@ -482,7 +482,7 @@ theorem powSMulQuotInclusion_injective
 
 中文:
 定理 powSMulQuotInclusion_injective
-  条件: {a b c : 自然数} (h : c = b + a) (N : Submodule R M)
+  条件: {a b c : 自然数} (h : c = b + a) (N : 子模 R M)
   证明: by
   rw [← LinearMap.ker_eq_bot]
   simp [powSMulQuotInclusion, mapQ, ← le_bot_iff, ker_liftQ, LinearMap.ker_comp, pow_add, mul_smul,
@@ -529,7 +529,7 @@ theorem range_powSMulQuotInclusion
 
 中文:
 定理 range_powSMulQuotInclusion
-  条件: (h : c = b + a) (N : Submodule R M)
+  条件: (h : c = b + a) (N : 子模 R M)
   证明: by
   simp [powSMulQuotInclusion, mapQ, range_liftQ, LinearMap.range_comp]
 

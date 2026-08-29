@@ -100,7 +100,7 @@ theorem parallelepiped_basis_eq
 
 中文:
 定理 parallelepiped_basis_eq
-  条件: (b : Basis ι 实数 E)
+  条件: (b : 基 ι 实数 E)
   证明: by
   classical
   ext x
@@ -216,7 +216,7 @@ theorem parallelepiped_orthonormalBasis_one_dim
 
 中文:
 定理 parallelepiped_orthonormalBasis_one_dim
-  条件: (b : OrthonormalBasis ι 实数 实数)
+  条件: (b : 正交标准基 ι 实数 实数)
   证明: by
   have e : ι ≃ Fin 1 := by
     apply Fintype.equivFinOfCardEq
@@ -317,7 +317,7 @@ theorem convex_parallelepiped
 中文:
 定理 convex_parallelepiped
   条件: (v : ι -> E)
-  结论: Convex 实数 (parallelepiped v)
+  结论: 凸 实数 (parallelepiped v)
   证明: by
   rw [parallelepiped_eq_sum_segment]
   exact convex_sum _ fun _i _hi => convex_segment _ _
@@ -434,7 +434,7 @@ definition parallelepiped
 
 中文:
 定义 parallelepiped
-  签名: (b : Basis ι 实数 E)
+  签名: (b : 基 ι 实数 E)
   定义体: _root_.parallelepiped b
   isCompact' := IsCompact.image isCompact_Icc
       (continuous_finsetSum Finset.univ
@@ -474,7 +474,7 @@ theorem coe_parallelepiped
 
 中文:
 定理 coe_parallelepiped
-  条件: (b : Basis ι 实数 E)
+  条件: (b : 基 ι 实数 E)
   证明: rfl
 
 @[simp]
@@ -494,7 +494,7 @@ theorem parallelepiped_reindex
 
 中文:
 定理 parallelepiped_reindex
-  条件: (b : Basis ι 实数 E) (e : ι ≃ ι')
+  条件: (b : 基 ι 实数 E) (e : ι ≃ ι')
   证明: PositiveCompacts.ext
     (congr_arg _root_.parallelepiped (b.coe_reindex e)).trans (parallelepiped_comp_equiv b e.symm)
 
@@ -515,7 +515,7 @@ theorem parallelepiped_map
 
 中文:
 定理 parallelepiped_map
-  条件: (b : Basis ι 实数 E) (e : E ≃ₗ[实数] F)
+  条件: (b : 基 ι 实数 E) (e : E ≃ₗ[实数] F)
   证明: PositiveCompacts.ext (image_parallelepiped e.toLinearMap _).symm
 
 Depends on / 依赖: b.finiteDimensional_of_finite, finiteDimensional_of_finite
@@ -548,7 +548,7 @@ theorem prod_parallelepiped
 
 中文:
 定理 prod_parallelepiped
-  条件: (v : Basis ι 实数 E) (w : Basis ι' 实数 F)
+  条件: (v : 基 ι 实数 E) (w : 基 ι' 实数 F)
   证明: by
   ext x
   simp only [Basis.coe_parallelepiped, TopologicalSpace.PositiveCompacts.coe_prod, Set.mem_prod,
@@ -611,7 +611,7 @@ instance _root_.isAddHaarMeasure_basis_addHaar
 
 中文:
 实例 _root_.isAddHaarMeasure_basis_addHaar
-  签名: (b : Basis ι 实数 E)
+  签名: (b : 基 ι 实数 E)
   定义体: by
   rw [Basis.addHaar]; exact Measure.isAddHaarMeasure_addHaarMeasure _
 
@@ -638,7 +638,7 @@ theorem addHaar_eq_iff
 
 中文:
 定理 addHaar_eq_iff
-  结论: [SecondCountableTopology E] (b : Basis ι 实数 E) (μ : Measure E)
+  结论: [第二可数拓扑 E] (b : 基 ι 实数 E) (μ : 测度 E)
   证明: by
   rw [Basis.addHaar_def]
   exact addHaarMeasure_eq_iff b.parallelepiped μ
@@ -665,7 +665,7 @@ theorem addHaar_reindex
 
 中文:
 定理 addHaar_reindex
-  条件: (b : Basis ι 实数 E) (e : ι ≃ ι')
+  条件: (b : 基 ι 实数 E) (e : ι ≃ ι')
   证明: by
   rw [Basis.addHaar]; rw [b.parallelepiped_reindex e]; rw [← Basis.addHaar]
 
@@ -687,7 +687,7 @@ theorem addHaar_self
 
 中文:
 定理 addHaar_self
-  条件: (b : Basis ι 实数 E)
+  条件: (b : 基 ι 实数 E)
   结论: b.addHaar (_root_.parallelepiped b) = 1
   证明: by
   rw [Basis.addHaar]; exact addHaarMeasure_self
@@ -712,7 +712,7 @@ theorem prod_addHaar
 
 中文:
 定理 prod_addHaar
-  条件: (v : Basis ι 实数 E) (w : Basis ι' 实数 F)
+  条件: (v : 基 ι 实数 E) (w : 基 ι' 实数 F)
   证明: by
   have : FiniteDimensional Real E := v.finiteDimensional_of_finite
   have : FiniteDimensional Real F := w.finiteDimensional_of_finite
@@ -760,8 +760,8 @@ instance [NormedAddCommGroup
   body: isAddHaarMeasure_basis_addHaar _
 
 中文:
-实例 [NormedAddCommGroup
-  签名: E] [InnerProductSpace 实数 E] [FiniteDimensional 实数 E]
+实例 [赋范交换加群
+  签名: E] [内积空间 实数 E] [有限维 实数 E]
   定义体: isAddHaarMeasure_basis_addHaar _
 
 Depends on / 依赖: isAddHaarMeasure_basis_addHaar
@@ -779,8 +779,8 @@ instance Real.measureSpace
   body: by infer_instance
 
 中文:
-实例 Real.measureSpace
-  签名: : MeasureSpace 实数
+实例 实数.measureSpace
+  签名: : 测度空间 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance

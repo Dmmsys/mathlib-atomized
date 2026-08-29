@@ -44,7 +44,7 @@ abbreviation VertexOperator
 
 中文:
 缩写 VertexOperator
-  签名: (R : 类型) (V : 类型) [CommRing R] [AddCommGroup V]
+  签名: (R : 类型) (V : 类型) [交换环 R] [加法交换群 V]
   定义体: HVertexOperator Int R V V
 
 Depends on / 依赖: HVertexOperator
@@ -87,7 +87,7 @@ definition ncoeff
 
 中文:
 定义 ncoeff
-  签名: : VertexOperator R V ->ₗ[R] 整数 -> Module.End R V where
+  签名: : VertexOperator R V ->ₗ[R] 整数 -> 模.End R V where
   定义体: HVertexOperator.coeff A (-n - 1)
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -203,7 +203,7 @@ definition of_coeff
 
 中文:
 定义 of_coeff
-  签名: (f : 整数 -> Module.End R V)
+  签名: (f : 整数 -> 模.End R V)
   定义体: HVertexOperator.of_coeff f fun x => (BddBelow.isWF (hf x)).isPWO
 
 @[simp]
@@ -228,7 +228,7 @@ theorem of_coeff_apply_coeff
 
 中文:
 定理 of_coeff_apply_coeff
-  结论: (f : 整数 -> Module.End R V)
+  结论: (f : 整数 -> 模.End R V)
   证明: by
   rfl
 
@@ -254,7 +254,7 @@ theorem ncoeff_of_coeff
 
 中文:
 定理 ncoeff_of_coeff
-  结论: (f : 整数 -> Module.End R V)
+  结论: (f : 整数 -> 模.End R V)
   证明: by
   ext v
   rw [ncoeff_apply]; rw [coeff_apply_apply]; rw [of_coeff_apply_coeff]

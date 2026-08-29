@@ -140,7 +140,7 @@ instance zariskiTopology
 
 中文:
 实例 zariskiTopology
-  签名: : TopologicalSpace (PrimeSpectrum R)
+  签名: : 拓扑空间 (素谱 R)
   定义体: TopologicalSpace.ofClosed (Set.range PrimeSpectrum.zeroLocus) ⟨Set.univ, by simp⟩
     (by
       intro Zs h
@@ -178,8 +178,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (U : Set (PrimeSpectrum R))
-  结论: IsOpen U ↔ 存在 s, Uᶜ = zeroLocus s
+  条件: (U : 集合 (素谱 R))
+  结论: 是开集 U ↔ 存在 s, Uᶜ = zeroLocus s
   证明: by
   simp only [@eq_comm _ Uᶜ]; rfl
 
@@ -200,8 +200,8 @@ theorem isClosed_iff_zeroLocus
 
 中文:
 定理 isClosed_iff_zeroLocus
-  条件: (Z : Set (PrimeSpectrum R))
-  结论: IsClosed Z ↔ 存在 s, Z = zeroLocus s
+  条件: (Z : 集合 (素谱 R))
+  结论: 是闭集 Z ↔ 存在 s, Z = zeroLocus s
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff]; rw [compl_compl]
 
@@ -221,7 +221,7 @@ theorem isClosed_iff_zeroLocus_ideal
 
 中文:
 定理 isClosed_iff_zeroLocus_ideal
-  条件: (Z : Set (PrimeSpectrum R))
+  条件: (Z : 集合 (素谱 R))
   证明: (isClosed_iff_zeroLocus _).trans
     ⟨fun ⟨s, hs⟩ => ⟨_, (zeroLocus_span s).substr hs⟩, fun ⟨I, hI⟩ => ⟨I, hI⟩⟩
 
@@ -244,7 +244,7 @@ theorem isClosed_iff_zeroLocus_radical_ideal
 
 中文:
 定理 isClosed_iff_zeroLocus_radical_ideal
-  条件: (Z : Set (PrimeSpectrum R))
+  条件: (Z : 集合 (素谱 R))
   证明: (isClosed_iff_zeroLocus_ideal _).trans
     ⟨fun ⟨I, hI⟩ => ⟨_, I.radical_isRadical, (zeroLocus_radical I).substr hI⟩, fun ⟨I, _, hI⟩ =>
       ⟨I, hI⟩⟩
@@ -270,8 +270,8 @@ theorem isClosed_zeroLocus
 
 中文:
 定理 isClosed_zeroLocus
-  条件: (s : Set R)
-  结论: IsClosed (zeroLocus s)
+  条件: (s : 集合 R)
+  结论: 是闭集 (zeroLocus s)
   证明: by
   rw [isClosed_iff_zeroLocus]
   exact ⟨s, rfl⟩
@@ -296,7 +296,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
 
 中文:
 定理 zeroLocus_vanishingIdeal_eq_closure
-  条件: (t : Set (PrimeSpectrum R))
+  条件: (t : 集合 (素谱 R))
   证明: by
 .mp isClosed_closure with ⟨I, hI⟩ rcases isClosed_iff_zeroLocus (closure t)
   rw [subset_antisymm_iff]; rw [(isClosed_zeroLocus _).closure_subset_iff]; rw [hI]; rw [subset_zeroLocus_iff_subset_vanishingIdeal]; rw [(gc R).u_l_u_eq_u]; rw [← subset_zeroLocus_iff_subset_vanishingIdeal]; rw [← hI]
@@ -320,7 +320,7 @@ theorem vanishingIdeal_closure
 
 中文:
 定理 vanishingIdeal_closure
-  条件: (t : Set (PrimeSpectrum R))
+  条件: (t : 集合 (素谱 R))
   证明: zeroLocus_vanishingIdeal_eq_closure t ▸ (gc R).u_l_u_eq_u t
 
 Depends on / 依赖: u_l_u_eq_u, zeroLocus_vanishingIdeal_eq_closure
@@ -342,7 +342,7 @@ theorem closure_singleton
 中文:
 定理 closure_singleton
   条件: (x)
-  结论: closure ({x} : Set (PrimeSpectrum R)) = zeroLocus x.asIdeal
+  结论: closure ({x} : 集合 (素谱 R)) = zeroLocus x.asIdeal
   证明: by
   rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [vanishingIdeal_singleton]
 
@@ -366,7 +366,7 @@ theorem isClosed_singleton_iff_isMaximal
 
 中文:
 定理 isClosed_singleton_iff_isMaximal
-  条件: (x : PrimeSpectrum R)
+  条件: (x : 素谱 R)
   证明: by
   rw [← closure_subset_iff_isClosed]; rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [vanishingIdeal_singleton]
   constructor <;> intro H
@@ -397,7 +397,7 @@ theorem isRadical_vanishingIdeal
 
 中文:
 定理 isRadical_vanishingIdeal
-  条件: (s : Set (PrimeSpectrum R))
+  条件: (s : 集合 (素谱 R))
   结论: (vanishingIdeal s).IsRadical
   证明: by
   rw [← vanishingIdeal_closure]; rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [vanishingIdeal_zeroLocus_eq_radical]
@@ -422,7 +422,7 @@ theorem zeroLocus_eq_iff
 
 中文:
 定理 zeroLocus_eq_iff
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   证明: by
   constructor
   · intro h; simp_rw [← vanishingIdeal_zeroLocus_eq_radical, h]
@@ -448,7 +448,7 @@ theorem vanishingIdeal_anti_mono_iff
 
 中文:
 定理 vanishingIdeal_anti_mono_iff
-  条件: {s t : Set (PrimeSpectrum R)} (ht : IsClosed t)
+  条件: {s t : 集合 (素谱 R)} (ht : 是闭集 t)
   证明: ⟨vanishingIdeal_anti_mono, fun h => by
     rw [← ht.closure_subset_iff]; rw [← ht.closure_eq]
     convert! ← zeroLocus_anti_mono_ideal h <;> apply zeroLocus_vanishingIdeal_eq_closure⟩
@@ -472,7 +472,7 @@ theorem vanishingIdeal_strict_anti_mono_iff
 
 中文:
 定理 vanishingIdeal_strict_anti_mono_iff
-  结论: {s t : Set (PrimeSpectrum R)} (hs : IsClosed s)
+  结论: {s t : 集合 (素谱 R)} (hs : 是闭集 s)
   证明: by
   rw [Set.ssubset_def]; rw [vanishingIdeal_anti_mono_iff hs]; rw [vanishingIdeal_anti_mono_iff ht]; rw [lt_iff_le_not_ge]
 
@@ -493,7 +493,7 @@ definition closedsEmbedding
 
 中文:
 定义 closedsEmbedding
-  签名: (R : 类型) [CommSemiring R]
+  签名: (R : 类型) [交换半环 R]
   定义体: OrderEmbedding.ofMapLEIff (fun s => vanishingIdeal ↑(OrderDual.ofDual s)) fun s _ =>
     (vanishingIdeal_anti_mono_iff s.2).symm
 
@@ -524,8 +524,8 @@ theorem t1Space_iff_isField
 
 中文:
 定理 t1Space_iff_isField
-  条件: [IsDomain R]
-  结论: T1Space (PrimeSpectrum R) ↔ IsField R
+  条件: [是整环 R]
+  结论: T1空间 (素谱 R) ↔ 是域 R
   证明: by
   refine ⟨?_, fun h => ?_⟩
   · intro h
@@ -571,7 +571,7 @@ theorem isIrreducible_zeroLocus_iff_of_radical
 
 中文:
 定理 isIrreducible_zeroLocus_iff_of_radical
-  条件: (I : Ideal R) (hI : I.IsRadical)
+  条件: (I : 理想 R) (hI : I.IsRadical)
   证明: by
   rw [Ideal.isPrime_iff]; rw [IsIrreducible]
   apply and_congr
@@ -615,7 +615,7 @@ theorem isIrreducible_zeroLocus_iff
 
 中文:
 定理 isIrreducible_zeroLocus_iff
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: zeroLocus_radical I ▸ isIrreducible_zeroLocus_iff_of_radical _ I.radical_isRadical
 
 Depends on / 依赖: I.radical_isRadical, TotallySeparatedSpace, TotallySeparatedSpace.totallyDisconnectedSpace, isIrreducible_zeroLocus_iff_of_radical, radical_isRadical, totallyDisconnectedSpace, zeroLocus_radical
@@ -635,7 +635,7 @@ theorem isIrreducible_iff_vanishingIdeal_isPrime
 
 中文:
 定理 isIrreducible_iff_vanishingIdeal_isPrime
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   rw [← isIrreducible_iff_closure]; rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [isIrreducible_zeroLocus_iff_of_radical _ (isRadical_vanishingIdeal s)]
 
@@ -726,7 +726,7 @@ instance irreducibleSpace
 
 中文:
 实例 irreducibleSpace
-  签名: [IsDomain R]
+  签名: [是整环 R]
   定义体: by
   simpa [irreducibleSpace_iff_isPrime_nilradical] using Ideal.isPrime_bot
 
@@ -747,7 +747,7 @@ instance quasiSober
 
 中文:
 实例 quasiSober
-  签名: : QuasiSober (PrimeSpectrum R)
+  签名: : 拟醇 (素谱 R)
   定义体: ⟨fun {S} h₁ h₂ =>
     ⟨⟨_, isIrreducible_iff_vanishingIdeal_isPrime.1 h₁⟩, by
       rw [IsGenericPoint]; rw [closure_singleton]; rw [zeroLocus_vanishingIdeal_eq_closure]; rw [h₂.closure_eq]⟩⟩
@@ -776,7 +776,7 @@ instance compactSpace
 
 中文:
 实例 compactSpace
-  签名: : CompactSpace (PrimeSpectrum R)
+  签名: : 紧空间 (素谱 R)
   定义体: by
   refine compactSpace_of_finite_subfamily_closed fun S S_closed S_empty => ?_
   choose I hI using fun i => (isClosed_iff_zeroLocus_ideal (S i)).mp (S_closed i)
@@ -804,7 +804,7 @@ theorem discreteTopology_iff_finite_and_krullDimLE_zero
 
 中文:
 定理 discreteTopology_iff_finite_and_krullDimLE_zero
-  结论: DiscreteTopology (PrimeSpectrum R) ↔
+  结论: 离散拓扑 (素谱 R) ↔
   证明: ⟨fun _ => ⟨finite_of_compact_of_discrete, .mk₀ fun I h => isClosed_singleton_iff_isMaximal ⟨I, h⟩
 .mp discreteTopology_iff_forall_isClosed.mp ‹_› _⟩, fun ⟨_, _⟩ =>
     .of_finite_of_isClosed_singleton fun p => (isClosed_singleton_iff_isMaximal p).mpr inferInstance⟩
@@ -889,7 +889,7 @@ lemma continuous_comap
 中文:
 引理 continuous_comap
   条件: (f : R ->+* S)
-  结论: Continuous (comap f)
+  结论: 连续 (comap f)
   证明: by
   simp only [continuous_iff_isClosed, isClosed_iff_zeroLocus]
   rintro _ ⟨s, rfl⟩
@@ -922,7 +922,7 @@ theorem localization_comap_injective
 
 中文:
 定理 localization_comap_injective
-  条件: [Algebra R S] (M : Submonoid R) [IsLocalization M S]
+  条件: [代数 R S] (M : 子幺半群 R) [是Localization M S]
   证明: by
   intro p q h
   replace h := _root_.congr_arg (fun x : PrimeSpectrum R => Ideal.map (algebraMap R S) x.asIdeal) h
@@ -958,7 +958,7 @@ theorem localization_comap_range
 
 中文:
 定理 localization_comap_range
-  条件: [Algebra R S] (M : Submonoid R) [IsLocalization M S]
+  条件: [代数 R S] (M : 子幺半群 R) [是Localization M S]
   证明: by
   refine Set.ext fun x => ⟨?_, fun h => ?_⟩
   · rintro ⟨p, rfl⟩
@@ -995,7 +995,7 @@ theorem localization_comap_isInducing
 
 中文:
 定理 localization_comap_isInducing
-  条件: [Algebra R S] (M : Submonoid R) [IsLocalization M S]
+  条件: [代数 R S] (M : 子幺半群 R) [是Localization M S]
   证明: by
   refine ⟨TopologicalSpace.ext_isClosed fun Z => ?_⟩
   simp_rw [isClosed_induced_iff, isClosed_iff_zeroLocus, @eq_comm _ _ (zeroLocus _),
@@ -1029,7 +1029,7 @@ theorem localization_comap_isEmbedding
 
 中文:
 定理 localization_comap_isEmbedding
-  条件: [Algebra R S] (M : Submonoid R) [IsLocalization M S]
+  条件: [代数 R S] (M : 子幺半群 R) [是Localization M S]
   证明: ⟨localization_comap_isInducing S M, localization_comap_injective S M⟩
 
 Depends on / 依赖: localization_comap_injective, localization_comap_isInducing
@@ -1057,8 +1057,8 @@ theorem comap_isInducing_of_surjective
 
 中文:
 定理 comap_isInducing_of_surjective
-  条件: (hf : Surjective f)
-  结论: IsInducing (comap f) where
+  条件: (hf : 满射 f)
+  结论: 是Inducing (comap f) where
   证明: by
     simp only [TopologicalSpace.ext_iff, ← isClosed_compl_iff, isClosed_iff_zeroLocus,
       isClosed_induced_iff]
@@ -1092,8 +1092,8 @@ theorem isEmbedding_comap_of_surjective
 
 中文:
 定理 isEmbedding_comap_of_surjective
-  条件: (hf : Surjective f)
-  结论: IsEmbedding (comap f)
+  条件: (hf : 满射 f)
+  结论: 是嵌入 (comap f)
   证明: (isEmbedding_iff _).2 ⟨comap_isInducing_of_surjective _ _ hf, comap_injective_of_surjective f hf⟩
 
 Depends on / 依赖: comap_injective_of_surjective, comap_isInducing_of_surjective, isEmbedding_iff
@@ -1140,7 +1140,7 @@ lemma isHomeomorph_comap_of_bijective
 
 中文:
 引理 isHomeomorph_comap_of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
   证明: (homeomorphOfRingEquiv (.ofBijective f hf)).symm.isHomeomorph
 
 Depends on / 依赖: homeomorphOfRingEquiv, isHomeomorph, ofBijective, symm.isHomeomorph
@@ -1172,7 +1172,7 @@ theorem comap_singleton_isClosed_of_surjective
 
 中文:
 定理 comap_singleton_isClosed_of_surjective
-  结论: (f : R ->+* S) (hf : Function.Surjective f)
+  结论: (f : R ->+* S) (hf : 函数.满射 f)
   证明: haveI : x.asIdeal.IsMaximal := (isClosed_singleton_iff_isMaximal x).1 hx
   (isClosed_singleton_iff_isMaximal _).2 (Ideal.comap_isMaximal_of_surjective f hf)
 
@@ -1197,7 +1197,7 @@ lemma comap_quotientMk_bijective_of_le_nilradical
 
 中文:
 引理 comap_quotientMk_bijective_of_le_nilradical
-  条件: {I : Ideal R} (hle : I <= nilradical R)
+  条件: {I : 理想 R} (hle : I <= nilradical R)
   证明: by
   refine ⟨comap_injective_of_surjective _ Ideal.Quotient.mk_surjective, ?_⟩
   simpa [← Set.range_eq_univ, range_comap_of_surjective _ _ Ideal.Quotient.mk_surjective,
@@ -1223,7 +1223,7 @@ theorem isClosed_range_comap_of_surjective
 
 中文:
 定理 isClosed_range_comap_of_surjective
-  条件: (hf : Surjective f)
+  条件: (hf : 满射 f)
   证明: by
   rw [range_comap_of_surjective _ f hf]
   exact isClosed_zeroLocus _
@@ -1248,8 +1248,8 @@ lemma isClosedEmbedding_comap_of_surjective
 
 中文:
 引理 isClosedEmbedding_comap_of_surjective
-  条件: (hf : Surjective f)
-  结论: IsClosedEmbedding (comap f) where
+  条件: (hf : 满射 f)
+  结论: 是闭嵌入 (comap f) where
   证明: comap_isInducing_of_surjective S f hf
   injective := comap_injective_of_surjective f hf
   isClosed_range := isClosed_range_comap_of_surjective S f hf
@@ -1384,7 +1384,7 @@ lemma isClosedEmbedding_comap_fst
 
 中文:
 引理 isClosedEmbedding_comap_fst
-  结论: IsClosedEmbedding (comap (RingHom.fst R S))
+  结论: 是闭嵌入 (comap (环态射.fst R S))
   证明: (isClosedEmbedding_iff _).mpr ⟨isEmbedding_comap_of_surjective _ _ Prod.fst_surjective, by
     simp_rw [range_comap_fst, isClosed_zeroLocus]⟩
 
@@ -1405,7 +1405,7 @@ lemma isClosedEmbedding_comap_snd
 
 中文:
 引理 isClosedEmbedding_comap_snd
-  结论: IsClosedEmbedding (comap (RingHom.snd R S))
+  结论: 是闭嵌入 (comap (环态射.snd R S))
   证明: (isClosedEmbedding_iff _).mpr ⟨isEmbedding_comap_of_surjective _ _ Prod.snd_surjective, by
     simp_rw [range_comap_snd, isClosed_zeroLocus]⟩
 
@@ -1502,7 +1502,7 @@ theorem mem_basicOpen
 
 中文:
 定理 mem_basicOpen
-  条件: (f : R) (x : PrimeSpectrum R)
+  条件: (f : R) (x : 素谱 R)
   结论: x in basicOpen f ↔ f ∉ x.asIdeal
   证明: Iff.rfl
 
@@ -1525,7 +1525,7 @@ theorem isOpen_basicOpen
 中文:
 定理 isOpen_basicOpen
   条件: {a : R}
-  结论: IsOpen (basicOpen a : Set (PrimeSpectrum R))
+  结论: 是开集 (basicOpen a : 集合 (素谱 R))
   证明: (basicOpen a).isOpen
 
 @[simp]
@@ -1637,7 +1637,7 @@ theorem basicOpen_le_basicOpen_iff_algebraMap_isUnit
 
 中文:
 定理 basicOpen_le_basicOpen_iff_algebraMap_isUnit
-  结论: {f g : R} [Algebra R S]
+  结论: {f g : R} [代数 R S]
   证明: by
   simp_rw [basicOpen_le_basicOpen_iff, Ideal.mem_radical_iff, Ideal.mem_span_singleton,
     IsLocalization.Away.algebraMap_isUnit_iff f]
@@ -1814,7 +1814,7 @@ theorem eq_biUnion_of_isOpen
 
 中文:
 定理 eq_biUnion_of_isOpen
-  条件: {s : Set (PrimeSpectrum R)} (hs : IsOpen s)
+  条件: {s : 集合 (素谱 R)} (hs : 是开集 s)
   证明: (isTopologicalBasis_basic_opens.open_eq_sUnion' hs).trans by aesop
 
 Depends on / 依赖: isTopologicalBasis_basic_opens, isTopologicalBasis_basic_opens.open_eq_sUnion, open_eq_sUnion
@@ -1839,7 +1839,7 @@ theorem isBasis_basic_opens
 
 中文:
 定理 isBasis_basic_opens
-  结论: TopologicalSpace.Opens.IsBasis (Set.range (@basicOpen R _))
+  结论: 拓扑空间.Opens.是基 (集合.range (@basicOpen R _))
   证明: by
   unfold TopologicalSpace.Opens.IsBasis
   convert! isTopologicalBasis_basic_opens (R := R)
@@ -1873,7 +1873,7 @@ theorem basicOpen_eq_bot_iff
 中文:
 定理 basicOpen_eq_bot_iff
   条件: (f : R)
-  结论: basicOpen f = ⊥ ↔ IsNilpotent f
+  结论: basicOpen f = ⊥ ↔ 是幂零 f
   证明: by
   rw [← TopologicalSpace.Opens.coe_inj]; rw [basicOpen_eq_zeroLocus_compl]
   simp only [Set.eq_univ_iff_forall, Set.singleton_subset_iff, TopologicalSpace.Opens.coe_bot,
@@ -1905,7 +1905,7 @@ theorem localization_away_comap_range
 
 中文:
 定理 localization_away_comap_range
-  结论: (S : 类型v) [CommSemiring S] [Algebra R S] (r : R)
+  结论: (S : 类型v) [交换半环 S] [代数 R S] (r : R)
   证明: by
   rw [localization_comap_range S (Submonoid.powers r)]
   ext x
@@ -1942,7 +1942,7 @@ theorem localization_away_isOpenEmbedding
 
 中文:
 定理 localization_away_isOpenEmbedding
-  结论: (S : 类型v) [CommSemiring S] [Algebra R S] (r : R)
+  结论: (S : 类型v) [交换半环 S] [代数 R S] (r : R)
   证明: localization_comap_isEmbedding S (Submonoid.powers r)
   isOpen_range := by
     rw [localization_away_comap_range S r]
@@ -1971,7 +1971,7 @@ theorem isCompact_basicOpen
 中文:
 定理 isCompact_basicOpen
   条件: (f : R)
-  结论: IsCompact (basicOpen f : Set (PrimeSpectrum R))
+  结论: 是紧集 (basicOpen f : 集合 (素谱 R))
   证明: by
   rw [← localization_away_comap_range (Localization (Submonoid.powers f))]
   exact isCompact_range (continuous_comap _)
@@ -2045,7 +2045,7 @@ lemma iSup_basicOpen_eq_top_iff'
 
 中文:
 引理 iSup_basicOpen_eq_top_iff'
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   证明: by
   conv_rhs => rw [← Subtype.range_val (s := s), ← iSup_basicOpen_eq_top_iff]
   simp
@@ -2072,7 +2072,7 @@ theorem isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton
 
 中文:
 定理 isLocalization_away_iff_atPrime_of_basicOpen_eq_singleton
-  结论: [Algebra R S]
+  结论: [代数 R S]
   证明: have : IsLocalization.AtPrime (Localization.Away f) p.1 := by
     refine .of_le_of_exists_dvd (.powers f) _
       (Submonoid.powers_le.mpr <| by apply h ▸ Set.mem_singleton p) fun r hr => ?_
@@ -2147,7 +2147,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiSeparatedSpace (PrimeSpectrum R)
+  签名: 拟分离空间 (素谱 R)
   定义体: .of_isTopologicalBasis isTopologicalBasis_basic_opens fun i j => by
     simpa [← TopologicalSpace.Opens.coe_inf, ← basicOpen_mul, -basicOpen_eq_zeroLocus_compl]
       using isCompact_basicOpen _
@@ -2263,7 +2263,7 @@ lemma isOpenEmbedding_sigmaToPi
 
 中文:
 引理 isOpenEmbedding_sigmaToPi
-  结论: Topology.IsOpenEmbedding (sigmaToPi R)
+  结论: 拓扑.是开嵌入 (sigmaToPi R)
   证明: by
   classical
   refine .of_continuous_injective_isOpenMap ?_ ?_ ?_
@@ -2303,7 +2303,7 @@ definition sigmaToPiHomeo
 
 中文:
 定义 sigmaToPiHomeo
-  签名: {ι : 类型} (R : ι -> 类型) [对任意 i, CommRing (R i)] [Finite ι]
+  签名: {ι : 类型} (R : ι -> 类型) [对任意 i, 交换环 (R i)] [有限 ι]
   定义体: (isOpenEmbedding_sigmaToPi R).toHomeomorphOfSurjective (sigmaToPi_bijective R).surjective
 
 @[simp]
@@ -2325,7 +2325,7 @@ lemma sigmaToPiHomeo_apply
 
 中文:
 引理 sigmaToPiHomeo_apply
-  条件: [Finite ι] (p : Σ i, PrimeSpectrum (R i))
+  条件: [有限 ι] (p : Σ i, 素谱 (R i))
   证明: rfl
 -/
 lemma sigmaToPiHomeo_apply [Finite ι] (p : Σ i, PrimeSpectrum (R i)) :
@@ -2433,7 +2433,7 @@ definition _root_.MaximalSpectrum.toPiLocalizationEquiv
 @[simp]
 
 中文:
-定义 _root_.MaximalSpectrum.toPiLocalizationEquiv
+定义 _root_.极大谱.toPiLocalizationEquiv
   签名: :
   定义体: .ofBijective _ ⟨MaximalSpectrum.toPiLocalization_injective R,
     maximalSpectrumToPiLocalization_surjective_of_discreteTopology R⟩
@@ -2459,7 +2459,7 @@ theorem _root_.MaximalSpectrum.toPiLocalizationEquiv_apply
 @[simp]
 
 中文:
-定理 _root_.MaximalSpectrum.toPiLocalizationEquiv_apply
+定理 _root_.极大谱.toPiLocalizationEquiv_apply
   条件: (x : R)
   证明: rfl
 
@@ -2479,8 +2479,8 @@ theorem _root_.MaximalSpectrum.toPiLocalizationEquiv_apply_apply
   proof: rfl
 
 中文:
-定理 _root_.MaximalSpectrum.toPiLocalizationEquiv_apply_apply
-  条件: (x : R) (I : MaximalSpectrum R)
+定理 _root_.极大谱.toPiLocalizationEquiv_apply_apply
+  条件: (x : R) (I : 极大谱 R)
   证明: rfl
 -/
 theorem _root_.MaximalSpectrum.toPiLocalizationEquiv_apply_apply (x : R) (I : MaximalSpectrum R) :
@@ -2498,7 +2498,7 @@ theorem discreteTopology_iff_toPiLocalization_surjective
 
 中文:
 定理 discreteTopology_iff_toPiLocalization_surjective
-  条件: {R} [CommSemiring R]
+  条件: {R} [交换半环 R]
   证明: ⟨fun _ => toPiLocalization_surjective_of_discreteTopology _,
     discreteTopology_of_toLocalization_surjective⟩
 
@@ -2520,7 +2520,7 @@ theorem discreteTopology_iff_toPiLocalization_bijective
 
 中文:
 定理 discreteTopology_iff_toPiLocalization_bijective
-  条件: {R} [CommSemiring R]
+  条件: {R} [交换半环 R]
   证明: discreteTopology_iff_toPiLocalization_surjective.trans
     (and_iff_right <| toPiLocalization_injective _).symm
 
@@ -2542,7 +2542,7 @@ lemma toPiLocalization_bijective
 
 中文:
 引理 toPiLocalization_bijective
-  结论: Function.Bijective (toPiLocalization R)
+  结论: 函数.双射 (toPiLocalization R)
   证明: discreteTopology_iff_toPiLocalization_bijective.mp inferInstance
 
 Depends on / 依赖: discreteTopology_iff_toPiLocalization_bijective, discreteTopology_iff_toPiLocalization_bijective.mp
@@ -2606,7 +2606,7 @@ theorem toPiLocalizationEquiv_apply_apply
 
 中文:
 定理 toPiLocalizationEquiv_apply_apply
-  条件: (x : R) (I : PrimeSpectrum R)
+  条件: (x : R) (I : 素谱 R)
   证明: rfl
 -/
 theorem toPiLocalizationEquiv_apply_apply (x : R) (I : PrimeSpectrum R) :
@@ -2629,7 +2629,7 @@ theorem le_iff_mem_closure
 
 中文:
 定理 le_iff_mem_closure
-  条件: (x y : PrimeSpectrum R)
+  条件: (x y : 素谱 R)
   证明: by
   rw [← asIdeal_le_asIdeal]; rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [mem_zeroLocus]; rw [vanishingIdeal_singleton]; rw [SetLike.coe_subset_coe]
 
@@ -2650,7 +2650,7 @@ theorem le_iff_specializes
 
 中文:
 定理 le_iff_specializes
-  条件: (x y : PrimeSpectrum R)
+  条件: (x y : 素谱 R)
   结论: x <= y ↔ x ⤳ y
   证明: (le_iff_mem_closure x y).trans specializes_iff_mem_closure.symm
 
@@ -2671,7 +2671,7 @@ definition nhdsOrderEmbedding
 
 中文:
 定义 nhdsOrderEmbedding
-  签名: : PrimeSpectrum R ↪o Filter (PrimeSpectrum R)
+  签名: : 素谱 R ↪o 滤子 (素谱 R)
   定义体: OrderEmbedding.ofMapLEIff nhds fun a b => (le_iff_specializes a b).symm
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofMapLEIff, le_iff_specializes, ofMapLEIff
@@ -2689,7 +2689,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space (PrimeSpectrum R)
+  签名: T0空间 (素谱 R)
   定义体: ⟨nhdsOrderEmbedding.inj'⟩
 
 Depends on / 依赖: nhdsOrderEmbedding, nhdsOrderEmbedding.inj
@@ -2707,7 +2707,7 @@ instance :
 
 中文:
 实例 :
-  签名: PrespectralSpace (PrimeSpectrum R)
+  签名: Prespectral空间 (素谱 R)
   定义体: .of_isTopologicalBasis' isTopologicalBasis_basic_opens isCompact_basicOpen
 
 Depends on / 依赖: isCompact_basicOpen, isTopologicalBasis_basic_opens, of_isTopologicalBasis
@@ -2724,7 +2724,7 @@ instance :
 
 中文:
 实例 :
-  签名: SpectralSpace (PrimeSpectrum R)
+  签名: 谱空间 (素谱 R)
 -/
 instance : SpectralSpace (PrimeSpectrum R) where
 
@@ -2746,7 +2746,7 @@ definition localizationMapOfSpecializes
 
 中文:
 定义 localizationMapOfSpecializes
-  签名: {x y : PrimeSpectrum R} (h : x ⤳ y)
+  签名: {x y : 素谱 R} (h : x ⤳ y)
   定义体: @IsLocalization.lift _ _ _ _ _ _ _ _ Localization.isLocalization
     (algebraMap R (Localization.AtPrime x.asIdeal))
     (by
@@ -3104,7 +3104,7 @@ definition zeroLocusEquivIrreducibleCloseds
 
 中文:
 定义 zeroLocusEquivIrreducibleCloseds
-  签名: (I : Set R)
+  签名: (I : 集合 R)
   定义体: irreducibleSetEquivPoints.toEquiv.symm.trans OrderDual.toDual
   map_rel_iff' {p q} := (RelIso.symm irreducibleSetEquivPoints).map_rel_iff.trans
     ((subtype_specializes_iff p q).trans (le_iff_specializes p.1 q.1).symm)
@@ -3128,7 +3128,7 @@ lemma stableUnderSpecialization_singleton
 
 中文:
 引理 stableUnderSpecialization_singleton
-  条件: {x : PrimeSpectrum R}
+  条件: {x : 素谱 R}
   证明: by
   simp_rw [← isMax_iff, StableUnderSpecialization, ← le_iff_specializes, Set.mem_singleton_iff,
     @forall_comm _ (_ = _), forall_eq]
@@ -3155,7 +3155,7 @@ lemma stableUnderGeneralization_singleton
 
 中文:
 引理 stableUnderGeneralization_singleton
-  条件: {x : PrimeSpectrum R}
+  条件: {x : 素谱 R}
   证明: by
   simp_rw [← isMin_iff, StableUnderGeneralization, ← le_iff_specializes, Set.mem_singleton_iff,
     @forall_comm _ (_ = _), forall_eq]
@@ -3184,7 +3184,7 @@ lemma isCompact_isOpen_iff
 
 中文:
 引理 isCompact_isOpen_iff
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   rw [isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis _
     isTopologicalBasis_basic_opens isCompact_basicOpen]
@@ -3216,7 +3216,7 @@ lemma isCompact_isOpen_iff_ideal
 
 中文:
 引理 isCompact_isOpen_iff_ideal
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   rw [isCompact_isOpen_iff]
   exact ⟨fun ⟨s, e⟩ => ⟨.span s, ⟨s, rfl⟩, by simpa using e⟩,
@@ -3360,8 +3360,8 @@ lemma exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
   simp onl
 
 中文:
-引理 exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
-  结论: {s : Set (PrimeSpectrum R)}
+引理 存在_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen
+  结论: {s : 集合 (素谱 R)}
   证明: by
   cases subsingleton_or_nontrivial R
   · refine ⟨0, 0, ?_, ?_, ?_, ?_⟩ <;> apply Subsingleton.elim
@@ -3417,8 +3417,8 @@ lemma exists_idempotent_basicOpen_eq_of_isClopen
 @[stacks 00EE]
 
 中文:
-引理 exists_idempotent_basicOpen_eq_of_isClopen
-  结论: {s : Set (PrimeSpectrum R)}
+引理 存在_idempotent_basicOpen_eq_of_isClopen
+  结论: {s : 集合 (素谱 R)}
   证明: have ⟨e, _, mul, add, eq, _⟩ := exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen hs
   ⟨e, (IsIdempotentElem.of_mul_add mul add).1, eq⟩
 
@@ -3444,8 +3444,8 @@ lemma existsUnique_idempotent_basicOpen_eq_of_isClopen
   exact basicOpen_injOn_isIdempotentElem hx hy (SetLike.ext' eq)
 
 中文:
-引理 existsUnique_idempotent_basicOpen_eq_of_isClopen
-  结论: {s : Set (PrimeSpectrum R)}
+引理 存在Unique_idempotent_basicOpen_eq_of_isClopen
+  结论: {s : 集合 (素谱 R)}
   证明: by
   refine existsUnique_of_exists_of_unique (exists_idempotent_basicOpen_eq_of_isClopen hs) ?_
   rintro x y ⟨hx, rfl⟩ ⟨hy, eq⟩
@@ -3475,7 +3475,7 @@ lemma isClopen_iff_mul_add
 
 中文:
 引理 isClopen_iff_mul_add
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · have ⟨e, f, h⟩ := exists_mul_eq_zero_add_eq_one_basicOpen_eq_of_isClopen h
@@ -3508,7 +3508,7 @@ lemma isClopen_iff_mul_add_zeroLocus
 
 中文:
 引理 isClopen_iff_mul_add_zeroLocus
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   rw [isClopen_iff_mul_add]; rw [exists_comm]
   refine exists₂_congr fun e f => ?_
@@ -3579,7 +3579,7 @@ lemma isRetrocompact_zeroLocus_compl
 
 中文:
 引理 isRetrocompact_zeroLocus_compl
-  条件: {s : Set R} (hs : s.Finite)
+  条件: {s : 集合 R} (hs : s.有限)
   证明: (QuasiSeparatedSpace.isRetrocompact_iff_isCompact (isClosed_zeroLocus _).isOpen_compl).mpr
     (isCompact_isOpen_iff.mpr ⟨hs.toFinset, by simp⟩).1
 
@@ -3603,7 +3603,7 @@ lemma isRetrocompact_zeroLocus_compl_of_fg
 
 中文:
 引理 isRetrocompact_zeroLocus_compl_of_fg
-  条件: {I : Ideal R} (hI : I.FG)
+  条件: {I : 理想 R} (hI : I.FG)
   证明: by
   obtain ⟨s, rfl⟩ := hI
   rw [zeroLocus_span]
@@ -3678,8 +3678,8 @@ theorem isClosedMap_comap_of_isIntegral
   refine ⟨⟨q, hq₂⟩, ((le_iff_specializes _ ⟨q
 
 中文:
-定理 isClosedMap_comap_of_isIntegral
-  条件: (hf : f.Is整数egral)
+定理 isClosedMap_comap_of_is整数egral
+  条件: (hf : f.是整)
   证明: by
   refine fun s hs => isClosed_image_of_stableUnderSpecialization _ _ hs ?_
   rintro _ y e ⟨x, hx, rfl⟩
@@ -3710,8 +3710,8 @@ theorem isClosed_comap_singleton_of_isIntegral
   simpa using isClosedMap_comap_of_isIntegral f hf _ hx
 
 中文:
-定理 isClosed_comap_singleton_of_isIntegral
-  结论: (hf : f.Is整数egral)
+定理 isClosed_comap_singleton_of_is整数egral
+  结论: (hf : f.是整)
   证明: by
   simpa using isClosedMap_comap_of_isIntegral f hf _ hx
 
@@ -3738,7 +3738,7 @@ lemma closure_image_comap_zeroLocus
 
 中文:
 引理 closure_image_comap_zeroLocus
-  条件: (I : Ideal S)
+  条件: (I : 理想 S)
   证明: by
   apply subset_antisymm
   · rw [(isClosed_zeroLocus _).closure_subset_iff, Set.image_subset_iff, preimage_comap_zeroLocus]
@@ -3779,8 +3779,8 @@ lemma isIntegral_of_isClosedMap_comap_mapRingHom
     have H := h _ (isClosed_zero
 
 中文:
-引理 isIntegral_of_isClosedMap_comap_mapRingHom
-  条件: (h : IsClosedMap (comap (mapRingHom f)))
+引理 is整数egral_of_isClosedMap_comap_mapRingHom
+  条件: (h : 是闭映射 (comap (mapRingHom f)))
   证明: by
   algebraize [f]
   suffices Algebra.IsIntegral R S by rwa [Algebra.isIntegral_def] at this
@@ -3838,8 +3838,8 @@ lemma _root_.Algebra.IsIntegral.comap_surjective
   exact ⟨⟨Q, hQ⟩, rfl⟩
 
 中文:
-引理 _root_.Algebra.IsIntegral.comap_surjective
-  结论: [Algebra R S] [Algebra.Is整数egral R S]
+引理 _root_.代数.是整.comap_surjective
+  结论: [代数 R S] [代数.是整 R S]
   证明: by
   intro ⟨p, hp⟩
   have hinj : Function.Injective (algebraMap R S) := FaithfulSMul.algebraMap_injective _ _
@@ -3870,8 +3870,8 @@ lemma _root_.RingHom.IsIntegral.comap_surjective
   exact Algebra.IsIntegral.comap_surjective _ _
 
 中文:
-引理 _root_.RingHom.IsIntegral.comap_surjective
-  结论: {f : R ->+* S} (hf : f.Is整数egral)
+引理 _root_.环态射.是整.comap_surjective
+  结论: {f : R ->+* S} (hf : f.是整)
   证明: by
   algebraize [f]
   have : FaithfulSMul R S := (faithfulSMul_iff_algebraMap_injective R S).mpr hinj
@@ -3904,8 +3904,8 @@ definition _root_.Ideal.minimalPrimes.equivIrreducibleComponents
     (e.trans ((Prime
 
 中文:
-定义 _root_.Ideal.minimalPrimes.equivIrreducibleComponents
-  签名: (I : Ideal R)
+定义 _root_.理想.minimalPrimes.equivIrreducibleComponents
+  签名: (I : 理想 R)
   定义体: by
   let e : {p : Ideal R | p.IsPrime ∧ I <= p} ≃o zeroLocus (I : Set R) :=
     ⟨⟨fun x => ⟨⟨x.1, x.2.1⟩, x.2.2⟩, fun x => ⟨x.1.1, x.1.2, x.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
@@ -4026,7 +4026,7 @@ lemma vanishingIdeal_mem_minimalPrimes
 
 中文:
 引理 vanishingIdeal_mem_minimalPrimes
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   constructor
   · rw [← zeroLocus_minimalPrimes, ← zeroLocus_vanishingIdeal_eq_closure]
@@ -4057,7 +4057,7 @@ lemma zeroLocus_ideal_mem_irreducibleComponents
 
 中文:
 引理 zeroLocus_ideal_mem_irreducibleComponents
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: by
   rw [← vanishingIdeal_zeroLocus_eq_radical]
   conv_lhs => rw [← (isClosed_zeroLocus _).closure_eq]
@@ -4089,7 +4089,7 @@ definition closedPoint
 
 中文:
 定义 closedPoint
-  签名: : PrimeSpectrum R
+  签名: : 素谱 R
   定义体: ⟨maximalIdeal R, (maximalIdeal.isMaximal R).isPrime⟩
 
 Depends on / 依赖: isMaximal, isPrime, maximalIdeal, maximalIdeal.isMaximal
@@ -4108,7 +4108,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (PrimeSpectrum R)
+  签名: 有顶序 (素谱 R)
   定义体: closedPoint R
   le_top := fun _ => le_maximalIdeal Ideal.IsPrime.ne_top'
 
@@ -4126,8 +4126,8 @@ instance [IsDomain
   signature: R] : BoundedOrder (PrimeSpectrum R) where
 
 中文:
-实例 [IsDomain
-  签名: R] : BoundedOrder (PrimeSpectrum R) where
+实例 [是整环
+  签名: R] : 有界序 (素谱 R) where
 -/
 instance [IsDomain R] : BoundedOrder (PrimeSpectrum R) where
 
@@ -4141,8 +4141,8 @@ theorem PrimeSpectrum.asIdeal_top
   proof: rfl
 
 中文:
-定理 PrimeSpectrum.asIdeal_top
-  结论: (⊤ : PrimeSpectrum R).asIdeal = IsLocalRing.maximalIdeal R
+定理 素谱.asIdeal_top
+  结论: (⊤ : 素谱 R).asIdeal = 是局部环.maximalIdeal R
   证明: rfl
 -/
 theorem PrimeSpectrum.asIdeal_top : (⊤ : PrimeSpectrum R).asIdeal = IsLocalRing.maximalIdeal R :=
@@ -4166,7 +4166,7 @@ theorem isLocalHom_iff_comap_closedPoint
 
 中文:
 定理 isLocalHom_iff_comap_closedPoint
-  结论: {S : 类型v} [CommSemiring S] [IsLocalRing S]
+  结论: {S : 类型v} [交换半环 S] [是局部环 S]
   证明: by
   -- Porting note: inline `this` does **not** work
   have := (local_hom_TFAE f).out 0 4
@@ -4193,7 +4193,7 @@ theorem comap_closedPoint
 
 中文:
 定理 comap_closedPoint
-  结论: {S : 类型v} [CommSemiring S] [IsLocalRing S] (f : R ->+* S)
+  结论: {S : 类型v} [交换半环 S] [是局部环 S] (f : R ->+* S)
   证明: (isLocalHom_iff_comap_closedPoint f).mp inferInstance
 
 Depends on / 依赖: isLocalHom_iff_comap_closedPoint
@@ -4213,7 +4213,7 @@ theorem specializes_closedPoint
 
 中文:
 定理 specializes_closedPoint
-  条件: (x : PrimeSpectrum R)
+  条件: (x : 素谱 R)
   结论: x ⤳ closedPoint R
   证明: (PrimeSpectrum.le_iff_specializes _ _).mp (IsLocalRing.le_maximalIdeal x.2.1)
 
@@ -4237,7 +4237,7 @@ theorem closedPoint_mem_iff
 
 中文:
 定理 closedPoint_mem_iff
-  条件: (U : TopologicalSpace.Opens <| PrimeSpectrum R)
+  条件: (U : 拓扑空间.Opens <| 素谱 R)
   证明: by
   constructor
   · rw [eq_top_iff]
@@ -4267,7 +4267,7 @@ lemma closed_point_mem_iff
 
 中文:
 引理 closed_point_mem_iff
-  条件: {U : TopologicalSpace.Opens (PrimeSpectrum R)}
+  条件: {U : 拓扑空间.Opens (素谱 R)}
   证明: ⟨(eq_top_iff.mpr fun x _ => (specializes_closedPoint x).mem_open U.2 ·), (· ▸ trivial)⟩
 
 @[simp]
@@ -4291,8 +4291,8 @@ theorem PrimeSpectrum.comap_residue
   exact Ideal.mk_ker
 
 中文:
-定理 PrimeSpectrum.comap_residue
-  结论: (T : 类型u) [CommRing T] [IsLocalRing T]
+定理 素谱.comap_residue
+  结论: (T : 类型u) [交换环 T] [是局部环 T]
   证明: by
   rw [Subsingleton.elim x ⊥]
   ext1
@@ -4319,7 +4319,7 @@ lemma isClosed_singleton_closedPoint
 
 中文:
 引理 isClosed_singleton_closedPoint
-  结论: IsClosed {closedPoint R}
+  结论: 是闭集 {closedPoint R}
   证明: by
   rw [PrimeSpectrum.isClosed_singleton_iff_isMaximal]; rw [closedPoint]
   infer_instance
@@ -4339,8 +4339,8 @@ theorem Ring.KrullDimLE.eq_bot_or_eq_top
   proof: Order.krullDim_le_one_iff_of_boundedOrder.mp Order.KrullDimLE.krullDim_le _
 
 中文:
-定理 Ring.KrullDimLE.eq_bot_or_eq_top
-  结论: [IsDomain R] [Ring.KrullDimLE 1 R]
+定理 环.Krull维数不超过.eq_bot_or_eq_top
+  结论: [是整环 R] [环.Krull维数不超过 1 R]
   证明: Order.krullDim_le_one_iff_of_boundedOrder.mp Order.KrullDimLE.krullDim_le _
 
 Depends on / 依赖: KrullDimLE, Order.KrullDimLE.krullDim_le, Order.krullDim_le_one_iff_of_boundedOrder.mp, krullDim_le, krullDim_le_one_iff_of_boundedOrder
@@ -4363,8 +4363,8 @@ theorem PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim
   (PrimeSpectrum.pointsEquivIrreducibleCloseds R).symm
 
 中文:
-定理 PrimeSpectrum.topologicalKrullDim_eq_ringKrullDim
-  条件: [CommSemiring R]
+定理 素谱.topologicalKrullDim_eq_ringKrullDim
+  条件: [交换半环 R]
   证明: Order.krullDim_orderDual.symm.trans Order.krullDim_eq_of_orderIso
   (PrimeSpectrum.pointsEquivIrreducibleCloseds R).symm
 
@@ -4442,7 +4442,7 @@ lemma isClopen_iff
 
 中文:
 引理 isClopen_iff
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: by
   refine ⟨exists_idempotent_basicOpen_eq_of_isClopen, ?_⟩
   rintro ⟨e, he, rfl⟩
@@ -4472,7 +4472,7 @@ lemma isClopen_iff_zeroLocus
 
 中文:
 引理 isClopen_iff_zeroLocus
-  条件: {s : Set (PrimeSpectrum R)}
+  条件: {s : 集合 (素谱 R)}
   证明: isClopen_iff.trans ⟨fun ⟨e, he, h⟩ => ⟨1 - e, he.one_sub,
     h.trans (basicOpen_eq_zeroLocus_of_isIdempotentElem e he)⟩,
     fun ⟨e, he, h⟩ => ⟨1 - e, he.one_sub, h.trans (zeroLocus_eq_basicOpen_of_isIdempotentElem e he)⟩⟩
@@ -4633,7 +4633,7 @@ lemma isIdempotentElemEquivClopens_symm_compl
 
 中文:
 引理 isIdempotentElemEquivClopens_symm_compl
-  条件: (s : Clopens (PrimeSpectrum R))
+  条件: (s : Clopens (素谱 R))
   证明: map_compl ..
 
 Depends on / 依赖: map_compl
@@ -4688,7 +4688,7 @@ lemma isIdempotentElemEquivClopens_symm_sup
 
 中文:
 引理 isIdempotentElemEquivClopens_symm_sup
-  条件: (s₁ s₂ : Clopens (PrimeSpectrum R))
+  条件: (s₁ s₂ : Clopens (素谱 R))
   证明: isIdempotentElemEquivClopens (R := R).symm
     e (s₁ ⊔ s₂) = ⟨_, (e s₁).2.add_sub_mul (e s₂).2⟩ :=
   map_sup ..

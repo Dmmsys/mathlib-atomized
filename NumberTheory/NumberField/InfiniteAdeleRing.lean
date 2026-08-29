@@ -59,7 +59,7 @@ deriving CommRing, Inhabited, TopologicalSpace, IsTopologicalRing, Algebra K
 
 中文:
 定义 InfiniteAdeleRing
-  签名: (K : 类型) [Field K]
+  签名: (K : 类型) [域 K]
   定义体: (v : InfinitePlace K) -> v.Completion
 deriving CommRing, Inhabited, TopologicalSpace, IsTopologicalRing, Algebra K
 
@@ -86,8 +86,8 @@ instance [NumberField
   body: (inferInstance : Nonempty (InfinitePlace K)).elim fun w => Pi.nontrivial_at w
 
 中文:
-实例 [NumberField
-  签名: K] : Nontrivial K∞
+实例 [数域
+  签名: K] : 非平凡 K∞
   定义体: (inferInstance : Nonempty (InfinitePlace K)).elim fun w => Pi.nontrivial_at w
 
 Depends on / 依赖: InfinitePlace, Nonempty, Pi.nontrivial_at, nontrivial_at
@@ -122,7 +122,7 @@ instance locallyCompactSpace
 
 中文:
 实例 locallyCompactSpace
-  签名: [NumberField K]
+  签名: [数域 K]
   定义体: Pi.locallyCompactSpace_of_finite
 
 Depends on / 依赖: Pi.locallyCompactSpace_of_finite, locallyCompactSpace_of_finite
@@ -220,7 +220,7 @@ theorem denseRange_algebraMap
 
 中文:
 定理 denseRange_algebraMap
-  条件: [NumberField K]
+  条件: [数域 K]
   结论: DenseRange algebraMap K K∞
   证明: (DenseRange.piMap fun v => Completion.denseRange_coe v).comp
     (InfinitePlace.denseRange_algebraMap_pi K) (.piMap fun v => Completion.continuous_coe v)
@@ -240,8 +240,8 @@ instance [NumberField
   body: ∏ v, ‖x v‖ ^ v.mult
 
 中文:
-实例 [NumberField
-  签名: K] : Norm K∞ where norm x
+实例 [数域
+  签名: K] : 范数 K∞ where norm x
   定义体: ∏ v, ‖x v‖ ^ v.mult
 
 Depends on / 依赖: v.mult
@@ -261,7 +261,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  条件: [NumberField K] (x : K∞)
+  条件: [数域 K] (x : K∞)
   结论: ‖x‖ = ∏ v, ‖x v‖ ^ v.mult
   证明: rfl
 -/
@@ -281,7 +281,7 @@ theorem norm_eq_zero_of_not_isUnit
 
 中文:
 定理 norm_eq_zero_of_not_isUnit
-  条件: [NumberField K] {x : K∞} (hx : ¬IsUnit x)
+  条件: [数域 K] {x : K∞} (hx : ¬是单位 x)
   证明: by
   rw [Pi.isUnit_iff]; rw [not_forall] at hx
   obtain ⟨v, hv⟩ := hx
@@ -306,7 +306,7 @@ theorem coe_norm_eq_abs_norm
 
 中文:
 定理 coe_norm_eq_abs_norm
-  条件: [NumberField K] (x : K)
+  条件: [数域 K] (x : K)
   证明: by
   simpa [-Rat.cast_abs, norm_def] using! InfinitePlace.prod_eq_abs_norm x
 

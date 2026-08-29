@@ -41,7 +41,7 @@ instance discreteFintype
 
 中文:
 实例 discreteFintype
-  签名: {α : 类型} [Fintype α]
+  签名: {α : 类型} [有限类型 α]
   定义体: Fintype.ofEquiv α discreteEquiv.symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, discreteEquiv, discreteEquiv.symm, ofEquiv
@@ -64,7 +64,7 @@ instance discreteHomFintype
 
 中文:
 实例 discreteHomFintype
-  签名: {α : 类型} (X Y : Discrete α)
+  签名: {α : 类型} (X Y : 离散 α)
   定义体: by
   classical
   apply ULift.fintype
@@ -86,11 +86,11 @@ class FinCategory
     - fintypeHom : forall j j' : J, Fintype (j ⟶ j')  [default: by infer_instance]
 
 中文:
-类 FinCategory
-  参数: (J : 类型v) [SmallCategory J]
+类 有限范畴
+  参数: (J : 类型v) [小范畴 J]
   公理与运算 (2 个):
-    - fintypeObj : Fintype J  [默认: by infer_instance]
-    - fintypeHom : 对任意 j j' : J, Fintype (j ⟶ j')  [默认: by infer_instance]
+    - fintypeObj : 有限类型 J  [默认: by infer_instance]
+    - fintypeHom : 对任意 j j' : J, 有限类型 (j ⟶ j')  [默认: by infer_instance]
 
 Depends on / 依赖: Fintype, fintypeHom, infer_instance
 -/
@@ -109,7 +109,7 @@ instance finCategoryDiscreteOfFintype
 
 中文:
 实例 finCategoryDiscreteOfFintype
-  签名: (J : 类型v) [Fintype J]
+  签名: (J : 类型v) [有限类型 J]
 -/
 instance finCategoryDiscreteOfFintype (J : Type v) [Fintype J] : FinCategory (Discrete J) where
 
@@ -129,7 +129,7 @@ instance finCategoryOpposite
 
 中文:
 实例 finCategoryOpposite
-  签名: {J : 类型v} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型v} [小范畴 J] [有限范畴 J]
   定义体: Fintype.ofEquiv _ equivToOpposite
   fintypeHom j j' := Fintype.ofEquiv _ (opEquiv j j').symm
 
@@ -151,7 +151,7 @@ instance finCategoryUlift
 
 中文:
 实例 finCategoryUlift
-  签名: {J : 类型v} [SmallCategory J] [FinCategory J]
+  签名: {J : 类型v} [小范畴 J] [有限范畴 J]
   定义体: ULift.fintype J
   fintypeHom := fun _ _ => ULift.fintype _
 

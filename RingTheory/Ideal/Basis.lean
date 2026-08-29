@@ -40,7 +40,7 @@ definition basisSpanSingleton
 
 中文:
 定义 basisSpanSingleton
-  签名: (b : Basis ι R S) {x : S} (hx : x != 0)
+  签名: (b : 基 ι R S) {x : S} (hx : x != 0)
   定义体: b.map
     LinearEquiv.ofInjective (LinearMap.mulLeft R x) (mul_right_injective₀ hx) ≪≫ₗ
         LinearEquiv.ofEq _ _
@@ -78,7 +78,7 @@ theorem basisSpanSingleton_apply
 
 中文:
 定理 basisSpanSingleton_apply
-  条件: (b : Basis ι R S) {x : S} (hx : x != 0) (i : ι)
+  条件: (b : 基 ι R S) {x : S} (hx : x != 0) (i : ι)
   证明: by
   simp only [basisSpanSingleton, Basis.map_apply, LinearEquiv.trans_apply,
     Submodule.restrictScalarsEquiv_apply, LinearEquiv.ofInjective_apply, LinearEquiv.coe_ofEq_apply,
@@ -105,7 +105,7 @@ theorem constr_basisSpanSingleton
 
 中文:
 定理 constr_basisSpanSingleton
-  结论: {N : 类型} [Semiring N] [Module N S] [SMulCommClass R N S]
+  结论: {N : 类型} [半环 N] [模 N S] [标量交换类 R N S]
   证明: b.ext fun i => by simp
 
 Depends on / 依赖: b.ext
@@ -126,8 +126,8 @@ theorem Basis.mem_ideal_iff
   proof: (b.map ((I.restrictScalarsEquiv R _ _).restrictScalars R).symm).mem_submodule_iff
 
 中文:
-定理 Basis.mem_ideal_iff
-  结论: {ι R S : 类型} [CommSemiring R] [Semiring S] [Algebra R S]
+定理 基.mem_ideal_iff
+  结论: {ι R S : 类型} [交换半环 R] [半环 S] [代数 R S]
   证明: (b.map ((I.restrictScalarsEquiv R _ _).restrictScalars R).symm).mem_submodule_iff
 
 Depends on / 依赖: I.restrictScalarsEquiv, b.map, mem_submodule_iff, restrictScalars, restrictScalarsEquiv
@@ -146,8 +146,8 @@ theorem Basis.mem_ideal_iff'
   proof: (b.map ((I.restrictScalarsEquiv R _ _).restrictScalars R).symm).mem_submodule_iff'
 
 中文:
-定理 Basis.mem_ideal_iff'
-  结论: {ι R S : 类型} [Fintype ι] [CommSemiring R] [Semiring S] [Algebra R S]
+定理 基.mem_ideal_iff'
+  结论: {ι R S : 类型} [有限类型 ι] [交换半环 R] [半环 S] [代数 R S]
   证明: (b.map ((I.restrictScalarsEquiv R _ _).restrictScalars R).symm).mem_submodule_iff'
 
 Depends on / 依赖: I.restrictScalarsEquiv, b.map, mem_submodule_iff, restrictScalars, restrictScalarsEquiv

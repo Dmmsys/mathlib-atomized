@@ -49,11 +49,11 @@ inductive FreeAddMagma
     - add: FreeAddMagma α -> FreeAddMagma α -> FreeAddMagma α
 
 中文:
-归纳类型 FreeAddMagma
+归纳类型 自由加法原群
   参数: (α : 类型u)
   构造子 (2 个):
-    - of: α -> FreeAddMagma α
-    - add: FreeAddMagma α -> FreeAddMagma α -> FreeAddMagma α
+    - of: α -> 自由加法原群 α
+    - add: 自由加法原群 α -> 自由加法原群 α -> 自由加法原群 α
 -/
 inductive FreeAddMagma (α : Type u) : Type u
   | of : α -> FreeAddMagma α
@@ -90,11 +90,11 @@ inductive FreeMagma
     - mul: FreeMagma α -> FreeMagma α -> FreeMagma α
 
 中文:
-归纳类型 FreeMagma
+归纳类型 自由原群
   参数: (α : 类型u)
   构造子 (2 个):
-    - of: α -> FreeMagma α
-    - mul: FreeMagma α -> FreeMagma α -> FreeMagma α
+    - of: α -> 自由原群 α
+    - mul: 自由原群 α -> 自由原群 α -> 自由原群 α
 -/
 inductive FreeMagma (α : Type u) : Type u
   | of : α -> FreeMagma α
@@ -118,8 +118,8 @@ instance [Inhabited
 @[to_additive]
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (FreeMagma α)
+实例 [可居
+  签名: α] : 可居 (自由原群 α)
   定义体: ⟨of default⟩
 
 @[to_additive]
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (FreeMagma α)
+  签名: 乘法 (自由原群 α)
   定义体: ⟨FreeMagma.mul⟩
 
 @[to_additive (attr := simp)]
@@ -160,7 +160,7 @@ theorem mul_eq
 
 中文:
 定理 mul_eq
-  条件: (x y : FreeMagma α)
+  条件: (x y : 自由原群 α)
   结论: mul x y = x * y
   证明: rfl
 -/
@@ -181,7 +181,7 @@ definition recOnMul
 
 中文:
 定义 recOnMul
-  签名: {C : FreeMagma α -> Sort l} (x) (ih1 : 对任意 x, C (of x))
+  签名: {C : 自由原群 α -> 类型层 l} (x) (ih1 : 对任意 x, C (of x))
   定义体: FreeMagma.recOn x ih1 ih2
 
 @[to_additive (attr := ext 1100)]
@@ -204,7 +204,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {β : 类型v} [Mul β] {f g : FreeMagma α ->ₙ* β} (h : f ∘ of = g ∘ of)
+  条件: {β : 类型v} [乘法 β] {f g : 自由原群 α ->ₙ* β} (h : f ∘ of = g ∘ of)
   结论: f = g
   证明: (DFunLike.ext _ _) fun x => recOnMul x (congr_fun h) by intros; simp only [map_mul, *]
 
@@ -223,8 +223,8 @@ definition FreeMagma.liftAux
   signature: {α : Type u} {β : Type v} [Mul β] (f : α -> β)
 
 中文:
-定义 FreeMagma.liftAux
-  签名: {α : 类型u} {β : 类型v} [Mul β] (f : α -> β)
+定义 自由原群.liftAux
+  签名: {α : 类型u} {β : 类型v} [乘法 β] (f : α -> β)
 -/
 def FreeMagma.liftAux {α : Type u} {β : Type v} [Mul β] (f : α -> β) : FreeMagma α -> β
   | FreeMagma.of x => f x
@@ -238,8 +238,8 @@ definition FreeAddMagma.liftAux
   signature: {α : Type u} {β : Type v} [Add β] (f : α -> β)
 
 中文:
-定义 FreeAddMagma.liftAux
-  签名: {α : 类型u} {β : 类型v} [Add β] (f : α -> β)
+定义 自由加法原群.liftAux
+  签名: {α : 类型u} {β : 类型v} [加法 β] (f : α -> β)
 -/
 def FreeAddMagma.liftAux {α : Type u} {β : Type v} [Add β] (f : α -> β) : FreeAddMagma α -> β
   | FreeAddMagma.of x => f x
@@ -270,7 +270,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (α -> β) ≃ (FreeMagma α ->ₙ* β) where
+  签名: : (α -> β) ≃ (自由原群 α ->ₙ* β) where
   定义体: { toFun := liftAux f
     map_mul' := fun _ _ => rfl }
   invFun F := F ∘ of
@@ -339,7 +339,7 @@ theorem lift_comp_of'
 
 中文:
 定理 lift_comp_of'
-  条件: (f : FreeMagma α ->ₙ* β)
+  条件: (f : 自由原群 α ->ₙ* β)
   结论: lift (f ∘ of) = f
   证明: lift.apply_symm_apply f
 
@@ -414,7 +414,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad FreeMagma
+  签名: 单子 自由原群
   定义体: of
   bind x f := lift f x
 -/
@@ -437,7 +437,7 @@ definition recOnPure
 
 中文:
 定义 recOnPure
-  签名: {C : FreeMagma α -> Sort l} (x) (ih1 : 对任意 x, C (pure x))
+  签名: {C : 自由原群 α -> 类型层 l} (x) (ih1 : 对任意 x, C (pure x))
   定义体: FreeMagma.recOnMul x ih1 ih2
 
 @[to_additive (attr := simp)]
@@ -461,7 +461,7 @@ theorem map_pure
 中文:
 定理 map_pure
   条件: (f : α -> β) (x)
-  结论: (f <$> pure x : FreeMagma β) = pure (f x)
+  结论: (f <$> pure x : 自由原群 β) = pure (f x)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -482,7 +482,7 @@ theorem map_mul'
 
 中文:
 定理 map_mul'
-  条件: (f : α -> β) (x y : FreeMagma α)
+  条件: (f : α -> β) (x y : 自由原群 α)
   结论: f < > (x * y) = f < > x * f < > y
   证明: rfl
 
@@ -504,7 +504,7 @@ theorem pure_bind
 
 中文:
 定理 pure_bind
-  条件: (f : α -> FreeMagma β) (x)
+  条件: (f : α -> 自由原群 β) (x)
   结论: pure x >>= f = f x
   证明: rfl
 
@@ -526,7 +526,7 @@ theorem mul_bind
 
 中文:
 定理 mul_bind
-  条件: (f : α -> FreeMagma β) (x y : FreeMagma α)
+  条件: (f : α -> 自由原群 β) (x y : 自由原群 α)
   结论: x * y >>= f = (x >>= f) * (y >>= f)
   证明: rfl
 
@@ -549,7 +549,7 @@ theorem pure_seq
 
 中文:
 定理 pure_seq
-  条件: {α β : 类型u} {f : α -> β} {x : FreeMagma α}
+  条件: {α β : 类型u} {f : α -> β} {x : 自由原群 α}
   结论: pure f <*> x = f < > x
   证明: rfl
 
@@ -570,7 +570,7 @@ theorem mul_seq
 
 中文:
 定理 mul_seq
-  条件: {α β : 类型u} {f g : FreeMagma (α -> β)} {x : FreeMagma α}
+  条件: {α β : 类型u} {f g : 自由原群 (α -> β)} {x : 自由原群 α}
   证明: rfl
 
 @[to_additive]
@@ -594,7 +594,7 @@ instance instLawfulMonad
 
 中文:
 实例 instLawfulMonad
-  签名: : LawfulMonad FreeMagma.{u}
+  签名: : 合法单子 自由原群.{u}
   定义体: LawfulMonad.mk'
   (pure_bind := fun _ _ => rfl)
   (bind_assoc := fun x f g => FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
@@ -623,8 +623,8 @@ definition FreeMagma.traverse
   signature: {m : Type u -> Type u} [Applicative m] {α β : Type u}
 
 中文:
-定义 FreeMagma.traverse
-  签名: {m : 类型u -> 类型u} [Applicative m] {α β : 类型u}
+定义 自由原群.traverse
+  签名: {m : 类型u -> 类型u} [适用 m] {α β : 类型u}
 
 Depends on / 依赖: DivisionRing, fast_instance, toDivisionRing
 -/
@@ -641,8 +641,8 @@ definition FreeAddMagma.traverse
   signature: {m : Type u -> Type u} [Applicative m] {α β : Type u}
 
 中文:
-定义 FreeAddMagma.traverse
-  签名: {m : 类型u -> 类型u} [Applicative m] {α β : 类型u}
+定义 自由加法原群.traverse
+  签名: {m : 类型u -> 类型u} [适用 m] {α β : 类型u}
 
 Depends on / 依赖: SetLike, SubfieldClass, toField
 -/
@@ -672,7 +672,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable FreeMagma
+  签名: 可遍历 自由原群
   定义体: ⟨@FreeMagma.traverse⟩
 
 Depends on / 依赖: FreeMagma, FreeMagma.traverse, traverse
@@ -696,7 +696,7 @@ theorem traverse_pure
 中文:
 定理 traverse_pure
   条件: (x)
-  结论: traverse F (pure x : FreeMagma α) = pure < > F x
+  结论: traverse F (pure x : 自由原群 α) = pure < > F x
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -716,7 +716,7 @@ theorem traverse_pure'
 
 中文:
 定理 traverse_pure'
-  结论: traverse F ∘ pure = fun x => (pure <$> F x : m (FreeMagma β))
+  结论: traverse F ∘ pure = fun x => (pure <$> F x : m (自由原群 β))
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -736,7 +736,7 @@ theorem traverse_mul
 
 中文:
 定理 traverse_mul
-  条件: (x y : FreeMagma α)
+  条件: (x y : 自由原群 α)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -779,7 +779,7 @@ theorem traverse_eq
 中文:
 定理 traverse_eq
   条件: (x)
-  结论: FreeMagma.traverse F x = traverse F x
+  结论: 自由原群.traverse F x = traverse F x
   证明: rfl
 
 @[to_additive]
@@ -803,7 +803,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable FreeMagma.{u}
+  签名: 合法可遍历 自由原群.{u}
   定义体: { instLawfulMonad with
     id_traverse := fun x =>
       FreeMagma.recOnPure x (fun _ => rfl) fun x y ih1 ih2 => by
@@ -846,7 +846,7 @@ definition FreeMagma.repr
   signature: {α : Type u} [Repr α]
 
 中文:
-定义 FreeMagma.repr
+定义 自由原群.repr
   签名: {α : 类型u} [Repr α]
 -/
 protected def FreeMagma.repr {α : Type u} [Repr α] : FreeMagma α -> Lean.Format
@@ -861,7 +861,7 @@ definition FreeAddMagma.repr
   signature: {α : Type u} [Repr α]
 
 中文:
-定义 FreeAddMagma.repr
+定义 自由加法原群.repr
   签名: {α : 类型u} [Repr α]
 -/
 protected def FreeAddMagma.repr {α : Type u} [Repr α] : FreeAddMagma α -> Lean.Format
@@ -881,7 +881,7 @@ definition FreeMagma.length
   signature: {α : Type u}
 
 中文:
-定义 FreeMagma.length
+定义 自由原群.length
   签名: {α : 类型u}
 -/
 def FreeMagma.length {α : Type u} : FreeMagma α -> Nat
@@ -896,7 +896,7 @@ definition FreeAddMagma.length
   signature: {α : Type u}
 
 中文:
-定义 FreeAddMagma.length
+定义 自由加法原群.length
   签名: {α : 类型u}
 
 Depends on / 依赖: FreeMagma, FreeMagma.length, length
@@ -921,8 +921,8 @@ lemma FreeMagma.length_pos
   | mul y z => Nat.add_pos_left (length_pos y) z.length
 
 中文:
-引理 FreeMagma.length_pos
-  条件: {α : 类型u} (x : FreeMagma α)
+引理 自由原群.length_pos
+  条件: {α : 类型u} (x : 自由原群 α)
   结论: 0 < x.length
   证明: match x with
   | FreeMagma.of _ => Nat.succ_pos 0
@@ -946,11 +946,11 @@ inductive AddMagma.AssocRel
     - left: forall w x y z, AddMagma.AssocRel α (w + (x + y + z)) (w + (x + (y + z)))
 
 中文:
-归纳类型 AddMagma.AssocRel
-  参数: (α : 类型u) [Add α]
+归纳类型 加法原群.AssocRel
+  参数: (α : 类型u) [加法 α]
   构造子 (2 个):
-    - intro: 对任意 x y z, AddMagma.AssocRel α (x + y + z) (x + (y + z))
-    - left: 对任意 w x y z, AddMagma.AssocRel α (w + (x + y + z)) (w + (x + (y + z)))
+    - intro: 对任意 x y z, 加法原群.AssocRel α (x + y + z) (x + (y + z))
+    - left: 对任意 w x y z, 加法原群.AssocRel α (w + (x + y + z)) (w + (x + (y + z)))
 -/
 inductive AddMagma.AssocRel (α : Type u) [Add α] : α -> α -> Prop
   | intro : forall x y z, AddMagma.AssocRel α (x + y + z) (x + (y + z))
@@ -969,11 +969,11 @@ inductive Magma.AssocRel
     - left: forall w x y z, Magma.AssocRel α (w * (x * y * z)) (w * (x * (y * z)))
 
 中文:
-归纳类型 Magma.AssocRel
-  参数: (α : 类型u) [Mul α]
+归纳类型 原群.AssocRel
+  参数: (α : 类型u) [乘法 α]
   构造子 (2 个):
-    - intro: 对任意 x y z, Magma.AssocRel α (x * y * z) (x * (y * z))
-    - left: 对任意 w x y z, Magma.AssocRel α (w * (x * y * z)) (w * (x * (y * z)))
+    - intro: 对任意 x y z, 原群.AssocRel α (x * y * z) (x * (y * z))
+    - left: 对任意 w x y z, 原群.AssocRel α (w * (x * y * z)) (w * (x * (y * z)))
 -/
 inductive Magma.AssocRel (α : Type u) [Mul α] : α -> α -> Prop
   | intro : forall x y z, Magma.AssocRel α (x * y * z) (x * (y * z))
@@ -993,7 +993,7 @@ definition AssocQuotient
 
 中文:
 定义 AssocQuotient
-  签名: (α : 类型u) [Mul α]
+  签名: (α : 类型u) [乘法 α]
   定义体: Quot AssocRel α
 
 Depends on / 依赖: AssocRel
@@ -1020,7 +1020,7 @@ theorem quot_mk_assoc
 中文:
 定理 quot_mk_assoc
   条件: (x y z : α)
-  结论: Quot.mk (AssocRel α) (x * y * z) = Quot.mk _ (x * (y * z))
+  结论: 商.mk (AssocRel α) (x * y * z) = 商.mk _ (x * (y * z))
   证明: Quot.sound (AssocRel.intro _ _ _)
 
 @[to_additive]
@@ -1068,7 +1068,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup (AssocQuotient α)
+  签名: 半群 (AssocQuotient α)
   定义体: by
     refine Quot.liftOn₂ x y (fun x y => Quot.mk _ (x * y)) ?_ ?_
     · rintro a b₁ b₂ (⟨c, d, e⟩ | ⟨c, d, e, f⟩)
@@ -1127,8 +1127,8 @@ instance [Inhabited
 @[to_additive (attr := elab_as_elim, induction_eliminator)]
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (AssocQuotient α)
+实例 [可居
+  签名: α] : 可居 (AssocQuotient α)
   定义体: ⟨of default⟩
 
 @[to_additive (attr := elab_as_elim, induction_eliminator)]
@@ -1339,11 +1339,11 @@ structure FreeAddSemigroup
     - tail : List α
 
 中文:
-结构 FreeAddSemigroup
+结构 FreeAdd半群
   参数: (α : 类型u)
   公理与运算 (2 个):
     - head : α
-    - tail : List α
+    - tail : 列表 α
 -/
 structure FreeAddSemigroup (α : Type u) where
   /-- The head of the element -/
@@ -1380,11 +1380,11 @@ structure FreeSemigroup
     - tail : List α
 
 中文:
-结构 FreeSemigroup
+结构 自由半群
   参数: (α : 类型u)
   公理与运算 (2 个):
     - head : α
-    - tail : List α
+    - tail : 列表 α
 -/
 structure FreeSemigroup (α : Type u) where
   /-- The head of the element -/
@@ -1411,7 +1411,7 @@ mul_assoc _L1 _L2 _L3 := FreeSemigroup.ext rfl List.append_assoc _ _ _
 
 中文:
 实例 :
-  签名: Semigroup (FreeSemigroup α)
+  签名: 半群 (自由半群 α)
   定义体: ⟨L1.1, L1.2 ++ L2.1 :: L2.2⟩
 mul_assoc _L1 _L2 _L3 := FreeSemigroup.ext rfl List.append_assoc _ _ _
 
@@ -1435,7 +1435,7 @@ theorem head_mul
 
 中文:
 定理 head_mul
-  条件: (x y : FreeSemigroup α)
+  条件: (x y : 自由半群 α)
   结论: (x * y).1 = x.1
   证明: rfl
 
@@ -1457,7 +1457,7 @@ theorem tail_mul
 
 中文:
 定理 tail_mul
-  条件: (x y : FreeSemigroup α)
+  条件: (x y : 自由半群 α)
   结论: (x * y).2 = x.2 ++ y.1 :: y.2
   证明: rfl
 
@@ -1477,7 +1477,7 @@ theorem mk_mul_mk
 
 中文:
 定理 mk_mul_mk
-  条件: (x y : α) (L1 L2 : List α)
+  条件: (x y : α) (L1 L2 : 列表 α)
   结论: mk x L1 * mk y L2 = mk x (L1 ++ y :: L2)
   证明: rfl
 -/
@@ -1514,7 +1514,7 @@ definition length
 
 中文:
 定义 length
-  签名: (x : FreeSemigroup α)
+  签名: (x : 自由半群 α)
   定义体: x.tail.length + 1
 
 @[to_additive (attr := simp)]
@@ -1538,7 +1538,7 @@ theorem length_mul
 
 中文:
 定理 length_mul
-  条件: (x y : FreeSemigroup α)
+  条件: (x y : 自由半群 α)
   结论: (x * y).length = x.length + y.length
   证明: by
   simp [length, Nat.add_right_comm]
@@ -1582,8 +1582,8 @@ instance [Inhabited
   body: ⟨of default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (FreeSemigroup α)
+实例 [可居
+  签名: α] : 可居 (自由半群 α)
   定义体: ⟨of default⟩
 -/
 instance [Inhabited α] : Inhabited (FreeSemigroup α) := ⟨of default⟩
@@ -1604,7 +1604,7 @@ definition recOnMul
 
 中文:
 定义 recOnMul
-  签名: {C : FreeSemigroup α -> Sort l} (x) (ih1 : 对任意 x, C (of x))
+  签名: {C : 自由半群 α -> 类型层 l} (x) (ih1 : 对任意 x, C (of x))
   定义体: FreeSemigroup.recOn x fun f s =>
       List.recOn s ih1 (fun hd tl ih f => ih2 f ⟨hd, tl⟩ (ih1 f) (ih hd)) f
 
@@ -1628,7 +1628,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {β : 类型v} [Mul β] {f g : FreeSemigroup α ->ₙ* β} (h : f ∘ of = g ∘ of)
+  条件: {β : 类型v} [乘法 β] {f g : 自由半群 α ->ₙ* β} (h : f ∘ of = g ∘ of)
   结论: f = g
   证明: (DFunLike.ext _ _) fun x =>
     FreeSemigroup.recOnMul x (congr_fun h) fun x y hx hy => by simp only [map_mul, *]
@@ -1661,7 +1661,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (α -> β) ≃ (FreeSemigroup α ->ₙ* β) where
+  签名: : (α -> β) ≃ (自由半群 α ->ₙ* β) where
   定义体: { toFun x := x.2.foldl (fun a b => a * f b) (f x.1)
       map_mul' := by simp [← List.foldl_map, List.foldl_assoc] }
   invFun f := f ∘ of
@@ -1689,7 +1689,7 @@ lemma lift_mk_eq_foldl
 
 中文:
 引理 lift_mk_eq_foldl
-  条件: {f : α -> β} {x : α} {xs : List α}
+  条件: {f : α -> β} {x : α} {xs : 列表 α}
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1753,7 +1753,7 @@ theorem lift_comp_of'
 
 中文:
 定理 lift_comp_of'
-  条件: (f : FreeSemigroup α ->ₙ* β)
+  条件: (f : 自由半群 α ->ₙ* β)
   结论: lift (f ∘ of) = f
   证明: hom_ext rfl
 
@@ -1803,7 +1803,7 @@ definition map
 
 中文:
 定义 map
-  签名: : FreeSemigroup α ->ₙ* FreeSemigroup β
+  签名: : 自由半群 α ->ₙ* 自由半群 β
   定义体: lift of ∘ f
 
 @[to_additive (attr := simp)]
@@ -1872,7 +1872,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad FreeSemigroup
+  签名: 单子 自由半群
   定义体: of
   bind x f := lift f x
 -/
@@ -1894,7 +1894,7 @@ definition recOnPure
 
 中文:
 定义 recOnPure
-  签名: {C : FreeSemigroup α -> Sort l} (x) (ih1 : 对任意 x, C (pure x))
+  签名: {C : 自由半群 α -> 类型层 l} (x) (ih1 : 对任意 x, C (pure x))
   定义体: FreeSemigroup.recOnMul x ih1 ih2
 
 @[to_additive (attr := simp)]
@@ -1920,7 +1920,7 @@ theorem map_pure
 中文:
 定理 map_pure
   条件: (f : α -> β) (x)
-  结论: (f <$> pure x : FreeSemigroup β) = pure (f x)
+  结论: (f <$> pure x : 自由半群 β) = pure (f x)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1941,7 +1941,7 @@ theorem map_mul'
 
 中文:
 定理 map_mul'
-  条件: (f : α -> β) (x y : FreeSemigroup α)
+  条件: (f : α -> β) (x y : 自由半群 α)
   结论: f < > (x * y) = f < > x * f < > y
   证明: map_mul (map f) _ _
 
@@ -1966,7 +1966,7 @@ theorem pure_bind
 
 中文:
 定理 pure_bind
-  条件: (f : α -> FreeSemigroup β) (x)
+  条件: (f : α -> 自由半群 β) (x)
   结论: pure x >>= f = f x
   证明: rfl
 
@@ -1987,7 +1987,7 @@ theorem mul_bind
 
 中文:
 定理 mul_bind
-  条件: (f : α -> FreeSemigroup β) (x y : FreeSemigroup α)
+  条件: (f : α -> 自由半群 β) (x y : 自由半群 α)
   证明: map_mul (lift f) _ _
 
 @[to_additive (attr := simp)]
@@ -2011,7 +2011,7 @@ theorem pure_seq
 
 中文:
 定理 pure_seq
-  条件: {f : α -> β} {x : FreeSemigroup α}
+  条件: {f : α -> β} {x : 自由半群 α}
   结论: pure f <*> x = f < > x
   证明: rfl
 
@@ -2032,7 +2032,7 @@ theorem mul_seq
 
 中文:
 定理 mul_seq
-  条件: {f g : FreeSemigroup (α -> β)} {x : FreeSemigroup α}
+  条件: {f g : 自由半群 (α -> β)} {x : 自由半群 α}
   证明: mul_bind _ _ _
 
 @[to_additive]
@@ -2057,7 +2057,7 @@ instance instLawfulMonad
 
 中文:
 实例 instLawfulMonad
-  签名: : LawfulMonad FreeSemigroup.{u}
+  签名: : 合法单子 自由半群.{u}
   定义体: LawfulMonad.mk'
   (pure_bind := fun _ _ => rfl)
   (bind_assoc := fun x g f =>
@@ -2086,7 +2086,7 @@ definition traverse
 
 中文:
 定义 traverse
-  签名: {m : 类型u -> 类型u} [Applicative m] {α β : 类型u}
+  签名: {m : 类型u -> 类型u} [适用 m] {α β : 类型u}
   定义体: recOnPure x (fun x => pure <$> F x) fun _x _y ihx ihy => (· * ·) < > ihx <*> ihy
 
 @[to_additive]
@@ -2106,7 +2106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable FreeSemigroup
+  签名: 可遍历 自由半群
   定义体: ⟨@FreeSemigroup.traverse⟩
 
 Depends on / 依赖: FreeSemigroup, FreeSemigroup.traverse, traverse
@@ -2130,7 +2130,7 @@ theorem traverse_pure
 中文:
 定理 traverse_pure
   条件: (x)
-  结论: traverse F (pure x : FreeSemigroup α) = pure < > F x
+  结论: traverse F (pure x : 自由半群 α) = pure < > F x
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2148,7 +2148,7 @@ theorem traverse_pure'
 
 中文:
 定理 traverse_pure'
-  结论: traverse F ∘ pure = fun x => (pure <$> F x : m (FreeSemigroup β))
+  结论: traverse F ∘ pure = fun x => (pure <$> F x : m (自由半群 β))
   证明: rfl
 -/
 theorem traverse_pure' : traverse F ∘ pure = fun x => (pure <$> F x : m (FreeSemigroup β)) := rfl
@@ -2174,7 +2174,7 @@ theorem traverse_mul
 
 中文:
 定理 traverse_mul
-  条件: (x y : FreeSemigroup α)
+  条件: (x y : 自由半群 α)
   证明: let ⟨x, L1⟩ := x
   let ⟨y, L2⟩ := y
   List.recOn L1 (fun _ => rfl)
@@ -2232,7 +2232,7 @@ theorem traverse_eq
 中文:
 定理 traverse_eq
   条件: (x)
-  结论: FreeSemigroup.traverse F x = traverse F x
+  结论: 自由半群.traverse F x = traverse F x
   证明: rfl
 
 @[to_additive]
@@ -2255,7 +2255,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable FreeSemigroup.{u}
+  签名: 合法可遍历 自由半群.{u}
   定义体: { instLawfulMonad with
     id_traverse := fun x =>
       FreeSemigroup.recOnMul x (fun _ => rfl) fun x y ih1 ih2 => by
@@ -2295,7 +2295,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : DecidableEq (FreeSemigroup α)
+  签名: α] : DecidableEq (自由半群 α)
   定义体: fun _ _ => decidable_of_iff' _ FreeSemigroup.ext_iff
 
 Depends on / 依赖: FreeSemigroup, FreeSemigroup.ext_iff, decidable_of_iff, ext_iff
@@ -2323,7 +2323,7 @@ definition toFreeSemigroup
 
 中文:
 定义 toFreeSemigroup
-  签名: : FreeMagma α ->ₙ* FreeSemigroup α
+  签名: : 自由原群 α ->ₙ* 自由半群 α
   定义体: FreeMagma.lift FreeSemigroup.of
 
 @[to_additive (attr := simp)]
@@ -2347,7 +2347,7 @@ theorem toFreeSemigroup_of
 中文:
 定理 toFreeSemigroup_of
   条件: (x : α)
-  结论: toFreeSemigroup (of x) = FreeSemigroup.of x
+  结论: toFreeSemigroup (of x) = 自由半群.of x
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2367,7 +2367,7 @@ theorem toFreeSemigroup_comp_of
 
 中文:
 定理 toFreeSemigroup_comp_of
-  结论: @toFreeSemigroup α ∘ of = FreeSemigroup.of
+  结论: @toFreeSemigroup α ∘ of = 自由半群.of
   证明: rfl
 
 @[to_additive]
@@ -2408,7 +2408,7 @@ theorem toFreeSemigroup_map
 
 中文:
 定理 toFreeSemigroup_map
-  条件: (f : α -> β) (x : FreeMagma α)
+  条件: (f : α -> β) (x : 自由原群 α)
   证明: DFunLike.congr_fun (toFreeSemigroup_comp_map f) x
 
 @[to_additive (attr := simp)]
@@ -2432,7 +2432,7 @@ theorem length_toFreeSemigroup
 
 中文:
 定理 length_toFreeSemigroup
-  条件: (x : FreeMagma α)
+  条件: (x : 自由原群 α)
   结论: (toFreeSemigroup x).length = x.length
   证明: FreeMagma.recOnMul x (fun _ => rfl) fun x y hx hy => by
     rw [map_mul]; rw [FreeSemigroup.length_mul]; rw [hx]; rw [hy]; rfl

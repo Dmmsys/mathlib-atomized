@@ -68,7 +68,7 @@ theorem IsOrderedMonoid.toIsOrderedCancelMonoid'
   proof: le_of_mul_le_mul_left' h
 
 中文:
-定理 IsOrderedMonoid.toIsOrderedCancelMonoid'
+定理 是Ordered幺半群.toIsOrderedCancelMonoid'
   证明: le_of_mul_le_mul_left' h
 
 Depends on / 依赖: le_of_mul_le_mul_left
@@ -152,8 +152,8 @@ theorem exists_one_lt'
   · exact ⟨y, h⟩
 
 中文:
-定理 exists_one_lt'
-  条件: [Nontrivial α]
+定理 存在_one_lt'
+  条件: [非平凡 α]
   结论: 存在 a : α, 1 < a
   证明: by
   obtain ⟨y, hy⟩ := Decidable.exists_ne (1 : α)

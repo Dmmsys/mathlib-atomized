@@ -66,7 +66,7 @@ definition edgeFinset
 
 中文:
 定义 edgeFinset
-  签名: : Finset (Sym2 V)
+  签名: : 有限集 (Sym2 V)
   定义体: Set.toFinset G.edgeSet
 
 @[simp, norm_cast]
@@ -87,7 +87,7 @@ theorem coe_edgeFinset
 
 中文:
 定理 coe_edgeFinset
-  结论: (G.edgeFinset : Set (Sym2 V)) = G.edgeSet
+  结论: (G.edgeFinset : 集合 (Sym2 V)) = G.edgeSet
   证明: Set.coe_toFinset _
 
 Depends on / 依赖: Set.coe_toFinset, coe_toFinset
@@ -257,7 +257,7 @@ theorem edgeFinset_bot
 
 中文:
 定理 edgeFinset_bot
-  结论: (⊥ : SimpleGraph V).edgeFinset = ∅
+  结论: (⊥ : 简单图 V).edgeFinset = ∅
   证明: by simp [edgeFinset]
 
 @[simp]
@@ -279,7 +279,7 @@ theorem edgeFinset_sup
 
 中文:
 定理 edgeFinset_sup
-  条件: [Fintype (edgeSet (G₁ ⊔ G₂))] [DecidableEq V]
+  条件: [有限类型 (edgeSet (G₁ ⊔ G₂))] [DecidableEq V]
   证明: by simp [edgeFinset]
 
 @[simp]
@@ -303,7 +303,7 @@ theorem edgeFinset_inf
 
 中文:
 定理 edgeFinset_inf
-  条件: [Fintype (G₁ ⊓ G₂).edgeSet] [DecidableEq V]
+  条件: [有限类型 (G₁ ⊓ G₂).edgeSet] [DecidableEq V]
   证明: by
   simp [edgeFinset]
 
@@ -400,7 +400,7 @@ lemma edgeFinset_nonempty
 
 中文:
 引理 edgeFinset_nonempty
-  结论: G.edgeFinset.Nonempty ↔ G != ⊥
+  结论: G.edgeFinset.非空 ↔ G != ⊥
   证明: by
   rw [Finset.nonempty_iff_ne_empty]; rw [edgeFinset_eq_empty.ne]
 
@@ -419,7 +419,7 @@ theorem edgeFinset_card
 
 中文:
 定理 edgeFinset_card
-  结论: #G.edgeFinset = Fintype.card G.edgeSet
+  结论: #G.edgeFinset = 有限类型.card G.edgeSet
   证明: Set.toFinset_card _
 
 Depends on / 依赖: Set.toFinset_card, toFinset_card
@@ -437,7 +437,7 @@ theorem card_edgeSet
 
 中文:
 定理 card_edgeSet
-  结论: Fintype.card G.edgeSet = #G.edgeFinset
+  结论: 有限类型.card G.edgeSet = #G.edgeFinset
   证明: .symm Set.toFinset_card _
 
 Depends on / 依赖: Set.toFinset_card, toFinset_card
@@ -456,7 +456,7 @@ theorem edgeSet_univ_card
 
 中文:
 定理 edgeSet_univ_card
-  结论: #(univ : Finset G.edgeSet) = #G.edgeFinset
+  结论: #(univ : 有限集 G.edgeSet) = #G.edgeFinset
   证明: by
   simp [card_edgeSet]
 
@@ -520,7 +520,7 @@ theorem card_edgeFinset_le_card_choose_two
 
 中文:
 定理 card_edgeFinset_le_card_choose_two
-  结论: #G.edgeFinset <= (Fintype.card V).choose 2
+  结论: #G.edgeFinset <= (有限类型.card V).choose 2
   证明: by
   classical
   rw [← card_edgeFinset_top_eq_card_choose_two]
@@ -560,7 +560,7 @@ definition neighborFinset
 
 中文:
 定义 neighborFinset
-  签名: : Finset V
+  签名: : 有限集 V
   定义体: (G.neighborSet v).toFinset
 
 Depends on / 依赖: G.neighborSet, neighborSet, toFinset
@@ -601,7 +601,7 @@ theorem coe_neighborFinset
 
 中文:
 定理 coe_neighborFinset
-  结论: (G.neighborFinset v : Set V) = G.neighborSet v
+  结论: (G.neighborFinset v : 集合 V) = G.neighborSet v
   证明: Set.coe_toFinset _
 
 @[simp]
@@ -624,7 +624,7 @@ theorem mem_neighborFinset
 中文:
 定理 mem_neighborFinset
   条件: (w : V)
-  结论: w in G.neighborFinset v ↔ G.Adj v w
+  结论: w in G.neighborFinset v ↔ G.伴随 v w
   证明: Set.mem_toFinset
 
 Depends on / 依赖: Set.mem_toFinset, mem_toFinset
@@ -696,7 +696,7 @@ theorem neighborFinset_bot
 
 中文:
 定理 neighborFinset_bot
-  条件: [Fintype ((⊥ : SimpleGraph V).neighborSet v)]
+  条件: [有限类型 ((⊥ : 简单图 V).neighborSet v)]
   证明: by
   ext; simp
 
@@ -720,7 +720,7 @@ theorem neighborFinset_top
 
 中文:
 定理 neighborFinset_top
-  条件: [Fintype V] [DecidableEq V]
+  条件: [有限类型 V] [DecidableEq V]
   证明: by
   simp [← Finset.coe_inj]
 
@@ -746,7 +746,7 @@ theorem neighborFinset_sup
 
 中文:
 定理 neighborFinset_sup
-  结论: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
+  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
   证明: by
   simp [← Finset.coe_inj]
 
@@ -773,7 +773,7 @@ theorem neighborFinset_inf
 
 中文:
 定理 neighborFinset_inf
-  结论: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
+  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
   证明: by
   simp [← Finset.coe_inj]
 
@@ -798,7 +798,7 @@ theorem neighborFinset_sdiff
 
 中文:
 定理 neighborFinset_sdiff
-  结论: [DecidableEq V] {G₁ G₂ : SimpleGraph V}
+  结论: [DecidableEq V] {G₁ G₂ : 简单图 V}
   证明: by
   simp [← Finset.coe_inj]
 
@@ -820,7 +820,7 @@ theorem disjoint_neighborFinset_of_disjoint
 
 中文:
 定理 disjoint_neighborFinset_of_disjoint
-  条件: [Fintype <| H.neighborSet v] (h : Disjoint G H)
+  条件: [有限类型 <| H.neighborSet v] (h : Disjoint G H)
   证明: by
   simp [← Finset.disjoint_coe, disjoint_neighborSet.mpr h v]
 
@@ -841,7 +841,7 @@ theorem neighborFinset_sup_of_disjoint
 
 中文:
 定理 neighborFinset_sup_of_disjoint
-  结论: {G₁ G₂ : SimpleGraph V}
+  结论: {G₁ G₂ : 简单图 V}
   证明: by
   simp [← Finset.coe_inj, Finset.coe_disjUnion]
 
@@ -887,7 +887,7 @@ protected alias ⟨IsIsolated.of_neighborFinset_eq_empty, IsIsolated.neighborFin
 
 中文:
 引理 neighborFinset_nonempty
-  结论: (G.neighborFinset v).Nonempty ↔ ¬ G.IsIsolated v
+  结论: (G.neighborFinset v).非空 ↔ ¬ G.IsIsolated v
   证明: by
   simp [nonempty_iff_ne_empty]
 
@@ -951,7 +951,7 @@ theorem card_neighborSet_eq_degree
 
 中文:
 定理 card_neighborSet_eq_degree
-  结论: Fintype.card (G.neighborSet v) = G.degree v
+  结论: 有限类型.card (G.neighborSet v) = G.degree v
   证明: (Set.toFinset_card _).symm
 
 Depends on / 依赖: Set.toFinset_card, toFinset_card
@@ -1010,8 +1010,8 @@ theorem degree_pos_iff_exists_adj
   simp only [degree, card_pos, Finset.Nonempty, mem_neighborFinset]
 
 中文:
-定理 degree_pos_iff_exists_adj
-  结论: 0 < G.degree v ↔ 存在 w, G.Adj v w
+定理 degree_pos_iff_存在_adj
+  结论: 0 < G.degree v ↔ 存在 w, G.伴随 v w
   证明: by
   simp only [degree, card_pos, Finset.Nonempty, mem_neighborFinset]
 
@@ -1031,7 +1031,7 @@ theorem degree_pos_iff_nonempty
 
 中文:
 定理 degree_pos_iff_nonempty
-  结论: 0 < G.degree v ↔ (G.neighborSet v).Nonempty
+  结论: 0 < G.degree v ↔ (G.neighborSet v).非空
   证明: G.degree_pos_iff_exists_adj v
 
 Depends on / 依赖: G.degree_pos_iff_exists_adj, degree_pos_iff_exists_adj
@@ -1050,8 +1050,8 @@ theorem Adj.degree_pos_left
   proof: G.degree_pos_iff_nonempty.mpr ⟨_, h⟩
 
 中文:
-定理 Adj.degree_pos_left
-  条件: {w : V} (h : G.Adj v w)
+定理 伴随.degree_pos_left
+  条件: {w : V} (h : G.伴随 v w)
   结论: 0 < G.degree v
   证明: G.degree_pos_iff_nonempty.mpr ⟨_, h⟩
 
@@ -1071,8 +1071,8 @@ theorem Adj.degree_pos_right
   proof: h.symm.degree_pos_left
 
 中文:
-定理 Adj.degree_pos_right
-  条件: {w : V} (h : G.Adj w v)
+定理 伴随.degree_pos_right
+  条件: {w : V} (h : G.伴随 w v)
   结论: 0 < G.degree v
   证明: h.symm.degree_pos_left
 
@@ -1132,7 +1132,7 @@ theorem degree_eq_zero_of_subsingleton
 
 中文:
 定理 degree_eq_zero_of_subsingleton
-  结论: {G : SimpleGraph V} (v : V) [Fintype (G.neighborSet v)]
+  结论: {G : 简单图 V} (v : V) [有限类型 (G.neighborSet v)]
   证明: by
   simp
 -/
@@ -1150,7 +1150,7 @@ theorem nontrivial_of_degree_ne_zero
 
 中文:
 定理 nontrivial_of_degree_ne_zero
-  结论: {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)]
+  结论: {G : 简单图 V} {v : V} [有限类型 (G.neighborSet v)]
   证明: nontrivial_of_not_isIsolated .not.mp h G.degree_eq_zero v
 
 Depends on / 依赖: G.degree_eq_zero, degree_eq_zero, nontrivial_of_not_isIsolated, not.mp
@@ -1170,8 +1170,8 @@ theorem degree_eq_one_iff_existsUnique_adj
   simp only [mem_neighborFinset]
 
 中文:
-定理 degree_eq_one_iff_existsUnique_adj
-  条件: {G : SimpleGraph V} {v : V} [Fintype (G.neighborSet v)]
+定理 degree_eq_one_iff_存在Unique_adj
+  条件: {G : 简单图 V} {v : V} [有限类型 (G.neighborSet v)]
   证明: by
   rw [degree]; rw [Finset.card_eq_one]; rw [Finset.singleton_iff_unique_mem]
   simp only [mem_neighborFinset]
@@ -1197,7 +1197,7 @@ theorem degree_compl
 
 中文:
 定理 degree_compl
-  条件: [Fintype (Gᶜ.neighborSet v)] [Fintype V]
+  条件: [有限类型 (Gᶜ.neighborSet v)] [有限类型 V]
   证明: by
   classical
     rw [← card_neighborSet_union_compl_neighborSet G v]; rw [Set.toFinset_union]
@@ -1362,7 +1362,7 @@ theorem incidenceFinset_eq_filter
 
 中文:
 定理 incidenceFinset_eq_filter
-  条件: [DecidableEq V] [Fintype G.edgeSet]
+  条件: [DecidableEq V] [有限类型 G.edgeSet]
   证明: by
   ext ⟨⟨⟩⟩
   simp [mk'_mem_incidenceSet_iff]
@@ -1384,7 +1384,7 @@ theorem incidenceFinset_subset
 
 中文:
 定理 incidenceFinset_subset
-  条件: [DecidableEq V] [Fintype G.edgeSet]
+  条件: [DecidableEq V] [有限类型 G.edgeSet]
   证明: Set.toFinset_subset_toFinset.mpr (G.incidenceSet_subset v)
 
 Depends on / 依赖: G.incidenceSet_subset, Set.toFinset_subset_toFinset.mpr, incidenceSet_subset, toFinset_subset_toFinset
@@ -1404,7 +1404,7 @@ theorem disjoint_incidenceFinset_of_disjoint
 
 中文:
 定理 disjoint_incidenceFinset_of_disjoint
-  结论: [DecidableEq V] [Fintype <| H.neighborSet v]
+  结论: [DecidableEq V] [有限类型 <| H.neighborSet v]
   证明: by
   simp [← Finset.disjoint_coe, disjoint_incidenceSet.mpr h v]
 
@@ -1427,7 +1427,7 @@ theorem degree_le_card_edgeFinset
 
 中文:
 定理 degree_le_card_edgeFinset
-  条件: [Fintype G.edgeSet]
+  条件: [有限类型 G.edgeSet]
   证明: by
   classical
   rw [← card_incidenceFinset_eq_degree]
@@ -1455,7 +1455,7 @@ lemma degree_le_of_le
 
 中文:
 引理 degree_le_of_le
-  条件: {H : SimpleGraph V} [Fintype (H.neighborSet v)] (hle : G <= H)
+  条件: {H : 简单图 V} [有限类型 (H.neighborSet v)] (hle : G <= H)
   证明: by
   simp_rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card fun v hv => hle hv
@@ -1477,7 +1477,7 @@ theorem degree_lt_card_verts
 
 中文:
 定理 degree_lt_card_verts
-  条件: [Fintype V] [DecidableRel G.Adj] (v : V)
+  条件: [有限类型 V] [DecidableRel G.伴随] (v : V)
   证明: Finset.card_lt_univ_of_notMem G.notMem_neighborFinset_self v
 
 Depends on / 依赖: Finset, Finset.card_lt_univ_of_notMem, G.notMem_neighborFinset_self, card_lt_univ_of_notMem, notMem_neighborFinset_self
@@ -1498,7 +1498,7 @@ abbreviation LocallyFinite
   body: forall v : V, Fintype (G.neighborSet v)
 
 中文:
-缩写 LocallyFinite
+缩写 局部有限
   定义体: forall v : V, Fintype (G.neighborSet v)
 
 Depends on / 依赖: Fintype, G.neighborSet, neighborSet
@@ -1561,7 +1561,7 @@ theorem IsRegularOfDegree.of_isEmpty
 
 中文:
 定理 IsRegularOfDegree.of_isEmpty
-  条件: [IsEmpty V] {d : 自然数}
+  条件: [是空 V] {d : 自然数}
   结论: G.IsRegularOfDegree d
   证明: IsEmpty.elim ‹_›
 
@@ -1582,7 +1582,7 @@ theorem IsRegularOfDegree.compl
 
 中文:
 定理 IsRegularOfDegree.compl
-  结论: [Fintype V] [DecidableEq V] {G : SimpleGraph V} [DecidableRel G.Adj]
+  结论: [有限类型 V] [DecidableEq V] {G : 简单图 V} [DecidableRel G.伴随]
   证明: by
   intro v
   rw [degree_compl]; rw [h v]
@@ -1612,7 +1612,7 @@ abbreviation neighborSetFintype
 
 中文:
 缩写 neighborSetFintype
-  签名: [DecidableRel G.Adj] (v : V)
+  签名: [DecidableRel G.伴随] (v : V)
   定义体: inferInstance
 -/
 abbrev neighborSetFintype [DecidableRel G.Adj] (v : V) : Fintype (G.neighborSet v) :=
@@ -1628,7 +1628,7 @@ theorem neighborFinset_eq_filter
 
 中文:
 定理 neighborFinset_eq_filter
-  条件: {v : V} [DecidableRel G.Adj]
+  条件: {v : V} [DecidableRel G.伴随]
   证明: by ext; simp
 -/
 theorem neighborFinset_eq_filter {v : V} [DecidableRel G.Adj] :
@@ -1648,7 +1648,7 @@ theorem neighborFinset_compl
 
 中文:
 定理 neighborFinset_compl
-  条件: [DecidableEq V] [DecidableRel G.Adj] (v : V)
+  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
   证明: by
   simp only [neighborFinset, neighborSet_compl, Set.toFinset_sdiff, Set.toFinset_compl,
     Set.toFinset_singleton]
@@ -1700,7 +1700,7 @@ theorem bot_degree
 中文:
 定理 bot_degree
   条件: (v : V)
-  结论: (⊥ : SimpleGraph V).degree v = 0
+  结论: (⊥ : 简单图 V).degree v = 0
   证明: by
   simp
 -/
@@ -1743,7 +1743,7 @@ theorem IsRegularOfDegree.bot
 
 中文:
 定理 IsRegularOfDegree.bot
-  结论: (⊥ : SimpleGraph V).IsRegularOfDegree 0
+  结论: (⊥ : 简单图 V).IsRegularOfDegree 0
   证明: bot_degree
 
 Depends on / 依赖: bot_degree
@@ -1761,7 +1761,7 @@ definition minDegree
 
 中文:
 定义 minDegree
-  签名: [DecidableRel G.Adj]
+  签名: [DecidableRel G.伴随]
   定义体: WithTop.untopD 0 (univ.image fun v => G.degree v).min
 
 Depends on / 依赖: G.degree, WithTop, WithTop.untopD, degree, univ.image, untopD
@@ -1779,8 +1779,8 @@ theorem exists_minimal_degree_vertex
   grind [minDegree, WithTop.untopD_coe, min_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
 中文:
-定理 exists_minimal_degree_vertex
-  条件: [DecidableRel G.Adj] [Nonempty V]
+定理 存在_minimal_degree_vertex
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   grind [minDegree, WithTop.untopD_coe, min_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
@@ -1801,7 +1801,7 @@ theorem minDegree_le_degree
 
 中文:
 定理 minDegree_le_degree
-  条件: [DecidableRel G.Adj] (v : V)
+  条件: [DecidableRel G.伴随] (v : V)
   结论: G.minDegree <= G.degree v
   证明: WithTop.untopD_le Finset.min_le mem_image_of_mem (G.degree ·) mem_univ v
 
@@ -1824,8 +1824,8 @@ theorem le_minDegree_of_forall_le_degree
 @[simp]
 
 中文:
-定理 le_minDegree_of_forall_le_degree
-  结论: [DecidableRel G.Adj] [Nonempty V] (k : 自然数)
+定理 le_minDegree_of_对任意_le_degree
+  结论: [DecidableRel G.伴随] [非空 V] (k : 自然数)
   证明: by
   rcases G.exists_minimal_degree_vertex with ⟨v, hv⟩
   rw [hv]
@@ -1857,7 +1857,7 @@ lemma minDegree_of_subsingleton
 
 中文:
 引理 minDegree_of_subsingleton
-  条件: [DecidableRel G.Adj] [Subsingleton V]
+  条件: [DecidableRel G.伴随] [子单例 V]
   结论: G.minDegree = 0
   证明: by
   cases isEmpty_or_nonempty V <;>
@@ -1890,7 +1890,7 @@ lemma minDegree_le_minDegree
 
 中文:
 引理 minDegree_le_minDegree
-  结论: {H : SimpleGraph V} [DecidableRel G.Adj] [DecidableRel H.Adj]
+  结论: {H : 简单图 V} [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: by
   cases isEmpty_or_nonempty V
   · simp
@@ -1919,7 +1919,7 @@ theorem minDegree_lt_card
 
 中文:
 定理 minDegree_lt_card
-  条件: [DecidableRel G.Adj] [Nonempty V]
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   have ⟨v, hv⟩ := G.exists_minimal_degree_vertex
   rw [hv]
@@ -1943,7 +1943,7 @@ definition maxDegree
 
 中文:
 定义 maxDegree
-  签名: [DecidableRel G.Adj]
+  签名: [DecidableRel G.伴随]
   定义体: WithBot.unbotD 0 (univ.image fun v => G.degree v).max
 
 Depends on / 依赖: Equiv.psigmaEquivSigmaPLift, G.degree, WithBot, WithBot.unbotD, degree, of_equiv, psigmaEquivSigmaPLift, unbotD, univ.image
@@ -1961,8 +1961,8 @@ theorem exists_maximal_degree_vertex
   grind [maxDegree, WithBot.unbotD_coe, max_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
 中文:
-定理 exists_maximal_degree_vertex
-  条件: [DecidableRel G.Adj] [Nonempty V]
+定理 存在_maximal_degree_vertex
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   grind [maxDegree, WithBot.unbotD_coe, max_mem_image_coe <| univ_nonempty.image (G.degree ·)]
 
@@ -1985,7 +1985,7 @@ theorem degree_le_maxDegree
 
 中文:
 定理 degree_le_maxDegree
-  条件: [DecidableRel G.Adj] (v : V)
+  条件: [DecidableRel G.伴随] (v : V)
   结论: G.degree v <= G.maxDegree
   证明: WithBot.le_unbotD Finset.le_max mem_image_of_mem (G.degree ·) mem_univ v
 
@@ -2012,7 +2012,7 @@ lemma maxDegree_of_subsingleton
 
 中文:
 引理 maxDegree_of_subsingleton
-  条件: [DecidableRel G.Adj] [Subsingleton V]
+  条件: [DecidableRel G.伴随] [子单例 V]
   结论: G.maxDegree = 0
   证明: by
   cases isEmpty_or_nonempty V <;>
@@ -2041,8 +2041,8 @@ theorem maxDegree_le_of_forall_degree_le
     exact hv ▸ h _
 
 中文:
-定理 maxDegree_le_of_forall_degree_le
-  条件: [DecidableRel G.Adj] (k : 自然数) (h : 对任意 v, G.degree v <= k)
+定理 maxDegree_le_of_对任意_degree_le
+  条件: [DecidableRel G.伴随] (k : 自然数) (h : 对任意 v, G.degree v <= k)
   证明: by
   cases isEmpty_or_nonempty V
   · simp
@@ -2071,7 +2071,7 @@ theorem IsRegularOfDegree.maxDegree_eq
 
 中文:
 定理 IsRegularOfDegree.maxDegree_eq
-  结论: [Nonempty V] [DecidableRel G.Adj] {d : 自然数}
+  结论: [非空 V] [DecidableRel G.伴随] {d : 自然数}
   证明: by
   simp [maxDegree, h.degree_eq, Finset.image_const]
 
@@ -2094,7 +2094,7 @@ lemma maxDegree_bot_eq_zero
 
 中文:
 引理 maxDegree_bot_eq_zero
-  结论: (⊥ : SimpleGraph V).maxDegree = 0
+  结论: (⊥ : 简单图 V).maxDegree = 0
   证明: Nat.le_zero.1 maxDegree_le_of_forall_degree_le _ _ (by simp)
 
 Depends on / 依赖: Nat.le_zero, le_zero, maxDegree_le_of_forall_degree_le
@@ -2123,7 +2123,7 @@ theorem maxDegree_eq_zero_iff
 
 中文:
 定理 maxDegree_eq_zero_iff
-  条件: [DecidableRel G.Adj]
+  条件: [DecidableRel G.伴随]
   结论: G.maxDegree = 0 ↔ G = ⊥
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -2163,7 +2163,7 @@ lemma maxDegree_top
 中文:
 引理 maxDegree_top
   条件: [DecidableEq V]
-  结论: (⊤ : SimpleGraph V).maxDegree = Fintype.card V - 1
+  结论: (⊤ : 简单图 V).maxDegree = 有限类型.card V - 1
   证明: by
   cases isEmpty_or_nonempty V
   · simp
@@ -2193,7 +2193,7 @@ lemma minDegree_le_maxDegree
 
 中文:
 引理 minDegree_le_maxDegree
-  条件: [DecidableRel G.Adj]
+  条件: [DecidableRel G.伴随]
   结论: G.minDegree <= G.maxDegree
   证明: by
   by_cases! he : IsEmpty V
@@ -2220,7 +2220,7 @@ theorem IsRegularOfDegree.minDegree_eq
 
 中文:
 定理 IsRegularOfDegree.minDegree_eq
-  结论: [Nonempty V] [DecidableRel G.Adj] {d : 自然数}
+  结论: [非空 V] [DecidableRel G.伴随] {d : 自然数}
   证明: by
   simp [minDegree, h.degree_eq, Finset.image_const]
 
@@ -2243,7 +2243,7 @@ lemma minDegree_bot_eq_zero
 
 中文:
 引理 minDegree_bot_eq_zero
-  结论: (⊥ : SimpleGraph V).minDegree = 0
+  结论: (⊥ : 简单图 V).minDegree = 0
   证明: Nat.le_zero.1 (minDegree_le_maxDegree _).trans (by simp)
 
 Depends on / 依赖: Nat.le_zero, le_zero, minDegree_le_maxDegree
@@ -2265,7 +2265,7 @@ theorem minDegree_eq_zero_iff
 
 中文:
 定理 minDegree_eq_zero_iff
-  条件: [DecidableRel G.Adj] [Nonempty V]
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   refine ⟨fun h => ?_, fun ⟨v, hv⟩ => ?_⟩
   · grind [G.exists_minimal_degree_vertex, degree_eq_zero]
@@ -2293,7 +2293,7 @@ theorem minDegree_eq_zero_iff_support_ne
 
 中文:
 定理 minDegree_eq_zero_iff_support_ne
-  条件: [DecidableRel G.Adj] [Nonempty V]
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   simp [Set.ne_univ_iff_exists_notMem, minDegree_eq_zero_iff]
 
@@ -2321,7 +2321,7 @@ lemma minDegree_top
 中文:
 引理 minDegree_top
   条件: [DecidableEq V]
-  结论: (⊤ : SimpleGraph V).minDegree = Fintype.card V - 1
+  结论: (⊤ : 简单图 V).minDegree = 有限类型.card V - 1
   证明: by
   cases isEmpty_or_nonempty V
   · simp
@@ -2347,7 +2347,7 @@ theorem maxDegree_lt_card_verts
 
 中文:
 定理 maxDegree_lt_card_verts
-  条件: [DecidableRel G.Adj] [Nonempty V]
+  条件: [DecidableRel G.伴随] [非空 V]
   证明: by
   obtain ⟨v, hv⟩ := G.exists_maximal_degree_vertex
   rw [hv]
@@ -2373,7 +2373,7 @@ theorem card_commonNeighbors_le_degree_left
 
 中文:
 定理 card_commonNeighbors_le_degree_left
-  条件: [DecidableRel G.Adj] (v w : V)
+  条件: [DecidableRel G.伴随] (v w : V)
   证明: by
   rw [← card_neighborSet_eq_degree]
   exact Set.card_le_card Set.inter_subset_left
@@ -2396,7 +2396,7 @@ theorem card_commonNeighbors_le_degree_right
 
 中文:
 定理 card_commonNeighbors_le_degree_right
-  条件: [DecidableRel G.Adj] (v w : V)
+  条件: [DecidableRel G.伴随] (v w : V)
   证明: by
   simp_rw [commonNeighbors_symm _ v w, card_commonNeighbors_le_degree_left]
 
@@ -2416,7 +2416,7 @@ theorem card_commonNeighbors_lt_card_verts
 
 中文:
 定理 card_commonNeighbors_lt_card_verts
-  条件: [DecidableRel G.Adj] (v w : V)
+  条件: [DecidableRel G.伴随] (v w : V)
   证明: Nat.lt_of_le_of_lt (G.card_commonNeighbors_le_degree_left _ _) (G.degree_lt_card_verts v)
 
 Depends on / 依赖: G.card_commonNeighbors_le_degree_left, G.degree_lt_card_verts, Nat.lt_of_le_of_lt, card_commonNeighbors_le_degree_left, degree_lt_card_verts, lt_of_le_of_lt
@@ -2440,8 +2440,8 @@ refine Finset.card_lt_card Finset.ssubset_iff.mpr ⟨w, ?_, ?_⟩
   · simpa [Finset.insert_subset_iff, G.commonNeighbors_subset_neighborSet_left v w]
 
 中文:
-定理 Adj.card_commonNeighbors_lt_degree
-  结论: {G : SimpleGraph V} [DecidableRel G.Adj] {v w : V}
+定理 伴随.card_commonNeighbors_lt_degree
+  结论: {G : 简单图 V} [DecidableRel G.伴随] {v w : V}
   证明: by
   classical
   rw [← Set.toFinset_card]
@@ -2494,7 +2494,7 @@ lemma insert_neighborFinset_eq_univ
 
 中文:
 引理 insert_neighborFinset_eq_univ
-  条件: [DecidableEq V] [DecidableRel G.Adj] (v : V)
+  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
   证明: by
   simp only [Finset.ext_iff, mem_insert, mem_neighborFinset, IsUniversal]
   grind
@@ -2517,7 +2517,7 @@ lemma neighborFinset_eq_erase_univ
 
 中文:
 引理 neighborFinset_eq_erase_univ
-  条件: [DecidableEq V] [DecidableRel G.Adj] (v : V)
+  条件: [DecidableEq V] [DecidableRel G.伴随] (v : V)
   证明: by
   grind [insert_neighborFinset_eq_univ, notMem_neighborFinset_self]
 
@@ -2543,7 +2543,7 @@ lemma degree_eq_card_sub_one
 
 中文:
 引理 degree_eq_card_sub_one
-  条件: [DecidableRel G.Adj] (v : V)
+  条件: [DecidableRel G.伴随] (v : V)
   证明: by
   classical
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -2572,7 +2572,7 @@ lemma degree_lt_card_sub_one
 
 中文:
 引理 degree_lt_card_sub_one
-  条件: [DecidableRel G.Adj] (v : V)
+  条件: [DecidableRel G.伴随] (v : V)
   证明: by
   grind [degree_eq_card_sub_one, Nat.le_sub_one_of_lt <| G.degree_lt_card_verts v]
 
@@ -2600,7 +2600,7 @@ theorem card_edgeFinset_eq
 
 中文:
 定理 card_edgeFinset_eq
-  条件: (f : G ≃g G') [Fintype G.edgeSet] [Fintype G'.edgeSet]
+  条件: (f : G ≃g G') [有限类型 G.edgeSet] [有限类型 G'.edgeSet]
   证明: by
   apply Finset.card_eq_of_equiv
   simpa using f.mapEdgeSet
@@ -2986,7 +2986,7 @@ theorem filter_edgeFinset_toFinset_subset
 
 中文:
 定理 filter_edgeFinset_toFinset_subset
-  条件: [DecidableEq V] (s : Finset V)
+  条件: [DecidableEq V] (s : 有限集 V)
   证明: by
   simp [subset_iff, ← mem_sym2_iff, filter_mem_eq_inter]
 
@@ -3011,7 +3011,7 @@ theorem card_filter_edgeFinset_toFinset_subset
 
 中文:
 定理 card_filter_edgeFinset_toFinset_subset
-  条件: [DecidableEq V] (s : Finset V)
+  条件: [DecidableEq V] (s : 有限集 V)
   证明: by
   have h := congrArg Finset.card (map_edgeFinset_induce (s := (↑s : Set V)) (G := G))
   rw [card_map]; rw [toFinset_coe] at h
@@ -3049,7 +3049,7 @@ theorem edgeFinset_map
 
 中文:
 定理 edgeFinset_map
-  条件: (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj]
+  条件: (f : V ↪ W) (G : 简单图 V) [DecidableRel G.伴随]
   证明: by
   rw [← Finset.coe_inj]
   push_cast
@@ -3075,7 +3075,7 @@ theorem card_edgeFinset_map
 
 中文:
 定理 card_edgeFinset_map
-  条件: (f : V ↪ W) (G : SimpleGraph V) [DecidableRel G.Adj]
+  条件: (f : V ↪ W) (G : 简单图 V) [DecidableRel G.伴随]
   证明: by
   rw [edgeFinset_map]
   exact G.edgeFinset.card_map f.sym2Map

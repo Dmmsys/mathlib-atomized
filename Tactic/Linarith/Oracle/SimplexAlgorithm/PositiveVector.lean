@@ -57,7 +57,7 @@ definition stateLP
 
 中文:
 定义 stateLP
-  签名: {n m : 自然数} (A : matType n m) (strictIndexes : List 自然数)
+  签名: {n m : 自然数} (A : matType n m) (strictIndexes : 列表 自然数)
   定义体: /- +2 due to shifting by `f` and `z` -/
   let objectiveRow : List (Nat × Nat × Rat) :=
     (0, 0, -1) :: strictIndexes.map fun idx => (0, idx + 2, 1)
@@ -124,7 +124,7 @@ definition findPositiveVector
 
 中文:
 定义 findPositiveVector
-  签名: {n m : 自然数} {matType : 自然数 -> 自然数 -> Type} [UsableInSimplexAlgorithm matType]
+  签名: {n m : 自然数} {matType : 自然数 -> 自然数 -> 类型} [UsableInSimplexAlgorithm matType]
   定义体: do
   /- State the linear programming problem. -/
   let B := stateLP A strictIndexes

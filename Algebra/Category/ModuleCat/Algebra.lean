@@ -55,7 +55,7 @@ definition moduleOfAlgebraModule
 
 中文:
 定义 moduleOfAlgebraModule
-  签名: (M : ModuleCat.{v} A)
+  签名: (M : 模范畴.{v} A)
   定义体: Module.restrictScalars k A M
 
 Depends on / 依赖: Module, Module.restrictScalars, restrictScalars
@@ -76,8 +76,8 @@ theorem isScalarTower_of_algebra_moduleCat
 
 中文:
 定理 isScalarTower_of_algebra_moduleCat
-  条件: (M : ModuleCat.{v} A)
-  结论: IsScalarTower k A M
+  条件: (M : 模范畴.{v} A)
+  结论: 标量塔 k A M
   证明: IsScalarTower.restrictScalars k A M
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.restrictScalars, restrictScalars
@@ -100,7 +100,7 @@ instance linearOverField
 
 中文:
 实例 linearOverField
-  签名: : Linear k (ModuleCat.{v} A) where
+  签名: : 线性 k (模范畴.{v} A) where
   定义体: inferInstance
 -/
 instance linearOverField : Linear k (ModuleCat.{v} A) where

@@ -72,7 +72,7 @@ theorem Filter.Eventually.exists_lt
 @[to_dual]
 
 中文:
-定理 Filter.Eventually.exists_lt
+定理 滤子.Eventually.存在_lt
   结论: {a : α} [NeBot (𝓝[<] a)] {p : α -> 命题}
   证明: ((frequently_lt_nhds a).and_eventually h).exists
 
@@ -99,7 +99,7 @@ theorem nhdsWithin_Ici_neBot
 中文:
 定理 nhdsWithin_Ici_neBot
   条件: {a b : α} (H₂ : a <= b)
-  结论: NeBot (𝓝[Ici a] b)
+  结论: NeBot (𝓝[左闭右无界区间 a] b)
   证明: nhdsWithin_neBot_of_mem H₂
 
 @[to_dual]
@@ -168,7 +168,7 @@ lemma IsAntichain.interior_eq_empty
 
 中文:
 引理 IsAntichain.interior_eq_empty
-  结论: [对任意 x : α, (𝓝[<] x).NeBot] {s : Set α}
+  结论: [对任意 x : α, (𝓝[<] x).NeBot] {s : 集合 α}
   证明: by
   refine eq_empty_of_forall_notMem fun x hx => ?_
   have : forallᶠ y in 𝓝 x, y in s := mem_interior_iff_mem_nhds.1 hx
@@ -195,7 +195,7 @@ lemma IsAntichain.interior_eq_empty'
 
 中文:
 引理 IsAntichain.interior_eq_empty'
-  结论: [对任意 x : α, (𝓝[>] x).NeBot] {s : Set α}
+  结论: [对任意 x : α, (𝓝[>] x).NeBot] {s : 集合 α}
   证明: have : forall x : αᵒᵈ, NeBot (𝓝[<] x) := ‹_›
   hs.to_dual.interior_eq_empty
 
@@ -250,7 +250,7 @@ theorem continuousWithinAt_inter_Ioi_iff_Ici
 
 中文:
 定理 continuousWithinAt_inter_Ioi_iff_Ici
-  条件: {a : α} {f : α -> β} {s : Set α}
+  条件: {a : α} {f : α -> β} {s : 集合 α}
   证明: by
   simp [← Ici_sdiff_left, ← inter_sdiff_assoc, continuousWithinAt_sdiff_self]
 
@@ -309,7 +309,7 @@ theorem nhdsWithinLE_sup_nhdsWithinGE
 中文:
 定理 nhdsWithinLE_sup_nhdsWithinGE
   条件: (a : α)
-  结论: 𝓝[s inter Iic a] a ⊔ 𝓝[s inter Ici a] a = 𝓝[s] a
+  结论: 𝓝[s inter 左无界右闭区间 a] a ⊔ 𝓝[s inter 左闭右无界区间 a] a = 𝓝[s] a
   证明: by
   rw [← nhdsWithin_union]; rw [← inter_union_distrib_left]; rw [Iic_union_Ici]; rw [inter_univ]
 
@@ -363,7 +363,7 @@ theorem nhdsWithinLT_sup_nhdsWithinGE
 中文:
 定理 nhdsWithinLT_sup_nhdsWithinGE
   条件: (a : α)
-  结论: 𝓝[s inter Iio a] a ⊔ 𝓝[s inter Ici a] a = 𝓝[s] a
+  结论: 𝓝[s inter 左无界右开区间 a] a ⊔ 𝓝[s inter 左闭右无界区间 a] a = 𝓝[s] a
   证明: by
   rw [← nhdsWithin_union]; rw [← inter_union_distrib_left]; rw [Iio_union_Ici]; rw [inter_univ]
 
@@ -417,7 +417,7 @@ theorem nhdsWithinLE_sup_nhdsWithinGT
 中文:
 定理 nhdsWithinLE_sup_nhdsWithinGT
   条件: (a : α)
-  结论: 𝓝[s inter Iic a] a ⊔ 𝓝[s inter Ioi a] a = 𝓝[s] a
+  结论: 𝓝[s inter 左无界右闭区间 a] a ⊔ 𝓝[s inter 左开右无界区间 a] a = 𝓝[s] a
   证明: by
   rw [← nhdsWithin_union]; rw [← inter_union_distrib_left]; rw [Iic_union_Ioi]; rw [inter_univ]
 

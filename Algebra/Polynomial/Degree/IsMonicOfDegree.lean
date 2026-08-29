@@ -40,7 +40,7 @@ structure IsMonicOfDegree
     - monic : p.Monic
 
 中文:
-结构 IsMonicOfDegree
+结构 是MonicOfDegree
   参数: (p : R[X]) (n : 自然数)
   公理与运算 (2 个):
     - natDegree_eq : p.natDegree = n
@@ -67,7 +67,7 @@ lemma isMonicOfDegree_zero_iff
 中文:
 引理 isMonicOfDegree_zero_iff
   条件: {p : R[X]}
-  结论: IsMonicOfDegree p 0 ↔ p = 1
+  结论: 是MonicOfDegree p 0 ↔ p = 1
   证明: by
   simp only [isMonicOfDegree_iff']
   refine ⟨fun ⟨H₁, H₂⟩ => eq_one_of_monic_natDegree_zero H₂ H₁, fun H => ?_⟩
@@ -93,8 +93,8 @@ lemma IsMonicOfDegree.leadingCoeff_eq
 @[simp]
 
 中文:
-引理 IsMonicOfDegree.leadingCoeff_eq
-  条件: {p : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n)
+引理 是MonicOfDegree.leadingCoeff_eq
+  条件: {p : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n)
   证明: Monic.def.mp hp.monic
 
 @[simp]
@@ -120,7 +120,7 @@ lemma isMonicOfDegree_iff_of_subsingleton
 
 中文:
 引理 isMonicOfDegree_iff_of_subsingleton
-  条件: [Subsingleton R] {p : R[X]} {n : 自然数}
+  条件: [子单例 R] {p : R[X]} {n : 自然数}
   证明: by
   rw [Subsingleton.eq_one p]
   refine ⟨fun ⟨H, _⟩ => ?_, fun H => ?_⟩
@@ -150,7 +150,7 @@ lemma isMonicOfDegree_iff
 
 中文:
 引理 isMonicOfDegree_iff
-  条件: [Nontrivial R] (p : R[X]) (n : 自然数)
+  条件: [非平凡 R] (p : R[X]) (n : 自然数)
   证明: by
   simp only [isMonicOfDegree_iff']
   refine ⟨fun ⟨H₁, H₂⟩ => ⟨H₁.le, H₁ ▸ Monic.coeff_natDegree H₂⟩, fun ⟨H₁, H₂⟩ => ⟨?_, ?_⟩⟩
@@ -181,7 +181,7 @@ lemma IsMonicOfDegree.exists_natDegree_lt
     lia
 
 中文:
-引理 IsMonicOfDegree.exists_natDegree_lt
+引理 是MonicOfDegree.存在_natDegree_lt
   结论: {p : R[X]} {n : 自然数} (hn : n != 0)
   证明: by
   refine ⟨p.eraseLead, ?_, ?_⟩
@@ -218,8 +218,8 @@ lemma IsMonicOfDegree.mul
     rw [hp.leadingCoeff_eq]; rw [hq.leadingCoeff_eq]; rw
 
 中文:
-引理 IsMonicOfDegree.mul
-  结论: {p q : R[X]} {m n : 自然数} (hp : IsMonicOfDegree p m)
+引理 是MonicOfDegree.mul
+  结论: {p q : R[X]} {m n : 自然数} (hp : 是MonicOfDegree p m)
   证明: by
   rcases subsingleton_or_nontrivial R with H | H
   · simp only [isMonicOfDegree_iff_of_subsingleton, Nat.add_eq_zero_iff] at hp hq ⊢
@@ -256,8 +256,8 @@ lemma IsMonicOfDegree.pow
     exact ih.mul hp
 
 中文:
-引理 IsMonicOfDegree.pow
-  条件: {p : R[X]} {m : 自然数} (hp : IsMonicOfDegree p m) (n : 自然数)
+引理 是MonicOfDegree.pow
+  条件: {p : R[X]} {m : 自然数} (hp : 是MonicOfDegree p m) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -291,8 +291,8 @@ lemma IsMonicOfDegree.coeff_eq
     rw [coeff_eq_zero_of_natDegree_lt hp]; rw [coeff_eq_zero_of_natDegree_lt
 
 中文:
-引理 IsMonicOfDegree.coeff_eq
-  结论: {p q : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n)
+引理 是MonicOfDegree.coeff_eq
+  结论: {p q : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n)
   证明: by
   nontriviality R
   rw [isMonicOfDegree_iff] at hp hq
@@ -331,8 +331,8 @@ lemma IsMonicOfDegree.of_mul_left
   have h : p.leadingCoeff * q.leadingCoeff !=
 
 中文:
-引理 IsMonicOfDegree.of_mul_left
-  结论: {p q : R[X]} {m n : 自然数} (hp : IsMonicOfDegree p m)
+引理 是MonicOfDegree.of_mul_left
+  结论: {p q : R[X]} {m n : 自然数} (hp : 是MonicOfDegree p m)
   证明: by
   rcases subsingleton_or_nontrivial R with H | H
   · simp only [isMonicOfDegree_iff_of_subsingleton, Nat.add_eq_zero_iff] at hpq ⊢
@@ -375,8 +375,8 @@ lemma IsMonicOfDegree.of_mul_right
   have h : p.leadingCoeff * q.leadingCoeff !
 
 中文:
-引理 IsMonicOfDegree.of_mul_right
-  结论: {p q : R[X]} {m n : 自然数} (hq : IsMonicOfDegree q n)
+引理 是MonicOfDegree.of_mul_right
+  结论: {p q : R[X]} {m n : 自然数} (hq : 是MonicOfDegree q n)
   证明: by
   rcases subsingleton_or_nontrivial R with H | H
   · simp only [isMonicOfDegree_iff_of_subsingleton, Nat.add_eq_zero_iff] at hpq ⊢
@@ -418,8 +418,8 @@ lemma IsMonicOfDegree.add_right
     exact ((isMonicOfDegree_iff p n).mp hp).2
 
 中文:
-引理 IsMonicOfDegree.add_right
-  结论: {p q : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n)
+引理 是MonicOfDegree.add_right
+  结论: {p q : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n)
   证明: by
   rcases subsingleton_or_nontrivial R with H | H
   · simpa using hp
@@ -451,7 +451,7 @@ lemma IsMonicOfDegree.add_left
   exact hq.add_right hp
 
 中文:
-引理 IsMonicOfDegree.add_left
+引理 是MonicOfDegree.add_left
   结论: {p q : R[X]} {n : 自然数} (hp : p.natDegree < n)
   证明: by
   rw [add_comm]
@@ -480,8 +480,8 @@ lemma IsMonicOfDegree.comp
   rw [coeff_comp_degree_mul_degree (hq.natDegr
 
 中文:
-引理 IsMonicOfDegree.comp
-  结论: {p q : R[X]} {m n : 自然数} (hn : n != 0) (hp : IsMonicOfDegree p m)
+引理 是MonicOfDegree.comp
+  结论: {p q : R[X]} {m n : 自然数} (hn : n != 0) (hp : 是MonicOfDegree p m)
   证明: by
   rcases subsingleton_or_nontrivial R with h | h
   · simp only [isMonicOfDegree_iff_of_subsingleton, mul_eq_zero] at hp ⊢
@@ -514,8 +514,8 @@ lemma IsMonicOfDegree.ne_zero
   proof: h.monic.ne_zero
 
 中文:
-引理 IsMonicOfDegree.ne_zero
-  条件: {p : R[X]} {n : 自然数} (h : IsMonicOfDegree p n)
+引理 是MonicOfDegree.ne_zero
+  条件: {p : R[X]} {n : 自然数} (h : 是MonicOfDegree p n)
   结论: p != 0
   证明: h.monic.ne_zero
 
@@ -535,7 +535,7 @@ lemma isMonicOfDegree_X
 
 中文:
 引理 isMonicOfDegree_X
-  结论: IsMonicOfDegree (X : R[X]) 1
+  结论: 是MonicOfDegree (X : R[X]) 1
   证明: (isMonicOfDegree_iff ..).mpr ⟨natDegree_X_le, coeff_X_one⟩
 
 Depends on / 依赖: coeff_X_one, isMonicOfDegree_iff, natDegree_X_le
@@ -556,7 +556,7 @@ lemma isMonicOfDegree_X_pow
 中文:
 引理 isMonicOfDegree_X_pow
   条件: (n : 自然数)
-  结论: IsMonicOfDegree ((X : R[X]) ^ n) n
+  结论: 是MonicOfDegree ((X : R[X]) ^ n) n
   证明: (isMonicOfDegree_iff ..).mpr ⟨natDegree_X_pow_le n, coeff_X_pow_self n⟩
 
 Depends on / 依赖: coeff_X_pow_self, isMonicOfDegree_iff, natDegree_X_pow_le
@@ -577,7 +577,7 @@ lemma isMonicOfDegree_monomial_one
 中文:
 引理 isMonicOfDegree_monomial_one
   条件: (n : 自然数)
-  结论: IsMonicOfDegree (monomial n (1 : R)) n
+  结论: 是MonicOfDegree (monomial n (1 : R)) n
   证明: by
   simpa only [monomial_one_right_eq_X_pow] using isMonicOfDegree_X_pow R n
 
@@ -598,7 +598,7 @@ lemma isMonicOfDegree_X_add_one
 中文:
 引理 isMonicOfDegree_X_add_one
   条件: (r : R)
-  结论: IsMonicOfDegree (X + C r) 1
+  结论: 是MonicOfDegree (X + C r) 1
   证明: (isMonicOfDegree_X R).add_right (by rw [natDegree_C]; exact zero_lt_one)
 
 Depends on / 依赖: add_right, isMonicOfDegree_X, natDegree_C, zero_lt_one
@@ -624,7 +624,7 @@ lemma isMonicOfDegree_one_iff
 中文:
 引理 isMonicOfDegree_one_iff
   条件: {f : R[X]}
-  结论: IsMonicOfDegree f 1 ↔ 存在 r : R, f = X + C r
+  结论: 是MonicOfDegree f 1 ↔ 存在 r : R, f = X + C r
   证明: by
   refine ⟨fun H => ?_, fun ⟨r, H⟩ => H ▸ isMonicOfDegree_X_add_one r⟩
   refine ⟨f.coeff 0, ?_⟩
@@ -661,7 +661,7 @@ exact (isMonicOfDegree_X_pow R 2).add_right
 中文:
 引理 isMonicOfDegree_add_add_two
   条件: (a b : R)
-  结论: IsMonicOfDegree (X ^ 2 + C a * X + C b) 2
+  结论: 是MonicOfDegree (X ^ 2 + C a * X + C b) 2
   证明: by
   rw [add_assoc]
 exact (isMonicOfDegree_X_pow R 2).add_right
@@ -736,7 +736,7 @@ lemma IsMonicOfDegree.natDegree_sub_X_pow
   simpa [hq₁]
 
 中文:
-引理 IsMonicOfDegree.natDegree_sub_X_pow
+引理 是MonicOfDegree.natDegree_sub_X_pow
   结论: {p : R[X]} {n : 自然数} (hn : n != 0)
   证明: by
   obtain ⟨q, hq₁, hq₂⟩ := hp.exists_natDegree_lt hn
@@ -764,8 +764,8 @@ lemma IsMonicOfDegree.natDegree_sub_lt
   exact (natDegree_sub_le_iff_left hq).mpr hp
 
 中文:
-引理 IsMonicOfDegree.natDegree_sub_lt
-  结论: {p q : R[X]} {n : 自然数} (hn : n != 0) (hp : IsMonicOfDegree p n)
+引理 是MonicOfDegree.natDegree_sub_lt
+  结论: {p q : R[X]} {n : 自然数} (hn : n != 0) (hp : 是MonicOfDegree p n)
   证明: by
   rw [← sub_sub_sub_cancel_right p q (X ^ n)]
   replace hp := hp.natDegree_sub_X_pow hn
@@ -795,8 +795,8 @@ lemma IsMonicOfDegree.sub
 exact hp.add_right (natDegree_neg q) ▸ hq
 
 中文:
-引理 IsMonicOfDegree.sub
-  条件: {p q : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n) (hq : q.natDegree < n)
+引理 是MonicOfDegree.sub
+  条件: {p q : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n) (hq : q.natDegree < n)
   证明: by
   rw [sub_eq_add_neg]
 exact hp.add_right (natDegree_neg q) ▸ hq
@@ -822,7 +822,7 @@ lemma isMonicOfDegree_X_sub_one
 中文:
 引理 isMonicOfDegree_X_sub_one
   条件: (r : R)
-  结论: IsMonicOfDegree (X - C r) 1
+  结论: 是MonicOfDegree (X - C r) 1
   证明: (isMonicOfDegree_X R).sub (by rw [natDegree_C]; exact zero_lt_one)
 
 Depends on / 依赖: isMonicOfDegree_X, natDegree_C, zero_lt_one
@@ -849,7 +849,7 @@ exact (isMonicOfDegree_X_pow R 2).add_right by
 中文:
 引理 isMonicOfDegree_sub_add_two
   条件: (a b : R)
-  结论: IsMonicOfDegree (X ^ 2 - C a * X + C b) 2
+  结论: 是MonicOfDegree (X ^ 2 - C a * X + C b) 2
   证明: by
   rw [sub_add]
 exact (isMonicOfDegree_X_pow R 2).add_right by
@@ -919,8 +919,8 @@ lemma IsMonicOfDegree.of_dvd_add
   exact ha.add_right hr
 
 中文:
-引理 IsMonicOfDegree.of_dvd_add
-  结论: {a b r : R[X]} {m n : 自然数} (hmn : n <= m) (ha : IsMonicOfDegree a m)
+引理 是MonicOfDegree.of_dvd_add
+  结论: {a b r : R[X]} {m n : 自然数} (hmn : n <= m) (ha : 是MonicOfDegree a m)
   证明: by
   obtain ⟨q, hq⟩ := exists_eq_mul_left_of_dvd h
   refine ⟨q, hb.of_mul_right ?_, eq_sub_iff_add_eq.mpr hq⟩
@@ -949,8 +949,8 @@ lemma IsMonicOfDegree.of_dvd_sub
   · rwa [natDegree_neg]
 
 中文:
-引理 IsMonicOfDegree.of_dvd_sub
-  结论: {a b r : R[X]} {m n : 自然数} (hmn : n <= m) (ha : IsMonicOfDegree a m)
+引理 是MonicOfDegree.of_dvd_sub
+  结论: {a b r : R[X]} {m n : 自然数} (hmn : n <= m) (ha : 是MonicOfDegree a m)
   证明: by
   convert ha.of_dvd_add hmn hb ?_ h with q
   · rw [sub_neg_eq_add]
@@ -978,8 +978,8 @@ lemma IsMonicOfDegree.aeval_add
   exact hp.comp one_ne_zero (isMonicOfDegree_X_add_one r)
 
 中文:
-引理 IsMonicOfDegree.aeval_add
-  条件: {p : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n) (r : R)
+引理 是MonicOfDegree.aeval_add
+  条件: {p : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n) (r : R)
   证明: by
   rcases subsingleton_or_nontrivial R with H | H
   · simpa using hp
@@ -1006,8 +1006,8 @@ lemma IsMonicOfDegree.aeval_sub
   exact aeval_add hp (-r)
 
 中文:
-引理 IsMonicOfDegree.aeval_sub
-  条件: {p : R[X]} {n : 自然数} (hp : IsMonicOfDegree p n) (r : R)
+引理 是MonicOfDegree.aeval_sub
+  条件: {p : R[X]} {n : 自然数} (hp : 是MonicOfDegree p n) (r : R)
   证明: by
   rw [sub_eq_add_neg]; rw [← map_neg]
   exact aeval_add hp (-r)

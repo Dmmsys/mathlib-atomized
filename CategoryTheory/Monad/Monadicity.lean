@@ -73,7 +73,7 @@ instance main_pair_reflexive
 
 中文:
 实例 main_pair_reflexive
-  签名: (A : adj.toMonad.Algebra)
+  签名: (A : adj.toMonad.代数)
   定义体: by
   apply IsReflexivePair.mk' (F.map (adj.unit.app _)) _ _
   · rw [← F.map_comp, ← F.map_id]
@@ -101,7 +101,7 @@ instance main_pair_G_split
 
 中文:
 实例 main_pair_G_split
-  签名: (A : adj.toMonad.Algebra)
+  签名: (A : adj.toMonad.代数)
   定义体: ⟨_, _, ⟨beckSplitCoequalizer A⟩⟩
 
 Depends on / 依赖: beckSplitCoequalizer
@@ -121,7 +121,7 @@ definition comparisonLeftAdjointObj
 
 中文:
 定义 comparisonLeftAdjointObj
-  签名: (A : adj.toMonad.Algebra)
+  签名: (A : adj.toMonad.代数)
   定义体: coequalizer (F.map A.a) (adj.counit.app _)
 
 Depends on / 依赖: F.map, adj.counit.app, coequalizer, counit
@@ -153,7 +153,7 @@ definition comparisonLeftAdjointHomEquiv
 
 中文:
 定义 comparisonLeftAdjointHomEquiv
-  签名: (A : adj.toMonad.Algebra) (B : D)
+  签名: (A : adj.toMonad.代数) (B : D)
   定义体: calc
     (comparisonLeftAdjointObj adj A ⟶ B) ≃ { f : F.obj A.A ⟶ B // _ } :=
       Cofork.IsColimit.homIso (colimit.isColimit _) B
@@ -285,7 +285,7 @@ definition unitCofork
 
 中文:
 定义 unitCofork
-  签名: (A : adj.toMonad.Algebra)
+  签名: (A : adj.toMonad.代数)
   定义体: Cofork.ofπ (G.map (coequalizer.π (F.map A.a) (adj.counit.app (F.obj A.A))))
     (by rw [← G.map_comp, coequalizer.condition, G.map_comp])
 
@@ -309,7 +309,7 @@ theorem unitCofork_π
 
 中文:
 定理 unitCofork_π
-  结论: (A : adj.toMonad.Algebra)
+  结论: (A : adj.toMonad.代数)
   证明: rfl
 -/
 theorem unitCofork_π (A : adj.toMonad.Algebra)
@@ -388,7 +388,7 @@ definition unitColimitOfPreservesCoequalizer
 
 中文:
 定义 unitColimitOfPreservesCoequalizer
-  签名: (A : adj.toMonad.Algebra)
+  签名: (A : adj.toMonad.代数)
   定义体: isColimitOfHasCoequalizerOfPreservesColimit G _ _
 -/
 def unitColimitOfPreservesCoequalizer (A : adj.toMonad.Algebra)
@@ -536,7 +536,7 @@ class HasCoequalizerOfIsSplitPair
     - out : forall {A B} (f g : A ⟶ B) [G.IsSplitPair f g], HasCoequalizer f g
 
 中文:
-类 HasCoequalizerOfIsSplitPair
+类 有余equalizerOfIsSplitPair
   参数: (G : D ⥤ C)
   公理与运算 (1 个):
     - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], HasCoequalizer f g
@@ -559,7 +559,7 @@ instance [HasCoequalizerOfIsSplitPair
   body: fun _ => HasCoequalizerOfIsSplitPair.out G _ _
 
 中文:
-实例 [HasCoequalizerOfIsSplitPair
+实例 [有余equalizerOfIsSplitPair
   签名: G] : 对任意 (A
   定义体: fun _ => HasCoequalizerOfIsSplitPair.out G _ _
 
@@ -582,10 +582,10 @@ class PreservesColimitOfIsSplitPair
     - out : forall {A B} (f g : A ⟶ B) [G.IsSplitPair f g], PreservesColimit (parallelPair f g) G
 
 中文:
-类 PreservesColimitOfIsSplitPair
+类 保持余limitOfIsSplitPair
   参数: (G : D ⥤ C)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], PreservesColimit (parallelPair f g) G
+    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], 保持余极限 (parallelPair f g) G
 -/
 class PreservesColimitOfIsSplitPair (G : D ⥤ C) where
   out : forall {A B} (f g : A ⟶ B) [G.IsSplitPair f g], PreservesColimit (parallelPair f g) G
@@ -602,7 +602,7 @@ instance [PreservesColimitOfIsSplitPair
   body: fun _ => PreservesColimitOfIsSplitPair.out _ _
 
 中文:
-实例 [PreservesColimitOfIsSplitPair
+实例 [保持余limitOfIsSplitPair
   签名: G] : 对任意 (A
   定义体: fun _ => PreservesColimitOfIsSplitPair.out _ _
 
@@ -627,7 +627,7 @@ class ReflectsColimitOfIsSplitPair
 类 ReflectsColimitOfIsSplitPair
   参数: (G : D ⥤ C)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], ReflectsColimit (parallelPair f g) G
+    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], 反映余极限 (parallelPair f g) G
 -/
 class ReflectsColimitOfIsSplitPair (G : D ⥤ C) where
   out : forall {A B} (f g : A ⟶ B) [G.IsSplitPair f g], ReflectsColimit (parallelPair f g) G
@@ -677,7 +677,7 @@ definition monadicOfHasPreservesReflectsGSplitCoequalizers
 
 中文:
 定义 monadicOfHasPreservesReflectsGSplitCoequalizers
-  签名: [HasCoequalizerOfIsSplitPair G]
+  签名: [有余equalizerOfIsSplitPair G]
   定义体: F
   adj := adj
   eqv := by
@@ -733,7 +733,7 @@ class CreatesColimitOfIsSplitPair
 类 CreatesColimitOfIsSplitPair
   参数: (G : D ⥤ C)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], CreatesColimit (parallelPair f g) G
+    - out : 对任意 {A B} (f g : A ⟶ B) [G.IsSplitPair f g], 创造余极限 (parallelPair f g) G
 -/
 class CreatesColimitOfIsSplitPair (G : D ⥤ C) where
   /-- For all `G`-split pairs `f,g`, `G` creates colimits of `parallelPair f g`. -/
@@ -819,7 +819,7 @@ definition monadicOfHasPreservesGSplitCoequalizersOfReflectsIsomorphisms
 
 中文:
 定义 monadicOfHasPreservesGSplitCoequalizersOfReflectsIsomorphisms
-  签名: [G.ReflectsIsomorphisms]
+  签名: [G.反映同构]
   定义体: by
   have : ReflectsColimitOfIsSplitPair G := ⟨fun f g _ => by
     have := HasCoequalizerOfIsSplitPair.out G f g
@@ -854,10 +854,10 @@ class PreservesColimitOfIsReflexivePair
     - out : forall ⦃A B⦄ (f g : A ⟶ B) [IsReflexivePair f g], PreservesColimit (parallelPair f g) G
 
 中文:
-类 PreservesColimitOfIsReflexivePair
+类 保持余limitOfIsReflexivePair
   参数: (G : C ⥤ D)
   公理与运算 (1 个):
-    - out : 对任意 ⦃A B⦄ (f g : A ⟶ B) [IsReflexivePair f g], PreservesColimit (parallelPair f g) G
+    - out : 对任意 ⦃A B⦄ (f g : A ⟶ B) [是ReflexivePair f g], 保持余极限 (parallelPair f g) G
 -/
 class PreservesColimitOfIsReflexivePair (G : C ⥤ D) where
   out : forall ⦃A B⦄ (f g : A ⟶ B) [IsReflexivePair f g], PreservesColimit (parallelPair f g) G
@@ -874,8 +874,8 @@ instance [PreservesColimitOfIsReflexivePair
   body: fun _ => PreservesColimitOfIsReflexivePair.out _ _
 
 中文:
-实例 [PreservesColimitOfIsReflexivePair
-  签名: G] : 对任意 X : Algebra adj.toMonad,
+实例 [保持余limitOfIsReflexivePair
+  签名: G] : 对任意 X : 代数 adj.toMonad,
   定义体: fun _ => PreservesColimitOfIsReflexivePair.out _ _
 
 Depends on / 依赖: PreservesColimitOfIsReflexivePair, PreservesColimitOfIsReflexivePair.out

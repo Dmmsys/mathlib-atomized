@@ -49,7 +49,7 @@ definition characterSpace
 
 中文:
 定义 characterSpace
-  签名: (𝕜 : 类型) (A : 类型) [CommSemiring 𝕜] [TopologicalSpace 𝕜] [ContinuousAdd 𝕜]
+  签名: (𝕜 : 类型) (A : 类型) [交换半环 𝕜] [拓扑空间 𝕜] [连续加法 𝕜]
   定义体: {φ : WeakDual 𝕜 A | φ != 0 ∧ forall x y : A, φ (x * y) = φ x * φ y}
 
 Depends on / 依赖: WeakDual
@@ -80,7 +80,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (characterSpace 𝕜 A) A 𝕜 where
+  签名: : 函数状 (characterSpace 𝕜 A) A 𝕜 where
   定义体: ((φ : WeakDual 𝕜 A) : A -> 𝕜)
   coe_injective φ ψ h := by ext1; apply DFunLike.ext; exact congr_fun h
 
@@ -292,7 +292,7 @@ instance instIsEmpty
 
 中文:
 实例 instIsEmpty
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: ⟨fun φ => φ.prop.1
     ContinuousLinearMap.ext fun x => by
       rw [show x = 0 from Subsingleton.elim x 0]; rw [map_zero]; rw [map_zero] ⟩
@@ -350,7 +350,7 @@ isClosed_eq (eval_continuous _) (eval_continuous _).mul (eval_continuous _)
 
 中文:
 定理 union_zero_isClosed
-  条件: [T2Space 𝕜] [ContinuousMul 𝕜]
+  条件: [T2空间 𝕜] [连续乘法 𝕜]
   证明: by
   simp only [union_zero, Set.ofPred_forall]
   exact
@@ -389,7 +389,7 @@ instance instAlgHomClass
 
 中文:
 实例 instAlgHomClass
-  签名: : AlgHomClass (characterSpace 𝕜 A) 𝕜 A 𝕜
+  签名: : 代数态射类 (characterSpace 𝕜 A) 𝕜 A 𝕜
   定义体: haveI map_one' : forall φ : characterSpace 𝕜 A, φ 1 = 1 := fun φ => by
     have h₁ : φ 1 * (1 - φ 1) = 0 := by rw [mul_sub, sub_eq_zero, mul_one, ← map_mul φ, one_mul]
     rcases mul_eq_zero.mp h₁ with (h₂ | h₂)
@@ -456,7 +456,7 @@ theorem eq_set_map_one_map_mul
 
 中文:
 定理 eq_set_map_one_map_mul
-  条件: [Nontrivial 𝕜]
+  条件: [非平凡 𝕜]
   证明: by
   ext φ
   refine ⟨?_, ?_⟩
@@ -495,7 +495,7 @@ theorem isClosed
 
 中文:
 定理 isClosed
-  条件: [Nontrivial 𝕜] [T2Space 𝕜] [ContinuousMul 𝕜]
+  条件: [非平凡 𝕜] [T2空间 𝕜] [连续乘法 𝕜]
   证明: by
   rw [eq_set_map_one_map_mul]; rw [Set.ofPred_and]
   refine IsClosed.inter (isClosed_eq (eval_continuous _) continuous_const) ?_
@@ -525,7 +525,7 @@ theorem apply_mem_spectrum
 
 中文:
 定理 apply_mem_spectrum
-  条件: [Nontrivial 𝕜] (φ : characterSpace 𝕜 A) (a : A)
+  条件: [非平凡 𝕜] (φ : characterSpace 𝕜 A) (a : A)
   结论: φ a in spectrum 𝕜 a
   证明: AlgHom.apply_mem_spectrum φ a
 
@@ -549,7 +549,7 @@ theorem ext_ker
 
 中文:
 定理 ext_ker
-  条件: {φ ψ : characterSpace 𝕜 A} (h : RingHom.ker φ = RingHom.ker ψ)
+  条件: {φ ψ : characterSpace 𝕜 A} (h : 环态射.ker φ = 环态射.ker ψ)
   结论: φ = ψ
   证明: by
   ext x

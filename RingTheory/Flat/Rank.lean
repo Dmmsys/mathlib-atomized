@@ -51,8 +51,8 @@ lemma PrimeSpectrum.rankAtStalk_pos_iff_mem_range_comap
   rw [Module.rankAtStalk_eq]; rw [Module.finrank_pos_iff]; rw [p.nontrivial_iff_mem_rangeComap]
 
 中文:
-引理 PrimeSpectrum.rankAtStalk_pos_iff_mem_range_comap
-  条件: (p : PrimeSpectrum R)
+引理 素谱.rankAtStalk_pos_iff_mem_range_comap
+  条件: (p : 素谱 R)
   证明: by
   rw [Module.rankAtStalk_eq]; rw [Module.finrank_pos_iff]; rw [p.nontrivial_iff_mem_rangeComap]
 
@@ -72,7 +72,7 @@ lemma PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective
     Set.eq_univ_iff_forall]
 
 中文:
-引理 PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective
+引理 素谱.rankAtStalk_pos_iff_comap_surjective
   证明: by
   simp_rw [rankAtStalk_pos_iff_mem_range_comap, ← Set.range_eq_univ,
     Set.eq_univ_iff_forall]
@@ -98,7 +98,7 @@ lemma PrimeSpectrum.comap_surjective_iff_injective_of_finite
   int
 
 中文:
-引理 PrimeSpectrum.comap_surjective_iff_injective_of_finite
+引理 素谱.comap_surjective_iff_injective_of_finite
   证明: by
   refine ⟨fun h => ?_, fun h =>
     have : FaithfulSMul R S := (faithfulSMul_iff_algebraMap_injective R S).mpr h
@@ -137,7 +137,7 @@ lemma Module.rankAtStalk_pos_iff_algebraMap_injective
   rw [← PrimeSpectrum.comap_surjective_iff_injective_of_finite]; rw [PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective]
 
 中文:
-引理 Module.rankAtStalk_pos_iff_algebraMap_injective
+引理 模.rankAtStalk_pos_iff_algebraMap_injective
   证明: by
   rw [← PrimeSpectrum.comap_surjective_iff_injective_of_finite]; rw [PrimeSpectrum.rankAtStalk_pos_iff_comap_surjective]
 
@@ -163,7 +163,7 @@ lemma Module.algebraMap_surjective_of_rankAtStalk_le_one
       apply Module.subs
 
 中文:
-引理 Module.algebraMap_surjective_of_rankAtStalk_le_one
+引理 模.algebraMap_surjective_of_rankAtStalk_le_one
   条件: (h : 对任意 p, rankAtStalk (R := R) S p <= 1)
   证明: by
   apply surjective_of_isLocalization_isMaximal (fun P _ => Localization.AtPrime P)
@@ -203,7 +203,7 @@ lemma Module.Flat.tfae_algebraMap_surjective
     rw [← Nat.pow_eq_self_iff h
 
 中文:
-引理 Module.Flat.tfae_algebraMap_surjective
+引理 模.平坦.tfae_algebraMap_surjective
   证明: by
   tfae_have 1 -> 2 := LinearMap.mul'_bijective_of_surjective _ _
   tfae_have 2 -> 3 := fun H p => by
@@ -238,7 +238,7 @@ lemma Module.rankAtStalk_le_one_iff_surjective
   proof: (Module.Flat.tfae_algebraMap_surjective R S).out 2 0
 
 中文:
-引理 Module.rankAtStalk_le_one_iff_surjective
+引理 模.rankAtStalk_le_one_iff_surjective
   证明: (Module.Flat.tfae_algebraMap_surjective R S).out 2 0
 
 Depends on / 依赖: Function, Function.Surjective, Surjective, algebraMap
@@ -262,7 +262,7 @@ lemma Module.algebraMap_bijective_iff_rankAtStalk
 alias ⟨Module.algebraMap_bijective_of_rankAtStalk, _⟩ := Module.algebraMap_bijective_iff_rankAtSta
 
 中文:
-引理 Module.algebraMap_bijective_iff_rankAtStalk
+引理 模.algebraMap_bijective_iff_rankAtStalk
   证明: by
   rw [Function.Bijective]; rw [← rankAtStalk_pos_iff_algebraMap_injective]; rw [← rankAtStalk_le_one_iff_surjective]
   refine ⟨fun h => by simp [h], fun h => ?_⟩
@@ -303,8 +303,8 @@ definition RingHom.finrank
 @[simp]
 
 中文:
-定义 RingHom.finrank
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+定义 环态射.finrank
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: letI : Algebra R S := f.toAlgebra
   Module.rankAtStalk S x
 
@@ -328,7 +328,7 @@ lemma RingHom.finrank_algebraMap
   rw [RingHom.finrank]; rw [toAlgebra_algebraMap]
 
 中文:
-引理 RingHom.finrank_algebraMap
+引理 环态射.finrank_algebraMap
   证明: by
   ext
   rw [RingHom.finrank]; rw [toAlgebra_algebraMap]
@@ -352,8 +352,8 @@ lemma Algebra.rankAtStalk_eq_of_isPushout
   rw [Module.rankAtStalk_eq_of_equiv (Algebra.IsPushout.equiv R R' S S').symm.toLinearEquiv]; rw [Module.rankAtStalk_baseChange]
 
 中文:
-引理 Algebra.rankAtStalk_eq_of_isPushout
-  结论: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+引理 代数.rankAtStalk_eq_of_isPushout
+  结论: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   证明: by
   have : IsPushout R R' S S' := Algebra.IsPushout.symm inferInstance
   have := Module.rankAtStalk_eq_of_equiv (Algebra.IsPushout.equiv R R' S S').symm.toLinearEquiv
@@ -382,8 +382,8 @@ lemma RingHom.finrank_comp_left_of_bijective
   apply Algebra.rankAtStalk_eq_of_isPushout
 
 中文:
-引理 RingHom.finrank_comp_left_of_bijective
-  结论: {R S T : 类型} [CommRing R] [CommRing S] [CommRing T]
+引理 环态射.finrank_comp_left_of_bijective
+  结论: {R S T : 类型} [交换环 R] [交换环 S] [交换环 T]
   证明: by
   algebraize [f, g, (g.comp f)]
   have : Algebra.IsPushout R S R T := .of_bijective_right _ _ hf
@@ -414,8 +414,8 @@ have : Module.Finite R T := h1.comp .of_surjective _ hg.2
   exact (Algebra.rankAtStalk_eq_of_isPushout _ _ _ _ _).symm
 
 中文:
-引理 RingHom.finrank_comp_right_of_bijective
-  结论: {R S T : 类型} [CommRing R] [CommRing S]
+引理 环态射.finrank_comp_right_of_bijective
+  结论: {R S T : 类型} [交换环 R] [交换环 S]
   证明: by
   subst hy
   algebraize [f, g, (g.comp f)]
@@ -451,8 +451,8 @@ have : IsScalarTower R T P := .of_algebraMap_eq' congr($(h.1.1).hom)
   exact Algebra.rankAtStalk_eq_of_isPushout R S T P x
 
 中文:
-引理 CommRingCat.finrank_eq_of_isPushout
-  结论: {R S T P : CommRingCat.{u}} {f : R ⟶ S} {g : R ⟶ T}
+引理 交换环范畴.finrank_eq_of_isPushout
+  结论: {R S T P : 交换环范畴.{u}} {f : R ⟶ S} {g : R ⟶ T}
   证明: by
   algebraize [f.hom, g.hom, inl.hom, inr.hom, inl.hom.comp f.hom]
 have : IsScalarTower R T P := .of_algebraMap_eq' congr($(h.1.1).hom)

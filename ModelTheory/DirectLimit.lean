@@ -154,7 +154,7 @@ abbreviation Structure.Sigma
 local notation "Σˣ" => Structure.Sigma
 
 中文:
-缩写 Structure.Sigma
+缩写 结构.依赖和类型
   签名: (f : 对任意 i j, i <= j -> G i ↪[L] G j)
   定义体: Σ i, G i
 
@@ -173,7 +173,7 @@ abbreviation Structure.Sigma.mk
   body: ⟨i, x⟩
 
 中文:
-缩写 Structure.Sigma.mk
+缩写 结构.依赖和类型.mk
   签名: (i : ι) (x : G i)
   定义体: ⟨i, x⟩
 -/
@@ -191,7 +191,7 @@ definition unify
 
 中文:
 定义 unify
-  签名: {α : 类型} (x : α -> Σˣ f) (i : ι) (h : i in upperBounds (range (Sigma.fst ∘ x)))
+  签名: {α : 类型} (x : α -> Σˣ f) (i : ι) (h : i in upperBounds (range (依赖和类型.fst ∘ x)))
   定义体: f (x a).1 i (h (mem_range_self a)) (x a).2
 
 Depends on / 依赖: mem_range_self
@@ -320,7 +320,7 @@ definition sigmaStructure
 
 中文:
 定义 sigmaStructure
-  签名: [IsDirectedOrder ι] [Nonempty ι]
+  签名: [IsDirectedOrder ι] [非空 ι]
   定义体: ⟨_,
       funMap F
         (unify f x (Classical.choose (Finite.bddAbove_range fun a => (x a).1))
@@ -375,7 +375,7 @@ instance [DirectedSystem
 
 中文:
 实例 [DirectedSystem
-  签名: G fun i j h => f i j h] [IsDirectedOrder ι] [Inhabited ι]
+  签名: G fun i j h => f i j h] [IsDirectedOrder ι] [可居 ι]
   定义体: ⟨⟦⟨default, default⟩⟧⟩
 -/
 instance [DirectedSystem G fun i j h => f i j h] [IsDirectedOrder ι] [Inhabited ι]
@@ -444,7 +444,7 @@ theorem funMap_unify_equiv
 
 中文:
 定理 funMap_unify_equiv
-  结论: {n : 自然数} (F : L.Functions n) (x : Fin n -> Σˣ f) (i j : ι)
+  结论: {n : 自然数} (F : L.函数 n) (x : 有限集 n -> Σˣ f) (i j : ι)
   证明: by
   obtain ⟨k, ik, jk⟩ := directed_of (· <= ·) i j
   refine ⟨k, ik, jk, ?_⟩
@@ -471,7 +471,7 @@ theorem relMap_unify_equiv
 
 中文:
 定理 relMap_unify_equiv
-  结论: {n : 自然数} (R : L.Relations n) (x : Fin n -> Σˣ f) (i j : ι)
+  结论: {n : 自然数} (R : L.关系 n) (x : 有限集 n -> Σˣ f) (i j : ι)
   证明: by
   obtain ⟨k, ik, jk⟩ := directed_of (· <= ·) i j
   rw [← (f i k ik).map_rel]; rw [comp_unify]; rw [← (f j k jk).map_rel]; rw [comp_unify]
@@ -499,8 +499,8 @@ theorem exists_unify_eq
   exact ⟨i, hi.1, hi.2, funext fun a => (equiv_iff G f _ _).1 (xy a)⟩
 
 中文:
-定理 exists_unify_eq
-  条件: {α : 类型} [Finite α] {x y : α -> Σˣ f} (xy : x ≈ y)
+定理 存在_unify_eq
+  条件: {α : 类型} [有限 α] {x y : α -> Σˣ f} (xy : x ≈ y)
   证明: by
   obtain ⟨i, hi⟩ := Finite.bddAbove_range (Sum.elim (fun a => (x a).1) fun a => (y a).1)
   rw [Sum.elim_range]; rw [upperBounds_union] at hi
@@ -527,7 +527,7 @@ theorem funMap_equiv_unify
 
 中文:
 定理 funMap_equiv_unify
-  结论: {n : 自然数} (F : L.Functions n) (x : Fin n -> Σˣ f) (i : ι)
+  结论: {n : 自然数} (F : L.函数 n) (x : 有限集 n -> Σˣ f) (i : ι)
   证明: funMap_unify_equiv G f F x (Classical.choose (Finite.bddAbove_range fun a => (x a).1)) i _ hi
 
 Depends on / 依赖: Classical, Classical.choose, Finite, Finite.bddAbove_range, bddAbove_range, funMap_unify_equiv
@@ -547,7 +547,7 @@ theorem relMap_equiv_unify
 
 中文:
 定理 relMap_equiv_unify
-  结论: {n : 自然数} (R : L.Relations n) (x : Fin n -> Σˣ f) (i : ι)
+  结论: {n : 自然数} (R : L.关系 n) (x : 有限集 n -> Σˣ f) (i : ι)
   证明: relMap_unify_equiv G f R x (Classical.choose (Finite.bddAbove_range fun a => (x a).1)) i _ hi
 
 Depends on / 依赖: Classical, Classical.choose, Finite, Finite.bddAbove_range, bddAbove_range, relMap_unify_equiv
@@ -614,7 +614,7 @@ instance instStructureDirectLimit
 
 中文:
 实例 instStructureDirectLimit
-  签名: : L.Structure (DirectLimit G f)
+  签名: : L.结构 (DirectLimit G f)
   定义体: inferInstanceAs L.Structure (Quotient (DirectLimit.setoid G f))
 
 @[simp]
@@ -643,7 +643,7 @@ theorem funMap_quotient_mk'_sigma_mk'
 
 中文:
 定理 funMap_quotient_mk'_sigma_mk'
-  条件: {n : 自然数} {F : L.Functions n} {i : ι} {x : Fin n -> G i}
+  条件: {n : 自然数} {F : L.函数 n} {i : ι} {x : 有限集 n -> G i}
   证明: by
   simp only [funMap_quotient_mk', Quotient.eq]
   obtain ⟨k, ik, jk⟩ :=
@@ -679,7 +679,7 @@ theorem relMap_quotient_mk'_sigma_mk'
 
 中文:
 定理 relMap_quotient_mk'_sigma_mk'
-  条件: {n : 自然数} {R : L.Relations n} {i : ι} {x : Fin n -> G i}
+  条件: {n : 自然数} {R : L.关系 n} {i : ι} {x : 有限集 n -> G i}
   证明: by
   rw [relMap_quotient_mk']
   rw [relMap_equiv_unify G f R (fun a => .mk f i (x a)) i (fun _ ⟨_]; rw [hj⟩ => le_of_eq hj.symm)]
@@ -710,8 +710,8 @@ theorem exists_quotient_mk'_sigma_mk'_eq
   have : (.mk f i 
 
 中文:
-定理 exists_quotient_mk'_sigma_mk'_eq
-  条件: {α : 类型} [Finite α] (x : α -> DirectLimit G f)
+定理 存在_quotient_mk'_sigma_mk'_eq
+  条件: {α : 类型} [有限 α] (x : α -> DirectLimit G f)
   证明: by
   obtain ⟨i, hi⟩ := Finite.bddAbove_range fun a => (x a).out.1
   refine ⟨i, unify f (Quotient.out ∘ x) i hi, ?_⟩
@@ -854,7 +854,7 @@ theorem exists_of
 @[elab_as_elim]
 
 中文:
-定理 exists_of
+定理 存在_of
   条件: (z : DirectLimit G f)
   结论: 存在 i x, of L ι G f i x = z
   证明: ⟨z.out.1, z.out.2, by simp⟩
@@ -925,8 +925,8 @@ theorem exists_fg_substructure_in_Sigma
   rw [← image_univ]; rw [image_image]; rw [image_univ]; rw [← eq_y]
 
 中文:
-定理 exists_fg_substructure_in_Sigma
-  条件: (S : L.Substructure (DirectLimit G f)) (S_fg : S.FG)
+定理 存在_fg_substructure_in_Sigma
+  条件: (S : L.子结构 (DirectLimit G f)) (S_fg : S.FG)
   证明: by
   let ⟨A, A_closure⟩ := S_fg
   let ⟨i, y, eq_y⟩ := exists_quotient_mk'_sigma_mk'_eq G _ (fun a : A => a.1)
@@ -1180,7 +1180,7 @@ theorem cg
 
 中文:
 定理 cg
-  结论: {ι : 类型} [Countable ι] [Preorder ι] [IsDirectedOrder ι] [Nonempty ι]
+  结论: {ι : 类型} [可数 ι] [预序 ι] [IsDirectedOrder ι] [非空 ι]
   证明: by
   refine ⟨⟨⋃ i, DirectLimit.of L ι G f i '' Classical.choose (h i).out, ?_, ?_⟩⟩
   · exact Set.countable_iUnion fun i => Set.Countable.image (Classical.choose_spec (h i).out).1 _
@@ -1216,7 +1216,7 @@ instance cg'
 
 中文:
 实例 cg'
-  签名: {ι : 类型} [Countable ι] [Preorder ι] [IsDirectedOrder ι] [Nonempty ι]
+  签名: {ι : 类型} [可数 ι] [预序 ι] [IsDirectedOrder ι] [非空 ι]
   定义体: cg f h
 -/
 instance cg' {ι : Type*} [Countable ι] [Preorder ι] [IsDirectedOrder ι] [Nonempty ι]
@@ -1243,7 +1243,7 @@ instance :
 
 中文:
 实例 :
-  签名: DirectedSystem (fun i => S i) (fun _ _ h => Substructure.inclusion (S.monotone h))
+  签名: DirectedSystem (fun i => S i) (fun _ _ h => 子结构.inclusion (S.monotone h))
   定义体: rfl
   map_map _ _ _ _ _ _ := rfl
 -/

@@ -82,7 +82,7 @@ lemma disjointed_apply
 中文:
 引理 disjointed_apply
   条件: (f : ι -> α) (i : ι)
-  结论: disjointed f i = f i \ (Iio i).sup f
+  结论: disjointed f i = f i \ (左无界右开区间 i).上确界 f
   证明: rfl
 -/
 lemma disjointed_apply (f : ι -> α) (i : ι) : disjointed f i = f i \ (Iio i).sup f := rfl
@@ -122,7 +122,7 @@ lemma disjointed_bot
 
 中文:
 引理 disjointed_bot
-  条件: [OrderBot ι] (f : ι -> α)
+  条件: [有底序 ι] (f : ι -> α)
   结论: disjointed f ⊥ = f ⊥
   证明: disjointed_of_isMin _ isMin_bot
 -/
@@ -344,8 +344,8 @@ lemma Fintype.sup_disjointed
   rw [← sup'_eq_sup nonempty_Iic]; rw [← sup'_eq_su
 
 中文:
-引理 Fintype.sup_disjointed
-  条件: [Fintype ι] (f : ι -> α)
+引理 有限类型.sup_disjointed
+  条件: [有限类型 ι] (f : ι -> α)
   证明: by
   classical
   have hun : univ.biUnion Iic = (univ : Finset ι) := by
@@ -441,7 +441,7 @@ lemma biUnion_Iic_disjointed
 
 中文:
 引理 biUnion_Iic_disjointed
-  条件: {α : 类型} (f : ι -> Set α) (n : ι)
+  条件: {α : 类型} (f : ι -> 集合 α) (n : ι)
   证明: by
   rw [← partialSups_disjointed]; rw [partialSups_eq_biSup]
   simp
@@ -464,7 +464,7 @@ lemma biUnion_range_succ_disjointed
 
 中文:
 引理 biUnion_range_succ_disjointed
-  条件: {α : 类型} (f : 自然数 -> Set α) (n : 自然数)
+  条件: {α : 类型} (f : 自然数 -> 集合 α) (n : 自然数)
   证明: by
   rw [Nat.range_succ_eq_Iic]; rw [biUnion_Iic_disjointed]
 
@@ -496,7 +496,7 @@ theorem disjoint_disjointed
 中文:
 定理 disjoint_disjointed
   条件: (f : ι -> α)
-  结论: Pairwise (Disjoint on disjointed f)
+  结论: 两两 (Disjoint on disjointed f)
   证明: (pairwise_disjoint_on _).mpr fun _ _ => disjoint_disjointed_of_lt f
 
 Depends on / 依赖: disjoint_disjointed_of_lt, pairwise_disjoint_on
@@ -514,7 +514,7 @@ theorem disjointed_unique'
 
 中文:
 定理 disjointed_unique'
-  结论: {f d : ι -> α} (hdisj : Pairwise (Disjoint on d))
+  结论: {f d : ι -> α} (hdisj : 两两 (Disjoint on d))
   证明: disjointed_unique (fun hij => hdisj hij.ne) hsups
 
 Depends on / 依赖: disjointed_unique, hij.ne
@@ -535,8 +535,8 @@ lemma Finset.disjiUnion_Iic_disjointed
   rw [← partialSups_disjointed]; rw [partialSups_apply]; rw [Finset.sup'_eq_sup]; rw [Finset.sup_eq_biUnion]; rw [disjiUnion_eq_biUnion]
 
 中文:
-引理 Finset.disjiUnion_Iic_disjointed
-  条件: [DecidableEq α] (n : ι) (t : ι -> Finset α)
+引理 有限集.disjiUnion_Iic_disjointed
+  条件: [DecidableEq α] (n : ι) (t : ι -> 有限集 α)
   证明: by
   rw [← partialSups_disjointed]; rw [partialSups_apply]; rw [Finset.sup'_eq_sup]; rw [Finset.sup_eq_biUnion]; rw [disjiUnion_eq_biUnion]
 
@@ -588,8 +588,8 @@ lemma Monotone.disjointed_succ
   rwa [disjointed_succ, hf.partialSups_eq]
 
 中文:
-引理 Monotone.disjointed_succ
-  条件: {f : ι -> α} (hf : Monotone f) {i : ι} (hn : ¬IsMax i)
+引理 递增.disjointed_succ
+  条件: {f : ι -> α} (hf : 递增 f) {i : ι} (hn : ¬IsMax i)
   证明: by
   rwa [disjointed_succ, hf.partialSups_eq]
 -/
@@ -613,8 +613,8 @@ lemma Monotone.disjointed_succ_sup
     rw [this]; rw [← su
 
 中文:
-引理 Monotone.disjointed_succ_sup
-  条件: {f : ι -> α} (hf : Monotone f) (i : ι)
+引理 递增.disjointed_succ_sup
+  条件: {f : ι -> α} (hf : 递增 f) (i : ι)
   证明: by
   by_cases h : IsMax i
   · simpa only [succ_eq_iff_isMax.mpr h, sup_eq_right] using disjointed_le f i
@@ -723,8 +723,8 @@ lemma Fintype.exists_disjointed_le
   have hf' : f = f' ∘ R := by ext; simp only [Function.comp_
 
 中文:
-引理 Fintype.exists_disjointed_le
-  条件: {ι : 类型} [Fintype ι] (f : ι -> α)
+引理 有限类型.存在_disjointed_le
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> α)
   证明: by
   rcases isEmpty_or_nonempty ι with hι | hι
   · -- do `ι = ∅` separately since `⊤ : Fin n` isn't defined for `n = 0`
@@ -767,7 +767,7 @@ theorem iSup_disjointed
 
 中文:
 定理 iSup_disjointed
-  条件: [PartialOrder ι] [LocallyFiniteOrderBot ι] (f : ι -> α)
+  条件: [偏序 ι] [LocallyFiniteOrderBot ι] (f : ι -> α)
   证明: iSup_eq_iSup_of_partialSups_eq_partialSups (partialSups_disjointed f)
 
 Depends on / 依赖: iSup_eq_iSup_of_partialSups_eq_partialSups, partialSups_disjointed
@@ -787,7 +787,7 @@ theorem disjointed_eq_inf_compl
 
 中文:
 定理 disjointed_eq_inf_compl
-  条件: [Preorder ι] [LocallyFiniteOrderBot ι] (f : ι -> α) (i : ι)
+  条件: [预序 ι] [LocallyFiniteOrderBot ι] (f : ι -> α) (i : ι)
   证明: by
   simp only [disjointed_apply, Finset.sup_eq_iSup, mem_Iio, sdiff_eq, compl_iSup]
 
@@ -812,7 +812,7 @@ theorem disjointed_subset
 
 中文:
 定理 disjointed_subset
-  条件: [Preorder ι] [LocallyFiniteOrderBot ι] (f : ι -> Set α) (i : ι)
+  条件: [预序 ι] [LocallyFiniteOrderBot ι] (f : ι -> 集合 α) (i : ι)
   证明: disjointed_le f i
 
 Depends on / 依赖: disjointed_le
@@ -831,7 +831,7 @@ theorem iUnion_disjointed
 
 中文:
 定理 iUnion_disjointed
-  条件: [PartialOrder ι] [LocallyFiniteOrderBot ι] {f : ι -> Set α}
+  条件: [偏序 ι] [LocallyFiniteOrderBot ι] {f : ι -> 集合 α}
   证明: iSup_disjointed f
 
 Depends on / 依赖: iSup_disjointed
@@ -850,7 +850,7 @@ theorem disjointed_eq_inter_compl
 
 中文:
 定理 disjointed_eq_inter_compl
-  条件: [Preorder ι] [LocallyFiniteOrderBot ι] (f : ι -> Set α) (i : ι)
+  条件: [预序 ι] [LocallyFiniteOrderBot ι] (f : ι -> 集合 α) (i : ι)
   证明: disjointed_eq_inf_compl f i
 
 Depends on / 依赖: disjointed_eq_inf_compl
@@ -871,7 +871,7 @@ theorem preimage_find_eq_disjointed
 
 中文:
 定理 preimage_find_eq_disjointed
-  结论: (s : 自然数 -> Set α) (H : 对任意 x, 存在 n, x in s n)
+  结论: (s : 自然数 -> 集合 α) (H : 对任意 x, 存在 n, x in s n)
   证明: by
   ext x
   simp [Nat.find_eq_iff, disjointed_eq_inter_compl]

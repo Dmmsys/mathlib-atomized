@@ -455,7 +455,7 @@ definition associativityFunctorEquivNaturalityFunctorIso
       (isoWhiskerLeft _ (Functor.associator _ _ E).symm ≪≫ (Functor.associator _ _ E).s
 
 中文:
-定义 associativityFunctorEquivNaturalityFunctorIso
+定义 associativityFunctorEquiv自然数uralityFunctorIso
   签名: :
   定义体: (prod.associativity _ _ _)
   NatIso.ofComponents (fun E => Iso.prod

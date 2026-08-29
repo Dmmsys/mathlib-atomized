@@ -141,7 +141,7 @@ structure HasFTaylorSeriesUpToOn
     - cont : forall m : Nat, m <= n -> ContinuousOn (p · m) s
 
 中文:
-结构 HasFTaylorSeriesUpToOn
+结构 有FTaylorSeriesUpToOn
   公理与运算 (3 个):
     - zero_eq : 对任意 x in s, (p x 0).curry0 = f x
     - fderivWithin : 对任意 m : 自然数, m < n -> 对任意 x in s, HasFDerivWithinAt (p · m) (p x m.succ).curryLeft s x
@@ -165,8 +165,8 @@ theorem HasFTaylorSeriesUpToOn.zero_eq'
   exact (p x 0).uncurry0_curry0.symm
 
 中文:
-定理 HasFTaylorSeriesUpToOn.zero_eq'
-  条件: (h : HasFTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s)
+定理 有FTaylorSeriesUpToOn.zero_eq'
+  条件: (h : 有FTaylorSeriesUpToOn n f p s) {x : E} (hx : x in s)
   证明: by
   rw [← h.zero_eq x hx]
   exact (p x 0).uncurry0_curry0.symm
@@ -189,7 +189,7 @@ theorem hasFTaylorSeriesUpToOn_empty
 
 中文:
 定理 hasFTaylorSeriesUpToOn_empty
-  结论: HasFTaylorSeriesUpToOn n f p ∅
+  结论: 有FTaylorSeriesUpToOn n f p ∅
   证明: by
   constructor <;> simp
 -/
@@ -208,8 +208,8 @@ theorem HasFTaylorSeriesUpToOn.congr
   exact h.zero_eq x hx
 
 中文:
-定理 HasFTaylorSeriesUpToOn.congr
-  结论: (h : HasFTaylorSeriesUpToOn n f p s)
+定理 有FTaylorSeriesUpToOn.congr
+  结论: (h : 有FTaylorSeriesUpToOn n f p s)
   证明: by
   refine ⟨fun x hx => ?_, h.fderivWithin, h.cont⟩
   rw [h₁ x hx]
@@ -237,8 +237,8 @@ theorem HasFTaylorSeriesUpToOn.congr_series
   cont m hm := (hp.cont m hm).congr (hp
 
 中文:
-定理 HasFTaylorSeriesUpToOn.congr_series
-  结论: {q} (hp : HasFTaylorSeriesUpToOn n f p s)
+定理 有FTaylorSeriesUpToOn.congr_series
+  结论: {q} (hp : 有FTaylorSeriesUpToOn n f p s)
   证明: by simp only [← hpq 0 zero_le hx, hp.zero_eq x hx]
   fderivWithin m hm x hx := by
     refine ((hp.fderivWithin m hm x hx).congr' (hpq m hm.le).symm hx).congr_fderiv ?_
@@ -268,8 +268,8 @@ theorem HasFTaylorSeriesUpToOn.mono
     fun m hm => (h.cont m hm).mono hst⟩
 
 中文:
-定理 HasFTaylorSeriesUpToOn.mono
-  条件: (h : HasFTaylorSeriesUpToOn n f p s) {t : Set E} (hst : t subseteq s)
+定理 有FTaylorSeriesUpToOn.mono
+  条件: (h : 有FTaylorSeriesUpToOn n f p s) {t : 集合 E} (hst : t subseteq s)
   证明: ⟨fun x hx => h.zero_eq x (hst hx), fun m hm x hx => (h.fderivWithin m hm x (hst hx)).mono hst,
     fun m hm => (h.cont m hm).mono hst⟩
 
@@ -290,8 +290,8 @@ theorem HasFTaylorSeriesUpToOn.of_le
     h.cont k (le_trans hk hmn)⟩
 
 中文:
-定理 HasFTaylorSeriesUpToOn.of_le
-  条件: (h : HasFTaylorSeriesUpToOn n f p s) (hmn : m <= n)
+定理 有FTaylorSeriesUpToOn.of_le
+  条件: (h : 有FTaylorSeriesUpToOn n f p s) (hmn : m <= n)
   证明: ⟨h.zero_eq, fun k hk x hx => h.fderivWithin k (lt_of_lt_of_le hk hmn) x hx, fun k hk =>
     h.cont k (le_trans hk hmn)⟩
 
@@ -313,8 +313,8 @@ theorem HasFTaylorSeriesUpToOn.continuousOn
   rwa [← (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_continuousOn_iff]
 
 中文:
-定理 HasFTaylorSeriesUpToOn.continuousOn
-  条件: (h : HasFTaylorSeriesUpToOn n f p s)
+定理 有FTaylorSeriesUpToOn.continuousOn
+  条件: (h : 有FTaylorSeriesUpToOn n f p s)
   证明: by
   have := (h.cont 0 bot_le).congr fun x hx => (h.zero_eq' hx).symm
   rwa [← (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_continuousOn_iff]
@@ -475,8 +475,8 @@ theorem HasFTaylorSeriesUpToOn.hasFDerivWithinAt
   rw [LinearIsom
 
 中文:
-定理 HasFTaylorSeriesUpToOn.hasFDerivWithinAt
-  结论: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
+定理 有FTaylorSeriesUpToOn.hasFDerivWithinAt
+  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
   证明: by
   have A : forall y in s, f y = (continuousMultilinearCurryFin0 𝕜 E F) (p y 0) := fun y hy =>
     (h.zero_eq y hy).symm
@@ -510,8 +510,8 @@ theorem HasFTaylorSeriesUpToOn.differentiableOn
   proof: fun _x hx => (h.hasFDerivWithinAt hn hx).differentiableWithinAt
 
 中文:
-定理 HasFTaylorSeriesUpToOn.differentiableOn
-  条件: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
+定理 有FTaylorSeriesUpToOn.differentiableOn
+  条件: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
   证明: fun _x hx => (h.hasFDerivWithinAt hn hx).differentiableWithinAt
 
 Depends on / 依赖: differentiableWithinAt, h.hasFDerivWithinAt, hasFDerivWithinAt
@@ -528,8 +528,8 @@ theorem HasFTaylorSeriesUpToOn.hasFDerivAt
   proof: (h.hasFDerivWithinAt hn (mem_of_mem_nhds hx)).hasFDerivAt hx
 
 中文:
-定理 HasFTaylorSeriesUpToOn.hasFDerivAt
-  结论: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
+定理 有FTaylorSeriesUpToOn.hasFDerivAt
+  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
   证明: (h.hasFDerivWithinAt hn (mem_of_mem_nhds hx)).hasFDerivAt hx
 
 Depends on / 依赖: h.hasFDerivWithinAt, hasFDerivAt, hasFDerivWithinAt, mem_of_mem_nhds
@@ -547,8 +547,8 @@ theorem HasFTaylorSeriesUpToOn.eventually_hasFDerivAt
   proof: (eventually_eventually_nhds.2 hx).mono fun _y hy => h.hasFDerivAt hn hy
 
 中文:
-定理 HasFTaylorSeriesUpToOn.eventually_hasFDerivAt
-  结论: (h : HasFTaylorSeriesUpToOn n f p s)
+定理 有FTaylorSeriesUpToOn.eventually_hasFDerivAt
+  结论: (h : 有FTaylorSeriesUpToOn n f p s)
   证明: (eventually_eventually_nhds.2 hx).mono fun _y hy => h.hasFDerivAt hn hy
 
 Depends on / 依赖: eventually_eventually_nhds, h.hasFDerivAt, hasFDerivAt
@@ -567,8 +567,8 @@ theorem HasFTaylorSeriesUpToOn.differentiableAt
   proof: (h.hasFDerivAt hn hx).differentiableAt
 
 中文:
-定理 HasFTaylorSeriesUpToOn.differentiableAt
-  结论: (h : HasFTaylorSeriesUpToOn n f p s) (hn : n != 0)
+定理 有FTaylorSeriesUpToOn.differentiableAt
+  结论: (h : 有FTaylorSeriesUpToOn n f p s) (hn : n != 0)
   证明: (h.hasFDerivAt hn hx).differentiableAt
 
 Depends on / 依赖: differentiableAt, h.hasFDerivAt, hasFDerivAt
@@ -653,7 +653,7 @@ theorem HasFTaylorSeriesUpToOn.shift_of_succ
       (p x
 
 中文:
-定理 HasFTaylorSeriesUpToOn.shift_of_succ
+定理 有FTaylorSeriesUpToOn.shift_of_succ
   证明: by
   constructor
   · intro x _
@@ -858,7 +858,7 @@ definition iteratedFDerivWithin
 
 中文:
 定义 iteratedFDerivWithin
-  签名: (n : 自然数) (f : E -> F) (s : Set E)
+  签名: (n : 自然数) (f : E -> F) (s : 集合 E)
   定义体: Nat.recOn n (fun x => ContinuousMultilinearMap.uncurry0 𝕜 E (f x)) fun _ rec x =>
     ContinuousLinearMap.uncurryLeft (fderivWithin 𝕜 rec s x)
 
@@ -879,7 +879,7 @@ definition ftaylorSeriesWithin
 
 中文:
 定义 ftaylorSeriesWithin
-  签名: (f : E -> F) (s : Set E) (x : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E)
   定义体: fun n =>
   iteratedFDerivWithin 𝕜 n f s x
 -/
@@ -899,7 +899,7 @@ theorem iteratedFDerivWithin_zero_apply
 
 中文:
 定理 iteratedFDerivWithin_zero_apply
-  条件: (m : Fin 0 -> E)
+  条件: (m : 有限集 0 -> E)
   证明: rfl
 -/
 theorem iteratedFDerivWithin_zero_apply (m : Fin 0 -> E) :
@@ -939,7 +939,7 @@ theorem dist_iteratedFDerivWithin_zero
 
 中文:
 定理 dist_iteratedFDerivWithin_zero
-  结论: (f : E -> F) (s : Set E) (x : E)
+  结论: (f : E -> F) (s : 集合 E) (x : E)
   证明: by
   simp only [iteratedFDerivWithin_zero_eq_comp, comp_apply, LinearIsometryEquiv.dist_map]
 
@@ -983,7 +983,7 @@ theorem iteratedFDerivWithin_succ_apply_left
 
 中文:
 定理 iteratedFDerivWithin_succ_apply_left
-  条件: {n : 自然数} (m : Fin (n + 1) -> E)
+  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
   证明: rfl
 -/
 theorem iteratedFDerivWithin_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) :
@@ -1020,7 +1020,7 @@ theorem fderivWithin_iteratedFDerivWithin
 
 中文:
 定理 fderivWithin_iteratedFDerivWithin
-  条件: {s : Set E} {n : 自然数}
+  条件: {s : 集合 E} {n : 自然数}
   证明: rfl
 -/
 theorem fderivWithin_iteratedFDerivWithin {s : Set E} {n : Nat} :
@@ -1243,7 +1243,7 @@ theorem iteratedFDerivWithin_one_apply
 
 中文:
 定理 iteratedFDerivWithin_one_apply
-  条件: (h : UniqueDiffWithinAt 𝕜 s x) (m : Fin 1 -> E)
+  条件: (h : UniqueDiffWithinAt 𝕜 s x) (m : 有限集 1 -> E)
   证明: by
   simp [iteratedFDerivWithin_succ_apply_left, iteratedFDerivWithin_zero_eq_comp,
     (continuousMultilinearCurryFin0 𝕜 E F).symm.comp_fderivWithin h]
@@ -1315,7 +1315,7 @@ theorem Filter.EventuallyEq.iteratedFDerivWithin'
     simp only [iteratedFDerivWithin_succ_eq_comp_left, hy, (· ∘ ·)]
 
 中文:
-定理 Filter.EventuallyEq.iteratedFDerivWithin'
+定理 滤子.EventuallyEq.iteratedFDerivWithin'
   条件: (h : f₁ =ᶠ[𝓝[s] x] f) (ht : t subseteq s) (n : 自然数)
   证明: by
   induction n with
@@ -1346,7 +1346,7 @@ theorem Filter.EventuallyEq.iteratedFDerivWithin
   proof: h.iteratedFDerivWithin' Subset.rfl n
 
 中文:
-定理 Filter.EventuallyEq.iteratedFDerivWithin
+定理 滤子.EventuallyEq.iteratedFDerivWithin
   条件: (h : f₁ =ᶠ[𝓝[s] x] f) (n : 自然数)
   证明: h.iteratedFDerivWithin' Subset.rfl n
 -/
@@ -1367,7 +1367,7 @@ theorem Filter.EventuallyEq.ftaylorSeriesWithin
   apply (Filter.EventuallyEq.iteratedFDerivWithin (𝕜 := 𝕜) h₁x₁ n).eq_of_nhdsWithin h₂x₁
 
 中文:
-定理 Filter.EventuallyEq.ftaylorSeriesWithin
+定理 滤子.EventuallyEq.ftaylorSeriesWithin
   条件: (h : f₁ =ᶠ[𝓝[s] x] f)
   证明: by
   filter_upwards [eventually_eventually_nhdsWithin.2 h, self_mem_nhdsWithin] with x₁ h₁x₁ h₂x₁
@@ -1390,7 +1390,7 @@ theorem Filter.EventuallyEq.iteratedFDerivWithin_eq
   (this.iteratedFDerivWithin' (subset_insert _ _) n).self_of_nhdsWithin (mem_insert _ _)
 
 中文:
-定理 Filter.EventuallyEq.iteratedFDerivWithin_eq
+定理 滤子.EventuallyEq.iteratedFDerivWithin_eq
   结论: (h : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: have : f₁ =ᶠ[𝓝[insert x s] x] f := by simpa [EventuallyEq, hx]
   (this.iteratedFDerivWithin' (subset_insert _ _) n).self_of_nhdsWithin (mem_insert _ _)
@@ -1431,7 +1431,7 @@ theorem Set.EqOn.iteratedFDerivWithin
   iteratedFDerivWithin_congr hs hx n
 
 中文:
-定理 Set.EqOn.iteratedFDerivWithin
+定理 集合.EqOn.iteratedFDerivWithin
   条件: (hs : EqOn f₁ f s) (n : 自然数)
   证明: fun _x hx =>
   iteratedFDerivWithin_congr hs hx n
@@ -1635,7 +1635,7 @@ theorem iteratedFDerivWithin_inter_open
 
 中文:
 定理 iteratedFDerivWithin_inter_open
-  条件: {n : 自然数} (hu : IsOpen u) (hx : x in u)
+  条件: {n : 自然数} (hu : 是开集 u) (hx : x in u)
   证明: iteratedFDerivWithin_inter (hu.mem_nhds hx)
 
 Depends on / 依赖: hu.mem_nhds, iteratedFDerivWithin_inter, mem_nhds
@@ -1659,7 +1659,7 @@ theorem HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
         (ContinuousMul
 
 中文:
-定理 HasFTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
+定理 有FTaylorSeriesUpToOn.eq_iteratedFDerivWithin_of_uniqueDiffOn
   证明: by
   induction m generalizing x with
   | zero => rw [h.zero_eq' hx, iteratedFDerivWithin_zero_eq_comp, comp_apply]
@@ -1843,11 +1843,11 @@ structure HasFTaylorSeriesUpTo
     - cont : forall m : Nat, m <= n -> Continuous fun x => p x m
 
 中文:
-结构 HasFTaylorSeriesUpTo
+结构 有FTaylorSeriesUpTo
   公理与运算 (3 个):
     - zero_eq : 对任意 x, (p x 0).curry0 = f x
-    - fderiv : 对任意 m : 自然数, m < n -> 对任意 x, HasFDerivAt (fun y => p y m) (p x m.succ).curryLeft x
-    - cont : 对任意 m : 自然数, m <= n -> Continuous fun x => p x m
+    - fderiv : 对任意 m : 自然数, m < n -> 对任意 x, 在点处Fréchet可导 (fun y => p y m) (p x m.succ).curryLeft x
+    - cont : 对任意 m : 自然数, m <= n -> 连续 fun x => p x m
 -/
 structure HasFTaylorSeriesUpTo
   (n : Nat∞ω) (f : E -> F) (p : E -> FormalMultilinearSeries 𝕜 E F) : Prop where
@@ -1866,8 +1866,8 @@ theorem HasFTaylorSeriesUpTo.zero_eq'
   exact (p x 0).uncurry0_curry0.symm
 
 中文:
-定理 HasFTaylorSeriesUpTo.zero_eq'
-  条件: (h : HasFTaylorSeriesUpTo n f p) (x : E)
+定理 有FTaylorSeriesUpTo.zero_eq'
+  条件: (h : 有FTaylorSeriesUpTo n f p) (x : E)
   证明: by
   rw [← h.zero_eq x]
   exact (p x 0).uncurry0_curry0.symm
@@ -1888,8 +1888,8 @@ lemma HasFTaylorSeriesUpTo.fderiv_eq
   proof: .fderiv h.fderiv m hmn x
 
 中文:
-引理 HasFTaylorSeriesUpTo.fderiv_eq
-  结论: (h : HasFTaylorSeriesUpTo n f p)
+引理 有FTaylorSeriesUpTo.fderiv_eq
+  结论: (h : 有FTaylorSeriesUpTo n f p)
   证明: .fderiv h.fderiv m hmn x
 
 Depends on / 依赖: fderiv, h.fderiv
@@ -1932,8 +1932,8 @@ theorem HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn
   proof: (hasFTaylorSeriesUpToOn_univ_iff.2 h).mono (subset_univ _)
 
 中文:
-定理 HasFTaylorSeriesUpTo.hasFTaylorSeriesUpToOn
-  条件: (h : HasFTaylorSeriesUpTo n f p) (s : Set E)
+定理 有FTaylorSeriesUpTo.hasFTaylorSeriesUpToOn
+  条件: (h : 有FTaylorSeriesUpTo n f p) (s : 集合 E)
   证明: (hasFTaylorSeriesUpToOn_univ_iff.2 h).mono (subset_univ _)
 
 Depends on / 依赖: hasFTaylorSeriesUpToOn_univ_iff, subset_univ
@@ -1952,8 +1952,8 @@ theorem HasFTaylorSeriesUpTo.of_le
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h ⊢; exact h.of_le hmn
 
 中文:
-定理 HasFTaylorSeriesUpTo.of_le
-  条件: (h : HasFTaylorSeriesUpTo n f p) (hmn : m <= n)
+定理 有FTaylorSeriesUpTo.of_le
+  条件: (h : 有FTaylorSeriesUpTo n f p) (hmn : m <= n)
   证明: by
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h ⊢; exact h.of_le hmn
 
@@ -1976,9 +1976,9 @@ theorem HasFTaylorSeriesUpTo.continuous
   exact h.continuousOn
 
 中文:
-定理 HasFTaylorSeriesUpTo.continuous
-  条件: (h : HasFTaylorSeriesUpTo n f p)
-  结论: Continuous f
+定理 有FTaylorSeriesUpTo.continuous
+  条件: (h : 有FTaylorSeriesUpTo n f p)
+  结论: 连续 f
   证明: by
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
   rw [← continuousOn_univ]
@@ -2071,8 +2071,8 @@ theorem HasFTaylorSeriesUpTo.hasFDerivAt
   exact (hasFTaylorSeriesUpToOn_univ_iff.2 h).hasFDerivWithinAt hn (mem_univ _)
 
 中文:
-定理 HasFTaylorSeriesUpTo.hasFDerivAt
-  条件: (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0) (x : E)
+定理 有FTaylorSeriesUpTo.hasFDerivAt
+  条件: (h : 有FTaylorSeriesUpTo n f p) (hn : n != 0) (x : E)
   证明: by
   rw [← hasFDerivWithinAt_univ]
   exact (hasFTaylorSeriesUpToOn_univ_iff.2 h).hasFDerivWithinAt hn (mem_univ _)
@@ -2093,8 +2093,8 @@ theorem HasFTaylorSeriesUpTo.differentiable
   proof: fun x => (h.hasFDerivAt hn x).differentiableAt
 
 中文:
-定理 HasFTaylorSeriesUpTo.differentiable
-  条件: (h : HasFTaylorSeriesUpTo n f p) (hn : n != 0)
+定理 有FTaylorSeriesUpTo.differentiable
+  条件: (h : 有FTaylorSeriesUpTo n f p) (hn : n != 0)
   证明: fun x => (h.hasFDerivAt hn x).differentiableAt
 
 Depends on / 依赖: differentiableAt, h.hasFDerivAt, hasFDerivAt
@@ -2147,7 +2147,7 @@ lemma HasFTaylorSeriesUpTo.tsupport_mono
 .symm refine tsupport_comp_eq (g := 
 
 中文:
-引理 HasFTaylorSeriesUpTo.tsupport_mono
+引理 有FTaylorSeriesUpTo.tsupport_mono
   结论: {k m : 自然数} (h : k <= m) (h2 : m <= n)
   证明: by
   induction h with
@@ -2187,7 +2187,7 @@ lemma HasFTaylorSeriesUpTo.tsupport_subset
   exact (continuousMultilinearCurryFin0 _ _ _).map_eq_zero_iff (x := x)
 
 中文:
-引理 HasFTaylorSeriesUpTo.tsupport_subset
+引理 有FTaylorSeriesUpTo.tsupport_subset
   结论: {m : 自然数} (h : m <= n)
   证明: by
   refine (hf.tsupport_mono zero_le h).trans_eq ?_
@@ -2262,7 +2262,7 @@ theorem iteratedFDeriv_zero_apply
 
 中文:
 定理 iteratedFDeriv_zero_apply
-  条件: (m : Fin 0 -> E)
+  条件: (m : 有限集 0 -> E)
   证明: rfl
 -/
 theorem iteratedFDeriv_zero_apply (m : Fin 0 -> E) :
@@ -2334,7 +2334,7 @@ theorem iteratedFDeriv_succ_apply_left
 
 中文:
 定理 iteratedFDeriv_succ_apply_left
-  条件: {n : 自然数} (m : Fin (n + 1) -> E)
+  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
   证明: rfl
 -/
 theorem iteratedFDeriv_succ_apply_left {n : Nat} (m : Fin (n + 1) -> E) :
@@ -2354,7 +2354,7 @@ theorem DifferentiableAt.iteratedFDeriv_succ_apply_left'
 
 中文:
 定理 DifferentiableAt.iteratedFDeriv_succ_apply_left'
-  结论: {n : 自然数} {m : Fin (n + 1) -> E}
+  结论: {n : 自然数} {m : 有限集 (n + 1) -> E}
   证明: by
   convert iteratedFDeriv_succ_apply_left m
   simp [fderiv_continuousMultilinear_apply_const hf]
@@ -2541,7 +2541,7 @@ theorem Filter.EventuallyEq.iteratedFDeriv
   simp_all [← nhdsWithin_univ, ← iteratedFDerivWithin_univ, EventuallyEq.iteratedFDerivWithin]
 
 中文:
-定理 Filter.EventuallyEq.iteratedFDeriv
+定理 滤子.EventuallyEq.iteratedFDeriv
   证明: by
   simp_all [← nhdsWithin_univ, ← iteratedFDerivWithin_univ, EventuallyEq.iteratedFDerivWithin]
 -/
@@ -2563,7 +2563,7 @@ theorem Filter.EventuallyEq.ftaylorSeries
   exact (he₁.iteratedFDeriv 𝕜 n).eq_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.ftaylorSeries
+定理 滤子.EventuallyEq.ftaylorSeries
   条件: (h : f₁ =ᶠ[𝓝 x] f)
   证明: by
   filter_upwards [eventually_eventuallyEq_nhds.2 h] with e₁ he₁
@@ -2587,7 +2587,7 @@ theorem HasFTaylorSeriesUpTo.eq_iteratedFDeriv
   exact h.eq_iteratedFDerivWithin_of_uniqueDiffOn hmn uniqueDiffOn_univ (mem_univ _)
 
 中文:
-定理 HasFTaylorSeriesUpTo.eq_iteratedFDeriv
+定理 有FTaylorSeriesUpTo.eq_iteratedFDeriv
   证明: by
   rw [← iteratedFDerivWithin_univ]
   rw [← hasFTaylorSeriesUpToOn_univ_iff] at h
@@ -2615,7 +2615,7 @@ theorem iteratedFDerivWithin_of_isOpen
 
 中文:
 定理 iteratedFDerivWithin_of_isOpen
-  条件: (n : 自然数) (hs : IsOpen s)
+  条件: (n : 自然数) (hs : 是开集 s)
   证明: by
   intro x hx
   rw [← iteratedFDerivWithin_univ]
@@ -2667,7 +2667,7 @@ theorem iteratedFDeriv_succ_apply_right
 
 中文:
 定理 iteratedFDeriv_succ_apply_right
-  条件: {n : 自然数} (m : Fin (n + 1) -> E)
+  条件: {n : 自然数} (m : 有限集 (n + 1) -> E)
   证明: by
   rw [← iteratedFDerivWithin_univ]; rw [← iteratedFDerivWithin_univ]; rw [← fderivWithin_univ]
   exact iteratedFDerivWithin_succ_apply_right uniqueDiffOn_univ (mem_univ _) _
@@ -2745,7 +2745,7 @@ theorem iteratedFDeriv_one_apply
 
 中文:
 定理 iteratedFDeriv_one_apply
-  条件: (m : Fin 1 -> E)
+  条件: (m : 有限集 1 -> E)
   证明: by
   rw [iteratedFDeriv_succ_apply_right]; rw [iteratedFDeriv_zero_apply]; rw [last_zero]
 
@@ -2793,7 +2793,7 @@ lemma iteratedFDeriv_two_apply
 
 中文:
 引理 iteratedFDeriv_two_apply
-  条件: (f : E -> F) (z : E) (m : Fin 2 -> E)
+  条件: (f : E -> F) (z : E) (m : 有限集 2 -> E)
   证明: by
   simp [iteratedFDeriv_succ_apply_right, init]
 
@@ -2947,7 +2947,7 @@ lemma iteratedFDerivWithin_comp_neg
 
 中文:
 引理 iteratedFDerivWithin_comp_neg
-  条件: {f : 𝕜 -> F} {s : Set 𝕜} (n : 自然数) (a : 𝕜)
+  条件: {f : 𝕜 -> F} {s : 集合 𝕜} (n : 自然数) (a : 𝕜)
   证明: by
   induction n generalizing a with
   | zero => simp [iteratedFDerivWithin]
@@ -2988,7 +2988,7 @@ theorem iteratedFDerivWithin_comp_const_sub
 
 中文:
 定理 iteratedFDerivWithin_comp_const_sub
-  条件: {f : 𝕜 -> F} {s : Set 𝕜} (n : 自然数) (c : 𝕜)
+  条件: {f : 𝕜 -> F} {s : 集合 𝕜} (n : 自然数) (c : 𝕜)
   证明: by
   ext a
   have : (fun z : 𝕜 => f (c - z)) = fun z => (fun w => f (c + w)) (-z) := by

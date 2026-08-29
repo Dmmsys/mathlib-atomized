@@ -381,7 +381,7 @@ theorem hammingDist_le_card_fintype
 中文:
 定理 hammingDist_le_card_fintype
   条件: {x y : 对任意 i, β i}
-  结论: hammingDist x y <= Fintype.card ι
+  结论: hammingDist x y <= 有限类型.card ι
   证明: card_le_univ _
 
 Depends on / 依赖: card_le_univ
@@ -420,7 +420,7 @@ theorem hammingDist_comp
 
 中文:
 定理 hammingDist_comp
-  条件: (f : 对任意 i, γ i -> β i) {x y : 对任意 i, γ i} (hf : 对任意 i, Injective (f i))
+  条件: (f : 对任意 i, γ i -> β i) {x y : 对任意 i, γ i} (hf : 对任意 i, 单射 (f i))
   证明: le_antisymm (hammingDist_comp_le_hammingDist _) by dsimp [hammingDist]; gcongr; exact @hf _ _ _
 
 Depends on / 依赖: hammingDist, hammingDist_comp_le_hammingDist, le_antisymm
@@ -439,7 +439,7 @@ theorem hammingDist_smul_le_hammingDist
 
 中文:
 定理 hammingDist_smul_le_hammingDist
-  条件: [对任意 i, SMul α (β i)] {k : α} {x y : 对任意 i, β i}
+  条件: [对任意 i, 标量乘法 α (β i)] {k : α} {x y : 对任意 i, β i}
   证明: hammingDist_comp_le_hammingDist fun i => (k • · : β i -> β i)
 
 Depends on / 依赖: hammingDist_comp_le_hammingDist
@@ -458,7 +458,7 @@ theorem hammingDist_smul
 
 中文:
 定理 hammingDist_smul
-  结论: [对任意 i, SMul α (β i)] {k : α} {x y : 对任意 i, β i}
+  结论: [对任意 i, 标量乘法 α (β i)] {k : α} {x y : 对任意 i, β i}
   证明: hammingDist_comp (fun i => (k • · : β i -> β i)) hk
 
 Depends on / 依赖: hammingDist_comp
@@ -663,7 +663,7 @@ theorem hammingNorm_le_card_fintype
 中文:
 定理 hammingNorm_le_card_fintype
   条件: {x : 对任意 i, β i}
-  结论: hammingNorm x <= Fintype.card ι
+  结论: hammingNorm x <= 有限类型.card ι
   证明: hammingDist_le_card_fintype
 
 Depends on / 依赖: hammingDist_le_card_fintype
@@ -706,7 +706,7 @@ theorem hammingNorm_comp
 
 中文:
 定理 hammingNorm_comp
-  结论: (f : 对任意 i, γ i -> β i) {x : 对任意 i, γ i} (hf₁ : 对任意 i, Injective (f i))
+  结论: (f : 对任意 i, γ i -> β i) {x : 对任意 i, γ i} (hf₁ : 对任意 i, 单射 (f i))
   证明: by
   simpa only [← hammingDist_zero_right, hf₂] using! hammingDist_comp f hf₁ (y := fun _ => 0)
 
@@ -726,7 +726,7 @@ theorem hammingNorm_smul_le_hammingNorm
 
 中文:
 定理 hammingNorm_smul_le_hammingNorm
-  结论: [Zero α] [对任意 i, SMulWithZero α (β i)] {k : α}
+  结论: [零 α] [对任意 i, 带零标量乘法 α (β i)] {k : α}
   证明: hammingNorm_comp_le_hammingNorm (fun i (c : β i) => k • c) fun i => by simp_rw [smul_zero]
 
 Depends on / 依赖: hammingNorm_comp_le_hammingNorm, simp_rw, smul_zero
@@ -745,7 +745,7 @@ theorem hammingNorm_smul
 
 中文:
 定理 hammingNorm_smul
-  结论: [Zero α] [对任意 i, SMulWithZero α (β i)] {k : α}
+  结论: [零 α] [对任意 i, 带零标量乘法 α (β i)] {k : α}
   证明: hammingNorm_comp (fun i (c : β i) => k • c) hk fun i => by simp_rw [smul_zero]
 
 Depends on / 依赖: hammingNorm_comp, simp_rw, smul_zero
@@ -767,7 +767,7 @@ theorem hammingDist_eq_hammingNorm
 
 中文:
 定理 hammingDist_eq_hammingNorm
-  条件: [对任意 i, AddGroup (β i)] (x y : 对任意 i, β i)
+  条件: [对任意 i, 加法群 (β i)] (x y : 对任意 i, β i)
   证明: by
   simp_rw [hammingNorm, hammingDist, Pi.add_apply, Pi.neg_apply, ne_eq, neg_add_eq_zero]
 
@@ -811,8 +811,8 @@ instance [forall
   body: inferInstanceAs Inhabited (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, Inhabited (β i)] : Inhabited (Hamming β)
+实例 [对任意
+  签名: i, 可居 (β i)] : 可居 (Hamming β)
   定义体: inferInstanceAs Inhabited (forall i, β i)
 
 Depends on / 依赖: Inhabited
@@ -830,7 +830,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: ι] [Fintype ι] [对任意 i, Fintype (β i)] : Fintype (Hamming β)
+  签名: ι] [有限类型 ι] [对任意 i, 有限类型 (β i)] : 有限类型 (Hamming β)
   定义体: inferInstanceAs Fintype (forall i, β i)
 
 Depends on / 依赖: Fintype
@@ -847,8 +847,8 @@ instance [Inhabited
   body: inferInstanceAs Nontrivial (forall i, β i)
 
 中文:
-实例 [Inhabited
-  签名: ι] [对任意 i, Nonempty (β i)] [Nontrivial (β default)] : Nontrivial (Hamming β)
+实例 [可居
+  签名: ι] [对任意 i, 非空 (β i)] [非平凡 (β default)] : 非平凡 (Hamming β)
   定义体: inferInstanceAs Nontrivial (forall i, β i)
 
 Depends on / 依赖: Nontrivial
@@ -865,7 +865,7 @@ instance [Fintype
   body: inferInstanceAs DecidableEq (forall i, β i)
 
 中文:
-实例 [Fintype
+实例 [有限类型
   签名: ι] [对任意 i, DecidableEq (β i)] : DecidableEq (Hamming β)
   定义体: inferInstanceAs DecidableEq (forall i, β i)
 
@@ -883,8 +883,8 @@ instance [forall
   body: inferInstanceAs Zero (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, Zero (β i)] : Zero (Hamming β)
+实例 [对任意
+  签名: i, 零 (β i)] : 零 (Hamming β)
   定义体: inferInstanceAs Zero (forall i, β i)
 -/
 instance [forall i, Zero (β i)] : Zero (Hamming β) :=
@@ -899,8 +899,8 @@ instance [forall
   body: inferInstanceAs Neg (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, Neg (β i)] : Neg (Hamming β)
+实例 [对任意
+  签名: i, 取负 (β i)] : 取负 (Hamming β)
   定义体: inferInstanceAs Neg (forall i, β i)
 -/
 instance [forall i, Neg (β i)] : Neg (Hamming β) :=
@@ -915,8 +915,8 @@ instance [forall
   body: inferInstanceAs Add (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, Add (β i)] : Add (Hamming β)
+实例 [对任意
+  签名: i, 加法 (β i)] : 加法 (Hamming β)
   定义体: inferInstanceAs Add (forall i, β i)
 -/
 instance [forall i, Add (β i)] : Add (Hamming β) :=
@@ -931,8 +931,8 @@ instance [forall
   body: inferInstanceAs Sub (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, Sub (β i)] : Sub (Hamming β)
+实例 [对任意
+  签名: i, 减法 (β i)] : 减法 (Hamming β)
   定义体: inferInstanceAs Sub (forall i, β i)
 -/
 instance [forall i, Sub (β i)] : Sub (Hamming β) :=
@@ -947,8 +947,8 @@ instance [forall
   body: inferInstanceAs SMul α (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, SMul α (β i)] : SMul α (Hamming β)
+实例 [对任意
+  签名: i, 标量乘法 α (β i)] : 标量乘法 α (Hamming β)
   定义体: inferInstanceAs SMul α (forall i, β i)
 -/
 instance [forall i, SMul α (β i)] : SMul α (Hamming β) :=
@@ -963,8 +963,8 @@ instance [Zero
   body: inferInstanceAs SMulWithZero α (forall i, β i)
 
 中文:
-实例 [Zero
-  签名: α] [对任意 i, Zero (β i)] [对任意 i, SMulWithZero α (β i)] : SMulWithZero α (Hamming β)
+实例 [零
+  签名: α] [对任意 i, 零 (β i)] [对任意 i, 带零标量乘法 α (β i)] : 带零标量乘法 α (Hamming β)
   定义体: inferInstanceAs SMulWithZero α (forall i, β i)
 
 Depends on / 依赖: SMulWithZero
@@ -981,8 +981,8 @@ instance [forall
   body: inferInstanceAs AddMonoid (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, AddMonoid (β i)] : AddMonoid (Hamming β)
+实例 [对任意
+  签名: i, 加法幺半群 (β i)] : 加法幺半群 (Hamming β)
   定义体: inferInstanceAs AddMonoid (forall i, β i)
 
 Depends on / 依赖: AddMonoid
@@ -999,8 +999,8 @@ instance [forall
   body: inferInstanceAs AddGroup (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, AddGroup (β i)] : AddGroup (Hamming β)
+实例 [对任意
+  签名: i, 加法群 (β i)] : 加法群 (Hamming β)
   定义体: inferInstanceAs AddGroup (forall i, β i)
 
 Depends on / 依赖: AddGroup
@@ -1017,8 +1017,8 @@ instance [forall
   body: inferInstanceAs AddCommMonoid (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, AddCommMonoid (β i)] : AddCommMonoid (Hamming β)
+实例 [对任意
+  签名: i, 加法交换幺半群 (β i)] : 加法交换幺半群 (Hamming β)
   定义体: inferInstanceAs AddCommMonoid (forall i, β i)
 
 Depends on / 依赖: AddCommMonoid
@@ -1035,8 +1035,8 @@ instance [forall
   body: inferInstanceAs AddCommGroup (forall i, β i)
 
 中文:
-实例 [forall
-  签名: i, AddCommGroup (β i)] : AddCommGroup (Hamming β)
+实例 [对任意
+  签名: i, 加法交换群 (β i)] : 加法交换群 (Hamming β)
   定义体: inferInstanceAs AddCommGroup (forall i, β i)
 
 Depends on / 依赖: AddCommGroup
@@ -1237,7 +1237,7 @@ theorem toHamming_zero
 
 中文:
 定理 toHamming_zero
-  条件: [对任意 i, Zero (β i)]
+  条件: [对任意 i, 零 (β i)]
   结论: toHamming (0 : 对任意 i, β i) = 0
   证明: rfl
 
@@ -1260,7 +1260,7 @@ theorem ofHamming_zero
 
 中文:
 定理 ofHamming_zero
-  条件: [对任意 i, Zero (β i)]
+  条件: [对任意 i, 零 (β i)]
   结论: ofHamming (0 : Hamming β) = 0
   证明: rfl
 
@@ -1283,7 +1283,7 @@ theorem toHamming_neg
 
 中文:
 定理 toHamming_neg
-  条件: [对任意 i, Neg (β i)] {x : 对任意 i, β i}
+  条件: [对任意 i, 取负 (β i)] {x : 对任意 i, β i}
   结论: toHamming (-x) = -toHamming x
   证明: rfl
 
@@ -1306,7 +1306,7 @@ theorem ofHamming_neg
 
 中文:
 定理 ofHamming_neg
-  条件: [对任意 i, Neg (β i)] {x : Hamming β}
+  条件: [对任意 i, 取负 (β i)] {x : Hamming β}
   结论: ofHamming (-x) = -ofHamming x
   证明: rfl
 
@@ -1328,7 +1328,7 @@ theorem toHamming_add
 
 中文:
 定理 toHamming_add
-  条件: [对任意 i, Add (β i)] {x y : 对任意 i, β i}
+  条件: [对任意 i, 加法 (β i)] {x y : 对任意 i, β i}
   证明: rfl
 
 @[simp]
@@ -1350,7 +1350,7 @@ theorem ofHamming_add
 
 中文:
 定理 ofHamming_add
-  条件: [对任意 i, Add (β i)] {x y : Hamming β}
+  条件: [对任意 i, 加法 (β i)] {x y : Hamming β}
   证明: rfl
 
 @[simp]
@@ -1372,7 +1372,7 @@ theorem toHamming_sub
 
 中文:
 定理 toHamming_sub
-  条件: [对任意 i, Sub (β i)] {x y : 对任意 i, β i}
+  条件: [对任意 i, 减法 (β i)] {x y : 对任意 i, β i}
   证明: rfl
 
 @[simp]
@@ -1394,7 +1394,7 @@ theorem ofHamming_sub
 
 中文:
 定理 ofHamming_sub
-  条件: [对任意 i, Sub (β i)] {x y : Hamming β}
+  条件: [对任意 i, 减法 (β i)] {x y : Hamming β}
   证明: rfl
 
 @[simp]
@@ -1416,7 +1416,7 @@ theorem toHamming_smul
 
 中文:
 定理 toHamming_smul
-  条件: [对任意 i, SMul α (β i)] {r : α} {x : 对任意 i, β i}
+  条件: [对任意 i, 标量乘法 α (β i)] {r : α} {x : 对任意 i, β i}
   证明: rfl
 
 @[simp]
@@ -1436,7 +1436,7 @@ theorem ofHamming_smul
 
 中文:
 定理 ofHamming_smul
-  条件: [对任意 i, SMul α (β i)] {r : α} {x : Hamming β}
+  条件: [对任意 i, 标量乘法 α (β i)] {r : α} {x : Hamming β}
   证明: rfl
 -/
 theorem ofHamming_smul [forall i, SMul α (β i)] {r : α} {x : Hamming β} :
@@ -1510,7 +1510,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (Hamming β)
+  签名: 伪度量空间 (Hamming β)
   定义体: by
     push_cast
     exact mod_cast hammingDist_self
@@ -1579,7 +1579,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (Hamming β)
+  签名: 离散拓扑 (Hamming β)
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology (Hamming β) := ⟨rfl⟩
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace (Hamming β)
+  签名: 度量空间 (Hamming β)
   定义体: .ofT0PseudoMetricSpace _
 
 Depends on / 依赖: ofT0PseudoMetricSpace
@@ -1612,8 +1612,8 @@ instance [forall
 @[simp, push_cast]
 
 中文:
-实例 [forall
-  签名: i, Zero (β i)] : Norm (Hamming β)
+实例 [对任意
+  签名: i, 零 (β i)] : 范数 (Hamming β)
   定义体: ⟨fun x => hammingNorm (ofHamming x)⟩
 
 @[simp, push_cast]
@@ -1635,7 +1635,7 @@ theorem norm_eq_hammingNorm
 
 中文:
 定理 norm_eq_hammingNorm
-  条件: [对任意 i, Zero (β i)] (x : Hamming β)
+  条件: [对任意 i, 零 (β i)] (x : Hamming β)
   结论: ‖x‖ = hammingNorm (ofHamming x)
   证明: rfl
 -/
@@ -1651,8 +1651,8 @@ instance [forall
   body: by push_cast; exact mod_cast hammingDist_eq_hammingNorm
 
 中文:
-实例 [forall
-  签名: i, AddGroup (β i)] : NormedAddGroup (Hamming β) where
+实例 [对任意
+  签名: i, 加法群 (β i)] : 赋范加群 (Hamming β) where
   定义体: by push_cast; exact mod_cast hammingDist_eq_hammingNorm
 
 Depends on / 依赖: hammingDist_eq_hammingNorm, mod_cast
@@ -1671,8 +1671,8 @@ instance [forall
 @[simp, push_cast]
 
 中文:
-实例 [forall
-  签名: i, AddCommGroup (β i)] : NormedAddCommGroup (Hamming β) where
+实例 [对任意
+  签名: i, 加法交换群 (β i)] : 赋范交换加群 (Hamming β) where
   定义体: fun x y => NormedAddGroup.dist_eq x y
 
 @[simp, push_cast]
@@ -1693,7 +1693,7 @@ theorem nnnorm_eq_hammingNorm
 
 中文:
 定理 nnnorm_eq_hammingNorm
-  条件: [对任意 i, AddGroup (β i)] (x : Hamming β)
+  条件: [对任意 i, 加法群 (β i)] (x : Hamming β)
   证明: rfl
 -/
 theorem nnnorm_eq_hammingNorm [forall i, AddGroup (β i)] (x : Hamming β) :

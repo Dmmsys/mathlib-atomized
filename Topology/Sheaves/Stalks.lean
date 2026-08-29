@@ -100,7 +100,7 @@ definition stalk
 
 中文:
 定义 stalk
-  签名: (ℱ : X.Presheaf C) (x : X)
+  签名: (ℱ : X.预层 C) (x : X)
   定义体: (stalkFunctor C x).obj ℱ
 
 Depends on / 依赖: stalkFunctor
@@ -121,7 +121,7 @@ theorem stalkFunctor_obj
 
 中文:
 定理 stalkFunctor_obj
-  条件: (ℱ : X.Presheaf C) (x : X)
+  条件: (ℱ : X.预层 C) (x : X)
   结论: (stalkFunctor C x).obj ℱ = ℱ.stalk x
   证明: rfl
 -/
@@ -138,7 +138,7 @@ definition germ
 
 中文:
 定义 germ
-  签名: (F : X.Presheaf C) (U : Opens X) (x : X) (hx : x in U)
+  签名: (F : X.预层 C) (U : Opens X) (x : X) (hx : x in U)
   定义体: colimit.ι ((OpenNhds.inclusion x).op ⋙ F) (op ⟨U, hx⟩)
 
 Depends on / 依赖: OpenNhds, OpenNhds.inclusion, colimit, inclusion
@@ -158,7 +158,7 @@ definition Γgerm
 
 中文:
 定义 Γgerm
-  签名: (F : X.Presheaf C) (x : X)
+  签名: (F : X.预层 C) (x : X)
   定义体: F.germ ⊤ x True.intro
 
 @[reassoc]
@@ -180,7 +180,7 @@ theorem germ_res
 
 中文:
 定理 germ_res
-  条件: (F : X.Presheaf C) {U V : Opens X} (i : U ⟶ V) (x : X) (hx : x in U)
+  条件: (F : X.预层 C) {U V : Opens X} (i : U ⟶ V) (x : X) (hx : x in U)
   证明: let i' : (⟨U, hx⟩ : OpenNhds x) ⟶ ⟨V, i.le hx⟩ := i
   colimit.w ((OpenNhds.inclusion x).op ⋙ F) i'.op
 
@@ -207,7 +207,7 @@ theorem germ_res'
 
 中文:
 定理 germ_res'
-  条件: (F : X.Presheaf C) {U V : Opens X} (i : op V ⟶ op U) (x : X) (hx : x in U)
+  条件: (F : X.预层 C) {U V : Opens X} (i : op V ⟶ op U) (x : X) (hx : x in U)
   证明: let i' : (⟨U, hx⟩ : OpenNhds x) ⟶ ⟨V, i.unop.le hx⟩ := i.unop
   colimit.w ((OpenNhds.inclusion x).op ⋙ F) i'.op
 
@@ -231,7 +231,7 @@ lemma map_germ_eq_Γgerm
 
 中文:
 引理 map_germ_eq_Γgerm
-  条件: (F : X.Presheaf C) {U : Opens X} {i : U ⟶ ⊤} (x : X) (hx : x in U)
+  条件: (F : X.预层 C) {U : Opens X} {i : U ⟶ ⊤} (x : X) (hx : x in U)
   证明: germ_res F i x hx
 
 Depends on / 依赖: germ_res
@@ -254,7 +254,7 @@ theorem germ_res_apply
 
 中文:
 定理 germ_res_apply
-  结论: (F : X.Presheaf C)
+  结论: (F : X.预层 C)
   证明: by
   rw [← ConcreteCategory.comp_apply]; rw [germ_res]
 
@@ -276,7 +276,7 @@ theorem germ_res_apply'
 
 中文:
 定理 germ_res_apply'
-  结论: (F : X.Presheaf C)
+  结论: (F : X.预层 C)
   证明: by
   rw [← ConcreteCategory.comp_apply]; rw [germ_res']
 
@@ -297,7 +297,7 @@ lemma Γgerm_res_apply
 
 中文:
 引理 Γgerm_res_apply
-  结论: (F : X.Presheaf C)
+  结论: (F : X.预层 C)
   证明: F.germ_res_apply i x hx s
 
 Depends on / 依赖: F.germ_res_apply, germ_res_apply
@@ -322,7 +322,7 @@ theorem stalk_hom_ext
 
 中文:
 定理 stalk_hom_ext
-  结论: (F : X.Presheaf C) {x} {Y : C} {f₁ f₂ : F.stalk x ⟶ Y}
+  结论: (F : X.预层 C) {x} {Y : C} {f₁ f₂ : F.stalk x ⟶ Y}
   证明: colimit.hom_ext fun U => by
     induction U with | op U => obtain ⟨U, hxU⟩ := U; exact ih U hxU
 
@@ -345,7 +345,7 @@ theorem stalkFunctor_map_germ
 
 中文:
 定理 stalkFunctor_map_germ
-  条件: {F G : X.Presheaf C} (U : Opens X) (x : X) (hx : x in U) (f : F ⟶ G)
+  条件: {F G : X.预层 C} (U : Opens X) (x : X) (hx : x in U) (f : F ⟶ G)
   证明: colimit.ι_map (whiskerLeft (OpenNhds.inclusion x).op f) (op ⟨U, hx⟩)
 
 Depends on / 依赖: OpenNhds, OpenNhds.inclusion, colimit, inclusion, whiskerLeft
@@ -367,7 +367,7 @@ theorem stalkFunctor_map_germ_apply
 
 中文:
 定理 stalkFunctor_map_germ_apply
-  结论: [ConcreteCategory C FC]
+  结论: [余ncrete范畴 C FC]
   证明: by
   rw [← ConcreteCategory.comp_apply]; rw [← stalkFunctor_map_germ]; rw [ConcreteCategory.comp_apply]
   rfl
@@ -392,7 +392,7 @@ theorem stalkFunctor_map_germ_apply'
 
 中文:
 定理 stalkFunctor_map_germ_apply'
-  结论: [ConcreteCategory C FC]
+  结论: [余ncrete范畴 C FC]
   证明: stalkFunctor_map_germ_apply U x hx f s
 
 Depends on / 依赖: F.stalk, G.stalk
@@ -419,7 +419,7 @@ definition stalkPushforward
 
 中文:
 定义 stalkPushforward
-  签名: (f : X ⟶ Y) (F : X.Presheaf C) (x : X)
+  签名: (f : X ⟶ Y) (F : X.预层 C) (x : X)
   定义体: by
   -- This is a hack; Lean doesn't like to elaborate the term written directly.
   refine ?_ ≫ colimit.pre _ (OpenNhds.map f x).op
@@ -444,7 +444,7 @@ theorem stalkPushforward_germ
 
 中文:
 定理 stalkPushforward_germ
-  结论: (f : X ⟶ Y) (F : X.Presheaf C) (U : Opens Y)
+  结论: (f : X ⟶ Y) (F : X.预层 C) (U : Opens Y)
   证明: by
   simp [germ, stalkPushforward]
 
@@ -488,7 +488,7 @@ theorem id
 
 中文:
 定理 id
-  条件: (ℱ : X.Presheaf C) (x : X)
+  条件: (ℱ : X.预层 C) (x : X)
   证明: by
   ext
   simp only [stalkPushforward, germ, colim_map, ι_colimMap_assoc, whiskerRight_app]
@@ -519,7 +519,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (ℱ : X.Presheaf C) (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: (ℱ : X.预层 C) (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by
   ext
   simp [germ, stalkPushforward]
@@ -548,7 +548,7 @@ theorem stalkPushforward_iso_of_isInducing
 
 中文:
 定理 stalkPushforward_iso_of_isInducing
-  结论: {f : X ⟶ Y} (hf : IsInducing f)
+  结论: {f : X ⟶ Y} (hf : 是Inducing f)
   证明: by
   have := Functor.initial_of_adjunction (hf.adjunctionNhds x)
   convert!
@@ -583,7 +583,7 @@ definition stalkPullbackHom
 
 中文:
 定义 stalkPullbackHom
-  签名: (f : X ⟶ Y) (F : Y.Presheaf C) (x : X)
+  签名: (f : X ⟶ Y) (F : Y.预层 C) (x : X)
   定义体: (stalkFunctor _ (f x)).map ((pullbackPushforwardAdjunction C f).unit.app F) ≫
     stalkPushforward _ _ _ x
 
@@ -635,7 +635,7 @@ definition germToPullbackStalk
 
 中文:
 定义 germToPullbackStalk
-  签名: (f : X ⟶ Y) (F : Y.Presheaf C) (U : Opens X) (x : X) (hx : x in U)
+  签名: (f : X ⟶ Y) (F : Y.预层 C) (U : Opens X) (x : X) (hx : x in U)
   定义体: ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit F (op U)).desc
     { pt := F.stalk ((f : X -> Y) (x : X))
       ι :=
@@ -670,7 +670,7 @@ lemma pullback_obj_obj_ext
 
 中文:
 引理 pullback_obj_obj_ext
-  结论: {Z : C} {f : X ⟶ Y} {F : Y.Presheaf C} (U : (Opens X)ᵒᵖ)
+  结论: {Z : C} {f : X ⟶ Y} {F : Y.预层 C} (U : (Opens X)ᵒᵖ)
   证明: by
   apply ((Opens.map f).op.isPointwiseLeftKanExtensionLeftKanExtensionUnit F _).hom_ext
   rintro ⟨⟨V⟩, ⟨⟩, ⟨b⟩⟩
@@ -801,7 +801,7 @@ definition stalkPullbackInv
 
 中文:
 定义 stalkPullbackInv
-  签名: (f : X ⟶ Y) (F : Y.Presheaf C) (x : X)
+  签名: (f : X ⟶ Y) (F : Y.预层 C) (x : X)
   定义体: colimit.desc ((OpenNhds.inclusion x).op ⋙ (Presheaf.pullback C f).obj F)
     { pt := F.stalk (f x)
       ι :=
@@ -838,7 +838,7 @@ lemma germ_stalkPullbackInv
 
 中文:
 引理 germ_stalkPullbackInv
-  条件: (f : X ⟶ Y) (F : Y.Presheaf C) (x : X) (V : Opens X) (hV : x in V)
+  条件: (f : X ⟶ Y) (F : Y.预层 C) (x : X) (V : Opens X) (hV : x in V)
   证明: by
   apply colimit.ι_desc
 
@@ -869,7 +869,7 @@ definition stalkPullbackIso
 
 中文:
 定义 stalkPullbackIso
-  签名: (f : X ⟶ Y) (F : Y.Presheaf C) (x : X)
+  签名: (f : X ⟶ Y) (F : Y.预层 C) (x : X)
   定义体: stalkPullbackHom _ _ _ _
   inv := stalkPullbackInv _ _ _ _
   hom_inv_id := by
@@ -922,7 +922,7 @@ definition stalkSpecializes
 
 中文:
 定义 stalkSpecializes
-  签名: (F : X.Presheaf C) {x y : X} (h : x ⤳ y)
+  签名: (F : X.预层 C) {x y : X} (h : x ⤳ y)
   定义体: by
   refine colimit.desc _ ⟨_, fun U => ?_, ?_⟩
   · exact
@@ -961,7 +961,7 @@ theorem germ_stalkSpecializes
 
 中文:
 定理 germ_stalkSpecializes
-  结论: (F : X.Presheaf C)
+  结论: (F : X.预层 C)
   证明: colimit.ι_desc _ _
 
 @[simp]
@@ -988,7 +988,7 @@ theorem stalkSpecializes_refl
 
 中文:
 定理 stalkSpecializes_refl
-  条件: (F : X.Presheaf C) (x : X)
+  条件: (F : X.预层 C) (x : X)
   证明: by
   ext
   simp
@@ -1013,7 +1013,7 @@ theorem stalkSpecializes_comp
 
 中文:
 定理 stalkSpecializes_comp
-  条件: (F : X.Presheaf C) {x y z : X} (h : x ⤳ y) (h' : y ⤳ z)
+  条件: (F : X.预层 C) {x y z : X} (h : x ⤳ y) (h' : y ⤳ z)
   证明: by
   ext
   simp
@@ -1037,7 +1037,7 @@ theorem stalkSpecializes_stalkFunctor_map
 
 中文:
 定理 stalkSpecializes_stalkFunctor_map
-  条件: {F G : X.Presheaf C} (f : F ⟶ G) {x y : X} (h : x ⤳ y)
+  条件: {F G : X.预层 C} (f : F ⟶ G) {x y : X} (h : x ⤳ y)
   证明: by
   ext
   simp
@@ -1062,7 +1062,7 @@ theorem stalkSpecializes_stalkPushforward
 
 中文:
 定理 stalkSpecializes_stalkPushforward
-  条件: (f : X ⟶ Y) (F : X.Presheaf C) {x y : X} (h : x ⤳ y)
+  条件: (f : X ⟶ Y) (F : X.预层 C) {x y : X} (h : x ⤳ y)
   证明: by
   ext
   simp
@@ -1086,7 +1086,7 @@ definition stalkCongr
 
 中文:
 定义 stalkCongr
-  签名: (F : X.Presheaf C) {x y : X}
+  签名: (F : X.预层 C) {x y : X}
   定义体: ⟨F.stalkSpecializes e.ge, F.stalkSpecializes e.le, by simp, by simp⟩
 
 Depends on / 依赖: F.stalkSpecializes, e.ge, e.le, stalkSpecializes
@@ -1113,7 +1113,7 @@ theorem germ_ext
 
 中文:
 定理 germ_ext
-  结论: (F : X.Presheaf C) {U V : Opens X} {x : X} {hxU : x in U} {hxV : x in V}
+  结论: (F : X.预层 C) {U V : Opens X} {x : X} {hxU : x in U} {hxV : x in V}
   证明: by
   rw [← F.germ_res iWU x hxW]; rw [← F.germ_res iWV x hxW]; rw [ConcreteCategory.comp_apply]; rw [ConcreteCategory.comp_apply]; rw [ih]
 
@@ -1146,8 +1146,8 @@ theorem exists_germ_eq
 @[deprecated (since := "2026-05-16")] alias germ_exist := exists_germ_eq
 
 中文:
-定理 exists_germ_eq
-  条件: (F : X.Presheaf C) {x : X} (t : ToType (stalk.{v, u} F x))
+定理 存在_germ_eq
+  条件: (F : X.预层 C) {x : X} (t : ToType (stalk.{v, u} F x))
   证明: by
   obtain ⟨U, s, e⟩ :=
     Types.jointly_surjective.{v, v} _ (isColimitOfPreserves (forget C) (colimit.isColimit _)) t
@@ -1185,8 +1185,8 @@ theorem exists_le_germ_eq
   exact germ_res_apply ..
 
 中文:
-定理 exists_le_germ_eq
-  结论: (F : X.Presheaf C) {x : X} (t : ToType (stalk.{v, u} F x))
+定理 存在_le_germ_eq
+  结论: (F : X.预层 C) {x : X} (t : ToType (stalk.{v, u} F x))
   证明: by
   rcases F.exists_germ_eq t with ⟨U, hxU, s, rfl⟩
   refine ⟨U ⊓ V, inf_le_right, by simp [*], F.map (homOfLE inf_le_left).op s, ?_⟩
@@ -1213,7 +1213,7 @@ theorem germ_eq
 
 中文:
 定理 germ_eq
-  结论: (F : X.Presheaf C) {U V : Opens X} (x : X) (mU : x in U) (mV : x in V)
+  结论: (F : X.预层 C) {U V : Opens X} (x : X) (mU : x in U) (mV : x in V)
   证明: by
   obtain ⟨W, iU, iV, e⟩ := (colimit.isColimit ((OpenNhds.inclusion x).op ⋙ F)).eq_iff.mp h
   exact ⟨(unop W).1, (unop W).2, iU.unop, iV.unop, e⟩
@@ -1243,7 +1243,7 @@ theorem stalkFunctor_map_injective_of_app_injective
 
 中文:
 定理 stalkFunctor_map_injective_of_app_injective
-  结论: {F G : Presheaf C X} {f : F ⟶ G}
+  结论: {F G : 预层 C X} {f : F ⟶ G}
   证明: fun s t hst => by
   rcases exists_germ_eq F s with ⟨U₁, hxU₁, s, rfl⟩
   rcases exists_germ_eq F t with ⟨U₂, hxU₂, t, rfl⟩
@@ -1284,8 +1284,8 @@ lemma exists_mem_germ_eq_of_isBasis
   exact ⟨V, hxV, hV, F.map (homOfLE hVU).op s, by rw [← ConcreteCategory.comp_apply, F.germ_res']⟩
 
 中文:
-引理 exists_mem_germ_eq_of_isBasis
-  条件: (F : X.Presheaf C) (x : X) (t : ToType (F.stalk x))
+引理 存在_mem_germ_eq_of_isBasis
+  条件: (F : X.预层 C) (x : X) (t : ToType (F.stalk x))
   证明: by
   obtain ⟨U, hxU, s, rfl⟩ := F.exists_germ_eq t
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU⟩ := hB.exists_subset_of_mem_open hxU U.2
@@ -1315,7 +1315,7 @@ lemma germ_eq_of_isBasis
 
 中文:
 引理 germ_eq_of_isBasis
-  结论: (F : X.Presheaf C) {U V : Opens X} (x : X) (mU : x in U) (mV : x in V)
+  结论: (F : X.预层 C) {U V : Opens X} (x : X) (mU : x in U) (mV : x in V)
   证明: by
   obtain ⟨W, hxW, hWU, hWV, e⟩ := F.germ_eq x mU mV _ _ h
   obtain ⟨_, ⟨W', hW', rfl⟩, hxW', hW'W⟩ := hB.exists_subset_of_mem_open hxW W.2
@@ -1388,7 +1388,7 @@ theorem section_ext
 
 中文:
 定理 section_ext
-  结论: (F : Sheaf C X) (U : Opens X) (s t : ToType (F.1.obj (op U)))
+  结论: (F : 层 C X) (U : Opens X) (s t : ToType (F.1.obj (op U)))
   证明: by
   -- We use `germ_eq` and the axiom of choice, to pick for every point `x` a neighbourhood
   -- `V x`, such that the restrictions of `s` and `t` to `V x` coincide.
@@ -1427,7 +1427,7 @@ h x hx by rw [stalkFunctor_map_germ_apply, stalkFunctor_map_germ_apply, hst]
 
 中文:
 定理 app_injective_of_stalkFunctor_map_injective
-  结论: {F : Sheaf C X} {G : Presheaf C X} (f : F.1 ⟶ G)
+  结论: {F : 层 C X} {G : 预层 C X} (f : F.1 ⟶ G)
   证明: fun s t hst =>
   section_ext F _ _ _ fun x hx =>
 h x hx by rw [stalkFunctor_map_germ_apply, stalkFunctor_map_germ_apply, hst]
@@ -1449,7 +1449,7 @@ theorem app_injective_iff_stalkFunctor_map_injective
 
 中文:
 定理 app_injective_iff_stalkFunctor_map_injective
-  结论: {F : Sheaf C X} {G : Presheaf C X}
+  结论: {F : 层 C X} {G : 预层 C X}
   证明: ⟨fun h U => app_injective_of_stalkFunctor_map_injective f U fun x _ => h x,
     stalkFunctor_map_injective_of_app_injective⟩
 
@@ -1515,7 +1515,7 @@ include instCC in
 
 中文:
 定理 stalk_mono_of_mono
-  条件: {F G : Sheaf C X} (f : F ⟶ G) [Mono f]
+  条件: {F G : 层 C X} (f : F ⟶ G) [单态射 f]
   证明: fun x => Functor.map_mono (Sheaf.forget.{v} C X ⋙ stalkFunctor C x) f
 
 include instCC in
@@ -1541,7 +1541,7 @@ theorem mono_of_stalk_mono
 
 中文:
 定理 mono_of_stalk_mono
-  条件: {F G : Sheaf C X} (f : F ⟶ G) [对任意 x, Mono <| (stalkFunctor C x).map f.1]
+  条件: {F G : 层 C X} (f : F ⟶ G) [对任意 x, 单态射 <| (stalkFunctor C x).map f.1]
   证明: (Sheaf.Hom.mono_iff_presheaf_mono _ _ _).mpr
     (NatTrans.mono_iff_mono_app _).mpr fun U =>
 (ConcreteCategory.mono_iff_injective_of_preservesPullback _).mpr
@@ -1570,7 +1570,7 @@ theorem mono_iff_stalk_mono
 
 中文:
 定理 mono_iff_stalk_mono
-  条件: {F G : Sheaf C X} (f : F ⟶ G)
+  条件: {F G : 层 C X} (f : F ⟶ G)
   证明: ⟨fun _ => stalk_mono_of_mono _, fun _ => mono_of_stalk_mono _⟩
 
 Depends on / 依赖: mono_of_stalk_mono, stalk_mono_of_mono
@@ -1598,7 +1598,7 @@ theorem app_surjective_of_injective_of_locally_surjective
 
 中文:
 定理 app_surjective_of_injective_of_locally_surjective
-  结论: {F G : Sheaf C X} (f : F ⟶ G)
+  结论: {F G : 层 C X} (f : F ⟶ G)
   证明: by
   conv at hsurj =>
     enter [t]
@@ -1661,7 +1661,7 @@ theorem app_surjective_of_stalkFunctor_map_bijective
 
 中文:
 定理 app_surjective_of_stalkFunctor_map_bijective
-  结论: {F G : Sheaf C X} (f : F ⟶ G) (U : Opens X)
+  结论: {F G : 层 C X} (f : F ⟶ G) (U : Opens X)
   证明: by
   refine app_surjective_of_injective_of_locally_surjective f U (And.left <| h · ·) fun t x hx => ?_
   -- Now we need to prove our initial claim: That we can find preimages of `t` locally.
@@ -1701,7 +1701,7 @@ include instCC in
 
 中文:
 定理 app_bijective_of_stalkFunctor_map_bijective
-  结论: {F G : Sheaf C X} (f : F ⟶ G) (U : Opens X)
+  结论: {F G : 层 C X} (f : F ⟶ G) (U : Opens X)
   证明: ⟨app_injective_of_stalkFunctor_map_injective f.1 U fun x hx => (h x hx).1,
     app_surjective_of_stalkFunctor_map_bijective f U h⟩
 
@@ -1731,7 +1731,7 @@ theorem app_isIso_of_stalkFunctor_map_iso
 
 中文:
 定理 app_isIso_of_stalkFunctor_map_iso
-  结论: {F G : Sheaf C X} (f : F ⟶ G) (U : Opens X)
+  结论: {F G : 层 C X} (f : F ⟶ G) (U : Opens X)
   证明: by
   -- Since the forgetful functor of `C` reflects isomorphisms, it suffices to see that the
   -- underlying map between types is an isomorphism, i.e. bijective.
@@ -1767,7 +1767,7 @@ theorem isIso_of_stalkFunctor_map_iso
 
 中文:
 定理 isIso_of_stalkFunctor_map_iso
-  结论: {F G : Sheaf C X} (f : F ⟶ G)
+  结论: {F G : 层 C X} (f : F ⟶ G)
   证明: by
   -- Since the inclusion functor from sheaves to presheaves is fully faithful, it suffices to
   -- show that `f`, as a morphism between _presheaves_, is an isomorphism.
@@ -1798,7 +1798,7 @@ theorem isIso_iff_stalkFunctor_map_iso
 
 中文:
 定理 isIso_iff_stalkFunctor_map_iso
-  条件: {F G : Sheaf C X} (f : F ⟶ G)
+  条件: {F G : 层 C X} (f : F ⟶ G)
   证明: ⟨fun _ x =>
     @Functor.map_isIso _ _ _ _ _ _ (stalkFunctor C x) f.1 ((Sheaf.forget C X).map_isIso f),
    fun _ => isIso_of_stalkFunctor_map_iso f⟩

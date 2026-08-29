@@ -36,7 +36,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [AddMonoid α] [DistribMulAction M α] (S : Submonoid M)
+  签名: [加法幺半群 α] [分配乘法作用 M α] (S : 子幺半群 M)
   定义体: inferInstance
 -/
 instance distribMulAction [AddMonoid α] [DistribMulAction M α] (S : Submonoid M) :
@@ -57,7 +57,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: [Monoid α] [MulDistribMulAction M α] (S : Submonoid M)
+  签名: [幺半群 α] [MulDistribMul作用 M α] (S : 子幺半群 M)
   定义体: inferInstance
 -/
 instance mulDistribMulAction [Monoid α] [MulDistribMulAction M α] (S : Submonoid M) :

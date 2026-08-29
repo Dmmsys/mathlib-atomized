@@ -59,7 +59,7 @@ instance OrderDual.supSet
 
 中文:
 实例 OrderDual.supSet
-  签名: (α) [h : InfSet α]
+  签名: (α) [h : 下确界集 α]
   定义体: ⟨fun s => h.sInf s⟩
 
 Depends on / 依赖: h.sInf
@@ -78,11 +78,11 @@ class CompleteSemilatticeSup
     - isLUB_sSup : forall s : Set α, IsLUB s (sSup s)
 
 中文:
-类 CompleteSemilatticeSup
+类 余mpleteSemilatticeSup
   参数: (α : 类型)
-  继承: PartialOrder α, SupSet α
+  继承: 偏序 α, 上确界集 α
   公理与运算 (1 个):
-    - isLUB_sSup : 对任意 s : Set α, IsLUB s (sSup s)
+    - isLUB_sSup : 对任意 s : 集合 α, IsLUB s (sSup s)
 -/
 class CompleteSemilatticeSup (α : Type*) extends PartialOrder α, SupSet α where
   /-- Every set has a least upper bound. -/
@@ -105,11 +105,11 @@ class CompleteSemilatticeInf
     - isGLB_sInf : forall s : Set α, IsGLB s (sInf s)
 
 中文:
-类 CompleteSemilatticeInf
+类 余mpleteSemilatticeInf
   参数: (α : 类型)
-  继承: PartialOrder α, InfSet α
+  继承: 偏序 α, 下确界集 α
   公理与运算 (1 个):
-    - isGLB_sInf : 对任意 s : Set α, IsGLB s (sInf s)
+    - isGLB_sInf : 对任意 s : 集合 α, IsGLB s (sInf s)
 -/
 class CompleteSemilatticeInf (α : Type*) extends PartialOrder α, InfSet α where
   /-- Every set has a greatest lower bound. -/
@@ -133,7 +133,7 @@ theorem isLUB_sSup
 
 中文:
 定理 isLUB_sSup
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsLUB s (sSup s)
   证明: CompleteSemilatticeSup.isLUB_sSup _
 
@@ -433,9 +433,9 @@ class CompleteLattice
   (no additional axioms)
 
 中文:
-类 CompleteLattice
+类 完备格
   参数: (α : 类型)
-  继承: Lattice α, CompleteSemilatticeSup α, 
+  继承: 格 α, 余mpleteSemilatticeSup α, 
   (无附加公理)
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.mk, isGLB_sInf, isLUB_sSup, toInfSet, toSupSet
@@ -489,7 +489,7 @@ inf_le_right _ _ := (isGLB_sInf _
 
 中文:
 定义 completeLatticeOfInf
-  签名: (α : 类型) [H1 : PartialOrder α] [H2 : InfSet α]
+  签名: (α : 类型) [H1 : 偏序 α] [H2 : 下确界集 α]
   定义体: H1; __ := H2
   bot := sInf univ
   bot_le _ := (isGLB_sInf univ).1 trivial
@@ -539,7 +539,7 @@ definition completeLatticeOfCompleteSemilatticeInf
 
 中文:
 定义 completeLatticeOfCompleteSemilatticeInf
-  签名: (α : 类型) [CompleteSemilatticeInf α]
+  签名: (α : 类型) [余mpleteSemilatticeInf α]
   定义体: completeLatticeOfInf α fun s => isGLB_sInf s
 
 Depends on / 依赖: completeLatticeOfInf, isGLB_sInf
@@ -582,7 +582,7 @@ le_sup_right _ _ := (isLUB_sSup _).1 mem
 
 中文:
 定义 completeLatticeOfSup
-  签名: (α : 类型) [H1 : PartialOrder α] [H2 : SupSet α]
+  签名: (α : 类型) [H1 : 偏序 α] [H2 : 上确界集 α]
   定义体: H1; __ := H2
   top := sSup univ
   le_top _ := (isLUB_sSup univ).1 trivial
@@ -628,7 +628,7 @@ definition completeLatticeOfCompleteSemilatticeSup
 
 中文:
 定义 completeLatticeOfCompleteSemilatticeSup
-  签名: (α : 类型) [CompleteSemilatticeSup α]
+  签名: (α : 类型) [余mpleteSemilatticeSup α]
   定义体: completeLatticeOfSup α fun s => isLUB_sSup s
 
 Depends on / 依赖: completeLatticeOfSup, isLUB_sSup
@@ -655,9 +655,9 @@ class CompleteLinearOrder
     - compare_eq_compareOfLessAndEq : forall a b, compare a b = compareOfLessAndEq a b  [default: by compareOfLessAndEq_rfl]
 
 中文:
-类 CompleteLinearOrder
+类 完备线性序
   参数: (α : 类型)
-  继承: CompleteLattice α, BiheytingAlgebra α, Ord α
+  继承: 完备格 α, Biheyting代数 α, 序 α
   公理与运算 (6 个):
     - le_total((a b : α)) : a <= b ∨ b <= a
     - toDecidableLE : DecidableLE α
@@ -699,8 +699,8 @@ instance CompleteLinearOrder.toLinearOrder
     · simp [(CompleteLinearOrder.le_total a b).resolve_left h]
 
 中文:
-实例 CompleteLinearOrder.toLinearOrder
-  签名: [i : CompleteLinearOrder α]
+实例 完备线性序.toLinearOrder
+  签名: [i : 完备线性序 α]
   定义体: i
   min_def a b := by
     split_ifs with h
@@ -733,7 +733,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: [CompleteLattice α]
+  签名: [完备格 α]
 -/
 instance instCompleteLattice [CompleteLattice α] : CompleteLattice αᵒᵈ where
 
@@ -749,7 +749,7 @@ instance instCompleteLinearOrder
 
 中文:
 实例 instCompleteLinearOrder
-  签名: [CompleteLinearOrder α]
+  签名: [完备线性序 α]
   定义体: instCompleteLattice
   __ := instBiheytingAlgebra
   __ := instLinearOrder α
@@ -783,7 +783,7 @@ theorem toDual_sSup
 
 中文:
 定理 toDual_sSup
-  条件: [SupSet α] (s : Set α)
+  条件: [上确界集 α] (s : 集合 α)
   结论: toDual (sSup s) = sInf (ofDual ⁻¹' s)
   证明: rfl
 
@@ -806,7 +806,7 @@ theorem ofDual_sSup
 
 中文:
 定理 ofDual_sSup
-  条件: [InfSet α] (s : Set αᵒᵈ)
+  条件: [下确界集 α] (s : 集合 αᵒᵈ)
   结论: ofDual (sSup s) = sInf (toDual ⁻¹' s)
   证明: rfl
 
@@ -829,7 +829,7 @@ theorem toDual_iSup
 
 中文:
 定理 toDual_iSup
-  条件: [SupSet α] (f : ι -> α)
+  条件: [上确界集 α] (f : ι -> α)
   结论: toDual (⨆ i, f i) = ⨅ i, toDual (f i)
   证明: rfl
 
@@ -850,7 +850,7 @@ theorem ofDual_iSup
 
 中文:
 定理 ofDual_iSup
-  条件: [InfSet α] (f : ι -> αᵒᵈ)
+  条件: [下确界集 α] (f : ι -> αᵒᵈ)
   结论: ofDual (⨆ i, f i) = ⨅ i, ofDual (f i)
   证明: rfl
 -/
@@ -922,7 +922,7 @@ theorem le_sSup_iff_forall_lt
 @[to_dual iInf_le_iff_forall_lt]
 
 中文:
-定理 le_sSup_iff_forall_lt
+定理 le_sSup_iff_对任意_lt
   结论: l <= sSup s ↔ 对任意 b < l, 存在 a in s, b < a
   证明: by
   grind [sSup_lt_iff, mem_upperBounds, not_le]
@@ -946,7 +946,7 @@ theorem le_iSup_iff_forall_lt
 @[to_dual]
 
 中文:
-定理 le_iSup_iff_forall_lt
+定理 le_iSup_iff_对任意_lt
   结论: l <= iSup f ↔ 对任意 b < l, 存在 i, b < f i
   证明: le_sSup_iff_forall_lt.trans forall₂_congr fun _ _ => exists_range_iff
 
@@ -1020,7 +1020,7 @@ theorem lt_biSup_iff
 
 中文:
 定理 lt_biSup_iff
-  条件: {s : Set β} {f : β -> α}
+  条件: {s : 集合 β} {f : β -> α}
   结论: a < ⨆ i in s, f i ↔ 存在 i in s, a < f i
   证明: by
   simp [lt_iSup_iff]
@@ -1048,7 +1048,7 @@ abbreviation supSet
 
 中文:
 缩写 supSet
-  签名: [SupSet β]
+  签名: [上确界集 β]
   定义体: e.symm (⨆ a in s, e a)
 -/
 protected abbrev supSet [SupSet β] : SupSet α where
@@ -1065,7 +1065,7 @@ lemma supSet_def
 
 中文:
 引理 supSet_def
-  条件: [SupSet β] (s : Set α)
+  条件: [上确界集 β] (s : 集合 α)
   证明: e.supSet
     sSup s = e.symm (⨆ a in s, e a) := rfl
 
@@ -1085,7 +1085,7 @@ abbreviation infSet
 
 中文:
 缩写 infSet
-  签名: [InfSet β]
+  签名: [下确界集 β]
   定义体: e.symm (⨅ a in s, e a)
 -/
 protected abbrev infSet [InfSet β] : InfSet α where
@@ -1102,7 +1102,7 @@ lemma infSet_def
 
 中文:
 引理 infSet_def
-  条件: [InfSet β] (s : Set α)
+  条件: [下确界集 β] (s : 集合 α)
   证明: e.infSet
     sInf s = e.symm (⨅ a in s, e a) := rfl
 

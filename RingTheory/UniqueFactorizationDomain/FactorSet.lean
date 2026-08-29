@@ -42,7 +42,7 @@ abbreviation FactorSet.{u}
 
 中文:
 缩写 FactorSet.{u}
-  签名: (α : 类型u) [CommMonoidWithZero α]
+  签名: (α : 类型u) [带零交换幺半群 α]
   定义体: WithTop (Multiset { a : Associates α // Irreducible a })
 
 Depends on / 依赖: Associates, Irreducible, Multiset, WithTop
@@ -62,7 +62,7 @@ theorem FactorSet.coe_add
 
 中文:
 定理 FactorSet.coe_add
-  条件: {a b : Multiset { a : Associates α // Irreducible a }}
+  条件: {a b : Multiset { a : Associates α // 不可约 a }}
   证明: by norm_cast
 -/
 theorem FactorSet.coe_add {a b : Multiset { a : Associates α // Irreducible a }} :
@@ -96,7 +96,7 @@ definition FactorSet.prod
   signature: : FactorSet α -> Associates α
 
 中文:
-定义 FactorSet.prod
+定义 FactorSet.乘积
   签名: : FactorSet α -> Associates α
 -/
 def FactorSet.prod : FactorSet α -> Associates α
@@ -116,7 +116,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: (⊤ : FactorSet α).prod = 0
+  结论: (⊤ : FactorSet α).乘积 = 0
   证明: rfl
 
 @[simp]
@@ -137,7 +137,7 @@ theorem prod_coe
 
 中文:
 定理 prod_coe
-  条件: {s : Multiset { a : Associates α // Irreducible a }}
+  条件: {s : Multiset { a : Associates α // 不可约 a }}
   证明: rfl
 
 @[simp]
@@ -156,7 +156,7 @@ theorem prod_add
 
 中文:
 定理 prod_add
-  结论: 对任意 a b : FactorSet α, (a + b).prod = a.prod * b.prod
+  结论: 对任意 a b : FactorSet α, (a + b).乘积 = a.乘积 * b.乘积
 -/
 theorem prod_add : forall a b : FactorSet α, (a + b).prod = a.prod * b.prod
   | ⊤, b => show (⊤ + b).prod = (⊤ : FactorSet α).prod * b.prod by simp
@@ -179,7 +179,7 @@ prod_le_prod Multiset.map_le_map WithTop.coe_le_coe.1 h
 
 中文:
 定理 prod_mono
-  结论: 对任意 {a b : FactorSet α}, a <= b -> a.prod <= b.prod
+  结论: 对任意 {a b : FactorSet α}, a <= b -> a.乘积 <= b.乘积
   证明: top_unique h
     rw [this]; rw [prod_top]
   | a, ⊤, _ => show a.prod <= (⊤ : FactorSet α).prod by simp
@@ -212,7 +212,7 @@ theorem FactorSet.prod_eq_zero_iff
 
 中文:
 定理 FactorSet.prod_eq_zero_iff
-  条件: [IsCancelMulZero α] [Nontrivial α] (p : FactorSet α)
+  条件: [是乘零消去 α] [非平凡 α] (p : FactorSet α)
   证明: by
   unfold FactorSet at p
   induction p -- TODO: `induction_eliminator` doesn't work with `abbrev`
@@ -245,7 +245,7 @@ definition bcount
 
 中文:
 定义 bcount
-  签名: (p : { a : Associates α // Irreducible a })
+  签名: (p : { a : Associates α // 不可约 a })
 -/
 def bcount (p : { a : Associates α // Irreducible a }) :
     FactorSet α -> Nat
@@ -290,7 +290,7 @@ theorem count_some
 
 中文:
 定理 count_some
-  条件: (hp : Irreducible p) (s : Multiset _)
+  条件: (hp : 不可约 p) (s : Multiset _)
   证明: by
   simp only [count, dif_pos hp, bcount]
 
@@ -315,7 +315,7 @@ theorem count_zero
 
 中文:
 定理 count_zero
-  条件: (hp : Irreducible p)
+  条件: (hp : 不可约 p)
   结论: count p (0 : FactorSet α) = 0
   证明: by
   simp only [count, dif_pos hp, bcount, Multiset.count_zero]
@@ -336,7 +336,7 @@ theorem count_reducible
 
 中文:
 定理 count_reducible
-  条件: (hp : ¬Irreducible p)
+  条件: (hp : ¬不可约 p)
   结论: count p = 0
   证明: dif_neg hp
 
@@ -357,7 +357,7 @@ definition BfactorSetMem
 
 中文:
 定义 BfactorSetMem
-  签名: : { a : Associates α // Irreducible a } -> FactorSet α -> 命题
+  签名: : { a : Associates α // 不可约 a } -> FactorSet α -> 命题
 -/
 def BfactorSetMem : { a : Associates α // Irreducible a } -> FactorSet α -> Prop
   | _, ⊤ => True
@@ -437,7 +437,7 @@ theorem mem_factorSet_top
 
 中文:
 定理 mem_factorSet_top
-  条件: {p : Associates α} {hp : Irreducible p}
+  条件: {p : Associates α} {hp : 不可约 p}
   结论: p in (⊤ : FactorSet α)
   证明: by
   dsimp only [Membership.mem]; dsimp only [FactorSetMem]; split_ifs; exact trivial
@@ -458,7 +458,7 @@ theorem mem_factorSet_some
 
 中文:
 定理 mem_factorSet_some
-  结论: {p : Associates α} {hp : Irreducible p}
+  结论: {p : Associates α} {hp : 不可约 p}
   证明: by
   dsimp only [Membership.mem]; dsimp only [FactorSetMem]; split_ifs; rfl
 
@@ -480,7 +480,7 @@ theorem reducible_notMem_factorSet
 
 中文:
 定理 reducible_notMem_factorSet
-  条件: {p : Associates α} (hp : ¬Irreducible p) (s : FactorSet α)
+  条件: {p : Associates α} (hp : ¬不可约 p) (s : FactorSet α)
   证明: fun h => by
   rwa [← factorSetMem_eq_mem, FactorSetMem, dif_neg hp] at h
 
@@ -532,7 +532,7 @@ theorem FactorSet.unique
 
 中文:
 定理 FactorSet.unique
-  条件: [Nontrivial α] {p q : FactorSet α} (h : p.prod = q.prod)
+  条件: [非平凡 α] {p q : FactorSet α} (h : p.乘积 = q.乘积)
   结论: p = q
   证明: by
   -- TODO: `induction_eliminator` doesn't work with `abbrev`
@@ -757,7 +757,7 @@ theorem factors_prod
 中文:
 定理 factors_prod
   条件: (a : Associates α)
-  结论: a.factors.prod = a
+  结论: a.factors.乘积 = a
   证明: by
   rcases Associates.mk_surjective a with ⟨a, rfl⟩
   rcases eq_or_ne a 0 with rfl | ha
@@ -788,8 +788,8 @@ theorem prod_factors
 
 中文:
 定理 prod_factors
-  条件: [Nontrivial α] (s : FactorSet α)
-  结论: s.prod.factors = s
+  条件: [非平凡 α] (s : FactorSet α)
+  结论: s.乘积.factors = s
   证明: FactorSet.unique factors_prod _
 
 @[nontriviality]
@@ -813,7 +813,7 @@ theorem factors_subsingleton
 
 中文:
 定理 factors_subsingleton
-  条件: [Subsingleton α] {a : Associates α}
+  条件: [子单例 α] {a : Associates α}
   结论: a.factors = ⊤
   证明: by
   have : Subsingleton (Associates α) := inferInstance
@@ -1054,7 +1054,7 @@ theorem count_le_count_of_factors_le
 
 中文:
 定理 count_le_count_of_factors_le
-  结论: {a b p : Associates α} (hb : b != 0) (hp : Irreducible p)
+  结论: {a b p : Associates α} (hb : b != 0) (hp : 不可约 p)
   证明: by
   by_cases ha : a = 0
   · simp_all
@@ -1086,7 +1086,7 @@ theorem count_le_count_of_le
 
 中文:
 定理 count_le_count_of_le
-  条件: {a b p : Associates α} (hb : b != 0) (hp : Irreducible p) (h : a <= b)
+  条件: {a b p : Associates α} (hb : b != 0) (hp : 不可约 p) (h : a <= b)
   证明: count_le_count_of_factors_le hb hp factors_mono h
 
 Depends on / 依赖: count_le_count_of_factors_le, factors_mono
@@ -1111,8 +1111,8 @@ theorem prod_le
 
 中文:
 定理 prod_le
-  条件: [Nontrivial α] {a b : FactorSet α}
-  结论: a.prod <= b.prod ↔ a <= b
+  条件: [非平凡 α] {a b : FactorSet α}
+  结论: a.乘积 <= b.乘积 ↔ a <= b
   证明: by
   refine ⟨fun h => ?_, prod_mono⟩
   have : a.prod.factors <= b.prod.factors := factors_mono h
@@ -1136,7 +1136,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Associates α)
+  签名: 最大值 (Associates α)
   定义体: ⟨fun a b => (a.factors ⊔ b.factors).prod⟩
 
 Depends on / 依赖: a.factors, b.factors, factors
@@ -1155,7 +1155,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Associates α)
+  签名: 最小值 (Associates α)
   定义体: ⟨fun a b => (a.factors ⊓ b.factors).prod⟩
 
 Depends on / 依赖: a.factors, b.factors, factors
@@ -1180,7 +1180,7 @@ le_sup_left := fun a _ => le_trans (le_of_eq (factors_prod a).symm) prod_mono le
 
 中文:
 实例 :
-  签名: Lattice (Associates α)
+  签名: 格 (Associates α)
   定义体: { Associates.instPartialOrder with
     sup := (· ⊔ ·)
     inf := (· ⊓ ·)
@@ -1291,7 +1291,7 @@ theorem dvd_of_mem_factors'
 
 中文:
 定理 dvd_of_mem_factors'
-  结论: {a : α} {p : Associates α} {hp : Irreducible p} {hz : a != 0}
+  结论: {a : α} {p : Associates α} {hp : 不可约 p} {hz : a != 0}
   证明: by
   have := Classical.decEq (Associates α)
   apply dvd_of_mem_factors
@@ -1320,7 +1320,7 @@ theorem mem_factors'_of_dvd
 
 中文:
 定理 mem_factors'_of_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p) (hd : p ∣ a)
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p) (hd : p ∣ a)
   证明: by
   obtain ⟨q, hq, hpq⟩ := exists_mem_factors_of_dvd ha0 hp hd
   apply Multiset.mem_pmap.mpr; use q; use hq
@@ -1349,7 +1349,7 @@ theorem mem_factors'_iff_dvd
 
 中文:
 定理 mem_factors'_iff_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p)
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p)
   证明: by
   constructor
   · rw [← mk_dvd_mk]
@@ -1377,7 +1377,7 @@ theorem mem_factors_of_dvd
 
 中文:
 定理 mem_factors_of_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p) (hd : p ∣ a)
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p) (hd : p ∣ a)
   证明: by
   rw [factors_mk _ ha0]
   exact mem_factorSet_some.mpr (mem_factors'_of_dvd ha0 hp hd)
@@ -1403,7 +1403,7 @@ theorem mem_factors_iff_dvd
 
 中文:
 定理 mem_factors_iff_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p)
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p)
   证明: by
   constructor
   · rw [← mk_dvd_mk]
@@ -1435,7 +1435,7 @@ theorem exists_prime_dvd_of_not_inf_one
   rw [factors_mk a ha]; rw [factors_mk b hb]; rw [← WithTop.coe_in
 
 中文:
-定理 exists_prime_dvd_of_not_inf_one
+定理 存在_prime_dvd_of_not_inf_one
   结论: {a b : α} (ha : a != 0) (hb : b != 0)
   证明: by
   classical
@@ -1526,7 +1526,7 @@ theorem factors_self
 
 中文:
 定理 factors_self
-  条件: [Nontrivial α] {p : Associates α} (hp : Irreducible p)
+  条件: [非平凡 α] {p : Associates α} (hp : 不可约 p)
   证明: FactorSet.unique
     (by rw [factors_prod, FactorSet.prod.eq_def]; dsimp; rw [prod_singleton])
 
@@ -1550,7 +1550,7 @@ theorem factors_prime_pow
 
 中文:
 定理 factors_prime_pow
-  条件: [Nontrivial α] {p : Associates α} (hp : Irreducible p) (k : 自然数)
+  条件: [非平凡 α] {p : Associates α} (hp : 不可约 p) (k : 自然数)
   证明: FactorSet.unique
     (by
       rw [Associates.factors_prod]; rw [FactorSet.prod.eq_def]
@@ -1613,7 +1613,7 @@ theorem factors_one
 
 中文:
 定理 factors_one
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: factors (1 : Associates α) = 0
   证明: by
   apply FactorSet.unique
@@ -1643,7 +1643,7 @@ theorem pow_factors
 
 中文:
 定理 pow_factors
-  条件: [Nontrivial α] {a : Associates α} {k : 自然数}
+  条件: [非平凡 α] {a : Associates α} {k : 自然数}
   证明: by
   induction k with
   | zero => rw [zero_nsmul, pow_zero]; exact factors_one
@@ -1672,7 +1672,7 @@ theorem prime_pow_dvd_iff_le
 
 中文:
 定理 prime_pow_dvd_iff_le
-  条件: {m p : Associates α} (h₁ : m != 0) (h₂ : Irreducible p) {k : 自然数}
+  条件: {m p : Associates α} (h₁ : m != 0) (h₂ : 不可约 p) {k : 自然数}
   证明: by
   rw [count]; rw [dif_pos h₂]; rw [prime_pow_le_iff_le_bcount h₁]
 
@@ -1697,7 +1697,7 @@ theorem le_of_count_ne_zero
 
 中文:
 定理 le_of_count_ne_zero
-  条件: {m p : Associates α} (h0 : m != 0) (hp : Irreducible p)
+  条件: {m p : Associates α} (h0 : m != 0) (hp : 不可约 p)
   证明: by
   rw [← pos_iff_ne_zero]
   intro h
@@ -1732,7 +1732,7 @@ theorem count_ne_zero_iff_dvd
 
 中文:
 定理 count_ne_zero_iff_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p)
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p)
   证明: by
   rw [← Associates.mk_le_mk_iff_dvd]
   refine
@@ -1767,7 +1767,7 @@ theorem count_self
 
 中文:
 定理 count_self
-  结论: [Nontrivial α] {p : Associates α}
+  结论: [非平凡 α] {p : Associates α}
   证明: by
   simp [factors_self hp, Associates.count_some hp]
 
@@ -1788,7 +1788,7 @@ theorem count_eq_zero_of_ne
 
 中文:
 定理 count_eq_zero_of_ne
-  结论: {p q : Associates α} (hp : Irreducible p)
+  结论: {p q : Associates α} (hp : 不可约 p)
   证明: not_ne_iff.mp fun h' => h associated_iff_eq.mp hp.associated_of_dvd hq
     le_of_count_ne_zero hq.ne_zero hp h'
 
@@ -1997,7 +1997,7 @@ theorem count_pow
 
 中文:
 定理 count_pow
-  结论: [Nontrivial α] {a : Associates α} (ha : a != 0)
+  结论: [非平凡 α] {a : Associates α} (ha : a != 0)
   证明: by
   induction k with
   | zero => rw [pow_zero, factors_one, zero_mul, count_zero hp]
@@ -2024,7 +2024,7 @@ theorem dvd_count_pow
 
 中文:
 定理 dvd_count_pow
-  结论: [Nontrivial α] {a : Associates α} (ha : a != 0)
+  结论: [非平凡 α] {a : Associates α} (ha : a != 0)
   证明: by
   rw [count_pow ha hp]
   apply dvd_mul_right
@@ -2245,7 +2245,7 @@ theorem eq_pow_find_of_dvd_irreducible_pow
 
 中文:
 定理 eq_pow_find_of_dvd_irreducible_pow
-  结论: {a p : Associates α} (hp : Irreducible p)
+  结论: {a p : Associates α} (hp : 不可约 p)
   证明: by
   classical rw [count_factors_eq_find_of_dvd_pow hp, ← eq_pow_count_factors_of_dvd_pow hp h]
   exact h

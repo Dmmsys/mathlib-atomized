@@ -71,14 +71,14 @@ structure Algebra.Generators
     - algebraMap_eq : algebraMap (MvPolynomial ι R) S = aeval (R := R) val  [default: by rfl]
 
 中文:
-结构 Algebra.Generators
+结构 代数.生成元
   参数: where
   公理与运算 (5 个):
     - val : ι -> S
-    - σ' : S -> MvPolynomial ι R
+    - σ' : S -> 多元多项式 ι R
     - aeval_val_σ' : 对任意 s, aeval val (σ' s) = s
-    - algebra : Algebra (MvPolynomial ι R) S  [默认: (aeval val).toAlgebra]
-    - algebraMap_eq : algebraMap (MvPolynomial ι R) S = aeval (R := R) val  [默认: by rfl]
+    - algebra : 代数 (多元多项式 ι R) S  [默认: (aeval val).toAlgebra]
+    - algebraMap_eq : algebraMap (多元多项式 ι R) S = aeval (R := R) val  [默认: by rfl]
 
 Depends on / 依赖: toAlgebra
 -/
@@ -112,8 +112,8 @@ abbreviation Ring
   body: MvPolynomial ι R
 
 中文:
-缩写 Ring
-  签名: (P : Generators R S ι)
+缩写 环
+  签名: (P : 生成元 R S ι)
   定义体: MvPolynomial ι R
 
 Depends on / 依赖: MvPolynomial
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra P.Ring S
+  签名: 代数 P.环 S
   定义体: P.algebra
 
 Depends on / 依赖: P.algebra, algebra
@@ -147,7 +147,7 @@ definition σ
 
 中文:
 定义 σ
-  签名: : S -> P.Ring
+  签名: : S -> P.环
   定义体: P.σ'
 -/
 def σ : S -> P.Ring := P.σ'
@@ -166,7 +166,7 @@ initialize_simps_projections Algebra.Generators (σ' -> σ)
 
 中文:
 定义 Simps.σ
-  签名: : S -> P.Ring
+  签名: : S -> P.环
   定义体: P.σ
 
 initialize_simps_projections Algebra.Generators (σ' -> σ)
@@ -217,7 +217,7 @@ lemma algebraMap_apply
 中文:
 引理 algebraMap_apply
   条件: (x)
-  结论: algebraMap P.Ring S x = aeval (R := R) P.val x
+  结论: algebraMap P.环 S x = aeval (R := R) P.val x
   证明: by
   simp [algebraMap_eq]
 
@@ -263,7 +263,7 @@ lemma σ_injective
 
 中文:
 引理 σ_injective
-  结论: P.σ.Injective
+  结论: P.σ.单射
   证明: by
   intro x y e
   rw [← P.aeval_val_σ x]; rw [← P.aeval_val_σ y]; rw [e]
@@ -284,7 +284,7 @@ lemma aeval_val_surjective
 
 中文:
 引理 aeval_val_surjective
-  结论: Function.Surjective (aeval (R := R) P.val)
+  结论: 函数.满射 (aeval (R := R) P.val)
   证明: fun x => ⟨P.σ x, by simp⟩
 
 Depends on / 依赖: P.val
@@ -302,7 +302,7 @@ lemma algebraMap_surjective
 
 中文:
 引理 algebraMap_surjective
-  结论: Function.Surjective (algebraMap P.Ring S)
+  结论: 函数.满射 (algebraMap P.环 S)
   证明: (⟨_, P.algebraMap_apply _ ▸ P.aeval_val_σ ·⟩)
 
 Depends on / 依赖: P.aeval_val_, P.algebraMap_apply, algebraMap_apply
@@ -327,7 +327,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: (val : ι -> S) (h : Function.Surjective (aeval (R := R) val))
+  签名: (val : ι -> S) (h : 函数.满射 (aeval (R := R) val))
   定义体: val
   σ' x := (h x).choose
   aeval_val_σ' x := (h x).choose_spec
@@ -350,7 +350,7 @@ definition ofSurjectiveAlgebraMap
 
 中文:
 定义 ofSurjectiveAlgebraMap
-  签名: (h : Function.Surjective (algebraMap R S))
+  签名: (h : 函数.满射 (algebraMap R S))
   定义体: ofSurjective PEmpty.elim fun s => by
     use C (h s).choose
     simp [(h s).choose_spec]
@@ -375,7 +375,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Generators R R PEmpty.{w + 1}
+  签名: : 生成元 R R 命题空.{w + 1}
   定义体: ofSurjectiveAlgebraMap by
   rw [algebraMap_self]
   exact RingHomSurjective.is_surjective
@@ -402,7 +402,7 @@ definition mvPolynomial
 
 中文:
 定义 mvPolynomial
-  签名: : Generators R (MvPolynomial ι R) ι where
+  签名: : 生成元 R (多元多项式 ι R) ι where
   定义体: X
   σ' f := f
   aeval_val_σ' := aeval_X_left_apply
@@ -424,7 +424,7 @@ definition ofAlgHom
 
 中文:
 定义 ofAlgHom
-  签名: {I : 类型} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective f)
+  签名: {I : 类型} (f : 多元多项式 I R ->ₐ[R] S) (h : 函数.满射 f)
   定义体: ofSurjective (f ∘ X) (by rwa [show aeval (f ∘ X) = f by ext; simp])
 
 Depends on / 依赖: ofSurjective
@@ -448,7 +448,7 @@ definition ofSet
 
 中文:
 定义 ofSet
-  签名: {s : Set S} (hs : Algebra.adjoin R s = ⊤)
+  签名: {s : 集合 S} (hs : 代数.adjoin R s = ⊤)
   定义体: by
   refine ofSurjective (Subtype.val : s -> S) ?_
   rwa [← AlgHom.range_eq_top, ← Algebra.adjoin_range_eq_range_aeval,
@@ -477,7 +477,7 @@ definition self
 
 中文:
 定义 self
-  签名: : Generators R S S where
+  签名: : 生成元 R S S where
   定义体: _root_.id
   σ' := X
   aeval_val_σ' := aeval_X _
@@ -504,7 +504,7 @@ definition toExtension
 
 中文:
 定义 toExtension
-  签名: : Extension R S where
+  签名: : 扩张 R S where
   定义体: P.Ring
   σ := P.σ
   algebraMap_σ := by simp
@@ -561,7 +561,7 @@ lemma ofAlgEquiv_val
 
 中文:
 引理 ofAlgEquiv_val
-  条件: (P : Generators R S ι) {T : 类型} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
+  条件: (P : 生成元 R S ι) {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
   证明: rfl
 
 Depends on / 依赖: variable
@@ -596,7 +596,7 @@ definition localizationAway
 
 中文:
 定义 localizationAway
-  签名: : Generators R S Unit where
+  签名: : 生成元 R S 单元 where
   定义体: IsLocalization.Away.invSelf r
   σ' s :=
     letI a : R := (IsLocalization.Away.sec r s).1
@@ -646,7 +646,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: [Algebra S T] [IsScalarTower R S T]
+  签名: [代数 S T] [标量塔 R S T]
   定义体: Sum.elim Q.val (algebraMap S T ∘ P.val)
   σ' x := (AddMonoidAlgebra.coeff <| Q.σ x).sum fun n r =>
     rename .inr (P.σ r) * monomial (n.mapDomain .inl) 1
@@ -685,7 +685,7 @@ definition extendScalars
 
 中文:
 定义 extendScalars
-  签名: [Algebra S T] [IsScalarTower R S T] (P : Generators R T ι)
+  签名: [代数 S T] [标量塔 R S T] (P : 生成元 R T ι)
   定义体: P.val
   σ' x := map (algebraMap R S) (P.σ x)
   aeval_val_σ' s := by simp [@aeval_def S, ← IsScalarTower.algebraMap_eq, ← @aeval_def R]
@@ -720,7 +720,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: (T) [CommRing T] [Algebra R T] (P : Generators R S ι)
+  签名: (T) [交换环 T] [代数 R T] (P : 生成元 R S ι)
   定义体: by
   apply Generators.ofSurjective (fun x => 1 otimesₜ[R] P.val x)
   intro x
@@ -801,7 +801,7 @@ lemma baseChangeFromBaseChange_apply
 
 中文:
 引理 baseChangeFromBaseChange_apply
-  条件: (x : P.toExtension.baseChange.Ring)
+  条件: (x : P.toExtension.baseChange.环)
   证明: rfl
 -/
 lemma baseChangeFromBaseChange_apply (x : P.toExtension.baseChange.Ring) :
@@ -851,7 +851,7 @@ lemma baseChangeToBaseChange_apply
 
 中文:
 引理 baseChangeToBaseChange_apply
-  条件: (x : (baseChange T P).toExtension.Ring)
+  条件: (x : (baseChange T P).toExtension.环)
   证明: rfl
 -/
 lemma baseChangeToBaseChange_apply (x : (baseChange T P).toExtension.Ring) :
@@ -873,7 +873,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (P : Generators R S ι) (b : ι' -> S)
+  签名: (P : 生成元 R S ι) (b : ι' -> S)
   定义体: .ofSurjective (Sum.elim P.val b) fun s => by
     use rename Sum.inl (P.σ s)
     simp [aeval_rename]
@@ -900,7 +900,7 @@ lemma extend_val_inl
 
 中文:
 引理 extend_val_inl
-  条件: (P : Generators R S ι) (b : ι' -> S) (i : ι)
+  条件: (P : 生成元 R S ι) (b : ι' -> S) (i : ι)
   证明: rfl
 
 @[simp]
@@ -919,7 +919,7 @@ lemma extend_val_inr
 
 中文:
 引理 extend_val_inr
-  条件: (P : Generators R S ι) (b : ι' -> S) (i : ι')
+  条件: (P : 生成元 R S ι) (b : ι' -> S) (i : ι')
   证明: rfl
 -/
 lemma extend_val_inr (P : Generators R S ι) (b : ι' -> S) (i : ι') :
@@ -940,7 +940,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : Generators R S ι') (e : ι ≃ ι')
+  签名: (P : 生成元 R S ι') (e : ι ≃ ι')
   定义体: P.val ∘ e
   σ' := rename e.symm ∘ P.σ
   aeval_val_σ' s := by
@@ -969,7 +969,7 @@ lemma reindex_val
 
 中文:
 引理 reindex_val
-  条件: (P : Generators R S ι') (e : ι ≃ ι')
+  条件: (P : 生成元 R S ι') (e : ι ≃ ι')
   证明: rfl
 -/
 lemma reindex_val (P : Generators R S ι') (e : ι ≃ ι') :
@@ -1004,7 +1004,7 @@ definition naive
 
 中文:
 定义 naive
-  签名: (s : MvPolynomial σ R ⧸ I -> MvPolynomial σ R :=
+  签名: (s : 多元多项式 σ R ⧸ I -> 多元多项式 σ R :=
   定义体: Ideal.Quotient.mk _ (X i)
   σ' := s
   aeval_val_σ' x := by
@@ -1037,7 +1037,7 @@ lemma naive_σ
 
 中文:
 引理 naive_σ
-  结论: (Generators.naive s hs).σ = s
+  结论: (生成元.naive s hs).σ = s
   证明: rfl
 -/
 @[simp] lemma naive_σ : (Generators.naive s hs).σ = s := rfl
@@ -1055,8 +1055,8 @@ lemma finiteType
 
 中文:
 引理 finiteType
-  条件: {α : 类型} [Finite α] (P : Generators R S α)
-  结论: FiniteType R S
+  条件: {α : 类型} [有限 α] (P : 生成元 R S α)
+  结论: 有限型 R S
   证明: .of_surjective (IsScalarTower.toAlgHom R P.Ring S) P.algebraMap_surjective
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, P.Ring, P.algebraMap_surjective, algebraMap_surjective, of_surjective, toAlgHom
@@ -1075,7 +1075,7 @@ lemma _root_.Algebra.FiniteType.iff_exists_generators
 exact ⟨n, ⟨.ofSurjective (fun i => f (X i)) by rwa [aeval_unique f] at hf⟩⟩
 
 中文:
-引理 _root_.Algebra.FiniteType.iff_exists_generators
+引理 _root_.代数.有限型.iff_存在_generators
   证明: by
   refine ⟨fun h => ?_, fun ⟨n, ⟨P⟩⟩ => P.finiteType⟩
   obtain ⟨n, f, hf⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp h
@@ -1122,10 +1122,10 @@ structure Hom
     - aeval_val : forall i, aeval P'.val (val i) = algebraMap S S' (P.val i)
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
-    - val : ι -> P'.Ring
+    - val : ι -> P'.环
     - aeval_val : 对任意 i, aeval P'.val (val i) = algebraMap S S' (P.val i)
 -/
 structure Hom where
@@ -1149,8 +1149,8 @@ definition Hom.toAlgHom
   body: MvPolynomial.aeval f.val
 
 中文:
-定义 Hom.toAlgHom
-  签名: (f : Hom P P')
+定义 态射.toAlgHom
+  签名: (f : 态射 P P')
   定义体: MvPolynomial.aeval f.val
 -/
 def Hom.toAlgHom (f : Hom P P') : P.Ring ->ₐ[R] P'.Ring := MvPolynomial.aeval f.val
@@ -1173,9 +1173,9 @@ lemma Hom.algebraMap_toAlgHom
   simp [Hom.toAlgHom]
 
 中文:
-引理 Hom.algebraMap_toAlgHom
-  条件: (f : Hom P P') (x)
-  结论: MvPolynomial.aeval P'.val (f.toAlgHom x) =
+引理 态射.algebraMap_toAlgHom
+  条件: (f : 态射 P P') (x)
+  结论: 多元多项式.aeval P'.val (f.toAlgHom x) =
   证明: by
   suffices ((MvPolynomial.aeval P'.val).restrictScalars R).comp f.toAlgHom =
       (IsScalarTower.toAlgHom R S S').comp (MvPolynomial.aeval P.val) from
@@ -1206,8 +1206,8 @@ lemma Hom.algebraMap_toAlgHom'
 @[simp]
 
 中文:
-引理 Hom.algebraMap_toAlgHom'
-  结论: [Algebra R' S] [IsScalarTower R R' S]
+引理 态射.algebraMap_toAlgHom'
+  结论: [代数 R' S] [标量塔 R R' S]
   证明: f.algebraMap_toAlgHom _
 
 @[simp]
@@ -1230,8 +1230,8 @@ lemma Hom.toAlgHom_X
   proof: MvPolynomial.aeval_X f.val i
 
 中文:
-引理 Hom.toAlgHom_X
-  条件: (f : Hom P P') (i)
+引理 态射.toAlgHom_X
+  条件: (f : 态射 P P') (i)
   结论: f.toAlgHom (.X i) = f.val i
   证明: MvPolynomial.aeval_X f.val i
 
@@ -1250,8 +1250,8 @@ lemma Hom.toAlgHom_C
   proof: MvPolynomial.aeval_C f.val r
 
 中文:
-引理 Hom.toAlgHom_C
-  条件: (f : Hom P P') (r)
+引理 态射.toAlgHom_C
+  条件: (f : 态射 P P') (r)
   结论: f.toAlgHom (.C r) = .C (algebraMap _ _ r)
   证明: MvPolynomial.aeval_C f.val r
 
@@ -1270,8 +1270,8 @@ lemma Hom.toAlgHom_monomial
   rw [toAlgHom]; rw [aeval_monomial]; rw [Algebra.smul_def]
 
 中文:
-引理 Hom.toAlgHom_monomial
-  条件: (f : Generators.Hom P P') (v r)
+引理 态射.toAlgHom_monomial
+  条件: (f : 生成元.态射 P P') (v r)
   证明: by
   rw [toAlgHom]; rw [aeval_monomial]; rw [Algebra.smul_def]
 
@@ -1298,7 +1298,7 @@ definition Hom.equivAlgHom
   right_inv f := by ext; simp
 
 中文:
-定义 Hom.equivAlgHom
+定义 态射.equivAlgHom
   签名: :
   定义体: ⟨f.toAlgHom, f.algebraMap_toAlgHom⟩
   invFun f := ⟨fun i => f.1 (.X i), fun i => by simp [f.2]⟩
@@ -1329,7 +1329,7 @@ definition defaultHom
 
 中文:
 定义 defaultHom
-  签名: : Hom P P'
+  签名: : 态射 P P'
   定义体: ⟨P'.σ ∘ algebraMap S S' ∘ P.val, fun x => by simp⟩
 
 Depends on / 依赖: P.val, algebraMap
@@ -1346,7 +1346,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Hom P P')
+  签名: 可居 (态射 P P')
   定义体: ⟨defaultHom P P'⟩
 
 Depends on / 依赖: defaultHom
@@ -1367,7 +1367,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Hom.id
+  签名: def 态射.id
   定义体: ⟨X, by simp⟩
 
 @[simp]
@@ -1384,8 +1384,8 @@ lemma Hom.toAlgHom_id
   proof: by ext1; simp
 
 中文:
-引理 Hom.toAlgHom_id
-  结论: Hom.toAlgHom (.id P) = AlgHom.id _ _
+引理 态射.toAlgHom_id
+  结论: 态射.toAlgHom (.id P) = 代数态射.id _ _
   证明: by ext1; simp
 -/
 lemma Hom.toAlgHom_id : Hom.toAlgHom (.id P) = AlgHom.id _ _ := by ext1; simp
@@ -1409,8 +1409,8 @@ definition Hom.comp
     | mul_X p i hp => simp
 
 中文:
-定义 Hom.comp
-  签名: [IsScalarTower R' R'' S''] [IsScalarTower R' S' S'']
+定义 态射.comp
+  签名: [标量塔 R' R'' S''] [标量塔 R' S' S'']
   定义体: aeval f.val (g.val x)
   aeval_val x := by
     rw [IsScalarTower.algebraMap_apply S S' S'']; rw [← g.aeval_val]
@@ -1439,8 +1439,8 @@ lemma Hom.comp_id
   proof: by ext; simp
 
 中文:
-引理 Hom.comp_id
-  条件: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] (f : Hom P P')
+引理 态射.comp_id
+  条件: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S'] (f : 态射 P P')
   证明: by ext; simp
 -/
 lemma Hom.comp_id [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S'] (f : Hom P P') :
@@ -1460,9 +1460,9 @@ lemma Hom.id_comp
   ext; simp [Hom.id, aeval_X_left]
 
 中文:
-引理 Hom.id_comp
-  条件: [Algebra S S'] (f : Hom P P')
-  结论: (Hom.id P').comp f = f
+引理 态射.id_comp
+  条件: [代数 S S'] (f : 态射 P P')
+  结论: (态射.id P').comp f = f
   证明: by
   ext; simp [Hom.id, aeval_X_left]
 -/
@@ -1485,7 +1485,7 @@ lemma Hom.toAlgHom_comp_apply
   | mul_X p i hp => simp only [map_mul, hp, toAlgHom_X, comp_val]; rfl
 
 中文:
-引理 Hom.toAlgHom_comp_apply
+引理 态射.toAlgHom_comp_apply
   证明: by
   induction x using MvPolynomial.induction_on with
   | C r => simp only [← MvPolynomial.algebraMap_eq, AlgHom.map_algebraMap]
@@ -1521,7 +1521,7 @@ definition toComp
 
 中文:
 定义 toComp
-  签名: (Q : Generators S T ι') (P : Generators R S ι)
+  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   定义体: X (.inr i)
   aeval_val i := by simp
 -/
@@ -1539,7 +1539,7 @@ lemma toComp_toAlgHom
 
 中文:
 引理 toComp_toAlgHom
-  条件: (Q : Generators S T ι') (P : Generators R S ι)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   证明: by rw [rename_eq_aeval]; rfl
 
 Depends on / 依赖: rename_eq_aeval
@@ -1562,7 +1562,7 @@ definition ofComp
 
 中文:
 定义 ofComp
-  签名: (Q : Generators S T ι') (P : Generators R S ι)
+  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   定义体: i.elim X (C ∘ P.val)
   aeval_val i := by cases i <;> simp
 
@@ -1588,7 +1588,7 @@ lemma ofComp_toAlgHom_monomial_sumElim
 
 中文:
 引理 ofComp_toAlgHom_monomial_sumElim
-  条件: (Q : Generators S T ι') (P : Generators R S ι) (v₁ v₂ a)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (v₁ v₂ a)
   证明: by
   rw [Hom.toAlgHom_monomial]; rw [monomial_eq]
   simp only [ofComp_val, aeval_monomial]
@@ -1627,7 +1627,7 @@ lemma toComp_toAlgHom_monomial
 
 中文:
 引理 toComp_toAlgHom_monomial
-  条件: (Q : Generators S T ι') (P : Generators R S ι) (j a)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (j a)
   证明: by
   convert! rename_monomial _ _ _
   · ext f (i₁ | i₂)
@@ -1663,7 +1663,7 @@ lemma toAlgHom_ofComp_rename
 
 中文:
 引理 toAlgHom_ofComp_rename
-  条件: (Q : Generators S T ι') (P : Generators R S ι) (p : P.Ring)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (p : P.环)
   证明: have : (Q.ofComp P).toAlgHom.comp (rename Sum.inr) =
     (IsScalarTower.toAlgHom R S Q.Ring).comp (IsScalarTower.toAlgHom R P.Ring S) := by ext; simp
   DFunLike.congr_fun this p
@@ -1694,7 +1694,7 @@ lemma toAlgHom_ofComp_surjective
 
 中文:
 引理 toAlgHom_ofComp_surjective
-  条件: (Q : Generators S T ι') (P : Generators R S ι)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   证明: by
   intro p
   induction p using MvPolynomial.induction_on with
@@ -1741,7 +1741,7 @@ definition toExtendScalars
 
 中文:
 定义 toExtendScalars
-  签名: (P : Generators R T ι)
+  签名: (P : 生成元 R T ι)
   定义体: X
   aeval_val i := by simp
 -/
@@ -1766,8 +1766,8 @@ definition Hom.toExtensionHom
   algebraMap_toRingHom x := by simp
 
 中文:
-定义 Hom.toExtensionHom
-  签名: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
+定义 态射.toExtensionHom
+  签名: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S']
   定义体: f.toAlgHom.toRingHom
   toRingHom_algebraMap x := by simp
   algebraMap_toRingHom x := by simp
@@ -1792,8 +1792,8 @@ lemma Hom.toExtensionHom_id
   proof: by ext; simp
 
 中文:
-引理 Hom.toExtensionHom_id
-  结论: Hom.toExtensionHom (.id P) = .id _
+引理 态射.toExtensionHom_id
+  结论: 态射.toExtensionHom (.id P) = .id _
   证明: by ext; simp
 -/
 lemma Hom.toExtensionHom_id : Hom.toExtensionHom (.id P) = .id _ := by ext; simp
@@ -1810,8 +1810,8 @@ lemma Hom.toExtensionHom_comp
   proof: by ext; simp
 
 中文:
-引理 Hom.toExtensionHom_comp
-  结论: [Algebra R S'] [IsScalarTower R S S']
+引理 态射.toExtensionHom_comp
+  结论: [代数 R S'] [标量塔 R S S']
   证明: by ext; simp
 -/
 lemma Hom.toExtensionHom_comp [Algebra R S'] [IsScalarTower R S S']
@@ -1830,8 +1830,8 @@ lemma Hom.toExtensionHom_toAlgHom_apply
   proof: rfl
 
 中文:
-引理 Hom.toExtensionHom_toAlgHom_apply
-  结论: [Algebra R S'] [IsScalarTower R R' S']
+引理 态射.toExtensionHom_toAlgHom_apply
+  结论: [代数 R S'] [标量塔 R R' S']
   证明: rfl
 -/
 lemma Hom.toExtensionHom_toAlgHom_apply [Algebra R S'] [IsScalarTower R R' S']
@@ -1848,7 +1848,7 @@ abbreviation ker
 
 中文:
 缩写 ker
-  签名: : Ideal P.Ring
+  签名: : 理想 P.环
   定义体: P.toExtension.ker
 
 Depends on / 依赖: P.toExtension.ker, toExtension
@@ -1869,7 +1869,7 @@ lemma ker_eq_ker_aeval_val
 
 中文:
 引理 ker_eq_ker_aeval_val
-  结论: P.ker = RingHom.ker (aeval P.val)
+  结论: P.ker = 环态射.ker (aeval P.val)
   证明: by
   simp only [ker, Extension.ker, toExtension_Ring, algebraMap_eq]
   rfl
@@ -1930,7 +1930,7 @@ lemma ker_naive
 
 中文:
 引理 ker_naive
-  结论: {σ : 类型} {I : Ideal (MvPolynomial σ R)}
+  结论: {σ : 类型} {I : 理想 (多元多项式 σ R)}
   证明: I.mk_ker
 
 Depends on / 依赖: I.mk_ker, mk_ker
@@ -1958,7 +1958,7 @@ lemma ker_ofAlgHom
 
 中文:
 引理 ker_ofAlgHom
-  条件: {I : 类型} (f : MvPolynomial I R ->ₐ[R] S) (h : Function.Surjective ⇑f)
+  条件: {I : 类型} (f : 多元多项式 I R ->ₐ[R] S) (h : 函数.满射 ⇑f)
   证明: by
   change RingHom.ker _ = _
   congr
@@ -1986,7 +1986,7 @@ lemma ker_ofAlgEquiv
 
 中文:
 引理 ker_ofAlgEquiv
-  条件: (P : Generators R S ι) {T : 类型} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
+  条件: (P : 生成元 R S ι) {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
   证明: by
   rw [ker_eq_ker_aeval_val]; rw [ofAlgEquiv_val]; rw [Function.comp_def]; rw [← AlgHom.coe_coe]; rw [← MvPolynomial.comp_aeval]; rw [← AlgHom.comap_ker]; rw [← RingHom.ker_coe_toRingHom]; rw [AlgHomClass.toRingHom_toAlgHom]; rw [AlgHom.ker_coe_equiv]; rw [← RingHom.ker_eq_comap_bot]; rw [← ker_eq
 
@@ -2014,7 +2014,7 @@ lemma map_toComp_ker
 
 中文:
 引理 map_toComp_ker
-  条件: (Q : Generators S T ι') (P : Generators R S ι)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   证明: by
   let : DecidableEq (ι' ->₀ Nat) := Classical.decEq _
   apply le_antisymm
@@ -2116,7 +2116,7 @@ definition kerCompPreimage
 
 中文:
 定义 kerCompPreimage
-  签名: (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
+  签名: (Q : 生成元 S T ι') (P : 生成元 R S ι) (x : Q.ker)
   定义体: by
   refine ⟨(AddMonoidAlgebra.coeff x.1).sum fun n r => ?_, ?_⟩
   · -- The use of `refine` is intentional to control the elaboration order
@@ -2159,7 +2159,7 @@ lemma ofComp_kerCompPreimage
 
 中文:
 引理 ofComp_kerCompPreimage
-  条件: (Q : Generators S T ι') (P : Generators R S ι) (x : Q.ker)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι) (x : Q.ker)
   证明: by
   conv_rhs => rw [← x.1.support_sum_monomial_coeff]
   rw [kerCompPreimage]; rw [map_finsuppSum]; rw [Finsupp.sum]
@@ -2203,7 +2203,7 @@ lemma map_ofComp_ker
 
 中文:
 引理 map_ofComp_ker
-  条件: (Q : Generators S T ι') (P : Generators R S ι)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   证明: by
   ext x
   rw [Ideal.mem_map_iff_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
@@ -2243,7 +2243,7 @@ lemma ker_comp_eq_sup
 
 中文:
 引理 ker_comp_eq_sup
-  条件: (Q : Generators S T ι') (P : Generators R S ι)
+  条件: (Q : 生成元 S T ι') (P : 生成元 R S ι)
   证明: by
   rw [← map_ofComp_ker Q P]; rw [Ideal.comap_map_of_surjective _ (toAlgHom_ofComp_surjective Q P)]
   rw [← sup_assoc]; rw [Algebra.Generators.map_toComp_ker]; rw [← RingHom.ker_eq_comap_bot]
@@ -2275,7 +2275,7 @@ lemma toAlgHom_ofComp_localizationAway
 
 中文:
 引理 toAlgHom_ofComp_localizationAway
-  条件: (g : S) [IsLocalization.Away g T]
+  条件: (g : S) [是Localization.Away g T]
   证明: by
   simp [Generators.Hom.toAlgHom, Generators.ofComp, aeval_rename]
 
@@ -2308,7 +2308,7 @@ definition defaultHom
 
 中文:
 定义 defaultHom
-  签名: (P : Extension.{w} R S)
+  签名: (P : 扩张.{w} R S)
   定义体: .ofAlgHom (MvPolynomial.aeval P.σ) (by dsimp; ext; simp)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.aeval, ofAlgHom

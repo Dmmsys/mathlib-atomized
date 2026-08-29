@@ -69,7 +69,7 @@ definition vectorSpan
 
 中文:
 定义 vectorSpan
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: Submodule.span k (s -ᵥ s)
 
 Depends on / 依赖: Submodule, Submodule.span
@@ -88,8 +88,8 @@ theorem vectorSpan_def
 
 中文:
 定理 vectorSpan_def
-  条件: (s : Set P)
-  结论: vectorSpan k s = Submodule.span k (s -ᵥ s)
+  条件: (s : 集合 P)
+  结论: vectorSpan k s = 子模.span k (s -ᵥ s)
   证明: rfl
 -/
 theorem vectorSpan_def (s : Set P) : vectorSpan k s = Submodule.span k (s -ᵥ s) :=
@@ -106,7 +106,7 @@ theorem vectorSpan_mono
 
 中文:
 定理 vectorSpan_mono
-  条件: {s₁ s₂ : Set P} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 P} (h : s₁ subseteq s₂)
   结论: vectorSpan k s₁ <= vectorSpan k s₂
   证明: Submodule.span_mono (vsub_self_mono h)
 
@@ -129,7 +129,7 @@ theorem vectorSpan_empty
 
 中文:
 定理 vectorSpan_empty
-  结论: vectorSpan k (∅ : Set P) = (⊥ : Submodule k V)
+  结论: vectorSpan k (∅ : 集合 P) = (⊥ : 子模 k V)
   证明: by
   rw [vectorSpan_def]; rw [vsub_empty]; rw [Submodule.span_empty]
 
@@ -152,7 +152,7 @@ theorem vectorSpan_singleton
 中文:
 定理 vectorSpan_singleton
   条件: (p : P)
-  结论: vectorSpan k ({p} : Set P) = ⊥
+  结论: vectorSpan k ({p} : 集合 P) = ⊥
   证明: by simp [vectorSpan_def]
 
 Depends on / 依赖: vectorSpan_def
@@ -170,7 +170,7 @@ theorem vsub_set_subset_vectorSpan
 
 中文:
 定理 vsub_set_subset_vectorSpan
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: s -ᵥ s subseteq ↑(vectorSpan k s)
   证明: Submodule.subset_span
 
@@ -189,7 +189,7 @@ theorem vsub_mem_vectorSpan
 
 中文:
 定理 vsub_mem_vectorSpan
-  条件: {s : Set P} {p₁ p₂ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
+  条件: {s : 集合 P} {p₁ p₂ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
   证明: vsub_set_subset_vectorSpan k s (vsub_mem_vsub hp₁ hp₂)
 
 Depends on / 依赖: vsub_mem_vsub, vsub_set_subset_vectorSpan
@@ -212,7 +212,7 @@ lemma vectorSpan_of_subsingleton
 
 中文:
 引理 vectorSpan_of_subsingleton
-  条件: {s : Set P} (h : s.Subsingleton)
+  条件: {s : 集合 P} (h : s.子单例)
   结论: vectorSpan k s = ⊥
   证明: by
   rcases h.eq_empty_or_singleton with rfl | ⟨p, rfl⟩ <;> simp
@@ -242,8 +242,8 @@ lemma vectorSpan_eq_bot_iff_subsingleton
 
 中文:
 引理 vectorSpan_eq_bot_iff_subsingleton
-  条件: {s : Set P}
-  结论: vectorSpan k s = ⊥ ↔ s.Subsingleton
+  条件: {s : 集合 P}
+  结论: vectorSpan k s = ⊥ ↔ s.子单例
   证明: by
   refine ⟨fun h => ?_, vectorSpan_of_subsingleton _⟩
   by_contra hns
@@ -272,7 +272,7 @@ definition spanPoints
 
 中文:
 定义 spanPoints
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: { p | exists p₁ in s, exists v in vectorSpan k s, p = v +ᵥ p₁ }
 
 Depends on / 依赖: vectorSpan
@@ -290,7 +290,7 @@ theorem mem_spanPoints
 
 中文:
 定理 mem_spanPoints
-  条件: (p : P) (s : Set P)
+  条件: (p : P) (s : 集合 P)
   结论: p in s -> p in spanPoints k s
 -/
 theorem mem_spanPoints (p : P) (s : Set P) : p in s -> p in spanPoints k s
@@ -307,7 +307,7 @@ theorem subset_spanPoints
 
 中文:
 定理 subset_spanPoints
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: s subseteq spanPoints k s
   证明: fun p => mem_spanPoints k p s
 
@@ -334,8 +334,8 @@ theorem spanPoints_nonempty
 
 中文:
 定理 spanPoints_nonempty
-  条件: (s : Set P)
-  结论: (spanPoints k s).Nonempty ↔ s.Nonempty
+  条件: (s : 集合 P)
+  结论: (spanPoints k s).非空 ↔ s.非空
   证明: by
   constructor
   · contrapose
@@ -367,7 +367,7 @@ theorem vadd_mem_spanPoints_of_mem_spanPoints_of_mem_vectorSpan
 
 中文:
 定理 vadd_mem_spanPoints_of_mem_spanPoints_of_mem_vectorSpan
-  结论: {s : Set P} {p : P} {v : V}
+  结论: {s : 集合 P} {p : P} {v : V}
   证明: by
   rcases hp with ⟨p₂, ⟨hp₂, ⟨v₂, ⟨hv₂, hv₂p⟩⟩⟩⟩
   rw [hv₂p]; rw [vadd_vadd]
@@ -395,7 +395,7 @@ theorem vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
 
 中文:
 定理 vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
-  结论: {s : Set P} {p₁ p₂ : P}
+  结论: {s : 集合 P} {p₁ p₂ : P}
   证明: by
   rcases hp₁ with ⟨p₁a, ⟨hp₁a, ⟨v₁, ⟨hv₁, hv₁p⟩⟩⟩⟩
   rcases hp₂ with ⟨p₂a, ⟨hp₂a, ⟨v₂, ⟨hv₂, hv₂p⟩⟩⟩⟩
@@ -426,10 +426,10 @@ structure AffineSubspace
     - smul_vsub_vadd_mem'((c : k) {p₁ p₂ p₃ : P}) : p₁ in carrier -> p₂ in carrier -> p₃ in carrier -> c • (p₁ -ᵥ p₂ : V) +ᵥ p₃ in carrier
 
 中文:
-结构 AffineSubspace
-  参数: (k : 类型) {V : 类型} (P : 类型) [Ring k] [AddCommGroup V]
+结构 仿射子空间
+  参数: (k : 类型) {V : 类型} (P : 类型) [环 k] [加法交换群 V]
   公理与运算 (2 个):
-    - carrier : Set P
+    - carrier : 集合 P
     - smul_vsub_vadd_mem'((c : k) {p₁ p₂ p₃ : P}) : p₁ in carrier -> p₂ in carrier -> p₃ in carrier -> c • (p₁ -ᵥ p₂ : V) +ᵥ p₃ in carrier
 -/
 structure AffineSubspace (k : Type*) {V : Type*} (P : Type*) [Ring k] [AddCommGroup V]
@@ -454,7 +454,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (AffineSubspace k P) P
+  签名: 集合状 (仿射子空间 k P) P
   定义体: carrier
   coe_injective p q _ := by cases p; cases q; congr
 
@@ -474,7 +474,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (AffineSubspace k P)
+  签名: 偏序 (仿射子空间 k P)
   定义体: .ofSetLike (AffineSubspace k P) P
 
 Depends on / 依赖: AffineSubspace, ofSetLike
@@ -492,7 +492,7 @@ lemma carrier_eq_coe
 
 中文:
 引理 carrier_eq_coe
-  条件: (s : AffineSubspace k P)
+  条件: (s : 仿射子空间 k P)
   结论: s.carrier = s
   证明: rfl
 -/
@@ -508,7 +508,7 @@ lemma smul_vsub_vadd_mem
 
 中文:
 引理 smul_vsub_vadd_mem
-  条件: (s : AffineSubspace k P) (c : k) {p₁ p₂ p₃ : P}
+  条件: (s : 仿射子空间 k P) (c : k) {p₁ p₂ p₃ : P}
   证明: s.smul_vsub_vadd_mem' c
 
 Depends on / 依赖: s.smul_vsub_vadd_mem, smul_vsub_vadd_mem
@@ -528,8 +528,8 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  条件: (p : P) (s : AffineSubspace k P)
-  结论: p in (s : Set P) ↔ p in s
+  条件: (p : P) (s : 仿射子空间 k P)
+  结论: p in (s : 集合 P) ↔ p in s
   证明: by simp
 -/
 theorem mem_coe (p : P) (s : AffineSubspace k P) : p in (s : Set P) ↔ p in s := by simp
@@ -546,7 +546,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : AffineSubspace k P -> Set P)
+  结论: 函数.单射 ((↑) : 仿射子空间 k P -> 集合 P)
   证明: SetLike.coe_injective
 
 @[ext (iff := false)]
@@ -568,7 +568,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : AffineSubspace k P} (h : 对任意 x, x in p ↔ x in q)
+  条件: {p q : 仿射子空间 k P} (h : 对任意 x, x in p ↔ x in q)
   结论: p = q
   证明: SetLike.ext h
 
@@ -588,8 +588,8 @@ theorem ext_iff
 
 中文:
 定理 ext_iff
-  条件: (s₁ s₂ : AffineSubspace k P)
-  结论: s₁ = s₂ ↔ (s₁ : Set P) = s₂
+  条件: (s₁ s₂ : 仿射子空间 k P)
+  结论: s₁ = s₂ ↔ (s₁ : 集合 P) = s₂
   证明: SetLike.ext'_iff
 -/
 protected theorem ext_iff (s₁ s₂ : AffineSubspace k P) : s₁ = s₂ ↔ (s₁ : Set P) = s₂ :=
@@ -612,7 +612,7 @@ definition toAffineSubspace
 
 中文:
 定义 toAffineSubspace
-  签名: (p : Submodule k V)
+  签名: (p : 子模 k V)
   定义体: p
   smul_vsub_vadd_mem' _ _ _ _ h₁ h₂ h₃ := p.add_mem (p.smul_mem _ (p.sub_mem h₁ h₂)) h₃
 -/
@@ -632,7 +632,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Submodule k V) (AffineSubspace k V)
+  签名: Coe (子模 k V) (仿射子空间 k V)
   定义体: ⟨toAffineSubspace⟩
 
 @[simp]
@@ -652,7 +652,7 @@ theorem mem_toAffineSubspace
 
 中文:
 定理 mem_toAffineSubspace
-  条件: {p : Submodule k V} {x : V}
+  条件: {p : 子模 k V} {x : V}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -682,7 +682,7 @@ lemma vsub_self_of_zero_mem
 
 中文:
 引理 vsub_self_of_zero_mem
-  条件: {s : AffineSubspace k V} (hs : 0 in s)
+  条件: {s : 仿射子空间 k V} (hs : 0 in s)
   证明: by
   ext x
   constructor
@@ -715,7 +715,7 @@ lemma vsub_self_eq_iff_zero_mem
 
 中文:
 引理 vsub_self_eq_iff_zero_mem
-  条件: {s : AffineSubspace k V} [Nonempty s]
+  条件: {s : 仿射子空间 k V} [非空 s]
   证明: by
   refine ⟨fun h => ?_, vsub_self_of_zero_mem⟩
   obtain x : s := Classical.choice inferInstance
@@ -741,7 +741,7 @@ definition direction
 
 中文:
 定义 direction
-  签名: (s : AffineSubspace k P)
+  签名: (s : 仿射子空间 k P)
   定义体: vectorSpan k (s : Set P)
 
 Depends on / 依赖: vectorSpan
@@ -760,8 +760,8 @@ theorem direction_eq_vectorSpan
 
 中文:
 定理 direction_eq_vectorSpan
-  条件: (s : AffineSubspace k P)
-  结论: s.direction = vectorSpan k (s : Set P)
+  条件: (s : 仿射子空间 k P)
+  结论: s.direction = vectorSpan k (s : 集合 P)
   证明: rfl
 -/
 theorem direction_eq_vectorSpan (s : AffineSubspace k P) : s.direction = vectorSpan k (s : Set P) :=
@@ -786,7 +786,7 @@ definition directionOfNonempty
 
 中文:
 定义 directionOfNonempty
-  签名: {s : AffineSubspace k P} (h : (s : Set P).Nonempty)
+  签名: {s : 仿射子空间 k P} (h : (s : 集合 P).非空)
   定义体: (s : Set P) -ᵥ s
   zero_mem' := by
     obtain ⟨p, hp⟩ := h
@@ -829,7 +829,7 @@ theorem directionOfNonempty_eq_direction
 
 中文:
 定理 directionOfNonempty_eq_direction
-  条件: {s : AffineSubspace k P} (h : (s : Set P).Nonempty)
+  条件: {s : 仿射子空间 k P} (h : (s : 集合 P).非空)
   证明: by
   refine le_antisymm ?_ (Submodule.span_le.2 Set.Subset.rfl)
   rw [← SetLike.coe_subset_coe]; rw [directionOfNonempty]; rw [direction]; rw [Submodule.coe_set_mk]; rw [AddSubmonoid.coe_set_mk]
@@ -853,7 +853,7 @@ theorem coe_direction_eq_vsub_set
 
 中文:
 定理 coe_direction_eq_vsub_set
-  条件: {s : AffineSubspace k P} (h : (s : Set P).Nonempty)
+  条件: {s : 仿射子空间 k P} (h : (s : 集合 P).非空)
   证明: directionOfNonempty_eq_direction h ▸ rfl
 
 Depends on / 依赖: directionOfNonempty_eq_direction
@@ -874,7 +874,7 @@ theorem mem_direction_iff_eq_vsub
 
 中文:
 定理 mem_direction_iff_eq_vsub
-  条件: {s : AffineSubspace k P} (h : (s : Set P).Nonempty) (v : V)
+  条件: {s : 仿射子空间 k P} (h : (s : 集合 P).非空) (v : V)
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_direction_eq_vsub_set h]; rw [Set.mem_vsub]
   simp only [SetLike.mem_coe, eq_comm]
@@ -901,7 +901,7 @@ theorem vadd_mem_of_mem_direction
 
 中文:
 定理 vadd_mem_of_mem_direction
-  结论: {s : AffineSubspace k P} {v : V} (hv : v in s.direction) {p : P}
+  结论: {s : 仿射子空间 k P} {v : V} (hv : v in s.direction) {p : P}
   证明: by
   rw [mem_direction_iff_eq_vsub ⟨p]; rw [hp⟩] at hv
   rcases hv with ⟨p₁, hp₁, p₂, hp₂, hv⟩
@@ -929,7 +929,7 @@ theorem vsub_mem_direction
 
 中文:
 定理 vsub_mem_direction
-  条件: {s : AffineSubspace k P} {p₁ p₂ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
+  条件: {s : 仿射子空间 k P} {p₁ p₂ : P} (hp₁ : p₁ in s) (hp₂ : p₂ in s)
   证明: vsub_mem_vectorSpan k hp₁ hp₂
 
 Depends on / 依赖: vsub_mem_vectorSpan
@@ -948,7 +948,7 @@ theorem vadd_mem_iff_mem_direction
 
 中文:
 定理 vadd_mem_iff_mem_direction
-  条件: {s : AffineSubspace k P} (v : V) {p : P} (hp : p in s)
+  条件: {s : 仿射子空间 k P} (v : V) {p : P} (hp : p in s)
   证明: ⟨fun h => by simpa using vsub_mem_direction h hp, fun h => vadd_mem_of_mem_direction h hp⟩
 
 Depends on / 依赖: vadd_mem_of_mem_direction, vsub_mem_direction
@@ -970,7 +970,7 @@ theorem vadd_mem_iff_mem_of_mem_direction
 
 中文:
 定理 vadd_mem_iff_mem_of_mem_direction
-  结论: {s : AffineSubspace k P} {v : V} (hv : v in s.direction)
+  结论: {s : 仿射子空间 k P} {v : V} (hv : v in s.direction)
   证明: by
   refine ⟨fun h => ?_, fun h => vadd_mem_of_mem_direction hv h⟩
   convert! vadd_mem_of_mem_direction (Submodule.neg_mem _ hv) h
@@ -1001,7 +1001,7 @@ theorem coe_direction_eq_vsub_set_right
 
 中文:
 定理 coe_direction_eq_vsub_set_right
-  条件: {s : AffineSubspace k P} {p : P} (hp : p in s)
+  条件: {s : 仿射子空间 k P} {p : P} (hp : p in s)
   证明: by
   rw [coe_direction_eq_vsub_set ⟨p]; rw [hp⟩]
   refine le_antisymm ?_ ?_
@@ -1039,7 +1039,7 @@ theorem coe_direction_eq_vsub_set_left
 
 中文:
 定理 coe_direction_eq_vsub_set_left
-  条件: {s : AffineSubspace k P} {p : P} (hp : p in s)
+  条件: {s : 仿射子空间 k P} {p : P} (hp : p in s)
   证明: by
   ext v
   rw [SetLike.mem_coe]; rw [← Submodule.neg_mem_iff]; rw [← SetLike.mem_coe]; rw [coe_direction_eq_vsub_set_right hp]; rw [Set.mem_image]; rw [Set.mem_image]
@@ -1071,7 +1071,7 @@ theorem mem_direction_iff_eq_vsub_right
 
 中文:
 定理 mem_direction_iff_eq_vsub_right
-  条件: {s : AffineSubspace k P} {p : P} (hp : p in s) (v : V)
+  条件: {s : 仿射子空间 k P} {p : P} (hp : p in s) (v : V)
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_direction_eq_vsub_set_right hp]
   exact ⟨fun ⟨p₂, hp₂, hv⟩ => ⟨p₂, hp₂, hv.symm⟩, fun ⟨p₂, hp₂, hv⟩ => ⟨p₂, hp₂, hv.symm⟩⟩
@@ -1095,7 +1095,7 @@ theorem mem_direction_iff_eq_vsub_left
 
 中文:
 定理 mem_direction_iff_eq_vsub_left
-  条件: {s : AffineSubspace k P} {p : P} (hp : p in s) (v : V)
+  条件: {s : 仿射子空间 k P} {p : P} (hp : p in s) (v : V)
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_direction_eq_vsub_set_left hp]
   exact ⟨fun ⟨p₂, hp₂, hv⟩ => ⟨p₂, hp₂, hv.symm⟩, fun ⟨p₂, hp₂, hv⟩ => ⟨p₂, hp₂, hv.symm⟩⟩
@@ -1121,7 +1121,7 @@ lemma direction_eq_self_iff_zero_mem
 
 中文:
 引理 direction_eq_self_iff_zero_mem
-  条件: {s : AffineSubspace k V}
+  条件: {s : 仿射子空间 k V}
   证明: by rw [← h]; simp
   mpr h := by
     ext x
@@ -1146,7 +1146,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (AffineSubspace k V) (Submodule k V) (·) (0 in ·)
+  签名: CanLift (仿射子空间 k V) (子模 k V) (·) (0 in ·)
   定义体: ⟨fun _ hs => ⟨_, direction_eq_self_iff_zero_mem.mpr hs⟩⟩
 
 Depends on / 依赖: direction_eq_self_iff_zero_mem, direction_eq_self_iff_zero_mem.mpr
@@ -1175,7 +1175,7 @@ theorem ext_of_direction_eq
 
 中文:
 定理 ext_of_direction_eq
-  结论: {s₁ s₂ : AffineSubspace k P} (hd : s₁.direction = s₂.direction)
+  结论: {s₁ s₂ : 仿射子空间 k P} (hd : s₁.direction = s₂.direction)
   证明: by
   ext p
   have hq1 := Set.mem_of_mem_inter_left hn.some_mem
@@ -1218,7 +1218,7 @@ theorem eq_iff_direction_eq_of_mem
 
 中文:
 定理 eq_iff_direction_eq_of_mem
-  结论: {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p in s₁)
+  结论: {s₁ s₂ : 仿射子空间 k P} {p : P} (h₁ : p in s₁)
   证明: ⟨fun h => h ▸ rfl, fun h => ext_of_direction_eq h ⟨p, h₁, h₂⟩⟩
 
 Depends on / 依赖: ext_of_direction_eq
@@ -1240,7 +1240,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (p : P) (direction : Submodule k V)
+  签名: (p : P) (direction : 子模 k V)
   定义体: { q | q -ᵥ p in direction }
   smul_vsub_vadd_mem' c p₁ p₂ p₃ hp₁ hp₂ hp₃ := by
     simpa [vadd_vsub_assoc] using
@@ -1268,7 +1268,7 @@ theorem mem_mk'
 
 中文:
 定理 mem_mk'
-  条件: {p q : P} {direction : Submodule k V}
+  条件: {p q : P} {direction : 子模 k V}
   结论: q in mk' p direction ↔ q -ᵥ p in direction
   证明: Iff.rfl
 
@@ -1289,7 +1289,7 @@ theorem self_mem_mk'
 
 中文:
 定理 self_mem_mk'
-  条件: (p : P) (direction : Submodule k V)
+  条件: (p : P) (direction : 子模 k V)
   结论: p in mk' p direction
   证明: by
   simp
@@ -1308,7 +1308,7 @@ theorem vadd_mem_mk'
 
 中文:
 定理 vadd_mem_mk'
-  条件: {v : V} (p : P) {direction : Submodule k V} (hv : v in direction)
+  条件: {v : V} (p : P) {direction : 子模 k V} (hv : v in direction)
   证明: by
   simpa
 -/
@@ -1327,8 +1327,8 @@ theorem mk'_nonempty
 
 中文:
 定理 mk'_nonempty
-  条件: (p : P) (direction : Submodule k V)
-  结论: (mk' p direction : Set P).Nonempty
+  条件: (p : P) (direction : 子模 k V)
+  结论: (mk' p direction : 集合 P).非空
   证明: ⟨p, self_mem_mk' p direction⟩
 -/
 theorem mk'_nonempty (p : P) (direction : Submodule k V) : (mk' p direction : Set P).Nonempty :=
@@ -1355,7 +1355,7 @@ theorem direction_mk'
 
 中文:
 定理 direction_mk'
-  条件: (p : P) (direction : Submodule k V)
+  条件: (p : P) (direction : 子模 k V)
   证明: by
   ext v
   rw [mem_direction_iff_eq_vsub (mk'_nonempty _ _)]
@@ -1389,7 +1389,7 @@ theorem mk'_eq
 
 中文:
 定理 mk'_eq
-  条件: {s : AffineSubspace k P} {p : P} (hp : p in s)
+  条件: {s : 仿射子空间 k P} {p : P} (hp : p in s)
   结论: mk' p s.direction = s
   证明: ext_of_direction_eq (direction_mk' p s.direction) ⟨p, Set.mem_inter (self_mem_mk' _ _) hp⟩
 -/
@@ -1414,7 +1414,7 @@ theorem spanPoints_subset_coe_of_subset_coe
 
 中文:
 定理 spanPoints_subset_coe_of_subset_coe
-  条件: {s : Set P} {s₁ : AffineSubspace k P} (h : s subseteq s₁)
+  条件: {s : 集合 P} {s₁ : 仿射子空间 k P} (h : s subseteq s₁)
   证明: by
   rintro p ⟨p₁, hp₁, v, hv, hp⟩
   rw [hp]
@@ -1457,7 +1457,7 @@ theorem toAffineSubspace_direction
 
 中文:
 定理 toAffineSubspace_direction
-  条件: (s : Submodule k V)
+  条件: (s : 子模 k V)
   结论: s.toAffineSubspace.direction = s
   证明: by
   ext x; simp [← s.toAffineSubspace.vadd_mem_iff_mem_direction _ s.zero_mem]
@@ -1488,7 +1488,7 @@ definition affineSpan
 
 中文:
 定义 affineSpan
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: spanPoints k s
   smul_vsub_vadd_mem' c _ _ _ hp₁ hp₂ hp₃ :=
     vadd_mem_spanPoints_of_mem_spanPoints_of_mem_vectorSpan k hp₃
@@ -1515,8 +1515,8 @@ theorem coe_affineSpan
 
 中文:
 定理 coe_affineSpan
-  条件: (s : Set P)
-  结论: (affineSpan k s : Set P) = spanPoints k s
+  条件: (s : 集合 P)
+  结论: (affineSpan k s : 集合 P) = spanPoints k s
   证明: rfl
 -/
 theorem coe_affineSpan (s : Set P) : (affineSpan k s : Set P) = spanPoints k s :=
@@ -1532,8 +1532,8 @@ lemma mem_affineSpan_iff_exists
   proof: Iff.rfl
 
 中文:
-引理 mem_affineSpan_iff_exists
-  条件: {p : P} {s : Set P}
+引理 mem_affineSpan_iff_存在
+  条件: {p : P} {s : 集合 P}
   结论: p in affineSpan k s ↔
   证明: Iff.rfl
 
@@ -1554,7 +1554,7 @@ theorem subset_affineSpan
 
 中文:
 定理 subset_affineSpan
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: s subseteq affineSpan k s
   证明: subset_spanPoints k s
 
@@ -1581,7 +1581,7 @@ theorem direction_affineSpan
 
 中文:
 定理 direction_affineSpan
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   结论: (affineSpan k s).direction = vectorSpan k s
   证明: by
   apply le_antisymm
@@ -1617,7 +1617,7 @@ theorem mem_affineSpan
 
 中文:
 定理 mem_affineSpan
-  条件: {p : P} {s : Set P} (hp : p in s)
+  条件: {p : P} {s : 集合 P} (hp : p in s)
   结论: p in affineSpan k s
   证明: mem_spanPoints k p s hp
 
@@ -1643,8 +1643,8 @@ lemma vectorSpan_add_self
 
 中文:
 引理 vectorSpan_add_self
-  条件: (s : Set V)
-  结论: (vectorSpan k s : Set V) + s = affineSpan k s
+  条件: (s : 集合 V)
+  结论: (vectorSpan k s : 集合 V) + s = affineSpan k s
   证明: by
   ext
   simp [mem_add, coe_affineSpan, spanPoints]
@@ -1669,7 +1669,7 @@ theorem vadd_mem_affineSpan_of_mem_affineSpan_of_mem_vectorSpan
 
 中文:
 定理 vadd_mem_affineSpan_of_mem_affineSpan_of_mem_vectorSpan
-  结论: {s : Set P} {p : P} {v : V}
+  结论: {s : 集合 P} {p : P} {v : V}
   证明: vadd_mem_spanPoints_of_mem_spanPoints_of_mem_vectorSpan k hp hv
 
 Depends on / 依赖: vadd_mem_spanPoints_of_mem_spanPoints_of_mem_vectorSpan
@@ -1688,7 +1688,7 @@ theorem vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
 
 中文:
 定理 vsub_mem_vectorSpan_of_mem_affineSpan_of_mem_affineSpan
-  结论: {s : Set P} {p₁ p₂ : P}
+  结论: {s : 集合 P} {p₁ p₂ : P}
   证明: vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints k hp₁ hp₂
 
 Depends on / 依赖: vsub_mem_vectorSpan_of_mem_spanPoints_of_mem_spanPoints
@@ -1707,7 +1707,7 @@ theorem affineSpan_le_of_subset_coe
 
 中文:
 定理 affineSpan_le_of_subset_coe
-  条件: {s : Set P} {s₁ : AffineSubspace k P} (h : s subseteq s₁)
+  条件: {s : 集合 P} {s₁ : 仿射子空间 k P} (h : s subseteq s₁)
   证明: AffineSubspace.spanPoints_subset_coe_of_subset_coe h
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.spanPoints_subset_coe_of_subset_coe, spanPoints_subset_coe_of_subset_coe
@@ -1738,7 +1738,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (AffineSubspace k P)
+  签名: 完备格 (仿射子空间 k P)
   定义体: fun s₁ s₂ => affineSpan k (s₁ union s₂)
   le_sup_left := fun _ _ =>
     Set.Subset.trans Set.subset_union_left (subset_spanPoints k _)
@@ -1790,7 +1790,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AffineSubspace k P)
+  签名: 可居 (仿射子空间 k P)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (AffineSubspace k P) :=
@@ -1807,8 +1807,8 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: (s₁ s₂ : AffineSubspace k P)
-  结论: s₁ <= s₂ ↔ (s₁ : Set P) subseteq s₂
+  条件: (s₁ s₂ : 仿射子空间 k P)
+  结论: s₁ <= s₂ ↔ (s₁ : 集合 P) subseteq s₂
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1827,7 +1827,7 @@ theorem le_def'
 
 中文:
 定理 le_def'
-  条件: (s₁ s₂ : AffineSubspace k P)
+  条件: (s₁ s₂ : 仿射子空间 k P)
   结论: s₁ <= s₂ ↔ 对任意 p in s₁, p in s₂
   证明: Iff.rfl
 
@@ -1847,8 +1847,8 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: (s₁ s₂ : AffineSubspace k P)
-  结论: s₁ < s₂ ↔ (s₁ : Set P) ⊂ s₂
+  条件: (s₁ s₂ : 仿射子空间 k P)
+  结论: s₁ < s₂ ↔ (s₁ : 集合 P) ⊂ s₂
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1866,8 +1866,8 @@ theorem not_le_iff_exists
   proof: Set.not_subset
 
 中文:
-定理 not_le_iff_exists
-  条件: (s₁ s₂ : AffineSubspace k P)
+定理 not_le_iff_存在
+  条件: (s₁ s₂ : 仿射子空间 k P)
   结论: ¬s₁ <= s₂ ↔ 存在 p in s₁, p ∉ s₂
   证明: Set.not_subset
 
@@ -1886,8 +1886,8 @@ theorem exists_of_lt
   proof: Set.exists_of_ssubset h
 
 中文:
-定理 exists_of_lt
-  条件: {s₁ s₂ : AffineSubspace k P} (h : s₁ < s₂)
+定理 存在_of_lt
+  条件: {s₁ s₂ : 仿射子空间 k P} (h : s₁ < s₂)
   结论: 存在 p in s₂, p ∉ s₁
   证明: Set.exists_of_ssubset h
 
@@ -1906,8 +1906,8 @@ theorem lt_iff_le_and_exists
   rw [lt_iff_le_not_ge]; rw [not_le_iff_exists]
 
 中文:
-定理 lt_iff_le_and_exists
-  条件: (s₁ s₂ : AffineSubspace k P)
+定理 lt_iff_le_and_存在
+  条件: (s₁ s₂ : 仿射子空间 k P)
   证明: by
   rw [lt_iff_le_not_ge]; rw [not_le_iff_exists]
 
@@ -1928,7 +1928,7 @@ theorem eq_of_direction_eq_of_nonempty_of_le
 
 中文:
 定理 eq_of_direction_eq_of_nonempty_of_le
-  结论: {s₁ s₂ : AffineSubspace k P}
+  结论: {s₁ s₂ : 仿射子空间 k P}
   证明: let ⟨p, hp⟩ := hn
   ext_of_direction_eq hd ⟨p, hp, hle hp⟩
 
@@ -1949,7 +1949,7 @@ instance nonempty_sup_left
 
 中文:
 实例 nonempty_sup_left
-  签名: (s₁ s₂ : AffineSubspace k P) [Nonempty s₁]
+  签名: (s₁ s₂ : 仿射子空间 k P) [非空 s₁]
   定义体: .map (Set.inclusion <| SetLike.le_def.1 le_sup_left) ‹_›
 
 Depends on / 依赖: Set.inclusion, SetLike, SetLike.le_def, inclusion, le_def, le_sup_left
@@ -1968,7 +1968,7 @@ instance nonempty_sup_right
 
 中文:
 实例 nonempty_sup_right
-  签名: (s₁ s₂ : AffineSubspace k P) [Nonempty s₂]
+  签名: (s₁ s₂ : 仿射子空间 k P) [非空 s₂]
   定义体: .map (Set.inclusion <| SetLike.le_def.1 le_sup_right) ‹_›
 
 Depends on / 依赖: Set.inclusion, SetLike, SetLike.le_def, inclusion, le_def, le_sup_right
@@ -1990,7 +1990,7 @@ theorem affineSpan_eq_sInf
 
 中文:
 定理 affineSpan_eq_sInf
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: le_antisymm (affineSpan_le_of_subset_coe <| Set.subset_iInter₂ fun _ => id)
     (sInf_le (subset_spanPoints k _))
 
@@ -2017,7 +2017,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (affineSpan k) ((↑) : AffineSubspace k P -> Set P) where
+  签名: : Galois嵌入 (affineSpan k) ((↑) : 仿射子空间 k P -> 集合 P) where
   定义体: affineSpan k s
   gc s₁ _s₂ :=
     ⟨fun h => Set.Subset.trans (subset_spanPoints k s₁) h, affineSpan_le_of_subset_coe⟩
@@ -2043,7 +2043,7 @@ theorem span_empty
 
 中文:
 定理 span_empty
-  结论: affineSpan k (∅ : Set P) = ⊥
+  结论: affineSpan k (∅ : 集合 P) = ⊥
   证明: (AffineSubspace.gi k V P).gc.l_bot
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.gi, gc.l_bot, l_bot
@@ -2063,7 +2063,7 @@ theorem span_univ
 
 中文:
 定理 span_univ
-  结论: affineSpan k (Set.univ : Set P) = ⊤
+  结论: affineSpan k (集合.univ : 集合 P) = ⊤
   证明: eq_top_iff.2 subset_affineSpan k _
 
 Depends on / 依赖: eq_top_iff, subset_affineSpan
@@ -2083,7 +2083,7 @@ theorem _root_.affineSpan_le
 
 中文:
 定理 _root_.affineSpan_le
-  条件: {s : Set P} {Q : AffineSubspace k P}
+  条件: {s : 集合 P} {Q : 仿射子空间 k P}
   证明: (AffineSubspace.gi k V P).gc _ _
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.gi
@@ -2105,7 +2105,7 @@ theorem span_union
 
 中文:
 定理 span_union
-  条件: (s t : Set P)
+  条件: (s t : 集合 P)
   结论: affineSpan k (s union t) = affineSpan k s ⊔ affineSpan k t
   证明: (AffineSubspace.gi k V P).gc.l_sup
 
@@ -2124,7 +2124,7 @@ theorem span_iUnion
 
 中文:
 定理 span_iUnion
-  条件: {ι : 类型} (s : ι -> Set P)
+  条件: {ι : 类型} (s : ι -> 集合 P)
   证明: (AffineSubspace.gi k V P).gc.l_iSup
 
 Depends on / 依赖: AffineSubspace, AffineSubspace.gi, gc.l_iSup, l_iSup
@@ -2146,7 +2146,7 @@ theorem top_coe
 
 中文:
 定理 top_coe
-  结论: ((⊤ : AffineSubspace k P) : Set P) = Set.univ
+  结论: ((⊤ : 仿射子空间 k P) : 集合 P) = 集合.univ
   证明: rfl
 -/
 theorem top_coe : ((⊤ : AffineSubspace k P) : Set P) = Set.univ :=
@@ -2166,7 +2166,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (p : P)
-  结论: p in (⊤ : AffineSubspace k P)
+  结论: p in (⊤ : 仿射子空间 k P)
   证明: Set.mem_univ p
 
 Depends on / 依赖: Set.mem_univ, mem_univ
@@ -2188,7 +2188,7 @@ lemma mk'_top
 中文:
 引理 mk'_top
   条件: (p : P)
-  结论: mk' p (⊤ : Submodule k V) = ⊤
+  结论: mk' p (⊤ : 子模 k V) = ⊤
   证明: by
   ext x
   simp [mem_mk']
@@ -2217,7 +2217,7 @@ theorem direction_top
 
 中文:
 定理 direction_top
-  结论: (⊤ : AffineSubspace k P).direction = ⊤
+  结论: (⊤ : 仿射子空间 k P).direction = ⊤
   证明: by
   obtain ⟨p⟩ := S.nonempty
   ext v
@@ -2248,7 +2248,7 @@ theorem bot_coe
 
 中文:
 定理 bot_coe
-  结论: ((⊥ : AffineSubspace k P) : Set P) = ∅
+  结论: ((⊥ : 仿射子空间 k P) : 集合 P) = ∅
   证明: rfl
 -/
 theorem bot_coe : ((⊥ : AffineSubspace k P) : Set P) = ∅ :=
@@ -2267,7 +2267,7 @@ theorem bot_ne_top
 
 中文:
 定理 bot_ne_top
-  结论: (⊥ : AffineSubspace k P) != ⊤
+  结论: (⊥ : 仿射子空间 k P) != ⊤
   证明: by
   intro contra
   rw [AffineSubspace.ext_iff]; rw [bot_coe]; rw [top_coe] at contra
@@ -2290,7 +2290,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (AffineSubspace k P)
+  签名: 非平凡 (仿射子空间 k P)
   定义体: ⟨⟨⊥, ⊤, bot_ne_top k V P⟩⟩
 
 Depends on / 依赖: bot_ne_top
@@ -2313,8 +2313,8 @@ theorem nonempty_of_affineSpan_eq_top
 
 中文:
 定理 nonempty_of_affineSpan_eq_top
-  条件: {s : Set P} (h : affineSpan k s = ⊤)
-  结论: s.Nonempty
+  条件: {s : 集合 P} (h : affineSpan k s = ⊤)
+  结论: s.非空
   证明: by
   rw [Set.nonempty_iff_ne_empty]
   rintro rfl
@@ -2339,7 +2339,7 @@ theorem vectorSpan_eq_top_of_affineSpan_eq_top
 
 中文:
 定理 vectorSpan_eq_top_of_affineSpan_eq_top
-  条件: {s : Set P} (h : affineSpan k s = ⊤)
+  条件: {s : 集合 P} (h : affineSpan k s = ⊤)
   证明: by rw [← direction_affineSpan, h, direction_top]
 
 Depends on / 依赖: direction_affineSpan, direction_top
@@ -2364,7 +2364,7 @@ theorem affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty
 
 中文:
 定理 affineSpan_eq_top_iff_vectorSpan_eq_top_of_nonempty
-  条件: {s : Set P} (hs : s.Nonempty)
+  条件: {s : 集合 P} (hs : s.非空)
   证明: by
   refine ⟨vectorSpan_eq_top_of_affineSpan_eq_top k V P, ?_⟩
   intro h
@@ -2399,7 +2399,7 @@ theorem affineSpan_eq_top_iff_vectorSpan_eq_top_of_nontrivial
 
 中文:
 定理 affineSpan_eq_top_iff_vectorSpan_eq_top_of_nontrivial
-  条件: {s : Set P} [Nontrivial P]
+  条件: {s : 集合 P} [非平凡 P]
   证明: by
   rcases s.eq_empty_or_nonempty with hs | hs
   · simp [hs, subsingleton_iff_bot_eq_top, AddTorsor.subsingleton_iff V P, not_subsingleton]
@@ -2425,7 +2425,7 @@ theorem card_pos_of_affineSpan_eq_top
 
 中文:
 定理 card_pos_of_affineSpan_eq_top
-  结论: {ι : 类型} [Fintype ι] {p : ι -> P}
+  结论: {ι : 类型} [有限类型 ι] {p : ι -> P}
   证明: by
   obtain ⟨-, ⟨i, -⟩⟩ := nonempty_of_affineSpan_eq_top k V P h
   exact Fintype.card_pos_iff.mpr ⟨i⟩
@@ -2448,7 +2448,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (⊤ : AffineSubspace k P)
+  签名: 非空 (⊤ : 仿射子空间 k P)
   定义体: inferInstanceAs (Nonempty (⊤ : Set P))
 
 Depends on / 依赖: Nonempty
@@ -2469,7 +2469,7 @@ theorem notMem_bot
 中文:
 定理 notMem_bot
   条件: (p : P)
-  结论: p ∉ (⊥ : AffineSubspace k P)
+  结论: p ∉ (⊥ : 仿射子空间 k P)
   证明: Set.notMem_empty p
 
 Depends on / 依赖: Set.notMem_empty, notMem_empty
@@ -2487,7 +2487,7 @@ instance isEmpty_bot
 
 中文:
 实例 isEmpty_bot
-  签名: : IsEmpty (⊥ : AffineSubspace k P)
+  签名: : 是空 (⊥ : 仿射子空间 k P)
   定义体: Subtype.isEmpty_of_false fun _ => notMem_bot _ _ _
 
 Depends on / 依赖: IsEmpty, IsEmpty.false, Subtype, Subtype.isEmpty_of_false, isEmpty_of_false, notMem_bot
@@ -2510,7 +2510,7 @@ theorem direction_bot
 
 中文:
 定理 direction_bot
-  结论: (⊥ : AffineSubspace k P).direction = ⊥
+  结论: (⊥ : 仿射子空间 k P).direction = ⊥
   证明: by
   rw [direction_eq_vectorSpan]; rw [bot_coe]; rw [vectorSpan_def]; rw [vsub_empty]; rw [Submodule.span_empty]
 
@@ -2535,8 +2535,8 @@ theorem coe_eq_bot_iff
 
 中文:
 定理 coe_eq_bot_iff
-  条件: (Q : AffineSubspace k P)
-  结论: (Q : Set P) = ∅ ↔ Q = ⊥
+  条件: (Q : 仿射子空间 k P)
+  结论: (Q : 集合 P) = ∅ ↔ Q = ⊥
   证明: coe_injective.eq_iff' (bot_coe _ _ _)
 
 @[simp]
@@ -2558,8 +2558,8 @@ theorem coe_eq_univ_iff
 
 中文:
 定理 coe_eq_univ_iff
-  条件: (Q : AffineSubspace k P)
-  结论: (Q : Set P) = univ ↔ Q = ⊤
+  条件: (Q : 仿射子空间 k P)
+  结论: (Q : 集合 P) = univ ↔ Q = ⊤
   证明: coe_injective.eq_iff' (top_coe _ _ _)
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff, top_coe
@@ -2580,8 +2580,8 @@ theorem nonempty_iff_ne_bot
 
 中文:
 定理 nonempty_iff_ne_bot
-  条件: (Q : AffineSubspace k P)
-  结论: (Q : Set P).Nonempty ↔ Q != ⊥
+  条件: (Q : 仿射子空间 k P)
+  结论: (Q : 集合 P).非空 ↔ Q != ⊥
   证明: by
   rw [nonempty_iff_ne_empty]
   exact not_congr Q.coe_eq_bot_iff
@@ -2605,8 +2605,8 @@ theorem eq_bot_or_nonempty
 
 中文:
 定理 eq_bot_or_nonempty
-  条件: (Q : AffineSubspace k P)
-  结论: Q = ⊥ ∨ (Q : Set P).Nonempty
+  条件: (Q : 仿射子空间 k P)
+  结论: Q = ⊥ ∨ (Q : 集合 P).非空
   证明: by
   rw [nonempty_iff_ne_bot]
   apply eq_or_ne
@@ -2630,8 +2630,8 @@ instance [Subsingleton
     · exact .inr h.eq_univ
 
 中文:
-实例 [Subsingleton
-  签名: P] : IsSimpleOrder (AffineSubspace k P) where
+实例 [子单例
+  签名: P] : 是单序 (仿射子空间 k P) where
   定义体: by
     rw [← coe_eq_bot_iff]; rw [← coe_eq_univ_iff]
     rcases (s : Set P).eq_empty_or_nonempty with h | h
@@ -2666,7 +2666,7 @@ theorem direction_eq_top_iff_of_nonempty
 
 中文:
 定理 direction_eq_top_iff_of_nonempty
-  条件: {s : AffineSubspace k P} (h : (s : Set P).Nonempty)
+  条件: {s : 仿射子空间 k P} (h : (s : 集合 P).非空)
   证明: by
   constructor
   · intro hd
@@ -2702,8 +2702,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (s₁ s₂ : AffineSubspace k P)
-  结论: (s₁ ⊓ s₂ : Set P) = (s₁ : Set P) inter s₂
+  条件: (s₁ s₂ : 仿射子空间 k P)
+  结论: (s₁ ⊓ s₂ : 集合 P) = (s₁ : 集合 P) inter s₂
   证明: rfl
 
 Depends on / 依赖: Subsingleton
@@ -2722,7 +2722,7 @@ theorem mem_inf_iff
 
 中文:
 定理 mem_inf_iff
-  条件: (p : P) (s₁ s₂ : AffineSubspace k P)
+  条件: (p : P) (s₁ s₂ : 仿射子空间 k P)
   结论: p in s₁ ⊓ s₂ ↔ p in s₁ ∧ p in s₂
   证明: Iff.rfl
 
@@ -2745,7 +2745,7 @@ theorem direction_inf
 
 中文:
 定理 direction_inf
-  条件: (s₁ s₂ : AffineSubspace k P)
+  条件: (s₁ s₂ : 仿射子空间 k P)
   证明: by
   simp only [direction_eq_vectorSpan, vectorSpan_def]
   exact
@@ -2774,7 +2774,7 @@ theorem direction_inf_of_mem
 
 中文:
 定理 direction_inf_of_mem
-  条件: {s₁ s₂ : AffineSubspace k P} {p : P} (h₁ : p in s₁) (h₂ : p in s₂)
+  条件: {s₁ s₂ : 仿射子空间 k P} {p : P} (h₁ : p in s₁) (h₂ : p in s₂)
   证明: by
   ext v
   rw [Submodule.mem_inf]; rw [← vadd_mem_iff_mem_direction v h₁]; rw [← vadd_mem_iff_mem_direction v h₂]; rw [←
@@ -2800,7 +2800,7 @@ theorem direction_inf_of_mem_inf
 
 中文:
 定理 direction_inf_of_mem_inf
-  条件: {s₁ s₂ : AffineSubspace k P} {p : P} (h : p in s₁ ⊓ s₂)
+  条件: {s₁ s₂ : 仿射子空间 k P} {p : P} (h : p in s₁ ⊓ s₂)
   证明: direction_inf_of_mem ((mem_inf_iff p s₁ s₂).1 h).1 ((mem_inf_iff p s₁ s₂).1 h).2
 
 @[simp, norm_cast]
@@ -2822,7 +2822,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (t : Set (AffineSubspace k P))
+  条件: (t : 集合 (仿射子空间 k P))
   证明: rfl
 -/
 theorem coe_sInf (t : Set (AffineSubspace k P)) :
@@ -2840,7 +2840,7 @@ theorem mem_sInf_iff
 
 中文:
 定理 mem_sInf_iff
-  条件: (p : P) (t : Set (AffineSubspace k P))
+  条件: (p : P) (t : 集合 (仿射子空间 k P))
   结论: p in sInf t ↔ 对任意 s in t, p in s
   证明: Set.mem_iInter₂
 
@@ -2861,7 +2861,7 @@ exact le_iInf₂ fun s hs => Submodule.span_mono vsub_self_mono biInter_subset_o
 
 中文:
 定理 direction_sInf
-  条件: (t : Set (AffineSubspace k P))
+  条件: (t : 集合 (仿射子空间 k P))
   证明: by
   simp only [direction_eq_vectorSpan, vectorSpan_def]
 exact le_iInf₂ fun s hs => Submodule.span_mono vsub_self_mono biInter_subset_of_mem hs
@@ -2890,7 +2890,7 @@ theorem direction_sInf_of_mem
 
 中文:
 定理 direction_sInf_of_mem
-  条件: (t : Set (AffineSubspace k P)) (p : P) (h : 对任意 s in t, p in s)
+  条件: (t : 集合 (仿射子空间 k P)) (p : P) (h : 对任意 s in t, p in s)
   证明: by
   apply (direction_sInf t).antisymm
   intro v hv
@@ -2924,7 +2924,7 @@ theorem direction_sInf_of_mem_sInf
 
 中文:
 定理 direction_sInf_of_mem_sInf
-  条件: (t : Set (AffineSubspace k P)) (p : P) (h : p in sInf t)
+  条件: (t : 集合 (仿射子空间 k P)) (p : P) (h : p in sInf t)
   证明: direction_sInf_of_mem t p (mem_sInf_iff p t).mp h
 
 @[simp, norm_cast]
@@ -2947,7 +2947,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: (s : ι -> AffineSubspace k P)
+  条件: (s : ι -> 仿射子空间 k P)
   证明: by
   rw [iInf]; rw [coe_sInf]; rw [Set.biInter_range]
 
@@ -2969,7 +2969,7 @@ theorem mem_iInf_iff
 
 中文:
 定理 mem_iInf_iff
-  条件: (s : ι -> AffineSubspace k P) (p : P)
+  条件: (s : ι -> 仿射子空间 k P) (p : P)
   结论: p in iInf s ↔ 对任意 i, p in s i
   证明: by
   rw [iInf]; rw [mem_sInf_iff]; rw [Set.forall_mem_range]
@@ -2991,7 +2991,7 @@ theorem direction_iInf
 
 中文:
 定理 direction_iInf
-  条件: (s : ι -> AffineSubspace k P)
+  条件: (s : ι -> 仿射子空间 k P)
   证明: by
   apply (direction_sInf _).trans_eq
   rw [iInf_range]
@@ -3015,7 +3015,7 @@ theorem direction_iInf_of_mem
 
 中文:
 定理 direction_iInf_of_mem
-  条件: (s : ι -> AffineSubspace k P) (p : P) (h : 对任意 i, p in s i)
+  条件: (s : ι -> 仿射子空间 k P) (p : P) (h : 对任意 i, p in s i)
   证明: by
   rw [iInf]; rw [direction_sInf_of_mem _ p ?_]; rw [iInf_range]
   rwa [Set.forall_mem_range]
@@ -3038,7 +3038,7 @@ theorem direction_iInf_of_mem_iInf
 
 中文:
 定理 direction_iInf_of_mem_iInf
-  条件: (s : ι -> AffineSubspace k P) (p : P) (h : p in iInf s)
+  条件: (s : ι -> 仿射子空间 k P) (p : P) (h : p in iInf s)
   证明: by
   rw [iInf]; rw [direction_sInf_of_mem_sInf _ p h]; rw [iInf_range]
 
@@ -3061,7 +3061,7 @@ theorem direction_le
 
 中文:
 定理 direction_le
-  条件: {s₁ s₂ : AffineSubspace k P} (h : s₁ <= s₂)
+  条件: {s₁ s₂ : 仿射子空间 k P} (h : s₁ <= s₂)
   结论: s₁.direction <= s₂.direction
   证明: by
   simp only [direction_eq_vectorSpan, vectorSpan_def]
@@ -3088,7 +3088,7 @@ theorem sup_direction_le
 
 中文:
 定理 sup_direction_le
-  条件: (s₁ s₂ : AffineSubspace k P)
+  条件: (s₁ s₂ : 仿射子空间 k P)
   证明: by
   simp only [direction_eq_vectorSpan, vectorSpan_def]
   exact
@@ -3124,7 +3124,7 @@ theorem sup_direction_lt_of_nonempty_of_inter_empty
 
 中文:
 定理 sup_direction_lt_of_nonempty_of_inter_empty
-  结论: {s₁ s₂ : AffineSubspace k P}
+  结论: {s₁ s₂ : 仿射子空间 k P}
   证明: by
   obtain ⟨p₁, hp₁⟩ := h1
   obtain ⟨p₂, hp₂⟩ := h2
@@ -3170,7 +3170,7 @@ theorem inter_nonempty_of_nonempty_of_sup_direction_eq_top
 
 中文:
 定理 inter_nonempty_of_nonempty_of_sup_direction_eq_top
-  结论: {s₁ s₂ : AffineSubspace k P}
+  结论: {s₁ s₂ : 仿射子空间 k P}
   证明: by
   by_contra h
   rw [Set.not_nonempty_iff_eq_empty] at h
@@ -3208,7 +3208,7 @@ theorem inter_eq_singleton_of_nonempty_of_isCompl
 
 中文:
 定理 inter_eq_singleton_of_nonempty_of_isCompl
-  结论: {s₁ s₂ : AffineSubspace k P}
+  结论: {s₁ s₂ : 仿射子空间 k P}
   证明: by
   obtain ⟨p, hp⟩ := inter_nonempty_of_nonempty_of_sup_direction_eq_top h1 h2 hd.sup_eq_top
   use p
@@ -3254,8 +3254,8 @@ theorem affineSpan_coe
 
 中文:
 定理 affineSpan_coe
-  条件: (s : AffineSubspace k P)
-  结论: affineSpan k (s : Set P) = s
+  条件: (s : 仿射子空间 k P)
+  结论: affineSpan k (s : 集合 P) = s
   证明: by
   refine le_antisymm ?_ (subset_affineSpan _ _)
   rintro p ⟨p₁, hp₁, v, hv, rfl⟩
@@ -3285,7 +3285,7 @@ theorem mk'_le_mk'_iff
 
 中文:
 定理 mk'_le_mk'_iff
-  条件: (p : P) {d₁ d₂ : Submodule k V}
+  条件: (p : P) {d₁ d₂ : 子模 k V}
   结论: mk' p d₁ <= mk' p d₂ ↔ d₁ <= d₂
   证明: by
   simp_rw [SetLike.le_def, mem_mk']
@@ -3309,7 +3309,7 @@ theorem mk'_strictMono
 中文:
 定理 mk'_strictMono
   条件: (p : P)
-  结论: StrictMono (mk' p (k := k))
+  结论: 严格递增 (mk' p (k := k))
   证明: strictMono_of_le_iff_le (fun _ _ => (mk'_le_mk'_iff p).symm)
 -/
 theorem mk'_strictMono (p : P) : StrictMono (mk' p (k := k)) :=
@@ -3342,7 +3342,7 @@ alias ⟨_, _root_.Set.Nonempty.affineSpan⟩ := affineSpan_nonempty
 
 中文:
 定理 affineSpan_nonempty
-  结论: (affineSpan k s : Set P).Nonempty ↔ s.Nonempty
+  结论: (affineSpan k s : 集合 P).非空 ↔ s.非空
   证明: spanPoints_nonempty k s
 
 alias ⟨_, _root_.Set.Nonempty.affineSpan⟩ := affineSpan_nonempty
@@ -3363,8 +3363,8 @@ instance [Nonempty
   body: ((nonempty_coe_sort.1 ‹_›).affineSpan _).to_subtype
 
 中文:
-实例 [Nonempty
-  签名: s] : Nonempty (affineSpan k s)
+实例 [非空
+  签名: s] : 非空 (affineSpan k s)
   定义体: ((nonempty_coe_sort.1 ‹_›).affineSpan _).to_subtype
 
 Depends on / 依赖: affineSpan, nonempty_coe_sort, to_subtype
@@ -3413,7 +3413,7 @@ theorem bot_lt_affineSpan
 
 中文:
 定理 bot_lt_affineSpan
-  结论: ⊥ < affineSpan k s ↔ s.Nonempty
+  结论: ⊥ < affineSpan k s ↔ s.非空
   证明: by
   rw [bot_lt_iff_ne_bot]; rw [nonempty_iff_ne_empty]
   exact (affineSpan_eq_bot _).not
@@ -3438,7 +3438,7 @@ lemma affineSpan_eq_top_iff_nonempty_of_subsingleton
 
 中文:
 引理 affineSpan_eq_top_iff_nonempty_of_subsingleton
-  条件: [Subsingleton P]
+  条件: [子单例 P]
   证明: by
   rw [← bot_lt_affineSpan k]; rw [IsSimpleOrder.bot_lt_iff_eq_top]
 
@@ -3465,7 +3465,7 @@ theorem affineSpan_induction
 
 中文:
 定理 affineSpan_induction
-  结论: {x : P} {s : Set P} {p : P -> 命题} (h : x in affineSpan k s)
+  结论: {x : P} {s : 集合 P} {p : P -> 命题} (h : x in affineSpan k s)
   证明: (affineSpan_le (Q := ⟨{x | p x}, smul_vsub_vadd⟩)).mpr mem h
 
 Depends on / 依赖: affineSpan_le, smul_vsub_vadd
@@ -3492,7 +3492,7 @@ theorem affineSpan_induction'
 
 中文:
 定理 affineSpan_induction'
-  结论: {s : Set P} {p : 对任意 x, x in affineSpan k s -> 命题}
+  结论: {s : 集合 P} {p : 对任意 x, x in affineSpan k s -> 命题}
   证明: by
   suffices exists (hx : x in affineSpan k s), p x hx from this.elim fun hx hc => hc
   -- TODO: `induction h using affineSpan_induction` gives the error:
@@ -3533,7 +3533,7 @@ theorem vsub_mem_vectorSpan_pair
 中文:
 定理 vsub_mem_vectorSpan_pair
   条件: (p₁ p₂ : P)
-  结论: p₁ -ᵥ p₂ in vectorSpan k ({p₁, p₂} : Set P)
+  结论: p₁ -ᵥ p₂ in vectorSpan k ({p₁, p₂} : 集合 P)
   证明: vsub_mem_vectorSpan _ (Set.mem_insert _ _) (Set.mem_insert_of_mem _ (Set.mem_singleton _))
 
 Depends on / 依赖: Set.mem_insert, Set.mem_insert_of_mem, Set.mem_singleton, mem_insert, mem_insert_of_mem, mem_singleton, vsub_mem_vectorSpan
@@ -3553,7 +3553,7 @@ theorem vsub_rev_mem_vectorSpan_pair
 中文:
 定理 vsub_rev_mem_vectorSpan_pair
   条件: (p₁ p₂ : P)
-  结论: p₂ -ᵥ p₁ in vectorSpan k ({p₁, p₂} : Set P)
+  结论: p₂ -ᵥ p₁ in vectorSpan k ({p₁, p₂} : 集合 P)
   证明: vsub_mem_vectorSpan _ (Set.mem_insert_of_mem _ (Set.mem_singleton _)) (Set.mem_insert _ _)
 
 Depends on / 依赖: Set.mem_insert, Set.mem_insert_of_mem, Set.mem_singleton, mem_insert, mem_insert_of_mem, mem_singleton, vsub_mem_vectorSpan
@@ -3661,7 +3661,7 @@ theorem affineSpan_pair_le_of_mem_of_mem
 
 中文:
 定理 affineSpan_pair_le_of_mem_of_mem
-  结论: {p₁ p₂ : P} {s : AffineSubspace k P} (hp₁ : p₁ in s)
+  结论: {p₁ p₂ : P} {s : 仿射子空间 k P} (hp₁ : p₁ in s)
   证明: by
   rw [affineSpan_le]; rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
   exact ⟨hp₁, hp₂⟩
@@ -3726,7 +3726,7 @@ theorem affineSpan_mono
 
 中文:
 定理 affineSpan_mono
-  条件: {s₁ s₂ : Set P} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 P} (h : s₁ subseteq s₂)
   结论: affineSpan k s₁ <= affineSpan k s₂
   证明: affineSpan_le_of_subset_coe (Set.Subset.trans h (subset_affineSpan k _))
 
@@ -3746,7 +3746,7 @@ theorem affineSpan_insert_affineSpan
 
 中文:
 定理 affineSpan_insert_affineSpan
-  条件: (p : P) (ps : Set P)
+  条件: (p : P) (ps : 集合 P)
   证明: by
   rw [Set.insert_eq]; rw [Set.insert_eq]; rw [span_union]; rw [span_union]; rw [affineSpan_coe]
 
@@ -3768,7 +3768,7 @@ theorem affineSpan_insert_eq_affineSpan
 
 中文:
 定理 affineSpan_insert_eq_affineSpan
-  条件: {p : P} {ps : Set P} (h : p in affineSpan k ps)
+  条件: {p : P} {ps : 集合 P} (h : p in affineSpan k ps)
   证明: by
   rw [← mem_coe] at h
   rw [← affineSpan_insert_affineSpan]; rw [Set.insert_eq_of_mem h]; rw [affineSpan_coe]
@@ -3793,7 +3793,7 @@ theorem vectorSpan_insert_eq_vectorSpan
 
 中文:
 定理 vectorSpan_insert_eq_vectorSpan
-  条件: {p : P} {ps : Set P} (h : p in affineSpan k ps)
+  条件: {p : P} {ps : 集合 P} (h : p in affineSpan k ps)
   证明: by
   simp_rw [← direction_affineSpan, affineSpan_insert_eq_affineSpan _ h]
 
@@ -3821,7 +3821,7 @@ lemma affineSpan_le_toAffineSubspace_span
 
 中文:
 引理 affineSpan_le_toAffineSubspace_span
-  条件: {s : Set V}
+  条件: {s : 集合 V}
   证明: by
   intro x hx
   simp only [Submodule.mem_toAffineSubspace]
@@ -3855,7 +3855,7 @@ lemma affineSpan_subset_span
 
 中文:
 引理 affineSpan_subset_span
-  条件: {s : Set V}
+  条件: {s : 集合 V}
   证明: affineSpan_le_toAffineSubspace_span
 
 Depends on / 依赖: affineSpan_le_toAffineSubspace_span
@@ -3882,7 +3882,7 @@ exact subset_sub_left mem_insert ..
 
 中文:
 引理 affineSpan_insert_zero
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   证明: by
   rw [← Submodule.span_insert_zero]
   refine affineSpan_subset_span.antisymm ?_

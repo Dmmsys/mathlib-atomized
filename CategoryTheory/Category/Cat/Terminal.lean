@@ -42,7 +42,7 @@ definition isTerminalOfUniqueOfIsDiscrete
 
 中文:
 定义 isTerminalOfUniqueOfIsDiscrete
-  签名: {T : 类型u} [Category.{v} T] [Unique T] [IsDiscrete T]
+  签名: {T : 类型u} [范畴.{v} T] [唯一 T] [是离散 T]
   定义体: IsTerminal.ofUniqueHom (fun X => ((const X).obj (default : T)).toCatHom)
     (fun _ _ => Cat.Hom.ext <| Functor.ext (by simp [eq_iff_true_of_subsingleton]))
 
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTerminal Cat.{v, u}
+  签名: 有终止 Cat.{v, u}
   定义体: by
   have : IsDiscrete (ShrinkHoms.{u} PUnit.{u + 1}) := {
     subsingleton _ _ := { allEq _ _ := eq_of_comp_right_eq (congrFun rfl) }
@@ -112,7 +112,7 @@ definition isTerminalDiscretePUnit
 
 中文:
 定义 isTerminalDiscretePUnit
-  签名: : IsTerminal (Cat.of (Discrete PUnit))
+  签名: : 是终止 (Cat.of (离散 命题单元))
   定义体: isTerminalOfUniqueOfIsDiscrete
 
 Depends on / 依赖: isTerminalOfUniqueOfIsDiscrete
@@ -130,7 +130,7 @@ definition isoDiscretePUnitOfIsTerminal
 
 中文:
 定义 isoDiscretePUnitOfIsTerminal
-  签名: {T : 类型u} [Category.{u} T] (hT : IsTerminal (Cat.of T))
+  签名: {T : 类型u} [范畴.{u} T] (hT : 是终止 (Cat.of T))
   定义体: IsTerminal.uniqueUpToIso hT isTerminalDiscretePUnit
 
 Depends on / 依赖: IsTerminal, IsTerminal.uniqueUpToIso, isTerminalDiscretePUnit, uniqueUpToIso

@@ -81,7 +81,7 @@ theorem orderedInsert_cons
 
 中文:
 定理 orderedInsert_cons
-  条件: (a b : α) (l : List α)
+  条件: (a b : α) (l : 列表 α)
   证明: .refl _
 -/
 @[simp, grind =] theorem orderedInsert_cons (a b : α) (l : List α) :
@@ -98,7 +98,7 @@ theorem orderedInsert_cons_of_le
 
 中文:
 定理 orderedInsert_cons_of_le
-  条件: {a b : α} (l : List α) (h : a ≼ b)
+  条件: {a b : α} (l : 列表 α) (h : a ≼ b)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -117,7 +117,7 @@ theorem orderedInsert_of_not_le
 
 中文:
 定理 orderedInsert_of_not_le
-  条件: {a b : α} (l : List α) (h : ¬ a ≼ b)
+  条件: {a b : α} (l : 列表 α) (h : ¬ a ≼ b)
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -137,7 +137,7 @@ definition insertionSort
 
 中文:
 定义 insertionSort
-  签名: : List α -> List α
+  签名: : 列表 α -> 列表 α
   定义体: foldr (orderedInsert r) []
 
 @[simp, grind =]
@@ -172,7 +172,7 @@ theorem insertionSort_cons
 
 中文:
 定理 insertionSort_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: .refl _
 -/
 @[simp, grind =] theorem insertionSort_cons (a : α) (l : List α) :
@@ -194,7 +194,7 @@ theorem orderedInsert_length
 
 中文:
 定理 orderedInsert_length
-  条件: (L : List α) (a : α)
+  条件: (L : 列表 α) (a : α)
   证明: by
   induction L <;> grind
 
@@ -215,7 +215,7 @@ theorem orderedInsert_eq_take_drop
 
 中文:
 定理 orderedInsert_eq_take_drop
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   induction l <;> grind [takeWhile, dropWhile]
 
@@ -237,7 +237,7 @@ theorem insertionSort_cons_eq_take_drop
 
 中文:
 定理 insertionSort_cons_eq_take_drop
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: orderedInsert_eq_take_drop r a _
 
 @[simp]
@@ -262,7 +262,7 @@ theorem mem_orderedInsert
 
 中文:
 定理 mem_orderedInsert
-  条件: {a b : α} {l : List α}
+  条件: {a b : α} {l : 列表 α}
   证明: by
   induction l <;> grind
 -/
@@ -281,7 +281,7 @@ theorem map_orderedInsert
 
 中文:
 定理 map_orderedInsert
-  结论: (f : α -> β) (l : List α) (x : α)
+  结论: (f : α -> β) (l : 列表 α) (x : α)
   证明: by
   induction l <;> grind
 -/
@@ -303,7 +303,7 @@ theorem perm_orderedInsert
 中文:
 定理 perm_orderedInsert
   条件: (a)
-  结论: 对任意 l : List α, orderedInsert r a l ~ a :: l
+  结论: 对任意 l : 列表 α, orderedInsert r a l ~ a :: l
 -/
 theorem perm_orderedInsert (a) : forall l : List α, orderedInsert r a l ~ a :: l
   | [] => Perm.refl _
@@ -324,7 +324,7 @@ theorem orderedInsert_count
 
 中文:
 定理 orderedInsert_count
-  条件: [DecidableEq α] (L : List α) (a b : α)
+  条件: [DecidableEq α] (L : 列表 α) (a b : α)
   证明: by
   rw [(L.perm_orderedInsert r b).count_eq]; rw [count_cons]
   simp
@@ -350,7 +350,7 @@ theorem perm_insertionSort
 
 中文:
 定理 perm_insertionSort
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: insertionSort r l ~ l
   证明: by
   induction l <;> grind [List.Perm, perm_orderedInsert]
@@ -376,7 +376,7 @@ theorem mem_insertionSort
 
 中文:
 定理 mem_insertionSort
-  条件: {l : List α} {x : α}
+  条件: {l : 列表 α} {x : α}
   结论: x in l.insertionSort r ↔ x in l
   证明: (perm_insertionSort r l).mem_iff
 
@@ -399,7 +399,7 @@ theorem length_insertionSort
 
 中文:
 定理 length_insertionSort
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (insertionSort r l).length = l.length
   证明: (perm_insertionSort r _).length_eq
 
@@ -425,8 +425,8 @@ apply h b (mem_insertionSort r).1 _
     exact mem_cons_self
 
 中文:
-定理 insertionSort_cons_of_forall_rel
-  条件: {a : α} {l : List α} (h : 对任意 b in l, r a b)
+定理 insertionSort_cons_of_对任意_rel
+  条件: {a : α} {l : 列表 α} (h : 对任意 b in l, r a b)
   证明: by
   rw [insertionSort_cons]
   cases hi : insertionSort r l with
@@ -468,7 +468,7 @@ theorem map_insertionSort
 
 中文:
 定理 map_insertionSort
-  条件: (f : α -> β) (l : List α) (hl : 对任意 a in l, 对任意 b in l, a ≼ b ↔ f a ≼ f b)
+  条件: (f : α -> β) (l : 列表 α) (hl : 对任意 a in l, 对任意 b in l, a ≼ b ↔ f a ≼ f b)
   证明: by
   induction l with
   | nil => simp
@@ -505,9 +505,9 @@ theorem Pairwise.insertionSort_eq
   induction l <;> grind [cases List]
 
 中文:
-定理 Pairwise.insertionSort_eq
-  条件: {l : List α}
-  结论: Pairwise r l -> insertionSort r l = l
+定理 两两.insertionSort_eq
+  条件: {l : 列表 α}
+  结论: 两两 r l -> insertionSort r l = l
   证明: by
   induction l <;> grind [cases List]
 -/
@@ -525,7 +525,7 @@ theorem erase_orderedInsert
 
 中文:
 定理 erase_orderedInsert
-  条件: [DecidableEq α] [Std.Refl r] (x : α) (xs : List α)
+  条件: [DecidableEq α] [Std.Refl r] (x : α) (xs : 列表 α)
   证明: by
   induction xs <;> grind [Std.Refl]
 
@@ -566,7 +566,7 @@ theorem orderedInsert_erase
 
 中文:
 定理 orderedInsert_erase
-  结论: [DecidableEq α] [Std.Antisymm r] (x : α) (xs : List α) (hx : x in xs)
+  结论: [DecidableEq α] [Std.反对称 r] (x : α) (xs : 列表 α) (hx : x in xs)
   证明: by
   induction xs with grind +splitIndPred
 
@@ -589,7 +589,7 @@ theorem sublist_orderedInsert
 
 中文:
 定理 sublist_orderedInsert
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   结论: xs <+ xs.orderedInsert r x
   证明: by
   induction xs <;> grind
@@ -608,7 +608,7 @@ theorem cons_sublist_orderedInsert
 
 中文:
 定理 cons_sublist_orderedInsert
-  条件: {l c : List α} {a : α} (hl : c <+ l) (ha : 对任意 a' in c, a ≼ a')
+  条件: {l c : 列表 α} {a : α} (hl : c <+ l) (ha : 对任意 a' in c, a ≼ a')
   证明: by
   induction l <;> grind
 -/
@@ -636,8 +636,8 @@ theorem Sublist.orderedInsert_sublist
      
 
 中文:
-定理 Sublist.orderedInsert_sublist
-  结论: [IsTrans α r] {as bs} (x) (hs : as <+ bs)
+定理 子表.orderedInsert_sublist
+  结论: [是Trans α r] {as bs} (x) (hs : as <+ bs)
   证明: by
   cases as with
   | nil => simp
@@ -688,9 +688,9 @@ theorem Pairwise.orderedInsert
   statement: forall l, Pairwise r l -> Pairwise r (orderedInsert r a l)
 
 中文:
-定理 Pairwise.orderedInsert
+定理 两两.orderedInsert
   条件: (a : α)
-  结论: 对任意 l, Pairwise r l -> Pairwise r (orderedInsert r a l)
+  结论: 对任意 l, 两两 r l -> 两两 r (orderedInsert r a l)
 -/
 theorem Pairwise.orderedInsert (a : α) : forall l, Pairwise r l -> Pairwise r (orderedInsert r a l)
   | [], _ => pairwise_singleton _ a
@@ -715,7 +715,7 @@ theorem pairwise_insertionSort
 
 中文:
 定理 pairwise_insertionSort
-  结论: 对任意 l, Pairwise r (insertionSort r l)
+  结论: 对任意 l, 两两 r (insertionSort r l)
 -/
 theorem pairwise_insertionSort : forall l, Pairwise r (insertionSort r l)
   | [] => Pairwise.nil
@@ -742,7 +742,7 @@ theorem sublist_insertionSort
 
 中文:
 定理 sublist_insertionSort
-  条件: {l c : List α} (hr : c.Pairwise r) (hc : c <+ l)
+  条件: {l c : 列表 α} (hr : c.两两 r) (hc : c <+ l)
   证明: by
   induction l generalizing c with
   | nil => grind
@@ -776,7 +776,7 @@ theorem pair_sublist_insertionSort
 
 中文:
 定理 pair_sublist_insertionSort
-  条件: {a b : α} {l : List α} (hab : r a b) (h : [a, b] <+ l)
+  条件: {a b : α} {l : 列表 α} (hab : r a b) (h : [a, b] <+ l)
   证明: sublist_insertionSort (pairwise_pair.mpr hab) h
 
 Depends on / 依赖: pairwise_pair, pairwise_pair.mpr, sublist_insertionSort
@@ -807,7 +807,7 @@ theorem sublist_insertionSort'
 
 中文:
 定理 sublist_insertionSort'
-  条件: {l c : List α} (hs : c.Pairwise r) (hc : c <+~ l)
+  条件: {l c : 列表 α} (hs : c.两两 r) (hc : c <+~ l)
   证明: by
   classical
   obtain ⟨d, hc, hd⟩ := hc
@@ -846,7 +846,7 @@ theorem pair_sublist_insertionSort'
 
 中文:
 定理 pair_sublist_insertionSort'
-  条件: {a b : α} {l : List α} (hab : a ≼ b) (h : [a, b] <+~ l)
+  条件: {a b : α} {l : 列表 α} (hab : a ≼ b) (h : [a, b] <+~ l)
   证明: sublist_insertionSort' (pairwise_pair.mpr hab) h
 
 Depends on / 依赖: pairwise_pair, pairwise_pair.mpr, sublist_insertionSort
@@ -887,8 +887,8 @@ theorem Perm.eq_of_pairwise'
   proof: eq_of_pairwise (fun _ _ _ _ => antisymm)
 
 中文:
-定理 Perm.eq_of_pairwise'
-  条件: {l₁ l₂ : List α}
+定理 置换.eq_of_pairwise'
+  条件: {l₁ l₂ : 列表 α}
   证明: eq_of_pairwise (fun _ _ _ _ => antisymm)
 
 Depends on / 依赖: antisymm, eq_of_pairwise
@@ -909,7 +909,7 @@ theorem sublist_of_subperm_of_pairwise
 
 中文:
 定理 sublist_of_subperm_of_pairwise
-  结论: {l₁ l₂ : List α} (hp : l₁ <+~ l₂)
+  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂)
   证明: by
   let ⟨_, h, h'⟩ := hp
   exact Sublist.trans (h.eq_of_pairwise' (hs₂.sublist h') hs₁ ▸ Sublist.refl _) h'
@@ -931,8 +931,8 @@ theorem Subset.antisymm_of_pairwise
     (subperm_of_subset h₂.nodup hl₁₂')).eq_of_pairwise' h₁ h₂
 
 中文:
-定理 Subset.antisymm_of_pairwise
-  结论: [Std.Irrefl r] {l₁ l₂ : List α}
+定理 子集.antisymm_of_pairwise
+  结论: [Std.Irrefl r] {l₁ l₂ : 列表 α}
   证明: ((subperm_of_subset h₁.nodup hl₁₂).antisymm
     (subperm_of_subset h₂.nodup hl₁₂')).eq_of_pairwise' h₁ h₂
 
@@ -952,8 +952,8 @@ theorem Pairwise.eq_of_mem_iff
   proof: Subset.antisymm_of_pairwise h₁ h₂ (by grind) (by grind)
 
 中文:
-定理 Pairwise.eq_of_mem_iff
-  结论: [Std.Irrefl r] {l₁ l₂ : List α}
+定理 两两.eq_of_mem_iff
+  结论: [Std.Irrefl r] {l₁ l₂ : 列表 α}
   证明: Subset.antisymm_of_pairwise h₁ h₂ (by grind) (by grind)
 
 Depends on / 依赖: Subset, Subset.antisymm_of_pairwise, antisymm_of_pairwise
@@ -981,8 +981,8 @@ theorem Pairwise.merge
     l l' (by simpa using h) (by simpa using h')
 
 中文:
-定理 Pairwise.merge
-  条件: {l l' : List α} (h : Pairwise r l) (h' : Pairwise r l')
+定理 两两.merge
+  条件: {l l' : 列表 α} (h : 两两 r l) (h' : 两两 r l')
   证明: by
   simpa using pairwise_merge (le := (r · ·))
     (fun a b c h₁ h₂ => by simpa using _root_.trans (by simpa using h₁) (by simpa using h₂))
@@ -1015,8 +1015,8 @@ theorem pairwise_mergeSort'
 
 中文:
 定理 pairwise_mergeSort'
-  条件: (l : List α)
-  结论: Pairwise r (mergeSort l (r · ·))
+  条件: (l : 列表 α)
+  结论: 两两 r (mergeSort l (r · ·))
   证明: by
   simpa using pairwise_mergeSort (le := (r · ·))
     (fun _ _ _ => by simpa using trans_of r)
@@ -1044,8 +1044,8 @@ theorem mergeSort_eq_self
 
 中文:
 定理 mergeSort_eq_self
-  条件: {l : List α}
-  结论: Pairwise r l -> mergeSort l (r · ·) = l
+  条件: {l : 列表 α}
+  结论: 两两 r l -> mergeSort l (r · ·) = l
   证明: (mergeSort_perm _ _).eq_of_pairwise' (pairwise_mergeSort' _ l)
 
 Depends on / 依赖: eq_of_pairwise, mergeSort_perm, pairwise_mergeSort
@@ -1064,7 +1064,7 @@ theorem mergeSort_eq_insertionSort
 
 中文:
 定理 mergeSort_eq_insertionSort
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: ((mergeSort_perm l _).trans (perm_insertionSort r l).symm).eq_of_pairwise'
     (pairwise_mergeSort' r l) (pairwise_insertionSort r l)
 
@@ -1114,7 +1114,7 @@ definition SortedLE
 
 中文:
 定义 SortedLE
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: Monotone l.get
 
 Depends on / 依赖: Monotone, l.get
@@ -1130,7 +1130,7 @@ definition SortedGE
 
 中文:
 定义 SortedGE
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: Antitone l.get
 -/
 @[to_dual existing SortedLE] def SortedGE (l : List α) := Antitone l.get
@@ -1144,7 +1144,7 @@ definition SortedLT
 
 中文:
 定义 SortedLT
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: StrictMono l.get
 
 Depends on / 依赖: StrictMono, l.get
@@ -1160,7 +1160,7 @@ definition SortedGT
 
 中文:
 定义 SortedGT
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: StrictAnti l.get
 -/
 @[to_dual existing SortedLT] def SortedGT (l : List α) := StrictAnti l.get
@@ -1177,7 +1177,7 @@ theorem sortedLE_iff_monotone_get
 
 中文:
 定理 sortedLE_iff_monotone_get
-  结论: l.SortedLE ↔ Monotone l.get
+  结论: l.SortedLE ↔ 递增 l.get
   证明: .rfl
 -/
 theorem sortedLE_iff_monotone_get : l.SortedLE ↔ Monotone l.get := .rfl
@@ -1191,7 +1191,7 @@ theorem sortedGE_iff_antitone_get
 
 中文:
 定理 sortedGE_iff_antitone_get
-  结论: l.SortedGE ↔ Antitone l.get
+  结论: l.SortedGE ↔ 递减 l.get
   证明: .rfl
 -/
 theorem sortedGE_iff_antitone_get : l.SortedGE ↔ Antitone l.get := .rfl
@@ -1205,7 +1205,7 @@ theorem sortedLT_iff_strictMono_get
 
 中文:
 定理 sortedLT_iff_strictMono_get
-  结论: l.SortedLT ↔ StrictMono l.get
+  结论: l.SortedLT ↔ 严格递增 l.get
   证明: .rfl
 -/
 theorem sortedLT_iff_strictMono_get : l.SortedLT ↔ StrictMono l.get := .rfl
@@ -1224,7 +1224,7 @@ pro
 
 中文:
 定理 sortedGT_iff_strictAnti_get
-  结论: l.SortedGT ↔ StrictAnti l.get
+  结论: l.SortedGT ↔ 严格递减 l.get
   证明: .rfl
 
 protected alias ⟨SortedLE.monotone_get, _root_.Monotone.sortedLE⟩ := sortedLE_iff_monotone_get
@@ -1255,7 +1255,7 @@ theorem sortedLE_iff_pairwise
 
 中文:
 定理 sortedLE_iff_pairwise
-  结论: l.SortedLE ↔ l.Pairwise (· <= ·)
+  结论: l.SortedLE ↔ l.两两 (· <= ·)
   证明: by
   simp only [sortedLE_iff_monotone_get, monotone_iff_forall_lt, Fin.forall_iff]
   grind [pairwise_iff_getElem]
@@ -1275,7 +1275,7 @@ theorem sortedGE_iff_pairwise
 
 中文:
 定理 sortedGE_iff_pairwise
-  结论: l.SortedGE ↔ l.Pairwise (· >= ·)
+  结论: l.SortedGE ↔ l.两两 (· >= ·)
   证明: by
   simp only [sortedGE_iff_antitone_get, antitone_iff_forall_lt, Fin.forall_iff]
   grind [pairwise_iff_getElem]
@@ -1295,7 +1295,7 @@ theorem sortedLT_iff_pairwise
 
 中文:
 定理 sortedLT_iff_pairwise
-  结论: l.SortedLT ↔ l.Pairwise (· < ·)
+  结论: l.SortedLT ↔ l.两两 (· < ·)
   证明: by
   simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff]
   grind [pairwise_iff_getElem]
@@ -1319,7 +1319,7 @@ protected alias ⟨SortedLT.pairwise,
 
 中文:
 定理 sortedGT_iff_pairwise
-  结论: l.SortedGT ↔ l.Pairwise (· > ·)
+  结论: l.SortedGT ↔ l.两两 (· > ·)
   证明: by
   simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff]
   grind [pairwise_iff_getElem]
@@ -1593,7 +1593,7 @@ theorem SortedLT.sortedLE
 
 中文:
 定理 SortedLT.sortedLE
-  条件: {l : List α} (h : l.SortedLT)
+  条件: {l : 列表 α} (h : l.SortedLT)
   结论: l.SortedLE
   证明: h.strictMono_get.monotone.sortedLE
 -/
@@ -1610,7 +1610,7 @@ theorem SortedGT.sortedGE
 
 中文:
 定理 SortedGT.sortedGE
-  条件: {l : List α} (h : l.SortedGT)
+  条件: {l : 列表 α} (h : l.SortedGT)
   结论: l.SortedGE
   证明: h.strictAnti_get.antitone.sortedGE
 -/
@@ -1763,7 +1763,7 @@ theorem sortedLE_ofFn_iff
 
 中文:
 定理 sortedLE_ofFn_iff
-  结论: (ofFn f).SortedLE ↔ Monotone f
+  结论: (ofFn f).SortedLE ↔ 递增 f
   证明: by
   simp only [sortedLE_iff_monotone_get, Monotone, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
@@ -1784,7 +1784,7 @@ theorem sortedGE_ofFn_iff
 
 中文:
 定理 sortedGE_ofFn_iff
-  结论: (ofFn f).SortedGE ↔ Antitone f
+  结论: (ofFn f).SortedGE ↔ 递减 f
   证明: by
   simp only [sortedGE_iff_antitone_get, Antitone, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_le_mk]
@@ -1805,7 +1805,7 @@ theorem sortedLT_ofFn_iff
 
 中文:
 定理 sortedLT_ofFn_iff
-  结论: (ofFn f).SortedLT ↔ StrictMono f
+  结论: (ofFn f).SortedLT ↔ 严格递增 f
   证明: by
   simp only [sortedLT_iff_strictMono_get, StrictMono, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
@@ -1826,7 +1826,7 @@ theorem sortedGT_ofFn_iff
 
 中文:
 定理 sortedGT_ofFn_iff
-  结论: (ofFn f).SortedGT ↔ StrictAnti f
+  结论: (ofFn f).SortedGT ↔ 严格递减 f
   证明: by
   simp only [sortedGT_iff_strictAnti_get, StrictAnti, Fin.forall_iff,
     length_ofFn, get_ofFn, Fin.cast_mk, Fin.mk_lt_mk]
@@ -1939,7 +1939,7 @@ theorem sortedLE_map_ofDual
 
 中文:
 定理 sortedLE_map_ofDual
-  条件: {l : List αᵒᵈ}
+  条件: {l : 列表 αᵒᵈ}
   证明: by
   grind [OrderDual.ofDual_le_ofDual]
 -/
@@ -1973,7 +1973,7 @@ theorem sortedLT_map_ofDual
 
 中文:
 定理 sortedLT_map_ofDual
-  条件: {l : List αᵒᵈ}
+  条件: {l : 列表 αᵒᵈ}
   证明: by
   grind [OrderDual.ofDual_lt_ofDual]
 -/
@@ -1996,7 +1996,7 @@ prot
 
 中文:
 定理 sortedGT_map_ofDual
-  条件: {l : List αᵒᵈ}
+  条件: {l : 列表 αᵒᵈ}
   证明: by
   grind [OrderDual.ofDual_lt_ofDual]
 
@@ -2031,7 +2031,7 @@ theorem sortedLE_map_toDual
 
 中文:
 定理 sortedLE_map_toDual
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   grind [OrderDual.toDual_le_toDual]
 
@@ -2051,7 +2051,7 @@ theorem sortedGE_map_toDual
 
 中文:
 定理 sortedGE_map_toDual
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   grind [OrderDual.toDual_le_toDual]
 
@@ -2071,7 +2071,7 @@ theorem sortedLT_map_toDual
 
 中文:
 定理 sortedLT_map_toDual
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   grind [OrderDual.toDual_lt_toDual]
 
@@ -2096,7 +2096,7 @@ prot
 
 中文:
 定理 sortedGT_map_toDual
-  条件: {l : List αᵒᵈ}
+  条件: {l : 列表 αᵒᵈ}
   证明: by
   grind [OrderDual.toDual_lt_toDual]
 
@@ -2136,7 +2136,7 @@ theorem SortedLE.sortedLT_of_nodup
 
 中文:
 定理 SortedLE.sortedLT_of_nodup
-  条件: {l : List α} (h₁ : l.SortedLE) (h₂ : l.Nodup)
+  条件: {l : 列表 α} (h₁ : l.SortedLE) (h₂ : l.Nodup)
   证明: (h₁.monotone_get.strictMono_of_injective h₂.injective_get).sortedLT
 -/
 protected theorem SortedLE.sortedLT_of_nodup {l : List α} (h₁ : l.SortedLE) (h₂ : l.Nodup) :
@@ -2152,7 +2152,7 @@ theorem SortedGE.sortedGT_of_nodup
 
 中文:
 定理 SortedGE.sortedGT_of_nodup
-  条件: {l : List α} (h₁ : l.SortedGE) (h₂ : l.Nodup)
+  条件: {l : 列表 α} (h₁ : l.SortedGE) (h₂ : l.Nodup)
   证明: (h₁.antitone_get.strictAnti_of_injective h₂.injective_get).sortedGT
 -/
 protected theorem SortedGE.sortedGT_of_nodup {l : List α} (h₁ : l.SortedGE) (h₂ : l.Nodup) :
@@ -2203,8 +2203,8 @@ theorem Perm.eq_of_sortedLE
   proof: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
 
 中文:
-定理 Perm.eq_of_sortedLE
-  结论: {l₁ l₂ : List α} (hl₁ : l₁.SortedLE)
+定理 置换.eq_of_sortedLE
+  结论: {l₁ l₂ : 列表 α} (hl₁ : l₁.SortedLE)
   证明: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
 
 Depends on / 依赖: Perm.eq_of_pairwise, eq_of_pairwise, pairwise
@@ -2222,8 +2222,8 @@ theorem Perm.eq_of_sortedGE
   proof: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
 
 中文:
-定理 Perm.eq_of_sortedGE
-  结论: {l₁ l₂ : List α} (hl₁ : l₁.SortedGE)
+定理 置换.eq_of_sortedGE
+  结论: {l₁ l₂ : 列表 α} (hl₁ : l₁.SortedGE)
   证明: Perm.eq_of_pairwise' hl₁.pairwise hl₂.pairwise
 
 Depends on / 依赖: Perm.eq_of_pairwise, eq_of_pairwise, pairwise
@@ -2241,8 +2241,8 @@ theorem Subset.antisymm_of_sortedLT
   proof: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
 
 中文:
-定理 Subset.antisymm_of_sortedLT
-  结论: {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
+定理 子集.antisymm_of_sortedLT
+  结论: {l₁ l₂ : 列表 α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
   证明: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
 
 Depends on / 依赖: antisymm_of_pairwise, pairwise
@@ -2260,8 +2260,8 @@ theorem Subset.antisymm_of_sortedGT
   proof: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
 
 中文:
-定理 Subset.antisymm_of_sortedGT
-  结论: {l₁ l₂ : List α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
+定理 子集.antisymm_of_sortedGT
+  结论: {l₁ l₂ : 列表 α} (hl₁₂ : l₁ subseteq l₂) (hl₁₂' : l₂ subseteq l₁)
   证明: hl₁₂.antisymm_of_pairwise h₁.pairwise h₂.pairwise hl₁₂'
 
 Depends on / 依赖: antisymm_of_pairwise, pairwise
@@ -2280,7 +2280,7 @@ theorem SortedLT.eq_of_mem_iff
 
 中文:
 定理 SortedLT.eq_of_mem_iff
-  结论: {l₁ l₂ : List α}
+  结论: {l₁ l₂ : 列表 α}
   证明: h₁.pairwise.eq_of_mem_iff h₂.pairwise
 
 Depends on / 依赖: eq_of_mem_iff, pairwise, pairwise.eq_of_mem_iff
@@ -2299,7 +2299,7 @@ theorem SortedGT.eq_of_mem_iff
 
 中文:
 定理 SortedGT.eq_of_mem_iff
-  结论: {l₁ l₂ : List α}
+  结论: {l₁ l₂ : 列表 α}
   证明: h₁.pairwise.eq_of_mem_iff h₂.pairwise h
 
 Depends on / 依赖: eq_of_mem_iff, pairwise, pairwise.eq_of_mem_iff
@@ -2317,8 +2317,8 @@ theorem Perm.eq_reverse_of_sortedLE_of_sortedGE
   proof: (perm_reverse.mpr hp).eq_of_sortedLE hl₁ hl₂.reverse
 
 中文:
-定理 Perm.eq_reverse_of_sortedLE_of_sortedGE
-  结论: {l₁ l₂ : List α} (hp : l₁ ~ l₂) (hl₁ : l₁.SortedLE)
+定理 置换.eq_reverse_of_sortedLE_of_sortedGE
+  结论: {l₁ l₂ : 列表 α} (hp : l₁ ~ l₂) (hl₁ : l₁.SortedLE)
   证明: (perm_reverse.mpr hp).eq_of_sortedLE hl₁ hl₂.reverse
 
 Depends on / 依赖: eq_of_sortedLE, perm_reverse, perm_reverse.mpr, reverse
@@ -2337,7 +2337,7 @@ theorem SortedLT.eq_reverse_of_mem_iff_of_sortedGT
 
 中文:
 定理 SortedLT.eq_reverse_of_mem_iff_of_sortedGT
-  结论: {l₁ l₂ : List α}
+  结论: {l₁ l₂ : 列表 α}
   证明: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
 
 Depends on / 依赖: eq_of_mem_iff, reverse
@@ -2356,7 +2356,7 @@ theorem SortedGT.eq_reverse_of_mem_iff_of_sortedLT
 
 中文:
 定理 SortedGT.eq_reverse_of_mem_iff_of_sortedLT
-  结论: {l₁ l₂ : List α}
+  结论: {l₁ l₂ : 列表 α}
   证明: hl₁.eq_of_mem_iff hl₂.reverse (by simpa using h)
 
 Depends on / 依赖: eq_of_mem_iff, reverse
@@ -2376,7 +2376,7 @@ theorem sublist_of_subperm_of_sortedLE
 
 中文:
 定理 sublist_of_subperm_of_sortedLE
-  结论: {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedLE)
+  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedLE)
   证明: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
 
 Depends on / 依赖: pairwise, sublist_of_subperm_of_pairwise
@@ -2394,7 +2394,7 @@ theorem sublist_of_subperm_of_sortedGE
 
 中文:
 定理 sublist_of_subperm_of_sortedGE
-  结论: {l₁ l₂ : List α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedGE)
+  结论: {l₁ l₂ : 列表 α} (hp : l₁ <+~ l₂) (hl₁ : l₁.SortedGE)
   证明: sublist_of_subperm_of_pairwise hp hl₁.pairwise hl₂.pairwise
 
 Depends on / 依赖: pairwise, sublist_of_subperm_of_pairwise
@@ -2599,8 +2599,8 @@ theorem pairwise_listMap
 
 中文:
 定理 pairwise_listMap
-  条件: (e : ra ↪r rb) {l : List α}
-  结论: (l.map e).Pairwise rb ↔ l.Pairwise ra
+  条件: (e : ra ↪r rb) {l : 列表 α}
+  结论: (l.map e).两两 rb ↔ l.两两 ra
   证明: by
   simp [pairwise_map, e.map_rel_iff]
 
@@ -2623,7 +2623,7 @@ theorem pairwise_swap_listMap
 
 中文:
 定理 pairwise_swap_listMap
-  条件: (e : ra ↪r rb) {l : List α}
+  条件: (e : ra ↪r rb) {l : 列表 α}
   证明: by
   simp [pairwise_map, e.map_rel_iff]
 
@@ -2653,8 +2653,8 @@ theorem pairwise_listMap
 
 中文:
 定理 pairwise_listMap
-  条件: (e : ra ≃r rb) {l : List α}
-  结论: (l.map e).Pairwise rb ↔ l.Pairwise ra
+  条件: (e : ra ≃r rb) {l : 列表 α}
+  结论: (l.map e).两两 rb ↔ l.两两 ra
   证明: e.toRelEmbedding.pairwise_listMap
 
 @[simp]
@@ -2675,7 +2675,7 @@ theorem pairwise_swap_listMap
 
 中文:
 定理 pairwise_swap_listMap
-  条件: (e : ra ≃r rb) {l : List α}
+  条件: (e : ra ≃r rb) {l : 列表 α}
   证明: e.toRelEmbedding.pairwise_swap_listMap
 
 Depends on / 依赖: e.toRelEmbedding.pairwise_swap_listMap, pairwise_swap_listMap, toRelEmbedding
@@ -2706,7 +2706,7 @@ theorem sortedLE_listMap
 
 中文:
 定理 sortedLE_listMap
-  条件: (e : α ↪o β) {l : List α}
+  条件: (e : α ↪o β) {l : 列表 α}
   证明: by
   simp_rw [sortedLE_iff_pairwise, e.pairwise_listMap]
 
@@ -2733,7 +2733,7 @@ theorem sortedLT_listMap
 
 中文:
 定理 sortedLT_listMap
-  条件: (e : α ↪o β) {l : List α}
+  条件: (e : α ↪o β) {l : 列表 α}
   证明: by
   simp_rw [sortedLT_iff_pairwise]
   exact e.ltEmbedding.pairwise_listMap
@@ -2761,7 +2761,7 @@ theorem sortedGE_listMap
 
 中文:
 定理 sortedGE_listMap
-  条件: (e : α ↪o β) {l : List α}
+  条件: (e : α ↪o β) {l : 列表 α}
   证明: by
   simp_rw [← sortedLE_reverse, ← map_reverse, sortedLE_listMap]
 
@@ -2785,7 +2785,7 @@ theorem sortedGT_listMap
 
 中文:
 定理 sortedGT_listMap
-  条件: (e : α ↪o β) {l : List α}
+  条件: (e : α ↪o β) {l : 列表 α}
   证明: by
   simp_rw [← sortedLT_reverse, ← map_reverse, sortedLT_listMap]
 
@@ -2814,7 +2814,7 @@ theorem sortedLT_listMap
 
 中文:
 定理 sortedLT_listMap
-  条件: (e : α ≃o β) {l : List α}
+  条件: (e : α ≃o β) {l : 列表 α}
   证明: e.toOrderEmbedding.sortedLT_listMap
 
 @[simp]
@@ -2836,7 +2836,7 @@ theorem sortedGT_listMap
 
 中文:
 定理 sortedGT_listMap
-  条件: (e : α ≃o β) {l : List α}
+  条件: (e : α ≃o β) {l : 列表 α}
   证明: e.toOrderEmbedding.sortedGT_listMap
 
 Depends on / 依赖: e.toOrderEmbedding.sortedGT_listMap, sortedGT_listMap, toOrderEmbedding
@@ -2861,7 +2861,7 @@ theorem sortedLE_listMap
 
 中文:
 定理 sortedLE_listMap
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: (OrderEmbedding.ofStrictMono f hf).sortedLE_listMap
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedLE_listMap
@@ -2880,7 +2880,7 @@ theorem sortedGE_listMap
 
 中文:
 定理 sortedGE_listMap
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: (OrderEmbedding.ofStrictMono f hf).sortedGE_listMap
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedGE_listMap
@@ -2899,7 +2899,7 @@ theorem sortedLT_listMap
 
 中文:
 定理 sortedLT_listMap
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: (OrderEmbedding.ofStrictMono f hf).sortedLT_listMap
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedLT_listMap
@@ -2918,7 +2918,7 @@ theorem sortedGT_listMap
 
 中文:
 定理 sortedGT_listMap
-  条件: (hf : StrictMono f)
+  条件: (hf : 严格递增 f)
   证明: (OrderEmbedding.ofStrictMono f hf).sortedGT_listMap
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, ofStrictMono, sortedGT_listMap
@@ -2946,7 +2946,7 @@ theorem sortedLE_listMap
 
 中文:
 定理 sortedLE_listMap
-  条件: (hf : StrictAnti f)
+  条件: (hf : 严格递减 f)
   证明: by
   grind [hf.le_iff_ge]
 
@@ -2967,7 +2967,7 @@ theorem sortedGE_listMap
 
 中文:
 定理 sortedGE_listMap
-  条件: (hf : StrictAnti f)
+  条件: (hf : 严格递减 f)
   证明: by
   grind [hf.le_iff_ge]
 
@@ -2988,7 +2988,7 @@ theorem sortedLT_listMap
 
 中文:
 定理 sortedLT_listMap
-  条件: (hf : StrictAnti f)
+  条件: (hf : 严格递减 f)
   证明: by
   grind [hf.lt_iff_gt]
 
@@ -3009,7 +3009,7 @@ theorem sortedGT_listMap
 
 中文:
 定理 sortedGT_listMap
-  条件: (hf : StrictAnti f)
+  条件: (hf : 严格递减 f)
   证明: by
   grind [hf.lt_iff_gt]
 

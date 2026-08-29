@@ -49,7 +49,7 @@ definition cokerToKer'
 
 中文:
 定义 cokerToKer'
-  签名: (hk : k <= n) (cc : CokernelCofork (S.map' k (k + 1)))
+  签名: (hk : k <= n) (cc : 余核余叉 (S.map' k (k + 1)))
   定义体: IsColimit.desc hcc (CokernelCofork.ofπ _
     (show S.map' k (k + 1) ≫ IsLimit.lift hkf (KernelFork.ofι _ (hS.zero (k + 1))) = _ from
       Fork.IsLimit.hom_ext hkf (by simpa using hS.zero k)))
@@ -76,7 +76,7 @@ lemma cokerToKer'_fac
 
 中文:
 引理 cokerToKer'_fac
-  结论: (hk : k <= n) (cc : CokernelCofork (S.map' k (k + 1)))
+  结论: (hk : k <= n) (cc : 余核余叉 (S.map' k (k + 1)))
   证明: by
   simp [cokerToKer']
 -/
@@ -227,7 +227,7 @@ lemma epi_cokerToKer'
 
 中文:
 引理 epi_cokerToKer'
-  条件: (hS' : (S.sc hS (k + 1)).Exact)
+  条件: (hS' : (S.sc hS (k + 1)).正合)
   证明: by
   have := hS'.hasZeroObject
   have := hS'.hasHomology
@@ -265,7 +265,7 @@ lemma mono_cokerToKer'
 
 中文:
 引理 mono_cokerToKer'
-  条件: (hS' : (S.sc hS k).Exact)
+  条件: (hS' : (S.sc hS k).正合)
   证明: by
   have := hS'.hasZeroObject
   have := hS'.hasHomology
@@ -337,7 +337,7 @@ instance isIso_cokerToKer'
 
 中文:
 实例 isIso_cokerToKer'
-  签名: : IsIso (hS.cokerToKer' k hk cc kf hcc hkf)
+  签名: : 是同构 (hS.cokerToKer' k hk cc kf hcc hkf)
   定义体: by
   have : Mono (hS.cokerToKer' k hk cc kf hcc hkf) :=
       hS.toIsComplex.mono_cokerToKer' k hk cc kf hcc hkf

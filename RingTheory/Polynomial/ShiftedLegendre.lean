@@ -245,7 +245,7 @@ lemma shiftedLegendre_eval_symm
 
 中文:
 引理 shiftedLegendre_eval_symm
-  条件: (n : 自然数) {R : 类型} [Ring R] (x : R)
+  条件: (n : 自然数) {R : 类型} [环 R] (x : R)
   证明: by
   have := congr(aeval x $(neg_one_pow_mul_shiftedLegendre_comp_one_sub_X_eq n))
   simpa [aeval_comp] using this.symm

@@ -52,7 +52,7 @@ definition Dual
   body: P
 
 中文:
-定义 Dual
+定义 对偶
   定义体: P
 -/
 def Dual :=
@@ -68,7 +68,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Inhabited P] : Inhabited (Dual P)
+  签名: : 可居 P] : 可居 (对偶 P)
   定义体: h
 -/
 instance [h : Inhabited P] : Inhabited (Dual P) :=
@@ -83,8 +83,8 @@ instance [Finite
   body: ‹Finite P›
 
 中文:
-实例 [Finite
-  签名: P] : Finite (Dual P)
+实例 [有限
+  签名: P] : 有限 (对偶 P)
   定义体: ‹Finite P›
 
 Depends on / 依赖: Finite
@@ -102,7 +102,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Fintype P] : Fintype (Dual P)
+  签名: : 有限类型 P] : 有限类型 (对偶 P)
   定义体: h
 -/
 instance [h : Fintype P] : Fintype (Dual P) :=
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Dual L) (Dual P)
+  签名: Membership (对偶 L) (对偶 P)
   定义体: ⟨Function.swap (Membership.mem : L -> P -> Prop)⟩
 
 Depends on / 依赖: Function, Function.swap, Membership, Membership.mem
@@ -139,7 +139,7 @@ class Nondegenerate
     - eq_or_eq : forall {p₁ p₂ : P} {l₁ l₂ : L}, p₁ in l₁ -> p₂ in l₁ -> p₁ in l₂ -> p₂ in l₂ -> p₁ = p₂ ∨ l₁ = l₂
 
 中文:
-类 Nondegenerate
+类 非退化
   参数: : 命题 where
   公理与运算 (3 个):
     - exists_point : 对任意 l : L, 存在 p, p ∉ l
@@ -163,9 +163,9 @@ class HasPoints
     - mkPoint_ax : forall {l₁ l₂ : L} (h : l₁ != l₂), mkPoint h in l₁ ∧ mkPoint h in l₂
 
 中文:
-类 HasPoints
-  参数: extends Nondegenerate P L
-  继承: Nondegenerate P L
+类 有Points
+  参数: extends 非退化 P L
+  继承: 非退化 P L
   公理与运算 (2 个):
     - mkPoint : 对任意 {l₁ l₂ : L}, l₁ != l₂ -> P
     - mkPoint_ax : 对任意 {l₁ l₂ : L} (h : l₁ != l₂), mkPoint h in l₁ ∧ mkPoint h in l₂
@@ -187,9 +187,9 @@ class HasLines
     - mkLine_ax : forall {p₁ p₂ : P} (h : p₁ != p₂), p₁ in mkLine h ∧ p₂ in mkLine h
 
 中文:
-类 HasLines
-  参数: extends Nondegenerate P L
-  继承: Nondegenerate P L
+类 有Lines
+  参数: extends 非退化 P L
+  继承: 非退化 P L
   公理与运算 (2 个):
     - mkLine : 对任意 {p₁ p₂ : P}, p₁ != p₂ -> L
     - mkLine_ax : 对任意 {p₁ p₂ : P} (h : p₁ != p₂), p₁ in mkLine h ∧ p₂ in mkLine h
@@ -216,8 +216,8 @@ instance Dual.Nondegenerate
   eq_or_eq := @fun l₁ l₂ p₁ p₂ h₁ h₂ h₃ h₄ => (@eq_or_eq P L _ _ p₁ p₂ l₁ l₂ h₁ h₃ h₂ h₄).symm
 
 中文:
-实例 Dual.Nondegenerate
-  签名: [Nondegenerate P L]
+实例 对偶.非退化
+  签名: [非退化 P L]
   定义体: @exists_line P L _ _
   exists_line := @exists_point P L _ _
   eq_or_eq := @fun l₁ l₂ p₁ p₂ h₁ h₂ h₃ h₄ => (@eq_or_eq P L _ _ p₁ p₂ l₁ l₂ h₁ h₃ h₂ h₄).symm
@@ -240,8 +240,8 @@ instance Dual.hasLines
     mkLine_ax := @mkPoint_ax P L _ _ }
 
 中文:
-实例 Dual.hasLines
-  签名: [HasPoints P L]
+实例 对偶.hasLines
+  签名: [有Points P L]
   定义体: { Dual.Nondegenerate _ _ with
     mkLine := @mkPoint P L _ _
     mkLine_ax := @mkPoint_ax P L _ _ }
@@ -264,8 +264,8 @@ instance Dual.hasPoints
     mkPoint_ax := @mkLine_ax P L _ _ }
 
 中文:
-实例 Dual.hasPoints
-  签名: [HasLines P L]
+实例 对偶.hasPoints
+  签名: [有Lines P L]
   定义体: { Dual.Nondegenerate _ _ with
     mkPoint := @mkLine P L _ _
     mkPoint_ax := @mkLine_ax P L _ _ }
@@ -287,8 +287,8 @@ theorem HasPoints.existsUnique_point
     (eq_or_eq hp.1 (mkPoint_ax hl).1 hp.2 (mkPoint_ax hl).2).resolve_right hl⟩
 
 中文:
-定理 HasPoints.existsUnique_point
-  条件: [HasPoints P L] (l₁ l₂ : L) (hl : l₁ != l₂)
+定理 有Points.存在Unique_point
+  条件: [有Points P L] (l₁ l₂ : L) (hl : l₁ != l₂)
   证明: ⟨mkPoint hl, mkPoint_ax hl, fun _ hp =>
     (eq_or_eq hp.1 (mkPoint_ax hl).1 hp.2 (mkPoint_ax hl).2).resolve_right hl⟩
 
@@ -308,8 +308,8 @@ theorem HasLines.existsUnique_line
   proof: HasPoints.existsUnique_point (Dual L) (Dual P) p₁ p₂ hp
 
 中文:
-定理 HasLines.existsUnique_line
-  条件: [HasLines P L] (p₁ p₂ : P) (hp : p₁ != p₂)
+定理 有Lines.存在Unique_line
+  条件: [有Lines P L] (p₁ p₂ : P) (hp : p₁ != p₂)
   证明: HasPoints.existsUnique_point (Dual L) (Dual P) p₁ p₂ hp
 
 Depends on / 依赖: HasPoints, HasPoints.existsUnique_point, existsUnique_point
@@ -335,8 +335,8 @@ theorem Nondegenerate.exists_injective_of_card_le
       exact ⟨f, hf1, fun l => 
 
 中文:
-定理 Nondegenerate.exists_injective_of_card_le
-  结论: [Nondegenerate P L] [Fintype P] [Fintype L]
+定理 非退化.存在_injective_of_card_le
+  结论: [非退化 P L] [有限类型 P] [有限类型 L]
   证明: by
   classical
     let t : L -> Finset P := fun l => Set.toFinset { p | p ∉ l }
@@ -449,7 +449,7 @@ theorem sum_lineCount_eq_sum_pointCount
 
 中文:
 定理 sum_lineCount_eq_sum_pointCount
-  条件: [Fintype P] [Fintype L]
+  条件: [有限类型 P] [有限类型 L]
   证明: by
   classical
     simp only [lineCount, pointCount, Nat.card_eq_fintype_card, ← Fintype.card_sigma]
@@ -489,8 +489,8 @@ theorem HasLines.pointCount_le_lineCount
   have : forall p' : { p // p in l }, p != p' := fun p'
 
 中文:
-定理 HasLines.pointCount_le_lineCount
-  结论: [HasLines P L] {p : P} {l : L} (h : p ∉ l)
+定理 有Lines.pointCount_le_lineCount
+  结论: [有Lines P L] {p : P} {l : L} (h : p ∉ l)
   证明: by
   by_cases hf : Infinite { p : P // p in l }
   · simp [pointCount]
@@ -525,8 +525,8 @@ theorem HasPoints.lineCount_le_pointCount
   proof: @HasLines.pointCount_le_lineCount (Dual L) (Dual P) _ _ l p h hf
 
 中文:
-定理 HasPoints.lineCount_le_pointCount
-  结论: [HasPoints P L] {p : P} {l : L} (h : p ∉ l)
+定理 有Points.lineCount_le_pointCount
+  结论: [有Points P L] {p : P} {l : L} (h : p ∉ l)
   证明: @HasLines.pointCount_le_lineCount (Dual L) (Dual P) _ _ l p h hf
 
 Depends on / 依赖: HasLines, HasLines.pointCount_le_lineCount, pointCount_le_lineCount
@@ -554,8 +554,8 @@ theorem HasLines.card_le
         (Finset.sum_le_sum fun l _ => Ha
 
 中文:
-定理 HasLines.card_le
-  条件: [HasLines P L] [Fintype P] [Fintype L]
+定理 有Lines.card_le
+  条件: [有Lines P L] [有限类型 P] [有限类型 L]
   证明: by
   classical
   by_contra hc₂
@@ -599,8 +599,8 @@ theorem HasPoints.card_le
   proof: @HasLines.card_le (Dual L) (Dual P) _ _ _ _
 
 中文:
-定理 HasPoints.card_le
-  条件: [HasPoints P L] [Fintype P] [Fintype L]
+定理 有Points.card_le
+  条件: [有Points P L] [有限类型 P] [有限类型 L]
   证明: @HasLines.card_le (Dual L) (Dual P) _ _ _ _
 
 Depends on / 依赖: HasLines, HasLines.card_le, card_le
@@ -624,8 +624,8 @@ theorem HasLines.exists_bijective_of_card_eq
 ((hf3.sum_comp _).trans (sum_lineCount_eq_sum
 
 中文:
-定理 HasLines.exists_bijective_of_card_eq
-  结论: [HasLines P L] [Fintype P] [Fintype L]
+定理 有Lines.存在_bijective_of_card_eq
+  结论: [有Lines P L] [有限类型 P] [有限类型 L]
   证明: by
   obtain ⟨f, hf1, hf2⟩ := Nondegenerate.exists_injective_of_card_le (ge_of_eq h)
   have hf3 := (Fintype.bijective_iff_injective_and_card f).mpr ⟨hf1, h.symm⟩
@@ -656,8 +656,8 @@ theorem HasLines.lineCount_eq_pointCount
       rw [← Finset.univ_product_univ]; rw [Finset.sum_product_right]; 
 
 中文:
-定理 HasLines.lineCount_eq_pointCount
-  结论: [HasLines P L] [Fintype P] [Fintype L]
+定理 有Lines.lineCount_eq_pointCount
+  结论: [有Lines P L] [有限类型 P] [有限类型 L]
   证明: by
   classical
     obtain ⟨f, hf1, hf2⟩ := HasLines.exists_bijective_of_card_eq hPL
@@ -702,8 +702,8 @@ theorem HasPoints.lineCount_eq_pointCount
   proof: (@HasLines.lineCount_eq_pointCount (Dual L) (Dual P) _ _ _ _ hPL.symm l p hpl).symm
 
 中文:
-定理 HasPoints.lineCount_eq_pointCount
-  结论: [HasPoints P L] [Fintype P] [Fintype L]
+定理 有Points.lineCount_eq_pointCount
+  结论: [有Points P L] [有限类型 P] [有限类型 L]
   证明: (@HasLines.lineCount_eq_pointCount (Dual L) (Dual P) _ _ _ _ hPL.symm l p hpl).symm
 
 Depends on / 依赖: HasLines, HasLines.lineCount_eq_pointCount, hPL.symm, lineCount_eq_pointCount
@@ -729,8 +729,8 @@ definition HasLines.hasPoints
       have := Fintype.one_lt_card_iff_nontrivial.mp ((congr_arg _ h).mpr Fintype.one_
 
 中文:
-定义 HasLines.hasPoints
-  签名: [HasLines P L] [Fintype P] [Fintype L]
+定义 有Lines.hasPoints
+  签名: [有Lines P L] [有限类型 P] [有限类型 L]
   定义体: let : forall l₁ l₂ : L, l₁ != l₂ -> exists p : P, p in l₁ ∧ p in l₂ := fun l₁ l₂ hl => by
     classical
       obtain ⟨f, _, hf2⟩ := HasLines.exists_bijective_of_card_eq h
@@ -786,8 +786,8 @@ definition HasPoints.hasLines
     mkLine_ax := @fun _ _ => this.mkPoint_ax }
 
 中文:
-定义 HasPoints.hasLines
-  签名: [HasPoints P L] [Fintype P] [Fintype L]
+定义 有Points.hasLines
+  签名: [有Points P L] [有限类型 P] [有限类型 L]
   定义体: let := @HasLines.hasPoints (Dual L) (Dual P) _ _ _ _ h.symm
   { ‹HasPoints P L› with
     mkLine := @fun _ _ => this.mkPoint
@@ -816,8 +816,8 @@ class ProjectivePlane
 
 中文:
 类 ProjectivePlane
-  参数: extends HasPoints P L, HasLines P L
-  继承: HasPoints P L, HasLines P L
+  参数: extends 有Points P L, 有Lines P L
+  继承: 有Points P L, 有Lines P L
   公理与运算 (1 个):
     - exists_config : 存在 (p₁ p₂ p₃ : P) (l₁ l₂ l₃ : L), p₁ ∉ l₂ ∧ p₁ ∉ l₃ ∧ p₂ ∉ l₁ ∧ p₂ in l₂ ∧ p₂ in l₃ ∧ p₃ ∉ l₁ ∧ p₃ in l₂ ∧ p₃ ∉ l₃
 
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: ProjectivePlane (Dual L) (Dual P)
+  签名: ProjectivePlane (对偶 L) (对偶 P)
   定义体: { Dual.hasPoints _ _, Dual.hasLines _ _ with
     exists_config :=
       let ⟨p₁, p₂, p₃, l₁, l₂, l₃, h₁₂, h₁₃, h₂₁, h₂₂, h₂₃, h₃₁, h₃₂, h₃₃⟩ := @exists_config P L _ _
@@ -888,8 +888,8 @@ theorem card_points_eq_card_lines
 
 中文:
 定理 card_points_eq_card_lines
-  条件: [Fintype P] [Fintype L]
-  结论: Fintype.card P = Fintype.card L
+  条件: [有限类型 P] [有限类型 L]
+  结论: 有限类型.card P = 有限类型.card L
   证明: le_antisymm (HasLines.card_le P L) (HasPoints.card_le P L)
 
 Depends on / 依赖: HasLines, HasLines.card_le, HasPoints, HasPoints.card_le, card_le, le_antisymm
@@ -917,7 +917,7 @@ theorem lineCount_eq_lineCount
 
 中文:
 定理 lineCount_eq_lineCount
-  条件: [Finite P] [Finite L] (p q : P)
+  条件: [有限 P] [有限 L] (p q : P)
   结论: lineCount L p = lineCount L q
   证明: by
   cases nonempty_fintype P
@@ -962,7 +962,7 @@ theorem pointCount_eq_pointCount
 
 中文:
 定理 pointCount_eq_pointCount
-  条件: [Finite P] [Finite L] (l m : L)
+  条件: [有限 P] [有限 L] (l m : L)
   证明: by
   apply lineCount_eq_lineCount (Dual P)
 
@@ -988,7 +988,7 @@ theorem lineCount_eq_pointCount
 
 中文:
 定理 lineCount_eq_pointCount
-  条件: [Finite P] [Finite L] (p : P) (l : L)
+  条件: [有限 P] [有限 L] (p : P) (l : L)
   证明: Exists.elim (exists_point l) fun q hq =>
 (lineCount_eq_lineCount L p q).trans by
       cases nonempty_fintype P
@@ -1017,9 +1017,9 @@ theorem Dual.order
   proof: congr_arg (fun n => n - 1) (lineCount_eq_pointCount _ _)
 
 中文:
-定理 Dual.order
-  条件: [Finite P] [Finite L]
-  结论: order (Dual L) (Dual P) = order P L
+定理 对偶.order
+  条件: [有限 P] [有限 L]
+  结论: order (对偶 L) (对偶 P) = order P L
   证明: congr_arg (fun n => n - 1) (lineCount_eq_pointCount _ _)
 
 Depends on / 依赖: congr_arg, lineCount_eq_pointCount
@@ -1043,7 +1043,7 @@ theorem lineCount_eq
 
 中文:
 定理 lineCount_eq
-  条件: [Finite P] [Finite L] (p : P)
+  条件: [有限 P] [有限 L] (p : P)
   结论: lineCount L p = order P L + 1
   证明: by
   obtain ⟨q, -, -, l, -, -, -, -, h, -⟩ := Classical.choose_spec (@exists_config P L _ _)
@@ -1071,7 +1071,7 @@ theorem pointCount_eq
 
 中文:
 定理 pointCount_eq
-  条件: [Finite P] [Finite L] (l : L)
+  条件: [有限 P] [有限 L] (l : L)
   结论: pointCount P l = order P L + 1
   证明: (lineCount_eq (Dual P) _).trans (congr_arg (fun n => n + 1) (Dual.order P L))
 
@@ -1097,7 +1097,7 @@ theorem one_lt_order
 
 中文:
 定理 one_lt_order
-  条件: [Finite P] [Finite L]
+  条件: [有限 P] [有限 L]
   结论: 1 < order P L
   证明: by
   obtain ⟨p₁, p₂, p₃, l₁, l₂, l₃, -, -, h₂₁, h₂₂, h₂₃, h₃₁, h₃₂, h₃₃⟩ := @exists_config P L _ _
@@ -1131,7 +1131,7 @@ theorem two_lt_lineCount
 
 中文:
 定理 two_lt_lineCount
-  条件: [Finite P] [Finite L] (p : P)
+  条件: [有限 P] [有限 L] (p : P)
   结论: 2 < lineCount L p
   证明: by
   simpa only [lineCount_eq L p, Nat.succ_lt_succ_iff] using one_lt_order P L
@@ -1155,7 +1155,7 @@ theorem two_lt_pointCount
 
 中文:
 定理 two_lt_pointCount
-  条件: [Finite P] [Finite L] (l : L)
+  条件: [有限 P] [有限 L] (l : L)
   结论: 2 < pointCount P l
   证明: by
   simpa only [pointCount_eq P l, Nat.succ_lt_succ_iff] using one_lt_order P L
@@ -1184,8 +1184,8 @@ theorem card_points
 
 中文:
 定理 card_points
-  条件: [Fintype P] [Finite L]
-  结论: Fintype.card P = order P L ^ 2 + order P L + 1
+  条件: [有限类型 P] [有限 L]
+  结论: 有限类型.card P = order P L ^ 2 + order P L + 1
   证明: by
   cases nonempty_fintype L
   obtain ⟨p, -⟩ := @exists_config P L _ _
@@ -1233,8 +1233,8 @@ theorem card_lines
 
 中文:
 定理 card_lines
-  条件: [Finite P] [Fintype L]
-  结论: Fintype.card L = order P L ^ 2 + order P L + 1
+  条件: [有限 P] [有限类型 L]
+  结论: 有限类型.card L = order P L ^ 2 + order P L + 1
   证明: (card_points (Dual L) (Dual P)).trans (congr_arg (fun n => n ^ 2 + n + 1) (Dual.order P L))
 
 Depends on / 依赖: Dual.order, card_points, congr_arg
@@ -1262,7 +1262,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (ℙ K (Fin 3 -> K)) (ℙ K (Fin 3 -> K))
+  签名: Membership (ℙ K (有限集 3 -> K)) (ℙ K (有限集 3 -> K))
   定义体: ⟨Function.swap orthogonal⟩
 
 Depends on / 依赖: Function, Function.swap, orthogonal
@@ -1281,7 +1281,7 @@ lemma mem_iff
 
 中文:
 引理 mem_iff
-  条件: (v w : ℙ K (Fin 3 -> K))
+  条件: (v w : ℙ K (有限集 3 -> K))
   结论: v in w ↔ orthogonal v w
   证明: Iff.rfl
 
@@ -1307,7 +1307,7 @@ lemma crossProduct_eq_zero_of_dotProduct_eq_zero
 
 中文:
 引理 crossProduct_eq_zero_of_dotProduct_eq_zero
-  结论: {a b c d : Fin 3 -> K} (hac : a ⬝ᵥ c = 0)
+  结论: {a b c d : 有限集 3 -> K} (hac : a ⬝ᵥ c = 0)
   证明: by
   by_contra h
   simp_rw [not_or, ← ne_eq, crossProduct_ne_zero_iff_linearIndependent] at h
@@ -1349,7 +1349,7 @@ lemma eq_or_eq_of_orthogonal
 
 中文:
 引理 eq_or_eq_of_orthogonal
-  结论: {a b c d : ℙ K (Fin 3 -> K)} (hac : a.orthogonal c)
+  结论: {a b c d : ℙ K (有限集 3 -> K)} (hac : a.orthogonal c)
   证明: by
   induction a with | h a ha =>
   induction b with | h b hb =>
@@ -1382,7 +1382,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nondegenerate (ℙ K (Fin 3 -> K)) (ℙ K (Fin 3 -> K))
+  签名: 非退化 (ℙ K (有限集 3 -> K)) (ℙ K (有限集 3 -> K))
   定义体: { exists_point := exists_not_orthogonal_self
     exists_line := exists_not_self_orthogonal
     eq_or_eq := eq_or_eq_of_orthogonal }
@@ -1413,7 +1413,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: K] : ProjectivePlane (ℙ K (Fin 3 -> K)) (ℙ K (Fin 3 -> K))
+  签名: K] : ProjectivePlane (ℙ K (有限集 3 -> K)) (ℙ K (有限集 3 -> K))
   定义体: { mkPoint := by
       intro v w _
       exact cross v w

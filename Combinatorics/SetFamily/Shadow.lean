@@ -68,7 +68,7 @@ definition shadow
 
 中文:
 定义 shadow
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: 𝒜.sup fun s => s.image (erase s)
 
 @[inherit_doc] scoped[FinsetFamily] notation:max "∂" => Finset.shadow
@@ -94,7 +94,7 @@ theorem shadow_empty
 
 中文:
 定理 shadow_empty
-  结论: ∂ (∅ : Finset (Finset α)) = ∅
+  结论: ∂ (∅ : 有限集 (有限集 α)) = ∅
   证明: rfl
 -/
 theorem shadow_empty : ∂ (∅ : Finset (Finset α)) = ∅ :=
@@ -115,7 +115,7 @@ lemma shadow_iterate_empty
 中文:
 引理 shadow_iterate_empty
   条件: (k : 自然数)
-  结论: ∂^[k] (∅ : Finset (Finset α)) = ∅
+  结论: ∂^[k] (∅ : 有限集 (有限集 α)) = ∅
   证明: by
   induction k <;> simp [*, shadow_empty]
 
@@ -137,7 +137,7 @@ theorem shadow_singleton_empty
 
 中文:
 定理 shadow_singleton_empty
-  结论: ∂ ({∅} : Finset (Finset α)) = ∅
+  结论: ∂ ({∅} : 有限集 (有限集 α)) = ∅
   证明: rfl
 
 @[simp]
@@ -181,7 +181,7 @@ theorem shadow_monotone
 
 中文:
 定理 shadow_monotone
-  结论: Monotone (shadow : Finset (Finset α) -> Finset (Finset α))
+  结论: 递增 (shadow : 有限集 (有限集 α) -> 有限集 (有限集 α))
   证明: fun _ _ =>
   sup_mono
 -/
@@ -255,7 +255,7 @@ lemma mem_shadow_iff_exists_sdiff
   simp_rw [mem_shadow_iff, ← covBy_iff_card_sdiff_eq_one, covBy_iff_exists_erase]
 
 中文:
-引理 mem_shadow_iff_exists_sdiff
+引理 mem_shadow_iff_存在_sdiff
   结论: t in ∂ 𝒜 ↔ 存在 s in 𝒜, t subseteq s ∧ #(s \ t) = 1
   证明: by
   simp_rw [mem_shadow_iff, ← covBy_iff_card_sdiff_eq_one, covBy_iff_exists_erase]
@@ -301,7 +301,7 @@ refine mem_shadow_iff_exists_sdiff.trans exists_congr fun t => and_congr_right f
   exact card_mono hst
 
 中文:
-引理 mem_shadow_iff_exists_mem_card_add_one
+引理 mem_shadow_iff_存在_mem_card_add_one
   结论: t in ∂ 𝒜 ↔ 存在 s in 𝒜, t subseteq s ∧ #s = #t + 1
   证明: by
 refine mem_shadow_iff_exists_sdiff.trans exists_congr fun t => and_congr_right fun _ =>
@@ -330,7 +330,7 @@ lemma mem_shadow_iterate_iff_exists_card
     aesop
 
 中文:
-引理 mem_shadow_iterate_iff_exists_card
+引理 mem_shadow_iterate_iff_存在_card
   证明: by
   induction k generalizing t with
   | zero => simp
@@ -364,7 +364,7 @@ lemma mem_shadow_iterate_iff_exists_sdiff
     rwa [union_sdiff_self_eq_union, union_eq_right.2 hts]
 
 中文:
-引理 mem_shadow_iterate_iff_exists_sdiff
+引理 mem_shadow_iterate_iff_存在_sdiff
   结论: t in ∂^[k] 𝒜 ↔ 存在 s in 𝒜, t subseteq s ∧ #(s \ t) = k
   证明: by
   rw [mem_shadow_iterate_iff_exists_card]
@@ -398,7 +398,7 @@ refine mem_shadow_iterate_iff_exists_sdiff.trans exists_congr fun t => and_congr
   exact card_mono hst
 
 中文:
-引理 mem_shadow_iterate_iff_exists_mem_card_add
+引理 mem_shadow_iterate_iff_存在_mem_card_add
   证明: by
 refine mem_shadow_iterate_iff_exists_sdiff.trans exists_congr fun t => and_congr_right fun _ =>
     and_congr_right fun hst => ?_
@@ -426,8 +426,8 @@ theorem _root_.Set.Sized.shadow
   rw [card_erase_of_mem hi]; rw [h𝒜 hA]
 
 中文:
-定理 _root_.Set.Sized.shadow
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+定理 _root_.集合.Sized.shadow
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   intro A h
   obtain ⟨A, hA, i, hi, rfl⟩ := mem_shadow_iff.1 h
@@ -451,8 +451,8 @@ lemma _root_.Set.Sized.shadow_iterate
   rw [card_sdiff_of_subset hts]; rw [← h𝒜 hs]; rw [Nat.sub_sub_self (card_le_card hts)]
 
 中文:
-引理 _root_.Set.Sized.shadow_iterate
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+引理 _root_.集合.Sized.shadow_iterate
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   simp_rw [Set.Sized, mem_coe, mem_shadow_iterate_iff_exists_sdiff]
   rintro t ⟨s, hs, hts, rfl⟩
@@ -504,7 +504,7 @@ lemma exists_subset_of_mem_shadow
   ⟨t, ht, hst.1⟩
 
 中文:
-引理 exists_subset_of_mem_shadow
+引理 存在_subset_of_mem_shadow
   条件: (hs : t in ∂ 𝒜)
   结论: 存在 s in 𝒜, t subseteq s
   证明: let ⟨t, ht, hst⟩ := mem_shadow_iff_exists_mem_card_add_one.1 hs
@@ -536,7 +536,7 @@ definition upShadow
 
 中文:
 定义 upShadow
-  签名: (𝒜 : Finset (Finset α))
+  签名: (𝒜 : 有限集 (有限集 α))
   定义体: 𝒜.sup fun s => sᶜ.image fun a => insert a s
 
 @[inherit_doc] scoped[FinsetFamily] notation:max "∂⁺ " => Finset.upShadow
@@ -560,7 +560,7 @@ theorem upShadow_empty
 
 中文:
 定理 upShadow_empty
-  结论: ∂⁺ (∅ : Finset (Finset α)) = ∅
+  结论: ∂⁺ (∅ : 有限集 (有限集 α)) = ∅
   证明: rfl
 -/
 theorem upShadow_empty : ∂⁺ (∅ : Finset (Finset α)) = ∅ :=
@@ -578,7 +578,7 @@ theorem upShadow_monotone
 
 中文:
 定理 upShadow_monotone
-  结论: Monotone (upShadow : Finset (Finset α) -> Finset (Finset α))
+  结论: 递增 (upShadow : 有限集 (有限集 α) -> 有限集 (有限集 α))
   证明: fun _ _ => sup_mono
 
 Depends on / 依赖: sup_mono
@@ -636,7 +636,7 @@ lemma mem_upShadow_iff_exists_sdiff
   simp_rw [mem_upShadow_iff, ← covBy_iff_card_sdiff_eq_one, covBy_iff_exists_insert]
 
 中文:
-引理 mem_upShadow_iff_exists_sdiff
+引理 mem_upShadow_iff_存在_sdiff
   结论: t in ∂⁺ 𝒜 ↔ 存在 s in 𝒜, s subseteq t ∧ #(t \ s) = 1
   证明: by
   simp_rw [mem_upShadow_iff, ← covBy_iff_card_sdiff_eq_one, covBy_iff_exists_insert]
@@ -681,7 +681,7 @@ refine mem_upShadow_iff_exists_sdiff.trans exists_congr fun t => and_congr_right
   exact card_mono hst
 
 中文:
-引理 mem_upShadow_iff_exists_mem_card_add_one
+引理 mem_upShadow_iff_存在_mem_card_add_one
   证明: by
 refine mem_upShadow_iff_exists_sdiff.trans exists_congr fun t => and_congr_right fun _ =>
     and_congr_right fun hst => ?_
@@ -713,7 +713,7 @@ lemma mem_upShadow_iterate_iff_exists_card
       exact ⟨_, ⟨_, _
 
 中文:
-引理 mem_upShadow_iterate_iff_exists_card
+引理 mem_upShadow_iterate_iff_存在_card
   证明: by
   induction k generalizing t with
   | zero => simp
@@ -755,7 +755,7 @@ lemma mem_upShadow_iterate_iff_exists_sdiff
     exact ⟨_, rfl, sdiff_subset, by rwa [sdiff_sdiff_eq_self hst]⟩
 
 中文:
-引理 mem_upShadow_iterate_iff_exists_sdiff
+引理 mem_upShadow_iterate_iff_存在_sdiff
   结论: t in ∂⁺^[k] 𝒜 ↔ 存在 s in 𝒜, s subseteq t ∧ #(t \ s) = k
   证明: by
   rw [mem_upShadow_iterate_iff_exists_card]
@@ -787,7 +787,7 @@ refine mem_upShadow_iterate_iff_exists_sdiff.trans exists_congr fun t => and_con
   exact card_mono hst
 
 中文:
-引理 mem_upShadow_iterate_iff_exists_mem_card_add
+引理 mem_upShadow_iterate_iff_存在_mem_card_add
   证明: by
 refine mem_upShadow_iterate_iff_exists_sdiff.trans exists_congr fun t => and_congr_right fun _ =>
     and_congr_right fun hst => ?_
@@ -815,8 +815,8 @@ lemma _root_.Set.Sized.upShadow
   rw [card_insert_of_notMem hi]; rw [h𝒜 hA]
 
 中文:
-引理 _root_.Set.Sized.upShadow
-  条件: (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+引理 _root_.集合.Sized.upShadow
+  条件: (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   intro A h
   obtain ⟨A, hA, i, hi, rfl⟩ := mem_upShadow_iff.1 h
@@ -839,7 +839,7 @@ theorem exists_subset_of_mem_upShadow
   ⟨t, ht, hts⟩
 
 中文:
-定理 exists_subset_of_mem_upShadow
+定理 存在_subset_of_mem_upShadow
   条件: (hs : s in ∂⁺ 𝒜)
   结论: 存在 t in 𝒜, t subseteq s
   证明: let ⟨t, ht, hts, _⟩ := mem_upShadow_iff_exists_mem_card_add_one.1 hs
@@ -869,7 +869,7 @@ theorem mem_upShadow_iff_exists_mem_card_add
   
 
 中文:
-定理 mem_upShadow_iff_exists_mem_card_add
+定理 mem_upShadow_iff_存在_mem_card_add
   证明: by
   induction k generalizing 𝒜 s with
   | zero =>

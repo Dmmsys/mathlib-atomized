@@ -36,7 +36,7 @@ theorem finite_one
 
 中文:
 定理 finite_one
-  结论: (1 : Set α).Finite
+  结论: (1 : 集合 α).有限
   证明: finite_singleton _
 
 Depends on / 依赖: finite_singleton
@@ -60,8 +60,8 @@ theorem Finite.mul
   proof: Finite.image2 _
 
 中文:
-定理 Finite.mul
-  结论: s.Finite -> t.Finite -> (s * t).Finite
+定理 有限.mul
+  结论: s.有限 -> t.有限 -> (s * t).有限
   证明: Finite.image2 _
 
 Depends on / 依赖: Finite, Finite.image2, image2
@@ -81,7 +81,7 @@ instance fintypeMul
 
 中文:
 实例 fintypeMul
-  签名: [DecidableEq α] (s t : Set α) [Fintype s] [Fintype t]
+  签名: [DecidableEq α] (s t : 集合 α) [有限类型 s] [有限类型 t]
   定义体: Set.fintypeImage2 _ _ _
 
 Depends on / 依赖: Set.fintypeImage2, fintypeImage2
@@ -108,7 +108,7 @@ instance decidableMemMul
 
 中文:
 实例 decidableMemMul
-  签名: [Fintype α] [DecidableEq α] [DecidablePred (· in s)]
+  签名: [有限类型 α] [DecidableEq α] [DecidablePred (· in s)]
   定义体: fun _ => decidable_of_iff _ mem_mul.symm
 
 @[to_additive]
@@ -136,7 +136,7 @@ instance decidableMemPow
 
 中文:
 实例 decidableMemPow
-  签名: [Fintype α] [DecidableEq α] [DecidablePred (· in s)] (n : 自然数)
+  签名: [有限类型 α] [DecidableEq α] [DecidablePred (· in s)] (n : 自然数)
   定义体: by
   induction n with
   | zero =>
@@ -174,8 +174,8 @@ theorem Finite.smul
   proof: Finite.image2 _
 
 中文:
-定理 Finite.smul
-  结论: s.Finite -> t.Finite -> (s • t).Finite
+定理 有限.smul
+  结论: s.有限 -> t.有限 -> (s • t).有限
   证明: Finite.image2 _
 
 Depends on / 依赖: Finite, Finite.image2, image2
@@ -201,8 +201,8 @@ theorem Finite.smul_set
 @[to_additive]
 
 中文:
-定理 Finite.smul_set
-  结论: s.Finite -> (a • s).Finite
+定理 有限.smul_set
+  结论: s.有限 -> (a • s).有限
   证明: Finite.image _
 
 @[to_additive]
@@ -222,8 +222,8 @@ theorem Infinite.of_smul_set
   proof: Infinite.of_image _
 
 中文:
-定理 Infinite.of_smul_set
-  结论: (a • s).Infinite -> s.Infinite
+定理 无限.of_smul_set
+  结论: (a • s).无限 -> s.无限
   证明: Infinite.of_image _
 
 Depends on / 依赖: Infinite, Infinite.of_image, of_image
@@ -247,9 +247,9 @@ theorem Finite.vsub
   proof: hs.image2 _ ht
 
 中文:
-定理 Finite.vsub
-  条件: (hs : s.Finite) (ht : t.Finite)
-  结论: Set.Finite (s -ᵥ t)
+定理 有限.vsub
+  条件: (hs : s.有限) (ht : t.有限)
+  结论: 集合.有限 (s -ᵥ t)
   证明: hs.image2 _ ht
 
 Depends on / 依赖: hs.image2, image2
@@ -276,7 +276,7 @@ lemma finite_mul
 
 中文:
 引理 finite_mul
-  结论: (s * t).Finite ↔ s.Finite ∧ t.Finite ∨ s = ∅ ∨ t = ∅
+  结论: (s * t).有限 ↔ s.有限 ∧ t.有限 ∨ s = ∅ ∨ t = ∅
   证明: finite_image2 (fun _ _ => (mul_left_injective _).injOn) fun _ _ => (mul_right_injective _).injOn
 
 @[to_additive]
@@ -297,7 +297,7 @@ lemma infinite_mul
 
 中文:
 引理 infinite_mul
-  结论: (s * t).Infinite ↔ s.Infinite ∧ t.Nonempty ∨ t.Infinite ∧ s.Nonempty
+  结论: (s * t).无限 ↔ s.无限 ∧ t.非空 ∨ t.无限 ∧ s.非空
   证明: infinite_image2 (fun _ _ => (mul_left_injective _).injOn) fun _ _ => (mul_right_injective _).injOn
 
 Depends on / 依赖: infinite_image2, mul_left_injective, mul_right_injective
@@ -321,7 +321,7 @@ lemma finite_inv
 
 中文:
 引理 finite_inv
-  结论: s⁻¹.Finite ↔ s.Finite
+  结论: s⁻¹.有限 ↔ s.有限
   证明: by
   rw [← image_inv_eq_inv]; rw [finite_image_iff inv_injective.injOn]
 -/
@@ -340,7 +340,7 @@ lemma infinite_inv
 
 中文:
 引理 infinite_inv
-  结论: s⁻¹.Infinite ↔ s.Infinite
+  结论: s⁻¹.无限 ↔ s.无限
   证明: finite_inv.not
 
 @[to_additive] alias ⟨Finite.of_inv, Finite.inv⟩ := finite_inv
@@ -363,8 +363,8 @@ lemma Finite.div
   proof: .image2 _
 
 中文:
-引理 Finite.div
-  结论: s.Finite -> t.Finite -> (s / t).Finite
+引理 有限.div
+  结论: s.有限 -> t.有限 -> (s / t).有限
   证明: .image2 _
 -/
 @[to_additive] lemma Finite.div : s.Finite -> t.Finite -> (s / t).Finite := .image2 _
@@ -381,7 +381,7 @@ instance fintypeDiv
 
 中文:
 实例 fintypeDiv
-  签名: [DecidableEq α] (s t : Set α) [Fintype s] [Fintype t]
+  签名: [DecidableEq α] (s t : 集合 α) [有限类型 s] [有限类型 t]
   定义体: Set.fintypeImage2 _ _ _
 
 Depends on / 依赖: Set.fintypeImage2, fintypeImage2
@@ -408,7 +408,7 @@ lemma finite_div
 
 中文:
 引理 finite_div
-  结论: (s / t).Finite ↔ s.Finite ∧ t.Finite ∨ s = ∅ ∨ t = ∅
+  结论: (s / t).有限 ↔ s.有限 ∧ t.有限 ∨ s = ∅ ∨ t = ∅
   证明: finite_image2 (fun _ _ => div_left_injective.injOn) fun _ _ => div_right_injective.injOn
 
 @[to_additive]
@@ -429,7 +429,7 @@ lemma infinite_div
 
 中文:
 引理 infinite_div
-  结论: (s / t).Infinite ↔ s.Infinite ∧ t.Nonempty ∨ t.Infinite ∧ s.Nonempty
+  结论: (s / t).无限 ↔ s.无限 ∧ t.非空 ∨ t.无限 ∧ s.非空
   证明: infinite_image2 (fun _ _ => div_left_injective.injOn) fun _ _ => div_right_injective.injOn
 
 Depends on / 依赖: div_left_injective, div_left_injective.injOn, div_right_injective, div_right_injective.injOn, infinite_image2

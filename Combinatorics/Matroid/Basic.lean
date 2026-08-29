@@ -177,8 +177,8 @@ definition Matroid.ExchangeProperty
   body: forall X Y, P X -> P Y -> forall a in X \ Y, exists b in Y \ X, P (insert b (X \ {a}))
 
 中文:
-定义 Matroid.ExchangeProperty
-  签名: {α : 类型} (P : Set α -> 命题)
+定义 拟阵.ExchangeProperty
+  签名: {α : 类型} (P : 集合 α -> 命题)
   定义体: forall X Y, P X -> P Y -> forall a in X \ Y, exists b in Y \ X, P (insert b (X \ {a}))
 
 Depends on / 依赖: insert
@@ -195,8 +195,8 @@ definition Matroid.ExistsMaximalSubsetProperty
   body: forall I, P I -> I subseteq X -> exists J, I subseteq J ∧ Maximal (fun K => P K ∧ K subseteq X) J
 
 中文:
-定义 Matroid.ExistsMaximalSubsetProperty
-  签名: {α : 类型} (P : Set α -> 命题) (X : Set α)
+定义 拟阵.ExistsMaximalSubsetProperty
+  签名: {α : 类型} (P : 集合 α -> 命题) (X : 集合 α)
   定义体: forall I, P I -> I subseteq X -> exists J, I subseteq J ∧ Maximal (fun K => P K ∧ K subseteq X) J
 
 Depends on / 依赖: Maximal, subseteq
@@ -221,16 +221,16 @@ structure Matroid
     - (subset_ground : forall B, IsBase B -> B subseteq E)
 
 中文:
-结构 Matroid
+结构 拟阵
   参数: (α : 类型)
   公理与运算 (8 个):
-    - (E : Set α)
-    - (IsBase : Set α -> 命题)
-    - (Indep : Set α -> 命题)
+    - (E : 集合 α)
+    - (IsBase : 集合 α -> 命题)
+    - (Indep : 集合 α -> 命题)
     - (indep_iff' : 对任意 ⦃I⦄, Indep I ↔ 存在 B, IsBase B ∧ I subseteq B)
     - (exists_isBase : 存在 B, IsBase B)
-    - (isBase_exchange : Matroid.Exchange命题erty IsBase)
-    - (maximality : 对任意 X, X subseteq E -> Matroid.ExistsMaximalSubset命题erty Indep X)
+    - (isBase_exchange : 拟阵.ExchangeProperty IsBase)
+    - (maximality : 对任意 X, X subseteq E -> 拟阵.ExistsMaximalSubsetProperty Indep X)
     - (subset_ground : 对任意 B, IsBase B -> B subseteq E)
 
 Depends on / 依赖: FinEnum, Fintype
@@ -274,10 +274,10 @@ class Finite
     - (ground_finite : M.E.Finite)
 
 中文:
-类 Finite
-  参数: (M : Matroid α)
+类 有限
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - (ground_finite : M.E.Finite)
+    - (ground_finite : M.E.有限)
 -/
 @[mk_iff] protected class Finite (M : Matroid α) : Prop where
   /-- The ground set is finite -/
@@ -293,10 +293,10 @@ class Nonempty
     - (ground_nonempty : M.E.Nonempty)
 
 中文:
-类 Nonempty
-  参数: (M : Matroid α)
+类 非空
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - (ground_nonempty : M.E.Nonempty)
+    - (ground_nonempty : M.E.非空)
 -/
 protected class Nonempty (M : Matroid α) : Prop where
   /-- The ground set is nonempty -/
@@ -313,8 +313,8 @@ theorem ground_nonempty
 
 中文:
 定理 ground_nonempty
-  条件: (M : Matroid α) [M.Nonempty]
-  结论: M.E.Nonempty
+  条件: (M : 拟阵 α) [M.非空]
+  结论: M.E.非空
   证明: Nonempty.ground_nonempty
 
 Depends on / 依赖: Nonempty, Nonempty.ground_nonempty, ground_nonempty
@@ -333,8 +333,8 @@ theorem ground_nonempty_iff
 
 中文:
 定理 ground_nonempty_iff
-  条件: (M : Matroid α)
-  结论: M.E.Nonempty ↔ M.Nonempty
+  条件: (M : 拟阵 α)
+  结论: M.E.非空 ↔ M.非空
   证明: ⟨fun h => ⟨h⟩, fun ⟨h⟩ => h⟩
 -/
 theorem ground_nonempty_iff (M : Matroid α) : M.E.Nonempty ↔ M.Nonempty :=
@@ -351,8 +351,8 @@ lemma nonempty_type
 
 中文:
 引理 nonempty_type
-  条件: (M : Matroid α) [h : M.Nonempty]
-  结论: Nonempty α
+  条件: (M : 拟阵 α) [h : M.非空]
+  结论: 非空 α
   证明: ⟨M.ground_nonempty.some⟩
 
 Depends on / 依赖: M.ground_nonempty.some, ground_nonempty
@@ -371,8 +371,8 @@ theorem ground_finite
 
 中文:
 定理 ground_finite
-  条件: (M : Matroid α) [M.Finite]
-  结论: M.E.Finite
+  条件: (M : 拟阵 α) [M.有限]
+  结论: M.E.有限
   证明: Finite.ground_finite
 
 Depends on / 依赖: Finite, Finite.ground_finite, ground_finite
@@ -391,8 +391,8 @@ theorem set_finite
 
 中文:
 定理 set_finite
-  条件: (M : Matroid α) [M.Finite] (X : Set α) (hX : X subseteq M.E := by aesop)
-  结论: X.Finite
+  条件: (M : 拟阵 α) [M.有限] (X : 集合 α) (hX : X subseteq M.E := by aesop)
+  结论: X.有限
   证明: M.ground_finite.subset hX
 
 Depends on / 依赖: Finite, M.ground_finite.subset, X.Finite, ground_finite, subset
@@ -410,7 +410,7 @@ instance finite_of_finite
 
 中文:
 实例 finite_of_finite
-  签名: [Finite α] {M : Matroid α}
+  签名: [有限 α] {M : 拟阵 α}
   定义体: ⟨Set.toFinite _⟩
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -429,9 +429,9 @@ class RankFinite
 
 中文:
 类 RankFinite
-  参数: (M : Matroid α)
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - exists_finite_isBase : 存在 B, M.IsBase B ∧ B.Finite
+    - exists_finite_isBase : 存在 B, M.IsBase B ∧ B.有限
 -/
 @[mk_iff] class RankFinite (M : Matroid α) : Prop where
   /-- There is a finite base -/
@@ -447,7 +447,7 @@ instance rankFinite_of_finite
 
 中文:
 实例 rankFinite_of_finite
-  签名: (M : Matroid α) [M.Finite]
+  签名: (M : 拟阵 α) [M.有限]
   定义体: ⟨M.exists_isBase.imp (fun B hB => ⟨hB, M.set_finite B (M.subset_ground _ hB)⟩)⟩
 
 Depends on / 依赖: M.exists_isBase.imp, M.set_finite, M.subset_ground, exists_isBase, set_finite, subset_ground
@@ -466,9 +466,9 @@ class RankInfinite
 
 中文:
 类 RankInfinite
-  参数: (M : Matroid α)
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - exists_infinite_isBase : 存在 B, M.IsBase B ∧ B.Infinite
+    - exists_infinite_isBase : 存在 B, M.IsBase B ∧ B.无限
 -/
 @[mk_iff] class RankInfinite (M : Matroid α) : Prop where
   /-- There is an infinite base -/
@@ -485,7 +485,7 @@ class RankPos
 
 中文:
 类 RankPos
-  参数: (M : Matroid α)
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
     - empty_not_isBase : ¬M.IsBase ∅
 -/
@@ -507,7 +507,7 @@ instance rankPos_nonempty
 
 中文:
 实例 rankPos_nonempty
-  签名: {M : Matroid α} [M.RankPos]
+  签名: {M : 拟阵 α} [M.RankPos]
   定义体: by
   obtain ⟨B, hB⟩ := M.exists_isBase
   obtain rfl | ⟨e, heB⟩ := B.eq_empty_or_nonempty
@@ -538,7 +538,7 @@ theorem antichain
 
 中文:
 定理 antichain
-  条件: (exch : Exchange命题erty IsBase) (hB : IsBase B) (hB' : IsBase B') (h : B subseteq B')
+  条件: (exch : ExchangeProperty IsBase) (hB : IsBase B) (hB' : IsBase B') (h : B subseteq B')
   证明: h.antisymm (fun x hx => by_contra
     (fun hxB => let ⟨_, hy, _⟩ := exch B' B hB' hB x ⟨hx, hxB⟩; hy.2 <| h hy.1))
 
@@ -565,7 +565,7 @@ theorem encard_sdiff_le_aux
 
 中文:
 定理 encard_sdiff_le_aux
-  结论: {B₁ B₂ : Set α}
+  结论: {B₁ B₂ : 集合 α}
   证明: by
   obtain (he | hinf | ⟨e, he, hcard⟩) :=
     (B₂ \ B₁).eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
@@ -608,7 +608,7 @@ theorem encard_sdiff_eq
 
 中文:
 定理 encard_sdiff_eq
-  条件: (exch : Exchange命题erty IsBase) (hB₁ : IsBase B₁) (hB₂ : IsBase B₂)
+  条件: (exch : ExchangeProperty IsBase) (hB₁ : IsBase B₁) (hB₂ : IsBase B₂)
   证明: (encard_sdiff_le_aux exch hB₁ hB₂).antisymm (encard_sdiff_le_aux exch hB₂ hB₁)
 
 @[deprecated (since := "2026-06-03")] alias encard_diff_eq := encard_sdiff_eq
@@ -632,7 +632,7 @@ theorem encard_isBase_eq
 
 中文:
 定理 encard_isBase_eq
-  条件: (exch : Exchange命题erty IsBase) (hB₁ : IsBase B₁) (hB₂ : IsBase B₂)
+  条件: (exch : ExchangeProperty IsBase) (hB₁ : IsBase B₁) (hB₂ : IsBase B₂)
   证明: by
   rw [← encard_sdiff_add_encard_inter B₁ B₂]; rw [exch.encard_sdiff_eq hB₁ hB₂]; rw [inter_comm]; rw [encard_sdiff_add_encard_inter]
 
@@ -844,7 +844,7 @@ theorem insert_subset_ground
 
 中文:
 定理 insert_subset_ground
-  结论: {e : α} {X : Set α} {M : Matroid α}
+  结论: {e : α} {X : 集合 α} {M : 拟阵 α}
   证明: insert_subset he hX
 
 @[aesop safe (rule_sets := [Matroid])]
@@ -865,7 +865,7 @@ theorem ground_subset_ground
 
 中文:
 定理 ground_subset_ground
-  条件: {M : Matroid α}
+  条件: {M : 拟阵 α}
   结论: M.E subseteq M.E
   证明: rfl.subset
 -/
@@ -972,7 +972,7 @@ theorem IsBase.not_isBase_of_ssubset
 
 中文:
 定理 IsBase.not_isBase_of_ssubset
-  条件: {X : Set α} (hB : M.IsBase B) (hX : X ⊂ B)
+  条件: {X : 集合 α} (hB : M.IsBase B) (hX : X ⊂ B)
   结论: ¬ M.IsBase X
   证明: fun h => hX.ne (h.eq_of_subset_isBase hB hX.subset)
 
@@ -1104,7 +1104,7 @@ theorem IsBase.finite_of_finite
 
 中文:
 定理 IsBase.finite_of_finite
-  结论: {B' : Set α}
+  结论: {B' : 集合 α}
   证明: (finite_iff_finite_of_encard_eq_encard (hB.encard_eq_encard_of_isBase hB')).mp h
 
 Depends on / 依赖: encard_eq_encard_of_isBase, finite_iff_finite_of_encard_eq_encard, hB.encard_eq_encard_of_isBase
@@ -1124,7 +1124,7 @@ theorem IsBase.infinite_of_infinite
 
 中文:
 定理 IsBase.infinite_of_infinite
-  条件: (hB : M.IsBase B) (h : B.Infinite) (hB₁ : M.IsBase B₁)
+  条件: (hB : M.IsBase B) (h : B.无限) (hB₁ : M.IsBase B₁)
   证明: by
   contrapose! h; exact hB₁.finite_of_finite h hB
 
@@ -1147,7 +1147,7 @@ theorem IsBase.finite
 中文:
 定理 IsBase.finite
   条件: [RankFinite M] (hB : M.IsBase B)
-  结论: B.Finite
+  结论: B.有限
   证明: let ⟨_, hB₀⟩ := ‹RankFinite M›.exists_finite_isBase
   hB₀.1.finite_of_finite hB₀.2 hB
 
@@ -1170,7 +1170,7 @@ theorem IsBase.infinite
 中文:
 定理 IsBase.infinite
   条件: [RankInfinite M] (hB : M.IsBase B)
-  结论: B.Infinite
+  结论: B.无限
   证明: let ⟨_, hB₀⟩ := ‹RankInfinite M›.exists_infinite_isBase
   hB₀.1.infinite_of_infinite hB₀.2 hB
 
@@ -1213,7 +1213,7 @@ theorem IsBase.nonempty
 中文:
 定理 IsBase.nonempty
   条件: [RankPos M] (hB : M.IsBase B)
-  结论: B.Nonempty
+  结论: B.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rintro rfl; exact M.empty_not_isBase hB
 
@@ -1237,7 +1237,7 @@ theorem IsBase.rankPos_of_nonempty
 
 中文:
 定理 IsBase.rankPos_of_nonempty
-  条件: (hB : M.IsBase B) (h : B.Nonempty)
+  条件: (hB : M.IsBase B) (h : B.非空)
   结论: M.RankPos
   证明: by
   rw [rankPos_iff]
@@ -1264,7 +1264,7 @@ theorem IsBase.rankFinite_of_finite
 
 中文:
 定理 IsBase.rankFinite_of_finite
-  条件: (hB : M.IsBase B) (hfin : B.Finite)
+  条件: (hB : M.IsBase B) (hfin : B.有限)
   结论: RankFinite M
   证明: ⟨⟨B, hB, hfin⟩⟩
 -/
@@ -1282,7 +1282,7 @@ theorem IsBase.rankInfinite_of_infinite
 
 中文:
 定理 IsBase.rankInfinite_of_infinite
-  条件: (hB : M.IsBase B) (h : B.Infinite)
+  条件: (hB : M.IsBase B) (h : B.无限)
   结论: RankInfinite M
   证明: ⟨⟨B, hB, h⟩⟩
 -/
@@ -1301,7 +1301,7 @@ theorem not_rankFinite
 
 中文:
 定理 not_rankFinite
-  条件: (M : Matroid α) [RankInfinite M]
+  条件: (M : 拟阵 α) [RankInfinite M]
   结论: ¬ RankFinite M
   证明: by
   intro h; obtain ⟨B, hB⟩ := M.exists_isBase; exact hB.infinite hB.finite
@@ -1323,7 +1323,7 @@ theorem not_rankInfinite
 
 中文:
 定理 not_rankInfinite
-  条件: (M : Matroid α) [RankFinite M]
+  条件: (M : 拟阵 α) [RankFinite M]
   结论: ¬ RankInfinite M
   证明: by
   intro h; obtain ⟨B, hB⟩ := M.exists_isBase; exact hB.infinite hB.finite
@@ -1347,7 +1347,7 @@ theorem rankFinite_or_rankInfinite
 
 中文:
 定理 rankFinite_or_rankInfinite
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: RankFinite M ∨ RankInfinite M
   证明: let ⟨B, hB⟩ := M.exists_isBase
   B.finite_or_infinite.imp hB.rankFinite_of_finite hB.rankInfinite_of_infinite
@@ -1375,7 +1375,7 @@ theorem not_rankFinite_iff
 
 中文:
 定理 not_rankFinite_iff
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: ¬ RankFinite M ↔ RankInfinite M
   证明: M.rankFinite_or_rankInfinite.elim (fun h => iff_of_false (by simpa) M.not_rankInfinite)
     fun h => iff_of_true M.not_rankFinite h
@@ -1401,7 +1401,7 @@ theorem not_rankInfinite_iff
 
 中文:
 定理 not_rankInfinite_iff
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: ¬ RankInfinite M ↔ RankFinite M
   证明: by
   rw [← not_rankFinite_iff]; rw [not_not]
@@ -1475,7 +1475,7 @@ theorem ext_isBase
 
 中文:
 定理 ext_isBase
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: by
   have h' : forall B, M₁.IsBase B ↔ M₂.IsBase B :=
     fun B => ⟨fun hB => (h hB.subset_ground).1 hB,
@@ -1501,7 +1501,7 @@ theorem ext_iff_isBase
 
 中文:
 定理 ext_iff_isBase
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   证明: ⟨fun h => by simp [h], fun ⟨hE, h⟩ => ext_isBase hE h⟩
 
 Depends on / 依赖: ext_isBase
@@ -1560,7 +1560,7 @@ definition Dep
 
 中文:
 定义 Dep
-  签名: (M : Matroid α) (D : Set α)
+  签名: (M : 拟阵 α) (D : 集合 α)
   定义体: ¬M.Indep D ∧ D subseteq M.E
 
 Depends on / 依赖: M.Indep, subseteq
@@ -1603,7 +1603,7 @@ alias setOf_indep_eq := setOfPred_indep_eq
 
 中文:
 定理 setOfPred_indep_eq
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: {I | M.Indep I} = lowerClosure ({B | M.IsBase B})
   证明: by
   simp_rw [indep_iff, lowerClosure, LowerSet.coe_mk, mem_ofPred]
@@ -1629,7 +1629,7 @@ theorem Indep.exists_isBase_superset
   proof: indep_iff.1 hI
 
 中文:
-定理 Indep.exists_isBase_superset
+定理 Indep.存在_isBase_superset
   条件: (hI : M.Indep I)
   结论: 存在 B, M.IsBase B ∧ I subseteq B
   证明: indep_iff.1 hI
@@ -1672,8 +1672,8 @@ alias setOf_dep_eq := setOfPred_dep_eq
 
 中文:
 定理 setOfPred_dep_eq
-  条件: (M : Matroid α)
-  结论: {D | M.Dep D} = {I | M.Indep I}ᶜ inter Iic M.E
+  条件: (M : 拟阵 α)
+  结论: {D | M.Dep D} = {I | M.Indep I}ᶜ inter 左无界右闭区间 M.E
   证明: rfl
 
 @[deprecated (since := "2026-07-09")]
@@ -1975,7 +1975,7 @@ theorem empty_indep
 
 中文:
 定理 empty_indep
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.Indep ∅
   证明: Exists.elim M.exists_isBase (fun _ hB => hB.indep.subset (empty_subset _))
 -/
@@ -1995,7 +1995,7 @@ theorem Dep.nonempty
 中文:
 定理 Dep.nonempty
   条件: (hD : M.Dep D)
-  结论: D.Nonempty
+  结论: D.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rintro rfl; exact hD.not_indep M.empty_indep
 
@@ -2017,7 +2017,7 @@ theorem Indep.finite
 中文:
 定理 Indep.finite
   条件: [RankFinite M] (hI : M.Indep I)
-  结论: I.Finite
+  结论: I.有限
   证明: let ⟨_, hB, hIB⟩ := hI.exists_isBase_superset
   hB.finite.subset hIB
 
@@ -2040,7 +2040,7 @@ theorem Indep.rankPos_of_nonempty
 
 中文:
 定理 Indep.rankPos_of_nonempty
-  条件: (hI : M.Indep I) (hne : I.Nonempty)
+  条件: (hI : M.Indep I) (hne : I.非空)
   结论: M.RankPos
   证明: by
   obtain ⟨B, hB, hIB⟩ := hI.exists_isBase_superset
@@ -2063,7 +2063,7 @@ theorem Indep.inter_right
 
 中文:
 定理 Indep.inter_right
-  条件: (hI : M.Indep I) (X : Set α)
+  条件: (hI : M.Indep I) (X : 集合 α)
   结论: M.Indep (I inter X)
   证明: hI.subset inter_subset_left
 
@@ -2083,7 +2083,7 @@ theorem Indep.inter_left
 
 中文:
 定理 Indep.inter_left
-  条件: (hI : M.Indep I) (X : Set α)
+  条件: (hI : M.Indep I) (X : 集合 α)
   结论: M.Indep (X inter I)
   证明: hI.subset inter_subset_right
 
@@ -2105,7 +2105,7 @@ theorem Indep.sdiff
 
 中文:
 定理 Indep.sdiff
-  条件: (hI : M.Indep I) (X : Set α)
+  条件: (hI : M.Indep I) (X : 集合 α)
   结论: M.Indep (I \ X)
   证明: hI.subset sdiff_subset
 
@@ -2155,7 +2155,7 @@ theorem isBase_iff_maximal_indep
 
 中文:
 定理 isBase_iff_maximal_indep
-  结论: M.IsBase B ↔ Maximal M.Indep B
+  结论: M.IsBase B ↔ 极大 M.Indep B
   证明: by
   rw [maximal_subset_iff]
   refine ⟨fun h => ⟨h.indep, fun _ => h.eq_of_subset_indep⟩, fun ⟨h, h'⟩ => ?_⟩
@@ -2366,7 +2366,7 @@ lemma insert_isBase_of_insert_indep
 
 中文:
 引理 insert_isBase_of_insert_indep
-  结论: {M : Matroid α} {I : Set α} {e f : α}
+  结论: {M : 拟阵 α} {I : 集合 α} {e f : α}
   证明: by
   obtain rfl | hef := eq_or_ne e f
   · assumption
@@ -2422,7 +2422,7 @@ theorem Indep.exists_insert_of_not_isBase
   obtain ⟨e, he, hBase⟩ := hB'.exchange hB ⟨hxB', hx
 
 中文:
-定理 Indep.exists_insert_of_not_isBase
+定理 Indep.存在_insert_of_not_isBase
   条件: (hI : M.Indep I) (hI' : ¬M.IsBase I) (hB : M.IsBase B)
   证明: by
   obtain ⟨B', hB', hIB'⟩ := hI.exists_isBase_superset
@@ -2458,9 +2458,9 @@ exact hne hIb.eq_of_subset_indep hII' hI'
   exact hB.1.isBase_of_maximal fun J hJ hBJ => hB.2 
 
 中文:
-定理 Indep.exists_insert_of_not_maximal
-  条件: (M : Matroid α) ⦃I B
-  结论: Set α⦄ (hI : M.Indep I)
+定理 Indep.存在_insert_of_not_maximal
+  条件: (M : 拟阵 α) ⦃I B
+  结论: 集合 α⦄ (hI : M.Indep I)
   证明: by
   simp only [maximal_subset_iff, hI, not_and, not_forall, exists_prop, true_imp_iff] at hB hInotmax
   refine hI.exists_insert_of_not_isBase (fun hIb => ?_) ?_
@@ -2492,7 +2492,7 @@ theorem Indep.isBase_of_forall_insert
   exact hBmax e ⟨hB'.subset_ground he.1, he.2⟩ h
 
 中文:
-定理 Indep.isBase_of_forall_insert
+定理 Indep.isBase_of_对任意_insert
   结论: (hB : M.Indep B)
   证明: by
   by_contra hnb
@@ -2537,7 +2537,7 @@ theorem IsBase.exists_insert_of_ssubset
     (fun hI => hIB.ne (hI.eq_of_subset_isBase hB hIB.subset)) hB'
 
 中文:
-定理 IsBase.exists_insert_of_ssubset
+定理 IsBase.存在_insert_of_ssubset
   条件: (hB : M.IsBase B) (hIB : I ⊂ B) (hB' : M.IsBase B')
   证明: (hB.indep.subset hIB.subset).exists_insert_of_not_isBase
     (fun hI => hIB.ne (hI.eq_of_subset_isBase hB hIB.subset)) hB'
@@ -2565,7 +2565,7 @@ theorem ext_indep
 
 中文:
 定理 ext_indep
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: have h' : M₁.Indep = M₂.Indep := by
     ext I
     by_cases hI : I subseteq M₁.E
@@ -2594,7 +2594,7 @@ theorem ext_iff_indep
 
 中文:
 定理 ext_iff_indep
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   证明: ⟨fun h => by (subst h; simp), fun h => ext_indep h.1 h.2⟩
 
 Depends on / 依赖: ext_indep
@@ -2618,7 +2618,7 @@ lemma ext_isBase_indep
 
 中文:
 引理 ext_isBase_indep
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: by
   refine ext_indep hE fun I hIE => ⟨fun hI => ?_, fun hI => ?_⟩
   · obtain ⟨B, hB, hIB⟩ := hI.exists_isBase_superset
@@ -2647,9 +2647,9 @@ class Finitary
 
 中文:
 类 Finitary
-  参数: (M : Matroid α)
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
-    - indep_of_forall_finite : 对任意 I, (对任意 J, J subseteq I -> J.Finite -> M.Indep J) -> M.Indep I
+    - indep_of_forall_finite : 对任意 I, (对任意 J, J subseteq I -> J.有限 -> M.Indep J) -> M.Indep I
 -/
 @[mk_iff] class Finitary (M : Matroid α) : Prop where
   /-- `I` is independent if all its finite subsets are independent. -/
@@ -2664,8 +2664,8 @@ theorem indep_of_forall_finite_subset_indep
   proof: Finitary.indep_of_forall_finite I h
 
 中文:
-定理 indep_of_forall_finite_subset_indep
-  结论: {M : Matroid α} [Finitary M] (I : Set α)
+定理 indep_of_对任意_finite_subset_indep
+  结论: {M : 拟阵 α} [Finitary M] (I : 集合 α)
   证明: Finitary.indep_of_forall_finite I h
 
 Depends on / 依赖: Finitary, Finitary.indep_of_forall_finite, indep_of_forall_finite
@@ -2683,8 +2683,8 @@ theorem indep_iff_forall_finite_subset_indep
   proof: ⟨fun h _ hJI _ => h.subset hJI, Finitary.indep_of_forall_finite I⟩
 
 中文:
-定理 indep_iff_forall_finite_subset_indep
-  条件: {M : Matroid α} [Finitary M]
+定理 indep_iff_对任意_finite_subset_indep
+  条件: {M : 拟阵 α} [Finitary M]
   证明: ⟨fun h _ hJI _ => h.subset hJI, Finitary.indep_of_forall_finite I⟩
 
 Depends on / 依赖: Finitary, Finitary.indep_of_forall_finite, h.subset, indep_of_forall_finite, subset
@@ -2708,7 +2708,7 @@ instance finitary_of_rankFinite
 
 中文:
 实例 finitary_of_rankFinite
-  签名: {M : Matroid α} [RankFinite M]
+  签名: {M : 拟阵 α} [RankFinite M]
   定义体: by
     refine I.finite_or_infinite.elim (hI _ Subset.rfl) (fun h => False.elim ?_)
     obtain ⟨B, hB⟩ := M.exists_isBase
@@ -2737,8 +2737,8 @@ theorem existsMaximalSubsetProperty_indep
   proof: M.maximality
 
 中文:
-定理 existsMaximalSubsetProperty_indep
-  条件: (M : Matroid α)
+定理 存在MaximalSubsetProperty_indep
+  条件: (M : 拟阵 α)
   证明: M.maximality
 
 Depends on / 依赖: M.maximality, maximality
@@ -2772,7 +2772,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (M : Matroid α) (E : Set α) (IsBase Indep : Set α -> 命题) (hE : E = M.E)
+  签名: (M : 拟阵 α) (E : 集合 α) (IsBase Indep : 集合 α -> 命题) (hE : E = M.E)
   定义体: E
   IsBase := IsBase
   Indep := Indep
@@ -2815,7 +2815,7 @@ definition copyIndep
 
 中文:
 定义 copyIndep
-  签名: (M : Matroid α) (E : Set α) (Indep : Set α -> 命题)
+  签名: (M : 拟阵 α) (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: M.copy E M.IsBase Indep hE (fun _ => Iff.rfl) h
 -/
 @[simps!] def copyIndep (M : Matroid α) (E : Set α) (Indep : Set α -> Prop)
@@ -2832,7 +2832,7 @@ definition copyBase
 
 中文:
 定义 copyBase
-  签名: (M : Matroid α) (E : Set α) (IsBase : Set α -> 命题)
+  签名: (M : 拟阵 α) (E : 集合 α) (IsBase : 集合 α -> 命题)
   定义体: M.copy E IsBase M.Indep hE h (fun _ => Iff.rfl)
 -/
 @[simps!] def copyBase (M : Matroid α) (E : Set α) (IsBase : Set α -> Prop)
@@ -2852,8 +2852,8 @@ definition IsBasis
   body: Maximal (fun A => M.Indep A ∧ A subseteq X) I ∧ X subseteq M.E
 
 中文:
-定义 IsBasis
-  签名: (M : Matroid α) (I X : Set α)
+定义 是基
+  签名: (M : 拟阵 α) (I X : 集合 α)
   定义体: Maximal (fun A => M.Indep A ∧ A subseteq X) I ∧ X subseteq M.E
 
 Depends on / 依赖: M.Indep, Maximal, subseteq
@@ -2870,8 +2870,8 @@ definition IsBasis'
   body: Maximal (fun A => M.Indep A ∧ A subseteq X) I
 
 中文:
-定义 IsBasis'
-  签名: (M : Matroid α) (I X : Set α)
+定义 是基'
+  签名: (M : 拟阵 α) (I X : 集合 α)
   定义体: Maximal (fun A => M.Indep A ∧ A subseteq X) I
 
 Depends on / 依赖: M.Indep, Maximal, subseteq
@@ -2891,8 +2891,8 @@ theorem IsBasis'.indep
   proof: hI.1.1
 
 中文:
-定理 IsBasis'.indep
-  条件: (hI : M.IsBasis' I X)
+定理 是基'.indep
+  条件: (hI : M.是基' I X)
   结论: M.Indep I
   证明: hI.1.1
 -/
@@ -2909,8 +2909,8 @@ theorem IsBasis.indep
   proof: hI.1.1.1
 
 中文:
-定理 IsBasis.indep
-  条件: (hI : M.IsBasis I X)
+定理 是基.indep
+  条件: (hI : M.是基 I X)
   结论: M.Indep I
   证明: hI.1.1.1
 -/
@@ -2927,8 +2927,8 @@ theorem IsBasis.subset
   proof: hI.1.1.2
 
 中文:
-定理 IsBasis.subset
-  条件: (hI : M.IsBasis I X)
+定理 是基.subset
+  条件: (hI : M.是基 I X)
   结论: I subseteq X
   证明: hI.1.1.2
 -/
@@ -2945,9 +2945,9 @@ theorem IsBasis.isBasis'
   proof: hI.1
 
 中文:
-定理 IsBasis.isBasis'
-  条件: (hI : M.IsBasis I X)
-  结论: M.IsBasis' I X
+定理 是基.isBasis'
+  条件: (hI : M.是基 I X)
+  结论: M.是基' I X
   证明: hI.1
 -/
 theorem IsBasis.isBasis' (hI : M.IsBasis I X) : M.IsBasis' I X :=
@@ -2963,9 +2963,9 @@ theorem IsBasis'.isBasis
   proof: ⟨hI, hX⟩
 
 中文:
-定理 IsBasis'.isBasis
-  条件: (hI : M.IsBasis' I X) (hX : X subseteq M.E := by aesop_mat)
-  结论: M.IsBasis I X
+定理 是基'.isBasis
+  条件: (hI : M.是基' I X) (hX : X subseteq M.E := by aesop_mat)
+  结论: M.是基 I X
   证明: ⟨hI, hX⟩
 -/
 theorem IsBasis'.isBasis (hI : M.IsBasis' I X) (hX : X subseteq M.E := by aesop_mat) : M.IsBasis I X :=
@@ -2984,8 +2984,8 @@ theorem IsBasis'.subset
 @[aesop unsafe 15% (rule_sets := [Matroid])]
 
 中文:
-定理 IsBasis'.subset
-  条件: (hI : M.IsBasis' I X)
+定理 是基'.subset
+  条件: (hI : M.是基' I X)
   结论: I subseteq X
   证明: hI.1.2
 
@@ -3007,8 +3007,8 @@ theorem IsBasis.subset_ground
   proof: hI.2
 
 中文:
-定理 IsBasis.subset_ground
-  条件: (hI : M.IsBasis I X)
+定理 是基.subset_ground
+  条件: (hI : M.是基 I X)
   结论: X subseteq M.E
   证明: hI.2
 -/
@@ -3029,9 +3029,9 @@ theorem IsBasis.isBasis_inter_ground
 @[aesop unsafe 15% (rule_sets := [Matroid])]
 
 中文:
-定理 IsBasis.isBasis_inter_ground
-  条件: (hI : M.IsBasis I X)
-  结论: M.IsBasis I (X inter M.E)
+定理 是基.isBasis_inter_ground
+  条件: (hI : M.是基 I X)
+  结论: M.是基 I (X inter M.E)
   证明: by
   convert! hI
   rw [inter_eq_self_of_subset_left hI.subset_ground]
@@ -3055,8 +3055,8 @@ theorem IsBasis.left_subset_ground
   proof: hI.indep.subset_ground
 
 中文:
-定理 IsBasis.left_subset_ground
-  条件: (hI : M.IsBasis I X)
+定理 是基.left_subset_ground
+  条件: (hI : M.是基 I X)
   结论: I subseteq M.E
   证明: hI.indep.subset_ground
 
@@ -3074,8 +3074,8 @@ theorem IsBasis.eq_of_subset_indep
   proof: hIJ.antisymm (hI.1.2 ⟨hJ, hJX⟩ hIJ)
 
 中文:
-定理 IsBasis.eq_of_subset_indep
-  结论: (hI : M.IsBasis I X) (hJ : M.Indep J) (hIJ : I subseteq J)
+定理 是基.eq_of_subset_indep
+  结论: (hI : M.是基 I X) (hJ : M.Indep J) (hIJ : I subseteq J)
   证明: hIJ.antisymm (hI.1.2 ⟨hJ, hJX⟩ hIJ)
 
 Depends on / 依赖: antisymm, hIJ.antisymm
@@ -3094,9 +3094,9 @@ theorem IsBasis.Finite
   proof: hI.indep.finite
 
 中文:
-定理 IsBasis.Finite
-  条件: (hI : M.IsBasis I X) [RankFinite M]
-  结论: I.Finite
+定理 是基.有限
+  条件: (hI : M.是基 I X) [RankFinite M]
+  结论: I.有限
   证明: hI.indep.finite
 
 Depends on / 依赖: finite, hI.indep.finite
@@ -3159,7 +3159,7 @@ theorem isBasis'_iff_isBasis_inter_ground
 
 中文:
 定理 isBasis'_iff_isBasis_inter_ground
-  结论: M.IsBasis' I X ↔ M.IsBasis I (X inter M.E)
+  结论: M.是基' I X ↔ M.是基 I (X inter M.E)
   证明: by
   rw [IsBasis']; rw [IsBasis]; rw [and_iff_left inter_subset_right]; rw [maximal_iff_maximal_of_imp_of_forall]
   · exact fun I hI => ⟨hI.1, hI.2.trans inter_subset_left⟩
@@ -3185,7 +3185,7 @@ theorem isBasis'_iff_isBasis
 中文:
 定理 isBasis'_iff_isBasis
   条件: (hX : X subseteq M.E := by aesop_mat)
-  结论: M.IsBasis' I X ↔ M.IsBasis I X
+  结论: M.是基' I X ↔ M.是基 I X
   证明: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [inter_eq_self_of_subset_left hX]
 -/
@@ -3202,7 +3202,7 @@ theorem isBasis_iff_isBasis'_subset_ground
 
 中文:
 定理 isBasis_iff_isBasis'_subset_ground
-  结论: M.IsBasis I X ↔ M.IsBasis' I X ∧ X subseteq M.E
+  结论: M.是基 I X ↔ M.是基' I X ∧ X subseteq M.E
   证明: ⟨fun h => ⟨h.isBasis', h.subset_ground⟩, fun h => (isBasis'_iff_isBasis h.2).mp h.1⟩
 
 Depends on / 依赖: _iff_isBasis, h.isBasis, h.subset_ground, isBasis, subset_ground
@@ -3220,9 +3220,9 @@ theorem IsBasis'.isBasis_inter_ground
   proof: isBasis'_iff_isBasis_inter_ground.mp hIX
 
 中文:
-定理 IsBasis'.isBasis_inter_ground
-  条件: (hIX : M.IsBasis' I X)
-  结论: M.IsBasis I (X inter M.E)
+定理 是基'.isBasis_inter_ground
+  条件: (hIX : M.是基' I X)
+  结论: M.是基 I (X inter M.E)
   证明: isBasis'_iff_isBasis_inter_ground.mp hIX
 -/
 theorem IsBasis'.isBasis_inter_ground (hIX : M.IsBasis' I X) : M.IsBasis I (X inter M.E) :=
@@ -3237,8 +3237,8 @@ theorem IsBasis'.eq_of_subset_indep
   proof: hIJ.antisymm (hI.2 ⟨hJ, hJX⟩ hIJ)
 
 中文:
-定理 IsBasis'.eq_of_subset_indep
-  结论: (hI : M.IsBasis' I X) (hJ : M.Indep J) (hIJ : I subseteq J)
+定理 是基'.eq_of_subset_indep
+  结论: (hI : M.是基' I X) (hJ : M.Indep J) (hIJ : I subseteq J)
   证明: hIJ.antisymm (hI.2 ⟨hJ, hJX⟩ hIJ)
 -/
 theorem IsBasis'.eq_of_subset_indep (hI : M.IsBasis' I X) (hJ : M.Indep J) (hIJ : I subseteq J)
@@ -3256,8 +3256,8 @@ theorem IsBasis'.insert_not_indep
     hI.eq_of_subset_indep hi (subset_insert _ _) (insert_subset he.1 hI.subset)
 
 中文:
-定理 IsBasis'.insert_not_indep
-  条件: (hI : M.IsBasis' I X) (he : e in X \ I)
+定理 是基'.insert_not_indep
+  条件: (hI : M.是基' I X) (he : e in X \ I)
   结论: ¬ M.Indep (insert e I)
   证明: fun hi => he.2 insert_eq_self.1 Eq.symm
     hI.eq_of_subset_indep hi (subset_insert _ _) (insert_subset he.1 hI.subset)
@@ -3323,8 +3323,8 @@ theorem IsBasis.isBasis_subset
   exact fun J hJ hIJ hJY => hI.eq_of_subset_indep hJ hIJ (hJY.trans hYX)
 
 中文:
-定理 IsBasis.isBasis_subset
-  条件: (hI : M.IsBasis I X) (hIY : I subseteq Y) (hYX : Y subseteq X)
+定理 是基.isBasis_subset
+  条件: (hI : M.是基 I X) (hIY : I subseteq Y) (hYX : Y subseteq X)
   证明: by
   rw [isBasis_iff (hYX.trans hI.subset_ground)]; rw [and_iff_right hI.indep]; rw [and_iff_right hIY]
   exact fun J hJ hIJ hJY => hI.eq_of_subset_indep hJ hIJ (hJY.trans hYX)
@@ -3348,7 +3348,7 @@ theorem isBasis_self_iff_indep
 
 中文:
 定理 isBasis_self_iff_indep
-  结论: M.IsBasis I I ↔ M.Indep I
+  结论: M.是基 I I ↔ M.Indep I
   证明: by
   rw [isBasis_iff']; rw [and_iff_right rfl.subset]; rw [and_assoc]; rw [and_iff_left_iff_imp]
   exact fun hi => ⟨fun _ _ => subset_antisymm, hi.subset_ground⟩
@@ -3369,7 +3369,7 @@ theorem Indep.isBasis_self
 中文:
 定理 Indep.isBasis_self
   条件: (h : M.Indep I)
-  结论: M.IsBasis I I
+  结论: M.是基 I I
   证明: isBasis_self_iff_indep.mpr h
 
 Depends on / 依赖: isBasis_self_iff_indep, isBasis_self_iff_indep.mpr
@@ -3388,8 +3388,8 @@ theorem isBasis_empty_iff
 
 中文:
 定理 isBasis_empty_iff
-  条件: (M : Matroid α)
-  结论: M.IsBasis I ∅ ↔ I = ∅
+  条件: (M : 拟阵 α)
+  结论: M.是基 I ∅ ↔ I = ∅
   证明: ⟨fun h => subset_empty_iff.mp h.subset, fun h => by (rw [h]; exact M.empty_indep.isBasis_self)⟩
 -/
 @[simp] theorem isBasis_empty_iff (M : Matroid α) : M.IsBasis I ∅ ↔ I = ∅ :=
@@ -3408,8 +3408,8 @@ theorem IsBasis.dep_of_ssubset
   exact fun hY => hIY.ne (hI.eq_of_subset_indep hY hIY.subset hYX)
 
 中文:
-定理 IsBasis.dep_of_ssubset
-  条件: (hI : M.IsBasis I X) (hIY : I ⊂ Y) (hYX : Y subseteq X)
+定理 是基.dep_of_ssubset
+  条件: (hI : M.是基 I X) (hIY : I ⊂ Y) (hYX : Y subseteq X)
   结论: M.Dep Y
   证明: by
   have : X subseteq M.E := hI.subset_ground
@@ -3433,8 +3433,8 @@ theorem IsBasis.insert_dep
   proof: hI.dep_of_ssubset (ssubset_insert he.2) (insert_subset he.1 hI.subset)
 
 中文:
-定理 IsBasis.insert_dep
-  条件: (hI : M.IsBasis I X) (he : e in X \ I)
+定理 是基.insert_dep
+  条件: (hI : M.是基 I X) (he : e in X \ I)
   结论: M.Dep (insert e I)
   证明: hI.dep_of_ssubset (ssubset_insert he.2) (insert_subset he.1 hI.subset)
 
@@ -3452,8 +3452,8 @@ theorem IsBasis.mem_of_insert_indep
   proof: by_contra (fun heI => (hI.insert_dep ⟨he, heI⟩).not_indep hIe)
 
 中文:
-定理 IsBasis.mem_of_insert_indep
-  条件: (hI : M.IsBasis I X) (he : e in X) (hIe : M.Indep (insert e I))
+定理 是基.mem_of_insert_indep
+  条件: (hI : M.是基 I X) (he : e in X) (hIe : M.Indep (insert e I))
   证明: by_contra (fun heI => (hI.insert_dep ⟨he, heI⟩).not_indep hIe)
 
 Depends on / 依赖: hI.insert_dep, insert_dep, not_indep
@@ -3471,8 +3471,8 @@ theorem IsBasis'.mem_of_insert_indep
   proof: hI.isBasis_inter_ground.mem_of_insert_indep ⟨he, hIe.subset_ground (mem_insert _ _)⟩ hIe
 
 中文:
-定理 IsBasis'.mem_of_insert_indep
-  结论: (hI : M.IsBasis' I X) (he : e in X)
+定理 是基'.mem_of_insert_indep
+  结论: (hI : M.是基' I X) (he : e in X)
   证明: hI.isBasis_inter_ground.mem_of_insert_indep ⟨he, hIe.subset_ground (mem_insert _ _)⟩ hIe
 -/
 theorem IsBasis'.mem_of_insert_indep (hI : M.IsBasis' I X) (he : e in X)
@@ -3489,9 +3489,9 @@ theorem IsBasis.not_isBasis_of_ssubset
   proof: fun h => hJI.ne (h.eq_of_subset_indep hI.indep hJI.subset hI.subset)
 
 中文:
-定理 IsBasis.not_isBasis_of_ssubset
-  条件: (hI : M.IsBasis I X) (hJI : J ⊂ I)
-  结论: ¬ M.IsBasis J X
+定理 是基.not_isBasis_of_ssubset
+  条件: (hI : M.是基 I X) (hJI : J ⊂ I)
+  结论: ¬ M.是基 J X
   证明: fun h => hJI.ne (h.eq_of_subset_indep hI.indep hJI.subset hI.subset)
 
 Depends on / 依赖: eq_of_subset_indep, h.eq_of_subset_indep, hI.indep, hI.subset, hJI.ne, hJI.subset, subset
@@ -3557,8 +3557,8 @@ theorem exists_isBasis
   ⟨_, hI⟩
 
 中文:
-定理 exists_isBasis
-  条件: (M : Matroid α) (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+定理 存在_isBasis
+  条件: (M : 拟阵 α) (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: let ⟨_, hI, _⟩ := M.empty_indep.subset_isBasis_of_subset (empty_subset X)
   ⟨_, hI⟩
 
@@ -3580,9 +3580,9 @@ theorem exists_isBasis'
   ⟨_, hI⟩
 
 中文:
-定理 exists_isBasis'
-  条件: (M : Matroid α) (X : Set α)
-  结论: 存在 I, M.IsBasis' I X
+定理 存在_isBasis'
+  条件: (M : 拟阵 α) (X : 集合 α)
+  结论: 存在 I, M.是基' I X
   证明: let ⟨_, hI, _⟩ := M.empty_indep.subset_isBasis'_of_subset (empty_subset X)
   ⟨_, hI⟩
 
@@ -3604,8 +3604,8 @@ theorem exists_isBasis_subset_isBasis
   exact ⟨_, _, hI, hJ, hIJ⟩
 
 中文:
-定理 exists_isBasis_subset_isBasis
-  条件: (M : Matroid α) (hXY : X subseteq Y) (hY : Y subseteq M.E := by aesop_mat)
+定理 存在_isBasis_subset_isBasis
+  条件: (M : 拟阵 α) (hXY : X subseteq Y) (hY : Y subseteq M.E := by aesop_mat)
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis X (hXY.trans hY)
   obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis_of_subset (hI.subset.trans hXY)
@@ -3631,8 +3631,8 @@ theorem IsBasis.exists_isBasis_inter_eq_of_superset
   exact fun e he => hI.mem_of_insert_indep he.2 (hJ.indep.subset (insert_subset he.1 hIJ))
 
 中文:
-定理 IsBasis.exists_isBasis_inter_eq_of_superset
-  结论: (hI : M.IsBasis I X) (hXY : X subseteq Y)
+定理 是基.存在_isBasis_inter_eq_of_superset
+  结论: (hI : M.是基 I X) (hXY : X subseteq Y)
   证明: by
   obtain ⟨J, hJ, hIJ⟩ := hI.indep.subset_isBasis_of_subset (hI.subset.trans hXY)
   refine ⟨J, hJ, subset_antisymm ?_ (subset_inter hIJ hI.subset)⟩
@@ -3657,8 +3657,8 @@ theorem exists_isBasis_union_inter_isBasis
   (fun I hI => ⟨hI.1, by rwa [hI.2]⟩)
 
 中文:
-定理 exists_isBasis_union_inter_isBasis
-  结论: (M : Matroid α) (X Y : Set α)
+定理 存在_isBasis_union_inter_isBasis
+  结论: (M : 拟阵 α) (X Y : 集合 α)
   证明: let ⟨J, hJ⟩ := M.exists_isBasis Y
   (hJ.exists_isBasis_inter_eq_of_superset subset_union_right).imp
   (fun I hI => ⟨hI.1, by rwa [hI.2]⟩)
@@ -3683,7 +3683,7 @@ theorem Indep.eq_of_isBasis
 
 中文:
 定理 Indep.eq_of_isBasis
-  条件: (hI : M.Indep I) (hJ : M.IsBasis J I)
+  条件: (hI : M.Indep I) (hJ : M.是基 J I)
   结论: J = I
   证明: hJ.eq_of_subset_indep hI hJ.subset rfl.subset
 
@@ -3705,8 +3705,8 @@ theorem IsBasis.exists_isBase
     inter_subset_right])⟩
 
 中文:
-定理 IsBasis.exists_isBase
-  条件: (hI : M.IsBasis I X)
+定理 是基.存在_isBase
+  条件: (hI : M.是基 I X)
   结论: 存在 B, M.IsBase B ∧ I = B inter X
   证明: let ⟨B,hB, hIB⟩ := hI.indep.exists_isBase_superset
   ⟨B, hB, subset_antisymm (subset_inter hIB hI.subset)
@@ -3732,7 +3732,7 @@ theorem isBasis_ground_iff
 
 中文:
 定理 isBasis_ground_iff
-  结论: M.IsBasis B M.E ↔ M.IsBase B
+  结论: M.是基 B M.E ↔ M.IsBase B
   证明: by
   rw [IsBasis]; rw [and_iff_left rfl.subset]; rw [isBase_iff_maximal_indep]; rw [maximal_and_iff_right_of_imp (fun _ h => h.subset_ground)]; rw [and_iff_left_of_imp (fun h => h.1.subset_ground)]
 -/
@@ -3751,7 +3751,7 @@ theorem IsBase.isBasis_ground
 中文:
 定理 IsBase.isBasis_ground
   条件: (hB : M.IsBase B)
-  结论: M.IsBasis B M.E
+  结论: M.是基 B M.E
   证明: isBasis_ground_iff.mpr hB
 
 Depends on / 依赖: isBasis_ground_iff, isBasis_ground_iff.mpr
@@ -3772,7 +3772,7 @@ theorem Indep.isBasis_iff_forall_insert_dep
   exact ⟨fun h e heX heI => ⟨fun hi => h.1 e heI hi heX, h.2 heX
 
 中文:
-定理 Indep.isBasis_iff_forall_insert_dep
+定理 Indep.isBasis_iff_对任意_insert_dep
   条件: (hI : M.Indep I) (hIX : I subseteq X)
   证明: by
   rw [IsBasis]; rw [maximal_iff_forall_insert (fun I J hI hIJ => ⟨hI.1.subset hIJ]; rw [hIJ.trans hI.2⟩)]
@@ -3800,7 +3800,7 @@ theorem Indep.isBasis_of_forall_insert
   proof: (hI.isBasis_iff_forall_insert_dep hIX).mpr he
 
 中文:
-定理 Indep.isBasis_of_forall_insert
+定理 Indep.isBasis_of_对任意_insert
   结论: (hI : M.Indep I) (hIX : I subseteq X)
   证明: (hI.isBasis_iff_forall_insert_dep hIX).mpr he
 
@@ -3854,8 +3854,8 @@ theorem IsBasis.iUnion_isBasis_iUnion
   refine ((hI i).insert_dep ⟨hes, he' _⟩).superset (insert_subset_insert (subset_iUni
 
 中文:
-定理 IsBasis.iUnion_isBasis_iUnion
-  结论: {ι : Type _} (X I : ι -> Set α)
+定理 是基.iUnion_isBasis_iUnion
+  结论: {ι : 类型 _} (X I : ι -> 集合 α)
   证明: by
   refine h_ind.isBasis_of_forall_insert
     (iUnion_subset (fun i => (hI i).subset.trans (subset_iUnion _ _))) ?_
@@ -3887,8 +3887,8 @@ theorem IsBasis.isBasis_iUnion
   exact (hI (Classical.arbitrary ι)).indep
 
 中文:
-定理 IsBasis.isBasis_iUnion
-  结论: {ι : Type _} [Nonempty ι] (X : ι -> Set α)
+定理 是基.isBasis_iUnion
+  结论: {ι : 类型 _} [非空 ι] (X : ι -> 集合 α)
   证明: by
   convert! IsBasis.iUnion_isBasis_iUnion X (fun _ => I) (fun i => hI i) _ <;> rw [iUnion_const]
   exact (hI (Classical.arbitrary ι)).indep
@@ -3912,8 +3912,8 @@ theorem IsBasis.isBasis_sUnion
   exact IsBasis.isBasis_iUnion _ fun X => h X X.prop
 
 中文:
-定理 IsBasis.isBasis_sUnion
-  结论: {Xs : Set (Set α)} (hne : Xs.Nonempty)
+定理 是基.isBasis_sUnion
+  结论: {Xs : 集合 (集合 α)} (hne : Xs.非空)
   证明: by
   rw [sUnion_eq_iUnion]
   have := Iff.mpr nonempty_coe_sort hne
@@ -3979,8 +3979,8 @@ theorem IsBasis.union_isBasis_union
   rwa [← union_eq_iUnion]
 
 中文:
-定理 IsBasis.union_isBasis_union
-  结论: (hIX : M.IsBasis I X) (hJY : M.IsBasis J Y)
+定理 是基.union_isBasis_union
+  结论: (hIX : M.是基 I X) (hJY : M.是基 J Y)
   证明: by
   rw [union_eq_iUnion]; rw [union_eq_iUnion]
   refine IsBasis.iUnion_isBasis_iUnion _ _ ?_ ?_
@@ -4006,8 +4006,8 @@ theorem IsBasis.isBasis_union
   convert! hIX.union_isBasis_union hIY _ <;> rw [union_self]; exact hIX.indep
 
 中文:
-定理 IsBasis.isBasis_union
-  条件: (hIX : M.IsBasis I X) (hIY : M.IsBasis I Y)
+定理 是基.isBasis_union
+  条件: (hIX : M.是基 I X) (hIY : M.是基 I Y)
   证明: by
   convert! hIX.union_isBasis_union hIY _ <;> rw [union_self]; exact hIX.indep
 
@@ -4029,8 +4029,8 @@ theorem IsBasis.isBasis_union_of_subset
   assumption
 
 中文:
-定理 IsBasis.isBasis_union_of_subset
-  条件: (hI : M.IsBasis I X) (hJ : M.Indep J) (hIJ : I subseteq J)
+定理 是基.isBasis_union_of_subset
+  条件: (hI : M.是基 I X) (hJ : M.Indep J) (hIJ : I subseteq J)
   证明: by
   convert! hJ.isBasis_self.union_isBasis_union hI _ <;>
   rw [union_eq_self_of_subset_right hIJ]
@@ -4055,8 +4055,8 @@ theorem IsBasis.insert_isBasis_insert
   exact hI.union_isBasis_union (h.subset subset_union_right).isBasis_self h
 
 中文:
-定理 IsBasis.insert_isBasis_insert
-  条件: (hI : M.IsBasis I X) (h : M.Indep (insert e I))
+定理 是基.insert_isBasis_insert
+  条件: (hI : M.是基 I X) (h : M.Indep (insert e I))
   证明: by
   simp_rw [← union_singleton] at *
   exact hI.union_isBasis_union (h.subset subset_union_right).isBasis_self h
@@ -4081,7 +4081,7 @@ theorem IsBase.isBase_of_isBasis_superset
 
 中文:
 定理 IsBase.isBase_of_isBasis_superset
-  条件: (hB : M.IsBase B) (hBX : B subseteq X) (hIX : M.IsBasis I X)
+  条件: (hB : M.IsBase B) (hBX : B subseteq X) (hIX : M.是基 I X)
   证明: by
   by_contra h
   obtain ⟨e, heBI, he⟩ := hIX.indep.exists_insert_of_not_isBase h hB
@@ -4106,7 +4106,7 @@ obtain ⟨B', hB', hIB'⟩ := hI.subset_isBasis_of_subset subset_union_left (t :
   exact ⟨B', hB.isBase_of_isBasis_superset subset_union_right hB', hIB', hB'.subset⟩
 
 中文:
-定理 Indep.exists_isBase_subset_union_isBase
+定理 Indep.存在_isBase_subset_union_isBase
   条件: (hI : M.Indep I) (hB : M.IsBase B)
   证明: by
 obtain ⟨B', hB', hIB'⟩ := hI.subset_isBasis_of_subset subset_union_left (t := B)
@@ -4129,8 +4129,8 @@ theorem IsBasis.inter_eq_of_subset_indep
   (fun _ he => hIX.mem_of_insert_indep he.2 (hJ.subset (insert_subset he.1 hIJ)))
 
 中文:
-定理 IsBasis.inter_eq_of_subset_indep
-  条件: (hIX : M.IsBasis I X) (hIJ : I subseteq J) (hJ : M.Indep J)
+定理 是基.inter_eq_of_subset_indep
+  条件: (hIX : M.是基 I X) (hIJ : I subseteq J) (hJ : M.Indep J)
   证明: (subset_inter hIJ hIX.subset).antisymm'
   (fun _ he => hIX.mem_of_insert_indep he.2 (hJ.subset (insert_subset he.1 hIJ)))
 
@@ -4151,8 +4151,8 @@ theorem IsBasis'.inter_eq_of_subset_indep
   rw [← hI.isBasis_inter_ground.inter_eq_of_subset_indep hIJ hJ]; rw [inter_comm X]; rw [← inter_assoc]; rw [inter_eq_self_of_subset_left hJ.subset_ground]
 
 中文:
-定理 IsBasis'.inter_eq_of_subset_indep
-  条件: (hI : M.IsBasis' I X) (hIJ : I subseteq J) (hJ : M.Indep J)
+定理 是基'.inter_eq_of_subset_indep
+  条件: (hI : M.是基' I X) (hIJ : I subseteq J) (hJ : M.Indep J)
   证明: by
   rw [← hI.isBasis_inter_ground.inter_eq_of_subset_indep hIJ hJ]; rw [inter_comm X]; rw [← inter_assoc]; rw [inter_eq_self_of_subset_left hJ.subset_ground]
 -/
@@ -4198,8 +4198,8 @@ theorem exists_isBasis_disjoint_isBasis_of_subset
 exact heI hI.mem_of_insert_indep heX (hI'.indep.subset (insert_subset he
 
 中文:
-定理 exists_isBasis_disjoint_isBasis_of_subset
-  结论: (M : Matroid α) {X Y : Set α} (hXY : X subseteq Y)
+定理 存在_isBasis_disjoint_isBasis_of_subset
+  结论: (M : 拟阵 α) {X Y : 集合 α} (hXY : X subseteq Y)
   证明: by
   obtain ⟨I, I', hI, hI', hII'⟩ := M.exists_isBasis_subset_isBasis hXY
   refine ⟨I, I' \ I, hI, by rwa [union_sdiff_self, union_eq_self_of_subset_left hII'], ?_⟩
@@ -4237,7 +4237,7 @@ theorem finite_setOfPred_matroid
 
 中文:
 定理 finite_setOfPred_matroid
-  条件: {E : Set α} (hE : E.Finite)
+  条件: {E : 集合 α} (hE : E.有限)
   证明: by
   set f : Matroid α -> Set α × (Set (Set α)) := fun M => ⟨M.E, {B | M.IsBase B}⟩
   have hf : f.Injective := by
@@ -4278,8 +4278,8 @@ alias finite_setOf_matroid' := finite_setOfPred_matroid'
 
 中文:
 定理 finite_setOfPred_matroid'
-  条件: {E : Set α} (hE : E.Finite)
-  结论: {M : Matroid α | M.E = E}.Finite
+  条件: {E : 集合 α} (hE : E.有限)
+  结论: {M : 拟阵 α | M.E = E}.有限
   证明: (finite_setOfPred_matroid hE).subset (fun M => by rintro rfl; exact subset_refl M.E)
 
 @[deprecated (since := "2026-07-09")]

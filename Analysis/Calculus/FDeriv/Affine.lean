@@ -44,7 +44,7 @@ refine .of_isLittleOTVS .congr_left (.zero _ _) ?_
 
 中文:
 定理 hasFDerivAtFilter
-  结论: HasFDerivAtFilter f f.contLinear L
+  结论: 有FDerivAtFilter f f.contLinear L
   证明: by
 refine .of_isLittleOTVS .congr_left (.zero _ _) ?_
   simp [(vsub_eq_sub _ _).symm.trans (f.contLinear_map_vsub _ _).symm]
@@ -112,7 +112,7 @@ theorem hasFDerivAt
 
 中文:
 定理 hasFDerivAt
-  结论: HasFDerivAt f f.contLinear x
+  结论: 在点处Fréchet可导 f f.contLinear x
   证明: f.hasFDerivAtFilter
 
 @[simp, fun_prop]
@@ -219,7 +219,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 f
+  结论: 可微 𝕜 f
   证明: fun _ =>
   f.differentiableAt
 

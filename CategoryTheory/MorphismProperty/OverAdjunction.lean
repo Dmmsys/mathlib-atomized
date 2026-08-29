@@ -129,7 +129,7 @@ definition Over.mapId
 
 中文:
 定义 Over.mapId
-  签名: [P.IsMultiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
+  签名: [P.是Multiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
   定义体: NatIso.ofComponents (fun Y => Over.isoMk (Iso.refl _))
 -/
 def Over.mapId [P.IsMultiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
@@ -195,7 +195,7 @@ definition Over.pullback
 
 中文:
 定义 Over.pullback
-  签名: (f : X ⟶ Y) [P.HasPullbacksAlong f]
+  签名: (f : X ⟶ Y) [P.有PullbacksAlong f]
   定义体: Over.mk Q (Limits.pullback.snd A.hom f)
     (pullback_snd A.hom f A.prop)
   map {A B} g := Over.homMk (pullback.lift (pullback.fst A.hom f ≫ g.left)
@@ -268,7 +268,7 @@ lemma Over.pullbackComp_left_fst_fst
 
 中文:
 引理 Over.pullbackComp_left_fst_fst
-  结论: (f : X ⟶ Y) (g : Y ⟶ Z) [P.IsStableUnderBaseChangeAlong f]
+  结论: (f : X ⟶ Y) (g : Y ⟶ Z) [P.是StableUnderBaseChangeAlong f]
   证明: by
   simp
 -/
@@ -296,7 +296,7 @@ definition Over.pullbackCongr
 
 中文:
 定义 Over.pullbackCongr
-  签名: {f : X ⟶ Y} [P.HasPullbacksAlong f]
+  签名: {f : X ⟶ Y} [P.有PullbacksAlong f]
   定义体: by subst h; infer_instance
     haveI : P.IsStableUnderBaseChangeAlong g := by subst h; infer_instance
     Over.pullback P Q f ≅ Over.pullback P Q g :=
@@ -332,7 +332,7 @@ lemma Over.pullbackCongr_hom_app_left_fst
 
 中文:
 引理 Over.pullbackCongr_hom_app_left_fst
-  结论: {f : X ⟶ Y} [P.HasPullbacksAlong f] {g : X ⟶ Y}
+  结论: {f : X ⟶ Y} [P.有PullbacksAlong f] {g : X ⟶ Y}
   证明: by subst h; infer_instance
     ((Over.pullbackCongr h).hom.app A).left ≫ pullback.fst A.hom g = pullback.fst A.hom f := by
   subst h
@@ -366,7 +366,7 @@ definition Over.pullbackMapHomPullback
 
 中文:
 定义 Over.pullbackMapHomPullback
-  签名: [P.IsStableUnderComposition]
+  签名: [P.是StableUnderComposition]
   定义体: by subst hfg; infer_instance
     Over.pullback P Q fg ⋙ Over.map (f := f) _ hPf ⟶
       Over.pullback P Q g where
@@ -401,7 +401,7 @@ definition Over.pullbackCompForgetIso
 
 中文:
 定义 Over.pullbackCompForgetIso
-  签名: {X Y : T} (f : X ⟶ Y) [HasPullbacksAlong f]
+  签名: {X Y : T} (f : X ⟶ Y) [有PullbacksAlong f]
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -438,7 +438,7 @@ definition Over.mapPullbackAdj
 
 中文:
 定义 Over.mapPullbackAdj
-  签名: (f : X ⟶ Y) [P.HasPullbacksAlong f]
+  签名: (f : X ⟶ Y) [P.有PullbacksAlong f]
   定义体: Over.homMk (pullback.lift (𝟙 _) A.hom (by simp)) (by simp) by
     apply Q.of_postcomp (W' := Q)
     · exact Q.pullback_fst _ _ hQf
@@ -472,7 +472,7 @@ lemma isRightAdjoint_pullback
 
 中文:
 引理 isRightAdjoint_pullback
-  结论: (f : X ⟶ Y) [P.HasPullbacksAlong f] [P.IsStableUnderBaseChangeAlong f]
+  结论: (f : X ⟶ Y) [P.有PullbacksAlong f] [P.是StableUnderBaseChangeAlong f]
   证明: (Over.mapPullbackAdj P ⊤ f hPf trivial).isRightAdjoint
 
 Depends on / 依赖: Over.mapPullbackAdj, isRightAdjoint, mapPullbackAdj
@@ -585,7 +585,7 @@ definition Under.mapId
 
 中文:
 定义 Under.mapId
-  签名: [P.IsMultiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
+  签名: [P.是Multiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
   定义体: NatIso.ofComponents (fun Y => Under.isoMk (Iso.refl _))
 -/
 def Under.mapId [P.IsMultiplicative] [Q.RespectsIso] (X : T) (f : X ⟶ X := 𝟙 X)
@@ -651,7 +651,7 @@ definition Under.pushout
 
 中文:
 定义 Under.pushout
-  签名: (f : X ⟶ Y) [P.HasPushoutsAlong f]
+  签名: (f : X ⟶ Y) [P.有PushoutsAlong f]
   定义体: Under.mk Q (Limits.pushout.inr A.hom f)
     (pushout_inr A.hom f A.prop)
   map {A B} g := Under.homMk (pushout.desc (g.right ≫ pushout.inl _ _)
@@ -731,7 +731,7 @@ definition Under.pushoutCongr
 
 中文:
 定义 Under.pushoutCongr
-  签名: {f : X ⟶ Y} [P.HasPushoutsAlong f]
+  签名: {f : X ⟶ Y} [P.有PushoutsAlong f]
   定义体: by subst h; infer_instance
     haveI : P.IsStableUnderCobaseChangeAlong g := by subst h; infer_instance
     Under.pushout P Q f ≅ Under.pushout P Q g :=
@@ -767,7 +767,7 @@ lemma Under.pushoutCongr_hom_app_left_fst
 
 中文:
 引理 Under.pushoutCongr_hom_app_left_fst
-  结论: {f : X ⟶ Y} [P.HasPushoutsAlong f] {g : X ⟶ Y}
+  结论: {f : X ⟶ Y} [P.有PushoutsAlong f] {g : X ⟶ Y}
   证明: by subst h; infer_instance
     pushout.inl _ _ ≫ ((Under.pushoutCongr h).hom.app A).right = pushout.inl _ _ := by
   subst h
@@ -796,7 +796,7 @@ definition Under.pushoutCompForgetIso
 
 中文:
 定义 Under.pushoutCompForgetIso
-  签名: {X Y : T} (f : X ⟶ Y) [HasPushoutsAlong f]
+  签名: {X Y : T} (f : X ⟶ Y) [有PushoutsAlong f]
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -834,7 +834,7 @@ counit.app A := Under.homMk (pushout.desc (𝟙 _) A.hom (by simp)) (by simp) by
 
 中文:
 定义 Under.mapPushoutAdj
-  签名: (f : X ⟶ Y) [P.HasPushoutsAlong f]
+  签名: (f : X ⟶ Y) [P.有PushoutsAlong f]
   定义体: Under.homMk (pushout.inl _ _) pushout.condition (Q.pushout_inl _ _ hQf)
 counit.app A := Under.homMk (pushout.desc (𝟙 _) A.hom (by simp)) (by simp) by
     apply Q.of_precomp (W' := Q)
@@ -868,7 +868,7 @@ lemma isLeftAdjoint_pushout
 
 中文:
 引理 isLeftAdjoint_pushout
-  结论: (f : X ⟶ Y) [P.HasPushoutsAlong f] [P.IsStableUnderCobaseChangeAlong f]
+  结论: (f : X ⟶ Y) [P.有PushoutsAlong f] [P.是StableUnderCobaseChangeAlong f]
   证明: (Under.mapPushoutAdj P ⊤ f hPf trivial).isLeftAdjoint
 
 Depends on / 依赖: Under.mapPushoutAdj, isLeftAdjoint, mapPushoutAdj

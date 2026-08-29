@@ -53,7 +53,7 @@ definition orthogonalProjection
 
 中文:
 定义 orthogonalProjection
-  签名: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  签名: (s : 仿射子空间 𝕜 P) [非空 s]
   定义体: letI x := Classical.arbitrary s
   AffineIsometryEquiv.vaddConst 𝕜 x
 .toContinuousAffineEquiv.toContinuousAffineMap.comp
@@ -80,7 +80,7 @@ theorem orthogonalProjection_apply
 
 中文:
 定理 orthogonalProjection_apply
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 -/
 theorem orthogonalProjection_apply (s : AffineSubspace 𝕜 P) [Nonempty s]
@@ -99,7 +99,7 @@ theorem orthogonalProjection_apply'
 
 中文:
 定理 orthogonalProjection_apply'
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: rfl
 -/
 theorem orthogonalProjection_apply' (s : AffineSubspace 𝕜 P) [Nonempty s]
@@ -121,7 +121,7 @@ theorem orthogonalProjection_apply_mem
 
 中文:
 定理 orthogonalProjection_apply_mem
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [orthogonalProjection_apply]; rw [coe_vadd]; rw [vadd_eq_vadd_iff_sub_eq_vsub]; rw [← Submodule.coe_sub]; rw [← map_sub]; rw [vsub_sub_vsub_cancel_left]; rw [Submodule.coe_orthogonalProjectionOnto_apply]; rw [Submodule.starProjection_eq_self_iff]
   exact s.vsub_mem_direction (SetLike.coe_mem
@@ -153,7 +153,7 @@ theorem orthogonalProjection_congr
 
 中文:
 定理 orthogonalProjection_congr
-  结论: {s₁ s₂ : AffineSubspace 𝕜 P} {p₁ p₂ : P}
+  结论: {s₁ s₂ : 仿射子空间 𝕜 P} {p₁ p₂ : P}
   证明: h ▸ ‹_›
     letI : s₂.direction.HasOrthogonalProjection := h ▸ ‹_›
     (orthogonalProjection s₁ p₁ : P) = (orthogonalProjection s₂ p₂ : P) := by
@@ -181,7 +181,7 @@ theorem orthogonalProjection_linear
 
 中文:
 定理 orthogonalProjection_linear
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: rfl
 -/
 theorem orthogonalProjection_linear {s : AffineSubspace 𝕜 P} [Nonempty s]
@@ -201,7 +201,7 @@ theorem orthogonalProjection_contLinear
 
 中文:
 定理 orthogonalProjection_contLinear
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: rfl
 -/
 theorem orthogonalProjection_contLinear {s : AffineSubspace 𝕜 P} [Nonempty s]
@@ -219,7 +219,7 @@ theorem orthogonalProjection_mem
 
 中文:
 定理 orthogonalProjection_mem
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: (orthogonalProjection s p).2
 
 Depends on / 依赖: orthogonalProjection
@@ -240,7 +240,7 @@ theorem orthogonalProjection_mem_orthogonal
 
 中文:
 定理 orthogonalProjection_mem_orthogonal
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [mem_mk']; rw [orthogonalProjection_apply]; rw [coe_vadd]; rw [vadd_vsub_eq_sub_vsub]; rw [← Submodule.neg_mem_iff]; rw [neg_sub]
   apply Submodule.sub_starProjection_mem_orthogonal
@@ -270,7 +270,7 @@ theorem inter_eq_singleton_orthogonalProjection
 
 中文:
 定理 inter_eq_singleton_orthogonalProjection
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   obtain ⟨q, hq⟩ := inter_eq_singleton_of_nonempty_of_isCompl (nonempty_subtype.mp ‹_›)
     (mk'_nonempty p s.directionᗮ)
@@ -303,7 +303,7 @@ theorem orthogonalProjection_vsub_mem_direction
 
 中文:
 定理 orthogonalProjection_vsub_mem_direction
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: (orthogonalProjection s p₂ -ᵥ ⟨p₁, hp₁⟩ : s.direction).2
 
 Depends on / 依赖: direction, orthogonalProjection, s.direction
@@ -323,7 +323,7 @@ theorem vsub_orthogonalProjection_mem_direction
 
 中文:
 定理 vsub_orthogonalProjection_mem_direction
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: ((⟨p₁, hp₁⟩ : s) -ᵥ orthogonalProjection s p₂ : s.direction).2
 
 Depends on / 依赖: direction, orthogonalProjection, s.direction
@@ -352,7 +352,7 @@ theorem orthogonalProjection_eq_self_iff
 
 中文:
 定理 orthogonalProjection_eq_self_iff
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   constructor
   · exact fun h => h ▸ orthogonalProjection_mem p
@@ -390,7 +390,7 @@ theorem orthogonalProjection_mem_subspace_eq_self
 
 中文:
 定理 orthogonalProjection_mem_subspace_eq_self
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   ext
   rw [orthogonalProjection_eq_self_iff]
@@ -414,7 +414,7 @@ theorem orthogonalProjection_orthogonalProjection
 
 中文:
 定理 orthogonalProjection_orthogonalProjection
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: orthogonalProjection_mem_subspace_eq_self ((orthogonalProjection s) p)
 
 Depends on / 依赖: orthogonalProjection, orthogonalProjection_mem_subspace_eq_self
@@ -436,7 +436,7 @@ theorem eq_orthogonalProjection_of_eq_subspace
 
 中文:
 定理 eq_orthogonalProjection_of_eq_subspace
-  结论: {s s' : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s s' : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   subst h
   rfl
@@ -480,7 +480,7 @@ theorem dist_orthogonalProjection_eq_zero_iff
 
 中文:
 定理 dist_orthogonalProjection_eq_zero_iff
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   rw [dist_comm]; rw [dist_eq_zero]; rw [orthogonalProjection_eq_self_iff]
 
@@ -501,7 +501,7 @@ theorem dist_orthogonalProjection_ne_zero_of_notMem
 
 中文:
 定理 dist_orthogonalProjection_ne_zero_of_notMem
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: mt dist_orthogonalProjection_eq_zero_iff.mp hp
 
 Depends on / 依赖: dist_orthogonalProjection_eq_zero_iff, dist_orthogonalProjection_eq_zero_iff.mp
@@ -523,7 +523,7 @@ theorem orthogonalProjection_vsub_mem_direction_orthogonal
 
 中文:
 定理 orthogonalProjection_vsub_mem_direction_orthogonal
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [← mem_mk']
   apply orthogonalProjection_mem_orthogonal
@@ -547,7 +547,7 @@ theorem vsub_orthogonalProjection_mem_direction_orthogonal
 
 中文:
 定理 vsub_orthogonalProjection_mem_direction_orthogonal
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: direction_mk' p s.directionᗮ ▸
     vsub_mem_direction (self_mem_mk' _ _) (orthogonalProjection_mem_orthogonal s p)
 
@@ -569,7 +569,7 @@ theorem orthogonalProjection_vsub_orthogonalProjection
 
 中文:
 定理 orthogonalProjection_vsub_orthogonalProjection
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   simpa using vsub_orthogonalProjection_mem_direction_orthogonal _ _
 
@@ -597,7 +597,7 @@ lemma coe_orthogonalProjection_eq_iff_mem
 
 中文:
 引理 coe_orthogonalProjection_eq_iff_mem
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   constructor
   · rintro rfl
@@ -635,7 +635,7 @@ lemma orthogonalProjection_eq_iff_mem
 
 中文:
 引理 orthogonalProjection_eq_iff_mem
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   simpa using coe_orthogonalProjection_eq_iff_mem (s := s) (p := p) (q := (q : P))
 
@@ -659,7 +659,7 @@ lemma orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem
 
 中文:
 引理 orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem
-  结论: {s : AffineSubspace 𝕜 P}
+  结论: {s : 仿射子空间 𝕜 P}
   证明: by
   rw [orthogonalProjection_eq_iff_mem]; rw [← s.directionᗮ.add_mem_iff_left (x := p -ᵥ q)
     (vsub_orthogonalProjection_mem_direction_orthogonal s q)]
@@ -688,7 +688,7 @@ lemma orthogonalProjection_sup_of_orthogonalProjection_eq
 
 中文:
 引理 orthogonalProjection_sup_of_orthogonalProjection_eq
-  结论: {s₁ s₂ : AffineSubspace 𝕜 P} [Nonempty s₁]
+  结论: {s₁ s₂ : 仿射子空间 𝕜 P} [非空 s₁]
   证明: by
   rw [coe_orthogonalProjection_eq_iff_mem]
   refine ⟨SetLike.le_def.1 le_sup_left (orthogonalProjection_mem _), ?_⟩
@@ -720,7 +720,7 @@ theorem orthogonalProjection_vadd_eq_self
 
 中文:
 定理 orthogonalProjection_vadd_eq_self
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   ext
   exact coe_orthogonalProjection_eq_iff_mem.mpr (by simp [*])
@@ -744,7 +744,7 @@ theorem orthogonalProjection_vadd_smul_vsub_orthogonalProjection
 
 中文:
 定理 orthogonalProjection_vadd_smul_vsub_orthogonalProjection
-  结论: {s : AffineSubspace 𝕜 P}
+  结论: {s : 仿射子空间 𝕜 P}
   证明: orthogonalProjection_vadd_eq_self hp
     (Submodule.smul_mem _ _ (vsub_orthogonalProjection_mem_direction_orthogonal s _))
 
@@ -769,7 +769,7 @@ lemma orthogonalProjection_orthogonalProjection_of_le
 
 中文:
 引理 orthogonalProjection_orthogonalProjection_of_le
-  结论: {s₁ s₂ : AffineSubspace 𝕜 P} [Nonempty s₁]
+  结论: {s₁ s₂ : 仿射子空间 𝕜 P} [非空 s₁]
   证明: by
   rw [orthogonalProjection_eq_orthogonalProjection_iff_vsub_mem]
   exact SetLike.le_def.1 (Submodule.orthogonal_le (direction_le h))
@@ -828,7 +828,7 @@ lemma dist_orthogonalProjection_eq_dist_iff_eq_of_mem
 
 中文:
 引理 dist_orthogonalProjection_eq_dist_iff_eq_of_mem
-  结论: {s : AffineSubspace 𝕜 P}
+  结论: {s : 仿射子空间 𝕜 P}
   证明: ⟨p₂, hp₂⟩
     dist p₁ (orthogonalProjection s p₁) = dist p₁ p₂ ↔ orthogonalProjection s p₁ = p₂ := by
   have : Nonempty s := ⟨p₂, hp₂⟩
@@ -866,7 +866,7 @@ lemma dist_orthogonalProjection_eq_infDist
 
 中文:
 引理 dist_orthogonalProjection_eq_infDist
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   refine le_antisymm ?_ (Metric.infDist_le_dist_of_mem (orthogonalProjection_mem _))
   rw [Metric.infDist_eq_iInf]
@@ -900,7 +900,7 @@ lemma dist_orthogonalProjection_eq_infNndist
 
 中文:
 引理 dist_orthogonalProjection_eq_infNndist
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [← NNReal.coe_inj]
   simp [dist_orthogonalProjection_eq_infDist]
@@ -927,7 +927,7 @@ theorem dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd
 
 中文:
 定理 dist_sq_smul_orthogonal_vadd_smul_orthogonal_vadd
-  结论: {s : AffineSubspace 𝕜 P} {p₁ p₂ : P}
+  结论: {s : 仿射子空间 𝕜 P} {p₁ p₂ : P}
   证明: calc
     dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) * dist (r₁ • v +ᵥ p₁) (r₂ • v +ᵥ p₂) =
         ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ * ‖p₁ -ᵥ p₂ + (r₁ - r₂) • v‖ := by
@@ -965,7 +965,7 @@ theorem dist_eq_iff_dist_orthogonalProjection_eq
 
 中文:
 定理 dist_eq_iff_dist_orthogonalProjection_eq
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   rw [← mul_self_inj_of_nonneg dist_nonneg dist_nonneg]; rw [←
     mul_self_inj_of_nonneg dist_nonneg dist_nonneg]; rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p₃ hp₁]; rw [dist_sq_eq_dist_orthogonalProjection_sq_add_dist_orthogonalProjection_sq p₃ hp₂]
@@ -994,7 +994,7 @@ theorem dist_set_eq_iff_dist_orthogonalProjection_eq
 
 中文:
 定理 dist_set_eq_iff_dist_orthogonalProjection_eq
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: ⟨fun h _ hp₁ _ hp₂ hne =>
     (dist_eq_iff_dist_orthogonalProjection_eq p (hps hp₁) (hps hp₂)).1 (h hp₁ hp₂ hne),
     fun h _ hp₁ _ hp₂ hne =>
@@ -1024,8 +1024,8 @@ theorem exists_dist_eq_iff_exists_dist_orthogonalProjection_eq
   exact h
 
 中文:
-定理 exists_dist_eq_iff_exists_dist_orthogonalProjection_eq
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+定理 存在_dist_eq_iff_存在_dist_orthogonalProjection_eq
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   have h := dist_set_eq_iff_dist_orthogonalProjection_eq hps p
   simp_rw [Set.pairwise_eq_iff_exists_eq] at h
@@ -1053,7 +1053,7 @@ definition reflection
 
 中文:
 定义 reflection
-  签名: (s : AffineSubspace 𝕜 P) [Nonempty s] [s.direction.HasOrthogonalProjection]
+  签名: (s : 仿射子空间 𝕜 P) [非空 s] [s.direction.有OrthogonalProjection]
   定义体: letI x : P := Classical.arbitrary s
   AffineIsometryEquiv.vaddConst 𝕜 x
 .symm.trans s.direction.reflection.toAffineIsometryEquiv
@@ -1078,7 +1078,7 @@ theorem reflection_apply
 
 中文:
 定理 reflection_apply
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s] [s.direction.HasOrthogonalProjection]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s] [s.direction.有OrthogonalProjection]
   证明: rfl
 -/
 theorem reflection_apply (s : AffineSubspace 𝕜 P) [Nonempty s] [s.direction.HasOrthogonalProjection]
@@ -1099,7 +1099,7 @@ theorem reflection_apply_of_mem
 
 中文:
 定理 reflection_apply_of_mem
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [reflection_apply]; rw [vadd_eq_vadd_iff_sub_eq_vsub]; rw [← map_sub]; rw [vsub_sub_vsub_cancel_left]; rw [s.direction.reflection_eq_self_iff]
   exact s.vsub_mem_direction (SetLike.coe_mem _) hx
@@ -1126,7 +1126,7 @@ theorem reflection_apply'
 
 中文:
 定理 reflection_apply'
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [reflection_apply]; rw [orthogonalProjection_apply']; rw [Submodule.coe_orthogonalProjectionOnto_apply]
   set x : P := ↑(Classical.arbitrary s)
@@ -1155,7 +1155,7 @@ theorem eq_reflection_of_eq_subspace
 
 中文:
 定理 eq_reflection_of_eq_subspace
-  结论: {s s' : AffineSubspace 𝕜 P} [Nonempty s] [Nonempty s']
+  结论: {s s' : 仿射子空间 𝕜 P} [非空 s] [非空 s']
   证明: by
   subst h
   rfl
@@ -1179,7 +1179,7 @@ theorem reflection_reflection
 
 中文:
 定理 reflection_reflection
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   simp [reflection, -AffineIsometryEquiv.map_vadd]
 
@@ -1204,7 +1204,7 @@ theorem reflection_symm
 
 中文:
 定理 reflection_symm
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   ext
   rw [← (reflection s).injective.eq_iff]
@@ -1228,7 +1228,7 @@ theorem reflection_involutive
 
 中文:
 定理 reflection_involutive
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: reflection_reflection s
 
 Depends on / 依赖: reflection_reflection
@@ -1249,7 +1249,7 @@ theorem reflection_eq_self_iff
 
 中文:
 定理 reflection_eq_self_iff
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   rw [reflection_apply]; rw [Eq.comm]; rw [eq_vadd_iff_vsub_eq]; rw [Eq.comm]; rw [s.direction.reflection_eq_self_iff]; rw [s.mem_direction_iff_eq_vsub_right (SetLike.coe_mem (Classical.arbitrary s))]
   simp
@@ -1276,7 +1276,7 @@ theorem reflection_eq_iff_orthogonalProjection_eq
 
 中文:
 定理 reflection_eq_iff_orthogonalProjection_eq
-  结论: (s₁ s₂ : AffineSubspace 𝕜 P) [Nonempty s₁]
+  结论: (s₁ s₂ : 仿射子空间 𝕜 P) [非空 s₁]
   证明: by
   rw [reflection_apply']; rw [reflection_apply']
   constructor
@@ -1312,7 +1312,7 @@ theorem dist_reflection
 
 中文:
 定理 dist_reflection
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s] [s.direction.HasOrthogonalProjection]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s] [s.direction.有OrthogonalProjection]
   证明: by
   conv_lhs => rw [← reflection_reflection s p₁]
   exact (reflection s).dist_map _ _
@@ -1337,7 +1337,7 @@ theorem dist_reflection_eq_of_mem
 
 中文:
 定理 dist_reflection_eq_of_mem
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [← reflection_eq_self_iff p₁] at hp₁
   convert! (reflection s).dist_map p₁ p₂
@@ -1365,7 +1365,7 @@ theorem reflection_mem_of_le_of_mem
 
 中文:
 定理 reflection_mem_of_le_of_mem
-  结论: {s₁ s₂ : AffineSubspace 𝕜 P} [Nonempty s₁]
+  结论: {s₁ s₂ : 仿射子空间 𝕜 P} [非空 s₁]
   证明: by
   rw [reflection_apply']
   have ho : ↑(orthogonalProjection s₁ p) in s₂ := hle (orthogonalProjection_mem p)
@@ -1392,7 +1392,7 @@ theorem reflection_orthogonal_vadd
 
 中文:
 定理 reflection_orthogonal_vadd
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: by
   rw [reflection_apply']; rw [orthogonalProjection_vadd_eq_self hp hv]; rw [vsub_vadd_eq_vsub_sub]
   simp
@@ -1416,7 +1416,7 @@ theorem reflection_vadd_smul_vsub_orthogonalProjection
 
 中文:
 定理 reflection_vadd_smul_vsub_orthogonalProjection
-  结论: {s : AffineSubspace 𝕜 P} [Nonempty s]
+  结论: {s : 仿射子空间 𝕜 P} [非空 s]
   证明: reflection_orthogonal_vadd hp₁
     (Submodule.smul_mem _ _ (vsub_orthogonalProjection_mem_direction_orthogonal s _))
 
@@ -1445,7 +1445,7 @@ lemma orthogonalProjection_map
 
 中文:
 引理 orthogonalProjection_map
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   rw [coe_orthogonalProjection_eq_iff_mem]
   simp only [mem_map, AffineIsometry.coe_toAffineMap, AffineIsometry.map_eq_iff, exists_eq_right,
@@ -1481,7 +1481,7 @@ lemma orthogonalProjection_subtype
 
 中文:
 引理 orthogonalProjection_subtype
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s] (s' : AffineSubspace 𝕜 s)
+  结论: (s : 仿射子空间 𝕜 P) [非空 s] (s' : 仿射子空间 𝕜 s)
   证明: by
   rw [eq_comm]
   have : (s'.map s.subtypeₐᵢ.toAffineMap).direction.HasOrthogonalProjection := by
@@ -1512,7 +1512,7 @@ lemma reflection_map
 
 中文:
 引理 reflection_map
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s]
+  结论: (s : 仿射子空间 𝕜 P) [非空 s]
   证明: by
   simp [reflection_apply']
 -/
@@ -1533,7 +1533,7 @@ lemma reflection_subtype
 
 中文:
 引理 reflection_subtype
-  结论: (s : AffineSubspace 𝕜 P) [Nonempty s] (s' : AffineSubspace 𝕜 s)
+  结论: (s : 仿射子空间 𝕜 P) [非空 s] (s' : 仿射子空间 𝕜 s)
   证明: by
   simp [reflection_apply', orthogonalProjection_subtype]
 
@@ -1569,7 +1569,7 @@ definition orthogonalProjectionSpan
 
 中文:
 定义 orthogonalProjectionSpan
-  签名: {n : 自然数} (s : Simplex 𝕜 P n)
+  签名: {n : 自然数} (s : 单纯形 𝕜 P n)
   定义体: orthogonalProjection (affineSpan 𝕜 (Set.range s.points))
 
 Depends on / 依赖: Set.range, affineSpan, orthogonalProjection, points, s.points
@@ -1588,7 +1588,7 @@ lemma orthogonalProjectionSpan_congr
 
 中文:
 引理 orthogonalProjectionSpan_congr
-  结论: {m n : 自然数} {s₁ : Simplex 𝕜 P m} {s₂ : Simplex 𝕜 P n}
+  结论: {m n : 自然数} {s₁ : 单纯形 𝕜 P m} {s₂ : 单纯形 𝕜 P n}
   证明: orthogonalProjection_congr (by rw [h]) hp
 
 Depends on / 依赖: orthogonalProjection_congr
@@ -1608,7 +1608,7 @@ lemma orthogonalProjectionSpan_reindex
 
 中文:
 引理 orthogonalProjectionSpan_reindex
-  结论: {m n : 自然数} (s : Simplex 𝕜 P m)
+  结论: {m n : 自然数} (s : 单纯形 𝕜 P m)
   证明: orthogonalProjectionSpan_congr (s.reindex_range_points e) rfl
 -/
 @[simp] lemma orthogonalProjectionSpan_reindex {m n : Nat} (s : Simplex 𝕜 P m)
@@ -1626,7 +1626,7 @@ theorem orthogonalProjection_vadd_smul_vsub_orthogonalProjection
 
 中文:
 定理 orthogonalProjection_vadd_smul_vsub_orthogonalProjection
-  结论: {n : 自然数} (s : Simplex 𝕜 P n)
+  结论: {n : 自然数} (s : 单纯形 𝕜 P n)
   证明: EuclideanGeometry.orthogonalProjection_vadd_smul_vsub_orthogonalProjection _ _ _
 
 Depends on / 依赖: EuclideanGeometry, EuclideanGeometry.orthogonalProjection_vadd_smul_vsub_orthogonalProjection, orthogonalProjection_vadd_smul_vsub_orthogonalProjection
@@ -1696,7 +1696,7 @@ lemma orthogonalProjectionSpan_eq_point
 
 中文:
 引理 orthogonalProjectionSpan_eq_point
-  条件: (s : Simplex 𝕜 P 0) (p : P)
+  条件: (s : 单纯形 𝕜 P 0) (p : P)
   证明: by
   rw [orthogonalProjectionSpan]
   convert! orthogonalProjection_affineSpan_singleton _ _
@@ -1721,7 +1721,7 @@ lemma orthogonalProjectionSpan_faceOpposite_eq_point_rev
 
 中文:
 引理 orthogonalProjectionSpan_faceOpposite_eq_point_rev
-  结论: (s : Simplex 𝕜 P 1) (i : Fin 2)
+  结论: (s : 单纯形 𝕜 P 1) (i : 有限集 2)
   证明: by
   simp [faceOpposite_point_eq_point_rev]
 
@@ -1746,7 +1746,7 @@ lemma orthogonalProjectionSpan_map
 
 中文:
 引理 orthogonalProjectionSpan_map
-  条件: {n : 自然数} (s : Simplex 𝕜 P n) (f : P ->ᵃⁱ[𝕜] P₂) (p : P)
+  条件: {n : 自然数} (s : 单纯形 𝕜 P n) (f : P ->ᵃⁱ[𝕜] P₂) (p : P)
   证明: by
   simp_rw [orthogonalProjectionSpan]
   convert! orthogonalProjection_map (affineSpan 𝕜 (Set.range s.points)) f p
@@ -1774,7 +1774,7 @@ lemma orthogonalProjectionSpan_restrict
 
 中文:
 引理 orthogonalProjectionSpan_restrict
-  结论: {n : 自然数} (s : Simplex 𝕜 P n)
+  结论: {n : 自然数} (s : 单纯形 𝕜 P n)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     ((s.restrict S hS).orthogonalProjectionSpan p : P) = s.orthogonalProjectionSpan p := by
   rw [eq_comm]

@@ -67,11 +67,11 @@ structure IsSkeletonOf
     - eqv : F.IsEquivalence  [default: by infer_instance]
 
 中文:
-结构 IsSkeletonOf
+结构 是SkeletonOf
   参数: (F : D ⥤ C)
   公理与运算 (2 个):
     - skel : Skeletal D
-    - eqv : F.IsEquivalence  [默认: by infer_instance]
+    - eqv : F.是等价  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -94,8 +94,8 @@ theorem Functor.eq_of_iso
   proof: Functor.ext (fun X => hC ⟨hF.app X⟩) fun _ _ _ => Subsingleton.elim _ _
 
 中文:
-定理 Functor.eq_of_iso
-  条件: {F₁ F₂ : D ⥤ C} [Quiver.IsThin C] (hC : Skeletal C) (hF : F₁ ≅ F₂)
+定理 函子.eq_of_iso
+  条件: {F₁ F₂ : D ⥤ C} [箭图.IsThin C] (hC : Skeletal C) (hF : F₁ ≅ F₂)
   证明: Functor.ext (fun X => hC ⟨hF.app X⟩) fun _ _ _ => Subsingleton.elim _ _
 
 Depends on / 依赖: Functor, Functor.ext, Subsingleton, Subsingleton.elim, hF.app
@@ -116,7 +116,7 @@ theorem functor_skeletal
 
 中文:
 定理 functor_skeletal
-  条件: [Quiver.IsThin C] (hC : Skeletal C)
+  条件: [箭图.IsThin C] (hC : Skeletal C)
   结论: Skeletal (D ⥤ C)
   证明: fun _ _ h =>
   h.elim (Functor.eq_of_iso hC)
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromSkeleton C).Full
+  签名: (fromSkeleton C).满
   定义体: by
   apply InducedCategory.full
 
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromSkeleton C).Faithful
+  签名: (fromSkeleton C).忠实
   定义体: by
   apply InducedCategory.faithful
 
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromSkeleton C).EssSurj
+  签名: (fromSkeleton C).本质满射
   定义体: ⟨Quotient.mk' X, Quotient.mk_out X⟩
 
 Depends on / 依赖: Quotient, Quotient.mk, Quotient.mk_out, mk_out
@@ -250,7 +250,7 @@ instance fromSkeleton.isEquivalence
 
 中文:
 实例 fromSkeleton.isEquivalence
-  签名: : (fromSkeleton C).IsEquivalence where
+  签名: : (fromSkeleton C).是等价 where
 -/
 noncomputable instance fromSkeleton.isEquivalence : (fromSkeleton C).IsEquivalence where
 
@@ -415,7 +415,7 @@ lemma skeleton_isSkeleton
 
 中文:
 引理 skeleton_isSkeleton
-  结论: IsSkeletonOf C (Skeleton C) (fromSkeleton C) where
+  结论: 是SkeletonOf C (Skeleton C) (fromSkeleton C) where
   证明: skeleton_skeletal C
   eqv := fromSkeleton.isEquivalence C
 
@@ -459,7 +459,7 @@ lemma toSkeleton_eq_toSkeleton_iff
 中文:
 引理 toSkeleton_eq_toSkeleton_iff
   条件: {X Y : C}
-  结论: toSkeleton X = toSkeleton Y ↔ Nonempty (X ≅ Y)
+  结论: toSkeleton X = toSkeleton Y ↔ 非空 (X ≅ Y)
   证明: Quotient.eq
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -576,8 +576,8 @@ instance [F.Full]
   body: inferInstanceAs (_ ⋙ _).Full
 
 中文:
-实例 [F.Full]
-  签名: : F.mapSkeleton.Full
+实例 [F.满]
+  签名: : F.mapSkeleton.满
   定义体: inferInstanceAs (_ ⋙ _).Full
 -/
 instance [F.Full] : F.mapSkeleton.Full := inferInstanceAs (_ ⋙ _).Full
@@ -591,8 +591,8 @@ instance [F.Faithful]
   body: inferInstanceAs (_ ⋙ _).Faithful
 
 中文:
-实例 [F.Faithful]
-  签名: : F.mapSkeleton.Faithful
+实例 [F.忠实]
+  签名: : F.mapSkeleton.忠实
   定义体: inferInstanceAs (_ ⋙ _).Faithful
 
 Depends on / 依赖: Faithful
@@ -608,8 +608,8 @@ instance [F.EssSurj]
   body: inferInstanceAs (_ ⋙ _).EssSurj
 
 中文:
-实例 [F.EssSurj]
-  签名: : F.mapSkeleton.EssSurj
+实例 [F.本质满射]
+  签名: : F.mapSkeleton.本质满射
   定义体: inferInstanceAs (_ ⋙ _).EssSurj
 
 Depends on / 依赖: EssSurj
@@ -654,8 +654,8 @@ lemma mapSkeleton_injective
 
 中文:
 引理 mapSkeleton_injective
-  条件: [F.Full] [F.Faithful]
-  结论: Function.Injective F.mapSkeleton.obj
+  条件: [F.满] [F.忠实]
+  结论: 函数.单射 F.mapSkeleton.obj
   证明: fun _ _ h => skeleton_skeletal C ⟨F.mapSkeleton.preimageIso eqToIso h⟩
 
 Depends on / 依赖: F.mapSkeleton.preimageIso, eqToIso, mapSkeleton, preimageIso, skeleton_skeletal
@@ -674,8 +674,8 @@ lemma mapSkeleton_surjective
 
 中文:
 引理 mapSkeleton_surjective
-  条件: [F.EssSurj]
-  结论: Function.Surjective F.mapSkeleton.obj
+  条件: [F.本质满射]
+  结论: 函数.满射 F.mapSkeleton.obj
   证明: fun Y => let ⟨X, h⟩ := EssSurj.mem_essImage F.mapSkeleton Y; ⟨X, skeleton_skeletal D h⟩
 
 Depends on / 依赖: EssSurj, EssSurj.mem_essImage, F.mapSkeleton, mapSkeleton, mem_essImage, skeleton_skeletal
@@ -698,7 +698,7 @@ definition Equivalence.skeletonEquiv
     right_inv := fun Y => skeleton_skeletal D ⟨f.counitIso.app Y⟩ }
 
 中文:
-定义 Equivalence.skeletonEquiv
+定义 等价.skeletonEquiv
   签名: (e : C ≌ D)
   定义体: let f := ((skeletonEquivalence C).trans e).trans (skeletonEquivalence D).symm
   { toFun := f.functor.obj
@@ -768,7 +768,7 @@ instance inhabitedThinSkeleton
 
 中文:
 实例 inhabitedThinSkeleton
-  签名: [Inhabited C]
+  签名: [可居 C]
   定义体: ⟨ThinSkeleton.mk default⟩
 
 Depends on / 依赖: ThinSkeleton, ThinSkeleton.mk
@@ -793,7 +793,7 @@ instance ThinSkeleton.preorder
 
 中文:
 实例 ThinSkeleton.preorder
-  签名: : Preorder (ThinSkeleton C) where
+  签名: : 预序 (ThinSkeleton C) where
   定义体: @Quotient.lift₂ C C _ (isIsomorphicSetoid C) (isIsomorphicSetoid C)
       (fun X Y => Nonempty (X ⟶ Y))
         (by
@@ -864,7 +864,7 @@ instance thin
 
 中文:
 实例 thin
-  签名: : Quiver.IsThin (ThinSkeleton C)
+  签名: : 箭图.IsThin (ThinSkeleton C)
   定义体: fun _ _ =>
   ⟨by
     rintro ⟨⟨f₁⟩⟩ ⟨⟨_⟩⟩
@@ -928,7 +928,7 @@ definition mapNatTrans
   body: Quotient.recOnSubsingleton X fun x => ⟨⟨⟨k.app x⟩⟩⟩
 
 中文:
-定义 mapNatTrans
+定义 map自然数Trans
   签名: {F₁ F₂ : C ⥤ D} (k : F₁ ⟶ F₂)
   定义体: Quotient.recOnSubsingleton X fun x => ⟨⟨⟨k.app x⟩⟩⟩
 
@@ -1021,7 +1021,7 @@ definition map₂NatTrans
       Quotient.recOnSubsingleton y fun Y => homOfLE (f.le.elim fun f' =>
 
 中文:
-定义 map₂NatTrans
+定义 map₂自然数Trans
   签名: (F : C ⥤ D ⥤ E)
   定义体: fun {x₁} {x₂} =>
   @Quotient.recOnSubsingleton₂ C C (isIsomorphicSetoid C) (isIsomorphicSetoid C)
@@ -1074,7 +1074,7 @@ instance toThinSkeleton_faithful
 
 中文:
 实例 toThinSkeleton_faithful
-  签名: : (toThinSkeleton C).Faithful where
+  签名: : (toThinSkeleton C).忠实 where
 -/
 instance toThinSkeleton_faithful : (toThinSkeleton C).Faithful where
 
@@ -1147,7 +1147,7 @@ instance fromThinSkeleton_isEquivalence
 
 中文:
 实例 fromThinSkeleton_isEquivalence
-  签名: : (fromThinSkeleton C).IsEquivalence
+  签名: : (fromThinSkeleton C).是等价
   定义体: (equivalence C).isEquivalence_functor
 
 Depends on / 依赖: equivalence, isEquivalence_functor
@@ -1192,7 +1192,7 @@ instance thinSkeletonPartialOrder
 
 中文:
 实例 thinSkeletonPartialOrder
-  签名: : PartialOrder (ThinSkeleton C)
+  签名: : 偏序 (ThinSkeleton C)
   定义体: { CategoryTheory.ThinSkeleton.preorder C with
     le_antisymm :=
       Quotient.ind₂
@@ -1335,7 +1335,7 @@ definition mapCompFromThinSkeletonIso
 
 中文:
 定义 mapCompFromThinSkeletonIso
-  签名: [Quiver.IsThin D] (F : C ⥤ D)
+  签名: [箭图.IsThin D] (F : C ⥤ D)
   定义体: Functor.isoWhiskerRight (fromThinSkeletonCompToThinSkeletonIso F).symm _ ≪≫
     Functor.isoWhiskerLeft (fromThinSkeleton C ⋙ F) (equivalence D).counitIso ≪≫
     Functor.rightUnitor (fromThinSkeleton C ⋙ F)
@@ -1358,7 +1358,7 @@ lemma thinSkeleton_isSkeleton
 
 中文:
 引理 thinSkeleton_isSkeleton
-  结论: IsSkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where
+  结论: 是SkeletonOf C (ThinSkeleton C) (fromThinSkeleton C) where
   证明: skeletal
 
 Depends on / 依赖: skeletal
@@ -1447,8 +1447,8 @@ definition Equivalence.thinSkeletonOrderIso
   body: ((ThinSkeleton.equivalence C).trans e).toOrderIso
 
 中文:
-定义 Equivalence.thinSkeletonOrderIso
-  签名: [Quiver.IsThin C] (e : C ≌ α)
+定义 等价.thinSkeletonOrderIso
+  签名: [箭图.IsThin C] (e : C ≌ α)
   定义体: ((ThinSkeleton.equivalence C).trans e).toOrderIso
 
 Depends on / 依赖: ThinSkeleton, ThinSkeleton.equivalence, equivalence, toOrderIso

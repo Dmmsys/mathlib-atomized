@@ -35,8 +35,8 @@ definition Subgroup.centerUnitsEquivUnitsCenter
   inv
 
 中文:
-定义 Subgroup.centerUnitsEquivUnitsCenter
-  签名: (G₀ : 类型) [GroupWithZero G₀]
+定义 子群.centerUnitsEquivUnitsCenter
+  签名: (G₀ : 类型) [带零群 G₀]
   定义体: MonoidHom.toHomUnits
     { toFun u := by
         refine ⟨(u : G₀ˣ), Submonoid.mem_center_iff.mpr fun r => ?_⟩

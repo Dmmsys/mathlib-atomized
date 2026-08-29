@@ -33,9 +33,9 @@ structure StarSubalgebra
     - star_mem'({a}) : a in carrier -> star a in carrier
 
 中文:
-结构 StarSubalgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [StarRing R] [Semiring A]
-  继承: Subalgebra R A
+结构 对合子代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [对合环 R] [半环 A]
+  继承: 子代数 R A
   公理与运算 (1 个):
     - star_mem'({a}) : a in carrier -> star a in carrier
 -/
@@ -66,7 +66,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: : SetLike (StarSubalgebra R A) A where
+  签名: : 集合状 (对合子代数 R A) A where
   定义体: S.carrier
   coe_injective p q h := by obtain ⟨⟨⟨⟨⟨_, _⟩, _⟩, _⟩, _⟩, _⟩ := p; cases q; congr
 
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (StarSubalgebra R A)
+  签名: 偏序 (对合子代数 R A)
   定义体: .ofSetLike (StarSubalgebra R A) A
 
 Depends on / 依赖: StarSubalgebra, ofSetLike
@@ -112,7 +112,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A] [StarRing R] [StarRing A]
+  签名: {S R A : 类型} [交换半环 R] [半环 A] [代数 R A] [对合环 R] [对合环 A]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -155,7 +155,7 @@ instance starMemClass
 
 中文:
 实例 starMemClass
-  签名: : StarMemClass (StarSubalgebra R A) A where
+  签名: : StarMem类 (对合子代数 R A) A where
   定义体: s.star_mem'
 
 Depends on / 依赖: s.star_mem, star_mem
@@ -177,7 +177,7 @@ instance subsemiringClass
 
 中文:
 实例 subsemiringClass
-  签名: : SubsemiringClass (StarSubalgebra R A) A where
+  签名: : 子半环类 (对合子代数 R A) A where
   定义体: s.add_mem'
   mul_mem {s} := s.mul_mem'
   one_mem {s} := s.one_mem'
@@ -201,7 +201,7 @@ instance smulMemClass
 
 中文:
 实例 smulMemClass
-  签名: : SMulMemClass (StarSubalgebra R A) R A where
+  签名: : SMulMem类 (对合子代数 R A) R A where
   定义体: (SMulMemClass.smul_mem r ha : r • a in s.toSubalgebra)
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, s.toSubalgebra, smul_mem, toSubalgebra
@@ -220,7 +220,7 @@ instance subringClass
 
 中文:
 实例 subringClass
-  签名: {R A} [CommRing R] [StarRing R] [Ring A] [StarRing A] [Algebra R A]
+  签名: {R A} [交换环 R] [对合环 R] [环 A] [对合环 A] [代数 R A]
   定义体: show -a in s.toSubalgebra from neg_mem ha
 
 Depends on / 依赖: neg_mem, s.toSubalgebra, toSubalgebra
@@ -243,7 +243,7 @@ instance starRing
 
 中文:
 实例 starRing
-  签名: (s : StarSubalgebra R A)
+  签名: (s : 对合子代数 R A)
   定义体: { StarMemClass.instStar s with
     star_involutive := fun r => Subtype.ext (star_star (r : A))
     star_mul := fun r₁ r₂ => Subtype.ext (star_mul (r₁ : A) (r₂ : A))
@@ -267,7 +267,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: (s : StarSubalgebra R A)
+  签名: (s : 对合子代数 R A)
   定义体: s.toSubalgebra.algebra'
 
 Depends on / 依赖: algebra, s.toSubalgebra.algebra, toSubalgebra
@@ -285,7 +285,7 @@ instance starModule
 
 中文:
 实例 starModule
-  签名: (s : StarSubalgebra R A)
+  签名: (s : 对合子代数 R A)
   定义体: Subtype.ext (star_smul r (a : A))
 
 Depends on / 依赖: Subtype, Subtype.ext, star_smul
@@ -306,7 +306,7 @@ definition toNonUnitalStarSubalgebra
 
 中文:
 定义 toNonUnitalStarSubalgebra
-  签名: (S : StarSubalgebra R A)
+  签名: (S : 对合子代数 R A)
   定义体: S
   smul_mem' r _x hx := S.smul_mem hx r
 -/
@@ -326,7 +326,7 @@ lemma one_mem_toNonUnitalStarSubalgebra
 
 中文:
 引理 one_mem_toNonUnitalStarSubalgebra
-  条件: (S : StarSubalgebra R A)
+  条件: (S : 对合子代数 R A)
   证明: S.one_mem'
 
 @[simp]
@@ -347,7 +347,7 @@ lemma mem_toNonUnitalStarSubalgebra
 
 中文:
 引理 mem_toNonUnitalStarSubalgebra
-  条件: {S : StarSubalgebra R A} {x : A}
+  条件: {S : 对合子代数 R A} {x : A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -366,7 +366,7 @@ lemma toNonUnitalStarSubalgebra_injective
 
 中文:
 引理 toNonUnitalStarSubalgebra_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun _ _ => by simp [SetLike.ext_iff]
 
 Depends on / 依赖: SetLike, SetLike.ext_iff, ext_iff
@@ -385,7 +385,7 @@ lemma toNonUnitalStarSubalgebra_inj
 
 中文:
 引理 toNonUnitalStarSubalgebra_inj
-  条件: {S U : StarSubalgebra R A}
+  条件: {S U : 对合子代数 R A}
   证明: toNonUnitalStarSubalgebra_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalStarSubalgebra_injective, toNonUnitalStarSubalgebra_injective.eq_iff
@@ -407,7 +407,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : StarSubalgebra R A} {x : A}
+  条件: {s : 对合子代数 R A} {x : A}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -432,7 +432,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : StarSubalgebra R A} (h : 对任意 x : A, x in S ↔ x in T)
+  条件: {S T : 对合子代数 R A} (h : 对任意 x : A, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -457,8 +457,8 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (S : Subalgebra R A) (h)
-  结论: ((⟨S, h⟩ : StarSubalgebra R A) : Set A) = S
+  条件: (S : 子代数 R A) (h)
+  结论: ((⟨S, h⟩ : 对合子代数 R A) : 集合 A) = S
   证明: rfl
 
 @[simp]
@@ -479,7 +479,7 @@ theorem mem_toSubalgebra
 
 中文:
 定理 mem_toSubalgebra
-  条件: {S : StarSubalgebra R A} {x}
+  条件: {S : 对合子代数 R A} {x}
   结论: x in S.toSubalgebra ↔ x in S
   证明: Iff.rfl
 
@@ -502,8 +502,8 @@ theorem coe_toSubalgebra
 
 中文:
 定理 coe_toSubalgebra
-  条件: (S : StarSubalgebra R A)
-  结论: (S.toSubalgebra : Set A) = S
+  条件: (S : 对合子代数 R A)
+  结论: (S.toSubalgebra : 集合 A) = S
   证明: rfl
 -/
 theorem coe_toSubalgebra (S : StarSubalgebra R A) : (S.toSubalgebra : Set A) = S :=
@@ -537,7 +537,7 @@ theorem toSubalgebra_inj
 
 中文:
 定理 toSubalgebra_inj
-  条件: {S U : StarSubalgebra R A}
+  条件: {S U : 对合子代数 R A}
   结论: S.toSubalgebra = U.toSubalgebra ↔ S = U
   证明: toSubalgebra_injective.eq_iff
 
@@ -556,7 +556,7 @@ theorem toSubalgebra_le_iff
 
 中文:
 定理 toSubalgebra_le_iff
-  条件: {S₁ S₂ : StarSubalgebra R A}
+  条件: {S₁ S₂ : 对合子代数 R A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -578,7 +578,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : StarSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  签名: (S : 对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
   定义体: Subalgebra.copy S.toSubalgebra s hs
   star_mem' {a} ha := hs ▸ S.star_mem' (by simpa [hs] using ha)
 
@@ -600,8 +600,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : StarSubalgebra R A) (s : Set A) (hs : s = ↑S)
-  结论: (S.copy s hs : Set A) = s
+  条件: (S : 对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
+  结论: (S.copy s hs : 集合 A) = s
   证明: rfl
 -/
 theorem coe_copy (S : StarSubalgebra R A) (s : Set A) (hs : s = ↑S) : (S.copy s hs : Set A) = s :=
@@ -618,7 +618,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : StarSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : 对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -675,7 +675,7 @@ theorem range_subset
 
 中文:
 定理 range_subset
-  结论: Set.range (algebraMap R A) subseteq S
+  结论: 集合.range (algebraMap R A) subseteq S
   证明: fun _x ⟨r, hr⟩ => hr ▸ S.algebraMap_mem r
 
 Depends on / 依赖: S.algebraMap_mem, algebraMap_mem
@@ -692,7 +692,7 @@ theorem range_le
 
 中文:
 定理 range_le
-  结论: Set.range (algebraMap R A) <= S
+  结论: 集合.range (algebraMap R A) <= S
   证明: S.range_subset
 
 Depends on / 依赖: S.range_subset, range_subset
@@ -767,7 +767,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (S.subtype : S -> A) = Subtype.val
+  结论: (S.subtype : S -> A) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (S.subtype : S -> A) = Subtype.val :=
@@ -830,7 +830,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂)
+  签名: {S₁ S₂ : 对合子代数 R A} (h : S₁ <= S₂)
   定义体: Subtype.map id h
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -862,7 +862,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂)
+  条件: {S₁ S₂ : 对合子代数 R A} (h : S₁ <= S₂)
   证明: Set.inclusion_injective h
 
 @[simp]
@@ -884,7 +884,7 @@ theorem subtype_comp_inclusion
 
 中文:
 定理 subtype_comp_inclusion
-  条件: {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂)
+  条件: {S₁ S₂ : 对合子代数 R A} (h : S₁ <= S₂)
   证明: rfl
 -/
 theorem subtype_comp_inclusion {S₁ S₂ : StarSubalgebra R A} (h : S₁ <= S₂) :
@@ -906,7 +906,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R A)
+  签名: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R A)
   定义体: { S.toSubalgebra.map f.toAlgHom with
     star_mem' := by
       rintro _ ⟨a, ha, rfl⟩
@@ -931,7 +931,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {S₁ S₂ : StarSubalgebra R A} {f : A ->⋆ₐ[R] B}
+  条件: {S₁ S₂ : 对合子代数 R A} {f : A ->⋆ₐ[R] B}
   结论: S₁ <= S₂ -> S₁.map f <= S₂.map f
   证明: Set.image_mono
 
@@ -954,8 +954,8 @@ ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
 中文:
 定理 map_injective
-  条件: {f : A ->⋆ₐ[R] B} (hf : Function.Injective f)
-  结论: Function.Injective (map f)
+  条件: {f : A ->⋆ₐ[R] B} (hf : 函数.单射 f)
+  结论: 函数.单射 (map f)
   证明: fun _S₁ _S₂ ih =>
 ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
@@ -979,8 +979,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : StarSubalgebra R A)
-  结论: S.map (StarAlgHom.id R A) = S
+  条件: (S : 对合子代数 R A)
+  结论: S.map (StarAlg态射.id R A) = S
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -1000,7 +1000,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (S : StarSubalgebra R A) (g : B ->⋆ₐ[R] C) (f : A ->⋆ₐ[R] B)
+  条件: (S : 对合子代数 R A) (g : B ->⋆ₐ[R] C) (f : A ->⋆ₐ[R] B)
   证明: SetLike.coe_injective Set.image_image _ _ _
 
 @[simp]
@@ -1022,7 +1022,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {S : StarSubalgebra R A} {f : A ->⋆ₐ[R] B} {y : B}
+  条件: {S : 对合子代数 R A} {f : A ->⋆ₐ[R] B} {y : B}
   证明: Subsemiring.mem_map
 
 Depends on / 依赖: Subsemiring, Subsemiring.mem_map, mem_map
@@ -1043,7 +1043,7 @@ theorem map_toSubalgebra
 
 中文:
 定理 map_toSubalgebra
-  条件: {S : StarSubalgebra R A} {f : A ->⋆ₐ[R] B}
+  条件: {S : 对合子代数 R A} {f : A ->⋆ₐ[R] B}
   证明: SetLike.coe_injective rfl
 
 @[simp, norm_cast]
@@ -1066,8 +1066,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (S : StarSubalgebra R A) (f : A ->⋆ₐ[R] B)
-  结论: (S.map f : Set B) = f '' S
+  条件: (S : 对合子代数 R A) (f : A ->⋆ₐ[R] B)
+  结论: (S.map f : 集合 B) = f '' S
   证明: rfl
 -/
 theorem coe_map (S : StarSubalgebra R A) (f : A ->⋆ₐ[R] B) : (S.map f : Set B) = f '' S :=
@@ -1084,7 +1084,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R B)
+  签名: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R B)
   定义体: { S.toSubalgebra.comap f.toAlgHom with
     star_mem' := @fun a ha => show f (star a) in S from (map_star f a).symm ▸ star_mem ha }
 
@@ -1104,7 +1104,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {S : StarSubalgebra R A} {f : A ->⋆ₐ[R] B} {U : StarSubalgebra R B}
+  条件: {S : 对合子代数 R A} {f : A ->⋆ₐ[R] B} {U : 对合子代数 R B}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -1148,7 +1148,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  条件: {S₁ S₂ : StarSubalgebra R B} {f : A ->⋆ₐ[R] B}
+  条件: {S₁ S₂ : 对合子代数 R B} {f : A ->⋆ₐ[R] B}
   证明: Set.preimage_mono
 
 Depends on / 依赖: Set.preimage_mono, preimage_mono
@@ -1173,7 +1173,7 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  条件: {f : A ->⋆ₐ[R] B} (hf : Function.Surjective f)
+  条件: {f : A ->⋆ₐ[R] B} (hf : 函数.满射 f)
   证明: fun _S₁ _S₂ h =>
   ext fun b =>
     let ⟨x, hx⟩ := hf b
@@ -1201,8 +1201,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (S : StarSubalgebra R A)
-  结论: S.comap (StarAlgHom.id R A) = S
+  条件: (S : 对合子代数 R A)
+  结论: S.comap (StarAlg态射.id R A) = S
   证明: SetLike.coe_injective Set.preimage_id
 
 Depends on / 依赖: Set.preimage_id, SetLike, SetLike.coe_injective, coe_injective, preimage_id
@@ -1222,7 +1222,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (S : StarSubalgebra R C) (g : B ->⋆ₐ[R] C) (f : A ->⋆ₐ[R] B)
+  条件: (S : 对合子代数 R C) (g : B ->⋆ₐ[R] C) (f : A ->⋆ₐ[R] B)
   证明: SetLike.coe_injective by exact Set.preimage_preimage
 
 @[simp]
@@ -1247,7 +1247,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: (S : StarSubalgebra R B) (f : A ->⋆ₐ[R] B) (x : A)
+  条件: (S : 对合子代数 R B) (f : A ->⋆ₐ[R] B) (x : A)
   结论: x in S.comap f ↔ f x in S
   证明: Iff.rfl
 
@@ -1269,7 +1269,7 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (S : StarSubalgebra R B) (f : A ->⋆ₐ[R] B)
+  条件: (S : 对合子代数 R B) (f : A ->⋆ₐ[R] B)
   证明: rfl
 -/
 theorem coe_comap (S : StarSubalgebra R B) (f : A ->⋆ₐ[R] B) :
@@ -1295,7 +1295,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: Subalgebra.centralizer R (s union star s)
   star_mem' := Set.star_mem_centralizer
 
@@ -1319,8 +1319,8 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: (s : Set A)
-  结论: (centralizer R s : Set A) = (s union star s).centralizer
+  条件: (s : 集合 A)
+  结论: (centralizer R s : 集合 A) = (s union star s).centralizer
   证明: rfl
 -/
 theorem coe_centralizer (s : Set A) : (centralizer R s : Set A) = (s union star s).centralizer :=
@@ -1342,7 +1342,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: (s t : Set A) (h : s subseteq t)
+  条件: (s t : 集合 A) (h : s subseteq t)
   结论: centralizer R t <= centralizer R s
   证明: Set.centralizer_subset (Set.union_subset_union h <| Set.preimage_mono h)
 
@@ -1361,7 +1361,7 @@ theorem centralizer_toSubalgebra
 
 中文:
 定理 centralizer_toSubalgebra
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: rfl
 -/
 theorem centralizer_toSubalgebra (s : Set A) :
@@ -1379,7 +1379,7 @@ theorem coe_centralizer_centralizer
 
 中文:
 定理 coe_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [coe_centralizer]; rw [StarMemClass.star_coe_eq]; rw [Set.union_self]; rw [coe_centralizer]
 
@@ -1417,7 +1417,7 @@ instance involutiveStar
 
 中文:
 实例 involutiveStar
-  签名: : InvolutiveStar (Subalgebra R A) where
+  签名: : InvolutiveStar (子代数 R A) where
   定义体: { carrier := star S.carrier
       mul_mem' := fun {x y} hx hy => by
         simp only [Set.mem_star, Subalgebra.mem_carrier] at *
@@ -1457,7 +1457,7 @@ theorem mem_star_iff
 
 中文:
 定理 mem_star_iff
-  条件: (S : Subalgebra R A) (x : A)
+  条件: (S : 子代数 R A) (x : A)
   结论: x in star S ↔ star x in S
   证明: Iff.rfl
 
@@ -1480,7 +1480,7 @@ theorem star_mem_star_iff
 
 中文:
 定理 star_mem_star_iff
-  条件: (S : Subalgebra R A) (x : A)
+  条件: (S : 子代数 R A) (x : A)
   结论: star x in star S ↔ x in S
   证明: by
   simp
@@ -1502,8 +1502,8 @@ theorem coe_star
 
 中文:
 定理 coe_star
-  条件: (S : Subalgebra R A)
-  结论: ((star S : Subalgebra R A) : Set A) = star (S : Set A)
+  条件: (S : 子代数 R A)
+  结论: ((star S : 子代数 R A) : 集合 A) = star (S : 集合 A)
   证明: rfl
 -/
 theorem coe_star (S : Subalgebra R A) : ((star S : Subalgebra R A) : Set A) = star (S : Set A) :=
@@ -1519,7 +1519,7 @@ theorem star_mono
 
 中文:
 定理 star_mono
-  结论: Monotone (star : Subalgebra R A -> Subalgebra R A)
+  结论: 递增 (star : 子代数 R A -> 子代数 R A)
   证明: fun _ _ h _ hx => h hx
 -/
 theorem star_mono : Monotone (star : Subalgebra R A -> Subalgebra R A) := fun _ _ h _ hx => h hx
@@ -1538,8 +1538,8 @@ theorem star_adjoin_comm
 
 中文:
 定理 star_adjoin_comm
-  条件: (s : Set A)
-  结论: star (Algebra.adjoin R s) = Algebra.adjoin R (star s)
+  条件: (s : 集合 A)
+  结论: star (代数.adjoin R s) = 代数.adjoin R (star s)
   证明: have : forall t : Set A, Algebra.adjoin R (star t) <= star (Algebra.adjoin R t) := fun _ =>
     Algebra.adjoin_le fun _ hx => Algebra.subset_adjoin hx
   le_antisymm (by simpa only [star_star] using Subalgebra.star_mono (this (star s))) (this s)
@@ -1567,7 +1567,7 @@ definition starClosure
 
 中文:
 定义 starClosure
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S ⊔ star S
   star_mem' := fun {a} ha => by
     simp only [Subalgebra.mem_carrier, ← (@Algebra.gi R A _ _ _).l_sup_u _ _] at *
@@ -1596,7 +1596,7 @@ theorem coe_starClosure
 
 中文:
 定理 coe_starClosure
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   证明: rfl
 
 @[simp]
@@ -1615,7 +1615,7 @@ theorem mem_starClosure
 
 中文:
 定理 mem_starClosure
-  条件: (S : Subalgebra R A) {x : A}
+  条件: (S : 子代数 R A) {x : A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1633,7 +1633,7 @@ theorem starClosure_toSubalgebra
 
 中文:
 定理 starClosure_toSubalgebra
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   证明: rfl
 -/
 theorem starClosure_toSubalgebra (S : Subalgebra R A) :
@@ -1651,7 +1651,7 @@ theorem starClosure_le
 
 中文:
 定理 starClosure_le
-  条件: {S₁ : Subalgebra R A} {S₂ : StarSubalgebra R A} (h : S₁ <= S₂.toSubalgebra)
+  条件: {S₁ : 子代数 R A} {S₂ : 对合子代数 R A} (h : S₁ <= S₂.toSubalgebra)
   证明: StarSubalgebra.toSubalgebra_le_iff.1
     sup_le h fun x hx =>
       (star_star x ▸ star_mem (show star x in S₂ from h <| (S₁.mem_star_iff _).1 hx) : x in S₂)
@@ -1674,7 +1674,7 @@ theorem starClosure_le_iff
 
 中文:
 定理 starClosure_le_iff
-  条件: {S₁ : Subalgebra R A} {S₂ : StarSubalgebra R A}
+  条件: {S₁ : 子代数 R A} {S₂ : 对合子代数 R A}
   证明: ⟨fun h => le_sup_left.trans h, starClosure_le⟩
 
 Depends on / 依赖: le_sup_left, le_sup_left.trans, starClosure_le
@@ -1710,7 +1710,7 @@ definition adjoin
 
 中文:
 定义 adjoin
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { Algebra.adjoin R (s union star s) with
     star_mem' := fun hx => by
       rwa [Subalgebra.mem_carrier, ← Subalgebra.mem_star_iff, Subalgebra.star_adjoin_comm,
@@ -1737,8 +1737,8 @@ theorem adjoin_eq_starClosure_adjoin
 
 中文:
 定理 adjoin_eq_starClosure_adjoin
-  条件: (s : Set A)
-  结论: adjoin R s = (Algebra.adjoin R s).starClosure
+  条件: (s : 集合 A)
+  结论: adjoin R s = (代数.adjoin R s).starClosure
   证明: toSubalgebra_injective
     show Algebra.adjoin R (s union star s) = Algebra.adjoin R s ⊔ star (Algebra.adjoin R s) from
       (Subalgebra.star_adjoin_comm R s).symm ▸ Algebra.adjoin_union s (star s)
@@ -1762,7 +1762,7 @@ theorem adjoin_toSubalgebra
 
 中文:
 定理 adjoin_toSubalgebra
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: rfl
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
@@ -1784,7 +1784,7 @@ theorem subset_adjoin
 
 中文:
 定理 subset_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: s subseteq adjoin R s
   证明: Set.subset_union_left.trans Algebra.subset_adjoin
 
@@ -1809,7 +1809,7 @@ theorem star_subset_adjoin
 
 中文:
 定理 star_subset_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: star s subseteq adjoin R s
   证明: Set.subset_union_right.trans Algebra.subset_adjoin
 
@@ -1834,7 +1834,7 @@ theorem mem_adjoin_of_mem
 
 中文:
 定理 mem_adjoin_of_mem
-  条件: {s : Set A} {x : A} (hx : x in s)
+  条件: {s : 集合 A} {x : A} (hx : x in s)
   结论: x in adjoin R s
   证明: subset_adjoin R s hx
 
@@ -1857,7 +1857,7 @@ theorem self_mem_adjoin_singleton
 中文:
 定理 self_mem_adjoin_singleton
   条件: (x : A)
-  结论: x in adjoin R ({x} : Set A)
+  结论: x in adjoin R ({x} : 集合 A)
   证明: Algebra.subset_adjoin Set.mem_union_left _ (Set.mem_singleton x)
 
 Depends on / 依赖: Algebra, Algebra.subset_adjoin, Set.mem_singleton, Set.mem_union_left, mem_singleton, mem_union_left, subset_adjoin
@@ -1877,7 +1877,7 @@ theorem star_self_mem_adjoin_singleton
 中文:
 定理 star_self_mem_adjoin_singleton
   条件: (x : A)
-  结论: star x in adjoin R ({x} : Set A)
+  结论: star x in adjoin R ({x} : 集合 A)
   证明: star_mem self_mem_adjoin_singleton R x
 
 Depends on / 依赖: self_mem_adjoin_singleton, star_mem
@@ -1902,7 +1902,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection (adjoin R : Set A -> StarSubalgebra R A) (↑)
+  结论: GaloisConnection (adjoin R : 集合 A -> 对合子代数 R A) (↑)
   证明: by
   intro s S
   rw [← toSubalgebra_le_iff]; rw [adjoin_toSubalgebra]; rw [Algebra.adjoin_le_iff]; rw [coe_toSubalgebra]
@@ -1930,7 +1930,7 @@ le_l_u S := (StarAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (adjoin R : Set A -> StarSubalgebra R A) (↑) where
+  签名: : Galois嵌入 (adjoin R : 集合 A -> 对合子代数 R A) (↑) where
   定义体: (adjoin R s).copy s le_antisymm (StarAlgebra.gc.le_u_l s) hs
   gc := StarAlgebra.gc
 le_l_u S := (StarAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
@@ -1955,7 +1955,7 @@ theorem adjoin_le
 
 中文:
 定理 adjoin_le
-  条件: {S : StarSubalgebra R A} {s : Set A} (hs : s subseteq S)
+  条件: {S : 对合子代数 R A} {s : 集合 A} (hs : s subseteq S)
   结论: adjoin R s <= S
   证明: StarAlgebra.gc.l_le hs
 
@@ -1980,7 +1980,7 @@ theorem adjoin_le_iff
 
 中文:
 定理 adjoin_le_iff
-  条件: {S : StarSubalgebra R A} {s : Set A}
+  条件: {S : 对合子代数 R A} {s : 集合 A}
   结论: adjoin R s <= S ↔ s subseteq S
   证明: StarAlgebra.gc _ _
 
@@ -2005,7 +2005,7 @@ theorem adjoin_mono
 
 中文:
 定理 adjoin_mono
-  条件: {s t : Set A} (H : s subseteq t)
+  条件: {s t : 集合 A} (H : s subseteq t)
   结论: adjoin R s <= adjoin R t
   证明: StarAlgebra.gc.monotone_l H
 
@@ -2028,8 +2028,8 @@ lemma adjoin_eq
 
 中文:
 引理 adjoin_eq
-  条件: (S : StarSubalgebra R A)
-  结论: adjoin R (S : Set A) = S
+  条件: (S : 对合子代数 R A)
+  结论: adjoin R (S : 集合 A) = S
   证明: le_antisymm (adjoin_le le_rfl) (subset_adjoin R (S : Set A))
 
 Depends on / 依赖: adjoin_le, le_antisymm, le_rfl, subset_adjoin
@@ -2049,7 +2049,7 @@ lemma adjoin_eq_span
 
 中文:
 引理 adjoin_eq_span
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [adjoin_toSubalgebra]; rw [Algebra.adjoin_eq_span]
 
@@ -2071,7 +2071,7 @@ lemma adjoin_nonUnitalStarSubalgebra_eq_span
 
 中文:
 引理 adjoin_nonUnitalStarSubalgebra_eq_span
-  条件: (s : NonUnitalStarSubalgebra R A)
+  条件: (s : 非幺对合子代数 R A)
   证明: by
   rw [adjoin_eq_span]; rw [Submonoid.closure_eq_one_union]; rw [span_union]; rw [← NonUnitalStarAlgebra.adjoin_eq_span]; rw [NonUnitalStarAlgebra.adjoin_eq]
 
@@ -2091,8 +2091,8 @@ theorem _root_.Subalgebra.starClosure_eq_adjoin
     (adjoin_le (le_sup_left : S <= S ⊔ star S))
 
 中文:
-定理 _root_.Subalgebra.starClosure_eq_adjoin
-  条件: (S : Subalgebra R A)
+定理 _root_.子代数.starClosure_eq_adjoin
+  条件: (S : 子代数 R A)
   证明: le_antisymm (Subalgebra.starClosure_le_iff.2 <| subset_adjoin R (S : Set A))
     (adjoin_le (le_sup_left : S <= S ⊔ star S))
 
@@ -2123,7 +2123,7 @@ theorem adjoin_induction
 
 中文:
 定理 adjoin_induction
-  结论: {s : Set A} {p : (x : A) -> x in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : (x : A) -> x in adjoin R s -> 命题}
   证明: by
   refine Algebra.adjoin_induction (fun x hx => ?_) algebraMap add mul ha
   push _ in _ at hx
@@ -2165,7 +2165,7 @@ theorem adjoin_induction₂
 
 中文:
 定理 adjoin_induction₂
-  结论: {s : Set A} {p : (x y : A) -> x in adjoin R s -> y in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : (x y : A) -> x in adjoin R s -> y in adjoin R s -> 命题}
   证明: by
   induction hb using adjoin_induction with
   | mem z hz => induction ha using adjoin_induction with
@@ -2229,7 +2229,7 @@ theorem adjoin_induction_subtype
 
 中文:
 定理 adjoin_induction_subtype
-  结论: {s : Set A} {p : adjoin R s -> 命题} (a : adjoin R s)
+  结论: {s : 集合 A} {p : adjoin R s -> 命题} (a : adjoin R s)
   证明: Subtype.recOn a fun b hb => by
     induction hb using adjoin_induction with
     | mem _ h => exact mem _ h
@@ -2268,7 +2268,7 @@ lemma adjoin_le_centralizer_centralizer
 
 中文:
 引理 adjoin_le_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [← toSubalgebra_le_iff]; rw [centralizer_toSubalgebra]; rw [adjoin_toSubalgebra]
   convert! Algebra.adjoin_le_centralizer_centralizer R (s union star s)
@@ -2299,7 +2299,7 @@ theorem isMulCommutative_adjoin
 
 中文:
 定理 isMulCommutative_adjoin
-  结论: {s : Set A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  结论: {s : 集合 A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   证明: by
   have := adjoin_le_centralizer_centralizer R s
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
@@ -2337,7 +2337,7 @@ abbreviation adjoinCommSemiringOfComm
 
 中文:
 缩写 adjoinCommSemiringOfComm
-  签名: {s : Set A}
+  签名: {s : 集合 A}
   定义体: have := isMulCommutative_adjoin R hcomm hcomm_star
   inferInstance
 
@@ -2362,7 +2362,7 @@ instance instIsMulCommutative_adjoin
 
 中文:
 实例 instIsMulCommutative_adjoin
-  签名: {S : 类型} [SetLike S A] [MulMemClass S A] [StarMemClass S A]
+  签名: {S : 类型} [集合状 S A] [MulMem类 S A] [StarMem类 S A]
   定义体: isMulCommutative_adjoin R
     (fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂)
     (fun _ h₁ _ h₂ => setLike_mul_comm h₁ (star_mem h₂))
@@ -2390,7 +2390,7 @@ abbreviation adjoinCommRingOfComm
 
 中文:
 缩写 adjoinCommRingOfComm
-  签名: (R : 类型u) {A : 类型v} [CommRing R] [StarRing R] [Ring A]
+  签名: (R : 类型u) {A : 类型v} [交换环 R] [对合环 R] [环 A]
   定义体: have := isMulCommutative_adjoin R hcomm hcomm_star
   inferInstance
 
@@ -2414,7 +2414,7 @@ instance isMulCommutative_adjoin_singleton
 
 中文:
 实例 isMulCommutative_adjoin_singleton
-  签名: (x : A) [IsStarNormal x]
+  签名: (x : A) [是StarNormal x]
   定义体: isMulCommutative_adjoin R (by grind) (by grind)
 
 Depends on / 依赖: isMulCommutative_adjoin
@@ -2438,7 +2438,7 @@ instance adjoinCommSemiringOfIsStarNormal
 
 中文:
 实例 adjoinCommSemiringOfIsStarNormal
-  签名: (x : A) [IsStarNormal x]
+  签名: (x : A) [是StarNormal x]
   定义体: have := isMulCommutative_adjoin_singleton R x
   inferInstance
 
@@ -2464,7 +2464,7 @@ instance adjoinCommRingOfIsStarNormal
 
 中文:
 实例 adjoinCommRingOfIsStarNormal
-  签名: (R : 类型u) {A : 类型v} [CommRing R] [StarRing R] [Ring A]
+  签名: (R : 类型u) {A : 类型v} [交换环 R] [对合环 R] [环 A]
   定义体: have := isMulCommutative_adjoin_singleton R x
   inferInstance
 
@@ -2500,7 +2500,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (StarSubalgebra R A) where
+  签名: : 完备格 (对合子代数 R A) where
   定义体: GaloisInsertion.liftCompleteLattice StarAlgebra.gi
   bot := { toSubalgebra := ⊥, star_mem' := fun ⟨r, hr⟩ => ⟨star r, hr ▸ algebraMap_star_comm _⟩ }
   bot_le S := (bot_le : ⊥ <= S.toSubalgebra)
@@ -2524,7 +2524,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (StarSubalgebra R A)
+  签名: : 可居 (对合子代数 R A)
   定义体: ⟨⊤⟩
 
 @[simp, norm_cast]
@@ -2545,7 +2545,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: (↑(⊤ : StarSubalgebra R A) : Set A) = Set.univ
+  结论: (↑(⊤ : 对合子代数 R A) : 集合 A) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -2568,7 +2568,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : A}
-  结论: x in (⊤ : StarSubalgebra R A)
+  结论: x in (⊤ : 对合子代数 R A)
   证明: Set.mem_univ x
 
 @[simp]
@@ -2589,7 +2589,7 @@ theorem top_toSubalgebra
 
 中文:
 定理 top_toSubalgebra
-  结论: (⊤ : StarSubalgebra R A).toSubalgebra = ⊤
+  结论: (⊤ : 对合子代数 R A).toSubalgebra = ⊤
   证明: by ext; simp
 -/
 theorem top_toSubalgebra : (⊤ : StarSubalgebra R A).toSubalgebra = ⊤ := by ext; simp
@@ -2607,7 +2607,7 @@ theorem toSubalgebra_eq_top
 
 中文:
 定理 toSubalgebra_eq_top
-  条件: {S : StarSubalgebra R A}
+  条件: {S : 对合子代数 R A}
   结论: S.toSubalgebra = ⊤ ↔ S = ⊤
   证明: StarSubalgebra.toSubalgebra_injective.eq_iff' top_toSubalgebra
 
@@ -2627,7 +2627,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : StarSubalgebra R A}
+  条件: {S T : 对合子代数 R A}
   结论: 对任意 {x : A}, x in S -> x in S ⊔ T
   证明: have : S <= S ⊔ T := le_sup_left; (this ·)
 
@@ -2647,7 +2647,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : StarSubalgebra R A}
+  条件: {S T : 对合子代数 R A}
   结论: 对任意 {x : A}, x in T -> x in S ⊔ T
   证明: have : T <= S ⊔ T := le_sup_right; (this ·)
 
@@ -2666,7 +2666,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : StarSubalgebra R A} {x y : A} (hx : x in S) (hy : y in T)
+  条件: {S T : 对合子代数 R A} {x y : A} (hx : x in S) (hy : y in T)
   证明: mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
@@ -2686,7 +2686,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (f : A ->⋆ₐ[R] B) (S T : StarSubalgebra R A)
+  条件: (f : A ->⋆ₐ[R] B) (S T : 对合子代数 R A)
   结论: map f (S ⊔ T) = map f S ⊔ map f T
   证明: (StarSubalgebra.gc_map_comap f).l_sup
 
@@ -2707,7 +2707,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (f : A ->⋆ₐ[R] B) (hf : Function.Injective f) (S T : StarSubalgebra R A)
+  条件: (f : A ->⋆ₐ[R] B) (hf : 函数.单射 f) (S T : 对合子代数 R A)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[simp, norm_cast]
@@ -2731,8 +2731,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (S T : StarSubalgebra R A)
-  结论: (↑(S ⊓ T) : Set A) = (S : Set A) inter T
+  条件: (S T : 对合子代数 R A)
+  结论: (↑(S ⊓ T) : 集合 A) = (S : 集合 A) inter T
   证明: rfl
 
 @[simp]
@@ -2754,7 +2754,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {S T : StarSubalgebra R A} {x : A}
+  条件: {S T : 对合子代数 R A} {x : A}
   结论: x in S ⊓ T ↔ x in S ∧ x in T
   证明: Iff.rfl
 
@@ -2777,7 +2777,7 @@ theorem inf_toSubalgebra
 
 中文:
 定理 inf_toSubalgebra
-  条件: (S T : StarSubalgebra R A)
+  条件: (S T : 对合子代数 R A)
   证明: by
   ext; simp
 -/
@@ -2800,8 +2800,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (StarSubalgebra R A))
-  结论: (↑(sInf S) : Set A) = ⋂ s in S, ↑s
+  条件: (S : 集合 (对合子代数 R A))
+  结论: (↑(sInf S) : 集合 A) = ⋂ s in S, ↑s
   证明: sInf_image
 
 @[simp]
@@ -2826,7 +2826,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (StarSubalgebra R A)} {x : A}
+  条件: {S : 集合 (对合子代数 R A)} {x : A}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simp only [← SetLike.mem_coe, coe_sInf, Set.mem_iInter₂]
@@ -2851,7 +2851,7 @@ theorem sInf_toSubalgebra
 
 中文:
 定理 sInf_toSubalgebra
-  条件: (S : Set (StarSubalgebra R A))
+  条件: (S : 集合 (对合子代数 R A))
   证明: SetLike.coe_injective by simp
 
 @[simp, norm_cast]
@@ -2877,8 +2877,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> StarSubalgebra R A}
-  结论: (↑(⨅ i, S i) : Set A) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 对合子代数 R A}
+  结论: (↑(⨅ i, S i) : 集合 A) = ⋂ i, S i
   证明: by
   simp [iInf]
 
@@ -2898,7 +2898,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> StarSubalgebra R A} {x : A}
+  条件: {ι : 类型层*} {S : ι -> 对合子代数 R A} {x : A}
   证明: by simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 Depends on / 依赖: Set.forall_mem_range, forall_mem_range, mem_sInf
@@ -2920,7 +2920,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : A ->⋆ₐ[R] B) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : A ->⋆ₐ[R] B) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -2945,7 +2945,7 @@ theorem iInf_toSubalgebra
 
 中文:
 定理 iInf_toSubalgebra
-  条件: {ι : Sort*} (S : ι -> StarSubalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> 对合子代数 R A)
   证明: SetLike.coe_injective by simp
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -2964,7 +2964,7 @@ theorem bot_toSubalgebra
 
 中文:
 定理 bot_toSubalgebra
-  结论: (⊥ : StarSubalgebra R A).toSubalgebra = ⊥
+  结论: (⊥ : 对合子代数 R A).toSubalgebra = ⊥
   证明: rfl
 -/
 theorem bot_toSubalgebra : (⊥ : StarSubalgebra R A).toSubalgebra = ⊥ := rfl
@@ -2983,7 +2983,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : A}
-  结论: x in (⊥ : StarSubalgebra R A) ↔ x in Set.range (algebraMap R A)
+  结论: x in (⊥ : 对合子代数 R A) ↔ x in 集合.range (algebraMap R A)
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -3003,7 +3003,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : StarSubalgebra R A) : Set A) = Set.range (algebraMap R A)
+  结论: ((⊥ : 对合子代数 R A) : 集合 A) = 集合.range (algebraMap R A)
   证明: rfl
 -/
 theorem coe_bot : ((⊥ : StarSubalgebra R A) : Set A) = Set.range (algebraMap R A) := rfl
@@ -3020,7 +3020,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: {S : StarSubalgebra R A}
+  条件: {S : 对合子代数 R A}
   结论: S = ⊤ ↔ 对任意 x : A, x in S
   证明: ⟨fun h x => by rw [h]; exact mem_top,
   fun h => by ext x; exact ⟨fun _ => mem_top, fun _ => h x⟩⟩
@@ -3060,7 +3060,7 @@ theorem ext_adjoin
 
 中文:
 定理 ext_adjoin
-  结论: {s : Set A} [FunLike F (adjoin R s) B]
+  结论: {s : 集合 A} [函数状 F (adjoin R s) B]
   证明: by
   refine DFunLike.ext f g fun a =>
     adjoin_induction_subtype (p := fun y => f y = g y) a (fun x hx => ?_) (fun r => ?_)
@@ -3096,7 +3096,7 @@ Subtype.ext Set.mem_singleton_iff.mp hx).symm ▸
 
 中文:
 定理 ext_adjoin_singleton
-  结论: {a : A} [FunLike F (adjoin R ({a} : Set A)) B]
+  结论: {a : A} [函数状 F (adjoin R ({a} : 集合 A)) B]
   证明: ext_adjoin fun x hx =>
     (show x = ⟨a, self_mem_adjoin_singleton R a⟩ from
 Subtype.ext Set.mem_singleton_iff.mp hx).symm ▸
@@ -3128,7 +3128,7 @@ definition equalizer
 
 中文:
 定义 equalizer
-  签名: : StarSubalgebra R A where
+  签名: : 对合子代数 R A where
   定义体: AlgHom.equalizer (f : A ->ₐ[R] B) g
   star_mem' {a} (ha : f a = g a) := by simpa only [← map_star] using! congrArg star ha
 
@@ -3153,7 +3153,7 @@ theorem mem_equalizer
 中文:
 定理 mem_equalizer
   条件: (x : A)
-  结论: x in StarAlgHom.equalizer f g ↔ f x = g x
+  结论: x in StarAlg态射.equalizer f g ↔ f x = g x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3172,8 +3172,8 @@ theorem adjoin_le_equalizer
 
 中文:
 定理 adjoin_le_equalizer
-  条件: {s : Set A} (h : s.EqOn f g)
-  结论: adjoin R s <= StarAlgHom.equalizer f g
+  条件: {s : 集合 A} (h : s.EqOn f g)
+  结论: adjoin R s <= StarAlg态射.equalizer f g
   证明: adjoin_le h
 
 Depends on / 依赖: adjoin_le
@@ -3192,7 +3192,7 @@ theorem ext_of_adjoin_eq_top
 
 中文:
 定理 ext_of_adjoin_eq_top
-  条件: {s : Set A} (h : adjoin R s = ⊤) ⦃f g
+  条件: {s : 集合 A} (h : adjoin R s = ⊤) ⦃f g
   结论: F⦄ (hs : s.EqOn f g) : f = g
   证明: DFunLike.ext f g fun _x => StarAlgHom.adjoin_le_equalizer f g hs h.symm ▸ trivial
 
@@ -3215,7 +3215,7 @@ theorem map_adjoin
 
 中文:
 定理 map_adjoin
-  条件: (f : A ->⋆ₐ[R] B) (s : Set A)
+  条件: (f : A ->⋆ₐ[R] B) (s : 集合 A)
   证明: GaloisConnection.l_comm_of_u_comm Set.image_preimage (gc_map_comap f) StarAlgebra.gc
     StarAlgebra.gc fun _ => rfl
 
@@ -3257,7 +3257,7 @@ theorem range_eq_map_top
 中文:
 定理 range_eq_map_top
   条件: (φ : A ->⋆ₐ[R] B)
-  结论: φ.range = (⊤ : StarSubalgebra R A).map φ
+  结论: φ.range = (⊤ : 对合子代数 R A).map φ
   证明: StarSubalgebra.ext fun x =>
     ⟨by rintro ⟨a, ha⟩; exact ⟨a, by simp, ha⟩, by rintro ⟨a, -, ha⟩; exact ⟨a, ha⟩⟩
 
@@ -3283,7 +3283,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R B) (hf : 对任意 x, f x in S)
+  签名: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R B) (hf : 对任意 x, f x in S)
   定义体: AlgHom.codRestrict f.toAlgHom S.toSubalgebra hf
   map_star' := fun x => Subtype.ext (map_star f x)
 
@@ -3307,7 +3307,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R B) (hf : 对任意 x, f x in S) (x : A)
+  条件: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R B) (hf : 对任意 x, f x in S) (x : A)
   证明: rfl
 
 @[simp]
@@ -3327,7 +3327,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  结论: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R B)
+  结论: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R B)
   证明: StarAlgHom.ext coe_codRestrict _ S hf
 
 Depends on / 依赖: StarAlgHom, StarAlgHom.ext, coe_codRestrict
@@ -3346,7 +3346,7 @@ theorem injective_codRestrict
 
 中文:
 定理 injective_codRestrict
-  条件: (f : A ->⋆ₐ[R] B) (S : StarSubalgebra R B) (hf : 对任意 x : A, f x in S)
+  条件: (f : A ->⋆ₐ[R] B) (S : 对合子代数 R B) (hf : 对任意 x : A, f x in S)
   证明: ⟨fun H _x _y hxy => H Subtype.ext hxy, fun H _x _y hxy => H (congr_arg Subtype.val hxy :)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, congr_arg
@@ -3387,7 +3387,7 @@ definition _root_.StarAlgEquiv.ofInjective
     map_smul' := fun r a => Subtype.ext (map_smul f r a) }
 
 中文:
-定义 _root_.StarAlgEquiv.ofInjective
+定义 _root_.StarAlg等价.ofInjective
   签名: (f : A ->⋆ₐ[R] B)
   定义体: { AlgEquiv.ofInjective f.toAlgHom hf with
     toFun := f.rangeRestrict
@@ -3426,7 +3426,7 @@ definition StarAlgEquiv.restrictScalars
     toFun := f }
 
 中文:
-定义 StarAlgEquiv.restrictScalars
+定义 StarAlg等价.restrictScalars
   签名: (f : A ≃⋆ₐ[S] B)
   定义体: { (f : A ->ₗ[S] B).restrictScalars R, f with
     toFun := f }
@@ -3447,7 +3447,7 @@ theorem StarAlgEquiv.restrictScalars_injective
 @[simp]
 
 中文:
-定理 StarAlgEquiv.restrictScalars_injective
+定理 StarAlg等价.restrictScalars_injective
   证明: fun _ _ h => ext (DFunLike.congr_fun h ·)
 
 @[simp]
@@ -3468,7 +3468,7 @@ theorem StarAlgEquiv.toNonUnitalStarAlgHom_restrictScalars
   proof: rfl
 
 中文:
-定理 StarAlgEquiv.toNonUnitalStarAlgHom_restrictScalars
+定理 StarAlg等价.toNonUnitalStarAlgHom_restrictScalars
   条件: (e : A ≃⋆ₐ[S] B)
   证明: rfl
 -/
@@ -3495,7 +3495,7 @@ definition StarAlgHom.restrictScalars
   map_star' := map_star f
 
 中文:
-定义 StarAlgHom.restrictScalars
+定义 StarAlg态射.restrictScalars
   签名: (f : A ->⋆ₐ[S] B)
   定义体: f.toAlgHom.restrictScalars R
   map_star' := map_star f
@@ -3517,7 +3517,7 @@ theorem StarAlgHom.restrictScalars_injective
 @[simp]
 
 中文:
-定理 StarAlgHom.restrictScalars_injective
+定理 StarAlg态射.restrictScalars_injective
   证明: fun f g h => StarAlgHom.ext fun x =>
     show f.restrictScalars R x = g.restrictScalars R x from DFunLike.congr_fun h x
 
@@ -3540,7 +3540,7 @@ theorem StarAlgEquiv.toStarAlgHom_restrictScalars
   proof: rfl
 
 中文:
-定理 StarAlgEquiv.toStarAlgHom_restrictScalars
+定理 StarAlg等价.toStarAlgHom_restrictScalars
   条件: (e : A ≃⋆ₐ[S] B)
   证明: rfl
 -/
@@ -3567,8 +3567,8 @@ definition NonUnitalStarSubalgebra.toStarSubalgebra
     (Algebra.algebraMap_eq_smul_one (R := R) (A := A) r).symm ▸ SMulMemClass.smul_mem r h1
 
 中文:
-定义 NonUnitalStarSubalgebra.toStarSubalgebra
-  签名: (S : NonUnitalStarSubalgebra R A) (h1 : 1 in S)
+定义 非幺对合子代数.toStarSubalgebra
+  签名: (S : 非幺对合子代数 R A) (h1 : 1 in S)
   定义体: S
   one_mem' := h1
   algebraMap_mem' r :=
@@ -3590,8 +3590,8 @@ lemma StarSubalgebra.toNonUnitalStarSubalgebra_toStarSubalgebra
   proof: by cases S; rfl
 
 中文:
-引理 StarSubalgebra.toNonUnitalStarSubalgebra_toStarSubalgebra
-  条件: (S : StarSubalgebra R A)
+引理 对合子代数.toNonUnitalStarSubalgebra_toStarSubalgebra
+  条件: (S : 对合子代数 R A)
   证明: by cases S; rfl
 -/
 lemma StarSubalgebra.toNonUnitalStarSubalgebra_toStarSubalgebra (S : StarSubalgebra R A) :
@@ -3606,7 +3606,7 @@ lemma NonUnitalStarSubalgebra.toStarSubalgebra_toNonUnitalStarSubalgebra
   cases S; rfl
 
 中文:
-引理 NonUnitalStarSubalgebra.toStarSubalgebra_toNonUnitalStarSubalgebra
+引理 非幺对合子代数.toStarSubalgebra_toNonUnitalStarSubalgebra
   证明: by
   cases S; rfl
 -/
@@ -3627,7 +3627,7 @@ lemma NonUnitalStarAlgebra.adjoin_le_starAlgebra_adjoin
 
 中文:
 引理 NonUnitalStarAlgebra.adjoin_le_starAlgebra_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: adjoin_le StarAlgebra.subset_adjoin R s
 
 Depends on / 依赖: StarAlgebra, StarAlgebra.subset_adjoin, adjoin_le, subset_adjoin
@@ -3647,8 +3647,8 @@ lemma StarAlgebra.adjoin_nonUnitalStarSubalgebra
     (adjoin_le <| (NonUnitalStarAlgebra.subset_adjoin R s).trans <| subset_adjoin R _)
 
 中文:
-引理 StarAlgebra.adjoin_nonUnitalStarSubalgebra
-  条件: (s : Set A)
+引理 对合代数.adjoin_nonUnitalStarSubalgebra
+  条件: (s : 集合 A)
   证明: le_antisymm
     (adjoin_le <| NonUnitalStarAlgebra.adjoin_le_starAlgebra_adjoin R s)
     (adjoin_le <| (NonUnitalStarAlgebra.subset_adjoin R s).trans <| subset_adjoin R _)
@@ -3682,7 +3682,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: {ι : 类型} [Nonempty ι] {S : ι -> StarSubalgebra R A}
+  结论: {ι : 类型} [非空 ι] {S : ι -> 对合子代数 R A}
   证明: let K : StarSubalgebra R A :=
     { __ := NonUnitalStarSubalgebra.copy _ _ (NonUnitalStarSubalgebra.coe_iSup_of_directed
         (S := fun i => (S i).toNonUnitalStarSubalgebra) dir).symm
@@ -3716,7 +3716,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : 类型} [Nonempty ι] {S : ι -> StarSubalgebra R A}
+  结论: {ι : 类型} [非空 ι] {S : ι -> 对合子代数 R A}
   证明: by
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, coe_iSup_of_directed dir,
     Subalgebra.coe_iSup_of_directed dir] using Subalgebra.isMulCommutative_iSup dir
@@ -3739,7 +3739,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone

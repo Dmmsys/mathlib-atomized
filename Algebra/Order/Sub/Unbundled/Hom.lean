@@ -33,8 +33,8 @@ theorem AddHom.le_map_tsub
   exact hf le_tsub_add
 
 中文:
-定理 AddHom.le_map_tsub
-  结论: [Preorder β] [Add β] [Sub β] [OrderedSub β] (f : AddHom α β)
+定理 加法半群态射.le_map_tsub
+  结论: [预序 β] [加法 β] [减法 β] [OrderedSub β] (f : 加法半群态射 α β)
   证明: by
   rw [tsub_le_iff_right]; rw [← f.map_add]
   exact hf le_tsub_add
@@ -56,7 +56,7 @@ theorem le_mul_tsub
 
 中文:
 定理 le_mul_tsub
-  结论: {R : 类型} [Distrib R] [Preorder R] [Sub R] [OrderedSub R]
+  结论: {R : 类型} [Distrib R] [预序 R] [减法 R] [OrderedSub R]
   证明: (AddHom.mulLeft a).le_map_tsub (monotone_id.const_mul' a) _ _
 
 Depends on / 依赖: AddHom, AddHom.mulLeft, const_mul, le_map_tsub, monotone_id, monotone_id.const_mul, mulLeft
@@ -76,7 +76,7 @@ theorem le_tsub_mul
 
 中文:
 定理 le_tsub_mul
-  结论: {R : 类型} [NonUnitalCommSemiring R] [Preorder R] [Sub R] [OrderedSub R]
+  结论: {R : 类型} [非幺交换半环 R] [预序 R] [减法 R] [OrderedSub R]
   证明: by
   simpa only [mul_comm _ c] using le_mul_tsub
 
@@ -100,7 +100,7 @@ theorem map_tsub_of_le
 
 中文:
 定理 map_tsub_of_le
-  结论: {F : 类型} [PartialOrder α] [AddCommSemigroup α] [ExistsAddOfLE α]
+  结论: {F : 类型} [偏序 α] [加法交换半群 α] [ExistsAddOfLE α]
   证明: by
   conv => lhs; rw [← tsub_add_cancel_of_le h]
   rw [map_add]; rw [add_tsub_cancel_right]
@@ -128,7 +128,7 @@ theorem OrderIso.map_tsub
 
 中文:
 定理 OrderIso.map_tsub
-  结论: {M N : 类型} [Preorder M] [Add M] [Sub M] [OrderedSub M]
+  结论: {M N : 类型} [预序 M] [加法 M] [减法 M] [OrderedSub M]
   证明: by
   let e_add : M ≃+ N := { e with map_add' := h_add }
   refine le_antisymm ?_ (e_add.toAddHom.le_map_tsub e.monotone a b)
@@ -162,8 +162,8 @@ theorem AddMonoidHom.le_map_tsub
   proof: f.toAddHom.le_map_tsub hf a b
 
 中文:
-定理 AddMonoidHom.le_map_tsub
-  结论: [Preorder β] [AddZeroClass β] [Sub β] [OrderedSub β] (f : α ->+ β)
+定理 加法幺半群态射.le_map_tsub
+  结论: [预序 β] [加法零类 β] [减法 β] [OrderedSub β] (f : α ->+ β)
   证明: f.toAddHom.le_map_tsub hf a b
 
 Depends on / 依赖: f.toAddHom.le_map_tsub, le_map_tsub, toAddHom

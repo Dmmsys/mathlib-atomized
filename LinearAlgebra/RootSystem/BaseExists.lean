@@ -64,7 +64,7 @@ lemma baseOf_pairwise_pairing_le_zero
 
 中文:
 引理 baseOf_pairwise_pairing_le_zero
-  结论: [CharZero R] [IsDomain R] [P.IsCrystallographic]
+  结论: [特征零 R] [是整环 R] [P.IsCrystallographic]
   证明: by
   let _i := P.indexNeg
   intro i hi j hj hne
@@ -100,7 +100,7 @@ lemma linearIndepOn_root_baseOf'
 
 中文:
 引理 linearIndepOn_root_baseOf'
-  结论: [IsDomain R] {S : 类型}
+  结论: [是整环 R] {S : 类型}
   证明: by
   have : CharZero R := Algebra.charZero_of_charZero S R
   have : Fintype ι := Fintype.ofFinite ι
@@ -151,7 +151,7 @@ let b : Basis s R M := Basis.mk hli by
 
 中文:
 引理 ncard_eq_finrank_of_linearIndepOn_of
-  结论: [P.IsRootSystem] [Nontrivial R]
+  结论: [P.是RootSystem] [非平凡 R]
   证明: by
 let b : Basis s R M := Basis.mk hli by
     rw [← IsRootSystem.span_root_eq_top (P := P)]; rw [span_le]; rw [← span_span_of_tower (R := Int)]
@@ -203,7 +203,7 @@ lemma linearIndepOn_root_baseOf
 
 中文:
 引理 linearIndepOn_root_baseOf
-  条件: (f : M ->+ Rat) (hf : 对任意 i, f (P.root i) != 0)
+  条件: (f : M ->+ 有理数) (hf : 对任意 i, f (P.root i) != 0)
   证明: by
   let _i : Module Rat M := Module.compHom M (algebraMap Rat R)
   let _i : Module Rat N := Module.compHom N (algebraMap Rat R)
@@ -316,7 +316,7 @@ lemma eq_baseOf_iff
 
 中文:
 引理 eq_baseOf_iff
-  结论: (s : Set ι) (f : M ->+ Rat)
+  结论: (s : 集合 ι) (f : M ->+ 有理数)
   证明: by
   let := P.indexNeg
   refine ⟨?_, fun ⟨hli, sp⟩ => P.eq_baseOf_of_linearIndepOn_of_mem_or_neg_mem_closure s hli sp f hf⟩
@@ -474,7 +474,7 @@ lemma coroot_mem_or_neg_mem_closure_of_root
 
 中文:
 引理 coroot_mem_or_neg_mem_closure_of_root
-  结论: (s : Set ι)
+  结论: (s : 集合 ι)
   证明: by
   let _i := P.indexNeg
   let _i : Fintype ι := Fintype.ofFinite ι
@@ -530,7 +530,7 @@ definition Base.mk'
 
 中文:
 定义 Base.mk'
-  签名: (s : Set ι)
+  签名: (s : 集合 ι)
   定义体: (toFinite s).toFinset
   linearIndepOn_root := by simpa
   linearIndepOn_coroot := by have : Fintype ι := Fintype.ofFinite ι; simpa
@@ -565,7 +565,7 @@ exists_dual_forall_apply_ne_zero P.root by simp [P.ne_zero]
 
 中文:
 引理 nonempty_base
-  结论: Nonempty P.Base
+  结论: 非空 P.Base
   证明: by
   let _i : Module Rat M := Module.compHom M (algebraMap Rat R)
   obtain ⟨f, hf⟩ : exists f : Dual Rat M, forall i, f (P.root i) != 0 :=

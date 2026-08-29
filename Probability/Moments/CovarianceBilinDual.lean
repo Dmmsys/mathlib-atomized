@@ -72,7 +72,7 @@ definition toLpₗ
 
 中文:
 定义 toLpₗ
-  签名: (μ : Measure E) (p : 实数>=0∞)
+  签名: (μ : 测度 E) (p : 实数>=0∞)
   定义体: if h_Lp : MemLp id p μ then
   { toFun := fun L => MemLp.toLp L (h_Lp.continuousLinearMap_comp L)
     map_add' u v := by push_cast; rw [MemLp.toLp_add]
@@ -158,7 +158,7 @@ lemma norm_toLpₗ_le
 
 中文:
 引理 norm_toLpₗ_le
-  条件: [OpensMeasurableSpace E] (L : StrongDual 𝕜 E)
+  条件: [OpensMeasurable空间 E] (L : StrongDual 𝕜 E)
   证明: by
   by_cases h_Lp : MemLp id p μ
   swap
@@ -245,7 +245,7 @@ definition toLp
 
 中文:
 定义 toLp
-  签名: (μ : Measure E) (p : 实数>=0∞) [Fact (1 <= p)]
+  签名: (μ : 测度 E) (p : 实数>=0∞) [Fact (1 <= p)]
   定义体: StrongDual.toLpₗ μ p
   cont := by
     refine LinearMap.continuous_of_locally_bounded _ fun s hs => ?_
@@ -343,7 +343,7 @@ definition uncenteredCovarianceBilinDual
 
 中文:
 定义 uncenteredCovarianceBilinDual
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: ContinuousLinearMap.bilinearComp (isBoundedBilinearMap_inner (𝕜 := Real)).toContinuousLinearMap
     (StrongDual.toLp μ 2) (StrongDual.toLp μ 2)
 
@@ -427,7 +427,7 @@ lemma uncenteredCovarianceBilinDual_zero
 
 中文:
 引理 uncenteredCovarianceBilinDual_zero
-  结论: uncenteredCovarianceBilinDual (0 : Measure E) = 0
+  结论: uncenteredCovarianceBilinDual (0 : 测度 E) = 0
   证明: by
   ext
   have : Subsingleton (Lp Real 2 (0 : Measure E)) := ⟨fun x y => Lp.ext_iff.2 rfl⟩
@@ -513,7 +513,7 @@ omit [BorelSpace E] in
 
 中文:
 定义 covarianceBilinDual
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: uncenteredCovarianceBilinDual (μ.map (fun x => x - ∫ x, x ∂μ))
 
 omit [BorelSpace E] in
@@ -539,7 +539,7 @@ lemma _root_.MeasureTheory.memLp_id_of_self_sub_integral
   that `μ` is finite, so this requires an argument. If the constant is zero,
 
 中文:
-引理 _root_.MeasureTheory.memLp_id_of_self_sub_integral
+引理 _root_.测度论.memLp_id_of_self_sub_integral
   结论: {p : 实数>=0∞}
   证明: by
   have : (id : E -> E) = fun x => x - ∫ x, x ∂μ + ∫ x, x ∂μ := by ext; simp
@@ -676,7 +676,7 @@ lemma covarianceBilinDual_zero
 
 中文:
 引理 covarianceBilinDual_zero
-  结论: covarianceBilinDual (0 : Measure E) = 0
+  结论: covarianceBilinDual (0 : 测度 E) = 0
   证明: by
   rw [covarianceBilinDual]; rw [Measure.map_zero]; rw [uncenteredCovarianceBilinDual_zero]
 
@@ -764,7 +764,7 @@ lemma isPosSemidef_covarianceBilinDual
 
 中文:
 引理 isPosSemidef_covarianceBilinDual
-  结论: (covarianceBilinDual μ).toBilinForm.IsPosSemidef where
+  结论: (covarianceBilinDual μ).toBilinForm.是PosSemidef where
   证明: covarianceBilinDual_comm
   nonneg := covarianceBilinDual_self_nonneg
 

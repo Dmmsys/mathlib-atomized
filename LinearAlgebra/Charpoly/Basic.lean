@@ -153,7 +153,7 @@ theorem charpoly_sub_smul
 
 中文:
 定理 charpoly_sub_smul
-  条件: (f : Module.End R M) (μ : R)
+  条件: (f : 模.End R M) (μ : R)
   证明: by
   simpa [LinearMap.charpoly, smul_eq_mul_diagonal] using Matrix.charpoly_sub_scalar ..
 
@@ -249,8 +249,8 @@ theorem isIntegral
   proof: ⟨f.charpoly, ⟨charpoly_monic f, aeval_self_charpoly f⟩⟩
 
 中文:
-定理 isIntegral
-  结论: Is整数egral R f
+定理 is整数egral
+  结论: 是整 R f
   证明: ⟨f.charpoly, ⟨charpoly_monic f, aeval_self_charpoly f⟩⟩
 
 Depends on / 依赖: aeval_self_charpoly, charpoly, charpoly_monic, f.charpoly
@@ -268,7 +268,7 @@ theorem minpoly_dvd_charpoly
 
 中文:
 定理 minpoly_dvd_charpoly
-  结论: {K : 类型u} {M : 类型v} [Field K] [AddCommGroup M] [Module K M]
+  结论: {K : 类型u} {M : 类型v} [域 K] [加法交换群 M] [模 K M]
   证明: minpoly.dvd _ _ (aeval_self_charpoly f)
 
 Depends on / 依赖: aeval_self_charpoly, minpoly, minpoly.dvd
@@ -340,7 +340,7 @@ theorem minpoly_coeff_zero_of_injective
 
 中文:
 定理 minpoly_coeff_zero_of_injective
-  条件: [Nontrivial R] (hf : Function.Injective f)
+  条件: [非平凡 R] (hf : 函数.单射 f)
   证明: by
   intro h
   obtain ⟨P, hP⟩ := X_dvd_iff.2 h
@@ -390,7 +390,7 @@ theorem Algebra.aeval_self_charpoly_lmul
 simpa [← aeval_algHom_apply] using LinearMap.aeval_self_charpoly Algebra.lmul _ _ α
 
 中文:
-定理 Algebra.aeval_self_charpoly_lmul
+定理 代数.aeval_self_charpoly_lmul
   条件: (α : M)
   证明: Algebra.lmul_injective (R := R) by
 simpa [← aeval_algHom_apply] using LinearMap.aeval_self_charpoly Algebra.lmul _ _ α

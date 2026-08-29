@@ -69,7 +69,7 @@ definition cyclotomic'
 
 中文:
 定义 cyclotomic'
-  签名: (n : 自然数) (R : 类型) [CommRing R] [IsDomain R]
+  签名: (n : 自然数) (R : 类型) [交换环 R] [是整环 R]
   定义体: ∏ μ in primitiveRoots n R, (X - C μ)
 
 Depends on / 依赖: primitiveRoots
@@ -91,7 +91,7 @@ theorem cyclotomic'_zero
 
 中文:
 定理 cyclotomic'_zero
-  条件: (R : 类型) [CommRing R] [IsDomain R]
+  条件: (R : 类型) [交换环 R] [是整环 R]
   结论: cyclotomic' 0 R = 1
   证明: by
   simp only [cyclotomic', Finset.prod_empty, primitiveRoots_zero]
@@ -113,7 +113,7 @@ theorem cyclotomic'_one
 
 中文:
 定理 cyclotomic'_one
-  条件: (R : 类型) [CommRing R] [IsDomain R]
+  条件: (R : 类型) [交换环 R] [是整环 R]
   结论: cyclotomic' 1 R = X - 1
   证明: by
   simp only [cyclotomic', Finset.prod_singleton, map_one, IsPrimitiveRoot.primitiveRoots_one]
@@ -137,7 +137,7 @@ theorem cyclotomic'_two
 
 中文:
 定理 cyclotomic'_two
-  条件: (R : 类型) [CommRing R] [IsDomain R] (p : 自然数) [CharP R p] (hp : p != 2)
+  条件: (R : 类型) [交换环 R] [是整环 R] (p : 自然数) [特征p R p] (hp : p != 2)
   证明: by
   rw [cyclotomic']
   have prim_root_two : primitiveRoots 2 R = {(-1 : R)} := by
@@ -163,7 +163,7 @@ theorem cyclotomic'.monic
 
 中文:
 定理 cyclotomic'.monic
-  条件: (n : 自然数) (R : 类型) [CommRing R] [IsDomain R]
+  条件: (n : 自然数) (R : 类型) [交换环 R] [是整环 R]
   证明: monic_prod_of_monic _ _ fun _ _ => monic_X_sub_C _
 -/
 theorem cyclotomic'.monic (n : Nat) (R : Type*) [CommRing R] [IsDomain R] :
@@ -181,7 +181,7 @@ theorem cyclotomic'_ne_zero
 
 中文:
 定理 cyclotomic'_ne_zero
-  条件: (n : 自然数) (R : 类型) [CommRing R] [IsDomain R]
+  条件: (n : 自然数) (R : 类型) [交换环 R] [是整环 R]
   结论: cyclotomic' n R != 0
   证明: (cyclotomic'.monic n R).ne_zero
 -/
@@ -204,7 +204,7 @@ theorem natDegree_cyclotomic'
 
 中文:
 定理 natDegree_cyclotomic'
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: by
   rw [cyclotomic']
   rw [natDegree_prod (primitiveRoots n R) fun z : R => X - C z]
@@ -235,7 +235,7 @@ theorem degree_cyclotomic'
 
 中文:
 定理 degree_cyclotomic'
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: by
   simp only [degree_eq_natDegree (cyclotomic'_ne_zero n R), natDegree_cyclotomic' h]
 
@@ -256,7 +256,7 @@ theorem roots_of_cyclotomic
 
 中文:
 定理 roots_of_cyclotomic
-  条件: (n : 自然数) (R : 类型) [CommRing R] [IsDomain R]
+  条件: (n : 自然数) (R : 类型) [交换环 R] [是整环 R]
   证明: by
   rw [cyclotomic']; exact roots_prod_X_sub_C (primitiveRoots n R)
 
@@ -283,7 +283,7 @@ theorem X_pow_sub_one_eq_prod
 
 中文:
 定理 X_pow_sub_one_eq_prod
-  条件: {ζ : R} {n : 自然数} (hpos : 0 < n) (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (hpos : 0 < n) (h : 是PrimitiveRoot ζ n)
   证明: by
   classical
   rw [nthRootsFinset]; rw [← Multiset.toFinset_eq (IsPrimitiveRoot.nthRoots_one_nodup h)]
@@ -352,7 +352,7 @@ theorem X_pow_sub_one_splits
 
 中文:
 定理 X_pow_sub_one_splits
-  条件: {ζ : K} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : K} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: by
   rw [splits_iff_card_roots]; rw [← nthRoots]; rw [IsPrimitiveRoot.card_nthRoots_one h]; rw [natDegree_X_pow_sub_C]
 
@@ -377,7 +377,7 @@ theorem prod_cyclotomic'_eq_X_pow_sub_one
 
 中文:
 定理 prod_cyclotomic'_eq_X_pow_sub_one
-  结论: {K : 类型} [CommRing K] [IsDomain K] {ζ : K} {n : 自然数}
+  结论: {K : 类型} [交换环 K] [是整环 K] {ζ : K} {n : 自然数}
   证明: by
   classical
   have hd : (n.divisors : Set Nat).PairwiseDisjoint fun k => primitiveRoots k K :=
@@ -412,7 +412,7 @@ theorem cyclotomic'_eq_X_pow_sub_one_div
 
 中文:
 定理 cyclotomic'_eq_X_pow_sub_one_div
-  结论: {K : 类型} [CommRing K] [IsDomain K] {ζ : K} {n : 自然数}
+  结论: {K : 类型} [交换环 K] [是整环 K] {ζ : K} {n : 自然数}
   证明: by
   rw [← prod_cyclotomic'_eq_X_pow_sub_one hpos h]; rw [← Nat.cons_self_properDivisors hpos.ne']; rw [Finset.prod_cons]
   have prod_monic : (∏ i in Nat.properDivisors n, cyclotomic' i K).Monic := by
@@ -454,7 +454,7 @@ theorem int_coeff_of_cyclotomic'
 
 中文:
 定理 int_coeff_of_cyclotomic'
-  结论: {K : 类型} [CommRing K] [IsDomain K] {ζ : K} {n : 自然数}
+  结论: {K : 类型} [交换环 K] [是整环 K] {ζ : K} {n : 自然数}
   证明: by
   refine lifts_and_degree_eq_and_monic ?_ (cyclotomic'.monic n K)
   induction n using Nat.strong_induction_on generalizing ζ with | _ k ihk
@@ -513,7 +513,7 @@ theorem unique_int_coeff_of_cycl
 
 中文:
 定理 unique_int_coeff_of_cycl
-  结论: {K : 类型} [CommRing K] [IsDomain K] [CharZero K] {ζ : K}
+  结论: {K : 类型} [交换环 K] [是整环 K] [特征零 K] {ζ : K}
   证明: by
   obtain ⟨P, hP⟩ := int_coeff_of_cyclotomic' h
   refine ⟨P, hP.1, fun Q hQ => ?_⟩
@@ -547,7 +547,7 @@ definition cyclotomic
 
 中文:
 定义 cyclotomic
-  签名: (n : 自然数) (R : 类型) [Ring R]
+  签名: (n : 自然数) (R : 类型) [环 R]
   定义体: if h : n = 0 then 1
   else map (Int.castRingHom R) (int_coeff_of_cyclotomic' (Complex.isPrimitiveRoot_exp n h)).choose
 
@@ -597,7 +597,7 @@ theorem map_cyclotomic_int
 
 中文:
 定理 map_cyclotomic_int
-  条件: (n : 自然数) (R : 类型) [Ring R]
+  条件: (n : 自然数) (R : 类型) [环 R]
   证明: by
   by_cases hzero : n = 0
   · simp only [hzero, cyclotomic, dif_pos, Polynomial.map_one]
@@ -657,7 +657,7 @@ theorem int_cyclotomic_unique
 
 中文:
 定理 int_cyclotomic_unique
-  条件: {n : 自然数} {P : 整数[X]} (h : map (整数.castRingHom Complex) P = cyclotomic' n Complex)
+  条件: {n : 自然数} {P : 整数[X]} (h : map (整数.castRingHom 复形) P = cyclotomic' n 复形)
   证明: by
   apply map_injective (Int.castRingHom Complex) Int.cast_injective
   rw [h]; rw [(int_cyclotomic_spec n).1]
@@ -684,7 +684,7 @@ theorem map_cyclotomic
 
 中文:
 定理 map_cyclotomic
-  条件: (n : 自然数) {R S : 类型} [Ring R] [Ring S] (f : R ->+* S)
+  条件: (n : 自然数) {R S : 类型} [环 R] [环 S] (f : R ->+* S)
   证明: by
   rw [← map_cyclotomic_int n R]; rw [← map_cyclotomic_int n S]; rw [map_map]
   have : Subsingleton (Int ->+* S) := inferInstance
@@ -709,7 +709,7 @@ theorem cyclotomic.eval_apply
 
 中文:
 定理 cyclotomic.eval_apply
-  条件: {R S : 类型} (q : R) (n : 自然数) [Ring R] [Ring S] (f : R ->+* S)
+  条件: {R S : 类型} (q : R) (n : 自然数) [环 R] [环 S] (f : R ->+* S)
   证明: by
   rw [← map_cyclotomic n f]; rw [eval_map]; rw [eval₂_at_apply]
 
@@ -728,7 +728,7 @@ theorem cyclotomic.eval_apply_ofReal
   proof: cyclotomic.eval_apply q n (algebraMap Real Complex)
 
 中文:
-定理 cyclotomic.eval_apply_ofReal
+定理 cyclotomic.eval_apply_of实数
   条件: (q : 实数) (n : 自然数)
   证明: cyclotomic.eval_apply q n (algebraMap Real Complex)
 -/
@@ -750,7 +750,7 @@ theorem cyclotomic_zero
 
 中文:
 定理 cyclotomic_zero
-  条件: (R : 类型) [Ring R]
+  条件: (R : 类型) [环 R]
   结论: cyclotomic 0 R = 1
   证明: by
   simp only [cyclotomic, dif_pos]
@@ -778,7 +778,7 @@ theorem cyclotomic_one
 
 中文:
 定理 cyclotomic_one
-  条件: (R : 类型) [Ring R]
+  条件: (R : 类型) [环 R]
   结论: cyclotomic 1 R = X - 1
   证明: by
   have hspec : map (Int.castRingHom Complex) (X - 1) = cyclotomic' 1 Complex := by
@@ -809,7 +809,7 @@ theorem cyclotomic.monic
 
 中文:
 定理 cyclotomic.monic
-  条件: (n : 自然数) (R : 类型) [Ring R]
+  条件: (n : 自然数) (R : 类型) [环 R]
   结论: (cyclotomic n R).Monic
   证明: by
   rw [← map_cyclotomic_int]
@@ -832,8 +832,8 @@ theorem cyclotomic.isPrimitive
 
 中文:
 定理 cyclotomic.isPrimitive
-  条件: (n : 自然数) (R : 类型) [CommRing R]
-  结论: (cyclotomic n R).IsPrimitive
+  条件: (n : 自然数) (R : 类型) [交换环 R]
+  结论: (cyclotomic n R).是Primitive
   证明: (cyclotomic.monic n R).isPrimitive
 
 Depends on / 依赖: cyclotomic, cyclotomic.monic, isPrimitive
@@ -852,7 +852,7 @@ theorem cyclotomic_ne_zero
 
 中文:
 定理 cyclotomic_ne_zero
-  条件: (n : 自然数) (R : 类型) [Ring R] [Nontrivial R]
+  条件: (n : 自然数) (R : 类型) [环 R] [非平凡 R]
   结论: cyclotomic n R != 0
   证明: (cyclotomic.monic n R).ne_zero
 
@@ -877,7 +877,7 @@ theorem degree_cyclotomic
 
 中文:
 定理 degree_cyclotomic
-  条件: (n : 自然数) (R : 类型) [Ring R] [Nontrivial R]
+  条件: (n : 自然数) (R : 类型) [环 R] [非平凡 R]
   证明: by
   rw [← map_cyclotomic_int]
   rw [degree_map_eq_of_leadingCoeff_ne_zero (Int.castRingHom R) _]
@@ -910,7 +910,7 @@ theorem natDegree_cyclotomic
 
 中文:
 定理 natDegree_cyclotomic
-  条件: (n : 自然数) (R : 类型) [Ring R] [Nontrivial R]
+  条件: (n : 自然数) (R : 类型) [环 R] [非平凡 R]
   证明: by
   rw [natDegree]; rw [degree_cyclotomic]; norm_cast
 
@@ -932,7 +932,7 @@ lemma natDegree_cyclotomic_le
 
 中文:
 引理 natDegree_cyclotomic_le
-  条件: {R : 类型} [Ring R] {n : 自然数}
+  条件: {R : 类型} [环 R] {n : 自然数}
   证明: by
   nontriviality R
   rw [natDegree_cyclotomic]
@@ -955,7 +955,7 @@ theorem degree_cyclotomic_pos
 
 中文:
 定理 degree_cyclotomic_pos
-  条件: (n : 自然数) (R : 类型) (hpos : 0 < n) [Ring R] [Nontrivial R]
+  条件: (n : 自然数) (R : 类型) (hpos : 0 < n) [环 R] [非平凡 R]
   证明: by
   rwa [degree_cyclotomic n R, Nat.cast_pos, Nat.totient_pos]
 
@@ -982,7 +982,7 @@ theorem prod_cyclotomic_eq_X_pow_sub_one
 
 中文:
 定理 prod_cyclotomic_eq_X_pow_sub_one
-  条件: {n : 自然数} (hpos : 0 < n) (R : 类型) [CommRing R]
+  条件: {n : 自然数} (hpos : 0 < n) (R : 类型) [交换环 R]
   证明: by
   have integer : ∏ i in Nat.divisors n, cyclotomic i Int = X ^ n - 1 := by
     apply map_injective (Int.castRingHom Complex) Int.cast_injective
@@ -1018,7 +1018,7 @@ theorem cyclotomic.dvd_X_pow_sub_one
 
 中文:
 定理 cyclotomic.dvd_X_pow_sub_one
-  条件: (n : 自然数) (R : 类型) [Ring R]
+  条件: (n : 自然数) (R : 类型) [环 R]
   证明: by
   suffices cyclotomic n Int ∣ X ^ n - 1 by
     simpa only [map_cyclotomic_int, Polynomial.map_sub, Polynomial.map_one, Polynomial.map_pow,
@@ -1053,7 +1053,7 @@ theorem prod_cyclotomic_eq_geom_sum
 
 中文:
 定理 prod_cyclotomic_eq_geom_sum
-  条件: {n : 自然数} (h : 0 < n) (R) [CommRing R]
+  条件: {n : 自然数} (h : 0 < n) (R) [交换环 R]
   证明: by
   suffices (∏ i in n.divisors.erase 1, cyclotomic i Int) = ∑ i in Finset.range n, X ^ i by
     simpa only [Polynomial.map_prod, map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow,
@@ -1083,7 +1083,7 @@ theorem cyclotomic_prime
 
 中文:
 定理 cyclotomic_prime
-  条件: (R : 类型) [Ring R] (p : 自然数) [hp : Fact p.Prime]
+  条件: (R : 类型) [环 R] (p : 自然数) [hp : Fact p.素]
   证明: by
   suffices cyclotomic p Int = ∑ i in range p, X ^ i by
     simpa only [map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow, Polynomial.map_X] using
@@ -1111,7 +1111,7 @@ theorem cyclotomic_prime_mul_X_sub_one
 
 中文:
 定理 cyclotomic_prime_mul_X_sub_one
-  条件: (R : 类型) [Ring R] (p : 自然数) [hn : Fact (自然数.Prime p)]
+  条件: (R : 类型) [环 R] (p : 自然数) [hn : Fact (自然数.素 p)]
   证明: by rw [cyclotomic_prime, geom_sum_mul]
 
 @[simp]
@@ -1135,7 +1135,7 @@ theorem cyclotomic_two
 
 中文:
 定理 cyclotomic_two
-  条件: (R : 类型) [Ring R]
+  条件: (R : 类型) [环 R]
   结论: cyclotomic 2 R = X + 1
   证明: by simp [cyclotomic_prime]
 
@@ -1158,7 +1158,7 @@ theorem cyclotomic_three
 
 中文:
 定理 cyclotomic_three
-  条件: (R : 类型) [Ring R]
+  条件: (R : 类型) [环 R]
   结论: cyclotomic 3 R = X ^ 2 + X + 1
   证明: by
   simp [cyclotomic_prime, sum_range_succ']
@@ -1185,7 +1185,7 @@ theorem cyclotomic_dvd_geom_sum_of_dvd
 
 中文:
 定理 cyclotomic_dvd_geom_sum_of_dvd
-  条件: (R) [Ring R] {d n : 自然数} (hdn : d ∣ n) (hd : d != 1)
+  条件: (R) [环 R] {d n : 自然数} (hdn : d ∣ n) (hd : d != 1)
   证明: by
   suffices cyclotomic d Int ∣ ∑ i in Finset.range n, X ^ i by
     simpa only [map_cyclotomic_int, Polynomial.map_sum, Polynomial.map_pow, Polynomial.map_X] using
@@ -1220,7 +1220,7 @@ theorem X_pow_sub_one_mul_prod_cyclotomic_eq_X_pow_sub_one_of_dvd
 
 中文:
 定理 X_pow_sub_one_mul_prod_cyclotomic_eq_X_pow_sub_one_of_dvd
-  结论: (R) [CommRing R] {d n : 自然数}
+  结论: (R) [交换环 R] {d n : 自然数}
   证明: by
   have h0d : 0 < d := Nat.pos_of_dvd_of_pos hdvd (by positivity)
   rw [← prod_cyclotomic_eq_X_pow_sub_one h0d]; rw [← prod_cyclotomic_eq_X_pow_sub_one (by positivity)]; rw [mul_comm]; rw [Finset.prod_sdiff (by gcongr)]
@@ -1247,7 +1247,7 @@ theorem X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd
 
 中文:
 定理 X_pow_sub_one_mul_cyclotomic_dvd_X_pow_sub_one_of_dvd
-  结论: (R) [CommRing R] {d n : 自然数}
+  结论: (R) [交换环 R] {d n : 自然数}
   证明: by
   rw [Nat.mem_properDivisors] at h
   use ∏ x in n.properDivisors \ d.divisors, cyclotomic x R
@@ -1289,7 +1289,7 @@ theorem cyclotomic_eq_prod_X_pow_sub_one_pow_moebius
 
 中文:
 定理 cyclotomic_eq_prod_X_pow_sub_one_pow_moebius
-  结论: {n : 自然数} (R : 类型) [CommRing R]
+  结论: {n : 自然数} (R : 类型) [交换环 R]
   证明: by
   rcases n.eq_zero_or_pos with (rfl | hpos)
   · simp
@@ -1336,7 +1336,7 @@ theorem cyclotomic_eq_X_pow_sub_one_div
 
 中文:
 定理 cyclotomic_eq_X_pow_sub_one_div
-  条件: {R : 类型} [CommRing R] {n : 自然数} (hpos : 0 < n)
+  条件: {R : 类型} [交换环 R] {n : 自然数} (hpos : 0 < n)
   证明: by
   nontriviality R
   rw [← prod_cyclotomic_eq_X_pow_sub_one hpos]; rw [← Nat.cons_self_properDivisors hpos.ne']; rw [Finset.prod_cons]
@@ -1378,7 +1378,7 @@ theorem X_pow_sub_one_dvd_prod_cyclotomic
 
 中文:
 定理 X_pow_sub_one_dvd_prod_cyclotomic
-  结论: (R : 类型) [CommRing R] {n m : 自然数} (hpos : 0 < n)
+  结论: (R : 类型) [交换环 R] {n m : 自然数} (hpos : 0 < n)
   证明: by
   replace hm := Nat.mem_properDivisors.2
     ⟨hm, lt_of_le_of_ne (Nat.divisor_le (Nat.mem_divisors.2 ⟨hm, hpos.ne'⟩)) hdiff⟩
@@ -1412,7 +1412,7 @@ theorem cyclotomic_eq_prod_X_sub_primitiveRoots
 
 中文:
 定理 cyclotomic_eq_prod_X_sub_primitiveRoots
-  结论: {K : 类型} [CommRing K] [IsDomain K] {ζ : K}
+  结论: {K : 类型} [交换环 K] [是整环 K] {ζ : K}
   证明: by
   rw [← cyclotomic']
   induction n using Nat.strong_induction_on generalizing ζ with | _ k hk
@@ -1454,7 +1454,7 @@ theorem eq_cyclotomic_iff
 
 中文:
 定理 eq_cyclotomic_iff
-  条件: {R : 类型} [CommRing R] {n : 自然数} (hpos : 0 < n) (P : R[X])
+  条件: {R : 类型} [交换环 R] {n : 自然数} (hpos : 0 < n) (P : R[X])
   证明: by
   nontriviality R
   refine ⟨fun hcycl => ?_, fun hP => ?_⟩
@@ -1498,7 +1498,7 @@ theorem cyclotomic_prime_pow_eq_geom_sum
 
 中文:
 定理 cyclotomic_prime_pow_eq_geom_sum
-  条件: {R : 类型} [CommRing R] {p n : 自然数} (hp : p.Prime)
+  条件: {R : 类型} [交换环 R] {p n : 自然数} (hp : p.素)
   证明: by
   have : forall m, (cyclotomic (p ^ (m + 1)) R = ∑ i in Finset.range p, (X ^ p ^ m) ^ i) ↔
       ((∑ i in Finset.range p, (X ^ p ^ m) ^ i) *
@@ -1538,7 +1538,7 @@ theorem cyclotomic_prime_pow_mul_X_pow_sub_one
 
 中文:
 定理 cyclotomic_prime_pow_mul_X_pow_sub_one
-  结论: (R : 类型) [CommRing R] (p k : 自然数)
+  结论: (R : 类型) [交换环 R] (p k : 自然数)
   证明: by
   rw [cyclotomic_prime_pow_eq_geom_sum hn.out]; rw [geom_sum_mul]; rw [← pow_mul]; rw [pow_succ]; rw [mul_comm]
 
@@ -1563,7 +1563,7 @@ theorem cyclotomic_coeff_zero
 
 中文:
 定理 cyclotomic_coeff_zero
-  条件: (R : 类型) [CommRing R] {n : 自然数} (hn : 1 < n)
+  条件: (R : 类型) [交换环 R] {n : 自然数} (hn : 1 < n)
   证明: by
   induction n using Nat.strong_induction_on with | _ n hi
   have hprod : (∏ i in Nat.properDivisors n, (Polynomial.cyclotomic i R).coeff 0) = -1 := by
@@ -1616,7 +1616,7 @@ theorem coprime_of_root_cyclotomic
 
 中文:
 定理 coprime_of_root_cyclotomic
-  结论: {n : 自然数} (hpos : 0 < n) {p : 自然数} [hprime : Fact p.Prime] {a : 自然数}
+  结论: {n : 自然数} (hpos : 0 < n) {p : 自然数} [hprime : Fact p.素] {a : 自然数}
   证明: by
   apply Nat.Coprime.symm
   rw [hprime.1.coprime_iff_not_dvd]
@@ -1661,7 +1661,7 @@ theorem orderOf_root_cyclotomic_dvd
 
 中文:
 定理 orderOf_root_cyclotomic_dvd
-  结论: {n : 自然数} (hpos : 0 < n) {p : 自然数} [Fact p.Prime] {a : 自然数}
+  结论: {n : 自然数} (hpos : 0 < n) {p : 自然数} [Fact p.素] {a : 自然数}
   证明: by
   apply orderOf_dvd_of_pow_eq_one
   suffices hpow : eval (Nat.castRingHom (ZMod p) a) (X ^ n - 1 : (ZMod p)[X]) = 0 by
@@ -1704,7 +1704,7 @@ lemma dvd_C_mul_X_sub_one_pow_add_one
 
 中文:
 引理 dvd_C_mul_X_sub_one_pow_add_one
-  结论: {p : 自然数} (hpri : p.Prime)
+  结论: {p : 自然数} (hpri : p.素)
   证明: by
   have := hpri.dvd_add_pow_sub_pow_of_dvd (C a * X) (-1) (r := C r) ?_ ?_
   · rwa [← sub_eq_add_neg, (hpri.odd_of_ne_two hp).neg_pow, one_pow, sub_neg_eq_add] at this
@@ -1737,7 +1737,7 @@ congr_arg (eval (x / y) · * y ^ card (nthRootsFinset n (1 : K)))
   · simp [sub_mul, div_pow, h
 
 中文:
-定理 _root_.IsPrimitiveRoot.pow_sub_pow_eq_prod_sub_mul_field
+定理 _root_.是PrimitiveRoot.pow_sub_pow_eq_prod_sub_mul_field
   结论: {K : 类型}
   证明: by
   by_cases hy : y = 0
@@ -1780,7 +1780,7 @@ h.map_of_injective FaithfulSMul.algebraMap_injective R K
   rw [h'.pow_sub_pow_eq_prod_
 
 中文:
-定理 _root_.IsPrimitiveRoot.pow_sub_pow_eq_prod_sub_mul
+定理 _root_.是PrimitiveRoot.pow_sub_pow_eq_prod_sub_mul
   结论: (hpos : 0 < n)
   证明: by
   let K := FractionRing R
@@ -1821,7 +1821,7 @@ theorem _root_.IsPrimitiveRoot.pow_add_pow_eq_prod_add_mul
   simpa [hodd.neg_pow] using h.pow_sub_pow_eq_prod_sub_mul x (-y) hodd.pos
 
 中文:
-定理 _root_.IsPrimitiveRoot.pow_add_pow_eq_prod_add_mul
+定理 _root_.是PrimitiveRoot.pow_add_pow_eq_prod_add_mul
   结论: (hodd : Odd n)
   证明: by
   simpa [hodd.neg_pow] using h.pow_sub_pow_eq_prod_sub_mul x (-y) hodd.pos
@@ -1842,7 +1842,7 @@ theorem separable_cyclotomic
 
 中文:
 定理 separable_cyclotomic
-  条件: (n : 自然数) (K : 类型) [Field K] [NeZero (n : K)]
+  条件: (n : 自然数) (K : 类型) [域 K] [NeZero (n : K)]
   证明: .of_dvd (separable_X_pow_sub_C 1 NeZero.out one_ne_zero) (cyclotomic.dvd_X_pow_sub_one n K)
 
 Depends on / 依赖: NeZero, NeZero.out, cyclotomic, cyclotomic.dvd_X_pow_sub_one, dvd_X_pow_sub_one, of_dvd, one_ne_zero, separable_X_pow_sub_C
@@ -1861,7 +1861,7 @@ theorem squarefree_cyclotomic
 
 中文:
 定理 squarefree_cyclotomic
-  条件: (n : 自然数) (K : 类型) [Field K] [NeZero (n : K)]
+  条件: (n : 自然数) (K : 类型) [域 K] [NeZero (n : K)]
   证明: (separable_cyclotomic n K).squarefree
 
 Depends on / 依赖: separable_cyclotomic, squarefree

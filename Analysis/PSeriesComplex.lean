@@ -34,8 +34,8 @@ lemma Complex.summable_one_div_nat_cpow
     (Nat.cast_pos.mpr <| Nat.succ_pos _)]
 
 中文:
-引理 Complex.summable_one_div_nat_cpow
-  条件: {p : Complex}
+引理 复形.summable_one_div_nat_cpow
+  条件: {p : 复形}
   证明: by
   rw [← Real.summable_one_div_nat_rpow]; rw [← summable_nat_add_iff 1 (G := Real)]; rw [← summable_nat_add_iff 1 (G := Complex)]; rw [← summable_norm_iff]
   simp only [norm_div, norm_one, ← ofReal_natCast, norm_cpow_eq_rpow_re_of_pos

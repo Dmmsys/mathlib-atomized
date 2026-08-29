@@ -58,7 +58,7 @@ definition LinearMap.mkContinuous
   body: ⟨f, AddMonoidHomClass.continuous_of_bound f C h⟩
 
 中文:
-定义 LinearMap.mkContinuous
+定义 线性映射.mkContinuous
   签名: (C : 实数) (h : 对任意 x, ‖f x‖ <= C * ‖x‖)
   定义体: ⟨f, AddMonoidHomClass.continuous_of_bound f C h⟩
 
@@ -78,7 +78,7 @@ definition LinearMap.mkContinuousOfExistsBound
     AddMonoidHomClass.continuous_of_bound f C hC⟩
 
 中文:
-定义 LinearMap.mkContinuousOfExistsBound
+定义 线性映射.mkContinuousOfExistsBound
   签名: (h : 存在 C, 对任意 x, ‖f x‖ <= C * ‖x‖)
   定义体: ⟨f,
     let ⟨C, hC⟩ := h
@@ -159,7 +159,7 @@ theorem LinearMap.mkContinuous_coe
 @[simp]
 
 中文:
-定理 LinearMap.mkContinuous_coe
+定理 线性映射.mkContinuous_coe
   条件: (C : 实数) (h : 对任意 x, ‖f x‖ <= C * ‖x‖)
   证明: rfl
 
@@ -181,7 +181,7 @@ theorem LinearMap.mkContinuous_apply
 @[simp, norm_cast]
 
 中文:
-定理 LinearMap.mkContinuous_apply
+定理 线性映射.mkContinuous_apply
   条件: (C : 实数) (h : 对任意 x, ‖f x‖ <= C * ‖x‖) (x : E)
   证明: rfl
 
@@ -203,7 +203,7 @@ theorem LinearMap.mkContinuousOfExistsBound_coe
 @[simp]
 
 中文:
-定理 LinearMap.mkContinuousOfExistsBound_coe
+定理 线性映射.mkContinuousOfExistsBound_coe
   条件: (h : 存在 C, 对任意 x, ‖f x‖ <= C * ‖x‖)
   证明: rfl
 
@@ -223,7 +223,7 @@ theorem LinearMap.mkContinuousOfExistsBound_apply
   proof: rfl
 
 中文:
-定理 LinearMap.mkContinuousOfExistsBound_apply
+定理 线性映射.mkContinuousOfExistsBound_apply
   条件: (h : 存在 C, 对任意 x, ‖f x‖ <= C * ‖x‖) (x : E)
   证明: rfl
 -/
@@ -288,7 +288,7 @@ definition LinearEquiv.toContinuousLinearEquivOfBounds
   continuous_invFun := AddMonoidHomClass.continuous_of_bound e.symm C_inv h_inv
 
 中文:
-定义 LinearEquiv.toContinuousLinearEquivOfBounds
+定义 线性等价.toContinuousLinearEquivOfBounds
   签名: (e : E ≃ₛₗ[σ] F) (C_to C_inv : 实数)
   定义体: e
   continuous_toFun := AddMonoidHomClass.continuous_of_bound e C_to h_to
@@ -321,7 +321,7 @@ definition LinearMap.toContinuousLinearMap₁
 @[simp]
 
 中文:
-定义 LinearMap.toContinuousLinearMap₁
+定义 线性映射.toContinuousLinearMap₁
   签名: (f : 𝕜 ->ₗ[𝕜] E)
   定义体: f.mkContinuous ‖f 1‖ fun x => by
     conv_lhs => rw [← mul_one x]
@@ -348,7 +348,7 @@ theorem LinearMap.toContinuousLinearMap₁_coe
 @[simp]
 
 中文:
-定理 LinearMap.toContinuousLinearMap₁_coe
+定理 线性映射.toContinuousLinearMap₁_coe
   条件: (f : 𝕜 ->ₗ[𝕜] E)
   证明: rfl
 
@@ -368,7 +368,7 @@ theorem LinearMap.toContinuousLinearMap₁_apply
   proof: rfl
 
 中文:
-定理 LinearMap.toContinuousLinearMap₁_apply
+定理 线性映射.toContinuousLinearMap₁_apply
   条件: (f : 𝕜 ->ₗ[𝕜] E) (x)
   证明: rfl
 -/
@@ -392,7 +392,7 @@ theorem ContinuousLinearMap.isUniformEmbedding_of_bound
   proof: (AddMonoidHomClass.antilipschitz_of_bound f hf).isUniformEmbedding f.uniformContinuous
 
 中文:
-定理 ContinuousLinearMap.isUniformEmbedding_of_bound
+定理 连续线性映射.isUniformEmbedding_of_bound
   条件: {K : 实数>=0} (hf : 对任意 x, ‖x‖ <= K * ‖f x‖)
   证明: (AddMonoidHomClass.antilipschitz_of_bound f hf).isUniformEmbedding f.uniformContinuous
 
@@ -421,7 +421,7 @@ definition ContinuousLinearMap.ofHomothety
   body: f.mkContinuous a fun x => le_of_eq (hf x)
 
 中文:
-定义 ContinuousLinearMap.ofHomothety
+定义 连续线性映射.ofHomothety
   签名: (f : E ->ₛₗ[σ] F) (a : 实数) (hf : 对任意 x, ‖f x‖ = a * ‖x‖)
   定义体: f.mkContinuous a fun x => le_of_eq (hf x)
 
@@ -444,7 +444,7 @@ theorem ContinuousLinearEquiv.homothety_inverse
   simpa [eq_inv_mul_iff_mul_eq₀ (ne_of_gt ha)] using (hf (f.symm y)).symm
 
 中文:
-定理 ContinuousLinearEquiv.homothety_inverse
+定理 连续线性等价.homothety_inverse
   条件: (a : 实数) (ha : 0 < a) (f : E ≃ₛₗ[σ] F)
   证明: by
   intro hf y
@@ -467,7 +467,7 @@ definition ContinuousLinearEquiv.ofHomothety
     (ContinuousLinearEquiv.homothety_inverse a ha f hf x).le
 
 中文:
-定义 ContinuousLinearEquiv.ofHomothety
+定义 连续线性等价.ofHomothety
   签名: (f : E ≃ₛₗ[σ] F) (a : 实数) (ha : 0 < a)
   定义体: LinearEquiv.toContinuousLinearEquivOfBounds f a a⁻¹ (fun x => (hf x).le) fun x =>
     (ContinuousLinearEquiv.homothety_inverse a ha f hf x).le

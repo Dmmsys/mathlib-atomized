@@ -110,7 +110,7 @@ theorem smul_extend
 
 中文:
 定理 smul_extend
-  结论: [Semiring R] [IsDomain R] [Module R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: [半环 R] [是整环 R] [模 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: by
   classical
   ext s; by_cases h : P s <;> simp [extend, ENNReal.smul_top, *]
@@ -250,7 +250,7 @@ include P0 m0 in
 
 中文:
 定理 extend_iUnion_nat
-  结论: {f : 自然数 -> Set α} (hm : 对任意 i, P (f i))
+  结论: {f : 自然数 -> 集合 α} (hm : 对任意 i, P (f i))
   证明: (extend_eq _ _).trans
 mU.trans by
       congr with i
@@ -307,7 +307,7 @@ theorem extend_iUnion_le_tsum_nat'
 
 中文:
 定理 extend_iUnion_le_tsum_nat'
-  条件: (s : 自然数 -> Set α)
+  条件: (s : 自然数 -> 集合 α)
   证明: by
   by_cases! h : forall i, P (s i)
   · rw [extend_eq _ (PU h), congr_arg tsum _]
@@ -350,7 +350,7 @@ theorem extend_mono'
 中文:
 定理 extend_mono'
   条件: ⦃s₁ s₂
-  结论: Set α⦄ (h₁ : P s₁) (hs : s₁ subseteq s₂) : extend m s₁ <= extend m s₂
+  结论: 集合 α⦄ (h₁ : P s₁) (hs : s₁ subseteq s₂) : extend m s₁ <= extend m s₂
   证明: by
   refine le_iInf ?_
   intro h₂
@@ -388,7 +388,7 @@ include P0 m0 PU mU in
 
 中文:
 定理 extend_iUnion
-  结论: {β} [Countable β] {f : β -> Set α} (hd : Pairwise (Disjoint on f))
+  结论: {β} [可数 β] {f : β -> 集合 α} (hd : 两两 (Disjoint on f))
   证明: by
   cases nonempty_encodable β
   rw [← Encodable.iUnion_decode₂]; rw [← tsum_iUnion_decode₂]
@@ -423,7 +423,7 @@ theorem extend_union
 
 中文:
 定理 extend_union
-  条件: {s₁ s₂ : Set α} (hd : Disjoint s₁ s₂) (h₁ : P s₁) (h₂ : P s₂)
+  条件: {s₁ s₂ : 集合 α} (hd : Disjoint s₁ s₂) (h₁ : P s₁) (h₂ : P s₂)
   证明: by
   rw [union_eq_iUnion]; rw [extend_iUnion P0 m0 PU mU (pairwise_disjoint_on_bool.2 hd) (Bool.forall_bool.2 ⟨h₂]; rw [h₁⟩)]; rw [tsum_fintype]
   simp
@@ -449,7 +449,7 @@ definition inducedOuterMeasure
 
 中文:
 定义 inducedOuterMeasure
-  签名: : OuterMeasure α
+  签名: : 外测度 α
   定义体: OuterMeasure.ofFunction (extend m) (extend_empty P0 m0)
 
 Depends on / 依赖: OuterMeasure, OuterMeasure.ofFunction, extend, extend_empty, ofFunction
@@ -469,7 +469,7 @@ theorem le_inducedOuterMeasure
 
 中文:
 定理 le_inducedOuterMeasure
-  条件: {μ : OuterMeasure α}
+  条件: {μ : 外测度 α}
   证明: le_ofFunction.trans forall_congr' fun _s => le_iInf_iff
 
 Depends on / 依赖: forall_congr, le_iInf_iff, le_ofFunction, le_ofFunction.trans
@@ -490,7 +490,7 @@ include PU msU m_mono
 
 中文:
 定理 inducedOuterMeasure_union_of_false_of_nonempty_inter
-  结论: {s t : Set α}
+  结论: {s t : 集合 α}
   证明: ofFunction_union_of_top_of_nonempty_inter fun u hsu htu => @iInf_of_empty _ _ _ ⟨h u hsu htu⟩ _
 
 include PU msU m_mono
@@ -515,7 +515,7 @@ theorem inducedOuterMeasure_eq_extend'
 
 中文:
 定理 inducedOuterMeasure_eq_extend'
-  条件: {s : Set α} (hs : P s)
+  条件: {s : 集合 α} (hs : P s)
   证明: ofFunction_eq s (fun _t => extend_mono' m_mono hs) (extend_iUnion_le_tsum_nat' PU msU)
 
 Depends on / 依赖: better_inf, extend_iUnion_le_tsum_nat, extend_mono, m_mono, ofFunction_eq
@@ -535,7 +535,7 @@ theorem inducedOuterMeasure_eq'
 
 中文:
 定理 inducedOuterMeasure_eq'
-  条件: {s : Set α} (hs : P s)
+  条件: {s : 集合 α} (hs : P s)
   结论: inducedOuterMeasure m P0 m0 s = m s hs
   证明: (inducedOuterMeasure_eq_extend' PU msU m_mono hs).trans extend_eq _ _
 
@@ -566,7 +566,7 @@ theorem inducedOuterMeasure_eq_iInf
 
 中文:
 定理 inducedOuterMeasure_eq_iInf
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   apply le_antisymm
   · simp only [le_iInf_iff]
@@ -641,7 +641,7 @@ theorem inducedOuterMeasure_preimage
 
 中文:
 定理 inducedOuterMeasure_preimage
-  结论: (f : α ≃ α) (Pm : 对任意 s : Set α, P (f ⁻¹' s) ↔ P s)
+  结论: (f : α ≃ α) (Pm : 对任意 s : 集合 α, P (f ⁻¹' s) ↔ P s)
   证明: by
     rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; rw [inducedOuterMeasure_eq_iInf _ msU m_mono]; symm
     refine f.injective.preimage_surjective.iInf_congr (preimage f) fun s => ?_
@@ -676,8 +676,8 @@ theorem inducedOuterMeasure_exists_set
     ⟨t, h1t, h2t, le_trans (le_of_eq <| inducedOuterMeasure_eq' _ msU m_mono h1t) (le_of_lt h3t)⟩
 
 中文:
-定理 inducedOuterMeasure_exists_set
-  结论: {s : Set α} (hs : inducedOuterMeasure m P0 m0 s != ∞)
+定理 inducedOuterMeasure_存在_set
+  结论: {s : 集合 α} (hs : inducedOuterMeasure m P0 m0 s != ∞)
   证明: by
   have h := ENNReal.lt_add_right hs hε
   conv at h =>
@@ -726,7 +726,7 @@ theorem inducedOuterMeasure_caratheodory
 
 中文:
 定理 inducedOuterMeasure_caratheodory
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   rw [isCaratheodory_iff_le]
   constructor
@@ -799,7 +799,7 @@ theorem extend_mono
 
 中文:
 定理 extend_mono
-  条件: {s₁ s₂ : Set α} (h₁ : MeasurableSet s₁) (hs : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 α} (h₁ : 可测集 s₁) (hs : s₁ subseteq s₂)
   证明: by
   refine le_iInf ?_; intro h₂
   have :=
@@ -837,7 +837,7 @@ theorem extend_iUnion_le_tsum_nat
 
 中文:
 定理 extend_iUnion_le_tsum_nat
-  结论: 对任意 s : 自然数 -> Set α,
+  结论: 对任意 s : 自然数 -> 集合 α,
   证明: by
   refine extend_iUnion_le_tsum_nat' MeasurableSet.iUnion ?_; intro f h
   simp +singlePass only [iUnion_disjointed.symm]
@@ -867,7 +867,7 @@ theorem inducedOuterMeasure_eq_extend
 
 中文:
 定理 inducedOuterMeasure_eq_extend
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: ofFunction_eq s (fun _t => extend_mono m0 mU hs) (extend_iUnion_le_tsum_nat m0 mU)
 
 Depends on / 依赖: extend_iUnion_le_tsum_nat, extend_mono, ofFunction_eq
@@ -886,7 +886,7 @@ theorem inducedOuterMeasure_eq
 
 中文:
 定理 inducedOuterMeasure_eq
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: (inducedOuterMeasure_eq_extend m0 mU hs).trans extend_eq _ _
 
 Depends on / 依赖: extend_eq, inducedOuterMeasure_eq_extend
@@ -911,7 +911,7 @@ definition trim
 
 中文:
 定义 trim
-  签名: : OuterMeasure α
+  签名: : 外测度 α
   定义体: inducedOuterMeasure (P := MeasurableSet) (fun s _ => m s) .empty m.empty
 
 Depends on / 依赖: MeasurableSet, inducedOuterMeasure, m.empty
@@ -929,7 +929,7 @@ theorem le_trim_iff
 
 中文:
 定理 le_trim_iff
-  条件: {m₁ m₂ : OuterMeasure α}
+  条件: {m₁ m₂ : 外测度 α}
   证明: le_inducedOuterMeasure
 
 Depends on / 依赖: le_inducedOuterMeasure
@@ -968,7 +968,7 @@ lemma null_of_trim_null
 
 中文:
 引理 null_of_trim_null
-  条件: {s : Set α} (h : m.trim s = 0)
+  条件: {s : 集合 α} (h : m.trim s = 0)
   结论: m s = 0
   证明: nonpos_iff_eq_zero.1 (le_trim m s).trans_eq h
 
@@ -992,7 +992,7 @@ theorem trim_eq
 
 中文:
 定理 trim_eq
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   结论: m.trim s = m s
   证明: inducedOuterMeasure_eq' MeasurableSet.iUnion (fun f _hf => measure_iUnion_le f)
     (fun _ _ _ _ h => measure_mono h) hs
@@ -1016,7 +1016,7 @@ theorem trim_congr
 
 中文:
 定理 trim_congr
-  条件: {m₁ m₂ : OuterMeasure α} (H : 对任意 {s : Set α}, MeasurableSet s -> m₁ s = m₂ s)
+  条件: {m₁ m₂ : 外测度 α} (H : 对任意 {s : 集合 α}, 可测集 s -> m₁ s = m₂ s)
   证明: by
   simp +contextual only [trim, H]
 
@@ -1040,7 +1040,7 @@ theorem trim_mono
 
 中文:
 定理 trim_mono
-  结论: Monotone (trim : OuterMeasure α -> OuterMeasure α)
+  结论: 递增 (trim : 外测度 α -> 外测度 α)
   证明: fun _m₁ _m₂ H _s =>
   iInf₂_mono fun _f _hs => ENNReal.tsum_le_tsum fun _b => iInf_mono fun _hf => H _
 -/
@@ -1060,7 +1060,7 @@ theorem trim_anti_measurableSpace
 
 中文:
 定理 trim_anti_measurableSpace
-  结论: {α} (m : OuterMeasure α) {m0 m1 : MeasurableSpace α}
+  结论: {α} (m : 外测度 α) {m0 m1 : 可测空间 α}
   证明: by
   simp only [le_trim_iff]
   intro s hs
@@ -1084,7 +1084,7 @@ theorem trim_le_trim_iff
 
 中文:
 定理 trim_le_trim_iff
-  条件: {m₁ m₂ : OuterMeasure α}
+  条件: {m₁ m₂ : 外测度 α}
   证明: le_trim_iff.trans forall₂_congr fun s hs => by rw [trim_eq _ hs]
 
 Depends on / 依赖: le_trim_iff, le_trim_iff.trans, trim_eq
@@ -1104,7 +1104,7 @@ theorem trim_eq_trim_iff
 
 中文:
 定理 trim_eq_trim_iff
-  条件: {m₁ m₂ : OuterMeasure α}
+  条件: {m₁ m₂ : 外测度 α}
   证明: by
   simp only [le_antisymm_iff, trim_le_trim_iff, forall_and]
 
@@ -1129,8 +1129,8 @@ theorem trim_eq_iInf
 
 中文:
 定理 trim_eq_iInf
-  条件: (s : Set α)
-  结论: m.trim s = ⨅ (t) (_ : s subseteq t) (_ : MeasurableSet t), m t
+  条件: (s : 集合 α)
+  结论: m.trim s = ⨅ (t) (_ : s subseteq t) (_ : 可测集 t), m t
   证明: by
   simp +singlePass only [iInf_comm]
   exact
@@ -1157,8 +1157,8 @@ theorem trim_eq_iInf'
 
 中文:
 定理 trim_eq_iInf'
-  条件: (s : Set α)
-  结论: m.trim s = ⨅ t : { t // s subseteq t ∧ MeasurableSet t }, m t
+  条件: (s : 集合 α)
+  结论: m.trim s = ⨅ t : { t // s subseteq t ∧ 可测集 t }, m t
   证明: by
   simp [iInf_subtype, iInf_and, trim_eq_iInf]
 
@@ -1180,7 +1180,7 @@ theorem trim_trim
 
 中文:
 定理 trim_trim
-  条件: (m : OuterMeasure α)
+  条件: (m : 外测度 α)
   结论: m.trim.trim = m.trim
   证明: trim_eq_trim_iff.2 fun _s => m.trim_eq
 
@@ -1204,7 +1204,7 @@ theorem trim_top
 
 中文:
 定理 trim_top
-  结论: (⊤ : OuterMeasure α).trim = ⊤
+  结论: (⊤ : 外测度 α).trim = ⊤
   证明: top_unique le_trim _
 
 @[simp]
@@ -1227,7 +1227,7 @@ exact nonpos_iff_eq_zero.1 (measure_mono (subset_univ s)).trans_eq trim_eq _ .un
 
 中文:
 定理 trim_zero
-  结论: (0 : OuterMeasure α).trim = 0
+  结论: (0 : 外测度 α).trim = 0
   证明: by
   ext s
 exact nonpos_iff_eq_zero.1 (measure_mono (subset_univ s)).trans_eq trim_eq _ .univ
@@ -1252,8 +1252,8 @@ ENNReal.tsum_le_tsum fun i => iInf_le_of_le t iInf_le_of_le st iInf_le _ ht
 
 中文:
 定理 trim_sum_ge
-  条件: {ι} (m : ι -> OuterMeasure α)
-  结论: (sum fun i => (m i).trim) <= (sum m).trim
+  条件: {ι} (m : ι -> 外测度 α)
+  结论: (求和 fun i => (m i).trim) <= (求和 m).trim
   证明: fun s => by
   simp only [sum_apply, trim_eq_iInf, le_iInf_iff]
   exact fun t st ht =>
@@ -1282,8 +1282,8 @@ theorem exists_measurable_superset_eq_trim
   · have : forall r > ms, 
 
 中文:
-定理 exists_measurable_superset_eq_trim
-  条件: (m : OuterMeasure α) (s : Set α)
+定理 存在_measurable_superset_eq_trim
+  条件: (m : 外测度 α) (s : 集合 α)
   证明: by
   simp only [trim_eq_iInf]; set ms := ⨅ (t : Set α) (_ : s subseteq t) (_ : MeasurableSet t), m t
   by_cases hs : ms = ∞
@@ -1332,8 +1332,8 @@ theorem exists_measurable_superset_of_trim_eq_zero
   exact ⟨t, hst, ht, h ▸ hm⟩
 
 中文:
-定理 exists_measurable_superset_of_trim_eq_zero
-  结论: {m : OuterMeasure α} {s : Set α}
+定理 存在_measurable_superset_of_trim_eq_zero
+  结论: {m : 外测度 α} {s : 集合 α}
   证明: by
   rcases exists_measurable_superset_eq_trim m s with ⟨t, hst, ht, hm⟩
   exact ⟨t, hst, ht, h ▸ hm⟩
@@ -1359,8 +1359,8 @@ theorem exists_measurable_superset_forall_eq_trim
   exacts [hμt i ▸ (μ i).mono (iInter_subset _ _), (measure_mono hst).trans_eq ((μ i).
 
 中文:
-定理 exists_measurable_superset_forall_eq_trim
-  结论: {ι} [Countable ι] (μ : ι -> OuterMeasure α)
+定理 存在_measurable_superset_对任意_eq_trim
+  结论: {ι} [可数 ι] (μ : ι -> 外测度 α)
   证明: by
   choose t hst ht hμt using fun i => (μ i).exists_measurable_superset_eq_trim s
   replace hst := subset_iInter hst
@@ -1391,7 +1391,7 @@ theorem trim_binop
 
 中文:
 定理 trim_binop
-  结论: {m₁ m₂ m₃ : OuterMeasure α} {op : 实数>=0∞ -> 实数>=0∞ -> 实数>=0∞}
+  结论: {m₁ m₂ m₃ : 外测度 α} {op : 实数>=0∞ -> 实数>=0∞ -> 实数>=0∞}
   证明: by
   rcases exists_measurable_superset_forall_eq_trim ![m₁, m₂, m₃] s with ⟨t, _hst, _ht, htm⟩
   simp only [Fin.forall_iff_succ, Matrix.cons_val_zero, Matrix.cons_val_succ] at htm
@@ -1415,7 +1415,7 @@ theorem trim_op
 
 中文:
 定理 trim_op
-  结论: {m₁ m₂ : OuterMeasure α} {op : 实数>=0∞ -> 实数>=0∞} (h : 对任意 s, m₁ s = op (m₂ s))
+  结论: {m₁ m₂ : 外测度 α} {op : 实数>=0∞ -> 实数>=0∞} (h : 对任意 s, m₁ s = op (m₂ s))
   证明: @trim_binop α _ m₁ m₂ 0 (fun a _b => op a) h s
 
 Depends on / 依赖: trim_binop
@@ -1435,7 +1435,7 @@ theorem trim_add
 
 中文:
 定理 trim_add
-  条件: (m₁ m₂ : OuterMeasure α)
+  条件: (m₁ m₂ : 外测度 α)
   结论: (m₁ + m₂).trim = m₁.trim + m₂.trim
   证明: ext trim_binop (add_apply m₁ m₂)
 
@@ -1454,7 +1454,7 @@ theorem trim_smul
 
 中文:
 定理 trim_smul
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (c : R)
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R)
   证明: ext trim_op (smul_apply m c)
 
 Depends on / 依赖: smul_apply, trim_op
@@ -1474,7 +1474,7 @@ theorem trim_sup
 
 中文:
 定理 trim_sup
-  条件: (m₁ m₂ : OuterMeasure α)
+  条件: (m₁ m₂ : 外测度 α)
   结论: (m₁ ⊔ m₂).trim = m₁.trim ⊔ m₂.trim
   证明: ext fun s => (trim_binop (sup_apply m₁ m₂) s).trans (sup_apply _ _ _).symm
 
@@ -1501,7 +1501,7 @@ theorem trim_iSup
 
 中文:
 定理 trim_iSup
-  条件: {ι} [Countable ι] (μ : ι -> OuterMeasure α)
+  条件: {ι} [可数 ι] (μ : ι -> 外测度 α)
   证明: by
   simp_rw [← @iSup_plift_down _ ι]
   ext1 s
@@ -1542,7 +1542,7 @@ theorem restrict_trim
 
 中文:
 定理 restrict_trim
-  条件: {μ : OuterMeasure α} {s : Set α} (hs : MeasurableSet s)
+  条件: {μ : 外测度 α} {s : 集合 α} (hs : 可测集 s)
   证明: by
   refine le_antisymm (fun t => ?_) (le_trim_iff.2 fun t ht => ?_)
   · rw [restrict_apply]

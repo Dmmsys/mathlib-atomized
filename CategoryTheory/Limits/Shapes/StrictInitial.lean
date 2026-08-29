@@ -62,10 +62,10 @@ class HasStrictInitialObjects
     - out : forall {I A : C} (f : A ⟶ I), IsInitial I -> IsIso f
 
 中文:
-类 HasStrictInitialObjects
+类 有StrictInitialObjects
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 {I A : C} (f : A ⟶ I), IsInitial I -> IsIso f
+    - out : 对任意 {I A : C} (f : A ⟶ I), IsInitial I -> 是同构 f
 -/
 class HasStrictInitialObjects : Prop where
   out : forall {I A : C} (f : A ⟶ I), IsInitial I -> IsIso f
@@ -88,7 +88,7 @@ theorem IsInitial.isIso_to
 中文:
 定理 IsInitial.isIso_to
   条件: (hI : IsInitial I) {A : C} (f : A ⟶ I)
-  结论: IsIso f
+  结论: 是同构 f
   证明: HasStrictInitialObjects.out f hI
 
 Depends on / 依赖: HasStrictInitialObjects, HasStrictInitialObjects.out
@@ -136,7 +136,7 @@ theorem IsInitial.subsingleton_to
 中文:
 定理 IsInitial.subsingleton_to
   条件: (hI : IsInitial I) {A : C}
-  结论: Subsingleton (A ⟶ I)
+  结论: 子单例 (A ⟶ I)
   证明: ⟨hI.strict_hom_ext⟩
 
 Depends on / 依赖: P.arbitrary, P.prop_arbitrary, arbitrary, hI.strict_hom_ext, prop_arbitrary, strict_hom_ext
@@ -326,7 +326,7 @@ theorem initial.subsingleton_to
 中文:
 定理 initial.subsingleton_to
   条件: {A : C}
-  结论: Subsingleton (A ⟶ ⊥_ C)
+  结论: 子单例 (A ⟶ ⊥_ C)
   证明: initialIsInitial.subsingleton_to
 
 Depends on / 依赖: initialIsInitial, initialIsInitial.subsingleton_to, subsingleton_to
@@ -468,8 +468,8 @@ instance [Quiver.IsThin
     exact ⟨hI.to _⟩
 
 中文:
-实例 [Quiver.IsThin
-  签名: C] : HasStrictInitialObjects C where
+实例 [箭图.IsThin
+  签名: C] : 有StrictInitialObjects C where
   定义体: by
     rw [isIso_iff_of_thin]
     exact ⟨hI.to _⟩
@@ -495,10 +495,10 @@ class HasStrictTerminalObjects
     - out : forall {I A : C} (f : I ⟶ A), IsTerminal I -> IsIso f
 
 中文:
-类 HasStrictTerminalObjects
+类 有StrictTerminalObjects
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 {I A : C} (f : I ⟶ A), IsTerminal I -> IsIso f
+    - out : 对任意 {I A : C} (f : I ⟶ A), 是终止 I -> 是同构 f
 -/
 class HasStrictTerminalObjects : Prop where
   out : forall {I A : C} (f : I ⟶ A), IsTerminal I -> IsIso f
@@ -519,9 +519,9 @@ theorem IsTerminal.isIso_from
   proof: HasStrictTerminalObjects.out f hI
 
 中文:
-定理 IsTerminal.isIso_from
-  条件: (hI : IsTerminal I) {A : C} (f : I ⟶ A)
-  结论: IsIso f
+定理 是终止.isIso_from
+  条件: (hI : 是终止 I) {A : C} (f : I ⟶ A)
+  结论: 是同构 f
   证明: HasStrictTerminalObjects.out f hI
 
 Depends on / 依赖: HasStrictTerminalObjects, HasStrictTerminalObjects.out
@@ -542,8 +542,8 @@ theorem IsTerminal.strict_hom_ext
   exact eq_of_inv_eq_inv (hI.hom_ext (inv f) (inv g))
 
 中文:
-定理 IsTerminal.strict_hom_ext
-  条件: (hI : IsTerminal I) {A : C} (f g : I ⟶ A)
+定理 是终止.strict_hom_ext
+  条件: (hI : 是终止 I) {A : C} (f g : I ⟶ A)
   结论: f = g
   证明: by
   have := hI.isIso_from f
@@ -569,7 +569,7 @@ definition IsTerminal.ofStrict
   hY.ofIso (asIso f)
 
 中文:
-定义 IsTerminal.ofStrict
+定义 是终止.ofStrict
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: letI := hY.isIso_from f
   hY.ofIso (asIso f)
@@ -591,9 +591,9 @@ theorem IsTerminal.subsingleton_to
   proof: ⟨hI.strict_hom_ext⟩
 
 中文:
-定理 IsTerminal.subsingleton_to
-  条件: (hI : IsTerminal I) {A : C}
-  结论: Subsingleton (I ⟶ A)
+定理 是终止.subsingleton_to
+  条件: (hI : 是终止 I) {A : C}
+  结论: 子单例 (I ⟶ A)
   证明: ⟨hI.strict_hom_ext⟩
 
 Depends on / 依赖: hI.strict_hom_ext, strict_hom_ext
@@ -626,7 +626,7 @@ theorem limit_π_isIso_of_is_strict_terminal
 
 中文:
 定理 limit_π_isIso_of_is_strict_terminal
-  结论: (F : J ⥤ C) [HasLimit F] (i : J)
+  结论: (F : J ⥤ C) [有极限 F] (i : J)
   证明: by
   classical
     refine ⟨⟨limit.lift _ ⟨_, ⟨?_, ?_⟩⟩, ?_, ?_⟩⟩
@@ -730,7 +730,7 @@ theorem terminal.subsingleton_to
 中文:
 定理 terminal.subsingleton_to
   条件: {A : C}
-  结论: Subsingleton (⊤_ C ⟶ A)
+  结论: 子单例 (⊤_ C ⟶ A)
   证明: terminalIsTerminal.subsingleton_to
 
 Depends on / 依赖: subsingleton_to, terminalIsTerminal, terminalIsTerminal.subsingleton_to
@@ -752,7 +752,7 @@ theorem hasStrictTerminalObjects_of_terminal_is_strict
 
 中文:
 定理 hasStrictTerminalObjects_of_terminal_is_strict
-  条件: (I : C) (h : 对任意 (A) (f : I ⟶ A), IsIso f)
+  条件: (I : C) (h : 对任意 (A) (f : I ⟶ A), 是同构 f)
   证明: { out := fun {I' A} f hI' =>
       haveI := h A (hI'.from _ ≫ f)
       ⟨⟨inv (hI'.from I ≫ f) ≫ hI'.from I, hI'.hom_ext _ _, by rw [assoc, IsIso.inv_hom_id]⟩⟩ }
@@ -776,8 +776,8 @@ instance [Quiver.IsThin
     exact ⟨hI.from _⟩
 
 中文:
-实例 [Quiver.IsThin
-  签名: C] : HasStrictTerminalObjects C where
+实例 [箭图.IsThin
+  签名: C] : 有StrictTerminalObjects C where
   定义体: by
     rw [CategoryTheory.isIso_iff_of_thin]
     exact ⟨hI.from _⟩

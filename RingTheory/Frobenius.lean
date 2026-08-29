@@ -58,8 +58,8 @@ definition AlgHom.IsArithFrobAt
   body: forall x, φ x - x ^ Nat.card (R ⧸ Q.under R) in Q
 
 中文:
-定义 AlgHom.IsArithFrobAt
-  签名: (φ : S ->ₐ[R] S) (Q : Ideal S)
+定义 代数态射.IsArithFrobAt
+  签名: (φ : S ->ₐ[R] S) (Q : 理想 S)
   定义体: forall x, φ x - x ^ Nat.card (R ⧸ Q.under R) in Q
 
 Depends on / 依赖: Nat.card, Q.under
@@ -87,7 +87,7 @@ lemma mk_apply
 中文:
 引理 mk_apply
   条件: (x)
-  结论: Ideal.Quotient.mk Q (φ x) = x ^ 自然数.card (R ⧸ Q.under R)
+  结论: 理想.商.mk Q (φ x) = x ^ 自然数.card (R ⧸ Q.under R)
   证明: by
   rw [← map_pow]; rw [Ideal.Quotient.eq]
   exact H x
@@ -112,7 +112,7 @@ lemma finite_quotient
 
 中文:
 引理 finite_quotient
-  结论: _root_.Finite (R ⧸ Q.under R)
+  结论: _root_.有限 (R ⧸ Q.under R)
   证明: by
   by_contra! h
   obtain rfl : Q = ⊤ := by simpa [Nat.card_eq_zero_of_infinite, ← Ideal.eq_top_iff_one] using H 0
@@ -255,7 +255,7 @@ lemma restrict_injective
 
 中文:
 引理 restrict_injective
-  条件: [Q.IsPrime]
+  条件: [Q.是素]
   证明: by
   rw [injective_iff_map_eq_zero]
   intro x hx
@@ -283,7 +283,7 @@ lemma comap_eq
 
 中文:
 引理 comap_eq
-  条件: [Q.IsPrime]
+  条件: [Q.是素]
   结论: Q.comap φ = Q
   证明: by
   refine le_antisymm (fun x hx => ?_) H.le_comap
@@ -313,7 +313,7 @@ lemma apply_of_pow_eq_one
 
 中文:
 引理 apply_of_pow_eq_one
-  条件: [IsDomain S] {ζ : S} {m : 自然数} (hζ : ζ ^ m = 1) (hk' : ↑m ∉ Q)
+  条件: [是整环 S] {ζ : S} {m : 自然数} (hζ : ζ ^ m = 1) (hk' : ↑m ∉ Q)
   证明: by
   set q := Nat.card (R ⧸ Q.under R)
   have hm : m != 0 := by rintro rfl; exact hk' (by simp)
@@ -362,7 +362,7 @@ definition localize
 
 中文:
 定义 localize
-  签名: [Q.IsPrime]
+  签名: [Q.是素]
   定义体: Localization.localRingHom _ _ φ H.comap_eq.symm
   commutes' x := by
     simp [IsScalarTower.algebraMap_apply R S (Localization.AtPrime Q),
@@ -389,7 +389,7 @@ lemma localize_algebraMap
 
 中文:
 引理 localize_algebraMap
-  条件: [Q.IsPrime] (x : S)
+  条件: [Q.是素] (x : S)
   证明: Localization.localRingHom_to_map _ _ _ H.comap_eq.symm _
 
 Depends on / 依赖: H.comap_eq.symm, Localization, Localization.localRingHom_to_map, comap_eq, localRingHom_to_map
@@ -418,7 +418,7 @@ lemma isArithFrobAt_localize
 
 中文:
 引理 isArithFrobAt_localize
-  条件: [Q.IsPrime]
+  条件: [Q.是素]
   结论: H.localize.IsArithFrobAt (maximalIdeal _)
   证明: by
   have h : Nat.card (R ⧸ (maximalIdeal _).comap (algebraMap R (Localization.AtPrime Q))) =
@@ -495,7 +495,7 @@ abbreviation IsArithFrobAt
 
 中文:
 缩写 IsArithFrobAt
-  签名: {M : 类型} [Monoid M] [MulSemiringAction M S] [SMulCommClass M R S]
+  签名: {M : 类型} [幺半群 M] [MulSemiring作用 M S] [标量交换类 M R S]
   定义体: (MulSemiringAction.toAlgHom R S σ).IsArithFrobAt Q
 
 Depends on / 依赖: IsArithFrobAt, MulSemiringAction, MulSemiringAction.toAlgHom, toAlgHom
@@ -526,8 +526,8 @@ theorem mem_stabilizer
 
 中文:
 定理 mem_stabilizer
-  条件: [Q.IsPrime] (h : IsArithFrobAt R σ Q)
-  结论: σ in MulAction.stabilizer G Q
+  条件: [Q.是素] (h : IsArithFrobAt R σ Q)
+  结论: σ in 乘法作用.stabilizer G Q
   证明: by
   rw [MulAction.mem_stabilizer_iff]
   conv_lhs => rw [← h.comap_eq]
@@ -624,8 +624,8 @@ lemma exists_of_isInvariant
   cases nonemp
 
 中文:
-引理 exists_of_isInvariant
-  条件: [Q.IsPrime] [Finite (S ⧸ Q)]
+引理 存在_of_isInvariant
+  条件: [Q.是素] [有限 (S ⧸ Q)]
   结论: 存在 σ : G, IsArithFrobAt R σ Q
   证明: by
   let P := Q.under R
@@ -673,8 +673,8 @@ lemma exists_primesOver_isConj
   refine ⟨fun Q' => τ Q' * σ 
 
 中文:
-引理 exists_primesOver_isConj
-  结论: (P : Ideal R)
+引理 存在_primesOver_isConj
+  结论: (P : 理想 R)
   证明: by
   obtain ⟨⟨Q, hQ₁, hQ₂⟩, hQ₃⟩ := hP
   have (Q' : Ideal.primesOver P S) : exists σ : G, Q'.1 = σ • Q :=
@@ -714,7 +714,7 @@ definition _root_.arithFrobAt
 
 中文:
 定义 _root_.arithFrobAt
-  签名: [Q.IsPrime] [Finite (S ⧸ Q)]
+  签名: [Q.是素] [有限 (S ⧸ Q)]
   定义体: (exists_primesOver_isConj S G (Q.under R)
     ⟨⟨Q, ‹_›, ⟨rfl⟩⟩, ‹Finite (S ⧸ Q)›⟩).choose ⟨Q, ‹_›, ⟨rfl⟩⟩
 
@@ -736,7 +736,7 @@ lemma arithFrobAt
 
 中文:
 引理 arithFrobAt
-  条件: [Q.IsPrime] [Finite (S ⧸ Q)]
+  条件: [Q.是素] [有限 (S ⧸ Q)]
   结论: IsArithFrobAt R (arithFrobAt R G Q) Q
   证明: (exists_primesOver_isConj S G (Q.under R)
     ⟨⟨Q, ‹_›, ⟨rfl⟩⟩, ‹Finite (S ⧸ Q)›⟩).choose_spec.1 ⟨Q, ‹_›, ⟨rfl⟩⟩
@@ -755,7 +755,7 @@ theorem arithFrobAt_mem_stabilizer
 
 中文:
 定理 arithFrobAt_mem_stabilizer
-  条件: [Q.IsPrime] [Finite (S ⧸ Q)]
+  条件: [Q.是素] [有限 (S ⧸ Q)]
   证明: mem_stabilizer (.arithFrobAt R G Q)
 
 Depends on / 依赖: arithFrobAt, mem_stabilizer

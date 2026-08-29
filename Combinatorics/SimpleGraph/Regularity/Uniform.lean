@@ -66,8 +66,8 @@ definition IsUniform
 deriving Decidable
 
 中文:
-定义 IsUniform
-  签名: (s t : Finset α)
+定义 是一致
+  签名: (s t : 有限集 α)
   定义体: forall ⦃s'⦄, s' subseteq s -> forall ⦃t'⦄, t' subseteq t -> (#s : 𝕜) * ε <= #s' ->
     (#t : 𝕜) * ε <= #t' -> |(G.edgeDensity s' t' : 𝕜) - (G.edgeDensity s t : 𝕜)| < ε
 deriving Decidable
@@ -94,9 +94,9 @@ theorem IsUniform.mono
 omit [IsStrictOrderedRing 𝕜] in
 
 中文:
-定理 IsUniform.mono
-  条件: {ε' : 𝕜} (h : ε <= ε') (hε : IsUniform G ε s t)
-  结论: IsUniform G ε' s t
+定理 是一致.mono
+  条件: {ε' : 𝕜} (h : ε <= ε') (hε : 是一致 G ε s t)
+  结论: 是一致 G ε' s t
   证明: fun s' hs' t' ht' hs ht => by
   refine (hε hs' ht' (le_trans ?_ hs) (le_trans ?_ ht)).trans_le h <;> gcongr
 
@@ -123,7 +123,7 @@ omit [IsStrictOrderedRing 𝕜] in
 
 中文:
 实例 :
-  签名: Std.Symm (IsUniform G ε)
+  签名: Std.Symm (是一致 G ε)
   定义体: by
     rw [edgeDensity_comm _ t']; rw [edgeDensity_comm _ t]
     exact h hs' ht' hs ht
@@ -147,8 +147,8 @@ theorem IsUniform.symm
   proof: symm_of _
 
 中文:
-定理 IsUniform.symm
-  结论: IsUniform G ε s t -> IsUniform G ε t s
+定理 是一致.symm
+  结论: 是一致 G ε s t -> 是一致 G ε t s
   证明: symm_of _
 
 Depends on / 依赖: symm_of
@@ -169,7 +169,7 @@ theorem isUniform_comm
 
 中文:
 定理 isUniform_comm
-  结论: IsUniform G ε s t ↔ IsUniform G ε t s
+  结论: 是一致 G ε s t ↔ 是一致 G ε t s
   证明: ⟨symm_of _, symm_of _⟩
 
 Depends on / 依赖: mem_singleton_self, symm_of
@@ -191,7 +191,7 @@ lemma isUniform_one
 
 中文:
 引理 isUniform_one
-  结论: G.IsUniform (1 : 𝕜) s t
+  结论: G.是一致 (1 : 𝕜) s t
   证明: by
   intro s' hs' t' ht' hs ht
   rw [mul_one] at hs ht
@@ -220,8 +220,8 @@ lemma IsUniform.pos
     (by simpa using mul_nonpos_of_nonneg_of_nonpos (Nat.cast_nonneg _) hε)
 
 中文:
-引理 IsUniform.pos
-  条件: (hG : G.IsUniform ε s t)
+引理 是一致.pos
+  条件: (hG : G.是一致 ε s t)
   结论: 0 < ε
   证明: not_le.1 fun hε => (hε.trans <| abs_nonneg _).not_gt hG (empty_subset _) (empty_subset _)
     (by simpa using mul_nonpos_of_nonneg_of_nonpos (Nat.cast_nonneg _) hε)
@@ -250,7 +250,7 @@ lemma isUniform_singleton
 
 中文:
 引理 isUniform_singleton
-  结论: G.IsUniform ε {a} {b} ↔ 0 < ε
+  结论: G.是一致 ε {a} {b} ↔ 0 < ε
   证明: by
   refine ⟨IsUniform.pos, fun hε s' hs' t' ht' hs ht => ?_⟩
   rw [card_singleton]; rw [Nat.cast_one]; rw [one_mul] at hs ht
@@ -281,7 +281,7 @@ theorem not_isUniform_zero
 
 中文:
 定理 not_isUniform_zero
-  结论: ¬G.IsUniform (0 : 𝕜) s t
+  结论: ¬G.是一致 (0 : 𝕜) s t
   证明: fun h =>
 (abs_nonneg _).not_gt h (empty_subset _) (empty_subset _) (by simp) (by simp)
 -/
@@ -325,7 +325,7 @@ definition nonuniformWitnesses
 
 中文:
 定义 nonuniformWitnesses
-  签名: (ε : 𝕜) (s t : Finset α)
+  签名: (ε : 𝕜) (s t : 有限集 α)
   定义体: if h : ¬G.IsUniform ε s t then
     ((not_isUniform_iff.1 h).choose, (not_isUniform_iff.1 h).choose_spec.2.choose)
   else (s, t)
@@ -349,7 +349,7 @@ theorem left_nonuniformWitnesses_subset
 
 中文:
 定理 left_nonuniformWitnesses_subset
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   rw [nonuniformWitnesses]; rw [dif_pos h]
   exact (not_isUniform_iff.1 h).choose_spec.1
@@ -373,7 +373,7 @@ theorem left_nonuniformWitnesses_card
 
 中文:
 定理 left_nonuniformWitnesses_card
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   rw [nonuniformWitnesses]; rw [dif_pos h]
   exact (not_isUniform_iff.1 h).choose_spec.2.choose_spec.2.1
@@ -397,7 +397,7 @@ theorem right_nonuniformWitnesses_subset
 
 中文:
 定理 right_nonuniformWitnesses_subset
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   rw [nonuniformWitnesses]; rw [dif_pos h]
   exact (not_isUniform_iff.1 h).choose_spec.2.choose_spec.1
@@ -421,7 +421,7 @@ theorem right_nonuniformWitnesses_card
 
 中文:
 定理 right_nonuniformWitnesses_card
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   rw [nonuniformWitnesses]; rw [dif_pos h]
   exact (not_isUniform_iff.1 h).choose_spec.2.choose_spec.2.2.1
@@ -445,7 +445,7 @@ theorem nonuniformWitnesses_spec
 
 中文:
 定理 nonuniformWitnesses_spec
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   rw [nonuniformWitnesses]; rw [dif_pos h]
   exact (not_isUniform_iff.1 h).choose_spec.2.choose_spec.2.2.2
@@ -470,7 +470,7 @@ definition nonuniformWitness
 
 中文:
 定义 nonuniformWitness
-  签名: (ε : 𝕜) (s t : Finset α)
+  签名: (ε : 𝕜) (s t : 有限集 α)
   定义体: if WellOrderingRel s t then (G.nonuniformWitnesses ε s t).1 else (G.nonuniformWitnesses ε t s).2
 
 Depends on / 依赖: G.nonuniformWitnesses, WellOrderingRel, nonuniformWitnesses
@@ -493,7 +493,7 @@ theorem nonuniformWitness_subset
 
 中文:
 定理 nonuniformWitness_subset
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   结论: G.nonuniformWitness ε s t subseteq s
   证明: by
   unfold nonuniformWitness
@@ -523,7 +523,7 @@ theorem le_card_nonuniformWitness
 
 中文:
 定理 le_card_nonuniformWitness
-  条件: (h : ¬G.IsUniform ε s t)
+  条件: (h : ¬G.是一致 ε s t)
   证明: by
   unfold nonuniformWitness
   split_ifs
@@ -557,7 +557,7 @@ theorem nonuniformWitness_spec
 
 中文:
 定理 nonuniformWitness_spec
-  条件: (h₁ : s != t) (h₂ : ¬G.IsUniform ε s t)
+  条件: (h₁ : s != t) (h₂ : ¬G.是一致 ε s t)
   结论: ε <= |G.edgeDensity
   证明: by
   unfold nonuniformWitness
@@ -629,7 +629,7 @@ omit [IsStrictOrderedRing 𝕜] in
 
 中文:
 引理 mk_mem_sparsePairs
-  条件: (u v : Finset α) (ε : 𝕜)
+  条件: (u v : 有限集 α) (ε : 𝕜)
   证明: by
   rw [sparsePairs]; rw [mem_filter]; rw [mem_offDiag]; rw [and_assoc]; rw [and_assoc]
 
@@ -740,7 +740,7 @@ theorem nonUniforms_bot
 中文:
 定理 nonUniforms_bot
   条件: (hε : 0 < ε)
-  结论: (⊥ : Finpartition A).nonUniforms G ε = ∅
+  结论: (⊥ : 有限分拆 A).nonUniforms G ε = ∅
   证明: by
   rw [eq_empty_iff_forall_notMem]
   rintro ⟨u, v⟩
@@ -768,7 +768,7 @@ definition IsUniform
   body: (#(P.nonUniforms G ε) : 𝕜) <= (#P.parts * (#P.parts - 1) : Nat) * ε
 
 中文:
-定义 IsUniform
+定义 是一致
   签名: (ε : 𝕜)
   定义体: (#(P.nonUniforms G ε) : 𝕜) <= (#P.parts * (#P.parts - 1) : Nat) * ε
 
@@ -791,7 +791,7 @@ lemma bot_isUniform
 中文:
 引理 bot_isUniform
   条件: (hε : 0 < ε)
-  结论: (⊥ : Finpartition A).IsUniform G ε
+  结论: (⊥ : 有限分拆 A).是一致 G ε
   证明: by
   rw [Finpartition.IsUniform]; rw [Finpartition.card_bot]; rw [nonUniforms_bot _ hε]; rw [Finset.card_empty]; rw [Nat.cast_zero]
   positivity
@@ -816,7 +816,7 @@ lemma isUniform_one
 
 中文:
 引理 isUniform_one
-  结论: P.IsUniform G (1 : 𝕜)
+  结论: P.是一致 G (1 : 𝕜)
   证明: by
   rw [IsUniform]; rw [mul_one]; rw [Nat.cast_le]
   refine (card_filter_le _
@@ -845,9 +845,9 @@ theorem IsUniform.mono
 omit [IsStrictOrderedRing 𝕜] in
 
 中文:
-定理 IsUniform.mono
-  条件: {ε ε' : 𝕜} (hP : P.IsUniform G ε) (h : ε <= ε')
-  结论: P.IsUniform G ε'
+定理 是一致.mono
+  条件: {ε ε' : 𝕜} (hP : P.是一致 G ε) (h : ε <= ε')
+  结论: P.是一致 G ε'
   证明: ((Nat.cast_le.2 <| card_le_card <| P.nonUniforms_mono G h).trans hP).trans by gcongr
 
 omit [IsStrictOrderedRing 𝕜] in
@@ -871,7 +871,7 @@ omit [IsStrictOrderedRing 𝕜] in
 中文:
 定理 isUniformOfEmpty
   条件: (hP : P.parts = ∅)
-  结论: P.IsUniform G ε
+  结论: P.是一致 G ε
   证明: by
   simp [IsUniform, hP, nonUniforms]
 
@@ -894,8 +894,8 @@ theorem nonempty_of_not_uniform
 
 中文:
 定理 nonempty_of_not_uniform
-  条件: (h : ¬P.IsUniform G ε)
-  结论: P.parts.Nonempty
+  条件: (h : ¬P.是一致 G ε)
+  结论: P.parts.非空
   证明: nonempty_of_ne_empty fun h₁ => h isUniformOfEmpty h₁
 
 Depends on / 依赖: isUniformOfEmpty, nonempty_of_ne_empty
@@ -915,7 +915,7 @@ definition nonuniformWitnesses
 
 中文:
 定义 nonuniformWitnesses
-  签名: : Finset (Finset α)
+  签名: : 有限集 (有限集 α)
   定义体: {t in P.parts | s != t ∧ ¬G.IsUniform ε s t}.image (G.nonuniformWitness ε s)
 
 Depends on / 依赖: G.IsUniform, G.nonuniformWitness, IsUniform, P.parts, nonuniformWitness
@@ -951,7 +951,7 @@ theorem nonuniformWitness_mem_nonuniformWitnesses
 
 中文:
 定理 nonuniformWitness_mem_nonuniformWitnesses
-  结论: (h : ¬G.IsUniform ε s t) (ht : t in P.parts)
+  结论: (h : ¬G.是一致 ε s t) (ht : t in P.parts)
   证明: mem_image_of_mem _ mem_filter.2 ⟨ht, hst, h⟩
 
 Depends on / 依赖: mem_filter, mem_image_of_mem
@@ -1190,7 +1190,7 @@ _ <= _ := mul_le_mul_of_nonneg_right hG by positivity
 
 中文:
 引理 IsEquipartition.sum_nonUniforms_lt'
-  结论: (hA : A.Nonempty) (hε : 0 < ε) (hP : P.IsEquipartition)
+  结论: (hA : A.非空) (hε : 0 < ε) (hP : P.IsEquipartition)
   证明: by
   calc
     _ <= #(P.nonUniforms G ε) • (↑(#A / #P.parts + 1) : 𝕜) ^ 2 :=
@@ -1238,7 +1238,7 @@ lemma IsEquipartition.sum_nonUniforms_lt
 
 中文:
 引理 IsEquipartition.sum_nonUniforms_lt
-  结论: (hA : A.Nonempty) (hε : 0 < ε) (hP : P.IsEquipartition)
+  结论: (hA : A.非空) (hε : 0 < ε) (hP : P.IsEquipartition)
   证明: by
   calc
     _ <= ∑ i in P.nonUniforms G ε, (#i.1 * #i.2 : 𝕜) := by
@@ -1306,7 +1306,7 @@ instance regularityReduced.instDecidableRel_adj
 
 中文:
 实例 regularityReduced.instDecidableRel_adj
-  签名: : DecidableRel (G.regularityReduced P ε δ).Adj
+  签名: : DecidableRel (G.regularityReduced P ε δ).伴随
   定义体: inferInstanceAs DecidableRel (mk _ _).Adj
 
 Depends on / 依赖: DecidableRel

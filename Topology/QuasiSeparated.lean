@@ -44,7 +44,7 @@ definition IsQuasiSeparated
 
 中文:
 定义 IsQuasiSeparated
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall U V : Set α, U subseteq s -> IsOpen U -> IsCompact U -> V subseteq s -> IsOpen V -> IsCompact V -> IsCompact (U inter V)
 
 Depends on / 依赖: IsCompact, IsOpen, subseteq
@@ -65,10 +65,10 @@ class QuasiSeparatedSpace
     - inter_isCompact : forall U V : Set α, IsOpen U -> IsCompact U -> IsOpen V -> IsCompact V -> IsCompact (U inter V)
 
 中文:
-类 QuasiSeparatedSpace
-  参数: (α : 类型) [TopologicalSpace α]
+类 拟分离空间
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (1 个):
-    - inter_isCompact : 对任意 U V : Set α, IsOpen U -> IsCompact U -> IsOpen V -> IsCompact V -> IsCompact (U inter V)
+    - inter_isCompact : 对任意 U V : 集合 α, 是开集 U -> 是紧集 U -> 是开集 V -> 是紧集 V -> 是紧集 (U inter V)
 -/
 class QuasiSeparatedSpace (α : Type*) [TopologicalSpace α] : Prop where
   /-- The intersection of two open compact subsets of a quasi-separated space is compact. -/
@@ -87,7 +87,7 @@ theorem isQuasiSeparated_univ_iff
 
 中文:
 定理 isQuasiSeparated_univ_iff
-  条件: {α : 类型} [TopologicalSpace α]
+  条件: {α : 类型} [拓扑空间 α]
   证明: by
   rw [quasiSeparatedSpace_iff]
   simp [IsQuasiSeparated]
@@ -109,7 +109,7 @@ theorem isQuasiSeparated_univ
 
 中文:
 定理 isQuasiSeparated_univ
-  条件: {α : 类型} [TopologicalSpace α] [QuasiSeparatedSpace α]
+  条件: {α : 类型} [拓扑空间 α] [拟分离空间 α]
   证明: isQuasiSeparated_univ_iff.mpr inferInstance
 
 Depends on / 依赖: isQuasiSeparated_univ_iff, isQuasiSeparated_univ_iff.mpr
@@ -135,7 +135,7 @@ theorem IsQuasiSeparated.image_of_isEmbedding
 
 中文:
 定理 IsQuasiSeparated.image_of_isEmbedding
-  结论: {s : Set α} (H : IsQuasiSeparated s)
+  结论: {s : 集合 α} (H : IsQuasiSeparated s)
   证明: by
   intro U V hU hU' hU'' hV hV' hV''
   convert!
@@ -183,7 +183,7 @@ theorem IsQuasiSeparated.of_subset
 
 中文:
 定理 IsQuasiSeparated.of_subset
-  条件: {s t : Set α} (ht : IsQuasiSeparated t) (h : s subseteq t)
+  条件: {s t : 集合 α} (ht : IsQuasiSeparated t) (h : s subseteq t)
   证明: by
   intro U V hU hU' hU'' hV hV' hV''
   exact ht U V (hU.trans h) hU' hU'' (hV.trans h) hV' hV''
@@ -210,8 +210,8 @@ theorem Topology.IsOpenEmbedding.isQuasiSeparated_iff
       (image_mono hV) (h.isOpenMa
 
 中文:
-定理 Topology.IsOpenEmbedding.isQuasiSeparated_iff
-  条件: (h : IsOpenEmbedding f) {s : Set α}
+定理 拓扑.是开嵌入.isQuasiSeparated_iff
+  条件: (h : 是开嵌入 f) {s : 集合 α}
   证明: by
   refine ⟨fun hs => hs.image_of_isEmbedding h.isEmbedding, ?_⟩
   intro H U V hU hU' hU'' hV hV' hV''
@@ -242,8 +242,8 @@ lemma Topology.IsOpenEmbedding.quasiSeparatedSpace
 exact isQuasiSeparated_univ.of_subset Set.subset_univ _
 
 中文:
-引理 Topology.IsOpenEmbedding.quasiSeparatedSpace
-  条件: [QuasiSeparatedSpace β] (h : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.quasiSeparatedSpace
+  条件: [拟分离空间 β] (h : 是开嵌入 f)
   证明: by
   rw [← isQuasiSeparated_univ_iff]; rw [h.isQuasiSeparated_iff]
 exact isQuasiSeparated_univ.of_subset Set.subset_univ _
@@ -268,7 +268,7 @@ theorem isQuasiSeparated_iff_quasiSeparatedSpace
 
 中文:
 定理 isQuasiSeparated_iff_quasiSeparatedSpace
-  条件: (s : Set α) (hs : IsOpen s)
+  条件: (s : 集合 α) (hs : 是开集 s)
   证明: by
   rw [← isQuasiSeparated_univ_iff]
   convert! (hs.isOpenEmbedding_subtypeVal.isQuasiSeparated_iff (s := Set.univ)).symm
@@ -304,8 +304,8 @@ lemma QuasiSeparatedSpace.of_isTopologicalBasis
     exact hs.isCompact_biU
 
 中文:
-引理 QuasiSeparatedSpace.of_isTopologicalBasis
-  结论: {ι : 类型} {b : ι -> Set α}
+引理 拟分离空间.of_isTopologicalBasis
+  结论: {ι : 类型} {b : ι -> 集合 α}
   证明: by
     have aux := isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis b basis fun i => by
       simpa using isCompact_inter i i
@@ -341,7 +341,7 @@ lemma IsQuasiSeparated.of_quasiSeparatedSpace
 
 中文:
 引理 IsQuasiSeparated.of_quasiSeparatedSpace
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsQuasiSeparated s
   证明: isQuasiSeparated_univ.of_subset (Set.subset_univ _)
 
@@ -359,8 +359,8 @@ lemma QuasiSeparatedSpace.of_isOpenEmbedding
   proof: isQuasiSeparated_univ_iff.mp (h.isQuasiSeparated_iff.mpr <| .of_quasiSeparatedSpace _)
 
 中文:
-引理 QuasiSeparatedSpace.of_isOpenEmbedding
-  条件: {f : β -> α} (h : IsOpenEmbedding f)
+引理 拟分离空间.of_isOpenEmbedding
+  条件: {f : β -> α} (h : 是开嵌入 f)
   证明: isQuasiSeparated_univ_iff.mp (h.isQuasiSeparated_iff.mpr <| .of_quasiSeparatedSpace _)
 
 Depends on / 依赖: h.isQuasiSeparated_iff.mpr, isQuasiSeparated_iff, isQuasiSeparated_univ_iff, isQuasiSeparated_univ_iff.mp, of_quasiSeparatedSpace
@@ -378,8 +378,8 @@ lemma IsCompact.inter_of_isOpen
   proof: QuasiSeparatedSpace.inter_isCompact _ _ hUopen hUcomp hVopen hVcomp
 
 中文:
-引理 IsCompact.inter_of_isOpen
-  结论: (hUcomp : IsCompact U) (hVcomp : IsCompact V) (hUopen : IsOpen U)
+引理 是紧集.inter_of_isOpen
+  结论: (hUcomp : 是紧集 U) (hVcomp : 是紧集 V) (hUopen : 是开集 U)
   证明: QuasiSeparatedSpace.inter_isCompact _ _ hUopen hUcomp hVopen hVcomp
 
 Depends on / 依赖: QuasiSeparatedSpace, QuasiSeparatedSpace.inter_isCompact, hUcomp, hUopen, hVcomp, hVopen, inter_isCompact
@@ -405,8 +405,8 @@ lemma QuasiSeparatedSpace.isCompact_sInter_of_nonempty
     obtain (ha | ha) :=
 
 中文:
-引理 QuasiSeparatedSpace.isCompact_sInter_of_nonempty
-  结论: {s : Set (Set α)} (hf : s.Finite)
+引理 拟分离空间.isCompact_s整数er_of_nonempty
+  结论: {s : 集合 (集合 α)} (hf : s.有限)
   证明: by
   wlog h : forall t in s, IsOpen t
   · let a := { t in s | IsOpen t }
@@ -456,8 +456,8 @@ lemma QuasiSeparatedSpace.isCompact_sInter
   · exact QuasiSeparatedSpace.isCompact_sInter_of_nonempty hf hne ho hc
 
 中文:
-引理 QuasiSeparatedSpace.isCompact_sInter
-  结论: [CompactSpace α] {s : Set (Set α)} (hf : s.Finite)
+引理 拟分离空间.isCompact_s整数er
+  结论: [紧空间 α] {s : 集合 (集合 α)} (hf : s.有限)
   证明: by
   obtain (rfl | hne) := s.eq_empty_or_nonempty
   · simp [CompactSpace.isCompact_univ]
@@ -487,7 +487,7 @@ lemma quasiSeparatedSpace_congr
 中文:
 引理 quasiSeparatedSpace_congr
   条件: (e : α ≃ₜ β)
-  结论: QuasiSeparatedSpace α ↔ QuasiSeparatedSpace β where
+  结论: 拟分离空间 α ↔ 拟分离空间 β where
   证明: .of_isOpenEmbedding e.symm.isOpenEmbedding
   mpr _ := .of_isOpenEmbedding e.isOpenEmbedding
 

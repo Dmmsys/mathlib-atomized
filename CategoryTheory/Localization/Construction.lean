@@ -67,7 +67,7 @@ structure LocQuiver
 
 中文:
 结构 LocQuiver
-  参数: (W : Morphism命题erty C)
+  参数: (W : MorphismProperty C)
   公理与运算 (1 个):
     - obj : C
 -/
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (LocQuiver W)
+  签名: 箭图 (LocQuiver W)
   定义体: (A.obj ⟶ B.obj) oplus { f : B.obj ⟶ A.obj // W f }
 
 Depends on / 依赖: A.obj, B.obj
@@ -309,7 +309,7 @@ theorem _root_.CategoryTheory.MorphismProperty.Q_inverts
   (Localization.Construction.wIso w hw).isIso_hom
 
 中文:
-定理 _root_.CategoryTheory.MorphismProperty.Q_inverts
+定理 _root_.范畴论.MorphismProperty.Q_inverts
   结论: W.IsInvertedBy W.Q
   证明: fun _ _ w hw =>
   (Localization.Construction.wIso w hw).isIso_hom
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.Q.EssSurj
+  签名: W.Q.本质满射
   定义体: ⟨(objEquiv W).symm Y, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Iso.refl, objEquiv
@@ -557,7 +557,7 @@ theorem morphismProperty_eq_top
 
 中文:
 定理 morphismProperty_eq_top
-  结论: (P : Morphism命题erty W.Localization)
+  结论: (P : MorphismProperty W.Localization)
   证明: by
   funext X Y f
   ext
@@ -610,7 +610,7 @@ theorem morphismProperty_eq_top'
 
 中文:
 定理 morphismProperty_eq_top'
-  结论: (P : Morphism命题erty W.Localization)
+  结论: (P : MorphismProperty W.Localization)
   证明: morphismProperty_eq_top P hP₁ (fun _ _ w _ => hP₂ _ (hP₁ w))
 
 Depends on / 依赖: morphismProperty_eq_top

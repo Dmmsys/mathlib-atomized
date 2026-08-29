@@ -61,8 +61,8 @@ definition IsSheafPairwiseIntersections
   body: forall ⦃ι : Type w⦄ (U : ι -> Opens X), Nonempty (IsLimit (F.mapCone (Pairwise.cocone U).op))
 
 中文:
-定义 IsSheafPairwiseIntersections
-  签名: (F : Presheaf C X)
+定义 IsSheafPairwise整数ersections
+  签名: (F : 预层 C X)
   定义体: forall ⦃ι : Type w⦄ (U : ι -> Opens X), Nonempty (IsLimit (F.mapCone (Pairwise.cocone U).op))
 
 Depends on / 依赖: F.mapCone, IsLimit, Nonempty, Pairwise, Pairwise.cocone, cocone, mapCone
@@ -79,8 +79,8 @@ definition IsSheafPreservesLimitPairwiseIntersections
   body: forall ⦃ι : Type w⦄ (U : ι -> Opens X), PreservesLimit (Pairwise.diagram U).op F
 
 中文:
-定义 IsSheafPreservesLimitPairwiseIntersections
-  签名: (F : Presheaf C X)
+定义 IsSheafPreservesLimitPairwise整数ersections
+  签名: (F : 预层 C X)
   定义体: forall ⦃ι : Type w⦄ (U : ι -> Opens X), PreservesLimit (Pairwise.diagram U).op F
 
 Depends on / 依赖: Pairwise, Pairwise.diagram, PreservesLimit, diagram
@@ -109,7 +109,7 @@ definition pairwiseToOpensLeCoverObj
 
 中文:
 定义 pairwiseToOpensLeCoverObj
-  签名: : Pairwise ι -> OpensLeCover U
+  签名: : 两两 ι -> OpensLeCover U
 -/
 def pairwiseToOpensLeCoverObj : Pairwise ι -> OpensLeCover U
   | single i => ⟨U i, ⟨i, le_rfl⟩⟩
@@ -150,7 +150,7 @@ definition pairwiseToOpensLeCover
 
 中文:
 定义 pairwiseToOpensLeCover
-  签名: : Pairwise ι ⥤ OpensLeCover U where
+  签名: : 两两 ι ⥤ OpensLeCover U where
   定义体: pairwiseToOpensLeCoverObj U
   map {_ _} i := pairwiseToOpensLeCoverMap U i
 
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Final (pairwiseToOpensLeCover U)
+  签名: 函子.终 (pairwiseToOpensLeCover U)
   定义体: ⟨fun V =>
     isConnected_of_zigzag fun A B => by
       rcases A with ⟨⟨⟨⟩⟩, ⟨i⟩ | ⟨i, j⟩, a⟩ <;> rcases B with ⟨⟨⟨⟩⟩, ⟨i'⟩ | ⟨i', j'⟩, b⟩
@@ -388,7 +388,7 @@ theorem isSheafOpensLeCover_iff_isSheafPairwiseIntersections
   proof: forall₂_congr fun _ U => (F.isLimitOpensLeCoverEquivPairwise U).nonempty_congr
 
 中文:
-定理 isSheafOpensLeCover_iff_isSheafPairwiseIntersections
+定理 isSheafOpensLeCover_iff_isSheafPairwise整数ersections
   证明: forall₂_congr fun _ U => (F.isLimitOpensLeCoverEquivPairwise U).nonempty_congr
 
 Depends on / 依赖: F.isLimitOpensLeCoverEquivPairwise, isLimitOpensLeCoverEquivPairwise, nonempty_congr
@@ -407,8 +407,8 @@ theorem IsSheaf.isSheafPairwiseIntersections
   proof: (h.isSheafOpensLeCover U).map (F.isLimitOpensLeCoverEquivPairwise _)
 
 中文:
-定理 IsSheaf.isSheafPairwiseIntersections
-  条件: (h : F.IsSheaf)
+定理 是层.isSheafPairwise整数ersections
+  条件: (h : F.是层)
   证明: (h.isSheafOpensLeCover U).map (F.isLimitOpensLeCoverEquivPairwise _)
 
 Depends on / 依赖: F.isLimitOpensLeCoverEquivPairwise, h.isSheafOpensLeCover, isLimitOpensLeCoverEquivPairwise, isSheafOpensLeCover
@@ -427,8 +427,8 @@ theorem isSheaf_iff_isSheafPairwiseIntersections
   rw [isSheaf_iff_isSheafOpensLeCover]; rw [isSheafOpensLeCover_iff_isSheafPairwiseIntersections]
 
 中文:
-定理 isSheaf_iff_isSheafPairwiseIntersections
-  结论: F.IsSheaf ↔ F.IsSheafPairwise整数ersections
+定理 isSheaf_iff_isSheafPairwise整数ersections
+  结论: F.是层 ↔ F.IsSheafPairwise整数ersections
   证明: by
   rw [isSheaf_iff_isSheafOpensLeCover]; rw [isSheafOpensLeCover_iff_isSheafPairwiseIntersections]
 
@@ -448,8 +448,8 @@ theorem IsSheaf.isSheafPreservesLimitPairwiseIntersections
     (h.isSheafPairwiseIntersections U).some
 
 中文:
-定理 IsSheaf.isSheafPreservesLimitPairwiseIntersections
-  条件: (h : F.IsSheaf)
+定理 是层.isSheafPreservesLimitPairwise整数ersections
+  条件: (h : F.是层)
   证明: preservesLimit_of_preserves_limit_cone (Pairwise.coconeIsColimit U).op
     (h.isSheafPairwiseIntersections U).some
 
@@ -472,7 +472,7 @@ theorem isSheaf_iff_isSheafPreservesLimitPairwiseIntersections
   exact ⟨isLimitOfPreserves _ (Pairwise.coconeIsColimit U).op⟩
 
 中文:
-定理 isSheaf_iff_isSheafPreservesLimitPairwiseIntersections
+定理 isSheaf_iff_isSheafPreservesLimitPairwise整数ersections
   证明: by
   refine ⟨fun h U => h.isSheafPreservesLimitPairwiseIntersections,
     fun h => F.isSheaf_iff_isSheafPairwiseIntersections.mpr fun ι U => ?_⟩
@@ -730,7 +730,7 @@ definition isLimitPullbackCone
 
 中文:
 定义 isLimitPullbackCone
-  签名: : IsLimit (interUnionPullbackCone F U V)
+  签名: : 是极限 (interUnionPullbackCone F U V)
   定义体: by
   let ι : ULift.{w} WalkingPair -> Opens X := fun ⟨j⟩ => WalkingPair.casesOn j U V
   have hι : U ⊔ V = iSup ι := by

@@ -80,11 +80,11 @@ structure GlueData
     - f_open : forall i j, IsOpenImmersion (f i j)
 
 中文:
-结构 GlueData
-  参数: extends CategoryTheory.GlueData Scheme
-  继承: CategoryTheory.GlueData Scheme
+结构 粘合数据
+  参数: extends 范畴论.粘合数据 概形
+  继承: 范畴论.粘合数据 概形
   公理与运算 (1 个):
-    - f_open : 对任意 i j, IsOpenImmersion (f i j)
+    - f_open : 对任意 i j, 是开浸入 (f i j)
 -/
 structure GlueData extends CategoryTheory.GlueData Scheme where
   f_open : forall i j, IsOpenImmersion (f i j)
@@ -108,7 +108,7 @@ abbreviation toLocallyRingedSpaceGlueData
 
 中文:
 缩写 toLocallyRingedSpaceGlueData
-  签名: : LocallyRingedSpace.GlueData
+  签名: : LocallyRinged空间.粘合数据
   定义体: { f_open := D.f_open
     toGlueData := 𝖣.mapGlueData forgetToLocallyRingedSpace }
 
@@ -155,7 +155,7 @@ definition gluedScheme
 
 中文:
 定义 gluedScheme
-  签名: : Scheme
+  签名: : 概形
   定义体: by
   apply LocallyRingedSpace.IsOpenImmersion.scheme
     D.toLocallyRingedSpaceGlueData.toGlueData.glued
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesColimit 𝖣.diagram.multispan forgetToLocallyRingedSpace
+  签名: 创造余极限 𝖣.diagram.multispan forgetToLocallyRingedSpace
   定义体: createsColimitOfFullyFaithfulOfIso D.gluedScheme
     (HasColimit.isoOfNatIso (𝖣.diagramIso forgetToLocallyRingedSpace).symm)
 
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit (𝖣.diagram.multispan) forgetToTop
+  签名: 保持余极限 (𝖣.diagram.multispan) forgetToTop
   定义体: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToLocallyRingedSpace ⋙
       LocallyRingedSpace.forgetToSheafedSpace ⋙ SheafedSpace.forget CommRingCat))
 
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit (𝖣.diagram.multispan) forget
+  签名: 保持余极限 (𝖣.diagram.multispan) forget
   定义体: inferInstanceAs (PreservesColimit (𝖣.diagram).multispan (forgetToTop ⋙ CategoryTheory.forget _))
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.forget, PreservesColimit, diagram, forget, forgetToTop, multispan
@@ -270,7 +270,7 @@ abbreviation glued
 
 中文:
 缩写 glued
-  签名: : Scheme
+  签名: : 概形
   定义体: 𝖣.glued
 -/
 abbrev glued : Scheme :=
@@ -518,8 +518,8 @@ definition Rel
   body: exists x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
 
 中文:
-定义 Rel
-  签名: (a b : Σ i, ((D.U i).carrier : Type _))
+定义 关系
+  签名: (a b : Σ i, ((D.U i).carrier : 类型 _))
   定义体: exists x : (D.V (a.1, b.1)).carrier, D.f _ _ x = a.2 ∧ (D.t _ _ ≫ D.f _ _) x = b.2
 
 Depends on / 依赖: carrier
@@ -583,8 +583,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (U : Set D.glued.carrier)
-  结论: IsOpen U ↔ 对任意 i, IsOpen (D.ι i ⁻¹' U)
+  条件: (U : 集合 D.glued.carrier)
+  结论: 是开集 U ↔ 对任意 i, 是开集 (D.ι i ⁻¹' U)
   证明: by
   rw [← (TopCat.homeoOfIso D.isoCarrier.symm).isOpen_preimage]; rw [TopCat.GlueData.isOpen_iff]
   apply forall_congr'
@@ -618,7 +618,7 @@ definition openCover
 
 中文:
 定义 openCover
-  签名: (D : Scheme.GlueData)
+  签名: (D : 概形.粘合数据)
   定义体: D.J
   X := D.U
   f := D.ι
@@ -858,7 +858,7 @@ definition gluedCover
 
 中文:
 定义 gluedCover
-  签名: : Scheme.GlueData.{u} where
+  签名: : 概形.粘合数据.{u} where
   定义体: 𝒰.I₀
   U := 𝒰.X
   V := fun ⟨x, y⟩ => pullback (𝒰.f x) (𝒰.f y)
@@ -960,7 +960,7 @@ theorem fromGlued_injective
 
 中文:
 定理 fromGlued_injective
-  结论: Function.Injective 𝒰.fromGlued
+  结论: 函数.单射 𝒰.fromGlued
   证明: by
   intro x y h
   obtain ⟨i, x, rfl⟩ := 𝒰.gluedCover.ι_jointly_surjective x
@@ -1023,7 +1023,7 @@ theorem isOpenMap_fromGlued
 
 中文:
 定理 isOpenMap_fromGlued
-  结论: IsOpenMap 𝒰.fromGlued
+  结论: 是开映射 𝒰.fromGlued
   证明: by
   intro U hU
   rw [isOpen_iff_forall_mem_open]
@@ -1065,7 +1065,7 @@ theorem isOpenEmbedding_fromGlued
 
 中文:
 定理 isOpenEmbedding_fromGlued
-  结论: IsOpenEmbedding 𝒰.fromGlued
+  结论: 是开嵌入 𝒰.fromGlued
   证明: .of_continuous_injective_isOpenMap (by fun_prop) 𝒰.fromGlued_injective 𝒰.isOpenMap_fromGlued
 
 Depends on / 依赖: fromGlued_injective, fun_prop, isOpenMap_fromGlued, of_continuous_injective_isOpenMap
@@ -1091,7 +1091,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi 𝒰.fromGlued.base
+  签名: 满态射 𝒰.fromGlued.base
   定义体: by
   rw [TopCat.epi_iff_surjective]
   intro x
@@ -1122,7 +1122,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion 𝒰.fromGlued
+  签名: 是开浸入 𝒰.fromGlued
   定义体: IsOpenImmersion.of_isIso_stalkMap _ 𝒰.isOpenEmbedding_fromGlued
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.of_isIso_stalkMap, isOpenEmbedding_fromGlued, of_isIso_stalkMap
@@ -1145,7 +1145,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso 𝒰.fromGlued
+  签名: 是同构 𝒰.fromGlued
   定义体: let F := Scheme.forgetToLocallyRingedSpace ⋙ LocallyRingedSpace.forgetToSheafedSpace ⋙
     SheafedSpace.forgetToPresheafedSpace
   have : IsIso (F.map (fromGlued 𝒰)) := by
@@ -1182,7 +1182,7 @@ definition glueMorphisms
 
 中文:
 定义 glueMorphisms
-  签名: (𝒰 : OpenCover.{v} X) {Y : Scheme.{u}} (f : 对任意 x, 𝒰.X x ⟶ Y)
+  签名: (𝒰 : OpenCover.{v} X) {Y : 概形.{u}} (f : 对任意 x, 𝒰.X x ⟶ Y)
   定义体: by
   refine inv 𝒰.ulift.fromGlued ≫ ?_
   fapply Multicoequalizer.desc
@@ -1221,7 +1221,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: (𝒰 : OpenCover.{v} X) {Y : Scheme} (f₁ f₂ : X ⟶ Y)
+  结论: (𝒰 : OpenCover.{v} X) {Y : 概形} (f₁ f₂ : X ⟶ Y)
   证明: by
   rw [← cancel_epi 𝒰.ulift.fromGlued]
   apply Multicoequalizer.hom_ext
@@ -1256,7 +1256,7 @@ theorem ι_glueMorphisms
 
 中文:
 定理 ι_glueMorphisms
-  结论: (𝒰 : OpenCover.{v} X) {Y : Scheme} (f : 对任意 x, 𝒰.X x ⟶ Y)
+  结论: (𝒰 : OpenCover.{v} X) {Y : 概形} (f : 对任意 x, 𝒰.X x ⟶ Y)
   证明: by
   refine Cover.hom_ext (𝒰.ulift.pullback₁ (𝒰.f x)) _ _ fun i => ?_
   dsimp only [Precoverage.ZeroHypercover.pullback₁_toPreZeroHypercover,
@@ -1293,8 +1293,8 @@ lemma hom_ext_of_forall
   exact 𝒰.hom_ext _ _ hU
 
 中文:
-引理 hom_ext_of_forall
-  结论: {X Y : Scheme} (f g : X ⟶ Y)
+引理 hom_ext_of_对任意
+  结论: {X Y : 概形} (f g : X ⟶ Y)
   证明: by
   choose U hxU hU using H
   let 𝒰 : X.OpenCover := {
@@ -1334,7 +1334,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.isomorphisms Scheme).IsLocalAtTarget zariskiPrecoverage
+  签名: (MorphismProperty.isomorphisms 概形).是LocalAtTarget zariskiPrecoverage
   定义体: .mk_of_isStableUnderBaseChange fun {X Y} f (𝒰 : Y.OpenCover) (H : forall i, IsIso _) =>
     ⟨𝒰.glueMorphisms (fun i => inv (snd f (𝒰.f i)) ≫ fst _ _) fun i j => by
     rw [← cancel_epi ((pullbackRightPullbackFstIso _ _ _).hom ≫ map (fst f (𝒰.f i) ≫ f)
@@ -1434,8 +1434,8 @@ lemma exists_of_pullback_V_V
       (by simpa [hy₁, hy₂] using
 
 中文:
-引理 exists_of_pullback_V_V
-  条件: {i j k : J} (x : pullback (C := Scheme) (V F i j).ι (V F i k).ι)
+引理 存在_of_pullback_V_V
+  条件: {i j k : J} (x : pullback (C := 概形) (V F i j).ι (V F i k).ι)
   证明: by
   obtain ⟨k₁, y₁, hy₁⟩ := mem_iSup.mp ((pullback.fst (C := Scheme) _ _) x).2
   obtain ⟨k₂, y₂, hy₂⟩ := mem_iSup.mp ((pullback.snd (C := Scheme) _ _) x).2
@@ -1684,7 +1684,7 @@ definition glueData
 
 中文:
 定义 glueData
-  签名: : Scheme.GlueData where
+  签名: : 概形.粘合数据 where
   定义体: Shrink.{u} J
   U j := F.obj ↓j
   V ij := V F ↓ij.1 ↓ij.2
@@ -1804,7 +1804,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: (glueData F).glued
   ι.app j := F.map (eqToHom (by simp)) ≫ (glueData F).ι (equivShrink _ j)
   ι.naturality {i j} f := by
@@ -1844,7 +1844,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: : IsColimit (cocone F) where
+  签名: : 是余极限 (cocone F) where
   定义体: Multicoequalizer.desc _ _ (fun i => s.ι.app ↓i) (by
     rintro ⟨i, j⟩
     dsimp [glueData, GlueData.diagram]
@@ -1942,7 +1942,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: ⟨_, isColimit F⟩
 
 Depends on / 依赖: isColimit
@@ -1959,7 +1959,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F Scheme.forgetToLocallyRingedSpace
+  签名: 保持余极限 F 概形.forgetToLocallyRingedSpace
   定义体: preservesColimit_of_preserves_colimit_cocone (isColimit F) (isColimitForgetToLocallyRingedSpace F)
 
 Depends on / 依赖: isColimit, isColimitForgetToLocallyRingedSpace, preservesColimit_of_preserves_colimit_cocone
@@ -1977,7 +1977,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesColimit F Scheme.forgetToLocallyRingedSpace
+  签名: 创造余极限 F 概形.forgetToLocallyRingedSpace
   定义体: CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.createsColimitOfReflectsIsomorphismsOfPreserves, createsColimitOfReflectsIsomorphismsOfPreserves

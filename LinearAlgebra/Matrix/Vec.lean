@@ -50,7 +50,7 @@ definition vec
 
 中文:
 定义 vec
-  签名: (A : Matrix m n R)
+  签名: (A : 矩阵 m n R)
   定义体: fun ij => A ij.2 ij.1
 
 @[simp]
@@ -71,7 +71,7 @@ theorem vec_of
 中文:
 定理 vec_of
   条件: (f : m -> n -> R)
-  结论: vec (of f) = Function.uncurry (flip f)
+  结论: vec (of f) = 函数.uncurry (flip f)
   证明: rfl
 -/
 theorem vec_of (f : m -> n -> R) : vec (of f) = Function.uncurry (flip f) := rfl
@@ -87,8 +87,8 @@ theorem vec_transpose
 
 中文:
 定理 vec_transpose
-  条件: (A : Matrix m n R)
-  结论: vec Aᵀ = vec A ∘ Prod.swap
+  条件: (A : 矩阵 m n R)
+  结论: vec Aᵀ = vec A ∘ 积类型.swap
   证明: rfl
 -/
 theorem vec_transpose (A : Matrix m n R) : vec Aᵀ = vec A ∘ Prod.swap := rfl
@@ -104,8 +104,8 @@ theorem vec_eq_uncurry
 
 中文:
 定理 vec_eq_uncurry
-  条件: (A : Matrix m n R)
-  结论: vec A = Function.uncurry fun i j => A j i
+  条件: (A : 矩阵 m n R)
+  结论: vec A = 函数.uncurry fun i j => A j i
   证明: rfl
 -/
 theorem vec_eq_uncurry (A : Matrix m n R) : vec A = Function.uncurry fun i j => A j i := rfl
@@ -122,7 +122,7 @@ theorem vec_inj
 
 中文:
 定理 vec_inj
-  条件: {A B : Matrix m n R}
+  条件: {A B : 矩阵 m n R}
   结论: A.vec = B.vec ↔ A = B
   证明: by
   simp_rw [← Matrix.ext_iff, funext_iff, Prod.forall, @forall_comm m n, vec]
@@ -142,7 +142,7 @@ theorem vec_bijective
 
 中文:
 定理 vec_bijective
-  结论: Function.Bijective (vec : Matrix m n R -> _)
+  结论: 函数.双射 (vec : 矩阵 m n R -> _)
   证明: .symm.bijective.comp Function.swap_bijective Equiv.curry _ _ _
 
 Depends on / 依赖: Equiv.curry, Function, Function.swap_bijective, bijective, swap_bijective, symm.bijective.comp
@@ -163,7 +163,7 @@ theorem vec_map
 
 中文:
 定理 vec_map
-  条件: (A : Matrix m n R) (f : R -> S)
+  条件: (A : 矩阵 m n R) (f : R -> S)
   结论: vec (A.map f) = f ∘ vec A
   证明: rfl
 
@@ -185,8 +185,8 @@ theorem vec_zero
 
 中文:
 定理 vec_zero
-  条件: [Zero R]
-  结论: vec (0 : Matrix m n R) = 0
+  条件: [零 R]
+  结论: vec (0 : 矩阵 m n R) = 0
   证明: rfl
 
 @[simp]
@@ -208,7 +208,7 @@ theorem vec_eq_zero_iff
 
 中文:
 定理 vec_eq_zero_iff
-  条件: [Zero R] {A : Matrix m n R}
+  条件: [零 R] {A : 矩阵 m n R}
   结论: vec A = 0 ↔ A = 0
   证明: vec_inj (B := 0)
 
@@ -230,7 +230,7 @@ theorem vec_add
 
 中文:
 定理 vec_add
-  条件: [Add R] (A B : Matrix m n R)
+  条件: [加法 R] (A B : 矩阵 m n R)
   结论: vec (A + B) = vec A + vec B
   证明: rfl
 -/
@@ -250,7 +250,7 @@ theorem vec_neg
 
 中文:
 定理 vec_neg
-  条件: [Neg R] (A : Matrix m n R)
+  条件: [取负 R] (A : 矩阵 m n R)
   结论: vec (-A) = -vec A
   证明: rfl
 
@@ -273,7 +273,7 @@ theorem vec_sub
 
 中文:
 定理 vec_sub
-  条件: [Sub R] (A B : Matrix m n R)
+  条件: [减法 R] (A B : 矩阵 m n R)
   结论: vec (A - B) = vec A - vec B
   证明: rfl
 
@@ -294,7 +294,7 @@ theorem vec_smul
 
 中文:
 定理 vec_smul
-  条件: {α} [SMul α R] (r : α) (A : Matrix m n R)
+  条件: {α} [标量乘法 α R] (r : α) (A : 矩阵 m n R)
   结论: vec (r • A) = r • vec A
   证明: rfl
 -/
@@ -313,7 +313,7 @@ theorem vec_sum
 
 中文:
 定理 vec_sum
-  条件: [AddCommMonoid R] (s : Finset ι) (A : ι -> Matrix m n R)
+  条件: [加法交换幺半群 R] (s : 有限集 ι) (A : ι -> 矩阵 m n R)
   证明: by
   ext
   simp_rw [vec, Finset.sum_apply, vec, Matrix.sum_apply]
@@ -337,7 +337,7 @@ theorem vec_dotProduct_vec
 
 中文:
 定理 vec_dotProduct_vec
-  结论: [AddCommMonoid R] [Mul R] [Fintype m] [Fintype n]
+  结论: [加法交换幺半群 R] [乘法 R] [有限类型 m] [有限类型 n]
   证明: by
   simp_rw [Matrix.trace, Matrix.diag, Matrix.mul_apply, dotProduct, vec, transpose_apply,
     ← Finset.univ_product_univ, Finset.sum_product]
@@ -360,7 +360,7 @@ theorem star_vec
 
 中文:
 定理 star_vec
-  条件: [Star R] (x : Matrix m n R)
+  条件: [对合 R] (x : 矩阵 m n R)
   证明: rfl
 -/
 theorem star_vec [Star R] (x : Matrix m n R) :
@@ -378,7 +378,7 @@ theorem star_vec_dotProduct_vec
 
 中文:
 定理 star_vec_dotProduct_vec
-  结论: [AddCommMonoid R] [Mul R] [Star R] [Fintype m] [Fintype n]
+  结论: [加法交换幺半群 R] [乘法 R] [对合 R] [有限类型 m] [有限类型 n]
   证明: by
   simp_rw [star_vec, vec_dotProduct_vec, ← conjTranspose_transpose, transpose_transpose]
 
@@ -402,7 +402,7 @@ theorem vec_hadamard
 
 中文:
 定理 vec_hadamard
-  条件: [Mul R] (A B : Matrix m n R)
+  条件: [乘法 R] (A B : 矩阵 m n R)
   结论: vec (A ⊙ B) = vec A * vec B
   证明: rfl
 
@@ -423,7 +423,7 @@ theorem vec_single
 
 中文:
 定理 vec_single
-  条件: [DecidableEq m] [DecidableEq n] [Zero R] (i : m) (j : n) (r : R)
+  条件: [DecidableEq m] [DecidableEq n] [零 R] (i : m) (j : n) (r : R)
   证明: by
   rw [single_eq_of_single_single]; rw [vec_of]; rw [Function.uncurry_flip]; rw [Pi.uncurry_single_single]
   exact Pi.single_comp_equiv (Equiv.prodComm _ _) _ _
@@ -451,7 +451,7 @@ theorem hadamard_kronecker_hadamard
 
 中文:
 定理 hadamard_kronecker_hadamard
-  条件: (A B : Matrix l m R) (C D : Matrix n p R)
+  条件: (A B : 矩阵 l m R) (C D : 矩阵 n p R)
   证明: ext fun _ _ => mul_mul_mul_comm _ _ _ _
 
 Depends on / 依赖: mul_mul_mul_comm
@@ -496,7 +496,7 @@ theorem kronecker_mulVec_vec_of_commute
 
 中文:
 定理 kronecker_mulVec_vec_of_commute
-  结论: (A : Matrix l m R) (X : Matrix m n R) (B : Matrix p n R)
+  结论: (A : 矩阵 l m R) (X : 矩阵 m n R) (B : 矩阵 p n R)
   证明: by
   ext ⟨k, l⟩
   simp_rw [vec, mulVec, mul_apply, dotProduct, kroneckerMap_apply, Finset.sum_mul, transpose_apply,
@@ -524,7 +524,7 @@ theorem vec_vecMul_kronecker_of_commute
 
 中文:
 定理 vec_vecMul_kronecker_of_commute
-  结论: (A : Matrix m l R) (X : Matrix m n R) (B : Matrix n p R)
+  结论: (A : 矩阵 m l R) (X : 矩阵 m n R) (B : 矩阵 n p R)
   证明: by
   ext ⟨k, l⟩
   simp_rw [vec, vecMul, mul_apply, dotProduct, kroneckerMap_apply, Finset.sum_mul, transpose_apply,
@@ -554,7 +554,7 @@ theorem kronecker_mulVec_vec
 
 中文:
 定理 kronecker_mulVec_vec
-  条件: (A : Matrix l m R) (X : Matrix m n R) (B : Matrix p n R)
+  条件: (A : 矩阵 l m R) (X : 矩阵 m n R) (B : 矩阵 p n R)
   证明: kronecker_mulVec_vec_of_commute _ _ _ fun _ _ _ => Commute.all _ _
 
 Depends on / 依赖: Commute, Commute.all, kronecker_mulVec_vec_of_commute
@@ -573,7 +573,7 @@ theorem vec_vecMul_kronecker
 
 中文:
 定理 vec_vecMul_kronecker
-  条件: (A : Matrix m l R) (X : Matrix m n R) (B : Matrix n p R)
+  条件: (A : 矩阵 m l R) (X : 矩阵 m n R) (B : 矩阵 n p R)
   证明: vec_vecMul_kronecker_of_commute _ _ _ fun _ _ _ => Commute.all _ _
 
 Depends on / 依赖: Commute, Commute.all, vec_vecMul_kronecker_of_commute
@@ -600,7 +600,7 @@ theorem vec_mul_eq_mulVec
 
 中文:
 定理 vec_mul_eq_mulVec
-  条件: [DecidableEq n] (A : Matrix l m R) (B : Matrix m n R)
+  条件: [DecidableEq n] (A : 矩阵 l m R) (B : 矩阵 m n R)
   证明: by
   rw [kronecker_mulVec_vec_of_commute]; rw [transpose_one]; rw [Matrix.mul_one]
   intro x i j
@@ -627,7 +627,7 @@ theorem vec_mul_eq_vecMul
 
 中文:
 定理 vec_mul_eq_vecMul
-  条件: [DecidableEq m] (A : Matrix m n R) (B : Matrix n p R)
+  条件: [DecidableEq m] (A : 矩阵 m n R) (B : 矩阵 n p R)
   证明: by
   rw [vec_vecMul_kronecker_of_commute]; rw [transpose_one]; rw [Matrix.one_mul]
   intro x i j
@@ -678,7 +678,7 @@ theorem star_dotProduct_hadamard_mulVec_eq_kronecker
 
 中文:
 定理 star_dotProduct_hadamard_mulVec_eq_kronecker
-  结论: [StarAddMonoid R]
+  结论: [StarAdd幺半群 R]
   证明: by
   rw [dotProduct_hadamard_mulVec_eq_kronecker]; rw [← map_diagonal_star]; rw [star_vec]
 

@@ -261,7 +261,7 @@ definition List.mapAccumRM
   signature: (f : α -> β' -> m' (β' × γ'))
 
 中文:
-定义 List.mapAccumRM
+定义 列表.mapAccumRM
   签名: (f : α -> β' -> m' (β' × γ'))
 -/
 def List.mapAccumRM (f : α -> β' -> m' (β' × γ')) : β' -> List α -> m' (β' × List γ')
@@ -279,7 +279,7 @@ definition List.mapAccumLM
   signature: (f : β' -> α -> m' (β' × γ'))
 
 中文:
-定义 List.mapAccumLM
+定义 列表.mapAccumLM
   签名: (f : β' -> α -> m' (β' × γ'))
 -/
 def List.mapAccumLM (f : β' -> α -> m' (β' × γ')) : β' -> List α -> m' (β' × List γ')
@@ -467,8 +467,8 @@ theorem guard_true
 
 中文:
 定理 guard_true
-  条件: {h : Decidable True}
-  结论: @guard F _ True h = pure ()
+  条件: {h : 可判定 真}
+  结论: @guard F _ 真 h = pure ()
   证明: by simp [guard]
 
 @[simp]
@@ -488,8 +488,8 @@ theorem guard_false
 
 中文:
 定理 guard_false
-  条件: {h : Decidable False}
-  结论: @guard F _ False h = failure
+  条件: {h : 可判定 假}
+  结论: @guard F _ 假 h = failure
   证明: by
   simp [guard]
 -/
@@ -529,7 +529,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad (Sum.{v, u} e)
+  签名: 单子 (和.{v, u} e)
   定义体: @Sum.inr e
   bind := @Sum.bind e
 
@@ -550,7 +550,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor (Sum.{v, u} e)
+  签名: Lawful函子 (和.{v, u} e)
   定义体: by
   constructor <;> intros <;> (try casesm Sum _ _) <;> rfl
 
@@ -586,7 +586,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad (Sum.{v, u} e)
+  签名: 合法单子 (和.{v, u} e)
   定义体: by
     intros
     casesm Sum _ _ <;> casesm Sum _ _ <;> rfl
@@ -644,9 +644,9 @@ class CommApplicative
     - commutative_prod : forall {α β} (a : m α) (b : m β),
 
 中文:
-类 CommApplicative
-  参数: (m : 类型u -> 类型v) [Applicative m]
-  继承: LawfulApplicative m
+类 交换适用
+  参数: (m : 类型u -> 类型v) [适用 m]
+  继承: 合法适用 m
   公理与运算 (1 个):
     - commutative_prod : 对任意 {α β} (a : m α) (b : m β),
 -/
@@ -673,8 +673,8 @@ _ = (fun b a => f a b) < > b <*> a := by
       rfl
 
 中文:
-定理 CommApplicative.commutative_map
-  结论: {m : 类型u -> 类型v} [h : Applicative m]
+定理 交换适用.commutative_map
+  结论: {m : 类型u -> 类型v} [h : 适用 m]
   证明: calc
 f < > a <*> b = (fun p : α × β => f p.1 p.2) < > (Prod.mk <$> a <*> b) := by
       simp only [map_seq, map_map, Function.comp_def]

@@ -88,13 +88,13 @@ structure IsAddFoelner
     - tendsto_meas_vadd_symmDiff((g : G)) : Tendsto (fun i => μ ((g +ᵥ F i) ∆ F i) / μ (F i)) l (𝓝 0)
 
 中文:
-结构 IsAddFoelner
+结构 是加法Foelner
   参数: : 命题 where
   公理与运算 (4 个):
-    - eventually_measurableSet : 对任意ᶠ i in l, MeasurableSet (F i)
+    - eventually_measurableSet : 对任意ᶠ i in l, 可测集 (F i)
     - eventually_meas_ne_zero : 对任意ᶠ i in l, μ (F i) != 0
     - eventually_meas_ne_top : 对任意ᶠ i in l, μ (F i) != ∞
-    - tendsto_meas_vadd_symmDiff((g : G)) : Tendsto (fun i => μ ((g +ᵥ F i) ∆ F i) / μ (F i)) l (𝓝 0)
+    - tendsto_meas_vadd_symmDiff((g : G)) : 收敛 (fun i => μ ((g +ᵥ F i) ∆ F i) / μ (F i)) l (𝓝 0)
 -/
 structure IsAddFoelner : Prop where
   eventually_measurableSet : forallᶠ i in l, MeasurableSet (F i)
@@ -122,13 +122,13 @@ structure IsFoelner
     - tendsto_meas_smul_symmDiff((g : G)) : Tendsto (fun i => μ ((g • F i) ∆ F i) / μ (F i)) l (𝓝 0)
 
 中文:
-结构 IsFoelner
+结构 是Foelner
   参数: : 命题 where
   公理与运算 (4 个):
-    - eventually_measurableSet : 对任意ᶠ i in l, MeasurableSet (F i)
+    - eventually_measurableSet : 对任意ᶠ i in l, 可测集 (F i)
     - eventually_meas_ne_zero : 对任意ᶠ i in l, μ (F i) != 0
     - eventually_meas_ne_top : 对任意ᶠ i in l, μ (F i) != ∞
-    - tendsto_meas_smul_symmDiff((g : G)) : Tendsto (fun i => μ ((g • F i) ∆ F i) / μ (F i)) l (𝓝 0)
+    - tendsto_meas_smul_symmDiff((g : G)) : 收敛 (fun i => μ ((g • F i) ∆ F i) / μ (F i)) l (𝓝 0)
 -/
 structure IsFoelner : Prop where
   eventually_measurableSet : forallᶠ i in l, MeasurableSet (F i)
@@ -158,7 +158,7 @@ theorem univ_of_isFiniteMeasure
 
 中文:
 定理 univ_of_isFiniteMeasure
-  条件: [NeZero μ] [IsFiniteMeasure μ]
+  条件: [NeZero μ] [是有限测度 μ]
   证明: by simp
   eventually_meas_ne_zero := by simp [NeZero.ne]
   eventually_meas_ne_top := by simp
@@ -191,7 +191,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {l' : Filter ι} (hfoel : IsFoelner G μ l F) (hle : l' <= l)
+  条件: {l' : 滤子 ι} (hfoel : 是Foelner G μ l F) (hle : l' <= l)
   证明: hfoel.eventually_measurableSet.filter_mono hle
   eventually_meas_ne_zero := hfoel.eventually_meas_ne_zero.filter_mono hle
   eventually_meas_ne_top := hfoel.eventually_meas_ne_top.filter_mono hle
@@ -222,7 +222,7 @@ theorem comp_tendsto
 
 中文:
 定理 comp_tendsto
-  结论: {ι' : 类型} {l' : Filter ι'} {φ : ι' -> ι} (hfoel : IsFoelner G μ l F)
+  结论: {ι' : 类型} {l' : 滤子 ι'} {φ : ι' -> ι} (hfoel : 是Foelner G μ l F)
   证明: htendsto.eventually hfoel.eventually_measurableSet
   eventually_meas_ne_zero := htendsto.eventually hfoel.eventually_meas_ne_zero
   eventually_meas_ne_top := htendsto.eventually hfoel.eventually_meas_ne_top
@@ -254,7 +254,7 @@ definition mean
 
 中文:
 定义 mean
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: limUnder u (fun i => μ (s inter F i) / μ (F i))
 
 @[to_additive]
@@ -280,7 +280,7 @@ theorem tendsto_nhds_mean
 
 中文:
 定理 tendsto_nhds_mean
-  条件: (hfoel : IsFoelner G μ u F) (s : Set X)
+  条件: (hfoel : 是Foelner G μ u F) (s : 集合 X)
   证明: by
   have mem_Icc : forallᶠ i in u, μ (s inter F i) / μ (F i) in Icc 0 1 := by
     filter_upwards [hfoel.eventually_meas_ne_zero, hfoel.eventually_meas_ne_top] with i hi hi'
@@ -315,7 +315,7 @@ theorem mean_univ_eq_one
 
 中文:
 定理 mean_univ_eq_one
-  条件: (hfoel : IsFoelner G μ u F)
+  条件: (hfoel : 是Foelner G μ u F)
   证明: by
   refine tendsto_nhds_unique_of_eventuallyEq (hfoel.tendsto_nhds_mean _) tendsto_const_nhds ?_
   filter_upwards [hfoel.eventually_meas_ne_zero, hfoel.eventually_meas_ne_top] with i hi hi'
@@ -346,7 +346,7 @@ theorem mean_union_eq_add_of_disjoint
 
 中文:
 定理 mean_union_eq_add_of_disjoint
-  结论: (hfoel : IsFoelner G μ u F)
+  结论: (hfoel : 是Foelner G μ u F)
   证明: by
   refine tendsto_nhds_unique_of_eventuallyEq
     (hfoel.tendsto_nhds_mean _) (hfoel.tendsto_nhds_mean _ |>.add <| hfoel.tendsto_nhds_mean _) ?_
@@ -377,7 +377,7 @@ theorem tendsto_meas_smul_symmDiff_smul
 
 中文:
 定理 tendsto_meas_smul_symmDiff_smul
-  结论: [SMulInvariantMeasure G X μ]
+  结论: [标量乘不变测度 G X μ]
   证明: by
   simpa [← smul_smul] using hfoel.tendsto_meas_smul_symmDiff (h⁻¹ * g)
 
@@ -408,7 +408,7 @@ theorem mean_smul_eq_mean_smul
 
 中文:
 定理 mean_smul_eq_mean_smul
-  结论: [SMulInvariantMeasure G X μ]
+  结论: [标量乘不变测度 G X μ]
   证明: by
   suffices hle : forall g h, mean μ u F (g • s) <= mean μ u F (h • s) by
     exact le_antisymm (hle g h) (hle h g)
@@ -447,7 +447,7 @@ theorem mean_smul_eq_mean
 
 中文:
 定理 mean_smul_eq_mean
-  结论: [SMulInvariantMeasure G X μ]
+  结论: [标量乘不变测度 G X μ]
   证明: by
   simpa using hfoel.mean_smul_eq_mean_smul g 1 s
 
@@ -479,7 +479,7 @@ theorem amenable
 
 中文:
 定理 amenable
-  条件: [SMulInvariantMeasure G X μ] [NeBot l] (hfoel : IsFoelner G μ l F)
+  条件: [标量乘不变测度 G X μ] [NeBot l] (hfoel : 是Foelner G μ l F)
   证明: by
   use mean μ (Ultrafilter.of l) F
   refine ⟨?_, ?_, ?_⟩
@@ -520,7 +520,7 @@ definition maxFoelner
 
 中文:
 定义 maxFoelner
-  签名: : Filter (Set X)
+  签名: : 滤子 (集合 X)
   定义体: 𝓟 {s : Set X | MeasurableSet s ∧ μ s != 0 ∧ μ s != ∞} ⊓
   ⨅ (g : G), comap (fun s => μ ((g • s) ∆ s) / μ s) (𝓝 0)
 
@@ -543,7 +543,7 @@ theorem isFoelner_iff_tendsto
 
 中文:
 定理 isFoelner_iff_tendsto
-  结论: IsFoelner G μ l F ↔ Tendsto F l (maxFoelner G μ)
+  结论: 是Foelner G μ l F ↔ 收敛 F l (maxFoelner G μ)
   证明: by
   simp [maxFoelner, tendsto_inf, tendsto_iInf, isFoelner_iff, Function.comp_def, and_assoc]
 
@@ -566,7 +566,7 @@ theorem isFoelner_maxFoelner
 
 中文:
 定理 isFoelner_maxFoelner
-  结论: IsFoelner G μ (maxFoelner G μ) id
+  结论: 是Foelner G μ (maxFoelner G μ) id
   证明: .2 @tendsto_id _ (maxFoelner G μ) isFoelner_iff_tendsto _ _
 
 @[to_additive amenable_of_maxAddFoelner_neBot]
@@ -587,7 +587,7 @@ theorem amenable_of_maxFoelner_neBot
 
 中文:
 定理 amenable_of_maxFoelner_neBot
-  条件: [SMulInvariantMeasure G X μ] [NeBot (maxFoelner G μ)]
+  条件: [标量乘不变测度 G X μ] [NeBot (maxFoelner G μ)]
   证明: IsFoelner.amenable isFoelner_maxFoelner G μ
 
 Depends on / 依赖: IsFoelner, IsFoelner.amenable, amenable, isFoelner_maxFoelner

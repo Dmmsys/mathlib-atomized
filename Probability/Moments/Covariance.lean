@@ -52,7 +52,7 @@ scoped notation "cov[" X ", " Y "; " μ "]" => ProbabilityTheory.covariance X Y 
 
 中文:
 定义 covariance
-  签名: (X Y : Ω -> 实数) (μ : Measure Ω)
+  签名: (X Y : Ω -> 实数) (μ : 测度 Ω)
   定义体: ∫ ω, (X ω - μ[X]) * (Y ω - μ[Y]) ∂μ
 
 @[inherit_doc]
@@ -87,7 +87,7 @@ lemma covariance_eq_sub
 
 中文:
 引理 covariance_eq_sub
-  条件: [IsProbabilityMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  条件: [是概率测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: by
    simp_rw [covariance, sub_mul, mul_sub]
    repeat rw [integral_sub]
@@ -155,7 +155,7 @@ lemma covariance_zero_measure
 
 中文:
 引理 covariance_zero_measure
-  结论: cov[X, Y; (0 : Measure Ω)] = 0
+  结论: cov[X, Y; (0 : 测度 Ω)] = 0
   证明: by simp [covariance]
 -/
 @[simp] lemma covariance_zero_measure : cov[X, Y; (0 : Measure Ω)] = 0 := by simp [covariance]
@@ -206,7 +206,7 @@ lemma covariance_const_left
 
 中文:
 引理 covariance_const_left
-  条件: [IsProbabilityMeasure μ] (c : 实数)
+  条件: [是概率测度 μ] (c : 实数)
   结论: cov[fun _ => c, Y; μ] = 0
   证明: by
   simp [covariance]
@@ -233,7 +233,7 @@ lemma covariance_const_right
 
 中文:
 引理 covariance_const_right
-  条件: [IsProbabilityMeasure μ] (c : 实数)
+  条件: [是概率测度 μ] (c : 实数)
   结论: cov[X, fun _ => c; μ] = 0
   证明: by
   simp [covariance]
@@ -262,7 +262,7 @@ lemma covariance_add_const_left
 
 中文:
 引理 covariance_add_const_left
-  条件: [IsProbabilityMeasure μ] (hX : 整数egrable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : 可积 X μ) (c : 实数)
   证明: by
   simp_rw [covariance]
   congr with ω
@@ -295,7 +295,7 @@ lemma covariance_const_add_left
 
 中文:
 引理 covariance_const_add_left
-  条件: [IsProbabilityMeasure μ] (hX : 整数egrable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : 可积 X μ) (c : 实数)
   证明: by
   simp_rw [add_comm c]
   exact covariance_add_const_left hX c
@@ -323,7 +323,7 @@ lemma covariance_add_const_right
 
 中文:
 引理 covariance_add_const_right
-  条件: [IsProbabilityMeasure μ] (hY : 整数egrable Y μ) (c : 实数)
+  条件: [是概率测度 μ] (hY : 可积 Y μ) (c : 实数)
   证明: by
   rw [covariance_comm]; rw [covariance_add_const_left hY c]; rw [covariance_comm]
 
@@ -348,7 +348,7 @@ lemma covariance_const_add_right
 
 中文:
 引理 covariance_const_add_right
-  条件: [IsProbabilityMeasure μ] (hY : 整数egrable Y μ) (c : 实数)
+  条件: [是概率测度 μ] (hY : 可积 Y μ) (c : 实数)
   证明: by
   simp_rw [add_comm c]
   exact covariance_add_const_right hY c
@@ -377,7 +377,7 @@ lemma covariance_add_left
 
 中文:
 引理 covariance_add_left
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   simp_rw [covariance, Pi.add_apply]
   rw [← integral_add]
@@ -411,7 +411,7 @@ lemma covariance_add_right
 
 中文:
 引理 covariance_add_right
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   rw [covariance_comm]; rw [covariance_add_left hY hZ hX]; rw [covariance_comm X]; rw [covariance_comm Z]
 
@@ -714,7 +714,7 @@ lemma covariance_sub_left
 
 中文:
 引理 covariance_sub_left
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   simp_rw [sub_eq_add_neg, covariance_add_left hX hY.neg hZ, covariance_neg_left]
 
@@ -735,7 +735,7 @@ lemma covariance_fun_sub_left
 
 中文:
 引理 covariance_fun_sub_left
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: covariance_sub_left hX hY hZ
 
 Depends on / 依赖: Algebra, Algebra.FormallySmooth.of_perfectField, FormallySmooth, covariance_sub_left, of_perfectField
@@ -755,7 +755,7 @@ lemma covariance_sub_right
 
 中文:
 引理 covariance_sub_right
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   simp_rw [sub_eq_add_neg, covariance_add_right hX hY hZ.neg, covariance_neg_right]
 
@@ -776,7 +776,7 @@ lemma covariance_fun_sub_right
 
 中文:
 引理 covariance_fun_sub_right
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: covariance_sub_right hX hY hZ
 
 Depends on / 依赖: covariance_sub_right
@@ -797,7 +797,7 @@ lemma covariance_sub_sub
 
 中文:
 引理 covariance_sub_sub
-  结论: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  结论: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: by
   rw [covariance_sub_left hX hY (hZ.sub hT)]; rw [covariance_sub_right hX hZ hT]; rw [covariance_sub_right hY hZ hT]
   abel
@@ -822,7 +822,7 @@ lemma covariance_fun_sub_fun_sub
 
 中文:
 引理 covariance_fun_sub_fun_sub
-  结论: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  结论: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: covariance_sub_sub hX hY hZ hT
 
 @[simp]
@@ -849,7 +849,7 @@ lemma covariance_sub_const_left
 
 中文:
 引理 covariance_sub_const_left
-  条件: [IsProbabilityMeasure μ] (hX : 整数egrable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : 可积 X μ) (c : 实数)
   证明: by
   simp [sub_eq_add_neg, hX]
 
@@ -875,7 +875,7 @@ lemma covariance_const_sub_left
 
 中文:
 引理 covariance_const_sub_left
-  条件: [IsProbabilityMeasure μ] (hX : 整数egrable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : 可积 X μ) (c : 实数)
   证明: by
   simp [sub_eq_add_neg, hX.fun_neg]
 
@@ -901,7 +901,7 @@ lemma covariance_sub_const_right
 
 中文:
 引理 covariance_sub_const_right
-  条件: [IsProbabilityMeasure μ] (hY : 整数egrable Y μ) (c : 实数)
+  条件: [是概率测度 μ] (hY : 可积 Y μ) (c : 实数)
   证明: by
   simp [sub_eq_add_neg, hY]
 
@@ -925,7 +925,7 @@ lemma covariance_const_sub_right
 
 中文:
 引理 covariance_const_sub_right
-  条件: [IsProbabilityMeasure μ] (hY : 整数egrable Y μ) (c : 实数)
+  条件: [是概率测度 μ] (hY : 可积 Y μ) (c : 实数)
   证明: by
   simp [sub_eq_add_neg, hY.fun_neg]
 
@@ -992,7 +992,7 @@ lemma covariance_sum_left
 
 中文:
 引理 covariance_sum_left
-  条件: [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
+  条件: [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
   证明: covariance_sum_left' (fun _ _ => hX _) hY
 
 Depends on / 依赖: covariance_sum_left
@@ -1037,7 +1037,7 @@ lemma covariance_fun_sum_left
 
 中文:
 引理 covariance_fun_sum_left
-  条件: [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
+  条件: [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
   证明: by
   convert! covariance_sum_left hX hY
   simp
@@ -1083,7 +1083,7 @@ lemma covariance_sum_right
 
 中文:
 引理 covariance_sum_right
-  条件: [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
+  条件: [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
   证明: covariance_sum_right' (fun _ _ => hX _) hY
 
 Depends on / 依赖: covariance_sum_right
@@ -1126,7 +1126,7 @@ lemma covariance_fun_sum_right
 
 中文:
 引理 covariance_fun_sum_right
-  条件: [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
+  条件: [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ) (hY : MemLp Y 2 μ)
   证明: covariance_fun_sum_right' (fun _ _ => hX _) hY
 
 Depends on / 依赖: covariance_fun_sum_right
@@ -1148,7 +1148,7 @@ lemma covariance_sum_sum'
 
 中文:
 引理 covariance_sum_sum'
-  结论: {ι' : 类型} {Y : ι' -> Ω -> 实数} {t : Finset ι'}
+  结论: {ι' : 类型} {Y : ι' -> Ω -> 实数} {t : 有限集 ι'}
   证明: by
   rw [covariance_sum_left' hX]
   · exact Finset.sum_congr rfl fun i hi => by rw [covariance_sum_right' hY (hX i hi)]
@@ -1173,7 +1173,7 @@ lemma covariance_sum_sum
 
 中文:
 引理 covariance_sum_sum
-  结论: [Fintype ι] {ι' : 类型} [Fintype ι'] {Y : ι' -> Ω -> 实数}
+  结论: [有限类型 ι] {ι' : 类型} [有限类型 ι'] {Y : ι' -> Ω -> 实数}
   证明: covariance_sum_sum' (fun _ _ => hX _) (fun _ _ => hY _)
 
 Depends on / 依赖: covariance_sum_sum
@@ -1195,7 +1195,7 @@ lemma covariance_fun_sum_fun_sum'
 
 中文:
 引理 covariance_fun_sum_fun_sum'
-  结论: {ι' : 类型} {Y : ι' -> Ω -> 实数} {t : Finset ι'}
+  结论: {ι' : 类型} {Y : ι' -> Ω -> 实数} {t : 有限集 ι'}
   证明: by
   convert! covariance_sum_sum' hX hY
   all_goals simp
@@ -1219,7 +1219,7 @@ lemma covariance_fun_sum_fun_sum
 
 中文:
 引理 covariance_fun_sum_fun_sum
-  结论: [Fintype ι] {ι' : 类型} [Fintype ι'] {Y : ι' -> Ω -> 实数}
+  结论: [有限类型 ι] {ι' : 类型} [有限类型 ι'] {Y : ι' -> Ω -> 实数}
   证明: covariance_fun_sum_fun_sum' (fun _ _ => hX _) (fun _ _ => hY _)
 
 Depends on / 依赖: covariance_fun_sum_fun_sum

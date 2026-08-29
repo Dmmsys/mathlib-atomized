@@ -47,7 +47,7 @@ lemma isSheaf_coherent
 
 中文:
 引理 isSheaf_coherent
-  条件: (P : Cᵒᵖ ⥤ Type w)
+  条件: (P : Cᵒᵖ ⥤ 类型 w)
   证明: by
   constructor
   · intro hP B α _ X π h
@@ -96,7 +96,7 @@ theorem isSheaf_yoneda_obj
 中文:
 定理 isSheaf_yoneda_obj
   条件: (W : C)
-  结论: Presieve.IsSheaf (coherentTopology C) (yoneda.obj W)
+  结论: Presieve.是层 (coherentTopology C) (yoneda.obj W)
   证明: by
   rw [isSheaf_coherent]
   intro X α _ Y π H
@@ -136,7 +136,7 @@ instance subcanonical
 
 中文:
 实例 subcanonical
-  签名: : (coherentTopology C).Subcanonical
+  签名: : (coherentTopology C).子典范
   定义体: GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj _ isSheaf_yoneda_obj
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, Subcanonical, isSheaf_yoneda_obj, of_isSheaf_yoneda_obj

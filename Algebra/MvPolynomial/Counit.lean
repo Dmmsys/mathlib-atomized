@@ -43,7 +43,7 @@ definition ACounit
 
 中文:
 定义 ACounit
-  签名: : MvPolynomial B A ->ₐ[A] B
+  签名: : 多元多项式 B A ->ₐ[A] B
   定义体: aeval id
 -/
 noncomputable def ACounit : MvPolynomial B A ->ₐ[A] B :=
@@ -106,7 +106,7 @@ theorem ACounit_surjective
 
 中文:
 定理 ACounit_surjective
-  结论: Surjective (ACounit A B)
+  结论: 满射 (ACounit A B)
   证明: fun b => ⟨X b, ACounit_X A b⟩
 
 Depends on / 依赖: ACounit_X
@@ -123,7 +123,7 @@ definition counit
 
 中文:
 定义 counit
-  签名: : MvPolynomial R 整数 ->+* R
+  签名: : 多元多项式 R 整数 ->+* R
   定义体: (ACounit Int R).toRingHom
 
 Depends on / 依赖: ACounit, toRingHom
@@ -140,8 +140,8 @@ definition counitNat
   body: ACounit Nat A
 
 中文:
-定义 counitNat
-  签名: : MvPolynomial A 自然数 ->+* A
+定义 counit自然数
+  签名: : 多元多项式 A 自然数 ->+* A
   定义体: ACounit Nat A
 
 Depends on / 依赖: ACounit
@@ -159,7 +159,7 @@ theorem counit_surjective
 
 中文:
 定理 counit_surjective
-  结论: Surjective (counit R)
+  结论: 满射 (counit R)
   证明: ACounit_surjective Int R
 
 Depends on / 依赖: ACounit_surjective
@@ -176,8 +176,8 @@ theorem counitNat_surjective
   proof: ACounit_surjective Nat A
 
 中文:
-定理 counitNat_surjective
-  结论: Surjective (counit自然数 A)
+定理 counit自然数_surjective
+  结论: 满射 (counit自然数 A)
   证明: ACounit_surjective Nat A
 
 Depends on / 依赖: ACounit_surjective
@@ -215,7 +215,7 @@ theorem counitNat_C
   proof: ACounit_C _ _
 
 中文:
-定理 counitNat_C
+定理 counit自然数_C
   条件: (n : 自然数)
   结论: counit自然数 A (C n) = n
   证明: ACounit_C _ _
@@ -263,7 +263,7 @@ theorem counitNat_X
   proof: ACounit_X _ _
 
 中文:
-定理 counitNat_X
+定理 counit自然数_X
   条件: (a : A)
   结论: counit自然数 A (X a) = a
   证明: ACounit_X _ _

@@ -54,7 +54,7 @@ lemma map_aux
 中文:
 引理 map_aux
   条件: ⦃X
-  结论: D⦄ (R : Sieve X) (hR : R in K X)
+  结论: D⦄ (R : 筛 X) (hR : R in K X)
   证明: by
   obtain ⟨U, u⟩ := u
   dsimp at f ⊢
@@ -362,7 +362,7 @@ definition sheafFiberMapIso
 
 中文:
 定义 sheafFiberMapIso
-  签名: [Functor.IsContinuous F J K]
+  签名: [函子.是连续 F J K]
   定义体: Functor.isoWhiskerLeft (sheafToPresheaf K A) (Φ.presheafFiberMapIso F K A) ≪≫
     (Functor.associator ..).symm ≪≫
     Functor.isoWhiskerRight (F.sheafPushforwardContinuousCompSheafToPresheafIso A J K).symm _ ≪≫

@@ -90,7 +90,7 @@ definition toMvPolynomial
 
 中文:
 定义 toMvPolynomial
-  签名: (M : Matrix m n R) (i : m)
+  签名: (M : 矩阵 m n R) (i : m)
   定义体: ∑ j, monomial (.single j 1) (M i j)
 
 Depends on / 依赖: monomial, single
@@ -110,7 +110,7 @@ lemma toMvPolynomial_eval_eq_apply
 
 中文:
 引理 toMvPolynomial_eval_eq_apply
-  条件: (M : Matrix m n R) (i : m) (c : n -> R)
+  条件: (M : 矩阵 m n R) (i : m) (c : n -> R)
   证明: by
   simp only [toMvPolynomial, map_sum, eval_monomial, pow_zero, Finsupp.prod_single_index, pow_one,
     mulVec, dotProduct]
@@ -133,7 +133,7 @@ lemma toMvPolynomial_map
 
 中文:
 引理 toMvPolynomial_map
-  条件: (f : R ->+* S) (M : Matrix m n R) (i : m)
+  条件: (f : R ->+* S) (M : 矩阵 m n R) (i : m)
   证明: by
   simp only [toMvPolynomial, map_apply, map_sum, map_monomial]
 
@@ -157,7 +157,7 @@ lemma toMvPolynomial_isHomogeneous
 
 中文:
 引理 toMvPolynomial_isHomogeneous
-  条件: (M : Matrix m n R) (i : m)
+  条件: (M : 矩阵 m n R) (i : m)
   证明: by
   apply MvPolynomial.IsHomogeneous.sum
   rintro j -
@@ -186,7 +186,7 @@ lemma toMvPolynomial_totalDegree_le
 
 中文:
 引理 toMvPolynomial_totalDegree_le
-  条件: (M : Matrix m n R) (i : m)
+  条件: (M : 矩阵 m n R) (i : m)
   证明: by
   apply (toMvPolynomial_isHomogeneous _ _).totalDegree_le
 
@@ -213,7 +213,7 @@ lemma toMvPolynomial_constantCoeff
 
 中文:
 引理 toMvPolynomial_constantCoeff
-  条件: (M : Matrix m n R) (i : m)
+  条件: (M : 矩阵 m n R) (i : m)
   证明: by
   simp only [toMvPolynomial, ← C_mul_X_eq_monomial, map_sum, map_mul, constantCoeff_X,
     mul_zero, Finset.sum_const_zero]
@@ -241,7 +241,7 @@ lemma toMvPolynomial_zero
 
 中文:
 引理 toMvPolynomial_zero
-  结论: (0 : Matrix m n R).toMvPolynomial = 0
+  结论: (0 : 矩阵 m n R).toMvPolynomial = 0
   证明: by
   ext; simp only [toMvPolynomial, zero_apply, map_zero, Finset.sum_const_zero, Pi.zero_apply]
 
@@ -271,7 +271,7 @@ lemma toMvPolynomial_one
 中文:
 引理 toMvPolynomial_one
   条件: [DecidableEq n]
-  结论: (1 : Matrix n n R).toMvPolynomial = X
+  结论: (1 : 矩阵 n n R).toMvPolynomial = X
   证明: by
   ext i : 1
   rw [toMvPolynomial]; rw [Finset.sum_eq_single i]
@@ -302,7 +302,7 @@ lemma toMvPolynomial_add
 
 中文:
 引理 toMvPolynomial_add
-  条件: (M N : Matrix m n R)
+  条件: (M N : 矩阵 m n R)
   证明: by
   ext i : 1
   simp only [toMvPolynomial, add_apply, map_add, Finset.sum_add_distrib, Pi.add_apply]
@@ -329,7 +329,7 @@ lemma toMvPolynomial_mul
 
 中文:
 引理 toMvPolynomial_mul
-  条件: (M : Matrix m n R) (N : Matrix n o R) (i : m)
+  条件: (M : 矩阵 m n R) (N : 矩阵 n o R) (i : m)
   证明: by
   simp only [toMvPolynomial, mul_apply, map_sum, Finset.sum_comm (γ := o), bind₁, aeval,
     AlgHom.coe_mk, coe_eval₂Hom, eval₂_monomial, algebraMap_apply, Algebra.algebraMap_self,
@@ -418,7 +418,7 @@ lemma toMvPolynomial_baseChange
 
 中文:
 引理 toMvPolynomial_baseChange
-  条件: (f : M₁ ->ₗ[R] M₂) (i : ι₂) (A : 类型) [CommRing A] [Algebra R A]
+  条件: (f : M₁ ->ₗ[R] M₂) (i : ι₂) (A : 类型) [交换环 A] [代数 R A]
   证明: by
   simp only [toMvPolynomial, toMatrix_baseChange, Matrix.toMvPolynomial_map]
 
@@ -632,7 +632,7 @@ definition polyCharpolyAux
 
 中文:
 定义 polyCharpolyAux
-  签名: : Polynomial (MvPolynomial ι R)
+  签名: : 多项式 (多元多项式 ι R)
   定义体: (charpoly.univ R ιM).map MvPolynomial.bind₁ (φ.toMvPolynomial b bₘ.end)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.bind, charpoly, charpoly.univ, toMvPolynomial
@@ -661,7 +661,7 @@ lemma polyCharpolyAux_baseChange
 
 中文:
 引理 polyCharpolyAux_baseChange
-  条件: (A : 类型) [CommRing A] [Algebra R A]
+  条件: (A : 类型) [交换环 A] [代数 R A]
   证明: by
   simp only [polyCharpolyAux]
   rw [← charpoly.univ_map_map _ (algebraMap R A)]
@@ -782,7 +782,7 @@ lemma polyCharpolyAux_map_eq_charpoly
 
 中文:
 引理 polyCharpolyAux_map_eq_charpoly
-  结论: [Module.Finite R M] [Module.Free R M]
+  结论: [模.有限 R M] [模.自由 R M]
   证明: by
   nontriviality R
   rw [polyCharpolyAux_map_eq_toMatrix_charpoly]; rw [LinearMap.charpoly_toMatrix]
@@ -810,7 +810,7 @@ lemma polyCharpolyAux_coeff_eval
 
 中文:
 引理 polyCharpolyAux_coeff_eval
-  条件: [Module.Finite R M] [Module.Free R M] (x : L) (i : 自然数)
+  条件: [模.有限 R M] [模.自由 R M] (x : L) (i : 自然数)
   证明: by
   nontriviality R
   rw [← polyCharpolyAux_map_eq_charpoly φ b bₘ x]; rw [Polynomial.coeff_map]
@@ -835,7 +835,7 @@ lemma polyCharpolyAux_map_eval
 
 中文:
 引理 polyCharpolyAux_map_eval
-  结论: [Module.Finite R M] [Module.Free R M]
+  结论: [模.有限 R M] [模.自由 R M]
   证明: by
   simp only [← polyCharpolyAux_map_eq_charpoly φ b bₘ, LinearEquiv.apply_symm_apply,
     Finsupp.equivFunOnFinite, Equiv.coe_fn_symm_mk, Finsupp.coe_mk]
@@ -895,7 +895,7 @@ lemma polyCharpolyAux_basisIndep
 
 中文:
 引理 polyCharpolyAux_basisIndep
-  结论: {ιM' : 类型} [Fintype ιM'] [DecidableEq ιM']
+  结论: {ιM' : 类型} [有限类型 ιM'] [DecidableEq ιM']
   证明: by
   let f : Polynomial (MvPolynomial ι R) -> Polynomial (MvPolynomial ι R) :=
     Polynomial.map (MvPolynomial.aeval X).toRingHom
@@ -942,7 +942,7 @@ definition polyCharpoly
 
 中文:
 定义 polyCharpoly
-  签名: : Polynomial (MvPolynomial ι R)
+  签名: : 多项式 (多元多项式 ι R)
   定义体: φ.polyCharpolyAux b (Module.Free.chooseBasis R M)
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, polyCharpolyAux
@@ -961,7 +961,7 @@ lemma polyCharpoly_eq_of_basis
 
 中文:
 引理 polyCharpoly_eq_of_basis
-  条件: [DecidableEq ιM] (bₘ : Basis ιM R M)
+  条件: [DecidableEq ιM] (bₘ : 基 ιM R M)
   证明: by
   rw [polyCharpoly]; rw [φ.polyCharpolyAux_basisIndep b (Module.Free.chooseBasis R M) bₘ]; rw [polyCharpolyAux]
 
@@ -1003,7 +1003,7 @@ lemma polyCharpoly_ne_zero
 
 中文:
 引理 polyCharpoly_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (polyCharpoly φ b) != 0
   证明: (polyCharpoly_monic _ _).ne_zero
 
@@ -1026,7 +1026,7 @@ lemma polyCharpoly_natDegree
 
 中文:
 引理 polyCharpoly_natDegree
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   rw [polyCharpoly]; rw [polyCharpolyAux]; rw [(charpoly.univ_monic _ _).natDegree_map]; rw [charpoly.univ_natDegree]; rw [finrank_eq_card_chooseBasisIndex]
 
@@ -1051,7 +1051,7 @@ lemma polyCharpoly_coeff_isHomogeneous
 
 中文:
 引理 polyCharpoly_coeff_isHomogeneous
-  条件: (i j : 自然数) (hij : i + j = finrank R M) [Nontrivial R]
+  条件: (i j : 自然数) (hij : i + j = finrank R M) [非平凡 R]
   证明: by
   rw [finrank_eq_card_chooseBasisIndex] at hij
   rw [polyCharpoly]; rw [polyCharpolyAux]; rw [Polynomial.coeff_map]; rw [← one_mul j]
@@ -1085,7 +1085,7 @@ lemma polyCharpoly_baseChange
 
 中文:
 引理 polyCharpoly_baseChange
-  条件: (A : 类型) [CommRing A] [Algebra R A]
+  条件: (A : 类型) [交换环 A] [代数 R A]
   证明: by
   unfold polyCharpoly
   rw [← φ.polyCharpolyAux_baseChange]
@@ -1165,7 +1165,7 @@ lemma polyCharpoly_coeff_eq_zero_of_basis
 
 中文:
 引理 polyCharpoly_coeff_eq_zero_of_basis
-  结论: (b : Basis ι R L) (b' : Basis ι' R L) (k : 自然数)
+  结论: (b : 基 ι R L) (b' : 基 ι' R L) (k : 自然数)
   证明: by
   rw [polyCharpoly]; rw [polyCharpolyAux]; rw [Polynomial.coeff_map] at H ⊢
   set B := (Module.Free.chooseBasis R M).end
@@ -1197,7 +1197,7 @@ lemma polyCharpoly_coeff_eq_zero_iff_of_basis
 
 中文:
 引理 polyCharpoly_coeff_eq_zero_iff_of_basis
-  条件: (b : Basis ι R L) (b' : Basis ι' R L) (k : 自然数)
+  条件: (b : 基 ι R L) (b' : 基 ι' R L) (k : 自然数)
   证明: by
   constructor <;> apply polyCharpoly_coeff_eq_zero_of_basis
 
@@ -1228,7 +1228,7 @@ definition nilRankAux
 
 中文:
 定义 nilRankAux
-  签名: (φ : L ->ₗ[R] Module.End R M) (b : Basis ι R L)
+  签名: (φ : L ->ₗ[R] 模.End R M) (b : 基 ι R L)
   定义体: (polyCharpoly φ b).natTrailingDegree
 
 Depends on / 依赖: natTrailingDegree, polyCharpoly
@@ -1248,7 +1248,7 @@ lemma polyCharpoly_coeff_nilRankAux_ne_zero
 
 中文:
 引理 polyCharpoly_coeff_nilRankAux_ne_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   apply Polynomial.trailingCoeff_nonzero_iff_nonzero.mpr
   apply polyCharpoly_ne_zero
@@ -1273,7 +1273,7 @@ lemma nilRankAux_le
 
 中文:
 引理 nilRankAux_le
-  条件: [Nontrivial R] (b : Basis ι R L) (b' : Basis ι' R L)
+  条件: [非平凡 R] (b : 基 ι R L) (b' : 基 ι' R L)
   证明: by
   apply Polynomial.natTrailingDegree_le_of_ne_zero
   rw [Ne]; rw [(polyCharpoly_coeff_eq_zero_iff_of_basis φ b b' _).not]
@@ -1298,7 +1298,7 @@ lemma nilRankAux_basis_indep
 
 中文:
 引理 nilRankAux_basis_indep
-  条件: [Nontrivial R] (b : Basis ι R L) (b' : Basis ι' R L)
+  条件: [非平凡 R] (b : 基 ι R L) (b' : 基 ι' R L)
   证明: by
   apply le_antisymm <;> apply nilRankAux_le
 
@@ -1330,7 +1330,7 @@ definition nilRank
 
 中文:
 定义 nilRank
-  签名: (φ : L ->ₗ[R] Module.End R M)
+  签名: (φ : L ->ₗ[R] 模.End R M)
   定义体: nilRankAux φ (Module.Free.chooseBasis R L)
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, nilRankAux
@@ -1352,7 +1352,7 @@ lemma nilRank_eq_polyCharpoly_natTrailingDegree
 
 中文:
 引理 nilRank_eq_polyCharpoly_natTrailingDegree
-  条件: (b : Basis ι R L)
+  条件: (b : 基 ι R L)
   证明: by
   apply nilRankAux_basis_indep
 
@@ -1400,8 +1400,8 @@ lemma nilRank_le_card
 
 中文:
 引理 nilRank_le_card
-  条件: {ι : 类型} [Fintype ι] (b : Basis ι R M)
-  结论: nilRank φ <= Fintype.card ι
+  条件: {ι : 类型} [有限类型 ι] (b : 基 ι R M)
+  结论: nilRank φ <= 有限类型.card ι
   证明: by
   apply Polynomial.natTrailingDegree_le_of_ne_zero
   rw [← Module.finrank_eq_card_basis b]; rw [← polyCharpoly_natDegree φ (chooseBasis R L)]; rw [Polynomial.coeff_natDegree]; rw [(polyCharpoly_monic _ _).leadingCoeff]
@@ -1549,7 +1549,7 @@ lemma isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
 
 中文:
 引理 isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   rw [isNilRegular_def]
   constructor
@@ -1598,7 +1598,7 @@ lemma exists_isNilRegular_of_finrank_le_card
       (by simp [n, nilRank_le_card φ 
 
 中文:
-引理 exists_isNilRegular_of_finrank_le_card
+引理 存在_isNilRegular_of_finrank_le_card
   条件: (h : finrank R M <= #R)
   证明: by
   let b := chooseBasis R L
@@ -1641,8 +1641,8 @@ lemma exists_isNilRegular
 exact Cardinal.natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite R›
 
 中文:
-引理 exists_isNilRegular
-  条件: [Infinite R]
+引理 存在_isNilRegular
+  条件: [无限 R]
   结论: 存在 x : L, IsNilRegular φ x
   证明: by
   apply exists_isNilRegular_of_finrank_le_card

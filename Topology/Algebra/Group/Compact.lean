@@ -35,7 +35,7 @@ theorem TopologicalSpace.PositiveCompacts.locallyCompactSpace_of_group
   K.isCompact.locallyCompactSpace_of_mem_nhds_of_group (mem_interior_iff_mem_nhds.1 hx)
 
 中文:
-定理 TopologicalSpace.PositiveCompacts.locallyCompactSpace_of_group
+定理 拓扑空间.PositiveCompacts.locallyCompactSpace_of_group
   证明: let ⟨_x, hx⟩ := K.interior_nonempty
   K.isCompact.locallyCompactSpace_of_mem_nhds_of_group (mem_interior_iff_mem_nhds.1 hx)
 

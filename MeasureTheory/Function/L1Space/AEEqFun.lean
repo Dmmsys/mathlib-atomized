@@ -52,7 +52,7 @@ definition Integrable
   body: MeasureTheory.Integrable f μ
 
 中文:
-定义 Integrable
+定义 可积
   签名: (f : α ->ₘ[μ] ε)
   定义体: MeasureTheory.Integrable f μ
 
@@ -101,7 +101,7 @@ theorem integrable_coeFn
 中文:
 定理 integrable_coeFn
   条件: {f : α ->ₘ[μ] ε}
-  结论: MeasureTheory.整数egrable f μ ↔ 整数egrable f
+  结论: 测度论.可积 f μ ↔ 可积 f
   证明: by
   rw [← integrable_mk f.aestronglyMeasurable]; rw [mk_coeFn]
 
@@ -120,7 +120,7 @@ theorem integrable_zero
 
 中文:
 定理 integrable_zero
-  结论: 整数egrable (0 : α ->ₘ[μ] ε')
+  结论: 可积 (0 : α ->ₘ[μ] ε')
   证明: (MeasureTheory.integrable_zero α ε' μ).congr (coeFn_mk _ _).symm
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.integrable_zero, coeFn_mk, integrable_zero
@@ -142,9 +142,9 @@ theorem Integrable.neg
   proof: induction_on f fun _f hfm hfi => (integrable_mk _).2 ((integrable_mk hfm).1 hfi).neg
 
 中文:
-定理 Integrable.neg
+定理 可积.neg
   条件: {f : α ->ₘ[μ] β}
-  结论: 整数egrable f -> 整数egrable (-f)
+  结论: 可积 f -> 可积 (-f)
   证明: induction_on f fun _f hfm hfi => (integrable_mk _).2 ((integrable_mk hfm).1 hfi).neg
 -/
 theorem Integrable.neg {f : α ->ₘ[μ] β} : Integrable f -> Integrable (-f) :=
@@ -165,7 +165,7 @@ theorem integrable_iff_mem_L1
 中文:
 定理 integrable_iff_mem_L1
   条件: {f : α ->ₘ[μ] β}
-  结论: 整数egrable f ↔ f in (α ->₁[μ] β)
+  结论: 可积 f ↔ f in (α ->₁[μ] β)
   证明: by
   rw [← integrable_coeFn]; rw [← memLp_one_iff_integrable]; rw [Lp.mem_Lp_iff_memLp]
 
@@ -188,9 +188,9 @@ theorem Integrable.add
   exact hfi.add hgi
 
 中文:
-定理 Integrable.add
+定理 可积.add
   条件: {f g : α ->ₘ[μ] β}
-  结论: 整数egrable f -> 整数egrable g -> 整数egrable (f + g)
+  结论: 可积 f -> 可积 g -> 可积 (f + g)
   证明: by
   refine induction_on₂ f g fun f hf g hg hfi hgi => ?_
   simp only [integrable_mk, mk_add_mk] at hfi hgi ⊢
@@ -210,8 +210,8 @@ theorem Integrable.sub
   proof: (sub_eq_add_neg f g).symm ▸ hf.add hg.neg
 
 中文:
-定理 Integrable.sub
-  条件: {f g : α ->ₘ[μ] β} (hf : 整数egrable f) (hg : 整数egrable g)
+定理 可积.sub
+  条件: {f g : α ->ₘ[μ] β} (hf : 可积 f) (hg : 可积 g)
   证明: (sub_eq_add_neg f g).symm ▸ hf.add hg.neg
 -/
 theorem Integrable.sub {f g : α ->ₘ[μ] β} (hf : Integrable f) (hg : Integrable g) :
@@ -235,9 +235,9 @@ theorem Integrable.smul
     by simpa using! ((integrable_mk hfm).1 hfi).smul c
 
 中文:
-定理 Integrable.smul
+定理 可积.smul
   条件: {c : 𝕜} {f : α ->ₘ[μ] β}
-  结论: 整数egrable f -> 整数egrable (c • f)
+  结论: 可积 f -> 可积 (c • f)
   证明: induction_on f fun _f hfm hfi => (integrable_mk _).2
     by simpa using! ((integrable_mk hfm).1 hfi).smul c
 -/
@@ -268,7 +268,7 @@ theorem integrable_coeFn
 中文:
 定理 integrable_coeFn
   条件: (f : α ->₁[μ] β)
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: by
   rw [← memLp_one_iff_integrable]
   exact Lp.memLp f
@@ -291,7 +291,7 @@ theorem hasFiniteIntegral_coeFn
 @[fun_prop]
 
 中文:
-定理 hasFiniteIntegral_coeFn
+定理 hasFinite整数egral_coeFn
   条件: (f : α ->₁[μ] β)
   结论: HasFinite整数egral f μ
   证明: (integrable_coeFn f).hasFiniteIntegral
@@ -342,8 +342,8 @@ theorem measurable_coeFn
 
 中文:
 定理 measurable_coeFn
-  条件: [MeasurableSpace β] [BorelSpace β] (f : α ->₁[μ] β)
-  结论: Measurable f
+  条件: [可测空间 β] [Borel空间 β] (f : α ->₁[μ] β)
+  结论: 可测 f
   证明: (Lp.stronglyMeasurable f).measurable
 
 @[fun_prop]
@@ -390,8 +390,8 @@ theorem aemeasurable_coeFn
 
 中文:
 定理 aemeasurable_coeFn
-  条件: [MeasurableSpace β] [BorelSpace β] (f : α ->₁[μ] β)
-  结论: AEMeasurable f μ
+  条件: [可测空间 β] [Borel空间 β] (f : α ->₁[μ] β)
+  结论: 几乎处处可测 f μ
   证明: (Lp.stronglyMeasurable f).measurable.aemeasurable
 
 Depends on / 依赖: Lp.stronglyMeasurable, aemeasurable, measurable, measurable.aemeasurable, stronglyMeasurable
@@ -517,9 +517,9 @@ theorem ofReal_norm_eq_lintegral
   exact ne_of_lt (hasFiniteIntegral_coeFn f)
 
 中文:
-定理 ofReal_norm_eq_lintegral
+定理 of实数_norm_eq_lintegral
   条件: (f : α ->₁[μ] β)
-  结论: ENN实数.of实数 ‖f‖ = ∫⁻ x, ‖f x‖ₑ ∂μ
+  结论: 广义非负实数.of实数 ‖f‖ = ∫⁻ x, ‖f x‖ₑ ∂μ
   证明: by
   rw [norm_def]; rw [ENNReal.ofReal_toReal]
   exact ne_of_lt (hasFiniteIntegral_coeFn f)
@@ -543,7 +543,7 @@ theorem ofReal_norm_sub_eq_lintegral
   simp only [ha, Pi.sub_apply]
 
 中文:
-定理 ofReal_norm_sub_eq_lintegral
+定理 of实数_norm_sub_eq_lintegral
   条件: (f g : α ->₁[μ] β)
   证明: by
   simp_rw [ofReal_norm_eq_lintegral, ← edist_zero_right]
@@ -577,7 +577,7 @@ definition toL1
 
 中文:
 定义 toL1
-  签名: (f : α -> β) (hf : 整数egrable f μ)
+  签名: (f : α -> β) (hf : 可积 f μ)
   定义体: (memLp_one_iff_integrable.2 hf).toLp f
 
 @[simp]
@@ -600,7 +600,7 @@ theorem toL1_coeFn
 
 中文:
 定理 toL1_coeFn
-  条件: (f : α ->₁[μ] β) (hf : 整数egrable f μ)
+  条件: (f : α ->₁[μ] β) (hf : 可积 f μ)
   结论: hf.toL1 f = f
   证明: by
   simp [Integrable.toL1]
@@ -623,7 +623,7 @@ theorem coeFn_toL1
 
 中文:
 定理 coeFn_toL1
-  条件: {f : α -> β} (hf : 整数egrable f μ)
+  条件: {f : α -> β} (hf : 可积 f μ)
   结论: hf.toL1 f =ᵐ[μ] f
   证明: AEEqFun.coeFn_mk _ _
 
@@ -648,7 +648,7 @@ theorem toL1_zero
 
 中文:
 定理 toL1_zero
-  条件: (h : 整数egrable (0 : α -> β) μ)
+  条件: (h : 可积 (0 : α -> β) μ)
   结论: h.toL1 0 = 0
   证明: rfl
 
@@ -670,7 +670,7 @@ theorem toL1_eq_mk
 
 中文:
 定理 toL1_eq_mk
-  条件: (f : α -> β) (hf : 整数egrable f μ)
+  条件: (f : α -> β) (hf : 可积 f μ)
   证明: rfl
 
 @[simp]
@@ -690,7 +690,7 @@ theorem toL1_eq_toL1_iff
 
 中文:
 定理 toL1_eq_toL1_iff
-  条件: (f g : α -> β) (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (f g : α -> β) (hf : 可积 f μ) (hg : 可积 g μ)
   证明: MemLp.toLp_eq_toLp_iff _ _
 
 Depends on / 依赖: MemLp.toLp_eq_toLp_iff, toLp_eq_toLp_iff
@@ -709,7 +709,7 @@ theorem toL1_add
 
 中文:
 定理 toL1_add
-  条件: (f g : α -> β) (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (f g : α -> β) (hf : 可积 f μ) (hg : 可积 g μ)
   证明: rfl
 -/
 theorem toL1_add (f g : α -> β) (hf : Integrable f μ) (hg : Integrable g μ) :
@@ -727,8 +727,8 @@ theorem toL1_neg
 
 中文:
 定理 toL1_neg
-  条件: (f : α -> β) (hf : 整数egrable f μ)
-  结论: toL1 (-f) (整数egrable.neg hf) = -toL1 f hf
+  条件: (f : α -> β) (hf : 可积 f μ)
+  结论: toL1 (-f) (可积.neg hf) = -toL1 f hf
   证明: rfl
 -/
 theorem toL1_neg (f : α -> β) (hf : Integrable f μ) : toL1 (-f) (Integrable.neg hf) = -toL1 f hf :=
@@ -744,7 +744,7 @@ theorem toL1_sub
 
 中文:
 定理 toL1_sub
-  条件: (f g : α -> β) (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (f g : α -> β) (hf : 可积 f μ) (hg : 可积 g μ)
   证明: rfl
 -/
 theorem toL1_sub (f g : α -> β) (hf : Integrable f μ) (hg : Integrable g μ) :
@@ -762,7 +762,7 @@ theorem norm_toL1
 
 中文:
 定理 norm_toL1
-  条件: (f : α -> β) (hf : 整数egrable f μ)
+  条件: (f : α -> β) (hf : 可积 f μ)
   证明: by
   simp [toL1, Lp.norm_toLp, eLpNorm, eLpNorm'_eq_lintegral_enorm]
 
@@ -785,7 +785,7 @@ theorem enorm_toL1
 
 中文:
 定理 enorm_toL1
-  条件: {f : α -> β} (hf : 整数egrable f μ)
+  条件: {f : α -> β} (hf : 可积 f μ)
   结论: ‖hf.toL1 f‖ₑ = ∫⁻ a, ‖f a‖ₑ ∂μ
   证明: by
   simp only [Lp.enorm_def, toL1_eq_mk, eLpNorm_aeeqFun]
@@ -808,7 +808,7 @@ theorem norm_toL1_eq_lintegral_norm
 
 中文:
 定理 norm_toL1_eq_lintegral_norm
-  条件: (f : α -> β) (hf : 整数egrable f μ)
+  条件: (f : α -> β) (hf : 可积 f μ)
   证明: by
   rw [norm_toL1]; rw [lintegral_norm_eq_lintegral_edist]
 
@@ -831,7 +831,7 @@ theorem norm_toL1_eq_lintegral_enorm
 
 中文:
 定理 norm_toL1_eq_lintegral_enorm
-  条件: (f : α -> β) (hf : 整数egrable f μ)
+  条件: (f : α -> β) (hf : 可积 f μ)
   证明: by
   simp_rw [norm_toL1, edist_zero_right]
 
@@ -857,7 +857,7 @@ theorem edist_toL1_toL1
 
 中文:
 定理 edist_toL1_toL1
-  条件: (f g : α -> β) (hf : 整数egrable f μ) (hg : 整数egrable g μ)
+  条件: (f g : α -> β) (hf : 可积 f μ) (hg : 可积 g μ)
   证明: by
   simp only [toL1, Lp.edist_toLp_toLp, eLpNorm, one_ne_zero, eLpNorm'_eq_lintegral_enorm,
     Pi.sub_apply, toReal_one, ENNReal.rpow_one, ne_eq, not_false_eq_true, div_self, ite_false]
@@ -883,7 +883,7 @@ theorem edist_toL1_zero
 
 中文:
 定理 edist_toL1_zero
-  条件: (f : α -> β) (hf : 整数egrable f μ)
+  条件: (f : α -> β) (hf : 可积 f μ)
   证明: by
   simp only [edist_zero_right, Lp.enorm_def, toL1_eq_mk, eLpNorm_aeeqFun]
   apply eLpNorm_one_eq_lintegral_enorm
@@ -907,7 +907,7 @@ theorem toL1_smul
 
 中文:
 定理 toL1_smul
-  条件: (f : α -> β) (hf : 整数egrable f μ) (k : 𝕜)
+  条件: (f : α -> β) (hf : 可积 f μ) (k : 𝕜)
   证明: rfl
 -/
 theorem toL1_smul (f : α -> β) (hf : Integrable f μ) (k : 𝕜) :
@@ -924,7 +924,7 @@ theorem toL1_smul'
 
 中文:
 定理 toL1_smul'
-  条件: (f : α -> β) (hf : 整数egrable f μ) (k : 𝕜)
+  条件: (f : α -> β) (hf : 可积 f μ) (k : 𝕜)
   证明: rfl
 -/
 theorem toL1_smul' (f : α -> β) (hf : Integrable f μ) (k : 𝕜) :

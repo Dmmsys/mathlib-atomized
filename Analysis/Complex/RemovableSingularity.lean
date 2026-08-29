@@ -47,7 +47,7 @@ theorem analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
 
 中文:
 定理 analyticAt_of_differentiable_on_punctured_nhds_of_continuousAt
-  结论: {f : Complex -> E} {c : Complex}
+  结论: {f : 复形 -> E} {c : 复形}
   证明: by
   rcases (nhdsWithin_hasBasis nhds_basis_closedBall _).mem_iff.1 hd with ⟨R, hR0, hRs⟩
   lift R to Real>=0 using hR0.le
@@ -85,7 +85,7 @@ theorem differentiableOn_compl_singleton_and_continuousAt_iff
 
 中文:
 定理 differentiableOn_compl_singleton_and_continuousAt_iff
-  结论: {f : Complex -> E} {s : Set Complex} {c : Complex}
+  结论: {f : 复形 -> E} {s : 集合 复形} {c : 复形}
   证明: by
   refine ⟨?_, fun hd => ⟨hd.mono sdiff_subset, (hd.differentiableAt hs).continuousAt⟩⟩
   rintro ⟨hd, hc⟩ x hx
@@ -122,7 +122,7 @@ continuousAt_dslope_same.2 h.differentiableAt hc⟩⟩
 
 中文:
 定理 differentiableOn_dslope
-  条件: {f : Complex -> E} {s : Set Complex} {c : Complex} (hc : s in 𝓝 c)
+  条件: {f : 复形 -> E} {s : 集合 复形} {c : 复形} (hc : s in 𝓝 c)
   证明: ⟨fun h => h.of_dslope, fun h =>
 (differentiableOn_compl_singleton_and_continuousAt_iff hc).mp
       ⟨Iff.mpr (differentiableOn_dslope_of_notMem fun h => h.2 rfl) (h.mono sdiff_subset),
@@ -151,7 +151,7 @@ theorem differentiableOn_update_limUnder_of_isLittleO
 
 中文:
 定理 differentiableOn_update_limUnder_of_isLittleO
-  结论: {f : Complex -> E} {s : Set Complex} {c : Complex} (hc : s in 𝓝 c)
+  结论: {f : 复形 -> E} {s : 集合 复形} {c : 复形} (hc : s in 𝓝 c)
   证明: by
   set F : Complex -> E := fun z => (z - c) • f z
   suffices DifferentiableOn Complex F (s \ {c}) ∧ ContinuousAt F c by
@@ -188,7 +188,7 @@ theorem differentiableOn_update_limUnder_insert_of_isLittleO
 
 中文:
 定理 differentiableOn_update_limUnder_insert_of_isLittleO
-  结论: {f : Complex -> E} {s : Set Complex} {c : Complex}
+  结论: {f : 复形 -> E} {s : 集合 复形} {c : 复形}
   证明: differentiableOn_update_limUnder_of_isLittleO (insert_mem_nhds_iff.2 hc)
     (hd.mono fun _ hz => hz.1.resolve_left hz.2) ho
 
@@ -214,7 +214,7 @@ theorem differentiableOn_update_limUnder_of_bddAbove
 
 中文:
 定理 differentiableOn_update_limUnder_of_bddAbove
-  结论: {f : Complex -> E} {s : Set Complex} {c : Complex} (hc : s in 𝓝 c)
+  结论: {f : 复形 -> E} {s : 集合 复形} {c : 复形} (hc : s in 𝓝 c)
   证明: differentiableOn_update_limUnder_of_isLittleO hc hd IsBoundedUnder.isLittleO_sub_self_inv
     let ⟨C, hC⟩ := hb
 ⟨C + ‖f c‖, eventually_map.2 mem_nhdsWithin_iff_exists_mem_nhds_inter.2
@@ -245,7 +245,7 @@ theorem tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
 
 中文:
 定理 tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
-  结论: {f : Complex -> E} {c : Complex}
+  结论: {f : 复形 -> E} {c : 复形}
   证明: by
   rw [eventually_nhdsWithin_iff] at hd
   have : DifferentiableOn Complex f ({z | z != c -> DifferentiableAt Complex f z} \ {c}) := fun z hz =>
@@ -275,7 +275,7 @@ theorem tendsto_limUnder_of_differentiable_on_punctured_nhds_of_bounded_under
 
 中文:
 定理 tendsto_limUnder_of_differentiable_on_punctured_nhds_of_bounded_under
-  结论: {f : Complex -> E} {c : Complex}
+  结论: {f : 复形 -> E} {c : 复形}
   证明: tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO hd hb.isLittleO_sub_self_inv
 
 Depends on / 依赖: hb.isLittleO_sub_self_inv, isLittleO_sub_self_inv, tendsto_limUnder_of_differentiable_on_punctured_nhds_of_isLittleO
@@ -299,8 +299,8 @@ theorem two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable
   have h0 := (hf'.diffContOnCl_ball hc).two_pi_i_inv_smul_cir
 
 中文:
-定理 two_pi_I_inv_smul_circleIntegral_sub_sq_inv_smul_of_differentiable
-  结论: {U : Set Complex}
+定理 two_pi_I_inv_smul_circle整数egral_sub_sq_inv_smul_of_differentiable
+  结论: {U : 集合 复形}
   证明: by
   -- We apply the removable singularity theorem and the Cauchy formula to `dslope f w₀`
   have hf' : DifferentiableOn Complex (dslope f w₀) U :=

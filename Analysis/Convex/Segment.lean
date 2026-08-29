@@ -434,7 +434,7 @@ theorem segment.lift
 
 中文:
 定理 segment.lift
-  条件: [SMulPosMono R 𝕜] (x y : E)
+  条件: [标量乘正递增 R 𝕜] (x y : E)
   结论: segment R x y subseteq segment 𝕜 x y
   证明: by
   rintro z ⟨a, b, ha, hb, hab, hxy⟩
@@ -461,7 +461,7 @@ theorem openSegment.lift
 
 中文:
 定理 openSegment.lift
-  条件: [Nontrivial 𝕜] [SMulPosStrictMono R 𝕜] (x y : E)
+  条件: [非平凡 𝕜] [标量乘正严格递增 R 𝕜] (x y : E)
   证明: by
   rintro z ⟨a, b, ha, hb, hab, hxy⟩
   refine ⟨_, _, ?_, ?_, by simpa [add_smul] using congr($(hab) • (1 : 𝕜)), by simpa⟩
@@ -704,7 +704,7 @@ theorem lineMap_mem_openSegment
 
 中文:
 定理 lineMap_mem_openSegment
-  条件: (a b : E) {t : 𝕜} (ht : t in Ioo 0 1)
+  条件: (a b : E) {t : 𝕜} (ht : t in 开区间 0 1)
   证明: openSegment_eq_image_lineMap 𝕜 a b ▸ mem_image_of_mem _ ht
 
 Depends on / 依赖: mem_image_of_mem, openSegment_eq_image_lineMap
@@ -726,7 +726,7 @@ theorem lineMap_mem_segment
 
 中文:
 定理 lineMap_mem_segment
-  条件: (a b : E) {t : 𝕜} (ht : t in Icc 0 1)
+  条件: (a b : E) {t : 𝕜} (ht : t in 闭区间 0 1)
   证明: segment_eq_image_lineMap 𝕜 a b ▸ mem_image_of_mem _ ht
 
 @[simp]
@@ -811,7 +811,7 @@ theorem vadd_segment
 
 中文:
 定理 vadd_segment
-  条件: [AddTorsor G E] [VAddCommClass G E E] (a : G) (b c : E)
+  条件: [加法Torsor G E] [VAddComm类 G E E] (a : G) (b c : E)
   证明: #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12286/
   we didn't need this `let` statement. -/
   let : AddTorsor E E := AddGroup.instAddTorsor E
@@ -844,7 +844,7 @@ theorem vadd_openSegment
 
 中文:
 定理 vadd_openSegment
-  条件: [AddTorsor G E] [VAddCommClass G E E] (a : G) (b c : E)
+  条件: [加法Torsor G E] [VAddComm类 G E E] (a : G) (b c : E)
   证明: #adaptation_note /-- Prior to https://github.com/leanprover/lean4/pull/12286/
   we didn't need this `let` statement. -/
   let : AddTorsor E E := AddGroup.instAddTorsor E
@@ -1043,7 +1043,7 @@ lemma segment_inter_eq_endpoint_of_linearIndependent_sub
 
 中文:
 引理 segment_inter_eq_endpoint_of_linearIndependent_sub
-  结论: [ZeroLEOneClass 𝕜]
+  结论: [ZeroLEOne类 𝕜]
   证明: by
   refine (segment_inter_subset_endpoint_of_linearIndependent_sub 𝕜 h).antisymm ?_
   simp [singleton_subset_iff, left_mem_segment]
@@ -1072,7 +1072,7 @@ theorem sameRay_of_mem_segment
 
 中文:
 定理 sameRay_of_mem_segment
-  结论: [CommRing 𝕜] [PartialOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: [交换环 𝕜] [偏序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   rw [segment_eq_image'] at h
   rcases h with ⟨θ, ⟨hθ₀, hθ₁⟩, rfl⟩
@@ -1142,7 +1142,7 @@ theorem midpoint_mem_openSegment
 
 中文:
 定理 midpoint_mem_openSegment
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   证明: by
   rw [openSegment_eq_image_lineMap]
   exact ⟨⅟2, ⟨invOf_pos.mpr two_pos, invOf_lt_one one_lt_two⟩, rfl⟩
@@ -1165,7 +1165,7 @@ theorem midpoint_mem_segment
 
 中文:
 定理 midpoint_mem_segment
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   结论: midpoint 𝕜 x y in [x -[𝕜] y]
   证明: openSegment_subset_segment _ _ _ midpoint_mem_openSegment _ _
 
@@ -1186,7 +1186,7 @@ theorem mem_openSegment_sub_add
 
 中文:
 定理 mem_openSegment_sub_add
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   证明: by
   convert! midpoint_mem_openSegment (𝕜 := 𝕜) (x - y) (x + y)
   rw [midpoint_sub_add]
@@ -1209,7 +1209,7 @@ theorem mem_segment_sub_add
 
 中文:
 定理 mem_segment_sub_add
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   结论: x in [x - y -[𝕜] x + y]
   证明: openSegment_subset_segment _ _ _ mem_openSegment_sub_add _ _
 
@@ -1230,7 +1230,7 @@ theorem mem_openSegment_add_sub
 
 中文:
 定理 mem_openSegment_add_sub
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   证明: by
   convert! midpoint_mem_openSegment (𝕜 := 𝕜) (x + y) (x - y)
   rw [midpoint_add_sub]
@@ -1255,7 +1255,7 @@ theorem mem_segment_add_sub
 
 中文:
 定理 mem_segment_add_sub
-  条件: [Invertible (2 : 𝕜)] (x y : E)
+  条件: [可逆 (2 : 𝕜)] (x y : E)
   结论: x in [x + y -[𝕜] x - y]
   证明: openSegment_subset_segment _ _ _ mem_openSegment_add_sub _ _
 
@@ -1286,7 +1286,7 @@ theorem left_mem_openSegment_iff
 
 中文:
 定理 left_mem_openSegment_iff
-  条件: [DenselyOrdered 𝕜] [IsTorsionFree 𝕜 E]
+  条件: [稠密序 𝕜] [是无挠 𝕜 E]
   证明: by
   constructor
   · rintro ⟨a, b, _, hb, hab, hx⟩
@@ -1321,7 +1321,7 @@ theorem right_mem_openSegment_iff
 
 中文:
 定理 right_mem_openSegment_iff
-  条件: [DenselyOrdered 𝕜] [IsTorsionFree 𝕜 E]
+  条件: [稠密序 𝕜] [是无挠 𝕜 E]
   证明: by rw [openSegment_symm, left_mem_openSegment_iff, eq_comm]
 
 Depends on / 依赖: eq_comm, left_mem_openSegment_iff, openSegment_symm
@@ -1554,7 +1554,7 @@ theorem segment_subset_Icc
 中文:
 定理 segment_subset_Icc
   条件: (h : x <= y)
-  结论: [x -[𝕜] y] subseteq Icc x y
+  结论: [x -[𝕜] y] subseteq 闭区间 x y
   证明: by
   rintro z ⟨a, b, ha, hb, hab, rfl⟩
   constructor
@@ -1604,7 +1604,7 @@ theorem openSegment_subset_Ioo
 中文:
 定理 openSegment_subset_Ioo
   条件: (h : x < y)
-  结论: openSegment 𝕜 x y subseteq Ioo x y
+  结论: openSegment 𝕜 x y subseteq 开区间 x y
   证明: by
   rintro z ⟨a, b, ha, hb, hab, rfl⟩
   constructor
@@ -1677,7 +1677,7 @@ theorem Convex.min_le_combo
   proof: (segment_subset_uIcc x y ⟨_, _, ha, hb, hab, rfl⟩).1
 
 中文:
-定理 Convex.min_le_combo
+定理 凸.min_le_combo
   条件: (x y : E) (ha : 0 <= a) (hb : 0 <= b) (hab : a + b = 1)
   证明: (segment_subset_uIcc x y ⟨_, _, ha, hb, hab, rfl⟩).1
 
@@ -1696,7 +1696,7 @@ theorem Convex.combo_le_max
   proof: (segment_subset_uIcc x y ⟨_, _, ha, hb, hab, rfl⟩).2
 
 中文:
-定理 Convex.combo_le_max
+定理 凸.combo_le_max
   条件: (x y : E) (ha : 0 <= a) (hb : 0 <= b) (hab : a + b = 1)
   证明: (segment_subset_uIcc x y ⟨_, _, ha, hb, hab, rfl⟩).2
 
@@ -1732,7 +1732,7 @@ theorem Icc_subset_segment
 
 中文:
 定理 Icc_subset_segment
-  结论: Icc x y subseteq [x -[𝕜] y]
+  结论: 闭区间 x y subseteq [x -[𝕜] y]
   证明: by
   rintro z ⟨hxz, hyz⟩
   obtain rfl | h := (hxz.trans hyz).eq_or_lt
@@ -1770,7 +1770,7 @@ theorem segment_eq_Icc
 中文:
 定理 segment_eq_Icc
   条件: (h : x <= y)
-  结论: [x -[𝕜] y] = Icc x y
+  结论: [x -[𝕜] y] = 闭区间 x y
   证明: (segment_subset_Icc h).antisymm Icc_subset_segment
 
 Depends on / 依赖: Icc_subset_segment, antisymm, segment_subset_Icc
@@ -1791,7 +1791,7 @@ mem_openSegment_of_ne_left_right hz.1.ne hz.2.ne' Icc_subset_segment Ioo_subset_
 
 中文:
 定理 Ioo_subset_openSegment
-  结论: Ioo x y subseteq openSegment 𝕜 x y
+  结论: 开区间 x y subseteq openSegment 𝕜 x y
   证明: fun _ hz =>
 mem_openSegment_of_ne_left_right hz.1.ne hz.2.ne' Icc_subset_segment Ioo_subset_Icc_self hz
 
@@ -1813,7 +1813,7 @@ theorem openSegment_eq_Ioo
 中文:
 定理 openSegment_eq_Ioo
   条件: (h : x < y)
-  结论: openSegment 𝕜 x y = Ioo x y
+  结论: openSegment 𝕜 x y = 开区间 x y
   证明: (openSegment_subset_Ioo h).antisymm Ioo_subset_openSegment
 
 Depends on / 依赖: Ioo_subset_openSegment, antisymm, openSegment_subset_Ioo
@@ -1836,7 +1836,7 @@ theorem segment_eq_Icc'
 中文:
 定理 segment_eq_Icc'
   条件: (x y : 𝕜)
-  结论: [x -[𝕜] y] = Icc (min x y) (max x y)
+  结论: [x -[𝕜] y] = 闭区间 (最小值 x y) (最大值 x y)
   证明: by
   rcases le_total x y with h | h
   · rw [segment_eq_Icc h, max_eq_right h, min_eq_left h]
@@ -1864,7 +1864,7 @@ theorem openSegment_eq_Ioo'
 中文:
 定理 openSegment_eq_Ioo'
   条件: (hxy : x != y)
-  结论: openSegment 𝕜 x y = Ioo (min x y) (max x y)
+  结论: openSegment 𝕜 x y = 开区间 (最小值 x y) (最大值 x y)
   证明: by
   rcases hxy.lt_or_gt with h | h
   · rw [openSegment_eq_Ioo h, max_eq_right h.le, min_eq_left h.le]
@@ -1907,7 +1907,7 @@ theorem Convex.mem_Icc
   simp only [← segment_eq_Icc h, segment, mem_ofPred_eq, smul_eq_mul, exists_and_left]
 
 中文:
-定理 Convex.mem_Icc
+定理 凸.mem_Icc
   条件: (h : x <= y)
   证明: by
   simp only [← segment_eq_Icc h, segment, mem_ofPred_eq, smul_eq_mul, exists_and_left]
@@ -1928,7 +1928,7 @@ theorem Convex.mem_Ioo
   simp only [← openSegment_eq_Ioo h, openSegment, smul_eq_mul, exists_and_left, mem_ofPred_eq]
 
 中文:
-定理 Convex.mem_Ioo
+定理 凸.mem_Ioo
   条件: (h : x < y)
   证明: by
   simp only [← openSegment_eq_Ioo h, openSegment, smul_eq_mul, exists_and_left, mem_ofPred_eq]
@@ -1955,7 +1955,7 @@ theorem Convex.mem_Ioc
     · exact ⟨a, b, ha,
 
 中文:
-定理 Convex.mem_Ioc
+定理 凸.mem_Ioc
   条件: (h : x < y)
   证明: by
   refine ⟨fun hz => ?_, ?_⟩
@@ -1999,7 +1999,7 @@ theorem Convex.mem_Ico
     · exact ⟨a, b, ha'
 
 中文:
-定理 Convex.mem_Ico
+定理 凸.mem_Ico
   条件: (h : x < y)
   证明: by
   refine ⟨fun hz => ?_, ?_⟩

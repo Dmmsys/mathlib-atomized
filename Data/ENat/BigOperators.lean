@@ -36,8 +36,8 @@ theorem toNat_prod
   proof: map_prod toNatHom _ _
 
 中文:
-定理 toNat_prod
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> 自然数∞}
+定理 to自然数_prod
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> 自然数∞}
   证明: map_prod toNatHom _ _
 
 Depends on / 依赖: map_prod, toNatHom
@@ -63,7 +63,7 @@ theorem iInf_sum
 
 中文:
 定理 iInf_sum
-  结论: {ι α : 类型} {f : ι -> α -> 自然数∞} {s : Finset α} [Nonempty ι]
+  结论: {ι α : 类型} {f : ι -> α -> 自然数∞} {s : 有限集 α} [非空 ι]
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp only [Finset.sum_empty, ciInf_const]
@@ -190,7 +190,7 @@ theorem lt_top_of_sum_ne_top
 
 中文:
 定理 lt_top_of_sum_ne_top
-  结论: {s : Finset α} {f : α -> 自然数∞} (h : ∑ x in s, f x != ⊤) {a : α}
+  结论: {s : 有限集 α} {f : α -> 自然数∞} (h : ∑ x in s, f x != ⊤) {a : α}
   证明: sum_lt_top.1 h.lt_top a ha
 
 Depends on / 依赖: h.lt_top, lt_top, sum_lt_top
@@ -210,8 +210,8 @@ theorem toNat_sum
   exact sum_congr rfl fun x hx => (natCast_toNat (hf x hx)).symm
 
 中文:
-定理 toNat_sum
-  条件: {s : Finset α} {f : α -> 自然数∞} (hf : 对任意 a in s, f a != ⊤)
+定理 to自然数_sum
+  条件: {s : 有限集 α} {f : α -> 自然数∞} (hf : 对任意 a in s, f a != ⊤)
   证明: by
   rw [← natCast_inj]; rw [natCast_toNat (sum_ne_top.2 hf)]; rw [Nat.cast_sum]
   exact sum_congr rfl fun x hx => (natCast_toNat (hf x hx)).symm
@@ -238,7 +238,7 @@ theorem sum_lt_sum_of_nonempty
 
 中文:
 定理 sum_lt_sum_of_nonempty
-  结论: {s : Finset α} (hs : s.Nonempty) {f g : α -> 自然数∞}
+  结论: {s : 有限集 α} (hs : s.非空) {f g : α -> 自然数∞}
   证明: by
   induction hs using Nonempty.cons_induction with
   | singleton => simp [Hlt _ (mem_singleton_self _)]
@@ -267,8 +267,8 @@ theorem exists_le_of_sum_le
   apply sum_lt_sum_of_nonempty hs Hle
 
 中文:
-定理 exists_le_of_sum_le
-  结论: {s : Finset α} (hs : s.Nonempty) {f g : α -> 自然数∞}
+定理 存在_le_of_sum_le
+  结论: {s : 有限集 α} (hs : s.非空) {f g : α -> 自然数∞}
   证明: by
   contrapose! Hle
   apply sum_lt_sum_of_nonempty hs Hle
@@ -299,7 +299,7 @@ lemma sum_iSup
 
 中文:
 引理 sum_iSup
-  结论: {α ι : 类型} {s : Finset α} {f : α -> ι -> 自然数∞}
+  结论: {α ι : 类型} {s : 有限集 α} {f : α -> ι -> 自然数∞}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -332,7 +332,7 @@ lemma sum_iSup_of_monotone
 
 中文:
 引理 sum_iSup_of_monotone
-  结论: {α ι : 类型} [Preorder ι] [IsDirectedOrder ι] {s : Finset α}
+  结论: {α ι : 类型} [预序 ι] [IsDirectedOrder ι] {s : 有限集 α}
   证明: sum_iSup fun i j => (exists_ge_ge i j).imp fun _k ⟨hi, hj⟩ a => ⟨hf a hi, hf a hj⟩
 
 Depends on / 依赖: exists_ge_ge, sum_iSup

@@ -907,8 +907,8 @@ theorem _root_.Continuous.const_clm_comp
   proof: (compSL E F G σ₁₂ σ₂₃ g).continuous.comp hf
 
 中文:
-定理 _root_.Continuous.const_clm_comp
-  结论: {X} [TopologicalSpace X] {f : X -> E ->SL[σ₁₂] F}
+定理 _root_.连续.const_clm_comp
+  结论: {X} [拓扑空间 X] {f : X -> E ->SL[σ₁₂] F}
   证明: (compSL E F G σ₁₂ σ₂₃ g).continuous.comp hf
 
 Depends on / 依赖: compSL, continuous, continuous.comp
@@ -929,8 +929,8 @@ theorem _root_.Continuous.clm_comp_const
     (compSL E F G σ₁₂ σ₂₃) f).continuous.comp hg
 
 中文:
-定理 _root_.Continuous.clm_comp_const
-  结论: {X} [TopologicalSpace X] {g : X -> F ->SL[σ₂₃] G}
+定理 _root_.连续.clm_comp_const
+  结论: {X} [拓扑空间 X] {g : X -> F ->SL[σ₂₃] G}
   证明: (@ContinuousLinearMap.flip _ _ _ _ _ (E ->SL[σ₁₃] G) _ _ _ _ _ _ _ _ _ _ _ _ _
     (compSL E F G σ₁₂ σ₂₃) f).continuous.comp hg
 

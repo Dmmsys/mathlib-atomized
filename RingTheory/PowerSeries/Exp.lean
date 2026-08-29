@@ -55,7 +55,7 @@ definition exp
 
 中文:
 定义 exp
-  签名: : PowerSeries A
+  签名: : 幂级数 A
   定义体: mk fun n => algebraMap Rat A (1 / n !)
 
 Depends on / 依赖: algebraMap
@@ -78,7 +78,7 @@ theorem coeff_exp
 
 中文:
 定理 coeff_exp
-  结论: coeff n (exp A) = algebraMap Rat A (1 / n !)
+  结论: coeff n (exp A) = algebraMap 有理数 A (1 / n !)
   证明: coeff_mk _ _
 
 @[simp]
@@ -158,7 +158,7 @@ theorem derivative_exp
 
 中文:
 定理 derivative_exp
-  条件: (A : 类型) [CommRing A] [Algebra Rat A]
+  条件: (A : 类型) [交换环 A] [代数 有理数 A]
   证明: by
   ext n
   rw [coeff_derivative]; rw [coeff_exp]; rw [coeff_exp]
@@ -202,7 +202,7 @@ theorem exp_unique_of_derivative_eq_self
 
 中文:
 定理 exp_unique_of_derivative_eq_self
-  结论: [CommRing A] [Algebra Rat A] [IsAddTorsionFree A]
+  结论: [交换环 A] [代数 有理数 A] [是加法无挠 A]
   证明: by
   ext n
   induction n with
@@ -247,8 +247,8 @@ theorem isUnit_exp
 
 中文:
 定理 isUnit_exp
-  条件: (A : 类型) [Ring A] [Algebra Rat A]
-  结论: IsUnit (exp A)
+  条件: (A : 类型) [环 A] [代数 有理数 A]
+  结论: 是单位 (exp A)
   证明: isUnit_iff_constantCoeff.mpr (by simp)
 
 @[simp]
@@ -270,7 +270,7 @@ theorem order_exp
 
 中文:
 定理 order_exp
-  条件: (A : 类型) [Ring A] [Algebra Rat A] [Nontrivial A]
+  条件: (A : 类型) [环 A] [代数 有理数 A] [非平凡 A]
   结论: (exp A).order = 0
   证明: order_zero_of_unit (isUnit_exp A)
 
@@ -304,7 +304,7 @@ theorem exp_mul_exp_eq_exp_add
 
 中文:
 定理 exp_mul_exp_eq_exp_add
-  条件: [Algebra Rat A] (a b : A)
+  条件: [代数 有理数 A] (a b : A)
   证明: by
   ext n
   simp only [coeff_mul, exp, rescale, coeff_mk, MonoidHom.coe_mk, OneHom.coe_mk, coe_mk,
@@ -355,7 +355,7 @@ theorem exp_mul_exp_neg_eq_one
 
 中文:
 定理 exp_mul_exp_neg_eq_one
-  条件: [Algebra Rat A]
+  条件: [代数 有理数 A]
   结论: exp A * evalNegHom (exp A) = 1
   证明: by
   convert! exp_mul_exp_eq_exp_add (1 : A) (-1) <;> simp
@@ -383,7 +383,7 @@ theorem exp_pow_eq_rescale_exp
 
 中文:
 定理 exp_pow_eq_rescale_exp
-  条件: [Algebra Rat A] (k : 自然数)
+  条件: [代数 有理数 A] (k : 自然数)
   结论: exp A ^ k = rescale (k : A) (exp A)
   证明: by
   induction k with
@@ -419,7 +419,7 @@ theorem exp_pow_sum
 
 中文:
 定理 exp_pow_sum
-  条件: [Algebra Rat A] (n : 自然数)
+  条件: [代数 有理数 A] (n : 自然数)
   证明: by
   simp only [exp_pow_eq_rescale_exp, rescale]
   ext

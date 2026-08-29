@@ -26,8 +26,8 @@ structure Prefunctor
     - map : forall {X Y : V}, (X ⟶ Y) -> (obj X ⟶ obj Y)
 
 中文:
-结构 Prefunctor
-  参数: (V : 类型u₁) [Quiver.{v₁} V] (W : 类型u₂) [Quiver.{v₂} W]
+结构 预函子
+  参数: (V : 类型u₁) [箭图.{v₁} V] (W : 类型u₂) [箭图.{v₂} W]
   公理与运算 (2 个):
     - obj : V -> W
     - map : 对任意 {X Y : V}, (X ⟶ Y) -> (obj X ⟶ obj Y)
@@ -56,7 +56,7 @@ lemma mk_obj
 
 中文:
 引理 mk_obj
-  条件: {V W : 类型} [Quiver V] [Quiver W] {obj : V -> W} {map} {X : V}
+  条件: {V W : 类型} [箭图 V] [箭图 W] {obj : V -> W} {map} {X : V}
   证明: rfl
 -/
 lemma mk_obj {V W : Type*} [Quiver V] [Quiver W] {obj : V -> W} {map} {X : V} :
@@ -74,7 +74,7 @@ lemma mk_map
 
 中文:
 引理 mk_map
-  条件: {V W : 类型} [Quiver V] [Quiver W] {obj : V -> W} {map} {X Y : V} {f : X ⟶ Y}
+  条件: {V W : 类型} [箭图 V] [箭图 W] {obj : V -> W} {map} {X Y : V} {f : X ⟶ Y}
   证明: rfl
 
 @[ext (iff := false)]
@@ -101,7 +101,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {V : 类型u} [Quiver.{v₁} V] {W : 类型u₂} [Quiver.{v₂} W] {F G : Prefunctor V W}
+  结论: {V : 类型u} [箭图.{v₁} V] {W : 类型u₂} [箭图.{v₂} W] {F G : 预函子 V W}
   证明: by
   obtain ⟨F_obj, _⟩ := F
   obtain ⟨G_obj, _⟩ := G
@@ -143,7 +143,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: {V W : 类型u} [Quiver V] [Quiver W] {F G : Prefunctor V W}
+  结论: {V W : 类型u} [箭图 V] [箭图 W] {F G : 预函子 V W}
   证明: by
   obtain ⟨Fobj, Fmap⟩ := F
   obtain ⟨Gobj, Gmap⟩ := G
@@ -178,7 +178,7 @@ definition id
 
 中文:
 定义 id
-  签名: (V : 类型) [Quiver V]
+  签名: (V : 类型) [箭图 V]
   定义体: fun X => X
   map f := f
 -/
@@ -204,7 +204,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {U : 类型} [Quiver U] {V : 类型} [Quiver V] {W : 类型} [Quiver W]
+  签名: {U : 类型} [箭图 U] {V : 类型} [箭图 V] {W : 类型} [箭图 W]
   定义体: G.obj (F.obj X)
   map f := G.map (F.map f)
 
@@ -230,7 +230,7 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: {U V : 类型} [Quiver U] [Quiver V] (F : Prefunctor U V)
+  条件: {U V : 类型} [箭图 U] [箭图 V] (F : 预函子 U V)
   证明: rfl
 
 @[simp]
@@ -251,7 +251,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: {U V : 类型} [Quiver U] [Quiver V] (F : Prefunctor U V)
+  条件: {U V : 类型} [箭图 U] [箭图 V] (F : 预函子 U V)
   证明: rfl
 
 @[simp]
@@ -270,7 +270,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {U V W Z : 类型} [Quiver U] [Quiver V] [Quiver W] [Quiver Z]
+  结论: {U V W Z : 类型} [箭图 U] [箭图 V] [箭图 W] [箭图 Z]
   证明: rfl
 -/
 theorem comp_assoc {U V W Z : Type*} [Quiver U] [Quiver V] [Quiver W] [Quiver Z]
@@ -299,7 +299,7 @@ theorem congr_map
 
 中文:
 定理 congr_map
-  结论: {U V : 类型} [Quiver U] [Quiver V] (F : U ⥤q V) {X Y : U} {f g : X ⟶ Y}
+  结论: {U V : 类型} [箭图 U] [箭图 V] (F : U ⥤q V) {X Y : U} {f g : X ⟶ Y}
   证明: by
   rw [h]
 -/
@@ -317,7 +317,7 @@ theorem congr_obj
 
 中文:
 定理 congr_obj
-  条件: {U V : 类型} [Quiver U] [Quiver V] {F G : U ⥤q V} (e : F = G) (X : U)
+  条件: {U V : 类型} [箭图 U] [箭图 V] {F G : U ⥤q V} (e : F = G) (X : U)
   证明: by cases e; rfl
 -/
 theorem congr_obj {U V : Type*} [Quiver U] [Quiver V] {F G : U ⥤q V} (e : F = G) (X : U) :
@@ -337,7 +337,7 @@ theorem congr_hom
 
 中文:
 定理 congr_hom
-  结论: {U V : 类型} [Quiver U] [Quiver V] {F G : U ⥤q V} (e : F = G) {X Y : U}
+  结论: {U V : 类型} [箭图 U] [箭图 V] {F G : U ⥤q V} (e : F = G) {X Y : U}
   证明: by
   subst e
   simp
@@ -359,7 +359,7 @@ theorem homOfEq_map
 
 中文:
 定理 homOfEq_map
-  结论: {U V : 类型} [Quiver U] [Quiver V] (F : U ⥤q V) {X Y : U} (f : X ⟶ Y)
+  结论: {U V : 类型} [箭图 U] [箭图 V] (F : U ⥤q V) {X Y : U} (f : X ⟶ Y)
   证明: by subst hX hY; simp
 -/
 theorem homOfEq_map {U V : Type*} [Quiver U] [Quiver V] (F : U ⥤q V) {X Y : U} (f : X ⟶ Y)

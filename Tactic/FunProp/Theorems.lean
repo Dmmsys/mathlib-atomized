@@ -151,7 +151,7 @@ definition detectLambdaTheoremArgs
 
 中文:
 定义 detectLambdaTheoremArgs
-  签名: (f : Expr) (ctxVars : Array Expr)
+  签名: (f : Expr) (ctxVars : 数组 Expr)
   定义体: do
 
   -- eta expand but beta reduce body
@@ -230,7 +230,7 @@ structure LambdaTheorems
 结构 LambdaTheorems
   参数: where
   公理与运算 (1 个):
-    - theorems : Std.HashMap (Name × LambdaTheoremType) (Array LambdaTheorem)  [默认: {}]
+    - theorems : Std.HashMap (Name × LambdaTheoremType) (数组 LambdaTheorem)  [默认: {}]
 -/
 structure LambdaTheorems where
   /-- map: function property name × theorem type → lambda theorem -/
@@ -293,7 +293,7 @@ definition getLambdaTheorems
 
 中文:
 定义 getLambdaTheorems
-  签名: (fun命题Name : Name) (type : LambdaTheoremType)
+  签名: (funPropName : Name) (type : LambdaTheoremType)
   定义体: do
   return (lambdaTheoremsExt.getState (← getEnv)).theorems.getD (funPropName,type) #[]
 
@@ -380,7 +380,7 @@ structure FunctionTheorem
     - funPropName : Name
     - thmOrigin : Origin
     - funOrigin : Origin
-    - mainArgs : Array 自然数
+    - mainArgs : 数组 自然数
     - appliedArgs : 自然数
     - priority : 自然数  [默认: eval_prio default]
     - form : TheoremForm
@@ -418,7 +418,7 @@ structure FunctionTheorems
 结构 FunctionTheorems
   参数: where
   公理与运算 (1 个):
-    - theorems : TreeMap Name (TreeMap Name (Array FunctionTheorem) Name.quickCmp) Name.quickCmp  [默认: {}]
+    - theorems : TreeMap Name (TreeMap Name (数组 FunctionTheorem) Name.quickCmp) Name.quickCmp  [默认: {}]
 -/
 structure FunctionTheorems where
   /-- map: function name → function property → function theorem -/
@@ -495,7 +495,7 @@ definition getTheoremsForFunction
 
 中文:
 定义 getTheoremsForFunction
-  签名: (funName : Name) (fun命题Name : Name)
+  签名: (funName : Name) (funPropName : Name)
   定义体: do
   return (functionTheoremsExt.getState (← getEnv)).theorems.getD funName {}
 .getD funPropName #[]
@@ -639,7 +639,7 @@ inductive Theorem
     - transition: (thm : GeneralTheorem)
 
 中文:
-归纳类型 Theorem
+归纳类型 定理
   参数: where
   构造子 (4 个):
     - lam: (thm : LambdaTheorem)

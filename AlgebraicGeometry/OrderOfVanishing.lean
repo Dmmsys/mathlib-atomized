@@ -280,7 +280,7 @@ lemma ord_of_isUnit
 
 中文:
 引理 ord_of_isUnit
-  结论: {U : X.Opens} [Nonempty U] {f : Γ(X, U)} (hf : IsUnit f) {x : X}
+  结论: {U : X.Opens} [非空 U] {f : Γ(X, U)} (hf : 是单位 f) {x : X}
   证明: by
   by_cases! hx : coheight x != 1
   · simp [hx]
@@ -364,7 +364,7 @@ exact inf_le_iff.mp Ring.ordFrac_add (R := X.presheaf.stalk x) _ _ hfg
 
 中文:
 引理 ord_add
-  结论: {x : X} [IsDiscreteValuationRing (X.presheaf.stalk x)]
+  结论: {x : X} [是离散赋值环 (X.presheaf.stalk x)]
   证明: by
   by_cases hf : f = 0
   · simp [hf]
@@ -407,7 +407,7 @@ lemma ord_le_smul
 
 中文:
 引理 ord_le_smul
-  结论: {x : X} {U : X.Opens} [Nonempty U] (hxU : x in U)
+  结论: {x : X} {U : X.Opens} [非空 U] (hxU : x in U)
   证明: by
   by_cases! hx : coheight x != 1
   · simp [hx]

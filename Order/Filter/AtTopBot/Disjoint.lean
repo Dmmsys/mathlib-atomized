@@ -36,8 +36,8 @@ theorem disjoint_atBot_principal_Ioi
 
 中文:
 定理 disjoint_atBot_principal_Ioi
-  条件: [Preorder α] (x : α)
-  结论: Disjoint atBot (𝓟 (Ioi x))
+  条件: [预序 α] (x : α)
+  结论: Disjoint atBot (𝓟 (左开右无界区间 x))
   证明: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl) (Iic_mem_atBot x) (mem_principal_self _)
 
 @[to_dual disjoint_atBot_principal_Ici]
@@ -61,7 +61,7 @@ theorem disjoint_atTop_principal_Iic
 
 中文:
 定理 disjoint_atTop_principal_Iic
-  条件: [Preorder α] [NoTopOrder α] (x : α)
+  条件: [预序 α] [无顶序 α] (x : α)
   证明: disjoint_of_disjoint_of_mem (Iic_disjoint_Ioi le_rfl).symm (Ioi_mem_atTop x)
     (mem_principal_self _)
 
@@ -89,7 +89,7 @@ theorem disjoint_pure_atTop
 
 中文:
 定理 disjoint_pure_atTop
-  条件: [Preorder α] [NoTopOrder α] (x : α)
+  条件: [预序 α] [无顶序 α] (x : α)
   结论: Disjoint (pure x) atTop
   证明: Disjoint.symm (disjoint_atTop_principal_Iic x).mono_right le_principal_iff.2
     mem_pure.2 self_mem_Iic
@@ -119,7 +119,7 @@ theorem disjoint_atBot_atTop
 
 中文:
 定理 disjoint_atBot_atTop
-  条件: [PartialOrder α] [Nontrivial α]
+  条件: [偏序 α] [非平凡 α]
   证明: by
   rcases exists_pair_ne α with ⟨x, y, hne⟩
   by_cases hle : x <= y

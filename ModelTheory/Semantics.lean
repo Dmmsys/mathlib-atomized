@@ -97,7 +97,7 @@ theorem realize_var
 中文:
 定理 realize_var
   条件: (v : α -> M) (k)
-  结论: realize v (var k : L.Term α) = v k
+  结论: realize v (var k : L.项 α) = v k
   证明: rfl
 
 @[simp]
@@ -117,7 +117,7 @@ theorem realize_func
 
 中文:
 定理 realize_func
-  条件: (v : α -> M) {n} (f : L.Functions n) (ts)
+  条件: (v : α -> M) {n} (f : L.函数 n) (ts)
   证明: rfl
 
 @[simp]
@@ -139,7 +139,7 @@ theorem realize_function_term
 
 中文:
 定理 realize_function_term
-  条件: {n} (v : Fin n -> M) (f : L.Functions n)
+  条件: {n} (v : 有限集 n -> M) (f : L.函数 n)
   证明: by
   rfl
 
@@ -165,7 +165,7 @@ theorem realize_relabel
 
 中文:
 定理 realize_relabel
-  条件: {t : L.Term α} {g : α -> β} {v : β -> M}
+  条件: {t : L.项 α} {g : α -> β} {v : β -> M}
   证明: by
   induction t with
   | var => rfl
@@ -192,7 +192,7 @@ theorem realize_liftAt
 
 中文:
 定理 realize_liftAt
-  条件: {n n' m : 自然数} {t : L.Term (α oplus (Fin n))} {v : α oplus (Fin (n + n')) -> M}
+  条件: {n n' m : 自然数} {t : L.项 (α oplus (有限集 n))} {v : α oplus (有限集 (n + n')) -> M}
   证明: realize_relabel
 
 @[simp]
@@ -246,7 +246,7 @@ theorem realize_functions_apply₁
 
 中文:
 定理 realize_functions_apply₁
-  条件: {f : L.Functions 1} {t : L.Term α} {v : α -> M}
+  条件: {f : L.函数 1} {t : L.项 α} {v : α -> M}
   证明: by
   rw [Functions.apply₁]; rw [Term.realize]
   refine congr rfl (funext fun i => ?_)
@@ -277,7 +277,7 @@ theorem realize_functions_apply₂
 
 中文:
 定理 realize_functions_apply₂
-  条件: {f : L.Functions 2} {t₁ t₂ : L.Term α} {v : α -> M}
+  条件: {f : L.函数 2} {t₁ t₂ : L.项 α} {v : α -> M}
   证明: by
   rw [Functions.apply₂]; rw [Term.realize]
   refine congr rfl (funext (Fin.cases ?_ ?_))
@@ -306,7 +306,7 @@ theorem realize_con
 
 中文:
 定理 realize_con
-  条件: {A : Set M} {a : A} {v : α -> M}
+  条件: {A : 集合 M} {a : A} {v : α -> M}
   结论: (L.con a).term.realize v = a
   证明: rfl
 
@@ -329,7 +329,7 @@ theorem realize_subst
 
 中文:
 定理 realize_subst
-  条件: {t : L.Term α} {tf : α -> L.Term β} {v : β -> M}
+  条件: {t : L.项 α} {tf : α -> L.项 β} {v : β -> M}
   证明: by
   induction t with
   | var => rfl
@@ -354,7 +354,7 @@ theorem realize_substFunc
 
 中文:
 定理 realize_substFunc
-  结论: [L'.Structure M] {c : {n : 自然数} -> L.Functions n -> L'.Term (Fin n)}
+  结论: [L'.结构 M] {c : {n : 自然数} -> L.函数 n -> L'.项 (有限集 n)}
   证明: by
   induction x with
   | var => simp
@@ -383,7 +383,7 @@ theorem realize_restrictVar
 
 中文:
 定理 realize_restrictVar
-  结论: [DecidableEq α] {t : L.Term α} {f : t.varFinset -> β}
+  结论: [DecidableEq α] {t : L.项 α} {f : t.varFinset -> β}
   证明: by
   induction t with
   | var => simp [restrictVar, hv']
@@ -413,7 +413,7 @@ theorem realize_restrictVar'
 
 中文:
 定理 realize_restrictVar'
-  结论: [DecidableEq α] {t : L.Term α} {s : Set α} (h : ↑t.varFinset subseteq s)
+  结论: [DecidableEq α] {t : L.项 α} {s : 集合 α} (h : ↑t.varFinset subseteq s)
   证明: realize_restrictVar _ (by simp)
 
 Depends on / 依赖: realize_restrictVar
@@ -437,7 +437,7 @@ theorem realize_restrictVarLeft
 
 中文:
 定理 realize_restrictVarLeft
-  结论: [DecidableEq α] {γ : 类型} {t : L.Term (α oplus γ)}
+  结论: [DecidableEq α] {γ : 类型} {t : L.项 (α oplus γ)}
   证明: by
   induction t with
   | var a => cases a <;> simp [restrictVarLeft, hxs']
@@ -468,7 +468,7 @@ theorem realize_restrictVarLeft'
 
 中文:
 定理 realize_restrictVarLeft'
-  结论: [DecidableEq α] {γ : 类型} {t : L.Term (α oplus γ)} {s : Set α}
+  结论: [DecidableEq α] {γ : 类型} {t : L.项 (α oplus γ)} {s : 集合 α}
   证明: realize_restrictVarLeft _ (by simp)
 
 Depends on / 依赖: realize_restrictVarLeft
@@ -500,7 +500,7 @@ theorem realize_constantsToVars
 
 中文:
 定理 realize_constantsToVars
-  结论: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
   证明: by
   induction t with
   | var => simp
@@ -551,7 +551,7 @@ theorem realize_varsToConstants
 
 中文:
 定理 realize_varsToConstants
-  结论: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
   证明: by
   induction t with
   | var ab => rcases ab with a | b <;> simp [Language.con]
@@ -587,7 +587,7 @@ theorem realize_constantsVarsEquivLeft
 
 中文:
 定理 realize_constantsVarsEquivLeft
-  结论: [L[[α]].Structure M]
+  结论: [L[[α]].结构 M]
   证明: by
   simp only [constantsVarsEquivLeft, realize_relabel, Equiv.coe_trans, Function.comp_apply,
     constantsVarsEquiv_apply, relabelEquiv_symm_apply]
@@ -626,7 +626,7 @@ theorem realize_onTerm
 
 中文:
 定理 realize_onTerm
-  结论: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (t : L.Term α)
+  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (t : L.项 α)
   证明: by
   induction t with
   | var => rfl
@@ -658,8 +658,8 @@ theorem HomClass.realize_term
     simp [*]
 
 中文:
-定理 HomClass.realize_term
-  结论: {F : 类型} [FunLike F M N] [HomClass L F M N]
+定理 态射类.realize_term
+  结论: {F : 类型} [函数状 F M N] [态射类 L F M N]
   证明: by
   induction t
   · rfl
@@ -694,8 +694,8 @@ definition Realize
   signature: : forall {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : Fin l -> M), Prop
 
 中文:
-定义 Realize
-  签名: : 对任意 {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : Fin l -> M), 命题
+定义 实数ize
+  签名: : 对任意 {l} (_f : L.BoundedFormula α l) (_v : α -> M) (_xs : 有限集 l -> M), 命题
 
 Depends on / 依赖: atTop_isCountablyGenerated_of_archimedean
 -/
@@ -722,7 +722,7 @@ theorem realize_bot
 
 中文:
 定理 realize_bot
-  结论: (⊥ : L.BoundedFormula α l).实数ize v xs ↔ False
+  结论: (⊥ : L.BoundedFormula α l).实数ize v xs ↔ 假
   证明: Iff.rfl
 
 @[simp]
@@ -768,7 +768,7 @@ theorem realize_bdEqual
 
 中文:
 定理 realize_bdEqual
-  条件: (t₁ t₂ : L.Term (α oplus (Fin l)))
+  条件: (t₁ t₂ : L.项 (α oplus (有限集 l)))
   证明: Iff.rfl
 
 @[simp]
@@ -792,7 +792,7 @@ theorem realize_top
 
 中文:
 定理 realize_top
-  结论: (⊤ : L.BoundedFormula α l).实数ize v xs ↔ True
+  结论: (⊤ : L.BoundedFormula α l).实数ize v xs ↔ 真
   证明: by simp [Top.top]
 
 @[simp]
@@ -842,7 +842,7 @@ theorem realize_foldr_inf
 
 中文:
 定理 realize_foldr_inf
-  条件: (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M)
+  条件: (l : 列表 (L.BoundedFormula α n)) (v : α -> M) (xs : 有限集 n -> M)
   证明: by
   induction l with
   | nil => simp
@@ -893,7 +893,7 @@ theorem realize_foldr_imp
 
 中文:
 定理 realize_foldr_imp
-  结论: {k : 自然数} (l : List (L.BoundedFormula α k))
+  结论: {k : 自然数} (l : 列表 (L.BoundedFormula α k))
   证明: by
   intro v xs
   induction l
@@ -927,7 +927,7 @@ theorem realize_rel
 
 中文:
 定理 realize_rel
-  条件: {k : 自然数} {R : L.Relations k} {ts : Fin k -> L.Term _}
+  条件: {k : 自然数} {R : L.关系 k} {ts : 有限集 k -> L.项 _}
   证明: Iff.rfl
 
 @[simp]
@@ -954,7 +954,7 @@ theorem realize_rel₁
 
 中文:
 定理 realize_rel₁
-  条件: {R : L.Relations 1} {t : L.Term _}
+  条件: {R : L.关系 1} {t : L.项 _}
   证明: by
   rw [Relations.boundedFormula₁]; rw [realize_rel]; rw [iff_eq_eq]
   refine congr rfl (funext fun _ => ?_)
@@ -987,7 +987,7 @@ theorem realize_rel₂
 
 中文:
 定理 realize_rel₂
-  条件: {R : L.Relations 2} {t₁ t₂ : L.Term _}
+  条件: {R : L.关系 2} {t₁ t₂ : L.项 _}
   证明: by
   rw [Relations.boundedFormula₂]; rw [realize_rel]; rw [iff_eq_eq]
   refine congr rfl (funext (Fin.cases ?_ ?_))
@@ -1050,7 +1050,7 @@ theorem realize_foldr_sup
 
 中文:
 定理 realize_foldr_sup
-  条件: (l : List (L.BoundedFormula α n)) (v : α -> M) (xs : Fin n -> M)
+  条件: (l : 列表 (L.BoundedFormula α n)) (v : α -> M) (xs : 有限集 n -> M)
   证明: by
   induction l with
   | nil => simp
@@ -1083,7 +1083,7 @@ theorem realize_all
 
 中文:
 定理 realize_all
-  结论: (all θ).实数ize v xs ↔ 对任意 a : M, θ.实数ize v (Fin.snoc xs a)
+  结论: (all θ).实数ize v xs ↔ 对任意 a : M, θ.实数ize v (有限集.snoc xs a)
   证明: Iff.rfl
 
 @[simp]
@@ -1108,7 +1108,7 @@ theorem realize_ex
 
 中文:
 定理 realize_ex
-  结论: θ.ex.实数ize v xs ↔ 存在 a : M, θ.实数ize v (Fin.snoc xs a)
+  结论: θ.ex.实数ize v xs ↔ 存在 a : M, θ.实数ize v (有限集.snoc xs a)
   证明: by
   rw [BoundedFormula.ex]; rw [realize_not]; rw [realize_all]; rw [not_forall]
   simp_rw [realize_not, Classical.not_not]
@@ -1182,7 +1182,7 @@ theorem realize_mapTermRel_id
 
 中文:
 定理 realize_mapTermRel_id
-  结论: [L'.Structure M]
+  结论: [L'.结构 M]
   证明: by
   induction φ with
   | falsum => rfl
@@ -1227,7 +1227,7 @@ theorem realize_mapTermRel_add_castLe
 
 中文:
 定理 realize_mapTermRel_add_castLe
-  结论: [L'.Structure M] {k : 自然数}
+  结论: [L'.结构 M] {k : 自然数}
   证明: by
   induction φ with
   | falsum => rfl
@@ -1270,7 +1270,7 @@ theorem realize_relabel
 
 中文:
 定理 realize_relabel
-  结论: {m n : 自然数} {φ : L.BoundedFormula α n} {g : α -> β oplus (Fin m)} {v : β -> M}
+  结论: {m n : 自然数} {φ : L.BoundedFormula α n} {g : α -> β oplus (有限集 m)} {v : β -> M}
   证明: by
   apply realize_mapTermRel_add_castLe <;> simp
 
@@ -1300,7 +1300,7 @@ theorem realize_liftAt
 
 中文:
 定理 realize_liftAt
-  结论: {n n' m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + n') -> M}
+  结论: {n n' m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : 有限集 (n + n') -> M}
   证明: by
   rw [liftAt]
   induction φ with
@@ -1348,7 +1348,7 @@ theorem realize_liftAt_one
 
 中文:
 定理 realize_liftAt_one
-  结论: {n m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : Fin (n + 1) -> M}
+  结论: {n m : 自然数} {φ : L.BoundedFormula α n} {v : α -> M} {xs : 有限集 (n + 1) -> M}
   证明: by
   simp [realize_liftAt, hmn, castSucc]
 
@@ -1412,7 +1412,7 @@ theorem realize_subst
 
 中文:
 定理 realize_subst
-  条件: {φ : L.BoundedFormula α n} {tf : α -> L.Term β} {v : β -> M} {xs : Fin n -> M}
+  条件: {φ : L.BoundedFormula α n} {tf : α -> L.项 β} {v : β -> M} {xs : 有限集 n -> M}
   证明: realize_mapTermRel_id
     (fun n t x => by
       rw [Term.realize_subst]
@@ -1507,7 +1507,7 @@ theorem realize_restrictFreeVar'
 
 中文:
 定理 realize_restrictFreeVar'
-  结论: [DecidableEq α] {n : 自然数} {φ : L.BoundedFormula α n} {s : Set α}
+  结论: [DecidableEq α] {n : 自然数} {φ : L.BoundedFormula α n} {s : 集合 α}
   证明: realize_restrictFreeVar _ (by simp)
 
 Depends on / 依赖: realize_restrictFreeVar
@@ -1533,7 +1533,7 @@ theorem realize_constantsVarsEquiv
 
 中文:
 定理 realize_constantsVarsEquiv
-  结论: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
   证明: by
   refine realize_mapTermRel_id (fun n t xs => realize_constantsVarsEquivLeft) fun n R xs => ?_
   -- This used to be `rw`, but we need `erw` after https://github.com/leanprover/lean4/pull/2644
@@ -1634,7 +1634,7 @@ theorem realize_onBoundedFormula
 
 中文:
 定理 realize_onBoundedFormula
-  结论: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] {n : 自然数}
+  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] {n : 自然数}
   证明: by
   induction ψ with
   | falsum => rfl
@@ -1706,7 +1706,7 @@ theorem realize_bot
 
 中文:
 定理 realize_bot
-  结论: (⊥ : L.Formula α).实数ize v ↔ False
+  结论: (⊥ : L.公式 α).实数ize v ↔ 假
   证明: Iff.rfl
 
 @[simp]
@@ -1729,7 +1729,7 @@ theorem realize_top
 
 中文:
 定理 realize_top
-  结论: (⊤ : L.Formula α).实数ize v ↔ True
+  结论: (⊤ : L.公式 α).实数ize v ↔ 真
   证明: BoundedFormula.realize_top
 
 @[simp]
@@ -1798,7 +1798,7 @@ theorem realize_rel
 
 中文:
 定理 realize_rel
-  条件: {k : 自然数} {R : L.Relations k} {ts : Fin k -> L.Term α}
+  条件: {k : 自然数} {R : L.关系 k} {ts : 有限集 k -> L.项 α}
   证明: BoundedFormula.realize_rel.trans (by simp)
 
 @[simp]
@@ -1825,7 +1825,7 @@ theorem realize_rel₁
 
 中文:
 定理 realize_rel₁
-  条件: {R : L.Relations 1} {t : L.Term _}
+  条件: {R : L.关系 1} {t : L.项 _}
   证明: by
   rw [Relations.formula₁]; rw [realize_rel]; rw [iff_eq_eq]
   refine congr rfl (funext fun _ => ?_)
@@ -1858,7 +1858,7 @@ theorem realize_rel₂
 
 中文:
 定理 realize_rel₂
-  条件: {R : L.Relations 2} {t₁ t₂ : L.Term _}
+  条件: {R : L.关系 2} {t₁ t₂ : L.项 _}
   证明: by
   rw [Relations.formula₂]; rw [realize_rel]; rw [iff_eq_eq]
   refine congr rfl (funext (Fin.cases ?_ ?_))
@@ -1935,7 +1935,7 @@ theorem realize_relabel
 
 中文:
 定理 realize_relabel
-  条件: {φ : L.Formula α} {g : α -> β} {v : β -> M}
+  条件: {φ : L.公式 α} {g : α -> β} {v : β -> M}
   证明: by
   rw [Realize]; rw [Realize]; rw [relabel]; rw [BoundedFormula.realize_relabel]; rw [iff_eq_eq]; rw [Fin.castAdd_zero]
   exact congr rfl (funext finZeroElim)
@@ -1960,7 +1960,7 @@ theorem realize_relabel_sumInr
 
 中文:
 定理 realize_relabel_sumInr
-  条件: (φ : L.Formula (Fin n)) {v : Empty -> M} {x : Fin n -> M}
+  条件: (φ : L.公式 (有限集 n)) {v : 空 -> M} {x : 有限集 n -> M}
   证明: by
   rw [BoundedFormula.realize_relabel]; rw [Formula.Realize]; rw [Sum.elim_comp_inr]; rw [Fin.castAdd_zero]; rw [cast_refl]; rw [Function.comp_id]; rw [Subsingleton.elim (x ∘ (natAdd n : Fin 0 -> Fin n)) default]
 
@@ -1985,7 +1985,7 @@ theorem realize_equal
 
 中文:
 定理 realize_equal
-  条件: {t₁ t₂ : L.Term α} {x : α -> M}
+  条件: {t₁ t₂ : L.项 α} {x : α -> M}
   证明: by simp [Term.equal, Realize]
 
 @[simp]
@@ -2008,7 +2008,7 @@ theorem realize_graph
 
 中文:
 定理 realize_graph
-  条件: {f : L.Functions n} {x : Fin n -> M} {y : M}
+  条件: {f : L.函数 n} {x : 有限集 n -> M} {y : M}
   证明: by
   simp only [Formula.graph, Term.realize, realize_equal, Fin.cons_zero, Fin.cons_succ]
   rw [eq_comm]
@@ -2033,7 +2033,7 @@ theorem boundedFormula_realize_eq_realize
 
 中文:
 定理 boundedFormula_realize_eq_realize
-  条件: (φ : L.Formula α) (x : α -> M) (y : Fin 0 -> M)
+  条件: (φ : L.公式 α) (x : α -> M) (y : 有限集 0 -> M)
   证明: by
   rw [Formula.Realize]; rw [iff_iff_eq]
   congr
@@ -2061,8 +2061,8 @@ theorem LHom.realize_onFormula
 @[simp]
 
 中文:
-定理 LHom.realize_onFormula
-  结论: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (ψ : L.Formula α)
+定理 L态射.realize_onFormula
+  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (ψ : L.公式 α)
   证明: φ.realize_onBoundedFormula ψ
 
 @[simp]
@@ -2088,8 +2088,8 @@ theorem LHom.setOfPred_realize_onFormula
 alias LHom.setOf_realize_onFormula := LHom.setOfPred_realize_onFormula
 
 中文:
-定理 LHom.setOfPred_realize_onFormula
-  结论: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+定理 L态射.setOfPred_realize_onFormula
+  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M]
   证明: by
   ext
   simp
@@ -2301,7 +2301,7 @@ theorem realize_equivSentence_symm_con
 
 中文:
 定理 realize_equivSentence_symm_con
-  结论: [L[[α]].Structure M]
+  结论: [L[[α]].结构 M]
   证明: by
   simp only [equivSentence, _root_.Equiv.symm_symm, Equiv.coe_trans, Realize,
     BoundedFormula.realize_relabelEquiv, Function.comp]
@@ -2338,7 +2338,7 @@ theorem realize_equivSentence
 
 中文:
 定理 realize_equivSentence
-  结论: [L[[α]].Structure M] [(L.lhomWithConstants α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(L.lhomWithConstants α).是ExpansionOn M]
   证明: by
   rw [← realize_equivSentence_symm_con M (equivSentence φ)]; rw [_root_.Equiv.symm_apply_apply]
 
@@ -2384,8 +2384,8 @@ theorem LHom.realize_onSentence
   proof: φ.realize_onFormula ψ
 
 中文:
-定理 LHom.realize_onSentence
-  结论: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+定理 L态射.realize_onSentence
+  结论: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M]
   证明: φ.realize_onFormula ψ
 
 Depends on / 依赖: realize_onFormula
@@ -2566,8 +2566,8 @@ theorem LHom.onTheory_model
   proof: by simp [Theory.model_iff, LHom.onTheory]
 
 中文:
-定理 LHom.onTheory_model
-  条件: [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M] (T : L.Theory)
+定理 L态射.onTheory_model
+  条件: [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M] (T : L.Theory)
   证明: by simp [Theory.model_iff, LHom.onTheory]
 
 Depends on / 依赖: LHom.onTheory, Theory, Theory.model_iff, model_iff, onTheory
@@ -2914,7 +2914,7 @@ theorem _root_.FirstOrder.Language.Formula.realize_iAlls
   · exact ⟨fun v => v ∘ e, fun v => v ∘ e.symm
 
 中文:
-定理 _root_.FirstOrder.Language.Formula.realize_iAlls
+定理 _root_.FirstOrder.Language.公式.realize_iAlls
   证明: by
   let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
   rw [Formula.iAlls]
@@ -2956,7 +2956,7 @@ theorem realize_iAlls
 
 中文:
 定理 realize_iAlls
-  条件: [Finite β] {φ : L.Formula (α oplus β)} {v : α -> M} {v' : Fin 0 -> M}
+  条件: [有限 β] {φ : L.公式 (α oplus β)} {v : α -> M} {v' : 有限集 0 -> M}
   证明: by
   rw [← Formula.realize_iAlls]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
@@ -2985,7 +2985,7 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExs
 
 
 中文:
-定理 _root_.FirstOrder.Language.Formula.realize_iExs
+定理 _root_.FirstOrder.Language.公式.realize_iExs
   证明: by
   let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin γ))
   rw [Formula.iExs]
@@ -3028,7 +3028,7 @@ theorem realize_iExs
 
 中文:
 定理 realize_iExs
-  条件: [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M}
+  条件: [有限 γ] {φ : L.公式 (α oplus γ)} {v : α -> M} {v' : 有限集 0 -> M}
   证明: by
   rw [← Formula.realize_iExs]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
@@ -3059,7 +3059,7 @@ theorem realize_toFormula
 
 中文:
 定理 realize_toFormula
-  条件: (φ : L.BoundedFormula α n) (v : α oplus (Fin n) -> M)
+  条件: (φ : L.BoundedFormula α n) (v : α oplus (有限集 n) -> M)
   证明: by
   induction φ with
   | falsum => rfl
@@ -3112,7 +3112,7 @@ theorem realize_iSup
 
 中文:
 定理 realize_iSup
-  结论: [Finite β] {f : β -> L.BoundedFormula α n}
+  结论: [有限 β] {f : β -> L.BoundedFormula α n}
   证明: by
   simp only [iSup, realize_foldr_sup, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
     exists_exists_eq_and]
@@ -3142,7 +3142,7 @@ theorem realize_iInf
 
 中文:
 定理 realize_iInf
-  结论: [Finite β] {f : β -> L.BoundedFormula α n}
+  结论: [有限 β] {f : β -> L.BoundedFormula α n}
   证明: by
   simp only [iInf, realize_foldr_inf, List.mem_map, Finset.mem_toList, Finset.mem_univ, true_and,
     forall_exists_index, forall_apply_eq_imp_iff]
@@ -3170,8 +3170,8 @@ theorem _root_.FirstOrder.Language.Formula.realize_iSup
 @[simp]
 
 中文:
-定理 _root_.FirstOrder.Language.Formula.realize_iSup
-  结论: [Finite β] {f : β -> L.Formula α}
+定理 _root_.FirstOrder.Language.公式.realize_iSup
+  结论: [有限 β] {f : β -> L.公式 α}
   证明: by
   simp [Formula.iSup, Formula.Realize]
 
@@ -3194,8 +3194,8 @@ theorem _root_.FirstOrder.Language.Formula.realize_iInf
   simp [Formula.iInf, Formula.Realize]
 
 中文:
-定理 _root_.FirstOrder.Language.Formula.realize_iInf
-  结论: [Finite β] {f : β -> L.Formula α}
+定理 _root_.FirstOrder.Language.公式.realize_iInf
+  结论: [有限 β] {f : β -> L.公式 α}
   证明: by
   simp [Formula.iInf, Formula.Realize]
 
@@ -3219,8 +3219,8 @@ theorem _root_.FirstOrder.Language.Formula.realize_iExsUnique
     realize_bdEqual, Term.realize_
 
 中文:
-定理 _root_.FirstOrder.Language.Formula.realize_iExsUnique
-  结论: [Finite γ]
+定理 _root_.FirstOrder.Language.公式.realize_iExsUnique
+  结论: [有限 γ]
   证明: by
   rw [Formula.iExsUnique]; rw [ExistsUnique]
   simp only [Formula.realize_iExs, Formula.realize_inf, Formula.realize_iAlls, Formula.realize_imp,
@@ -3254,7 +3254,7 @@ theorem realize_iExsUnique
 
 中文:
 定理 realize_iExsUnique
-  条件: [Finite γ] {φ : L.Formula (α oplus γ)} {v : α -> M} {v' : Fin 0 -> M}
+  条件: [有限 γ] {φ : L.公式 (α oplus γ)} {v : α -> M} {v' : 有限集 0 -> M}
   证明: by
   rw [← Formula.realize_iExsUnique]; rw [iff_iff_eq]; congr; simp [eq_iff_true_of_subsingleton]
 
@@ -3281,7 +3281,7 @@ theorem realize_exClosure
 
 中文:
 定理 realize_exClosure
-  条件: [DecidableEq α] (φ : L.Formula α)
+  条件: [DecidableEq α] (φ : L.公式 α)
   证明: by
   simp [Sentence.Realize, Formula.exClosure, Formula.realize_iExs]
 
@@ -3305,7 +3305,7 @@ theorem realize_exClosure_of_realize_equivSentence
 
 中文:
 定理 realize_exClosure_of_realize_equivSentence
-  结论: [DecidableEq α] [L[[α]].Structure M]
+  结论: [DecidableEq α] [L[[α]].结构 M]
   证明: by
   rw [Formula.realize_exClosure]
   exists fun a => (L.con (a : α) : M)
@@ -3335,7 +3335,7 @@ theorem exists_realize_equivSentence_iff_realize_exClosure
           using (realize_equivSentence_symm M (F
 
 中文:
-定理 exists_realize_equivSentence_iff_realize_exClosure
+定理 存在_realize_equivSentence_iff_realize_exClosure
   证明: by
   constructor
   · rintro ⟨v, hv⟩
@@ -3445,7 +3445,7 @@ include g
 
 中文:
 定理 realize_formula
-  条件: (φ : L.Formula α) {v : α -> M}
+  条件: (φ : L.公式 α) {v : α -> M}
   证明: by
   rw [Formula.Realize]; rw [Formula.Realize]; rw [← realize_boundedFormula g φ]; rw [iff_eq_eq]; rw [Unique.eq_default (g ∘ default)]
 
@@ -3653,7 +3653,7 @@ exact forall₃_congr fun _ _ _ => imp_congr realize_rel₂ imp_congr realize_re
 
 中文:
 定理 realize_transitive
-  结论: M ⊨ r.transitive ↔ IsTrans M fun x y => RelMap r ![x, y]
+  结论: M ⊨ r.transitive ↔ 是Trans M fun x y => RelMap r ![x, y]
   证明: by
   rw [isTrans_def]
 exact forall₃_congr fun _ _ _ => imp_congr realize_rel₂ imp_congr realize_rel₂ realize_rel₂
@@ -3679,7 +3679,7 @@ exact forall₂_congr fun _ _ => realize_sup.trans or_congr realize_rel₂ reali
 
 中文:
 定理 realize_total
-  结论: M ⊨ r.total ↔ Std.Total fun x y : M => RelMap r ![x, y]
+  结论: M ⊨ r.total ↔ Std.全 fun x y : M => RelMap r ![x, y]
   证明: by
   rw [total_def]
 exact forall₂_congr fun _ _ => realize_sup.trans or_congr realize_rel₂ realize_rel₂
@@ -3746,7 +3746,7 @@ theorem model_infiniteTheory_iff
 
 中文:
 定理 model_infiniteTheory_iff
-  结论: M ⊨ L.infiniteTheory ↔ Infinite M
+  结论: M ⊨ L.infiniteTheory ↔ 无限 M
   证明: by
   simp [infiniteTheory, infinite_iff, aleph0_le]
 
@@ -3767,7 +3767,7 @@ instance model_infiniteTheory
 
 中文:
 实例 model_infiniteTheory
-  签名: [h : Infinite M]
+  签名: [h : 无限 M]
   定义体: L.model_infiniteTheory_iff.2 h
 
 @[simp]
@@ -3790,7 +3790,7 @@ theorem model_nonemptyTheory_iff
 
 中文:
 定理 model_nonemptyTheory_iff
-  结论: M ⊨ L.nonemptyTheory ↔ Nonempty M
+  结论: M ⊨ L.nonemptyTheory ↔ 非空 M
   证明: by
   simp only [nonemptyTheory, Theory.model_iff, Set.mem_singleton_iff, forall_eq,
     Sentence.realize_cardGe, Nat.cast_one, Cardinal.one_le_iff_ne_zero, mk_ne_zero_iff]
@@ -3811,7 +3811,7 @@ instance model_nonempty
 
 中文:
 实例 model_nonempty
-  签名: [h : Nonempty M]
+  签名: [h : 非空 M]
   定义体: L.model_nonemptyTheory_iff.2 h
 
 Depends on / 依赖: L.model_nonemptyTheory_iff, model_nonemptyTheory_iff
@@ -3836,7 +3836,7 @@ theorem model_distinctConstantsTheory
 
 中文:
 定理 model_distinctConstantsTheory
-  条件: {M : Type w} [L[[α]].Structure M] (s : Set α)
+  条件: {M : 类型 w} [L[[α]].结构 M] (s : 集合 α)
   证明: by
   simp only [distinctConstantsTheory, Theory.model_iff, Set.mem_image,
     Prod.exists, forall_exists_index, and_imp]
@@ -3872,7 +3872,7 @@ theorem card_le_of_model_distinctConstantsTheory
 
 中文:
 定理 card_le_of_model_distinctConstantsTheory
-  结论: (s : Set α) (M : Type w) [L[[α]].Structure M]
+  结论: (s : 集合 α) (M : 类型 w) [L[[α]].结构 M]
   证明: lift_mk_le'.2 ⟨⟨_, Set.injOn_iff_injective.1 ((L.model_distinctConstantsTheory s).1 h)⟩⟩
 
 Depends on / 依赖: L.model_distinctConstantsTheory, Set.injOn_iff_injective, injOn_iff_injective, lift_mk_le, model_distinctConstantsTheory
@@ -3985,7 +3985,7 @@ theorem nonempty_iff
 中文:
 定理 nonempty_iff
   条件: (h : M ≅[L] N)
-  结论: Nonempty M ↔ Nonempty N
+  结论: 非空 M ↔ 非空 N
   证明: (model_nonemptyTheory_iff L).symm.trans (h.theory_model_iff.trans (model_nonemptyTheory_iff L))
 
 Depends on / 依赖: h.theory_model_iff.trans, model_nonemptyTheory_iff, symm.trans, theory_model_iff
@@ -4004,8 +4004,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: [Mn : Nonempty M] (h : M ≅[L] N)
-  结论: Nonempty N
+  条件: [Mn : 非空 M] (h : M ≅[L] N)
+  结论: 非空 N
   证明: h.nonempty_iff.1 Mn
 
 Depends on / 依赖: h.nonempty_iff, nonempty_iff
@@ -4025,7 +4025,7 @@ theorem infinite_iff
 中文:
 定理 infinite_iff
   条件: (h : M ≅[L] N)
-  结论: Infinite M ↔ Infinite N
+  结论: 无限 M ↔ 无限 N
   证明: (model_infiniteTheory_iff L).symm.trans (h.theory_model_iff.trans (model_infiniteTheory_iff L))
 
 Depends on / 依赖: h.theory_model_iff.trans, model_infiniteTheory_iff, symm.trans, theory_model_iff
@@ -4044,8 +4044,8 @@ theorem infinite
 
 中文:
 定理 infinite
-  条件: [Mi : Infinite M] (h : M ≅[L] N)
-  结论: Infinite N
+  条件: [Mi : 无限 M] (h : M ≅[L] N)
+  结论: 无限 N
   证明: h.infinite_iff.1 Mi
 
 Depends on / 依赖: h.infinite_iff, infinite_iff

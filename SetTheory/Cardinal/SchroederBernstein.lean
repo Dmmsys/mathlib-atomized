@@ -59,7 +59,7 @@ theorem schroeder_bernstein_of_rel
 
 中文:
 定理 schroeder_bernstein_of_rel
-  结论: {f : α -> β} {g : β -> α} (hf : Function.Injective f)
+  结论: {f : α -> β} {g : β -> α} (hf : 函数.单射 f)
   证明: by
   classical
   rcases isEmpty_or_nonempty β with hβ | hβ
@@ -123,7 +123,7 @@ theorem schroeder_bernstein
 
 中文:
 定理 schroeder_bernstein
-  结论: {f : α -> β} {g : β -> α} (hf : Function.Injective f)
+  结论: {f : α -> β} {g : β -> α} (hf : 函数.单射 f)
   证明: by
   obtain ⟨f, hf, _⟩ := schroeder_bernstein_of_rel hf hg (fun x y => True) (by simp) (by simp)
   exact ⟨f, hf⟩
@@ -146,7 +146,7 @@ theorem antisymm
 
 中文:
 定理 antisymm
-  结论: (α ↪ β) -> (β ↪ α) -> Nonempty (α ≃ β)
+  结论: (α ↪ β) -> (β ↪ α) -> 非空 (α ≃ β)
   证明: schroeder_bernstein h₁ h₂
     ⟨Equiv.ofBijective f hf⟩
 
@@ -193,8 +193,8 @@ theorem min_injective
 
 中文:
 定理 min_injective
-  条件: [I : Nonempty ι]
-  结论: 存在 i, Nonempty (对任意 j, β i ↪ β j)
+  条件: [I : 非空 ι]
+  结论: 存在 i, 非空 (对任意 j, β i ↪ β j)
   证明: let ⟨s, hs⟩ := show exists s, Maximal (· in sets β) s by
     refine zorn_subset _ fun c hc hcc =>
       ⟨⋃₀ c, fun i x ⟨p, hpc, hxp⟩ y ⟨q, hqc, hyq⟩ hi => ?_, fun _ => subset_sUnion_of_mem⟩
@@ -251,7 +251,7 @@ theorem total
 中文:
 定理 total
   条件: (α : 类型u) (β : 类型v)
-  结论: Nonempty (α ↪ β) ∨ Nonempty (β ↪ α)
+  结论: 非空 (α ↪ β) ∨ 非空 (β ↪ α)
   证明: match @min_injective Bool (fun b => cond b (ULift α) (ULift.{max u v, v} β)) ⟨true⟩
     with
   | ⟨true, ⟨h⟩⟩ =>

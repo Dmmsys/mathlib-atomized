@@ -50,7 +50,7 @@ theorem smul_sum
 
 中文:
 定理 smul_sum
-  条件: [Zero β] [AddCommMonoid M] [DistribSMul R M] {v : α ->₀ β} {c : R} {h : α -> β -> M}
+  条件: [零 β] [加法交换幺半群 M] [分配标量乘法 R M] {v : α ->₀ β} {c : R} {h : α -> β -> M}
   证明: Finset.smul_sum
 
 @[simp]
@@ -76,7 +76,7 @@ theorem sum_smul_index_semilinearMap'
 
 中文:
 定理 sum_smul_index_semilinearMap'
-  结论: [Semiring R] [Semiring R₂] [AddCommMonoid M] [Module R M]
+  结论: [半环 R] [半环 R₂] [加法交换幺半群 M] [模 R M]
   证明: by
   rw [Finsupp.sum_smul_index']; rw [Finsupp.smul_sum]
   · simp only [map_smulₛₗ]
@@ -103,7 +103,7 @@ theorem sum_smul_index_linearMap'
 
 中文:
 定理 sum_smul_index_linearMap'
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] [AddCommMonoid M₂]
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] [加法交换幺半群 M₂]
   证明: sum_smul_index_semilinearMap'
 
 Depends on / 依赖: sum_smul_index_semilinearMap
@@ -140,8 +140,8 @@ instance _root_.LinearMap.CompatibleSMul.finsupp_dom
     congr; ext i m; exact (f.comp <| lsingle i).map_smul_of_tower r m
 
 中文:
-实例 _root_.LinearMap.CompatibleSMul.finsupp_dom
-  签名: [SMulZeroClass R M] [DistribSMul R N]
+实例 _root_.线性映射.余mpatibleSMul.finsupp_dom
+  签名: [SMulZero类 R M] [分配标量乘法 R N]
   定义体: by
     conv_rhs => rw [← sum_single m, map_finsuppSum, smul_sum]
     erw [← sum_single (r • m), sum_mapRange_index single_zero, map_finsuppSum]
@@ -165,8 +165,8 @@ instance _root_.LinearMap.CompatibleSMul.finsupp_cod
   body: by ext i; apply ((lapply i).comp f).map_smul_of_tower
 
 中文:
-实例 _root_.LinearMap.CompatibleSMul.finsupp_cod
-  签名: [SMul R M] [SMulZeroClass R N]
+实例 _root_.线性映射.余mpatibleSMul.finsupp_cod
+  签名: [标量乘法 R M] [SMulZero类 R N]
   定义体: by ext i; apply ((lapply i).comp f).map_smul_of_tower
 
 Depends on / 依赖: lapply, map_smul_of_tower
@@ -246,7 +246,7 @@ theorem coe_lsum
 中文:
 定理 coe_lsum
   条件: (f : α -> M ->ₛₗ[σ] N)
-  结论: (lsum S f : (α ->₀ M) -> N) = fun d => d.sum fun i => f i
+  结论: (lsum S f : (α ->₀ M) -> N) = fun d => d.求和 fun i => f i
   证明: rfl
 -/
 theorem coe_lsum (f : α -> M ->ₛₗ[σ] N) : (lsum S f : (α ->₀ M) -> N) = fun d => d.sum fun i => f i :=
@@ -264,7 +264,7 @@ theorem lsum_apply
 中文:
 定理 lsum_apply
   条件: (f : α -> M ->ₛₗ[σ] N) (l : α ->₀ M)
-  结论: Finsupp.lsum S f l = l.sum fun b => f b
+  结论: 有限支撑.lsum S f l = l.求和 fun b => f b
   证明: rfl
 -/
 theorem lsum_apply (f : α -> M ->ₛₗ[σ] N) (l : α ->₀ M) : Finsupp.lsum S f l = l.sum fun b => f b :=
@@ -391,7 +391,7 @@ theorem lift_apply
 中文:
 定理 lift_apply
   条件: (f) (g)
-  结论: ((lift M R X) f) g = g.sum fun x r => r • f x
+  结论: ((lift M R X) f) g = g.求和 fun x r => r • f x
   证明: rfl
 -/
 theorem lift_apply (f) (g) : ((lift M R X) f) g = g.sum fun x r => r • f x :=
@@ -537,7 +537,7 @@ theorem domLCongr_refl
 
 中文:
 定理 domLCongr_refl
-  结论: Finsupp.domLCongr (Equiv.refl α) = LinearEquiv.refl R (α ->₀ M)
+  结论: 有限支撑.domLCongr (等价.refl α) = 线性等价.refl R (α ->₀ M)
   证明: LinearEquiv.ext fun _ => equivMapDomain_refl _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ext, equivMapDomain_refl
@@ -624,7 +624,7 @@ definition lcongr
 
 中文:
 定义 lcongr
-  签名: {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N)
+  签名: {ι κ : 类型层 _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N)
   定义体: (Finsupp.domLCongr e₁).trans (mapRange.linearEquiv e₂)
 
 @[simp]
@@ -647,7 +647,7 @@ theorem lcongr_single
 
 中文:
 定理 lcongr_single
-  条件: {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (i : ι) (m : M)
+  条件: {ι κ : 类型层 _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (i : ι) (m : M)
   证明: by simp [lcongr]
 
 @[simp]
@@ -668,7 +668,7 @@ theorem lcongr_apply_apply
 
 中文:
 定理 lcongr_apply_apply
-  条件: {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (f : ι ->₀ M) (k : κ)
+  条件: {ι κ : 类型层 _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (f : ι ->₀ M) (k : κ)
   证明: rfl
 -/
 theorem lcongr_apply_apply {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (f : ι ->₀ M) (k : κ) :
@@ -689,7 +689,7 @@ theorem lcongr_symm_single
 
 中文:
 定理 lcongr_symm_single
-  条件: {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (k : κ) (n : N)
+  条件: {ι κ : 类型层 _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N) (k : κ) (n : N)
   证明: by
   apply_fun (lcongr e₁ e₂ : (ι ->₀ M) -> (κ ->₀ N)) using (lcongr e₁ e₂).injective
   simp
@@ -716,7 +716,7 @@ theorem lcongr_symm
 
 中文:
 定理 lcongr_symm
-  条件: {ι κ : Sort _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N)
+  条件: {ι κ : 类型层 _} (e₁ : ι ≃ κ) (e₂ : M ≃ₛₗ[σ] N)
   证明: by
   ext
   rfl
@@ -748,8 +748,8 @@ theorem Submodule.finsuppSum_mem
   proof: AddSubmonoidClass.finsuppSum_mem S f g h
 
 中文:
-定理 Submodule.finsuppSum_mem
-  结论: {ι β : 类型} [Zero β] (S : Submodule R M) (f : ι ->₀ β)
+定理 子模.finsuppSum_mem
+  结论: {ι β : 类型} [零 β] (S : 子模 R M) (f : ι ->₀ β)
   证明: AddSubmonoidClass.finsuppSum_mem S f g h
 -/
 protected theorem Submodule.finsuppSum_mem {ι β : Type*} [Zero β] (S : Submodule R M) (f : ι ->₀ β)
@@ -775,7 +775,7 @@ definition splittingOfFinsuppSurjective
 
 中文:
 定义 splittingOfFinsuppSurjective
-  签名: (f : M ->ₗ[R] α ->₀ R) (s : Surjective f)
+  签名: (f : M ->ₗ[R] α ->₀ R) (s : 满射 f)
   定义体: Finsupp.lift _ _ _ fun x : α => (s (Finsupp.single x 1)).choose
 
 Depends on / 依赖: Finsupp, Finsupp.lift, Finsupp.single, single
@@ -799,7 +799,7 @@ theorem splittingOfFinsuppSurjective_splits
 
 中文:
 定理 splittingOfFinsuppSurjective_splits
-  条件: (f : M ->ₗ[R] α ->₀ R) (s : Surjective f)
+  条件: (f : M ->ₗ[R] α ->₀ R) (s : 满射 f)
   证明: by
   ext x
   dsimp [splittingOfFinsuppSurjective]
@@ -830,7 +830,7 @@ theorem leftInverse_splittingOfFinsuppSurjective
 
 中文:
 定理 leftInverse_splittingOfFinsuppSurjective
-  条件: (f : M ->ₗ[R] α ->₀ R) (s : Surjective f)
+  条件: (f : M ->ₗ[R] α ->₀ R) (s : 满射 f)
   证明: fun g =>
   LinearMap.congr_fun (splittingOfFinsuppSurjective_splits f s) g
 -/
@@ -848,7 +848,7 @@ theorem splittingOfFinsuppSurjective_injective
 
 中文:
 定理 splittingOfFinsuppSurjective_injective
-  条件: (f : M ->ₗ[R] α ->₀ R) (s : Surjective f)
+  条件: (f : M ->ₗ[R] α ->₀ R) (s : 满射 f)
   证明: (leftInverse_splittingOfFinsuppSurjective f s).injective
 
 Depends on / 依赖: injective, leftInverse_splittingOfFinsuppSurjective
@@ -933,7 +933,7 @@ definition mulLeftMap
 
 中文:
 定义 mulLeftMap
-  签名: {M : Submodule R S} (N : Submodule R S) {ι : 类型} (m : ι -> M)
+  签名: {M : 子模 R S} (N : 子模 R S) {ι : 类型} (m : ι -> M)
   定义体: Finsupp.lsum R fun i => (m i).1 • N.subtype
 
 Depends on / 依赖: Finsupp, Finsupp.lsum, N.subtype, subtype
@@ -953,7 +953,7 @@ theorem mulLeftMap_apply
 
 中文:
 定理 mulLeftMap_apply
-  条件: {M N : Submodule R S} {ι : 类型} (m : ι -> M) (n : ι ->₀ N)
+  条件: {M N : 子模 R S} {ι : 类型} (m : ι -> M) (n : ι ->₀ N)
   证明: rfl
 
 @[simp]
@@ -973,7 +973,7 @@ theorem mulLeftMap_apply_single
 
 中文:
 定理 mulLeftMap_apply_single
-  条件: {M N : Submodule R S} {ι : 类型} (m : ι -> M) (i : ι) (n : N)
+  条件: {M N : 子模 R S} {ι : 类型} (m : ι -> M) (i : ι) (n : N)
   证明: by
   simp [mulLeftMap]
 
@@ -997,7 +997,7 @@ definition mulRightMap
 
 中文:
 定义 mulRightMap
-  签名: (M : Submodule R S) {N : Submodule R S} {ι : 类型} (n : ι -> N)
+  签名: (M : 子模 R S) {N : 子模 R S} {ι : 类型} (n : ι -> N)
   定义体: Finsupp.lsum R fun i => MulOpposite.op (n i).1 • M.subtype
 
 Depends on / 依赖: Finsupp, Finsupp.lsum, M.subtype, MulOpposite, MulOpposite.op, subtype
@@ -1017,7 +1017,7 @@ theorem mulRightMap_apply
 
 中文:
 定理 mulRightMap_apply
-  条件: {M N : Submodule R S} {ι : 类型} (n : ι -> N) (m : ι ->₀ M)
+  条件: {M N : 子模 R S} {ι : 类型} (n : ι -> N) (m : ι ->₀ M)
   证明: rfl
 
 @[simp]
@@ -1037,7 +1037,7 @@ theorem mulRightMap_apply_single
 
 中文:
 定理 mulRightMap_apply_single
-  条件: {M N : Submodule R S} {ι : 类型} (n : ι -> N) (i : ι) (m : M)
+  条件: {M N : 子模 R S} {ι : 类型} (n : ι -> N) (i : ι) (m : M)
   证明: by
   simp [mulRightMap]
 
@@ -1058,7 +1058,7 @@ theorem mulLeftMap_eq_mulRightMap_of_commute
 
 中文:
 定理 mulLeftMap_eq_mulRightMap_of_commute
-  结论: [SMulCommClass R S S]
+  结论: [标量交换类 R S S]
   证明: by
   ext i n; simp [(hc i n).eq]
 -/
@@ -1077,7 +1077,7 @@ theorem mulLeftMap_eq_mulRightMap
 
 中文:
 定理 mulLeftMap_eq_mulRightMap
-  结论: {S : 类型} [CommSemiring S] [Module R S] [SMulCommClass R R S]
+  结论: {S : 类型} [交换半环 S] [模 R S] [标量交换类 R R S]
   证明: mulLeftMap_eq_mulRightMap_of_commute N m fun _ _ => mul_comm _ _
 
 Depends on / 依赖: mulLeftMap_eq_mulRightMap_of_commute, mul_comm

@@ -53,7 +53,7 @@ definition hermite
 
 中文:
 定义 hermite
-  签名: : 自然数 -> Polynomial 整数
+  签名: : 自然数 -> 多项式 整数
 -/
 noncomputable def hermite : Nat -> Polynomial Int
   | 0 => 1

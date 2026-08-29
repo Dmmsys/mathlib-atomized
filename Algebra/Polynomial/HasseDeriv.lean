@@ -171,7 +171,7 @@ theorem hasseDeriv_zero
 
 中文:
 定理 hasseDeriv_zero
-  结论: @hasseDeriv R _ 0 = LinearMap.id
+  结论: @hasseDeriv R _ 0 = 线性映射.id
   证明: LinearMap.ext hasseDeriv_zero'
 
 Depends on / 依赖: LinearMap, LinearMap.ext, hasseDeriv_zero
@@ -556,7 +556,7 @@ theorem natDegree_hasseDeriv
 
 中文:
 定理 natDegree_hasseDeriv
-  条件: [IsAddTorsionFree R] (p : R[X]) (n : 自然数)
+  条件: [是加法无挠 R] (p : R[X]) (n : 自然数)
   证明: by
   classical
   refine map_natDegree_eq_sub (fun h => hasseDeriv_eq_zero_of_lt_natDegree _ _) ?_

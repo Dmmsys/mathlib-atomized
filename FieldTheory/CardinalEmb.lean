@@ -99,7 +99,7 @@ local notation "Ē" => AlgebraicClosure E
 
 中文:
 定义 wellOrderedBasis
-  签名: : Basis ι F E
+  签名: : 基 ι F E
   定义体: (chooseBasis F E).reindex
     (Cardinal.eq.mp <| (mk_ord_toType _).trans <| rank_eq_card_chooseBasisIndex F E).some.symm
 
@@ -152,7 +152,7 @@ lemma noMaxOrder_rank_toType
 
 中文:
 引理 noMaxOrder_rank_toType
-  结论: NoMaxOrder ι
+  结论: NoMax序 ι
   证明: Cardinal.noMaxOrder Fact.out
 
 Depends on / 依赖: Cardinal, Cardinal.noMaxOrder, Fact.out, noMaxOrder
@@ -259,7 +259,7 @@ theorem strictMono_leastExt
 
 中文:
 定理 strictMono_leastExt
-  结论: StrictMono φ
+  结论: 严格递增 φ
   证明: fun i j h => by
   have least := isLeast_leastExt (F := F) (E := E)
   by_contra!
@@ -293,7 +293,7 @@ theorem adjoin_image_leastExt
 中文:
 定理 adjoin_image_leastExt
   条件: (i : ι)
-  结论: E⟮<i⟯ = adjoin F (b '' Iio (φ i))
+  结论: E⟮<i⟯ = adjoin F (b '' 左无界右开区间 (φ i))
   证明: by
   refine le_antisymm (adjoin.mono _ _ _ ?_) (adjoin_le_iff.mpr ?_)
   · rw [image_comp]; apply image_mono; rintro _ ⟨j, hj, rfl⟩; exact strictMono_leastExt hj
@@ -346,7 +346,7 @@ theorem strictMono_filtration
 
 中文:
 定理 strictMono_filtration
-  结论: StrictMono (E⟮<·⟯)
+  结论: 严格递增 (E⟮<·⟯)
   证明: fun i _ h => ⟨adjoin.mono _ _ _ (image_mono <| Iio_subset_Iio h.le),
     fun incl => (isLeast_leastExt i).1 (incl <| subset_adjoin _ _ ⟨i, h, rfl⟩)⟩
 
@@ -474,7 +474,7 @@ definition filtration
 
 中文:
 定义 filtration
-  签名: : WithTop ι ↪o 整数ermediateField F E
+  签名: : WithTop ι ↪o 中间域 F E
   定义体: .ofStrictMono (fun i => i.recTopCoe ⊤ (E⟮<·⟯)) fun i j h => by
     cases j
     · obtain ⟨i, rfl⟩ := ne_top_iff_exists.mp h.ne
@@ -645,7 +645,7 @@ theorem directed_filtration
 
 中文:
 定理 directed_filtration
-  结论: Directed (· <= ·) fun j : Iio i => filtration j.1
+  结论: Directed (· <= ·) fun j : 左无界右开区间 i => filtration j.1
   证明: (filtration.monotone.comp <| Subtype.mono_coe _).directed_le
 
 Depends on / 依赖: Subtype, Subtype.mono_coe, directed_le, filtration, filtration.monotone.comp, mono_coe, monotone
@@ -673,7 +673,7 @@ theorem iSup_filtration
 
 中文:
 定理 iSup_filtration
-  结论: ⨆ j : Iio i, filtration j = filtration i
+  结论: ⨆ j : 左无界右开区间 i, filtration j = filtration i
   证明: by
   cases i
   · rw [← range_coe, iSup_range']; exact iSup_adjoin_eq_top
@@ -709,7 +709,7 @@ lemma eq_bot_of_not_nonempty
 
 中文:
 引理 eq_bot_of_not_nonempty
-  条件: (hi : ¬ Nonempty (Iio i))
+  条件: (hi : ¬ 非空 (左无界右开区间 i))
   结论: filtration i = ⊥
   证明: by
   cases i
@@ -803,7 +803,7 @@ definition embEquivPi
 
 中文:
 定义 embEquivPi
-  签名: : Field.Emb F E ≃ 对任意 i : ι, factor (F := F) (E := E) i
+  签名: : 域.Emb F E ≃ 对任意 i : ι, factor (F := F) (E := E) i
   定义体: let e := globalEquiv
     (fun i _ => ⟨_, equivSucc_coherence i⟩) (fun _ hi => ⟨equivLim hi, fun _ _ => rfl⟩) ⊤
 (topEquiv.arrowCongr .refl).symm.trans e.trans .trans (.piCongrSet WithTop.range_coe.symm)
@@ -839,7 +839,7 @@ theorem cardinal_eq_two_pow_rank
 
 中文:
 定理 cardinal_eq_two_pow_rank
-  结论: [Algebra.IsSeparable F E]
+  结论: [代数.是可分 F E]
   证明: by
   have := Fact.mk rank_inf
   rw [Emb.Cardinal.embEquivPi.cardinal_eq]; rw [mk_pi]
@@ -875,7 +875,7 @@ theorem cardinal_eq_of_isSeparable
 
 中文:
 定理 cardinal_eq_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   证明: by
   dsimp only; split_ifs with h
   · exact cardinal_eq_two_pow_rank h
@@ -903,7 +903,7 @@ theorem cardinal_eq_two_pow_sepDegree
 
 中文:
 定理 cardinal_eq_two_pow_sepDegree
-  结论: [Algebra.IsAlgebraic F E]
+  结论: [代数.是代数 F E]
   证明: by
   rw [← cardinal_separableClosure]; rw [cardinal_eq_two_pow_rank rank_inf]
   rfl
@@ -926,7 +926,7 @@ theorem cardinal_eq
 
 中文:
 定理 cardinal_eq
-  条件: [Algebra.IsAlgebraic F E]
+  条件: [代数.是代数 F E]
   证明: by
   rw [← cardinal_separableClosure]; rw [cardinal_eq_of_isSeparable]; rfl
 

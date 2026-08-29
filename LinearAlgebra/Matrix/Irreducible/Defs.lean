@@ -84,7 +84,7 @@ definition toQuiver
 
 中文:
 定义 toQuiver
-  签名: (A : Matrix n n R)
+  签名: (A : 矩阵 n n R)
   定义体: ⟨fun i j => PLift (0 < A i j)⟩
 -/
 def toQuiver (A : Matrix n n R) : Quiver n :=
@@ -101,8 +101,8 @@ structure IsIrreducible
     - connected : @IsSStronglyConnected n (toQuiver A)
 
 中文:
-结构 IsIrreducible
-  参数: (A : Matrix n n R)
+结构 是不可约
+  参数: (A : 矩阵 n n R)
   公理与运算 (2 个):
     - nonneg((i j : n)) : 0 <= A i j
     - connected : @IsSStronglyConnected n (toQuiver A)
@@ -122,8 +122,8 @@ structure IsPrimitive
     - exists_pos_pow : exists k > 0, forall i j, 0 < (A ^ k) i j
 
 中文:
-结构 IsPrimitive
-  参数: [Fintype n] [DecidableEq n] (A : Matrix n n R)
+结构 是Primitive
+  参数: [有限类型 n] [DecidableEq n] (A : 矩阵 n n R)
   公理与运算 (2 个):
     - nonneg((i j : n)) : 0 <= A i j
     - exists_pos_pow : 存在 k > 0, 对任意 i j, 0 < (A ^ k) i j
@@ -151,8 +151,8 @@ lemma IsIrreducible.exists_pos
   have ⟨v, p₁, p₂, 
 
 中文:
-引理 IsIrreducible.exists_pos
-  结论: [Nontrivial n]
+引理 是不可约.存在_pos
+  结论: [非平凡 n]
   证明: by
   let : Quiver n := toQuiver A
   by_contra h_row
@@ -269,7 +269,7 @@ theorem isIrreducible_iff_exists_pow_pos
       (pow_apply_pos_iff_nonempty_path (A := A) hA p.length i j).2 this
 
 中文:
-定理 isIrreducible_iff_exists_pow_pos
+定理 isIrreducible_iff_存在_pow_pos
   证明: by
   let : Quiver n := toQuiver A
   constructor
@@ -315,7 +315,7 @@ theorem IsPrimitive.isIrreducible
   aesop
 
 中文:
-定理 IsPrimitive.isIrreducible
+定理 是Primitive.isIrreducible
   证明: by
   obtain ⟨h_nonneg, k, hk_pos, hk_all⟩ := h_prim
   rw [isIrreducible_iff_exists_pow_pos h_nonneg]
@@ -350,7 +350,7 @@ definition transposePath
 
 中文:
 定义 transposePath
-  签名: {i j : n} (p : @Quiver.Path n A.toQuiver i j)
+  签名: {i j : n} (p : @箭图.道路 n A.toQuiver i j)
   定义体: by
   letI : Quiver n := toQuiver A
   induction p with
@@ -397,9 +397,9 @@ theorem IsIrreducible.transpose
    
 
 中文:
-定理 IsIrreducible.transpose
-  条件: (hA : IsIrreducible A)
-  结论: IsIrreducible Aᵀ
+定理 是不可约.transpose
+  条件: (hA : 是不可约 A)
+  结论: 是不可约 Aᵀ
   证明: by
   have hA_T_nonneg : forall i j, 0 <= Aᵀ i j := fun i j => by
     simpa [Matrix.transpose_apply] using hA.nonneg j i

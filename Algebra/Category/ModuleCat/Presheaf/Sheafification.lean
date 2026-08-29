@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: (SheafOfModules.toSheaf.{v} R).ReflectsIsomorphisms
+  签名: (模层.toSheaf.{v} R).反映同构
   定义体: have : (SheafOfModules.toSheaf.{v} R ⋙ sheafToPresheaf _ _).ReflectsIsomorphisms :=
     inferInstanceAs (SheafOfModules.forget.{v} R ⋙ toPresheaf _).ReflectsIsomorphisms
   reflectsIsomorphisms_of_comp _ (sheafToPresheaf _ _)
@@ -91,7 +91,7 @@ definition sheafification
 
 中文:
 定义 sheafification
-  签名: : PresheafOfModules.{v} R₀ ⥤ SheafOfModules.{v} R where
+  签名: : 预模层.{v} R₀ ⥤ 模层.{v} R where
   定义体: sheafify α (CategoryTheory.toSheafify J M₀.presheaf)
   map f := sheafifyMap _ _ _ f
     ((toPresheaf R₀ ⋙ presheafToSheaf J AddCommGrpCat).map f)
@@ -314,7 +314,7 @@ lemma sheafificationAdjunction_homEquiv_apply
 
 中文:
 引理 sheafificationAdjunction_homEquiv_apply
-  结论: {P : PresheafOfModules.{v} R₀}
+  结论: {P : 预模层.{v} R₀}
   证明: rfl
 
 @[simp]
@@ -336,7 +336,7 @@ lemma toPresheaf_map_sheafificationAdjunction_unit_app
 
 中文:
 引理 toPresheaf_map_sheafificationAdjunction_unit_app
-  条件: (M₀ : PresheafOfModules.{v} R₀)
+  条件: (M₀ : 预模层.{v} R₀)
   证明: rfl
 
 @[simp]
@@ -357,7 +357,7 @@ lemma toSheaf_map_sheafificationAdjunction_counit_app
 
 中文:
 引理 toSheaf_map_sheafificationAdjunction_counit_app
-  条件: (M : SheafOfModules.{v} R)
+  条件: (M : 模层.{v} R)
   证明: (toSheaf_map_sheafificationHomEquiv_symm _ _).trans
     (by rw [← Adjunction.homEquiv_symm_id]; rfl)
 
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: (sheafification.{v} α).IsLeftAdjoint
+  签名: (sheafification.{v} α).是左伴随
   定义体: (sheafificationAdjunction α).isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, mono_iff_injective, sheafificationAdjunction
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (sheafificationAdjunction α).counit
+  签名: 是同构 (sheafificationAdjunction α).counit
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro F
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: (SheafOfModules.forget.{v} R ⋙ restrictScalars α).Full
+  签名: (模层.forget.{v} R ⋙ restrictScalars α).满
   定义体: (sheafificationAdjunction.{v} α).fullyFaithfulROfIsIsoCounit.full
 
 Depends on / 依赖: Module, fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit.full, sheafificationAdjunction
@@ -449,7 +449,7 @@ instance :
 
 中文:
 实例 :
-  签名: (SheafOfModules.forget.{v} R ⋙ restrictScalars α).Faithful
+  签名: (模层.forget.{v} R ⋙ restrictScalars α).忠实
   定义体: (sheafificationAdjunction.{v} α).fullyFaithfulROfIsIsoCounit.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit.faithful, sheafificationAdjunction
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: (SheafOfModules.toSheaf.{v} R).ReflectsIsomorphisms
+  签名: (模层.toSheaf.{v} R).反映同构
   定义体: reflectsIsomorphisms_of_comp (SheafOfModules.toSheaf.{v} R) (sheafToPresheaf J _)
 
 Depends on / 依赖: SheafOfModules, SheafOfModules.toSheaf, reflectsIsomorphisms_of_comp, sheafToPresheaf, toSheaf
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsFiniteLimits (SheafOfModules.toSheaf.{v} R)
+  签名: ReflectsFiniteLimits (模层.toSheaf.{v} R)
   定义体: inferInstance
 
 Depends on / 依赖: CommRing, sMulCommClass_mk
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (sheafification.{v} α)
+  签名: 保持FiniteLimits (sheafification.{v} α)
   定义体: preservesFiniteLimits_of_reflects_of_preserves
     (sheafification.{v} α) (SheafOfModules.toSheaf.{v} R)
 

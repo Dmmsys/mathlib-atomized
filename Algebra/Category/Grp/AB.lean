@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFilteredColimits (AddCommGrpCat.{u})
+  签名: HasFilteredColimits (加法交换群范畴.{u})
   定义体: inferInstance
 -/
 instance : HasFilteredColimits (AddCommGrpCat.{u}) where
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB5 (AddCommGrpCat.{u})
+  签名: AB5 (加法交换群范畴.{u})
   定义体: { preservesFiniteLimits := inferInstance }
 
 Depends on / 依赖: preservesFiniteLimits
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB4 AddCommGrpCat.{u}
+  签名: AB4 加法交换群范畴.{u}
   定义体: AB4.of_AB5 _
 
 Depends on / 依赖: AB4.of_AB5, of_AB5
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExactLimitsOfShape (Discrete J) (AddCommGrpCat.{u})
+  签名: 有ExactLimitsOfShape (离散 J) (加法交换群范畴.{u})
   定义体: by
   apply +allowSynthFailures hasExactLimitsOfShape_of_preservesEpi
   exact {
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: AB4Star AddCommGrpCat.{u}
+  签名: AB4Star 加法交换群范畴.{u}
   定义体: inferInstance
 -/
 instance : AB4Star AddCommGrpCat.{u} where
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSeparator AddCommGrpCat.{u}
+  签名: 有Separator 加法交换群范畴.{u}
   定义体: by
     use AddCommGrpCat.of (ULift Int)
     intro A B f g h; simp_all only [ObjectProperty.singleton_iff, AddCommGrpCat.ext_iff,
@@ -260,6 +260,6 @@ instance :
 
 中文:
 实例 :
-  签名: IsGrothendieckAbelian.{u} AddCommGrpCat.{u}
+  签名: 是GrothendieckAbelian.{u} 加法交换群范畴.{u}
 -/
 instance : IsGrothendieckAbelian.{u} AddCommGrpCat.{u} where

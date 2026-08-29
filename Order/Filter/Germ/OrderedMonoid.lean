@@ -42,7 +42,7 @@ instance instIsOrderedMonoid
 
 中文:
 实例 instIsOrderedMonoid
-  签名: [CommMonoid β] [Preorder β] [IsOrderedMonoid β]
+  签名: [交换幺半群 β] [预序 β] [是Ordered幺半群 β]
   定义体: inductionOn₂ f g fun _ _ H h => inductionOn h fun _ => H.mono
     fun _ H => by dsimp; gcongr
 
@@ -69,7 +69,7 @@ instance instIsOrderedCancelMonoid
 
 中文:
 实例 instIsOrderedCancelMonoid
-  签名: [CommMonoid β] [Preorder β] [IsOrderedCancelMonoid β]
+  签名: [交换幺半群 β] [预序 β] [是OrderedCancel幺半群 β]
   定义体: inductionOn₃ f g h fun _ _ _ H => H.mono
     fun _ => le_of_mul_le_mul_left'
 
@@ -94,7 +94,7 @@ instance instCanonicallyOrderedMul
 
 中文:
 实例 instCanonicallyOrderedMul
-  签名: [Mul β] [LE β] [CanonicallyOrderedMul β]
+  签名: [乘法 β] [LE β] [典范有序乘法 β]
   定义体: inductionOn₂ x y fun _ _ => Eventually.of_forall fun _ => le_mul_self
   le_self_mul x y := inductionOn₂ x y fun _ _ => Eventually.of_forall fun _ => le_self_mul
 

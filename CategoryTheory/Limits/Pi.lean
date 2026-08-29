@@ -46,7 +46,7 @@ definition coneCompEval
 
 中文:
 定义 coneCompEval
-  签名: (c : Cone F) (i : I)
+  签名: (c : 锥 F) (i : I)
   定义体: c.pt i
   π :=
     { app := fun j => c.π.app j i
@@ -73,7 +73,7 @@ definition coconeCompEval
 
 中文:
 定义 coconeCompEval
-  签名: (c : Cocone F) (i : I)
+  签名: (c : 余锥 F) (i : I)
   定义体: c.pt i
   ι :=
     { app := fun j => c.ι.app j i
@@ -102,7 +102,7 @@ definition coneOfConeCompEval
 
 中文:
 定义 coneOfConeCompEval
-  签名: (c : 对任意 i, Cone (F ⋙ Pi.eval C i))
+  签名: (c : 对任意 i, 锥 (F ⋙ 依赖函数类型.eval C i))
   定义体: (c i).pt
   π :=
     { app := fun j i => (c i).π.app j
@@ -133,7 +133,7 @@ definition coconeOfCoconeCompEval
 
 中文:
 定义 coconeOfCoconeCompEval
-  签名: (c : 对任意 i, Cocone (F ⋙ Pi.eval C i))
+  签名: (c : 对任意 i, 余锥 (F ⋙ 依赖函数类型.eval C i))
   定义体: (c i).pt
   ι :=
     { app := fun j i => (c i).ι.app j
@@ -165,7 +165,7 @@ definition coneOfConeEvalIsLimit
 
 中文:
 定义 coneOfConeEvalIsLimit
-  签名: {c : 对任意 i, Cone (F ⋙ Pi.eval C i)} (P : 对任意 i, IsLimit (c i))
+  签名: {c : 对任意 i, 锥 (F ⋙ 依赖函数类型.eval C i)} (P : 对任意 i, 是极限 (c i))
   定义体: (P i).lift (coneCompEval s i)
   fac s j := by
     funext i
@@ -202,7 +202,7 @@ definition coconeOfCoconeEvalIsColimit
 
 中文:
 定义 coconeOfCoconeEvalIsColimit
-  签名: {c : 对任意 i, Cocone (F ⋙ Pi.eval C i)} (P : 对任意 i, IsColimit (c i))
+  签名: {c : 对任意 i, 余锥 (F ⋙ 依赖函数类型.eval C i)} (P : 对任意 i, 是余极限 (c i))
   定义体: (P i).desc (coconeCompEval s i)
   fac s j := by
     funext i
@@ -239,7 +239,7 @@ theorem hasLimit_of_hasLimit_comp_eval
 
 中文:
 定理 hasLimit_of_hasLimit_comp_eval
-  结论: HasLimit F
+  结论: 有极限 F
   证明: HasLimit.mk
     { cone := coneOfConeCompEval fun _ => limit.cone _
       isLimit := coneOfConeEvalIsLimit fun _ => limit.isLimit _ }
@@ -269,7 +269,7 @@ theorem hasColimit_of_hasColimit_comp_eval
 
 中文:
 定理 hasColimit_of_hasColimit_comp_eval
-  结论: HasColimit F
+  结论: 有余极限 F
   证明: HasColimit.mk
     { cocone := coconeOfCoconeCompEval fun _ => colimit.cocone _
       isColimit := coconeOfCoconeEvalIsColimit fun _ => colimit.isColimit _ }

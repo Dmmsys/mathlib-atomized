@@ -104,7 +104,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: { Lex.le, Lex.lt with
     le_refl := fun ⟨_, _⟩ => Lex.right _ le_rfl,
     le_trans := by
@@ -163,7 +163,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: [PartialOrder ι] [对任意 i, PartialOrder (α i)]
+  签名: [偏序 ι] [对任意 i, 偏序 (α i)]
   定义体: { Lex.preorder with
     le_antisymm := by
       rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ (⟨_, _, hlt₁⟩ | ⟨_, hlt₁⟩) (⟨_, _, hlt₂⟩ | ⟨_, hlt₂⟩)
@@ -201,7 +201,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: [LinearOrder ι] [对任意 i, LinearOrder (α i)]
+  签名: [线性序 ι] [对任意 i, 线性序 (α i)]
   定义体: { Lex.partialOrder with
     le_total := by
       rintro ⟨i, a⟩ ⟨j, b⟩
@@ -241,7 +241,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [PartialOrder ι] [OrderBot ι] [对任意 i, Preorder (α i)] [OrderBot (α ⊥)]
+  签名: [偏序 ι] [有底序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
   定义体: ⟨⊥, ⊥⟩
   bot_le := fun ⟨a, b⟩ => by
     obtain rfl | ha := eq_bot_or_bot_lt a
@@ -270,7 +270,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [PartialOrder ι] [OrderTop ι] [对任意 i, Preorder (α i)] [OrderTop (α ⊤)]
+  签名: [偏序 ι] [有顶序 ι] [对任意 i, 预序 (α i)] [有顶序 (α ⊤)]
   定义体: ⟨⊤, ⊤⟩
   le_top := fun ⟨a, b⟩ => by
     obtain rfl | ha := eq_top_or_lt_top a
@@ -295,7 +295,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [PartialOrder ι] [BoundedOrder ι] [对任意 i, Preorder (α i)] [OrderBot (α ⊥)]
+  签名: [偏序 ι] [有界序 ι] [对任意 i, 预序 (α i)] [有底序 (α ⊥)]
   定义体: { Lex.orderBot, Lex.orderTop with }
 
 Depends on / 依赖: Lex.orderBot, Lex.orderTop, orderBot, orderTop
@@ -320,7 +320,7 @@ instance denselyOrdered
 
 中文:
 实例 denselyOrdered
-  签名: [Preorder ι] [DenselyOrdered ι] [对任意 i, Nonempty (α i)] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [稠密序 ι] [对任意 i, 非空 (α i)] [对任意 i, 预序 (α i)]
   定义体: ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨k, hi, hj⟩ := exists_between h
@@ -356,7 +356,7 @@ instance denselyOrdered_of_noMaxOrder
 
 中文:
 实例 denselyOrdered_of_noMaxOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨c, ha⟩ := exists_gt a
@@ -390,7 +390,7 @@ instance denselyOrdered_of_noMinOrder
 
 中文:
 实例 denselyOrdered_of_noMinOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)]
   定义体: ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩ (⟨_, _, h⟩ | @⟨_, _, b, h⟩)
     · obtain ⟨c, hb⟩ := exists_lt b
@@ -423,7 +423,7 @@ instance noMaxOrder_of_nonempty
 
 中文:
 实例 noMaxOrder_of_nonempty
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [NoMaxOrder ι]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMax序 ι]
   定义体: ⟨by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_gt i
@@ -454,7 +454,7 @@ instance noMinOrder_of_nonempty
 
 中文:
 实例 noMinOrder_of_nonempty
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [NoMinOrder ι]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [NoMin序 ι]
   定义体: ⟨by
     rintro ⟨i, a⟩
     obtain ⟨j, h⟩ := exists_lt i
@@ -484,7 +484,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [对任意 i, NoMaxOrder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMax序 (α i)]
   定义体: ⟨by
     rintro ⟨i, a⟩
     obtain ⟨b, h⟩ := exists_gt a
@@ -512,7 +512,7 @@ instance noMinOrder
 
 中文:
 实例 noMinOrder
-  签名: [Preorder ι] [对任意 i, Preorder (α i)] [对任意 i, NoMinOrder (α i)]
+  签名: [预序 ι] [对任意 i, 预序 (α i)] [对任意 i, NoMin序 (α i)]
   定义体: ⟨by
     rintro ⟨i, a⟩
     obtain ⟨b, h⟩ := exists_lt a

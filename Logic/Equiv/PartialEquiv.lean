@@ -126,13 +126,13 @@ structure PartialEquiv
     - right_inv' : forall ⦃x⦄, x in target -> toFun (invFun x) = x
 
 中文:
-结构 PartialEquiv
+结构 部分等价
   参数: (α : 类型) (β : 类型)
   公理与运算 (8 个):
     - toFun : α -> β
     - invFun : β -> α
-    - source : Set α
-    - target : Set β
+    - source : 集合 α
+    - target : 集合 β
     - map_source' : 对任意 ⦃x⦄, x in source -> toFun x in target
     - map_target' : 对任意 ⦃x⦄, x in target -> invFun x in source
     - left_inv' : 对任意 ⦃x⦄, x in source -> invFun (toFun x) = x
@@ -173,8 +173,8 @@ instance [Inhabited
       eqOn_empty _ _⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: α] [Inhabited β] : Inhabited (PartialEquiv α β)
+实例 [可居
+  签名: α] [可居 β] : 可居 (部分等价 α β)
   定义体: ⟨⟨const α default, const β default, ∅, ∅, mapsTo_empty _ _, mapsTo_empty _ _, eqOn_empty _ _,
       eqOn_empty _ _⟩⟩
 
@@ -203,7 +203,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : PartialEquiv β α where
+  签名: : 部分等价 β α where
   定义体: e.invFun
   invFun := e.toFun
   source := e.target
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (PartialEquiv α β) fun _ => α -> β
+  签名: CoeFun (部分等价 α β) fun _ => α -> β
   定义体: ⟨PartialEquiv.toFun⟩
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.toFun
@@ -253,7 +253,7 @@ initialize_simps_projections PartialEquiv (toFun -> apply, invFun -> symm_apply)
 
 中文:
 定义 Simps.symm_apply
-  签名: (e : PartialEquiv α β)
+  签名: (e : 部分等价 α β)
   定义体: e.symm
 
 initialize_simps_projections PartialEquiv (toFun -> apply, invFun -> symm_apply)
@@ -514,7 +514,7 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  结论: MapsTo e e.source e.target
+  结论: 映射到 e e.source e.target
   证明: fun _ => e.map_source
 -/
 protected theorem mapsTo : MapsTo e e.source e.target := fun _ => e.map_source
@@ -531,7 +531,7 @@ theorem mapsTo_symm
 
 中文:
 定理 mapsTo_symm
-  结论: MapsTo e.symm e.target e.source
+  结论: 映射到 e.symm e.target e.source
   证明: e.symm.mapsTo
 
 @[deprecated (since := "2026-05-18")] alias symm_mapsTo := mapsTo_symm
@@ -599,7 +599,7 @@ theorem injOn
 
 中文:
 定理 injOn
-  结论: InjOn e e.source
+  结论: 单射限制 e e.source
   证明: e.leftInvOn.injOn
 -/
 protected theorem injOn : InjOn e e.source :=
@@ -615,7 +615,7 @@ theorem bijOn
 
 中文:
 定理 bijOn
-  结论: BijOn e e.source e.target
+  结论: 双射限制 e e.source e.target
   证明: e.invOn.bijOn e.mapsTo e.mapsTo_symm
 -/
 protected theorem bijOn : BijOn e e.source e.target :=
@@ -631,7 +631,7 @@ theorem surjOn
 
 中文:
 定理 surjOn
-  结论: SurjOn e e.source e.target
+  结论: 满射限制 e e.source e.target
   证明: e.bijOn.surjOn
 -/
 protected theorem surjOn : SurjOn e e.source e.target :=
@@ -659,8 +659,8 @@ definition _root_.Equiv.toPartialEquivOfImageEq
   right_inv' x _ := e.apply_symm_apply x
 
 中文:
-定义 _root_.Equiv.toPartialEquivOfImageEq
-  签名: (e : α ≃ β) (s : Set α) (t : Set β) (h : e '' s = t)
+定义 _root_.等价.toPartialEquivOfImageEq
+  签名: (e : α ≃ β) (s : 集合 α) (t : 集合 β) (h : e '' s = t)
   定义体: e
   invFun := e.symm
   source := s
@@ -698,7 +698,7 @@ definition _root_.Equiv.toPartialEquiv
   body: e.toPartialEquivOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
 
 中文:
-定义 _root_.Equiv.toPartialEquiv
+定义 _root_.等价.toPartialEquiv
   签名: (e : α ≃ β)
   定义体: e.toPartialEquivOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
 
@@ -717,7 +717,7 @@ instance inhabitedOfEmpty
 
 中文:
 实例 inhabitedOfEmpty
-  签名: [IsEmpty α] [IsEmpty β]
+  签名: [是空 α] [是空 β]
   定义体: ⟨((Equiv.equivEmpty α).trans (Equiv.equivEmpty β).symm).toPartialEquiv⟩
 
 Depends on / 依赖: Equiv.equivEmpty, equivEmpty, toPartialEquiv
@@ -744,7 +744,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (e : PartialEquiv α β) (f : α -> β) (hf : ⇑e = f) (g : β -> α) (hg : ⇑e.symm = g) (s : Set α)
+  签名: (e : 部分等价 α β) (f : α -> β) (hf : ⇑e = f) (g : β -> α) (hg : ⇑e.symm = g) (s : 集合 α)
   定义体: f
   invFun := g
   source := s
@@ -779,7 +779,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  结论: (e : PartialEquiv α β) (f : α -> β) (hf : ⇑e = f) (g : β -> α) (hg : ⇑e.symm = g)
+  结论: (e : 部分等价 α β) (f : α -> β) (hf : ⇑e = f) (g : β -> α) (hg : ⇑e.symm = g)
   证明: by
   subst f g s t
   cases e
@@ -957,7 +957,7 @@ theorem forall_mem_target
   rw [← image_source_eq_target]; rw [forall_mem_image]
 
 中文:
-定理 forall_mem_target
+定理 对任意_mem_target
   条件: {p : β -> 命题}
   结论: (对任意 y in e.target, p y) ↔ 对任意 x in e.source, p (e x)
   证明: by
@@ -979,7 +979,7 @@ theorem exists_mem_target
   rw [← image_source_eq_target]; rw [exists_mem_image]
 
 中文:
-定理 exists_mem_target
+定理 存在_mem_target
   条件: {p : β -> 命题}
   结论: (存在 y in e.target, p y) ↔ 存在 x in e.source, p (e x)
   证明: by
@@ -999,8 +999,8 @@ definition IsImage
   body: forall ⦃x⦄, x in e.source -> (e x in t ↔ x in s)
 
 中文:
-定义 IsImage
-  签名: (s : Set α) (t : Set β)
+定义 是像
+  签名: (s : 集合 α) (t : 集合 β)
   定义体: forall ⦃x⦄, x in e.source -> (e x in t ↔ x in s)
 
 Depends on / 依赖: e.source, source
@@ -1023,7 +1023,7 @@ theorem apply_mem_iff
 
 中文:
 定理 apply_mem_iff
-  条件: (h : e.IsImage s t) (hx : x in e.source)
+  条件: (h : e.是像 s t) (hx : x in e.source)
   结论: e x in t ↔ x in s
   证明: h hx
 -/
@@ -1041,7 +1041,7 @@ theorem symm_apply_mem_iff
 
 中文:
 定理 symm_apply_mem_iff
-  条件: (h : e.IsImage s t)
+  条件: (h : e.是像 s t)
   结论: 对任意 ⦃y⦄, y in e.target -> (e.symm y in s ↔ y in t)
   证明: e.forall_mem_target.mpr fun x hx => by rw [e.left_inv hx, h hx]
 
@@ -1063,8 +1063,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : e.IsImage s t)
-  结论: e.symm.IsImage t s
+  条件: (h : e.是像 s t)
+  结论: e.symm.是像 t s
   证明: h.symm_apply_mem_iff
 
 @[simp]
@@ -1083,7 +1083,7 @@ theorem symm_iff
 
 中文:
 定理 symm_iff
-  结论: e.symm.IsImage t s ↔ e.IsImage s t
+  结论: e.symm.是像 t s ↔ e.是像 s t
   证明: ⟨fun h => h.symm, fun h => h.symm⟩
 
 Depends on / 依赖: h.symm
@@ -1102,8 +1102,8 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  条件: (h : e.IsImage s t)
-  结论: MapsTo e (e.source inter s) (e.target inter t)
+  条件: (h : e.是像 s t)
+  结论: 映射到 e (e.source inter s) (e.target inter t)
   证明: fun _ hx => ⟨e.mapsTo hx.1, (h hx.1).2 hx.2⟩
 -/
 protected theorem mapsTo (h : e.IsImage s t) : MapsTo e (e.source inter s) (e.target inter t) :=
@@ -1120,8 +1120,8 @@ theorem symm_mapsTo
 
 中文:
 定理 symm_mapsTo
-  条件: (h : e.IsImage s t)
-  结论: MapsTo e.symm (e.target inter t) (e.source inter s)
+  条件: (h : e.是像 s t)
+  结论: 映射到 e.symm (e.target inter t) (e.source inter s)
   证明: h.symm.mapsTo
 
 Depends on / 依赖: h.symm.mapsTo, mapsTo
@@ -1148,7 +1148,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: (h : e.IsImage s t)
+  签名: (h : e.是像 s t)
   定义体: e
   invFun := e.symm
   source := e.source inter s
@@ -1179,7 +1179,7 @@ theorem image_eq
 
 中文:
 定理 image_eq
-  条件: (h : e.IsImage s t)
+  条件: (h : e.是像 s t)
   结论: e '' (e.source inter s) = e.target inter t
   证明: h.restr.image_source_eq_target
 
@@ -1199,7 +1199,7 @@ theorem symm_image_eq
 
 中文:
 定理 symm_image_eq
-  条件: (h : e.IsImage s t)
+  条件: (h : e.是像 s t)
   结论: e.symm '' (e.target inter t) = e.source inter s
   证明: h.symm.image_eq
 
@@ -1221,7 +1221,7 @@ alias ⟨preimage_eq, of_preimage_eq⟩ := iff_preimage_eq
 
 中文:
 定理 iff_preimage_eq
-  结论: e.IsImage s t ↔ e.source inter e ⁻¹' t = e.source inter s
+  结论: e.是像 s t ↔ e.source inter e ⁻¹' t = e.source inter s
   证明: by
   simp only [IsImage, Set.ext_iff, mem_inter_iff, mem_preimage, and_congr_right_iff]
 
@@ -1246,7 +1246,7 @@ alias ⟨symm_preimage_eq, of_symm_preimage_eq⟩ := iff_symm_preimage_eq
 
 中文:
 定理 iff_symm_preimage_eq
-  结论: e.IsImage s t ↔ e.target inter e.symm ⁻¹' s = e.target inter t
+  结论: e.是像 s t ↔ e.target inter e.symm ⁻¹' s = e.target inter t
   证明: symm_iff.symm.trans iff_preimage_eq
 
 alias ⟨symm_preimage_eq, of_symm_preimage_eq⟩ := iff_symm_preimage_eq
@@ -1270,7 +1270,7 @@ theorem of_image_eq
 中文:
 定理 of_image_eq
   条件: (h : e '' (e.source inter s) = e.target inter t)
-  结论: e.IsImage s t
+  结论: e.是像 s t
   证明: of_symm_preimage_eq Eq.trans (of_symm_preimage_eq rfl).image_eq.symm h
 
 Depends on / 依赖: Eq.trans, image_eq, image_eq.symm, of_symm_preimage_eq
@@ -1290,7 +1290,7 @@ theorem of_symm_image_eq
 中文:
 定理 of_symm_image_eq
   条件: (h : e.symm '' (e.target inter t) = e.source inter s)
-  结论: e.IsImage s t
+  结论: e.是像 s t
   证明: of_preimage_eq Eq.trans (iff_preimage_eq.2 rfl).symm_image_eq.symm h
 
 Depends on / 依赖: Eq.trans, iff_preimage_eq, of_preimage_eq, symm_image_eq, symm_image_eq.symm
@@ -1309,8 +1309,8 @@ theorem compl
 
 中文:
 定理 compl
-  条件: (h : e.IsImage s t)
-  结论: e.IsImage sᶜ tᶜ
+  条件: (h : e.是像 s t)
+  结论: e.是像 sᶜ tᶜ
   证明: fun _ hx => not_congr (h hx)
 -/
 protected theorem compl (h : e.IsImage s t) : e.IsImage sᶜ tᶜ := fun _ hx => not_congr (h hx)
@@ -1325,7 +1325,7 @@ theorem inter
 
 中文:
 定理 inter
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: fun _ hx => and_congr (h hx) (h' hx)
 -/
 protected theorem inter {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -1341,7 +1341,7 @@ theorem union
 
 中文:
 定理 union
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: fun _ hx => or_congr (h hx) (h' hx)
 -/
 protected theorem union {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -1357,7 +1357,7 @@ theorem diff
 
 中文:
 定理 diff
-  条件: {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t')
+  条件: {s' t'} (h : e.是像 s t) (h' : e.是像 s' t')
   证明: h.inter h'.compl
 -/
 protected theorem diff {s' t'} (h : e.IsImage s t) (h' : e.IsImage s' t') :
@@ -1378,7 +1378,7 @@ theorem leftInvOn_piecewise
 
 中文:
 定理 leftInvOn_piecewise
-  结论: {e' : PartialEquiv α β} [对任意 i, Decidable (i in s)]
+  结论: {e' : 部分等价 α β} [对任意 i, 可判定 (i in s)]
   证明: by
   rintro x (⟨he, hs⟩ | ⟨he, hs : x ∉ s⟩)
   · rw [piecewise_eq_of_mem _ _ _ hs, piecewise_eq_of_mem _ _ _ ((h he).2 hs), e.left_inv he]
@@ -1405,7 +1405,7 @@ theorem inter_eq_of_inter_eq_of_eqOn
 
 中文:
 定理 inter_eq_of_inter_eq_of_eqOn
-  结论: {e' : PartialEquiv α β} (h : e.IsImage s t)
+  结论: {e' : 部分等价 α β} (h : e.是像 s t)
   证明: by rw [← h.image_eq, ← h'.image_eq, ← hs, heq.image_eq]
 
 Depends on / 依赖: h.image_eq, heq.image_eq, image_eq
@@ -1428,7 +1428,7 @@ theorem symm_eq_on_of_inter_eq_of_eqOn
 
 中文:
 定理 symm_eq_on_of_inter_eq_of_eqOn
-  结论: {e' : PartialEquiv α β} (h : e.IsImage s t)
+  结论: {e' : 部分等价 α β} (h : e.是像 s t)
   证明: by
   rw [← h.image_eq]
   rintro y ⟨x, hx, rfl⟩
@@ -1457,7 +1457,7 @@ theorem isImage_source_target
 
 中文:
 定理 isImage_source_target
-  结论: e.IsImage e.source e.target
+  结论: e.是像 e.source e.target
   证明: fun x hx => by simp [hx]
 -/
 theorem isImage_source_target : e.IsImage e.source e.target := fun x hx => by simp [hx]
@@ -1472,7 +1472,7 @@ theorem isImage_source_target_of_disjoint
 
 中文:
 定理 isImage_source_target_of_disjoint
-  结论: (e' : PartialEquiv α β) (hs : Disjoint e.source e'.source)
+  结论: (e' : 部分等价 α β) (hs : Disjoint e.source e'.source)
   证明: IsImage.of_image_eq by rw [hs.inter_eq, ht.inter_eq, image_empty]
 
 Depends on / 依赖: IsImage, IsImage.of_image_eq, hs.inter_eq, ht.inter_eq, image_empty, inter_eq, of_image_eq
@@ -1493,7 +1493,7 @@ theorem image_source_inter_eq'
 
 中文:
 定理 image_source_inter_eq'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: e '' (e.source inter s) = e.target inter e.symm ⁻¹' s
   证明: by
   rw [inter_comm]; rw [e.leftInvOn.image_inter']; rw [image_source_eq_target]; rw [inter_comm]
@@ -1514,7 +1514,7 @@ theorem image_source_inter_eq
 
 中文:
 定理 image_source_inter_eq
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   rw [inter_comm]; rw [e.leftInvOn.image_inter]; rw [image_source_eq_target]; rw [inter_comm]
 
@@ -1535,7 +1535,7 @@ theorem image_eq_target_inter_inv_preimage
 
 中文:
 定理 image_eq_target_inter_inv_preimage
-  条件: {s : Set α} (h : s subseteq e.source)
+  条件: {s : 集合 α} (h : s subseteq e.source)
   证明: by
   rw [← e.image_source_inter_eq']; rw [inter_eq_self_of_subset_right h]
 
@@ -1555,7 +1555,7 @@ theorem symm_image_eq_source_inter_preimage
 
 中文:
 定理 symm_image_eq_source_inter_preimage
-  条件: {s : Set β} (h : s subseteq e.target)
+  条件: {s : 集合 β} (h : s subseteq e.target)
   证明: e.symm.image_eq_target_inter_inv_preimage h
 
 Depends on / 依赖: e.symm.image_eq_target_inter_inv_preimage, image_eq_target_inter_inv_preimage
@@ -1574,7 +1574,7 @@ theorem symm_image_target_inter_eq
 
 中文:
 定理 symm_image_target_inter_eq
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   证明: e.symm.image_source_inter_eq _
 
 Depends on / 依赖: e.symm.image_source_inter_eq, image_source_inter_eq
@@ -1594,7 +1594,7 @@ theorem symm_image_target_inter_eq'
 
 中文:
 定理 symm_image_target_inter_eq'
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: e.symm '' (e.target inter s) = e.source inter e ⁻¹' s
   证明: e.symm.image_source_inter_eq' _
 
@@ -1614,7 +1614,7 @@ theorem source_inter_preimage_inv_preimage
 
 中文:
 定理 source_inter_preimage_inv_preimage
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: Set.ext fun x => and_congr_right_iff.2 fun hx =>
     by simp only [mem_preimage, e.left_inv hx]
 
@@ -1635,7 +1635,7 @@ theorem source_inter_preimage_target_inter
 
 中文:
 定理 source_inter_preimage_target_inter
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   证明: ext fun _ => ⟨fun hx => ⟨hx.1, hx.2.2⟩, fun hx => ⟨hx.1, e.map_source hx.1, hx.2⟩⟩
 
 Depends on / 依赖: e.map_source, map_source
@@ -1654,7 +1654,7 @@ theorem target_inter_inv_preimage_preimage
 
 中文:
 定理 target_inter_inv_preimage_preimage
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   证明: e.symm.source_inter_preimage_inv_preimage _
 
 Depends on / 依赖: e.symm.source_inter_preimage_inv_preimage, source_inter_preimage_inv_preimage
@@ -1674,7 +1674,7 @@ theorem symm_image_image_of_subset_source
 
 中文:
 定理 symm_image_image_of_subset_source
-  条件: {s : Set α} (h : s subseteq e.source)
+  条件: {s : 集合 α} (h : s subseteq e.source)
   结论: e.symm '' e '' s = s
   证明: (e.leftInvOn.mono h).image_image
 
@@ -1694,7 +1694,7 @@ theorem image_symm_image_of_subset_target
 
 中文:
 定理 image_symm_image_of_subset_target
-  条件: {s : Set β} (h : s subseteq e.target)
+  条件: {s : 集合 β} (h : s subseteq e.target)
   结论: e '' e.symm '' s = s
   证明: e.symm.symm_image_image_of_subset_source h
 
@@ -1779,7 +1779,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {e e' : PartialEquiv α β} (h : 对任意 x, e x = e' x)
+  结论: {e e' : 部分等价 α β} (h : 对任意 x, e x = e' x)
   证明: by
   have A : (e : α -> β) = e' := by
     ext x
@@ -1818,7 +1818,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: (@IsImage.of_symm_preimage_eq α β e s (e.symm ⁻¹' s) rfl).restr
 
 @[simp, mfld_simps]
@@ -1840,7 +1840,7 @@ theorem restr_coe
 
 中文:
 定理 restr_coe
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (e.restr s : α -> β) = e
   证明: rfl
 
@@ -1863,7 +1863,7 @@ theorem restr_coe_symm
 
 中文:
 定理 restr_coe_symm
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ((e.restr s).symm : β -> α) = e.symm
   证明: rfl
 
@@ -1884,7 +1884,7 @@ theorem restr_source
 
 中文:
 定理 restr_source
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (e.restr s).source = e.source inter s
   证明: rfl
 -/
@@ -1904,7 +1904,7 @@ theorem source_restr_subset_source
 
 中文:
 定理 source_restr_subset_source
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (e.restr s).source subseteq e.source
   证明: inter_subset_left
 
@@ -1926,7 +1926,7 @@ theorem restr_target
 
 中文:
 定理 restr_target
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (e.restr s).target = e.target inter e.symm ⁻¹' s
   证明: rfl
 -/
@@ -1945,7 +1945,7 @@ theorem restr_eq_of_source_subset
 
 中文:
 定理 restr_eq_of_source_subset
-  条件: {e : PartialEquiv α β} {s : Set α} (h : e.source subseteq s)
+  条件: {e : 部分等价 α β} {s : 集合 α} (h : e.source subseteq s)
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) (by simp [inter_eq_self_of_subset_left h])
 
 @[simp, mfld_simps]
@@ -1968,7 +1968,7 @@ theorem restr_univ
 
 中文:
 定理 restr_univ
-  条件: {e : PartialEquiv α β}
+  条件: {e : 部分等价 α β}
   结论: e.restr univ = e
   证明: restr_eq_of_source_subset (subset_univ _)
 
@@ -2010,7 +2010,7 @@ theorem refl_source
 
 中文:
 定理 refl_source
-  结论: (PartialEquiv.refl α).source = univ
+  结论: (部分等价.refl α).source = univ
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2031,7 +2031,7 @@ theorem refl_target
 
 中文:
 定理 refl_target
-  结论: (PartialEquiv.refl α).target = univ
+  结论: (部分等价.refl α).target = univ
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2052,7 +2052,7 @@ theorem refl_coe
 
 中文:
 定理 refl_coe
-  结论: (PartialEquiv.refl α : α -> α) = id
+  结论: (部分等价.refl α : α -> α) = id
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2073,7 +2073,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (PartialEquiv.refl α).symm = PartialEquiv.refl α
+  结论: (部分等价.refl α).symm = 部分等价.refl α
   证明: rfl
 
 @[mfld_simps]
@@ -2095,8 +2095,8 @@ theorem refl_restr_source
 
 中文:
 定理 refl_restr_source
-  条件: (s : Set α)
-  结论: ((PartialEquiv.refl α).restr s).source = s
+  条件: (s : 集合 α)
+  结论: ((部分等价.refl α).restr s).source = s
   证明: by simp
 
 @[mfld_simps]
@@ -2115,8 +2115,8 @@ theorem refl_restr_target
 
 中文:
 定理 refl_restr_target
-  条件: (s : Set α)
-  结论: ((PartialEquiv.refl α).restr s).target = s
+  条件: (s : 集合 α)
+  结论: ((部分等价.refl α).restr s).target = s
   证明: by simp
 -/
 theorem refl_restr_target (s : Set α) : ((PartialEquiv.refl α).restr s).target = s := by simp
@@ -2140,7 +2140,7 @@ definition ofSet
 
 中文:
 定义 ofSet
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: id
   invFun := id
   source := s
@@ -2176,8 +2176,8 @@ theorem ofSet_source
 
 中文:
 定理 ofSet_source
-  条件: (s : Set α)
-  结论: (PartialEquiv.ofSet s).source = s
+  条件: (s : 集合 α)
+  结论: (部分等价.ofSet s).source = s
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2199,8 +2199,8 @@ theorem ofSet_target
 
 中文:
 定理 ofSet_target
-  条件: (s : Set α)
-  结论: (PartialEquiv.ofSet s).target = s
+  条件: (s : 集合 α)
+  结论: (部分等价.ofSet s).target = s
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2222,8 +2222,8 @@ theorem ofSet_coe
 
 中文:
 定理 ofSet_coe
-  条件: (s : Set α)
-  结论: (PartialEquiv.ofSet s : α -> α) = id
+  条件: (s : 集合 α)
+  结论: (部分等价.ofSet s : α -> α) = id
   证明: rfl
 
 @[simp, mfld_simps]
@@ -2243,8 +2243,8 @@ theorem ofSet_symm
 
 中文:
 定理 ofSet_symm
-  条件: (s : Set α)
-  结论: (PartialEquiv.ofSet s).symm = PartialEquiv.ofSet s
+  条件: (s : 集合 α)
+  结论: (部分等价.ofSet s).symm = 部分等价.ofSet s
   证明: rfl
 -/
 theorem ofSet_symm (s : Set α) : (PartialEquiv.ofSet s).symm = PartialEquiv.ofSet s :=
@@ -2312,7 +2312,7 @@ definition trans'
 
 中文:
 定义 trans'
-  签名: (e' : PartialEquiv β γ) (h : e.target = e'.source)
+  签名: (e' : 部分等价 β γ) (h : e.target = e'.source)
   定义体: e' ∘ e
   invFun := e.symm ∘ e'.symm
   source := e.source
@@ -2349,7 +2349,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: : PartialEquiv α γ
+  签名: : 部分等价 α γ
   定义体: PartialEquiv.trans' (e.symm.restr e'.source).symm (e'.restr e.target) (inter_comm _ _)
 
 @[simp, mfld_simps]
@@ -2596,7 +2596,7 @@ theorem trans_assoc
 
 中文:
 定理 trans_assoc
-  条件: (e'' : PartialEquiv γ δ)
+  条件: (e'' : 部分等价 γ δ)
   结论: (e.trans e').trans e'' = e.trans (e'.trans e'')
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl)
     (by simp [trans_source, @preimage_comp α β γ, inter_assoc])
@@ -2622,7 +2622,7 @@ theorem trans_refl
 
 中文:
 定理 trans_refl
-  结论: e.trans (PartialEquiv.refl β) = e
+  结论: e.trans (部分等价.refl β) = e
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) (by simp [trans_source])
 
 @[simp, mfld_simps]
@@ -2643,7 +2643,7 @@ theorem refl_trans
 
 中文:
 定理 refl_trans
-  结论: (PartialEquiv.refl α).trans e = e
+  结论: (部分等价.refl α).trans e = e
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) (by simp [trans_source, preimage_id])
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.ext, preimage_id, trans_source
@@ -2662,7 +2662,7 @@ theorem trans_ofSet
 
 中文:
 定理 trans_ofSet
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: e.trans (ofSet s) = e.restr (e ⁻¹' s)
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) rfl
 
@@ -2681,7 +2681,7 @@ theorem trans_refl_restr
 
 中文:
 定理 trans_refl_restr
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) (by simp [trans_source])
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.ext, trans_source
@@ -2702,7 +2702,7 @@ theorem trans_refl_restr'
 
 中文:
 定理 trans_refl_restr'
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) by
     simp only [trans_source, restr_source, refl_source, univ_inter]
     rw [← inter_assoc]; rw [inter_self]
@@ -2727,7 +2727,7 @@ theorem restr_trans
 
 中文:
 定理 restr_trans
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (e.restr s).trans e' = (e.trans e').restr s
   证明: PartialEquiv.ext (fun _ => rfl) (fun _ => rfl) by
     simp [trans_source, inter_comm, inter_assoc]
@@ -2748,7 +2748,7 @@ theorem mem_symm_trans_source
 
 中文:
 定理 mem_symm_trans_source
-  结论: {e' : PartialEquiv α γ} {x : α} (he : x in e.source)
+  结论: {e' : 部分等价 α γ} {x : α} (he : x in e.source)
   证明: ⟨e.mapsTo he, by rwa [mem_preimage, PartialEquiv.symm_symm, e.left_inv he]⟩
 
 Depends on / 依赖: PartialEquiv, PartialEquiv.symm_symm, e.left_inv, e.mapsTo, left_inv, mapsTo, mem_preimage, symm_symm
@@ -2767,7 +2767,7 @@ definition EqOnSource
 
 中文:
 定义 EqOnSource
-  签名: (e e' : PartialEquiv α β)
+  签名: (e e' : 部分等价 α β)
   定义体: e.source = e'.source ∧ e.source.EqOn e e'
 
 Depends on / 依赖: e.source, e.source.EqOn, source
@@ -2786,7 +2786,7 @@ instance eqOnSourceSetoid
 
 中文:
 实例 eqOnSourceSetoid
-  签名: : Setoid (PartialEquiv α β) where
+  签名: : 集合等价关系 (部分等价 α β) where
   定义体: EqOnSource
   iseqv := by constructor <;> grind [EqOnSource, EqOn]
 
@@ -2825,7 +2825,7 @@ theorem EqOnSource.source_eq
 
 中文:
 定理 EqOnSource.source_eq
-  条件: {e e' : PartialEquiv α β} (h : e ≈ e')
+  条件: {e e' : 部分等价 α β} (h : e ≈ e')
   结论: e.source = e'.source
   证明: h.1
 -/
@@ -2843,7 +2843,7 @@ theorem EqOnSource.eqOn
 
 中文:
 定理 EqOnSource.eqOn
-  条件: {e e' : PartialEquiv α β} (h : e ≈ e')
+  条件: {e e' : 部分等价 α β} (h : e ≈ e')
   结论: e.source.EqOn e e'
   证明: h.2
 -/
@@ -2862,7 +2862,7 @@ theorem EqOnSource.target_eq
 
 中文:
 定理 EqOnSource.target_eq
-  条件: {e e' : PartialEquiv α β} (h : e ≈ e')
+  条件: {e e' : 部分等价 α β} (h : e ≈ e')
   结论: e.target = e'.target
   证明: by
   simp only [← image_source_eq_target, ← source_eq h, h.2.image_eq]
@@ -2886,7 +2886,7 @@ theorem EqOnSource.symm'
 
 中文:
 定理 EqOnSource.symm'
-  条件: {e e' : PartialEquiv α β} (h : e ≈ e')
+  条件: {e e' : 部分等价 α β} (h : e ≈ e')
   结论: e.symm ≈ e'.symm
   证明: by
   refine ⟨target_eq h, eqOn_of_leftInvOn_of_rightInvOn e.leftInvOn ?_ ?_⟩ <;>
@@ -2910,7 +2910,7 @@ theorem EqOnSource.symm_eqOn
 
 中文:
 定理 EqOnSource.symm_eqOn
-  条件: {e e' : PartialEquiv α β} (h : e ≈ e')
+  条件: {e e' : 部分等价 α β} (h : e ≈ e')
   证明: eqOn h.symm'
 
 Depends on / 依赖: h.symm
@@ -2935,7 +2935,7 @@ theorem EqOnSource.trans'
 
 中文:
 定理 EqOnSource.trans'
-  结论: {e e' : PartialEquiv α β} {f f' : PartialEquiv β γ} (he : e ≈ e')
+  结论: {e e' : 部分等价 α β} {f f' : 部分等价 β γ} (he : e ≈ e')
   证明: by
   constructor
   · rw [trans_source'', trans_source'', ← target_eq he, ← hf.1]
@@ -2970,7 +2970,7 @@ theorem EqOnSource.restr
 
 中文:
 定理 EqOnSource.restr
-  条件: {e e' : PartialEquiv α β} (he : e ≈ e') (s : Set α)
+  条件: {e e' : 部分等价 α β} (he : e ≈ e') (s : 集合 α)
   证明: by
   constructor
   · simp [he.1]
@@ -2998,7 +2998,7 @@ theorem EqOnSource.source_inter_preimage_eq
 
 中文:
 定理 EqOnSource.source_inter_preimage_eq
-  条件: {e e' : PartialEquiv α β} (he : e ≈ e') (s : Set β)
+  条件: {e e' : 部分等价 α β} (he : e ≈ e') (s : 集合 β)
   证明: by rw [he.eqOn.inter_preimage_eq, source_eq he]
 
 Depends on / 依赖: he.eqOn.inter_preimage_eq, inter_preimage_eq, source_eq
@@ -3070,7 +3070,7 @@ theorem eq_of_eqOnSource_univ
 
 中文:
 定理 eq_of_eqOnSource_univ
-  结论: (e e' : PartialEquiv α β) (h : e ≈ e') (s : e.source = univ)
+  结论: (e e' : 部分等价 α β) (h : e ≈ e') (s : e.source = univ)
   证明: by
   refine PartialEquiv.ext (fun x => ?_) (fun x => ?_) h.1
   · apply h.2
@@ -3113,8 +3113,8 @@ definition prod
 @[simp, mfld_simps]
 
 中文:
-定义 prod
-  签名: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+定义 乘积
+  签名: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   定义体: e.source ×ˢ e'.source
   target := e.target ×ˢ e'.target
   toFun p := (e p.1, e' p.2)
@@ -3151,7 +3151,7 @@ theorem prod_source
 
 中文:
 定理 prod_source
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -3173,7 +3173,7 @@ theorem prod_target
 
 中文:
 定理 prod_target
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -3193,7 +3193,7 @@ theorem prod_coe
 
 中文:
 定理 prod_coe
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   证明: rfl
 -/
 theorem prod_coe (e : PartialEquiv α β) (e' : PartialEquiv γ δ) :
@@ -3212,7 +3212,7 @@ theorem prod_coe_symm
 
 中文:
 定理 prod_coe_symm
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   证明: rfl
 
 @[simp, mfld_simps]
@@ -3235,7 +3235,7 @@ theorem prod_symm
 
 中文:
 定理 prod_symm
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv γ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 γ δ)
   证明: by
   ext x <;> simp [prod_coe_symm]
 
@@ -3281,7 +3281,7 @@ theorem prod_trans
 
 中文:
 定理 prod_trans
-  结论: {η : 类型} {ε : 类型} (e : PartialEquiv α β) (f : PartialEquiv β γ)
+  结论: {η : 类型} {ε : 类型} (e : 部分等价 α β) (f : 部分等价 β γ)
   证明: by
   ext ⟨x, y⟩ <;> simp; tauto
 -/
@@ -3315,7 +3315,7 @@ definition piecewise
 
 中文:
 定义 piecewise
-  签名: (e e' : PartialEquiv α β) (s : Set α) (t : Set β) [对任意 x, Decidable (x in s)]
+  签名: (e e' : 部分等价 α β) (s : 集合 α) (t : 集合 β) [对任意 x, 可判定 (x in s)]
   定义体: s.piecewise e e'
   invFun := t.piecewise e.symm e'.symm
   source := s.ite e.source e'.source
@@ -3349,7 +3349,7 @@ theorem symm_piecewise
 
 中文:
 定理 symm_piecewise
-  结论: (e e' : PartialEquiv α β) {s : Set α} {t : Set β} [对任意 x, Decidable (x in s)]
+  结论: (e e' : 部分等价 α β) {s : 集合 α} {t : 集合 β} [对任意 x, 可判定 (x in s)]
   证明: rfl
 -/
 theorem symm_piecewise (e e' : PartialEquiv α β) {s : Set α} {t : Set β} [forall x, Decidable (x in s)]
@@ -3373,7 +3373,7 @@ definition disjointUnion
 
 中文:
 定义 disjointUnion
-  签名: (e e' : PartialEquiv α β) (hs : Disjoint e.source e'.source)
+  签名: (e e' : 部分等价 α β) (hs : Disjoint e.source e'.source)
   定义体: (e.piecewise e' e.source e.target e.isImage_source_target <|
         e'.isImage_source_target_of_disjoint _ hs.symm ht.symm).copy
     _ rfl _ rfl (e.source union e'.source) (ite_left _ _) (e.target union e'.target) (ite_left _ _)
@@ -3397,7 +3397,7 @@ theorem disjointUnion_eq_piecewise
 
 中文:
 定理 disjointUnion_eq_piecewise
-  结论: (e e' : PartialEquiv α β) (hs : Disjoint e.source e'.source)
+  结论: (e e' : 部分等价 α β) (hs : Disjoint e.source e'.source)
   证明: copy_eq ..
 
 Depends on / 依赖: copy_eq
@@ -3432,7 +3432,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (ei : 对任意 i, PartialEquiv (αi i) (βi i))
+  签名: (ei : 对任意 i, 部分等价 (αi i) (βi i))
   定义体: Pi.map fun i => ei i
   invFun := Pi.map fun i => (ei i).symm
   source := pi univ fun i => (ei i).source
@@ -3462,7 +3462,7 @@ theorem pi_symm
 
 中文:
 定理 pi_symm
-  条件: (ei : 对任意 i, PartialEquiv (αi i) (βi i))
+  条件: (ei : 对任意 i, 部分等价 (αi i) (βi i))
   证明: rfl
 -/
 theorem pi_symm (ei : forall i, PartialEquiv (αi i) (βi i)) :
@@ -3481,7 +3481,7 @@ theorem pi_symm_apply
 
 中文:
 定理 pi_symm_apply
-  条件: (ei : 对任意 i, PartialEquiv (αi i) (βi i))
+  条件: (ei : 对任意 i, 部分等价 (αi i) (βi i))
   证明: rfl
 
 @[simp, mfld_simps]
@@ -3504,7 +3504,7 @@ theorem pi_refl
 
 中文:
 定理 pi_refl
-  结论: (PartialEquiv.pi fun i => PartialEquiv.refl (αi i)) = .refl (对任意 i, αi i)
+  结论: (部分等价.pi fun i => 部分等价.refl (αi i)) = .refl (对任意 i, αi i)
   证明: by
   ext <;> simp
 
@@ -3525,7 +3525,7 @@ theorem pi_trans
 
 中文:
 定理 pi_trans
-  条件: (ei : 对任意 i, PartialEquiv (αi i) (βi i)) (ei' : 对任意 i, PartialEquiv (βi i) (γi i))
+  条件: (ei : 对任意 i, 部分等价 (αi i) (βi i)) (ei' : 对任意 i, 部分等价 (βi i) (γi i))
   证明: by
   ext <;> simp [forall_and]
 
@@ -3568,7 +3568,7 @@ lemma injective_of_source_eq_univ
 中文:
 引理 injective_of_source_eq_univ
   条件: (h : e.source = univ)
-  结论: Injective e
+  结论: 单射 e
   证明: by simpa [h] using e.injOn
 
 Depends on / 依赖: e.injOn
@@ -3637,8 +3637,8 @@ definition BijOn.toPartialEquiv
   right_inv' := hf.invOn_invFunOn.2
 
 中文:
-定义 BijOn.toPartialEquiv
-  签名: [Nonempty α] (f : α -> β) (s : Set α) (t : Set β)
+定义 双射限制.toPartialEquiv
+  签名: [非空 α] (f : α -> β) (s : 集合 α) (t : 集合 β)
   定义体: f
   invFun := invFunOn f s
   source := s
@@ -3670,8 +3670,8 @@ definition InjOn.toPartialEquiv
   body: hf.bijOn_image.toPartialEquiv f s (f '' s)
 
 中文:
-定义 InjOn.toPartialEquiv
-  签名: [Nonempty α] (f : α -> β) (s : Set α) (hf : InjOn f s)
+定义 单射限制.toPartialEquiv
+  签名: [非空 α] (f : α -> β) (s : 集合 α) (hf : 单射限制 f s)
   定义体: hf.bijOn_image.toPartialEquiv f s (f '' s)
 
 Depends on / 依赖: bijOn_image, hf.bijOn_image.toPartialEquiv, toPartialEquiv
@@ -3701,7 +3701,7 @@ theorem refl_toPartialEquiv
 
 中文:
 定理 refl_toPartialEquiv
-  结论: (Equiv.refl α).toPartialEquiv = PartialEquiv.refl α
+  结论: (等价.refl α).toPartialEquiv = 部分等价.refl α
   证明: rfl
 
 @[simp, mfld_simps]
@@ -3765,7 +3765,7 @@ definition transPartialEquiv
 
 中文:
 定义 transPartialEquiv
-  签名: (e : α ≃ β) (f' : PartialEquiv β γ)
+  签名: (e : α ≃ β) (f' : 部分等价 β γ)
   定义体: (e.toPartialEquiv.trans f').copy _ rfl _ rfl (e ⁻¹' f'.source) (univ_inter _) f'.target
     (inter_univ _)
 
@@ -3787,7 +3787,7 @@ theorem transPartialEquiv_eq_trans
 
 中文:
 定理 transPartialEquiv_eq_trans
-  条件: (e : α ≃ β) (f' : PartialEquiv β γ)
+  条件: (e : α ≃ β) (f' : 部分等价 β γ)
   证明: PartialEquiv.copy_eq ..
 
 @[simp, mfld_simps]
@@ -3812,7 +3812,7 @@ theorem transPartialEquiv_trans
 
 中文:
 定理 transPartialEquiv_trans
-  条件: (e : α ≃ β) (f' : PartialEquiv β γ) (f'' : PartialEquiv γ δ)
+  条件: (e : α ≃ β) (f' : 部分等价 β γ) (f'' : 部分等价 γ δ)
   证明: by
   simp only [transPartialEquiv_eq_trans, PartialEquiv.trans_assoc]
 
@@ -3838,7 +3838,7 @@ theorem trans_transPartialEquiv
 
 中文:
 定理 trans_transPartialEquiv
-  条件: (e : α ≃ β) (e' : β ≃ γ) (f'' : PartialEquiv γ δ)
+  条件: (e : α ≃ β) (e' : β ≃ γ) (f'' : 部分等价 γ δ)
   证明: by
   simp only [transPartialEquiv_eq_trans, PartialEquiv.trans_assoc, trans_toPartialEquiv]
 
@@ -3864,7 +3864,7 @@ lemma coe_transPartialEquiv
 
 中文:
 引理 coe_transPartialEquiv
-  条件: {f : α ≃ β} {g : PartialEquiv β γ}
+  条件: {f : α ≃ β} {g : 部分等价 β γ}
   结论: f.transPartialEquiv g = g ∘ f
   证明: rfl
 
@@ -3884,7 +3884,7 @@ lemma coe_transPartialEquiv_symm
 
 中文:
 引理 coe_transPartialEquiv_symm
-  条件: {f : α ≃ β} {g : PartialEquiv β γ}
+  条件: {f : α ≃ β} {g : 部分等价 β γ}
   证明: rfl
 -/
 lemma coe_transPartialEquiv_symm {f : α ≃ β} {g : PartialEquiv β γ} :
@@ -3909,7 +3909,7 @@ definition transEquiv
 
 中文:
 定义 transEquiv
-  签名: (e : PartialEquiv α β) (f' : β ≃ γ)
+  签名: (e : 部分等价 α β) (f' : β ≃ γ)
   定义体: (e.trans f'.toPartialEquiv).copy _ rfl _ rfl e.source (inter_univ _) (f'.symm ⁻¹' e.target)
     (univ_inter _)
 
@@ -3931,7 +3931,7 @@ theorem transEquiv_eq_trans
 
 中文:
 定理 transEquiv_eq_trans
-  条件: (e : PartialEquiv α β) (e' : β ≃ γ)
+  条件: (e : 部分等价 α β) (e' : β ≃ γ)
   证明: copy_eq ..
 
 @[simp, mfld_simps]
@@ -3956,7 +3956,7 @@ theorem transEquiv_transEquiv
 
 中文:
 定理 transEquiv_transEquiv
-  条件: (e : PartialEquiv α β) (f' : β ≃ γ) (f'' : γ ≃ δ)
+  条件: (e : 部分等价 α β) (f' : β ≃ γ) (f'' : γ ≃ δ)
   证明: by
   simp only [transEquiv_eq_trans, trans_assoc, Equiv.trans_toPartialEquiv]
 
@@ -3980,7 +3980,7 @@ theorem trans_transEquiv
 
 中文:
 定理 trans_transEquiv
-  条件: (e : PartialEquiv α β) (e' : PartialEquiv β γ) (f'' : γ ≃ δ)
+  条件: (e : 部分等价 α β) (e' : 部分等价 β γ) (f'' : γ ≃ δ)
   证明: by
   simp only [transEquiv_eq_trans, trans_assoc]
 
@@ -4003,7 +4003,7 @@ lemma coe_transEquiv
 
 中文:
 引理 coe_transEquiv
-  条件: {f : PartialEquiv α β} {g : β ≃ γ}
+  条件: {f : 部分等价 α β} {g : β ≃ γ}
   结论: f.transEquiv g = g ∘ f
   证明: rfl
 
@@ -4022,7 +4022,7 @@ lemma coe_transEquiv_symm
 
 中文:
 引理 coe_transEquiv_symm
-  条件: {f : PartialEquiv α β} {g : β ≃ γ}
+  条件: {f : 部分等价 α β} {g : β ≃ γ}
   证明: rfl
 -/
 lemma coe_transEquiv_symm {f : PartialEquiv α β} {g : β ≃ γ} :

@@ -36,8 +36,8 @@ instance [HasSheafify
     map f := ⟨f.hom⟩ } (Iso.refl _)
 
 中文:
-实例 [HasSheafify
-  签名: J A] [CartesianMonoidalCategory A] [MonoidalClosed (Cᵒᵖ ⥤ A)] :
+实例 [有Sheafify
+  签名: J A] [CartesianMonoidal范畴 A] [幺半群闭 (Cᵒᵖ ⥤ A)] :
   定义体: cartesianClosedOfReflective' (sheafToPresheaf _ _) {
     obj F := ⟨F.obj, (isSheaf_of_iso_iff F.2.choose_spec.some).1 F.2.choose.property⟩
     map f := ⟨f.hom⟩ } (Iso.refl _)

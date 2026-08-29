@@ -78,7 +78,7 @@ theorem eq_bot_of_generator_maximal_map_eq_zero
 
 中文:
 定理 eq_bot_of_generator_maximal_map_eq_zero
-  结论: (b : Basis ι R M) {N : Submodule R M}
+  结论: (b : 基 ι R M) {N : 子模 R M}
   证明: by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -119,7 +119,7 @@ theorem eq_bot_of_generator_maximal_submoduleImage_eq_zero
 
 中文:
 定理 eq_bot_of_generator_maximal_submoduleImage_eq_zero
-  结论: {N O : Submodule R M} (b : Basis ι R O)
+  结论: {N O : 子模 R M} (b : 基 ι R O)
   证明: by
   rw [Submodule.eq_bot_iff]
   intro x hx
@@ -156,7 +156,7 @@ theorem dvd_generator_iff
 
 中文:
 定理 dvd_generator_iff
-  结论: {R : 类型} [CommSemiring R] {I : Ideal R} [I.IsPrincipal] {x : R}
+  结论: {R : 类型} [交换半环 R] {I : 理想 R} [I.是Principal] {x : R}
   证明: by
   simp_rw [le_antisymm_iff, I.span_singleton_le_iff_mem.2 hx, and_true, ← Ideal.mem_span_singleton]
   conv_rhs => rw [← span_singleton_generator I, Submodule.span_singleton_le_iff_mem]
@@ -196,7 +196,7 @@ theorem generator_maximal_submoduleImage_dvd
 
 中文:
 定理 generator_maximal_submoduleImage_dvd
-  结论: {N O : Submodule R M} (hNO : N <= O) {ϕ : O ->ₗ[R] R}
+  结论: {N O : 子模 R M} (hNO : N <= O) {ϕ : O ->ₗ[R] R}
   证明: by
   let a : R := generator (ϕ.submoduleImage N)
   let d : R := IsPrincipal.generator (Submodule.span R {a, ψ ⟨y, hNO yN⟩})
@@ -255,8 +255,8 @@ theorem Submodule.basis_of_pid_aux
       set_has_max
 
 中文:
-定理 Submodule.basis_of_pid_aux
-  结论: [Finite ι] {O : 类型} [AddCommGroup O] [Module R O]
+定理 子模.basis_of_pid_aux
+  结论: [有限 ι] {O : 类型} [加法交换群 O] [模 R O]
   证明: by
   -- Let `ϕ` be a maximal projection of `M` onto `R`, in the sense that there is
   -- no `ψ` whose image of `N` is larger than `ϕ`'s image of `N`.
@@ -400,8 +400,8 @@ theorem Submodule.nonempty_basis_of_pid
   obtain ⟨y, -, a, hay, M', -, N',
 
 中文:
-定理 Submodule.nonempty_basis_of_pid
-  结论: {ι : 类型} [Finite ι] (b : Basis ι R M)
+定理 子模.nonempty_basis_of_pid
+  结论: {ι : 类型} [有限 ι] (b : 基 ι R M)
   证明: by
   have := Classical.decEq M
   cases nonempty_fintype ι
@@ -438,8 +438,8 @@ definition Submodule.basisOfPid
   body: ⟨_, (N.nonempty_basis_of_pid b).choose_spec.some⟩
 
 中文:
-定义 Submodule.basisOfPid
-  签名: {ι : 类型} [Finite ι] (b : Basis ι R M)
+定义 子模.basisOfPid
+  签名: {ι : 类型} [有限 ι] (b : 基 ι R M)
   定义体: ⟨_, (N.nonempty_basis_of_pid b).choose_spec.some⟩
 
 Depends on / 依赖: IsHaarMeasure, IsHaarMeasure.sigmaFinite, N.nonempty_basis_of_pid, SigmaCompactSpace, SigmaFinite, choose_spec, choose_spec.some, nonempty_basis_of_pid, sigmaFinite
@@ -461,8 +461,8 @@ theorem Submodule.basisOfPid_bot
   exact Sigma.eq rfl (Basis.eq_of_apply_eq <| finZeroElim)
 
 中文:
-定理 Submodule.basisOfPid_bot
-  条件: {ι : 类型} [Finite ι] (b : Basis ι R M)
+定理 子模.basisOfPid_bot
+  条件: {ι : 类型} [有限 ι] (b : 基 ι R M)
   证明: by
   obtain ⟨n, b'⟩ := Submodule.basisOfPid b ⊥
   let e : Fin n ≃ Fin 0 := b'.indexEquiv (Basis.empty _ : Basis (Fin 0) R (⊥ : Submodule R M))
@@ -488,8 +488,8 @@ definition Submodule.basisOfPidOfLE
   ⟨n, bN'.map (Submodule.comapSubtypeEquivOfLe hNO)⟩
 
 中文:
-定义 Submodule.basisOfPidOfLE
-  签名: {ι : 类型} [Finite ι] {N O : Submodule R M}
+定义 子模.basisOfPidOfLE
+  签名: {ι : 类型} [有限 ι] {N O : 子模 R M}
   定义体: let ⟨n, bN'⟩ := Submodule.basisOfPid b (N.comap O.subtype)
   ⟨n, bN'.map (Submodule.comapSubtypeEquivOfLe hNO)⟩
 
@@ -509,8 +509,8 @@ definition Submodule.basisOfPidOfLESpan
   body: Submodule.basisOfPidOfLE le (Basis.span hb)
 
 中文:
-定义 Submodule.basisOfPidOfLESpan
-  签名: {ι : 类型} [Finite ι] {b : ι -> M}
+定义 子模.basisOfPidOfLESpan
+  签名: {ι : 类型} [有限 ι] {b : ι -> M}
   定义体: Submodule.basisOfPidOfLE le (Basis.span hb)
 
 Depends on / 依赖: Basis.span, Submodule, Submodule.basisOfPidOfLE, basisOfPidOfLE
@@ -536,8 +536,8 @@ definition Module.basisOfFiniteTypeTorsionFree
         forall i ∉ I, exists a 
 
 中文:
-定义 Module.basisOfFiniteTypeTorsionFree
-  签名: [Fintype ι] {s : ι -> M}
+定义 模.basisOfFiniteTypeTorsionFree
+  签名: [有限类型 ι] {s : ι -> M}
   定义体: by
   classical
     -- We define `N` as the submodule spanned by a maximal linear independent subfamily of `s`
@@ -608,8 +608,8 @@ theorem Module.free_of_finite_type_torsion_free
   exact Module.Free.of_basis b
 
 中文:
-定理 Module.free_of_finite_type_torsion_free
-  结论: [_root_.Finite ι] {s : ι -> M}
+定理 模.free_of_finite_type_torsion_free
+  结论: [_root_.有限 ι] {s : ι -> M}
   证明: by
   cases nonempty_fintype ι
   obtain ⟨n, b⟩ : Σ n, Basis (Fin n) R M := Module.basisOfFiniteTypeTorsionFree hs
@@ -632,8 +632,8 @@ definition Module.basisOfFiniteTypeTorsionFree'
   body: Module.basisOfFiniteTypeTorsionFree Module.Finite.exists_fin.choose_spec.choose_spec
 
 中文:
-定义 Module.basisOfFiniteTypeTorsionFree'
-  签名: [Module.Finite R M]
+定义 模.basisOfFiniteTypeTorsionFree'
+  签名: [模.有限 R M]
   定义体: Module.basisOfFiniteTypeTorsionFree Module.Finite.exists_fin.choose_spec.choose_spec
 
 Depends on / 依赖: Finite, Module, Module.Finite.exists_fin.choose_spec.choose_spec, Module.basisOfFiniteTypeTorsionFree, basisOfFiniteTypeTorsionFree, choose_spec, exists_fin
@@ -653,8 +653,8 @@ instance Module.free_of_finite_type_torsion_free'
   exact Module.Free.of_basis b
 
 中文:
-实例 Module.free_of_finite_type_torsion_free'
-  签名: [Module.Finite R M] [IsTorsionFree R M]
+实例 模.free_of_finite_type_torsion_free'
+  签名: [模.有限 R M] [是无挠 R M]
   定义体: by
   obtain ⟨n, b⟩ : Σ n, Basis (Fin n) R M := Module.basisOfFiniteTypeTorsionFree'
   exact Module.Free.of_basis b
@@ -683,9 +683,9 @@ theorem Module.free_iff_isTorsionFree
   proof: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 
 中文:
-定理 Module.free_iff_isTorsionFree
-  条件: [Module.Finite R M]
-  结论: Free R M ↔ IsTorsionFree R M
+定理 模.free_iff_isTorsionFree
+  条件: [模.有限 R M]
+  结论: 自由 R M ↔ 是无挠 R M
   证明: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 -/
 theorem Module.free_iff_isTorsionFree [Module.Finite R M] : Free R M ↔ IsTorsionFree R M :=
@@ -709,13 +709,13 @@ structure Module.Basis.SmithNormalForm
     - snf : forall i, (bN i : M) = a i • bM (f i)
 
 中文:
-结构 Module.Basis.SmithNormalForm
-  参数: (N : Submodule R M) (ι : 类型) (n : 自然数)
+结构 模.基.SmithNormalForm
+  参数: (N : 子模 R M) (ι : 类型) (n : 自然数)
   公理与运算 (5 个):
-    - bM : Basis ι R M
-    - bN : Basis (Fin n) R N
-    - f : Fin n ↪ ι
-    - a : Fin n -> R
+    - bM : 基 ι R M
+    - bN : 基 (有限集 n) R N
+    - f : 有限集 n ↪ ι
+    - a : 有限集 n -> R
     - snf : 对任意 i, (bN i : M) = a i • bM (f i)
 -/
 structure Module.Basis.SmithNormalForm (N : Submodule R M) (ι : Type*) (n : Nat) where
@@ -749,7 +749,7 @@ lemma repr_eq_zero_of_notMem_range
 
 中文:
 引理 repr_eq_zero_of_notMem_range
-  条件: {i : ι} (hi : i ∉ Set.range snf.f)
+  条件: {i : ι} (hi : i ∉ 集合.range snf.f)
   证明: by
   obtain ⟨m, hm⟩ := m
   obtain ⟨c, rfl⟩ := snf.bN.mem_submodule_iff.mp hm
@@ -775,7 +775,7 @@ lemma le_ker_coord_of_notMem_range
 
 中文:
 引理 le_ker_coord_of_notMem_range
-  条件: {i : ι} (hi : i ∉ Set.range snf.f)
+  条件: {i : ι} (hi : i ∉ 集合.range snf.f)
   证明: fun m hm => snf.repr_eq_zero_of_notMem_range ⟨m, hm⟩ hi
 
 Depends on / 依赖: repr_eq_zero_of_notMem_range, snf.repr_eq_zero_of_notMem_range
@@ -802,7 +802,7 @@ lemma repr_apply_embedding_eq_repr_smul
 
 中文:
 引理 repr_apply_embedding_eq_repr_smul
-  条件: {i : Fin n}
+  条件: {i : 有限集 n}
   证明: by
   obtain ⟨m, hm⟩ := m
   obtain ⟨c, rfl⟩ := snf.bN.mem_submodule_iff.mp hm
@@ -861,7 +861,7 @@ lemma coord_apply_embedding_eq_smul_coord
 
 中文:
 引理 coord_apply_embedding_eq_smul_coord
-  条件: {i : Fin n}
+  条件: {i : 有限集 n}
   证明: by
   ext m
   simp [Pi.smul_apply (snf.a i)]
@@ -889,7 +889,7 @@ lemma toMatrix_restrict_eq_toMatrix
 
 中文:
 引理 toMatrix_restrict_eq_toMatrix
-  结论: [Fintype ι] [DecidableEq ι]
+  结论: [有限类型 ι] [DecidableEq ι]
   证明: by
   rw [LinearMap.toMatrix_apply]; rw [LinearMap.toMatrix_apply]; rw [snf.repr_apply_embedding_eq_repr_smul ⟨_]; rw [(hf _)⟩]
   congr
@@ -925,8 +925,8 @@ theorem Submodule.exists_smith_normal_form_of_le
   obtain ⟨y, hy, a, _, M', M'_le_M, N', _,
 
 中文:
-定理 Submodule.exists_smith_normal_form_of_le
-  结论: [Finite ι] (b : Basis ι R M) (N O : Submodule R M)
+定理 子模.存在_smith_normal_form_of_le
+  结论: [有限 ι] (b : 基 ι R M) (N O : 子模 R M)
   证明: by
   cases nonempty_fintype ι
   induction O using inductionOnRank b generalizing N with | ih M0 ih =>
@@ -972,8 +972,8 @@ definition Submodule.smithNormalFormOfLE
     Submodule.coe_smul
 
 中文:
-定义 Submodule.smithNormalFormOfLE
-  签名: [Finite ι] (b : Basis ι R M) (N O : Submodule R M)
+定义 子模.smithNormalFormOfLE
+  签名: [有限 ι] (b : 基 ι R M) (N O : 子模 R M)
   定义体: by
   choose n o hno bO bN a snf using N.exists_smith_normal_form_of_le b O N_le_O
   refine
@@ -1008,8 +1008,8 @@ definition Submodule.smithNormalForm
     simp only [bM', snf, Basis.map_apply, LinearEquiv.ofTop_ap
 
 中文:
-定义 Submodule.smithNormalForm
-  签名: [Finite ι] (b : Basis ι R M) (N : Submodule R M)
+定义 子模.smithNormalForm
+  签名: [有限 ι] (b : 基 ι R M) (N : 子模 R M)
   定义体: let ⟨m, n, bM, bN, f, a, snf⟩ := N.smithNormalFormOfLE b ⊤ le_top
   let bM' := bM.map (LinearEquiv.ofTop _ rfl)
   let e := bM'.indexEquiv b
@@ -1045,8 +1045,8 @@ definition Submodule.smithNormalFormOfRankEq
   ⟨bM, bN.reindex e, e.symm.toEmbedding.trans f, a ∘ e.symm, fun i =>
 
 中文:
-定义 Submodule.smithNormalFormOfRankEq
-  签名: [Fintype ι] (b : Basis ι R M)
+定义 子模.smithNormalFormOfRankEq
+  签名: [有限类型 ι] (b : 基 ι R M)
   定义体: let ⟨n, bM, bN, f, a, snf⟩ := N.smithNormalForm b
   let e : Fin n ≃ Fin (Fintype.card ι) := Fintype.equivOfCardEq (by
     simp only [Fintype.card_fin, ← Module.finrank_eq_card_basis bM, ← h,
@@ -1083,8 +1083,8 @@ theorem Submodule.exists_smith_normal_form_of_rank_eq
   have fe : forall i, f (e.symm i) = i := e.apply_symm_app
 
 中文:
-定理 Submodule.exists_smith_normal_form_of_rank_eq
-  结论: (b : Basis ι R M)
+定理 子模.存在_smith_normal_form_of_rank_eq
+  结论: (b : 基 ι R M)
   证明: by
   cases nonempty_fintype ι
   let ⟨bM, bN, f, a, snf⟩ := N.smithNormalFormOfRankEq b h
@@ -1118,8 +1118,8 @@ definition Submodule.smithNormalFormTopBasis
   body: (exists_smith_normal_form_of_rank_eq b h).choose
 
 中文:
-定义 Submodule.smithNormalFormTopBasis
-  签名: (b : Basis ι R M)
+定义 子模.smithNormalFormTopBasis
+  签名: (b : 基 ι R M)
   定义体: (exists_smith_normal_form_of_rank_eq b h).choose
 
 Depends on / 依赖: exists_smith_normal_form_of_rank_eq
@@ -1137,8 +1137,8 @@ definition Submodule.smithNormalFormBotBasis
   body: (exists_smith_normal_form_of_rank_eq b h).choose_spec.choose_spec.choose
 
 中文:
-定义 Submodule.smithNormalFormBotBasis
-  签名: (b : Basis ι R M)
+定义 子模.smithNormalFormBotBasis
+  签名: (b : 基 ι R M)
   定义体: (exists_smith_normal_form_of_rank_eq b h).choose_spec.choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose, exists_smith_normal_form_of_rank_eq
@@ -1158,8 +1158,8 @@ definition Submodule.smithNormalFormCoeffs
 @[simp]
 
 中文:
-定义 Submodule.smithNormalFormCoeffs
-  签名: (b : Basis ι R M)
+定义 子模.smithNormalFormCoeffs
+  签名: (b : 基 ι R M)
   定义体: (exists_smith_normal_form_of_rank_eq b h).choose_spec.choose
 
 @[simp]
@@ -1182,8 +1182,8 @@ theorem Submodule.smithNormalFormBotBasis_def
 @[simp]
 
 中文:
-定理 Submodule.smithNormalFormBotBasis_def
-  结论: (b : Basis ι R M)
+定理 子模.smithNormalFormBotBasis_def
+  结论: (b : 基 ι R M)
   证明: (exists_smith_normal_form_of_rank_eq b h).choose_spec.choose_spec.choose_spec
 
 @[simp]
@@ -1210,8 +1210,8 @@ theorem Submodule.smithNormalFormCoeffs_ne_zero
   simp [hi]
 
 中文:
-定理 Submodule.smithNormalFormCoeffs_ne_zero
-  结论: (b : Basis ι R M)
+定理 子模.smithNormalFormCoeffs_ne_zero
+  结论: (b : 基 ι R M)
   证明: by
   intro hi
   apply Basis.ne_zero (smithNormalFormBotBasis b h) i
@@ -1247,8 +1247,8 @@ theorem Ideal.finrank_eq_finrank
   exact Ideal.rank_eq bS hI (bI.map ((restrictScalarsEquiv R S S I).restrictScalars R))
 
 中文:
-定理 Ideal.finrank_eq_finrank
-  条件: [Finite ι] (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定理 理想.finrank_eq_finrank
+  条件: [有限 ι] (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   证明: by
   obtain ⟨_, bS, bI, _, _, _⟩ := (I.restrictScalars R).smithNormalForm b
   cases nonempty_fintype ι
@@ -1273,8 +1273,8 @@ definition Ideal.smithNormalForm
   body: Submodule.smithNormalFormOfRankEq b (finrank_eq_finrank b I hI)
 
 中文:
-定义 Ideal.smithNormalForm
-  签名: [Fintype ι] (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定义 理想.smithNormalForm
+  签名: [有限类型 ι] (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   定义体: Submodule.smithNormalFormOfRankEq b (finrank_eq_finrank b I hI)
 
 Depends on / 依赖: Submodule, Submodule.smithNormalFormOfRankEq, finrank_eq_finrank, smithNormalFormOfRankEq
@@ -1294,8 +1294,8 @@ theorem Ideal.exists_smith_normal_form
   proof: Submodule.exists_smith_normal_form_of_rank_eq b (finrank_eq_finrank b I hI)
 
 中文:
-定理 Ideal.exists_smith_normal_form
-  条件: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定理 理想.存在_smith_normal_form
+  条件: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   证明: Submodule.exists_smith_normal_form_of_rank_eq b (finrank_eq_finrank b I hI)
 
 Depends on / 依赖: Submodule, Submodule.exists_smith_normal_form_of_rank_eq, exists_smith_normal_form_of_rank_eq, finrank_eq_finrank
@@ -1313,8 +1313,8 @@ definition Ideal.ringBasis
   body: (Ideal.exists_smith_normal_form b I hI).choose
 
 中文:
-定义 Ideal.ringBasis
-  签名: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定义 理想.ringBasis
+  签名: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   定义体: (Ideal.exists_smith_normal_form b I hI).choose
 
 Depends on / 依赖: Ideal.exists_smith_normal_form, exists_smith_normal_form
@@ -1331,8 +1331,8 @@ definition Ideal.selfBasis
   body: (Ideal.exists_smith_normal_form b I hI).choose_spec.choose_spec.choose
 
 中文:
-定义 Ideal.selfBasis
-  签名: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定义 理想.selfBasis
+  签名: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   定义体: (Ideal.exists_smith_normal_form b I hI).choose_spec.choose_spec.choose
 
 Depends on / 依赖: Ideal.exists_smith_normal_form, choose_spec, choose_spec.choose_spec.choose, exists_smith_normal_form
@@ -1349,8 +1349,8 @@ definition Ideal.smithCoeffs
   body: (Ideal.exists_smith_normal_form b I hI).choose_spec.choose
 
 中文:
-定义 Ideal.smithCoeffs
-  签名: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定义 理想.smithCoeffs
+  签名: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   定义体: (Ideal.exists_smith_normal_form b I hI).choose_spec.choose
 
 Depends on / 依赖: Ideal.exists_smith_normal_form, choose_spec, choose_spec.choose, exists_smith_normal_form
@@ -1375,8 +1375,8 @@ theorem Ideal.selfBasis_def
 @[simp]
 
 中文:
-定理 Ideal.selfBasis_def
-  条件: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥)
+定理 理想.selfBasis_def
+  条件: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥)
   证明: (Ideal.exists_smith_normal_form b I hI).choose_spec.choose_spec.choose_spec
 
 @[simp]
@@ -1401,8 +1401,8 @@ theorem Ideal.smithCoeffs_ne_zero
   simp [hi]
 
 中文:
-定理 Ideal.smithCoeffs_ne_zero
-  条件: (b : Basis ι R S) (I : Ideal S) (hI : I != ⊥) (i)
+定理 理想.smithCoeffs_ne_zero
+  条件: (b : 基 ι R S) (I : 理想 S) (hI : I != ⊥) (i)
   证明: by
   intro hi
   apply Basis.ne_zero (Ideal.selfBasis b I hI) i

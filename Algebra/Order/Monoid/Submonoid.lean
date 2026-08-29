@@ -55,7 +55,7 @@ instance toIsOrderedMonoid
 
 中文:
 实例 toIsOrderedMonoid
-  签名: [CommMonoid M] [Preorder M] [IsOrderedMonoid M]
+  签名: [交换幺半群 M] [预序 M] [是Ordered幺半群 M]
   定义体: Function.Injective.isOrderedMonoid Subtype.val (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedMonoid, Injective, Subtype, Subtype.val, isOrderedMonoid
@@ -78,7 +78,7 @@ instance toIsOrderedCancelMonoid
 
 中文:
 实例 toIsOrderedCancelMonoid
-  签名: [CommMonoid M] [Preorder M] [IsOrderedCancelMonoid M]
+  签名: [交换幺半群 M] [预序 M] [是OrderedCancel幺半群 M]
   定义体: Function.Injective.isOrderedCancelMonoid Subtype.val (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedCancelMonoid, Injective, Subtype, Subtype.val, isOrderedCancelMonoid
@@ -105,7 +105,7 @@ definition oneLE
 
 中文:
 定义 oneLE
-  签名: : Submonoid M where
+  签名: : 子幺半群 M where
   定义体: Set.Ici 1
   mul_mem' := one_le_mul
   one_mem' := le_rfl

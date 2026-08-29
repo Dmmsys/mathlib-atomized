@@ -32,7 +32,7 @@ instance instModuleIsTorsionFree
 
 中文:
 实例 instModuleIsTorsionFree
-  签名: [Semiring R] [对任意 i, AddCommMonoid (M i)] [对任意 i, Module R (M i)]
+  签名: [半环 R] [对任意 i, 加法交换幺半群 (M i)] [对任意 i, 模 R (M i)]
   定义体: .piMap fun _i => hr.isSMulRegular
 
 Depends on / 依赖: hr.isSMulRegular, isSMulRegular

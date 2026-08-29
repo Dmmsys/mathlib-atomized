@@ -82,7 +82,7 @@ theorem posTangentConeAt_mono
 
 中文:
 定理 posTangentConeAt_mono
-  结论: Monotone fun s => posTangentConeAt s a
+  结论: 递增 fun s => posTangentConeAt s a
   证明: by
   intro s t hst
   exact tangentConeAt_mono hst
@@ -420,7 +420,7 @@ theorem IsLocalMin.hasFDerivAt_eq_zero
 
 中文:
 定理 IsLocalMin.hasFDerivAt_eq_zero
-  条件: (h : IsLocalMin f a) (hf : HasFDerivAt f f' a)
+  条件: (h : IsLocalMin f a) (hf : 在点处Fréchet可导 f f' a)
   结论: f' = 0
   证明: by
   ext y
@@ -475,7 +475,7 @@ theorem IsLocalMax.hasFDerivAt_eq_zero
 
 中文:
 定理 IsLocalMax.hasFDerivAt_eq_zero
-  条件: (h : IsLocalMax f a) (hf : HasFDerivAt f f' a)
+  条件: (h : IsLocalMax f a) (hf : 在点处Fréchet可导 f f' a)
   结论: f' = 0
   证明: neg_eq_zero.1 h.neg.hasFDerivAt_eq_zero hf.neg
 
@@ -524,7 +524,7 @@ theorem IsLocalExtr.hasFDerivAt_eq_zero
 中文:
 定理 IsLocalExtr.hasFDerivAt_eq_zero
   条件: (h : IsLocalExtr f a)
-  结论: HasFDerivAt f f' a -> f' = 0
+  结论: 在点处Fréchet可导 f f' a -> f' = 0
   证明: h.elim IsLocalMin.hasFDerivAt_eq_zero IsLocalMax.hasFDerivAt_eq_zero
 
 Depends on / 依赖: IsLocalMax, IsLocalMax.hasFDerivAt_eq_zero, IsLocalMin, IsLocalMin.hasFDerivAt_eq_zero, h.elim, hasFDerivAt_eq_zero
@@ -639,7 +639,7 @@ theorem IsLocalMin.hasDerivAt_eq_zero
 
 中文:
 定理 IsLocalMin.hasDerivAt_eq_zero
-  条件: (h : IsLocalMin f a) (hf : HasDerivAt f f' a)
+  条件: (h : IsLocalMin f a) (hf : 在点处可导 f f' a)
   结论: f' = 0
   证明: by
   simpa using DFunLike.congr_fun (h.hasFDerivAt_eq_zero (hasDerivAt_iff_hasFDerivAt.1 hf)) 1
@@ -688,7 +688,7 @@ theorem IsLocalMax.hasDerivAt_eq_zero
 
 中文:
 定理 IsLocalMax.hasDerivAt_eq_zero
-  条件: (h : IsLocalMax f a) (hf : HasDerivAt f f' a)
+  条件: (h : IsLocalMax f a) (hf : 在点处可导 f f' a)
   结论: f' = 0
   证明: neg_eq_zero.1 h.neg.hasDerivAt_eq_zero hf.neg
 
@@ -737,7 +737,7 @@ theorem IsLocalExtr.hasDerivAt_eq_zero
 中文:
 定理 IsLocalExtr.hasDerivAt_eq_zero
   条件: (h : IsLocalExtr f a)
-  结论: HasDerivAt f f' a -> f' = 0
+  结论: 在点处可导 f f' a -> f' = 0
   证明: h.elim IsLocalMin.hasDerivAt_eq_zero IsLocalMax.hasDerivAt_eq_zero
 
 Depends on / 依赖: IsLocalMax, IsLocalMax.hasDerivAt_eq_zero, IsLocalMin, IsLocalMin.hasDerivAt_eq_zero, h.elim, hasDerivAt_eq_zero

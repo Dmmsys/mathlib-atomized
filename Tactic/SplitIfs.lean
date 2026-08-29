@@ -244,7 +244,7 @@ definition getNextName
 
 中文:
 定义 getNextName
-  签名: (hNames: IO.Ref (List (TSyntax `Lean.binderIdent)))
+  签名: (hNames: IO.Ref (列表 (TSyntax `Lean.binderIdent)))
   定义体: do
   match ← hNames.get with
   | [] => mkFreshUserName `h

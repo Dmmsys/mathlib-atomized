@@ -61,10 +61,10 @@ class Fintype
     - complete : forall x : α, x in elems
 
 中文:
-类 Fintype
+类 有限类型
   参数: (α : 类型)
   公理与运算 (2 个):
-    - elems : Finset α
+    - elems : 有限集 α
     - complete : 对任意 x : α, x in elems
 -/
 class Fintype (α : Type*) where
@@ -88,7 +88,7 @@ theorem nodup_map_iff_injOn
 
 中文:
 定理 nodup_map_iff_injOn
-  条件: {f : α -> β} {s : Finset α}
+  条件: {f : α -> β} {s : 有限集 α}
   证明: by
   simp [Multiset.nodup_map_iff_inj_on s.nodup, Set.InjOn]
 
@@ -115,7 +115,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: β] : Decidable (Set.InjOn f s)
+  签名: β] : 可判定 (集合.单射限制 f s)
   定义体: -- Use custom implementation for better performance.
   decidable_of_iff ((Multiset.map f s.val).Nodup) Finset.nodup_map_iff_injOn
 -/
@@ -133,7 +133,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: β] : Decidable (Set.BijOn f s t')
+  签名: β] : 可判定 (集合.双射限制 f s t')
   定义体: inferInstanceAs (Decidable (_ ∧ _ ∧ _))
 
 Depends on / 依赖: Decidable
@@ -159,7 +159,7 @@ definition univ
 
 中文:
 定义 univ
-  签名: : Finset α
+  签名: : 有限集 α
   定义体: @Fintype.elems α _
 
 @[simp, grind ←]
@@ -182,7 +182,7 @@ theorem mem_univ
 中文:
 定理 mem_univ
   条件: (x : α)
-  结论: x in (univ : Finset α)
+  结论: x in (univ : 有限集 α)
   证明: Fintype.complete x
 
 Depends on / 依赖: Fintype, Fintype.complete, complete
@@ -200,7 +200,7 @@ theorem mem_univ_val
 
 中文:
 定理 mem_univ_val
-  结论: 对任意 x, x in (univ : Finset α).1
+  结论: 对任意 x, x in (univ : 有限集 α).1
   证明: by simp
 -/
 theorem mem_univ_val : forall x, x in (univ : Finset α).1 := by simp
@@ -214,7 +214,7 @@ theorem eq_univ_iff_forall
   proof: by simp [Finset.ext_iff]
 
 中文:
-定理 eq_univ_iff_forall
+定理 eq_univ_iff_对任意
   结论: s = univ ↔ 对任意 x, x in s
   证明: by simp [Finset.ext_iff]
 
@@ -233,7 +233,7 @@ theorem eq_univ_of_forall
 @[simp, norm_cast]
 
 中文:
-定理 eq_univ_of_forall
+定理 eq_univ_of_对任意
   结论: (对任意 x, x in s) -> s = univ
   证明: eq_univ_iff_forall.2
 
@@ -257,7 +257,7 @@ theorem coe_univ
 
 中文:
 定理 coe_univ
-  结论: ↑(univ : Finset α) = (Set.univ : Set α)
+  结论: ↑(univ : 有限集 α) = (集合.univ : 集合 α)
   证明: by ext; simp
 
 @[simp, norm_cast]
@@ -277,7 +277,7 @@ theorem coe_eq_univ
 
 中文:
 定理 coe_eq_univ
-  结论: (s : Set α) = Set.univ ↔ s = univ
+  结论: (s : 集合 α) = 集合.univ ↔ s = univ
   证明: by rw [← coe_univ, coe_inj]
 
 @[simp]
@@ -298,7 +298,7 @@ theorem subset_univ
 
 中文:
 定理 subset_univ
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s subseteq univ
   证明: fun a _ => mem_univ a
 
@@ -422,7 +422,7 @@ instance decidablePiFintype
 
 中文:
 实例 decidablePiFintype
-  签名: {α} {β : α -> 类型} [对任意 a, DecidableEq (β a)] [Fintype α]
+  签名: {α} {β : α -> 类型} [对任意 a, DecidableEq (β a)] [有限类型 α]
   定义体: fun f g =>
   decidable_of_iff (forall a in @univ α _, f a = g a)
     (by simp [funext_iff])
@@ -442,7 +442,7 @@ instance decidableForallFintype
 
 中文:
 实例 decidableForallFintype
-  签名: {p : α -> 命题} [DecidablePred p] [Fintype α]
+  签名: {p : α -> 命题} [DecidablePred p] [有限类型 α]
   定义体: decidable_of_iff (forall a in @univ α _, p a) (by simp)
 
 Depends on / 依赖: decidable_of_iff
@@ -461,7 +461,7 @@ instance decidableExistsFintype
 
 中文:
 实例 decidableExistsFintype
-  签名: {p : α -> 命题} [DecidablePred p] [Fintype α]
+  签名: {p : α -> 命题} [DecidablePred p] [有限类型 α]
   定义体: decidable_of_iff (exists a in @univ α _, p a) (by simp)
 
 Depends on / 依赖: decidable_of_iff
@@ -480,7 +480,7 @@ instance decidableMemRangeFintype
 
 中文:
 实例 decidableMemRangeFintype
-  签名: [Fintype α] [DecidableEq β] (f : α -> β)
+  签名: [有限类型 α] [DecidableEq β] (f : α -> β)
   定义体: fun _ => Fintype.decidableExistsFintype
 
 Depends on / 依赖: Fintype, Fintype.decidableExistsFintype, decidableExistsFintype
@@ -498,7 +498,7 @@ instance decidableSubsingleton
 
 中文:
 实例 decidableSubsingleton
-  签名: [Fintype α] [DecidableEq α] {s : Set α} [DecidablePred (· in s)]
+  签名: [有限类型 α] [DecidableEq α] {s : 集合 α} [DecidablePred (· in s)]
   定义体: decidable_of_iff (forall a in s, forall b in s, a = b) Iff.rfl
 
 Depends on / 依赖: Iff.rfl, decidable_of_iff
@@ -519,7 +519,7 @@ instance decidableEqEquivFintype
 
 中文:
 实例 decidableEqEquivFintype
-  签名: [DecidableEq β] [Fintype α]
+  签名: [DecidableEq β] [有限类型 α]
   定义体: fun a b =>
   decidable_of_iff (a.1 = b.1) Equiv.coe_fn_injective.eq_iff
 -/
@@ -537,7 +537,7 @@ instance decidableEqEmbeddingFintype
 
 中文:
 实例 decidableEqEmbeddingFintype
-  签名: [DecidableEq β] [Fintype α]
+  签名: [DecidableEq β] [有限类型 α]
   定义体: fun a b =>
   decidable_of_iff ((a : α -> β) = b) Function.Embedding.coe_injective.eq_iff
 -/
@@ -557,7 +557,7 @@ theorem nodup_map_univ_iff_injective
 
 中文:
 定理 nodup_map_univ_iff_injective
-  条件: [Fintype α] {f : α -> β}
+  条件: [有限类型 α] {f : α -> β}
   证明: by
   rw [nodup_map_iff_injOn]; rw [coe_univ]; rw [Set.injOn_univ]
 
@@ -578,7 +578,7 @@ instance decidableInjectiveFintype
 
 中文:
 实例 decidableInjectiveFintype
-  签名: [DecidableEq β] [Fintype α]
+  签名: [DecidableEq β] [有限类型 α]
   定义体: -- Use custom implementation for better performance.
   fun f => decidable_of_iff ((Multiset.map f univ.val).Nodup) nodup_map_univ_iff_injective
 -/
@@ -597,7 +597,7 @@ instance decidableSurjectiveFintype
 
 中文:
 实例 decidableSurjectiveFintype
-  签名: [DecidableEq β] [Fintype α] [Fintype β]
+  签名: [DecidableEq β] [有限类型 α] [有限类型 β]
   定义体: fun x => inferInstanceAs Decidable (forall b, exists a, x a = b)
 
 Depends on / 依赖: Decidable
@@ -616,7 +616,7 @@ instance decidableBijectiveFintype
 
 中文:
 实例 decidableBijectiveFintype
-  签名: [DecidableEq β] [Fintype α] [Fintype β]
+  签名: [DecidableEq β] [有限类型 α] [有限类型 β]
   定义体: fun x => inferInstanceAs Decidable (Injective x ∧ Surjective x)
 
 Depends on / 依赖: Decidable, Injective, Surjective
@@ -635,7 +635,7 @@ instance decidableRightInverseFintype
 
 中文:
 实例 decidableRightInverseFintype
-  签名: [DecidableEq α] [Fintype α] (f : α -> β) (g : β -> α)
+  签名: [DecidableEq α] [有限类型 α] (f : α -> β) (g : β -> α)
   定义体: inferInstanceAs Decidable (forall x, g (f x) = x)
 
 Depends on / 依赖: Decidable
@@ -654,7 +654,7 @@ instance decidableLeftInverseFintype
 
 中文:
 实例 decidableLeftInverseFintype
-  签名: [DecidableEq β] [Fintype β] (f : α -> β) (g : β -> α)
+  签名: [DecidableEq β] [有限类型 β] (f : α -> β) (g : β -> α)
   定义体: inferInstanceAs Decidable (forall x, f (g x) = x)
 
 Depends on / 依赖: Decidable
@@ -697,7 +697,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: {p : α -> 命题} (s : Finset α) (H : 对任意 x : α, x in s ↔ p x)
+  签名: {p : α -> 命题} (s : 有限集 α) (H : 对任意 x : α, x in s ↔ p x)
   定义体: ⟨⟨s.1.pmap Subtype.mk fun x => (H x).1, s.nodup.pmap fun _ _ _ _ => congr_arg Subtype.val⟩,
     fun ⟨x, px⟩ => Multiset.mem_pmap.2 ⟨x, (H x).2 px, rfl⟩⟩
 -/
@@ -718,7 +718,7 @@ definition ofFinset
 
 中文:
 定义 ofFinset
-  签名: {p : Set α} (s : Finset α) (H : 对任意 x, x in s ↔ x in p)
+  签名: {p : 集合 α} (s : 有限集 α) (H : 对任意 x, x in s ↔ x in p)
   定义体: Fintype.subtype s H
 
 Depends on / 依赖: Fintype, Fintype.subtype, subtype
@@ -737,8 +737,8 @@ instance Bool.fintype
   body: ⟨⟨{true, false}, by simp⟩, fun x => by cases x <;> simp⟩
 
 中文:
-实例 Bool.fintype
-  签名: : Fintype 布尔
+实例 布尔值.fintype
+  签名: : 有限类型 布尔值
   定义体: ⟨⟨{true, false}, by simp⟩, fun x => by cases x <;> simp⟩
 -/
 instance Bool.fintype : Fintype Bool :=
@@ -754,7 +754,7 @@ instance Ordering.fintype
 
 中文:
 实例 Ordering.fintype
-  签名: : Fintype Ordering
+  签名: : 有限类型 Ordering
   定义体: ⟨⟨{.lt, .eq, .gt}, by simp⟩, fun x => by cases x <;> simp⟩
 -/
 instance Ordering.fintype : Fintype Ordering :=
@@ -770,7 +770,7 @@ instance OrderDual.fintype
 
 中文:
 实例 OrderDual.fintype
-  签名: (α : 类型) [Fintype α]
+  签名: (α : 类型) [有限类型 α]
   定义体: ‹Fintype α›
 
 Depends on / 依赖: Fintype
@@ -788,7 +788,7 @@ instance OrderDual.finite
 
 中文:
 实例 OrderDual.finite
-  签名: (α : 类型) [Finite α]
+  签名: (α : 类型) [有限 α]
   定义体: ‹Finite α›
 
 Depends on / 依赖: Finite
@@ -806,7 +806,7 @@ instance Lex.fintype
 
 中文:
 实例 Lex.fintype
-  签名: (α : 类型) [Fintype α]
+  签名: (α : 类型) [有限类型 α]
   定义体: ‹Fintype α›
 
 Depends on / 依赖: Fintype

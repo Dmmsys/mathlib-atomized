@@ -38,8 +38,8 @@ map_mul' _ _ := unop_injective Units.ext rfl
 @[to_additive (attr := simp)]
 
 中文:
-定义 Units.opEquiv
-  签名: {M} [Monoid M]
+定义 单位群.opEquiv
+  签名: {M} [幺半群 M]
   定义体: op ⟨unop u, unop ↑u⁻¹, op_injective u.4, op_injective u.3⟩
 invFun := MulOpposite.rec' fun u => ⟨op ↑u, op ↑u⁻¹, unop_injective u.4, unop_injective u.3⟩
 map_mul' _ _ := unop_injective Units.ext rfl
@@ -65,8 +65,8 @@ theorem Units.coe_unop_opEquiv
 @[to_additive (attr := simp)]
 
 中文:
-定理 Units.coe_unop_opEquiv
-  条件: {M} [Monoid M] (u : Mᵐᵒᵖˣ)
+定理 单位群.coe_unop_opEquiv
+  条件: {M} [幺半群 M] (u : Mᵐᵒᵖˣ)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -95,8 +95,8 @@ nonrec theorem IsUnit.unop {M} [Monoid M] {m : Mᵐᵒᵖ} (h : IsUnit m) : IsUn
   hu ▸ ⟨unop (U
 
 中文:
-定理 Units.coe_opEquiv_symm
-  条件: {M} [Monoid M] (u : Mˣᵐᵒᵖ)
+定理 单位群.coe_opEquiv_symm
+  条件: {M} [幺半群 M] (u : Mˣᵐᵒᵖ)
   证明: rfl
 
 @[to_additive]
@@ -137,8 +137,8 @@ theorem isUnit_op
 
 中文:
 定理 isUnit_op
-  条件: {M} [Monoid M] {m : M}
-  结论: IsUnit (op m) ↔ IsUnit m
+  条件: {M} [幺半群 M] {m : M}
+  结论: 是单位 (op m) ↔ 是单位 m
   证明: ⟨IsUnit.unop, IsUnit.op⟩
 
 @[to_additive (attr := simp)]
@@ -160,8 +160,8 @@ theorem isUnit_unop
 
 中文:
 定理 isUnit_unop
-  条件: {M} [Monoid M] {m : Mᵐᵒᵖ}
-  结论: IsUnit (unop m) ↔ IsUnit m
+  条件: {M} [幺半群 M] {m : Mᵐᵒᵖ}
+  结论: 是单位 (unop m) ↔ 是单位 m
   证明: ⟨IsUnit.op, IsUnit.unop⟩
 
 Depends on / 依赖: IsUnit, IsUnit.op, IsUnit.unop

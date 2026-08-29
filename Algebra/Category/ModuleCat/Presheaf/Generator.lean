@@ -63,7 +63,7 @@ definition freeYonedaEquiv
 
 中文:
 定义 freeYonedaEquiv
-  签名: {M : PresheafOfModules.{v} R} {X : C}
+  签名: {M : 预模层.{v} R} {X : C}
   定义体: freeHomEquiv.trans yonedaEquiv
 
 Depends on / 依赖: freeHomEquiv, freeHomEquiv.trans, yonedaEquiv
@@ -85,7 +85,7 @@ lemma freeYonedaEquiv_symm_app
 
 中文:
 引理 freeYonedaEquiv_symm_app
-  结论: (M : PresheafOfModules.{v} R) (X : C)
+  结论: (M : 预模层.{v} R) (X : C)
   证明: by
   simp [freeYonedaEquiv, freeHomEquiv, yonedaEquiv]
 
@@ -106,7 +106,7 @@ lemma freeYonedaEquiv_comp
 
 中文:
 引理 freeYonedaEquiv_comp
-  结论: {M N : PresheafOfModules.{v} R} {X : C}
+  结论: {M N : 预模层.{v} R} {X : C}
   证明: rfl
 -/
 lemma freeYonedaEquiv_comp {M N : PresheafOfModules.{v} R} {X : C}
@@ -124,7 +124,7 @@ definition freeYoneda
 
 中文:
 定义 freeYoneda
-  签名: : Object命题erty (PresheafOfModules.{v} R)
+  签名: : ObjectProperty (预模层.{v} R)
   定义体: .ofObj (yoneda ⋙ free R).obj
 
 Depends on / 依赖: yoneda
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.Small.{u} (freeYoneda R)
+  签名: ObjectProperty.Small.{u} (freeYoneda R)
   定义体: by
   dsimp [freeYoneda]
   infer_instance
@@ -172,7 +172,7 @@ lemma isSeparating
 
 中文:
 引理 isSeparating
-  结论: Object命题erty.IsSeparating (freeYoneda R)
+  结论: ObjectProperty.IsSeparating (freeYoneda R)
   证明: by
   intro M N f₁ f₂ h
   ext ⟨X⟩ m
@@ -197,7 +197,7 @@ lemma isDetecting
 
 中文:
 引理 isDetecting
-  结论: Object命题erty.IsDetecting (freeYoneda R)
+  结论: ObjectProperty.IsDetecting (freeYoneda R)
   证明: (isSeparating R).isDetecting
 
 Depends on / 依赖: isDetecting, isSeparating
@@ -217,7 +217,7 @@ instance wellPowered
 
 中文:
 实例 wellPowered
-  签名: {C₀ : 类型u} [SmallCategory C₀] (R₀ : C₀ᵒᵖ ⥤ RingCat.{u})
+  签名: {C₀ : 类型u} [小范畴 C₀] (R₀ : C₀ᵒᵖ ⥤ 环范畴.{u})
   定义体: wellPowered_of_isDetecting (freeYoneda.isDetecting R₀)
 
 Depends on / 依赖: freeYoneda, freeYoneda.isDetecting, isDetecting, wellPowered_of_isDetecting
@@ -236,7 +236,7 @@ abbreviation Elements
 
 中文:
 缩写 Elements
-  签名: {C : 类型u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
+  签名: {C : 类型u₁} [范畴.{v₁} C] {R : Cᵒᵖ ⥤ 环范畴.{u}}
   定义体: ((toPresheaf R).obj M ⋙ forget Ab).Elements
 
 Depends on / 依赖: Elements, forget, toPresheaf
@@ -254,7 +254,7 @@ abbreviation elementsMk
 
 中文:
 缩写 elementsMk
-  签名: {C : 类型u₁} [Category.{v₁} C] {R : Cᵒᵖ ⥤ RingCat.{u}}
+  签名: {C : 类型u₁} [范畴.{v₁} C] {R : Cᵒᵖ ⥤ 环范畴.{u}}
   定义体: Functor.elementsMk _ X x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, Functor, Functor.elementsMk, ModuleCat, elementsMk
@@ -341,7 +341,7 @@ abbreviation freeYonedaCoproduct
 
 中文:
 缩写 freeYonedaCoproduct
-  签名: : PresheafOfModules.{u} R
+  签名: : 预模层.{u} R
   定义体: ∐ (Elements.freeYoneda (M := M))
 
 Depends on / 依赖: Elements, Elements.freeYoneda, freeYoneda
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi M.fromFreeYonedaCoproduct
+  签名: 满态射 M.fromFreeYonedaCoproduct
   定义体: epi_of_surjective (fun X m => ⟨M.freeYonedaCoproductMk (M.elementsMk X m),
     M.fromFreeYonedaCoproduct_app_mk (M.elementsMk X m)⟩)
 

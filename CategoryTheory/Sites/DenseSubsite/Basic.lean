@@ -72,7 +72,7 @@ structure Presieve.CoverByImageStructure
     - fac : lift ≫ map = f  [default: by cat_disch]
 
 中文:
-结构 Presieve.CoverByImageStructure
+结构 Presieve.余verByImageStructure
   参数: (G : C ⥤ D) {V U : D} (f : V ⟶ U)
   公理与运算 (4 个):
     - obj : C
@@ -120,7 +120,7 @@ definition Sieve.coverByImage
     ⟨⟨Z, g ≫ f₁, f₂, show (g ≫ f₁) ≫ f₂ = g ≫ _ by rw [Category.assoc, ← e]⟩⟩⟩
 
 中文:
-定义 Sieve.coverByImage
+定义 筛.coverByImage
   签名: (G : C ⥤ D) (U : D)
   定义体: ⟨Presieve.coverByImage G U, fun ⟨⟨Z, f₁, f₂, (e : _ = _)⟩⟩ g =>
     ⟨⟨Z, g ≫ f₁, f₂, show (g ≫ f₁) ≫ f₂ = g ≫ _ by rw [Category.assoc, ← e]⟩⟩⟩
@@ -158,10 +158,10 @@ class Functor.IsCoverDense
     - is_cover : forall U : D, Sieve.coverByImage G U in K U
 
 中文:
-类 Functor.IsCoverDense
-  参数: (G : C ⥤ D) (K : GrothendieckTopology D)
+类 函子.是余verDense
+  参数: (G : C ⥤ D) (K : Grothendieck拓扑 D)
   公理与运算 (1 个):
-    - is_cover : 对任意 U : D, Sieve.coverByImage G U in K U
+    - is_cover : 对任意 U : D, 筛.coverByImage G U in K U
 -/
 class Functor.IsCoverDense (G : C ⥤ D) (K : GrothendieckTopology D) : Prop where
   is_cover : forall U : D, Sieve.coverByImage G U in K U
@@ -176,8 +176,8 @@ lemma Functor.is_cover_of_isCoverDense
   apply Functor.IsCoverDense.is_cover
 
 中文:
-引理 Functor.is_cover_of_isCoverDense
-  结论: (G : C ⥤ D) (K : GrothendieckTopology D)
+引理 函子.is_cover_of_isCoverDense
+  结论: (G : C ⥤ D) (K : Grothendieck拓扑 D)
   证明: by
   apply Functor.IsCoverDense.is_cover
 
@@ -201,7 +201,7 @@ lemma Functor.isCoverDense_of_generate_singleton_functor_π_mem
     exact ⟨⟨_, g, _, w⟩⟩
 
 中文:
-引理 Functor.isCoverDense_of_generate_singleton_functor_π_mem
+引理 函子.isCoverDense_of_generate_singleton_functor_π_mem
   结论: (G : C ⥤ D)
   证明: by
     obtain ⟨X, f, h⟩ := h B
@@ -249,7 +249,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [G.IsCoverDense K] (ℱ : Sheaf K 类型) (X : D) {s t : ℱ.obj.obj (op X)}
+  结论: [G.是余verDense K] (ℱ : 层 K 类型) (X : D) {s t : ℱ.obj.obj (op X)}
   证明: by
   apply ((isSheaf_iff_isSheaf_of_type _ _).1 ℱ.property
     (Sieve.coverByImage G X) (G.is_cover_of_isCoverDense K X)).isSeparatedFor.ext
@@ -283,7 +283,7 @@ theorem functorPullback_pushforward_covering
 
 中文:
 定理 functorPullback_pushforward_covering
-  结论: [G.IsCoverDense K] [G.IsLocallyFull K] {X : C}
+  结论: [G.是余verDense K] [G.是LocallyFull K] {X : C}
   证明: by
   refine K.transitive T.2 _ fun Y iYX hiYX => ?_
   apply K.transitive (G.is_cover_of_isCoverDense _ _) _
@@ -318,7 +318,7 @@ definition homOver
 
 中文:
 定义 homOver
-  签名: {ℱ : Dᵒᵖ ⥤ A} {ℱ' : Sheaf K A} (α : G.op ⋙ ℱ ⟶ G.op ⋙ ℱ'.obj) (X : A)
+  签名: {ℱ : Dᵒᵖ ⥤ A} {ℱ' : 层 K A} (α : G.op ⋙ ℱ ⟶ G.op ⋙ ℱ'.obj) (X : A)
   定义体: whiskerRight α (coyoneda.obj (op X))
 
 Depends on / 依赖: coyoneda, coyoneda.obj, whiskerRight
@@ -341,7 +341,7 @@ definition isoOver
 
 中文:
 定义 isoOver
-  签名: {ℱ ℱ' : Sheaf K A} (α : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj) (X : A)
+  签名: {ℱ ℱ' : 层 K A} (α : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj) (X : A)
   定义体: isoWhiskerRight α (coyoneda.obj (op X))
 
 Depends on / 依赖: coyoneda, coyoneda.obj, isoWhiskerRight
@@ -360,7 +360,7 @@ theorem sheaf_eq_amalgamation
 
 中文:
 定理 sheaf_eq_amalgamation
-  结论: (ℱ : Sheaf K A) {X : A} {U : D} {T : Sieve U} (hT)
+  结论: (ℱ : 层 K A) {X : A} {U : D} {T : 筛 U} (hT)
   证明: (ℱ.property X T hT).isSeparatedFor x t _ h ((ℱ.property X T hT).isAmalgamation hx)
 
 Depends on / 依赖: isAmalgamation, isSeparatedFor, property
@@ -391,7 +391,7 @@ theorem naturality_apply
 
 中文:
 定理 naturality_apply
-  条件: [G.IsLocallyFull K] {X Y : C} (i : G.obj X ⟶ G.obj Y) (x)
+  条件: [G.是LocallyFull K] {X Y : C} (i : G.obj X ⟶ G.obj Y) (x)
   证明: by
   have {X Y} (i : X ⟶ Y) (x) :
       ℱ'.1.map (G.map i).op (α.app _ x) = α.app _ (ℱ.map (G.map i).op x) := by
@@ -425,7 +425,7 @@ theorem naturality
 
 中文:
 定理 naturality
-  条件: [G.IsLocallyFull K] {X Y : C} (i : G.obj X ⟶ G.obj Y)
+  条件: [G.是LocallyFull K] {X Y : C} (i : G.obj X ⟶ G.obj Y)
   证明: by ext; exact naturality_apply α i _
 
 Depends on / 依赖: naturality_apply
@@ -486,7 +486,7 @@ theorem pushforwardFamily_apply
 
 中文:
 定理 pushforwardFamily_apply
-  结论: [G.IsLocallyFull K]
+  结论: [G.是LocallyFull K]
   证明: by
   simp only [pushforwardFamily_def, op_obj]
   generalize Nonempty.some (Presieve.in_coverByImage G f) = l
@@ -672,7 +672,7 @@ definition appIso
 
 中文:
 定义 appIso
-  签名: {ℱ ℱ' : Sheaf K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
+  签名: {ℱ ℱ' : 层 K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
   定义体: appHom i.hom X
   inv := appHom i.inv X
   hom_inv_id := by
@@ -764,7 +764,7 @@ definition presheafIso
 
 中文:
 定义 presheafIso
-  签名: {ℱ ℱ' : Sheaf K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
+  签名: {ℱ ℱ' : 层 K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
   定义体: NatIso.ofComponents (fun X => appIso i (unop X)) @(presheafHom i.hom).naturality
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, appIso, i.hom, naturality, ofComponents, presheafHom
@@ -789,7 +789,7 @@ definition sheafIso
 
 中文:
 定义 sheafIso
-  签名: {ℱ ℱ' : Sheaf K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
+  签名: {ℱ ℱ' : 层 K (类型v)} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
   定义体: (fullyFaithfulSheafToPresheaf _ _).preimageIso (presheafIso i)
 
 Depends on / 依赖: fullyFaithfulSheafToPresheaf, preimageIso, presheafIso
@@ -946,7 +946,7 @@ definition presheafIso
 
 中文:
 定义 presheafIso
-  签名: {ℱ ℱ' : Sheaf K A} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
+  签名: {ℱ ℱ' : 层 K A} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
   定义体: by
   have : forall X : Dᵒᵖ, IsIso ((sheafHom i.hom).app X) := by
     intro X
@@ -987,7 +987,7 @@ definition sheafIso
 
 中文:
 定义 sheafIso
-  签名: {ℱ ℱ' : Sheaf K A} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
+  签名: {ℱ ℱ' : 层 K A} (i : G.op ⋙ ℱ.obj ≅ G.op ⋙ ℱ'.obj)
   定义体: (fullyFaithfulSheafToPresheaf _ _).preimageIso (presheafIso i)
 
 Depends on / 依赖: fullyFaithfulSheafToPresheaf, preimageIso, presheafIso
@@ -1258,7 +1258,7 @@ theorem iso_of_restrict_iso
 
 中文:
 定理 iso_of_restrict_iso
-  条件: {ℱ ℱ' : Sheaf K A} (α : ℱ ⟶ ℱ') (i : IsIso (whiskerLeft G.op α.hom))
+  条件: {ℱ ℱ' : 层 K A} (α : ℱ ⟶ ℱ') (i : 是同构 (whiskerLeft G.op α.hom))
   证明: by
   convert! (sheafIso (asIso (whiskerLeft G.op α.hom))).isIso_hom using 1
   ext1
@@ -1292,8 +1292,8 @@ lemma compatiblePreserving
 
 中文:
 引理 compatiblePreserving
-  条件: [G.IsLocallyFaithful K]
-  结论: CompatiblePreserving K G
+  条件: [G.是LocallyFaithful K]
+  结论: 余mpatiblePreserving K G
   证明: by
   constructor
   intro ℱ Z T x hx Y₁ Y₂ X f₁ f₂ g₁ g₂ hg₁ hg₂ eq
@@ -1329,8 +1329,8 @@ lemma isContinuous
 
 中文:
 引理 isContinuous
-  条件: [G.IsLocallyFaithful K] (Hp : CoverPreserving J K G)
-  结论: G.IsContinuous J K
+  条件: [G.是LocallyFaithful K] (Hp : 余verPreserving J K G)
+  结论: G.是连续 J K
   证明: isContinuous_of_coverPreserving (compatiblePreserving K G) Hp
 
 Depends on / 依赖: compatiblePreserving, isContinuous_of_coverPreserving
@@ -1348,7 +1348,7 @@ instance full_sheafPushforwardContinuous
 
 中文:
 实例 full_sheafPushforwardContinuous
-  签名: [G.IsContinuous J K]
+  签名: [G.是连续 J K]
   定义体: ⟨⟨sheafHom α.hom⟩, Sheaf.hom_ext sheafHom_restrict_eq α.hom⟩
 
 Depends on / 依赖: Sheaf.hom_ext, hom_ext, sheafHom, sheafHom_restrict_eq
@@ -1374,7 +1374,7 @@ instance faithful_sheafPushforwardContinuous
 
 中文:
 实例 faithful_sheafPushforwardContinuous
-  签名: [G.IsContinuous J K]
+  签名: [G.是连续 J K]
   定义体: by
     intro ℱ ℱ' α β e
     ext1
@@ -1431,13 +1431,13 @@ class IsDenseSubsite
     - functorPushforward_mem_iff : forall {X : C} {S : Sieve X}, S.functorPushforward G in K _ ↔ S in J _
 
 中文:
-类 IsDenseSubsite
+类 是DenseSubsite
   参数: : 命题 where
   公理与运算 (4 个):
-    - isCoverDense' : G.IsCoverDense K  [默认: by infer_instance]
-    - isLocallyFull' : G.IsLocallyFull K  [默认: by infer_instance]
-    - isLocallyFaithful' : G.IsLocallyFaithful K  [默认: by infer_instance]
-    - functorPushforward_mem_iff : 对任意 {X : C} {S : Sieve X}, S.functorPushforward G in K _ ↔ S in J _
+    - isCoverDense' : G.是余verDense K  [默认: by infer_instance]
+    - isLocallyFull' : G.是LocallyFull K  [默认: by infer_instance]
+    - isLocallyFaithful' : G.是LocallyFaithful K  [默认: by infer_instance]
+    - functorPushforward_mem_iff : 对任意 {X : C} {S : 筛 X}, S.functorPushforward G in K _ ↔ S in J _
 
 Depends on / 依赖: G.IsLocallyFaithful, G.IsLocallyFull, IsLocallyFaithful, IsLocallyFull, S.functorPushforward, functorPushforward, functorPushforward_mem_iff, infer_instance, isLocallyFaithful, isLocallyFull
 -/
@@ -1457,7 +1457,7 @@ lemma functorPushforward_mem_iff
 
 中文:
 引理 functorPushforward_mem_iff
-  条件: {X : C} {S : Sieve X} [G.IsDenseSubsite J K]
+  条件: {X : C} {S : 筛 X} [G.是DenseSubsite J K]
   证明: IsDenseSubsite.functorPushforward_mem_iff
 
 Depends on / 依赖: IsDenseSubsite, IsDenseSubsite.functorPushforward_mem_iff, functorPushforward_mem_iff
@@ -1481,7 +1481,7 @@ lemma isCoverDense
 
 中文:
 引理 isCoverDense
-  结论: G.IsCoverDense K
+  结论: G.是余verDense K
   证明: isCoverDense' J
 
 Depends on / 依赖: isCoverDense
@@ -1497,7 +1497,7 @@ lemma isLocallyFull
 
 中文:
 引理 isLocallyFull
-  结论: G.IsLocallyFull K
+  结论: G.是LocallyFull K
   证明: isLocallyFull' J
 
 Depends on / 依赖: isLocallyFull
@@ -1513,7 +1513,7 @@ lemma isLocallyFaithful
 
 中文:
 引理 isLocallyFaithful
-  结论: G.IsLocallyFaithful K
+  结论: G.是LocallyFaithful K
   证明: isLocallyFaithful' J
 
 Depends on / 依赖: isLocallyFaithful
@@ -1530,7 +1530,7 @@ lemma coverPreserving
 
 中文:
 引理 coverPreserving
-  结论: CoverPreserving J K G
+  结论: 余verPreserving J K G
   证明: ⟨functorPushforward_mem_iff.mpr⟩
 
 Depends on / 依赖: functorPushforward_mem_iff, functorPushforward_mem_iff.mpr
@@ -2146,7 +2146,7 @@ lemma hasSheafify_of_isEquivalence
 
 中文:
 引理 hasSheafify_of_isEquivalence
-  条件: [HasSheafify J A] [HasFiniteLimits A]
+  条件: [有Sheafify J A] [有有限极限 A]
   证明: by
   have : PreservesFiniteLimits (presheafToSheaf J A ⋙
     (G.sheafPushforwardContinuous A J K).inv) := by
@@ -2187,7 +2187,7 @@ definition sheafEquiv
 
 中文:
 定义 sheafEquiv
-  签名: : Sheaf J A ≌ Sheaf K A
+  签名: : 层 J A ≌ 层 K A
   定义体: (sheafPushforwardContinuous G A J K).asEquivalence.symm
 
 Depends on / 依赖: asEquivalence, asEquivalence.symm, sheafPushforwardContinuous

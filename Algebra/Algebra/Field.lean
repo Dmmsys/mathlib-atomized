@@ -111,7 +111,7 @@ theorem coe_ratCast
 
 中文:
 定理 coe_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ↑(q : R) = (q : A)
   证明: map_ratCast (algebraMap R A) q
 

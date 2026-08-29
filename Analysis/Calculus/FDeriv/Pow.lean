@@ -182,7 +182,7 @@ theorem hasFDerivWithinAt_pow'
 
 中文:
 定理 hasFDerivWithinAt_pow'
-  条件: (n : 自然数) {x : 𝔸} {s : Set 𝔸}
+  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
   证明: .pow' n hasFDerivWithinAt_id _ _
 
 @[to_fun]
@@ -208,8 +208,8 @@ theorem HasFDerivAt.pow'
 exact this.congr_fderiv aux _ _ _ _
 
 中文:
-定理 HasFDerivAt.pow'
-  条件: (h : HasFDerivAt f f' x) (n : 自然数)
+定理 在点处Fréchet可导.pow'
+  条件: (h : 在点处Fréchet可导 f f' x) (n : 自然数)
   证明: match n with
   | 0 => by simpa using! hasFDerivAt_const 1 x
   | 1 => by simpa using h
@@ -306,7 +306,7 @@ theorem differentiableWithinAt_pow
 
 中文:
 定理 differentiableWithinAt_pow
-  条件: (n : 自然数) {x : 𝔸} {s : Set 𝔸}
+  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
   证明: differentiableWithinAt_id.pow _
 
 @[to_fun (attr := simp, fun_prop)]
@@ -391,7 +391,7 @@ theorem differentiableOn_pow
 
 中文:
 定理 differentiableOn_pow
-  条件: (n : 自然数) {s : Set 𝔸}
+  条件: (n : 自然数) {s : 集合 𝔸}
   结论: DifferentiableOn 𝕜 (fun x : 𝔸 => x ^ n) s
   证明: differentiableOn_id.pow n
 
@@ -413,9 +413,9 @@ theorem Differentiable.pow
   proof: fun x => (hf x).pow n
 
 中文:
-定理 Differentiable.pow
-  条件: (hf : Differentiable 𝕜 f) (n : 自然数)
-  结论: Differentiable 𝕜 (f ^ n)
+定理 可微.pow
+  条件: (hf : 可微 𝕜 f) (n : 自然数)
+  结论: 可微 𝕜 (f ^ n)
   证明: fun x => (hf x).pow n
 -/
 theorem Differentiable.pow (hf : Differentiable 𝕜 f) (n : Nat) : Differentiable 𝕜 (f ^ n) :=
@@ -435,7 +435,7 @@ theorem differentiable_pow
 中文:
 定理 differentiable_pow
   条件: (n : 自然数)
-  结论: Differentiable 𝕜 fun x : 𝔸 => x ^ n
+  结论: 可微 𝕜 fun x : 𝔸 => x ^ n
   证明: differentiable_id.pow _
 
 @[to_fun fderiv_fun_pow']
@@ -525,7 +525,7 @@ theorem fderivWithin_pow_ring'
 
 中文:
 定理 fderivWithin_pow_ring'
-  条件: {s : Set 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
+  条件: {s : 集合 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   rw [fderivWithin_fun_pow' hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
 
@@ -640,7 +640,7 @@ theorem hasFDerivWithinAt_pow
 
 中文:
 定理 hasFDerivWithinAt_pow
-  条件: (n : 自然数) {x : 𝔸} {s : Set 𝔸}
+  条件: (n : 自然数) {x : 𝔸} {s : 集合 𝔸}
   证明: .pow n hasFDerivWithinAt_id _ _
 -/
 theorem hasFDerivWithinAt_pow (n : Nat) {x : 𝔸} {s : Set 𝔸} :
@@ -657,8 +657,8 @@ theorem HasFDerivAt.pow
   proof: .congr_fderiv aux_sum_eq_pow _ h.pow' n
 
 中文:
-定理 HasFDerivAt.pow
-  条件: (h : HasFDerivAt f f' x) (n : 自然数)
+定理 在点处Fréchet可导.pow
+  条件: (h : 在点处Fréchet可导 f f' x) (n : 自然数)
   证明: .congr_fderiv aux_sum_eq_pow _ h.pow' n
 
 Depends on / 依赖: aux_sum_eq_pow, congr_fderiv, h.pow
@@ -766,7 +766,7 @@ theorem fderivWithin_pow_ring
 
 中文:
 定理 fderivWithin_pow_ring
-  条件: {s : Set 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
+  条件: {s : 集合 𝔸} {x : 𝔸} (n : 自然数) (hxs : UniqueDiffWithinAt 𝕜 s x)
   证明: by
   rw [fderivWithin_fun_pow hxs n differentiableAt_fun_id.differentiableWithinAt]; rw [fderivWithin_fun_id hxs]
 

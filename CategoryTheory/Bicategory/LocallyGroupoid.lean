@@ -47,7 +47,7 @@ abbreviation IsLocallyGroupoid
 
 中文:
 缩写 IsLocallyGroupoid
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B]
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
   定义体: forall (b c : B), IsGroupoid (b ⟶ c)
 
 Depends on / 依赖: IsGroupoid
@@ -109,8 +109,8 @@ instance [Inhabited
   body: ⟨⟨default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: B] : Inhabited (Pith B)
+实例 [可居
+  签名: B] : 可居 (Pith B)
   定义体: ⟨⟨default⟩⟩
 
 Depends on / 依赖: F.property, property
@@ -129,7 +129,7 @@ instance categoryStruct
 
 中文:
 实例 categoryStruct
-  签名: [Bicategory.{w₁, v₁} B]
+  签名: [双范畴.{w₁, v₁} B]
   定义体: Core (a.as ⟶ b.as)
   id a := ⟨𝟙 a.as⟩
   comp f g := ⟨f.of ≫ g.of⟩
@@ -342,7 +342,7 @@ associator x y z := Core.isoMk associator x.of y.of z.of
 
 中文:
 实例 :
-  签名: Bicategory.{w₁, v₁} (Pith B)
+  签名: 双范畴.{w₁, v₁} (Pith B)
   定义体: CoreHom.mk whiskerLeftIso x.of (CoreHom.iso f)
 whiskerRight f y := CoreHom.mk whiskerRightIso (CoreHom.iso f) y.of
 leftUnitor x := Core.isoMk leftUnitor x.of
@@ -417,7 +417,7 @@ mapComp f g := Core.isoMk F.mapComp f g
 
 中文:
 定义 pseudofunctorToPith
-  签名: {B' : 类型u₂} [Bicategory.{w₂, v₂} B']
+  签名: {B' : 类型u₂} [双范畴.{w₂, v₂} B']
   定义体: .mk F.obj x
 map f := .mk F.map f
 map₂ f := .mk asIso F.map₂ f

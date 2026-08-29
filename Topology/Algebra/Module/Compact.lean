@@ -38,8 +38,8 @@ lemma Submodule.isCompact_of_fg
   fun_prop
 
 中文:
-引理 Submodule.isCompact_of_fg
-  条件: [CompactSpace R] {N : Submodule R M} (hN : N.FG)
+引理 子模.isCompact_of_fg
+  条件: [紧空间 R] {N : 子模 R M} (hN : N.FG)
   证明: by
   obtain ⟨s, hs⟩ := hN
   have : LinearMap.range (Fintype.linearCombination R (α := s) Subtype.val) = N := by
@@ -72,8 +72,8 @@ lemma Ideal.isCompact_of_fg
   proof: Submodule.isCompact_of_fg hI
 
 中文:
-引理 Ideal.isCompact_of_fg
-  结论: [IsTopologicalSemiring R] [CompactSpace R]
+引理 理想.isCompact_of_fg
+  结论: [是TopologicalSemiring R] [紧空间 R]
   证明: Submodule.isCompact_of_fg hI
 -/
 lemma Ideal.isCompact_of_fg [IsTopologicalSemiring R] [CompactSpace R]
@@ -91,9 +91,9 @@ lemma Module.Finite.compactSpace
   proof: ⟨Submodule.isCompact_of_fg (Module.Finite.fg_top (R := R))⟩
 
 中文:
-引理 Module.Finite.compactSpace
-  条件: [CompactSpace R] [Module.Finite R M]
-  结论: CompactSpace M
+引理 模.有限.compactSpace
+  条件: [紧空间 R] [模.有限 R M]
+  结论: 紧空间 M
   证明: ⟨Submodule.isCompact_of_fg (Module.Finite.fg_top (R := R))⟩
 
 Depends on / 依赖: Finite, Module, Module.Finite.fg_top, Submodule, Submodule.isCompact_of_fg, fg_top, isCompact_of_fg

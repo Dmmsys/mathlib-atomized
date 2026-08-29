@@ -44,7 +44,7 @@ obtain ⟨F, hFmax⟩ := C.exists_maximal filter_nonempty_iff.2
 
 中文:
 定理 ruzsa_covering_mul
-  条件: (hB : B.Nonempty) (hK : #(A * B) <= K * #B)
+  条件: (hB : B.非空) (hK : #(A * B) <= K * #B)
   证明: by
   have : forall F, Decidable ((F : Set G).PairwiseDisjoint (· • B)) := fun F => Classical.dec _
   set C := {F in A.powerset | (SetLike.coe F).PairwiseDisjoint (· • B)}
@@ -100,7 +100,7 @@ lemma ruzsa_covering_mul
 
 中文:
 引理 ruzsa_covering_mul
-  结论: (hA : A.Finite) (hB : B.Finite) (hB₀ : B.Nonempty)
+  结论: (hA : A.有限) (hB : B.有限) (hB₀ : B.非空)
   证明: by
   lift A to Finset G using hA
   lift B to Finset G using hB

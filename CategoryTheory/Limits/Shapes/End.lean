@@ -285,7 +285,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: (hc : IsLimit c) {X : C} {f g : X ⟶ c.pt} (h : 对任意 j, f ≫ c.ι j = g ≫ c.ι j)
+  条件: (hc : 是极限 c) {X : C} {f g : X ⟶ c.pt} (h : 对任意 j, f ≫ c.ι j = g ≫ c.ι j)
   证明: Multifork.IsLimit.hom_ext hc h
 
 Depends on / 依赖: IsLimit, Multifork, Multifork.IsLimit.hom_ext, hom_ext
@@ -306,7 +306,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (hc : IsLimit c) {X : C} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
+  签名: (hc : 是极限 c) {X : C} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
   定义体: Multifork.IsLimit.lift hc f (fun _ => hf _)
 
 @[reassoc (attr := simp)]
@@ -330,7 +330,7 @@ lemma lift_ι
 
 中文:
 引理 lift_ι
-  结论: (hc : IsLimit c) {X : C} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
+  结论: (hc : 是极限 c) {X : C} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
   证明: by
   apply IsLimit.fac
 
@@ -481,7 +481,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: (hc : IsColimit c) {X : C} {f g : c.pt ⟶ X} (h : 对任意 j, c.π j ≫ f = c.π j ≫ g)
+  条件: (hc : 是余极限 c) {X : C} {f g : c.pt ⟶ X} (h : 对任意 j, c.π j ≫ f = c.π j ≫ g)
   证明: Multicofork.IsColimit.hom_ext hc h
 
 Depends on / 依赖: IsColimit, Multicofork, Multicofork.IsColimit.hom_ext, hom_ext
@@ -502,7 +502,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (hc : IsColimit c) {X : C} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
+  签名: (hc : 是余极限 c) {X : C} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
   定义体: Multicofork.IsColimit.desc hc f (fun _ => hf _)
 
 @[reassoc (attr := simp)]
@@ -526,7 +526,7 @@ lemma π_desc
 
 中文:
 引理 π_desc
-  结论: (hc : IsColimit c) {X : C} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
+  结论: (hc : 是余极限 c) {X : C} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
   证明: by
   apply IsColimit.fac
 

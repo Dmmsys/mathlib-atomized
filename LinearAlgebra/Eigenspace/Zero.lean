@@ -54,8 +54,8 @@ lemma IsNilpotent.charpoly_eq_X_pow_finrank
   exact h.map (LinearMap.toMatrixAlgEquiv (chooseBasis R M))
 
 中文:
-引理 IsNilpotent.charpoly_eq_X_pow_finrank
-  条件: {φ : Module.End R M} (h : IsNilpotent φ)
+引理 是幂零.charpoly_eq_X_pow_finrank
+  条件: {φ : 模.End R M} (h : 是幂零 φ)
   证明: by
   rw [← sub_eq_zero]
   apply IsNilpotent.eq_zero
@@ -117,7 +117,7 @@ obtain ⟨n, h
 
 中文:
 引理 charpoly_nilpotent_tfae
-  条件: [IsNoetherian R M] (φ : Module.End R M)
+  条件: [是Noether R M] (φ : 模.End R M)
   证明: by
   tfae_have 1 -> 2 := IsNilpotent.charpoly_eq_X_pow_finrank
   tfae_have 2 -> 3
@@ -166,7 +166,7 @@ lemma charpoly_eq_X_pow_iff
 
 中文:
 引理 charpoly_eq_X_pow_iff
-  条件: [IsNoetherian R M] (φ : Module.End R M)
+  条件: [是Noether R M] (φ : 模.End R M)
   证明: (charpoly_nilpotent_tfae φ).out 1 2
 
 Depends on / 依赖: charpoly_nilpotent_tfae
@@ -193,7 +193,7 @@ lemma hasEigenvalue_zero_tfae
 
 中文:
 引理 hasEigenvalue_zero_tfae
-  条件: (φ : Module.End K M)
+  条件: (φ : 模.End K M)
   证明: by
   tfae_have 1 ↔ 2 := Module.End.hasEigenvalue_iff_isRoot
   tfae_have 2 -> 3 := by
@@ -245,7 +245,7 @@ lemma charpoly_constantCoeff_eq_zero_iff
 
 中文:
 引理 charpoly_constantCoeff_eq_zero_iff
-  条件: (φ : Module.End K M)
+  条件: (φ : 模.End K M)
   证明: (hasEigenvalue_zero_tfae φ).out 2 5
 
 Depends on / 依赖: hasEigenvalue_zero_tfae
@@ -271,7 +271,7 @@ lemma not_hasEigenvalue_zero_tfae
 
 中文:
 引理 not_hasEigenvalue_zero_tfae
-  条件: (φ : Module.End K M)
+  条件: (φ : 模.End K M)
   证明: by
   have := (hasEigenvalue_zero_tfae φ).not
   dsimp only [List.map] at this
@@ -315,7 +315,7 @@ lemma finrank_maxGenEigenspace_zero_eq
 
 中文:
 引理 finrank_maxGenEigenspace_zero_eq
-  条件: (φ : Module.End K M)
+  条件: (φ : 模.End K M)
   证明: by
   set V := φ.maxGenEigenspace 0
   have hV : V = ⨆ (n : Nat), ker (φ ^ n) := by
@@ -398,7 +398,7 @@ lemma finrank_maxGenEigenspace_eq
 
 中文:
 引理 finrank_maxGenEigenspace_eq
-  条件: (φ : Module.End K M) (μ : K)
+  条件: (φ : 模.End K M) (μ : K)
   证明: by
   rw [φ.maxGenEigenspace_eq_maxGenEigenspace_zero]; rw [finrank_maxGenEigenspace_zero_eq]; rw [Polynomial.rootMultiplicity_eq_natTrailingDegree]; rw [LinearMap.charpoly_sub_smul]
 
@@ -419,7 +419,7 @@ lemma finrank_genEigenspace_le
 
 中文:
 引理 finrank_genEigenspace_le
-  条件: (φ : Module.End K M) (μ : K) (k : 自然数)
+  条件: (φ : 模.End K M) (μ : K) (k : 自然数)
   证明: by
   grw [Submodule.finrank_mono (φ.genEigenspace_le_maximal μ k), finrank_maxGenEigenspace_eq]
 
@@ -439,7 +439,7 @@ lemma finrank_eigenspace_le
 
 中文:
 引理 finrank_eigenspace_le
-  条件: (φ : Module.End K M) (μ : K)
+  条件: (φ : 模.End K M) (μ : K)
   证明: finrank_genEigenspace_le ..
 
 Depends on / 依赖: finrank_genEigenspace_le

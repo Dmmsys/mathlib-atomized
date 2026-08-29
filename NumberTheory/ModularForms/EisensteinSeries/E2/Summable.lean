@@ -69,7 +69,7 @@ lemma G2_partial_sum_eq
 中文:
 引理 G2_partial_sum_eq
   条件: (N : 自然数)
-  结论: ∑ m in Icc (-N : 整数) N, e2Summand m z =
+  结论: ∑ m in 闭区间 (-N : 整数) N, e2Summand m z =
   证明: by
   rw [sum_Icc_of_even_eq_range (e2Summand_even z)]; rw [Finset.sum_range_succ']; rw [smul_add]; rw [nsmul_eq_mul]; rw [Nat.cast_zero]; rw [e2Summand_zero_eq_two_riemannZeta_two]
   ring_nf
@@ -108,7 +108,7 @@ lemma aux_G2_tendsto
 
 中文:
 引理 aux_G2_tendsto
-  结论: Tendsto
+  结论: 收敛
   证明: by
   have : -8 * π ^ 2 * ∑' n : Nat+, σ 1 n * 𝕢 z ^ (n : Nat) =
       ∑' m : Nat, (-8 * π ^ 2 * ∑' n : Nat+, n * 𝕢 z ^ ((m + 1) * n)) := by
@@ -281,7 +281,7 @@ lemma tendsto_e2Summand_atTop_nhds_zero
 
 中文:
 引理 tendsto_e2Summand_atTop_nhds_zero
-  结论: Tendsto (e2Summand · z) atTop (𝓝 0)
+  结论: 收敛 (e2Summand · z) atTop (𝓝 0)
   证明: (summable_e2Summand_symmetricIcc z).tendsto_zero_of_even_summable_symmetricIcc (e2Summand_even _)
 
 Depends on / 依赖: e2Summand_even, summable_e2Summand_symmetricIcc, tendsto_zero_of_even_summable_symmetricIcc
@@ -559,7 +559,7 @@ lemma telescope_aux
 
 中文:
 引理 telescope_aux
-  条件: (z : Complex) (m : 整数) (b : 自然数)
+  条件: (z : 复形) (m : 整数) (b : 自然数)
   证明: by
   convert! sum_Ico_int_sub b (fun n => 1 / ((m : Complex) * z + n)) using 2 <;>
   simp [add_assoc, sub_eq_add_neg]
@@ -716,7 +716,7 @@ hav
 
 中文:
 引理 aux_tendsto_tsum
-  结论: Tendsto (fun n : 自然数 => 2 / z *
+  结论: 收敛 (fun n : 自然数 => 2 / z *
   证明: by
   rw [← PNat.tendsto_comp_val_iff]
   have H0 : (fun n : Nat+ => (2 / z * ∑' (m : Nat+), (1 / (-(n : Complex) / z - m) + 1 / (-n / z + m)))) =

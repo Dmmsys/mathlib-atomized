@@ -47,7 +47,7 @@ theorem TensorProduct.toMatrix_map
   exact mul_comm _ _
 
 中文:
-定理 TensorProduct.toMatrix_map
+定理 张量积.toMatrix_map
   条件: (f : M ->ₗ[R] M') (g : N ->ₗ[R] N')
   证明: by
   ext ⟨i, j⟩ ⟨i', j'⟩
@@ -75,8 +75,8 @@ theorem Matrix.toLin_kronecker
   rw [← LinearEquiv.eq_symm_apply]; rw [toLin_symm]; rw [TensorProduct.toMatrix_map]; rw [toMatrix_toLin]; rw [toMatrix_toLin]
 
 中文:
-定理 Matrix.toLin_kronecker
-  条件: (A : Matrix ι' ι R) (B : Matrix κ' κ R)
+定理 矩阵.toLin_kronecker
+  条件: (A : 矩阵 ι' ι R) (B : 矩阵 κ' κ R)
   证明: by
   rw [← LinearEquiv.eq_symm_apply]; rw [toLin_symm]; rw [TensorProduct.toMatrix_map]; rw [toMatrix_toLin]; rw [toMatrix_toLin]
 
@@ -99,7 +99,7 @@ theorem TensorProduct.toMatrix_comm
     @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, and_comm, submatrix_a
 
 中文:
-定理 TensorProduct.toMatrix_comm
+定理 张量积.toMatrix_comm
   证明: by
   ext ⟨i, j⟩ ⟨i', j'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, comm_tmul,
@@ -129,7 +129,7 @@ theorem TensorProduct.toMatrix_assoc
     @eq_comm _ j', smul_eq_mul, mul_ite, mul_one, mul_zero, ← ite_and, @eq_comm _ 
 
 中文:
-定理 TensorProduct.toMatrix_assoc
+定理 张量积.toMatrix_assoc
   证明: by
   ext ⟨i, j, k⟩ ⟨⟨i', j'⟩, k'⟩
   simp only [toMatrix_apply, Basis.tensorProduct_apply, LinearEquiv.coe_coe, assoc_tmul,

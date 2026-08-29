@@ -47,7 +47,7 @@ definition StructuredArrow
   body: Comma (Functor.fromPUnit.{0} S) T
 
 中文:
-定义 StructuredArrow
+定义 结构化箭头
   签名: (S : D) (T : C ⥤ D)
   定义体: Comma (Functor.fromPUnit.{0} S) T
 
@@ -67,7 +67,7 @@ definition StructuredArrow.Hom
   body: CommaMorphism f g
 
 中文:
-定义 StructuredArrow.Hom
+定义 结构化箭头.态射
   签名: {S : D} {T : C ⥤ D}
   定义体: CommaMorphism f g
 -/
@@ -95,7 +95,7 @@ abbreviation right
 
 中文:
 缩写 right
-  签名: (X : StructuredArrow S T)
+  签名: (X : 结构化箭头 S T)
   定义体: Comma.right X
 
 Depends on / 依赖: Comma.right
@@ -112,7 +112,7 @@ abbreviation hom
 
 中文:
 缩写 hom
-  签名: (X : StructuredArrow S T)
+  签名: (X : 结构化箭头 S T)
   定义体: Comma.hom X
 
 Depends on / 依赖: Comma.hom
@@ -130,7 +130,7 @@ abbreviation Hom.right
   body: CommaMorphism.right f
 
 中文:
-缩写 Hom.right
+缩写 态射.right
   签名: : X.right ⟶ Y.right
   定义体: CommaMorphism.right f
 -/
@@ -172,7 +172,7 @@ lemma Hom.w
   proof: StructuredArrow.w f
 
 中文:
-引理 Hom.w
+引理 态射.w
   结论: X.hom ≫ T.map f.right = Y.hom
   证明: StructuredArrow.w f
 -/
@@ -216,7 +216,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : StructuredArrow S T} (f g : X ⟶ Y) (h : f.right = g.right)
+  条件: {X Y : 结构化箭头 S T} (f g : X ⟶ Y) (h : f.right = g.right)
   结论: f = g
   证明: CommaMorphism.ext (Subsingleton.elim _ _) h
 
@@ -239,7 +239,7 @@ theorem hom_eq_iff
 
 中文:
 定理 hom_eq_iff
-  条件: {X Y : StructuredArrow S T} (f g : X ⟶ Y)
+  条件: {X Y : 结构化箭头 S T} (f g : X ⟶ Y)
   结论: f = g ↔ f.right = g.right
   证明: ⟨fun h => by rw [h], hom_ext _ _⟩
 
@@ -352,7 +352,7 @@ theorem comp_right
 
 中文:
 定理 comp_right
-  条件: {X Y Z : StructuredArrow S T} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 结构化箭头 S T} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -374,7 +374,7 @@ theorem id_right
 
 中文:
 定理 id_right
-  条件: (X : StructuredArrow S T)
+  条件: (X : 结构化箭头 S T)
   结论: (𝟙 X : X ⟶ X).right = 𝟙 X.right
   证明: rfl
 
@@ -397,7 +397,7 @@ theorem eqToHom_right
 
 中文:
 定理 eqToHom_right
-  条件: {X Y : StructuredArrow S T} (h : X = Y)
+  条件: {X Y : 结构化箭头 S T} (h : X = Y)
   证明: by
   subst h
   simp only [eqToHom_refl, id_right]
@@ -423,7 +423,7 @@ theorem left_eq_id
 
 中文:
 定理 left_eq_id
-  条件: {X Y : StructuredArrow S T} (f : X ⟶ Y)
+  条件: {X Y : 结构化箭头 S T} (f : X ⟶ Y)
   结论: f.left = 𝟙 X.left
   证明: rfl
 -/
@@ -446,7 +446,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {f f' : StructuredArrow S T} (g : f.right ⟶ f'.right)
+  签名: {f f' : 结构化箭头 S T} (g : f.right ⟶ f'.right)
   定义体: 𝟙 f.left
   right := g
 
@@ -467,7 +467,7 @@ theorem homMk_surjective
 
 中文:
 定理 homMk_surjective
-  条件: {f f' : StructuredArrow S T} (φ : f ⟶ f')
+  条件: {f f' : 结构化箭头 S T} (φ : f ⟶ f')
   证明: ⟨φ.right, StructuredArrow.w φ, rfl⟩
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.w
@@ -491,7 +491,7 @@ definition homMk'
 
 中文:
 定义 homMk'
-  签名: (f : StructuredArrow S T) (g : f.right ⟶ Y')
+  签名: (f : 结构化箭头 S T) (g : f.right ⟶ Y')
   定义体: 𝟙 _
   right := g
 -/
@@ -512,7 +512,7 @@ lemma homMk'_id
 
 中文:
 引理 homMk'_id
-  条件: (f : StructuredArrow S T)
+  条件: (f : 结构化箭头 S T)
   结论: homMk' f (𝟙 f.right) = eqToHom (by cat_disch)
   证明: by
   simp [eqToHom_right]
@@ -550,7 +550,7 @@ lemma homMk'_comp
 
 中文:
 引理 homMk'_comp
-  条件: (f : StructuredArrow S T) (g : f.right ⟶ Y') (g' : Y' ⟶ Y'')
+  条件: (f : 结构化箭头 S T) (g : f.right ⟶ Y') (g' : Y' ⟶ Y'')
   证明: by
   simp [eqToHom_right]
 -/
@@ -651,7 +651,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {f f' : StructuredArrow S T} (g : f.right ≅ f'.right)
+  签名: {f f' : 结构化箭头 S T} (g : f.right ≅ f'.right)
   定义体: Comma.isoMk (eqToIso (by ext)) g (by simpa using w.symm)
 
 Depends on / 依赖: Comma.isoMk, cat_disch, eqToIso, w.symm
@@ -675,7 +675,7 @@ theorem obj_ext
 
 中文:
 定理 obj_ext
-  结论: (x y : StructuredArrow S T) (hr : x.right = y.right)
+  结论: (x y : 结构化箭头 S T) (hr : x.right = y.right)
   证明: by
   cases x
   cases y
@@ -702,7 +702,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {A B : StructuredArrow S T} (f g : A ⟶ B)
+  条件: {A B : 结构化箭头 S T} (f g : A ⟶ B)
   结论: f.right = g.right -> f = g
   证明: CommaMorphism.ext (Subsingleton.elim _ _)
 
@@ -722,7 +722,7 @@ theorem ext_iff
 
 中文:
 定理 ext_iff
-  条件: {A B : StructuredArrow S T} (f g : A ⟶ B)
+  条件: {A B : 结构化箭头 S T} (f g : A ⟶ B)
   结论: f = g ↔ f.right = g.right
   证明: ⟨fun h => h ▸ rfl, ext f g⟩
 -/
@@ -739,7 +739,7 @@ instance proj_faithful
 
 中文:
 实例 proj_faithful
-  签名: : (proj S T).Faithful where
+  签名: : (proj S T).忠实 where
   定义体: ext
 -/
 instance proj_faithful : (proj S T).Faithful where
@@ -756,8 +756,8 @@ theorem mono_of_mono_right
 
 中文:
 定理 mono_of_mono_right
-  条件: {A B : StructuredArrow S T} (f : A ⟶ B) [h : Mono f.right]
-  结论: Mono f
+  条件: {A B : 结构化箭头 S T} (f : A ⟶ B) [h : 单态射 f.right]
+  结论: 单态射 f
   证明: (proj S T).mono_of_mono_map h
 
 Depends on / 依赖: mono_of_mono_map
@@ -776,8 +776,8 @@ theorem epi_of_epi_right
 
 中文:
 定理 epi_of_epi_right
-  条件: {A B : StructuredArrow S T} (f : A ⟶ B) [h : Epi f.right]
-  结论: Epi f
+  条件: {A B : 结构化箭头 S T} (f : A ⟶ B) [h : 满态射 f.right]
+  结论: 满态射 f
   证明: (proj S T).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map
@@ -795,7 +795,7 @@ instance mono_homMk
 
 中文:
 实例 mono_homMk
-  签名: {A B : StructuredArrow S T} (f : A.right ⟶ B.right) (w) [h : Mono f]
+  签名: {A B : 结构化箭头 S T} (f : A.right ⟶ B.right) (w) [h : 单态射 f]
   定义体: (proj S T).mono_of_mono_map h
 
 Depends on / 依赖: mono_of_mono_map
@@ -814,7 +814,7 @@ instance epi_homMk
 
 中文:
 实例 epi_homMk
-  签名: {A B : StructuredArrow S T} (f : A.right ⟶ B.right) (w) [h : Epi f]
+  签名: {A B : 结构化箭头 S T} (f : A.right ⟶ B.right) (w) [h : 满态射 f]
   定义体: (proj S T).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map
@@ -834,7 +834,7 @@ theorem eq_mk
 
 中文:
 定理 eq_mk
-  条件: (f : StructuredArrow S T)
+  条件: (f : 结构化箭头 S T)
   结论: f = mk f.hom
   证明: rfl
 -/
@@ -853,7 +853,7 @@ definition eta
 
 中文:
 定义 eta
-  签名: (f : StructuredArrow S T)
+  签名: (f : 结构化箭头 S T)
   定义体: isoMk (Iso.refl _)
 
 Depends on / 依赖: Iso.refl
@@ -871,7 +871,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  条件: (f : StructuredArrow S T)
+  条件: (f : 结构化箭头 S T)
   证明: ⟨_, _, eq_mk f⟩
 
 Depends on / 依赖: eq_mk
@@ -950,7 +950,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: {f : StructuredArrow S T}
+  条件: {f : 结构化箭头 S T}
   结论: (map (𝟙 S)).obj f = f
   证明: by
   rw [eq_mk f]
@@ -979,7 +979,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {f : S ⟶ S'} {f' : S' ⟶ S''} {h : StructuredArrow S'' T}
+  条件: {f : S ⟶ S'} {f' : S' ⟶ S''} {h : 结构化箭头 S'' T}
   证明: by
   rw [eq_mk h]
   simp
@@ -1028,7 +1028,7 @@ definition mapNatIso
   body: Comma.mapRightIso _ i
 
 中文:
-定义 mapNatIso
+定义 map自然数Iso
   签名: (i : T ≅ T')
   定义体: Comma.mapRightIso _ i
 
@@ -1049,7 +1049,7 @@ instance proj_reflectsIsomorphisms
 
 中文:
 实例 proj_reflectsIsomorphisms
-  签名: : (proj S T).ReflectsIsomorphisms where
+  签名: : (proj S T).反映同构 where
   定义体: ⟨StructuredArrow.homMk (inv ((proj S T).map f) :), by simp⟩
 
 Depends on / 依赖: HasProduct, StructuredArrow, StructuredArrow.homMk, U.isLimitPowerFan, hasWidePullback_of_isTerminal, isLimitPowerFan, isTerminalIncl
@@ -1076,7 +1076,7 @@ definition mkIdInitial
 
 中文:
 定义 mkIdInitial
-  签名: [T.Full] [T.Faithful]
+  签名: [T.满] [T.忠实]
   定义体: homMk (T.preimage c.pt.hom)
   uniq c m _ := by
     apply CommaMorphism.ext
@@ -1135,7 +1135,7 @@ instance isEquivalence_pre
 
 中文:
 实例 isEquivalence_pre
-  签名: (S : D) (F : B ⥤ C) (G : C ⥤ D) [F.IsEquivalence]
+  签名: (S : D) (F : B ⥤ C) (G : C ⥤ D) [F.是等价]
   定义体: Comma.isEquivalence_preRight _ _ _
 
 Depends on / 依赖: Comma.isEquivalence_preRight, isEquivalence_preRight
@@ -1191,7 +1191,7 @@ instance isEquivalence_post
 
 中文:
 实例 isEquivalence_post
-  签名: (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.Full] [G.Faithful]
+  签名: (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.满] [G.忠实]
 -/
 instance isEquivalence_post (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.Full] [G.Faithful] :
     (post S F G).IsEquivalence where
@@ -1214,7 +1214,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: : StructuredArrow L R ⥤ StructuredArrow L' R'
+  签名: : 结构化箭头 L R ⥤ 结构化箭头 L' R'
   定义体: Comma.map (F₁ := 𝟭 (Discrete PUnit)) (Discrete.natTrans (fun _ => α)) β
 
 Depends on / 依赖: Comma.map, Discrete, Discrete.natTrans, natTrans
@@ -1233,7 +1233,7 @@ instance faithful_map₂
 
 中文:
 实例 faithful_map₂
-  签名: [F.Faithful]
+  签名: [F.忠实]
   定义体: by
   apply Comma.faithful_map
 
@@ -1255,7 +1255,7 @@ instance full_map₂
 
 中文:
 实例 full_map₂
-  签名: [G.Faithful] [F.Full] [IsIso α] [IsIso β]
+  签名: [G.忠实] [F.满] [是同构 α] [是同构 β]
   定义体: by
   apply Comma.full_map
 
@@ -1277,7 +1277,7 @@ instance essSurj_map₂
 
 中文:
 实例 essSurj_map₂
-  签名: [F.EssSurj] [G.Full] [IsIso α] [IsIso β]
+  签名: [F.本质满射] [G.满] [是同构 α] [是同构 β]
   定义体: by
   apply Comma.essSurj_map
 
@@ -1322,7 +1322,7 @@ definition map₂CompMap₂Iso
 
 中文:
 定义 map₂CompMap₂Iso
-  签名: {C' : 类型u₆} [Category.{v₆} C'] {D' : 类型u₅} [Category.{v₅} D']
+  签名: {C' : 类型u₆} [范畴.{v₆} C'] {D' : 类型u₅} [范畴.{v₅} D']
   定义体: NatIso.ofComponents (fun X => isoMk (Iso.refl _))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1518,8 +1518,8 @@ abbreviation IsUniversal
   body: IsInitial f
 
 中文:
-缩写 IsUniversal
-  签名: (f : StructuredArrow S T)
+缩写 是泛
+  签名: (f : 结构化箭头 S T)
   定义体: IsInitial f
 
 Depends on / 依赖: IsInitial
@@ -1541,7 +1541,7 @@ theorem uniq
 
 中文:
 定理 uniq
-  条件: (h : IsUniversal f) (η : f ⟶ g)
+  条件: (h : 是泛 f) (η : f ⟶ g)
   结论: η = h.to g
   证明: h.hom_ext η (h.to g)
 
@@ -1560,7 +1560,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (h : IsUniversal f) (g : StructuredArrow S T)
+  签名: (h : 是泛 f) (g : 结构化箭头 S T)
   定义体: (h.to g).right
 
 Depends on / 依赖: h.to
@@ -1580,7 +1580,7 @@ theorem fac
 
 中文:
 定理 fac
-  条件: (h : IsUniversal f) (g : StructuredArrow S T)
+  条件: (h : 是泛 f) (g : 结构化箭头 S T)
   证明: (h.to g).w
 
 Depends on / 依赖: h.to
@@ -1600,7 +1600,7 @@ theorem hom_desc
 
 中文:
 定理 hom_desc
-  条件: (h : IsUniversal f) {c : C} (η : f.right ⟶ c)
+  条件: (h : 是泛 f) {c : C} (η : f.right ⟶ c)
   证明: let g := mk f.hom ≫ T.map η
   congrArg CommaMorphism.right (h.hom_ext (homMk η rfl : f ⟶ g) (h.to g))
 
@@ -1622,7 +1622,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: (h : IsUniversal f) {c : C} {η η' : f.right ⟶ c}
+  结论: (h : 是泛 f) {c : C} {η η' : f.right ⟶ c}
   证明: by
   rw [h.hom_desc η]; rw [h.hom_desc η']; rw [w]
 
@@ -1641,8 +1641,8 @@ theorem existsUnique
   proof: ⟨h.desc g, h.fac g, fun f w => h.hom_ext by simp [w]⟩
 
 中文:
-定理 existsUnique
-  条件: (h : IsUniversal f) (g : StructuredArrow S T)
+定理 存在Unique
+  条件: (h : 是泛 f) (g : 结构化箭头 S T)
   证明: ⟨h.desc g, h.fac g, fun f w => h.hom_ext by simp [w]⟩
 
 Depends on / 依赖: h.desc, h.fac, h.hom_ext, hom_ext
@@ -1689,7 +1689,7 @@ definition CostructuredArrow.Hom
   body: CommaMorphism f g
 
 中文:
-定义 CostructuredArrow.Hom
+定义 CostructuredArrow.态射
   签名: {S : C ⥤ D} {T : D}
   定义体: CommaMorphism f g
 
@@ -1757,7 +1757,7 @@ abbreviation Hom.left
 #adaptation_note
 
 中文:
-缩写 Hom.left
+缩写 态射.left
   签名: : X.left ⟶ Y.left
   定义体: CommaMorphism.left f
 
@@ -1806,7 +1806,7 @@ theorem Hom.w
   proof: CostructuredArrow.w f
 
 中文:
-定理 Hom.w
+定理 态射.w
   条件: (f : X ⟶ Y)
   结论: S.map f.left ≫ Y.hom = X.hom
   证明: CostructuredArrow.w f
@@ -2374,7 +2374,7 @@ instance proj_faithful
 
 中文:
 实例 proj_faithful
-  签名: : (proj S T).Faithful where map_injective {_ _}
+  签名: : (proj S T).忠实 where map_injective {_ _}
   定义体: ext
 -/
 instance proj_faithful : (proj S T).Faithful where map_injective {_ _} := ext
@@ -2390,8 +2390,8 @@ theorem mono_of_mono_left
 
 中文:
 定理 mono_of_mono_left
-  条件: {A B : CostructuredArrow S T} (f : A ⟶ B) [h : Mono f.left]
-  结论: Mono f
+  条件: {A B : CostructuredArrow S T} (f : A ⟶ B) [h : 单态射 f.left]
+  结论: 单态射 f
   证明: (proj S T).mono_of_mono_map h
 
 Depends on / 依赖: mono_of_mono_map
@@ -2410,8 +2410,8 @@ theorem epi_of_epi_left
 
 中文:
 定理 epi_of_epi_left
-  条件: {A B : CostructuredArrow S T} (f : A ⟶ B) [h : Epi f.left]
-  结论: Epi f
+  条件: {A B : CostructuredArrow S T} (f : A ⟶ B) [h : 满态射 f.left]
+  结论: 满态射 f
   证明: (proj S T).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map
@@ -2429,7 +2429,7 @@ instance mono_homMk
 
 中文:
 实例 mono_homMk
-  签名: {A B : CostructuredArrow S T} (f : A.left ⟶ B.left) (w) [h : Mono f]
+  签名: {A B : CostructuredArrow S T} (f : A.left ⟶ B.left) (w) [h : 单态射 f]
   定义体: (proj S T).mono_of_mono_map h
 
 Depends on / 依赖: mono_of_mono_map
@@ -2448,7 +2448,7 @@ instance epi_homMk
 
 中文:
 实例 epi_homMk
-  签名: {A B : CostructuredArrow S T} (f : A.left ⟶ B.left) (w) [h : Epi f]
+  签名: {A B : CostructuredArrow S T} (f : A.left ⟶ B.left) (w) [h : 满态射 f]
   定义体: (proj S T).epi_of_epi_map h
 
 Depends on / 依赖: epi_of_epi_map
@@ -2663,7 +2663,7 @@ definition mapNatIso
   body: Comma.mapLeftIso _ i
 
 中文:
-定义 mapNatIso
+定义 map自然数Iso
   签名: (i : S ≅ S')
   定义体: Comma.mapLeftIso _ i
 
@@ -2684,7 +2684,7 @@ instance proj_reflectsIsomorphisms
 
 中文:
 实例 proj_reflectsIsomorphisms
-  签名: : (proj S T).ReflectsIsomorphisms where
+  签名: : (proj S T).反映同构 where
   定义体: ⟨CostructuredArrow.homMk (inv ((proj S T).map f) :), by simp⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.homMk
@@ -2711,7 +2711,7 @@ definition mkIdTerminal
 
 中文:
 定义 mkIdTerminal
-  签名: [S.Full] [S.Faithful]
+  签名: [S.满] [S.忠实]
   定义体: homMk (S.preimage c.pt.hom)
   uniq := by
     rintro c m -
@@ -2770,7 +2770,7 @@ instance isEquivalence_pre
 
 中文:
 实例 isEquivalence_pre
-  签名: (F : B ⥤ C) (G : C ⥤ D) (S : D) [F.IsEquivalence]
+  签名: (F : B ⥤ C) (G : C ⥤ D) (S : D) [F.是等价]
   定义体: Comma.isEquivalence_preLeft _ _ _
 
 Depends on / 依赖: Comma.isEquivalence_preLeft, isEquivalence_preLeft
@@ -2826,7 +2826,7 @@ instance isEquivalence_post
 
 中文:
 实例 isEquivalence_post
-  签名: (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.Full] [G.Faithful]
+  签名: (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.满] [G.忠实]
 -/
 instance isEquivalence_post (S : C) (F : B ⥤ C) (G : C ⥤ D) [G.Full] [G.Faithful] :
     (post F G S).IsEquivalence where
@@ -2868,7 +2868,7 @@ instance faithful_map₂
 
 中文:
 实例 faithful_map₂
-  签名: [F.Faithful]
+  签名: [F.忠实]
   定义体: by
   apply Comma.faithful_map
 
@@ -2888,7 +2888,7 @@ instance full_map₂
 
 中文:
 实例 full_map₂
-  签名: [G.Faithful] [F.Full] [IsIso α] [IsIso β]
+  签名: [G.忠实] [F.满] [是同构 α] [是同构 β]
   定义体: by
   apply Comma.full_map
 
@@ -2908,7 +2908,7 @@ instance essSurj_map₂
 
 中文:
 实例 essSurj_map₂
-  签名: [F.EssSurj] [G.Full] [IsIso α] [IsIso β]
+  签名: [F.本质满射] [G.满] [是同构 α] [是同构 β]
   定义体: by
   apply Comma.essSurj_map
 
@@ -2950,7 +2950,7 @@ definition map₂CompMap₂Iso
 
 中文:
 定义 map₂CompMap₂Iso
-  签名: {C' : 类型u₆} [Category.{v₆} C'] {D' : 类型u₅} [Category.{v₅} D']
+  签名: {C' : 类型u₆} [范畴.{v₆} C'] {D' : 类型u₅} [范畴.{v₅} D']
   定义体: NatIso.ofComponents fun X => isoMk (.refl _)
 -/
 def map₂CompMap₂Iso {C' : Type u₆} [Category.{v₆} C'] {D' : Type u₅} [Category.{v₅} D']
@@ -3105,7 +3105,7 @@ abbreviation IsUniversal
   body: IsTerminal f
 
 中文:
-缩写 IsUniversal
+缩写 是泛
   签名: (f : CostructuredArrow S T)
   定义体: IsTerminal f
 
@@ -3128,7 +3128,7 @@ theorem uniq
 
 中文:
 定理 uniq
-  条件: (h : IsUniversal f) (η : g ⟶ f)
+  条件: (h : 是泛 f) (η : g ⟶ f)
   结论: η = h.from g
   证明: h.hom_ext η (h.from g)
 
@@ -3147,7 +3147,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (h : IsUniversal f) (g : CostructuredArrow S T)
+  签名: (h : 是泛 f) (g : CostructuredArrow S T)
   定义体: (h.from g).left
 
 Depends on / 依赖: h.from
@@ -3167,7 +3167,7 @@ theorem fac
 
 中文:
 定理 fac
-  条件: (h : IsUniversal f) (g : CostructuredArrow S T)
+  条件: (h : 是泛 f) (g : CostructuredArrow S T)
   证明: Category.comp_id g.hom ▸ (h.from g).w
 
 Depends on / 依赖: Category, Category.comp_id, comp_id, g.hom, h.from
@@ -3187,7 +3187,7 @@ theorem hom_desc
 
 中文:
 定理 hom_desc
-  条件: (h : IsUniversal f) {c : C} (η : c ⟶ f.left)
+  条件: (h : 是泛 f) {c : C} (η : c ⟶ f.left)
   证明: let g := mk S.map η ≫ f.hom
   congrArg CommaMorphism.left (h.hom_ext (homMk η rfl : g ⟶ f) (h.from g))
 
@@ -3209,7 +3209,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: (h : IsUniversal f) {c : C} {η η' : c ⟶ f.left}
+  结论: (h : 是泛 f) {c : C} {η η' : c ⟶ f.left}
   证明: by
   rw [h.hom_desc η]; rw [h.hom_desc η']; rw [w]
 
@@ -3228,8 +3228,8 @@ theorem existsUnique
   proof: ⟨h.lift g, h.fac g, fun f w => h.hom_ext by simp [w]⟩
 
 中文:
-定理 existsUnique
-  条件: (h : IsUniversal f) (g : CostructuredArrow S T)
+定理 存在Unique
+  条件: (h : 是泛 f) (g : CostructuredArrow S T)
   证明: ⟨h.lift g, h.fac g, fun f w => h.hom_ext by simp [w]⟩
 
 Depends on / 依赖: h.fac, h.hom_ext, h.lift, hom_ext
@@ -3634,8 +3634,8 @@ map φ := homMk φ.right.right by
     simp
 
 中文:
-定义 StructuredArrow.preEquivalenceFunctor
-  签名: (f : StructuredArrow e G)
+定义 结构化箭头.preEquivalenceFunctor
+  签名: (f : 结构化箭头 e G)
   定义体: mk g.hom.right
 map φ := homMk φ.right.right by
     rw [← w φ]; rw [comp_right]
@@ -3669,8 +3669,8 @@ map φ := homMk homMk φ.right by
       Functor.comp_map, Category.assoc, ← w φ, Functor.map_comp]
 
 中文:
-定义 StructuredArrow.preEquivalenceInverse
-  签名: (f : StructuredArrow e G)
+定义 结构化箭头.preEquivalenceInverse
+  签名: (f : 结构化箭头 e G)
   定义体: mk
             (Y := mk (Y := g.right)
               (f.hom ≫ (G.map g.hom : G.obj f.right ⟶ (F ⋙ G).obj g.right)))
@@ -3706,8 +3706,8 @@ definition StructuredArrow.preEquivalence
   counitIso := NatIso.ofComponents (fun _ => isoMk (Iso.refl _))
 
 中文:
-定义 StructuredArrow.preEquivalence
-  签名: (f : StructuredArrow e G)
+定义 结构化箭头.preEquivalence
+  签名: (f : 结构化箭头 e G)
   定义体: preEquivalenceFunctor F f
   inverse := preEquivalenceInverse F f
   unitIso := NatIso.ofComponents (fun X => isoMk (isoMk (Iso.refl _) (by simp)))
@@ -3733,7 +3733,7 @@ definition StructuredArrow.map₂IsoPreEquivalenceInverseCompProj
   body: NatIso.ofComponents fun _ => isoMk (Iso.refl _)
 
 中文:
-定义 StructuredArrow.map₂IsoPreEquivalenceInverseCompProj
+定义 结构化箭头.map₂IsoPreEquivalenceInverseCompProj
   签名: {T : C ⥤ D} {S : D ⥤ E} {T' : C ⥤ E}
   定义体: NatIso.ofComponents fun _ => isoMk (Iso.refl _)
 
@@ -3887,8 +3887,8 @@ theorem StructuredArrow.w_prod_fst
 @[reassoc (attr := simp)]
 
 中文:
-定理 StructuredArrow.w_prod_fst
-  结论: {X Y : StructuredArrow (S, S') (T.prod T')}
+定理 结构化箭头.w_prod_fst
+  结论: {X Y : 结构化箭头 (S, S') (T.乘积 T')}
   证明: congr_arg _root_.Prod.fst (StructuredArrow.w f)
 
 @[reassoc (attr := simp)]
@@ -3909,8 +3909,8 @@ theorem StructuredArrow.w_prod_snd
   proof: congr_arg _root_.Prod.snd (StructuredArrow.w f)
 
 中文:
-定理 StructuredArrow.w_prod_snd
-  结论: {X Y : StructuredArrow (S, S') (T.prod T')}
+定理 结构化箭头.w_prod_snd
+  结论: {X Y : 结构化箭头 (S, S') (T.乘积 T')}
   证明: congr_arg _root_.Prod.snd (StructuredArrow.w f)
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.w, _root_, _root_.Prod.snd, congr_arg
@@ -3932,7 +3932,7 @@ definition StructuredArrow.prodFunctor
             StructuredArrow.homMk η.right.2 (by simp)⟩
 
 中文:
-定义 StructuredArrow.prodFunctor
+定义 结构化箭头.prodFunctor
   签名: :
   定义体: ⟨.mk f.hom.1, .mk f.hom.2⟩
   map η := ⟨StructuredArrow.homMk η.right.1 (by simp),
@@ -3960,7 +3960,7 @@ definition StructuredArrow.prodInverse
   map η := StructuredArrow.homMk ⟨η.1.right, η.2.right⟩ (by simp)
 
 中文:
-定义 StructuredArrow.prodInverse
+定义 结构化箭头.prodInverse
   签名: :
   定义体: .mk (Y := (f.1.right, f.2.right)) ⟨f.1.hom, f.2.hom⟩
   map η := StructuredArrow.homMk ⟨η.1.right, η.2.right⟩ (by simp)
@@ -3987,7 +3987,7 @@ definition StructuredArrow.prodEquivalence
   counitIso := NatIso.ofComponents (fun f => Iso.refl _) (by intros; ext; all_goals simp)
 
 中文:
-定义 StructuredArrow.prodEquivalence
+定义 结构化箭头.prodEquivalence
   签名: :
   定义体: StructuredArrow.prodFunctor S S' T T'
   inverse := StructuredArrow.prodInverse S S' T T'
@@ -4023,7 +4023,7 @@ theorem CostructuredArrow.w_prod_fst
 
 中文:
 定理 CostructuredArrow.w_prod_fst
-  条件: {A B : CostructuredArrow (S.prod S') (T, T')} (f : A ⟶ B)
+  条件: {A B : CostructuredArrow (S.乘积 S') (T, T')} (f : A ⟶ B)
   证明: congr_arg _root_.Prod.fst (CostructuredArrow.w f)
 
 @[reassoc (attr := simp)]
@@ -4045,7 +4045,7 @@ theorem CostructuredArrow.w_prod_snd
 
 中文:
 定理 CostructuredArrow.w_prod_snd
-  条件: {A B : CostructuredArrow (S.prod S') (T, T')} (f : A ⟶ B)
+  条件: {A B : CostructuredArrow (S.乘积 S') (T, T')} (f : A ⟶ B)
   证明: congr_arg _root_.Prod.snd (CostructuredArrow.w f)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.w, _root_, _root_.Prod.snd, congr_arg

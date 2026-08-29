@@ -68,7 +68,7 @@ theorem exists_multiset
     exact ⟨Sx + Sy, by rw [Multiset.map_add, Multiset.sum_add, hx, hy]⟩
 
 中文:
-定理 exists_multiset
+定理 存在_multiset
   条件: (x : M otimes[R] N)
   证明: by
   induction x with
@@ -109,7 +109,7 @@ theorem exists_finsupp_left
     exact (Finsupp.sum_add_index' (by simp) TensorProduct.tmul_add).symm
 
 中文:
-定理 exists_finsupp_left
+定理 存在_finsupp_left
   条件: (x : M otimes[R] N)
   证明: by
   induction x with
@@ -148,7 +148,7 @@ theorem exists_finsupp_right
   simp_rw [h, Finsupp.sum, map_sum, comm_tmul]
 
 中文:
-定理 exists_finsupp_right
+定理 存在_finsupp_right
   条件: (x : M otimes[R] N)
   证明: by
   obtain ⟨S, h⟩ := exists_finsupp_left (TensorProduct.comm R M N x)
@@ -176,7 +176,7 @@ theorem exists_finset
   apply Finset.sum_nbij' (fun m => ⟨m, S m⟩) Prod.fst <;> simp
 
 中文:
-定理 exists_finset
+定理 存在_finset
   条件: (x : M otimes[R] N)
   证明: by
   obtain ⟨S, h⟩ := exists_finsupp_left x
@@ -209,8 +209,8 @@ theorem exists_finite_submodule_of_setFinite
   · exact
 
 中文:
-定理 exists_finite_submodule_of_setFinite
-  条件: (s : Set (M otimes[R] N)) (hs : s.Finite)
+定理 存在_finite_submodule_of_setFinite
+  条件: (s : 集合 (M otimes[R] N)) (hs : s.有限)
   证明: by
   simp_rw [Module.Finite.iff_fg]
   induction s, hs using Set.Finite.induction_on with
@@ -257,8 +257,8 @@ theorem exists_finite_submodule_left_of_setFinite
   exact h.trans (LinearMap.range_comp_le_range _ _)
 
 中文:
-定理 exists_finite_submodule_left_of_setFinite
-  条件: (s : Set (M otimes[R] N)) (hs : s.Finite)
+定理 存在_finite_submodule_left_of_setFinite
+  条件: (s : 集合 (M otimes[R] N)) (hs : s.有限)
   证明: by
   obtain ⟨M', _, hfin, _, h⟩ := exists_finite_submodule_of_setFinite s hs
   refine ⟨M', hfin, ?_⟩
@@ -287,8 +287,8 @@ theorem exists_finite_submodule_right_of_setFinite
   exact h.trans (LinearMap.range_comp_le_range _ _)
 
 中文:
-定理 exists_finite_submodule_right_of_setFinite
-  条件: (s : Set (M otimes[R] N)) (hs : s.Finite)
+定理 存在_finite_submodule_right_of_setFinite
+  条件: (s : 集合 (M otimes[R] N)) (hs : s.有限)
   证明: by
   obtain ⟨_, N', _, hfin, h⟩ := exists_finite_submodule_of_setFinite s hs
   refine ⟨N', hfin, ?_⟩
@@ -318,8 +318,8 @@ theorem exists_finite_submodule_of_setFinite'
   rw [mapIncl]; rw [show M'.subtype = inclusion hM ∘ₗ M₁.subtype.submoduleMap M' by ext; simp]; rw [show N'.s
 
 中文:
-定理 exists_finite_submodule_of_setFinite'
-  条件: (s : Set (M₁ otimes[R] N₁)) (hs : s.Finite)
+定理 存在_finite_submodule_of_setFinite'
+  条件: (s : 集合 (M₁ otimes[R] N₁)) (hs : s.有限)
   证明: by
   obtain ⟨M', N', _, _, h⟩ := exists_finite_submodule_of_setFinite s hs
   have hM := map_subtype_le M₁ M'
@@ -353,8 +353,8 @@ theorem exists_finite_submodule_left_of_setFinite'
   exact h.trans (LinearMap.range_comp_le_range _ _)
 
 中文:
-定理 exists_finite_submodule_left_of_setFinite'
-  条件: (s : Set (M₁ otimes[R] N₁)) (hs : s.Finite)
+定理 存在_finite_submodule_left_of_setFinite'
+  条件: (s : 集合 (M₁ otimes[R] N₁)) (hs : s.有限)
   证明: by
   obtain ⟨M', _, hM, _, hfin, _, h⟩ := exists_finite_submodule_of_setFinite' s hs
   refine ⟨M', hM, hfin, ?_⟩
@@ -384,8 +384,8 @@ theorem exists_finite_submodule_right_of_setFinite'
   exact h.trans (LinearMap.range_comp_le_range _ _)
 
 中文:
-定理 exists_finite_submodule_right_of_setFinite'
-  条件: (s : Set (M₁ otimes[R] N₁)) (hs : s.Finite)
+定理 存在_finite_submodule_right_of_setFinite'
+  条件: (s : 集合 (M₁ otimes[R] N₁)) (hs : s.有限)
   证明: by
   obtain ⟨_, N', _, hN, _, hfin, h⟩ := exists_finite_submodule_of_setFinite' s hs
   refine ⟨N', hN, hfin, ?_⟩
@@ -418,7 +418,7 @@ lemma exists_sum_tmul_eq
     use kx + ky, Fin.addCases mx my, Fin.
 
 中文:
-引理 exists_sum_tmul_eq
+引理 存在_sum_tmul_eq
   条件: (x : M otimes[R] N)
   证明: by
   induction x with

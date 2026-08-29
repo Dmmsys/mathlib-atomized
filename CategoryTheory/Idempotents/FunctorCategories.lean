@@ -140,7 +140,7 @@ instance functor_category_isIdempotentComplete
 
 中文:
 实例 functor_category_isIdempotentComplete
-  签名: [IsIdempotentComplete C]
+  签名: [是IdempotentComplete C]
   定义体: by
   refine ⟨fun F p hp => ?_⟩
   have hC := (isIdempotentComplete_iff_hasEqualizer_of_id_and_idempotent C).mp inferInstance
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: (karoubiFunctorCategoryEmbedding J C).Full
+  签名: (karoubiFunctorCategoryEmbedding J C).满
   定义体: ⟨{f :=
         { app := fun j => (f.app j).f
           naturality := fun j j' φ => by
@@ -328,7 +328,7 @@ instance :
 
 中文:
 实例 :
-  签名: (karoubiFunctorCategoryEmbedding J C).Faithful
+  签名: (karoubiFunctorCategoryEmbedding J C).忠实
   定义体: by
     ext j
     exact hom_ext_iff.mp (congr_app h j)

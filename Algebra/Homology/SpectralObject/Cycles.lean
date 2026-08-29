@@ -138,7 +138,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (X.iCycles f g n)
+  签名: 单态射 (X.iCycles f g n)
   定义体: by
   dsimp [iCycles]
   infer_instance
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (X.pOpcycles f g n)
+  签名: 满态射 (X.pOpcycles f g n)
   定义体: by
   dsimp [pOpcycles]
   infer_instance
@@ -185,7 +185,7 @@ lemma isZero_opcycles
 
 中文:
 引理 isZero_opcycles
-  条件: (h : IsZero ((X.H n).obj (mk₁ f)))
+  条件: (h : 是零 ((X.H n).obj (mk₁ f)))
   证明: by
   rw [IsZero.iff_id_eq_zero]; rw [← cancel_epi (X.pOpcycles ..)]
   apply h.eq_of_src
@@ -209,7 +209,7 @@ lemma isZero_cycles
 
 中文:
 引理 isZero_cycles
-  条件: (h : IsZero ((X.H n).obj (mk₁ g)))
+  条件: (h : 是零 ((X.H n).obj (mk₁ g)))
   证明: by
   rw [IsZero.iff_id_eq_zero]; rw [← cancel_mono (X.iCycles ..)]
   apply h.eq_of_tgt
@@ -1174,7 +1174,7 @@ lemma isIso_toCycles
 
 中文:
 引理 isIso_toCycles
-  条件: (n : 整数) (hf : IsZero ((X.H n).obj (mk₁ f)))
+  条件: (n : 整数) (hf : 是零 ((X.H n).obj (mk₁ f)))
   证明: by
   have : Mono (X.toCycles f g fg h n) :=
     (X.cokernelSequenceCycles_exact f g fg h n).mono_g (hf.eq_of_src _ _)
@@ -1201,7 +1201,7 @@ lemma isIso_fromOpcycles
 
 中文:
 引理 isIso_fromOpcycles
-  条件: (n : 整数) (hg : IsZero ((X.H n).obj (mk₁ g)))
+  条件: (n : 整数) (hg : 是零 ((X.H n).obj (mk₁ g)))
   证明: by
   have : Epi (X.fromOpcycles f g fg h n) :=
     (X.kernelSequenceOpcycles_exact f g fg h n).epi_f (hg.eq_of_tgt _ _)

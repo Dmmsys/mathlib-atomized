@@ -35,7 +35,7 @@ structure MonadCont.Label
 
 中文:
 结构 MonadCont.Label
-  参数: (α : Type w) (m : 类型u -> 类型v) (β : 类型u)
+  参数: (α : 类型 w) (m : 类型u -> 类型v) (β : 类型u)
   公理与运算 (1 个):
     - apply : α -> m β
 -/
@@ -94,8 +94,8 @@ class LawfulMonadCont
 
 中文:
 类 LawfulMonadCont
-  参数: (m : 类型u -> 类型v) [Monad m] [MonadCont m]
-  继承: LawfulMonad m
+  参数: (m : 类型u -> 类型v) [单子 m] [MonadCont m]
+  继承: 合法单子 m
   公理与运算 (3 个):
     - callCC_bind_right({α ω γ} (cmd : m α) (next : Label ω m γ -> α -> m ω)) : (callCC fun f => cmd >>= next f) = cmd >>= fun x => callCC fun f => next f x
     - callCC_bind_left({α} (β) (x : α) (dead : Label α m β -> β -> m α)) : (callCC fun f : Label α m β => goto f x >>= dead f) = pure x
@@ -121,7 +121,7 @@ definition ContT
 
 中文:
 定义 ContT
-  签名: (r : 类型u) (m : 类型u -> 类型v) (α : Type w)
+  签名: (r : 类型u) (m : 类型u -> 类型v) (α : 类型 w)
   定义体: (α -> m r) -> m r
 -/
 def ContT (r : Type u) (m : Type u -> Type v) (α : Type w) :=
@@ -136,8 +136,8 @@ abbreviation Cont
   body: ContT r Id α
 
 中文:
-缩写 Cont
-  签名: (r : 类型u) (α : Type w)
+缩写 余nt
+  签名: (r : 类型u) (α : 类型 w)
   定义体: ContT r Id α
 -/
 abbrev Cont (r : Type u) (α : Type w) :=
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad (ContT r m)
+  签名: 单子 (ContT r m)
   定义体: f x
   bind x f g := x fun i => f i g
 
@@ -451,7 +451,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad (ContT r m)
+  签名: 合法单子 (ContT r m)
   定义体: LawfulMonad.mk'
   (id_map := by intros; rfl)
   (pure_bind := by intros; ext; rfl)
@@ -475,7 +475,7 @@ instance [Monad
 @[simp]
 
 中文:
-实例 [Monad
+实例 [单子
   签名: m] : MonadLift m (ContT r m) where
   定义体: .mk fun k => x >>= k
 
@@ -495,7 +495,7 @@ theorem run_monadLift
 
 中文:
 定理 run_monadLift
-  条件: [Monad m] {α} (x : m α) (k : α -> m r)
+  条件: [单子 m] {α} (x : m α) (k : α -> m r)
   证明: rfl
 -/
 theorem run_monadLift [Monad m] {α} (x : m α) (k : α -> m r) :
@@ -513,7 +513,7 @@ theorem monadLift_bind
 
 中文:
 定理 monadLift_bind
-  条件: [Monad m] [LawfulMonad m] {α β} (x : m α) (f : α -> m β)
+  条件: [单子 m] [合法单子 m] {α β} (x : m α) (f : α -> m β)
   证明: by
   ext
   simp only [bind_assoc, run_bind, run_monadLift, Function.comp_apply]
@@ -681,7 +681,7 @@ nonrec def ExceptT.callCC {ε} [MonadCont m] {α β : Type _}
 
 中文:
 定理 ExceptT.goto_mkLabel
-  条件: {α β ε : Type _} (x : Label (Except.{u, u} ε α) m β) (i : α)
+  条件: {α β ε : 类型 _} (x : Label (Except.{u, u} ε α) m β) (i : α)
   证明: by
   cases x; rfl
 
@@ -742,7 +742,7 @@ nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT 
 
 中文:
 定理 OptionT.goto_mkLabel
-  条件: {α β : Type _} (x : Label (Option.{u} α) m β) (i : α)
+  条件: {α β : 类型 _} (x : Label (选项类型.{u} α) m β) (i : α)
   证明: (rfl)
 
 nonrec def OptionT.callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
@@ -770,7 +770,7 @@ lemma run_callCC
 
 中文:
 引理 run_callCC
-  条件: [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α)
+  条件: [MonadCont m] {α β : 类型 _} (f : Label α (OptionT m) β -> OptionT m α)
   证明: (rfl)
 -/
 lemma run_callCC [MonadCont m] {α β : Type _} (f : Label α (OptionT m) β -> OptionT m α) :
@@ -859,7 +859,7 @@ definition WriterT.mkLabel'
 
 中文:
 定义 WriterT.mkLabel'
-  签名: {α β ω} [Monoid ω]
+  签名: {α β ω} [幺半群 ω]
 -/
 def WriterT.mkLabel' {α β ω} [Monoid ω] : Label (α × ω) m β -> Label α (WriterT ω m) β
 | ⟨f⟩ => ⟨fun a => monadLift f (a, 1)⟩
@@ -874,7 +874,7 @@ theorem WriterT.goto_mkLabel
 
 中文:
 定理 WriterT.goto_mkLabel
-  条件: {α β ω : Type _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α)
+  条件: {α β ω : 类型 _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α)
   证明: by cases x; rfl
 -/
 theorem WriterT.goto_mkLabel {α β ω : Type _} [EmptyCollection ω] (x : Label (α × ω) m β) (i : α) :
@@ -894,7 +894,7 @@ WriterT.mk callCC (WriterT.run ∘ f ∘ WriterT.mkLabel : Label (α × ω) m β
 
 中文:
 定理 WriterT.goto_mkLabel'
-  条件: {α β ω : Type _} [Monoid ω] (x : Label (α × ω) m β) (i : α)
+  条件: {α β ω : 类型 _} [幺半群 ω] (x : Label (α × ω) m β) (i : α)
   证明: by cases x; rfl
 
 nonrec def WriterT.callCC [MonadCont m] {α β ω : Type _} [EmptyCollection ω]
@@ -919,7 +919,7 @@ definition WriterT.callCC'
 
 中文:
 定义 WriterT.callCC'
-  签名: [MonadCont m] {α β ω : Type _} [Monoid ω]
+  签名: [MonadCont m] {α β ω : 类型 _} [幺半群 ω]
   定义体: WriterT.mk
     MonadCont.callCC (WriterT.run ∘ f ∘ WriterT.mkLabel' : Label (α × ω) m β -> m (α × ω))
 

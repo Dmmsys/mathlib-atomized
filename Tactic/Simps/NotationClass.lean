@@ -51,7 +51,7 @@ definition findArgType
 
 中文:
 定义 findArgType
-  签名: : Type
+  签名: : 类型
   定义体: Name -> Name -> Array Expr -> MetaM (Array (Option Expr))
 -/
 @[expose] def findArgType : Type := Name -> Name -> Array Expr -> MetaM (Array (Option Expr))

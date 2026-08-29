@@ -75,8 +75,8 @@ class IsOrderedRing
   (no additional axioms)
 
 中文:
-类 IsOrderedRing
-  参数: (R : 类型) [Semiring R] [PartialOrder R]
+类 是Ordered环
+  参数: (R : 类型) [半环 R] [偏序 R]
   (无附加公理)
 -/
 class IsOrderedRing (R : Type*) [Semiring R] [PartialOrder R] extends
@@ -96,8 +96,8 @@ class IsStrictOrderedRing
   (no additional axioms)
 
 中文:
-类 IsStrictOrderedRing
-  参数: (R : 类型) [Semiring R] [PartialOrder R]
+类 是StrictOrdered环
+  参数: (R : 类型) [半环 R] [偏序 R]
   (无附加公理)
 -/
 class IsStrictOrderedRing (R : Type*) [Semiring R] [PartialOrder R] extends
@@ -121,8 +121,8 @@ instance [Semiring
   mul_lt_mul_of_pos_right := mul_lt_mul_of_pos_right
 
 中文:
-实例 [Semiring
-  签名: R] [PartialOrder R] [IsStrictOrderedRing R] : Lean.Grind.OrderedRing R where
+实例 [半环
+  签名: R] [偏序 R] [是StrictOrdered环 R] : Lean.Grind.OrderedRing R where
   定义体: zero_lt_one
   mul_lt_mul_of_pos_left := mul_lt_mul_of_pos_left
   mul_lt_mul_of_pos_right := mul_lt_mul_of_pos_right
@@ -146,8 +146,8 @@ lemma IsOrderedRing.of_mul_nonneg
     simpa only [sub_mul, sub_nonneg] using mul_nonneg _ _ (sub_nonneg.2 hbc) ha
 
 中文:
-引理 IsOrderedRing.of_mul_nonneg
-  结论: [Ring R] [PartialOrder R] [IsOrderedAddMonoid R]
+引理 是Ordered环.of_mul_nonneg
+  结论: [环 R] [偏序 R] [是OrderedAdd幺半群 R]
   证明: by
     simpa only [mul_sub, sub_nonneg] using mul_nonneg _ _ ha (sub_nonneg.2 hbc)
   mul_le_mul_of_nonneg_right a ha b c hbc := by
@@ -175,8 +175,8 @@ lemma IsStrictOrderedRing.of_mul_pos
     simpa only [sub_mul, sub_pos] using mul_pos _ _ (sub_pos.2 hbc) ha
 
 中文:
-引理 IsStrictOrderedRing.of_mul_pos
-  结论: [Ring R] [PartialOrder R] [IsOrderedAddMonoid R]
+引理 是StrictOrdered环.of_mul_pos
+  结论: [环 R] [偏序 R] [是OrderedAdd幺半群 R]
   证明: by
     simpa only [mul_sub, sub_pos] using mul_pos _ _ ha (sub_pos.2 hbc)
   mul_lt_mul_of_pos_right a ha b c hbc := by
@@ -215,7 +215,7 @@ theorem AddMonoidWithOne.toCharZero
   proof: (strictMono_nat_of_lt_succ fun n => by rw [Nat.cast_succ]; apply lt_add_one).injective
 
 中文:
-定理 AddMonoidWithOne.toCharZero
+定理 加法带幺幺半群.toCharZero
   结论: {R}
   证明: (strictMono_nat_of_lt_succ fun n => by rw [Nat.cast_succ]; apply lt_add_one).injective
 
@@ -378,9 +378,9 @@ theorem IsOrderedRing.toCharZero
   proof: AddMonoidWithOne.toCharZero
 
 中文:
-定理 IsOrderedRing.toCharZero
-  条件: [Nontrivial R]
-  结论: CharZero R
+定理 是Ordered环.toCharZero
+  条件: [非平凡 R]
+  结论: 特征零 R
   证明: AddMonoidWithOne.toCharZero
 
 Depends on / 依赖: AddMonoidWithOne, AddMonoidWithOne.toCharZero, toCharZero
@@ -396,8 +396,8 @@ instance [Nontrivial
   body: ⟨fun a => ⟨a + 1, by simp⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : NoMaxOrder R
+实例 [非平凡
+  签名: R] : NoMax序 R
   定义体: ⟨fun a => ⟨a + 1, by simp⟩⟩
 -/
 instance [Nontrivial R] : NoMaxOrder R := ⟨fun a => ⟨a + 1, by simp⟩⟩
@@ -411,8 +411,8 @@ instance [Nontrivial
   body: ⟨fun a => ⟨a - 1, by simp⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : NoMinOrder R
+实例 [非平凡
+  签名: R] : NoMin序 R
   定义体: ⟨fun a => ⟨a - 1, by simp⟩⟩
 -/
 instance [Nontrivial R] : NoMinOrder R := ⟨fun a => ⟨a - 1, by simp⟩⟩

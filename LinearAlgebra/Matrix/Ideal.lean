@@ -54,7 +54,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: I.toAddSubmonoid.matrix
   smul_mem' M N hN := by
     intro i j
@@ -87,7 +87,7 @@ theorem mem_matrix
 
 中文:
 定理 mem_matrix
-  条件: (I : Ideal R) (M : Matrix n n R)
+  条件: (I : 理想 R) (M : 矩阵 n n R)
   证明: by rfl
 -/
 theorem mem_matrix (I : Ideal R) (M : Matrix n n R) :
@@ -103,7 +103,7 @@ theorem matrix_monotone
 
 中文:
 定理 matrix_monotone
-  结论: Monotone (matrix (R := R) n)
+  结论: 递增 (matrix (R := R) n)
   证明: fun _ _ IJ _ MI i j => IJ (MI i j)
 -/
 theorem matrix_monotone : Monotone (matrix (R := R) n) :=
@@ -124,7 +124,7 @@ theorem matrix_strictMono_of_nonempty
 
 中文:
 定理 matrix_strictMono_of_nonempty
-  条件: [Nonempty n]
+  条件: [非空 n]
   证明: .strictMono_of_injective fun I J eq => by matrix_monotone n
     ext x
     have : (forall _ _, x in I) ↔ (forall _ _, x in J) := congr((Matrix.of fun _ _ => x) in $eq)
@@ -157,7 +157,7 @@ theorem matrix_bot
 
 中文:
 定理 matrix_bot
-  结论: (⊥ : Ideal R).matrix n = ⊥
+  结论: (⊥ : 理想 R).matrix n = ⊥
   证明: by
   ext M
   simp only [mem_matrix, mem_bot]
@@ -188,7 +188,7 @@ theorem matrix_top
 
 中文:
 定理 matrix_top
-  结论: (⊤ : Ideal R).matrix n = ⊤
+  结论: (⊤ : 理想 R).matrix n = ⊤
   证明: by
   ext; simp
 -/
@@ -220,7 +220,7 @@ theorem single_mem_jacobson_matrix
 
 中文:
 定理 single_mem_jacobson_matrix
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   -- Proof generalized from example 8 in
   -- https://ysharifi.wordpress.com/2022/08/16/the-jacobson-radical-basic-examples/
@@ -264,7 +264,7 @@ theorem matrix_jacobson_le
 
 中文:
 定理 matrix_jacobson_le
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   intro M MI
   rw [matrix_eq_sum_single M]
@@ -344,7 +344,7 @@ theorem matrix_apply
 
 中文:
 定理 matrix_apply
-  条件: {c : RingCon R} {M N : Matrix n n R}
+  条件: {c : RingCon R} {M N : 矩阵 n n R}
   证明: Iff.rfl
 
 @[simp]
@@ -402,7 +402,7 @@ theorem matrix_monotone
 
 中文:
 定理 matrix_monotone
-  结论: Monotone (matrix (R := R) n)
+  结论: 递增 (matrix (R := R) n)
   证明: fun _ _ hc _ _ h _ _ => hc (h _ _)
 -/
 theorem matrix_monotone : Monotone (matrix (R := R) n) :=
@@ -421,8 +421,8 @@ theorem matrix_injective
 
 中文:
 定理 matrix_injective
-  条件: [Nonempty n]
-  结论: Function.Injective (matrix (R := R) n)
+  条件: [非空 n]
+  结论: 函数.单射 (matrix (R := R) n)
   证明: fun I J eq => RingCon.ext fun r s => by
     have := congr_fun (DFunLike.congr_fun eq (Matrix.of fun _ _ => r)) (Matrix.of fun _ _ => s)
     simpa using this
@@ -444,7 +444,7 @@ theorem matrix_strictMono_of_nonempty
 
 中文:
 定理 matrix_strictMono_of_nonempty
-  条件: [Nonempty n]
+  条件: [非空 n]
   证明: .strictMono_of_injective matrix_injective _ matrix_monotone n
 
 @[simp]
@@ -514,7 +514,7 @@ iseqv.symm h := fun _ _ => c.symm h _ _
 
 中文:
 定义 ofMatrix
-  签名: [DecidableEq n] (c : RingCon (Matrix n n R))
+  签名: [DecidableEq n] (c : RingCon (矩阵 n n R))
   定义体: forall i j, c (single i j x) (single i j y)
   iseqv.refl _ := fun _ _ => c.refl _
 iseqv.symm h := fun _ _ => c.symm h _ _
@@ -543,7 +543,7 @@ theorem ofMatrix_rel
 
 中文:
 定理 ofMatrix_rel
-  条件: [DecidableEq n] {c : RingCon (Matrix n n R)} {x y : R}
+  条件: [DecidableEq n] {c : RingCon (矩阵 n n R)} {x y : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -569,7 +569,7 @@ theorem ofMatrix_matrix
 
 中文:
 定理 ofMatrix_matrix
-  条件: [DecidableEq n] [Nonempty n] (c : RingCon R)
+  条件: [DecidableEq n] [非空 n] (c : RingCon R)
   证明: by
   ext x y
   constructor
@@ -616,7 +616,7 @@ theorem matrix_ofMatrix
 
 中文:
 定理 matrix_ofMatrix
-  条件: [DecidableEq n] (c : RingCon (Matrix n n R))
+  条件: [DecidableEq n] (c : RingCon (矩阵 n n R))
   证明: by
   ext x y
   constructor
@@ -650,7 +650,7 @@ theorem ofMatrix_rel'
 
 中文:
 定理 ofMatrix_rel'
-  条件: [DecidableEq n] {c : RingCon (Matrix n n R)} {x y : R} (i j : n)
+  条件: [DecidableEq n] {c : RingCon (矩阵 n n R)} {x y : R} (i j : n)
   证明: by
   refine ⟨fun h => h i j, fun h i' j' => ?_⟩
   simpa using c.mul (c.mul (c.refl <| single i' i 1) h) (c.refl <| single j j' 1)
@@ -679,7 +679,7 @@ theorem coe_ofMatrix_eq_relationMap
 
 中文:
 定理 coe_ofMatrix_eq_relationMap
-  条件: [DecidableEq n] {c : RingCon (Matrix n n R)} (i j : n)
+  条件: [DecidableEq n] {c : RingCon (矩阵 n n R)} (i j : n)
   证明: by
   ext x y
   constructor
@@ -727,7 +727,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (I : TwoSidedIdeal R)
+  签名: (I : TwoSided理想 R)
   定义体: I.ringCon.matrix n
 
 @[simp]
@@ -748,7 +748,7 @@ lemma mem_matrix
 
 中文:
 引理 mem_matrix
-  条件: (I : TwoSidedIdeal R) (M : Matrix n n R)
+  条件: (I : TwoSided理想 R) (M : 矩阵 n n R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -766,7 +766,7 @@ theorem matrix_monotone
 
 中文:
 定理 matrix_monotone
-  结论: Monotone (matrix (R := R) n)
+  结论: 递增 (matrix (R := R) n)
   证明: fun _ _ IJ _ MI i j => IJ (MI i j)
 -/
 theorem matrix_monotone : Monotone (matrix (R := R) n) :=
@@ -785,7 +785,7 @@ theorem matrix_strictMono_of_nonempty
 
 中文:
 定理 matrix_strictMono_of_nonempty
-  条件: [h : Nonempty n]
+  条件: [h : 非空 n]
   证明: .strictMono_of_injective matrix_monotone n
 .comp (fun _ _ => ofRingCon.inj) (RingCon.matrix_injective n).comp ringCon_injective
 
@@ -809,7 +809,7 @@ theorem matrix_bot
 
 中文:
 定理 matrix_bot
-  结论: (⊥ : TwoSidedIdeal R).matrix n = ⊥
+  结论: (⊥ : TwoSided理想 R).matrix n = ⊥
   证明: ringCon_injective RingCon.matrix_bot _
 
 @[simp]
@@ -830,7 +830,7 @@ theorem matrix_top
 
 中文:
 定理 matrix_top
-  结论: (⊤ : TwoSidedIdeal R).matrix n = ⊤
+  结论: (⊤ : TwoSided理想 R).matrix n = ⊤
   证明: ringCon_injective RingCon.matrix_top _
 
 Depends on / 依赖: RingCon, RingCon.matrix_top, matrix_top, ringCon_injective
@@ -864,7 +864,7 @@ left_inv _ := ringCon_injective RingCon.ofMatrix_matrix _
 
 中文:
 定义 equivMatrix
-  签名: : TwoSidedIdeal R ≃ TwoSidedIdeal (Matrix n n R) where
+  签名: : TwoSided理想 R ≃ TwoSided理想 (矩阵 n n R) where
   定义体: I.matrix n
   invFun J := { ringCon := J.ringCon.ofMatrix }
 right_inv _ := ringCon_injective RingCon.matrix_ofMatrix _
@@ -895,7 +895,7 @@ theorem coe_equivMatrix_symm_apply
 
 中文:
 定理 coe_equivMatrix_symm_apply
-  条件: (I : TwoSidedIdeal (Matrix n n R)) (i j : n)
+  条件: (I : TwoSided理想 (矩阵 n n R)) (i j : n)
   证明: by
   ext r
   constructor
@@ -940,7 +940,7 @@ exact IJ MI i j
 
 中文:
 定义 orderIsoMatrix
-  签名: : TwoSidedIdeal R ≃o TwoSidedIdeal (Matrix n n R) where
+  签名: : TwoSided理想 R ≃o TwoSided理想 (矩阵 n n R) where
   定义体: equivMatrix
   map_rel_iff' {I J} := by
     simp only [equivMatrix_apply]
@@ -980,7 +980,7 @@ theorem asIdeal_matrix
 
 中文:
 定理 asIdeal_matrix
-  条件: [DecidableEq n] (I : TwoSidedIdeal R)
+  条件: [DecidableEq n] (I : TwoSided理想 R)
   证明: by
   ext; simp
 -/
@@ -1017,7 +1017,7 @@ lemma jacobson_matrix_le
 
 中文:
 引理 jacobson_matrix_le
-  条件: (I : TwoSidedIdeal R)
+  条件: (I : TwoSided理想 R)
   证明: by
   -- Proof generalized from example 8 in
   -- https://ysharifi.wordpress.com/2022/08/16/the-jacobson-radical-basic-examples/
@@ -1057,7 +1057,7 @@ theorem jacobson_matrix
 
 中文:
 定理 jacobson_matrix
-  条件: (I : TwoSidedIdeal R)
+  条件: (I : TwoSided理想 R)
   证明: by
   apply le_antisymm
   · apply jacobson_matrix_le

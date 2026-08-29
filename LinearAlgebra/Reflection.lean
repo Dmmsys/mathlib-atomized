@@ -158,7 +158,7 @@ lemma preReflection_preReflection
 
 中文:
 引理 preReflection_preReflection
-  条件: (g : Dual R M) (h : f x = 2)
+  条件: (g : 对偶 R M) (h : f x = 2)
   证明: by
   ext m
   simp only [h, preReflection_apply, mul_comm (g x) (f m), mul_two, mul_assoc, Dual.eval_apply,
@@ -311,7 +311,7 @@ lemma invOn_reflection_of_mapsTo
 
 中文:
 引理 invOn_reflection_of_mapsTo
-  条件: {Φ : Set M} (h : f x = 2)
+  条件: {Φ : 集合 M} (h : f x = 2)
   证明: ⟨fun x _ => involutive_reflection h x, fun x _ => involutive_reflection h x⟩
 
 Depends on / 依赖: involutive_reflection
@@ -330,7 +330,7 @@ lemma bijOn_reflection_of_mapsTo
 
 中文:
 引理 bijOn_reflection_of_mapsTo
-  条件: {Φ : Set M} (h : f x = 2) (h' : MapsTo (reflection h) Φ Φ)
+  条件: {Φ : 集合 M} (h : f x = 2) (h' : 映射到 (reflection h) Φ Φ)
   证明: (invOn_reflection_of_mapsTo h).bijOn h' h'
 
 Depends on / 依赖: invOn_reflection_of_mapsTo
@@ -352,7 +352,7 @@ lemma _root_.Submodule.mem_invtSubmodule_reflection_of_mem
   simpa only [reflection_apply, p.sub_mem_iff_right hy] using p.smul_mem (f y) hx
 
 中文:
-引理 _root_.Submodule.mem_invtSubmodule_reflection_of_mem
+引理 _root_.子模.mem_invtSubmodule_reflection_of_mem
   结论: (h : f x = 2)
   证明: by
   suffices forall y in p, reflection h y in p from
@@ -384,8 +384,8 @@ lemma _root_.Submodule.mem_invtSubmodule_reflection_iff
       rw [hp.eq_bot]; rw [Submodule.mem_bot]; rw 
 
 中文:
-引理 _root_.Submodule.mem_invtSubmodule_reflection_iff
-  结论: [IsDomain R] [NeZero (2 : R)]
+引理 _root_.子模.mem_invtSubmodule_reflection_iff
+  结论: [是整环 R] [NeZero (2 : R)]
   证明: by
   refine ⟨fun h' y hy => ?_, fun h' y hy => ?_⟩
 · have hx : x != 0 := by rintro rfl; exact two_ne_zero (α := R) by simp [← h]
@@ -757,8 +757,8 @@ lemma Dual.eq_of_preReflection_mapsTo
       LinearMap.id_coe, LinearEquiv.
 
 中文:
-引理 Dual.eq_of_preReflection_mapsTo
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+引理 对偶.eq_of_preReflection_mapsTo
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   have hx : x != 0 := by rintro rfl; simp at hf₁
   let u := reflection hg₁ * reflection hf₁
@@ -817,8 +817,8 @@ lemma Dual.eq_of_preReflection_mapsTo'
   let x' : span
 
 中文:
-引理 Dual.eq_of_preReflection_mapsTo'
-  结论: [CharZero R] [IsDomain R] [IsTorsionFree R M]
+引理 对偶.eq_of_preReflection_mapsTo'
+  结论: [特征零 R] [是整环 R] [是无挠 R M]
   证明: by
   set Φ' : Set (span R Φ) := range (inclusion <| Submodule.subset_span (R := R) (s := Φ))
   rw [← finite_coe_iff] at hΦ₁
@@ -910,7 +910,7 @@ lemma infinite_range_reflection_reflection_iterate_iff
 
 中文:
 引理 infinite_range_reflection_reflection_iterate_iff
-  结论: [IsAddTorsionFree M]
+  结论: [是加法无挠 M]
   证明: by
   simp only [reflection_reflection_iterate hfx hgy hgxfy, infinite_range_add_nsmul_iff, sub_ne_zero]
 
@@ -938,7 +938,7 @@ lemma eq_of_mapsTo_reflection_of_mem
 
 中文:
 引理 eq_of_mapsTo_reflection_of_mem
-  结论: [IsAddTorsionFree M] {Φ : Set M} (hΦ : Φ.Finite)
+  结论: [是加法无挠 M] {Φ : 集合 M} (hΦ : Φ.有限)
   证明: by
   suffices h : f y • x = (2 : R) • y by
     rw [hfy]; rw [two_smul R x]; rw [two_smul R y]; rw [← two_zsmul]; rw [← two_zsmul] at h
@@ -983,7 +983,7 @@ lemma injOn_dualMap_subtype_span_range_range
 
 中文:
 引理 injOn_dualMap_subtype_span_range_range
-  结论: {ι : 类型} [IsAddTorsionFree M]
+  结论: {ι : 类型} [是加法无挠 M]
   证明: by
   rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩ hij
   congr

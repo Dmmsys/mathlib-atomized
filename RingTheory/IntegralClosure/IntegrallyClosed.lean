@@ -70,8 +70,8 @@ abbreviation IsIntegrallyClosedIn
   body: IsIntegralClosure R R A
 
 中文:
-缩写 IsIntegrallyClosedIn
-  签名: (R A : 类型) [CommRing R] [CommRing A] [Algebra R A]
+缩写 Is整数egrallyClosedIn
+  签名: (R A : 类型) [交换环 R] [交换环 A] [代数 R A]
   定义体: IsIntegralClosure R R A
 
 Depends on / 依赖: IsIntegralClosure
@@ -88,8 +88,8 @@ abbreviation IsIntegrallyClosed
   body: IsIntegrallyClosedIn R (FractionRing R)
 
 中文:
-缩写 IsIntegrallyClosed
-  签名: (R : 类型) [CommRing R]
+缩写 是整闭
+  签名: (R : 类型) [交换环 R]
   定义体: IsIntegrallyClosedIn R (FractionRing R)
 
 Depends on / 依赖: FractionRing, IsIntegrallyClosedIn
@@ -119,8 +119,8 @@ theorem AlgHom.isIntegrallyClosedIn
     simp_all
 
 中文:
-定理 AlgHom.isIntegrallyClosedIn
-  条件: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+定理 代数态射.is整数egrallyClosedIn
+  条件: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   证明: by
   rintro ⟨inj, cl⟩
   refine ⟨Function.Injective.of_comp (f := f) ?_, fun hx => ?_, ?_⟩
@@ -155,7 +155,7 @@ theorem AlgEquiv.isIntegrallyClosedIn
   proof: ⟨AlgHom.isIntegrallyClosedIn e.symm e.symm.injective, AlgHom.isIntegrallyClosedIn e e.injective⟩
 
 中文:
-定理 AlgEquiv.isIntegrallyClosedIn
+定理 代数等价.is整数egrallyClosedIn
   条件: (e : A ≃ₐ[R] B)
   证明: ⟨AlgHom.isIntegrallyClosedIn e.symm e.symm.injective, AlgHom.isIntegrallyClosedIn e e.injective⟩
 
@@ -175,7 +175,7 @@ theorem isIntegrallyClosed_iff_isIntegrallyClosedIn
   proof: (IsLocalization.algEquiv R⁰ _ _).isIntegrallyClosedIn
 
 中文:
-定理 isIntegrallyClosed_iff_isIntegrallyClosedIn
+定理 is整数egrallyClosed_iff_is整数egrallyClosedIn
   证明: (IsLocalization.algEquiv R⁰ _ _).isIntegrallyClosedIn
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, algEquiv, isIntegrallyClosedIn
@@ -193,8 +193,8 @@ theorem isIntegrallyClosed_iff_isIntegralClosure
   proof: isIntegrallyClosed_iff_isIntegrallyClosedIn K
 
 中文:
-定理 isIntegrallyClosed_iff_isIntegralClosure
-  结论: Is整数egrallyClosed R ↔ Is整数egralClosure R R K
+定理 is整数egrallyClosed_iff_is整数egralClosure
+  结论: 是整闭 R ↔ 是整闭包 R R K
   证明: isIntegrallyClosed_iff_isIntegrallyClosedIn K
 
 Depends on / 依赖: isIntegrallyClosed_iff_isIntegrallyClosedIn
@@ -217,7 +217,7 @@ theorem isIntegrallyClosedIn_iff
     apply isIntegral_algebraMap
 
 中文:
-定理 isIntegrallyClosedIn_iff
+定理 is整数egrallyClosedIn_iff
   证明: by
   constructor
   · rintro ⟨_, cl⟩
@@ -251,7 +251,7 @@ theorem isIntegrallyClosed_iff
         IsFractionRing.injective R K]
 
 中文:
-定理 isIntegrallyClosed_iff
+定理 is整数egrallyClosed_iff
   证明: by
   simp [isIntegrallyClosed_iff_isIntegrallyClosedIn K, isIntegrallyClosedIn_iff,
         IsFractionRing.injective R K]
@@ -316,7 +316,7 @@ theorem isIntegrallyClosedIn_iff
   exact congr(forall _ _, _ in $Subtype.range_val)
 
 中文:
-定理 isIntegrallyClosedIn_iff
+定理 is整数egrallyClosedIn_iff
   证明: by
   rw [isIntegrallyClosedIn_iff]; rw [and_iff_right (FaithfulSMul.algebraMap_injective _ _)]
   exact congr(forall _ _, _ in $Subtype.range_val)
@@ -336,7 +336,7 @@ theorem isIntegrallyClosed_iff
   rw [isIntegrallyClosed_iff A]; exact congr(forall _ _, _ in $Subtype.range_val)
 
 中文:
-定理 isIntegrallyClosed_iff
+定理 is整数egrallyClosed_iff
   条件: [IsFractionRing S A]
   证明: by
   rw [isIntegrallyClosed_iff A]; exact congr(forall _ _, _ in $Subtype.range_val)
@@ -359,7 +359,7 @@ let : Algebra R T := RingHom.toAlgebra .codRestrict _ _ h
 
 中文:
 定理 integralClosure_le_iff
-  条件: {T : Subring A} [Is整数egrallyClosedIn T A]
+  条件: {T : 子环 A} [Is整数egrallyClosedIn T A]
   证明: h (algebraMap_mem (integralClosure R A) r)
 mpr h a ha := Subring.isIntegrallyClosedIn_iff.mp ‹_›
 let : Algebra R T := RingHom.toAlgebra .codRestrict _ _ h
@@ -387,7 +387,7 @@ theorem integralClosure_subring_le_iff
 
 中文:
 定理 integralClosure_subring_le_iff
-  条件: {T : Subring A} [Is整数egrallyClosedIn T A]
+  条件: {T : 子环 A} [Is整数egrallyClosedIn T A]
   证明: by
   rw [integralClosure_le_iff]; rw [Subtype.forall]; rw [SetLike.le_def]; rfl
 
@@ -451,7 +451,7 @@ theorem isIntegral_iff
   proof: IsIntegralClosure.isIntegral_iff
 
 中文:
-定理 isIntegral_iff
+定理 is整数egral_iff
   条件: [Is整数egrallyClosedIn R A] {x : A}
   证明: IsIntegralClosure.isIntegral_iff
 
@@ -470,7 +470,7 @@ theorem exists_algebraMap_eq_of_isIntegral_pow
   proof: isIntegral_iff.mp hx.of_pow hn
 
 中文:
-定理 exists_algebraMap_eq_of_isIntegral_pow
+定理 存在_algebraMap_eq_of_is整数egral_pow
   结论: [Is整数egrallyClosedIn R A]
   证明: isIntegral_iff.mp hx.of_pow hn
 
@@ -490,8 +490,8 @@ theorem exists_algebraMap_eq_of_pow_mem_subalgebra
   proof: exists_algebraMap_eq_of_isIntegral_pow hn isIntegral_iff.mpr ⟨⟨x ^ n, hx⟩, rfl⟩
 
 中文:
-定理 exists_algebraMap_eq_of_pow_mem_subalgebra
-  结论: {A : 类型} [CommRing A] [Algebra R A]
+定理 存在_algebraMap_eq_of_pow_mem_subalgebra
+  结论: {A : 类型} [交换环 A] [代数 R A]
   证明: exists_algebraMap_eq_of_isIntegral_pow hn isIntegral_iff.mpr ⟨⟨x ^ n, hx⟩, rfl⟩
 
 Depends on / 依赖: exists_algebraMap_eq_of_isIntegral_pow, isIntegral_iff, isIntegral_iff.mpr
@@ -522,7 +522,7 @@ theorem integralClosure_eq_bot_iff
 
 中文:
 定理 integralClosure_eq_bot_iff
-  条件: (hRA : Function.Injective (algebraMap R A))
+  条件: (hRA : 函数.单射 (algebraMap R A))
   证明: by
   refine eq_bot_iff.trans ?_
   constructor
@@ -561,7 +561,7 @@ theorem integralClosure_eq_bot
 
 中文:
 定理 integralClosure_eq_bot
-  结论: [Is整数egrallyClosedIn R A] [IsDomain R] [Module.IsTorsionFree R A]
+  结论: [Is整数egrallyClosedIn R A] [是整环 R] [模.是无挠 R A]
   证明: (integralClosure_eq_bot_iff A (FaithfulSMul.algebraMap_injective _ _)).mpr ‹_›
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, integralClosure_eq_bot_iff
@@ -582,8 +582,8 @@ lemma of_isIntegralClosure
   IsIntegralClosure.tower_top (R := R)
 
 中文:
-引理 of_isIntegralClosure
-  结论: [Algebra R B] [Algebra A B] [IsScalarTower R A B]
+引理 of_is整数egralClosure
+  结论: [代数 R B] [代数 A B] [标量塔 R A B]
   证明: have : Algebra.IsIntegral R A := IsIntegralClosure.isIntegral_algebra R B
   IsIntegralClosure.tower_top (R := R)
 
@@ -609,7 +609,7 @@ lemma _root_.IsIntegralClosure.of_isIntegrallyClosedIn
   exact IsIntegral.map (IsScalarTower.toAlgHom A A B) (Algebra.IsIntegral.isIntegral y)
 
 中文:
-引理 _root_.IsIntegralClosure.of_isIntegrallyClosedIn
+引理 _root_.是整闭包.of_is整数egrallyClosedIn
   证明: by
   refine ⟨IsIntegralClosure.algebraMap_injective _ A _, fun {x} =>
     ⟨fun hx => IsIntegralClosure.isIntegral_iff.mp (IsIntegral.tower_top (A := A) hx), ?_⟩⟩
@@ -644,7 +644,7 @@ instance [iic
 
 中文:
 实例 [iic
-  签名: : Is整数egrallyClosed R] : Is整数egralClosure R R K
+  签名: : 是整闭 R] : 是整闭包 R R K
   定义体: (isIntegrallyClosed_iff_isIntegralClosure K).mp iic
 
 Depends on / 依赖: isIntegrallyClosed_iff_isIntegralClosure
@@ -662,7 +662,7 @@ theorem algebraMap_eq_of_integral
 
 中文:
 定理 algebraMap_eq_of_integral
-  条件: [Is整数egrallyClosed R] {x : K}
+  条件: [是整闭 R] {x : K}
   证明: IsIntegralClosure.isIntegral_iff.mp
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isIntegral_iff.mp, isIntegral_iff
@@ -680,8 +680,8 @@ theorem isIntegral_iff
   proof: IsIntegrallyClosedIn.isIntegral_iff
 
 中文:
-定理 isIntegral_iff
-  条件: [Is整数egrallyClosed R] {x : K}
+定理 is整数egral_iff
+  条件: [是整闭 R] {x : K}
   证明: IsIntegrallyClosedIn.isIntegral_iff
 
 Depends on / 依赖: IsIntegrallyClosedIn, IsIntegrallyClosedIn.isIntegral_iff, isIntegral_iff
@@ -699,8 +699,8 @@ theorem exists_algebraMap_eq_of_isIntegral_pow
   proof: IsIntegrallyClosedIn.exists_algebraMap_eq_of_isIntegral_pow hn hx
 
 中文:
-定理 exists_algebraMap_eq_of_isIntegral_pow
-  结论: [Is整数egrallyClosed R] {x : K} {n : 自然数} (hn : 0 < n)
+定理 存在_algebraMap_eq_of_is整数egral_pow
+  结论: [是整闭 R] {x : K} {n : 自然数} (hn : 0 < n)
   证明: IsIntegrallyClosedIn.exists_algebraMap_eq_of_isIntegral_pow hn hx
 
 Depends on / 依赖: IsIntegrallyClosedIn, IsIntegrallyClosedIn.exists_algebraMap_eq_of_isIntegral_pow, exists_algebraMap_eq_of_isIntegral_pow
@@ -718,8 +718,8 @@ theorem exists_algebraMap_eq_of_pow_mem_subalgebra
   proof: IsIntegrallyClosedIn.exists_algebraMap_eq_of_pow_mem_subalgebra hn hx
 
 中文:
-定理 exists_algebraMap_eq_of_pow_mem_subalgebra
-  结论: {K : 类型} [CommRing K] [Algebra R K]
+定理 存在_algebraMap_eq_of_pow_mem_subalgebra
+  结论: {K : 类型} [交换环 K] [代数 R K]
   证明: IsIntegrallyClosedIn.exists_algebraMap_eq_of_pow_mem_subalgebra hn hx
 
 Depends on / 依赖: IsIntegrallyClosedIn, IsIntegrallyClosedIn.exists_algebraMap_eq_of_pow_mem_subalgebra, exists_algebraMap_eq_of_pow_mem_subalgebra
@@ -745,8 +745,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: (f : R ≃+* S) [h : Is整数egrallyClosed R]
-  结论: Is整数egrallyClosed S
+  条件: (f : R ≃+* S) [h : 是整闭 R]
+  结论: 是整闭 S
   证明: by
   let _ : Algebra S R := f.symm.toRingHom.toAlgebra
   let f : S ≃ₐ[S] R := AlgEquiv.ofRingEquiv fun _ => rfl
@@ -776,8 +776,8 @@ instance _root_.IsIntegralClosure.of_isIntegrallyClosed
   body: IsIntegralClosure.of_isIntegrallyClosedIn
 
 中文:
-实例 _root_.IsIntegralClosure.of_isIntegrallyClosed
-  签名: [Is整数egrallyClosed R]
+实例 _root_.是整闭包.of_is整数egrallyClosed
+  签名: [是整闭 R]
   定义体: IsIntegralClosure.of_isIntegrallyClosedIn
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.of_isIntegrallyClosedIn, of_isIntegrallyClosedIn
@@ -801,7 +801,7 @@ lemma of_isIntegrallyClosedIn
   convert! (IsIntegralClosu
 
 中文:
-引理 of_isIntegrallyClosedIn
+引理 of_is整数egrallyClosedIn
   证明: by
   have : IsDomain R := (FaithfulSMul.algebraMap_injective R K).isDomain _
   let f : FractionRing R ->ₐ[R] K := IsFractionRing.liftAlgHom (g := Algebra.ofId _ _)
@@ -838,7 +838,7 @@ lemma _root_.IsIntegralClosure.of_isIntegralClosure_of_isIntegrallyClosedIn
     · obtain ⟨x, rfl⟩ := (IsIntegralClosure.isIntegral_iff (R := T) (A := T)).mp
 
 中文:
-引理 _root_.IsIntegralClosure.of_isIntegralClosure_of_isIntegrallyClosedIn
+引理 _root_.是整闭包.of_is整数egralClosure_of_is整数egrallyClosedIn
   证明: by
   refine ⟨?_, ?_⟩
   · rw [IsScalarTower.algebraMap_eq S T U]
@@ -880,7 +880,7 @@ lemma of_isIntegrallyClosed_of_isIntegrallyClosedIn
   .of_isIntegrallyClosedIn R (FractionRing S)
 
 中文:
-引理 of_isIntegrallyClosed_of_isIntegrallyClosedIn
+引理 of_is整数egrallyClosed_of_is整数egrallyClosedIn
   证明: have : IsIntegrallyClosedIn R (FractionRing S) :=
     .of_isIntegralClosure_of_isIntegrallyClosedIn _ _ S _
   .of_isIntegrallyClosedIn R (FractionRing S)
@@ -909,7 +909,7 @@ theorem integralClosure_eq_bot_iff
 
 中文:
 定理 integralClosure_eq_bot_iff
-  结论: integralClosure R K = ⊥ ↔ Is整数egrallyClosed R
+  结论: integralClosure R K = ⊥ ↔ 是整闭 R
   证明: (IsIntegrallyClosedIn.integralClosure_eq_bot_iff _ (IsFractionRing.injective _ _)).trans
     (isIntegrallyClosed_iff_isIntegrallyClosedIn _).symm
 
@@ -939,7 +939,7 @@ ha (injective_iff_map_eq_zero _).1 (IsFractionRing.injective R K) _ h
 
 中文:
 定理 pow_dvd_pow_iff
-  结论: [IsDomain R] [Is整数egrallyClosed R]
+  结论: [是整环 R] [是整闭 R]
   证明: by
   refine ⟨fun ⟨x, hx⟩ => ?_, fun h => pow_dvd_pow_of_dvd h n⟩
   by_cases ha : a = 0
@@ -982,7 +982,7 @@ theorem _root_.Associated.pow_iff
 
 中文:
 定理 _root_.Associated.pow_iff
-  结论: [IsDomain R] [Is整数egrallyClosed R] {n : 自然数} (hn : n != 0)
+  结论: [是整环 R] [是整闭 R] {n : 自然数} (hn : n != 0)
   证明: by
   simp_rw [← dvd_dvd_iff_associated, pow_dvd_pow_iff hn]
 
@@ -1009,7 +1009,7 @@ theorem integralClosure_eq_bot
 
 中文:
 定理 integralClosure_eq_bot
-  条件: [Is整数egrallyClosed R]
+  条件: [是整闭 R]
   结论: integralClosure R K = ⊥
   证明: (integralClosure_eq_bot_iff K).mpr ‹_›
 
@@ -1040,8 +1040,8 @@ theorem isIntegrallyClosedOfFiniteExtension
   (integralClosure_eq_bot_iff L).mp integralClosure_idem
 
 中文:
-定理 isIntegrallyClosedOfFiniteExtension
-  条件: [IsDomain R] [FiniteDimensional K L]
+定理 is整数egrallyClosedOfFiniteExtension
+  条件: [是整环 R] [有限维 K L]
   证明: letI : IsFractionRing (integralClosure R L) L := isFractionRing_of_finite_extension K L
   (integralClosure_eq_bot_iff L).mp integralClosure_idem
 
@@ -1074,8 +1074,8 @@ lemma isIntegrallyClosed_of_isLocalization
   have := IsFraction
 
 中文:
-引理 isIntegrallyClosed_of_isLocalization
-  结论: [Is整数egrallyClosed R] [IsDomain R] (M : Submonoid R)
+引理 is整数egrallyClosed_of_isLocalization
+  结论: [是整闭 R] [是整环 R] (M : 子幺半群 R)
   证明: by
   let K := FractionRing R
   let g : S ->+* K := IsLocalization.map _ (T := R⁰) (RingHom.id R) hM
@@ -1114,8 +1114,8 @@ instance Field.instIsIntegrallyClosed
   body: (isIntegrallyClosed_iff K).mpr fun {x} _ => ⟨x, rfl⟩
 
 中文:
-实例 Field.instIsIntegrallyClosed
-  签名: (K : 类型) [Field K]
+实例 域.instIs整数egrallyClosed
+  签名: (K : 类型) [域 K]
   定义体: (isIntegrallyClosed_iff K).mpr fun {x} _ => ⟨x, rfl⟩
 
 Depends on / 依赖: isIntegrallyClosed_iff

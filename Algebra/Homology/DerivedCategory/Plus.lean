@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh : _ ⥤ Plus C).CommShift 整数
+  签名: (Qh : _ ⥤ Plus C).交换Shift 整数
   定义体: by
   dsimp only [Qh]
   infer_instance
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh : _ ⥤ Plus C).IsTriangulated
+  签名: (Qh : _ ⥤ Plus C).是三角
   定义体: by
   dsimp only [Qh]
   infer_instance
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.plus C).IsVerdierRightLocalizing
+  签名: (HomotopyCategory.plus C).是VerdierRightLocalizing
   定义体: by
     obtain ⟨K : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective K
     obtain ⟨L : CochainComplex _ _, rfl⟩ := HomotopyCategory.quotient_obj_surjective L
@@ -280,7 +280,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).EssSurj
+  签名: (Qh (C := C)).本质满射
   定义体: by
     intro ⟨X, n, K, e, h⟩
     refine ⟨⟨(HomotopyCategory.quotient C (ComplexShape.up Int)).obj K, ?_⟩,
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: Qh.IsLocalization (HomotopyCategory.Plus.subcategoryAcyclic C).trW
+  签名: Qh.是Localization (HomotopyCategory.Plus.subcategoryAcyclic C).trW
   定义体: ((HomotopyCategory.plus C).triangulatedLocalizerMorphism
     (HomotopyCategory.subcategoryAcyclic C)).isLocalization_of_isLocalizedFullyFaithful
       (QhCompιIsoιCompQh C).symm
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: Qh.IsLocalization (HomotopyCategory.Plus.quasiIso C)
+  签名: Qh.是Localization (HomotopyCategory.Plus.quasiIso C)
   定义体: by
   rw [HomotopyCategory.Plus.quasiIso_eq_subcategoryAcyclic_trW]
   infer_instance
@@ -444,7 +444,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Qh (C := C)).mapArrow.EssSurj
+  签名: (Qh (C := C)).mapArrow.本质满射
   定义体: Localization.essSurj_mapArrow _
     (HomotopyCategory.Plus.subcategoryAcyclic C).trW
 
@@ -466,7 +466,7 @@ abbreviation TStructure.t
 
 中文:
 缩写 TStructure.t
-  签名: : TStructure (DerivedCategory.Plus C)
+  签名: : TStructure (导出范畴.Plus C)
   定义体: (DerivedCategory.TStructure.t (C := C)).plus.tStructure DerivedCategory.TStructure.t
 
 Depends on / 依赖: DerivedCategory, DerivedCategory.TStructure.t, TStructure, plus.tStructure, tStructure
@@ -483,7 +483,7 @@ abbreviation IsGE
   body: Plus.TStructure.t.IsGE X n
 
 中文:
-缩写 IsGE
+缩写 是GE
   签名: (X : Plus C) (n : 整数)
   定义体: Plus.TStructure.t.IsGE X n
 
@@ -500,7 +500,7 @@ abbreviation IsLE
   body: Plus.TStructure.t.IsLE X n
 
 中文:
-缩写 IsLE
+缩写 是LE
   签名: (X : Plus C) (n : 整数)
   定义体: Plus.TStructure.t.IsLE X n
 
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: (DerivedCategory.Plus.homologyFunctor C 0).ShiftSequence 整数
+  签名: (导出范畴.Plus.homologyFunctor C 0).ShiftSequence 整数
   定义体: inferInstanceAs ((ι ⋙ DerivedCategory.homologyFunctor C 0).ShiftSequence Int)
 
 Depends on / 依赖: DerivedCategory, DerivedCategory.homologyFunctor, ShiftSequence, homologyFunctor
@@ -665,7 +665,7 @@ definition Q
 
 中文:
 定义 Q
-  签名: : CochainComplex.Plus C ⥤ DerivedCategory.Plus C
+  签名: : 上链复形.Plus C ⥤ 导出范畴.Plus C
   定义体: HomotopyCategory.Plus.quotient C ⋙ Qh
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.Plus.quotient, quotient

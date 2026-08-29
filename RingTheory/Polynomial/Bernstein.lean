@@ -302,7 +302,7 @@ theorem derivative_succ
 中文:
 定理 derivative_succ
   条件: (n ν : 自然数)
-  结论: Polynomial.derivative (bernsteinPolynomial R n (ν + 1)) =
+  结论: 多项式.derivative (bernsteinPolynomial R n (ν + 1)) =
   证明: by
   cases n
   · simp [bernsteinPolynomial]
@@ -478,7 +478,7 @@ theorem iterate_derivative_at_0_ne_zero
 
 中文:
 定理 iterate_derivative_at_0_ne_zero
-  条件: [CharZero R] (n ν : 自然数) (h : ν <= n)
+  条件: [特征零 R] (n ν : 自然数) (h : ν <= n)
   证明: by
   simp only [bernsteinPolynomial.iterate_derivative_at_0, Ne]
   simp only [← ascPochhammer_eval_cast]
@@ -592,7 +592,7 @@ theorem iterate_derivative_at_1_ne_zero
 
 中文:
 定理 iterate_derivative_at_1_ne_zero
-  条件: [CharZero R] (n ν : 自然数) (h : ν <= n)
+  条件: [特征零 R] (n ν : 自然数) (h : ν <= n)
   证明: by
   rw [bernsteinPolynomial.iterate_derivative_at_1 _ _ _ h]; rw [Ne]; rw [neg_one_pow_mul_eq_zero_iff]; rw [←
     Nat.cast_succ]; rw [← ascPochhammer_eval_cast]; rw [← Nat.cast_zero]; rw [Nat.cast_inj]
@@ -708,9 +708,9 @@ theorem sum
     _ = 1 := by simp
 
 中文:
-定理 sum
+定理 求和
   条件: (n : 自然数)
-  结论: (∑ ν in Finset.range (n + 1), bernsteinPolynomial R n ν) = 1
+  结论: (∑ ν in 有限集.range (n + 1), bernsteinPolynomial R n ν) = 1
   证明: calc
     (∑ ν in Finset.range (n + 1), bernsteinPolynomial R n ν) = (X + (1 - X)) ^ n := by
       rw [add_pow]

@@ -34,8 +34,8 @@ definition RingHom.Flat
   Module.Flat R S
 
 中文:
-定义 RingHom.Flat
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S] (f : R ->+* S)
+定义 环态射.平坦
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: letI : Algebra R S := f.toAlgebra
   Module.Flat R S
 
@@ -55,8 +55,8 @@ lemma RingHom.flat_algebraMap_iff
   rw [RingHom.Flat]; rw [toAlgebra_algebraMap]
 
 中文:
-引理 RingHom.flat_algebraMap_iff
-  条件: {R S : 类型} [CommRing R] [CommRing S] [Algebra R S]
+引理 环态射.flat_algebraMap_iff
+  条件: {R S : 类型} [交换环 R] [交换环 S] [代数 R S]
   证明: by
   rw [RingHom.Flat]; rw [toAlgebra_algebraMap]
 
@@ -81,7 +81,7 @@ lemma id
 
 中文:
 引理 id
-  结论: RingHom.Flat (RingHom.id R)
+  结论: 环态射.平坦 (环态射.id R)
   证明: Module.Flat.self
 
 Depends on / 依赖: Module, Module.Flat.self
@@ -102,8 +102,8 @@ lemma comp
 
 中文:
 引理 comp
-  条件: {f : R ->+* S} {g : S ->+* T} (hf : f.Flat) (hg : g.Flat)
-  结论: Flat (g.comp f)
+  条件: {f : R ->+* S} {g : S ->+* T} (hf : f.平坦) (hg : g.平坦)
+  结论: 平坦 (g.comp f)
   证明: by
   algebraize [f, g, (g.comp f)]
   exact Module.Flat.trans R S T
@@ -127,8 +127,8 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
-  结论: Flat f
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
+  结论: 平坦 f
   证明: by
   algebraize [f]
   exact Module.Flat.of_linearEquiv (LinearEquiv.ofBijective (Algebra.linearMap R S) hf).symm
@@ -149,7 +149,7 @@ lemma containsIdentities
 
 中文:
 引理 containsIdentities
-  结论: ContainsIdentities Flat
+  结论: 余ntainsIdentities 平坦
   证明: id
 -/
 lemma containsIdentities : ContainsIdentities Flat := id
@@ -166,7 +166,7 @@ lemma stableUnderComposition
 
 中文:
 引理 stableUnderComposition
-  结论: StableUnderComposition Flat
+  结论: StableUnderComposition 平坦
   证明: by
   introv R hf hg
   exact hf.comp hg
@@ -190,7 +190,7 @@ lemma respectsIso
 
 中文:
 引理 respectsIso
-  结论: RespectsIso Flat
+  结论: RespectsIso 平坦
   证明: by
   apply stableUnderComposition.respectsIso
   introv
@@ -217,7 +217,7 @@ lemma isStableUnderBaseChange
 
 中文:
 引理 isStableUnderBaseChange
-  结论: IsStableUnderBaseChange Flat
+  结论: 是StableUnderBaseChange 平坦
   证明: by
   apply IsStableUnderBaseChange.mk respectsIso
   introv h
@@ -244,7 +244,7 @@ lemma holdsForLocalizationAway
 
 中文:
 引理 holdsForLocalizationAway
-  结论: HoldsForLocalizationAway Flat
+  结论: HoldsForLocalizationAway 平坦
   证明: by
   introv R h
   exact flat_algebraMap_iff.mpr (IsLocalization.flat _ (Submonoid.powers r))
@@ -272,7 +272,7 @@ lemma ofLocalizationSpanTarget
 
 中文:
 引理 ofLocalizationSpanTarget
-  结论: OfLocalizationSpanTarget Flat
+  结论: OfLocalizationSpanTarget 平坦
   证明: by
   introv R hsp h
   algebraize_only [f]
@@ -308,7 +308,7 @@ lemma propertyIsLocal
 
 中文:
 引理 propertyIsLocal
-  结论: 命题ertyIsLocal Flat where
+  结论: PropertyIsLocal 平坦 where
   证明: isStableUnderBaseChange.localizationPreserves.away
   ofLocalizationSpanTarget := ofLocalizationSpanTarget
   ofLocalizationSpan := ofLocalizationSpanTarget.ofLocalizationSpan
@@ -346,7 +346,7 @@ lemma ofLocalizationPrime
 
 中文:
 引理 ofLocalizationPrime
-  结论: OfLocalizationPrime Flat
+  结论: OfLocalizationPrime 平坦
   证明: by
   introv R h
   algebraize_only [f]
@@ -387,7 +387,7 @@ lemma localRingHom
 
 中文:
 引理 localRingHom
-  结论: {f : R ->+* S} (hf : f.Flat)
+  结论: {f : R ->+* S} (hf : f.平坦)
   证明: by
   subst hQP
   algebraize [f, Localization.localRingHom (Ideal.comap f P) P f rfl]
@@ -425,7 +425,7 @@ lemma generalizingMap_comap
 
 中文:
 引理 generalizingMap_comap
-  条件: {f : R ->+* S} (hf : f.Flat)
+  条件: {f : R ->+* S} (hf : f.平坦)
   结论: GeneralizingMap (comap f)
   证明: by
   algebraize [f]
@@ -456,8 +456,8 @@ lemma of_isField
 
 中文:
 引理 of_isField
-  条件: (hR : IsField R) (f : R ->+* S)
-  结论: f.Flat
+  条件: (hR : 是域 R) (f : R ->+* S)
+  结论: f.平坦
   证明: by
   let := f.toAlgebra
   let := hR.toField
@@ -494,7 +494,7 @@ lemma lTensor
 
 中文:
 引理 lTensor
-  条件: {f : B ->ₐ[R] D} (hf : f.Flat)
+  条件: {f : B ->ₐ[R] D} (hf : f.平坦)
   证明: by
   algebraize [f.toRingHom, (Algebra.TensorProduct.lTensor (S := A) A f).toRingHom]
   let e : A otimes[R] D ≃ₐ[A otimes[R] B] (A otimes[R] B) otimes[B] D :=
@@ -529,7 +529,7 @@ lemma tensorProductMap
 
 中文:
 引理 tensorProductMap
-  条件: {f : A ->ₐ[S] C} {g : B ->ₐ[R] D} (hf : f.Flat) (hg : g.Flat)
+  条件: {f : A ->ₐ[S] C} {g : B ->ₐ[R] D} (hf : f.平坦) (hg : g.平坦)
   证明: by
   have heq : Algebra.TensorProduct.map f g =
       (Algebra.TensorProduct.map f (.id R D)).comp (Algebra.TensorProduct.map (.id _ _) g) := by
@@ -578,7 +578,7 @@ lemma comp_iff_of_bijective_left
 
 中文:
 引理 comp_iff_of_bijective_left
-  条件: {f : R ->+* S} {g : S ->+* T} (hg : Function.Bijective g)
+  条件: {f : R ->+* S} {g : S ->+* T} (hg : 函数.双射 g)
   证明: by
   refine ⟨fun hf => ?_, fun hf => .comp hf (.of_bijective hg)⟩
   let e := RingEquiv.ofBijective g hg
@@ -613,7 +613,7 @@ lemma comp_iff_of_bijective_right
 
 中文:
 引理 comp_iff_of_bijective_right
-  条件: {f : R ->+* S} {g : T ->+* R} (hg : Function.Bijective g)
+  条件: {f : R ->+* S} {g : T ->+* R} (hg : 函数.双射 g)
   证明: by
   refine ⟨fun hf => ?_, fun hf => .comp (.of_bijective hg) hf⟩
   let e := RingEquiv.ofBijective g hg
@@ -651,7 +651,7 @@ lemma ulift_iff
 中文:
 引理 ulift_iff
   条件: {f : R ->+* S}
-  结论: (ulift.{u₁, u₂} f).Flat ↔ f.Flat
+  结论: (ulift.{u₁, u₂} f).平坦 ↔ f.平坦
   证明: by
   refine ⟨fun hf => ?_, fun hf => ?_⟩
   · rwa [← comp_ulift_eq.{u₁, u₂} f, comp_iff_of_bijective_left (Equiv.bijective _),
@@ -689,7 +689,7 @@ lemma CommRingCat.inr_injective_of_flat
 .injective.comp (Algebra.TensorProduct.includeRight_injective (B := T) 
 
 中文:
-引理 CommRingCat.inr_injective_of_flat
+引理 交换环范畴.inr_injective_of_flat
   证明: by
   algebraize [f.hom, g.hom]
   have : _ = pushout.inr f g := (CommRingCat.isPushout_tensorProduct R S T).inr_isoPushout_hom
@@ -720,7 +720,7 @@ lemma CommRingCat.inl_injective_of_flat
 .injective.comp (Algebra.TensorProduct.includeLeft_injective (S := R) (
 
 中文:
-引理 CommRingCat.inl_injective_of_flat
+引理 交换环范畴.inl_injective_of_flat
   证明: by
   algebraize [f.hom, g.hom]
   have : _ = pushout.inl f g := (CommRingCat.isPushout_tensorProduct R S T).inl_isoPushout_hom
@@ -756,7 +756,7 @@ definition flat
 
 中文:
 定义 flat
-  签名: : Morphism命题erty CommRingCat.{u}
+  签名: : MorphismProperty 交换环范畴.{u}
   定义体: RingHom.toMorphismProperty fun f => f.Flat
 
 @[simp]
@@ -777,7 +777,7 @@ lemma flat_iff
 
 中文:
 引理 flat_iff
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: .rfl
 -/
 lemma flat_iff {R S : CommRingCat.{u}} (f : R ⟶ S) :
@@ -793,7 +793,7 @@ lemma flat_ofHom_iff
 
 中文:
 引理 flat_ofHom_iff
-  条件: {R S : 类型u} [CommRing R] [CommRing S] (f : R ->+* S)
+  条件: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
   证明: .rfl
 -/
 lemma flat_ofHom_iff {R S : Type u} [CommRing R] [CommRing S] (f : R ->+* S) :
@@ -811,7 +811,7 @@ instance :
 
 中文:
 实例 :
-  签名: flat.IsStableUnderCobaseChange
+  签名: flat.是StableUnderCobaseChange
   定义体: by
   rw [flat]; rw [RingHom.isStableUnderCobaseChange_toMorphismProperty_iff]
   exact RingHom.Flat.isStableUnderBaseChange
@@ -845,7 +845,7 @@ lemma RingHom.Flat.mapOfCompatibleSMul
       (RingHom.comp (Algebra.TensorProduct.i
 
 中文:
-引理 RingHom.Flat.mapOfCompatibleSMul
+引理 环态射.平坦.mapOfCompatibleSMul
   结论: {R S : 类型u} (T A : 类型u)
   证明: by
   rw [← CommRingCat.flat_ofHom_iff] at h ⊢

@@ -30,9 +30,9 @@ class RingConeClass
   (no additional axioms)
 
 中文:
-类 RingConeClass
-  参数: (S : 类型) (R : outParam 类型) [Ring R] [SetLike S R]
-  继承: AddGroupConeClass S R, SubsemiringClass S R
+类 RingCone类
+  参数: (S : 类型) (R : outParam 类型) [环 R] [集合状 S R]
+  继承: 加法群锥类 S R, 子半环类 S R
   (无附加公理)
 -/
 class RingConeClass (S : Type*) (R : outParam Type*) [Ring R] [SetLike S R] : Prop
@@ -49,8 +49,8 @@ structure RingCone
 
 中文:
 结构 RingCone
-  参数: (R : 类型) [Ring R]
-  继承: Subsemiring R, AddGroupCone R
+  参数: (R : 类型) [环 R]
+  继承: 子半环 R, 加法群锥 R
   (无附加公理)
 -/
 structure RingCone (R : Type*) [Ring R] extends Subsemiring R, AddGroupCone R
@@ -69,7 +69,7 @@ instance RingCone.instSetLike
 
 中文:
 实例 RingCone.instSetLike
-  签名: (R : 类型) [Ring R]
+  签名: (R : 类型) [环 R]
   定义体: C.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
 
@@ -97,7 +97,7 @@ instance RingCone.instRingConeClass
 
 中文:
 实例 RingCone.instRingConeClass
-  签名: (R : 类型) [Ring R]
+  签名: (R : 类型) [环 R]
   定义体: C.add_mem'
   zero_mem {C} := C.zero_mem'
   mul_mem {C} := C.mul_mem'
@@ -129,7 +129,7 @@ theorem RingCone.mem_mk
 
 中文:
 定理 RingCone.mem_mk
-  结论: {R : 类型} [Ring R] {toSubsemiring : Subsemiring R}
+  结论: {R : 类型} [环 R] {toSubsemiring : 子半环 R}
   证明: .rfl
 
 @[simp]
@@ -149,7 +149,7 @@ theorem RingCone.coe_set_mk
 
 中文:
 定理 RingCone.coe_set_mk
-  结论: {R : 类型} [Ring R] {toSubsemiring : Subsemiring R}
+  结论: {R : 类型} [环 R] {toSubsemiring : 子半环 R}
   证明: rfl
 -/
 theorem RingCone.coe_set_mk {R : Type*} [Ring R] {toSubsemiring : Subsemiring R}
@@ -249,7 +249,7 @@ instance nonneg.hasMemOrNegMem
 
 中文:
 实例 nonneg.hasMemOrNegMem
-  签名: {T : 类型} [Ring T] [LinearOrder T] [IsOrderedRing T]
+  签名: {T : 类型} [环 T] [线性序 T] [是Ordered环 T]
   定义体: mem_or_neg_mem (AddGroupCone.nonneg T)
 
 Depends on / 依赖: AddGroupCone, AddGroupCone.nonneg, mem_or_neg_mem, nonneg
@@ -276,8 +276,8 @@ lemma IsOrderedRing.mkOfCone
   .of_mul_nonneg fun x y xnn ynn => show _ in C by simpa using mul_mem xnn ynn
 
 中文:
-引理 IsOrderedRing.mkOfCone
-  条件: [RingConeClass S R]
+引理 是Ordered环.mkOfCone
+  条件: [RingCone类 S R]
   证明: .mkOfAddGroupCone C
     IsOrderedRing R :=
   letI _ : PartialOrder R := .mkOfAddGroupCone C

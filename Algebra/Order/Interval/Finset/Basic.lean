@@ -216,7 +216,7 @@ lemma image_add_left_Icc
 中文:
 引理 image_add_left_Icc
   条件: (a b c : α)
-  结论: (Icc a b).image (c + ·) = Icc (c + a) (c + b)
+  结论: (闭区间 a b).像 (c + ·) = 闭区间 (c + a) (c + b)
   证明: by
   rw [← map_add_left_Icc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -236,7 +236,7 @@ lemma image_add_left_Ico
 中文:
 引理 image_add_left_Ico
   条件: (a b c : α)
-  结论: (Ico a b).image (c + ·) = Ico (c + a) (c + b)
+  结论: (左闭右开区间 a b).像 (c + ·) = 左闭右开区间 (c + a) (c + b)
   证明: by
   rw [← map_add_left_Ico]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -256,7 +256,7 @@ lemma image_add_left_Ioc
 中文:
 引理 image_add_left_Ioc
   条件: (a b c : α)
-  结论: (Ioc a b).image (c + ·) = Ioc (c + a) (c + b)
+  结论: (左开右闭区间 a b).像 (c + ·) = 左开右闭区间 (c + a) (c + b)
   证明: by
   rw [← map_add_left_Ioc]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -276,7 +276,7 @@ lemma image_add_left_Ioo
 中文:
 引理 image_add_left_Ioo
   条件: (a b c : α)
-  结论: (Ioo a b).image (c + ·) = Ioo (c + a) (c + b)
+  结论: (开区间 a b).像 (c + ·) = 开区间 (c + a) (c + b)
   证明: by
   rw [← map_add_left_Ioo]; rw [map_eq_image]; rw [addLeftEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -296,7 +296,7 @@ lemma image_add_right_Icc
 中文:
 引理 image_add_right_Icc
   条件: (a b c : α)
-  结论: (Icc a b).image (· + c) = Icc (a + c) (b + c)
+  结论: (闭区间 a b).像 (· + c) = 闭区间 (a + c) (b + c)
   证明: by
   rw [← map_add_right_Icc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -316,7 +316,7 @@ lemma image_add_right_Ico
 中文:
 引理 image_add_right_Ico
   条件: (a b c : α)
-  结论: (Ico a b).image (· + c) = Ico (a + c) (b + c)
+  结论: (左闭右开区间 a b).像 (· + c) = 左闭右开区间 (a + c) (b + c)
   证明: by
   rw [← map_add_right_Ico]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -336,7 +336,7 @@ lemma image_add_right_Ioc
 中文:
 引理 image_add_right_Ioc
   条件: (a b c : α)
-  结论: (Ioc a b).image (· + c) = Ioc (a + c) (b + c)
+  结论: (左开右闭区间 a b).像 (· + c) = 左开右闭区间 (a + c) (b + c)
   证明: by
   rw [← map_add_right_Ioc]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
 -/
@@ -356,7 +356,7 @@ lemma image_add_right_Ioo
 中文:
 引理 image_add_right_Ioo
   条件: (a b c : α)
-  结论: (Ioo a b).image (· + c) = Ioo (a + c) (b + c)
+  结论: (开区间 a b).像 (· + c) = 开区间 (a + c) (b + c)
   证明: by
   rw [← map_add_right_Ioo]; rw [map_eq_image]; rw [addRightEmbedding]; rw [Embedding.coeFn_mk]
 -/

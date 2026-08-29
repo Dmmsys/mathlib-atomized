@@ -50,8 +50,8 @@ instance [Zero
   body: ⟨(0 : α)⟩
 
 中文:
-实例 [Zero
-  签名: α] : Zero (Completion α)
+实例 [零
+  签名: α] : 零 (完备化 α)
   定义体: ⟨(0 : α)⟩
 -/
 instance [Zero α] : Zero (Completion α) :=
@@ -66,8 +66,8 @@ instance [Neg
   body: ⟨Completion.map (fun a => -a : α -> α)⟩
 
 中文:
-实例 [Neg
-  签名: α] : Neg (Completion α)
+实例 [取负
+  签名: α] : 取负 (完备化 α)
   定义体: ⟨Completion.map (fun a => -a : α -> α)⟩
 
 Depends on / 依赖: Completion, Completion.map
@@ -84,8 +84,8 @@ instance [Add
   body: ⟨Completion.map₂ (· + ·)⟩
 
 中文:
-实例 [Add
-  签名: α] : Add (Completion α)
+实例 [加法
+  签名: α] : 加法 (完备化 α)
   定义体: ⟨Completion.map₂ (· + ·)⟩
 
 Depends on / 依赖: Completion, Completion.map
@@ -104,8 +104,8 @@ instance [Sub
 @[norm_cast]
 
 中文:
-实例 [Sub
-  签名: α] : Sub (Completion α)
+实例 [减法
+  签名: α] : 减法 (完备化 α)
   定义体: ⟨Completion.map₂ Sub.sub⟩
 
 @[norm_cast]
@@ -126,9 +126,9 @@ theorem UniformSpace.Completion.coe_zero
   proof: rfl
 
 中文:
-定理 UniformSpace.Completion.coe_zero
-  条件: [Zero α]
-  结论: ((0 : α) : Completion α) = 0
+定理 一致空间.完备化.coe_zero
+  条件: [零 α]
+  结论: ((0 : α) : 完备化 α) = 0
   证明: rfl
 -/
 theorem UniformSpace.Completion.coe_zero [Zero α] : ((0 : α) : Completion α) = 0 :=
@@ -143,8 +143,8 @@ lemma UniformSpace.Completion.coe_eq_zero_iff
   proof: Completion.coe_inj
 
 中文:
-引理 UniformSpace.Completion.coe_eq_zero_iff
-  条件: [Zero α] [T0Space α] {x : α}
+引理 一致空间.完备化.coe_eq_zero_iff
+  条件: [零 α] [T0空间 α] {x : α}
   证明: Completion.coe_inj
 -/
 @[simp] lemma UniformSpace.Completion.coe_eq_zero_iff [Zero α] [T0Space α] {x : α} :
@@ -171,8 +171,8 @@ instance [UniformSpace
       rw [← coe_smul]; rw [zero_smul]; rw [coe_zero]
 
 中文:
-实例 [UniformSpace
-  签名: α] [MonoidWithZero M] [Zero α] [MulActionWithZero M α]
+实例 [一致空间
+  签名: α] [带零幺半群 M] [零 α] [带零乘法作用 M α]
   定义体: fun r => by rw [← coe_zero, ← coe_smul, MulActionWithZero.smul_zero r]
   zero_smul :=
     ext' (continuous_const_smul _) continuous_const fun a => by
@@ -208,7 +208,7 @@ theorem coe_neg
 中文:
 定理 coe_neg
   条件: (a : α)
-  结论: ((-a : α) : Completion α) = -a
+  结论: ((-a : α) : 完备化 α) = -a
   证明: (map_coe uniformContinuous_neg a).symm
 
 @[norm_cast]
@@ -233,7 +233,7 @@ theorem coe_sub
 中文:
 定理 coe_sub
   条件: (a b : α)
-  结论: ((a - b : α) : Completion α) = a - b
+  结论: ((a - b : α) : 完备化 α) = a - b
   证明: (map₂_coe_coe a b Sub.sub uniformContinuous_sub).symm
 
 @[norm_cast]
@@ -256,7 +256,7 @@ theorem coe_add
 中文:
 定理 coe_add
   条件: (a b : α)
-  结论: ((a + b : α) : Completion α) = a + b
+  结论: ((a + b : α) : 完备化 α) = a + b
   证明: (map₂_coe_coe a b (· + ·) uniformContinuous_add).symm
 
 Depends on / 依赖: uniformContinuous_add
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (Completion α)
+  签名: 加法幺半群 (完备化 α)
   定义体: Completion.induction_on a
       (isClosed_eq (continuous_map₂ continuous_const continuous_id) continuous_id) fun a =>
       show 0 + (a : Completion α) = a by rw [← coe_zero, ← coe_add, zero_add]
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubNegMonoid (Completion α)
+  签名: SubNeg幺半群 (完备化 α)
   定义体: Completion.induction_on₂ a b
       (isClosed_eq (continuous_map₂ continuous_fst continuous_snd)
         (continuous_map₂ continuous_fst (Completion.continuous_map.comp continuous_snd)))
@@ -376,7 +376,7 @@ instance addGroup
 
 中文:
 实例 addGroup
-  签名: : AddGroup (Completion α) where
+  签名: : 加法群 (完备化 α) where
   定义体: Completion.induction_on a
       (isClosed_eq (continuous_map₂ Completion.continuous_map continuous_id) continuous_const)
       fun a =>
@@ -405,7 +405,7 @@ instance isUniformAddGroup
 
 中文:
 实例 isUniformAddGroup
-  签名: : IsUniformAddGroup (Completion α)
+  签名: : 是UniformAdd群 (完备化 α)
   定义体: ⟨uniformContinuous_map₂ Sub.sub⟩
 
 Depends on / 依赖: Sub.sub
@@ -436,7 +436,7 @@ definition toCompl
 
 中文:
 定义 toCompl
-  签名: : α ->+ Completion α where
+  签名: : α ->+ 完备化 α where
   定义体: (↑)
   map_add' := coe_add
   map_zero' := coe_zero
@@ -456,7 +456,7 @@ theorem continuous_toCompl
 
 中文:
 定理 continuous_toCompl
-  结论: Continuous (toCompl : α -> Completion α)
+  结论: 连续 (toCompl : α -> 完备化 α)
   证明: continuous_coe α
 
 Depends on / 依赖: continuous_coe
@@ -475,7 +475,7 @@ theorem isDenseInducing_toCompl
 
 中文:
 定理 isDenseInducing_toCompl
-  结论: IsDenseInducing (toCompl : α -> Completion α)
+  结论: 是DenseInducing (toCompl : α -> 完备化 α)
   证明: isDenseInducing_coe
 
 Depends on / 依赖: isDenseInducing_coe
@@ -505,7 +505,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (Completion α)
+  签名: : 加法交换群 (完备化 α)
   定义体: { (inferInstance : AddGroup <| Completion α) with
     add_comm a b :=
       Completion.induction_on₂ a b
@@ -540,7 +540,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [Module R α] [UniformContinuousConstSMul R α]
+  签名: [半环 R] [模 R α] [一致连续常数标量乘法 R α]
   定义体: { (inferInstance : DistribMulAction R <| Completion α),
     (inferInstance : MulActionWithZero R <| Completion α) with
     add_smul := fun a b =>
@@ -585,8 +585,8 @@ definition AddMonoidHom.extension
         fun 
 
 中文:
-定义 AddMonoidHom.extension
-  签名: [CompleteSpace β] [T0Space β] (f : α ->+ β) (hf : Continuous f)
+定义 加法幺半群态射.extension
+  签名: [完备空间 β] [T0空间 β] (f : α ->+ β) (hf : 连续 f)
   定义体: have hf : UniformContinuous f := uniformContinuous_addMonoidHom_of_continuous hf
   { toFun := Completion.extension f
     map_zero' := by rw [← coe_zero, extension_coe hf, f.map_zero]
@@ -620,8 +620,8 @@ theorem AddMonoidHom.extension_coe
 @[continuity, fun_prop]
 
 中文:
-定理 AddMonoidHom.extension_coe
-  结论: [CompleteSpace β] [T0Space β] (f : α ->+ β)
+定理 加法幺半群态射.extension_coe
+  结论: [完备空间 β] [T0空间 β] (f : α ->+ β)
   证明: UniformSpace.Completion.extension_coe (uniformContinuous_addMonoidHom_of_continuous hf) a
 
 @[continuity, fun_prop]
@@ -642,8 +642,8 @@ theorem AddMonoidHom.continuous_extension
   proof: UniformSpace.Completion.continuous_extension
 
 中文:
-定理 AddMonoidHom.continuous_extension
-  结论: [CompleteSpace β] [T0Space β] (f : α ->+ β)
+定理 加法幺半群态射.continuous_extension
+  结论: [完备空间 β] [T0空间 β] (f : α ->+ β)
   证明: UniformSpace.Completion.continuous_extension
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion.continuous_extension, continuous_extension
@@ -663,8 +663,8 @@ definition AddMonoidHom.completion
 @[continuity, fun_prop]
 
 中文:
-定义 AddMonoidHom.completion
-  签名: (f : α ->+ β) (hf : Continuous f)
+定义 加法幺半群态射.completion
+  签名: (f : α ->+ β) (hf : 连续 f)
   定义体: (toCompl.comp f).extension (continuous_toCompl.comp hf)
 
 @[continuity, fun_prop]
@@ -686,8 +686,8 @@ theorem AddMonoidHom.continuous_completion
 @[simp]
 
 中文:
-定理 AddMonoidHom.continuous_completion
-  条件: (f : α ->+ β) (hf : Continuous f)
+定理 加法幺半群态射.continuous_completion
+  条件: (f : α ->+ β) (hf : 连续 f)
   证明: continuous_map
 
 @[simp]
@@ -708,8 +708,8 @@ theorem AddMonoidHom.completion_coe
   proof: map_coe (uniformContinuous_addMonoidHom_of_continuous hf) a
 
 中文:
-定理 AddMonoidHom.completion_coe
-  条件: (f : α ->+ β) (hf : Continuous f) (a : α)
+定理 加法幺半群态射.completion_coe
+  条件: (f : α ->+ β) (hf : 连续 f) (a : α)
   证明: map_coe (uniformContinuous_addMonoidHom_of_continuous hf) a
 
 Depends on / 依赖: map_coe, uniformContinuous_addMonoidHom_of_continuous
@@ -731,7 +731,7 @@ theorem AddMonoidHom.completion_zero
   · simp [(0 : α ->+ β).completion_coe continuous_const, coe_zero]
 
 中文:
-定理 AddMonoidHom.completion_zero
+定理 加法幺半群态射.completion_zero
   证明: by
   ext x
   refine Completion.induction_on x ?_ ?_
@@ -764,8 +764,8 @@ theorem AddMonoidHom.completion_add
   · simp [(f + g).completion_coe hfg, coe_add, f.completion_coe hf, g.completion_coe hg]
 
 中文:
-定理 AddMonoidHom.completion_add
-  结论: {γ : 类型} [AddCommGroup γ] [UniformSpace γ]
+定理 加法幺半群态射.completion_add
+  结论: {γ : 类型} [加法交换群 γ] [一致空间 γ]
   证明: by
   have hfg := hf.add hg
   ext x

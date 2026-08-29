@@ -38,8 +38,8 @@ theorem Rat.denseRange_cast
   proof: dense_of_exists_between fun _ _ h => Set.exists_range_iff.2 exists_rat_btwn h
 
 中文:
-定理 Rat.denseRange_cast
-  结论: {𝕜} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+定理 有理数.denseRange_cast
+  结论: {𝕜} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: dense_of_exists_between fun _ _ h => Set.exists_range_iff.2 exists_rat_btwn h
 
 Depends on / 依赖: Set.exists_range_iff, dense_of_exists_between, exists_range_iff, exists_rat_btwn
@@ -78,7 +78,7 @@ theorem dense_of_not_isolated_one
 
 中文:
 定理 dense_of_not_isolated_one
-  条件: (S : Subgroup G) (hS : 对任意 ε > 1, 存在 g in S, g in Ioo 1 ε)
+  条件: (S : 子群 G) (hS : 对任意 ε > 1, 存在 g in S, g in 开区间 1 ε)
   证明: by
   cases subsingleton_or_nontrivial G
   · refine fun x => _root_.subset_closure ?_
@@ -122,7 +122,7 @@ theorem dense_of_no_min
 
 中文:
 定理 dense_of_no_min
-  结论: (S : Subgroup G) (hbot : S != ⊥)
+  结论: (S : 子群 G) (hbot : S != ⊥)
   证明: by
   refine S.dense_of_not_isolated_one fun ε ε1 => ?_
   contrapose! H
@@ -156,8 +156,8 @@ theorem dense_or_cyclic
 
 中文:
 定理 dense_or_cyclic
-  条件: (S : Subgroup G)
-  结论: Dense (S : Set G) ∨ 存在 a : G, S = closure {a}
+  条件: (S : 子群 G)
+  结论: 稠密 (S : 集合 G) ∨ 存在 a : G, S = closure {a}
   证明: by
   refine (em _).imp (dense_of_not_isolated_one S) fun h => ?_
   push Not at h
@@ -203,7 +203,7 @@ theorem dense_xor_cyclic
 
 中文:
 定理 dense_xor_cyclic
-  条件: (s : Subgroup G)
+  条件: (s : 子群 G)
   证明: by
   if hd : Dense (s : Set G) then
     simp only [hd, xor_true]
@@ -242,7 +242,7 @@ theorem dense_iff_ne_zpowers
 
 中文:
 定理 dense_iff_ne_zpowers
-  条件: {s : Subgroup G}
+  条件: {s : 子群 G}
   证明: by
   simp [xor_iff_iff_not.1 s.dense_xor_cyclic]
 

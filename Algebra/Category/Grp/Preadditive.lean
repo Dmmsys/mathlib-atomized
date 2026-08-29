@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M ⟶ N)
+  签名: 加法 (M ⟶ N)
   定义体: ofHom (f.hom + g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -70,7 +70,7 @@ lemma hom_add_apply
 
 中文:
 引理 hom_add_apply
-  条件: {P Q : AddCommGrpCat} (f g : P ⟶ Q) (x : P)
+  条件: {P Q : 加法交换群范畴} (f g : P ⟶ Q) (x : P)
   结论: (f + g) x = f x + g x
   证明: rfl
 -/
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ⟶ N)
+  签名: 零 (M ⟶ N)
   定义体: ofHom 0
 -/
 instance : Zero (M ⟶ N) where
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (M ⟶ N)
+  签名: 标量乘法 自然数 (M ⟶ N)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: f.hom
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M ⟶ N)
+  签名: 取负 (M ⟶ N)
   定义体: ofHom (-f.hom)
 
 Depends on / 依赖: f.hom
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M ⟶ N)
+  签名: 减法 (M ⟶ N)
   定义体: ofHom (f.hom - g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (M ⟶ N)
+  签名: 标量乘法 整数 (M ⟶ N)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: GrpObj, GrpObj.left_inv, GrpObj.right_inv, f.hom, left_inv, ofAlgHom, right_inv, unop.hom
@@ -260,7 +260,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive AddCommGrpCat
+  签名: 预加性 加法交换群范畴
 
 Depends on / 依赖: CommAlgCat, CommAlgCat.of, IsCommMonObj
 -/

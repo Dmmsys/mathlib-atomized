@@ -62,7 +62,7 @@ definition map
 
 中文:
 定义 map
-  签名: (hf : IsSpectralMap f) (c : locallyFinsupp X R)
+  签名: (hf : 是谱映射 f) (c : locallyFinsupp X R)
   定义体: ∑ᶠ x in f ⁻¹' {z}, c x * w x
   supportWithinDomain' := by simp
   supportLocallyFiniteWithinDomain' y _ := by
@@ -99,7 +99,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  条件: (hf : IsSpectralMap f) (c : locallyFinsupp X R) (y : Y)
+  条件: (hf : 是谱映射 f) (c : locallyFinsupp X R) (y : Y)
   证明: rfl
 -/
 lemma map_apply (hf : IsSpectralMap f) (c : locallyFinsupp X R) (y : Y) :
@@ -119,8 +119,8 @@ lemma support_map_subset_of_forall_mem
 @[simp]
 
 中文:
-引理 support_map_subset_of_forall_mem
-  结论: (s : Set X) (t : Set Y) (hc : c.support subseteq s)
+引理 support_map_subset_of_对任意_mem
+  结论: (s : 集合 X) (t : 集合 Y) (hc : c.support subseteq s)
   证明: by
   intro y hy
   obtain ⟨x, (rfl : f x = y), h'⟩ := exists_ne_zero_of_finsum_mem_ne_zero hy
@@ -149,7 +149,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: [PrespectralSpace X] (hw : 对任意 z : X, w z = 1)
+  条件: [Prespectral空间 X] (hw : 对任意 z : X, w z = 1)
   证明: by
   ext
   simp [map, hw]

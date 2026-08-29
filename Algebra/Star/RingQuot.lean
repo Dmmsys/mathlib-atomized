@@ -42,7 +42,7 @@ theorem Rel.star
                      exa
 
 中文:
-定理 Rel.star
+定理 关系.star
   结论: (hr : 对任意 a b, r a b -> r (star a) (star b))
   证明: by
   induction h with
@@ -118,7 +118,7 @@ definition starRing
 
 中文:
 定义 starRing
-  签名: {R : 类型u} [Semiring R] [StarRing R] (r : R -> R -> 命题)
+  签名: {R : 类型u} [半环 R] [对合环 R] (r : R -> R -> 命题)
   定义体: star' r hr
   star_involutive := by
     rintro ⟨⟨⟩⟩

@@ -91,7 +91,7 @@ theorem Equicontinuous.comap_uniformFun_eq
 
 中文:
 定理 Equicontinuous.comap_uniformFun_eq
-  条件: [CompactSpace X] (F_eqcont : Equicontinuous F)
+  条件: [紧空间 X] (F_eqcont : Equicontinuous F)
   证明: by
   -- The `≤` inequality is trivial
   refine le_antisymm (UniformSpace.comap_mono UniformFun.uniformContinuous_toFun) ?_
@@ -153,7 +153,7 @@ lemma Equicontinuous.isUniformInducing_uniformFun_iff_pi
 
 中文:
 引理 Equicontinuous.isUniformInducing_uniformFun_iff_pi
-  结论: [UniformSpace ι] [CompactSpace X]
+  结论: [一致空间 ι] [紧空间 X]
   证明: by
   rw [isUniformInducing_iff_uniformSpace]; rw [isUniformInducing_iff_uniformSpace]; rw [← F_eqcont.comap_uniformFun_eq]
   rfl
@@ -180,7 +180,7 @@ lemma Equicontinuous.inducing_uniformFun_iff_pi
 
 中文:
 引理 Equicontinuous.inducing_uniformFun_iff_pi
-  结论: [TopologicalSpace ι] [CompactSpace X]
+  结论: [拓扑空间 ι] [紧空间 X]
   证明: by
   rw [isInducing_iff]; rw [isInducing_iff]
   change (_ = (UniformFun.uniformSpace X α |>.comap F |>.toTopologicalSpace)) ↔
@@ -214,7 +214,7 @@ theorem Equicontinuous.tendsto_uniformFun_iff_pi
 
 中文:
 定理 Equicontinuous.tendsto_uniformFun_iff_pi
-  结论: [CompactSpace X]
+  结论: [紧空间 X]
   证明: by
   -- Assume `ℱ` is non-trivial.
   rcases ℱ.eq_or_neBot with rfl | ℱ_ne
@@ -277,7 +277,7 @@ theorem EquicontinuousOn.comap_uniformOnFun_eq
 
 中文:
 定理 EquicontinuousOn.comap_uniformOnFun_eq
-  结论: {𝔖 : Set (Set X)} (𝔖_compact : 对任意 K in 𝔖, IsCompact K)
+  结论: {𝔖 : 集合 (集合 X)} (𝔖_compact : 对任意 K in 𝔖, 是紧集 K)
   证明: by
   -- Recall that the uniform structure on `X →ᵤ[𝔖] α` is the one induced by all the maps
   -- `K.domRestrict : (X →ᵤ[𝔖] α) → (K →ᵤ α)` for `K ∈ 𝔖`. Its pullback along `F`, which is
@@ -327,7 +327,7 @@ lemma EquicontinuousOn.isUniformInducing_uniformOnFun_iff_pi'
 
 中文:
 引理 EquicontinuousOn.isUniformInducing_uniformOnFun_iff_pi'
-  结论: [UniformSpace ι]
+  结论: [一致空间 ι]
   证明: by
   rw [isUniformInducing_iff_uniformSpace]; rw [isUniformInducing_iff_uniformSpace]; rw [← EquicontinuousOn.comap_uniformOnFun_eq 𝔖_compact F_eqcont]
   rfl
@@ -357,7 +357,7 @@ lemma EquicontinuousOn.isUniformInducing_uniformOnFun_iff_pi
 
 中文:
 引理 EquicontinuousOn.isUniformInducing_uniformOnFun_iff_pi
-  结论: [UniformSpace ι]
+  结论: [一致空间 ι]
   证明: by
   rw [eq_univ_iff_forall] at 𝔖_covers
   -- This obviously follows from the previous lemma, we formalize it by going through the
@@ -394,7 +394,7 @@ lemma EquicontinuousOn.inducing_uniformOnFun_iff_pi'
 
 中文:
 引理 EquicontinuousOn.inducing_uniformOnFun_iff_pi'
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: by
   rw [isInducing_iff]; rw [isInducing_iff]
   change (_ = ((UniformOnFun.uniformSpace X α 𝔖).comap F).toTopologicalSpace) ↔
@@ -428,7 +428,7 @@ lemma EquicontinuousOn.isInducing_uniformOnFun_iff_pi
 
 中文:
 引理 EquicontinuousOn.isInducing_uniformOnFun_iff_pi
-  结论: [TopologicalSpace ι]
+  结论: [拓扑空间 ι]
   证明: by
   rw [eq_univ_iff_forall] at 𝔖_covers
   -- This obviously follows from the previous lemma, we formalize it by going through the
@@ -610,7 +610,7 @@ theorem ArzelaAscoli.compactSpace_of_closed_inducing'
 
 中文:
 定理 ArzelaAscoli.compactSpace_of_closed_inducing'
-  结论: [TopologicalSpace ι] {𝔖 : Set (Set X)}
+  结论: [拓扑空间 ι] {𝔖 : 集合 (集合 X)}
   证明: by
   -- By equicontinuity, we know that the topology on `ι` is also the one induced by
   -- `domRestrict (⋃₀ 𝔖) ∘ F`.
@@ -654,7 +654,7 @@ theorem ArzelaAscoli.compactSpace_of_isClosedEmbedding
 
 中文:
 定理 ArzelaAscoli.compactSpace_of_isClosedEmbedding
-  结论: [TopologicalSpace ι] {𝔖 : Set (Set X)}
+  结论: [拓扑空间 ι] {𝔖 : 集合 (集合 X)}
   证明: compactSpace_of_closed_inducing' 𝔖_compact F_clemb.isInducing F_clemb.isClosed_range
     F_eqcont F_pointwiseCompact
 
@@ -683,7 +683,7 @@ theorem ArzelaAscoli.isCompact_closure_of_isClosedEmbedding
 
 中文:
 定理 ArzelaAscoli.isCompact_closure_of_isClosedEmbedding
-  结论: [TopologicalSpace ι] [T2Space α]
+  结论: [拓扑空间 ι] [T2空间 α]
   证明: by
   -- We apply `ArzelaAscoli.compactSpace_of_isClosedEmbedding` to the map
   -- `F ∘ (↑) : closure s → (X → α)`, for which all the hypotheses are easily verified.

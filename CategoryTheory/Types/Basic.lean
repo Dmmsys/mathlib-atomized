@@ -214,7 +214,7 @@ structure Hom
     - hom' : Fun X Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : 类型u)
   公理与运算 (2 个):
     - private(mk) : :
@@ -242,8 +242,8 @@ id X := .mk .id X
 comp f g := .mk g.hom'.comp f.hom'
 
 中文:
-实例 CategoryTheory.types
-  签名: : Category.{u} (类型u) where
+实例 范畴论.types
+  签名: : 范畴.{u} (类型u) where
   定义体: Hom
 id X := .mk .id X
 comp f g := .mk g.hom'.comp f.hom'
@@ -275,7 +275,7 @@ example (X Y : Type*) (f : Fun X Y) : (f : X -> Y) = f := by
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} (类型u) Fun
+  签名: 余ncrete范畴.{u} (类型u) Fun
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -317,8 +317,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := Type u) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : 类型u} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 类型u} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := Type u) f
 -/
 abbrev Hom.hom {X Y : Type u} (f : Hom X Y) : Fun X Y :=
@@ -366,7 +366,7 @@ initialize_simps_projections Hom (hom' -> hom)
 @[simp]
 
 中文:
-定义 Hom.Simps.hom
+定义 态射.Simps.hom
   签名: (X Y : 类型u) (f : X ⟶ Y)
   定义体: ConcreteCategory.hom f
 
@@ -446,7 +446,7 @@ lemma hom_ofHom
 中文:
 引理 hom_ofHom
   条件: {X Y : 类型u} (f : X -> Y)
-  结论: Hom.hom (ofHom f) = Fun.mk f
+  结论: 态射.hom (ofHom f) = Fun.mk f
   证明: rfl
 
 @[simp]
@@ -468,7 +468,7 @@ lemma ofHom_hom
 中文:
 引理 ofHom_hom
   条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: ofHom (Hom.hom f) = f
+  结论: ofHom (态射.hom f) = f
   证明: rfl
 
 @[simp]
@@ -712,7 +712,7 @@ definition sections
 
 中文:
 定义 sections
-  签名: (F : J ⥤ Type w)
+  签名: (F : J ⥤ 类型 w)
   定义体: { u | forall {j j'} (f : j ⟶ j'), F.map f (u j) = u j' }
 
 @[simp]
@@ -733,7 +733,7 @@ lemma sections_property
 
 中文:
 引理 sections_property
-  结论: {F : J ⥤ Type w} (s : F.sections)
+  结论: {F : J ⥤ 类型 w} (s : F.sections)
   证明: s.property f
 
 Depends on / 依赖: property, s.property
@@ -753,7 +753,7 @@ lemma sections_ext_iff
 
 中文:
 引理 sections_ext_iff
-  条件: {F : J ⥤ Type w} {x y : F.sections}
+  条件: {F : J ⥤ 类型 w} {x y : F.sections}
   结论: x = y ↔ 对任意 j, x.val j = y.val j
   证明: Subtype.ext_iff.trans funext_iff
 
@@ -778,7 +778,7 @@ definition sectionsFunctor
 
 中文:
 定义 sectionsFunctor
-  签名: : (J ⥤ Type w) ⥤ Type max u w where
+  签名: : (J ⥤ 类型 w) ⥤ 类型 最大值 u w where
   定义体: F.sections
   map {F G} φ := ↾fun x => ⟨fun j => φ.app j (x.1 j), fun {j j'} f =>
     by simp [← NatTrans.naturality_apply, x.2 f]⟩
@@ -1006,7 +1006,7 @@ definition uliftFunctor
 
 中文:
 定义 uliftFunctor
-  签名: : 类型u ⥤ Type max u v where
+  签名: : 类型u ⥤ 类型 最大值 u v where
   定义体: ULift.{v} X
   map {X} {_} f := ofHom fun x : ULift.{v} X => ULift.up (f x.down)
 -/
@@ -1024,7 +1024,7 @@ definition fullyFaithfulULiftFunctor
 
 中文:
 定义 fullyFaithfulULiftFunctor
-  签名: : (uliftFunctor.{v, u}).FullyFaithful where
+  签名: : (uliftFunctor.{v, u}).满忠实 where
   定义体: ofHom fun x => (f (ULift.up x)).down
 
 Depends on / 依赖: ULift.up
@@ -1042,7 +1042,7 @@ instance uliftFunctor_full
 
 中文:
 实例 uliftFunctor_full
-  签名: : (uliftFunctor.{v, u}).Full
+  签名: : (uliftFunctor.{v, u}).满
   定义体: fullyFaithfulULiftFunctor.full
 
 Depends on / 依赖: fullyFaithfulULiftFunctor, fullyFaithfulULiftFunctor.full
@@ -1060,7 +1060,7 @@ instance uliftFunctor_faithful
 
 中文:
 实例 uliftFunctor_faithful
-  签名: : uliftFunctor.{v, u}.Faithful
+  签名: : uliftFunctor.{v, u}.忠实
   定义体: fullyFaithfulULiftFunctor.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulULiftFunctor, fullyFaithfulULiftFunctor.faithful
@@ -1182,7 +1182,7 @@ theorem mono_iff_injective
 中文:
 定理 mono_iff_injective
   条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: Mono f ↔ Function.Injective f
+  结论: 单态射 f ↔ 函数.单射 f
   证明: by
   simp [← ofHom_mono_iff_injective]
 
@@ -1202,8 +1202,8 @@ theorem injective_of_mono
 
 中文:
 定理 injective_of_mono
-  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : Mono f]
-  结论: Function.Injective f
+  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : 单态射 f]
+  结论: 函数.单射 f
   证明: (mono_iff_injective f).1 hf
 
 Depends on / 依赖: mono_iff_injective
@@ -1279,7 +1279,7 @@ theorem epi_iff_surjective
 中文:
 定理 epi_iff_surjective
   条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   simp [← ofHom_epi_iff_surjective]
 
@@ -1299,8 +1299,8 @@ theorem surjective_of_epi
 
 中文:
 定理 surjective_of_epi
-  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : Epi f]
-  结论: Function.Surjective f
+  条件: {X Y : 类型u} (f : X ⟶ Y) [hf : 满态射 f]
+  结论: 函数.满射 f
   证明: (epi_iff_surjective f).1 hf
 
 Depends on / 依赖: epi_iff_surjective
@@ -1328,7 +1328,7 @@ definition ofTypeFunctor
 
 中文:
 定义 ofTypeFunctor
-  签名: (m : 类型u -> 类型v) [_root_.Functor m] [LawfulFunctor m]
+  签名: (m : 类型u -> 类型v) [_root_.函子 m] [Lawful函子 m]
   定义体: m x
   map f := ofHom (_root_.Functor.map f.hom)
   map_id := fun α => by ext X; apply id_map
@@ -1455,7 +1455,7 @@ theorem toEquiv_symm_fun
 中文:
 定理 toEquiv_symm_fun
   条件: (i : X ≅ Y)
-  结论: (i.toEquiv.symm :) = (ConcreteCategory.hom i.inv).toFun
+  结论: (i.toEquiv.symm :) = (余ncrete范畴.hom i.inv).toFun
   证明: rfl
 
 @[simp]
@@ -1478,7 +1478,7 @@ theorem toEquiv_id
 中文:
 定理 toEquiv_id
   条件: (X : 类型u)
-  结论: (Iso.refl X).toEquiv = Equiv.refl X
+  结论: (同构.refl X).toEquiv = 等价.refl X
   证明: rfl
 
 @[simp]
@@ -1521,7 +1521,7 @@ theorem isIso_iff_bijective
 中文:
 定理 isIso_iff_bijective
   条件: {X Y : 类型u} (f : X ⟶ Y)
-  结论: IsIso f ↔ Function.Bijective f
+  结论: 是同构 f ↔ 函数.双射 f
   证明: Iff.intro (fun _ => (asIso f : X ≅ Y).toEquiv.bijective) fun b =>
     (Equiv.ofBijective f b).toIso.isIso_hom
 
@@ -1567,7 +1567,7 @@ instance :
 
 中文:
 实例 :
-  签名: SplitEpiCategory (类型u)
+  签名: 分裂满态射范畴 (类型u)
   定义体: IsSplitEpi.mk'
       { section_ := ofHom <| Function.surjInv <| (epi_iff_surjective f).1 hf
         id := by

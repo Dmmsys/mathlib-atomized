@@ -117,7 +117,7 @@ definition Lean.Expr.getExprInputs
 
 中文:
 定义 Lean.Expr.getExprInputs
-  签名: : Expr -> Array Expr
+  签名: : Expr -> 数组 Expr
 -/
 def Lean.Expr.getExprInputs : Expr -> Array Expr
   | app fn arg => #[fn, arg]
@@ -159,7 +159,7 @@ definition uniquify
 
 中文:
 定义 uniquify
-  签名: : List α -> List (α × 自然数)
+  签名: : 列表 α -> 列表 (α × 自然数)
   定义体: uniquify ms
     (m, 0) :: (lms.map fun (x, n) => if x == m then (x, n + 1) else (x, n))
 
@@ -184,7 +184,7 @@ definition weight
 
 中文:
 定义 weight
-  签名: (L : List (α × 布尔)) (a : α)
+  签名: (L : 列表 (α × 布尔值)) (a : α)
   定义体: let l := L.length
   match L.find? (Prod.fst · == a) with
     | some (_, b) => if b then - l + (L.idxOf (a, b) : Int) else (L.idxOf (a, b) + 1 : Int)
@@ -215,7 +215,7 @@ definition reorderUsing
 
 中文:
 定义 reorderUsing
-  签名: (toReorder : List α) (instructions : List (α × 布尔))
+  签名: (toReorder : 列表 α) (instructions : 列表 (α × 布尔值))
   定义体: let uInstructions :=
     let (as, as?) := instructions.unzip
     (uniquify as).zip as?
@@ -252,7 +252,7 @@ definition prepareOp
 
 中文:
 定义 prepareOp
-  签名: (sum : Expr)
+  签名: (求和 : Expr)
   定义体: let opargs := sum.getAppArgs
   (opargs.toList.take (opargs.size - 2)).foldl (fun x y => Expr.app x y) sum.getAppFn
 
@@ -282,7 +282,7 @@ definition sumList
 
 中文:
 定义 sumList
-  签名: (prepOp : Expr) (left_assoc? : 布尔)
+  签名: (prepOp : Expr) (left_assoc? : 布尔值)
 -/
 def sumList (prepOp : Expr) (left_assoc? : Bool) : List Expr -> Expr
   | [] => default
@@ -315,7 +315,7 @@ definition getAddends
 
 中文:
 定义 getAddends
-  签名: (sum : Expr)
+  签名: (求和 : Expr)
   定义体: do
   if sum.isAppOf op then
     let inR ← sum.getAppArgs.filterM fun r => do isDefEq R (← inferType r <|> pure R)
@@ -347,7 +347,7 @@ definition getOps
 
 中文:
 定义 getOps
-  签名: (sum : Expr)
+  签名: (求和 : Expr)
   定义体: do
   let summands ← getAddends op (← inferType sum <|> return sum) sum
   let (first, rest) := if summands.size == 1 then (#[], sum.getExprInputs) else
@@ -377,7 +377,7 @@ definition rankSums
 
 中文:
 定义 rankSums
-  签名: (tgt : Expr) (instructions : List (Expr × 布尔))
+  签名: (tgt : Expr) (instructions : 列表 (Expr × 布尔值))
   定义体: do
   let sums ← getOps op (← instantiateMVars tgt)
   let candidates := sums.map fun (addends, sum) => do
@@ -411,7 +411,7 @@ definition permuteExpr
 
 中文:
 定义 permuteExpr
-  签名: (tgt : Expr) (instructions : List (Expr × 布尔))
+  签名: (tgt : Expr) (instructions : 列表 (Expr × 布尔值))
   定义体: do
   let permInstructions ← rankSums op tgt instructions
   if permInstructions == [] then throwError "The goal is already in the required form"
@@ -455,7 +455,7 @@ definition pairUp
 
 中文:
 定义 pairUp
-  签名: : List (Expr × 布尔 × Syntax) -> List Expr ->
+  签名: : 列表 (Expr × 布尔值 × Syntax) -> 列表 Expr ->
 -/
 def pairUp : List (Expr × Bool × Syntax) -> List Expr ->
     MetaM ((List (Expr × Bool)) × List (Expr × Bool × Syntax))
@@ -482,7 +482,7 @@ definition moveOperSimpCtx
 
 中文:
 定义 moveOperSimpCtx
-  签名: : MetaM Simp.Context
+  签名: : MetaM Simp.余ntext
   定义体: do
   let simpNames := Elab.Tactic.simpOnlyBuiltins ++ [
     ``add_comm, ``add_assoc, ``add_left_comm, -- for `HAdd.hAdd`
@@ -519,7 +519,7 @@ guard (twoGoals.length == 2) >
 
 中文:
 定义 reorderAndSimp
-  签名: (mv : MVarId) (instr : List (Expr × 布尔))
+  签名: (mv : MVarId) (instr : 列表 (Expr × 布尔值))
   定义体: mv.withContext do
   let permExpr ← permuteExpr op (← mv.getType'') instr
   -- generate the implication `permutedMv → mv = permutedMv → mv`
@@ -560,7 +560,7 @@ definition unifyMovements
 
 中文:
 定义 unifyMovements
-  签名: (data : Array (Expr × 布尔 × Syntax)) (tgt : Expr)
+  签名: (data : 数组 (Expr × 布尔值 × Syntax)) (tgt : Expr)
   定义体: do
   let ops ← getOps op tgt
   let atoms := (ops.map Prod.fst).flatten.toList.filter (!isBVar ·)
@@ -598,7 +598,7 @@ definition parseArrows
 
 中文:
 定义 parseArrows
-  签名: : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (Array (Expr × 布尔 × Syntax))
+  签名: : TSyntax `Lean.Parser.Tactic.rwRuleSeq -> TermElabM (数组 (Expr × 布尔值 × Syntax))
   定义体: rstx
       return (← Term.elabTerm r[1]! none, ! r[0]!.isNone, rstx)
   | _ => failure

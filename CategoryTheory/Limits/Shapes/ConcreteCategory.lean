@@ -152,7 +152,7 @@ lemma Pi.map_ext
   exact h j
 
 中文:
-引理 Pi.map_ext
+引理 依赖函数类型.map_ext
   结论: (x y : ToType (F.obj (∏ᶜ f : C)))
   证明: by
   apply ConcreteCategory.injective_of_mono_of_preservesPullback (PreservesProduct.iso F f).hom
@@ -193,7 +193,7 @@ definition uniqueOfTerminalOfPreserves
 
 中文:
 定义 uniqueOfTerminalOfPreserves
-  签名: [PreservesLimit (Functor.empty.{0} C) (forget C)]
+  签名: [保持极限 (函子.empty.{0} C) (forget C)]
   定义体: Types.isTerminalEquivUnique (ToType X) IsTerminal.isTerminalObj (forget C) X h
 
 Depends on / 依赖: IsTerminal, IsTerminal.isTerminalObj, ToType, Types.isTerminalEquivUnique, forget, isTerminalEquivUnique, isTerminalObj
@@ -213,7 +213,7 @@ definition terminalOfUniqueOfReflects
 
 中文:
 定义 terminalOfUniqueOfReflects
-  签名: [ReflectsLimit (Functor.empty.{0} C) (forget C)]
+  签名: [反映极限 (函子.empty.{0} C) (forget C)]
   定义体: IsTerminal.isTerminalOfObj (forget C) X
     (Types.isTerminalEquivUnique (ToType X)).symm h
 
@@ -234,7 +234,7 @@ definition terminalIffUnique
 
 中文:
 定义 terminalIffUnique
-  签名: [PreservesLimit (Functor.empty.{0} C) (forget C)]
+  签名: [保持极限 (函子.empty.{0} C) (forget C)]
   定义体: (IsTerminal.isTerminalIffObj (forget C) X).trans Types.isTerminalEquivUnique _
 
 Depends on / 依赖: IsTerminal, IsTerminal.isTerminalIffObj, Types.isTerminalEquivUnique, forget, isTerminalEquivUnique, isTerminalIffObj
@@ -257,7 +257,7 @@ definition terminalEquiv
 
 中文:
 定义 terminalEquiv
-  签名: : ToType (⊤_ C) ≃ PUnit
+  签名: : ToType (⊤_ C) ≃ 命题单元
   定义体: (PreservesTerminal.iso (forget C) ≪≫ Types.terminalIso).toEquiv
 
 Depends on / 依赖: PreservesTerminal, PreservesTerminal.iso, Types.terminalIso, forget, terminalIso, toEquiv
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (ToType (⊤_ C))
+  签名: 唯一 (ToType (⊤_ C))
   定义体: (terminalEquiv C).symm PUnit.unit
   uniq _ := (terminalEquiv C).injective (Subsingleton.elim _ _)
 
@@ -305,7 +305,7 @@ lemma empty_of_initial_of_preserves
 
 中文:
 引理 empty_of_initial_of_preserves
-  结论: [PreservesColimit (Functor.empty.{0} C) (forget C)] (X : C)
+  结论: [保持余极限 (函子.empty.{0} C) (forget C)] (X : C)
   证明: by
   rw [← Types.initial_iff_empty]
   exact Nonempty.map (IsInitial.isInitialObj (forget C) _) h
@@ -328,7 +328,7 @@ lemma initial_of_empty_of_reflects
 
 中文:
 引理 initial_of_empty_of_reflects
-  结论: [ReflectsColimit (Functor.empty.{0} C) (forget C)] (X : C)
+  结论: [反映余极限 (函子.empty.{0} C) (forget C)] (X : C)
   证明: Nonempty.map (IsInitial.isInitialOfObj (forget C) _)
     (Types.initial_iff_empty (ToType X)).mpr h
 
@@ -350,7 +350,7 @@ lemma initial_iff_empty_of_preserves_of_reflects
 
 中文:
 引理 initial_iff_empty_of_preserves_of_reflects
-  结论: [PreservesColimit (Functor.empty.{0} C) (forget C)]
+  结论: [保持余极限 (函子.empty.{0} C) (forget C)]
   证明: by
   rw [← Types.initial_iff_empty]; rw [(IsInitial.isInitialIffObj (forget C) X).nonempty_congr]
 
@@ -650,7 +650,7 @@ theorem widePullback_ext
 
 中文:
 定理 widePullback_ext
-  结论: {B : C} {ι : Type w} {X : ι -> C} (f : 对任意 j : ι, X j ⟶ B)
+  结论: {B : C} {ι : 类型 w} {X : ι -> C} (f : 对任意 j : ι, X j ⟶ B)
   证明: by
   apply Concrete.limit_ext
   rintro (_ | j)
@@ -681,7 +681,7 @@ theorem widePullback_ext'
 
 中文:
 定理 widePullback_ext'
-  结论: {B : C} {ι : Type w} [Nonempty ι] {X : ι -> C}
+  结论: {B : C} {ι : 类型 w} [非空 ι] {X : ι -> C}
   证明: by
   apply Concrete.widePullback_ext _ _ _ _ h
   inhabit ι
@@ -889,8 +889,8 @@ theorem widePushout_exists_rep
     rfl
 
 中文:
-定理 widePushout_exists_rep
-  结论: {B : C} {α : Type _} {X : α -> C} (f : 对任意 j : α, B ⟶ X j)
+定理 widePushout_存在_rep
+  结论: {B : C} {α : 类型 _} {X : α -> C} (f : 对任意 j : α, B ⟶ X j)
   证明: by
   obtain ⟨_ | j, y, rfl⟩ := Concrete.colimit_exists_rep _ x
   · left
@@ -928,8 +928,8 @@ theorem widePushout_exists_rep'
   · use i, y
 
 中文:
-定理 widePushout_exists_rep'
-  结论: {B : C} {α : Type _} [Nonempty α] {X : α -> C}
+定理 widePushout_存在_rep'
+  结论: {B : C} {α : 类型 _} [非空 α] {X : α -> C}
   证明: by
   rcases Concrete.widePushout_exists_rep f x with (⟨y, rfl⟩ | ⟨i, y, rfl⟩)
   · inhabit α
@@ -964,7 +964,7 @@ theorem cokernel_funext
 
 中文:
 定理 cokernel_funext
-  结论: {C : 类型} [Category* C] [HasZeroMorphisms C] {FC : C -> C -> 类型}
+  结论: {C : 类型} [范畴* C] [有ZeroMorphisms C] {FC : C -> C -> 类型}
   证明: by
   ext x
   simpa using w x

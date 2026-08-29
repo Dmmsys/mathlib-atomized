@@ -59,7 +59,7 @@ alias ⟨ContMDiffWithinAt.contDiffWithinAt, ContDiffWithinAt.contMDiffWithinAt�
 
 中文:
 定理 contMDiffWithinAt_iff_contDiffWithinAt
-  条件: {f : E -> E'} {s : Set E} {x : E}
+  条件: {f : E -> E'} {s : 集合 E} {x : E}
   证明: by
   simp +contextual only [ContMDiffWithinAt, liftPropWithinAt_iff',
     ContDiffWithinAtProp, iff_def, mfld_simps]
@@ -118,7 +118,7 @@ alias ⟨ContMDiffOn.contDiffOn, ContDiffOn.contMDiffOn⟩ := contMDiffOn_iff_co
 
 中文:
 定理 contMDiffOn_iff_contDiffOn
-  条件: {f : E -> E'} {s : Set E}
+  条件: {f : E -> E'} {s : 集合 E}
   证明: forall_congr' by simp [contMDiffWithinAt_iff_contDiffWithinAt]
 
 alias ⟨ContMDiffOn.contDiffOn, ContDiffOn.contMDiffOn⟩ := contMDiffOn_iff_contDiffOn
@@ -146,7 +146,7 @@ alias ⟨ContMDiff.contDiff, ContDiff.contMDiff⟩ := contMDiff_iff_contDiff
 中文:
 定理 contMDiff_iff_contDiff
   条件: {f : E -> E'}
-  结论: ContMDiff 𝓘(𝕜, E) 𝓘(𝕜, E') n f ↔ ContDiff 𝕜 n f
+  结论: ContMDiff 𝓘(𝕜, E) 𝓘(𝕜, E') n f ↔ 连续可微 𝕜 n f
   证明: by
   rw [← contDiffOn_univ]; rw [← contMDiffOn_univ]; rw [contMDiffOn_iff_contDiffOn]
 
@@ -169,7 +169,7 @@ theorem ContDiffWithinAt.comp_contMDiffWithinAt
 
 中文:
 定理 ContDiffWithinAt.comp_contMDiffWithinAt
-  结论: {g : F -> F'} {f : M -> F} {s : Set M} {t : Set F}
+  结论: {g : F -> F'} {f : M -> F} {s : 集合 M} {t : 集合 F}
   证明: hg.contMDiffWithinAt.comp x hf h
 
 Depends on / 依赖: contMDiffWithinAt, hg.contMDiffWithinAt.comp
@@ -189,7 +189,7 @@ theorem ContDiffAt.comp_contMDiffWithinAt
 
 中文:
 定理 ContDiffAt.comp_contMDiffWithinAt
-  结论: {g : F -> F'} {f : M -> F} {s : Set M}
+  结论: {g : F -> F'} {f : M -> F} {s : 集合 M}
   证明: hg.contMDiffAt.comp_contMDiffWithinAt x hf
 
 Depends on / 依赖: comp_contMDiffWithinAt, contMDiffAt, hg.contMDiffAt.comp_contMDiffWithinAt
@@ -227,8 +227,8 @@ theorem ContDiff.comp_contMDiffWithinAt
   proof: hg.contDiffAt.comp_contMDiffWithinAt hf
 
 中文:
-定理 ContDiff.comp_contMDiffWithinAt
-  结论: {g : F -> F'} {f : M -> F} {s : Set M} {x : M}
+定理 连续可微.comp_contMDiffWithinAt
+  结论: {g : F -> F'} {f : M -> F} {s : 集合 M} {x : M}
   证明: hg.contDiffAt.comp_contMDiffWithinAt hf
 
 Depends on / 依赖: comp_contMDiffWithinAt, contDiffAt, hg.contDiffAt.comp_contMDiffWithinAt
@@ -247,8 +247,8 @@ theorem ContDiff.comp_contMDiffAt
   proof: hg.comp_contMDiffWithinAt hf
 
 中文:
-定理 ContDiff.comp_contMDiffAt
-  结论: {g : F -> F'} {f : M -> F} {x : M} (hg : ContDiff 𝕜 n g)
+定理 连续可微.comp_contMDiffAt
+  结论: {g : F -> F'} {f : M -> F} {x : M} (hg : 连续可微 𝕜 n g)
   证明: hg.comp_contMDiffWithinAt hf
 
 Depends on / 依赖: comp_contMDiffWithinAt, hg.comp_contMDiffWithinAt
@@ -267,8 +267,8 @@ theorem ContDiff.comp_contMDiff
   hg.contDiffAt.comp_contMDiffAt (hf x)
 
 中文:
-定理 ContDiff.comp_contMDiff
-  结论: {g : F -> F'} {f : M -> F} (hg : ContDiff 𝕜 n g)
+定理 连续可微.comp_contMDiff
+  结论: {g : F -> F'} {f : M -> F} (hg : 连续可微 𝕜 n g)
   证明: fun x =>
   hg.contDiffAt.comp_contMDiffAt (hf x)
 -/
@@ -289,7 +289,7 @@ theorem ContinuousLinearMap.contMDiff
   proof: L.contDiff.contMDiff
 
 中文:
-定理 ContinuousLinearMap.contMDiff
+定理 连续线性映射.contMDiff
   条件: (L : E ->L[𝕜] F)
   结论: ContMDiff 𝓘(𝕜, E) 𝓘(𝕜, F) n L
   证明: L.contDiff.contMDiff
@@ -309,7 +309,7 @@ theorem ContinuousLinearMap.contMDiffAt
   proof: L.contMDiff _
 
 中文:
-定理 ContinuousLinearMap.contMDiffAt
+定理 连续线性映射.contMDiffAt
   条件: (L : E ->L[𝕜] F) {x}
   结论: ContMDiffAt 𝓘(𝕜, E) 𝓘(𝕜, F) n L x
   证明: L.contMDiff _
@@ -328,7 +328,7 @@ theorem ContinuousLinearMap.contMDiffWithinAt
   proof: L.contMDiffAt.contMDiffWithinAt
 
 中文:
-定理 ContinuousLinearMap.contMDiffWithinAt
+定理 连续线性映射.contMDiffWithinAt
   条件: (L : E ->L[𝕜] F) {s x}
   证明: L.contMDiffAt.contMDiffWithinAt
 
@@ -348,7 +348,7 @@ theorem ContinuousLinearMap.contMDiffOn
   proof: L.contMDiff.contMDiffOn
 
 中文:
-定理 ContinuousLinearMap.contMDiffOn
+定理 连续线性映射.contMDiffOn
   条件: (L : E ->L[𝕜] F) {s}
   结论: ContMDiffOn 𝓘(𝕜, E) 𝓘(𝕜, F) n L s
   证明: L.contMDiff.contMDiffOn
@@ -373,7 +373,7 @@ nonrec theorem ContMDiffAt.clm_precomp {f : M -> F₁ ->L[𝕜] F₂} {x : M}
 
 中文:
 定理 ContMDiffWithinAt.clm_precomp
-  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : Set M} {x : M}
+  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : 集合 M} {x : M}
   证明: ContDiff.comp_contMDiffWithinAt (g := (ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃).flip)
     (ContinuousLinearMap.contDiff _) hf
 
@@ -407,7 +407,7 @@ theorem ContMDiffOn.clm_precomp
 
 中文:
 定理 ContMDiffOn.clm_precomp
-  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : Set M}
+  结论: {f : M -> F₁ ->L[𝕜] F₂} {s : 集合 M}
   证明: fun x hx =>
   (hf x hx).clm_precomp
 -/
@@ -452,7 +452,7 @@ nonrec theorem ContMDiffAt.clm_postcomp {f : M -> F₂ ->L[𝕜] F₃} {x : M}
 
 中文:
 定理 ContMDiffWithinAt.clm_postcomp
-  结论: {f : M -> F₂ ->L[𝕜] F₃} {s : Set M} {x : M}
+  结论: {f : M -> F₂ ->L[𝕜] F₃} {s : 集合 M} {x : M}
   证明: ContDiff.comp_contMDiffWithinAt (F' := (F₁ ->L[𝕜] F₂) ->L[𝕜] (F₁ ->L[𝕜] F₃))
     (g := ContinuousLinearMap.compL 𝕜 F₁ F₂ F₃) (ContinuousLinearMap.contDiff _) hf
 
@@ -512,7 +512,7 @@ theorem ContMDiffWithinAt.clm_comp
 
 中文:
 定理 ContMDiffWithinAt.clm_comp
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : Set M} {x : M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : 集合 M} {x : M}
   证明: ContDiff.comp_contMDiffWithinAt (g := fun x : (F₁ ->L[𝕜] F₃) × (F₂ ->L[𝕜] F₁) => x.1.comp x.2)
     (f := fun x => (g x, f x)) (contDiff_fst.clm_comp contDiff_snd) (hg.prodMk_space hf)
 
@@ -556,7 +556,7 @@ theorem ContMDiffOn.clm_comp
 
 中文:
 定理 ContMDiffOn.clm_comp
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₁} {s : 集合 M}
   证明: fun x hx =>
   (hg x hx).clm_comp (hf x hx)
 -/
@@ -597,7 +597,7 @@ theorem ContMDiffWithinAt.clm_apply
 
 中文:
 定理 ContMDiffWithinAt.clm_apply
-  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : Set M} {x : M}
+  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : 集合 M} {x : M}
   证明: ContDiffWithinAt.comp_contMDiffWithinAt (t := univ)
     (g := fun x : (F₁ ->L[𝕜] F₂) × F₁ => x.1 x.2)
     (by apply ContDiff.contDiffAt; exact contDiff_fst.clm_apply contDiff_snd) (hg.prodMk_space hf)
@@ -632,7 +632,7 @@ theorem ContMDiffOn.clm_apply
 
 中文:
 定理 ContMDiffOn.clm_apply
-  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₂} {f : M -> F₁} {s : 集合 M}
   证明: fun x hx => (hg x hx).clm_apply (hf x hx)
 
 Depends on / 依赖: clm_apply
@@ -711,7 +711,7 @@ theorem ContMDiffOn.cle_arrowCongr
 
 中文:
 定理 ContMDiffOn.cle_arrowCongr
-  结论: {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {s : Set M}
+  结论: {f : M -> F₁ ≃L[𝕜] F₂} {g : M -> F₃ ≃L[𝕜] F₄} {s : 集合 M}
   证明: fun x hx =>
   (hf x hx).cle_arrowCongr (hg x hx)
 -/
@@ -758,7 +758,7 @@ nonrec theorem ContMDiffAt.clm_prodMap {g : M -> F₁ ->L[𝕜] F₃} {f : M -> 
 
 中文:
 定理 ContMDiffWithinAt.clm_prodMap
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : 集合 M}
   证明: ContDiff.comp_contMDiffWithinAt (g := fun x : (F₁ ->L[𝕜] F₃) × (F₂ ->L[𝕜] F₄) => x.1.prodMap x.2)
     (f := fun x => (g x, f x)) (ContinuousLinearMap.prodMapL 𝕜 F₁ F₃ F₂ F₄).contDiff
     (hg.prodMk_space hf)
@@ -791,7 +791,7 @@ theorem ContMDiffOn.clm_prodMap
 
 中文:
 定理 ContMDiffOn.clm_prodMap
-  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : Set M}
+  结论: {g : M -> F₁ ->L[𝕜] F₃} {f : M -> F₂ ->L[𝕜] F₄} {s : 集合 M}
   证明: fun x hx =>
   (hg x hx).clm_prodMap (hf x hx)
 -/

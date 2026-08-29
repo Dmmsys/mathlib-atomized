@@ -45,7 +45,7 @@ theorem hasFDerivWithinAt_closure_of_tendsto_fderiv
 
 中文:
 定理 hasFDerivWithinAt_closure_of_tendsto_fderiv
-  结论: {f : E -> F} {s : Set E} {x : E} {f' : E ->L[实数] F}
+  结论: {f : E -> F} {s : 集合 E} {x : E} {f' : E ->L[实数] F}
   证明: by
   -- one can assume without loss of generality that `x` belongs to the closure of `s`, as the
   -- statement is empty otherwise
@@ -136,7 +136,7 @@ theorem hasDerivWithinAt_Ici_of_tendsto_deriv
 
 中文:
 定理 hasDerivWithinAt_Ici_of_tendsto_deriv
-  结论: {s : Set 实数} {e : E} {a : 实数} {f : 实数 -> E}
+  结论: {s : 集合 实数} {e : E} {a : 实数} {f : 实数 -> E}
   证明: by
   /- This is a specialization of `hasFDerivWithinAt_closure_of_tendsto_fderiv`. To be in the
     setting of this theorem, we need to work on an open interval with closure contained in
@@ -189,7 +189,7 @@ theorem hasDerivWithinAt_Iic_of_tendsto_deriv
 
 中文:
 定理 hasDerivWithinAt_Iic_of_tendsto_deriv
-  结论: {s : Set 实数} {e : E} {a : 实数}
+  结论: {s : 集合 实数} {e : E} {a : 实数}
   证明: by
   /- This is a specialization of `hasFDerivWithinAt_closure_of_tendsto_fderiv`. To be in the
     setting of this theorem, we need to work on an open interval with closure contained in

@@ -66,7 +66,7 @@ class IsIntegral
     - integral : exists W_int : WeierstrassCurve R, W = W_int⁄K
 
 中文:
-类 IsIntegral
+类 是整
   参数: (W : WeierstrassCurve K)
   公理与运算 (1 个):
     - integral : 存在 W_int : WeierstrassCurve R, W = W_int⁄K
@@ -84,7 +84,7 @@ definition integralModel
 
 中文:
 定义 integralModel
-  签名: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  签名: (W : WeierstrassCurve K) [hW : 是整 R W]
   定义体: hW.integral.choose
 
 Depends on / 依赖: hW.integral.choose, integral
@@ -105,7 +105,7 @@ lemma baseChange_integralModel_eq
 
 中文:
 引理 baseChange_integralModel_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: hW.integral.choose_spec.symm
 
 Depends on / 依赖: choose_spec, hW.integral.choose_spec.symm, integral
@@ -131,7 +131,7 @@ lemma isIntegral_of_exists_lift
   · apply h₆.choose_spec.symm
 
 中文:
-引理 isIntegral_of_exists_lift
+引理 is整数egral_of_存在_lift
   结论: {W : WeierstrassCurve K}
   证明: by
   use ⟨h₁.choose, h₂.choose, h₃.choose, h₄.choose, h₆.choose⟩
@@ -174,8 +174,8 @@ lemma Δ_integral_of_isIntegral
   rw [hW_int]; rw [baseChange]; rw [map_Δ]
 
 中文:
-引理 Δ_integral_of_isIntegral
-  条件: (W : WeierstrassCurve K) [Is整数egral R W]
+引理 Δ_integral_of_is整数egral
+  条件: (W : WeierstrassCurve K) [是整 R W]
   证明: by
   obtain ⟨W_int, hW_int⟩ : exists W_int : WeierstrassCurve R, W = W_int⁄K :=
     IsIntegral.integral
@@ -203,7 +203,7 @@ lemma integralModel_a₁_eq
 
 中文:
 引理 integralModel_a₁_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -227,7 +227,7 @@ lemma integralModel_a₂_eq
 
 中文:
 引理 integralModel_a₂_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -251,7 +251,7 @@ lemma integralModel_a₃_eq
 
 中文:
 引理 integralModel_a₃_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -275,7 +275,7 @@ lemma integralModel_a₄_eq
 
 中文:
 引理 integralModel_a₄_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -299,7 +299,7 @@ lemma integralModel_a₆_eq
 
 中文:
 引理 integralModel_a₆_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -323,7 +323,7 @@ lemma integralModel_b₂_eq
 
 中文:
 引理 integralModel_b₂_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -347,7 +347,7 @@ lemma integralModel_b₄_eq
 
 中文:
 引理 integralModel_b₄_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -371,7 +371,7 @@ lemma integralModel_b₆_eq
 
 中文:
 引理 integralModel_b₆_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -395,7 +395,7 @@ lemma integralModel_b₈_eq
 
 中文:
 引理 integralModel_b₈_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -419,7 +419,7 @@ lemma integralModel_c₄_eq
 
 中文:
 引理 integralModel_c₄_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -443,7 +443,7 @@ lemma integralModel_c₆_eq
 
 中文:
 引理 integralModel_c₆_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -467,7 +467,7 @@ lemma integralModel_Δ_eq
 
 中文:
 引理 integralModel_Δ_eq
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   conv_rhs => rw [← baseChange_integralModel_eq R W]
   simp [baseChange]
@@ -500,7 +500,7 @@ theorem exists_isIntegral
   have hlmax : forall v in l, v <= lmax := fun 
 
 中文:
-定理 exists_isIntegral
+定理 存在_is整数egral
   条件: (W : WeierstrassCurve K)
   证明: by
   let l₀ := [W.a₁, W.a₂, W.a₃, W.a₄, W.a₆]
@@ -609,8 +609,8 @@ lemma valuation_Δ_aux_eq_of_isIntegral
   simp [valuation_Δ_aux, hW]
 
 中文:
-引理 valuation_Δ_aux_eq_of_isIntegral
-  条件: (W : WeierstrassCurve K) [hW : Is整数egral R W]
+引理 valuation_Δ_aux_eq_of_is整数egral
+  条件: (W : WeierstrassCurve K) [hW : 是整 R W]
   证明: by
   simp [valuation_Δ_aux, hW]
 -/
@@ -632,10 +632,10 @@ class IsMinimal
     - val_Δ_maximal : MaximalFor (fun (C : VariableChange K) => IsIntegral R (C • W)) (fun (C : VariableChange K) => valuation_Δ_aux R (C • W)) (1 : VariableChange K)
 
 中文:
-类 IsMinimal
+类 是极小
   参数: (W : WeierstrassCurve K)
   公理与运算 (1 个):
-    - val_Δ_maximal : MaximalFor (fun (C : VariableChange K) => Is整数egral R (C • W)) (fun (C : VariableChange K) => valuation_Δ_aux R (C • W)) (1 : VariableChange K)
+    - val_Δ_maximal : MaximalFor (fun (C : VariableChange K) => 是整 R (C • W)) (fun (C : VariableChange K) => valuation_Δ_aux R (C • W)) (1 : VariableChange K)
 
 Depends on / 依赖: KanComplex, KanComplex.hornFilling, hornFilling
 -/
@@ -666,7 +666,7 @@ theorem exists_isMinimal
   let
 
 中文:
-定理 exists_isMinimal
+定理 存在_isMinimal
   条件: (W : WeierstrassCurve K)
   证明: by
   obtain ⟨C, hC⟩ := exists_maximalFor_of_wellFoundedGT
@@ -732,7 +732,7 @@ definition reduction
 
 中文:
 定义 reduction
-  签名: (W : WeierstrassCurve K) [IsMinimal R W]
+  签名: (W : WeierstrassCurve K) [是极小 R W]
   定义体: (integralModel R W).map (residue R)
 
 Depends on / 依赖: integralModel, residue
@@ -755,9 +755,9 @@ class HasGoodReduction
     - goodReduction : valuation K (maximalIdeal R) W.Δ = 1
 
 中文:
-类 HasGoodReduction
+类 有GoodReduction
   参数: (W : WeierstrassCurve K)
-  继承: IsMinimal R W
+  继承: 是极小 R W
   公理与运算 (1 个):
     - goodReduction : valuation K (maximalIdeal R) W.Δ = 1
 -/
@@ -782,7 +782,7 @@ not_if
 
 中文:
 引理 hasGoodReduction_iff_isElliptic_reduction
-  条件: {W : WeierstrassCurve K} [hW : IsMinimal R W]
+  条件: {W : WeierstrassCurve K} [hW : 是极小 R W]
   证明: by
   refine Iff.trans ?_ (W.reduction R).isElliptic_iff.symm
   simp only [reduction, map_Δ, isUnit_iff_ne_zero, ne_eq, residue_eq_zero_iff]
@@ -822,9 +822,9 @@ class HasMultiplicativeReduction
     - multiplicativeReduction : valuation K (maximalIdeal R) W.c₄ = 1
 
 中文:
-类 HasMultiplicativeReduction
+类 有MultiplicativeReduction
   参数: (W : WeierstrassCurve K)
-  继承: IsMinimal R W
+  继承: 是极小 R W
   公理与运算 (2 个):
     - badReduction : valuation K (maximalIdeal R) W.Δ < 1
     - multiplicativeReduction : valuation K (maximalIdeal R) W.c₄ = 1
@@ -848,9 +848,9 @@ class HasAdditiveReduction
     - additiveReduction : valuation K (maximalIdeal R) W.c₄ < 1
 
 中文:
-类 HasAdditiveReduction
+类 有加法itiveReduction
   参数: (W : WeierstrassCurve K)
-  继承: IsMinimal R W
+  继承: 是极小 R W
   公理与运算 (2 个):
     - badReduction : valuation K (maximalIdeal R) W.Δ < 1
     - additiveReduction : valuation K (maximalIdeal R) W.c₄ < 1
@@ -878,9 +878,9 @@ class HasSplitMultiplicativeReduction
     - splitMultiplicativeReduction : letI I  [default: W.integralModel R]
 
 中文:
-类 HasSplitMultiplicativeReduction
+类 有SplitMultiplicativeReduction
   参数: (W : WeierstrassCurve K)
-  继承: W.HasMultiplicativeReduction R
+  继承: W.有MultiplicativeReduction R
   公理与运算 (1 个):
     - splitMultiplicativeReduction : letI I  [默认: W.integralModel R]
 
@@ -906,7 +906,7 @@ theorem hasGoodReduction_or_hasMultiplicativeReduction_or_hasAdditiveReduction
 
 中文:
 定理 hasGoodReduction_or_hasMultiplicativeReduction_or_hasAdditiveReduction
-  条件: [IsMinimal R W]
+  条件: [是极小 R W]
   证明: by
   rw [hasGoodReduction_iff]; rw [hasMultiplicativeReduction_iff]; rw [hasAdditiveReduction_iff]; rw [← integralModel_Δ_eq R W]; rw [← integralModel_c₄_eq R W]
   grind [valuation_le_one]
@@ -927,8 +927,8 @@ theorem HasGoodReduction.not_hasMultiplicativeReduction
   proof: fun h => h.badReduction.ne hW.goodReduction
 
 中文:
-定理 HasGoodReduction.not_hasMultiplicativeReduction
-  条件: (hW : W.HasGoodReduction R)
+定理 有GoodReduction.not_hasMultiplicativeReduction
+  条件: (hW : W.有GoodReduction R)
   证明: fun h => h.badReduction.ne hW.goodReduction
 
 Depends on / 依赖: badReduction, goodReduction, h.badReduction.ne, hW.goodReduction
@@ -946,8 +946,8 @@ theorem HasGoodReduction.not_hasAdditiveReduction
   proof: fun h => h.badReduction.ne hW.goodReduction
 
 中文:
-定理 HasGoodReduction.not_hasAdditiveReduction
-  条件: (hW : W.HasGoodReduction R)
+定理 有GoodReduction.not_hasAdditiveReduction
+  条件: (hW : W.有GoodReduction R)
   证明: fun h => h.badReduction.ne hW.goodReduction
 
 Depends on / 依赖: badReduction, goodReduction, h.badReduction.ne, hW.goodReduction
@@ -965,8 +965,8 @@ theorem HasMultiplicativeReduction.not_hasGoodReduction
   proof: fun h => hW.badReduction.ne h.goodReduction
 
 中文:
-定理 HasMultiplicativeReduction.not_hasGoodReduction
-  条件: (hW : W.HasMultiplicativeReduction R)
+定理 有MultiplicativeReduction.not_hasGoodReduction
+  条件: (hW : W.有MultiplicativeReduction R)
   证明: fun h => hW.badReduction.ne h.goodReduction
 
 Depends on / 依赖: badReduction, goodReduction, h.goodReduction, hW.badReduction.ne
@@ -984,8 +984,8 @@ theorem HasAdditiveReduction.not_hasGoodReduction
   proof: fun h => hW.badReduction.ne h.goodReduction
 
 中文:
-定理 HasAdditiveReduction.not_hasGoodReduction
-  条件: (hW : W.HasAdditiveReduction R)
+定理 有加法itiveReduction.not_hasGoodReduction
+  条件: (hW : W.有加法itiveReduction R)
   证明: fun h => hW.badReduction.ne h.goodReduction
 
 Depends on / 依赖: badReduction, goodReduction, h.goodReduction, hW.badReduction.ne
@@ -1003,8 +1003,8 @@ theorem HasMultiplicativeReduction.not_hasAdditiveReduction
   proof: fun h => h.additiveReduction.ne hW.multiplicativeReduction
 
 中文:
-定理 HasMultiplicativeReduction.not_hasAdditiveReduction
-  条件: (hW : W.HasMultiplicativeReduction R)
+定理 有MultiplicativeReduction.not_hasAdditiveReduction
+  条件: (hW : W.有MultiplicativeReduction R)
   证明: fun h => h.additiveReduction.ne hW.multiplicativeReduction
 
 Depends on / 依赖: additiveReduction, h.additiveReduction.ne, hW.multiplicativeReduction, multiplicativeReduction, quasicategory_iff_innerFibration
@@ -1022,8 +1022,8 @@ theorem HasAdditiveReduction.not_hasMultiplicativeReduction
   proof: fun h => hW.additiveReduction.ne h.multiplicativeReduction
 
 中文:
-定理 HasAdditiveReduction.not_hasMultiplicativeReduction
-  条件: (hW : W.HasAdditiveReduction R)
+定理 有加法itiveReduction.not_hasMultiplicativeReduction
+  条件: (hW : W.有加法itiveReduction R)
   证明: fun h => hW.additiveReduction.ne h.multiplicativeReduction
 
 Depends on / 依赖: additiveReduction, h.multiplicativeReduction, hW.additiveReduction.ne, multiplicativeReduction

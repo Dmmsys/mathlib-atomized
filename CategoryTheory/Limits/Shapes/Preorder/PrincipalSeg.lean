@@ -42,8 +42,8 @@ definition PrincipalSeg.cocone
         rfl }
 
 中文:
-定义 PrincipalSeg.cocone
-  签名: {α β : 类型} [PartialOrder α] [PartialOrder β]
+定义 主段.cocone
+  签名: {α β : 类型} [偏序 α] [偏序 β]
   定义体: F.obj f.top
   ι :=
     { app i := F.map (homOfLE (f.lt_top i).le)

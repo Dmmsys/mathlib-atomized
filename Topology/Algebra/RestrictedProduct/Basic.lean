@@ -76,7 +76,7 @@ definition RestrictedProduct
 
 中文:
 定义 RestrictedProduct
-  签名: (𝓕 : Filter ι)
+  签名: (𝓕 : 滤子 ι)
   定义体: {x : Π i, R i // forallᶠ i in 𝓕, x i in A i}
 -/
 def RestrictedProduct (𝓕 : Filter ι) : Type _ := {x : Π i, R i // forallᶠ i in 𝓕, x i in A i}
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: DFunLike (Πʳ i, [R i, A i]_[𝓕]) ι R
+  签名: 依赖函数状 (Πʳ i, [R i, A i]_[𝓕]) ι R
   定义体: x.1 i
   coe_injective _ _ := Subtype.ext
 -/
@@ -208,7 +208,7 @@ lemma range_coe_principal
 
 中文:
 引理 range_coe_principal
-  条件: {S : Set ι}
+  条件: {S : 集合 ι}
   证明: range_coe R A
 
 Depends on / 依赖: range_coe
@@ -341,7 +341,7 @@ lemma exists_inclusion_eq_of_eventually
   proof: ⟨⟨x.1, hx𝓖⟩, rfl⟩
 
 中文:
-引理 exists_inclusion_eq_of_eventually
+引理 存在_inclusion_eq_of_eventually
   结论: (h : 𝓕 <= 𝓖) {x : Πʳ i, [R i, A i]_[𝓕]}
   证明: ⟨⟨x.1, hx𝓖⟩, rfl⟩
 -/
@@ -359,7 +359,7 @@ lemma exists_structureMap_eq_of_forall
   proof: ⟨fun i => ⟨x i, hx i⟩, rfl⟩
 
 中文:
-引理 exists_structureMap_eq_of_forall
+引理 存在_structureMap_eq_of_对任意
   结论: {x : Πʳ i, [R i, A i]_[𝓕]}
   证明: ⟨fun i => ⟨x i, hx i⟩, rfl⟩
 -/
@@ -496,7 +496,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, One (R i)] [对任意 i, OneMemClass (S i) (R i)] : One (Πʳ i, [R i, B i]_[𝓕]) where
+  签名: i, 幺 (R i)] [对任意 i, OneMem类 (S i) (R i)] : 幺 (Πʳ i, [R i, B i]_[𝓕]) where
   定义体: ⟨fun _ => 1, .of_forall fun _ => one_mem _⟩
 
 @[to_additive (attr := simp)]
@@ -519,7 +519,7 @@ lemma one_apply
 
 中文:
 引理 one_apply
-  条件: [Π i, One (R i)] [对任意 i, OneMemClass (S i) (R i)] (i : ι)
+  条件: [Π i, 幺 (R i)] [对任意 i, OneMem类 (S i) (R i)] (i : ι)
   证明: rfl
 
 @[to_additive]
@@ -541,7 +541,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Inv (R i)] [对任意 i, InvMemClass (S i) (R i)] : Inv (Πʳ i, [R i, B i]_[𝓕]) where
+  签名: i, 取逆 (R i)] [对任意 i, InvMem类 (S i) (R i)] : 取逆 (Πʳ i, [R i, B i]_[𝓕]) where
   定义体: ⟨fun i => (x i)⁻¹, x.2.mono fun _ => inv_mem⟩
 
 @[to_additive (attr := simp)]
@@ -564,7 +564,7 @@ lemma inv_apply
 
 中文:
 引理 inv_apply
-  结论: [Π i, Inv (R i)] [对任意 i, InvMemClass (S i) (R i)]
+  结论: [Π i, 取逆 (R i)] [对任意 i, InvMem类 (S i) (R i)]
   证明: rfl
 
 @[to_additive]
@@ -586,7 +586,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Mul (R i)] [对任意 i, MulMemClass (S i) (R i)] : Mul (Πʳ i, [R i, B i]_[𝓕]) where
+  签名: i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)] : 乘法 (Πʳ i, [R i, B i]_[𝓕]) where
   定义体: ⟨fun i => x i * y i, y.2.mp (x.2.mono fun _ => mul_mem)⟩
 
 @[to_additive (attr := simp)]
@@ -609,7 +609,7 @@ lemma mul_apply
 
 中文:
 引理 mul_apply
-  结论: [Π i, Mul (R i)] [对任意 i, MulMemClass (S i) (R i)]
+  结论: [Π i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)]
   证明: rfl
 
 @[to_additive]
@@ -636,7 +636,7 @@ lemma smul_apply
 
 中文:
 引理 smul_apply
-  结论: {G : 类型} [Π i, SMul G (R i)] [对任意 i, SMulMemClass (S i) G (R i)] (g : G)
+  结论: {G : 类型} [Π i, 标量乘法 G (R i)] [对任意 i, SMulMem类 (S i) G (R i)] (g : G)
   证明: rfl
 
 @[to_additive]
@@ -658,7 +658,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, DivInvMonoid (R i)] [对任意 i, SubgroupClass (S i) (R i)] :
+  签名: i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
   定义体: ⟨fun i => x i / y i, y.2.mp (x.2.mono fun _ => div_mem)⟩
 
 @[to_additive (attr := simp)]
@@ -682,7 +682,7 @@ lemma div_apply
 
 中文:
 引理 div_apply
-  结论: [Π i, DivInvMonoid (R i)] [对任意 i, SubgroupClass (S i) (R i)]
+  结论: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
   证明: rfl
 
 @[to_additive]
@@ -704,7 +704,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: [Π i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)]
+  签名: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
   定义体: ⟨fun i => x i ^ n, x.2.mono fun _ hi => pow_mem hi n⟩
 
 @[to_additive]
@@ -728,7 +728,7 @@ lemma pow_apply
 
 中文:
 引理 pow_apply
-  结论: [Π i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)]
+  结论: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
   证明: rfl
 
 @[to_additive]
@@ -750,7 +750,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)] :
+  签名: i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)] :
   定义体: DFunLike.coe_injective.monoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 @[to_additive]
@@ -774,7 +774,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, CommMonoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)] :
+  签名: i, 交换幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)] :
   定义体: DFunLike.coe_injective.commMonoid _ rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 @[to_additive]
@@ -798,7 +798,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: [Π i, DivInvMonoid (R i)] [对任意 i, SubgroupClass (S i) (R i)]
+  签名: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
   定义体: ⟨fun i => x i ^ n, x.2.mono fun _ hi => zpow_mem hi n⟩
 
 @[to_additive]
@@ -820,7 +820,7 @@ lemma zpow_apply
 
 中文:
 引理 zpow_apply
-  结论: [Π i, DivInvMonoid (R i)] [对任意 i, SubgroupClass (S i) (R i)]
+  结论: [Π i, 除逆幺半群 (R i)] [对任意 i, 子群类 (S i) (R i)]
   证明: rfl
 -/
 lemma zpow_apply [Π i, DivInvMonoid (R i)] [forall i, SubgroupClass (S i) (R i)]
@@ -839,7 +839,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, AddMonoidWithOne (R i)] [对任意 i, AddSubmonoidWithOneClass (S i) (R i)] :
+  签名: i, 加法带幺幺半群 (R i)] [对任意 i, 加法带幺子幺半群类 (S i) (R i)] :
   定义体: ⟨fun _ => n, .of_forall fun _ => natCast_mem _ n⟩
 
 @[to_additive]
@@ -864,7 +864,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Group (R i)] [对任意 i, SubgroupClass (S i) (R i)] :
+  签名: i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
   定义体: DFunLike.coe_injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -889,7 +889,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, CommGroup (R i)] [对任意 i, SubgroupClass (S i) (R i)] :
+  签名: i, 交换群 (R i)] [对任意 i, 子群类 (S i) (R i)] :
   定义体: DFunLike.coe_injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -910,7 +910,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)] :
+  签名: i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
   定义体: ⟨fun _ => n, .of_forall fun _ => intCast_mem _ n⟩
 
 Depends on / 依赖: intCast_mem, of_forall
@@ -930,7 +930,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)] :
+  签名: i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
   定义体: DFunLike.coe_injective.ring _ rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl)
 
@@ -951,7 +951,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, CommRing (R i)] [对任意 i, SubringClass (S i) (R i)] :
+  签名: i, 交换环 (R i)] [对任意 i, 子环类 (S i) (R i)] :
   定义体: DFunLike.coe_injective funext (fun _ => mul_comm _ _)
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, mul_comm
@@ -977,7 +977,7 @@ definition coeMonoidHom
 
 中文:
 定义 coeMonoidHom
-  签名: [对任意 i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)]
+  签名: [对任意 i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
   定义体: (↑)
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -1020,7 +1020,7 @@ definition evalMonoidHom
 
 中文:
 定义 evalMonoidHom
-  签名: (j : ι) [Π i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)]
+  签名: (j : ι) [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
   定义体: x j
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -1044,7 +1044,7 @@ lemma evalMonoidHom_apply
 
 中文:
 引理 evalMonoidHom_apply
-  结论: [Π i, Monoid (R i)] [对任意 i, SubmonoidClass (S i) (R i)]
+  结论: [Π i, 幺半群 (R i)] [对任意 i, 子幺半群类 (S i) (R i)]
   证明: rfl
 -/
 lemma evalMonoidHom_apply [Π i, Monoid (R i)] [forall i, SubmonoidClass (S i) (R i)]
@@ -1064,7 +1064,7 @@ definition evalRingHom
 
 中文:
 定义 evalRingHom
-  签名: (j : ι) [Π i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)]
+  签名: (j : ι) [Π i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)]
   定义体: evalMonoidHom R j
   __ := evalAddMonoidHom R j
 
@@ -1088,7 +1088,7 @@ lemma evalRingHom_apply
 
 中文:
 引理 evalRingHom_apply
-  结论: [Π i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)]
+  结论: [Π i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)]
   证明: rfl
 -/
 lemma evalRingHom_apply [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
@@ -1194,7 +1194,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  结论: {G H : ι -> 类型} {C : (i : ι) -> Set (G i)}
+  结论: {G H : ι -> 类型} {C : (i : ι) -> 集合 (G i)}
   证明: rfl
 -/
 lemma map_apply {G H : ι -> Type*} {C : (i : ι) -> Set (G i)}
@@ -1393,7 +1393,7 @@ lemma coe_mulSingle_apply
 中文:
 引理 coe_mulSingle_apply
   条件: (x : G i) (j : ι)
-  结论: mulSingle A i x j = Pi.mulSingle i x j
+  结论: mulSingle A i x j = 依赖函数类型.mulSingle i x j
   证明: rfl
 -/
 lemma coe_mulSingle_apply (x : G i) (j : ι) : mulSingle A i x j = Pi.mulSingle i x j := rfl
@@ -1409,7 +1409,7 @@ lemma comp_mulSingle
 
 中文:
 引理 comp_mulSingle
-  结论: (↑) ∘ mulSingle A i = Pi.mulSingle (M := G) i
+  结论: (↑) ∘ mulSingle A i = 依赖函数类型.mulSingle (M := G) i
   证明: by ext; simp
 
 @[to_additive]
@@ -1429,7 +1429,7 @@ lemma mulSingle_injective
 
 中文:
 引理 mulSingle_injective
-  结论: (mulSingle A i).Injective
+  结论: (mulSingle A i).单射
   证明: (comp_mulSingle A _ ▸ Pi.mulSingle_injective i).of_comp
 
 @[to_additive]
@@ -1620,7 +1620,7 @@ lemma mulSingle_mul
 
 中文:
 引理 mulSingle_mul
-  结论: [对任意 i, MulOneClass (G i)] [对任意 i, OneMemClass (S i) (G i)]
+  结论: [对任意 i, MulOne类 (G i)] [对任意 i, OneMem类 (S i) (G i)]
   证明: by
   ext; simp [Pi.mulSingle_mul]
 
@@ -1649,7 +1649,7 @@ lemma mul_single
 
 中文:
 引理 mul_single
-  结论: [对任意 i, MulZeroClass (G i)] [对任意 i, ZeroMemClass (S i) (G i)]
+  结论: [对任意 i, 乘零类 (G i)] [对任意 i, ZeroMem类 (S i) (G i)]
   证明: by
   ext j
   rcases eq_or_ne i j with rfl | hne; · simp
@@ -1682,7 +1682,7 @@ lemma single_mul
 
 中文:
 引理 single_mul
-  结论: [对任意 i, MulZeroClass (G i)] [对任意 i, ZeroMemClass (S i) (G i)]
+  结论: [对任意 i, 乘零类 (G i)] [对任意 i, ZeroMem类 (S i) (G i)]
   证明: by
   ext j
   rcases eq_or_ne i j with rfl | hne; · simp
@@ -1713,7 +1713,7 @@ lemma mulSingle_inv
 
 中文:
 引理 mulSingle_inv
-  结论: [对任意 i, Group (G i)] [对任意 i, SubgroupClass (S i) (G i)]
+  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
   证明: by
   ext; simp [Pi.mulSingle_inv]
 
@@ -1740,7 +1740,7 @@ lemma mulSingle_div
 
 中文:
 引理 mulSingle_div
-  结论: [对任意 i, Group (G i)] [对任意 i, SubgroupClass (S i) (G i)]
+  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
   证明: by
   ext; simp [Pi.mulSingle_div]
 
@@ -1767,7 +1767,7 @@ lemma mulSingle_pow
 
 中文:
 引理 mulSingle_pow
-  结论: [对任意 i, Monoid (G i)] [对任意 i, SubmonoidClass (S i) (G i)]
+  结论: [对任意 i, 幺半群 (G i)] [对任意 i, 子幺半群类 (S i) (G i)]
   证明: by
   ext; simp [Pi.mulSingle_pow, RestrictedProduct.pow_apply]
 
@@ -1792,7 +1792,7 @@ lemma mulSingle_zpow
 
 中文:
 引理 mulSingle_zpow
-  结论: [对任意 i, Group (G i)] [对任意 i, SubgroupClass (S i) (G i)]
+  结论: [对任意 i, 群 (G i)] [对任意 i, 子群类 (S i) (G i)]
   证明: by
   ext; simp [Pi.mulSingle_zpow, RestrictedProduct.zpow_apply]
 

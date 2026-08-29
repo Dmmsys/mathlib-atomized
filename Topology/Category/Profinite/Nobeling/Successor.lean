@@ -137,7 +137,7 @@ include hC in
 
 中文:
 定理 isClosed_C0
-  结论: IsClosed (C0 C ho)
+  结论: 是闭集 (C0 C ho)
   证明: by
   refine hC.inter ?_
   have h : Continuous (fun (f : I -> Bool) => f (term I ho)) := continuous_apply (term I ho)
@@ -166,7 +166,7 @@ theorem isClosed_C1
 
 中文:
 定理 isClosed_C1
-  结论: IsClosed (C1 C ho)
+  结论: 是闭集 (C1 C ho)
   证明: by
   refine hC.inter ?_
   have h : Continuous (fun (f : I -> Bool) => f (term I ho)) := continuous_apply (term I ho)
@@ -253,7 +253,7 @@ theorem isClosed_C'
 
 中文:
 定理 isClosed_C'
-  结论: IsClosed (C' C ho)
+  结论: 是闭集 (C' C ho)
   证明: IsClosed.inter (isClosed_C0 _ hC _) (isClosed_proj _ _ (isClosed_C1 _ hC _))
 
 Depends on / 依赖: IsClosed, IsClosed.inter, isClosed_C0, isClosed_C1, isClosed_proj
@@ -292,7 +292,7 @@ definition SwapTrue
 
 中文:
 定义 SwapTrue
-  签名: : (I -> 布尔) -> I -> 布尔
+  签名: : (I -> 布尔值) -> I -> 布尔值
   定义体: fun f i => if ord I i = o then true else f i
 -/
 def SwapTrue : (I -> Bool) -> I -> Bool :=
@@ -314,7 +314,7 @@ theorem continuous_swapTrue
 
 中文:
 定理 continuous_swapTrue
-  结论: Continuous (SwapTrue o : (I -> 布尔) -> I -> 布尔)
+  结论: 连续 (SwapTrue o : (I -> 布尔值) -> I -> 布尔值)
   证明: by
   dsimp +unfoldPartialApp [SwapTrue]
   apply continuous_pi
@@ -433,7 +433,7 @@ theorem continuous_CC'₀
 
 中文:
 定理 continuous_CC'₀
-  结论: Continuous (CC'₀ C ho)
+  结论: 连续 (CC'₀ C ho)
   证明: Continuous.subtype_mk continuous_subtype_val _
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, continuous_subtype_val, subtype_mk
@@ -450,7 +450,7 @@ theorem continuous_CC'₁
 
 中文:
 定理 continuous_CC'₁
-  结论: Continuous (CC'₁ C hsC ho)
+  结论: 连续 (CC'₁ C hsC ho)
   证明: Continuous.subtype_mk (Continuous.comp (continuous_swapTrue o) continuous_subtype_val) _
 -/
 theorem continuous_CC'₁ : Continuous (CC'₁ C hsC ho) :=
@@ -468,7 +468,7 @@ definition Linear_CC'₀
 
 中文:
 定义 Linear_CC'₀
-  签名: : LocallyConstant C 整数 ->ₗ[整数] LocallyConstant (C' C ho) 整数
+  签名: : 局部常数 C 整数 ->ₗ[整数] 局部常数 (C' C ho) 整数
   定义体: LocallyConstant.comapₗ Int ⟨(CC'₀ C ho), (continuous_CC'₀ C ho)⟩
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.comap, continuous_CC
@@ -488,7 +488,7 @@ definition Linear_CC'₁
 
 中文:
 定义 Linear_CC'₁
-  签名: : LocallyConstant C 整数 ->ₗ[整数] LocallyConstant (C' C ho) 整数
+  签名: : 局部常数 C 整数 ->ₗ[整数] 局部常数 (C' C ho) 整数
   定义体: LocallyConstant.comapₗ Int ⟨(CC'₁ C hsC ho), (continuous_CC'₁ C hsC ho)⟩
 -/
 def Linear_CC'₁ : LocallyConstant C Int ->ₗ[Int] LocallyConstant (C' C ho) Int :=
@@ -506,7 +506,7 @@ definition Linear_CC'
 
 中文:
 定义 Linear_CC'
-  签名: : LocallyConstant C 整数 ->ₗ[整数] LocallyConstant (C' C ho) 整数
+  签名: : 局部常数 C 整数 ->ₗ[整数] 局部常数 (C' C ho) 整数
   定义体: Linear_CC'₁ C hsC ho - Linear_CC'₀ C ho
 -/
 def Linear_CC' : LocallyConstant C Int ->ₗ[Int] LocallyConstant (C' C ho) Int :=
@@ -584,7 +584,7 @@ theorem C0_projOrd
 
 中文:
 定理 C0_projOrd
-  条件: {x : I -> 布尔} (hx : x in C0 C ho)
+  条件: {x : I -> 布尔值} (hx : x in C0 C ho)
   结论: Proj (ord I · < o) x = x
   证明: by
   ext i
@@ -635,7 +635,7 @@ theorem C1_projOrd
 
 中文:
 定理 C1_projOrd
-  条件: {x : I -> 布尔} (hx : x in C1 C ho)
+  条件: {x : I -> 布尔值} (hx : x in C1 C ho)
   结论: SwapTrue o (Proj (ord I · < o) x) = x
   证明: by
   ext i
@@ -684,7 +684,7 @@ theorem CC_exact
 
 中文:
 定理 CC_exact
-  条件: {f : LocallyConstant C 整数} (hf : Linear_CC' C hsC ho f = 0)
+  条件: {f : 局部常数 C 整数} (hf : Linear_CC' C hsC ho f = 0)
   证明: by
   classical
   dsimp [Linear_CC', Linear_CC'₀, Linear_CC'₁] at hf
@@ -745,7 +745,7 @@ include hC in
 
 中文:
 定理 succ_mono
-  结论: CategoryTheory.Mono (ModuleCat.ofHom (πs C o))
+  结论: 范畴论.单态射 (模范畴.ofHom (πs C o))
   证明: by
   rw [ModuleCat.mono_iff_injective]
   exact injective_πs _ _
@@ -801,7 +801,7 @@ include hsC in
 
 中文:
 定义 MaxProducts
-  签名: : Set (Products I)
+  签名: : 集合 (Products I)
   定义体: {l | l.isGood C ∧ term I ho in l.val}
 
 include hsC in
@@ -902,7 +902,7 @@ theorem injective_sum_to
 
 中文:
 定理 injective_sum_to
-  结论: Function.Injective (sum_to C ho)
+  结论: 函数.单射 (sum_to C ho)
   证明: by
   refine Function.Injective.sumElim Subtype.val_injective Subtype.val_injective
     (fun ⟨a,ha⟩ ⟨b,hb⟩ => (fun (hab : a = b) => ?_))
@@ -955,7 +955,7 @@ _ ≃ _ := Equiv.setCongr by rw [sum_to_range C ho, union_succ C hsC ho]
 
 中文:
 定义 sum_equiv
-  签名: (hsC : contained C (Order.succ o)) (ho : o < Ordinal.type (· < · : I -> I -> 命题))
+  签名: (hsC : contained C (Order.succ o)) (ho : o < 序数.type (· < · : I -> I -> 命题))
   定义体: calc _ ≃ Set.range (sum_to C ho) := Equiv.ofInjective (sum_to C ho) (injective_sum_to C ho)
 _ ≃ _ := Equiv.setCongr by rw [sum_to_range C ho, union_succ C hsC ho]
 
@@ -1042,7 +1042,7 @@ theorem span_sum
 
 中文:
 定理 span_sum
-  结论: Set.range (eval C) = Set.range (Sum.elim
+  结论: 集合.range (eval C) = 集合.range (和.elim
   证明: by
   rw [← sum_equiv_comp_eval_eq_elim C hsC ho]; rw [Equiv.toFun_as_coe]; rw [EquivLike.range_comp (e := sum_equiv C hsC ho)]
 
@@ -1069,7 +1069,7 @@ theorem square_commutes
 
 中文:
 定理 square_commutes
-  结论: SumEval C ho ∘ Sum.inl =
+  结论: SumEval C ho ∘ 和.inl =
   证明: by
   ext l
   dsimp [SumEval]
@@ -1099,7 +1099,7 @@ theorem swapTrue_eq_true
 
 中文:
 定理 swapTrue_eq_true
-  条件: (x : I -> 布尔)
+  条件: (x : I -> 布尔值)
   结论: SwapTrue o x (term I ho) = true
   证明: by
   simp only [SwapTrue, ord_term_aux, ite_true]
@@ -1162,7 +1162,7 @@ theorem Products.max_eq_o_cons_tail
 
 中文:
 定理 Products.max_eq_o_cons_tail
-  结论: [Inhabited I] (l : Products I) (hl : l.val != [])
+  结论: [可居 I] (l : Products I) (hl : l.val != [])
   证明: by
   rw [← List.cons_head!_tail hl]; rw [hlh]
   simp [Tail]
@@ -1188,7 +1188,7 @@ include hsC in
 
 中文:
 定理 Products.max_eq_o_cons_tail'
-  结论: [Inhabited I] (l : Products I) (hl : l.val != [])
+  结论: [可居 I] (l : Products I) (hl : l.val != [])
   证明: by
   simp_rw [← max_eq_o_cons_tail ho l hl hlh, Subtype.coe_eta]
 
@@ -1219,7 +1219,7 @@ theorem GoodProducts.head!_eq_o_of_maxProducts
 
 中文:
 定理 GoodProducts.head!_eq_o_of_maxProducts
-  条件: [Inhabited I] (l : ↑(MaxProducts C ho))
+  条件: [可居 I] (l : ↑(MaxProducts C ho))
   证明: by
   rw [eq_comm]; rw [← ord_term ho]
   have hm := l.prop.2
@@ -1282,7 +1282,7 @@ theorem Products.evalCons
 
 中文:
 定理 Products.evalCons
-  结论: {I} [LinearOrder I] {C : Set (I -> 布尔)} {l : List I} {a : I}
+  结论: {I} [线性序 I] {C : 集合 (I -> 布尔值)} {l : 列表 I} {a : I}
   证明: by
   simp only [eval.eq_1, List.map, List.prod_cons]
 
@@ -1310,7 +1310,7 @@ theorem Products.max_eq_eval
 
 中文:
 定理 Products.max_eq_eval
-  结论: [Inhabited I] (l : Products I) (hl : l.val != [])
+  结论: [可居 I] (l : Products I) (hl : l.val != [])
   证明: by
   have hlc : ((term I ho) :: l.Tail.val).IsChain (· > ·) := by
     rw [← max_eq_o_cons_tail ho l hl hlh]; exact l.prop

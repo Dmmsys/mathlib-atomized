@@ -61,11 +61,11 @@ class HasConicalLimit
     - preservesLimit_eCoyoneda((X : C)) : PreservesLimit F (eCoyoneda V X)  [default: by infer_instance]
 
 中文:
-类 HasConicalLimit
+类 有余nicalLimit
   参数: (F : J ⥤ C)
-  继承: HasLimit F
+  继承: 有极限 F
   公理与运算 (1 个):
-    - preservesLimit_eCoyoneda((X : C)) : PreservesLimit F (eCoyoneda V X)  [默认: by infer_instance]
+    - preservesLimit_eCoyoneda((X : C)) : 保持极限 F (eCoyoneda V X)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -85,10 +85,10 @@ class HasConicalLimitsOfShape
     - hasConicalLimit : forall F : J ⥤ C, HasConicalLimit V F  [default: by infer_instance]
 
 中文:
-类 HasConicalLimitsOfShape
+类 有余nicalLimitsOfShape
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasConicalLimit : 对任意 F : J ⥤ C, HasConicalLimit V F  [默认: by infer_instance]
+    - hasConicalLimit : 对任意 F : J ⥤ C, 有余nicalLimit V F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -116,10 +116,10 @@ class HasConicalLimitsOfSize
     - hasConicalLimitsOfShape : forall (J : Type u₁) [Category.{v₁} J], HasConicalLimitsOfShape J V C  [default: by infer_instance]
 
 中文:
-类 HasConicalLimitsOfSize
+类 有余nicalLimitsOfSize
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasConicalLimitsOfShape : 对任意 (J : 类型u₁) [Category.{v₁} J], HasConicalLimitsOfShape J V C  [默认: by infer_instance]
+    - hasConicalLimitsOfShape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有余nicalLimitsOfShape J V C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -168,8 +168,8 @@ lemma HasConicalLimit.of_iso
   preservesLimit_eCoyoneda X := preservesLimit_of_iso_diagram (eCoyoneda V X) e
 
 中文:
-引理 HasConicalLimit.of_iso
-  条件: {F G : J ⥤ C} [HasConicalLimit V F] (e : F ≅ G)
+引理 有余nicalLimit.of_iso
+  条件: {F G : J ⥤ C} [有余nicalLimit V F] (e : F ≅ G)
   证明: hasLimit_of_iso e
   preservesLimit_eCoyoneda X := preservesLimit_of_iso_diagram (eCoyoneda V X) e
 
@@ -188,8 +188,8 @@ instance HasConicalLimit.of_equiv
   signature: (F : J ⥤ C) [HasConicalLimit V F]
 
 中文:
-实例 HasConicalLimit.of_equiv
-  签名: (F : J ⥤ C) [HasConicalLimit V F]
+实例 有余nicalLimit.of_equiv
+  签名: (F : J ⥤ C) [有余nicalLimit V F]
 
 Depends on / 依赖: Discrete, Discrete.opposite, opposite, preservesColimitsOfShape_of_equiv
 -/
@@ -206,8 +206,8 @@ lemma HasConicalLimit.of_equiv_comp
   HasConicalLimit.of_iso V e
 
 中文:
-引理 HasConicalLimit.of_equiv_comp
-  结论: (F : J ⥤ C) (G : J' ⥤ J) [G.IsEquivalence]
+引理 有余nicalLimit.of_equiv_comp
+  结论: (F : J ⥤ C) (G : J' ⥤ J) [G.是等价]
   证明: have e : G.inv ⋙ G ⋙ F ≅ F := G.asEquivalence.invFunIdAssoc F
   HasConicalLimit.of_iso V e
 
@@ -229,8 +229,8 @@ instance HasConicalLimitsOfShape.hasLimitsOfShape
   signature: [HasConicalLimitsOfShape J V C]
 
 中文:
-实例 HasConicalLimitsOfShape.hasLimitsOfShape
-  签名: [HasConicalLimitsOfShape J V C]
+实例 有余nicalLimitsOfShape.hasLimitsOfShape
+  签名: [有余nicalLimitsOfShape J V C]
 -/
 instance HasConicalLimitsOfShape.hasLimitsOfShape [HasConicalLimitsOfShape J V C] :
     HasLimitsOfShape J C where
@@ -244,8 +244,8 @@ lemma HasConicalLimitsOfShape.of_equiv
   proof: HasConicalLimit.of_equiv_comp V F G
 
 中文:
-引理 HasConicalLimitsOfShape.of_equiv
-  结论: [HasConicalLimitsOfShape J' V C]
+引理 有余nicalLimitsOfShape.of_equiv
+  结论: [有余nicalLimitsOfShape J' V C]
   证明: HasConicalLimit.of_equiv_comp V F G
 
 Depends on / 依赖: HasConicalLimit, HasConicalLimit.of_equiv_comp, of_equiv_comp
@@ -262,8 +262,8 @@ instance HasConicalLimitsOfSize.hasLimitsOfSize
   signature: [HasConicalLimitsOfSize.{v₁, u₁} V C]
 
 中文:
-实例 HasConicalLimitsOfSize.hasLimitsOfSize
-  签名: [HasConicalLimitsOfSize.{v₁, u₁} V C]
+实例 有余nicalLimitsOfSize.hasLimitsOfSize
+  签名: [有余nicalLimitsOfSize.{v₁, u₁} V C]
 -/
 instance HasConicalLimitsOfSize.hasLimitsOfSize [HasConicalLimitsOfSize.{v₁, u₁} V C] :
     HasLimitsOfSize.{v₁, u₁} C where

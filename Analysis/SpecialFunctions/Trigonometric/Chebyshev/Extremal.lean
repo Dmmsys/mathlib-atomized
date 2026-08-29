@@ -114,7 +114,7 @@ lemma node_mem_Icc
 中文:
 引理 node_mem_Icc
   条件: {n i : 自然数}
-  结论: node n i in Set.Icc (-1) 1
+  结论: node n i in 集合.闭区间 (-1) 1
   证明: Set.mem_Icc.mpr ⟨neg_one_le_cos _, cos_le_one _⟩
 
 Depends on / 依赖: Set.mem_Icc.mpr, cos_le_one, mem_Icc, neg_one_le_cos
@@ -136,7 +136,7 @@ lemma eval_T_real_node
 
 中文:
 引理 eval_T_real_node
-  条件: {n i : 自然数} (hi : i in Finset.Iic n)
+  条件: {n i : 自然数} (hi : i in 有限集.左无界右闭区间 n)
   证明: by
   rcases eq_or_ne n 0 with rfl | hn
   · simp [show i = 0 by grind]
@@ -547,7 +547,7 @@ theorem coeff_le_of_forall_abs_le_one
   · rw [sumNodes_T_eq]
 
 中文:
-定理 coeff_le_of_forall_abs_le_one
+定理 coeff_le_of_对任意_abs_le_one
   结论: {n : 自然数} {P : 实数[X]}
   证明: by
   convert! sumNodes_le_sumNodes_T (fun i hi => le_of_lt <| negOnePow_mul_leadingCoeffC_pos hi) hPbnd
@@ -579,7 +579,7 @@ theorem leadingCoeff_le_of_forall_abs_le_one
     grw [coeff_le_of_forall_abs_le_one (le_of_e
 
 中文:
-定理 leadingCoeff_le_of_forall_abs_le_one
+定理 leadingCoeff_le_of_对任意_abs_le_one
   结论: {n : 自然数} {P : 实数[X]}
   证明: by
   by_cases P = 0
@@ -616,7 +616,7 @@ theorem coeff_eq_iff_of_forall_abs_le_one
   · rw [sumNodes_T_eq]
 
 中文:
-定理 coeff_eq_iff_of_forall_abs_le_one
+定理 coeff_eq_iff_of_对任意_abs_le_one
   结论: {n : 自然数} {P : 实数[X]}
   证明: by
   convert! sumNodes_eq_sumNodes_T_iff (fun i hi => negOnePow_mul_leadingCoeffC_pos hi) hPdeg hPbnd
@@ -647,7 +647,7 @@ theorem leadingCoeff_eq_iff_of_forall_abs_le_one
   lift P.degree to N
 
 中文:
-定理 leadingCoeff_eq_iff_of_forall_abs_le_one
+定理 leadingCoeff_eq_iff_of_对任意_abs_le_one
   结论: {n : 自然数} {P : 实数[X]} (hn : 2 <= n)
   证明: by
   refine ⟨fun hP => ?_, fun hP => by simp [hP]⟩
@@ -821,7 +821,7 @@ theorem eval_iterate_derivative_le_of_forall_abs_le_one
   · rw [sumNodes_eq_eval_it
 
 中文:
-定理 eval_iterate_derivative_le_of_forall_abs_le_one
+定理 eval_iterate_derivative_le_of_对任意_abs_le_one
   结论: {n : 自然数} {P : 实数[X]}
   证明: by
   by_cases! hk : n < k

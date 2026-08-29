@@ -64,7 +64,7 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_const
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq_const
-  结论: (h : Martingale f ℱ μ)
+  结论: (h : 鞅 f ℱ μ)
   证明: by
   refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
   refine condExp_ae_eq_restrict_of_measurableSpace_eq_on hτ.measurableSpace_le (ℱ.le i)
@@ -96,7 +96,7 @@ theorem condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
 
 中文:
 定理 condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const
-  结论: (h : Martingale f ℱ μ)
+  结论: (h : 鞅 f ℱ μ)
   证明: by
   by_cases hin : i <= n
   · refine Filter.EventuallyEq.trans ?_ (ae_restrict_of_ae (h.condExp_ae_eq hin))
@@ -139,7 +139,7 @@ theorem stoppedValue_ae_eq_restrict_eq
 
 中文:
 定理 stoppedValue_ae_eq_restrict_eq
-  结论: (h : Martingale f ℱ μ) (hτ : IsStoppingTime ℱ τ)
+  结论: (h : 鞅 f ℱ μ) (hτ : IsStoppingTime ℱ τ)
   证明: by
   refine Filter.EventuallyEq.trans ?_
     (condExp_stopping_time_ae_eq_restrict_eq_const_of_le_const h hτ hτ_le i).symm
@@ -176,7 +176,7 @@ theorem stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le_const_of_countable_range
-  结论: (h : Martingale f ℱ μ)
+  结论: (h : 鞅 f ℱ μ)
   证明: by
   have : Set.univ = ⋃ i in Set.range τ, {x | τ x = i} := by
     ext1 x
@@ -217,7 +217,7 @@ theorem stoppedValue_ae_eq_condExp_of_le_const
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le_const
-  结论: [Countable ι] (h : Martingale f ℱ μ)
+  结论: [可数 ι] (h : 鞅 f ℱ μ)
   证明: h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range hτ hτ_le (Set.to_countable _)
 
 Depends on / 依赖: Set.to_countable, h.stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, stoppedValue_ae_eq_condExp_of_le_const_of_countable_range, to_countable
@@ -243,7 +243,7 @@ theorem stoppedValue_ae_eq_condExp_of_le_of_countable_range
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le_of_countable_range
-  结论: (h : Martingale f ℱ μ)
+  结论: (h : 鞅 f ℱ μ)
   证明: by
   have : SigmaFinite (μ.trim (hτ.measurableSpace_le_of_le hτ_le)) :=
     sigmaFiniteTrim_mono _ (IsStoppingTime.measurableSpace_mono hσ hτ hσ_le_τ)
@@ -281,7 +281,7 @@ theorem stoppedValue_ae_eq_condExp_of_le
 
 中文:
 定理 stoppedValue_ae_eq_condExp_of_le
-  结论: [Countable ι] (h : Martingale f ℱ μ)
+  结论: [可数 ι] (h : 鞅 f ℱ μ)
   证明: h.stoppedValue_ae_eq_condExp_of_le_of_countable_range hτ hσ hσ_le_τ hτ_le (Set.to_countable _)
     (Set.to_countable _)
 
@@ -324,7 +324,7 @@ theorem condExp_stoppedValue_stopping_time_ae_eq_restrict_le
 
 中文:
 定理 condExp_stoppedValue_stopping_time_ae_eq_restrict_le
-  结论: (h : Martingale f ℱ μ)
+  结论: (h : 鞅 f ℱ μ)
   证明: by
   rw [ae_eq_restrict_iff_indicator_ae_eq
     (hτ.measurableSpace_le _ (hτ.measurableSet_le_stopping_time hσ))]
@@ -379,7 +379,7 @@ theorem stoppedValue_min_ae_eq_condExp
 
 中文:
 定理 stoppedValue_min_ae_eq_condExp
-  结论: [SigmaFiniteFiltration μ ℱ] (h : Martingale f ℱ μ)
+  结论: [σ有限滤子 μ ℱ] (h : 鞅 f ℱ μ)
   证明: by
   refine
     (h.stoppedValue_ae_eq_condExp_of_le hτ (hσ.min hτ) (fun x => min_le_right _ _) hτ_le).trans ?_

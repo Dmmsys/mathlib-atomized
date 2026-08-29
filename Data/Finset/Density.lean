@@ -69,7 +69,7 @@ definition dens
 
 中文:
 定义 dens
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: s.card / Fintype.card α
 
 Depends on / 依赖: Fintype, Fintype.card, s.card
@@ -87,8 +87,8 @@ lemma dens_eq_card_div_card
 
 中文:
 引理 dens_eq_card_div_card
-  条件: (s : Finset α)
-  结论: dens s = s.card / Fintype.card α
+  条件: (s : 有限集 α)
+  结论: dens s = s.card / 有限类型.card α
   证明: rfl
 -/
 lemma dens_eq_card_div_card (s : Finset α) : dens s = s.card / Fintype.card α := rfl
@@ -103,7 +103,7 @@ lemma dens_empty
 
 中文:
 引理 dens_empty
-  结论: dens (∅ : Finset α) = 0
+  结论: dens (∅ : 有限集 α) = 0
   证明: by simp [dens]
 -/
 @[simp] lemma dens_empty : dens (∅ : Finset α) = 0 := by simp [dens]
@@ -121,7 +121,7 @@ lemma dens_singleton
 中文:
 引理 dens_singleton
   条件: (a : α)
-  结论: dens ({a} : Finset α) = (Fintype.card α : Rat>=0)⁻¹
+  结论: dens ({a} : 有限集 α) = (有限类型.card α : 有理数>=0)⁻¹
   证明: by
   simp [dens]
 -/
@@ -141,7 +141,7 @@ lemma dens_cons
 中文:
 引理 dens_cons
   条件: (h : a ∉ s)
-  结论: (s.cons a h).dens = dens s + (Fintype.card α : Rat>=0)⁻¹
+  结论: (s.cons a h).dens = dens s + (有限类型.card α : 有理数>=0)⁻¹
   证明: by
   simp [dens, add_div]
 -/
@@ -160,7 +160,7 @@ lemma dens_disjUnion
 
 中文:
 引理 dens_disjUnion
-  条件: (s t : Finset α) (h)
+  条件: (s t : 有限集 α) (h)
   结论: dens (s.disjUnion t h) = dens s + dens t
   证明: by
   simp_rw [dens, card_disjUnion, Nat.cast_add, add_div]
@@ -196,7 +196,7 @@ lemma dens_ne_zero
 
 中文:
 引理 dens_ne_zero
-  结论: dens s != 0 ↔ s.Nonempty
+  结论: dens s != 0 ↔ s.非空
   证明: dens_eq_zero.not.trans nonempty_iff_ne_empty.symm
 
 Depends on / 依赖: dens_eq_zero, dens_eq_zero.not.trans, nonempty_iff_ne_empty, nonempty_iff_ne_empty.symm
@@ -218,7 +218,7 @@ protected alias ⟨_, Nonempty.dens_ne_zero⟩ := dens_ne_zero
 
 中文:
 引理 dens_pos
-  结论: 0 < dens s ↔ s.Nonempty
+  结论: 0 < dens s ↔ s.非空
   证明: pos_iff_ne_zero.trans dens_ne_zero
 
 protected alias ⟨_, Nonempty.dens_pos⟩ := dens_pos
@@ -296,7 +296,7 @@ lemma dens_mono
 
 中文:
 引理 dens_mono
-  结论: Monotone (dens : Finset α -> Rat>=0)
+  结论: 递增 (dens : 有限集 α -> 有理数>=0)
   证明: fun _ _ => dens_le_dens
 -/
 @[mono] lemma dens_mono : Monotone (dens : Finset α -> Rat>=0) := fun _ _ => dens_le_dens
@@ -310,7 +310,7 @@ lemma dens_strictMono
 
 中文:
 引理 dens_strictMono
-  结论: StrictMono (dens : Finset α -> Rat>=0)
+  结论: 严格递增 (dens : 有限集 α -> 有理数>=0)
   证明: fun _ _ => dens_lt_dens
 -/
 @[mono] lemma dens_strictMono : StrictMono (dens : Finset α -> Rat>=0) := fun _ _ => dens_lt_dens
@@ -332,7 +332,7 @@ lemma dens_map_le
 
 中文:
 引理 dens_map_le
-  条件: [Fintype β] (f : α ↪ β)
+  条件: [有限类型 β] (f : α ↪ β)
   结论: dens (s.map f) <= dens s
   证明: by
   cases isEmpty_or_nonempty α
@@ -364,7 +364,7 @@ lemma dens_map_equiv
 
 中文:
 引理 dens_map_equiv
-  条件: [Fintype β] (e : α ≃ β)
+  条件: [有限类型 β] (e : α ≃ β)
   结论: (s.map e.toEmbedding).dens = s.dens
   证明: by
   simp [dens, Fintype.card_congr e]
@@ -383,7 +383,7 @@ lemma dens_image
 
 中文:
 引理 dens_image
-  条件: [Fintype β] [DecidableEq β] {f : α -> β} (hf : Bijective f) (s : Finset α)
+  条件: [有限类型 β] [DecidableEq β] {f : α -> β} (hf : 双射 f) (s : 有限集 α)
   证明: by
   simpa [map_eq_image, -dens_map_equiv] using dens_map_equiv (.ofBijective f hf)
 
@@ -408,8 +408,8 @@ lemma card_mul_dens
 
 中文:
 引理 card_mul_dens
-  条件: (s : Finset α)
-  结论: Fintype.card α * s.dens = s.card
+  条件: (s : 有限集 α)
+  结论: 有限类型.card α * s.dens = s.card
   证明: by
   cases isEmpty_or_nonempty α
   · simp [Subsingleton.elim s ∅]
@@ -434,8 +434,8 @@ lemma dens_mul_card
 
 中文:
 引理 dens_mul_card
-  条件: (s : Finset α)
-  结论: s.dens * Fintype.card α = s.card
+  条件: (s : 有限集 α)
+  结论: s.dens * 有限类型.card α = s.card
   证明: by
   rw [mul_comm]; rw [card_mul_dens]
 -/
@@ -455,7 +455,7 @@ lemma natCast_card_mul_nnratCast_dens
 
 中文:
 引理 natCast_card_mul_nnratCast_dens
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: mod_cast s.card_mul_dens
 -/
 @[simp] lemma natCast_card_mul_nnratCast_dens (s : Finset α) :
@@ -471,7 +471,7 @@ lemma nnratCast_dens_mul_natCast_card
 
 中文:
 引理 nnratCast_dens_mul_natCast_card
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: mod_cast s.dens_mul_card
 -/
 @[simp] lemma nnratCast_dens_mul_natCast_card (s : Finset α) :
@@ -489,8 +489,8 @@ lemma nnratCast_dens
 
 中文:
 引理 nnratCast_dens
-  条件: (s : Finset α)
-  结论: (s.dens : 𝕜) = s.card / Fintype.card α
+  条件: (s : 有限集 α)
+  结论: (s.dens : 𝕜) = s.card / 有限类型.card α
   证明: by
   simp [dens]
 -/
@@ -512,7 +512,7 @@ lemma dens_univ
 
 中文:
 引理 dens_univ
-  结论: dens (univ : Finset α) = 1
+  结论: dens (univ : 有限集 α) = 1
   证明: by simp [dens, card_univ]
 -/
 @[simp] lemma dens_univ : dens (univ : Finset α) = 1 := by simp [dens, card_univ]
@@ -592,7 +592,7 @@ lemma dens_union_add_dens_inter
 
 中文:
 引理 dens_union_add_dens_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by
   simp_rw [dens, ← add_div, ← Nat.cast_add, card_union_add_card_inter]
 
@@ -612,7 +612,7 @@ lemma dens_inter_add_dens_union
 
 中文:
 引理 dens_inter_add_dens_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   证明: by rw [add_comm, dens_union_add_dens_inter]
 
 Depends on / 依赖: add_comm, dens_union_add_dens_inter
@@ -674,7 +674,7 @@ lemma dens_sdiff_add_dens
 
 中文:
 引理 dens_sdiff_add_dens
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: dens (s \ t) + dens t = (s union t).dens
   证明: by
   rw [← dens_union_of_disjoint sdiff_disjoint]; rw [sdiff_union_self_eq_union]
@@ -726,7 +726,7 @@ lemma dens_sdiff_add_dens_inter
 
 中文:
 引理 dens_sdiff_add_dens_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: dens (s \ t) + dens (s inter t) = dens s
   证明: by
   rw [← dens_union_of_disjoint (disjoint_sdiff_inter _ _)]; rw [sdiff_union_inter]
@@ -751,7 +751,7 @@ lemma dens_inter_add_dens_sdiff
 
 中文:
 引理 dens_inter_add_dens_sdiff
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: dens (s inter t) + dens (s \ t) = dens s
   证明: by
   rw [add_comm]; rw [dens_sdiff_add_dens_inter]
@@ -773,7 +773,7 @@ lemma dens_filter_add_dens_filter_not_eq_dens
 
 中文:
 引理 dens_filter_add_dens_filter_not_eq_dens
-  结论: {α : 类型} [Fintype α] {s : Finset α}
+  结论: {α : 类型} [有限类型 α] {s : 有限集 α}
   证明: by
   classical
   rw [← dens_union_of_disjoint (disjoint_filter_filter_not ..)]; rw [filter_union_filter_not_eq]
@@ -797,7 +797,7 @@ lemma dens_union_le
 
 中文:
 引理 dens_union_le
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: dens (s union t) <= dens s + dens t
   证明: dens_union_add_dens_inter s t ▸ le_add_of_nonneg_right zero_le
 
@@ -855,7 +855,7 @@ lemma le_dens_sdiff
 
 中文:
 引理 le_dens_sdiff
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: dens t - dens s <= dens (t \ s)
   证明: tsub_le_iff_right.2 dens_le_dens_sdiff_add_dens
 

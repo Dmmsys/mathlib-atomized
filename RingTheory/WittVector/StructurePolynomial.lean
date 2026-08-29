@@ -129,7 +129,7 @@ definition wittStructureRat
 
 中文:
 定义 wittStructureRat
-  签名: (Φ : MvPolynomial idx Rat) (n : 自然数)
+  签名: (Φ : 多元多项式 idx 有理数) (n : 自然数)
   定义体: bind₁ (fun k => bind₁ (fun i => rename (Prod.mk i) (W_ Rat k)) Φ) (xInTermsOfW p Rat n)
 
 Depends on / 依赖: Prod.mk, xInTermsOfW
@@ -152,7 +152,7 @@ theorem wittStructureRat_prop
 
 中文:
 定理 wittStructureRat_prop
-  条件: (Φ : MvPolynomial idx Rat) (n : 自然数)
+  条件: (Φ : 多元多项式 idx 有理数) (n : 自然数)
   证明: calc
     bind₁ (wittStructureRat p Φ) (W_ Rat n) =
         bind₁ (fun k => bind₁ (fun i => (rename (Prod.mk i)) (W_ Rat k)) Φ)
@@ -189,8 +189,8 @@ theorem wittStructureRat_existsUnique
     exact eval₂Hom_congr (Ring
 
 中文:
-定理 wittStructureRat_existsUnique
-  条件: (Φ : MvPolynomial idx Rat)
+定理 wittStructureRat_存在Unique
+  条件: (Φ : 多元多项式 idx 有理数)
   证明: by
   refine ⟨wittStructureRat p Φ, ?_, ?_⟩
   · intro n; apply wittStructureRat_prop
@@ -232,7 +232,7 @@ theorem wittStructureRat_rec_aux
 
 中文:
 定理 wittStructureRat_rec_aux
-  条件: (Φ : MvPolynomial idx Rat) (n : 自然数)
+  条件: (Φ : 多元多项式 idx 有理数) (n : 自然数)
   证明: by
   have := xInTermsOfW_aux p Rat n
   replace := congr_arg (bind₁ fun k : Nat => bind₁ (fun i => rename (Prod.mk i) (W_ Rat k)) Φ) this
@@ -272,7 +272,7 @@ theorem wittStructureRat_rec
 
 中文:
 定理 wittStructureRat_rec
-  条件: (Φ : MvPolynomial idx Rat) (n : 自然数)
+  条件: (Φ : 多元多项式 idx 有理数) (n : 自然数)
   证明: by
   calc
     wittStructureRat p Φ n = C (1 / (p : Rat) ^ n) * (wittStructureRat p Φ n * C ((p : Rat) ^ n)) := ?_
@@ -303,8 +303,8 @@ definition wittStructureInt
     wittStructureRat p (map (Int.castRingHom Rat) Φ) n
 
 中文:
-定义 wittStructureInt
-  签名: (Φ : MvPolynomial idx 整数) (n : 自然数)
+定义 wittStructure整数
+  签名: (Φ : 多元多项式 idx 整数) (n : 自然数)
   定义体: .ofCoeff .mapRange Rat.num (Rat.num_intCast 0) AddMonoidAlgebra.coeff
     wittStructureRat p (map (Int.castRingHom Rat) Φ) n
 
@@ -331,7 +331,7 @@ theorem bind₁_rename_expand_wittPolynomial
 
 中文:
 定理 bind₁_rename_expand_wittPolynomial
-  结论: (Φ : MvPolynomial idx 整数) (n : 自然数)
+  结论: (Φ : 多元多项式 idx 整数) (n : 自然数)
   证明: by
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
   simp only [map_bind₁, map_rename, map_expand, rename_expand, map_wittPolynomial]
@@ -377,7 +377,7 @@ theorem C_p_pow_dvd_bind₁_rename_wittPolynomial_sub_sum
 
 中文:
 定理 C_p_pow_dvd_bind₁_rename_wittPolynomial_sub_sum
-  结论: (Φ : MvPolynomial idx 整数) (n : 自然数)
+  结论: (Φ : 多元多项式 idx 整数) (n : 自然数)
   证明: by
   rcases n with - | n
   · simp
@@ -439,8 +439,8 @@ theorem map_wittStructureInt
       map (Int.castRin
 
 中文:
-定理 map_wittStructureInt
-  条件: (Φ : MvPolynomial idx 整数) (n : 自然数)
+定理 map_wittStructure整数
+  条件: (Φ : 多元多项式 idx 整数) (n : 自然数)
   证明: by
   induction n using Nat.strong_induction_on with | h n IH => ?_
   rw [wittStructureInt]; rw [map_mapRange_eq_iff]; rw [Int.coe_castRingHom]
@@ -490,8 +490,8 @@ theorem wittStructureInt_prop
     AlgHom.coe_toRingHom, map_wittStructureInt]
 
 中文:
-定理 wittStructureInt_prop
-  条件: (Φ : MvPolynomial idx 整数) (n)
+定理 wittStructure整数_prop
+  条件: (Φ : 多元多项式 idx 整数) (n)
   证明: by
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
   have := wittStructureRat_prop p (map (Int.castRingHom Rat) Φ) n
@@ -525,8 +525,8 @@ theorem eq_wittStructureInt
   · intro 
 
 中文:
-定理 eq_wittStructureInt
-  结论: (Φ : MvPolynomial idx 整数) (φ : 自然数 -> MvPolynomial (idx × 自然数) 整数)
+定理 eq_wittStructure整数
+  结论: (Φ : 多元多项式 idx 整数) (φ : 自然数 -> 多元多项式 (idx × 自然数) 整数)
   证明: by
   funext k
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
@@ -565,8 +565,8 @@ theorem wittStructureInt_existsUnique
   proof: ⟨wittStructureInt p Φ, wittStructureInt_prop _ _, eq_wittStructureInt _ _⟩
 
 中文:
-定理 wittStructureInt_existsUnique
-  条件: (Φ : MvPolynomial idx 整数)
+定理 wittStructure整数_存在Unique
+  条件: (Φ : 多元多项式 idx 整数)
   证明: ⟨wittStructureInt p Φ, wittStructureInt_prop _ _, eq_wittStructureInt _ _⟩
 
 Depends on / 依赖: eq_wittStructureInt, wittStructureInt, wittStructureInt_prop
@@ -592,7 +592,7 @@ theorem witt_structure_prop
 
 中文:
 定理 witt_structure_prop
-  条件: (Φ : MvPolynomial idx 整数) (n)
+  条件: (Φ : 多元多项式 idx 整数) (n)
   证明: by
   convert! congr_arg (map (Int.castRingHom R)) (wittStructureInt_prop p Φ n) using 1 <;>
       rw [hom_bind₁] <;>
@@ -626,8 +626,8 @@ theorem wittStructureInt_rename
 @[simp]
 
 中文:
-定理 wittStructureInt_rename
-  条件: {σ : 类型} (Φ : MvPolynomial idx 整数) (f : idx -> σ) (n : 自然数)
+定理 wittStructure整数_rename
+  条件: {σ : 类型} (Φ : 多元多项式 idx 整数) (f : idx -> σ) (n : 自然数)
   证明: by
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
   simp only [map_rename, map_wittStructureInt, wittStructureRat, rename_bind₁, rename_rename,
@@ -659,7 +659,7 @@ theorem constantCoeff_wittStructureRat_zero
 
 中文:
 定理 constantCoeff_wittStructureRat_zero
-  条件: (Φ : MvPolynomial idx Rat)
+  条件: (Φ : 多元多项式 idx 有理数)
   证明: by
   simp only [wittStructureRat, bind₁, map_aeval, xInTermsOfW_zero, constantCoeff_rename,
     constantCoeff_wittPolynomial, aeval_X, constantCoeff_comp_algebraMap, eval₂Hom_zero'_apply,
@@ -688,7 +688,7 @@ theorem constantCoeff_wittStructureRat
 
 中文:
 定理 constantCoeff_wittStructureRat
-  条件: (Φ : MvPolynomial idx Rat) (h : constantCoeff Φ = 0) (n : 自然数)
+  条件: (Φ : 多元多项式 idx 有理数) (h : constantCoeff Φ = 0) (n : 自然数)
   证明: by
   simp only [wittStructureRat, eval₂Hom_zero'_apply, h, bind₁, map_aeval, constantCoeff_rename,
     constantCoeff_wittPolynomial, constantCoeff_comp_algebraMap, RingHom.id_apply,
@@ -717,8 +717,8 @@ theorem constantCoeff_wittStructureInt_zero
   rw [← constantCoeff_map]; rw [map_wittStructureInt]; rw [constantCoeff_wittStructureRat_zero]; rw [constantCoeff_map]
 
 中文:
-定理 constantCoeff_wittStructureInt_zero
-  条件: (Φ : MvPolynomial idx 整数)
+定理 constantCoeff_wittStructure整数_zero
+  条件: (Φ : 多元多项式 idx 整数)
   证明: by
   have inj : Function.Injective (Int.castRingHom Rat) := by intro m n; exact Int.cast_inj.mp
   apply inj
@@ -745,8 +745,8 @@ theorem constantCoeff_wittStructureInt
   rw [constantCoeff_map]; rw [h]; rw [map_zero]
 
 中文:
-定理 constantCoeff_wittStructureInt
-  条件: (Φ : MvPolynomial idx 整数) (h : constantCoeff Φ = 0) (n : 自然数)
+定理 constantCoeff_wittStructure整数
+  条件: (Φ : 多元多项式 idx 整数) (h : constantCoeff Φ = 0) (n : 自然数)
   证明: by
   have inj : Function.Injective (Int.castRingHom Rat) := by intro m n; exact Int.cast_inj.mp
   apply inj
@@ -783,7 +783,7 @@ theorem wittStructureRat_vars
 
 中文:
 定理 wittStructureRat_vars
-  条件: [Fintype idx] (Φ : MvPolynomial idx Rat) (n : 自然数)
+  条件: [有限类型 idx] (Φ : 多元多项式 idx 有理数) (n : 自然数)
   证明: by
   rw [wittStructureRat]
   intro x hx
@@ -821,8 +821,8 @@ theorem wittStructureInt_vars
   apply wittStructureRat_vars
 
 中文:
-定理 wittStructureInt_vars
-  条件: [Fintype idx] (Φ : MvPolynomial idx 整数) (n : 自然数)
+定理 wittStructure整数_vars
+  条件: [有限类型 idx] (Φ : 多元多项式 idx 整数) (n : 自然数)
   证明: by
   have : Function.Injective (Int.castRingHom Rat) := Int.cast_injective
   rw [← vars_map_of_injective _ this]; rw [map_wittStructureInt]

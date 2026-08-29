@@ -106,7 +106,7 @@ lemma hasSmallLocalizedShiftedHom_iff_target
 
 中文:
 引理 hasSmallLocalizedShiftedHom_iff_target
-  结论: [W.IsCompatibleWithShift M]
+  结论: [W.是余mpatibleWithShift M]
   证明: forall_congr' (fun a => forall_congr' (fun b =>
     hasSmallLocalizedHom_iff_target W (X⟦a⟧) (f⟦b⟧') (W.shift hf b)))
 
@@ -130,7 +130,7 @@ lemma hasSmallLocalizedShiftedHom_iff_source
 
 中文:
 引理 hasSmallLocalizedShiftedHom_iff_source
-  结论: [W.IsCompatibleWithShift M]
+  结论: [W.是余mpatibleWithShift M]
   证明: forall_congr' (fun a => forall_congr' (fun b =>
     hasSmallLocalizedHom_iff_source W (f⟦a⟧') (W.shift hf a) (Y⟦b⟧)))
 
@@ -879,7 +879,7 @@ lemma equiv_chgUniv
 
 中文:
 引理 equiv_chgUniv
-  结论: (L : C ⥤ D) [L.IsLocalization W] [L.CommShift M] {X Y : C} {m : M}
+  结论: (L : C ⥤ D) [L.是Localization W] [L.交换Shift M] {X Y : C} {m : M}
   证明: by
   dsimp [equiv]
   congr
@@ -958,7 +958,7 @@ lemma equiv_smallShiftedHomMap
 
 中文:
 引理 equiv_smallShiftedHomMap
-  结论: (G : D₁ ⥤ D₂) [G.CommShift M]
+  结论: (G : D₁ ⥤ D₂) [G.交换Shift M]
   证明: by
   have := hasSmallLocalizedHom_of_hasSmallLocalizedShiftedHom₀.{w''} W₂ M X₂ X₂
   apply ((L₂.commShiftIso m).app Y₂).homToEquiv.symm.injective

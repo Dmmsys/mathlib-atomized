@@ -65,10 +65,10 @@ class IsStandardSmooth
     - out : exists (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
 
 中文:
-类 IsStandardSmooth
+类 是StandardSmooth
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 存在 (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
+    - out : 存在 (ι σ : 类型) (_ : 有限 σ), 有限 ι ∧ 非空 (浸没呈现 R S ι σ)
 -/
 class IsStandardSmooth : Prop where
   out : exists (ι σ : Type) (_ : Finite σ), Finite ι ∧ Nonempty (SubmersivePresentation R S ι σ)
@@ -86,8 +86,8 @@ lemma SubmersivePresentation.isStandardSmooth
   exact ⟨_, _, _, inferInstance, ⟨P.reindex (Fintype.equivFin _).symm (Fintype.equivFin _).symm⟩⟩
 
 中文:
-引理 SubmersivePresentation.isStandardSmooth
-  条件: [Finite ι] (P : SubmersivePresentation R S ι σ)
+引理 浸没呈现.isStandardSmooth
+  条件: [有限 ι] (P : 浸没呈现 R S ι σ)
   证明: by
   exact ⟨_, _, _, inferInstance, ⟨P.reindex (Fintype.equivFin _).symm (Fintype.equivFin _).symm⟩⟩
 
@@ -107,8 +107,8 @@ definition IsStandardSmooth.relativeDimension
   ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose_spec.2.some.dimension
 
 中文:
-定义 IsStandardSmooth.relativeDimension
-  签名: [IsStandardSmooth R S]
+定义 是StandardSmooth.relativeDimension
+  签名: [是StandardSmooth R S]
   定义体: letI := ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose
   ‹IsStandardSmooth R S›.out.choose_spec.choose_spec.choose_spec.2.some.dimension
 
@@ -128,10 +128,10 @@ class IsStandardSmoothOfRelativeDimension
     - out : exists (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ), P.dimension = n
 
 中文:
-类 IsStandardSmoothOfRelativeDimension
+类 是StandardSmoothOfRelativeDimension
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 存在 (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ), P.dimension = n
+    - out : 存在 (ι σ : 类型) (_ : 有限 σ) (_ : 有限 ι) (P : 浸没呈现 R S ι σ), P.dimension = n
 -/
 class IsStandardSmoothOfRelativeDimension : Prop where
   out : exists (ι σ : Type) (_ : Finite σ) (_ : Finite ι) (P : SubmersivePresentation R S ι σ),
@@ -150,8 +150,8 @@ lemma SubmersivePresentation.isStandardSmoothOfRelativeDimension
   simp [hP]
 
 中文:
-引理 SubmersivePresentation.isStandardSmoothOfRelativeDimension
-  结论: [Finite ι]
+引理 浸没呈现.isStandardSmoothOfRelativeDimension
+  结论: [有限 ι]
   证明: by
   refine ⟨⟨_, _, _, inferInstance,
     P.reindex (Fintype.equivFin _).symm (Fintype.equivFin σ).symm, ?_⟩⟩
@@ -177,7 +177,7 @@ lemma IsStandardSmoothOfRelativeDimension.isStandardSmooth
     H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty⟩
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.isStandardSmooth
+引理 是StandardSmoothOfRelativeDimension.isStandardSmooth
   证明: ⟨_, _, _, H.out.choose_spec.choose_spec.choose_spec.choose,
     H.out.choose_spec.choose_spec.choose_spec.choose_spec.nonempty⟩
 -/
@@ -195,7 +195,7 @@ lemma IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective
     SubmersivePresentation.ofBijectiveAlgebraMap h, Presentation.ofBijectiveAlgebraMap_dimension h⟩
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective
+引理 是StandardSmoothOfRelativeDimension.of_algebraMap_bijective
   证明: ⟨_, _, _, inferInstance,
     SubmersivePresentation.ofBijectiveAlgebraMap h, Presentation.ofBijectiveAlgebraMap_dimension h⟩
 
@@ -217,7 +217,7 @@ instance IsStandardSmoothOfRelativeDimension.id
   body: IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective Function.bijective_id
 
 中文:
-实例 IsStandardSmoothOfRelativeDimension.id
+实例 是StandardSmoothOfRelativeDimension.id
   签名: :
   定义体: IsStandardSmoothOfRelativeDimension.of_algebraMap_bijective Function.bijective_id
 -/
@@ -241,8 +241,8 @@ lemma IsStandardSmooth.of_algEquiv
   exact (P.ofAlgEquiv e).isStandardSmooth
 
 中文:
-引理 IsStandardSmooth.of_algEquiv
-  结论: {T : 类型} [CommRing T] [Algebra R T] (e : S ≃ₐ[R] T)
+引理 是StandardSmooth.of_algEquiv
+  结论: {T : 类型} [交换环 T] [代数 R T] (e : S ≃ₐ[R] T)
   证明: by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
   exact (P.ofAlgEquiv e).isStandardSmooth
@@ -265,8 +265,8 @@ lemma IsStandardSmoothOfRelativeDimension.of_algEquiv
   exact (P.ofAlgEquiv e).isStandardSmoothOfRelativeDimension (by simpa)
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.of_algEquiv
-  结论: {T : 类型} [CommRing T] [Algebra R T]
+引理 是StandardSmoothOfRelativeDimension.of_algEquiv
+  结论: {T : 类型} [交换环 T] [代数 R T]
   证明: by
   obtain ⟨_, _, _, _, ⟨P, hP⟩⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
   exact (P.ofAlgEquiv e).isStandardSmoothOfRelativeDimension (by simpa)
@@ -295,8 +295,8 @@ lemma IsStandardSmooth.trans
     exact ⟨_, _, _, inferInstance, ⟨Q.comp P⟩⟩
 
 中文:
-引理 IsStandardSmooth.trans
-  条件: [IsStandardSmooth R S] [IsStandardSmooth S T]
+引理 是StandardSmooth.trans
+  条件: [是StandardSmooth R S] [是StandardSmooth S T]
   证明: by
     obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
     obtain ⟨_, _, _, _, ⟨Q⟩⟩ := ‹IsStandardSmooth S T›
@@ -324,8 +324,8 @@ lemma IsStandardSmoothOfRelativeDimension.trans
     apply PreSubmersivePresentation.dimension_comp_eq_dimension_add_dimension
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.trans
-  结论: [IsStandardSmoothOfRelativeDimension n R S]
+引理 是StandardSmoothOfRelativeDimension.trans
+  结论: [是StandardSmoothOfRelativeDimension n R S]
   证明: by
     obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
     obtain ⟨_, _, _, _, Q, hQ⟩ := ‹IsStandardSmoothOfRelativeDimension m S T›
@@ -354,8 +354,8 @@ lemma IsStandardSmooth.localization_away
   proof: ⟨_, _, _, inferInstance, ⟨SubmersivePresentation.localizationAway S r⟩⟩
 
 中文:
-引理 IsStandardSmooth.localization_away
-  条件: (r : R) [IsLocalization.Away r S]
+引理 是StandardSmooth.localization_away
+  条件: (r : R) [是Localization.Away r S]
   证明: ⟨_, _, _, inferInstance, ⟨SubmersivePresentation.localizationAway S r⟩⟩
 
 Depends on / 依赖: SubmersivePresentation, SubmersivePresentation.localizationAway, localizationAway
@@ -374,8 +374,8 @@ lemma IsStandardSmoothOfRelativeDimension.localization_away
     Presentation.localizationAway_dimension_zero r⟩
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.localization_away
-  条件: (r : R) [IsLocalization.Away r S]
+引理 是StandardSmoothOfRelativeDimension.localization_away
+  条件: (r : R) [是Localization.Away r S]
   证明: ⟨_, _, _, inferInstance, SubmersivePresentation.localizationAway S r,
     Presentation.localizationAway_dimension_zero r⟩
 
@@ -401,8 +401,8 @@ instance IsStandardSmooth.baseChange
     exact ⟨ι, σ, _, inferInstance, ⟨P.baseChange T⟩⟩
 
 中文:
-实例 IsStandardSmooth.baseChange
-  签名: [IsStandardSmooth R S]
+实例 是StandardSmooth.baseChange
+  签名: [是StandardSmooth R S]
   定义体: by
     obtain ⟨ι, σ, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
     exact ⟨ι, σ, _, inferInstance, ⟨P.baseChange T⟩⟩
@@ -425,7 +425,7 @@ instance IsStandardSmoothOfRelativeDimension.baseChange
     exact ⟨_, _, _, inferInstance, P.baseChange T, hP⟩
 
 中文:
-实例 IsStandardSmoothOfRelativeDimension.baseChange
+实例 是StandardSmoothOfRelativeDimension.baseChange
   定义体: by
     obtain ⟨_, _, _, _, P, hP⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
     exact ⟨_, _, _, inferInstance, P.baseChange T, hP⟩

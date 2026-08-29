@@ -59,9 +59,9 @@ class BooleanRing
     - isIdempotentElem((a : α)) : IsIdempotentElem a
 
 中文:
-类 BooleanRing
+类 布尔ean环
   参数: (α)
-  继承: Ring α
+  继承: 环 α
   公理与运算 (1 个):
     - isIdempotentElem((a : α)) : IsIdempotentElem a
 -/
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanRing PUnit
+  签名: 布尔ean环 命题单元
   定义体: ⟨fun _ => Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -325,7 +325,7 @@ definition AsBoolAlg
   body: α
 
 中文:
-定义 AsBoolAlg
+定义 As布尔Alg
   签名: (α : 类型)
   定义体: α
 -/
@@ -341,7 +341,7 @@ definition toBoolAlg
   body: Equiv.refl _
 
 中文:
-定义 toBoolAlg
+定义 to布尔Alg
   签名: : α ≃ As布尔Alg α
   定义体: Equiv.refl _
 
@@ -361,7 +361,7 @@ definition ofBoolAlg
 @[simp]
 
 中文:
-定义 ofBoolAlg
+定义 of布尔Alg
   签名: : As布尔Alg α ≃ α
   定义体: Equiv.refl _
 
@@ -384,7 +384,7 @@ theorem toBoolAlg_symm_eq
 @[simp]
 
 中文:
-定理 toBoolAlg_symm_eq
+定理 to布尔Alg_symm_eq
   结论: (@to布尔Alg α).symm = of布尔Alg
   证明: rfl
 
@@ -405,7 +405,7 @@ theorem ofBoolAlg_symm_eq
 @[simp]
 
 中文:
-定理 ofBoolAlg_symm_eq
+定理 of布尔Alg_symm_eq
   结论: (@of布尔Alg α).symm = to布尔Alg
   证明: rfl
 
@@ -427,7 +427,7 @@ theorem toBoolAlg_ofBoolAlg
 @[simp]
 
 中文:
-定理 toBoolAlg_ofBoolAlg
+定理 to布尔Alg_of布尔Alg
   条件: (a : As布尔Alg α)
   结论: to布尔Alg (of布尔Alg a) = a
   证明: rfl
@@ -448,7 +448,7 @@ theorem ofBoolAlg_toBoolAlg
   proof: rfl
 
 中文:
-定理 ofBoolAlg_toBoolAlg
+定理 of布尔Alg_to布尔Alg
   条件: (a : α)
   结论: of布尔Alg (to布尔Alg a) = a
   证明: rfl
@@ -466,7 +466,7 @@ theorem toBoolAlg_inj
   proof: Iff.rfl
 
 中文:
-定理 toBoolAlg_inj
+定理 to布尔Alg_inj
   条件: {a b : α}
   结论: to布尔Alg a = to布尔Alg b ↔ a = b
   证明: Iff.rfl
@@ -486,7 +486,7 @@ theorem ofBoolAlg_inj
   proof: Iff.rfl
 
 中文:
-定理 ofBoolAlg_inj
+定理 of布尔Alg_inj
   条件: {a b : As布尔Alg α}
   结论: of布尔Alg a = of布尔Alg b ↔ a = b
   证明: Iff.rfl
@@ -505,8 +505,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (As布尔Alg α)
+实例 [可居
+  签名: α] : 可居 (As布尔Alg α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -529,8 +529,8 @@ definition sup
   body: ⟨fun x y => x + y + x * y⟩
 
 中文:
-定义 sup
-  签名: : Max α
+定义 上确界
+  签名: : 最大值 α
   定义体: ⟨fun x y => x + y + x * y⟩
 -/
 def sup : Max α :=
@@ -550,8 +550,8 @@ scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.sup
 scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.inf
 
 中文:
-定义 inf
-  签名: : Min α
+定义 下确界
+  签名: : 最小值 α
   定义体: ⟨(· * ·)⟩
 
 scoped[BooleanAlgebraOfBooleanRing] attribute [instance 100] BooleanRing.sup
@@ -790,8 +790,8 @@ definition toBooleanAlgebra
   
 
 中文:
-定义 toBooleanAlgebra
-  签名: : 布尔eanAlgebra α
+定义 to布尔eanAlgebra
+  签名: : 布尔代数 α
   定义体: { Lattice.mk' sup_comm sup_assoc inf_comm inf_assoc sup_inf_self inf_sup_self with
     le_sup_inf := le_sup_inf
     top := 1
@@ -837,7 +837,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanAlgebra (As布尔Alg α)
+  签名: 布尔代数 (As布尔Alg α)
   定义体: fast_instance% @BooleanRing.toBooleanAlgebra α _
 
 @[simp]
@@ -859,7 +859,7 @@ theorem ofBoolAlg_top
 @[simp]
 
 中文:
-定理 ofBoolAlg_top
+定理 of布尔Alg_top
   结论: of布尔Alg (⊤ : As布尔Alg α) = 1
   证明: rfl
 
@@ -880,7 +880,7 @@ theorem ofBoolAlg_bot
 @[simp]
 
 中文:
-定理 ofBoolAlg_bot
+定理 of布尔Alg_bot
   结论: of布尔Alg (⊥ : As布尔Alg α) = 0
   证明: rfl
 
@@ -901,7 +901,7 @@ theorem ofBoolAlg_sup
 @[simp]
 
 中文:
-定理 ofBoolAlg_sup
+定理 of布尔Alg_sup
   条件: (a b : As布尔Alg α)
   证明: rfl
 
@@ -924,7 +924,7 @@ theorem ofBoolAlg_inf
 @[simp]
 
 中文:
-定理 ofBoolAlg_inf
+定理 of布尔Alg_inf
   条件: (a b : As布尔Alg α)
   结论: of布尔Alg (a ⊓ b) = of布尔Alg a * of布尔Alg b
   证明: rfl
@@ -947,7 +947,7 @@ theorem ofBoolAlg_compl
 @[simp]
 
 中文:
-定理 ofBoolAlg_compl
+定理 of布尔Alg_compl
   条件: (a : As布尔Alg α)
   结论: of布尔Alg aᶜ = 1 + of布尔Alg a
   证明: rfl
@@ -968,7 +968,7 @@ theorem ofBoolAlg_sdiff
   proof: rfl
 
 中文:
-定理 ofBoolAlg_sdiff
+定理 of布尔Alg_sdiff
   条件: (a b : As布尔Alg α)
   结论: of布尔Alg (a \ b) = of布尔Alg a * (1 + of布尔Alg b)
   证明: rfl
@@ -1019,7 +1019,7 @@ theorem ofBoolAlg_symmDiff
 @[simp]
 
 中文:
-定理 ofBoolAlg_symmDiff
+定理 of布尔Alg_symmDiff
   条件: (a b : As布尔Alg α)
   结论: of布尔Alg (a ∆ b) = of布尔Alg a + of布尔Alg b
   证明: by
@@ -1046,7 +1046,7 @@ theorem ofBoolAlg_mul_ofBoolAlg_eq_left_iff
 @[simp]
 
 中文:
-定理 ofBoolAlg_mul_ofBoolAlg_eq_left_iff
+定理 of布尔Alg_mul_of布尔Alg_eq_left_iff
   条件: {a b : As布尔Alg α}
   证明: @inf_eq_left (AsBoolAlg α) _ _ _
 
@@ -1070,7 +1070,7 @@ theorem toBoolAlg_zero
 @[simp]
 
 中文:
-定理 toBoolAlg_zero
+定理 to布尔Alg_zero
   结论: to布尔Alg (0 : α) = ⊥
   证明: rfl
 
@@ -1091,7 +1091,7 @@ theorem toBoolAlg_one
 @[simp]
 
 中文:
-定理 toBoolAlg_one
+定理 to布尔Alg_one
   结论: to布尔Alg (1 : α) = ⊤
   证明: rfl
 
@@ -1113,7 +1113,7 @@ theorem toBoolAlg_mul
 @[simp]
 
 中文:
-定理 toBoolAlg_mul
+定理 to布尔Alg_mul
   条件: (a b : α)
   结论: to布尔Alg (a * b) = to布尔Alg a ⊓ to布尔Alg b
   证明: rfl
@@ -1136,7 +1136,7 @@ theorem toBoolAlg_add_add_mul
 @[simp]
 
 中文:
-定理 toBoolAlg_add_add_mul
+定理 to布尔Alg_add_add_mul
   条件: (a b : α)
   结论: to布尔Alg (a + b + a * b) = to布尔Alg a ⊔ to布尔Alg b
   证明: rfl
@@ -1157,7 +1157,7 @@ theorem toBoolAlg_add
   proof: (ofBoolAlg_symmDiff a b).symm
 
 中文:
-定理 toBoolAlg_add
+定理 to布尔Alg_add
   条件: (a b : α)
   结论: to布尔Alg (a + b) = to布尔Alg a ∆ to布尔Alg b
   证明: (ofBoolAlg_symmDiff a b).symm
@@ -1187,7 +1187,7 @@ definition RingHom.asBoolAlg
 @[simp]
 
 中文:
-定义 RingHom.asBoolAlg
+定义 环态射.as布尔Alg
   签名: (f : α ->+* β)
   定义体: toBoolAlg ∘ f ∘ ofBoolAlg
   map_sup' a b := by
@@ -1220,8 +1220,8 @@ theorem RingHom.asBoolAlg_id
 @[simp]
 
 中文:
-定理 RingHom.asBoolAlg_id
-  结论: (RingHom.id α).as布尔Alg = BoundedLatticeHom.id _
+定理 环态射.as布尔Alg_id
+  结论: (环态射.id α).as布尔Alg = 有界格态射.id _
   证明: rfl
 
 @[simp]
@@ -1239,7 +1239,7 @@ theorem RingHom.asBoolAlg_comp
   proof: rfl
 
 中文:
-定理 RingHom.asBoolAlg_comp
+定理 环态射.as布尔Alg_comp
   条件: (g : β ->+* γ) (f : α ->+* β)
   证明: rfl
 -/
@@ -1263,7 +1263,7 @@ definition AsBoolRing
   body: α
 
 中文:
-定义 AsBoolRing
+定义 As布尔Ring
   签名: (α : 类型)
   定义体: α
 -/
@@ -1279,7 +1279,7 @@ definition toBoolRing
   body: Equiv.refl _
 
 中文:
-定义 toBoolRing
+定义 to布尔Ring
   签名: : α ≃ As布尔Ring α
   定义体: Equiv.refl _
 
@@ -1299,7 +1299,7 @@ definition ofBoolRing
 @[simp]
 
 中文:
-定义 ofBoolRing
+定义 of布尔Ring
   签名: : As布尔Ring α ≃ α
   定义体: Equiv.refl _
 
@@ -1322,7 +1322,7 @@ theorem toBoolRing_symm_eq
 @[simp]
 
 中文:
-定理 toBoolRing_symm_eq
+定理 to布尔Ring_symm_eq
   结论: (@to布尔Ring α).symm = of布尔Ring
   证明: rfl
 
@@ -1343,7 +1343,7 @@ theorem ofBoolRing_symm_eq
 @[simp]
 
 中文:
-定理 ofBoolRing_symm_eq
+定理 of布尔Ring_symm_eq
   结论: (@of布尔Ring α).symm = to布尔Ring
   证明: rfl
 
@@ -1365,7 +1365,7 @@ theorem toBoolRing_ofBoolRing
 @[simp]
 
 中文:
-定理 toBoolRing_ofBoolRing
+定理 to布尔Ring_of布尔Ring
   条件: (a : As布尔Ring α)
   结论: to布尔Ring (of布尔Ring a) = a
   证明: rfl
@@ -1386,7 +1386,7 @@ theorem ofBoolRing_toBoolRing
   proof: rfl
 
 中文:
-定理 ofBoolRing_toBoolRing
+定理 of布尔Ring_to布尔Ring
   条件: (a : α)
   结论: of布尔Ring (to布尔Ring a) = a
   证明: rfl
@@ -1404,7 +1404,7 @@ theorem toBoolRing_inj
   proof: Iff.rfl
 
 中文:
-定理 toBoolRing_inj
+定理 to布尔Ring_inj
   条件: {a b : α}
   结论: to布尔Ring a = to布尔Ring b ↔ a = b
   证明: Iff.rfl
@@ -1424,7 +1424,7 @@ theorem ofBoolRing_inj
   proof: Iff.rfl
 
 中文:
-定理 ofBoolRing_inj
+定理 of布尔Ring_inj
   条件: {a b : As布尔Ring α}
   结论: of布尔Ring a = of布尔Ring b ↔ a = b
   证明: Iff.rfl
@@ -1443,8 +1443,8 @@ instance [Inhabited
   body: ⟨default (α := α)⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (As布尔Ring α)
+实例 [可居
+  签名: α] : 可居 (As布尔Ring α)
   定义体: ⟨default (α := α)⟩
 -/
 instance [Inhabited α] : Inhabited (AsBoolRing α) :=
@@ -1473,8 +1473,8 @@ abbreviation GeneralizedBooleanAlgebra.toNonUnitalCommRing
   left_
 
 中文:
-缩写 GeneralizedBooleanAlgebra.toNonUnitalCommRing
-  签名: [Generalized布尔eanAlgebra α]
+缩写 Generalized布尔ean代数.toNonUnitalCommRing
+  签名: [Generalized布尔ean代数 α]
   定义体: (· ∆ ·)
   add_assoc := symmDiff_assoc
   zero := ⊥
@@ -1519,8 +1519,8 @@ instance [GeneralizedBooleanAlgebra
   body: @GeneralizedBooleanAlgebra.toNonUnitalCommRing α _
 
 中文:
-实例 [GeneralizedBooleanAlgebra
-  签名: α] : NonUnitalCommRing (As布尔Ring α)
+实例 [Generalized布尔ean代数
+  签名: α] : 非幺交换环 (As布尔Ring α)
   定义体: @GeneralizedBooleanAlgebra.toNonUnitalCommRing α _
 
 Depends on / 依赖: GeneralizedBooleanAlgebra, GeneralizedBooleanAlgebra.toNonUnitalCommRing, toNonUnitalCommRing
@@ -1547,8 +1547,8 @@ scoped[BooleanRingOfBooleanAlgebra]
   attribute [instance] GeneralizedBooleanAlgebra.toNonUnitalCommRing BooleanAlgebra.toBooleanRing
 
 中文:
-缩写 BooleanAlgebra.toBooleanRing
-  签名: : 布尔eanRing α where
+缩写 布尔代数.to布尔eanRing
+  签名: : 布尔ean环 α where
   定义体: GeneralizedBooleanAlgebra.toNonUnitalCommRing
   one := ⊤
   one_mul := top_inf_eq
@@ -1582,7 +1582,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanRing (As布尔Ring α)
+  签名: 布尔ean环 (As布尔Ring α)
   定义体: fast_instance% @BooleanAlgebra.toBooleanRing α _
 
 @[simp]
@@ -1604,7 +1604,7 @@ theorem ofBoolRing_zero
 @[simp]
 
 中文:
-定理 ofBoolRing_zero
+定理 of布尔Ring_zero
   结论: of布尔Ring (0 : As布尔Ring α) = ⊥
   证明: rfl
 
@@ -1625,7 +1625,7 @@ theorem ofBoolRing_one
 @[simp]
 
 中文:
-定理 ofBoolRing_one
+定理 of布尔Ring_one
   结论: of布尔Ring (1 : As布尔Ring α) = ⊤
   证明: rfl
 
@@ -1647,7 +1647,7 @@ theorem ofBoolRing_neg
 @[simp]
 
 中文:
-定理 ofBoolRing_neg
+定理 of布尔Ring_neg
   条件: (a : As布尔Ring α)
   结论: of布尔Ring (-a) = of布尔Ring a
   证明: rfl
@@ -1670,7 +1670,7 @@ theorem ofBoolRing_add
 @[simp]
 
 中文:
-定理 ofBoolRing_add
+定理 of布尔Ring_add
   条件: (a b : As布尔Ring α)
   结论: of布尔Ring (a + b) = of布尔Ring a ∆ of布尔Ring b
   证明: rfl
@@ -1693,7 +1693,7 @@ theorem ofBoolRing_sub
 @[simp]
 
 中文:
-定理 ofBoolRing_sub
+定理 of布尔Ring_sub
   条件: (a b : As布尔Ring α)
   结论: of布尔Ring (a - b) = of布尔Ring a ∆ of布尔Ring b
   证明: rfl
@@ -1716,7 +1716,7 @@ theorem ofBoolRing_mul
 @[simp]
 
 中文:
-定理 ofBoolRing_mul
+定理 of布尔Ring_mul
   条件: (a b : As布尔Ring α)
   结论: of布尔Ring (a * b) = of布尔Ring a ⊓ of布尔Ring b
   证明: rfl
@@ -1738,7 +1738,7 @@ theorem ofBoolRing_le_ofBoolRing_iff
 @[simp]
 
 中文:
-定理 ofBoolRing_le_ofBoolRing_iff
+定理 of布尔Ring_le_of布尔Ring_iff
   条件: {a b : As布尔Ring α}
   证明: inf_eq_left.symm
 
@@ -1762,7 +1762,7 @@ theorem toBoolRing_bot
 @[simp]
 
 中文:
-定理 toBoolRing_bot
+定理 to布尔Ring_bot
   结论: to布尔Ring (⊥ : α) = 0
   证明: rfl
 
@@ -1783,7 +1783,7 @@ theorem toBoolRing_top
 @[simp]
 
 中文:
-定理 toBoolRing_top
+定理 to布尔Ring_top
   结论: to布尔Ring (⊤ : α) = 1
   证明: rfl
 
@@ -1805,7 +1805,7 @@ theorem toBoolRing_inf
 @[simp]
 
 中文:
-定理 toBoolRing_inf
+定理 to布尔Ring_inf
   条件: (a b : α)
   结论: to布尔Ring (a ⊓ b) = to布尔Ring a * to布尔Ring b
   证明: rfl
@@ -1826,7 +1826,7 @@ theorem toBoolRing_symmDiff
   proof: rfl
 
 中文:
-定理 toBoolRing_symmDiff
+定理 to布尔Ring_symmDiff
   条件: (a b : α)
   结论: to布尔Ring (a ∆ b) = to布尔Ring a + to布尔Ring b
   证明: rfl
@@ -1852,8 +1852,8 @@ definition BoundedLatticeHom.asBoolRing
 @[simp]
 
 中文:
-定义 BoundedLatticeHom.asBoolRing
-  签名: (f : BoundedLatticeHom α β)
+定义 有界格态射.as布尔Ring
+  签名: (f : 有界格态射 α β)
   定义体: toBoolRing ∘ f ∘ ofBoolRing
   map_zero' := f.map_bot'
   map_one' := f.map_top'
@@ -1882,8 +1882,8 @@ theorem BoundedLatticeHom.asBoolRing_id
 @[simp]
 
 中文:
-定理 BoundedLatticeHom.asBoolRing_id
-  结论: (BoundedLatticeHom.id α).as布尔Ring = RingHom.id _
+定理 有界格态射.as布尔Ring_id
+  结论: (有界格态射.id α).as布尔Ring = 环态射.id _
   证明: rfl
 
 @[simp]
@@ -1901,8 +1901,8 @@ theorem BoundedLatticeHom.asBoolRing_comp
   proof: rfl
 
 中文:
-定理 BoundedLatticeHom.asBoolRing_comp
-  条件: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
+定理 有界格态射.as布尔Ring_comp
+  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
   证明: rfl
 -/
 theorem BoundedLatticeHom.asBoolRing_comp (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β) :
@@ -1927,8 +1927,8 @@ definition OrderIso.asBoolAlgAsBoolRing
    ofBoolRing_le_ofBoolRing_iff.trans ofBoolAlg_mul_ofBoolAlg_eq_left_iff⟩
 
 中文:
-定义 OrderIso.asBoolAlgAsBoolRing
-  签名: (α : 类型) [布尔eanAlgebra α]
+定义 OrderIso.as布尔AlgAs布尔Ring
+  签名: (α : 类型) [布尔代数 α]
   定义体: ⟨ofBoolAlg.trans ofBoolRing,
    ofBoolRing_le_ofBoolRing_iff.trans ofBoolAlg_mul_ofBoolAlg_eq_left_iff⟩
 
@@ -1952,8 +1952,8 @@ definition RingEquiv.asBoolRingAsBoolAlg
     map_add' := ofBoolAlg_symmDiff }
 
 中文:
-定义 RingEquiv.asBoolRingAsBoolAlg
-  签名: (α : 类型) [布尔eanRing α]
+定义 环等价.as布尔RingAs布尔Alg
+  签名: (α : 类型) [布尔ean环 α]
   定义体: { ofBoolRing.trans ofBoolAlg with
     map_mul' := fun _a _b => rfl
     map_add' := ofBoolAlg_symmDiff }
@@ -1977,7 +1977,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 布尔
+  签名: 零 布尔值
   定义体: false
 -/
 instance : Zero Bool where zero := false
@@ -1992,7 +1992,7 @@ instance :
 
 中文:
 实例 :
-  签名: One 布尔
+  签名: 幺 布尔值
   定义体: true
 -/
 instance : One Bool where one := true
@@ -2007,7 +2007,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add 布尔
+  签名: 加法 布尔值
   定义体: xor
 -/
 instance : Add Bool where add := xor
@@ -2022,7 +2022,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg 布尔
+  签名: 取负 布尔值
   定义体: id
 -/
 instance : Neg Bool where neg := id
@@ -2037,7 +2037,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub 布尔
+  签名: 减法 布尔值
   定义体: xor
 -/
 instance : Sub Bool where sub := xor
@@ -2052,7 +2052,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul 布尔
+  签名: 乘法 布尔值
   定义体: and
 -/
 instance : Mul Bool where mul := and
@@ -2077,7 +2077,7 @@ instance :
 
 中文:
 实例 :
-  签名: 布尔eanRing 布尔
+  签名: 布尔ean环 布尔值
   定义体: xor_assoc
   zero_add := Bool.false_xor
   add_zero := Bool.xor_false
@@ -2118,7 +2118,7 @@ theorem Bool.zero_eq_false
   proof: rfl
 
 中文:
-定理 Bool.zero_eq_false
+定理 布尔值.zero_eq_false
   结论: 0 = false
   证明: rfl
 -/
@@ -2133,7 +2133,7 @@ theorem Bool.one_eq_true
   proof: rfl
 
 中文:
-定理 Bool.one_eq_true
+定理 布尔值.one_eq_true
   结论: 1 = true
   证明: rfl
 -/
@@ -2149,8 +2149,8 @@ theorem Bool.add_eq_xor
   proof: rfl
 
 中文:
-定理 Bool.add_eq_xor
-  条件: (b c : 布尔)
+定理 布尔值.add_eq_xor
+  条件: (b c : 布尔值)
   结论: b + c = (b ^^ c)
   证明: rfl
 -/
@@ -2166,8 +2166,8 @@ theorem Bool.neg_eq_id
   proof: rfl
 
 中文:
-定理 Bool.neg_eq_id
-  条件: (b : 布尔)
+定理 布尔值.neg_eq_id
+  条件: (b : 布尔值)
   结论: -b = b
   证明: rfl
 -/
@@ -2183,8 +2183,8 @@ theorem Bool.sub_eq_xor
   proof: rfl
 
 中文:
-定理 Bool.sub_eq_xor
-  条件: (b c : 布尔)
+定理 布尔值.sub_eq_xor
+  条件: (b c : 布尔值)
   结论: b - c = (b ^^ c)
   证明: rfl
 -/
@@ -2200,8 +2200,8 @@ theorem Bool.mul_eq_and
   proof: rfl
 
 中文:
-定理 Bool.mul_eq_and
-  条件: (b c : 布尔)
+定理 布尔值.mul_eq_and
+  条件: (b c : 布尔值)
   结论: b * c = (b && c)
   证明: rfl
 -/

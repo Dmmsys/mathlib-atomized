@@ -51,7 +51,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: (F : J ⥤ TopCat.{max v u})
+  签名: (F : J ⥤ 顶元素范畴.{最大值 v u})
   定义体: TopCat.of { u : forall j : J, F.obj j | forall {i j : J} (f : i ⟶ j), F.map f (u i) = u j }
   π :=
     { app := fun j => ofHom
@@ -93,7 +93,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: (F : J ⥤ TopCat.{max v u})
+  签名: (F : J ⥤ 顶元素范畴.{最大值 v u})
   定义体: ofHom
     { toFun := fun x =>
         ⟨fun _ => S.π.app _ x, fun f => by
@@ -138,7 +138,7 @@ definition conePtOfConeForget
 
 中文:
 定义 conePtOfConeForget
-  签名: : Type _
+  签名: : 类型 _
   定义体: c.pt
 
 Depends on / 依赖: c.pt
@@ -186,7 +186,7 @@ definition coneOfConeForget
 
 中文:
 定义 coneOfConeForget
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: of (conePtOfConeForget c)
   π :=
     { app j := ofHom (ContinuousMap.mk (c.π.app j) (by
@@ -226,7 +226,7 @@ definition isLimitConeOfForget
 
 中文:
 定义 isLimitConeOfForget
-  签名: (c : Cone (F ⋙ forget)) (hc : IsLimit c)
+  签名: (c : 锥 (F ⋙ forget)) (hc : 是极限 c)
   定义体: by
   refine IsLimit.ofFaithful forget (ht := hc)
     (fun s => ofHom (ContinuousMap.mk (hc.lift ((forget).mapCone s)) ?_)) (fun _ => rfl)
@@ -318,7 +318,7 @@ lemma nonempty_isLimit_iff_eq_induced
 
 中文:
 引理 nonempty_isLimit_iff_eq_induced
-  结论: {F : J ⥤ TopCat.{u}} (c : Cone F)
+  结论: {F : J ⥤ 顶元素范畴.{u}} (c : 锥 F)
   证明: by
   refine ⟨fun ⟨hc⟩ => induced_of_isLimit _ hc, fun h => ⟨?_⟩⟩
   refine .ofIsoLimit (isLimitConeOfForget _ hc) (Cone.ext ?_ ?_)
@@ -353,7 +353,7 @@ theorem limit_topology
 
 中文:
 定理 limit_topology
-  条件: [HasLimit F]
+  条件: [有极限 F]
   证明: induced_of_isLimit _ (limit.isLimit _)
 
 Depends on / 依赖: induced_of_isLimit, isLimit, limit.isLimit
@@ -403,7 +403,7 @@ instance topCat_hasLimitsOfShape
 
 中文:
 实例 topCat_hasLimitsOfShape
-  签名: (J : 类型v) [Category* J] [Small.{u} J]
+  签名: (J : 类型v) [范畴* J] [Small.{u} J]
   定义体: fun F => by
     rw [hasLimit_iff_small_sections]
     infer_instance
@@ -439,7 +439,7 @@ instance topCat_hasLimits
 
 中文:
 实例 topCat_hasLimits
-  签名: : HasLimits TopCat.{u}
+  签名: : 有极限 顶元素范畴.{u}
   定义体: TopCat.topCat_hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: TopCat, TopCat.topCat_hasLimitsOfSize, topCat_hasLimitsOfSize
@@ -470,7 +470,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget : TopCat.{u} ⥤ _) where
+  签名: : PreservesLimits (forget : 顶元素范畴.{u} ⥤ _) where
 -/
 instance forget_preservesLimits : PreservesLimits (forget : TopCat.{u} ⥤ _) where
 
@@ -494,7 +494,7 @@ definition coconePtOfCoconeForget
 
 中文:
 定义 coconePtOfCoconeForget
-  签名: : Type _
+  签名: : 类型 _
   定义体: c.pt
 
 Depends on / 依赖: c.pt
@@ -543,7 +543,7 @@ definition coconeOfCoconeForget
 
 中文:
 定义 coconeOfCoconeForget
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: of (coconePtOfCoconeForget c)
   ι :=
     { app j := ofHom (ContinuousMap.mk (c.ι.app j) (by
@@ -585,7 +585,7 @@ definition isColimitCoconeOfForget
 
 中文:
 定义 isColimitCoconeOfForget
-  签名: (c : Cocone (F ⋙ forget)) (hc : IsColimit c)
+  签名: (c : 余锥 (F ⋙ forget)) (hc : 是余极限 c)
   定义体: by
   refine IsColimit.ofFaithful forget (ht := hc)
     (fun s => ofHom (ContinuousMap.mk (hc.desc ((forget).mapCocone s)) ?_)) (fun _ => rfl)
@@ -670,7 +670,7 @@ lemma isOpen_iff_of_isColimit
 
 中文:
 引理 isOpen_iff_of_isColimit
-  条件: (X : Set c.pt)
+  条件: (X : 集合 c.pt)
   证明: by
   trans (⨆ (j : J), (F.obj j).str.coinduced (c.ι.app j)).IsOpen X
   · rw [← coinduced_of_isColimit c hc, isOpen_fold]
@@ -699,7 +699,7 @@ lemma isClosed_iff_of_isColimit
 
 中文:
 引理 isClosed_iff_of_isColimit
-  条件: (X : Set c.pt)
+  条件: (X : 集合 c.pt)
   证明: by
   simp only [← isOpen_compl_iff, isOpen_iff_of_isColimit _ hc,
     Functor.const_obj_obj, Set.preimage_compl]
@@ -723,7 +723,7 @@ lemma continuous_iff_of_isColimit
 
 中文:
 引理 continuous_iff_of_isColimit
-  条件: {X : 类型u'} [TopologicalSpace X] (f : c.pt -> X)
+  条件: {X : 类型u'} [拓扑空间 X] (f : c.pt -> X)
   证明: by
   simp only [continuous_def, isOpen_iff_of_isColimit _ hc]
   tauto
@@ -755,7 +755,7 @@ lemma nonempty_isColimit_iff_eq_coinduced
 
 中文:
 引理 nonempty_isColimit_iff_eq_coinduced
-  条件: (c : Cocone F) (hc : IsColimit ((forget).mapCocone c))
+  条件: (c : 余锥 F) (hc : 是余极限 ((forget).mapCocone c))
   证明: by
   refine ⟨fun ⟨hc⟩ => coinduced_of_isColimit _ hc, fun h => ⟨?_⟩⟩
   refine .ofIsoColimit (isColimitCoconeOfForget _ hc) (Cocone.ext ?_ ?_)
@@ -789,7 +789,7 @@ theorem colimit_topology
 
 中文:
 定理 colimit_topology
-  条件: (F : J ⥤ TopCat.{u}) [HasColimit F]
+  条件: (F : J ⥤ 顶元素范畴.{u}) [有余极限 F]
   证明: coinduced_of_isColimit _ (colimit.isColimit _)
 
 Depends on / 依赖: coinduced_of_isColimit, colimit, colimit.isColimit, isColimit
@@ -809,7 +809,7 @@ theorem colimit_isOpen_iff
 
 中文:
 定理 colimit_isOpen_iff
-  结论: (F : J ⥤ TopCat.{u}) [HasColimit F]
+  结论: (F : J ⥤ 顶元素范畴.{u}) [有余极限 F]
   证明: by
   apply isOpen_iff_of_isColimit _ (colimit.isColimit _)
 
@@ -861,7 +861,7 @@ instance topCat_hasColimitsOfShape
 
 中文:
 实例 topCat_hasColimitsOfShape
-  签名: (J : 类型v) [Category* J] [Small.{u} J]
+  签名: (J : 类型v) [范畴* J] [Small.{u} J]
   定义体: fun F => by
     rw [hasColimit_iff_small_colimitType]
     infer_instance
@@ -897,7 +897,7 @@ instance topCat_hasColimits
 
 中文:
 实例 topCat_hasColimits
-  签名: : HasColimits TopCat.{u}
+  签名: : 有余极限 顶元素范畴.{u}
   定义体: TopCat.topCat_hasColimitsOfSize.{u, u}
 
 Depends on / 依赖: TopCat, TopCat.topCat_hasColimitsOfSize, topCat_hasColimitsOfSize
@@ -928,7 +928,7 @@ instance forget_preservesColimits
 
 中文:
 实例 forget_preservesColimits
-  签名: : PreservesColimits (forget : TopCat.{u} ⥤ 类型u) where
+  签名: : PreservesColimits (forget : 顶元素范畴.{u} ⥤ 类型u) where
 -/
 instance forget_preservesColimits : PreservesColimits (forget : TopCat.{u} ⥤ Type u) where
 
@@ -946,7 +946,7 @@ definition isTerminalPUnit
 
 中文:
 定义 isTerminalPUnit
-  签名: : IsTerminal (TopCat.of PUnit.{u + 1})
+  签名: : 是终止 (顶元素范畴.of 命题单元.{u + 1})
   定义体: haveI : forall X, Unique (X ⟶ TopCat.of PUnit.{u + 1}) := fun X =>
     ⟨⟨ofHom ⟨fun _ => PUnit.unit, continuous_const⟩⟩, fun f => by ext⟩
   Limits.IsTerminal.ofUnique _
@@ -968,7 +968,7 @@ definition terminalIsoPUnit
 
 中文:
 定义 terminalIsoPUnit
-  签名: : ⊤_ TopCat.{u} ≅ TopCat.of PUnit
+  签名: : ⊤_ 顶元素范畴.{u} ≅ 顶元素范畴.of 命题单元
   定义体: terminalIsTerminal.uniqueUpToIso isTerminalPUnit
 
 Depends on / 依赖: isTerminalPUnit, terminalIsTerminal, terminalIsTerminal.uniqueUpToIso, uniqueUpToIso
@@ -988,7 +988,7 @@ definition isInitialPEmpty
 
 中文:
 定义 isInitialPEmpty
-  签名: : IsInitial (TopCat.of PEmpty.{u + 1})
+  签名: : IsInitial (顶元素范畴.of 命题空.{u + 1})
   定义体: haveI : forall X, Unique (TopCat.of PEmpty.{u + 1} ⟶ X) := fun X =>
     ⟨⟨ofHom ⟨fun x => x.elim, by fun_prop⟩⟩, fun f => by ext ⟨⟩⟩
   Limits.IsInitial.ofUnique _
@@ -1010,7 +1010,7 @@ definition initialIsoPEmpty
 
 中文:
 定义 initialIsoPEmpty
-  签名: : ⊥_ TopCat.{u} ≅ TopCat.of PEmpty
+  签名: : ⊥_ 顶元素范畴.{u} ≅ 顶元素范畴.of 命题空
   定义体: initialIsInitial.uniqueUpToIso isInitialPEmpty
 
 Depends on / 依赖: initialIsInitial, initialIsInitial.uniqueUpToIso, isInitialPEmpty, uniqueUpToIso
@@ -1028,9 +1028,9 @@ lemma IsInducing.empty
   proof: by ext; simp
 
 中文:
-引理 IsInducing.empty
-  条件: (X : TopCat)
-  结论: Topology.IsInducing (TopCat.isInitialPEmpty.to X) where
+引理 是Inducing.empty
+  条件: (X : 顶元素范畴)
+  结论: 拓扑.是Inducing (顶元素范畴.isInitialPEmpty.to X) where
   证明: by ext; simp
 -/
 lemma IsInducing.empty (X : TopCat) : Topology.IsInducing (TopCat.isInitialPEmpty.to X) where

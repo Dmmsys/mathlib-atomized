@@ -53,7 +53,7 @@ lemma Algebra.TensorProduct.includeLeft_map_center_le
   | add _ _ _ _ => simp_all [add_mul, mul_add]
 
 中文:
-引理 Algebra.TensorProduct.includeLeft_map_center_le
+引理 代数.张量积.includeLeft_map_center_le
   证明: by
   intro x hx
   simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
@@ -92,7 +92,7 @@ lemma Algebra.TensorProduct.includeRight_map_center_le
   | add _ _ _ _ => simp_all [add_mul, mul_add]
 
 中文:
-引理 Algebra.TensorProduct.includeRight_map_center_le
+引理 代数.张量积.includeRight_map_center_le
   证明: fun x hx => by
   simp only [Subalgebra.mem_map, Subalgebra.mem_center_iff] at hx ⊢
   obtain ⟨c, hc0, rfl⟩ := hx
@@ -128,7 +128,7 @@ lemma left_of_tensor
 
 中文:
 引理 left_of_tensor
-  结论: (inj : Function.Injective (algebraMap K C)) [Module.Flat K B]
+  结论: (inj : 函数.单射 (algebraMap K C)) [模.平坦 K B]
   证明: (Subalgebra.map_le.mp ((includeLeft_map_center_le K B C).trans hbc.1)).trans
     fun _ ⟨k, hk⟩ => ⟨k, includeLeft_injective (S := K) inj hk⟩
 
@@ -150,7 +150,7 @@ lemma right_of_tensor
 
 中文:
 引理 right_of_tensor
-  结论: (inj : Function.Injective (algebraMap K B)) [Module.Flat K C]
+  结论: (inj : 函数.单射 (algebraMap K B)) [模.平坦 K C]
   证明: have : IsCentral K (C otimes[K] B) := IsCentral.of_algEquiv K _ _ Algebra.TensorProduct.comm _ _ _
   left_of_tensor K C B inj
 
@@ -171,7 +171,7 @@ lemma left_of_tensor_of_field
 
 中文:
 引理 left_of_tensor_of_field
-  结论: (K B C : 类型) [Field K] [Ring B] [Ring C] [Nontrivial C]
+  结论: (K B C : 类型) [域 K] [环 B] [环 C] [非平凡 C]
   证明: left_of_tensor K B C FaithfulSMul.algebraMap_injective K C
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, left_of_tensor
@@ -190,7 +190,7 @@ lemma right_of_tensor_of_field
 
 中文:
 引理 right_of_tensor_of_field
-  结论: (K B C : 类型) [Field K] [Ring B] [Ring C] [Nontrivial B]
+  结论: (K B C : 类型) [域 K] [环 B] [环 C] [非平凡 B]
   证明: right_of_tensor K B C FaithfulSMul.algebraMap_injective K B
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, right_of_tensor

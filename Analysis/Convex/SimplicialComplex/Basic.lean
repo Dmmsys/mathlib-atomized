@@ -69,12 +69,12 @@ structure SimplicialComplex
     - inter_subset_convexHull : forall {s t}, s in faces -> t in faces -> convexHull 𝕜 ↑s inter convexHull 𝕜 ↑t subseteq convexHull 𝕜 (s inter t : Set E)
 
 中文:
-结构 SimplicialComplex
-  参数: extends PreAbstractSimplicialComplex E
-  继承: PreAbstractSimplicialComplex E
+结构 单纯复形
+  参数: extends 预抽象单纯复形 E
+  继承: 预抽象单纯复形 E
   公理与运算 (2 个):
     - indep : 对任意 {s}, s in faces -> AffineIndependent 𝕜 ((↑) : s -> E)
-    - inter_subset_convexHull : 对任意 {s t}, s in faces -> t in faces -> convexHull 𝕜 ↑s inter convexHull 𝕜 ↑t subseteq convexHull 𝕜 (s inter t : Set E)
+    - inter_subset_convexHull : 对任意 {s t}, s in faces -> t in faces -> convexHull 𝕜 ↑s inter convexHull 𝕜 ↑t subseteq convexHull 𝕜 (s inter t : 集合 E)
 -/
 structure SimplicialComplex extends PreAbstractSimplicialComplex E where
   /-- the vertices in each face are affine independent: this is an implementation detail -/
@@ -99,7 +99,7 @@ lemma nonempty_of_mem_faces
 中文:
 引理 nonempty_of_mem_faces
   条件: (hs : s in K.faces)
-  结论: s.Nonempty
+  结论: s.非空
   证明: .1 K.isRelLowerSet_faces hs
 
 Depends on / 依赖: K.isRelLowerSet_faces, isRelLowerSet_faces
@@ -135,7 +135,7 @@ definition space
 
 中文:
 定义 space
-  签名: (K : SimplicialComplex 𝕜 E)
+  签名: (K : 单纯复形 𝕜 E)
   定义体: ⋃ s in K.faces, convexHull 𝕜 (s : Set E)
 
 Depends on / 依赖: K.faces, convexHull
@@ -154,7 +154,7 @@ theorem mem_space_iff
 
 中文:
 定理 mem_space_iff
-  结论: x in K.space ↔ 存在 s in K.faces, x in convexHull 𝕜 (s : Set E)
+  结论: x in K.space ↔ 存在 s in K.faces, x in convexHull 𝕜 (s : 集合 E)
   证明: by
   simp [space]
 -/
@@ -198,7 +198,7 @@ theorem subset_space
 中文:
 定理 subset_space
   条件: (hs : s in K.faces)
-  结论: (s : Set E) subseteq K.space
+  结论: (s : 集合 E) subseteq K.space
   证明: (subset_convexHull 𝕜 _).trans convexHull_subset_space hs
 -/
 protected theorem subset_space (hs : s in K.faces) : (s : Set E) subseteq K.space :=
@@ -240,7 +240,7 @@ theorem down_closed
 
 中文:
 定理 down_closed
-  条件: {s t} (hs : s in K.faces) (hst : t subseteq s) (ht : t.Nonempty)
+  条件: {s t} (hs : s in K.faces) (hst : t subseteq s) (ht : t.非空)
   结论: t in K.faces
   证明: (K.isRelLowerSet_faces hs).2 hst ht
 
@@ -264,7 +264,7 @@ theorem disjoint_or_exists_inter_eq_convexHull
   · rw [coe_inter, convexHull_inter_convexHull hs ht]
 
 中文:
-定理 disjoint_or_exists_inter_eq_convexHull
+定理 disjoint_or_存在_inter_eq_convexHull
   条件: (hs : s in K.faces) (ht : t in K.faces)
   证明: by
   classical
@@ -303,7 +303,7 @@ definition ofErase
 
 中文:
 定义 ofErase
-  签名: (faces : Set (Finset E)) (indep : 对任意 s in faces, AffineIndependent 𝕜 ((↑) : s -> E))
+  签名: (faces : 集合 (有限集 E)) (indep : 对任意 s in faces, AffineIndependent 𝕜 ((↑) : s -> E))
   定义体: faces \ {∅}
   indep hs := indep _ hs.1
   isRelLowerSet_faces := by
@@ -338,7 +338,7 @@ definition ofSubcomplex
 
 中文:
 定义 ofSubcomplex
-  签名: (K : SimplicialComplex 𝕜 E) (faces : Set (Finset E)) (subset : faces subseteq K.faces)
+  签名: (K : 单纯复形 𝕜 E) (faces : 集合 (有限集 E)) (subset : faces subseteq K.faces)
   定义体: { faces := faces
     indep := fun hs => K.indep (subset hs)
     isRelLowerSet_faces := K.isRelLowerSet_faces.mono_isLowerSet down_closed subset
@@ -366,7 +366,7 @@ definition vertices
 
 中文:
 定义 vertices
-  签名: (K : SimplicialComplex 𝕜 E)
+  签名: (K : 单纯复形 𝕜 E)
   定义体: { x | {x} in K.faces }
 
 Depends on / 依赖: K.faces
@@ -405,7 +405,7 @@ refine ⟨fun h => mem_biUnion h mem_coe.2 mem_singleton_self x, fun h => ?_⟩
 
 中文:
 定理 vertices_eq
-  结论: K.vertices = ⋃ k in K.faces, (k : Set E)
+  结论: K.vertices = ⋃ k in K.faces, (k : 集合 E)
   证明: by
   ext x
 refine ⟨fun h => mem_biUnion h mem_coe.2 mem_singleton_self x, fun h => ?_⟩
@@ -518,7 +518,7 @@ definition facets
 
 中文:
 定义 facets
-  签名: (K : SimplicialComplex 𝕜 E)
+  签名: (K : 单纯复形 𝕜 E)
   定义体: { s in K.faces | forall ⦃t⦄, t in K.faces -> s subseteq t -> s = t }
 
 Depends on / 依赖: K.faces, subseteq
@@ -626,7 +626,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (SimplicialComplex 𝕜 E)
+  签名: 最小值 (单纯复形 𝕜 E)
   定义体: ⟨fun K L =>
     { faces := K.faces inter L.faces
       indep := fun hs => K.indep hs.1
@@ -656,7 +656,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (SimplicialComplex 𝕜 E)
+  签名: SemilatticeInf (单纯复形 𝕜 E)
   定义体: { PartialOrder.lift (fun K => K.faces) (fun _ _ => SimplicialComplex.ext) with
     inf := (· ⊓ ·)
     inf_le_left := fun _ _ _ hs => hs.1
@@ -685,7 +685,7 @@ instance hasBot
 
 中文:
 实例 hasBot
-  签名: : Bot (SimplicialComplex 𝕜 E)
+  签名: : 底元素 (单纯复形 𝕜 E)
   定义体: ⟨{ faces := ∅
       indep := fun hs => (Set.notMem_empty _ hs).elim
       isRelLowerSet_faces := isRelLowerSet_empty
@@ -709,7 +709,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (SimplicialComplex 𝕜 E)
+  签名: 有底序 (单纯复形 𝕜 E)
   定义体: { SimplicialComplex.hasBot 𝕜 E with bot_le := fun _ => Set.empty_subset _ }
 
 Depends on / 依赖: Set.empty_subset, SimplicialComplex, SimplicialComplex.hasBot, bot_le, empty_subset, hasBot
@@ -727,7 +727,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SimplicialComplex 𝕜 E)
+  签名: 可居 (单纯复形 𝕜 E)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (SimplicialComplex 𝕜 E) :=
@@ -745,7 +745,7 @@ theorem faces_bot
 
 中文:
 定理 faces_bot
-  结论: (⊥ : SimplicialComplex 𝕜 E).faces = ∅
+  结论: (⊥ : 单纯复形 𝕜 E).faces = ∅
   证明: rfl
 -/
 theorem faces_bot : (⊥ : SimplicialComplex 𝕜 E).faces = ∅ := rfl
@@ -760,7 +760,7 @@ theorem space_bot
 
 中文:
 定理 space_bot
-  结论: (⊥ : SimplicialComplex 𝕜 E).space = ∅
+  结论: (⊥ : 单纯复形 𝕜 E).space = ∅
   证明: Set.biUnion_empty _
 
 Depends on / 依赖: Set.biUnion_empty, biUnion_empty
@@ -778,7 +778,7 @@ theorem facets_bot
 
 中文:
 定理 facets_bot
-  结论: (⊥ : SimplicialComplex 𝕜 E).facets = ∅
+  结论: (⊥ : 单纯复形 𝕜 E).facets = ∅
   证明: eq_empty_of_subset_empty facets_subset
 
 Depends on / 依赖: eq_empty_of_subset_empty, facets_subset

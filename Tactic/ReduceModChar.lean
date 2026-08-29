@@ -59,8 +59,8 @@ lemma CharP.isInt_of_mod
   proof: ⟨by rw [he.out, CharP.intCast_eq_intCast_mod α n, show n = n' from hn.out, h₂.out, Int.cast_id]⟩
 
 中文:
-引理 CharP.isInt_of_mod
-  结论: {e' r : 整数} {α : 类型} [Ring α] {n n' : 自然数} (inst : CharP α n) {e : α}
+引理 特征p.is整数_of_mod
+  结论: {e' r : 整数} {α : 类型} [环 α] {n n' : 自然数} (inst : 特征p α n) {e : α}
   证明: ⟨by rw [he.out, CharP.intCast_eq_intCast_mod α n, show n = n' from hn.out, h₂.out, Int.cast_id]⟩
 
 Depends on / 依赖: CharP.intCast_eq_intCast_mod, Int.cast_id, cast_id, he.out, hn.out, intCast_eq_intCast_mod
@@ -78,8 +78,8 @@ lemma CharP.isNat_pow
   statement: forall {f : α -> Nat -> α} {a : α} {a' b b' c n n' : Nat},
 
 中文:
-引理 CharP.isNat_pow
-  条件: {α} [Semiring α]
+引理 特征p.is自然数_pow
+  条件: {α} [半环 α]
   结论: 对任意 {f : α -> 自然数 -> α} {a : α} {a' b b' c n n' : 自然数},
 -/
 lemma CharP.isNat_pow {α} [Semiring α] : forall {f : α -> Nat -> α} {a : α} {a' b b' c n n' : Nat},
@@ -105,7 +105,7 @@ let rr ← evalIntMod.go _ _ ze q(IsInt.raw_refl $ne) _
 
 中文:
 定义 normBareNumeral
-  签名: {α : Q(类型u)} (n n' : Q(自然数)) (pn : Q(Is自然数 «$n» «$n'»))
+  签名: {α : Q(类型u)} (n n' : Q(自然数)) (pn : Q(是自然数 «$n» «$n'»))
   定义体: do
   let ⟨ze, ne, pe⟩ ← Result.toInt _ (← Mathlib.Meta.NormNum.derive e)
 let rr ← evalIntMod.go _ _ ze q(IsInt.raw_refl $ne) _
@@ -154,8 +154,8 @@ lemma CharP.intCast_eq_mod
   proof: CharP.intCast_eq_intCast_mod R p
 
 中文:
-引理 CharP.intCast_eq_mod
-  条件: (R : Type _) [Ring R] (p : 自然数) [CharP R p] (k : 整数)
+引理 特征p.intCast_eq_mod
+  条件: (R : 类型 _) [环 R] (p : 自然数) [特征p R p] (k : 整数)
   证明: CharP.intCast_eq_intCast_mod R p
 
 Depends on / 依赖: CharP.intCast_eq_intCast_mod, intCast_eq_intCast_mod
@@ -175,8 +175,8 @@ definition normIntNumeral
   normIntNumeral' n n' pn e _ instCharP
 
 中文:
-定义 normIntNumeral
-  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_ : Q(Ring $α))
+定义 norm整数Numeral
+  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_ : Q(环 $α))
   定义体: do
   let ⟨n', pn⟩ ← deriveNat n q(Nat.instAddMonoidWithOne)
   normIntNumeral' n n' pn e _ instCharP
@@ -197,8 +197,8 @@ lemma CharP.neg_eq_sub_one_mul
   simp
 
 中文:
-引理 CharP.neg_eq_sub_one_mul
-  结论: {α : Type _} [Ring α] (n : 自然数) (inst : CharP α n) (b : α)
+引理 特征p.neg_eq_sub_one_mul
+  结论: {α : 类型 _} [环 α] (n : 自然数) (inst : 特征p α n) (b : α)
   证明: by
   rw [← pa]; rw [← p.out]; rw [← neg_one_mul]
   simp
@@ -236,7 +236,7 @@ have : instAddMonoidWithOne =Q sα := ⟨⟩
 
 中文:
 定义 normNeg
-  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_instRing : Q(Ring $α))
+  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_instRing : Q(环 $α))
   定义体: do
   let .app f (b : Q($α)) ← whnfR e | failure
 guard ← withNewMCtxDepth isDefEq f q(Neg.neg (α := $α))
@@ -274,8 +274,8 @@ lemma CharP.neg_mul_eq_sub_one_mul
   simp
 
 中文:
-引理 CharP.neg_mul_eq_sub_one_mul
-  结论: {α : Type _} [Ring α] (n : 自然数) (inst : CharP α n) (a b : α)
+引理 特征p.neg_mul_eq_sub_one_mul
+  结论: {α : 类型 _} [环 α] (n : 自然数) (inst : 特征p α n) (a b : α)
   证明: by
   rw [← pa]; rw [← p.out]; rw [← neg_one_mul]
   simp
@@ -308,7 +308,7 @@ have : AddGroupW
 
 中文:
 定义 normNegCoeffMul
-  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_instRing : Q(Ring $α))
+  签名: {α : Q(类型u)} (n : Q(自然数)) (e : Q($α)) (_instRing : Q(环 $α))
   定义体: do
   let .app neg (.app (.app mul (a : Q($α))) (b : Q($α))) ← whnfR e | failure
 guard ← withNewMCtxDepth isDefEq neg q(Neg.neg (α := $α))
@@ -350,7 +350,7 @@ inductive TypeToCharPResult
 归纳类型 TypeToCharPResult
   参数: (α : Q(类型u))
   构造子 (2 个):
-    - intLike: (n : Q(自然数)) (instRing : Q(Ring $α)) (instCharP : Q(CharP $α $n))
+    - intLike: (n : Q(自然数)) (instRing : Q(环 $α)) (instCharP : Q(特征p $α $n))
     - failure: 
 -/
 inductive TypeToCharPResult (α : Q(Type u))

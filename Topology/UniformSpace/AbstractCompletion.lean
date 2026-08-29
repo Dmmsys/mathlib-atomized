@@ -76,10 +76,10 @@ structure AbstractCompletion.{v,
   公理与运算 (7 个):
     - space : 类型v
     - coe : α -> space
-    - uniformStruct : UniformSpace space
-    - complete : CompleteSpace space
-    - separation : T0Space space
-    - isUniformInducing : IsUniformInducing coe
+    - uniformStruct : 一致空间 space
+    - complete : 完备空间 space
+    - separation : T0空间 space
+    - isUniformInducing : 是UniformInducing coe
     - dense : DenseRange coe
 -/
 structure AbstractCompletion.{v, u} (α : Type u) [UniformSpace α] where
@@ -121,7 +121,7 @@ definition ofComplete
 
 中文:
 定义 ofComplete
-  签名: [T0Space α] [CompleteSpace α]
+  签名: [T0空间 α] [完备空间 α]
   定义体: mk α id inferInstance inferInstance inferInstance .id denseRange_id
 
 Depends on / 依赖: denseRange_id
@@ -159,7 +159,7 @@ theorem isDenseInducing
 
 中文:
 定理 isDenseInducing
-  结论: IsDenseInducing ι
+  结论: 是DenseInducing ι
   证明: ⟨pkg.isUniformInducing.isInducing, pkg.dense⟩
 
 @[fun_prop]
@@ -180,7 +180,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: UniformContinuous ι
+  结论: 一致连续 ι
   证明: IsUniformInducing.uniformContinuous pkg.isUniformInducing
 
 Depends on / 依赖: IsUniformInducing, IsUniformInducing.uniformContinuous, isUniformInducing, pkg.isUniformInducing, uniformContinuous
@@ -200,7 +200,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ι
+  结论: 连续 ι
   证明: pkg.uniformContinuous_coe.continuous
 
 @[elab_as_elim]
@@ -221,7 +221,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  条件: {p : hatα -> 命题} (a : hatα) (hp : IsClosed { a | p a }) (ih : 对任意 a, p (ι a))
+  条件: {p : hatα -> 命题} (a : hatα) (hp : 是闭集 { a | p a }) (ih : 对任意 a, p (ι a))
   证明: isClosed_property pkg.dense hp ih a
 
 Depends on / 依赖: isClosed_property, pkg.dense
@@ -242,7 +242,7 @@ theorem funext
 
 中文:
 定理 funext
-  结论: [TopologicalSpace β] [T2Space β] {f g : hatα -> β} (hf : Continuous f)
+  结论: [拓扑空间 β] [T2空间 β] {f g : hatα -> β} (hf : 连续 f)
   证明: funext fun a => pkg.induction_on a (isClosed_eq hf hg) h
 -/
 protected theorem funext [TopologicalSpace β] [T2Space β] {f g : hatα -> β} (hf : Continuous f)
@@ -285,7 +285,7 @@ theorem extend_def
 
 中文:
 定理 extend_def
-  条件: (hf : UniformContinuous f)
+  条件: (hf : 一致连续 f)
   结论: pkg.extend f = pkg.isDenseInducing.extend f
   证明: if_pos hf
 
@@ -306,7 +306,7 @@ theorem inseparable_extend_coe
 
 中文:
 定理 inseparable_extend_coe
-  条件: (hf : UniformContinuous f) (x : α)
+  条件: (hf : 一致连续 f) (x : α)
   证明: by
   rw [extend_def _ hf]
   exact pkg.isDenseInducing.inseparable_extend hf.continuous.continuousAt
@@ -331,7 +331,7 @@ theorem extend_coe
 
 中文:
 定理 extend_coe
-  条件: [T2Space β] (hf : UniformContinuous f) (a : α)
+  条件: [T2空间 β] (hf : 一致连续 f) (a : α)
   结论: (pkg.extend f) (ι a) = f a
   证明: by
   rw [pkg.extend_def hf]
@@ -362,7 +362,7 @@ theorem uniformContinuous_extend
 
 中文:
 定理 uniformContinuous_extend
-  结论: UniformContinuous (pkg.extend f)
+  结论: 一致连续 (pkg.extend f)
   证明: by
   by_cases hf : UniformContinuous f
   · rw [pkg.extend_def hf]
@@ -393,7 +393,7 @@ theorem continuous_extend
 
 中文:
 定理 continuous_extend
-  结论: Continuous (pkg.extend f)
+  结论: 连续 (pkg.extend f)
   证明: pkg.uniformContinuous_extend.continuous
 
 @[fun_prop]
@@ -416,7 +416,7 @@ lemma isUniformInducing_extend
 
 中文:
 引理 isUniformInducing_extend
-  条件: (h : IsUniformInducing f)
+  条件: (h : 是UniformInducing f)
   证明: by
   rw [extend_def _ h.uniformContinuous]
   exact pkg.isDenseInducing.isUniformInducing_extend pkg.isUniformInducing h
@@ -444,7 +444,7 @@ theorem extend_unique
 
 中文:
 定理 extend_unique
-  结论: (hf : UniformContinuous f) {g : hatα -> β} (hg : UniformContinuous g)
+  结论: (hf : 一致连续 f) {g : hatα -> β} (hg : 一致连续 g)
   证明: by
   apply pkg.funext pkg.continuous_extend hg.continuous
   simpa only [pkg.extend_coe hf] using h
@@ -472,7 +472,7 @@ theorem extend_comp_coe
 
 中文:
 定理 extend_comp_coe
-  条件: {f : hatα -> β} (hf : UniformContinuous f)
+  条件: {f : hatα -> β} (hf : 一致连续 f)
   结论: pkg.extend (f ∘ ι) = f
   证明: funext fun x =>
     pkg.induction_on x (isClosed_eq pkg.continuous_extend hf.continuous) fun y =>
@@ -532,7 +532,7 @@ theorem uniformContinuous_map
 
 中文:
 定理 uniformContinuous_map
-  结论: UniformContinuous (map f)
+  结论: 一致连续 (map f)
   证明: pkg.uniformContinuous_extend
 
 @[continuity]
@@ -553,7 +553,7 @@ theorem continuous_map
 
 中文:
 定理 continuous_map
-  结论: Continuous (map f)
+  结论: 连续 (map f)
   证明: pkg.continuous_extend
 
 Depends on / 依赖: continuous_extend, pkg.continuous_extend
@@ -575,7 +575,7 @@ theorem map_coe
 
 中文:
 定理 map_coe
-  条件: (hf : UniformContinuous f) (a : α)
+  条件: (hf : 一致连续 f) (a : α)
   结论: map f (ι a) = ι' (f a)
   证明: pkg.extend_coe (pkg'.uniformContinuous_coe.comp hf) a
 
@@ -600,7 +600,7 @@ theorem map_unique
 
 中文:
 定理 map_unique
-  结论: {f : α -> β} {g : hatα -> hatβ} (hg : UniformContinuous g)
+  结论: {f : α -> β} {g : hatα -> hatβ} (hg : 一致连续 g)
   证明: pkg.funext (pkg.continuous_map _ _) hg.continuous by
     intro a
     change pkg.extend (ι' ∘ f) _ = _
@@ -653,7 +653,7 @@ theorem extend_map
 
 中文:
 定理 extend_map
-  结论: [CompleteSpace γ] [T0Space γ] {f : β -> γ} {g : α -> β}
+  结论: [完备空间 γ] [T0空间 γ] {f : β -> γ} {g : α -> β}
   证明: pkg.funext (pkg'.continuous_extend.comp (pkg.continuous_map pkg' _)) pkg.continuous_extend
     fun a => by
     rw [pkg.extend_coe (hf.comp hg)]; rw [comp_apply]; rw [pkg.map_coe pkg' hg]; rw [pkg'.extend_coe hf]
@@ -681,7 +681,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {g : β -> γ} {f : α -> β} (hg : UniformContinuous g) (hf : UniformContinuous f)
+  条件: {g : β -> γ} {f : α -> β} (hg : 一致连续 g) (hf : 一致连续 f)
   证明: pkg.extend_map pkg' (pkg''.uniformContinuous_coe.comp hg) hf
 
 Depends on / 依赖: extend_map, pkg.extend_map, uniformContinuous_coe, uniformContinuous_coe.comp
@@ -809,7 +809,7 @@ theorem uniformContinuous_compare
 
 中文:
 定理 uniformContinuous_compare
-  结论: UniformContinuous (pkg.compare pkg')
+  结论: 一致连续 (pkg.compare pkg')
   证明: pkg.uniformContinuous_extend
 
 Depends on / 依赖: pkg.uniformContinuous_extend, uniformContinuous_extend
@@ -922,7 +922,7 @@ theorem uniformContinuous_compareEquiv
 
 中文:
 定理 uniformContinuous_compareEquiv
-  结论: UniformContinuous (pkg.compareEquiv pkg')
+  结论: 一致连续 (pkg.compareEquiv pkg')
   证明: pkg.uniformContinuous_compare pkg'
 
 @[fun_prop]
@@ -943,7 +943,7 @@ theorem uniformContinuous_compareEquiv_symm
 
 中文:
 定理 uniformContinuous_compareEquiv_symm
-  结论: UniformContinuous (pkg.compareEquiv pkg').symm
+  结论: 一致连续 (pkg.compareEquiv pkg').symm
   证明: pkg'.uniformContinuous_compare pkg
 
 Depends on / 依赖: uniformContinuous_compare
@@ -968,7 +968,7 @@ theorem compare_comp_eq_compare
 
 中文:
 定理 compare_comp_eq_compare
-  结论: (γ : 类型uγ) [TopologicalSpace γ]
+  结论: (γ : 类型uγ) [拓扑空间 γ]
   证明: pkg.uniformStruct.toTopologicalSpace
     letI := pkg'.uniformStruct.toTopologicalSpace
     (forall a : pkg.space,
@@ -1017,7 +1017,7 @@ definition prod
   dense := pkg.dense.prodMap pkg'.dense
 
 中文:
-定义 prod
+定义 乘积
   签名: : AbstractCompletion (α × β) where
   定义体: hatα × hatβ
   coe p := ⟨ι p.1, ι' p.2⟩
@@ -1081,7 +1081,7 @@ theorem extension₂_coe_coe
 
 中文:
 定理 extension₂_coe_coe
-  条件: (hf : UniformContinuous <| uncurry f) (a : α) (b : β)
+  条件: (hf : 一致连续 <| uncurry f) (a : α) (b : β)
   证明: show (pkg.prod pkg').extend (uncurry f) ((pkg.prod pkg').coe (a, b)) = uncurry f (a, b) from
     (pkg.prod pkg').extend_coe hf _
 
@@ -1191,7 +1191,7 @@ theorem continuous_map₂
 
 中文:
 定理 continuous_map₂
-  结论: {δ} [TopologicalSpace δ] {f : α -> β -> γ} {a : δ -> hatα} {b : δ -> hatβ}
+  结论: {δ} [拓扑空间 δ] {f : α -> β -> γ} {a : δ -> hatα} {b : δ -> hatβ}
   证明: (pkg.uniformContinuous_map₂ pkg' pkg'' f).continuous.comp₂ ha hb
 
 Depends on / 依赖: continuous, continuous.comp, pkg.uniformContinuous_map

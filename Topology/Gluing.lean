@@ -76,12 +76,12 @@ structure GlueData
     - f_mono(i j) : = (TopCat.mono_iff_injective _).mpr (f_open i j).isEmbedding.injective
 
 中文:
-结构 GlueData
-  参数: extends CategoryTheory.GlueData TopCat
-  继承: CategoryTheory.GlueData TopCat
+结构 粘合数据
+  参数: extends 范畴论.粘合数据 顶元素范畴
+  继承: 范畴论.粘合数据 顶元素范畴
   公理与运算 (2 个):
-    - f_open : 对任意 i j, IsOpenEmbedding (f i j)
-    - f_mono(i j) : = (TopCat.mono_iff_injective _).mpr (f_open i j).isEmbedding.injective
+    - f_open : 对任意 i j, 是开嵌入 (f i j)
+    - f_mono(i j) : = (顶元素范畴.mono_iff_injective _).mpr (f_open i j).isEmbedding.injective
 
 Depends on / 依赖: TopCat, TopCat.mono_iff_injective, f_open, injective, isEmbedding, isEmbedding.injective, mono_iff_injective
 -/
@@ -105,7 +105,7 @@ theorem π_surjective
 
 中文:
 定理 π_surjective
-  结论: Function.Surjective 𝖣.π
+  结论: 函数.满射 𝖣.π
   证明: (TopCat.epi_iff_surjective 𝖣.π).mp inferInstance
 
 Depends on / 依赖: TopCat, TopCat.epi_iff_surjective, epi_iff_surjective
@@ -130,8 +130,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (U : Set 𝖣.glued)
-  结论: IsOpen U ↔ 对任意 i, IsOpen (𝖣.ι i ⁻¹' U)
+  条件: (U : 集合 𝖣.glued)
+  结论: 是开集 U ↔ 对任意 i, 是开集 (𝖣.ι i ⁻¹' U)
   证明: by
   delta CategoryTheory.GlueData.ι
   simp_rw [← Multicoequalizer.ι_sigmaπ 𝖣.diagram]
@@ -177,8 +177,8 @@ definition Rel
   body: exists x : D.V (a.1, b.1), D.f _ _ x = a.2 ∧ D.f _ _ (D.t _ _ x) = b.2
 
 中文:
-定义 Rel
-  签名: (a b : Σ i, ((D.U i : TopCat) : Type _))
+定义 关系
+  签名: (a b : Σ i, ((D.U i : 顶元素范畴) : 类型 _))
   定义体: exists x : D.V (a.1, b.1), D.f _ _ x = a.2 ∧ D.f _ _ (D.t _ _ x) = b.2
 -/
 def Rel (a b : Σ i, ((D.U i : TopCat) : Type _)) : Prop :=
@@ -200,7 +200,7 @@ theorem rel_equiv
 
 中文:
 定理 rel_equiv
-  结论: Equivalence D.Rel
+  结论: 等价 D.关系
   证明: ⟨fun x => ⟨inv (D.f _ _) x.2, IsIso.inv_hom_id_apply (D.f x.fst x.fst) _,
     by simp [IsIso.inv_hom_id_apply (D.f x.fst x.fst)]⟩, by
     rintro a b ⟨x, e₁, e₂⟩
@@ -371,7 +371,7 @@ theorem ι_injective
 中文:
 定理 ι_injective
   条件: (i : D.J)
-  结论: Function.Injective (𝖣.ι i)
+  结论: 函数.单射 (𝖣.ι i)
   证明: by
   intro x y h
   rcases (D.ι_eq_iff_rel _ _ _ _).mp h with ⟨_, e₁, e₂⟩
@@ -468,7 +468,7 @@ theorem preimage_range
 中文:
 定理 preimage_range
   条件: (i j : D.J)
-  结论: 𝖣.ι j ⁻¹' Set.range (𝖣.ι i) = Set.range (D.f j i)
+  结论: 𝖣.ι j ⁻¹' 集合.range (𝖣.ι i) = 集合.range (D.f j i)
   证明: by
   rw [← Set.preimage_image_eq (Set.range (D.f j i)) (D.ι_injective j)]; rw [← Set.image_univ]; rw [←
     Set.image_univ]; rw [← Set.image_comp]; rw [← coe_comp]; rw [Set.image_univ]; rw [Set.image_univ]; rw [← image_inter]; rw [Set.preimage_range_inter]
@@ -498,7 +498,7 @@ theorem preimage_image_eq_image
 
 中文:
 定理 preimage_image_eq_image
-  条件: (i j : D.J) (U : Set (𝖣.U i))
+  条件: (i j : D.J) (U : 集合 (𝖣.U i))
   证明: by
   have : D.f _ _ ⁻¹' 𝖣.ι j ⁻¹' 𝖣.ι i '' U = (D.t j i ≫ D.f _ _) ⁻¹' U := by
     ext x
@@ -542,7 +542,7 @@ theorem preimage_image_eq_image'
 
 中文:
 定理 preimage_image_eq_image'
-  条件: (i j : D.J) (U : Set (𝖣.U i))
+  条件: (i j : D.J) (U : 集合 (𝖣.U i))
   证明: by
   convert! D.preimage_image_eq_image i j U using 1
   rw [coe_comp]; rw [coe_comp]; rw [Set.image_comp]
@@ -584,7 +584,7 @@ theorem open_image_open
 中文:
 定理 open_image_open
   条件: (i : D.J) (U : Opens (𝖣.U i))
-  结论: IsOpen (𝖣.ι i '' U)
+  结论: 是开集 (𝖣.ι i '' U)
   证明: by
   rw [isOpen_iff]
   intro j
@@ -616,7 +616,7 @@ theorem ι_isOpenEmbedding
 中文:
 定理 ι_isOpenEmbedding
   条件: (i : D.J)
-  结论: IsOpenEmbedding (𝖣.ι i)
+  结论: 是开嵌入 (𝖣.ι i)
   证明: .of_continuous_injective_isOpenMap (𝖣.ι i).hom.continuous_toFun (D.ι_injective i) fun U h =>
     D.open_image_open i ⟨U, h⟩
 
@@ -647,7 +647,7 @@ structure MkCore
   参数: where
   公理与运算 (8 个):
     - {J : 类型u}
-    - U : J -> TopCat.{u}
+    - U : J -> 顶元素范畴.{u}
     - V : 对任意 i, J -> Opens (U i)
     - t : 对任意 i j, (Opens.toTopCat _).obj (V i j) ⟶ (Opens.toTopCat _).obj (V j i)
     - V_id : 对任意 i, V i i = ⊤
@@ -828,7 +828,7 @@ definition ofOpenSubsets
 
 中文:
 定义 ofOpenSubsets
-  签名: : TopCat.GlueData.{u}
+  签名: : 顶元素范畴.粘合数据.{u}
   定义体: mk'.{u}
     { J
       U := fun i => (Opens.toTopCat <| TopCat.of α).obj (U i)
@@ -863,7 +863,7 @@ definition fromOpenSubsetsGlue
 
 中文:
 定义 fromOpenSubsetsGlue
-  签名: : (ofOpenSubsets U).toGlueData.glued ⟶ TopCat.of α
+  签名: : (ofOpenSubsets U).toGlueData.glued ⟶ 顶元素范畴.of α
   定义体: Multicoequalizer.desc _ _ (fun _ => Opens.inclusion' _) (by rintro ⟨i, j⟩; ext x; rfl)
 
 @[simp, elementwise nosimp]
@@ -911,7 +911,7 @@ theorem fromOpenSubsetsGlue_injective
 
 中文:
 定理 fromOpenSubsetsGlue_injective
-  结论: Function.Injective (fromOpenSubsetsGlue U)
+  结论: 函数.单射 (fromOpenSubsetsGlue U)
   证明: by
   intro x y e
   obtain ⟨i, ⟨x, hx⟩, rfl⟩ := (ofOpenSubsets U).ι_jointly_surjective x
@@ -950,7 +950,7 @@ theorem fromOpenSubsetsGlue_isOpenMap
 
 中文:
 定理 fromOpenSubsetsGlue_isOpenMap
-  结论: IsOpenMap (fromOpenSubsetsGlue U)
+  结论: 是开映射 (fromOpenSubsetsGlue U)
   证明: by
   intro s hs
   rw [(ofOpenSubsets U).isOpen_iff] at hs
@@ -992,7 +992,7 @@ theorem fromOpenSubsetsGlue_isOpenEmbedding
 
 中文:
 定理 fromOpenSubsetsGlue_isOpenEmbedding
-  结论: IsOpenEmbedding (fromOpenSubsetsGlue U)
+  结论: 是开嵌入 (fromOpenSubsetsGlue U)
   证明: .of_continuous_injective_isOpenMap (ContinuousMap.continuous_toFun _)
     (fromOpenSubsetsGlue_injective U) (fromOpenSubsetsGlue_isOpenMap U)
 
@@ -1022,7 +1022,7 @@ theorem range_fromOpenSubsetsGlue
 
 中文:
 定理 range_fromOpenSubsetsGlue
-  结论: Set.range (fromOpenSubsetsGlue U) = ⋃ i, (U i : Set α)
+  结论: 集合.range (fromOpenSubsetsGlue U) = ⋃ i, (U i : 集合 α)
   证明: by
   ext
   constructor
@@ -1061,7 +1061,7 @@ definition openCoverGlueHomeo
 
 中文:
 定义 openCoverGlueHomeo
-  签名: (h : ⋃ i, (U i : Set α) = Set.univ)
+  签名: (h : ⋃ i, (U i : 集合 α) = 集合.univ)
   定义体: Equiv.toHomeomorphOfContinuousOpen
     (Equiv.ofBijective (fromOpenSubsetsGlue U)
       ⟨fromOpenSubsetsGlue_injective U,

@@ -74,10 +74,10 @@ class StrictConvexSpace
     - strictConvex_closedBall : forall r : Real, 0 < r -> StrictConvex 𝕜 (closedBall (0 : E) r)
 
 中文:
-类 StrictConvexSpace
-  参数: (𝕜 E : 类型) [NormedField 𝕜] [PartialOrder 𝕜]
+类 严格凸空间
+  参数: (𝕜 E : 类型) [赋范域 𝕜] [偏序 𝕜]
   公理与运算 (1 个):
-    - strictConvex_closedBall : 对任意 r : 实数, 0 < r -> StrictConvex 𝕜 (closedBall (0 : E) r)
+    - strictConvex_closedBall : 对任意 r : 实数, 0 < r -> 严格凸 𝕜 (closedBall (0 : E) r)
 -/
 class StrictConvexSpace (𝕜 E : Type*) [NormedField 𝕜] [PartialOrder 𝕜]
     [NormedAddCommGroup E] [NormedSpace 𝕜 E] : Prop where
@@ -100,7 +100,7 @@ theorem strictConvex_closedBall
 
 中文:
 定理 strictConvex_closedBall
-  条件: [StrictConvexSpace 𝕜 E] (x : E) (r : 实数)
+  条件: [严格凸空间 𝕜 E] (x : E) (r : 实数)
   证明: by
   rcases le_or_gt r 0 with hr | hr
   · exact (subsingleton_closedBall x hr).strictConvex
@@ -127,8 +127,8 @@ theorem StrictConvexSpace.of_strictConvex_unitClosedBall
   proof: ⟨fun r hr => by simpa only [smul_unitClosedBall_of_nonneg hr.le] using h.smul r⟩
 
 中文:
-定理 StrictConvexSpace.of_strictConvex_unitClosedBall
-  结论: [LinearMap.CompatibleSMul E E 𝕜 实数]
+定理 严格凸空间.of_strictConvex_unitClosedBall
+  结论: [线性映射.余mpatibleSMul E E 𝕜 实数]
   证明: ⟨fun r hr => by simpa only [smul_unitClosedBall_of_nonneg hr.le] using h.smul r⟩
 
 Depends on / 依赖: h.smul, hr.le, smul_unitClosedBall_of_nonneg
@@ -150,7 +150,7 @@ theorem StrictConvexSpace.of_norm_combo_lt_one
   rcases h x y hx hy hne with ⟨a, b, hab, hlt
 
 中文:
-定理 StrictConvexSpace.of_norm_combo_lt_one
+定理 严格凸空间.of_norm_combo_lt_one
   证明: by
   refine
     StrictConvexSpace.of_strictConvex_unitClosedBall Real
@@ -186,7 +186,7 @@ theorem StrictConvexSpace.of_norm_combo_ne_one
   rcases h x y h
 
 中文:
-定理 StrictConvexSpace.of_norm_combo_ne_one
+定理 严格凸空间.of_norm_combo_ne_one
   证明: by
   refine StrictConvexSpace.of_strictConvex_unitClosedBall Real
     ((convex_closedBall _ _).strictConvex ?_)
@@ -222,7 +222,7 @@ theorem StrictConvexSpace.of_norm_add_ne_two
   rw [← smul_add]; rw [norm_smul]; rw [Real.norm_of_nonneg one_half_pos.le]; rw [one_div]; rw [← div_eq_inv_mul]; rw [Ne]; rw [div_eq_one_iff_eq (two_n
 
 中文:
-定理 StrictConvexSpace.of_norm_add_ne_two
+定理 严格凸空间.of_norm_add_ne_two
   证明: by
   refine
     StrictConvexSpace.of_norm_combo_ne_one fun x y hx hy hne =>
@@ -248,7 +248,7 @@ theorem StrictConvexSpace.of_pairwise_sphere_norm_ne_two
     h (mem_sphere_zero_iff_norm.2 hx) (mem_sphere_zero_iff_norm.2 hy)
 
 中文:
-定理 StrictConvexSpace.of_pairwise_sphere_norm_ne_two
+定理 严格凸空间.of_pairwise_sphere_norm_ne_two
   证明: StrictConvexSpace.of_norm_add_ne_two fun _ _ hx hy =>
     h (mem_sphere_zero_iff_norm.2 hx) (mem_sphere_zero_iff_norm.2 hy)
 
@@ -270,7 +270,7 @@ theorem StrictConvexSpace.of_norm_add
   exact (sameRay_iff_of_norm_eq (hx.trans hy.symm)).1 (h x y hx hy h₂)
 
 中文:
-定理 StrictConvexSpace.of_norm_add
+定理 严格凸空间.of_norm_add
   证明: by
   refine StrictConvexSpace.of_pairwise_sphere_norm_ne_two fun x hx y hy => mt fun h₂ => ?_
   rw [mem_sphere_zero_iff_norm] at hx hy
@@ -588,8 +588,8 @@ instance Real.instStrictConvexSpace
   body: strictConvex_iff_convex.mpr (convex_closedBall _ _)
 
 中文:
-实例 Real.instStrictConvexSpace
-  签名: : StrictConvexSpace 实数 实数 where
+实例 实数.instStrictConvexSpace
+  签名: : 严格凸空间 实数 实数 where
   定义体: strictConvex_iff_convex.mpr (convex_closedBall _ _)
 
 Depends on / 依赖: convex_closedBall, strictConvex_iff_convex, strictConvex_iff_convex.mpr

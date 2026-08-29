@@ -51,8 +51,8 @@ class HasSolidNorm
     - solid : forall ⦃x y : α⦄, |x| <= |y| -> ‖x‖ <= ‖y‖
 
 中文:
-类 HasSolidNorm
-  参数: (α : 类型) [NormedAddCommGroup α] [Lattice α]
+类 有Solid范数
+  参数: (α : 类型) [赋范交换加群 α] [格 α]
   公理与运算 (1 个):
     - solid : 对任意 ⦃x y : α⦄, |x| <= |y| -> ‖x‖ <= ‖y‖
 -/
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSolidNorm 实数
+  签名: 有Solid范数 实数
   定义体: ⟨fun _ _ => id⟩
 -/
 instance : HasSolidNorm Real := ⟨fun _ _ => id⟩
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSolidNorm Rat
+  签名: 有Solid范数 有理数
   定义体: ⟨fun _ _ _ => by simpa only [norm, ← Rat.cast_abs, Rat.cast_le]⟩
 
 Depends on / 依赖: Rat.cast_abs, Rat.cast_le, cast_abs, cast_le
@@ -141,8 +141,8 @@ instance Int.hasSolidNorm
   body: by simpa [← Int.norm_cast_real, ← Int.cast_abs] using h
 
 中文:
-实例 Int.hasSolidNorm
-  签名: : HasSolidNorm 整数 where
+实例 整数.hasSolidNorm
+  签名: : 有Solid范数 整数 where
   定义体: by simpa [← Int.norm_cast_real, ← Int.cast_abs] using h
 
 Depends on / 依赖: Int.cast_abs, Int.norm_cast_real, cast_abs, norm_cast_real
@@ -523,7 +523,7 @@ lemma continuous_posPart
 
 中文:
 引理 continuous_posPart
-  结论: Continuous (posPart : α -> α)
+  结论: 连续 (posPart : α -> α)
   证明: lipschitzWith_posPart.continuous
 
 @[fun_prop]
@@ -543,7 +543,7 @@ lemma continuous_negPart
 
 中文:
 引理 continuous_negPart
-  结论: Continuous (negPart : α -> α)
+  结论: 连续 (negPart : α -> α)
   证明: lipschitzWith_negPart.continuous
 
 Depends on / 依赖: continuous, lipschitzWith_negPart, lipschitzWith_negPart.continuous
@@ -563,7 +563,7 @@ lemma isClosed_nonneg
 
 中文:
 引理 isClosed_nonneg
-  结论: IsClosed {x : α | 0 <= x}
+  结论: 是闭集 {x : α | 0 <= x}
   证明: by
   have : {x : α | 0 <= x} = negPart ⁻¹' {0} := by ext; simp [negPart_eq_zero]
   rw [this]

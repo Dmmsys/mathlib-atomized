@@ -240,7 +240,7 @@ definition natIsoOfRightAdjointNatIso
     (leftAdjointsCoyonedaEquiv adj2 (adj1.ofNatIsoRight r)))
 
 中文:
-定义 natIsoOfRightAdjointNatIso
+定义 natIsoOfRightAdjoint自然数Iso
   签名: {F F' : C ⥤ D} {G G' : D ⥤ C}
   定义体: NatIso.removeOp ((Coyoneda.fullyFaithful.whiskeringRight _).isoEquiv.symm
     (leftAdjointsCoyonedaEquiv adj2 (adj1.ofNatIsoRight r)))
@@ -264,7 +264,7 @@ definition natIsoOfLeftAdjointNatIso
   body: NatIso.removeOp (natIsoOfRightAdjointNatIso (op adj2) (op adj1) (NatIso.op l))
 
 中文:
-定义 natIsoOfLeftAdjointNatIso
+定义 natIsoOfLeftAdjoint自然数Iso
   签名: {F F' : C ⥤ D} {G G' : D ⥤ C}
   定义体: NatIso.removeOp (natIsoOfRightAdjointNatIso (op adj2) (op adj1) (NatIso.op l))
 
@@ -287,8 +287,8 @@ instance IsLeftAdjoint.op
   body: ⟨F.rightAdjoint.op, ⟨.op .ofIsLeftAdjoint _⟩⟩
 
 中文:
-实例 IsLeftAdjoint.op
-  签名: {F : C ⥤ D} [F.IsLeftAdjoint]
+实例 是左伴随.op
+  签名: {F : C ⥤ D} [F.是左伴随]
   定义体: ⟨F.rightAdjoint.op, ⟨.op .ofIsLeftAdjoint _⟩⟩
 
 Depends on / 依赖: F.rightAdjoint.op, ofIsLeftAdjoint, rightAdjoint
@@ -305,8 +305,8 @@ instance IsRightAdjoint.op
   body: ⟨F.leftAdjoint.op, ⟨.op .ofIsRightAdjoint _⟩⟩
 
 中文:
-实例 IsRightAdjoint.op
-  签名: {F : C ⥤ D} [F.IsRightAdjoint]
+实例 是右伴随.op
+  签名: {F : C ⥤ D} [F.是右伴随]
   定义体: ⟨F.leftAdjoint.op, ⟨.op .ofIsRightAdjoint _⟩⟩
 
 Depends on / 依赖: F.leftAdjoint.op, leftAdjoint, ofIsRightAdjoint
@@ -323,8 +323,8 @@ instance IsLeftAdjoint.leftOp
   body: ⟨F.rightAdjoint.rightOp, ⟨.leftOp .ofIsLeftAdjoint _⟩⟩
 
 中文:
-实例 IsLeftAdjoint.leftOp
-  签名: {F : C ⥤ Dᵒᵖ} [F.IsLeftAdjoint]
+实例 是左伴随.leftOp
+  签名: {F : C ⥤ Dᵒᵖ} [F.是左伴随]
   定义体: ⟨F.rightAdjoint.rightOp, ⟨.leftOp .ofIsLeftAdjoint _⟩⟩
 
 Depends on / 依赖: F.rightAdjoint.rightOp, inhabit, leftOp, ofIsLeftAdjoint, rightAdjoint, rightOp
@@ -342,8 +342,8 @@ instance IsRightAdjoint.leftOp
   body: inferInstanceAs (F.op ⋙ (opOpEquivalence D).functor).IsLeftAdjoint
 
 中文:
-实例 IsRightAdjoint.leftOp
-  签名: {F : C ⥤ Dᵒᵖ} [F.IsRightAdjoint]
+实例 是右伴随.leftOp
+  签名: {F : C ⥤ Dᵒᵖ} [F.是右伴随]
   定义体: inferInstanceAs (F.op ⋙ (opOpEquivalence D).functor).IsLeftAdjoint
 
 Depends on / 依赖: F.op, IsLeftAdjoint, functor, opOpEquivalence
@@ -361,8 +361,8 @@ instance IsLeftAdjoint.rightOp
   body: inferInstanceAs ((opOpEquivalence C).inverse ⋙ F.op).IsRightAdjoint
 
 中文:
-实例 IsLeftAdjoint.rightOp
-  签名: {F : Cᵒᵖ ⥤ D} [F.IsLeftAdjoint]
+实例 是左伴随.rightOp
+  签名: {F : Cᵒᵖ ⥤ D} [F.是左伴随]
   定义体: inferInstanceAs ((opOpEquivalence C).inverse ⋙ F.op).IsRightAdjoint
 
 Depends on / 依赖: F.op, IsRightAdjoint, inverse, opOpEquivalence
@@ -379,8 +379,8 @@ instance IsRightAdjoint.rightOp
   body: ⟨F.leftAdjoint.leftOp, ⟨.rightOp .ofIsRightAdjoint _⟩⟩
 
 中文:
-实例 IsRightAdjoint.rightOp
-  签名: {F : Cᵒᵖ ⥤ D} [F.IsRightAdjoint]
+实例 是右伴随.rightOp
+  签名: {F : Cᵒᵖ ⥤ D} [F.是右伴随]
   定义体: ⟨F.leftAdjoint.leftOp, ⟨.rightOp .ofIsRightAdjoint _⟩⟩
 
 Depends on / 依赖: F.leftAdjoint.leftOp, leftAdjoint, leftOp, ofIsRightAdjoint, rightOp

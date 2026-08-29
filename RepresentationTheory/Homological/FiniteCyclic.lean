@@ -67,7 +67,7 @@ lemma coinvariantsKer_eq_range
 
 中文:
 引理 coinvariantsKer_eq_range
-  条件: (hg : 对任意 x, x in Subgroup.zpowers g)
+  条件: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   refine le_antisymm (Submodule.span_le.2 ?_) ?_
   · rintro a ⟨⟨γ, α⟩, rfl⟩
@@ -100,7 +100,7 @@ definition coinvariantsEquiv
 
 中文:
 定义 coinvariantsEquiv
-  签名: (hg : 对任意 x, x in Subgroup.zpowers g)
+  签名: (hg : 对任意 x, x in 子群.zpowers g)
   定义体: Submodule.quotEquivOfEq _ _ (coinvariantsKer_eq_range ρ g hg)
 
 Depends on / 依赖: Submodule, Submodule.quotEquivOfEq, coinvariantsKer_eq_range, quotEquivOfEq
@@ -180,7 +180,7 @@ omit [Fin
 
 中文:
 引理 range_norm_eq_ker_applyAsHom_sub
-  条件: (hg : 对任意 x, x in Subgroup.zpowers g)
+  条件: (hg : 对任意 x, x in 子群.zpowers g)
   证明: le_antisymm (fun _ ⟨_, h⟩ => by simp [sub_hom, applyAsHom_apply _, ← h, norm])
     fun x hx => ⟨.single 1 (x.coeff g), by
     ext γ
@@ -216,7 +216,7 @@ lemma range_applyAsHom_sub_eq_ker_linearCombination
 
 中文:
 引理 range_applyAsHom_sub_eq_ker_linearCombination
-  条件: (hg : 对任意 x, x in Subgroup.zpowers g)
+  条件: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   simp [sub_hom, applyAsHom, FiniteCyclicGroup.coinvariantsKer_eq_range
     (Representation.leftRegular k G) _ hg,
@@ -243,7 +243,7 @@ lemma range_applyAsHom_sub_eq_ker_norm
 
 中文:
 引理 range_applyAsHom_sub_eq_ker_norm
-  条件: (hg : 对任意 x, x in Subgroup.zpowers g)
+  条件: (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   simp [norm, ker_leftRegular_norm_eq, range_applyAsHom_sub_eq_ker_linearCombination k g hg]
 
@@ -282,7 +282,7 @@ definition chainComplexFunctor
 
 中文:
 定义 chainComplexFunctor
-  签名: : Rep k G ⥤ ChainComplex (Rep k G) 自然数 where
+  签名: : Rep k G ⥤ 链复形 (Rep k G) 自然数 where
   定义体: HomologicalComplex.alternatingConst A (φ := A.norm) (ψ := applyAsHom A g - 𝟙 A)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, norm, applyAsHom])
     fun _ _ => ComplexShape.down_nat_odd_add
@@ -322,7 +322,7 @@ abbreviation normHomCompSub
 
 中文:
 缩写 normHomCompSub
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: ShortComplex.mk (ModuleCat.ofHom A.norm.hom.toLinearMap)
     (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm])
@@ -345,7 +345,7 @@ abbreviation subCompNormHom
 
 中文:
 缩写 subCompNormHom
-  签名: : ShortComplex (ModuleCat k)
+  签名: : 短复形 (模范畴 k)
   定义体: ShortComplex.mk (ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (ModuleCat.ofHom A.norm.hom.toLinearMap) (by ext; simp [sub_hom, applyAsHom, norm])
 
@@ -368,7 +368,7 @@ abbreviation moduleCatChainComplex
 
 中文:
 缩写 moduleCatChainComplex
-  签名: : ChainComplex (ModuleCat k) 自然数
+  签名: : 链复形 (模范畴 k) 自然数
   定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom
     A.norm.hom.toLinearMap) (ψ := ModuleCat.ofHom (applyAsHom A g - 𝟙 A).hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
@@ -395,7 +395,7 @@ abbreviation moduleCatCochainComplex
 
 中文:
 缩写 moduleCatCochainComplex
-  签名: : CochainComplex (ModuleCat k) 自然数
+  签名: : 上链复形 (模范畴 k) 自然数
   定义体: HomologicalComplex.alternatingConst (ModuleCat.of k A.V) (φ := ModuleCat.ofHom (applyAsHom A g -
     𝟙 A).hom.toLinearMap) (ψ := ModuleCat.ofHom A.norm.hom.toLinearMap)
     (by ext; simp [sub_hom, applyAsHom, norm]) (by ext; simp [sub_hom, applyAsHom, norm])
@@ -465,7 +465,7 @@ lemma resolution_quasiIso
 
 中文:
 引理 resolution_quasiIso
-  条件: (g : G) (hg : 对任意 x, x in Subgroup.zpowers g)
+  条件: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
     induction m with
     | zero =>
@@ -523,7 +523,7 @@ projective _ := inferInstanceAs Projective (leftRegular k G)
 
 中文:
 定义 resolution
-  签名: (g : G) (hg : 对任意 x, x in Subgroup.zpowers g)
+  签名: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
   定义体: (FiniteCyclicGroup.chainComplexFunctor k g).obj (leftRegular k G)
 projective _ := inferInstanceAs Projective (leftRegular k G)
   π := FiniteCyclicGroup.resolution.π k g

@@ -60,8 +60,8 @@ structure NonUnitalAlgHom
   (no additional axioms)
 
 中文:
-结构 NonUnitalAlgHom
-  参数: [Monoid R] [Monoid S] (φ : R ->* S) (A : 类型v) (B : Type w)
+结构 非幺Alg态射
+  参数: [幺半群 R] [幺半群 S] (φ : R ->* S) (A : 类型v) (B : 类型 w)
   继承: A ->ₑ+[φ] B, A ->ₙ* B
   (无附加公理)
 
@@ -92,9 +92,9 @@ class NonUnitalAlgSemiHomClass
   (no additional axioms)
 
 中文:
-类 NonUnitalAlgSemiHomClass
-  参数: (F : 类型) {R S : outParam 类型} [Monoid R] [Monoid S]
-  继承: DistribMulActionSemiHomClass F φ A B, MulHomClass F A B
+类 非幺AlgSemi态射类
+  参数: (F : 类型) {R S : outParam 类型} [幺半群 R] [幺半群 S]
+  继承: DistribMulActionSemi态射类 F φ A B, 乘法态射类 F A B
   (无附加公理)
 
 Depends on / 依赖: PreEnvelGroupRel, Quotient, Quotient.inductionOn, Quotient.sound, inductionOn, inv_mul_cancel
@@ -166,7 +166,7 @@ definition toNonUnitalAlgSemiHom
 
 中文:
 定义 toNonUnitalAlgSemiHom
-  签名: {F R S : 类型} [Monoid R] [Monoid S] {φ : R ->* S} {A B : 类型}
+  签名: {F R S : 类型} [幺半群 R] [幺半群 S] {φ : R ->* S} {A B : 类型}
   定义体: { (f : A ->ₙ+* B) with
     toFun := f
     map_smul' := map_smulₛₗ f }
@@ -200,7 +200,7 @@ definition toNonUnitalAlgHom
 
 中文:
 定义 toNonUnitalAlgHom
-  签名: {F R : 类型} [Monoid R] {A B : 类型}
+  签名: {F R : 类型} [幺半群 R] {A B : 类型}
   定义体: { (f : A ->ₙ+* B) with
     toFun := f
     map_smul' := map_smulₛₗ f }
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->ₛₙₐ[φ] B) A B
+  签名: 函数状 (A ->ₛₙₐ[φ] B) A B
   定义体: f.toFun
   coe_injective := by rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
 
@@ -312,7 +312,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  结论: {F : 类型} [FunLike F A B]
+  结论: {F : 类型} [函数状 F A B]
   证明: rfl
 -/
 protected theorem coe_coe {F : Type*} [FunLike F A B]
@@ -331,7 +331,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (A ->ₛₙₐ[φ] B) (A -> B) (↑)
+  结论: @函数.单射 (A ->ₛₙₐ[φ] B) (A -> B) (↑)
   证明: by
   rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h; congr
 -/
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ->ₛₙₐ[φ] B) A B
+  签名: 函数状 (A ->ₛₙₐ[φ] B) A B
   定义体: f.toFun
   coe_injective := coe_injective
 
@@ -373,7 +373,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalAlgSemiHomClass (A ->ₛₙₐ[φ] B) φ A B
+  签名: 非幺AlgSemi态射类 (A ->ₛₙₐ[φ] B) φ A B
   定义体: f.map_add'
   map_zero f := f.map_zero'
   map_mul f := f.map_mul'
@@ -490,7 +490,7 @@ lemma addHomMk_coe
 中文:
 引理 addHomMk_coe
   条件: (f : A ->ₛₙₐ[φ] B)
-  结论: AddHom.mk f (map_add f) = f
+  结论: 加法半群态射.mk f (map_add f) = f
   证明: rfl
 
 @[simp]
@@ -773,7 +773,7 @@ definition id
 
 中文:
 定义 id
-  签名: (R A : 类型) [Monoid R] [NonUnitalNonAssocSemiring A]
+  签名: (R A : 类型) [幺半群 R] [非幺非结合半环 A]
   定义体: { NonUnitalRingHom.id A with
     toFun := id
     map_smul' := fun _ _ => rfl }
@@ -797,7 +797,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(NonUnitalAlgHom.id R A) = id
+  结论: ⇑(非幺Alg态射.id R A) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(NonUnitalAlgHom.id R A) = id :=
@@ -813,7 +813,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (A ->ₛₙₐ[φ] B)
+  签名: 零 (A ->ₛₙₐ[φ] B)
   定义体: ⟨{ (0 : A ->ₑ+[φ] B) with map_mul' := by simp }⟩
 
 Depends on / 依赖: map_mul
@@ -833,7 +833,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (A ->ₙₐ[R] A)
+  签名: 幺 (A ->ₙₐ[R] A)
   定义体: ⟨NonUnitalAlgHom.id R A⟩
 
 @[simp]
@@ -927,7 +927,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (A ->ₛₙₐ[φ] B)
+  签名: 可居 (A ->ₛₙₐ[φ] B)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (A ->ₛₙₐ[φ] B) :=
@@ -947,7 +947,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : MonoidHom.CompTriple φ ψ χ]
+  签名: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [κ : 幺半群态射.余mpTriple φ ψ χ]
   定义体: { (f : B ->ₙ* C).comp (g : A ->ₙ* B), (f : B ->ₑ+[ψ] C).comp (g : A ->ₑ+[φ] B) with }
 
 @[simp, norm_cast]
@@ -967,7 +967,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ]
+  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [幺半群态射.余mpTriple φ ψ χ]
   证明: rfl
 -/
 theorem coe_comp (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] :
@@ -983,7 +983,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A)
+  条件: (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [幺半群态射.余mpTriple φ ψ χ] (x : A)
   证明: rfl
 -/
 theorem comp_apply (f : B ->ₛₙₐ[ψ] C) (g : A ->ₛₙₐ[φ] B) [MonoidHom.CompTriple φ ψ χ] (x : A) :
@@ -1026,7 +1026,7 @@ theorem coe_inverse
 
 中文:
 定理 coe_inverse
-  结论: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
+  结论: (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : 函数.左逆 g f)
   证明: rfl
 -/
 theorem coe_inverse (f : A ->ₙₐ[R] B₁) (g : B₁ -> A) (h₁ : Function.LeftInverse g f)
@@ -1186,7 +1186,7 @@ definition prod
   map_smul' c x := by simp only [Function.prod_
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
   定义体: Function.prod f g
   map_zero' := by simp only [Function.prod_apply, Prod.mk_zero_zero, map_zero]
@@ -1217,7 +1217,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -1241,7 +1241,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: (fst R B C).comp (prod f g) = f
+  结论: (fst R B C).comp (乘积 f g) = f
   证明: by
   rfl
 
@@ -1266,7 +1266,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : A ->ₙₐ[R] B) (g : A ->ₙₐ[R] C)
-  结论: (snd R B C).comp (prod f g) = g
+  结论: (snd R B C).comp (乘积 f g) = g
   证明: by
   rfl
 
@@ -1286,7 +1286,7 @@ theorem prod_fst_snd
 
 中文:
 定理 prod_fst_snd
-  结论: prod (fst R A B) (snd R A B) = 1
+  结论: 乘积 (fst R A B) (snd R A B) = 1
   证明: coe_injective Function.prod_fst_snd
 
 Depends on / 依赖: Function, Function.prod_fst_snd, coe_injective, prod_fst_snd
@@ -1402,7 +1402,7 @@ theorem coe_inr
 
 中文:
 定理 coe_inr
-  结论: (inr R A B : B -> A × B) = Prod.mk 0
+  结论: (inr R A B : B -> A × B) = 积类型.mk 0
   证明: rfl
 -/
 theorem coe_inr : (inr R A B : B -> A × B) = Prod.mk 0 :=
@@ -1473,7 +1473,7 @@ instance NonUnitalAlgHom.hasCoe
 @[simp]
 
 中文:
-实例 NonUnitalAlgHom.hasCoe
+实例 非幺Alg态射.hasCoe
   签名: : CoeOut (A ->ₐ[R] B) (A ->ₙₐ[R] B)
   定义体: ⟨toNonUnitalAlgHom⟩
 

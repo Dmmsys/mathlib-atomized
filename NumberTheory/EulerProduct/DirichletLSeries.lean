@@ -83,7 +83,7 @@ definition dirichletSummandHom
 
 中文:
 定义 dirichletSummandHom
-  签名: {n : 自然数} (χ : DirichletCharacter Complex n) (hs : s != 0)
+  签名: {n : 自然数} (χ : DirichletCharacter 复形 n) (hs : s != 0)
   定义体: χ n * (n : Complex) ^ (-s)
   map_zero' := by simp [hs]
   map_one' := by simp
@@ -173,7 +173,7 @@ lemma summable_dirichletSummand
 
 中文:
 引理 summable_dirichletSummand
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N) (hs : 1 < s.re)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N) (hs : 1 < s.re)
   证明: by
   simp only [dirichletSummandHom, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, norm_mul]
   exact (summable_riemannZetaSummand hs).of_nonneg_of_le (fun _ => by positivity)
@@ -200,7 +200,7 @@ lemma tsum_dirichletSummand
 
 中文:
 引理 tsum_dirichletSummand
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N) (hs : 1 < s.re)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N) (hs : 1 < s.re)
   证明: by
   simp only [dirichletSummandHom, cpow_neg, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, LSeries,
     LSeries.term_of_ne_zero' (ne_zero_of_one_lt_re hs), div_eq_mul_inv]
@@ -296,7 +296,7 @@ convert! eulerProduct_completely_multiplicative_hasProd summable_dirichletSumman
 
 中文:
 定理 DirichletCharacter.LSeries_eulerProduct_hasProd
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N)
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N)
   证明: by
   rw [← tsum_dirichletSummand χ hs]
 convert! eulerProduct_completely_multiplicative_hasProd summable_dirichletSummand χ hs
@@ -319,7 +319,7 @@ theorem DirichletCharacter.LSeries_eulerProduct_tprod
 
 中文:
 定理 DirichletCharacter.LSeries_eulerProduct_tprod
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N)
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N)
   证明: (DirichletCharacter.LSeries_eulerProduct_hasProd χ hs).tprod_eq
 
 Depends on / 依赖: DirichletCharacter, DirichletCharacter.LSeries_eulerProduct_hasProd, LSeries_eulerProduct_hasProd, tprod_eq
@@ -341,7 +341,7 @@ apply eulerProduct_completely_multiplicative summable_dirichletSummand χ hs
 
 中文:
 定理 DirichletCharacter.LSeries_eulerProduct
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N)
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N)
   证明: by
   rw [← tsum_dirichletSummand χ hs]
 apply eulerProduct_completely_multiplicative summable_dirichletSummand χ hs
@@ -373,7 +373,7 @@ let f := dirichletSummandHom χ ne_zero_of_one_lt_re hs
 
 中文:
 定理 DirichletCharacter.LSeries_eulerProduct_exp_log
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N)
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N)
   证明: by
 let f := dirichletSummandHom χ ne_zero_of_one_lt_re hs
   have h n : term ↗χ s n = f n := by
@@ -412,7 +412,7 @@ theorem ArithmeticFunction.LSeries_zeta_eulerProduct_exp_log
 
 中文:
 定理 ArithmeticFunction.LSeries_zeta_eulerProduct_exp_log
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   证明: by
   convert!
     modOne_eq_one (R := Complex) ▸
@@ -438,7 +438,7 @@ theorem riemannZeta_eulerProduct_exp_log
 
 中文:
 定理 riemannZeta_eulerProduct_exp_log
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   证明: LSeries_one_eq_riemannZeta hs ▸ ArithmeticFunction.LSeries_zeta_eulerProduct_exp_log hs
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.LSeries_zeta_eulerProduct_exp_log, LSeries_one_eq_riemannZeta, LSeries_zeta_eulerProduct_exp_log
@@ -607,7 +607,7 @@ theorem riemannZeta_eq_exp_LSeries
 
 中文:
 定理 riemannZeta_eq_exp_LSeries
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   证明: by
   rw [← LSeries_one_eq_riemannZeta hs]
   convert LSeries_eq_exp_LSeries (1 : DirichletCharacter Complex 1) hs

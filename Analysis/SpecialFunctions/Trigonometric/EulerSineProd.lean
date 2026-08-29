@@ -397,7 +397,7 @@ theorem sin_pi_mul_eq
 
 中文:
 定理 sin_pi_mul_eq
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   证明: by
   rcases eq_or_ne z 0 with (rfl | hz)
   · simp
@@ -478,7 +478,7 @@ theorem tendsto_integral_cos_pow_mul_div
 
 中文:
 定理 tendsto_integral_cos_pow_mul_div
-  条件: {f : 实数 -> Complex} (hf : ContinuousOn f (Icc 0 (π / 2)))
+  条件: {f : 实数 -> 复形} (hf : ContinuousOn f (闭区间 0 (π / 2)))
   证明: by
   simp_rw [div_eq_inv_mul (α := Complex), ← Complex.ofReal_inv, integral_of_le pi_div_two_pos.le,
     ← MeasureTheory.integral_Icc_eq_integral_Ioc, ← Complex.ofReal_pow, ← Complex.real_smul]
@@ -522,8 +522,8 @@ theorem _root_.Complex.tendsto_euler_sin_prod
  
 
 中文:
-定理 _root_.Complex.tendsto_euler_sin_prod
-  条件: (z : Complex)
+定理 _root_.复形.tendsto_euler_sin_prod
+  条件: (z : 复形)
   证明: by
   have A :
     Tendsto
@@ -573,7 +573,7 @@ theorem _root_.Real.tendsto_euler_sin_prod
         (∏ j in Finset.rang
 
 中文:
-定理 _root_.Real.tendsto_euler_sin_prod
+定理 _root_.实数.tendsto_euler_sin_prod
   条件: (x : 实数)
   证明: by
   convert! (Complex.continuous_re.tendsto _).comp (Complex.tendsto_euler_sin_prod x) using 1

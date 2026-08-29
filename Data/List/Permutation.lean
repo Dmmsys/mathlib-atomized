@@ -68,7 +68,7 @@ theorem permutationsAux2_fst
 
 中文:
 定理 permutationsAux2_fst
-  条件: (t : α) (ts : List α) (r : List β)
+  条件: (t : α) (ts : 列表 α) (r : 列表 β)
 -/
 theorem permutationsAux2_fst (t : α) (ts : List α) (r : List β) :
     forall (ys : List α) (f : List α -> β), (permutationsAux2 t ts r ys f).1 = ys ++ ts
@@ -88,7 +88,7 @@ theorem permutationsAux2_snd_nil
 
 中文:
 定理 permutationsAux2_snd_nil
-  条件: (t : α) (ts : List α) (r : List β) (f : List α -> β)
+  条件: (t : α) (ts : 列表 α) (r : 列表 β) (f : 列表 α -> β)
   证明: rfl
 
 @[simp]
@@ -109,7 +109,7 @@ theorem permutationsAux2_snd_cons
 
 中文:
 定理 permutationsAux2_snd_cons
-  结论: (t : α) (ts : List α) (r : List β) (y : α) (ys : List α)
+  结论: (t : α) (ts : 列表 α) (r : 列表 β) (y : α) (ys : 列表 α)
   证明: by
   simp [permutationsAux2, permutationsAux2_fst t _ _ ys]
 
@@ -132,7 +132,7 @@ theorem permutationsAux2_append
 
 中文:
 定理 permutationsAux2_append
-  条件: (t : α) (ts : List α) (r : List β) (ys : List α) (f : List α -> β)
+  条件: (t : α) (ts : 列表 α) (r : 列表 β) (ys : 列表 α) (f : 列表 α -> β)
   证明: by
   induction ys generalizing f <;> simp [*]
 
@@ -155,7 +155,7 @@ theorem permutationsAux2_comp_append
 
 中文:
 定理 permutationsAux2_comp_append
-  条件: {t : α} {ts ys : List α} {r : List β} (f : List α -> β)
+  条件: {t : α} {ts ys : 列表 α} {r : 列表 β} (f : 列表 α -> β)
   证明: by
   induction ys generalizing f with
   | nil => simp
@@ -187,7 +187,7 @@ theorem map_permutationsAux2'
 
 中文:
 定理 map_permutationsAux2'
-  结论: {α' β'} (g : α -> α') (g' : β -> β') (t : α) (ts ys : List α)
+  结论: {α' β'} (g : α -> α') (g' : β -> β') (t : α) (ts ys : 列表 α)
   证明: by
   induction ys generalizing f f' with
   | nil => simp
@@ -226,7 +226,7 @@ theorem map_permutationsAux2
 
 中文:
 定理 map_permutationsAux2
-  条件: (t : α) (ts : List α) (ys : List α) (f : List α -> β)
+  条件: (t : α) (ts : 列表 α) (ys : 列表 α) (f : 列表 α -> β)
   证明: by
   rw [map_permutationsAux2' id]; rw [map_id]; rw [map_id]
   · rfl
@@ -251,7 +251,7 @@ theorem permutationsAux2_snd_eq
 
 中文:
 定理 permutationsAux2_snd_eq
-  条件: (t : α) (ts : List α) (r : List β) (ys : List α) (f : List α -> β)
+  条件: (t : α) (ts : 列表 α) (r : 列表 β) (ys : 列表 α) (f : 列表 α -> β)
   证明: by
   rw [← permutationsAux2_append]; rw [map_permutationsAux2]; rw [permutationsAux2_comp_append]
 
@@ -272,7 +272,7 @@ theorem map_map_permutationsAux2
 
 中文:
 定理 map_map_permutationsAux2
-  条件: {α'} (g : α -> α') (t : α) (ts ys : List α)
+  条件: {α'} (g : α -> α') (t : α) (ts ys : 列表 α)
   证明: map_permutationsAux2' _ _ _ _ _ _ _ _ fun _ => rfl
 
 Depends on / 依赖: map_permutationsAux2
@@ -295,7 +295,7 @@ theorem map_map_permutations'Aux
 
 中文:
 定理 map_map_permutations'Aux
-  条件: (f : α -> β) (t : α) (ts : List α)
+  条件: (f : α -> β) (t : α) (ts : 列表 α)
   证明: by
   induction ts with
   | nil => rfl
@@ -324,7 +324,7 @@ theorem permutations'Aux_eq_permutationsAux2
 
 中文:
 定理 permutations'Aux_eq_permutationsAux2
-  条件: (t : α) (ts : List α)
+  条件: (t : α) (ts : 列表 α)
   证明: by
   induction ts with | nil => rfl | cons a ts ih => ?_
   simp only [permutations'Aux, ih, cons_append, permutationsAux2_snd_cons, append_nil, id_eq,
@@ -360,7 +360,7 @@ theorem mem_permutationsAux2
 
 中文:
 定理 mem_permutationsAux2
-  条件: {t : α} {ts : List α} {ys : List α} {l l' : List α}
+  条件: {t : α} {ts : 列表 α} {ys : 列表 α} {l l' : 列表 α}
   证明: by
   induction ys generalizing l with
   | nil => simp +contextual
@@ -401,7 +401,7 @@ theorem mem_permutationsAux2'
 
 中文:
 定理 mem_permutationsAux2'
-  条件: {t : α} {ts : List α} {ys : List α} {l : List α}
+  条件: {t : α} {ts : 列表 α} {ys : 列表 α} {l : 列表 α}
   证明: by
   rw [show @id (List α) = ([] ++ ·) by funext _; rfl]; apply mem_permutationsAux2
 
@@ -423,7 +423,7 @@ theorem length_permutationsAux2
 
 中文:
 定理 length_permutationsAux2
-  条件: (t : α) (ts : List α) (ys : List α) (f : List α -> β)
+  条件: (t : α) (ts : 列表 α) (ys : 列表 α) (f : 列表 α -> β)
   证明: by
   induction ys generalizing f <;> simp [*]
 
@@ -446,7 +446,7 @@ theorem foldr_permutationsAux2
 
 中文:
 定理 foldr_permutationsAux2
-  条件: (t : α) (ts : List α) (r L : List (List α))
+  条件: (t : α) (ts : 列表 α) (r L : 列表 (列表 α))
   证明: by
   induction L with
   | nil => rfl
@@ -476,7 +476,7 @@ theorem mem_foldr_permutationsAux2
 
 中文:
 定理 mem_foldr_permutationsAux2
-  条件: {t : α} {ts : List α} {r L : List (List α)} {l' : List α}
+  条件: {t : α} {ts : 列表 α} {r L : 列表 (列表 α)} {l' : 列表 α}
   证明: by
   have :
     (exists a : List α,
@@ -510,7 +510,7 @@ theorem length_foldr_permutationsAux2
 
 中文:
 定理 length_foldr_permutationsAux2
-  条件: (t : α) (ts : List α) (r L : List (List α))
+  条件: (t : α) (ts : 列表 α) (r L : 列表 (列表 α))
   证明: by
   simp [foldr_permutationsAux2, length_permutationsAux2, length_flatMap]
 
@@ -538,7 +538,7 @@ theorem length_foldr_permutationsAux2'
 
 中文:
 定理 length_foldr_permutationsAux2'
-  结论: (t : α) (ts : List α) (r L : List (List α)) (n)
+  结论: (t : α) (ts : 列表 α) (r L : 列表 (列表 α)) (n)
   证明: by
   rw [length_foldr_permutationsAux2]; rw [(_ : (map length L).sum = n * length L)]
   induction L with
@@ -576,7 +576,7 @@ theorem permutationsAux_nil
 
 中文:
 定理 permutationsAux_nil
-  条件: (is : List α)
+  条件: (is : 列表 α)
   结论: permutationsAux [] is = []
   证明: by
   rw [permutationsAux]; rw [permutationsAux.rec]
@@ -602,7 +602,7 @@ theorem permutationsAux_cons
 
 中文:
 定理 permutationsAux_cons
-  条件: (t : α) (ts is : List α)
+  条件: (t : α) (ts is : 列表 α)
   证明: by
   rw [permutationsAux]; rw [permutationsAux.rec]; rfl
 
@@ -628,7 +628,7 @@ theorem permutations_nil
 
 中文:
 定理 permutations_nil
-  结论: permutations ([] : List α) = [[]]
+  结论: permutations ([] : 列表 α) = [[]]
   证明: by
   rw [permutations]; rw [permutationsAux_nil]
 
@@ -679,7 +679,7 @@ theorem map_permutations
 
 中文:
 定理 map_permutations
-  条件: (f : α -> β) (ts : List α)
+  条件: (f : α -> β) (ts : 列表 α)
   证明: by
   rw [permutations]; rw [permutations]; rw [map]; rw [map_permutationsAux]; rw [map]
 
@@ -702,7 +702,7 @@ theorem map_permutations'
 
 中文:
 定理 map_permutations'
-  条件: (f : α -> β) (ts : List α)
+  条件: (f : α -> β) (ts : 列表 α)
   证明: by
   induction ts with
   | nil => rfl
@@ -733,7 +733,7 @@ theorem permutationsAux_append
 
 中文:
 定理 permutationsAux_append
-  条件: (is is' ts : List α)
+  条件: (is is' ts : 列表 α)
   证明: by
   induction is generalizing is' with | nil => simp | cons t is ih =>
   simp only [foldr_permutationsAux2, ih, map_flatMap, cons_append, permutationsAux_cons, map_append,
@@ -768,7 +768,7 @@ theorem permutations_append
 
 中文:
 定理 permutations_append
-  条件: (is ts : List α)
+  条件: (is ts : 列表 α)
   证明: by
   simp [permutations, permutationsAux_append]
 
@@ -830,7 +830,7 @@ theorem perm_of_mem_permutations
 
 中文:
 定理 perm_of_mem_permutations
-  条件: {l₁ l₂ : List α} (h : l₁ in permutations l₂)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ in permutations l₂)
   结论: l₁ ~ l₂
   证明: (eq_or_mem_of_mem_cons h).elim (fun e => e ▸ Perm.refl _) fun m =>
     append_nil l₂ ▸ perm_of_mem_permutationsAux m
@@ -883,7 +883,7 @@ theorem length_permutations
 
 中文:
 定理 length_permutations
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (permutations l) = (length l)!
   证明: length_permutationsAux l []
 
@@ -902,7 +902,7 @@ theorem mem_permutations_of_perm_lemma
 
 中文:
 定理 mem_permutations_of_perm_lemma
-  结论: {is l : List α}
+  结论: {is l : 列表 α}
   证明: by simpa [permutations, perm_nil] using H
 
 Depends on / 依赖: perm_nil, permutations
@@ -967,7 +967,7 @@ theorem mem_permutations
 
 中文:
 定理 mem_permutations
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: s in permutations t ↔ s ~ t
   证明: ⟨perm_of_mem_permutations, mem_permutations_of_perm_lemma mem_permutationsAux_of_perm⟩
 
@@ -989,7 +989,7 @@ theorem perm_pair
 
 中文:
 定理 perm_pair
-  条件: {a b : α} {l : List α}
+  条件: {a b : α} {l : 列表 α}
   结论: l ~ [a, b] ↔ l = [a, b] ∨ l = [b, a]
   证明: by
   have : [a, b].permutations = [[a, b], [b, a]] := by cbv
@@ -1012,7 +1012,7 @@ theorem pair_perm
 
 中文:
 定理 pair_perm
-  条件: {a b : α} {l : List α}
+  条件: {a b : α} {l : 列表 α}
   结论: [a, b] ~ l ↔ l = [a, b] ∨ l = [b, a]
   证明: perm_comm.trans perm_pair
 
@@ -1040,7 +1040,7 @@ theorem perm_permutations'Aux_comm
 
 中文:
 定理 perm_permutations'Aux_comm
-  条件: (a b : α) (l : List α)
+  条件: (a b : α) (l : 列表 α)
   证明: by
   induction l with
   | nil => exact Perm.swap [a, b] [b, a] []
@@ -1098,8 +1098,8 @@ theorem Perm.permutations'
   | trans _ _ IH₁ IH₂ => exact IH₁.trans IH₂
 
 中文:
-定理 Perm.permutations'
-  条件: {s t : List α} (p : s ~ t)
+定理 置换.permutations'
+  条件: {s t : 列表 α} (p : s ~ t)
   结论: permutations' s ~ permutations' t
   证明: by
   induction p with
@@ -1142,7 +1142,7 @@ theorem permutations_perm_permutations'
 
 中文:
 定理 permutations_perm_permutations'
-  条件: (ts : List α)
+  条件: (ts : 列表 α)
   结论: ts.permutations ~ ts.permutations'
   证明: by
   obtain ⟨n, h⟩ : exists n, length ts < n := ⟨_, Nat.lt_succ_self _⟩
@@ -1182,7 +1182,7 @@ theorem mem_permutations'
 
 中文:
 定理 mem_permutations'
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: s in permutations' t ↔ s ~ t
   证明: (permutations_perm_permutations' _).symm.mem_iff.trans mem_permutations
 
@@ -1204,8 +1204,8 @@ theorem Perm.permutations
 @[simp]
 
 中文:
-定理 Perm.permutations
-  条件: {s t : List α} (h : s ~ t)
+定理 置换.permutations
+  条件: {s t : 列表 α} (h : s ~ t)
   结论: permutations s ~ permutations t
   证明: (permutations_perm_permutations' _).trans
     h.permutations'.trans (permutations_perm_permutations' _).symm
@@ -1233,7 +1233,7 @@ theorem perm_permutations_iff
 
 中文:
 定理 perm_permutations_iff
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: permutations s ~ permutations t ↔ s ~ t
   证明: ⟨fun h => mem_permutations.1 h.mem_iff.1 mem_permutations.2 (Perm.refl _),
     Perm.permutations⟩
@@ -1259,7 +1259,7 @@ theorem perm_permutations'_iff
 
 中文:
 定理 perm_permutations'_iff
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: permutations' s ~ permutations' t ↔ s ~ t
   证明: ⟨fun h => mem_permutations'.1 h.mem_iff.1 mem_permutations'.2 (Perm.refl _),
     Perm.permutations'⟩
@@ -1286,7 +1286,7 @@ theorem getElem_permutations'Aux
 
 中文:
 定理 getElem_permutations'Aux
-  结论: (s : List α) (x : α) (n : 自然数)
+  结论: (s : 列表 α) (x : α) (n : 自然数)
   证明: by
   induction s generalizing n with
   | nil =>
@@ -1322,7 +1322,7 @@ theorem get_permutations'Aux
 
 中文:
 定理 get_permutations'Aux
-  结论: (s : List α) (x : α) (n : 自然数)
+  结论: (s : 列表 α) (x : α) (n : 自然数)
   证明: by
   simp [getElem_permutations'Aux]
 
@@ -1379,7 +1379,7 @@ theorem count_permutations'Aux_self
 
 中文:
 定理 count_permutations'Aux_self
-  条件: [DecidableEq α] (l : List α) (x : α)
+  条件: [DecidableEq α] (l : 列表 α) (x : α)
   证明: by
   induction l generalizing x with
   | nil => simp [takeWhile, count]
@@ -1420,7 +1420,7 @@ theorem length_permutations'Aux
 
 中文:
 定理 length_permutations'Aux
-  条件: (s : List α) (x : α)
+  条件: (s : 列表 α) (x : α)
   证明: by
   induction s with
   | nil => simp
@@ -1450,7 +1450,7 @@ theorem injective_permutations'Aux
 中文:
 定理 injective_permutations'Aux
   条件: (x : α)
-  结论: Function.Injective (permutations'Aux x)
+  结论: 函数.单射 (permutations'Aux x)
   证明: by
   intro s t h
   apply insertIdx_injective s.length x
@@ -1488,7 +1488,7 @@ theorem nodup_permutations'Aux_of_notMem
 
 中文:
 定理 nodup_permutations'Aux_of_notMem
-  条件: (s : List α) (x : α) (hx : x ∉ s)
+  条件: (s : 列表 α) (x : α) (hx : x ∉ s)
   证明: by
   induction s with
   | nil => simp
@@ -1531,7 +1531,7 @@ theorem nodup_permutations'Aux_iff
 
 中文:
 定理 nodup_permutations'Aux_iff
-  条件: {s : List α} {x : α}
+  条件: {s : 列表 α} {x : α}
   结论: Nodup (permutations'Aux x s) ↔ x ∉ s
   证明: by
   refine ⟨fun h H => ?_, nodup_permutations'Aux_of_notMem _ _⟩
@@ -1576,7 +1576,7 @@ theorem nodup_permutations
 
 中文:
 定理 nodup_permutations
-  条件: (s : List α) (hs : Nodup s)
+  条件: (s : 列表 α) (hs : Nodup s)
   结论: Nodup s.permutations
   证明: by
   rw [(permutations_perm_permutations' s).nodup_iff]
@@ -1644,7 +1644,7 @@ lemma permutations_take_two
 
 中文:
 引理 permutations_take_two
-  条件: (x y : α) (s : List α)
+  条件: (x y : α) (s : 列表 α)
   证明: by
   induction s <;> simp [permutations]
 
@@ -1676,7 +1676,7 @@ theorem nodup_permutations_iff
 
 中文:
 定理 nodup_permutations_iff
-  条件: {s : List α}
+  条件: {s : 列表 α}
   结论: Nodup s.permutations ↔ Nodup s
   证明: by
   refine ⟨?_, nodup_permutations s⟩

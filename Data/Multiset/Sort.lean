@@ -92,7 +92,7 @@ theorem pairwise_sort
 
 中文:
 定理 pairwise_sort
-  结论: (sort s r).Pairwise r
+  结论: (sort s r).两两 r
   证明: Quot.inductionOn s (pairwise_mergeSort' _)
 
 @[simp]
@@ -231,7 +231,7 @@ theorem sort_range
 中文:
 定理 sort_range
   条件: (n : 自然数)
-  结论: sort (range n) = List.range n
+  结论: sort (range n) = 列表.range n
   证明: List.mergeSort_eq_self _ (sortedLT_range n).sortedLE.pairwise
 
 Depends on / 依赖: List.mergeSort_eq_self, mergeSort_eq_self, pairwise, sortedLE, sortedLE.pairwise, sortedLT_range

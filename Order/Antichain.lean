@@ -65,7 +65,7 @@ definition IsAntichain
 
 中文:
 定义 IsAntichain
-  签名: (r : α -> α -> 命题) (s : Set α)
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: s.Pairwise rᶜ
 
 Depends on / 依赖: Pairwise, s.Pairwise
@@ -155,7 +155,7 @@ theorem mono_on
 
 中文:
 定理 mono_on
-  条件: (hs : IsAntichain r₁ s) (h : s.Pairwise fun ⦃a b⦄ => r₂ a b -> r₁ a b)
+  条件: (hs : IsAntichain r₁ s) (h : s.两两 fun ⦃a b⦄ => r₂ a b -> r₁ a b)
   证明: hs.imp_on h.imp fun _ _ h h₁ h₂ => h₁ h h₂
 
 Depends on / 依赖: h.imp, hs.imp_on, imp_on
@@ -212,7 +212,7 @@ theorem antisymm
 中文:
 定理 antisymm
   条件: (h : IsAntichain r univ)
-  结论: Std.Antisymm r
+  结论: Std.反对称 r
   证明: ⟨fun _ _ ha _ => h.eq trivial trivial ha⟩
 
 @[deprecated (since := "2026-01-06")] protected alias isAntisymm := antisymm
@@ -238,8 +238,8 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: [Std.Trichotomous r] (h : IsAntichain r s)
-  结论: s.Subsingleton
+  条件: [Std.三歧 r] (h : IsAntichain r s)
+  结论: s.子单例
   证明: by
   rintro a ha b hb
   obtain hab | hab | hab := trichotomous_of r a b
@@ -305,7 +305,7 @@ theorem image
   exact hs hb hc (ne_of_apply_ne _ hbc) (h hr)
 
 中文:
-定理 image
+定理 像
   条件: (hs : IsAntichain r s) (f : α -> β) (h : 对任意 ⦃a b⦄, r' (f a) (f b) -> r a b)
   证明: by
   rintro _ ⟨b, hb, rfl⟩ _ ⟨c, hc, rfl⟩ hbc hr
@@ -328,8 +328,8 @@ theorem preimage
 hs hb hc (hf.ne hbc) h hr
 
 中文:
-定理 preimage
-  结论: (hs : IsAntichain r s) {f : β -> α} (hf : Injective f)
+定理 原像
+  结论: (hs : IsAntichain r s) {f : β -> α} (hf : 单射 f)
   证明: fun _ hb _ hc hbc hr =>
 hs hb hc (hf.ne hbc) h hr
 -/
@@ -466,7 +466,7 @@ theorem preimage_relEmbedding
 
 中文:
 定理 preimage_relEmbedding
-  条件: {t : Set β} (ht : IsAntichain r' t) (φ : r ↪r r')
+  条件: {t : 集合 β} (ht : IsAntichain r' t) (φ : r ↪r r')
   证明: fun _ ha _s ha' hne hle =>
   ht ha ha' (fun h => hne (φ.injective h)) (φ.map_rel_iff.mpr hle)
 -/
@@ -504,7 +504,7 @@ theorem preimage_relIso
 
 中文:
 定理 preimage_relIso
-  条件: {t : Set β} (hs : IsAntichain r' t) (φ : r ≃r r')
+  条件: {t : 集合 β} (hs : IsAntichain r' t) (φ : r ≃r r')
   证明: hs.preimage_relEmbedding φ.toRelEmbedding
 
 Depends on / 依赖: hs.preimage_relEmbedding, preimage_relEmbedding, toRelEmbedding
@@ -585,7 +585,7 @@ theorem preimage_embedding
 
 中文:
 定理 preimage_embedding
-  条件: [LE α] [LE β] {t : Set β} (ht : IsAntichain (· <= ·) t) (φ : α ↪o β)
+  条件: [LE α] [LE β] {t : 集合 β} (ht : IsAntichain (· <= ·) t) (φ : α ↪o β)
   证明: preimage_relEmbedding ht _
 
 Depends on / 依赖: preimage_relEmbedding
@@ -661,7 +661,7 @@ theorem preimage_iso
 
 中文:
 定理 preimage_iso
-  条件: [LE α] [LE β] {t : Set β} (ht : IsAntichain (· <= ·) t) (φ : α ≃o β)
+  条件: [LE α] [LE β] {t : 集合 β} (ht : IsAntichain (· <= ·) t) (φ : α ≃o β)
   证明: preimage_relEmbedding ht _
 
 Depends on / 依赖: preimage_relEmbedding
@@ -680,7 +680,7 @@ theorem preimage_iso_iff
 
 中文:
 定理 preimage_iso_iff
-  条件: [LE α] [LE β] {t : Set β} {φ : α ≃o β}
+  条件: [LE α] [LE β] {t : 集合 β} {φ : α ≃o β}
   证明: ⟨fun h => (φ.image_preimage t).subst (h.image_iso φ), fun h => h.preimage_iso _⟩
 
 Depends on / 依赖: h.image_iso, h.preimage_iso, image_iso, image_preimage, preimage_iso
@@ -739,7 +739,7 @@ theorem image_compl
 
 中文:
 定理 image_compl
-  条件: [布尔eanAlgebra α] (hs : IsAntichain (· <= ·) s)
+  条件: [布尔代数 α] (hs : IsAntichain (· <= ·) s)
   证明: (hs.image_embedding (OrderIso.compl α).toOrderEmbedding).flip
 
 Depends on / 依赖: OrderIso, OrderIso.compl, hs.image_embedding, image_embedding, toOrderEmbedding
@@ -759,7 +759,7 @@ theorem preimage_compl
 
 中文:
 定理 preimage_compl
-  条件: [布尔eanAlgebra α] (hs : IsAntichain (· <= ·) s)
+  条件: [布尔代数 α] (hs : IsAntichain (· <= ·) s)
   证明: fun _ ha _ ha' hne hle =>
   hs ha' ha (fun h => hne (compl_inj_iff.mp h.symm)) (compl_le_compl hle)
 -/
@@ -778,7 +778,7 @@ theorem diff
 
 中文:
 定理 diff
-  条件: {s t : Set α} (h : IsAntichain r s)
+  条件: {s t : 集合 α} (h : IsAntichain r s)
   结论: IsAntichain r (s \ t)
   证明: h.subset Set.sdiff_subset
 -/
@@ -798,7 +798,7 @@ theorem isAntichain_preimage_subtypeVal
 
 中文:
 定理 isAntichain_preimage_subtypeVal
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   simp [IsAntichain, Set.Pairwise]
 
@@ -820,7 +820,7 @@ theorem isAntichain_coe_univ_iff
 
 中文:
 定理 isAntichain_coe_univ_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: @IsAntichain ↑s (r · ·) univ ↔ IsAntichain r s
   证明: by
   simpa using isAntichain_preimage_subtypeVal s univ
@@ -860,8 +860,8 @@ theorem Set.Subsingleton.isAntichain
   proof: hs.pairwise _
 
 中文:
-定理 Set.Subsingleton.isAntichain
-  条件: (hs : s.Subsingleton) (r : α -> α -> 命题)
+定理 集合.子单例.isAntichain
+  条件: (hs : s.子单例) (r : α -> α -> 命题)
   结论: IsAntichain r s
   证明: hs.pairwise _
 
@@ -913,7 +913,7 @@ lemma isChain_and_isAntichain_iff_subsingleton
 
 中文:
 引理 isChain_and_isAntichain_iff_subsingleton
-  结论: IsChain r s ∧ IsAntichain r s ↔ s.Subsingleton
+  结论: IsChain r s ∧ IsAntichain r s ↔ s.子单例
   证明: ⟨fun h => subsingleton_of_isChain_of_isAntichain h.1 h.2, fun h => ⟨h.isChain, h.isAntichain _⟩⟩
 
 Depends on / 依赖: h.isAntichain, h.isChain, isAntichain, isChain, subsingleton_of_isChain_of_isAntichain
@@ -1122,7 +1122,7 @@ theorem IsAntichain.bot_mem_iff
 
 中文:
 定理 IsAntichain.bot_mem_iff
-  条件: [OrderBot α] (hs : IsAntichain (· <= ·) s)
+  条件: [有底序 α] (hs : IsAntichain (· <= ·) s)
   结论: ⊥ in s ↔ s = {⊥}
   证明: isLeast_bot_iff.symm.trans hs.least_iff
 
@@ -1142,7 +1142,7 @@ theorem IsAntichain.top_mem_iff
 
 中文:
 定理 IsAntichain.top_mem_iff
-  条件: [OrderTop α] (hs : IsAntichain (· <= ·) s)
+  条件: [有顶序 α] (hs : IsAntichain (· <= ·) s)
   结论: ⊤ in s ↔ s = {⊤}
   证明: isGreatest_top_iff.symm.trans hs.greatest_iff
 
@@ -1163,7 +1163,7 @@ theorem IsAntichain.minimal_mem_iff
 中文:
 定理 IsAntichain.minimal_mem_iff
   条件: (hs : IsAntichain (· <= ·) s)
-  结论: Minimal (· in s) a ↔ a in s
+  结论: 极小 (· in s) a ↔ a in s
   证明: ⟨fun h => h.prop, fun h => ⟨h, fun _ hys hyx => (hs.eq hys h hyx).symm.le⟩⟩
 
 Depends on / 依赖: h.prop, hs.eq, symm.le
@@ -1183,7 +1183,7 @@ theorem IsAntichain.maximal_mem_iff
 中文:
 定理 IsAntichain.maximal_mem_iff
   条件: (hs : IsAntichain (· <= ·) s)
-  结论: Maximal (· in s) a ↔ a in s
+  结论: 极大 (· in s) a ↔ a in s
   证明: hs.to_dual.minimal_mem_iff
 
 Depends on / 依赖: hs.to_dual.minimal_mem_iff, minimal_mem_iff, to_dual
@@ -1309,7 +1309,7 @@ theorem isAntichain_iff_forall_not_lt
   proof: ⟨fun hs _ ha _ => hs.not_lt ha, fun hs _ ha _ hb h h' => hs ha hb h'.lt_of_ne h⟩
 
 中文:
-定理 isAntichain_iff_forall_not_lt
+定理 isAntichain_iff_对任意_not_lt
   证明: ⟨fun hs _ ha _ => hs.not_lt ha, fun hs _ ha _ hb h h' => hs ha hb h'.lt_of_ne h⟩
 
 Depends on / 依赖: hs.not_lt, lt_of_ne, not_lt
@@ -1333,7 +1333,7 @@ alias setOf_maximal_antichain := setOfPred_maximal_antichain
 中文:
 定理 setOfPred_maximal_antichain
   条件: (P : α -> 命题)
-  结论: IsAntichain (· <= ·) {x | Maximal P x}
+  结论: IsAntichain (· <= ·) {x | 极大 P x}
   证明: fun _ hx _ ⟨hy, _⟩ hne hle => hne (hle.antisymm <| hx.2 hy hle)
 
 @[deprecated (since := "2026-07-09")]
@@ -1361,7 +1361,7 @@ theorem setOfPred_minimal_antichain
 中文:
 定理 setOfPred_minimal_antichain
   条件: (P : α -> 命题)
-  结论: IsAntichain (· <= ·) {x | Minimal P x}
+  结论: IsAntichain (· <= ·) {x | 极小 P x}
   证明: (setOfPred_maximal_antichain (α := αᵒᵈ) P).swap
 
 @[deprecated (since := "2026-07-09")] alias setOf_minimal_antichain := setOfPred_minimal_antichain
@@ -1388,7 +1388,7 @@ definition IsStrongAntichain
 
 中文:
 定义 IsStrongAntichain
-  签名: (r : α -> α -> 命题) (s : Set α)
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: s.Pairwise fun a b => forall c, ¬r a c ∨ ¬r b c
 
 Depends on / 依赖: Pairwise, s.Pairwise
@@ -1489,8 +1489,8 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: [IsDirected α r] (h : IsStrongAntichain r s)
-  结论: s.Subsingleton
+  条件: [是Directed α r] (h : IsStrongAntichain r s)
+  结论: s.子单例
   证明: fun a ha b hb =>
   let ⟨_, hac, hbc⟩ := directed_of r a b
   h.eq ha hb hac hbc
@@ -1550,8 +1550,8 @@ theorem image
   exact (hs ha hb (ne_of_apply_ne _ hab) _).imp (mt <| h _ _) (mt <| h _ _)
 
 中文:
-定理 image
-  结论: (hs : IsStrongAntichain r s) {f : α -> β} (hf : Surjective f)
+定理 像
+  结论: (hs : IsStrongAntichain r s) {f : α -> β} (hf : 满射 f)
   证明: by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩ hab c
   obtain ⟨c, rfl⟩ := hf c
@@ -1575,8 +1575,8 @@ theorem preimage
   (hs ha hb (hf.ne hab) _).imp (mt <| h _ _) (mt <| h _ _)
 
 中文:
-定理 preimage
-  结论: (hs : IsStrongAntichain r s) {f : β -> α} (hf : Injective f)
+定理 原像
+  结论: (hs : IsStrongAntichain r s) {f : β -> α} (hf : 单射 f)
   证明: fun _ ha _ hb hab _ =>
   (hs ha hb (hf.ne hab) _).imp (mt <| h _ _) (mt <| h _ _)
 -/
@@ -1633,8 +1633,8 @@ theorem Set.Subsingleton.isStrongAntichain
   proof: hs.pairwise _
 
 中文:
-定理 Set.Subsingleton.isStrongAntichain
-  条件: (hs : s.Subsingleton) (r : α -> α -> 命题)
+定理 集合.子单例.isStrongAntichain
+  条件: (hs : s.子单例) (r : α -> α -> 命题)
   证明: hs.pairwise _
 
 Depends on / 依赖: hs.pairwise, pairwise
@@ -1655,7 +1655,7 @@ definition IsMaxAntichain
 
 中文:
 定义 IsMaxAntichain
-  签名: (r : α -> α -> 命题) (s : Set α)
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: IsAntichain r s ∧ forall ⦃t⦄, IsAntichain r t -> s subseteq t -> s = t
 
 Depends on / 依赖: IsAntichain, subseteq
@@ -1696,8 +1696,8 @@ theorem image
       ((e.toEquiv.subset_symm_image _ _).2 hf)
 
 中文:
-定理 image
-  条件: {s : β -> β -> 命题} (e : r ≃r s) {c : Set α} (hc : IsMaxAntichain r c)
+定理 像
+  条件: {s : β -> β -> 命题} (e : r ≃r s) {c : 集合 α} (hc : IsMaxAntichain r c)
   证明: hc.isAntichain.image _ fun _ _ => e.map_rel_iff'.mp
   right t ht hf := by
     rw [← e.coe_fn_toEquiv]; rw [← e.toEquiv.eq_preimage_iff_image_eq]; rw [← Equiv.image_symm_eq_preimage]
@@ -1729,7 +1729,7 @@ theorem isEmpty_iff
 中文:
 定理 isEmpty_iff
   条件: (h : IsMaxAntichain r s)
-  结论: IsEmpty α ↔ s = ∅
+  结论: 是空 α ↔ s = ∅
   证明: by
   refine ⟨fun _ => s.eq_empty_of_isEmpty, fun h' => ?_⟩
   constructor
@@ -1756,7 +1756,7 @@ theorem nonempty_iff
 中文:
 定理 nonempty_iff
   条件: (h : IsMaxAntichain r s)
-  结论: Nonempty α ↔ s.Nonempty
+  结论: 非空 α ↔ s.非空
   证明: not_iff_not.mp by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
 -/
 protected theorem nonempty_iff (h : IsMaxAntichain r s) : Nonempty α ↔ s.Nonempty :=
@@ -1806,7 +1806,7 @@ definition IsWeakAntichain
 
 中文:
 定义 IsWeakAntichain
-  签名: (s : Set (对任意 i, α i))
+  签名: (s : 集合 (对任意 i, α i))
   定义体: IsAntichain (· ≺ ·) s
 
 Depends on / 依赖: IsAntichain
@@ -1917,8 +1917,8 @@ theorem Set.Subsingleton.isWeakAntichain
   proof: hs.isAntichain _
 
 中文:
-定理 Set.Subsingleton.isWeakAntichain
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.isWeakAntichain
+  条件: (hs : s.子单例)
   结论: IsWeakAntichain s
   证明: hs.isAntichain _
 

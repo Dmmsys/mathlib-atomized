@@ -51,8 +51,8 @@ lemma FormallySmooth.flat_of_algHom_of_isNoetherianRing
     (AdicCompletion.kerProj hf).toLinearMap (LinearMap.ext fun x => congr($hg x))
 
 中文:
-引理 FormallySmooth.flat_of_algHom_of_isNoetherianRing
-  结论: (f : S ->ₐ[R] A) (hf : Function.Surjective f)
+引理 形式光滑.flat_of_algHom_of_isNoetherianRing
+  结论: (f : S ->ₐ[R] A) (hf : 函数.满射 f)
   证明: by
   have : Module.Flat R (AdicCompletion (RingHom.ker f) S) := .trans _ S _
   obtain ⟨g, hg⟩ := exists_kerProj_comp_eq_id f hf
@@ -82,8 +82,8 @@ theorem Smooth.flat_of_isNoetherianRing
   exact FormallySmooth.flat_of_algHom_of_isNoetherianRing f hf
 
 中文:
-定理 Smooth.flat_of_isNoetherianRing
-  条件: [IsNoetherianRing R] [Smooth R A]
+定理 光滑.flat_of_isNoetherianRing
+  条件: [是Noether环 R] [光滑 R A]
   证明: by
   obtain ⟨k, f, hf⟩ := (FiniteType.iff_quotient_mvPolynomial'' (R := R) (S := A)).mp inferInstance
   exact FormallySmooth.flat_of_algHom_of_isNoetherianRing f hf
@@ -108,8 +108,8 @@ instance Smooth.flat
   exact .of_linearEquiv e.toLinearEquiv
 
 中文:
-实例 Smooth.flat
-  签名: [Smooth R A]
+实例 光滑.flat
+  签名: [光滑 R A]
   定义体: by
   obtain ⟨A₀, B₀, _, _, _, _, _, _, _, _, ⟨e⟩⟩ := exists_finiteType Int R A
   have : IsNoetherianRing A₀ := Algebra.FiniteType.isNoetherianRing Int _
@@ -137,8 +137,8 @@ lemma RingHom.Smooth.flat
   exact Algebra.Smooth.flat R S
 
 中文:
-引理 RingHom.Smooth.flat
-  条件: {R S : 类型} [CommRing R] [CommRing S] {f : R ->+* S} (hf : f.Smooth)
+引理 环态射.光滑.flat
+  条件: {R S : 类型} [交换环 R] [交换环 S] {f : R ->+* S} (hf : f.光滑)
   证明: by
   algebraize [f]
   exact Algebra.Smooth.flat R S

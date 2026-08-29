@@ -51,7 +51,7 @@ definition LeftOrdContinuous
 
 中文:
 定义 LeftOrdContinuous
-  签名: [Preorder α] [Preorder β] (f : α -> β)
+  签名: [预序 α] [预序 β] (f : α -> β)
   定义体: forall ⦃s : Set α⦄ ⦃x⦄, s.Nonempty -> IsLUB s x -> IsLUB (f '' s) (f x)
 
 Depends on / 依赖: Nonempty, s.Nonempty
@@ -134,7 +134,7 @@ theorem map_isGreatest
 
 中文:
 定理 map_isGreatest
-  条件: (hf : LeftOrdContinuous f) {s : Set α} {x : α} (h : IsGreatest s x)
+  条件: (hf : LeftOrdContinuous f) {s : 集合 α} {x : α} (h : IsGreatest s x)
   证明: ⟨mem_image_of_mem f h.1, (hf ⟨x, h.1⟩ h.isLUB).1⟩
 
 @[to_dual]
@@ -162,7 +162,7 @@ theorem mono
 中文:
 定理 mono
   条件: (hf : LeftOrdContinuous f)
-  结论: Monotone f
+  结论: 递增 f
   证明: fun a₁ a₂ h =>
   have : IsGreatest {a₁, a₂} a₂ := ⟨Or.inr rfl, by simp [*]⟩
 (hf.map_isGreatest this).2 mem_image_of_mem _ (Or.inl rfl)
@@ -268,7 +268,7 @@ theorem le_iff
 
 中文:
 定理 le_iff
-  条件: (hf : LeftOrdContinuous f) (h : Injective f) {x y}
+  条件: (hf : LeftOrdContinuous f) (h : 单射 f) {x y}
   结论: f x <= f y ↔ x <= y
   证明: by
   simp only [← sup_eq_right, ← hf.map_sup, h.eq_iff]
@@ -293,7 +293,7 @@ theorem lt_iff
 
 中文:
 定理 lt_iff
-  条件: (hf : LeftOrdContinuous f) (h : Injective f) {x y}
+  条件: (hf : LeftOrdContinuous f) (h : 单射 f) {x y}
   结论: f x < f y ↔ x < y
   证明: by
   simp only [lt_iff_le_not_ge, hf.le_iff h]
@@ -318,7 +318,7 @@ definition toOrderEmbedding
 
 中文:
 定义 toOrderEmbedding
-  签名: (hf : LeftOrdContinuous f) (h : Injective f)
+  签名: (hf : LeftOrdContinuous f) (h : 单射 f)
   定义体: ⟨⟨f, h⟩, hf.le_iff h⟩
 
 Depends on / 依赖: hf.le_iff, le_iff
@@ -339,7 +339,7 @@ theorem coe_toOrderEmbedding
 
 中文:
 定理 coe_toOrderEmbedding
-  条件: (hf : LeftOrdContinuous f) (h : Injective f)
+  条件: (hf : LeftOrdContinuous f) (h : 单射 f)
   证明: rfl
 -/
 theorem coe_toOrderEmbedding (hf : LeftOrdContinuous f) (h : Injective f) :
@@ -365,7 +365,7 @@ theorem map_sSup'
 
 中文:
 定理 map_sSup'
-  条件: (hf : LeftOrdContinuous f) {s : Set α} (hs : s.Nonempty)
+  条件: (hf : LeftOrdContinuous f) {s : 集合 α} (hs : s.非空)
   证明: (hf hs <| isLUB_sSup s).sSup_eq.symm
 
 @[to_dual]
@@ -390,7 +390,7 @@ theorem map_sSup
 
 中文:
 定理 map_sSup
-  条件: (hf : LeftOrdContinuous f) {s : Set α} (hs : s.Nonempty)
+  条件: (hf : LeftOrdContinuous f) {s : 集合 α} (hs : s.非空)
   证明: by
   rw [hf.map_sSup' hs]; rw [sSup_image]
 
@@ -415,7 +415,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: (hf : LeftOrdContinuous f) [Nonempty ι] (g : ι -> α)
+  条件: (hf : LeftOrdContinuous f) [非空 ι] (g : ι -> α)
   证明: by
   simp only [iSup, hf.map_sSup' (range_nonempty g), ← range_comp]
   rfl
@@ -446,7 +446,7 @@ theorem map_csSup
 
 中文:
 定理 map_csSup
-  条件: (hf : LeftOrdContinuous f) {s : Set α} (sne : s.Nonempty) (sbdd : BddAbove s)
+  条件: (hf : LeftOrdContinuous f) {s : 集合 α} (sne : s.非空) (sbdd : BddAbove s)
   证明: ((hf sne <| isLUB_csSup sne sbdd).csSup_eq <| sne.image f).symm
 
 @[to_dual]

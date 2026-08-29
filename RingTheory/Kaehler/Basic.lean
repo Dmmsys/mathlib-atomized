@@ -70,7 +70,7 @@ abbreviation KaehlerDifferential.ideal
 
 中文:
 缩写 KaehlerDifferential.ideal
-  签名: : Ideal (S otimes[R] S)
+  签名: : 理想 (S otimes[R] S)
   定义体: RingHom.ker (TensorProduct.lmul' R : S otimes[R] S ->ₐ[R] S)
 
 Depends on / 依赖: RingHom, RingHom.ker, TensorProduct, TensorProduct.lmul, otimes
@@ -110,8 +110,8 @@ definition Derivation.tensorProductTo
   body: TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S ->ₗ[R] M)).flip D.toLinearMap)
 
 中文:
-定义 Derivation.tensorProductTo
-  签名: (D : Derivation R S M)
+定义 导子.tensorProductTo
+  签名: (D : 导子 R S M)
   定义体: TensorProduct.AlgebraTensorModule.lift ((LinearMap.lsmul S (S ->ₗ[R] M)).flip D.toLinearMap)
 
 Depends on / 依赖: AlgebraTensorModule, D.toLinearMap, LinearMap, LinearMap.lsmul, TensorProduct, TensorProduct.AlgebraTensorModule.lift, toLinearMap
@@ -128,8 +128,8 @@ theorem Derivation.tensorProductTo_tmul
   proof: rfl
 
 中文:
-定理 Derivation.tensorProductTo_tmul
-  条件: (D : Derivation R S M) (s t : S)
+定理 导子.tensorProductTo_tmul
+  条件: (D : 导子 R S M) (s t : S)
   证明: rfl
 -/
 theorem Derivation.tensorProductTo_tmul (D : Derivation R S M) (s t : S) :
@@ -151,8 +151,8 @@ theorem Derivation.tensorProductTo_mul
   refin
 
 中文:
-定理 Derivation.tensorProductTo_mul
-  条件: (D : Derivation R S M) (x y : S otimes[R] S)
+定理 导子.tensorProductTo_mul
+  条件: (D : 导子 R S M) (x y : S otimes[R] S)
   证明: by
   refine TensorProduct.induction_on x ?_ ?_ ?_
   · rw [zero_mul, map_zero, map_zero, zero_smul, smul_zero, add_zero]
@@ -319,7 +319,7 @@ instance KaehlerDifferential.isScalarTower_of_tower
 
 中文:
 实例 KaehlerDifferential.isScalarTower_of_tower
-  签名: {R₁ R₂ : 类型} [CommRing R₁] [CommRing R₂]
+  签名: {R₁ R₂ : 类型} [交换环 R₁] [交换环 R₂]
   定义体: Submodule.Quotient.isScalarTower _ _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isScalarTower, isScalarTower
@@ -340,7 +340,7 @@ instance KaehlerDifferential.isScalarTower'
 
 中文:
 实例 KaehlerDifferential.isScalarTower'
-  签名: : IsScalarTower R (S otimes[R] S) Ω[S⁄R]
+  签名: : 标量塔 R (S otimes[R] S) Ω[S⁄R]
   定义体: Submodule.Quotient.isScalarTower _ _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isScalarTower, isScalarTower
@@ -376,7 +376,7 @@ theorem KaehlerDifferential.fromIdeal_surjective
 
 中文:
 定理 KaehlerDifferential.fromIdeal_surjective
-  结论: Function.Surjective (fromIdeal R S)
+  结论: 函数.满射 (fromIdeal R S)
   证明: Ideal.toCotangent_surjective _
 
 Depends on / 依赖: Ideal.toCotangent_surjective, toCotangent_surjective
@@ -451,7 +451,7 @@ definition KaehlerDifferential.D
 
 中文:
 定义 KaehlerDifferential.D
-  签名: : Derivation R S Ω[S⁄R]
+  签名: : 导子 R S Ω[S⁄R]
   定义体: { toLinearMap := KaehlerDifferential.DLinearMap R S
     map_one_eq_zero' := by
       dsimp [KaehlerDifferential.DLinearMap_apply, Ideal.toCotangent_apply]
@@ -559,7 +559,7 @@ lemma KaehlerDifferential.subsingleton_of_surjective
 
 中文:
 引理 KaehlerDifferential.subsingleton_of_surjective
-  条件: (h : Function.Surjective (algebraMap R S))
+  条件: (h : 函数.满射 (algebraMap R S))
   证明: by
   suffices (⊤ : Submodule S Ω[S⁄R]) <= ⊥ from
     (subsingleton_iff_forall_eq 0).mpr fun y => this trivial
@@ -590,8 +590,8 @@ definition Derivation.liftKaehlerDifferential
   · exact D.tensorProductTo.comp ((KaehlerDifferential.ideal R S).su
 
 中文:
-定义 Derivation.liftKaehlerDifferential
-  签名: (D : Derivation R S M)
+定义 导子.liftKaehlerDifferential
+  签名: (D : 导子 R S M)
   定义体: by
   refine LinearMap.comp ((((KaehlerDifferential.ideal R S) •
     (⊤ : Submodule (S otimes[R] S) (KaehlerDifferential.ideal R S))).restrictScalars S).liftQ ?_ ?_)
@@ -623,8 +623,8 @@ theorem Derivation.liftKaehlerDifferential_apply
   proof: rfl
 
 中文:
-定理 Derivation.liftKaehlerDifferential_apply
-  条件: (D : Derivation R S M) (x)
+定理 导子.liftKaehlerDifferential_apply
+  条件: (D : 导子 R S M) (x)
   证明: rfl
 -/
 theorem Derivation.liftKaehlerDifferential_apply (D : Derivation R S M) (x) :
@@ -646,8 +646,8 @@ theorem Derivation.liftKaehlerDifferential_comp
 @[simp]
 
 中文:
-定理 Derivation.liftKaehlerDifferential_comp
-  条件: (D : Derivation R S M)
+定理 导子.liftKaehlerDifferential_comp
+  条件: (D : 导子 R S M)
   证明: by
   ext a
   dsimp [KaehlerDifferential.D_apply]
@@ -677,8 +677,8 @@ theorem Derivation.liftKaehlerDifferential_comp_D
 @[ext]
 
 中文:
-定理 Derivation.liftKaehlerDifferential_comp_D
-  条件: (D' : Derivation R S M) (x : S)
+定理 导子.liftKaehlerDifferential_comp_D
+  条件: (D' : 导子 R S M) (x : S)
   证明: Derivation.congr_fun D'.liftKaehlerDifferential_comp x
 
 @[ext]
@@ -706,7 +706,7 @@ theorem Derivation.liftKaehlerDifferential_unique
 
 
 中文:
-定理 Derivation.liftKaehlerDifferential_unique
+定理 导子.liftKaehlerDifferential_unique
   结论: (f f' : Ω[S⁄R] ->ₗ[S] M)
   证明: by
   apply LinearMap.ext
@@ -743,7 +743,7 @@ theorem Derivation.liftKaehlerDifferential_D
     (KaehlerDifferential.D R S).liftKaehlerDifferential_comp
 
 中文:
-定理 Derivation.liftKaehlerDifferential_D
+定理 导子.liftKaehlerDifferential_D
   证明: Derivation.liftKaehlerDifferential_unique _ _
     (KaehlerDifferential.D R S).liftKaehlerDifferential_comp
 
@@ -822,7 +822,7 @@ definition KaehlerDifferential.linearMapEquivDerivation
 
 中文:
 定义 KaehlerDifferential.linearMapEquivDerivation
-  签名: : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] Derivation R S M
+  签名: : (Ω[S⁄R] ->ₗ[S] M) ≃ₗ[S] 导子 R S M
   定义体: { Derivation.llcomp.flip <| KaehlerDifferential.D R S with
     invFun := Derivation.liftKaehlerDifferential
     left_inv := fun _ =>
@@ -1154,7 +1154,7 @@ local not
 
 中文:
 定义 KaehlerDifferential.kerTotal
-  签名: : Submodule S (S ->₀ S)
+  签名: : 子模 S (S ->₀ S)
   定义体: Submodule.span S
     (((Set.range fun x : S × S => single x.1 1 + single x.2 1 - single (x.1 + x.2) 1) union
         Set.range fun x : S × S => single x.2 x.1 + single x.1 x.2 - single (x.1 * x.2) 1) union
@@ -1545,7 +1545,7 @@ theorem KaehlerDifferential.kerTotal_map
 
 中文:
 定理 KaehlerDifferential.kerTotal_map
-  结论: [Algebra R B] [IsScalarTower R A B] [IsScalarTower R S B]
+  结论: [代数 R B] [标量塔 R A B] [标量塔 R S B]
   证明: by
   rw [KaehlerDifferential.kerTotal]; rw [Submodule.map_span]; rw [KaehlerDifferential.kerTotal]; rw [Submodule.restrictScalars_span _ _ h]
   simp_rw [Set.image_union, Submodule.span_union, ← Set.image_univ, Set.image_image, Set.image_univ,
@@ -1586,7 +1586,7 @@ theorem KaehlerDifferential.kerTotal_map'
 
 中文:
 定理 KaehlerDifferential.kerTotal_map'
-  结论: [Algebra R B]
+  结论: [代数 R B]
   证明: by
   rw [Submodule.map_sup]; rw [← kerTotal_map R R A B h]; rw [Submodule.map_span]; rw [← Set.range_comp]
   congr
@@ -1723,7 +1723,7 @@ lemma KaehlerDifferential.ker_map_of_surjective
 
 中文:
 引理 KaehlerDifferential.ker_map_of_surjective
-  条件: (h : Function.Surjective (algebraMap A B))
+  条件: (h : 函数.满射 (algebraMap A B))
   证明: by
   rw [ker_map]; rw [← kerTotal_map' R A B h]; rw [Submodule.comap_map_eq]; rw [Submodule.map_sup]; rw [Submodule.map_sup]; rw [← kerTotal_eq]; rw [← Submodule.comap_bot]; rw [Submodule.map_comap_eq_of_surjective (linearCombination_surjective _ _)]; rw [bot_sup_eq]; rw [Submodule.map_span]; rw [← 
 

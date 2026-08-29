@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: (karoubi.F Λ).PreservesZeroMorphisms
+  签名: (karoubi.F Λ).保持ZeroMorphisms
 -/
 instance : (karoubi.F Λ).PreservesZeroMorphisms where
 
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: Λ.karoubi.F.PreservesZeroMorphisms
+  签名: Λ.karoubi.F.保持ZeroMorphisms
 -/
 instance : Λ.karoubi.F.PreservesZeroMorphisms where
 
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: Λ.reduced.F.PreservesZeroMorphisms
+  签名: Λ.reduced.F.保持ZeroMorphisms
   定义体: by
   dsimp [reduced, transport]
   infer_instance

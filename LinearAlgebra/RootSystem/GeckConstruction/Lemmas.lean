@@ -204,7 +204,7 @@ lemma chainBotCoeff_mul_chainTopCoeff.aux_0
 
 中文:
 引理 chainBotCoeff_mul_chainTopCoeff.aux_0
-  结论: [P.IsNotG2]
+  结论: [P.是NotG2]
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   have := pairingIn_le_zero_of_root_add_mem hik_mem
@@ -246,7 +246,7 @@ lemma chainBotCoeff_mul_chainTopCoeff.isNotG2
 
 中文:
 引理 chainBotCoeff_mul_chainTopCoeff.isNotG2
-  结论: P.IsNotG2
+  结论: P.是NotG2
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : IsAddTorsionFree M := .of_isTorsionFree R M

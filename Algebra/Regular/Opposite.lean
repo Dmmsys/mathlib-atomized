@@ -86,7 +86,7 @@ theorem isRegular_op
 中文:
 定理 isRegular_op
   条件: {a : R}
-  结论: IsRegular (op a) ↔ IsRegular a
+  结论: 是正则 (op a) ↔ 是正则 a
   证明: by
   simp [isRegular_iff, and_comm]
 
@@ -172,7 +172,7 @@ theorem isRegular_unop
 中文:
 定理 isRegular_unop
   条件: {a : Rᵐᵒᵖ}
-  结论: IsRegular a.unop ↔ IsRegular a
+  结论: 是正则 a.unop ↔ 是正则 a
   证明: isRegular_op.symm
 
 @[to_additive] protected alias ⟨_, IsLeftRegular.unop⟩ := isLeftRegular_unop

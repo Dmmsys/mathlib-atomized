@@ -42,7 +42,7 @@ definition circleTransform
 
 中文:
 定义 circleTransform
-  签名: (f : Complex -> E) (θ : 实数)
+  签名: (f : 复形 -> E) (θ : 实数)
   定义体: (2 * ↑π * I)⁻¹ • deriv (circleMap z R) θ • (circleMap z R θ - w)⁻¹ • f (circleMap z R θ)
 
 Depends on / 依赖: circleMap
@@ -60,7 +60,7 @@ definition circleTransformDeriv
 
 中文:
 定义 circleTransformDeriv
-  签名: (f : Complex -> E) (θ : 实数)
+  签名: (f : 复形 -> E) (θ : 实数)
   定义体: (2 * ↑π * I)⁻¹ • deriv (circleMap z R) θ • ((circleMap z R θ - w) ^ 2)⁻¹ • f (circleMap z R θ)
 
 Depends on / 依赖: circleMap
@@ -79,7 +79,7 @@ theorem circleTransformDeriv_periodic
 
 中文:
 定理 circleTransformDeriv_periodic
-  条件: (f : Complex -> E)
+  条件: (f : 复形 -> E)
   证明: by
   simp [circleTransformDeriv, periodic_circleMap z R _, periodic_circleMap 0 R _]
 
@@ -106,7 +106,7 @@ theorem circleTransformDeriv_eq
 
 中文:
 定理 circleTransformDeriv_eq
-  条件: (f : Complex -> E)
+  条件: (f : 复形 -> E)
   结论: circleTransformDeriv R z w f =
   证明: by
   ext
@@ -139,7 +139,7 @@ theorem integral_circleTransform
 
 中文:
 定理 integral_circleTransform
-  条件: (f : Complex -> E)
+  条件: (f : 复形 -> E)
   证明: by
   simp_rw [circleTransform, circleIntegral, deriv_circleMap, circleMap]
   simp
@@ -168,7 +168,7 @@ theorem continuous_circleTransform
 
 中文:
 定理 continuous_circleTransform
-  结论: {R : 实数} (hR : 0 < R) {f : Complex -> E} {z w : Complex}
+  结论: {R : 实数} (hR : 0 < R) {f : 复形 -> E} {z w : 复形}
   证明: by
   apply_rules [Continuous.smul, continuous_const]
   · rw [funext <| deriv_circleMap _ _]
@@ -201,7 +201,7 @@ theorem continuous_circleTransformDeriv
 
 中文:
 定理 continuous_circleTransformDeriv
-  结论: {R : 实数} (hR : 0 < R) {f : Complex -> E} {z w : Complex}
+  结论: {R : 实数} (hR : 0 < R) {f : 复形 -> E} {z w : 复形}
   证明: by
   rw [circleTransformDeriv_eq]
   exact (continuous_circleMap_inv hw).smul (continuous_circleTransform hR hf hw)
@@ -224,7 +224,7 @@ definition circleTransformBoundingFunction
 
 中文:
 定义 circleTransformBoundingFunction
-  签名: (R : 实数) (z : Complex) (w : Complex × 实数)
+  签名: (R : 实数) (z : 复形) (w : 复形 × 实数)
   定义体: circleTransformDeriv R z w.1 (fun _ => 1) w.2
 
 Depends on / 依赖: circleTransformDeriv
@@ -248,7 +248,7 @@ theorem continuousOn_prod_circle_transform_function
 
 中文:
 定理 continuousOn_prod_circle_transform_function
-  条件: {R r : 实数} (hr : r < R) {z : Complex}
+  条件: {R r : 实数} (hr : r < R) {z : 复形}
   证明: by
   simp_rw [← one_div]
   apply_rules [ContinuousOn.pow, ContinuousOn.div, continuousOn_const]
@@ -284,7 +284,7 @@ theorem continuousOn_norm_circleTransformBoundingFunction
 
 中文:
 定理 continuousOn_norm_circleTransformBoundingFunction
-  条件: {R r : 实数} (hr : r < R) (z : Complex)
+  条件: {R r : 实数} (hr : r < R) (z : 复形)
   证明: by
   have : ContinuousOn (circleTransformBoundingFunction R z) (closedBall z r ×ˢ univ) := by
     apply_rules [ContinuousOn.fun_smul, continuousOn_const]
@@ -319,7 +319,7 @@ theorem norm_circleTransformBoundingFunction_le
 
 中文:
 定理 norm_circleTransformBoundingFunction_le
-  条件: {R r : 实数} (hr : r < R) (hr' : 0 <= r) (z : Complex)
+  条件: {R r : 实数} (hr : r < R) (hr' : 0 <= r) (z : 复形)
   证明: by
   have cts := continuousOn_norm_circleTransformBoundingFunction hr z
   have comp : IsCompact (closedBall z r ×ˢ [[0, 2 * π]]) := by
@@ -355,7 +355,7 @@ theorem circleTransformDeriv_bound
 
 中文:
 定理 circleTransformDeriv_bound
-  结论: {R : 实数} (hR : 0 < R) {z x : Complex} {f : Complex -> Complex} (hx : x in ball z R)
+  结论: {R : 实数} (hR : 0 < R) {z x : 复形} {f : 复形 -> 复形} (hx : x in ball z R)
   证明: by
   obtain ⟨r, hr, hrx⟩ := exists_lt_mem_ball_of_mem_ball hx
   obtain ⟨ε', hε', H⟩ := exists_ball_subset_ball hrx

@@ -184,7 +184,7 @@ theorem extended_ne_zero
 
 中文:
 定理 extended_ne_zero
-  条件: [IsDomain B] (hf' : Function.Injective f) (hI : I != 0) (hN : 0 ∉ N)
+  条件: [是整环 B] (hf' : 函数.单射 f) (hI : I != 0) (hN : 0 ∉ N)
   证明: by
   simp only [ne_eq, ← coeToSubmodule_inj, coe_extended_eq_span, coe_zero, Submodule.span_eq_bot,
     Set.mem_image, SetLike.mem_coe, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂,
@@ -217,7 +217,7 @@ theorem extended_eq_zero_iff
 
 中文:
 定理 extended_eq_zero_iff
-  条件: [IsDomain B] (hf' : Function.Injective f) (hN : 0 ∉ N)
+  条件: [是整环 B] (hf' : 函数.单射 f) (hN : 0 ∉ N)
   证明: by
   refine ⟨?_, fun h => h ▸ extended_zero _ _⟩
   contrapose!
@@ -437,7 +437,7 @@ theorem extended_extended
 
 中文:
 定理 extended_extended
-  结论: {C W : 类型} [CommRing C] [CommRing W] [Algebra C W]
+  结论: {C W : 类型} [交换环 C] [交换环 W] [代数 C W]
   证明: by
   rw [← coeToSubmodule_inj]; rw [coe_extended_eq_span]; rw [coe_extended_eq_span]
   refine Submodule.span_eq_span ?_ ?_
@@ -485,7 +485,7 @@ theorem extended_coeIdeal_eq_map
 
 中文:
 定理 extended_coeIdeal_eq_map
-  条件: (I₀ : Ideal A)
+  条件: (I₀ : 理想 A)
   证明: by
   rw [Ideal.map]; rw [Ideal.span]; rw [← coeToSubmodule_inj]; rw [Ideal.submodule_span_eq]; rw [coe_coeIdeal]; rw [IsLocalization.coeSubmodule_span]; rw [coe_extended_eq_span]
   refine Submodule.span_eq_span ?_ ?_
@@ -593,7 +593,7 @@ theorem extendedHom'_comp
 
 中文:
 定理 extendedHom'_comp
-  结论: {C W : 类型} [CommRing C] [CommRing W] [Algebra C W]
+  结论: {C W : 类型} [交换环 C] [交换环 W] [代数 C W]
   证明: by
   apply RingHom.ext
   intro I
@@ -686,7 +686,7 @@ alias extendedHomₐ_coeIdeal_eq_map := extendedHom_coeIdeal_eq_map
 
 中文:
 定理 extendedHom_coeIdeal_eq_map
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: extended_coeIdeal_eq_map L _ I
 
 @[deprecated (since := "2026-04-16")]
@@ -773,7 +773,7 @@ using! subset_span Set.mem_image_of_mem _ hx₁
 
 中文:
 定理 le_one_of_extendedHom_le_one
-  结论: [Is整数egrallyClosed A] [Is整数egrallyClosed B]
+  结论: [是整闭 A] [是整闭 B]
   证明: by
   contrapose hI
   rw [SetLike.not_le_iff_exists] at hI ⊢
@@ -813,7 +813,7 @@ theorem extendedHom_le_one_iff
 
 中文:
 定理 extendedHom_le_one_iff
-  条件: [Is整数egrallyClosed A] [Is整数egrallyClosed B]
+  条件: [是整闭 A] [是整闭 B]
   证明: ⟨fun h => le_one_of_extendedHom_le_one L B h, fun a => extended_le_one_of_le_one L _ I a⟩
 
 @[deprecated (since := "2026-04-16")] alias extendedHomₐ_le_one_iff := extendedHom_le_one_iff

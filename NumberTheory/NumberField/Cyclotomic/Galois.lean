@@ -63,7 +63,7 @@ abbreviation galEquivZMod
 
 中文:
 缩写 galEquivZMod
-  签名: : Gal(K/Rat) ≃* (ZMod n)ˣ
+  签名: : Gal(K/有理数) ≃* (ZMod n)ˣ
   定义体: IsCyclotomicExtension.autEquivPow K Polynomial.cyclotomic.irreducible_rat (NeZero.pos n)
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.autEquivPow, NeZero, NeZero.pos, Polynomial, Polynomial.cyclotomic.irreducible_rat, autEquivPow, cyclotomic, irreducible_rat
@@ -83,7 +83,7 @@ theorem galEquivZMod_apply_of_pow_eq
 
 中文:
 定理 galEquivZMod_apply_of_pow_eq
-  条件: (σ : Gal(K/Rat)) {x : K} (hx : x ^ n = 1)
+  条件: (σ : Gal(K/有理数)) {x : K} (hx : x ^ n = 1)
   证明: by
   obtain ⟨a, -, rfl⟩ := (zeta_spec n Rat K).eq_pow_of_pow_eq_one hx
   rw [map_pow]; rw [pow_right_comm]; rw [galEquivZMod]; rw [autEquivPow_apply]; rw [OneHom.toFun_eq_coe]; rw [MonoidHom.toOneHom_coe]; rw [IsPrimitiveRoot.autToPow_spec]
@@ -108,7 +108,7 @@ apply galEquivZMod_apply_of_pow_eq n K σ by rw [← Subalgebra.coe_pow, hx, One
 
 中文:
 定理 galEquivZMod_smul_of_pow_eq
-  条件: (σ : Gal(K/Rat)) {x : 𝓞 K} (hx : x ^ n = 1)
+  条件: (σ : Gal(K/有理数)) {x : 𝓞 K} (hx : x ^ n = 1)
   证明: by
   apply FaithfulSMul.algebraMap_injective (𝓞 K) K
 apply galEquivZMod_apply_of_pow_eq n K σ by rw [← Subalgebra.coe_pow, hx, OneMemClass.coe_one]
@@ -139,7 +139,7 @@ theorem galEquivZMod_restrictNormal_apply
 
 中文:
 定理 galEquivZMod_restrictNormal_apply
-  条件: (h : m ∣ n) (σ : Gal(K/Rat))
+  条件: (h : m ∣ n) (σ : Gal(K/有理数))
   证明: by
   have hζ := IsCyclotomicExtension.zeta_spec m Rat F
   let ζ := IsCyclotomicExtension.zeta m Rat F
@@ -186,7 +186,7 @@ have : CharP (Int ⧸ span {(p : Int)}) p := ringChar.of_eq Int.ringChar_idealQu
 
 中文:
 定理 mem_zpowers_galEquivZMod_of_mem_stabilizer
-  条件: {σ : Gal(K/Rat)} (hσ : σ in stabilizer Gal(K/Rat) P)
+  条件: {σ : Gal(K/有理数)} (hσ : σ in stabilizer Gal(K/有理数) P)
   证明: by
   have hζ := IsCyclotomicExtension.zeta_spec n Rat K
   let τ := IsFractionRing.stabilizerHom Gal(K/Rat) (Ideal.span {(p : Int)}) P
@@ -303,7 +303,7 @@ theorem mem_subgroupGalEquivSubgroupChar_iff
 
 中文:
 定理 mem_subgroupGalEquivSubgroupChar_iff
-  条件: (χ : DirichletCharacter R n) (H : Subgroup Gal(K/Rat))
+  条件: (χ : DirichletCharacter R n) (H : 子群 Gal(K/有理数))
   证明: by
   simp [subgroupGalEquivSubgroupChar]
 
@@ -330,7 +330,7 @@ theorem mem_subgroupGalEquivSubgroupChar_symm_iff
 
 中文:
 定理 mem_subgroupGalEquivSubgroupChar_symm_iff
-  结论: (σ : Gal(K/Rat))
+  结论: (σ : Gal(K/有理数))
   证明: by
   simp only [subgroupGalEquivSubgroupChar, OrderIso.symm_trans_apply, MulEquiv.symm_mapSubgroup,
     MulEquiv.coe_mapSubgroup, Subgroup.mem_map_equiv, MulEquiv.symm_symm,
@@ -358,7 +358,7 @@ theorem card_subgroupGalEquivSubgroupChar
 
 中文:
 定理 card_subgroupGalEquivSubgroupChar
-  条件: [IsMulCommutative Gal(K/Rat)] (H : Subgroup Gal(K/Rat))
+  条件: [是MulCommutative Gal(K/有理数)] (H : 子群 Gal(K/有理数))
   证明: by
   rw [subgroupGalEquivSubgroupChar]; rw [OrderIso.trans_apply]; rw [card_subgroupOrderIsoSubgroupMulChar]
   exact Nat.card_congr (QuotientGroup.congr _ _ (galEquivZMod n K) rfl).symm.toEquiv
@@ -406,7 +406,7 @@ theorem card_intermediateFieldEquivSubgroupChar
 
 中文:
 定理 card_intermediateFieldEquivSubgroupChar
-  条件: (F : 整数ermediateField Rat K)
+  条件: (F : 中间域 有理数 K)
   证明: by
   unfold intermediateFieldEquivSubgroupChar
   rw [OrderIso.trans_apply]; rw [OrderIso.trans_apply]; rw [OrderIso.dualDual_symm_apply]; rw [IsGalois.intermediateFieldEquivSubgroup_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [OrderDual.ofDual_toDual]; rw [card_subgroupGalEqui
@@ -430,7 +430,7 @@ theorem mem_intermediateFieldEquivSubgroupChar_iff
 
 中文:
 定理 mem_intermediateFieldEquivSubgroupChar_iff
-  结论: (F : 整数ermediateField Rat K)
+  结论: (F : 中间域 有理数 K)
   证明: by
   simp [intermediateFieldEquivSubgroupChar]
 
@@ -457,7 +457,7 @@ theorem mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
 
 中文:
 定理 mem_intermediateFieldEquivSubgroupChar_iff_conductor_dvd
-  结论: (F : 整数ermediateField Rat K)
+  结论: (F : 中间域 有理数 K)
   证明: by
   simp_rw [← χ.mem_conductorSet_iff_conductor_dvd hdiv, χ.mem_conductorSet_iff,
     factorsThrough_iff_ker_unitsMap hdiv, mem_intermediateFieldEquivSubgroupChar_iff,

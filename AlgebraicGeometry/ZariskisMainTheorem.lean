@@ -60,8 +60,8 @@ theorem exists_etale_isCompl_of_quasiFiniteAt
   have : (f.appLE U V hUV).hom.FiniteType := f.fini
 
 中文:
-定理 exists_etale_isCompl_of_quasiFiniteAt
-  结论: [IsSeparated f]
+定理 存在_etale_isCompl_of_quasiFiniteAt
+  结论: [是分离 f]
   证明: by
   obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := S.isBasis_affineOpens.exists_subset_of_mem_open
     (Set.mem_univ (f x)) isOpen_univ
@@ -154,7 +154,7 @@ lemma Scheme.Hom.exists_mem_and_isIso_morphismRestrict_toNormalization
   
 
 中文:
-引理 Scheme.Hom.exists_mem_and_isIso_morphismRestrict_toNormalization
+引理 概形.态射.存在_mem_and_isIso_morphismRestrict_toNormalization
   证明: by
   obtain ⟨T, fT, _, ⟨u, hu⟩, V, W, v, hVW, _, hv₂⟩ := exists_etale_isCompl_of_quasiFiniteAt _ rfl hx
   obtain ⟨U, hU, _⟩ : exists U, (pullback.snd f fT).toNormalization v.1 in U ∧
@@ -263,7 +263,7 @@ lemma Scheme.Hom.exists_isIso_morphismRestrict_toNormalization
     refine (IsZariskiLocalAtTarget.iff_of_openCover (P := .isomorphisms _) 𝒰).mpr f
 
 中文:
-引理 Scheme.Hom.exists_isIso_morphismRestrict_toNormalization
+引理 概形.态射.存在_isIso_morphismRestrict_toNormalization
   证明: by
   choose V hxV hV using fun x : { x // f.QuasiFiniteAt x } =>
     f.exists_mem_and_isIso_morphismRestrict_toNormalization x x.2
@@ -372,8 +372,8 @@ lemma Scheme.Hom.isOpen_quasiFiniteAt
     obtain ⟨_, ⟨V : X.Opens, hV, rfl⟩, hxV, hVU⟩ := X.isBasis_affineOpens.exists_sub
 
 中文:
-引理 Scheme.Hom.isOpen_quasiFiniteAt
-  条件: [LocallyOfFiniteType f]
+引理 概形.态射.isOpen_quasiFiniteAt
+  条件: [局部有限型 f]
   证明: by
   wlog H : IsAffineHom f
   · rw [isOpen_iff_forall_mem_open]
@@ -416,8 +416,8 @@ definition Scheme.Hom.quasiFiniteLocus
   body: ⟨{ x | f.QuasiFiniteAt x }, f.isOpen_quasiFiniteAt⟩
 
 中文:
-定义 Scheme.Hom.quasiFiniteLocus
-  签名: [LocallyOfFiniteType f]
+定义 概形.态射.quasiFiniteLocus
+  签名: [局部有限型 f]
   定义体: ⟨{ x | f.QuasiFiniteAt x }, f.isOpen_quasiFiniteAt⟩
 
 Depends on / 依赖: QuasiFiniteAt, f.QuasiFiniteAt, f.isOpen_quasiFiniteAt, isOpen_quasiFiniteAt
@@ -436,8 +436,8 @@ lemma Scheme.Hom.mem_quasiFiniteLocus
   proof: .rfl
 
 中文:
-引理 Scheme.Hom.mem_quasiFiniteLocus
-  结论: [LocallyOfFiniteType f]
+引理 概形.态射.mem_quasiFiniteLocus
+  结论: [局部有限型 f]
   证明: .rfl
 -/
 lemma Scheme.Hom.mem_quasiFiniteLocus [LocallyOfFiniteType f]
@@ -459,8 +459,8 @@ instance [LocallyOfFiniteType
   simp
 
 中文:
-实例 [LocallyOfFiniteType
-  签名: f] [IsSeparated f] [QuasiCompact f] :
+实例 [局部有限型
+  签名: f] [是分离 f] [拟紧 f] :
   定义体: by
   obtain ⟨U, hU, e⟩ := Scheme.Hom.exists_isIso_morphismRestrict_toNormalization f
   convert!
@@ -491,8 +491,8 @@ lemma Scheme.Hom.quasiFiniteLocus_eq_top
   proof: top_le_iff.mp fun x _ => f.quasiFiniteAt x
 
 中文:
-引理 Scheme.Hom.quasiFiniteLocus_eq_top
-  条件: [LocallyQuasiFinite f] [LocallyOfFiniteType f]
+引理 概形.态射.quasiFiniteLocus_eq_top
+  条件: [局部拟有限 f] [局部有限型 f]
   证明: top_le_iff.mp fun x _ => f.quasiFiniteAt x
 
 Depends on / 依赖: f.quasiFiniteAt, quasiFiniteAt, top_le_iff, top_le_iff.mp
@@ -512,8 +512,8 @@ lemma Scheme.Hom.quasiFiniteLocus_comp
   simp [quasiFiniteAt_comp_iff_of_isOpenImmersion]
 
 中文:
-引理 Scheme.Hom.quasiFiniteLocus_comp
-  结论: {Z : Scheme} [IsOpenImmersion f]
+引理 概形.态射.quasiFiniteLocus_comp
+  结论: {Z : 概形} [是开浸入 f]
   证明: by
   ext
   simp [quasiFiniteAt_comp_iff_of_isOpenImmersion]
@@ -540,8 +540,8 @@ lemma Scheme.Hom.quasiFiniteLocus_eq_top_iff
   rw [← (f.fiberHomeo _).symm.isOpen_image]; rw [Set.image_singleto
 
 中文:
-引理 Scheme.Hom.quasiFiniteLocus_eq_top_iff
-  条件: [LocallyOfFiniteType f]
+引理 概形.态射.quasiFiniteLocus_eq_top_iff
+  条件: [局部有限型 f]
   证明: by
   refine ⟨fun H => locallyQuasiFinite_iff_isDiscrete_preimage_singleton.mpr fun x => ?_,
     fun _ => f.quasiFiniteLocus_eq_top⟩
@@ -570,7 +570,7 @@ instance [LocallyOfFiniteType
   rw [← Scheme.Hom.quasiFiniteLocus_eq_top_iff]; rw [Scheme.Hom.quasiFiniteLocus_comp]; rw [Scheme.Opens.ι_preimage_self]
 
 中文:
-实例 [LocallyOfFiniteType
+实例 [局部有限型
   签名: f] :
   定义体: by
   rw [← Scheme.Hom.quasiFiniteLocus_eq_top_iff]; rw [Scheme.Hom.quasiFiniteLocus_comp]; rw [Scheme.Opens.ι_preimage_self]
@@ -597,8 +597,8 @@ instance [LocallyQuasiFinite
   simp
 
 中文:
-实例 [LocallyQuasiFinite
-  签名: f] [LocallyOfFiniteType f] [IsSeparated f] [QuasiCompact f] :
+实例 [局部拟有限
+  签名: f] [局部有限型 f] [是分离 f] [拟紧 f] :
   定义体: by
   convert!
     (inferInstance :
@@ -631,8 +631,8 @@ instance [QuasiSeparated
   .of_comp_of_isSeparated _ f.fromNormalization
 
 中文:
-实例 [QuasiSeparated
-  签名: f] [UniversallyClosed f] : UniversallyClosed f.toNormalization
+实例 [拟分离
+  签名: f] [普遍闭 f] : 普遍闭 f.toNormalization
   定义体: have : UniversallyClosed (f.toNormalization ≫ f.fromNormalization) := by simpa
   .of_comp_of_isSeparated _ f.fromNormalization
 
@@ -657,7 +657,7 @@ lemma IsFinite.of_isProper_of_locallyQuasiFinite
 @[stacks 02LS "(1) <=> (3)
 
 中文:
-引理 IsFinite.of_isProper_of_locallyQuasiFinite
+引理 是有限.of_isProper_of_locallyQuasiFinite
   证明: by
   have : IsIso f.toNormalization :=
     (isIso_iff_isOpenImmersion_and_surjective _).mpr ⟨inferInstance, inferInstance⟩
@@ -688,7 +688,7 @@ lemma IsFinite.iff_isProper_and_locallyQuasiFinite
     fun ⟨_, _⟩ => .of_isProper_of_locallyQuasiFinite f⟩
 
 中文:
-引理 IsFinite.iff_isProper_and_locallyQuasiFinite
+引理 是有限.iff_isProper_and_locallyQuasiFinite
   证明: by
   refine ⟨fun _ => ⟨inferInstance, inferInstance⟩,
     fun ⟨_, _⟩ => .of_isProper_of_locallyQuasiFinite f⟩
@@ -712,7 +712,7 @@ lemma IsFinite.eq_proper_inf_locallyQuasiFinite
 @[stacks 04XV "(1) <=> (2)"]
 
 中文:
-引理 IsFinite.eq_proper_inf_locallyQuasiFinite
+引理 是有限.eq_proper_inf_locallyQuasiFinite
   证明: by
   ext
   exact IsFinite.iff_isProper_and_locallyQuasiFinite ..
@@ -738,7 +738,7 @@ lemma IsClosedImmersion.iff_isProper_and_mono
   aesop
 
 中文:
-引理 IsClosedImmersion.iff_isProper_and_mono
+引理 是闭浸入.iff_isProper_and_mono
   证明: by
   have (_ : Mono f) (_ : IsProper f) : LocallyQuasiFinite f := inferInstance
   rw [IsClosedImmersion.iff_isFinite_and_mono]; rw [IsFinite.iff_isProper_and_locallyQuasiFinite]
@@ -762,7 +762,7 @@ lemma IsClosedImmersion.eq_proper_inf_monomorphisms
   exact IsClosedImmersion.iff_isProper_and_mono ..
 
 中文:
-引理 IsClosedImmersion.eq_proper_inf_monomorphisms
+引理 是闭浸入.eq_proper_inf_monomorphisms
   证明: by
   ext
   exact IsClosedImmersion.iff_isProper_and_mono ..
@@ -790,7 +790,7 @@ lemma exists_isFinite_morphismRestrict_of_finite_preimage_singleton
     ex
 
 中文:
-引理 exists_isFinite_morphismRestrict_of_finite_preimage_singleton
+引理 存在_isFinite_morphismRestrict_of_finite_preimage_singleton
   证明: by
   let V : Y.Opens := ⟨_, (f.isClosedMap _ f.quasiFiniteLocus.isOpen.isClosed_compl).isOpen_compl⟩
   refine ⟨V, ?_, ?_⟩
@@ -833,7 +833,7 @@ lemma exists_finite_imageι_comp_morphismRestrict_of_finite_image_preimage
   re
 
 中文:
-引理 exists_finite_imageι_comp_morphismRestrict_of_finite_image_preimage
+引理 存在_finite_imageι_comp_morphismRestrict_of_finite_image_preimage
   证明: by
   have : IsProper f := .of_comp f g
   have : IsProper (f.imageι ≫ g) := by

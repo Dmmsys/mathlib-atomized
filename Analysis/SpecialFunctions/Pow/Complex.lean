@@ -29,7 +29,7 @@ definition cpow
 
 中文:
 定义 cpow
-  签名: (x y : Complex)
+  签名: (x y : 复形)
   定义体: if x = 0 then if y = 0 then 1 else 0 else exp (log x * y)
 -/
 noncomputable def cpow (x y : Complex) : Complex :=
@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow Complex Complex
+  签名: 幂 复形 复形
   定义体: ⟨cpow⟩
 
 @[simp]
@@ -67,7 +67,7 @@ theorem cpow_eq_pow
 
 中文:
 定理 cpow_eq_pow
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: cpow x y = x ^ y
   证明: rfl
 -/
@@ -85,7 +85,7 @@ theorem cpow_def
 
 中文:
 定理 cpow_def
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: x ^ y = if x = 0 then if y = 0 then 1 else 0 else exp (log x * y)
   证明: rfl
 -/
@@ -105,7 +105,7 @@ theorem cpow_def_of_ne_zero
 
 中文:
 定理 cpow_def_of_ne_zero
-  条件: {x : Complex} (hx : x != 0) (y : Complex)
+  条件: {x : 复形} (hx : x != 0) (y : 复形)
   结论: x ^ y = exp (log x * y)
   证明: if_neg hx
 
@@ -130,8 +130,8 @@ theorem cpow_zero
 
 中文:
 定理 cpow_zero
-  条件: (x : Complex)
-  结论: x ^ (0 : Complex) = 1
+  条件: (x : 复形)
+  结论: x ^ (0 : 复形) = 1
   证明: by simp [cpow_def]
 
 @[simp]
@@ -154,7 +154,7 @@ theorem cpow_eq_zero_iff
 
 中文:
 定理 cpow_eq_zero_iff
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: x ^ y = 0 ↔ x = 0 ∧ y != 0
   证明: by
   simp only [cpow_def]
@@ -177,7 +177,7 @@ theorem cpow_ne_zero_iff
 
 中文:
 定理 cpow_ne_zero_iff
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   证明: by
   rw [ne_eq]; rw [cpow_eq_zero_iff]; rw [not_and_or]; rw [ne_eq]; rw [not_not]
 
@@ -199,7 +199,7 @@ theorem cpow_ne_zero_iff_of_exponent_ne_zero
 
 中文:
 定理 cpow_ne_zero_iff_of_exponent_ne_zero
-  条件: {x y : Complex} (hy : y != 0)
+  条件: {x y : 复形} (hy : y != 0)
   证明: by simp [hy]
 
 @[simp]
@@ -219,8 +219,8 @@ theorem zero_cpow
 
 中文:
 定理 zero_cpow
-  条件: {x : Complex} (h : x != 0)
-  结论: (0 : Complex) ^ x = 0
+  条件: {x : 复形} (h : x != 0)
+  结论: (0 : 复形) ^ x = 0
   证明: by simp [cpow_def, *]
 
 Depends on / 依赖: cpow_def
@@ -245,8 +245,8 @@ theorem zero_cpow_eq_iff
 
 中文:
 定理 zero_cpow_eq_iff
-  条件: {x : Complex} {a : Complex}
-  结论: (0 : Complex) ^ x = a ↔ x != 0 ∧ a = 0 ∨ x = 0 ∧ a = 1
+  条件: {x : 复形} {a : 复形}
+  结论: (0 : 复形) ^ x = a ↔ x != 0 ∧ a = 0 ∨ x = 0 ∧ a = 1
   证明: by
   constructor
   · intro hyp
@@ -281,8 +281,8 @@ theorem eq_zero_cpow_iff
 
 中文:
 定理 eq_zero_cpow_iff
-  条件: {x : Complex} {a : Complex}
-  结论: a = (0 : Complex) ^ x ↔ x != 0 ∧ a = 0 ∨ x = 0 ∧ a = 1
+  条件: {x : 复形} {a : 复形}
+  结论: a = (0 : 复形) ^ x ↔ x != 0 ∧ a = 0 ∨ x = 0 ∧ a = 1
   证明: by
   rw [← zero_cpow_eq_iff]; rw [eq_comm]
 
@@ -308,8 +308,8 @@ theorem cpow_one
 
 中文:
 定理 cpow_one
-  条件: (x : Complex)
-  结论: x ^ (1 : Complex) = x
+  条件: (x : 复形)
+  结论: x ^ (1 : 复形) = x
   证明: if hx : x = 0 then by simp [hx, cpow_def]
   else by rw [cpow_def, if_neg (one_ne_zero : (1 : Complex) != 0), if_neg hx, mul_one, exp_log hx]
 
@@ -335,8 +335,8 @@ theorem one_cpow
 
 中文:
 定理 one_cpow
-  条件: (x : Complex)
-  结论: (1 : Complex) ^ x = 1
+  条件: (x : 复形)
+  结论: (1 : 复形) ^ x = 1
   证明: by
   rw [cpow_def]
   split_ifs <;> simp_all [one_ne_zero]
@@ -360,7 +360,7 @@ theorem cpow_add
 
 中文:
 定理 cpow_add
-  条件: {x : Complex} (y z : Complex) (hx : x != 0)
+  条件: {x : 复形} (y z : 复形) (hx : x != 0)
   结论: x ^ (y + z) = x ^ y * x ^ z
   证明: by
   simp only [cpow_def, ite_mul, mul_ite]
@@ -384,7 +384,7 @@ theorem cpow_mul
 
 中文:
 定理 cpow_mul
-  条件: {x y : Complex} (z : Complex) (h₁ : -π < (log x * y).im) (h₂ : (log x * y).im <= π)
+  条件: {x y : 复形} (z : 复形) (h₁ : -π < (log x * y).im) (h₂ : (log x * y).im <= π)
   证明: by
   simp only [cpow_def]
   split_ifs <;> simp_all [exp_ne_zero, log_exp h₁ h₂, mul_assoc]
@@ -409,7 +409,7 @@ theorem cpow_neg
 
 中文:
 定理 cpow_neg
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: x ^ (-y) = (x ^ y)⁻¹
   证明: by
   simp only [cpow_def, neg_eq_zero, mul_neg]
@@ -433,7 +433,7 @@ theorem cpow_sub
 
 中文:
 定理 cpow_sub
-  条件: {x : Complex} (y z : Complex) (hx : x != 0)
+  条件: {x : 复形} (y z : 复形) (hx : x != 0)
   结论: x ^ (y - z) = x ^ y / x ^ z
   证明: by
   rw [sub_eq_add_neg]; rw [cpow_add _ _ hx]; rw [cpow_neg]; rw [div_eq_mul_inv]
@@ -454,8 +454,8 @@ theorem cpow_neg_one
 
 中文:
 定理 cpow_neg_one
-  条件: (x : Complex)
-  结论: x ^ (-1 : Complex) = x⁻¹
+  条件: (x : 复形)
+  结论: x ^ (-1 : 复形) = x⁻¹
   证明: by simpa using cpow_neg x 1
 
 Depends on / 依赖: cpow_neg
@@ -478,7 +478,7 @@ lemma cpow_int_mul
 
 中文:
 引理 cpow_int_mul
-  条件: (x : Complex) (n : 整数) (y : Complex)
+  条件: (x : 复形) (n : 整数) (y : 复形)
   结论: x ^ (n * y) = (x ^ y) ^ n
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
@@ -507,7 +507,7 @@ lemma cpow_mul_int
 
 中文:
 引理 cpow_mul_int
-  条件: (x y : Complex) (n : 整数)
+  条件: (x y : 复形) (n : 整数)
   结论: x ^ (y * n) = (x ^ y) ^ n
   证明: by rw [mul_comm, cpow_int_mul]
 
@@ -526,7 +526,7 @@ lemma cpow_nat_mul
 
 中文:
 引理 cpow_nat_mul
-  条件: (x : Complex) (n : 自然数) (y : Complex)
+  条件: (x : 复形) (n : 自然数) (y : 复形)
   结论: x ^ (n * y) = (x ^ y) ^ n
   证明: mod_cast cpow_int_mul x n y
 
@@ -544,8 +544,8 @@ lemma cpow_ofNat_mul
   proof: cpow_nat_mul x n y
 
 中文:
-引理 cpow_ofNat_mul
-  条件: (x : Complex) (n : 自然数) [n.AtLeastTwo] (y : Complex)
+引理 cpow_of自然数_mul
+  条件: (x : 复形) (n : 自然数) [n.AtLeastTwo] (y : 复形)
   证明: cpow_nat_mul x n y
 
 Depends on / 依赖: cpow_nat_mul
@@ -566,7 +566,7 @@ lemma cpow_mul_nat
 
 中文:
 引理 cpow_mul_nat
-  条件: (x y : Complex) (n : 自然数)
+  条件: (x y : 复形) (n : 自然数)
   结论: x ^ (y * n) = (x ^ y) ^ n
   证明: by
   rw [mul_comm]; rw [cpow_nat_mul]
@@ -587,8 +587,8 @@ lemma cpow_mul_ofNat
 @[simp, norm_cast]
 
 中文:
-引理 cpow_mul_ofNat
-  条件: (x y : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 cpow_mul_of自然数
+  条件: (x y : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: cpow_mul_nat x y n
 
 @[simp, norm_cast]
@@ -613,8 +613,8 @@ theorem cpow_natCast
 
 中文:
 定理 cpow_natCast
-  条件: (x : Complex) (n : 自然数)
-  结论: x ^ (n : Complex) = x ^ n
+  条件: (x : 复形) (n : 自然数)
+  结论: x ^ (n : 复形) = x ^ n
   证明: by simpa using cpow_nat_mul x n 1
 
 @[simp]
@@ -633,8 +633,8 @@ lemma cpow_ofNat
   proof: cpow_natCast x n
 
 中文:
-引理 cpow_ofNat
-  条件: (x : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 cpow_of自然数
+  条件: (x : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: cpow_natCast x n
 
 Depends on / 依赖: cpow_natCast
@@ -656,8 +656,8 @@ theorem cpow_two
 
 中文:
 定理 cpow_two
-  条件: (x : Complex)
-  结论: x ^ (2 : Complex) = x ^ (2 : 自然数)
+  条件: (x : 复形)
+  结论: x ^ (2 : 复形) = x ^ (2 : 自然数)
   证明: cpow_ofNat x 2
 
 @[simp, norm_cast]
@@ -680,8 +680,8 @@ theorem cpow_intCast
 
 中文:
 定理 cpow_intCast
-  条件: (x : Complex) (n : 整数)
-  结论: x ^ (n : Complex) = x ^ n
+  条件: (x : 复形) (n : 整数)
+  结论: x ^ (n : 复形) = x ^ n
   证明: by simpa using cpow_int_mul x n 1
 
 @[simp]
@@ -706,8 +706,8 @@ theorem cpow_nat_inv_pow
 
 中文:
 定理 cpow_nat_inv_pow
-  条件: (x : Complex) {n : 自然数} (hn : n != 0)
-  结论: (x ^ (n⁻¹ : Complex)) ^ n = x
+  条件: (x : 复形) {n : 自然数} (hn : n != 0)
+  结论: (x ^ (n⁻¹ : 复形)) ^ n = x
   证明: by
   rw [← cpow_nat_mul]; rw [mul_inv_cancel₀]; rw [cpow_one]
   assumption_mod_cast
@@ -730,8 +730,8 @@ lemma cpow_ofNat_inv_pow
   proof: cpow_nat_inv_pow _ (NeZero.ne n)
 
 中文:
-引理 cpow_ofNat_inv_pow
-  条件: (x : Complex) (n : 自然数) [n.AtLeastTwo]
+引理 cpow_of自然数_inv_pow
+  条件: (x : 复形) (n : 自然数) [n.AtLeastTwo]
   证明: cpow_nat_inv_pow _ (NeZero.ne n)
 
 Depends on / 依赖: NeZero, NeZero.ne, cpow_nat_inv_pow
@@ -752,7 +752,7 @@ lemma cpow_int_mul'
 
 中文:
 引理 cpow_int_mul'
-  条件: {x : Complex} {n : 整数} (hlt : -π < n * x.arg) (hle : n * x.arg <= π) (y : Complex)
+  条件: {x : 复形} {n : 整数} (hlt : -π < n * x.arg) (hle : n * x.arg <= π) (y : 复形)
   证明: by
   rw [mul_comm] at hlt hle
   rw [cpow_mul]; rw [cpow_intCast] <;> simpa [log_im]
@@ -774,7 +774,7 @@ lemma cpow_nat_mul'
 
 中文:
 引理 cpow_nat_mul'
-  条件: {x : Complex} {n : 自然数} (hlt : -π < n * x.arg) (hle : n * x.arg <= π) (y : Complex)
+  条件: {x : 复形} {n : 自然数} (hlt : -π < n * x.arg) (hle : n * x.arg <= π) (y : 复形)
   证明: cpow_int_mul' hlt hle y
 
 Depends on / 依赖: cpow_int_mul
@@ -792,8 +792,8 @@ lemma cpow_ofNat_mul'
   proof: cpow_nat_mul' hlt hle y
 
 中文:
-引理 cpow_ofNat_mul'
-  结论: {x : Complex} {n : 自然数} [n.AtLeastTwo] (hlt : -π < Of自然数.of自然数 n * x.arg)
+引理 cpow_of自然数_mul'
+  结论: {x : 复形} {n : 自然数} [n.AtLeastTwo] (hlt : -π < Of自然数.of自然数 n * x.arg)
   证明: cpow_nat_mul' hlt hle y
 
 Depends on / 依赖: cpow_nat_mul
@@ -816,7 +816,7 @@ lemma pow_cpow_nat_inv
 
 中文:
 引理 pow_cpow_nat_inv
-  条件: {x : Complex} {n : 自然数} (h₀ : n != 0) (hlt : -(π / n) < x.arg) (hle : x.arg <= π / n)
+  条件: {x : 复形} {n : 自然数} (h₀ : n != 0) (hlt : -(π / n) < x.arg) (hle : x.arg <= π / n)
   证明: by
   rw [← cpow_nat_mul']; rw [mul_inv_cancel₀ (Nat.cast_ne_zero.2 h₀)]; rw [cpow_one]
   · rwa [← div_lt_iff₀' (Nat.cast_pos.2 h₀.bot_lt), neg_div]
@@ -839,8 +839,8 @@ lemma pow_cpow_ofNat_inv
   proof: pow_cpow_nat_inv (NeZero.ne n) hlt hle
 
 中文:
-引理 pow_cpow_ofNat_inv
-  结论: {x : Complex} {n : 自然数} [n.AtLeastTwo] (hlt : -(π / Of自然数.of自然数 n) < x.arg)
+引理 pow_cpow_of自然数_inv
+  结论: {x : 复形} {n : 自然数} [n.AtLeastTwo] (hlt : -(π / Of自然数.of自然数 n) < x.arg)
   证明: pow_cpow_nat_inv (NeZero.ne n) hlt hle
 
 Depends on / 依赖: NeZero, NeZero.ne, pow_cpow_nat_inv
@@ -862,8 +862,8 @@ lemma sq_cpow_two_inv
 
 中文:
 引理 sq_cpow_two_inv
-  条件: {x : Complex} (hx : 0 < x.re)
-  结论: (x ^ (2 : 自然数)) ^ (2⁻¹ : Complex) = x
+  条件: {x : 复形} (hx : 0 < x.re)
+  结论: (x ^ (2 : 自然数)) ^ (2⁻¹ : 复形) = x
   证明: pow_cpow_ofNat_inv (neg_pi_div_two_lt_arg_iff.2 <| .inl hx)
     (arg_le_pi_div_two_iff.2 <| .inl hx.le)
 
@@ -884,7 +884,7 @@ lemma isSquare
 
 中文:
 引理 isSquare
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: IsSquare x
   证明: ⟨x ^ (2⁻¹ : Complex), by simp [← sq]⟩
 -/
@@ -906,8 +906,8 @@ theorem mul_cpow_ofReal_nonneg
   have ha'' : (a : Complex
 
 中文:
-定理 mul_cpow_ofReal_nonneg
-  条件: {a b : 实数} (ha : 0 <= a) (hb : 0 <= b) (r : Complex)
+定理 mul_cpow_of实数_nonneg
+  条件: {a b : 实数} (ha : 0 <= a) (hb : 0 <= b) (r : 复形)
   证明: by
   rcases eq_or_ne r 0 with (rfl | hr)
   · simp only [cpow_zero, mul_one]
@@ -942,8 +942,8 @@ lemma natCast_mul_natCast_cpow
 
 中文:
 引理 natCast_mul_natCast_cpow
-  条件: (m n : 自然数) (s : Complex)
-  结论: (m * n : Complex) ^ s = m ^ s * n ^ s
+  条件: (m n : 自然数) (s : 复形)
+  结论: (m * n : 复形) ^ s = m ^ s * n ^ s
   证明: ofReal_natCast m ▸ ofReal_natCast n ▸ mul_cpow_ofReal_nonneg m.cast_nonneg n.cast_nonneg s
 
 Depends on / 依赖: cast_nonneg, m.cast_nonneg, mul_cpow_ofReal_nonneg, n.cast_nonneg, ofReal_natCast
@@ -965,8 +965,8 @@ lemma natCast_cpow_natCast_mul
 
 中文:
 引理 natCast_cpow_natCast_mul
-  条件: (n m : 自然数) (z : Complex)
-  结论: (n : Complex) ^ (m * z) = ((n : Complex) ^ m) ^ z
+  条件: (n m : 自然数) (z : 复形)
+  结论: (n : 复形) ^ (m * z) = ((n : 复形) ^ m) ^ z
   证明: by
   refine cpow_nat_mul' (x := n) (n := m) ?_ ?_ z
   · simp only [natCast_arg, mul_zero, Left.neg_neg_iff, pi_pos]
@@ -993,7 +993,7 @@ theorem inv_cpow_eq_ite
 
 中文:
 定理 inv_cpow_eq_ite
-  条件: (x : Complex) (n : Complex)
+  条件: (x : 复形) (n : 复形)
   证明: by
   simp_rw [Complex.cpow_def, log_inv_eq_ite, inv_eq_zero, map_eq_zero, ite_mul, neg_mul,
     RCLike.conj_inv, apply_ite conj, apply_ite exp, apply_ite Inv.inv, map_zero, map_one, exp_neg,
@@ -1021,7 +1021,7 @@ theorem inv_cpow
 
 中文:
 定理 inv_cpow
-  条件: (x : Complex) (n : Complex) (hx : x.arg != π)
+  条件: (x : 复形) (n : 复形) (hx : x.arg != π)
   结论: x⁻¹ ^ n = (x ^ n)⁻¹
   证明: by
   rw [inv_cpow_eq_ite]; rw [if_neg hx]
@@ -1040,8 +1040,8 @@ lemma inv_cpow_ofReal_nonneg
   proof: inv_cpow _ _ by simpa [arg_ofReal_of_nonneg ha] using Real.pi_ne_zero.symm
 
 中文:
-引理 inv_cpow_ofReal_nonneg
-  条件: {a : 实数} (ha : 0 <= a) (r : Complex)
+引理 inv_cpow_of实数_nonneg
+  条件: {a : 实数} (ha : 0 <= a) (r : 复形)
   证明: inv_cpow _ _ by simpa [arg_ofReal_of_nonneg ha] using Real.pi_ne_zero.symm
 
 Depends on / 依赖: Real.pi_ne_zero.symm, arg_ofReal_of_nonneg, inv_cpow, pi_ne_zero
@@ -1060,8 +1060,8 @@ lemma div_cpow_ofReal_nonneg
   rw [div_eq_mul_inv]; rw [← ofReal_inv]; rw [mul_cpow_ofReal_nonneg ha (inv_nonneg_of_nonneg hb)]; rw [ofReal_inv]; rw [inv_cpow_ofReal_nonneg hb]; rw [div_eq_mul_inv]
 
 中文:
-引理 div_cpow_ofReal_nonneg
-  条件: {a b : 实数} (ha : 0 <= a) (hb : 0 <= b) (r : Complex)
+引理 div_cpow_of实数_nonneg
+  条件: {a b : 实数} (ha : 0 <= a) (hb : 0 <= b) (r : 复形)
   证明: by
   rw [div_eq_mul_inv]; rw [← ofReal_inv]; rw [mul_cpow_ofReal_nonneg ha (inv_nonneg_of_nonneg hb)]; rw [ofReal_inv]; rw [inv_cpow_ofReal_nonneg hb]; rw [div_eq_mul_inv]
 
@@ -1085,7 +1085,7 @@ theorem inv_cpow_eq_ite'
 
 中文:
 定理 inv_cpow_eq_ite'
-  条件: (x : Complex) (n : Complex)
+  条件: (x : 复形) (n : 复形)
   证明: by
   rw [inv_cpow_eq_ite]; rw [apply_ite conj]; rw [conj_conj]; rw [conj_conj]
   split_ifs with h
@@ -1114,7 +1114,7 @@ theorem conj_cpow_eq_ite
 
 中文:
 定理 conj_cpow_eq_ite
-  条件: (x : Complex) (n : Complex)
+  条件: (x : 复形) (n : 复形)
   证明: by
   simp_rw [cpow_def, map_eq_zero, apply_ite conj, map_one, map_zero, ← exp_conj, map_mul, conj_conj,
     log_conj_eq_ite]
@@ -1140,7 +1140,7 @@ theorem conj_cpow
 
 中文:
 定理 conj_cpow
-  条件: (x : Complex) (n : Complex) (hx : x.arg != π)
+  条件: (x : 复形) (n : 复形) (hx : x.arg != π)
   结论: conj x ^ n = conj (x ^ conj n)
   证明: by
   rw [conj_cpow_eq_ite]; rw [if_neg hx]
@@ -1162,7 +1162,7 @@ theorem cpow_conj
 
 中文:
 定理 cpow_conj
-  条件: (x : Complex) (n : Complex) (hx : x.arg != π)
+  条件: (x : 复形) (n : 复形) (hx : x.arg != π)
   结论: x ^ conj n = conj (conj x ^ n)
   证明: by
   rw [conj_cpow _ _ hx]; rw [conj_conj]
@@ -1183,8 +1183,8 @@ lemma natCast_add_one_cpow_ne_zero
 
 中文:
 引理 natCast_add_one_cpow_ne_zero
-  条件: (n : 自然数) (z : Complex)
-  结论: (n + 1 : Complex) ^ z != 0
+  条件: (n : 自然数) (z : 复形)
+  结论: (n + 1 : 复形) ^ z != 0
   证明: mt (cpow_eq_zero_iff ..).mp fun H => by norm_cast at H; exact H.1
 
 Depends on / 依赖: cpow_eq_zero_iff

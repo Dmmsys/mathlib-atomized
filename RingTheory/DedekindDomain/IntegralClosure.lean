@@ -73,8 +73,8 @@ theorem IsIntegralClosure.isLocalization
  
 
 中文:
-定理 IsIntegralClosure.isLocalization
-  条件: [IsDomain A] [Algebra.IsAlgebraic K L]
+定理 是整闭包.isLocalization
+  条件: [是整环 A] [代数.是代数 K L]
   证明: by
   have : IsDomain C :=
     (IsIntegralClosure.equiv A C L (integralClosure A L)).toMulEquiv.isDomain (integralClosure A L)
@@ -112,8 +112,8 @@ theorem IsIntegralClosure.isLocalization_of_isSeparable
   proof: IsIntegralClosure.isLocalization A K L C
 
 中文:
-定理 IsIntegralClosure.isLocalization_of_isSeparable
-  条件: [IsDomain A] [Algebra.IsSeparable K L]
+定理 是整闭包.isLocalization_of_isSeparable
+  条件: [是整环 A] [代数.是可分 K L]
   证明: IsIntegralClosure.isLocalization A K L C
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isLocalization, isLocalization
@@ -139,8 +139,8 @@ theorem IsIntegralClosure.range_le_span_dualBasis
 refine Submodule.mem_
 
 中文:
-定理 IsIntegralClosure.range_le_span_dualBasis
-  结论: [Algebra.IsSeparable K L] {ι : 类型} [Finite ι]
+定理 是整闭包.range_le_span_dualBasis
+  结论: [代数.是可分 K L] {ι : 类型} [有限 ι]
   证明: by
   rw [← LinearMap.BilinForm.dualSubmodule_span_of_basis]; rw [← LinearMap.BilinForm.le_flip_dualSubmodule]; rw [Submodule.span_le]
   rintro _ ⟨i, rfl⟩ _ ⟨y, rfl⟩
@@ -174,7 +174,7 @@ theorem integralClosure_le_span_dualBasis
 
 中文:
 定理 integralClosure_le_span_dualBasis
-  结论: [Algebra.IsSeparable K L] {ι : 类型} [Finite ι]
+  结论: [代数.是可分 K L] {ι : 类型} [有限 ι]
   证明: by
   refine le_trans ?_ (IsIntegralClosure.range_le_span_dualBasis (integralClosure A L) b hb_int)
   intro x hx
@@ -204,8 +204,8 @@ theorem exists_integral_multiples
   Algebra.IsAlgebraic.exists_integral_multiples ..
 
 中文:
-定理 exists_integral_multiples
-  条件: (s : Finset L)
+定理 存在_integral_multiples
+  条件: (s : 有限集 L)
   证明: have := IsLocalization.isAlgebraic K (nonZeroDivisors A)
   have := Algebra.IsAlgebraic.trans A K L
   Algebra.IsAlgebraic.exists_integral_multiples ..
@@ -234,7 +234,7 @@ theorem FiniteDimensional.exists_is_basis_integral
     refine mt ((injective_iff_map_eq_zero (algebraMap A L)).m
 
 中文:
-定理 FiniteDimensional.exists_is_basis_integral
+定理 有限维.存在_is_basis_integral
   证明: by
   let := Classical.decEq L
   let s' := IsNoetherian.finsetBasisIndex K L
@@ -284,8 +284,8 @@ theorem IsIntegralClosure.isNoetherian
     (Sub
 
 中文:
-定理 IsIntegralClosure.isNoetherian
-  条件: [Is整数egrallyClosed A] [IsNoetherianRing A]
+定理 是整闭包.isNoetherian
+  条件: [是整闭 A] [是Noether环 A]
   证明: by
   have := Classical.decEq L
   obtain ⟨s, b, hb_int⟩ := FiniteDimensional.exists_is_basis_integral A K L
@@ -318,8 +318,8 @@ theorem IsIntegralClosure.isNoetherianRing
   proof: isNoetherianRing_iff.mpr isNoetherian_of_tower A (IsIntegralClosure.isNoetherian A K L C)
 
 中文:
-定理 IsIntegralClosure.isNoetherianRing
-  条件: [Is整数egrallyClosed A] [IsNoetherianRing A]
+定理 是整闭包.isNoetherianRing
+  条件: [是整闭 A] [是Noether环 A]
   证明: isNoetherianRing_iff.mpr isNoetherian_of_tower A (IsIntegralClosure.isNoetherian A K L C)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherian, isNoetherian, isNoetherianRing_iff, isNoetherianRing_iff.mpr, isNoetherian_of_tower
@@ -339,8 +339,8 @@ theorem IsIntegralClosure.finite
   exact Module.IsNoetherian.finite A C
 
 中文:
-定理 IsIntegralClosure.finite
-  条件: [Is整数egrallyClosed A] [IsNoetherianRing A]
+定理 是整闭包.finite
+  条件: [是整闭 A] [是Noether环 A]
   证明: by
   have := IsIntegralClosure.isNoetherian A K L C
   exact Module.IsNoetherian.finite A C
@@ -363,8 +363,8 @@ theorem IsIntegralClosure.module_free
   inferInstance
 
 中文:
-定理 IsIntegralClosure.module_free
-  条件: [IsTorsionFree A L] [IsPrincipalIdealRing A]
+定理 是整闭包.module_free
+  条件: [是无挠 A L] [是主理想环 A]
   证明: haveI : IsTorsionFree A C := IsIntegralClosure.isTorsionFree A L
   haveI : IsNoetherian A C := IsIntegralClosure.isNoetherian A K L _
   inferInstance
@@ -391,8 +391,8 @@ theorem IsIntegralClosure.rank
   let b := Basis.localizationLocalization K A⁰ L (Modu
 
 中文:
-定理 IsIntegralClosure.rank
-  条件: [IsPrincipalIdealRing A] [IsTorsionFree A L]
+定理 是整闭包.rank
+  条件: [是主理想环 A] [是无挠 A L]
   证明: by
   have : Module.Free A C := IsIntegralClosure.module_free A K L C
   have : IsNoetherian A C := IsIntegralClosure.isNoetherian A K L C
@@ -423,7 +423,7 @@ theorem integralClosure.isNoetherianRing
 
 中文:
 定理 integralClosure.isNoetherianRing
-  条件: [Is整数egrallyClosed A] [IsNoetherianRing A]
+  条件: [是整闭 A] [是Noether环 A]
   证明: IsIntegralClosure.isNoetherianRing A K L (integralClosure A L)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isNoetherianRing, integralClosure, isNoetherianRing
@@ -450,9 +450,9 @@ theorem IsIntegralClosure.isDedekindDomain
     (isIntegrallyClosed_iff L).mpr fun {x} 
 
 中文:
-定理 IsIntegralClosure.isDedekindDomain
-  条件: [IsDedekindDomain A]
-  结论: IsDedekindDomain C
+定理 是整闭包.isDedekindDomain
+  条件: [是Dedekind整环 A]
+  结论: 是Dedekind整环 C
   证明: have : IsFractionRing C L := IsIntegralClosure.isFractionRing_of_finite_extension A K L C
   have : Algebra.IsIntegral A C := IsIntegralClosure.isIntegral_algebra A L
   { IsIntegralClosure.isNoetherianRing A K L C,
@@ -480,7 +480,7 @@ theorem integralClosure.isDedekindDomain
 
 中文:
 定理 integralClosure.isDedekindDomain
-  条件: [IsDedekindDomain A]
+  条件: [是Dedekind整环 A]
   证明: IsIntegralClosure.isDedekindDomain A K L (integralClosure A L)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.isDedekindDomain, integralClosure, isDedekindDomain
@@ -502,7 +502,7 @@ instance integralClosure.isDedekindDomain_fractionRing
 
 中文:
 实例 integralClosure.isDedekindDomain_fractionRing
-  签名: [IsDedekindDomain A]
+  签名: [是Dedekind整环 A]
   定义体: integralClosure.isDedekindDomain A (FractionRing A) L
 
 Depends on / 依赖: FractionRing, integralClosure, integralClosure.isDedekindDomain, isDedekindDomain

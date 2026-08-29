@@ -29,8 +29,8 @@ class ZeroLEOneClass
     - zero_le_one : (0 : α) <= 1
 
 中文:
-类 ZeroLEOneClass
-  参数: (α : 类型) [Zero α] [One α] [LE α]
+类 ZeroLEOne类
+  参数: (α : 类型) [零 α] [幺 α] [LE α]
   公理与运算 (1 个):
     - zero_le_one : (0 : α) <= 1
 -/
@@ -49,7 +49,7 @@ lemma zero_le_one
 
 中文:
 引理 zero_le_one
-  条件: [Zero α] [One α] [LE α] [ZeroLEOneClass α]
+  条件: [零 α] [幺 α] [LE α] [ZeroLEOne类 α]
   结论: (0 : α) <= 1
   证明: ZeroLEOneClass.zero_le_one
 -/
@@ -65,8 +65,8 @@ instance ZeroLEOneClass.factZeroLeOne
   body: zero_le_one
 
 中文:
-实例 ZeroLEOneClass.factZeroLeOne
-  签名: [Zero α] [One α] [LE α] [ZeroLEOneClass α]
+实例 ZeroLEOne类.factZeroLeOne
+  签名: [零 α] [幺 α] [LE α] [ZeroLEOne类 α]
   定义体: zero_le_one
 
 Depends on / 依赖: zero_le_one
@@ -86,7 +86,7 @@ lemma zero_le_one'
 
 中文:
 引理 zero_le_one'
-  条件: (α) [Zero α] [One α] [LE α] [ZeroLEOneClass α]
+  条件: (α) [零 α] [幺 α] [LE α] [ZeroLEOne类 α]
   结论: (0 : α) <= 1
   证明: zero_le_one
 
@@ -104,8 +104,8 @@ instance Prod.instZeroLEOneClass
   body: ⟨⟨zero_le_one, zero_le_one⟩⟩
 
 中文:
-实例 Prod.instZeroLEOneClass
-  签名: {R S : 类型} [Zero R] [One R] [LE R] [ZeroLEOneClass R]
+实例 积类型.instZeroLEOneClass
+  签名: {R S : 类型} [零 R] [幺 R] [LE R] [ZeroLEOne类 R]
   定义体: ⟨⟨zero_le_one, zero_le_one⟩⟩
 
 Depends on / 依赖: zero_le_one
@@ -123,8 +123,8 @@ instance Pi.instZeroLEOneClass
   body: ⟨fun _ => zero_le_one⟩
 
 中文:
-实例 Pi.instZeroLEOneClass
-  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, Zero (R i)] [对任意 i, One (R i)]
+实例 依赖函数类型.instZeroLEOneClass
+  签名: {ι : 类型} {R : ι -> 类型} [对任意 i, 零 (R i)] [对任意 i, 幺 (R i)]
   定义体: ⟨fun _ => zero_le_one⟩
 
 Depends on / 依赖: zero_le_one
@@ -160,7 +160,7 @@ instance ZeroLEOneClass.factZeroLtOne
   body: zero_lt_one
 
 中文:
-实例 ZeroLEOneClass.factZeroLtOne
+实例 ZeroLEOne类.factZeroLtOne
   签名: : Fact ((0 : α) < 1) where
   定义体: zero_lt_one
 
@@ -201,8 +201,8 @@ instance Nat.instZeroLEOneClass
   body: ⟨Nat.le_of_lt Nat.zero_lt_one⟩
 
 中文:
-实例 Nat.instZeroLEOneClass
-  签名: : ZeroLEOneClass 自然数
+实例 自然数.instZeroLEOneClass
+  签名: : ZeroLEOne类 自然数
   定义体: ⟨Nat.le_of_lt Nat.zero_lt_one⟩
 
 Depends on / 依赖: Nat.le_of_lt, Nat.zero_lt_one, le_of_lt, zero_lt_one
@@ -217,8 +217,8 @@ instance Int.instZeroLEOneClass
   body: ⟨Int.le_of_lt Int.zero_lt_one⟩
 
 中文:
-实例 Int.instZeroLEOneClass
-  签名: : ZeroLEOneClass 整数
+实例 整数.instZeroLEOneClass
+  签名: : ZeroLEOne类 整数
   定义体: ⟨Int.le_of_lt Int.zero_lt_one⟩
 
 Depends on / 依赖: Int.le_of_lt, Int.zero_lt_one, le_of_lt, zero_lt_one
@@ -233,8 +233,8 @@ instance Rat.instZeroLEOneClass
   body: ⟨by decide⟩
 
 中文:
-实例 Rat.instZeroLEOneClass
-  签名: : ZeroLEOneClass Rat
+实例 有理数.instZeroLEOneClass
+  签名: : ZeroLEOne类 有理数
   定义体: ⟨by decide⟩
 -/
 instance Rat.instZeroLEOneClass : ZeroLEOneClass Rat := ⟨by decide⟩

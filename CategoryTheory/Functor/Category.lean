@@ -53,8 +53,8 @@ instance Functor.category
   comp α β := vcomp α β
 
 中文:
-实例 Functor.category
-  签名: : Category.{max u₁ v₂} (C ⥤ D) where
+实例 函子.category
+  签名: : 范畴.{最大值 u₁ v₂} (C ⥤ D) where
   定义体: NatTrans F G
   id F := NatTrans.id F
   comp α β := vcomp α β
@@ -288,7 +288,7 @@ lemma naturality_inv
 
 中文:
 引理 naturality_inv
-  结论: {F G : C ⥤ D} (α : F ⟶ G) {X Y : C} (f : X ⟶ Y) [IsIso (α.app X)]
+  结论: {F G : C ⥤ D} (α : F ⟶ G) {X Y : C} (f : X ⟶ Y) [是同构 (α.app X)]
   证明: by
   rw [IsIso.inv_comp_eq]; rw [← Category.assoc]; rw [IsIso.eq_comp_inv]
   exact α.naturality f
@@ -316,8 +316,8 @@ theorem epi_of_epi_app
 
 中文:
 定理 epi_of_epi_app
-  条件: (α : F ⟶ G) [对任意 X : C, Epi (α.app X)]
-  结论: Epi α
+  条件: (α : F ⟶ G) [对任意 X : C, 满态射 (α.app X)]
+  结论: 满态射 α
   证明: ⟨fun g h eq => by
     ext X
     rw [← cancel_epi (α.app X)]; rw [← comp_app]; rw [eq]; rw [comp_app]⟩
@@ -688,7 +688,7 @@ abbreviation NatTrans.flipApp
   body: ((flipFunctor _ _ _).map τ).app Y
 
 中文:
-缩写 NatTrans.flipApp
+缩写 自然变换.flipApp
   签名: {G G' : C ⥤ D ⥤ E} (τ : G ⟶ G') (Y : D)
   定义体: ((flipFunctor _ _ _).map τ).app Y
 

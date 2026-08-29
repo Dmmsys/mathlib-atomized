@@ -55,7 +55,7 @@ definition SupClosed
 
 中文:
 定义 SupClosed
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall ⦃a⦄, a in s -> forall ⦃b⦄, b in s -> a ⊔ b in s
 -/
 def SupClosed (s : Set α) : Prop := forall ⦃a⦄, a in s -> forall ⦃b⦄, b in s -> a ⊔ b in s
@@ -70,7 +70,7 @@ lemma supClosed_empty
 
 中文:
 引理 supClosed_empty
-  结论: SupClosed (∅ : Set α)
+  结论: SupClosed (∅ : 集合 α)
   证明: by simp [SupClosed]
 -/
 @[to_dual (attr := simp)] lemma supClosed_empty : SupClosed (∅ : Set α) := by simp [SupClosed]
@@ -84,7 +84,7 @@ lemma supClosed_singleton
 
 中文:
 引理 supClosed_singleton
-  结论: SupClosed ({a} : Set α)
+  结论: SupClosed ({a} : 集合 α)
   证明: by simp [SupClosed]
 -/
 @[to_dual (attr := simp)] lemma supClosed_singleton : SupClosed ({a} : Set α) := by simp [SupClosed]
@@ -101,7 +101,7 @@ lemma supClosed_univ
 
 中文:
 引理 supClosed_univ
-  结论: SupClosed (univ : Set α)
+  结论: SupClosed (univ : 集合 α)
   证明: by simp [SupClosed]
 
 @[to_dual]
@@ -144,7 +144,7 @@ lemma supClosed_sInter
 @[to_dual]
 
 中文:
-引理 supClosed_sInter
+引理 supClosed_s整数er
   条件: (hS : 对任意 s in S, SupClosed s)
   结论: SupClosed (⋂₀ S)
   证明: fun _a ha _b hb _s hs => hS _ hs (ha _ hs) (hb _ hs)
@@ -167,7 +167,7 @@ lemma supClosed_iInter
 @[to_dual InfClosed.codirectedOn]
 
 中文:
-引理 supClosed_iInter
+引理 supClosed_i整数er
   条件: (hf : 对任意 i, SupClosed (f i))
   结论: SupClosed (⋂ i, f i)
   证明: supClosed_sInter forall_mem_range.2 hf
@@ -217,8 +217,8 @@ lemma IsUpperSet.supClosed
 @[to_dual]
 
 中文:
-引理 IsUpperSet.supClosed
-  条件: (hs : IsUpperSet s)
+引理 是上集.supClosed
+  条件: (hs : 是上集 s)
   结论: SupClosed s
   证明: fun _a _ _b => hs le_sup_right
 
@@ -240,8 +240,8 @@ lemma SupClosed.preimage
 @[to_dual]
 
 中文:
-引理 SupClosed.preimage
-  条件: [FunLike F β α] [SupHomClass F β α] (hs : SupClosed s) (f : F)
+引理 SupClosed.原像
+  条件: [函数状 F β α] [并态射类 F β α] (hs : SupClosed s) (f : F)
   证明: fun a ha b hb => by simpa [map_sup] using hs ha hb
 
 @[to_dual]
@@ -267,8 +267,8 @@ exact Set.mem_image_of_mem _ hs ha hb
 @[to_dual]
 
 中文:
-引理 SupClosed.image
-  条件: [FunLike F α β] [SupHomClass F α β] (hs : SupClosed s) (f : F)
+引理 SupClosed.像
+  条件: [函数状 F α β] [并态射类 F α β] (hs : SupClosed s) (f : F)
   证明: by
   rintro _ ⟨a, ha, rfl⟩ _ ⟨b, hb, rfl⟩
   rw [← map_sup]
@@ -299,8 +299,8 @@ lemma supClosed_range
 
 中文:
 引理 supClosed_range
-  条件: [FunLike F α β] [SupHomClass F α β] (f : F)
-  结论: SupClosed (Set.range f)
+  条件: [函数状 F α β] [并态射类 F α β] (f : F)
+  结论: SupClosed (集合.range f)
   证明: by
   simpa using supClosed_univ.image f
 
@@ -324,8 +324,8 @@ lemma SupClosed.prod
 @[to_dual]
 
 中文:
-引理 SupClosed.prod
-  条件: {t : Set β} (hs : SupClosed s) (ht : SupClosed t)
+引理 SupClosed.乘积
+  条件: {t : 集合 β} (hs : SupClosed s) (ht : SupClosed t)
   结论: SupClosed (s ×ˢ t)
   证明: fun _a ha _b hb => ⟨hs ha.1 hb.1, ht ha.2 hb.2⟩
 
@@ -347,7 +347,7 @@ lemma supClosed_pi
 
 中文:
 引理 supClosed_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, SemilatticeSup (α i)] {s : Set ι}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, SemilatticeSup (α i)] {s : 集合 ι}
   证明: fun _a ha _b hb _i hi => ht _ hi (ha _ hi) (hb _ hi)
 
 @[to_dual]
@@ -371,7 +371,7 @@ lemma SupClosed.insert_upperBounds
 
 中文:
 引理 SupClosed.insert_upperBounds
-  条件: {s : Set α} {a : α} (hs : SupClosed s) (ha : a in upperBounds s)
+  条件: {s : 集合 α} {a : α} (hs : SupClosed s) (ha : a in upperBounds s)
   证明: by
   rw [SupClosed]
   aesop
@@ -399,7 +399,7 @@ lemma SupClosed.insert_lowerBounds
 
 中文:
 引理 SupClosed.insert_lowerBounds
-  条件: {s : Set α} {a : α} (h : SupClosed s) (ha : a in lowerBounds s)
+  条件: {s : 集合 α} {a : α} (h : SupClosed s) (ha : a in lowerBounds s)
   证明: by
   rw [SupClosed]
   have ha' : forall b in s, a <= b := fun _ a => ha a
@@ -432,7 +432,7 @@ lemma SupClosed.finsetSup'_mem
 
 中文:
 引理 SupClosed.finsetSup'_mem
-  条件: (hs : SupClosed s) (ht : t.Nonempty)
+  条件: (hs : SupClosed s) (ht : t.非空)
   证明: sup'_induction _ _ hs
 
 @[to_dual]
@@ -454,7 +454,7 @@ lemma SupClosed.finsetSup_mem
 
 中文:
 引理 SupClosed.finsetSup_mem
-  条件: [OrderBot α] (hs : SupClosed s) (ht : t.Nonempty)
+  条件: [有底序 α] (hs : SupClosed s) (ht : t.非空)
   证明: sup'_eq_sup ht f ▸ hs.finsetSup'_mem ht
 
 Depends on / 依赖: _eq_sup, _mem, finsetSup, hs.finsetSup
@@ -484,8 +484,8 @@ structure IsSublattice
     - infClosed : InfClosed s
 
 中文:
-结构 IsSublattice
-  参数: (s : Set α)
+结构 是子格
+  参数: (s : 集合 α)
   公理与运算 (2 个):
     - supClosed : SupClosed s
     - infClosed : InfClosed s
@@ -509,7 +509,7 @@ lemma isSublattice_empty
 
 中文:
 引理 isSublattice_empty
-  结论: IsSublattice (∅ : Set α)
+  结论: 是子格 (∅ : 集合 α)
   证明: ⟨supClosed_empty, infClosed_empty⟩
 -/
 @[simp] lemma isSublattice_empty : IsSublattice (∅ : Set α) := ⟨supClosed_empty, infClosed_empty⟩
@@ -523,7 +523,7 @@ lemma isSublattice_singleton
 
 中文:
 引理 isSublattice_singleton
-  结论: IsSublattice ({a} : Set α)
+  结论: 是子格 ({a} : 集合 α)
   证明: ⟨supClosed_singleton, infClosed_singleton⟩
 -/
 @[simp] lemma isSublattice_singleton : IsSublattice ({a} : Set α) :=
@@ -539,7 +539,7 @@ lemma isSublattice_univ
 
 中文:
 引理 isSublattice_univ
-  结论: IsSublattice (Set.univ : Set α)
+  结论: 是子格 (集合.univ : 集合 α)
   证明: ⟨supClosed_univ, infClosed_univ⟩
 -/
 @[simp] lemma isSublattice_univ : IsSublattice (Set.univ : Set α) :=
@@ -555,9 +555,9 @@ lemma IsSublattice.inter
   proof: ⟨hs.1.inter ht.1, hs.2.inter ht.2⟩
 
 中文:
-引理 IsSublattice.inter
-  条件: (hs : IsSublattice s) (ht : IsSublattice t)
-  结论: IsSublattice (s inter t)
+引理 是子格.inter
+  条件: (hs : 是子格 s) (ht : 是子格 t)
+  结论: 是子格 (s inter t)
   证明: ⟨hs.1.inter ht.1, hs.2.inter ht.2⟩
 -/
 lemma IsSublattice.inter (hs : IsSublattice s) (ht : IsSublattice t) : IsSublattice (s inter t) :=
@@ -573,9 +573,9 @@ lemma isSublattice_sInter
   proof: ⟨supClosed_sInter fun _s hs => (hS _ hs).1, infClosed_sInter fun _s hs => (hS _ hs).2⟩
 
 中文:
-引理 isSublattice_sInter
-  条件: (hS : 对任意 s in S, IsSublattice s)
-  结论: IsSublattice (⋂₀ S)
+引理 isSublattice_s整数er
+  条件: (hS : 对任意 s in S, 是子格 s)
+  结论: 是子格 (⋂₀ S)
   证明: ⟨supClosed_sInter fun _s hs => (hS _ hs).1, infClosed_sInter fun _s hs => (hS _ hs).2⟩
 
 Depends on / 依赖: infClosed_sInter, supClosed_sInter
@@ -593,9 +593,9 @@ lemma isSublattice_iInter
   proof: ⟨supClosed_iInter fun _i => (hf _).1, infClosed_iInter fun _i => (hf _).2⟩
 
 中文:
-引理 isSublattice_iInter
-  条件: (hf : 对任意 i, IsSublattice (f i))
-  结论: IsSublattice (⋂ i, f i)
+引理 isSublattice_i整数er
+  条件: (hf : 对任意 i, 是子格 (f i))
+  结论: 是子格 (⋂ i, f i)
   证明: ⟨supClosed_iInter fun _i => (hf _).1, infClosed_iInter fun _i => (hf _).2⟩
 
 Depends on / 依赖: infClosed_iInter, supClosed_iInter
@@ -612,8 +612,8 @@ lemma IsSublattice.preimage
   proof: ⟨hs.1.preimage _, hs.2.preimage _⟩
 
 中文:
-引理 IsSublattice.preimage
-  结论: [FunLike F β α] [LatticeHomClass F β α]
+引理 是子格.原像
+  结论: [函数状 F β α] [格态射类 F β α]
   证明: ⟨hs.1.preimage _, hs.2.preimage _⟩
 
 Depends on / 依赖: preimage
@@ -631,8 +631,8 @@ lemma IsSublattice.image
   proof: ⟨hs.1.image _, hs.2.image _⟩
 
 中文:
-引理 IsSublattice.image
-  条件: [FunLike F α β] [LatticeHomClass F α β] (hs : IsSublattice s) (f : F)
+引理 是子格.像
+  条件: [函数状 F α β] [格态射类 F α β] (hs : 是子格 s) (f : F)
   证明: ⟨hs.1.image _, hs.2.image _⟩
 -/
 lemma IsSublattice.image [FunLike F α β] [LatticeHomClass F α β] (hs : IsSublattice s) (f : F) :
@@ -648,7 +648,7 @@ lemma IsSublattice_range
 
 中文:
 引理 IsSublattice_range
-  条件: [FunLike F α β] [LatticeHomClass F α β] (f : F)
+  条件: [函数状 F α β] [格态射类 F α β] (f : F)
   证明: ⟨supClosed_range _, infClosed_range _⟩
 
 Depends on / 依赖: infClosed_range, supClosed_range
@@ -666,8 +666,8 @@ lemma IsSublattice.prod
   proof: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 
 中文:
-引理 IsSublattice.prod
-  条件: {t : Set β} (hs : IsSublattice s) (ht : IsSublattice t)
+引理 是子格.乘积
+  条件: {t : 集合 β} (hs : 是子格 s) (ht : 是子格 t)
   证明: ⟨hs.1.prod ht.1, hs.2.prod ht.2⟩
 -/
 lemma IsSublattice.prod {t : Set β} (hs : IsSublattice s) (ht : IsSublattice t) :
@@ -683,7 +683,7 @@ lemma isSublattice_pi
 
 中文:
 引理 isSublattice_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, Lattice (α i)] {s : Set ι}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 格 (α i)] {s : 集合 ι}
   证明: ⟨supClosed_pi fun _i hi => (ht _ hi).1, infClosed_pi fun _i hi => (ht _ hi).2⟩
 
 Depends on / 依赖: infClosed_pi, supClosed_pi
@@ -702,7 +702,7 @@ lemma supClosed_preimage_toDual
 
 中文:
 引理 supClosed_preimage_toDual
-  条件: {s : Set αᵒᵈ}
+  条件: {s : 集合 αᵒᵈ}
   证明: Iff.rfl
 -/
 @[to_dual (attr := simp)] lemma supClosed_preimage_toDual {s : Set αᵒᵈ} :
@@ -718,7 +718,7 @@ lemma supClosed_preimage_ofDual
 
 中文:
 引理 supClosed_preimage_ofDual
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 -/
 @[to_dual (attr := simp)] lemma supClosed_preimage_ofDual {s : Set α} :
@@ -734,7 +734,7 @@ lemma isSublattice_preimage_toDual
 
 中文:
 引理 isSublattice_preimage_toDual
-  条件: {s : Set αᵒᵈ}
+  条件: {s : 集合 αᵒᵈ}
   证明: ⟨fun h => ⟨h.2, h.1⟩, fun h => ⟨h.2, h.1⟩⟩
 -/
 @[simp] lemma isSublattice_preimage_toDual {s : Set αᵒᵈ} :
@@ -781,8 +781,8 @@ lemma LinearOrder.supClosed
   proof: fun a ha b hb => by cases le_total a b <;> simp [*]
 
 中文:
-引理 LinearOrder.supClosed
-  条件: (s : Set α)
+引理 线性序.supClosed
+  条件: (s : 集合 α)
   结论: SupClosed s
   证明: fun a ha b hb => by cases le_total a b <;> simp [*]
 -/
@@ -799,9 +799,9 @@ lemma LinearOrder.isSublattice
   proof: ⟨LinearOrder.supClosed _, LinearOrder.infClosed _⟩
 
 中文:
-引理 LinearOrder.isSublattice
-  条件: (s : Set α)
-  结论: IsSublattice s
+引理 线性序.isSublattice
+  条件: (s : 集合 α)
+  结论: 是子格 s
   证明: ⟨LinearOrder.supClosed _, LinearOrder.infClosed _⟩
 -/
 @[simp] protected lemma LinearOrder.isSublattice (s : Set α) : IsSublattice s :=
@@ -834,7 +834,7 @@ definition supClosure
 
 中文:
 定义 supClosure
-  签名: : ClosureOperator (Set α)
+  签名: : 闭包算子 (集合 α)
   定义体: .ofPred
   (fun s => {a | exists (t : Finset α) (ht : t.Nonempty), ↑t subseteq s ∧ t.sup' ht id = a})
   SupClosed
@@ -872,7 +872,7 @@ lemma subset_supClosure
 
 中文:
 引理 subset_supClosure
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s subseteq supClosure s
   证明: supClosure.le_closure _
 
@@ -917,7 +917,7 @@ lemma supClosure_mono
 
 中文:
 引理 supClosure_mono
-  结论: Monotone (supClosure : Set α -> Set α)
+  结论: 递增 (supClosure : 集合 α -> 集合 α)
   证明: supClosure.monotone
 
 @[to_dual (attr := simp)]
@@ -966,7 +966,7 @@ lemma supClosure_idem
 
 中文:
 引理 supClosure_idem
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: supClosure (supClosure s) = supClosure s
   证明: supClosure.idempotent _
 
@@ -985,7 +985,7 @@ lemma supClosure_empty
 
 中文:
 引理 supClosure_empty
-  结论: supClosure (∅ : Set α) = ∅
+  结论: supClosure (∅ : 集合 α) = ∅
   证明: by simp
 -/
 @[to_dual (attr := simp)] lemma supClosure_empty : supClosure (∅ : Set α) = ∅ := by simp
@@ -1018,7 +1018,7 @@ lemma supClosure_univ
 
 中文:
 引理 supClosure_univ
-  结论: supClosure (Set.univ : Set α) = Set.univ
+  结论: supClosure (集合.univ : 集合 α) = 集合.univ
   证明: by simp
 
 @[to_dual (attr := simp)]
@@ -1041,7 +1041,7 @@ exact sup'_le _ _ fun b hb => ha hts hb
 
 中文:
 引理 upperBounds_supClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: upperBounds (supClosure s) = upperBounds s
   证明: (upperBounds_mono_set subset_supClosure).antisymm by
     rintro a ha _ ⟨t, ht, hts, rfl⟩
@@ -1114,7 +1114,7 @@ lemma finsetSup'_mem_supClosure
 
 中文:
 引理 finsetSup'_mem_supClosure
-  结论: {ι : 类型} {t : Finset ι} (ht : t.Nonempty) {f : ι -> α}
+  结论: {ι : 类型} {t : 有限集 ι} (ht : t.非空) {f : ι -> α}
   证明: supClosed_supClosure.finsetSup'_mem _ fun _i hi => subset_supClosure hf _ hi
 
 @[to_dual infClosure_min]
@@ -1160,9 +1160,9 @@ lemma Set.Finite.supClosure
     Finset.me
 
 中文:
-引理 Set.Finite.supClosure
-  条件: (hs : s.Finite)
-  结论: (supClosure s).Finite
+引理 集合.有限.supClosure
+  条件: (hs : s.有限)
+  结论: (supClosure s).有限
   证明: by
   lift s to Finset α using hs
   classical
@@ -1196,7 +1196,7 @@ lemma supClosure_prod
 
 中文:
 引理 supClosure_prod
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: le_antisymm (supClosure_min (Set.prod_mono subset_supClosure subset_supClosure) <|
     supClosed_supClosure.prod supClosed_supClosure) <| by
       rintro ⟨_, _⟩ ⟨⟨u, hu, hus, rfl⟩, v, hv, hvt, rfl⟩
@@ -1229,7 +1229,7 @@ definition latticeClosure
 
 中文:
 定义 latticeClosure
-  签名: : ClosureOperator (Set α)
+  签名: : 闭包算子 (集合 α)
   定义体: .ofCompletePred IsSublattice fun _ => isSublattice_sInter
 
 Depends on / 依赖: IsSublattice, isSublattice_sInter, ofCompletePred
@@ -1262,7 +1262,7 @@ lemma isSublattice_latticeClosure
 
 中文:
 引理 isSublattice_latticeClosure
-  结论: IsSublattice (latticeClosure s)
+  结论: 是子格 (latticeClosure s)
   证明: latticeClosure.isClosed_closure _
 -/
 @[simp] lemma isSublattice_latticeClosure : IsSublattice (latticeClosure s) :=
@@ -1280,7 +1280,7 @@ lemma latticeClosure_min
 
 中文:
 引理 latticeClosure_min
-  结论: s subseteq t -> IsSublattice t -> latticeClosure s subseteq t
+  结论: s subseteq t -> 是子格 t -> latticeClosure s subseteq t
   证明: latticeClosure.closure_min
 
 @[to_dual self (reorder := sup inf)]
@@ -1342,7 +1342,7 @@ lemma latticeClosure_mono
 
 中文:
 引理 latticeClosure_mono
-  结论: Monotone (latticeClosure : Set α -> Set α)
+  结论: 递增 (latticeClosure : 集合 α -> 集合 α)
   证明: latticeClosure.monotone
 
 Depends on / 依赖: latticeClosure, latticeClosure.monotone, monotone
@@ -1361,7 +1361,7 @@ alias ⟨_, IsSublattice.latticeClosure_eq⟩ := latticeClosure_eq_self
 
 中文:
 引理 latticeClosure_eq_self
-  结论: latticeClosure s = s ↔ IsSublattice s
+  结论: latticeClosure s = s ↔ 是子格 s
   证明: latticeClosure.isClosed_iff.symm
 
 alias ⟨_, IsSublattice.latticeClosure_eq⟩ := latticeClosure_eq_self
@@ -1382,7 +1382,7 @@ lemma latticeClosure_idem
 
 中文:
 引理 latticeClosure_idem
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: latticeClosure (latticeClosure s) = latticeClosure s
   证明: latticeClosure.idempotent _
 
@@ -1401,7 +1401,7 @@ lemma latticeClosure_empty
 
 中文:
 引理 latticeClosure_empty
-  结论: latticeClosure (∅ : Set α) = ∅
+  结论: latticeClosure (∅ : 集合 α) = ∅
   证明: by simp
 -/
 @[simp] lemma latticeClosure_empty : latticeClosure (∅ : Set α) = ∅ := by simp
@@ -1433,7 +1433,7 @@ lemma latticeClosure_univ
 
 中文:
 引理 latticeClosure_univ
-  结论: latticeClosure (Set.univ : Set α) = Set.univ
+  结论: latticeClosure (集合.univ : 集合 α) = 集合.univ
   证明: by simp
 
 @[to_dual self (reorder := map_sup map_inf)]
@@ -1457,7 +1457,7 @@ lemma image_latticeClosure
 
 中文:
 引理 image_latticeClosure
-  结论: (s : Set α) (f : α -> β)
+  结论: (s : 集合 α) (f : α -> β)
   证明: by
   simp only [subset_antisymm_iff, Set.image_subset_iff]
   constructor <;> apply latticeClosure_sup_inf_induction
@@ -1499,7 +1499,7 @@ lemma ofDual_preimage_latticeClosure
 
 中文:
 引理 ofDual_preimage_latticeClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   ext
   simp [latticeClosure, (Equiv.Set.congr toDual).surjective.forall, Equiv.image_eq_preimage_symm]
@@ -1526,7 +1526,7 @@ lemma image_latticeClosure'
 
 中文:
 引理 image_latticeClosure'
-  结论: (s : Set α) (f : α -> β)
+  结论: (s : 集合 α) (f : α -> β)
   证明: by
   simpa only [Set.image_comp, Equiv.image_symm_eq_preimage, ← ofDual_preimage_latticeClosure]
     using! image_latticeClosure s (ofDual.symm ∘ f) map_sup map_inf
@@ -1592,7 +1592,7 @@ lemma supClosure_infClosure
 
 中文:
 引理 supClosure_infClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: supClosure (infClosure s) = latticeClosure s
   证明: le_antisymm (supClosure_min (infClosure_min subset_latticeClosure isSublattice_latticeClosure.2)
     isSublattice_latticeClosure.1) <| latticeClosure_min (subset_infClosure.trans subset_supClosure)
@@ -1616,9 +1616,9 @@ lemma Set.Finite.latticeClosure
   rw [← supClosure_infClosure]; exact hs.infClosure.supClosure
 
 中文:
-引理 Set.Finite.latticeClosure
-  条件: (hs : s.Finite)
-  结论: (latticeClosure s).Finite
+引理 集合.有限.latticeClosure
+  条件: (hs : s.有限)
+  结论: (latticeClosure s).有限
   证明: by
   rw [← supClosure_infClosure]; exact hs.infClosure.supClosure
 
@@ -1638,7 +1638,7 @@ lemma latticeClosure_prod
 
 中文:
 引理 latticeClosure_prod
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   simp_rw [← supClosure_infClosure]; simp
 -/
@@ -1664,7 +1664,7 @@ isLUB_sSup _ := isLUB_supClosure.mp h _ supClosed_supClosure
 
 中文:
 定义 SemilatticeSup.toCompleteSemilatticeSup
-  签名: [SemilatticeSup α] (sSup : Set α -> α)
+  签名: [SemilatticeSup α] (sSup : 集合 α -> α)
   定义体: fun s => sSup (supClosure s)
 isLUB_sSup _ := isLUB_supClosure.mp h _ supClosed_supClosure
 
@@ -1694,7 +1694,7 @@ lemma SupClosed.iSup_mem_of_nonempty
 
 中文:
 引理 SupClosed.iSup_mem_of_nonempty
-  结论: [Finite ι] [Nonempty ι] (hs : SupClosed s)
+  结论: [有限 ι] [非空 ι] (hs : SupClosed s)
   证明: by
   cases nonempty_fintype (PLift ι)
   rw [← iSup_plift_down]; rw [← Finset.sup'_univ_eq_ciSup]
@@ -1725,7 +1725,7 @@ lemma SupClosed.sSup_mem_of_nonempty
 
 中文:
 引理 SupClosed.sSup_mem_of_nonempty
-  结论: (hs : SupClosed s) (ht : t.Finite) (ht' : t.Nonempty)
+  结论: (hs : SupClosed s) (ht : t.有限) (ht' : t.非空)
   证明: by
   have := ht.to_subtype
   have := ht'.to_subtype
@@ -1756,7 +1756,7 @@ lemma compl_image_latticeClosure
 
 中文:
 引理 compl_image_latticeClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: image_latticeClosure' s _ compl_sup_distrib (fun _ _ => compl_inf)
 
 Depends on / 依赖: compl_inf, compl_sup_distrib, image_latticeClosure
@@ -1803,7 +1803,7 @@ lemma SupClosed.biSup_mem_of_nonempty
 
 中文:
 引理 SupClosed.biSup_mem_of_nonempty
-  结论: {ι : 类型} {t : Set ι} {f : ι -> α} (hs : SupClosed s)
+  结论: {ι : 类型} {t : 集合 ι} {f : ι -> α} (hs : SupClosed s)
   证明: by
   rw [← sSup_image]
   exact hs.sSup_mem_of_nonempty (ht.image _) (by simpa) (by simpa)
@@ -1833,7 +1833,7 @@ lemma SupClosed.iSup_mem
 
 中文:
 引理 SupClosed.iSup_mem
-  条件: [Finite ι] (hs : SupClosed s) (hbot : ⊥ in s) (hf : 对任意 i, f i in s)
+  条件: [有限 ι] (hs : SupClosed s) (hbot : ⊥ in s) (hf : 对任意 i, f i in s)
   证明: by
   cases isEmpty_or_nonempty ι
   · simpa [iSup_of_empty]
@@ -1865,7 +1865,7 @@ lemma SupClosed.sSup_mem
 
 中文:
 引理 SupClosed.sSup_mem
-  条件: (hs : SupClosed s) (ht : t.Finite) (hbot : ⊥ in s) (hts : t subseteq s)
+  条件: (hs : SupClosed s) (ht : t.有限) (hbot : ⊥ in s) (hts : t subseteq s)
   证明: by
   have := ht.to_subtype
   rw [sSup_eq_iSup']
@@ -1894,7 +1894,7 @@ lemma SupClosed.biSup_mem
 
 中文:
 引理 SupClosed.biSup_mem
-  结论: {ι : 类型} {t : Set ι} {f : ι -> α} (hs : SupClosed s)
+  结论: {ι : 类型} {t : 集合 ι} {f : ι -> α} (hs : SupClosed s)
   证明: by
   rw [← sSup_image]
   exact hs.sSup_mem (ht.image _) hbot (by simpa)

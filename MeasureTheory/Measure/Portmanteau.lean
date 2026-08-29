@@ -130,7 +130,7 @@ theorem le_measure_compl_liminf_of_limsup_measure_le
 
 中文:
 定理 le_measure_compl_liminf_of_limsup_measure_le
-  结论: {ι : 类型} {L : Filter ι} {μ : Measure Ω}
+  结论: {ι : 类型} {L : 滤子 ι} {μ : 测度 Ω}
   证明: by
   rcases L.eq_or_neBot with rfl | hne
   · simp only [liminf_bot, le_top]
@@ -170,7 +170,7 @@ theorem le_measure_liminf_of_limsup_measure_compl_le
 
 中文:
 定理 le_measure_liminf_of_limsup_measure_compl_le
-  结论: {ι : 类型} {L : Filter ι} {μ : Measure Ω}
+  结论: {ι : 类型} {L : 滤子 ι} {μ : 测度 Ω}
   证明: compl_compl E ▸ le_measure_compl_liminf_of_limsup_measure_le (MeasurableSet.compl E_mble) h
 
 Depends on / 依赖: E_mble, MeasurableSet, MeasurableSet.compl, compl_compl, le_measure_compl_liminf_of_limsup_measure_le
@@ -198,7 +198,7 @@ theorem limsup_measure_compl_le_of_le_liminf_measure
 
 中文:
 定理 limsup_measure_compl_le_of_le_liminf_measure
-  结论: {ι : 类型} {L : Filter ι} {μ : Measure Ω}
+  结论: {ι : 类型} {L : 滤子 ι} {μ : 测度 Ω}
   证明: by
   rcases L.eq_or_neBot with rfl | hne
   · simp only [limsup_bot, bot_le]
@@ -238,7 +238,7 @@ theorem limsup_measure_le_of_le_liminf_measure_compl
 
 中文:
 定理 limsup_measure_le_of_le_liminf_measure_compl
-  结论: {ι : 类型} {L : Filter ι} {μ : Measure Ω}
+  结论: {ι : 类型} {L : 滤子 ι} {μ : 测度 Ω}
   证明: compl_compl E ▸ limsup_measure_compl_le_of_le_liminf_measure (MeasurableSet.compl E_mble) h
 
 Depends on / 依赖: E_mble, MeasurableSet, MeasurableSet.compl, compl_compl, limsup_measure_compl_le_of_le_liminf_measure
@@ -268,7 +268,7 @@ theorem limsup_measure_closed_le_iff_liminf_measure_open_ge
 
 中文:
 定理 limsup_measure_closed_le_iff_liminf_measure_open_ge
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   constructor
   · intro h G G_open
@@ -334,7 +334,7 @@ theorem tendsto_measure_of_le_liminf_measure_of_limsup_measure_le
 
 中文:
 定理 tendsto_measure_of_le_liminf_measure_of_limsup_measure_le
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   apply tendsto_of_le_liminf_of_limsup_le
   · have E₀_ae_eq_E : E₀ =ᵐ[μ] E :=
@@ -386,7 +386,7 @@ theorem tendsto_measure_of_null_frontier
 
 中文:
 定理 tendsto_measure_of_null_frontier
-  结论: {ι : 类型} {L : Filter ι} {μ : Measure Ω}
+  结论: {ι : 类型} {L : 滤子 ι} {μ : 测度 Ω}
   证明: haveI h_closeds : forall F, IsClosed F -> (L.limsup fun i => μs i F) <= μ F :=
     limsup_measure_closed_le_iff_liminf_measure_open_ge.mpr h_opens
   tendsto_measure_of_le_liminf_measure_of_limsup_measure_le interior_subset subset_closure
@@ -444,8 +444,8 @@ theorem FiniteMeasure.limsup_measure_closed_le_of_tendsto
   have key₁ : Tendsto (fun n => ∫⁻ ω, (fs n ω : Real>
 
 中文:
-定理 FiniteMeasure.limsup_measure_closed_le_of_tendsto
-  结论: {Ω ι : 类型} {L : Filter ι}
+定理 有限测度.limsup_measure_closed_le_of_tendsto
+  结论: {Ω ι : 类型} {L : 滤子 ι}
   证明: by
   rcases L.eq_or_neBot with rfl | hne
   · simp only [limsup_bot, bot_le]
@@ -497,8 +497,8 @@ theorem ProbabilityMeasure.limsup_measure_closed_le_of_tendsto
     ((tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds L).mp μs_lim) F_closed
 
 中文:
-定理 ProbabilityMeasure.limsup_measure_closed_le_of_tendsto
-  结论: {Ω ι : 类型} {L : Filter ι}
+定理 概率测度.limsup_measure_closed_le_of_tendsto
+  结论: {Ω ι : 类型} {L : 滤子 ι}
   证明: by
   apply FiniteMeasure.limsup_measure_closed_le_of_tendsto
     ((tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds L).mp μs_lim) F_closed
@@ -525,8 +525,8 @@ theorem ProbabilityMeasure.le_liminf_measure_open_of_tendsto
     (h_closeds _ (isClosed_compl_iff.mpr G_open))
 
 中文:
-定理 ProbabilityMeasure.le_liminf_measure_open_of_tendsto
-  结论: {Ω ι : 类型} {L : Filter ι}
+定理 概率测度.le_liminf_measure_open_of_tendsto
+  结论: {Ω ι : 类型} {L : 滤子 ι}
   证明: haveI h_closeds : forall F, IsClosed F -> (L.limsup fun i => (μs i : Measure Ω) F) <= (μ : Measure Ω) F :=
     fun _ F_closed => limsup_measure_closed_le_of_tendsto μs_lim F_closed
   le_measure_liminf_of_limsup_measure_compl_le G_open.measurableSet
@@ -555,7 +555,7 @@ theorem ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto'
   tendsto_measure_of_null_frontier h_opens E_nullbdry
 
 中文:
-定理 ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto'
+定理 概率测度.tendsto_measure_of_null_frontier_of_tendsto'
   结论: {Ω ι : 类型}
   证明: haveI h_opens : forall G, IsOpen G -> (μ : Measure Ω) G <= L.liminf fun i => (μs i : Measure Ω) G :=
     fun _ G_open => le_liminf_measure_open_of_tendsto μs_lim G_open
@@ -583,8 +583,8 @@ theorem ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto
   exact (ENNReal.tendsto_toNNReal (measure_ne_top (↑μ) E)).comp key
 
 中文:
-定理 ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto
-  结论: {Ω ι : 类型} {L : Filter ι}
+定理 概率测度.tendsto_measure_of_null_frontier_of_tendsto
+  结论: {Ω ι : 类型} {L : 滤子 ι}
   证明: by
   have key := tendsto_measure_of_null_frontier_of_tendsto' μs_lim (by simpa using E_nullbdry)
   exact (ENNReal.tendsto_toNNReal (measure_ne_top (↑μ) E)).comp key
@@ -607,8 +607,8 @@ theorem ProbabilityMeasure.tendsto_measure_of_isClopen_of_tendsto
   proof: ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto μs_lim (by simp [hE])
 
 中文:
-定理 ProbabilityMeasure.tendsto_measure_of_isClopen_of_tendsto
-  结论: {Ω ι : 类型} {L : Filter ι}
+定理 概率测度.tendsto_measure_of_isClopen_of_tendsto
+  结论: {Ω ι : 类型} {L : 滤子 ι}
   证明: ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto μs_lim (by simp [hE])
 
 Depends on / 依赖: ProbabilityMeasure, ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto, tendsto_measure_of_null_frontier_of_tendsto
@@ -664,8 +664,8 @@ theorem exists_null_frontier_thickening
   have aux := measure_sdiff_null 
 
 中文:
-定理 exists_null_frontier_thickening
-  结论: (μ : Measure Ω) [SFinite μ] (s : Set Ω) {a b : 实数}
+定理 存在_null_frontier_thickening
+  结论: (μ : 测度 Ω) [SFinite μ] (s : 集合 Ω) {a b : 实数}
   证明: by
   have mbles : forall r : Real, MeasurableSet (frontier (Metric.thickening r s)) :=
     fun r => isClosed_frontier.measurableSet
@@ -700,8 +700,8 @@ theorem exists_null_frontiers_thickening
       (fu
 
 中文:
-定理 exists_null_frontiers_thickening
-  条件: (μ : Measure Ω) [SFinite μ] (s : Set Ω)
+定理 存在_null_frontiers_thickening
+  条件: (μ : 测度 Ω) [SFinite μ] (s : 集合 Ω)
   证明: by
   rcases exists_seq_strictAnti_tendsto (0 : Real) with ⟨Rs, ⟨_, ⟨Rs_pos, Rs_lim⟩⟩⟩
   have obs := fun n : Nat => exists_null_frontier_thickening μ s (Rs_pos n)
@@ -739,7 +739,7 @@ lemma limsup_measure_closed_le_of_forall_tendsto_measure
   have rs_lim : Tendsto rs atTop (𝓝 0) := (Cl
 
 中文:
-引理 limsup_measure_closed_le_of_forall_tendsto_measure
+引理 limsup_measure_closed_le_of_对任意_tendsto_measure
   证明: by
   let : PseudoMetricSpace Ω := TopologicalSpace.pseudoMetrizableSpacePseudoMetric Ω
   rcases L.eq_or_neBot with rfl | _
@@ -795,7 +795,7 @@ lemma le_liminf_measure_open_of_forall_tendsto_measure
   exact limsup_measure_closed_le_of_forall_tendsto_measure h _ (isClosed_compl_iff.mpr G_open)
 
 中文:
-引理 le_liminf_measure_open_of_forall_tendsto_measure
+引理 le_liminf_measure_open_of_对任意_tendsto_measure
   证明: by
   apply le_measure_liminf_of_limsup_measure_compl_le G_open.measurableSet
   exact limsup_measure_closed_le_of_forall_tendsto_measure h _ (isClosed_compl_iff.mpr G_open)
@@ -844,7 +844,7 @@ lemma lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure
     _ <= atTop.liminf (fun i => ∫⁻ (t : Real) in Set.Ioi 0
 
 中文:
-引理 lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure
+引理 lintegral_le_liminf_lintegral_of_对任意_isOpen_measure_le_liminf_measure
   证明: by
   simp_rw [lintegral_eq_lintegral_meas_lt _ (Eventually.of_forall f_nn) f_cont.aemeasurable]
   calc ∫⁻ (t : Real) in Set.Ioi 0, μ {a | t < f a}
@@ -881,7 +881,7 @@ lemma integral_le_liminf_integral_of_forall_isOpen_measure_le_liminf_measure
   convert! ENNReal.toReal_mono ?_
 
 中文:
-引理 integral_le_liminf_integral_of_forall_isOpen_measure_le_liminf_measure
+引理 integral_le_liminf_integral_of_对任意_isOpen_measure_le_liminf_measure
   证明: by
   have same := lintegral_le_liminf_lintegral_of_forall_isOpen_measure_le_liminf_measure
                   f.continuous f_nn h_opens
@@ -936,8 +936,8 @@ theorem tendsto_of_forall_isOpen_le_liminf_nat'
   exact integral_le_liminf_integral_of_forall_isOpen_measure_le_liminf_measure f_nn h_opens
 
 中文:
-定理 tendsto_of_forall_isOpen_le_liminf_nat'
-  结论: {μ : ProbabilityMeasure Ω}
+定理 tendsto_of_对任意_isOpen_le_liminf_nat'
+  结论: {μ : 概率测度 Ω}
   证明: by
   refine ProbabilityMeasure.tendsto_iff_forall_integral_tendsto.mpr ?_
   refine tendsto_integral_of_forall_integral_le_liminf_integral fun f f_nn => ?_
@@ -967,8 +967,8 @@ theorem tendsto_of_forall_isOpen_le_liminf_nat
     refine Monotone.map_liminf_of_continuousAt (F := atTop) ENNReal.
 
 中文:
-定理 tendsto_of_forall_isOpen_le_liminf_nat
-  结论: {μ : ProbabilityMeasure Ω}
+定理 tendsto_of_对任意_isOpen_le_liminf_nat
+  结论: {μ : 概率测度 Ω}
   证明: by
   refine tendsto_of_forall_isOpen_le_liminf_nat' fun G G_open => ?_
   specialize h_opens G G_open
@@ -1007,8 +1007,8 @@ theorem tendsto_of_forall_isOpen_le_liminf'
   exact (h_opens G hG).trans (liminf_le_liminf_of_le hu)
 
 中文:
-定理 tendsto_of_forall_isOpen_le_liminf'
-  结论: {ι : 类型} {μ : ProbabilityMeasure Ω}
+定理 tendsto_of_对任意_isOpen_le_liminf'
+  结论: {ι : 类型} {μ : 概率测度 Ω}
   证明: by
   apply Filter.tendsto_of_seq_tendsto fun u hu => ?_
   apply tendsto_of_forall_isOpen_le_liminf_nat' fun G hG => ?_
@@ -1039,8 +1039,8 @@ theorem tendsto_of_forall_isOpen_le_liminf
 .isCoboundedUnder_ge exact isBo
 
 中文:
-定理 tendsto_of_forall_isOpen_le_liminf
-  结论: {ι : 类型} {μ : ProbabilityMeasure Ω}
+定理 tendsto_of_对任意_isOpen_le_liminf
+  结论: {ι : 类型} {μ : 概率测度 Ω}
   证明: by
   apply Filter.tendsto_of_seq_tendsto fun u hu => ?_
   apply tendsto_of_forall_isOpen_le_liminf_nat fun G hG => (h_opens G hG).trans ?_
@@ -1080,7 +1080,7 @@ lemma tendsto_of_forall_isClosed_limsup_le'
   rwa [← limsup_measure_closed_le_iff_liminf_measure_open_ge]
 
 中文:
-引理 tendsto_of_forall_isClosed_limsup_le'
+引理 tendsto_of_对任意_isClosed_limsup_le'
   证明: by
   refine tendsto_of_forall_isOpen_le_liminf' ?_
   rwa [← limsup_measure_closed_le_iff_liminf_measure_open_ge]
@@ -1107,8 +1107,8 @@ lemma tendsto_of_forall_isClosed_limsup_le_nat
     Monotone.map_limsup_of_continuousAt (F := atTop) ENNReal.coe_mono (μs · F
 
 中文:
-引理 tendsto_of_forall_isClosed_limsup_le_nat
-  结论: {μs : 自然数 -> ProbabilityMeasure Ω}
+引理 tendsto_of_对任意_isClosed_limsup_le_nat
+  结论: {μs : 自然数 -> 概率测度 Ω}
   证明: by
   refine tendsto_of_forall_isClosed_limsup_le' fun F hF_closed => ?_
   specialize h F hF_closed
@@ -1144,7 +1144,7 @@ theorem tendsto_of_forall_isClosed_limsup_le
     (limsup_le_limsup_of_le hu (by isBoundedDefault) ⟨1, by simp⟩)
 
 中文:
-定理 tendsto_of_forall_isClosed_limsup_le
+定理 tendsto_of_对任意_isClosed_limsup_le
   证明: by
   apply Filter.tendsto_of_seq_tendsto fun u hu => ?_
   apply tendsto_of_forall_isClosed_limsup_le_nat fun F hF => le_trans ?_ (h F hF)
@@ -1170,8 +1170,8 @@ lemma tendsto_of_forall_isClosed_limsup_real_le'
   proof: tendsto_of_forall_isClosed_limsup_le (by simpa using h)
 
 中文:
-引理 tendsto_of_forall_isClosed_limsup_real_le'
-  结论: {L : Filter ι} [L.IsCountablyGenerated]
+引理 tendsto_of_对任意_isClosed_limsup_real_le'
+  结论: {L : 滤子 ι} [L.是余untablyGenerated]
   证明: tendsto_of_forall_isClosed_limsup_le (by simpa using h)
 
 Depends on / 依赖: tendsto_of_forall_isClosed_limsup_le
@@ -1196,7 +1196,7 @@ refine ENNReal.le_of_forall_pos_le_add fun ε hε _ => ?_
   obtain ⟨K, h
 
 中文:
-定理 tendsto_of_forall_isCompact_of_isTightMeasureSet
+定理 tendsto_of_对任意_isCompact_of_isTightMeasureSet
   证明: by
   obtain rfl | _ := L.eq_or_neBot
   · simp
@@ -1253,8 +1253,8 @@ theorem tendsto_iff_forall_lipschitz_integral_tendsto
     l
 
 中文:
-定理 tendsto_iff_forall_lipschitz_integral_tendsto
-  结论: {γ Ω : 类型} {mΩ : MeasurableSpace Ω}
+定理 tendsto_iff_对任意_lipschitz_integral_tendsto
+  结论: {γ Ω : 类型} {mΩ : 可测空间 Ω}
   证明: by
   constructor
   · -- A bounded Lipschitz function is in particular a bounded continuous function, and we already
@@ -1335,7 +1335,7 @@ lemma _root_.IsPiSystem.tendsto_measureReal_biUnion
   have A (i) : (μ i).real (⋃ s in t, s)
 
 中文:
-引理 _root_.IsPiSystem.tendsto_measureReal_biUnion
+引理 _root_.IsPiSystem.tendsto_measure实数_biUnion
   证明: by
   /- This statement is not completely obvious, as `⋃ s ∈ t, s` does not belong to the π-system `S`.
   However, thanks to the inclusion-exclusion formula one may express its measure in terms of
@@ -1415,7 +1415,7 @@ lemma ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen
     rcases TopologicalSpace.isOpen_iUnion_countable 
 
 中文:
-引理 ProbabilityMeasure.exists_lt_measure_biUnion_of_isOpen
+引理 概率测度.存在_lt_measure_biUnion_of_isOpen
   证明: by
   obtain ⟨T, TS, T_count, hT⟩ : exists T : Set (Set Ω), T subseteq S ∧ T.Countable ∧ ⋃ t in T, t = G := by
     have : forall (x : G), exists s in S, s in 𝓝 (x : Ω) ∧ s subseteq G := fun x => h G hG x x.2

@@ -39,12 +39,12 @@ structure BialgCat
     - [instBialgebra : Bialgebra R carrier]
 
 中文:
-结构 BialgCat
+结构 Bialg范畴
   参数: where
   公理与运算 (3 个):
     - carrier : 类型v
-    - [instRing : Ring carrier]
-    - [instBialgebra : Bialgebra R carrier]
+    - [instRing : 环 carrier]
+    - [instBialgebra : 双代数 R carrier]
 -/
 structure BialgCat where
   /-- The underlying type. -/
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (BialgCat.{v} R) (类型v)
+  签名: CoeSort (Bialg范畴.{v} R) (类型v)
   定义体: ⟨(·.carrier)⟩
 
 Depends on / 依赖: carrier
@@ -92,7 +92,7 @@ definition of
 
 中文:
 定义 of
-  签名: (X : 类型v) [Ring X] [Bialgebra R X]
+  签名: (X : 类型v) [环 X] [双代数 R X]
   定义体: X
 -/
 def of (X : Type v) [Ring X] [Bialgebra R X] :
@@ -111,7 +111,7 @@ lemma of_comul
 
 中文:
 引理 of_comul
-  条件: {X : 类型v} [Ring X] [Bialgebra R X]
+  条件: {X : 类型v} [环 X] [双代数 R X]
   证明: rfl
 
 Depends on / 依赖: Coalgebra, Coalgebra.comul
@@ -131,7 +131,7 @@ lemma of_counit
 
 中文:
 引理 of_counit
-  条件: {X : 类型v} [Ring X] [Bialgebra R X]
+  条件: {X : 类型v} [环 X] [双代数 R X]
   证明: rfl
 
 Depends on / 依赖: Coalgebra, Coalgebra.counit, counit
@@ -152,8 +152,8 @@ structure Hom
     - toBialgHom' : V ->ₐc[R] W
 
 中文:
-结构 Hom
-  参数: (V W : BialgCat.{v} R)
+结构 态射
+  参数: (V W : Bialg范畴.{v} R)
   公理与运算 (1 个):
     - toBialgHom' : V ->ₐc[R] W
 -/
@@ -173,7 +173,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (BialgCat.{v} R) where
+  签名: : 范畴 (Bialg范畴.{v} R) where
   定义体: Hom X Y
   id X := ⟨BialgHom.id R X⟩
   comp f g := ⟨BialgHom.comp g.toBialgHom' f.toBialgHom'⟩
@@ -194,7 +194,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory (BialgCat.{v} R) (· ->ₐc[R] ·) where
+  签名: : 余ncrete范畴 (Bialg范畴.{v} R) (· ->ₐc[R] ·) where
   定义体: f.toBialgHom'
   ofHom f := ⟨f⟩
 
@@ -213,8 +213,8 @@ abbreviation Hom.toBialgHom
   body: ConcreteCategory.hom (C := BialgCat R) f
 
 中文:
-缩写 Hom.toBialgHom
-  签名: {X Y : BialgCat R} (f : Hom X Y)
+缩写 态射.toBialgHom
+  签名: {X Y : Bialg范畴 R} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := BialgCat R) f
 
 Depends on / 依赖: BialgCat, ConcreteCategory, ConcreteCategory.hom
@@ -232,7 +232,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [Ring X] [Ring Y]
+  签名: {X Y : 类型v} [环 X] [环 Y]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -251,8 +251,8 @@ lemma Hom.toBialgHom_injective
   proof: fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 中文:
-引理 Hom.toBialgHom_injective
-  条件: (V W : BialgCat.{v} R)
+引理 态射.toBialgHom_injective
+  条件: (V W : Bialg范畴.{v} R)
   证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
 -/
 lemma Hom.toBialgHom_injective (V W : BialgCat.{v} R) :
@@ -271,7 +271,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : BialgCat.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
+  条件: {X Y : Bialg范畴.{v} R} (f g : X ⟶ Y) (h : f.toBialgHom = g.toBialgHom)
   证明: Hom.ext h
 
 Depends on / 依赖: Hom.ext
@@ -290,7 +290,7 @@ theorem toBialgHom_comp
 
 中文:
 定理 toBialgHom_comp
-  条件: {X Y Z : BialgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : Bialg范畴.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 @[simp] theorem toBialgHom_comp {X Y Z : BialgCat.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -307,7 +307,7 @@ theorem toBialgHom_id
 
 中文:
 定理 toBialgHom_id
-  条件: {M : BialgCat.{v} R}
+  条件: {M : Bialg范畴.{v} R}
   证明: rfl
 -/
 @[simp] theorem toBialgHom_id {M : BialgCat.{v} R} :
@@ -327,7 +327,7 @@ instance hasForgetToAlgebra
 
 中文:
 实例 hasForgetToAlgebra
-  签名: : HasForget₂ (BialgCat R) (AlgCat R) where
+  签名: : 有Forget₂ (Bialg范畴 R) (Alg范畴 R) where
   定义体: { obj := fun X => AlgCat.of R X
       map := fun {X Y} f => AlgCat.ofHom f.toBialgHom }
 
@@ -353,7 +353,7 @@ theorem forget₂_algebra_obj
 
 中文:
 定理 forget₂_algebra_obj
-  条件: (X : BialgCat R)
+  条件: (X : Bialg范畴 R)
   证明: rfl
 
 @[simp]
@@ -373,7 +373,7 @@ theorem forget₂_algebra_map
 
 中文:
 定理 forget₂_algebra_map
-  条件: (X Y : BialgCat R) (f : X ⟶ Y)
+  条件: (X Y : Bialg范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_algebra_map (X Y : BialgCat R) (f : X ⟶ Y) :
@@ -393,7 +393,7 @@ instance hasForgetToCoalgebra
 
 中文:
 实例 hasForgetToCoalgebra
-  签名: : HasForget₂ (BialgCat R) (CoalgCat R) where
+  签名: : 有Forget₂ (Bialg范畴 R) (余alg范畴 R) where
   定义体: { obj := fun X => CoalgCat.of R X
       map := fun {_ _} f => CoalgCat.ofHom f.toBialgHom }
 
@@ -419,7 +419,7 @@ theorem forget₂_coalgebra_obj
 
 中文:
 定理 forget₂_coalgebra_obj
-  条件: (X : BialgCat R)
+  条件: (X : Bialg范畴 R)
   证明: rfl
 
 @[simp]
@@ -439,7 +439,7 @@ theorem forget₂_coalgebra_map
 
 中文:
 定理 forget₂_coalgebra_map
-  条件: (X Y : BialgCat R) (f : X ⟶ Y)
+  条件: (X Y : Bialg范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_coalgebra_map (X Y : BialgCat R) (f : X ⟶ Y) :
@@ -496,7 +496,7 @@ theorem toBialgIso_refl
 
 中文:
 定理 toBialgIso_refl
-  结论: toBialgIso (BialgEquiv.refl R X) = .refl _
+  结论: toBialgIso (Bialg等价.refl R X) = .refl _
   证明: rfl
 -/
 @[simp] theorem toBialgIso_refl : toBialgIso (BialgEquiv.refl R X) = .refl _ :=
@@ -651,7 +651,7 @@ instance BialgCat.forget_reflects_isos
     exact ⟨e.toBialgIso.isIso_hom.1⟩
 
 中文:
-实例 BialgCat.forget_reflects_isos
+实例 Bialg范畴.forget_reflects_isos
   签名: :
   定义体: by
     let i := asIso ((forget (BialgCat.{v} R)).map f)

@@ -173,7 +173,7 @@ return
 
 中文:
 定义 findContradictionWithNe
-  签名: (graph : Graph) (facts : Array AtomicFact)
+  签名: (graph : 图) (facts : 数组 AtomicFact)
   定义体: do
   let scc := graph.findSCCs
   for fact in facts do
@@ -216,7 +216,7 @@ return some mkApp proof pf
 
 中文:
 定义 findContradictionWithNle
-  签名: (g : Graph)
+  签名: (g : 图)
   定义体: do
   for fact in facts do
     if let .nle lhs rhs proof := fact then
@@ -247,7 +247,7 @@ definition updateGraphWithNltInfSup
 
 中文:
 定义 updateGraphWithNltInfSup
-  签名: (g : Graph)
+  签名: (g : 图)
   定义体: do
   let nltFacts := facts.filter fun fact => fact matches .nlt ..
   let mut usedNltFacts : Vector Bool _ := .replicate nltFacts.size false
@@ -314,7 +314,7 @@ let atomsMsg := String.intercalate "\n" Array.toList
 
 中文:
 定义 orderCoreImp
-  签名: (only? : 布尔) (hyps : Array Expr) (negGoal : Expr) (g : MVarId)
+  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr) (g : MVarId)
   定义体: do
   g.withContext do
     let TypeToFacts ← collectFacts only? hyps negGoal
@@ -383,7 +383,7 @@ definition orderCore
 
 中文:
 定义 orderCore
-  签名: (only? : 布尔) (hyps : Array Expr) (negGoal : Expr) (g : MVarId)
+  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr) (g : MVarId)
   定义体: (orderCoreImp only? hyps negGoal g).run .reducible
 
 Depends on / 依赖: negGoal, orderCoreImp, reducible

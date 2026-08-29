@@ -29,8 +29,8 @@ theorem IsUltrametricDist.of_normedAlgebra'
     simpa using h.dist_triangle_max (algebraMap K L x) (algebraMap K L y) (algebraMap K L z)⟩
 
 中文:
-定理 IsUltrametricDist.of_normedAlgebra'
-  结论: [SeminormedRing L] [NormOneClass L] [NormedAlgebra K L]
+定理 是UltrametricDist.of_normedAlgebra'
+  结论: [Seminormed环 L] [NormOne类 L] [赋范代数 K L]
   证明: ⟨fun x y z => by
     simpa using h.dist_triangle_max (algebraMap K L x) (algebraMap K L y) (algebraMap K L z)⟩
 
@@ -53,8 +53,8 @@ theorem IsUltrametricDist.of_normedAlgebra
   exact fun n => (algebraMap.coe_natCast (R := K) (A := L) n) ▸ norm_algebraMap' L (n : K) ▸ h n
 
 中文:
-定理 IsUltrametricDist.of_normedAlgebra
-  结论: [NormedDivisionRing L] [NormedAlgebra K L]
+定理 是UltrametricDist.of_normedAlgebra
+  结论: [NormedDivision环 L] [赋范代数 K L]
   证明: by
   rw [isUltrametricDist_iff_forall_norm_natCast_le_one] at h ⊢
   exact fun n => (algebraMap.coe_natCast (R := K) (A := L) n) ▸ norm_algebraMap' L (n : K) ▸ h n
@@ -76,8 +76,8 @@ theorem IsUltrametricDist.normedAlgebra_iff
   proof: ⟨fun _ => IsUltrametricDist.of_normedAlgebra' L, fun _ => IsUltrametricDist.of_normedAlgebra K⟩
 
 中文:
-定理 IsUltrametricDist.normedAlgebra_iff
-  条件: [NormedDivisionRing L] [NormedAlgebra K L]
+定理 是UltrametricDist.normedAlgebra_iff
+  条件: [NormedDivision环 L] [赋范代数 K L]
   证明: ⟨fun _ => IsUltrametricDist.of_normedAlgebra' L, fun _ => IsUltrametricDist.of_normedAlgebra K⟩
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.of_normedAlgebra, of_normedAlgebra

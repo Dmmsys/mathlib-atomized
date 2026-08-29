@@ -40,8 +40,8 @@ definition Ideal.closure
 @[simp]
 
 中文:
-定义 Ideal.closure
-  签名: (I : Ideal R)
+定义 理想.closure
+  签名: (I : 理想 R)
   定义体: {
     AddSubmonoid.topologicalClosure
       I.toAddSubmonoid with
@@ -68,9 +68,9 @@ theorem Ideal.coe_closure
   proof: rfl
 
 中文:
-定理 Ideal.coe_closure
-  条件: (I : Ideal R)
-  结论: (I.closure : Set R) = closure I
+定理 理想.coe_closure
+  条件: (I : 理想 R)
+  结论: (I.closure : 集合 R) = closure I
   证明: rfl
 -/
 theorem Ideal.coe_closure (I : Ideal R) : (I.closure : Set R) = closure I :=
@@ -86,8 +86,8 @@ theorem Ideal.closure_eq_of_isClosed
   proof: SetLike.ext' hI.closure_eq
 
 中文:
-定理 Ideal.closure_eq_of_isClosed
-  条件: (I : Ideal R) (hI : IsClosed (I : Set R))
+定理 理想.closure_eq_of_isClosed
+  条件: (I : 理想 R) (hI : 是闭集 (I : 集合 R))
   结论: I.closure = I
   证明: SetLike.ext' hI.closure_eq
 
@@ -112,8 +112,8 @@ definition Ideal.connectedComponentOfZero
 @[simp]
 
 中文:
-定义 Ideal.connectedComponentOfZero
-  签名: : Ideal R where
+定义 理想.connectedComponentOfZero
+  签名: : 理想 R where
   定义体: AddSubgroup.connectedComponentOfZero R
   smul_mem' c x h := IsConnected.subset_connectedComponent
     (isConnected_connectedComponent.image _ (continuous_const_mul c).continuousOn)
@@ -138,7 +138,7 @@ theorem Ideal.coe_connectedComponentOfZero
   proof: rfl
 
 中文:
-定理 Ideal.coe_connectedComponentOfZero
+定理 理想.coe_connectedComponentOfZero
   证明: rfl
 -/
 theorem Ideal.coe_connectedComponentOfZero :
@@ -163,7 +163,7 @@ instance topologicalRingQuotientTopology
 
 中文:
 实例 topologicalRingQuotientTopology
-  签名: : TopologicalSpace (R ⧸ N)
+  签名: : 拓扑空间 (R ⧸ N)
   定义体: instTopologicalSpaceQuotient
 
 Depends on / 依赖: instTopologicalSpaceQuotient
@@ -184,7 +184,7 @@ theorem QuotientRing.isOpenMap_coe
 
 中文:
 定理 QuotientRing.isOpenMap_coe
-  结论: IsOpenMap (mk N)
+  结论: 是开映射 (mk N)
   证明: QuotientAddGroup.isOpenMap_coe
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.isOpenMap_coe, isOpenMap_coe
@@ -202,7 +202,7 @@ theorem QuotientRing.isOpenQuotientMap_mk
 
 中文:
 定理 QuotientRing.isOpenQuotientMap_mk
-  结论: IsOpenQuotientMap (mk N)
+  结论: 是OpenQuotient映射 (mk N)
   证明: QuotientAddGroup.isOpenQuotientMap_mk
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.isOpenQuotientMap_mk, isOpenQuotientMap_mk
@@ -220,7 +220,7 @@ theorem QuotientRing.isQuotientMap_coe_coe
 
 中文:
 定理 QuotientRing.isQuotientMap_coe_coe
-  结论: IsQuotientMap fun p : R × R => (mk N p.1, mk N p.2)
+  结论: 是商映射 fun p : R × R => (mk N p.1, mk N p.2)
   证明: ((isOpenQuotientMap_mk N).prodMap (isOpenQuotientMap_mk N)).isQuotientMap
 
 Depends on / 依赖: isOpenQuotientMap_mk, isQuotientMap, prodMap
@@ -240,7 +240,7 @@ continuous_mul := (QuotientRing.isQuotientMap_coe_coe N).continuous_iff.2
 
 中文:
 实例 topologicalRing_quotient
-  签名: : IsTopologicalRing (R ⧸ N) where
+  签名: : 是拓扑环 (R ⧸ N) where
   定义体: QuotientAddGroup.instIsTopologicalAddGroup _
 continuous_mul := (QuotientRing.isQuotientMap_coe_coe N).continuous_iff.2
     continuous_quot_mk.comp continuous_mul
@@ -261,8 +261,8 @@ instance [CompactSpace
   body: Quotient.compactSpace
 
 中文:
-实例 [CompactSpace
-  签名: R] : CompactSpace (R ⧸ N)
+实例 [紧空间
+  签名: R] : 紧空间 (R ⧸ N)
   定义体: Quotient.compactSpace
 
 Depends on / 依赖: Quotient, Quotient.compactSpace, compactSpace

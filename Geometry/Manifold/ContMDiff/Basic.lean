@@ -70,7 +70,7 @@ theorem ContMDiffWithinAt.comp
 
 中文:
 定理 ContMDiffWithinAt.comp
-  结论: {t : Set M'} {g : M' -> M''} (x : M)
+  结论: {t : 集合 M'} {g : M' -> M''} (x : M)
   证明: by
   rw [contMDiffWithinAt_iff] at hg hf ⊢
   refine ⟨hg.1.comp hf.1 st, ?_⟩
@@ -122,7 +122,7 @@ theorem ContMDiffWithinAt.comp_of_eq
 
 中文:
 定理 ContMDiffWithinAt.comp_of_eq
-  结论: {t : Set M'} {g : M' -> M''} {x : M} {y : M'}
+  结论: {t : 集合 M'} {g : M' -> M''} {x : M} {y : M'}
   证明: by
   subst hx; exact hg.comp x hf st
 
@@ -144,7 +144,7 @@ theorem ContMDiffOn.comp
 
 中文:
 定理 ContMDiffOn.comp
-  结论: {t : Set M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
+  结论: {t : 集合 M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
   证明: fun x hx =>
   (hg _ (st hx)).comp x (hf x hx) st
 -/
@@ -162,7 +162,7 @@ theorem ContMDiffOn.comp'
 
 中文:
 定理 ContMDiffOn.comp'
-  结论: {t : Set M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
+  结论: {t : 集合 M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
   证明: hg.comp (hf.mono inter_subset_left) inter_subset_right
 
 Depends on / 依赖: hf.mono, hg.comp, inter_subset_left, inter_subset_right
@@ -205,7 +205,7 @@ theorem ContMDiffWithinAt.comp'
 
 中文:
 定理 ContMDiffWithinAt.comp'
-  结论: {t : Set M'} {g : M' -> M''} (x : M)
+  结论: {t : 集合 M'} {g : M' -> M''} (x : M)
   证明: hg.comp x (hf.mono inter_subset_left) inter_subset_right
 
 Depends on / 依赖: hf.mono, hg.comp, inter_subset_left, inter_subset_right
@@ -293,7 +293,7 @@ theorem ContMDiff.comp_contMDiffOn
 
 中文:
 定理 ContMDiff.comp_contMDiffOn
-  结论: {f : M -> M'} {g : M' -> M''} {s : Set M}
+  结论: {f : M -> M'} {g : M' -> M''} {s : 集合 M}
   证明: hg.contMDiffOn.comp hf Set.subset_preimage_univ
 
 Depends on / 依赖: Set.subset_preimage_univ, contMDiffOn, hg.contMDiffOn.comp, subset_preimage_univ
@@ -312,7 +312,7 @@ theorem ContMDiffOn.comp_contMDiff
 
 中文:
 定理 ContMDiffOn.comp_contMDiff
-  结论: {t : Set M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
+  结论: {t : 集合 M'} {g : M' -> M''} (hg : ContMDiffOn I' I'' n g t)
   证明: contMDiffOn_univ.mp hg.comp hf.contMDiffOn fun x _ => ht x
 
 Depends on / 依赖: contMDiffOn, contMDiffOn_univ, contMDiffOn_univ.mp, hf.contMDiffOn, hg.comp
@@ -508,7 +508,7 @@ theorem contMDiff_one
 
 中文:
 定理 contMDiff_one
-  条件: [One M']
+  条件: [幺 M']
   结论: ContMDiff I I' n (1 : M -> M')
   证明: by
   simp only [Pi.one_def, contMDiff_const]
@@ -552,7 +552,7 @@ theorem contMDiffOn_one
 
 中文:
 定理 contMDiffOn_one
-  条件: [One M']
+  条件: [幺 M']
   结论: ContMDiffOn I I' n (1 : M -> M') s
   证明: contMDiff_one.contMDiffOn
 
@@ -595,7 +595,7 @@ theorem contMDiffAt_one
 
 中文:
 定理 contMDiffAt_one
-  条件: [One M']
+  条件: [幺 M']
   结论: ContMDiffAt I I' n (1 : M -> M') x
   证明: contMDiff_one.contMDiffAt
 
@@ -640,7 +640,7 @@ theorem contMDiffWithinAt_one
 
 中文:
 定理 contMDiffWithinAt_one
-  条件: [One M']
+  条件: [幺 M']
   结论: ContMDiffWithinAt I I' n (1 : M -> M') s x
   证明: contMDiffAt_const.contMDiffWithinAt
 
@@ -668,7 +668,7 @@ theorem contMDiff_of_subsingleton
 
 中文:
 定理 contMDiff_of_subsingleton
-  条件: [Subsingleton M']
+  条件: [子单例 M']
   结论: ContMDiff I I' n f
   证明: by
   intro x
@@ -698,7 +698,7 @@ theorem contMDiffAt_of_subsingleton
 
 中文:
 定理 contMDiffAt_of_subsingleton
-  条件: [Subsingleton M']
+  条件: [子单例 M']
   结论: ContMDiffAt I I' n f x
   证明: contMDiff_of_subsingleton.contMDiffAt
 
@@ -723,7 +723,7 @@ theorem contMDiffWithinAt_of_subsingleton
 
 中文:
 定理 contMDiffWithinAt_of_subsingleton
-  条件: [Subsingleton M']
+  条件: [子单例 M']
   结论: ContMDiffWithinAt I I' n f s x
   证明: contMDiffAt_of_subsingleton.contMDiffWithinAt
 
@@ -746,7 +746,7 @@ theorem contMDiffOn_of_subsingleton
 
 中文:
 定理 contMDiffOn_of_subsingleton
-  条件: [Subsingleton M']
+  条件: [子单例 M']
   结论: ContMDiffOn I I' n f s
   证明: contMDiff_of_subsingleton.contMDiffOn
 
@@ -769,7 +769,7 @@ lemma contMDiff_of_discreteTopology
 
 中文:
 引理 contMDiff_of_discreteTopology
-  条件: [DiscreteTopology M]
+  条件: [离散拓扑 M]
   证明: by
   intro x
   -- f is locally constant, and constant functions are smooth.
@@ -807,7 +807,7 @@ theorem contMDiff_of_mulTSupport
 
 中文:
 定理 contMDiff_of_mulTSupport
-  结论: [One M'] {f : M -> M'}
+  结论: [幺 M'] {f : M -> M'}
   证明: by
   intro x
   by_cases hx : x in mulTSupport f
@@ -841,7 +841,7 @@ theorem contMDiffWithinAt_of_notMem_mulTSupport
 
 中文:
 定理 contMDiffWithinAt_of_notMem_mulTSupport
-  结论: {f : M -> M'} [One M'] {x : M}
+  结论: {f : M -> M'} [幺 M'] {x : M}
   证明: by
   apply contMDiffWithinAt_const.congr_of_eventuallyEq
     (eventually_nhdsWithin_of_eventually_nhds <| notMem_mulTSupport_iff_eventuallyEq.mp hx)
@@ -867,7 +867,7 @@ theorem contMDiffAt_of_notMem_mulTSupport
 
 中文:
 定理 contMDiffAt_of_notMem_mulTSupport
-  结论: {f : M -> M'} [One M'] {x : M}
+  结论: {f : M -> M'} [幺 M'] {x : M}
   证明: contMDiffWithinAt_of_notMem_mulTSupport hx n univ
 
 Depends on / 依赖: contMDiffWithinAt_of_notMem_mulTSupport
@@ -997,7 +997,7 @@ lemma contMDiffOn_union_iff_of_isOpen
 
 中文:
 引理 contMDiffOn_union_iff_of_isOpen
-  条件: (hs : IsOpen s) (ht : IsOpen t)
+  条件: (hs : 是开集 s) (ht : 是开集 t)
   证明: ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right⟩,
    fun ⟨hfs, hft⟩ => ContMDiffOn.union_of_isOpen hfs hft hs ht⟩
 
@@ -1045,7 +1045,7 @@ lemma ContMDiffOn.iUnion_of_isOpen
 
 中文:
 引理 ContMDiffOn.iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set M}
+  结论: {ι : 类型} {s : ι -> 集合 M}
   证明: by
   rintro x ⟨si, ⟨i, rfl⟩, hxsi⟩
 .contMDiffWithinAt exact (hf i).contMDiffAt ((hs i).mem_nhds hxsi)
@@ -1069,7 +1069,7 @@ lemma contMDiffOn_iUnion_iff_of_isOpen
 
 中文:
 引理 contMDiffOn_iUnion_iff_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set M}
+  结论: {ι : 类型} {s : ι -> 集合 M}
   证明: ⟨fun h i => h.mono subset_iUnion_of_subset i fun _ a => a,
    fun h => ContMDiffOn.iUnion_of_isOpen h hs⟩
 
@@ -1093,7 +1093,7 @@ lemma contMDiff_of_contMDiffOn_iUnion_of_isOpen
 
 中文:
 引理 contMDiff_of_contMDiffOn_iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set M}
+  结论: {ι : 类型} {s : ι -> 集合 M}
   证明: by
   rw [← contMDiffOn_univ]; rw [← hs']
   exact ContMDiffOn.iUnion_of_isOpen hf hs
@@ -1175,7 +1175,7 @@ theorem ContMDiff.extend_one
 
 中文:
 定理 ContMDiff.extend_one
-  结论: [T2Space M] [One M'] {n : 自然数∞ω} {U : Opens M} {f : U -> M'}
+  结论: [T2空间 M] [幺 M'] {n : 自然数∞ω} {U : Opens M} {f : U -> M'}
   证明: fun x => by
   refine contMDiff_of_mulTSupport (fun x h => ?_) _
   lift x to U using Subtype.coe_image_subset _ _
@@ -1232,7 +1232,7 @@ lemma ContMDiffWithinAt.subtypeVal_comp_iff
 
 中文:
 引理 ContMDiffWithinAt.subtypeVal_comp_iff
-  结论: (U : TopologicalSpace.Opens M') (f : M -> U) (s : Set M)
+  结论: (U : 拓扑空间.Opens M') (f : M -> U) (s : 集合 M)
   证明: ChartedSpace.liftPropWithinAt_subtypeVal_comp_iff ..
 
 @[simp]
@@ -1258,7 +1258,7 @@ lemma ContMDiffAt.subtypeVal_comp_iff
 
 中文:
 引理 ContMDiffAt.subtypeVal_comp_iff
-  条件: (U : TopologicalSpace.Opens M') (f : M -> U) (x : M)
+  条件: (U : 拓扑空间.Opens M') (f : M -> U) (x : M)
   证明: by
   rw [ContMDiffAt]; rw [ContMDiffAt]; rw [ContMDiffWithinAt.subtypeVal_comp_iff]
 
@@ -1282,7 +1282,7 @@ lemma ContMDiff.subtypeVal_comp_iff
 
 中文:
 引理 ContMDiff.subtypeVal_comp_iff
-  条件: (U : TopologicalSpace.Opens M') (f : M -> U)
+  条件: (U : 拓扑空间.Opens M') (f : M -> U)
   证明: by
   simp_rw [ContMDiff, ContMDiffAt.subtypeVal_comp_iff]
 
@@ -1318,7 +1318,7 @@ lemma contMDiff_isOpenEmbedding
 
 中文:
 引理 contMDiff_isOpenEmbedding
-  条件: [Nonempty M]
+  条件: [非空 M]
   证明: h.singletonChartedSpace; ContMDiff I I n e := by
   have := h.isManifold_singleton (I := I) (n := ω)
   rw [@contMDiff_iff _ _ _ _ _ _ _ _ _ _ h.singletonChartedSpace]
@@ -1369,7 +1369,7 @@ lemma contMDiffOn_isOpenEmbedding_symm
 
 中文:
 引理 contMDiffOn_isOpenEmbedding_symm
-  条件: [Nonempty M]
+  条件: [非空 M]
   证明: h.singletonChartedSpace; ContMDiffOn I I
       n (IsOpenEmbedding.toOpenPartialHomeomorph e h).symm (range e) := by
   have := h.isManifold_singleton (I := I) (n := ω)

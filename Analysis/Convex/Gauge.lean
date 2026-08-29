@@ -61,7 +61,7 @@ definition gauge
 
 中文:
 定义 gauge
-  签名: (s : Set E) (x : E)
+  签名: (s : 集合 E) (x : E)
   定义体: sInf { r : Real | 0 < r ∧ x in r • s }
 -/
 def gauge (s : Set E) (x : E) : Real :=
@@ -79,7 +79,7 @@ theorem gauge_def
 
 中文:
 定理 gauge_def
-  结论: gauge s x = sInf ({ r in Set.Ioi (0 : 实数) | x in r • s })
+  结论: gauge s x = sInf ({ r in 集合.左开右无界区间 (0 : 实数) | x in r • s })
   证明: rfl
 -/
 theorem gauge_def : gauge s x = sInf ({ r in Set.Ioi (0 : Real) | x in r • s }) :=
@@ -97,7 +97,7 @@ theorem gauge_def'
 
 中文:
 定理 gauge_def'
-  结论: gauge s x = sInf {r in Set.Ioi (0 : 实数) | r⁻¹ • x in s}
+  结论: gauge s x = sInf {r in 集合.左开右无界区间 (0 : 实数) | r⁻¹ • x in s}
   证明: by
   congrm sInf {r | ?_}
   exact and_congr_right fun hr => mem_smul_set_iff_inv_smul_mem₀ hr.ne' _ _
@@ -182,7 +182,7 @@ theorem exists_lt_of_gauge_lt
   exact ⟨b, hb, hba, hx⟩
 
 中文:
-定理 exists_lt_of_gauge_lt
+定理 存在_lt_of_gauge_lt
   条件: (absorbs : Absorbent 实数 s) (h : gauge s x < a)
   证明: by
   obtain ⟨b, ⟨hb, hx⟩, hba⟩ := exists_lt_of_csInf_lt absorbs.gauge_set_nonempty h
@@ -249,7 +249,7 @@ theorem gauge_zero'
 
 中文:
 定理 gauge_zero'
-  结论: gauge (0 : Set E) = 0
+  结论: gauge (0 : 集合 E) = 0
   证明: by
   ext x
   rw [gauge_def']
@@ -283,7 +283,7 @@ theorem gauge_empty
 
 中文:
 定理 gauge_empty
-  结论: gauge (∅ : Set E) = 0
+  结论: gauge (∅ : 集合 E) = 0
   证明: by
   ext
   simp only [gauge_def', Real.sInf_empty, mem_empty_iff_false, Pi.zero_apply, sep_false]
@@ -453,7 +453,7 @@ theorem setOfPred_gauge_le_eq
 
 中文:
 定理 setOfPred_gauge_le_eq
-  结论: (hs₁ : Convex 实数 s) (hs₀ : (0 : E) in s) (hs₂ : Absorbent 实数 s)
+  结论: (hs₁ : 凸 实数 s) (hs₀ : (0 : E) in s) (hs₂ : Absorbent 实数 s)
   证明: by
   ext x
   simp_rw [Set.mem_iInter, Set.mem_ofPred_eq]
@@ -626,7 +626,7 @@ alias gauge_lt_one_subset_self :=
 
 中文:
 定理 setOfPred_gauge_lt_one_subset_self
-  结论: (hs : Convex 实数 s) (h₀ : (0 : E) in s)
+  结论: (hs : 凸 实数 s) (h₀ : (0 : E) in s)
   证明: fun _x hx =>
   let ⟨_y, hys, hx⟩ := mem_openSegment_of_gauge_lt_one absorbs hx
   hs.openSegment_subset h₀ hys hx
@@ -685,7 +685,7 @@ gaug
 
 中文:
 定理 gauge_add_le
-  条件: (hs : Convex 实数 s) (absorbs : Absorbent 实数 s) (x y : E)
+  条件: (hs : 凸 实数 s) (absorbs : Absorbent 实数 s) (x y : E)
   证明: by
   refine le_of_forall_pos_lt_add fun ε hε => ?_
   obtain ⟨a, ha, ha', x, hx, rfl⟩ :=
@@ -720,7 +720,7 @@ theorem gauge_sum_le
 
 中文:
 定理 gauge_sum_le
-  结论: {ι : 类型} (hs : Convex 实数 s) (absorbs : Absorbent 实数 s) (t : Finset ι)
+  结论: {ι : 类型} (hs : 凸 实数 s) (absorbs : Absorbent 实数 s) (t : 有限集 ι)
   证明: Finset.le_sum_of_subadditive _ gauge_zero.le (gauge_add_le hs absorbs) _ _
 
 Depends on / 依赖: Finset, Finset.le_sum_of_subadditive, absorbs, gauge_add_le, gauge_zero, gauge_zero.le, le_sum_of_subadditive
@@ -782,8 +782,8 @@ exact eq_empty_iff_forall_notMem.2 fun x hx => ha (gauge_nonneg _).trans hx
 alias C
 
 中文:
-定理 Convex.setOfPred_gauge_le
-  结论: (hs : Convex 实数 s) (h₀ : (0 : E) in s) (absorbs : Absorbent 实数 s)
+定理 凸.setOfPred_gauge_le
+  结论: (hs : 凸 实数 s) (h₀ : (0 : E) in s) (absorbs : Absorbent 实数 s)
   证明: by
   by_cases ha : 0 <= a
   · rw [setOfPred_gauge_le_eq hs h₀ absorbs ha]
@@ -896,7 +896,7 @@ theorem gauge_smul_of_nonneg
 
 中文:
 定理 gauge_smul_of_nonneg
-  结论: [MulActionWithZero α E] [IsScalarTower α 实数 (Set E)] {s : Set E} {a : α}
+  结论: [带零乘法作用 α E] [标量塔 α 实数 (集合 E)] {s : 集合 E} {a : α}
   证明: by
   obtain rfl | ha' := ha.eq_or_lt
   · rw [zero_smul, gauge_zero, zero_smul]
@@ -953,7 +953,7 @@ theorem gauge_smul_left_of_nonneg
 
 中文:
 定理 gauge_smul_left_of_nonneg
-  结论: [MulActionWithZero α E] [SMulCommClass α 实数 实数]
+  结论: [带零乘法作用 α E] [标量交换类 α 实数 实数]
   证明: by
   obtain rfl | ha' := ha.eq_or_lt
   · rw [inv_zero, zero_smul, gauge_of_subset_zero (zero_smul_set_subset _)]
@@ -1005,7 +1005,7 @@ theorem gauge_smul_left
 
 中文:
 定理 gauge_smul_left
-  结论: [Module α E] [SMulCommClass α 实数 实数] [IsScalarTower α 实数 实数]
+  结论: [模 α E] [标量交换类 α 实数 实数] [标量塔 α 实数 实数]
   证明: by
   rw [← gauge_smul_left_of_nonneg (abs_nonneg a)]
   obtain h | h := abs_choice a
@@ -1116,7 +1116,7 @@ theorem comap_gauge_nhds_zero_le
 
 中文:
 定理 comap_gauge_nhds_zero_le
-  条件: (ha : Absorbent 实数 s) (hb : Bornology.IsVonNBounded 实数 s)
+  条件: (ha : Absorbent 实数 s) (hb : 有界结构.IsVonNBounded 实数 s)
   证明: fun u hu => by
   rcases (hb hu).exists_pos with ⟨r, hr₀, hr⟩
   filter_upwards [preimage_mem_comap (gt_mem_nhds (inv_pos.2 hr₀))] with x (hx : gauge s x < r⁻¹)
@@ -1152,7 +1152,7 @@ theorem gauge_eq_zero
 
 中文:
 定理 gauge_eq_zero
-  条件: (hs : Absorbent 实数 s) (hb : Bornology.IsVonNBounded 实数 s)
+  条件: (hs : Absorbent 实数 s) (hb : 有界结构.IsVonNBounded 实数 s)
   证明: by
   refine ⟨fun h₀ => by_contra fun (hne : x != 0) => ?_, fun h => h.symm ▸ gauge_zero⟩
   have : {x}ᶜ in comap (gauge s) (𝓝 0) :=
@@ -1181,7 +1181,7 @@ theorem gauge_pos
 
 中文:
 定理 gauge_pos
-  条件: (hs : Absorbent 实数 s) (hb : Bornology.IsVonNBounded 实数 s)
+  条件: (hs : Absorbent 实数 s) (hb : 有界结构.IsVonNBounded 实数 s)
   证明: by
   simp only [(gauge_nonneg _).lt_iff_ne', Ne, gauge_eq_zero hs hb]
 
@@ -1215,7 +1215,7 @@ theorem interior_subset_gauge_lt_one
 
 中文:
 定理 interior_subset_gauge_lt_one
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: interior s subseteq { x | gauge s x < 1 }
   证明: by
   intro x hx
@@ -1255,7 +1255,7 @@ alias setOf_gauge_lt_one_eq_self_of_isOpen := setOfPred_gauge_lt_one_eq_se
 
 中文:
 定理 setOfPred_gauge_lt_one_eq_self_of_isOpen
-  结论: (hs₁ : Convex 实数 s) (hs₀ : (0 : E) in s)
+  结论: (hs₁ : 凸 实数 s) (hs₀ : (0 : E) in s)
   证明: by
   refine (setOfPred_gauge_lt_one_subset_self hs₁ ‹_› <| absorbent_nhds_zero <|
     hs₂.mem_nhds hs₀).antisymm ?_
@@ -1290,7 +1290,7 @@ theorem gauge_lt_one_of_mem_of_isOpen
 
 中文:
 定理 gauge_lt_one_of_mem_of_isOpen
-  条件: (hs₂ : IsOpen s) {x : E} (hx : x in s)
+  条件: (hs₂ : 是开集 s) {x : E} (hx : x in s)
   证明: interior_subset_gauge_lt_one s by rwa [hs₂.interior_eq]
 
 Depends on / 依赖: interior_eq, interior_subset_gauge_lt_one
@@ -1313,7 +1313,7 @@ theorem gauge_lt_of_mem_smul
 
 中文:
 定理 gauge_lt_of_mem_smul
-  条件: (x : E) (ε : 实数) (hε : 0 < ε) (hs₂ : IsOpen s) (hx : x in ε • s)
+  条件: (x : E) (ε : 实数) (hε : 0 < ε) (hs₂ : 是开集 s) (hx : x in ε • s)
   证明: by
   have : ε⁻¹ • x in s := by rwa [← mem_smul_set_iff_inv_smul_mem₀ hε.ne']
   have h_gauge_lt := gauge_lt_one_of_mem_of_isOpen hs₂ this
@@ -1345,7 +1345,7 @@ theorem mem_closure_of_gauge_le_one
 
 中文:
 定理 mem_closure_of_gauge_le_one
-  结论: (hc : Convex 实数 s) (hs₀ : 0 in s) (ha : Absorbent 实数 s)
+  结论: (hc : 凸 实数 s) (hs₀ : 0 in s) (ha : Absorbent 实数 s)
   证明: by
   have : forallᶠ r : Real in 𝓝[<] 1, r • x in s := by
     filter_upwards [Ico_mem_nhdsLT one_pos] with r ⟨hr₀, hr₁⟩
@@ -1378,7 +1378,7 @@ theorem mem_frontier_of_gauge_eq_one
 
 中文:
 定理 mem_frontier_of_gauge_eq_one
-  结论: (hc : Convex 实数 s) (hs₀ : 0 in s) (ha : Absorbent 实数 s)
+  结论: (hc : 凸 实数 s) (hs₀ : 0 in s) (ha : Absorbent 实数 s)
   证明: ⟨mem_closure_of_gauge_le_one hc hs₀ ha h.le, fun h' =>
     (interior_subset_gauge_lt_one s h').out.ne h⟩
 
@@ -1405,7 +1405,7 @@ theorem tendsto_gauge_nhds_zero_nhdsGE
 中文:
 定理 tendsto_gauge_nhds_zero_nhdsGE
   条件: (hs : s in 𝓝 0)
-  结论: Tendsto (gauge s) (𝓝 0) (𝓝[>=] 0)
+  结论: 收敛 (gauge s) (𝓝 0) (𝓝[>=] 0)
   证明: by
   refine nhdsGE_basis_Icc.tendsto_right_iff.2 fun ε hε => ?_
   rw [← set_smul_mem_nhds_zero_iff hε.ne'] at hs
@@ -1432,7 +1432,7 @@ theorem tendsto_gauge_nhds_zero
 中文:
 定理 tendsto_gauge_nhds_zero
   条件: (hs : s in 𝓝 0)
-  结论: Tendsto (gauge s) (𝓝 0) (𝓝 0)
+  结论: 收敛 (gauge s) (𝓝 0) (𝓝 0)
   证明: (tendsto_gauge_nhds_zero_nhdsGE hs).mono_right inf_le_left
 
 Depends on / 依赖: inf_le_left, mono_right, tendsto_gauge_nhds_zero_nhdsGE
@@ -1476,7 +1476,7 @@ theorem comap_gauge_nhds_zero
 
 中文:
 定理 comap_gauge_nhds_zero
-  条件: (hb : Bornology.IsVonNBounded 实数 s) (h₀ : s in 𝓝 0)
+  条件: (hb : 有界结构.IsVonNBounded 实数 s) (h₀ : s in 𝓝 0)
   证明: (comap_gauge_nhds_zero_le (absorbent_nhds_zero h₀) hb).antisymm
     (tendsto_gauge_nhds_zero h₀).le_comap
 
@@ -1512,7 +1512,7 @@ theorem continuousAt_gauge
 
 中文:
 定理 continuousAt_gauge
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   结论: ContinuousAt (gauge s) x
   证明: by
   have ha : Absorbent Real s := absorbent_nhds_zero hs₀
@@ -1557,8 +1557,8 @@ theorem continuous_gauge
 
 中文:
 定理 continuous_gauge
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
-  结论: Continuous (gauge s)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
+  结论: 连续 (gauge s)
   证明: continuous_iff_continuousAt.2 fun _ => continuousAt_gauge hc hs₀
 
 Depends on / 依赖: continuousAt_gauge, continuous_iff_continuousAt
@@ -1581,7 +1581,7 @@ theorem setOfPred_gauge_lt_one_eq_interior
 
 中文:
 定理 setOfPred_gauge_lt_one_eq_interior
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: by
   refine Subset.antisymm (fun x hx => ?_) (interior_subset_gauge_lt_one s)
   rcases mem_openSegment_of_gauge_lt_one (absorbent_nhds_zero hs₀) hx with ⟨y, hys, hxy⟩
@@ -1613,7 +1613,7 @@ theorem gauge_lt_one_iff_mem_interior
 
 中文:
 定理 gauge_lt_one_iff_mem_interior
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: Set.ext_iff.1 (setOfPred_gauge_lt_one_eq_interior hc hs₀) _
 
 Depends on / 依赖: Set.ext_iff, ext_iff, setOfPred_gauge_lt_one_eq_interior
@@ -1634,7 +1634,7 @@ theorem gauge_le_one_iff_mem_closure
 
 中文:
 定理 gauge_le_one_iff_mem_closure
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: ⟨mem_closure_of_gauge_le_one hc (mem_of_mem_nhds hs₀) (absorbent_nhds_zero hs₀), fun h =>
     le_on_closure (fun _ => gauge_le_one_of_mem) (continuous_gauge hc hs₀).continuousOn
       continuousOn_const h⟩
@@ -1659,7 +1659,7 @@ theorem gauge_eq_one_iff_mem_frontier
 
 中文:
 定理 gauge_eq_one_iff_mem_frontier
-  条件: (hc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  条件: (hc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: by
   rw [eq_iff_le_not_lt]; rw [gauge_le_one_iff_mem_closure hc hs₀]; rw [gauge_lt_one_iff_mem_interior hc hs₀]
   rfl
@@ -1689,7 +1689,7 @@ definition gaugeSeminorm
 
 中文:
 定义 gaugeSeminorm
-  签名: (hs₀ : Balanced 𝕜 s) (hs₁ : Convex 实数 s) (hs₂ : Absorbent 实数 s)
+  签名: (hs₀ : Balanced 𝕜 s) (hs₁ : 凸 实数 s) (hs₂ : Absorbent 实数 s)
   定义体: Seminorm.of (gauge s) (gauge_add_le hs₁ hs₂) (gauge_smul hs₀)
 
 Depends on / 依赖: Seminorm, Seminorm.of, gauge_add_le, gauge_smul
@@ -1710,7 +1710,7 @@ theorem gaugeSeminorm_lt_one_of_isOpen
 
 中文:
 定理 gaugeSeminorm_lt_one_of_isOpen
-  条件: (hs : IsOpen s) {x : E} (hx : x in s)
+  条件: (hs : 是开集 s) {x : E} (hx : x in s)
   证明: gauge_lt_one_of_mem_of_isOpen hs hx
 
 Depends on / 依赖: gauge_lt_one_of_mem_of_isOpen
@@ -1732,7 +1732,7 @@ theorem gaugeSeminorm_ball_one
 
 中文:
 定理 gaugeSeminorm_ball_one
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   结论: (gaugeSeminorm hs₀ hs₁ hs₂).ball 0 1 = s
   证明: by
   rw [Seminorm.ball_zero_eq]
@@ -1765,8 +1765,8 @@ theorem Seminorm.gauge_ball
     refine hp.subset ⟨hpx₂, (2 * p x)⁻¹ • 
 
 中文:
-定理 Seminorm.gauge_ball
-  条件: (p : Seminorm 实数 E)
+定理 半范数.gauge_ball
+  条件: (p : 半范数 实数 E)
   结论: gauge (p.ball 0 1) = p
   证明: by
   ext x
@@ -1806,8 +1806,8 @@ theorem Seminorm.gaugeSeminorm_ball
   proof: DFunLike.coe_injective p.gauge_ball
 
 中文:
-定理 Seminorm.gaugeSeminorm_ball
-  条件: (p : Seminorm 实数 E)
+定理 半范数.gaugeSeminorm_ball
+  条件: (p : 半范数 实数 E)
   证明: DFunLike.coe_injective p.gauge_ball
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, gauge_ball, p.gauge_ball
@@ -1904,7 +1904,7 @@ theorem gauge_closure_zero
 
 中文:
 定理 gauge_closure_zero
-  结论: gauge (closure (0 : Set E)) = 0
+  结论: gauge (closure (0 : 集合 E)) = 0
   证明: funext fun x => by
   simp only [← singleton_zero, gauge_def', mem_closure_zero_iff_norm, norm_smul, mul_eq_zero,
     norm_eq_zero, inv_eq_zero]
@@ -2013,8 +2013,8 @@ theorem Convex.lipschitzWith_gauge
       _ <= gauge s y + ‖x - y‖ / r := by grw [ga
 
 中文:
-定理 Convex.lipschitzWith_gauge
-  结论: {r : 实数>=0} (hc : Convex 实数 s) (hr : 0 < r)
+定理 凸.lipschitzWith_gauge
+  结论: {r : 实数>=0} (hc : 凸 实数 s) (hr : 0 < r)
   证明: have : Absorbent Real (Metric.ball (0 : E) r) := absorbent_ball_zero hr
   LipschitzWith.of_le_add_mul _ fun x y =>
     calc
@@ -2044,8 +2044,8 @@ theorem Convex.lipschitz_gauge
   ⟨(⟨r, hr₀.le⟩ : Real>=0)⁻¹, hc.lipschitzWith_gauge hr₀ hr⟩
 
 中文:
-定理 Convex.lipschitz_gauge
-  条件: (hc : Convex 实数 s) (h₀ : s in 𝓝 (0 : E))
+定理 凸.lipschitz_gauge
+  条件: (hc : 凸 实数 s) (h₀ : s in 𝓝 (0 : E))
   证明: let ⟨r, hr₀, hr⟩ := Metric.mem_nhds_iff.1 h₀
   ⟨(⟨r, hr₀.le⟩ : Real>=0)⁻¹, hc.lipschitzWith_gauge hr₀ hr⟩
 
@@ -2065,8 +2065,8 @@ theorem Convex.uniformContinuous_gauge
   proof: let ⟨_K, hK⟩ := hc.lipschitz_gauge h₀; hK.uniformContinuous
 
 中文:
-定理 Convex.uniformContinuous_gauge
-  条件: (hc : Convex 实数 s) (h₀ : s in 𝓝 (0 : E))
+定理 凸.uniformContinuous_gauge
+  条件: (hc : 凸 实数 s) (h₀ : s in 𝓝 (0 : E))
   证明: let ⟨_K, hK⟩ := hc.lipschitz_gauge h₀; hK.uniformContinuous
 
 Depends on / 依赖: hK.uniformContinuous, hc.lipschitz_gauge, lipschitz_gauge, uniformContinuous

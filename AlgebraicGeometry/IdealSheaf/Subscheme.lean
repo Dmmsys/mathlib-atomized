@@ -683,7 +683,7 @@ definition glueData
 
 中文:
 定义 glueData
-  签名: : Scheme.GlueData where
+  签名: : 概形.粘合数据 where
   定义体: X.affineOpens
   U := I.glueDataObj
   V ij := I.glueDataObjPullback ij.1 ij.2
@@ -926,7 +926,7 @@ lemma range_gluedTo
 
 中文:
 引理 range_gluedTo
-  结论: Set.range I.gluedTo = I.support
+  结论: 集合.range I.gluedTo = I.support
   证明: by
   refine subset_antisymm (Set.range_subset_iff.mpr fun x => ?_) ?_
   · obtain ⟨ix, x : I.glueDataObj ix, rfl⟩ :=
@@ -1058,7 +1058,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreimmersion I.gluedTo
+  签名: 是Preimmersion I.gluedTo
   定义体: by
   rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsPreimmersion)
     _ (iSup_affineOpens_eq_top X)]
@@ -1086,7 +1086,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiCompact I.gluedTo
+  签名: 拟紧 I.gluedTo
   定义体: ⟨fun _ _ => (Topology.IsClosedEmbedding.isProperMap
     ⟨I.gluedTo.isEmbedding, I.range_gluedTo ▸ I.support.isClosed⟩).isCompact_preimage⟩
 -/
@@ -1126,7 +1126,7 @@ definition subscheme
 
 中文:
 定义 subscheme
-  签名: : Scheme
+  签名: : 概形
   定义体: I.glueData.glued.restrict
     (f := TopCat.ofHom (toContinuousMap I.gluedHomeo.symm))
     I.gluedHomeo.symm.isOpenEmbedding
@@ -1246,7 +1246,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreimmersion I.subschemeι
+  签名: 是Preimmersion I.subschemeι
   定义体: by
   rw [subschemeι_def]
   infer_instance
@@ -1271,7 +1271,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiCompact I.subschemeι
+  签名: 拟紧 I.subschemeι
   定义体: by
   rw [subschemeι_def]
   infer_instance
@@ -1296,7 +1296,7 @@ lemma range_subschemeι
 
 中文:
 引理 range_subschemeι
-  结论: Set.range I.subschemeι = I.support
+  结论: 集合.range I.subschemeι = I.support
   证明: by
   simp [← range_gluedTo, I.subschemeι_def, Set.range_comp]
 
@@ -1582,7 +1582,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (⊤ : X.IdealSheafData).subscheme
+  签名: 是空 (⊤ : X.IdealSheafData).subscheme
   定义体: by
   rw [← (subschemeι _).ker_eq_top_iff_isEmpty]; rw [ker_subschemeι]
 
@@ -1831,7 +1831,7 @@ definition subschemeFunctor
 
 中文:
 定义 subschemeFunctor
-  签名: (Y : Scheme.{u})
+  签名: (Y : 概形.{u})
   定义体: .mk I.unop.subschemeι
   map {I J} h := Over.homMk (IdealSheafData.inclusion h.unop.le)
 
@@ -1858,8 +1858,8 @@ abbreviation Hom.image
   body: f.ker.subscheme
 
 中文:
-缩写 Hom.image
-  签名: : Scheme.{u}
+缩写 态射.像
+  签名: : 概形.{u}
   定义体: f.ker.subscheme
 
 Depends on / 依赖: _eq_last_iff, f.ker.subscheme, subscheme
@@ -1875,8 +1875,8 @@ abbreviation Hom.imageι
   body: f.ker.subschemeι
 
 中文:
-缩写 Hom.imageι
-  签名: : f.image ⟶ Y
+缩写 态射.imageι
+  签名: : f.像 ⟶ Y
   定义体: f.ker.subschemeι
 
 Depends on / 依赖: Fin.castSucc_zero, _eq_castSucc_iff, castSucc_zero, f.ker.subscheme
@@ -1943,8 +1943,8 @@ definition Hom.toImageAux
     simp 
 
 中文:
-定义 Hom.toImageAux
-  签名: : X ⟶ f.image
+定义 态射.toImageAux
+  签名: : X ⟶ f.像
   定义体: Cover.glueMorphisms ((Y.openCoverOfIsOpenCover _ (iSup_affineOpens_eq_top Y)).pullback₁ f)
     (fun U => (pullback.snd f U.1.ι ≫ U.1.toSpecΓ).liftQuotient _
       (by exact ideal_ker_le_ker_ΓSpecIso_inv_comp f U) ≫ f.ker.subschemeCover.f U) (by
@@ -1977,7 +1977,7 @@ lemma Hom.toImageAux_spec
   simp [IdealSheafData.glueDataObjι, Scheme.Hom.liftQuotient_comp_assoc, pullback.condition]
 
 中文:
-引理 Hom.toImageAux_spec
+引理 态射.toImageAux_spec
   证明: by
   apply Cover.hom_ext ((Y.openCoverOfIsOpenCover _ (iSup_affineOpens_eq_top Y)).pullback₁ f)
   intro U
@@ -2007,8 +2007,8 @@ definition Hom.toImage
 @[reassoc (attr := simp)]
 
 中文:
-定义 Hom.toImage
-  签名: : X ⟶ f.image
+定义 态射.toImage
+  签名: : X ⟶ f.像
   定义体: f.toImageAux.copyBase (fun x => ⟨f x, f.range_subset_ker_support ⟨x, rfl⟩⟩)
     (funext fun x => Subtype.ext congr($f.toImageAux_spec x))
 
@@ -2031,7 +2031,7 @@ lemma Hom.toImage_imageι
   exact Scheme.Hom.copyBase_eq _ _ _
 
 中文:
-引理 Hom.toImage_imageι
+引理 态射.toImage_imageι
   证明: by
   convert f.toImageAux_spec
   exact Scheme.Hom.copyBase_eq _ _ _
@@ -2053,8 +2053,8 @@ instance [QuasiCompact
     rw [denseRange_iff_closure_range]; rw [f.imageι.isEmbedding.closure_eq_preimage_closure_image]; rw [← Set.univ_subset_iff]; rw [← Set.image_subset_iff]; rw [Set.image_univ]; rw [IdealSheafData.range_subschemeι]; rw [Hom.support_ker]; rw [← Set.range_comp]; rw [← TopCat.coe_comp]; rw [← Scheme
 
 中文:
-实例 [QuasiCompact
-  签名: f] : IsDominant f.toImage where
+实例 [拟紧
+  签名: f] : 是Dominant f.toImage where
   定义体: by
     rw [denseRange_iff_closure_range]; rw [f.imageι.isEmbedding.closure_eq_preimage_closure_image]; rw [← Set.univ_subset_iff]; rw [← Set.image_subset_iff]; rw [Set.image_univ]; rw [IdealSheafData.range_subschemeι]; rw [Hom.support_ker]; rw [← Set.range_comp]; rw [← TopCat.coe_comp]; rw [← Scheme
 
@@ -2074,8 +2074,8 @@ instance [QuasiCompact
   .of_comp _ f.imageι
 
 中文:
-实例 [QuasiCompact
-  签名: f] : QuasiCompact f.toImage
+实例 [拟紧
+  签名: f] : 拟紧 f.toImage
   定义体: have : QuasiCompact (f.toImage ≫ f.imageι) := by simpa
   .of_comp _ f.imageι
 
@@ -2096,7 +2096,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (IdealSheafData.subschemeι ⊥ : _ ⟶ X)
+  签名: 是同构 (IdealSheafData.subschemeι ⊥ : _ ⟶ X)
   定义体: ⟨Scheme.Hom.toImage (𝟙 X) ≫ IdealSheafData.inclusion bot_le,
     by simp [← cancel_mono (IdealSheafData.subschemeι _)], by simp⟩
 
@@ -2118,7 +2118,7 @@ lemma isIso_subschemeι_iff_eq_bot
 中文:
 引理 isIso_subschemeι_iff_eq_bot
   条件: (I : X.IdealSheafData)
-  结论: IsIso I.subschemeι ↔ I = ⊥
+  结论: 是同构 I.subschemeι ↔ I = ⊥
   证明: ⟨fun h => by simp [← I.ker_subschemeι], fun h => h ▸ inferInstance⟩
 
 Depends on / 依赖: I.ker_subscheme
@@ -2138,7 +2138,7 @@ lemma Hom.toImage_app
   simp only [Hom.com
 
 中文:
-引理 Hom.toImage_app
+引理 态射.toImage_app
   证明: by
   have := ConcreteCategory.epi_of_surjective _ (f.ker.subschemeι_app_surjective U)
   rw [← cancel_epi (f.ker.subschemeι.app U)]; rw [← Scheme.Hom.comp_app]; rw [Scheme.Hom.congr_app f.toImage_imageι]; rw [f.ker.subschemeι_app]; rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]
@@ -2170,8 +2170,8 @@ lemma Hom.toImage_app_injective
     (f.ker.subschemeObjIso U).commRingCatIsoToRingEquiv.injective
 
 中文:
-引理 Hom.toImage_app_injective
-  条件: [QuasiCompact f]
+引理 态射.toImage_app_injective
+  条件: [拟紧 f]
   证明: by
   simp only [f.toImage_app U, CommRingCat.hom_comp, CommRingCat.hom_ofHom, RingHom.coe_comp]
   exact (RingHom.lift_injective_of_ker_le_ideal _ _ (by simp)).comp
@@ -2198,8 +2198,8 @@ lemma Hom.stalkFunctor_toImage_injective
   exact f.toImage_app_injective ⟨U, hU⟩
 
 中文:
-引理 Hom.stalkFunctor_toImage_injective
-  条件: [QuasiCompact f] (x)
+引理 态射.stalkFunctor_toImage_injective
+  条件: [拟紧 f] (x)
   证明: by
   apply TopCat.Presheaf.stalkFunctor_map_injective_of_isBasis
     (hB := (Y.isBasis_affineOpens.of_isInducing f.imageι.isEmbedding.isInducing))
@@ -2233,7 +2233,7 @@ definition kerAdjunction
 
 中文:
 定义 kerAdjunction
-  签名: (Y : Scheme.{u})
+  签名: (Y : 概形.{u})
   定义体: eqToHom (by simp)
   counit.app f := (Over.homMk f.unop.hom.toImage f.unop.hom.toImage_imageι).op
   counit.naturality _ _ _ := Quiver.Hom.unop_inj (by ext1; simp [← cancel_mono (subschemeι _)])
@@ -2261,7 +2261,7 @@ instance :
 
 中文:
 实例 :
-  签名: (IdealSheafData.subschemeFunctor Y).Full
+  签名: (IdealSheafData.subschemeFunctor Y).满
   定义体: have : IsIso Y.kerAdjunction.rightOp.counit := by
     simp [NatTrans.isIso_iff_isIso_app, CategoryTheory.instIsIsoEqToHom]
   Y.kerAdjunction.rightOp.fullyFaithfulROfIsIsoCounit.full

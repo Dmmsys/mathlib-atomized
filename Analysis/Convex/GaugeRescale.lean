@@ -38,7 +38,7 @@ definition gaugeRescale
 
 中文:
 定义 gaugeRescale
-  签名: (s t : Set E) (x : E)
+  签名: (s t : 集合 E) (x : E)
   定义体: (gauge s x / gauge t x) • x
 -/
 def gaugeRescale (s t : Set E) (x : E) : E := (gauge s x / gauge t x) • x
@@ -53,7 +53,7 @@ theorem gaugeRescale_def
 
 中文:
 定理 gaugeRescale_def
-  条件: (s t : Set E) (x : E)
+  条件: (s t : 集合 E) (x : E)
   证明: rfl
 -/
 theorem gaugeRescale_def (s t : Set E) (x : E) :
@@ -71,7 +71,7 @@ theorem gaugeRescale_zero
 
 中文:
 定理 gaugeRescale_zero
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: gaugeRescale s t 0 = 0
   证明: smul_zero _
 -/
@@ -89,7 +89,7 @@ theorem gaugeRescale_smul
 
 中文:
 定理 gaugeRescale_smul
-  条件: (s t : Set E) {c : 实数} (hc : 0 <= c) (x : E)
+  条件: (s t : 集合 E) {c : 实数} (hc : 0 <= c) (x : E)
   证明: by
   simp only [gaugeRescale, gauge_smul_of_nonneg hc, smul_smul, smul_eq_mul]
   rw [mul_div_mul_comm]; rw [mul_right_comm]; rw [div_self_mul_self]
@@ -112,7 +112,7 @@ theorem gauge_gaugeRescale'
 
 中文:
 定理 gauge_gaugeRescale'
-  条件: (s : Set E) {t : Set E} {x : E} (hx : gauge t x != 0)
+  条件: (s : 集合 E) {t : 集合 E} {x : E} (hx : gauge t x != 0)
   证明: by
   rw [gaugeRescale]; rw [gauge_smul_of_nonneg (div_nonneg (gauge_nonneg _) (gauge_nonneg _))]; rw [smul_eq_mul]; rw [div_mul_cancel₀ _ hx]
 
@@ -135,7 +135,7 @@ theorem gauge_gaugeRescale_le
 
 中文:
 定理 gauge_gaugeRescale_le
-  条件: (s t : Set E) (x : E)
+  条件: (s t : 集合 E) (x : E)
   证明: by
   by_cases hx : gauge t x = 0
   · simp [gaugeRescale, hx, gauge_nonneg]
@@ -167,7 +167,7 @@ theorem gaugeRescale_self_apply
 
 中文:
 定理 gaugeRescale_self_apply
-  结论: {s : Set E} (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
+  结论: {s : 集合 E} (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx; · simp
   rw [gaugeRescale]; rw [div_self]; rw [one_smul]
@@ -191,7 +191,7 @@ theorem gaugeRescale_self
 
 中文:
 定理 gaugeRescale_self
-  条件: {s : Set E} (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
+  条件: {s : 集合 E} (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
   证明: funext gaugeRescale_self_apply hsa hsb
 
 Depends on / 依赖: gaugeRescale_self_apply
@@ -213,7 +213,7 @@ theorem gauge_gaugeRescale
 
 中文:
 定理 gauge_gaugeRescale
-  结论: (s : Set E) {t : Set E} (hta : Absorbent 实数 t) (htb : IsVonNBounded 实数 t)
+  结论: (s : 集合 E) {t : 集合 E} (hta : Absorbent 实数 t) (htb : IsVonNBounded 实数 t)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp
@@ -240,7 +240,7 @@ theorem gaugeRescale_gaugeRescale
 
 中文:
 定理 gaugeRescale_gaugeRescale
-  结论: {s t u : Set E} (hta : Absorbent 实数 t) (htb : IsVonNBounded 实数 t)
+  结论: {s t u : 集合 E} (hta : Absorbent 实数 t) (htb : IsVonNBounded 实数 t)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx; · simp
   rw [gaugeRescale_def s t x]; rw [gaugeRescale_smul]; rw [gaugeRescale]; rw [gaugeRescale]; rw [smul_smul]; rw [div_mul_div_cancel₀]
@@ -267,7 +267,7 @@ definition gaugeRescaleEquiv
 
 中文:
 定义 gaugeRescaleEquiv
-  签名: (s t : Set E) (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
+  签名: (s t : 集合 E) (hsa : Absorbent 实数 s) (hsb : IsVonNBounded 实数 s)
   定义体: gaugeRescale s t
   invFun := gaugeRescale t s
   left_inv x := by rw [gaugeRescale_gaugeRescale, gaugeRescale_self_apply] <;> assumption
@@ -298,7 +298,7 @@ theorem mapsTo_gaugeRescale_interior
 
 中文:
 定理 mapsTo_gaugeRescale_interior
-  条件: (h₀ : t in 𝓝 0) (hc : Convex 实数 t)
+  条件: (h₀ : t in 𝓝 0) (hc : 凸 实数 t)
   证明: fun x hx => by
   rw [← gauge_lt_one_iff_mem_interior] <;> try assumption
   exact (gauge_gaugeRescale_le _ _ _).trans_lt (interior_subset_gauge_lt_one _ hx)
@@ -322,7 +322,7 @@ mem_closure_of_gauge_le_one htc ht₀ hta (gauge_gaugeRescale_le _ _ _).trans
 
 中文:
 定理 mapsTo_gaugeRescale_closure
-  结论: {s t : Set E} (hsc : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  结论: {s t : 集合 E} (hsc : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: fun _x hx =>
 mem_closure_of_gauge_le_one htc ht₀ hta (gauge_gaugeRescale_le _ _ _).trans
     (gauge_le_one_iff_mem_closure hsc hs₀).2 hx
@@ -351,7 +351,7 @@ theorem continuous_gaugeRescale
 
 中文:
 定理 continuous_gaugeRescale
-  结论: {s t : Set E} (hs : Convex 实数 s) (hs₀ : s in 𝓝 0)
+  结论: {s t : 集合 E} (hs : 凸 实数 s) (hs₀ : s in 𝓝 0)
   证明: by
   have hta : Absorbent Real t := absorbent_nhds_zero ht₀
   refine continuous_iff_continuousAt.2 fun x => ?_
@@ -387,7 +387,7 @@ definition gaugeRescaleHomeomorph
 
 中文:
 定义 gaugeRescaleHomeomorph
-  签名: (s t : Set E)
+  签名: (s t : 集合 E)
   定义体: gaugeRescaleEquiv s t (absorbent_nhds_zero hs₀) hsb (absorbent_nhds_zero ht₀) htb
   continuous_toFun := by apply continuous_gaugeRescale <;> assumption
   continuous_invFun := by apply continuous_gaugeRescale <;> assumption
@@ -413,7 +413,7 @@ theorem image_gaugeRescaleHomeomorph_interior
 
 中文:
 定理 image_gaugeRescaleHomeomorph_interior
-  结论: {s t : Set E}
+  结论: {s t : 集合 E}
   证明: Subset.antisymm (mapsTo_gaugeRescale_interior ht₀ htc).image_subset by
     rw [← Homeomorph.preimage_symm]; rw [← image_subset_iff]
     exact (mapsTo_gaugeRescale_interior hs₀ hsc).image_subset
@@ -443,7 +443,7 @@ theorem image_gaugeRescaleHomeomorph_closure
 
 中文:
 定理 image_gaugeRescaleHomeomorph_closure
-  结论: {s t : Set E}
+  结论: {s t : 集合 E}
   证明: by
   refine Subset.antisymm (mapsTo_gaugeRescale_closure hsc hs₀ htc
     (mem_of_mem_nhds ht₀) (absorbent_nhds_zero ht₀)).image_subset ?_
@@ -479,8 +479,8 @@ theorem exists_homeomorph_image_eq
     apply gaugeRes
 
 中文:
-定理 exists_homeomorph_image_eq
-  结论: {s t : Set E}
+定理 存在_homeomorph_image_eq
+  结论: {s t : 集合 E}
   证明: by
   rsuffices ⟨e, h₁, h₂⟩ : exists e : E ≃ₜ E, e '' interior s = interior t ∧ e '' closure s = closure t
   · refine ⟨e, h₁, h₂, ?_⟩
@@ -531,8 +531,8 @@ theorem exists_homeomorph_image_interior_closure_frontier_eq_unitBall
     (convex_ball 0 1) (by simp [isOpen_ball.interior_eq]) (NormedSpace.isVonNBounded_ball _ _ _)
 
 中文:
-定理 exists_homeomorph_image_interior_closure_frontier_eq_unitBall
-  结论: {s : Set E}
+定理 存在_homeomorph_image_interior_closure_frontier_eq_unitBall
+  结论: {s : 集合 E}
   证明: by
   simpa [isOpen_ball.interior_eq, closure_ball, frontier_ball]
     using exists_homeomorph_image_eq hc hne (NormedSpace.isVonNBounded_of_isBounded _ hb)

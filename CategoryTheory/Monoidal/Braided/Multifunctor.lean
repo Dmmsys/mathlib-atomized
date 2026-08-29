@@ -569,7 +569,7 @@ definition ofBifunctor
 
 中文:
 定义 ofBifunctor
-  签名: : BraidedCategory C where
+  签名: : 辫范畴 C where
   定义体: (β.app X).app Y
   braiding_naturality_right _ _ _ _ := (β.app _).hom.naturality _
   braiding_naturality_left _ _ := NatTrans.congr_app (β.hom.naturality _) _
@@ -605,8 +605,8 @@ definition SymmetricCategory.ofCurried
   body: NatTrans.congr_app (NatTrans.congr_app h X) Y
 
 中文:
-定义 SymmetricCategory.ofCurried
-  签名: [BraidedCategory C]
+定义 对称范畴.ofCurried
+  签名: [辫范畴 C]
   定义体: NatTrans.congr_app (NatTrans.congr_app h X) Y
 
 Depends on / 依赖: NatTrans, NatTrans.congr_app, congr_app

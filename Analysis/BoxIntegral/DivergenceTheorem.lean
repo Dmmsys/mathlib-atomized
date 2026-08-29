@@ -76,7 +76,7 @@ theorem norm_volume_sub_integral_face_upper_sub_lower_smul_le
 
 中文:
 定理 norm_volume_sub_integral_face_upper_sub_lower_smul_le
-  结论: {f : (Fin (n + 1) -> 实数) -> E}
+  结论: {f : (有限集 (n + 1) -> 实数) -> E}
   证明: by
   -- Porting note: Lean fails to find `α` in the next line
   set e : Real -> (Fin n -> Real) -> (Fin (n + 1) -> Real) := i.insertNth (α := fun _ => Real)
@@ -172,8 +172,8 @@ theorem hasIntegral_GP_pderiv
     by_ca
 
 中文:
-定理 hasIntegral_GP_pderiv
-  结论: (f : (Fin (n + 1) -> 实数) -> E)
+定理 has整数egral_GP_pderiv
+  结论: (f : (有限集 (n + 1) -> 实数) -> E)
   证明: by
   /- Note that `f` is continuous on `I.Icc`, hence it is integrable on the faces of all boxes
     `J ≤ I`, thus the difference of integrals over `x i = J.upper i` and `x i = J.lower i` is a
@@ -297,7 +297,7 @@ theorem hasIntegral_GP_divergence_of_forall_hasDerivWithinAt
   exact hasIntegral_GP_pderiv I _ _ s hs (fun x hx => Hs x hx i) (fun x hx => Hd x hx i) i
 
 中文:
-定理 hasIntegral_GP_divergence_of_forall_hasDerivWithinAt
+定理 has整数egral_GP_divergence_of_对任意_hasDerivWithinAt
   证明: by
   refine HasIntegral.sum fun i _ => ?_
   simp only [hasFDerivWithinAt_pi', continuousWithinAt_pi] at Hd Hs

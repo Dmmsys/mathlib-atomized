@@ -60,8 +60,8 @@ instance [One
 @[to_additive (attr := simp)]
 
 中文:
-实例 [One
-  签名: β] : One (α ->ᵤ β)
+实例 [幺
+  签名: β] : 幺 (α ->ᵤ β)
   定义体: inferInstanceAs One (α -> β)
 
 @[to_additive (attr := simp)]
@@ -82,7 +82,7 @@ lemma UniformFun.toFun_one
 
 中文:
 引理 UniformFun.toFun_one
-  条件: [One β]
+  条件: [幺 β]
   结论: toFun (1 : α ->ᵤ β) = 1
   证明: rfl
 
@@ -102,7 +102,7 @@ lemma UniformFun.ofFun_one
 
 中文:
 引理 UniformFun.ofFun_one
-  条件: [One β]
+  条件: [幺 β]
   结论: ofFun (1 : α -> β) = 1
   证明: rfl
 -/
@@ -119,8 +119,8 @@ instance [One
 @[to_additive (attr := simp)]
 
 中文:
-实例 [One
-  签名: β] : One (α ->ᵤ[𝔖] β)
+实例 [幺
+  签名: β] : 幺 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs One (α -> β)
 
 @[to_additive (attr := simp)]
@@ -141,7 +141,7 @@ lemma UniformOnFun.toFun_one
 
 中文:
 引理 UniformOnFun.toFun_one
-  条件: [One β]
+  条件: [幺 β]
   结论: toFun 𝔖 (1 : α ->ᵤ[𝔖] β) = 1
   证明: rfl
 
@@ -161,7 +161,7 @@ lemma UniformOnFun.one_apply
 
 中文:
 引理 UniformOnFun.one_apply
-  条件: [One β]
+  条件: [幺 β]
   结论: ofFun 𝔖 (1 : α -> β) = 1
   证明: rfl
 -/
@@ -178,8 +178,8 @@ instance [Mul
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Mul
-  签名: β] : Mul (α ->ᵤ β)
+实例 [乘法
+  签名: β] : 乘法 (α ->ᵤ β)
   定义体: inferInstanceAs Mul (α -> β)
 
 @[to_additive (attr := simp)]
@@ -200,7 +200,7 @@ lemma UniformFun.toFun_mul
 
 中文:
 引理 UniformFun.toFun_mul
-  条件: [Mul β] (f g : α ->ᵤ β)
+  条件: [乘法 β] (f g : α ->ᵤ β)
   结论: toFun (f * g) = toFun f * toFun g
   证明: rfl
 
@@ -220,7 +220,7 @@ lemma UniformFun.ofFun_mul
 
 中文:
 引理 UniformFun.ofFun_mul
-  条件: [Mul β] (f g : α -> β)
+  条件: [乘法 β] (f g : α -> β)
   结论: ofFun (f * g) = ofFun f * ofFun g
   证明: rfl
 -/
@@ -237,8 +237,8 @@ instance [Mul
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Mul
-  签名: β] : Mul (α ->ᵤ[𝔖] β)
+实例 [乘法
+  签名: β] : 乘法 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Mul (α -> β)
 
 @[to_additive (attr := simp)]
@@ -258,7 +258,7 @@ lemma UniformOnFun.toFun_mul
 
 中文:
 引理 UniformOnFun.toFun_mul
-  条件: [Mul β] (f g : α ->ᵤ[𝔖] β)
+  条件: [乘法 β] (f g : α ->ᵤ[𝔖] β)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -279,7 +279,7 @@ lemma UniformOnFun.ofFun_mul
 
 中文:
 引理 UniformOnFun.ofFun_mul
-  条件: [Mul β] (f g : α -> β)
+  条件: [乘法 β] (f g : α -> β)
   结论: ofFun 𝔖 (f * g) = ofFun 𝔖 f * ofFun 𝔖 g
   证明: rfl
 -/
@@ -296,8 +296,8 @@ instance [Inv
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Inv
-  签名: β] : Inv (α ->ᵤ β)
+实例 [取逆
+  签名: β] : 取逆 (α ->ᵤ β)
   定义体: inferInstanceAs Inv (α -> β)
 
 @[to_additive (attr := simp)]
@@ -318,7 +318,7 @@ lemma UniformFun.toFun_inv
 
 中文:
 引理 UniformFun.toFun_inv
-  条件: [Inv β] (f : α ->ᵤ β)
+  条件: [取逆 β] (f : α ->ᵤ β)
   结论: toFun (f⁻¹) = (toFun f)⁻¹
   证明: rfl
 
@@ -338,7 +338,7 @@ lemma UniformFun.ofFun_inv
 
 中文:
 引理 UniformFun.ofFun_inv
-  条件: [Inv β] (f : α -> β)
+  条件: [取逆 β] (f : α -> β)
   结论: ofFun (f⁻¹) = (ofFun f)⁻¹
   证明: rfl
 -/
@@ -355,8 +355,8 @@ instance [Inv
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Inv
-  签名: β] : Inv (α ->ᵤ[𝔖] β)
+实例 [取逆
+  签名: β] : 取逆 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Inv (α -> β)
 
 @[to_additive (attr := simp)]
@@ -377,7 +377,7 @@ lemma UniformOnFun.toFun_inv
 
 中文:
 引理 UniformOnFun.toFun_inv
-  条件: [Inv β] (f : α ->ᵤ[𝔖] β)
+  条件: [取逆 β] (f : α ->ᵤ[𝔖] β)
   结论: toFun 𝔖 (f⁻¹) = (toFun 𝔖 f)⁻¹
   证明: rfl
 
@@ -397,7 +397,7 @@ lemma UniformOnFun.ofFun_inv
 
 中文:
 引理 UniformOnFun.ofFun_inv
-  条件: [Inv β] (f : α -> β)
+  条件: [取逆 β] (f : α -> β)
   结论: ofFun 𝔖 (f⁻¹) = (ofFun 𝔖 f)⁻¹
   证明: rfl
 -/
@@ -414,8 +414,8 @@ instance [Div
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Div
-  签名: β] : Div (α ->ᵤ β)
+实例 [除法
+  签名: β] : 除法 (α ->ᵤ β)
   定义体: inferInstanceAs Div (α -> β)
 
 @[to_additive (attr := simp)]
@@ -436,7 +436,7 @@ lemma UniformFun.toFun_div
 
 中文:
 引理 UniformFun.toFun_div
-  条件: [Div β] (f g : α ->ᵤ β)
+  条件: [除法 β] (f g : α ->ᵤ β)
   结论: toFun (f / g) = toFun f / toFun g
   证明: rfl
 
@@ -456,7 +456,7 @@ lemma UniformFun.ofFun_div
 
 中文:
 引理 UniformFun.ofFun_div
-  条件: [Div β] (f g : α -> β)
+  条件: [除法 β] (f g : α -> β)
   结论: ofFun (f / g) = ofFun f / ofFun g
   证明: rfl
 -/
@@ -473,8 +473,8 @@ instance [Div
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Div
-  签名: β] : Div (α ->ᵤ[𝔖] β)
+实例 [除法
+  签名: β] : 除法 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Div (α -> β)
 
 @[to_additive (attr := simp)]
@@ -494,7 +494,7 @@ lemma UniformOnFun.toFun_div
 
 中文:
 引理 UniformOnFun.toFun_div
-  条件: [Div β] (f g : α ->ᵤ[𝔖] β)
+  条件: [除法 β] (f g : α ->ᵤ[𝔖] β)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -517,7 +517,7 @@ lemma UniformOnFun.ofFun_div
 
 中文:
 引理 UniformOnFun.ofFun_div
-  条件: [Div β] (f g : α -> β)
+  条件: [除法 β] (f g : α -> β)
   结论: ofFun 𝔖 (f / g) = ofFun 𝔖 f / ofFun 𝔖 g
   证明: rfl
 
@@ -541,7 +541,7 @@ lemma UniformFun.toFun_pow
 
 中文:
 引理 UniformFun.toFun_pow
-  条件: {M : 类型} [Pow β M] (c : M) (f : α ->ᵤ β)
+  条件: {M : 类型} [幂 β M] (c : M) (f : α ->ᵤ β)
   证明: rfl
 
 @[to_additive (attr := simp) ofFun_smul]
@@ -563,7 +563,7 @@ lemma UniformFun.ofFun_pow
 
 中文:
 引理 UniformFun.ofFun_pow
-  条件: {M : 类型} [Pow β M] (c : M) (f : α -> β)
+  条件: {M : 类型} [幂 β M] (c : M) (f : α -> β)
   证明: rfl
 
 @[to_additive]
@@ -588,7 +588,7 @@ lemma UniformOnFun.toFun_pow
 
 中文:
 引理 UniformOnFun.toFun_pow
-  条件: {M : 类型} [Pow β M] (c : M) (f : α ->ᵤ[𝔖] β)
+  条件: {M : 类型} [幂 β M] (c : M) (f : α ->ᵤ[𝔖] β)
   证明: rfl
 
 @[to_additive (attr := simp) ofFun_smul]
@@ -610,7 +610,7 @@ lemma UniformOnFun.ofFun_pow
 
 中文:
 引理 UniformOnFun.ofFun_pow
-  条件: {M : 类型} [Pow β M] (c : M) (f : α -> β)
+  条件: {M : 类型} [幂 β M] (c : M) (f : α -> β)
   证明: rfl
 
 @[to_additive]
@@ -631,8 +631,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: β] : Monoid (α ->ᵤ β)
+实例 [幺半群
+  签名: β] : 幺半群 (α ->ᵤ β)
   定义体: inferInstanceAs Monoid (α -> β)
 
 @[to_additive]
@@ -653,8 +653,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: β] : Monoid (α ->ᵤ[𝔖] β)
+实例 [幺半群
+  签名: β] : 幺半群 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Monoid (α -> β)
 
 @[to_additive]
@@ -675,8 +675,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: β] : CommMonoid (α ->ᵤ β)
+实例 [交换幺半群
+  签名: β] : 交换幺半群 (α ->ᵤ β)
   定义体: inferInstanceAs CommMonoid (α -> β)
 
 @[to_additive]
@@ -697,8 +697,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: β] : CommMonoid (α ->ᵤ[𝔖] β)
+实例 [交换幺半群
+  签名: β] : 交换幺半群 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs CommMonoid (α -> β)
 
 @[to_additive]
@@ -719,8 +719,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: β] : Group (α ->ᵤ β)
+实例 [群
+  签名: β] : 群 (α ->ᵤ β)
   定义体: inferInstanceAs Group (α -> β)
 
 @[to_additive]
@@ -739,8 +739,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: β] : Group (α ->ᵤ[𝔖] β)
+实例 [群
+  签名: β] : 群 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Group (α -> β)
 
 @[to_additive]
@@ -759,8 +759,8 @@ instance [CommGroup
 @[to_additive]
 
 中文:
-实例 [CommGroup
-  签名: β] : CommGroup (α ->ᵤ β)
+实例 [交换群
+  签名: β] : 交换群 (α ->ᵤ β)
   定义体: inferInstanceAs CommGroup (α -> β)
 
 @[to_additive]
@@ -779,8 +779,8 @@ instance [CommGroup
   body: inferInstanceAs CommGroup (α -> β)
 
 中文:
-实例 [CommGroup
-  签名: β] : CommGroup (α ->ᵤ[𝔖] β)
+实例 [交换群
+  签名: β] : 交换群 (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs CommGroup (α -> β)
 
 Depends on / 依赖: CommGroup
@@ -826,8 +826,8 @@ instance [Semiring
   body: inferInstanceAs Module R (α -> β)
 
 中文:
-实例 [Semiring
-  签名: R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ β)
+实例 [半环
+  签名: R] [加法交换幺半群 β] [模 R β] : 模 R (α ->ᵤ β)
   定义体: inferInstanceAs Module R (α -> β)
 
 Depends on / 依赖: Module
@@ -844,8 +844,8 @@ instance [Semiring
   body: inferInstanceAs Module R (α -> β)
 
 中文:
-实例 [Semiring
-  签名: R] [AddCommMonoid β] [Module R β] : Module R (α ->ᵤ[𝔖] β)
+实例 [半环
+  签名: R] [加法交换幺半群 β] [模 R β] : 模 R (α ->ᵤ[𝔖] β)
   定义体: inferInstanceAs Module R (α -> β)
 
 Depends on / 依赖: Module
@@ -876,7 +876,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformGroup (α ->ᵤ G)
+  签名: 是一致群 (α ->ᵤ G)
   定义体: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
     -- `UniformFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ G × G) → (α →ᵤ G)` is uniformly continuous too. By precomposing with
@@ -909,7 +909,7 @@ theorem UniformFun.hasBasis_nhds_one_of_basis
 
 中文:
 定理 UniformFun.hasBasis_nhds_one_of_basis
-  结论: {p : ι -> 命题} {b : ι -> Set G}
+  结论: {p : ι -> 命题} {b : ι -> 集合 G}
   证明: by
   convert! UniformFun.hasBasis_nhds_of_basis α _ (1 : α ->ᵤ G) h.uniformity_of_nhds_one
   simp
@@ -957,7 +957,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformGroup (α ->ᵤ[𝔖] G)
+  签名: 是一致群 (α ->ᵤ[𝔖] G)
   定义体: ⟨(-- Since `(/) : G × G → G` is uniformly continuous,
     -- `UniformOnFun.postcomp_uniformContinuous` tells us that
     -- `((/) ∘ —) : (α →ᵤ[𝔖] G × G) → (α →ᵤ[𝔖] G)` is uniformly continuous too. By precomposing with
@@ -992,7 +992,7 @@ UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α ->ᵤ[𝔖] G) h𝔖₁ h�
 
 中文:
 定理 UniformOnFun.hasBasis_nhds_one_of_basis
-  结论: (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
+  结论: (𝔖 : 集合 <| 集合 α) (h𝔖₁ : 𝔖.非空)
   证明: by
   convert!
 UniformOnFun.hasBasis_nhds_of_basis α _ 𝔖 (1 : α ->ᵤ[𝔖] G) h𝔖₁ h𝔖₂
@@ -1024,7 +1024,7 @@ theorem UniformOnFun.hasBasis_nhds_one
 
 中文:
 定理 UniformOnFun.hasBasis_nhds_one
-  结论: (𝔖 : Set <| Set α) (h𝔖₁ : 𝔖.Nonempty)
+  结论: (𝔖 : 集合 <| 集合 α) (h𝔖₁ : 𝔖.非空)
   证明: UniformOnFun.hasBasis_nhds_one_of_basis 𝔖 h𝔖₁ h𝔖₂ (basis_sets _)
 
 @[to_additive (attr := simp)]
@@ -1049,7 +1049,7 @@ lemma UniformOnFun.ofFun_prod
 
 中文:
 引理 UniformOnFun.ofFun_prod
-  条件: {β : 类型} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
+  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1071,7 +1071,7 @@ lemma UniformOnFun.toFun_prod
 
 中文:
 引理 UniformOnFun.toFun_prod
-  条件: {β : 类型} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
+  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1093,7 +1093,7 @@ lemma UniformFun.ofFun_prod
 
 中文:
 引理 UniformFun.ofFun_prod
-  条件: {β : 类型} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
+  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1113,7 +1113,7 @@ lemma UniformFun.toFun_prod
 
 中文:
 引理 UniformFun.toFun_prod
-  条件: {β : 类型} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι)
+  条件: {β : 类型} [交换幺半群 β] {f : ι -> α -> β} (I : 有限集 ι)
   证明: rfl
 -/
 lemma UniformFun.toFun_prod {β : Type*} [CommMonoid β] {f : ι -> α -> β} (I : Finset ι) :
@@ -1159,7 +1159,7 @@ instance UniformFunOn.uniformContinuousConstSMul
 
 中文:
 实例 UniformFunOn.uniformContinuousConstSMul
-  签名: {𝔖 : Set (Set α)}
+  签名: {𝔖 : 集合 (集合 α)}
   定义体: UniformOnFun.postcomp_uniformContinuous
     uniformContinuous_const_smul c
 

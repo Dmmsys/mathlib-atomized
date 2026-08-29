@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.IsCoverDense (coherentTopology _)
+  签名: F.是余verDense (coherentTopology _)
   定义体: by
   refine F.isCoverDense_of_generate_singleton_functor_π_mem _ fun B => ⟨_, F.effectiveEpiOver B, ?_⟩
   apply Coverage.Saturate.of
@@ -101,8 +101,8 @@ theorem exists_effectiveEpiFamily_iff_mem_induced
       fun a => Sieve.
 
 中文:
-定理 exists_effectiveEpiFamily_iff_mem_induced
-  条件: (X : C) (S : Sieve X)
+定理 存在_effectiveEpiFamily_iff_mem_induced
+  条件: (X : C) (S : 筛 X)
   证明: by
   refine ⟨fun ⟨α, _, Y, π, ⟨H₁, H₂⟩⟩ => ?_, fun hS => ?_⟩
   · rw [mem_inducedTopology_iff_of_isCoverDense]
@@ -245,7 +245,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: (A : 类型u₃) [Category.{v₃} A] [对任意 X, HasLimitsOfShape (StructuredArrow X F.op) A]
+  签名: (A : 类型u₃) [范畴.{v₃} A] [对任意 X, 有形状极限 (结构化箭头 X F.op) A]
   定义体: F.reflects_precoherent
     Sheaf (coherentTopology C) A ≌ Sheaf (coherentTopology D) A :=
   Functor.IsDenseSubsite.sheafEquiv _ _ F _
@@ -287,7 +287,7 @@ definition equivalence'
 
 中文:
 定义 equivalence'
-  签名: (A : 类型u₃) [Category.{v₃} A]
+  签名: (A : 类型u₃) [范畴.{v₃} A]
   定义体: F.reflects_precoherent
     Sheaf (coherentTopology C) A ≌ Sheaf (coherentTopology D) A :=
   Functor.IsDenseSubsite.sheafEquiv _ _ F _
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.IsCoverDense (regularTopology _)
+  签名: F.是余verDense (regularTopology _)
   定义体: by
   refine F.isCoverDense_of_generate_singleton_functor_π_mem _ fun B => ⟨_, F.effectiveEpiOver B, ?_⟩
   apply Coverage.Saturate.of
@@ -364,8 +364,8 @@ theorem exists_effectiveEpi_iff_mem_induced
   · rw [
 
 中文:
-定理 exists_effectiveEpi_iff_mem_induced
-  条件: (X : C) (S : Sieve X)
+定理 存在_effectiveEpi_iff_mem_induced
+  条件: (X : C) (S : 筛 X)
   证明: by
   refine ⟨fun ⟨Y, π, ⟨H₁, H₂⟩⟩ => ?_, fun hS => ?_⟩
   · rw [mem_inducedTopology_iff_of_isCoverDense]
@@ -504,7 +504,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: (A : 类型u₃) [Category.{v₃} A] [对任意 X, HasLimitsOfShape (StructuredArrow X F.op) A]
+  签名: (A : 类型u₃) [范畴.{v₃} A] [对任意 X, 有形状极限 (结构化箭头 X F.op) A]
   定义体: F.reflects_preregular
     Sheaf (regularTopology C) A ≌ Sheaf (regularTopology D) A :=
   Functor.IsDenseSubsite.sheafEquiv _ _ F _
@@ -536,7 +536,7 @@ theorem isSheaf_coherent_iff_regular_and_extensive
 
 中文:
 定理 isSheaf_coherent_iff_regular_and_extensive
-  条件: [Preregular C] [FinitaryPreExtensive C]
+  条件: [Preregular C] [有限预广延 C]
   证明: by
   rw [← extensive_regular_generate_coherent]
   exact isSheaf_sup (extensiveCoverage C) (regularCoverage C) F
@@ -588,7 +588,7 @@ instance [Preregular
 
 中文:
 实例 [Preregular
-  签名: C] [FinitaryExtensive C]
+  签名: C] [有限广延 C]
   定义体: (Presheaf.isSheaf_iff_preservesFiniteProducts F.obj).1
     ((Presheaf.isSheaf_coherent_iff_regular_and_extensive F.obj).mp F.property).1
 
@@ -610,7 +610,7 @@ theorem isSheaf_iff_preservesFiniteProducts_of_projective
 
 中文:
 定理 isSheaf_iff_preservesFiniteProducts_of_projective
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_coherent_iff_regular_and_extensive]; rw [and_iff_left (isSheaf_of_projective F)]; rw [isSheaf_iff_preservesFiniteProducts]
 
@@ -632,7 +632,7 @@ theorem isSheaf_iff_extensiveSheaf_of_projective
 
 中文:
 定理 isSheaf_iff_extensiveSheaf_of_projective
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_iff_preservesFiniteProducts_of_projective]; rw [isSheaf_iff_preservesFiniteProducts]
 
@@ -666,7 +666,7 @@ definition coherentExtensiveEquivalence
 
 中文:
 定义 coherentExtensiveEquivalence
-  签名: [Preregular C] [FinitaryExtensive C] [对任意 (X : C), Projective X]
+  签名: [Preregular C] [有限广延 C] [对任意 (X : C), 投射 X]
   定义体: ObjectProperty.lift _ (sheafToPresheaf _ _) (fun F =>
       (isSheaf_iff_extensiveSheaf_of_projective F.obj).mp F.property)
   inverse :=
@@ -705,7 +705,7 @@ lemma isSheaf_coherent_of_hasPullbacks_comp
 
 中文:
 引理 isSheaf_coherent_of_hasPullbacks_comp
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_iff_preservesFiniteProducts_and_equalizerCondition (h := h)] at hF ⊢
   have := hF.1
@@ -737,7 +737,7 @@ lemma isSheaf_coherent_of_hasPullbacks_of_comp
 
 中文:
 引理 isSheaf_coherent_of_hasPullbacks_of_comp
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_iff_preservesFiniteProducts_and_equalizerCondition (h := h)] at hF ⊢
   obtain ⟨_, hF₂⟩ := hF
@@ -769,7 +769,7 @@ lemma isSheaf_coherent_of_projective_comp
 
 中文:
 引理 isSheaf_coherent_of_projective_comp
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_iff_preservesFiniteProducts_of_projective] at hF ⊢
   infer_instance
@@ -794,7 +794,7 @@ lemma isSheaf_coherent_of_projective_of_comp
 
 中文:
 引理 isSheaf_coherent_of_projective_of_comp
-  结论: [Preregular C] [FinitaryExtensive C]
+  结论: [Preregular C] [有限广延 C]
   证明: by
   rw [isSheaf_iff_preservesFiniteProducts_of_projective] at hF ⊢
   exact ⟨fun n => ⟨fun {K} => ⟨fun {c} hc => ⟨isLimitOfReflects s (isLimitOfPreserves (F ⋙ s) hc)⟩⟩⟩⟩
@@ -818,7 +818,7 @@ instance [Preregular
 
 中文:
 实例 [Preregular
-  签名: C] [FinitaryExtensive C]
+  签名: C] [有限广延 C]
   定义体: isSheaf_coherent_of_hasPullbacks_comp (h := h) F s hF
 
 Depends on / 依赖: isSheaf_coherent_of_hasPullbacks_comp
@@ -838,7 +838,7 @@ instance [Preregular
 
 中文:
 实例 [Preregular
-  签名: C] [FinitaryExtensive C] [对任意 (X : C), Projective X]
+  签名: C] [有限广延 C] [对任意 (X : C), 投射 X]
   定义体: isSheaf_coherent_of_projective_comp F s hF
 
 Depends on / 依赖: isSheaf_coherent_of_projective_comp

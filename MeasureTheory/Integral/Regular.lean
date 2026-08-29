@@ -36,7 +36,7 @@ lemma IsCompact.measure_eq_biInf_integral_hasCompactSupport
     simp
 
 中文:
-引理 IsCompact.measure_eq_biInf_integral_hasCompactSupport
+引理 是紧集.measure_eq_biInf_integral_hasCompactSupport
   证明: by
   apply le_antisymm
   · simp only [le_iInf_iff]
@@ -86,7 +86,7 @@ lemma IsOpen.measure_eq_biSup_integral_continuous
     obtain ⟨⟨f, f_cont⟩, fU, fK, f
 
 中文:
-引理 IsOpen.measure_eq_biSup_integral_continuous
+引理 是开集.measure_eq_biSup_integral_continuous
   证明: by
   apply le_antisymm
   · apply le_of_forall_lt (fun r hr => ?_)

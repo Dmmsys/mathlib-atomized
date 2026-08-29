@@ -47,10 +47,10 @@ class IsCardinalFiltered
     - nonempty_cocone({A : Type w} [SmallCategory A] (F : A ⥤ J) (hA : HasCardinalLT (Arrow A) κ)) : Nonempty (Cocone F)
 
 中文:
-类 IsCardinalFiltered
-  参数: (J : 类型u) [Category.{v} J]
+类 是CardinalFiltered
+  参数: (J : 类型u) [范畴.{v} J]
   公理与运算 (1 个):
-    - nonempty_cocone({A : Type w} [SmallCategory A] (F : A ⥤ J) (hA : HasCardinalLT (Arrow A) κ)) : Nonempty (Cocone F)
+    - nonempty_cocone({A : 类型 w} [小范畴 A] (F : A ⥤ J) (hA : HasCardinalLT (箭头 A) κ)) : 非空 (余锥 F)
 -/
 class IsCardinalFiltered (J : Type u) [Category.{v} J]
     (κ : Cardinal.{w}) [Fact κ.IsRegular] : Prop where
@@ -103,7 +103,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: {A : 类型v'} [Category.{u'} A]
+  签名: {A : 类型v'} [范畴.{u'} A]
   定义体: by
   have := hA.small
   have := small_of_small_arrow.{w} A
@@ -135,7 +135,7 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: {κ' : Cardinal.{w}} [Fact κ'.IsRegular] (h : κ' <= κ)
+  条件: {κ' : 基数.{w}} [Fact κ'.是正则] (h : κ' <= κ)
   证明: ⟨cocone F (hA.of_le h)⟩
 
 Depends on / 依赖: cocone, hA.of_le, of_le
@@ -155,7 +155,7 @@ lemma of_equivalence
 
 中文:
 引理 of_equivalence
-  条件: {J' : 类型u'} [Category.{v'} J'] (e : J ≌ J')
+  条件: {J' : 类型u'} [范畴.{v'} J'] (e : J ≌ J')
   证明: ⟨e.inverse.mapCoconeInv (cocone (F ⋙ e.inverse) hA)⟩
 
 Depends on / 依赖: IsLoopAt, cocone, e.inverse, e.inverse.mapCoconeInv, eq_of_isLink, inverse, mapCoconeInv
@@ -177,7 +177,7 @@ definition max
   body: (cocone (κ := κ) (Discrete.functor S) (by simpa using hS)).pt
 
 中文:
-定义 max
+定义 最大值
   签名: : J
   定义体: (cocone (κ := κ) (Discrete.functor S) (by simpa using hS)).pt
 
@@ -355,7 +355,7 @@ lemma isFiltered_of_isCardinalFiltered
 
 中文:
 引理 isFiltered_of_isCardinalFiltered
-  结论: (J : 类型u) [Category.{v} J]
+  结论: (J : 类型u) [范畴.{v} J]
   证明: by
   rw [IsFiltered.iff_cocone_nonempty.{w}]
   intro A _ _ F
@@ -388,8 +388,8 @@ lemma IsCardinalFiltered.nonempty
   IsFiltered.nonempty
 
 中文:
-引理 IsCardinalFiltered.nonempty
-  结论: (J : 类型u) [Category.{v} J]
+引理 是CardinalFiltered.nonempty
+  结论: (J : 类型u) [范畴.{v} J]
   证明: have := isFiltered_of_isCardinalFiltered J κ
   IsFiltered.nonempty
 
@@ -421,7 +421,7 @@ lemma isCardinalFiltered_aleph0_iff
 
 中文:
 引理 isCardinalFiltered_aleph0_iff
-  条件: (J : 类型u) [Category.{v} J]
+  条件: (J : 类型u) [范畴.{v} J]
   证明: by
   constructor
   · intro
@@ -464,7 +464,7 @@ lemma isCardinalFiltered_preorder
 
 中文:
 引理 isCardinalFiltered_preorder
-  结论: (J : Type w) [Preorder J]
+  结论: (J : 类型 w) [预序 J]
   证明: by
     obtain ⟨j, hj⟩ := h F.obj (by simpa only [hasCardinalLT_iff_cardinal_mk_lt] using
         hasCardinalLT_of_hasCardinalLT_arrow hA)
@@ -616,7 +616,7 @@ instance isCardinalFiltered_pi
 
 中文:
 实例 isCardinalFiltered_pi
-  签名: {ι : 类型u'} (J : ι -> 类型u) [对任意 i, Category.{v} (J i)]
+  签名: {ι : 类型u'} (J : ι -> 类型u) [对任意 i, 范畴.{v} (J i)]
   定义体: ⟨by
     let c (i : ι) := cocone (F ⋙ Pi.eval J i) hC
     exact
@@ -666,7 +666,7 @@ include h₁ h₂ in
 
 中文:
 引理 isCardinalFiltered_iff_aux₁
-  结论: {ι : Type w} {j : J} {k : ι -> J}
+  结论: {ι : 类型 w} {j : J} {k : ι -> J}
   证明: by
   obtain ⟨l, hl⟩ := h₁ k hι
   let a (i : ι) := (hl i).some
@@ -699,7 +699,7 @@ lemma isCardinalFiltered_iff_aux₂
 
 中文:
 引理 isCardinalFiltered_iff_aux₂
-  结论: {ι : Type w} {j : ι -> J} {k : J}
+  结论: {ι : 类型 w} {j : ι -> J} {k : J}
   证明: by
   have (i : ι) : exists (l : J) (p : k ⟶ l), f₁ i ≫ p = f₂ i ≫ p := by
     obtain ⟨l, a, b, hl⟩ := h₂ (Sum.elim (fun (_ : PUnit.{w + 1}) => f₁ i)
@@ -781,7 +781,7 @@ lemma IsCardinalFiltered.multicoequalizer
   exact ⟨l, b, fun i => by rw [← h i, IsFiltered.coeq_condition_assoc]⟩
 
 中文:
-引理 IsCardinalFiltered.multicoequalizer
+引理 是CardinalFiltered.multicoequalizer
   证明: by
   have := isFiltered_of_isCardinalFiltered J κ
   obtain ⟨l, a, b, h⟩ := IsCardinalFiltered.wideSpan
@@ -815,7 +815,7 @@ lemma IsCardinalFiltered.of_final
       fu
 
 中文:
-引理 IsCardinalFiltered.of_final
+引理 是CardinalFiltered.of_final
   证明: by
   have := isFiltered_of_isCardinalFiltered J₁ κ
   obtain ⟨h₁, h₂⟩ := (Functor.final_iff_of_isFiltered F).1 inferInstance
@@ -864,8 +864,8 @@ lemma Limits.IsTerminal.isCardinalFiltered
   proof: ⟨{ pt := X, ι.app _ := hX.from _ }⟩
 
 中文:
-引理 Limits.IsTerminal.isCardinalFiltered
-  结论: {J : 类型u} [Category.{v} J]
+引理 Limits.是终止.isCardinalFiltered
+  结论: {J : 类型u} [范畴.{v} J]
   证明: ⟨{ pt := X, ι.app _ := hX.from _ }⟩
 
 Depends on / 依赖: hX.from
@@ -885,7 +885,7 @@ lemma isCardinalFiltered_of_hasTerminal
 
 中文:
 引理 isCardinalFiltered_of_hasTerminal
-  结论: (J : 类型u) [Category.{v} J]
+  结论: (J : 类型u) [范畴.{v} J]
   证明: terminalIsTerminal.isCardinalFiltered _
 
 Depends on / 依赖: isCardinalFiltered, terminalIsTerminal, terminalIsTerminal.isCardinalFiltered

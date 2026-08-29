@@ -48,7 +48,7 @@ definition openPartialHomeomorph
 
 中文:
 定义 openPartialHomeomorph
-  签名: (φ : B -> F ≃L[𝕜] F) (hU : IsOpen U)
+  签名: (φ : B -> F ≃L[𝕜] F) (hU : 是开集 U)
   定义体: (x.1, φ x.1 x.2)
   invFun x := (x.1, (φ x.1).symm x.2)
   source := U ×ˢ univ
@@ -91,7 +91,7 @@ theorem trans_openPartialHomeomorph_apply
 
 中文:
 定理 trans_openPartialHomeomorph_apply
-  结论: (hU : IsOpen U)
+  结论: (hU : 是开集 U)
   证明: rfl
 -/
 theorem trans_openPartialHomeomorph_apply (hU : IsOpen U)
@@ -116,7 +116,7 @@ theorem source_trans_openPartialHomeomorph
 
 中文:
 定理 source_trans_openPartialHomeomorph
-  结论: (hU : IsOpen U)
+  结论: (hU : 是开集 U)
   证明: by
   dsimp only [FiberwiseLinear.openPartialHomeomorph]; mfld_set_tac
 
@@ -143,7 +143,7 @@ theorem target_trans_openPartialHomeomorph
 
 中文:
 定理 target_trans_openPartialHomeomorph
-  结论: (hU : IsOpen U)
+  结论: (hU : 是开集 U)
   证明: by
   dsimp only [FiberwiseLinear.openPartialHomeomorph]; mfld_set_tac
 

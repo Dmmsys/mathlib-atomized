@@ -80,7 +80,7 @@ theorem LinearIndependent.restrict_scalars
 
 中文:
 定理 LinearIndependent.restrict_scalars
-  结论: [Semiring K] [SMulWithZero R K] [Module K M]
+  结论: [半环 K] [带零标量乘法 R K] [模 K M]
   证明: by
   intro x y hxy
   let f := fun r : R => r • (1 : K)
@@ -112,7 +112,7 @@ theorem LinearIndependent.restrict_scalars'
 
 中文:
 定理 LinearIndependent.restrict_scalars'
-  结论: [Semiring K] [SMulWithZero R K] [Module K M]
+  结论: [半环 K] [带零标量乘法 R K] [模 K M]
   证明: restrict_scalars ((faithfulSMul_iff_injective_smul_one R K).mp inferInstance) li
 
 Depends on / 依赖: faithfulSMul_iff_injective_smul_one, restrict_scalars
@@ -134,7 +134,7 @@ theorem Submodule.range_ker_disjoint
       (LinearMap.ker_eq_bot_of_injective hv)]; rw 
 
 中文:
-定理 Submodule.range_ker_disjoint
+定理 子模.range_ker_disjoint
   结论: {f : M ->ₗ[R] M'}
   证明: by
   rw [LinearIndependent]; rw [Finsupp.linearCombination_linear_comp] at hv
@@ -265,7 +265,7 @@ theorem LinearIndepOn.comp_of_image
 
 中文:
 定理 LinearIndepOn.comp_of_image
-  结论: {s : Set ι'} {f : ι' -> ι} (h : LinearIndepOn R v (f '' s))
+  结论: {s : 集合 ι'} {f : ι' -> ι} (h : LinearIndepOn R v (f '' s))
   证明: LinearIndependent.comp h _ (Equiv.Set.imageOfInjOn _ _ hf).injective
 
 Depends on / 依赖: Equiv.Set.imageOfInjOn, LinearIndependent, LinearIndependent.comp, imageOfInjOn, injective
@@ -331,7 +331,7 @@ theorem LinearIndepOn_iff_linearIndepOn_image_injOn
 
 中文:
 定理 LinearIndepOn_iff_linearIndepOn_image_injOn
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: ⟨fun h => ⟨h.id_image, h.injOn⟩, fun h => (linearIndepOn_iff_image h.2).2 h.1⟩
 
 Depends on / 依赖: h.id_image, h.injOn, id_image, linearIndepOn_iff_image
@@ -407,7 +407,7 @@ theorem LinearIndependent.group_smul
 
 中文:
 定理 LinearIndependent.group_smul
-  结论: {G : 类型} [hG : Group G] [MulAction G R]
+  结论: {G : 类型} [hG : 群 G] [乘法作用 G R]
   证明: by
   rw [linearIndependent_iff''ₛ] at hv ⊢
   intro s g₁ g₂ hgs hsum i
@@ -444,7 +444,7 @@ theorem LinearIndependent.group_smul_iff
 
 中文:
 定理 LinearIndependent.group_smul_iff
-  结论: {G : 类型} [hG : Group G] [MulAction G R]
+  结论: {G : 类型} [hG : 群 G] [乘法作用 G R]
   证明: by
   refine ⟨fun h => ?_, fun h => h.group_smul w⟩
   convert! h.group_smul (fun i => (w i)⁻¹)
@@ -557,7 +557,7 @@ theorem linearIndependent_finset_map_embedding_subtype
 
 中文:
 定理 linearIndependent_finset_map_embedding_subtype
-  结论: (s : Set M)
+  结论: (s : 集合 M)
   证明: li.comp (fun _ => ⟨_, by aesop⟩) by intro; simp
 
 Depends on / 依赖: li.comp
@@ -581,7 +581,7 @@ theorem linearIndepOn_of_finite
 
 中文:
 定理 linearIndepOn_of_finite
-  条件: (s : Set ι) (H : 对任意 t subseteq s, Set.Finite t -> LinearIndepOn R v t)
+  条件: (s : 集合 ι) (H : 对任意 t subseteq s, 集合.有限 t -> LinearIndepOn R v t)
   证明: linearIndepOn_iffₛ.2 fun f hf g hg eq =>
     linearIndepOn_iffₛ.1 (H _ (union_subset hf hg) <| (Finset.finite_toSet _).union <|
       Finset.finite_toSet _) f Set.subset_union_left g Set.subset_union_right eq
@@ -611,7 +611,7 @@ li by simpa [Finsupp.linearCombination_apply] using h
 
 中文:
 定理 LinearIndependent.eq_of_smul_apply_eq_smul_apply
-  结论: {M : 类型} [AddCommMonoid M] [Module R M]
+  结论: {M : 类型} [加法交换幺半群 M] [模 R M]
   证明: by
   have h_single_eq : Finsupp.single i c = Finsupp.single j d :=
 li by simpa [Finsupp.linearCombination_apply] using h
@@ -648,7 +648,7 @@ theorem LinearIndependent.disjoint_span_image
 
 中文:
 定理 LinearIndependent.disjoint_span_image
-  结论: (hv : LinearIndependent R v) {s t : Set ι}
+  结论: (hv : LinearIndependent R v) {s t : 集合 ι}
   证明: by
   simp only [disjoint_def, Finsupp.mem_span_image_iff_linearCombination]
   rintro _ ⟨l₁, hl₁, rfl⟩ ⟨l₂, hl₂, H⟩
@@ -683,7 +683,7 @@ theorem LinearIndependent.notMem_span_image
 
 中文:
 定理 LinearIndependent.notMem_span_image
-  结论: [Nontrivial R] (hv : LinearIndependent R v) {s : Set ι}
+  结论: [非平凡 R] (hv : LinearIndependent R v) {s : 集合 ι}
   证明: by
   have h' : v x in Submodule.span R (v '' {x}) := by
     rw [Set.image_singleton]
@@ -721,7 +721,7 @@ theorem LinearIndependent.linearCombination_ne_of_notMem_support
 
 中文:
 定理 LinearIndependent.linearCombination_ne_of_notMem_support
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   replace h : x ∉ (f.support : Set ι) := h
   intro w
@@ -754,7 +754,7 @@ theorem LinearIndepOn.id_imageₛ
 
 中文:
 定理 LinearIndepOn.id_imageₛ
-  结论: {s : Set M} {f : M ->ₗ[R] M'} (hs : LinearIndepOn R id s)
+  结论: {s : 集合 M} {f : M ->ₗ[R] M'} (hs : LinearIndepOn R id s)
   证明: id_image hs.map_injOn f (by simpa using hf_inj)
 
 Depends on / 依赖: hf_inj, hs.map_injOn, id_image, map_injOn
@@ -780,7 +780,7 @@ theorem surjective_of_linearIndependent_of_span
 
 中文:
 定理 surjective_of_linearIndependent_of_span
-  结论: [Nontrivial R] (hv : LinearIndependent R v)
+  结论: [非平凡 R] (hv : LinearIndependent R v)
   证明: by
   intro i
   let repr : (span R (range (v ∘ f)) : Type _) -> ι' ->₀ R := (hv.comp f f.injective).repr
@@ -832,7 +832,7 @@ theorem eq_of_linearIndepOn_id_of_span_subtype
 
 中文:
 定理 eq_of_linearIndepOn_id_of_span_subtype
-  结论: [Nontrivial R] {s t : Set M}
+  结论: [非平凡 R] {s t : 集合 M}
   证明: by
   let f : t ↪ s :=
     ⟨fun x => ⟨x.1, h x.2⟩, fun a b hab => Subtype.coe_injective (Subtype.mk.inj hab)⟩
@@ -874,7 +874,7 @@ theorem le_of_span_le_span
 
 中文:
 定理 le_of_span_le_span
-  结论: [Nontrivial R] {s t u : Set M} (hl : LinearIndepOn R id u)
+  结论: [非平凡 R] {s t u : 集合 M} (hl : LinearIndepOn R id u)
   证明: by
   have :=
     eq_of_linearIndepOn_id_of_span_subtype (hl.mono (Set.union_subset hsu htu))
@@ -900,7 +900,7 @@ theorem span_le_span_iff
 
 中文:
 定理 span_le_span_iff
-  结论: [Nontrivial R] {s t u : Set M} (hl : LinearIndependent R ((↑) : u -> M))
+  结论: [非平凡 R] {s t u : 集合 M} (hl : LinearIndependent R ((↑) : u -> M))
   证明: ⟨le_of_span_le_span hl hsu htu, span_mono⟩
 
 Depends on / 依赖: le_of_span_le_span, span_mono
@@ -931,7 +931,7 @@ theorem LinearIndependent.eq_coords_of_eq
 
 中文:
 定理 LinearIndependent.eq_coords_of_eq
-  结论: [Fintype ι] {v : ι -> M} (hv : LinearIndependent R v)
+  结论: [有限类型 ι] {v : ι -> M} (hv : LinearIndependent R v)
   证明: by
   rw [← sub_eq_zero]; rw [← sum_sub_distrib] at heq
   simp_rw [← sub_smul] at heq
@@ -1045,8 +1045,8 @@ theorem LinearMap.linearIndependent_iff
   proof: f.linearIndependent_iff_of_disjoint by simp_rw [hf_inj, disjoint_bot_right]
 
 中文:
-定理 LinearMap.linearIndependent_iff
-  条件: (f : M ->ₗ[R] M') (hf_inj : LinearMap.ker f = ⊥)
+定理 线性映射.linearIndependent_iff
+  条件: (f : M ->ₗ[R] M') (hf_inj : 线性映射.ker f = ⊥)
   证明: f.linearIndependent_iff_of_disjoint by simp_rw [hf_inj, disjoint_bot_right]
 -/
 protected theorem LinearMap.linearIndependent_iff (f : M ->ₗ[R] M') (hf_inj : LinearMap.ker f = ⊥) :
@@ -1070,7 +1070,7 @@ theorem LinearIndependent.finCons'
 
 中文:
 定理 LinearIndependent.finCons'
-  结论: {m : 自然数} (x : M) (v : Fin m -> M) (hli : LinearIndependent R v)
+  结论: {m : 自然数} (x : M) (v : 有限集 m -> M) (hli : LinearIndependent R v)
   证明: by
   rw [Fintype.linearIndependent_iff] at hli ⊢
   rintro g total_eq j
@@ -1109,7 +1109,7 @@ theorem LinearIndependent.finSnoc'
 
 中文:
 定理 LinearIndependent.finSnoc'
-  结论: {m : 自然数} (v : Fin m -> M) (x : M) (hli : LinearIndependent R v)
+  结论: {m : 自然数} (v : 有限集 m -> M) (x : M) (hli : LinearIndependent R v)
   证明: by
   rw [Fin.snoc_eq_cons_rotate v x]; rw [← Function.comp_def]
   exact (linearIndependent_equiv _).mpr (.finCons' x v hli x_ortho)
@@ -1241,7 +1241,7 @@ theorem LinearIndepOn.union
 
 中文:
 定理 LinearIndepOn.union
-  结论: {t : Set ι} (hs : LinearIndepOn R v s) (ht : LinearIndepOn R v t)
+  结论: {t : 集合 ι} (hs : LinearIndepOn R v s) (ht : LinearIndepOn R v t)
   证明: by
   nontriviality R
   classical
@@ -1274,7 +1274,7 @@ theorem LinearIndepOn.id_union
 
 中文:
 定理 LinearIndepOn.id_union
-  结论: {s t : Set M} (hs : LinearIndepOn R id s) (ht : LinearIndepOn R id t)
+  结论: {s t : 集合 M} (hs : LinearIndepOn R id s) (ht : LinearIndepOn R id t)
   证明: hs.union ht (by simpa)
 
 Depends on / 依赖: hs.union
@@ -1297,7 +1297,7 @@ theorem linearIndepOn_union_iff
 
 中文:
 定理 linearIndepOn_union_iff
-  条件: {t : Set ι} (hdj : Disjoint s t)
+  条件: {t : 集合 ι} (hdj : Disjoint s t)
   证明: by
   refine ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right, ?_⟩,
     fun h => h.1.union h.2.1 h.2.2⟩
@@ -1325,7 +1325,7 @@ theorem linearIndepOn_id_union_iff
 
 中文:
 定理 linearIndepOn_id_union_iff
-  条件: {s t : Set M} (hdj : Disjoint s t)
+  条件: {s t : 集合 M} (hdj : Disjoint s t)
   证明: by
   rw [linearIndepOn_union_iff hdj]; rw [image_id]; rw [image_id]
 
@@ -1347,8 +1347,8 @@ theorem LinearIndepOn.image
   proof: hs.id_imageₛ LinearMap.injOn_of_disjoint_ker le_rfl hf_inj
 
 中文:
-定理 LinearIndepOn.image
-  结论: {s : Set M} {f : M ->ₗ[R] M'}
+定理 LinearIndepOn.像
+  结论: {s : 集合 M} {f : M ->ₗ[R] M'}
   证明: hs.id_imageₛ LinearMap.injOn_of_disjoint_ker le_rfl hf_inj
 
 Depends on / 依赖: LinearMap, LinearMap.injOn_of_disjoint_ker, hf_inj, hs.id_image, injOn_of_disjoint_ker, le_rfl
@@ -1380,7 +1380,7 @@ theorem linearIndependent_monoidHom
 
 中文:
 定理 linearIndependent_monoidHom
-  结论: (G : 类型) [MulOneClass G] (L : 类型) [CommRing L]
+  结论: (G : 类型) [MulOne类 G] (L : 类型) [交换环 L]
   证明: by
   let := Classical.decEq (G ->* L)
   let : MulAction L L := DistribMulAction.toMulAction
@@ -1477,7 +1477,7 @@ lemma linearIndependent_unique_iff
 
 中文:
 引理 linearIndependent_unique_iff
-  条件: [Unique ι]
+  条件: [唯一 ι]
   结论: LinearIndependent R v ↔ v default != 0
   证明: by
   refine ⟨?_, .of_subsingleton _⟩
@@ -1531,7 +1531,7 @@ theorem linearIndependent_subsingleton_index_iff
 
 中文:
 定理 linearIndependent_subsingleton_index_iff
-  条件: [Subsingleton ι] (f : ι -> M)
+  条件: [子单例 ι] (f : ι -> M)
   证明: by
   obtain (he | he) := isEmpty_or_nonempty ι
   · simp [linearIndependent_empty_type]

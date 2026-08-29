@@ -37,8 +37,8 @@ theorem IsLocalization.surj_of_gcd_domain
   grind
 
 中文:
-定理 IsLocalization.surj_of_gcd_domain
-  结论: [GCDMonoid R] (M : Submonoid R) [IsLocalization M A]
+定理 是Localization.surj_of_gcd_domain
+  结论: [最大公约数幺半群 R] (M : 子幺半群 R) [是Localization M A]
   证明: by
   obtain ⟨x, ⟨y, hy⟩, rfl⟩ := IsLocalization.exists_mk'_eq M z
   obtain ⟨x', y', hx', hy', hu⟩ := extract_gcd x y

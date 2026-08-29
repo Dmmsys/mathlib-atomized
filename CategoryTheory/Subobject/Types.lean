@@ -41,8 +41,8 @@ theorem subtype_val_mono
 
 中文:
 定理 subtype_val_mono
-  条件: {α : 类型u} (s : Set α)
-  结论: Mono (↾(Subtype.val : s -> α))
+  条件: {α : 类型u} (s : 集合 α)
+  结论: 单态射 (↾(子类型.val : s -> α))
   证明: (mono_iff_injective _).mpr Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, mono_iff_injective, val_injective
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellPowered.{u} (类型u)
+  签名: 良幂.{u} (类型u)
   定义体: wellPowered_of_essentiallySmall_monoOver fun α =>
     EssentiallySmall.mk' (Types.monoOverEquivalenceSet α)
 

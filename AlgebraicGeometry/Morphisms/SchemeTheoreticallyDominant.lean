@@ -45,7 +45,7 @@ class IsSchemeTheoreticallyDominant
     - ker_eq_bot((f)) : f.ker = ⊥
 
 中文:
-类 IsSchemeTheoreticallyDominant
+类 是SchemeTheoreticallyDominant
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
     - ker_eq_bot((f)) : f.ker = ⊥
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative @IsSchemeTheoreticallyDominant
+  签名: 是Multiplicative @是SchemeTheoreticallyDominant
   定义体: inferInstance
   comp_mem _ _ _ _ := inferInstance
 -/
@@ -99,8 +99,8 @@ lemma IsSchemeTheoreticallyDominant.of_isDominant
   exact f.range_subset_
 
 中文:
-引理 IsSchemeTheoreticallyDominant.of_isDominant
-  条件: (f : X ⟶ Y) [IsDominant f] [IsReduced Y]
+引理 是SchemeTheoreticallyDominant.of_isDominant
+  条件: (f : X ⟶ Y) [是Dominant f] [是既约 Y]
   证明: by
   rw [isSchemeTheoreticallyDominant_iff]; rw [← Scheme.IdealSheafData.support_eq_top_iff]; rw [← SetLike.coe_injective.eq_iff]; rw [TopologicalSpace.Closeds.coe_top]; rw [← Set.univ_subset_iff]; rw [← f.denseRange.closure_eq]; rw [f.ker.support.isClosed.closure_subset_iff]
   exact f.range_subset_
@@ -122,7 +122,7 @@ lemma isSchemeTheoreticallyDominant_iff_isDominant
 
 中文:
 引理 isSchemeTheoreticallyDominant_iff_isDominant
-  条件: (f : X ⟶ Y) [QuasiCompact f] [IsReduced Y]
+  条件: (f : X ⟶ Y) [拟紧 f] [是既约 Y]
   证明: ⟨fun _ => inferInstance, fun _ => .of_isDominant _⟩
 
 Depends on / 依赖: of_isDominant
@@ -148,8 +148,8 @@ lemma Scheme.Hom.app_injective
     Y.isBasis_affine
 
 中文:
-引理 Scheme.Hom.app_injective
-  结论: (f : X ⟶ Y) [IsSchemeTheoreticallyDominant f] [QuasiCompact f]
+引理 概形.态射.app_injective
+  结论: (f : X ⟶ Y) [是SchemeTheoreticallyDominant f] [拟紧 f]
   证明: by
   wlog hU : IsAffineOpen U generalizing U; swap
   · rw [RingHom.injective_iff_ker_eq_bot, ← f.ker_apply ⟨U, hU⟩, f.ker_eq_bot]
@@ -186,8 +186,8 @@ lemma IsSchemeTheoreticallyDominant.isReduced
   proof: ⟨fun _ => isReduced_of_injective _ (f.app_injective _)⟩
 
 中文:
-引理 IsSchemeTheoreticallyDominant.isReduced
-  结论: (f : X ⟶ Y) [IsSchemeTheoreticallyDominant f]
+引理 是SchemeTheoreticallyDominant.isReduced
+  结论: (f : X ⟶ Y) [是SchemeTheoreticallyDominant f]
   证明: ⟨fun _ => isReduced_of_injective _ (f.app_injective _)⟩
 
 Depends on / 依赖: app_injective, f.app_injective, isReduced_of_injective
@@ -212,7 +212,7 @@ instance IsSchemeTheoreticallyDominant.pullbackSnd
   simp 
 
 中文:
-实例 IsSchemeTheoreticallyDominant.pullbackSnd
+实例 是SchemeTheoreticallyDominant.pullbackSnd
   签名: (f : X ⟶ S) (g : Y ⟶ S)
   定义体: by
   rw [isSchemeTheoreticallyDominant_iff]
@@ -255,7 +255,7 @@ lemma IsSchemeTheoreticallyDominant.of_isPullback
   infer_instance
 
 中文:
-引理 IsSchemeTheoreticallyDominant.of_isPullback
+引理 是SchemeTheoreticallyDominant.of_isPullback
   结论: {f : X ⟶ S} {g : Y ⟶ S}
   证明: by
   rw [← H.isoPullback_hom_snd]
@@ -279,7 +279,7 @@ instance IsSchemeTheoreticallyDominant.pullbackFst
   body: .of_isPullback (.flip <| .of_hasPullback _ _)
 
 中文:
-实例 IsSchemeTheoreticallyDominant.pullbackFst
+实例 是SchemeTheoreticallyDominant.pullbackFst
   签名: (f : X ⟶ S) (g : Y ⟶ S)
   定义体: .of_isPullback (.flip <| .of_hasPullback _ _)
 

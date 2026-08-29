@@ -485,7 +485,7 @@ definition negInduction
 
 中文:
 定义 negInduction
-  签名: {motive : 整数 -> Sort*} (nat : 对任意 n : 自然数, motive n)
+  签名: {motive : 整数 -> 类型层*} (nat : 对任意 n : 自然数, motive n)
 -/
 @[elab_as_elim] protected def negInduction {motive : Int -> Sort*} (nat : forall n : Nat, motive n)
     (neg : (forall n : Nat, motive n) -> forall n : Nat, motive (-n)) : forall n : Int, motive n
@@ -507,7 +507,7 @@ definition leInduction
 
 中文:
 定义 leInduction
-  签名: {m : 整数} {motive : 对任意 n, m <= n -> Sort*} (base : motive m m.le_refl)
+  签名: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
   定义体: fun n => n.inductionOn' m
     (fun _ => base) (fun k hle ih _ => succ k hle <| ih hle) (fun _ _ _ _ => False.elim <| by lia)
 
@@ -531,7 +531,7 @@ theorem leInduction_base
 
 中文:
 定理 leInduction_base
-  结论: {m : 整数} {motive : 对任意 n, m <= n -> Sort*} (base : motive m m.le_refl)
+  结论: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
   证明: by
   rw [Int.leInduction]; rw [inductionOn'_self]
 
@@ -554,7 +554,7 @@ theorem leInduction_add_one
 
 中文:
 定理 leInduction_add_one
-  结论: {m : 整数} {motive : 对任意 n, m <= n -> Sort*} (base : motive m m.le_refl)
+  结论: {m : 整数} {motive : 对任意 n, m <= n -> 类型层*} (base : motive m m.le_refl)
   证明: by
   rw [Int.leInduction]; rw [inductionOn'_add_one hmn]
   rfl
@@ -581,7 +581,7 @@ definition leInductionDown
 
 中文:
 定义 leInductionDown
-  签名: {m : 整数} {motive : 对任意 n, n <= m -> Sort*} (base : motive m m.le_refl)
+  签名: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
   定义体: fun n => n.inductionOn' m
     (fun _ => base) (fun _ _ _ _ => False.elim <| by lia) (fun k hle ih _ => pred k hle <| ih hle)
 -/
@@ -601,7 +601,7 @@ theorem leInductionDown_base
 
 中文:
 定理 leInductionDown_base
-  结论: {m : 整数} {motive : 对任意 n, n <= m -> Sort*} (base : motive m m.le_refl)
+  结论: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
   证明: by
   rw [Int.leInductionDown]; rw [inductionOn'_self]
 
@@ -626,7 +626,7 @@ theorem leInductionDown_sub_one
 
 中文:
 定理 leInductionDown_sub_one
-  结论: {m : 整数} {motive : 对任意 n, n <= m -> Sort*} (base : motive m m.le_refl)
+  结论: {m : 整数} {motive : 对任意 n, n <= m -> 类型层*} (base : motive m m.le_refl)
   证明: by
   rw [Int.leInductionDown]; rw [inductionOn'_sub_one hnm]
   rfl
@@ -1231,7 +1231,7 @@ lemma exists_lt_and_lt_iff_not_dvd
   proof: (not_dvd_iff_lt_mul_succ m hn).symm
 
 中文:
-引理 exists_lt_and_lt_iff_not_dvd
+引理 存在_lt_and_lt_iff_not_dvd
   条件: (m : 整数) (hn : 0 < n)
   证明: (not_dvd_iff_lt_mul_succ m hn).symm
 
@@ -1278,7 +1278,7 @@ lemma ofNat_add_negSucc_of_ge
   rw [negSucc_eq]; rw [ofNat_eq_natCast]; rw [ofNat_eq_natCast]; rw [← Int.natCast_one]; rw [← Int.natCast_add]; rw [← Int.sub_eq_add_neg]; rw [← Int.natCast_sub h]
 
 中文:
-引理 ofNat_add_negSucc_of_ge
+引理 of自然数_add_negSucc_of_ge
   条件: {m n : 自然数} (h : n.succ <= m)
   证明: by
   rw [negSucc_eq]; rw [ofNat_eq_natCast]; rw [ofNat_eq_natCast]; rw [← Int.natCast_one]; rw [← Int.natCast_add]; rw [← Int.sub_eq_add_neg]; rw [← Int.natCast_sub h]
@@ -1373,7 +1373,7 @@ lemma toNat_pred_coe_of_pos
   simp only [lt_toNat, Int.cast_ofNat_Int, h, natCast_pred_of_pos, Int.le_of_lt h, toNat_of_nonneg]
 
 中文:
-引理 toNat_pred_coe_of_pos
+引理 to自然数_pred_coe_of_pos
   条件: {i : 整数} (h : 0 < i)
   结论: ((i.to自然数 - 1 : 自然数) : 整数) = i - 1
   证明: by
@@ -1394,7 +1394,7 @@ lemma toNat_lt_of_ne_zero
   proof: by lia
 
 中文:
-引理 toNat_lt_of_ne_zero
+引理 to自然数_lt_of_ne_zero
   条件: {n : 自然数} (hn : n != 0)
   结论: m.to自然数 < n ↔ m < n
   证明: by lia
@@ -1463,9 +1463,9 @@ lemma gcd_ofNat_negSucc
   proof: by simp [gcd]
 
 中文:
-引理 gcd_ofNat_negSucc
+引理 gcd_of自然数_negSucc
   条件: (m n : 自然数)
-  结论: gcd m (negSucc n) = m.gcd (n + 1)
+  结论: 最大公约数 m (negSucc n) = m.最大公约数 (n + 1)
   证明: by simp [gcd]
 -/
 @[simp] lemma gcd_ofNat_negSucc (m n : Nat) : gcd m (negSucc n) = m.gcd (n + 1) := by simp [gcd]
@@ -1479,9 +1479,9 @@ lemma gcd_negSucc_ofNat
   proof: by simp [gcd]
 
 中文:
-引理 gcd_negSucc_ofNat
+引理 gcd_negSucc_of自然数
   条件: (m n : 自然数)
-  结论: gcd (negSucc m) n = (m + 1).gcd n
+  结论: 最大公约数 (negSucc m) n = (m + 1).最大公约数 n
   证明: by simp [gcd]
 -/
 @[simp] lemma gcd_negSucc_ofNat (m n : Nat) : gcd (negSucc m) n = (m + 1).gcd n := by simp [gcd]
@@ -1514,7 +1514,7 @@ theorem gcd_right_comm
 中文:
 定理 gcd_right_comm
   条件: (a b c : 整数)
-  结论: gcd (gcd a b) c = gcd (gcd a c) b
+  结论: 最大公约数 (最大公约数 a b) c = 最大公约数 (最大公约数 a c) b
   证明: by
   rw [gcd_assoc]; rw [gcd_assoc]; rw [gcd_comm b c]
 

@@ -53,7 +53,7 @@ theorem Filter.EventuallyEq.iteratedDerivWithin_eq
   proof: congr($(hfg.iteratedFDerivWithin_eq hfg' n) _)
 
 中文:
-定理 Filter.EventuallyEq.iteratedDerivWithin_eq
+定理 滤子.EventuallyEq.iteratedDerivWithin_eq
   条件: (hfg : f =ᶠ[𝓝[s] x] g) (hfg' : f x = g x)
   证明: congr($(hfg.iteratedFDerivWithin_eq hfg' n) _)
 
@@ -74,8 +74,8 @@ theorem Filter.EventuallyEq.iteratedDerivWithin'
 .fun_comp (fun a => a fun _ => 1) exact h.iteratedFDerivWithin' ht n
 
 中文:
-定理 Filter.EventuallyEq.iteratedDerivWithin'
-  结论: {s t : Set 𝕜}
+定理 滤子.EventuallyEq.iteratedDerivWithin'
+  结论: {s t : 集合 𝕜}
   证明: by
   unfold iteratedDerivWithin
 .fun_comp (fun a => a fun _ => 1) exact h.iteratedFDerivWithin' ht n
@@ -97,8 +97,8 @@ lemma Filter.EventuallyEq.iteratedDerivWithin
   proof: h.iteratedDerivWithin' Set.Subset.rfl n
 
 中文:
-引理 Filter.EventuallyEq.iteratedDerivWithin
-  条件: {s : Set 𝕜} (h : f =ᶠ[𝓝[s] x] g) (n : 自然数)
+引理 滤子.EventuallyEq.iteratedDerivWithin
+  条件: {s : 集合 𝕜} (h : f =ᶠ[𝓝[s] x] g) (n : 自然数)
   证明: h.iteratedDerivWithin' Set.Subset.rfl n
 -/
 protected lemma Filter.EventuallyEq.iteratedDerivWithin {s : Set 𝕜} (h : f =ᶠ[𝓝[s] x] g) (n : Nat) :
@@ -113,7 +113,7 @@ theorem Filter.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert
   proof: (hfg.filter_mono (by simp)).iteratedDerivWithin_eq (hfg.eq_of_nhdsWithin (by simp))
 
 中文:
-定理 Filter.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert
+定理 滤子.EventuallyEq.iteratedDerivWithin_eq_of_nhds_insert
   证明: (hfg.filter_mono (by simp)).iteratedDerivWithin_eq (hfg.eq_of_nhdsWithin (by simp))
 
 Depends on / 依赖: eq_of_nhdsWithin, filter_mono, hfg.eq_of_nhdsWithin, hfg.filter_mono, iteratedDerivWithin_eq
@@ -137,7 +137,7 @@ include h hx in
 
 中文:
 定理 iteratedDerivWithin_congr
-  条件: (hfg : Set.EqOn f g s)
+  条件: (hfg : 集合.EqOn f g s)
   证明: fun _ hx => hfg.eventuallyEq_nhdsWithin.iteratedDerivWithin_eq (hfg hx)
 
 include h hx in
@@ -954,7 +954,7 @@ lemma Filter.EventuallyEq.iteratedDeriv
 @[to_fun iteratedDeriv_fun_add]
 
 中文:
-引理 Filter.EventuallyEq.iteratedDeriv
+引理 滤子.EventuallyEq.iteratedDeriv
   证明: by
   simp_all [← nhdsWithin_univ, ← iteratedDerivWithin_univ, EventuallyEq.iteratedDerivWithin]
 
@@ -1336,7 +1336,7 @@ theorem iteratedDeriv_comp_const_smul
 
 中文:
 定理 iteratedDeriv_comp_const_smul
-  条件: {n : 自然数} {f : 𝕜 -> F} (h : ContDiff 𝕜 n f) (c : 𝕜)
+  条件: {n : 自然数} {f : 𝕜 -> F} (h : 连续可微 𝕜 n f) (c : 𝕜)
   证明: by
   funext x
   simpa only [iteratedDerivWithin_univ] using
@@ -1363,7 +1363,7 @@ theorem iteratedDeriv_comp_const_mul
 
 中文:
 定理 iteratedDeriv_comp_const_mul
-  条件: {n : 自然数} {f : 𝕜 -> 𝕜} (h : ContDiff 𝕜 n f) (c : 𝕜)
+  条件: {n : 自然数} {f : 𝕜 -> 𝕜} (h : 连续可微 𝕜 n f) (c : 𝕜)
   证明: by
   simpa only [smul_eq_mul] using iteratedDeriv_comp_const_smul h c
 
@@ -1533,7 +1533,7 @@ lemma Filter.EventuallyEq.iteratedDeriv_eq
   rw [(hfg.filter_mono nhdsWithin_le_nhds).iteratedFDerivWithin_eq hfg.eq_of_nhds n]
 
 中文:
-引理 Filter.EventuallyEq.iteratedDeriv_eq
+引理 滤子.EventuallyEq.iteratedDeriv_eq
   条件: (n : 自然数) {f g : 𝕜 -> F} {x : 𝕜} (hfg : f =ᶠ[𝓝 x] g)
   证明: by
   simp only [← iteratedDerivWithin_univ, iteratedDerivWithin_eq_iteratedFDerivWithin]
@@ -1558,8 +1558,8 @@ lemma Set.EqOn.iteratedDeriv_of_isOpen
   exact hfg ha
 
 中文:
-引理 Set.EqOn.iteratedDeriv_of_isOpen
-  条件: (hfg : Set.EqOn f g s) (hs : IsOpen s) (n : 自然数)
+引理 集合.EqOn.iteratedDeriv_of_isOpen
+  条件: (hfg : 集合.EqOn f g s) (hs : 是开集 s) (n : 自然数)
   证明: by
   refine fun x hx => Filter.EventuallyEq.iteratedDeriv_eq n ?_
   filter_upwards [IsOpen.mem_nhds hs hx] with a ha
@@ -1707,7 +1707,7 @@ lemma iteratedDerivWithin_sum
 
 中文:
 引理 iteratedDerivWithin_sum
-  结论: {s : Set 𝕜} (hx : x in s) (hs : UniqueDiffOn 𝕜 s)
+  结论: {s : 集合 𝕜} (hx : x in s) (hs : UniqueDiffOn 𝕜 s)
   证明: by
   classical
   induction I using Finset.induction_on with
@@ -1742,7 +1742,7 @@ lemma iteratedDerivWithin_fun_sum
 
 中文:
 引理 iteratedDerivWithin_fun_sum
-  结论: {s : Set 𝕜} (hx : x in s) (hs : UniqueDiffOn 𝕜 s)
+  结论: {s : 集合 𝕜} (hx : x in s) (hs : UniqueDiffOn 𝕜 s)
   证明: by
   simpa [sum_fn] using iteratedDerivWithin_sum hx hs hf
 

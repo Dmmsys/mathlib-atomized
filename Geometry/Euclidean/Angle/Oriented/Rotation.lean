@@ -240,7 +240,7 @@ theorem det_rotation
 中文:
 定理 det_rotation
   条件: (θ : 实数.Angle)
-  结论: LinearMap.det (o.rotation θ).toLinearMap = 1
+  结论: 线性映射.det (o.rotation θ).toLinearMap = 1
   证明: by
   have : Nontrivial V := nontrivial_of_finrank_eq_succ (@Fact.out (finrank Real V = 2) _)
   obtain ⟨x, hx⟩ : exists x, x != (0 : V) := exists_ne (0 : V)
@@ -315,7 +315,7 @@ theorem rotation_zero
 
 中文:
 定理 rotation_zero
-  结论: o.rotation 0 = LinearIsometryEquiv.refl 实数 V
+  结论: o.rotation 0 = 线性等距等价.refl 实数 V
   证明: by ext; simp [rotation]
 
 Depends on / 依赖: rotation
@@ -336,7 +336,7 @@ theorem rotation_pi
 
 中文:
 定理 rotation_pi
-  结论: o.rotation π = LinearIsometryEquiv.neg 实数
+  结论: o.rotation π = 线性等距等价.neg 实数
   证明: by
   ext x
   simp [rotation]
@@ -1063,7 +1063,7 @@ theorem exists_linearIsometryEquiv_eq_of_det_pos
   apply (o.basisRightAngleR
 
 中文:
-定理 exists_linearIsometryEquiv_eq_of_det_pos
+定理 存在_linearIsometryEquiv_eq_of_det_pos
   结论: {f : V ≃ₗᵢ[实数] V}
   证明: by
   have : Nontrivial V := nontrivial_of_finrank_eq_succ (@Fact.out (finrank Real V = 2) _)
@@ -1130,8 +1130,8 @@ theorem _root_.Complex.rotation
   ring
 
 中文:
-定理 _root_.Complex.rotation
-  条件: (θ : 实数.Angle) (z : Complex)
+定理 _root_.复形.rotation
+  条件: (θ : 实数.Angle) (z : 复形)
   证明: by
   simp only [rotation_apply, Complex.rightAngleRotation, Real.Angle.coe_toCircle, real_smul]
   ring
@@ -1152,7 +1152,7 @@ theorem rotation_map_complex
 
 中文:
 定理 rotation_map_complex
-  结论: (θ : 实数.Angle) (f : V ≃ₗᵢ[实数] Complex)
+  结论: (θ : 实数.Angle) (f : V ≃ₗᵢ[实数] 复形)
   证明: by
   rw [← Complex.rotation]; rw [← hf]; rw [o.rotation_map]; rw [LinearIsometryEquiv.symm_apply_apply]
 

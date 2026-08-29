@@ -58,7 +58,7 @@ theorem toTensorAlgebra_tprod
 
 中文:
 定理 toTensorAlgebra_tprod
-  条件: {n} (x : Fin n -> M)
+  条件: {n} (x : 有限集 n -> M)
   证明: PiTensorProduct.lift.tprod _
 
 @[simp]
@@ -198,7 +198,7 @@ theorem ofDirectSum_of_tprod
 
 中文:
 定理 ofDirectSum_of_tprod
-  条件: {n} (x : Fin n -> M)
+  条件: {n} (x : 有限集 n -> M)
   证明: (DirectSum.toAddMonoid_of
     (fun _ => LinearMap.toAddMonoidHom TensorPower.toTensorAlgebra) _ _).trans
   (TensorPower.toTensorAlgebra_tprod _)
@@ -375,7 +375,7 @@ theorem _root_.TensorPower.list_prod_gradedMonoid_mk_single
 
 中文:
 定理 _root_.TensorPower.list_prod_gradedMonoid_mk_single
-  条件: (n : 自然数) (x : Fin n -> M)
+  条件: (n : 自然数) (x : 有限集 n -> M)
   证明: by
   refine Fin.consInduction ?_ ?_ x <;> clear x
   · rw [List.finRange_zero, List.map_nil, List.prod_nil]
@@ -421,7 +421,7 @@ theorem toDirectSum_tensorPower_tprod
 
 中文:
 定理 toDirectSum_tensorPower_tprod
-  条件: {n} (x : Fin n -> M)
+  条件: {n} (x : 有限集 n -> M)
   证明: by
   rw [tprod_apply]; rw [map_list_prod]; rw [List.map_ofFn]
   simp_rw [Function.comp_def, toDirectSum_ι]

@@ -46,7 +46,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward₀OfCommRingCat F R).Monoidal
+  签名: (pushforward₀OfCommRingCat F R).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       -- using `Iso.refl _` for `μIso` directly hurts kernel typechecking

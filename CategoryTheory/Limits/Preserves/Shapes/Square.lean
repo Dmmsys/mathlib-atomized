@@ -48,8 +48,8 @@ lemma IsPullback.map
   proof: Square.IsPullback.mk _ (isLimitPullbackConeMapOfIsLimit F sq.fac h.isLimit)
 
 中文:
-引理 IsPullback.map
-  条件: (h : sq.IsPullback) (F : C ⥤ D) [PreservesLimit (cospan sq.f₂₄ sq.f₃₄) F]
+引理 是拉回.map
+  条件: (h : sq.是拉回) (F : C ⥤ D) [保持极限 (cospan sq.f₂₄ sq.f₃₄) F]
   证明: Square.IsPullback.mk _ (isLimitPullbackConeMapOfIsLimit F sq.fac h.isLimit)
 
 Depends on / 依赖: IsPullback, Square, Square.IsPullback.mk, h.isLimit, isLimit, isLimitPullbackConeMapOfIsLimit, sq.fac
@@ -67,8 +67,8 @@ lemma IsPullback.of_map
   proof: CategoryTheory.IsPullback.of_map F sq.fac h
 
 中文:
-引理 IsPullback.of_map
-  结论: (F : C ⥤ D) [ReflectsLimit (cospan sq.f₂₄ sq.f₃₄) F]
+引理 是拉回.of_map
+  结论: (F : C ⥤ D) [反映极限 (cospan sq.f₂₄ sq.f₃₄) F]
   证明: CategoryTheory.IsPullback.of_map F sq.fac h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.of_map, IsPullback, of_map, sq.fac
@@ -87,8 +87,8 @@ lemma IsPullback.map_iff
   proof: ⟨fun h => of_map F h, fun h => h.map F⟩
 
 中文:
-引理 IsPullback.map_iff
-  结论: (F : C ⥤ D) [PreservesLimit (cospan sq.f₂₄ sq.f₃₄) F]
+引理 是拉回.map_iff
+  结论: (F : C ⥤ D) [保持极限 (cospan sq.f₂₄ sq.f₃₄) F]
   证明: ⟨fun h => of_map F h, fun h => h.map F⟩
 
 Depends on / 依赖: h.map, of_map
@@ -107,8 +107,8 @@ lemma IsPushout.map
   proof: Square.IsPushout.mk _ (isColimitPushoutCoconeMapOfIsColimit F sq.fac h.isColimit)
 
 中文:
-引理 IsPushout.map
-  条件: (h : sq.IsPushout) (F : C ⥤ D) [PreservesColimit (span sq.f₁₂ sq.f₁₃) F]
+引理 是推出.map
+  条件: (h : sq.是推出) (F : C ⥤ D) [保持余极限 (span sq.f₁₂ sq.f₁₃) F]
   证明: Square.IsPushout.mk _ (isColimitPushoutCoconeMapOfIsColimit F sq.fac h.isColimit)
 
 Depends on / 依赖: IsPushout, Square, Square.IsPushout.mk, h.isColimit, isColimit, isColimitPushoutCoconeMapOfIsColimit, sq.fac
@@ -126,8 +126,8 @@ lemma IsPushout.of_map
   proof: CategoryTheory.IsPushout.of_map F sq.fac h
 
 中文:
-引理 IsPushout.of_map
-  结论: (F : C ⥤ D) [ReflectsColimit (span sq.f₁₂ sq.f₁₃) F]
+引理 是推出.of_map
+  结论: (F : C ⥤ D) [反映余极限 (span sq.f₁₂ sq.f₁₃) F]
   证明: CategoryTheory.IsPushout.of_map F sq.fac h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPushout.of_map, IsPushout, of_map, sq.fac
@@ -146,8 +146,8 @@ lemma IsPushout.map_iff
   proof: ⟨fun h => of_map F h, fun h => h.map F⟩
 
 中文:
-引理 IsPushout.map_iff
-  结论: (F : C ⥤ D) [PreservesColimit (span sq.f₁₂ sq.f₁₃) F]
+引理 是推出.map_iff
+  结论: (F : C ⥤ D) [保持余极限 (span sq.f₁₂ sq.f₁₃) F]
   证明: ⟨fun h => of_map F h, fun h => h.map F⟩
 
 Depends on / 依赖: h.map, of_map
@@ -230,8 +230,8 @@ lemma IsPullback.iff_of_equiv
     (((Equiv.trans Equ
 
 中文:
-引理 IsPullback.iff_of_equiv
-  结论: sq₁.IsPullback ↔ sq₂.IsPullback
+引理 是拉回.iff_of_equiv
+  结论: sq₁.是拉回 ↔ sq₂.是拉回
   证明: by
   rw [← IsPullback.map_iff sq₁ uliftFunctor.{max u v}]; rw [← IsPullback.map_iff sq₂ uliftFunctor.{max u v}]
   refine iff_of_iso (Square.isoMk
@@ -265,9 +265,9 @@ lemma IsPullback.of_equiv
   proof: (iff_of_equiv sq₁ sq₂ e₁ e₂ e₃ e₄ comm₁₂ comm₁₃ comm₂₄ comm₃₄).1 h₁
 
 中文:
-引理 IsPullback.of_equiv
-  条件: (h₁ : sq₁.IsPullback)
-  结论: sq₂.IsPullback
+引理 是拉回.of_equiv
+  条件: (h₁ : sq₁.是拉回)
+  结论: sq₂.是拉回
   证明: (iff_of_equiv sq₁ sq₂ e₁ e₂ e₃ e₄ comm₁₂ comm₁₃ comm₂₄ comm₃₄).1 h₁
 
 Depends on / 依赖: iff_of_equiv

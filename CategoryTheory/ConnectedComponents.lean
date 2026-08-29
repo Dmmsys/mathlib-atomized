@@ -46,7 +46,7 @@ definition ConnectedComponents
 
 中文:
 定义 ConnectedComponents
-  签名: (J : 类型u₁) [Category.{v₁} J]
+  签名: (J : 类型u₁) [范畴.{v₁} J]
   定义体: Quotient (Zigzag.setoid J)
 
 Depends on / 依赖: Quotient, Zigzag, Zigzag.setoid, setoid
@@ -66,8 +66,8 @@ definition Functor.mapConnectedComponents
 @[simp]
 
 中文:
-定义 Functor.mapConnectedComponents
-  签名: {K : 类型u₂} [Category.{v₂} K] (F : J ⥤ K)
+定义 函子.mapConnectedComponents
+  签名: {K : 类型u₂} [范畴.{v₂} K] (F : J ⥤ K)
   定义体: Quotient.lift (Quotient.mk (Zigzag.setoid _) ∘ F.obj) x
     (fun _ _ => Quot.sound ∘ zigzag_obj_of_zigzag F)
 
@@ -90,8 +90,8 @@ lemma Functor.mapConnectedComponents_mk
   proof: rfl
 
 中文:
-引理 Functor.mapConnectedComponents_mk
-  条件: {K : 类型u₂} [Category.{v₂} K] (F : J ⥤ K) (j : J)
+引理 函子.mapConnectedComponents_mk
+  条件: {K : 类型u₂} [范畴.{v₂} K] (F : J ⥤ K) (j : J)
   证明: rfl
 -/
 lemma Functor.mapConnectedComponents_mk {K : Type u₂} [Category.{v₂} K] (F : J ⥤ K) (j : J) :
@@ -106,8 +106,8 @@ instance [Inhabited
   body: ⟨Quotient.mk'' default⟩
 
 中文:
-实例 [Inhabited
-  签名: J] : Inhabited (ConnectedComponents J)
+实例 [可居
+  签名: J] : 可居 (ConnectedComponents J)
   定义体: ⟨Quotient.mk'' default⟩
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -148,7 +148,7 @@ definition ConnectedComponents.liftFunctor
 
 中文:
 定义 ConnectedComponents.liftFunctor
-  签名: (J) [Category* J] {X : 类型} (F : J ⥤ Discrete X)
+  签名: (J) [范畴* J] {X : 类型} (F : J ⥤ 离散 X)
   定义体: Quotient.lift (fun c => (F.obj c).as)
     (fun _ _ h => eq_of_zigzag X (zigzag_obj_of_zigzag F h))
 
@@ -177,7 +177,7 @@ definition ConnectedComponents.typeToCatHomEquiv
 
 中文:
 定义 ConnectedComponents.typeToCatHomEquiv
-  签名: (J) [Category* J] (X : 类型)
+  签名: (J) [范畴* J] (X : 类型)
   定义体: ConnectedComponents.functorToDiscrete _
   invFun := ConnectedComponents.liftFunctor _
   left_inv f := funext fun x => by
@@ -317,7 +317,7 @@ abbreviation Decomposed
 
 中文:
 缩写 Decomposed
-  签名: (J : 类型u₁) [Category.{v₁} J]
+  签名: (J : 类型u₁) [范畴.{v₁} J]
   定义体: Σ j : ConnectedComponents J, j.Component
 
 Depends on / 依赖: Component, ConnectedComponents, j.Component
@@ -358,7 +358,7 @@ definition decomposedTo
 
 中文:
 定义 decomposedTo
-  签名: (J : 类型u₁) [Category.{v₁} J]
+  签名: (J : 类型u₁) [范畴.{v₁} J]
   定义体: Sigma.desc ConnectedComponents.ι
 
 @[simp]
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: (decomposedTo J).Full
+  签名: (decomposedTo J).满
   定义体: by
     rintro ⟨j', X, hX⟩ ⟨k', Y, hY⟩ f
     dsimp at f
@@ -439,7 +439,7 @@ instance :
 
 中文:
 实例 :
-  签名: (decomposedTo J).Faithful
+  签名: (decomposedTo J).忠实
   定义体: by
     rintro ⟨_, j, rfl⟩ ⟨_, k, hY⟩ ⟨⟨f⟩⟩ ⟨⟨_⟩⟩ rfl
     rfl
@@ -459,7 +459,7 @@ instance :
 
 中文:
 实例 :
-  签名: (decomposedTo J).EssSurj
+  签名: (decomposedTo J).本质满射
   定义体: ⟨⟨_, j, rfl⟩, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Iso.refl
@@ -475,7 +475,7 @@ instance :
 
 中文:
 实例 :
-  签名: (decomposedTo J).IsEquivalence
+  签名: (decomposedTo J).是等价
 -/
 instance : (decomposedTo J).IsEquivalence where
 

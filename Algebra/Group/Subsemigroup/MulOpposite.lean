@@ -40,7 +40,7 @@ definition op
 
 中文:
 定义 op
-  签名: (x : Subsemigroup M)
+  签名: (x : 子半群 M)
   定义体: MulOpposite.unop ⁻¹' x
   mul_mem' ha hb := x.mul_mem hb ha
 
@@ -62,7 +62,7 @@ theorem mem_op
 
 中文:
 定理 mem_op
-  条件: {x : Mᵐᵒᵖ} {S : Subsemigroup M}
+  条件: {x : Mᵐᵒᵖ} {S : 子半群 M}
   结论: x in S.op ↔ x.unop in S
   证明: Iff.rfl
 
@@ -86,7 +86,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (x : Subsemigroup Mᵐᵒᵖ)
+  签名: (x : 子半群 Mᵐᵒᵖ)
   定义体: MulOpposite.op ⁻¹' x
   mul_mem' ha hb := x.mul_mem hb ha
 
@@ -110,7 +110,7 @@ theorem mem_unop
 
 中文:
 定理 mem_unop
-  条件: {x : M} {S : Subsemigroup Mᵐᵒᵖ}
+  条件: {x : M} {S : 子半群 Mᵐᵒᵖ}
   结论: x in S.unop ↔ MulOpposite.op x in S
   证明: Iff.rfl
 
@@ -134,7 +134,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (S : Subsemigroup M)
+  条件: (S : 子半群 M)
   结论: S.op.unop = S
   证明: rfl
 
@@ -154,7 +154,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (S : Subsemigroup Mᵐᵒᵖ)
+  条件: (S : 子半群 Mᵐᵒᵖ)
   结论: S.unop.op = S
   证明: rfl
 -/
@@ -176,7 +176,7 @@ theorem op_le_iff
 
 中文:
 定理 op_le_iff
-  条件: {S₁ : Subsemigroup M} {S₂ : Subsemigroup Mᵐᵒᵖ}
+  条件: {S₁ : 子半群 M} {S₂ : 子半群 Mᵐᵒᵖ}
   结论: S₁.op <= S₂ ↔ S₁ <= S₂.unop
   证明: MulOpposite.op_surjective.forall
 
@@ -201,7 +201,7 @@ theorem le_op_iff
 
 中文:
 定理 le_op_iff
-  条件: {S₁ : Subsemigroup Mᵐᵒᵖ} {S₂ : Subsemigroup M}
+  条件: {S₁ : 子半群 Mᵐᵒᵖ} {S₂ : 子半群 M}
   结论: S₁ <= S₂.op ↔ S₁.unop <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -226,7 +226,7 @@ theorem op_le_op_iff
 
 中文:
 定理 op_le_op_iff
-  条件: {S₁ S₂ : Subsemigroup M}
+  条件: {S₁ S₂ : 子半群 M}
   结论: S₁.op <= S₂.op ↔ S₁ <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -249,7 +249,7 @@ theorem unop_le_unop_iff
 
 中文:
 定理 unop_le_unop_iff
-  条件: {S₁ S₂ : Subsemigroup Mᵐᵒᵖ}
+  条件: {S₁ S₂ : 子半群 Mᵐᵒᵖ}
   结论: S₁.unop <= S₂.unop ↔ S₁ <= S₂
   证明: MulOpposite.unop_surjective.forall
 
@@ -277,7 +277,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Subsemigroup M ≃o Subsemigroup Mᵐᵒᵖ where
+  签名: : 子半群 M ≃o 子半群 Mᵐᵒᵖ where
   定义体: Subsemigroup.op
   invFun := Subsemigroup.unop
   left_inv := unop_op
@@ -308,7 +308,7 @@ theorem op_injective
 
 中文:
 定理 op_injective
-  结论: (@Subsemigroup.op M _).Injective
+  结论: (@子半群.op M _).单射
   证明: opEquiv.injective
 
 @[to_additive]
@@ -330,7 +330,7 @@ theorem unop_injective
 
 中文:
 定理 unop_injective
-  结论: (@Subsemigroup.unop M _).Injective
+  结论: (@子半群.unop M _).单射
   证明: opEquiv.symm.injective
 
 @[to_additive (attr := simp)]
@@ -353,7 +353,7 @@ theorem op_inj
 
 中文:
 定理 op_inj
-  条件: {S T : Subsemigroup M}
+  条件: {S T : 子半群 M}
   结论: S.op = T.op ↔ S = T
   证明: opEquiv.eq_iff_eq
 
@@ -377,7 +377,7 @@ theorem unop_inj
 
 中文:
 定理 unop_inj
-  条件: {S T : Subsemigroup Mᵐᵒᵖ}
+  条件: {S T : 子半群 Mᵐᵒᵖ}
   结论: S.unop = T.unop ↔ S = T
   证明: opEquiv.symm.eq_iff_eq
 
@@ -400,7 +400,7 @@ theorem op_bot
 
 中文:
 定理 op_bot
-  结论: (⊥ : Subsemigroup M).op = ⊥
+  结论: (⊥ : 子半群 M).op = ⊥
   证明: opEquiv.map_bot
 
 @[to_additive (attr := simp)]
@@ -423,7 +423,7 @@ theorem op_eq_bot
 
 中文:
 定理 op_eq_bot
-  条件: {S : Subsemigroup M}
+  条件: {S : 子半群 M}
   结论: S.op = ⊥ ↔ S = ⊥
   证明: op_injective.eq_iff' op_bot
 
@@ -446,7 +446,7 @@ theorem unop_bot
 
 中文:
 定理 unop_bot
-  结论: (⊥ : Subsemigroup Mᵐᵒᵖ).unop = ⊥
+  结论: (⊥ : 子半群 Mᵐᵒᵖ).unop = ⊥
   证明: opEquiv.symm.map_bot
 
 @[to_additive (attr := simp)]
@@ -469,7 +469,7 @@ theorem unop_eq_bot
 
 中文:
 定理 unop_eq_bot
-  条件: {S : Subsemigroup Mᵐᵒᵖ}
+  条件: {S : 子半群 Mᵐᵒᵖ}
   结论: S.unop = ⊥ ↔ S = ⊥
   证明: unop_injective.eq_iff' unop_bot
 
@@ -492,7 +492,7 @@ theorem op_top
 
 中文:
 定理 op_top
-  结论: (⊤ : Subsemigroup M).op = ⊤
+  结论: (⊤ : 子半群 M).op = ⊤
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -513,7 +513,7 @@ theorem op_eq_top
 
 中文:
 定理 op_eq_top
-  条件: {S : Subsemigroup M}
+  条件: {S : 子半群 M}
   结论: S.op = ⊤ ↔ S = ⊤
   证明: op_injective.eq_iff' op_top
 
@@ -536,7 +536,7 @@ theorem unop_top
 
 中文:
 定理 unop_top
-  结论: (⊤ : Subsemigroup Mᵐᵒᵖ).unop = ⊤
+  结论: (⊤ : 子半群 Mᵐᵒᵖ).unop = ⊤
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -557,7 +557,7 @@ theorem unop_eq_top
 
 中文:
 定理 unop_eq_top
-  条件: {S : Subsemigroup Mᵐᵒᵖ}
+  条件: {S : 子半群 Mᵐᵒᵖ}
   结论: S.unop = ⊤ ↔ S = ⊤
   证明: unop_injective.eq_iff' unop_top
 
@@ -581,7 +581,7 @@ theorem op_sup
 
 中文:
 定理 op_sup
-  条件: (S₁ S₂ : Subsemigroup M)
+  条件: (S₁ S₂ : 子半群 M)
   结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
   证明: opEquiv.map_sup _ _
 
@@ -606,7 +606,7 @@ theorem unop_sup
 
 中文:
 定理 unop_sup
-  条件: (S₁ S₂ : Subsemigroup Mᵐᵒᵖ)
+  条件: (S₁ S₂ : 子半群 Mᵐᵒᵖ)
   结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
   证明: opEquiv.symm.map_sup _ _
 
@@ -631,7 +631,7 @@ theorem op_inf
 
 中文:
 定理 op_inf
-  条件: (S₁ S₂ : Subsemigroup M)
+  条件: (S₁ S₂ : 子半群 M)
   结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
   证明: rfl
 
@@ -653,7 +653,7 @@ theorem unop_inf
 
 中文:
 定理 unop_inf
-  条件: (S₁ S₂ : Subsemigroup Mᵐᵒᵖ)
+  条件: (S₁ S₂ : 子半群 Mᵐᵒᵖ)
   结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
   证明: rfl
 
@@ -675,7 +675,7 @@ theorem op_sSup
 
 中文:
 定理 op_sSup
-  条件: (S : Set (Subsemigroup M))
+  条件: (S : 集合 (子半群 M))
   结论: (sSup S).op = sSup (.unop ⁻¹' S)
   证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
 
@@ -700,7 +700,7 @@ theorem unop_sSup
 
 中文:
 定理 unop_sSup
-  条件: (S : Set (Subsemigroup Mᵐᵒᵖ))
+  条件: (S : 集合 (子半群 Mᵐᵒᵖ))
   结论: (sSup S).unop = sSup (.op ⁻¹' S)
   证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
 
@@ -725,7 +725,7 @@ theorem op_sInf
 
 中文:
 定理 op_sInf
-  条件: (S : Set (Subsemigroup M))
+  条件: (S : 集合 (子半群 M))
   结论: (sInf S).op = sInf (.unop ⁻¹' S)
   证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
 
@@ -750,7 +750,7 @@ theorem unop_sInf
 
 中文:
 定理 unop_sInf
-  条件: (S : Set (Subsemigroup Mᵐᵒᵖ))
+  条件: (S : 集合 (子半群 Mᵐᵒᵖ))
   结论: (sInf S).unop = sInf (.op ⁻¹' S)
   证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
 
@@ -775,7 +775,7 @@ theorem op_iSup
 
 中文:
 定理 op_iSup
-  条件: (S : ι -> Subsemigroup M)
+  条件: (S : ι -> 子半群 M)
   结论: (iSup S).op = ⨆ i, (S i).op
   证明: opEquiv.map_iSup _
 
@@ -799,7 +799,7 @@ theorem unop_iSup
 
 中文:
 定理 unop_iSup
-  条件: (S : ι -> Subsemigroup Mᵐᵒᵖ)
+  条件: (S : ι -> 子半群 Mᵐᵒᵖ)
   结论: (iSup S).unop = ⨆ i, (S i).unop
   证明: opEquiv.symm.map_iSup _
 
@@ -824,7 +824,7 @@ theorem op_iInf
 
 中文:
 定理 op_iInf
-  条件: (S : ι -> Subsemigroup M)
+  条件: (S : ι -> 子半群 M)
   结论: (iInf S).op = ⨅ i, (S i).op
   证明: opEquiv.map_iInf _
 
@@ -848,7 +848,7 @@ theorem unop_iInf
 
 中文:
 定理 unop_iInf
-  条件: (S : ι -> Subsemigroup Mᵐᵒᵖ)
+  条件: (S : ι -> 子半群 Mᵐᵒᵖ)
   结论: (iInf S).unop = ⨅ i, (S i).unop
   证明: opEquiv.symm.map_iInf _
 
@@ -876,7 +876,7 @@ theorem op_closure
 
 中文:
 定理 op_closure
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
   证明: by
   simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, Subsemigroup.coe_unop]
@@ -906,7 +906,7 @@ theorem unop_closure
 
 中文:
 定理 unop_closure
-  条件: (s : Set Mᵐᵒᵖ)
+  条件: (s : 集合 Mᵐᵒᵖ)
   结论: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
   证明: by
   rw [← op_inj]; rw [op_unop]; rw [op_closure]
@@ -931,7 +931,7 @@ definition equivOp
 
 中文:
 定义 equivOp
-  签名: (H : Subsemigroup M)
+  签名: (H : 子半群 M)
   定义体: MulOpposite.opEquiv.subtypeEquiv fun _ => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, MulOpposite, MulOpposite.opEquiv.subtypeEquiv, opEquiv, subtypeEquiv

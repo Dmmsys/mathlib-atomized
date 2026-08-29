@@ -54,9 +54,9 @@ structure Precoverage
 
 中文:
 结构 Precoverage
-  参数: (C : 类型) [Category* C]
+  参数: (C : 类型) [范畴* C]
   公理与运算 (1 个):
-    - coverings : 对任意 (X : C), Set (Presieve X)
+    - coverings : 对任意 (X : C), 集合 (Presieve X)
 -/
 structure Precoverage (C : Type*) [Category* C] where
   /-- The collection of covering presieves for an object `X`. -/
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Precoverage C) (fun _ => (X : C) -> Set (Presieve X))
+  签名: CoeFun (Precoverage C) (fun _ => (X : C) -> 集合 (Presieve X))
   定义体: coverings
 
 Depends on / 依赖: coverings
@@ -98,7 +98,7 @@ le_antisymm _ _ h1 h2 := Precoverage.ext funext
 
 中文:
 实例 :
-  签名: PartialOrder (Precoverage C)
+  签名: 偏序 (Precoverage C)
   定义体: A.coverings <= B.coverings
   le_refl _ _ := le_refl _
   le_trans _ _ _ h1 h2 X := le_trans (h1 X) (h2 X)
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Precoverage C)
+  签名: 最小值 (Precoverage C)
   定义体: ⟨A.coverings ⊓ B.coverings⟩
 
 Depends on / 依赖: A.coverings, B.coverings, coverings
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Precoverage C)
+  签名: 最大值 (Precoverage C)
   定义体: ⟨A.coverings ⊔ B.coverings⟩
 
 Depends on / 依赖: A.coverings, B.coverings, coverings
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Precoverage C)
+  签名: 上确界集 (Precoverage C)
   定义体: ⟨⨆ K in A, K.coverings⟩
 
 Depends on / 依赖: K.coverings, coverings
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Precoverage C)
+  签名: 下确界集 (Precoverage C)
   定义体: ⟨⨅ K in A, K.coverings⟩
 
 Depends on / 依赖: K.coverings, coverings
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Precoverage C)
+  签名: 顶元素 (Precoverage C)
   定义体: .univ
 -/
 instance : Top (Precoverage C) where
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Precoverage C)
+  签名: 底元素 (Precoverage C)
   定义体: ∅
 -/
 instance : Bot (Precoverage C) where
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Precoverage C)
+  签名: 完备格 (Precoverage C)
   定义体: Function.Injective.completeLattice Precoverage.coverings (fun _ _ hab => Precoverage.ext hab)
     .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl) rfl rfl
 
@@ -249,10 +249,10 @@ class HasIsos
     - mem_coverings_of_isIso({S T : C} (f : S ⟶ T) [IsIso f]) : .singleton f in J T
 
 中文:
-类 HasIsos
+类 有是os
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - mem_coverings_of_isIso({S T : C} (f : S ⟶ T) [IsIso f]) : .singleton f in J T
+    - mem_coverings_of_isIso({S T : C} (f : S ⟶ T) [是同构 f]) : .singleton f in J T
 -/
 class HasIsos (J : Precoverage C) : Prop where
   mem_coverings_of_isIso {S T : C} (f : S ⟶ T) [IsIso f] : .singleton f in J T
@@ -267,10 +267,10 @@ class IsStableUnderBaseChange
     - mem_coverings_of_isPullback({ι : Type (max u v)} {S : C} {X : ι -> C} (f : forall i, X i ⟶ S) (hR : Presieve.ofArrows X f in J S) {Y : C} (g : Y ⟶ S) {P : ι -> C} (p₁ : forall i, P i ⟶ Y) (p₂ : forall i, P i ⟶ X i) (h : forall i, IsPullback (p₁ i) (p₂ i) g (f i))) : .ofArrows P p₁ in J Y
 
 中文:
-类 IsStableUnderBaseChange
+类 是StableUnderBaseChange
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - mem_coverings_of_isPullback({ι : Type (max u v)} {S : C} {X : ι -> C} (f : 对任意 i, X i ⟶ S) (hR : Presieve.ofArrows X f in J S) {Y : C} (g : Y ⟶ S) {P : ι -> C} (p₁ : 对任意 i, P i ⟶ Y) (p₂ : 对任意 i, P i ⟶ X i) (h : 对任意 i, IsPullback (p₁ i) (p₂ i) g (f i))) : .ofArrows P p₁ in J Y
+    - mem_coverings_of_isPullback({ι : 类型 (最大值 u v)} {S : C} {X : ι -> C} (f : 对任意 i, X i ⟶ S) (hR : Presieve.ofArrows X f in J S) {Y : C} (g : Y ⟶ S) {P : ι -> C} (p₁ : 对任意 i, P i ⟶ Y) (p₂ : 对任意 i, P i ⟶ X i) (h : 对任意 i, 是拉回 (p₁ i) (p₂ i) g (f i))) : .ofArrows P p₁ in J Y
 -/
 class IsStableUnderBaseChange (J : Precoverage C) : Prop where
   mem_coverings_of_isPullback {ι : Type (max u v)} {S : C} {X : ι -> C} (f : forall i, X i ⟶ S)
@@ -289,10 +289,10 @@ class IsStableUnderComposition
     - comp_mem_coverings({ι : Type (max u v)} {S : C} {X : ι -> C} (f : forall i, X i ⟶ S) (hf : Presieve.ofArrows X f in J S) {σ : ι -> Type (max u v)} {Y : forall (i : ι), σ i -> C} (g : forall i j, Y i j ⟶ X i) (hg : forall i, Presieve.ofArrows (Y i) (g i) in J (X i))) : .ofArrows (fun p : Σ i, σ i => Y _ p.2) (fun _ => g _ _ ≫ f _) in J S
 
 中文:
-类 IsStableUnderComposition
+类 是StableUnderComposition
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - comp_mem_coverings({ι : Type (max u v)} {S : C} {X : ι -> C} (f : 对任意 i, X i ⟶ S) (hf : Presieve.ofArrows X f in J S) {σ : ι -> Type (max u v)} {Y : 对任意 (i : ι), σ i -> C} (g : 对任意 i j, Y i j ⟶ X i) (hg : 对任意 i, Presieve.ofArrows (Y i) (g i) in J (X i))) : .ofArrows (fun p : Σ i, σ i => Y _ p.2) (fun _ => g _ _ ≫ f _) in J S
+    - comp_mem_coverings({ι : 类型 (最大值 u v)} {S : C} {X : ι -> C} (f : 对任意 i, X i ⟶ S) (hf : Presieve.ofArrows X f in J S) {σ : ι -> 类型 (最大值 u v)} {Y : 对任意 (i : ι), σ i -> C} (g : 对任意 i j, Y i j ⟶ X i) (hg : 对任意 i, Presieve.ofArrows (Y i) (g i) in J (X i))) : .ofArrows (fun p : Σ i, σ i => Y _ p.2) (fun _ => g _ _ ≫ f _) in J S
 -/
 class IsStableUnderComposition (J : Precoverage C) : Prop where
   comp_mem_coverings {ι : Type (max u v)}
@@ -311,7 +311,7 @@ class IsStableUnderSup
     - sup_mem_coverings({X : C} {R S : Presieve X} (hR : R in J X) (hS : S in J X)) : R ⊔ S in J X
 
 中文:
-类 IsStableUnderSup
+类 是StableUnderSup
   参数: (J : Precoverage C)
   公理与运算 (1 个):
     - sup_mem_coverings({X : C} {R S : Presieve X} (hR : R in J X) (hS : S in J X)) : R ⊔ S in J X
@@ -330,10 +330,10 @@ class HasPullbacks
     - hasPullbacks_of_mem({X Y : C} {R : Presieve Y} (f : X ⟶ Y) (hR : R in J Y)) : R.HasPullbacks f
 
 中文:
-类 HasPullbacks
+类 有Pullbacks
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - hasPullbacks_of_mem({X Y : C} {R : Presieve Y} (f : X ⟶ Y) (hR : R in J Y)) : R.HasPullbacks f
+    - hasPullbacks_of_mem({X Y : C} {R : Presieve Y} (f : X ⟶ Y) (hR : R in J Y)) : R.有Pullbacks f
 
 Depends on / 依赖: HasIsos, HasIsos.mem_coverings_of_isIso, mem_coverings_of_isIso
 -/
@@ -362,7 +362,7 @@ lemma mem_coverings_of_isPullback
 
 中文:
 引理 mem_coverings_of_isPullback
-  结论: {J : Precoverage C} [IsStableUnderBaseChange J]
+  结论: {J : Precoverage C} [是StableUnderBaseChange J]
   证明: by
   -- We need to construct `max u v`-indexed families with the same presieves.
   -- Because `f` needs not be injective, the indexing type is a sum.
@@ -406,7 +406,7 @@ lemma comp_mem_coverings
 
 中文:
 引理 comp_mem_coverings
-  结论: {J : Precoverage C} [IsStableUnderComposition J] {ι : Type w}
+  结论: {J : Precoverage C} [是StableUnderComposition J] {ι : 类型 w}
   证明: by
   -- We need to construct `max u v`-indexed families with the same presieves.
   -- Because `f` and `g` need not be injective, the indexing type is a sigma of sums.
@@ -462,7 +462,7 @@ lemma pullbackArrows_mem
 
 中文:
 引理 pullbackArrows_mem
-  结论: {J : Precoverage C} [IsStableUnderBaseChange J]
+  结论: {J : Precoverage C} [是StableUnderBaseChange J]
   证明: by
   obtain ⟨ι, Z, g, rfl⟩ := R.exists_eq_ofArrows
   have (i : ι) : Limits.HasPullback (g i) f := Presieve.hasPullback f (Presieve.ofArrows.mk i)
@@ -506,7 +506,7 @@ lemma hasPairwisePullbacks_of_mem
 
 中文:
 引理 hasPairwisePullbacks_of_mem
-  结论: (J : Precoverage C) [J.HasPullbacks] {X : C} {R : Presieve X}
+  结论: (J : Precoverage C) [J.有Pullbacks] {X : C} {R : Presieve X}
   证明: (J.hasPullbacks_of_mem f hR).hasPullback h
 
 Depends on / 依赖: J.hasPullbacks_of_mem, hasPullback, hasPullbacks_of_mem
@@ -624,7 +624,7 @@ lemma comap_comp
 
 中文:
 引理 comap_comp
-  条件: {E : 类型} [Category* E] (F : C ⥤ D) (G : D ⥤ E) (J : Precoverage E)
+  条件: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ E) (J : Precoverage E)
   证明: by
   ext X R
   obtain ⟨ι, Y, f, rfl⟩ := R.exists_eq_ofArrows
@@ -651,7 +651,7 @@ lemma comap_monotone
 
 中文:
 引理 comap_monotone
-  结论: Monotone (comap F)
+  结论: 递增 (comap F)
   证明: fun _ _ hJK _ _ hR => hJK _ hR
 -/
 lemma comap_monotone : Monotone (comap F) :=
@@ -666,8 +666,8 @@ instance [HasIsos
   body: by simpa using mem_coverings_of_isIso (F.map f)
 
 中文:
-实例 [HasIsos
-  签名: J] : HasIsos (J.comap F) where
+实例 [有是os
+  签名: J] : 有是os (J.comap F) where
   定义体: by simpa using mem_coverings_of_isIso (F.map f)
 
 Depends on / 依赖: F.map, mem_coverings_of_isIso
@@ -686,7 +686,7 @@ instance [IsStableUnderComposition
     exact J.comp_mem_coverings _ hf _ hg
 
 中文:
-实例 [IsStableUnderComposition
+实例 [是StableUnderComposition
   签名: J] :
   定义体: by
     simp only [mem_comap_iff, Presieve.map_ofArrows, Functor.map_comp] at hf hg ⊢
@@ -712,8 +712,8 @@ instance [PreservesLimitsOfShape
       fun i => CategoryTheory.Functor.map_isPullback F (h i)
 
 中文:
-实例 [PreservesLimitsOfShape
-  签名: WalkingCospan F] [IsStableUnderBaseChange J] :
+实例 [保持形状极限
+  签名: WalkingCospan F] [是StableUnderBaseChange J] :
   定义体: by
     simp only [mem_comap_iff, Presieve.map_ofArrows] at hf ⊢
     exact mem_coverings_of_isPullback _ hf _ _ _
@@ -741,8 +741,8 @@ instance [CreatesLimitsOfShape
     exact .of_createsLimit F g f
 
 中文:
-实例 [CreatesLimitsOfShape
-  签名: WalkingCospan F] [HasPullbacks J] : HasPullbacks (J.comap F) where
+实例 [创造形状极限
+  签名: WalkingCospan F] [有Pullbacks J] : 有Pullbacks (J.comap F) where
   定义体: by
     refine ⟨fun {Z g} hg => ?_⟩
     have : (Presieve.map F R).HasPullbacks (F.map f) := J.hasPullbacks_of_mem (F.map f) hR
@@ -778,10 +778,10 @@ class Functor.PreservesPairwisePullbacks
     - preservesLimit((R) ⦃Y Z) : C⦄ ⦃f : Y ⟶ X⦄ ⦃g : Z ⟶ X⦄ : R f -> R g -> PreservesLimit (cospan f g) F  [default: by infer_instance]
 
 中文:
-类 Functor.PreservesPairwisePullbacks
+类 函子.保持PairwisePullbacks
   参数: (F : C ⥤ D) {X : C} (R : Presieve X)
   公理与运算 (1 个):
-    - preservesLimit((R) ⦃Y Z) : C⦄ ⦃f : Y ⟶ X⦄ ⦃g : Z ⟶ X⦄ : R f -> R g -> PreservesLimit (cospan f g) F  [默认: by infer_instance]
+    - preservesLimit((R) ⦃Y Z) : C⦄ ⦃f : Y ⟶ X⦄ ⦃g : Z ⟶ X⦄ : R f -> R g -> 保持极限 (cospan f g) F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -800,7 +800,7 @@ instance [PreservesLimitsOfShape
   signature: WalkingCospan F] {X
 
 中文:
-实例 [PreservesLimitsOfShape
+实例 [保持形状极限
   签名: WalkingCospan F] {X
 -/
 instance [PreservesLimitsOfShape WalkingCospan F] {X : C} (R : Presieve X) :
@@ -818,7 +818,7 @@ lemma Presieve.HasPairwisePullbacks.map_of_preservesPairwisePullbacks
     exact hasPullback_of_preservesPullback F _ _
 
 中文:
-引理 Presieve.HasPairwisePullbacks.map_of_preservesPairwisePullbacks
+引理 Presieve.有PairwisePullbacks.map_of_preservesPairwisePullbacks
   结论: {X : C} (R : Presieve X)
   证明: fun {f} ⟨hf⟩ g ⟨hg⟩ => by
     have := Presieve.HasPairwisePullbacks.has_pullbacks hf hg
@@ -850,7 +850,7 @@ class PullbacksPreservedBy
 类 PullbacksPreservedBy
   参数: (J : Precoverage C) (F : C ⥤ D)
   公理与运算 (1 个):
-    - preservesPairwisePullbacks_of_mem(⦃X) : C⦄ ⦃R : Presieve X⦄ : R in J X -> F.PreservesPairwisePullbacks R  [默认: by infer_instance]
+    - preservesPairwisePullbacks_of_mem(⦃X) : C⦄ ⦃R : Presieve X⦄ : R in J X -> F.保持PairwisePullbacks R  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/

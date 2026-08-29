@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace ℍ
+  签名: 拓扑空间 ℍ
   定义体: .induced UpperHalfPlane.coe inferInstance
 
 @[fun_prop]
@@ -63,7 +63,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: IsEmbedding ((↑) : ℍ -> Complex)
+  结论: 是嵌入 ((↑) : ℍ -> 复形)
   证明: coe_injective.isEmbedding_induced
 
 Depends on / 依赖: coe_injective, coe_injective.isEmbedding_induced, isEmbedding_induced
@@ -83,7 +83,7 @@ theorem isOpenEmbedding_coe
 
 中文:
 定理 isOpenEmbedding_coe
-  结论: IsOpenEmbedding ((↑) : ℍ -> Complex)
+  结论: 是开嵌入 ((↑) : ℍ -> 复形)
   证明: ⟨isEmbedding_coe, by simp [isOpen_upperHalfPlaneSet]⟩
 
 @[fun_prop]
@@ -106,7 +106,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : ℍ -> Complex)
+  结论: 连续 ((↑) : ℍ -> 复形)
   证明: isEmbedding_coe.continuous
 
 @[fun_prop]
@@ -129,7 +129,7 @@ theorem continuous_re
 
 中文:
 定理 continuous_re
-  结论: Continuous re
+  结论: 连续 re
   证明: Complex.continuous_re.comp continuous_coe
 
 @[fun_prop]
@@ -152,7 +152,7 @@ theorem continuous_im
 
 中文:
 定理 continuous_im
-  结论: Continuous im
+  结论: 连续 im
   证明: Complex.continuous_im.comp continuous_coe
 
 @[fun_prop]
@@ -172,8 +172,8 @@ theorem _root_.Continuous.upperHalfPlaneMk
   proof: isEmbedding_coe.continuous_iff.mpr hf
 
 中文:
-定理 _root_.Continuous.upperHalfPlaneMk
-  结论: {X : 类型} [TopologicalSpace X] {f : X -> Complex}
+定理 _root_.连续.upperHalfPlaneMk
+  结论: {X : 类型} [拓扑空间 X] {f : X -> 复形}
   证明: isEmbedding_coe.continuous_iff.mpr hf
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe, isEmbedding_coe.continuous_iff.mpr
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology ℍ
+  签名: 第二可数拓扑 ℍ
   定义体: secondCountableTopology_induced ..
 
 Depends on / 依赖: secondCountableTopology_induced
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: T3Space ℍ
+  签名: T3空间 ℍ
   定义体: isEmbedding_coe.t3Space
 
 Depends on / 依赖: isEmbedding_coe, isEmbedding_coe.t3Space, t3Space
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: T4Space ℍ
+  签名: T4空间 ℍ
   定义体: inferInstance
 -/
 instance : T4Space ℍ := inferInstance
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContractibleSpace ℍ
+  签名: 余ntractible空间 ℍ
   定义体: by
   rw [isEmbedding_coe.toHomeomorph.trans (.setCongr range_coe) |>.contractibleSpace_iff]
   exact (convex_halfSpace_im_gt 0).contractibleSpace ⟨I, one_pos.trans_eq I_im.symm⟩
@@ -266,7 +266,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyPathConnectedSpace ℍ
+  签名: LocallyPathConnected空间 ℍ
   定义体: isOpenEmbedding_coe.locallyPathConnectedSpace
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.locallyPathConnectedSpace, locallyPathConnectedSpace
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace ℍ
+  签名: Noncompact空间 ℍ
   定义体: by
     have : IsCompact (Complex.im ⁻¹' Ioi 0) := by
       simpa [isEmbedding_coe.isCompact_iff] using! h
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyCompactSpace ℍ
+  签名: 局部紧空间 ℍ
   定义体: isOpenEmbedding_coe.locallyCompactSpace
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.locallyCompactSpace, locallyCompactSpace
@@ -335,7 +335,7 @@ instance instContinuousGLSMul
 
 中文:
 实例 instContinuousGLSMul
-  签名: : ContinuousConstSMul (GL (Fin 2) 实数) ℍ where
+  签名: : 连续常数标量乘法 (GL (有限集 2) 实数) ℍ where
   定义体: by
     simp_rw [continuous_induced_rng (f := UpperHalfPlane.coe), Function.comp_def,
       UpperHalfPlane.coe_smul, UpperHalfPlane.σ]
@@ -480,7 +480,7 @@ lemma subset_verticalStrip_of_isCompact
 
 中文:
 引理 subset_verticalStrip_of_isCompact
-  条件: {K : Set ℍ} (hK : IsCompact K)
+  条件: {K : 集合 ℍ} (hK : 是紧集 K)
   证明: by
   rcases K.eq_empty_or_nonempty with rfl | hne
   · exact ⟨1, 1, Real.zero_lt_one, empty_subset _⟩
@@ -561,7 +561,7 @@ definition ofComplex
 
 中文:
 定义 ofComplex
-  签名: : OpenPartialHomeomorph Complex ℍ
+  签名: : OpenPartialHomeomorph 复形 ℍ
   定义体: (isOpenEmbedding_coe.toOpenPartialHomeomorph _).symm
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.toOpenPartialHomeomorph, toOpenPartialHomeomorph
@@ -584,7 +584,7 @@ lemma ofComplex_apply
 中文:
 引理 ofComplex_apply
   条件: (z : ℍ)
-  结论: ofComplex (z : Complex) = z
+  结论: ofComplex (z : 复形) = z
   证明: IsOpenEmbedding.toOpenPartialHomeomorph_left_inv ..
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.toOpenPartialHomeomorph_left_inv, toOpenPartialHomeomorph_left_inv
@@ -608,7 +608,7 @@ lemma ofComplex_apply_eq_ite
 
 中文:
 引理 ofComplex_apply_eq_ite
-  条件: (w : Complex)
+  条件: (w : 复形)
   证明: by
   split_ifs with hw
   · exact ofComplex_apply ⟨w, hw⟩
@@ -638,7 +638,7 @@ lemma ofComplex_apply_of_im_pos
 
 中文:
 引理 ofComplex_apply_of_im_pos
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   证明: ofComplex_apply ⟨z, hz⟩
 
 Depends on / 依赖: ofComplex_apply
@@ -658,7 +658,7 @@ lemma ofComplex_apply_of_im_nonpos
 
 中文:
 引理 ofComplex_apply_of_im_nonpos
-  条件: {w : Complex} (hw : w.im <= 0)
+  条件: {w : 复形} (hw : w.im <= 0)
   证明: by
   simp [ofComplex_apply_eq_ite w, hw]
 
@@ -679,7 +679,7 @@ lemma ofComplex_apply_eq_of_im_nonpos
 
 中文:
 引理 ofComplex_apply_eq_of_im_nonpos
-  条件: {w w' : Complex} (hw : w.im <= 0) (hw' : w'.im <= 0)
+  条件: {w w' : 复形} (hw : w.im <= 0) (hw' : w'.im <= 0)
   证明: by
   simp [ofComplex_apply_of_im_nonpos, hw, hw']
 
@@ -700,7 +700,7 @@ lemma comp_ofComplex
 
 中文:
 引理 comp_ofComplex
-  条件: (f : ℍ -> Complex) (z : ℍ)
+  条件: (f : ℍ -> 复形) (z : ℍ)
   结论: (↑ₕf) z = f z
   证明: congrArg _ ofComplex_apply z
 
@@ -720,7 +720,7 @@ lemma comp_ofComplex_of_im_pos
 
 中文:
 引理 comp_ofComplex_of_im_pos
-  条件: (f : ℍ -> Complex) (z : Complex) (hz : 0 < z.im)
+  条件: (f : ℍ -> 复形) (z : 复形) (hz : 0 < z.im)
   结论: (↑ₕf) z = f ⟨z, hz⟩
   证明: congrArg _ ofComplex_apply ⟨z, hz⟩
 
@@ -740,7 +740,7 @@ lemma comp_ofComplex_of_im_le_zero
 
 中文:
 引理 comp_ofComplex_of_im_le_zero
-  条件: (f : ℍ -> Complex) (z z' : Complex) (hz : z.im <= 0) (hz' : z'.im <= 0)
+  条件: (f : ℍ -> 复形) (z z' : 复形) (hz : z.im <= 0) (hz' : z'.im <= 0)
   证明: by
   simp [ofComplex_apply_of_im_nonpos, hz, hz']
 
@@ -764,7 +764,7 @@ lemma eventuallyEq_coe_comp_ofComplex
 
 中文:
 引理 eventuallyEq_coe_comp_ofComplex
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   证明: by
   filter_upwards [isOpen_upperHalfPlaneSet.mem_nhds hz] with x hx
   simp only [Function.comp_apply, ofComplex_apply_of_im_pos hx, id_eq]
@@ -846,7 +846,7 @@ lemma isOpenMap_re
 
 中文:
 引理 isOpenMap_re
-  结论: IsOpenMap re
+  结论: 是开映射 re
   证明: Complex.isOpenMap_re.comp isOpenEmbedding_coe.isOpenMap
 
 Depends on / 依赖: Complex.isOpenMap_re.comp, isOpenEmbedding_coe, isOpenEmbedding_coe.isOpenMap, isOpenMap, isOpenMap_re
@@ -864,7 +864,7 @@ lemma isOpenMap_im
 
 中文:
 引理 isOpenMap_im
-  结论: IsOpenMap im
+  结论: 是开映射 im
   证明: Complex.isOpenMap_im.comp isOpenEmbedding_coe.isOpenMap
 
 Depends on / 依赖: Complex.isOpenMap_im.comp, isOpenEmbedding_coe, isOpenEmbedding_coe.isOpenMap, isOpenMap, isOpenMap_im
@@ -889,7 +889,7 @@ lemma isOpenMap_norm
 
 中文:
 引理 isOpenMap_norm
-  结论: IsOpenMap (fun τ : ℍ => ‖(τ : Complex)‖)
+  结论: 是开映射 (fun τ : ℍ => ‖(τ : 复形)‖)
   证明: by
   refine .of_nhds_le fun τ U hU => ?_
   obtain ⟨s, hs, hs'⟩ := Filter.mem_map_iff_exists_image.mp hU

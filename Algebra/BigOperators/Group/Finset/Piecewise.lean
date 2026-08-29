@@ -82,7 +82,7 @@ theorem prod_apply_ite
 
 中文:
 定理 prod_apply_ite
-  结论: {s : Finset ι} {p : ι -> 命题} [DecidablePred p] (f g : ι -> γ)
+  结论: {s : 有限集 ι} {p : ι -> 命题} [DecidablePred p] (f g : ι -> γ)
   证明: (prod_apply_dite _ _ _).trans congr_arg₂ _ (prod_attach _ (h ∘ f)) (prod_attach _ (h ∘ g))
 
 @[to_additive]
@@ -109,7 +109,7 @@ theorem prod_dite
 
 中文:
 定理 prod_dite
-  结论: {s : Finset ι} {p : ι -> 命题} [DecidablePred p] (f : 对任意 x : ι, p x -> M)
+  结论: {s : 有限集 ι} {p : ι -> 命题} [DecidablePred p] (f : 对任意 x : ι, p x -> M)
   证明: by
   simp [prod_apply_dite _ _ fun x => x]
 
@@ -138,7 +138,7 @@ theorem prod_ite
 
 中文:
 定理 prod_ite
-  条件: {s : Finset ι} {p : ι -> 命题} [DecidablePred p] (f g : ι -> M)
+  条件: {s : 有限集 ι} {p : ι -> 命题} [DecidablePred p] (f g : ι -> M)
   证明: by
   simp [prod_apply_ite _ _ fun x => x]
 
@@ -324,7 +324,7 @@ theorem prod_ite_mem
 
 中文:
 定理 prod_ite_mem
-  条件: [DecidableEq ι] (s t : Finset ι) (f : ι -> M)
+  条件: [DecidableEq ι] (s t : 有限集 ι) (f : ι -> M)
   证明: by
   rw [← Finset.prod_filter]; rw [Finset.filter_mem_eq_inter]
 
@@ -354,7 +354,7 @@ lemma prod_attach_eq_prod_dite
 
 中文:
 引理 prod_attach_eq_prod_dite
-  条件: [Fintype ι] (s : Finset ι) (f : s -> M) [DecidablePred (· in s)]
+  条件: [有限类型 ι] (s : 有限集 ι) (f : s -> M) [DecidablePred (· in s)]
   证明: by
   rw [Finset.prod_dite]; rw [Finset.univ_eq_attach]; rw [Finset.prod_const_one]; rw [mul_one]
   congr
@@ -395,7 +395,7 @@ theorem prod_dite_eq
 
 中文:
 定理 prod_dite_eq
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : 对任意 x : ι, a = x -> M)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : 对任意 x : ι, a = x -> M)
   证明: by
   split_ifs with h
   · rw [Finset.prod_eq_single a, dif_pos rfl]
@@ -442,7 +442,7 @@ theorem prod_dite_eq'
 
 中文:
 定理 prod_dite_eq'
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : 对任意 x : ι, x = a -> M)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : 对任意 x : ι, x = a -> M)
   证明: by
   split_ifs with h
   · rw [Finset.prod_eq_single a, dif_pos rfl]
@@ -479,7 +479,7 @@ theorem prod_ite_eq
 
 中文:
 定理 prod_ite_eq
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : ι -> M)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : ι -> M)
   证明: prod_dite_eq s a fun x _ => b x
 
 Depends on / 依赖: prod_dite_eq
@@ -508,7 +508,7 @@ theorem prod_ite_eq'
 
 中文:
 定理 prod_ite_eq'
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : ι -> M)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : ι -> M)
   证明: prod_dite_eq' s a fun x _ => b x
 
 @[to_additive]
@@ -531,7 +531,7 @@ theorem prod_ite_eq_of_mem
 
 中文:
 定理 prod_ite_eq_of_mem
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : ι -> M) (h : a in s)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : ι -> M) (h : a in s)
   证明: by
   simp only [prod_ite_eq, if_pos h]
 
@@ -556,7 +556,7 @@ theorem prod_ite_eq_of_mem'
 
 中文:
 定理 prod_ite_eq_of_mem'
-  条件: [DecidableEq ι] (s : Finset ι) (a : ι) (b : ι -> M) (h : a in s)
+  条件: [DecidableEq ι] (s : 有限集 ι) (a : ι) (b : ι -> M) (h : a in s)
   证明: by
   simp only [prod_ite_eq', if_pos h]
 
@@ -581,7 +581,7 @@ theorem prod_pi_mulSingle'
 
 中文:
 定理 prod_pi_mulSingle'
-  条件: [DecidableEq ι] (a : ι) (x : M) (s : Finset ι)
+  条件: [DecidableEq ι] (a : ι) (x : M) (s : 有限集 ι)
   证明: prod_dite_eq' _ _ _
 
 @[to_additive (attr := simp)]
@@ -605,7 +605,7 @@ theorem prod_pi_mulSingle
 
 中文:
 定理 prod_pi_mulSingle
-  结论: {M : ι -> 类型} [DecidableEq ι] [对任意 a, CommMonoid (M a)] (a : ι)
+  结论: {M : ι -> 类型} [DecidableEq ι] [对任意 a, 交换幺半群 (M a)] (a : ι)
   证明: prod_dite_eq _ _ _
 
 @[to_additive]
@@ -632,7 +632,7 @@ theorem prod_piecewise
 
 中文:
 定理 prod_piecewise
-  条件: [DecidableEq ι] (s t : Finset ι) (f g : ι -> M)
+  条件: [DecidableEq ι] (s t : 有限集 ι) (f g : ι -> M)
   证明: by
   simp only [piecewise]
   rw [prod_ite]; rw [filter_mem_eq_inter]; rw [← sdiff_eq_filter]
@@ -663,7 +663,7 @@ theorem prod_inter_mul_prod_sdiff
 
 中文:
 定理 prod_inter_mul_prod_sdiff
-  条件: [DecidableEq ι] (s t : Finset ι) (f : ι -> M)
+  条件: [DecidableEq ι] (s t : 有限集 ι) (f : ι -> M)
   证明: by
   convert! (s.prod_piecewise t f f).symm
   simp +unfoldPartialApp [Finset.piecewise]
@@ -700,7 +700,7 @@ alias prod_eq_mul_prod_diff_singleton := prod_eq_mul_prod_sdiff_si
 
 中文:
 定理 prod_eq_mul_prod_sdiff_singleton
-  结论: [DecidableEq ι] {s : Finset ι} (i : ι) (f : ι -> M)
+  结论: [DecidableEq ι] {s : 有限集 ι} (i : ι) (f : ι -> M)
   证明: by
   by_cases hs : i in s
   · convert! (s.prod_inter_mul_prod_sdiff { i } f).symm
@@ -740,7 +740,7 @@ alias prod_eq_mul_prod_diff_singleton_of_mem := prod_eq_mul_prod_sdiff_singleton
 
 中文:
 定理 prod_eq_mul_prod_sdiff_singleton_of_mem
-  结论: [DecidableEq ι] {s : Finset ι} {i : ι} (h : i in s)
+  结论: [DecidableEq ι] {s : 有限集 ι} {i : ι} (h : i in s)
   证明: prod_eq_mul_prod_sdiff_singleton _ _ (by simp_all)
 
 @[deprecated (since := "2026-06-03")]
@@ -774,7 +774,7 @@ alias prod_eq_prod_diff_singleton_mul := prod_eq_prod_sdiff_singleton_mul
 
 中文:
 定理 prod_eq_prod_sdiff_singleton_mul
-  结论: [DecidableEq ι] {s : Finset ι} {i : ι} (h : i in s)
+  结论: [DecidableEq ι] {s : 有限集 ι} {i : ι} (h : i in s)
   证明: by
   rw [prod_eq_mul_prod_sdiff_singleton_of_mem h]; rw [mul_comm]
 
@@ -804,8 +804,8 @@ theorem _root_.Fintype.prod_eq_mul_prod_compl
 @[to_additive]
 
 中文:
-定理 _root_.Fintype.prod_eq_mul_prod_compl
-  条件: [DecidableEq ι] [Fintype ι] (a : ι) (f : ι -> M)
+定理 _root_.有限类型.prod_eq_mul_prod_compl
+  条件: [DecidableEq ι] [有限类型 ι] (a : ι) (f : ι -> M)
   证明: prod_eq_mul_prod_sdiff_singleton_of_mem (mem_univ a) f
 
 @[to_additive]
@@ -826,8 +826,8 @@ theorem _root_.Fintype.prod_eq_prod_compl_mul
   proof: prod_eq_prod_sdiff_singleton_mul (mem_univ a) f
 
 中文:
-定理 _root_.Fintype.prod_eq_prod_compl_mul
-  条件: [DecidableEq ι] [Fintype ι] (a : ι) (f : ι -> M)
+定理 _root_.有限类型.prod_eq_prod_compl_mul
+  条件: [DecidableEq ι] [有限类型 ι] (a : ι) (f : ι -> M)
   证明: prod_eq_prod_sdiff_singleton_mul (mem_univ a) f
 
 Depends on / 依赖: mem_univ, prod_eq_prod_sdiff_singleton_mul
@@ -852,7 +852,7 @@ theorem dvd_prod_of_mem
 
 中文:
 定理 dvd_prod_of_mem
-  条件: (f : ι -> M) {a : ι} {s : Finset ι} (ha : a in s)
+  条件: (f : ι -> M) {a : ι} {s : 有限集 ι} (ha : a in s)
   结论: f a ∣ ∏ i in s, f i
   证明: by
   classical
@@ -887,7 +887,7 @@ theorem prod_update_of_notMem
 
 中文:
 定理 prod_update_of_notMem
-  结论: [DecidableEq ι] {s : Finset ι} {i : ι} (h : i ∉ s) (f : ι -> M)
+  结论: [DecidableEq ι] {s : 有限集 ι} {i : ι} (h : i ∉ s) (f : ι -> M)
   证明: by
   apply prod_congr rfl
   intro j hj
@@ -922,7 +922,7 @@ theorem prod_update_of_mem
 
 中文:
 定理 prod_update_of_mem
-  条件: [DecidableEq ι] {s : Finset ι} {i : ι} (h : i in s) (f : ι -> M) (b : M)
+  条件: [DecidableEq ι] {s : 有限集 ι} {i : ι} (h : i in s) (f : ι -> M) (b : M)
   证明: by
   rw [update_eq_piecewise]; rw [prod_piecewise]
   simp [h]
@@ -955,7 +955,7 @@ exact fun j hj hji => if_neg fun hpj => hji h _ hj _ hi hpj hpi
 
 中文:
 定理 prod_ite_one
-  结论: (s : Finset ι) (p : ι -> 命题) [DecidablePred p]
+  结论: (s : 有限集 ι) (p : ι -> 命题) [DecidablePred p]
   证明: by
   split_ifs with h
   · obtain ⟨i, hi, hpi⟩ := h
@@ -993,7 +993,7 @@ theorem prod_pow_boole
 
 中文:
 定理 prod_pow_boole
-  条件: [DecidableEq ι] (s : Finset ι) (f : ι -> M) (a : ι)
+  条件: [DecidableEq ι] (s : 有限集 ι) (f : ι -> M) (a : ι)
   证明: by simp
 
 @[to_additive]
@@ -1014,7 +1014,7 @@ lemma prod_eq_prod_iff_single
 
 中文:
 引理 prod_eq_prod_iff_single
-  结论: [IsRightCancelMul M] {f g : ι -> M} {i : ι} (hi : i in s)
+  结论: [右乘消去 M] {f g : ι -> M} {i : ι} (hi : i in s)
   证明: by
   classical
   rw [prod_eq_mul_prod_sdiff_singleton_of_mem hi]; rw [prod_eq_mul_prod_sdiff_singleton_of_mem hi]; rw [prod_congr rfl (by simpa)]; rw [mul_left_inj]
@@ -1038,7 +1038,7 @@ lemma card_filter
 
 中文:
 引理 card_filter
-  条件: (p) [DecidablePred p] (s : Finset ι)
+  条件: (p) [DecidablePred p] (s : 有限集 ι)
   证明: by simp [sum_ite]
 
 Depends on / 依赖: sum_ite
@@ -1065,7 +1065,7 @@ lemma prod_ite_eq_ite_exists
   simp [prod_ite_one univ p (by simpa using h)]
 
 中文:
-引理 prod_ite_eq_ite_exists
+引理 prod_ite_eq_ite_存在
   结论: (p : ι -> 命题) [DecidablePred p] (h : 对任意 i j, p i -> p j -> i = j)
   证明: by
   simp [prod_ite_one univ p (by simpa using h)]
@@ -1091,7 +1091,7 @@ lemma prod_ite_mem
 
 中文:
 引理 prod_ite_mem
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: ∏ i, (if i in s then f i else 1) = ∏ i in s, f i
   证明: by
   simp
@@ -1205,7 +1205,7 @@ lemma prod_pi_mulSingle
 
 中文:
 引理 prod_pi_mulSingle
-  条件: {M : ι -> 类型} [对任意 i, CommMonoid (M i)] (i : ι) (f : 对任意 i, M i)
+  条件: {M : ι -> 类型} [对任意 i, 交换幺半群 (M i)] (i : ι) (f : 对任意 i, M i)
   证明: prod_dite_eq _ _
 
 Depends on / 依赖: prod_dite_eq
@@ -1227,7 +1227,7 @@ lemma prod_pi_mulSingle'
 中文:
 引理 prod_pi_mulSingle'
   条件: (i : ι) (a : M)
-  结论: ∏ j, Pi.mulSingle i a j = a
+  结论: ∏ j, 依赖函数类型.mulSingle i a j = a
   证明: prod_dite_eq' _ _
 
 Depends on / 依赖: prod_dite_eq

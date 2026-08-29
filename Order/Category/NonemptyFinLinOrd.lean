@@ -41,12 +41,12 @@ structure NonemptyFinLinOrd
     - [fintype : Fintype carrier]
 
 中文:
-结构 NonemptyFinLinOrd
-  参数: extends LinOrd
-  继承: LinOrd
+结构 非空有限线性序
+  参数: extends 线性序
+  继承: 线性序
   公理与运算 (2 个):
-    - [nonempty : Nonempty carrier]
-    - [fintype : Fintype carrier]
+    - [nonempty : 非空 carrier]
+    - [fintype : 有限类型 carrier]
 -/
 structure NonemptyFinLinOrd extends LinOrd where
   [nonempty : Nonempty carrier]
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort NonemptyFinLinOrd (Type _)
+  签名: CoeSort 非空有限线性序 (类型 _)
   定义体: X.carrier
 
 Depends on / 依赖: X.carrier, carrier
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory NonemptyFinLinOrd
+  签名: 大范畴 非空有限线性序
   定义体: inferInstanceAs Category (InducedCategory _ toLinOrd)
 
 Depends on / 依赖: Category, InducedCategory, toLinOrd
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory NonemptyFinLinOrd (· ->o ·)
+  签名: 余ncrete范畴 非空有限线性序 (· ->o ·)
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toLinOrd) _
 
 Depends on / 依赖: Action, Action.forget_map, ConcreteCategory, FDRep.isoToLinearEquiv, FGModuleCat, FGModuleCat.Iso.conj_hom_eq_conj, Functor, Functor.mapIso_hom, InducedCategory, Iso.conj_apply, ModuleCat, ModuleCat.hom_ext_iff, ModuleCat.hom_ofHom, cat_disch, conj_apply, conj_hom_eq_conj, forget_map, hom_ext_iff, hom_ofHom, i.hom.comm
@@ -123,7 +123,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (α : 类型) [Nonempty α] [Fintype α] [LinearOrder α]
+  签名: (α : 类型) [非空 α] [有限类型 α] [线性序 α]
   定义体: α
 -/
 abbrev of (α : Type*) [Nonempty α] [Fintype α] [LinearOrder α] : NonemptyFinLinOrd where
@@ -140,7 +140,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [Nonempty α] [Fintype α] [LinearOrder α]
+  条件: (α : 类型) [非空 α] [有限类型 α] [线性序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -159,7 +159,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Nonempty X] [LinearOrder X] [Fintype X]
+  签名: {X Y : 类型u} [非空 X] [线性序 X] [有限类型 X]
   定义体: ConcreteCategory.ofHom (C := NonemptyFinLinOrd) f
 
 @[simp]
@@ -183,8 +183,8 @@ lemma hom_hom_id
 
 中文:
 引理 hom_hom_id
-  条件: {X : NonemptyFinLinOrd}
-  结论: (𝟙 X : X ⟶ X).hom.hom = OrderHom.id
+  条件: {X : 非空有限线性序}
+  结论: (𝟙 X : X ⟶ X).hom.hom = 序态射.id
   证明: rfl
 -/
 lemma hom_hom_id {X : NonemptyFinLinOrd} : (𝟙 X : X ⟶ X).hom.hom = OrderHom.id := rfl
@@ -201,7 +201,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : NonemptyFinLinOrd) (x : X)
+  条件: (X : 非空有限线性序) (x : X)
   证明: by simp
 
 @[simp]
@@ -220,7 +220,7 @@ lemma hom_hom_comp
 
 中文:
 引理 hom_hom_comp
-  条件: {X Y Z : NonemptyFinLinOrd} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 非空有限线性序} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_hom_comp {X Y Z : NonemptyFinLinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -238,7 +238,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : NonemptyFinLinOrd} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 非空有限线性序} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -260,7 +260,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : NonemptyFinLinOrd} {f g : X ⟶ Y} (hf : f.hom.hom = g.hom.hom)
+  条件: {X Y : 非空有限线性序} {f g : X ⟶ Y} (hf : f.hom.hom = g.hom.hom)
   结论: f = g
   证明: InducedCategory.hom_ext (ConcreteCategory.ext hf)
 
@@ -284,7 +284,7 @@ lemma hom_hom_ofHom
 
 中文:
 引理 hom_hom_ofHom
-  结论: {X Y : 类型u} [Nonempty X] [LinearOrder X] [Fintype X] [Nonempty Y]
+  结论: {X Y : 类型u} [非空 X] [线性序 X] [有限类型 X] [非空 Y]
   证明: rfl
 
 @[simp]
@@ -304,7 +304,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : NonemptyFinLinOrd} (f : X ⟶ Y)
+  条件: {X Y : 非空有限线性序} (f : X ⟶ Y)
   证明: rfl
 -/
 lemma ofHom_hom {X Y : NonemptyFinLinOrd} (f : X ⟶ Y) :
@@ -320,7 +320,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited NonemptyFinLinOrd
+  签名: 可居 非空有限线性序
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited NonemptyFinLinOrd :=
@@ -336,7 +336,7 @@ instance hasForgetToLinOrd
 
 中文:
 实例 hasForgetToLinOrd
-  签名: : HasForget₂ NonemptyFinLinOrd LinOrd
+  签名: : 有Forget₂ 非空有限线性序 线性序
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toLinOrd) _
 
 Depends on / 依赖: InducedCategory, toLinOrd
@@ -355,7 +355,7 @@ instance hasForgetToFinPartOrd
 
 中文:
 实例 hasForgetToFinPartOrd
-  签名: : HasForget₂ NonemptyFinLinOrd FinPartOrd where
+  签名: : 有Forget₂ 非空有限线性序 有限偏序 where
   定义体: .of X
   forget₂.map f := FinPartOrd.ofHom f.hom.hom
 -/
@@ -376,8 +376,8 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : NonemptyFinLinOrd.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 非空有限线性序.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -398,7 +398,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : NonemptyFinLinOrd ⥤ NonemptyFinLinOrd where
+  签名: : 非空有限线性序 ⥤ 非空有限线性序 where
   定义体: of Xᵒᵈ
   map f := ofHom f.hom.hom.dual
 
@@ -423,7 +423,7 @@ counitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
 
 中文:
 定义 dualEquiv
-  签名: : NonemptyFinLinOrd ≌ NonemptyFinLinOrd where
+  签名: : 非空有限线性序 ≌ 非空有限线性序 where
   定义体: dual
   inverse := dual
 unitIso := NatIso.ofComponents fun X => Iso.mk OrderIso.dualDual X
@@ -454,7 +454,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  条件: {A B : NonemptyFinLinOrd.{u}} (f : A ⟶ B)
+  条件: {A B : 非空有限线性序.{u}} (f : A ⟶ B)
   证明: by
   refine ⟨?_, ConcreteCategory.mono_of_injective f⟩
   intro _ a₁ a₂ h
@@ -501,7 +501,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  条件: {A B : NonemptyFinLinOrd.{u}} (f : A ⟶ B)
+  条件: {A B : 非空有限线性序.{u}} (f : A ⟶ B)
   证明: by
   constructor
   · intro
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: SplitEpiCategory NonemptyFinLinOrd.{u}
+  签名: 分裂满态射范畴 非空有限线性序.{u}
   定义体: ⟨fun {X Y} f hf => by
     have H : forall y : Y, Nonempty (f ⁻¹' {y}) := by
       rw [epi_iff_surjective] at hf
@@ -625,7 +625,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasStrongEpiMonoFactorisations NonemptyFinLinOrd.{u}
+  签名: 有StrongEpiMonoFactorisations 非空有限线性序.{u}
   定义体: ⟨fun {X Y} f => by
     let I := of (Set.image f ⊤)
     let e : X ⟶ I := ofHom ⟨fun x => ⟨f x, ⟨x, by tauto⟩⟩, fun x₁ x₂ h => f.hom.hom.monotone h⟩
@@ -703,8 +703,8 @@ definition Fin.homSucc
 alias Fin.hom_succ := Fin.homSucc
 
 中文:
-定义 Fin.homSucc
-  签名: {n} (i : Fin n)
+定义 有限集.homSucc
+  签名: {n} (i : 有限集 n)
   定义体: homOfLE (Fin.castSucc_le_succ i)
 
 @[deprecated (since := "2026-07-18")]

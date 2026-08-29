@@ -115,7 +115,7 @@ lemma exists_not_self_orthogonal
   exact ⟨mk F w fun h => hw (by rw [h, dotProduct_zero]), hw⟩
 
 中文:
-引理 exists_not_self_orthogonal
+引理 存在_not_self_orthogonal
   条件: (v : ℙ F (m -> F))
   结论: 存在 w, ¬ orthogonal v w
   证明: by
@@ -144,7 +144,7 @@ lemma exists_not_orthogonal_self
   exact exists_not_self_orthogonal v
 
 中文:
-引理 exists_not_orthogonal_self
+引理 存在_not_orthogonal_self
   条件: (v : ℙ F (m -> F))
   结论: 存在 w, ¬ orthogonal w v
   证明: by
@@ -172,7 +172,7 @@ lemma mk_eq_mk_iff_crossProduct_eq_zero
 
 中文:
 引理 mk_eq_mk_iff_crossProduct_eq_zero
-  条件: {v w : Fin 3 -> F} (hv : v != 0) (hw : w != 0)
+  条件: {v w : 有限集 3 -> F} (hv : v != 0) (hw : w != 0)
   证明: by
   rw [← not_iff_not]; rw [mk_eq_mk_iff']; rw [not_exists]; rw [← LinearIndependent.pair_iff' hw]; rw [← crossProduct_ne_zero_iff_linearIndependent]; rw [← cross_anticomm]; rw [neg_ne_zero]
 
@@ -200,7 +200,7 @@ definition cross
 
 中文:
 定义 cross
-  签名: : ℙ F (Fin 3 -> F) -> ℙ F (Fin 3 -> F) -> ℙ F (Fin 3 -> F)
+  签名: : ℙ F (有限集 3 -> F) -> ℙ F (有限集 3 -> F) -> ℙ F (有限集 3 -> F)
   定义体: Quotient.map₂ (fun v w => if h : crossProduct v.1 w.1 = 0 then v else ⟨crossProduct v.1 w.1, h⟩)
     (fun _ _ ⟨a, ha⟩ _ _ ⟨b, hb⟩ => by
       simp_rw [← ha, ← hb, LinearMap.map_smul_of_tower, LinearMap.smul_apply, smul_smul,
@@ -232,7 +232,7 @@ lemma cross_mk
 
 中文:
 引理 cross_mk
-  条件: {v w : Fin 3 -> F} (hv : v != 0) (hw : w != 0)
+  条件: {v w : 有限集 3 -> F} (hv : v != 0) (hw : w != 0)
   证明: by
   change Quotient.mk'' _ = _
   split_ifs with h <;> simp only [h] <;> rfl
@@ -256,7 +256,7 @@ lemma cross_mk_of_cross_eq_zero
 
 中文:
 引理 cross_mk_of_cross_eq_zero
-  结论: {v w : Fin 3 -> F} (hv : v != 0) (hw : w != 0)
+  结论: {v w : 有限集 3 -> F} (hv : v != 0) (hw : w != 0)
   证明: by
   rw [cross_mk]; rw [dif_pos h]
 
@@ -278,7 +278,7 @@ lemma cross_mk_of_cross_ne_zero
 
 中文:
 引理 cross_mk_of_cross_ne_zero
-  结论: {v w : Fin 3 -> F} (hv : v != 0) (hw : w != 0)
+  结论: {v w : 有限集 3 -> F} (hv : v != 0) (hw : w != 0)
   证明: by
   rw [cross_mk]; rw [dif_neg h]
 
@@ -303,7 +303,7 @@ lemma cross_self
 
 中文:
 引理 cross_self
-  条件: (v : ℙ F (Fin 3 -> F))
+  条件: (v : ℙ F (有限集 3 -> F))
   结论: cross v v = v
   证明: by
   induction v with | h v hv =>
@@ -328,7 +328,7 @@ lemma cross_mk_of_ne
 
 中文:
 引理 cross_mk_of_ne
-  条件: {v w : Fin 3 -> F} (hv : v != 0) (hw : w != 0) (h : mk F v hv != mk F w hw)
+  条件: {v w : 有限集 3 -> F} (hv : v != 0) (hw : w != 0) (h : mk F v hv != mk F w hw)
   证明: by
   rw [cross_mk_of_cross_ne_zero]
 
@@ -355,7 +355,7 @@ lemma cross_comm
 
 中文:
 引理 cross_comm
-  条件: (v w : ℙ F (Fin 3 -> F))
+  条件: (v w : ℙ F (有限集 3 -> F))
   结论: cross v w = cross w v
   证明: by
   rcases eq_or_ne v w with rfl | h
@@ -386,7 +386,7 @@ theorem cross_orthogonal_left
 
 中文:
 定理 cross_orthogonal_left
-  条件: {v w : ℙ F (Fin 3 -> F)} (h : v != w)
+  条件: {v w : ℙ F (有限集 3 -> F)} (h : v != w)
   证明: by
   induction v with | h v hv =>
   induction w with | h w hw =>
@@ -412,7 +412,7 @@ theorem cross_orthogonal_right
 
 中文:
 定理 cross_orthogonal_right
-  条件: {v w : ℙ F (Fin 3 -> F)} (h : v != w)
+  条件: {v w : ℙ F (有限集 3 -> F)} (h : v != w)
   证明: by
   rw [cross_comm]
   exact cross_orthogonal_left h.symm
@@ -436,7 +436,7 @@ theorem orthogonal_cross_left
 
 中文:
 定理 orthogonal_cross_left
-  条件: {v w : ℙ F (Fin 3 -> F)} (h : v != w)
+  条件: {v w : ℙ F (有限集 3 -> F)} (h : v != w)
   证明: by
   rw [orthogonal_comm]
   exact cross_orthogonal_left h
@@ -460,7 +460,7 @@ lemma orthogonal_cross_right
 
 中文:
 引理 orthogonal_cross_right
-  条件: {v w : ℙ F (Fin 3 -> F)} (h : v != w)
+  条件: {v w : ℙ F (有限集 3 -> F)} (h : v != w)
   证明: by
   rw [orthogonal_comm]
   exact cross_orthogonal_right h

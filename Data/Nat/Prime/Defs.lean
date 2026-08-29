@@ -48,7 +48,7 @@ definition Prime
   body: Irreducible p
 
 中文:
-定义 Prime
+定义 素
   签名: (p : 自然数)
   定义体: Irreducible p
 
@@ -69,7 +69,7 @@ theorem irreducible_iff_nat_prime
 中文:
 定理 irreducible_iff_nat_prime
   条件: (a : 自然数)
-  结论: Irreducible a ↔ 自然数.Prime a
+  结论: 不可约 a ↔ 自然数.素 a
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -86,7 +86,7 @@ theorem not_prime_zero
 
 中文:
 定理 not_prime_zero
-  结论: ¬ Prime 0
+  结论: ¬ 素 0
 -/
 theorem not_prime_zero : ¬ Prime 0
   | h => h.ne_zero rfl
@@ -101,7 +101,7 @@ theorem prime_zero_false
 
 中文:
 定理 prime_zero_false
-  结论: Prime 0 -> False
+  结论: 素 0 -> 假
   证明: not_prime_zero
 -/
 @[aesop safe destruct] theorem prime_zero_false : Prime 0 -> False :=
@@ -116,7 +116,7 @@ theorem not_prime_one
 
 中文:
 定理 not_prime_one
-  结论: ¬ Prime 1
+  结论: ¬ 素 1
 -/
 theorem not_prime_one : ¬ Prime 1
   | h => h.ne_one rfl
@@ -131,7 +131,7 @@ theorem prime_one_false
 
 中文:
 定理 prime_one_false
-  结论: Prime 1 -> False
+  结论: 素 1 -> 假
   证明: not_prime_one
 -/
 @[aesop safe destruct] theorem prime_one_false : Prime 1 -> False :=
@@ -147,8 +147,8 @@ theorem Prime.ne_zero
   proof: Irreducible.ne_zero h
 
 中文:
-定理 Prime.ne_zero
-  条件: {n : 自然数} (h : Prime n)
+定理 素.ne_zero
+  条件: {n : 自然数} (h : 素 n)
   结论: n != 0
   证明: Irreducible.ne_zero h
 -/
@@ -165,8 +165,8 @@ theorem Prime.pos
   proof: Nat.pos_of_ne_zero pp.ne_zero
 
 中文:
-定理 Prime.pos
-  条件: {p : 自然数} (pp : Prime p)
+定理 素.pos
+  条件: {p : 自然数} (pp : 素 p)
   结论: 0 < p
   证明: Nat.pos_of_ne_zero pp.ne_zero
 
@@ -183,8 +183,8 @@ theorem Prime.two_le
   statement: forall {p : Nat}, Prime p -> 2 <= p
 
 中文:
-定理 Prime.two_le
-  结论: 对任意 {p : 自然数}, Prime p -> 2 <= p
+定理 素.two_le
+  结论: 对任意 {p : 自然数}, 素 p -> 2 <= p
 -/
 theorem Prime.two_le : forall {p : Nat}, Prime p -> 2 <= p
   | 0, h => (not_prime_zero h).elim
@@ -201,9 +201,9 @@ theorem Prime.one_lt
   proof: Prime.two_le
 
 中文:
-定理 Prime.one_lt
+定理 素.one_lt
   条件: {p : 自然数}
-  结论: Prime p -> 1 < p
+  结论: 素 p -> 1 < p
   证明: Prime.two_le
 
 Depends on / 依赖: Prime.two_le, two_le
@@ -221,8 +221,8 @@ lemma Prime.one_le
   proof: hp.one_lt.le
 
 中文:
-引理 Prime.one_le
-  条件: {p : 自然数} (hp : p.Prime)
+引理 素.one_le
+  条件: {p : 自然数} (hp : p.素)
   结论: 1 <= p
   证明: hp.one_lt.le
 
@@ -239,8 +239,8 @@ instance Prime.one_lt'
   body: ⟨hp.1.one_lt⟩
 
 中文:
-实例 Prime.one_lt'
-  签名: (p : 自然数) [hp : Fact p.Prime]
+实例 素.one_lt'
+  签名: (p : 自然数) [hp : Fact p.素]
   定义体: ⟨hp.1.one_lt⟩
 
 Depends on / 依赖: one_lt
@@ -258,8 +258,8 @@ theorem Prime.ne_one
   proof: hp.one_lt.ne'
 
 中文:
-定理 Prime.ne_one
-  条件: {p : 自然数} (hp : p.Prime)
+定理 素.ne_one
+  条件: {p : 自然数} (hp : p.素)
   结论: p != 1
   证明: hp.one_lt.ne'
 -/
@@ -283,8 +283,8 @@ theorem Prime.eq_one_or_self_of_dvd
 @[inherit_doc Nat.Prime]
 
 中文:
-定理 Prime.eq_one_or_self_of_dvd
-  条件: {p : 自然数} (pp : p.Prime) (m : 自然数) (hm : m ∣ p)
+定理 素.eq_one_or_self_of_dvd
+  条件: {p : 自然数} (pp : p.素) (m : 自然数) (hm : m ∣ p)
   证明: by
   obtain ⟨n, hn⟩ := hm
   have := pp.isUnit_or_isUnit hn
@@ -326,7 +326,7 @@ theorem prime_def
 中文:
 定理 prime_def
   条件: {p : 自然数}
-  结论: Prime p ↔ 2 <= p ∧ 对任意 m, m ∣ p -> m = 1 ∨ m = p
+  结论: 素 p ↔ 2 <= p ∧ 对任意 m, m ∣ p -> m = 1 ∨ m = p
   证明: by
   refine ⟨fun h => ⟨h.two_le, h.eq_one_or_self_of_dvd⟩, fun h => ?_⟩
   have h1 := Nat.one_lt_two.trans_le h.1
@@ -363,7 +363,7 @@ theorem prime_def_lt
 中文:
 定理 prime_def_lt
   条件: {p : 自然数}
-  结论: Prime p ↔ 2 <= p ∧ 对任意 m < p, m ∣ p -> m = 1
+  结论: 素 p ↔ 2 <= p ∧ 对任意 m < p, m ∣ p -> m = 1
   证明: prime_def.trans
     and_congr_right fun p2 =>
       forall_congr' fun _ =>
@@ -398,7 +398,7 @@ theorem prime_def_lt'
 中文:
 定理 prime_def_lt'
   条件: {p : 自然数}
-  结论: Prime p ↔ 2 <= p ∧ 对任意 m, 2 <= m -> m < p -> ¬m ∣ p
+  结论: 素 p ↔ 2 <= p ∧ 对任意 m, 2 <= m -> m < p -> ¬m ∣ p
   证明: prime_def_lt.trans
     and_congr_right fun p2 =>
       forall_congr' fun m =>
@@ -438,7 +438,7 @@ theorem prime_def_le_sqrt
 中文:
 定理 prime_def_le_sqrt
   条件: {p : 自然数}
-  结论: Prime p ↔ 2 <= p ∧ 对任意 m, 2 <= m -> m <= sqrt p -> ¬m ∣ p
+  结论: 素 p ↔ 2 <= p ∧ 对任意 m, 2 <= m -> m <= sqrt p -> ¬m ∣ p
   证明: prime_def_lt'.trans
     and_congr_right fun p2 =>
 ⟨fun a m m2 l => a m m2 lt_of_le_of_lt l sqrt_lt_self p2, fun a m m2 l mdvd@⟨k, e⟩ => by
@@ -473,7 +473,7 @@ theorem prime_iff_not_exists_mul_eq
   h
 
 中文:
-定理 prime_iff_not_exists_mul_eq
+定理 prime_iff_not_存在_mul_eq
   条件: {p : 自然数}
   证明: by
   push Not
@@ -514,7 +514,7 @@ theorem prime_of_coprime
 中文:
 定理 prime_of_coprime
   条件: (n : 自然数) (h1 : 1 < n) (h : 对任意 m < n, m != 0 -> n.Coprime m)
-  结论: Prime n
+  结论: 素 n
   证明: by
   refine prime_def_lt.mpr ⟨h1, fun m mlt mdvd => ?_⟩
   have hm : m != 0 := by
@@ -561,7 +561,7 @@ theorem prime_two
 
 中文:
 定理 prime_two
-  结论: Prime 2
+  结论: 素 2
   证明: by decide
 -/
 theorem prime_two : Prime 2 := by decide
@@ -576,7 +576,7 @@ theorem prime_three
 
 中文:
 定理 prime_three
-  结论: Prime 3
+  结论: 素 3
   证明: by decide
 -/
 theorem prime_three : Prime 3 := by decide
@@ -591,7 +591,7 @@ theorem prime_five
 
 中文:
 定理 prime_five
-  结论: Prime 5
+  结论: 素 5
   证明: by decide
 -/
 theorem prime_five : Prime 5 := by decide
@@ -606,7 +606,7 @@ theorem prime_seven
 
 中文:
 定理 prime_seven
-  结论: Prime 7
+  结论: 素 7
   证明: by decide
 -/
 theorem prime_seven : Prime 7 := by decide
@@ -621,7 +621,7 @@ theorem prime_eleven
 
 中文:
 定理 prime_eleven
-  结论: Prime 11
+  结论: 素 11
   证明: by decide
 -/
 theorem prime_eleven : Prime 11 := by decide
@@ -638,7 +638,7 @@ theorem dvd_prime
 
 中文:
 定理 dvd_prime
-  条件: {p m : 自然数} (pp : Prime p)
+  条件: {p m : 自然数} (pp : 素 p)
   结论: m ∣ p ↔ m = 1 ∨ m = p
   证明: ⟨fun d => pp.eq_one_or_self_of_dvd m d, fun h =>
     h.elim (fun e => e.symm ▸ one_dvd _) fun e => e.symm ▸ dvd_rfl⟩
@@ -660,7 +660,7 @@ theorem dvd_prime_two_le
 
 中文:
 定理 dvd_prime_two_le
-  条件: {p m : 自然数} (pp : Prime p) (H : 2 <= m)
+  条件: {p m : 自然数} (pp : 素 p) (H : 2 <= m)
   结论: m ∣ p ↔ m = p
   证明: (dvd_prime pp).trans or_iff_right_of_imp Not.elim ne_of_gt H
 
@@ -680,7 +680,7 @@ theorem prime_dvd_prime_iff_eq
 
 中文:
 定理 prime_dvd_prime_iff_eq
-  条件: {p q : 自然数} (pp : p.Prime) (qp : q.Prime)
+  条件: {p q : 自然数} (pp : p.素) (qp : q.素)
   结论: p ∣ q ↔ p = q
   证明: dvd_prime_two_le qp (Prime.two_le pp)
 
@@ -699,8 +699,8 @@ theorem Prime.not_dvd_one
   proof: Irreducible.not_dvd_one pp
 
 中文:
-定理 Prime.not_dvd_one
-  条件: {p : 自然数} (pp : Prime p)
+定理 素.not_dvd_one
+  条件: {p : 自然数} (pp : 素 p)
   结论: ¬p ∣ 1
   证明: Irreducible.not_dvd_one pp
 -/
@@ -959,7 +959,7 @@ theorem minFac_has_prop
 中文:
 定理 minFac_has_prop
   条件: {n : 自然数} (n1 : n != 1)
-  结论: minFac命题 n (minFac n)
+  结论: minFacProp n (minFac n)
   证明: by
   by_cases n0 : n = 0
   · simp [n0, minFacProp]
@@ -1022,7 +1022,7 @@ theorem minFac_prime
 中文:
 定理 minFac_prime
   条件: {n : 自然数} (n1 : n != 1)
-  结论: Prime (minFac n)
+  结论: 素 (minFac n)
   证明: let ⟨f2, fd, a⟩ := minFac_has_prop n1
   prime_def_lt'.2 ⟨f2, fun m m2 l d => not_le_of_gt l (a m m2 (d.trans fd))⟩
 
@@ -1050,7 +1050,7 @@ theorem minFac_prime_iff
 中文:
 定理 minFac_prime_iff
   条件: {n : 自然数}
-  结论: Prime (minFac n) ↔ n != 1
+  结论: 素 (minFac n) ↔ n != 1
   证明: by
   refine ⟨?_, minFac_prime⟩
   rintro h rfl
@@ -1154,7 +1154,7 @@ le_trans h minFac_le_of_dvd pp.two_le d,
 中文:
 定理 le_minFac
   条件: {m n : 自然数}
-  结论: n = 1 ∨ m <= minFac n ↔ 对任意 p, Prime p -> p ∣ n -> m <= p
+  结论: n = 1 ∨ m <= minFac n ↔ 对任意 p, 素 p -> p ∣ n -> m <= p
   证明: ⟨fun h p pp d =>
     h.elim (by rintro rfl; cases pp.not_dvd_one d) fun h =>
 le_trans h minFac_le_of_dvd pp.two_le d,
@@ -1215,7 +1215,7 @@ let ⟨f2, fd, _⟩ := minFac_has_prop ne_of_gt pp.one_lt
 中文:
 定理 prime_def_minFac
   条件: {p : 自然数}
-  结论: Prime p ↔ 2 <= p ∧ minFac p = p
+  结论: 素 p ↔ 2 <= p ∧ minFac p = p
   证明: ⟨fun pp =>
     ⟨pp.two_le,
 let ⟨f2, fd, _⟩ := minFac_has_prop ne_of_gt pp.one_lt
@@ -1244,8 +1244,8 @@ theorem Prime.minFac_eq
   proof: (prime_def_minFac.1 hp).2
 
 中文:
-定理 Prime.minFac_eq
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.minFac_eq
+  条件: {p : 自然数} (hp : 素 p)
   结论: minFac p = p
   证明: (prime_def_minFac.1 hp).2
 
@@ -1302,7 +1302,7 @@ theorem not_prime_iff_minFac_lt
 中文:
 定理 not_prime_iff_minFac_lt
   条件: {n : 自然数} (n2 : 2 <= n)
-  结论: ¬Prime n ↔ minFac n < n
+  结论: ¬素 n ↔ minFac n < n
   证明: (not_congr <| prime_def_minFac.trans <| and_iff_right n2).trans
     (lt_iff_le_and_ne.trans <| and_iff_right <| minFac_le <| le_of_succ_le n2).symm
 
@@ -1328,7 +1328,7 @@ theorem minFac_le_div
 
 中文:
 定理 minFac_le_div
-  条件: {n : 自然数} (pos : 0 < n) (np : ¬Prime n)
+  条件: {n : 自然数} (pos : 0 < n) (np : ¬素 n)
   结论: minFac n <= n / minFac n
   证明: match minFac_dvd n with
 | ⟨0, h0⟩ => absurd pos by rw [h0, mul_zero]; decide
@@ -1370,7 +1370,7 @@ theorem minFac_sq_le_self
 
 中文:
 定理 minFac_sq_le_self
-  条件: {n : 自然数} (w : 0 < n) (h : ¬Prime n)
+  条件: {n : 自然数} (w : 0 < n) (h : ¬素 n)
   结论: minFac n ^ 2 <= n
   证明: have t : minFac n <= n / minFac n := minFac_le_div w h
   calc
@@ -1528,9 +1528,9 @@ theorem exists_prime_and_dvd
   proof: ⟨minFac n, minFac_prime hn, minFac_dvd _⟩
 
 中文:
-定理 exists_prime_and_dvd
+定理 存在_prime_and_dvd
   条件: {n : 自然数} (hn : n != 1)
-  结论: 存在 p, Prime p ∧ p ∣ n
+  结论: 存在 p, 素 p ∧ p ∣ n
   证明: ⟨minFac n, minFac_prime hn, minFac_dvd _⟩
 
 Depends on / 依赖: minFac, minFac_dvd, minFac_prime
@@ -1555,7 +1555,7 @@ theorem coprime_of_dvd
 
 中文:
 定理 coprime_of_dvd
-  条件: {m n : 自然数} (H : 对任意 k, Prime k -> k ∣ m -> ¬k ∣ n)
+  条件: {m n : 自然数} (H : 对任意 k, 素 k -> k ∣ m -> ¬k ∣ n)
   结论: Coprime m n
   证明: by
   rw [coprime_iff_gcd_eq_one]
@@ -1586,8 +1586,8 @@ theorem Prime.coprime_iff_not_dvd
     coprime_of_dvd fun _ m2 mp => ((prime_dvd_prime_iff_eq m2 pp).1 mp).symm ▸ nd⟩
 
 中文:
-定理 Prime.coprime_iff_not_dvd
-  条件: {p n : 自然数} (pp : Prime p)
+定理 素.coprime_iff_not_dvd
+  条件: {p n : 自然数} (pp : 素 p)
   结论: Coprime p n ↔ ¬p ∣ n
   证明: ⟨fun co d => pp.not_dvd_one co.dvd_of_dvd_mul_left (by simp [d]), fun nd =>
     coprime_of_dvd fun _ m2 mp => ((prime_dvd_prime_iff_eq m2 pp).1 mp).symm ▸ nd⟩
@@ -1611,8 +1611,8 @@ theorem Prime.dvd_mul
 alias ⟨Prime.dvd_or_dvd, _⟩ := Prime.dvd_mul
 
 中文:
-定理 Prime.dvd_mul
-  条件: {p m n : 自然数} (pp : Prime p)
+定理 素.dvd_mul
+  条件: {p m n : 自然数} (pp : 素 p)
   结论: p ∣ m * n ↔ p ∣ m ∨ p ∣ n
   证明: ⟨fun H => or_iff_not_imp_left.2 fun h => (pp.coprime_iff_not_dvd.2 h).dvd_of_dvd_mul_left H,
     Or.rec (fun h : p ∣ m => h.mul_right _) fun h : p ∣ n => h.mul_left _⟩
@@ -1639,7 +1639,7 @@ alias ⟨Prime.prime, _root_.Prime.nat_prime⟩ := prime_iff
 中文:
 定理 prime_iff
   条件: {p : 自然数}
-  结论: p.Prime ↔ _root_.Prime p
+  结论: p.素 ↔ _root_.素 p
   证明: ⟨fun h => ⟨h.ne_zero, h.not_isUnit, fun _ _ => h.dvd_mul.mp⟩, Prime.irreducible⟩
 
 alias ⟨Prime.prime, _root_.Prime.nat_prime⟩ := prime_iff
@@ -1662,7 +1662,7 @@ instance instDecidablePredPrime
 
 中文:
 实例 instDecidablePredPrime
-  签名: : DecidablePred (_root_.Prime : 自然数 -> 命题)
+  签名: : DecidablePred (_root_.素 : 自然数 -> 命题)
   定义体: fun n =>
   decidable_of_iff (Nat.Prime n) Nat.prime_iff
 -/
@@ -1681,7 +1681,7 @@ theorem irreducible_iff_prime
 中文:
 定理 irreducible_iff_prime
   条件: {p : 自然数}
-  结论: Irreducible p ↔ _root_.Prime p
+  结论: 不可约 p ↔ _root_.素 p
   证明: prime_iff
 
 Depends on / 依赖: prime_iff
@@ -1699,7 +1699,7 @@ instance instDecidablePredIrreducible
 
 中文:
 实例 instDecidablePredIrreducible
-  签名: : DecidablePred (Irreducible : 自然数 -> 命题)
+  签名: : DecidablePred (不可约 : 自然数 -> 命题)
   定义体: decidablePrime
 
 Depends on / 依赖: decidablePrime
@@ -1756,7 +1756,7 @@ instance inhabitedPrimes
 
 中文:
 实例 inhabitedPrimes
-  签名: : Inhabited Primes
+  签名: : 可居 Primes
   定义体: ⟨⟨2, prime_two⟩⟩
 
 Depends on / 依赖: prime_two
@@ -1773,7 +1773,7 @@ instance coeNat
   body: ⟨Subtype.val⟩
 
 中文:
-实例 coeNat
+实例 coe自然数
   签名: : Coe 自然数.Primes 自然数
   定义体: ⟨Subtype.val⟩
 
@@ -1792,7 +1792,7 @@ theorem coe_nat_injective
 
 中文:
 定理 coe_nat_injective
-  结论: Function.Injective ((↑) : 自然数.Primes -> 自然数)
+  结论: 函数.单射 ((↑) : 自然数.Primes -> 自然数)
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -1832,7 +1832,7 @@ instance monoid.primePow
 
 中文:
 实例 monoid.primePow
-  签名: {α : 类型} [Monoid α]
+  签名: {α : 类型} [幺半群 α]
   定义体: ⟨fun x p => x ^ (p : Nat)⟩
 -/
 instance monoid.primePow {α : Type*} [Monoid α] : Pow α Primes :=
@@ -1848,7 +1848,7 @@ instance fact_prime_two
 
 中文:
 实例 fact_prime_two
-  签名: : Fact (Prime 2)
+  签名: : Fact (素 2)
   定义体: ⟨prime_two⟩
 
 Depends on / 依赖: prime_two
@@ -1866,7 +1866,7 @@ instance fact_prime_three
 
 中文:
 实例 fact_prime_three
-  签名: : Fact (Prime 3)
+  签名: : Fact (素 3)
   定义体: ⟨prime_three⟩
 
 Depends on / 依赖: prime_three

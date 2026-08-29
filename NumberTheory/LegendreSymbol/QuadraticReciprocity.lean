@@ -123,7 +123,7 @@ theorem exists_sq_eq_two_iff
   lia
 
 中文:
-定理 exists_sq_eq_two_iff
+定理 存在_sq_eq_two_iff
   条件: (hp : p != 2)
   结论: IsSquare (2 : ZMod p) ↔ p % 8 = 1 ∨ p % 8 = 7
   证明: by
@@ -151,7 +151,7 @@ theorem exists_sq_eq_neg_two_iff
   lia
 
 中文:
-定理 exists_sq_eq_neg_two_iff
+定理 存在_sq_eq_neg_two_iff
   条件: (hp : p != 2)
   结论: IsSquare (-2 : ZMod p) ↔ p % 8 = 1 ∨ p % 8 = 3
   证明: by
@@ -326,7 +326,7 @@ theorem exists_sq_eq_prime_iff_of_mod_four_eq_one
       quadratic_reciprocity_one_mod_four hp1 hq1]
 
 中文:
-定理 exists_sq_eq_prime_iff_of_mod_four_eq_one
+定理 存在_sq_eq_prime_iff_of_mod_four_eq_one
   条件: (hp1 : p % 4 = 1) (hq1 : q != 2)
   证明: by
   rcases eq_or_ne p q with rfl | h
@@ -353,7 +353,7 @@ theorem exists_sq_eq_prime_iff_of_mod_four_eq_three
   rw [← eq_one_iff' p (prime_ne_zero p q hpq)]; rw [← eq_neg_one_iff' q]; rw [quadratic_reciprocity_three_mod_four hp3 hq3]; rw [neg_inj]
 
 中文:
-定理 exists_sq_eq_prime_iff_of_mod_four_eq_three
+定理 存在_sq_eq_prime_iff_of_mod_four_eq_three
   结论: (hp3 : p % 4 = 3) (hq3 : q % 4 = 3)
   证明: by
   rw [← eq_one_iff' p (prime_ne_zero p q hpq)]; rw [← eq_neg_one_iff' q]; rw [quadratic_reciprocity_three_mod_four hp3 hq3]; rw [neg_inj]

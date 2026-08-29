@@ -46,8 +46,8 @@ structure TopHom
     - map_top' : toFun ⊤ = ⊤
 
 中文:
-结构 TopHom
-  参数: (α β : 类型) [Top α] [Top β]
+结构 顶元素态射
+  参数: (α β : 类型) [顶元素 α] [顶元素 β]
   公理与运算 (2 个):
     - toFun : α -> β
     - map_top' : toFun ⊤ = ⊤
@@ -71,8 +71,8 @@ structure BotHom
     - map_bot' : toFun ⊥ = ⊥
 
 中文:
-结构 BotHom
-  参数: (α β : 类型) [Bot α] [Bot β]
+结构 底元素态射
+  参数: (α β : 类型) [底元素 α] [底元素 β]
   公理与运算 (2 个):
     - toFun : α -> β
     - map_bot' : toFun ⊥ = ⊥
@@ -95,9 +95,9 @@ structure BoundedOrderHom
     - map_bot' : toFun ⊥ = ⊥
 
 中文:
-结构 BoundedOrderHom
-  参数: (α β : 类型) [Preorder α] [Preorder β] [BoundedOrder α]
-  继承: OrderHom α β
+结构 有界序态射
+  参数: (α β : 类型) [预序 α] [预序 β] [有界序 α]
+  继承: 序态射 α β
   公理与运算 (2 个):
     - map_top' : toFun ⊤ = ⊤
     - map_bot' : toFun ⊥ = ⊥
@@ -126,8 +126,8 @@ class TopHomClass
     - map_top((f : F)) : f ⊤ = ⊤
 
 中文:
-类 TopHomClass
-  参数: (F : 类型) (α β : outParam 类型) [Top α] [Top β] [FunLike F α β]
+类 顶元素态射类
+  参数: (F : 类型) (α β : outParam 类型) [顶元素 α] [顶元素 β] [函数状 F α β]
   公理与运算 (1 个):
     - map_top((f : F)) : f ⊤ = ⊤
 -/
@@ -150,8 +150,8 @@ class BotHomClass
     - map_bot((f : F)) : f ⊥ = ⊥
 
 中文:
-类 BotHomClass
-  参数: (F : 类型) (α β : outParam 类型) [Bot α] [Bot β] [FunLike F α β]
+类 底元素态射类
+  参数: (F : 类型) (α β : outParam 类型) [底元素 α] [底元素 β] [函数状 F α β]
   公理与运算 (1 个):
     - map_bot((f : F)) : f ⊥ = ⊥
 -/
@@ -172,9 +172,9 @@ class BoundedOrderHomClass
     - map_bot((f : F)) : f ⊥ = ⊥
 
 中文:
-类 BoundedOrderHomClass
+类 有界序态射类
   参数: (F α β : 类型) [LE α] [LE β]
-  继承: RelHomClass F ((· <= ·) : α -> α -> Prop) ((· <= ·) : β -> β -> Prop)
+  继承: 关系态射类 F ((· <= ·) : α -> α -> 命题) ((· <= ·) : β -> β -> 命题)
   公理与运算 (2 个):
     - map_top((f : F)) : f ⊤ = ⊤
     - map_bot((f : F)) : f ⊥ = ⊥
@@ -237,7 +237,7 @@ theorem map_eq_top_iff
 
 中文:
 定理 map_eq_top_iff
-  结论: [LE α] [OrderTop α] [PartialOrder β] [OrderTop β] [OrderIsoClass F α β]
+  结论: [LE α] [有顶序 α] [偏序 β] [有顶序 β] [OrderIso类 F α β]
   证明: by
   rw [← map_top f]; rw [(EquivLike.injective f).eq_iff]
 
@@ -267,8 +267,8 @@ definition TopHomClass.toTopHom
 @[to_dual]
 
 中文:
-定义 TopHomClass.toTopHom
-  签名: [Top α] [Top β] [TopHomClass F α β] (f : F)
+定义 顶元素态射类.toTopHom
+  签名: [顶元素 α] [顶元素 β] [顶元素态射类 F α β] (f : F)
   定义体: ⟨f, map_top f⟩
 
 @[to_dual]
@@ -288,8 +288,8 @@ instance [Top
   body: ⟨TopHomClass.toTopHom⟩
 
 中文:
-实例 [Top
-  签名: α] [Top β] [TopHomClass F α β] : CoeTC F (TopHom α β)
+实例 [顶元素
+  签名: α] [顶元素 β] [顶元素态射类 F α β] : CoeTC F (顶元素态射 α β)
   定义体: ⟨TopHomClass.toTopHom⟩
 
 Depends on / 依赖: TopHomClass, TopHomClass.toTopHom, toTopHom
@@ -309,8 +309,8 @@ definition BoundedOrderHomClass.toBoundedOrderHom
   body: { (f : α ->o β) with toFun := f, map_top' := map_top f, map_bot' := map_bot f }
 
 中文:
-定义 BoundedOrderHomClass.toBoundedOrderHom
-  签名: [Preorder α] [Preorder β] [BoundedOrder α]
+定义 有界序态射类.toBoundedOrderHom
+  签名: [预序 α] [预序 β] [有界序 α]
   定义体: { (f : α ->o β) with toFun := f, map_top' := map_top f, map_bot' := map_bot f }
 
 Depends on / 依赖: map_bot, map_top
@@ -328,8 +328,8 @@ instance [Preorder
   body: ⟨BoundedOrderHomClass.toBoundedOrderHom⟩
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [BoundedOrder α] [BoundedOrder β] [BoundedOrderHomClass F α β] :
+实例 [预序
+  签名: α] [预序 β] [有界序 α] [有界序 β] [有界序态射类 F α β] :
   定义体: ⟨BoundedOrderHomClass.toBoundedOrderHom⟩
 
 Depends on / 依赖: BoundedOrderHomClass, BoundedOrderHomClass.toBoundedOrderHom, toBoundedOrderHom
@@ -363,7 +363,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (TopHom α β) α β
+  签名: 函数状 (顶元素态射 α β) α β
   定义体: TopHom.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopHomClass (TopHom α β) α β
+  签名: 顶元素态射类 (顶元素态射 α β) α β
   定义体: TopHom.map_top'
 
 Depends on / 依赖: TopHom, TopHom.map_top, map_top
@@ -410,7 +410,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : TopHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 顶元素态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -437,7 +437,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : TopHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 顶元素态射 α β) (f' : α -> β) (h : f' = f)
   定义体: f'
   map_top' := h.symm ▸ f.map_top'
 
@@ -462,7 +462,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : TopHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 顶元素态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 
@@ -485,7 +485,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : TopHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 顶元素态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -507,7 +507,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (TopHom α β)
+  签名: 可居 (顶元素态射 α β)
   定义体: ⟨⟨fun _ => ⊤, rfl⟩⟩
 -/
 instance : Inhabited (TopHom α β) :=
@@ -529,7 +529,7 @@ definition id
 
 中文:
 定义 id
-  签名: : TopHom α α
+  签名: : 顶元素态射 α α
   定义体: ⟨id, rfl⟩
 
 @[to_dual (attr := simp, norm_cast)]
@@ -548,7 +548,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(TopHom.id α) = id
+  结论: ⇑(顶元素态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(TopHom.id α) = id :=
@@ -569,7 +569,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: TopHom.id α a = a
+  结论: 顶元素态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : TopHom.id α a = a :=
@@ -590,7 +590,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : TopHom β γ) (g : TopHom α β)
+  签名: (f : 顶元素态射 β γ) (g : 顶元素态射 α β)
   定义体: f ∘ g
   map_top' := by rw [comp_apply, map_top, map_top]
 
@@ -615,7 +615,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : TopHom β γ) (g : TopHom α β)
+  条件: (f : 顶元素态射 β γ) (g : 顶元素态射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -638,7 +638,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : TopHom β γ) (g : TopHom α β) (a : α)
+  条件: (f : 顶元素态射 β γ) (g : 顶元素态射 α β) (a : α)
   结论: (f.comp g) a = f (g a)
   证明: rfl
 
@@ -660,7 +660,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : TopHom γ δ) (g : TopHom β γ) (h : TopHom α β)
+  条件: (f : 顶元素态射 γ δ) (g : 顶元素态射 β γ) (h : 顶元素态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -683,8 +683,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : TopHom α β)
-  结论: f.comp (TopHom.id α) = f
+  条件: (f : 顶元素态射 α β)
+  结论: f.comp (顶元素态射.id α) = f
   证明: TopHom.ext fun _ => rfl
 
 @[to_dual (attr := simp)]
@@ -708,8 +708,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : TopHom α β)
-  结论: (TopHom.id β).comp f = f
+  条件: (f : 顶元素态射 α β)
+  结论: (顶元素态射.id β).comp f = f
   证明: TopHom.ext fun _ => rfl
 
 @[to_dual (attr := simp)]
@@ -732,7 +732,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : TopHom β γ} {f : TopHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : 顶元素态射 β γ} {f : 顶元素态射 α β} (hf : 满射 f)
   证明: ⟨fun h => TopHom.ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (fun g => comp g f)⟩
 
 @[to_dual (attr := simp)]
@@ -755,7 +755,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : TopHom β γ} {f₁ f₂ : TopHom α β} (hg : Injective g)
+  条件: {g : 顶元素态射 β γ} {f₁ f₂ : 顶元素态射 α β} (hg : 单射 g)
   证明: ⟨fun h => TopHom.ext fun a => hg by rw [← TopHom.comp_apply, h, TopHom.comp_apply],
     congr_arg _⟩
 
@@ -781,7 +781,7 @@ instance instLE
 
 中文:
 实例 instLE
-  签名: [LE β] [Top β]
+  签名: [LE β] [顶元素 β]
   定义体: (f : α -> β) <= g
 
 @[to_dual]
@@ -801,8 +801,8 @@ instance [Preorder
 @[to_dual]
 
 中文:
-实例 [Preorder
-  签名: β] [Top β] : Preorder (TopHom α β)
+实例 [预序
+  签名: β] [顶元素 β] : 预序 (顶元素态射 α β)
   定义体: Preorder.lift (DFunLike.coe : TopHom α β -> α -> β)
 
 @[to_dual]
@@ -822,8 +822,8 @@ instance [PartialOrder
   body: PartialOrder.lift _ DFunLike.coe_injective
 
 中文:
-实例 [PartialOrder
-  签名: β] [Top β] : PartialOrder (TopHom α β)
+实例 [偏序
+  签名: β] [顶元素 β] : 偏序 (顶元素态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -849,7 +849,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (TopHom α β)
+  签名: 有顶序 (顶元素态射 α β)
   定义体: ⟨⊤, rfl⟩
   le_top := fun _ => @le_top (α -> β) _ _ _
 
@@ -872,7 +872,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ⇑(⊤ : TopHom α β) = ⊤
+  结论: ⇑(⊤ : 顶元素态射 α β) = ⊤
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -893,7 +893,7 @@ theorem top_apply
 中文:
 定理 top_apply
   条件: (a : α)
-  结论: (⊤ : TopHom α β) a = ⊤
+  结论: (⊤ : 顶元素态射 α β) a = ⊤
   证明: rfl
 -/
 theorem top_apply (a : α) : (⊤ : TopHom α β) a = ⊤ :=
@@ -918,7 +918,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (TopHom α β)
+  签名: 最小值 (顶元素态射 α β)
   定义体: ⟨fun f g => ⟨f ⊓ g, by rw [Pi.inf_apply, map_top, map_top, inf_top_eq]⟩⟩
 
 @[to_dual]
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (TopHom α β)
+  签名: SemilatticeInf (顶元素态射 α β)
   定义体: DFunLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 @[to_dual (attr := simp)]
@@ -1010,7 +1010,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (TopHom α β)
+  签名: 最大值 (顶元素态射 α β)
   定义体: ⟨fun f g => ⟨f ⊔ g, by rw [Pi.sup_apply, map_top, map_top, sup_top_eq]⟩⟩
 
 @[to_dual]
@@ -1033,7 +1033,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (TopHom α β)
+  签名: SemilatticeSup (顶元素态射 α β)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
 
 @[to_dual (attr := simp)]
@@ -1097,8 +1097,8 @@ instance [Lattice
 @[to_dual]
 
 中文:
-实例 [Lattice
-  签名: β] [OrderTop β] : Lattice (TopHom α β)
+实例 [格
+  签名: β] [有顶序 β] : 格 (顶元素态射 α β)
   定义体: DFunLike.coe_injective.lattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_dual]
@@ -1118,8 +1118,8 @@ instance [DistribLattice
   body: DFunLike.coe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [DistribLattice
-  签名: β] [OrderTop β] : DistribLattice (TopHom α β)
+实例 [Distrib格
+  签名: β] [有顶序 β] : Distrib格 (顶元素态射 α β)
   定义体: DFunLike.coe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.distribLattice, coe_injective, distribLattice
@@ -1151,7 +1151,7 @@ definition toTopHom
 
 中文:
 定义 toTopHom
-  签名: (f : BoundedOrderHom α β)
+  签名: (f : 有界序态射 α β)
   定义体: f
 -/
 def toTopHom (f : BoundedOrderHom α β) : TopHom α β where
@@ -1168,7 +1168,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (BoundedOrderHom α β) α β
+  签名: 函数状 (有界序态射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
 
@@ -1192,7 +1192,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrderHomClass (BoundedOrderHom α β) α β
+  签名: 有界序态射类 (有界序态射 α β) α β
   定义体: @(f.monotone')
   map_top f := f.map_top'
   map_bot f := f.map_bot'
@@ -1218,7 +1218,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : BoundedOrderHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 有界序态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -1239,7 +1239,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : BoundedOrderHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 有界序态射 α β) (f' : α -> β) (h : f' = f)
   定义体: { f.toOrderHom.copy f' h, f.toTopHom.copy f' h, f.toBotHom.copy f' h with }
 
 @[simp]
@@ -1259,7 +1259,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : BoundedOrderHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 有界序态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -1277,7 +1277,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : BoundedOrderHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 有界序态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -1298,7 +1298,7 @@ definition id
 
 中文:
 定义 id
-  签名: : BoundedOrderHom α α
+  签名: : 有界序态射 α α
   定义体: { OrderHom.id, TopHom.id α, BotHom.id α with }
 -/
 protected def id : BoundedOrderHom α α :=
@@ -1316,7 +1316,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (BoundedOrderHom α α)
+  签名: 可居 (有界序态射 α α)
   定义体: ⟨BoundedOrderHom.id α⟩
 
 @[simp, norm_cast]
@@ -1337,7 +1337,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(BoundedOrderHom.id α) = id
+  结论: ⇑(有界序态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(BoundedOrderHom.id α) = id :=
@@ -1358,7 +1358,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: BoundedOrderHom.id α a = a
+  结论: 有界序态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : BoundedOrderHom.id α a = a :=
@@ -1376,7 +1376,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : BoundedOrderHom β γ) (g : BoundedOrderHom α β)
+  签名: (f : 有界序态射 β γ) (g : 有界序态射 α β)
   定义体: { f.toOrderHom.comp g.toOrderHom, f.toTopHom.comp g.toTopHom, f.toBotHom.comp g.toBotHom with }
 
 @[simp]
@@ -1400,7 +1400,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : BoundedOrderHom β γ) (g : BoundedOrderHom α β)
+  条件: (f : 有界序态射 β γ) (g : 有界序态射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -1422,7 +1422,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : BoundedOrderHom β γ) (g : BoundedOrderHom α β) (a : α)
+  条件: (f : 有界序态射 β γ) (g : 有界序态射 α β) (a : α)
   证明: rfl
 
 @[simp]
@@ -1444,7 +1444,7 @@ theorem coe_comp_orderHom
 
 中文:
 定理 coe_comp_orderHom
-  条件: (f : BoundedOrderHom β γ) (g : BoundedOrderHom α β)
+  条件: (f : 有界序态射 β γ) (g : 有界序态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1466,7 +1466,7 @@ theorem coe_comp_topHom
 
 中文:
 定理 coe_comp_topHom
-  条件: (f : BoundedOrderHom β γ) (g : BoundedOrderHom α β)
+  条件: (f : 有界序态射 β γ) (g : 有界序态射 α β)
   证明: rfl
 
 @[simp]
@@ -1488,7 +1488,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : BoundedOrderHom γ δ) (g : BoundedOrderHom β γ) (h : BoundedOrderHom α β)
+  条件: (f : 有界序态射 γ δ) (g : 有界序态射 β γ) (h : 有界序态射 α β)
   证明: rfl
 
 @[simp]
@@ -1511,8 +1511,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : BoundedOrderHom α β)
-  结论: f.comp (BoundedOrderHom.id α) = f
+  条件: (f : 有界序态射 α β)
+  结论: f.comp (有界序态射.id α) = f
   证明: BoundedOrderHom.ext fun _ => rfl
 
 @[simp]
@@ -1536,8 +1536,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : BoundedOrderHom α β)
-  结论: (BoundedOrderHom.id β).comp f = f
+  条件: (f : 有界序态射 α β)
+  结论: (有界序态射.id β).comp f = f
   证明: BoundedOrderHom.ext fun _ => rfl
 
 @[simp]
@@ -1561,7 +1561,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : BoundedOrderHom β γ} {f : BoundedOrderHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : 有界序态射 β γ} {f : 有界序态射 α β} (hf : 满射 f)
   证明: ⟨fun h => BoundedOrderHom.ext hf.forall.2 DFunLike.ext_iff.1 h,
    congr_arg (fun g => comp g f)⟩
 
@@ -1588,7 +1588,7 @@ hg by rw [← BoundedOrderHom.comp_apply, h, BoundedOrderHom.comp_apply],
 
 中文:
 定理 cancel_left
-  条件: {g : BoundedOrderHom β γ} {f₁ f₂ : BoundedOrderHom α β} (hg : Injective g)
+  条件: {g : 有界序态射 β γ} {f₁ f₂ : 有界序态射 α β} (hg : 单射 g)
   证明: ⟨fun h =>
     BoundedOrderHom.ext fun a =>
 hg by rw [← BoundedOrderHom.comp_apply, h, BoundedOrderHom.comp_apply],
@@ -1652,7 +1652,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: TopHom.dual (TopHom.id α) = BotHom.id _
+  结论: 顶元素态射.dual (顶元素态射.id α) = 底元素态射.id _
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1673,7 +1673,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : TopHom β γ) (f : TopHom α β)
+  条件: (g : 顶元素态射 β γ) (f : 顶元素态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1695,7 +1695,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: TopHom.dual.symm (BotHom.id _) = TopHom.id α
+  结论: 顶元素态射.dual.symm (底元素态射.id _) = 顶元素态射.id α
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1714,7 +1714,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : BotHom βᵒᵈ γᵒᵈ) (f : BotHom αᵒᵈ βᵒᵈ)
+  条件: (g : 底元素态射 βᵒᵈ γᵒᵈ) (f : 底元素态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 
 Depends on / 依赖: dividedPowersBot
@@ -1773,7 +1773,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: (BoundedOrderHom.id α).dual = BoundedOrderHom.id _
+  结论: (有界序态射.id α).dual = 有界序态射.id _
   证明: rfl
 
 @[simp]
@@ -1794,7 +1794,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : BoundedOrderHom β γ) (f : BoundedOrderHom α β)
+  条件: (g : 有界序态射 β γ) (f : 有界序态射 α β)
   证明: rfl
 
 @[simp]
@@ -1816,7 +1816,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: BoundedOrderHom.dual.symm (BoundedOrderHom.id _) = BoundedOrderHom.id α
+  结论: 有界序态射.dual.symm (有界序态射.id _) = 有界序态射.id α
   证明: rfl
 
 @[simp]
@@ -1835,7 +1835,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : BoundedOrderHom βᵒᵈ γᵒᵈ) (f : BoundedOrderHom αᵒᵈ βᵒᵈ)
+  条件: (g : 有界序态射 βᵒᵈ γᵒᵈ) (f : 有界序态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 -/
 theorem symm_dual_comp (g : BoundedOrderHom βᵒᵈ γᵒᵈ) (f : BoundedOrderHom αᵒᵈ βᵒᵈ) :

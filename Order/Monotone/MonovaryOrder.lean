@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictTotalOrder ι (MonovaryOrder f g)
+  签名: 是StrictTotal序 ι (MonovaryOrder f g)
   定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap fun {a b} => by
     convert! trichotomous_of (Prod.Lex (· < ·) <| Prod.Lex (· < ·) WellOrderingRel) _ _
     · simp only [Prod.ext_iff, ← and_assoc, imp_and, iff_and_self]
@@ -92,7 +92,7 @@ lemma monovaryOn_iff_exists_monotoneOn
   · obtain h | ⟨-, h⟩ := Prod.lex_iff.1 
 
 中文:
-引理 monovaryOn_iff_exists_monotoneOn
+引理 monovaryOn_iff_存在_monotoneOn
   证明: by
   classical
   let := linearOrderOfSTO (MonovaryOrder f g)
@@ -125,7 +125,7 @@ lemma antivaryOn_iff_exists_monotoneOn_antitoneOn
   simp_rw [← monovaryOn_toDual_right, monovaryOn_iff_exists_monotoneOn, monotoneOn_toDual_comp_iff]
 
 中文:
-引理 antivaryOn_iff_exists_monotoneOn_antitoneOn
+引理 antivaryOn_iff_存在_monotoneOn_antitoneOn
   证明: by
   simp_rw [← monovaryOn_toDual_right, monovaryOn_iff_exists_monotoneOn, monotoneOn_toDual_comp_iff]
 
@@ -145,7 +145,7 @@ lemma monovaryOn_iff_exists_antitoneOn
     monotoneOn_toDual_comp_iff]
 
 中文:
-引理 monovaryOn_iff_exists_antitoneOn
+引理 monovaryOn_iff_存在_antitoneOn
   证明: by
   simp_rw [← antivaryOn_toDual_left, antivaryOn_iff_exists_monotoneOn_antitoneOn,
     monotoneOn_toDual_comp_iff]
@@ -166,7 +166,7 @@ lemma antivaryOn_iff_exists_antitoneOn_monotoneOn
   simp_rw [← monovaryOn_toDual_left, monovaryOn_iff_exists_monotoneOn, monotoneOn_toDual_comp_iff]
 
 中文:
-引理 antivaryOn_iff_exists_antitoneOn_monotoneOn
+引理 antivaryOn_iff_存在_antitoneOn_monotoneOn
   证明: by
   simp_rw [← monovaryOn_toDual_left, monovaryOn_iff_exists_monotoneOn, monotoneOn_toDual_comp_iff]
 
@@ -185,7 +185,7 @@ lemma monovary_iff_exists_monotone
   simp [← monovaryOn_univ, monovaryOn_iff_exists_monotoneOn]
 
 中文:
-引理 monovary_iff_exists_monotone
+引理 monovary_iff_存在_monotone
   证明: by
   simp [← monovaryOn_univ, monovaryOn_iff_exists_monotoneOn]
 
@@ -204,7 +204,7 @@ lemma monovary_iff_exists_antitone
   simp [← monovaryOn_univ, monovaryOn_iff_exists_antitoneOn]
 
 中文:
-引理 monovary_iff_exists_antitone
+引理 monovary_iff_存在_antitone
   证明: by
   simp [← monovaryOn_univ, monovaryOn_iff_exists_antitoneOn]
 
@@ -223,7 +223,7 @@ lemma antivary_iff_exists_monotone_antitone
   simp [← antivaryOn_univ, antivaryOn_iff_exists_monotoneOn_antitoneOn]
 
 中文:
-引理 antivary_iff_exists_monotone_antitone
+引理 antivary_iff_存在_monotone_antitone
   证明: by
   simp [← antivaryOn_univ, antivaryOn_iff_exists_monotoneOn_antitoneOn]
 
@@ -246,7 +246,7 @@ alias ⟨MonovaryOn.exists_antitoneOn, _⟩ := monovaryOn_iff_exists_antitoneOn
 alias ⟨AntivaryOn.exists_monotoneOn_antitoneOn, _⟩ := antivaryOn_iff_exi
 
 中文:
-引理 antivary_iff_exists_antitone_monotone
+引理 antivary_iff_存在_antitone_monotone
   证明: by
   simp [← antivaryOn_univ, antivaryOn_iff_exists_antitoneOn_monotoneOn]
 

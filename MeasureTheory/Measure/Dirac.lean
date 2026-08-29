@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasureSpace PUnit
+  签名: 测度空间 命题单元
   定义体: ⟨dirac PUnit.unit⟩
 
 Depends on / 依赖: PUnit.unit
@@ -102,7 +102,7 @@ theorem dirac_apply'
 
 中文:
 定理 dirac_apply'
-  条件: (a : α) (hs : MeasurableSet s)
+  条件: (a : α) (hs : 可测集 s)
   结论: dirac a s = s.indicator 1 a
   证明: toMeasure_apply _ _ hs
 
@@ -245,7 +245,7 @@ theorem dirac_apply
 
 中文:
 定理 dirac_apply
-  条件: [MeasurableSingletonClass α] (a : α) (s : Set α)
+  条件: [MeasurableSingleton类 α] (a : α) (s : 集合 α)
   证明: by
   by_cases h : a in s; · rw [dirac_apply_of_mem h, indicator_of_mem h, Pi.one_apply]
   rw [indicator_of_notMem h]; rw [← nonpos_iff_eq_zero]
@@ -299,7 +299,7 @@ theorem map_dirac'
 
 中文:
 定理 map_dirac'
-  条件: {f : α -> β} (hf : Measurable f) (a : α)
+  条件: {f : α -> β} (hf : 可测 f) (a : α)
   结论: (dirac a).map f = dirac (f a)
   证明: by
   classical
@@ -333,8 +333,8 @@ lemma map_const
 
 中文:
 引理 map_const
-  条件: (μ : Measure α) (c : β)
-  结论: μ.map (fun _ => c) = (μ Set.univ) • dirac c
+  条件: (μ : 测度 α) (c : β)
+  结论: μ.map (fun _ => c) = (μ 集合.univ) • dirac c
   证明: by
   ext s hs
   simp only [Measure.coe_smul, Pi.smul_apply,
@@ -375,7 +375,7 @@ theorem restrict_singleton
 
 中文:
 定理 restrict_singleton
-  条件: (μ : Measure α) (a : α)
+  条件: (μ : 测度 α) (a : α)
   结论: μ.restrict {a} = μ {a} • dirac a
   证明: by
   ext1 s hs
@@ -406,7 +406,7 @@ theorem ext_of_singleton
 
 中文:
 定理 ext_of_singleton
-  条件: [Countable α] {μ ν : Measure α} (h : 对任意 a, μ {a} = ν {a})
+  条件: [可数 α] {μ ν : 测度 α} (h : 对任意 a, μ {a} = ν {a})
   结论: μ = ν
   证明: ext_of_sUnion_eq_univ (countable_range singleton) (by aesop) (by simp_all)
 
@@ -426,7 +426,7 @@ theorem ext_iff_singleton
 
 中文:
 定理 ext_iff_singleton
-  条件: [Countable α] {μ ν : Measure α}
+  条件: [可数 α] {μ ν : 测度 α}
   结论: μ = ν ↔ 对任意 a, μ {a} = ν {a}
   证明: ⟨fun h _ => h ▸ rfl, ext_of_singleton⟩
 
@@ -450,8 +450,8 @@ theorem _root_.MeasureTheory.ext_iff_measureReal_singleton
 alias ⟨_, ext_of_measureReal_singleton⟩ := MeasureTheory.ext_iff_measureReal_singleton
 
 中文:
-定理 _root_.MeasureTheory.ext_iff_measureReal_singleton
-  结论: [Countable α]
+定理 _root_.测度论.ext_iff_measure实数_singleton
+  结论: [可数 α]
   证明: by
   rw [Measure.ext_iff_singleton]
   congr! with x
@@ -486,7 +486,7 @@ theorem map_eq_sum
 
 中文:
 定理 map_eq_sum
-  结论: [Countable β] [MeasurableSingletonClass β] (μ : Measure α) (f : α -> β)
+  结论: [可数 β] [MeasurableSingleton类 β] (μ : 测度 α) (f : α -> β)
   证明: by
   ext s
   have : forall y in s, MeasurableSet (f ⁻¹' {y}) := fun y _ => hf (measurableSet_singleton _)
@@ -514,7 +514,7 @@ theorem sum_smul_dirac
 
 中文:
 定理 sum_smul_dirac
-  条件: [Countable α] [MeasurableSingletonClass α] (μ : Measure α)
+  条件: [可数 α] [MeasurableSingleton类 α] (μ : 测度 α)
   证明: by simpa using (map_eq_sum μ id measurable_id).symm
 
 Depends on / 依赖: map_eq_sum, measurable_id
@@ -533,7 +533,7 @@ lemma sum_smul_dirac_singleton
 
 中文:
 引理 sum_smul_dirac_singleton
-  条件: [MeasurableSingletonClass α] {f : α -> 实数>=0∞} {a : α}
+  条件: [MeasurableSingleton类 α] {f : α -> 实数>=0∞} {a : α}
   证明: by
   simp +contextual [tsum_eq_single a]
 
@@ -559,8 +559,8 @@ lemma exists_sum_smul_dirac
   have h_points_me
 
 中文:
-引理 exists_sum_smul_dirac
-  条件: [Countable α] (μ : Measure α)
+引理 存在_sum_smul_dirac
+  条件: [可数 α] (μ : 测度 α)
   证明: by
   let measurableAtoms := measurableAtom '' (Set.univ : Set α)
   have h_nonempty (s : measurableAtoms) : Set.Nonempty s.1 := by
@@ -626,7 +626,7 @@ theorem tsum_indicator_apply_singleton
 
 中文:
 定理 tsum_indicator_apply_singleton
-  结论: [Countable α] [MeasurableSingletonClass α] (μ : Measure α)
+  结论: [可数 α] [MeasurableSingleton类 α] (μ : 测度 α)
   证明: by
   classical
   calc
@@ -664,7 +664,7 @@ theorem mem_ae_dirac_iff
 
 中文:
 定理 mem_ae_dirac_iff
-  条件: {a : α} (hs : MeasurableSet s)
+  条件: {a : α} (hs : 可测集 s)
   结论: s in ae (dirac a) ↔ a in s
   证明: by
   by_cases a in s <;> simp [mem_ae_iff, dirac_apply', hs.compl, *]
@@ -686,7 +686,7 @@ theorem ae_dirac_iff
 
 中文:
 定理 ae_dirac_iff
-  条件: {a : α} {p : α -> 命题} (hp : MeasurableSet { x | p x })
+  条件: {a : α} {p : α -> 命题} (hp : 可测集 { x | p x })
   证明: mem_ae_dirac_iff hp
 
 @[simp]
@@ -709,7 +709,7 @@ theorem ae_dirac_eq
 
 中文:
 定理 ae_dirac_eq
-  条件: [MeasurableSingletonClass α] (a : α)
+  条件: [MeasurableSingleton类 α] (a : α)
   结论: ae (dirac a) = pure a
   证明: by
   ext s
@@ -731,7 +731,7 @@ theorem ae_eq_dirac'
 
 中文:
 定理 ae_eq_dirac'
-  条件: [MeasurableSingletonClass β] {a : α} {f : α -> β} (hf : Measurable f)
+  条件: [MeasurableSingleton类 β] {a : α} {f : α -> β} (hf : 可测 f)
   证明: (ae_dirac_iff <| show MeasurableSet (f ⁻¹' {f a}) from hf <| measurableSet_singleton _).2 rfl
 
 Depends on / 依赖: MeasurableSet, ae_dirac_iff, measurableSet_singleton
@@ -752,7 +752,7 @@ theorem ae_eq_dirac
 
 中文:
 定理 ae_eq_dirac
-  条件: [MeasurableSingletonClass α] {a : α} (f : α -> δ)
+  条件: [MeasurableSingleton类 α] {a : α} (f : α -> δ)
   证明: by simp [Filter.EventuallyEq]
 
 @[fun_prop]
@@ -775,7 +775,7 @@ lemma aemeasurable_dirac
 
 中文:
 引理 aemeasurable_dirac
-  条件: [MeasurableSingletonClass α] {a : α} {f : α -> β}
+  条件: [MeasurableSingleton类 α] {a : α} {f : α -> β}
   证明: ⟨fun _ => f a, measurable_const, ae_eq_dirac f⟩
 
 @[simp]
@@ -800,8 +800,8 @@ theorem Measure.map_dirac
   simp [indicator_apply]
 
 中文:
-定理 Measure.map_dirac
-  结论: [MeasurableSingletonClass α] [MeasurableSingletonClass β]
+定理 测度.map_dirac
+  结论: [MeasurableSingleton类 α] [MeasurableSingleton类 β]
   证明: by
   classical
   ext s hs
@@ -826,7 +826,7 @@ instance Measure.dirac.isProbabilityMeasure
   body: ⟨dirac_apply_of_mem mem_univ x⟩
 
 中文:
-实例 Measure.dirac.isProbabilityMeasure
+实例 测度.dirac.isProbabilityMeasure
   签名: {x : α}
   定义体: ⟨dirac_apply_of_mem mem_univ x⟩
 
@@ -845,7 +845,7 @@ lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal
 
 中文:
 引理 _root_.HasSum.isProbabilityMeasure_sum_dirac_ennreal
-  结论: {ι : 类型} {mδ : MeasurableSpace δ}
+  结论: {ι : 类型} {mδ : 可测空间 δ}
   证明: by simp [h.tsum_eq]
 
 Depends on / 依赖: h.tsum_eq, tsum_eq
@@ -865,7 +865,7 @@ lemma _root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal
 
 中文:
 引理 _root_.HasSum.isProbabilityMeasure_sum_dirac_nnreal
-  结论: {ι : 类型} {mδ : MeasurableSpace δ}
+  结论: {ι : 类型} {mδ : 可测空间 δ}
   证明: (ENNReal.hasSum_coe.2 h).isProbabilityMeasure_sum_dirac_ennreal
 
 Depends on / 依赖: ENNReal, ENNReal.hasSum_coe, hasSum_coe, isProbabilityMeasure_sum_dirac_ennreal
@@ -885,7 +885,7 @@ lemma _root_.HasSum.isProbabilityMeasure_sum_dirac
 
 中文:
 引理 _root_.HasSum.isProbabilityMeasure_sum_dirac
-  结论: {ι : 类型} {mδ : MeasurableSpace δ}
+  结论: {ι : 类型} {mδ : 可测空间 δ}
   证明: HasSum.isProbabilityMeasure_sum_dirac_nnreal (by simpa using h2.toNNReal h1)
 
 Depends on / 依赖: HasSum, HasSum.isProbabilityMeasure_sum_dirac_nnreal, h2.toNNReal, isProbabilityMeasure_sum_dirac_nnreal, toNNReal
@@ -905,7 +905,7 @@ instance [hα
 
 中文:
 实例 [hα
-  签名: : Nonempty α] : Nonempty {μ : Measure α // IsProbabilityMeasure μ}
+  签名: : 非空 α] : 非空 {μ : 测度 α // 是概率测度 μ}
   定义体: ⟨Measure.dirac hα.some, inferInstance⟩
 
 Depends on / 依赖: Measure, Measure.dirac
@@ -923,7 +923,7 @@ instance Measure.dirac.instIsFiniteMeasure
   body: inferInstance
 
 中文:
-实例 Measure.dirac.instIsFiniteMeasure
+实例 测度.dirac.instIsFiniteMeasure
   签名: {a : α}
   定义体: inferInstance
 -/
@@ -937,7 +937,7 @@ instance Measure.dirac.instSigmaFinite
   body: inferInstance
 
 中文:
-实例 Measure.dirac.instSigmaFinite
+实例 测度.dirac.instSigmaFinite
   签名: {a : α}
   定义体: inferInstance
 -/
@@ -956,7 +956,7 @@ theorem dirac_eq_one_iff_mem
 
 中文:
 定理 dirac_eq_one_iff_mem
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: dirac a s = 1 ↔ a in s
   证明: by
   rw [← prob_compl_eq_zero_iff hs]; rw [← mem_ae_iff]
@@ -981,7 +981,7 @@ theorem dirac_eq_zero_iff_not_mem
 
 中文:
 定理 dirac_eq_zero_iff_not_mem
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   结论: dirac a s = 0 ↔ a ∉ s
   证明: by
   rw [← compl_compl s]; rw [← mem_ae_iff]; rw [notMem_compl_iff]
@@ -1007,7 +1007,7 @@ theorem restrict_dirac'
 
 中文:
 定理 restrict_dirac'
-  条件: (hs : MeasurableSet s) [Decidable (a in s)]
+  条件: (hs : 可测集 s) [可判定 (a in s)]
   证明: by
   split_ifs with has
   · apply restrict_eq_self_of_ae_mem
@@ -1037,7 +1037,7 @@ theorem restrict_dirac
 
 中文:
 定理 restrict_dirac
-  条件: [MeasurableSingletonClass α] [Decidable (a in s)]
+  条件: [MeasurableSingleton类 α] [可判定 (a in s)]
   证明: by
   split_ifs with has
   · apply restrict_eq_self_of_ae_mem
@@ -1063,7 +1063,7 @@ lemma mutuallySingular_dirac
 
 中文:
 引理 mutuallySingular_dirac
-  结论: [MeasurableSingletonClass α] (x : α) (μ : Measure α)
+  结论: [MeasurableSingleton类 α] (x : α) (μ : 测度 α)
   证明: ⟨{x}ᶜ, (MeasurableSet.singleton x).compl, by simp, by simp⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, singleton
@@ -1091,7 +1091,7 @@ lemma dirac_eq_dirac_iff_forall_mem_iff_mem
                   indicator_eq_one_iff
 
 中文:
-引理 dirac_eq_dirac_iff_forall_mem_iff_mem
+引理 dirac_eq_dirac_iff_对任意_mem_iff_mem
   条件: {x y : α}
   证明: by
   constructor
@@ -1139,7 +1139,7 @@ lemma dirac_ne_dirac_iff_exists_measurableSet
   · simpa only [x_in_A, false
 
 中文:
-引理 dirac_ne_dirac_iff_exists_measurableSet
+引理 dirac_ne_dirac_iff_存在_measurableSet
   条件: {x y : α}
   证明: by
   apply not_iff_not.mp
@@ -1328,7 +1328,7 @@ lemma ae_mem_finset_iff_map_eq_sum_dirac
 
 中文:
 引理 ae_mem_finset_iff_map_eq_sum_dirac
-  条件: {μ : Measure β} (hf : AEMeasurable f μ)
+  条件: {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: by
   rw [← ae_map_iff hf (by measurability)]; rw [ae_mem_finset_iff]
   simp [map_apply₀ hf]
@@ -1352,7 +1352,7 @@ lemma ae_eq_or_eq_iff_map_eq_dirac_add_dirac
 
 中文:
 引理 ae_eq_or_eq_iff_map_eq_dirac_add_dirac
-  结论: {μ : Measure β} (hf : AEMeasurable f μ)
+  结论: {μ : 测度 β} (hf : 几乎处处可测 f μ)
   证明: by
   -- FIXME: Why does `simpa using ...` not work?
   convert! ae_mem_finset_iff_map_eq_sum_dirac (s := .cons a₁ { a₂ } <| by simpa) hf <;> simp

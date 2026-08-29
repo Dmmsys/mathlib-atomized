@@ -106,7 +106,7 @@ definition withVSCodeAbbrev
 
 中文:
 定义 withVSCodeAbbrev
-  签名: : Array Char
+  签名: : 数组 Char
   定义体: #[
   '⦃', '⦄', '⟦', '⟧', '⟨', '⟩', '⟮', '⟯', '⸨', '⸩', '‹', '›', '«', '»', '⁅', '⁆',
   '‖', '₊', '⌊', '⌋', '⌈', '⌉', '⦋', '⦌', 'α', 'β', 'χ', '↓', 'ε', 'γ', 'inter', 'μ',
@@ -214,7 +214,7 @@ definition othersInMathlib
 
 中文:
 定义 othersInMathlib
-  签名: : Array Char
+  签名: : 数组 Char
   定义体: #[
   '✔', '⟍', 'ł', 'ń', '⎯', '⏐', 'ć', 'š', '̂', 'ᘁ', '𝖣', 'ß', 'ỳ', '⤏',
 

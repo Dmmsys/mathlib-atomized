@@ -65,7 +65,7 @@ definition isRadical
 
 中文:
 定义 isRadical
-  签名: : Object命题erty (Preradical C)
+  签名: : ObjectProperty (Preradical C)
   定义体: fun Φ => IsIso (toColon Φ Φ)
 
 Depends on / 依赖: toColon
@@ -149,7 +149,7 @@ lemma isZero
 中文:
 引理 isZero
   条件: (Φ : Radical C)
-  结论: IsZero (Φ.obj.quotient ⋙ Φ.obj.r)
+  结论: 是零 (Φ.obj.quotient ⋙ Φ.obj.r)
   证明: by
   rw [← Preradical.isRadical_iff_isZero]; rw [Preradical.isRadical_iff_isIso]
   infer_instance

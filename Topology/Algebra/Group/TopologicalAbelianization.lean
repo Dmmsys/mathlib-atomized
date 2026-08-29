@@ -44,7 +44,7 @@ instance instNormalCommutatorClosure
 
 中文:
 实例 instNormalCommutatorClosure
-  签名: : (commutator G).topologicalClosure.Normal
+  签名: : (commutator G).topologicalClosure.正规
   定义体: Subgroup.is_normal_topologicalClosure (commutator G)
 
 Depends on / 依赖: Subgroup, Subgroup.is_normal_topologicalClosure, commutator, is_normal_topologicalClosure
@@ -92,7 +92,7 @@ QuotientGroup.leftRel_apply.mpr by
 
 中文:
 实例 commGroup
-  签名: : CommGroup (G_ab G) where
+  签名: : 交换群 (G_ab G) where
   定义体: fun x y =>
     Quotient.inductionOn₂' x y fun a b =>
 Quotient.sound'

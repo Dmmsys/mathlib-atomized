@@ -61,8 +61,8 @@ theorem Algebra.map_leftMulMatrix_localization
     Basis.localizationLocalization_apply, Basis.localizationLocalization_repr_algebraMap]
 
 中文:
-定理 Algebra.map_leftMulMatrix_localization
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι]
+定理 代数.map_leftMulMatrix_localization
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
   ext i j
   simp only [Matrix.map_apply, RingHom.mapMatrix_apply, leftMulMatrix_eq_repr_mul, ← map_mul,
@@ -93,8 +93,8 @@ theorem Algebra.norm_localization
   rw [Algebra.norm_eq_matrix_det (b.localizationLocalization Rₘ M S
 
 中文:
-定理 Algebra.norm_localization
-  条件: [Module.Free R S] [Module.Finite R S] (a : S)
+定理 代数.norm_localization
+  条件: [模.自由 R S] [模.有限 R S] (a : S)
   证明: by
   cases subsingleton_or_nontrivial R
   · have : Subsingleton Rₘ := Module.subsingleton R Rₘ
@@ -125,8 +125,8 @@ lemma Algebra.norm_eq_iff
 IsLocalization.injective Rₘ hM h.symm ▸ (Algebra.norm_localization R M a).symm⟩
 
 中文:
-引理 Algebra.norm_eq_iff
-  结论: [Module.Free R S] [Module.Finite R S] {a : S} {b : R}
+引理 代数.norm_eq_iff
+  结论: [模.自由 R S] [模.有限 R S] {a : S} {b : R}
   证明: ⟨fun h => h.symm ▸ Algebra.norm_localization _ M _, fun h =>
 IsLocalization.injective Rₘ hM h.symm ▸ (Algebra.norm_localization R M a).symm⟩
 
@@ -153,8 +153,8 @@ theorem Algebra.trace_localization
   rw [Algebra.trace_eq_matrix_trace (b.localizationLocalization Rₘ 
 
 中文:
-定理 Algebra.trace_localization
-  条件: [Module.Free R S] [Module.Finite R S] (a : S)
+定理 代数.trace_localization
+  条件: [模.自由 R S] [模.有限 R S] (a : S)
   证明: by
   cases subsingleton_or_nontrivial R
   · have : Subsingleton Rₘ := Module.subsingleton R Rₘ
@@ -197,8 +197,8 @@ theorem Algebra.traceMatrix_localizationLocalization
   exact Algebra.trace_localization
 
 中文:
-定理 Algebra.traceMatrix_localizationLocalization
-  条件: (b : Basis ι R S)
+定理 代数.traceMatrix_localizationLocalization
+  条件: (b : 基 ι R S)
   证明: by
   have : Module.Finite R S := Module.Finite.of_basis b
   have : Module.Free R S := Module.Free.of_basis b
@@ -229,8 +229,8 @@ theorem Algebra.discr_localizationLocalization
   rw [Algebra.discr_def]; rw [Algebra.discr_def]; rw [RingHom.map_det]; rw [Algebra.traceMatrix_localizationLocalization]
 
 中文:
-定理 Algebra.discr_localizationLocalization
-  条件: (b : Basis ι R S)
+定理 代数.discr_localizationLocalization
+  条件: (b : 基 ι R S)
   证明: by
   rw [Algebra.discr_def]; rw [Algebra.discr_def]; rw [RingHom.map_det]; rw [Algebra.traceMatrix_localizationLocalization]
 

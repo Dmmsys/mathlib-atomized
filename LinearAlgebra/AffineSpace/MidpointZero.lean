@@ -34,7 +34,7 @@ theorem lineMap_inv_two
 
 中文:
 定理 lineMap_inv_two
-  结论: {R : 类型} {V P : 类型} [DivisionRing R] [CharZero R] [AddCommGroup V]
+  结论: {R : 类型} {V P : 类型} [除环 R] [特征零 R] [加法交换群 V]
   证明: rfl
 -/
 theorem lineMap_inv_two {R : Type*} {V P : Type*} [DivisionRing R] [CharZero R] [AddCommGroup V]
@@ -53,7 +53,7 @@ theorem lineMap_one_half
 
 中文:
 定理 lineMap_one_half
-  结论: {R : 类型} {V P : 类型} [DivisionRing R] [CharZero R] [AddCommGroup V]
+  结论: {R : 类型} {V P : 类型} [除环 R] [特征零 R] [加法交换群 V]
   证明: by
   rw [one_div]; rw [lineMap_inv_two]
 
@@ -73,7 +73,7 @@ theorem homothety_invOf_two
 
 中文:
 定理 homothety_invOf_two
-  结论: {R : 类型} {V P : 类型} [CommRing R] [Invertible (2 : R)]
+  结论: {R : 类型} {V P : 类型} [交换环 R] [可逆 (2 : R)]
   证明: rfl
 -/
 theorem homothety_invOf_two {R : Type*} {V P : Type*} [CommRing R] [Invertible (2 : R)]
@@ -91,7 +91,7 @@ theorem homothety_inv_two
 
 中文:
 定理 homothety_inv_two
-  结论: {k : 类型} {V P : 类型} [Field k] [CharZero k] [AddCommGroup V]
+  结论: {k : 类型} {V P : 类型} [域 k] [特征零 k] [加法交换群 V]
   证明: rfl
 -/
 theorem homothety_inv_two {k : Type*} {V P : Type*} [Field k] [CharZero k] [AddCommGroup V]
@@ -111,7 +111,7 @@ theorem homothety_one_half
 
 中文:
 定理 homothety_one_half
-  结论: {k : 类型} {V P : 类型} [Field k] [CharZero k] [AddCommGroup V]
+  结论: {k : 类型} {V P : 类型} [域 k] [特征零 k] [加法交换群 V]
   证明: by
   rw [one_div]; rw [homothety_inv_two]
 
@@ -134,7 +134,7 @@ theorem pi_midpoint_apply
 
 中文:
 定理 pi_midpoint_apply
-  结论: {k ι : 类型} {V : ι -> 类型} {P : ι -> 类型} [Ring k]
+  结论: {k ι : 类型} {V : ι -> 类型} {P : ι -> 类型} [环 k]
   证明: rfl
 -/
 theorem pi_midpoint_apply {k ι : Type*} {V : ι -> Type*} {P : ι -> Type*} [Ring k]

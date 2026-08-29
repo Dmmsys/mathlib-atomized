@@ -78,7 +78,7 @@ definition smulSet
 
 中文:
 定义 smulSet
-  签名: [SMul α β]
+  签名: [标量乘法 α β]
   定义体: image (a • ·)
 -/
 protected def smulSet [SMul α β] : SMul α (Set β) where smul a := image (a • ·)
@@ -101,7 +101,7 @@ scoped[Pointwise] attribute [instance] Set.vaddSet Set.vadd
 
 中文:
 定义 smul
-  签名: [SMul α β]
+  签名: [标量乘法 α β]
   定义体: image2 (· • ·)
 
 scoped[Pointwise] attribute [instance] Set.smulSet Set.smul
@@ -195,7 +195,7 @@ lemma empty_smul
 
 中文:
 引理 empty_smul
-  结论: (∅ : Set α) • t = ∅
+  结论: (∅ : 集合 α) • t = ∅
   证明: image2_empty_left
 -/
 @[to_additive (attr := simp)] lemma empty_smul : (∅ : Set α) • t = ∅ := image2_empty_left
@@ -209,7 +209,7 @@ lemma smul_empty
 
 中文:
 引理 smul_empty
-  结论: s • (∅ : Set β) = ∅
+  结论: s • (∅ : 集合 β) = ∅
   证明: image2_empty_right
 -/
 @[to_additive (attr := simp)] lemma smul_empty : s • (∅ : Set β) = ∅ := image2_empty_right
@@ -244,7 +244,7 @@ lemma smul_nonempty
 
 中文:
 引理 smul_nonempty
-  结论: (s • t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s • t).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 Depends on / 依赖: image2_nonempty_iff
@@ -260,8 +260,8 @@ lemma Nonempty.smul
   proof: .image2
 
 中文:
-引理 Nonempty.smul
-  结论: s.Nonempty -> t.Nonempty -> (s • t).Nonempty
+引理 非空.smul
+  结论: s.非空 -> t.非空 -> (s • t).非空
   证明: .image2
 -/
 @[to_additive] lemma Nonempty.smul : s.Nonempty -> t.Nonempty -> (s • t).Nonempty := .image2
@@ -274,8 +274,8 @@ lemma Nonempty.of_smul_left
   proof: .of_image2_left
 
 中文:
-引理 Nonempty.of_smul_left
-  结论: (s • t).Nonempty -> s.Nonempty
+引理 非空.of_smul_left
+  结论: (s • t).非空 -> s.非空
   证明: .of_image2_left
 -/
 @[to_additive] lemma Nonempty.of_smul_left : (s • t).Nonempty -> s.Nonempty := .of_image2_left
@@ -290,8 +290,8 @@ lemma Nonempty.of_smul_right
 @[to_additive (attr := simp low + 1)]
 
 中文:
-引理 Nonempty.of_smul_right
-  结论: (s • t).Nonempty -> t.Nonempty
+引理 非空.of_smul_right
+  结论: (s • t).非空 -> t.非空
   证明: .of_image2_right
 
 @[to_additive (attr := simp low + 1)]
@@ -311,7 +311,7 @@ lemma smul_singleton
 
 中文:
 引理 smul_singleton
-  结论: s • ({b} : Set β) = (· • b) '' s
+  结论: s • ({b} : 集合 β) = (· • b) '' s
   证明: image2_singleton_right
 
 @[to_additive (attr := simp low + 1)]
@@ -333,7 +333,7 @@ lemma singleton_smul
 
 中文:
 引理 singleton_smul
-  结论: ({a} : Set α) • t = a • t
+  结论: ({a} : 集合 α) • t = a • t
   证明: image2_singleton_left
 
 @[to_additive (attr := simp high)]
@@ -355,7 +355,7 @@ lemma singleton_smul_singleton
 
 中文:
 引理 singleton_smul_singleton
-  结论: ({a} : Set α) • ({b} : Set β) = {a • b}
+  结论: ({a} : 集合 α) • ({b} : 集合 β) = {a • b}
   证明: image2_singleton
 
 @[to_additive (attr := mono, gcongr)]
@@ -576,7 +576,7 @@ lemma smul_set_subset_smul
 
 中文:
 引理 smul_set_subset_smul
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: a in s -> a • t subseteq s • t
   证明: image_subset_image2_right
 
@@ -650,7 +650,7 @@ lemma smul_set_empty
 
 中文:
 引理 smul_set_empty
-  结论: a • (∅ : Set β) = ∅
+  结论: a • (∅ : 集合 β) = ∅
   证明: image_empty _
 -/
 @[to_additive (attr := simp)] lemma smul_set_empty : a • (∅ : Set β) = ∅ := image_empty _
@@ -686,7 +686,7 @@ lemma smul_set_nonempty
 
 中文:
 引理 smul_set_nonempty
-  结论: (a • s).Nonempty ↔ s.Nonempty
+  结论: (a • s).非空 ↔ s.非空
   证明: image_nonempty
 
 @[to_additive (attr := simp)]
@@ -706,7 +706,7 @@ lemma smul_set_singleton
 
 中文:
 引理 smul_set_singleton
-  结论: a • ({b} : Set β) = {a • b}
+  结论: a • ({b} : 集合 β) = {a • b}
   证明: image_singleton
 
 Depends on / 依赖: image_singleton
@@ -792,7 +792,7 @@ lemma smul_set_insert
 
 中文:
 引理 smul_set_insert
-  条件: (a : α) (b : β) (s : Set β)
+  条件: (a : α) (b : β) (s : 集合 β)
   结论: a • insert b s = insert (a • b) (a • s)
   证明: image_insert_eq ..
 
@@ -831,8 +831,8 @@ lemma Nonempty.smul_set
   proof: Nonempty.image _
 
 中文:
-引理 Nonempty.smul_set
-  结论: s.Nonempty -> (a • s).Nonempty
+引理 非空.smul_set
+  结论: s.非空 -> (a • s).非空
   证明: Nonempty.image _
 -/
 @[to_additive] lemma Nonempty.smul_set : s.Nonempty -> (a • s).Nonempty := Nonempty.image _
@@ -856,7 +856,7 @@ theorem smul_set_pi_of_surjective
 
 中文:
 定理 smul_set_pi_of_surjective
-  结论: (c : M) (I : Set ι) (s : 对任意 i, Set (π i))
+  结论: (c : M) (I : 集合 ι) (s : 对任意 i, 集合 (π i))
   证明: piMap_image_pi hsurj s
 
 @[to_additive]
@@ -879,7 +879,7 @@ theorem smul_set_univ_pi
 
 中文:
 定理 smul_set_univ_pi
-  条件: (c : M) (s : 对任意 i, Set (π i))
+  条件: (c : M) (s : 对任意 i, 集合 (π i))
   结论: c • univ.pi s = univ.pi (c • s)
   证明: piMap_image_univ_pi _ s
 
@@ -905,7 +905,7 @@ lemma range_smul_range
 
 中文:
 引理 range_smul_range
-  条件: {ι κ : 类型} [SMul α β] (b : ι -> α) (c : κ -> β)
+  条件: {ι κ : 类型} [标量乘法 α β] (b : ι -> α) (c : κ -> β)
   证明: image2_range ..
 
 @[to_additive]
@@ -927,7 +927,7 @@ lemma smul_set_range
 
 中文:
 引理 smul_set_range
-  条件: [SMul α β] {ι : Sort*} (a : α) (f : ι -> β)
+  条件: [标量乘法 α β] {ι : 类型层*} (a : α) (f : ι -> β)
   证明: (range_comp ..).symm
 
 Depends on / 依赖: range_comp
@@ -946,7 +946,7 @@ lemma range_smul
 
 中文:
 引理 range_smul
-  条件: [SMul α β] {ι : Sort*} (a : α) (f : ι -> β)
+  条件: [标量乘法 α β] {ι : 类型层*} (a : α) (f : ι -> β)
   证明: (smul_set_range ..).symm
 -/
 @[to_additive] lemma range_smul [SMul α β] {ι : Sort*} (a : α) (f : ι -> β) :
@@ -971,7 +971,7 @@ instance sdiv
 
 中文:
 实例 sdiv
-  签名: : SDiv (Set α) (Set β) where sdiv
+  签名: : SDiv (集合 α) (集合 β) where sdiv
   定义体: image2 (· /ₛ ·)
 
 @[to_additive (attr := simp)]
@@ -1082,7 +1082,7 @@ lemma empty_sdiv
 
 中文:
 引理 empty_sdiv
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   结论: ∅ /ₛ t = ∅
   证明: image2_empty_left
 
@@ -1106,7 +1106,7 @@ lemma sdiv_empty
 
 中文:
 引理 sdiv_empty
-  条件: (s : Set β)
+  条件: (s : 集合 β)
   结论: s /ₛ ∅ = ∅
   证明: image2_empty_right
 
@@ -1151,7 +1151,7 @@ lemma sdiv_nonempty
 
 中文:
 引理 sdiv_nonempty
-  结论: (s /ₛ t : Set α).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s /ₛ t : 集合 α).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 @[to_additive]
@@ -1172,8 +1172,8 @@ lemma Nonempty.sdiv
 @[to_additive]
 
 中文:
-引理 Nonempty.sdiv
-  结论: s.Nonempty -> t.Nonempty -> (s /ₛ t : Set α).Nonempty
+引理 非空.sdiv
+  结论: s.非空 -> t.非空 -> (s /ₛ t : 集合 α).非空
   证明: .image2
 
 @[to_additive]
@@ -1194,8 +1194,8 @@ lemma Nonempty.of_sdiv_left
 @[to_additive]
 
 中文:
-引理 Nonempty.of_sdiv_left
-  结论: (s /ₛ t : Set α).Nonempty -> s.Nonempty
+引理 非空.of_sdiv_left
+  结论: (s /ₛ t : 集合 α).非空 -> s.非空
   证明: .of_image2_left
 
 @[to_additive]
@@ -1216,8 +1216,8 @@ lemma Nonempty.of_sdiv_right
 @[to_additive (attr := simp low + 1)]
 
 中文:
-引理 Nonempty.of_sdiv_right
-  结论: (s /ₛ t : Set α).Nonempty -> t.Nonempty
+引理 非空.of_sdiv_right
+  结论: (s /ₛ t : 集合 α).非空 -> t.非空
   证明: .of_image2_right
 
 @[to_additive (attr := simp low + 1)]
@@ -1240,7 +1240,7 @@ lemma sdiv_singleton
 
 中文:
 引理 sdiv_singleton
-  条件: (s : Set β) (b : β)
+  条件: (s : 集合 β) (b : β)
   结论: s /ₛ {b} = (· /ₛ b) '' s
   证明: image2_singleton_right
 
@@ -1264,7 +1264,7 @@ lemma singleton_sdiv
 
 中文:
 引理 singleton_sdiv
-  条件: (t : Set β) (b : β)
+  条件: (t : 集合 β) (b : β)
   结论: {b} /ₛ t = (b /ₛ ·) '' t
   证明: image2_singleton_left
 
@@ -1287,7 +1287,7 @@ lemma singleton_sdiv_singleton
 
 中文:
 引理 singleton_sdiv_singleton
-  结论: ({b} : Set β) /ₛ {c} = {b /ₛ c}
+  结论: ({b} : 集合 β) /ₛ {c} = {b /ₛ c}
   证明: image2_singleton
 
 @[to_additive (attr := mono, gcongr)]
@@ -1553,7 +1553,7 @@ lemma image_smul_comm
 
 中文:
 引理 image_smul_comm
-  条件: [SMul α β] [SMul α γ] (f : β -> γ) (a : α) (s : Set β)
+  条件: [标量乘法 α β] [标量乘法 α γ] (f : β -> γ) (a : α) (s : 集合 β)
   证明: image_comm
 
 Depends on / 依赖: image_comm
@@ -1577,7 +1577,7 @@ lemma op_smul_set_smul_eq_smul_smul_set
 
 中文:
 引理 op_smul_set_smul_eq_smul_smul_set
-  结论: (a : α) (s : Set β) (t : Set γ)
+  结论: (a : α) (s : 集合 β) (t : 集合 γ)
   证明: by
   ext; simp [mem_smul, mem_smul_set, h]
 

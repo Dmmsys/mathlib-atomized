@@ -50,7 +50,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder 自然数 where
+  签名: : 线性序 自然数 where
   定义体: Nat.le
   le_refl := @Nat.le_refl
   le_trans := @Nat.le_trans
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder 自然数
+  签名: 预序 自然数
   定义体: inferInstance
 -/
 instance : Preorder Nat := inferInstance
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder 自然数
+  签名: 偏序 自然数
   定义体: inferInstance
 -/
 instance : PartialOrder Nat := inferInstance
@@ -116,7 +116,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial 自然数
+  签名: : 非平凡 自然数
   定义体: ⟨⟨0, 1, Nat.zero_ne_one⟩⟩
 
 Depends on / 依赖: Nat.zero_ne_one, zero_ne_one
@@ -136,7 +136,7 @@ lemma succ_injective
 
 中文:
 引理 succ_injective
-  结论: Injective 自然数.succ
+  结论: 单射 自然数.succ
   证明: @succ.inj
 
 Depends on / 依赖: succ.inj
@@ -178,7 +178,7 @@ lemma pow_left_injective
 中文:
 引理 pow_left_injective
   条件: (hn : n != 0)
-  结论: Injective (fun a : 自然数 => a ^ n)
+  结论: 单射 (fun a : 自然数 => a ^ n)
   证明: by
   simp [Injective, le_antisymm_iff, Nat.pow_le_pow_iff_left hn]
 
@@ -200,7 +200,7 @@ lemma pow_right_injective
 中文:
 引理 pow_right_injective
   条件: (ha : 2 <= a)
-  结论: Injective (a ^ ·)
+  结论: 单射 (a ^ ·)
   证明: by
   simp [Injective, le_antisymm_iff, Nat.pow_le_pow_iff_right ha]
 -/
@@ -245,7 +245,7 @@ lemma leRecOn_injective
 
 中文:
 引理 leRecOn_injective
-  结论: {C : 自然数 -> Sort*} {n m} (hnm : n <= m) (next : 对任意 {k}, C k -> C (k + 1))
+  结论: {C : 自然数 -> 类型层*} {n m} (hnm : n <= m) (next : 对任意 {k}, C k -> C (k + 1))
   证明: by
   induction hnm with
   | refl =>
@@ -290,7 +290,7 @@ lemma leRecOn_surjective
 
 中文:
 引理 leRecOn_surjective
-  结论: {C : 自然数 -> Sort*} {n m} (hnm : n <= m) (next : 对任意 {k}, C k -> C (k + 1))
+  结论: {C : 自然数 -> 类型层*} {n m} (hnm : n <= m) (next : 对任意 {k}, C k -> C (k + 1))
   证明: by
   induction hnm with
   | refl =>
@@ -331,7 +331,7 @@ lemma set_induction_bounded
 
 中文:
 引理 set_induction_bounded
-  结论: {S : Set 自然数} (hk : k in S) (h_ind : 对任意 k : 自然数, k in S -> k + 1 in S)
+  结论: {S : 集合 自然数} (hk : k in S) (h_ind : 对任意 k : 自然数, k in S -> k + 1 in S)
   证明: @leRecOn (fun n => n in S) k n hnk @h_ind hk
 
 Depends on / 依赖: h_ind, leRecOn
@@ -350,7 +350,7 @@ lemma set_induction
 
 中文:
 引理 set_induction
-  条件: {S : Set 自然数} (hb : 0 in S) (h_ind : 对任意 k : 自然数, k in S -> k + 1 in S) (n : 自然数)
+  条件: {S : 集合 自然数} (hb : 0 in S) (h_ind : 对任意 k : 自然数, k in S -> k + 1 in S) (n : 自然数)
   证明: set_induction_bounded hb h_ind (zero_le n)
 
 Depends on / 依赖: h_ind, set_induction_bounded, zero_le
@@ -374,7 +374,7 @@ lemma dvd_left_injective
 
 中文:
 引理 dvd_left_injective
-  结论: Function.Injective ((· ∣ ·) : 自然数 -> 自然数 -> 命题)
+  结论: 函数.单射 ((· ∣ ·) : 自然数 -> 自然数 -> 命题)
   证明: fun _ _ h =>
   dvd_right_iff_eq.mp fun a => iff_of_eq (congr_fun h a)
 

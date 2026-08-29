@@ -73,11 +73,11 @@ structure SummableFamily
 
 中文:
 结构 SummableFamily
-  参数: (Γ R) [PartialOrder Γ] [AddCommMonoid R] (α : 类型)
+  参数: (Γ R) [偏序 Γ] [加法交换幺半群 R] (α : 类型)
   公理与运算 (3 个):
     - toFun : α -> R⟦Γ⟧
-    - isPWO_iUnion_support' : Set.IsPWO (⋃ a : α, (toFun a).support)
-    - finite_co_support' : 对任意 g : Γ, { a | (toFun a).coeff g != 0 }.Finite
+    - isPWO_iUnion_support' : 集合.IsPWO (⋃ a : α, (toFun a).support)
+    - finite_co_support' : 对任意 g : Γ, { a | (toFun a).coeff g != 0 }.有限
 -/
 structure SummableFamily (Γ R) [PartialOrder Γ] [AddCommMonoid R] (α : Type*) where
   /-- A parametrized family of Hahn series. -/
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (SummableFamily Γ R α) α R⟦Γ⟧
+  签名: 函数状 (SummableFamily Γ R α) α R⟦Γ⟧
   定义体: toFun
   coe_injective | ⟨_, _, _⟩, ⟨_, _, _⟩, rfl => rfl
 
@@ -148,7 +148,7 @@ theorem isPWO_iUnion_support
 中文:
 定理 isPWO_iUnion_support
   条件: (s : SummableFamily Γ R α)
-  结论: Set.IsPWO (⋃ a : α, (s a).support)
+  结论: 集合.IsPWO (⋃ a : α, (s a).support)
   证明: s.isPWO_iUnion_support'
 
 Depends on / 依赖: isPWO_iUnion_support, max_comm, s.isPWO_iUnion_support
@@ -187,7 +187,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (SummableFamily Γ R α) (α -> R⟦Γ⟧) (⇑)
+  结论: @函数.单射 (SummableFamily Γ R α) (α -> R⟦Γ⟧) (⇑)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (SummableFamily Γ R α)
+  签名: 加法 (SummableFamily Γ R α)
   定义体: ⟨fun x y =>
     { toFun := x + y
       isPWO_iUnion_support' :=
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (SummableFamily Γ R α)
+  签名: 零 (SummableFamily Γ R α)
   定义体: ⟨⟨0, by simp, by simp⟩⟩
 -/
 instance : Zero (SummableFamily Γ R α) :=
@@ -294,7 +294,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SummableFamily Γ R α)
+  签名: 可居 (SummableFamily Γ R α)
   定义体: ⟨0⟩
 
 @[simp]
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul M (SummableFamily Γ R β)
+  签名: 标量乘法 M (SummableFamily Γ R β)
   定义体: ⟨fun r t =>
     { toFun := r • t
       isPWO_iUnion_support' := t.isPWO_iUnion_support.mono (Set.iUnion_mono fun i =>
@@ -475,7 +475,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (SummableFamily Γ R α)
+  签名: 加法交换幺半群 (SummableFamily Γ R α)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommMonoid _ coe_zero coe_add (fun _ _ => coe_smul' _ _)
 
@@ -696,7 +696,7 @@ theorem coeff_hsum_eq_sum_of_subset
 
 中文:
 定理 coeff_hsum_eq_sum_of_subset
-  结论: {s : SummableFamily Γ R α} {g : Γ} {t : Finset α}
+  结论: {s : SummableFamily Γ R α} {g : Γ} {t : 有限集 α}
   证明: by
   simp only [coeff_hsum, finsum_eq_sum _ (s.finite_co_support _)]
   exact sum_subset (Set.Finite.toFinset_subset.mpr h) (by simp)
@@ -821,7 +821,7 @@ definition const
 
 中文:
 定义 const
-  签名: (ι) [Finite ι] (x : R⟦Γ⟧)
+  签名: (ι) [有限 ι] (x : R⟦Γ⟧)
   定义体: x
   isPWO_iUnion_support' := by
     cases isEmpty_or_nonempty ι
@@ -853,7 +853,7 @@ theorem hsum_unique
 
 中文:
 定理 hsum_unique
-  条件: {ι} [Unique ι] (x : SummableFamily Γ R ι)
+  条件: {ι} [唯一 ι] (x : SummableFamily Γ R ι)
   结论: x.hsum = x default
   证明: by
   ext g
@@ -882,7 +882,7 @@ definition Equiv
 (Equiv.set_finite_iff e.subtypeEquivOfSubtype').m
 
 中文:
-定义 Equiv
+定义 等价
   签名: (e : α ≃ β) (s : SummableFamily Γ R α)
   定义体: s (e.symm b)
   isPWO_iUnion_support' := by
@@ -919,7 +919,7 @@ theorem hsum_equiv
 中文:
 定理 hsum_equiv
   条件: (e : α ≃ β) (s : SummableFamily Γ R α)
-  结论: (Equiv e s).hsum = s.hsum
+  结论: (等价 e s).hsum = s.hsum
   证明: by
   ext g
   simp only [coeff_hsum, Equiv_toFun]
@@ -951,7 +951,7 @@ exact Exists.intro i right_ne_zero_of_smul hi
 
 中文:
 定义 smulFamily
-  签名: [AddCommMonoid V] [SMulWithZero R V] (f : α -> R) (s : SummableFamily Γ V α)
+  签名: [加法交换幺半群 V] [带零标量乘法 R V] (f : α -> R) (s : SummableFamily Γ V α)
   定义体: (f a) • s a
   isPWO_iUnion_support' := by
     refine Set.IsPWO.mono s.isPWO_iUnion_support fun g hg => ?_
@@ -984,7 +984,7 @@ theorem hsum_smulFamily
 
 中文:
 定理 hsum_smulFamily
-  结论: [AddCommMonoid V] [SMulWithZero R V] (f : α -> R)
+  结论: [加法交换幺半群 V] [带零标量乘法 R V] (f : α -> R)
   证明: rfl
 -/
 theorem hsum_smulFamily [AddCommMonoid V] [SMulWithZero R V] (f : α -> R)
@@ -1109,7 +1109,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (SummableFamily Γ R α)
+  签名: 取负 (SummableFamily Γ R α)
   定义体: { toFun := fun a => -s a
       isPWO_iUnion_support' := by
         simp_rw [support_neg]
@@ -1185,7 +1185,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (SummableFamily Γ R α)
+  签名: 减法 (SummableFamily Γ R α)
   定义体: { toFun := s - s'
       isPWO_iUnion_support' := by
         simp_rw [sub_eq_add_neg]
@@ -1256,7 +1256,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (SummableFamily Γ R α)
+  签名: 加法交换群 (SummableFamily Γ R α)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub
     (fun _ _ => coe_smul' _ _) (fun _ _ => coe_smul' _ _)
@@ -1510,7 +1510,7 @@ theorem coeff_smul
 
 中文:
 定理 coeff_smul
-  结论: {R} {V} [Semiring R] [AddCommMonoid V] [Module R V]
+  结论: {R} {V} [半环 R] [加法交换幺半群 V] [模 R V]
   证明: by
   rw [coeff_hsum]
   simp only [coeff_hsum_eq_sum, smul_toFun, HahnModule.coeff_smul, Equiv.symm_apply_apply]
@@ -1555,7 +1555,7 @@ theorem smul_hsum
 
 中文:
 定理 smul_hsum
-  结论: {R} {V} [Semiring R] [AddCommMonoid V] [Module R V]
+  结论: {R} {V} [半环 R] [加法交换幺半群 V] [模 R V]
   证明: by
   ext g
   rw [coeff_smul s t g]; rw [HahnModule.coeff_smul]; rw [Equiv.symm_apply_apply]
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R⟦Γ⟧ (SummableFamily Γ' V β)
+  签名: 标量乘法 R⟦Γ⟧ (SummableFamily Γ' V β)
   定义体: Equiv (Equiv.punitProd β) smul (const Unit x) t
 
 Depends on / 依赖: Equiv.punitProd, punitProd
@@ -1657,7 +1657,7 @@ theorem hsum_smul_module
 
 中文:
 定理 hsum_smul_module
-  结论: {R} {V} [Semiring R] [AddCommMonoid V] [Module R V] {x : R⟦Γ⟧}
+  结论: {R} {V} [半环 R] [加法交换幺半群 V] [模 R V] {x : R⟦Γ⟧}
   证明: by
   rw [smul_eq]; rw [hsum_equiv]; rw [smul_hsum]; rw [hsum_unique]; rw [const_toFun]
 
@@ -1689,8 +1689,8 @@ instance [AddCommMonoid
   mul_smul _ _ _ := ext fun _ => by simp [HahnModule.i
 
 中文:
-实例 [AddCommMonoid
-  签名: V] [Module R V] : Module R⟦Γ⟧ (SummableFamily Γ' V α) where
+实例 [加法交换幺半群
+  签名: V] [模 R V] : 模 R⟦Γ⟧ (SummableFamily Γ' V α) where
   定义体: ext fun _ => by simp
   zero_smul _ := ext fun _ => by simp
   one_smul _ := ext fun _ => by rw [smul_apply, HahnModule.one_smul', Equiv.symm_apply_apply]
@@ -1767,7 +1767,7 @@ theorem hsum_sub
 
 中文:
 定理 hsum_sub
-  条件: {R : 类型} [Ring R] {s t : SummableFamily Γ R α}
+  条件: {R : 类型} [环 R] {s t : SummableFamily Γ R α}
   证明: by
   rw [← lsum_apply]; rw [map_sub]; rw [lsum_apply]; rw [lsum_apply]
 
@@ -2003,7 +2003,7 @@ theorem hsum_ofFinsupp
 中文:
 定理 hsum_ofFinsupp
   条件: {f : α ->₀ R⟦Γ⟧}
-  结论: (ofFinsupp f).hsum = f.sum fun _ => id
+  结论: (ofFinsupp f).hsum = f.求和 fun _ => id
   证明: by
   ext g
   simp only [coeff_hsum, coe_ofFinsupp, Finsupp.sum]
@@ -2144,7 +2144,7 @@ theorem embDomain_of_notMem_range
 
 中文:
 定理 embDomain_of_notMem_range
-  条件: (h : b ∉ Set.range f)
+  条件: (h : b ∉ 集合.range f)
   结论: s.embDomain f b = 0
   证明: by
   rw [embDomain_apply]; rw [dif_neg h]
@@ -2212,7 +2212,7 @@ theorem support_pow_subset_closure
 
 中文:
 定理 support_pow_subset_closure
-  结论: [AddCommMonoid Γ] [PartialOrder Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [加法交换幺半群 Γ] [偏序 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: by
   intro g hn
   induction n generalizing g with
@@ -2250,7 +2250,7 @@ theorem isPWO_iUnion_support_powers
 
 中文:
 定理 isPWO_iUnion_support_powers
-  结论: [AddCommMonoid Γ] [LinearOrder Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [加法交换幺半群 Γ] [线性序 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: (x.isPWO_support'.addSubmonoid_closure
     fun _ hg => le_trans hx (order_le_of_coeff_ne_zero (Function.mem_support.mp hg))).mono
     (Set.iUnion_subset fun n => support_pow_subset_closure x n)
@@ -2279,7 +2279,7 @@ theorem co_support_zero
 
 中文:
 定理 co_support_zero
-  结论: [AddCommMonoid Γ] [PartialOrder Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [加法交换幺半群 Γ] [偏序 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: by
   simp only [Set.subset_singleton_iff, Set.mem_ofPred_eq]
   intro n hn
@@ -2485,7 +2485,7 @@ include hx in
 
 中文:
 定理 coe_powers
-  结论: ⇑(powers x) = HPow.hPow x
+  结论: ⇑(powers x) = 异质幂.hPow x
   证明: by
   ext1 n
   simp [hx]
@@ -2658,7 +2658,7 @@ theorem isUnit_of_isUnit_leadingCoeff_AddUnitOrder
 
 中文:
 定理 isUnit_of_isUnit_leadingCoeff_AddUnitOrder
-  结论: {x : R⟦Γ⟧} (hx : IsUnit x.leadingCoeff)
+  结论: {x : R⟦Γ⟧} (hx : 是单位 x.leadingCoeff)
   证明: by
   let ⟨⟨u, i, ui, iu⟩, h⟩ := hx
   rw [Units.val_mk] at h
@@ -2772,7 +2772,7 @@ theorem isUnit_iff
 中文:
 定理 isUnit_iff
   条件: {x : R⟦Γ⟧}
-  结论: IsUnit x ↔ IsUnit (x.leadingCoeff)
+  结论: 是单位 x ↔ 是单位 (x.leadingCoeff)
   证明: by
   constructor
   · rintro ⟨⟨u, i, ui, iu⟩, rfl⟩
@@ -2820,7 +2820,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvMonoid R⟦Γ⟧
+  签名: 除逆幺半群 R⟦Γ⟧
   定义体: single (-x.order) (x.leadingCoeff)⁻¹ *
       (SummableFamily.powers <| 1 - single (-x.order) (x.leadingCoeff)⁻¹ * x).hsum
 
@@ -2905,7 +2905,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field R⟦Γ⟧ where
+  签名: : 域 R⟦Γ⟧ where
   定义体: by simp [inv_def]
   mul_inv_cancel x x0 := by
     have h :=

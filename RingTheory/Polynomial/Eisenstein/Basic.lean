@@ -56,8 +56,8 @@ structure IsWeaklyEisensteinAt
     - mem : forall {n}, n < f.natDegree -> f.coeff n in 𝓟
 
 中文:
-结构 IsWeaklyEisensteinAt
-  参数: [CommSemiring R] (f : R[X]) (𝓟 : Ideal R)
+结构 是WeaklyEisensteinAt
+  参数: [交换半环 R] (f : R[X]) (𝓟 : 理想 R)
   公理与运算 (1 个):
     - mem : 对任意 {n}, n < f.natDegree -> f.coeff n in 𝓟
 -/
@@ -80,8 +80,8 @@ structure IsEisensteinAt
     - notMem : f.coeff 0 ∉ 𝓟 ^ 2
 
 中文:
-结构 IsEisensteinAt
-  参数: [CommSemiring R] (f : R[X]) (𝓟 : Ideal R)
+结构 是EisensteinAt
+  参数: [交换半环 R] (f : R[X]) (𝓟 : 理想 R)
   公理与运算 (3 个):
     - leading : f.leadingCoeff ∉ 𝓟
     - mem : 对任意 {n}, n < f.natDegree -> f.coeff n in 𝓟
@@ -113,7 +113,7 @@ theorem map
 
 中文:
 定理 map
-  条件: (hf : f.IsWeaklyEisensteinAt 𝓟) {A : 类型v} [CommSemiring A] (φ : R ->+* A)
+  条件: (hf : f.是WeaklyEisensteinAt 𝓟) {A : 类型v} [交换半环 A] (φ : R ->+* A)
   证明: by
   refine (isWeaklyEisensteinAt_iff _ _).2 fun hn => ?_
   rw [coeff_map]
@@ -146,7 +146,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: (hf : f.IsWeaklyEisensteinAt 𝓟) (hf' : f'.IsWeaklyEisensteinAt 𝓟)
+  条件: (hf : f.是WeaklyEisensteinAt 𝓟) (hf' : f'.是WeaklyEisensteinAt 𝓟)
   证明: by
   rw [isWeaklyEisensteinAt_iff] at hf hf' ⊢
   intro n hn
@@ -198,7 +198,7 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree
   have : forall n < f.natDegree, p 
 
 中文:
-定理 exists_mem_adjoin_mul_eq_pow_natDegree
+定理 存在_mem_adjoin_mul_eq_pow_natDegree
   结论: {x : S} (hx : aeval x f = 0) (hmo : f.Monic)
   证明: by
   rw [aeval_def]; rw [Polynomial.eval₂_eq_eval_map]; rw [eval_eq_sum_range]; rw [range_add_one]; rw [sum_insert notMem_range_self]; rw [sum_range]; rw [(hmo.map (algebraMap R S)).coeff_natDegree]; rw [one_mul] at hx
@@ -247,7 +247,7 @@ theorem exists_mem_adjoin_mul_eq_pow_natDegree_le
   · rw [← mul_assoc _ 
 
 中文:
-定理 exists_mem_adjoin_mul_eq_pow_natDegree_le
+定理 存在_mem_adjoin_mul_eq_pow_natDegree_le
   结论: {x : S} (hx : aeval x f = 0) (hmo : f.Monic)
   证明: by
   intro i hi
@@ -289,7 +289,7 @@ theorem pow_natDegree_le_of_root_of_monic_mem
 
 中文:
 定理 pow_natDegree_le_of_root_of_monic_mem
-  结论: (hf : f.IsWeaklyEisensteinAt 𝓟)
+  结论: (hf : f.是WeaklyEisensteinAt 𝓟)
   证明: by
   intro i hi
   obtain ⟨k, hk⟩ := exists_add_of_le hi
@@ -328,7 +328,7 @@ theorem pow_natDegree_le_of_aeval_zero_of_monic_mem_map
 
 中文:
 定理 pow_natDegree_le_of_aeval_zero_of_monic_mem_map
-  结论: (hf : f.IsWeaklyEisensteinAt 𝓟)
+  结论: (hf : f.是WeaklyEisensteinAt 𝓟)
   证明: by
   suffices x ^ (f.map (algebraMap R S)).natDegree in 𝓟.map (algebraMap R S) by
     intro i hi
@@ -373,7 +373,7 @@ theorem scaleRoots.isWeaklyEisensteinAt
 
 中文:
 定理 scaleRoots.isWeaklyEisensteinAt
-  条件: (p : R[X]) {x : R} {P : Ideal R} (hP : x in P)
+  条件: (p : R[X]) {x : R} {P : 理想 R} (hP : x in P)
   证明: by
   refine ⟨fun i => ?_⟩
   rw [coeff_scaleRoots]
@@ -405,7 +405,7 @@ theorem dvd_pow_natDegree_of_eval₂_eq_zero
 
 中文:
 定理 dvd_pow_natDegree_of_eval₂_eq_zero
-  结论: {f : R ->+* A} (hf : Function.Injective f) {p : R[X]}
+  结论: {f : R ->+* A} (hf : 函数.单射 f) {p : R[X]}
   证明: by
   rw [← natDegree_scaleRoots p x]; rw [← Ideal.mem_span_singleton]
   refine
@@ -439,7 +439,7 @@ theorem dvd_pow_natDegree_of_aeval_eq_zero
 
 中文:
 定理 dvd_pow_natDegree_of_aeval_eq_zero
-  结论: [IsDomain R] [Algebra R A] [Nontrivial A]
+  结论: [是整环 R] [代数 R A] [非平凡 A]
   证明: dvd_pow_natDegree_of_eval₂_eq_zero (FaithfulSMul.algebraMap_injective R A) hp x y z h
     ((mul_comm _ _).trans hz)
 
@@ -468,7 +468,7 @@ theorem _root_.Polynomial.Monic.leadingCoeff_notMem
   proof: hf.leadingCoeff.symm ▸ (Ideal.ne_top_iff_one _).1 h
 
 中文:
-定理 _root_.Polynomial.Monic.leadingCoeff_notMem
+定理 _root_.多项式.Monic.leadingCoeff_notMem
   条件: (hf : f.Monic) (h : 𝓟 != ⊤)
   证明: hf.leadingCoeff.symm ▸ (Ideal.ne_top_iff_one _).1 h
 
@@ -488,7 +488,7 @@ theorem _root_.Polynomial.Monic.isEisensteinAt_of_mem_of_notMem
     notMem := hnotMem }
 
 中文:
-定理 _root_.Polynomial.Monic.isEisensteinAt_of_mem_of_notMem
+定理 _root_.多项式.Monic.isEisensteinAt_of_mem_of_notMem
   结论: (hf : f.Monic) (h : 𝓟 != ⊤)
   证明: { leading := Polynomial.Monic.leadingCoeff_notMem hf h
     mem := fun hn => hmem hn
@@ -514,8 +514,8 @@ theorem isWeaklyEisensteinAt
 
 中文:
 定理 isWeaklyEisensteinAt
-  条件: (hf : f.IsEisensteinAt 𝓟)
-  结论: IsWeaklyEisensteinAt f 𝓟
+  条件: (hf : f.是EisensteinAt 𝓟)
+  结论: 是WeaklyEisensteinAt f 𝓟
   证明: ⟨fun h => hf.mem h⟩
 
 Depends on / 依赖: hf.mem
@@ -538,7 +538,7 @@ theorem coeff_mem
 
 中文:
 定理 coeff_mem
-  条件: (hf : f.IsEisensteinAt 𝓟) {n : 自然数} (hn : n != f.natDegree)
+  条件: (hf : f.是EisensteinAt 𝓟) {n : 自然数} (hn : n != f.natDegree)
   结论: f.coeff n in 𝓟
   证明: by
   rcases ne_iff_lt_or_gt.1 hn with h₁ | h₂
@@ -571,7 +571,7 @@ theorem irreducible
 
 中文:
 定理 irreducible
-  结论: (hf : f.IsEisensteinAt 𝓟) (hprime : 𝓟.IsPrime) (hu : f.IsPrimitive)
+  结论: (hf : f.是EisensteinAt 𝓟) (hprime : 𝓟.是素) (hu : f.是Primitive)
   证明: irreducible_of_eisenstein_criterion hprime hf.leading (fun _ hn => hf.mem (coe_lt_degree.1 hn))
     (natDegree_pos_iff_degree_pos.1 hfd0) hf.notMem hu
 

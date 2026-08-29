@@ -34,7 +34,7 @@ class CanLift
 
 中文:
 类 CanLift
-  参数: (α β : Sort*) (coe : outParam <| β -> α) (cond : outParam <| α -> 命题)
+  参数: (α β : 类型层*) (coe : outParam <| β -> α) (cond : outParam <| α -> 命题)
   公理与运算 (1 个):
     - prf : 对任意 x : α, cond x -> 存在 y : β, coe y = x
 -/
@@ -70,8 +70,8 @@ instance Pi.canLift
     funext fun i => Classical.choose_spec (CanLift.prf (f i) (hf i))⟩
 
 中文:
-实例 Pi.canLift
-  签名: (ι : Sort*) (α β : ι -> Sort*) (coe : 对任意 i, β i -> α i) (P : 对任意 i, α i -> 命题)
+实例 依赖函数类型.canLift
+  签名: (ι : 类型层*) (α β : ι -> 类型层*) (coe : 对任意 i, β i -> α i) (P : 对任意 i, α i -> 命题)
   定义体: ⟨fun i => Classical.choose (CanLift.prf (f i) (hf i)),
     funext fun i => Classical.choose_spec (CanLift.prf (f i) (hf i))⟩
 
@@ -96,7 +96,7 @@ instance Prod.instCanLift
     exact ⟨(x, y), by simp⟩
 
 中文:
-实例 Prod.instCanLift
+实例 积类型.instCanLift
   签名: {α β γ δ : 类型} {coeβα condβα coeδγ condδγ} [CanLift α β coeβα condβα]
   定义体: by
     rintro ⟨x, y⟩ ⟨hx, hy⟩
@@ -127,8 +127,8 @@ theorem Subtype.exists_pi_extension
     funext fun i => dif_pos i.2⟩
 
 中文:
-定理 Subtype.exists_pi_extension
-  结论: {ι : Sort*} {α : ι -> Sort*} [ne : 对任意 i, Nonempty (α i)]
+定理 子类型.存在_pi_extension
+  结论: {ι : 类型层*} {α : ι -> 类型层*} [ne : 对任意 i, 非空 (α i)]
   证明: by
   haveI : DecidablePred p := fun i => Classical.propDecidable (p i)
   exact ⟨fun i => if hi : p i then f ⟨i, hi⟩ else Classical.choice (ne i),
@@ -153,7 +153,7 @@ instance PiSubtype.canLift
 
 中文:
 实例 PiSubtype.canLift
-  签名: (ι : Sort*) (α : ι -> Sort*) [对任意 i, Nonempty (α i)] (p : ι -> 命题)
+  签名: (ι : 类型层*) (α : ι -> 类型层*) [对任意 i, 非空 (α i)] (p : ι -> 命题)
   定义体: Subtype.exists_pi_extension f
 
 Depends on / 依赖: Subtype, Subtype.exists_pi_extension, exists_pi_extension
@@ -173,7 +173,7 @@ instance PiSubtype.canLift'
 
 中文:
 实例 PiSubtype.canLift'
-  签名: (ι : Sort*) (α : Sort*) [Nonempty α] (p : ι -> 命题)
+  签名: (ι : 类型层*) (α : 类型层*) [非空 α] (p : ι -> 命题)
   定义体: PiSubtype.canLift ι (fun _ => α) p
 
 Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
@@ -191,8 +191,8 @@ instance Subtype.canLift
   body: ⟨⟨a, ha⟩, rfl⟩
 
 中文:
-实例 Subtype.canLift
-  签名: {α : Sort*} (p : α -> 命题)
+实例 子类型.canLift
+  签名: {α : 类型层*} (p : α -> 命题)
   定义体: ⟨⟨a, ha⟩, rfl⟩
 -/
 instance Subtype.canLift {α : Sort*} (p : α -> Prop) :
@@ -321,7 +321,7 @@ definition Lift.main
 
 中文:
 定义 Lift.main
-  签名: (e t : TSyntax `term) (hUsing : Option (TSyntax `term))
+  签名: (e t : TSyntax `term) (hUsing : 选项类型 (TSyntax `term))
   定义体: withMainContext do
   -- Are we using a new variable for the lifted var?
   let isNewVar := !newVarName.isNone

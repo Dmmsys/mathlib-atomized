@@ -125,7 +125,7 @@ lemma conjSqrt_monotone
 中文:
 引理 conjSqrt_monotone
   条件: {c : A}
-  结论: Monotone (conjSqrt c)
+  结论: 递增 (conjSqrt c)
   证明: by
   intro a b hab
   by_cases hc : 0 <= c

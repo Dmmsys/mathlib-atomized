@@ -380,7 +380,7 @@ structure Solution'
     - H : a ^ 3 + b ^ 3 = u * c ^ 3
 
 中文:
-结构 Solution'
+结构 解'
   参数: where
   公理与运算 (10 个):
     - a : 𝓞 K
@@ -421,9 +421,9 @@ structure Solution
     - hab : fun ^ 2 ∣ a + b
 
 中文:
-结构 Solution
-  参数: extends Solution' hζ
-  继承: Solution' hζ
+结构 解
+  参数: extends 解' hζ
+  继承: 解' hζ
   公理与运算 (1 个):
     - hab : fun ^ 2 ∣ a + b
 -/
@@ -445,7 +445,7 @@ lemma Solution'.multiplicity_lambda_c_finite
   proof: .of_not_isUnit hζ.zeta_sub_one_prime'.not_isUnit S'.hc
 
 中文:
-引理 Solution'.multiplicity_lambda_c_finite
+引理 解'.multiplicity_lambda_c_finite
   证明: .of_not_isUnit hζ.zeta_sub_one_prime'.not_isUnit S'.hc
 
 Depends on / 依赖: not_isUnit, of_not_isUnit, zeta_sub_one_prime
@@ -462,7 +462,7 @@ definition Solution'.multiplicity
   body: _root_.multiplicity (hζ.toInteger - 1) S'.c
 
 中文:
-定义 Solution'.multiplicity
+定义 解'.multiplicity
   定义体: _root_.multiplicity (hζ.toInteger - 1) S'.c
 -/
 noncomputable def Solution'.multiplicity :=
@@ -476,7 +476,7 @@ definition Solution.multiplicity
   body: S.toSolution'.multiplicity
 
 中文:
-定义 Solution.multiplicity
+定义 解.multiplicity
   定义体: S.toSolution'.multiplicity
 
 Depends on / 依赖: S.toSolution, multiplicity, toSolution
@@ -495,7 +495,7 @@ omit [NumberField K] [IsCyclotomicExtension {3} Rat K] in
 include S in
 
 中文:
-定义 Solution.isMinimal
+定义 解.isMinimal
   签名: : 命题
   定义体: forall (S₁ : Solution hζ), S.multiplicity <= S₁.multiplicity
 
@@ -521,8 +521,8 @@ lemma Solution.exists_minimal
   exact ⟨S₁, fun S'' => hS₁ ▸ Nat.find_min' _ ⟨S'', rfl⟩⟩
 
 中文:
-引理 Solution.exists_minimal
-  结论: 存在 (S₁ : Solution hζ), S₁.isMinimal
+引理 解.存在_minimal
+  结论: 存在 (S₁ : 解 hζ), S₁.isMinimal
   证明: by
   classical
   let T := {n | exists (S' : Solution hζ), S'.multiplicity = n}
@@ -672,7 +672,7 @@ lemma Solution'.two_le_multiplicity
     S'.multiplicity_lambda_c_finite.le_multiplicity_of_pow_dvd (lambda_sq_dvd_c S')
 
 中文:
-引理 Solution'.two_le_multiplicity
+引理 解'.two_le_multiplicity
   结论: 2 <= S'.multiplicity
   证明: by
   simpa [Solution'.multiplicity] using
@@ -691,7 +691,7 @@ lemma Solution.two_le_multiplicity
   proof: S.toSolution'.two_le_multiplicity
 
 中文:
-引理 Solution.two_le_multiplicity
+引理 解.two_le_multiplicity
   结论: 2 <= S.multiplicity
   证明: S.toSolution'.two_le_multiplicity
 
@@ -845,8 +845,8 @@ lemma exists_Solution_of_Solution'
     hab := hab }, rfl⟩
 
 中文:
-引理 exists_Solution_of_Solution'
-  结论: 存在 (S₁ : Solution hζ), S₁.multiplicity = S'.multiplicity
+引理 存在_Solution_of_Solution'
+  结论: 存在 (S₁ : 解 hζ), S₁.multiplicity = S'.multiplicity
   证明: by
   obtain ⟨a, b, H, coprime, ha, hb, hab⟩ := ex_cube_add_cube_eq_and_isCoprime_and_not_dvd_and_dvd S'
   exact ⟨
@@ -1028,7 +1028,7 @@ lemma associated_of_dvd_a_add_b_of_dvd_a_add_eta_mul_b
 
 中文:
 引理 associated_of_dvd_a_add_b_of_dvd_a_add_eta_mul_b
-  结论: {p : 𝓞 K} (hp : Prime p)
+  结论: {p : 𝓞 K} (hp : 素 p)
   证明: by
   suffices p_lam : p ∣ fun from hp.associated_of_dvd hζ.zeta_sub_one_prime' p_lam
   rw [← one_mul S.a]; rw [← one_mul S.b] at hpab
@@ -1061,7 +1061,7 @@ lemma associated_of_dvd_a_add_b_of_dvd_a_add_eta_sq_mul_b
 
 中文:
 引理 associated_of_dvd_a_add_b_of_dvd_a_add_eta_sq_mul_b
-  结论: {p : 𝓞 K} (hp : Prime p)
+  结论: {p : 𝓞 K} (hp : 素 p)
   证明: by
   suffices p_lam : p ∣ fun from hp.associated_of_dvd hζ.zeta_sub_one_prime' p_lam
   rw [← one_mul S.a]; rw [← one_mul S.b] at hpab
@@ -1097,7 +1097,7 @@ lemma associated_of_dvd_a_add_eta_mul_b_of_dvd_a_add_eta_sq_mul_b
 
 中文:
 引理 associated_of_dvd_a_add_eta_mul_b_of_dvd_a_add_eta_sq_mul_b
-  结论: {p : 𝓞 K} (hp : Prime p)
+  结论: {p : 𝓞 K} (hp : 素 p)
   证明: by
   suffices p_lam : p ∣ fun from hp.associated_of_dvd hζ.zeta_sub_one_prime' p_lam
   rw [← one_mul S.a] at hpaηb
@@ -1566,7 +1566,7 @@ lemma exists_cube_associated
   exact ⟨exists_associated_pow_of_associated_pow_mul S.isC
 
 中文:
-引理 exists_cube_associated
+引理 存在_cube_associated
   证明: by
   have h₁ := S.isCoprime_x_z.mul_left S.isCoprime_y_z
   have h₂ : Associated (S.w ^ 3) (S.x * S.y * S.z) :=
@@ -2087,8 +2087,8 @@ hc := fun h => S.X_ne_zero by simpa [hζ.zeta_sub_one_prime'.ne_zero] using h
   coprime := (isCoprime_mul_unit_left_right S.u₄.isUnit _ _).2 S.
 
 中文:
-定义 Solution'_descent
-  签名: : Solution' hζ where
+定义 解'_descent
+  签名: : 解' hζ where
   定义体: S.Y
   b := S.u₄ * S.Z
   c := fun ^ (S.multiplicity - 1) * S.X
@@ -2127,8 +2127,8 @@ lemma Solution'_descent_multiplicity
   simp only [mul_eq_mul_left_iff, pow_eq_zero_iff', hζ.
 
 中文:
-引理 Solution'_descent_multiplicity
-  结论: S.Solution'_descent.multiplicity = S.multiplicity - 1
+引理 解'_descent_multiplicity
+  结论: S.解'_descent.multiplicity = S.multiplicity - 1
   证明: by
   refine multiplicity_eq_of_dvd_of_not_dvd
     (by simp [Solution'_descent]) (fun h => S.lambda_not_dvd_X ?_)
@@ -2155,7 +2155,7 @@ lemma Solution'_descent_multiplicity_lt
 exact Nat.pred_lt by have := S.two_le_multiplicity; lia
 
 中文:
-引理 Solution'_descent_multiplicity_lt
+引理 解'_descent_multiplicity_lt
   证明: by
   rw [Solution'_descent_multiplicity S]; rw [Nat.sub_one]
 exact Nat.pred_lt by have := S.two_le_multiplicity; lia
@@ -2175,7 +2175,7 @@ theorem exists_Solution_multiplicity_lt
   exact ⟨S', hS' ▸ Solution'_descent_multiplicity_lt S⟩
 
 中文:
-定理 exists_Solution_multiplicity_lt
+定理 存在_Solution_multiplicity_lt
   证明: by
   obtain ⟨S', hS'⟩ := exists_Solution_of_Solution' (Solution'_descent S)
   exact ⟨S', hS' ▸ Solution'_descent_multiplicity_lt S⟩

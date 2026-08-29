@@ -83,9 +83,9 @@ class SubringClass
   (no additional axioms)
 
 中文:
-类 SubringClass
-  参数: (S : 类型) (R : outParam (类型u)) [NonAssocRing R] [SetLike S R]
-  继承: SubsemiringClass S R, NegMemClass S R
+类 子环类
+  参数: (S : 类型) (R : outParam (类型u)) [非结合环 R] [集合状 S R]
+  继承: 子半环类 S R, NegMem类 S R
   (无附加公理)
 -/
 class SubringClass (S : Type*) (R : outParam (Type u)) [NonAssocRing R] [SetLike S R] : Prop
@@ -299,9 +299,9 @@ structure Subring
   (no additional axioms)
 
 中文:
-结构 Subring
-  参数: (R : 类型u) [NonAssocRing R]
-  继承: Subsemiring R, AddSubgroup R
+结构 子环
+  参数: (R : 类型u) [非结合环 R]
+  继承: 子半环 R, 加法子群 R
   (无附加公理)
 -/
 structure Subring (R : Type u) [NonAssocRing R] extends Subsemiring R, AddSubgroup R
@@ -324,7 +324,7 @@ lemma toSubsemiring_injective
 
 中文:
 引理 toSubsemiring_injective
-  结论: (toSubsemiring : Subring R -> Subsemiring R).Injective
+  结论: (toSubsemiring : 子环 R -> 子半环 R).单射
   证明: fun ⟨s, hs⟩ t => by congr!
 -/
 lemma toSubsemiring_injective : (toSubsemiring : Subring R -> Subsemiring R).Injective :=
@@ -341,7 +341,7 @@ lemma toSubsemiring_inj
 
 中文:
 引理 toSubsemiring_inj
-  条件: {s t : Subring R}
+  条件: {s t : 子环 R}
   结论: s.toSubsemiring = t.toSubsemiring ↔ s = t
   证明: toSubsemiring_injective.eq_iff
 -/
@@ -359,7 +359,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subring R) R
+  签名: 集合状 (子环 R) R
   定义体: s.carrier
   coe_injective := SetLike.coe_injective.comp toSubsemiring_injective
 
@@ -379,7 +379,7 @@ lemma toAddSubgroup_injective
 
 中文:
 引理 toAddSubgroup_injective
-  结论: (toAddSubgroup : Subring R -> AddSubgroup R).Injective
+  结论: (toAddSubgroup : 子环 R -> 加法子群 R).单射
   证明: fun _ _ h => SetLike.ext (SetLike.ext_iff.mp h :)
 
 Depends on / 依赖: SetLike, SetLike.ext, SetLike.ext_iff.mp, ext_iff
@@ -397,7 +397,7 @@ lemma toSubmonoid_injective
 
 中文:
 引理 toSubmonoid_injective
-  结论: (fun s : Subring R => s.toSubmonoid).Injective
+  结论: (fun s : 子环 R => s.toSubmonoid).单射
   证明: fun _ _ h => SetLike.ext (SetLike.ext_iff.mp h :)
 
 Depends on / 依赖: SetLike, SetLike.ext, SetLike.ext_iff.mp, ext_iff
@@ -417,7 +417,7 @@ initialize_simps_projections Subring (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subring R)
+  签名: 偏序 (子环 R)
   定义体: .ofSetLike (Subring R) R
 
 initialize_simps_projections Subring (carrier -> coe, as_prefix coe)
@@ -445,7 +445,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R : 类型} [NonAssocRing R] [SetLike S R] [SubringClass S R]
+  签名: {S R : 类型} [非结合环 R] [集合状 S R] [子环类 S R]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubringClass (Subring R) R
+  签名: 子环类 (子环 R) R
   定义体: s.zero_mem'
   add_mem {s} := s.add_mem'
   one_mem s := s.one_mem'
@@ -518,7 +518,7 @@ definition toNonUnitalSubring
 
 中文:
 定义 toNonUnitalSubring
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S
 
 @[simp]
@@ -537,7 +537,7 @@ theorem mem_toSubsemiring
 
 中文:
 定理 mem_toSubsemiring
-  条件: {s : Subring R} {x : R}
+  条件: {s : 子环 R} {x : R}
   结论: x in s.toSubsemiring ↔ x in s
   证明: Iff.rfl
 
@@ -558,7 +558,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subring R} {x : R}
+  条件: {s : 子环 R} {x : R}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -581,8 +581,8 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {S : Subsemiring R} {x : R} (h)
-  结论: x in (⟨S, h⟩ : Subring R) ↔ x in S
+  条件: {S : 子半环 R} {x : R} (h)
+  结论: x in (⟨S, h⟩ : 子环 R) ↔ x in S
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -602,8 +602,8 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (S : Subsemiring R) (h)
-  结论: ((⟨S, h⟩ : Subring R) : Set R) = S
+  条件: (S : 子半环 R) (h)
+  结论: ((⟨S, h⟩ : 子环 R) : 集合 R) = S
   证明: rfl
 
 @[simp]
@@ -621,7 +621,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {S S' : Subsemiring R} (h₁ h₂)
+  条件: {S S' : 子半环 R} (h₁ h₂)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -641,7 +641,7 @@ lemma one_mem_toNonUnitalSubring
 
 中文:
 引理 one_mem_toNonUnitalSubring
-  条件: (S : Subring R)
+  条件: (S : 子环 R)
   结论: 1 in S.toNonUnitalSubring
   证明: S.one_mem
 
@@ -662,7 +662,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Subring R} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 子环 R} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -686,7 +686,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Subring R) (s : Set R) (hs : s = ↑S)
+  签名: (S : 子环 R) (s : 集合 R) (hs : s = ↑S)
   定义体: { S.toSubsemiring.copy s hs with
     carrier := s
     neg_mem' := hs.symm ▸ S.neg_mem' }
@@ -707,7 +707,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : Subring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : 子环 R) (s : 集合 R) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -731,7 +731,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (s : Set R) (sm : Submonoid R) (sa : AddSubgroup R) (hm : ↑sm = s)
+  签名: (s : 集合 R) (sm : 子幺半群 R) (sa : 加法子群 R) (hm : ↑sm = s)
   定义体: { sm.copy s hm.symm, sa.copy s ha.symm with }
 
 @[simp]
@@ -753,7 +753,7 @@ theorem mem_mk'
 
 中文:
 定理 mem_mk'
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s)
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子群 R} (ha : ↑sa = s)
   证明: Iff.rfl
 
 @[simp]
@@ -777,7 +777,7 @@ theorem mk'_toSubmonoid
 
 中文:
 定理 mk'_toSubmonoid
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubgroup R}
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
   证明: SetLike.coe_injective hm.symm
 
 @[simp]
@@ -799,7 +799,7 @@ theorem mk'_toAddSubgroup
 
 中文:
 定理 mk'_toAddSubgroup
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubgroup R}
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
   证明: SetLike.coe_injective ha.symm
 -/
 theorem mk'_toAddSubgroup {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubgroup R}
@@ -822,8 +822,8 @@ definition Subsemiring.toSubring
     exact mul_mem hneg h
 
 中文:
-定义 Subsemiring.toSubring
-  签名: (s : Subsemiring R) (hneg : (-1 : R) in s)
+定义 子半环.toSubring
+  签名: (s : 子半环 R) (hneg : (-1 : R) in s)
   定义体: s
   neg_mem' h := by
     rw [← neg_one_mul]
@@ -953,7 +953,7 @@ instance toRing
 
 中文:
 实例 toRing
-  签名: {R} [Ring R] (s : Subring R)
+  签名: {R} [环 R] (s : 子环 R)
   定义体: SubringClass.toRing s
 
 Depends on / 依赖: SubringClass, SubringClass.toRing, toRing
@@ -990,7 +990,7 @@ theorem pow_mem
 
 中文:
 定理 pow_mem
-  条件: {R : 类型} [Ring R] (s : Subring R) {x : R} (hx : x in s) (n : 自然数)
+  条件: {R : 类型} [环 R] (s : 子环 R) {x : R} (hx : x in s) (n : 自然数)
   证明: pow_mem hx n
 
 @[simp, norm_cast]
@@ -1121,7 +1121,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: {R} [Ring R] (s : Subring R) (x : s) (n : 自然数)
+  条件: {R} [环 R] (s : 子环 R) (x : s) (n : 自然数)
   结论: ↑(x ^ n) = (x : R) ^ n
   证明: SubmonoidClass.coe_pow x n
 
@@ -1177,7 +1177,7 @@ instance toCommRing
 
 中文:
 实例 toCommRing
-  签名: {R} [CommRing R] (s : Subring R)
+  签名: {R} [交换环 R] (s : 子环 R)
   定义体: SubringClass.toCommRing s
 
 Depends on / 依赖: SubringClass, SubringClass.toCommRing, toCommRing
@@ -1209,7 +1209,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (s : Subring R)
+  签名: (s : 子环 R)
   定义体: { s.toSubmonoid.subtype, s.toAddSubgroup.subtype with toFun := (↑) }
 
 @[simp]
@@ -1230,7 +1230,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: {s : Subring R} (x : s)
+  条件: {s : 子环 R} (x : s)
   证明: rfl
 
 Depends on / 依赖: CommRingCat, MorphismProperty, MorphismProperty.injective, X.exists_germ_injective, appIso, cancel_left_of_respectsIso, cancel_right_of_respectsIso, exists_germ_injective, f.appIso, f.stalkMap, hU.image_of_isOpenImmersion, image_of_isOpenImmersion, injective, stalkMap
@@ -1250,7 +1250,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (s : Subring R)
+  条件: (s : 子环 R)
   证明: s.toSubmonoid.subtype_injective
 
 @[simp]
@@ -1336,8 +1336,8 @@ theorem coe_toSubsemiring
 
 中文:
 定理 coe_toSubsemiring
-  条件: (s : Subring R)
-  结论: (s.toSubsemiring : Set R) = s
+  条件: (s : 子环 R)
+  结论: (s.toSubsemiring : 集合 R) = s
   证明: rfl
 
 Depends on / 依赖: Ideal.primeCompl_le_nonZeroDivisors, IsGermInjective, IsIntegral, IsLocalization, IsLocalization.injective, Nonempty, X.IsGermInjective, X.affineCover.covers, X.affineCover.f, affineCover, covers, injective, isAffineOpen_opensRange, isLocalization_stalk, opensRange, primeCompl_le_nonZeroDivisors
@@ -1358,7 +1358,7 @@ theorem mem_toSubmonoid
 
 中文:
 定理 mem_toSubmonoid
-  条件: {s : Subring R} {x : R}
+  条件: {s : 子环 R} {x : R}
   结论: x in s.toSubmonoid ↔ x in s
   证明: Iff.rfl
 
@@ -1381,8 +1381,8 @@ theorem coe_toSubmonoid
 
 中文:
 定理 coe_toSubmonoid
-  条件: (s : Subring R)
-  结论: (s.toSubmonoid : Set R) = s
+  条件: (s : 子环 R)
+  结论: (s.toSubmonoid : 集合 R) = s
   证明: rfl
 -/
 theorem coe_toSubmonoid (s : Subring R) : (s.toSubmonoid : Set R) = s :=
@@ -1401,7 +1401,7 @@ theorem mem_toAddSubgroup
 
 中文:
 定理 mem_toAddSubgroup
-  条件: {s : Subring R} {x : R}
+  条件: {s : 子环 R} {x : R}
   结论: x in s.toAddSubgroup ↔ x in s
   证明: Iff.rfl
 
@@ -1424,8 +1424,8 @@ theorem coe_toAddSubgroup
 
 中文:
 定理 coe_toAddSubgroup
-  条件: (s : Subring R)
-  结论: (s.toAddSubgroup : Set R) = s
+  条件: (s : 子环 R)
+  结论: (s.toAddSubgroup : 集合 R) = s
   证明: rfl
 -/
 theorem coe_toAddSubgroup (s : Subring R) : (s.toAddSubgroup : Set R) = s :=
@@ -1443,8 +1443,8 @@ definition NonUnitalSubring.toSubring
   one_mem' := h1
 
 中文:
-定义 NonUnitalSubring.toSubring
-  签名: (S : NonUnitalSubring R) (h1 : (1 : R) in S)
+定义 NonUnital子环.toSubring
+  签名: (S : NonUnital子环 R) (h1 : (1 : R) in S)
   定义体: S
   one_mem' := h1
 -/
@@ -1461,8 +1461,8 @@ lemma Subring.toNonUnitalSubring_toSubring
   proof: by cases S; rfl
 
 中文:
-引理 Subring.toNonUnitalSubring_toSubring
-  条件: (S : Subring R)
+引理 子环.toNonUnitalSubring_toSubring
+  条件: (S : 子环 R)
   证明: by cases S; rfl
 -/
 lemma Subring.toNonUnitalSubring_toSubring (S : Subring R) :
@@ -1477,8 +1477,8 @@ lemma NonUnitalSubring.toSubring_toNonUnitalSubring
   proof: by cases S; rfl
 
 中文:
-引理 NonUnitalSubring.toSubring_toNonUnitalSubring
-  条件: (S : NonUnitalSubring R) (h1 : (1 : R) in S)
+引理 NonUnital子环.toSubring_toNonUnitalSubring
+  条件: (S : NonUnital子环 R) (h1 : (1 : R) in S)
   证明: by cases S; rfl
 -/
 lemma NonUnitalSubring.toSubring_toNonUnitalSubring (S : NonUnitalSubring R) (h1 : (1 : R) in S) :

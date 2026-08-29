@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R R[X]_n
+  签名: 模.有限 R R[X]_n
   定义体: .of_basis basis ..
 
 Depends on / 依赖: of_basis
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R R[X]_n
+  签名: 模.自由 R R[X]_n
   定义体: .of_basis basis ..
 
 Depends on / 依赖: of_basis
@@ -153,7 +153,7 @@ definition basisProd
 
 中文:
 定义 basisProd
-  签名: : Basis (Fin (m + n)) R (R[X]_m × R[X]_n)
+  签名: : 基 (有限集 (m + n)) R (R[X]_m × R[X]_n)
   定义体: ((basis R m).prod (basis R n)).reindex finSumFinEquiv
 
 Depends on / 依赖: finSumFinEquiv, reindex
@@ -172,7 +172,7 @@ lemma basisProd_castAdd
 
 中文:
 引理 basisProd_castAdd
-  条件: (m n : 自然数) (i : Fin m)
+  条件: (m n : 自然数) (i : 有限集 m)
   证明: by
   rw [basisProd]; rw [Basis.reindex_apply]; rw [finSumFinEquiv_symm_apply_castAdd]; rw [Basis.prod_apply]; rw [Sum.elim_inl]; rw [LinearMap.coe_inl]; rw [Function.comp_apply]
 -/
@@ -191,7 +191,7 @@ lemma basisProd_natAdd
 
 中文:
 引理 basisProd_natAdd
-  条件: (m n : 自然数) (i : Fin n)
+  条件: (m n : 自然数) (i : 有限集 n)
   证明: by
   rw [basisProd]; rw [Basis.reindex_apply]; rw [finSumFinEquiv_symm_apply_natAdd]; rw [Basis.prod_apply]; rw [Sum.elim_inr]; rw [LinearMap.coe_inr]; rw [Function.comp_apply]
 -/
@@ -230,7 +230,7 @@ lemma addLinearEquiv_castAdd
 
 中文:
 引理 addLinearEquiv_castAdd
-  条件: (i : Fin m)
+  条件: (i : 有限集 m)
   证明: by
   rw [addLinearEquiv]; rw [Basis.equiv_apply]; rw [Equiv.refl_apply]; rw [basisProd_castAdd]
 
@@ -251,7 +251,7 @@ lemma addLinearEquiv_natAdd
 
 中文:
 引理 addLinearEquiv_natAdd
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   证明: by
   rw [addLinearEquiv]; rw [Basis.equiv_apply]; rw [Equiv.refl_apply]; rw [basisProd_natAdd]
 
@@ -271,7 +271,7 @@ lemma addLinearEquiv_symm_apply_inl_basis
 
 中文:
 引理 addLinearEquiv_symm_apply_inl_basis
-  条件: (i : Fin m)
+  条件: (i : 有限集 m)
   证明: (LinearEquiv.symm_apply_eq _).2 (addLinearEquiv_castAdd i).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, addLinearEquiv_castAdd, symm_apply_eq
@@ -291,7 +291,7 @@ lemma addLinearEquiv_symm_apply_inr_basis
 
 中文:
 引理 addLinearEquiv_symm_apply_inr_basis
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   证明: (LinearEquiv.symm_apply_eq _).2 (addLinearEquiv_natAdd j).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, addLinearEquiv_natAdd, symm_apply_eq
@@ -418,7 +418,7 @@ lemma addLinearEquiv_apply'
 
 中文:
 引理 addLinearEquiv_apply'
-  条件: {R : 类型} [Ring R] (f)
+  条件: {R : 类型} [环 R] (f)
   证明: by
   rw [and_comm]; rw [eq_comm]; rw [eq_comm (b := _ %ₘ _)]
   nontriviality R; refine div_modByMonic_unique _ _ (monic_X_pow _) ⟨?_, ?_⟩
@@ -445,7 +445,7 @@ lemma addLinearEquiv_apply_fst
 
 中文:
 引理 addLinearEquiv_apply_fst
-  条件: {R : 类型} [Ring R] (f)
+  条件: {R : 类型} [环 R] (f)
   证明: (addLinearEquiv_apply' f).1
 
 Depends on / 依赖: addLinearEquiv_apply
@@ -464,7 +464,7 @@ lemma addLinearEquiv_apply_snd
 
 中文:
 引理 addLinearEquiv_apply_snd
-  条件: {R : 类型} [Ring R] (f)
+  条件: {R : 类型} [环 R] (f)
   证明: (addLinearEquiv_apply' f).2
 
 Depends on / 依赖: addLinearEquiv_apply
@@ -483,7 +483,7 @@ lemma addLinearEquiv_apply
 
 中文:
 引理 addLinearEquiv_apply
-  条件: {R : 类型} [Ring R] (f)
+  条件: {R : 类型} [环 R] (f)
   证明: Prod.ext (Subtype.ext <| addLinearEquiv_apply_fst f) (Subtype.ext <| addLinearEquiv_apply_snd f)
 
 Depends on / 依赖: Prod.ext, Subtype, Subtype.ext, addLinearEquiv_apply_fst, addLinearEquiv_apply_snd

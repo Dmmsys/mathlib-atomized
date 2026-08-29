@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofTypeFunctor F).LaxMonoidal
+  签名: (ofTypeFunctor F).松弛幺半群
   定义体: ↾fun _ => (pure PUnit.unit : F _)
   μ _ _ := ↾fun p => (Prod.mk <$> p.1 <*> p.2 : F _)
 

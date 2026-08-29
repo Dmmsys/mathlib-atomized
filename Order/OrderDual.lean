@@ -172,8 +172,8 @@ definition _root_.LinearOrder.swap
   body: inferInstanceAs LinearOrder (OrderDual α)
 
 中文:
-定义 _root_.LinearOrder.swap
-  签名: (α : 类型) (_ : LinearOrder α)
+定义 _root_.线性序.swap
+  签名: (α : 类型) (_ : 线性序 α)
   定义体: inferInstanceAs LinearOrder (OrderDual α)
 
 Depends on / 依赖: LinearOrder, OrderDual, mem_sInf, mem_sInf.mpr, smul_mem
@@ -191,7 +191,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Inhabited α] : Inhabited αᵒᵈ
+  签名: : 可居 α] : 可居 αᵒᵈ
   定义体: ⟨h.default⟩
 
 Depends on / 依赖: h.default
@@ -208,8 +208,8 @@ theorem Ord.dual_dual
   proof: rfl
 
 中文:
-定理 Ord.dual_dual
-  条件: (α : 类型) [H : Ord α]
+定理 序.dual_dual
+  条件: (α : 类型) [H : 序 α]
   结论: OrderDual.instOrd αᵒᵈ = H
   证明: rfl
 -/
@@ -226,8 +226,8 @@ theorem Preorder.dual_dual
   proof: rfl
 
 中文:
-定理 Preorder.dual_dual
-  条件: (α : 类型) [H : Preorder α]
+定理 预序.dual_dual
+  条件: (α : 类型) [H : 预序 α]
   结论: OrderDual.instPreorder αᵒᵈ = H
   证明: rfl
 -/
@@ -244,7 +244,7 @@ theorem instPartialOrder.dual_dual
 
 中文:
 定理 instPartialOrder.dual_dual
-  条件: (α : 类型) [H : PartialOrder α]
+  条件: (α : 类型) [H : 偏序 α]
   证明: rfl
 -/
 theorem instPartialOrder.dual_dual (α : Type*) [H : PartialOrder α] :
@@ -261,7 +261,7 @@ theorem instLinearOrder.dual_dual
 
 中文:
 定理 instLinearOrder.dual_dual
-  条件: (α : 类型) [H : LinearOrder α]
+  条件: (α : 类型) [H : 线性序 α]
   证明: rfl
 -/
 theorem instLinearOrder.dual_dual (α : Type*) [H : LinearOrder α] :
@@ -278,7 +278,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Nontrivial α] : Nontrivial αᵒᵈ
+  签名: : 非平凡 α] : 非平凡 αᵒᵈ
   定义体: h
 -/
 instance [h : Nontrivial α] : Nontrivial αᵒᵈ := h
@@ -292,7 +292,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Unique α] : Unique αᵒᵈ where
+  签名: : 唯一 α] : 唯一 αᵒᵈ where
   定义体: h.uniq
 
 Depends on / 依赖: h.uniq
@@ -407,7 +407,7 @@ theorem toDual_trans_ofDual
 
 中文:
 定理 toDual_trans_ofDual
-  结论: (toDual (α := α)).trans ofDual = Equiv.refl _
+  结论: (toDual (α := α)).trans ofDual = 等价.refl _
   证明: rfl
 -/
 @[simp] theorem toDual_trans_ofDual : (toDual (α := α)).trans ofDual = Equiv.refl _ := rfl
@@ -421,7 +421,7 @@ theorem ofDual_trans_toDual
 
 中文:
 定理 ofDual_trans_toDual
-  结论: (ofDual (α := α)).trans toDual = Equiv.refl _
+  结论: (ofDual (α := α)).trans toDual = 等价.refl _
   证明: rfl
 -/
 @[simp] theorem ofDual_trans_toDual : (ofDual (α := α)).trans toDual = Equiv.refl _ := rfl
@@ -648,7 +648,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : αᵒᵈ -> Sort*} (toDual : 对任意 a : α, motive (toDual a))
+  签名: {motive : αᵒᵈ -> 类型层*} (toDual : 对任意 a : α, motive (toDual a))
   定义体: toDual
 -/
 protected def rec {motive : αᵒᵈ -> Sort*} (toDual : forall a : α, motive (toDual a)) :
@@ -664,7 +664,7 @@ theorem «forall»
   proof: .rfl
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : αᵒᵈ -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (toDual a)
   证明: .rfl
@@ -685,7 +685,7 @@ theorem «exists»
 @[to_dual self] alias ⟨_, _root_.LT.lt.ofDual⟩ := ofDual_lt_ofDual
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : αᵒᵈ -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (toDual a)
   证明: .rfl
@@ -717,7 +717,7 @@ instance OrderDual.denselyOrdered
 
 中文:
 实例 OrderDual.denselyOrdered
-  签名: (α : 类型) [LT α] [h : DenselyOrdered α]
+  签名: (α : 类型) [LT α] [h : 稠密序 α]
   定义体: ⟨fun _ _ ha => (@exists_between α _ h _ _ ha).imp fun _ => And.symm⟩
 
 @[simp]
@@ -741,7 +741,7 @@ theorem denselyOrdered_orderDual
 中文:
 定理 denselyOrdered_orderDual
   条件: [LT α]
-  结论: DenselyOrdered αᵒᵈ ↔ DenselyOrdered α
+  结论: 稠密序 αᵒᵈ ↔ 稠密序 α
   证明: ⟨by convert! @OrderDual.denselyOrdered αᵒᵈ _, @OrderDual.denselyOrdered α _⟩
 
 Depends on / 依赖: OrderDual, OrderDual.denselyOrdered, convert, denselyOrdered
@@ -765,7 +765,7 @@ abbreviation top
 
 中文:
 缩写 top
-  签名: [Top β]
+  签名: [顶元素 β]
   定义体: e.symm ⊤
 -/
 protected abbrev top [Top β] : Top α where
@@ -782,7 +782,7 @@ lemma top_def
 
 中文:
 引理 top_def
-  条件: [Top β]
+  条件: [顶元素 β]
   证明: e.top
     ⊤ = e.symm ⊤ := rfl
 
@@ -802,7 +802,7 @@ abbreviation bot
 
 中文:
 缩写 bot
-  签名: [Bot β]
+  签名: [底元素 β]
   定义体: e.symm ⊥
 -/
 protected abbrev bot [Bot β] : Bot α where
@@ -819,7 +819,7 @@ lemma bot_def
 
 中文:
 引理 bot_def
-  条件: [Bot β]
+  条件: [底元素 β]
   证明: e.bot
     ⊥ = e.symm ⊥ := rfl
 
@@ -839,7 +839,7 @@ abbreviation compl
 
 中文:
 缩写 compl
-  签名: [Compl β]
+  签名: [补集 β]
   定义体: e.symm (e a)ᶜ
 -/
 protected abbrev compl [Compl β] : Compl α where
@@ -856,7 +856,7 @@ lemma compl_def
 
 中文:
 引理 compl_def
-  条件: [Compl β] (a : α)
+  条件: [补集 β] (a : α)
   证明: e.compl
     aᶜ = e.symm (e a)ᶜ := rfl
 
@@ -876,7 +876,7 @@ abbreviation sdiff
 
 中文:
 缩写 sdiff
-  签名: [SDiff β]
+  签名: [对称差 β]
   定义体: e.symm (e a \ e b)
 -/
 protected abbrev sdiff [SDiff β] : SDiff α where
@@ -893,7 +893,7 @@ lemma sdiff_def
 
 中文:
 引理 sdiff_def
-  条件: [SDiff β] (a b : α)
+  条件: [对称差 β] (a b : α)
   证明: e.sdiff
     a \ b = e.symm (e a \ e b) := rfl
 

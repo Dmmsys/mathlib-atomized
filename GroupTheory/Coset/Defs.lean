@@ -73,7 +73,7 @@ definition leftRel
 
 中文:
 定义 leftRel
-  签名: : Setoid α
+  签名: : 集合等价关系 α
   定义体: MulAction.orbitRel s.op α
 
 Depends on / 依赖: MulAction, MulAction.orbitRel, orbitRel, s.op
@@ -187,7 +187,7 @@ instance instHasQuotientSubgroup
 
 中文:
 实例 instHasQuotientSubgroup
-  签名: : HasQuotient α (Subgroup α)
+  签名: : 有商 α (子群 α)
   定义体: ⟨fun s => Quotient (leftRel s)⟩
 
 @[to_additive]
@@ -231,7 +231,7 @@ definition rightRel
 
 中文:
 定义 rightRel
-  签名: : Setoid α
+  签名: : 集合等价关系 α
   定义体: MulAction.orbitRel s α
 
 Depends on / 依赖: MulAction, MulAction.orbitRel, orbitRel
@@ -345,7 +345,7 @@ definition quotientRightRelEquivQuotientLeftRel
 
 中文:
 定义 quotientRightRelEquivQuotientLeftRel
-  签名: : Quotient (QuotientGroup.rightRel s) ≃ α ⧸ s where
+  签名: : 商 (商群.rightRel s) ≃ α ⧸ s where
   定义体: Quotient.map' (fun g => g⁻¹) fun a b => by
       rw [leftRel_apply]; rw [rightRel_apply]
       exact fun h => (congr_arg (· in s) (by simp)).mp (s.inv_mem h)
@@ -422,7 +422,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective @mk _ _ s
+  结论: 函数.满射 @mk _ _ s
   证明: Quotient.mk''_surjective
 
 @[to_additive (attr := simp)]
@@ -445,7 +445,7 @@ lemma range_mk
 
 中文:
 引理 range_mk
-  结论: range (QuotientGroup.mk (s := s)) = univ
+  结论: range (商群.mk (s := s)) = univ
   证明: range_eq_univ.mpr mk_surjective
 
 @[to_additive (attr := elab_as_elim)]
@@ -468,7 +468,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  条件: {C : α ⧸ s -> 命题} (x : α ⧸ s) (H : 对任意 z, C (QuotientGroup.mk z))
+  条件: {C : α ⧸ s -> 命题} (x : α ⧸ s) (H : 对任意 z, C (商群.mk z))
   结论: C x
   证明: Quotient.inductionOn' x H
 
@@ -521,7 +521,7 @@ theorem quotient_liftOn_mk
 中文:
 定理 quotient_liftOn_mk
   条件: {β} (f : α -> β) (h) (x : α)
-  结论: Quotient.liftOn' (x : α ⧸ s) f h = f x
+  结论: 商.liftOn' (x : α ⧸ s) f h = f x
   证明: rfl
 
 @[to_additive]
@@ -542,7 +542,7 @@ theorem forall_mk
 @[to_additive]
 
 中文:
-定理 forall_mk
+定理 对任意_mk
   条件: {C : α ⧸ s -> 命题}
   结论: (对任意 x : α ⧸ s, C x) ↔ 对任意 x : α, C x
   证明: mk_surjective.forall
@@ -567,7 +567,7 @@ theorem exists_mk
 @[to_additive]
 
 中文:
-定理 exists_mk
+定理 存在_mk
   条件: {C : α ⧸ s -> 命题}
   结论: (存在 x : α ⧸ s, C x) ↔ 存在 x : α, C x
   证明: mk_surjective.exists
@@ -707,7 +707,7 @@ theorem preimage_image_mk
 
 中文:
 定理 preimage_image_mk
-  条件: (N : Subgroup α) (s : Set α)
+  条件: (N : 子群 α) (s : 集合 α)
   证明: by
   ext x
   simp only [QuotientGroup.eq, SetLike.exists, exists_prop, Set.mem_preimage, Set.mem_iUnion,
@@ -744,7 +744,7 @@ theorem preimage_image_mk_eq_iUnion_image
 
 中文:
 定理 preimage_image_mk_eq_iUnion_image
-  条件: (N : Subgroup α) (s : Set α)
+  条件: (N : 子群 α) (s : 集合 α)
   证明: by
   rw [preimage_image_mk]; rw [iUnion_congr_of_surjective (·⁻¹) inv_surjective]
   exact fun x => image_mul_right'
@@ -773,7 +773,7 @@ theorem preimage_image_mk_eq_mul
 
 中文:
 定理 preimage_image_mk_eq_mul
-  条件: (N : Subgroup α) (s : Set α)
+  条件: (N : 子群 α) (s : 集合 α)
   证明: by
   rw [preimage_image_mk_eq_iUnion_image]; rw [iUnion_subtype]; rw [← image2_mul]; rw [← iUnion_image_right]
   simp only [SetLike.mem_coe]
@@ -800,7 +800,7 @@ theorem preimage_mk_one
 
 中文:
 定理 preimage_mk_one
-  条件: (N : Subgroup α)
+  条件: (N : 子群 α)
   证明: by
   rw [← image_singleton]; rw [preimage_image_mk_eq_mul]
   simp

@@ -112,7 +112,7 @@ instance curriedActionMopMonoidal
 
 中文:
 实例 curriedActionMopMonoidal
-  签名: : (curriedActionMop C D).Monoidal where
+  签名: : (curriedActionMop C D).幺半群 where
   定义体: .mop (actionUnitNatIso C D).inv
 μ _ _ := .mop { app _ := αₗ _ _ _ |>.inv }
 δ _ _ := .mop { app _ := αₗ _ _ _ |>.hom }
@@ -169,7 +169,7 @@ definition actionOfMonoidalFunctorToEndofunctorMop
 
 中文:
 定义 actionOfMonoidalFunctorToEndofunctorMop
-  签名: (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.Monoidal]
+  签名: (F : C ⥤ (D ⥤ D)ᴹᵒᵖ) [F.幺半群]
   定义体: (F.obj c).unmop.obj d
   actionHomLeft f d := (F.map f).unmop.app d
   actionHomRight c _ _ f := (F.obj c).unmop.map f
@@ -280,7 +280,7 @@ instance curriedActionMonoidal
 
 中文:
 实例 curriedActionMonoidal
-  签名: [MonoidalRightAction C D]
+  签名: [MonoidalRight作用 C D]
   定义体: (actionUnitNatIso C D).inv
   μ _ _ := { app _ := αᵣ _ _ _ |>.inv }
   δ _ _ := { app _ := αᵣ _ _ _ |>.hom }
@@ -332,7 +332,7 @@ have e := c
 
 中文:
 定义 actionOfMonoidalFunctorToEndofunctor
-  签名: (F : C ⥤ D ⥤ D) [F.Monoidal]
+  签名: (F : C ⥤ D ⥤ D) [F.幺半群]
   定义体: (F.obj c).obj d
   actionHomLeft f c := (F.obj c).map f
   actionHomRight d _ _ f := (F.map f).app d

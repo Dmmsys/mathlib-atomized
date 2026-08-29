@@ -43,7 +43,7 @@ theorem lebesgue_number_lemma
 
 中文:
 定理 lebesgue_number_lemma
-  结论: {ι : Sort*} {U : ι -> Set α} (hK : IsCompact K)
+  结论: {ι : 类型层*} {U : ι -> 集合 α} (hK : 是紧集 K)
   证明: by
   have : forall x in K, exists i, exists V in 𝓤 α, ball x (V ○ V) subseteq U i := fun x hx => by
     obtain ⟨i, hi⟩ := mem_iUnion.1 (hcover hx)
@@ -79,7 +79,7 @@ theorem lebesgue_number_lemma_nhds'
 
 中文:
 定理 lebesgue_number_lemma_nhds'
-  结论: {U : (x : α) -> x in K -> Set α} (hK : IsCompact K)
+  结论: {U : (x : α) -> x in K -> 集合 α} (hK : 是紧集 K)
   证明: by
   rcases lebesgue_number_lemma (U := fun x : K => interior (U x x.2)) hK (fun _ => isOpen_interior)
     (fun x hx => mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 (hU x hx)⟩) with ⟨V, V_uni, hV⟩
@@ -106,7 +106,7 @@ theorem lebesgue_number_lemma_nhds
 
 中文:
 定理 lebesgue_number_lemma_nhds
-  条件: {U : α -> Set α} (hK : IsCompact K) (hU : 对任意 x in K, U x in 𝓝 x)
+  条件: {U : α -> 集合 α} (hK : 是紧集 K) (hU : 对任意 x in K, U x in 𝓝 x)
   证明: by
   rcases lebesgue_number_lemma (U := fun x => interior (U x)) hK (fun _ => isOpen_interior)
     (fun x hx => mem_iUnion.2 ⟨x, mem_interior_iff_mem_nhds.2 (hU x hx)⟩) with ⟨V, V_uni, hV⟩
@@ -131,7 +131,7 @@ theorem lebesgue_number_lemma_nhdsWithin'
 
 中文:
 定理 lebesgue_number_lemma_nhdsWithin'
-  结论: {U : (x : α) -> x in K -> Set α} (hK : IsCompact K)
+  结论: {U : (x : α) -> x in K -> 集合 α} (hK : 是紧集 K)
   证明: (lebesgue_number_lemma_nhds' hK (fun x hx => Filter.mem_inf_principal'.1 (hU x hx))).imp
     fun _ ⟨V_uni, hV⟩ => ⟨V_uni, fun x hx => (hV x hx).imp fun _ hy => (inter_subset _ _ _).2 hy⟩
 
@@ -153,7 +153,7 @@ theorem lebesgue_number_lemma_nhdsWithin
 
 中文:
 定理 lebesgue_number_lemma_nhdsWithin
-  结论: {U : α -> Set α} (hK : IsCompact K)
+  结论: {U : α -> 集合 α} (hK : 是紧集 K)
   证明: (lebesgue_number_lemma_nhds hK (fun x hx => Filter.mem_inf_principal'.1 (hU x hx))).imp
     fun _ ⟨V_uni, hV⟩ => ⟨V_uni, fun x hx => (hV x hx).imp fun _ hy => (inter_subset _ _ _).2 hy⟩
 
@@ -175,8 +175,8 @@ theorem Filter.HasBasis.lebesgue_number_lemma
   exact fun s t hst ht x hx => (ht x hx).imp fun i hi => Subset.trans (ball_mono hst _) hi
 
 中文:
-定理 Filter.HasBasis.lebesgue_number_lemma
-  结论: {ι' ι : Sort*} {p : ι' -> 命题}
+定理 滤子.有基.lebesgue_number_lemma
+  结论: {ι' ι : 类型层*} {p : ι' -> 命题}
   证明: by
   refine (hbasis.exists_iff ?_).1 (lebesgue_number_lemma hK hopen hcover)
   exact fun s t hst ht x hx => (ht x hx).imp fun i hi => Subset.trans (ball_mono hst _) hi
@@ -199,8 +199,8 @@ theorem Filter.HasBasis.lebesgue_number_lemma_nhds'
   exact fun s t hst ht x hx => (ht x hx).imp fun y hy => Subset.trans (ball_mono hst _) hy
 
 中文:
-定理 Filter.HasBasis.lebesgue_number_lemma_nhds'
-  结论: {ι' : Sort*} {p : ι' -> 命题}
+定理 滤子.有基.lebesgue_number_lemma_nhds'
+  结论: {ι' : 类型层*} {p : ι' -> 命题}
   证明: by
   refine (hbasis.exists_iff ?_).1 (lebesgue_number_lemma_nhds' hK hU)
   exact fun s t hst ht x hx => (ht x hx).imp fun y hy => Subset.trans (ball_mono hst _) hy
@@ -223,8 +223,8 @@ theorem Filter.HasBasis.lebesgue_number_lemma_nhds
   exact fun s t hst ht x hx => (ht x hx).imp fun y hy => Subset.trans (ball_mono hst _) hy
 
 中文:
-定理 Filter.HasBasis.lebesgue_number_lemma_nhds
-  结论: {ι' : Sort*} {p : ι' -> 命题}
+定理 滤子.有基.lebesgue_number_lemma_nhds
+  结论: {ι' : 类型层*} {p : ι' -> 命题}
   证明: by
   refine (hbasis.exists_iff ?_).1 (lebesgue_number_lemma_nhds hK hU)
   exact fun s t hst ht x hx => (ht x hx).imp fun y hy => Subset.trans (ball_mono hst _) hy
@@ -247,8 +247,8 @@ theorem Filter.HasBasis.lebesgue_number_lemma_nhdsWithin'
     fun y hy => Subset.trans (Set.inter_subset_inter_left K (ball_mono hst _)) hy
 
 中文:
-定理 Filter.HasBasis.lebesgue_number_lemma_nhdsWithin'
-  结论: {ι' : Sort*} {p : ι' -> 命题}
+定理 滤子.有基.lebesgue_number_lemma_nhdsWithin'
+  结论: {ι' : 类型层*} {p : ι' -> 命题}
   证明: by
   refine (hbasis.exists_iff ?_).1 (lebesgue_number_lemma_nhdsWithin' hK hU)
   exact fun s t hst ht x hx => (ht x hx).imp
@@ -274,8 +274,8 @@ theorem Filter.HasBasis.lebesgue_number_lemma_nhdsWithin
     fun y hy => Subset.trans (Set.inter_subset_inter_left K (ball_mono hst _)) hy
 
 中文:
-定理 Filter.HasBasis.lebesgue_number_lemma_nhdsWithin
-  结论: {ι' : Sort*} {p : ι' -> 命题}
+定理 滤子.有基.lebesgue_number_lemma_nhdsWithin
+  结论: {ι' : 类型层*} {p : ι' -> 命题}
   证明: by
   refine (hbasis.exists_iff ?_).1 (lebesgue_number_lemma_nhdsWithin hK hU)
   exact fun s t hst ht x hx => (ht x hx).imp
@@ -300,7 +300,7 @@ theorem lebesgue_number_lemma_sUnion
 
 中文:
 定理 lebesgue_number_lemma_sUnion
-  结论: {S : Set (Set α)}
+  结论: {S : 集合 (集合 α)}
   证明: by
   rw [sUnion_eq_iUnion] at hcover
   simpa using lebesgue_number_lemma hK (by simpa) hcover
@@ -328,8 +328,8 @@ theorem IsCompact.nhdsSet_basis_uniformity
         simpa using hbasis.lebesgue_number
 
 中文:
-定理 IsCompact.nhdsSet_basis_uniformity
-  结论: {p : ι -> 命题} {V : ι -> Set (α × α)}
+定理 是紧集.nhdsSet_basis_uniformity
+  结论: {p : ι -> 命题} {V : ι -> 集合 (α × α)}
   证明: by
     constructor
     · intro H
@@ -370,8 +370,8 @@ theorem Disjoint.exists_uniform_thickening
   refine ⟨V, hV, Set.disjoint_left.mpr fun x => ?
 
 中文:
-定理 Disjoint.exists_uniform_thickening
-  结论: {A B : Set α} (hA : IsCompact A) (hB : IsClosed B)
+定理 Disjoint.存在_uniform_thickening
+  结论: {A B : 集合 α} (hA : 是紧集 A) (hB : 是闭集 B)
   证明: by
   have : Bᶜ in 𝓝ˢ A := hB.isOpen_compl.mem_nhdsSet.mpr h.le_compl_right
   rw [(hA.nhdsSet_basis_uniformity (Filter.basis_sets _)).mem_iff] at this
@@ -406,8 +406,8 @@ theorem Disjoint.exists_uniform_thickening_of_basis
     (iUnion₂_mono fun b _ => ball_mono hiV b)⟩
 
 中文:
-定理 Disjoint.exists_uniform_thickening_of_basis
-  结论: {p : ι -> 命题} {s : ι -> Set (α × α)}
+定理 Disjoint.存在_uniform_thickening_of_basis
+  结论: {p : ι -> 命题} {s : ι -> 集合 (α × α)}
   证明: by
   rcases h.exists_uniform_thickening hA hB with ⟨V, hV, hVAB⟩
   rcases hU.mem_iff.1 hV with ⟨i, hi, hiV⟩
@@ -436,7 +436,7 @@ theorem lebesgue_number_of_compact_open
 
 中文:
 定理 lebesgue_number_of_compact_open
-  结论: {K U : Set α} (hK : IsCompact K)
+  结论: {K U : 集合 α} (hK : 是紧集 K)
   证明: let ⟨V, ⟨hV, hVo⟩, hVU⟩ :=
     (hK.nhdsSet_basis_uniformity uniformity_hasBasis_open).mem_iff.1 (hU.mem_nhdsSet.2 hKU)
   ⟨V, hV, hVo, iUnion₂_subset_iff.1 hVU⟩
@@ -468,7 +468,7 @@ theorem nhdsSet_diagonal_eq_uniformity
 
 中文:
 定理 nhdsSet_diagonal_eq_uniformity
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   结论: 𝓝ˢ (diagonal α) = 𝓤 α
   证明: by
   refine nhdsSet_diagonal_le_uniformity.antisymm ?_
@@ -503,7 +503,7 @@ theorem compactSpace_uniformity
 
 中文:
 定理 compactSpace_uniformity
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   结论: 𝓤 α = ⨆ x, 𝓝 (x, x)
   证明: nhdsSet_diagonal_eq_uniformity.symm.trans (nhdsSet_diagonal _)
 
@@ -526,7 +526,7 @@ theorem unique_uniformity_of_compact
 
 中文:
 定理 unique_uniformity_of_compact
-  结论: [t : TopologicalSpace γ] [CompactSpace γ]
+  结论: [t : 拓扑空间 γ] [紧空间 γ]
   证明: by
   refine UniformSpace.ext ?_
   have : @CompactSpace γ u.toTopologicalSpace := by rwa [h]
@@ -557,8 +557,8 @@ theorem IsClosed.relPreimage_of_isCompact
 exact fun y hy => ht.eventually_forall_of_forall_eventually fun x hx => hs _ hy _ hx
 
 中文:
-定理 IsClosed.relPreimage_of_isCompact
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+定理 是闭集.relPreimage_of_isCompact
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_eventually] at hs ⊢
   simp_rw [Set.mem_compl_iff, SetRel.mem_preimage, not_exists, not_and]
@@ -582,8 +582,8 @@ theorem IsClosed.relImage_of_isCompact
   proof: hs.relInv.relPreimage_of_isCompact ht
 
 中文:
-定理 IsClosed.relImage_of_isCompact
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+定理 是闭集.relImage_of_isCompact
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: hs.relInv.relPreimage_of_isCompact ht
 
 Depends on / 依赖: hs.relInv.relPreimage_of_isCompact, relInv, relPreimage_of_isCompact

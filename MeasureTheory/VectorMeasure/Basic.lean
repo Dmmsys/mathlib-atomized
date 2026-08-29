@@ -68,13 +68,13 @@ structure VectorMeasure
     - m_iUnion'(⦃f) : Nat -> Set α⦄ : (forall i, MeasurableSet (f i)) -> Pairwise (Disjoint on f) -> HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
 
 中文:
-结构 VectorMeasure
-  参数: (α : 类型) [MeasurableSpace α] (M : 类型) [AddCommMonoid M]
+结构 向量测度
+  参数: (α : 类型) [可测空间 α] (M : 类型) [加法交换幺半群 M]
   公理与运算 (4 个):
-    - measureOf' : Set α -> M
+    - measureOf' : 集合 α -> M
     - empty' : measureOf' ∅ = 0
-    - not_measurable'(⦃i) : Set α⦄ : ¬MeasurableSet i -> measureOf' i = 0
-    - m_iUnion'(⦃f) : 自然数 -> Set α⦄ : (对任意 i, MeasurableSet (f i)) -> Pairwise (Disjoint on f) -> HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
+    - not_measurable'(⦃i) : 集合 α⦄ : ¬可测集 i -> measureOf' i = 0
+    - m_iUnion'(⦃f) : 自然数 -> 集合 α⦄ : (对任意 i, 可测集 (f i)) -> 两两 (Disjoint on f) -> HasSum (fun i => measureOf' (f i)) (measureOf' (⋃ i, f i))
 -/
 structure VectorMeasure (α : Type*) [MeasurableSpace α] (M : Type*) [AddCommMonoid M]
     [TopologicalSpace M] where
@@ -97,8 +97,8 @@ abbreviation SignedMeasure
   body: VectorMeasure α Real
 
 中文:
-缩写 SignedMeasure
-  签名: (α : 类型) [MeasurableSpace α]
+缩写 符号测度
+  签名: (α : 类型) [可测空间 α]
   定义体: VectorMeasure α Real
 
 Depends on / 依赖: VectorMeasure
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (VectorMeasure α M) (Set α) M
+  签名: 函数状 (向量测度 α M) (集合 α) M
   定义体: VectorMeasure.measureOf'
   coe_injective v w h := by
     cases v; cases w; congr
@@ -158,8 +158,8 @@ initialize_simps_projections VectorMeasure (measureOf' -> apply)
 
 中文:
 定理 coe_mk
-  条件: (v : Set α -> M) (h₁) (h₂) (h₃)
-  结论: (mk v h₁ h₂ h₃ : VectorMeasure α M) = v
+  条件: (v : 集合 α -> M) (h₁) (h₂) (h₃)
+  结论: (mk v h₁ h₂ h₃ : 向量测度 α M) = v
   证明: rfl
 
 initialize_simps_projections VectorMeasure (measureOf' -> apply)
@@ -184,7 +184,7 @@ theorem empty
 
 中文:
 定理 empty
-  条件: (v : VectorMeasure α M)
+  条件: (v : 向量测度 α M)
   结论: v ∅ = 0
   证明: v.empty'
 
@@ -207,7 +207,7 @@ theorem not_measurable
 
 中文:
 定理 not_measurable
-  条件: (v : VectorMeasure α M) {i : Set α} (hi : ¬MeasurableSet i)
+  条件: (v : 向量测度 α M) {i : 集合 α} (hi : ¬可测集 i)
   结论: v i = 0
   证明: v.not_measurable' hi
 
@@ -230,7 +230,7 @@ theorem m_iUnion
 
 中文:
 定理 m_iUnion
-  结论: (v : VectorMeasure α M) {f : 自然数 -> Set α} (hf₁ : 对任意 i, MeasurableSet (f i))
+  结论: (v : 向量测度 α M) {f : 自然数 -> 集合 α} (hf₁ : 对任意 i, 可测集 (f i))
   证明: v.m_iUnion' hf₁ hf₂
 
 @[deprecated (since := "2026-06-10")] alias coe_injective := DFunLike.coe_injective
@@ -268,8 +268,8 @@ theorem ext_iff
 
 中文:
 定理 ext_iff
-  条件: (v w : VectorMeasure α M)
-  结论: v = w ↔ 对任意 i : Set α, MeasurableSet i -> v i = w i
+  条件: (v w : 向量测度 α M)
+  结论: v = w ↔ 对任意 i : 集合 α, 可测集 i -> v i = w i
   证明: by
   constructor
   · rintro rfl _ _
@@ -306,7 +306,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : VectorMeasure α M} (h : 对任意 i : Set α, MeasurableSet i -> s i = t i)
+  条件: {s t : 向量测度 α M} (h : 对任意 i : 集合 α, 可测集 i -> s i = t i)
   结论: s = t
   证明: (ext_iff s t).2 h
 
@@ -333,7 +333,7 @@ theorem hasSum_of_disjoint_iUnion
 
 中文:
 定理 hasSum_of_disjoint_iUnion
-  条件: (hm : 对任意 i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f))
+  条件: (hm : 对任意 i, 可测集 (f i)) (hd : 两两 (Disjoint on f))
   证明: by
   rcases Countable.exists_injective_nat β with ⟨e, he⟩
   rw [← hasSum_extend_zero he]
@@ -365,7 +365,7 @@ theorem of_if
 
 中文:
 定理 of_if
-  条件: {ι : 类型} {x : ι} {B : Set ι} {A : Set α} [Decidable (x in B)]
+  条件: {ι : 类型} {x : ι} {B : 集合 ι} {A : 集合 α} [可判定 (x in B)]
   证明: by
   split_ifs with h <;> simp [h]
 
@@ -387,7 +387,7 @@ theorem of_disjoint_iUnion
 
 中文:
 定理 of_disjoint_iUnion
-  条件: (hm : 对任意 i, MeasurableSet (f i)) (hd : Pairwise (Disjoint on f))
+  条件: (hm : 对任意 i, 可测集 (f i)) (hd : 两两 (Disjoint on f))
   证明: (hasSum_of_disjoint_iUnion hm hd).tsum_eq.symm
 
 Depends on / 依赖: hasSum_of_disjoint_iUnion, tsum_eq, tsum_eq.symm
@@ -411,7 +411,7 @@ theorem of_biUnion
 
 中文:
 定理 of_biUnion
-  结论: {ι : 类型} {s : Set ι} {f : ι -> Set α} (hs : s.Countable)
+  结论: {ι : 类型} {s : 集合 ι} {f : ι -> 集合 α} (hs : s.可数)
   证明: by
   have := hs.toEncodable
   rw [biUnion_eq_iUnion]
@@ -442,7 +442,7 @@ theorem of_biUnion_finset
 
 中文:
 定理 of_biUnion_finset
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 集合 α} (hd : PairwiseDisjoint (↑s) f)
   证明: by
   rw [← Finset.sum_attach]; rw [Finset.attach_eq_univ]; rw [← tsum_fintype (L := .unconditional s)]
   exact of_biUnion s.countable_toSet hd hm
@@ -466,7 +466,7 @@ theorem of_union
 
 中文:
 定理 of_union
-  条件: {A B : Set α} (h : Disjoint A B) (hA : MeasurableSet A) (hB : MeasurableSet B)
+  条件: {A B : 集合 α} (h : Disjoint A B) (hA : 可测集 A) (hB : 可测集 B)
   证明: by
   rw [Set.union_eq_iUnion]; rw [of_disjoint_iUnion]; rw [tsum_fintype]; rw [Fintype.sum_bool]; rw [cond]; rw [cond]
   exacts [fun b => Bool.casesOn b hB hA, pairwise_disjoint_on_bool.2 h]
@@ -491,7 +491,7 @@ theorem of_add_of_sdiff
 
 中文:
 定理 of_add_of_sdiff
-  条件: {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B) (h : A subseteq B)
+  条件: {A B : 集合 α} (hA : 可测集 A) (hB : 可测集 B) (h : A subseteq B)
   证明: by
   rw [← of_union (@Set.disjoint_sdiff_right _ A B) hA (hB.diff hA)]; rw [Set.union_sdiff_cancel h]
 
@@ -518,7 +518,7 @@ theorem of_sdiff
 
 中文:
 定理 of_sdiff
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
   证明: by
   rw [← of_add_of_sdiff hA hB h]; rw [add_sub_cancel_left]
 
@@ -544,7 +544,7 @@ theorem of_compl
 
 中文:
 定理 of_compl
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
   证明: by
   simpa [compl_eq_univ_sdiff] using of_sdiff hA .univ (v := v) (subset_univ _)
 
@@ -574,7 +574,7 @@ theorem of_sdiff_of_sdiff_eq_zero
 
 中文:
 定理 of_sdiff_of_sdiff_eq_zero
-  结论: {A B : Set α} (hA : MeasurableSet A) (hB : MeasurableSet B)
+  结论: {A B : 集合 α} (hA : 可测集 A) (hB : 可测集 B)
   证明: by
   symm
   calc
@@ -618,7 +618,7 @@ theorem of_iUnion_nonneg
 
 中文:
 定理 of_iUnion_nonneg
-  结论: {M : 类型} [TopologicalSpace M]
+  结论: {M : 类型} [拓扑空间 M]
   证明: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonneg hf₃
 
 Depends on / 依赖: of_disjoint_iUnion, tsum_nonneg, v.of_disjoint_iUnion
@@ -639,7 +639,7 @@ theorem of_iUnion_nonpos
 
 中文:
 定理 of_iUnion_nonpos
-  结论: {M : 类型} [TopologicalSpace M]
+  结论: {M : 类型} [拓扑空间 M]
   证明: (v.of_disjoint_iUnion hf₁ hf₂).symm ▸ tsum_nonpos hf₃
 
 Depends on / 依赖: of_disjoint_iUnion, tsum_nonpos, v.of_disjoint_iUnion
@@ -662,7 +662,7 @@ theorem of_nonneg_disjoint_union_eq_zero
 
 中文:
 定理 of_nonneg_disjoint_union_eq_zero
-  结论: {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
+  结论: {s : 符号测度 α} {A B : 集合 α} (h : Disjoint A B)
   证明: by
   rw [of_union h hA₁ hB₁] at hAB
   linarith
@@ -687,7 +687,7 @@ theorem of_nonpos_disjoint_union_eq_zero
 
 中文:
 定理 of_nonpos_disjoint_union_eq_zero
-  结论: {s : SignedMeasure α} {A B : Set α} (h : Disjoint A B)
+  结论: {s : 符号测度 α} {A B : 集合 α} (h : Disjoint A B)
   证明: by
   rw [of_union h hA₁ hB₁] at hAB
   linarith
@@ -755,7 +755,7 @@ theorem tendsto_vectorMeasure_iInter_atTop_nat
   exact tendsto_vectorMeasure_iUnion_atTop_nat
 
 中文:
-定理 tendsto_vectorMeasure_iInter_atTop_nat
+定理 tendsto_vectorMeasure_i整数er_atTop_nat
   证明: by
   have I n : v (s n) = v univ - v (s n)ᶜ := by simp [of_compl (hs n)]
   have J : v (⋂ n, s n) = v univ - v (⋃ n, (s n)ᶜ) := by
@@ -798,7 +798,7 @@ theorem ext_of_generateFrom
 
 中文:
 定理 ext_of_generateFrom
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [T2Space M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [T2空间 M]
   证明: by
   ext s hs
   induction s, hs using MeasurableSpace.induction_on_inter hA hC with
@@ -848,7 +848,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: (r : R) (v : VectorMeasure α M)
+  签名: (r : R) (v : 向量测度 α M)
   定义体: r • ⇑v
   empty' := by rw [Pi.smul_apply, empty, smul_zero]
   not_measurable' _ hi := by rw [Pi.smul_apply, v.not_measurable hi, smul_zero]
@@ -870,7 +870,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R (VectorMeasure α M)
+  签名: : 标量乘法 R (向量测度 α M)
   定义体: ⟨smul⟩
 -/
 instance instSMul : SMul R (VectorMeasure α M) :=
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R (VectorMeasure α M) (Set α) M
+  签名: 是SMulApply R (向量测度 α M) (集合 α) M
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] alias coe_smul := FunLike.coe_smul
@@ -920,7 +920,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (VectorMeasure α M)
+  签名: : 零 (向量测度 α M)
   定义体: ⟨⟨0, rfl, fun _ _ => rfl, fun _ _ _ => hasSum_zero⟩⟩
 
 Depends on / 依赖: hasSum_zero
@@ -938,7 +938,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (VectorMeasure α M) (Set α) M
+  签名: 是ZeroApply (向量测度 α M) (集合 α) M
   定义体: rfl
 -/
 instance : IsZeroApply (VectorMeasure α M) (Set α) M where
@@ -956,7 +956,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (VectorMeasure α M)
+  签名: : 可居 (向量测度 α M)
   定义体: ⟨0⟩
 
 @[nontriviality]
@@ -976,7 +976,7 @@ lemma apply_eq_zero_of_isEmpty
 
 中文:
 引理 apply_eq_zero_of_isEmpty
-  条件: [IsEmpty α] (μ : VectorMeasure α M) (s : Set α)
+  条件: [是空 α] (μ : 向量测度 α M) (s : 集合 α)
   证明: by
   simp [eq_empty_of_isEmpty s]
 
@@ -995,8 +995,8 @@ instance [IsEmpty
   body: ⟨fun μ ν => by ext; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
 
 中文:
-实例 [IsEmpty
-  签名: α] : Subsingleton (VectorMeasure α M)
+实例 [是空
+  签名: α] : 子单例 (向量测度 α M)
   定义体: ⟨fun μ ν => by ext; rw [apply_eq_zero_of_isEmpty, apply_eq_zero_of_isEmpty]⟩
 
 Depends on / 依赖: apply_eq_zero_of_isEmpty
@@ -1019,7 +1019,7 @@ theorem eq_zero_of_isEmpty
 
 中文:
 定理 eq_zero_of_isEmpty
-  条件: [IsEmpty α] (μ : VectorMeasure α M)
+  条件: [是空 α] (μ : 向量测度 α M)
   结论: μ = 0
   证明: Subsingleton.elim μ 0
 
@@ -1051,7 +1051,7 @@ definition add
 
 中文:
 定义 add
-  签名: (v w : VectorMeasure α M)
+  签名: (v w : 向量测度 α M)
   定义体: v + w
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.add_apply, v.not_measurable hi, w.not_measurable hi, add_zero]
@@ -1073,7 +1073,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (VectorMeasure α M)
+  签名: : 加法 (向量测度 α M)
   定义体: ⟨add⟩
 -/
 instance instAdd : Add (VectorMeasure α M) :=
@@ -1093,7 +1093,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (VectorMeasure α M) (Set α) M
+  签名: 是加法Apply (向量测度 α M) (集合 α) M
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] alias coe_add := FunLike.coe_add
@@ -1123,7 +1123,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (VectorMeasure α M)
+  签名: : 加法交换幺半群 (向量测度 α M)
   定义体: fast_instance% FunLike.addCommMonoid
 
 @[deprecated (since := "2026-06-10")] alias coeFnAddMonoidHom := FunLike.coeAddMonoidHom
@@ -1162,7 +1162,7 @@ m_iUnion' _ hf₁ hf₂ := HasSum.neg v.m_iUnion hf₁ hf₂
 
 中文:
 定义 neg
-  签名: (v : VectorMeasure α M)
+  签名: (v : 向量测度 α M)
   定义体: -v
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.neg_apply, neg_eq_zero, v.not_measurable hi]
@@ -1184,7 +1184,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (VectorMeasure α M)
+  签名: : 取负 (向量测度 α M)
   定义体: ⟨neg⟩
 -/
 instance instNeg : Neg (VectorMeasure α M) :=
@@ -1204,7 +1204,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (VectorMeasure α M) (Set α) M
+  签名: 是NegApply (向量测度 α M) (集合 α) M
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] alias coe_neg := FunLike.coe_neg
@@ -1231,7 +1231,7 @@ definition sub
 
 中文:
 定义 sub
-  签名: (v w : VectorMeasure α M)
+  签名: (v w : 向量测度 α M)
   定义体: v - w
   empty' := by simp
   not_measurable' _ hi := by rw [Pi.sub_apply, v.not_measurable hi, w.not_measurable hi, sub_zero]
@@ -1253,7 +1253,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (VectorMeasure α M)
+  签名: : 减法 (向量测度 α M)
   定义体: ⟨sub⟩
 -/
 instance instSub : Sub (VectorMeasure α M) :=
@@ -1273,7 +1273,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (VectorMeasure α M) (Set α) M
+  签名: 是SubApply (向量测度 α M) (集合 α) M
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] alias coe_sub := FunLike.coe_sub
@@ -1297,7 +1297,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (VectorMeasure α M)
+  签名: : 加法交换群 (向量测度 α M)
   定义体: fast_instance% FunLike.addCommGroup
 
 Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
@@ -1321,7 +1321,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [ContinuousAdd M]
+  签名: [连续加法 M]
   定义体: fast_instance% FunLike.distribMulAction
 
 Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
@@ -1346,7 +1346,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [ContinuousAdd M]
+  签名: [连续加法 M]
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -1422,7 +1422,7 @@ lemma dirac_apply_of_mem
 
 中文:
 引理 dirac_apply_of_mem
-  条件: (hs : MeasurableSet s) (hx : x in s)
+  条件: (hs : 可测集 s) (hx : x in s)
   结论: dirac x v s = v
   证明: if_pos (And.intro hs hx)
 -/
@@ -1493,7 +1493,7 @@ definition toSignedMeasure
 
 中文:
 定义 toSignedMeasure
-  签名: (μ : Measure α) [hμ : IsFiniteMeasure μ]
+  签名: (μ : 测度 α) [hμ : 是有限测度 μ]
   定义体: if MeasurableSet s then μ.real s else 0
   empty' := by simp
   not_measurable' _ hi := if_neg hi
@@ -1525,7 +1525,7 @@ theorem toSignedMeasure_apply
 
 中文:
 定理 toSignedMeasure_apply
-  条件: (μ : Measure α) [hμ : IsFiniteMeasure μ] (i : Set α)
+  条件: (μ : 测度 α) [hμ : 是有限测度 μ] (i : 集合 α)
   证明: rfl
 -/
 theorem toSignedMeasure_apply (μ : Measure α) [hμ : IsFiniteMeasure μ] (i : Set α) :
@@ -1541,7 +1541,7 @@ theorem toSignedMeasure_apply_measurable
 
 中文:
 定理 toSignedMeasure_apply_measurable
-  结论: {μ : Measure α} [IsFiniteMeasure μ] {i : Set α}
+  结论: {μ : 测度 α} [是有限测度 μ] {i : 集合 α}
   证明: if_pos hi
 
 Depends on / 依赖: if_pos
@@ -1563,7 +1563,7 @@ theorem toSignedMeasure_congr
 
 中文:
 定理 toSignedMeasure_congr
-  结论: {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: {μ ν : 测度 α} [是有限测度 μ] [是有限测度 ν]
   证明: by
   congr
 -/
@@ -1589,7 +1589,7 @@ theorem toSignedMeasure_eq_toSignedMeasure_iff
 
 中文:
 定理 toSignedMeasure_eq_toSignedMeasure_iff
-  结论: {μ ν : Measure α} [IsFiniteMeasure μ]
+  结论: {μ ν : 测度 α} [是有限测度 μ]
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · ext1 i hi
@@ -1626,7 +1626,7 @@ theorem toSignedMeasure_zero
 
 中文:
 定理 toSignedMeasure_zero
-  结论: (0 : Measure α).toSignedMeasure = 0
+  结论: (0 : 测度 α).toSignedMeasure = 0
   证明: by
   ext i hi
   simp [hi]
@@ -1652,7 +1652,7 @@ theorem toSignedMeasure_add
 
 中文:
 定理 toSignedMeasure_add
-  条件: (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 μ] [是有限测度 ν]
   证明: by
   ext i hi
   rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_add_apply]; rw [_root_.add_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [toSignedMeasure_apply_measurable hi]
@@ -1680,7 +1680,7 @@ theorem toSignedMeasure_smul
 
 中文:
 定理 toSignedMeasure_smul
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (r : 实数>=0)
+  条件: (μ : 测度 α) [是有限测度 μ] (r : 实数>=0)
   证明: by
   ext i hi
   rw [toSignedMeasure_apply_measurable hi]; rw [_root_.smul_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [measureReal_nnreal_smul_apply]
@@ -1709,8 +1709,8 @@ definition toENNRealVectorMeasure
     exact tsum_congr fun n => if_pos (hf₁ n)
 
 中文:
-定义 toENNRealVectorMeasure
-  签名: (μ : Measure α)
+定义 toENN实数VectorMeasure
+  签名: (μ : 测度 α)
   定义体: if MeasurableSet i then μ i else 0
   empty' := by simp
   not_measurable' _ hi := if_neg hi
@@ -1739,8 +1739,8 @@ theorem toENNRealVectorMeasure_apply
   proof: rfl
 
 中文:
-定理 toENNRealVectorMeasure_apply
-  条件: (μ : Measure α) (i : Set α)
+定理 toENN实数VectorMeasure_apply
+  条件: (μ : 测度 α) (i : 集合 α)
   证明: rfl
 -/
 theorem toENNRealVectorMeasure_apply (μ : Measure α) (i : Set α) :
@@ -1757,8 +1757,8 @@ theorem toENNRealVectorMeasure_apply_measurable
 @[simp]
 
 中文:
-定理 toENNRealVectorMeasure_apply_measurable
-  条件: {μ : Measure α} {i : Set α} (hi : MeasurableSet i)
+定理 toENN实数VectorMeasure_apply_measurable
+  条件: {μ : 测度 α} {i : 集合 α} (hi : 可测集 i)
   证明: if_pos hi
 
 @[simp]
@@ -1783,8 +1783,8 @@ theorem toENNRealVectorMeasure_zero
 @[simp]
 
 中文:
-定理 toENNRealVectorMeasure_zero
-  结论: (0 : Measure α).toENN实数VectorMeasure = 0
+定理 toENN实数VectorMeasure_zero
+  结论: (0 : 测度 α).toENN实数VectorMeasure = 0
   证明: by
   ext i
   simp
@@ -1807,8 +1807,8 @@ theorem toENNRealVectorMeasure_add
   rw [toENNRealVectorMeasure_apply_measurable hi]; rw [add_apply]; rw [_root_.add_apply]; rw [toENNRealVectorMeasure_apply_measurable hi]; rw [toENNRealVectorMeasure_apply_measurable hi]
 
 中文:
-定理 toENNRealVectorMeasure_add
-  条件: (μ ν : Measure α)
+定理 toENN实数VectorMeasure_add
+  条件: (μ ν : 测度 α)
   证明: by
   refine MeasureTheory.VectorMeasure.ext fun i hi => ?_
   rw [toENNRealVectorMeasure_apply_measurable hi]; rw [add_apply]; rw [_root_.add_apply]; rw [toENNRealVectorMeasure_apply_measurable hi]; rw [toENNRealVectorMeasure_apply_measurable hi]
@@ -1831,7 +1831,7 @@ theorem toSignedMeasure_sub_apply
 
 中文:
 定理 toSignedMeasure_sub_apply
-  结论: {μ ν : Measure α} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: {μ ν : 测度 α} [是有限测度 μ] [是有限测度 ν]
   证明: by
   rw [_root_.sub_apply]; rw [toSignedMeasure_apply_measurable hi]; rw [Measure.toSignedMeasure_apply_measurable hi]
 
@@ -1860,7 +1860,7 @@ definition ennrealToMeasure
 
 中文:
 定义 ennrealToMeasure
-  签名: {_ : MeasurableSpace α} (v : VectorMeasure α 实数>=0∞)
+  签名: {_ : 可测空间 α} (v : 向量测度 α 实数>=0∞)
   定义体: ofMeasurable (fun s _ => v s) v.empty fun _ hf₁ hf₂ => v.of_disjoint_iUnion hf₁ hf₂
 
 Depends on / 依赖: ofMeasurable, of_disjoint_iUnion, v.empty, v.of_disjoint_iUnion
@@ -1881,7 +1881,7 @@ theorem ennrealToMeasure_apply
 
 中文:
 定理 ennrealToMeasure_apply
-  结论: {m : MeasurableSpace α} {v : VectorMeasure α 实数>=0∞} {s : Set α}
+  结论: {m : 可测空间 α} {v : 向量测度 α 实数>=0∞} {s : 集合 α}
   证明: by
   rw [ennrealToMeasure]; rw [ofMeasurable_apply _ hs]
 
@@ -1907,7 +1907,7 @@ theorem ennrealToMeasure_zero
 
 中文:
 定理 ennrealToMeasure_zero
-  结论: ennrealToMeasure (0 : VectorMeasure α 实数>=0∞) = 0
+  结论: ennrealToMeasure (0 : 向量测度 α 实数>=0∞) = 0
   证明: by
   simp [ennrealToMeasure]
 
@@ -1930,7 +1930,7 @@ theorem _root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure
 @[simp]
 
 中文:
-定理 _root_.MeasureTheory.Measure.toENNRealVectorMeasure_ennrealToMeasure
+定理 _root_.测度论.测度.toENN实数VectorMeasure_ennrealToMeasure
   证明: ext fun s hs => by
   rw [toENNRealVectorMeasure_apply_measurable hs]; rw [ennrealToMeasure_apply hs]
 
@@ -1954,8 +1954,8 @@ theorem ennrealToMeasure_toENNRealVectorMeasure
   rw [ennrealToMeasure_apply hs]; rw [toENNRealVectorMeasure_apply_measurable hs]
 
 中文:
-定理 ennrealToMeasure_toENNRealVectorMeasure
-  条件: (μ : Measure α)
+定理 ennrealToMeasure_toENN实数VectorMeasure
+  条件: (μ : 测度 α)
   证明: Measure.ext fun s hs => by
   rw [ennrealToMeasure_apply hs]; rw [toENNRealVectorMeasure_apply_measurable hs]
 
@@ -1982,7 +1982,7 @@ definition equivMeasure
 
 中文:
 定义 equivMeasure
-  签名: [MeasurableSpace α]
+  签名: [可测空间 α]
   定义体: ennrealToMeasure
   invFun := toENNRealVectorMeasure
   left_inv := toENNRealVectorMeasure_ennrealToMeasure
@@ -2021,7 +2021,7 @@ definition map
 
 中文:
 定义 map
-  签名: (v : VectorMeasure α M) (f : α -> β)
+  签名: (v : 向量测度 α M) (f : α -> β)
   定义体: if hf : Measurable f then
     { measureOf' := fun s => if MeasurableSet s then v (f ⁻¹' s) else 0
       empty' := by simp
@@ -2055,7 +2055,7 @@ theorem map_not_measurable
 
 中文:
 定理 map_not_measurable
-  条件: {f : α -> β} (hf : ¬Measurable f)
+  条件: {f : α -> β} (hf : ¬可测 f)
   结论: v.map f = 0
   证明: dif_neg hf
 
@@ -2078,7 +2078,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
+  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [map]; rw [dif_pos hf]
   exact if_pos hs
@@ -2132,7 +2132,7 @@ theorem map_zero
 中文:
 定理 map_zero
   条件: (f : α -> β)
-  结论: (0 : VectorMeasure α M).map f = 0
+  结论: (0 : 向量测度 α M).map f = 0
   证明: by
   by_cases hf : Measurable f
   · ext i hi
@@ -2166,7 +2166,7 @@ definition mapRange
 
 中文:
 定义 mapRange
-  签名: (v : VectorMeasure α M) (f : M ->+ N) (hf : Continuous f)
+  签名: (v : 向量测度 α M) (f : M ->+ N) (hf : 连续 f)
   定义体: f (v s)
   empty' := by rw [empty, AddMonoidHom.map_zero]
   not_measurable' i hi := by rw [not_measurable v hi, AddMonoidHom.map_zero]
@@ -2194,7 +2194,7 @@ theorem mapRange_apply
 
 中文:
 定理 mapRange_apply
-  条件: {f : M ->+ N} (hf : Continuous f) {s : Set α}
+  条件: {f : M ->+ N} (hf : 连续 f) {s : 集合 α}
   结论: v.mapRange f hf s = f (v s)
   证明: rfl
 
@@ -2218,7 +2218,7 @@ theorem mapRange_id
 
 中文:
 定理 mapRange_id
-  结论: v.mapRange (AddMonoidHom.id M) continuous_id = v
+  结论: v.mapRange (加法幺半群态射.id M) continuous_id = v
   证明: by
   ext
   rfl
@@ -2242,7 +2242,7 @@ theorem mapRange_zero
 
 中文:
 定理 mapRange_zero
-  条件: {f : M ->+ N} (hf : Continuous f)
+  条件: {f : M ->+ N} (hf : 连续 f)
   证明: by
   ext
   simp
@@ -2269,7 +2269,7 @@ theorem mapRange_add
 
 中文:
 定理 mapRange_add
-  条件: {v w : VectorMeasure α M} {f : M ->+ N} (hf : Continuous f)
+  条件: {v w : 向量测度 α M} {f : M ->+ N} (hf : 连续 f)
   证明: by
   ext
   simp
@@ -2291,7 +2291,7 @@ definition mapRangeHom
 
 中文:
 定义 mapRangeHom
-  签名: {α : 类型} [MeasurableSpace α] (f : M ->+ N) (hf : Continuous f)
+  签名: {α : 类型} [可测空间 α] (f : M ->+ N) (hf : 连续 f)
   定义体: v.mapRange f hf
   map_zero' := mapRange_zero hf
   map_add' _ _ := mapRange_add hf
@@ -2325,7 +2325,7 @@ theorem mapRange_smul
 
 中文:
 定理 mapRange_smul
-  条件: {v : VectorMeasure α M} {f : M ->ₗ[R] N} (hf : Continuous f) {c : R}
+  条件: {v : 向量测度 α M} {f : M ->ₗ[R] N} (hf : 连续 f) {c : R}
   证明: by
   ext; simp
 -/
@@ -2348,7 +2348,7 @@ definition mapRangeₗ
 
 中文:
 定义 mapRangeₗ
-  签名: {α : 类型} [MeasurableSpace α] (f : M ->ₗ[R] N) (hf : Continuous f)
+  签名: {α : 类型} [可测空间 α] (f : M ->ₗ[R] N) (hf : 连续 f)
   定义体: v.mapRange f.toAddMonoidHom hf
   map_add' _ _ := mapRange_add hf
   map_smul' _ _ := mapRange_smul hf
@@ -2384,7 +2384,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (v : VectorMeasure α M) (i : Set α)
+  签名: (v : 向量测度 α M) (i : 集合 α)
   定义体: if hi : MeasurableSet i then
     { measureOf' := fun s => if MeasurableSet s then v (s inter i) else 0
       empty' := by simp
@@ -2420,7 +2420,7 @@ theorem restrict_not_measurable
 
 中文:
 定理 restrict_not_measurable
-  条件: {i : Set α} (hi : ¬MeasurableSet i)
+  条件: {i : 集合 α} (hi : ¬可测集 i)
   结论: v.restrict i = 0
   证明: dif_neg hi
 
@@ -2441,7 +2441,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j)
+  条件: {i : 集合 α} (hi : 可测集 i) {j : 集合 α} (hj : 可测集 j)
   证明: by
   rw [restrict]; rw [dif_pos hi]
   exact if_pos hj
@@ -2466,7 +2466,7 @@ theorem restrict_apply_univ
 
 中文:
 定理 restrict_apply_univ
-  条件: {i : Set α}
+  条件: {i : 集合 α}
   证明: by
   by_cases hi : MeasurableSet i
   · simp [restrict_apply, hi]
@@ -2491,7 +2491,7 @@ theorem restrict_eq_self
 
 中文:
 定理 restrict_eq_self
-  结论: {i : Set α} (hi : MeasurableSet i) {j : Set α} (hj : MeasurableSet j)
+  结论: {i : 集合 α} (hi : 可测集 i) {j : 集合 α} (hj : 可测集 j)
   证明: by
   rw [restrict_apply v hi hj]; rw [Set.inter_eq_left.2 hij]
 
@@ -2542,7 +2542,7 @@ theorem restrict_univ
 
 中文:
 定理 restrict_univ
-  结论: v.restrict Set.univ = v
+  结论: v.restrict 集合.univ = v
   证明: ext fun i hi => by rw [restrict_apply v MeasurableSet.univ hi, Set.inter_univ]
 
 @[simp]
@@ -2568,8 +2568,8 @@ theorem restrict_zero
 
 中文:
 定理 restrict_zero
-  条件: {i : Set α}
-  结论: (0 : VectorMeasure α M).restrict i = 0
+  条件: {i : 集合 α}
+  结论: (0 : 向量测度 α M).restrict i = 0
   证明: by
   by_cases hi : MeasurableSet i
   · ext j hj
@@ -2600,7 +2600,7 @@ theorem restrict_dirac
 
 中文:
 定理 restrict_dirac
-  条件: {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) [Decidable (x in s)]
+  条件: {s : 集合 α} {x : α} {m : M} (hs : 可测集 s) [可判定 (x in s)]
   证明: by
   classical
   ext t ht
@@ -2633,7 +2633,7 @@ theorem restrict_dirac_of_mem
 
 中文:
 定理 restrict_dirac_of_mem
-  条件: {s : Set α} {x : α} {m : M} (hs : MeasurableSet s) (hx : x in s)
+  条件: {s : 集合 α} {x : α} {m : M} (hs : 可测集 s) (hx : x in s)
   证明: by
   classical
   simp [restrict_dirac, hs, hx]
@@ -2664,7 +2664,7 @@ theorem restrict_dirac_of_notMem
 
 中文:
 定理 restrict_dirac_of_notMem
-  条件: {s : Set α} {x : α} {m : M} (hx : x ∉ s)
+  条件: {s : 集合 α} {x : α} {m : M} (hx : x ∉ s)
   证明: by
   classical
   by_cases hs : MeasurableSet s
@@ -2726,7 +2726,7 @@ theorem restrict_restrict
 
 中文:
 定理 restrict_restrict
-  条件: {s t : Set α} (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: {s t : 集合 α} (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   ext u hu
   simp [restrict_apply, hs, hu, ht, Set.inter_assoc]
@@ -2750,7 +2750,7 @@ theorem restrict_map
 
 中文:
 定理 restrict_map
-  条件: {f : α -> β} (hf : Measurable f) {s : Set β} (hs : MeasurableSet s)
+  条件: {f : α -> β} (hf : 可测 f) {s : 集合 β} (hs : 可测集 s)
   证明: by
   ext t ht
   simp [map_apply, hs, hf hs, restrict_apply, ht, hf, hf ht]
@@ -2774,7 +2774,7 @@ theorem restrict_toSignedMeasure
 
 中文:
 定理 restrict_toSignedMeasure
-  结论: {μ : Measure α} [IsFiniteMeasure μ]
+  结论: {μ : 测度 α} [是有限测度 μ]
   证明: by
   ext t ht
   rw [restrict_apply _ hs ht]; rw [Measure.toSignedMeasure_apply_measurable (ht.inter hs)]; rw [Measure.toSignedMeasure_apply_measurable ht]; rw [measureReal_restrict_apply ht]
@@ -2806,7 +2806,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  条件: (v w : VectorMeasure α M) (f : α -> β)
+  条件: (v w : 向量测度 α M) (f : α -> β)
   结论: (v + w).map f = v.map f + w.map f
   证明: by
   by_cases hf : Measurable f
@@ -2838,7 +2838,7 @@ definition mapGm
 
 中文:
 定义 mapGm
-  签名: {α : 类型} [MeasurableSpace α] (f : α -> β)
+  签名: {α : 类型} [可测空间 α] (f : α -> β)
   定义体: v.map f
   map_zero' := map_zero f
   map_add' _ _ := map_add _ _ f
@@ -2867,7 +2867,7 @@ theorem restrict_add
 
 中文:
 定理 restrict_add
-  条件: (v w : VectorMeasure α M) (i : Set α)
+  条件: (v w : 向量测度 α M) (i : 集合 α)
   证明: by
   by_cases hi : MeasurableSet i
   · ext j hj
@@ -2897,7 +2897,7 @@ definition restrictGm
 
 中文:
 定义 restrictGm
-  签名: {α : 类型} [MeasurableSpace α] (i : Set α)
+  签名: {α : 类型} [可测空间 α] (i : 集合 α)
   定义体: v.restrict i
   map_zero' := restrict_zero
   map_add' _ _ := restrict_add _ _ i
@@ -2932,7 +2932,7 @@ theorem restrict_add_restrict_compl
 
 中文:
 定理 restrict_add_restrict_compl
-  条件: (hi : MeasurableSet i)
+  条件: (hi : 可测集 i)
   证明: by
   ext A hA
   rw [_root_.add_apply]; rw [restrict_apply _ hi hA]; rw [restrict_apply _ hi.compl hA]; rw [← of_union _ (hA.inter hi) (hA.inter hi.compl)]
@@ -2965,7 +2965,7 @@ theorem restrict_inter_add_sdiff
 
 中文:
 定理 restrict_inter_add_sdiff
-  条件: (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   ext u hu
   simp only [_root_.add_apply, restrict_apply, hs, hu, hs.inter ht, hs.diff ht]
@@ -2998,7 +2998,7 @@ theorem restrict_union_add_inter
 
 中文:
 定理 restrict_union_add_inter
-  条件: (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   rw [← v.restrict_inter_add_sdiff (hs.union ht) ht]; rw [union_inter_cancel_right]; rw [union_sdiff_right]; rw [← v.restrict_inter_add_sdiff hs ht]; rw [add_comm]; rw [← add_assoc]; rw [add_right_comm]
 
@@ -3019,7 +3019,7 @@ theorem restrict_union
 
 中文:
 定理 restrict_union
-  条件: (h : Disjoint s t) (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: (h : Disjoint s t) (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   simp [← v.restrict_union_add_inter hs ht, disjoint_iff_inter_eq_empty.mp h]
 
@@ -3051,7 +3051,7 @@ theorem restrict_neg
 
 中文:
 定理 restrict_neg
-  条件: (v : VectorMeasure α M) (i : Set α)
+  条件: (v : 向量测度 α M) (i : 集合 α)
   证明: by
   by_cases hi : MeasurableSet i
   · ext j hj; simp [restrict_apply _ hi hj]
@@ -3079,7 +3079,7 @@ theorem restrict_sub
 
 中文:
 定理 restrict_sub
-  条件: (v w : VectorMeasure α M) (i : Set α)
+  条件: (v w : 向量测度 α M) (i : 集合 α)
   证明: by
   simp [sub_eq_add_neg, restrict_add, restrict_neg]
 
@@ -3120,7 +3120,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: {v : VectorMeasure α M} {f : α -> β} (c : R)
+  条件: {v : 向量测度 α M} {f : α -> β} (c : R)
   结论: (c • v).map f = c • v.map f
   证明: by
   by_cases hf : Measurable f
@@ -3162,7 +3162,7 @@ theorem restrict_smul
 
 中文:
 定理 restrict_smul
-  条件: {v : VectorMeasure α M} {i : Set α} (c : R)
+  条件: {v : 向量测度 α M} {i : 集合 α} (c : R)
   证明: by
   by_cases hi : MeasurableSet i
   · ext j hj
@@ -3232,7 +3232,7 @@ definition restrictₗ
 
 中文:
 定义 restrictₗ
-  签名: (i : Set α)
+  签名: (i : 集合 α)
   定义体: v.restrict i
   map_add' _ _ := restrict_add _ _ i
   map_smul' _ _ := restrict_smul _
@@ -3263,7 +3263,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (VectorMeasure α M) where
+  签名: : 偏序 (向量测度 α M) where
   定义体: forall i, MeasurableSet i -> v i <= w i
   le_refl _ _ _ := le_rfl
   le_trans _ _ _ h₁ h₂ i hi := le_trans (h₁ i hi) (h₂ i hi)
@@ -3289,7 +3289,7 @@ theorem le_iff
 
 中文:
 定理 le_iff
-  结论: v <= w ↔ 对任意 i, MeasurableSet i -> v i <= w i
+  结论: v <= w ↔ 对任意 i, 可测集 i -> v i <= w i
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3350,7 +3350,7 @@ theorem restrict_le_restrict_iff
 
 中文:
 定理 restrict_le_restrict_iff
-  条件: {i : Set α} (hi : MeasurableSet i)
+  条件: {i : 集合 α} (hi : 可测集 i)
   证明: ⟨fun h j hj₁ hj₂ => restrict_eq_self v hi hj₁ hj₂ ▸ restrict_eq_self w hi hj₁ hj₂ ▸ h j hj₁,
     fun h => le_iff.1 fun _ hj =>
       (restrict_apply v hi hj).symm ▸ (restrict_apply w hi hj).symm ▸
@@ -3378,7 +3378,7 @@ theorem subset_le_of_restrict_le_restrict
 
 中文:
 定理 subset_le_of_restrict_le_restrict
-  结论: {i : Set α} (hi : MeasurableSet i) (hi₂ : v <=[i] w)
+  结论: {i : 集合 α} (hi : 可测集 i) (hi₂ : v <=[i] w)
   证明: by
   by_cases hj₁ : MeasurableSet j
   · exact (restrict_le_restrict_iff _ _ hi).1 hi₂ hj₁ hj
@@ -3405,7 +3405,7 @@ theorem restrict_le_restrict_of_subset_le
 
 中文:
 定理 restrict_le_restrict_of_subset_le
-  结论: {i : Set α}
+  结论: {i : 集合 α}
   证明: by
   by_cases hi : MeasurableSet i
   · exact (restrict_le_restrict_iff _ _ hi).2 h
@@ -3430,7 +3430,7 @@ theorem restrict_le_restrict_subset
 
 中文:
 定理 restrict_le_restrict_subset
-  结论: {i j : Set α} (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w)
+  结论: {i j : 集合 α} (hi₁ : 可测集 i) (hi₂ : v <=[i] w)
   证明: restrict_le_restrict_of_subset_le v w fun _ _ hk₂ =>
     subset_le_of_restrict_le_restrict v w hi₁ hi₂ (Set.Subset.trans hk₂ hij)
 
@@ -3470,7 +3470,7 @@ theorem le_restrict_univ_iff_le
 
 中文:
 定理 le_restrict_univ_iff_le
-  结论: v <=[Set.univ] w ↔ v <= w
+  结论: v <=[集合.univ] w ↔ v <= w
   证明: by
   simp
 -/
@@ -3503,7 +3503,7 @@ theorem neg_le_neg_iff
 
 中文:
 定理 neg_le_neg_iff
-  条件: {i : Set α} (hi : MeasurableSet i)
+  条件: {i : 集合 α} (hi : 可测集 i)
   结论: -w <=[i] -v ↔ v <=[i] w
   证明: ⟨fun h => neg_neg v ▸ neg_neg w ▸ neg_le_neg _ _ hi h, fun h => neg_le_neg _ _ hi h⟩
 
@@ -3535,7 +3535,7 @@ theorem restrict_le_restrict_iUnion
 
 中文:
 定理 restrict_le_restrict_iUnion
-  结论: {f : 自然数 -> Set α} (hf₁ : 对任意 n, MeasurableSet (f n))
+  结论: {f : 自然数 -> 集合 α} (hf₁ : 对任意 n, 可测集 (f n))
   证明: by
   refine restrict_le_restrict_of_subset_le v w fun a ha₁ ha₂ => ?_
   have ha₃ : ⋃ n, a inter disjointed f n = a := by
@@ -3586,7 +3586,7 @@ theorem restrict_le_restrict_countable_iUnion
 
 中文:
 定理 restrict_le_restrict_countable_iUnion
-  结论: [Countable β] {f : β -> Set α}
+  结论: [可数 β] {f : β -> 集合 α}
   证明: by
   cases nonempty_encodable β
   rw [← Encodable.iUnion_decode₂]
@@ -3626,7 +3626,7 @@ theorem restrict_le_restrict_union
 
 中文:
 定理 restrict_le_restrict_union
-  结论: (hi₁ : MeasurableSet i) (hi₂ : v <=[i] w) (hj₁ : MeasurableSet j)
+  结论: (hi₁ : 可测集 i) (hi₂ : v <=[i] w) (hj₁ : 可测集 j)
   证明: by
   rw [Set.union_eq_iUnion]
   refine restrict_le_restrict_countable_iUnion v w ?_ ?_
@@ -3717,7 +3717,7 @@ theorem zero_le_restrict_not_measurable
 
 中文:
 定理 zero_le_restrict_not_measurable
-  条件: (hi : ¬MeasurableSet i)
+  条件: (hi : ¬可测集 i)
   结论: 0 <=[i] v
   证明: by
   rw [restrict_zero]; rw [restrict_not_measurable _ hi]
@@ -3739,7 +3739,7 @@ theorem restrict_le_zero_of_not_measurable
 
 中文:
 定理 restrict_le_zero_of_not_measurable
-  条件: (hi : ¬MeasurableSet i)
+  条件: (hi : ¬可测集 i)
   结论: v <=[i] 0
   证明: by
   rw [restrict_zero]; rw [restrict_not_measurable _ hi]
@@ -3761,7 +3761,7 @@ theorem measurable_of_not_zero_le_restrict
 中文:
 定理 measurable_of_not_zero_le_restrict
   条件: (hi : ¬0 <=[i] v)
-  结论: MeasurableSet i
+  结论: 可测集 i
   证明: Not.imp_symm (zero_le_restrict_not_measurable _) hi
 
 Depends on / 依赖: Not.imp_symm, imp_symm, zero_le_restrict_not_measurable
@@ -3781,7 +3781,7 @@ theorem measurable_of_not_restrict_le_zero
 中文:
 定理 measurable_of_not_restrict_le_zero
   条件: (hi : ¬v <=[i] 0)
-  结论: MeasurableSet i
+  结论: 可测集 i
   证明: Not.imp_symm (restrict_le_zero_of_not_measurable _) hi
 
 Depends on / 依赖: Not.imp_symm, imp_symm, restrict_le_zero_of_not_measurable
@@ -3801,7 +3801,7 @@ theorem zero_le_restrict_subset
 
 中文:
 定理 zero_le_restrict_subset
-  条件: (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : 0 <=[i] v)
+  条件: (hi₁ : 可测集 i) (hij : j subseteq i) (hi₂ : 0 <=[i] v)
   结论: 0 <=[j] v
   证明: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
     (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
@@ -3824,7 +3824,7 @@ theorem restrict_le_zero_subset
 
 中文:
 定理 restrict_le_zero_subset
-  条件: (hi₁ : MeasurableSet i) (hij : j subseteq i) (hi₂ : v <=[i] 0)
+  条件: (hi₁ : 可测集 i) (hij : j subseteq i) (hi₂ : v <=[i] 0)
   结论: v <=[j] 0
   证明: restrict_le_restrict_of_subset_le _ _ fun _ hk₁ hk₂ =>
     (restrict_le_restrict_iff _ _ hi₁).1 hi₂ hk₁ (Set.Subset.trans hk₂ hij)
@@ -3855,7 +3855,7 @@ theorem exists_pos_measure_of_not_restrict_le_zero
   exact hi
 
 中文:
-定理 exists_pos_measure_of_not_restrict_le_zero
+定理 存在_pos_measure_of_not_restrict_le_zero
   条件: (hi : ¬v <=[i] 0)
   证明: by
   have hi₁ : MeasurableSet i := measurable_of_not_restrict_le_zero _ hi
@@ -3889,7 +3889,7 @@ instance instAddLeftMono
 
 中文:
 实例 instAddLeftMono
-  签名: : AddLeftMono (VectorMeasure α M)
+  签名: : AddLeftMono (向量测度 α M)
   定义体: ⟨fun _ _ _ h i hi => by simp only [_root_.add_apply]; grw [h i hi]⟩
 
 Depends on / 依赖: _root_, _root_.add_apply, add_apply
@@ -3918,7 +3918,7 @@ scoped[MeasureTheory] infixl:50 " ≪ᵥ " => MeasureTheory.VectorMeasure.Absolu
 
 中文:
 定义 AbsolutelyContinuous
-  签名: (v : VectorMeasure α M) (w : VectorMeasure α N)
+  签名: (v : 向量测度 α M) (w : 向量测度 α N)
   定义体: forall ⦃s : Set α⦄, w s = 0 -> v s = 0
 
 @[inherit_doc VectorMeasure.AbsolutelyContinuous]
@@ -3951,7 +3951,7 @@ theorem mk
 
 中文:
 定理 mk
-  条件: (h : 对任意 ⦃s : Set α⦄, MeasurableSet s -> w s = 0 -> v s = 0)
+  条件: (h : 对任意 ⦃s : 集合 α⦄, 可测集 s -> w s = 0 -> v s = 0)
   结论: v ≪ᵥ w
   证明: by
   intro s hs
@@ -3980,7 +3980,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: {w : VectorMeasure α M} (h : v = w)
+  条件: {w : 向量测度 α M} (h : v = w)
   结论: v ≪ᵥ w
   证明: fun _ hs => h.symm ▸ hs
 
@@ -4005,7 +4005,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (v : VectorMeasure α M)
+  条件: (v : 向量测度 α M)
   结论: v ≪ᵥ v
   证明: eq rfl
 
@@ -4025,7 +4025,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: {u : VectorMeasure α L} {v : VectorMeasure α M} {w : VectorMeasure α N} (huv : u ≪ᵥ v)
+  结论: {u : 向量测度 α L} {v : 向量测度 α M} {w : 向量测度 α N} (huv : u ≪ᵥ v)
   证明: fun _ hs => huv hvw hs
 -/
 theorem trans {u : VectorMeasure α L} {v : VectorMeasure α M} {w : VectorMeasure α N} (huv : u ≪ᵥ v)
@@ -4043,8 +4043,8 @@ theorem zero
 
 中文:
 定理 zero
-  条件: (v : VectorMeasure α N)
-  结论: (0 : VectorMeasure α M) ≪ᵥ v
+  条件: (v : 向量测度 α N)
+  结论: (0 : 向量测度 α M) ≪ᵥ v
   证明: fun s _ => zero_apply s
 
 Depends on / 依赖: zero_apply
@@ -4064,7 +4064,7 @@ theorem neg_left
 
 中文:
 定理 neg_left
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
   证明: by
   intro s hs
   rw [neg_apply]; rw [h hs]; rw [neg_zero]
@@ -4089,7 +4089,7 @@ theorem neg_right
 
 中文:
 定理 neg_right
-  结论: {N : 类型} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
+  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
   证明: by
   intro s hs
   rw [neg_apply]; rw [neg_eq_zero] at hs
@@ -4115,7 +4115,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [ContinuousAdd M] {v₁ v₂ : VectorMeasure α M} {w : VectorMeasure α N} (hv₁ : v₁ ≪ᵥ w)
+  结论: [连续加法 M] {v₁ v₂ : 向量测度 α M} {w : 向量测度 α N} (hv₁ : v₁ ≪ᵥ w)
   证明: by
   intro s hs
   rw [_root_.add_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_add]
@@ -4139,7 +4139,7 @@ theorem sub
 
 中文:
 定理 sub
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
   证明: by
   intro s hs
   rw [sub_apply]; rw [hv₁ hs]; rw [hv₂ hs]; rw [zero_sub]; rw [neg_zero]
@@ -4164,7 +4164,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {R : 类型} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] {r : R}
+  结论: {R : 类型} [半环 R] [分配乘法作用 R M] [连续常数标量乘法 R M] {r : R}
   证明: by
   intro s hs
   rw [_root_.smul_apply]; rw [h hs]; rw [smul_zero]
@@ -4193,7 +4193,7 @@ theorem map
 
 中文:
 定理 map
-  条件: [MeasureSpace β] (h : v ≪ᵥ w) (f : α -> β)
+  条件: [测度空间 β] (h : v ≪ᵥ w) (f : α -> β)
   结论: v.map f ≪ᵥ w.map f
   证明: by
   by_cases hf : Measurable f
@@ -4231,7 +4231,7 @@ theorem ennrealToMeasure
 
 中文:
 定理 ennrealToMeasure
-  条件: {μ : VectorMeasure α 实数>=0∞}
+  条件: {μ : 向量测度 α 实数>=0∞}
   证明: by
   constructor <;> intro h
   · refine mk fun s hmeas hs => h ?_
@@ -4269,8 +4269,8 @@ definition MutuallySingular
 scoped[MeasureTheory] infixl:60 " ⟂ᵥ " => MeasureTheory.VectorMeasure.MutuallySingular
 
 中文:
-定义 MutuallySingular
-  签名: (v : VectorMeasure α M) (w : VectorMeasure α N)
+定义 互奇异
+  签名: (v : 向量测度 α M) (w : 向量测度 α N)
   定义体: exists s : Set α, MeasurableSet s ∧ (forall t subseteq s, v t = 0) ∧ forall t subseteq sᶜ, w t = 0
 
 @[inherit_doc VectorMeasure.MutuallySingular]
@@ -4303,7 +4303,7 @@ theorem mk
 
 中文:
 定理 mk
-  结论: (s : Set α) (hs : MeasurableSet s) (h₁ : 对任意 t subseteq s, MeasurableSet t -> v t = 0)
+  结论: (s : 集合 α) (hs : 可测集 s) (h₁ : 对任意 t subseteq s, 可测集 t -> v t = 0)
   证明: by
   refine ⟨s, hs, fun t hst => ?_, fun t hst => ?_⟩ <;> by_cases ht : MeasurableSet t
   · exact h₁ t hst ht
@@ -4355,7 +4355,7 @@ theorem zero_right
 
 中文:
 定理 zero_right
-  结论: v ⟂ᵥ (0 : VectorMeasure α N)
+  结论: v ⟂ᵥ (0 : 向量测度 α N)
   证明: ⟨∅, MeasurableSet.empty, fun _ ht => (Set.subset_empty_iff.1 ht).symm ▸ v.empty,
     fun _ _ => zero_apply _⟩
 
@@ -4375,7 +4375,7 @@ theorem zero_left
 
 中文:
 定理 zero_left
-  结论: (0 : VectorMeasure α M) ⟂ᵥ w
+  结论: (0 : 向量测度 α M) ⟂ᵥ w
   证明: zero_right.symm
 
 Depends on / 依赖: zero_right, zero_right.symm
@@ -4401,7 +4401,7 @@ theorem add_left
 
 中文:
 定理 add_left
-  条件: [T2Space N] [ContinuousAdd M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w)
+  条件: [T2空间 N] [连续加法 M] (h₁ : v₁ ⟂ᵥ w) (h₂ : v₂ ⟂ᵥ w)
   结论: v₁ + v₂ ⟂ᵥ w
   证明: by
   obtain ⟨u, hmu, hu₁, hu₂⟩ := h₁
@@ -4443,7 +4443,7 @@ theorem add_right
 
 中文:
 定理 add_right
-  条件: [T2Space M] [ContinuousAdd N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂)
+  条件: [T2空间 M] [连续加法 N] (h₁ : v ⟂ᵥ w₁) (h₂ : v ⟂ᵥ w₂)
   结论: v ⟂ᵥ w₁ + w₂
   证明: (add_left h₁.symm h₂.symm).symm
 
@@ -4463,7 +4463,7 @@ theorem smul_right
 
 中文:
 定理 smul_right
-  结论: {R : 类型} [Semiring R] [DistribMulAction R N] [ContinuousConstSMul R N]
+  结论: {R : 类型} [半环 R] [分配乘法作用 R N] [连续常数标量乘法 R N]
   证明: let ⟨s, hmeas, hs₁, hs₂⟩ := h
   ⟨s, hmeas, hs₁, fun t ht => by simp only [_root_.smul_apply, hs₂ t ht, smul_zero]⟩
 
@@ -4484,7 +4484,7 @@ theorem smul_left
 
 中文:
 定理 smul_left
-  结论: {R : 类型} [Semiring R] [DistribMulAction R M] [ContinuousConstSMul R M] (r : R)
+  结论: {R : 类型} [半环 R] [分配乘法作用 R M] [连续常数标量乘法 R M] (r : R)
   证明: (smul_right r h.symm).symm
 
 Depends on / 依赖: h.symm, smul_right
@@ -4507,7 +4507,7 @@ theorem neg_left
 
 中文:
 定理 neg_left
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
   证明: by
   obtain ⟨u, hmu, hu₁, hu₂⟩ := h
   refine ⟨u, hmu, fun s hs => ?_, hu₂⟩
@@ -4535,7 +4535,7 @@ theorem neg_right
 
 中文:
 定理 neg_right
-  结论: {N : 类型} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
+  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
   证明: h.symm.neg_left.symm
 
 @[simp]
@@ -4559,7 +4559,7 @@ theorem neg_left_iff
 
 中文:
 定理 neg_left_iff
-  结论: {M : 类型} [AddCommGroup M] [TopologicalSpace M] [IsTopologicalAddGroup M]
+  结论: {M : 类型} [加法交换群 M] [拓扑空间 M] [是拓扑加群 M]
   证明: ⟨fun h => neg_neg v ▸ h.neg_left, neg_left⟩
 
 @[simp]
@@ -4581,7 +4581,7 @@ theorem neg_right_iff
 
 中文:
 定理 neg_right_iff
-  结论: {N : 类型} [AddCommGroup N] [TopologicalSpace N] [IsTopologicalAddGroup N]
+  结论: {N : 类型} [加法交换群 N] [拓扑空间 N] [是拓扑加群 N]
   证明: ⟨fun h => neg_neg w ▸ h.neg_right, neg_right⟩
 
 Depends on / 依赖: h.neg_right, neg_neg, neg_right
@@ -4613,7 +4613,7 @@ definition trim
 
 中文:
 定义 trim
-  签名: {m n : MeasurableSpace α} (v : VectorMeasure α M) (hle : m <= n)
+  签名: {m n : 可测空间 α} (v : 向量测度 α M) (hle : m <= n)
   定义体: @VectorMeasure.mk α m M _ _
     (fun i => if MeasurableSet[m] i then v i else 0)
     (by rw [if_pos (@MeasurableSet.empty _ m), v.empty])
@@ -4681,7 +4681,7 @@ theorem zero_trim
 中文:
 定理 zero_trim
   条件: (hle : m <= n)
-  结论: (0 : VectorMeasure α M).trim hle = 0
+  结论: (0 : 向量测度 α M).trim hle = 0
   证明: by
   ext i hi
   exact if_pos hi
@@ -4702,7 +4702,7 @@ theorem trim_measurableSet_eq
 
 中文:
 定理 trim_measurableSet_eq
-  条件: (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i)
+  条件: (hle : m <= n) {i : 集合 α} (hi : 可测集[m] i)
   证明: if_pos hi
 
 Depends on / 依赖: if_pos
@@ -4724,7 +4724,7 @@ theorem restrict_trim
 
 中文:
 定理 restrict_trim
-  条件: (hle : m <= n) {i : Set α} (hi : MeasurableSet[m] i)
+  条件: (hle : m <= n) {i : 集合 α} (hi : 可测集[m] i)
   证明: by
   ext j hj
   rw [@restrict_apply _ m]; rw [trim_measurableSet_eq hle hj]; rw [restrict_apply]; rw [trim_measurableSet_eq]
@@ -4760,7 +4760,7 @@ definition toMeasureOfZeroLE'
 
 中文:
 定义 toMeasureOfZeroLE'
-  签名: (s : SignedMeasure α) (i : Set α) (hi : 0 <=[i] s) (j : Set α)
+  签名: (s : 符号测度 α) (i : 集合 α) (hi : 0 <=[i] s) (j : 集合 α)
   定义体: ((↑) : Real>=0 -> Real>=0∞) (.mk (s.restrict i j) (le_trans (by simp) (hi j hj)))
 
 Depends on / 依赖: le_trans, restrict, s.restrict
@@ -4786,7 +4786,7 @@ definition toMeasureOfZeroLE
 
 中文:
 定义 toMeasureOfZeroLE
-  签名: (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : 0 <=[i] s)
+  签名: (s : 符号测度 α) (i : 集合 α) (hi₁ : 可测集 i) (hi₂ : 0 <=[i] s)
   定义体: by
   refine Measure.ofMeasurable (s.toMeasureOfZeroLE' i hi₂) ?_ ?_
   · simp_rw [toMeasureOfZeroLE', s.restrict_apply hi₁ MeasurableSet.empty, Set.empty_inter i,
@@ -4832,7 +4832,7 @@ theorem toMeasureOfZeroLE_apply
 
 中文:
 定理 toMeasureOfZeroLE_apply
-  条件: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j)
+  条件: (hi : 0 <=[i] s) (hi₁ : 可测集 i) (hj₁ : 可测集 j)
   证明: by
   simp_rw [toMeasureOfZeroLE, Measure.ofMeasurable_apply _ hj₁, toMeasureOfZeroLE',
     s.restrict_apply hi₁ hj₁, Set.inter_comm]
@@ -4856,7 +4856,7 @@ theorem toMeasureOfZeroLE_real_apply
 
 中文:
 定理 toMeasureOfZeroLE_real_apply
-  结论: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i)
+  结论: (hi : 0 <=[i] s) (hi₁ : 可测集 i)
   证明: by
   simp [measureReal_def, toMeasureOfZeroLE_apply, hj₁]
 
@@ -4877,7 +4877,7 @@ definition toMeasureOfLEZero
 
 中文:
 定义 toMeasureOfLEZero
-  签名: (s : SignedMeasure α) (i : Set α) (hi₁ : MeasurableSet i) (hi₂ : s <=[i] 0)
+  签名: (s : 符号测度 α) (i : 集合 α) (hi₁ : 可测集 i) (hi₂ : s <=[i] 0)
   定义体: toMeasureOfZeroLE (-s) i hi₁ @neg_zero (VectorMeasure α Real) _ ▸ neg_le_neg _ _ hi₁ hi₂
 
 Depends on / 依赖: VectorMeasure, neg_le_neg, neg_zero, toMeasureOfZeroLE
@@ -4897,7 +4897,7 @@ theorem toMeasureOfLEZero_apply
 
 中文:
 定理 toMeasureOfLEZero_apply
-  条件: (hi : s <=[i] 0) (hi₁ : MeasurableSet i) (hj₁ : MeasurableSet j)
+  条件: (hi : s <=[i] 0) (hi₁ : 可测集 i) (hj₁ : 可测集 j)
   证明: by
   simp [toMeasureOfLEZero, toMeasureOfZeroLE_apply _ _ _ hj₁]
 
@@ -4921,7 +4921,7 @@ theorem toMeasureOfLEZero_real_apply
 
 中文:
 定理 toMeasureOfLEZero_real_apply
-  结论: (hi : s <=[i] 0) (hi₁ : MeasurableSet i)
+  结论: (hi : s <=[i] 0) (hi₁ : 可测集 i)
   证明: by
   simp [measureReal_def, toMeasureOfLEZero_apply _ hi hi₁ hj₁]
 
@@ -4944,7 +4944,7 @@ instance toMeasureOfZeroLE_finite
 
 中文:
 实例 toMeasureOfZeroLE_finite
-  签名: (hi : 0 <=[i] s) (hi₁ : MeasurableSet i)
+  签名: (hi : 0 <=[i] s) (hi₁ : 可测集 i)
   定义体: by
     rw [toMeasureOfZeroLE_apply s hi hi₁ MeasurableSet.univ]
     exact ENNReal.coe_lt_top
@@ -4969,7 +4969,7 @@ instance toMeasureOfLEZero_finite
 
 中文:
 实例 toMeasureOfLEZero_finite
-  签名: (hi : s <=[i] 0) (hi₁ : MeasurableSet i)
+  签名: (hi : s <=[i] 0) (hi₁ : 可测集 i)
   定义体: by
     rw [toMeasureOfLEZero_apply s hi hi₁ MeasurableSet.univ]
     exact ENNReal.coe_lt_top
@@ -4994,7 +4994,7 @@ theorem toMeasureOfZeroLE_toSignedMeasure
 
 中文:
 定理 toMeasureOfZeroLE_toSignedMeasure
-  条件: (hs : 0 <=[Set.univ] s)
+  条件: (hs : 0 <=[集合.univ] s)
   证明: by
   ext i hi
   simp [hi, toMeasureOfZeroLE_apply _ _ _ hi, measureReal_def]
@@ -5018,7 +5018,7 @@ theorem toMeasureOfLEZero_toSignedMeasure
 
 中文:
 定理 toMeasureOfLEZero_toSignedMeasure
-  条件: (hs : s <=[Set.univ] 0)
+  条件: (hs : s <=[集合.univ] 0)
   证明: by
   ext i hi
   simp [hi, toMeasureOfLEZero_apply _ _ _ hi, measureReal_def]
@@ -5108,7 +5108,7 @@ theorem toSignedMeasure_restrict_eq_restrict_toSignedMeasure
 
 中文:
 定理 toSignedMeasure_restrict_eq_restrict_toSignedMeasure
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: by
   ext A hA
   simp [VectorMeasure.restrict_apply, hA, hs]

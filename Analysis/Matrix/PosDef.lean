@@ -164,7 +164,7 @@ lemma eigenvalues_conjTranspose_mul_self_nonneg
 
 中文:
 引理 eigenvalues_conjTranspose_mul_self_nonneg
-  条件: (A : Matrix m n 𝕜) [DecidableEq n] (i : n)
+  条件: (A : 矩阵 m n 𝕜) [DecidableEq n] (i : n)
   证明: (posSemidef_conjTranspose_mul_self _).eigenvalues_nonneg _
 
 Depends on / 依赖: eigenvalues_nonneg, posSemidef_conjTranspose_mul_self
@@ -183,7 +183,7 @@ lemma eigenvalues_self_mul_conjTranspose_nonneg
 
 中文:
 引理 eigenvalues_self_mul_conjTranspose_nonneg
-  条件: (A : Matrix m n 𝕜) [DecidableEq m] (i : m)
+  条件: (A : 矩阵 m n 𝕜) [DecidableEq m] (i : m)
   证明: (posSemidef_self_mul_conjTranspose _).eigenvalues_nonneg _
 
 Depends on / 依赖: eigenvalues_nonneg, posSemidef_self_mul_conjTranspose
@@ -309,7 +309,7 @@ definition PosSemidef.preInnerProductSpace
 
 中文:
 定义 PosSemidef.preInnerProductSpace
-  签名: {M : Matrix n n 𝕜} (hM : M.PosSemidef)
+  签名: {M : 矩阵 n n 𝕜} (hM : M.PosSemidef)
   定义体: (M *ᵥ y) ⬝ᵥ star x
   conj_inner_symm x y := by
     rw [dotProduct_comm]; rw [star_dotProduct]; rw [starRingEnd_apply]; rw [star_star]; rw [star_mulVec]; rw [dotProduct_comm (M *ᵥ y)]; rw [dotProduct_mulVec]; rw [hM.isHermitian.eq]
@@ -336,7 +336,7 @@ abbreviation toSeminormedAddCommGroup
 
 中文:
 缩写 toSeminormedAddCommGroup
-  签名: (M : Matrix n n 𝕜) (hM : M.PosSemidef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosSemidef)
   定义体: @InnerProductSpace.Core.toSeminormedAddCommGroup _ _ _ _ _ hM.preInnerProductSpace
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.Core.toSeminormedAddCommGroup, hM.preInnerProductSpace, preInnerProductSpace, toSeminormedAddCommGroup
@@ -361,7 +361,7 @@ abbreviation toNormedAddCommGroup
 
 中文:
 缩写 toNormedAddCommGroup
-  签名: (M : Matrix n n 𝕜) (hM : M.PosDef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosDef)
   定义体: @InnerProductSpace.Core.toNormedAddCommGroup _ _ _ _ _
   { __ := hM.posSemidef.preInnerProductSpace
     definite x (hx : _ ⬝ᵥ _ = 0) := by
@@ -390,7 +390,7 @@ definition toInnerProductSpace
 
 中文:
 定义 toInnerProductSpace
-  签名: (M : Matrix n n 𝕜) (hM : M.PosSemidef)
+  签名: (M : 矩阵 n n 𝕜) (hM : M.PosSemidef)
   定义体: InnerProductSpace.ofCore _
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.ofCore, ofCore

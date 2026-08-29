@@ -128,7 +128,7 @@ theorem isAlmostPrime_one_iff
 
 中文:
 定理 isAlmostPrime_one_iff
-  结论: IsAlmostPrime 1 n ↔ n.Prime
+  结论: IsAlmostPrime 1 n ↔ n.素
   证明: by
   constructor
   · exact fun h => ArithmeticFunction.cardFactors_eq_one_iff_prime.mp h.2
@@ -152,8 +152,8 @@ theorem Prime.isAlmostPrime_one
   simpa using isAlmostPrime_one_iff.mpr hp
 
 中文:
-定理 Prime.isAlmostPrime_one
-  条件: (hp : p.Prime)
+定理 素.isAlmostPrime_one
+  条件: (hp : p.素)
   结论: IsAlmostPrime 1 p
   证明: by
   simpa using isAlmostPrime_one_iff.mpr hp
@@ -241,8 +241,8 @@ theorem Prime.mul_isAlmostPrime_two
   simpa using hp.isAlmostPrime_one.mul hq.isAlmostPrime_one
 
 中文:
-定理 Prime.mul_isAlmostPrime_two
-  条件: (hp : p.Prime) (hq : q.Prime)
+定理 素.mul_isAlmostPrime_two
+  条件: (hp : p.素) (hq : q.素)
   证明: by
   simpa using hp.isAlmostPrime_one.mul hq.isAlmostPrime_one
 
@@ -263,8 +263,8 @@ theorem Prime.sq_isAlmostPrime_two
   simpa [pow_two] using hp.mul_isAlmostPrime_two hp
 
 中文:
-定理 Prime.sq_isAlmostPrime_two
-  条件: (hp : p.Prime)
+定理 素.sq_isAlmostPrime_two
+  条件: (hp : p.素)
   结论: IsAlmostPrime 2 (p ^ 2)
   证明: by
   simpa [pow_two] using hp.mul_isAlmostPrime_two hp

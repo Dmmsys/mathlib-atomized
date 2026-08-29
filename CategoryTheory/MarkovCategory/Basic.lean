@@ -62,9 +62,9 @@ class MarkovCategory
     - discard_natural({X Y : C} (f : X ⟶ Y)) : f ≫ ε[Y] = ε[X]
 
 中文:
-类 MarkovCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
-  继承: CopyDiscardCategory C
+类 Markov范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
+  继承: 余pyDiscard范畴 C
   公理与运算 (1 个):
     - discard_natural({X Y : C} (f : X ⟶ Y)) : f ≫ ε[Y] = ε[X]
 -/
@@ -111,7 +111,7 @@ definition isTerminalUnit
 
 中文:
 定义 isTerminalUnit
-  签名: : IsTerminal (𝟙_ C)
+  签名: : 是终止 (𝟙_ C)
   定义体: IsTerminal.ofUniqueHom _ eq_discard
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, eq_discard, ofUniqueHom

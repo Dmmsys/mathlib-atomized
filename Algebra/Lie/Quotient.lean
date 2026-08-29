@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasQuotient M (LieSubmodule R L M)
+  签名: 有商 M (Lie子模 R L M)
   定义体: ⟨fun N => M ⧸ N.toSubmodule⟩
 
 Depends on / 依赖: N.toSubmodule, toSubmodule
@@ -74,7 +74,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (M ⧸ N)
+  签名: : 加法交换群 (M ⧸ N)
   定义体: Submodule.Quotient.addCommGroup _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.addCommGroup, addCommGroup
@@ -92,7 +92,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: {S : 类型} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  签名: {S : 类型} [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   定义体: Submodule.Quotient.module' _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.module, module
@@ -111,7 +111,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module R (M ⧸ N)
+  签名: : 模 R (M ⧸ N)
   定义体: Submodule.Quotient.module _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.module, module
@@ -129,7 +129,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: {S : 类型} [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  签名: {S : 类型} [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   定义体: Submodule.Quotient.isCentralScalar _
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.isCentralScalar, isCentralScalar
@@ -149,7 +149,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (M ⧸ N)
+  签名: : 可居 (M ⧸ N)
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited (M ⧸ N) :=
@@ -208,7 +208,7 @@ theorem is_quotient_mk
 中文:
 定理 is_quotient_mk
   条件: (m : M)
-  结论: Quotient.mk'' m = (mk m : M ⧸ N)
+  结论: 商.mk'' m = (mk m : M ⧸ N)
   证明: rfl
 -/
 theorem is_quotient_mk (m : M) : Quotient.mk'' m = (mk m : M ⧸ N) :=
@@ -227,7 +227,7 @@ definition lieSubmoduleInvariant
 
 中文:
 定义 lieSubmoduleInvariant
-  签名: : L ->ₗ[R] Submodule.compatibleMaps N.toSubmodule N.toSubmodule
+  签名: : L ->ₗ[R] 子模.compatibleMaps N.toSubmodule N.toSubmodule
   定义体: LinearMap.codRestrict _ (LieModule.toEnd R L M) fun _ _ => N.lie_mem
 
 Depends on / 依赖: LieModule, LieModule.toEnd, LinearMap, LinearMap.codRestrict, N.lie_mem, codRestrict, lie_mem
@@ -252,7 +252,7 @@ Submodule.linearMap_qext _ LinearMap.ext fun _ => congr_arg mk lie_lie _ _ _ }
 
 中文:
 定义 actionAsEndoMap
-  签名: : L ->ₗ⁅R⁆ Module.End R (M ⧸ N)
+  签名: : L ->ₗ⁅R⁆ 模.End R (M ⧸ N)
   定义体: { LinearMap.comp (Submodule.mapQLinear (N : Submodule R M) (N : Submodule R M))
       lieSubmoduleInvariant with
     map_lie' := fun {_ _} =>
@@ -294,7 +294,7 @@ instance lieQuotientLieRingModule
 
 中文:
 实例 lieQuotientLieRingModule
-  签名: : LieRingModule L (M ⧸ N)
+  签名: : Lie环模 L (M ⧸ N)
   定义体: { LieRingModule.compLieHom _ (actionAsEndoMap N) with bracket := Bracket.bracket }
 
 Depends on / 依赖: Bracket, Bracket.bracket, LieRingModule, LieRingModule.compLieHom, actionAsEndoMap, bracket, compLieHom
@@ -312,7 +312,7 @@ instance lieQuotientLieModule
 
 中文:
 实例 lieQuotientLieModule
-  签名: : LieModule R L (M ⧸ N)
+  签名: : Lie模 R L (M ⧸ N)
   定义体: LieModule.compLieHom _ (actionAsEndoMap N)
 
 Depends on / 依赖: LieModule, LieModule.compLieHom, actionAsEndoMap, compLieHom
@@ -401,7 +401,7 @@ instance lieQuotientLieRing
 
 中文:
 实例 lieQuotientLieRing
-  签名: : LieRing (L ⧸ I) where
+  签名: : Lie环 (L ⧸ I) where
   定义体: by
     induction x', y', z' using Quotient.inductionOn₃' with | _ x y z
     repeat'
@@ -462,7 +462,7 @@ instance lieQuotientLieAlgebra
 
 中文:
 实例 lieQuotientLieAlgebra
-  签名: : LieAlgebra R (L ⧸ I) where
+  签名: : Lie代数 R (L ⧸ I) where
   定义体: by
     induction x', y' using Quotient.inductionOn₂' with | _ x y
     repeat'
@@ -527,7 +527,7 @@ theorem surjective_mk'
 
 中文:
 定理 surjective_mk'
-  结论: Function.Surjective (mk' N)
+  结论: 函数.满射 (mk' N)
   证明: Quot.mk_surjective
 
 @[simp]
@@ -548,7 +548,7 @@ theorem range_mk'
 
 中文:
 定理 range_mk'
-  结论: LieModuleHom.range (mk' N) = ⊤
+  结论: Lie模态射.range (mk' N) = ⊤
   证明: by
   simp [LieModuleHom.range_eq_top]
 
@@ -567,7 +567,7 @@ instance isNoetherian
 
 中文:
 实例 isNoetherian
-  签名: [IsNoetherian R M]
+  签名: [是Noether R M]
   定义体: inferInstanceAs (IsNoetherian R (M ⧸ (N : Submodule R M)))
 
 Depends on / 依赖: IsNoetherian, Submodule

@@ -68,7 +68,7 @@ definition taylorCoeffWithin
 
 中文:
 定义 taylorCoeffWithin
-  签名: (f : 实数 -> E) (k : 自然数) (s : Set 实数) (x₀ : 实数)
+  签名: (f : 实数 -> E) (k : 自然数) (s : 集合 实数) (x₀ : 实数)
   定义体: (k ! : Real)⁻¹ • iteratedDerivWithin k f s x₀
 
 Depends on / 依赖: iteratedDerivWithin
@@ -88,7 +88,7 @@ definition taylorWithin
 
 中文:
 定义 taylorWithin
-  签名: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ : 实数)
+  签名: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ : 实数)
   定义体: (Finset.range (n + 1)).sum fun k =>
     PolynomialModule.comp (Polynomial.X - Polynomial.C x₀)
       (PolynomialModule.single Real k (taylorCoeffWithin f k s x₀))
@@ -110,7 +110,7 @@ definition taylorWithinEval
 
 中文:
 定义 taylorWithinEval
-  签名: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ x : 实数)
+  签名: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ x : 实数)
   定义体: PolynomialModule.eval x (taylorWithin f n s x₀)
 
 Depends on / 依赖: PolynomialModule, PolynomialModule.eval, taylorWithin
@@ -132,7 +132,7 @@ theorem taylorWithin_succ
 
 中文:
 定理 taylorWithin_succ
-  条件: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ : 实数)
+  条件: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ : 实数)
   证明: by
   dsimp only [taylorWithin]
   rw [Finset.sum_range_succ]
@@ -165,7 +165,7 @@ theorem taylorWithinEval_succ
 
 中文:
 定理 taylorWithinEval_succ
-  条件: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ x : 实数)
+  条件: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ x : 实数)
   证明: by
   simp_rw [taylorWithinEval, taylorWithin_succ, map_add, PolynomialModule.comp_eval]
   congr
@@ -202,7 +202,7 @@ theorem taylor_within_zero_eval
 
 中文:
 定理 taylor_within_zero_eval
-  条件: (f : 实数 -> E) (s : Set 实数) (x₀ x : 实数)
+  条件: (f : 实数 -> E) (s : 集合 实数) (x₀ x : 实数)
   证明: by
   dsimp only [taylorWithinEval]
   dsimp only [taylorWithin]
@@ -233,7 +233,7 @@ theorem taylorWithinEval_self
 
 中文:
 定理 taylorWithinEval_self
-  条件: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ : 实数)
+  条件: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ : 实数)
   证明: by
   induction n with
   | zero => exact taylor_within_zero_eval _ _ _ _
@@ -262,7 +262,7 @@ theorem taylor_within_apply
 
 中文:
 定理 taylor_within_apply
-  条件: (f : 实数 -> E) (n : 自然数) (s : Set 实数) (x₀ x : 实数)
+  条件: (f : 实数 -> E) (n : 自然数) (s : 集合 实数) (x₀ x : 实数)
   证明: by
   induction n with
   | zero => simp
@@ -296,7 +296,7 @@ theorem continuousOn_taylorWithinEval
 
 中文:
 定理 continuousOn_taylorWithinEval
-  结论: {f : 实数 -> E} {x : 实数} {n : 自然数} {s : Set 实数}
+  结论: {f : 实数 -> E} {x : 实数} {n : 自然数} {s : 集合 实数}
   证明: by
   simp_rw [taylor_within_apply]
   refine continuousOn_finsetSum (Finset.range (n + 1)) fun i hi => ?_
@@ -363,7 +363,7 @@ theorem hasDerivWithinAt_taylor_coeff_within
 
 中文:
 定理 hasDerivWithinAt_taylor_coeff_within
-  结论: {f : 实数 -> E} {x y : 实数} {k : 自然数} {s t : Set 实数}
+  结论: {f : 实数 -> E} {x y : 实数} {k : 自然数} {s t : 集合 实数}
   证明: by
   replace hf :
     HasDerivWithinAt (iteratedDerivWithin (k + 1) f s) (iteratedDerivWithin (k + 2) f s y) t y := by
@@ -414,7 +414,7 @@ theorem hasDerivWithinAt_taylorWithinEval
 
 中文:
 定理 hasDerivWithinAt_taylorWithinEval
-  结论: {f : 实数 -> E} {x y : 实数} {n : 自然数} {s s' : Set 实数}
+  结论: {f : 实数 -> E} {x y : 实数} {n : 自然数} {s s' : 集合 实数}
   证明: by
   have hs'_unique : UniqueDiffWithinAt Real s' y :=
     UniqueDiffWithinAt.mono_nhds (hs_unique _ (h hy)) (nhdsWithin_le_iff.mpr hs')
@@ -525,7 +525,7 @@ theorem hasDerivAt_taylorWithinEval_succ
 
 中文:
 定理 hasDerivAt_taylorWithinEval_succ
-  条件: {x₀ x : 实数} {s : Set 实数} (f : 实数 -> E) (n : 自然数)
+  条件: {x₀ x : 实数} {s : 集合 实数} (f : 实数 -> E) (n : 自然数)
   证明: by
   change HasDerivAt (fun x => taylorWithinEval f _ s x₀ x) _ _
   simp_rw [taylor_within_apply]
@@ -569,7 +569,7 @@ theorem taylor_isLittleO
 
 中文:
 定理 taylor_isLittleO
-  结论: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : Set 实数}
+  结论: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : 集合 实数}
   证明: by
   induction n generalizing f with
   | zero =>
@@ -614,7 +614,7 @@ theorem taylor_isLittleO_univ
 
 中文:
 定理 taylor_isLittleO_univ
-  条件: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} (hf : ContDiff 实数 n f)
+  条件: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} (hf : 连续可微 实数 n f)
   证明: by
   simpa using taylor_isLittleO convex_univ (mem_univ x₀) hf.contDiffOn
 
@@ -639,7 +639,7 @@ theorem taylor_tendsto
 
 中文:
 定理 taylor_tendsto
-  结论: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : Set 实数}
+  结论: {f : 实数 -> E} {x₀ : 实数} {n : 自然数} {s : 集合 实数}
   证明: by
   have h_isLittleO := (taylor_isLittleO hs hx₀s hf).norm_norm
   rw [Asymptotics.isLittleO_iff_tendsto] at h_isLittleO
@@ -674,8 +674,8 @@ theorem Real.taylor_tendsto
   simp [div_eq_inv_mul]
 
 中文:
-定理 Real.taylor_tendsto
-  结论: {f : 实数 -> 实数} {x₀ : 实数} {n : 自然数} {s : Set 实数}
+定理 实数.taylor_tendsto
+  结论: {f : 实数 -> 实数} {x₀ : 实数} {n : 自然数} {s : 集合 实数}
   证明: by
   convert _root_.taylor_tendsto hs hx₀s hf with x
   simp [div_eq_inv_mul]
@@ -934,7 +934,7 @@ theorem exists_taylor_mean_remainder_bound
   let g : Real -> Real := fun y => ‖iteratedDerivWithin (n + 1) f (Icc a b)
 
 中文:
-定理 exists_taylor_mean_remainder_bound
+定理 存在_taylor_mean_remainder_bound
   结论: {f : 实数 -> E} {a b : 实数} {n : 自然数} (hab : a <= b)
   证明: by
   rcases eq_or_lt_of_le hab with (rfl | h)
@@ -978,7 +978,7 @@ theorem taylor_integral_remainder_aux
 
 中文:
 定理 taylor_integral_remainder_aux
-  结论: [NormedAddCommGroup F] [NormedSpace 实数 F]
+  结论: [赋范交换加群 F] [赋范空间 实数 F]
   证明: by
   rcases eq_or_ne x₀ x with rfl | this
   · simp
@@ -1105,7 +1105,7 @@ theorem taylor_integral_remainder
 
 中文:
 定理 taylor_integral_remainder
-  结论: [NormedAddCommGroup F] [NormedSpace 实数 F]
+  结论: [赋范交换加群 F] [赋范空间 实数 F]
   证明: by
   rcases eq_or_ne x₀ x with rfl | this
   · simp

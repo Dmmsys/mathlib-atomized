@@ -53,7 +53,7 @@ abbreviation IsSmoothAt
 
 中文:
 缩写 IsSmoothAt
-  签名: (p : Ideal A) [p.IsPrime]
+  签名: (p : 理想 A) [p.是素]
   定义体: Algebra.FormallySmooth R (Localization.AtPrime p)
 
 Depends on / 依赖: Algebra, Algebra.FormallySmooth, AtPrime, FormallySmooth, Localization, Localization.AtPrime
@@ -71,7 +71,7 @@ definition smoothLocus
 
 中文:
 定义 smoothLocus
-  签名: : Set (PrimeSpectrum A)
+  签名: : 集合 (素谱 A)
   定义体: { p | IsSmoothAt R p.asIdeal }
 
 Depends on / 依赖: IsSmoothAt, asIdeal, p.asIdeal
@@ -144,7 +144,7 @@ lemma basicOpen_subset_smoothLocus_iff
 
 中文:
 引理 basicOpen_subset_smoothLocus_iff
-  条件: [FinitePresentation R A] {f : A}
+  条件: [有限呈现 R A] {f : A}
   证明: by
   rw [smoothLocus_eq_compl_support_inter]; rw [Set.subset_inter_iff]; rw [Set.subset_compl_comm]; rw [PrimeSpectrum.basicOpen_eq_zeroLocus_compl]; rw [compl_compl]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [Algebra.formallySmooth_iff]; rw [iff_comm]; rw [and_comm]
   congr! 1
@@ -178,7 +178,7 @@ lemma basicOpen_subset_smoothLocus_iff_smooth
 
 中文:
 引理 basicOpen_subset_smoothLocus_iff_smooth
-  条件: [FinitePresentation R A] {f : A}
+  条件: [有限呈现 R A] {f : A}
   证明: by
   have : FinitePresentation A (Localization.Away f) := IsLocalization.Away.finitePresentation f
   rw [basicOpen_subset_smoothLocus_iff]
@@ -206,7 +206,7 @@ lemma smoothLocus_eq_univ_iff
 
 中文:
 引理 smoothLocus_eq_univ_iff
-  条件: [FinitePresentation R A]
+  条件: [有限呈现 R A]
   证明: by
   have := IsLocalization.atUnits A (.powers 1) (S := Localization.Away (1 : A)) (by simp)
   rw [Algebra.FormallySmooth.iff_of_equiv (this.restrictScalars R)]; rw [← basicOpen_subset_smoothLocus_iff]
@@ -233,8 +233,8 @@ lemma smoothLocus_eq_univ
 
 中文:
 引理 smoothLocus_eq_univ
-  条件: [Smooth R A]
-  结论: smoothLocus R A = Set.univ
+  条件: [光滑 R A]
+  结论: smoothLocus R A = 集合.univ
   证明: by
   rw [smoothLocus_eq_univ_iff]
   infer_instance
@@ -261,7 +261,7 @@ lemma smoothLocus_comap_of_isLocalization
 
 中文:
 引理 smoothLocus_comap_of_isLocalization
-  结论: {Af : 类型} [CommRing Af] [Algebra A Af] [Algebra R Af]
+  结论: {Af : 类型} [交换环 Af] [代数 A Af] [代数 R Af]
   证明: by
   ext p
   let q := PrimeSpectrum.comap (algebraMap A Af) p
@@ -303,8 +303,8 @@ lemma isOpen_smoothLocus
 
 中文:
 引理 isOpen_smoothLocus
-  条件: [FinitePresentation R A]
-  结论: IsOpen (smoothLocus R A)
+  条件: [有限呈现 R A]
+  结论: 是开集 (smoothLocus R A)
   证明: by
   rw [isOpen_iff_forall_mem_open]
   intro x hx
@@ -355,8 +355,8 @@ lemma IsSmoothAt.exists_notMem_smooth
   rwa [basicOpen_subset_smoothLocus_iff] at hf
 
 中文:
-引理 IsSmoothAt.exists_notMem_smooth
-  结论: [FinitePresentation R A] (p : Ideal A) [p.IsPrime]
+引理 IsSmoothAt.存在_notMem_smooth
+  结论: [有限呈现 R A] (p : 理想 A) [p.是素]
   证明: by
   obtain ⟨_, ⟨_, ⟨f, rfl⟩, rfl⟩, hxf, hf⟩ :=
     isBasis_basic_opens.exists_subset_of_mem_open ‹⟨p, ‹_›⟩ in smoothLocus R A› isOpen_smoothLocus

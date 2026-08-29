@@ -43,8 +43,8 @@ lemma CompletelyRegularSpace.exists_BCNN
     simpa
 
 中文:
-引理 CompletelyRegularSpace.exists_BCNN
-  结论: {X : 类型} [TopologicalSpace X] [CompletelyRegularSpace X]
+引理 余mpletelyRegular空间.存在_BCNN
+  结论: {X : 类型} [拓扑空间 X] [余mpletelyRegular空间 X]
   证明: by
   obtain ⟨g, g_cont, gx_zero, g_one_on_K⟩ :=
     CompletelyRegularSpace.completely_regular x K K_closed x_notin_K
@@ -103,7 +103,7 @@ lemma injective_diracProba
 
 中文:
 引理 injective_diracProba
-  条件: {X : 类型} [MeasurableSpace X] [MeasurableSpace.SeparatesPoints X]
+  条件: {X : 类型} [可测空间 X] [可测空间.SeparatesPoints X]
   证明: by
   intro x y x_eq_y
   simpa [diracProba, dirac_eq_dirac_iff] using congr(ProbabilityMeasure.toMeasure $x_eq_y)
@@ -125,7 +125,7 @@ lemma diracProba_toMeasure_apply'
 
 中文:
 引理 diracProba_toMeasure_apply'
-  条件: (x : X) {A : Set X} (A_mble : MeasurableSet A)
+  条件: (x : X) {A : 集合 X} (A_mble : 可测集 A)
   证明: Measure.dirac_apply' x A_mble
 -/
 @[simp] lemma diracProba_toMeasure_apply' (x : X) {A : Set X} (A_mble : MeasurableSet A) :
@@ -141,7 +141,7 @@ lemma diracProba_toMeasure_apply_of_mem
 
 中文:
 引理 diracProba_toMeasure_apply_of_mem
-  条件: {x : X} {A : Set X} (x_in_A : x in A)
+  条件: {x : X} {A : 集合 X} (x_in_A : x in A)
   证明: Measure.dirac_apply_of_mem x_in_A
 -/
 @[simp] lemma diracProba_toMeasure_apply_of_mem {x : X} {A : Set X} (x_in_A : x in A) :
@@ -157,7 +157,7 @@ lemma diracProba_toMeasure_apply
 
 中文:
 引理 diracProba_toMeasure_apply
-  条件: [MeasurableSingletonClass X] (x : X) (A : Set X)
+  条件: [MeasurableSingleton类 X] (x : X) (A : 集合 X)
   证明: Measure.dirac_apply _ _
 -/
 @[simp] lemma diracProba_toMeasure_apply [MeasurableSingletonClass X] (x : X) (A : Set X) :
@@ -180,7 +180,7 @@ lemma continuous_diracProba
 
 中文:
 引理 continuous_diracProba
-  结论: Continuous (fun (x : X) => diracProba x)
+  结论: 连续 (fun (x : X) => diracProba x)
   证明: by
   rw [continuous_iff_continuousAt]
   apply fun x => ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto.mpr fun f => ?_
@@ -214,7 +214,7 @@ lemma not_tendsto_diracProba_of_not_tendsto
 
 中文:
 引理 not_tendsto_diracProba_of_not_tendsto
-  结论: [CompletelyRegularSpace X] {x : X} (L : Filter X)
+  结论: [余mpletelyRegular空间 X] {x : X} (L : 滤子 X)
   证明: by
   obtain ⟨U, U_nhds, hU⟩ : exists U, U in 𝓝 x ∧ existsᶠ x in L, x ∉ U := by
     contrapose! h
@@ -263,7 +263,7 @@ lemma tendsto_diracProba_iff_tendsto
 
 中文:
 引理 tendsto_diracProba_iff_tendsto
-  条件: [CompletelyRegularSpace X] {x : X} (L : Filter X)
+  条件: [余mpletelyRegular空间 X] {x : X} (L : 滤子 X)
   证明: by
   constructor
   · contrapose
@@ -312,7 +312,7 @@ lemma diracProba_diracProbaInverse
 
 中文:
 引理 diracProba_diracProbaInverse
-  结论: {X : 类型} [MeasurableSpace X]
+  结论: {X : 类型} [可测空间 X]
   证明: (mem_range.mp μ.prop).choose_spec
 -/
 @[simp] lemma diracProba_diracProbaInverse {X : Type*} [MeasurableSpace X]
@@ -332,7 +332,7 @@ lemma diracProbaInverse_eq
 
 中文:
 引理 diracProbaInverse_eq
-  结论: [T0Space X] {x : X} {μ : range (diracProba (X := X))}
+  结论: [T0空间 X] {x : X} {μ : range (diracProba (X := X))}
   证明: by
   apply injective_diracProba (X := X)
   simp only [← h]
@@ -358,7 +358,7 @@ definition diracProbaEquiv
 
 中文:
 定义 diracProbaEquiv
-  签名: [T0Space X]
+  签名: [T0空间 X]
   定义体: fun x => ⟨diracProba x, by exact mem_range_self x⟩
   invFun := diracProbaInverse
   left_inv x := by apply diracProbaInverse_eq; rfl
@@ -382,7 +382,7 @@ lemma diracProba_comp_diracProbaEquiv_symm_eq_val
 
 中文:
 引理 diracProba_comp_diracProbaEquiv_symm_eq_val
-  条件: [T0Space X]
+  条件: [T0空间 X]
   证明: by
   funext μ; simp [diracProbaEquiv]
 
@@ -407,7 +407,7 @@ lemma tendsto_diracProbaEquivSymm_iff_tendsto
 
 中文:
 引理 tendsto_diracProbaEquivSymm_iff_tendsto
-  结论: [T0Space X] [CompletelyRegularSpace X]
+  结论: [T0空间 X] [余mpletelyRegular空间 X]
   证明: by
   have key :=
     tendsto_diracProba_iff_tendsto (F.map diracProbaEquiv.symm) (x := diracProbaEquiv.symm μ)
@@ -438,7 +438,7 @@ lemma continuous_diracProbaEquiv
 
 中文:
 引理 continuous_diracProbaEquiv
-  条件: [T0Space X]
+  条件: [T0空间 X]
   证明: Continuous.subtype_mk continuous_diracProba mem_range_self
 -/
 lemma continuous_diracProbaEquiv [T0Space X] :
@@ -459,7 +459,7 @@ lemma continuous_diracProbaEquivSymm
 
 中文:
 引理 continuous_diracProbaEquivSymm
-  条件: [T0Space X] [CompletelyRegularSpace X]
+  条件: [T0空间 X] [余mpletelyRegular空间 X]
   证明: by
   apply continuous_iff_continuousAt.mpr
   intro μ
@@ -485,7 +485,7 @@ definition diracProbaHomeomorph
 
 中文:
 定义 diracProbaHomeomorph
-  签名: [T0Space X] [CompletelyRegularSpace X]
+  签名: [T0空间 X] [余mpletelyRegular空间 X]
   定义体: @Homeomorph.mk X _ _ _ diracProbaEquiv continuous_diracProbaEquiv continuous_diracProbaEquivSymm
 -/
 noncomputable def diracProbaHomeomorph [T0Space X] [CompletelyRegularSpace X] :
@@ -502,7 +502,7 @@ theorem isEmbedding_diracProba
 
 中文:
 定理 isEmbedding_diracProba
-  条件: [T0Space X] [CompletelyRegularSpace X]
+  条件: [T0空间 X] [余mpletelyRegular空间 X]
   证明: IsEmbedding.subtypeVal.comp diracProbaHomeomorph.isEmbedding
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.comp, diracProbaHomeomorph, diracProbaHomeomorph.isEmbedding, isEmbedding, subtypeVal

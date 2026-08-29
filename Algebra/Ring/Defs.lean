@@ -73,7 +73,7 @@ class Distrib
 中文:
 类 Distrib
   参数: (R : 类型)
-  继承: Mul R, Add R
+  继承: 乘法 R, 加法 R
   公理与运算 (2 个):
     - left_distrib : 对任意 a b c : R, a * (b + c) = a * b + a * c
     - right_distrib : 对任意 a b c : R, (a + b) * c = a * c + b * c
@@ -94,8 +94,8 @@ class LeftDistribClass
     - left_distrib : forall a b c : R, a * (b + c) = a * b + a * c
 
 中文:
-类 LeftDistribClass
-  参数: (R : 类型) [Mul R] [Add R]
+类 LeftDistrib类
+  参数: (R : 类型) [乘法 R] [加法 R]
   公理与运算 (1 个):
     - left_distrib : 对任意 a b c : R, a * (b + c) = a * b + a * c
 -/
@@ -113,8 +113,8 @@ class RightDistribClass
     - right_distrib : forall a b c : R, (a + b) * c = a * c + b * c
 
 中文:
-类 RightDistribClass
-  参数: (R : 类型) [Mul R] [Add R]
+类 RightDistrib类
+  参数: (R : 类型) [乘法 R] [加法 R]
   公理与运算 (1 个):
     - right_distrib : 对任意 a b c : R, (a + b) * c = a * c + b * c
 -/
@@ -143,7 +143,7 @@ alias mul_add := left_distrib
 
 中文:
 定理 left_distrib
-  条件: [Mul R] [Add R] [LeftDistribClass R] (a b c : R)
+  条件: [乘法 R] [加法 R] [LeftDistrib类 R] (a b c : R)
   证明: LeftDistribClass.left_distrib a b c
 
 alias mul_add := left_distrib
@@ -168,7 +168,7 @@ alias add_mul := right_distrib
 
 中文:
 定理 right_distrib
-  条件: [Mul R] [Add R] [RightDistribClass R] (a b c : R)
+  条件: [乘法 R] [加法 R] [RightDistrib类 R] (a b c : R)
   证明: RightDistribClass.right_distrib a b c
 
 alias add_mul := right_distrib
@@ -191,7 +191,7 @@ theorem distrib_three_right
 
 中文:
 定理 distrib_three_right
-  条件: [Mul R] [Add R] [RightDistribClass R] (a b c d : R)
+  条件: [乘法 R] [加法 R] [RightDistrib类 R] (a b c d : R)
   证明: by simp [right_distrib]
 
 Depends on / 依赖: right_distrib
@@ -223,9 +223,9 @@ class NonUnitalNonAssocSemiring
   (no additional axioms)
 
 中文:
-类 NonUnitalNonAssocSemiring
+类 非幺非结合半环
   参数: (α : 类型u)
-  继承: AddCommMonoid α, Distrib α, MulZeroClass α
+  继承: 加法交换幺半群 α, Distrib α, 乘零类 α
   (无附加公理)
 -/
 class NonUnitalNonAssocSemiring (α : Type u) extends AddCommMonoid α, Distrib α, MulZeroClass α
@@ -240,9 +240,9 @@ class NonUnitalSemiring
   (no additional axioms)
 
 中文:
-类 NonUnitalSemiring
+类 非幺半环
   参数: (α : 类型u)
-  继承: NonUnitalNonAssocSemiring α, SemigroupWithZero α
+  继承: 非幺非结合半环 α, 带零半群 α
   (无附加公理)
 -/
 class NonUnitalSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, SemigroupWithZero α
@@ -257,9 +257,9 @@ class NonAssocSemiring
   (no additional axioms)
 
 中文:
-类 NonAssocSemiring
+类 非结合半环
   参数: (α : 类型u)
-  继承: NonUnitalNonAssocSemiring α, MulZeroOneClass α, 
+  继承: 非幺非结合半环 α, 乘零幺类 α, 
   (无附加公理)
 -/
 class NonAssocSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, MulZeroOneClass α,
@@ -275,9 +275,9 @@ class NonUnitalNonAssocRing
   (no additional axioms)
 
 中文:
-类 NonUnitalNonAssocRing
+类 非幺非结合环
   参数: (α : 类型u)
-  继承: AddCommGroup α, NonUnitalNonAssocSemiring α
+  继承: 加法交换群 α, 非幺非结合半环 α
   (无附加公理)
 -/
 class NonUnitalNonAssocRing (α : Type u) extends AddCommGroup α, NonUnitalNonAssocSemiring α
@@ -292,9 +292,9 @@ class NonUnitalRing
   (no additional axioms)
 
 中文:
-类 NonUnitalRing
+类 非幺环
   参数: (α : 类型)
-  继承: NonUnitalNonAssocRing α, NonUnitalSemiring α
+  继承: 非幺非结合环 α, 非幺半环 α
   (无附加公理)
 -/
 class NonUnitalRing (α : Type*) extends NonUnitalNonAssocRing α, NonUnitalSemiring α
@@ -309,9 +309,9 @@ class NonAssocRing
   (no additional axioms)
 
 中文:
-类 NonAssocRing
+类 非结合环
   参数: (α : 类型)
-  继承: NonUnitalNonAssocRing α, NonAssocSemiring α, 
+  继承: 非幺非结合环 α, 非结合半环 α, 
   (无附加公理)
 -/
 class NonAssocRing (α : Type*) extends NonUnitalNonAssocRing α, NonAssocSemiring α,
@@ -327,9 +327,9 @@ class Semiring
   (no additional axioms)
 
 中文:
-类 Semiring
+类 半环
   参数: (α : 类型u)
-  继承: AddCommMonoid α, MonoidWithZero α, NonUnitalSemiring α, 
+  继承: 加法交换幺半群 α, 带零幺半群 α, 非幺半环 α, 
   (无附加公理)
 -/
 class Semiring (α : Type u) extends AddCommMonoid α, MonoidWithZero α, NonUnitalSemiring α,
@@ -347,9 +347,9 @@ class Ring
   (no additional axioms)
 
 中文:
-类 Ring
+类 环
   参数: (R : 类型u)
-  继承: Semiring R, AddCommGroup R, AddGroupWithOne R
+  继承: 半环 R, 加法交换群 R, 加法带幺群 R
   (无附加公理)
 -/
 class Ring (R : Type u) extends Semiring R, AddCommGroup R, AddGroupWithOne R
@@ -364,7 +364,7 @@ instance [Semiring
   body: inferInstance
 
 中文:
-实例 [Semiring
+实例 [半环
   签名: α] : Distrib α
   定义体: inferInstance
 -/
@@ -378,8 +378,8 @@ instance [Semiring
   body: inferInstance
 
 中文:
-实例 [Semiring
-  签名: α] : MulZeroClass α
+实例 [半环
+  签名: α] : 乘零类 α
   定义体: inferInstance
 -/
 instance [Semiring α] : MulZeroClass α := inferInstance
@@ -392,8 +392,8 @@ instance [Semiring
   body: inferInstance
 
 中文:
-实例 [Semiring
-  签名: α] : MulZeroOneClass α
+实例 [半环
+  签名: α] : 乘零幺类 α
   定义体: inferInstance
 -/
 instance [Semiring α] : MulZeroOneClass α := inferInstance
@@ -419,7 +419,7 @@ theorem add_one_mul
 
 中文:
 定理 add_one_mul
-  条件: [RightDistribClass α] (a b : α)
+  条件: [RightDistrib类 α] (a b : α)
   结论: (a + 1) * b = a * b + b
   证明: by
   rw [add_mul]; rw [one_mul]
@@ -441,7 +441,7 @@ theorem mul_add_one
 
 中文:
 定理 mul_add_one
-  条件: [LeftDistribClass α] (a b : α)
+  条件: [LeftDistrib类 α] (a b : α)
   结论: a * (b + 1) = a * b + a
   证明: by
   rw [mul_add]; rw [mul_one]
@@ -463,7 +463,7 @@ theorem one_add_mul
 
 中文:
 定理 one_add_mul
-  条件: [RightDistribClass α] (a b : α)
+  条件: [RightDistrib类 α] (a b : α)
   结论: (1 + a) * b = b + a * b
   证明: by
   rw [add_mul]; rw [one_mul]
@@ -485,7 +485,7 @@ theorem mul_one_add
 
 中文:
 定理 mul_one_add
-  条件: [LeftDistribClass α] (a b : α)
+  条件: [LeftDistrib类 α] (a b : α)
   结论: a * (1 + b) = a + a * b
   证明: by
   rw [mul_add]; rw [mul_one]
@@ -634,7 +634,7 @@ theorem mul_boole
 
 中文:
 定理 mul_boole
-  条件: {α} [MulZeroOneClass α] (P : 命题) [Decidable P] (a : α)
+  条件: {α} [乘零幺类 α] (P : 命题) [可判定 P] (a : α)
   证明: by simp
 -/
 theorem mul_boole {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) :
@@ -650,7 +650,7 @@ theorem boole_mul
 
 中文:
 定理 boole_mul
-  条件: {α} [MulZeroOneClass α] (P : 命题) [Decidable P] (a : α)
+  条件: {α} [乘零幺类 α] (P : 命题) [可判定 P] (a : α)
   证明: by simp
 -/
 theorem boole_mul {α} [MulZeroOneClass α] (P : Prop) [Decidable P] (a : α) :
@@ -666,9 +666,9 @@ class NonUnitalNonAssocCommSemiring
   (no additional axioms)
 
 中文:
-类 NonUnitalNonAssocCommSemiring
+类 非幺非结合交换半环
   参数: (α : 类型u)
-  继承: NonUnitalNonAssocSemiring α, CommMagma α
+  继承: 非幺非结合半环 α, 交换原群 α
   (无附加公理)
 -/
 class NonUnitalNonAssocCommSemiring (α : Type u) extends NonUnitalNonAssocSemiring α, CommMagma α
@@ -685,9 +685,9 @@ class NonUnitalCommSemiring
   (no additional axioms)
 
 中文:
-类 NonUnitalCommSemiring
+类 非幺交换半环
   参数: (α : 类型u)
-  继承: NonUnitalSemiring α, CommSemigroup α
+  继承: 非幺半环 α, 交换半群 α
   (无附加公理)
 -/
 class NonUnitalCommSemiring (α : Type u) extends NonUnitalSemiring α, CommSemigroup α
@@ -702,9 +702,9 @@ class NonAssocCommSemiring
   (no additional axioms)
 
 中文:
-类 NonAssocCommSemiring
+类 非结合交换半环
   参数: (α : 类型u)
-  继承: NonAssocSemiring α, NonUnitalNonAssocCommSemiring α
+  继承: 非结合半环 α, 非幺非结合交换半环 α
   (无附加公理)
 -/
 class NonAssocCommSemiring (α : Type u)
@@ -720,9 +720,9 @@ class CommSemiring
   (no additional axioms)
 
 中文:
-类 CommSemiring
+类 交换半环
   参数: (R : 类型u)
-  继承: Semiring R, CommMonoid R
+  继承: 半环 R, 交换幺半群 R
   (无附加公理)
 -/
 class CommSemiring (R : Type u) extends Semiring R, CommMonoid R
@@ -840,8 +840,8 @@ class HasDistribNeg
     - mul_neg : forall x y : α, x * -y = -(x * y)
 
 中文:
-类 HasDistribNeg
-  参数: (α : 类型) [Mul α]
+类 有DistribNeg
+  参数: (α : 类型) [乘法 α]
   继承: InvolutiveNeg α
   公理与运算 (2 个):
     - neg_mul : 对任意 x y : α, -x * y = -(x * y)
@@ -1251,9 +1251,9 @@ class NonUnitalNonAssocCommRing
   (no additional axioms)
 
 中文:
-类 NonUnitalNonAssocCommRing
+类 非幺非结合交换环
   参数: (α : 类型u)
-  继承: NonUnitalNonAssocRing α, NonUnitalNonAssocCommSemiring α
+  继承: 非幺非结合环 α, 非幺非结合交换半环 α
   (无附加公理)
 -/
 class NonUnitalNonAssocCommRing (α : Type u)
@@ -1269,9 +1269,9 @@ class NonUnitalCommRing
   (no additional axioms)
 
 中文:
-类 NonUnitalCommRing
+类 非幺交换环
   参数: (α : 类型u)
-  继承: NonUnitalRing α, NonUnitalNonAssocCommRing α
+  继承: 非幺环 α, 非幺非结合交换环 α
   (无附加公理)
 -/
 class NonUnitalCommRing (α : Type u) extends NonUnitalRing α, NonUnitalNonAssocCommRing α
@@ -1286,9 +1286,9 @@ class NonAssocCommRing
   (no additional axioms)
 
 中文:
-类 NonAssocCommRing
+类 非结合交换环
   参数: (α : 类型u)
-  继承: NonAssocRing α, NonUnitalNonAssocCommRing α, NonAssocCommSemiring α
+  继承: 非结合环 α, 非幺非结合交换环 α, 非结合交换半环 α
   (无附加公理)
 -/
 class NonAssocCommRing (α : Type u)
@@ -1315,9 +1315,9 @@ class CommRing
   (no additional axioms)
 
 中文:
-类 CommRing
+类 交换环
   参数: (α : 类型u)
-  继承: Ring α, CommMonoid α
+  继承: 环 α, 交换幺半群 α
   (无附加公理)
 -/
 class CommRing (α : Type u) extends Ring α, CommMonoid α
@@ -1354,9 +1354,9 @@ class IsDomain
   (no additional axioms)
 
 中文:
-类 IsDomain
-  参数: (α : 类型u) [Semiring α]
-  继承: IsCancelMulZero α, Nontrivial α
+类 是整环
+  参数: (α : 类型u) [半环 α]
+  继承: 是乘零消去 α, 非平凡 α
   (无附加公理)
 -/
 class IsDomain (α : Type u) [Semiring α] : Prop extends IsCancelMulZero α, Nontrivial α

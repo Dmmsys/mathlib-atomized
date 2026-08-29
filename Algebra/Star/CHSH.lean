@@ -100,8 +100,8 @@ structure IsCHSHTuple
     - A₁B₁_commutes : A₁ * B₁ = B₁ * A₁
 
 中文:
-结构 IsCHSHTuple
-  参数: {R} [Monoid R] [StarMul R] (A₀ A₁ B₀ B₁ : R)
+结构 是CHSHTuple
+  参数: {R} [幺半群 R] [StarMul R] (A₀ A₁ B₀ B₁ : R)
   公理与运算 (12 个):
     - A₀_inv : A₀ ^ 2 = 1
     - A₁_inv : A₁ ^ 2 = 1
@@ -143,7 +143,7 @@ theorem CHSH_id
 
 中文:
 定理 CHSH_id
-  结论: [CommRing R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ ^ 2 = 1)
+  结论: [交换环 R] {A₀ A₁ B₀ B₁ : R} (A₀_inv : A₀ ^ 2 = 1) (A₁_inv : A₁ ^ 2 = 1)
   证明: by
   grind
 -/
@@ -169,7 +169,7 @@ theorem CHSH_inequality_of_comm
 
 中文:
 定理 CHSH_inequality_of_comm
-  结论: [CommRing R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
+  结论: [交换环 R] [偏序 R] [对合环 R] [StarOrdered环 R]
   证明: by
   let P := 2 - A₀ * B₀ - A₀ * B₁ - A₁ * B₀ + A₁ * B₁
   have i₁ : 0 <= P := by
@@ -250,7 +250,7 @@ theorem tsirelson_inequality
 
 中文:
 定理 tsirelson_inequality
-  结论: [Ring R] [PartialOrder R] [StarRing R] [StarOrderedRing R]
+  结论: [环 R] [偏序 R] [对合环 R] [StarOrdered环 R]
   证明: by
   -- abel will create `ℤ` multiplication. We will `simp` them away to `ℝ` multiplication.
   have M : forall (m : Int) (a : Real) (x : R), m • a • x = ((m : Real) * a) • x := fun m a x => by

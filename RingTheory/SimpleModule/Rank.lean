@@ -26,7 +26,7 @@ theorem isSimpleModule_iff_finrank_eq_one
 
 中文:
 定理 isSimpleModule_iff_finrank_eq_one
-  条件: {R M} [DivisionRing R] [AddCommGroup M] [Module R M]
+  条件: {R M} [除环 R] [加法交换群 M] [模 R M]
   证明: ⟨fun h => have := h.nontrivial; have ⟨v, hv⟩ := exists_ne (0 : M)
     (finrank_eq_one_iff_of_nonzero' v hv).mpr (IsSimpleModule.toSpanSingleton_surjective R hv),
   (isSimpleModule_iff ..).mpr ∘ is_simple_module_of_finrank_eq_one⟩

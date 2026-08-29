@@ -172,7 +172,7 @@ definition RootForm
 
 中文:
 定义 RootForm
-  签名: : LinearMap.BilinForm R M
+  签名: : 线性映射.BilinForm R M
   定义体: ∑ i, (P.coroot' i).smulRight (P.coroot' i)
 
 Depends on / 依赖: P.coroot, coroot, smulRight
@@ -190,7 +190,7 @@ definition CorootForm
 
 中文:
 定义 CorootForm
-  签名: : LinearMap.BilinForm R N
+  签名: : 线性映射.BilinForm R N
   定义体: P.flip.RootForm
 
 Depends on / 依赖: P.flip.RootForm, RootForm
@@ -759,7 +759,7 @@ omit [Module S N] [IsScalarTower S R N] in
 
 中文:
 定义 RootFormIn
-  签名: : LinearMap.BilinForm S (P.rootSpan S)
+  签名: : 线性映射.BilinForm S (P.rootSpan S)
   定义体: ∑ i, (P.coroot'In S i).smulRight (P.coroot'In S i)
 
 omit [Module S N] [IsScalarTower S R N] in
@@ -1224,7 +1224,7 @@ theorem exists_ge_zero_eq_rootForm
   apply FaithfulSM
 
 中文:
-定理 exists_ge_zero_eq_rootForm
+定理 存在_ge_zero_eq_rootForm
   条件: (x : M) (hx : x in span S (range P.root))
   证明: by
   refine ⟨(P.posRootForm S).posForm ⟨x, hx⟩ ⟨x, hx⟩, IsSumSq.nonneg ?_, by simp [posRootForm]⟩
@@ -1363,7 +1363,7 @@ lemma pairingIn_le_zero_iff
 
 中文:
 引理 pairingIn_le_zero_iff
-  条件: [NeZero (2 : R)] [IsDomain R] [Module.IsTorsionFree R M]
+  条件: [NeZero (2 : R)] [是整环 R] [模.是无挠 R M]
   证明: by
   rcases eq_or_ne (P.pairingIn S i j) 0 with hij | hij <;>
   rcases eq_or_ne (P.pairingIn S j i) 0 with hji | hji

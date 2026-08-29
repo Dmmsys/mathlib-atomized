@@ -58,7 +58,7 @@ definition dualIndepMatroid
 
 中文:
 定义 dualIndepMatroid
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: M.E
   Indep I := I subseteq M.E ∧ exists B, M.IsBase B ∧ Disjoint I B
   indep_empty := ⟨empty_subset M.E, M.exists_isBase.imp (fun _ hB => ⟨hB, empty_disjoint _⟩)⟩
@@ -135,7 +135,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: M.dualIndepMatroid.matroid
 
 Depends on / 依赖: M.dualIndepMatroid.matroid, dualIndepMatroid, matroid
@@ -155,7 +155,7 @@ theorem dual_indep_iff_exists'
   proof: Iff.rfl
 
 中文:
-定理 dual_indep_iff_exists'
+定理 dual_indep_iff_存在'
   结论: (M✶.Indep I) ↔ I subseteq M.E ∧ (存在 B, M.IsBase B ∧ Disjoint I B)
   证明: Iff.rfl
 
@@ -189,7 +189,7 @@ theorem dual_indep_iff_exists
   rw [dual_indep_iff_exists']; rw [and_iff_right hI]
 
 中文:
-定理 dual_indep_iff_exists
+定理 dual_indep_iff_存在
   条件: (hI : I subseteq M.E := by aesop_mat)
   证明: by
   rw [dual_indep_iff_exists']; rw [and_iff_right hI]
@@ -212,8 +212,8 @@ theorem dual_dep_iff_forall
     iff_true_intro Or.inl]
 
 中文:
-定理 dual_dep_iff_forall
-  结论: (M✶.Dep I) ↔ (对任意 B, M.IsBase B -> (I inter B).Nonempty) ∧ I subseteq M.E
+定理 dual_dep_iff_对任意
+  结论: (M✶.Dep I) ↔ (对任意 B, M.IsBase B -> (I inter B).非空) ∧ I subseteq M.E
   证明: by
   simp_rw [dep_iff, dual_indep_iff_exists', dual_ground, and_congr_left_iff, not_and,
     not_exists, not_and, not_disjoint_iff_nonempty_inter, Classical.imp_iff_right_iff,
@@ -236,7 +236,7 @@ instance dual_finite
 
 中文:
 实例 dual_finite
-  签名: [M.Finite]
+  签名: [M.有限]
   定义体: ⟨M.ground_finite⟩
 
 Depends on / 依赖: M.ground_finite, ground_finite
@@ -254,7 +254,7 @@ instance dual_nonempty
 
 中文:
 实例 dual_nonempty
-  签名: [M.Nonempty]
+  签名: [M.非空]
   定义体: ⟨M.ground_nonempty⟩
 
 Depends on / 依赖: M.ground_nonempty, ground_nonempty
@@ -355,7 +355,7 @@ theorem dual_dual
 
 中文:
 定理 dual_dual
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M✶✶ = M
   证明: ext_isBase rfl (fun B (h : B subseteq M.E) =>
     by rw [dual_isBase_iff, dual_isBase_iff, dual_ground, sdiff_sdiff_cancel_left h])
@@ -374,7 +374,7 @@ theorem dual_involutive
 
 中文:
 定理 dual_involutive
-  结论: Function.Involutive (dual : Matroid α -> Matroid α)
+  结论: 函数.对合 (dual : 拟阵 α -> 拟阵 α)
   证明: dual_dual
 
 Depends on / 依赖: dual_dual
@@ -391,7 +391,7 @@ theorem dual_injective
 
 中文:
 定理 dual_injective
-  结论: Function.Injective (dual : Matroid α -> Matroid α)
+  结论: 函数.单射 (dual : 拟阵 α -> 拟阵 α)
   证明: dual_involutive.injective
 
 Depends on / 依赖: dual_involutive, dual_involutive.injective, injective
@@ -410,7 +410,7 @@ theorem dual_inj
 
 中文:
 定理 dual_inj
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   结论: M₁✶ = M₂✶ ↔ M₁ = M₂
   证明: dual_injective.eq_iff
 -/
@@ -429,7 +429,7 @@ theorem eq_dual_comm
 
 中文:
 定理 eq_dual_comm
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   结论: M₁ = M₂✶ ↔ M₂ = M₁✶
   证明: by
   rw [← dual_inj]; rw [dual_dual]; rw [eq_comm]
@@ -450,7 +450,7 @@ theorem eq_dual_iff_dual_eq
 
 中文:
 定理 eq_dual_iff_dual_eq
-  条件: {M₁ M₂ : Matroid α}
+  条件: {M₁ M₂ : 拟阵 α}
   结论: M₁ = M₂✶ ↔ M₁✶ = M₂
   证明: dual_involutive.eq_iff.symm
 
@@ -516,7 +516,7 @@ theorem IsBase.compl_inter_isBasis_of_inter_isBasis
 
 中文:
 定理 IsBase.compl_inter_isBasis_of_inter_isBasis
-  条件: (hB : M.IsBase B) (hBX : M.IsBasis (B inter X) X)
+  条件: (hB : M.IsBase B) (hBX : M.是基 (B inter X) X)
   证明: by
   refine Indep.isBasis_of_forall_insert ?_ inter_subset_right (fun e he => ?_)
   · rw [dual_indep_iff_exists]
@@ -604,7 +604,7 @@ theorem ground_not_isBase
 
 中文:
 定理 ground_not_isBase
-  条件: (M : Matroid α) [h : RankPos M✶]
+  条件: (M : 拟阵 α) [h : RankPos M✶]
   结论: ¬M.IsBase M.E
   证明: by
   rwa [rankPos_iff, dual_isBase_iff, sdiff_empty] at h
@@ -666,7 +666,7 @@ abbreviation Coindep
 
 中文:
 缩写 Coindep
-  签名: (M : Matroid α) (I : Set α)
+  签名: (M : 拟阵 α) (I : 集合 α)
   定义体: M✶.Indep I
 -/
 abbrev Coindep (M : Matroid α) (I : Set α) : Prop := M✶.Indep I
@@ -757,7 +757,7 @@ theorem coindep_iff_exists'
     fun ⟨B, hB, _, hBX⟩ => ⟨B, hB, hBX.symm⟩⟩
 
 中文:
-定理 coindep_iff_exists'
+定理 coindep_iff_存在'
   结论: M.Coindep X ↔ (存在 B, M.IsBase B ∧ B subseteq M.E \ X) ∧ X subseteq M.E
   证明: by
   simp_rw [Coindep, dual_indep_iff_exists', and_comm (a := (_ : Set α) subseteq _), and_congr_left_iff,
@@ -783,7 +783,7 @@ theorem coindep_iff_exists
   rw [coindep_iff_exists']; rw [and_iff_left hX]
 
 中文:
-定理 coindep_iff_exists
+定理 coindep_iff_存在
   条件: (hX : X subseteq M.E := by aesop_mat)
   证明: by
   rw [coindep_iff_exists']; rw [and_iff_left hX]
@@ -855,7 +855,7 @@ theorem Coindep.exists_isBase_subset_compl
   proof: (coindep_iff_exists h.subset_ground).1 h
 
 中文:
-定理 Coindep.exists_isBase_subset_compl
+定理 Coindep.存在_isBase_subset_compl
   条件: (h : M.Coindep X)
   结论: 存在 B, M.IsBase B ∧ B subseteq M.E \ X
   证明: (coindep_iff_exists h.subset_ground).1 h
@@ -875,7 +875,7 @@ theorem Coindep.exists_subset_compl_isBase
   proof: coindep_iff_subset_compl_isBase.1 h
 
 中文:
-定理 Coindep.exists_subset_compl_isBase
+定理 Coindep.存在_subset_compl_isBase
   条件: (h : M.Coindep X)
   结论: 存在 B, M.IsBase B ∧ X subseteq M.E \ B
   证明: coindep_iff_subset_compl_isBase.1 h

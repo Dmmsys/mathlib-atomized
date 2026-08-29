@@ -40,7 +40,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: α] : SDiff (List α)
+  签名: α] : 对称差 (列表 α)
   定义体: ⟨List.diff⟩
 
 Depends on / 依赖: List.diff
@@ -58,7 +58,7 @@ definition getI
 
 中文:
 定义 getI
-  签名: [Inhabited α] (l : List α) (n : 自然数)
+  签名: [可居 α] (l : 列表 α) (n : 自然数)
   定义体: getD l n default
 -/
 def getI [Inhabited α] (l : List α) (n : Nat) : α :=
@@ -73,7 +73,7 @@ definition headI
 
 中文:
 定义 headI
-  签名: [Inhabited α]
+  签名: [可居 α]
 -/
 def headI [Inhabited α] : List α -> α
   | [] => default
@@ -90,8 +90,8 @@ theorem headI_nil
 
 中文:
 定理 headI_nil
-  条件: [Inhabited α]
-  结论: ([] : List α).headI = default
+  条件: [可居 α]
+  结论: ([] : 列表 α).headI = default
   证明: rfl
 -/
 @[simp] theorem headI_nil [Inhabited α] : ([] : List α).headI = default := rfl
@@ -106,7 +106,7 @@ theorem headI_cons
 
 中文:
 定理 headI_cons
-  条件: [Inhabited α] {h : α} {t : List α}
+  条件: [可居 α] {h : α} {t : 列表 α}
   结论: (h :: t).headI = h
   证明: rfl
 -/
@@ -121,7 +121,7 @@ definition getLastI
 
 中文:
 定义 getLastI
-  签名: [Inhabited α]
+  签名: [可居 α]
 -/
 def getLastI [Inhabited α] : List α -> α
   | [] => default
@@ -139,7 +139,7 @@ definition takeI
 
 中文:
 定义 takeI
-  签名: [Inhabited α] (n : 自然数) (l : List α)
+  签名: [可居 α] (n : 自然数) (l : 列表 α)
   定义体: takeD n l default
 -/
 def takeI [Inhabited α] (n : Nat) (l : List α) : List α :=
@@ -155,7 +155,7 @@ definition findM
 
 中文:
 定义 findM
-  签名: {α} {m : 类型u -> 类型v} [Alternative m] (tac : α -> m PUnit)
+  签名: {α} {m : 类型u -> 类型v} [Alternative m] (tac : α -> m 命题单元)
   定义体: List.firstM fun a => (tac a) > a
 
 Depends on / 依赖: List.firstM, firstM
@@ -195,7 +195,7 @@ definition orM
 
 中文:
 定义 orM
-  签名: : List (m 布尔) -> m 布尔
+  签名: : 列表 (m 布尔值) -> m 布尔值
   定义体: anyM id
 -/
 def orM : List (m Bool) -> m Bool :=
@@ -211,7 +211,7 @@ definition andM
 
 中文:
 定义 andM
-  签名: : List (m 布尔) -> m 布尔
+  签名: : 列表 (m 布尔值) -> m 布尔值
   定义体: allM id
 -/
 def andM : List (m Bool) -> m Bool :=
@@ -237,7 +237,7 @@ definition foldlIdxM
 
 中文:
 定义 foldlIdxM
-  签名: {α β} (f : 自然数 -> β -> α -> m β) (b : β) (as : List α)
+  签名: {α β} (f : 自然数 -> β -> α -> m β) (b : β) (as : 列表 α)
   定义体: as.foldlIdx
     (fun i ma b => do
       let a ← ma
@@ -267,7 +267,7 @@ definition foldrIdxM
 
 中文:
 定义 foldrIdxM
-  签名: {α β} (f : 自然数 -> α -> β -> m β) (b : β) (as : List α)
+  签名: {α β} (f : 自然数 -> α -> β -> m β) (b : β) (as : 列表 α)
   定义体: as.foldrIdx
     (fun i a mb => do
       let b ← mb
@@ -300,7 +300,7 @@ definition mapIdxMAux'
 
 中文:
 定义 mapIdxMAux'
-  签名: {α} (f : 自然数 -> α -> m PUnit)
+  签名: {α} (f : 自然数 -> α -> m 命题单元)
 -/
 def mapIdxMAux' {α} (f : Nat -> α -> m PUnit) : Nat -> List α -> m PUnit
   | _, [] => pure ⟨⟩
@@ -316,7 +316,7 @@ definition mapIdxM'
 
 中文:
 定义 mapIdxM'
-  签名: {α} (f : 自然数 -> α -> m PUnit) (as : List α)
+  签名: {α} (f : 自然数 -> α -> m 命题单元) (as : 列表 α)
   定义体: mapIdxMAux' f 0 as
 
 Depends on / 依赖: mapIdxMAux
@@ -337,7 +337,7 @@ definition Forall
   signature: (p : α -> Prop)
 
 中文:
-定义 Forall
+定义 任意
   签名: (p : α -> 命题)
 -/
 def Forall (p : α -> Prop) : List α -> Prop
@@ -358,7 +358,7 @@ definition permutationsAux2
 
 中文:
 定义 permutationsAux2
-  签名: (t : α) (ts : List α) (r : List β)
+  签名: (t : α) (ts : 列表 α) (r : 列表 β)
   定义体: permutationsAux2 t ts r ys (fun x : List α => f (y :: x))
     (y :: us, f (t :: y :: us) :: zs)
 
@@ -382,7 +382,7 @@ definition permutationsAux.rec
 
 中文:
 定义 permutationsAux.rec
-  签名: {C : List α -> List α -> Sort v} (H0 : 对任意 is, C [] is)
+  签名: {C : 列表 α -> 列表 α -> 类型层 v} (H0 : 对任意 is, C [] is)
 -/
 def permutationsAux.rec {C : List α -> List α -> Sort v} (H0 : forall is, C [] is)
     (H1 : forall t ts is, C ts (t :: is) -> C is [] -> C (t :: ts) is) : forall l₁ l₂, C l₁ l₂
@@ -403,7 +403,7 @@ definition permutationsAux
 
 中文:
 定义 permutationsAux
-  签名: : List α -> List α -> List (List α)
+  签名: : 列表 α -> 列表 α -> 列表 (列表 α)
   定义体: permutationsAux.rec (fun _ => []) fun t ts is IH1 IH2 =>
     foldr (fun y r => (permutationsAux2 t ts r y id).2) IH1 (is :: IH2)
 
@@ -423,7 +423,7 @@ definition permutations
 
 中文:
 定义 permutations
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: l :: permutationsAux l []
 
 Depends on / 依赖: permutationsAux
@@ -481,7 +481,7 @@ definition permutations'
 
 中文:
 定义 permutations'
-  签名: : List α -> List (List α)
+  签名: : 列表 α -> 列表 (列表 α)
 -/
 def permutations' : List α -> List (List α)
   | [] => [[]]
@@ -524,7 +524,7 @@ instance instSProd
 
 中文:
 实例 instSProd
-  签名: : SProd (List α) (List β) (List (α × β)) where
+  签名: : SProd (列表 α) (列表 β) (列表 (α × β)) where
   定义体: List.product
 
 Depends on / 依赖: List.product, product
@@ -598,7 +598,7 @@ definition chooseX
 
 中文:
 定义 chooseX
-  签名: : 对任意 l : List α, 对任意 _ : 存在 a, a in l ∧ p a, { a // a in l ∧ p a }
+  签名: : 对任意 l : 列表 α, 对任意 _ : 存在 a, a in l ∧ p a, { a // a in l ∧ p a }
   定义体: chooseX ls
           (hp.imp fun _ ⟨o, h₂⟩ => ⟨(mem_cons.mp o).resolve_left fun e => pl <| e ▸ h₂, h₂⟩)
 ⟨a, mem_cons.mpr Or.inr ha.1, ha.2⟩
@@ -645,7 +645,7 @@ definition mapDiagM'
 
 中文:
 定义 mapDiagM'
-  签名: {m} [Monad m] {α} (f : α -> α -> m Unit)
+  签名: {m} [单子 m] {α} (f : α -> α -> m 单元)
 -/
 def mapDiagM' {m} [Monad m] {α} (f : α -> α -> m Unit) : List α -> m Unit
   | [] => return ()
@@ -680,7 +680,7 @@ definition map₂Left'
 
 中文:
 定义 map₂Left'
-  签名: (f : α -> Option β -> γ)
+  签名: (f : α -> 选项类型 β -> γ)
   定义体: map₂Left' f as bs
     (f a (some b) :: rec'.fst, rec'.snd)
 -/
@@ -701,7 +701,7 @@ definition map₂Right'
 
 中文:
 定义 map₂Right'
-  签名: (f : Option α -> β -> γ) (as : List α) (bs : List β)
+  签名: (f : 选项类型 α -> β -> γ) (as : 列表 α) (bs : 列表 β)
   定义体: map₂Left' (flip f) bs as
 -/
 def map₂Right' (f : Option α -> β -> γ) (as : List α) (bs : List β) : List γ × List α :=
@@ -730,7 +730,7 @@ definition map₂Left
 
 中文:
 定义 map₂Left
-  签名: (f : α -> Option β -> γ)
+  签名: (f : α -> 选项类型 β -> γ)
 -/
 def map₂Left (f : α -> Option β -> γ) : List α -> List β -> List γ
   | [], _ => []
@@ -747,7 +747,7 @@ definition map₂Right
 
 中文:
 定义 map₂Right
-  签名: (f : Option α -> β -> γ) (as : List α) (bs : List β)
+  签名: (f : 选项类型 α -> β -> γ) (as : 列表 α) (bs : 列表 β)
   定义体: map₂Left (flip f) bs as
 -/
 def map₂Right (f : Option α -> β -> γ) (as : List α) (bs : List β) : List γ :=
@@ -764,7 +764,7 @@ definition mapAsyncChunked
 
 中文:
 定义 mapAsyncChunked
-  签名: {α β} (f : α -> β) (xs : List α) (chunk_size := 1024)
+  签名: {α β} (f : α -> β) (xs : 列表 α) (chunk_size := 1024)
   定义体: ((xs.toChunks chunk_size).map fun xs => Task.spawn fun _ => List.map f xs).flatMap Task.get
 -/
 def mapAsyncChunked {α β} (f : α -> β) (xs : List α) (chunk_size := 1024) : List β :=
@@ -834,7 +834,7 @@ definition replaceIf
 
 中文:
 定义 replaceIf
-  签名: : List α -> List 布尔 -> List α -> List α
+  签名: : 列表 α -> 列表 布尔值 -> 列表 α -> 列表 α
 -/
 def replaceIf : List α -> List Bool -> List α -> List α
   | l, _, [] => l
@@ -897,7 +897,7 @@ theorem iterateTR_loop_eq
 
 中文:
 定理 iterateTR_loop_eq
-  条件: (f : α -> α) (a : α) (n : 自然数) (l : List α)
+  条件: (f : α -> α) (a : α) (n : 自然数) (l : 列表 α)
   证明: by
   induction n generalizing a l <;> simp [*]
 
@@ -1050,7 +1050,7 @@ abbreviation consecutivePairs
 
 中文:
 缩写 consecutivePairs
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: l.zip l.tail
 
 Depends on / 依赖: l.tail, l.zip

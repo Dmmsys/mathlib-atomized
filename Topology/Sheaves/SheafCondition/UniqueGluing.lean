@@ -218,8 +218,8 @@ theorem IsSheaf.isSheafUniqueGluing_types
   exact (Types.isLimit_iff _).mp (h.isSheafPairwiseIntersections U) _ cpt.sectionPairwise.prop
 
 中文:
-定理 IsSheaf.isSheafUniqueGluing_types
-  结论: (h : F.IsSheaf) (sf : 对任意 i : ι, F.obj (op (U i)))
+定理 是层.isSheafUniqueGluing_types
+  结论: (h : F.是层) (sf : 对任意 i : ι, F.obj (op (U i)))
   证明: by
   simp_rw [isGluing_iff_pairwise]
   exact (Types.isLimit_iff _).mp (h.isSheafPairwiseIntersections U) _ cpt.sectionPairwise.prop
@@ -249,7 +249,7 @@ theorem isSheaf_iff_isSheafUniqueGluing_types
 
 中文:
 定理 isSheaf_iff_isSheafUniqueGluing_types
-  结论: F.IsSheaf ↔ F.IsSheafUniqueGluing
+  结论: F.是层 ↔ F.IsSheafUniqueGluing
   证明: by
   simp_rw [isSheaf_iff_isSheafPairwiseIntersections, IsSheafPairwiseIntersections,
     Types.isLimit_iff, IsSheafUniqueGluing, isGluing_iff_pairwise]
@@ -282,7 +282,7 @@ theorem isSheaf_of_isSheafUniqueGluing_types
 中文:
 定理 isSheaf_of_isSheafUniqueGluing_types
   条件: (Fsh : F.IsSheafUniqueGluing)
-  结论: F.IsSheaf
+  结论: F.是层
   证明: (isSheaf_iff_isSheafUniqueGluing_types F).mpr Fsh
 
 Depends on / 依赖: isSheaf_iff_isSheafUniqueGluing_types
@@ -307,8 +307,8 @@ theorem IsSheaf.isSheafUniqueGluing
   proof: ((isSheaf_iff_isSheaf_comp' (forget C) F).mp h).isSheafUniqueGluing_types sf cpt
 
 中文:
-定理 IsSheaf.isSheafUniqueGluing
-  结论: (h : F.IsSheaf) {ι : 类型} (U : ι -> Opens X)
+定理 是层.isSheafUniqueGluing
+  结论: (h : F.是层) {ι : 类型} (U : ι -> Opens X)
   证明: ((isSheaf_iff_isSheaf_comp' (forget C) F).mp h).isSheafUniqueGluing_types sf cpt
 
 Depends on / 依赖: forget, isSheafUniqueGluing_types, isSheaf_iff_isSheaf_comp
@@ -331,7 +331,7 @@ theorem isSheaf_iff_isSheafUniqueGluing
 
 中文:
 定理 isSheaf_iff_isSheafUniqueGluing
-  结论: F.IsSheaf ↔ F.IsSheafUniqueGluing
+  结论: F.是层 ↔ F.IsSheafUniqueGluing
   证明: Iff.trans (isSheaf_iff_isSheaf_comp' (forget C) F)
     (isSheaf_iff_isSheafUniqueGluing_types (F ⋙ forget C))
 
@@ -364,7 +364,7 @@ theorem existsUnique_gluing
   proof: IsSheaf.isSheafUniqueGluing F.property U sf h
 
 中文:
-定理 existsUnique_gluing
+定理 存在Unique_gluing
   结论: (sf : 对任意 i : ι, ToType (F.1.obj (op (U i))))
   证明: IsSheaf.isSheafUniqueGluing F.property U sf h
 
@@ -391,7 +391,7 @@ theorem existsUnique_gluing'
   
 
 中文:
-定理 existsUnique_gluing'
+定理 存在Unique_gluing'
   结论: (V : Opens X) (iUV : 对任意 i : ι, U i ⟶ V) (hcover : V <= iSup U)
   证明: by
   have V_eq_supr_U : V = iSup U := le_antisymm hcover (iSup_le fun i => (iUV i).le)
@@ -556,7 +556,7 @@ theorem eq_app_of_locally_eq
 
 中文:
 定理 eq_app_of_locally_eq
-  结论: {V : Opens X} {G : Sheaf C X} {f : F ⟶ G}
+  结论: {V : Opens X} {G : 层 C X} {f : F ⟶ G}
   证明: by
   refine eq_of_locally_eq G U _ _ (fun _ => ?_)
   rw [← NatTrans.naturality_apply]; rw [h]; rw [ht]; rw [← ConcreteCategory.comp_apply]; rw [← Functor.map_comp]

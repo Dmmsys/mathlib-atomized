@@ -120,8 +120,8 @@ theorem exists_closed_cover_approximatesLinearOn_of_hasFDerivWithinAt
     
 
 中文:
-定理 exists_closed_cover_approximatesLinearOn_of_hasFDerivWithinAt
-  结论: [SecondCountableTopology F]
+定理 存在_closed_cover_approximatesLinearOn_of_hasFDerivWithinAt
+  结论: [第二可数拓扑 F]
   证明: by
   /- Choose countably many linear maps `f' z`. For every such map, if `f` has a derivative at `x`
     close enough to `f' z`, then `f y - f x` is well approximated by `f' z (y - x)` for `y` close
@@ -283,8 +283,8 @@ theorem exists_partition_approximatesLinearOn_of_hasFDerivWithinAt
   · rw [iUnion_disjointed]; ex
 
 中文:
-定理 exists_partition_approximatesLinearOn_of_hasFDerivWithinAt
-  结论: [SecondCountableTopology F]
+定理 存在_partition_approximatesLinearOn_of_hasFDerivWithinAt
+  结论: [第二可数拓扑 F]
   证明: by
   rcases exists_closed_cover_approximatesLinearOn_of_hasFDerivWithinAt f s f' hf' r rpos with
     ⟨t, A, t_closed, st, t_approx, ht⟩
@@ -872,7 +872,7 @@ theorem aemeasurable_fderivWithin
 
 中文:
 定理 aemeasurable_fderivWithin
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   /- It suffices to show that `f'` can be uniformly approximated by a measurable function.
     Fix `ε > 0`. Thanks to `exists_partition_approximatesLinearOn_of_hasFDerivWithinAt`, one
@@ -948,8 +948,8 @@ theorem aemeasurable_ofReal_abs_det_fderivWithin
   exact aemeasurable_fderivWithin μ hs hf'
 
 中文:
-定理 aemeasurable_ofReal_abs_det_fderivWithin
-  结论: (hs : MeasurableSet s)
+定理 aemeasurable_of实数_abs_det_fderivWithin
+  结论: (hs : 可测集 s)
   证明: by
   apply ENNReal.measurable_ofReal.comp_aemeasurable
   refine continuous_abs.measurable.comp_aemeasurable ?_
@@ -979,8 +979,8 @@ theorem aemeasurable_toNNReal_abs_det_fderivWithin
   exact aemeasurable_fderivWithin μ hs hf'
 
 中文:
-定理 aemeasurable_toNNReal_abs_det_fderivWithin
-  结论: (hs : MeasurableSet s)
+定理 aemeasurable_toNN实数_abs_det_fderivWithin
+  结论: (hs : 可测集 s)
   证明: by
   apply measurable_real_toNNReal.comp_aemeasurable
   refine continuous_abs.measurable.comp_aemeasurable ?_
@@ -1008,7 +1008,7 @@ theorem measurable_image_of_fderivWithin
 
 中文:
 定理 measurable_image_of_fderivWithin
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: haveI : DifferentiableOn Real f s := fun x hx => (hf' x hx).differentiableWithinAt
   hs.image_of_continuousOn_injOn (DifferentiableOn.continuousOn this) hf
 
@@ -1074,7 +1074,7 @@ theorem measurableEmbedding_of_fderivWithin
 
 中文:
 定理 measurableEmbedding_of_fderivWithin
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: haveI : DifferentiableOn Real f s := fun x hx => (hf' x hx).differentiableWithinAt
   this.continuousOn.measurableEmbedding hs hf
 
@@ -1104,7 +1104,7 @@ theorem addHaar_image_le_lintegral_abs_det_fderiv_aux1
 
 中文:
 定理 addHaar_image_le_lintegral_abs_det_fderiv_aux1
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   /- To bound `μ (f '' s)`, we cover `s` by sets where `f` is well-approximated by linear maps
     `A n` (and where `f'` is almost everywhere close to `A n`), and then use that `f` expands the
@@ -1207,7 +1207,7 @@ theorem addHaar_image_le_lintegral_abs_det_fderiv_aux2
 
 中文:
 定理 addHaar_image_le_lintegral_abs_det_fderiv_aux2
-  结论: (hs : MeasurableSet s) (h's : μ s != ∞)
+  结论: (hs : 可测集 s) (h's : μ s != ∞)
   证明: by
   -- We just need to let the error tend to `0` in the previous lemma.
   have :
@@ -1249,7 +1249,7 @@ theorem addHaar_image_le_lintegral_abs_det_fderiv
 
 中文:
 定理 addHaar_image_le_lintegral_abs_det_fderiv
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   /- We already know the result for finite-measure sets. We cover `s` by finite-measure sets using
     `spanningSets μ`, and apply the previous result to each of these parts. -/
@@ -1303,7 +1303,7 @@ theorem lintegral_abs_det_fderiv_le_addHaar_image_aux1
 
 中文:
 定理 lintegral_abs_det_fderiv_le_addHaar_image_aux1
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   /- To bound `∫⁻ x in s, ENNReal.ofReal |(f' x).det| ∂μ`, we cover `s` by sets where `f` is
     well-approximated by linear maps `A n` (and where `f'` is almost everywhere close to `A n`),
@@ -1433,7 +1433,7 @@ theorem lintegral_abs_det_fderiv_le_addHaar_image_aux2
 
 中文:
 定理 lintegral_abs_det_fderiv_le_addHaar_image_aux2
-  结论: (hs : MeasurableSet s) (h's : μ s != ∞)
+  结论: (hs : 可测集 s) (h's : μ s != ∞)
   证明: by
   -- We just need to let the error tend to `0` in the previous lemma.
   have :
@@ -1477,7 +1477,7 @@ theorem lintegral_abs_det_fderiv_le_addHaar_image
 
 中文:
 定理 lintegral_abs_det_fderiv_le_addHaar_image
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   /- We already know the result for finite-measure sets. We cover `s` by finite-measure sets using
     `spanningSets μ`, and apply the previous result to each of these parts. -/
@@ -1538,7 +1538,7 @@ theorem lintegral_abs_det_fderiv_eq_addHaar_image
 
 中文:
 定理 lintegral_abs_det_fderiv_eq_addHaar_image
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: le_antisymm (lintegral_abs_det_fderiv_le_addHaar_image μ hs hf' hf)
     (addHaar_image_le_lintegral_abs_det_fderiv μ hs hf')
 
@@ -1653,7 +1653,7 @@ theorem restrict_map_withDensity_abs_det_fderiv_eq_addHaar
 
 中文:
 定理 restrict_map_withDensity_abs_det_fderiv_eq_addHaar
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   obtain ⟨u, u_meas, uf⟩ : exists u, Measurable u ∧ EqOn u f s := by
     classical
@@ -1703,7 +1703,7 @@ theorem lintegral_image_eq_lintegral_abs_det_fderiv_mul
 
 中文:
 定理 lintegral_image_eq_lintegral_abs_det_fderiv_mul
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rw [← restrict_map_withDensity_abs_det_fderiv_eq_addHaar μ hs hf' hf]; rw [(measurableEmbedding_of_fderivWithin hs hf' hf).lintegral_map]
   simp only [Set.domRestrict_apply, ← Function.comp_apply (f := g)]
@@ -1734,7 +1734,7 @@ theorem integrableOn_image_iff_integrableOn_abs_det_fderiv_smul
 
 中文:
 定理 integrableOn_image_iff_integrableOn_abs_det_fderiv_smul
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rw [IntegrableOn]; rw [← restrict_map_withDensity_abs_det_fderiv_eq_addHaar μ hs hf' hf]; rw [(measurableEmbedding_of_fderivWithin hs hf' hf).integrable_map_iff]
   simp only [Set.domRestrict_eq, ← Function.comp_assoc, ENNReal.ofReal]
@@ -1764,7 +1764,7 @@ theorem integral_image_eq_integral_abs_det_fderiv_smul
 
 中文:
 定理 integral_image_eq_integral_abs_det_fderiv_smul
-  结论: (hs : MeasurableSet s)
+  结论: (hs : 可测集 s)
   证明: by
   rw [← restrict_map_withDensity_abs_det_fderiv_eq_addHaar μ hs hf' hf]; rw [(measurableEmbedding_of_fderivWithin hs hf' hf).integral_map]
   simp only [Set.domRestrict_apply, ← Function.comp_apply (f := g), ENNReal.ofReal]
@@ -1828,7 +1828,7 @@ lemma _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_
       ((ae_restrict_iff' (hf.measurableSet_image' hs)).mpr hg)]; rw [integral_image_eq_integral_abs_det_
 
 中文:
-引理 _root_.MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_det_fderiv_mul
+引理 _root_.可测嵌入.withDensity_of实数_comap_apply_eq_integral_abs_det_fderiv_mul
   证明: by
   rw [Measure.comap_apply f hf.injective (fun t ht => hf.measurableSet_image' ht) _ hs]; rw [withDensity_apply _ (hf.measurableSet_image' hs)]; rw [← ofReal_integral_eq_lintegral_ofReal hg_int
       ((ae_restrict_iff' (hf.measurableSet_image' hs)).mpr hg)]; rw [integral_image_eq_integral_abs_det_
@@ -1855,7 +1855,7 @@ lemma _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_d
       f.measurableEmbedding hg hg_int hf']
 
 中文:
-引理 _root_.MeasurableEquiv.withDensity_ofReal_map_symm_apply_eq_integral_abs_det_fderiv_mul
+引理 _root_.可测等价.withDensity_of实数_map_symm_apply_eq_integral_abs_det_fderiv_mul
   证明: by
   rw [MeasurableEquiv.map_symm]; rw [MeasurableEmbedding.withDensity_ofReal_comap_apply_eq_integral_abs_det_fderiv_mul μ hs
       f.measurableEmbedding hg hg_int hf']

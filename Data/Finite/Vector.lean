@@ -26,8 +26,8 @@ instance List.Vector.finite
   infer_instance
 
 中文:
-实例 List.Vector.finite
-  签名: [Finite α] {n : 自然数}
+实例 列表.Vector.finite
+  签名: [有限 α] {n : 自然数}
   定义体: by
   have := Fintype.ofFinite α
   infer_instance
@@ -49,7 +49,7 @@ instance [Finite
   infer_instance
 
 中文:
-实例 [Finite
+实例 [有限
   签名: α] {n
   定义体: by
   have := Fintype.ofFinite α

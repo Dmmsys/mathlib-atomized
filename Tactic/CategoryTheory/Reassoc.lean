@@ -46,7 +46,7 @@ theorem eq_whisker'
 
 中文:
 定理 eq_whisker'
-  结论: {C : 类型} [Category* C]
+  结论: {C : 类型} [范畴* C]
   证明: by rw [w]
 -/
 theorem eq_whisker' {C : Type*} [Category* C]
@@ -169,7 +169,7 @@ definition registerReassocExpr
 
 中文:
 定义 registerReassocExpr
-  签名: (f : Expr -> MetaM (Expr × Array MVarId))
+  签名: (f : Expr -> MetaM (Expr × 数组 MVarId))
   定义体: do
   reassocImplRef.modify (·.push f)
 -/

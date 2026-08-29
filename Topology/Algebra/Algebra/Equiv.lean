@@ -47,8 +47,8 @@ structure ContinuousAlgEquiv
   (no additional axioms)
 
 中文:
-结构 ContinuousAlgEquiv
-  参数: (R A B : 类型) [CommSemiring R]
+结构 余ntinuousAlg等价
+  参数: (R A B : 类型) [交换半环 R]
   继承: A ≃ₐ[R] B, A ≃ₜ B
   (无附加公理)
 -/
@@ -71,9 +71,9 @@ class ContinuousAlgEquivClass
   (no additional axioms)
 
 中文:
-类 ContinuousAlgEquivClass
-  参数: (F : 类型) (R A B : outParam 类型) [CommSemiring R]
-  继承: AlgEquivClass F R A B, HomeomorphClass F A B
+类 余ntinuousAlg等价类
+  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R]
+  继承: 代数等价类 F R A B, 同胚类 F A B
   (无附加公理)
 -/
 class ContinuousAlgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R]
@@ -164,7 +164,7 @@ instance equivLike
 
 中文:
 实例 equivLike
-  签名: : EquivLike (A ≃A[R] B) A B where
+  签名: : 等价状 (A ≃A[R] B) A B where
   定义体: f.toFun
   inv f := f.invFun
   coe_injective' f g h₁ h₂ := by
@@ -204,7 +204,7 @@ instance continuousAlgEquivClass
 
 中文:
 实例 continuousAlgEquivClass
-  签名: : ContinuousAlgEquivClass (A ≃A[R] B) R A B where
+  签名: : 余ntinuousAlg等价类 (A ≃A[R] B) R A B where
   定义体: f.map_add'
   map_mul f := f.map_mul'
   commutes f := f.commutes'
@@ -290,7 +290,7 @@ theorem toAlgEquiv_injective
 
 中文:
 定理 toAlgEquiv_injective
-  结论: Function.Injective (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B)
+  结论: 函数.单射 (toAlgEquiv : (A ≃A[R] B) -> A ≃ₐ[R] B)
   证明: by
   rintro ⟨e, _, _⟩ ⟨e', _, _⟩ rfl
   rfl
@@ -334,7 +334,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : (A ≃A[R] B) -> A ->A[R] B)
+  结论: 函数.单射 ((↑) : (A ≃A[R] B) -> A ->A[R] B)
   证明: fun _ _ h => ext funext ContinuousAlgHom.ext_iff.1 h
 
 @[simp]
@@ -528,7 +528,7 @@ theorem isOpenMap
 中文:
 定理 isOpenMap
   条件: (e : A ≃A[R] B)
-  结论: IsOpenMap e
+  结论: 是开映射 e
   证明: e.toHomeomorph.isOpenMap
 
 Depends on / 依赖: e.toHomeomorph.isOpenMap, isOpenMap, toHomeomorph
@@ -547,7 +547,7 @@ theorem image_closure
 
 中文:
 定理 image_closure
-  条件: (e : A ≃A[R] B) (S : Set A)
+  条件: (e : A ≃A[R] B) (S : 集合 A)
   结论: e '' closure S = closure (e '' S)
   证明: e.toHomeomorph.image_closure S
 
@@ -569,7 +569,7 @@ theorem preimage_closure
 
 中文:
 定理 preimage_closure
-  条件: (e : A ≃A[R] B) (S : Set B)
+  条件: (e : A ≃A[R] B) (S : 集合 B)
   结论: e ⁻¹' closure S = closure (e ⁻¹' S)
   证明: e.toHomeomorph.preimage_closure S
 
@@ -592,8 +592,8 @@ theorem isClosed_image
 
 中文:
 定理 isClosed_image
-  条件: (e : A ≃A[R] B) {S : Set A}
-  结论: IsClosed (e '' S) ↔ IsClosed S
+  条件: (e : A ≃A[R] B) {S : 集合 A}
+  结论: 是闭集 (e '' S) ↔ 是闭集 S
   证明: e.toHomeomorph.isClosed_image
 
 Depends on / 依赖: e.toHomeomorph.isClosed_image, isClosed_image, toHomeomorph
@@ -613,7 +613,7 @@ theorem map_nhds_eq
 中文:
 定理 map_nhds_eq
   条件: (e : A ≃A[R] B) (a : A)
-  结论: Filter.map e (𝓝 a) = 𝓝 (e a)
+  结论: 滤子.map e (𝓝 a) = 𝓝 (e a)
   证明: e.toHomeomorph.map_nhds_eq a
 
 Depends on / 依赖: e.toHomeomorph.map_nhds_eq, map_nhds_eq, toHomeomorph
@@ -657,7 +657,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (e : A ≃A[R] B)
-  结论: Continuous e
+  结论: 连续 e
   证明: e.continuous_toFun
 
 Depends on / 依赖: continuous_toFun, e.continuous_toFun
@@ -675,7 +675,7 @@ theorem continuousOn
 
 中文:
 定理 continuousOn
-  条件: (e : A ≃A[R] B) {S : Set A}
+  条件: (e : A ≃A[R] B) {S : 集合 A}
   结论: ContinuousOn e S
   证明: e.continuous.continuousOn
 
@@ -714,7 +714,7 @@ theorem continuousWithinAt
 
 中文:
 定理 continuousWithinAt
-  条件: (e : A ≃A[R] B) {S : Set A} {a : A}
+  条件: (e : A ≃A[R] B) {S : 集合 A} {a : A}
   证明: e.continuous.continuousWithinAt
 
 Depends on / 依赖: continuous, continuousWithinAt, e.continuous.continuousWithinAt
@@ -733,7 +733,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] (e : A ≃A[R] B) {f : α -> A}
+  条件: {α : 类型} [拓扑空间 α] (e : A ≃A[R] B) {f : α -> A}
   证明: e.toHomeomorph.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, e.toHomeomorph.comp_continuous_iff, toHomeomorph
@@ -752,7 +752,7 @@ theorem comp_continuous_iff'
 
 中文:
 定理 comp_continuous_iff'
-  条件: {β : 类型} [TopologicalSpace β] (e : A ≃A[R] B) {g : B -> β}
+  条件: {β : 类型} [拓扑空间 β] (e : A ≃A[R] B) {g : B -> β}
   证明: e.toHomeomorph.comp_continuous_iff'
 
 Depends on / 依赖: comp_continuous_iff, e.toHomeomorph.comp_continuous_iff, toHomeomorph
@@ -828,7 +828,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: refl R A = ContinuousAlgHom.id R A
+  结论: refl R A = 余ntinuousAlg态射.id R A
   证明: rfl
 
 @[simp]
@@ -848,7 +848,7 @@ theorem coeCLE_refl
 
 中文:
 定理 coeCLE_refl
-  结论: (refl R A).toContinuousLinearEquiv = ContinuousLinearEquiv.refl R A
+  结论: (refl R A).toContinuousLinearEquiv = 连续线性等价.refl R A
   证明: rfl
 
 @[simp]
@@ -986,7 +986,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: (e : A ≃A[R] B) (S : Set A)
+  条件: (e : A ≃A[R] B) (S : 集合 A)
   结论: e.symm '' e '' S = S
   证明: e.toEquiv.symm_image_image S
 
@@ -1011,7 +1011,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: (e : A ≃A[R] B) (S : Set B)
+  条件: (e : A ≃A[R] B) (S : 集合 B)
   结论: e '' e.symm '' S = S
   证明: e.symm.symm_image_image S
 
@@ -1095,7 +1095,7 @@ theorem symm_map_nhds_eq
 中文:
 定理 symm_map_nhds_eq
   条件: (e : A ≃A[R] B) (a : A)
-  结论: Filter.map e.symm (𝓝 (e a)) = 𝓝 a
+  结论: 滤子.map e.symm (𝓝 (e a)) = 𝓝 a
   证明: e.toHomeomorph.symm_map_nhds_eq a
 
 Depends on / 依赖: e.toHomeomorph.symm_map_nhds_eq, symm_map_nhds_eq, toHomeomorph
@@ -1370,7 +1370,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (A ≃A[R] B) -> _)
+  结论: 函数.双射 (symm : (A ≃A[R] B) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -1464,7 +1464,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (e : A ≃A[R] B) (S : Set A)
+  条件: (e : A ≃A[R] B) (S : 集合 A)
   结论: e '' S = e.symm ⁻¹' S
   证明: e.toEquiv.image_eq_preimage_symm S
 
@@ -1487,7 +1487,7 @@ theorem image_symm_eq_preimage
 
 中文:
 定理 image_symm_eq_preimage
-  条件: (e : A ≃A[R] B) (S : Set B)
+  条件: (e : A ≃A[R] B) (S : 集合 B)
   结论: e.symm '' S = e ⁻¹' S
   证明: by
   rw [e.symm.image_eq_preimage_symm]; rw [e.symm_symm]
@@ -1513,7 +1513,7 @@ theorem symm_preimage_preimage
 
 中文:
 定理 symm_preimage_preimage
-  条件: (e : A ≃A[R] B) (S : Set B)
+  条件: (e : A ≃A[R] B) (S : 集合 B)
   结论: e.symm ⁻¹' e ⁻¹' S = S
   证明: e.toEquiv.symm_preimage_preimage S
 
@@ -1536,7 +1536,7 @@ theorem preimage_symm_preimage
 
 中文:
 定理 preimage_symm_preimage
-  条件: (e : A ≃A[R] B) (S : Set A)
+  条件: (e : A ≃A[R] B) (S : 集合 A)
   结论: e ⁻¹' e.symm ⁻¹' S = S
   证明: e.symm.symm_preimage_preimage S
 
@@ -1556,7 +1556,7 @@ theorem isUniformEmbedding
 
 中文:
 定理 isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁] [UniformSpace E₂] [Ring E₁]
+  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂] [环 E₁]
   证明: e.toAlgEquiv.isUniformEmbedding e.toContinuousAlgHom.uniformContinuous
     e.symm.toContinuousAlgHom.uniformContinuous
 
@@ -1579,8 +1579,8 @@ theorem _root_.AlgEquiv.isUniformEmbedding
     continuous_invFun := by dsimp; fun_prop }
 
 中文:
-定理 _root_.AlgEquiv.isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁] [UniformSpace E₂]
+定理 _root_.代数等价.isUniformEmbedding
+  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
   证明: ContinuousAlgEquiv.isUniformEmbedding { e with
     continuous_toFun := h₁
     continuous_invFun := by dsimp; fun_prop }
@@ -1607,7 +1607,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : A ≃A[R] B)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: e.toAlgEquiv.surjective
 
 Depends on / 依赖: e.toAlgEquiv.surjective, surjective, toAlgEquiv
@@ -1628,7 +1628,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {ι : 类型} {A : ι -> 类型} [(i : ι) -> Semiring (A i)] [(i : ι) -> Algebra R (A i)]
+  签名: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)] [(i : ι) -> 代数 R (A i)]
   定义体: AlgEquiv.cast h
   continuous_toFun := by cases h; exact continuous_id
   continuous_invFun := by cases h; exact continuous_id
@@ -1657,7 +1657,7 @@ theorem cast_apply
 
 中文:
 定理 cast_apply
-  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> Semiring (A i)]
+  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)]
   证明: rfl
 
 @[simp]
@@ -1679,7 +1679,7 @@ theorem cast_symm_apply
 
 中文:
 定理 cast_symm_apply
-  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> Semiring (A i)]
+  结论: {ι : 类型} {A : ι -> 类型} [(i : ι) -> 半环 (A i)]
   证明: rfl
 
 Depends on / 依赖: Equiv.cast, h.symm

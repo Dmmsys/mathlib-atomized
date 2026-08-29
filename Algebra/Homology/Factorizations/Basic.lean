@@ -53,7 +53,7 @@ definition degreewiseEpiWithInjectiveKernel
 
 中文:
 定义 degreewiseEpiWithInjectiveKernel
-  签名: : Morphism命题erty (CochainComplex C 整数)
+  签名: : MorphismProperty (上链复形 C 整数)
   定义体: fun _ _ φ => forall (i : Int), epiWithInjectiveKernel (φ.f i)
 
 Depends on / 依赖: epiWithInjectiveKernel
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: (degreewiseEpiWithInjectiveKernel (C := C)).IsMultiplicative
+  签名: (degreewiseEpiWithInjectiveKernel (C := C)).是Multiplicative
   定义体: MorphismProperty.id_mem _ _
   comp_mem _ _ hf hg n := MorphismProperty.comp_mem _ _ _ (hf n) (hg n)
 
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: (degreewiseEpiWithInjectiveKernel (C := C)).IsStableUnderRetracts
+  签名: (degreewiseEpiWithInjectiveKernel (C := C)).是StableUnderRetracts
   定义体: MorphismProperty.of_retract (r.map (HomologicalComplex.eval _ _ i)) (h i)
 
 Depends on / 依赖: IsStableUnderRetracts
@@ -113,7 +113,7 @@ lemma degreewiseEpiWithInjectiveKernel_iff_of_isZero
 
 中文:
 引理 degreewiseEpiWithInjectiveKernel_iff_of_isZero
-  结论: {K L : CochainComplex C 整数}
+  结论: {K L : 上链复形 C 整数}
   证明: forall_congr' (fun n => by
     rw [epiWithInjectiveKernel_iff_of_isZero]
     exact (HomologicalComplex.eval _ _ n).map_isZero hL)
@@ -137,7 +137,7 @@ lemma degreewiseEpiWithInjectiveKernel.epi
 
 中文:
 引理 degreewiseEpiWithInjectiveKernel.epi
-  结论: {K L : CochainComplex C 整数} {f : K ⟶ L}
+  结论: {K L : 上链复形 C 整数} {f : K ⟶ L}
   证明: HomologicalComplex.epi_of_epi_f f (fun n => (h n).1)
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.epi_of_epi_f, epi_of_epi_f

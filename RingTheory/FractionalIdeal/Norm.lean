@@ -53,7 +53,7 @@ theorem absNorm_div_norm_eq_absNorm_div_norm
 
 中文:
 定理 absNorm_div_norm_eq_absNorm_div_norm
-  结论: {I : FractionalIdeal R⁰ K} (a : R⁰) (I₀ : Ideal R)
+  结论: {I : FractionalIdeal R⁰ K} (a : R⁰) (I₀ : 理想 R)
   证明: by
   rw [div_eq_div_iff]
   · replace h := congr_arg (I.den • ·) h
@@ -92,7 +92,7 @@ definition absNorm
 
 中文:
 定义 absNorm
-  签名: : FractionalIdeal R⁰ K ->*₀ Rat where
+  签名: : FractionalIdeal R⁰ K ->*₀ 有理数 where
   定义体: (Ideal.absNorm I.num : Rat) / |Algebra.norm Int (I.den : R)|
   map_zero' := by
     rw [num_zero_eq]; rw [Submodule.zero_eq_bot]; rw [Ideal.absNorm_bot]; rw [Nat.cast_zero]; rw [zero_div]
@@ -147,7 +147,7 @@ theorem absNorm_eq'
 
 中文:
 定理 absNorm_eq'
-  结论: {I : FractionalIdeal R⁰ K} (a : R⁰) (I₀ : Ideal R)
+  结论: {I : FractionalIdeal R⁰ K} (a : R⁰) (I₀ : 理想 R)
   证明: by
   rw [absNorm]; rw [← absNorm_div_norm_eq_absNorm_div_norm a I₀ h]; rw [MonoidWithZeroHom.coe_mk]; rw [ZeroHom.coe_mk]
 
@@ -225,7 +225,7 @@ refine Ideal.absNorm_eq_zero_iff.mp Nat.cast_eq_zero.mp h.resolve_right ?_
 
 中文:
 定理 absNorm_eq_zero_iff
-  条件: [IsDomain K] {I : FractionalIdeal R⁰ K}
+  条件: [是整环 K] {I : FractionalIdeal R⁰ K}
   证明: by
   refine ⟨fun h => zero_of_num_eq_bot zero_notMem_nonZeroDivisors ?_, fun h => h ▸ absNorm_bot⟩
   rw [absNorm_eq]; rw [div_eq_zero_iff] at h
@@ -253,7 +253,7 @@ theorem coeIdeal_absNorm
 
 中文:
 定理 coeIdeal_absNorm
-  条件: (I₀ : Ideal R)
+  条件: (I₀ : 理想 R)
   证明: by
   rw [absNorm_eq' 1 I₀ (by rw [one_smul]; rfl), OneMemClass.coe_one, map_one, abs_one,
     Int.cast_one, _root_.div_one]
@@ -284,7 +284,7 @@ theorem abs_det_basis_change
 
 中文:
 定理 abs_det_basis_change
-  结论: [IsDomain K] {ι : 类型} [Fintype ι]
+  结论: [是整环 K] {ι : 类型} [有限类型 ι]
   证明: by
   have := IsFractionRing.nontrivial R K
   let b₀ : Basis ι Rat K := b.localizationLocalization Rat Int⁰ K
@@ -332,7 +332,7 @@ theorem absNorm_span_singleton
 
 中文:
 定理 absNorm_span_singleton
-  条件: [Module.Finite Rat K] (x : K)
+  条件: [模.有限 有理数 K] (x : K)
   证明: by
   have : IsDomain K := IsFractionRing.isDomain R
   obtain ⟨d, ⟨r, hr⟩⟩ := IsLocalization.exists_integer_multiple R⁰ x

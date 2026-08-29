@@ -49,9 +49,9 @@ class IsProper
   (no additional axioms)
 
 中文:
-类 IsProper
-  参数: : 命题 extends IsSeparated f, UniversallyClosed f, LocallyOfFiniteType f where
-  继承: IsSeparated f, UniversallyClosed f, LocallyOfFiniteType f
+类 是真
+  参数: : 命题 extends 是分离 f, 普遍闭 f, 局部有限型 f where
+  继承: 是分离 f, 普遍闭 f, 局部有限型 f
   (无附加公理)
 -/
 class IsProper : Prop extends IsSeparated f, UniversallyClosed f, LocallyOfFiniteType f where
@@ -69,7 +69,7 @@ lemma isProper_eq
 
 中文:
 引理 isProper_eq
-  结论: @Is命题er =
+  结论: @是真 =
   证明: by
   ext X Y f
   rw [isProper_iff]; rw [← and_assoc]
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.RespectsIso @Is命题er
+  签名: MorphismProperty.RespectsIso @是真
   定义体: by
   rw [isProper_eq]
   infer_instance
@@ -122,7 +122,7 @@ instance stableUnderComposition
 
 中文:
 实例 stableUnderComposition
-  签名: : Morphism命题erty.IsStableUnderComposition @Is命题er
+  签名: : MorphismProperty.是StableUnderComposition @是真
   定义体: by
   rw [isProper_eq]
   infer_instance
@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @Is命题er
+  签名: MorphismProperty.是Multiplicative @是真
   定义体: by
   rw [isProper_eq]
   infer_instance
@@ -165,8 +165,8 @@ instance [IsProper
   signature: f] [IsProper g] : IsProper (f ≫ g) where
 
 中文:
-实例 [IsProper
-  签名: f] [Is命题er g] : Is命题er (f ≫ g) where
+实例 [是真
+  签名: f] [是真 g] : 是真 (f ≫ g) where
 -/
 instance [IsProper f] [IsProper g] : IsProper (f ≫ g) where
 
@@ -185,7 +185,7 @@ instance isStableUnderBaseChange
 
 中文:
 实例 isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @Is命题er
+  签名: : MorphismProperty.是StableUnderBaseChange @是真
   定义体: by
   rw [isProper_eq]
   infer_instance
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @Is命题er
+  签名: IsZariskiLocalAtTarget @是真
   定义体: by
   rw [isProper_eq]
   infer_instance
@@ -240,7 +240,7 @@ lemma IsFinite.eq_isProper_inf_isAffineHom
   rw [inf_comm]; rw [isProper_eq]; rw [inf_assoc]; rw [← inf_assoc]; rw [this]; rw [eq_inf]; rw [IsIntegralHom.eq_universallyClosed_inf_isAffineHom]; rw [inf_assoc]; rw [
 
 中文:
-引理 IsFinite.eq_isProper_inf_isAffineHom
+引理 是有限.eq_isProper_inf_isAffineHom
   证明: by
   have : (@IsAffineHom ⊓ @IsSeparated : MorphismProperty _) = @IsAffineHom :=
     inf_eq_left.mpr fun _ _ _ _ => inferInstance
@@ -265,7 +265,7 @@ lemma IsFinite.iff_isProper_and_isAffineHom
   rfl
 
 中文:
-引理 IsFinite.iff_isProper_and_isAffineHom
+引理 是有限.iff_isProper_and_isAffineHom
   证明: by
   rw [eq_isProper_inf_isAffineHom]
   rfl
@@ -293,7 +293,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @UniversallyClosed @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @普遍闭 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (UniversallyClosed _)
 
@@ -315,8 +315,8 @@ lemma UniversallyClosed.of_comp_of_isSeparated
   proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 中文:
-引理 UniversallyClosed.of_comp_of_isSeparated
-  条件: [UniversallyClosed (f ≫ g)] [IsSeparated g]
+引理 普遍闭.of_comp_of_isSeparated
+  条件: [普遍闭 (f ≫ g)] [是分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @Is命题er @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @是真 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsProper _)
 
@@ -358,8 +358,8 @@ instance [UniversallyClosed
 @[stacks 01W6 "(2)"]
 
 中文:
-实例 [UniversallyClosed
-  签名: f] : UniversallyClosed f.toImage
+实例 [普遍闭
+  签名: f] : 普遍闭 f.toImage
   定义体: have : UniversallyClosed (f.toImage ≫ f.imageι) := by simpa
   .of_comp_of_isSeparated _ f.imageι
 
@@ -382,9 +382,9 @@ lemma IsProper.of_comp
   proof: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 中文:
-引理 IsProper.of_comp
-  条件: [Is命题er (f ≫ g)] [IsSeparated g]
-  结论: Is命题er f
+引理 是真.of_comp
+  条件: [是真 (f ≫ g)] [是分离 g]
+  结论: 是真 f
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -401,8 +401,8 @@ lemma IsProper.comp_iff
   proof: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 中文:
-引理 IsProper.comp_iff
-  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [Is命题er g]
+引理 是真.comp_iff
+  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [是真 g]
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -430,8 +430,8 @@ theorem isIntegral_appTop_of_universallyClosed
   have : UniversallyClosed X.toSpecΓ :
 
 中文:
-定理 isIntegral_appTop_of_universallyClosed
-  条件: (f : X ⟶ Y) [UniversallyClosed f] [IsAffine Y]
+定理 is整数egral_appTop_of_universallyClosed
+  条件: (f : X ⟶ Y) [普遍闭 f] [是仿射 Y]
   证明: by
   have : CompactSpace X := (quasiCompact_iff_compactSpace f).mp inferInstance
   have : UniversallyClosed (X.toSpecΓ ≫ Spec.map f.appTop) := by

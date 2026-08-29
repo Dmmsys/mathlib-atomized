@@ -49,7 +49,7 @@ lemma compProd_withDensity
 
 中文:
 引理 compProd_withDensity
-  结论: [SFinite μ] [IsSFiniteKernel κ] [IsSFiniteKernel (κ.withDensity f)]
+  结论: [SFinite μ] [是SFiniteKernel κ] [是SFiniteKernel (κ.withDensity f)]
   证明: by
   ext s hs
   rw [compProd_apply hs]; rw [withDensity_apply _ hs]; rw [← lintegral_indicator hs]; rw [lintegral_compProd]
@@ -90,7 +90,7 @@ lemma ae_eq_of_compProd_eq
 
 中文:
 引理 ae_eq_of_compProd_eq
-  结论: [IsFiniteMeasure μ] [IsFiniteKernel κ] [IsFiniteKernel η]
+  结论: [是有限测度 μ] [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   have h_ac : forallᵐ a ∂μ, κ a ≪ η a := (Measure.absolutelyContinuous_of_eq h).kernel_of_compProd
   have hκ_eq : forallᵐ a ∂μ, κ a = η.withDensity (κ.rnDeriv η) a := by
@@ -127,7 +127,7 @@ lemma compProd_eq_iff
 
 中文:
 引理 compProd_eq_iff
-  条件: [IsFiniteMeasure μ] [IsFiniteKernel κ] [IsFiniteKernel η]
+  条件: [是有限测度 μ] [是FiniteKernel κ] [是FiniteKernel η]
   证明: ⟨Kernel.ae_eq_of_compProd_eq, Measure.compProd_congr⟩
 
 Depends on / 依赖: Kernel, Kernel.ae_eq_of_compProd_eq, Measure, Measure.compProd_congr, ae_eq_of_compProd_eq, compProd_congr

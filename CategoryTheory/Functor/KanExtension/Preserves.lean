@@ -43,10 +43,10 @@ class PreservesLeftKanExtension
     - preserves : forall (F' : C ⥤ B) (α : F ⟶ L ⋙ F') [IsLeftKanExtension F' α],
 
 中文:
-类 PreservesLeftKanExtension
+类 保持LeftKanExtension
   参数: where
   公理与运算 (1 个):
-    - preserves : 对任意 (F' : C ⥤ B) (α : F ⟶ L ⋙ F') [IsLeftKanExtension F' α],
+    - preserves : 对任意 (F' : C ⥤ B) (α : F ⟶ L ⋙ F') [是LeftKanExtension F' α],
 -/
 class PreservesLeftKanExtension where
   preserves : forall (F' : C ⥤ B) (α : F ⟶ L ⋙ F') [IsLeftKanExtension F' α],
@@ -61,7 +61,7 @@ lemma PreservesLeftKanExtension.mk'
 (LeftExtension.postcompose₂ObjMkIso _ _) (preserves h.nonempty_isUniversal.some).some⟩⟩
 
 中文:
-引理 PreservesLeftKanExtension.mk'
+引理 保持LeftKanExtension.mk'
   证明: ⟨⟨Limits.IsInitial.equivOfIso
 (LeftExtension.postcompose₂ObjMkIso _ _) (preserves h.nonempty_isUniversal.some).some⟩⟩
 
@@ -88,7 +88,7 @@ lemma PreservesLeftKanExtension.mk_of_preserves_isLeftKanExtension
       (by ext x; simp [← G.map_comp])
 
 中文:
-引理 PreservesLeftKanExtension.mk_of_preserves_isLeftKanExtension
+引理 保持LeftKanExtension.mk_of_preserves_isLeftKanExtension
   证明: .mk fun F'' α' h =>
     isLeftKanExtension_of_iso
       (isoWhiskerRight (leftKanExtensionUnique F' α F'' α') G)
@@ -120,7 +120,7 @@ lemma PreservesLeftKanExtension.mk_of_preserves_isUniversal
       (LeftExtension.postcompose₂ L F G|>.mapIso <| Limits.IsInitial.uniqueUpToIso hE hE') h.some⟩
 
 中文:
-引理 PreservesLeftKanExtension.mk_of_preserves_isUniversal
+引理 保持LeftKanExtension.mk_of_preserves_isUniversal
   结论: (E : LeftExtension L F)
   证明: .mk' G F L fun hE' =>
     ⟨Limits.IsInitial.equivOfIso
@@ -147,10 +147,10 @@ class PreservesPointwiseLeftKanExtensionAt
     - preserves : forall (E : LeftExtension L F), E.IsPointwiseLeftKanExtensionAt c -> Nonempty ((LeftExtension.postcompose₂ L F G |>.obj E).IsPointwiseLeftKanExtensionAt c)
 
 中文:
-类 PreservesPointwiseLeftKanExtensionAt
+类 保持PointwiseLeftKanExtensionAt
   参数: (c : C)
   公理与运算 (1 个):
-    - preserves : 对任意 (E : LeftExtension L F), E.IsPointwiseLeftKanExtensionAt c -> Nonempty ((LeftExtension.postcompose₂ L F G |>.obj E).IsPointwiseLeftKanExtensionAt c)
+    - preserves : 对任意 (E : LeftExtension L F), E.IsPointwiseLeftKanExtensionAt c -> 非空 ((LeftExtension.postcompose₂ L F G |>.obj E).IsPointwiseLeftKanExtensionAt c)
 -/
 class PreservesPointwiseLeftKanExtensionAt (c : C) where
   /-- `G` preserves every pointwise extensions of `F` along `L` at `c`. -/
@@ -254,7 +254,7 @@ lemma PreservesPointwiseLeftKanExtensionAt.mk'
         (E'.coconeAtWhiskerRightIso G F L c).symm⟩
 
 中文:
-引理 PreservesPointwiseLeftKanExtensionAt.mk'
+引理 保持PointwiseLeftKanExtensionAt.mk'
   结论: (c : C) {E : LeftExtension L F}
   证明: ⟨Limits.IsColimit.ofIsoColimit hGE
       (E.coconeAtWhiskerRightIso G F L c) ≪≫
@@ -286,7 +286,7 @@ letI : (L.leftKanExtension F).IsLeftKanExtension L.leftKanExtensionUnit F := by
 
 中文:
 实例 hasLeftKanExtension_of_preserves
-  签名: [L.HasLeftKanExtension F]
+  签名: [L.有LeftKanExtension F]
   定义体: @HasLeftKanExtension.mk _ _ _ _ _ _ _ _ _ _
 letI : (L.leftKanExtension F).IsLeftKanExtension L.leftKanExtensionUnit F := by
       infer_instance
@@ -337,7 +337,7 @@ definition leftKanExtensionCompIsoOfPreserves
 
 中文:
 定义 leftKanExtensionCompIsoOfPreserves
-  签名: [PreservesLeftKanExtension G F L]
+  签名: [保持LeftKanExtension G F L]
   定义体: leftKanExtensionUnique
     (L.leftKanExtension F ⋙ G)
     (whiskerRight (L.leftKanExtensionUnit F) G ≫ (Functor.associator _ _ _).hom)
@@ -761,10 +761,10 @@ class PreservesRightKanExtension
     - preserves : forall (F' : C ⥤ B) (α : L ⋙ F' ⟶ F) [IsRightKanExtension F' α],
 
 中文:
-类 PreservesRightKanExtension
+类 保持RightKanExtension
   参数: where
   公理与运算 (1 个):
-    - preserves : 对任意 (F' : C ⥤ B) (α : L ⋙ F' ⟶ F) [IsRightKanExtension F' α],
+    - preserves : 对任意 (F' : C ⥤ B) (α : L ⋙ F' ⟶ F) [是RightKanExtension F' α],
 -/
 class PreservesRightKanExtension where
   preserves : forall (F' : C ⥤ B) (α : L ⋙ F' ⟶ F) [IsRightKanExtension F' α],
@@ -779,7 +779,7 @@ lemma PreservesRightKanExtension.mk'
 (RightExtension.postcompose₂ObjMkIso _ _) (preserves h.nonempty_isUniversal.some).some⟩⟩
 
 中文:
-引理 PreservesRightKanExtension.mk'
+引理 保持RightKanExtension.mk'
   证明: ⟨⟨Limits.IsTerminal.equivOfIso
 (RightExtension.postcompose₂ObjMkIso _ _) (preserves h.nonempty_isUniversal.some).some⟩⟩
 
@@ -807,7 +807,7 @@ lemma PreservesRightKanExtension.mk_of_preserves_isRightKanExtension
       (by ext x; simp [← G.map_comp])
 
 中文:
-引理 PreservesRightKanExtension.mk_of_preserves_isRightKanExtension
+引理 保持RightKanExtension.mk_of_preserves_isRightKanExtension
   证明: .mk fun F'' α' h =>
     isRightKanExtension_of_iso
       (isoWhiskerRight (rightKanExtensionUnique F' α F'' α') G)
@@ -840,7 +840,7 @@ lemma PreservesRightKanExtension.mk_of_preserves_isUniversal
  Limits.IsTerminal.uniqueUpToIso hE hE') h.some⟩
 
 中文:
-引理 PreservesRightKanExtension.mk_of_preserves_isUniversal
+引理 保持RightKanExtension.mk_of_preserves_isUniversal
   结论: (E : RightExtension L F)
   证明: .mk' G F L fun hE' =>
     ⟨Limits.IsTerminal.equivOfIso
@@ -869,10 +869,10 @@ class PreservesPointwiseRightKanExtensionAt
     - preserves : forall (E : RightExtension L F), E.IsPointwiseRightKanExtensionAt c -> Nonempty ((RightExtension.postcompose₂ L F G |>.obj E).IsPointwiseRightKanExtensionAt c)
 
 中文:
-类 PreservesPointwiseRightKanExtensionAt
+类 保持PointwiseRightKanExtensionAt
   参数: (c : C)
   公理与运算 (1 个):
-    - preserves : 对任意 (E : RightExtension L F), E.IsPointwiseRightKanExtensionAt c -> Nonempty ((RightExtension.postcompose₂ L F G |>.obj E).IsPointwiseRightKanExtensionAt c)
+    - preserves : 对任意 (E : RightExtension L F), E.IsPointwiseRightKanExtensionAt c -> 非空 ((RightExtension.postcompose₂ L F G |>.obj E).IsPointwiseRightKanExtensionAt c)
 -/
 class PreservesPointwiseRightKanExtensionAt (c : C) where
   /-- `G` preserves every pointwise extensions of `F` along `L` at `c`. -/
@@ -976,7 +976,7 @@ lemma PreservesPointwiseRightKanExtensionAt.mk'
         (E'.coneAtWhiskerRightIso G F L c).symm⟩
 
 中文:
-引理 PreservesPointwiseRightKanExtensionAt.mk'
+引理 保持PointwiseRightKanExtensionAt.mk'
   结论: (c : C) {E : RightExtension L F}
   证明: ⟨Limits.IsLimit.ofIsoLimit hGE
       (E.coneAtWhiskerRightIso G F L c) ≪≫
@@ -1059,7 +1059,7 @@ definition rightKanExtensionCompIsoOfPreserves
 
 中文:
 定义 rightKanExtensionCompIsoOfPreserves
-  签名: [PreservesRightKanExtension G F L]
+  签名: [保持RightKanExtension G F L]
   定义体: rightKanExtensionUnique
     (L.rightKanExtension F ⋙ G)
     ((Functor.associator _ _ _).inv ≫ whiskerRight (L.rightKanExtensionCounit F) G)

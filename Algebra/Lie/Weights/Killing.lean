@@ -54,7 +54,7 @@ lemma restrict_killingForm
 
 中文:
 引理 restrict_killingForm
-  条件: (H : LieSubalgebra R L)
+  条件: (H : Lie子代数 R L)
   证明: rfl
 -/
 lemma restrict_killingForm (H : LieSubalgebra R L) :
@@ -234,7 +234,7 @@ lemma mem_ker_killingForm_of_mem_rootSpace_of_forall_rootSpace_neg
     · exact killingForm_a
 
 中文:
-引理 mem_ker_killingForm_of_mem_rootSpace_of_forall_rootSpace_neg
+引理 mem_ker_killingForm_of_mem_rootSpace_of_对任意_rootSpace_neg
   证明: by
   rw [LinearMap.mem_ker]
   ext y
@@ -342,9 +342,9 @@ lemma IsZero.neg
   proof: by ext; rw [coe_neg, h, neg_zero]
 
 中文:
-引理 IsZero.neg
-  条件: (h : α.IsZero)
-  结论: (-α).IsZero
+引理 是零.neg
+  条件: (h : α.是零)
+  结论: (-α).是零
   证明: by ext; rw [coe_neg, h, neg_zero]
 
 Depends on / 依赖: coe_neg, neg_zero
@@ -361,7 +361,7 @@ lemma isZero_neg
 
 中文:
 引理 isZero_neg
-  结论: (-α).IsZero ↔ α.IsZero
+  结论: (-α).是零 ↔ α.是零
   证明: ⟨fun h => neg_neg α ▸ h.neg, fun h => h.neg⟩
 -/
 @[simp] lemma isZero_neg : (-α).IsZero ↔ α.IsZero := ⟨fun h => neg_neg α ▸ h.neg, fun h => h.neg⟩
@@ -592,7 +592,7 @@ lemma coroot_neg
 
 中文:
 引理 coroot_neg
-  条件: [IsTriangularizable K H L] (α : Weight K H L)
+  条件: [是Triangularizable K H L] (α : Weight K H L)
   证明: by
   simp [coroot]
 -/
@@ -1138,7 +1138,7 @@ lemma coroot_zero
 
 中文:
 引理 coroot_zero
-  条件: [Nontrivial L]
+  条件: [非平凡 L]
   结论: coroot (0 : Weight K H L) = 0
   证明: by simp [Weight.isZero_zero]
 
@@ -1444,7 +1444,7 @@ lemma exists_isSl2Triple_of_weight_isNonZero
   have hef := lie_eq_killin
 
 中文:
-引理 exists_isSl2Triple_of_weight_isNonZero
+引理 存在_isSl2Triple_of_weight_isNonZero
   条件: {α : Weight K H L} (hα : α.IsNonZero)
   证明: by
   obtain ⟨e, heα : e in rootSpace H α, he₀ : e != 0⟩ := α.exists_ne_zero
@@ -1497,7 +1497,7 @@ lemma _root_.IsSl2Triple.h_eq_coroot
     rw [LieSubalgebra.coe_bracket_
 
 中文:
-引理 _root_.IsSl2Triple.h_eq_coroot
+引理 _root_.是Sl2Triple.h_eq_coroot
   结论: {α : Weight K H L} (hα : α.IsNonZero)
   证明: by
   have hef := lie_eq_killingForm_smul_of_mem_rootSpace_of_mem_rootSpace_neg heα hfα
@@ -1849,8 +1849,8 @@ omit [IsKilling K L] [IsTriangularizable K H L] [CharZero K] in
 @[simp]
 
 中文:
-缩写 _root_.LieSubalgebra.root
-  签名: : Finset (Weight K H L)
+缩写 _root_.Lie子代数.root
+  签名: : 有限集 (Weight K H L)
   定义体: {α | α.IsNonZero}
 
 omit [IsKilling K L] [IsTriangularizable K H L] [CharZero K] in
@@ -1873,7 +1873,7 @@ lemma _root_.LieSubalgebra.isNonZero_coe_root
   aesop
 
 中文:
-引理 _root_.LieSubalgebra.isNonZero_coe_root
+引理 _root_.Lie子代数.isNonZero_coe_root
   条件: (α : H.root)
   结论: (α : Weight K H L).IsNonZero
   证明: by

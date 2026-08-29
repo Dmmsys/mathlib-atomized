@@ -241,7 +241,7 @@ lemma BoundedVariationOn.mul
 
 中文:
 引理 BoundedVariationOn.mul
-  结论: {f g : α -> 实数} {s : Set α}
+  结论: {f g : α -> 实数} {s : 集合 α}
   证明: hf.bilinear_comp hg (B := ContinuousLinearMap.lsmul Real Real)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, bilinear_comp, hf.bilinear_comp
@@ -313,7 +313,7 @@ lemma LocallyBoundedVariationOn.mul
 
 中文:
 引理 LocallyBoundedVariationOn.mul
-  结论: {f g : α -> 实数} {s : Set α}
+  结论: {f g : α -> 实数} {s : 集合 α}
   证明: hf.bilinear_comp hg (B := ContinuousLinearMap.lsmul Real Real)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, bilinear_comp, hf.bilinear_comp
@@ -342,7 +342,7 @@ theorem ae_differentiableWithinAt_of_mem_real
 
 中文:
 定理 ae_differentiableWithinAt_of_mem_real
-  结论: {f : 实数 -> 实数} {s : Set 实数}
+  结论: {f : 实数 -> 实数} {s : 集合 实数}
   证明: by
   obtain ⟨p, q, hp, hq, rfl⟩ : exists p q, MonotoneOn p s ∧ MonotoneOn q s ∧ f = p - q :=
     h.exists_monotoneOn_sub_monotoneOn
@@ -374,7 +374,7 @@ theorem ae_differentiableWithinAt_of_mem_pi
 
 中文:
 定理 ae_differentiableWithinAt_of_mem_pi
-  结论: {ι : 类型} [Fintype ι] {f : 实数 -> ι -> 实数} {s : Set 实数}
+  结论: {ι : 类型} [有限类型 ι] {f : 实数 -> ι -> 实数} {s : 集合 实数}
   证明: by
   have A : forall i : ι, LipschitzWith 1 fun x : ι -> Real => x i := fun i => LipschitzWith.eval i
   have : forall i : ι, forallᵐ x, x in s -> DifferentiableWithinAt Real (fun x : Real => f x i) s x := fun i => by
@@ -407,7 +407,7 @@ theorem ae_differentiableWithinAt_of_mem
 
 中文:
 定理 ae_differentiableWithinAt_of_mem
-  结论: {f : 实数 -> V} {s : Set 实数}
+  结论: {f : 实数 -> V} {s : 集合 实数}
   证明: by
   let A := (Module.Basis.ofVectorSpace Real V).equivFun.toContinuousLinearEquiv
   suffices H : forallᵐ x, x in s -> DifferentiableWithinAt Real (A ∘ f) s x by
@@ -473,7 +473,7 @@ theorem ae_differentiableWithinAt
 
 中文:
 定理 ae_differentiableWithinAt
-  结论: {f : 实数 -> V} {s : Set 实数} (h : LocallyBoundedVariationOn f s)
+  结论: {f : 实数 -> V} {s : 集合 实数} (h : LocallyBoundedVariationOn f s)
   证明: by
   rw [ae_restrict_iff' hs]
   exact h.ae_differentiableWithinAt_of_mem
@@ -524,7 +524,7 @@ theorem LipschitzOnWith.ae_differentiableWithinAt_of_mem_real
 
 中文:
 定理 LipschitzOnWith.ae_differentiableWithinAt_of_mem_real
-  结论: {C : 实数>=0} {f : 实数 -> V} {s : Set 实数}
+  结论: {C : 实数>=0} {f : 实数 -> V} {s : 集合 实数}
   证明: h.locallyBoundedVariationOn.ae_differentiableWithinAt_of_mem
 
 Depends on / 依赖: ae_differentiableWithinAt_of_mem, h.locallyBoundedVariationOn.ae_differentiableWithinAt_of_mem, locallyBoundedVariationOn
@@ -543,7 +543,7 @@ theorem LipschitzOnWith.ae_differentiableWithinAt_real
 
 中文:
 定理 LipschitzOnWith.ae_differentiableWithinAt_real
-  结论: {C : 实数>=0} {f : 实数 -> V} {s : Set 实数}
+  结论: {C : 实数>=0} {f : 实数 -> V} {s : 集合 实数}
   证明: h.locallyBoundedVariationOn.ae_differentiableWithinAt hs
 
 Depends on / 依赖: ae_differentiableWithinAt, h.locallyBoundedVariationOn.ae_differentiableWithinAt, locallyBoundedVariationOn

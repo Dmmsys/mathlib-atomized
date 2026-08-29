@@ -115,7 +115,7 @@ g.
 
 中文:
 定义 Lean.MVarId.subsingleton
-  签名: (g : MVarId) (insts : Array (Term × AbstractMVarsResult) := #[])
+  签名: (g : MVarId) (insts : 数组 (项 × AbstractMVarsResult) := #[])
   定义体: commitIfNoEx do
   let g ← g.heqOfEq
   g.withContext do

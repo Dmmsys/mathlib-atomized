@@ -75,8 +75,8 @@ theorem Submodule.isSemisimple_torsionBy_of_irreducible
   (isSemisimpleModule_iff ..).mpr (submodule_torsionBy_orderIso a).complementedLattice
 
 中文:
-定理 Submodule.isSemisimple_torsionBy_of_irreducible
-  条件: {a : R} (h : Irreducible a)
+定理 子模.isSemisimple_torsionBy_of_irreducible
+  条件: {a : R} (h : 不可约 a)
   证明: haveI := PrincipalIdealRing.isMaximal_of_irreducible h
   letI := Ideal.Quotient.field (R ∙ a)
   (isSemisimpleModule_iff ..).mpr (submodule_torsionBy_orderIso a).complementedLattice
@@ -102,8 +102,8 @@ theorem Submodule.isInternal_prime_power_torsion_of_pid
   rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [← Ideal.span_singleton_pow]; rw [Ideal.span_singleton_generator]
 
 中文:
-定理 Submodule.isInternal_prime_power_torsion_of_pid
-  结论: [Module.Finite R M]
+定理 子模.is整数ernal_prime_power_torsion_of_pid
+  结论: [模.有限 R M]
   证明: by
   convert! isInternal_prime_power_torsion hM
   rw [← torsionBySet_span_singleton_eq]; rw [Ideal.submodule_span_eq]; rw [← Ideal.span_singleton_pow]; rw [Ideal.span_singleton_generator]
@@ -134,8 +134,8 @@ theorem Submodule.exists_isInternal_prime_power_torsion_of_pid
     exact (IsPrincipal.prime_generator_of_isPrime p hP.ne_zer
 
 中文:
-定理 Submodule.exists_isInternal_prime_power_torsion_of_pid
-  结论: [Module.Finite R M]
+定理 子模.存在_is整数ernal_prime_power_torsion_of_pid
+  结论: [模.有限 R M]
   证明: by
   refine ⟨_, ?_, _, _, ?_, _, Submodule.isInternal_prime_power_torsion_of_pid hM⟩
   · exact Finset.fintypeCoeSort _
@@ -184,7 +184,7 @@ theorem _root_.Ideal.torsionOf_eq_span_pow_pOrder
       (Associates.mk <| gener
 
 中文:
-定理 _root_.Ideal.torsionOf_eq_span_pow_pOrder
+定理 _root_.理想.torsionOf_eq_span_pow_pOrder
   条件: (x : M)
   证明: by
   classical
@@ -229,7 +229,7 @@ theorem p_pow_smul_lift
 
 中文:
 定理 p_pow_smul_lift
-  结论: {x y : M} {k : 自然数} (hM' : Module.IsTorsionBy R M (p ^ pOrder hM y))
+  结论: {x y : M} {k : 自然数} (hM' : 模.IsTorsionBy R M (p ^ pOrder hM y))
   证明: by
   by_cases! hk : k <= pOrder hM y
   · let f :=
@@ -279,8 +279,8 @@ theorem exists_smul_eq_zero_and_mk_eq
     rw [← mk_smul]; rw [Quotient.mk_eq_zero]; rw [smul_eq_mul]; r
 
 中文:
-定理 exists_smul_eq_zero_and_mk_eq
-  结论: {z : M} (hz : Module.IsTorsionBy R M (p ^ pOrder hM z))
+定理 存在_smul_eq_zero_and_mk_eq
+  结论: {z : M} (hz : 模.IsTorsionBy R M (p ^ pOrder hM z))
   证明: by
   have f1 := mk_surjective (R ∙ z) (f 1)
   have : p ^ k • f1.choose in R ∙ z := by
@@ -324,7 +324,7 @@ theorem torsion_by_prime_power_decomposition
 
 中文:
 定理 torsion_by_prime_power_decomposition
-  结论: (hM : Module.IsTorsion' M (Submonoid.powers p))
+  结论: (hM : 模.是挠' M (子幺半群.powers p))
   证明: by
   obtain ⟨d, s, hs⟩ := @Module.Finite.exists_fin _ _ _ _ _ h'; use d; clear h'
   induction d generalizing M with
@@ -409,7 +409,7 @@ Nonempty torsionBy R M (p i ^ e i) ≃ₗ[R] ⨁ j, R ⧸ R ∙ p i ^ k j := by
 
 中文:
 定理 equiv_directSum_of_isTorsion
-  条件: [h' : Module.Finite R M] (hM : Module.IsTorsion R M)
+  条件: [h' : 模.有限 R M] (hM : 模.是挠 R M)
   证明: by
   obtain ⟨I, fI, _, p, hp, e, h⟩ := Submodule.exists_isInternal_prime_power_torsion_of_pid hM
   have :
@@ -457,7 +457,7 @@ theorem equiv_free_prod_directSum
 
 中文:
 定理 equiv_free_prod_directSum
-  条件: [h' : Module.Finite R M]
+  条件: [h' : 模.有限 R M]
   证明: by
   obtain ⟨I, fI, p, hp, e, ⟨h⟩⟩ :=
     equiv_directSum_of_isTorsion.{u, v} (@torsion_isTorsion R M _ _ _)
@@ -494,8 +494,8 @@ theorem exists_ker_toSpanSingleton_eq_annihilator
   rw [mem_ker]; rw [toSpanSingleton_app
 
 中文:
-定理 exists_ker_toSpanSingleton_eq_annihilator
-  条件: [Module.Finite R M]
+定理 存在_ker_toSpanSingleton_eq_annihilator
+  条件: [模.有限 R M]
   证明: by
   have ⟨m, ι, _, p, irr, n, ⟨e⟩⟩ := equiv_free_prod_directSum (R := R) (M := M)
   refine ⟨e.symm (Finsupp.equivFunOnFinite.symm fun _ => 1, DFinsupp.equivFunOnFintype.symm

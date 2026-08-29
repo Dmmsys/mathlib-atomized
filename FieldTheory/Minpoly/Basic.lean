@@ -79,7 +79,7 @@ theorem monic
 
 中文:
 定理 monic
-  条件: (hx : Is整数egral A x)
+  条件: (hx : 是整 A x)
   结论: Monic (minpoly A x)
   证明: by
   delta minpoly
@@ -104,7 +104,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial A] (hx : Is整数egral A x)
+  条件: [非平凡 A] (hx : 是整 A x)
   结论: minpoly A x != 0
   证明: (monic hx).ne_zero
 
@@ -124,7 +124,7 @@ theorem eq_zero
 
 中文:
 定理 eq_zero
-  条件: (hx : ¬Is整数egral A x)
+  条件: (hx : ¬是整 A x)
   结论: minpoly A x = 0
   证明: dif_neg hx
 
@@ -144,8 +144,8 @@ theorem ne_zero_iff
 
 中文:
 定理 ne_zero_iff
-  条件: [Nontrivial A]
-  结论: minpoly A x != 0 ↔ Is整数egral A x
+  条件: [非平凡 A]
+  结论: minpoly A x != 0 ↔ 是整 A x
   证明: ⟨fun h => of_not_not eq_zero.mt h, ne_zero⟩
 
 Depends on / 依赖: eq_zero, eq_zero.mt, ne_zero, of_not_not
@@ -166,7 +166,7 @@ theorem algHom_eq
 
 中文:
 定理 algHom_eq
-  条件: (f : B ->ₐ[A] B') (hf : Function.Injective f) (x : B)
+  条件: (f : B ->ₐ[A] B') (hf : 函数.单射 f) (x : B)
   证明: by
   classical
   simp_rw [minpoly, isIntegral_algHom_iff _ hf, ← Polynomial.aeval_def, aeval_algHom,
@@ -192,7 +192,7 @@ theorem algebraMap_eq
 
 中文:
 定理 algebraMap_eq
-  结论: {B} [CommRing B] [Algebra A B] [Algebra B B'] [IsScalarTower A B B']
+  结论: {B} [交换环 B] [代数 A B] [代数 B B'] [标量塔 A B B']
   证明: algHom_eq (IsScalarTower.toAlgHom A B B') h x
 
 @[simp]
@@ -274,7 +274,7 @@ theorem aeval_algHom
 中文:
 定理 aeval_algHom
   条件: (f : B ->ₐ[A] B') (x : B)
-  结论: (Polynomial.aeval (f x)) (minpoly A x) = 0
+  结论: (多项式.aeval (f x)) (minpoly A x) = 0
   证明: by
   rw [Polynomial.aeval_algHom]; rw [AlgHom.coe_comp]; rw [comp_apply]; rw [aeval]; rw [map_zero]
 
@@ -297,7 +297,7 @@ theorem ne_one
 
 中文:
 定理 ne_one
-  条件: [Nontrivial B]
+  条件: [非平凡 B]
   结论: minpoly A x != 1
   证明: by
   intro h
@@ -325,7 +325,7 @@ theorem map_ne_one
 
 中文:
 定理 map_ne_one
-  条件: [Nontrivial B] {R : 类型} [Semiring R] [Nontrivial R] (f : A ->+* R)
+  条件: [非平凡 B] {R : 类型} [半环 R] [非平凡 R] (f : A ->+* R)
   证明: by
   by_cases hx : IsIntegral A x
   · exact mt ((monic hx).eq_one_of_map_eq_one f) (ne_one A x)
@@ -357,8 +357,8 @@ theorem not_isUnit
 
 中文:
 定理 not_isUnit
-  条件: [Nontrivial B]
-  结论: ¬IsUnit (minpoly A x)
+  条件: [非平凡 B]
+  结论: ¬是单位 (minpoly A x)
   证明: by
   have : Nontrivial A := (algebraMap A B).domain_nontrivial
   by_cases hx : IsIntegral A x
@@ -425,8 +425,8 @@ theorem min
   · simp only [degree_zero, bot_le]
 
 中文:
-定理 min
-  条件: {p : A[X]} (pmonic : p.Monic) (hp : Polynomial.aeval x p = 0)
+定理 最小值
+  条件: {p : A[X]} (pmonic : p.Monic) (hp : 多项式.aeval x p = 0)
   证明: by
   delta minpoly; split_ifs with hx
 · refine le_of_not_gt degree_lt_wf.not_lt_min _ ?_
@@ -460,7 +460,7 @@ theorem unique'
 
 中文:
 定理 unique'
-  结论: {p : A[X]} (hm : p.Monic) (hp : Polynomial.aeval x p = 0)
+  结论: {p : A[X]} (hm : p.Monic) (hp : 多项式.aeval x p = 0)
   证明: by
   nontriviality A
   have hx : IsIntegral A x := ⟨p, hm, hp⟩
@@ -549,7 +549,7 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: [Subsingleton B]
+  条件: [子单例 B]
   结论: minpoly A x = 1
   证明: by
   nontriviality A
@@ -591,7 +591,7 @@ theorem natDegree_pos
 
 中文:
 定理 natDegree_pos
-  条件: [Nontrivial B] (hx : Is整数egral A x)
+  条件: [非平凡 B] (hx : 是整 A x)
   结论: 0 < natDegree (minpoly A x)
   证明: by
   rw [pos_iff_ne_zero]
@@ -626,7 +626,7 @@ theorem degree_pos
 
 中文:
 定理 degree_pos
-  条件: [Nontrivial B] (hx : Is整数egral A x)
+  条件: [非平凡 B] (hx : 是整 A x)
   结论: 0 < degree (minpoly A x)
   证明: natDegree_pos_iff_degree_pos.mp (natDegree_pos hx)
 
@@ -728,7 +728,7 @@ theorem two_le_natDegree_iff
 
 中文:
 定理 two_le_natDegree_iff
-  条件: (int : Is整数egral A x)
+  条件: (int : 是整 A x)
   证明: by
   rw [iff_not_comm]; rw [← natDegree_eq_one_iff]; rw [not_le]
   exact ⟨fun h => h.trans_lt one_lt_two, fun h => by linarith only [minpoly.natDegree_pos int, h]⟩
@@ -752,7 +752,7 @@ theorem two_le_natDegree_subalgebra
 
 中文:
 定理 two_le_natDegree_subalgebra
-  结论: {B} [CommRing B] [Algebra A B] [Nontrivial B]
+  结论: {B} [交换环 B] [代数 A B] [非平凡 B]
   证明: by
   rw [two_le_natDegree_iff int]; rw [Iff.not]
   apply Set.ext_iff.mp Subtype.range_val_subtype
@@ -784,7 +784,7 @@ theorem eq_X_sub_C_of_algebraMap_inj
 
 中文:
 定理 eq_X_sub_C_of_algebraMap_inj
-  条件: (a : A) (hf : Function.Injective (algebraMap A B))
+  条件: (a : A) (hf : 函数.单射 (algebraMap A B))
   证明: by
   nontriviality A
   refine (unique' A _ (monic_X_sub_C a) ?_ ?_).symm
@@ -825,7 +825,7 @@ theorem aeval_ne_zero_of_dvdNotUnit_minpoly
 
 中文:
 定理 aeval_ne_zero_of_dvdNotUnit_minpoly
-  结论: {a : A[X]} (hx : Is整数egral A x) (hamonic : a.Monic)
+  结论: {a : A[X]} (hx : 是整 A x) (hamonic : a.Monic)
   证明: by
   refine fun ha => (min A x hamonic ha).not_gt (degree_lt_degree ?_)
   obtain ⟨_, c, hu, he⟩ := hdvd
@@ -871,8 +871,8 @@ theorem irreducible
 
 中文:
 定理 irreducible
-  条件: (hx : Is整数egral A x)
-  结论: Irreducible (minpoly A x)
+  条件: (hx : 是整 A x)
+  结论: 不可约 (minpoly A x)
   证明: by
   refine (irreducible_of_monic (monic hx) <| ne_one A x).2 fun f g hf hg he => ?_
   rw [← hf.isUnit_iff]; rw [← hg.isUnit_iff]

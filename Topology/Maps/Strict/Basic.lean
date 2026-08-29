@@ -119,7 +119,7 @@ definition _root_.Homeomorph.quotientKerEquivRange
   Homeomorph.quotientKerEquivRange
 
 中文:
-定义 _root_.Homeomorph.quotientKerEquivRange
+定义 _root_.同胚.quotientKerEquivRange
   签名: (hf : IsStrictMap f)
   定义体: (isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp hf).homeomorph
 
@@ -174,7 +174,7 @@ lemma IsStrictMap.continuous
 中文:
 引理 IsStrictMap.continuous
   条件: {f : X -> Y} (hf : IsStrictMap f)
-  结论: Continuous f
+  结论: 连续 f
   证明: by
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization] at hf
   exact continuous_rangeFactorization_iff.mp hf.continuous
@@ -200,8 +200,8 @@ lemma _root_.IsOpenMap.isStrictMap
   IsOpenMap.isStrictMap
 
 中文:
-引理 _root_.IsOpenMap.isStrictMap
-  条件: (ho : IsOpenMap f) (h_cont : Continuous f)
+引理 _root_.是开映射.isStrictMap
+  条件: (ho : 是开映射 f) (h_cont : 连续 f)
   证明: by
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
   exact (ho.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
@@ -236,8 +236,8 @@ lemma _root_.IsClosedMap.isStrictMap
   IsClosedMap.isStrictMap
 
 中文:
-引理 _root_.IsClosedMap.isStrictMap
-  条件: (hc : IsClosedMap f) (h_cont : Continuous f)
+引理 _root_.是闭映射.isStrictMap
+  条件: (hc : 是闭映射 f) (h_cont : 连续 f)
   证明: by
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
   exact (hc.subtype_mk fun x => ⟨x, rfl⟩).isQuotientMap
@@ -269,8 +269,8 @@ lemma _root_.IsHomeomorph.isStrictMap
   IsHomeomorph.isStrictMap
 
 中文:
-引理 _root_.IsHomeomorph.isStrictMap
-  条件: (f_homeo : IsHomeomorph f)
+引理 _root_.是同胚.isStrictMap
+  条件: (f_homeo : 是同胚 f)
   证明: f_homeo.isOpenMap.isStrictMap f_homeo.continuous
 
 @[deprecated (since := "2026-07-10")] protected alias IsHomeomorph.isStrictMap :=
@@ -315,8 +315,8 @@ set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_com
   exact ⟨fun H => by simpa using! Φ.symm.isQuotientMap
 
 中文:
-引理 IsQuotientMap.isStrictMap_iff
-  条件: (f_quot : IsQuotientMap f)
+引理 是商映射.isStrictMap_iff
+  条件: (f_quot : 是商映射 f)
   证明: by
 set Φ : range (g ∘ f) ≃ₜ range g := .setCongr f_quot.surjective.range_comp g
   have key : rangeFactorization g ∘ f = Φ ∘ rangeFactorization (g ∘ f) := rfl
@@ -341,8 +341,8 @@ lemma IsQuotientMap.isStrictMap
   proof: f_quot.isStrictMap_iff.mp .id
 
 中文:
-引理 IsQuotientMap.isStrictMap
-  条件: (f_quot : IsQuotientMap f)
+引理 是商映射.isStrictMap
+  条件: (f_quot : 是商映射 f)
   证明: f_quot.isStrictMap_iff.mp .id
 
 Depends on / 依赖: f_quot, f_quot.isStrictMap_iff.mp, isStrictMap_iff
@@ -365,8 +365,8 @@ funext Quotient.ind fun _ => rfl
   simp_rw [isStrictMap_iff_isEmbedding_kerLift, ← g_emb.of_
 
 中文:
-引理 IsEmbedding.isStrictMap_iff
-  条件: (g_emb : IsEmbedding g)
+引理 是嵌入.isStrictMap_iff
+  条件: (g_emb : 是嵌入 g)
   证明: by
   set Φ : Quotient (Setoid.ker (g ∘ f)) ≃ₜ Quotient (Setoid.ker (f)) :=
     Homeomorph.Quotient.congrRight (fun _ _ => by simp [g_emb.injective.eq_iff])
@@ -395,8 +395,8 @@ lemma IsEmbedding.isStrictMap
   proof: f_emb.isStrictMap_iff.mp .id
 
 中文:
-引理 IsEmbedding.isStrictMap
-  条件: (f_emb : IsEmbedding f)
+引理 是嵌入.isStrictMap
+  条件: (f_emb : 是嵌入 f)
   证明: f_emb.isStrictMap_iff.mp .id
 
 Depends on / 依赖: f_emb, f_emb.isStrictMap_iff.mp, isStrictMap_iff
@@ -498,7 +498,7 @@ lemma _root_.Homeomorph.isStrictMap_comp_iff
   Homeomorph.isStrictMap_comp_iff
 
 中文:
-引理 _root_.Homeomorph.isStrictMap_comp_iff
+引理 _root_.同胚.isStrictMap_comp_iff
   条件: (e : X ≃ₜ Y) {f : Y -> Z}
   证明: e.isQuotientMap.isStrictMap_iff.symm
 
@@ -526,7 +526,7 @@ lemma _root_.Homeomorph.comp_isStrictMap_iff
   Homeomorph.comp_isStrictMap_iff
 
 中文:
-引理 _root_.Homeomorph.comp_isStrictMap_iff
+引理 _root_.同胚.comp_isStrictMap_iff
   条件: (e : Y ≃ₜ Z) {f : X -> Y}
   证明: e.isEmbedding.isStrictMap_iff.symm
 

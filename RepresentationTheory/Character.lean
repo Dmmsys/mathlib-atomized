@@ -110,7 +110,7 @@ theorem char_one
 中文:
 定理 char_one
   条件: (ρ : Representation k G V)
-  结论: ρ.character 1 = Module.finrank k V
+  结论: ρ.character 1 = 模.finrank k V
   证明: by
   simp only [character, map_one, trace_one]
 
@@ -160,7 +160,7 @@ theorem char_iso
 
 中文:
 定理 char_iso
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: ρ.character = σ.character
   证明: by
   ext g
@@ -333,7 +333,7 @@ theorem char_orthonormal
 
 中文:
 定理 char_orthonormal
-  条件: [IsIrreducible ρ] [IsIrreducible σ]
+  条件: [是不可约 ρ] [是不可约 σ]
   证明: by
   cases isEmpty_or_nonempty (Equiv σ ρ)
   · rw [card_inv_mul_sum_char_mul_char_eq_finrank]
@@ -418,7 +418,7 @@ theorem char_one
 中文:
 定理 char_one
   条件: (V : FDRep k G)
-  结论: V.character 1 = Module.finrank k V
+  结论: V.character 1 = 模.finrank k V
   证明: by
   simp only [character, map_one, trace_one]
 
@@ -652,7 +652,7 @@ theorem char_orthonormal
 
 中文:
 定理 char_orthonormal
-  条件: (V W : FDRep k G) [Simple V] [Simple W]
+  条件: (V W : FDRep k G) [单 V] [单 W]
   证明: by
   rw [scalar_product_char_eq_finrank_equivariant]
   -- The scalar product of the characters is equal to the dimension of the space of

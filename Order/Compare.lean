@@ -57,7 +57,7 @@ theorem cmpLE_swap
 
 中文:
 定理 cmpLE_swap
-  条件: {α} [LE α] [@Std.Total α (· <= ·)] [DecidableLE α] (x y : α)
+  条件: {α} [LE α] [@Std.全 α (· <= ·)] [DecidableLE α] (x y : α)
   证明: by
   by_cases xy : x <= y <;> by_cases yx : y <= x <;> simp [cmpLE, *, Ordering.swap]
   cases not_or_intro xy yx (total_of _ _ _)
@@ -81,7 +81,7 @@ theorem cmpLE_eq_cmp
 
 中文:
 定理 cmpLE_eq_cmp
-  结论: {α} [Preorder α] [@Std.Total α (· <= ·)] [DecidableLE α] [DecidableLT α]
+  结论: {α} [预序 α] [@Std.全 α (· <= ·)] [DecidableLE α] [DecidableLT α]
   证明: by
   by_cases xy : x <= y <;> by_cases yx : y <= x <;> simp [cmpLE, lt_iff_le_not_ge, *, cmp, cmpUsing]
   cases not_or_intro xy yx (total_of _ _ _)
@@ -164,7 +164,7 @@ theorem Compares.eq_lt
 
 中文:
 定理 Compares.eq_lt
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: 对任意 {o} {a b : α}, Compares o a b -> (o = lt ↔ a < b)
 -/
 theorem Compares.eq_lt [Preorder α] : forall {o} {a b : α}, Compares o a b -> (o = lt ↔ a < b)
@@ -182,7 +182,7 @@ theorem Compares.ne_lt
 
 中文:
 定理 Compares.ne_lt
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: 对任意 {o} {a b : α}, Compares o a b -> (o != lt ↔ b <= a)
 -/
 theorem Compares.ne_lt [Preorder α] : forall {o} {a b : α}, Compares o a b -> (o != lt ↔ b <= a)
@@ -200,7 +200,7 @@ theorem Compares.eq_eq
 
 中文:
 定理 Compares.eq_eq
-  条件: [Preorder α]
+  条件: [预序 α]
   结论: 对任意 {o} {a b : α}, Compares o a b -> (o = eq ↔ a = b)
 -/
 theorem Compares.eq_eq [Preorder α] : forall {o} {a b : α}, Compares o a b -> (o = eq ↔ a = b)
@@ -219,7 +219,7 @@ theorem Compares.eq_gt
 
 中文:
 定理 Compares.eq_gt
-  条件: [Preorder α] {o} {a b : α} (h : Compares o a b)
+  条件: [预序 α] {o} {a b : α} (h : Compares o a b)
   结论: o = gt ↔ b < a
   证明: swap_eq_iff_eq_swap.symm.trans h.swap.eq_lt
 
@@ -239,7 +239,7 @@ theorem Compares.ne_gt
 
 中文:
 定理 Compares.ne_gt
-  条件: [Preorder α] {o} {a b : α} (h : Compares o a b)
+  条件: [预序 α] {o} {a b : α} (h : Compares o a b)
   结论: o != gt ↔ a <= b
   证明: (not_congr swap_eq_iff_eq_swap.symm).trans h.swap.ne_lt
 
@@ -258,7 +258,7 @@ theorem Compares.le_total
 
 中文:
 定理 Compares.le_total
-  条件: [Preorder α] {a b : α}
+  条件: [预序 α] {a b : α}
   结论: 对任意 {o}, Compares o a b -> a <= b ∨ b <= a
 -/
 theorem Compares.le_total [Preorder α] {a b : α} : forall {o}, Compares o a b -> a <= b ∨ b <= a
@@ -276,7 +276,7 @@ theorem Compares.le_antisymm
 
 中文:
 定理 Compares.le_antisymm
-  条件: [Preorder α] {a b : α}
+  条件: [预序 α] {a b : α}
   结论: 对任意 {o}, Compares o a b -> a <= b -> b <= a -> a = b
 -/
 theorem Compares.le_antisymm [Preorder α] {a b : α} : forall {o}, Compares o a b -> a <= b -> b <= a -> a = b
@@ -293,7 +293,7 @@ theorem Compares.inj
 
 中文:
 定理 Compares.inj
-  条件: [Preorder α] {o₁}
+  条件: [预序 α] {o₁}
 -/
 theorem Compares.inj [Preorder α] {o₁} :
     forall {o₂} {a b : α}, Compares o₁ a b -> Compares o₂ a b -> o₁ = o₂
@@ -319,7 +319,7 @@ theorem compares_iff_of_compares_impl
 
 中文:
 定理 compares_iff_of_compares_impl
-  结论: [LinearOrder α] [Preorder β] {a b : α} {a' b' : β}
+  结论: [线性序 α] [预序 β] {a b : α} {a' b' : β}
   证明: by
   refine ⟨h, fun ho => ?_⟩
   rcases lt_trichotomy a b with hab | hab | hab
@@ -413,7 +413,7 @@ theorem cmp_compares
 
 中文:
 定理 cmp_compares
-  条件: [LinearOrder α] (a b : α)
+  条件: [线性序 α] (a b : α)
   结论: (cmp a b).Compares a b
   证明: by
   obtain h | h | h := lt_trichotomy a b <;> simp [cmp, cmpUsing, h, h.not_gt]
@@ -435,7 +435,7 @@ theorem Ordering.Compares.cmp_eq
 
 中文:
 定理 Ordering.Compares.cmp_eq
-  条件: [LinearOrder α] {a b : α} {o : Ordering} (h : o.Compares a b)
+  条件: [线性序 α] {a b : α} {o : Ordering} (h : o.Compares a b)
   证明: (cmp_compares a b).inj h
 
 @[simp]
@@ -462,7 +462,7 @@ theorem cmp_swap
 
 中文:
 定理 cmp_swap
-  条件: [Preorder α] [DecidableLT α] (a b : α)
+  条件: [预序 α] [DecidableLT α] (a b : α)
   结论: (cmp a b).swap = cmp b a
   证明: by
   unfold cmp cmpUsing
@@ -583,7 +583,7 @@ definition linearOrderOfCompares
 
 中文:
 定义 linearOrderOfCompares
-  签名: [Preorder α] (cmp : α -> α -> Ordering)
+  签名: [预序 α] (cmp : α -> α -> Ordering)
   定义体: let H : DecidableLE α := fun a b => decidable_of_iff _ (h a b).ne_gt
   { (inferInstance : Preorder α) with
     le_antisymm := fun a b => (h a b).le_antisymm,
@@ -844,7 +844,7 @@ theorem Eq.cmp_eq_eq
   proof: (cmp_eq_eq_iff _ _).2 h
 
 中文:
-定理 Eq.cmp_eq_eq
+定理 相等.cmp_eq_eq
   条件: (h : x = y)
   结论: cmp x y = Ordering.eq
   证明: (cmp_eq_eq_iff _ _).2 h
@@ -864,7 +864,7 @@ theorem Eq.cmp_eq_eq'
   proof: h.symm.cmp_eq_eq
 
 中文:
-定理 Eq.cmp_eq_eq'
+定理 相等.cmp_eq_eq'
   条件: (h : x = y)
   结论: cmp y x = Ordering.eq
   证明: h.symm.cmp_eq_eq

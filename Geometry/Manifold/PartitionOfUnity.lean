@@ -102,13 +102,13 @@ structure SmoothBumpCovering
     - eventuallyEq_one' : forall x in s, exists i, toFun i =ᶠ[𝓝 x] 1
 
 中文:
-结构 SmoothBumpCovering
-  参数: [FiniteDimensional 实数 E] (s : Set M := univ)
+结构 光滑凸覆盖
+  参数: [有限维 实数 E] (s : 集合 M := univ)
   公理与运算 (5 个):
     - c : ι -> M
-    - toFun : 对任意 i, SmoothBumpFunction I (c i)
+    - toFun : 对任意 i, 光滑凸函数 I (c i)
     - c_mem' : 对任意 i, c i in s
-    - locallyFinite' : LocallyFinite fun i => support (toFun i)
+    - locallyFinite' : 局部有限 fun i => support (toFun i)
     - eventuallyEq_one' : 对任意 x in s, 存在 i, toFun i =ᶠ[𝓝 x] 1
 -/
 structure SmoothBumpCovering [FiniteDimensional Real E] (s : Set M := univ) where
@@ -137,11 +137,11 @@ structure SmoothPartitionOfUnity
     - sum_le_one' : forall x, ∑ᶠ i, toFun i x <= 1
 
 中文:
-结构 SmoothPartitionOfUnity
-  参数: (s : Set M := univ)
+结构 光滑单位分解
+  参数: (s : 集合 M := univ)
   公理与运算 (5 个):
     - toFun : ι -> C^∞⟮I, M; 𝓘(实数), 实数⟯
-    - locallyFinite' : LocallyFinite fun i => support (toFun i)
+    - locallyFinite' : 局部有限 fun i => support (toFun i)
     - nonneg' : 对任意 i x, 0 <= toFun i x
     - sum_eq_one' : 对任意 x in s, ∑ᶠ i, toFun i x = 1
     - sum_le_one' : 对任意 x, ∑ᶠ i, toFun i x <= 1
@@ -178,7 +178,7 @@ theorem locallyFinite
 
 中文:
 定理 locallyFinite
-  结论: LocallyFinite fun i => support (f i)
+  结论: 局部有限 fun i => support (f i)
   证明: f.locallyFinite'
 -/
 protected theorem locallyFinite : LocallyFinite fun i => support (f i) :=
@@ -239,7 +239,7 @@ theorem exists_pos_of_mem
   simpa
 
 中文:
-定理 exists_pos_of_mem
+定理 存在_pos_of_mem
   条件: {x} (hx : x in s)
   结论: 存在 i, 0 < f i x
   证明: by
@@ -290,7 +290,7 @@ definition toPartitionOfUnity
 
 中文:
 定义 toPartitionOfUnity
-  签名: : PartitionOfUnity ι M s
+  签名: : 单位分解 ι M s
   定义体: { f with toFun := fun i => f i }
 -/
 def toPartitionOfUnity : PartitionOfUnity ι M s :=
@@ -364,7 +364,7 @@ theorem finsum_smul_mem_convex
 
 中文:
 定理 finsum_smul_mem_convex
-  结论: {g : ι -> M -> F} {t : Set F} {x : M} (hx : x in s)
+  结论: {g : ι -> M -> F} {t : 集合 F} {x : M} (hx : x in s)
   证明: ht.finsum_mem (fun _ => f.nonneg _ _) (f.sum_eq_one hx) hg
 
 Depends on / 依赖: f.nonneg, f.sum_eq_one, finsum_mem, ht.finsum_mem, nonneg, sum_eq_one
@@ -467,7 +467,7 @@ theorem contDiffAt_finsum
 
 中文:
 定理 contDiffAt_finsum
-  结论: {s : Set E} (f : SmoothPartitionOfUnity ι 𝓘(实数, E) E s) {x₀ : E}
+  结论: {s : 集合 E} (f : 光滑单位分解 ι 𝓘(实数, E) E s) {x₀ : E}
   证明: by
   simp only [← contMDiffAt_iff_contDiffAt] at *
   exact f.contMDiffAt_finsum hφ
@@ -496,7 +496,7 @@ definition finsupport
 
 中文:
 定义 finsupport
-  签名: : Finset ι
+  签名: : 有限集 ι
   定义体: ρ.toPartitionOfUnity.finsupport x₀
 
 @[simp]
@@ -541,7 +541,7 @@ theorem coe_finsupport
 
 中文:
 定理 coe_finsupport
-  结论: (ρ.finsupport x₀ : Set ι) = support fun i => ρ i x₀
+  结论: (ρ.finsupport x₀ : 集合 ι) = support fun i => ρ i x₀
   证明: ρ.toPartitionOfUnity.coe_finsupport x₀
 
 Depends on / 依赖: coe_finsupport, toPartitionOfUnity, toPartitionOfUnity.coe_finsupport
@@ -579,7 +579,7 @@ theorem sum_finsupport'
 
 中文:
 定理 sum_finsupport'
-  条件: (hx₀ : x₀ in s) {I : Finset ι} (hI : ρ.finsupport x₀ subseteq I)
+  条件: (hx₀ : x₀ in s) {I : 有限集 ι} (hI : ρ.finsupport x₀ subseteq I)
   证明: ρ.toPartitionOfUnity.sum_finsupport' hx₀ hI
 
 Depends on / 依赖: sum_finsupport, toPartitionOfUnity, toPartitionOfUnity.sum_finsupport
@@ -598,7 +598,7 @@ theorem sum_finsupport_smul_eq_finsum
 
 中文:
 定理 sum_finsupport_smul_eq_finsum
-  条件: {A : 类型} [AddCommGroup A] [Module 实数 A] (φ : ι -> M -> A)
+  条件: {A : 类型} [加法交换群 A] [模 实数 A] (φ : ι -> M -> A)
   证明: ρ.toPartitionOfUnity.sum_finsupport_smul_eq_finsum φ
 
 Depends on / 依赖: sum_finsupport_smul_eq_finsum, toPartitionOfUnity, toPartitionOfUnity.sum_finsupport_smul_eq_finsum
@@ -622,7 +622,7 @@ theorem finite_tsupport
 
 中文:
 定理 finite_tsupport
-  结论: {i | x₀ in tsupport (ρ i)}.Finite
+  结论: {i | x₀ in tsupport (ρ i)}.有限
   证明: ρ.toPartitionOfUnity.finite_tsupport _
 
 Depends on / 依赖: finite_tsupport, toPartitionOfUnity, toPartitionOfUnity.finite_tsupport
@@ -736,7 +736,7 @@ definition IsSubordinate
 
 中文:
 定义 IsSubordinate
-  签名: (f : SmoothPartitionOfUnity ι I M s) (U : ι -> Set M)
+  签名: (f : 光滑单位分解 ι I M s) (U : ι -> 集合 M)
   定义体: forall i, tsupport (f i) subseteq U i
 
 Depends on / 依赖: subseteq, tsupport
@@ -810,7 +810,7 @@ theorem contMDiff_toPartitionOfUnity
 
 中文:
 定理 contMDiff_toPartitionOfUnity
-  结论: {E : 类型uE} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型uE} [赋范交换加群 E] [赋范空间 实数 E]
   证明: (hf i).mul (contMDiff_finprod_cond fun j _ => contMDiff_const.sub (hf j)) by
     simp only [mulSupport_one_sub]
     exact f.locallyFinite
@@ -904,7 +904,7 @@ theorem IsSubordinate.toSmoothPartitionOfUnity
 
 中文:
 定理 IsSubordinate.toSmoothPartitionOfUnity
-  结论: {f : BumpCovering ι M s} {U : ι -> Set M}
+  结论: {f : BumpCovering ι M s} {U : ι -> 集合 M}
   证明: h.toPartitionOfUnity
 
 Depends on / 依赖: h.toPartitionOfUnity, toPartitionOfUnity
@@ -931,7 +931,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (SmoothBumpCovering ι I M s) fun x => 对任意 i
+  签名: CoeFun (光滑凸覆盖 ι I M s) fun x => 对任意 i
   定义体: ⟨toFun⟩
 -/
 instance : CoeFun (SmoothBumpCovering ι I M s) fun x => forall i : ι, SmoothBumpFunction I (x.c i) :=
@@ -947,7 +947,7 @@ definition IsSubordinate
 
 中文:
 定义 IsSubordinate
-  签名: {s : Set M} (f : SmoothBumpCovering ι I M s) (U : M -> Set M)
+  签名: {s : 集合 M} (f : 光滑凸覆盖 ι I M s) (U : M -> 集合 M)
   定义体: forall i, tsupport (f i) subseteq U (f.c i)
 
 Depends on / 依赖: subseteq, tsupport
@@ -965,7 +965,7 @@ theorem IsSubordinate.support_subset
 
 中文:
 定理 IsSubordinate.support_subset
-  结论: {fs : SmoothBumpCovering ι I M s} {U : M -> Set M}
+  结论: {fs : 光滑凸覆盖 ι I M s} {U : M -> 集合 M}
   证明: Subset.trans subset_closure (h i)
 
 Depends on / 依赖: Subset, Subset.trans, subset_closure
@@ -989,8 +989,8 @@ theorem exists_isSubordinate
   have hB := fun x hx => SmoothBumpFunction.nhds_basis_sup
 
 中文:
-定理 exists_isSubordinate
-  结论: [T2Space M] [SigmaCompactSpace M] (hs : IsClosed s)
+定理 存在_isSubordinate
+  结论: [T2空间 M] [SigmaCompact空间 M] (hs : 是闭集 s)
   证明: by
   -- First we deduce some missing instances
   have : LocallyCompactSpace H := I.locallyCompactSpace
@@ -1030,7 +1030,7 @@ theorem locallyFinite
 
 中文:
 定理 locallyFinite
-  结论: LocallyFinite fun i => support (fs i)
+  结论: 局部有限 fun i => support (fs i)
   证明: fs.locallyFinite'
 -/
 protected theorem locallyFinite : LocallyFinite fun i => support (fs i) :=
@@ -1048,7 +1048,7 @@ theorem point_finite
 中文:
 定理 point_finite
   条件: (x : M)
-  结论: {i | fs i x != 0}.Finite
+  结论: {i | fs i x != 0}.有限
   证明: fs.locallyFinite.point_finite x
 -/
 protected theorem point_finite (x : M) : {i | fs i x != 0}.Finite :=
@@ -1225,7 +1225,7 @@ definition fintype
 
 中文:
 定义 fintype
-  签名: [CompactSpace M]
+  签名: [紧空间 M]
   定义体: fs.locallyFinite.fintypeOfCompact fun i => (fs i).nonempty_support
 -/
 protected def fintype [CompactSpace M] : Fintype ι :=
@@ -1281,7 +1281,7 @@ alias ⟨_, IsSubordinate.toBumpCovering⟩ := isSubordinate_toBumpCovering
 
 中文:
 定理 isSubordinate_toBumpCovering
-  条件: {f : SmoothBumpCovering ι I M s} {U : M -> Set M}
+  条件: {f : 光滑凸覆盖 ι I M s} {U : M -> 集合 M}
   证明: Iff.rfl
 
 alias ⟨_, IsSubordinate.toBumpCovering⟩ := isSubordinate_toBumpCovering
@@ -1304,7 +1304,7 @@ definition toSmoothPartitionOfUnity
 
 中文:
 定义 toSmoothPartitionOfUnity
-  签名: : SmoothPartitionOfUnity ι I M s
+  签名: : 光滑单位分解 ι I M s
   定义体: fs.toBumpCovering.toSmoothPartitionOfUnity fun i => (fs i).contMDiff
 
 Depends on / 依赖: contMDiff, fs.toBumpCovering.toSmoothPartitionOfUnity, toBumpCovering, toSmoothPartitionOfUnity
@@ -1340,7 +1340,7 @@ theorem toSmoothPartitionOfUnity_eq_mul_prod
 
 中文:
 定理 toSmoothPartitionOfUnity_eq_mul_prod
-  结论: (i : ι) (x : M) (t : Finset ι)
+  结论: (i : ι) (x : M) (t : 有限集 ι)
   证明: fs.toBumpCovering.toPartitionOfUnity_eq_mul_prod i x t ht
 
 Depends on / 依赖: fs.toBumpCovering.toPartitionOfUnity_eq_mul_prod, toBumpCovering, toPartitionOfUnity_eq_mul_prod
@@ -1361,7 +1361,7 @@ theorem exists_finset_toSmoothPartitionOfUnity_eventuallyEq
   simpa using! fs.toBumpCovering.exists_finset_toPartitionOfUnity_eventuallyEq i x
 
 中文:
-定理 exists_finset_toSmoothPartitionOfUnity_eventuallyEq
+定理 存在_finset_toSmoothPartitionOfUnity_eventuallyEq
   条件: (i : ι) (x : M)
   证明: by
   simpa using! fs.toBumpCovering.exists_finset_toPartitionOfUnity_eventuallyEq i x
@@ -1422,7 +1422,7 @@ theorem IsSubordinate.toSmoothPartitionOfUnity
 
 中文:
 定理 IsSubordinate.toSmoothPartitionOfUnity
-  结论: {f : SmoothBumpCovering ι I M s} {U : M -> Set M}
+  结论: {f : 光滑凸覆盖 ι I M s} {U : M -> 集合 M}
   证明: h.toBumpCovering.toPartitionOfUnity
 -/
 theorem IsSubordinate.toSmoothPartitionOfUnity {f : SmoothBumpCovering ι I M s} {U : M -> Set M}
@@ -1468,8 +1468,8 @@ theorem exists_contMDiffMap_zero_one_of_isClosed
     ⟨⟨_, g.contMDiff_sum.of_le (by simp)⟩, fun x hx => ?_, fun x => g.sum_eq
 
 中文:
-定理 exists_contMDiffMap_zero_one_of_isClosed
-  结论: [T2Space M] [SigmaCompactSpace M] {s t : Set M}
+定理 存在_contMDiffMap_zero_one_of_isClosed
+  结论: [T2空间 M] [SigmaCompact空间 M] {s t : 集合 M}
   证明: by
   have : forall x in t, sᶜ in 𝓝 x := fun x hx => hs.isOpen_compl.mem_nhds (disjoint_right.1 hd hx)
   rcases SmoothBumpCovering.exists_isSubordinate I ht this with ⟨ι, f, hf⟩
@@ -1505,7 +1505,7 @@ theorem exists_contMDiffMap_zero_one_nhds_of_isClosed
   obtain ⟨f, hfu, hfv, hf⟩ := exists_contMD
 
 中文:
-定理 exists_contMDiffMap_zero_one_nhds_of_isClosed
+定理 存在_contMDiffMap_zero_one_nhds_of_isClosed
   证明: by
   obtain ⟨u, u_op, hsu, hut⟩ := normal_exists_closure_subset hs ht.isOpen_compl
     (subset_compl_iff_disjoint_left.mpr hd.symm)
@@ -1542,7 +1542,7 @@ theorem exists_contMDiffMap_one_nhds_of_subset_interior
 exact h0.self_of_nhdsSet _ fun hx' => hx interior_subset hx'
 
 中文:
-定理 exists_contMDiffMap_one_nhds_of_subset_interior
+定理 存在_contMDiffMap_one_nhds_of_subset_interior
   证明: by
   rcases exists_contMDiffMap_zero_one_nhds_of_isClosed I isOpen_interior.isClosed_compl hs
     (by rwa [← subset_compl_iff_disjoint_left, compl_compl]) (n := n) with ⟨f, h0, h1, hf⟩
@@ -1578,7 +1578,7 @@ definition single
 
 中文:
 定义 single
-  签名: (i : ι) (s : Set M)
+  签名: (i : ι) (s : 集合 M)
   定义体: (BumpCovering.single i s).toSmoothPartitionOfUnity fun j => by
     classical
     rcases eq_or_ne j i with (rfl | h)
@@ -1605,7 +1605,7 @@ instance [Inhabited
   body: ⟨single I default s⟩
 
 中文:
-实例 [Inhabited
+实例 [可居
   签名: ι] (s
   定义体: ⟨single I default s⟩
 
@@ -1630,8 +1630,8 @@ theorem exists_isSubordinate
   have := BumpCovering.exists_isSubordinate_of
 
 中文:
-定理 exists_isSubordinate
-  结论: {s : Set M} (hs : IsClosed s) (U : ι -> Set M) (ho : 对任意 i, IsOpen (U i))
+定理 存在_isSubordinate
+  结论: {s : 集合 M} (hs : 是闭集 s) (U : ι -> 集合 M) (ho : 对任意 i, 是开集 (U i))
   证明: by
   have : LocallyCompactSpace H := I.locallyCompactSpace
   have : LocallyCompactSpace M := ChartedSpace.locallyCompactSpace H M
@@ -1665,8 +1665,8 @@ theorem exists_isSubordinate_chartAt_source_of_isClosed
   exact mem_iUnion_of_mem ⟨x, hx⟩ (mem_chart_source H x)
 
 中文:
-定理 exists_isSubordinate_chartAt_source_of_isClosed
-  条件: {s : Set M} (hs : IsClosed s)
+定理 存在_isSubordinate_chartAt_source_of_isClosed
+  条件: {s : 集合 M} (hs : 是闭集 s)
   证明: by
   apply exists_isSubordinate _ hs _ (fun i => (chartAt H _).open_source) (fun x hx => ?_)
   exact mem_iUnion_of_mem ⟨x, hx⟩ (mem_chart_source H x)
@@ -1690,7 +1690,7 @@ theorem exists_isSubordinate_chartAt_source
   exact mem_iUnion_of_mem x (mem_chart_source H x)
 
 中文:
-定理 exists_isSubordinate_chartAt_source
+定理 存在_isSubordinate_chartAt_source
   证明: by
   apply exists_isSubordinate _ isClosed_univ _ (fun i => (chartAt H _).open_source) (fun x _ => ?_)
   exact mem_iUnion_of_mem x (mem_chart_source H x)
@@ -1721,7 +1721,7 @@ theorem exists_contMDiffSection_forall_mem_convex_of_local
     exact ⟨x_pt, mem_interior_
 
 中文:
-定理 exists_contMDiffSection_forall_mem_convex_of_local
+定理 存在_contMDiffSection_对任意_mem_convex_of_local
   证明: by
   choose W h_nhds s_loc s_smooth h_mem_t using Hloc
   -- Construct an open cover from the interiors of the given neighborhoods.
@@ -1787,8 +1787,8 @@ theorem exists_contMDiffMap_forall_mem_convex_of_local
   ⟨⟨s, (Bundle.contMDiffAt_section _ |>.mp <| s.contMDiff ·)⟩, hs⟩
 
 中文:
-定理 exists_contMDiffMap_forall_mem_convex_of_local
-  结论: (ht : 对任意 x, Convex 实数 (t x))
+定理 存在_contMDiffMap_对任意_mem_convex_of_local
+  结论: (ht : 对任意 x, 凸 实数 (t x))
   证明: let ⟨s, hs⟩ := exists_contMDiffSection_forall_mem_convex_of_local I (fun _ => F) t ht
     (fun x₀ => let ⟨U, hU, g, hgs, hgt⟩ := Hloc x₀
 .mpr hgs y hy, hgt⟩) ⟨U, hU, g, fun y hy => Bundle.contMDiffWithinAt_section
@@ -1815,8 +1815,8 @@ theorem exists_contMDiffMap_forall_mem_convex_of_local_const
     ⟨_, hc, fun _ => c, contMDiffOn_const, fun _ => id⟩
 
 中文:
-定理 exists_contMDiffMap_forall_mem_convex_of_local_const
-  结论: (ht : 对任意 x, Convex 实数 (t x))
+定理 存在_contMDiffMap_对任意_mem_convex_of_local_const
+  结论: (ht : 对任意 x, 凸 实数 (t x))
   证明: exists_contMDiffMap_forall_mem_convex_of_local I ht fun x =>
     let ⟨c, hc⟩ := Hloc x
     ⟨_, hc, fun _ => c, contMDiffOn_const, fun _ => id⟩
@@ -1843,7 +1843,7 @@ theorem Metric.exists_contMDiffMap_forall_closedEBall_subset
 @[deprecated (since := "20
 
 中文:
-定理 Metric.exists_contMDiffMap_forall_closedEBall_subset
+定理 Metric.存在_contMDiffMap_对任意_closedEBall_subset
   证明: by
   simpa only [mem_inter_iff, forall_and, mem_preimage, mem_iInter, @forall_comm ι M]
     using! exists_contMDiffMap_forall_mem_convex_of_local_const I
@@ -1882,7 +1882,7 @@ theorem Metric.exists_contMDiffMap_forall_closedBall_subset
   exact hδ i x hx
 
 中文:
-定理 Metric.exists_contMDiffMap_forall_closedBall_subset
+定理 Metric.存在_contMDiffMap_对任意_closedBall_subset
   证明: by
   rcases Metric.exists_contMDiffMap_forall_closedEBall_subset I hK hU hKU hfin with ⟨δ, hδ0, hδ⟩
   refine ⟨δ, hδ0, fun i x hx => ?_⟩
@@ -1917,8 +1917,8 @@ lemma IsOpen.exists_contMDiff_support_eq_aux
     simp only [ModelWithCorners.symm_comp_self, preimage_i
 
 中文:
-引理 IsOpen.exists_contMDiff_support_eq_aux
-  条件: {s : Set H} (hs : IsOpen s)
+引理 是开集.存在_contMDiff_support_eq_aux
+  条件: {s : 集合 H} (hs : 是开集 s)
   证明: by
   have h's : IsOpen (I.symm ⁻¹' s) := I.continuous_symm.isOpen_preimage _ hs
   rcases h's.exists_contDiff_support_eq with ⟨f, f_supp, f_diff, f_range⟩
@@ -1953,8 +1953,8 @@ theorem IsOpen.exists_contMDiff_support_eq
     apply IsOpen.exis
 
 中文:
-定理 IsOpen.exists_contMDiff_support_eq
-  条件: {s : Set M} (hs : IsOpen s)
+定理 是开集.存在_contMDiff_support_eq
+  条件: {s : 集合 M} (hs : 是开集 s)
   证明: by
   rcases SmoothPartitionOfUnity.exists_isSubordinate_chartAt_source I M with ⟨f, hf⟩
   have A : forall (c : M), exists g : H -> Real,
@@ -2024,7 +2024,7 @@ theorem exists_contMDiff_support_eq_eq_one_iff
   rcases ht.isOpen_compl.exists_contMDiff_support_eq I with ⟨g, g_supp, g_diff, g
 
 中文:
-定理 exists_contMDiff_support_eq_eq_one_iff
+定理 存在_contMDiff_support_eq_eq_one_iff
   证明: by
   /- Take `f` with support equal to `s`, and `g` with support equal to `tᶜ`. Then `f / (f + g)`
   satisfies the conclusion of the theorem. -/
@@ -2076,8 +2076,8 @@ theorem exists_contMDiff_zero_iff_one_iff_of_isClosed
   simp [← notMem_support, fs]
 
 中文:
-定理 exists_contMDiff_zero_iff_one_iff_of_isClosed
-  结论: {s t : Set M}
+定理 存在_contMDiff_zero_iff_one_iff_of_isClosed
+  结论: {s t : 集合 M}
   证明: by
   rcases exists_contMDiff_support_eq_eq_one_iff I hs.isOpen_compl ht hd.subset_compl_left with
     ⟨f, f_diff, f_range, fs, ft⟩

@@ -30,7 +30,7 @@ definition «let»
 
 中文:
 定义 «let»
-  签名: (g : MVarId) (h : Name) (v : Expr) (t : Option Expr := none)
+  签名: (g : MVarId) (h : Name) (v : Expr) (t : 选项类型 Expr := none)
   定义体: do
   (← g.define h (← t.getDM (inferType v)) v).intro1P
 -/
@@ -54,8 +54,8 @@ let (subgoals,_) ← Elab.Term.TermElabM.run Elab.Tactic.run mv do
     mvar
 
 中文:
-定义 existsi
-  签名: (mvar : MVarId) (es : List Expr)
+定义 存在i
+  签名: (mvar : MVarId) (es : 列表 Expr)
   定义体: do
   es.foldlM (fun mv e => do
 let (subgoals,_) ← Elab.Term.TermElabM.run Elab.Tactic.run mv do
@@ -156,7 +156,7 @@ definition TacticM.runCore
 
 中文:
 定义 TacticM.runCore
-  签名: (x : TacticM α) (ctx : Context) (s : State)
+  签名: (x : TacticM α) (ctx : 余ntext) (s : State)
   定义体: .run s x ctx
 -/
 @[inline] private def TacticM.runCore (x : TacticM α) (ctx : Context) (s : State) :
@@ -173,7 +173,7 @@ definition TacticM.runCore'
 
 中文:
 定义 TacticM.runCore'
-  签名: (x : TacticM α) (ctx : Context) (s : State)
+  签名: (x : TacticM α) (ctx : 余ntext) (s : State)
   定义体: Prod.fst < > x.runCore ctx s
 -/
 @[inline] private def TacticM.runCore' (x : TacticM α) (ctx : Context) (s : State) : TermElabM α :=

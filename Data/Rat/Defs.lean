@@ -52,7 +52,7 @@ theorem pos
 
 中文:
 定理 pos
-  条件: (a : Rat)
+  条件: (a : 有理数)
   结论: 0 < a.den
   证明: Nat.pos_of_ne_zero a.den_nz
 
@@ -73,7 +73,7 @@ lemma mk'_num_den
 
 中文:
 引理 mk'_num_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: mk' q.num q.den q.den_nz q.reduced = q
   证明: rfl
 
@@ -92,7 +92,7 @@ theorem ofInt_eq_cast
   proof: rfl
 
 中文:
-定理 ofInt_eq_cast
+定理 of整数_eq_cast
   条件: (n : 整数)
   结论: of整数 n = 整数.cast n
   证明: rfl
@@ -110,7 +110,7 @@ lemma intCast_injective
 
 中文:
 引理 intCast_injective
-  结论: Injective (整数.cast : 整数 -> Rat)
+  结论: 单射 (整数.cast : 整数 -> 有理数)
   证明: fun _ _ => congr_arg num
 
 Depends on / 依赖: congr_arg
@@ -126,7 +126,7 @@ lemma natCast_injective
 
 中文:
 引理 natCast_injective
-  结论: Injective (自然数.cast : 自然数 -> Rat)
+  结论: 单射 (自然数.cast : 自然数 -> 有理数)
   证明: intCast_injective.comp fun _ _ => Int.natCast_inj.1
 
 Depends on / 依赖: Int.natCast_inj, intCast_injective, intCast_injective.comp, natCast_inj
@@ -146,7 +146,7 @@ lemma intCast_eq_one_iff
 中文:
 引理 intCast_eq_one_iff
   条件: {n : 整数}
-  结论: (n : Rat) = 1 ↔ n = 1
+  结论: (n : 有理数) = 1 ↔ n = 1
   证明: intCast_inj
 -/
 @[simp high, norm_cast] lemma intCast_eq_one_iff {n : Int} : (n : Rat) = 1 ↔ n = 1 := intCast_inj
@@ -163,7 +163,7 @@ lemma natCast_eq_one_iff
 中文:
 引理 natCast_eq_one_iff
   条件: {n : 自然数}
-  结论: (n : Rat) = 1 ↔ n = 1
+  结论: (n : 有理数) = 1 ↔ n = 1
   证明: natCast_inj
 -/
 @[simp high, norm_cast] lemma natCast_eq_one_iff {n : Nat} : (n : Rat) = 1 ↔ n = 1 := natCast_inj
@@ -178,7 +178,7 @@ lemma mkRat_eq_divInt
   proof: rfl
 
 中文:
-引理 mkRat_eq_divInt
+引理 mkRat_eq_div整数
   条件: (n d)
   结论: mkRat n d = n /. d
   证明: rfl
@@ -213,7 +213,7 @@ lemma num_ne_zero
 
 中文:
 引理 num_ne_zero
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: q.num != 0 ↔ q != 0
   证明: num_eq_zero.not
 
@@ -234,7 +234,7 @@ lemma den_ne_zero
 
 中文:
 引理 den_ne_zero
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: q.den != 0
   证明: q.den_pos.ne'
 
@@ -254,7 +254,7 @@ theorem divInt_eq_zero
   rw [← zero_divInt b]; rw [divInt_eq_divInt_iff b0 b0]; rw [Int.zero_mul]; rw [Int.mul_eq_zero]; rw [or_iff_left b0]
 
 中文:
-定理 divInt_eq_zero
+定理 div整数_eq_zero
   条件: {a b : 整数} (b0 : b != 0)
   结论: a /. b = 0 ↔ a = 0
   证明: by
@@ -275,7 +275,7 @@ theorem divInt_ne_zero
   proof: (divInt_eq_zero b0).not
 
 中文:
-定理 divInt_ne_zero
+定理 div整数_ne_zero
   条件: {a b : 整数} (b0 : b != 0)
   结论: a /. b != 0 ↔ a != 0
   证明: (divInt_eq_zero b0).not
@@ -298,9 +298,9 @@ theorem intCast_eq_divInt
   proof: mk_eq_divInt
 
 中文:
-定理 intCast_eq_divInt
+定理 intCast_eq_div整数
   条件: (z : 整数)
-  结论: (z : Rat) = z /. 1
+  结论: (z : 有理数) = z /. 1
   证明: mk_eq_divInt
 
 Depends on / 依赖: mk_eq_divInt
@@ -323,7 +323,7 @@ theorem lift_binop_eq
 
 中文:
 定理 lift_binop_eq
-  结论: (f : Rat -> Rat -> Rat) (f₁ : 整数 -> 整数 -> 整数 -> 整数 -> 整数) (f₂ : 整数 -> 整数 -> 整数 -> 整数 -> 整数)
+  结论: (f : 有理数 -> 有理数 -> 有理数) (f₁ : 整数 -> 整数 -> 整数 -> 整数 -> 整数) (f₂ : 整数 -> 整数 -> 整数 -> 整数 -> 整数)
   证明: by
   generalize ha : a /. b = x; obtain ⟨n₁, d₁, h₁, c₁⟩ := x; rw [mk_eq_divInt] at ha
   generalize hc : c /. d = x; obtain ⟨n₂, d₂, h₂, c₂⟩ := x; rw [mk_eq_divInt] at hc
@@ -363,7 +363,7 @@ lemma neg_def
 
 中文:
 引理 neg_def
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: -q = -q.num /. q.den
   证明: by rw [← neg_divInt, num_divInt_den]
 
@@ -381,7 +381,7 @@ lemma divInt_neg
   proof: divInt_neg' ..
 
 中文:
-引理 divInt_neg
+引理 div整数_neg
   条件: (n d : 整数)
   结论: n /. -d = -n /. d
   证明: divInt_neg' ..
@@ -421,7 +421,7 @@ lemma mul_eq_mkRat
 
 中文:
 引理 mul_eq_mkRat
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   结论: q * r = mkRat (q.num * r.num) (q.den * r.den)
   证明: by
   rw [mul_def]; rw [normalize_eq_mkRat]
@@ -443,7 +443,7 @@ lemma pow_eq_mkRat
 
 中文:
 引理 pow_eq_mkRat
-  条件: (q : Rat) (n : 自然数)
+  条件: (q : 有理数) (n : 自然数)
   结论: q ^ n = mkRat (q.num ^ n) (q.den ^ n)
   证明: by
   rw [pow_def]; rw [mk_eq_mkRat]
@@ -464,8 +464,8 @@ lemma pow_eq_divInt
   rw [pow_def]; rw [mk_eq_divInt]; rw [Int.natCast_pow]
 
 中文:
-引理 pow_eq_divInt
-  条件: (q : Rat) (n : 自然数)
+引理 pow_eq_div整数
+  条件: (q : 有理数) (n : 自然数)
   结论: q ^ n = q.num ^ n /. q.den ^ n
   证明: by
   rw [pow_def]; rw [mk_eq_divInt]; rw [Int.natCast_pow]
@@ -522,7 +522,7 @@ lemma divInt_div_divInt
   rw [div_def]; rw [inv_divInt]; rw [divInt_mul_divInt]
 
 中文:
-引理 divInt_div_divInt
+引理 div整数_div_div整数
   条件: (n₁ d₁ n₂ d₂)
   证明: by
   rw [div_def]; rw [inv_divInt]; rw [divInt_mul_divInt]
@@ -543,7 +543,7 @@ lemma div_def'
 
 中文:
 引理 div_def'
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   结论: q / r = (q.num * r.den) /. (q.den * r.num)
   证明: by
   rw [← divInt_div_divInt]; rw [num_divInt_den]; rw [num_divInt_den]
@@ -565,7 +565,7 @@ lemma divInt_one
   proof: by simp [divInt, mkRat, normalize]
 
 中文:
-引理 divInt_one
+引理 div整数_one
   条件: (n : 整数)
   结论: n /. 1 = n
   证明: by simp [divInt, mkRat, normalize]
@@ -581,7 +581,7 @@ lemma divInt_one_one
   proof: by rw [divInt_one, Rat.intCast_one]
 
 中文:
-引理 divInt_one_one
+引理 div整数_one_one
   结论: 1 /. 1 = 1
   证明: by rw [divInt_one, Rat.intCast_one]
 
@@ -600,7 +600,7 @@ theorem zero_ne_one
 
 中文:
 定理 zero_ne_one
-  结论: 0 != (1 : Rat)
+  结论: 0 != (1 : 有理数)
   证明: by
   rw [ne_comm]; rw [← divInt_one_one]; rw [divInt_ne_zero] <;> lia
 -/
@@ -621,7 +621,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: : Nontrivial Rat where 存在_pair_ne
+  签名: : 非平凡 有理数 where 存在_pair_ne
   定义体: ⟨1, 0, by decide⟩
 -/
 instance nontrivial : Nontrivial Rat where exists_pair_ne := ⟨1, 0, by decide⟩
@@ -647,7 +647,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup Rat where
+  签名: : 加法交换群 有理数 where
   定义体: Rat.zero_add
   add_zero := Rat.add_zero
   add_comm := Rat.add_comm
@@ -692,7 +692,7 @@ instance addGroup
 
 中文:
 实例 addGroup
-  签名: : AddGroup Rat
+  签名: : 加法群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -709,7 +709,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid Rat
+  签名: : 加法交换幺半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -726,7 +726,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid Rat
+  签名: : 加法幺半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -743,7 +743,7 @@ instance addLeftCancelSemigroup
 
 中文:
 实例 addLeftCancelSemigroup
-  签名: : AddLeftCancelSemigroup Rat
+  签名: : 加法左消去半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -760,7 +760,7 @@ instance addRightCancelSemigroup
 
 中文:
 实例 addRightCancelSemigroup
-  签名: : AddRightCancelSemigroup Rat
+  签名: : 加法右消去半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -777,7 +777,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: : AddCommSemigroup Rat
+  签名: : 加法交换半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -794,7 +794,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: : AddSemigroup Rat
+  签名: : 加法半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -817,7 +817,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: : CommMonoid Rat where
+  签名: : 交换幺半群 有理数 where
   定义体: Rat.mul_one
   one_mul := Rat.one_mul
   mul_comm := Rat.mul_comm
@@ -847,7 +847,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: : Monoid Rat
+  签名: : 幺半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -864,7 +864,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: : CommSemigroup Rat
+  签名: : 交换半群 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -883,7 +883,7 @@ instance semigroup
 
 中文:
 实例 semigroup
-  签名: : Semigroup Rat
+  签名: : 半群 有理数
   定义体: by infer_instance
 
 @[simp]
@@ -906,7 +906,7 @@ theorem den_neg_eq_den
 
 中文:
 定理 den_neg_eq_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (-q).den = q.den
   证明: rfl
 
@@ -927,7 +927,7 @@ theorem num_neg_eq_neg_num
 
 中文:
 定理 num_neg_eq_neg_num
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (-q).num = -q.num
   证明: rfl
 -/
@@ -945,7 +945,7 @@ theorem num_zero
 
 中文:
 定理 num_zero
-  结论: Rat.num 0 = 0
+  结论: 有理数.num 0 = 0
   证明: rfl
 -/
 theorem num_zero : Rat.num 0 = 0 :=
@@ -962,7 +962,7 @@ theorem den_zero
 
 中文:
 定理 den_zero
-  结论: Rat.den 0 = 1
+  结论: 有理数.den 0 = 1
   证明: rfl
 -/
 theorem den_zero : Rat.den 0 = 1 :=
@@ -979,7 +979,7 @@ lemma zero_of_num_zero
 
 中文:
 引理 zero_of_num_zero
-  条件: {q : Rat} (hq : q.num = 0)
+  条件: {q : 有理数} (hq : q.num = 0)
   结论: q = 0
   证明: by simpa [hq] using q.num_divInt_den.symm
 
@@ -998,7 +998,7 @@ theorem zero_iff_num_zero
 
 中文:
 定理 zero_iff_num_zero
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: q = 0 ↔ q.num = 0
   证明: ⟨fun _ => by simp [*], zero_of_num_zero⟩
 
@@ -1020,7 +1020,7 @@ theorem num_one
 
 中文:
 定理 num_one
-  结论: (1 : Rat).num = 1
+  结论: (1 : 有理数).num = 1
   证明: rfl
 
 @[simp]
@@ -1039,7 +1039,7 @@ theorem den_one
 
 中文:
 定理 den_one
-  结论: (1 : Rat).den = 1
+  结论: (1 : 有理数).den = 1
   证明: rfl
 -/
 theorem den_one : (1 : Rat).den = 1 :=
@@ -1056,7 +1056,7 @@ theorem mk_num_ne_zero_of_ne_zero
 
 中文:
 定理 mk_num_ne_zero_of_ne_zero
-  条件: {q : Rat} {n d : 整数} (hq : q != 0) (hqnd : q = n /. d)
+  条件: {q : 有理数} {n d : 整数} (hq : q != 0) (hqnd : q = n /. d)
   结论: n != 0
   证明: fun this => hq by simpa [this] using hqnd
 -/
@@ -1074,7 +1074,7 @@ theorem mk_denom_ne_zero_of_ne_zero
 
 中文:
 定理 mk_denom_ne_zero_of_ne_zero
-  条件: {q : Rat} {n d : 整数} (hq : q != 0) (hqnd : q = n /. d)
+  条件: {q : 有理数} {n d : 整数} (hq : q != 0) (hqnd : q = n /. d)
   结论: d != 0
   证明: fun this => hq by simpa [this] using hqnd
 -/
@@ -1091,7 +1091,7 @@ theorem divInt_ne_zero_of_ne_zero
   proof: (divInt_ne_zero hd).mpr h
 
 中文:
-定理 divInt_ne_zero_of_ne_zero
+定理 div整数_ne_zero_of_ne_zero
   条件: {n d : 整数} (h : n != 0) (hd : d != 0)
   结论: n /. d != 0
   证明: (divInt_ne_zero hd).mpr h
@@ -1116,7 +1116,7 @@ theorem add_divInt
     simp [Int.add_mul, Int.mul_assoc]
 
 中文:
-定理 add_divInt
+定理 add_div整数
   条件: (a b c : 整数)
   结论: (a + b) /. c = a /. c + b /. c
   证明: if h : c = 0 then by simp [h]
@@ -1140,9 +1140,9 @@ lemma intCast_div_eq_divInt
   proof: by rw [divInt_eq_div]
 
 中文:
-引理 intCast_div_eq_divInt
+引理 intCast_div_eq_div整数
   条件: (n d : 整数)
-  结论: (n : Rat) / d = n /. d
+  结论: (n : 有理数) / d = n /. d
   证明: by rw [divInt_eq_div]
 
 Depends on / 依赖: divInt_eq_div
@@ -1159,9 +1159,9 @@ theorem natCast_div_eq_divInt
   proof: Rat.intCast_div_eq_divInt n d
 
 中文:
-定理 natCast_div_eq_divInt
+定理 natCast_div_eq_div整数
   条件: (n d : 自然数)
-  结论: (n : Rat) / d = n /. d
+  结论: (n : 有理数) / d = n /. d
   证明: Rat.intCast_div_eq_divInt n d
 
 Depends on / 依赖: Rat.intCast_div_eq_divInt, intCast_div_eq_divInt
@@ -1182,7 +1182,7 @@ theorem divInt_mul_divInt_cancel
   rw [divInt_mul_divInt]; rw [x.mul_comm]; rw [divInt_mul_right hx]
 
 中文:
-定理 divInt_mul_divInt_cancel
+定理 div整数_mul_div整数_cancel
   条件: {x : 整数} (hx : x != 0) (n d : 整数)
   结论: n /. x * (x /. d) = n /. d
   证明: by
@@ -1213,8 +1213,8 @@ theorem coe_int_num_of_den_eq_one
 
 中文:
 定理 coe_int_num_of_den_eq_one
-  条件: {q : Rat} (hq : q.den = 1)
-  结论: (q.num : Rat) = q
+  条件: {q : 有理数} (hq : q.den = 1)
+  结论: (q.num : 有理数) = q
   证明: by
   conv_rhs => rw [← num_divInt_den q, hq]
   rw [intCast_eq_divInt]
@@ -1239,8 +1239,8 @@ lemma eq_num_of_isInt
   exact (Rat.coe_int_num_of_den_eq_one h).symm
 
 中文:
-引理 eq_num_of_isInt
-  条件: {q : Rat} (h : q.is整数)
+引理 eq_num_of_is整数
+  条件: {q : 有理数} (h : q.is整数)
   结论: q = q.num
   证明: by
   rw [Rat.isInt]; rw [Nat.beq_eq_true_eq] at h
@@ -1263,7 +1263,7 @@ theorem den_eq_one_iff
 
 中文:
 定理 den_eq_one_iff
-  条件: (r : Rat)
+  条件: (r : 有理数)
   结论: r.den = 1 ↔ ↑r.num = r
   证明: ⟨Rat.coe_int_num_of_den_eq_one, fun h => h ▸ Rat.den_intCast r.num⟩
 
@@ -1284,7 +1284,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift Rat 整数 (↑) fun q => q.den = 1
+  签名: : CanLift 有理数 整数 (↑) fun q => q.den = 1
   定义体: ⟨fun q hq => ⟨q.num, coe_int_num_of_den_eq_one hq⟩⟩
 
 @[deprecated (since := "2026-06-06")] alias coe_int_inj := intCast_inj
@@ -1316,7 +1316,7 @@ definition divCasesOn
 
 中文:
 定义 divCasesOn
-  签名: {C : Rat -> Sort*} (a : Rat)
+  签名: {C : 有理数 -> 类型层*} (a : 有理数)
   定义体: a.casesOn fun n d nz red => by rw [Rat.mk_eq_divInt, Rat.divInt_eq_div]; exact div n d nz red
 
 Depends on / 依赖: Rat.divInt_eq_div, Rat.mk_eq_divInt, a.casesOn, casesOn, divInt_eq_div, mk_eq_divInt

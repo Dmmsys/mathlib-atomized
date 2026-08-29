@@ -51,7 +51,7 @@ theorem max_aleph0_card_le_rank_fun_nat
 
 中文:
 定理 max_aleph0_card_le_rank_fun_nat
-  结论: max ℵ₀ #K <= Module.rank K (自然数 -> K)
+  结论: 最大值 ℵ₀ #K <= 模.rank K (自然数 -> K)
   证明: by
   have aleph0_le : ℵ₀ <= Module.rank K (Nat -> K) := (rank_finsupp_self K Nat).symm.trans_le
     (Finsupp.lcoeFun.rank_le_of_injective <| by exact DFunLike.coe_injective)
@@ -126,8 +126,8 @@ have := LinearMap.lift_rank_le_of_injective _
 
 中文:
 定理 rank_fun_infinite
-  条件: {ι : 类型v} [hι : Infinite ι]
-  结论: Module.rank K (ι -> K) = #(ι -> K)
+  条件: {ι : 类型v} [hι : 无限 ι]
+  结论: 模.rank K (ι -> K) = #(ι -> K)
   证明: by
   obtain ⟨⟨ιK, bK⟩⟩ := Module.Free.exists_basis (R := K) (M := ι -> K)
   obtain ⟨e⟩ := lift_mk_le'.mp ((aleph0_le_mk_iff.mpr hι).trans_eq (lift_uzero #ι).symm)
@@ -166,7 +166,7 @@ theorem rank_dual_eq_card_dual_of_aleph0_le_rank'
 
 中文:
 定理 rank_dual_eq_card_dual_of_aleph0_le_rank'
-  结论: {V : 类型} [AddCommGroup V] [Module K V]
+  结论: {V : 类型} [加法交换群 V] [模 K V]
   证明: by
   obtain ⟨⟨ι, b⟩⟩ := Module.Free.exists_basis (R := K) (M := V)
   rw [← b.mk_eq_rank'']; rw [aleph0_le_mk_iff] at h
@@ -201,7 +201,7 @@ theorem rank_dual_eq_card_dual_of_aleph0_le_rank
 
 中文:
 定理 rank_dual_eq_card_dual_of_aleph0_le_rank
-  结论: {K V} [Field K] [AddCommGroup V] [Module K V]
+  结论: {K V} [域 K] [加法交换群 V] [模 K V]
   证明: by
   obtain ⟨⟨ι, b⟩⟩ := Module.Free.exists_basis (R := K) (M := V)
   rw [← b.mk_eq_rank'']; rw [aleph0_le_mk_iff] at h
@@ -234,7 +234,7 @@ theorem lift_rank_lt_rank_dual'
 
 中文:
 定理 lift_rank_lt_rank_dual'
-  结论: {V : 类型v} [AddCommGroup V] [Module K V]
+  结论: {V : 类型v} [加法交换群 V] [模 K V]
   证明: by
   obtain ⟨⟨ι, b⟩⟩ := Module.Free.exists_basis (R := K) (M := V)
   rw [← b.mk_eq_rank'']; rw [rank_dual_eq_card_dual_of_aleph0_le_rank' h]; rw [← (b.constr Nat (M' := K)).toEquiv.cardinal_eq]; rw [mk_arrow]
@@ -265,7 +265,7 @@ theorem lift_rank_lt_rank_dual
 
 中文:
 定理 lift_rank_lt_rank_dual
-  结论: {K : 类型u} {V : 类型v} [Field K] [AddCommGroup V] [Module K V]
+  结论: {K : 类型u} {V : 类型v} [域 K] [加法交换群 V] [模 K V]
   证明: by
   rw [rank_dual_eq_card_dual_of_aleph0_le_rank h]; rw [← rank_dual_eq_card_dual_of_aleph0_le_rank' h]
   exact lift_rank_lt_rank_dual' h
@@ -289,7 +289,7 @@ theorem rank_lt_rank_dual'
 
 中文:
 定理 rank_lt_rank_dual'
-  条件: {V : 类型u} [AddCommGroup V] [Module K V] (h : ℵ₀ <= Module.rank K V)
+  条件: {V : 类型u} [加法交换群 V] [模 K V] (h : ℵ₀ <= 模.rank K V)
   证明: by
   convert! lift_rank_lt_rank_dual' h; rw [lift_id]
 
@@ -310,7 +310,7 @@ theorem rank_lt_rank_dual
 
 中文:
 定理 rank_lt_rank_dual
-  结论: {K V : 类型u} [Field K] [AddCommGroup V] [Module K V]
+  结论: {K V : 类型u} [域 K] [加法交换群 V] [模 K V]
   证明: by
   convert! lift_rank_lt_rank_dual h; rw [lift_id]
 

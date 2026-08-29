@@ -30,8 +30,8 @@ abbreviation Function.Surjective.distribMulActionLeft
   body: { hf.distribSMulLeft f hsmul, hf.mulActionLeft f hsmul with }
 
 中文:
-缩写 Function.Surjective.distribMulActionLeft
-  签名: {R S M : 类型} [Monoid R] [AddMonoid M]
+缩写 函数.满射.distribMulActionLeft
+  签名: {R S M : 类型} [幺半群 R] [加法幺半群 M]
   定义体: { hf.distribSMulLeft f hsmul, hf.mulActionLeft f hsmul with }
 
 Depends on / 依赖: distribSMulLeft, hf.distribSMulLeft, hf.mulActionLeft, mulActionLeft
@@ -54,8 +54,8 @@ abbreviation DistribMulAction.compHom
   body: { DistribSMul.compFun A f, MulAction.compHom A f with }
 
 中文:
-缩写 DistribMulAction.compHom
-  签名: [Monoid N] (f : N ->* M)
+缩写 分配乘法作用.compHom
+  签名: [幺半群 N] (f : N ->* M)
   定义体: { DistribSMul.compFun A f, MulAction.compHom A f with }
 
 Depends on / 依赖: DistribSMul, DistribSMul.compFun, MulAction, MulAction.compHom, compFun, compHom
@@ -80,8 +80,8 @@ abbreviation MulDistribMulAction.compHom
     smul_mul := fun x => smul_mul' (f x) }
 
 中文:
-缩写 MulDistribMulAction.compHom
-  签名: [Monoid N] (f : N ->* M)
+缩写 MulDistribMul作用.compHom
+  签名: [幺半群 N] (f : N ->* M)
   定义体: { MulAction.compHom A f with
     smul_one := fun x => smul_one (f x),
     smul_mul := fun x => smul_mul' (f x) }
@@ -110,8 +110,8 @@ instance AddMonoid.End.applyDistribMulAction
 @[simp]
 
 中文:
-实例 AddMonoid.End.applyDistribMulAction
-  签名: [AddMonoid α]
+实例 加法幺半群.End.applyDistribMulAction
+  签名: [加法幺半群 α]
   定义体: (· <| ·)
   smul_zero := map_zero
   smul_add := map_add
@@ -139,8 +139,8 @@ theorem AddMonoid.End.smul_def
   proof: rfl
 
 中文:
-定理 AddMonoid.End.smul_def
-  条件: [AddMonoid α] (f : AddMonoid.End α) (a : α)
+定理 加法幺半群.End.smul_def
+  条件: [加法幺半群 α] (f : 加法幺半群.End α) (a : α)
   结论: f • a = f a
   证明: rfl
 -/
@@ -156,8 +156,8 @@ instance AddMonoid.End.applyFaithfulSMul
   body: ⟨fun {_ _ h} => AddMonoidHom.ext h⟩
 
 中文:
-实例 AddMonoid.End.applyFaithfulSMul
-  签名: [AddMonoid α]
+实例 加法幺半群.End.applyFaithfulSMul
+  签名: [加法幺半群 α]
   定义体: ⟨fun {_ _ h} => AddMonoidHom.ext h⟩
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext
@@ -178,8 +178,8 @@ definition DistribMulAction.toAddEquiv₀
     right_inv := fun b => smul_inv_smul₀ hx b }
 
 中文:
-定义 DistribMulAction.toAddEquiv₀
-  签名: {α : 类型} (β : 类型) [GroupWithZero α] [AddMonoid β]
+定义 分配乘法作用.toAddEquiv₀
+  签名: {α : 类型} (β : 类型) [带零群 α] [加法幺半群 β]
   定义体: { DistribSMul.toAddMonoidHom β x with
     invFun := fun b => x⁻¹ • b
     left_inv := fun b => inv_smul_smul₀ hx b

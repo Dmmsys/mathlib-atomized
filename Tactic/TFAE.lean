@@ -448,7 +448,7 @@ definition proveChain
 
 中文:
 定义 proveChain
-  签名: (i : 自然数) (is : List 自然数) (P : Q(命题)) (l : Q(List 命题))
+  签名: (i : 自然数) (is : 列表 自然数) (P : Q(命题)) (l : Q(列表 命题))
   定义体: do
   match l with
   | ~q([]) => return q(.singleton _)
@@ -485,7 +485,7 @@ definition proveGetLastDImpl
 
 中文:
 定义 proveGetLastDImpl
-  签名: (i i' : 自然数) (is : List 自然数) (P P' : Q(命题)) (l : Q(List 命题))
+  签名: (i i' : 自然数) (is : 列表 自然数) (P P' : Q(命题)) (l : Q(列表 命题))
   定义体: do
   match l with
   | ~q([]) => proveImpl hyps atoms i' i P' P
@@ -520,7 +520,7 @@ definition proveTFAE
 
 中文:
 定义 proveTFAE
-  签名: (is : List 自然数) (l : Q(List 命题))
+  签名: (is : 列表 自然数) (l : Q(列表 命题))
   定义体: do
   match l with
   | ~q([]) => return q(tfae_nil)
@@ -608,7 +608,7 @@ definition elabTFAEType
 
 中文:
 定义 elabTFAEType
-  签名: (tfaeList : List Q(命题))
+  签名: (tfaeList : 列表 Q(命题))
   定义体: tfaeList.length
     let i' ← elabIndex i l
     let j' ← elabIndex j l

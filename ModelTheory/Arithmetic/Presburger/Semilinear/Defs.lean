@@ -68,7 +68,7 @@ definition IsLinearSet
 
 中文:
 定义 IsLinearSet
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: exists (a : M) (t : Set M), t.Finite ∧ s = a +ᵥ (closure t : Set M)
 
 Depends on / 依赖: Finite, closure, t.Finite
@@ -129,8 +129,8 @@ theorem IsLinearSet.closure_finset
 
 中文:
 定理 IsLinearSet.closure_finset
-  条件: (s : Finset M)
-  结论: IsLinearSet (closure (s : Set M) : Set M)
+  条件: (s : 有限集 M)
+  结论: IsLinearSet (closure (s : 集合 M) : 集合 M)
   证明: ⟨0, s, by simp⟩
 -/
 theorem IsLinearSet.closure_finset (s : Finset M) : IsLinearSet (closure (s : Set M) : Set M) :=
@@ -146,7 +146,7 @@ theorem IsLinearSet.closure_of_finite
 
 中文:
 定理 IsLinearSet.closure_of_finite
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   证明: ⟨0, s, hs, by simp⟩
 -/
 theorem IsLinearSet.closure_of_finite (hs : s.Finite) :
@@ -162,7 +162,7 @@ theorem isLinearSet_iff_exists_fg_eq_vadd
     ⟨fun ⟨t, hs⟩ => ⟨_, ⟨t, rfl⟩, hs⟩, fun ⟨P, ⟨t, hP⟩, hs⟩ => ⟨t, by rwa [hP]⟩⟩)
 
 中文:
-定理 isLinearSet_iff_exists_fg_eq_vadd
+定理 isLinearSet_iff_存在_fg_eq_vadd
   证明: isLinearSet_iff.trans (exists_congr fun a =>
     ⟨fun ⟨t, hs⟩ => ⟨_, ⟨t, rfl⟩, hs⟩, fun ⟨P, ⟨t, hP⟩, hs⟩ => ⟨t, by rwa [hP]⟩⟩)
 
@@ -188,8 +188,8 @@ theorem IsLinearSet.of_fg
 
 中文:
 定理 IsLinearSet.of_fg
-  条件: {P : AddSubmonoid M} (hP : P.FG)
-  结论: IsLinearSet (P : Set M)
+  条件: {P : 加法子幺半群 M} (hP : P.FG)
+  结论: IsLinearSet (P : 集合 M)
   证明: by
   rw [isLinearSet_iff_exists_fg_eq_vadd]
   exact ⟨0, P, hP, by simp⟩
@@ -214,8 +214,8 @@ theorem IsLinearSet.univ
 
 中文:
 定理 IsLinearSet.univ
-  条件: [AddMonoid.FG M]
-  结论: IsLinearSet (univ : Set M)
+  条件: [加法幺半群.FG M]
+  结论: IsLinearSet (univ : 集合 M)
   证明: of_fg AddMonoid.FG.fg_top
 -/
 protected theorem IsLinearSet.univ [AddMonoid.FG M] : IsLinearSet (univ : Set M) :=
@@ -287,7 +287,7 @@ theorem IsLinearSet.image
   simp [image_vadd_distrib, ← AddMonoidHom.map_mclosure]
 
 中文:
-定理 IsLinearSet.image
+定理 IsLinearSet.像
   条件: (hs : IsLinearSet s) (f : F)
   结论: IsLinearSet (f '' s)
   证明: by
@@ -312,7 +312,7 @@ definition IsSemilinearSet
 
 中文:
 定义 IsSemilinearSet
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: exists (S : Set (Set M)), S.Finite ∧ (forall t in S, IsLinearSet t) ∧ s = ⋃₀ S
 
 Depends on / 依赖: Finite, IsLinearSet, S.Finite
@@ -372,7 +372,7 @@ theorem IsSemilinearSet.empty
 
 中文:
 定理 IsSemilinearSet.empty
-  结论: IsSemilinearSet (∅ : Set M)
+  结论: IsSemilinearSet (∅ : 集合 M)
   证明: ⟨∅, by simp⟩
 
 @[simp]
@@ -411,7 +411,7 @@ theorem IsSemilinearSet.closure_finset
 
 中文:
 定理 IsSemilinearSet.closure_finset
-  条件: (s : Finset M)
+  条件: (s : 有限集 M)
   证明: (IsLinearSet.closure_finset s).isSemilinearSet
 
 Depends on / 依赖: IsLinearSet, IsLinearSet.closure_finset, closure_finset, isSemilinearSet
@@ -430,7 +430,7 @@ theorem IsSemilinearSet.closure_of_finite
 
 中文:
 定理 IsSemilinearSet.closure_of_finite
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   证明: (IsLinearSet.closure_of_finite hs).isSemilinearSet
 
 Depends on / 依赖: IsLinearSet, IsLinearSet.closure_of_finite, closure_of_finite, isSemilinearSet
@@ -451,7 +451,7 @@ theorem IsSemilinearSet.of_fg
 
 中文:
 定理 IsSemilinearSet.of_fg
-  条件: {P : AddSubmonoid M} (hP : P.FG)
+  条件: {P : 加法子幺半群 M} (hP : P.FG)
   证明: (IsLinearSet.of_fg hP).isSemilinearSet
 
 @[simp]
@@ -474,8 +474,8 @@ theorem IsSemilinearSet.univ
 
 中文:
 定理 IsSemilinearSet.univ
-  条件: [AddMonoid.FG M]
-  结论: IsSemilinearSet (univ : Set M)
+  条件: [加法幺半群.FG M]
+  结论: IsSemilinearSet (univ : 集合 M)
   证明: IsLinearSet.univ.isSemilinearSet
 -/
 protected theorem IsSemilinearSet.univ [AddMonoid.FG M] : IsSemilinearSet (univ : Set M) :=
@@ -531,8 +531,8 @@ theorem IsSemilinearSet.sUnion
     simpa using hS'.1.union (ih hS'.2)
 
 中文:
-定理 IsSemilinearSet.sUnion
-  结论: {S : Set (Set M)} (hS : S.Finite)
+定理 IsSemilinearSet.集合并集
+  结论: {S : 集合 (集合 M)} (hS : S.有限)
   证明: by
   induction S, hS using Finite.induction_on with
   | empty => simp
@@ -563,7 +563,7 @@ theorem IsSemilinearSet.iUnion
 
 中文:
 定理 IsSemilinearSet.iUnion
-  条件: [Finite ι] {s : ι -> Set M} (hs : 对任意 i, IsSemilinearSet (s i))
+  条件: [有限 ι] {s : ι -> 集合 M} (hs : 对任意 i, IsSemilinearSet (s i))
   证明: by
   rw [← sUnion_range]
   apply sUnion (finite_range s)
@@ -590,7 +590,7 @@ theorem IsSemilinearSet.biUnion
 
 中文:
 定理 IsSemilinearSet.biUnion
-  结论: {s : Set ι} {t : ι -> Set M} (hs : s.Finite)
+  结论: {s : 集合 ι} {t : ι -> 集合 M} (hs : s.有限)
   证明: by
   rw [← sUnion_image]
   apply sUnion (hs.image t)
@@ -614,7 +614,7 @@ theorem IsSemilinearSet.biUnion_finset
 
 中文:
 定理 IsSemilinearSet.biUnion_finset
-  结论: {s : Finset ι} {t : ι -> Set M}
+  结论: {s : 有限集 ι} {t : ι -> 集合 M}
   证明: biUnion s.finite_toSet ht
 
 Depends on / 依赖: biUnion, finite_toSet, s.finite_toSet
@@ -637,7 +637,7 @@ theorem IsSemilinearSet.of_finite
 
 中文:
 定理 IsSemilinearSet.of_finite
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   结论: IsSemilinearSet s
   证明: by
   rw [← biUnion_of_singleton s]
@@ -725,7 +725,7 @@ theorem IsSemilinearSet.image
   exact biUnion hS fun s hs => ((hS' s hs).image f).isSemilinearSet
 
 中文:
-定理 IsSemilinearSet.image
+定理 IsSemilinearSet.像
   条件: (hs : IsSemilinearSet s) (f : F)
   结论: IsSemilinearSet (f '' s)
   证明: by
@@ -754,7 +754,7 @@ theorem isSemilinearSet_image_iff
 
 中文:
 定理 isSemilinearSet_image_iff
-  条件: {F : 类型} [EquivLike F M N] [AddEquivClass F M N] (f : F)
+  条件: {F : 类型} [等价状 F M N] [加法等价类 F M N] (f : F)
   证明: by
   constructor <;> intro h
   · convert! h.image (f : M ≃+ N).symm
@@ -789,7 +789,7 @@ theorem IsSemilinearSet.proj
 
 中文:
 定理 IsSemilinearSet.proj
-  条件: {s : Set (ι oplus κ -> M)} (hs : IsSemilinearSet s)
+  条件: {s : 集合 (ι oplus κ -> M)} (hs : IsSemilinearSet s)
   证明: by
   convert! hs.image (LinearMap.funLeft Nat M Sum.inl)
   ext x
@@ -849,7 +849,7 @@ lemma IsLinearSet.closure
 中文:
 引理 IsLinearSet.closure
   条件: (hs : IsLinearSet s)
-  结论: IsSemilinearSet (closure s : Set M)
+  结论: IsSemilinearSet (closure s : 集合 M)
   证明: by
   rcases hs with ⟨a, t, ht, rfl⟩
   convert! (IsSemilinearSet.singleton 0).union (isSemilinearSet ⟨a, { a } union t, by simp [ht], rfl⟩)
@@ -932,7 +932,7 @@ definition IsProperLinearSet
 
 中文:
 定义 IsProperLinearSet
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: exists (a : M) (t : Set M), t.Finite ∧ LinearIndepOn Nat id t ∧ s = a +ᵥ (closure t : Set M)
 
 Depends on / 依赖: Finite, LinearIndepOn, closure, t.Finite
@@ -976,7 +976,7 @@ theorem IsProperLinearSet.isLinearSet
 
 中文:
 定理 IsProperLinearSet.isLinearSet
-  条件: (hs : Is命题erLinearSet s)
+  条件: (hs : IsProperLinearSet s)
   结论: IsLinearSet s
   证明: by
   rcases hs with ⟨a, t, ht, _, rfl⟩
@@ -1001,7 +1001,7 @@ theorem IsProperLinearSet.singleton
 中文:
 定理 IsProperLinearSet.singleton
   条件: (a : M)
-  结论: Is命题erLinearSet {a}
+  结论: IsProperLinearSet {a}
   证明: ⟨a, ∅, by simp⟩
 -/
 theorem IsProperLinearSet.singleton (a : M) : IsProperLinearSet {a} :=
@@ -1017,7 +1017,7 @@ definition IsProperSemilinearSet
 
 中文:
 定义 IsProperSemilinearSet
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: exists (S : Set (Set M)), S.Finite ∧ (forall t in S, IsProperLinearSet t) ∧ s = ⋃₀ S
 
 Depends on / 依赖: Finite, IsProperLinearSet, S.Finite
@@ -1054,7 +1054,7 @@ theorem IsProperSemilinearSet.isSemilinearSet
 
 中文:
 定理 IsProperSemilinearSet.isSemilinearSet
-  条件: (hs : Is命题erSemilinearSet s)
+  条件: (hs : IsProperSemilinearSet s)
   证明: by
   rcases hs with ⟨S, hS, hS', rfl⟩
   exact ⟨S, hS, fun s hs => (hS' s hs).isLinearSet, rfl⟩
@@ -1078,7 +1078,7 @@ theorem IsProperLinearSet.isProperSemilinearSet
 
 中文:
 定理 IsProperLinearSet.isProperSemilinearSet
-  条件: (hs : Is命题erLinearSet s)
+  条件: (hs : IsProperLinearSet s)
   证明: ⟨{s}, by simpa⟩
 
 @[simp]
@@ -1098,7 +1098,7 @@ theorem IsProperSemilinearSet.empty
 
 中文:
 定理 IsProperSemilinearSet.empty
-  结论: Is命题erSemilinearSet (∅ : Set M)
+  结论: IsProperSemilinearSet (∅ : 集合 M)
   证明: ⟨∅, by simp⟩
 -/
 theorem IsProperSemilinearSet.empty : IsProperSemilinearSet (∅ : Set M) :=
@@ -1120,7 +1120,7 @@ theorem IsProperSemilinearSet.union
 
 中文:
 定理 IsProperSemilinearSet.union
-  结论: (hs₁ : Is命题erSemilinearSet s₁)
+  结论: (hs₁ : IsProperSemilinearSet s₁)
   证明: by
   rcases hs₁ with ⟨S₁, hS₁, hS₁', rfl⟩
   rcases hs₂ with ⟨S₂, hS₂, hS₂', rfl⟩
@@ -1154,8 +1154,8 @@ theorem IsProperSemilinearSet.sUnion
     simpa using hS'.1.union (ih hS'.2)
 
 中文:
-定理 IsProperSemilinearSet.sUnion
-  结论: {S : Set (Set M)} (hS : S.Finite)
+定理 IsProperSemilinearSet.集合并集
+  结论: {S : 集合 (集合 M)} (hS : S.有限)
   证明: by
   induction S, hS using Finite.induction_on with
   | empty => simp
@@ -1186,7 +1186,7 @@ theorem IsProperSemilinearSet.biUnion
 
 中文:
 定理 IsProperSemilinearSet.biUnion
-  结论: {s : Set ι} {t : ι -> Set M} (hs : s.Finite)
+  结论: {s : 集合 ι} {t : ι -> 集合 M} (hs : s.有限)
   证明: by
   rw [← sUnion_image]
   apply sUnion (hs.image t)
@@ -1210,7 +1210,7 @@ theorem IsProperSemilinearSet.biUnion_finset
 
 中文:
 定理 IsProperSemilinearSet.biUnion_finset
-  结论: {s : Finset ι} {t : ι -> Set M}
+  结论: {s : 有限集 ι} {t : ι -> 集合 M}
   证明: biUnion s.finite_toSet ht
 
 Depends on / 依赖: biUnion, finite_toSet, s.finite_toSet
@@ -1237,7 +1237,7 @@ lemma IsLinearSet.isProperSemilinearSet
 
 中文:
 引理 IsLinearSet.isProperSemilinearSet
-  条件: [IsCancelAdd M] (hs : IsLinearSet s)
+  条件: [是消去加法 M] (hs : IsLinearSet s)
   证明: by
   classical
   rw [isLinearSet_iff] at hs
@@ -1310,7 +1310,7 @@ theorem IsSemilinearSet.isProperSemilinearSet
 
 中文:
 定理 IsSemilinearSet.isProperSemilinearSet
-  条件: [IsCancelAdd M] (hs : IsSemilinearSet s)
+  条件: [是消去加法 M] (hs : IsSemilinearSet s)
   证明: by
   rcases hs with ⟨S, hS, hS', rfl⟩
   simp_rw [sUnion_eq_biUnion]
@@ -1344,8 +1344,8 @@ theorem Nat.isSemilinearSet_iff_ultimately_periodic
       rw
 
 中文:
-定理 Nat.isSemilinearSet_iff_ultimately_periodic
-  条件: {s : Set 自然数}
+定理 自然数.isSemilinearSet_iff_ultimately_periodic
+  条件: {s : 集合 自然数}
   证明: by
   constructor
   · intro hs

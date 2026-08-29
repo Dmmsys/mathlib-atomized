@@ -77,7 +77,7 @@ abbreviation hull
 
 中文:
 缩写 hull
-  签名: (T : Set α) (a : α)
+  签名: (T : 集合 α) (a : α)
   定义体: T ↓inter Ici a
 -/
 abbrev hull (T : Set α) (a : α) := T ↓inter Ici a
@@ -126,7 +126,7 @@ lemma hull_finsetInf
 
 中文:
 引理 hull_finsetInf
-  条件: (hT : 对任意 p in T, InfPrime p) (F : Finset α)
+  条件: (hT : 对任意 p in T, InfPrime p) (F : 有限集 α)
   证明: by
   rw [coe_upperClosure]
   induction F using Finset.cons_induction with
@@ -164,7 +164,7 @@ lemma preimage_upperClosure_compl_finset
 
 中文:
 引理 preimage_upperClosure_compl_finset
-  条件: (hT : 对任意 p in T, InfPrime p) (F : Finset α)
+  条件: (hT : 对任意 p in T, InfPrime p) (F : 有限集 α)
   证明: by
   rw [Set.preimage_compl]; rw [(hull_finsetInf hT)]
 
@@ -244,7 +244,7 @@ lemma hull_iSup
 
 中文:
 引理 hull_iSup
-  条件: {ι : Sort v} (s : ι -> α)
+  条件: {ι : 类型层 v} (s : ι -> α)
   结论: hull T (iSup s) = ⋂ i, hull T (s i)
   证明: by aesop
 -/
@@ -261,7 +261,7 @@ lemma hull_sSup
 
 中文:
 引理 hull_sSup
-  条件: (S : Set α)
+  条件: (S : 集合 α)
   结论: hull T (sSup S) = ⋂₀ { hull T a | a in S }
   证明: by aesop
 -/
@@ -284,7 +284,7 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  结论: [TopologicalSpace α] [IsLower α] (hT : 对任意 p in T, InfPrime p)
+  结论: [拓扑空间 α] [是Lower α] (hT : 对任意 p in T, InfPrime p)
   证明: by
   constructor <;> intro h
   · let R := {a : α | (hull T a)ᶜ subseteq S}
@@ -317,7 +317,7 @@ lemma isClosed_iff
 
 中文:
 引理 isClosed_iff
-  结论: [TopologicalSpace α] [IsLower α] (hT : 对任意 p in T, InfPrime p)
+  结论: [拓扑空间 α] [是Lower α] (hT : 对任意 p in T, InfPrime p)
   证明: by
   simp only [← isOpen_compl_iff, isOpen_iff hT, compl_inj_iff]
 
@@ -337,7 +337,7 @@ abbreviation kernel
 
 中文:
 缩写 kernel
-  签名: (S : Set T)
+  签名: (S : 集合 T)
   定义体: sInf (Subtype.val '' S)
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -356,7 +356,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection (α := Set T) (β := αᵒᵈ)
+  结论: GaloisConnection (α := 集合 T) (β := αᵒᵈ)
   证明: fun S a => by
   simp [Set.subset_def]
 -/
@@ -377,7 +377,7 @@ lemma gc_closureOperator
 
 中文:
 引理 gc_closureOperator
-  条件: (S : Set T)
+  条件: (S : 集合 T)
   结论: gc.closureOperator S = hull T (kernel S)
   证明: by
   simp only [toDual_sInf, GaloisConnection.closureOperator_apply, ofDual_sSup]
@@ -479,7 +479,7 @@ lemma hull_kernel_of_isClosed
 
 中文:
 引理 hull_kernel_of_isClosed
-  结论: [TopologicalSpace α] [IsLower α]
+  结论: [拓扑空间 α] [是Lower α]
   证明: by
   obtain ⟨a, ha⟩ := (isClosed_iff hT).mp h
   rw [ha]; rw [kernel_hull hG]
@@ -508,7 +508,7 @@ lemma closedsGC_closureOperator
 
 中文:
 引理 closedsGC_closureOperator
-  结论: [TopologicalSpace α] [IsLower α]
+  结论: [拓扑空间 α] [是Lower α]
   证明: by
   simp only [GaloisConnection.closureOperator_apply, Closeds.coe_closure, closure, le_antisymm_iff]
   constructor

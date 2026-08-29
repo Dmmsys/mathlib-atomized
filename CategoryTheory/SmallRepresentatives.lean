@@ -54,8 +54,8 @@ structure SmallCategoryOfSet
 结构 SmallCategoryOfSet
   参数: where
   公理与运算 (7 个):
-    - obj : Set Ω
-    - hom((X Y : obj)) : Set Ω
+    - obj : 集合 Ω
+    - hom((X Y : obj)) : 集合 Ω
     - id((X : obj)) : hom X X
     - comp({X Y Z : obj} (f : hom X Y) (g : hom Y Z)) : hom X Z
     - id_comp({X Y : obj} (f : hom X Y)) : comp (id _) f = f  [默认: by cat_disch]
@@ -98,7 +98,7 @@ abbreviation categoryFamily
 
 中文:
 缩写 categoryFamily
-  签名: : SmallCategoryOfSet Ω -> Type w
+  签名: : SmallCategoryOfSet Ω -> 类型 w
   定义体: fun S => S.obj
 
 Depends on / 依赖: S.obj
@@ -122,11 +122,11 @@ structure CoreSmallCategoryOfSet
     - homEquiv({X Y : obj}) : hom X Y ≃ (objEquiv X ⟶ objEquiv Y)
 
 中文:
-结构 CoreSmallCategoryOfSet
+结构 余reSmallCategoryOfSet
   参数: where
   公理与运算 (4 个):
-    - obj : Set Ω
-    - hom((X Y : obj)) : Set Ω
+    - obj : 集合 Ω
+    - hom((X Y : obj)) : 集合 Ω
     - objEquiv : obj ≃ C
     - homEquiv({X Y : obj}) : hom X Y ≃ (objEquiv X ⟶ objEquiv Y)
 -/
@@ -216,7 +216,7 @@ definition fullyFaithfulFunctor
 
 中文:
 定义 fullyFaithfulFunctor
-  签名: : h.functor.FullyFaithful where
+  签名: : h.functor.满忠实 where
   定义体: h.homEquiv.symm
 
 Depends on / 依赖: h.homEquiv.symm, homEquiv
@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: h.functor.IsEquivalence
+  签名: h.functor.是等价
   定义体: h.fullyFaithfulFunctor.faithful
   full := h.fullyFaithfulFunctor.full
   essSurj.mem_essImage Y := by
@@ -290,7 +290,7 @@ definition arrowEquiv
 
 中文:
 定义 arrowEquiv
-  签名: : Arrow h.smallCategoryOfSet.obj ≃ Arrow C
+  签名: : 箭头 h.smallCategoryOfSet.obj ≃ 箭头 C
   定义体: Equiv.ofBijective h.functor.mapArrow.obj (by
     constructor
     · rintro ⟨x, y, f⟩ ⟨x', y', g⟩ hfg
@@ -335,8 +335,8 @@ lemma exists_equivalence
       
 
 中文:
-引理 exists_equivalence
-  结论: (C : 类型u) [Category.{v} C]
+引理 存在_equivalence
+  结论: (C : 类型u) [范畴.{v} C]
   证明: by
   let f₁ := (Cardinal.lift_mk_le'.1 h₁).some
   let f₂ (X Y) := (Cardinal.lift_mk_le'.1 (h₂ X Y)).some
@@ -376,7 +376,7 @@ definition SmallCategoryCardinalLT
 
 中文:
 定义 SmallCategoryCardinalLT
-  签名: (κ : Cardinal.{w})
+  签名: (κ : 基数.{w})
   定义体: { S : SmallCategoryOfSet κ.ord.ToType // HasCardinalLT (Arrow S.obj) κ}
 
 Depends on / 依赖: HasCardinalLT, S.obj, SmallCategoryOfSet, ToType, ord.ToType
@@ -436,8 +436,8 @@ lemma exists_equivalence
     refine ⟨Function.Embedding.trans { toFun 
 
 中文:
-引理 exists_equivalence
-  条件: (C : 类型u) [Category.{v} C] (hC : HasCardinalLT (Arrow C) κ)
+引理 存在_equivalence
+  条件: (C : 类型u) [范畴.{v} C] (hC : HasCardinalLT (箭头 C) κ)
   证明: by
   let Ω := κ.ord.ToType
   have ι : Arrow C ↪ Ω := Nonempty.some (by

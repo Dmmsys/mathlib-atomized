@@ -48,8 +48,8 @@ theorem Pi.comul_eq_adjoint
   simp [TensorProduct.ext_iff_inner_left, adjoint_inner_right, inner_eq_star_dotProduct]
 
 中文:
-定理 Pi.comul_eq_adjoint
-  条件: {n : 类型} [Fintype n] [DecidableEq n]
+定理 依赖函数类型.comul_eq_adjoint
+  条件: {n : 类型} [有限类型 n] [DecidableEq n]
   证明: by
   ext
   simp only [comp_apply, ← toLinearMap_congr, LinearEquiv.coe_coe, ← LinearEquiv.symm_apply_eq]
@@ -79,8 +79,8 @@ theorem Pi.counit_eq_adjoint
     adjoint_toSpanSingleton, inner_eq_star_dotProduct]
 
 中文:
-定理 Pi.counit_eq_adjoint
-  条件: {n : 类型} [Fintype n] [DecidableEq n]
+定理 依赖函数类型.counit_eq_adjoint
+  条件: {n : 类型} [有限类型 n] [DecidableEq n]
   证明: by
   ext
   simp [← toSpanSingleton_one_eq_algebraLinearMap, comp_toSpanSingleton,
@@ -245,7 +245,7 @@ abbreviation algebraOfCoalgebra
 
 中文:
 缩写 algebraOfCoalgebra
-  签名: : Algebra 𝕜 E where
+  签名: : 代数 𝕜 E where
   定义体: { toFun := adjoint (Coalgebra.counit (R := 𝕜) (A := E))
       map_one' := rfl
       map_mul' x y := by

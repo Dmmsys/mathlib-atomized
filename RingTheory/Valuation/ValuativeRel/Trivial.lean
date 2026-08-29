@@ -50,7 +50,7 @@ definition trivialRel
 
 中文:
 定义 trivialRel
-  签名: {R : Type} [Semiring R] [DecidableEq R] [IsDomain R]
+  签名: {R : 类型} [半环 R] [DecidableEq R] [是整环 R]
   定义体: if y = 0 then x = 0 else True
   vle_total _ _ := by split_ifs <;> simp_all
   vle_trans _ _ := by split_ifs; simp_all
@@ -178,7 +178,7 @@ lemma not_isNontrivial_of_trivialRel
 
 中文:
 引理 not_isNontrivial_of_trivialRel
-  条件: [ValuativeRel R] [Valuation.Compatible (1 : Valuation R Γ)]
+  条件: [ValuativeRel R] [赋值.余mpatible (1 : 赋值 R Γ)]
   证明: by
   rintro ⟨⟨x, hx, hx'⟩⟩
   have := subsingleton_units_valueGroupWithZero_of_trivialRel R Γ
@@ -212,7 +212,7 @@ lemma isDiscrete_trivialRel
 
 中文:
 引理 isDiscrete_trivialRel
-  条件: [ValuativeRel R] [Valuation.Compatible (1 : Valuation R Γ)]
+  条件: [ValuativeRel R] [赋值.余mpatible (1 : 赋值 R Γ)]
   证明: by
   refine ⟨⟨0, zero_lt_one, fun x => ?_⟩⟩
   have := subsingleton_units_valueGroupWithZero_of_trivialRel R Γ

@@ -44,11 +44,11 @@ structure IsNormal
     - mem_lowerBounds_upperBounds_of_isSuccLimit({a : α} (ha : IsSuccLimit a)) : f a in lowerBounds (upperBounds (f '' Iio a))
 
 中文:
-结构 IsNormal
-  参数: [LinearOrder α] [LinearOrder β] (f : α -> β)
+结构 是正规
+  参数: [线性序 α] [线性序 β] (f : α -> β)
   公理与运算 (2 个):
-    - strictMono : StrictMono f
-    - mem_lowerBounds_upperBounds_of_isSuccLimit({a : α} (ha : IsSuccLimit a)) : f a in lowerBounds (upperBounds (f '' Iio a))
+    - strictMono : 严格递增 f
+    - mem_lowerBounds_upperBounds_of_isSuccLimit({a : α} (ha : 是SuccLimit a)) : f a in lowerBounds (upperBounds (f '' 左无界右开区间 a))
 -/
 structure IsNormal [LinearOrder α] [LinearOrder β] (f : α -> β) : Prop where
   strictMono : StrictMono f
@@ -68,7 +68,7 @@ theorem isNormal_iff
 
 中文:
 定理 isNormal_iff
-  条件: [LinearOrder α] [LinearOrder β] {f : α -> β}
+  条件: [线性序 α] [线性序 β] {f : α -> β}
   证明: by
   simp [isNormal_iff', mem_lowerBounds, mem_upperBounds]
 
@@ -94,8 +94,8 @@ theorem monotone
 
 中文:
 定理 monotone
-  条件: {f : α -> β} (hf : IsNormal f)
-  结论: Monotone f
+  条件: {f : α -> β} (hf : 是正规 f)
+  结论: 递增 f
   证明: hf.strictMono.monotone
 -/
 protected theorem monotone {f : α -> β} (hf : IsNormal f) : Monotone f :=
@@ -114,7 +114,7 @@ theorem isLUB_image_Iio_of_isSuccLimit
 
 中文:
 定理 isLUB_image_Iio_of_isSuccLimit
-  条件: {f : α -> β} (hf : IsNormal f) {a : α} (ha : IsSuccLimit a)
+  条件: {f : α -> β} (hf : 是正规 f) {a : α} (ha : 是SuccLimit a)
   证明: by
   refine ⟨?_, hf.2 ha⟩
   rintro - ⟨b, hb, rfl⟩
@@ -136,8 +136,8 @@ theorem le_iff_forall_le
   simpa [mem_upperBounds] using isLUB_le_iff (hf.isLUB_image_Iio_of_isSuccLimit ha)
 
 中文:
-定理 le_iff_forall_le
-  条件: (hf : IsNormal f) (ha : IsSuccLimit a) {b : β}
+定理 le_iff_对任意_le
+  条件: (hf : 是正规 f) (ha : 是SuccLimit a) {b : β}
   证明: by
   simpa [mem_upperBounds] using isLUB_le_iff (hf.isLUB_image_Iio_of_isSuccLimit ha)
 
@@ -157,8 +157,8 @@ theorem lt_iff_exists_lt
   simpa [mem_upperBounds] using lt_isLUB_iff (hf.isLUB_image_Iio_of_isSuccLimit ha)
 
 中文:
-定理 lt_iff_exists_lt
-  条件: (hf : IsNormal f) (ha : IsSuccLimit a) {b : β}
+定理 lt_iff_存在_lt
+  条件: (hf : 是正规 f) (ha : 是SuccLimit a) {b : β}
   证明: by
   simpa [mem_upperBounds] using lt_isLUB_iff (hf.isLUB_image_Iio_of_isSuccLimit ha)
 
@@ -186,8 +186,8 @@ theorem map_isSuccLimit
 
 中文:
 定理 map_isSuccLimit
-  条件: (hf : IsNormal f) (ha : IsSuccLimit a)
-  结论: IsSuccLimit (f a)
+  条件: (hf : 是正规 f) (ha : 是SuccLimit a)
+  结论: 是SuccLimit (f a)
   证明: by
   refine ⟨?_, fun b hb => ?_⟩
   · obtain ⟨b, hb⟩ := not_isMin_iff.1 ha.not_isMin
@@ -226,7 +226,7 @@ theorem map_isLUB
 
 中文:
 定理 map_isLUB
-  条件: (hf : IsNormal f) {s : Set α} (hs : IsLUB s a) (hs' : s.Nonempty)
+  条件: (hf : 是正规 f) {s : 集合 α} (hs : IsLUB s a) (hs' : s.非空)
   证明: by
   refine ⟨?_, fun b hb => ?_⟩
   · simpa [mem_upperBounds, hf.strictMono.le_iff_le] using hs.1
@@ -265,9 +265,9 @@ theorem _root_.InitialSeg.isNormal
     exact (f.map_isSuccLimit ha).isLUB_Iio.2
 
 中文:
-定理 _root_.InitialSeg.isNormal
+定理 _root_.初始段.isNormal
   条件: (f : α <=i β)
-  结论: IsNormal f where
+  结论: 是正规 f where
   证明: f.strictMono
   mem_lowerBounds_upperBounds_of_isSuccLimit ha := by
     rw [f.image_Iio]
@@ -291,9 +291,9 @@ theorem _root_.PrincipalSeg.isNormal
   proof: (f : α <=i β).isNormal
 
 中文:
-定理 _root_.PrincipalSeg.isNormal
+定理 _root_.主段.isNormal
   条件: (f : α <i β)
-  结论: IsNormal f
+  结论: 是正规 f
   证明: (f : α <=i β).isNormal
 
 Depends on / 依赖: isNormal
@@ -313,7 +313,7 @@ theorem _root_.OrderIso.isNormal
 中文:
 定理 _root_.OrderIso.isNormal
   条件: (f : α ≃o β)
-  结论: IsNormal f
+  结论: 是正规 f
   证明: f.toInitialSeg.isNormal
 
 Depends on / 依赖: f.toInitialSeg.isNormal, isNormal, toInitialSeg
@@ -331,7 +331,7 @@ theorem id
 
 中文:
 定理 id
-  结论: IsNormal (@id α)
+  结论: 是正规 (@id α)
   证明: (OrderIso.refl _).isNormal
 
 Depends on / 依赖: I.IsTwoSided, IsTwoSided, RingHomSurjective
@@ -354,8 +354,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hg : IsNormal g) (hf : IsNormal f)
-  结论: IsNormal (g ∘ f)
+  条件: (hg : 是正规 g) (hf : 是正规 f)
+  结论: 是正规 (g ∘ f)
   证明: by
   refine ⟨hg.strictMono.comp hf.strictMono, fun ha b hb => ?_⟩
   simp_rw [Function.comp_apply, mem_upperBounds, forall_mem_image] at hb
@@ -383,7 +383,7 @@ theorem to_Iio
 
 中文:
 定理 to_Iio
-  条件: (hf : IsNormal f) (a : α)
+  条件: (hf : 是正规 f) (a : α)
   证明: by
   rw [isNormal_iff]
   refine ⟨fun x y h => hf.strictMono h, fun b hb c hc => hf.2 (hb.subtypeVal (isLowerSet_Iio _)) ?_⟩
@@ -412,7 +412,7 @@ theorem map_sSup
 
 中文:
 定理 map_sSup
-  条件: (hf : IsNormal f) {s : Set α} (hs : s.Nonempty) (hs' : BddAbove s)
+  条件: (hf : 是正规 f) {s : 集合 α} (hs : s.非空) (hs' : BddAbove s)
   证明: ((hf.map_isLUB (isLUB_csSup hs hs') hs).csSup_eq (hs.image f)).symm
 
 Depends on / 依赖: csSup_eq, hf.map_isLUB, hs.image, isLUB_csSup, map_isLUB
@@ -435,7 +435,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι} [Nonempty ι] {g : ι -> α} (hf : IsNormal f) (hg : BddAbove (range g))
+  条件: {ι} [非空 ι] {g : ι -> α} (hf : 是正规 f) (hg : BddAbove (range g))
   证明: by
   unfold iSup
   convert! map_sSup hf (range_nonempty g) hg
@@ -469,7 +469,7 @@ theorem iSup_iterate_mem_fixedPoints
 
 中文:
 定理 iSup_iterate_mem_fixedPoints
-  结论: [WellFoundedLT α] {f : α -> α} (a : α) (hf : IsNormal f)
+  结论: [WellFoundedLT α] {f : α -> α} (a : α) (hf : 是正规 f)
   证明: by
   rw [f.mem_fixedPoints_iff]; rw [hf.map_iSup hf']
   apply le_antisymm <;> refine ciSup_le fun n => ?_
@@ -510,7 +510,7 @@ theorem preimage_Iic
 
 中文:
 定理 preimage_Iic
-  结论: (hf : IsNormal f) {x : β}
+  结论: (hf : 是正规 f) {x : β}
   证明: by
   refine le_antisymm (fun _ => le_csSup h₂) (fun y hy => ?_)
   obtain hy | rfl := hy.lt_or_eq
@@ -545,7 +545,7 @@ theorem le_iff_le_sSup
 
 中文:
 定理 le_iff_le_sSup
-  结论: (hf : IsNormal f) {x : α} {y : β}
+  结论: (hf : 是正规 f) {x : α} {y : β}
   证明: Set.ext_iff.1 (preimage_Iic hf h₁ h₂) x
 
 Depends on / 依赖: Set.ext_iff, ext_iff, preimage_Iic
@@ -565,7 +565,7 @@ theorem le_iff_le_sSup'
 
 中文:
 定理 le_iff_le_sSup'
-  结论: [WellFoundedLT α] {f : α -> α} (hf : IsNormal f) {x y : α}
+  结论: [WellFoundedLT α] {f : α -> α} (hf : 是正规 f) {x y : α}
   证明: hf.le_iff_le_sSup h ⟨y, fun _ => hf.strictMono.le_apply.trans⟩
 
 Depends on / 依赖: hf.le_iff_le_sSup, hf.strictMono.le_apply.trans, le_apply, le_iff_le_sSup, strictMono
@@ -595,7 +595,7 @@ theorem apply_of_isSuccLimit
 
 中文:
 定理 apply_of_isSuccLimit
-  条件: (hf : IsNormal f) (ha : IsSuccLimit a)
+  条件: (hf : 是正规 f) (ha : 是SuccLimit a)
   证明: by
   convert! map_iSup hf _
   · exact ha.iSup_Iio.symm
@@ -688,7 +688,7 @@ theorem ext_iff
 
 中文:
 定理 ext_iff
-  条件: [OrderBot α] {g : α -> β} (hf : IsNormal f) (hg : IsNormal g)
+  条件: [有底序 α] {g : α -> β} (hf : 是正规 f) (hg : 是正规 g)
   证明: by
   constructor
   · simp_all
@@ -735,8 +735,8 @@ theorem exists_map_le_lt_map_succ_of_exists_ge
 ⟨y, fun z hz => hf.strictMono.le_iff_le.1 hz.trans 
 
 中文:
-定理 exists_map_le_lt_map_succ_of_exists_ge
-  结论: [NoMaxOrder α] [OrderBot α] [WellFoundedLT β]
+定理 存在_map_le_lt_map_succ_of_存在_ge
+  结论: [NoMax序 α] [有底序 α] [WellFoundedLT β]
   证明: by
   have : Nonempty β := ⟨x⟩
   let := WellFoundedLT.toOrderBot β
@@ -773,8 +773,8 @@ theorem exists_map_le_lt_map_succ
 omit [SuccOrder α] in
 
 中文:
-定理 exists_map_le_lt_map_succ
-  结论: [NoMaxOrder α] [OrderBot α] {f : α -> α} {x : α}
+定理 存在_map_le_lt_map_succ
+  结论: [NoMax序 α] [有底序 α] {f : α -> α} {x : α}
   证明: exists_map_le_lt_map_succ_of_exists_ge hf ⟨x, hf.strictMono.le_apply⟩ hx
 
 omit [SuccOrder α] in
@@ -806,7 +806,7 @@ theorem dirSupClosed_range
 
 中文:
 定理 dirSupClosed_range
-  条件: {f : α -> α} (hf : IsNormal f)
+  条件: {f : α -> α} (hf : 是正规 f)
   结论: DirSupClosed (range f)
   证明: by
   intro s hs hs₀ _ a ha

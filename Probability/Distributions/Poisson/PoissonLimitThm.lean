@@ -58,7 +58,7 @@ lemma tendsto_zero_of_tendsto_mul_atTop
 
 中文:
 引理 tendsto_zero_of_tendsto_mul_atTop
-  条件: (hr : Tendsto (fun n => n * p n) atTop (𝓝 r))
+  条件: (hr : 收敛 (fun n => n * p n) atTop (𝓝 r))
   证明: by
   have : (fun n => (n * p n) * (1 / n)) =ᶠ[atTop] p := by
     filter_upwards [eventually_ge_atTop 1] with n hn
@@ -91,7 +91,7 @@ lemma tendsto_choose_mul_pow_atTop
 
 中文:
 引理 tendsto_choose_mul_pow_atTop
-  条件: (hr : Tendsto (fun n => n * p n) atTop (𝓝 r))
+  条件: (hr : 收敛 (fun n => n * p n) atTop (𝓝 r))
   证明: by
   have : (fun n => n.choose k * (p n) ^ k) ~[atTop] (fun n => ((n * p n) ^ k) / k.factorial) :=
     calc
@@ -129,7 +129,7 @@ theorem tendsto_choose_mul_pow_of_tendsto_mul_atTop
 
 中文:
 定理 tendsto_choose_mul_pow_of_tendsto_mul_atTop
-  条件: (hr : Tendsto (fun n => n * p n) atTop (𝓝 r))
+  条件: (hr : 收敛 (fun n => n * p n) atTop (𝓝 r))
   证明: by
   rw [mul_div_assoc]; rw [mul_comm]
   refine (tendsto_choose_mul_pow_atTop k hr).mul ?_
@@ -178,7 +178,7 @@ lemma binomial_tendsto_poissonPMFReal_atTop
   refine Tendsto.congr'
 
 中文:
-引理 binomial_tendsto_poissonPMFReal_atTop
+引理 binomial_tendsto_poissonPMF实数_atTop
   结论: {r : 实数>=0} {p : 自然数 -> unit整数erval}
   证明: by
   have t1 : Tendsto (fun n => (ENNReal.ofReal (n.choose k * (p n) ^ k * (1 - p n) ^ (n - k) : Real)))

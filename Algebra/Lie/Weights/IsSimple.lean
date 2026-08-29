@@ -841,7 +841,7 @@ definition invtSubmoduleToLieIdeal
 
 中文:
 定义 invtSubmoduleToLieIdeal
-  签名: (q : Submodule K (Dual K H))
+  签名: (q : 子模 K (对偶 K H))
   定义体: ⨆ α : {α : Weight K H L // ↑α in q ∧ α.IsNonZero}, sl2SubmoduleOfRoot α.2.2
   lie_mem := by
     intro x m hm
@@ -884,7 +884,7 @@ lemma coe_invtSubmoduleToLieIdeal_eq_iSup
 
 中文:
 引理 coe_invtSubmoduleToLieIdeal_eq_iSup
-  结论: (q : Submodule K (Dual K H))
+  结论: (q : 子模 K (对偶 K H))
   证明: rfl
 -/
 @[simp] lemma coe_invtSubmoduleToLieIdeal_eq_iSup (q : Submodule K (Dual K H))
@@ -904,7 +904,7 @@ lemma restr_invtSubmoduleToLieIdeal_eq_iSup
 
 中文:
 引理 restr_invtSubmoduleToLieIdeal_eq_iSup
-  结论: (q : Submodule K (Dual K H))
+  结论: (q : 子模 K (对偶 K H))
   证明: by
   rw [← LieSubmodule.toSubmodule_inj]; rw [LieSubmodule.restr_toSubmodule]; rw [coe_invtSubmoduleToLieIdeal_eq_iSup]; rw [LieSubmodule.iSup_toSubmodule]
 -/
@@ -931,7 +931,7 @@ lemma mem_rootSet_invtSubmoduleToLieIdeal
 
 中文:
 引理 mem_rootSet_invtSubmoduleToLieIdeal
-  结论: (q : Submodule K (Dual K H))
+  结论: (q : 子模 K (对偶 K H))
   证明: by
   set J := invtSubmoduleToLieIdeal q hq
   constructor
@@ -985,7 +985,7 @@ lemma invtSubmoduleToLieIdeal_mono
 
 中文:
 引理 invtSubmoduleToLieIdeal_mono
-  结论: {q₁ q₂ : Submodule K (Dual K H)}
+  结论: {q₁ q₂ : 子模 K (对偶 K H)}
   证明: by
   change (invtSubmoduleToLieIdeal q₁ hq₁).restr H <= (invtSubmoduleToLieIdeal q₂ hq₂).restr H
   exact iSup_le fun ⟨α, hα_mem, hα_nz⟩ => le_iSup_of_le ⟨α, h hα_mem, hα_nz⟩ le_rfl
@@ -1126,7 +1126,7 @@ theorem isSimple_iff_isIrreducible
 
 中文:
 定理 isSimple_iff_isIrreducible
-  结论: (rootSystem H).IsIrreducible ↔ IsSimple K L
+  结论: (rootSystem H).是不可约 ↔ 是单 K L
   证明: by
   nontriviality L
   have hL : ¬ IsLieAbelian L :=
@@ -1161,7 +1161,7 @@ instance instIsIrreducibleRootSystem_of_isSimple
 
 中文:
 实例 instIsIrreducibleRootSystem_of_isSimple
-  签名: [IsSimple K L]
+  签名: [是单 K L]
   定义体: LieAlgebra.IsKilling.isSimple_iff_isIrreducible.mpr ‹_›
 
 Depends on / 依赖: IsKilling, LieAlgebra, LieAlgebra.IsKilling.isSimple_iff_isIrreducible.mpr, isSimple_iff_isIrreducible

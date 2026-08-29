@@ -53,9 +53,9 @@ theorem Nonempty.eq_univ
   exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
 
 中文:
-定理 Nonempty.eq_univ
-  条件: [Subsingleton α]
-  结论: s.Nonempty -> s = univ
+定理 非空.eq_univ
+  条件: [子单例 α]
+  结论: s.非空 -> s = univ
   证明: by
   rintro ⟨x, hx⟩
   exact eq_univ_of_forall fun y => by rwa [Subsingleton.elim y x]
@@ -79,7 +79,7 @@ theorem univ_nonempty_iff
 
 中文:
 定理 univ_nonempty_iff
-  结论: (univ : Finset α).Nonempty ↔ Nonempty α
+  结论: (univ : 有限集 α).非空 ↔ 非空 α
   证明: by
   rw [← coe_nonempty]; rw [coe_univ]; rw [Set.nonempty_iff_univ_nonempty]
 
@@ -102,8 +102,8 @@ theorem univ_nonempty
 
 中文:
 定理 univ_nonempty
-  条件: [Nonempty α]
-  结论: (univ : Finset α).Nonempty
+  条件: [非空 α]
+  结论: (univ : 有限集 α).非空
   证明: univ_nonempty_iff.2 ‹_›
 
 Depends on / 依赖: univ_nonempty_iff
@@ -122,7 +122,7 @@ theorem univ_eq_empty_iff
 
 中文:
 定理 univ_eq_empty_iff
-  结论: (univ : Finset α) = ∅ ↔ IsEmpty α
+  结论: (univ : 有限集 α) = ∅ ↔ 是空 α
   证明: by
   contrapose!; exact univ_nonempty_iff
 
@@ -160,7 +160,7 @@ lemma univ_neq_empty
 
 中文:
 引理 univ_neq_empty
-  条件: (α : 类型) [Fintype α] [Nonempty α]
+  条件: (α : 类型) [有限类型 α] [非空 α]
   证明: fun h => (Finset.univ_eq_empty_iff.1 h).elim (Classical.arbitrary _)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Finset, Finset.univ_eq_empty_iff, arbitrary, univ_eq_empty_iff
@@ -179,7 +179,7 @@ theorem univ_nontrivial
 
 中文:
 定理 univ_nontrivial
-  条件: [h : Nontrivial α]
+  条件: [h : 非平凡 α]
   证明: univ_nontrivial_iff.mpr h
 
 Depends on / 依赖: univ_nontrivial_iff, univ_nontrivial_iff.mpr
@@ -203,7 +203,7 @@ lemma singleton_ne_univ
 
 中文:
 引理 singleton_ne_univ
-  条件: [Nontrivial α] (a : α)
+  条件: [非平凡 α] (a : α)
   结论: {a} != univ
   证明: by
   apply SetLike.coe_ne_coe.1
@@ -229,8 +229,8 @@ theorem univ_eq_empty
 
 中文:
 定理 univ_eq_empty
-  条件: [IsEmpty α]
-  结论: (univ : Finset α) = ∅
+  条件: [是空 α]
+  结论: (univ : 有限集 α) = ∅
   证明: univ_eq_empty_iff.2 ‹_›
 
 @[simp]
@@ -252,8 +252,8 @@ theorem univ_unique
 
 中文:
 定理 univ_unique
-  条件: [Unique α]
-  结论: (univ : Finset α) = {default}
+  条件: [唯一 α]
+  结论: (univ : 有限集 α) = {default}
   证明: Finset.ext fun x => iff_of_true (mem_univ _) mem_singleton.2 Subsingleton.elim x default
 
 Depends on / 依赖: Finset, Finset.ext, Subsingleton, Subsingleton.elim, iff_of_true, mem_singleton, mem_univ
@@ -275,7 +275,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: : BoundedOrder (Finset α)
+  签名: : 有界序 (有限集 α)
   定义体: { (inferInstance : OrderBot (Finset α)) with
     top := univ
     le_top := subset_univ }
@@ -300,7 +300,7 @@ theorem top_eq_univ
 
 中文:
 定理 top_eq_univ
-  结论: (⊤ : Finset α) = univ
+  结论: (⊤ : 有限集 α) = univ
   证明: rfl
 -/
 theorem top_eq_univ : (⊤ : Finset α) = univ :=
@@ -319,7 +319,7 @@ theorem ssubset_univ_iff
 
 中文:
 定理 ssubset_univ_iff
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s ⊂ univ ↔ s != univ
   证明: lt_top_iff_ne_top
 
@@ -342,7 +342,7 @@ theorem univ_subset_iff
 
 中文:
 定理 univ_subset_iff
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: univ subseteq s ↔ s = univ
   证明: top_le_iff
 
@@ -423,7 +423,7 @@ theorem sdiff_eq_inter_compl
 
 中文:
 定理 sdiff_eq_inter_compl
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s \ t = s inter tᶜ
   证明: sdiff_eq
 
@@ -445,7 +445,7 @@ theorem compl_eq_univ_sdiff
 
 中文:
 定理 compl_eq_univ_sdiff
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: sᶜ = univ \ s
   证明: rfl
 
@@ -565,8 +565,8 @@ theorem coe_compl
 
 中文:
 定理 coe_compl
-  条件: (s : Finset α)
-  结论: ↑sᶜ = (↑s : Set α)ᶜ
+  条件: (s : 有限集 α)
+  结论: ↑sᶜ = (↑s : 集合 α)ᶜ
   证明: Set.ext fun _ => mem_compl
 
 Depends on / 依赖: Set.ext, mem_compl
@@ -695,7 +695,7 @@ theorem compl_empty
 
 中文:
 定理 compl_empty
-  结论: (∅ : Finset α)ᶜ = univ
+  结论: (∅ : 有限集 α)ᶜ = univ
   证明: compl_bot
 
 @[simp]
@@ -718,7 +718,7 @@ theorem compl_univ
 
 中文:
 定理 compl_univ
-  结论: (univ : Finset α)ᶜ = ∅
+  结论: (univ : 有限集 α)ᶜ = ∅
   证明: compl_top
 
 @[simp]
@@ -742,7 +742,7 @@ theorem compl_eq_empty_iff
 
 中文:
 定理 compl_eq_empty_iff
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: sᶜ = ∅ ↔ s = univ
   证明: compl_eq_bot
 
@@ -767,7 +767,7 @@ theorem compl_eq_univ_iff
 
 中文:
 定理 compl_eq_univ_iff
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: sᶜ = univ ↔ s = ∅
   证明: compl_eq_top
 
@@ -792,7 +792,7 @@ theorem union_compl
 
 中文:
 定理 union_compl
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s union sᶜ = univ
   证明: sup_compl_eq_top
 
@@ -817,7 +817,7 @@ theorem inter_compl
 
 中文:
 定理 inter_compl
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s inter sᶜ = ∅
   证明: inf_compl_eq_bot
 
@@ -842,7 +842,7 @@ theorem compl_union
 
 中文:
 定理 compl_union
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t)ᶜ = sᶜ inter tᶜ
   证明: compl_sup
 
@@ -867,7 +867,7 @@ theorem compl_inter
 
 中文:
 定理 compl_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s inter t)ᶜ = sᶜ union tᶜ
   证明: compl_inf
 
@@ -972,7 +972,7 @@ theorem insert_compl_self
 中文:
 定理 insert_compl_self
   条件: (x : α)
-  结论: insert x ({x}ᶜ : Finset α) = univ
+  结论: insert x ({x}ᶜ : 有限集 α) = univ
   证明: by
   rw [← compl_erase]; rw [erase_singleton]; rw [compl_empty]
 
@@ -994,7 +994,7 @@ theorem compl_filter
 
 中文:
 定理 compl_filter
-  条件: (p : α -> 命题) [DecidablePred p] [对任意 x, Decidable ¬p x]
+  条件: (p : α -> 命题) [DecidablePred p] [对任意 x, 可判定 ¬p x]
   证明: ext by simp
 -/
 theorem compl_filter (p : α -> Prop) [DecidablePred p] [forall x, Decidable ¬p x] :
@@ -1013,8 +1013,8 @@ theorem compl_ne_univ_iff_nonempty
 
 中文:
 定理 compl_ne_univ_iff_nonempty
-  条件: (s : Finset α)
-  结论: sᶜ != univ ↔ s.Nonempty
+  条件: (s : 有限集 α)
+  结论: sᶜ != univ ↔ s.非空
   证明: by
   simp [eq_univ_iff_forall, Finset.Nonempty]
 
@@ -1036,7 +1036,7 @@ theorem compl_singleton
 中文:
 定理 compl_singleton
   条件: (a : α)
-  结论: ({a} : Finset α)ᶜ = univ.erase a
+  结论: ({a} : 有限集 α)ᶜ = univ.erase a
   证明: by
   rw [compl_eq_univ_sdiff]; rw [sdiff_singleton_eq_erase]
 
@@ -1058,8 +1058,8 @@ theorem insert_inj_on'
 
 中文:
 定理 insert_inj_on'
-  条件: (s : Finset α)
-  结论: Set.InjOn (fun a => insert a s) (sᶜ : Finset α)
+  条件: (s : 有限集 α)
+  结论: 集合.单射限制 (fun a => insert a s) (sᶜ : 有限集 α)
   证明: by
   rw [coe_compl]
   exact s.insert_inj_on
@@ -1082,7 +1082,7 @@ theorem image_univ_of_surjective
 
 中文:
 定理 image_univ_of_surjective
-  条件: [Fintype β] {f : β -> α} (hf : Surjective f)
+  条件: [有限类型 β] {f : β -> α} (hf : 满射 f)
   证明: eq_univ_of_forall hf.forall.2 fun _ => mem_image_of_mem _ mem_univ _
 
 @[simp]
@@ -1105,8 +1105,8 @@ theorem image_univ_equiv
 
 中文:
 定理 image_univ_equiv
-  条件: [Fintype β] (f : β ≃ α)
-  结论: univ.image f = univ
+  条件: [有限类型 β] (f : β ≃ α)
+  结论: univ.像 f = univ
   证明: Finset.image_univ_of_surjective f.surjective
 
 Depends on / 依赖: Finset, Finset.image_univ_of_surjective, f.surjective, image_univ_of_surjective, surjective
@@ -1125,7 +1125,7 @@ lemma univ_inter
 
 中文:
 引理 univ_inter
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: univ inter s = s
   证明: by ext a; simp
 -/
@@ -1142,7 +1142,7 @@ lemma inter_univ
 
 中文:
 引理 inter_univ
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s inter univ = s
   证明: by rw [inter_comm, univ_inter]
 -/
@@ -1178,8 +1178,8 @@ lemma singleton_eq_univ
 
 中文:
 引理 singleton_eq_univ
-  条件: [Subsingleton α] (a : α)
-  结论: ({a} : Finset α) = univ
+  条件: [子单例 α] (a : α)
+  结论: ({a} : 有限集 α) = univ
   证明: by
   ext b; simp [Subsingleton.elim a b]
 
@@ -1202,7 +1202,7 @@ theorem map_univ_of_surjective
 
 中文:
 定理 map_univ_of_surjective
-  条件: [Fintype β] {f : β ↪ α} (hf : Surjective f)
+  条件: [有限类型 β] {f : β ↪ α} (hf : 满射 f)
   结论: univ.map f = univ
   证明: eq_univ_of_forall hf.forall.2 fun _ => mem_map_of_mem _ mem_univ _
 
@@ -1225,7 +1225,7 @@ theorem map_univ_equiv
 
 中文:
 定理 map_univ_equiv
-  条件: [Fintype β] (f : β ≃ α)
+  条件: [有限类型 β] (f : β ≃ α)
   结论: univ.map f.toEmbedding = univ
   证明: map_univ_of_surjective f.surjective
 
@@ -1246,7 +1246,7 @@ theorem univ_map_equiv_to_embedding
 
 中文:
 定理 univ_map_equiv_to_embedding
-  条件: {α β : 类型} [Fintype α] [Fintype β] (e : α ≃ β)
+  条件: {α β : 类型} [有限类型 α] [有限类型 β] (e : α ≃ β)
   证明: eq_univ_iff_forall.mpr fun b => mem_map.mpr ⟨e.symm b, mem_univ _, by simp⟩
 
 @[simp]
@@ -1269,8 +1269,8 @@ theorem univ_filter_exists
   simp
 
 中文:
-定理 univ_filter_exists
-  结论: (f : α -> β) [Fintype β] [DecidablePred fun y => 存在 x, f x = y]
+定理 univ_filter_存在
+  结论: (f : α -> β) [有限类型 β] [DecidablePred fun y => 存在 x, f x = y]
   证明: by
   ext
   simp
@@ -1291,7 +1291,7 @@ theorem univ_filter_mem_range
 
 中文:
 定理 univ_filter_mem_range
-  结论: (f : α -> β) [Fintype β] [DecidablePred fun y => y in Set.range f]
+  结论: (f : α -> β) [有限类型 β] [DecidablePred fun y => y in 集合.range f]
   证明: by
   grind
 -/
@@ -1327,7 +1327,7 @@ lemma subtype_eq_univ
 
 中文:
 引理 subtype_eq_univ
-  条件: {p : α -> 命题} [DecidablePred p] [Fintype {a // p a}]
+  条件: {p : α -> 命题} [DecidablePred p] [有限类型 {a // p a}]
   证明: by simp [Finset.ext_iff]
 -/
 @[simp] lemma subtype_eq_univ {p : α -> Prop} [DecidablePred p] [Fintype {a // p a}] :
@@ -1343,7 +1343,7 @@ lemma subtype_univ
 
 中文:
 引理 subtype_univ
-  条件: [Fintype α] (p : α -> 命题) [DecidablePred p] [Fintype {a // p a}]
+  条件: [有限类型 α] (p : α -> 命题) [DecidablePred p] [有限类型 {a // p a}]
   证明: by simp
 -/
 @[simp] lemma subtype_univ [Fintype α] (p : α -> Prop) [DecidablePred p] [Fintype {a // p a}] :
@@ -1360,7 +1360,7 @@ lemma univ_map_subtype
 
 中文:
 引理 univ_map_subtype
-  条件: [Fintype α] (p : α -> 命题) [DecidablePred p] [Fintype {a // p a}]
+  条件: [有限类型 α] (p : α -> 命题) [DecidablePred p] [有限类型 {a // p a}]
   证明: by
   rw [← subtype_map]; rw [subtype_univ]
 
@@ -1383,7 +1383,7 @@ lemma univ_val_map_subtype_val
 
 中文:
 引理 univ_val_map_subtype_val
-  条件: [Fintype α] (p : α -> 命题) [DecidablePred p] [Fintype {a // p a}]
+  条件: [有限类型 α] (p : α -> 命题) [DecidablePred p] [有限类型 {a // p a}]
   证明: by
   apply (map_val (Function.Embedding.subtype p) univ).symm.trans
   apply congr_arg
@@ -1408,7 +1408,7 @@ lemma univ_val_map_subtype_restrict
 
 中文:
 引理 univ_val_map_subtype_restrict
-  结论: [Fintype α] (f : α -> β)
+  结论: [有限类型 α] (f : α -> β)
   证明: by
   rw [← univ_val_map_subtype_val]; rw [Multiset.map_map]; rw [Subtype.restrict_def]
 
@@ -1434,7 +1434,7 @@ lemma filter_univ_mem
 
 中文:
 引理 filter_univ_mem
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: univ.filter (· in s) = s
   证明: by simp
 -/
@@ -1450,7 +1450,7 @@ instance decidableCodisjoint
 
 中文:
 实例 decidableCodisjoint
-  签名: : Decidable (Codisjoint s t)
+  签名: : 可判定 (Codisjoint s t)
   定义体: decidable_of_iff _ codisjoint_left.symm
 
 Depends on / 依赖: codisjoint_left, codisjoint_left.symm, decidable_of_iff
@@ -1468,7 +1468,7 @@ instance decidableIsCompl
 
 中文:
 实例 decidableIsCompl
-  签名: : Decidable (IsCompl s t)
+  签名: : 可判定 (是补集 s t)
   定义体: decidable_of_iff' _ isCompl_iff
 
 Depends on / 依赖: decidable_of_iff, isCompl_iff

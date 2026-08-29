@@ -261,7 +261,7 @@ instance instLieRing
 
 中文:
 实例 instLieRing
-  签名: : LieRing (A otimes[R] L) where
+  签名: : Lie环 (A otimes[R] L) where
   定义体: by simp only [bracket_def, LinearMap.add_apply, map_add]
   lie_add x y z := by simp only [bracket_def, map_add]
   lie_self := bracket_lie_self R A L
@@ -285,7 +285,7 @@ instance instBaseLieAlgebra
 
 中文:
 实例 instBaseLieAlgebra
-  签名: : LieAlgebra R (A otimes[R] L) where lie_smul
+  签名: : Lie代数 R (A otimes[R] L) where lie_smul
   定义体: by simp [bracket_def]
 
 Depends on / 依赖: bracket_def
@@ -302,7 +302,7 @@ instance instLieAlgebra
 
 中文:
 实例 instLieAlgebra
-  签名: : LieAlgebra A (A otimes[R] L) where lie_smul _a _x _y
+  签名: : Lie代数 A (A otimes[R] L) where lie_smul _a _x _y
   定义体: map_smul _ _ _
 
 Depends on / 依赖: map_smul
@@ -323,7 +323,7 @@ instance instLieRingModule
 
 中文:
 实例 instLieRingModule
-  签名: : LieRingModule (A otimes[R] L) (A otimes[R] M) where
+  签名: : Lie环模 (A otimes[R] L) (A otimes[R] M) where
   定义体: by simp only [bracket_def, LinearMap.add_apply, map_add]
   lie_add x y z := by simp only [bracket_def, map_add]
   leibniz_lie := bracket_leibniz_lie R A L M
@@ -347,7 +347,7 @@ instance instLieModule
 
 中文:
 实例 instLieModule
-  签名: : LieModule A (A otimes[R] L) (A otimes[R] M) where
+  签名: : Lie模 A (A otimes[R] L) (A otimes[R] M) where
   定义体: by simp only [bracket_def, map_smul, LinearMap.smul_apply]
   lie_smul _ _ _ := map_smul _ _ _
 
@@ -373,7 +373,7 @@ definition map
 
 中文:
 定义 map
-  签名: {R A B L L' : 类型} [CommRing R] [CommRing A] [Algebra R A] [CommRing B] [Algebra R B]
+  签名: {R A B L L' : 类型} [交换环 R] [交换环 A] [代数 R A] [交换环 B] [代数 R B]
   定义体: { TensorProduct.map f.toLinearMap g with
     map_lie' {x y} := by
       simp only [bracket_def, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom]
@@ -407,7 +407,7 @@ lemma map_apply_tmul
 
 中文:
 引理 map_apply_tmul
-  结论: {R A B L L' : 类型} [CommRing R] [CommRing A] [Algebra R A] [CommRing B]
+  结论: {R A B L L' : 类型} [交换环 R] [交换环 A] [代数 R A] [交换环 B]
   证明: rfl
 -/
 lemma map_apply_tmul {R A B L L' : Type*} [CommRing R] [CommRing A] [Algebra R A] [CommRing B]
@@ -433,7 +433,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (RestrictScalars R A L)
+  签名: Lie环 (RestrictScalars R A L)
   定义体: h
 -/
 instance : LieRing (RestrictScalars R A L) :=
@@ -453,7 +453,7 @@ instance lieAlgebra
 
 中文:
 实例 lieAlgebra
-  签名: [CommRing R] [Algebra R A]
+  签名: [交换环 R] [代数 R A]
   定义体: (lie_smul (algebraMap R A t) (RestrictScalars.addEquiv R A L x)
     (RestrictScalars.addEquiv R A L y) :)
 
@@ -484,7 +484,7 @@ lemma LieModule.toEnd_baseChange
   ext; simp
 
 中文:
-引理 LieModule.toEnd_baseChange
+引理 Lie模.toEnd_baseChange
   条件: (x : L)
   证明: by
   ext; simp
@@ -517,7 +517,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: : LieSubmodule A (A otimes[R] L) (A otimes[R] M)
+  签名: : Lie子模 A (A otimes[R] L) (A otimes[R] M)
   定义体: { (N : Submodule R M).baseChange A with
     lie_mem := by
       intro x m hm
@@ -623,7 +623,7 @@ lemma baseChange_bot
 
 中文:
 引理 baseChange_bot
-  结论: (⊥ : LieSubmodule R L M).baseChange A = ⊥
+  结论: (⊥ : Lie子模 R L M).baseChange A = ⊥
   证明: by
   simp only [baseChange, bot_toSubmodule, Submodule.baseChange_bot]
   rfl
@@ -649,7 +649,7 @@ lemma baseChange_top
 
 中文:
 引理 baseChange_top
-  结论: (⊤ : LieSubmodule R L M).baseChange A = ⊤
+  结论: (⊤ : Lie子模 R L M).baseChange A = ⊤
   证明: by
   simp only [baseChange, top_toSubmodule, Submodule.baseChange_top]
   rfl
@@ -673,7 +673,7 @@ lemma lie_baseChange
 
 中文:
 引理 lie_baseChange
-  条件: {I : LieIdeal R L} {N : LieSubmodule R L M}
+  条件: {I : LieIdeal R L} {N : Lie子模 R L M}
   证明: by
   set s : Set (A otimes[R] M) := { m | exists x in I, exists n in N, 1 otimesₜ ⁅x, n⁆ = m}
   have : (TensorProduct.mk R A M 1) '' {m | exists x in I, exists n in N, ⁅x, n⁆ = m} = s := by ext; simp [s]

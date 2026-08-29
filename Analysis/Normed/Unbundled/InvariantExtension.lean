@@ -215,7 +215,7 @@ definition invariantExtension
 
 中文:
 定义 invariantExtension
-  签名: : AlgebraNorm K L where
+  签名: : 代数范数 K L where
   定义体: iSup fun σ : L ≃ₐ[K] L => algNormOfAlgEquiv σ x
   map_zero' := by simp only [map_zero, ciSup_const]
   add_le' x y := ciSup_le fun σ => le_trans (map_add_le_add (algNormOfAlgEquiv σ) x y)

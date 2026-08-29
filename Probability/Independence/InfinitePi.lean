@@ -52,7 +52,7 @@ lemma iIndepFun.map_fun_eq_infinitePi_map₀
 
 中文:
 引理 iIndepFun.map_fun_eq_infinitePi_map₀
-  结论: (mX : AEMeasurable (fun ω i => X i ω) P)
+  结论: (mX : 几乎处处可测 (fun ω i => X i ω) P)
   证明: by
   have := h.isProbabilityMeasure
   have _ i := isProbabilityMeasure_map (mX.eval i)
@@ -98,7 +98,7 @@ lemma iIndepFun_iff_map_fun_eq_infinitePi_map₀
 
 中文:
 引理 iIndepFun_iff_map_fun_eq_infinitePi_map₀
-  结论: [IsProbabilityMeasure P]
+  结论: [是概率测度 P]
   证明: h.map_fun_eq_infinitePi_map₀ mX
   mpr h := by
     have _ i := isProbabilityMeasure_map (mX.eval i)
@@ -136,7 +136,7 @@ lemma iIndepFun.map_fun_eq_infinitePi_map₀'
 
 中文:
 引理 iIndepFun.map_fun_eq_infinitePi_map₀'
-  结论: [Countable ι] (mX : 对任意 i, AEMeasurable (X i) P)
+  结论: [可数 ι] (mX : 对任意 i, 几乎处处可测 (X i) P)
   证明: h.map_fun_eq_infinitePi_map₀ aemeasurable_pi_iff.2 mX
 
 Depends on / 依赖: aemeasurable_pi_iff, h.map_fun_eq_infinitePi_map
@@ -156,7 +156,7 @@ lemma iIndepFun_iff_map_fun_eq_infinitePi_map₀'
 
 中文:
 引理 iIndepFun_iff_map_fun_eq_infinitePi_map₀'
-  结论: [IsProbabilityMeasure P] [Countable ι]
+  结论: [是概率测度 P] [可数 ι]
   证明: iIndepFun_iff_map_fun_eq_infinitePi_map₀ aemeasurable_pi_iff.2 mX
 
 Depends on / 依赖: aemeasurable_pi_iff
@@ -176,7 +176,7 @@ lemma iIndepFun.map_fun_eq_infinitePi_map
 
 中文:
 引理 iIndepFun.map_fun_eq_infinitePi_map
-  条件: (mX : 对任意 i, Measurable (X i)) (h : iIndepFun X P)
+  条件: (mX : 对任意 i, 可测 (X i)) (h : iIndepFun X P)
   证明: h.map_fun_eq_infinitePi_map₀ .aemeasurable measurable_pi_iff.2 mX
 
 Depends on / 依赖: aemeasurable, h.map_fun_eq_infinitePi_map, measurable_pi_iff
@@ -195,7 +195,7 @@ lemma iIndepFun_iff_map_fun_eq_infinitePi_map
 
 中文:
 引理 iIndepFun_iff_map_fun_eq_infinitePi_map
-  结论: [IsProbabilityMeasure P]
+  结论: [是概率测度 P]
   证明: iIndepFun_iff_map_fun_eq_infinitePi_map₀ .aemeasurable measurable_pi_iff.2 mX
 
 Depends on / 依赖: aemeasurable, measurable_pi_iff
@@ -219,7 +219,7 @@ lemma iIndepFun.hasLaw_infinitePi
 
 中文:
 引理 iIndepFun.hasLaw_infinitePi
-  结论: {μ : (i : ι) -> Measure (𝓧 i)} (hX : 对任意 i, HasLaw (X i) (μ i) P)
+  结论: {μ : (i : ι) -> 测度 (𝓧 i)} (hX : 对任意 i, 有Law (X i) (μ i) P)
   证明: h2
   map_eq := by
     have := h1.isProbabilityMeasure
@@ -248,7 +248,7 @@ lemma iIndepFun_iff_hasLaw_Pi_infinitePi
 
 中文:
 引理 iIndepFun_iff_hasLaw_Pi_infinitePi
-  结论: [IsProbabilityMeasure P] {μ : (i : ι) -> Measure (𝓧 i)}
+  结论: [是概率测度 P] {μ : (i : ι) -> 测度 (𝓧 i)}
   证明: h.hasLaw_infinitePi hX hm
   mpr h := by
     rw [iIndepFun_iff_map_fun_eq_infinitePi_map₀ hm]; rw [h.map_eq]
@@ -277,7 +277,7 @@ lemma iIndepFun_infinitePi
 
 中文:
 引理 iIndepFun_infinitePi
-  结论: {Ω : ι -> 类型} {mΩ : 对任意 i, MeasurableSpace (Ω i)}
+  结论: {Ω : ι -> 类型} {mΩ : 对任意 i, 可测空间 (Ω i)}
   证明: by
   rw [iIndepFun_iff_map_fun_eq_infinitePi_map (by fun_prop)]; rw [infinitePi_map_pi _ mX]
   congrm infinitePi fun i => ?_
@@ -306,7 +306,7 @@ lemma _root_.MeasureTheory.Measure.infinitePi_map_eval_prod
   all_goals exact Measurable.aemeasurable (by fun_prop)
 
 中文:
-引理 _root_.MeasureTheory.Measure.infinitePi_map_eval_prod
+引理 _root_.测度论.测度.infinitePi_map_eval_prod
   结论: {Ω : ι -> 类型}
   证明: by
   rw [IndepFun.map_prod_eq_prod_map_map]; rotate_right
@@ -337,7 +337,7 @@ lemma _root_.MeasureTheory.Measure.map_infinitePi_infinitePi_of_inj
 exact .precomp hf iIndepFun_infinitePi (X := fun x ω => ω) by fun_prop
 
 中文:
-引理 _root_.MeasureTheory.Measure.map_infinitePi_infinitePi_of_inj
+引理 _root_.测度论.测度.map_infinitePi_infinitePi_of_inj
   结论: {α : 类型} {Ω : ι -> 类型}
   证明: by
   rw [(iIndepFun_iff_map_fun_eq_infinitePi_map <| by fun_prop).mp ?_]
@@ -375,7 +375,7 @@ lemma iIndepFun_uncurry
 
 中文:
 引理 iIndepFun_uncurry
-  结论: {X : (i : ι) -> (j : κ i) -> Ω -> 𝓧 i j} (mX : 对任意 i j, Measurable (X i j))
+  结论: {X : (i : ι) -> (j : κ i) -> Ω -> 𝓧 i j} (mX : 对任意 i j, 可测 (X i j))
   证明: by
   have := h1.isProbabilityMeasure
   have : forall i j, IsProbabilityMeasure (P.map (X i j)) :=
@@ -414,7 +414,7 @@ lemma iIndepFun_uncurry_infinitePi
 
 中文:
 引理 iIndepFun_uncurry_infinitePi
-  结论: {Ω : (i : ι) -> κ i -> 类型} {mΩ : 对任意 i j, MeasurableSpace (Ω i j)}
+  结论: {Ω : (i : ι) -> κ i -> 类型} {mΩ : 对任意 i j, 可测空间 (Ω i j)}
   证明: by
   refine iIndepFun_uncurry (P := infinitePi (fun i => infinitePi (μ i)))
     (X := fun i j ω => X i j (ω i j)) (by fun_prop) ?_ fun i => ?_
@@ -466,7 +466,7 @@ lemma iIndepFun_uncurry'
 
 中文:
 引理 iIndepFun_uncurry'
-  结论: {X : (i : ι) -> (j : κ) -> Ω -> 𝓧 i j} (mX : 对任意 i j, Measurable (X i j))
+  结论: {X : (i : ι) -> (j : κ) -> Ω -> 𝓧 i j} (mX : 对任意 i j, 可测 (X i j))
   证明: (iIndepFun_uncurry mX h1 h2).of_precomp (Equiv.sigmaEquivProd ι κ).surjective
 
 Depends on / 依赖: Equiv.sigmaEquivProd, iIndepFun_uncurry, of_precomp, sigmaEquivProd, surjective
@@ -486,7 +486,7 @@ lemma iIndepFun_uncurry_infinitePi'
 
 中文:
 引理 iIndepFun_uncurry_infinitePi'
-  结论: {Ω : ι -> κ -> 类型} {mΩ : 对任意 i j, MeasurableSpace (Ω i j)}
+  结论: {Ω : ι -> κ -> 类型} {mΩ : 对任意 i j, 可测空间 (Ω i j)}
   证明: (iIndepFun_uncurry_infinitePi μ mX).of_precomp (Equiv.sigmaEquivProd ι κ).surjective
 
 Depends on / 依赖: Equiv.sigmaEquivProd, iIndepFun_uncurry_infinitePi, of_precomp, sigmaEquivProd, surjective

@@ -48,7 +48,7 @@ definition isLimitForkPushoutSelfOfFaithfullyFlat
 
 中文:
 定义 isLimitForkPushoutSelfOfFaithfullyFlat
-  签名: (hf : f.hom.FaithfullyFlat)
+  签名: (hf : f.hom.忠实平坦)
   定义体: by
   algebraize [f.hom]
   let fork : Fork (pushoutCocone R S S).inl (pushoutCocone R S S).inr :=
@@ -91,7 +91,7 @@ definition regularMonoOfFaithfullyFlat
 
 中文:
 定义 regularMonoOfFaithfullyFlat
-  签名: (hf : f.hom.FaithfullyFlat)
+  签名: (hf : f.hom.忠实平坦)
   定义体: pushout f f
   left := pushout.inl f f
   right := pushout.inr f f
@@ -118,7 +118,7 @@ lemma isRegularMono_of_faithfullyFlat
 
 中文:
 引理 isRegularMono_of_faithfullyFlat
-  条件: (hf : f.hom.FaithfullyFlat)
+  条件: (hf : f.hom.忠实平坦)
   证明: isRegularMono_of_regularMono (regularMonoOfFaithfullyFlat f hf)
 
 Depends on / 依赖: isRegularMono_of_regularMono, regularMonoOfFaithfullyFlat
@@ -143,7 +143,7 @@ lemma regularEpiOfFaithfullyFlat
 
 中文:
 引理 regularEpiOfFaithfullyFlat
-  条件: (hf : f.unop.hom.FaithfullyFlat)
+  条件: (hf : f.unop.hom.忠实平坦)
   证明: (isRegularEpi_op_iff_isRegularMono _).mpr (isRegularMono_of_faithfullyFlat _ hf)
 
 Depends on / 依赖: isRegularEpi_op_iff_isRegularMono, isRegularMono_of_faithfullyFlat
@@ -163,8 +163,8 @@ lemma effectiveEpi_of_faithfullyFlat
 
 中文:
 引理 effectiveEpi_of_faithfullyFlat
-  条件: (hf : f.unop.hom.FaithfullyFlat)
-  结论: EffectiveEpi f
+  条件: (hf : f.unop.hom.忠实平坦)
+  结论: 有效满态射 f
   证明: (isRegularEpi_iff_effectiveEpi _).mp (regularEpiOfFaithfullyFlat _ hf)
 
 Depends on / 依赖: isRegularEpi_iff_effectiveEpi, regularEpiOfFaithfullyFlat

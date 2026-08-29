@@ -42,10 +42,10 @@ class Algebra.IsFiniteSplit
     - nonempty_algEquiv_fun((R S)) : exists n : Nat, Nonempty (S ≃ₐ[R] Fin n -> R)
 
 中文:
-类 Algebra.IsFiniteSplit
-  参数: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+类 代数.是FiniteSplit
+  参数: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   公理与运算 (1 个):
-    - nonempty_algEquiv_fun((R S)) : 存在 n : 自然数, Nonempty (S ≃ₐ[R] Fin n -> R)
+    - nonempty_algEquiv_fun((R S)) : 存在 n : 自然数, 非空 (S ≃ₐ[R] 有限集 n -> R)
 -/
 class Algebra.IsFiniteSplit (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] : Prop where
   nonempty_algEquiv_fun (R S) : exists n : Nat, Nonempty (S ≃ₐ[R] Fin n -> R)
@@ -79,7 +79,7 @@ lemma of_algEquiv
 
 中文:
 引理 of_algEquiv
-  条件: {S' : 类型} [CommRing S'] [Algebra R S'] (e : S ≃ₐ[R] S') [IsFiniteSplit R S]
+  条件: {S' : 类型} [交换环 S'] [代数 R S'] (e : S ≃ₐ[R] S') [是FiniteSplit R S]
   证明: by
   obtain ⟨n, ⟨f⟩⟩ := nonempty_algEquiv_fun R S
   exact ⟨n, ⟨e.symm.trans f⟩⟩
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiniteSplit R R
+  签名: 是FiniteSplit R R
   定义体: .of_algEquiv (AlgEquiv.funUnique (ι := Fin 1) _ _)
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.funUnique, funUnique, of_algEquiv
@@ -120,8 +120,8 @@ lemma of_subsingleton_top
 
 中文:
 引理 of_subsingleton_top
-  条件: [Subsingleton S]
-  结论: IsFiniteSplit R S
+  条件: [子单例 S]
+  结论: 是FiniteSplit R S
   证明: ⟨0, ⟨default⟩⟩
 -/
 lemma of_subsingleton_top [Subsingleton S] : IsFiniteSplit R S :=
@@ -140,8 +140,8 @@ lemma of_subsingleton
 
 中文:
 引理 of_subsingleton
-  条件: [Subsingleton R]
-  结论: IsFiniteSplit R S
+  条件: [子单例 R]
+  结论: 是FiniteSplit R S
   证明: by
   have : Subsingleton S := RingHom.codomain_trivial (algebraMap R S)
   exact of_subsingleton_top
@@ -163,8 +163,8 @@ instance [IsFiniteSplit
   exact Module.Free.of_equiv e.symm.toLinearEquiv
 
 中文:
-实例 [IsFiniteSplit
-  签名: R S] : Module.Free R S
+实例 [是FiniteSplit
+  签名: R S] : 模.自由 R S
   定义体: by
   obtain ⟨n, ⟨e⟩⟩ := nonempty_algEquiv_fun R S
   exact Module.Free.of_equiv e.symm.toLinearEquiv
@@ -186,8 +186,8 @@ instance [IsFiniteSplit
   apply Module.FinitePresentation.of_equiv e.symm.toLinearEquiv
 
 中文:
-实例 [IsFiniteSplit
-  签名: R S] : Module.FinitePresentation R S
+实例 [是FiniteSplit
+  签名: R S] : 模.有限呈现 R S
   定义体: by
   obtain ⟨n, ⟨e⟩⟩ := nonempty_algEquiv_fun R S
   apply Module.FinitePresentation.of_equiv e.symm.toLinearEquiv
@@ -209,8 +209,8 @@ instance [IsFiniteSplit
   exact .of_equiv e.symm
 
 中文:
-实例 [IsFiniteSplit
-  签名: R S] : Etale R S
+实例 [是FiniteSplit
+  签名: R S] : 平展 R S
   定义体: by
   obtain ⟨n, ⟨e⟩⟩ := nonempty_algEquiv_fun R S
   exact .of_equiv e.symm
@@ -239,7 +239,7 @@ lemma bijective_algebraMap_quotient
 
 中文:
 引理 bijective_algebraMap_quotient
-  条件: [IsFiniteSplit k R] (p : Ideal R) [p.IsPrime]
+  条件: [是FiniteSplit k R] (p : 理想 R) [p.是素]
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := nonempty_algEquiv_fun k R
   let p' : Ideal (Fin n -> k) := p.comap e.symm
@@ -287,7 +287,7 @@ definition algHomEquivPrimeSpectrum
 
 中文:
 定义 algHomEquivPrimeSpectrum
-  签名: [IsFiniteSplit k R]
+  签名: [是FiniteSplit k R]
   定义体: ⟨RingHom.ker f, RingHom.ker_isPrime f⟩
   invFun p := AlgHom.comp
     (AlgEquiv.ofBijective (Algebra.ofId _ _) (bijective_algebraMap_quotient _ _)).symm.toAlgHom
@@ -329,7 +329,7 @@ lemma coe_algHomEquivPrimeSpectrum
 
 中文:
 引理 coe_algHomEquivPrimeSpectrum
-  条件: [IsFiniteSplit k R] (f : R ->ₐ[k] k)
+  条件: [是FiniteSplit k R] (f : R ->ₐ[k] k)
   证明: rfl
 -/
 lemma coe_algHomEquivPrimeSpectrum [IsFiniteSplit k R] (f : R ->ₐ[k] k) :
@@ -348,8 +348,8 @@ instance [IsSepClosed
   exact .of_algEquiv (Algebra.FormallyEtale.equivPiOfIsSepClosed k R).symm
 
 中文:
-实例 [IsSepClosed
-  签名: k] [EssFiniteType k R] [FormallyEtale k R] : IsFiniteSplit k R
+实例 [是SepClosed
+  签名: k] [EssFiniteType k R] [形式平展 k R] : 是FiniteSplit k R
   定义体: by
   have := FormallyUnramified.finite_of_free k R
   have : IsArtinianRing R := isArtinian_of_tower k inferInstance
@@ -379,8 +379,8 @@ lemma exists_tensorProduct_of_etale
       rw [Nat.cast_zero]; rw [Module.rankAtStalk_eq_zero_iff_subsingle
 
 中文:
-引理 exists_tensorProduct_of_etale
-  结论: [Etale R S] [Module.Finite R S] {n : 自然数}
+引理 存在_tensorProduct_of_etale
+  结论: [平展 R S] [模.有限 R S] {n : 自然数}
   证明: by
   induction n generalizing R S with
   | zero =>

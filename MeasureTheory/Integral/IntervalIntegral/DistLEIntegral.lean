@@ -217,7 +217,7 @@ hf.continuousOn.mono segment_subset_closure_openSegme
 
 中文:
 引理 norm_sub_le_mul_volume_of_norm_fderiv_le
-  结论: (hs : IsOpen s) (hf : DiffContOnCl 实数 f s)
+  结论: (hs : 是开集 s) (hf : DiffContOnCl 实数 f s)
   证明: by
   have hmem_s : forall t in Ioo (0 : Real) 1, lineMap a b t in s := fun t ht =>
 hab lineMap_mem_openSegment _ a b ht

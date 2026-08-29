@@ -59,7 +59,7 @@ definition IsRetrocompact
 
 中文:
 定义 IsRetrocompact
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃U⦄, IsCompact U -> IsOpen U -> IsCompact (s inter U)
 
 Depends on / 依赖: IsCompact, IsOpen
@@ -76,7 +76,7 @@ lemma IsRetrocompact.empty
 
 中文:
 引理 IsRetrocompact.empty
-  结论: IsRetrocompact (∅ : Set X)
+  结论: IsRetrocompact (∅ : 集合 X)
   证明: by simp [IsRetrocompact]
 -/
 @[simp] lemma IsRetrocompact.empty : IsRetrocompact (∅ : Set X) := by simp [IsRetrocompact]
@@ -91,7 +91,7 @@ lemma IsRetrocompact.univ
 
 中文:
 引理 IsRetrocompact.univ
-  结论: IsRetrocompact (univ : Set X)
+  结论: IsRetrocompact (univ : 集合 X)
   证明: by
   simp +contextual [IsRetrocompact]
 -/
@@ -143,7 +143,7 @@ lemma supClosed_isRetrocompact
 
 中文:
 引理 supClosed_isRetrocompact
-  结论: SupClosed {s : Set X | IsRetrocompact s}
+  结论: SupClosed {s : 集合 X | IsRetrocompact s}
   证明: fun _s hs _t ht => hs.union ht
 -/
 private lemma supClosed_isRetrocompact : SupClosed {s : Set X | IsRetrocompact s} :=
@@ -164,7 +164,7 @@ exact (ht _ <| by simp).union hi Finset.forall_of_forall_cons ht
 
 中文:
 引理 IsRetrocompact.finsetSup
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -194,7 +194,7 @@ lemma IsRetrocompact.finsetSup'
 
 中文:
 引理 IsRetrocompact.finsetSup'
-  结论: {ι : 类型} {s : Finset ι} {hs} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
   证明: by
   rw [Finset.sup'_eq_sup]; exact .finsetSup ht
 
@@ -214,7 +214,7 @@ lemma IsRetrocompact.iUnion
 
 中文:
 引理 IsRetrocompact.iUnion
-  条件: [Finite ι] {f : ι -> Set X} (hf : 对任意 i, IsRetrocompact (f i))
+  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsRetrocompact (f i))
   证明: supClosed_isRetrocompact.iSup_mem .empty hf
 
 Depends on / 依赖: iSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.iSup_mem
@@ -231,8 +231,8 @@ lemma IsRetrocompact.sUnion
   proof: supClosed_isRetrocompact.sSup_mem hS .empty hS'
 
 中文:
-引理 IsRetrocompact.sUnion
-  条件: {S : Set (Set X)} (hS : S.Finite) (hS' : 对任意 s in S, IsRetrocompact s)
+引理 IsRetrocompact.集合并集
+  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsRetrocompact s)
   证明: supClosed_isRetrocompact.sSup_mem hS .empty hS'
 
 Depends on / 依赖: sSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.sSup_mem
@@ -250,7 +250,7 @@ lemma IsRetrocompact.biUnion
 
 中文:
 引理 IsRetrocompact.biUnion
-  结论: {ι : 类型} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
+  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
   证明: supClosed_isRetrocompact.biSup_mem ht .empty hf
 
 Depends on / 依赖: biSup_mem, supClosed_isRetrocompact, supClosed_isRetrocompact.biSup_mem
@@ -291,7 +291,7 @@ lemma infClosed_isRetrocompact
 
 中文:
 引理 infClosed_isRetrocompact
-  结论: InfClosed {s : Set X | IsRetrocompact s}
+  结论: InfClosed {s : 集合 X | IsRetrocompact s}
   证明: fun _s hs _t ht => hs.inter ht
 -/
 private lemma infClosed_isRetrocompact : InfClosed {s : Set X | IsRetrocompact s} :=
@@ -312,7 +312,7 @@ exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
 
 中文:
 引理 IsRetrocompact.finsetInf
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -342,7 +342,7 @@ lemma IsRetrocompact.finsetInf'
 
 中文:
 引理 IsRetrocompact.finsetInf'
-  结论: {ι : 类型} {s : Finset ι} {hs} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
   证明: by
   rw [Finset.inf'_eq_inf]; exact .finsetInf ht
 
@@ -361,8 +361,8 @@ lemma IsRetrocompact.iInter
   proof: infClosed_isRetrocompact.iInf_mem .univ hf
 
 中文:
-引理 IsRetrocompact.iInter
-  条件: [Finite ι] {f : ι -> Set X} (hf : 对任意 i, IsRetrocompact (f i))
+引理 IsRetrocompact.i整数er
+  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsRetrocompact (f i))
   证明: infClosed_isRetrocompact.iInf_mem .univ hf
 
 Depends on / 依赖: iInf_mem, infClosed_isRetrocompact, infClosed_isRetrocompact.iInf_mem
@@ -379,8 +379,8 @@ lemma IsRetrocompact.sInter
   proof: infClosed_isRetrocompact.sInf_mem hS .univ hS'
 
 中文:
-引理 IsRetrocompact.sInter
-  条件: {S : Set (Set X)} (hS : S.Finite) (hS' : 对任意 s in S, IsRetrocompact s)
+引理 IsRetrocompact.集合交集
+  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsRetrocompact s)
   证明: infClosed_isRetrocompact.sInf_mem hS .univ hS'
 
 Depends on / 依赖: infClosed_isRetrocompact, infClosed_isRetrocompact.sInf_mem, sInf_mem
@@ -397,8 +397,8 @@ lemma IsRetrocompact.biInter
   proof: infClosed_isRetrocompact.biInf_mem ht .univ hf
 
 中文:
-引理 IsRetrocompact.biInter
-  结论: {ι : 类型} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
+引理 IsRetrocompact.bi整数er
+  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
   证明: infClosed_isRetrocompact.biInf_mem ht .univ hf
 
 Depends on / 依赖: biInf_mem, infClosed_isRetrocompact, infClosed_isRetrocompact.biInf_mem
@@ -496,7 +496,7 @@ refine hs ?_ hUopen.preimage hfemb.continuous
 
 中文:
 引理 IsRetrocompact.image_of_isEmbedding
-  结论: (hs : IsRetrocompact s) (hfemb : IsEmbedding f)
+  结论: (hs : IsRetrocompact s) (hfemb : 是嵌入 f)
   证明: by
   rintro U hUcomp hUopen
   rw [← image_inter_preimage]; rw [← hfemb.isCompact_iff]
@@ -532,7 +532,7 @@ exact hs (hUcomp.image hf.continuous) hf.isOpenMap _ hUopen
 
 中文:
 引理 IsRetrocompact.preimage_of_isOpenEmbedding
-  结论: {s : Set Y} (hf : IsOpenEmbedding f)
+  结论: {s : 集合 Y} (hf : 是开嵌入 f)
   证明: by
   rintro U hUcomp hUopen
   rw [hf.isCompact_iff]; rw [image_preimage_inter]
@@ -564,7 +564,7 @@ lemma IsRetrocompact.preimage_of_isClosedEmbedding
 
 中文:
 引理 IsRetrocompact.preimage_of_isClosedEmbedding
-  结论: {s : Set Y} (hf : IsClosedEmbedding f)
+  结论: {s : 集合 Y} (hf : 是闭嵌入 f)
   证明: by
   rintro U hUcomp hUopen
   have hfUopen : IsOpen (f '' U union (range f)ᶜ) := by
@@ -600,7 +600,7 @@ definition IsConstructible
 
 中文:
 定义 IsConstructible
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: s in BooleanSubalgebra.closure {U | IsOpen U ∧ IsRetrocompact U}
 
 @[simp]
@@ -623,7 +623,7 @@ lemma IsConstructible.empty
 
 中文:
 引理 IsConstructible.empty
-  结论: IsConstructible (∅ : Set X)
+  结论: IsConstructible (∅ : 集合 X)
   证明: BooleanSubalgebra.bot_mem
 
 @[simp]
@@ -641,7 +641,7 @@ lemma IsConstructible.univ
 
 中文:
 引理 IsConstructible.univ
-  结论: IsConstructible (univ : Set X)
+  结论: IsConstructible (univ : 集合 X)
   证明: BooleanSubalgebra.top_mem
 -/
 protected lemma IsConstructible.univ : IsConstructible (univ : Set X) := BooleanSubalgebra.top_mem
@@ -750,7 +750,7 @@ lemma IsConstructible.iUnion
 
 中文:
 引理 IsConstructible.iUnion
-  条件: [Finite ι] {f : ι -> Set X} (hf : 对任意 i, IsConstructible (f i))
+  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsConstructible (f i))
   证明: BooleanSubalgebra.iSup_mem hf
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.iSup_mem, iSup_mem
@@ -767,8 +767,8 @@ lemma IsConstructible.iInter
   proof: BooleanSubalgebra.iInf_mem hf
 
 中文:
-引理 IsConstructible.iInter
-  条件: [Finite ι] {f : ι -> Set X} (hf : 对任意 i, IsConstructible (f i))
+引理 IsConstructible.i整数er
+  条件: [有限 ι] {f : ι -> 集合 X} (hf : 对任意 i, IsConstructible (f i))
   证明: BooleanSubalgebra.iInf_mem hf
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.iInf_mem, iInf_mem
@@ -785,8 +785,8 @@ lemma IsConstructible.sUnion
   proof: BooleanSubalgebra.sSup_mem hS hS'
 
 中文:
-引理 IsConstructible.sUnion
-  条件: {S : Set (Set X)} (hS : S.Finite) (hS' : 对任意 s in S, IsConstructible s)
+引理 IsConstructible.集合并集
+  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsConstructible s)
   证明: BooleanSubalgebra.sSup_mem hS hS'
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sSup_mem, sSup_mem
@@ -803,8 +803,8 @@ lemma IsConstructible.sInter
   proof: BooleanSubalgebra.sInf_mem hS hS'
 
 中文:
-引理 IsConstructible.sInter
-  条件: {S : Set (Set X)} (hS : S.Finite) (hS' : 对任意 s in S, IsConstructible s)
+引理 IsConstructible.集合交集
+  条件: {S : 集合 (集合 X)} (hS : S.有限) (hS' : 对任意 s in S, IsConstructible s)
   证明: BooleanSubalgebra.sInf_mem hS hS'
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.sInf_mem, sInf_mem
@@ -822,7 +822,7 @@ lemma IsConstructible.biUnion
 
 中文:
 引理 IsConstructible.biUnion
-  结论: {ι : 类型} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
+  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
   证明: BooleanSubalgebra.biSup_mem ht hf
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.biSup_mem, biSup_mem
@@ -840,8 +840,8 @@ lemma IsConstructible.biInter
   proof: BooleanSubalgebra.biInf_mem ht hf
 
 中文:
-引理 IsConstructible.biInter
-  结论: {ι : 类型} {f : ι -> Set X} {t : Set ι} (ht : t.Finite)
+引理 IsConstructible.bi整数er
+  结论: {ι : 类型} {f : ι -> 集合 X} {t : 集合 ι} (ht : t.有限)
   证明: BooleanSubalgebra.biInf_mem ht hf
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.biInf_mem, biInf_mem
@@ -860,7 +860,7 @@ lemma _root_.IsRetrocompact.isConstructible
 
 中文:
 引理 _root_.IsRetrocompact.isConstructible
-  条件: (hUopen : IsOpen U) (hUcomp : IsRetrocompact U)
+  条件: (hUopen : 是开集 U) (hUcomp : IsRetrocompact U)
   证明: BooleanSubalgebra.subset_closure ⟨hUopen, hUcomp⟩
 
 Depends on / 依赖: BooleanSubalgebra, BooleanSubalgebra.subset_closure, hUcomp, hUopen, subset_closure
@@ -886,7 +886,7 @@ lemma IsConstructible.empty_union_induction
 
 中文:
 引理 IsConstructible.empty_union_induction
-  结论: {p : 对任意 s : Set X, IsConstructible s -> 命题}
+  结论: {p : 对任意 s : 集合 X, IsConstructible s -> 命题}
   证明: by
   induction hs using BooleanSubalgebra.closure_bot_sup_induction with
   | mem U hU => exact open_retrocompact _ hU.1 hU.2
@@ -924,8 +924,8 @@ exact (hf _ hUopen hUcomp).isConstructible hUopen.preimage hfcont
   | compl s hs hs' => rw [preimage_compl]; exact hs'.c
 
 中文:
-引理 IsConstructible.preimage
-  结论: {s : Set Y} (hfcont : Continuous f)
+引理 IsConstructible.原像
+  结论: {s : 集合 Y} (hfcont : 连续 f)
   证明: by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
@@ -957,7 +957,7 @@ lemma IsConstructible.preimage_of_isOpenEmbedding
 
 中文:
 引理 IsConstructible.preimage_of_isOpenEmbedding
-  结论: {s : Set Y} (hf : IsOpenEmbedding f)
+  结论: {s : 集合 Y} (hf : 是开嵌入 f)
   证明: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isOpenEmbedding hf
 
 @[stacks 09YE]
@@ -981,7 +981,7 @@ lemma IsConstructible.preimage_of_isClosedEmbedding
 
 中文:
 引理 IsConstructible.preimage_of_isClosedEmbedding
-  结论: {s : Set Y} (hf : IsClosedEmbedding f)
+  结论: {s : 集合 Y} (hf : 是闭嵌入 f)
   证明: hs.preimage hf.continuous fun _t _ ht => ht.preimage_of_isClosedEmbedding hf hf'
 
 @[stacks 09YD]
@@ -1009,7 +1009,7 @@ exact (hUcomp.image_of_isEmbedding hfopen.isEmbedding hfcomp).isConstructible
 
 中文:
 引理 IsConstructible.image_of_isOpenEmbedding
-  结论: (hfopen : IsOpenEmbedding f)
+  结论: (hfopen : 是开嵌入 f)
   证明: by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
@@ -1047,7 +1047,7 @@ lemma IsConstructible.image_of_isClosedEmbedding
 
 中文:
 引理 IsConstructible.image_of_isClosedEmbedding
-  结论: (hf : IsClosedEmbedding f)
+  结论: (hf : 是闭嵌入 f)
   证明: by
   induction hs using IsConstructible.empty_union_induction with
   | open_retrocompact U hUopen hUcomp =>
@@ -1088,7 +1088,7 @@ lemma isConstructible_preimage_iff_of_isOpenEmbedding
 
 中文:
 引理 isConstructible_preimage_iff_of_isOpenEmbedding
-  结论: {s : Set Y} (hf : IsOpenEmbedding f)
+  结论: {s : 集合 Y} (hf : 是开嵌入 f)
   证明: by simpa [image_preimage_eq_range_inter, inter_eq_right.2 hsf]
     using hs.image_of_isOpenEmbedding hf hfcomp
   mpr := .preimage_of_isOpenEmbedding hf
@@ -1117,7 +1117,7 @@ lemma _root_.QuasiSeparatedSpace.of_isOpenCover
     ap
 
 中文:
-引理 _root_.QuasiSeparatedSpace.of_isOpenCover
+引理 _root_.拟分离空间.of_isOpenCover
   结论: {ι : 类型} {U : ι -> Opens X} (hU : IsOpenCover U)
   证明: by
     obtain ⟨t, ht⟩ := hc₁.elim_finite_subcover _ (fun i => (U i).2) (by simp [hU.iSup_set_eq_univ])
@@ -1162,7 +1162,7 @@ lemma _root_.IsRetrocompact.isCompact
 中文:
 引理 _root_.IsRetrocompact.isCompact
   条件: (hs : IsRetrocompact s)
-  结论: IsCompact s
+  结论: 是紧集 s
   证明: by
   simpa using hs CompactSpace.isCompact_univ
 
@@ -1186,8 +1186,8 @@ lemma _root_.IsCompact.isRetrocompact
 omit [CompactSpace X] in
 
 中文:
-引理 _root_.IsCompact.isRetrocompact
-  条件: (hU' : IsCompact U) (hU : IsOpen U)
+引理 _root_.是紧集.isRetrocompact
+  条件: (hU' : 是紧集 U) (hU : 是开集 U)
   结论: IsRetrocompact U
   证明: fun _ hV' hV => hU'.inter_of_isOpen hV' hU hV
 
@@ -1211,8 +1211,8 @@ lemma _root_.IsCompact.isConstructible
 @[stacks 0069 "Iff form of (2). Note that Stacks doesn't define quasi-separated spaces."]
 
 中文:
-引理 _root_.IsCompact.isConstructible
-  条件: (hU' : IsCompact U) (hU : IsOpen U)
+引理 _root_.是紧集.isConstructible
+  条件: (hU' : 是紧集 U) (hU : 是开集 U)
   结论: IsConstructible U
   证明: (hU'.isRetrocompact hU).isConstructible hU
 
@@ -1234,7 +1234,7 @@ lemma _root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact
 @[elab_as_elim]
 
 中文:
-引理 _root_.QuasiSeparatedSpace.isRetrocompact_iff_isCompact
+引理 _root_.拟分离空间.isRetrocompact_iff_isCompact
   证明: ⟨IsRetrocompact.isCompact, (IsCompact.isRetrocompact · hU)⟩
 
 @[elab_as_elim]
@@ -1262,7 +1262,7 @@ lemma IsConstructible.induction_of_isTopologicalBasis
 
 中文:
 引理 IsConstructible.induction_of_isTopologicalBasis
-  结论: {ι : 类型} [Nonempty ι] (b : ι -> Set X)
+  结论: {ι : 类型} [非空 ι] (b : ι -> 集合 X)
   证明: by
   induction s, hs using BooleanSubalgebra.closure_sdiff_sup_induction with
   | isSublattice =>
@@ -1320,7 +1320,7 @@ definition IsLocallyConstructible
 
 中文:
 定义 IsLocallyConstructible
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall x, exists U in 𝓝 x, IsOpen U ∧ IsConstructible (U ↓inter s)
 
 Depends on / 依赖: IsConstructible, IsOpen
@@ -1363,7 +1363,7 @@ lemma _root_.IsRetrocompact.isLocallyConstructible
 
 中文:
 引理 _root_.IsRetrocompact.isLocallyConstructible
-  条件: (hUopen : IsOpen U) (hUcomp : IsRetrocompact U)
+  条件: (hUopen : 是开集 U) (hUcomp : IsRetrocompact U)
   证明: (hUcomp.isConstructible hUopen).isLocallyConstructible
 
 Depends on / 依赖: hUcomp, hUcomp.isConstructible, hUopen, isConstructible, isLocallyConstructible
@@ -1381,7 +1381,7 @@ lemma IsLocallyConstructible.empty
 
 中文:
 引理 IsLocallyConstructible.empty
-  结论: IsLocallyConstructible (∅ : Set X)
+  结论: IsLocallyConstructible (∅ : 集合 X)
   证明: IsConstructible.empty.isLocallyConstructible
 -/
 @[simp] protected lemma IsLocallyConstructible.empty : IsLocallyConstructible (∅ : Set X) :=
@@ -1397,7 +1397,7 @@ lemma IsLocallyConstructible.univ
 
 中文:
 引理 IsLocallyConstructible.univ
-  结论: IsLocallyConstructible (univ : Set X)
+  结论: IsLocallyConstructible (univ : 集合 X)
   证明: IsConstructible.univ.isLocallyConstructible
 -/
 @[simp] protected lemma IsLocallyConstructible.univ : IsLocallyConstructible (univ : Set X) :=
@@ -1460,7 +1460,7 @@ exact (ht _ <| by simp).inter hi Finset.forall_of_forall_cons ht
 
 中文:
 引理 IsLocallyConstructible.finsetInf
-  结论: {ι : 类型} {s : Finset ι} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {t : ι -> 集合 X}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1490,7 +1490,7 @@ lemma IsLocallyConstructible.finsetInf'
 
 中文:
 引理 IsLocallyConstructible.finsetInf'
-  结论: {ι : 类型} {s : Finset ι} {hs} {t : ι -> Set X}
+  结论: {ι : 类型} {s : 有限集 ι} {hs} {t : ι -> 集合 X}
   证明: by
   rw [Finset.inf'_eq_inf]; exact .finsetInf ht
 
@@ -1510,7 +1510,7 @@ lemma infClosed_isLocallyConstructible
 
 中文:
 引理 infClosed_isLocallyConstructible
-  结论: InfClosed {s : Set X | IsLocallyConstructible s}
+  结论: InfClosed {s : 集合 X | IsLocallyConstructible s}
   证明: fun _s hs _t ht => hs.inter ht
 -/
 private lemma infClosed_isLocallyConstructible : InfClosed {s : Set X | IsLocallyConstructible s} :=
@@ -1525,8 +1525,8 @@ lemma IsLocallyConstructible.iInter
   proof: infClosed_isLocallyConstructible.iInf_mem .univ hf
 
 中文:
-引理 IsLocallyConstructible.iInter
-  结论: [Finite ι] {f : ι -> Set X}
+引理 IsLocallyConstructible.i整数er
+  结论: [有限 ι] {f : ι -> 集合 X}
   证明: infClosed_isLocallyConstructible.iInf_mem .univ hf
 
 Depends on / 依赖: iInf_mem, infClosed_isLocallyConstructible, infClosed_isLocallyConstructible.iInf_mem
@@ -1544,8 +1544,8 @@ lemma IsLocallyConstructible.sInter
   proof: infClosed_isLocallyConstructible.sInf_mem hS .univ hS'
 
 中文:
-引理 IsLocallyConstructible.sInter
-  结论: {S : Set (Set X)} (hS : S.Finite)
+引理 IsLocallyConstructible.集合交集
+  结论: {S : 集合 (集合 X)} (hS : S.有限)
   证明: infClosed_isLocallyConstructible.sInf_mem hS .univ hS'
 
 Depends on / 依赖: infClosed_isLocallyConstructible, infClosed_isLocallyConstructible.sInf_mem, sInf_mem
@@ -1608,7 +1608,7 @@ lemma IsLocallyConstructible.iUnion
 
 中文:
 引理 IsLocallyConstructible.iUnion
-  结论: [Finite ι] {f : ι -> Set X}
+  结论: [有限 ι] {f : ι -> 集合 X}
   证明: SupClosed.iSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) .empty hf
 
 Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.iSup_mem, iSup_mem
@@ -1627,7 +1627,7 @@ lemma IsLocallyConstructible.biUnion
 
 中文:
 引理 IsLocallyConstructible.biUnion
-  结论: {ι : 类型} {f : ι -> Set X} {s : Set ι} (hs : s.Finite)
+  结论: {ι : 类型} {f : ι -> 集合 X} {s : 集合 ι} (hs : s.有限)
   证明: SupClosed.biSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hs .empty hf
 
 Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.biSup_mem, biSup_mem
@@ -1645,8 +1645,8 @@ lemma IsLocallyConstructible.sUnion
   proof: SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hS .empty hS'
 
 中文:
-引理 IsLocallyConstructible.sUnion
-  结论: {S : Set (Set X)} (hS : S.Finite)
+引理 IsLocallyConstructible.集合并集
+  结论: {S : 集合 (集合 X)} (hS : S.有限)
   证明: SupClosed.sSup_mem (s := {s | IsLocallyConstructible s}) (fun _ h₁ _ => h₁.union) hS .empty hS'
 
 Depends on / 依赖: IsLocallyConstructible, SupClosed, SupClosed.sSup_mem, sSup_mem
@@ -1669,7 +1669,7 @@ lemma IsLocallyConstructible.preimage_of_isOpenEmbedding
 
 中文:
 引理 IsLocallyConstructible.preimage_of_isOpenEmbedding
-  结论: {s : Set Y}
+  结论: {s : 集合 Y}
   证明: by
   intro x
   obtain ⟨U, hxU, hU, H⟩ := hs (f x)

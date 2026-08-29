@@ -121,7 +121,7 @@ structure ImplicitFunctionData
     - hasStrictFDerivAt_rightFun : HasStrictFDerivAt rightFun rightDeriv pt
     - range_leftDeriv : leftDeriv.range = ⊤
     - range_rightDeriv : rightDeriv.range = ⊤
-    - isCompl_ker : IsCompl leftDeriv.ker rightDeriv.ker
+    - isCompl_ker : 是补集 leftDeriv.ker rightDeriv.ker
 -/
 structure ImplicitFunctionData (𝕜 : Type*) [NontriviallyNormedField 𝕜] (E : Type*)
     [NormedAddCommGroup E] [NormedSpace 𝕜 E] [CompleteSpace E] (F : Type*) [NormedAddCommGroup F]

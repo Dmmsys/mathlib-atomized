@@ -46,8 +46,8 @@ structure RelSeries
   参数: where
   公理与运算 (3 个):
     - length : 自然数
-    - toFun : Fin (length + 1) -> α
-    - step : 对任意 (i : Fin length), toFun (Fin.castSucc i) ~[r] toFun i.succ
+    - toFun : 有限集 (length + 1) -> α
+    - step : 对任意 (i : 有限集 length), toFun (有限集.castSucc i) ~[r] toFun i.succ
 -/
 structure RelSeries where
   /-- The number of inequalities in the series -/
@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (RelSeries r) (fun x => Fin (x.length + 1) -> α)
+  签名: CoeFun (RelSeries r) (fun x => 有限集 (x.length + 1) -> α)
   定义体: { coe := RelSeries.toFun }
 
 Depends on / 依赖: RelSeries, RelSeries.toFun
@@ -108,8 +108,8 @@ instance [IsEmpty
   body: IsEmpty.false (x 0)
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (RelSeries r) where
+实例 [是空
+  签名: α] : 是空 (RelSeries r) where
   定义体: IsEmpty.false (x 0)
 
 Depends on / 依赖: IsEmpty, IsEmpty.false
@@ -126,8 +126,8 @@ instance [Inhabited
   body: singleton r default
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (RelSeries r) where
+实例 [可居
+  签名: α] : 可居 (RelSeries r) where
   定义体: singleton r default
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_reduced_fraction, singleton
@@ -144,8 +144,8 @@ instance [Nonempty
   body: Nonempty.map (singleton r) inferInstance
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (RelSeries r)
+实例 [非空
+  签名: α] : 非空 (RelSeries r)
   定义体: Nonempty.map (singleton r) inferInstance
 
 Depends on / 依赖: Nonempty, Nonempty.map, _eq_div, _num_den, singleton
@@ -196,7 +196,7 @@ lemma rel_of_lt
 
 中文:
 引理 rel_of_lt
-  条件: [r.IsTrans] (x : RelSeries r) {i j : Fin (x.length + 1)} (h : i < j)
+  条件: [r.是Trans] (x : RelSeries r) {i j : 有限集 (x.length + 1)} (h : i < j)
   证明: (Fin.liftFun_iff_succ (· ~[r] ·)).mpr x.step h
 
 Depends on / 依赖: Fin.liftFun_iff_succ, liftFun_iff_succ, x.step
@@ -215,7 +215,7 @@ lemma rel_or_eq_of_le
 
 中文:
 引理 rel_or_eq_of_le
-  条件: [r.IsTrans] (x : RelSeries r) {i j : Fin (x.length + 1)} (h : i <= j)
+  条件: [r.是Trans] (x : RelSeries r) {i j : 有限集 (x.length + 1)} (h : i <= j)
   证明: (Fin.lt_or_eq_of_le h).imp (x.rel_of_lt ·) (by rw [·])
 
 Depends on / 依赖: Fin.lt_or_eq_of_le, lt_or_eq_of_le, rel_of_lt, x.rel_of_lt
@@ -397,7 +397,7 @@ definition fromListIsChain
 
 中文:
 定义 fromListIsChain
-  签名: (x : List α) (x_ne_nil : x != []) (hx : x.IsChain (· ~[r] ·))
+  签名: (x : 列表 α) (x_ne_nil : x != []) (hx : x.IsChain (· ~[r] ·))
   定义体: x.length - 1
   toFun i := x[Fin.cast (Nat.succ_pred_eq_of_pos <| List.length_pos_iff.mpr x_ne_nil) i]
   step i := List.isChain_iff_getElem.mp hx i _
@@ -424,8 +424,8 @@ left_inv x := ext (by simp [toList]) by ext; dsimp; apply List.get_ofFn
 have := Nat.succ_pred_eq_of_pos List.le
 
 中文:
-定义 Equiv
-  签名: : RelSeries r ≃ {x : List α | x != [] ∧ x.IsChain (· ~[r] ·)} where
+定义 等价
+  签名: : RelSeries r ≃ {x : 列表 α | x != [] ∧ x.IsChain (· ~[r] ·)} where
   定义体: ⟨_, x.toList_ne_nil, x.isChain_toList⟩
   invFun x := fromListIsChain _ x.2.1 x.2.2
 left_inv x := ext (by simp [toList]) by ext; dsimp; apply List.get_ofFn
@@ -452,7 +452,7 @@ lemma toList_injective
 
 中文:
 引理 toList_injective
-  结论: Function.Injective (RelSeries.toList (r := r))
+  结论: 函数.单射 (RelSeries.toList (r := r))
   证明: fun _ _ h => (RelSeries.Equiv).injective Subtype.ext h
 
 Depends on / 依赖: Pi.isUnit_iff.mpr, isUnit_iff, map_units
@@ -479,7 +479,7 @@ class FiniteDimensional
     - exists_longest_relSeries : exists x : RelSeries r, forall y : RelSeries r, y.length <= x.length
 
 中文:
-类 FiniteDimensional
+类 有限维
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_longest_relSeries : 存在 x : RelSeries r, 对任意 y : RelSeries r, y.length <= x.length
@@ -502,7 +502,7 @@ class InfiniteDimensional
     - exists_relSeries_with_length : forall n : Nat, exists x : RelSeries r, x.length = n
 
 中文:
-类 InfiniteDimensional
+类 无限维
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_relSeries_with_length : 对任意 n : 自然数, 存在 x : RelSeries r, x.length = n
@@ -526,7 +526,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def longestOf [r.FiniteDimensional]
+  签名: def longestOf [r.有限维]
   定义体: SetRel.FiniteDimensional.exists_longest_relSeries.choose
 -/
 protected noncomputable def longestOf [r.FiniteDimensional] : RelSeries r :=
@@ -542,7 +542,7 @@ lemma length_le_length_longestOf
 
 中文:
 引理 length_le_length_longestOf
-  条件: [r.FiniteDimensional] (x : RelSeries r)
+  条件: [r.有限维] (x : RelSeries r)
   证明: SetRel.FiniteDimensional.exists_longest_relSeries.choose_spec _
 
 Depends on / 依赖: FiniteDimensional, SetRel, SetRel.FiniteDimensional.exists_longest_relSeries.choose_spec, choose_spec, exists_longest_relSeries
@@ -561,7 +561,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def withLength [r.InfiniteDimensional] (n : 自然数)
+  签名: def withLength [r.无限维] (n : 自然数)
   定义体: (SetRel.InfiniteDimensional.exists_relSeries_with_length n).choose
 -/
 protected noncomputable def withLength [r.InfiniteDimensional] (n : Nat) : RelSeries r :=
@@ -577,7 +577,7 @@ lemma length_withLength
 
 中文:
 引理 length_withLength
-  条件: [r.InfiniteDimensional] (n : 自然数)
+  条件: [r.无限维] (n : 自然数)
   证明: (SetRel.InfiniteDimensional.exists_relSeries_with_length n).choose_spec
 -/
 @[simp] lemma length_withLength [r.InfiniteDimensional] (n : Nat) :
@@ -598,8 +598,8 @@ lemma nonempty_of_infiniteDimensional
 
 中文:
 引理 nonempty_of_infiniteDimensional
-  条件: [r.InfiniteDimensional]
-  结论: Nonempty α
+  条件: [r.无限维]
+  结论: 非空 α
   证明: ⟨RelSeries.withLength r 0 0⟩
 
 Depends on / 依赖: RelSeries, RelSeries.withLength, withLength
@@ -620,8 +620,8 @@ lemma nonempty_of_finiteDimensional
 
 中文:
 引理 nonempty_of_finiteDimensional
-  条件: [r.FiniteDimensional]
-  结论: Nonempty α
+  条件: [r.有限维]
+  结论: 非空 α
   证明: by
   obtain ⟨p, _⟩ := (r.finiteDimensional_iff).mp ‹_›
   exact ⟨p 0⟩
@@ -660,7 +660,7 @@ theorem mem_def
 
 中文:
 定理 mem_def
-  结论: x in s ↔ x in Set.range s
+  结论: x in s ↔ x in 集合.range s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -700,7 +700,7 @@ theorem subsingleton_of_length_eq_zero
 中文:
 定理 subsingleton_of_length_eq_zero
   条件: (hs : s.length = 0)
-  结论: {x | x in s}.Subsingleton
+  结论: {x | x in s}.子单例
   证明: by
   rintro - ⟨i, rfl⟩ - ⟨j, rfl⟩
   congr!
@@ -724,7 +724,7 @@ theorem length_ne_zero_of_nontrivial
 
 中文:
 定理 length_ne_zero_of_nontrivial
-  条件: (h : {x | x in s}.Nontrivial)
+  条件: (h : {x | x in s}.非平凡)
   结论: s.length != 0
   证明: fun hs => h.not_subsingleton subsingleton_of_length_eq_zero hs
 
@@ -744,7 +744,7 @@ theorem length_pos_of_nontrivial
 
 中文:
 定理 length_pos_of_nontrivial
-  条件: (h : {x | x in s}.Nontrivial)
+  条件: (h : {x | x in s}.非平凡)
   结论: 0 < s.length
   证明: Nat.pos_iff_ne_zero.mpr length_ne_zero_of_nontrivial h
 
@@ -771,7 +771,7 @@ theorem length_ne_zero
 中文:
 定理 length_ne_zero
   条件: [r.IsIrrefl]
-  结论: s.length != 0 ↔ {x | x in s}.Nontrivial
+  结论: s.length != 0 ↔ {x | x in s}.非平凡
   证明: by
   refine ⟨fun h => ⟨s 0, by simp [mem_def], s 1, by simp [mem_def],
     fun rid => r.irrefl (s 0) ?_⟩, length_ne_zero_of_nontrivial⟩
@@ -802,7 +802,7 @@ theorem length_pos
 中文:
 定理 length_pos
   条件: [r.IsIrrefl]
-  结论: 0 < s.length ↔ {x | x in s}.Nontrivial
+  结论: 0 < s.length ↔ {x | x in s}.非平凡
   证明: Nat.pos_iff_ne_zero.trans length_ne_zero
 
 Depends on / 依赖: Nat.pos_iff_ne_zero.trans, length_ne_zero, pos_iff_ne_zero
@@ -823,7 +823,7 @@ lemma length_eq_zero
 中文:
 引理 length_eq_zero
   条件: [r.IsIrrefl]
-  结论: s.length = 0 ↔ {x | x in s}.Subsingleton
+  结论: s.length = 0 ↔ {x | x in s}.子单例
   证明: by
   rw [← not_ne_iff]; rw [length_ne_zero]; rw [Set.not_nontrivial_iff]
 
@@ -893,7 +893,7 @@ lemma apply_last
 中文:
 引理 apply_last
   条件: (x : RelSeries r)
-  结论: x (Fin.last <| x.length) = x.last
+  结论: x (有限集.last <| x.length) = x.last
   证明: rfl
 
 Depends on / 依赖: IsLocalization, IsLocalization.isNoetherianRing, isNoetherianRing
@@ -1076,7 +1076,7 @@ lemma toList_fromListIsChain
 
 中文:
 引理 toList_fromListIsChain
-  条件: (l : List α) (l_ne_nil : l != []) (hl : l.IsChain (· ~[r] ·))
+  条件: (l : 列表 α) (l_ne_nil : l != []) (hl : l.IsChain (· ~[r] ·))
   证明: Subtype.ext_iff.mp RelSeries.Equiv.right_inv ⟨l, ⟨l_ne_nil, hl⟩⟩
 
 Depends on / 依赖: RelSeries, RelSeries.Equiv.right_inv, Subtype, Subtype.ext_iff.mp, ext_iff, l_ne_nil, right_inv
@@ -1100,7 +1100,7 @@ lemma head_fromListIsChain
 
 中文:
 引理 head_fromListIsChain
-  条件: (l : List α) (l_ne_nil : l != []) (hl : l.IsChain (· ~[r] ·))
+  条件: (l : 列表 α) (l_ne_nil : l != []) (hl : l.IsChain (· ~[r] ·))
   证明: by
   simp [← apply_zero, List.getElem_zero_eq_head]
 
@@ -1385,7 +1385,7 @@ definition map
 
 中文:
 定义 map
-  签名: (p : RelSeries r) (f : r.Hom s)
+  签名: (p : RelSeries r) (f : r.态射 s)
   定义体: p.length
   toFun := f.1.comp p
   step := (f.2 <| p.step ·)
@@ -1407,7 +1407,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  条件: (p : RelSeries r) (f : r.Hom s) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (f : r.态射 s) (i : 有限集 (p.length + 1))
   证明: rfl
 -/
 @[simp] lemma map_apply (p : RelSeries r) (f : r.Hom s) (i : Fin (p.length + 1)) :
@@ -1424,7 +1424,7 @@ lemma head_map
 
 中文:
 引理 head_map
-  条件: (p : RelSeries r) (f : r.Hom s)
+  条件: (p : RelSeries r) (f : r.态射 s)
   结论: (p.map f).head = f p.head
   证明: rfl
 -/
@@ -1441,7 +1441,7 @@ lemma last_map
 
 中文:
 引理 last_map
-  条件: (p : RelSeries r) (f : r.Hom s)
+  条件: (p : RelSeries r) (f : r.态射 s)
   结论: (p.map f).last = f p.last
   证明: rfl
 -/
@@ -1473,7 +1473,7 @@ definition insertNth
 
 中文:
 定义 insertNth
-  签名: (p : RelSeries r) (i : Fin p.length) (a : α)
+  签名: (p : RelSeries r) (i : 有限集 p.length) (a : α)
   定义体: p.length + 1
   toFun := (Fin.castSucc i.succ).insertNth a p
   step m := by
@@ -1595,7 +1595,7 @@ lemma reverse_apply
 
 中文:
 引理 reverse_apply
-  条件: (p : RelSeries r) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (i : 有限集 (p.length + 1))
   证明: rfl
 -/
 @[simp] lemma reverse_apply (p : RelSeries r) (i : Fin (p.length + 1)) :
@@ -1742,7 +1742,7 @@ lemma cons_cast_succ
 
 中文:
 引理 cons_cast_succ
-  条件: (s : RelSeries r) (a : α) (h : a ~[r] s.head) (i : Fin (s.length + 1))
+  条件: (s : RelSeries r) (a : α) (h : a ~[r] s.head) (i : 有限集 (s.length + 1))
   证明: by
   simp [cons, Fin.append, Fin.addCases, Fin.subNat]
 
@@ -1810,7 +1810,7 @@ lemma fromListIsChain_cons
 
 中文:
 引理 fromListIsChain_cons
-  结论: (l : List α) (l_ne_nil : l != [])
+  结论: (l : 列表 α) (l_ne_nil : l != [])
   证明: by
   apply toList_injective
   simp
@@ -1918,7 +1918,7 @@ lemma snoc_cast_castSucc
 
 中文:
 引理 snoc_cast_castSucc
-  条件: (s : RelSeries r) (a : α) (h : s.last ~[r] a) (i : Fin (s.length + 1))
+  条件: (s : RelSeries r) (a : α) (h : s.last ~[r] a) (i : 有限集 (s.length + 1))
   证明: append_apply_left s (singleton r a) h i
 
 Depends on / 依赖: append_apply_left, singleton
@@ -2220,7 +2220,7 @@ definition inductionOn
 
 中文:
 定义 inductionOn
-  签名: (motive : RelSeries r -> Sort*)
+  签名: (motive : RelSeries r -> 类型层*)
   定义体: by
   let {n : Nat} (heq : p.length = n) : motive p := by
     induction n generalizing p with
@@ -2448,7 +2448,7 @@ definition inductionOn'
 
 中文:
 定义 inductionOn'
-  签名: (motive : RelSeries r -> Sort*)
+  签名: (motive : RelSeries r -> 类型层*)
   定义体: by
   let {n : Nat} (heq : p.length = n) : motive p := by
     induction n generalizing p with
@@ -2541,7 +2541,7 @@ lemma smash_castLE
 
 中文:
 引理 smash_castLE
-  条件: {p q : RelSeries r} (h : p.last = q.head) (i : Fin (p.length + 1))
+  条件: {p q : RelSeries r} (h : p.last = q.head) (i : 有限集 (p.length + 1))
   证明: by
   refine i.lastCases ?_ fun _ => by dsimp only [smash]; apply Fin.addCases_left
   change p.smash q h (Fin.natAdd p.length (0 : Fin (q.length + 1))) = _
@@ -2565,7 +2565,7 @@ lemma smash_castAdd
 
 中文:
 引理 smash_castAdd
-  条件: {p q : RelSeries r} (h : p.last = q.head) (i : Fin p.length)
+  条件: {p q : RelSeries r} (h : p.last = q.head) (i : 有限集 p.length)
   证明: smash_castLE h i.castSucc
 
 Depends on / 依赖: castSucc, i.castSucc, smash_castLE
@@ -2605,7 +2605,7 @@ lemma smash_natAdd
 
 中文:
 引理 smash_natAdd
-  条件: {p q : RelSeries r} (h : p.last = q.head) (i : Fin q.length)
+  条件: {p q : RelSeries r} (h : p.last = q.head) (i : 有限集 q.length)
   证明: by
   dsimp only [smash, Fin.castSucc_natAdd]
   apply Fin.addCases_right
@@ -2629,7 +2629,7 @@ lemma smash_succ_natAdd
 
 中文:
 引理 smash_succ_natAdd
-  条件: {p q : RelSeries r} (h : p.last = q.head) (i : Fin q.length)
+  条件: {p q : RelSeries r} (h : p.last = q.head) (i : 有限集 q.length)
   证明: by
   dsimp only [smash, Fin.succ_natAdd]
   apply Fin.addCases_right
@@ -2707,7 +2707,7 @@ definition take
 
 中文:
 定义 take
-  签名: {r : SetRel α α} (p : RelSeries r) (i : Fin (p.length + 1))
+  签名: {r : SetRel α α} (p : RelSeries r) (i : 有限集 (p.length + 1))
   定义体: i
   toFun := fun ⟨j, h⟩ => p.toFun ⟨j, by lia⟩
   step := fun ⟨j, h⟩ => p.step ⟨j, by lia⟩
@@ -2732,7 +2732,7 @@ lemma head_take
 
 中文:
 引理 head_take
-  条件: (p : RelSeries r) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (i : 有限集 (p.length + 1))
   证明: by simp [take, head]
 
 @[simp]
@@ -2751,7 +2751,7 @@ lemma last_take
 
 中文:
 引理 last_take
-  条件: (p : RelSeries r) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (i : 有限集 (p.length + 1))
   证明: by simp [take, last, Fin.last]
 
 Depends on / 依赖: Fin.last
@@ -2777,7 +2777,7 @@ definition drop
 
 中文:
 定义 drop
-  签名: (p : RelSeries r) (i : Fin (p.length + 1))
+  签名: (p : RelSeries r) (i : 有限集 (p.length + 1))
   定义体: p.length - i
   toFun := fun ⟨j, h⟩ => p.toFun ⟨j+i, by lia⟩
   step := fun ⟨j, h⟩ => by
@@ -2810,7 +2810,7 @@ lemma head_drop
 
 中文:
 引理 head_drop
-  条件: (p : RelSeries r) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (i : 有限集 (p.length + 1))
   结论: (p.drop i).head = p.toFun i
   证明: by
   simp [drop, head]
@@ -2835,7 +2835,7 @@ lemma last_drop
 
 中文:
 引理 last_drop
-  条件: (p : RelSeries r) (i : Fin (p.length + 1))
+  条件: (p : RelSeries r) (i : 有限集 (p.length + 1))
   结论: (p.drop i).last = p.last
   证明: by
   simp only [last, drop, Fin.last]
@@ -2872,7 +2872,7 @@ lemma SetRel.not_finiteDimensional_iff
 
 中文:
 引理 SetRel.not_finiteDimensional_iff
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   rw [finiteDimensional_iff]; rw [infiniteDimensional_iff]
   push Not
@@ -2915,7 +2915,7 @@ lemma SetRel.not_infiniteDimensional_iff
 
 中文:
 引理 SetRel.not_infiniteDimensional_iff
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   rw [← not_finiteDimensional_iff]; rw [not_not]
 
@@ -2937,7 +2937,7 @@ lemma SetRel.finiteDimensional_or_infiniteDimensional
 
 中文:
 引理 SetRel.finiteDimensional_or_infiniteDimensional
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   rw [← not_finiteDimensional_iff]
   exact em r.FiniteDimensional
@@ -2958,8 +2958,8 @@ instance SetRel.FiniteDimensional.inv
   body: ⟨.reverse (.longestOf r), fun s => s.reverse.length_le_length_longestOf r⟩
 
 中文:
-实例 SetRel.FiniteDimensional.inv
-  签名: [FiniteDimensional r]
+实例 SetRel.有限维.inv
+  签名: [有限维 r]
   定义体: ⟨.reverse (.longestOf r), fun s => s.reverse.length_le_length_longestOf r⟩
 
 Depends on / 依赖: length_le_length_longestOf, longestOf, reverse, s.reverse.length_le_length_longestOf
@@ -2979,7 +2979,7 @@ lemma SetRel.finiteDimensional_inv
 
 中文:
 引理 SetRel.finiteDimensional_inv
-  结论: FiniteDimensional r.inv ↔ FiniteDimensional r
+  结论: 有限维 r.inv ↔ 有限维 r
   证明: ⟨fun _ => .inv r.inv, fun _ => .inv _⟩
 
 Depends on / 依赖: r.inv
@@ -2996,8 +2996,8 @@ instance SetRel.InfiniteDimensional.inv
   body: ⟨fun n => ⟨.reverse (.withLength r n), RelSeries.length_withLength r n⟩⟩
 
 中文:
-实例 SetRel.InfiniteDimensional.inv
-  签名: [InfiniteDimensional r]
+实例 SetRel.无限维.inv
+  签名: [无限维 r]
   定义体: ⟨fun n => ⟨.reverse (.withLength r n), RelSeries.length_withLength r n⟩⟩
 
 Depends on / 依赖: RelSeries, RelSeries.length_withLength, length_withLength, reverse, withLength
@@ -3017,7 +3017,7 @@ lemma SetRel.infiniteDimensional_inv
 
 中文:
 引理 SetRel.infiniteDimensional_inv
-  结论: InfiniteDimensional r.inv ↔ InfiniteDimensional r
+  结论: 无限维 r.inv ↔ 无限维 r
   证明: ⟨fun _ => .inv r.inv, fun _ => .inv _⟩
 
 Depends on / 依赖: r.inv
@@ -3038,8 +3038,8 @@ lemma SetRel.IsWellFounded.inv_of_finiteDimensional
   exact (RelSeries.longestOf r).length.lt_succ_self.not_ge s.length_le_length_longestOf
 
 中文:
-引理 SetRel.IsWellFounded.inv_of_finiteDimensional
-  条件: [r.FiniteDimensional]
+引理 SetRel.是良基.inv_of_finiteDimensional
+  条件: [r.有限维]
   证明: by
   rw [IsWellFounded]; rw [wellFounded_iff_isEmpty_descending_chain]
   refine ⟨fun ⟨f, hf⟩ => ?_⟩
@@ -3065,9 +3065,9 @@ lemma SetRel.IsWellFounded.of_finiteDimensional
   proof: .inv_of_finiteDimensional r.inv
 
 中文:
-引理 SetRel.IsWellFounded.of_finiteDimensional
-  条件: [r.FiniteDimensional]
-  结论: r.IsWellFounded
+引理 SetRel.是良基.of_finiteDimensional
+  条件: [r.有限维]
+  结论: r.是良基
   证明: .inv_of_finiteDimensional r.inv
 
 Depends on / 依赖: inv_of_finiteDimensional, r.inv
@@ -3085,7 +3085,7 @@ abbreviation FiniteDimensionalOrder
 
 中文:
 缩写 FiniteDimensionalOrder
-  签名: (γ : 类型) [Preorder γ]
+  签名: (γ : 类型) [预序 γ]
   定义体: SetRel.FiniteDimensional {(a, b) : γ × γ | a < b}
 
 Depends on / 依赖: FiniteDimensional, SetRel, SetRel.FiniteDimensional
@@ -3105,7 +3105,7 @@ exact (x.step ⟨0, by lia⟩).ne Subsingleton.elim _ _⟩
 
 中文:
 实例 FiniteDimensionalOrder.ofUnique
-  签名: (γ : 类型) [Preorder γ] [Unique γ]
+  签名: (γ : 类型) [预序 γ] [唯一 γ]
   定义体: ⟨.singleton _ default, fun x => by
     by_contra! r
 exact (x.step ⟨0, by lia⟩).ne Subsingleton.elim _ _⟩
@@ -3128,7 +3128,7 @@ abbreviation InfiniteDimensionalOrder
 
 中文:
 缩写 InfiniteDimensionalOrder
-  签名: (γ : 类型) [Preorder γ]
+  签名: (γ : 类型) [预序 γ]
   定义体: SetRel.InfiniteDimensional {(a, b) : γ × γ | a < b}
 
 Depends on / 依赖: InfiniteDimensional, SetRel, SetRel.InfiniteDimensional
@@ -3217,7 +3217,7 @@ lemma nonempty_of_infiniteDimensionalOrder
 中文:
 引理 nonempty_of_infiniteDimensionalOrder
   条件: [InfiniteDimensionalOrder α]
-  结论: Nonempty α
+  结论: 非空 α
   证明: ⟨LTSeries.withLength α 0 0⟩
 
 Depends on / 依赖: LTSeries, LTSeries.withLength, withLength
@@ -3239,7 +3239,7 @@ lemma nonempty_of_finiteDimensionalOrder
 中文:
 引理 nonempty_of_finiteDimensionalOrder
   条件: [FiniteDimensionalOrder α]
-  结论: Nonempty α
+  结论: 非空 α
   证明: by
   obtain ⟨p, _⟩ := (SetRel.finiteDimensional_iff _).mp ‹_›
   exact ⟨p 0⟩
@@ -3304,7 +3304,7 @@ lemma strictMono
 中文:
 引理 strictMono
   条件: (x : LTSeries α)
-  结论: StrictMono x
+  结论: 严格递增 x
   证明: fun _ _ h => x.rel_of_lt h
 
 Depends on / 依赖: of_isLocalizationAway, rel_of_lt, x.rel_of_lt
@@ -3324,7 +3324,7 @@ lemma monotone
 中文:
 引理 monotone
   条件: (x : LTSeries α)
-  结论: Monotone x
+  结论: 递增 x
   证明: x.strictMono.monotone
 
 Depends on / 依赖: monotone, strictMono, x.strictMono.monotone
@@ -3343,7 +3343,7 @@ lemma head_le
 
 中文:
 引理 head_le
-  条件: (x : LTSeries α) (n : Fin (x.length + 1))
+  条件: (x : LTSeries α) (n : 有限集 (x.length + 1))
   结论: x.head <= x n
   证明: x.monotone (Fin.zero_le n)
 
@@ -3385,7 +3385,7 @@ step i := strictMono lt_add_one i.1
 
 中文:
 定义 mk
-  签名: (length : 自然数) (toFun : Fin (length + 1) -> α) (strictMono : StrictMono toFun)
+  签名: (length : 自然数) (toFun : 有限集 (length + 1) -> α) (strictMono : 严格递增 toFun)
   定义体: length
   toFun := toFun
 step i := strictMono lt_add_one i.1
@@ -3460,7 +3460,7 @@ definition map
 
 中文:
 定义 map
-  签名: (p : LTSeries α) (f : α -> β) (hf : StrictMono f)
+  签名: (p : LTSeries α) (f : α -> β) (hf : 严格递增 f)
   定义体: LTSeries.mk p.length (f.comp p) (hf.comp p.strictMono)
 
 Depends on / 依赖: LTSeries, LTSeries.mk, f.comp, hf.comp, length, p.length, p.strictMono, strictMono
@@ -3478,7 +3478,7 @@ lemma head_map
 
 中文:
 引理 head_map
-  条件: (p : LTSeries α) (f : α -> β) (hf : StrictMono f)
+  条件: (p : LTSeries α) (f : α -> β) (hf : 严格递增 f)
   证明: rfl
 -/
 @[simp] lemma head_map (p : LTSeries α) (f : α -> β) (hf : StrictMono f) :
@@ -3494,7 +3494,7 @@ lemma last_map
 
 中文:
 引理 last_map
-  条件: (p : LTSeries α) (f : α -> β) (hf : StrictMono f)
+  条件: (p : LTSeries α) (f : α -> β) (hf : 严格递增 f)
   证明: rfl
 -/
 @[simp] lemma last_map (p : LTSeries α) (f : α -> β) (hf : StrictMono f) :
@@ -3581,7 +3581,7 @@ lemma range_apply
 
 中文:
 引理 range_apply
-  条件: (n : 自然数) (i : Fin (n + 1))
+  条件: (n : 自然数) (i : 有限集 (n + 1))
   结论: (range n) i = i
   证明: rfl
 -/
@@ -3637,7 +3637,7 @@ theorem exists_relSeries_covBy
       exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_
 
 中文:
-定理 exists_relSeries_covBy
+定理 存在_relSeries_covBy
   证明: by
   obtain ⟨n, s, h⟩ := s
   induction n with
@@ -3691,7 +3691,7 @@ theorem exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
   · obtain ⟨t, i, 
 
 中文:
-定理 exists_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
+定理 存在_relSeries_covBy_and_head_eq_bot_and_last_eq_bot
   证明: by
   wlog h₁ : s.head = ⊥
   · obtain ⟨t, i, hi, ht⟩ := this (s.cons ⊥ (bot_lt_iff_ne_bot.mpr h₁)) rfl
@@ -3739,7 +3739,7 @@ lemma apply_add_index_le_apply_add_index_nat
 
 中文:
 引理 apply_add_index_le_apply_add_index_nat
-  结论: (p : LTSeries 自然数) (i j : Fin (p.length + 1))
+  结论: (p : LTSeries 自然数) (i j : 有限集 (p.length + 1))
   证明: by
   have ⟨i, hi⟩ := i
   have ⟨j, hj⟩ := j
@@ -3786,7 +3786,7 @@ lemma apply_add_index_le_apply_add_index_int
 
 中文:
 引理 apply_add_index_le_apply_add_index_int
-  结论: (p : LTSeries 整数) (i j : Fin (p.length + 1))
+  结论: (p : LTSeries 整数) (i j : 有限集 (p.length + 1))
   证明: by
   -- The proof is identical to `LTSeries.apply_add_index_le_apply_add_index_nat`, but seemed easier
   -- to copy rather than to abstract
@@ -3876,7 +3876,7 @@ lemma length_lt_card
 中文:
 引理 length_lt_card
   条件: (s : LTSeries α)
-  结论: s.length < Fintype.card α
+  结论: s.length < 有限类型.card α
   证明: by
   by_contra! h
   obtain ⟨i, j, hn, he⟩ := Fintype.exists_ne_map_eq_of_card_lt s (by rw [Fintype.card_fin]; lia)
@@ -3908,7 +3908,7 @@ instance [DecidableLT
 
 中文:
 实例 [DecidableLT
-  签名: α] : Fintype (LTSeries α) where
+  签名: α] : 有限类型 (LTSeries α) where
   定义体: Finset.univ.map (injStrictMono (Fintype.card α))
   complete s := by
     have bl := s.length_lt_card
@@ -3942,7 +3942,7 @@ lemma not_finiteDimensionalOrder_iff
 
 中文:
 引理 not_finiteDimensionalOrder_iff
-  条件: [Preorder α] [Nonempty α]
+  条件: [预序 α] [非空 α]
   证明: SetRel.not_finiteDimensional_iff
 
 Depends on / 依赖: SetRel, SetRel.not_finiteDimensional_iff, not_finiteDimensional_iff
@@ -3961,7 +3961,7 @@ lemma not_infiniteDimensionalOrder_iff
 
 中文:
 引理 not_infiniteDimensionalOrder_iff
-  条件: [Preorder α] [Nonempty α]
+  条件: [预序 α] [非空 α]
   证明: SetRel.not_infiniteDimensional_iff
 
 Depends on / 依赖: SetRel, SetRel.not_infiniteDimensional_iff, not_infiniteDimensional_iff
@@ -3981,7 +3981,7 @@ lemma finiteDimensionalOrder_or_infiniteDimensionalOrder
 
 中文:
 引理 finiteDimensionalOrder_or_infiniteDimensionalOrder
-  条件: [Preorder α] [Nonempty α]
+  条件: [预序 α] [非空 α]
   证明: SetRel.finiteDimensional_or_infiniteDimensional _
 
 Depends on / 依赖: SetRel, SetRel.finiteDimensional_or_infiniteDimensional, finiteDimensional_or_infiniteDimensional
@@ -4000,7 +4000,7 @@ lemma infiniteDimensionalOrder_of_strictMono
 
 中文:
 引理 infiniteDimensionalOrder_of_strictMono
-  结论: [Preorder α] [Preorder β]
+  结论: [预序 α] [预序 β]
   证明: ⟨fun n => ⟨(LTSeries.withLength _ n).map f hf, LTSeries.length_withLength α n⟩⟩
 
 Depends on / 依赖: LTSeries, LTSeries.length_withLength, LTSeries.withLength, length_withLength, withLength

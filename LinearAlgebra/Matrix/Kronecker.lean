@@ -61,7 +61,7 @@ definition kroneckerMap
 
 中文:
 定义 kroneckerMap
-  签名: (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β)
+  签名: (f : α -> β -> γ) (A : 矩阵 l m α) (B : 矩阵 n p β)
   定义体: of fun (i : l × n) (j : m × p) => f (A i.1 j.1) (B i.2 j.2)
 -/
 def kroneckerMap (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β) : Matrix (l × n) (m × p) γ :=
@@ -79,7 +79,7 @@ theorem kroneckerMap_apply
 
 中文:
 定理 kroneckerMap_apply
-  条件: (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β) (i j)
+  条件: (f : α -> β -> γ) (A : 矩阵 l m α) (B : 矩阵 n p β) (i j)
   证明: rfl
 -/
 theorem kroneckerMap_apply (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β) (i j) :
@@ -96,7 +96,7 @@ theorem kroneckerMap_transpose
 
 中文:
 定理 kroneckerMap_transpose
-  条件: (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β)
+  条件: (f : α -> β -> γ) (A : 矩阵 l m α) (B : 矩阵 n p β)
   证明: ext fun _ _ => rfl
 -/
 theorem kroneckerMap_transpose (f : α -> β -> γ) (A : Matrix l m α) (B : Matrix n p β) :
@@ -113,7 +113,7 @@ theorem kroneckerMap_map_left
 
 中文:
 定理 kroneckerMap_map_left
-  条件: (f : α' -> β -> γ) (g : α -> α') (A : Matrix l m α) (B : Matrix n p β)
+  条件: (f : α' -> β -> γ) (g : α -> α') (A : 矩阵 l m α) (B : 矩阵 n p β)
   证明: ext fun _ _ => rfl
 -/
 theorem kroneckerMap_map_left (f : α' -> β -> γ) (g : α -> α') (A : Matrix l m α) (B : Matrix n p β) :
@@ -130,7 +130,7 @@ theorem kroneckerMap_map_right
 
 中文:
 定理 kroneckerMap_map_right
-  条件: (f : α -> β' -> γ) (g : β -> β') (A : Matrix l m α) (B : Matrix n p β)
+  条件: (f : α -> β' -> γ) (g : β -> β') (A : 矩阵 l m α) (B : 矩阵 n p β)
   证明: ext fun _ _ => rfl
 -/
 theorem kroneckerMap_map_right (f : α -> β' -> γ) (g : β -> β') (A : Matrix l m α) (B : Matrix n p β) :
@@ -147,7 +147,7 @@ theorem kroneckerMap_map
 
 中文:
 定理 kroneckerMap_map
-  条件: (f : α -> β -> γ) (g : γ -> γ') (A : Matrix l m α) (B : Matrix n p β)
+  条件: (f : α -> β -> γ) (g : γ -> γ') (A : 矩阵 l m α) (B : 矩阵 n p β)
   证明: ext fun _ _ => rfl
 -/
 theorem kroneckerMap_map (f : α -> β -> γ) (g : γ -> γ') (A : Matrix l m α) (B : Matrix n p β) :
@@ -223,7 +223,7 @@ theorem kroneckerMap_zero_left
 
 中文:
 定理 kroneckerMap_zero_left
-  结论: [Zero α] [Zero γ] (f : α -> β -> γ) (hf : 对任意 b, f 0 b = 0)
+  结论: [零 α] [零 γ] (f : α -> β -> γ) (hf : 对任意 b, f 0 b = 0)
   证明: ext fun _ _ => hf _
 
 @[simp]
@@ -243,7 +243,7 @@ theorem kroneckerMap_zero_right
 
 中文:
 定理 kroneckerMap_zero_right
-  结论: [Zero β] [Zero γ] (f : α -> β -> γ) (hf : 对任意 a, f a 0 = 0)
+  结论: [零 β] [零 γ] (f : α -> β -> γ) (hf : 对任意 a, f a 0 = 0)
   证明: ext fun _ _ => hf _
 -/
 theorem kroneckerMap_zero_right [Zero β] [Zero γ] (f : α -> β -> γ) (hf : forall a, f a 0 = 0)
@@ -260,7 +260,7 @@ theorem kroneckerMap_add_left
 
 中文:
 定理 kroneckerMap_add_left
-  结论: [Add α] [Add γ] (f : α -> β -> γ)
+  结论: [加法 α] [加法 γ] (f : α -> β -> γ)
   证明: ext fun _ _ => hf _ _ _
 -/
 theorem kroneckerMap_add_left [Add α] [Add γ] (f : α -> β -> γ)
@@ -278,7 +278,7 @@ theorem kroneckerMap_add_right
 
 中文:
 定理 kroneckerMap_add_right
-  结论: [Add β] [Add γ] (f : α -> β -> γ)
+  结论: [加法 β] [加法 γ] (f : α -> β -> γ)
   证明: ext fun _ _ => hf _ _ _
 -/
 theorem kroneckerMap_add_right [Add β] [Add γ] (f : α -> β -> γ)
@@ -296,7 +296,7 @@ theorem kroneckerMap_smul_left
 
 中文:
 定理 kroneckerMap_smul_left
-  结论: [SMul R α] [SMul R γ] (f : α -> β -> γ) (r : R)
+  结论: [标量乘法 R α] [标量乘法 R γ] (f : α -> β -> γ) (r : R)
   证明: ext fun _ _ => hf _ _
 -/
 theorem kroneckerMap_smul_left [SMul R α] [SMul R γ] (f : α -> β -> γ) (r : R)
@@ -314,7 +314,7 @@ theorem kroneckerMap_smul_right
 
 中文:
 定理 kroneckerMap_smul_right
-  结论: [SMul R β] [SMul R γ] (f : α -> β -> γ) (r : R)
+  结论: [标量乘法 R β] [标量乘法 R γ] (f : α -> β -> γ) (r : R)
   证明: ext fun _ _ => hf _ _
 -/
 theorem kroneckerMap_smul_right [SMul R β] [SMul R γ] (f : α -> β -> γ) (r : R)
@@ -362,7 +362,7 @@ theorem kroneckerMap_diagonal_diagonal
 
 中文:
 定理 kroneckerMap_diagonal_diagonal
-  结论: [Zero α] [Zero β] [Zero γ] [DecidableEq m] [DecidableEq n]
+  结论: [零 α] [零 β] [零 γ] [DecidableEq m] [DecidableEq n]
   证明: by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   simp [diagonal, apply_ite f, ite_and, ite_apply, apply_ite (f (a i₁)), hf₁, hf₂]
@@ -387,7 +387,7 @@ theorem kroneckerMap_diagonal_right
 
 中文:
 定理 kroneckerMap_diagonal_right
-  结论: [Zero β] [Zero γ] [DecidableEq n] (f : α -> β -> γ)
+  结论: [零 β] [零 γ] [DecidableEq n] (f : α -> β -> γ)
   证明: by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   simp [diagonal, blockDiagonal, apply_ite (f (A i₁ j₁)), hf]
@@ -414,7 +414,7 @@ theorem kroneckerMap_diagonal_left
 
 中文:
 定理 kroneckerMap_diagonal_left
-  结论: [Zero α] [Zero γ] [DecidableEq l] (f : α -> β -> γ)
+  结论: [零 α] [零 γ] [DecidableEq l] (f : α -> β -> γ)
   证明: by
   ext ⟨i₁, i₂⟩ ⟨j₁, j₂⟩
   simp [diagonal, blockDiagonal, apply_ite f, ite_apply, hf]
@@ -442,7 +442,7 @@ theorem kroneckerMap_one_one
 
 中文:
 定理 kroneckerMap_one_one
-  结论: [Zero α] [Zero β] [Zero γ] [One α] [One β] [One γ] [DecidableEq m]
+  结论: [零 α] [零 β] [零 γ] [幺 α] [幺 β] [幺 γ] [DecidableEq m]
   证明: (kroneckerMap_diagonal_diagonal _ hf₁ hf₂ _ _).trans by simp only [hf₃, diagonal_one]
 
 Depends on / 依赖: diagonal_one, kroneckerMap_diagonal_diagonal
@@ -486,7 +486,7 @@ theorem kroneckerMap_reindex_left
 
 中文:
 定理 kroneckerMap_reindex_left
-  结论: (f : α -> β -> γ) (el : l ≃ l') (em : m ≃ m') (M : Matrix l m α)
+  结论: (f : α -> β -> γ) (el : l ≃ l') (em : m ≃ m') (M : 矩阵 l m α)
   证明: kroneckerMap_reindex _ _ _ (Equiv.refl _) (Equiv.refl _) _ _
 
 Depends on / 依赖: Equiv.refl, kroneckerMap_reindex
@@ -507,7 +507,7 @@ theorem kroneckerMap_reindex_right
 
 中文:
 定理 kroneckerMap_reindex_right
-  结论: (f : α -> β -> γ) (em : m ≃ m') (en : n ≃ n') (M : Matrix l l' α)
+  结论: (f : α -> β -> γ) (em : m ≃ m') (en : n ≃ n') (M : 矩阵 l l' α)
   证明: kroneckerMap_reindex _ (Equiv.refl _) (Equiv.refl _) _ _ _ _
 
 Depends on / 依赖: Equiv.refl, kroneckerMap_reindex
@@ -575,7 +575,7 @@ definition kroneckerMapBilinear
 
 中文:
 定义 kroneckerMapBilinear
-  签名: [Semiring S] [Semiring R]
+  签名: [半环 S] [半环 R]
   定义体: LinearMap.mk₂' R S (kroneckerMap fun r s => f r s) (kroneckerMap_add_left _ <| f.map_add₂)
     (fun _ => kroneckerMap_smul_left _ _ <| f.map_smul₂ _)
     (kroneckerMap_add_right _ fun a => (f a).map_add) fun r =>
@@ -607,7 +607,7 @@ theorem kroneckerMapBilinear_mul_mul
 
 中文:
 定理 kroneckerMapBilinear_mul_mul
-  结论: [Semiring S] [Semiring R] [Fintype m] [Fintype m']
+  结论: [半环 S] [半环 R] [有限类型 m] [有限类型 m']
   证明: by
   ext ⟨i, i'⟩ ⟨j, j'⟩
   simp only [kroneckerMapBilinear_apply_apply, mul_apply, ← Finset.univ_product_univ,
@@ -641,7 +641,7 @@ theorem trace_kroneckerMapBilinear
 
 中文:
 定理 trace_kroneckerMapBilinear
-  结论: [Semiring S] [Semiring R] [Fintype m] [Fintype n]
+  结论: [半环 S] [半环 R] [有限类型 m] [有限类型 n]
   证明: by
   simp_rw [Matrix.trace, Matrix.diag, kroneckerMapBilinear_apply_apply, LinearMap.map_sum₂,
     map_sum, ← Finset.univ_product_univ, Finset.sum_product, kroneckerMap_apply]
@@ -672,7 +672,7 @@ theorem det_kroneckerMapBilinear
 
 中文:
 定理 det_kroneckerMapBilinear
-  结论: [Semiring S] [Semiring R] [Fintype m] [Fintype n] [DecidableEq m]
+  结论: [半环 S] [半环 R] [有限类型 m] [有限类型 n] [DecidableEq m]
   证明: calc
     det (kroneckerMapBilinear f A B) =
         det (kroneckerMapBilinear f A 1 * kroneckerMapBilinear f 1 B) := by
@@ -725,7 +725,7 @@ scoped[Kronecker] infixl:100 " otimesₖ " => Matrix.kroneckerMap (· * ·)
 
 中文:
 定义 kronecker
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: kroneckerMap (· * ·)
 
 @[inherit_doc Matrix.kroneckerMap]
@@ -752,7 +752,7 @@ theorem kronecker_apply
 
 中文:
 定理 kronecker_apply
-  条件: [Mul α] (A : Matrix l m α) (B : Matrix n p α) (i₁ i₂ j₁ j₂)
+  条件: [乘法 α] (A : 矩阵 l m α) (B : 矩阵 n p α) (i₁ i₂ j₁ j₂)
   证明: rfl
 -/
 theorem kronecker_apply [Mul α] (A : Matrix l m α) (B : Matrix n p α) (i₁ i₂ j₁ j₂) :
@@ -769,7 +769,7 @@ definition kroneckerBilinear
 
 中文:
 定义 kroneckerBilinear
-  签名: [CommSemiring R] [Semiring α] [Algebra R α]
+  签名: [交换半环 R] [半环 α] [代数 R α]
   定义体: kroneckerMapBilinear (Algebra.lmul R α)
 
 Depends on / 依赖: Algebra, Algebra.lmul, kroneckerMapBilinear
@@ -791,8 +791,8 @@ theorem zero_kronecker
 
 中文:
 定理 zero_kronecker
-  条件: [MulZeroClass α] (B : Matrix n p α)
-  结论: (0 : Matrix l m α) otimesₖ B = 0
+  条件: [乘零类 α] (B : 矩阵 n p α)
+  结论: (0 : 矩阵 l m α) otimesₖ B = 0
   证明: kroneckerMap_zero_left _ zero_mul B
 
 Depends on / 依赖: kroneckerMap_zero_left, zero_mul
@@ -811,8 +811,8 @@ theorem kronecker_zero
 
 中文:
 定理 kronecker_zero
-  条件: [MulZeroClass α] (A : Matrix l m α)
-  结论: A otimesₖ (0 : Matrix n p α) = 0
+  条件: [乘零类 α] (A : 矩阵 l m α)
+  结论: A otimesₖ (0 : 矩阵 n p α) = 0
   证明: kroneckerMap_zero_right _ mul_zero A
 
 Depends on / 依赖: kroneckerMap_zero_right, mul_zero
@@ -830,7 +830,7 @@ theorem add_kronecker
 
 中文:
 定理 add_kronecker
-  条件: [Distrib α] (A₁ A₂ : Matrix l m α) (B : Matrix n p α)
+  条件: [Distrib α] (A₁ A₂ : 矩阵 l m α) (B : 矩阵 n p α)
   证明: kroneckerMap_add_left _ add_mul _ _ _
 
 Depends on / 依赖: add_mul, kroneckerMap_add_left
@@ -849,7 +849,7 @@ theorem kronecker_add
 
 中文:
 定理 kronecker_add
-  条件: [Distrib α] (A : Matrix l m α) (B₁ B₂ : Matrix n p α)
+  条件: [Distrib α] (A : 矩阵 l m α) (B₁ B₂ : 矩阵 n p α)
   证明: kroneckerMap_add_right _ mul_add _ _ _
 
 Depends on / 依赖: kroneckerMap_add_right, mul_add
@@ -868,7 +868,7 @@ theorem smul_kronecker
 
 中文:
 定理 smul_kronecker
-  结论: [Mul α] [SMul R α] [IsScalarTower R α α] (r : R)
+  结论: [乘法 α] [标量乘法 R α] [标量塔 R α α] (r : R)
   证明: kroneckerMap_smul_left _ _ (fun _ _ => smul_mul_assoc _ _ _) _ _
 
 Depends on / 依赖: kroneckerMap_smul_left, smul_mul_assoc
@@ -887,7 +887,7 @@ theorem kronecker_smul
 
 中文:
 定理 kronecker_smul
-  结论: [Mul α] [SMul R α] [SMulCommClass R α α] (r : R)
+  结论: [乘法 α] [标量乘法 R α] [标量交换类 R α α] (r : R)
   证明: kroneckerMap_smul_right _ _ (fun _ _ => mul_smul_comm _ _ _) _ _
 
 Depends on / 依赖: kroneckerMap_smul_right, mul_smul_comm
@@ -925,7 +925,7 @@ theorem diagonal_kronecker_diagonal
 
 中文:
 定理 diagonal_kronecker_diagonal
-  结论: [MulZeroClass α] [DecidableEq m] [DecidableEq n] (a : m -> α)
+  结论: [乘零类 α] [DecidableEq m] [DecidableEq n] (a : m -> α)
   证明: kroneckerMap_diagonal_diagonal _ zero_mul mul_zero _ _
 
 Depends on / 依赖: kroneckerMap_diagonal_diagonal, mul_zero, zero_mul
@@ -944,7 +944,7 @@ theorem kronecker_diagonal
 
 中文:
 定理 kronecker_diagonal
-  条件: [MulZeroClass α] [DecidableEq n] (A : Matrix l m α) (b : n -> α)
+  条件: [乘零类 α] [DecidableEq n] (A : 矩阵 l m α) (b : n -> α)
   证明: kroneckerMap_diagonal_right _ mul_zero _ _
 
 Depends on / 依赖: kroneckerMap_diagonal_right, mul_zero
@@ -965,7 +965,7 @@ theorem diagonal_kronecker
 
 中文:
 定理 diagonal_kronecker
-  条件: [MulZeroClass α] [DecidableEq l] (a : l -> α) (B : Matrix m n α)
+  条件: [乘零类 α] [DecidableEq l] (a : l -> α) (B : 矩阵 m n α)
   证明: kroneckerMap_diagonal_left _ zero_mul _ _
 
 @[simp]
@@ -988,7 +988,7 @@ theorem natCast_kronecker_natCast
 
 中文:
 定理 natCast_kronecker_natCast
-  条件: [NonAssocSemiring α] [DecidableEq m] [DecidableEq n] (a b : 自然数)
+  条件: [非结合半环 α] [DecidableEq m] [DecidableEq n] (a b : 自然数)
   证明: (diagonal_kronecker_diagonal _ _).trans by simp_rw [← Nat.cast_mul]; rfl
 
 Depends on / 依赖: Nat.cast_mul, cast_mul, diagonal_kronecker_diagonal, simp_rw
@@ -1010,7 +1010,7 @@ theorem kronecker_natCast
 
 中文:
 定理 kronecker_natCast
-  条件: [NonAssocSemiring α] [DecidableEq n] (A : Matrix l m α) (b : 自然数)
+  条件: [非结合半环 α] [DecidableEq n] (A : 矩阵 l m α) (b : 自然数)
   证明: .trans by kronecker_diagonal _ _
     congr! 2
     ext
@@ -1038,7 +1038,7 @@ theorem natCast_kronecker
 
 中文:
 定理 natCast_kronecker
-  条件: [NonAssocSemiring α] [DecidableEq l] (a : 自然数) (B : Matrix m n α)
+  条件: [非结合半环 α] [DecidableEq l] (a : 自然数) (B : 矩阵 m n α)
   证明: .trans by diagonal_kronecker _ _
     congr! 2
     ext
@@ -1063,8 +1063,8 @@ theorem kronecker_ofNat
   proof: kronecker_diagonal _ _
 
 中文:
-定理 kronecker_ofNat
-  结论: [NonAssocSemiring α] [DecidableEq n] (A : Matrix l m α) (b : 自然数)
+定理 kronecker_of自然数
+  结论: [非结合半环 α] [DecidableEq n] (A : 矩阵 l m α) (b : 自然数)
   证明: kronecker_diagonal _ _
 
 Depends on / 依赖: kronecker_diagonal
@@ -1083,8 +1083,8 @@ theorem ofNat_kronecker
   proof: diagonal_kronecker _ _
 
 中文:
-定理 ofNat_kronecker
-  结论: [NonAssocSemiring α] [DecidableEq l] (a : 自然数) [a.AtLeastTwo]
+定理 of自然数_kronecker
+  结论: [非结合半环 α] [DecidableEq l] (a : 自然数) [a.AtLeastTwo]
   证明: diagonal_kronecker _ _
 
 Depends on / 依赖: diagonal_kronecker
@@ -1105,7 +1105,7 @@ theorem one_kronecker_one
 
 中文:
 定理 one_kronecker_one
-  条件: [MulZeroOneClass α] [DecidableEq m] [DecidableEq n]
+  条件: [乘零幺类 α] [DecidableEq m] [DecidableEq n]
   证明: kroneckerMap_one_one _ zero_mul mul_zero (one_mul _)
 
 Depends on / 依赖: kroneckerMap_one_one, mul_zero, one_mul, zero_mul
@@ -1124,7 +1124,7 @@ theorem kronecker_one
 
 中文:
 定理 kronecker_one
-  条件: [MulZeroOneClass α] [DecidableEq n] (A : Matrix l m α)
+  条件: [乘零幺类 α] [DecidableEq n] (A : 矩阵 l m α)
   证明: (kronecker_diagonal _ _).trans congr_arg _ funext fun _ => Matrix.ext fun _ _ => mul_one _
 
 Depends on / 依赖: Matrix, Matrix.ext, congr_arg, kronecker_diagonal, mul_one
@@ -1144,7 +1144,7 @@ congr_arg _ congr_arg _ funext fun _ => Matrix.ext fun _ _ => one_mul _
 
 中文:
 定理 one_kronecker
-  条件: [MulZeroOneClass α] [DecidableEq l] (B : Matrix m n α)
+  条件: [乘零幺类 α] [DecidableEq l] (B : 矩阵 m n α)
   证明: (diagonal_kronecker _ _).trans
 congr_arg _ congr_arg _ funext fun _ => Matrix.ext fun _ _ => one_mul _
 
@@ -1166,7 +1166,7 @@ theorem mul_kronecker_mul
 
 中文:
 定理 mul_kronecker_mul
-  结论: [Fintype m] [Fintype m'] [CommSemiring α] (A : Matrix l m α)
+  结论: [有限类型 m] [有限类型 m'] [交换半环 α] (A : 矩阵 l m α)
   证明: kroneckerMapBilinear_mul_mul (Algebra.lmul Nat α).toLinearMap mul_mul_mul_comm A B A' B'
 
 Depends on / 依赖: Algebra, Algebra.lmul, kroneckerMapBilinear_mul_mul, mul_mul_mul_comm, toLinearMap
@@ -1189,7 +1189,7 @@ theorem kronecker_assoc
 
 中文:
 定理 kronecker_assoc
-  条件: [Semigroup α] (A : Matrix l m α) (B : Matrix n p α) (C : Matrix q r α)
+  条件: [半群 α] (A : 矩阵 l m α) (B : 矩阵 n p α) (C : 矩阵 q r α)
   证明: kroneckerMap_assoc₁ _ _ _ _ A B C mul_assoc
 
 @[simp]
@@ -1211,7 +1211,7 @@ theorem kronecker_assoc'
 
 中文:
 定理 kronecker_assoc'
-  条件: [Semigroup α] (A : Matrix l m α) (B : Matrix n p α) (C : Matrix q r α)
+  条件: [半群 α] (A : 矩阵 l m α) (B : 矩阵 n p α) (C : 矩阵 q r α)
   证明: kroneckerMap_assoc₁ _ _ _ _ A B C mul_assoc
 
 Depends on / 依赖: mul_assoc
@@ -1231,7 +1231,7 @@ theorem trace_kronecker
 
 中文:
 定理 trace_kronecker
-  条件: [Fintype m] [Fintype n] [Semiring α] (A : Matrix m m α) (B : Matrix n n α)
+  条件: [有限类型 m] [有限类型 n] [半环 α] (A : 矩阵 m m α) (B : 矩阵 n n α)
   证明: trace_kroneckerMapBilinear (Algebra.lmul Nat α).toLinearMap _ _
 
 Depends on / 依赖: Algebra, Algebra.lmul, toLinearMap, trace_kroneckerMapBilinear
@@ -1252,7 +1252,7 @@ theorem det_kronecker
 
 中文:
 定理 det_kronecker
-  结论: [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n] [CommRing R]
+  结论: [有限类型 m] [有限类型 n] [DecidableEq m] [DecidableEq n] [交换环 R]
   证明: by
   refine (det_kroneckerMapBilinear (Algebra.lmul Nat R).toLinearMap mul_mul_mul_comm _ _).trans ?_
   simp
@@ -1276,7 +1276,7 @@ theorem conjTranspose_kronecker
 
 中文:
 定理 conjTranspose_kronecker
-  条件: [CommMagma R] [StarMul R] (x : Matrix l m R) (y : Matrix n p R)
+  条件: [交换原群 R] [StarMul R] (x : 矩阵 l m R) (y : 矩阵 n p R)
   证明: by
   ext; simp
 -/
@@ -1295,7 +1295,7 @@ theorem conjTranspose_kronecker'
 
 中文:
 定理 conjTranspose_kronecker'
-  条件: [Mul R] [StarMul R] (x : Matrix l m R) (y : Matrix n p R)
+  条件: [乘法 R] [StarMul R] (x : 矩阵 l m R) (y : 矩阵 n p R)
   证明: by
   ext; simp
 -/
@@ -1341,7 +1341,7 @@ scoped[Kronecker] infixl:100 " otimesₖₜ " => Matrix.kroneckerMap (TensorProd
 
 中文:
 定义 kroneckerTMul
-  签名: : Matrix l m α -> Matrix n p β -> Matrix (l × n) (m × p) (α otimes[R] β)
+  签名: : 矩阵 l m α -> 矩阵 n p β -> 矩阵 (l × n) (m × p) (α otimes[R] β)
   定义体: kroneckerMap (· otimesₜ ·)
 
 @[inherit_doc kroneckerTMul]
@@ -1374,7 +1374,7 @@ theorem kroneckerTMul_apply
 
 中文:
 定理 kroneckerTMul_apply
-  条件: (A : Matrix l m α) (B : Matrix n p β) (i₁ i₂ j₁ j₂)
+  条件: (A : 矩阵 l m α) (B : 矩阵 n p β) (i₁ i₂ j₁ j₂)
   证明: rfl
 -/
 theorem kroneckerTMul_apply (A : Matrix l m α) (B : Matrix n p β) (i₁ i₂ j₁ j₂) :
@@ -1394,7 +1394,7 @@ definition kroneckerTMulBilinear
 
 中文:
 定义 kroneckerTMulBilinear
-  签名: [Semiring S] [Module S α] [SMulCommClass R S α]
+  签名: [半环 S] [模 S α] [标量交换类 R S α]
   定义体: kroneckerMapBilinear (AlgebraTensorModule.mk _ _ α β)
 
 @[simp]
@@ -1416,7 +1416,7 @@ theorem kroneckerTMulBilinear_apply
 
 中文:
 定理 kroneckerTMulBilinear_apply
-  结论: [Semiring S] [Module S α] [SMulCommClass R S α]
+  结论: [半环 S] [模 S α] [标量交换类 R S α]
   证明: rfl
 -/
 theorem kroneckerTMulBilinear_apply [Semiring S] [Module S α] [SMulCommClass R S α]
@@ -1436,8 +1436,8 @@ theorem zero_kroneckerTMul
 
 中文:
 定理 zero_kroneckerTMul
-  条件: (B : Matrix n p β)
-  结论: (0 : Matrix l m α) otimesₖₜ[R] B = 0
+  条件: (B : 矩阵 n p β)
+  结论: (0 : 矩阵 l m α) otimesₖₜ[R] B = 0
   证明: kroneckerMap_zero_left _ (zero_tmul α) B
 
 Depends on / 依赖: kroneckerMap_zero_left, zero_tmul
@@ -1456,8 +1456,8 @@ theorem kroneckerTMul_zero
 
 中文:
 定理 kroneckerTMul_zero
-  条件: (A : Matrix l m α)
-  结论: A otimesₖₜ[R] (0 : Matrix n p β) = 0
+  条件: (A : 矩阵 l m α)
+  结论: A otimesₖₜ[R] (0 : 矩阵 n p β) = 0
   证明: kroneckerMap_zero_right _ (tmul_zero β) A
 
 Depends on / 依赖: kroneckerMap_zero_right, tmul_zero
@@ -1475,7 +1475,7 @@ theorem add_kroneckerTMul
 
 中文:
 定理 add_kroneckerTMul
-  条件: (A₁ A₂ : Matrix l m α) (B : Matrix n p α)
+  条件: (A₁ A₂ : 矩阵 l m α) (B : 矩阵 n p α)
   证明: kroneckerMap_add_left _ add_tmul _ _ _
 
 Depends on / 依赖: add_tmul, kroneckerMap_add_left
@@ -1494,7 +1494,7 @@ theorem kroneckerTMul_add
 
 中文:
 定理 kroneckerTMul_add
-  条件: (A : Matrix l m α) (B₁ B₂ : Matrix n p β)
+  条件: (A : 矩阵 l m α) (B₁ B₂ : 矩阵 n p β)
   证明: kroneckerMap_add_right _ tmul_add _ _ _
 
 Depends on / 依赖: kroneckerMap_add_right, tmul_add
@@ -1513,7 +1513,7 @@ theorem smul_kroneckerTMul
 
 中文:
 定理 smul_kroneckerTMul
-  结论: [Monoid S] [DistribMulAction S α] [SMulCommClass R S α]
+  结论: [幺半群 S] [分配乘法作用 S α] [标量交换类 R S α]
   证明: kroneckerMap_smul_left _ _ (fun _ _ => smul_tmul' _ _ _) _ _
 
 Depends on / 依赖: kroneckerMap_smul_left, smul_tmul
@@ -1533,7 +1533,7 @@ theorem kroneckerTMul_smul
 
 中文:
 定理 kroneckerTMul_smul
-  结论: [Monoid S] [DistribMulAction S α] [DistribMulAction S β]
+  结论: [幺半群 S] [分配乘法作用 S α] [分配乘法作用 S β]
   证明: kroneckerMap_smul_right _ _ (fun _ _ => tmul_smul _ _ _) _ _
 
 Depends on / 依赖: kroneckerMap_smul_right, tmul_smul
@@ -1592,7 +1592,7 @@ theorem kroneckerTMul_diagonal
 
 中文:
 定理 kroneckerTMul_diagonal
-  条件: [DecidableEq n] (A : Matrix l m α) (b : n -> β)
+  条件: [DecidableEq n] (A : 矩阵 l m α) (b : n -> β)
   证明: kroneckerMap_diagonal_right _ (tmul_zero _) _ _
 
 Depends on / 依赖: kroneckerMap_diagonal_right, tmul_zero
@@ -1611,7 +1611,7 @@ theorem diagonal_kroneckerTMul
 
 中文:
 定理 diagonal_kroneckerTMul
-  条件: [DecidableEq l] (a : l -> α) (B : Matrix m n β)
+  条件: [DecidableEq l] (a : l -> α) (B : 矩阵 m n β)
   证明: kroneckerMap_diagonal_left _ (zero_tmul _) _ _
 
 Depends on / 依赖: kroneckerMap_diagonal_left, zero_tmul
@@ -1635,7 +1635,7 @@ theorem kroneckerTMul_assoc
 
 中文:
 定理 kroneckerTMul_assoc
-  条件: (A : Matrix l m α) (B : Matrix n p β) (C : Matrix q r γ)
+  条件: (A : 矩阵 l m α) (B : 矩阵 n p β) (C : 矩阵 q r γ)
   证明: ext fun _ _ => assoc_tmul _ _ _
 
 @[simp]
@@ -1659,7 +1659,7 @@ theorem kroneckerTMul_assoc'
 
 中文:
 定理 kroneckerTMul_assoc'
-  条件: (A : Matrix l m α) (B : Matrix n p β) (C : Matrix q r γ)
+  条件: (A : 矩阵 l m α) (B : 矩阵 n p β) (C : 矩阵 q r γ)
   证明: ext fun _ _ => assoc_tmul _ _ _
 
 Depends on / 依赖: assoc_tmul
@@ -1679,7 +1679,7 @@ theorem trace_kroneckerTMul
 
 中文:
 定理 trace_kroneckerTMul
-  条件: [Fintype m] [Fintype n] (A : Matrix m m α) (B : Matrix n n β)
+  条件: [有限类型 m] [有限类型 n] (A : 矩阵 m m α) (B : 矩阵 n n β)
   证明: trace_kroneckerMapBilinear (TensorProduct.mk R α β) _ _
 
 Depends on / 依赖: TensorProduct, TensorProduct.mk, trace_kroneckerMapBilinear
@@ -1699,7 +1699,7 @@ theorem conjTranspose_kroneckerTMul
 
 中文:
 定理 conjTranspose_kroneckerTMul
-  结论: [StarRing R] [StarAddMonoid α] [StarAddMonoid β]
+  结论: [对合环 R] [StarAdd幺半群 α] [StarAdd幺半群 β]
   证明: by
   ext; simp
 -/
@@ -1786,7 +1786,7 @@ theorem det_kroneckerTMul
 
 中文:
 定理 det_kroneckerTMul
-  结论: [Fintype m] [Fintype n] [DecidableEq m] [DecidableEq n]
+  结论: [有限类型 m] [有限类型 n] [DecidableEq m] [DecidableEq n]
   证明: by
   refine (det_kroneckerMapBilinear (TensorProduct.mk R α β) tmul_mul_tmul _ _).trans ?_
   simp -eta only [mk_apply, ← includeLeft_apply (S := R), ← includeRight_apply]

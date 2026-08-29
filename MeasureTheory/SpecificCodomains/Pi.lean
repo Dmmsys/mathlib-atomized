@@ -82,7 +82,7 @@ alias ⟨Integrable.eval, Integrable.of_eval⟩ := integrable_pi_iff
 
 中文:
 引理 integrable_pi_iff
-  结论: 整数egrable f μ ↔ 对任意 i, 整数egrable (f · i) μ
+  结论: 可积 f μ ↔ 对任意 i, 可积 (f · i) μ
   证明: by
   simp_rw [← memLp_one_iff_integrable, memLp_pi_iff]
 
@@ -109,7 +109,7 @@ lemma eval_integral
 
 中文:
 引理 eval_integral
-  条件: (hf : 对任意 i, 整数egrable (f · i) μ) (i : ι)
+  条件: (hf : 对任意 i, 可积 (f · i) μ) (i : ι)
   证明: by
   simp [← ContinuousLinearMap.proj_apply (R := Real) i (∫ x, f x ∂μ),
     ← ContinuousLinearMap.integral_comp_comm _ (Integrable.of_eval hf)]

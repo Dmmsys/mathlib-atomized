@@ -31,9 +31,9 @@ structure QuadraticModuleCat
     - form : QuadraticForm R carrier
 
 中文:
-结构 QuadraticModuleCat
-  参数: extends ModuleCat.{v} R
-  继承: ModuleCat.{v} R
+结构 二次模范畴
+  参数: extends 模范畴.{v} R
+  继承: 模范畴.{v} R
   公理与运算 (1 个):
     - form : QuadraticForm R carrier
 -/
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (QuadraticModuleCat.{v} R) (类型v)
+  签名: CoeSort (二次模范畴.{v} R) (类型v)
   定义体: ⟨(·.carrier)⟩
 
 Depends on / 依赖: carrier
@@ -75,7 +75,7 @@ theorem moduleCat_of_toModuleCat
 
 中文:
 定理 moduleCat_of_toModuleCat
-  条件: (X : QuadraticModuleCat.{v} R)
+  条件: (X : 二次模范畴.{v} R)
   证明: rfl
 -/
 @[simp] theorem moduleCat_of_toModuleCat (X : QuadraticModuleCat.{v} R) :
@@ -93,7 +93,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: {X : 类型v} [AddCommGroup X] [Module R X] (Q : QuadraticForm R X)
+  签名: {X : 类型v} [加法交换群 X] [模 R X] (Q : QuadraticForm R X)
   定义体: { ModuleCat.of R X with
     form := Q }
 
@@ -117,8 +117,8 @@ structure Hom
     - toIsometry' : V.form ->qᵢ W.form
 
 中文:
-结构 Hom
-  参数: (V W : QuadraticModuleCat.{v} R)
+结构 态射
+  参数: (V W : 二次模范畴.{v} R)
   公理与运算 (1 个):
     - toIsometry' : V.form ->qᵢ W.form
 -/
@@ -138,7 +138,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (QuadraticModuleCat.{v} R) where
+  签名: : 范畴 (二次模范畴.{v} R) where
   定义体: Hom M N
   id M := ⟨Isometry.id M.form⟩
   comp f g := ⟨Isometry.comp g.toIsometry' f.toIsometry'⟩
@@ -159,7 +159,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory (QuadraticModuleCat.{v} R)
+  签名: : 余ncrete范畴 (二次模范畴.{v} R)
   定义体: f.toIsometry'
   ofHom f := ⟨f⟩
 
@@ -179,8 +179,8 @@ abbreviation Hom.toIsometry
   body: ConcreteCategory.hom (C := QuadraticModuleCat R) f
 
 中文:
-缩写 Hom.toIsometry
-  签名: {X Y : QuadraticModuleCat R} (f : Hom X Y)
+缩写 态射.toIsometry
+  签名: {X Y : 二次模范畴 R} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := QuadraticModuleCat R) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, QuadraticModuleCat
@@ -198,7 +198,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
+  签名: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y] [模 R Y]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -219,8 +219,8 @@ lemma Hom.toIsometry_injective
 @[ext]
 
 中文:
-引理 Hom.toIsometry_injective
-  条件: (V W : QuadraticModuleCat.{v} R)
+引理 态射.toIsometry_injective
+  条件: (V W : 二次模范畴.{v} R)
   证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 @[ext]
@@ -240,7 +240,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : QuadraticModuleCat.{v} R} (f g : M ⟶ N) (h : f.toIsometry = g.toIsometry)
+  条件: {M N : 二次模范畴.{v} R} (f g : M ⟶ N) (h : f.toIsometry = g.toIsometry)
   证明: Hom.ext h
 
 Depends on / 依赖: Hom.ext
@@ -259,7 +259,7 @@ theorem toIsometry_comp
 
 中文:
 定理 toIsometry_comp
-  条件: {M N U : QuadraticModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ U)
+  条件: {M N U : 二次模范畴.{v} R} (f : M ⟶ N) (g : N ⟶ U)
   证明: rfl
 -/
 @[simp] theorem toIsometry_comp {M N U : QuadraticModuleCat.{v} R} (f : M ⟶ N) (g : N ⟶ U) :
@@ -276,7 +276,7 @@ theorem toIsometry_id
 
 中文:
 定理 toIsometry_id
-  条件: {M : QuadraticModuleCat.{v} R}
+  条件: {M : 二次模范畴.{v} R}
   证明: rfl
 -/
 @[simp] theorem toIsometry_id {M : QuadraticModuleCat.{v} R} :
@@ -296,7 +296,7 @@ instance hasForgetToModule
 
 中文:
 实例 hasForgetToModule
-  签名: : HasForget₂ (QuadraticModuleCat R) (ModuleCat R) where
+  签名: : 有Forget₂ (二次模范畴 R) (模范畴 R) where
   定义体: { obj := fun M => ModuleCat.of R M
       map := fun f => ModuleCat.ofHom f.toIsometry.toLinearMap }
 
@@ -322,7 +322,7 @@ theorem forget₂_obj
 
 中文:
 定理 forget₂_obj
-  条件: (X : QuadraticModuleCat R)
+  条件: (X : 二次模范畴 R)
   证明: rfl
 
 @[simp]
@@ -342,7 +342,7 @@ theorem forget₂_map
 
 中文:
 定理 forget₂_map
-  条件: (X Y : QuadraticModuleCat R) (f : X ⟶ Y)
+  条件: (X Y : 二次模范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_map (X Y : QuadraticModuleCat R) (f : X ⟶ Y) :
@@ -370,7 +370,7 @@ inv_hom_id := Hom.ext DFunLike.ext _ _ e.right_inv
 
 中文:
 定义 ofIso
-  签名: (e : Q₁.IsometryEquiv Q₂)
+  签名: (e : Q₁.等距等价 Q₂)
   定义体: ofHom e.toIsometry
   inv := ofHom e.symm.toIsometry
 hom_inv_id := Hom.ext DFunLike.ext _ _ e.left_inv
@@ -394,7 +394,7 @@ theorem ofIso_refl
 
 中文:
 定理 ofIso_refl
-  结论: ofIso (IsometryEquiv.refl Q₁) = .refl _
+  结论: ofIso (等距等价.refl Q₁) = .refl _
   证明: rfl
 -/
 @[simp] theorem ofIso_refl : ofIso (IsometryEquiv.refl Q₁) = .refl _ :=
@@ -411,7 +411,7 @@ theorem ofIso_symm
 
 中文:
 定理 ofIso_symm
-  条件: (e : Q₁.IsometryEquiv Q₂)
+  条件: (e : Q₁.等距等价 Q₂)
   结论: ofIso e.symm = (ofIso e).symm
   证明: rfl
 -/
@@ -428,7 +428,7 @@ theorem ofIso_trans
 
 中文:
 定理 ofIso_trans
-  条件: (e : Q₁.IsometryEquiv Q₂) (f : Q₂.IsometryEquiv Q₃)
+  条件: (e : Q₁.等距等价 Q₂) (f : Q₂.等距等价 Q₃)
   证明: rfl
 -/
 @[simp] theorem ofIso_trans (e : Q₁.IsometryEquiv Q₂) (f : Q₂.IsometryEquiv Q₃) :

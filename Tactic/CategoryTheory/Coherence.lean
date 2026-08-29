@@ -54,7 +54,7 @@ class LiftObj
 类 LiftObj
   参数: (X : C)
   公理与运算 (1 个):
-    - lift : FreeMonoidalCategory C
+    - lift : FreeMonoidal范畴 C
 -/
 class LiftObj (X : C) where
   protected lift : FreeMonoidalCategory C
@@ -99,7 +99,7 @@ class LiftHom
     - lift : LiftObj.lift X ⟶ LiftObj.lift Y
 
 中文:
-类 LiftHom
+类 Lift态射
   参数: {X Y : C} [LiftObj X] [LiftObj Y] (f : X ⟶ Y)
   公理与运算 (1 个):
     - lift : LiftObj.lift X ⟶ LiftObj.lift Y
@@ -282,7 +282,7 @@ instance whiskerRight
 
 中文:
 实例 whiskerRight
-  签名: {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [LiftHom f]
+  签名: {X Y : C} (f : X ⟶ Y) [LiftObj X] [LiftObj Y] [Lift态射 f]
   定义体: LiftHom.lift f ▷ LiftObj.lift Z
 
 Depends on / 依赖: LiftHom, LiftHom.lift, LiftObj, LiftObj.lift
@@ -455,7 +455,7 @@ lemma insert_id_lhs
 
 中文:
 引理 insert_id_lhs
-  条件: {C : 类型} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙 _ = g)
+  条件: {C : 类型} [范畴* C] {X Y : C} (f g : X ⟶ Y) (w : f ≫ 𝟙 _ = g)
   证明: by
   simpa using w
 -/
@@ -474,7 +474,7 @@ lemma insert_id_rhs
 
 中文:
 引理 insert_id_rhs
-  条件: {C : 类型} [Category* C] {X Y : C} (f g : X ⟶ Y) (w : f = g ≫ 𝟙 _)
+  条件: {C : 类型} [范畴* C] {X Y : C} (f g : X ⟶ Y) (w : f = g ≫ 𝟙 _)
   证明: by
   simpa using w
 -/

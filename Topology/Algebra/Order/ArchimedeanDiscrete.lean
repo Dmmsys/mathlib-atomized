@@ -93,8 +93,8 @@ instance [DiscreteTopology
     have := h.subsingleton_of_discreteTopology; false_of_nontrivial_of_subsingleton G
 
 中文:
-实例 [DiscreteTopology
-  签名: G] : IsCyclic G
+实例 [离散拓扑
+  签名: G] : 是循环 G
   定义体: by
   nontriviality G
   exact LinearOrderedCommGroup.isCyclic_iff_not_denselyOrdered.mpr fun h =>
@@ -130,8 +130,8 @@ lemma discrete_iff_cyclic
 
 中文:
 引理 discrete_iff_cyclic
-  条件: {H : Subgroup G}
-  结论: IsCyclic H ↔ DiscreteTopology H
+  条件: {H : 子群 G}
+  结论: 是循环 H ↔ 离散拓扑 H
   证明: by
   nontriviality G using isCyclic_of_subsingleton, Subsingleton.discreteTopology
   rw [Subgroup.isCyclic_iff_exists_zpowers_eq_top]

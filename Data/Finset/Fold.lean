@@ -43,7 +43,7 @@ definition fold
 
 中文:
 定义 fold
-  签名: (b : β) (f : α -> β) (s : Finset α)
+  签名: (b : β) (f : α -> β) (s : 有限集 α)
   定义体: (s.1.map f).fold op b
 -/
 def fold (b : β) (f : α -> β) (s : Finset α) : β :=
@@ -64,7 +64,7 @@ theorem fold_empty
 
 中文:
 定理 fold_empty
-  结论: (∅ : Finset α).fold op b f = b
+  结论: (∅ : 有限集 α).fold op b f = b
   证明: rfl
 
 @[simp]
@@ -144,7 +144,7 @@ theorem fold_singleton
 
 中文:
 定理 fold_singleton
-  结论: ({a} : Finset α).fold op b f = f a * b
+  结论: ({a} : 有限集 α).fold op b f = f a * b
   证明: rfl
 
 @[simp]
@@ -167,7 +167,7 @@ theorem fold_map
 
 中文:
 定理 fold_map
-  条件: {g : γ ↪ α} {s : Finset γ}
+  条件: {g : γ ↪ α} {s : 有限集 γ}
   结论: (s.map g).fold op b f = s.fold op b (f ∘ g)
   证明: by
   simp only [fold, map, Multiset.map_map]
@@ -193,7 +193,7 @@ theorem fold_image
 
 中文:
 定理 fold_image
-  结论: [DecidableEq α] {g : γ -> α} {s : Finset γ}
+  结论: [DecidableEq α] {g : γ -> α} {s : 有限集 γ}
   证明: by
   simp only [fold, image_val_of_injOn H, Multiset.map_map]
 
@@ -267,7 +267,7 @@ theorem fold_const
 
 中文:
 定理 fold_const
-  条件: [hd : Decidable (s = ∅)] (c : β) (h : op c (op b c) = op b c)
+  条件: [hd : 可判定 (s = ∅)] (c : β) (h : op c (op b c) = op b c)
   证明: by
   classical
     induction s using Finset.induction_on generalizing hd with
@@ -303,7 +303,7 @@ theorem fold_hom
 
 中文:
 定理 fold_hom
-  结论: {op' : γ -> γ -> γ} [Std.Commutative op'] [Std.Associative op'] {m : β -> γ}
+  结论: {op' : γ -> γ -> γ} [Std.交换 op'] [Std.结合 op'] {m : β -> γ}
   证明: by
   rw [fold]; rw [fold]; rw [← Multiset.fold_hom op hm]; rw [Multiset.map_map]
   simp only [Function.comp_apply]
@@ -326,7 +326,7 @@ theorem fold_disjUnion
 
 中文:
 定理 fold_disjUnion
-  条件: {s₁ s₂ : Finset α} {b₁ b₂ : β} (h)
+  条件: {s₁ s₂ : 有限集 α} {b₁ b₂ : β} (h)
   证明: (congr_arg _ <| Multiset.map_add _ _ _).trans (Multiset.fold_add _ _ _ _ _)
 
 Depends on / 依赖: Multiset, Multiset.fold_add, Multiset.map_add, congr_arg, fold_add, map_add
@@ -349,7 +349,7 @@ theorem fold_union_inter
 
 中文:
 定理 fold_union_inter
-  条件: [DecidableEq α] {s₁ s₂ : Finset α} {b₁ b₂ : β}
+  条件: [DecidableEq α] {s₁ s₂ : 有限集 α} {b₁ b₂ : β}
   证明: by
   unfold fold
   rw [← fold_add op]; rw [← Multiset.map_add]; rw [union_val]; rw [inter_val]; rw [union_add_inter]; rw [Multiset.map_add]; rw [hc.comm]; rw [fold_add]
@@ -410,7 +410,7 @@ theorem fold_image_idem
 
 中文:
 定理 fold_image_idem
-  条件: [DecidableEq α] {g : γ -> α} {s : Finset γ} [hi : Std.IdempotentOp op]
+  条件: [DecidableEq α] {g : γ -> α} {s : 有限集 γ} [hi : Std.IdempotentOp op]
   证明: by
   induction s using Finset.cons_induction with
   | empty => rw [fold_empty, image_empty, fold_empty]
@@ -585,7 +585,7 @@ theorem fold_union_empty_singleton
 
 中文:
 定理 fold_union_empty_singleton
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: by
   induction s using Finset.induction_on with
   | empty => simp only [fold_empty]
@@ -609,7 +609,7 @@ theorem fold_sup_bot_singleton
 
 中文:
 定理 fold_sup_bot_singleton
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: fold_union_empty_singleton s
 
 Depends on / 依赖: fold_union_empty_singleton
@@ -632,7 +632,7 @@ theorem le_fold_min
 
 中文:
 定理 le_fold_min
-  结论: c <= s.fold min b f ↔ c <= b ∧ 对任意 x in s, c <= f x
+  结论: c <= s.fold 最小值 b f ↔ c <= b ∧ 对任意 x in s, c <= f x
   证明: fold_op_rel_iff_and le_min_iff
 
 Depends on / 依赖: fold_op_rel_iff_and, le_min_iff
@@ -655,7 +655,7 @@ theorem fold_min_le
 
 中文:
 定理 fold_min_le
-  结论: s.fold min b f <= c ↔ b <= c ∨ 存在 x in s, f x <= c
+  结论: s.fold 最小值 b f <= c ↔ b <= c ∨ 存在 x in s, f x <= c
   证明: by
   change _ >= _ ↔ _
   apply fold_op_rel_iff_or
@@ -682,7 +682,7 @@ theorem lt_fold_min
 
 中文:
 定理 lt_fold_min
-  结论: c < s.fold min b f ↔ c < b ∧ 对任意 x in s, c < f x
+  结论: c < s.fold 最小值 b f ↔ c < b ∧ 对任意 x in s, c < f x
   证明: fold_op_rel_iff_and lt_min_iff
 
 Depends on / 依赖: fold_op_rel_iff_and, lt_min_iff
@@ -705,7 +705,7 @@ theorem fold_min_lt
 
 中文:
 定理 fold_min_lt
-  结论: s.fold min b f < c ↔ b < c ∨ 存在 x in s, f x < c
+  结论: s.fold 最小值 b f < c ↔ b < c ∨ 存在 x in s, f x < c
   证明: by
   change _ > _ ↔ _
   apply fold_op_rel_iff_or
@@ -737,7 +737,7 @@ theorem fold_max_le
 
 中文:
 定理 fold_max_le
-  结论: s.fold max b f <= c ↔ b <= c ∧ 对任意 x in s, f x <= c
+  结论: s.fold 最大值 b f <= c ↔ b <= c ∧ 对任意 x in s, f x <= c
   证明: by
   change _ >= _ ↔ _
   apply fold_op_rel_iff_and
@@ -764,7 +764,7 @@ theorem le_fold_max
 
 中文:
 定理 le_fold_max
-  结论: c <= s.fold max b f ↔ c <= b ∨ 存在 x in s, c <= f x
+  结论: c <= s.fold 最大值 b f ↔ c <= b ∨ 存在 x in s, c <= f x
   证明: fold_op_rel_iff_or le_max_iff
 
 Depends on / 依赖: fold_op_rel_iff_or, le_max_iff
@@ -787,7 +787,7 @@ theorem fold_max_lt
 
 中文:
 定理 fold_max_lt
-  结论: s.fold max b f < c ↔ b < c ∧ 对任意 x in s, f x < c
+  结论: s.fold 最大值 b f < c ↔ b < c ∧ 对任意 x in s, f x < c
   证明: by
   change _ > _ ↔ _
   apply fold_op_rel_iff_and
@@ -814,7 +814,7 @@ theorem lt_fold_max
 
 中文:
 定理 lt_fold_max
-  结论: c < s.fold max b f ↔ c < b ∨ 存在 x in s, c < f x
+  结论: c < s.fold 最大值 b f ↔ c < b ∨ 存在 x in s, c < f x
   证明: fold_op_rel_iff_or lt_max_iff
 
 Depends on / 依赖: fold_op_rel_iff_or, lt_max_iff

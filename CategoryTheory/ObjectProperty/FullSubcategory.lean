@@ -47,7 +47,7 @@ structure FullSubcategory
     - property : P obj
 
 中文:
-结构 FullSubcategory
+结构 满子范畴
   参数: where
   公理与运算 (2 个):
     - obj : C
@@ -68,8 +68,8 @@ instance FullSubcategory.category
   body: inferInstanceAs (Category (InducedCategory _ FullSubcategory.obj))
 
 中文:
-实例 FullSubcategory.category
-  签名: : Category.{v} P.FullSubcategory
+实例 满子范畴.category
+  签名: : 范畴.{v} P.满子范畴
   定义体: inferInstanceAs (Category (InducedCategory _ FullSubcategory.obj))
 
 Depends on / 依赖: Category, FullSubcategory, FullSubcategory.obj, InducedCategory
@@ -88,8 +88,8 @@ instance [P.Nonempty]
 @[ext]
 
 中文:
-实例 [P.Nonempty]
-  签名: : Nonempty P.FullSubcategory
+实例 [P.非空]
+  签名: : 非空 P.满子范畴
   定义体: Nonempty.intro ⟨P.arbitrary, P.prop_arbitrary⟩
 
 @[ext]
@@ -111,7 +111,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : P.FullSubcategory} {f g : X ⟶ Y} (h : f.hom = g.hom)
+  条件: {X Y : P.满子范畴} {f g : X ⟶ Y} (h : f.hom = g.hom)
   结论: f = g
   证明: InducedCategory.hom_ext h
 
@@ -136,7 +136,7 @@ definition ι
 
 中文:
 定义 ι
-  签名: : P.FullSubcategory ⥤ C
+  签名: : P.满子范畴 ⥤ C
   定义体: inducedFunctor FullSubcategory.obj
 
 @[simp]
@@ -221,8 +221,8 @@ lemma FullSubcategory.id_hom
 @[simp, reassoc]
 
 中文:
-引理 FullSubcategory.id_hom
-  条件: (X : P.FullSubcategory)
+引理 满子范畴.id_hom
+  条件: (X : P.满子范畴)
   证明: rfl
 
 @[simp, reassoc]
@@ -240,8 +240,8 @@ lemma FullSubcategory.comp_hom
   proof: rfl
 
 中文:
-引理 FullSubcategory.comp_hom
-  条件: {X Y Z : P.FullSubcategory} (f : X ⟶ Y) (g : Y ⟶ Z)
+引理 满子范畴.comp_hom
+  条件: {X Y Z : P.满子范畴} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma FullSubcategory.comp_hom {X Y Z : P.FullSubcategory} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -260,7 +260,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {X Y : P.FullSubcategory} (f : X.obj ⟶ Y.obj)
+  签名: {X Y : P.满子范畴} (f : X.obj ⟶ Y.obj)
   定义体: f
 -/
 def homMk {X Y : P.FullSubcategory} (f : X.obj ⟶ Y.obj) : X ⟶ Y where
@@ -277,7 +277,7 @@ lemma homMk_surjective
 
 中文:
 引理 homMk_surjective
-  条件: {X Y : P.FullSubcategory}
+  条件: {X Y : P.满子范畴}
   证明: fun f => ⟨f.hom, rfl⟩
 
 Depends on / 依赖: f.hom
@@ -313,7 +313,7 @@ instance full_ι
 
 中文:
 实例 full_ι
-  签名: : P.ι.Full
+  签名: : P.ι.满
   定义体: P.fullyFaithfulι.full
 
 Depends on / 依赖: P.fullyFaithful
@@ -329,7 +329,7 @@ instance faithful_ι
 
 中文:
 实例 faithful_ι
-  签名: : P.ι.Faithful
+  签名: : P.ι.忠实
   定义体: P.fullyFaithfulι.faithful
 
 Depends on / 依赖: P.fullyFaithful, faithful
@@ -350,7 +350,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : P.FullSubcategory} (e : X.obj ≅ Y.obj)
+  签名: {X Y : P.满子范畴} (e : X.obj ≅ Y.obj)
   定义体: homMk e.hom
   inv := homMk e.inv
 
@@ -375,7 +375,7 @@ lemma isoHom_inv_id_hom
 
 中文:
 引理 isoHom_inv_id_hom
-  条件: {X Y : P.FullSubcategory} (e : X ≅ Y)
+  条件: {X Y : P.满子范畴} (e : X ≅ Y)
   证明: P.ι.congr_map e.hom_inv_id
 
 @[reassoc (attr := simp)]
@@ -397,7 +397,7 @@ lemma isoInv_hom_id_hom
 
 中文:
 引理 isoInv_hom_id_hom
-  条件: {X Y : P.FullSubcategory} (e : X ≅ Y)
+  条件: {X Y : P.满子范畴} (e : X ≅ Y)
   证明: P.ι.congr_map e.inv_hom_id
 
 Depends on / 依赖: congr_map, e.inv_hom_id, inv_hom_id
@@ -421,7 +421,7 @@ lemma hom_inv
 
 中文:
 引理 hom_inv
-  条件: {X Y : P.FullSubcategory} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : P.满子范畴} (f : X ⟶ Y) [是同构 f]
   结论: (inv f).hom = inv f.hom
   证明: IsIso.eq_inv_of_hom_inv_id (P.ι.congr_map (asIso f).hom_inv_id)
 
@@ -441,8 +441,8 @@ lemma isIso_hom_iff
 
 中文:
 引理 isIso_hom_iff
-  条件: {X Y : P.FullSubcategory} (f : X ⟶ Y)
-  结论: IsIso f.hom ↔ IsIso f
+  条件: {X Y : P.满子范畴} (f : X ⟶ Y)
+  结论: 是同构 f.hom ↔ 是同构 f
   证明: ⟨fun _ => (P.isoMk (asIso f.hom)).isIso_hom, fun _ => inferInstance⟩
 
 Depends on / 依赖: P.isoMk, f.hom, isIso_hom
@@ -562,7 +562,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : C ⥤ FullSubcategory P where
+  签名: : C ⥤ 满子范畴 P where
   定义体: ⟨F.obj X, hF X⟩
   map f := homMk (F.map f)
 
@@ -630,8 +630,8 @@ instance [F.Faithful]
   body: Functor.Faithful.of_comp_iso (P.liftCompιIso F hF)
 
 中文:
-实例 [F.Faithful]
-  签名: : (P.lift F hF).Faithful
+实例 [F.忠实]
+  签名: : (P.lift F hF).忠实
   定义体: Functor.Faithful.of_comp_iso (P.liftCompιIso F hF)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_iso, P.liftComp, of_comp_iso
@@ -648,8 +648,8 @@ instance [F.Full]
   body: Functor.Full.of_comp_faithful_iso (P.liftCompιIso F hF)
 
 中文:
-实例 [F.Full]
-  签名: : (P.lift F hF).Full
+实例 [F.满]
+  签名: : (P.lift F hF).满
   定义体: Functor.Full.of_comp_faithful_iso (P.liftCompιIso F hF)
 
 Depends on / 依赖: Functor, Functor.Full.of_comp_faithful_iso, P.liftComp, of_comp_faithful_iso

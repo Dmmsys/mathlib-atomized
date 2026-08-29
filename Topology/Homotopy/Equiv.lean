@@ -53,13 +53,13 @@ structure HomotopyEquiv
     - right_inv : (toFun.comp invFun).Homotopic (ContinuousMap.id Y)
 
 中文:
-结构 HomotopyEquiv
-  参数: (X : 类型u) (Y : 类型v) [TopologicalSpace X] [TopologicalSpace Y]
+结构 同伦等价
+  参数: (X : 类型u) (Y : 类型v) [拓扑空间 X] [拓扑空间 Y]
   公理与运算 (4 个):
     - toFun : C(X, Y)
     - invFun : C(Y, X)
-    - left_inv : (invFun.comp toFun).Homotopic (ContinuousMap.id X)
-    - right_inv : (toFun.comp invFun).Homotopic (ContinuousMap.id Y)
+    - left_inv : (invFun.comp toFun).同伦 (连续映射.id X)
+    - right_inv : (toFun.comp invFun).同伦 (连续映射.id Y)
 -/
 structure HomotopyEquiv (X : Type u) (Y : Type v) [TopologicalSpace X] [TopologicalSpace Y] where
   /-- The forward map of a homotopy.
@@ -110,8 +110,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (h : HomotopyEquiv X Y)
-  结论: Continuous h
+  条件: (h : 同伦等价 X Y)
+  结论: 连续 h
   证明: h.toFun.continuous
 
 Depends on / 依赖: continuous, h.toFun.continuous
@@ -224,7 +224,7 @@ theorem coe_invFun
 
 中文:
 定理 coe_invFun
-  条件: (h : HomotopyEquiv X Y)
+  条件: (h : 同伦等价 X Y)
   结论: (⇑h.invFun : Y -> X) = ⇑h.symm
   证明: rfl
 -/
@@ -285,7 +285,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (X : 类型u) [TopologicalSpace X]
+  签名: (X : 类型u) [拓扑空间 X]
   定义体: (Homeomorph.refl X).toHomotopyEquiv
 
 Depends on / 依赖: Homeomorph, Homeomorph.refl, toHomotopyEquiv
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomotopyEquiv Unit Unit)
+  签名: 可居 (同伦等价 单元 单元)
   定义体: ⟨refl Unit⟩
 -/
 instance : Inhabited (HomotopyEquiv Unit Unit) :=
@@ -410,7 +410,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {ι : 类型} {X Y : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  签名: {ι : 类型} {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: .piMap fun i => (h i).toFun
   invFun := .piMap fun i => (h i).invFun
   left_inv := .piMap fun i => (h i).left_inv
@@ -445,7 +445,7 @@ theorem refl_toHomotopyEquiv
 
 中文:
 定理 refl_toHomotopyEquiv
-  条件: (X : 类型u) [TopologicalSpace X]
+  条件: (X : 类型u) [拓扑空间 X]
   证明: rfl
 
 @[simp]

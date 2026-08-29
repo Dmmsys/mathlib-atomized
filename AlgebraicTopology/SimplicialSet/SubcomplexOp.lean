@@ -32,7 +32,7 @@ definition op
 
 中文:
 定义 op
-  签名: : X.op.Subcomplex where
+  签名: : X.op.子复形 where
   定义体: A.obj
   map _ := A.map _
 -/

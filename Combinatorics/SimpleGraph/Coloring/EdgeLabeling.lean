@@ -40,7 +40,7 @@ definition EdgeLabeling
 
 中文:
 定义 EdgeLabeling
-  签名: (G : SimpleGraph V) (K : 类型)
+  签名: (G : 简单图 V) (K : 类型)
   定义体: G.edgeSet -> K
 
 Depends on / 依赖: G.edgeSet, edgeSet
@@ -58,7 +58,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: V] [Fintype G.edgeSet] [Fintype K] : Fintype (EdgeLabeling G K)
+  签名: V] [有限类型 G.edgeSet] [有限类型 K] : 有限类型 (EdgeLabeling G K)
   定义体: inferInstanceAs Fintype (G.edgeSet -> K)
 
 Depends on / 依赖: Fintype, G.edgeSet, edgeSet
@@ -75,8 +75,8 @@ instance [Finite
   body: Pi.finite
 
 中文:
-实例 [Finite
-  签名: G.edgeSet] [Finite K] : Finite (EdgeLabeling G K)
+实例 [有限
+  签名: G.edgeSet] [有限 K] : 有限 (EdgeLabeling G K)
   定义体: Pi.finite
 
 Depends on / 依赖: Pi.finite, finite
@@ -93,8 +93,8 @@ instance [Nonempty
   body: Pi.instNonempty
 
 中文:
-实例 [Nonempty
-  签名: K] : Nonempty (EdgeLabeling G K)
+实例 [非空
+  签名: K] : 非空 (EdgeLabeling G K)
   定义体: Pi.instNonempty
 
 Depends on / 依赖: Pi.instNonempty, instNonempty
@@ -111,8 +111,8 @@ instance [Inhabited
   body: inferInstanceAs Inhabited (G.edgeSet -> K)
 
 中文:
-实例 [Inhabited
-  签名: K] : Inhabited (EdgeLabeling G K)
+实例 [可居
+  签名: K] : 可居 (EdgeLabeling G K)
   定义体: inferInstanceAs Inhabited (G.edgeSet -> K)
 
 Depends on / 依赖: G.edgeSet, Inhabited, edgeSet
@@ -129,8 +129,8 @@ instance [Subsingleton
   body: Pi.instSubsingleton
 
 中文:
-实例 [Subsingleton
-  签名: K] : Subsingleton (EdgeLabeling G K)
+实例 [子单例
+  签名: K] : 子单例 (EdgeLabeling G K)
   定义体: Pi.instSubsingleton
 
 Depends on / 依赖: Pi.instSubsingleton, instSubsingleton
@@ -147,8 +147,8 @@ instance [Nonempty
   body: Function.nontrivial
 
 中文:
-实例 [Nonempty
-  签名: G.edgeSet] [Nontrivial K] : Nontrivial (EdgeLabeling G K)
+实例 [非空
+  签名: G.edgeSet] [非平凡 K] : 非平凡 (EdgeLabeling G K)
   定义体: Function.nontrivial
 
 Depends on / 依赖: Function, Function.nontrivial, nontrivial
@@ -165,8 +165,8 @@ instance [Unique
   body: inferInstanceAs Unique (G.edgeSet -> K)
 
 中文:
-实例 [Unique
-  签名: K] : Unique (EdgeLabeling G K)
+实例 [唯一
+  签名: K] : 唯一 (EdgeLabeling G K)
   定义体: inferInstanceAs Unique (G.edgeSet -> K)
 
 Depends on / 依赖: G.edgeSet, Unique, edgeSet
@@ -202,7 +202,7 @@ theorem card_topEdgeLabeling
 
 中文:
 定理 card_topEdgeLabeling
-  条件: [DecidableEq V] [Fintype V] [Fintype K]
+  条件: [DecidableEq V] [有限类型 V] [有限类型 K]
   证明: Fintype.card_fun.trans (by rw [← edgeFinset_card, card_edgeFinset_top_eq_card_choose_two])
 
 Depends on / 依赖: Fintype, Fintype.card_fun.trans, card_edgeFinset_top_eq_card_choose_two, card_fun, edgeFinset_card
@@ -223,7 +223,7 @@ definition get
 
 中文:
 定义 get
-  签名: (C : EdgeLabeling G K) (x y : V) (h : G.Adj x y)
+  签名: (C : EdgeLabeling G K) (x y : V) (h : G.伴随 x y)
   定义体: C ⟨s(x, y), h⟩
 -/
 def get (C : EdgeLabeling G K) (x y : V) (h : G.Adj x y) : K :=
@@ -240,7 +240,7 @@ lemma get_eq
 
 中文:
 引理 get_eq
-  条件: (C : EdgeLabeling G K) (x y : V) (h : G.Adj x y)
+  条件: (C : EdgeLabeling G K) (x y : V) (h : G.伴随 x y)
   结论: C.get x y h = C ⟨s(x, y), h⟩
   证明: rfl
 -/
@@ -377,7 +377,7 @@ theorem get_pullback
 
 中文:
 定理 get_pullback
-  条件: {f : G' ↪g G} (x y) (h : G'.Adj x y)
+  条件: {f : G' ↪g G} (x y) (h : G'.伴随 x y)
   证明: rfl
 
 @[simp]
@@ -420,7 +420,7 @@ theorem compRight_get
 
 中文:
 定理 compRight_get
-  条件: (f : K -> K') (x y) (h : G.Adj x y)
+  条件: (f : K -> K') (x y) (h : G.伴随 x y)
   证明: rfl
 -/
 theorem compRight_get (f : K -> K') (x y) (h : G.Adj x y) :
@@ -436,7 +436,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (f : 对任意 x y : V, G.Adj x y -> K)
+  签名: (f : 对任意 x y : V, G.伴随 x y -> K)
 -/
 def mk (f : forall x y : V, G.Adj x y -> K)
     (f_symm : forall (x y : V) (H : G.Adj x y), f y x H.symm = f x y H) : EdgeLabeling G K
@@ -456,7 +456,7 @@ theorem get_mk
 
 中文:
 定理 get_mk
-  条件: (f : 对任意 x y : V, G.Adj x y -> K) (f_symm) (x y : V) (h : G.Adj x y)
+  条件: (f : 对任意 x y : V, G.伴随 x y -> K) (f_symm) (x y : V) (h : G.伴随 x y)
   证明: rfl
 -/
 theorem get_mk (f : forall x y : V, G.Adj x y -> K) (f_symm) (x y : V) (h : G.Adj x y) :
@@ -519,7 +519,7 @@ instance [DecidableRel
 
 中文:
 实例 [DecidableRel
-  签名: G.Adj] [DecidableEq K] (k
+  签名: G.伴随] [DecidableEq K] (k
   定义体: fun _ _ =>
   decidable_of_iff' _ (EdgeLabeling.labelGraph_adj _ _)
 -/
@@ -693,7 +693,7 @@ definition toTopEdgeLabeling
 
 中文:
 定义 toTopEdgeLabeling
-  签名: (G : SimpleGraph V) [DecidableRel G.Adj]
+  签名: (G : 简单图 V) [DecidableRel G.伴随]
   定义体: EdgeLabeling.mk (fun x y _ => if G.Adj x y then 1 else 0) (by simp [G.adj_comm])
 
 @[simp]
@@ -716,7 +716,7 @@ theorem toTopEdgeLabeling_get
 
 中文:
 定理 toTopEdgeLabeling_get
-  条件: {G : SimpleGraph V} [DecidableRel G.Adj] {x y : V} (H : x != y)
+  条件: {G : 简单图 V} [DecidableRel G.伴随] {x y : V} (H : x != y)
   证明: rfl
 
 @[simp]
@@ -738,7 +738,7 @@ theorem toTopEdgeLabeling_labelGraph
 
 中文:
 定理 toTopEdgeLabeling_labelGraph
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj]
+  条件: (G : 简单图 V) [DecidableRel G.伴随]
   证明: by ext x y; simpa [imp_false] using G.ne_of_adj
 
 @[simp]
@@ -759,7 +759,7 @@ theorem toTopEdgeLabeling_labelGraph_compl
 
 中文:
 定理 toTopEdgeLabeling_labelGraph_compl
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj]
+  条件: (G : 简单图 V) [DecidableRel G.伴随]
   证明: by ext x y; simp [imp_false]
 
 Depends on / 依赖: imp_false

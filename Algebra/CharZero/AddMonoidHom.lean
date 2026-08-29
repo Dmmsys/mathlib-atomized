@@ -27,8 +27,8 @@ theorem CharZero.of_addMonoidHom
     rwa [← map_natCast' _ he, ← map_natCast' _ he, he'.eq_iff, Nat.cast_inj] at h
 
 中文:
-定理 CharZero.of_addMonoidHom
-  结论: {M N : 类型} [AddCommMonoidWithOne M] [AddCommMonoidWithOne N]
+定理 特征零.of_addMonoidHom
+  结论: {M N : 类型} [加法交换带幺幺半群 M] [加法交换带幺幺半群 N]
   证明: by
     rwa [← map_natCast' _ he, ← map_natCast' _ he, he'.eq_iff, Nat.cast_inj] at h
 

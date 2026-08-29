@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (ContinuousMonoidHom A B)
+  签名: 拓扑空间 (余ntinuous幺半群态射 A B)
   定义体: TopologicalSpace.induced toContinuousMap ContinuousMap.compactOpen
 
 @[to_additive]
@@ -103,7 +103,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: : ContinuousEvalConst (ContinuousMonoidHom A B) A B
+  签名: : 余ntinuousEvalConst (余ntinuous幺半群态射 A B) A B
   定义体: .of_continuous_forget (isInducing_toContinuousMap A B).continuous
 
 @[to_additive]
@@ -184,7 +184,7 @@ exact isClosed_eq (continuous_eval_const (x
 
 中文:
 定理 isClosedEmbedding_toContinuousMap
-  条件: [ContinuousMul B] [T2Space B]
+  条件: [连续乘法 B] [T2空间 B]
   证明: isEmbedding_toContinuousMap A B
   isClosed_range := by
     simp only [range_toContinuousMap, Set.ofPred_and, Set.ofPred_forall]
@@ -218,8 +218,8 @@ instance [T2Space
 @[to_additive]
 
 中文:
-实例 [T2Space
-  签名: B] : T2Space (ContinuousMonoidHom A B)
+实例 [T2空间
+  签名: B] : T2空间 (余ntinuous幺半群态射 A B)
   定义体: (isEmbedding_toContinuousMap A B).t2Space
 
 @[to_additive]
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalGroup (ContinuousMonoidHom A E)
+  签名: 是拓扑群 (余ntinuous幺半群态射 A E)
   定义体: let hi := isInducing_toContinuousMap A E
   let hc := hi.continuous
   { continuous_mul := hi.continuous_iff.mpr (continuous_mul.comp (Continuous.prodMap hc hc))
@@ -275,7 +275,7 @@ theorem continuous_of_continuous_uncurry
 
 中文:
 定理 continuous_of_continuous_uncurry
-  结论: {A : 类型} [TopologicalSpace A]
+  结论: {A : 类型} [拓扑空间 A]
   证明: (isInducing_toContinuousMap _ _).continuous_iff.mpr
     (ContinuousMap.continuous_of_continuous_uncurry _ h)
 
@@ -304,7 +304,7 @@ theorem continuous_comp
 
 中文:
 定理 continuous_comp
-  条件: [LocallyCompactSpace B]
+  条件: [局部紧空间 B]
   证明: (isInducing_toContinuousMap A C).continuous_iff.2
     ContinuousMap.continuous_comp'.comp
       ((isInducing_toContinuousMap A B).prodMap (isInducing_toContinuousMap B C)).continuous
@@ -333,7 +333,7 @@ theorem continuous_comp_left
 
 中文:
 定理 continuous_comp_left
-  条件: (f : ContinuousMonoidHom A B)
+  条件: (f : 余ntinuous幺半群态射 A B)
   证明: (isInducing_toContinuousMap A C).continuous_iff.2
     f.toContinuousMap.continuous_precomp.comp (isInducing_toContinuousMap B C).continuous
 
@@ -358,7 +358,7 @@ theorem continuous_comp_right
 
 中文:
 定理 continuous_comp_right
-  条件: (f : ContinuousMonoidHom B C)
+  条件: (f : 余ntinuous幺半群态射 B C)
   证明: (isInducing_toContinuousMap A C).continuous_iff.2
     f.toContinuousMap.continuous_postcomp.comp (isInducing_toContinuousMap A B).continuous
 
@@ -385,7 +385,7 @@ definition compLeft
 
 中文:
 定义 compLeft
-  签名: (f : ContinuousMonoidHom A B)
+  签名: (f : 余ntinuous幺半群态射 A B)
   定义体: g.comp f
   map_one' := rfl
   map_mul' _g _h := rfl
@@ -416,7 +416,7 @@ definition compRight
 
 中文:
 定义 compRight
-  签名: {B : 类型} [CommGroup B] [TopologicalSpace B] [IsTopologicalGroup B]
+  签名: {B : 类型} [交换群 B] [拓扑空间 B] [是拓扑群 B]
   定义体: f.comp g
   map_one' := ext fun _a => map_one f
   map_mul' g h := ext fun a => map_mul f (g a) (h a)
@@ -448,7 +448,7 @@ lemma isClosedEmbedding_coe
 
 中文:
 引理 isClosedEmbedding_coe
-  结论: IsClosedEmbedding ((⇑) : (A ->ₜ* B) -> A -> B)
+  结论: 是闭嵌入 ((⇑) : (A ->ₜ* B) -> A -> B)
   证明: ContinuousMap.isHomeomorph_coe.isClosedEmbedding.comp isClosedEmbedding_toContinuousMap ..
 
 @[to_additive]
@@ -468,8 +468,8 @@ instance [CompactSpace
   body: ContinuousMonoidHom.isClosedEmbedding_coe.compactSpace
 
 中文:
-实例 [CompactSpace
-  签名: B] : CompactSpace (A ->ₜ* B)
+实例 [紧空间
+  签名: B] : 紧空间 (A ->ₜ* B)
   定义体: ContinuousMonoidHom.isClosedEmbedding_coe.compactSpace
 
 Depends on / 依赖: ContinuousMonoidHom, ContinuousMonoidHom.isClosedEmbedding_coe.compactSpace, compactSpace, isClosedEmbedding_coe
@@ -501,7 +501,7 @@ theorem locallyCompactSpace_of_equicontinuousAt
 
 中文:
 定理 locallyCompactSpace_of_equicontinuousAt
-  结论: (U : Set X) (V : Set Y)
+  结论: (U : 集合 X) (V : 集合 Y)
   证明: by
   replace h := equicontinuous_of_equicontinuousAt_one _ h
   obtain ⟨W, hWo, hWV, hWc⟩ := local_compact_nhds hV
@@ -567,7 +567,7 @@ Nat.rec ⟨U0, hU0o⟩ fun _ S => let h := exists_closed_nhds_one_inv_eq_mul_sub
 
 中文:
 定理 locallyCompactSpace_of_hasBasis
-  结论: (V : 自然数 -> Set Y)
+  结论: (V : 自然数 -> 集合 Y)
   证明: by
   obtain ⟨U0, hU0c, hU0o⟩ := exists_compact_mem_nhds (1 : X)
   let U_aux : Nat -> {S : Set X | S in nhds 1} :=

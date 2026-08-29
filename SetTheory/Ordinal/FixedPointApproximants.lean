@@ -65,7 +65,7 @@ have h := lift_mk_le_lift_mk_of_injective injOn_iff_injective.1 h_inj
 
 中文:
 定理 not_injective_limitation_set
-  结论: ¬ InjOn g (Iio (ord <| succ #α))
+  结论: ¬ 单射限制 g (左无界右开区间 (ord <| succ #α))
   证明: by
   intro h_inj
 have h := lift_mk_le_lift_mk_of_injective injOn_iff_injective.1 h_inj
@@ -107,7 +107,7 @@ termination_by a
 
 中文:
 定义 lfpApprox
-  签名: (a : Ordinal.{u})
+  签名: (a : 序数.{u})
   定义体: x ⊔ ⨆ b < a, f (lfpApprox b)
 termination_by a
 
@@ -133,7 +133,7 @@ theorem lfpApprox_mono_right
 
 中文:
 定理 lfpApprox_mono_right
-  结论: Monotone (lfpApprox f x)
+  结论: 递增 (lfpApprox f x)
   证明: by
   intro a b h
   rw [lfpApprox]; rw [lfpApprox]
@@ -188,7 +188,7 @@ theorem le_lfpApprox
 
 中文:
 定理 le_lfpApprox
-  条件: {a : Ordinal}
+  条件: {a : 序数}
   结论: x <= lfpApprox f x a
   证明: by
   rw [lfpApprox]
@@ -212,7 +212,7 @@ exact le_sup_of_le_right le_iSup₂_of_le a h le_rfl
 
 中文:
 定理 apply_lfpApprox_le_lfpApprox_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   证明: by
   nth_rw 2 [lfpApprox]
 exact le_sup_of_le_right le_iSup₂_of_le a h le_rfl
@@ -238,7 +238,7 @@ apply sup_le hx.trans (f.mono (le_lfpApprox f))
 
 中文:
 定理 lfpApprox_add_one
-  条件: (hx : x <= f x) (a : Ordinal)
+  条件: (hx : x <= f x) (a : 序数)
   证明: by
   apply (apply_lfpApprox_le_lfpApprox_of_lt f (lt_add_one a)).antisymm'
   rw [lfpApprox]
@@ -270,7 +270,7 @@ theorem lfpApprox_of_isSuccLimit
 
 中文:
 定理 lfpApprox_of_isSuccLimit
-  条件: {a : Ordinal} (ha : Order.IsSuccLimit a)
+  条件: {a : 序数} (ha : Order.是SuccLimit a)
   证明: by
   apply (iSup_le fun b => lfpApprox_mono_right f b.2.le).antisymm'
   rw [lfpApprox]; rw [sup_le_iff]; rw [iSup_le_iff]
@@ -304,7 +304,7 @@ theorem lfpApprox_mono_left
 
 中文:
 定理 lfpApprox_mono_left
-  结论: Monotone (lfpApprox : (α ->o α) -> _)
+  结论: 递增 (lfpApprox : (α ->o α) -> _)
   证明: by
   intro f g h x a
   induction a using WellFoundedLT.induction with | ind i IH
@@ -333,7 +333,7 @@ exact sup_le_sup h iSup₂_mono fun j hj => f.mono (IH j hj)
 
 中文:
 定理 lfpApprox_mono_mid
-  结论: Monotone (lfpApprox f)
+  结论: 递增 (lfpApprox f)
   证明: by
   intro x₁ x₂ h a
   induction a using WellFoundedLT.induction with | ind i IH
@@ -483,7 +483,7 @@ theorem lfpApprox_eq_of_fixedPoint_or_zero
 
 中文:
 定理 lfpApprox_eq_of_fixedPoint_or_zero
-  条件: (hx : x <= f x) (o : Ordinal)
+  条件: (hx : x <= f x) (o : 序数)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases eq_or_ne o 0 with (rfl | ho)
@@ -529,7 +529,7 @@ have h_ninj := not_injective_limitation_set lfpApprox f x
   · intro h_eq; rw [Subtype.coe_inj] a
 
 中文:
-定理 exists_lfpApprox_eq_lfpApprox
+定理 存在_lfpApprox_eq_lfpApprox
   结论: 存在 a < ord succ #α, 存在 b < ord succ #α,
   证明: by
 have h_ninj := not_injective_limitation_set lfpApprox f x
@@ -666,7 +666,7 @@ use ord succ #α
 
 中文:
 定理 lfp_mem_range_lfpApprox
-  结论: f.lfp in Set.range (lfpApprox f ⊥)
+  结论: f.lfp in 集合.range (lfpApprox f ⊥)
   证明: by
 use ord succ #α
   exact lfpApprox_ord_eq_lfp f
@@ -761,7 +761,7 @@ termination_by a
 
 中文:
 定义 gfpApprox
-  签名: (a : Ordinal.{u})
+  签名: (a : 序数.{u})
   定义体: x ⊓ ⨅ b < a, f (gfpApprox b)
 termination_by a
 
@@ -807,7 +807,7 @@ theorem gfpApprox_anti_right
 
 中文:
 定理 gfpApprox_anti_right
-  结论: Antitone (gfpApprox f x)
+  结论: 递减 (gfpApprox f x)
   证明: lfpApprox_mono_right f.dual
 
 @[deprecated (since := "2026-03-30")] alias gfpApprox_antitone := gfpApprox_anti_right
@@ -830,7 +830,7 @@ theorem gfpApprox_le
 
 中文:
 定理 gfpApprox_le
-  条件: {a : Ordinal}
+  条件: {a : 序数}
   结论: gfpApprox f x a <= x
   证明: le_lfpApprox f.dual
 
@@ -849,7 +849,7 @@ theorem gfpApprox_add_one
 
 中文:
 定理 gfpApprox_add_one
-  条件: (hx : f x <= x) (a : Ordinal)
+  条件: (hx : f x <= x) (a : 序数)
   证明: lfpApprox_add_one f.dual hx a
 
 Depends on / 依赖: f.dual, lfpApprox_add_one
@@ -868,7 +868,7 @@ theorem gfpApprox_le_apply_gfpApprox_of_lt
 
 中文:
 定理 gfpApprox_le_apply_gfpApprox_of_lt
-  条件: {a b : Ordinal} (h : a < b)
+  条件: {a b : 序数} (h : a < b)
   证明: apply_lfpApprox_le_lfpApprox_of_lt f.dual h
 
 Depends on / 依赖: apply_lfpApprox_le_lfpApprox_of_lt, f.dual
@@ -887,7 +887,7 @@ theorem gfpApprox_of_isSuccLimit
 
 中文:
 定理 gfpApprox_of_isSuccLimit
-  条件: {a : Ordinal} (ha : Order.IsSuccLimit a)
+  条件: {a : 序数} (ha : Order.是SuccLimit a)
   证明: lfpApprox_of_isSuccLimit f.dual ha
 
 Depends on / 依赖: f.dual, lfpApprox_of_isSuccLimit
@@ -909,7 +909,7 @@ theorem gfpApprox_mono_left
 
 中文:
 定理 gfpApprox_mono_left
-  结论: Monotone (gfpApprox : (α ->o α) -> _)
+  结论: 递增 (gfpApprox : (α ->o α) -> _)
   证明: by
   intro f g h
   have : g.dual <= f.dual := h
@@ -932,7 +932,7 @@ theorem gfpApprox_mono_mid
 
 中文:
 定理 gfpApprox_mono_mid
-  结论: Monotone (gfpApprox f)
+  结论: 递增 (gfpApprox f)
   证明: fun _ _ h => lfpApprox_mono_mid f.dual h
 
 Depends on / 依赖: f.dual, lfpApprox_mono_mid
@@ -950,7 +950,7 @@ theorem gfpApprox_eq_of_mem_fixedPoints
 
 中文:
 定理 gfpApprox_eq_of_mem_fixedPoints
-  结论: {a b : Ordinal} (h_ab : a <= b)
+  结论: {a b : 序数} (h_ab : a <= b)
   证明: lfpApprox_eq_of_mem_fixedPoints f.dual h_ab h
 
 Depends on / 依赖: f.dual, h_ab, lfpApprox_eq_of_mem_fixedPoints
@@ -1007,7 +1007,7 @@ theorem gfpApprox_eq_of_fixedPoint_or_zero
 
 中文:
 定理 gfpApprox_eq_of_fixedPoint_or_zero
-  条件: (hx : f x <= x) (o : Ordinal)
+  条件: (hx : f x <= x) (o : 序数)
   证明: lfpApprox_eq_of_fixedPoint_or_zero f.dual hx o
 
 Depends on / 依赖: f.dual, lfpApprox_eq_of_fixedPoint_or_zero
@@ -1025,7 +1025,7 @@ theorem exists_gfpApprox_eq_gfpApprox
   proof: exists_lfpApprox_eq_lfpApprox f.dual x
 
 中文:
-定理 exists_gfpApprox_eq_gfpApprox
+定理 存在_gfpApprox_eq_gfpApprox
   结论: 存在 a < ord succ #α, 存在 b < ord succ #α,
   证明: exists_lfpApprox_eq_lfpApprox f.dual x
 
@@ -1101,7 +1101,7 @@ theorem gfp_mem_range_gfpApprox
 
 中文:
 定理 gfp_mem_range_gfpApprox
-  结论: f.gfp in Set.range (gfpApprox f ⊤)
+  结论: f.gfp in 集合.range (gfpApprox f ⊤)
   证明: lfp_mem_range_lfpApprox f.dual
 
 Depends on / 依赖: f.dual, lfp_mem_range_lfpApprox

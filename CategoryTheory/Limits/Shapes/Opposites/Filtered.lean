@@ -42,7 +42,7 @@ instance has_cofiltered_limits_op_of_has_filtered_colimits
 
 中文:
 实例 has_cofiltered_limits_op_of_has_filtered_colimits
-  签名: [HasFilteredColimitsOfSize.{v₂, u₂} C]
+  签名: [有FilteredColimitsOfSize.{v₂, u₂} C]
   定义体: hasLimitsOfShape_op_of_hasColimitsOfShape
 
 Depends on / 依赖: hasLimitsOfShape_op_of_hasColimitsOfShape
@@ -61,7 +61,7 @@ theorem has_cofiltered_limits_of_has_filtered_colimits_op
 
 中文:
 定理 has_cofiltered_limits_of_has_filtered_colimits_op
-  条件: [HasFilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ]
+  条件: [有FilteredColimitsOfSize.{v₂, u₂} Cᵒᵖ]
   证明: { HasLimitsOfShape := fun _ _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op }
 
 Depends on / 依赖: HasLimitsOfShape, hasLimitsOfShape_of_hasColimitsOfShape_op
@@ -80,7 +80,7 @@ instance has_filtered_colimits_op_of_has_cofiltered_limits
 
 中文:
 实例 has_filtered_colimits_op_of_has_cofiltered_limits
-  签名: [HasCofilteredLimitsOfSize.{v₂, u₂} C]
+  签名: [有余filteredLimitsOfSize.{v₂, u₂} C]
   定义体: inferInstance
 -/
 instance has_filtered_colimits_op_of_has_cofiltered_limits [HasCofilteredLimitsOfSize.{v₂, u₂} C] :
@@ -96,7 +96,7 @@ theorem has_filtered_colimits_of_has_cofiltered_limits_op
 
 中文:
 定理 has_filtered_colimits_of_has_cofiltered_limits_op
-  条件: [HasCofilteredLimitsOfSize.{v₂, u₂} Cᵒᵖ]
+  条件: [有余filteredLimitsOfSize.{v₂, u₂} Cᵒᵖ]
   证明: { HasColimitsOfShape := fun _ _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op }
 
 Depends on / 依赖: HasColimitsOfShape, hasColimitsOfShape_of_hasLimitsOfShape_op

@@ -31,7 +31,7 @@ theorem dcongrArg.{u,
 中文:
 定理 dcongrArg.{u,
   条件: v} {α
-  结论: Sort u} {a a' : α} {β : (a' : α) -> a = a' -> Sort v}
+  结论: 类型层 u} {a a' : α} {β : (a' : α) -> a = a' -> 类型层 v}
   证明: by
   cases h; rfl
 
@@ -55,7 +55,7 @@ theorem hdcongrArg.{u,
 中文:
 定理 hdcongrArg.{u,
   条件: v} {α
-  结论: Sort u} {a a' : α} {β : (a' : α) -> a = a' -> Sort v}
+  结论: 类型层 u} {a a' : α} {β : (a' : α) -> a = a' -> 类型层 v}
   证明: by
   cases h; rfl
 -/
@@ -76,7 +76,7 @@ theorem eq_of_heq.{u}
 
 中文:
 定理 eq_of_heq.{u}
-  条件: {α : Sort u} {a a' : α} (h : a ≍ a')
+  条件: {α : 类型层 u} {a a' : α} (h : a ≍ a')
   结论: a = a'
   证明: by
   cases h; rfl
@@ -95,7 +95,7 @@ theorem heqL.{u}
 
 中文:
 定理 heqL.{u}
-  条件: {α β : Sort u} {a : α} {b : β} (h : HEq a b)
+  条件: {α β : 类型层 u} {a : α} {b : β} (h : 异质相等 a b)
   证明: by
   cases h; rfl
 -/
@@ -114,7 +114,7 @@ theorem heqR.{u}
 
 中文:
 定理 heqR.{u}
-  条件: {α β : Sort u} {a : α} {b : β} (h : HEq a b)
+  条件: {α β : 类型层 u} {a : α} {b : β} (h : 异质相等 a b)
   证明: by
   cases h; rfl
 -/
@@ -244,7 +244,7 @@ definition CastMode.toNat
   signature: : CastMode -> Nat
 
 中文:
-定义 CastMode.toNat
+定义 CastMode.to自然数
   签名: : CastMode -> 自然数
 -/
 def CastMode.toNat : CastMode -> Nat
@@ -300,7 +300,7 @@ structure Config
     - castTransparency : TransparencyMode  [default: .default]
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (4 个):
     - transparency : TransparencyMode  [默认: .reducible]
@@ -345,14 +345,14 @@ structure Context
     - pNumArgs : Nat  [default: p.headNumArgs]
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (8 个):
-    - cfg : DepRewrite.Config
+    - cfg : DepRewrite.余nfig
     - p : Expr
     - x : Expr
     - h : Expr
-    - Δ : Array (FVarId × Expr)
+    - Δ : 数组 (FVarId × Expr)
     - δ : Std.HashSet FVarId
     - pHeadIdx : HeadIndex  [默认: p.toHeadIndex]
     - pNumArgs : 自然数  [默认: p.headNumArgs]
@@ -555,7 +555,7 @@ definition castBack?
 
 中文:
 定义 castBack?
-  签名: (e te x h : Expr) (Δ : Array (FVarId × Expr)) (δ : Std.HashSet FVarId)
+  签名: (e te x h : Expr) (Δ : 数组 (FVarId × Expr)) (δ : Std.HashSet FVarId)
   定义体: do
   if !te.hasAnyFVar (fun f => f == x.fvarId! || f == h.fvarId! ||
       Δ.any (·.1 == f) || δ.contains f) then
@@ -615,7 +615,7 @@ definition castFwd
 
 中文:
 定义 castFwd
-  签名: (e te p x h : Expr) (Δ : Array (FVarId × Expr)) (δ : Std.HashSet FVarId)
+  签名: (e te p x h : Expr) (Δ : 数组 (FVarId × Expr)) (δ : Std.HashSet FVarId)
   定义体: do
   if !te.hasAnyFVar (fun f => f == x.fvarId! || f == h.fvarId! ||
       Δ.any (·.1 == f) || δ.contains f) then
@@ -666,7 +666,7 @@ if ← withAtLeastTransparency .default withNewMCtxDepth isDefEq te' et then
 
 中文:
 定义 visitAndCast
-  签名: (e : Expr) (et? : Option Expr)
+  签名: (e : Expr) (et? : 选项类型 Expr)
   定义体: do
   let e' ← visit e et?
   let some et := et? | return e'
@@ -717,7 +717,7 @@ definition visit
 
 中文:
 定义 visit
-  签名: (e : Expr) (et? : Option Expr)
+  签名: (e : Expr) (et? : 选项类型 Expr)
   定义体: withTraceNode traceClsVisit (fun
     | .ok e' => pure m!"{e} => {e'} (et: {et?})"
     | .error _ => pure m!"{e} => ??") <| Meta.withIncRecDepth do
@@ -759,7 +759,7 @@ definition visitInner
 
 中文:
 定义 visitInner
-  签名: (e : Expr) (et? : Option Expr)
+  签名: (e : Expr) (et? : 选项类型 Expr)
   定义体: do
   let ctx ← read
   if e.hasLooseBVars then
@@ -872,7 +872,7 @@ definition dabstract
 
 中文:
 定义 dabstract
-  签名: (e : Expr) (p : Expr) (cfg : DepRewrite.Config)
+  签名: (e : Expr) (p : Expr) (cfg : DepRewrite.余nfig)
   定义体: do
   let e ← instantiateMVars e
   let tp ← inferType p
@@ -1110,7 +1110,7 @@ Term.withSynthesize withMainContext do
 
 中文:
 定义 depRewriteTarget
-  签名: (stx : Syntax) (symm : 布尔) (config : DepRewrite.Config := {})
+  签名: (stx : Syntax) (symm : 布尔值) (config : DepRewrite.余nfig := {})
   定义体: do
 Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true
@@ -1141,7 +1141,7 @@ Term.withSynthesize withMainContext do
 
 中文:
 定义 depRwTarget
-  签名: (stx : Syntax) (symm : 布尔) (config : DepRewrite.Config := {})
+  签名: (stx : Syntax) (symm : 布尔值) (config : DepRewrite.余nfig := {})
   定义体: do
 Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true
@@ -1173,7 +1173,7 @@ let rwResult ← Term.withSynthesize withMainContext do
 
 中文:
 定义 depRewriteLocalDecl
-  签名: (stx : Syntax) (symm : 布尔) (fvarId : FVarId)
+  签名: (stx : Syntax) (symm : 布尔值) (fvarId : FVarId)
   定义体: withMainContext do
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
@@ -1207,7 +1207,7 @@ let rwResult ← Term.withSynthesize withMainContext do
 
 中文:
 定义 depRwLocalDecl
-  签名: (stx : Syntax) (symm : 布尔) (fvarId : FVarId)
+  签名: (stx : Syntax) (symm : 布尔值) (fvarId : FVarId)
   定义体: withMainContext do
   -- Note: we cannot execute `replaceLocalDecl` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.
@@ -1330,7 +1330,7 @@ Term.withSynthesize withMainContext do
 
 中文:
 定义 depRewriteTarget
-  签名: (stx : Syntax) (symm : 布尔) (config : DepRewrite.Config := {})
+  签名: (stx : Syntax) (symm : 布尔值) (config : DepRewrite.余nfig := {})
   定义体: do
 Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true
@@ -1363,7 +1363,7 @@ Term.withSynthesize withMainContext do
 
 中文:
 定义 depRwTarget
-  签名: (stx : Syntax) (symm : 布尔) (config : DepRewrite.Config := {})
+  签名: (stx : Syntax) (symm : 布尔值) (config : DepRewrite.余nfig := {})
   定义体: do
 Term.withSynthesize withMainContext do
     let e ← elabTerm stx none true

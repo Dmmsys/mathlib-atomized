@@ -93,7 +93,7 @@ lemma essSurj_mapComposableArrows
 
 中文:
 引理 essSurj_mapComposableArrows
-  条件: [W.HasLeftCalculusOfFractions] (n : 自然数)
+  条件: [W.有LeftCalculusOfFractions] (n : 自然数)
   证明: by
   have := essSurj_mapComposableArrows_of_hasRightCalculusOfFractions L.op W.op n
   have := Functor.essSurj_of_iso (L.mapComposableArrowsOpIso n).symm

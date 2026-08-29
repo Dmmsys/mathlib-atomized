@@ -52,7 +52,7 @@ theorem star_natCast_smul
 
 中文:
 定理 star_natCast_smul
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] [StarAddMonoid M] (n : 自然数)
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] [StarAdd幺半群 M] (n : 自然数)
   证明: map_natCast_smul (starAddEquiv : M ≃+ M) R R n x
 
 @[simp]
@@ -76,7 +76,7 @@ theorem star_intCast_smul
 
 中文:
 定理 star_intCast_smul
-  结论: [Ring R] [AddCommGroup M] [Module R M] [StarAddMonoid M] (n : 整数)
+  结论: [环 R] [加法交换群 M] [模 R M] [StarAdd幺半群 M] (n : 整数)
   证明: map_intCast_smul (starAddEquiv : M ≃+ M) R R n x
 
 @[simp]
@@ -100,7 +100,7 @@ theorem star_inv_natCast_smul
 
 中文:
 定理 star_inv_natCast_smul
-  结论: [DivisionSemiring R] [AddCommMonoid M] [Module R M] [StarAddMonoid M]
+  结论: [除半环 R] [加法交换幺半群 M] [模 R M] [StarAdd幺半群 M]
   证明: map_inv_natCast_smul (starAddEquiv : M ≃+ M) R R n x
 
 @[simp]
@@ -124,7 +124,7 @@ theorem star_inv_intCast_smul
 
 中文:
 定理 star_inv_intCast_smul
-  结论: [DivisionRing R] [AddCommGroup M] [Module R M] [StarAddMonoid M]
+  结论: [除环 R] [加法交换群 M] [模 R M] [StarAdd幺半群 M]
   证明: map_inv_intCast_smul (starAddEquiv : M ≃+ M) R R n x
 
 @[simp]
@@ -146,7 +146,7 @@ theorem star_ratCast_smul
 
 中文:
 定理 star_ratCast_smul
-  结论: [DivisionRing R] [AddCommGroup M] [Module R M] [StarAddMonoid M] (n : Rat)
+  结论: [除环 R] [加法交换群 M] [模 R M] [StarAdd幺半群 M] (n : 有理数)
   证明: map_ratCast_smul (starAddEquiv : M ≃+ M) _ _ _ x
 
 Depends on / 依赖: map_ratCast_smul, starAddEquiv
@@ -176,7 +176,7 @@ lemma star_nnrat_smul
 
 中文:
 引理 star_nnrat_smul
-  条件: [AddCommMonoid R] [StarAddMonoid R] [Module Rat>=0 R] (q : Rat>=0) (x : R)
+  条件: [加法交换幺半群 R] [StarAdd幺半群 R] [模 有理数>=0 R] (q : 有理数>=0) (x : R)
   证明: map_nnrat_smul (starAddEquiv : R ≃+ R) _ _
 
 Depends on / 依赖: map_nnrat_smul, starAddEquiv
@@ -194,7 +194,7 @@ lemma star_rat_smul
 
 中文:
 引理 star_rat_smul
-  条件: [AddCommGroup R] [StarAddMonoid R] [Module Rat R] (q : Rat) (x : R)
+  条件: [加法交换群 R] [StarAdd幺半群 R] [模 有理数 R] (q : 有理数) (x : R)
   证明: map_rat_smul (starAddEquiv : R ≃+ R) _ _
 -/
 @[simp high] lemma star_rat_smul [AddCommGroup R] [StarAddMonoid R] [Module Rat R] (q : Rat) (x : R) :
@@ -220,8 +220,8 @@ instance StarAddMonoid.toStarModuleNNRat
   body: star_nnrat_smul
 
 中文:
-实例 StarAddMonoid.toStarModuleNNRat
-  签名: [AddCommMonoid R] [Module Rat>=0 R] [StarAddMonoid R]
+实例 StarAdd幺半群.toStarModuleNNRat
+  签名: [加法交换幺半群 R] [模 有理数>=0 R] [StarAdd幺半群 R]
   定义体: star_nnrat_smul
 
 Depends on / 依赖: star_nnrat_smul
@@ -238,8 +238,8 @@ instance StarAddMonoid.toStarModuleRat
   body: star_rat_smul
 
 中文:
-实例 StarAddMonoid.toStarModuleRat
-  签名: [AddCommGroup R] [Module Rat R] [StarAddMonoid R]
+实例 StarAdd幺半群.toStarModuleRat
+  签名: [加法交换群 R] [模 有理数 R] [StarAdd幺半群 R]
   定义体: star_rat_smul
 
 Depends on / 依赖: star_rat_smul
@@ -363,7 +363,7 @@ definition selfAdjoint.submodule
 
 中文:
 定义 selfAdjoint.submodule
-  签名: : Submodule R A
+  签名: : 子模 R A
   定义体: { selfAdjoint A with smul_mem' := fun _ _ => (IsSelfAdjoint.all _).smul }
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.all, selfAdjoint, smul_mem
@@ -381,7 +381,7 @@ definition skewAdjoint.submodule
 
 中文:
 定义 skewAdjoint.submodule
-  签名: : Submodule R A
+  签名: : 子模 R A
   定义体: { skewAdjoint A with smul_mem' := skewAdjoint.smul_mem }
 
 Depends on / 依赖: skewAdjoint, skewAdjoint.smul_mem, smul_mem
@@ -490,7 +490,7 @@ theorem StarModule.selfAdjointPart_add_skewAdjointPart
     add_add_sub_cancel, invOf_two_smul_add_invOf_two_smul]
 
 中文:
-定理 StarModule.selfAdjointPart_add_skewAdjointPart
+定理 对合模.selfAdjointPart_add_skewAdjointPart
   条件: (x : A)
   证明: by
   simp only [smul_sub, selfAdjointPart_apply_coe, smul_add, skewAdjointPart_apply_coe,
@@ -677,7 +677,7 @@ definition StarModule.decomposeProdAdjoint
   -- Note: with https://github.com/leanprover
 
 中文:
-定义 StarModule.decomposeProdAdjoint
+定义 对合模.decomposeProdAdjoint
   签名: : A ≃ₗ[R] selfAdjoint A × skewAdjoint A
   定义体: by
   refine LinearEquiv.ofLinearMap ((selfAdjointPart R).prod (skewAdjointPart R))
@@ -754,7 +754,7 @@ lemma isSelfAdjoint_algebraMap_iff
 
 中文:
 引理 isSelfAdjoint_algebraMap_iff
-  条件: {r : R} (h : Function.Injective (algebraMap R A))
+  条件: {r : R} (h : 函数.单射 (algebraMap R A))
   证明: ⟨fun hr => h algebraMap_star_comm r (A := A) ▸ hr.star_eq, IsSelfAdjoint.algebraMap A⟩
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.algebraMap, algebraMap, algebraMap_star_comm, hr.star_eq, star_eq
@@ -778,7 +778,7 @@ alias ⟨_, IsIdempotentElem.star⟩ := IsIdempotentElem.star_iff
 
 中文:
 定理 IsIdempotentElem.star_iff
-  条件: {R : 类型} [Mul R] [StarMul R] {a : R}
+  条件: {R : 类型} [乘法 R] [StarMul R] {a : R}
   证明: by
   simp [IsIdempotentElem, ← star_mul]
 

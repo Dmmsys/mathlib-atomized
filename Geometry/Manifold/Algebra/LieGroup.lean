@@ -68,9 +68,9 @@ class LieAddGroup
     - contMDiff_neg : CMDiff n fun a : G => -a
 
 中文:
-类 LieAddGroup
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
-  继承: ContMDiffAdd I n G
+类 LieAdd群
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
+  继承: 余ntMDiffAdd I n G
   公理与运算 (1 个):
     - contMDiff_neg : CMDiff n fun a : G => -a
 -/
@@ -96,9 +96,9 @@ class LieGroup
     - contMDiff_inv : CMDiff n fun a : G => a⁻¹
 
 中文:
-类 LieGroup
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
-  继承: ContMDiffMul I n G
+类 Lie群
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
+  继承: 余ntMDiffMul I n G
   公理与运算 (1 个):
     - contMDiff_inv : CMDiff n fun a : G => a⁻¹
 -/
@@ -137,7 +137,7 @@ theorem LieGroup.of_le
 @[to_additive]
 
 中文:
-定理 LieGroup.of_le
+定理 Lie群.of_le
   结论: {m n : 自然数∞ω} (hmn : m <= n)
   证明: by
   have : ContMDiffMul I m G := ContMDiffMul.of_le hmn
@@ -173,8 +173,8 @@ instance [IsTopologicalGroup
 @[to_additive]
 
 中文:
-实例 [IsTopologicalGroup
-  签名: G] : LieGroup I 0 G
+实例 [是拓扑群
+  签名: G] : Lie群 I 0 G
   定义体: by
   constructor
   rw [contMDiff_zero_iff]
@@ -199,8 +199,8 @@ instance [LieGroup
   body: LieGroup.of_le one_le_two
 
 中文:
-实例 [LieGroup
-  签名: I 2 G] : LieGroup I 1 G
+实例 [Lie群
+  签名: I 2 G] : Lie群 I 1 G
   定义体: LieGroup.of_le one_le_two
 
 Depends on / 依赖: LieGroup, LieGroup.of_le, of_le, one_le_two
@@ -253,7 +253,7 @@ theorem topologicalGroup_of_lieGroup
 
 中文:
 定理 topologicalGroup_of_lieGroup
-  结论: IsTopologicalGroup G
+  结论: 是拓扑群 G
   证明: { continuousMul_of_contMDiffMul I n with continuous_inv := (contMDiff_inv I n).continuous }
 
 Depends on / 依赖: contMDiff_inv, continuous, continuousMul_of_contMDiffMul, continuous_inv
@@ -276,7 +276,7 @@ theorem ContMDiffWithinAt.inv
 
 中文:
 定理 ContMDiffWithinAt.inv
-  结论: {f : M -> G} {s : Set M} {x₀ : M}
+  结论: {f : M -> G} {s : 集合 M} {x₀ : M}
   证明: (contMDiff_inv I n).contMDiffAt.contMDiffWithinAt.comp x₀ hf Set.mapsTo_univ _ _
 
 @[to_additive]
@@ -324,7 +324,7 @@ theorem ContMDiffOn.inv
 
 中文:
 定理 ContMDiffOn.inv
-  条件: {f : M -> G} {s : Set M} (hf : CMDiff[s] n f)
+  条件: {f : M -> G} {s : 集合 M} (hf : CMDiff[s] n f)
   证明: fun x hx => (hf x hx).inv
 
 @[to_additive]
@@ -369,7 +369,7 @@ theorem ContMDiffWithinAt.div
 
 中文:
 定理 ContMDiffWithinAt.div
-  结论: {f g : M -> G} {s : Set M} {x₀ : M}
+  结论: {f g : M -> G} {s : 集合 M} {x₀ : M}
   证明: by
   simp_rw [div_eq_mul_inv]; exact hf.mul hg.inv
 
@@ -422,7 +422,7 @@ theorem ContMDiffOn.div
 
 中文:
 定理 ContMDiffOn.div
-  结论: {f g : M -> G} {s : Set M} (hf : CMDiff[s] n f)
+  结论: {f g : M -> G} {s : 集合 M} (hf : CMDiff[s] n f)
   证明: by
   simp_rw [div_eq_mul_inv]; exact hf.mul hg.inv
 
@@ -469,7 +469,7 @@ instance Prod.instLieGroup
   body: { ContMDiffMul.prod _ _ _ _ with contMDiff_inv := contMDiff_fst.inv.prodMk contMDiff_snd.inv }
 
 中文:
-实例 Prod.instLieGroup
+实例 积类型.instLieGroup
   签名: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {n : 自然数∞ω}
   定义体: { ContMDiffMul.prod _ _ _ _ with contMDiff_inv := contMDiff_fst.inv.prodMk contMDiff_snd.inv }
 
@@ -524,8 +524,8 @@ class ContMDiffInv₀
     - contMDiffAt_inv₀ : forall ⦃x : G⦄, x != 0 -> CMDiffAt n (fun (y : G) => y⁻¹) x
 
 中文:
-类 ContMDiffInv₀
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
+类 余ntMDiffInv₀
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
   公理与运算 (1 个):
     - contMDiffAt_inv₀ : 对任意 ⦃x : G⦄, x != 0 -> CMDiffAt n (fun (y : G) => y⁻¹) x
 -/
@@ -560,7 +560,7 @@ theorem ContMDiffInv₀.of_le
   exact ⟨fun x hx => (h.contMDiffAt_inv₀ hx).of_le hmn⟩
 
 中文:
-定理 ContMDiffInv₀.of_le
+定理 余ntMDiffInv₀.of_le
   结论: {m n : 自然数∞ω} (hmn : m <= n)
   证明: by
   exact ⟨fun x hx => (h.contMDiffAt_inv₀ hx).of_le hmn⟩
@@ -593,8 +593,8 @@ instance [ContinuousInv₀
   exact IsO
 
 中文:
-实例 [ContinuousInv₀
-  签名: G] : ContMDiffInv₀ I 0 G
+实例 [余ntinuousInv₀
+  签名: G] : 余ntMDiffInv₀ I 0 G
   定义体: by
   have : T1Space G := I.t1Space G
   constructor
@@ -628,8 +628,8 @@ instance [ContMDiffInv₀
   body: ContMDiffInv₀.of_le one_le_two
 
 中文:
-实例 [ContMDiffInv₀
-  签名: I 2 G] : ContMDiffInv₀ I 1 G
+实例 [余ntMDiffInv₀
+  签名: I 2 G] : 余ntMDiffInv₀ I 1 G
   定义体: ContMDiffInv₀.of_le one_le_two
 
 Depends on / 依赖: of_le, one_le_two
@@ -672,7 +672,7 @@ theorem continuousInv₀_of_contMDiffInv₀
 
 中文:
 定理 continuousInv₀_of_contMDiffInv₀
-  结论: ContinuousInv₀ G
+  结论: 余ntinuousInv₀ G
   证明: { continuousAt_inv₀ := fun _ hx => (contMDiffAt_inv₀ (I := I) (n := n) hx).continuousAt }
 
 Depends on / 依赖: continuousAt
@@ -690,7 +690,7 @@ theorem contMDiffOn_inv₀
 
 中文:
 定理 contMDiffOn_inv₀
-  结论: CMDiff[{0}ᶜ] n (Inv.inv : G -> G)
+  结论: CMDiff[{0}ᶜ] n (取逆.inv : G -> G)
   证明: fun _x hx => (contMDiffAt_inv₀ hx).contMDiffWithinAt
 
 Depends on / 依赖: contMDiffWithinAt

@@ -53,7 +53,7 @@ theorem tendsto_apply_add_mul_sq_div_sub
 
 中文:
 定理 tendsto_apply_add_mul_sq_div_sub
-  结论: {f : 实数 -> 实数} {x a c d : 实数} {l : Filter 实数} (hl : l <= 𝓝[!=] x)
+  结论: {f : 实数 -> 实数} {x a c d : 实数} {l : 滤子 实数} (hl : l <= 𝓝[!=] x)
   证明: by
   have L : Tendsto (fun y => (y + c * (y - x) ^ 2 - x) / (y - x)) l (𝓝 1) := by
     have : Tendsto (fun y => 1 + c * (y - x)) l (𝓝 (1 + c * (x - x))) := by
@@ -95,8 +95,8 @@ theorem StieltjesFunction.ae_hasDerivAt
     and `f (x^-) = f x` almost everywh
 
 中文:
-定理 StieltjesFunction.ae_hasDerivAt
-  条件: (f : StieltjesFunction 实数)
+定理 Stieltjes函数.ae_hasDerivAt
+  条件: (f : Stieltjes函数 实数)
   证明: by
   /- Denote by `μ` the Stieltjes measure associated to `f`.
     The general theorem `VitaliFamily.ae_tendsto_rnDeriv` ensures that `μ [x, y] / (y - x)` tends
@@ -179,8 +179,8 @@ theorem Monotone.ae_hasDerivAt
     scale `y 
 
 中文:
-定理 Monotone.ae_hasDerivAt
-  条件: {f : 实数 -> 实数} (hf : Monotone f)
+定理 递增.ae_hasDerivAt
+  条件: {f : 实数 -> 实数} (hf : 递增 f)
   证明: by
   /- We already know that the Stieltjes function associated to `f` (i.e., `g : x ↦ f (x^+)`) is
     differentiable almost everywhere. We reduce to this statement by sandwiching values of `f` with
@@ -271,8 +271,8 @@ theorem Monotone.ae_differentiableAt
   filter_upwards [hf.ae_hasDerivAt] with x hx using hx.differentiableAt
 
 中文:
-定理 Monotone.ae_differentiableAt
-  条件: {f : 实数 -> 实数} (hf : Monotone f)
+定理 递增.ae_differentiableAt
+  条件: {f : 实数 -> 实数} (hf : 递增 f)
   证明: by
   filter_upwards [hf.ae_hasDerivAt] with x hx using hx.differentiableAt
 
@@ -296,7 +296,7 @@ theorem MonotoneOn.ae_differentiableWithinAt_of_mem
 
 中文:
 定理 MonotoneOn.ae_differentiableWithinAt_of_mem
-  条件: {f : 实数 -> 实数} {s : Set 实数} (hf : MonotoneOn f s)
+  条件: {f : 实数 -> 实数} {s : 集合 实数} (hf : MonotoneOn f s)
   证明: by
   /- We use a global monotone extension of `f`, and argue that this extension is differentiable
     almost everywhere. Such an extension need not exist (think of `1/x` on `(0, +∞)`), but it exists
@@ -333,7 +333,7 @@ theorem MonotoneOn.ae_differentiableWithinAt
 
 中文:
 定理 MonotoneOn.ae_differentiableWithinAt
-  结论: {f : 实数 -> 实数} {s : Set 实数} (hf : MonotoneOn f s)
+  结论: {f : 实数 -> 实数} {s : 集合 实数} (hf : MonotoneOn f s)
   证明: by
   rw [ae_restrict_iff' hs]
   exact hf.ae_differentiableWithinAt_of_mem

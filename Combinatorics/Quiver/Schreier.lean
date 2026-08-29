@@ -64,8 +64,8 @@ structure SchreierGraph
     - toVertex : V
 
 中文:
-结构 SchreierGraph
-  参数: (V : 类型) {M : 类型} [SMul M V] {S : 类型} (_ι : S -> M)
+结构 Schreier图
+  参数: (V : 类型) {M : 类型} [标量乘法 M V] {S : 类型} (_ι : S -> M)
   公理与运算 (2 个):
     - ofVertex : :
     - toVertex : V
@@ -97,7 +97,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : V ≃ SchreierGraph V ι where
+  签名: : V ≃ Schreier图 V ι where
   定义体: SchreierGraph.ofVertex
   invFun := SchreierGraph.toVertex
   left_inv _ := rfl
@@ -121,7 +121,7 @@ instance schreierGraphSMul
 
 中文:
 实例 schreierGraphSMul
-  签名: : SMul M (SchreierGraph V ι) where
+  签名: : 标量乘法 M (Schreier图 V ι) where
   定义体: ⟨x • y.toVertex⟩
 
 Depends on / 依赖: toVertex, y.toVertex
@@ -139,7 +139,7 @@ instance schreierGraphQuiver
 
 中文:
 实例 schreierGraphQuiver
-  签名: : Quiver (SchreierGraph V ι) where
+  签名: : 箭图 (Schreier图 V ι) where
   定义体: { s : S // (ι s) • x = y }
 -/
 instance schreierGraphQuiver : Quiver (SchreierGraph V ι) where
@@ -159,7 +159,7 @@ definition labelling
 
 中文:
 定义 labelling
-  签名: : SchreierGraph V ι ⥤q SingleObj S where
+  签名: : Schreier图 V ι ⥤q SingleObj S where
   定义体: SingleObj.star S
   map e := e.val
 
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction M (SchreierGraph V ι)
+  签名: 乘法作用 M (Schreier图 V ι)
   定义体: by
     ext
     exact one_smul M x.toVertex
@@ -235,7 +235,7 @@ definition labellingStarEquiv
 
 中文:
 定义 labellingStarEquiv
-  签名: (x : SchreierGraph V ι)
+  签名: (x : Schreier图 V ι)
   定义体: (labelling V ι).star x
   invFun := fun ⟨_, s⟩ => ⟨ι s • x, s, rfl⟩
   left_inv := fun ⟨_, _, rfl⟩ => rfl
@@ -269,7 +269,7 @@ definition labellingCostarEquiv
 
 中文:
 定义 labellingCostarEquiv
-  签名: (x : SchreierGraph V ι)
+  签名: (x : Schreier图 V ι)
   定义体: (labelling V ι).costar x
   invFun := fun ⟨_, s⟩ => ⟨(ι s)⁻¹ • x, s, by simp⟩
   left_inv := by
@@ -303,7 +303,7 @@ theorem labelling_isCovering
 
 中文:
 定理 labelling_isCovering
-  结论: (labelling V ι).IsCovering where
+  结论: (labelling V ι).是余vering where
   证明: (labellingStarEquiv ι u).bijective
   costar_bijective u := (labellingCostarEquiv ι u).bijective
 
@@ -329,7 +329,7 @@ lemma map_smul_of_comp_labelling_eq
 
 中文:
 引理 map_smul_of_comp_labelling_eq
-  结论: {W : 类型} [MulAction M W]
+  结论: {W : 类型} [乘法作用 M W]
   证明: by
   -- The key is that φ preserves labels, so edges labelled 's' stay labelled 's'
   let e : v ⟶ ι s • v := ⟨s, rfl⟩

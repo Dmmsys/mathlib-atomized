@@ -52,7 +52,7 @@ class Preorder
     - lt_iff_le_not_ge : forall a b : α, a < b ↔ a <= b ∧ ¬b <= a  [default: by intros; rfl]
 
 中文:
-类 Preorder
+类 预序
   参数: (α : 类型)
   继承: LE α, LT α
   公理与运算 (4 个):
@@ -78,7 +78,7 @@ instance [Preorder
   body: Preorder.lt_iff_le_not_ge
 
 中文:
-实例 [Preorder
+实例 [预序
   签名: α] : Std.LawfulOrderLT α where
   定义体: Preorder.lt_iff_le_not_ge
 
@@ -97,8 +97,8 @@ instance [Preorder
   le_trans := Preorder.le_trans
 
 中文:
-实例 [Preorder
-  签名: α] : Std.IsPreorder α where
+实例 [预序
+  签名: α] : Std.是预序 α where
   定义体: Preorder.le_refl
   le_trans := Preorder.le_trans
 
@@ -812,9 +812,9 @@ class PartialOrder
     - le_antisymm : forall a b : α, a <= b -> b <= a -> a = b
 
 中文:
-类 PartialOrder
+类 偏序
   参数: (α : 类型)
-  继承: Preorder α
+  继承: 预序 α
   公理与运算 (1 个):
     - le_antisymm : 对任意 a b : α, a <= b -> b <= a -> a = b
 
@@ -834,8 +834,8 @@ instance [PartialOrder
   body: PartialOrder.le_antisymm
 
 中文:
-实例 [PartialOrder
-  签名: α] : Std.IsPartialOrder α where
+实例 [偏序
+  签名: α] : Std.是偏序 α where
   定义体: PartialOrder.le_antisymm
 
 Depends on / 依赖: PartialOrder, PartialOrder.le_antisymm, le_antisymm
@@ -992,7 +992,7 @@ lemma Decidable.lt_or_eq_of_le
 @[to_dual Decidable.le_iff_lt_or_eq']
 
 中文:
-引理 Decidable.lt_or_eq_of_le
+引理 可判定.lt_or_eq_of_le
   条件: [DecidableLE α] (hab : a <= b)
   结论: a < b ∨ a = b
   证明: if hba : b <= a then Or.inr (le_antisymm hab hba) else Or.inl (lt_of_le_not_ge hab hba)
@@ -1017,7 +1017,7 @@ lemma Decidable.le_iff_lt_or_eq
 @[to_dual lt_or_eq_of_le']
 
 中文:
-引理 Decidable.le_iff_lt_or_eq
+引理 可判定.le_iff_lt_or_eq
   条件: [DecidableLE α]
   结论: a <= b ↔ a < b ∨ a = b
   证明: ⟨Decidable.lt_or_eq_of_le, le_of_lt_or_eq⟩

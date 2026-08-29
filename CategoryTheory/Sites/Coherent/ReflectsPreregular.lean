@@ -44,7 +44,7 @@ lemma Functor.reflects_preregular
   
 
 中文:
-引理 Functor.reflects_preregular
+引理 函子.reflects_preregular
   结论: Preregular C where
   证明: by
     obtain ⟨W, f', _, i, w⟩ := Preregular.exists_fac (F.map f) (F.map g)

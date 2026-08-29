@@ -127,7 +127,7 @@ definition glueMorphisms
 
 中文:
 定义 glueMorphisms
-  签名: {S T : C} (𝒰 : J.ZeroHypercover S) [𝒰.HasPullbacks]
+  签名: {S T : C} (𝒰 : J.ZeroHypercover S) [𝒰.有Pullbacks]
   定义体: 𝒰.toOneHypercover.glueMorphisms f fun i j _ => hf i j
 
 @[reassoc (attr := simp)]
@@ -151,7 +151,7 @@ lemma f_glueMorphisms
 
 中文:
 引理 f_glueMorphisms
-  结论: {S T : C} (𝒰 : J.ZeroHypercover S) [𝒰.HasPullbacks]
+  结论: {S T : C} (𝒰 : J.ZeroHypercover S) [𝒰.有Pullbacks]
   证明: 𝒰.toOneHypercover.f_glueMorphisms _ _ _
 
 Depends on / 依赖: f_glueMorphisms, toOneHypercover, toOneHypercover.f_glueMorphisms
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isomorphisms C).IsLocalAtTarget J
+  签名: (isomorphisms C).是LocalAtTarget J
   定义体: by
   refine .mk_of_isStableUnderBaseChange fun {X Y} f 𝒰 (H : forall i, IsIso _) => ⟨?_, ?_, ?_⟩
   · refine 𝒰.glueMorphisms (fun i => inv (pullback.snd f (𝒰.f i)) ≫ pullback.fst _ _) fun i j => ?_
@@ -218,7 +218,7 @@ lemma isPullback_of_forall_isPullback
   simp_rw [← isomorphisms.iff, IsLocalAtTarget.iff_of
 
 中文:
-引理 isPullback_of_forall_isPullback
+引理 isPullback_of_对任意_isPullback
   结论: {P X Y Z : C} (fst : P ⟶ X) (snd : P ⟶ Y) (f : X ⟶ Z)
   证明: by
   have h : fst ≫ f = snd ≫ g := (𝒰.pullback₁ fst).hom_ext fun i => by

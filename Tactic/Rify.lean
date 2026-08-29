@@ -109,7 +109,7 @@ definition mkRifyContext
 
 中文:
 定义 mkRifyContext
-  签名: : MetaM Simp.Context
+  签名: : MetaM Simp.余ntext
   定义体: do
   let result ← #[`zify_simps, `qify_simps, `rify_simps, `push_cast].mapM fun ext => do
     let some ext ← getSimpExtension? ext | failure
@@ -154,7 +154,7 @@ lemma ratCast_eq
 
 中文:
 引理 ratCast_eq
-  条件: (a b : Rat)
+  条件: (a b : 有理数)
   结论: a = b ↔ (a : 实数) = (b : 实数)
   证明: by simp
 -/
@@ -170,7 +170,7 @@ lemma ratCast_le
 
 中文:
 引理 ratCast_le
-  条件: (a b : Rat)
+  条件: (a b : 有理数)
   结论: a <= b ↔ (a : 实数) <= (b : 实数)
   证明: by simp
 -/
@@ -186,7 +186,7 @@ lemma ratCast_lt
 
 中文:
 引理 ratCast_lt
-  条件: (a b : Rat)
+  条件: (a b : 有理数)
   结论: a < b ↔ (a : 实数) < (b : 实数)
   证明: by simp
 -/
@@ -202,7 +202,7 @@ lemma ratCast_ne
 
 中文:
 引理 ratCast_ne
-  条件: (a b : Rat)
+  条件: (a b : 有理数)
   结论: a != b ↔ (a : 实数) != (b : 实数)
   证明: by simp
 -/
@@ -218,7 +218,7 @@ lemma ofNat_rat_real
   proof: rfl
 
 中文:
-引理 ofNat_rat_real
+引理 of自然数_rat_real
   条件: (a : 自然数) [a.AtLeastTwo]
   证明: rfl
 -/

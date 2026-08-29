@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl {a : R // IsIdempotentElem a}
+  签名: 补集 {a : R // IsIdempotentElem a}
   定义体: ⟨1 - a, a.prop.one_sub⟩
 
 Depends on / 依赖: a.prop.one_sub, one_sub
@@ -345,7 +345,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [NonUnitalNonAssocSemiring R]
+  结论: [非幺非结合半环 R]
   证明: by
   simp_rw [IsIdempotentElem, mul_add, add_mul, ha.eq, hb.eq, add_add_add_comm, ← add_assoc,
     add_assoc a, hab, zero_add]
@@ -371,7 +371,7 @@ theorem add_iff
 
 中文:
 定理 add_iff
-  结论: [NonUnitalNonAssocSemiring R] [IsCancelAdd R]
+  结论: [非幺非结合半环 R] [是消去加法 R]
   证明: by
   refine ⟨fun h => ?_, ha.add hb⟩
   rw [← add_right_cancel_iff (a := b)]; rw [add_assoc]; rw [← add_left_cancel_iff (a := a)]; rw [← add_assoc]; rw [add_add_add_comm]
@@ -397,7 +397,7 @@ lemma sub
 
 中文:
 引理 sub
-  结论: [NonUnitalNonAssocRing R] {a b : R} (ha : IsIdempotentElem a)
+  结论: [非幺非结合环 R] {a b : R} (ha : IsIdempotentElem a)
   证明: by
   simp_rw [IsIdempotentElem, sub_mul, mul_sub, hab, hba, ha.eq, hb.eq, sub_self, sub_zero]
 
@@ -423,7 +423,7 @@ theorem mul_eq_zero_of_anticommute
 
 中文:
 定理 mul_eq_zero_of_anticommute
-  结论: {a b : R} [NonUnitalSemiring R] [IsAddTorsionFree R]
+  结论: {a b : R} [非幺半环 R] [是加法无挠 R]
   证明: by
   have h : a * b * a = 0 := by
     rw [← nsmul_right_inj ((Nat.zero_ne_add_one 1).symm)]; rw [nsmul_zero]
@@ -457,7 +457,7 @@ lemma commute_of_anticommute
 
 中文:
 引理 commute_of_anticommute
-  结论: {a b : R} [NonUnitalSemiring R] [IsAddTorsionFree R]
+  结论: {a b : R} [非幺半环 R] [是加法无挠 R]
   证明: by
   have := mul_eq_zero_of_anticommute ha hab
   rw [this]; rw [zero_add] at hab
@@ -486,7 +486,7 @@ theorem sub_iff
 
 中文:
 定理 sub_iff
-  结论: [NonUnitalRing R] [IsAddTorsionFree R] {p q : R}
+  结论: [非幺环 R] [是加法无挠 R] {p q : R}
   证明: by
   refine ⟨fun hqp => ?_, fun ⟨h1, h2⟩ => hp.sub hq h1 h2⟩
 .mp ((add_sub_cancel p q).symm ▸ hq) have h : p * (q - p) + (q - p) * p = 0 := hp.add_iff hqp

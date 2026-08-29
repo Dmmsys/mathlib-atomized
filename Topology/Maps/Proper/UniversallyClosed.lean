@@ -36,7 +36,7 @@ theorem isProperMap_iff_isClosedMap_filter
 
 中文:
 定理 isProperMap_iff_isClosedMap_filter
-  结论: {X : 类型u} {Y : 类型v} [TopologicalSpace X]
+  结论: {X : 类型u} {Y : 类型v} [拓扑空间 X]
   证明: by
   constructor <;> intro H
   -- The direct implication is clear.
@@ -103,7 +103,7 @@ theorem isProperMap_iff_isClosedMap_ultrafilter
 
 中文:
 定理 isProperMap_iff_isClosedMap_ultrafilter
-  结论: {X : 类型u} {Y : 类型v} [TopologicalSpace X]
+  结论: {X : 类型u} {Y : 类型v} [拓扑空间 X]
   证明: by
   -- The proof is basically the same as above.
   constructor <;> intro H
@@ -148,7 +148,7 @@ theorem isProperMap_iff_universally_closed
 
 中文:
 定理 isProperMap_iff_universally_closed
-  结论: {X : 类型u} {Y : 类型v} [TopologicalSpace X]
+  结论: {X : 类型u} {Y : 类型v} [拓扑空间 X]
   证明: by
   constructor <;> intro H
   · exact ⟨H.continuous, fun Z => H.universally_closed _⟩

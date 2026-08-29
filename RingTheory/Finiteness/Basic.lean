@@ -41,7 +41,7 @@ theorem fg_bot
 
 中文:
 定理 fg_bot
-  结论: (⊥ : Submodule R M).FG
+  结论: (⊥ : 子模 R M).FG
   证明: ⟨∅, by rw [Finset.coe_empty, span_empty]⟩
 
 Depends on / 依赖: Finset, Finset.coe_empty, coe_empty, span_empty
@@ -60,7 +60,7 @@ theorem fg_span
 
 中文:
 定理 fg_span
-  条件: {s : Set M} (hs : s.Finite)
+  条件: {s : 集合 M} (hs : s.有限)
   结论: FG (span R s)
   证明: ⟨hs.toFinset, by rw [hs.coe_toFinset]⟩
 
@@ -101,8 +101,8 @@ theorem FG.sup
   fg_def.mpr ⟨t₁ union t₂, ht₁.union ht₂, by rw [span_union, span_t₁, span_t₂]⟩
 
 中文:
-定理 FG.sup
-  条件: {N₁ N₂ : Submodule R M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
+定理 FG.上确界
+  条件: {N₁ N₂ : 子模 R M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
   结论: (N₁ ⊔ N₂).FG
   证明: let ⟨t₁, ht₁, span_t₁⟩ := fg_def.mp hN₁
   let ⟨t₂, ht₂, span_t₂⟩ := fg_def.mp hN₂
@@ -123,7 +123,7 @@ theorem fg_finset_sup
 
 中文:
 定理 fg_finset_sup
-  条件: {ι : 类型} (s : Finset ι) (N : ι -> Submodule R M) (h : 对任意 i in s, (N i).FG)
+  条件: {ι : 类型} (s : 有限集 ι) (N : ι -> 子模 R M) (h : 对任意 i in s, (N i).FG)
   证明: Finset.sup_induction fg_bot (fun _ ha _ hb => ha.sup hb) h
 
 Depends on / 依赖: Finset, Finset.sup_induction, fg_bot, ha.sup, sup_induction
@@ -142,7 +142,7 @@ theorem fg_biSup
 
 中文:
 定理 fg_biSup
-  条件: {ι : 类型} (s : Finset ι) (N : ι -> Submodule R M) (h : 对任意 i in s, (N i).FG)
+  条件: {ι : 类型} (s : 有限集 ι) (N : ι -> 子模 R M) (h : 对任意 i in s, (N i).FG)
   证明: by simpa only [Finset.sup_eq_iSup] using fg_finset_sup s N h
 
 Depends on / 依赖: Finset, Finset.sup_eq_iSup, fg_finset_sup, sup_eq_iSup
@@ -162,7 +162,7 @@ theorem fg_iSup
 
 中文:
 定理 fg_iSup
-  条件: {ι : Sort*} [Finite ι] (N : ι -> Submodule R M) (h : 对任意 i, (N i).FG)
+  条件: {ι : 类型层*} [有限 ι] (N : ι -> 子模 R M) (h : 对任意 i, (N i).FG)
   证明: by
   cases nonempty_fintype (PLift ι)
   simpa [iSup_plift_down] using fg_biSup Finset.univ (N ∘ PLift.down) fun i _ => h i.down
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup {P : Submodule R M // P.FG}
+  签名: SemilatticeSup {P : 子模 R M // P.FG}
   定义体: fun P Q => ⟨P.val ⊔ Q.val, Submodule.FG.sup P.property Q.property⟩
   le_sup_left := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_left
   le_sup_right := fun P Q => by rw [← Subtype.coe_le_coe]; exact le_sup_right
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited {P : Submodule R M // P.FG}
+  签名: 可居 {P : 子模 R M // P.FG}
   定义体: ⟨⊥, fg_bot⟩
 
 Depends on / 依赖: fg_bot
@@ -247,7 +247,7 @@ theorem fg_pi
 
 中文:
 定理 fg_pi
-  结论: {ι : 类型} {M : ι -> 类型} [Finite ι] [对任意 i, AddCommMonoid (M i)]
+  结论: {ι : 类型} {M : ι -> 类型} [有限 ι] [对任意 i, 加法交换幺半群 (M i)]
   证明: by
   classical
     simp_rw [fg_def] at hsb ⊢
@@ -282,7 +282,7 @@ theorem FG.map
 
 中文:
 定理 FG.map
-  条件: {N : Submodule R M} (hs : N.FG)
+  条件: {N : 子模 R M} (hs : N.FG)
   结论: (N.map f).FG
   证明: let ⟨t, ht, span_t⟩ := fg_def.mp hs
   fg_def.mpr ⟨f '' t, ht.image _, by rw [span_image, span_t]⟩
@@ -304,7 +304,7 @@ lemma fg_range
 
 中文:
 引理 fg_range
-  条件: [Module.Finite R M] (f : M ->ₛₗ[σ] P)
+  条件: [模.有限 R M] (f : M ->ₛₗ[σ] P)
   结论: f.range.FG
   证明: by
   rw [LinearMap.range_eq_map]
@@ -330,7 +330,7 @@ map_injective_of_injective hf by
 
 中文:
 定理 fg_of_fg_map_injective
-  结论: (hf : Function.Injective f) {N : Submodule R M}
+  结论: (hf : 函数.单射 f) {N : 子模 R M}
   证明: let ⟨t, ht⟩ := hfn
   ⟨t.preimage f fun _ _ _ _ h => hf h,
 map_injective_of_injective hf by
@@ -359,7 +359,7 @@ theorem fg_map_iff
 
 中文:
 定理 fg_map_iff
-  条件: (hf : Function.Injective f) {N : Submodule R M}
+  条件: (hf : 函数.单射 f) {N : 子模 R M}
   证明: ⟨(fg_of_fg_map_injective _ hf ·), (.map _)⟩
 
 Depends on / 依赖: fg_of_fg_map_injective
@@ -383,7 +383,7 @@ theorem fg_of_fg_map
 
 中文:
 定理 fg_of_fg_map
-  结论: {R M P : 类型} [Ring R] [AddCommGroup M] [Module R M] [AddCommGroup P]
+  结论: {R M P : 类型} [环 R] [加法交换群 M] [模 R M] [加法交换群 P]
   证明: fg_of_fg_map_injective f (LinearMap.ker_eq_bot.mp hf) hfn
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mp, fg_of_fg_map_injective, ker_eq_bot
@@ -405,8 +405,8 @@ theorem fg_top
 
 中文:
 定理 fg_top
-  条件: (N : Submodule R M)
-  结论: (⊤ : Submodule R N).FG ↔ N.FG
+  条件: (N : 子模 R M)
+  结论: (⊤ : 子模 R N).FG ↔ N.FG
   证明: by
   rw [← fg_map_iff N.subtype Subtype.val_injective]; rw [map_top]; rw [range_subtype]
 -/
@@ -424,8 +424,8 @@ theorem fg_of_linearEquiv
 
 中文:
 定理 fg_of_linearEquiv
-  条件: (e : M ≃ₗ[R] P) (h : (⊤ : Submodule R P).FG)
-  结论: (⊤ : Submodule R M).FG
+  条件: (e : M ≃ₗ[R] P) (h : (⊤ : 子模 R P).FG)
+  结论: (⊤ : 子模 R M).FG
   证明: e.symm.range ▸ map_top (e.symm : P ->ₗ[R] M) ▸ h.map _
 
 Depends on / 依赖: e.symm, e.symm.range, h.map, map_top
@@ -449,7 +449,7 @@ theorem fg_induction
 
 中文:
 定理 fg_induction
-  结论: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: by classical
   obtain ⟨s, rfl⟩ := hN
   induction s using Finset.induction with
@@ -487,7 +487,7 @@ theorem fg_sup_span_induction
 
 中文:
 定理 fg_sup_span_induction
-  结论: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: by classical
   obtain ⟨s, rfl⟩ := hN
   induction s using Finset.induction with
@@ -527,7 +527,7 @@ alias fg_restrictScalars := FG.restrictScalars_of_surjective
 
 中文:
 定理 FG.restrictScalars_of_surjective
-  结论: [CommSemiring R] [Algebra R A] [Module R M]
+  结论: [交换半环 R] [代数 R A] [模 R M]
   证明: by
   obtain ⟨s, rfl⟩ := hS
 exact ⟨s, .symm restrictScalars_span R A h _⟩
@@ -562,7 +562,7 @@ theorem FG.of_restrictScalars
 
 中文:
 定理 FG.of_restrictScalars
-  结论: (R) [Semiring R] [Module R M] [SMul R A] [IsScalarTower R A M]
+  结论: (R) [半环 R] [模 R M] [标量乘法 R A] [标量塔 R A M]
   证明: by
   obtain ⟨s, e⟩ := hS
   refine ⟨s, restrictScalars_injective R _ _ (le_antisymm ?_ ?_)⟩
@@ -601,7 +601,7 @@ theorem FG.stabilizes_of_iSup_eq
 
 中文:
 定理 FG.stabilizes_of_iSup_eq
-  结论: {M' : Submodule R M} (hM' : M'.FG) (N : 自然数 ->o Submodule R M)
+  结论: {M' : 子模 R M} (hM' : M'.FG) (N : 自然数 ->o 子模 R M)
   证明: by
   obtain ⟨S, hS⟩ := hM'
   have (s : S) : exists n, (s : M) in N n :=
@@ -645,7 +645,7 @@ theorem fg_iff_compact
 
 中文:
 定理 fg_iff_compact
-  条件: (s : Submodule R M)
+  条件: (s : 子模 R M)
   结论: s.FG ↔ IsCompactElement s
   证明: by
   -- Introduce shorthand for span of an element
@@ -704,8 +704,8 @@ instance [Module.Finite
   body: CompleteLattice.coatomic_of_top_compact by rwa [← fg_iff_compact, ← finite_def]
 
 中文:
-实例 [Module.Finite
-  签名: R M] : IsCoatomic (Submodule R M)
+实例 [模.有限
+  签名: R M] : 是余原子的 (子模 R M)
   定义体: CompleteLattice.coatomic_of_top_compact by rwa [← fg_iff_compact, ← finite_def]
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.coatomic_of_top_compact, coatomic_of_top_compact, fg_iff_compact, finite_def
@@ -737,7 +737,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: [hM : Module.Finite R M] (f : M ->ₛₗ[σ] P) (hf : Surjective f)
+  条件: [hM : 模.有限 R M] (f : M ->ₛₗ[σ] P) (hf : 满射 f)
   证明: by
   rw [Module.finite_def]; rw [Submodule.fg_def] at hM ⊢
   obtain ⟨s, hsfin, hs⟩ := hM
@@ -763,7 +763,7 @@ theorem _root_.LinearMap.finite_iff_of_bijective
     rwa [Submodule.map_top, LinearMap.range_eq_top.mpr hf.surjective, ← Module.finite_def]⟩⟩
 
 中文:
-定理 _root_.LinearMap.finite_iff_of_bijective
+定理 _root_.线性映射.finite_iff_of_bijective
   结论: [RingHomSurjective σ]
   证明: ⟨fun _ => of_surjective f hf.surjective, fun _ => ⟨fg_of_fg_map_injective f hf.injective by
     rwa [Submodule.map_top, LinearMap.range_eq_top.mpr hf.surjective, ← Module.finite_def]⟩⟩
@@ -787,7 +787,7 @@ instance quotient
 
 中文:
 实例 quotient
-  签名: (R) {A M} [Semiring R] [AddCommGroup M] [Ring A] [Module A M] [Module R M]
+  签名: (R) {A M} [半环 R] [加法交换群 M] [环 A] [模 A M] [模 R M]
   定义体: Module.Finite.of_surjective (N.mkQ.restrictScalars R) N.mkQ_surjective
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_surjective, N.mkQ.restrictScalars, N.mkQ_surjective, mkQ_surjective, of_surjective, restrictScalars
@@ -808,7 +808,7 @@ instance range
 
 中文:
 实例 range
-  签名: [Module.Finite R M] (f : M ->ₗ[R] N)
+  签名: [模.有限 R M] (f : M ->ₗ[R] N)
   定义体: of_surjective (SemilinearMapClass.semilinearMap f).rangeRestrict
     fun ⟨_, y, hy⟩ => ⟨y, Subtype.ext hy⟩
 
@@ -828,7 +828,7 @@ instance map
 
 中文:
 实例 map
-  签名: (p : Submodule R M) [Module.Finite R p] (f : M ->ₗ[R] N)
+  签名: (p : 子模 R M) [模.有限 R p] (f : M ->ₗ[R] N)
   定义体: of_surjective (f.restrict fun _ => mem_map_of_mem) fun ⟨_, _, hy, hy'⟩ => ⟨⟨_, hy⟩, Subtype.ext hy'⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, f.restrict, mem_map_of_mem, of_surjective, restrict
@@ -848,7 +848,7 @@ instance pi
 
 中文:
 实例 pi
-  签名: {ι : 类型} {M : ι -> 类型} [_root_.Finite ι] [对任意 i, AddCommMonoid (M i)]
+  签名: {ι : 类型} {M : ι -> 类型} [_root_.有限 ι] [对任意 i, 加法交换幺半群 (M i)]
   定义体: ⟨by
     rw [← pi_top]
     exact fg_pi fun i => (h i).fg_top⟩
@@ -871,7 +871,7 @@ theorem of_pi
 
 中文:
 定理 of_pi
-  结论: {ι : 类型} (M : ι -> 类型) [对任意 i, AddCommMonoid (M i)] [对任意 i, Module R (M i)]
+  结论: {ι : 类型} (M : ι -> 类型) [对任意 i, 加法交换幺半群 (M i)] [对任意 i, 模 R (M i)]
   证明: of_surjective _ LinearMap.proj_surjective i
 
 Depends on / 依赖: LinearMap, LinearMap.proj_surjective, of_surjective, proj_surjective
@@ -890,7 +890,7 @@ theorem pi_iff
 
 中文:
 定理 pi_iff
-  结论: {ι : 类型} {M : ι -> 类型} [_root_.Finite ι] [对任意 i, AddCommMonoid (M i)]
+  结论: {ι : 类型} {M : ι -> 类型} [_root_.有限 ι] [对任意 i, 加法交换幺半群 (M i)]
   证明: ⟨fun _ i => of_pi M i, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_pi
@@ -910,8 +910,8 @@ theorem _root_.Ideal.fg_top
   proof: ⟨{1}, by simpa only [Finset.coe_singleton] using Ideal.span_singleton_one⟩
 
 中文:
-定理 _root_.Ideal.fg_top
-  结论: (⊤ : Ideal R).FG
+定理 _root_.理想.fg_top
+  结论: (⊤ : 理想 R).FG
   证明: ⟨{1}, by simpa only [Finset.coe_singleton] using Ideal.span_singleton_one⟩
 
 Depends on / 依赖: Finset, Finset.coe_singleton, Ideal.span_singleton_one, coe_singleton, span_singleton_one
@@ -929,7 +929,7 @@ instance self
 
 中文:
 实例 self
-  签名: : Module.Finite R R
+  签名: : 模.有限 R R
   定义体: ⟨Ideal.fg_top R⟩
 
 Depends on / 依赖: Ideal.fg_top, fg_top
@@ -953,7 +953,7 @@ theorem of_restrictScalars_finite
 
 中文:
 定理 of_restrictScalars_finite
-  结论: (R A M : 类型) [Semiring R] [Semiring A] [AddCommMonoid M]
+  结论: (R A M : 类型) [半环 R] [半环 A] [加法交换幺半群 M]
   证明: by
   rw [finite_def]; rw [fg_def] at hM ⊢
   obtain ⟨S, hSfin, hSgen⟩ := hM
@@ -985,8 +985,8 @@ theorem equiv
 
 中文:
 定理 equiv
-  条件: [Module.Finite R M] (e : M ≃ₗ[R] N)
-  结论: Module.Finite R N
+  条件: [模.有限 R M] (e : M ≃ₗ[R] N)
+  结论: 模.有限 R N
   证明: of_surjective (e : M ->ₗ[R] N) e.surjective
 
 Depends on / 依赖: e.surjective, of_surjective, surjective
@@ -1006,7 +1006,7 @@ theorem equiv_iff
 中文:
 定理 equiv_iff
   条件: (e : M ≃ₗ[R] N)
-  结论: Module.Finite R M ↔ Module.Finite R N
+  结论: 模.有限 R M ↔ 模.有限 R N
   证明: ⟨fun _ => equiv e, fun _ => equiv e.symm⟩
 
 Depends on / 依赖: e.symm
@@ -1023,8 +1023,8 @@ instance [Module.Finite
   body: equiv (MulOpposite.opLinearEquiv R)
 
 中文:
-实例 [Module.Finite
-  签名: R M] : Module.Finite R Mᵐᵒᵖ
+实例 [模.有限
+  签名: R M] : 模.有限 R Mᵐᵒᵖ
   定义体: equiv (MulOpposite.opLinearEquiv R)
 
 Depends on / 依赖: MulOpposite, MulOpposite.opLinearEquiv, opLinearEquiv
@@ -1043,7 +1043,7 @@ universe u in
 
 中文:
 实例 ulift
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: equiv ULift.moduleEquiv.symm
 
 universe u in
@@ -1063,7 +1063,7 @@ instance shrink
 
 中文:
 实例 shrink
-  签名: [Module.Finite R M] [Small.{u} M]
+  签名: [模.有限 R M] [Small.{u} M]
   定义体: Module.Finite.equiv (Shrink.linearEquiv R M).symm
 
 Depends on / 依赖: Finite, Module, Module.Finite.equiv, Shrink, Shrink.linearEquiv, linearEquiv
@@ -1085,8 +1085,8 @@ theorem iff_fg
 
 中文:
 定理 iff_fg
-  条件: {N : Submodule R M}
-  结论: Module.Finite R N ↔ N.FG
+  条件: {N : 子模 R M}
+  结论: 模.有限 R N ↔ N.FG
   证明: finite_def.trans N.fg_top
 
 Depends on / 依赖: N.fg_top, fg_top, finite_def, finite_def.trans
@@ -1106,8 +1106,8 @@ theorem _root_.Submodule.FG.of_finite
   proof: iff_fg.mp ‹_›
 
 中文:
-定理 _root_.Submodule.FG.of_finite
-  条件: {N : Submodule R M} [Module.Finite R N]
+定理 _root_.子模.FG.of_finite
+  条件: {N : 子模 R M} [模.有限 R N]
   结论: N.FG
   证明: iff_fg.mp ‹_›
 
@@ -1128,7 +1128,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : Module.Finite R (⊥ : Submodule R M)
+  签名: : 模.有限 R (⊥ : 子模 R M)
   定义体: .of_fg fg_bot
 
 Depends on / 依赖: fg_bot, of_fg
@@ -1145,7 +1145,7 @@ instance top
 
 中文:
 实例 top
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: .of_fg fg_top
 
 Depends on / 依赖: fg_top, of_fg
@@ -1165,7 +1165,7 @@ instance top_left
 
 中文:
 实例 top_left
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: have : RingHomSurjective (Subsemiring.topEquiv (R := R)).symm.toRingHom :=
     RingHomSurjective.instToRingHomRingEquiv Subsemiring.topEquiv.symm
   of_surjective (σ := (Subsemiring.topEquiv (R := R)).symm.toRingHom)
@@ -1192,8 +1192,8 @@ theorem span_of_finite
 
 中文:
 定理 span_of_finite
-  条件: {A : Set M} (hA : Set.Finite A)
-  结论: Module.Finite R (span R A)
+  条件: {A : 集合 M} (hA : 集合.有限 A)
+  结论: 模.有限 R (span R A)
   证明: of_fg ⟨hA.toFinset, hA.coe_toFinset.symm ▸ rfl⟩
 
 Depends on / 依赖: coe_toFinset, hA.coe_toFinset.symm, hA.toFinset, of_fg, toFinset
@@ -1229,7 +1229,7 @@ instance span_finset
 
 中文:
 实例 span_finset
-  签名: (s : Finset M)
+  签名: (s : 有限集 M)
   定义体: of_fg ⟨s, rfl⟩
 
 Depends on / 依赖: of_fg
@@ -1250,7 +1250,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: {R : 类型} (A M : 类型) [Semiring R] [Semiring A] [Module R A]
+  结论: {R : 类型} (A M : 类型) [半环 R] [半环 A] [模 R A]
 -/
 theorem trans {R : Type*} (A M : Type*) [Semiring R] [Semiring A] [Module R A]
     [AddCommMonoid M] [Module R M] [Module A M] [IsScalarTower R A M] :
@@ -1279,7 +1279,7 @@ lemma of_equiv_equiv
 
 中文:
 引理 of_equiv_equiv
-  结论: {A₁ B₁ A₂ B₂ : 类型} [CommSemiring A₁] [CommSemiring B₁]
+  结论: {A₁ B₁ A₂ B₂ : 类型} [交换半环 A₁] [交换半环 B₁]
   证明: by
   let := e₁.toRingHom.toAlgebra
   let := ((algebraMap A₁ B₁).comp e₁.symm.toRingHom).toAlgebra
@@ -1334,7 +1334,7 @@ instance finite_sup
 
 中文:
 实例 finite_sup
-  签名: (S₁ S₂ : Submodule R V) [h₁ : Module.Finite R S₁]
+  签名: (S₁ S₂ : 子模 R V) [h₁ : 模.有限 R S₁]
   定义体: by
   rw [Finite.iff_fg] at *
   exact .sup h₁ h₂
@@ -1360,7 +1360,7 @@ instance finite_finset_sup
 
 中文:
 实例 finite_finset_sup
-  签名: {ι : 类型} (s : Finset ι) (S : ι -> Submodule R V)
+  签名: {ι : 类型} (s : 有限集 ι) (S : ι -> 子模 R V)
   定义体: by
   refine s.sup_induction (f := S) (p := fun i => Module.Finite R ↑i) (Module.Finite.bot R V) ?_
     inferInstance
@@ -1399,7 +1399,7 @@ theorem FG.restrictScalars
 
 中文:
 定理 FG.restrictScalars
-  条件: [Module.Finite R A] (hS : S.FG)
+  条件: [模.有限 R A] (hS : S.FG)
   结论: (S.restrictScalars R).FG
   证明: by
   rw [← Module.Finite.iff_fg] at *
@@ -1425,7 +1425,7 @@ theorem FG.restrictScalars_iff
 
 中文:
 定理 FG.restrictScalars_iff
-  条件: [Module.Finite R A]
+  条件: [模.有限 R A]
   结论: (S.restrictScalars R).FG ↔ S.FG
   证明: ⟨of_restrictScalars R, restrictScalars⟩
 
@@ -1448,8 +1448,8 @@ theorem FG.span
 
 中文:
 定理 FG.span
-  条件: {S : Submodule R M} (hS : S.FG)
-  结论: (span A (S : Set M)).FG
+  条件: {S : 子模 R M} (hS : S.FG)
+  结论: (span A (S : 集合 M)).FG
   证明: by
   obtain ⟨t, ht⟩ := hS
   use t
@@ -1481,7 +1481,7 @@ theorem id
 
 中文:
 定理 id
-  结论: Finite (RingHom.id A)
+  结论: 有限 (环态射.id A)
   证明: Module.Finite.self A
 
 Depends on / 依赖: Finite, Module, Module.Finite.self
@@ -1501,8 +1501,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->+* B) (hf : Surjective f)
-  结论: f.Finite
+  条件: (f : A ->+* B) (hf : 满射 f)
+  结论: f.有限
   证明: letI := f.toAlgebra
   Module.Finite.of_surjective (Algebra.linearMap A B) hf
 
@@ -1522,9 +1522,9 @@ lemma _root_.RingEquiv.finite
   proof: .of_surjective _ e.surjective
 
 中文:
-引理 _root_.RingEquiv.finite
+引理 _root_.环等价.finite
   条件: (e : A ≃+* B)
-  结论: e.toRingHom.Finite
+  结论: e.toRingHom.有限
   证明: .of_surjective _ e.surjective
 
 Depends on / 依赖: e.surjective, of_surjective, surjective
@@ -1548,8 +1548,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.Finite) (hf : f.Finite)
-  结论: (g.comp f).Finite
+  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.有限) (hf : f.有限)
+  结论: (g.comp f).有限
   证明: by
   algebraize [f, g, g.comp f]
   exact .trans B C
@@ -1573,8 +1573,8 @@ theorem of_comp_finite
 
 中文:
 定理 of_comp_finite
-  条件: {f : A ->+* B} {g : B ->+* C} (h : (g.comp f).Finite)
-  结论: g.Finite
+  条件: {f : A ->+* B} {g : B ->+* C} (h : (g.comp f).有限)
+  结论: g.有限
   证明: by
   algebraize [f, g, g.comp f]
   exact .of_restrictScalars_finite A B C
@@ -1609,7 +1609,7 @@ theorem id
 
 中文:
 定理 id
-  结论: Finite (AlgHom.id R A)
+  结论: 有限 (代数态射.id R A)
   证明: RingHom.Finite.id A
 
 Depends on / 依赖: Finite, RingHom, RingHom.Finite.id
@@ -1630,8 +1630,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.Finite) (hf : f.Finite)
-  结论: (g.comp f).Finite
+  条件: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.有限) (hf : f.有限)
+  结论: (g.comp f).有限
   证明: RingHom.Finite.comp hg hf
 
 Depends on / 依赖: Finite, RingHom, RingHom.Finite.comp
@@ -1650,8 +1650,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->ₐ[R] B) (hf : Surjective f)
-  结论: f.Finite
+  条件: (f : A ->ₐ[R] B) (hf : 满射 f)
+  结论: f.有限
   证明: RingHom.Finite.of_surjective f.toRingHom hf
 
 Depends on / 依赖: Finite, RingHom, RingHom.Finite.of_surjective, f.toRingHom, of_surjective, toRingHom
@@ -1670,8 +1670,8 @@ theorem of_comp_finite
 
 中文:
 定理 of_comp_finite
-  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (h : (g.comp f).Finite)
-  结论: g.Finite
+  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (h : (g.comp f).有限)
+  结论: g.有限
   证明: RingHom.Finite.of_comp_finite h
 
 Depends on / 依赖: Finite, RingHom, RingHom.Finite.of_comp_finite, of_comp_finite
@@ -1704,7 +1704,7 @@ instance instModuleFiniteAux
 
 中文:
 实例 instModuleFiniteAux
-  签名: : Module.Finite R>=0 R
+  签名: : 模.有限 R>=0 R
   定义体: by
   simp_rw [Module.finite_def, Submodule.fg_def, Submodule.eq_top_iff']
   refine ⟨{1, -1}, by simp, fun x => ?_⟩
@@ -1732,7 +1732,7 @@ instance instModuleFinite
 
 中文:
 实例 instModuleFinite
-  签名: [Module.Finite R E]
+  签名: [模.有限 R E]
   定义体: .trans R E
 -/
 instance instModuleFinite [Module.Finite R E] : Module.Finite R>=0 E := .trans R E

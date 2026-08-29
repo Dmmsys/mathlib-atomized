@@ -57,7 +57,7 @@ definition Convex
   body: forall ⦃x : E⦄, x in s -> StarConvex 𝕜 x s
 
 中文:
-定义 Convex
+定义 凸
   签名: : 命题
   定义体: forall ⦃x : E⦄, x in s -> StarConvex 𝕜 x s
 
@@ -78,8 +78,8 @@ theorem Convex.starConvex
   proof: hs hx
 
 中文:
-定理 Convex.starConvex
-  条件: (hs : Convex 𝕜 s) (hx : x in s)
+定理 凸.starConvex
+  条件: (hs : 凸 𝕜 s) (hx : x in s)
   结论: StarConvex 𝕜 x s
   证明: hs hx
 -/
@@ -96,7 +96,7 @@ theorem convex_iff_segment_subset
 
 中文:
 定理 convex_iff_segment_subset
-  结论: Convex 𝕜 s ↔ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄, y in s -> [x -[𝕜] y] subseteq s
+  结论: 凸 𝕜 s ↔ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄, y in s -> [x -[𝕜] y] subseteq s
   证明: forall₂_congr fun _ _ => starConvex_iff_segment_subset
 
 Depends on / 依赖: starConvex_iff_segment_subset
@@ -113,8 +113,8 @@ theorem Convex.segment_subset
   proof: convex_iff_segment_subset.1 h hx hy
 
 中文:
-定理 Convex.segment_subset
-  条件: (h : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
+定理 凸.segment_subset
+  条件: (h : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
   证明: convex_iff_segment_subset.1 h hx hy
 
 Depends on / 依赖: convex_iff_segment_subset
@@ -132,8 +132,8 @@ theorem Convex.openSegment_subset
   proof: (openSegment_subset_segment 𝕜 x y).trans (h.segment_subset hx hy)
 
 中文:
-定理 Convex.openSegment_subset
-  条件: (h : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
+定理 凸.openSegment_subset
+  条件: (h : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
   证明: (openSegment_subset_segment 𝕜 x y).trans (h.segment_subset hx hy)
 
 Depends on / 依赖: h.segment_subset, openSegment_subset_segment, segment_subset
@@ -153,7 +153,7 @@ theorem convex_iff_add_mem
 
 中文:
 定理 convex_iff_add_mem
-  结论: Convex 𝕜 s ↔
+  结论: 凸 𝕜 s ↔
   证明: by
   simp_rw [convex_iff_segment_subset, segment_subset_iff]
 
@@ -208,7 +208,7 @@ theorem convex_empty
 
 中文:
 定理 convex_empty
-  结论: Convex 𝕜 (∅ : Set E)
+  结论: 凸 𝕜 (∅ : 集合 E)
   证明: fun _ => False.elim
 
 Depends on / 依赖: False.elim
@@ -225,7 +225,7 @@ theorem convex_univ
 
 中文:
 定理 convex_univ
-  结论: Convex 𝕜 (Set.univ : Set E)
+  结论: 凸 𝕜 (集合.univ : 集合 E)
   证明: fun _ _ => starConvex_univ _
 
 Depends on / 依赖: starConvex_univ
@@ -242,9 +242,9 @@ theorem Convex.inter
   proof: fun _ hx => (hs hx.1).inter (ht hx.2)
 
 中文:
-定理 Convex.inter
-  条件: {t : Set E} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t)
-  结论: Convex 𝕜 (s inter t)
+定理 凸.inter
+  条件: {t : 集合 E} (hs : 凸 𝕜 s) (ht : 凸 𝕜 t)
+  结论: 凸 𝕜 (s inter t)
   证明: fun _ hx => (hs hx.1).inter (ht hx.2)
 -/
 theorem Convex.inter {t : Set E} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) : Convex 𝕜 (s inter t) :=
@@ -261,9 +261,9 @@ theorem convex_sInter
 starConvex_sInter fun _ hs => h _ hs hx _ hs
 
 中文:
-定理 convex_sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, Convex 𝕜 s)
-  结论: Convex 𝕜 (⋂₀ S)
+定理 convex_s整数er
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, 凸 𝕜 s)
+  结论: 凸 𝕜 (⋂₀ S)
   证明: fun _ hx =>
 starConvex_sInter fun _ hs => h _ hs hx _ hs
 -/
@@ -279,8 +279,8 @@ theorem convex_iInter
   proof: sInter_range s ▸ convex_sInter forall_mem_range.2 h
 
 中文:
-定理 convex_iInter
-  条件: {ι : Sort*} {s : ι -> Set E} (h : 对任意 i, Convex 𝕜 (s i))
+定理 convex_i整数er
+  条件: {ι : 类型层*} {s : ι -> 集合 E} (h : 对任意 i, 凸 𝕜 (s i))
   证明: sInter_range s ▸ convex_sInter forall_mem_range.2 h
 
 Depends on / 依赖: convex_sInter, forall_mem_range, sInter_range
@@ -298,8 +298,8 @@ theorem convex_iInter₂
   proof: convex_iInter fun i => convex_iInter h i
 
 中文:
-定理 convex_iInter₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {s : (i : ι) -> κ i -> Set E}
+定理 convex_i整数er₂
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {s : (i : ι) -> κ i -> 集合 E}
   证明: convex_iInter fun i => convex_iInter h i
 
 Depends on / 依赖: convex_iInter
@@ -317,8 +317,8 @@ theorem Convex.prod
   proof: fun _ hx => (hs hx.1).prod (ht hx.2)
 
 中文:
-定理 Convex.prod
-  条件: {s : Set E} {t : Set F} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t)
+定理 凸.乘积
+  条件: {s : 集合 E} {t : 集合 F} (hs : 凸 𝕜 s) (ht : 凸 𝕜 t)
   证明: fun _ hx => (hs hx.1).prod (ht hx.2)
 -/
 theorem Convex.prod {s : Set E} {t : Set F} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t) :
@@ -334,7 +334,7 @@ theorem convex_pi
 
 中文:
 定理 convex_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommMonoid (E i)] [对任意 i, SMul 𝕜 (E i)]
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换幺半群 (E i)] [对任意 i, 标量乘法 𝕜 (E i)]
   证明: fun _ hx => starConvex_pi fun _ hi => ht hi hx _ hi
 
 Depends on / 依赖: starConvex_pi
@@ -359,7 +359,7 @@ theorem Directed.convex_iUnion
 
 中文:
 定理 Directed.convex_iUnion
-  结论: {ι : Sort*} {s : ι -> Set E} (hdir : Directed (· subseteq ·) s)
+  结论: {ι : 类型层*} {s : ι -> 集合 E} (hdir : Directed (· subseteq ·) s)
   证明: by
   rintro x hx y hy a b ha hb hab
   rw [mem_iUnion] at hx hy ⊢
@@ -391,7 +391,7 @@ theorem DirectedOn.convex_sUnion
 
 中文:
 定理 DirectedOn.convex_sUnion
-  结论: {c : Set (Set E)} (hdir : DirectedOn (· subseteq ·) c)
+  结论: {c : 集合 (集合 E)} (hdir : DirectedOn (· subseteq ·) c)
   证明: by
   rw [sUnion_eq_iUnion]
   exact (directedOn_iff_directed.1 hdir).convex_iUnion fun A => hc A.2
@@ -416,9 +416,9 @@ theorem Convex.setOfPred_const_imp
 @[deprecated (since := "2026-07-09")] alias Convex.setOf_const_imp := Convex.setOfPred_const_imp
 
 中文:
-定理 Convex.setOfPred_const_imp
-  条件: {P : 命题} (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 {x | P -> x in s}
+定理 凸.setOfPred_const_imp
+  条件: {P : 命题} (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 {x | P -> x in s}
   证明: by
   by_cases hP : P <;> simp [hP, hs, convex_univ]
 
@@ -447,7 +447,7 @@ theorem convex_iff_openSegment_subset
 
 中文:
 定理 convex_iff_openSegment_subset
-  条件: [ZeroLEOneClass 𝕜]
+  条件: [ZeroLEOne类 𝕜]
   证明: forall₂_congr fun _ => starConvex_iff_openSegment_subset
 
 Depends on / 依赖: starConvex_iff_openSegment_subset
@@ -464,7 +464,7 @@ theorem convex_iff_forall_pos
   proof: forall₂_congr fun _ => starConvex_iff_forall_pos
 
 中文:
-定理 convex_iff_forall_pos
+定理 convex_iff_对任意_pos
   证明: forall₂_congr fun _ => starConvex_iff_forall_pos
 
 Depends on / 依赖: starConvex_iff_forall_pos
@@ -489,7 +489,7 @@ theorem convex_iff_pairwise_pos
 
 中文:
 定理 convex_iff_pairwise_pos
-  结论: Convex 𝕜 s ↔
+  结论: 凸 𝕜 s ↔
   证明: by
   refine convex_iff_forall_pos.trans ⟨fun h x hx y hy _ => h hx hy, ?_⟩
   intro h x hx y hy a b ha hb hab
@@ -516,8 +516,8 @@ theorem Convex.starConvex_iff
   proof: ⟨fun hxs => hxs.mem h, hs.starConvex⟩
 
 中文:
-定理 Convex.starConvex_iff
-  条件: [ZeroLEOneClass 𝕜] (hs : Convex 𝕜 s) (h : s.Nonempty)
+定理 凸.starConvex_iff
+  条件: [ZeroLEOne类 𝕜] (hs : 凸 𝕜 s) (h : s.非空)
   证明: ⟨fun hxs => hxs.mem h, hs.starConvex⟩
 
 Depends on / 依赖: hs.starConvex, hxs.mem, starConvex
@@ -536,9 +536,9 @@ theorem Set.Subsingleton.convex
   proof: convex_iff_pairwise_pos.mpr (h.pairwise _)
 
 中文:
-定理 Set.Subsingleton.convex
-  条件: {s : Set E} (h : s.Subsingleton)
-  结论: Convex 𝕜 s
+定理 集合.子单例.convex
+  条件: {s : 集合 E} (h : s.子单例)
+  结论: 凸 𝕜 s
   证明: convex_iff_pairwise_pos.mpr (h.pairwise _)
 -/
 protected theorem Set.Subsingleton.convex {s : Set E} (h : s.Subsingleton) : Convex 𝕜 s :=
@@ -556,7 +556,7 @@ theorem convex_singleton
 中文:
 定理 convex_singleton
   条件: (c : E)
-  结论: Convex 𝕜 ({c} : Set E)
+  结论: 凸 𝕜 ({c} : 集合 E)
   证明: subsingleton_singleton.convex
 -/
 @[simp] theorem convex_singleton (c : E) : Convex 𝕜 ({c} : Set E) :=
@@ -572,7 +572,7 @@ theorem convex_zero
 
 中文:
 定理 convex_zero
-  结论: Convex 𝕜 (0 : Set E)
+  结论: 凸 𝕜 (0 : 集合 E)
   证明: convex_singleton _
 
 Depends on / 依赖: convex_singleton
@@ -596,8 +596,8 @@ theorem convex_segment
 
 中文:
 定理 convex_segment
-  条件: [IsOrderedRing 𝕜] (x y : E)
-  结论: Convex 𝕜 [x -[𝕜] y]
+  条件: [是Ordered环 𝕜] (x y : E)
+  结论: 凸 𝕜 [x -[𝕜] y]
   证明: by
   rintro p ⟨ap, bp, hap, hbp, habp, rfl⟩ q ⟨aq, bq, haq, hbq, habq, rfl⟩ a b ha hb hab
   refine
@@ -627,9 +627,9 @@ theorem Convex.linear_image
   exact ⟨a • x + b • y, hs hx hy ha hb hab, by rw [f.map_add, f.map_smul, f.map_smul]⟩
 
 中文:
-定理 Convex.linear_image
-  条件: (hs : Convex 𝕜 s) (f : E ->ₗ[𝕜] F)
-  结论: Convex 𝕜 (f '' s)
+定理 凸.linear_image
+  条件: (hs : 凸 𝕜 s) (f : E ->ₗ[𝕜] F)
+  结论: 凸 𝕜 (f '' s)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ a b ha hb hab
   exact ⟨a • x + b • y, hs hx hy ha hb hab, by rw [f.map_add, f.map_smul, f.map_smul]⟩
@@ -649,8 +649,8 @@ theorem Convex.is_linear_image
   proof: hs.linear_image hf.mk' f
 
 中文:
-定理 Convex.is_linear_image
-  条件: (hs : Convex 𝕜 s) {f : E -> F} (hf : IsLinearMap 𝕜 f)
+定理 凸.is_linear_image
+  条件: (hs : 凸 𝕜 s) {f : E -> F} (hf : 是线性映射 𝕜 f)
   证明: hs.linear_image hf.mk' f
 
 Depends on / 依赖: hf.mk, hs.linear_image, linear_image
@@ -671,9 +671,9 @@ theorem Convex.linear_preimage
     exact hs hx hy ha hb hab
 
 中文:
-定理 Convex.linear_preimage
-  条件: {s : Set F} (hs : Convex 𝕜 s) (f : E ->ₗ[𝕜] F)
-  结论: Convex 𝕜 (f ⁻¹' s)
+定理 凸.linear_preimage
+  条件: {s : 集合 F} (hs : 凸 𝕜 s) (f : E ->ₗ[𝕜] F)
+  结论: 凸 𝕜 (f ⁻¹' s)
   证明: fun x hx y hy a b ha hb hab => by
     rw [mem_preimage]; rw [f.map_add]; rw [LinearMap.map_smul_of_tower]; rw [LinearMap.map_smul_of_tower]
     exact hs hx hy ha hb hab
@@ -694,8 +694,8 @@ theorem Convex.is_linear_preimage
   proof: hs.linear_preimage hf.mk' f
 
 中文:
-定理 Convex.is_linear_preimage
-  条件: {s : Set F} (hs : Convex 𝕜 s) {f : E -> F} (hf : IsLinearMap 𝕜 f)
+定理 凸.is_linear_preimage
+  条件: {s : 集合 F} (hs : 凸 𝕜 s) {f : E -> F} (hf : 是线性映射 𝕜 f)
   证明: hs.linear_preimage hf.mk' f
 
 Depends on / 依赖: hf.mk, hs.linear_preimage, linear_preimage
@@ -715,9 +715,9 @@ theorem Convex.add
   exact (hs.prod ht).is_linear_image IsLinearMap.isLinearMap_add
 
 中文:
-定理 Convex.add
-  条件: {t : Set E} (hs : Convex 𝕜 s) (ht : Convex 𝕜 t)
-  结论: Convex 𝕜 (s + t)
+定理 凸.add
+  条件: {t : 集合 E} (hs : 凸 𝕜 s) (ht : 凸 𝕜 t)
+  结论: 凸 𝕜 (s + t)
   证明: by
   rw [← add_image_prod]
   exact (hs.prod ht).is_linear_image IsLinearMap.isLinearMap_add
@@ -744,7 +744,7 @@ definition convexAddSubmonoid
 
 中文:
 定义 convexAddSubmonoid
-  签名: : AddSubmonoid (Set E) where
+  签名: : 加法子幺半群 (集合 E) where
   定义体: {s : Set E | Convex 𝕜 s}
   zero_mem' := convex_zero
   add_mem' := Convex.add
@@ -769,7 +769,7 @@ theorem coe_convexAddSubmonoid
 
 中文:
 定理 coe_convexAddSubmonoid
-  结论: ↑(convexAddSubmonoid 𝕜 E) = {s : Set E | Convex 𝕜 s}
+  结论: ↑(convexAddSubmonoid 𝕜 E) = {s : 集合 E | 凸 𝕜 s}
   证明: rfl
 -/
 theorem coe_convexAddSubmonoid : ↑(convexAddSubmonoid 𝕜 E) = {s : Set E | Convex 𝕜 s} :=
@@ -789,8 +789,8 @@ theorem mem_convexAddSubmonoid
 
 中文:
 定理 mem_convexAddSubmonoid
-  条件: {s : Set E}
-  结论: s in convexAddSubmonoid 𝕜 E ↔ Convex 𝕜 s
+  条件: {s : 集合 E}
+  结论: s in convexAddSubmonoid 𝕜 E ↔ 凸 𝕜 s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -809,8 +809,8 @@ theorem convex_list_sum
 
 中文:
 定理 convex_list_sum
-  条件: {l : List (Set E)} (h : 对任意 i in l, Convex 𝕜 i)
-  结论: Convex 𝕜 l.sum
+  条件: {l : 列表 (集合 E)} (h : 对任意 i in l, 凸 𝕜 i)
+  结论: 凸 𝕜 l.求和
   证明: (convexAddSubmonoid 𝕜 E).list_sum_mem h
 
 Depends on / 依赖: convexAddSubmonoid, list_sum_mem
@@ -829,8 +829,8 @@ theorem convex_multiset_sum
 
 中文:
 定理 convex_multiset_sum
-  条件: {s : Multiset (Set E)} (h : 对任意 i in s, Convex 𝕜 i)
-  结论: Convex 𝕜 s.sum
+  条件: {s : Multiset (集合 E)} (h : 对任意 i in s, 凸 𝕜 i)
+  结论: 凸 𝕜 s.求和
   证明: (convexAddSubmonoid 𝕜 E).multiset_sum_mem _ h
 
 Depends on / 依赖: convexAddSubmonoid, multiset_sum_mem
@@ -848,7 +848,7 @@ theorem convex_sum
 
 中文:
 定理 convex_sum
-  条件: {ι} {s : Finset ι} (t : ι -> Set E) (h : 对任意 i in s, Convex 𝕜 (t i))
+  条件: {ι} {s : 有限集 ι} (t : ι -> 集合 E) (h : 对任意 i in s, 凸 𝕜 (t i))
   证明: (convexAddSubmonoid 𝕜 E).sum_mem h
 
 Depends on / 依赖: convexAddSubmonoid, sum_mem
@@ -869,9 +869,9 @@ theorem Convex.vadd
   exact (convex_singleton _).add hs
 
 中文:
-定理 Convex.vadd
-  条件: (hs : Convex 𝕜 s) (z : E)
-  结论: Convex 𝕜 (z +ᵥ s)
+定理 凸.vadd
+  条件: (hs : 凸 𝕜 s) (z : E)
+  结论: 凸 𝕜 (z +ᵥ s)
   证明: by
   simp_rw [← image_vadd, vadd_eq_add, ← singleton_add]
   exact (convex_singleton _).add hs
@@ -892,9 +892,9 @@ theorem Convex.translate
   proof: hs.vadd _
 
 中文:
-定理 Convex.translate
-  条件: (hs : Convex 𝕜 s) (z : E)
-  结论: Convex 𝕜 ((fun x => z + x) '' s)
+定理 凸.translate
+  条件: (hs : 凸 𝕜 s) (z : E)
+  结论: 凸 𝕜 ((fun x => z + x) '' s)
   证明: hs.vadd _
 
 Depends on / 依赖: hs.vadd
@@ -914,8 +914,8 @@ theorem Convex.translate_preimage_right
   rwa [smul_add, smul_add, add_add_add_comm, ← add_smul, hab, one_smul] at h
 
 中文:
-定理 Convex.translate_preimage_right
-  条件: (hs : Convex 𝕜 s) (z : E)
+定理 凸.translate_preimage_right
+  条件: (hs : 凸 𝕜 s) (z : E)
   证明: by
   intro x hx y hy a b ha hb hab
   have h := hs hx hy ha hb hab
@@ -939,8 +939,8 @@ theorem Convex.translate_preimage_left
   simpa only [add_comm] using hs.translate_preimage_right z
 
 中文:
-定理 Convex.translate_preimage_left
-  条件: (hs : Convex 𝕜 s) (z : E)
+定理 凸.translate_preimage_left
+  条件: (hs : 凸 𝕜 s) (z : E)
   证明: by
   simpa only [add_comm] using hs.translate_preimage_right z
 
@@ -970,7 +970,7 @@ theorem convex_Iic
 中文:
 定理 convex_Iic
   条件: (r : β)
-  结论: Convex 𝕜 (Iic r)
+  结论: 凸 𝕜 (左无界右闭区间 r)
   证明: fun x hx y hy a b ha hb hab =>
   calc
     a • x + b • y <= a • r + b • r :=
@@ -995,7 +995,7 @@ theorem convex_Ici
 中文:
 定理 convex_Ici
   条件: (r : β)
-  结论: Convex 𝕜 (Ici r)
+  结论: 凸 𝕜 (左闭右无界区间 r)
   证明: convex_Iic (β := βᵒᵈ) r
 
 Depends on / 依赖: convex_Iic
@@ -1015,7 +1015,7 @@ theorem convex_Icc
 中文:
 定理 convex_Icc
   条件: (r s : β)
-  结论: Convex 𝕜 (Icc r s)
+  结论: 凸 𝕜 (闭区间 r s)
   证明: Ici_inter_Iic.subst ((convex_Ici r).inter <| convex_Iic s)
 
 Depends on / 依赖: Ici_inter_Iic, Ici_inter_Iic.subst, convex_Ici, convex_Iic
@@ -1034,8 +1034,8 @@ theorem convex_halfSpace_le
 
 中文:
 定理 convex_halfSpace_le
-  条件: {f : E -> β} (h : IsLinearMap 𝕜 f) (r : β)
-  结论: Convex 𝕜 { w | f w <= r }
+  条件: {f : E -> β} (h : 是线性映射 𝕜 f) (r : β)
+  结论: 凸 𝕜 { w | f w <= r }
   证明: (convex_Iic r).is_linear_preimage h
 
 Depends on / 依赖: convex_Iic, is_linear_preimage
@@ -1053,8 +1053,8 @@ theorem convex_halfSpace_ge
 
 中文:
 定理 convex_halfSpace_ge
-  条件: {f : E -> β} (h : IsLinearMap 𝕜 f) (r : β)
-  结论: Convex 𝕜 { w | r <= f w }
+  条件: {f : E -> β} (h : 是线性映射 𝕜 f) (r : β)
+  结论: 凸 𝕜 { w | r <= f w }
   证明: (convex_Ici r).is_linear_preimage h
 
 Depends on / 依赖: convex_Ici, is_linear_preimage
@@ -1074,8 +1074,8 @@ theorem convex_hyperplane
 
 中文:
 定理 convex_hyperplane
-  条件: {f : E -> β} (h : IsLinearMap 𝕜 f) (r : β)
-  结论: Convex 𝕜 { w | f w = r }
+  条件: {f : E -> β} (h : 是线性映射 𝕜 f) (r : β)
+  结论: 凸 𝕜 { w | f w = r }
   证明: by
   simp_rw [le_antisymm_iff]
   exact (convex_halfSpace_le h r).inter (convex_halfSpace_ge h r)
@@ -1113,7 +1113,7 @@ theorem convex_Iio
 中文:
 定理 convex_Iio
   条件: (r : β)
-  结论: Convex 𝕜 (Iio r)
+  结论: 凸 𝕜 (左无界右开区间 r)
   证明: by
   intro x hx y hy a b ha hb hab
   obtain rfl | ha' := ha.eq_or_lt
@@ -1149,7 +1149,7 @@ theorem convex_Ioi
 中文:
 定理 convex_Ioi
   条件: (r : β)
-  结论: Convex 𝕜 (Ioi r)
+  结论: 凸 𝕜 (左开右无界区间 r)
   证明: convex_Iio (β := βᵒᵈ) r
 
 Depends on / 依赖: convex_Iio
@@ -1169,7 +1169,7 @@ theorem convex_Ioo
 中文:
 定理 convex_Ioo
   条件: (r s : β)
-  结论: Convex 𝕜 (Ioo r s)
+  结论: 凸 𝕜 (开区间 r s)
   证明: Ioi_inter_Iio.subst ((convex_Ioi r).inter <| convex_Iio s)
 
 Depends on / 依赖: Ioi_inter_Iio, Ioi_inter_Iio.subst, convex_Iio, convex_Ioi
@@ -1189,7 +1189,7 @@ theorem convex_Ico
 中文:
 定理 convex_Ico
   条件: (r s : β)
-  结论: Convex 𝕜 (Ico r s)
+  结论: 凸 𝕜 (左闭右开区间 r s)
   证明: Ici_inter_Iio.subst ((convex_Ici r).inter <| convex_Iio s)
 
 Depends on / 依赖: Ici_inter_Iio, Ici_inter_Iio.subst, convex_Ici, convex_Iio
@@ -1209,7 +1209,7 @@ theorem convex_Ioc
 中文:
 定理 convex_Ioc
   条件: (r s : β)
-  结论: Convex 𝕜 (Ioc r s)
+  结论: 凸 𝕜 (左开右闭区间 r s)
   证明: Ioi_inter_Iic.subst ((convex_Ioi r).inter <| convex_Iic s)
 
 Depends on / 依赖: Ioi_inter_Iic, Ioi_inter_Iic.subst, convex_Iic, convex_Ioi
@@ -1228,8 +1228,8 @@ theorem convex_halfSpace_lt
 
 中文:
 定理 convex_halfSpace_lt
-  条件: {f : E -> β} (h : IsLinearMap 𝕜 f) (r : β)
-  结论: Convex 𝕜 { w | f w < r }
+  条件: {f : E -> β} (h : 是线性映射 𝕜 f) (r : β)
+  结论: 凸 𝕜 { w | f w < r }
   证明: (convex_Iio r).is_linear_preimage h
 
 Depends on / 依赖: convex_Iio, is_linear_preimage
@@ -1247,8 +1247,8 @@ theorem convex_halfSpace_gt
 
 中文:
 定理 convex_halfSpace_gt
-  条件: {f : E -> β} (h : IsLinearMap 𝕜 f) (r : β)
-  结论: Convex 𝕜 { w | r < f w }
+  条件: {f : E -> β} (h : 是线性映射 𝕜 f) (r : β)
+  结论: 凸 𝕜 { w | r < f w }
   证明: (convex_Ioi r).is_linear_preimage h
 
 Depends on / 依赖: convex_Ioi, is_linear_preimage
@@ -1273,7 +1273,7 @@ theorem convex_uIcc
 中文:
 定理 convex_uIcc
   条件: (r s : β)
-  结论: Convex 𝕜 (uIcc r s)
+  结论: 凸 𝕜 (uIcc r s)
   证明: convex_Icc _ _
 
 Depends on / 依赖: convex_Icc
@@ -1305,9 +1305,9 @@ theorem Convex.lift
   all_goals exact zero_smul R (1 : 𝕜) ▸ smul_le_smul_of_nonneg_right ‹_› zero_le_one
 
 中文:
-定理 Convex.lift
-  条件: [SMulPosMono R 𝕜] {s : Set E} (hs : Convex 𝕜 s)
-  结论: Convex R s
+定理 凸.lift
+  条件: [标量乘正递增 R 𝕜] {s : 集合 E} (hs : 凸 𝕜 s)
+  结论: 凸 R s
   证明: by
   intro x hx y hy a b ha hb hab
   suffices (a • (1 : 𝕜)) • x + (b • (1 : 𝕜)) • y in s by simpa using this
@@ -1346,7 +1346,7 @@ theorem MonotoneOn.convex_le
 
 中文:
 定理 MonotoneOn.convex_le
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: fun x hx y hy _ _ ha hb hab =>
   ⟨hs hx.1 hy.1 ha hb hab,
     (hf (hs hx.1 hy.1 ha hb hab) (max_rec' (· in s) hx.1 hy.1)
@@ -1374,7 +1374,7 @@ theorem MonotoneOn.convex_lt
 
 中文:
 定理 MonotoneOn.convex_lt
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: fun x hx y hy _ _ ha hb hab =>
   ⟨hs hx.1 hy.1 ha hb hab,
     (hf (hs hx.1 hy.1 ha hb hab) (max_rec' (· in s) hx.1 hy.1)
@@ -1398,7 +1398,7 @@ theorem MonotoneOn.convex_ge
 
 中文:
 定理 MonotoneOn.convex_ge
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_le (E := Eᵒᵈ) (β := βᵒᵈ) hf.dual (by exact hs) r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_le, convex_le, hf.dual
@@ -1417,7 +1417,7 @@ theorem MonotoneOn.convex_gt
 
 中文:
 定理 MonotoneOn.convex_gt
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_lt (E := Eᵒᵈ) (β := βᵒᵈ) hf.dual (by exact hs) r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_lt, convex_lt, hf.dual
@@ -1436,7 +1436,7 @@ theorem AntitoneOn.convex_le
 
 中文:
 定理 AntitoneOn.convex_le
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_ge (β := βᵒᵈ) hf hs r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_ge, convex_ge
@@ -1455,7 +1455,7 @@ theorem AntitoneOn.convex_lt
 
 中文:
 定理 AntitoneOn.convex_lt
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_gt (β := βᵒᵈ) hf hs r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_gt, convex_gt
@@ -1474,7 +1474,7 @@ theorem AntitoneOn.convex_ge
 
 中文:
 定理 AntitoneOn.convex_ge
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_le (β := βᵒᵈ) hf hs r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_le, convex_le
@@ -1493,7 +1493,7 @@ theorem AntitoneOn.convex_gt
 
 中文:
 定理 AntitoneOn.convex_gt
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s) (r : β)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s) (r : β)
   证明: MonotoneOn.convex_lt (β := βᵒᵈ) hf hs r
 
 Depends on / 依赖: MonotoneOn, MonotoneOn.convex_lt, convex_lt
@@ -1512,9 +1512,9 @@ theorem Monotone.convex_le
   proof: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 中文:
-定理 Monotone.convex_le
-  条件: (hf : Monotone f) (r : β)
-  结论: Convex 𝕜 { x | f x <= r }
+定理 递增.convex_le
+  条件: (hf : 递增 f) (r : β)
+  结论: 凸 𝕜 { x | f x <= r }
   证明: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, convex_le, convex_univ, hf.monotoneOn, monotoneOn, sep_univ
@@ -1532,9 +1532,9 @@ theorem Monotone.convex_lt
   proof: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 中文:
-定理 Monotone.convex_lt
-  条件: (hf : Monotone f) (r : β)
-  结论: Convex 𝕜 { x | f x <= r }
+定理 递增.convex_lt
+  条件: (hf : 递增 f) (r : β)
+  结论: 凸 𝕜 { x | f x <= r }
   证明: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, convex_le, convex_univ, hf.monotoneOn, monotoneOn, sep_univ
@@ -1552,9 +1552,9 @@ theorem Monotone.convex_ge
   proof: Set.sep_univ.subst ((hf.monotoneOn univ).convex_ge convex_univ r)
 
 中文:
-定理 Monotone.convex_ge
-  条件: (hf : Monotone f) (r : β)
-  结论: Convex 𝕜 { x | r <= f x }
+定理 递增.convex_ge
+  条件: (hf : 递增 f) (r : β)
+  结论: 凸 𝕜 { x | r <= f x }
   证明: Set.sep_univ.subst ((hf.monotoneOn univ).convex_ge convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, convex_ge, convex_univ, hf.monotoneOn, monotoneOn, sep_univ
@@ -1572,9 +1572,9 @@ theorem Monotone.convex_gt
   proof: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 中文:
-定理 Monotone.convex_gt
-  条件: (hf : Monotone f) (r : β)
-  结论: Convex 𝕜 { x | f x <= r }
+定理 递增.convex_gt
+  条件: (hf : 递增 f) (r : β)
+  结论: 凸 𝕜 { x | f x <= r }
   证明: Set.sep_univ.subst ((hf.monotoneOn univ).convex_le convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, convex_le, convex_univ, hf.monotoneOn, monotoneOn, sep_univ
@@ -1592,9 +1592,9 @@ theorem Antitone.convex_le
   proof: Set.sep_univ.subst ((hf.antitoneOn univ).convex_le convex_univ r)
 
 中文:
-定理 Antitone.convex_le
-  条件: (hf : Antitone f) (r : β)
-  结论: Convex 𝕜 { x | f x <= r }
+定理 递减.convex_le
+  条件: (hf : 递减 f) (r : β)
+  结论: 凸 𝕜 { x | f x <= r }
   证明: Set.sep_univ.subst ((hf.antitoneOn univ).convex_le convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, antitoneOn, convex_le, convex_univ, hf.antitoneOn, sep_univ
@@ -1612,9 +1612,9 @@ theorem Antitone.convex_lt
   proof: Set.sep_univ.subst ((hf.antitoneOn univ).convex_lt convex_univ r)
 
 中文:
-定理 Antitone.convex_lt
-  条件: (hf : Antitone f) (r : β)
-  结论: Convex 𝕜 { x | f x < r }
+定理 递减.convex_lt
+  条件: (hf : 递减 f) (r : β)
+  结论: 凸 𝕜 { x | f x < r }
   证明: Set.sep_univ.subst ((hf.antitoneOn univ).convex_lt convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, antitoneOn, convex_lt, convex_univ, hf.antitoneOn, sep_univ
@@ -1632,9 +1632,9 @@ theorem Antitone.convex_ge
   proof: Set.sep_univ.subst ((hf.antitoneOn univ).convex_ge convex_univ r)
 
 中文:
-定理 Antitone.convex_ge
-  条件: (hf : Antitone f) (r : β)
-  结论: Convex 𝕜 { x | r <= f x }
+定理 递减.convex_ge
+  条件: (hf : 递减 f) (r : β)
+  结论: 凸 𝕜 { x | r <= f x }
   证明: Set.sep_univ.subst ((hf.antitoneOn univ).convex_ge convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, antitoneOn, convex_ge, convex_univ, hf.antitoneOn, sep_univ
@@ -1652,9 +1652,9 @@ theorem Antitone.convex_gt
   proof: Set.sep_univ.subst ((hf.antitoneOn univ).convex_gt convex_univ r)
 
 中文:
-定理 Antitone.convex_gt
-  条件: (hf : Antitone f) (r : β)
-  结论: Convex 𝕜 { x | r < f x }
+定理 递减.convex_gt
+  条件: (hf : 递减 f) (r : β)
+  结论: 凸 𝕜 { x | r < f x }
   证明: Set.sep_univ.subst ((hf.antitoneOn univ).convex_gt convex_univ r)
 
 Depends on / 依赖: Set.sep_univ.subst, antitoneOn, convex_gt, convex_univ, hf.antitoneOn, sep_univ
@@ -1684,9 +1684,9 @@ theorem Convex.smul
   proof: hs.linear_image (LinearMap.lsmul _ _ c)
 
 中文:
-定理 Convex.smul
-  条件: (hs : Convex 𝕜 s) (c : 𝕜)
-  结论: Convex 𝕜 (c • s)
+定理 凸.smul
+  条件: (hs : 凸 𝕜 s) (c : 𝕜)
+  结论: 凸 𝕜 (c • s)
   证明: hs.linear_image (LinearMap.lsmul _ _ c)
 
 Depends on / 依赖: LinearMap, LinearMap.lsmul, hs.linear_image, linear_image
@@ -1704,9 +1704,9 @@ theorem Convex.smul_preimage
   proof: hs.linear_preimage (LinearMap.lsmul _ _ c)
 
 中文:
-定理 Convex.smul_preimage
-  条件: (hs : Convex 𝕜 s) (c : 𝕜)
-  结论: Convex 𝕜 ((fun z => c • z) ⁻¹' s)
+定理 凸.smul_preimage
+  条件: (hs : 凸 𝕜 s) (c : 𝕜)
+  结论: 凸 𝕜 ((fun z => c • z) ⁻¹' s)
   证明: hs.linear_preimage (LinearMap.lsmul _ _ c)
 
 Depends on / 依赖: LinearMap, LinearMap.lsmul, hs.linear_preimage, linear_preimage
@@ -1724,8 +1724,8 @@ theorem Convex.affinity
   simpa only [← image_smul, ← image_vadd, image_image] using! (hs.smul c).vadd z
 
 中文:
-定理 Convex.affinity
-  条件: (hs : Convex 𝕜 s) (z : E) (c : 𝕜)
+定理 凸.affinity
+  条件: (hs : 凸 𝕜 s) (z : E) (c : 𝕜)
   证明: by
   simpa only [← image_smul, ← image_vadd, image_image] using! (hs.smul c).vadd z
 
@@ -1760,7 +1760,7 @@ theorem convex_openSegment
 中文:
 定理 convex_openSegment
   条件: (a b : E)
-  结论: Convex 𝕜 (openSegment 𝕜 a b)
+  结论: 凸 𝕜 (openSegment 𝕜 a b)
   证明: by
   rw [convex_iff_openSegment_subset]
   rintro p ⟨ap, bp, hap, hbp, habp, rfl⟩ q ⟨aq, bq, haq, hbq, habq, rfl⟩ z ⟨a, b, ha, hb, hab, rfl⟩
@@ -1800,7 +1800,7 @@ theorem convex_vadd
 中文:
 定理 convex_vadd
   条件: (a : E)
-  结论: Convex 𝕜 (a +ᵥ s) ↔ Convex 𝕜 s
+  结论: 凸 𝕜 (a +ᵥ s) ↔ 凸 𝕜 s
   证明: ⟨fun h => by simpa using h.vadd (-a), fun h => h.vadd _⟩
 
 Depends on / 依赖: h.vadd
@@ -1818,9 +1818,9 @@ theorem AffineSubspace.convex
   proof: fun x hx y hy a b _ _ hab => by simpa [Convex.combo_eq_smul_sub_add hab] using! Q.2 _ hy hx hx
 
 中文:
-定理 AffineSubspace.convex
-  条件: (Q : AffineSubspace 𝕜 E)
-  结论: Convex 𝕜 (Q : Set E)
+定理 仿射子空间.convex
+  条件: (Q : 仿射子空间 𝕜 E)
+  结论: 凸 𝕜 (Q : 集合 E)
   证明: fun x hx y hy a b _ _ hab => by simpa [Convex.combo_eq_smul_sub_add hab] using! Q.2 _ hy hx hx
 
 Depends on / 依赖: Convex, Convex.combo_eq_smul_sub_add, combo_eq_smul_sub_add
@@ -1838,9 +1838,9 @@ theorem Convex.affine_preimage
   proof: fun _ hx => (hs hx).affine_preimage _
 
 中文:
-定理 Convex.affine_preimage
-  条件: (f : E ->ᵃ[𝕜] F) {s : Set F} (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 (f ⁻¹' s)
+定理 凸.affine_preimage
+  条件: (f : E ->ᵃ[𝕜] F) {s : 集合 F} (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 (f ⁻¹' s)
   证明: fun _ hx => (hs hx).affine_preimage _
 
 Depends on / 依赖: affine_preimage
@@ -1860,9 +1860,9 @@ theorem Convex.affine_image
   exact (hs hx).affine_image _
 
 中文:
-定理 Convex.affine_image
-  条件: (f : E ->ᵃ[𝕜] F) (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 (f '' s)
+定理 凸.affine_image
+  条件: (f : E ->ᵃ[𝕜] F) (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 (f '' s)
   证明: by
   rintro _ ⟨x, hx, rfl⟩
   exact (hs hx).affine_image _
@@ -1883,9 +1883,9 @@ theorem Convex.neg
   proof: hs.is_linear_preimage IsLinearMap.isLinearMap_neg
 
 中文:
-定理 Convex.neg
-  条件: (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 (-s)
+定理 凸.neg
+  条件: (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 (-s)
   证明: hs.is_linear_preimage IsLinearMap.isLinearMap_neg
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.isLinearMap_neg, hs.is_linear_preimage, isLinearMap_neg, is_linear_preimage
@@ -1905,9 +1905,9 @@ theorem Convex.sub
   exact hs.add ht.neg
 
 中文:
-定理 Convex.sub
-  条件: (hs : Convex 𝕜 s) (ht : Convex 𝕜 t)
-  结论: Convex 𝕜 (s - t)
+定理 凸.sub
+  条件: (hs : 凸 𝕜 s) (ht : 凸 𝕜 t)
+  结论: 凸 𝕜 (s - t)
   证明: by
   rw [sub_eq_add_neg]
   exact hs.add ht.neg
@@ -1932,8 +1932,8 @@ theorem Convex.add_smul_mem
   exact hs hx hy (sub_nonneg_of_le ht.2) ht.1 (sub_add_cancel _ _)
 
 中文:
-定理 Convex.add_smul_mem
-  结论: (hs : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : x + y in s) {t : 𝕜}
+定理 凸.add_smul_mem
+  结论: (hs : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : x + y in s) {t : 𝕜}
   证明: by
   have h : x + t • y = (1 - t) • x + t • (x + y) := by match_scalars <;> noncomm_ring
   rw [h]
@@ -1957,8 +1957,8 @@ theorem Convex.smul_mem_of_zero_mem
   simpa using hs.add_smul_mem zero_mem (by simpa using hx) ht
 
 中文:
-定理 Convex.smul_mem_of_zero_mem
-  结论: (hs : Convex 𝕜 s) {x : E} (zero_mem : (0 : E) in s) (hx : x in s)
+定理 凸.smul_mem_of_zero_mem
+  结论: (hs : 凸 𝕜 s) {x : E} (zero_mem : (0 : E) in s) (hx : x in s)
   证明: by
   simpa using hs.add_smul_mem zero_mem (by simpa using hx) ht
 
@@ -1979,8 +1979,8 @@ theorem Convex.mapsTo_lineMap
   simpa only [mapsTo_iff_image_subset, segment_eq_image_lineMap] using h.segment_subset hx hy
 
 中文:
-定理 Convex.mapsTo_lineMap
-  条件: (h : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
+定理 凸.mapsTo_lineMap
+  条件: (h : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : y in s)
   证明: by
   simpa only [mapsTo_iff_image_subset, segment_eq_image_lineMap] using h.segment_subset hx hy
 
@@ -2000,8 +2000,8 @@ theorem Convex.lineMap_mem
   proof: h.mapsTo_lineMap hx hy ht
 
 中文:
-定理 Convex.lineMap_mem
-  结论: (h : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : y in s) {t : 𝕜}
+定理 凸.lineMap_mem
+  结论: (h : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : y in s) {t : 𝕜}
   证明: h.mapsTo_lineMap hx hy ht
 
 Depends on / 依赖: h.mapsTo_lineMap, mapsTo_lineMap
@@ -2021,8 +2021,8 @@ theorem Convex.add_smul_sub_mem
   exact h.lineMap_mem hx hy ht
 
 中文:
-定理 Convex.add_smul_sub_mem
-  结论: (h : Convex 𝕜 s) {x y : E} (hx : x in s) (hy : y in s) {t : 𝕜}
+定理 凸.add_smul_sub_mem
+  结论: (h : 凸 𝕜 s) {x y : E} (hx : x in s) (hy : y in s) {t : 𝕜}
   证明: by
   rw [add_comm]
   exact h.lineMap_mem hx hy ht
@@ -2061,8 +2061,8 @@ theorem Convex.semilinear_image
   refine ⟨r • x + t • y, hs hx hy (by simp_all [(@hσ 0 r).mp]) (by simp_all [(@hσ 0 
 
 中文:
-定理 Convex.semilinear_image
-  结论: {s : Set E} (hs : Convex 𝕜 s) (hσ : 对任意 {s t}, σ s <= σ t ↔ s <= t)
+定理 凸.semilinear_image
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) (hσ : 对任意 {s t}, σ s <= σ t ↔ s <= t)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ a b ha hb hab
   obtain ⟨r, rfl⟩ : exists r : 𝕜, σ r = a := RingHomSurjective.is_surjective ..
@@ -2101,7 +2101,7 @@ theorem Convex_subadditive_le
 
 中文:
 定理 Convex_subadditive_le
-  结论: [SMul 𝕜 E] {f : E -> 𝕜} (hf1 : 对任意 x y, f (x + y) <= (f x) + (f y))
+  结论: [标量乘法 𝕜 E] {f : E -> 𝕜} (hf1 : 对任意 x y, f (x + y) <= (f x) + (f y))
   证明: by
   rw [convex_iff_segment_subset]
   rintro x hx y hy z ⟨a, b, ha, hb, hs, rfl⟩
@@ -2133,8 +2133,8 @@ theorem Convex.midpoint_mem
   proof: h.segment_subset hx hy midpoint_mem_segment x y
 
 中文:
-定理 Convex.midpoint_mem
-  结论: [Ring 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+定理 凸.midpoint_mem
+  结论: [环 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: h.segment_subset hx hy midpoint_mem_segment x y
 
 Depends on / 依赖: h.segment_subset, midpoint_mem_segment, segment_subset
@@ -2182,8 +2182,8 @@ theorem Convex.mem_smul_of_zero_mem
     ⟨inv_nonneg.2 (zero_le_one.trans ht), inv_le_one_of_one_le₀ ht⟩
 
 中文:
-定理 Convex.mem_smul_of_zero_mem
-  结论: (h : Convex 𝕜 s) {x : E} (zero_mem : (0 : E) in s) (hx : x in s)
+定理 凸.mem_smul_of_zero_mem
+  结论: (h : 凸 𝕜 s) {x : E} (zero_mem : (0 : E) in s) (hx : x in s)
   证明: by
   rw [mem_smul_set_iff_inv_smul_mem₀ (zero_lt_one.trans_le ht).ne']
   exact h.smul_mem_of_zero_mem zero_mem hx
@@ -2213,8 +2213,8 @@ theorem Convex.exists_mem_add_smul_eq
     match_scalars <;> field
 
 中文:
-定理 Convex.exists_mem_add_smul_eq
-  结论: (h : Convex 𝕜 s) {x y : E} {p q : 𝕜} (hx : x in s) (hy : y in s)
+定理 凸.存在_mem_add_smul_eq
+  结论: (h : 凸 𝕜 s) {x y : E} {p q : 𝕜} (hx : x in s) (hy : y in s)
   证明: by
   rcases _root_.em (p = 0 ∧ q = 0) with (⟨rfl, rfl⟩ | hpq)
   · use x, hx
@@ -2247,8 +2247,8 @@ theorem Convex.add_smul
   exact h_conv.exists_mem_add_smul_eq h₁ h₂ hp hq
 
 中文:
-定理 Convex.add_smul
-  条件: (h_conv : Convex 𝕜 s) {p q : 𝕜} (hp : 0 <= p) (hq : 0 <= q)
+定理 凸.add_smul
+  条件: (h_conv : 凸 𝕜 s) {p q : 𝕜} (hp : 0 <= p) (hq : 0 <= q)
   证明: (add_smul_subset _ _ _).antisymm by
   rintro _ ⟨_, ⟨v₁, h₁, rfl⟩, _, ⟨v₂, h₂, rfl⟩, rfl⟩
   exact h_conv.exists_mem_add_smul_eq h₁ h₂ hp hq
@@ -2271,8 +2271,8 @@ theorem Convex.add_half_self_eq_self
   rw [one_smul]
 
 中文:
-定理 Convex.add_half_self_eq_self
-  条件: (h_conv : Convex 𝕜 s)
+定理 凸.add_half_self_eq_self
+  条件: (h_conv : 凸 𝕜 s)
   结论: (2 : 𝕜)⁻¹ • s + (2 : 𝕜)⁻¹ • s = s
   证明: by
   rw [← h_conv.add_smul (by norm_num) (by norm_num)]
@@ -2312,8 +2312,8 @@ theorem Set.OrdConnected.convex_of_chain
     exact (segment_subset_Icc hyx).trans (hs.out hy hx)
 
 中文:
-定理 Set.OrdConnected.convex_of_chain
-  结论: [Semiring 𝕜] [PartialOrder 𝕜] [AddCommMonoid E]
+定理 集合.序连通.convex_of_chain
+  结论: [半环 𝕜] [偏序 𝕜] [加法交换幺半群 E]
   证明: by
   refine convex_iff_segment_subset.mpr fun x hx y hy => ?_
   obtain hxy | hyx := h.total hx hy
@@ -2341,8 +2341,8 @@ theorem Set.OrdConnected.convex
   proof: hs.convex_of_chain isChain_of_trichotomous s
 
 中文:
-定理 Set.OrdConnected.convex
-  结论: [Semiring 𝕜] [PartialOrder 𝕜] [AddCommMonoid E] [LinearOrder E]
+定理 集合.序连通.convex
+  结论: [半环 𝕜] [偏序 𝕜] [加法交换幺半群 E] [线性序 E]
   证明: hs.convex_of_chain isChain_of_trichotomous s
 
 Depends on / 依赖: convex_of_chain, hs.convex_of_chain, isChain_of_trichotomous
@@ -2365,7 +2365,7 @@ alias ⟨Convex.ordConnected, _⟩ := convex_iff_ordConnected
 
 中文:
 定理 convex_iff_ordConnected
-  条件: [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜] {s : Set 𝕜}
+  条件: [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜] {s : 集合 𝕜}
   证明: by
   simp_rw [convex_iff_segment_subset, segment_eq_uIcc, ordConnected_iff_uIcc_subset]
 
@@ -2401,8 +2401,8 @@ theorem convex
 
 中文:
 定理 convex
-  条件: (K : Submodule 𝕜 E)
-  结论: Convex 𝕜 (↑K : Set E)
+  条件: (K : 子模 𝕜 E)
+  结论: 凸 𝕜 (↑K : 集合 E)
   证明: by
   repeat' intro
   refine add_mem (smul_mem _ _ ?_) (smul_mem _ _ ?_) <;> assumption
@@ -2422,7 +2422,7 @@ theorem starConvex
 
 中文:
 定理 starConvex
-  条件: (K : Submodule 𝕜 E)
+  条件: (K : 子模 𝕜 E)
   结论: StarConvex 𝕜 (0 : E) K
   证明: K.convex K.zero_mem
 -/
@@ -2438,8 +2438,8 @@ theorem Convex.semilinear_range
   proof: Submodule.convex ..
 
 中文:
-定理 Convex.semilinear_range
-  结论: {𝕜' : 类型} [Semiring 𝕜'] {σ : 𝕜' ->+* 𝕜}
+定理 凸.semilinear_range
+  结论: {𝕜' : 类型} [半环 𝕜'] {σ : 𝕜' ->+* 𝕜}
   证明: Submodule.convex ..
 
 Depends on / 依赖: Submodule, Submodule.convex, convex
@@ -2476,7 +2476,7 @@ lemma convex_of_nonneg_surjective_algebraMap
 
 中文:
 引理 convex_of_nonneg_surjective_algebraMap
-  结论: [FaithfulSMul R A] {s : Set M}
+  结论: [忠实标量乘法 R A] {s : 集合 M}
   证明: by
   simp only [Convex, StarConvex] at hs ⊢
   intro u hu v hv a b ha hb hab

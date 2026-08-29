@@ -42,7 +42,7 @@ theorem list_prod_apply
 
 中文:
 定理 list_prod_apply
-  结论: {α : 类型} {M : α -> 类型} [对任意 a, Monoid (M a)] (a : α)
+  结论: {α : 类型} {M : α -> 类型} [对任意 a, 幺半群 (M a)] (a : α)
   证明: map_list_prod (evalMonoidHom M a) _
 
 @[to_additive]
@@ -64,7 +64,7 @@ theorem multiset_prod_apply
 
 中文:
 定理 multiset_prod_apply
-  结论: {α : 类型} {M : α -> 类型} [对任意 a, CommMonoid (M a)] (a : α)
+  结论: {α : 类型} {M : α -> 类型} [对任意 a, 交换幺半群 (M a)] (a : α)
   证明: (evalMonoidHom M a).map_multiset_prod _
 
 Depends on / 依赖: evalMonoidHom, map_multiset_prod
@@ -85,8 +85,8 @@ theorem Finset.prod_apply
   proof: map_prod (Pi.evalMonoidHom M a) _ _
 
 中文:
-定理 Finset.prod_apply
-  结论: {α : 类型} {M : α -> 类型} [对任意 a, CommMonoid (M a)] (a : α)
+定理 有限集.prod_apply
+  结论: {α : 类型} {M : α -> 类型} [对任意 a, 交换幺半群 (M a)] (a : α)
   证明: map_prod (Pi.evalMonoidHom M a) _ _
 
 Depends on / 依赖: Pi.evalMonoidHom, evalMonoidHom, map_prod
@@ -108,8 +108,8 @@ theorem Finset.prod_fn
 @[to_additive]
 
 中文:
-定理 Finset.prod_fn
-  结论: {α : 类型} {M : α -> 类型} {ι} [对任意 a, CommMonoid (M a)] (s : Finset ι)
+定理 有限集.prod_fn
+  结论: {α : 类型} {M : α -> 类型} {ι} [对任意 a, 交换幺半群 (M a)] (s : 有限集 ι)
   证明: funext fun _ => Finset.prod_apply _ _ _
 
 @[to_additive]
@@ -132,8 +132,8 @@ theorem Fintype.prod_apply
 @[to_additive prod_mk_sum]
 
 中文:
-定理 Fintype.prod_apply
-  结论: {α : 类型} {M : α -> 类型} [Fintype ι] [对任意 a, CommMonoid (M a)] (a : α)
+定理 有限类型.prod_apply
+  结论: {α : 类型} {M : α -> 类型} [有限类型 ι] [对任意 a, 交换幺半群 (M a)] (a : α)
   证明: Finset.prod_apply a Finset.univ g
 
 @[to_additive prod_mk_sum]
@@ -156,7 +156,7 @@ theorem prod_mk_prod
 
 中文:
 定理 prod_mk_prod
-  条件: [CommMonoid M] [CommMonoid N] (s : Finset ι) (f : ι -> M) (g : ι -> N)
+  条件: [交换幺半群 M] [交换幺半群 N] (s : 有限集 ι) (f : ι -> M) (g : ι -> N)
   证明: haveI := Classical.decEq ι
   Finset.induction_on s rfl (by simp +contextual [Prod.ext_iff])
 
@@ -179,7 +179,7 @@ theorem pi_eq_sum_univ
 
 中文:
 定理 pi_eq_sum_univ
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {R : 类型} [NonAssocSemiring R]
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {R : 类型} [非结合半环 R]
   证明: by
   ext
   simp
@@ -201,7 +201,7 @@ theorem pi_eq_sum_univ'
 
 中文:
 定理 pi_eq_sum_univ'
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {R : 类型} [NonAssocSemiring R]
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {R : 类型} [非结合半环 R]
   证明: by
   convert! pi_eq_sum_univ x
   aesop
@@ -234,7 +234,7 @@ exact Finset.prod_eq_zero hi Set.indicator_of_notMem hj _
 
 中文:
 引理 prod_indicator_apply
-  条件: (s : Finset ι) (f : ι -> Set κ) (g : ι -> κ -> R) (j : κ)
+  条件: (s : 有限集 ι) (f : ι -> 集合 κ) (g : ι -> κ -> R) (j : κ)
   证明: by
   rw [Set.indicator]
   split_ifs with hj
@@ -269,7 +269,7 @@ lemma prod_indicator
 
 中文:
 引理 prod_indicator
-  条件: (s : Finset ι) (f : ι -> Set κ) (g : ι -> κ -> R)
+  条件: (s : 有限集 ι) (f : ι -> 集合 κ) (g : ι -> κ -> R)
   证明: by
   ext a; simpa using prod_indicator_apply ..
 
@@ -290,7 +290,7 @@ lemma prod_indicator_const_apply
 
 中文:
 引理 prod_indicator_const_apply
-  条件: (s : Finset ι) (f : ι -> Set κ) (g : κ -> R) (j : κ)
+  条件: (s : 有限集 ι) (f : ι -> 集合 κ) (g : κ -> R) (j : κ)
   证明: by
   simp [prod_indicator_apply]
 
@@ -310,7 +310,7 @@ lemma prod_indicator_const
 
 中文:
 引理 prod_indicator_const
-  条件: (s : Finset ι) (f : ι -> Set κ) (g : κ -> R)
+  条件: (s : 有限集 ι) (f : ι -> 集合 κ) (g : κ -> R)
   证明: by simp [prod_indicator]
 
 Depends on / 依赖: prod_indicator
@@ -339,8 +339,8 @@ theorem Finset.univ_prod_mulSingle
 @[to_additive]
 
 中文:
-定理 Finset.univ_prod_mulSingle
-  条件: [Fintype I] (f : 对任意 i, M i)
+定理 有限集.univ_prod_mulSingle
+  条件: [有限类型 I] (f : 对任意 i, M i)
   证明: by
   ext a
   simp
@@ -366,8 +366,8 @@ theorem MonoidHom.functions_ext
   simp only [H]
 
 中文:
-定理 MonoidHom.functions_ext
-  结论: [Finite I] (N : 类型) [CommMonoid N] (g h : (对任意 i, M i) ->* N)
+定理 幺半群态射.functions_ext
+  结论: [有限 I] (N : 类型) [交换幺半群 N] (g h : (对任意 i, M i) ->* N)
   证明: by
   cases nonempty_fintype I
   ext k
@@ -397,8 +397,8 @@ theorem MonoidHom.functions_ext'
   proof: g.functions_ext N h fun i => DFunLike.congr_fun (H i)
 
 中文:
-定理 MonoidHom.functions_ext'
-  结论: [Finite I] (N : 类型) [CommMonoid N] (g h : (对任意 i, M i) ->* N)
+定理 幺半群态射.functions_ext'
+  结论: [有限 I] (N : 类型) [交换幺半群 N] (g h : (对任意 i, M i) ->* N)
   证明: g.functions_ext N h fun i => DFunLike.congr_fun (H i)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, functions_ext, g.functions_ext
@@ -427,8 +427,8 @@ theorem RingHom.functions_ext
     @AddMonoidHom.functions_ext I _ R _ _ S _ (g : (forall i, R i) ->+ S) h H
 
 中文:
-定理 RingHom.functions_ext
-  结论: [Finite I] (S : 类型) [NonAssocSemiring S] (g h : (对任意 i, R i) ->+* S)
+定理 环态射.functions_ext
+  结论: [有限 I] (S : 类型) [非结合半环 S] (g h : (对任意 i, R i) ->+* S)
   证明: RingHom.coe_addMonoidHom_injective
     @AddMonoidHom.functions_ext I _ R _ _ S _ (g : (forall i, R i) ->+ S) h H
 
@@ -511,8 +511,8 @@ definition Pi.monoidHomMulEquiv
 refine congrArg _ funext fun _ =>
 
 中文:
-定义 Pi.monoidHomMulEquiv
-  签名: {ι : 类型} [Fintype ι] [DecidableEq ι] (M : ι -> 类型)
+定义 依赖函数类型.monoidHomMulEquiv
+  签名: {ι : 类型} [有限类型 ι] [DecidableEq ι] (M : ι -> 类型)
   定义体: φ.comp MonoidHom.mulSingle M i
   invFun φ := ∏ (i : ι), (φ i).comp (Pi.evalMonoidHom M i)
   left_inv φ := by
@@ -570,8 +570,8 @@ lemma Pi.single_induction
 @[to_additive existing (attr := elab_as_elim)]
 
 中文:
-引理 Pi.single_induction
-  结论: [对任意 i, AddCommMonoid (M i)] (p : (Π i, M i) -> 命题) (f : Π i, M i)
+引理 依赖函数类型.single_induction
+  结论: [对任意 i, 加法交换幺半群 (M i)] (p : (Π i, M i) -> 命题) (f : Π i, M i)
   证明: by
   cases nonempty_fintype ι
   rw [← Finset.univ_sum_single f]
@@ -601,8 +601,8 @@ lemma Pi.mulSingle_induction
   exact Finset.prod_induction _ _ mul one (by simp [mulSingle])
 
 中文:
-引理 Pi.mulSingle_induction
-  结论: [对任意 i, CommMonoid (M i)] (p : (Π i, M i) -> 命题) (f : Π i, M i)
+引理 依赖函数类型.mulSingle_induction
+  结论: [对任意 i, 交换幺半群 (M i)] (p : (Π i, M i) -> 命题) (f : Π i, M i)
   证明: by
   cases nonempty_fintype ι
   rw [← Finset.univ_prod_mulSingle f]
@@ -632,7 +632,7 @@ theorem eqOn_finsetProd
 
 中文:
 定理 eqOn_finsetProd
-  结论: {ι α β : 类型} [CommMonoid α]
+  结论: {ι α β : 类型} [交换幺半群 α]
   证明: fun t ht => by simp [funext fun i => h i ht]
 
 @[to_additive]
@@ -654,7 +654,7 @@ theorem eqOn_fun_finsetProd
 
 中文:
 定理 eqOn_fun_finsetProd
-  结论: {ι α β : 类型} [CommMonoid α]
+  结论: {ι α β : 类型} [交换幺半群 α]
   证明: by
   convert! eqOn_finsetProd h v <;> simp
 
@@ -690,7 +690,7 @@ theorem prod_apply
 
 中文:
 定理 prod_apply
-  条件: (s : Finset ι) (f : ι -> F) (x : α)
+  条件: (s : 有限集 ι) (f : ι -> F) (x : α)
   结论: (∏ i in s, f i) x = ∏ i in s, f i x
   证明: by
   classical
@@ -720,8 +720,8 @@ theorem FunLike.coe_prod
   ext; simp
 
 中文:
-定理 FunLike.coe_prod
-  条件: (s : Finset ι) (f : ι -> F)
+定理 函数状.coe_prod
+  条件: (s : 有限集 ι) (f : ι -> F)
   结论: ↑(∏ i in s, f i) = ∏ i in s, (f i : α -> β)
   证明: by
   ext; simp

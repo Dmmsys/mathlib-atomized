@@ -60,9 +60,9 @@ theorem IsIntegral.isAlgebraic
   proof: fun ⟨p, hp, hpx⟩ => ⟨p, hp.ne_zero, hpx⟩
 
 中文:
-定理 IsIntegral.isAlgebraic
-  条件: [Nontrivial R] {x : A}
-  结论: Is整数egral R x -> IsAlgebraic R x
+定理 是整.isAlgebraic
+  条件: [非平凡 R] {x : A}
+  结论: 是整 R x -> 是代数 R x
   证明: fun ⟨p, hp, hpx⟩ => ⟨p, hp.ne_zero, hpx⟩
 
 Depends on / 依赖: hp.ne_zero, ne_zero
@@ -79,8 +79,8 @@ instance Algebra.IsIntegral.isAlgebraic
   body: ⟨fun a => (Algebra.IsIntegral.isIntegral a).isAlgebraic⟩
 
 中文:
-实例 Algebra.IsIntegral.isAlgebraic
-  签名: [Nontrivial R] [Algebra.Is整数egral R A]
+实例 代数.是整.isAlgebraic
+  签名: [非平凡 R] [代数.是整 R A]
   定义体: ⟨fun a => (Algebra.IsIntegral.isIntegral a).isAlgebraic⟩
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, isAlgebraic, isIntegral
@@ -108,9 +108,9 @@ theorem isAlgebraic_iff_isIntegral
   rw [← aeval_def]; rw [map_mul]; rw [hpx]; rw [zero_mul]
 
 中文:
-定理 isAlgebraic_iff_isIntegral
+定理 isAlgebraic_iff_is整数egral
   条件: {x : A}
-  结论: IsAlgebraic K x ↔ Is整数egral K x
+  结论: 是代数 K x ↔ 是整 K x
   证明: by
   refine ⟨?_, IsIntegral.isAlgebraic⟩
   rintro ⟨p, hp, hpx⟩
@@ -136,7 +136,7 @@ theorem Algebra.isAlgebraic_iff_isIntegral
 alias ⟨IsAlgebraic.isIntegral, _⟩ := isAlgebraic_iff_isIntegral
 
 中文:
-定理 Algebra.isAlgebraic_iff_isIntegral
+定理 代数.isAlgebraic_iff_is整数egral
   证明: by
   rw [Algebra.isAlgebraic_def]; rw [Algebra.isIntegral_def]; rw [forall_congr' fun _ => isAlgebraic_iff_isIntegral]
 
@@ -157,8 +157,8 @@ instance Algebra.IsAlgebraic.isIntegral
   body: Algebra.isAlgebraic_iff_isIntegral.mp ‹_›
 
 中文:
-实例 Algebra.IsAlgebraic.isIntegral
-  签名: [Algebra.IsAlgebraic K A]
+实例 代数.是代数.is整数egral
+  签名: [代数.是代数 K A]
   定义体: Algebra.isAlgebraic_iff_isIntegral.mp ‹_›
 -/
 protected instance Algebra.IsAlgebraic.isIntegral [Algebra.IsAlgebraic K A] :
@@ -174,8 +174,8 @@ theorem Algebra.IsAlgebraic.of_isIntegralClosure
   inferInstance
 
 中文:
-定理 Algebra.IsAlgebraic.of_isIntegralClosure
-  结论: (R B C : 类型) [CommRing R] [Nontrivial R]
+定理 代数.是代数.of_is整数egralClosure
+  结论: (R B C : 类型) [交换环 R] [非平凡 R]
   证明: have := IsIntegralClosure.isIntegral_algebra R (A := B) C
   inferInstance
 
@@ -207,9 +207,9 @@ theorem IsAlgebraic.of_finite
   proof: (IsIntegral.of_finite R e).isAlgebraic
 
 中文:
-定理 IsAlgebraic.of_finite
-  条件: (e : A) [Module.Finite R A]
-  结论: IsAlgebraic R e
+定理 是代数.of_finite
+  条件: (e : A) [模.有限 R A]
+  结论: 是代数 R e
   证明: (IsIntegral.of_finite R e).isAlgebraic
 
 Depends on / 依赖: IsIntegral, IsIntegral.of_finite, isAlgebraic, of_finite
@@ -230,8 +230,8 @@ instance Algebra.IsAlgebraic.of_finite
   body: (IsIntegral.of_finite R A).isAlgebraic
 
 中文:
-实例 Algebra.IsAlgebraic.of_finite
-  签名: [Module.Finite R A]
+实例 代数.是代数.of_finite
+  签名: [模.有限 R A]
   定义体: (IsIntegral.of_finite R A).isAlgebraic
 
 Depends on / 依赖: IsIntegral, IsIntegral.of_finite, isAlgebraic, of_finite
@@ -295,7 +295,7 @@ abbreviation algEquivEquivAlgHom
 
 中文:
 缩写 algEquivEquivAlgHom
-  签名: [FiniteDimensional K L]
+  签名: [有限维 K L]
   定义体: Algebra.IsAlgebraic.algEquivEquivAlgHom K L
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.algEquivEquivAlgHom, IsAlgebraic, algEquivEquivAlgHom
@@ -331,9 +331,9 @@ theorem exists_integral_multiple
   have
 
 中文:
-定理 exists_integral_multiple
-  条件: (hz : IsAlgebraic R z)
-  结论: 存在 y != (0 : R), Is整数egral R (y • z)
+定理 存在_integral_multiple
+  条件: (hz : 是代数 R z)
+  结论: 存在 y != (0 : R), 是整 R (y • z)
   证明: by
   by_cases inj : Function.Injective (algebraMap R A); swap
   · rw [injective_iff_map_eq_zero] at inj; push Not at inj
@@ -373,8 +373,8 @@ theorem _root_.Algebra.IsAlgebraic.exists_integral_multiples
   exact (int _).smul _
 
 中文:
-定理 _root_.Algebra.IsAlgebraic.exists_integral_multiples
-  结论: [NoZeroDivisors R]
+定理 _root_.代数.是代数.存在_integral_multiples
+  结论: [无零因子 R]
   证明: by
   have := Algebra.IsAlgebraic.nontrivial R A
   choose r hr int using fun x => (alg.1 x).exists_integral_multiple
@@ -407,8 +407,8 @@ theorem of_smul_isIntegral
   rw [coeff_zero]; rw [← mul_one p.natDegree]; rw [← natDegree_C_mul_X y hy0]; r
 
 中文:
-定理 of_smul_isIntegral
-  结论: {y : R} (hy : ¬ IsNilpotent y)
+定理 of_smul_is整数egral
+  结论: {y : R} (hy : ¬ 是幂零 y)
   证明: by
   have ⟨p, monic, eval0⟩ := h
   refine ⟨p.comp (C y * X), fun h => ?_, by simpa [aeval_comp, Algebra.smul_def] using! eval0⟩
@@ -460,8 +460,8 @@ theorem iff_exists_smul_integral
     of_smul_isIntegral (by rwa [isNilpotent_iff_eq_zero]) int⟩
 
 中文:
-定理 iff_exists_smul_integral
-  条件: [IsReduced R]
+定理 iff_存在_smul_integral
+  条件: [是既约 R]
   证明: ⟨(exists_integral_multiple ·), fun ⟨_, hy, int⟩ =>
     of_smul_isIntegral (by rwa [isNilpotent_iff_eq_zero]) int⟩
 
@@ -491,8 +491,8 @@ lemma exists_smul_eq
   exact ⟨r, s, hr, hs.symm⟩
 
 中文:
-引理 exists_smul_eq
-  条件: {x : K} (hx : IsAlgebraic R x)
+引理 存在_smul_eq
+  条件: {x : K} (hx : 是代数 R x)
   证明: by
   obtain ⟨r, hr, h⟩ := hx.exists_integral_multiple
 .mp h obtain ⟨s, hs⟩ := IsIntegralClosure.isIntegral_iff (A := S)
@@ -519,8 +519,8 @@ lemma exists_nsmul_eq
   · exact ⟨n, -s, by simpa using ha, by simp [← h]⟩
 
 中文:
-引理 exists_nsmul_eq
-  条件: [Is整数egralClosure S 整数 K] {x : K} (hx : IsAlgebraic 整数 x)
+引理 存在_nsmul_eq
+  条件: [是整闭包 S 整数 K] {x : K} (hx : 是代数 整数 x)
   证明: by
   obtain ⟨a, s, ha, h⟩ := hx.exists_smul_eq S
   obtain ⟨n, rfl | rfl⟩ := a.eq_nat_or_neg
@@ -558,8 +558,8 @@ fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
   cases su
 
 中文:
-定理 restrictScalars_of_isIntegral
-  结论: [int : Algebra.Is整数egral R S]
+定理 restrictScalars_of_is整数egral
+  结论: [int : 代数.是整 R S]
   证明: by
   by_cases hRS : Function.Injective (algebraMap R S)
   on_goal 2 => exact (Algebra.isAlgebraic_of_not_injective
@@ -602,7 +602,7 @@ fun h => hRS .of_comp (IsScalarTower.algebraMap_eq R S A ▸ h)).1 _
 
 中文:
 定理 restrictScalars
-  结论: [Algebra.IsAlgebraic R S]
+  结论: [代数.是代数 R S]
   证明: by
   have ⟨p, hp, eval0⟩ := h
   by_cases hRS : Function.Injective (algebraMap R S)
@@ -649,8 +649,8 @@ theorem _root_.IsIntegral.trans_isAlgebraic
     exact h.isAlgebraic.restrictScalars _
 
 中文:
-定理 _root_.IsIntegral.trans_isAlgebraic
-  结论: [alg : Algebra.IsAlgebraic R S]
+定理 _root_.是整.trans_isAlgebraic
+  结论: [alg : 代数.是代数 R S]
   证明: by
   cases subsingleton_or_nontrivial A
   · have := Algebra.IsAlgebraic.nontrivial R S
@@ -686,7 +686,7 @@ lemma neg
 
 中文:
 引理 neg
-  结论: IsAlgebraic R (-a)
+  结论: 是代数 R (-a)
   证明: have ⟨p, h, eval0⟩ := ha
   ⟨algEquivAevalNegX p, EmbeddingLike.map_ne_zero_iff.mpr h, by simpa [← comp_eq_aeval, aeval_comp]⟩
 -/
@@ -707,7 +707,7 @@ lemma smul
 中文:
 引理 smul
   条件: (r : R)
-  结论: IsAlgebraic R (r • a)
+  结论: 是代数 R (r • a)
   证明: have ⟨_, hp, eval0⟩ := ha
   ⟨_, scaleRoots_ne_zero hp r, Algebra.smul_def r a ▸ scaleRoots_aeval_eq_zero eval0⟩
 -/
@@ -727,7 +727,7 @@ lemma nsmul
 中文:
 引理 nsmul
   条件: (n : 自然数)
-  结论: IsAlgebraic R (n • a)
+  结论: 是代数 R (n • a)
   证明: Nat.cast_smul_eq_nsmul R n a ▸ ha.smul _
 -/
 protected lemma nsmul (n : Nat) : IsAlgebraic R (n • a) :=
@@ -747,7 +747,7 @@ omit [Algebra S A] [IsScalarTower R S A] in
 中文:
 引理 zsmul
   条件: (n : 整数)
-  结论: IsAlgebraic R (n • a)
+  结论: 是代数 R (n • a)
   证明: Int.cast_smul_eq_zsmul R n a ▸ ha.smul _
 
 omit [Algebra S A] [IsScalarTower R S A] in
@@ -772,8 +772,8 @@ lemma tmul
 
 中文:
 引理 tmul
-  条件: [FaithfulSMul R S]
-  结论: IsAlgebraic S (s otimesₜ[R] a)
+  条件: [忠实标量乘法 R S]
+  结论: 是代数 S (s otimesₜ[R] a)
   证明: by
   rw [← mul_one s]; rw [← smul_eq_mul]; rw [← TensorProduct.smul_tmul']
   have ⟨p, h, eval0⟩ := ha
@@ -812,7 +812,7 @@ lemma mul
 
 中文:
 引理 mul
-  结论: IsAlgebraic R (a * b)
+  结论: 是代数 R (a * b)
   证明: by
   have ⟨ra, a0, int_a⟩ := ha.exists_integral_multiple
   have ⟨rb, b0, int_b⟩ := hb.exists_integral_multiple
@@ -842,7 +842,7 @@ lemma add
 
 中文:
 引理 add
-  结论: IsAlgebraic R (a + b)
+  结论: 是代数 R (a + b)
   证明: by
   have ⟨ra, a0, int_a⟩ := ha.exists_integral_multiple
   have ⟨rb, b0, int_b⟩ := hb.exists_integral_multiple
@@ -869,7 +869,7 @@ omit hb
 
 中文:
 引理 sub
-  结论: IsAlgebraic R (a - b)
+  结论: 是代数 R (a - b)
   证明: sub_eq_add_neg a b ▸ ha.add hb.neg
 
 omit hb
@@ -891,7 +891,7 @@ lemma pow
 中文:
 引理 pow
   条件: (n : 自然数)
-  结论: IsAlgebraic R (a ^ n)
+  结论: 是代数 R (a ^ n)
   证明: have := ha.nontrivial
   n.rec (pow_zero a ▸ isAlgebraic_one) fun _ h => pow_succ a _ ▸ h.mul ha
 -/
@@ -916,8 +916,8 @@ theorem IsAlgebraic.trans
   proof: ⟨fun _ => (alg.1 _).restrictScalars _⟩
 
 中文:
-定理 IsAlgebraic.trans
-  条件: [Algebra.IsAlgebraic R S] [alg : Algebra.IsAlgebraic S A]
+定理 是代数.trans
+  条件: [代数.是代数 R S] [alg : 代数.是代数 S A]
   证明: ⟨fun _ => (alg.1 _).restrictScalars _⟩
 -/
 @[stacks 09GJ] theorem IsAlgebraic.trans [Algebra.IsAlgebraic R S] [alg : Algebra.IsAlgebraic S A] :
@@ -933,8 +933,8 @@ theorem IsIntegral.trans_isAlgebraic
   proof: ⟨fun _ => (alg.1 _).restrictScalars_of_isIntegral _⟩
 
 中文:
-定理 IsIntegral.trans_isAlgebraic
-  条件: [Algebra.Is整数egral R S] [alg : Algebra.IsAlgebraic S A]
+定理 是整.trans_isAlgebraic
+  条件: [代数.是整 R S] [alg : 代数.是代数 S A]
   证明: ⟨fun _ => (alg.1 _).restrictScalars_of_isIntegral _⟩
 
 Depends on / 依赖: restrictScalars_of_isIntegral
@@ -952,8 +952,8 @@ theorem IsAlgebraic.trans_isIntegral
   proof: ⟨fun _ => (int.1 _).trans_isAlgebraic _⟩
 
 中文:
-定理 IsAlgebraic.trans_isIntegral
-  条件: [Algebra.IsAlgebraic R S] [int : Algebra.Is整数egral S A]
+定理 是代数.trans_is整数egral
+  条件: [代数.是代数 R S] [int : 代数.是整 S A]
   证明: ⟨fun _ => (int.1 _).trans_isAlgebraic _⟩
 
 Depends on / 依赖: trans_isAlgebraic
@@ -973,8 +973,8 @@ theorem IsIntegral.isAlgebraic_iff
   proof: ⟨.extendScalars (FaithfulSMul.algebraMap_injective ..), .restrictScalars_of_isIntegral _⟩
 
 中文:
-定理 IsIntegral.isAlgebraic_iff
-  结论: [Algebra.Is整数egral R S] [FaithfulSMul R S]
+定理 是整.isAlgebraic_iff
+  结论: [代数.是整 R S] [忠实标量乘法 R S]
   证明: ⟨.extendScalars (FaithfulSMul.algebraMap_injective ..), .restrictScalars_of_isIntegral _⟩
 -/
 protected theorem IsIntegral.isAlgebraic_iff [Algebra.IsIntegral R S] [FaithfulSMul R S]
@@ -991,8 +991,8 @@ theorem IsIntegral.isAlgebraic_iff_top
   simp_rw [Algebra.isAlgebraic_def, Algebra.IsIntegral.isAlgebraic_iff R S]
 
 中文:
-定理 IsIntegral.isAlgebraic_iff_top
-  结论: [Algebra.Is整数egral R S]
+定理 是整.isAlgebraic_iff_top
+  结论: [代数.是整 R S]
   证明: by
   simp_rw [Algebra.isAlgebraic_def, Algebra.IsIntegral.isAlgebraic_iff R S]
 
@@ -1011,8 +1011,8 @@ theorem IsAlgebraic.isAlgebraic_iff
   proof: ⟨.extendScalars (FaithfulSMul.algebraMap_injective ..), .restrictScalars _⟩
 
 中文:
-定理 IsAlgebraic.isAlgebraic_iff
-  结论: [Algebra.IsAlgebraic R S] [FaithfulSMul R S]
+定理 是代数.isAlgebraic_iff
+  结论: [代数.是代数 R S] [忠实标量乘法 R S]
   证明: ⟨.extendScalars (FaithfulSMul.algebraMap_injective ..), .restrictScalars _⟩
 -/
 protected theorem IsAlgebraic.isAlgebraic_iff [Algebra.IsAlgebraic R S] [FaithfulSMul R S]
@@ -1029,8 +1029,8 @@ theorem IsAlgebraic.isAlgebraic_iff_top
   simp_rw [Algebra.isAlgebraic_def, Algebra.IsAlgebraic.isAlgebraic_iff R S]
 
 中文:
-定理 IsAlgebraic.isAlgebraic_iff_top
-  结论: [Algebra.IsAlgebraic R S]
+定理 是代数.isAlgebraic_iff_top
+  结论: [代数.是代数 R S]
   证明: by
   simp_rw [Algebra.isAlgebraic_def, Algebra.IsAlgebraic.isAlgebraic_iff R S]
 
@@ -1049,8 +1049,8 @@ theorem IsAlgebraic.isAlgebraic_iff_bot
   proof: ⟨fun _ => .tower_bot_of_injective (FaithfulSMul.algebraMap_injective S A), fun _ => .trans R S A⟩
 
 中文:
-定理 IsAlgebraic.isAlgebraic_iff_bot
-  条件: [Algebra.IsAlgebraic S A] [FaithfulSMul S A]
+定理 是代数.isAlgebraic_iff_bot
+  条件: [代数.是代数 S A] [忠实标量乘法 S A]
   证明: ⟨fun _ => .tower_bot_of_injective (FaithfulSMul.algebraMap_injective S A), fun _ => .trans R S A⟩
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, tower_bot_of_injective
@@ -1074,8 +1074,8 @@ definition Subalgebra.algebraicClosure
   algebraMap_mem' := isAlgebraic_algebraMap
 
 中文:
-定义 Subalgebra.algebraicClosure
-  签名: [IsDomain R]
+定义 子代数.algebraicClosure
+  签名: [是整环 R]
   定义体: {s | IsAlgebraic R s}
   mul_mem' ha hb := ha.mul hb
   add_mem' ha hb := ha.add hb
@@ -1098,8 +1098,8 @@ theorem Subalgebra.mem_algebraicClosure
   proof: Iff.rfl
 
 中文:
-定理 Subalgebra.mem_algebraicClosure
-  条件: [IsDomain R] {x : S}
+定理 子代数.mem_algebraicClosure
+  条件: [是整环 R] {x : S}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1117,7 +1117,7 @@ theorem integralClosure_le_algebraicClosure
 
 中文:
 定理 integralClosure_le_algebraicClosure
-  条件: [IsDomain R]
+  条件: [是整环 R]
   证明: fun _ => IsIntegral.isAlgebraic
 
 Depends on / 依赖: IsIntegral, IsIntegral.isAlgebraic, isAlgebraic
@@ -1135,8 +1135,8 @@ theorem Subalgebra.algebraicClosure_eq_integralClosure
   proof: SetLike.ext fun _ => isAlgebraic_iff_isIntegral
 
 中文:
-定理 Subalgebra.algebraicClosure_eq_integralClosure
-  条件: {K} [Field K] [Algebra K S]
+定理 子代数.algebraicClosure_eq_integralClosure
+  条件: {K} [域 K] [代数 K S]
   证明: SetLike.ext fun _ => isAlgebraic_iff_isIntegral
 
 Depends on / 依赖: SetLike, SetLike.ext, isAlgebraic_iff_isIntegral
@@ -1154,8 +1154,8 @@ instance [IsDomain
   body: (Subalgebra.isAlgebraic_iff _).mp fun _ => id
 
 中文:
-实例 [IsDomain
-  签名: R] : Algebra.IsAlgebraic R (Subalgebra.algebraicClosure R S)
+实例 [是整环
+  签名: R] : 代数.是代数 R (子代数.algebraicClosure R S)
   定义体: (Subalgebra.isAlgebraic_iff _).mp fun _ => id
 
 Depends on / 依赖: Subalgebra, Subalgebra.isAlgebraic_iff, isAlgebraic_iff
@@ -1174,8 +1174,8 @@ theorem Algebra.isAlgebraic_adjoin_iff
   proof: Algebra.adjoin_le_iff (S := Subalgebra.algebraicClosure R S)
 
 中文:
-定理 Algebra.isAlgebraic_adjoin_iff
-  条件: [IsDomain R] {s : Set S}
+定理 代数.isAlgebraic_adjoin_iff
+  条件: [是整环 R] {s : 集合 S}
   证明: Algebra.adjoin_le_iff (S := Subalgebra.algebraicClosure R S)
 
 Depends on / 依赖: Algebra, Algebra.adjoin_le_iff, Subalgebra, Subalgebra.algebraicClosure, adjoin_le_iff, algebraicClosure
@@ -1196,8 +1196,8 @@ theorem Algebra.isAlgebraic_adjoin_of_nonempty
     isAlgebraic_adjoin_iff.mpr h⟩
 
 中文:
-定理 Algebra.isAlgebraic_adjoin_of_nonempty
-  条件: [NoZeroDivisors R] {s : Set S} (hs : s.Nonempty)
+定理 代数.isAlgebraic_adjoin_of_nonempty
+  条件: [无零因子 R] {s : 集合 S} (hs : s.非空)
   证明: ⟨fun h x hx => h _ (subset_adjoin hx), fun h =>
     have ⟨x, hx⟩ := hs
     have := (isDomain_iff_noZeroDivisors_and_nontrivial _).mpr ⟨‹_›, (h x hx).nontrivial⟩
@@ -1221,8 +1221,8 @@ theorem Algebra.isAlgebraic_adjoin_singleton_iff
   proof: (isAlgebraic_adjoin_of_nonempty <| Set.singleton_nonempty s).trans forall_eq
 
 中文:
-定理 Algebra.isAlgebraic_adjoin_singleton_iff
-  条件: [NoZeroDivisors R] {s : S}
+定理 代数.isAlgebraic_adjoin_singleton_iff
+  条件: [无零因子 R] {s : S}
   证明: (isAlgebraic_adjoin_of_nonempty <| Set.singleton_nonempty s).trans forall_eq
 
 Depends on / 依赖: Set.singleton_nonempty, forall_eq, isAlgebraic_adjoin_of_nonempty, singleton_nonempty
@@ -1244,8 +1244,8 @@ theorem IsAlgebraic.of_mul
   exact this.of_smul (mem_nonZeroDivisors_of_ne_zero hr)
 
 中文:
-定理 IsAlgebraic.of_mul
-  结论: [NoZeroDivisors R] {y z : S} (hy : y in nonZeroDivisors S)
+定理 是代数.of_mul
+  结论: [无零因子 R] {y z : S} (hy : y in nonZeroDivisors S)
   证明: by
   have ⟨t, ht, r, hr, eq⟩ := alg_y.exists_nonzero_eq_adjoin_mul hy
   have := alg_yz.mul (Algebra.isAlgebraic_adjoin_singleton_iff.mpr alg_y _ ht)
@@ -1279,8 +1279,8 @@ theorem IsAlgebraic.adjoin_of_forall_isAlgebraic
   have : Algebra.IsAlgebraic Rt 
 
 中文:
-定理 IsAlgebraic.adjoin_of_forall_isAlgebraic
-  结论: [NoZeroDivisors S] {s t : Set S}
+定理 是代数.adjoin_of_对任意_isAlgebraic
+  结论: [无零因子 S] {s t : 集合 S}
   证明: by
   set Rs := adjoin R s
   set Rt := adjoin R t
@@ -1332,8 +1332,8 @@ lemma extendScalars_of_isIntegral
   exact ha.restrictScalars_of_isIntegral _
 
 中文:
-引理 extendScalars_of_isIntegral
-  条件: [Algebra.Is整数egral R S]
+引理 extendScalars_of_is整数egral
+  条件: [代数.是整 R S]
   证明: by
   contrapose ha
   rw [Transcendental]; rw [not_not] at ha ⊢
@@ -1361,8 +1361,8 @@ lemma extendScalars
 
 中文:
 引理 extendScalars
-  条件: [Algebra.IsAlgebraic R S]
-  结论: Transcendental S a
+  条件: [代数.是代数 R S]
+  结论: 超越 S a
   证明: by
   contrapose ha
   rw [Transcendental]; rw [not_not] at ha ⊢
@@ -1390,7 +1390,7 @@ lemma integralClosure
 
 中文:
 引理 integralClosure
-  结论: Transcendental (integralClosure R S) a
+  结论: 超越 (integralClosure R S) a
   证明: ha.extendScalars_of_isIntegral _
 -/
 protected lemma integralClosure : Transcendental (integralClosure R S) a :=
@@ -1406,7 +1406,7 @@ lemma subalgebraAlgebraicClosure
 
 中文:
 引理 subalgebraAlgebraicClosure
-  条件: [IsDomain R]
+  条件: [是整环 R]
   证明: ha.extendScalars _
 
 Depends on / 依赖: extendScalars, ha.extendScalars
@@ -1429,8 +1429,8 @@ theorem IsIntegral.transcendental_iff
   proof: ⟨(·.extendScalars_of_isIntegral _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 
 中文:
-定理 IsIntegral.transcendental_iff
-  条件: [Algebra.Is整数egral R S]
+定理 是整.transcendental_iff
+  条件: [代数.是整 R S]
   证明: ⟨(·.extendScalars_of_isIntegral _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 -/
 protected theorem IsIntegral.transcendental_iff [Algebra.IsIntegral R S] :
@@ -1446,8 +1446,8 @@ theorem IsAlgebraic.transcendental_iff
   proof: ⟨(·.extendScalars _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 
 中文:
-定理 IsAlgebraic.transcendental_iff
-  条件: [Algebra.IsAlgebraic R S]
+定理 是代数.transcendental_iff
+  条件: [代数.是代数 R S]
   证明: ⟨(·.extendScalars _), (·.restrictScalars (FaithfulSMul.algebraMap_injective R S))⟩
 -/
 protected theorem IsAlgebraic.transcendental_iff [Algebra.IsAlgebraic R S] :
@@ -1479,7 +1479,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalization (algebraMapSubmonoid S R⁰) S'
+  签名: 是Localization (algebraMapSubmonoid S R⁰) S'
   定义体: have := (FaithfulSMul.algebraMap_injective R S).noZeroDivisors _ (map_zero _) (map_mul _)
   (IsLocalization.iff_of_le_of_exists_dvd _ S⁰
     (map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective ..) le_rfl)
@@ -1507,7 +1507,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalizedModule R⁰ (IsScalarTower.toAlgHom R S S').toLinearMap
+  签名: 是Localized模 R⁰ (标量塔.toAlgHom R S S').toLinearMap
   定义体: isLocalizedModule_iff_isLocalization.mpr inferInstance
 
 Depends on / 依赖: isLocalizedModule_iff_isLocalization, isLocalizedModule_iff_isLocalization.mpr
@@ -1527,7 +1527,7 @@ theorem isBaseChange_of_isFractionRing
 
 中文:
 定理 isBaseChange_of_isFractionRing
-  条件: [Module R' S'] [IsScalarTower R R' S']
+  条件: [模 R' S'] [标量塔 R R' S']
   证明: (isLocalizedModule_iff_isBaseChange R⁰ ..).mp inferInstance
 
 Depends on / 依赖: isLocalizedModule_iff_isBaseChange
@@ -1548,7 +1548,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPushout R R' S S'
+  签名: 是推出 R R' S S'
   定义体: (isPushout_iff ..).mpr isBaseChange_of_isFractionRing ..
 
 Depends on / 依赖: isBaseChange_of_isFractionRing, isPushout_iff
@@ -1564,7 +1564,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPushout R S R' S'
+  签名: 是推出 R S R' S'
   定义体: .symm inferInstance
 -/
 instance : IsPushout R S R' S' := .symm inferInstance
@@ -1615,7 +1615,7 @@ theorem rank_of_isFractionRing
 
 中文:
 定理 rank_of_isFractionRing
-  结论: (S' : 类型u) [CommRing S'] [Algebra R S'] [Algebra S S']
+  结论: (S' : 类型u) [交换环 S'] [代数 R S'] [代数 S S']
   证明: by
   simpa using lift_rank_of_isFractionRing R R' S S'
 
@@ -1639,7 +1639,7 @@ theorem rank_fractionRing
 
 中文:
 定理 rank_fractionRing
-  条件: [IsDomain S]
+  条件: [是整环 S]
   证明: rank_of_isFractionRing ..
 
 Depends on / 依赖: rank_of_isFractionRing
@@ -1665,8 +1665,8 @@ theorem Module.finrank_mul_finrank'
     rw [← IsFractionRing.finrank_eq R (FractionRing R) S (FractionRing S)
 
 中文:
-定理 Module.finrank_mul_finrank'
-  结论: (T : 类型) [CommRing T] [IsDomain T]
+定理 模.finrank_mul_finrank'
+  结论: (T : 类型) [交换环 T] [是整环 T]
   证明: by
   by_cases h : FaithfulSMul R S
   · have : FaithfulSMul R T := .trans R S T
@@ -1707,7 +1707,7 @@ theorem rank_polynomial_polynomial
 
 中文:
 定理 rank_polynomial_polynomial
-  结论: Module.rank R[X] S[X] = Module.rank R S
+  结论: 模.rank R[X] S[X] = 模.rank R S
   证明: ((Algebra.isPushout_iff ..).mp inferInstance).rank_eq
 
 Depends on / 依赖: Algebra, Algebra.isPushout_iff, isPushout_iff, rank_eq
@@ -1762,8 +1762,8 @@ instance Algebra.IsAlgebraic.tensorProduct
     p.induction_on isAlgebraic_zero (fun _ s => .tmul _ <| alg.1 s) (fun _ _ => .add)
 
 中文:
-实例 Algebra.IsAlgebraic.tensorProduct
-  签名: : Algebra.IsAlgebraic R' (R' otimes[R] S) where
+实例 代数.是代数.tensorProduct
+  签名: : 代数.是代数 R' (R' otimes[R] S) where
   定义体: have := IsAlgebraic.nontrivial R S
     have := (FaithfulSMul.algebraMap_injective R R').nontrivial
     p.induction_on isAlgebraic_zero (fun _ s => .tmul _ <| alg.1 s) (fun _ _ => .add)
@@ -1789,9 +1789,9 @@ theorem Algebra.IsPushout.isAlgebraic'
   proof: (equiv R R' S S').isAlgebraic
 
 中文:
-定理 Algebra.IsPushout.isAlgebraic'
-  条件: [IsPushout R R' S S']
-  结论: Algebra.IsAlgebraic R' S'
+定理 代数.是推出.isAlgebraic'
+  条件: [是推出 R R' S S']
+  结论: 代数.是代数 R' S'
   证明: (equiv R R' S S').isAlgebraic
 
 Depends on / 依赖: isAlgebraic
@@ -1809,9 +1809,9 @@ theorem Algebra.IsPushout.isAlgebraic
   proof: have := h.symm; (equiv R R' S S').isAlgebraic
 
 中文:
-定理 Algebra.IsPushout.isAlgebraic
-  条件: [h : IsPushout R S R' S']
-  结论: Algebra.IsAlgebraic R' S'
+定理 代数.是推出.isAlgebraic
+  条件: [h : 是推出 R S R' S']
+  结论: 代数.是代数 R' S'
   证明: have := h.symm; (equiv R R' S S').isAlgebraic
 
 Depends on / 依赖: h.symm, isAlgebraic
@@ -1830,8 +1830,8 @@ instance [NoZeroDivisors
   body: Algebra.IsPushout.isAlgebraic R S ..
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] : Algebra.IsAlgebraic R[X] S[X]
+实例 [无零因子
+  签名: R] : 代数.是代数 R[X] S[X]
   定义体: Algebra.IsPushout.isAlgebraic R S ..
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.isAlgebraic, IsPushout, isAlgebraic
@@ -1851,8 +1851,8 @@ instance [NoZeroDivisors
   exact Algebra.isAlgebraic_of_not_injective h
 
 中文:
-实例 [NoZeroDivisors
-  签名: S] : Algebra.IsAlgebraic R[X] S[X]
+实例 [无零因子
+  签名: S] : 代数.是代数 R[X] S[X]
   定义体: by
   by_cases h : Function.Injective (algebraMap R S)
   · have := h.noZeroDivisors _ (map_zero _) (map_mul _); infer_instance
@@ -1876,8 +1876,8 @@ theorem Polynomial.exists_dvd_map_of_isAlgebraic
   proof: (Algebra.IsAlgebraic.isAlgebraic f).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hf)
 
 中文:
-定理 Polynomial.exists_dvd_map_of_isAlgebraic
-  条件: [NoZeroDivisors S] {f : S[X]} (hf : f != 0)
+定理 多项式.存在_dvd_map_of_isAlgebraic
+  条件: [无零因子 S] {f : S[X]} (hf : f != 0)
   证明: (Algebra.IsAlgebraic.isAlgebraic f).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hf)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, exists_nonzero_dvd, isAlgebraic, mem_nonZeroDivisors_of_ne_zero
@@ -1904,7 +1904,7 @@ theorem MvPolynomial.exists_dvd_map_of_isAlgebraic
   proof: (Algebra.IsAlgebraic.isAlgebraic f).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hf)
 
 中文:
-定理 MvPolynomial.exists_dvd_map_of_isAlgebraic
+定理 多元多项式.存在_dvd_map_of_isAlgebraic
   结论: {σ}
   证明: (Algebra.IsAlgebraic.isAlgebraic f).exists_nonzero_dvd (mem_nonZeroDivisors_of_ne_zero hf)
 
@@ -1929,7 +1929,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R (FractionRing R[X]) S (FractionRing S[X])
+  签名: 代数.是推出 R (FractionRing R[X]) S (FractionRing S[X])
   定义体: (Algebra.IsPushout.comp_iff _ R[X] _ S[X]).mpr inferInstance
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.comp_iff, IsPushout, comp_iff
@@ -1947,7 +1947,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R S (FractionRing R[X]) (FractionRing S[X])
+  签名: 代数.是推出 R S (FractionRing R[X]) (FractionRing S[X])
   定义体: .symm inferInstance
 -/
 instance : Algebra.IsPushout R S (FractionRing R[X]) (FractionRing S[X]) := .symm inferInstance
@@ -2030,8 +2030,8 @@ exact Module.finite_def.mpr
       Submodule.fg_span (Set.toFinite _)
 
 中文:
-实例 [IsDomain
-  签名: R] [IsDomain S] [IsTorsionFree R S] [Module.Finite R S] :
+实例 [是整环
+  签名: R] [是整环 S] [是无挠 R S] [模.有限 R S] :
   定义体: by
   obtain ⟨_, s, hs⟩ := Module.Finite.exists_fin (R := R) (M := S)
 exact Module.finite_def.mpr

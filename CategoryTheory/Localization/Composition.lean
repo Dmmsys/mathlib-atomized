@@ -93,7 +93,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: [L₁.IsLocalization W₁] [L₂.IsLocalization W₂]
+  结论: [L₁.是Localization W₁] [L₂.是Localization W₂]
   证明: by
   -- The proof proceeds by reducing to the case of the constructed
   -- localized categories, which satisfy the strict universal property
@@ -169,7 +169,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: (W₃ : Morphism命题erty C₁)
+  结论: (W₃ : MorphismProperty C₁)
   证明: by
     have : (L₁ ⋙ W₂.Q).IsLocalization W₃ :=
       comp L₁ W₂.Q W₁ W₂ W₃ (fun X Y f hf => Localization.inverts W₂.Q W₂ _

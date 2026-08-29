@@ -54,7 +54,7 @@ theorem algebraicIndependent_unique_type_iff
 
 中文:
 定理 algebraicIndependent_unique_type_iff
-  条件: [Unique ι]
+  条件: [唯一 ι]
   证明: by
   rw [transcendental_iff_injective]; rw [algebraicIndependent_iff_injective_aeval]
   let i := uniqueAlgEquiv R ι
@@ -85,7 +85,7 @@ theorem algebraicIndependent_singleton_iff
 
 中文:
 定理 algebraicIndependent_singleton_iff
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   证明: letI := uniqueOfSubsingleton i
   algebraicIndependent_unique_type_iff
 
@@ -135,7 +135,7 @@ theorem transcendental
 中文:
 定理 transcendental
   条件: (i : ι)
-  结论: Transcendental R (x i)
+  结论: 超越 R (x i)
   证明: by
   have := hx.comp ![i] (Function.injective_of_subsingleton _)
   have : AlgebraicIndependent R ![x i] := by rwa [← FinVec.map_eq] at this
@@ -162,8 +162,8 @@ theorem isEmpty_of_isAlgebraic
 
 中文:
 定理 isEmpty_of_isAlgebraic
-  条件: [Algebra.IsAlgebraic R A]
-  结论: IsEmpty ι
+  条件: [代数.是代数 R A]
+  结论: 是空 ι
   证明: by
   rcases isEmpty_or_nonempty ι with h | ⟨⟨i⟩⟩
   · exact h
@@ -189,7 +189,7 @@ theorem trdeg_eq_zero
 
 中文:
 定理 trdeg_eq_zero
-  条件: [Algebra.IsAlgebraic R A]
+  条件: [代数.是代数 R A]
   结论: trdeg R A = 0
   证明: bot_unique ciSup_le' fun s => have := s.2.isEmpty_of_isAlgebraic; (Cardinal.mk_eq_zero _).le
 
@@ -212,7 +212,7 @@ zero_lt_one.trans_le le_ciSup_of_le Cardinal.bddAbove_of_small
 
 中文:
 定理 trdeg_pos
-  条件: [Algebra.Transcendental R A]
+  条件: [代数.超越 R A]
   结论: 0 < trdeg R A
   证明: have ⟨x, hx⟩ := Algebra.Transcendental.transcendental (R := R) (A := A)
 zero_lt_one.trans_le le_ciSup_of_le Cardinal.bddAbove_of_small
@@ -240,7 +240,7 @@ theorem trdeg_eq_zero_iff
 
 中文:
 定理 trdeg_eq_zero_iff
-  结论: trdeg R A = 0 ↔ Algebra.IsAlgebraic R A
+  结论: trdeg R A = 0 ↔ 代数.是代数 R A
   证明: by
   by_cases h : Algebra.IsAlgebraic R A
   · exact iff_of_true trdeg_eq_zero h
@@ -268,7 +268,7 @@ theorem trdeg_ne_zero_iff
 
 中文:
 定理 trdeg_ne_zero_iff
-  结论: trdeg R A != 0 ↔ Algebra.Transcendental R A
+  结论: trdeg R A != 0 ↔ 代数.超越 R A
   证明: by
   rw [Algebra.transcendental_iff_not_isAlgebraic]; rw [Ne]; rw [trdeg_eq_zero_iff]
 
@@ -345,7 +345,7 @@ theorem AlgebraicIndepOn.insert_iff
 
 中文:
 定理 AlgebraicIndepOn.insert_iff
-  条件: {s : Set ι} {i : ι} (h : i ∉ s)
+  条件: {s : 集合 ι} {i : ι} (h : i ∉ s)
   证明: by
   classical simp_rw [← algebraicIndependent_equiv (subtypeInsertEquivOption h).symm,
     AlgebraicIndepOn]
@@ -378,7 +378,7 @@ theorem AlgebraicIndepOn.insert
 
 中文:
 定理 AlgebraicIndepOn.insert
-  结论: {s : Set ι} {i : ι} (hs : AlgebraicIndepOn R x s)
+  结论: {s : 集合 ι} {i : ι} (hs : AlgebraicIndepOn R x s)
   证明: by
   nontriviality R
   have := hs.algebraMap_injective.nontrivial
@@ -408,7 +408,7 @@ theorem algebraicIndependent_of_set_of_finite
 
 中文:
 定理 algebraicIndependent_of_set_of_finite
-  结论: (s : Set ι)
+  结论: (s : 集合 ι)
   证明: by
   classical
   refine algebraicIndependent_of_finite_type fun t hfin => ?_
@@ -474,7 +474,7 @@ theorem algebraicIndependent_of_finite'
 
 中文:
 定理 algebraicIndependent_of_finite'
-  结论: (s : Set A)
+  结论: (s : 集合 A)
   证明: algebraicIndependent_of_finite_type' hinj fun t hfin h i hi => H _
     (by rintro _ ⟨x, _, rfl⟩; exact x.2) (hfin.image _) h.image _ i.2
     (mt Subtype.val_injective.mem_set_image.mp hi)
@@ -509,7 +509,7 @@ theorem sumElim_iff
 中文:
 定理 sumElim_iff
   条件: {ι'} {y : ι' -> A}
-  结论: AlgebraicIndependent R (Sum.elim y x) ↔
+  结论: AlgebraicIndependent R (和.elim y x) ↔
   证明: by
   by_cases hx : AlgebraicIndependent R x; swap
   · exact ⟨fun h => (hx <| by apply h.comp _ Sum.inr_injective).elim, fun h => (hx h.1).elim⟩
@@ -542,7 +542,7 @@ theorem iff_adjoin_image
 
 中文:
 定理 iff_adjoin_image
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   证明: by
   rw [show x '' s = range fun i : s => x i by ext; simp]
   convert! ← sumElim_iff
@@ -570,7 +570,7 @@ theorem iff_adjoin_image_compl
 
 中文:
 定理 iff_adjoin_image_compl
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   证明: by
   convert! ← iff_adjoin_image _; apply compl_compl
 
@@ -694,7 +694,7 @@ theorem adjoin_of_disjoint
 
 中文:
 定理 adjoin_of_disjoint
-  条件: {s t : Set ι} (h : Disjoint s t)
+  条件: {s t : 集合 ι} (h : Disjoint s t)
   证明: ((iff_adjoin_image s).mp hx).2.comp (inclusion _) (inclusion_injective h.subset_compl_left)
 
 Depends on / 依赖: h.subset_compl_left, iff_adjoin_image, inclusion, inclusion_injective, subset_compl_left
@@ -717,7 +717,7 @@ theorem adjoin_iff_disjoint
 
 中文:
 定理 adjoin_iff_disjoint
-  条件: [Nontrivial A] {s t : Set ι}
+  条件: [非平凡 A] {s t : 集合 ι}
   证明: by
   refine ⟨fun ind => of_not_not fun ndisj => ?_, adjoin_of_disjoint hx⟩
   have ⟨i, hs, ht⟩ := Set.not_disjoint_iff.mp ndisj
@@ -745,7 +745,7 @@ theorem transcendental_adjoin
 
 中文:
 定理 transcendental_adjoin
-  条件: {s : Set ι} {i : ι} (hi : i ∉ s)
+  条件: {s : 集合 ι} {i : ι} (hi : i ∉ s)
   证明: by
   convert! ← hx.adjoin_of_disjoint (Set.disjoint_singleton_right.mpr hi)
   rw [algebraicIndependent_singleton_iff ⟨i]; rw [rfl⟩]
@@ -770,7 +770,7 @@ theorem transcendental_adjoin_iff
 
 中文:
 定理 transcendental_adjoin_iff
-  条件: [Nontrivial A] {s : Set ι} {i : ι}
+  条件: [非平凡 A] {s : 集合 ι} {i : ι}
   证明: by
   rw [← Set.disjoint_singleton_right]
   convert! ← hx.adjoin_iff_disjoint (t := { i })
@@ -803,7 +803,7 @@ theorem lift_trdeg_add_le
 
 中文:
 定理 lift_trdeg_add_le
-  条件: [Nontrivial R] [FaithfulSMul R S] [FaithfulSMul S A]
+  条件: [非平凡 R] [忠实标量乘法 R S] [忠实标量乘法 S A]
   证明: by
   simp_rw [trdeg, lift_iSup bddAbove_of_small]
   simp_rw [Cardinal.ciSup_add_ciSup _ bddAbove_of_small _ bddAbove_of_small,
@@ -836,7 +836,7 @@ theorem trdeg_add_le
 
 中文:
 定理 trdeg_add_le
-  结论: [Nontrivial R] {A : 类型u} [CommRing A] [Algebra R A] [Algebra S A]
+  结论: [非平凡 R] {A : 类型u} [交换环 A] [代数 R A] [代数 S A]
   证明: by
   rw [← (trdeg R S).lift_id]; rw [← (trdeg S A).lift_id]; rw [← (trdeg R A).lift_id]
   exact lift_trdeg_add_le
@@ -863,7 +863,7 @@ theorem MvPolynomial.algebraicIndependent_polynomial_aeval_X
     rw [Set.mem_pr
 
 中文:
-定理 MvPolynomial.algebraicIndependent_polynomial_aeval_X
+定理 多元多项式.algebraicIndependent_polynomial_aeval_X
   证明: by
   set x := fun i => Polynomial.aeval (X i : MvPolynomial ι R) (f i)
   refine algebraicIndependent_of_finite_type' (C_injective _ _) fun t _ _ i hi => ?_

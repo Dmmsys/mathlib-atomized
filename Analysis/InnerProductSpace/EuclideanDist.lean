@@ -45,7 +45,7 @@ definition toEuclidean
 
 中文:
 定义 toEuclidean
-  签名: : E ≃L[实数] EuclideanSpace 实数 (Fin <| finrank 实数 E)
+  签名: : E ≃L[实数] EuclideanSpace 实数 (有限集 <| finrank 实数 E)
   定义体: ContinuousLinearEquiv.ofFinrankEq finrank_euclideanSpace_fin.symm
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ofFinrankEq, finrank_euclideanSpace_fin, finrank_euclideanSpace_fin.symm, ofFinrankEq
@@ -161,7 +161,7 @@ theorem isOpen_ball
 中文:
 定理 isOpen_ball
   条件: {x : E} {r : 实数}
-  结论: IsOpen (ball x r)
+  结论: 是开集 (ball x r)
   证明: Metric.isOpen_ball.preimage toEuclidean.continuous
 -/
 @[simp] theorem isOpen_ball {x : E} {r : Real} : IsOpen (ball x r) :=
@@ -237,7 +237,7 @@ nonrec theorem exists_pos_lt_subset_b
 中文:
 定理 isClosed_closedBall
   条件: {x : E} {r : 实数}
-  结论: IsClosed (closedBall x r)
+  结论: 是闭集 (closedBall x r)
   证明: isCompact_closedBall.isClosed
 
 nonrec theorem closure_ball (x : E) {r : Real} (h : r != 0) : closure (ball x r) = closedBall x r := by
@@ -273,7 +273,7 @@ theorem nhds_basis_closedBall
 中文:
 定理 nhds_basis_closedBall
   条件: {x : E}
-  结论: (𝓝 x).HasBasis (fun r : 实数 => 0 < r) (closedBall x)
+  结论: (𝓝 x).有基 (fun r : 实数 => 0 < r) (closedBall x)
   证明: by
   rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
   exact Metric.nhds_basis_closedBall.comap _
@@ -318,7 +318,7 @@ theorem nhds_basis_ball
 中文:
 定理 nhds_basis_ball
   条件: {x : E}
-  结论: (𝓝 x).HasBasis (fun r : 实数 => 0 < r) (ball x)
+  结论: (𝓝 x).有基 (fun r : 实数 => 0 < r) (ball x)
   证明: by
   rw [toEuclidean.toHomeomorph.nhds_eq_comap x]
   exact Metric.nhds_basis_ball.comap _
@@ -367,8 +367,8 @@ theorem ContDiff.euclidean_dist
     (toEuclidean (E := G)).contDiff.comp hg, fun x => toEuclidean.injective.ne (h x)]
 
 中文:
-定理 ContDiff.euclidean_dist
-  条件: (hf : ContDiff 实数 n f) (hg : ContDiff 实数 n g) (h : 对任意 x, f x != g x)
+定理 连续可微.euclidean_dist
+  条件: (hf : 连续可微 实数 n f) (hg : 连续可微 实数 n g) (h : 对任意 x, f x != g x)
   证明: by
   simp only [Euclidean.dist]
   apply ContDiff.dist Real

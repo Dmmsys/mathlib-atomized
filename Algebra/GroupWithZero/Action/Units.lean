@@ -60,7 +60,7 @@ lemma smul_mk0
 
 中文:
 引理 smul_mk0
-  条件: {α : 类型} [SMul G₀ α] {g : G₀} (hg : g != 0) (a : α)
+  条件: {α : 类型} [标量乘法 G₀ α] {g : G₀} (hg : g != 0) (a : α)
   结论: mk0 g hg • a = g • a
   证明: rfl
 -/
@@ -170,7 +170,7 @@ lemma SemiconjBy.smul_right_iff₀
 
 中文:
 引理 SemiconjBy.smul_right_iff₀
-  结论: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
+  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y z : β}
   证明: smul_right_iff (r := Units.mk0 a ha)
 
 @[simp]
@@ -194,7 +194,7 @@ lemma SemiconjBy.smul_left_iff₀
 
 中文:
 引理 SemiconjBy.smul_left_iff₀
-  结论: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y z : β}
+  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y z : β}
   证明: smul_left_iff (r := Units.mk0 a ha)
 
 @[simp]
@@ -218,7 +218,7 @@ lemma Commute.smul_right_iff₀
 
 中文:
 引理 Commute.smul_right_iff₀
-  结论: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
+  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y : β}
   证明: SemiconjBy.smul_right_iff₀ ha
 
 @[simp]
@@ -240,7 +240,7 @@ lemma Commute.smul_left_iff₀
 
 中文:
 引理 Commute.smul_left_iff₀
-  结论: [Mul β] [SMulCommClass α β β] [IsScalarTower α β β] {x y : β}
+  结论: [乘法 β] [标量交换类 α β β] [标量塔 α β β] {x y : β}
   证明: SemiconjBy.smul_left_iff₀ ha
 
 Depends on / 依赖: SemiconjBy, SemiconjBy.smul_left_iff
@@ -261,7 +261,7 @@ definition Equiv.smulRight
   right_inv := smul_inv_smul₀ ha
 
 中文:
-定义 Equiv.smulRight
+定义 等价.smulRight
   签名: (ha : a != 0)
   定义体: a • b
   invFun b := a⁻¹ • b
@@ -291,7 +291,7 @@ instance instSMulZeroClass
 
 中文:
 实例 instSMulZeroClass
-  签名: [Monoid M] [Zero α] [SMulZeroClass M α]
+  签名: [幺半群 M] [零 α] [SMulZero类 M α]
   定义体: smul_zero (m : M)
 
 Depends on / 依赖: smul_zero
@@ -309,7 +309,7 @@ instance instDistribSMulUnits
 
 中文:
 实例 instDistribSMulUnits
-  签名: [Monoid M] [AddZeroClass α] [DistribSMul M α]
+  签名: [幺半群 M] [加法零类 α] [分配标量乘法 M α]
   定义体: smul_add (m : M)
 
 Depends on / 依赖: smul_add
@@ -329,7 +329,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid M] [AddMonoid α] [DistribMulAction M α]
+  签名: [幺半群 M] [加法幺半群 α] [分配乘法作用 M α]
   定义体: instDistribSMulUnits
   one_smul := fun b => one_smul M b
   mul_smul := fun x y b => mul_smul (x : M) y b
@@ -353,7 +353,7 @@ instance instMulDistribMulAction
 
 中文:
 实例 instMulDistribMulAction
-  签名: [Monoid M] [Monoid α] [MulDistribMulAction M α]
+  签名: [幺半群 M] [幺半群 α] [MulDistribMul作用 M α]
   定义体: smul_mul' (m : M)
   smul_one m := smul_one (m : M)
 
@@ -379,8 +379,8 @@ lemma IsUnit.smul_eq_zero
   proof: smul_eq_zero_iff_eq hu.unit
 
 中文:
-引理 IsUnit.smul_eq_zero
-  条件: (hu : IsUnit u)
+引理 是单位.smul_eq_zero
+  条件: (hu : 是单位 u)
   结论: u • x = 0 ↔ x = 0
   证明: smul_eq_zero_iff_eq hu.unit
 -/

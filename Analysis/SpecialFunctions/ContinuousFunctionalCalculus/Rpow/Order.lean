@@ -63,7 +63,7 @@ lemma monotoneOn_nnrpow_Ioo
 
 中文:
 引理 monotoneOn_nnrpow_Ioo
-  条件: {p : 实数>=0} (hp : p in Ioo 0 1)
+  条件: {p : 实数>=0} (hp : p in 开区间 0 1)
   证明: by
   obtain ⟨μ, hμ⟩ := CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁ A hp
   have h₃' : (Ici 0).EqOn (fun a : A => a ^ p)
@@ -102,7 +102,7 @@ lemma monotone_nnrpow
 
 中文:
 引理 monotone_nnrpow
-  条件: {p : 实数>=0} (hp : p in Icc 0 1)
+  条件: {p : 实数>=0} (hp : p in 闭区间 0 1)
   证明: by
   intro a b hab
   by_cases ha : 0 <= a
@@ -146,7 +146,7 @@ lemma monotone_sqrt
 
 中文:
 引理 monotone_sqrt
-  结论: Monotone (sqrt : A -> A)
+  结论: 递增 (sqrt : A -> A)
   证明: by
   intro a b hab
   rw [CFC.sqrt_eq_nnrpow a]; rw [CFC.sqrt_eq_nnrpow b]
@@ -176,7 +176,7 @@ lemma nnrpow_le_nnrpow
 
 中文:
 引理 nnrpow_le_nnrpow
-  条件: {p : 实数>=0} (hp : p in Icc 0 1) {a b : A} (hab : a <= b)
+  条件: {p : 实数>=0} (hp : p in 闭区间 0 1) {a b : A} (hab : a <= b)
   证明: monotone_nnrpow hp hab
 
 @[gcongr]
@@ -223,7 +223,7 @@ lemma concaveOn_nnrpow_Ioo
 
 中文:
 引理 concaveOn_nnrpow_Ioo
-  条件: {p : 实数>=0} (hp : p in Ioo 0 1)
+  条件: {p : 实数>=0} (hp : p in 开区间 0 1)
   证明: by
   obtain ⟨μ, hμ⟩ := CFC.exists_measure_nnrpow_eq_integral_cfcₙ_rpowIntegrand₀₁ A hp
   have h₃' : (Ici 0).EqOn (fun a : A => a ^ p)
@@ -261,7 +261,7 @@ lemma concaveOn_nnrpow
 
 中文:
 引理 concaveOn_nnrpow
-  条件: {p : 实数>=0} (hp : p in Icc 0 1)
+  条件: {p : 实数>=0} (hp : p in 闭区间 0 1)
   证明: by
   have hIcc : Icc (0 : Real>=0) 1 = Ioo 0 1 union {0} union {1} := by ext; simp
   rw [hIcc] at hp
@@ -300,7 +300,7 @@ lemma concaveOn_sqrt
 
 中文:
 引理 concaveOn_sqrt
-  结论: ConcaveOn 实数 (Ici (0 : A)) (sqrt : A -> A)
+  结论: ConcaveOn 实数 (左闭右无界区间 (0 : A)) (sqrt : A -> A)
   证明: by
   eta_expand
   simp_rw [sqrt_eq_nnrpow]
@@ -339,8 +339,8 @@ lemma monotone_rpow
 
 中文:
 引理 monotone_rpow
-  条件: {p : 实数} (hp : p in Icc 0 1)
-  结论: Monotone (fun a : A => a ^ p)
+  条件: {p : 实数} (hp : p in 闭区间 0 1)
+  结论: 递增 (fun a : A => a ^ p)
   证明: by
   let q : Real>=0 := ⟨p, hp.1⟩
   change Monotone (fun a : A => a ^ (q : Real))
@@ -379,7 +379,7 @@ lemma rpow_le_rpow
 
 中文:
 引理 rpow_le_rpow
-  条件: {p : 实数} (hp : p in Icc 0 1) {a b : A} (hab : a <= b)
+  条件: {p : 实数} (hp : p in 闭区间 0 1) {a b : A} (hab : a <= b)
   证明: monotone_rpow hp hab
 
 Depends on / 依赖: monotone_rpow
@@ -404,7 +404,7 @@ lemma concaveOn_rpow
 
 中文:
 引理 concaveOn_rpow
-  条件: {p : 实数} (hp : p in Icc 0 1)
+  条件: {p : 实数} (hp : p in 闭区间 0 1)
   证明: by
   let q : Real>=0 := ⟨p, hp.1⟩
   change ConcaveOn Real (Ici (0 : A)) (fun a : A => a ^ (q : Real))

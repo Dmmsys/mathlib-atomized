@@ -59,8 +59,8 @@ theorem IsBoundedBilinearMap.hasStrictFDerivAt
       simp only [map_sub, deriv_apply, F
 
 中文:
-定理 IsBoundedBilinearMap.hasStrictFDerivAt
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.hasStrictFDerivAt
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: by
   simp only [hasStrictFDerivAt_iff_isLittleO]
   simp only [← map_add_left_nhds_zero (p, p), isLittleO_map]
@@ -110,8 +110,8 @@ theorem IsBoundedBilinearMap.hasFDerivAt
 @[fun_prop]
 
 中文:
-定理 IsBoundedBilinearMap.hasFDerivAt
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.hasFDerivAt
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: (h.hasStrictFDerivAt p).hasFDerivAt
 
 @[fun_prop]
@@ -134,8 +134,8 @@ theorem IsBoundedBilinearMap.hasFDerivWithinAt
 @[fun_prop]
 
 中文:
-定理 IsBoundedBilinearMap.hasFDerivWithinAt
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.hasFDerivWithinAt
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: (h.hasFDerivAt p).hasFDerivWithinAt
 
 @[fun_prop]
@@ -158,8 +158,8 @@ theorem IsBoundedBilinearMap.differentiableAt
 @[fun_prop]
 
 中文:
-定理 IsBoundedBilinearMap.differentiableAt
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.differentiableAt
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: (h.hasFDerivAt p).differentiableAt
 
 @[fun_prop]
@@ -180,8 +180,8 @@ theorem IsBoundedBilinearMap.differentiableWithinAt
   proof: (h.differentiableAt p).differentiableWithinAt
 
 中文:
-定理 IsBoundedBilinearMap.differentiableWithinAt
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.differentiableWithinAt
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: (h.differentiableAt p).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt, differentiableWithinAt, h.differentiableAt
@@ -199,8 +199,8 @@ theorem IsBoundedBilinearMap.fderiv
   proof: HasFDerivAt.fderiv (h.hasFDerivAt p)
 
 中文:
-定理 IsBoundedBilinearMap.fderiv
-  条件: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.fderiv
+  条件: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: HasFDerivAt.fderiv (h.hasFDerivAt p)
 -/
 protected theorem IsBoundedBilinearMap.fderiv (h : IsBoundedBilinearMap 𝕜 b) (p : E × F) :
@@ -220,8 +220,8 @@ theorem IsBoundedBilinearMap.fderivWithin
 @[fun_prop]
 
 中文:
-定理 IsBoundedBilinearMap.fderivWithin
-  结论: (h : IsBoundedBilinearMap 𝕜 b) (p : E × F)
+定理 是BoundedBilinear映射.fderivWithin
+  结论: (h : 是BoundedBilinear映射 𝕜 b) (p : E × F)
   证明: by
   rw [DifferentiableAt.fderivWithin (h.differentiableAt p) hxs]
   exact h.fderiv p
@@ -246,9 +246,9 @@ theorem IsBoundedBilinearMap.differentiable
 @[fun_prop]
 
 中文:
-定理 IsBoundedBilinearMap.differentiable
-  条件: (h : IsBoundedBilinearMap 𝕜 b)
-  结论: Differentiable 𝕜 b
+定理 是BoundedBilinear映射.differentiable
+  条件: (h : 是BoundedBilinear映射 𝕜 b)
+  结论: 可微 𝕜 b
   证明: fun x => h.differentiableAt x
 
 @[fun_prop]
@@ -268,8 +268,8 @@ theorem IsBoundedBilinearMap.differentiableOn
   proof: h.differentiable.differentiableOn
 
 中文:
-定理 IsBoundedBilinearMap.differentiableOn
-  条件: (h : IsBoundedBilinearMap 𝕜 b)
+定理 是BoundedBilinear映射.differentiableOn
+  条件: (h : 是BoundedBilinear映射 𝕜 b)
   证明: h.differentiable.differentiableOn
 
 Depends on / 依赖: differentiable, differentiableOn, h.differentiable.differentiableOn
@@ -294,7 +294,7 @@ theorem ContinuousLinearMap.hasFDerivWithinAt_of_bilinear
 @[fun_prop]
 
 中文:
-定理 ContinuousLinearMap.hasFDerivWithinAt_of_bilinear
+定理 连续线性映射.hasFDerivWithinAt_of_bilinear
   结论: {f : G' -> E} {g : G' -> F}
   证明: by
   -- need `by exact` to deal with tricky unification
@@ -324,7 +324,7 @@ theorem ContinuousLinearMap.hasFDerivAt_of_bilinear
 @[fun_prop]
 
 中文:
-定理 ContinuousLinearMap.hasFDerivAt_of_bilinear
+定理 连续线性映射.hasFDerivAt_of_bilinear
   结论: {f : G' -> E} {g : G' -> F} {f' : G' ->L[𝕜] E}
   证明: by
   -- need `by exact` to deal with tricky unification
@@ -347,7 +347,7 @@ theorem ContinuousLinearMap.hasStrictFDerivAt_of_bilinear
   proof: (B.isBoundedBilinearMap.hasStrictFDerivAt (f x, g x)).comp x (hf.prodMk hg)
 
 中文:
-定理 ContinuousLinearMap.hasStrictFDerivAt_of_bilinear
+定理 连续线性映射.hasStrictFDerivAt_of_bilinear
   证明: (B.isBoundedBilinearMap.hasStrictFDerivAt (f x, g x)).comp x (hf.prodMk hg)
 
 Depends on / 依赖: B.isBoundedBilinearMap.hasStrictFDerivAt, hasStrictFDerivAt, hf.prodMk, isBoundedBilinearMap, prodMk
@@ -368,8 +368,8 @@ theorem ContinuousLinearMap.fderivWithin_of_bilinear
   proof: (B.hasFDerivWithinAt_of_bilinear hf.hasFDerivWithinAt hg.hasFDerivWithinAt).fderivWithin hs
 
 中文:
-定理 ContinuousLinearMap.fderivWithin_of_bilinear
-  结论: {f : G' -> E} {g : G' -> F} {x : G'} {s : Set G'}
+定理 连续线性映射.fderivWithin_of_bilinear
+  结论: {f : G' -> E} {g : G' -> F} {x : G'} {s : 集合 G'}
   证明: (B.hasFDerivWithinAt_of_bilinear hf.hasFDerivWithinAt hg.hasFDerivWithinAt).fderivWithin hs
 
 Depends on / 依赖: B.hasFDerivWithinAt_of_bilinear, fderivWithin, hasFDerivWithinAt, hasFDerivWithinAt_of_bilinear, hf.hasFDerivWithinAt, hg.hasFDerivWithinAt
@@ -390,7 +390,7 @@ theorem ContinuousLinearMap.fderiv_of_bilinear
   proof: (B.hasFDerivAt_of_bilinear hf.hasFDerivAt hg.hasFDerivAt).fderiv
 
 中文:
-定理 ContinuousLinearMap.fderiv_of_bilinear
+定理 连续线性映射.fderiv_of_bilinear
   结论: {f : G' -> E} {g : G' -> F} {x : G'}
   证明: (B.hasFDerivAt_of_bilinear hf.hasFDerivAt hg.hasFDerivAt).fderiv
 

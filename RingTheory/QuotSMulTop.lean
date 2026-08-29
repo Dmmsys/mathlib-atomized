@@ -194,7 +194,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map r (LinearMap.id : M ->ₗ[R] M) = .id
+  结论: map r (线性映射.id : M ->ₗ[R] M) = .id
   证明: DFunLike.ext _ _ (mkQ_surjective _).forall.mpr fun _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.ext, forall.mpr, mkQ_surjective
@@ -319,8 +319,8 @@ lemma map_surjective
 
 中文:
 引理 map_surjective
-  条件: {f : M ->ₗ[R] M'} (hf : Surjective f)
-  结论: Surjective (map r f)
+  条件: {f : M ->ₗ[R] M'} (hf : 满射 f)
+  结论: 满射 (map r f)
   证明: have H₁ := (mkQ_surjective (r • ⊤ : Submodule R M')).comp hf
 @Surjective.of_comp _ _ _ _ (mkQ (r • ⊤ : Submodule R M)) by
     rwa [← LinearMap.coe_comp, map_comp_mkQ, LinearMap.coe_comp]
@@ -421,7 +421,7 @@ definition algebraMapTensorEquivTensorQuotSMulTop
 
 中文:
 定义 algebraMapTensorEquivTensorQuotSMulTop
-  签名: (S : 类型) [CommRing S] [Algebra R S]
+  签名: (S : 类型) [交换环 S] [代数 R S]
   定义体: Submodule.quotEquivOfEq _ _ (by simp [Ideal.map_span, ideal_span_singleton_smul]) ≪≫ₗ
     tensorQuotMapSMulEquivTensorQuot M S (Ideal.span {r}) ≪≫ₗ
       (Submodule.quotEquivOfEq _ _ (ideal_span_singleton_smul r _)).baseChange R S _ _
@@ -449,7 +449,7 @@ lemma mem_annihilator
 中文:
 引理 mem_annihilator
   条件: (x : R)
-  结论: x in Module.annihilator R (QuotSMulTop x M)
+  结论: x in 模.annihilator R (QuotSMulTop x M)
   证明: by
   refine Module.mem_annihilator.mpr (fun m => ?_)
   rcases Submodule.Quotient.mk_surjective _ m with ⟨m', hm'⟩

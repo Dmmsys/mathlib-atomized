@@ -133,7 +133,7 @@ lemma schwarz_applied
 
 中文:
 引理 schwarz_applied
-  结论: (hM : 0 < M) (hf : DifferentiableOn Complex f (ball 0 R))
+  结论: (hM : 0 < M) (hf : DifferentiableOn 复形 f (ball 0 R))
   证明: by
   rw [← dist_zero_right]; rw [← dist_zero_right]
   nth_rw 1 [← zero_div (2 * M - f 0), ← hf₂]

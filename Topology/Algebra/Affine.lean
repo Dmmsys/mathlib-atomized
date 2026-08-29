@@ -51,7 +51,7 @@ theorem continuous_linear_iff
 中文:
 定理 continuous_linear_iff
   条件: {f : P ->ᵃ[R] Q}
-  结论: Continuous f.linear ↔ Continuous f
+  结论: 连续 f.linear ↔ 连续 f
   证明: by
   inhabit P
   have :
@@ -94,7 +94,7 @@ theorem isOpenMap_linear_iff
 中文:
 定理 isOpenMap_linear_iff
   条件: {f : P ->ᵃ[R] Q}
-  结论: IsOpenMap f.linear ↔ IsOpenMap f
+  结论: 是开映射 f.linear ↔ 是开映射 f
   证明: by
   inhabit P
   have :
@@ -181,7 +181,7 @@ theorem _root_.Filter.Tendsto.lineMap
   proof: (hg.smul (h₂.vsub h₁)).vadd h₁
 
 中文:
-定理 _root_.Filter.Tendsto.lineMap
+定理 _root_.滤子.收敛.lineMap
   结论: {f₁ f₂ : α -> P} {g : α -> R} {p₁ p₂ : P} {c : R}
   证明: (hg.smul (h₂.vsub h₁)).vadd h₁
 
@@ -201,8 +201,8 @@ theorem _root_.Filter.Tendsto.midpoint
   proof: h₁.lineMap h₂ tendsto_const_nhds
 
 中文:
-定理 _root_.Filter.Tendsto.midpoint
-  结论: [Invertible (2 : R)] {f₁ f₂ : α -> P} {p₁ p₂ : P}
+定理 _root_.滤子.收敛.midpoint
+  结论: [可逆 (2 : R)] {f₁ f₂ : α -> P} {p₁ p₂ : P}
   证明: h₁.lineMap h₂ tendsto_const_nhds
 
 Depends on / 依赖: lineMap, tendsto_const_nhds
@@ -295,8 +295,8 @@ theorem _root_.Continuous.lineMap
   fun_prop
 
 中文:
-定理 _root_.Continuous.lineMap
-  结论: (h₁ : Continuous f₁) (h₂ : Continuous f₂)
+定理 _root_.连续.lineMap
+  结论: (h₁ : 连续 f₁) (h₂ : 连续 f₂)
   证明: by
   fun_prop
 
@@ -328,7 +328,7 @@ theorem homothety_continuous
 中文:
 定理 homothety_continuous
   条件: (x : P) (t : R)
-  结论: Continuous homothety x t
+  结论: 连续 homothety x t
   证明: by
   rw [coe_homothety]
   fun_prop
@@ -385,7 +385,7 @@ theorem _root_.eventually_homothety_image_subset_of_finite_subset_interior
 
 中文:
 定理 _root_.eventually_homothety_image_subset_of_finite_subset_interior
-  结论: {t : Set Q}
+  结论: {t : 集合 Q}
   证明: by
   suffices forall y in t, forallᶠ δ in 𝓝 (1 : R), homothety x δ y in s by
     simp_rw [Set.image_subset_iff]
@@ -423,7 +423,7 @@ theorem homothety_isOpenMap
 中文:
 定理 homothety_isOpenMap
   条件: (x : P) (t : R) (ht : t != 0)
-  结论: IsOpenMap homothety x t
+  结论: 是开映射 homothety x t
   证明: by
   apply IsOpenMap.of_inverse (homothety_continuous x t⁻¹) <;> intro e <;>
     simp [← AffineMap.comp_apply, ← homothety_mul, ht]

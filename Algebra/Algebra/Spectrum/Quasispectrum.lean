@@ -123,7 +123,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (PreQuasiregular R) where
+  签名: : 幺 (PreQuasiregular R) where
   定义体: equiv 0
 
 @[simp]
@@ -159,7 +159,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (PreQuasiregular R) where
+  签名: : 乘法 (PreQuasiregular R) where
   定义体: .mk (y.val + x.val + x.val * y.val)
 
 @[simp]
@@ -203,7 +203,7 @@ mul_assoc x y z := equiv.symm.injective by simp [mul_add, add_mul, mul_assoc]; a
 
 中文:
 实例 instMonoid
-  签名: : Monoid (PreQuasiregular R) where
+  签名: : 幺半群 (PreQuasiregular R) where
   定义体: equiv 0
   mul x y := .mk (y.val + x.val + x.val * y.val)
 mul_one _ := equiv.symm.injective by simp [-EmbeddingLike.apply_eq_iff_eq]
@@ -292,7 +292,7 @@ definition unitsFstOne
 
 中文:
 定义 unitsFstOne
-  签名: : Subgroup (Unitization R A)ˣ where
+  签名: : 子群 (Unitization R A)ˣ where
   定义体: {x | x.val.fst = 1}
   one_mem' := rfl
   mul_mem' {x} {y} (hx : x.val.fst = 1) (hy : y.val.fst = 1) := by simp [hx, hy]
@@ -541,7 +541,7 @@ lemma isQuasiregular_iff'
 中文:
 引理 isQuasiregular_iff'
   条件: {x : R}
-  结论: IsQuasiregular x ↔ IsUnit (PreQuasiregular.equiv x)
+  结论: IsQuasiregular x ↔ 是单位 (PreQuasiregular.equiv x)
   证明: by
   simp only [IsQuasiregular, IsUnit, Equiv.apply_symm_apply,
     ← PreQuasiregular.equiv (R := R).injective.eq_iff]
@@ -567,7 +567,7 @@ lemma IsQuasiregular.map
 
 中文:
 引理 IsQuasiregular.map
-  结论: {F R S : 类型} [NonUnitalSemiring R] [NonUnitalSemiring S]
+  结论: {F R S : 类型} [非幺半环 R] [非幺半环 S]
   证明: by
   rw [isQuasiregular_iff] at hx ⊢
   obtain ⟨y, hy₁, hy₂⟩ := hx
@@ -596,7 +596,7 @@ lemma IsQuasiregular.isUnit_one_add
 
 中文:
 引理 IsQuasiregular.isUnit_one_add
-  条件: {R : 类型} [Semiring R] {x : R} (hx : IsQuasiregular x)
+  条件: {R : 类型} [半环 R] {x : R} (hx : IsQuasiregular x)
   证明: by
   obtain ⟨y, hy₁, hy₂⟩ := isQuasiregular_iff.mp hx
   refine ⟨⟨1 + x, 1 + y, ?_, ?_⟩, rfl⟩
@@ -630,7 +630,7 @@ lemma isQuasiregular_iff_isUnit
 
 中文:
 引理 isQuasiregular_iff_isUnit
-  条件: {R : 类型} [Ring R] {x : R}
+  条件: {R : 类型} [环 R] {x : R}
   证明: by
   refine ⟨IsQuasiregular.isUnit_one_add, fun hx => ?_⟩
   rw [isQuasiregular_iff]
@@ -671,7 +671,7 @@ lemma isQuasiregular_iff_isUnit'
 
 中文:
 引理 isQuasiregular_iff_isUnit'
-  结论: (R : 类型) {A : 类型} [CommSemiring R] [NonUnitalSemiring A]
+  结论: (R : 类型) {A : 类型} [交换半环 R] [非幺半环 A]
   证明: by
   refine ⟨?_, fun hx => ?_⟩
   · rintro ⟨u, rfl⟩
@@ -723,7 +723,7 @@ lemma quasispectrum.not_isUnit_mem
 
 中文:
 引理 quasispectrum.not_isUnit_mem
-  条件: (a : A) {r : R} (hr : ¬ IsUnit r)
+  条件: (a : A) {r : R} (hr : ¬ 是单位 r)
   结论: r in quasispectrum R a
   证明: fun hr' => (hr hr').elim
 
@@ -744,7 +744,7 @@ lemma quasispectrum.zero_mem
 
 中文:
 引理 quasispectrum.zero_mem
-  条件: [Nontrivial R] (a : A)
+  条件: [非平凡 R] (a : A)
   结论: 0 in quasispectrum R a
   证明: quasispectrum.not_isUnit_mem a by simp
 
@@ -764,8 +764,8 @@ theorem quasispectrum.nonempty
 
 中文:
 定理 quasispectrum.nonempty
-  条件: [Nontrivial R] (a : A)
-  结论: (quasispectrum R a).Nonempty
+  条件: [非平凡 R] (a : A)
+  结论: (quasispectrum R a).非空
   证明: Set.nonempty_of_mem quasispectrum.zero_mem R a
 
 Depends on / 依赖: Algebra, CommSemiring, Semiring, Set.nonempty_of_mem, nonempty_of_mem, quasispectrum, quasispectrum.zero_mem, toModule, zero_mem
@@ -783,7 +783,7 @@ instance quasispectrum.instZero
 
 中文:
 实例 quasispectrum.instZero
-  签名: [Nontrivial R] (a : A)
+  签名: [非平凡 R] (a : A)
   定义体: ⟨0, quasispectrum.zero_mem R a⟩
 
 Depends on / 依赖: quasispectrum, quasispectrum.zero_mem, zero_mem
@@ -809,7 +809,7 @@ lemma NonUnitalAlgHom.quasispectrum_apply_subset'
   simpa [-smul_assoc] using this.map φ
 
 中文:
-引理 NonUnitalAlgHom.quasispectrum_apply_subset'
+引理 非幺Alg态射.quasispectrum_apply_subset'
   结论: {F R : 类型} (S : 类型) {A B : 类型}
   证明: by
   refine Set.compl_subset_compl.mp fun x => ?_
@@ -844,7 +844,7 @@ lemma NonUnitalAlgHom.quasispectrum_apply_subset
 @[simp]
 
 中文:
-引理 NonUnitalAlgHom.quasispectrum_apply_subset
+引理 非幺Alg态射.quasispectrum_apply_subset
   结论: {F R A B : 类型}
   证明: NonUnitalAlgHom.quasispectrum_apply_subset' R φ a
 
@@ -870,7 +870,7 @@ lemma quasispectrum.coe_zero
 
 中文:
 引理 quasispectrum.coe_zero
-  条件: [Nontrivial R] (a : A)
+  条件: [非平凡 R] (a : A)
   结论: (0 : quasispectrum R a) = (0 : R)
   证明: rfl
 -/
@@ -909,7 +909,7 @@ lemma quasispectrum_eq_spectrum_union
 
 中文:
 引理 quasispectrum_eq_spectrum_union
-  结论: (R : 类型) {A : 类型} [CommSemiring R]
+  结论: (R : 类型) {A : 类型} [交换半环 R]
   证明: by
   ext r
   rw [quasispectrum]
@@ -939,7 +939,7 @@ lemma spectrum_subset_quasispectrum
 
 中文:
 引理 spectrum_subset_quasispectrum
-  结论: (R : 类型) {A : 类型} [CommSemiring R] [Ring A] [Algebra R A]
+  结论: (R : 类型) {A : 类型} [交换半环 R] [环 A] [代数 R A]
   证明: quasispectrum_eq_spectrum_union R a ▸ Set.subset_union_left
 
 Depends on / 依赖: Set.subset_union_left, quasispectrum_eq_spectrum_union, subset_union_left
@@ -960,7 +960,7 @@ lemma quasispectrum_eq_spectrum_union_zero
 
 中文:
 引理 quasispectrum_eq_spectrum_union_zero
-  结论: (R : 类型) {A : 类型} [Semifield R] [Ring A]
+  结论: (R : 类型) {A : 类型} [半域 R] [环 A]
   证明: by
   convert! quasispectrum_eq_spectrum_union R a
   simp
@@ -983,7 +983,7 @@ lemma mem_quasispectrum_iff
 
 中文:
 引理 mem_quasispectrum_iff
-  结论: {R A : 类型} [Semifield R] [Ring A]
+  结论: {R A : 类型} [半域 R] [环 A]
   证明: by
   simp [quasispectrum_eq_spectrum_union_zero]
 
@@ -1043,7 +1043,7 @@ lemma zero_mem_spectrum_inr
 
 中文:
 引理 zero_mem_spectrum_inr
-  结论: (R S : 类型) {A : 类型} [CommSemiring R]
+  结论: (R S : 类型) {A : 类型} [交换半环 R]
   证明: by
   rw [spectrum.zero_mem_iff]
   rintro ⟨u, hu⟩
@@ -1069,7 +1069,7 @@ lemma mem_spectrum_inr_of_not_isUnit
 
 中文:
 引理 mem_spectrum_inr_of_not_isUnit
-  结论: {R A : 类型} [CommRing R]
+  结论: {R A : 类型} [交换环 R]
   证明: fun h => hr by simpa [map_sub] using h.map (fstHom R A)
 
 Depends on / 依赖: fstHom, h.map, map_sub
@@ -1094,7 +1094,7 @@ lemma quasispectrum_eq_spectrum_inr
 
 中文:
 引理 quasispectrum_eq_spectrum_inr
-  结论: (R : 类型) {A : 类型} [CommRing R] [NonUnitalRing A]
+  结论: (R : 类型) {A : 类型} [交换环 R] [非幺环 A]
   证明: by
   ext r
   have : { r | ¬ IsUnit r} subseteq spectrum R _ := mem_spectrum_inr_of_not_isUnit a
@@ -1128,7 +1128,7 @@ lemma quasispectrum_eq_spectrum_inr'
 
 中文:
 引理 quasispectrum_eq_spectrum_inr'
-  结论: (R S : 类型) {A : 类型} [Semifield R]
+  结论: (R S : 类型) {A : 类型} [半域 R]
   证明: by
   ext r
   have := Set.singleton_subset_iff.mpr (zero_mem_spectrum_inr R S a)
@@ -1160,7 +1160,7 @@ lemma quasispectrum_inr_eq
 
 中文:
 引理 quasispectrum_inr_eq
-  结论: (R S : 类型) {A : 类型} [Semifield R]
+  结论: (R S : 类型) {A : 类型} [半域 R]
   证明: by
   rw [quasispectrum_eq_spectrum_union_zero]; rw [quasispectrum_eq_spectrum_inr' R S]
   simpa using zero_mem_spectrum_inr _ _ _
@@ -1190,7 +1190,7 @@ lemma quasispectrum.mul_comm
 
 中文:
 引理 quasispectrum.mul_comm
-  结论: {R A : 类型} [CommRing R] [NonUnitalRing A] [Module R A]
+  结论: {R A : 类型} [交换环 R] [非幺环 A] [模 R A]
   证明: by
   rw [← Set.inter_union_compl (quasispectrum R (a * b)) {r | IsUnit r}]; rw [← Set.inter_union_compl (quasispectrum R (b * a)) {r | IsUnit r}]
   congr! 1
@@ -1219,8 +1219,8 @@ class NonnegSpectrumClass
     - quasispectrum_nonneg_of_nonneg : forall a : A, 0 <= a -> forall x in quasispectrum 𝕜 a, 0 <= x
 
 中文:
-类 NonnegSpectrumClass
-  参数: (𝕜 A : 类型) [CommSemiring 𝕜] [PartialOrder 𝕜]
+类 NonnegSpectrum类
+  参数: (𝕜 A : 类型) [交换半环 𝕜] [偏序 𝕜]
   公理与运算 (1 个):
     - quasispectrum_nonneg_of_nonneg : 对任意 a : A, 0 <= a -> 对任意 x in quasispectrum 𝕜 a, 0 <= x
 -/
@@ -1247,7 +1247,7 @@ alias ⟨_, of_spectrum_nonneg⟩ := iff_spectrum_nonneg
 
 中文:
 引理 iff_spectrum_nonneg
-  结论: {𝕜 A : 类型} [Semifield 𝕜] [LinearOrder 𝕜] [Ring A] [PartialOrder A]
+  结论: {𝕜 A : 类型} [半域 𝕜] [线性序 𝕜] [环 A] [偏序 A]
   证明: by
   simp [show NonnegSpectrumClass 𝕜 A ↔ _ from ⟨fun ⟨h⟩ => h, (⟨·⟩)⟩,
     quasispectrum_eq_spectrum_union_zero]
@@ -1275,7 +1275,7 @@ grind_pattern nonneg_of_mem_quasispectrum => x in quasispectrum 𝕜 a
 
 中文:
 引理 nonneg_of_mem_quasispectrum
-  结论: {𝕜 : 类型} [CommSemiring 𝕜] [PartialOrder 𝕜] [PartialOrder A]
+  结论: {𝕜 : 类型} [交换半环 𝕜] [偏序 𝕜] [偏序 A]
   证明: quasispectrum_nonneg_of_nonneg a ha x hx
 
 grind_pattern nonneg_of_mem_quasispectrum => x in quasispectrum 𝕜 a
@@ -1302,7 +1302,7 @@ grind_pattern spectrum_nonneg_of_nonneg => x in spectrum 𝕜 a
 
 中文:
 引理 spectrum_nonneg_of_nonneg
-  结论: {𝕜 A : 类型} [CommSemiring 𝕜] [PartialOrder 𝕜]
+  结论: {𝕜 A : 类型} [交换半环 𝕜] [偏序 𝕜]
   证明: NonnegSpectrumClass.quasispectrum_nonneg_of_nonneg a ha x (spectrum_subset_quasispectrum 𝕜 a hx)
 
 grind_pattern spectrum_nonneg_of_nonneg => x in spectrum 𝕜 a
@@ -1332,7 +1332,7 @@ structure QuasispectrumRestricts
 结构 QuasispectrumRestricts
   公理与运算 (2 个):
     - rightInvOn : (quasispectrum S a).RightInvOn f (algebraMap R S)
-    - left_inv : Function.LeftInverse f (algebraMap R S)
+    - left_inv : 函数.左逆 f (algebraMap R S)
 -/
 structure QuasispectrumRestricts
     {R S A : Type*} [CommSemiring R] [CommSemiring S] [NonUnitalRing A]
@@ -1381,7 +1381,7 @@ protected alias ⟨quasispectrum.of_algebraMap_mem, quasispectrum.algebraMap_mem
 
 中文:
 定理 quasispectrum.algebraMap_mem_iff
-  结论: (S : 类型) {R A : 类型} [Semifield R] [Field S]
+  结论: (S : 类型) {R A : 类型} [半域 R] [域 S]
   证明: by
   simp_rw [Unitization.quasispectrum_eq_spectrum_inr' _ S a, spectrum.algebraMap_mem_iff]
 
@@ -1412,7 +1412,7 @@ theorem quasispectrum.preimage_algebraMap
 
 中文:
 定理 quasispectrum.preimage_algebraMap
-  结论: (S : 类型) {R A : 类型} [Semifield R] [Field S]
+  结论: (S : 类型) {R A : 类型} [半域 R] [域 S]
   证明: Set.ext fun _ => quasispectrum.algebraMap_mem_iff _
 
 Depends on / 依赖: Set.ext, algebraMap_mem_iff, quasispectrum, quasispectrum.algebraMap_mem_iff
@@ -1461,7 +1461,7 @@ theorem of_subset_range_algebraMap
 
 中文:
 定理 of_subset_range_algebraMap
-  结论: (hf : f.LeftInverse (algebraMap R S))
+  结论: (hf : f.左逆 (algebraMap R S))
   证明: fun s hs => by obtain ⟨r, rfl⟩ := h hs; rw [hf r]
   left_inv := hf
 
@@ -1566,7 +1566,7 @@ theorem image
   simp only [← h.algebraMap_image, Set.image_image, h.left_inv _, Set.image_id']
 
 中文:
-定理 image
+定理 像
   条件: (h : QuasispectrumRestricts a f)
   结论: f '' quasispectrum S a = quasispectrum R a
   证明: by
@@ -1630,7 +1630,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: {R₁ R₂ R₃ A : 类型} [Semifield R₁] [Field R₂] [Field R₃]
+  结论: {R₁ R₂ R₃ A : 类型} [半域 R₁] [域 R₂] [域 R₃]
   证明: by
     convert! hfge ▸ hf.left_inv.comp hg.left_inv
     congrm (⇑$(IsScalarTower.algebraMap_eq R₁ R₂ R₃))
@@ -1718,7 +1718,7 @@ theorem of_rightInvOn
 
 中文:
 定理 of_rightInvOn
-  结论: (h₁ : Function.LeftInverse f (algebraMap R S))
+  结论: (h₁ : 函数.左逆 f (algebraMap R S))
   证明: by
     obtain (rfl | hx) := mem_quasispectrum_iff.mp hx
     · simpa using h₁ 0
@@ -1769,7 +1769,7 @@ theorem of_subset_range_algebraMap
 
 中文:
 定理 of_subset_range_algebraMap
-  结论: (hf : f.LeftInverse (algebraMap R S))
+  结论: (hf : f.左逆 (algebraMap R S))
   证明: fun s hs => by
     rw [mem_quasispectrum_iff] at hs
     obtain (rfl | hs) := hs
@@ -1830,7 +1830,7 @@ alias ⟨mul_comm, _⟩ := mul_comm_iff
 
 中文:
 引理 mul_comm_iff
-  结论: {R S A : 类型} [Semifield R] [Field S] [Ring A]
+  结论: {R S A : 类型} [半域 R] [域 S] [环 A]
   证明: QuasispectrumRestricts.mul_comm_iff
 
 alias ⟨mul_comm, _⟩ := mul_comm_iff
@@ -1887,7 +1887,7 @@ theorem image
   simp only [← h.algebraMap_image, Set.image_image, h.left_inv _, Set.image_id']
 
 中文:
-定理 image
+定理 像
   条件: (h : SpectrumRestricts a f)
   结论: f '' spectrum S a = spectrum R a
   证明: by
@@ -1952,7 +1952,7 @@ theorem quasispectrumRestricts_iff_spectrumRestricts_inr
 
 中文:
 定理 quasispectrumRestricts_iff_spectrumRestricts_inr
-  结论: (S : 类型) {R A : 类型} [Semifield R]
+  结论: (S : 类型) {R A : 类型} [半域 R]
   证明: by
   rw [quasispectrumRestricts_iff]; rw [spectrumRestricts_iff]; rw [← Unitization.quasispectrum_eq_spectrum_inr']
 
@@ -1997,7 +1997,7 @@ theorem quasispectrumRestricts_iff_spectrumRestricts
 
 中文:
 定理 quasispectrumRestricts_iff_spectrumRestricts
-  结论: {R S A : 类型} [Semifield R] [Semifield S]
+  结论: {R S A : 类型} [半域 R] [半域 S]
   证明: by rfl
 -/
 theorem quasispectrumRestricts_iff_spectrumRestricts {R S A : Type*} [Semifield R] [Semifield S]

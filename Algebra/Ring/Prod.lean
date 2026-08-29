@@ -64,7 +64,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+  签名: [非幺非结合半环 R] [非幺非结合半环 S]
   定义体: { (inferInstance : AddCommMonoid (R × S)),
     (inferInstance : Distrib (R × S)),
     (inferInstance : MulZeroClass (R × S)) with }
@@ -88,7 +88,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring R] [NonUnitalSemiring S]
+  签名: [非幺半环 R] [非幺半环 S]
   定义体: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
     (inferInstance : SemigroupWithZero (R × S)) with }
 
@@ -111,7 +111,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring R] [NonAssocSemiring S]
+  签名: [非结合半环 R] [非结合半环 S]
   定义体: { (inferInstance : NonUnitalNonAssocSemiring (R × S)),
     (inferInstance : MulZeroOneClass (R × S)),
     (inferInstance : AddMonoidWithOne (R × S)) with }
@@ -136,7 +136,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring R] [Semiring S]
+  签名: [半环 R] [半环 S]
   定义体: { (inferInstance : NonUnitalSemiring (R × S)),
     (inferInstance : NonAssocSemiring (R × S)),
     (inferInstance : MonoidWithZero (R × S)) with }
@@ -158,7 +158,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R] [NonUnitalCommSemiring S]
+  签名: [非幺交换半环 R] [非幺交换半环 S]
   定义体: { (inferInstance : NonUnitalSemiring (R × S)), (inferInstance : CommSemigroup (R × S)) with }
 
 Depends on / 依赖: CommSemigroup, NonUnitalSemiring
@@ -177,7 +177,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R] [CommSemiring S]
+  签名: [交换半环 R] [交换半环 S]
   定义体: { (inferInstance : Semiring (R × S)), (inferInstance : CommMonoid (R × S)) with }
 
 Depends on / 依赖: CommMonoid, Semiring
@@ -196,7 +196,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
+  签名: [非幺非结合环 R] [非幺非结合环 S]
   定义体: { (inferInstance : AddCommGroup (R × S)),
     (inferInstance : NonUnitalNonAssocSemiring (R × S)) with }
 
@@ -218,7 +218,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing R] [NonUnitalRing S]
+  签名: [非幺环 R] [非幺环 S]
   定义体: { (inferInstance : NonUnitalNonAssocRing (R × S)),
     (inferInstance : NonUnitalSemiring (R × S)) with }
 
@@ -240,7 +240,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [NonAssocRing R] [NonAssocRing S]
+  签名: [非结合环 R] [非结合环 S]
   定义体: { (inferInstance : NonUnitalNonAssocRing (R × S)),
     (inferInstance : NonAssocSemiring (R × S)),
     (inferInstance : AddGroupWithOne (R × S)) with }
@@ -264,7 +264,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring R] [Ring S]
+  签名: [环 R] [环 S]
   定义体: { (inferInstance : Semiring (R × S)),
     (inferInstance : AddCommGroup (R × S)),
     (inferInstance : AddGroupWithOne (R × S)) with }
@@ -286,7 +286,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing R] [NonUnitalCommRing S]
+  签名: [非幺交换环 R] [非幺交换环 S]
   定义体: { (inferInstance : NonUnitalRing (R × S)), (inferInstance : CommSemigroup (R × S)) with }
 
 Depends on / 依赖: CommSemigroup, NonUnitalRing
@@ -305,7 +305,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R] [CommRing S]
+  签名: [交换环 R] [交换环 S]
   定义体: { (inferInstance : Ring (R × S)), (inferInstance : CommMonoid (R × S)) with }
 
 Depends on / 依赖: CommMonoid
@@ -370,7 +370,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ⇑(fst R S) = Prod.fst
+  结论: ⇑(fst R S) = 积类型.fst
   证明: rfl
 
 @[simp]
@@ -389,7 +389,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ⇑(snd R S) = Prod.snd
+  结论: ⇑(snd R S) = 积类型.snd
   证明: rfl
 -/
 theorem coe_snd : ⇑(snd R S) = Prod.snd :=
@@ -411,7 +411,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : R ->ₙ+* S) (g : R ->ₙ+* T)
   定义体: { MulHom.prod (f : MulHom R S) (g : MulHom R T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
     toFun := fun x => (f x, g x) }
@@ -437,7 +437,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (x)
-  结论: f.prod g x = (f x, g x)
+  结论: f.乘积 g x = (f x, g x)
   证明: rfl
 
 @[simp]
@@ -458,7 +458,7 @@ theorem fst_comp_prod
 
 中文:
 定理 fst_comp_prod
-  结论: (fst S T).comp (f.prod g) = f
+  结论: (fst S T).comp (f.乘积 g) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -477,7 +477,7 @@ theorem snd_comp_prod
 
 中文:
 定理 snd_comp_prod
-  结论: (snd S T).comp (f.prod g) = g
+  结论: (snd S T).comp (f.乘积 g) = g
   证明: ext fun _ => rfl
 -/
 theorem snd_comp_prod : (snd S T).comp (f.prod g) = g :=
@@ -495,7 +495,7 @@ theorem prod_unique
 中文:
 定理 prod_unique
   条件: (f : R ->ₙ+* S × T)
-  结论: ((fst S T).comp f).prod ((snd S T).comp f) = f
+  结论: ((fst S T).comp f).乘积 ((snd S T).comp f) = f
   证明: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
 
 Depends on / 依赖: coe_fst, coe_snd, comp_apply, prod_apply
@@ -540,7 +540,7 @@ theorem prodMap_def
 
 中文:
 定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
+  结论: prodMap f g = (f.comp (fst R S)).乘积 (g.comp (snd R S))
   证明: rfl
 
 @[simp]
@@ -559,7 +559,7 @@ theorem coe_prodMap
 
 中文:
 定理 coe_prodMap
-  结论: ⇑(prodMap f g) = Prod.map f g
+  结论: ⇑(prodMap f g) = 积类型.map f g
   证明: rfl
 -/
 theorem coe_prodMap : ⇑(prodMap f g) = Prod.map f g :=
@@ -644,7 +644,7 @@ theorem coe_fst
 
 中文:
 定理 coe_fst
-  结论: ⇑(fst R S) = Prod.fst
+  结论: ⇑(fst R S) = 积类型.fst
   证明: rfl
 
 @[simp]
@@ -663,7 +663,7 @@ theorem coe_snd
 
 中文:
 定理 coe_snd
-  结论: ⇑(snd R S) = Prod.snd
+  结论: ⇑(snd R S) = 积类型.snd
   证明: rfl
 
 Depends on / 依赖: IsPreimmersion, IsPreimmersion.comp_iff, Scheme, Scheme.fromSpecResidueField, comp_iff, fromSpecResidueField, infer_instance
@@ -687,7 +687,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : R ->+* S) (g : R ->+* T)
   定义体: { MonoidHom.prod (f : R ->* S) (g : R ->* T), AddMonoidHom.prod (f : R ->+ S) (g : R ->+ T) with
     toFun := fun x => (f x, g x) }
@@ -715,7 +715,7 @@ theorem prod_apply
 中文:
 定理 prod_apply
   条件: (x)
-  结论: f.prod g x = (f x, g x)
+  结论: f.乘积 g x = (f x, g x)
   证明: rfl
 
 @[simp]
@@ -736,7 +736,7 @@ theorem fst_comp_prod
 
 中文:
 定理 fst_comp_prod
-  结论: (fst S T).comp (f.prod g) = f
+  结论: (fst S T).comp (f.乘积 g) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -755,7 +755,7 @@ theorem snd_comp_prod
 
 中文:
 定理 snd_comp_prod
-  结论: (snd S T).comp (f.prod g) = g
+  结论: (snd S T).comp (f.乘积 g) = g
   证明: ext fun _ => rfl
 -/
 theorem snd_comp_prod : (snd S T).comp (f.prod g) = g :=
@@ -773,7 +773,7 @@ theorem prod_unique
 中文:
 定理 prod_unique
   条件: (f : R ->+* S × T)
-  结论: ((fst S T).comp f).prod ((snd S T).comp f) = f
+  结论: ((fst S T).comp f).乘积 ((snd S T).comp f) = f
   证明: ext fun x => by simp only [prod_apply, coe_fst, coe_snd, comp_apply]
 
 Depends on / 依赖: coe_fst, coe_snd, comp_apply, prod_apply
@@ -818,7 +818,7 @@ theorem prodMap_def
 
 中文:
 定理 prodMap_def
-  结论: prodMap f g = (f.comp (fst R S)).prod (g.comp (snd R S))
+  结论: prodMap f g = (f.comp (fst R S)).乘积 (g.comp (snd R S))
   证明: rfl
 
 @[simp]
@@ -837,7 +837,7 @@ theorem coe_prodMap
 
 中文:
 定理 coe_prodMap
-  结论: ⇑(prodMap f g) = Prod.map f g
+  结论: ⇑(prodMap f g) = 积类型.map f g
   证明: rfl
 -/
 theorem coe_prodMap : ⇑(prodMap f g) = Prod.map f g :=
@@ -903,7 +903,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm : R × S ≃+* S × R) = Prod.swap
+  结论: ⇑(prodComm : R × S ≃+* S × R) = 积类型.swap
   证明: rfl
 
 @[simp]
@@ -924,7 +924,7 @@ theorem coe_prodComm_symm
 
 中文:
 定理 coe_prodComm_symm
-  结论: ⇑(prodComm : R × S ≃+* S × R).symm = Prod.swap
+  结论: ⇑(prodComm : R × S ≃+* S × R).symm = 积类型.swap
   证明: rfl
 
 @[simp]
@@ -1165,7 +1165,7 @@ theorem false_of_nontrivial_of_product_domain
 
 中文:
 定理 false_of_nontrivial_of_product_domain
-  结论: (R S : 类型) [Semiring R] [Semiring S]
+  结论: (R S : 类型) [半环 R] [半环 S]
   证明: by
   have :=
     NoZeroDivisors.eq_zero_or_eq_zero_of_mul_eq_zero (show ((0 : R), (1 : S)) * (1, 0) = 0 by simp)

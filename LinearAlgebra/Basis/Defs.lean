@@ -97,7 +97,7 @@ structure Basis
     - ofRepr : : repr : M ≃ₗ[R] ι ->₀ R
 
 中文:
-结构 Basis
+结构 基
   参数: where
   公理与运算 (1 个):
     - ofRepr : : repr : M ≃ₗ[R] ι ->₀ R
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Basis ι R (ι ->₀ R))
+  签名: 可居 (基 ι R (ι ->₀ R))
   定义体: ⟨.ofRepr (LinearEquiv.refl _ _)⟩
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, ofRepr
@@ -144,7 +144,7 @@ theorem repr_injective
 
 中文:
 定理 repr_injective
-  结论: Injective (repr : Basis ι R M -> M ≃ₗ[R] ι ->₀ R)
+  结论: 单射 (repr : 基 ι R M -> M ≃ₗ[R] ι ->₀ R)
   证明: fun f g h => by
   cases f; cases g; congr
 -/
@@ -165,7 +165,7 @@ LinearEquiv.toLinearMap_injective by ext; exact congr_fun h _
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Basis ι R M) ι M where
+  签名: : 函数状 (基 ι R M) ι M where
   定义体: b.repr.symm (Finsupp.single i 1)
 coe_injective f g h := repr_injective LinearEquiv.symm_bijective.injective
 LinearEquiv.toLinearMap_injective by ext; exact congr_fun h _
@@ -192,7 +192,7 @@ theorem coe_ofRepr
 中文:
 定理 coe_ofRepr
   条件: (e : M ≃ₗ[R] ι ->₀ R)
-  结论: ⇑(ofRepr e) = fun i => e.symm (Finsupp.single i 1)
+  结论: ⇑(ofRepr e) = fun i => e.symm (有限支撑.single i 1)
   证明: rfl
 -/
 theorem coe_ofRepr (e : M ≃ₗ[R] ι ->₀ R) : ⇑(ofRepr e) = fun i => e.symm (Finsupp.single i 1) :=
@@ -209,8 +209,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: [Nontrivial R]
-  结论: Injective b
+  条件: [非平凡 R]
+  结论: 单射 b
   证明: b.repr.symm.injective.comp fun _ _ => (Finsupp.single_left_inj (one_ne_zero : (1 : R) != 0)).mp
 -/
 protected theorem injective [Nontrivial R] : Injective b :=
@@ -226,7 +226,7 @@ theorem repr_symm_single_one
 
 中文:
 定理 repr_symm_single_one
-  结论: b.repr.symm (Finsupp.single i 1) = b i
+  结论: b.repr.symm (有限支撑.single i 1) = b i
   证明: rfl
 -/
 theorem repr_symm_single_one : b.repr.symm (Finsupp.single i 1) = b i :=
@@ -247,7 +247,7 @@ theorem repr_symm_single
 
 中文:
 定理 repr_symm_single
-  结论: b.repr.symm (Finsupp.single i c) = c • b i
+  结论: b.repr.symm (有限支撑.single i c) = c • b i
   证明: calc
     b.repr.symm (Finsupp.single i c) = b.repr.symm (c • Finsupp.single i (1 : R)) := by
       { rw [Finsupp.smul_single', mul_one] }
@@ -274,7 +274,7 @@ theorem repr_self
 
 中文:
 定理 repr_self
-  结论: b.repr (b i) = Finsupp.single i 1
+  结论: b.repr (b i) = 有限支撑.single i 1
   证明: LinearEquiv.apply_symm_apply _ _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.apply_symm_apply, apply_symm_apply
@@ -296,7 +296,7 @@ theorem repr_self_apply
 
 中文:
 定理 repr_self_apply
-  条件: (j) [Decidable (i = j)]
+  条件: (j) [可判定 (i = j)]
   结论: b.repr (b i) j = if i = j then 1 else 0
   证明: by
   rw [repr_self]; rw [Finsupp.single_apply]
@@ -325,7 +325,7 @@ theorem repr_symm_apply
 中文:
 定理 repr_symm_apply
   条件: (v)
-  结论: b.repr.symm v = Finsupp.linearCombination R b v
+  结论: b.repr.symm v = 有限支撑.linearCombination R b v
   证明: calc
     b.repr.symm v = b.repr.symm (v.sum Finsupp.single) := by simp
     _ = v.sum fun i vi => b.repr.symm (Finsupp.single i vi) := map_finsuppSum ..
@@ -354,7 +354,7 @@ theorem coe_repr_symm
 
 中文:
 定理 coe_repr_symm
-  结论: ↑b.repr.symm = Finsupp.linearCombination R b
+  结论: ↑b.repr.symm = 有限支撑.linearCombination R b
   证明: LinearMap.ext fun v => b.repr_symm_apply v
 
 @[simp]
@@ -381,7 +381,7 @@ theorem repr_linearCombination
 中文:
 定理 repr_linearCombination
   条件: (v)
-  结论: b.repr (Finsupp.linearCombination _ b v) = v
+  结论: b.repr (有限支撑.linearCombination _ b v) = v
   证明: by
   rw [← b.coe_repr_symm]
   exact b.repr.apply_symm_apply v
@@ -407,7 +407,7 @@ theorem linearCombination_repr
 
 中文:
 定理 linearCombination_repr
-  结论: Finsupp.linearCombination _ b (b.repr x) = x
+  结论: 有限支撑.linearCombination _ b (b.repr x) = x
   证明: by
   rw [← b.coe_repr_symm]
   exact b.repr.symm_apply_apply x
@@ -438,7 +438,7 @@ definition map
 
 中文:
 定义 map
-  签名: : Basis ι R M'
+  签名: : 基 ι R M'
   定义体: ofRepr (f.symm.trans b.repr)
 
 @[simp]
@@ -498,7 +498,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: : Basis ι' R M
+  签名: : 基 ι' R M
   定义体: .ofRepr (b.repr.trans (Finsupp.domLCongr e))
 
 Depends on / 依赖: Finsupp, Finsupp.domLCongr, b.repr.trans, domLCongr, ofRepr
@@ -614,7 +614,7 @@ theorem reindex_refl
 
 中文:
 定理 reindex_refl
-  结论: b.reindex (Equiv.refl ι) = b
+  结论: b.reindex (等价.refl ι) = b
   证明: by
   simp [reindex]
 
@@ -634,7 +634,7 @@ theorem range_reindex
 
 中文:
 定理 range_reindex
-  结论: Set.range (b.reindex e) = Set.range b
+  结论: 集合.range (b.reindex e) = 集合.range b
   证明: by
   simp [coe_reindex, range_comp]
 
@@ -667,8 +667,8 @@ definition Basis.equivFun
       (ι ->₀ R) ≃ₗ[R] ι -> R)
 
 中文:
-定义 Basis.equivFun
-  签名: [Finite ι] (b : Basis ι R M)
+定义 基.equivFun
+  签名: [有限 ι] (b : 基 ι R M)
   定义体: LinearEquiv.trans b.repr
     ({ Finsupp.equivFunOnFinite with
         toFun := (↑)
@@ -699,7 +699,7 @@ definition fintypeOfFintype
 
 中文:
 定义 fintypeOfFintype
-  签名: [Fintype ι] (b : Basis ι R M) [Fintype R]
+  签名: [有限类型 ι] (b : 基 ι R M) [有限类型 R]
   定义体: haveI := Classical.decEq ι
   Fintype.ofEquiv _ b.equivFun.toEquiv.symm
 
@@ -725,8 +725,8 @@ theorem Basis.equivFun_symm_apply
 @[simp]
 
 中文:
-定理 Basis.equivFun_symm_apply
-  条件: [Fintype ι] (b : Basis ι R M) (x : ι -> R)
+定理 基.equivFun_symm_apply
+  条件: [有限类型 ι] (b : 基 ι R M) (x : ι -> R)
   证明: by
   simp [Basis.equivFun, Finsupp.linearCombination_apply, sum_fintype, equivFunOnFinite]
 
@@ -751,8 +751,8 @@ theorem Basis.equivFun_apply
 @[simp]
 
 中文:
-定理 Basis.equivFun_apply
-  条件: [Finite ι] (b : Basis ι R M) (u : M)
+定理 基.equivFun_apply
+  条件: [有限 ι] (b : 基 ι R M) (u : M)
   结论: b.equivFun u = b.repr u
   证明: rfl
 
@@ -771,8 +771,8 @@ theorem Basis.map_equivFun
   proof: rfl
 
 中文:
-定理 Basis.map_equivFun
-  条件: [Finite ι] (b : Basis ι R M) (f : M ≃ₗ[R] M')
+定理 基.map_equivFun
+  条件: [有限 ι] (b : 基 ι R M) (f : M ≃ₗ[R] M')
   证明: rfl
 -/
 theorem Basis.map_equivFun [Finite ι] (b : Basis ι R M) (f : M ≃ₗ[R] M') :
@@ -791,8 +791,8 @@ theorem Basis.sum_equivFun
 @[simp]
 
 中文:
-定理 Basis.sum_equivFun
-  条件: [Fintype ι] (b : Basis ι R M) (u : M)
+定理 基.sum_equivFun
+  条件: [有限类型 ι] (b : 基 ι R M) (u : M)
   证明: by
   rw [← b.equivFun_symm_apply]; rw [b.equivFun.symm_apply_apply]
 
@@ -817,8 +817,8 @@ theorem Basis.sum_repr
 @[simp]
 
 中文:
-定理 Basis.sum_repr
-  条件: [Fintype ι] (b : Basis ι R M) (u : M)
+定理 基.sum_repr
+  条件: [有限类型 ι] (b : 基 ι R M) (u : M)
   结论: ∑ i, b.repr u i • b i = u
   证明: b.sum_equivFun u
 
@@ -839,8 +839,8 @@ theorem Basis.equivFun_self
   proof: by rw [b.equivFun_apply, b.repr_self_apply]
 
 中文:
-定理 Basis.equivFun_self
-  条件: [Finite ι] [DecidableEq ι] (b : Basis ι R M) (i j : ι)
+定理 基.equivFun_self
+  条件: [有限 ι] [DecidableEq ι] (b : 基 ι R M) (i j : ι)
   证明: by rw [b.equivFun_apply, b.repr_self_apply]
 
 Depends on / 依赖: b.equivFun_apply, b.repr_self_apply, equivFun_apply, repr_self_apply
@@ -858,8 +858,8 @@ theorem Basis.repr_sum_self
   simp_rw [← b.equivFun_symm_apply, ← b.equivFun_apply, b.equivFun.apply_symm_apply]
 
 中文:
-定理 Basis.repr_sum_self
-  条件: [Fintype ι] (b : Basis ι R M) (c : ι -> R)
+定理 基.repr_sum_self
+  条件: [有限类型 ι] (b : 基 ι R M) (c : ι -> R)
   证明: by
   simp_rw [← b.equivFun_symm_apply, ← b.equivFun_apply, b.equivFun.apply_symm_apply]
 
@@ -880,8 +880,8 @@ definition Basis.ofEquivFun
 @[simp]
 
 中文:
-定义 Basis.ofEquivFun
-  签名: [Finite ι] (e : M ≃ₗ[R] ι -> R)
+定义 基.ofEquivFun
+  签名: [有限 ι] (e : M ≃ₗ[R] ι -> R)
   定义体: .ofRepr e.trans LinearEquiv.symm Finsupp.linearEquivFunOnFinite R R ι
 
 @[simp]
@@ -903,8 +903,8 @@ theorem Basis.ofEquivFun_repr_apply
 @[simp]
 
 中文:
-定理 Basis.ofEquivFun_repr_apply
-  条件: [Finite ι] (e : M ≃ₗ[R] ι -> R) (x : M) (i : ι)
+定理 基.ofEquivFun_repr_apply
+  条件: [有限 ι] (e : M ≃ₗ[R] ι -> R) (x : M) (i : ι)
   证明: rfl
 
 @[simp]
@@ -928,8 +928,8 @@ e.injective
 @[simp]
 
 中文:
-定理 Basis.coe_ofEquivFun
-  条件: [Finite ι] [DecidableEq ι] (e : M ≃ₗ[R] ι -> R)
+定理 基.coe_ofEquivFun
+  条件: [有限 ι] [DecidableEq ι] (e : M ≃ₗ[R] ι -> R)
   证明: funext fun i =>
 e.injective
       funext fun j => by
@@ -958,8 +958,8 @@ theorem Basis.ofEquivFun_equivFun
 @[simp]
 
 中文:
-定理 Basis.ofEquivFun_equivFun
-  条件: [Finite ι] (v : Basis ι R M)
+定理 基.ofEquivFun_equivFun
+  条件: [有限 ι] (v : 基 ι R M)
   证明: Basis.repr_injective by ext; rfl
 
 @[simp]
@@ -982,8 +982,8 @@ theorem Basis.equivFun_ofEquivFun
   simp_rw [Basis.equivFun_apply, Basis.ofEquivFun_repr_apply]
 
 中文:
-定理 Basis.equivFun_ofEquivFun
-  条件: [Finite ι] (e : M ≃ₗ[R] ι -> R)
+定理 基.equivFun_ofEquivFun
+  条件: [有限 ι] (e : M ≃ₗ[R] ι -> R)
   证明: by
   ext j
   simp_rw [Basis.equivFun_apply, Basis.ofEquivFun_repr_apply]
@@ -1105,7 +1105,7 @@ theorem repr_eq_iff
 
 中文:
 定理 repr_eq_iff
-  条件: {b : Basis ι R M} {f : M ->ₗ[R] ι ->₀ R}
+  条件: {b : 基 ι R M} {f : M ->ₗ[R] ι ->₀ R}
   证明: ⟨fun h i => h ▸ b.repr_self i, fun h => b.ext fun i => (b.repr_self i).trans (h i).symm⟩
 
 Depends on / 依赖: b.ext, b.repr_self, repr_self
@@ -1124,7 +1124,7 @@ theorem repr_eq_iff'
 
 中文:
 定理 repr_eq_iff'
-  条件: {b : Basis ι R M} {f : M ≃ₗ[R] ι ->₀ R}
+  条件: {b : 基 ι R M} {f : M ≃ₗ[R] ι ->₀ R}
   证明: ⟨fun h i => h ▸ b.repr_self i, fun h => b.ext' fun i => (b.repr_self i).trans (h i).symm⟩
 
 Depends on / 依赖: b.ext, b.repr_self, repr_self
@@ -1144,8 +1144,8 @@ theorem apply_eq_iff
 
 中文:
 定理 apply_eq_iff
-  条件: {b : Basis ι R M} {x : M} {i : ι}
-  结论: b i = x ↔ b.repr x = Finsupp.single i 1
+  条件: {b : 基 ι R M} {x : M} {i : ι}
+  结论: b i = x ↔ b.repr x = 有限支撑.single i 1
   证明: ⟨fun h => h ▸ b.repr_self i, fun h => b.repr.injective ((b.repr_self i).trans h.symm)⟩
 
 Depends on / 依赖: HasBesicovitchCovering, b.repr.injective, b.repr_self, h.symm, injective, instHasBesicovitchCovering, repr_self
@@ -1212,7 +1212,7 @@ theorem eq_ofRepr_eq_repr
 
 中文:
 定理 eq_ofRepr_eq_repr
-  条件: {b₁ b₂ : Basis ι R M} (h : 对任意 x i, b₁.repr x i = b₂.repr x i)
+  条件: {b₁ b₂ : 基 ι R M} (h : 对任意 x i, b₁.repr x i = b₂.repr x i)
   结论: b₁ = b₂
   证明: repr_injective by ext; apply h
 
@@ -1234,7 +1234,7 @@ theorem eq_of_apply_eq
 
 中文:
 定理 eq_of_apply_eq
-  条件: {b₁ b₂ : Basis ι R M}
+  条件: {b₁ b₂ : 基 ι R M}
   结论: (对任意 i, b₁ i = b₂ i) -> b₁ = b₂
   证明: DFunLike.ext _ _
 
@@ -1360,7 +1360,7 @@ definition reindexRange
 
 中文:
 定义 reindexRange
-  签名: : Basis (range b) R M
+  签名: : 基 (range b) R M
   定义体: haveI := Classical.dec (Nontrivial R)
   if h : Nontrivial R then
     b.reindex (Equiv.ofInjective b (Basis.injective b))
@@ -1393,7 +1393,7 @@ theorem reindexRange_self
 
 中文:
 定理 reindexRange_self
-  条件: (i : ι) (h := Set.mem_range_self i)
+  条件: (i : ι) (h := 集合.mem_range_self i)
   结论: b.reindexRange ⟨b i, h⟩ = b i
   证明: by
   cases subsingleton_or_nontrivial R
@@ -1537,7 +1537,7 @@ theorem reindexRange_repr
 
 中文:
 定理 reindexRange_repr
-  条件: (x : M) (i : ι) (h := Set.mem_range_self i)
+  条件: (x : M) (i : ι) (h := 集合.mem_range_self i)
   证明: b.reindexRange_repr' _ rfl
 
 Depends on / 依赖: Set.mem_range_self, mem_range_self
@@ -1560,7 +1560,7 @@ definition reindexFinsetRange
 
 中文:
 定义 reindexFinsetRange
-  签名: : Basis (Finset.univ.image b) R M
+  签名: : 基 (有限集.univ.像 b) R M
   定义体: b.reindexRange.reindex ((Equiv.refl M).subtypeEquiv (by simp))
 
 Depends on / 依赖: Equiv.refl, b.reindexRange.reindex, reindex, reindexRange, subtypeEquiv
@@ -1582,7 +1582,7 @@ theorem reindexFinsetRange_self
 
 中文:
 定理 reindexFinsetRange_self
-  条件: (i : ι) (h := Finset.mem_image_of_mem b (Finset.mem_univ i))
+  条件: (i : ι) (h := 有限集.mem_image_of_mem b (有限集.mem_univ i))
   证明: by
   rw [reindexFinsetRange]; rw [reindex_apply]; rw [reindexRange_apply]
   rfl
@@ -1611,7 +1611,7 @@ theorem reindexFinsetRange_apply
 
 中文:
 定理 reindexFinsetRange_apply
-  条件: (x : Finset.univ.image b)
+  条件: (x : 有限集.univ.像 b)
   结论: b.reindexFinsetRange x = x
   证明: by
   rcases x with ⟨bi, hbi⟩
@@ -1933,7 +1933,7 @@ theorem constr_apply_fintype
 
 中文:
 定理 constr_apply_fintype
-  条件: [Fintype ι] (b : Basis ι R M) (f : ι -> M') (x : M)
+  条件: [有限类型 ι] (b : 基 ι R M) (f : ι -> M') (x : M)
   证明: by
   simp [b.constr_apply, b.equivFun_apply, Finsupp.sum_fintype]
 
@@ -2006,7 +2006,7 @@ theorem equiv_refl
 
 中文:
 定理 equiv_refl
-  结论: b.equiv b (Equiv.refl ι) = LinearEquiv.refl R M
+  结论: b.equiv b (等价.refl ι) = 线性等价.refl R M
   证明: b.ext' fun i => by simp
 
 @[simp]
@@ -2052,7 +2052,7 @@ theorem equiv_trans
 
 中文:
 定理 equiv_trans
-  条件: {ι'' : 类型} (b'' : Basis ι'' R M'') (e : ι ≃ ι') (e' : ι' ≃ ι'')
+  条件: {ι'' : 类型} (b'' : 基 ι'' R M'') (e : ι ≃ ι') (e' : ι' ≃ ι'')
   证明: b.ext' fun i => by simp
 
 @[simp]
@@ -2076,7 +2076,7 @@ theorem map_equiv
 
 中文:
 定理 map_equiv
-  条件: (b : Basis ι R M) (b' : Basis ι' R M') (e : ι ≃ ι')
+  条件: (b : 基 ι R M) (b' : 基 ι' R M') (e : ι ≃ ι')
   证明: by
   ext i
   simp
@@ -2192,7 +2192,7 @@ theorem sum_repr_mul_repr
 
 中文:
 定理 sum_repr_mul_repr
-  条件: {ι'} [Fintype ι'] (b' : Basis ι' R M) (x : M) (i : ι)
+  条件: {ι'} [有限类型 ι'] (b' : 基 ι' R M) (x : M) (i : ι)
   证明: by
   conv_rhs => rw [← b'.sum_repr x]
   simp_rw [map_sum, map_smul, Finset.sum_apply']
@@ -2252,7 +2252,7 @@ theorem forall_coord_eq_zero_iff
     b.repr.map_eq_zero_iff
 
 中文:
-定理 forall_coord_eq_zero_iff
+定理 对任意_coord_eq_zero_iff
   条件: {x : M}
   结论: (对任意 i, b.coord i x = 0) ↔ x = 0
   证明: Iff.trans (by simp only [b.coord_apply, DFunLike.ext_iff, Finsupp.zero_apply])
@@ -2299,7 +2299,7 @@ theorem coe_sumCoords
 
 中文:
 定理 coe_sumCoords
-  结论: (b.sumCoords : M -> R) = fun m => (b.repr m).sum fun _ => id
+  结论: (b.sumCoords : M -> R) = fun m => (b.repr m).求和 fun _ => id
   证明: rfl
 
 @[simp high]
@@ -2325,7 +2325,7 @@ theorem coe_sumCoords_of_fintype
 
 中文:
 定理 coe_sumCoords_of_fintype
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   结论: (b.sumCoords : M -> R) = ∑ i, b.coord i
   证明: by
   ext m
@@ -2398,7 +2398,7 @@ theorem coord_repr_symm
 
 中文:
 定理 coord_repr_symm
-  条件: (b : Basis ι R M) (i : ι) (f : ι ->₀ R)
+  条件: (b : 基 ι R M) (i : ι) (f : ι ->₀ R)
   证明: by
   simp only [repr_symm_apply, coord_apply, repr_linearCombination]
 
@@ -2482,7 +2482,7 @@ theorem coord_equivFun_symm
 
 中文:
 定理 coord_equivFun_symm
-  条件: [Finite ι] (b : Basis ι R M) (i : ι) (f : ι -> R)
+  条件: [有限 ι] (b : 基 ι R M) (i : ι) (f : ι -> R)
   证明: b.coord_repr_symm i (Finsupp.equivFunOnFinite.symm f)
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.symm, b.coord_repr_symm, coord_repr_symm, equivFunOnFinite

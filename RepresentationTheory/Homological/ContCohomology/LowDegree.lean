@@ -96,7 +96,7 @@ lemma cocycles₀IsoAux'
 
 中文:
 引理 cocycles₀IsoAux'
-  条件: (x : X) (h : ContinuousMap.const G x in ((resolution' X).X 0).ρ.invariants)
+  条件: (x : X) (h : 连续映射.const G x in ((resolution' X).X 0).ρ.invariants)
   证明: by
   rw [LinearMap.mem_ker]; rw [Subtype.ext_iff]; rw [ContinuousLinearMap.coe_coe]; rw [homogeneousCochains.d_apply]
   simp [d_succ, hom_sub, ContIntertwiningMap.sub_apply, d_zero]

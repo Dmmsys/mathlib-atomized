@@ -71,7 +71,7 @@ definition jacobson
 
 中文:
 定义 jacobson
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: sInf { J : Ideal R | I <= J ∧ IsMaximal J }
 
 Depends on / 依赖: IsMaximal
@@ -134,7 +134,7 @@ theorem jacobson_top
 
 中文:
 定理 jacobson_top
-  结论: jacobson (⊤ : Ideal R) = ⊤
+  结论: jacobson (⊤ : 理想 R) = ⊤
   证明: eq_top_iff.2 le_jacobson
 
 Depends on / 依赖: eq_top_iff, le_jacobson
@@ -155,7 +155,7 @@ theorem jacobson_bot
 
 中文:
 定理 jacobson_bot
-  结论: jacobson (⊥ : Ideal R) = Ring.jacobson R
+  结论: jacobson (⊥ : 理想 R) = 环.jacobson R
   证明: by
   simp_rw [jacobson, Ring.jacobson, Module.jacobson, bot_le, true_and, isMaximal_def]
 
@@ -228,7 +228,7 @@ theorem jacobson_eq_self_of_isMaximal
 
 中文:
 定理 jacobson_eq_self_of_isMaximal
-  条件: [H : IsMaximal I]
+  条件: [H : 是极大 I]
   结论: I.jacobson = I
   证明: le_antisymm (sInf_le ⟨le_of_eq rfl, H⟩) le_jacobson
 
@@ -304,8 +304,8 @@ theorem exists_mul_add_sub_mem_of_mem_jacobson
   simpa using hs
 
 中文:
-定理 exists_mul_add_sub_mem_of_mem_jacobson
-  条件: {I : Ideal R} (r : R) (h : r in jacobson I)
+定理 存在_mul_add_sub_mem_of_mem_jacobson
+  条件: {I : 理想 R} (r : R) (h : r in jacobson I)
   证明: by
   obtain ⟨s, hs⟩ := mem_jacobson_iff.1 h 1
   use s
@@ -332,8 +332,8 @@ theorem exists_mul_sub_mem_of_sub_one_mem_jacobson
   simp
 
 中文:
-定理 exists_mul_sub_mem_of_sub_one_mem_jacobson
-  条件: {I : Ideal R} (r : R) (h : r - 1 in jacobson I)
+定理 存在_mul_sub_mem_of_sub_one_mem_jacobson
+  条件: {I : 理想 R} (r : R) (h : r - 1 in jacobson I)
   证明: by
   convert! exists_mul_add_sub_mem_of_mem_jacobson _ h
   simp
@@ -496,7 +496,7 @@ theorem map_jacobson_of_surjective
 
 中文:
 定理 map_jacobson_of_surjective
-  条件: {f : R ->+* S} (hf : Function.Surjective f)
+  条件: {f : R ->+* S} (hf : 函数.满射 f)
   证明: by
   intro h
   unfold Ideal.jacobson
@@ -537,7 +537,7 @@ theorem map_jacobson_of_bijective
 
 中文:
 定理 map_jacobson_of_bijective
-  条件: {f : R ->+* S} (hf : Function.Bijective f)
+  条件: {f : R ->+* S} (hf : 函数.双射 f)
   证明: map_jacobson_of_surjective hf.right
     (le_trans (le_of_eq ((RingHom.injective_iff_ker_eq_bot f).1 hf.left)) bot_le)
 
@@ -558,7 +558,7 @@ theorem comap_jacobson
 
 中文:
 定理 comap_jacobson
-  条件: {f : R ->+* S} {K : Ideal S}
+  条件: {f : R ->+* S} {K : 理想 S}
   证明: Trans.trans (comap_sInf' f _) sInf_eq_iInf.symm
 
 Depends on / 依赖: Trans.trans, comap_sInf, sInf_eq_iInf, sInf_eq_iInf.symm
@@ -584,7 +584,7 @@ theorem comap_jacobson_of_surjective
 
 中文:
 定理 comap_jacobson_of_surjective
-  条件: {f : R ->+* S} (hf : Function.Surjective f) {K : Ideal S}
+  条件: {f : R ->+* S} (hf : 函数.满射 f) {K : 理想 S}
   证明: by
   unfold Ideal.jacobson
   refine le_antisymm ?_ ?_
@@ -630,7 +630,7 @@ theorem jacobson_mono
 
 中文:
 定理 jacobson_mono
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   结论: I <= J -> I.jacobson <= J.jacobson
   证明: by
   intro h x hx
@@ -655,8 +655,8 @@ theorem ringJacobson_le_jacobson
 
 中文:
 定理 ringJacobson_le_jacobson
-  条件: {I : Ideal R}
-  结论: Ring.jacobson R <= I.jacobson
+  条件: {I : 理想 R}
+  结论: 环.jacobson R <= I.jacobson
   证明: jacobson_bot.symm.trans_le (jacobson_mono bot_le)
 
 Depends on / 依赖: bot_le, jacobson_bot, jacobson_bot.symm.trans_le, jacobson_mono, trans_le
@@ -753,7 +753,7 @@ lemma isRadical_jacobson
 
 中文:
 引理 isRadical_jacobson
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: I.jacobson.IsRadical
   证明: isRadical_of_eq_jacobson jacobson_idem
 
@@ -775,7 +775,7 @@ theorem isUnit_of_sub_one_mem_jacobson_bot
 
 中文:
 定理 isUnit_of_sub_one_mem_jacobson_bot
-  条件: (r : R) (h : r - 1 in jacobson (⊥ : Ideal R))
+  条件: (r : R) (h : r - 1 in jacobson (⊥ : 理想 R))
   证明: by
   obtain ⟨s, hs⟩ := exists_mul_sub_mem_of_sub_one_mem_jacobson r h
   rw [mem_bot]; rw [sub_eq_zero]; rw [mul_comm] at hs
@@ -808,7 +808,7 @@ theorem mem_jacobson_bot
 中文:
 定理 mem_jacobson_bot
   条件: {x : R}
-  结论: x in jacobson (⊥ : Ideal R) ↔ 对任意 y, IsUnit (x * y + 1)
+  结论: x in jacobson (⊥ : 理想 R) ↔ 对任意 y, 是单位 (x * y + 1)
   证明: ⟨fun hx y =>
     let ⟨z, hz⟩ := (mem_jacobson_iff.1 hx) y
     isUnit_iff_exists_inv.2
@@ -955,10 +955,10 @@ class IsLocal
     - out : IsMaximal (jacobson I)
 
 中文:
-类 IsLocal
-  参数: (I : Ideal R)
+类 是Local
+  参数: (I : 理想 R)
   公理与运算 (1 个):
-    - out : IsMaximal (jacobson I)
+    - out : 是极大 (jacobson I)
 -/
 class IsLocal (I : Ideal R) : Prop where
   /-- A ring `R` is local if and only if its Jacobson radical is maximal -/
@@ -975,8 +975,8 @@ theorem isLocal_iff
 
 中文:
 定理 isLocal_iff
-  条件: {I : Ideal R}
-  结论: IsLocal I ↔ IsMaximal (jacobson I)
+  条件: {I : 理想 R}
+  结论: 是Local I ↔ 是极大 (jacobson I)
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem isLocal_iff {I : Ideal R} : IsLocal I ↔ IsMaximal (jacobson I) :=
@@ -996,8 +996,8 @@ theorem isLocal_of_isMaximal_radical
 
 中文:
 定理 isLocal_of_isMaximal_radical
-  条件: {I : Ideal R} (hi : IsMaximal (radical I))
-  结论: IsLocal I
+  条件: {I : 理想 R} (hi : 是极大 (radical I))
+  结论: 是Local I
   证明: ⟨have : radical I = jacobson I :=
       le_antisymm (le_sInf fun _ ⟨him, hm⟩ => hm.isPrime.radical_le_iff.2 him)
         (sInf_le ⟨le_radical, hi⟩)
@@ -1021,8 +1021,8 @@ theorem IsLocal.le_jacobson
 le_trans hjm le_of_eq Eq.symm hi.1.eq_of_le hm.1.1 sInf_le ⟨le_trans hij hjm, hm⟩
 
 中文:
-定理 IsLocal.le_jacobson
-  条件: {I J : Ideal R} (hi : IsLocal I) (hij : I <= J) (hj : J != ⊤)
+定理 是Local.le_jacobson
+  条件: {I J : 理想 R} (hi : 是Local I) (hij : I <= J) (hj : J != ⊤)
   证明: let ⟨_, hm, hjm⟩ := exists_le_maximal J hj
 le_trans hjm le_of_eq Eq.symm hi.1.eq_of_le hm.1.1 sInf_le ⟨le_trans hij hjm, hm⟩
 
@@ -1048,8 +1048,8 @@ theorem IsLocal.mem_jacobson_or_exists_inv
    
 
 中文:
-定理 IsLocal.mem_jacobson_or_exists_inv
-  条件: {I : Ideal R} (hi : IsLocal I) (x : R)
+定理 是Local.mem_jacobson_or_存在_inv
+  条件: {I : 理想 R} (hi : 是Local I) (x : R)
   证明: by_cases
     (fun h : I ⊔ span {x} = ⊤ =>
       let ⟨p, hpi, q, hq, hpq⟩ := Submodule.mem_sup.1 ((eq_top_iff_one _).1 h)
@@ -1090,7 +1090,7 @@ definition jacobson
 
 中文:
 定义 jacobson
-  签名: (I : TwoSidedIdeal R)
+  签名: (I : TwoSided理想 R)
   定义体: (asIdeal I).jacobson.toTwoSided
 
 Depends on / 依赖: asIdeal, jacobson, jacobson.toTwoSided, toTwoSided
@@ -1110,7 +1110,7 @@ lemma asIdeal_jacobson
 
 中文:
 引理 asIdeal_jacobson
-  条件: (I : TwoSidedIdeal R)
+  条件: (I : TwoSided理想 R)
   结论: asIdeal I.jacobson = (asIdeal I).jacobson
   证明: by
   ext; simp [jacobson]
@@ -1131,7 +1131,7 @@ theorem mem_jacobson_iff
 
 中文:
 定理 mem_jacobson_iff
-  条件: {x : R} {I : TwoSidedIdeal R}
+  条件: {x : R} {I : TwoSided理想 R}
   证明: by
   simp [jacobson, Ideal.mem_jacobson_iff]
 

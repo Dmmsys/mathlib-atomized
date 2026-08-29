@@ -126,7 +126,7 @@ theorem _root_.innerSL_inj
 
 中文:
 定理 _root_.innerSL_inj
-  条件: {E : 类型} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {x y : E}
+  条件: {E : 类型} [赋范交换加群 E] [内积空间 𝕜 E] {x y : E}
   证明: (toDualMap 𝕜 E).injective.eq_iff
 
 Depends on / 依赖: eq_iff, injective, injective.eq_iff, toDualMap
@@ -199,7 +199,7 @@ theorem innerSL_norm
 
 中文:
 定理 innerSL_norm
-  条件: [Nontrivial E]
+  条件: [非平凡 E]
   结论: ‖(innerSL 𝕜 : E ->L⋆[𝕜] E ->L[𝕜] 𝕜)‖ = 1
   证明: show ‖(toDualMap 𝕜 E).toContinuousLinearMap‖ = 1 from LinearIsometry.norm_toContinuousLinearMap _
 
@@ -227,7 +227,7 @@ theorem ext_inner_left_basis
 
 中文:
 定理 ext_inner_left_basis
-  结论: {ι : 类型} {x y : E} (b : Basis ι 𝕜 E)
+  结论: {ι : 类型} {x y : E} (b : 基 ι 𝕜 E)
   证明: by
   apply (toDualMap 𝕜 E).map_eq_iff.mp
   refine (Function.Injective.eq_iff ContinuousLinearMap.coe_injective).mp (b.ext ?_)
@@ -263,7 +263,7 @@ theorem ext_inner_right_basis
 
 中文:
 定理 ext_inner_right_basis
-  结论: {ι : 类型} {x y : E} (b : Basis ι 𝕜 E)
+  结论: {ι : 类型} {x y : E} (b : 基 ι 𝕜 E)
   证明: by
   refine ext_inner_left_basis b fun i => ?_
   rw [← inner_conj_symm]
@@ -555,8 +555,8 @@ instance [NormedAddCommGroup
     simp
 
 中文:
-实例 [NormedAddCommGroup
-  签名: E] [CompleteSpace E] [InnerProductSpace 实数 E] :
+实例 [赋范交换加群
+  签名: E] [完备空间 E] [内积空间 实数 E] :
   定义体: continuous_inner
   bijective_left := (toDual Real E).bijective
   bijective_right := by
@@ -588,7 +588,7 @@ lemma rank_rankOne
 
 中文:
 引理 rank_rankOne
-  结论: {𝕜 E F : 类型} [RCLike 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+  结论: {𝕜 E F : 类型} [RCLike 𝕜] [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: by
   rw [LinearMap.rank]; rw [rankOne_def]; rw [range_smulRight_apply]; rw [Module.rank_eq_one_iff_finrank_eq_one]
   · exact finrank_span_singleton hx
@@ -617,8 +617,8 @@ lemma OrthonormalBasis.norm_dual
     InnerProductSpace.toDual_symm_apply]
 
 中文:
-引理 OrthonormalBasis.norm_dual
-  结论: {ι E : 类型} [Fintype ι] [NormedAddCommGroup E]
+引理 正交标准基.norm_dual
+  结论: {ι E : 类型} [有限类型 ι] [赋范交换加群 E]
   证明: by
   have := b.toBasis.finiteDimensional_of_finite
   simp_rw [← (InnerProductSpace.toDual Real E).symm.norm_map, ← b.sum_sq_inner_left,

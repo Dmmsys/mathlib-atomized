@@ -29,8 +29,8 @@ instance [SemigroupWithZero
   body: (equivShrink _).symm.semigroupWithZero
 
 中文:
-实例 [SemigroupWithZero
-  签名: α] : SemigroupWithZero (Shrink α)
+实例 [带零半群
+  签名: α] : 带零半群 (Shrink α)
   定义体: (equivShrink _).symm.semigroupWithZero
 
 Depends on / 依赖: equivShrink, semigroupWithZero, symm.semigroupWithZero
@@ -46,8 +46,8 @@ instance [MulZeroClass
   body: (equivShrink _).symm.mulZeroClass
 
 中文:
-实例 [MulZeroClass
-  签名: α] : MulZeroClass (Shrink α)
+实例 [乘零类
+  签名: α] : 乘零类 (Shrink α)
   定义体: (equivShrink _).symm.mulZeroClass
 
 Depends on / 依赖: equivShrink, mulZeroClass, symm.mulZeroClass
@@ -62,8 +62,8 @@ instance [MulZeroOneClass
   body: (equivShrink _).symm.mulZeroOneClass
 
 中文:
-实例 [MulZeroOneClass
-  签名: α] : MulZeroOneClass (Shrink α)
+实例 [乘零幺类
+  签名: α] : 乘零幺类 (Shrink α)
   定义体: (equivShrink _).symm.mulZeroOneClass
 -/
 instance [MulZeroOneClass α] : MulZeroOneClass (Shrink α) := (equivShrink _).symm.mulZeroOneClass
@@ -77,8 +77,8 @@ instance [Monoid
   body: (equivShrink α).symm.distribMulAction M
 
 中文:
-实例 [Monoid
-  签名: M] [AddCommMonoid α] [DistribMulAction M α] : DistribMulAction M (Shrink.{v} α)
+实例 [幺半群
+  签名: M] [加法交换幺半群 α] [分配乘法作用 M α] : 分配乘法作用 M (Shrink.{v} α)
   定义体: (equivShrink α).symm.distribMulAction M
 
 Depends on / 依赖: distribMulAction, equivShrink, symm.distribMulAction

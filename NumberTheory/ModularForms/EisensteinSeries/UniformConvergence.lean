@@ -54,7 +54,7 @@ theorem eisensteinSeries_tendstoLocallyUniformly
 
 中文:
 定理 eisensteinSeries_tendstoLocallyUniformly
-  条件: {k : 整数} (hk : 3 <= k) {N : 自然数} (a : Fin 2 -> ZMod N)
+  条件: {k : 整数} (hk : 3 <= k) {N : 自然数} (a : 有限集 2 -> ZMod N)
   证明: by
   have hk' : (2 : Real) < k := by norm_cast
   have p_sum : Summable fun x : gammaSet N 1 a => ‖x.val‖ ^ (-k) :=

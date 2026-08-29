@@ -95,7 +95,7 @@ lemma coe_ad_apply_eq_ad_apply
 中文:
 引理 coe_ad_apply_eq_ad_apply
   条件: (x : L)
-  结论: ad R L x = LieAlgebra.ad R L x
+  结论: ad R L x = Lie代数.ad R L x
   证明: by ext; simp
 -/
 @[simp] lemma coe_ad_apply_eq_ad_apply (x : L) : ad R L x = LieAlgebra.ad R L x := by ext; simp
@@ -148,7 +148,7 @@ lemma ad_ker_eq_center
 
 中文:
 引理 ad_ker_eq_center
-  结论: (ad R L).ker = LieAlgebra.center R L
+  结论: (ad R L).ker = Lie代数.center R L
   证明: by
   ext x
   rw [← LieAlgebra.self_module_ker_eq_center]; rw [LieHom.mem_ker]; rw [LieModule.mem_ker]
@@ -172,7 +172,7 @@ lemma injective_ad_of_center_eq_bot
 
 中文:
 引理 injective_ad_of_center_eq_bot
-  条件: (h : LieAlgebra.center R L = ⊥)
+  条件: (h : Lie代数.center R L = ⊥)
   证明: by
   rw [← LieHom.ker_eq_bot]; rw [ad_ker_eq_center]; rw [h]
 
@@ -263,7 +263,7 @@ lemma maxTrivSubmodule_eq_bot_of_center_eq_bot
 
 中文:
 引理 maxTrivSubmodule_eq_bot_of_center_eq_bot
-  条件: (h : LieAlgebra.center R L = ⊥)
+  条件: (h : Lie代数.center R L = ⊥)
   证明: by
   refine (LieSubmodule.eq_bot_iff _).mpr fun D hD => ext fun x => ?_
   have : ad R L (D x) = 0 := by

@@ -55,7 +55,7 @@ theorem le_prod_nonempty_of_submultiplicative_on_pred
 
 中文:
 定理 le_prod_nonempty_of_submultiplicative_on_pred
-  结论: [IsOrderedMonoid N] (f : M -> N) (p : M -> 命题)
+  结论: [是Ordered幺半群 N] (f : M -> N) (p : M -> 命题)
   证明: by
   refine le_trans
     (Multiset.le_prod_nonempty_of_submultiplicative_on_pred f p h_mul hp_mul _ ?_ ?_) ?_
@@ -95,7 +95,7 @@ theorem le_prod_nonempty_of_submultiplicative
 
 中文:
 定理 le_prod_nonempty_of_submultiplicative
-  结论: [IsOrderedMonoid N] (f : M -> N)
+  结论: [是Ordered幺半群 N] (f : M -> N)
   证明: le_prod_nonempty_of_submultiplicative_on_pred f (fun _ => True) (fun x y _ _ => h_mul x y)
     (fun _ _ _ _ => trivial) g s hs fun _ _ => trivial
 
@@ -129,7 +129,7 @@ theorem le_prod_of_submultiplicative_on_pred
 
 中文:
 定理 le_prod_of_submultiplicative_on_pred
-  结论: [IsOrderedMonoid N] (f : M -> N) (p : M -> 命题)
+  结论: [是Ordered幺半群 N] (f : M -> N) (p : M -> 命题)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hs_nonempty)
   · simp [h_one]
@@ -164,7 +164,7 @@ theorem le_prod_of_submultiplicative
 
 中文:
 定理 le_prod_of_submultiplicative
-  结论: [IsOrderedMonoid N] (f : M -> N) (h_one : f 1 <= 1)
+  结论: [是Ordered幺半群 N] (f : M -> N) (h_one : f 1 <= 1)
   证明: le_trans (Multiset.le_prod_of_submultiplicative f h_one h_mul _) (by simp)
 
 Depends on / 依赖: Multiset, Multiset.le_prod_of_submultiplicative, h_mul, h_one, le_prod_of_submultiplicative, le_trans
@@ -222,8 +222,8 @@ theorem _root_.Monotone.finsetProd'
   proof: fun _ _ hab => Finset.prod_le_prod' fun i hi => hf i hi hab
 
 中文:
-定理 _root_.Monotone.finsetProd'
-  结论: [MulLeftMono N] {γ : 类型} [Preorder γ]
+定理 _root_.递增.finsetProd'
+  结论: [MulLeftMono N] {γ : 类型} [预序 γ]
   证明: fun _ _ hab => Finset.prod_le_prod' fun i hi => hf i hi hab
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, prod_le_prod
@@ -245,7 +245,7 @@ theorem _root_.MonotoneOn.finsetProd'
 
 中文:
 定理 _root_.MonotoneOn.finsetProd'
-  结论: [MulLeftMono N] {γ : 类型} [Preorder γ] {u : Set γ}
+  结论: [MulLeftMono N] {γ : 类型} [预序 γ] {u : 集合 γ}
   证明: fun _ ha _ hb hab => Finset.prod_le_prod' fun i hi => hf i hi ha hb hab
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, prod_le_prod
@@ -266,8 +266,8 @@ theorem _root_.Antitone.finsetProd'
   proof: fun _ _ hab => Finset.prod_le_prod' fun i hi => hf i hi hab
 
 中文:
-定理 _root_.Antitone.finsetProd'
-  结论: [MulLeftMono N] {γ : 类型} [Preorder γ]
+定理 _root_.递减.finsetProd'
+  结论: [MulLeftMono N] {γ : 类型} [预序 γ]
   证明: fun _ _ hab => Finset.prod_le_prod' fun i hi => hf i hi hab
 
 Depends on / 依赖: Finset, Finset.prod_le_prod, prod_le_prod
@@ -291,7 +291,7 @@ theorem _root_.AntitoneOn.finsetProd'
 
 中文:
 定理 _root_.AntitoneOn.finsetProd'
-  结论: [MulLeftMono N] {γ : 类型} [Preorder γ] {u : Set γ}
+  结论: [MulLeftMono N] {γ : 类型} [预序 γ] {u : 集合 γ}
   证明: fun _ ha _ hb hab => Finset.prod_le_prod' fun i hi => hf i hi ha hb hab
 
 @[to_additive sum_nonneg]
@@ -501,7 +501,7 @@ theorem prod_le_univ_prod_of_one_le'
 
 中文:
 定理 prod_le_univ_prod_of_one_le'
-  条件: [MulLeftMono N] [Fintype ι] {s : Finset ι} (w : 对任意 x, 1 <= f x)
+  条件: [MulLeftMono N] [有限类型 ι] {s : 有限集 ι} (w : 对任意 x, 1 <= f x)
   证明: prod_le_prod_of_subset_of_one_le' (subset_univ s) fun a _ _ => w a
 
 @[to_additive sum_eq_zero_iff_of_nonneg]
@@ -529,7 +529,7 @@ theorem prod_eq_one_iff_of_one_le'
 
 中文:
 定理 prod_eq_one_iff_of_one_le'
-  结论: {ι : 类型u_1} {N : 类型u_5} [CommMonoid N] [PartialOrder N]
+  结论: {ι : 类型u_1} {N : 类型u_5} [交换幺半群 N] [偏序 N]
   证明: by
   classical
     refine Finset.induction_on s
@@ -566,7 +566,7 @@ lemma one_lt_prod_iff_of_one_le
 
 中文:
 引理 one_lt_prod_iff_of_one_le
-  结论: {ι : 类型u_1} {N : 类型u_5} [CommMonoid N] [PartialOrder N]
+  结论: {ι : 类型u_1} {N : 类型u_5} [交换幺半群 N] [偏序 N]
   证明: by
   have hsum : 1 <= ∏ x in s, f x := one_le_prod' hf
   rw [hsum.lt_iff_ne']; rw [Ne]; rw [prod_eq_one_iff_of_one_le' hf]; rw [not_forall]
@@ -596,7 +596,7 @@ theorem prod_eq_one_iff_of_le_one'
 
 中文:
 定理 prod_eq_one_iff_of_le_one'
-  结论: {ι : 类型u_1} {N : 类型u_5} [CommMonoid N] [PartialOrder N]
+  结论: {ι : 类型u_1} {N : 类型u_5} [交换幺半群 N] [偏序 N]
   证明: prod_eq_one_iff_of_one_le' (N := Nᵒᵈ)
 
 @[to_additive]
@@ -621,7 +621,7 @@ lemma prod_lt_one_iff_of_le_one
 
 中文:
 引理 prod_lt_one_iff_of_le_one
-  结论: {ι : 类型u_1} {N : 类型u_5} [CommMonoid N] [PartialOrder N]
+  结论: {ι : 类型u_1} {N : 类型u_5} [交换幺半群 N] [偏序 N]
   证明: one_lt_prod_iff_of_one_le (N := Nᵒᵈ) hf
 
 @[to_additive single_le_sum]
@@ -719,7 +719,7 @@ theorem prod_le_pow_card
 
 中文:
 定理 prod_le_pow_card
-  条件: [MulLeftMono N] (s : Finset ι) (f : ι -> N) (n : N) (h : 对任意 x in s, f x <= n)
+  条件: [MulLeftMono N] (s : 有限集 ι) (f : ι -> N) (n : N) (h : 对任意 x in s, f x <= n)
   证明: by
   refine (Multiset.prod_le_pow_card (s.val.map f) n ?_).trans ?_
   · simpa using h
@@ -746,7 +746,7 @@ theorem pow_card_le_prod
 
 中文:
 定理 pow_card_le_prod
-  条件: [MulLeftMono N] (s : Finset ι) (f : ι -> N) (n : N) (h : 对任意 x in s, n <= f x)
+  条件: [MulLeftMono N] (s : 有限集 ι) (f : ι -> N) (n : N) (h : 对任意 x in s, n <= f x)
   证明: Finset.prod_le_pow_card (N := Nᵒᵈ) _ _ _ h
 
 Depends on / 依赖: Finset, Finset.prod_le_pow_card, prod_le_pow_card
@@ -764,7 +764,7 @@ theorem card_biUnion_le_card_mul
 
 中文:
 定理 card_biUnion_le_card_mul
-  结论: [DecidableEq β] (s : Finset ι) (f : ι -> Finset β) (n : 自然数)
+  结论: [DecidableEq β] (s : 有限集 ι) (f : ι -> 有限集 β) (n : 自然数)
   证明: card_biUnion_le.trans sum_le_card_nsmul _ _ _ h
 
 Depends on / 依赖: card_biUnion_le, card_biUnion_le.trans, sum_le_card_nsmul
@@ -791,7 +791,7 @@ theorem prod_fiberwise_le_prod_of_one_le_prod_fiber'
 
 中文:
 定理 prod_fiberwise_le_prod_of_one_le_prod_fiber'
-  结论: [MulLeftMono N] {t : Finset ι'} {g : ι -> ι'}
+  结论: [MulLeftMono N] {t : 有限集 ι'} {g : ι -> ι'}
   证明: calc
     (∏ y in t, ∏ x in s with g x = y, f x) <=
         ∏ y in t union s.image g, ∏ x in s with g x = y, f x :=
@@ -824,7 +824,7 @@ theorem prod_le_prod_fiberwise_of_prod_fiber_le_one'
 
 中文:
 定理 prod_le_prod_fiberwise_of_prod_fiber_le_one'
-  结论: [MulLeftMono N] {t : Finset ι'} {g : ι -> ι'}
+  结论: [MulLeftMono N] {t : 有限集 ι'} {g : ι -> ι'}
   证明: prod_fiberwise_le_prod_of_one_le_prod_fiber' (N := Nᵒᵈ) h
 
 @[to_additive]
@@ -939,7 +939,7 @@ lemma max_prod_le
 
 中文:
 引理 max_prod_le
-  条件: [CommMonoid M] [LinearOrder M] [IsOrderedMonoid M] {f g : ι -> M} {s : Finset ι}
+  条件: [交换幺半群 M] [线性序 M] [是Ordered幺半群 M] {f g : ι -> M} {s : 有限集 ι}
   证明: Multiset.max_prod_le
 
 @[to_additive]
@@ -961,7 +961,7 @@ lemma prod_min_le
 
 中文:
 引理 prod_min_le
-  条件: [CommMonoid M] [LinearOrder M] [IsOrderedMonoid M] {f g : ι -> M} {s : Finset ι}
+  条件: [交换幺半群 M] [线性序 M] [是Ordered幺半群 M] {f g : ι -> M} {s : 有限集 ι}
   证明: Multiset.prod_min_le
 
 Depends on / 依赖: Multiset, Multiset.prod_min_le, prod_min_le
@@ -980,7 +980,7 @@ theorem abs_sum_le_sum_abs
 
 中文:
 定理 abs_sum_le_sum_abs
-  结论: {G : 类型} [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G]
+  结论: {G : 类型} [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G]
   证明: le_sum_of_subadditive _ abs_zero.le abs_add_le s f
 
 Depends on / 依赖: abs_add_le, abs_zero, abs_zero.le, le_sum_of_subadditive
@@ -1000,7 +1000,7 @@ theorem abs_sum_of_nonneg
 
 中文:
 定理 abs_sum_of_nonneg
-  结论: {G : 类型} [AddCommGroup G] [LinearOrder G] [AddLeftMono G]
+  结论: {G : 类型} [加法交换群 G] [线性序 G] [AddLeftMono G]
   证明: by
   rw [abs_of_nonneg (Finset.sum_nonneg hf)]
 
@@ -1022,7 +1022,7 @@ theorem abs_sum_of_nonneg'
 
 中文:
 定理 abs_sum_of_nonneg'
-  结论: {G : 类型} [AddCommGroup G] [LinearOrder G] [AddLeftMono G]
+  结论: {G : 类型} [加法交换群 G] [线性序 G] [AddLeftMono G]
   证明: by
   rw [abs_of_nonneg (Finset.sum_nonneg' hf)]
 
@@ -1075,7 +1075,7 @@ theorem card_le_mul_card_image_of_maps_to
 
 中文:
 定理 card_le_mul_card_image_of_maps_to
-  结论: {f : α -> β} {s : Finset α} {t : Finset β}
+  结论: {f : α -> β} {s : 有限集 α} {t : 有限集 β}
   证明: calc
     #s = ∑ b in t, #{a in s | f a = b} := card_eq_sum_card_fiberwise Hf
     _ <= ∑ _b in t, n := sum_le_sum hn
@@ -1100,7 +1100,7 @@ theorem card_le_mul_card_image
 
 中文:
 定理 card_le_mul_card_image
-  结论: {f : α -> β} (s : Finset α) (n : 自然数)
+  结论: {f : α -> β} (s : 有限集 α) (n : 自然数)
   证明: card_le_mul_card_image_of_maps_to (fun _ => mem_image_of_mem _) n hn
 
 Depends on / 依赖: card_le_mul_card_image_of_maps_to, mem_image_of_mem
@@ -1122,7 +1122,7 @@ theorem mul_card_image_le_card_of_maps_to
 
 中文:
 定理 mul_card_image_le_card_of_maps_to
-  结论: {f : α -> β} {s : Finset α} {t : Finset β}
+  结论: {f : α -> β} {s : 有限集 α} {t : 有限集 β}
   证明: calc
     n * #t = ∑ _a in t, n := by simp [mul_comm]
     _ <= ∑ b in t, #{a in s | f a = b} := sum_le_sum hn
@@ -1148,7 +1148,7 @@ theorem mul_card_image_le_card
 
 中文:
 定理 mul_card_image_le_card
-  结论: {f : α -> β} (s : Finset α) (n : 自然数)
+  结论: {f : α -> β} (s : 有限集 α) (n : 自然数)
   证明: mul_card_image_le_card_of_maps_to (fun _ => mem_image_of_mem _) n hn
 
 Depends on / 依赖: mem_image_of_mem, mul_card_image_le_card_of_maps_to
@@ -1204,8 +1204,8 @@ lemma sum_card_le
 
 中文:
 引理 sum_card_le
-  条件: [Fintype α] (h : 对任意 a, #{b in B | a in b} <= n)
-  结论: ∑ s in B, #s <= Fintype.card α * n
+  条件: [有限类型 α] (h : 对任意 a, #{b in B | a in b} <= n)
+  结论: ∑ s in B, #s <= 有限类型.card α * n
   证明: calc
     ∑ s in B, #s = ∑ s in B, #(univ inter s) := by simp_rw [univ_inter]
     _ <= Fintype.card α * n := sum_card_inter_le fun a _ => h a
@@ -1257,7 +1257,7 @@ theorem le_sum_card
 
 中文:
 定理 le_sum_card
-  条件: [Fintype α] (h : 对任意 a, n <= #{b in B | a in b})
+  条件: [有限类型 α] (h : 对任意 a, n <= #{b in B | a in b})
   证明: calc
     Fintype.card α * n <= ∑ s in B, #(univ inter s) := le_sum_card_inter fun a _ => h a
     _ = ∑ s in B, #s := by simp_rw [univ_inter]
@@ -1300,7 +1300,7 @@ theorem sum_card
 
 中文:
 定理 sum_card
-  条件: [Fintype α] (h : 对任意 a, #{b in B | a in b} = n)
+  条件: [有限类型 α] (h : 对任意 a, #{b in B | a in b} = n)
   证明: by
   simp_rw [Fintype.card, ← sum_card_inter fun a _ => h a, univ_inter]
 
@@ -1322,7 +1322,7 @@ theorem card_le_card_biUnion
 
 中文:
 定理 card_le_card_biUnion
-  结论: {s : Finset ι} {f : ι -> Finset α} (hs : (s : Set ι).PairwiseDisjoint f)
+  结论: {s : 有限集 ι} {f : ι -> 有限集 α} (hs : (s : 集合 ι).PairwiseDisjoint f)
   证明: by
   rw [card_biUnion hs]; rw [card_eq_sum_ones]
   exact sum_le_sum fun i hi => (hf i hi).card_pos
@@ -1347,7 +1347,7 @@ theorem card_le_card_biUnion_add_card_fiber
 
 中文:
 定理 card_le_card_biUnion_add_card_fiber
-  结论: {s : Finset ι} {f : ι -> Finset α}
+  结论: {s : 有限集 ι} {f : ι -> 有限集 α}
   证明: by
   rw [← Finset.card_filter_add_card_filter_not fun i => f i = ∅]; rw [add_comm]
   grw [card_le_card_biUnion (hs.subset <| filter_subset _ _) fun i hi =>
@@ -1373,7 +1373,7 @@ card_le_one.2 fun _ hi _ hj => hf (mem_filter.1 hi).2.trans (mem_filter.1 hj).2.
 
 中文:
 定理 card_le_card_biUnion_add_one
-  结论: {s : Finset ι} {f : ι -> Finset α} (hf : Injective f)
+  结论: {s : 有限集 ι} {f : ι -> 有限集 α} (hf : 单射 f)
   证明: by
   grw [card_le_card_biUnion_add_card_fiber hs,
 card_le_one.2 fun _ hi _ hj => hf (mem_filter.1 hi).2.trans (mem_filter.1 hj).2.symm]
@@ -1468,7 +1468,7 @@ theorem prod_mono_set'
 中文:
 定理 prod_mono_set'
   条件: (f : ι -> M)
-  结论: Monotone fun s => ∏ x in s, f x
+  结论: 递增 fun s => ∏ x in s, f x
   证明: fun _ _ hs =>
   have := CanonicallyOrderedMul.toIsOrderedMonoid (α := M)
   prod_le_prod_of_subset' hs
@@ -1533,7 +1533,7 @@ Finset.one_lt_prod_iff_of_one_le fun _ _ => one_le
 
 中文:
 引理 one_lt_prod_iff
-  结论: {ι M : 类型} [CommMonoid M] [PartialOrder M] [CanonicallyOrderedMul M]
+  结论: {ι M : 类型} [交换幺半群 M] [偏序 M] [典范有序乘法 M]
   证明: have := CanonicallyOrderedMul.toIsOrderedMonoid (α := M)
 Finset.one_lt_prod_iff_of_one_le fun _ _ => one_le
 
@@ -1565,7 +1565,7 @@ lemma prod_lt_prod_of_subset_erase_union_singleton
 
 中文:
 引理 prod_lt_prod_of_subset_erase_union_singleton
-  结论: {ι M : 类型} [DecidableEq ι] [CommMonoid M]
+  结论: {ι M : 类型} [DecidableEq ι] [交换幺半群 M]
   证明: by
   have hd_not : d ∉ S' := fun hd => (Finset.mem_union.mp (hS' hd)).elim
     (fun h => (Finset.mem_erase.mp h).1 rfl)
@@ -1641,7 +1641,7 @@ theorem prod_lt_prod_of_nonempty'
 
 中文:
 定理 prod_lt_prod_of_nonempty'
-  结论: [MulLeftStrictMono M] (hs : s.Nonempty)
+  结论: [MulLeftStrictMono M] (hs : s.非空)
   证明: Multiset.prod_lt_prod_of_nonempty' (by aesop) hlt
 
 Depends on / 依赖: Multiset, Multiset.prod_lt_prod_of_nonempty, prod_lt_prod_of_nonempty
@@ -1753,7 +1753,7 @@ theorem one_lt_prod
 
 中文:
 定理 one_lt_prod
-  条件: [MulLeftStrictMono M] (h : 对任意 i in s, 1 < f i) (hs : s.Nonempty)
+  条件: [MulLeftStrictMono M] (h : 对任意 i in s, 1 < f i) (hs : s.非空)
   证明: lt_of_le_of_lt (by rw [prod_const_one]) prod_lt_prod_of_nonempty' hs h
 
 @[to_additive]
@@ -1777,7 +1777,7 @@ theorem prod_lt_one
 
 中文:
 定理 prod_lt_one
-  条件: [MulLeftStrictMono M] (h : 对任意 i in s, f i < 1) (hs : s.Nonempty)
+  条件: [MulLeftStrictMono M] (h : 对任意 i in s, f i < 1) (hs : s.非空)
   证明: (prod_lt_prod_of_nonempty' hs h).trans_le (by rw [prod_const_one])
 
 @[to_additive sum_pos']
@@ -1853,7 +1853,7 @@ theorem prod_eq_prod_iff_of_le
 
 中文:
 定理 prod_eq_prod_iff_of_le
-  结论: {ι M : 类型} [CommMonoid M] [PartialOrder M]
+  结论: {ι M : 类型} [交换幺半群 M] [偏序 M]
   证明: by
   classical
     revert h
@@ -1911,7 +1911,7 @@ lemma prod_sdiff_lt_prod_sdiff
 
 中文:
 引理 prod_sdiff_lt_prod_sdiff
-  结论: {ι M : 类型} [CommMonoid M] [PartialOrder M]
+  结论: {ι M : 类型} [交换幺半群 M] [偏序 M]
   证明: by
   rw [← mul_lt_mul_iff_right]; rw [← prod_union (disjoint_sdiff_inter _ _)]; rw [sdiff_union_inter]; rw [← prod_union]; rw [inter_comm]; rw [sdiff_union_inter]
   simpa only [inter_comm] using disjoint_sdiff_inter t s
@@ -1940,7 +1940,7 @@ theorem exists_lt_of_prod_lt'
   exact prod_le_prod' Hle
 
 中文:
-定理 exists_lt_of_prod_lt'
+定理 存在_lt_of_prod_lt'
   条件: [MulLeftMono M] (Hlt : ∏ i in s, f i < ∏ i in s, g i)
   证明: by
   contrapose! Hlt with Hle
@@ -1969,8 +1969,8 @@ theorem exists_le_of_prod_le'
 @[to_additive exists_pos_of_sum_zero_of_exists_nonzero]
 
 中文:
-定理 exists_le_of_prod_le'
-  条件: (hs : s.Nonempty) (Hle : ∏ i in s, f i <= ∏ i in s, g i)
+定理 存在_le_of_prod_le'
+  条件: (hs : s.非空) (Hle : ∏ i in s, f i <= ∏ i in s, g i)
   证明: by
   contrapose! Hle with Hlt
   exact prod_lt_prod_of_nonempty' hs Hlt
@@ -2000,7 +2000,7 @@ theorem exists_one_lt_of_prod_one_of_exists_ne_one'
     _ = 1 := prod_const_one
 
 中文:
-定理 exists_one_lt_of_prod_one_of_exists_ne_one'
+定理 存在_one_lt_of_prod_one_of_存在_ne_one'
   结论: (f : ι -> M) (h₁ : ∏ i in s, f i = 1)
   证明: by
   contrapose! h₁
@@ -2036,7 +2036,7 @@ theorem apply_sup_le_sum
 
 中文:
 定理 apply_sup_le_sum
-  结论: [SemilatticeSup α] [OrderBot α]
+  结论: [SemilatticeSup α] [有底序 α]
   证明: by
   classical
   refine t.induction_on zero.le fun i t it h => ?_
@@ -2063,7 +2063,7 @@ theorem apply_union_le_sum
 
 中文:
 定理 apply_union_le_sum
-  结论: [AddCommMonoid β] [Preorder β] [AddLeftMono β]
+  结论: [加法交换幺半群 β] [预序 β] [AddLeftMono β]
   证明: Finset.sup_set_eq_biUnion t s ▸ t.apply_sup_le_sum zero (by simpa)
 
 Depends on / 依赖: Finset, Finset.sup_set_eq_biUnion, apply_sup_le_sum, sup_set_eq_biUnion, t.apply_sup_le_sum
@@ -2092,7 +2092,7 @@ theorem sum_le_one_iff
 
 中文:
 定理 sum_le_one_iff
-  条件: {s : Finset α} {f : α -> 自然数}
+  条件: {s : 有限集 α} {f : α -> 自然数}
   证明: by
   classical
   refine ⟨fun h x y hsx hsy hfx hfy => ?_, fun h => ?_⟩
@@ -2137,7 +2137,7 @@ theorem prod_mono'
 
 中文:
 定理 prod_mono'
-  结论: Monotone fun f : ι -> M => ∏ i, f i
+  结论: 递增 fun f : ι -> M => ∏ i, f i
   证明: fun _ _ hfg =>
   Finset.prod_le_prod' fun x _ => hfg x
 
@@ -2200,7 +2200,7 @@ lemma prod_eq_one_iff_of_one_le
 
 中文:
 引理 prod_eq_one_iff_of_one_le
-  结论: {ι M : 类型} [Fintype ι] [CommMonoid M] [PartialOrder M]
+  结论: {ι M : 类型} [有限类型 ι] [交换幺半群 M] [偏序 M]
   证明: (Finset.prod_eq_one_iff_of_one_le' fun i _ => hf i).trans by simp [funext_iff]
 
 @[to_additive]
@@ -2222,7 +2222,7 @@ lemma prod_eq_one_iff_of_le_one
 
 中文:
 引理 prod_eq_one_iff_of_le_one
-  结论: {ι M : 类型} [Fintype ι] [CommMonoid M] [PartialOrder M]
+  结论: {ι M : 类型} [有限类型 ι] [交换幺半群 M] [偏序 M]
   证明: (Finset.prod_eq_one_iff_of_le_one' fun i _ => hf i).trans by simp [funext_iff]
 
 Depends on / 依赖: Finset, Finset.prod_eq_one_iff_of_le_one, funext_iff, prod_eq_one_iff_of_le_one
@@ -2251,7 +2251,7 @@ theorem prod_strictMono'
 
 中文:
 定理 prod_strictMono'
-  结论: StrictMono fun f : ι -> M => ∏ x, f x
+  结论: 严格递增 fun f : ι -> M => ∏ x, f x
   证明: fun _ _ hfg =>
   let ⟨hle, i, hlt⟩ := Pi.lt_def.mp hfg
   Finset.prod_lt_prod' (fun i _ => hle i) ⟨i, Finset.mem_univ i, hlt⟩
@@ -2386,7 +2386,7 @@ theorem finsetSum_eq_sup_iff_disjoint
 
 中文:
 定理 finsetSum_eq_sup_iff_disjoint
-  条件: [DecidableEq α] {i : Finset β} {f : β -> Multiset α}
+  条件: [DecidableEq α] {i : 有限集 β} {f : β -> Multiset α}
   证明: by
   induction i using Finset.cons_induction_on with
   | empty =>

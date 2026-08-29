@@ -42,8 +42,8 @@ structure Isometry
     - map_app' : forall m, Q₂ (toFun m) = Q₁ m
 
 中文:
-结构 Isometry
-  参数: (Q₁ : QuadraticMap R M₁ N) (Q₂ : QuadraticMap R M₂ N)
+结构 等距
+  参数: (Q₁ : 二次映射 R M₁ N) (Q₂ : 二次映射 R M₂ N)
   继承: M₁ ->ₗ[R] M₂
   公理与运算 (1 个):
     - map_app' : 对任意 m, Q₂ (toFun m) = Q₁ m
@@ -71,7 +71,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Q₁ ->qᵢ Q₂) M₁ M₂ where
+  签名: : 函数状 (Q₁ ->qᵢ Q₂) M₁ M₂ where
   定义体: f.toLinearMap
   coe_injective f g h := by cases f; cases g; congr; exact DFunLike.coe_injective h
 
@@ -92,7 +92,7 @@ instance instLinearMapClass
 
 中文:
 实例 instLinearMapClass
-  签名: : LinearMapClass (Q₁ ->qᵢ Q₂) R M₁ M₂ where
+  签名: : 线性映射类 (Q₁ ->qᵢ Q₂) R M₁ M₂ where
   定义体: f.toLinearMap.map_add
   map_smulₛₗ f := f.toLinearMap.map_smul
 
@@ -226,7 +226,7 @@ definition id
 
 中文:
 定义 id
-  签名: (Q : QuadraticMap R M N)
+  签名: (Q : 二次映射 R M N)
   定义体: LinearMap.id
   map_app' _ := rfl
 
@@ -251,7 +251,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {Q₁ Q₂ : QuadraticMap R M₁ N} (h : Q₁ = Q₂)
+  签名: {Q₁ Q₂ : 二次映射 R M₁ N} (h : Q₁ = Q₂)
   定义体: LinearMap.id
   map_app' _ := h ▸ rfl
 
@@ -275,7 +275,7 @@ theorem ofEq_rfl
 
 中文:
 定理 ofEq_rfl
-  条件: {Q : QuadraticMap R M₁ N}
+  条件: {Q : 二次映射 R M₁ N}
   结论: ofEq (rfl : Q = Q) = .id Q
   证明: rfl
 -/
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero ((0 : QuadraticMap R M₁ N) ->qᵢ Q₂)
+  签名: 零 ((0 : 二次映射 R M₁ N) ->qᵢ Q₂)
   定义体: { (0 : M₁ ->ₗ[R] M₂) with map_app' := fun _ => map_zero _ }
 
 Depends on / 依赖: map_app, map_zero
@@ -419,7 +419,7 @@ instance hasZeroOfSubsingleton
 
 中文:
 实例 hasZeroOfSubsingleton
-  签名: [Subsingleton M₁]
+  签名: [子单例 M₁]
   定义体: { (0 : M₁ ->ₗ[R] M₂) with
     map_app' := fun m => Subsingleton.elim 0 m ▸ (map_zero _).trans (map_zero _).symm }
 
@@ -439,8 +439,8 @@ instance [Subsingleton
   body: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
 
 中文:
-实例 [Subsingleton
-  签名: M₂] : Subsingleton (Q₁ ->qᵢ Q₂)
+实例 [子单例
+  签名: M₂] : 子单例 (Q₁ ->qᵢ Q₂)
   定义体: ⟨fun _ _ => ext fun _ => Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim

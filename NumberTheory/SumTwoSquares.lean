@@ -41,8 +41,8 @@ theorem Nat.Prime.sq_add_sq
   rwa [_root_.irreducible_iff_prime, prime_iff_mod_four_eq_three_of_nat_prime p]
 
 中文:
-定理 Nat.Prime.sq_add_sq
-  条件: {p : 自然数} [Fact p.Prime] (hp : p % 4 != 3)
+定理 自然数.素.sq_add_sq
+  条件: {p : 自然数} [Fact p.素] (hp : p % 4 != 3)
   证明: by
   apply sq_add_sq_of_nat_prime_of_not_irreducible p
   rwa [_root_.irreducible_iff_prime, prime_iff_mod_four_eq_three_of_nat_prime p]
@@ -73,7 +73,7 @@ theorem sq_add_sq_mul
 
 中文:
 定理 sq_add_sq_mul
-  结论: {R} [CommRing R] {a b x y u v : R} (ha : a = x ^ 2 + y ^ 2)
+  结论: {R} [交换环 R] {a b x y u v : R} (ha : a = x ^ 2 + y ^ 2)
   证明: ⟨x * u - y * v, x * v + y * u, by rw [ha, hb]; ring⟩
 -/
 theorem sq_add_sq_mul {R} [CommRing R] {a b x y u v : R} (ha : a = x ^ 2 + y ^ 2)
@@ -93,7 +93,7 @@ theorem Nat.sq_add_sq_mul
   simpa only [Int.natCast_natAbs, sq_abs]
 
 中文:
-定理 Nat.sq_add_sq_mul
+定理 自然数.sq_add_sq_mul
   条件: {a b x y u v : 自然数} (ha : a = x ^ 2 + y ^ 2) (hb : b = u ^ 2 + v ^ 2)
   证明: by
   zify at ha hb ⊢
@@ -201,7 +201,7 @@ theorem Nat.mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one
   exact ZMod.mod_four_ne_three_of_sq_eq_neg_sq' one_ne_zero h
 
 中文:
-定理 Nat.mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one
+定理 自然数.mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one
   结论: {p n : 自然数}
   证明: by
   obtain ⟨y, h⟩ := ZMod.isSquare_neg_one_of_dvd (Nat.dvd_of_mem_primeFactors hp) hs
@@ -233,7 +233,7 @@ theorem ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three
   | prime_mul p n hpp 
 
 中文:
-定理 ZMod.isSquare_neg_one_iff_forall_mem_primeFactors_mod_four_ne_three
+定理 ZMod.isSquare_neg_one_iff_对任意_mem_primeFactors_mod_four_ne_three
   结论: {n : 自然数}
   证明: by
   refine ⟨fun H q hq => Nat.mod_four_ne_three_of_mem_primeFactors_of_isSquare_neg_one hq H,
@@ -327,7 +327,7 @@ theorem Nat.eq_sq_add_sq_of_isSquare_mod_neg_one
     obtain ⟨u, v, huv⟩ := Nat.Prime.sq_add_sq (ZMod.
 
 中文:
-定理 Nat.eq_sq_add_sq_of_isSquare_mod_neg_one
+定理 自然数.eq_sq_add_sq_of_isSquare_mod_neg_one
   条件: {n : 自然数} (h : IsSquare (-1 : ZMod n))
   证明: by
   induction n using induction_on_primes with
@@ -433,7 +433,7 @@ theorem Nat.eq_sq_add_sq_iff_eq_sq_mul
       obta
 
 中文:
-定理 Nat.eq_sq_add_sq_iff_eq_sq_mul
+定理 自然数.eq_sq_add_sq_iff_eq_sq_mul
   条件: {n : 自然数}
   证明: by
   constructor
@@ -484,7 +484,7 @@ theorem Nat.eq_sq_add_sq_iff
   · have : Fact q.Prime := ⟨prime_of_mem_primeFactors h
 
 中文:
-定理 Nat.eq_sq_add_sq_iff
+定理 自然数.eq_sq_add_sq_iff
   条件: {n : 自然数}
   证明: by
   rcases n.eq_zero_or_pos with (rfl | hn₀)

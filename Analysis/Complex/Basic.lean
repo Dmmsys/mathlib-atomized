@@ -57,7 +57,7 @@ instance instModuleSelf
 
 中文:
 实例 instModuleSelf
-  签名: : Module Complex Complex
+  签名: : 模 复形 复形
   定义体: delta% inferInstance
 -/
 instance instModuleSelf : Module Complex Complex := delta% inferInstance
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedField Complex
+  签名: 赋范域 复形
   定义体: rfl
   norm_mul := Complex.norm_mul
 -/
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: DenselyNormedField Complex
+  签名: DenselyNormedField 复形
   定义体: let ⟨x, h⟩ := exists_between hr
     ⟨x, by rwa [norm_real, Real.norm_of_nonneg (h₀.trans_lt h.1).le]⟩
 
@@ -146,7 +146,7 @@ lemma nnnorm_intCast
 中文:
 引理 nnnorm_intCast
   条件: (n : 整数)
-  结论: ‖(n : Complex)‖₊ = ‖n‖₊
+  结论: ‖(n : 复形)‖₊ = ‖n‖₊
   证明: by
   ext; exact norm_intCast n
 
@@ -167,7 +167,7 @@ theorem continuous_normSq
 
 中文:
 定理 continuous_normSq
-  结论: Continuous normSq
+  结论: 连续 normSq
   证明: by
   simpa [← Complex.normSq_eq_norm_sq] using continuous_norm (E := Complex).fun_pow 2
 
@@ -187,7 +187,7 @@ theorem nnnorm_eq_one_of_pow_eq_one
 
 中文:
 定理 nnnorm_eq_one_of_pow_eq_one
-  条件: {ζ : Complex} {n : 自然数} (h : ζ ^ n = 1) (hn : n != 0)
+  条件: {ζ : 复形} {n : 自然数} (h : ζ ^ n = 1) (hn : n != 0)
   结论: ‖ζ‖₊ = 1
   证明: (pow_left_inj₀ zero_le zero_le hn).1 by rw [← nnnorm_pow, h, nnnorm_one, one_pow]
 
@@ -207,7 +207,7 @@ theorem norm_eq_one_of_pow_eq_one
 
 中文:
 定理 norm_eq_one_of_pow_eq_one
-  条件: {ζ : Complex} {n : 自然数} (h : ζ ^ n = 1) (hn : n != 0)
+  条件: {ζ : 复形} {n : 自然数} (h : ζ ^ n = 1) (hn : n != 0)
   结论: ‖ζ‖ = 1
   证明: congr_arg Subtype.val (nnnorm_eq_one_of_pow_eq_one h hn)
 
@@ -227,7 +227,7 @@ lemma le_of_eq_sum_of_eq_sum_norm
 
 中文:
 引理 le_of_eq_sum_of_eq_sum_norm
-  结论: {ι : 类型} {a b : 实数} (f : ι -> Complex) (s : Finset ι) (ha₀ : 0 <= a)
+  结论: {ι : 类型} {a b : 实数} (f : ι -> 复形) (s : 有限集 ι) (ha₀ : 0 <= a)
   证明: by
   norm_cast at hb; rw [← Complex.norm_of_nonneg ha₀, ha, hb]; exact norm_sum_le s f
 
@@ -248,8 +248,8 @@ theorem equivRealProd_apply_le
   simp [Prod.norm_def, abs_re_le_norm, abs_im_le_norm]
 
 中文:
-定理 equivRealProd_apply_le
-  条件: (z : Complex)
+定理 equiv实数Prod_apply_le
+  条件: (z : 复形)
   结论: ‖equiv实数Prod z‖ <= ‖z‖
   证明: by
   simp [Prod.norm_def, abs_re_le_norm, abs_im_le_norm]
@@ -270,8 +270,8 @@ theorem equivRealProd_apply_le'
   simpa using equivRealProd_apply_le z
 
 中文:
-定理 equivRealProd_apply_le'
-  条件: (z : Complex)
+定理 equiv实数Prod_apply_le'
+  条件: (z : 复形)
   结论: ‖equiv实数Prod z‖ <= 1 * ‖z‖
   证明: by
   simpa using equivRealProd_apply_le z
@@ -291,7 +291,7 @@ theorem lipschitz_equivRealProd
   simpa using! AddMonoidHomClass.lipschitz_of_bound equivRealProdLm 1 equivRealProd_apply_le'
 
 中文:
-定理 lipschitz_equivRealProd
+定理 lipschitz_equiv实数Prod
   结论: LipschitzWith 1 equiv实数Prod
   证明: by
   simpa using! AddMonoidHomClass.lipschitz_of_bound equivRealProdLm 1 equivRealProd_apply_le'
@@ -313,8 +313,8 @@ theorem antilipschitz_equivRealProd
 @[fun_prop]
 
 中文:
-定理 antilipschitz_equivRealProd
-  结论: AntilipschitzWith (NN实数.sqrt 2) equiv实数Prod
+定理 antilipschitz_equiv实数Prod
+  结论: AntilipschitzWith (非负实数.sqrt 2) equiv实数Prod
   证明: AddMonoidHomClass.antilipschitz_of_bound equivRealProdLm fun z => by
     simpa only [Real.coe_sqrt, NNReal.coe_ofNat] using! norm_le_sqrt_two_mul_max z
 
@@ -336,8 +336,8 @@ theorem isUniformEmbedding_equivRealProd
   proof: antilipschitz_equivRealProd.isUniformEmbedding lipschitz_equivRealProd.uniformContinuous
 
 中文:
-定理 isUniformEmbedding_equivRealProd
-  结论: IsUniformEmbedding equiv实数Prod
+定理 isUniformEmbedding_equiv实数Prod
+  结论: 是一致嵌入 equiv实数Prod
   证明: antilipschitz_equivRealProd.isUniformEmbedding lipschitz_equivRealProd.uniformContinuous
 
 Depends on / 依赖: antilipschitz_equivRealProd, antilipschitz_equivRealProd.isUniformEmbedding, isUniformEmbedding, lipschitz_equivRealProd, lipschitz_equivRealProd.uniformContinuous, uniformContinuous
@@ -355,7 +355,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace Complex
+  签名: 完备空间 复形
   定义体: (completeSpace_congr isUniformEmbedding_equivRealProd).mpr inferInstance
 
 Depends on / 依赖: completeSpace_congr, isUniformEmbedding_equivRealProd
@@ -373,7 +373,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: : T2Space Complex
+  签名: : T2空间 复形
   定义体: TopologicalSpace.t2Space_of_metrizableSpace
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.t2Space_of_metrizableSpace, t2Space_of_metrizableSpace
@@ -392,8 +392,8 @@ definition equivRealProdCLM
     norm_le_sqrt_two_mul_max (equivRealProd.symm p)
 
 中文:
-定义 equivRealProdCLM
-  签名: : Complex ≃L[实数] 实数 × 实数
+定义 equiv实数ProdCLM
+  签名: : 复形 ≃L[实数] 实数 × 实数
   定义体: equivRealProdLm.toContinuousLinearEquivOfBounds 1 (√2) equivRealProd_apply_le' fun p =>
     norm_le_sqrt_two_mul_max (equivRealProd.symm p)
 
@@ -412,7 +412,7 @@ theorem equivRealProdCLM_symm_apply
   proof: Complex.equivRealProd_symm_apply p
 
 中文:
-定理 equivRealProdCLM_symm_apply
+定理 equiv实数ProdCLM_symm_apply
   条件: (p : 实数 × 实数)
   证明: Complex.equivRealProd_symm_apply p
 
@@ -432,7 +432,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace Complex
+  签名: 真空间 复形
   定义体: lipschitz_equivRealProd.properSpace
   equivRealProdCLM.toHomeomorph.isProperMap
 
@@ -453,7 +453,7 @@ theorem tendsto_normSq_cocompact_atTop
 
 中文:
 定理 tendsto_normSq_cocompact_atTop
-  结论: Tendsto normSq (cocompact Complex) atTop
+  结论: 收敛 normSq (cocompact 复形) atTop
   证明: by
   simpa [norm_mul_self_eq_normSq]
     using tendsto_norm_cocompact_atTop.atTop_mul_atTop₀ (tendsto_norm_cocompact_atTop (E := Complex))
@@ -478,7 +478,7 @@ definition reCLM
 
 中文:
 定义 reCLM
-  签名: : Complex ->L[实数] 实数
+  签名: : 复形 ->L[实数] 实数
   定义体: reLm.mkContinuous 1 fun x => by simp [abs_re_le_norm]
 
 @[continuity, fun_prop]
@@ -501,7 +501,7 @@ theorem continuous_re
 
 中文:
 定理 continuous_re
-  结论: Continuous re
+  结论: 连续 re
   证明: reCLM.continuous
 
 @[fun_prop]
@@ -527,7 +527,7 @@ lemma uniformContinuous_re
 
 中文:
 引理 uniformContinuous_re
-  结论: UniformContinuous re
+  结论: 一致连续 re
   证明: reCLM.uniformContinuous
 
 @[deprecated (since := "2026-02-03")] alias uniformlyContinuous_re :=
@@ -556,7 +556,7 @@ theorem reCLM_coe
 
 中文:
 定理 reCLM_coe
-  结论: (reCLM : Complex ->ₗ[实数] 实数) = reLm
+  结论: (reCLM : 复形 ->ₗ[实数] 实数) = reLm
   证明: rfl
 
 @[simp]
@@ -576,8 +576,8 @@ theorem reCLM_apply
 
 中文:
 定理 reCLM_apply
-  条件: (z : Complex)
-  结论: (reCLM : Complex -> 实数) z = z.re
+  条件: (z : 复形)
+  结论: (reCLM : 复形 -> 实数) z = z.re
   证明: rfl
 -/
 theorem reCLM_apply (z : Complex) : (reCLM : Complex -> Real) z = z.re :=
@@ -595,7 +595,7 @@ definition imCLM
 
 中文:
 定义 imCLM
-  签名: : Complex ->L[实数] 实数
+  签名: : 复形 ->L[实数] 实数
   定义体: imLm.mkContinuous 1 fun x => by simp [abs_im_le_norm]
 
 @[continuity, fun_prop]
@@ -618,7 +618,7 @@ theorem continuous_im
 
 中文:
 定理 continuous_im
-  结论: Continuous im
+  结论: 连续 im
   证明: imCLM.continuous
 
 @[fun_prop]
@@ -644,7 +644,7 @@ lemma uniformContinuous_im
 
 中文:
 引理 uniformContinuous_im
-  结论: UniformContinuous im
+  结论: 一致连续 im
   证明: imCLM.uniformContinuous
 
 @[deprecated (since := "2026-02-03")] alias uniformlyContinuous_im :=
@@ -673,7 +673,7 @@ theorem imCLM_coe
 
 中文:
 定理 imCLM_coe
-  结论: (imCLM : Complex ->ₗ[实数] 实数) = imLm
+  结论: (imCLM : 复形 ->ₗ[实数] 实数) = imLm
   证明: rfl
 
 @[simp]
@@ -693,8 +693,8 @@ theorem imCLM_apply
 
 中文:
 定理 imCLM_apply
-  条件: (z : Complex)
-  结论: (imCLM : Complex -> 实数) z = z.im
+  条件: (z : 复形)
+  结论: (imCLM : 复形 -> 实数) z = z.im
   证明: rfl
 -/
 theorem imCLM_apply (z : Complex) : (imCLM : Complex -> Real) z = z.im :=
@@ -738,7 +738,7 @@ theorem restrictScalars_toSpanSingleton
 
 中文:
 定理 restrictScalars_toSpanSingleton
-  条件: (x : Complex)
+  条件: (x : 复形)
   证明: by
   ext1 z
   dsimp
@@ -765,7 +765,7 @@ definition conjLIE
 
 中文:
 定义 conjLIE
-  签名: : Complex ≃ₗᵢ[实数] Complex
+  签名: : 复形 ≃ₗᵢ[实数] 复形
   定义体: ⟨conjAe.toLinearEquiv, norm_conj⟩
 
 @[simp]
@@ -789,7 +789,7 @@ theorem conjLIE_apply
 
 中文:
 定理 conjLIE_apply
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: conjLIE z = conj z
   证明: rfl
 
@@ -827,7 +827,7 @@ theorem isometry_conj
 
 中文:
 定理 isometry_conj
-  结论: Isometry (conj : Complex -> Complex)
+  结论: 等距 (conj : 复形 -> 复形)
   证明: conjLIE.isometry
 
 @[simp]
@@ -851,7 +851,7 @@ theorem dist_conj_conj
 
 中文:
 定理 dist_conj_conj
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: dist (conj z) (conj w) = dist z w
   证明: isometry_conj.dist_eq z w
 
@@ -874,7 +874,7 @@ theorem nndist_conj_conj
 
 中文:
 定理 nndist_conj_conj
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: nndist (conj z) (conj w) = nndist z w
   证明: isometry_conj.nndist_eq z w
 
@@ -895,7 +895,7 @@ theorem dist_conj_comm
 
 中文:
 定理 dist_conj_comm
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: dist (conj z) w = dist z (conj w)
   证明: by
   rw [← dist_conj_conj]; rw [conj_conj]
@@ -916,7 +916,7 @@ theorem nndist_conj_comm
 
 中文:
 定理 nndist_conj_comm
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: nndist (conj z) w = nndist z (conj w)
   证明: Subtype.ext dist_conj_comm _ _
 
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousStar Complex
+  签名: 余ntinuousStar 复形
   定义体: ⟨conjLIE.continuous⟩
 
 @[continuity, fun_prop]
@@ -958,7 +958,7 @@ theorem continuous_conj
 
 中文:
 定理 continuous_conj
-  结论: Continuous (conj : Complex -> Complex)
+  结论: 连续 (conj : 复形 -> 复形)
   证明: continuous_star
 
 Depends on / 依赖: continuous_star
@@ -977,7 +977,7 @@ theorem ringHom_eq_id_or_conj_of_continuous
 
 中文:
 定理 ringHom_eq_id_or_conj_of_continuous
-  条件: {f : Complex ->+* Complex} (hf : Continuous f)
+  条件: {f : 复形 ->+* 复形} (hf : 连续 f)
   证明: by
   simpa only [DFunLike.ext_iff] using! real_algHom_eq_id_or_conj (AlgHom.mk' f (map_real_smul f hf))
 
@@ -997,7 +997,7 @@ definition conjCAE
 
 中文:
 定义 conjCAE
-  签名: : Complex ≃A[实数] Complex
+  签名: : 复形 ≃A[实数] 复形
   定义体: { conjAe, conjLIE.toContinuousLinearEquiv with }
 
 Depends on / 依赖: conjAe, conjLIE, conjLIE.toContinuousLinearEquiv, toContinuousLinearEquiv
@@ -1014,7 +1014,7 @@ abbreviation conjCLE
 
 中文:
 缩写 conjCLE
-  签名: : Complex ≃L[实数] Complex
+  签名: : 复形 ≃L[实数] 复形
   定义体: conjCAE.toContinuousLinearEquiv
 
 Depends on / 依赖: conjCAE, conjCAE.toContinuousLinearEquiv, toContinuousLinearEquiv
@@ -1090,7 +1090,7 @@ lemma conjCLE_coe_toLinearMap
 
 中文:
 引理 conjCLE_coe_toLinearMap
-  结论: (conjCLE : Complex ->ₗ[实数] Complex) = conjAe.toLinearMap
+  结论: (conjCLE : 复形 ->ₗ[实数] 复形) = conjAe.toLinearMap
   证明: by simp
 
 @[simp]
@@ -1109,7 +1109,7 @@ theorem conjCAE_apply
 
 中文:
 定理 conjCAE_apply
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: conjCAE z = conj z
   证明: rfl
 -/
@@ -1128,7 +1128,7 @@ theorem conjCLE_apply
 
 中文:
 定理 conjCLE_apply
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: conjCLE z = conj z
   证明: rfl
 -/
@@ -1161,8 +1161,8 @@ definition ofRealLI
 @[simp]
 
 中文:
-定义 ofRealLI
-  签名: : 实数 ->ₗᵢ[实数] Complex
+定义 of实数LI
+  签名: : 实数 ->ₗᵢ[实数] 复形
   定义体: ⟨ofRealAm.toLinearMap, norm_real⟩
 
 @[simp]
@@ -1183,7 +1183,7 @@ theorem ofRealLI_apply
   proof: rfl
 
 中文:
-定理 ofRealLI_apply
+定理 of实数LI_apply
   条件: (x : 实数)
   结论: of实数LI x = x
   证明: rfl
@@ -1201,8 +1201,8 @@ theorem isometry_ofReal
 @[continuity, fun_prop]
 
 中文:
-定理 isometry_ofReal
-  结论: Isometry ((↑) : 实数 -> Complex)
+定理 isometry_of实数
+  结论: 等距 ((↑) : 实数 -> 复形)
   证明: ofRealLI.isometry
 
 @[continuity, fun_prop]
@@ -1222,8 +1222,8 @@ theorem continuous_ofReal
   proof: ofRealLI.continuous
 
 中文:
-定理 continuous_ofReal
-  结论: Continuous ((↑) : 实数 -> Complex)
+定理 continuous_of实数
+  结论: 连续 ((↑) : 实数 -> 复形)
   证明: ofRealLI.continuous
 
 Depends on / 依赖: continuous, ofRealLI, ofRealLI.continuous
@@ -1240,8 +1240,8 @@ theorem isUniformEmbedding_ofReal
   proof: ofRealLI.isometry.isUniformEmbedding
 
 中文:
-定理 isUniformEmbedding_ofReal
-  结论: IsUniformEmbedding ((↑) : 实数 -> Complex)
+定理 isUniformEmbedding_of实数
+  结论: 是一致嵌入 ((↑) : 实数 -> 复形)
   证明: ofRealLI.isometry.isUniformEmbedding
 
 Depends on / 依赖: isUniformEmbedding, isometry, ofRealLI, ofRealLI.isometry.isUniformEmbedding
@@ -1258,7 +1258,7 @@ lemma _root_.RCLike.isUniformEmbedding_ofReal
   proof: RCLike.ofRealLI.isometry.isUniformEmbedding
 
 中文:
-引理 _root_.RCLike.isUniformEmbedding_ofReal
+引理 _root_.RCLike.isUniformEmbedding_of实数
   条件: {𝕜 : 类型} [RCLike 𝕜]
   证明: RCLike.ofRealLI.isometry.isUniformEmbedding
 
@@ -1277,8 +1277,8 @@ theorem _root_.Filter.tendsto_ofReal_iff
   proof: isUniformEmbedding_ofReal.isClosedEmbedding.tendsto_nhds_iff.symm
 
 中文:
-定理 _root_.Filter.tendsto_ofReal_iff
-  条件: {α : 类型} {l : Filter α} {f : α -> 实数} {x : 实数}
+定理 _root_.滤子.tendsto_of实数_iff
+  条件: {α : 类型} {l : 滤子 α} {f : α -> 实数} {x : 实数}
   证明: isUniformEmbedding_ofReal.isClosedEmbedding.tendsto_nhds_iff.symm
 
 Depends on / 依赖: isClosedEmbedding, isUniformEmbedding_ofReal, isUniformEmbedding_ofReal.isClosedEmbedding.tendsto_nhds_iff.symm, tendsto_nhds_iff
@@ -1296,7 +1296,7 @@ lemma _root_.Filter.tendsto_ofReal_iff'
   proof: RCLike.isUniformEmbedding_ofReal.isClosedEmbedding.tendsto_nhds_iff.symm
 
 中文:
-引理 _root_.Filter.tendsto_ofReal_iff'
+引理 _root_.滤子.tendsto_of实数_iff'
   结论: {α 𝕜 : 类型} [RCLike 𝕜]
   证明: RCLike.isUniformEmbedding_ofReal.isClosedEmbedding.tendsto_nhds_iff.symm
 
@@ -1316,8 +1316,8 @@ lemma _root_.Filter.Tendsto.ofReal
   proof: tendsto_ofReal_iff.mpr hf
 
 中文:
-引理 _root_.Filter.Tendsto.ofReal
-  结论: {α : 类型} {l : Filter α} {f : α -> 实数} {x : 实数}
+引理 _root_.滤子.收敛.of实数
+  结论: {α : 类型} {l : 滤子 α} {f : α -> 实数} {x : 实数}
   证明: tendsto_ofReal_iff.mpr hf
 
 Depends on / 依赖: tendsto_ofReal_iff, tendsto_ofReal_iff.mpr
@@ -1339,8 +1339,8 @@ congr_arg AlgHom.toRingHom
       Subsingleton.elim (AlgHom.mk' f <| map_real_smul f h) (Algebra.ofId Real Complex)
 
 中文:
-定理 ringHom_eq_ofReal_of_continuous
-  条件: {f : 实数 ->+* Complex} (h : Continuous f)
+定理 ringHom_eq_of实数_of_continuous
+  条件: {f : 实数 ->+* 复形} (h : 连续 f)
   结论: f = of实数Hom
   证明: by
   convert!
@@ -1365,8 +1365,8 @@ definition ofRealCLM
 @[simp]
 
 中文:
-定义 ofRealCLM
-  签名: : 实数 ->L[实数] Complex
+定义 of实数CLM
+  签名: : 实数 ->L[实数] 复形
   定义体: ofRealLI.toContinuousLinearMap
 
 @[simp]
@@ -1388,8 +1388,8 @@ theorem ofRealCLM_coe
 @[simp]
 
 中文:
-定理 ofRealCLM_coe
-  结论: (of实数CLM : 实数 ->ₗ[实数] Complex) = of实数Am.toLinearMap
+定理 of实数CLM_coe
+  结论: (of实数CLM : 实数 ->ₗ[实数] 复形) = of实数Am.toLinearMap
   证明: rfl
 
 @[simp]
@@ -1408,7 +1408,7 @@ theorem ofRealCLM_apply
   proof: rfl
 
 中文:
-定理 ofRealCLM_apply
+定理 of实数CLM_apply
   条件: (x : 实数)
   结论: of实数CLM x = x
   证明: rfl
@@ -1435,7 +1435,7 @@ instance :
 
 中文:
 实例 :
-  签名: RCLike Complex
+  签名: RCLike 复形
   定义体: ⟨⟨Complex.re, Complex.zero_re⟩, Complex.add_re⟩
   im := ⟨⟨Complex.im, Complex.zero_im⟩, Complex.add_im⟩
   I := Complex.I
@@ -1478,7 +1478,7 @@ theorem _root_.RCLike.re_eq_complex_re
 
 中文:
 定理 _root_.RCLike.re_eq_complex_re
-  结论: ⇑(RCLike.re : Complex ->+ 实数) = Complex.re
+  结论: ⇑(RCLike.re : 复形 ->+ 实数) = 复形.re
   证明: rfl
 -/
 theorem _root_.RCLike.re_eq_complex_re : ⇑(RCLike.re : Complex ->+ Real) = Complex.re :=
@@ -1494,7 +1494,7 @@ theorem _root_.RCLike.im_eq_complex_im
 
 中文:
 定理 _root_.RCLike.im_eq_complex_im
-  结论: ⇑(RCLike.im : Complex ->+ 实数) = Complex.im
+  结论: ⇑(RCLike.im : 复形 ->+ 实数) = 复形.im
   证明: rfl
 -/
 theorem _root_.RCLike.im_eq_complex_im : ⇑(RCLike.im : Complex ->+ Real) = Complex.im :=
@@ -1509,8 +1509,8 @@ theorem _root_.RCLike.ofReal_eq_complex_ofReal
   proof: rfl
 
 中文:
-定理 _root_.RCLike.ofReal_eq_complex_ofReal
-  结论: (RCLike.of实数 : 实数 -> Complex) = Complex.of实数
+定理 _root_.RCLike.of实数_eq_complex_of实数
+  结论: (RCLike.of实数 : 实数 -> 复形) = 复形.of实数
   证明: rfl
 -/
 theorem _root_.RCLike.ofReal_eq_complex_ofReal : (RCLike.ofReal : Real -> Complex) = Complex.ofReal := rfl
@@ -1527,7 +1527,7 @@ lemma mul_conj'
 
 中文:
 引理 mul_conj'
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z * conj z = ‖z‖ ^ 2
   证明: RCLike.mul_conj z
 
@@ -1545,7 +1545,7 @@ lemma conj_mul'
 
 中文:
 引理 conj_mul'
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: conj z * z = ‖z‖ ^ 2
   证明: RCLike.conj_mul z
 
@@ -1582,8 +1582,8 @@ lemma exists_norm_eq_mul_self
   proof: RCLike.exists_norm_eq_mul_self _
 
 中文:
-引理 exists_norm_eq_mul_self
-  条件: (z : Complex)
+引理 存在_norm_eq_mul_self
+  条件: (z : 复形)
   结论: 存在 c, ‖c‖ = 1 ∧ ‖z‖ = c * z
   证明: RCLike.exists_norm_eq_mul_self _
 
@@ -1602,8 +1602,8 @@ lemma exists_norm_mul_eq_self
   proof: RCLike.exists_norm_mul_eq_self _
 
 中文:
-引理 exists_norm_mul_eq_self
-  条件: (z : Complex)
+引理 存在_norm_mul_eq_self
+  条件: (z : 复形)
   结论: 存在 c, ‖c‖ = 1 ∧ c * ‖z‖ = z
   证明: RCLike.exists_norm_mul_eq_self _
 
@@ -1625,8 +1625,8 @@ lemma im_eq_zero_iff_isSelfAdjoint
 
 中文:
 引理 im_eq_zero_iff_isSelfAdjoint
-  条件: (x : Complex)
-  结论: Complex.im x = 0 ↔ IsSelfAdjoint x
+  条件: (x : 复形)
+  结论: 复形.im x = 0 ↔ IsSelfAdjoint x
   证明: by
   rw [← RCLike.im_eq_complex_im]
   exact RCLike.im_eq_zero_iff_isSelfAdjoint
@@ -1648,8 +1648,8 @@ lemma re_eq_ofReal_of_isSelfAdjoint
   exact RCLike.re_eq_ofReal_of_isSelfAdjoint hx
 
 中文:
-引理 re_eq_ofReal_of_isSelfAdjoint
-  条件: {x : Complex} {y : 实数} (hx : IsSelfAdjoint x)
+引理 re_eq_of实数_of_isSelfAdjoint
+  条件: {x : 复形} {y : 实数} (hx : IsSelfAdjoint x)
   证明: by
   rw [← RCLike.re_eq_complex_re]
   exact RCLike.re_eq_ofReal_of_isSelfAdjoint hx
@@ -1672,8 +1672,8 @@ lemma ofReal_eq_re_of_isSelfAdjoint
   exact RCLike.ofReal_eq_re_of_isSelfAdjoint hx
 
 中文:
-引理 ofReal_eq_re_of_isSelfAdjoint
-  条件: {x : Complex} {y : 实数} (hx : IsSelfAdjoint x)
+引理 of实数_eq_re_of_isSelfAdjoint
+  条件: {x : 复形} {y : 实数} (hx : IsSelfAdjoint x)
   证明: by
   rw [← RCLike.re_eq_complex_re]
   exact RCLike.ofReal_eq_re_of_isSelfAdjoint hx
@@ -1863,7 +1863,7 @@ theorem isometry_intCast
 
 中文:
 定理 isometry_intCast
-  结论: Isometry ((↑) : 整数 -> Complex)
+  结论: 等距 ((↑) : 整数 -> 复形)
   证明: Isometry.of_dist_eq by simp_rw [← Complex.ofReal_intCast,
     Complex.isometry_ofReal.dist_eq, Int.dist_cast_real, implies_true]
 
@@ -1885,7 +1885,7 @@ theorem isClosedEmbedding_intCast
 
 中文:
 定理 isClosedEmbedding_intCast
-  结论: IsClosedEmbedding ((↑) : 整数 -> Complex)
+  结论: 是闭嵌入 ((↑) : 整数 -> 复形)
   证明: isometry_intCast.isClosedEmbedding
 
 @[deprecated (since := "2026-04-15")] alias closedEmbedding_intCast := isClosedEmbedding_intCast
@@ -1907,7 +1907,7 @@ lemma isClosed_range_intCast
 
 中文:
 引理 isClosed_range_intCast
-  结论: IsClosed (Set.range ((↑) : 整数 -> Complex))
+  结论: 是闭集 (集合.range ((↑) : 整数 -> 复形))
   证明: Complex.isClosedEmbedding_intCast.isClosed_range
 
 Depends on / 依赖: Complex.isClosedEmbedding_intCast.isClosed_range, isClosedEmbedding_intCast, isClosed_range
@@ -1925,7 +1925,7 @@ lemma isOpen_compl_range_intCast
 
 中文:
 引理 isOpen_compl_range_intCast
-  结论: IsOpen (Set.range ((↑) : 整数 -> Complex))ᶜ
+  结论: 是开集 (集合.range ((↑) : 整数 -> 复形))ᶜ
   证明: Complex.isClosed_range_intCast.isOpen_compl
 
 Depends on / 依赖: Complex.isClosed_range_intCast.isOpen_compl, isClosed_range_intCast, isOpen_compl
@@ -1950,7 +1950,7 @@ theorem eq_coe_norm_of_nonneg
 
 中文:
 定理 eq_coe_norm_of_nonneg
-  条件: {z : Complex} (hz : 0 <= z)
+  条件: {z : 复形} (hz : 0 <= z)
   结论: z = ↑‖z‖
   证明: by
   lift z to Real using hz.2.symm
@@ -1974,7 +1974,7 @@ scoped[ComplexOrder] attribute [instance] Complex.orderClosedTopology
 
 中文:
 引理 orderClosedTopology
-  结论: OrderClosedTopology Complex
+  结论: OrderClosed拓扑 复形
   证明: RCLike.instOrderClosedTopology
 
 scoped[ComplexOrder] attribute [instance] Complex.orderClosedTopology
@@ -1998,7 +1998,7 @@ theorem norm_of_nonneg'
 
 中文:
 定理 norm_of_nonneg'
-  条件: {x : Complex} (hx : 0 <= x)
+  条件: {x : 复形} (hx : 0 <= x)
   结论: ‖x‖ = x
   证明: by
   rw [← RCLike.ofReal_eq_complex_ofReal]
@@ -2025,7 +2025,7 @@ lemma re_nonneg_iff_nonneg
 
 中文:
 引理 re_nonneg_iff_nonneg
-  条件: {x : Complex} (hx : IsSelfAdjoint x)
+  条件: {x : 复形} (hx : IsSelfAdjoint x)
   结论: 0 <= re x ↔ 0 <= x
   证明: by
   rw [← RCLike.re_eq_complex_re]
@@ -2053,7 +2053,7 @@ lemma re_le_re
 
 中文:
 引理 re_le_re
-  条件: {x y : Complex} (h : x <= y)
+  条件: {x y : 复形} (h : x <= y)
   结论: re x <= re y
   证明: by
   rw [RCLike.le_iff_re_im] at h
@@ -2092,7 +2092,7 @@ theorem re_to_complex
 
 中文:
 定理 re_to_complex
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: reC x = x.re
   证明: rfl
 
@@ -2115,7 +2115,7 @@ theorem im_to_complex
 
 中文:
 定理 im_to_complex
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: imC x = x.im
   证明: rfl
 
@@ -2137,7 +2137,7 @@ theorem I_to_complex
 
 中文:
 定理 I_to_complex
-  结论: IC = Complex.I
+  结论: IC = 复形.I
   证明: rfl
 
 @[simp]
@@ -2157,8 +2157,8 @@ theorem normSq_to_complex
 
 中文:
 定理 normSq_to_complex
-  条件: {x : Complex}
-  结论: norm_sqC x = Complex.normSq x
+  条件: {x : 复形}
+  结论: norm_sqC x = 复形.normSq x
   证明: rfl
 -/
 theorem normSq_to_complex {x : Complex} : norm_sqC x = Complex.normSq x :=
@@ -2273,7 +2273,7 @@ theorem hasSum_ofReal
 @[simp, norm_cast]
 
 中文:
-定理 hasSum_ofReal
+定理 hasSum_of实数
   条件: {f : α -> 实数} {x : 实数}
   结论: HasSum (fun x => (f x : 𝕜)) x L ↔ HasSum f x L
   证明: ⟨fun h => by simpa only [RCLike.reCLM_apply, RCLike.ofReal_re] using reCLM.hasSum h,
@@ -2301,7 +2301,7 @@ theorem summable_ofReal
 @[norm_cast]
 
 中文:
-定理 summable_ofReal
+定理 summable_of实数
   条件: {f : α -> 实数}
   结论: Summable (fun x => (f x : 𝕜)) L ↔ Summable f L
   证明: ⟨fun h => by simpa only [RCLike.reCLM_apply, RCLike.ofReal_re] using reCLM.summable h,
@@ -2326,7 +2326,7 @@ theorem ofReal_tsum
   proof: Function.LeftInverse.map_tsum f ofRealCLM.continuous continuous_re (fun _ => by simp)
 
 中文:
-定理 ofReal_tsum
+定理 of实数_tsum
   条件: (f : α -> 实数)
   结论: (↑(∑'[L] a, f a) : 𝕜) = ∑'[L] a, (f a : 𝕜)
   证明: Function.LeftInverse.map_tsum f ofRealCLM.continuous continuous_re (fun _ => by simp)
@@ -2480,7 +2480,7 @@ theorem hasSum_conj
 
 中文:
 定理 hasSum_conj
-  条件: {f : α -> Complex} {x : Complex}
+  条件: {f : α -> 复形} {x : 复形}
   结论: HasSum (fun x => conj (f x)) x L ↔ HasSum f (conj x) L
   证明: RCLike.hasSum_conj _
 
@@ -2500,7 +2500,7 @@ theorem hasSum_conj'
 
 中文:
 定理 hasSum_conj'
-  条件: {f : α -> Complex} {x : Complex}
+  条件: {f : α -> 复形} {x : 复形}
   结论: HasSum (fun x => conj (f x)) (conj x) L ↔ HasSum f x L
   证明: RCLike.hasSum_conj' _
 
@@ -2520,7 +2520,7 @@ theorem summable_conj
 
 中文:
 定理 summable_conj
-  条件: {f : α -> Complex}
+  条件: {f : α -> 复形}
   结论: (Summable fun x => conj (f x)) ↔ Summable f
   证明: RCLike.summable_conj _
 
@@ -2542,7 +2542,7 @@ theorem conj_tsum
 
 中文:
 定理 conj_tsum
-  条件: (f : α -> Complex)
+  条件: (f : α -> 复形)
   结论: conj (∑'[L] a, f a) = ∑'[L] a, conj (f a)
   证明: RCLike.conj_tsum _
 
@@ -2566,9 +2566,9 @@ theorem hasSum_ofReal
 @[simp, norm_cast]
 
 中文:
-定理 hasSum_ofReal
+定理 hasSum_of实数
   条件: {f : α -> 实数} {x : 实数}
-  结论: HasSum (fun x => (f x : Complex)) x L ↔ HasSum f x L
+  结论: HasSum (fun x => (f x : 复形)) x L ↔ HasSum f x L
   证明: RCLike.hasSum_ofReal _
 
 @[simp, norm_cast]
@@ -2591,9 +2591,9 @@ theorem summable_ofReal
 @[norm_cast]
 
 中文:
-定理 summable_ofReal
+定理 summable_of实数
   条件: {f : α -> 实数}
-  结论: (Summable (fun x => (f x : Complex)) L) ↔ Summable f L
+  结论: (Summable (fun x => (f x : 复形)) L) ↔ Summable f L
   证明: RCLike.summable_ofReal _
 
 @[norm_cast]
@@ -2614,9 +2614,9 @@ theorem ofReal_tsum
   proof: RCLike.ofReal_tsum _ _
 
 中文:
-定理 ofReal_tsum
+定理 of实数_tsum
   条件: (f : α -> 实数)
-  结论: (↑(∑'[L] a, f a) : Complex) = ∑'[L] a, ↑(f a)
+  结论: (↑(∑'[L] a, f a) : 复形) = ∑'[L] a, ↑(f a)
   证明: RCLike.ofReal_tsum _ _
 
 Depends on / 依赖: RCLike, RCLike.ofReal_tsum, ofReal_tsum
@@ -2635,7 +2635,7 @@ theorem hasSum_re
 
 中文:
 定理 hasSum_re
-  条件: {f : α -> Complex} {x : Complex} (h : HasSum f x L)
+  条件: {f : α -> 复形} {x : 复形} (h : HasSum f x L)
   结论: HasSum (fun x => (f x).re) x.re L
   证明: RCLike.hasSum_re Complex h
 
@@ -2655,7 +2655,7 @@ theorem hasSum_im
 
 中文:
 定理 hasSum_im
-  条件: {f : α -> Complex} {x : Complex} (h : HasSum f x L)
+  条件: {f : α -> 复形} {x : 复形} (h : HasSum f x L)
   结论: HasSum (fun x => (f x).im) x.im L
   证明: RCLike.hasSum_im Complex h
 
@@ -2675,7 +2675,7 @@ theorem re_tsum
 
 中文:
 定理 re_tsum
-  条件: [L.NeBot] {f : α -> Complex} (h : Summable f L)
+  条件: [L.NeBot] {f : α -> 复形} (h : Summable f L)
   结论: (∑'[L] a, f a).re = ∑'[L] a, (f a).re
   证明: RCLike.re_tsum _ h
 
@@ -2695,7 +2695,7 @@ theorem im_tsum
 
 中文:
 定理 im_tsum
-  条件: [L.NeBot] {f : α -> Complex} (h : Summable f L)
+  条件: [L.NeBot] {f : α -> 复形} (h : Summable f L)
   结论: (∑'[L] a, f a).im = ∑'[L] a, (f a).im
   证明: RCLike.im_tsum _ h
 
@@ -2714,7 +2714,7 @@ theorem hasSum_iff
 
 中文:
 定理 hasSum_iff
-  条件: (f : α -> Complex) (c : Complex)
+  条件: (f : α -> 复形) (c : 复形)
   证明: RCLike.hasSum_iff _ _
 
 Depends on / 依赖: RCLike, RCLike.hasSum_iff, hasSum_iff
@@ -2743,7 +2743,7 @@ definition slitPlane
 
 中文:
 定义 slitPlane
-  签名: : Set Complex
+  签名: : 集合 复形
   定义体: {z | 0 < z.re ∨ z.im != 0}
 
 Depends on / 依赖: z.im, z.re
@@ -2761,7 +2761,7 @@ lemma mem_slitPlane_iff
 
 中文:
 引理 mem_slitPlane_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z in slitPlane ↔ 0 < z.re ∨ z.im != 0
   证明: Set.mem_ofPred
 
@@ -2785,7 +2785,7 @@ lemma mem_slitPlane_or_neg_mem_slitPlane
 
 中文:
 引理 mem_slitPlane_or_neg_mem_slitPlane
-  条件: {z : Complex} (hz : z != 0)
+  条件: {z : 复形} (hz : z != 0)
   证明: by
   rw [mem_slitPlane_iff]; rw [mem_slitPlane_iff]
   rw [ne_eq]; rw [Complex.ext_iff] at hz
@@ -2834,7 +2834,7 @@ lemma isOpen_slitPlane
 
 中文:
 引理 isOpen_slitPlane
-  结论: IsOpen slitPlane
+  结论: 是开集 slitPlane
   证明: (isOpen_lt continuous_const continuous_re).union (isOpen_ne_fun continuous_im continuous_const)
 
 @[simp]
@@ -2857,7 +2857,7 @@ lemma ofReal_mem_slitPlane
 @[simp]
 
 中文:
-引理 ofReal_mem_slitPlane
+引理 of实数_mem_slitPlane
   条件: {x : 实数}
   结论: ↑x in slitPlane ↔ 0 < x
   证明: by simp [mem_slitPlane_iff]
@@ -2880,7 +2880,7 @@ lemma neg_ofReal_mem_slitPlane
   simpa using ofReal_mem_slitPlane (x := -x)
 
 中文:
-引理 neg_ofReal_mem_slitPlane
+引理 neg_of实数_mem_slitPlane
   条件: {x : 实数}
   结论: -↑x in slitPlane ↔ x < 0
   证明: by
@@ -2970,7 +2970,7 @@ lemma ofNat_mem_slitPlane
   proof: natCast_mem_slitPlane.2 (NeZero.ne n)
 
 中文:
-引理 ofNat_mem_slitPlane
+引理 of自然数_mem_slitPlane
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: of自然数(n) in slitPlane
   证明: natCast_mem_slitPlane.2 (NeZero.ne n)
@@ -2991,7 +2991,7 @@ lemma mem_slitPlane_iff_not_le_zero
 
 中文:
 引理 mem_slitPlane_iff_not_le_zero
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z in slitPlane ↔ ¬z <= 0
   证明: mem_slitPlane_iff.trans not_le_zero_iff.symm
 
@@ -3011,7 +3011,7 @@ lemma compl_Iic_zero
 
 中文:
 引理 compl_Iic_zero
-  结论: (Set.Iic 0)ᶜ = slitPlane
+  结论: (集合.左无界右闭区间 0)ᶜ = slitPlane
   证明: Set.ext fun _ =>
   mem_slitPlane_iff_not_le_zero.symm
 -/
@@ -3029,7 +3029,7 @@ lemma slitPlane_ne_zero
 
 中文:
 引理 slitPlane_ne_zero
-  条件: {z : Complex} (hz : z in slitPlane)
+  条件: {z : 复形} (hz : z in slitPlane)
   结论: z != 0
   证明: ne_of_mem_of_not_mem hz zero_notMem_slitPlane
 
@@ -3075,7 +3075,7 @@ lemma mem_slitPlane_of_norm_lt_one
 
 中文:
 引理 mem_slitPlane_of_norm_lt_one
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   结论: 1 + z in slitPlane
   证明: ball_one_subset_slitPlane by simpa
 
@@ -3101,7 +3101,7 @@ lemma subset_slitPlane_iff_of_subset_sphere
 
 中文:
 引理 subset_slitPlane_iff_of_subset_sphere
-  条件: {r : 实数} {s : Set Complex} (hs : s subseteq sphere 0 r)
+  条件: {r : 实数} {s : 集合 复形} (hs : s subseteq sphere 0 r)
   证明: by
   simp_rw [Set.subset_def, mem_slitPlane_iff_not_le_zero]
   contrapose!
@@ -3132,8 +3132,8 @@ lemma _root_.IsCompact.reProdIm
   proof: equivRealProdCLM.toHomeomorph.isCompact_preimage.2 (hs.prod ht)
 
 中文:
-引理 _root_.IsCompact.reProdIm
-  条件: {s t : Set 实数} (hs : IsCompact s) (ht : IsCompact t)
+引理 _root_.是紧集.reProdIm
+  条件: {s t : 集合 实数} (hs : 是紧集 s) (ht : 是紧集 t)
   证明: equivRealProdCLM.toHomeomorph.isCompact_preimage.2 (hs.prod ht)
 
 Depends on / 依赖: equivRealProdCLM, equivRealProdCLM.toHomeomorph.isCompact_preimage, hs.prod, isCompact_preimage, toHomeomorph

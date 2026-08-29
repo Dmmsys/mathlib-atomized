@@ -43,8 +43,8 @@ theorem IsLocalizedModule.isBaseChange
     cases h₂
 
 中文:
-定理 IsLocalizedModule.isBaseChange
-  条件: [IsLocalizedModule S f]
+定理 是Localized模.isBaseChange
+  条件: [是Localized模 S f]
   结论: IsBaseChange A f
   证明: .of_lift_unique _ fun Q _ _ _ _ g => by
     obtain ⟨ℓ, rfl, h₂⟩ := IsLocalizedModule.is_universal S f g fun s => by
@@ -93,7 +93,7 @@ theorem isLocalizedModule_iff_isBaseChange
 
 中文:
 定理 isLocalizedModule_iff_isBaseChange
-  结论: IsLocalizedModule S f ↔ IsBaseChange A f
+  结论: 是Localized模 S f ↔ IsBaseChange A f
   证明: by
   refine ⟨fun _ => IsLocalizedModule.isBaseChange S A f, fun h => ?_⟩
   let : Module A (LocalizedModule S M) := LocalizedModule.moduleOfIsLocalization ..
@@ -234,7 +234,7 @@ instance tensorProduct_isLocalizedModule
 
 中文:
 实例 tensorProduct_isLocalizedModule
-  签名: : IsLocalizedModule S (TensorProduct.mk R A M 1)
+  签名: : 是Localized模 S (张量积.mk R A M 1)
   定义体: (isLocalizedModule_iff_isBaseChange _ A _).mpr (TensorProduct.isBaseChange _ _ _)
 
 Depends on / 依赖: TensorProduct, TensorProduct.isBaseChange, isBaseChange, isLocalizedModule_iff_isBaseChange
@@ -262,7 +262,7 @@ theorem tensorProduct_compatibleSMul
 
 中文:
 定理 tensorProduct_compatibleSMul
-  结论: CompatibleSMul R A M₁ M₂ where
+  结论: 余mpatibleSMul R A M₁ M₂ where
   证明: by
     obtain ⟨r, s, rfl⟩ := exists_mk'_eq S a
     rw [← (map_units A s).smul_left_cancel]
@@ -287,8 +287,8 @@ instance [Module
   body: tensorProduct_compatibleSMul S ..
 
 中文:
-实例 [Module
-  签名: (Localization S) M₁] [Module (Localization S) M₂]
+实例 [模
+  签名: (Localization S) M₁] [模 (Localization S) M₂]
   定义体: tensorProduct_compatibleSMul S ..
 
 Depends on / 依赖: Nonempty, asymptoticNhds_eq_smul_vadd, infer_instance, tensorProduct_compatibleSMul
@@ -405,7 +405,7 @@ theorem bijective_linearMap_mul'
 
 中文:
 定理 bijective_linearMap_mul'
-  结论: Function.Bijective (LinearMap.mul' R A)
+  结论: 函数.双射 (线性映射.mul' R A)
   证明: have := tensorProduct_compatibleSMul S A A A
   (Algebra.TensorProduct.lmulEquiv R A).bijective
 
@@ -432,7 +432,7 @@ lemma Algebra.isLocalization_iff_isPushout
   rw [← isLocalizedModule_iff_isBaseChange (S := S)]
 
 中文:
-引理 Algebra.isLocalization_iff_isPushout
+引理 代数.isLocalization_iff_isPushout
   证明: by
   rw [Algebra.IsPushout.comm]; rw [Algebra.isPushout_iff]; rw [← isLocalizedModule_iff_isLocalization]
   rw [← isLocalizedModule_iff_isBaseChange (S := S)]
@@ -453,8 +453,8 @@ lemma Algebra.isPushout_of_isLocalization
   proof: (Algebra.isLocalization_iff_isPushout S _).mp inferInstance
 
 中文:
-引理 Algebra.isPushout_of_isLocalization
-  条件: [IsLocalization (Algebra.algebraMapSubmonoid T S) B]
+引理 代数.isPushout_of_isLocalization
+  条件: [是Localization (代数.algebraMapSubmonoid T S) B]
   证明: (Algebra.isLocalization_iff_isPushout S _).mp inferInstance
 
 Depends on / 依赖: Algebra, Algebra.isLocalization_iff_isPushout, isLocalization_iff_isPushout
@@ -474,8 +474,8 @@ lemma Submonoid.map_isUnit_le_isUnit
   exact hy.map _
 
 中文:
-引理 Submonoid.map_isUnit_le_isUnit
-  结论: {M N : 类型} [Monoid M] [Monoid N]
+引理 子幺半群.map_isUnit_le_isUnit
+  结论: {M N : 类型} [幺半群 M] [幺半群 N]
   证明: by
   rintro x ⟨y, hy, rfl⟩
   exact hy.map _
@@ -499,8 +499,8 @@ lemma Algebra.algebraMapSubmonoid_isUnit_le_isUnit
   exact hy.map _
 
 中文:
-引理 Algebra.algebraMapSubmonoid_isUnit_le_isUnit
-  结论: {R S : 类型} [CommSemiring R] [Semiring S]
+引理 代数.algebraMapSubmonoid_isUnit_le_isUnit
+  结论: {R S : 类型} [交换半环 R] [半环 S]
   证明: by
   rintro x ⟨y, hy, rfl⟩
   exact hy.map _
@@ -529,8 +529,8 @@ lemma Algebra.IsPushout.of_bijective_left
   apply isPushout_of_isLocalization (IsUnit.submonoid R)
 
 中文:
-引理 Algebra.IsPushout.of_bijective_left
-  结论: [Algebra A T] [IsScalarTower R A T]
+引理 代数.是推出.of_bijective_left
+  结论: [代数 A T] [标量塔 R A T]
   证明: by
   have : IsLocalization (IsUnit.submonoid R) A :=
     IsLocalization.of_le_isUnit_of_bijective Algebra.algebraMapSubmonoid_isUnit_le_isUnit H
@@ -558,8 +558,8 @@ lemma Algebra.IsPushout.of_bijective_right
   apply Algebra.isPushout_of_isLocalization (IsUnit.submonoid R)
 
 中文:
-引理 Algebra.IsPushout.of_bijective_right
-  结论: [Algebra A T] [IsScalarTower R A T]
+引理 代数.是推出.of_bijective_right
+  结论: [代数 A T] [标量塔 R A T]
   证明: by
   have : IsLocalization (algebraMapSubmonoid A (IsUnit.submonoid R)) T := by
     apply IsLocalization.of_le_isUnit_of_bijective _ H
@@ -612,8 +612,8 @@ theorem IsLocalizedModule.map_linearCombination
     ext; simp [IsLocalizedModule.map_comp]
 
 中文:
-定理 IsLocalizedModule.map_linearCombination
-  条件: {α : 类型} {v : α -> M} [IsLocalizedModule S f]
+定理 是Localized模.map_linearCombination
+  条件: {α : 类型} {v : α -> M} [是Localized模 S f]
   证明: linearMap_ext (S := S) (mapRange.linearMap (Algebra.linearMap R A)) f by
     ext; simp [IsLocalizedModule.map_comp]
 
@@ -646,8 +646,8 @@ instance IsLocalizedModule.rTensor
 IsScalarTower.of_algebraMap_smul fun r x => by simp [IsScalarTower.algebra
 
 中文:
-实例 IsLocalizedModule.rTensor
-  签名: (g : M ->ₗ[A] M') [h : IsLocalizedModule S g]
+实例 是Localized模.rTensor
+  签名: (g : M ->ₗ[A] M') [h : 是Localized模 S g]
   定义体: by
   let Aₚ := Localization S
   let : Module Aₚ M' := (IsLocalizedModule.iso S g).symm.toAddEquiv.module Aₚ
@@ -682,8 +682,8 @@ lemma IsLocalizedModule.map_lTensor
   simp
 
 中文:
-引理 IsLocalizedModule.map_lTensor
-  条件: (g : M ->ₗ[A] M') [h : IsLocalizedModule S g]
+引理 是Localized模.map_lTensor
+  条件: (g : M ->ₗ[A] M') [h : 是Localized模 S g]
   证明: by
   apply linearMap_ext S (AlgebraTensorModule.rTensor R N g) (AlgebraTensorModule.rTensor R P g)
   rw [map_comp]
@@ -719,8 +719,8 @@ instance IsLocalization.tensor
   infer_instance
 
 中文:
-实例 IsLocalization.tensor
-  签名: (M : Submonoid R) [IsLocalization M A]
+实例 是Localization.tensor
+  签名: (M : 子幺半群 R) [是Localization M A]
   定义体: by
   let _ : Algebra A (S otimes[R] A) := Algebra.TensorProduct.rightAlgebra
   rw [Algebra.isLocalization_iff_isPushout _ A]
@@ -746,8 +746,8 @@ instance IsLocalization.tensorRight
   infer_instance
 
 中文:
-实例 IsLocalization.tensorRight
-  签名: (M : Submonoid R) [IsLocalization M A]
+实例 是Localization.tensorRight
+  签名: (M : 子幺半群 R) [是Localization M A]
   定义体: by
   rw [Algebra.isLocalization_iff_isPushout _ A]
   infer_instance
@@ -770,8 +770,8 @@ lemma IsLocalization.tmul_mk'
   rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [Ring
 
 中文:
-引理 IsLocalization.tmul_mk'
-  条件: (M : Submonoid R) [IsLocalization M A] (s : S) (x : R) (y : M)
+引理 是Localization.tmul_mk'
+  条件: (M : 子幺半群 R) [是Localization M A] (s : S) (x : R) (y : M)
   证明: by
   rw [IsLocalization.eq_mk'_iff_mul_eq]; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [RingHomCompTriple.comp_apply]; rw [tmul_one_eq_one_tmul]; rw [tmul_mul_tmul]; rw [mul_one]; rw [mul_comm]; rw [IsLocalization.mk'_spec']; rw [algebraMap_apply]; rw [Algebra.algebraMap_self]; rw [Ring
 
@@ -796,8 +796,8 @@ lemma IsLocalization.mk'_tmul
     RingHom.algebraMap_toAlgebra]
 
 中文:
-引理 IsLocalization.mk'_tmul
-  条件: (M : Submonoid R) [IsLocalization M A] (s : S) (x : R) (y : M)
+引理 是Localization.mk'_tmul
+  条件: (M : 子幺半群 R) [是Localization M A] (s : S) (x : R) (y : M)
   证明: by
   simp [IsLocalization.eq_mk'_iff_mul_eq, map_mul,
     RingHom.algebraMap_toAlgebra]
@@ -978,8 +978,8 @@ lemma IsLocalization.tensorProduct_tensorProduct
     (Algebra.IsPushout.tensorProduct_tensorProduct R S A B H).symm
 
 中文:
-引理 IsLocalization.tensorProduct_tensorProduct
-  结论: (M : Submonoid A)
+引理 是Localization.tensorProduct_tensorProduct
+  结论: (M : 子幺半群 A)
   证明: (Algebra.isLocalization_iff_isPushout M _).mpr
     (Algebra.IsPushout.tensorProduct_tensorProduct R S A B H).symm
 
@@ -1012,8 +1012,8 @@ lemma IsLocalization.tensorProduct_tensorProduct_right
     
 
 中文:
-引理 IsLocalization.tensorProduct_tensorProduct_right
-  结论: (M : Submonoid A)
+引理 是Localization.tensorProduct_tensorProduct_right
+  结论: (M : 子幺半群 A)
   证明: by
   change IsLocalization (Algebra.algebraMapSubmonoid _ M) (S otimes[R] B)
   let : Algebra A (S otimes[R] B) := .compHom _ (algebraMap A B)
@@ -1057,8 +1057,8 @@ definition IsLocalization.tensorProductEquivOfMapIncludeRight
   haveI : IsScalarTower S (S otimes[R] A) (S otimes[R] B) :
 
 中文:
-定义 IsLocalization.tensorProductEquivOfMapIncludeRight
-  签名: (M : Submonoid A)
+定义 是Localization.tensorProductEquivOfMapIncludeRight
+  签名: (M : 子幺半群 A)
   定义体: letI M' : Submonoid (S otimes[R] A) := M.map (Algebra.TensorProduct.includeRight (R := R) (A := S))
   letI : Algebra (S otimes[R] A) (S otimes[R] B) :=
     (Algebra.TensorProduct.map (AlgHom.id R S) (IsScalarTower.toAlgHom R _ _)).toAlgebra
@@ -1094,8 +1094,8 @@ lemma IsLocalization.tensorProductEquivOfMapIncludeRight_tmul
   simp [heq, IsLocalization.tensorProductEquivOfMapIncludeRight]
 
 中文:
-引理 IsLocalization.tensorProductEquivOfMapIncludeRight_tmul
-  结论: (M : Submonoid A)
+引理 是Localization.tensorProductEquivOfMapIncludeRight_tmul
+  结论: (M : 子幺半群 A)
   证明: by
   let : Algebra (S otimes[R] A) (S otimes[R] B) :=
     (Algebra.TensorProduct.map (AlgHom.id R S) (IsScalarTower.toAlgHom R _ _)).toAlgebra
@@ -1132,8 +1132,8 @@ definition IsLocalization.Away.tensorProductEquivTMulRight
   IsLocalization.tensorProductEquivO
 
 中文:
-定义 IsLocalization.Away.tensorProductEquivTMulRight
-  签名: (g : A) (B : 类型) [CommSemiring B]
+定义 是Localization.Away.tensorProductEquivTMulRight
+  签名: (g : A) (B : 类型) [交换半环 B]
   定义体: haveI : IsLocalization
       ((Submonoid.powers g).map (Algebra.TensorProduct.includeRight (R := R) (A := S)))
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
@@ -1168,8 +1168,8 @@ lemma IsLocalization.Away.tensorProductEquivTMulRight_tmul
   IsLocalization.tensorProductEquivO
 
 中文:
-引理 IsLocalization.Away.tensorProductEquivTMulRight_tmul
-  结论: (g : A) (B : 类型) [CommSemiring B]
+引理 是Localization.Away.tensorProductEquivTMulRight_tmul
+  结论: (g : A) (B : 类型) [交换半环 B]
   证明: haveI : IsLocalization
       ((Submonoid.powers g).map (Algebra.TensorProduct.includeRight (R := R) (A := S)))
       (Localization.Away ((1 : S) otimesₜ[R] g)) := by
@@ -1205,7 +1205,7 @@ instance tensor
 
 中文:
 实例 tensor
-  签名: [IsLocalization.Away r A]
+  签名: [是Localization.Away r A]
   定义体: by
   simp only [IsLocalization.Away, ← Algebra.algebraMapSubmonoid_powers]
   infer_instance
@@ -1228,7 +1228,7 @@ abbreviation tensorEquiv
 
 中文:
 缩写 tensorEquiv
-  签名: [IsLocalization.Away r A]
+  签名: [是Localization.Away r A]
   定义体: IsLocalization.algEquiv (Submonoid.powers <| algebraMap R S r) _ _
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, Submonoid, Submonoid.powers, algEquiv, algebraMap, powers
@@ -1251,7 +1251,7 @@ instance tensorRight
 
 中文:
 实例 tensorRight
-  签名: [IsLocalization.Away r A]
+  签名: [是Localization.Away r A]
   定义体: by
   simp only [IsLocalization.Away, ← Algebra.algebraMapSubmonoid_powers]
   infer_instance
@@ -1274,7 +1274,7 @@ abbreviation tensorRightEquiv
 
 中文:
 缩写 tensorRightEquiv
-  签名: [IsLocalization.Away r A]
+  签名: [是Localization.Away r A]
   定义体: IsLocalization.algEquiv (Submonoid.powers <| algebraMap R S r) _ _
 
 Depends on / 依赖: IsLocalization, IsLocalization.algEquiv, Submonoid, Submonoid.powers, algEquiv, algebraMap, powers

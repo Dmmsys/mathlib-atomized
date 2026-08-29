@@ -57,9 +57,9 @@ structure IntermediateField
     - inv_mem' : forall x in carrier, x⁻¹ in carrier
 
 中文:
-结构 IntermediateField
-  参数: extends Subalgebra K L
-  继承: Subalgebra K L
+结构 中间域
+  参数: extends 子代数 K L
+  继承: 子代数 K L
   公理与运算 (1 个):
     - inv_mem' : 对任意 x in carrier, x⁻¹ in carrier
 -/
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (整数ermediateField K L) L
+  签名: 集合状 (中间域 K L) L
   定义体: ⟨fun S => S.toSubalgebra.carrier, by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
     simp ⟩
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (整数ermediateField K L)
+  签名: 偏序 (中间域 K L)
   定义体: .ofSetLike (IntermediateField K L) L
 
 Depends on / 依赖: IntermediateField, ofSetLike
@@ -149,7 +149,7 @@ definition toSubfield
 
 中文:
 定义 toSubfield
-  签名: : Subfield L
+  签名: : 子域 L
   定义体: { S.toSubalgebra with
     neg_mem' := S.neg_mem,
     inv_mem' := S.inv_mem' }
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubfieldClass (整数ermediateField K L) L
+  签名: 子域类 (中间域 K L) L
   定义体: s.add_mem'
   zero_mem {s} := s.zero_mem'
   neg_mem {s} := s.neg_mem
@@ -205,7 +205,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : 整数ermediateField K L} {x : L}
+  条件: {s : 中间域 K L} {x : L}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -229,7 +229,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : 整数ermediateField K L} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 中间域 K L} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -253,7 +253,7 @@ theorem coe_toSubalgebra
 
 中文:
 定理 coe_toSubalgebra
-  结论: (S.toSubalgebra : Set L) = S
+  结论: (S.toSubalgebra : 集合 L) = S
   证明: rfl
 
 @[simp]
@@ -274,7 +274,7 @@ theorem coe_toSubfield
 
 中文:
 定理 coe_toSubfield
-  结论: (S.toSubfield : Set L) = S
+  结论: (S.toSubfield : 集合 L) = S
   证明: rfl
 
 @[simp]
@@ -295,7 +295,7 @@ theorem coe_type_toSubalgebra
 
 中文:
 定理 coe_type_toSubalgebra
-  结论: (S.toSubalgebra : Type _) = S
+  结论: (S.toSubalgebra : 类型 _) = S
   证明: rfl
 
 @[simp]
@@ -316,7 +316,7 @@ theorem coe_type_toSubfield
 
 中文:
 定理 coe_type_toSubfield
-  结论: (S.toSubfield : Type _) = S
+  结论: (S.toSubfield : 类型 _) = S
   证明: rfl
 
 @[simp]
@@ -337,7 +337,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: (s : Subsemiring L) (hK : 对任意 x, algebraMap K L x in s) (hi) (x : L)
+  条件: (s : 子半环 L) (hK : 对任意 x, algebraMap K L x in s) (hi) (x : L)
   证明: Iff.rfl
 
 @[simp]
@@ -360,7 +360,7 @@ theorem mem_toSubalgebra
 
 中文:
 定理 mem_toSubalgebra
-  条件: (s : 整数ermediateField K L) (x : L)
+  条件: (s : 中间域 K L) (x : L)
   结论: x in s.toSubalgebra ↔ x in s
   证明: Iff.rfl
 
@@ -380,7 +380,7 @@ theorem mem_toSubfield
 
 中文:
 定理 mem_toSubfield
-  条件: (s : 整数ermediateField K L) (x : L)
+  条件: (s : 中间域 K L) (x : L)
   结论: x in s.toSubfield ↔ x in s
   证明: Iff.rfl
 
@@ -416,7 +416,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : 整数ermediateField K L) (s : Set L) (hs : s = ↑S)
+  签名: (S : 中间域 K L) (s : 集合 L) (hs : s = ↑S)
   定义体: S.toSubalgebra.copy s hs
   inv_mem' := hs.symm ▸ S.inv_mem'
 
@@ -438,7 +438,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : 整数ermediateField K L) (s : Set L) (hs : s = ↑S)
+  条件: (S : 中间域 K L) (s : 集合 L) (hs : s = ↑S)
   证明: rfl
 -/
 theorem coe_copy (S : IntermediateField K L) (s : Set L) (hs : s = ↑S) :
@@ -456,7 +456,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : 整数ermediateField K L) (s : Set L) (hs : s = ↑S)
+  条件: (S : 中间域 K L) (s : 集合 L) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -648,8 +648,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {l : List L}
-  结论: (对任意 x in l, x in S) -> l.prod in S
+  条件: {l : 列表 L}
+  结论: (对任意 x in l, x in S) -> l.乘积 in S
   证明: list_prod_mem
 -/
 protected theorem list_prod_mem {l : List L} : (forall x in l, x in S) -> l.prod in S :=
@@ -666,8 +666,8 @@ theorem list_sum_mem
 
 中文:
 定理 list_sum_mem
-  条件: {l : List L}
-  结论: (对任意 x in l, x in S) -> l.sum in S
+  条件: {l : 列表 L}
+  结论: (对任意 x in l, x in S) -> l.求和 in S
   证明: list_sum_mem
 -/
 protected theorem list_sum_mem {l : List L} : (forall x in l, x in S) -> l.sum in S :=
@@ -685,7 +685,7 @@ theorem multiset_prod_mem
 中文:
 定理 multiset_prod_mem
   条件: (m : Multiset L)
-  结论: (对任意 a in m, a in S) -> m.prod in S
+  结论: (对任意 a in m, a in S) -> m.乘积 in S
   证明: multiset_prod_mem m
 
 Depends on / 依赖: c.mul, c.refl
@@ -705,7 +705,7 @@ theorem multiset_sum_mem
 中文:
 定理 multiset_sum_mem
   条件: (m : Multiset L)
-  结论: (对任意 a in m, a in S) -> m.sum in S
+  结论: (对任意 a in m, a in S) -> m.求和 in S
   证明: multiset_sum_mem m
 -/
 protected theorem multiset_sum_mem (m : Multiset L) : (forall a in m, a in S) -> m.sum in S :=
@@ -721,7 +721,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  条件: {ι : 类型} {t : Finset ι} {f : ι -> L} (h : 对任意 c in t, f c in S)
+  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> L} (h : 对任意 c in t, f c in S)
   证明: prod_mem h
 -/
 protected theorem prod_mem {ι : Type*} {t : Finset ι} {f : ι -> L} (h : forall c in t, f c in S) :
@@ -738,7 +738,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  条件: {ι : 类型} {t : Finset ι} {f : ι -> L} (h : 对任意 c in t, f c in S)
+  条件: {ι : 类型} {t : 有限集 ι} {f : ι -> L} (h : 对任意 c in t, f c in S)
   证明: sum_mem h
 -/
 protected theorem sum_mem {ι : Type*} {t : Finset ι} {f : ι -> L} (h : forall c in t, f c in S) :
@@ -1008,7 +1008,7 @@ instance instSMulMemClass
 
 中文:
 实例 instSMulMemClass
-  签名: : SMulMemClass (整数ermediateField K L) K L where
+  签名: : SMulMem类 (中间域 K L) K L where
   定义体: fun _ _ hx => IntermediateField.smul_mem _ hx
 
 Depends on / 依赖: IntermediateField, IntermediateField.smul_mem, smul_mem
@@ -1030,8 +1030,8 @@ definition Subalgebra.toIntermediateField
 @[simp]
 
 中文:
-定义 Subalgebra.toIntermediateField
-  签名: (S : Subalgebra K L) (inv_mem : 对任意 x in S, x⁻¹ in S)
+定义 子代数.to整数ermediateField
+  签名: (S : 子代数 K L) (inv_mem : 对任意 x in S, x⁻¹ in S)
   定义体: { S with
     inv_mem' := inv_mem }
 
@@ -1058,8 +1058,8 @@ theorem toSubalgebra_toIntermediateField
 @[simp]
 
 中文:
-定理 toSubalgebra_toIntermediateField
-  条件: (S : Subalgebra K L) (inv_mem : 对任意 x in S, x⁻¹ in S)
+定理 toSubalgebra_to整数ermediateField
+  条件: (S : 子代数 K L) (inv_mem : 对任意 x in S, x⁻¹ in S)
   证明: by
   ext
   rfl
@@ -1083,8 +1083,8 @@ theorem toIntermediateField_toSubalgebra
   rfl
 
 中文:
-定理 toIntermediateField_toSubalgebra
-  条件: (S : 整数ermediateField K L)
+定理 to整数ermediateField_toSubalgebra
+  条件: (S : 中间域 K L)
   证明: by
   ext
   rfl
@@ -1109,8 +1109,8 @@ definition Subalgebra.toIntermediateField'
     rw [Subtype.ext_iff]; rw [S.coe_mul]; rw [S.coe_one]; rw [Subtyp
 
 中文:
-定义 Subalgebra.toIntermediateField'
-  签名: (S : Subalgebra K L) (hS : IsField S)
+定义 子代数.to整数ermediateField'
+  签名: (S : 子代数 K L) (hS : 是域 S)
   定义体: S.toIntermediateField fun x hx => by
     by_cases hx0 : x = 0
     · rw [hx0, inv_zero]
@@ -1145,8 +1145,8 @@ theorem toSubalgebra_toIntermediateField'
 @[simp]
 
 中文:
-定理 toSubalgebra_toIntermediateField'
-  条件: (S : Subalgebra K L) (hS : IsField S)
+定理 toSubalgebra_to整数ermediateField'
+  条件: (S : 子代数 K L) (hS : 是域 S)
   证明: by
   ext
   rfl
@@ -1170,8 +1170,8 @@ theorem toIntermediateField'_toSubalgebra
   rfl
 
 中文:
-定理 toIntermediateField'_toSubalgebra
-  条件: (S : 整数ermediateField K L)
+定理 to整数ermediateField'_toSubalgebra
+  条件: (S : 中间域 K L)
   证明: by
   ext
   rfl
@@ -1193,8 +1193,8 @@ definition Subfield.toIntermediateField
 @[simp]
 
 中文:
-定义 Subfield.toIntermediateField
-  签名: (S : Subfield L) (algebra_map_mem : 对任意 x, algebraMap K L x in S)
+定义 子域.to整数ermediateField
+  签名: (S : 子域 L) (algebra_map_mem : 对任意 x, algebraMap K L x in S)
   定义体: { S with
     algebraMap_mem' := algebra_map_mem }
 
@@ -1219,8 +1219,8 @@ theorem Subfield.toIntermediateField_toSubfield
 @[simp]
 
 中文:
-定理 Subfield.toIntermediateField_toSubfield
-  结论: (S : Subfield L)
+定理 子域.to整数ermediateField_toSubfield
+  结论: (S : 子域 L)
   证明: rfl
 
 @[simp]
@@ -1239,8 +1239,8 @@ theorem Subfield.coe_toIntermediateField
   proof: rfl
 
 中文:
-定理 Subfield.coe_toIntermediateField
-  结论: (S : Subfield L)
+定理 子域.coe_to整数ermediateField
+  结论: (S : 子域 L)
   证明: rfl
 -/
 theorem Subfield.coe_toIntermediateField (S : Subfield L)
@@ -1261,7 +1261,7 @@ instance toField
 
 中文:
 实例 toField
-  签名: : Field S
+  签名: : 域 S
   定义体: S.toSubfield.toField
 
 @[norm_cast]
@@ -1285,7 +1285,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: {ι : 类型} [Fintype ι] (f : ι -> S)
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> S)
   结论: (↑(∑ i, f i) : L) = ∑ i, (f i : L)
   证明: AddSubmonoidClass.coe_finsetSum f Finset.univ
 
@@ -1308,7 +1308,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: {ι : 类型} [Fintype ι] (f : ι -> S)
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> S)
   结论: (↑(∏ i, f i) : L) = ∏ i, (f i : L)
   证明: SubmonoidClass.coe_finsetProd f Finset.univ
 
@@ -1332,7 +1332,7 @@ instance [SMul
   body: inferInstanceAs (SMul F.toSubfield X)
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: L X] (F
   定义体: inferInstanceAs (SMul F.toSubfield X)
 
@@ -1352,7 +1352,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [SMul L X] {F : 整数ermediateField K L} (g : F) (m : X)
+  条件: [标量乘法 L X] {F : 中间域 K L} (g : F) (m : X)
   结论: g • m = (g : L) • m
   证明: rfl
 -/
@@ -1369,7 +1369,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMul L Y] [SMul X Y] [SMulCommClass L X Y]
+  签名: [标量乘法 L Y] [标量乘法 X Y] [标量交换类 L X Y]
   定义体: inferInstanceAs (SMulCommClass F.toSubfield X Y)
 
 Depends on / 依赖: F.toSubfield, SMulCommClass, toSubfield
@@ -1388,7 +1388,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul X Y] [SMul L Y] [SMulCommClass X L Y]
+  签名: [标量乘法 X Y] [标量乘法 L Y] [标量交换类 X L Y]
   定义体: inferInstanceAs (SMulCommClass X F.toSubfield Y)
 
 Depends on / 依赖: F.toSubfield, SMulCommClass, toSubfield
@@ -1416,8 +1416,8 @@ instance [SMul
   body: inferInstanceAs (FaithfulSMul F.toSubfield X)
 
 中文:
-实例 [SMul
-  签名: L X] [FaithfulSMul L X] (F
+实例 [标量乘法
+  签名: L X] [忠实标量乘法 L X] (F
   定义体: inferInstanceAs (FaithfulSMul F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, FaithfulSMul, toSubfield
@@ -1434,7 +1434,7 @@ instance [MulAction
   body: inferInstanceAs (MulAction F.toSubfield X)
 
 中文:
-实例 [MulAction
+实例 [乘法作用
   签名: L X] (F
   定义体: inferInstanceAs (MulAction F.toSubfield X)
 
@@ -1452,8 +1452,8 @@ instance [AddMonoid
   body: inferInstanceAs (DistribMulAction F.toSubfield X)
 
 中文:
-实例 [AddMonoid
-  签名: X] [DistribMulAction L X] (F
+实例 [加法幺半群
+  签名: X] [分配乘法作用 L X] (F
   定义体: inferInstanceAs (DistribMulAction F.toSubfield X)
 
 Depends on / 依赖: DistribMulAction, F.toSubfield, toSubfield
@@ -1470,8 +1470,8 @@ instance [Monoid
   body: inferInstanceAs (MulDistribMulAction F.toSubfield X)
 
 中文:
-实例 [Monoid
-  签名: X] [MulDistribMulAction L X] (F
+实例 [幺半群
+  签名: X] [MulDistribMul作用 L X] (F
   定义体: inferInstanceAs (MulDistribMulAction F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, MulDistribMulAction, toSubfield
@@ -1489,8 +1489,8 @@ instance [Zero
   body: inferInstanceAs (SMulWithZero F.toSubfield X)
 
 中文:
-实例 [Zero
-  签名: X] [SMulWithZero L X] (F
+实例 [零
+  签名: X] [带零标量乘法 L X] (F
   定义体: inferInstanceAs (SMulWithZero F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, SMulWithZero, toSubfield
@@ -1507,8 +1507,8 @@ instance [Zero
   body: inferInstanceAs (MulActionWithZero F.toSubfield X)
 
 中文:
-实例 [Zero
-  签名: X] [MulActionWithZero L X] (F
+实例 [零
+  签名: X] [带零乘法作用 L X] (F
   定义体: inferInstanceAs (MulActionWithZero F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, MulActionWithZero, toSubfield
@@ -1525,8 +1525,8 @@ instance [AddCommMonoid
   body: inferInstanceAs (Module F.toSubfield X)
 
 中文:
-实例 [AddCommMonoid
-  签名: X] [Module L X] (F
+实例 [加法交换幺半群
+  签名: X] [模 L X] (F
   定义体: inferInstanceAs (Module F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, Module, toSubfield
@@ -1543,8 +1543,8 @@ instance [Semiring
   body: inferInstanceAs (MulSemiringAction F.toSubfield X)
 
 中文:
-实例 [Semiring
-  签名: X] [MulSemiringAction L X] (F
+实例 [半环
+  签名: X] [MulSemiring作用 L X] (F
   定义体: inferInstanceAs (MulSemiringAction F.toSubfield X)
 
 Depends on / 依赖: F.toSubfield, MulSemiringAction, toSubfield
@@ -1563,7 +1563,7 @@ instance toAlgebra
 
 中文:
 实例 toAlgebra
-  签名: : Algebra S L
+  签名: : 代数 S L
   定义体: inferInstanceAs (Algebra S.toSubalgebra L)
 
 Depends on / 依赖: Algebra, S.toSubalgebra, toSubalgebra
@@ -1581,7 +1581,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: {R} [Semiring R] [SMul R K] [Module R L] [IsScalarTower R K L]
+  签名: {R} [半环 R] [标量乘法 R K] [模 R L] [标量塔 R K L]
   定义体: inferInstanceAs (Module R S.toSubalgebra)
 
 Depends on / 依赖: Module, S.toSubalgebra, toSubalgebra
@@ -1599,7 +1599,7 @@ instance algebra'
 
 中文:
 实例 algebra'
-  签名: {R' K L : 类型} [Field K] [Field L] [Algebra K L] (S : 整数ermediateField K L)
+  签名: {R' K L : 类型} [域 K] [域 L] [代数 K L] (S : 中间域 K L)
   定义体: inferInstanceAs (Algebra R' S.toSubalgebra)
 
 Depends on / 依赖: Algebra, S.toSubalgebra, toSubalgebra
@@ -1620,7 +1620,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: {R} [Semiring R] [SMul R K] [Module R L] [IsScalarTower R K L]
+  签名: {R} [半环 R] [标量乘法 R K] [模 R L] [标量塔 R K L]
   定义体: inferInstanceAs (IsScalarTower R K S.toSubalgebra)
 
 @[simp]
@@ -1642,7 +1642,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: {R} [SMul R K] [SMul R L] [IsScalarTower R K L] (r : R) (x : S)
+  条件: {R} [标量乘法 R K] [标量乘法 R L] [标量塔 R K L] (r : R) (x : S)
   证明: rfl
 -/
 theorem coe_smul {R} [SMul R K] [SMul R L] [IsScalarTower R K L] (r : R) (x : S) :
@@ -1693,7 +1693,7 @@ instance isScalarTower_bot
 
 中文:
 实例 isScalarTower_bot
-  签名: {R : 类型} [Semiring R] [Algebra L R]
+  签名: {R : 类型} [半环 R] [代数 L R]
   定义体: IsScalarTower.subalgebra _ _ _ S.toSubalgebra
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.subalgebra, S.toSubalgebra, subalgebra, toSubalgebra
@@ -1711,7 +1711,7 @@ instance isScalarTower_mid
 
 中文:
 实例 isScalarTower_mid
-  签名: {R : 类型} [Semiring R] [Algebra L R] [Algebra K R]
+  签名: {R : 类型} [半环 R] [代数 L R] [代数 K R]
   定义体: IsScalarTower.subalgebra' _ _ _ S.toSubalgebra
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.subalgebra, S.toSubalgebra, subalgebra, toSubalgebra
@@ -1730,7 +1730,7 @@ instance isScalarTower_mid'
 
 中文:
 实例 isScalarTower_mid'
-  签名: : IsScalarTower K S L
+  签名: : 标量塔 K S L
   定义体: inferInstance
 -/
 instance isScalarTower_mid' : IsScalarTower K S L :=
@@ -1752,7 +1752,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra S T
+  签名: 代数 S T
   定义体: T.algebra
 
 Depends on / 依赖: T.algebra, algebra
@@ -1769,7 +1769,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module S T
+  签名: 模 S T
   定义体: Algebra.toModule
 
 Depends on / 依赖: Algebra, Algebra.toModule, toModule
@@ -1786,7 +1786,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S T
+  签名: 标量乘法 S T
   定义体: Algebra.toSMul
 
 Depends on / 依赖: Algebra, Algebra.toSMul, toSMul
@@ -1802,8 +1802,8 @@ instance [Algebra
   body: T.isScalarTower
 
 中文:
-实例 [Algebra
-  签名: K E] [IsScalarTower K L E] : IsScalarTower K S T
+实例 [代数
+  签名: K E] [标量塔 K L E] : 标量塔 K S T
   定义体: T.isScalarTower
 
 Depends on / 依赖: T.isScalarTower, isScalarTower
@@ -1823,7 +1823,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : L ->ₐ[K] L') (S : 整数ermediateField K L')
+  签名: (f : L ->ₐ[K] L') (S : 中间域 K L')
   定义体: S.toSubalgebra.comap f
   inv_mem' x hx := show f x⁻¹ in S by rw [map_inv₀ f x]; exact S.inv_mem hx
 
@@ -1848,7 +1848,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : L ->ₐ[K] L') (S : 整数ermediateField K L)
+  签名: (f : L ->ₐ[K] L') (S : 中间域 K L)
   定义体: S.toSubalgebra.map f
   inv_mem' := by
     rintro _ ⟨x, hx, rfl⟩
@@ -1879,7 +1879,7 @@ theorem coe_map
 中文:
 定理 coe_map
   条件: (f : L ->ₐ[K] L')
-  结论: (S.map f : Set L') = f '' S
+  结论: (S.map f : 集合 L') = f '' S
   证明: rfl
 
 @[simp]
@@ -1941,7 +1941,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: S.map (AlgHom.id K L) = S
+  结论: S.map (代数态射.id K L) = S
   证明: SetLike.coe_injective Set.image_id _
 
 @[simp]
@@ -2011,7 +2011,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {K L₁ L₂ L₃ : 类型} [Field K] [Field L₁] [Algebra K L₁] [Field L₂] [Algebra K L₂]
+  结论: {K L₁ L₂ L₃ : 类型} [域 K] [域 L₁] [代数 K L₁] [域 L₂] [代数 K L₂]
   证明: SetLike.coe_injective Set.image_image _ _ _
 
 @[gcongr]
@@ -2034,7 +2034,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: (f : L ->ₐ[K] L') {S T : 整数ermediateField K L} (h : S <= T)
+  条件: (f : L ->ₐ[K] L') {S T : 中间域 K L} (h : S <= T)
   证明: SetLike.coe_mono (Set.image_mono h)
 
 Depends on / 依赖: Set.image_mono, SetLike, SetLike.coe_mono, coe_mono, image_mono
@@ -2093,7 +2093,7 @@ definition intermediateFieldMap
 
 中文:
 定义 intermediateFieldMap
-  签名: (e : L ≃ₐ[K] L') (E : 整数ermediateField K L)
+  签名: (e : L ≃ₐ[K] L') (E : 中间域 K L)
   定义体: e.subalgebraMap E.toSubalgebra
 
 Depends on / 依赖: E.toSubalgebra, e.subalgebraMap, subalgebraMap, toSubalgebra
@@ -2111,7 +2111,7 @@ theorem intermediateFieldMap_apply_coe
 
 中文:
 定理 intermediateFieldMap_apply_coe
-  条件: (e : L ≃ₐ[K] L') (E : 整数ermediateField K L) (a : E)
+  条件: (e : L ≃ₐ[K] L') (E : 中间域 K L) (a : E)
   证明: rfl
 -/
 theorem intermediateFieldMap_apply_coe (e : L ≃ₐ[K] L') (E : IntermediateField K L) (a : E) :
@@ -2128,7 +2128,7 @@ theorem intermediateFieldMap_symm_apply_coe
 
 中文:
 定理 intermediateFieldMap_symm_apply_coe
-  结论: (e : L ≃ₐ[K] L') (E : 整数ermediateField K L)
+  结论: (e : L ≃ₐ[K] L') (E : 中间域 K L)
   证明: rfl
 -/
 theorem intermediateFieldMap_symm_apply_coe (e : L ≃ₐ[K] L') (E : IntermediateField K L)
@@ -2155,7 +2155,7 @@ definition fieldRange
 
 中文:
 定义 fieldRange
-  签名: : 整数ermediateField K L'
+  签名: : 中间域 K L'
   定义体: { f.range, (f : L ->+* L').fieldRange with }
 
 @[simp]
@@ -2178,7 +2178,7 @@ theorem coe_fieldRange
 
 中文:
 定理 coe_fieldRange
-  结论: ↑f.fieldRange = Set.range f
+  结论: ↑f.fieldRange = 集合.range f
   证明: rfl
 
 @[simp]
@@ -2267,8 +2267,8 @@ theorem IsScalarTower.toAlgHom_fieldRange
   ext; simp
 
 中文:
-定理 IsScalarTower.toAlgHom_fieldRange
-  条件: [Algebra L L'] [IsScalarTower K L L']
+定理 标量塔.toAlgHom_fieldRange
+  条件: [代数 L L'] [标量塔 K L L']
   证明: by
   ext; simp
 -/
@@ -2390,8 +2390,8 @@ instance AlgHom.inhabited
   body: ⟨S.val⟩
 
 中文:
-实例 AlgHom.inhabited
-  签名: : Inhabited (S ->ₐ[K] L)
+实例 代数态射.inhabited
+  签名: : 可居 (S ->ₐ[K] L)
   定义体: ⟨S.val⟩
 
 Depends on / 依赖: S.val
@@ -2409,7 +2409,7 @@ theorem aeval_coe
 
 中文:
 定理 aeval_coe
-  结论: {R : 类型} [CommSemiring R] [Algebra R K] [Algebra R L] [IsScalarTower R K L]
+  结论: {R : 类型} [交换半环 R] [代数 R K] [代数 R L] [标量塔 R K L]
   证明: aeval_algHom_apply (S.val.restrictScalars R) x P
 
 Depends on / 依赖: S.val.restrictScalars, aeval_algHom_apply, restrictScalars
@@ -2428,7 +2428,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {E F : 整数ermediateField K L} (hEF : E <= F)
+  签名: {E F : 中间域 K L} (hEF : E <= F)
   定义体: Subalgebra.inclusion hEF
 
 Depends on / 依赖: Subalgebra, Subalgebra.inclusion, inclusion
@@ -2448,7 +2448,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {E F : 整数ermediateField K L} (hEF : E <= F)
+  条件: {E F : 中间域 K L} (hEF : E <= F)
   证明: Subalgebra.inclusion_injective hEF
 
 @[simp]
@@ -2473,8 +2473,8 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  条件: {E : 整数ermediateField K L}
-  结论: inclusion (le_refl E) = AlgHom.id K E
+  条件: {E : 中间域 K L}
+  结论: inclusion (le_refl E) = 代数态射.id K E
   证明: Subalgebra.inclusion_self
 
 @[simp]
@@ -2497,7 +2497,7 @@ theorem inclusion_inclusion
 
 中文:
 定理 inclusion_inclusion
-  条件: {E F G : 整数ermediateField K L} (hEF : E <= F) (hFG : F <= G) (x : E)
+  条件: {E F G : 中间域 K L} (hEF : E <= F) (hFG : F <= G) (x : E)
   证明: Subalgebra.inclusion_inclusion hEF hFG x
 
 @[simp]
@@ -2519,7 +2519,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  条件: {E F : 整数ermediateField K L} (hEF : E <= F) (e : E)
+  条件: {E F : 中间域 K L} (hEF : E <= F) (e : E)
   证明: rfl
 -/
 theorem coe_inclusion {E F : IntermediateField K L} (hEF : E <= F) (e : E) :
@@ -2541,7 +2541,7 @@ theorem toSubalgebra_injective
 
 中文:
 定理 toSubalgebra_injective
-  结论: Function.Injective (toSubalgebra : 整数ermediateField K L -> _)
+  结论: 函数.单射 (toSubalgebra : 中间域 K L -> _)
   证明: by
   intro _ _ h
   ext
@@ -2567,7 +2567,7 @@ theorem toSubfield_injective
 
 中文:
 定理 toSubfield_injective
-  结论: Function.Injective (toSubfield : 整数ermediateField K L -> _)
+  结论: 函数.单射 (toSubfield : 中间域 K L -> _)
   证明: by
   intro _ _ h
   ext
@@ -2632,7 +2632,7 @@ theorem map_injective
 中文:
 定理 map_injective
   条件: (f : L ->ₐ[K] L')
-  结论: Function.Injective (map f)
+  结论: 函数.单射 (map f)
   证明: by
   intro _ _ h
   rwa [← toSubalgebra_injective.eq_iff, toSubalgebra_map, toSubalgebra_map,
@@ -2657,7 +2657,7 @@ theorem set_range_subset
 
 中文:
 定理 set_range_subset
-  结论: Set.range (algebraMap K L) subseteq S
+  结论: 集合.range (algebraMap K L) subseteq S
   证明: S.toSubalgebra.range_subset
 
 Depends on / 依赖: S.toSubalgebra.range_subset, range_subset, toSubalgebra
@@ -2700,7 +2700,7 @@ theorem toSubalgebra_le_toSubalgebra
 
 中文:
 定理 toSubalgebra_le_toSubalgebra
-  条件: {S S' : 整数ermediateField K L}
+  条件: {S S' : 中间域 K L}
   证明: Iff.rfl
 
 @[simp]
@@ -2722,7 +2722,7 @@ theorem toSubalgebra_lt_toSubalgebra
 
 中文:
 定理 toSubalgebra_lt_toSubalgebra
-  条件: {S S' : 整数ermediateField K L}
+  条件: {S S' : 中间域 K L}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2745,7 +2745,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {F : 整数ermediateField K L} (E : 整数ermediateField K F)
+  签名: {F : 中间域 K L} (E : 中间域 K F)
   定义体: E.map (val F)
 
 Depends on / 依赖: E.map, IsCyclic, Subgroup, Subgroup.eq_top_iff, Subgroup.zpowers, Subgroup.zpowers_ne_bot, eq_bot_or_eq_top, eq_top_iff, exists_ne, isCyclic, nontriviality, resolve_left, zpowers, zpowers_ne_bot
@@ -2766,8 +2766,8 @@ theorem lift_injective
 
 中文:
 定理 lift_injective
-  条件: (F : 整数ermediateField K L)
-  结论: Function.Injective F.lift
+  条件: (F : 中间域 K L)
+  结论: 函数.单射 F.lift
   证明: map_injective F.val
 
 @[simp]
@@ -2788,7 +2788,7 @@ theorem lift_inj
 
 中文:
 定理 lift_inj
-  条件: {F : 整数ermediateField K L} (E E' : 整数ermediateField K F)
+  条件: {F : 中间域 K L} (E E' : 中间域 K F)
   证明: (lift_injective F).eq_iff
 
 Depends on / 依赖: eq_iff, lift_injective
@@ -2810,7 +2810,7 @@ theorem lift_le
 
 中文:
 定理 lift_le
-  条件: {F : 整数ermediateField K L} (E : 整数ermediateField K F)
+  条件: {F : 中间域 K L} (E : 中间域 K F)
   结论: lift E <= F
   证明: by
   rintro _ ⟨x, _, rfl⟩
@@ -2830,7 +2830,7 @@ theorem mem_lift
 
 中文:
 定理 mem_lift
-  条件: {F : 整数ermediateField K L} {E : 整数ermediateField K F} (x : F)
+  条件: {F : 中间域 K L} {E : 中间域 K F} (x : F)
   证明: Subtype.val_injective.mem_set_image
 
 Depends on / 依赖: Subtype, Subtype.val_injective.mem_set_image, mem_set_image, val_injective
@@ -2855,7 +2855,7 @@ definition liftAlgEquiv
 
 中文:
 定义 liftAlgEquiv
-  签名: {E : 整数ermediateField K L} (F : 整数ermediateField K E)
+  签名: {E : 中间域 K L} (F : 中间域 K E)
   定义体: ⟨x.1.1, (mem_lift x.1).mpr x.2⟩
   invFun x := ⟨⟨x.1, lift_le F x.2⟩, (mem_lift ⟨x.1, lift_le F x.2⟩).mp x.2⟩
   left_inv := congrFun rfl
@@ -2885,7 +2885,7 @@ lemma liftAlgEquiv_apply
 
 中文:
 引理 liftAlgEquiv_apply
-  条件: {E : 整数ermediateField K L} (F : 整数ermediateField K E) (x : F)
+  条件: {E : 中间域 K L} (F : 中间域 K E) (x : F)
   证明: rfl
 -/
 lemma liftAlgEquiv_apply {E : IntermediateField K L} (F : IntermediateField K E) (x : F) :
@@ -2909,7 +2909,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (E : 整数ermediateField L' L)
+  签名: (E : 中间域 L' L)
   定义体: { E.toSubfield, E.toSubalgebra.restrictScalars K with
     carrier := E.carrier }
 
@@ -2934,7 +2934,7 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: {E : 整数ermediateField L' L}
+  条件: {E : 中间域 L' L}
   证明: rfl
 
 @[simp]
@@ -2956,7 +2956,7 @@ theorem restrictScalars_toSubalgebra
 
 中文:
 定理 restrictScalars_toSubalgebra
-  条件: {E : 整数ermediateField L' L}
+  条件: {E : 中间域 L' L}
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -2980,7 +2980,7 @@ theorem restrictScalars_toSubfield
 
 中文:
 定理 restrictScalars_toSubfield
-  条件: {E : 整数ermediateField L' L}
+  条件: {E : 中间域 L' L}
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -3002,7 +3002,7 @@ theorem mem_restrictScalars
 
 中文:
 定理 mem_restrictScalars
-  条件: {E : 整数ermediateField L' L} {x : L}
+  条件: {E : 中间域 L' L} {x : L}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3043,7 +3043,7 @@ theorem restrictScalars_inj
 
 中文:
 定理 restrictScalars_inj
-  条件: {E E' : 整数ermediateField L' L}
+  条件: {E E' : 中间域 L' L}
   证明: (restrictScalars_injective K).eq_iff
 
 Depends on / 依赖: eq_iff, restrictScalars_injective
@@ -3078,7 +3078,7 @@ definition equivOfEq
 
 中文:
 定义 equivOfEq
-  签名: {S T : 整数ermediateField F E} (h : S = T)
+  签名: {S T : 中间域 F E} (h : S = T)
   定义体: Subalgebra.equivOfEq _ _ (congr_arg toSubalgebra h)
 
 @[simp]
@@ -3101,7 +3101,7 @@ theorem equivOfEq_symm
 
 中文:
 定理 equivOfEq_symm
-  条件: {S T : 整数ermediateField F E} (h : S = T)
+  条件: {S T : 中间域 F E} (h : S = T)
   证明: rfl
 
 @[simp]
@@ -3124,8 +3124,8 @@ theorem equivOfEq_rfl
 
 中文:
 定理 equivOfEq_rfl
-  条件: (S : 整数ermediateField F E)
-  结论: equivOfEq (rfl : S = S) = AlgEquiv.refl
+  条件: (S : 中间域 F E)
+  结论: equivOfEq (rfl : S = S) = 代数等价.refl
   证明: AlgEquiv.ext fun _ => rfl
 
 @[simp]
@@ -3146,7 +3146,7 @@ theorem equivOfEq_trans
 
 中文:
 定理 equivOfEq_trans
-  条件: {S T U : 整数ermediateField F E} (hST : S = T) (hTU : T = U)
+  条件: {S T U : 中间域 F E} (hST : S = T) (hTU : T = U)
   证明: rfl
 -/
 theorem equivOfEq_trans {S T U : IntermediateField F E} (hST : S = T) (hTU : T = U) :
@@ -3235,7 +3235,7 @@ definition extendScalars
 
 中文:
 定义 extendScalars
-  签名: : 整数ermediateField F L
+  签名: : 中间域 F L
   定义体: E.toIntermediateField fun ⟨_, hf⟩ => h hf
 
 @[simp]
@@ -3257,7 +3257,7 @@ theorem coe_extendScalars
 
 中文:
 定理 coe_extendScalars
-  结论: (extendScalars h : Set L) = (E : Set L)
+  结论: (extendScalars h : 集合 L) = (E : 集合 L)
   证明: rfl
 
 @[simp]
@@ -3331,7 +3331,7 @@ theorem extendScalars_le_iff
 
 中文:
 定理 extendScalars_le_iff
-  条件: (E' : 整数ermediateField F L)
+  条件: (E' : 中间域 F L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3349,7 +3349,7 @@ theorem le_extendScalars_iff
 
 中文:
 定理 le_extendScalars_iff
-  条件: (E' : 整数ermediateField F L)
+  条件: (E' : 中间域 F L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3430,7 +3430,7 @@ definition extendScalars
 
 中文:
 定义 extendScalars
-  签名: : 整数ermediateField F L
+  签名: : 中间域 F L
   定义体: Subfield.extendScalars (show F.toSubfield <= E.toSubfield from h)
 
 @[simp]
@@ -3453,7 +3453,7 @@ theorem coe_extendScalars
 
 中文:
 定理 coe_extendScalars
-  结论: (extendScalars h : Set L) = (E : Set L)
+  结论: (extendScalars h : 集合 L) = (E : 集合 L)
   证明: rfl
 
 @[simp]
@@ -3548,7 +3548,7 @@ theorem extendScalars_le_iff
 
 中文:
 定理 extendScalars_le_iff
-  条件: (E' : 整数ermediateField F L)
+  条件: (E' : 中间域 F L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3566,7 +3566,7 @@ theorem le_extendScalars_iff
 
 中文:
 定理 le_extendScalars_iff
-  条件: (E' : 整数ermediateField F L)
+  条件: (E' : 中间域 F L)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3595,7 +3595,7 @@ definition extendScalars.orderIso
 
 中文:
 定义 extendScalars.orderIso
-  签名: : { E : 整数ermediateField K L // F <= E } ≃o 整数ermediateField F L where
+  签名: : { E : 中间域 K L // F <= E } ≃o 中间域 F L where
   定义体: extendScalars E.2
   invFun E := ⟨E.restrictScalars K, fun x hx => E.algebraMap_mem ⟨x, hx⟩⟩
   map_rel_iff' {E E'} := by
@@ -3650,7 +3650,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: : 整数ermediateField K E
+  签名: : 中间域 K E
   定义体: (IntermediateField.inclusion h).fieldRange
 
 Depends on / 依赖: IntermediateField, IntermediateField.inclusion, fieldRange, inclusion

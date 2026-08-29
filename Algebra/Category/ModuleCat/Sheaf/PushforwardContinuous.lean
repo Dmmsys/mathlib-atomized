@@ -54,7 +54,7 @@ definition pushforward
 
 中文:
 定义 pushforward
-  签名: : SheafOfModules.{v} R ⥤ SheafOfModules.{v} S where
+  签名: : 模层.{v} R ⥤ 模层.{v} S where
   定义体: { val := (PresheafOfModules.pushforward φ.hom).obj M.val
       isSheaf := ((F.sheafPushforwardContinuous _ J K).obj ⟨_, M.isSheaf⟩).property }
   map f :=
@@ -117,7 +117,7 @@ abbreviation over
 
 中文:
 缩写 over
-  签名: (M : SheafOfModules.{v} R) (X : D)
+  签名: (M : 模层.{v} R) (X : D)
   定义体: (overFunctor R X).obj M
 
 Depends on / 依赖: overFunctor
@@ -134,8 +134,8 @@ abbreviation Hom.over
   body: (overFunctor R X).map f
 
 中文:
-缩写 Hom.over
-  签名: {M N : SheafOfModules.{v} R} (f : M ⟶ N) (X : D)
+缩写 态射.over
+  签名: {M N : 模层.{v} R} (f : M ⟶ N) (X : D)
   定义体: (overFunctor R X).map f
 
 Depends on / 依赖: overFunctor
@@ -222,7 +222,7 @@ definition overPullback
 
 中文:
 定义 overPullback
-  签名: [Limits.HasPullbacks D] {X Y : D} (f : X ⟶ Y)
+  签名: [Limits.有Pullbacks D] {X Y : D} (f : X ⟶ Y)
   定义体: pushforward (F := Over.pullback f) (Sheaf.toPushforwardOverPullback R f)
 
 Depends on / 依赖: Over.pullback, Sheaf.toPushforwardOverPullback, pullback, pushforward, toPushforwardOverPullback
@@ -265,7 +265,7 @@ definition pushforwardCongr
 
 中文:
 定义 pushforwardCongr
-  签名: {φ ψ : S ⟶ (F.sheafPushforwardContinuous RingCat.{u} J K).obj R} (e : φ = ψ)
+  签名: {φ ψ : S ⟶ (F.sheafPushforwardContinuous 环范畴.{u} J K).obj R} (e : φ = ψ)
   定义体: NatIso.ofComponents (fun X => (SheafOfModules.fullyFaithfulForget _).preimageIso
     (PresheafOfModules.isoMk (fun U => (ModuleCat.restrictScalarsCongr (by subst e; rfl)).app _)
       fun _ _ _ => by subst e; rfl)) fun _ => by subst e; rfl
@@ -481,7 +481,7 @@ definition pushforwardNatTrans
         (X.val.presheaf.map (α.app U.unop).op ≫ X.val
 
 中文:
-定义 pushforwardNatTrans
+定义 pushforward自然数Trans
   签名: (α : F ⟶ G)
   定义体: { val.app U := (ModuleCat.restrictScalars (φ.hom.app U).hom).map (X.val.map (α.app U.unop).op)
     val.naturality {U V} i := by
@@ -518,7 +518,7 @@ lemma pushforwardNatTrans_app_val_app
 @[simp]
 
 中文:
-引理 pushforwardNatTrans_app_val_app
+引理 pushforward自然数Trans_app_val_app
   条件: (α : F ⟶ G) (M U x)
   证明: rfl
 
@@ -538,7 +538,7 @@ lemma pushforwardNatTrans_id
 @[simp]
 
 中文:
-引理 pushforwardNatTrans_id
+引理 pushforward自然数Trans_id
   证明: by cat_disch
 
 @[simp]
@@ -560,7 +560,7 @@ lemma pushforwardNatTrans_comp
 @[simp]
 
 中文:
-引理 pushforwardNatTrans_comp
+引理 pushforward自然数Trans_comp
   结论: (α : F ⟶ G) (β : G ⟶ H)
   证明: by cat_disch
 
@@ -583,7 +583,7 @@ lemma pushforwardNatTrans_app_val_app_apply
   proof: rfl
 
 中文:
-引理 pushforwardNatTrans_app_val_app_apply
+引理 pushforward自然数Trans_app_val_app_apply
   条件: (α : F ⟶ G) (X U x)
   证明: rfl
 -/
@@ -609,7 +609,7 @@ definition pushforwardNatIso
       X.val.presheaf.map (α.inv.app U.unop).op = 𝟙 _ from congr($t
 
 中文:
-定义 pushforwardNatIso
+定义 pushforward自然数Iso
   签名: (α : F ≅ G)
   定义体: pushforwardNatTrans _ α.hom
   inv := pushforwardNatTrans _ α.inv ≫
@@ -653,7 +653,7 @@ definition pushforwardCongr₂
 
 中文:
 定义 pushforwardCongr₂
-  签名: {ψ : T ⟶ (F.sheafPushforwardContinuous RingCat J K).obj S} (e : F ≅ G)
+  签名: {ψ : T ⟶ (F.sheafPushforwardContinuous 环范畴 J K).obj S} (e : F ≅ G)
   定义体: pushforwardNatIso _ e ≪≫ pushforwardCongr he
 
 Depends on / 依赖: pushforwardCongr, pushforwardNatIso
@@ -783,7 +783,7 @@ instance isLeftAdjoint_pushforward_of_isIso
 
 中文:
 实例 isLeftAdjoint_pushforward_of_isIso
-  签名: [F.IsCocontinuous J K] [IsIso φ] [F.IsLeftAdjoint]
+  签名: [F.是余continuous J K] [是同构 φ] [F.是左伴随]
   定义体: by
   let adj := Adjunction.ofIsLeftAdjoint F
   let shAdj := adj.sheafPushforwardContinuous (E := RingCat.{u}) J K
@@ -895,7 +895,7 @@ definition overMapPushforwardAdj
 
 中文:
 定义 overMapPushforwardAdj
-  签名: [HasPullbacks C] {X Y : C} (f : X ⟶ Y)
+  签名: [有Pullbacks C] {X Y : C} (f : X ⟶ Y)
   定义体: by
   refine pushforwardPushforwardAdj (Over.mapPullbackAdj f) _ _ ?_ ?_
   · ext
@@ -922,7 +922,7 @@ instance [HasPullbacks
   body: (overMapPushforwardAdj R f).isLeftAdjoint
 
 中文:
-实例 [HasPullbacks
+实例 [有Pullbacks
   签名: C] {X Y
   定义体: (overMapPushforwardAdj R f).isLeftAdjoint
 
@@ -968,7 +968,7 @@ definition pushforwardPushforwardEquivalence
 
 中文:
 定义 pushforwardPushforwardEquivalence
-  签名: : SheafOfModules R ≌ SheafOfModules S where
+  签名: : 模层 R ≌ 模层 S where
   定义体: pushforward.{v} φ
   inverse := pushforward.{v} ψ
   unitIso :=

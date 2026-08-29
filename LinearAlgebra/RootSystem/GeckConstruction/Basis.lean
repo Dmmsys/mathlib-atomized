@@ -138,7 +138,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cartanSubalgebra' b).IsCartanSubalgebra
+  签名: (cartanSubalgebra' b).是Cartan子代数
   定义体: (basis b).isCartanSubalgebra
 
 Depends on / 依赖: isCartanSubalgebra
@@ -156,7 +156,7 @@ definition equivRootSystem
 
 中文:
 定义 equivRootSystem
-  签名: [IsAlgClosed K]
+  签名: [是代数闭 K]
   定义体: b.equivOfCartanMatrixEq _ (basis b).baseSupportEquiv by simp [(basis b).cartanMatrix_base_eq]
 
 Depends on / 依赖: b.equivOfCartanMatrixEq, baseSupportEquiv, cartanMatrix_base_eq, equivOfCartanMatrixEq

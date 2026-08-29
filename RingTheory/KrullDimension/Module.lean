@@ -63,7 +63,7 @@ lemma supportDim_eq_bot_of_subsingleton
 
 中文:
 引理 supportDim_eq_bot_of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   结论: supportDim R M = ⊥
   证明: by
   simpa [supportDim, support_eq_empty_iff]
@@ -86,7 +86,7 @@ lemma supportDim_ne_bot_of_nontrivial
 
 中文:
 引理 supportDim_ne_bot_of_nontrivial
-  条件: [Nontrivial M]
+  条件: [非平凡 M]
   结论: supportDim R M != ⊥
   证明: by
   have : Nonempty (Module.support R M) := nonempty_support_of_nontrivial.to_subtype
@@ -109,7 +109,7 @@ lemma supportDim_eq_bot_iff_subsingleton
 
 中文:
 引理 supportDim_eq_bot_iff_subsingleton
-  结论: supportDim R M = ⊥ ↔ Subsingleton M
+  结论: supportDim R M = ⊥ ↔ 子单例 M
   证明: by
   simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff]
 
@@ -129,7 +129,7 @@ lemma supportDim_ne_bot_iff_nontrivial
 
 中文:
 引理 supportDim_ne_bot_iff_nontrivial
-  结论: supportDim R M != ⊥ ↔ Nontrivial M
+  结论: supportDim R M != ⊥ ↔ 非平凡 M
   证明: by
   simp [supportDim, krullDim_eq_bot_iff, support_eq_empty_iff, not_subsingleton_iff_nontrivial]
 
@@ -150,7 +150,7 @@ lemma supportDim_eq_ringKrullDim_quotient_annihilator
 
 中文:
 引理 supportDim_eq_ringKrullDim_quotient_annihilator
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: by
   simp only [supportDim]
   rw [support_eq_zeroLocus]; rw [ringKrullDim_quotient]
@@ -222,7 +222,7 @@ lemma supportDim_quotient_eq_ringKrullDim
 
 中文:
 引理 supportDim_quotient_eq_ringKrullDim
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   rw [supportDim_eq_ringKrullDim_quotient_annihilator]; rw [Ideal.annihilator_quotient]
 
@@ -243,7 +243,7 @@ lemma supportDim_le_of_injective
 
 中文:
 引理 supportDim_le_of_injective
-  条件: (f : M ->ₗ[R] N) (h : Function.Injective f)
+  条件: (f : M ->ₗ[R] N) (h : 函数.单射 f)
   证明: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_injective f h a.2⟩)
     (fun {_ _} lt => lt)
 
@@ -265,7 +265,7 @@ lemma supportDim_le_of_surjective
 
 中文:
 引理 supportDim_le_of_surjective
-  条件: (f : M ->ₗ[R] N) (h : Function.Surjective f)
+  条件: (f : M ->ₗ[R] N) (h : 函数.满射 f)
   证明: krullDim_le_of_strictMono (fun a => ⟨a.1, Module.support_subset_of_surjective f h a.2⟩)
     (fun {_ _} lt => lt)
 
@@ -320,7 +320,7 @@ lemma support_of_supportDim_eq_zero
 
 中文:
 引理 support_of_supportDim_eq_zero
-  结论: [IsLocalRing R]
+  结论: [是局部环 R]
   证明: by
   let _ : Nontrivial N := by simp [← Module.supportDim_ne_bot_iff_nontrivial R, dim]
   rw [PrimeSpectrum.zeroLocus_eq_singleton]

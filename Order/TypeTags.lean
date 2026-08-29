@@ -149,7 +149,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : Bot (WithBot α)
+  签名: : 底元素 (WithBot α)
   定义体: ⟨none⟩
 
 @[to_dual]
@@ -168,7 +168,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (WithBot α)
+  签名: : 可居 (WithBot α)
   定义体: ⟨⊥⟩
 -/
 instance inhabited : Inhabited (WithBot α) :=
@@ -186,7 +186,7 @@ definition recBotCoe
 
 中文:
 定义 recBotCoe
-  签名: {C : WithBot α -> Sort*} (bot : C ⊥) (coe : 对任意 a : α, C a)
+  签名: {C : WithBot α -> 类型层*} (bot : C ⊥) (coe : 对任意 a : α, C a)
 -/
 def recBotCoe {C : WithBot α -> Sort*} (bot : C ⊥) (coe : forall a : α, C a) : forall n : WithBot α, C n
   | ⊥ => bot
@@ -205,7 +205,7 @@ theorem recBotCoe_bot
 
 中文:
 定理 recBotCoe_bot
-  条件: {C : WithBot α -> Sort*} (d : C ⊥) (f : 对任意 a : α, C a)
+  条件: {C : WithBot α -> 类型层*} (d : C ⊥) (f : 对任意 a : α, C a)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -225,7 +225,7 @@ theorem recBotCoe_coe
 
 中文:
 定理 recBotCoe_coe
-  条件: {C : WithBot α -> Sort*} (d : C ⊥) (f : 对任意 a : α, C a) (x : α)
+  条件: {C : WithBot α -> 类型层*} (d : C ⊥) (f : 对任意 a : α, C a) (x : α)
   证明: rfl
 -/
 theorem recBotCoe_coe {C : WithBot α -> Sort*} (d : C ⊥) (f : forall a : α, C a) (x : α) :

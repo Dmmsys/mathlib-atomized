@@ -52,7 +52,7 @@ definition cotangentComplexAux
 
 中文:
 定义 cotangentComplexAux
-  签名: [Finite σ] (P : PreSubmersivePresentation R S ι σ)
+  签名: [有限 σ] (P : PreSubmersivePresentation R S ι σ)
   定义体: Finsupp.linearEquivFunOnFinite S S σ ∘ₗ Finsupp.lcomapDomain _ P.map_inj ∘ₗ
     P.cotangentSpaceBasis.repr.toLinearMap ∘ₗ P.toExtension.cotangentComplex
 
@@ -80,7 +80,7 @@ lemma cotangentComplexAux_apply
 
 中文:
 引理 cotangentComplexAux_apply
-  结论: [Finite σ] (P : PreSubmersivePresentation R S ι σ)
+  结论: [有限 σ] (P : PreSubmersivePresentation R S ι σ)
   证明: by
   dsimp only [cotangentComplexAux, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply,
     cotangentComplex_mk]
@@ -111,7 +111,7 @@ lemma cotangentComplexAux_zero_iff
 
 中文:
 引理 cotangentComplexAux_zero_iff
-  条件: [Finite σ] {P : PreSubmersivePresentation R S ι σ} (x : P.ker)
+  条件: [有限 σ] {P : PreSubmersivePresentation R S ι σ} (x : P.ker)
   证明: by
   rw [funext_iff]
   simp_rw [cotangentComplexAux_apply, Pi.zero_apply]
@@ -147,7 +147,7 @@ lemma cotangentComplexAux_injective
 
 中文:
 引理 cotangentComplexAux_injective
-  结论: Function.Injective P.cotangentComplexAux
+  结论: 函数.单射 P.cotangentComplexAux
   证明: by
   rw [← LinearMap.ker_eq_bot]; rw [eq_bot_iff]
   intro x hx
@@ -212,7 +212,7 @@ lemma cotangentComplexAux_surjective
 
 中文:
 引理 cotangentComplexAux_surjective
-  结论: Function.Surjective P.cotangentComplexAux
+  结论: 函数.满射 P.cotangentComplexAux
   证明: by
   rw [← LinearMap.range_eq_top]; rw [_root_.eq_top_iff]; rw [← P.basisDeriv.span_eq]; rw [Submodule.span_le]
   rintro - ⟨i, rfl⟩
@@ -244,7 +244,7 @@ definition cotangentEquiv
 
 中文:
 定义 cotangentEquiv
-  签名: : P.toExtension.Cotangent ≃ₗ[S] σ -> S
+  签名: : P.toExtension.余切 ≃ₗ[S] σ -> S
   定义体: LinearEquiv.ofBijective _ ⟨P.cotangentComplexAux_injective, P.cotangentComplexAux_surjective⟩
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofBijective, P.cotangentComplexAux_injective, P.cotangentComplexAux_surjective, cotangentComplexAux_injective, cotangentComplexAux_surjective, ofBijective
@@ -266,7 +266,7 @@ lemma cotangentComplex_injective
 
 中文:
 引理 cotangentComplex_injective
-  结论: Function.Injective P.toExtension.cotangentComplex
+  结论: 函数.单射 P.toExtension.cotangentComplex
   证明: by
   have := P.cotangentComplexAux_injective
   simp only [PreSubmersivePresentation.cotangentComplexAux, LinearMap.coe_comp,
@@ -293,7 +293,7 @@ instance subsingleton_h1Cotangent
 
 中文:
 实例 subsingleton_h1Cotangent
-  签名: : Subsingleton P.toExtension.H1Cotangent
+  签名: : 子单例 P.toExtension.H1Cotangent
   定义体: by
   rw [Algebra.Extension.subsingleton_h1Cotangent]
   exact cotangentComplex_injective P
@@ -316,7 +316,7 @@ definition basisCotangent
 
 中文:
 定义 basisCotangent
-  签名: : Basis σ S P.toExtension.Cotangent
+  签名: : 基 σ S P.toExtension.余切
   定义体: P.basisDeriv.map P.cotangentEquiv.symm
 
 Depends on / 依赖: P.basisDeriv.map, P.cotangentEquiv.symm, basisDeriv, cotangentEquiv
@@ -372,7 +372,7 @@ instance free_cotangent
 
 中文:
 实例 free_cotangent
-  签名: : Module.Free S P.toExtension.Cotangent
+  签名: : 模.自由 S P.toExtension.余切
   定义体: Module.Free.of_basis P.basisCotangent
 
 Depends on / 依赖: Continuous, Continuous.prodMk_left, Module, Module.Free.of_basis, P.basisCotangent, Prod.mk, basisCotangent, continuousOn, exacts, fun_prop, hs.image, ht.image, isPreconnected_of_forall_pair, of_basis, prodMk_left
@@ -391,7 +391,7 @@ definition sectionCotangent
 
 中文:
 定义 sectionCotangent
-  签名: : P.toExtension.CotangentSpace ->ₗ[S] P.toExtension.Cotangent
+  签名: : P.toExtension.CotangentSpace ->ₗ[S] P.toExtension.余切
   定义体: (cotangentEquiv P).symm ∘ₗ (Finsupp.linearEquivFunOnFinite S S σ).toLinearMap ∘ₗ
     Finsupp.lcomapDomain _ P.map_inj ∘ₗ P.cotangentSpaceBasis.repr.toLinearMap
 
@@ -414,7 +414,7 @@ lemma sectionCotangent_eq_iff
 
 中文:
 引理 sectionCotangent_eq_iff
-  条件: (x : P.toExtension.CotangentSpace) (y : P.toExtension.Cotangent)
+  条件: (x : P.toExtension.CotangentSpace) (y : P.toExtension.余切)
   证明: by
   simp only [sectionCotangent, LinearMap.coe_comp, LinearEquiv.coe_coe, Function.comp_apply]
   rw [← (cotangentEquiv P).injective.eq_iff]; rw [funext_iff]; rw [LinearEquiv.apply_symm_apply]
@@ -471,7 +471,7 @@ lemma sectionCotangent_zero_of_notMem_range
 
 中文:
 引理 sectionCotangent_zero_of_notMem_range
-  条件: (i : ι) (hi : i ∉ Set.range P.map)
+  条件: (i : ι) (hi : i ∉ 集合.range P.map)
   证明: by
   classical
   contrapose hi
@@ -601,7 +601,7 @@ lemma basisKaehler_apply
 
 中文:
 引理 basisKaehler_apply
-  条件: (k : ((Set.range P.map)ᶜ : Set _))
+  条件: (k : ((集合.range P.map)ᶜ : 集合 _))
   证明: by
   simp [basisKaehler]
 
@@ -623,7 +623,7 @@ theorem free_kaehlerDifferential
 
 中文:
 定理 free_kaehlerDifferential
-  条件: (P : SubmersivePresentation R S ι σ)
+  条件: (P : 浸没呈现 R S ι σ)
   证明: Module.Free.of_basis P.basisKaehler
 
 Depends on / 依赖: Module, Module.Free.of_basis, P.basisKaehler, basisKaehler, of_basis
@@ -645,7 +645,7 @@ theorem rank_kaehlerDifferential
 
 中文:
 定理 rank_kaehlerDifferential
-  结论: [Nontrivial S] [Finite ι]
+  结论: [非平凡 S] [有限 ι]
   证明: by
   simp only [rank_eq_card_basis P.basisKaehler, Fintype.card_compl_set,
     Presentation.dimension, Nat.card_eq_fintype_card, Set.card_range_of_injective P.map_inj]
@@ -674,7 +674,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free S (Generators.localizationAway S r).toExtension.Cotangent
+  签名: 模.自由 S (生成元.localizationAway S r).toExtension.余切
   定义体: inferInstanceAs
     Module.Free S ((SubmersivePresentation.localizationAway S r).toExtension.Cotangent)
 
@@ -697,8 +697,8 @@ abbreviation Generators.cMulXSubOneCotangent
   body: Extension.Cotangent.mk ⟨C r * X () - 1, C_mul_X_sub_one_mem_ker _⟩
 
 中文:
-缩写 Generators.cMulXSubOneCotangent
-  签名: : (Generators.localizationAway S r).toExtension.Cotangent
+缩写 生成元.cMulXSubOneCotangent
+  签名: : (生成元.localizationAway S r).toExtension.余切
   定义体: Extension.Cotangent.mk ⟨C r * X () - 1, C_mul_X_sub_one_mem_ker _⟩
 
 Depends on / 依赖: C_mul_X_sub_one_mem_ker, Cotangent, Extension, Extension.Cotangent.mk
@@ -714,7 +714,7 @@ lemma Generators.cMulXSubOneCotangent_eq
   proof: rfl
 
 中文:
-引理 Generators.cMulXSubOneCotangent_eq
+引理 生成元.cMulXSubOneCotangent_eq
   证明: rfl
 -/
 lemma Generators.cMulXSubOneCotangent_eq :
@@ -730,8 +730,8 @@ lemma SubmersivePresentation.basisCotangent_localizationAway_apply
   proof: basisCotangent_apply _ _
 
 中文:
-引理 SubmersivePresentation.basisCotangent_localizationAway_apply
-  条件: (x : Unit)
+引理 浸没呈现.basisCotangent_localizationAway_apply
+  条件: (x : 单元)
   证明: basisCotangent_apply _ _
 
 Depends on / 依赖: basisCotangent_apply
@@ -763,8 +763,8 @@ definition Generators.basisCotangentAway
   body: (SubmersivePresentation.localizationAway S r).basisCotangent
 
 中文:
-定义 Generators.basisCotangentAway
-  签名: (r : R) [IsLocalization.Away r S]
+定义 生成元.basisCotangentAway
+  签名: (r : R) [是Localization.Away r S]
   定义体: (SubmersivePresentation.localizationAway S r).basisCotangent
 
 Depends on / 依赖: SubmersivePresentation, SubmersivePresentation.localizationAway, basisCotangent, localizationAway
@@ -782,8 +782,8 @@ lemma Generators.basisCotangentAway_apply
   proof: SubmersivePresentation.basisCotangent_apply _ _
 
 中文:
-引理 Generators.basisCotangentAway_apply
-  条件: (x : Unit)
+引理 生成元.basisCotangentAway_apply
+  条件: (x : 单元)
   证明: SubmersivePresentation.basisCotangent_apply _ _
 
 Depends on / 依赖: SubmersivePresentation, SubmersivePresentation.basisCotangent_apply, basisCotangent_apply
@@ -805,8 +805,8 @@ instance IsStandardSmooth.free_kaehlerDifferential
   exact P.free_kaehlerDifferential
 
 中文:
-实例 IsStandardSmooth.free_kaehlerDifferential
-  签名: [IsStandardSmooth R S]
+实例 是StandardSmooth.free_kaehlerDifferential
+  签名: [是StandardSmooth R S]
   定义体: by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
   exact P.free_kaehlerDifferential
@@ -829,8 +829,8 @@ instance IsStandardSmooth.subsingleton_h1Cotangent
   exact P.equivH1Cotangent.symm.toEquiv.subsingleton
 
 中文:
-实例 IsStandardSmooth.subsingleton_h1Cotangent
-  签名: [IsStandardSmooth R S]
+实例 是StandardSmooth.subsingleton_h1Cotangent
+  签名: [是StandardSmooth R S]
   定义体: by
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
   exact P.equivH1Cotangent.symm.toEquiv.subsingleton
@@ -853,8 +853,8 @@ theorem IsStandardSmoothOfRelativeDimension.rank_kaehlerDifferential
   rw [P.rank_kaehlerDifferential]; rw [hP]
 
 中文:
-定理 IsStandardSmoothOfRelativeDimension.rank_kaehlerDifferential
-  结论: [Nontrivial S] (n : 自然数)
+定理 是StandardSmoothOfRelativeDimension.rank_kaehlerDifferential
+  结论: [非平凡 S] (n : 自然数)
   证明: by
   obtain ⟨_, _, _, _, ⟨P, hP⟩⟩ := ‹IsStandardSmoothOfRelativeDimension n R S›
   rw [P.rank_kaehlerDifferential]; rw [hP]
@@ -881,8 +881,8 @@ lemma IsStandardSmoothOfRelativeDimension.iff_of_isStandardSmooth
   rwa [← P.rank_kaehlerDifferential]
 
 中文:
-引理 IsStandardSmoothOfRelativeDimension.iff_of_isStandardSmooth
-  结论: [Nontrivial S]
+引理 是StandardSmoothOfRelativeDimension.iff_of_isStandardSmooth
+  结论: [非平凡 S]
   证明: by
   refine ⟨fun h => IsStandardSmoothOfRelativeDimension.rank_kaehlerDifferential _, fun h => ?_⟩
   obtain ⟨_, _, _, _, ⟨P⟩⟩ := ‹IsStandardSmooth R S›
@@ -916,7 +916,7 @@ instance IsStandardSmoothOfRelativeDimension.subsingleton_kaehlerDifferential
 @[deprecated (since := "202
 
 中文:
-实例 IsStandardSmoothOfRelativeDimension.subsingleton_kaehlerDifferential
+实例 是StandardSmoothOfRelativeDimension.subsingleton_kaehlerDifferential
   定义体: by
   cases subsingleton_or_nontrivial S
   · exact Module.subsingleton S _

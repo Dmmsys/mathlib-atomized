@@ -110,7 +110,7 @@ unseal π₀ in
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (π₀.mk (X := X))
+  结论: 函数.满射 (π₀.mk (X := X))
   证明: Quot.mk_surjective
 
 unseal π₀ in
@@ -132,7 +132,7 @@ unseal π₀ in
 
 中文:
 引理 sound
-  条件: {x₀ x₁ : X _⦋0⦌} (e : Edge x₀ x₁)
+  条件: {x₀ x₁ : X _⦋0⦌} (e : 边 x₀ x₁)
   证明: Quot.sound ⟨e⟩
 
 unseal π₀ in
@@ -209,7 +209,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {T : 类型} (f : X _⦋0⦌ -> T) (hf : 对任意 ⦃x₀ x₁ : X _⦋0⦌⦄ (_ : X.Edge x₀ x₁), f x₀ = f x₁)
+  签名: {T : 类型} (f : X _⦋0⦌ -> T) (hf : 对任意 ⦃x₀ x₁ : X _⦋0⦌⦄ (_ : X.边 x₀ x₁), f x₀ = f x₁)
   定义体: Quot.lift f (by rintro x y ⟨e⟩; exact hf e)
 
 @[simp]
@@ -366,7 +366,7 @@ definition toπ₀NatTrans
   body: ↾π₀.mk
 
 中文:
-定义 toπ₀NatTrans
+定义 toπ₀自然数Trans
   签名: : SSet.evaluation.obj (op ⦋0⦌) ⟶ π₀Functor.{u} where
   定义体: ↾π₀.mk
 -/
@@ -383,7 +383,7 @@ abbreviation coforkπ₀
 
 中文:
 缩写 coforkπ₀
-  签名: : Cofork (X.δ (1 : Fin 2)) (X.δ 0)
+  签名: : 余叉 (X.δ (1 : 有限集 2)) (X.δ 0)
   定义体: Cofork.ofπ (↾π₀.mk) (by ext s; exact π₀.sound (Edge.mk' s))
 
 Depends on / 依赖: Cofork, Cofork.of, Edge.mk
@@ -409,7 +409,7 @@ definition isColimitCoforkπ₀
 
 中文:
 定义 isColimitCoforkπ₀
-  签名: : IsColimit X.coforkπ₀
+  签名: : 是余极限 X.coforkπ₀
   定义体: Cofork.IsColimit.mk _
     (fun s => ↾π₀.lift s.π (fun x₀ x₁ e => by
       simpa only [← e.src_eq, ← e.tgt_eq] using!
@@ -464,7 +464,7 @@ definition isColimitCoforkπ₀Functor
 
 中文:
 定义 isColimitCoforkπ₀Functor
-  签名: : IsColimit coforkπ₀Functor.{u}
+  签名: : 是余极限 coforkπ₀Functor.{u}
   定义体: evaluationJointlyReflectsColimits _ (fun X =>
     (isColimitMapCoconeCoforkEquiv _ _).2 X.isColimitCoforkπ₀)
 
@@ -488,7 +488,7 @@ lemma π₀.nonempty_iff
 
 中文:
 引理 π₀.nonempty_iff
-  结论: Nonempty (π₀ X) ↔ X.Nonempty
+  结论: 非空 (π₀ X) ↔ X.非空
   证明: ⟨fun _ => ⟨(π₀.mk_surjective (Classical.arbitrary (π₀ X))).choose⟩,
     fun _ => ⟨.mk (Classical.arbitrary _)⟩⟩
 
@@ -507,7 +507,7 @@ abbreviation IsPreconnected
   body: Subsingleton (π₀ X)
 
 中文:
-缩写 IsPreconnected
+缩写 是预连通
   签名: : 命题
   定义体: Subsingleton (π₀ X)
 -/
@@ -524,11 +524,11 @@ class IsConnected
     - nonempty : X.Nonempty  [default: by infer_instance]
 
 中文:
-类 IsConnected
-  参数: : 命题 extends SSet.IsPreconnected X where
-  继承: SSet.IsPreconnected X
+类 是连通
+  参数: : 命题 extends SSet.是预连通 X where
+  继承: SSet.是预连通 X
   公理与运算 (1 个):
-    - nonempty : X.Nonempty  [默认: by infer_instance]
+    - nonempty : X.非空  [默认: by infer_instance]
 -/
 protected class IsConnected : Prop extends SSet.IsPreconnected X where
   nonempty : X.Nonempty := by infer_instance
@@ -544,8 +544,8 @@ instance [X.IsConnected]
   body: ⟨π₀.mk (Classical.arbitrary _)⟩
 
 中文:
-实例 [X.IsConnected]
-  签名: : Nonempty (π₀ X)
+实例 [X.是连通]
+  签名: : 非空 (π₀ X)
   定义体: ⟨π₀.mk (Classical.arbitrary _)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary

@@ -35,7 +35,7 @@ theorem mdifferentiable_jacobiTheta
 
 中文:
 定理 mdifferentiable_jacobiTheta
-  结论: MDiff (jacobiTheta ∘ (↑) : ℍ -> Complex)
+  结论: MDiff (jacobiTheta ∘ (↑) : ℍ -> 复形)
   证明: fun τ => (differentiableAt_jacobiTheta τ.2).mdifferentiableAt.comp τ τ.mdifferentiable_coe
 
 Depends on / 依赖: differentiableAt_jacobiTheta, mdifferentiableAt, mdifferentiableAt.comp, mdifferentiable_coe

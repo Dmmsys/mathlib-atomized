@@ -36,7 +36,7 @@ definition synthesizeUsing
 
 中文:
 定义 synthesizeUsing
-  签名: {u : Level} (type : Q(Sort u)) (tac : TacticM Unit)
+  签名: {u : Level} (type : Q(类型层 u)) (tac : TacticM 单元)
   定义体: do
   let m ← mkFreshExprMVar type
   let goals ← (Term.withoutErrToSorry <| run m.mvarId! tac).run'
@@ -64,7 +64,7 @@ definition synthesizeUsing'
 
 中文:
 定义 synthesizeUsing'
-  签名: {u : Level} (type : Q(Sort u)) (tac : TacticM Unit)
+  签名: {u : Level} (type : Q(类型层 u)) (tac : TacticM 单元)
   定义体: do
   let (goals, e) ← synthesizeUsing type tac
   -- Note: does not use `tac *> Tactic.done` since that just adds a message
@@ -92,7 +92,7 @@ definition synthesizeUsingTactic
 
 中文:
 定义 synthesizeUsingTactic
-  签名: {u : Level} (type : Q(Sort u)) (tac : Syntax)
+  签名: {u : Level} (type : Q(类型层 u)) (tac : Syntax)
   定义体: do
   synthesizeUsing type (do evalTactic tac)
 -/
@@ -111,7 +111,7 @@ definition synthesizeUsingTactic'
 
 中文:
 定义 synthesizeUsingTactic'
-  签名: {u : Level} (type : Q(Sort u)) (tac : Syntax)
+  签名: {u : Level} (type : Q(类型层 u)) (tac : Syntax)
   定义体: do
   synthesizeUsing' type (do evalTactic tac)
 -/

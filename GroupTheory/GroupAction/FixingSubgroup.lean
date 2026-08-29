@@ -63,7 +63,7 @@ definition fixingSubmonoid
 
 中文:
 定义 fixingSubmonoid
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { ϕ : M | forall x : s, ϕ • (x : α) = x }
   one_mem' _ := one_smul _ _
   mul_mem' {x y} hx hy z := by rw [mul_smul, hy z, hx z]
@@ -86,7 +86,7 @@ theorem mem_fixingSubmonoid_iff
 
 中文:
 定理 mem_fixingSubmonoid_iff
-  条件: {s : Set α} {m : M}
+  条件: {s : 集合 α} {m : M}
   证明: ⟨fun hg y hy => hg ⟨y, hy⟩, fun h ⟨y, hy⟩ => h y hy⟩
 -/
 theorem mem_fixingSubmonoid_iff {s : Set α} {m : M} :
@@ -130,7 +130,7 @@ theorem fixingSubmonoid_antitone
 
 中文:
 定理 fixingSubmonoid_antitone
-  结论: Antitone fun s : Set α => fixingSubmonoid M s
+  结论: 递减 fun s : 集合 α => fixingSubmonoid M s
   证明: (fixingSubmonoid_fixedPoints_gc M α).monotone_l
 
 @[to_additive fixedPoints_antitone_addSubmonoid]
@@ -151,7 +151,7 @@ theorem fixedPoints_antitone
 
 中文:
 定理 fixedPoints_antitone
-  结论: Antitone fun P : Submonoid M => fixedPoints P α
+  结论: 递减 fun P : 子幺半群 M => fixedPoints P α
   证明: (fixingSubmonoid_fixedPoints_gc M α).monotone_u.dual_left
 
 Depends on / 依赖: dual_left, fixingSubmonoid_fixedPoints_gc, monotone_u, monotone_u.dual_left
@@ -171,7 +171,7 @@ theorem fixingSubmonoid_union
 
 中文:
 定理 fixingSubmonoid_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: (fixingSubmonoid_fixedPoints_gc M α).l_sup
 
 Depends on / 依赖: fixingSubmonoid_fixedPoints_gc, l_sup
@@ -192,7 +192,7 @@ theorem fixingSubmonoid_iUnion
 
 中文:
 定理 fixingSubmonoid_iUnion
-  条件: {ι : Sort*} {s : ι -> Set α}
+  条件: {ι : 类型层*} {s : ι -> 集合 α}
   证明: (fixingSubmonoid_fixedPoints_gc M α).l_iSup
 
 Depends on / 依赖: fixingSubmonoid_fixedPoints_gc, l_iSup
@@ -213,7 +213,7 @@ theorem fixedPoints_submonoid_sup
 
 中文:
 定理 fixedPoints_submonoid_sup
-  条件: {P Q : Submonoid M}
+  条件: {P Q : 子幺半群 M}
   证明: (fixingSubmonoid_fixedPoints_gc M α).u_inf
 
 Depends on / 依赖: fixingSubmonoid_fixedPoints_gc, u_inf
@@ -234,7 +234,7 @@ theorem fixedPoints_submonoid_iSup
 
 中文:
 定理 fixedPoints_submonoid_iSup
-  条件: {ι : Sort*} {P : ι -> Submonoid M}
+  条件: {ι : 类型层*} {P : ι -> 子幺半群 M}
   证明: (fixingSubmonoid_fixedPoints_gc M α).u_iInf
 
 Depends on / 依赖: fixingSubmonoid_fixedPoints_gc, u_iInf
@@ -265,7 +265,7 @@ definition fixingSubgroup
 
 中文:
 定义 fixingSubgroup
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { fixingSubmonoid M s with inv_mem' := fun hx z => by rw [inv_smul_eq_iff, hx z] }
 
 @[to_additive]
@@ -289,7 +289,7 @@ theorem mem_fixingSubgroup_iff
 
 中文:
 定理 mem_fixingSubgroup_iff
-  条件: {s : Set α} {m : M}
+  条件: {s : 集合 α} {m : M}
   结论: m in fixingSubgroup M s ↔ 对任意 y in s, m • y = y
   证明: ⟨fun hg y hy => hg ⟨y, hy⟩, fun h ⟨y, hy⟩ => h y hy⟩
 
@@ -312,7 +312,7 @@ theorem mem_fixingSubgroup_iff_subset_fixedBy
 
 中文:
 定理 mem_fixingSubgroup_iff_subset_fixedBy
-  条件: {s : Set α} {m : M}
+  条件: {s : 集合 α} {m : M}
   证明: by
   simp_rw [mem_fixingSubgroup_iff, Set.subset_def, mem_fixedBy]
 
@@ -336,7 +336,7 @@ theorem mem_fixingSubgroup_compl_iff_movedBy_subset
 
 中文:
 定理 mem_fixingSubgroup_compl_iff_movedBy_subset
-  条件: {s : Set α} {m : M}
+  条件: {s : 集合 α} {m : M}
   证明: by
   rw [mem_fixingSubgroup_iff_subset_fixedBy]; rw [Set.compl_subset_comm]
 
@@ -383,7 +383,7 @@ lemma fixingSubgroup_empty
 
 中文:
 引理 fixingSubgroup_empty
-  结论: fixingSubgroup M (∅ : Set α) = ⊤
+  结论: fixingSubgroup M (∅ : 集合 α) = ⊤
   证明: GaloisConnection.l_bot (fixingSubgroup_fixedPoints_gc M α)
 
 @[to_additive]
@@ -406,7 +406,7 @@ theorem fixingSubgroup_antitone
 
 中文:
 定理 fixingSubgroup_antitone
-  结论: Antitone (fixingSubgroup M : Set α -> Subgroup M)
+  结论: 递减 (fixingSubgroup M : 集合 α -> 子群 M)
   证明: (fixingSubgroup_fixedPoints_gc M α).monotone_l
 
 @[to_additive]
@@ -427,7 +427,7 @@ theorem fixedPoints_subgroup_antitone
 
 中文:
 定理 fixedPoints_subgroup_antitone
-  结论: Antitone fun P : Subgroup M => fixedPoints P α
+  结论: 递减 fun P : 子群 M => fixedPoints P α
   证明: (fixingSubgroup_fixedPoints_gc M α).monotone_u.dual_left
 
 Depends on / 依赖: dual_left, fixingSubgroup_fixedPoints_gc, monotone_u, monotone_u.dual_left
@@ -447,7 +447,7 @@ theorem fixingSubgroup_union
 
 中文:
 定理 fixingSubgroup_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: (fixingSubgroup_fixedPoints_gc M α).l_sup
 
 Depends on / 依赖: fixingSubgroup_fixedPoints_gc, l_sup
@@ -468,7 +468,7 @@ theorem fixingSubgroup_iUnion
 
 中文:
 定理 fixingSubgroup_iUnion
-  条件: {ι : Sort*} {s : ι -> Set α}
+  条件: {ι : 类型层*} {s : ι -> 集合 α}
   证明: (fixingSubgroup_fixedPoints_gc M α).l_iSup
 
 Depends on / 依赖: fixingSubgroup_fixedPoints_gc, l_iSup
@@ -489,7 +489,7 @@ theorem fixedPoints_subgroup_sup
 
 中文:
 定理 fixedPoints_subgroup_sup
-  条件: {P Q : Subgroup M}
+  条件: {P Q : 子群 M}
   证明: (fixingSubgroup_fixedPoints_gc M α).u_inf
 
 Depends on / 依赖: fixingSubgroup_fixedPoints_gc, u_inf
@@ -510,7 +510,7 @@ theorem fixedPoints_subgroup_iSup
 
 中文:
 定理 fixedPoints_subgroup_iSup
-  条件: {ι : Sort*} {P : ι -> Subgroup M}
+  条件: {ι : 类型层*} {P : ι -> 子群 M}
   证明: (fixingSubgroup_fixedPoints_gc M α).u_iInf
 
 Depends on / 依赖: fixingSubgroup_fixedPoints_gc, u_iInf
@@ -536,7 +536,7 @@ theorem orbit_fixingSubgroup_compl_subset
 
 中文:
 定理 orbit_fixingSubgroup_compl_subset
-  条件: {s : Set α} {a : α} (a_in_s : a in s)
+  条件: {s : 集合 α} {a : α} (a_in_s : a in s)
   证明: by
   intro b b_in_orbit
   let ⟨⟨g, g_fixing⟩, g_eq⟩ := MulAction.mem_orbit_iff.mp b_in_orbit

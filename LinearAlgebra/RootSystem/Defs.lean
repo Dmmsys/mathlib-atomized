@@ -93,7 +93,7 @@ structure RootPairing
   参数: extends M ->ₗ[R] N ->ₗ[R] R
   继承: M ->ₗ[R] N ->ₗ[R] R
   公理与运算 (7 个):
-    - [isPerfPair_toLinearMap : toLinearMap.IsPerfPair]
+    - [isPerfPair_toLinearMap : toLinearMap.是PerfPair]
     - root : ι ↪ M
     - coroot : ι ↪ N
     - root_coroot_two : 对任意 i, toLinearMap (root i) (coroot i) = 2
@@ -131,7 +131,7 @@ abbreviation RootDatum
 
 中文:
 缩写 RootDatum
-  签名: (X₁ X₂ : 类型) [AddCommGroup X₁] [AddCommGroup X₂]
+  签名: (X₁ X₂ : 类型) [加法交换群 X₁] [加法交换群 X₂]
   定义体: RootPairing ι Int X₁ X₂
 
 Depends on / 依赖: NormedAddCommGroup, RootPairing, measureSpaceOfInnerProductSpace
@@ -156,7 +156,7 @@ class IsRootSystem
     - span_coroot_eq_top : span R (range P.coroot) = ⊤
 
 中文:
-类 IsRootSystem
+类 是RootSystem
   参数: : 命题 where
   公理与运算 (2 个):
     - span_root_eq_top : span R (range P.root) = ⊤
@@ -256,8 +256,8 @@ instance [P.IsRootSystem]
   span_coroot_eq_top := IsRootSystem.span_root_eq_top
 
 中文:
-实例 [P.IsRootSystem]
-  签名: : P.flip.IsRootSystem where
+实例 [P.是RootSystem]
+  签名: : P.flip.是RootSystem where
   定义体: IsRootSystem.span_coroot_eq_top
   span_coroot_eq_top := IsRootSystem.span_root_eq_top
 
@@ -361,8 +361,8 @@ lemma exists_ne_zero
   exact ⟨i, P.ne_zero i⟩
 
 中文:
-引理 exists_ne_zero
-  条件: [Nonempty ι] [NeZero (2 : R)]
+引理 存在_ne_zero
+  条件: [非空 ι] [NeZero (2 : R)]
   结论: 存在 i, P.root i != 0
   证明: by
   obtain ⟨i⟩ := (inferInstance : Nonempty ι)
@@ -386,8 +386,8 @@ lemma exists_ne_zero'
 include P in
 
 中文:
-引理 exists_ne_zero'
-  条件: [Nonempty ι] [NeZero (2 : R)]
+引理 存在_ne_zero'
+  条件: [非空 ι] [NeZero (2 : R)]
   结论: 存在 i, P.coroot i != 0
   证明: P.flip.exists_ne_zero
 
@@ -414,8 +414,8 @@ include P in
 
 中文:
 引理 nontrivial
-  条件: [Nonempty ι] [NeZero (2 : R)]
-  结论: Nontrivial M
+  条件: [非空 ι] [NeZero (2 : R)]
+  结论: 非平凡 M
   证明: by
   obtain ⟨i, hi⟩ := P.exists_ne_zero
   exact ⟨P.root i, 0, hi⟩
@@ -438,8 +438,8 @@ lemma nontrivial'
 
 中文:
 引理 nontrivial'
-  条件: [Nonempty ι] [NeZero (2 : R)]
-  结论: Nontrivial N
+  条件: [非空 ι] [NeZero (2 : R)]
+  结论: 非平凡 N
   证明: P.flip.nontrivial
 -/
 protected lemma nontrivial' [Nonempty ι] [NeZero (2 : R)] : Nontrivial N :=
@@ -957,7 +957,7 @@ lemma reflectionPerm_involutive
 
 中文:
 引理 reflectionPerm_involutive
-  结论: Involutive (P.reflectionPerm i)
+  结论: 对合 (P.reflectionPerm i)
   证明: involutive_iff_iter_2_eq_id.mpr (by ext; simp)
 
 @[simp]
@@ -1221,7 +1221,7 @@ lemma bijOn_coreflection_coroot
 
 中文:
 引理 bijOn_coreflection_coroot
-  结论: BijOn (P.coreflection i) (range P.coroot) (range P.coroot)
+  结论: 双射限制 (P.coreflection i) (range P.coroot) (range P.coroot)
   证明: bijOn_reflection_root P.flip i
 
 @[simp]
@@ -1542,7 +1542,7 @@ lemma ne_neg
 
 中文:
 引理 ne_neg
-  条件: [NeZero (2 : R)] [IsDomain R]
+  条件: [NeZero (2 : R)] [是整环 R]
   证明: P.indexNeg
     i != -i := by
   have := Module.IsReflexive.of_isPerfPair P.toLinearMap
@@ -1707,7 +1707,7 @@ lemma smul_coroot_eq_of_root_eq_smul
 
 中文:
 引理 smul_coroot_eq_of_root_eq_smul
-  结论: [Finite ι] [IsAddTorsionFree N] (i j : ι) (t : R)
+  结论: [有限 ι] [是加法无挠 N] (i j : ι) (t : R)
   证明: by
   have hij : t * P.pairing i j = 2 := by simpa using ((P.coroot' j).congr_arg h).symm
   refine Module.eq_of_mapsTo_reflection_of_mem (f := P.root' i) (g := P.root' i)
@@ -1740,7 +1740,7 @@ lemma coroot_eq_smul_coroot_iff
 
 中文:
 引理 coroot_eq_smul_coroot_iff
-  结论: [Finite ι] [IsAddTorsionFree M] [IsAddTorsionFree N]
+  结论: [有限 ι] [是加法无挠 M] [是加法无挠 N]
   证明: ⟨fun h => (P.flip.smul_coroot_eq_of_root_eq_smul j i t h).symm,
     fun h => (P.smul_coroot_eq_of_root_eq_smul i j t h).symm⟩
 -/
@@ -1995,7 +1995,7 @@ exact (P.reflectionPerm_eq_reflectionPerm_iff_of_span i j).mp h x by simp
 
 中文:
 引理 reflectionPerm_eq_reflectionPerm_iff
-  条件: [P.IsRootSystem] (i j : ι)
+  条件: [P.是RootSystem] (i j : ι)
   证明: by
 refine ⟨fun h => ?_, fun h => Equiv.ext fun k => P.root.injective by simp [h]⟩
   ext x
@@ -2299,7 +2299,7 @@ exact IsOrthogonal.reflection_apply_right hj i his
 
 中文:
 引理 isFixedPt_reflection_of_isOrthogonal
-  结论: {s : Set ι} (hj : 对任意 i in s, P.IsOrthogonal j i)
+  结论: {s : 集合 ι} (hj : 对任意 i in s, P.IsOrthogonal j i)
   证明: by
   rw [IsFixedPt]
   induction hx using Submodule.span_induction with
@@ -2413,7 +2413,7 @@ lemma pairing_eq_zero_iff
 
 中文:
 引理 pairing_eq_zero_iff
-  条件: [NeZero (2 : R)] [IsDomain R] [Module.IsTorsionFree R M]
+  条件: [NeZero (2 : R)] [是整环 R] [模.是无挠 R M]
   证明: by
   suffices forall {i j : ι}, P.pairing i j = 0 -> P.pairing j i = 0 from ⟨this, this⟩
   intro i j h
@@ -2441,7 +2441,7 @@ lemma pairing_eq_zero_iff'
 
 中文:
 引理 pairing_eq_zero_iff'
-  条件: [NeZero (2 : R)] [IsDomain R]
+  条件: [NeZero (2 : R)] [是整环 R]
   证明: by
   have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   exact pairing_eq_zero_iff
@@ -2465,7 +2465,7 @@ lemma coxeterWeight_zero_iff_isOrthogonal
 
 中文:
 引理 coxeterWeight_zero_iff_isOrthogonal
-  条件: [NeZero (2 : R)] [IsDomain R]
+  条件: [NeZero (2 : R)] [是整环 R]
   证明: by
   have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   simp [coxeterWeight, IsOrthogonal, P.pairing_eq_zero_iff (i := i) (j := j)]
@@ -2487,7 +2487,7 @@ lemma isOrthogonal_iff_pairing_eq_zero
 
 中文:
 引理 isOrthogonal_iff_pairing_eq_zero
-  条件: [NeZero (2 : R)] [IsDomain R] [Module.IsTorsionFree R M]
+  条件: [NeZero (2 : R)] [是整环 R] [模.是无挠 R M]
   证明: ⟨fun h => h.1, fun h => ⟨h, pairing_eq_zero_iff.mp h⟩⟩
 
 Depends on / 依赖: pairing_eq_zero_iff, pairing_eq_zero_iff.mp
@@ -2507,7 +2507,7 @@ lemma isFixedPt_reflectionPerm_iff
 
 中文:
 引理 isFixedPt_reflectionPerm_iff
-  条件: [NeZero (2 : R)] [IsDomain R] [Module.IsTorsionFree R M]
+  条件: [NeZero (2 : R)] [是整环 R] [模.是无挠 R M]
   证明: by
   simp [P.ne_zero i, pairing_eq_zero_iff, IsFixedPt, reflectionPerm_eq_iff_smul_root]
 
@@ -2571,7 +2571,7 @@ instance [P.IsRootSystem]
   span_coroot_eq_top := by simp [Embedding.coe_trans, range_comp, RootPairing.map]
 
 中文:
-实例 [P.IsRootSystem]
+实例 [P.是RootSystem]
   签名: (e : ι ≃ ι₂) (f : M ≃ₗ[R] M₂) (g : N ≃ₗ[R] N₂)
   定义体: by simp [RootPairing.map, Embedding.coe_trans, range_comp]
   span_coroot_eq_top := by simp [Embedding.coe_trans, range_comp, RootPairing.map]

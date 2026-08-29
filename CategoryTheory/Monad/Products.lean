@@ -57,7 +57,7 @@ definition prodComonad
 
 中文:
 定义 prodComonad
-  签名: : Comonad C where
+  签名: : 余单子 C where
   定义体: prod.functor.obj X
   ε := { app := fun _ => Limits.prod.snd }
   δ := { app := fun _ => prod.lift Limits.prod.fst (𝟙 _) }
@@ -85,7 +85,7 @@ definition coalgebraToOver
 
 中文:
 定义 coalgebraToOver
-  签名: : Coalgebra (prodComonad X) ⥤ Over X where
+  签名: : 余algebra (prodComonad X) ⥤ Over X where
   定义体: Over.mk (A.a ≫ Limits.prod.fst)
   map f := Over.homMk f.f (by simp [← dsimp% f.h_assoc])
 
@@ -113,7 +113,7 @@ definition overToCoalgebra
 
 中文:
 定义 overToCoalgebra
-  签名: : Over X ⥤ Coalgebra (prodComonad X) where
+  签名: : Over X ⥤ 余algebra (prodComonad X) where
   定义体: { A := f.left
       a := prod.lift f.hom (𝟙 _) }
   map g := { f := g.left }
@@ -144,7 +144,7 @@ definition coalgebraEquivOver
 
 中文:
 定义 coalgebraEquivOver
-  签名: : Coalgebra (prodComonad X) ≌ Over X where
+  签名: : 余algebra (prodComonad X) ≌ Over X where
   定义体: coalgebraToOver X
   inverse := overToCoalgebra X
   unitIso := NatIso.ofComponents fun A =>
@@ -182,7 +182,7 @@ definition coprodMonad
 
 中文:
 定义 coprodMonad
-  签名: : Monad C where
+  签名: : 单子 C where
   定义体: coprod.functor.obj X
   η := { app := fun _ => coprod.inr }
   μ := { app := fun _ => coprod.desc coprod.inl (𝟙 _) }
@@ -211,7 +211,7 @@ definition algebraToUnder
 
 中文:
 定义 algebraToUnder
-  签名: : Monad.Algebra (coprodMonad X) ⥤ Under X where
+  签名: : 单子.代数 (coprodMonad X) ⥤ Under X where
   定义体: Under.mk (coprod.inl ≫ A.a)
   map f := Under.homMk f.f (by simp [← dsimp% f.h])
 
@@ -238,7 +238,7 @@ definition underToAlgebra
 
 中文:
 定义 underToAlgebra
-  签名: : Under X ⥤ Monad.Algebra (coprodMonad X) where
+  签名: : Under X ⥤ 单子.代数 (coprodMonad X) where
   定义体: { A := f.right
       a := coprod.desc f.hom (𝟙 _) }
   map g := { f := g.right }
@@ -271,7 +271,7 @@ definition algebraEquivUnder
 
 中文:
 定义 algebraEquivUnder
-  签名: : Monad.Algebra (coprodMonad X) ≌ Under X where
+  签名: : 单子.代数 (coprodMonad X) ≌ Under X where
   定义体: algebraToUnder X
   inverse := underToAlgebra X
   unitIso := NatIso.ofComponents fun A =>

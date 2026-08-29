@@ -1904,7 +1904,7 @@ lemma equivHomShift_comp
 
 中文:
 引理 equivHomShift_comp
-  结论: {K' : CochainComplex C 整数}
+  结论: {K' : 上链复形 C 整数}
   证明: by
   ext p q hpq
   simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]
@@ -1948,7 +1948,7 @@ lemma equivHomShift_comp_shift
 
 中文:
 引理 equivHomShift_comp_shift
-  条件: (f : K ⟶ L⟦n⟧) {L' : CochainComplex C 整数} (g : L ⟶ L')
+  条件: (f : K ⟶ L⟦n⟧) {L' : 上链复形 C 整数} (g : L ⟶ L')
   证明: by
   ext p q rfl
   simp [equivHomShift_apply, Cochain.rightUnshift_v _ _ _ _ _ _ _ (add_zero p)]

@@ -44,7 +44,7 @@ lemma prod_dist_eq_prod_dist_of_mem_line_of_mem_line
 
 中文:
 引理 prod_dist_eq_prod_dist_of_mem_line_of_mem_line
-  结论: {t : Triangle 𝕜 P} {p : Fin 3 -> P} {p' : P}
+  结论: {t : Triangle 𝕜 P} {p : 有限集 3 -> P} {p' : P}
   证明: by
   simp_rw [mem_affineSpan_pair_iff_exists_lineMap_eq] at hp
   choose r hr using hp
@@ -84,7 +84,7 @@ lemma prod_dist_div_dist_eq_one_of_mem_line_of_mem_line
 
 中文:
 引理 prod_dist_div_dist_eq_one_of_mem_line_of_mem_line
-  结论: {t : Triangle 𝕜 P} {p : Fin 3 -> P} {p' : P}
+  结论: {t : Triangle 𝕜 P} {p : 有限集 3 -> P} {p' : P}
   证明: by
   have aux (i) : dist (p i) (t.points (i + 2)) != 0 := by simpa using hp0 i
   have key := prod_dist_eq_prod_dist_of_mem_line_of_mem_line hp hp'

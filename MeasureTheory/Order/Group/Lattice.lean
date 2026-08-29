@@ -36,7 +36,7 @@ theorem measurable_oneLePart
 中文:
 定理 measurable_oneLePart
   条件: [MeasurableSup α]
-  结论: Measurable (oneLePart : α -> α)
+  结论: 可测 (oneLePart : α -> α)
   证明: measurable_sup_const _
 
 @[to_additive (attr := fun_prop)]
@@ -58,8 +58,8 @@ theorem Measurable.oneLePart
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.oneLePart
-  条件: [MeasurableSup α] (hf : Measurable f)
+定理 可测.oneLePart
+  条件: [MeasurableSup α] (hf : 可测 f)
   证明: measurable_oneLePart.comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -78,8 +78,8 @@ theorem AEMeasurable.oneLePart
   proof: hf.sup_const 1
 
 中文:
-定理 AEMeasurable.oneLePart
-  结论: {μ : MeasureTheory.Measure β} [MeasurableSup α]
+定理 几乎处处可测.oneLePart
+  结论: {μ : 测度论.测度 β} [MeasurableSup α]
   证明: hf.sup_const 1
 -/
 protected theorem AEMeasurable.oneLePart {μ : MeasureTheory.Measure β} [MeasurableSup α]
@@ -104,7 +104,7 @@ theorem measurable_leOnePart
 中文:
 定理 measurable_leOnePart
   条件: [MeasurableSup α]
-  结论: Measurable (leOnePart : α -> α)
+  结论: 可测 (leOnePart : α -> α)
   证明: (measurable_sup_const _).comp measurable_inv
 
 @[to_additive (attr := fun_prop)]
@@ -126,8 +126,8 @@ theorem Measurable.leOnePart
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.leOnePart
-  条件: [MeasurableSup α] (hf : Measurable f)
+定理 可测.leOnePart
+  条件: [MeasurableSup α] (hf : 可测 f)
   证明: measurable_leOnePart.comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -146,8 +146,8 @@ theorem AEMeasurable.leOnePart
   proof: hf.inv.sup_const 1
 
 中文:
-定理 AEMeasurable.leOnePart
-  结论: {μ : MeasureTheory.Measure β} [MeasurableSup α]
+定理 几乎处处可测.leOnePart
+  结论: {μ : 测度论.测度 β} [MeasurableSup α]
   证明: hf.inv.sup_const 1
 -/
 protected theorem AEMeasurable.leOnePart {μ : MeasureTheory.Measure β} [MeasurableSup α]
@@ -170,7 +170,7 @@ theorem measurable_mabs
 
 中文:
 定理 measurable_mabs
-  结论: Measurable (mabs : α -> α)
+  结论: 可测 (mabs : α -> α)
   证明: measurable_id'.sup measurable_inv
 
 @[to_additive (attr := fun_prop)]
@@ -193,9 +193,9 @@ theorem Measurable.mabs
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 Measurable.mabs
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => mabs (f x)
+定理 可测.mabs
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => mabs (f x)
   证明: measurable_mabs.comp hf
 
 @[to_additive (attr := fun_prop)]
@@ -213,8 +213,8 @@ theorem AEMeasurable.mabs
   proof: measurable_mabs.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.mabs
-  条件: {μ : MeasureTheory.Measure β} (hf : AEMeasurable f μ)
+定理 几乎处处可测.mabs
+  条件: {μ : 测度论.测度 β} (hf : 几乎处处可测 f μ)
   证明: measurable_mabs.comp_aemeasurable hf
 -/
 protected theorem AEMeasurable.mabs {μ : MeasureTheory.Measure β} (hf : AEMeasurable f μ) :

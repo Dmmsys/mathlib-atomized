@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (AlgCat.{u} R)
+  签名: 辫范畴 (Alg范畴.{u} R)
   定义体: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
     fun X Y => (Algebra.TensorProduct.comm R X Y).toAlgebraIso
 
@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (AlgCat R) (ModuleCat R)).Braided
+  签名: (forget₂ (Alg范畴 R) (模范畴 R)).辫
 -/
 instance : (forget₂ (AlgCat R) (ModuleCat R)).Braided where
 
@@ -72,7 +72,7 @@ instance instSymmetricCategory
 
 中文:
 实例 instSymmetricCategory
-  签名: : SymmetricCategory (AlgCat.{u} R)
+  签名: : 对称范畴 (Alg范畴.{u} R)
   定义体: .ofFaithful (forget₂ (AlgCat R) (ModuleCat R))
 
 Depends on / 依赖: AlgCat, ModuleCat, ofFaithful

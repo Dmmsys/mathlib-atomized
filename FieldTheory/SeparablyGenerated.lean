@@ -60,7 +60,7 @@ definition toPolynomialAdjoinImageCompl
 
 中文:
 定义 toPolynomialAdjoinImageCompl
-  签名: (F : MvPolynomial ι k) (a : ι -> K) (i : ι)
+  签名: (F : 多元多项式 ι k) (a : ι -> K) (i : ι)
   定义体: letI := Classical.typeDecidableEq ι
   (optionEquivLeft k _ (renameEquiv k (Equiv.optionSubtypeNe i).symm F)).mapAlgHom
     (aeval fun j : {j // j != i} =>
@@ -117,7 +117,7 @@ refine (congrArg Irreducible ?_).mp
 
 中文:
 定理 irreducible_toPolynomialAdjoinImageCompl
-  结论: {F : MvPolynomial ι k} (hF : Irreducible F) (i : ι)
+  结论: {F : 多元多项式 ι k} (hF : 不可约 F) (i : ι)
   证明: by
   classical
   unfold toPolynomialAdjoinImageCompl
@@ -167,9 +167,9 @@ simpa [h₁, hFa] using Eq.symm congr(aeval a $e))
   rw [e
 
 中文:
-引理 irreducible_of_forall_totalDegree_le
+引理 irreducible_of_对任意_totalDegree_le
   条件: (hF0 : F != 0) (hFa : F.aeval a = 0)
-  结论: Irreducible F
+  结论: 不可约 F
   证明: by
   refine ⟨fun h' => (h'.map (aeval a)).ne_zero hFa, fun q₁ q₂ e => ?_⟩
   wlog h₁ : aeval a q₁ = 0 generalizing q₁ q₂
@@ -261,7 +261,7 @@ theorem isAlgebraic_of_mem_vars_of_forall_totalDegree_le
   rw [h]; rw [Polynomial.coeff_ze
 
 中文:
-定理 isAlgebraic_of_mem_vars_of_forall_totalDegree_le
+定理 isAlgebraic_of_mem_vars_of_对任意_totalDegree_le
   结论: (hFa : F.aeval a = 0) (i : ι)
   证明: by
   have ⟨σ, hσ, hσi⟩ := (mem_vars_iff_mem_support i).mp hi
@@ -300,7 +300,7 @@ theorem exists_mem_support_not_dvd_of_forall_totalDegree_le
   replace H
 
 中文:
-定理 exists_mem_support_not_dvd_of_forall_totalDegree_le
+定理 存在_mem_support_not_dvd_of_对任意_totalDegree_le
   条件: (hF0 : F != 0) (hFa : F.aeval a = 0)
   证明: by
   by_contra!
@@ -380,7 +380,7 @@ lemma exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow
       ⟨totalDegree.argminOn S this, totalDegree.argminOn_mem 
 
 中文:
-引理 exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow
+引理 存在_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow
   证明: by
   set S := {F : MvPolynomial ι k | F != 0 ∧ F.aeval a = 0}
   obtain ⟨F, ⟨hF₀, hFa⟩, hFmin⟩ :
@@ -444,7 +444,7 @@ lemma exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow'
     (a := fun i : ↥(insert n s) => a i) ⟨n, by 
 
 中文:
-引理 exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow'
+引理 存在_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow'
   证明: by
   let e₁ : {j : ↥(insert n s) // j != ⟨n, by simp⟩} ≃ ↑s :=
     ⟨fun x => ⟨x, by aesop⟩, fun x => ⟨⟨x, by aesop⟩, by aesop⟩, fun _ => rfl, fun _ => rfl⟩
@@ -488,7 +488,7 @@ lemma exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_adjoin
   
 
 中文:
-引理 exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_adjoin_eq_top
+引理 存在_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_adjoin_eq_top
   证明: by
   have ⟨i, hi⟩ := exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow p hp H n ha'
   refine ⟨i, hi.1, ?_⟩
@@ -533,7 +533,7 @@ lemma exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_essFin
   have ⟨i, hi₁, hi₂⟩ := exists_isTranscendenceBasis_and_isS
 
 中文:
-引理 exists_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_essFiniteType
+引理 存在_isTranscendenceBasis_and_isSeparable_of_linearIndepOn_pow_of_essFiniteType
   证明: by
   have ⟨s, hs, Hs⟩ := exists_finset_maximalFor_isTranscendenceBasis_separableClosure k K
   refine ⟨s, hs, ⟨fun n => of_not_not fun hn => ?_⟩⟩
@@ -577,7 +577,7 @@ lemma exists_isTranscendenceBasis_and_isSeparable_of_perfectField
       exact Algebra.isIntegral_of_surject
 
 中文:
-引理 exists_isTranscendenceBasis_and_isSeparable_of_perfectField
+引理 存在_isTranscendenceBasis_and_isSeparable_of_perfectField
   证明: by
   obtain _ | ⟨p, hp, hpk⟩ := CharP.exists' k
   · obtain ⟨s, hs⟩ := IntermediateField.fg_top k K

@@ -50,8 +50,8 @@ class IsRegularCardinalOrder
     - type_lt_le_ord_cof : typeLT α <= (cof α).ord
 
 中文:
-类 IsRegularCardinalOrder
-  参数: (α : 类型) [LinearOrder α] [WellFoundedLT α]
+类 是RegularCardinal序
+  参数: (α : 类型) [线性序 α] [WellFoundedLT α]
   公理与运算 (1 个):
     - type_lt_le_ord_cof : typeLT α <= (cof α).ord
 -/
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularCardinalOrder 自然数
+  签名: 是RegularCardinal序 自然数
   定义体: ⟨by simp⟩
 -/
 instance : IsRegularCardinalOrder Nat := ⟨by simp⟩
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularCardinalOrder Ordinal
+  签名: 是RegularCardinal序 序数
   定义体: by
     rw [type_lt_ordinal]; rw [← ord_univ]; rw [ord_le_ord]; rw [le_cof_iff]
     intro s hs
@@ -187,7 +187,7 @@ theorem _root_.Cardinal.ord_cardinalMk
   rw [← ord_cof_eq_type_lt]; rw [cof_eq_cardinalMk]
 
 中文:
-定理 _root_.Cardinal.ord_cardinalMk
+定理 _root_.基数.ord_cardinalMk
   结论: ord #α = typeLT α
   证明: by
   rw [← ord_cof_eq_type_lt]; rw [cof_eq_cardinalMk]
@@ -208,7 +208,7 @@ theorem cof_ordinal
 
 中文:
 定理 cof_ordinal
-  结论: cof Ordinal.{u} = Cardinal.univ.{u, u + 1}
+  结论: cof 序数.{u} = 基数.univ.{u, u + 1}
   证明: by
   simp
 -/
@@ -229,7 +229,7 @@ theorem type_eq_of_isCofinal
 
 中文:
 定理 type_eq_of_isCofinal
-  条件: {s : Set α} (hs : IsCofinal s)
+  条件: {s : 集合 α} (hs : IsCofinal s)
   结论: typeLT s = typeLT α
   证明: by
   apply (RelEmbedding.ofMonotone Subtype.val (by simp)).ordinal_type_le.antisymm
@@ -253,7 +253,7 @@ definition enum
 
 中文:
 定义 enum
-  签名: (s : Set α) (hs : IsCofinal s)
+  签名: (s : 集合 α) (hs : IsCofinal s)
   定义体: .ofRelIsoLT (type_eq.1 (type_eq_of_isCofinal hs).symm).some
 
 Depends on / 依赖: ofRelIsoLT, type_eq, type_eq_of_isCofinal
@@ -275,7 +275,7 @@ theorem enum_le_of_forall_lt
   simpa [OrderIso.lt_symm_apply]
 
 中文:
-定理 enum_le_of_forall_lt
+定理 enum_le_of_对任意_lt
   条件: {a o : α} (ho : o in s) (H : 对任意 b < a, enum s hs b < o)
   证明: by
   rw [← Subtype.coe_mk o ho]; rw [Subtype.coe_le_coe]; rw [← OrderIso.le_symm_apply]
@@ -304,7 +304,7 @@ theorem enum_succ_le_of_lt
 
 中文:
 定理 enum_succ_le_of_lt
-  条件: [SuccOrder α] {a o : α} (ha : o in s) (H : enum s hs a < o)
+  条件: [Succ序 α] {a o : α} (ha : o in s) (H : enum s hs a < o)
   证明: by
   refine enum_le_of_forall_lt ha fun b hb => H.trans_le' ?_
   simpa using le_of_lt_succ hb
@@ -357,7 +357,7 @@ theorem enum_anti
 
 中文:
 定理 enum_anti
-  条件: {hs : IsCofinal s} {t : Set α} {x : α} (h : s subseteq t)
+  条件: {hs : IsCofinal s} {t : 集合 α} {x : α} (h : s subseteq t)
   证明: by
   induction x using WellFoundedLT.induction with | ind x IH
   exact enum_le_of_forall_lt (h (Subtype.prop _)) fun y hy =>
@@ -392,7 +392,7 @@ theorem enum_eq_iff
 中文:
 定理 enum_eq_iff
   条件: {f : α -> α}
-  结论: Subtype.val ∘ enum s hs = f ↔ StrictMono f ∧ range f = s
+  结论: 子类型.val ∘ enum s hs = f ↔ 严格递增 f ∧ range f = s
   证明: by
   have H := (Subtype.strictMono_coe _).comp (enum s hs).strictMono
   constructor
@@ -431,7 +431,7 @@ theorem enum_range
 
 中文:
 定理 enum_range
-  条件: {f : α -> α} (hf : StrictMono f)
+  条件: {f : α -> α} (hf : 严格递增 f)
   证明: by
   ext x
   apply congrFun (enum_eq_iff.2 ⟨?_, ?_⟩)
@@ -461,7 +461,7 @@ theorem enum_bot
 
 中文:
 定理 enum_bot
-  结论: {α : 类型} [ConditionallyCompleteLinearOrderBot α] [WellFoundedLT α]
+  结论: {α : 类型} [余nditionallyCompleteLinearOrderBot α] [WellFoundedLT α]
   证明: by
   let : Bot s := ⟨⟨sInf s, csInf_mem hs.nonempty⟩⟩
   let : OrderBot s := .mk fun a => csInf_le' a.2

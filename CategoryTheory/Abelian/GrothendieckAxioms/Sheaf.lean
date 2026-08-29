@@ -53,8 +53,8 @@ instance [HasFiniteLimits
   body: HasExactColimitsOfShape.domain_of_functor K (sheafToPresheaf J A)
 
 中文:
-实例 [HasFiniteLimits
-  签名: A] [HasColimitsOfShape K A] [HasExactColimitsOfShape K A]
+实例 [有有限极限
+  签名: A] [有形状余极限 K A] [有ExactColimitsOfShape K A]
   定义体: HasExactColimitsOfShape.domain_of_functor K (sheafToPresheaf J A)
 
 Depends on / 依赖: HasExactColimitsOfShape, HasExactColimitsOfShape.domain_of_functor, domain_of_functor, sheafToPresheaf
@@ -72,8 +72,8 @@ instance [HasFiniteColimits
   body: HasExactLimitsOfShape.domain_of_functor K (sheafToPresheaf J A)
 
 中文:
-实例 [HasFiniteColimits
-  签名: A] [HasLimitsOfShape K A] [HasExactLimitsOfShape K A]
+实例 [有有限余极限
+  签名: A] [有形状极限 K A] [有ExactLimitsOfShape K A]
   定义体: HasExactLimitsOfShape.domain_of_functor K (sheafToPresheaf J A)
 
 Depends on / 依赖: HasExactLimitsOfShape, HasExactLimitsOfShape.domain_of_functor, domain_of_functor, sheafToPresheaf
@@ -112,7 +112,7 @@ instance hasExactColimitsOfShape
 
 中文:
 实例 hasExactColimitsOfShape
-  签名: [HasFiniteLimits A] [HasSheafify J A]
+  签名: [有有限极限 A] [有Sheafify J A]
   定义体: (sheafificationAdjunction J A).hasExactColimitsOfShape K
 
 Depends on / 依赖: hasExactColimitsOfShape, sheafificationAdjunction
@@ -132,7 +132,7 @@ instance ab5ofSize
 
 中文:
 实例 ab5ofSize
-  签名: [HasFiniteLimits A] [HasSheafify J A]
+  签名: [有有限极限 A] [有Sheafify J A]
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance

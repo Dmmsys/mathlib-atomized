@@ -40,7 +40,7 @@ theorem surjOn_Ioo_of_monotone_surjective
 
 中文:
 定理 surjOn_Ioo_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   intro p hp
   rcases h_surj p with ⟨x, rfl⟩
@@ -75,7 +75,7 @@ theorem surjOn_Ico_of_monotone_surjective
 
 中文:
 定理 surjOn_Ico_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   obtain hab | hab := lt_or_ge a b
   · intro p hp
@@ -109,7 +109,7 @@ theorem surjOn_Ioc_of_monotone_surjective
 
 中文:
 定理 surjOn_Ioc_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   simpa using! surjOn_Ico_of_monotone_surjective h_mono.dual h_surj (toDual b) (toDual a)
 
@@ -136,7 +136,7 @@ theorem surjOn_Icc_of_monotone_surjective
 
 中文:
 定理 surjOn_Icc_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   intro p hp
   rcases eq_endpoints_or_mem_Ioo_of_mem_Icc hp with (rfl | rfl | hp')
@@ -169,7 +169,7 @@ theorem surjOn_Ioi_of_monotone_surjective
 
 中文:
 定理 surjOn_Ioi_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   rw [← compl_Iic]; rw [← compl_compl (Ioi (f a))]
   refine MapsTo.surjOn_compl ?_ h_surj
@@ -193,7 +193,7 @@ theorem surjOn_Iio_of_monotone_surjective
 
 中文:
 定理 surjOn_Iio_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: @surjOn_Ioi_of_monotone_surjective _ _ _ _ _ h_mono.dual h_surj a
 
 Depends on / 依赖: h_mono, h_mono.dual, h_surj, surjOn_Ioi_of_monotone_surjective
@@ -216,7 +216,7 @@ theorem surjOn_Ici_of_monotone_surjective
 
 中文:
 定理 surjOn_Ici_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: by
   rw [← Ioi_union_left]; rw [← Ioi_union_left]
   exact
@@ -242,7 +242,7 @@ theorem surjOn_Iic_of_monotone_surjective
 
 中文:
 定理 surjOn_Iic_of_monotone_surjective
-  结论: (h_mono : Monotone f) (h_surj : Function.Surjective f)
+  结论: (h_mono : 递增 f) (h_surj : 函数.满射 f)
   证明: @surjOn_Ici_of_monotone_surjective _ _ _ _ _ h_mono.dual h_surj a
 
 Depends on / 依赖: h_mono, h_mono.dual, h_surj, surjOn_Ici_of_monotone_surjective

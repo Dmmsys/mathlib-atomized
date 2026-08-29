@@ -218,7 +218,7 @@ definition truncGE'
 
 中文:
 定义 truncGE'
-  签名: : HomologicalComplex C c where
+  签名: : 同调复形 C c where
   定义体: truncGE'.X K e
   d := truncGE'.d K e
   shape _ _ h := dif_neg h
@@ -279,7 +279,7 @@ lemma truncGE'_d_eq
 
 中文:
 引理 truncGE'_d_eq
-  结论: {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
+  结论: {i j : ι} (hij : c.关系 i j) {i' j' : ι'}
   证明: by
   dsimp [truncGE', truncGE'.d]
   rw [dif_pos hij]; rw [dif_neg hi]
@@ -310,7 +310,7 @@ lemma truncGE'_d_eq_fromOpcycles
 
 中文:
 引理 truncGE'_d_eq_fromOpcycles
-  结论: {i j : ι} (hij : c.Rel i j) {i' j' : ι'}
+  结论: {i j : ι} (hij : c.关系 i j) {i' j' : ι'}
   证明: by
   dsimp [truncGE', truncGE'.d]
   rw [dif_pos hij]; rw [dif_pos hi]
@@ -340,7 +340,7 @@ definition truncGE
 
 中文:
 定义 truncGE
-  签名: : HomologicalComplex C c'
+  签名: : 同调复形 C c'
   定义体: (K.truncGE' e).extend e
 
 Depends on / 依赖: K.truncGE, extend, truncGE
@@ -789,7 +789,7 @@ lemma restrictionToTruncGE'_hasLift
 
 中文:
 引理 restrictionToTruncGE'_hasLift
-  结论: e.HasLift (K.restrictionToTruncGE' e)
+  结论: e.有Lift (K.restrictionToTruncGE' e)
   证明: by
   intro j hj i' _
   dsimp [restrictionToTruncGE']
@@ -926,7 +926,7 @@ instance [K.IsStrictlySupported
         (fun j hj => hi
 
 中文:
-实例 [K.IsStrictlySupported
+实例 [K.是StrictlySupported
   签名: e] (i
   定义体: by
   by_cases hi : e.BoundaryGE i
@@ -991,7 +991,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (K.πTruncGE e)
+  签名: 满态射 (K.πTruncGE e)
   定义体: epi_of_epi_f _ (fun _ => inferInstance)
 
 Depends on / 依赖: epi_of_epi_f
@@ -1010,7 +1010,7 @@ instance :
 
 中文:
 实例 :
-  签名: (K.truncGE e).IsStrictlySupported e
+  签名: (K.truncGE e).是StrictlySupported e
   定义体: by
   dsimp [truncGE]
   infer_instance
@@ -1090,8 +1090,8 @@ instance [K.IsStrictlySupported
       apply
 
 中文:
-实例 [K.IsStrictlySupported
-  签名: e] : IsIso (K.πTruncGE e)
+实例 [K.是StrictlySupported
+  签名: e] : 是同构 (K.πTruncGE e)
   定义体: by
   suffices forall (i' : ι'), IsIso ((K.πTruncGE e).f i') by
     apply Hom.isIso_of_components
@@ -1131,7 +1131,7 @@ lemma isIso_πTruncGE_iff
 
 中文:
 引理 isIso_πTruncGE_iff
-  结论: IsIso (K.πTruncGE e) ↔ K.IsStrictlySupported e
+  结论: 是同构 (K.πTruncGE e) ↔ K.是StrictlySupported e
   证明: ⟨fun _ => isStrictlySupported_of_iso (asIso (K.πTruncGE e)).symm e,
     fun _ => inferInstance⟩
 
@@ -1164,7 +1164,7 @@ definition truncGE'Functor
   map φ := HomologicalComplex.truncGE'Map φ e
 
 中文:
-定义 truncGE'Functor
+定义 truncGE'函子
   签名: :
   定义体: K.truncGE' e
   map φ := HomologicalComplex.truncGE'Map φ e
@@ -1188,7 +1188,7 @@ definition restrictionToTruncGE'NatTrans
   body: K.restrictionToTruncGE' e
 
 中文:
-定义 restrictionToTruncGE'NatTrans
+定义 restrictionToTruncGE'自然变换
   签名: :
   定义体: K.restrictionToTruncGE' e
 
@@ -1236,7 +1236,7 @@ definition πTruncGENatTrans
   body: K.πTruncGE e
 
 中文:
-定义 πTruncGENatTrans
+定义 πTruncGE自然数Trans
   签名: : 𝟭 _ ⟶ e.truncGEFunctor C where
   定义体: K.πTruncGE e
 -/

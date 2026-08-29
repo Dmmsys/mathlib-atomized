@@ -32,8 +32,8 @@ definition FaithfullyFlat
   Module.FaithfullyFlat R S
 
 中文:
-定义 FaithfullyFlat
-  签名: {R S : 类型} [CommRing R] [CommRing S] (f : R ->+* S)
+定义 忠实平坦
+  签名: {R S : 类型} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: letI : Algebra R S := f.toAlgebra
   Module.FaithfullyFlat R S
 
@@ -56,7 +56,7 @@ lemma faithfullyFlat_algebraMap_iff
 
 中文:
 引理 faithfullyFlat_algebraMap_iff
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: by
   simp only [FaithfullyFlat]
   congr!
@@ -85,8 +85,8 @@ exact inferInstanceAs Module.Flat R S
 
 中文:
 引理 flat
-  条件: (hf : f.FaithfullyFlat)
-  结论: f.Flat
+  条件: (hf : f.忠实平坦)
+  结论: f.平坦
   证明: by
   algebraize [f]
 exact inferInstanceAs Module.Flat R S
@@ -137,7 +137,7 @@ lemma eq_and
 
 中文:
 引理 eq_and
-  结论: FaithfullyFlat =
+  结论: 忠实平坦 =
   证明: by
   ext
   rw [iff_flat_and_comap_surjective]
@@ -163,7 +163,7 @@ lemma stableUnderComposition
 
 中文:
 引理 stableUnderComposition
-  结论: StableUnderComposition FaithfullyFlat
+  结论: StableUnderComposition 忠实平坦
   证明: by
   introv R hf hg
   algebraize [f, g, g.comp f]
@@ -196,8 +196,8 @@ lemma of_bijective
 
 中文:
 引理 of_bijective
-  条件: (hf : Function.Bijective f)
-  结论: f.FaithfullyFlat
+  条件: (hf : 函数.双射 f)
+  结论: f.忠实平坦
   证明: by
   rw [iff_flat_and_comap_surjective]
   refine ⟨.of_bijective hf, fun p => ?_⟩
@@ -231,8 +231,8 @@ lemma injective
 
 中文:
 引理 injective
-  条件: (hf : f.FaithfullyFlat)
-  结论: Function.Injective ⇑f
+  条件: (hf : f.忠实平坦)
+  结论: 函数.单射 ⇑f
   证明: by
   algebraize [f]
   exact FaithfulSMul.algebraMap_injective R S
@@ -253,7 +253,7 @@ lemma respectsIso
 
 中文:
 引理 respectsIso
-  结论: RespectsIso FaithfullyFlat
+  结论: RespectsIso 忠实平坦
   证明: stableUnderComposition.respectsIso (fun e => .of_bijective e.bijective)
 
 Depends on / 依赖: bijective, e.bijective, of_bijective, respectsIso, stableUnderComposition, stableUnderComposition.respectsIso
@@ -274,7 +274,7 @@ lemma isStableUnderBaseChange
 
 中文:
 引理 isStableUnderBaseChange
-  结论: IsStableUnderBaseChange FaithfullyFlat
+  结论: 是StableUnderBaseChange 忠实平坦
   证明: by
   refine .mk respectsIso (fun R S T _ _ _ _ _ _ => show (algebraMap _ _).FaithfullyFlat from ?_)
   rw [faithfullyFlat_algebraMap_iff] at *

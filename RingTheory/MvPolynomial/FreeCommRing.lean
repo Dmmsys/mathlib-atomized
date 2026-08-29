@@ -48,7 +48,7 @@ definition genericPolyMap
 
 中文:
 定义 genericPolyMap
-  签名: (monoms : ι -> Finset (κ ->₀ 自然数))
+  签名: (monoms : ι -> 有限集 (κ ->₀ 自然数))
   定义体: fun i => (monoms i).attach.sum
     (fun m => FreeCommRing.of (Sum.inl ⟨i, m⟩) *
       Finsupp.prod m.1 (fun j n => FreeCommRing.of (Sum.inr j) ^ n))
@@ -115,7 +115,7 @@ theorem MvPolynomialSupportLEEquiv_symm_apply_coeff
 
 中文:
 定理 MvPolynomialSupportLEEquiv_symm_apply_coeff
-  结论: [DecidableEq κ] [CommRing R] [DecidableEq R]
+  结论: [DecidableEq κ] [交换环 R] [DecidableEq R]
   证明: (mvPolynomialSupportLEEquiv (R := R) (fun i : ι => (p i).support)).symm_apply_apply
     ⟨p, fun _ => Finset.Subset.refl _⟩
 
@@ -146,7 +146,7 @@ theorem lift_genericPolyMap
 
 中文:
 定理 lift_genericPolyMap
-  结论: [DecidableEq κ] [CommRing R]
+  结论: [DecidableEq κ] [交换环 R]
   证明: by
   simp only [genericPolyMap, map_sum, map_mul, lift_of, support,
     mvPolynomialSupportLEEquiv, coeff, Finset.sum_filter, MvPolynomial.eval_eq,

@@ -51,7 +51,7 @@ definition IsProjectiveMeasureFamily
 
 中文:
 定义 IsProjectiveMeasureFamily
-  签名: (P : 对任意 J : Finset ι, Measure (对任意 j : J, α j))
+  签名: (P : 对任意 J : 有限集 ι, 测度 (对任意 j : J, α j))
   定义体: forall (I J : Finset ι) (hJI : J subseteq I),
     P J = (P I).map (Finset.restrict₂ hJI)
 
@@ -81,7 +81,7 @@ lemma eq_zero_of_isEmpty
 
 中文:
 引理 eq_zero_of_isEmpty
-  结论: [h : IsEmpty (Π i, α i)]
+  结论: [h : 是空 (Π i, α i)]
   证明: by
   classical
   obtain ⟨i, hi⟩ := isEmpty_pi.mp h
@@ -150,7 +150,7 @@ lemma measure_univ_eq
 
 中文:
 引理 measure_univ_eq
-  条件: (hP : IsProjectiveMeasureFamily P) (I J : Finset ι)
+  条件: (hP : IsProjectiveMeasureFamily P) (I J : 有限集 ι)
   证明: by
   classical
   rw [← hP.measure_univ_eq_of_subset I.subset_union_left]; rw [← hP.measure_univ_eq_of_subset (I.subset_union_right (s₂ := J))]
@@ -266,7 +266,7 @@ definition IsProjectiveLimit
 
 中文:
 定义 IsProjectiveLimit
-  签名: (μ : Measure (对任意 i, α i))
+  签名: (μ : 测度 (对任意 i, α i))
   定义体: forall I : Finset ι, (μ.map I.restrict) = P I
 
 Depends on / 依赖: Finset, I.restrict, restrict
@@ -315,7 +315,7 @@ lemma measure_univ_eq
 
 中文:
 引理 measure_univ_eq
-  条件: (hμ : IsProjectiveLimit μ P) (I : Finset ι)
+  条件: (hμ : IsProjectiveLimit μ P) (I : 有限集 ι)
   证明: by
   rw [← cylinder_univ I]; rw [hμ.measure_cylinder _ MeasurableSet.univ]
 
@@ -338,7 +338,7 @@ lemma isFiniteMeasure
 
 中文:
 引理 isFiniteMeasure
-  条件: [对任意 i, IsFiniteMeasure (P i)] (hμ : IsProjectiveLimit μ P)
+  条件: [对任意 i, 是有限测度 (P i)] (hμ : IsProjectiveLimit μ P)
   证明: by
   constructor
   rw [hμ.measure_univ_eq (∅ : Finset ι)]
@@ -365,7 +365,7 @@ lemma isProbabilityMeasure
 
 中文:
 引理 isProbabilityMeasure
-  条件: [对任意 i, IsProbabilityMeasure (P i)] (hμ : IsProjectiveLimit μ P)
+  条件: [对任意 i, 是概率测度 (P i)] (hμ : IsProjectiveLimit μ P)
   证明: by
   constructor
   rw [hμ.measure_univ_eq (∅ : Finset ι)]
@@ -415,7 +415,7 @@ theorem unique
 
 中文:
 定理 unique
-  结论: [对任意 i, IsFiniteMeasure (P i)]
+  结论: [对任意 i, 是有限测度 (P i)]
   证明: by
   have : IsFiniteMeasure μ := hμ.isFiniteMeasure
   refine ext_of_generate_finite (measurableCylinders α) generateFrom_measurableCylinders.symm

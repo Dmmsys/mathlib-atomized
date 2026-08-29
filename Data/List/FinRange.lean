@@ -39,7 +39,7 @@ lemma count_finRange
 
 中文:
 引理 count_finRange
-  条件: {n : 自然数} (a : Fin n)
+  条件: {n : 自然数} (a : 有限集 n)
   结论: count a (finRange n) = 1
   证明: by
   simp [List.Nodup.count (nodup_finRange n)]
@@ -61,7 +61,7 @@ theorem idxOf_finRange
 
 中文:
 定理 idxOf_finRange
-  条件: {k : 自然数} (i : Fin k)
+  条件: {k : 自然数} (i : 有限集 k)
   结论: (finRange k).idxOf i = i
   证明: by
   simpa using (nodup_finRange k).idxOf_getElem i
@@ -81,7 +81,7 @@ theorem ofFn_eq_pmap
 
 中文:
 定理 ofFn_eq_pmap
-  条件: {n} {f : Fin n -> α}
+  条件: {n} {f : 有限集 n -> α}
   证明: by
   ext
   grind
@@ -121,7 +121,7 @@ theorem ofFn_eq_map
 
 中文:
 定理 ofFn_eq_map
-  条件: {n} {f : Fin n -> α}
+  条件: {n} {f : 有限集 n -> α}
   结论: ofFn f = (finRange n).map f
   证明: by
   rw [← ofFn_id]; rw [map_ofFn]; rw [Function.comp_id]
@@ -143,7 +143,7 @@ exact nodup_range.pmap fun _ _ _ _ H => Fin.val_eq_of_eq hf H
 
 中文:
 定理 nodup_ofFn_ofInjective
-  条件: {n} {f : Fin n -> α} (hf : Function.Injective f)
+  条件: {n} {f : 有限集 n -> α} (hf : 函数.单射 f)
   证明: by
   rw [ofFn_eq_pmap]
 exact nodup_range.pmap fun _ _ _ _ H => Fin.val_eq_of_eq hf H
@@ -174,8 +174,8 @@ theorem nodup_ofFn
 
 中文:
 定理 nodup_ofFn
-  条件: {n} {f : Fin n -> α}
-  结论: Nodup (ofFn f) ↔ Function.Injective f
+  条件: {n} {f : 有限集 n -> α}
+  结论: Nodup (ofFn f) ↔ 函数.单射 f
   证明: by
   refine ⟨?_, nodup_ofFn_ofInjective⟩
   refine Fin.consInduction ?_ (fun x₀ xs ih => ?_) f
@@ -213,8 +213,8 @@ theorem Equiv.Perm.map_finRange_perm
   simpa [mem_map, mem_finRange] using! σ.surjective
 
 中文:
-定理 Equiv.Perm.map_finRange_perm
-  条件: {n : 自然数} (σ : Equiv.Perm (Fin n))
+定理 等价.置换.map_finRange_perm
+  条件: {n : 自然数} (σ : 等价.置换 (有限集 n))
   证明: by
   rw [perm_ext_iff_of_nodup ((nodup_finRange n).map σ.injective) <| nodup_finRange n]
   simpa [mem_map, mem_finRange] using! σ.surjective
@@ -237,8 +237,8 @@ theorem Equiv.Perm.ofFn_comp_perm
   exact σ.map_finRange_perm.map f
 
 中文:
-定理 Equiv.Perm.ofFn_comp_perm
-  条件: {n : 自然数} {α : 类型u} (σ : Equiv.Perm (Fin n)) (f : Fin n -> α)
+定理 等价.置换.ofFn_comp_perm
+  条件: {n : 自然数} {α : 类型u} (σ : 等价.置换 (有限集 n)) (f : 有限集 n -> α)
   证明: by
   rw [ofFn_eq_map]; rw [ofFn_eq_map]; rw [← map_map]
   exact σ.map_finRange_perm.map f

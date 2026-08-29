@@ -63,7 +63,7 @@ definition Locally
 
 中文:
 定义 Locally
-  签名: {R S : 类型u} [CommRing R] [CommRing S] (f : R ->+* S)
+  签名: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: exists (s : Set S) (_ : Ideal.span s = ⊤),
     forall t in s, P ((algebraMap S (Localization.Away t)).comp f)
 
@@ -165,7 +165,7 @@ lemma locally_of_exists
     RingHom.ext (fun x => (AlgEquiv.co
 
 中文:
-引理 locally_of_exists
+引理 locally_of_存在
   结论: (hP : RespectsIso P) (f : R ->+* S) {ι : 类型} (s : ι -> S)
   证明: by
   use Set.range s, hsone
@@ -202,7 +202,7 @@ lemma locally_iff_exists
     fun ⟨ι, s, hsone, Sₜ, _, _, hislocal, hs⟩ => locally_of_exists hP f s hsone Sₜ hs⟩
 
 中文:
-引理 locally_iff_exists
+引理 locally_iff_存在
   条件: (hP : RespectsIso P) (f : R ->+* S)
   证明: ⟨fun ⟨s, hsone, hs⟩ => ⟨s, fun t : s => (t : S), by simpa, fun t => Localization.Away (t : S),
       inferInstance, inferInstance, inferInstance, fun t => hs t.val t.property⟩,
@@ -304,7 +304,7 @@ lemma locally_of_locally
 
 中文:
 引理 locally_of_locally
-  结论: {Q : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题}
+  结论: {Q : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题}
   证明: by
   obtain ⟨s, hsone, hs⟩ := hf
   exact ⟨s, hsone, fun t ht => hPQ (hs t ht)⟩
@@ -654,7 +654,7 @@ lemma locally_isStableUnderBaseChange
 
 中文:
 引理 locally_isStableUnderBaseChange
-  条件: (hPi : RespectsIso P) (hPb : IsStableUnderBaseChange P)
+  条件: (hPi : RespectsIso P) (hPb : 是StableUnderBaseChange P)
   证明: by
   apply IsStableUnderBaseChange.mk (locally_respectsIso hPi)
   introv hf

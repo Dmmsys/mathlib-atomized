@@ -94,7 +94,7 @@ definition uliftFunctorFullyFaithful
 
 中文:
 定义 uliftFunctorFullyFaithful
-  签名: : uliftFunctor.{u, v}.FullyFaithful where
+  签名: : uliftFunctor.{u, v}.满忠实 where
   定义体: GrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
     (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
   map_preimage _ := rfl
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{u, v}.Faithful
+  签名: uliftFunctor.{u, v}.忠实
   定义体: uliftFunctorFullyFaithful.faithful
 
 Depends on / 依赖: faithful, uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.faithful
@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{u, v}.Full
+  签名: uliftFunctor.{u, v}.满
   定义体: uliftFunctorFullyFaithful.full
 
 @[to_additive]
@@ -169,7 +169,7 @@ instance uliftFunctor_preservesLimit
 
 中文:
 实例 uliftFunctor_preservesLimit
-  签名: {J : Type w} [Category.{w'} J]
+  签名: {J : 类型 w} [范畴.{w'} J]
   定义体: ⟨isLimitOfReflects (forget GrpCat)
     isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget GrpCat) lc)⟩
 
@@ -192,7 +192,7 @@ instance uliftFunctor_preservesLimitsOfShape
 
 中文:
 实例 uliftFunctor_preservesLimitsOfShape
-  签名: {J : Type w} [Category.{w'} J]
+  签名: {J : 类型 w} [范畴.{w'} J]
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfShape {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J uliftFunctor.{v, u} where
@@ -260,7 +260,7 @@ definition uliftFunctorFullyFaithful
 
 中文:
 定义 uliftFunctorFullyFaithful
-  签名: : uliftFunctor.{u, v}.FullyFaithful where
+  签名: : uliftFunctor.{u, v}.满忠实 where
   定义体: CommGrpCat.ofHom (MulEquiv.ulift.toMonoidHom.comp
     (f.hom.comp MulEquiv.ulift.symm.toMonoidHom))
   map_preimage _ := rfl
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{u, v}.Faithful
+  签名: uliftFunctor.{u, v}.忠实
   定义体: uliftFunctorFullyFaithful.faithful
 
 Depends on / 依赖: faithful, uliftFunctorFullyFaithful, uliftFunctorFullyFaithful.faithful
@@ -309,7 +309,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.{u, v}.Full
+  签名: uliftFunctor.{u, v}.满
   定义体: uliftFunctorFullyFaithful.full
 
 @[to_additive]
@@ -332,7 +332,7 @@ instance uliftFunctor_preservesLimit
 
 中文:
 实例 uliftFunctor_preservesLimit
-  签名: {J : Type w} [Category.{w'} J]
+  签名: {J : 类型 w} [范畴.{w'} J]
   定义体: ⟨isLimitOfReflects (forget CommGrpCat)
     isLimitOfPreserves CategoryTheory.uliftFunctor.{v} (isLimitOfPreserves (forget CommGrpCat) lc)⟩
 
@@ -355,7 +355,7 @@ instance uliftFunctor_preservesLimitsOfShape
 
 中文:
 实例 uliftFunctor_preservesLimitsOfShape
-  签名: {J : Type w} [Category.{w'} J]
+  签名: {J : 类型 w} [范畴.{w'} J]
 -/
 noncomputable instance uliftFunctor_preservesLimitsOfShape {J : Type w} [Category.{w'} J] :
     PreservesLimitsOfShape J uliftFunctor.{v, u} where
@@ -435,7 +435,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize.{w', w} uliftFunctor.{v, u}
+  签名: 保持余limitsOfSize.{w', w} uliftFunctor.{v, u}
   定义体: { preservesColimit := fun {F} =>
     { preserves := fun {c} hc => by
         classical

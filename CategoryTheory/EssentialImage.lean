@@ -84,7 +84,7 @@ lemma isoClosure_eq_essImage
 
 中文:
 引理 isoClosure_eq_essImage
-  结论: Object命题erty.isoClosure (· in Set.range F.obj) = F.essImage
+  结论: ObjectProperty.isoClosure (· in 集合.range F.obj) = F.essImage
   证明: by
   ext
   exact ⟨fun ⟨_, ⟨Z, rfl⟩, ⟨e⟩⟩ => ⟨Z, ⟨e.symm⟩⟩, fun ⟨Z, ⟨e⟩⟩ => ⟨F.obj Z, ⟨Z, rfl⟩, ⟨e.symm⟩⟩⟩
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.essImage.IsClosedUnderIsomorphisms
+  签名: F.essImage.在同构下封闭
   定义体: essImage.ofIso e h
 
 Depends on / 依赖: essImage, essImage.ofIso
@@ -160,7 +160,7 @@ theorem essImage.ofNatIso
   proof: hY.imp fun X => Nonempty.map fun t => h.symm.app X ≪≫ t
 
 中文:
-定理 essImage.ofNatIso
+定理 essImage.of自然数Iso
   条件: {F' : C ⥤ D} (h : F ≅ F') {Y : D} (hY : essImage F Y)
   证明: hY.imp fun X => Nonempty.map fun t => h.symm.app X ≪≫ t
 
@@ -304,7 +304,7 @@ class EssSurj
     - mem_essImage((F) (Y : D)) : F.essImage Y
 
 中文:
-类 EssSurj
+类 本质满射
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
     - mem_essImage((F) (Y : D)) : F.essImage Y
@@ -322,8 +322,8 @@ instance EssSurj.toEssImage
   body: fun ⟨_, hY⟩ => ⟨hY.witness, ⟨F.essImage.isoMk hY.getIso⟩⟩
 
 中文:
-实例 EssSurj.toEssImage
-  签名: : EssSurj F.toEssImage where
+实例 本质满射.toEssImage
+  签名: : 本质满射 F.toEssImage where
   定义体: fun ⟨_, hY⟩ => ⟨hY.witness, ⟨F.essImage.isoMk hY.getIso⟩⟩
 
 Depends on / 依赖: F.essImage.isoMk, essImage, getIso, hY.getIso, hY.witness, witness
@@ -344,8 +344,8 @@ theorem essSurj_of_surj
 
 中文:
 定理 essSurj_of_surj
-  条件: (h : Function.Surjective F.obj)
-  结论: EssSurj F where
+  条件: (h : 函数.满射 F.obj)
+  结论: 本质满射 F where
   证明: by
     obtain ⟨X, rfl⟩ := h Y
     apply obj_mem_essImage
@@ -408,8 +408,8 @@ instance Faithful.toEssImage
   infer_instance
 
 中文:
-实例 Faithful.toEssImage
-  签名: (F : C ⥤ D) [Faithful F]
+实例 忠实.toEssImage
+  签名: (F : C ⥤ D) [忠实 F]
   定义体: by
   dsimp only [Functor.toEssImage]
   infer_instance
@@ -431,8 +431,8 @@ instance Full.toEssImage
   infer_instance
 
 中文:
-实例 Full.toEssImage
-  签名: (F : C ⥤ D) [Full F]
+实例 满.toEssImage
+  签名: (F : C ⥤ D) [满 F]
   定义体: by
   dsimp only [Functor.toEssImage]
   infer_instance
@@ -453,7 +453,7 @@ instance instEssSurjId
 
 中文:
 实例 instEssSurjId
-  签名: : EssSurj (𝟭 C) where
+  签名: : 本质满射 (𝟭 C) where
   定义体: ⟨Y, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Iso.refl
@@ -472,8 +472,8 @@ lemma essSurj_of_iso
 
 中文:
 引理 essSurj_of_iso
-  条件: {F G : C ⥤ D} [EssSurj F] (α : F ≅ G)
-  结论: EssSurj G where
+  条件: {F G : C ⥤ D} [本质满射 F] (α : F ≅ G)
+  结论: 本质满射 G where
   证明: Functor.essImage.ofNatIso α (EssSurj.mem_essImage F Y)
 
 Depends on / 依赖: EssSurj, EssSurj.mem_essImage, Functor, Functor.essImage.ofNatIso, essImage, mem_essImage, ofNatIso
@@ -491,7 +491,7 @@ instance essSurj_comp
 
 中文:
 实例 essSurj_comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [F.EssSurj] [G.EssSurj]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [F.本质满射] [G.本质满射]
   定义体: ⟨_, ⟨G.mapIso (F.objObjPreimageIso _) ≪≫ G.objObjPreimageIso Z⟩⟩
 
 Depends on / 依赖: F.objObjPreimageIso, G.mapIso, G.objObjPreimageIso, mapIso, objObjPreimageIso
@@ -510,7 +510,7 @@ lemma essSurj_of_comp_fully_faithful
 
 中文:
 引理 essSurj_of_comp_fully_faithful
-  结论: (F : C ⥤ D) (G : D ⥤ E) [(F ⋙ G).EssSurj]
+  结论: (F : C ⥤ D) (G : D ⥤ E) [(F ⋙ G).本质满射]
   证明: ⟨_, ⟨G.preimageIso ((F ⋙ G).objObjPreimageIso (G.obj X))⟩⟩
 
 Depends on / 依赖: G.obj, G.preimageIso, objObjPreimageIso, preimageIso
@@ -644,7 +644,7 @@ lemma essImage_ι_comp
 
 中文:
 引理 essImage_ι_comp
-  条件: (F : C ⥤ D) (P : Object命题erty C)
+  条件: (F : C ⥤ D) (P : ObjectProperty C)
   证明: by
   ext Y
   constructor
@@ -676,7 +676,7 @@ lemma full_of_comp_essSurj
 
 中文:
 引理 full_of_comp_essSurj
-  结论: (F : D ⥤ E) (L : C ⥤ D) [EssSurj L]
+  结论: (F : D ⥤ E) (L : C ⥤ D) [本质满射 L]
   证明: ⟨by
   intro X₁ X₂ ψ
   obtain ⟨f, hf⟩ := h (F.map (L.objObjPreimageIso X₁).hom ≫ ψ ≫
@@ -706,7 +706,7 @@ lemma faithful_of_comp_essSurj
 
 中文:
 引理 faithful_of_comp_essSurj
-  结论: (F : D ⥤ E) (L : C ⥤ D) [EssSurj L]
+  结论: (F : D ⥤ E) (L : C ⥤ D) [本质满射 L]
   证明: by
     rw [← cancel_mono (L.objObjPreimageIso _).inv]; rw [← cancel_epi (L.objObjPreimageIso _).hom]
     exact h _ _ (by simp [hfg])

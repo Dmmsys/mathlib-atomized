@@ -47,7 +47,7 @@ theorem integral_deriv_of_contDiffOn_Icc
 
 中文:
 定理 integral_deriv_of_contDiffOn_Icc
-  条件: (h : ContDiffOn 实数 1 f (Icc a b)) (hab : a <= b)
+  条件: (h : ContDiffOn 实数 1 f (闭区间 a b)) (hab : a <= b)
   证明: by
   rcases hab.eq_or_lt with rfl | h'ab
   · simp
@@ -92,7 +92,7 @@ theorem integral_derivWithin_Icc_of_contDiffOn_Icc
 
 中文:
 定理 integral_derivWithin_Icc_of_contDiffOn_Icc
-  条件: (h : ContDiffOn 实数 1 f (Icc a b)) (hab : a <= b)
+  条件: (h : ContDiffOn 实数 1 f (闭区间 a b)) (hab : a <= b)
   证明: by
   rw [← integral_deriv_of_contDiffOn_Icc h hab]
   rw [integral_of_le hab]; rw [integral_of_le hab]
@@ -202,7 +202,7 @@ theorem enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc
 
 中文:
 定理 enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc
-  结论: (h : ContDiffOn 实数 1 f (Icc a b))
+  结论: (h : ContDiffOn 实数 1 f (闭区间 a b))
   证明: by
   /- We want to write `f b - f a = ∫ x in Icc a b, deriv f x` and use the inequality between
   norm of integral and integral of norm. There is a small difficulty that this formula is not
@@ -245,7 +245,7 @@ theorem enorm_sub_le_lintegral_derivWithin_Icc_of_contDiffOn_Icc
 
 中文:
 定理 enorm_sub_le_lintegral_derivWithin_Icc_of_contDiffOn_Icc
-  结论: (h : ContDiffOn 实数 1 f (Icc a b))
+  结论: (h : ContDiffOn 实数 1 f (闭区间 a b))
   证明: by
   apply (enorm_sub_le_lintegral_deriv_of_contDiffOn_Icc h hab).trans_eq
   apply lintegral_congr_ae

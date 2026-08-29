@@ -45,8 +45,8 @@ theorem CharP.dvd_of_ringHom
   rw [← map_natCast f p]; rw [CharP.cast_eq_zero]; rw [map_zero]
 
 中文:
-定理 CharP.dvd_of_ringHom
-  结论: [NonAssocSemiring R] [NonAssocSemiring A]
+定理 特征p.dvd_of_ringHom
+  结论: [非结合半环 R] [非结合半环 A]
   证明: by
   refine (CharP.cast_eq_zero_iff A q p).mp ?_
   rw [← map_natCast f p]; rw [CharP.cast_eq_zero]; rw [map_zero]
@@ -74,8 +74,8 @@ theorem CharP.of_ringHom_of_ne_zero
   ex
 
 中文:
-定理 CharP.of_ringHom_of_ne_zero
-  结论: [NonAssocSemiring R] [NoZeroDivisors R]
+定理 特征p.of_ringHom_of_ne_zero
+  结论: [非结合半环 R] [无零因子 R]
   证明: by
   have := f.domain_nontrivial
   have H := (CharP.char_is_prime_or_zero R p).resolve_right hp
@@ -109,7 +109,7 @@ theorem charP_of_injective_ringHom
 
 中文:
 定理 charP_of_injective_ringHom
-  结论: [NonAssocSemiring R] [NonAssocSemiring A]
+  结论: [非结合半环 R] [非结合半环 A]
   证明: by
     rw [← CharP.cast_eq_zero_iff R p x]; rw [← map_natCast f x]; rw [map_eq_zero_iff f h]
 
@@ -130,7 +130,7 @@ theorem charP_of_injective_algebraMap
 
 中文:
 定理 charP_of_injective_algebraMap
-  结论: [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [半环 A] [代数 R A]
   证明: charP_of_injective_ringHom h p
 
 Depends on / 依赖: charP_of_injective_ringHom
@@ -149,7 +149,7 @@ theorem charP_of_injective_algebraMap'
 
 中文:
 定理 charP_of_injective_algebraMap'
-  结论: (R : 类型) [CommRing R] [Semiring A]
+  结论: (R : 类型) [交换环 R] [半环 A]
   证明: charP_of_injective_ringHom (FaithfulSMul.algebraMap_injective R A) p
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, charP_of_injective_ringHom
@@ -168,7 +168,7 @@ theorem charZero_of_injective_ringHom
 
 中文:
 定理 charZero_of_injective_ringHom
-  结论: [NonAssocSemiring R] [NonAssocSemiring A]
+  结论: [非结合半环 R] [非结合半环 A]
   证明: CharZero.cast_injective h by simpa only [map_natCast f]
 
 Depends on / 依赖: CharZero, CharZero.cast_injective, cast_injective, map_natCast
@@ -187,7 +187,7 @@ theorem charZero_of_injective_algebraMap
 
 中文:
 定理 charZero_of_injective_algebraMap
-  结论: [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [半环 A] [代数 R A]
   证明: charZero_of_injective_ringHom h
 
 Depends on / 依赖: charZero_of_injective_ringHom
@@ -207,8 +207,8 @@ theorem RingHom.charP
   exact CharP.eq _ (charP_of_injective_ringHom H q) ‹CharP A p› ▸ h
 
 中文:
-定理 RingHom.charP
-  结论: [NonAssocSemiring R] [NonAssocSemiring A] (f : R ->+* A)
+定理 环态射.charP
+  结论: [非结合半环 R] [非结合半环 A] (f : R ->+* A)
   证明: by
   obtain ⟨q, h⟩ := CharP.exists R
   exact CharP.eq _ (charP_of_injective_ringHom H q) ‹CharP A p› ▸ h
@@ -229,8 +229,8 @@ theorem RingHom.charP_iff
   proof: ⟨fun _ => charP_of_injective_ringHom H p, fun _ => f.charP H p⟩
 
 中文:
-定理 RingHom.charP_iff
-  结论: [NonAssocSemiring R] [NonAssocSemiring A]
+定理 环态射.charP_iff
+  结论: [非结合半环 R] [非结合半环 A]
   证明: ⟨fun _ => charP_of_injective_ringHom H p, fun _ => f.charP H p⟩
 -/
 protected theorem RingHom.charP_iff [NonAssocSemiring R] [NonAssocSemiring A]
@@ -275,8 +275,8 @@ lemma RingHom.expChar
   | prime hp => have := f.charP H p; exact .prime hp
 
 中文:
-引理 RingHom.expChar
-  结论: [NonAssocSemiring R] [NonAssocSemiring A] (f : R ->+* A)
+引理 环态射.expChar
+  结论: [非结合半环 R] [非结合半环 A] (f : R ->+* A)
   证明: by
   cases ‹ExpChar A p› with
   | zero => have := f.charZero; exact .zero
@@ -299,8 +299,8 @@ lemma RingHom.expChar_iff
   proof: ⟨fun _ => expChar_of_injective_ringHom H p, fun _ => f.expChar H p⟩
 
 中文:
-引理 RingHom.expChar_iff
-  结论: [NonAssocSemiring R] [NonAssocSemiring A] (f : R ->+* A)
+引理 环态射.expChar_iff
+  结论: [非结合半环 R] [非结合半环 A] (f : R ->+* A)
   证明: ⟨fun _ => expChar_of_injective_ringHom H p, fun _ => f.expChar H p⟩
 
 Depends on / 依赖: expChar, expChar_of_injective_ringHom, f.expChar
@@ -319,7 +319,7 @@ lemma expChar_of_injective_algebraMap
 
 中文:
 引理 expChar_of_injective_algebraMap
-  结论: [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [半环 A] [代数 R A]
   证明: expChar_of_injective_ringHom h q
 
 Depends on / 依赖: expChar_of_injective_ringHom
@@ -339,7 +339,7 @@ theorem ExpChar.of_injective_algebraMap'
 
 中文:
 定理 ExpChar.of_injective_algebraMap'
-  结论: [CommRing R] [CommRing A]
+  结论: [交换环 R] [交换环 A]
   证明: expChar_of_injective_ringHom (FaithfulSMul.algebraMap_injective R A) q
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, expChar_of_injective_ringHom
@@ -362,7 +362,7 @@ instance charP
 
 中文:
 实例 charP
-  签名: [CharP R p]
+  签名: [特征p R p]
   定义体: L.subtype.charP L.subtype_injective p
 
 Depends on / 依赖: L.subtype.charP, L.subtype_injective, subtype, subtype_injective
@@ -408,8 +408,8 @@ theorem algebraRat.charP_zero
 
 中文:
 定理 algebraRat.charP_zero
-  条件: [Semiring R] [Algebra Rat R]
-  结论: CharP R 0
+  条件: [半环 R] [代数 有理数 R]
+  结论: 特征p R 0
   证明: charP_of_injective_algebraMap (algebraMap Rat R).injective 0
 
 Depends on / 依赖: algebraMap, charP_of_injective_algebraMap, injective
@@ -428,8 +428,8 @@ theorem algebraRat.charZero
 
 中文:
 定理 algebraRat.charZero
-  条件: [Ring R] [Algebra Rat R]
-  结论: CharZero R
+  条件: [环 R] [代数 有理数 R]
+  结论: 特征零 R
   证明: @CharP.charP_to_charZero R _ (algebraRat.charP_zero R)
 
 Depends on / 依赖: CharP.charP_to_charZero, algebraRat, algebraRat.charP_zero, charP_to_charZero, charP_zero
@@ -450,8 +450,8 @@ lemma RingHom.charP_iff_charP
   simp only [charP_iff, ← f.injective.eq_iff, map_natCast f, map_zero f]
 
 中文:
-引理 RingHom.charP_iff_charP
-  结论: {K L : 类型} [DivisionRing K] [NonAssocSemiring L] [Nontrivial L]
+引理 环态射.charP_iff_charP
+  结论: {K L : 类型} [除环 K] [非结合半环 L] [非平凡 L]
   证明: by
   simp only [charP_iff, ← f.injective.eq_iff, map_natCast f, map_zero f]
 
@@ -475,9 +475,9 @@ theorem Algebra.charP_iff
   proof: (algebraMap K L).charP_iff_charP p
 
 中文:
-定理 Algebra.charP_iff
+定理 代数.charP_iff
   条件: (p : 自然数)
-  结论: CharP K p ↔ CharP L p
+  结论: 特征p K p ↔ 特征p L p
   证明: (algebraMap K L).charP_iff_charP p
 -/
 protected theorem Algebra.charP_iff (p : Nat) : CharP K p ↔ CharP L p :=
@@ -494,7 +494,7 @@ theorem Algebra.ringChar_eq
   apply ringChar.charP
 
 中文:
-定理 Algebra.ringChar_eq
+定理 代数.ringChar_eq
   结论: ringChar K = ringChar L
   证明: by
   rw [ringChar.eq_iff]; rw [Algebra.charP_iff K L]
@@ -522,7 +522,7 @@ instance charP
 
 中文:
 实例 charP
-  签名: [CharP R p]
+  签名: [特征p R p]
   定义体: charP_of_injective_algebraMap FreeAlgebra.algebraMap_leftInverse.injective p
 
 Depends on / 依赖: FreeAlgebra, FreeAlgebra.algebraMap_leftInverse.injective, algebraMap_leftInverse, charP_of_injective_algebraMap, injective
@@ -540,7 +540,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: charZero_of_injective_algebraMap FreeAlgebra.algebraMap_leftInverse.injective
 
 Depends on / 依赖: FreeAlgebra, FreeAlgebra.algebraMap_leftInverse.injective, algebraMap_leftInverse, charZero_of_injective_algebraMap, f.hom, injective
@@ -566,8 +566,8 @@ theorem charP_of_isFractionRing
 
 中文:
 定理 charP_of_isFractionRing
-  条件: [CharP R p]
-  结论: CharP K p
+  条件: [特征p R p]
+  结论: 特征p K p
   证明: charP_of_injective_algebraMap (IsFractionRing.injective R K) p
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.injective, charP_of_injective_algebraMap, injective
@@ -586,8 +586,8 @@ theorem charZero_of_isFractionRing
 
 中文:
 定理 charZero_of_isFractionRing
-  条件: [CharZero R]
-  结论: CharZero K
+  条件: [特征零 R]
+  结论: 特征零 K
   证明: @CharP.charP_to_charZero K _ (charP_of_isFractionRing R 0)
 
 Depends on / 依赖: CharP.charP_to_charZero, charP_of_isFractionRing, charP_to_charZero
@@ -607,7 +607,7 @@ instance charP
 
 中文:
 实例 charP
-  签名: [CharP R p]
+  签名: [特征p R p]
   定义体: charP_of_isFractionRing R p
 
 Depends on / 依赖: charP_of_isFractionRing
@@ -625,7 +625,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: charZero_of_isFractionRing R
 
 Depends on / 依赖: charZero_of_isFractionRing

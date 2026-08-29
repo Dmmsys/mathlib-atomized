@@ -42,8 +42,8 @@ lemma isField_center
 
 中文:
 引理 isField_center
-  条件: (A : 类型) [Ring A] [IsSimpleRing A]
-  结论: IsField (Subring.center A) where
+  条件: (A : 类型) [环 A] [是单环 A]
+  结论: 是域 (子环.center A) where
   证明: ⟨0, 1, zero_ne_one⟩
   mul_comm := mul_comm
   mul_inv_cancel := by
@@ -96,8 +96,8 @@ lemma isSimpleRing_iff_isField
 
 中文:
 引理 isSimpleRing_iff_isField
-  条件: (A : 类型) [CommRing A]
-  结论: IsSimpleRing A ↔ IsField A
+  条件: (A : 类型) [交换环 A]
+  结论: 是单环 A ↔ 是域 A
   证明: ⟨fun _ => Subring.topEquiv.symm.toMulEquiv.isField by
     rw [← Subring.center_eq_top A]; exact IsSimpleRing.isField_center A,
     fun h => letI := h.toField; inferInstance⟩

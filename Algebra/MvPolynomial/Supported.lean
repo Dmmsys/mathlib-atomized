@@ -46,7 +46,7 @@ definition supported
 
 中文:
 定义 supported
-  签名: (s : Set σ)
+  签名: (s : 集合 σ)
   定义体: Algebra.adjoin R (X '' s)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
@@ -70,7 +70,7 @@ theorem supported_eq_range_rename
 
 中文:
 定理 supported_eq_range_rename
-  条件: (s : Set σ)
+  条件: (s : 集合 σ)
   结论: supported R s = (rename ((↑) : s -> σ)).range
   证明: by
   rw [supported]; rw [Set.image_eq_range]; rw [adjoin_range_eq_range_aeval]; rw [rename_eq_aeval]
@@ -95,7 +95,7 @@ definition supportedEquivMvPolynomial
 
 中文:
 定义 supportedEquivMvPolynomial
-  签名: (s : Set σ)
+  签名: (s : 集合 σ)
   定义体: (Subalgebra.equivOfEq _ _ (supported_eq_range_rename s)).trans
     (AlgEquiv.ofInjective (rename ((↑) : s -> σ)) (rename_injective _ Subtype.val_injective)).symm
 
@@ -122,7 +122,7 @@ theorem supportedEquivMvPolynomial_symm_C
 
 中文:
 定理 supportedEquivMvPolynomial_symm_C
-  条件: (s : Set σ) (x : R)
+  条件: (s : 集合 σ) (x : R)
   证明: by
   ext1
   simp [supportedEquivMvPolynomial, MvPolynomial.algebraMap_eq]
@@ -148,7 +148,7 @@ theorem supportedEquivMvPolynomial_symm_X
 
 中文:
 定理 supportedEquivMvPolynomial_symm_X
-  条件: (s : Set σ) (i : s)
+  条件: (s : 集合 σ) (i : s)
   证明: by
   simp [supportedEquivMvPolynomial]
 
@@ -214,7 +214,7 @@ theorem supported_eq_vars_subset
 
 中文:
 定理 supported_eq_vars_subset
-  结论: (supported R s : Set (MvPolynomial σ R)) = { p | ↑p.vars subseteq s }
+  结论: (supported R s : 集合 (多元多项式 σ R)) = { p | ↑p.vars subseteq s }
   证明: Set.ext fun _ => mem_supported
 
 @[simp]
@@ -237,8 +237,8 @@ theorem mem_supported_vars
 
 中文:
 定理 mem_supported_vars
-  条件: (p : MvPolynomial σ R)
-  结论: p in supported R (↑p.vars : Set σ)
+  条件: (p : 多元多项式 σ R)
+  结论: p in supported R (↑p.vars : 集合 σ)
   证明: by
   rw [mem_supported]
 
@@ -261,7 +261,7 @@ theorem supported_eq_adjoin_X
 
 中文:
 定理 supported_eq_adjoin_X
-  结论: supported R s = Algebra.adjoin R (X '' s)
+  结论: supported R s = 代数.adjoin R (X '' s)
   证明: rfl
 
 @[simp]
@@ -282,7 +282,7 @@ theorem supported_univ
 
 中文:
 定理 supported_univ
-  结论: supported R (Set.univ : Set σ) = ⊤
+  结论: supported R (集合.univ : 集合 σ) = ⊤
   证明: by
   simp [Algebra.eq_top_iff, mem_supported]
 
@@ -304,7 +304,7 @@ theorem supported_empty
 
 中文:
 定理 supported_empty
-  结论: supported R (∅ : Set σ) = ⊥
+  结论: supported R (∅ : 集合 σ) = ⊥
   证明: by simp [supported_eq_adjoin_X]
 
 Depends on / 依赖: supported_eq_adjoin_X
@@ -352,7 +352,7 @@ theorem X_mem_supported
 
 中文:
 定理 X_mem_supported
-  条件: [Nontrivial R] {i : σ}
+  条件: [非平凡 R] {i : σ}
   结论: X i in supported R s ↔ i in s
   证明: by
   simp [mem_supported]
@@ -380,7 +380,7 @@ theorem supported_le_supported_iff
 
 中文:
 定理 supported_le_supported_iff
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: supported R s <= supported R t ↔ s subseteq t
   证明: by
   constructor
@@ -406,7 +406,7 @@ theorem supported_strictMono
 
 中文:
 定理 supported_strictMono
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: strictMono_of_le_iff_le fun _ _ => supported_le_supported_iff.symm
 
 Depends on / 依赖: strictMono_of_le_iff_le, supported_le_supported_iff, supported_le_supported_iff.symm
@@ -429,8 +429,8 @@ theorem exists_restrict_to_vars
   simp only [← hF', aeval_rename]
 
 中文:
-定理 exists_restrict_to_vars
-  结论: (R : 类型) [CommRing R] {F : MvPolynomial σ 整数}
+定理 存在_restrict_to_vars
+  结论: (R : 类型) [交换环 R] {F : 多元多项式 σ 整数}
   证明: by
   rw [← mem_supported]; rw [supported_eq_range_rename]; rw [AlgHom.mem_range] at hF
   obtain ⟨F', hF'⟩ := hF

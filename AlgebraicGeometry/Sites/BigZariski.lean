@@ -52,7 +52,7 @@ definition zariskiPretopology
 
 中文:
 定义 zariskiPretopology
-  签名: : Pretopology Scheme.{u}
+  签名: : Pretopology 概形.{u}
   定义体: pretopology @IsOpenImmersion
 
 Depends on / 依赖: IsOpenImmersion, pretopology
@@ -70,7 +70,7 @@ abbreviation zariskiTopology
 
 中文:
 缩写 zariskiTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: grothendieckTopology IsOpenImmersion
 
 Depends on / 依赖: IsOpenImmersion, grothendieckTopology
@@ -114,7 +114,7 @@ let e : Y ⟶ X := 𝓤.glueMorphisms (fun j => x (𝓤.f _) (.mk
 
 中文:
 实例 subcanonical_zariskiTopology
-  签名: : zariskiTopology.Subcanonical
+  签名: : zariskiTopology.子典范
   定义体: by
   apply GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj
   intro X
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: Scheme.forgetToTop.{u}.IsContinuous zariskiTopology TopCat.grothendieckTopology
+  签名: 概形.forgetToTop.{u}.是连续 zariskiTopology 顶元素范畴.grothendieckTopology
   定义体: by
   rw [zariskiTopology]; rw [grothendieckTopology]
   have : (precoverage IsOpenImmersion).PullbacksPreservedBy forgetToTop := by
@@ -203,7 +203,7 @@ definition affineOneHypercover
 
 中文:
 定义 affineOneHypercover
-  签名: (X : Scheme.{u})
+  签名: (X : 概形.{u})
   定义体: .mk'
     (X.affineCover.refineOneHypercover fun i j =>
       (pullback (X.affineCover.f i) (X.affineCover.f j)).affineCover.toPreZeroHypercover)
@@ -238,7 +238,7 @@ inferInstanceAs Mono (Sigma.ι _ _)
 
 中文:
 引理 preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology
-  结论: {F : Scheme.{u}ᵒᵖ ⥤ 类型v}
+  结论: {F : 概形.{u}ᵒᵖ ⥤ 类型v}
   证明: by
   apply (config := { allowSynthFailures := true }) preservesLimitsOfShape_of_discrete
   intro X
@@ -284,7 +284,7 @@ lemma ofArrows_ι_mem_zariskiTopology_of_isColimit
 
 中文:
 引理 ofArrows_ι_mem_zariskiTopology_of_isColimit
-  结论: {J : 类型} [Category J]
+  结论: {J : 类型} [范畴 J]
   证明: by
   let iso : c.pt ≅ colimit F := hc.coconePointUniqueUpToIso (colimit.isColimit F)
   rw [← GrothendieckTopology.pullback_mem_iff_of_isIso (i := iso.inv)]
@@ -326,8 +326,8 @@ lemma Scheme.Cover.isSheafFor_sigma_iff
   
 
 中文:
-引理 Scheme.Cover.isSheafFor_sigma_iff
-  结论: {P : Morphism命题erty Scheme.{u}}
+引理 概形.Cover.isSheafFor_sigma_iff
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
   have : PreservesLimitsOfShape (Discrete (𝒰.I₀ × 𝒰.I₀)) F :=
     preservesLimitsOfShape_discrete_of_isSheaf_zariskiTopology hF

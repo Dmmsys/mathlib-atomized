@@ -140,7 +140,7 @@ theorem cast_pos
 中文:
 定理 cast_pos
   条件: {n : 自然数}
-  结论: Is自然数 (a : R) n -> a = n.rawCast + 0
+  结论: 是自然数 (a : R) n -> a = n.rawCast + 0
 -/
 theorem cast_pos {n : Nat} : IsNat (a : R) n -> a = n.rawCast + 0
   | ⟨e⟩ => by simp [e]
@@ -154,7 +154,7 @@ theorem cast_zero
 
 中文:
 定理 cast_zero
-  结论: Is自然数 (a : R) (nat_lit 0) -> a = 0
+  结论: 是自然数 (a : R) (nat_lit 0) -> a = 0
 -/
 theorem cast_zero : IsNat (a : R) (nat_lit 0) -> a = 0
   | ⟨e⟩ => by simp [e]
@@ -168,7 +168,7 @@ theorem cast_neg
 
 中文:
 定理 cast_neg
-  条件: {n : 自然数} {R} [Ring R] {a : R}
+  条件: {n : 自然数} {R} [环 R] {a : R}
 -/
 theorem cast_neg {n : Nat} {R} [Ring R] {a : R} :
     IsInt a (.negOfNat n) -> a = (Int.negOfNat n).rawCast + 0
@@ -183,7 +183,7 @@ theorem cast_nnrat
 
 中文:
 定理 cast_nnrat
-  条件: {n : 自然数} {d : 自然数} {R} [DivisionSemiring R] {a : R}
+  条件: {n : 自然数} {d : 自然数} {R} [除半环 R] {a : R}
 -/
 theorem cast_nnrat {n : Nat} {d : Nat} {R} [DivisionSemiring R] {a : R} :
     IsNNRat a n d -> a = NNRat.rawCast n d + 0
@@ -198,7 +198,7 @@ theorem cast_rat
 
 中文:
 定理 cast_rat
-  条件: {n : 整数} {d : 自然数} {R} [DivisionRing R] {a : R}
+  条件: {n : 整数} {d : 自然数} {R} [除环 R] {a : R}
 -/
 theorem cast_rat {n : Int} {d : Nat} {R} [DivisionRing R] {a : R} :
     IsRat a n d -> a = Rat.rawCast n d + 0
@@ -217,7 +217,7 @@ definition ExProd.mkNat
   ⟨q(($lit).rawCast : $α), .const ⟨n, none⟩⟩
 
 中文:
-定义 ExProd.mkNat
+定义 ExProd.mk自然数
   签名: (n : 自然数)
   定义体: let lit : Q(Nat) := .lit (.natVal n)
   ⟨q(($lit).rawCast : $α), .const ⟨n, none⟩⟩
@@ -238,8 +238,8 @@ definition ExProd.mkNegNat
   ⟨q((Int.negOfNat $lit).rawCast : $α), .const ⟨(-n), none⟩⟩
 
 中文:
-定义 ExProd.mkNegNat
-  签名: (_ : Q(Ring $α)) (n : 自然数)
+定义 ExProd.mkNeg自然数
+  签名: (_ : Q(环 $α)) (n : 自然数)
   定义体: let lit : Q(Nat) := mkRawNatLit n
   ⟨q((Int.negOfNat $lit).rawCast : $α), .const ⟨(-n), none⟩⟩
 
@@ -259,7 +259,7 @@ definition ExProd.mkNNRat
 
 中文:
 定义 ExProd.mkNNRat
-  签名: (_ : Q(DivisionSemiring $α)) (q : Rat) (n : Q(自然数)) (d : Q(自然数)) (h : Expr)
+  签名: (_ : Q(除半环 $α)) (q : 有理数) (n : Q(自然数)) (d : Q(自然数)) (h : Expr)
   定义体: ⟨q(NNRat.rawCast $n $d : $α), .const ⟨q, h⟩⟩
 
 Depends on / 依赖: NNRat.rawCast, rawCast
@@ -278,7 +278,7 @@ definition ExProd.mkNegNNRat
 
 中文:
 定义 ExProd.mkNegNNRat
-  签名: (_ : Q(DivisionRing $α)) (q : Rat) (n : Q(自然数)) (d : Q(自然数)) (h : Expr)
+  签名: (_ : Q(除环 $α)) (q : 有理数) (n : Q(自然数)) (d : Q(自然数)) (h : Expr)
   定义体: ⟨q(Rat.rawCast (.negOfNat $n) $d : $α), .const ⟨q, h⟩⟩
 
 Depends on / 依赖: Rat.rawCast, negOfNat, rawCast
@@ -304,7 +304,7 @@ have : e' =Q ($lit).rawCast := ⟨⟩
 
 中文:
 定义 evalCast
-  签名: {α : Q(类型u)} (sα : Q(CommSemiring $α)) {e : Q($α)}
+  签名: {α : Q(类型u)} (sα : Q(交换半环 $α)) {e : Q($α)}
   定义体: ExProd.mkNat sα lit.natLit!
 have : e' =Q ($lit).rawCast := ⟨⟩
     pure ⟨_, s.toSum, q(cast_pos $p)⟩
@@ -436,7 +436,7 @@ definition ExBase.evalNatCast
     pure ⟨_, .sum vc, p⟩
 
 中文:
-定义 ExBase.evalNatCast
+定义 ExBase.eval自然数Cast
   签名: {a : Q(自然数)} (va : ExBase sβ a)
   定义体: match va with
   | .atom _ => do
@@ -471,7 +471,7 @@ have : a =Q Nat.rawCast n := ⟨⟩
     let ⟨_, vb₃, pb₃⟩ ← ExProd.evalNatCas
 
 中文:
-定义 ExProd.evalNatCast
+定义 ExProd.eval自然数Cast
   签名: {a : Q(自然数)} (va : ExProd sβ a)
   定义体: match va with
   | .const ⟨c, hc⟩ =>
@@ -510,7 +510,7 @@ definition ExSum.evalNatCast
     pure ⟨_, .add vb₁ vb₂, q(natCast_add $pb₁ $pb₂)⟩
 
 中文:
-定义 ExSum.evalNatCast
+定义 ExSum.eval自然数Cast
   签名: {a : Q(自然数)} (va : ExSum sβ a)
   定义体: do
   assumeInstancesCommute
@@ -544,7 +544,7 @@ theorem natCast_int
 
 中文:
 定理 natCast_int
-  条件: {R} [CommRing R] (n)
+  条件: {R} [交换环 R] (n)
   结论: ((自然数.rawCast n : 整数) : R) = 自然数.rawCast n
   证明: by simp
 -/
@@ -559,8 +559,8 @@ theorem intCast_negOfNat_Int
   proof: by simp
 
 中文:
-定理 intCast_negOfNat_Int
-  条件: {R} [CommRing R] (n)
+定理 intCast_negOf自然数_整数
+  条件: {R} [交换环 R] (n)
   证明: by simp
 -/
 theorem intCast_negOfNat_Int {R} [CommRing R] (n) :
@@ -577,7 +577,7 @@ theorem intCast_mul
 
 中文:
 定理 intCast_mul
-  结论: {R} [CommRing R] {b₁ b₃ : R} {a₁ a₃ : 整数} (a₂) (_ : ((a₁ : 整数) : R) = b₁)
+  结论: {R} [交换环 R] {b₁ b₃ : R} {a₁ a₃ : 整数} (a₂) (_ : ((a₁ : 整数) : R) = b₁)
   证明: by
   subst_vars; simp
 -/
@@ -596,7 +596,7 @@ theorem intCast_zero
 
 中文:
 定理 intCast_zero
-  条件: {R} [CommRing R]
+  条件: {R} [交换环 R]
   结论: ((0 : 整数) : R) = 0
   证明: Int.cast_zero
 
@@ -618,7 +618,7 @@ mutual
 
 中文:
 定理 intCast_add
-  结论: {R} [CommRing R] {b₁ b₂ : R} {a₁ a₂ : 整数}
+  结论: {R} [交换环 R] {b₁ b₂ : R} {a₁ a₂ : 整数}
   证明: by
   subst_vars; simp
 
@@ -651,8 +651,8 @@ definition ExBase.evalIntCast
     pure ⟨_, .sum vc, p⟩
 
 中文:
-定义 ExBase.evalIntCast
-  签名: {a : Q(整数)} (rα : Q(CommRing $α)) (va : ExBase sβ a)
+定义 ExBase.eval整数Cast
+  签名: {a : Q(整数)} (rα : Q(交换环 $α)) (va : ExBase sβ a)
   定义体: match va with
   | .atom _ => do
     assumeInstancesCommute
@@ -691,8 +691,8 @@ definition ExProd.evalIntCast
       pure ⟨q(Int.rawCast (Int.negOfNat $m)), .const ⟨c, hc⟩, q(intCast_negOfNat_Int (R := $α) $m
 
 中文:
-定义 ExProd.evalIntCast
-  签名: {a : Q(整数)} (rα : Q(CommRing $α)) (va : ExProd sβ a)
+定义 ExProd.eval整数Cast
+  签名: {a : Q(整数)} (rα : Q(交换环 $α)) (va : ExProd sβ a)
   定义体: match va with
   | .const ⟨c, hc⟩ => do
     match a with
@@ -736,8 +736,8 @@ definition ExSum.evalIntCast
     pure ⟨_, .add vb₁ vb₂, (q(intCast_add $pb₁ $pb₂))⟩
 
 中文:
-定义 ExSum.evalIntCast
-  签名: {a : Q(整数)} (rα : Q(CommRing $α))
+定义 ExSum.eval整数Cast
+  签名: {a : Q(整数)} (rα : Q(交换环 $α))
   定义体: match va with
   | .zero => do
     assumeInstancesCommute
@@ -832,7 +832,7 @@ lemma smul_eq_mul
 
 中文:
 引理 smul_eq_mul
-  条件: {α : 类型} [Mul α] {a a' : α} (h : a = a') (b : α)
+  条件: {α : 类型} [乘法 α] {a a' : α} (h : a = a') (b : α)
   结论: a • b = a' * b
   证明: by
   subst h
@@ -854,7 +854,7 @@ theorem Nat.smul_eq_mul
   simp only [nsmul_eq_mul]
 
 中文:
-定理 Nat.smul_eq_mul
+定理 自然数.smul_eq_mul
   条件: {n n' : 自然数} {r : R} (hr : n = r) (hn : n' = n) (a : R)
   结论: n' • a = r * a
   证明: by
@@ -878,8 +878,8 @@ theorem Int.smul_eq_mul
   simp only [zsmul_eq_mul]
 
 中文:
-定理 Int.smul_eq_mul
-  条件: {R} {n n' : 整数} {r : R} [CommRing R] (hr : n = r) (hn : n' = n) (a : R)
+定理 整数.smul_eq_mul
+  条件: {R} {n n' : 整数} {r : R} [交换环 R] (hr : n = r) (hn : n' = n) (a : R)
   证明: by
   subst_vars
   simp only [zsmul_eq_mul]
@@ -952,7 +952,7 @@ pure some (pf : Q(IsNat ($a + $b) 0))
 
 中文:
 定义 add
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α))
   定义体: do
   let res ← za.toResult.add zb.toResult
   let isZero ← match res with
@@ -991,7 +991,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α))
   定义体: do
   let res ← za.toResult.mul zb.toResult
   return ← RatCoeff.ofResult res
@@ -1021,7 +1021,7 @@ have : b =Q x' := ⟨⟩
 
 中文:
 定义 cast
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α)) (cα : Common.Cache sα)
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α)) (cα : Common.Cache sα)
   定义体: do
   let cβ ← Common.mkCache sβ
   let ⟨x', vx, px⟩ ← Common.eval (ringCompute .nat) (ringCompute cβ) cβ x
@@ -1108,7 +1108,7 @@ have : b =Q lit := ⟨⟩
 
 中文:
 定义 pow
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α))
   定义体: do
   match vb with
   | .const _ =>
@@ -1153,7 +1153,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: {u : Lean.Level} {α : Q(类型u)} (_sα : Q(CommSemiring $α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (_sα : Q(交换半环 $α))
   定义体: do
   match (← (Lean.observing? <| za.toResult.inv _ czα :)) with
   | some res =>
@@ -1183,7 +1183,7 @@ definition derive
 
 中文:
 定义 derive
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α)) (x : Q($α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α)) (x : Q($α))
   定义体: do
   let res ← NormNum.derive x
   let ⟨_, va, pa⟩ ← evalCast sα res
@@ -1212,7 +1212,7 @@ have : x =Q Nat.rawCast 1 := ⟨⟩
 
 中文:
 定义 isOne
-  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  签名: {u : Lean.Level} {α : Q(类型u)} (sα : Q(交换半环 $α))
   定义体: do
   let ⟨qx, _hx⟩ := zx
   if qx == 1 then
@@ -1242,7 +1242,7 @@ definition _root_.Mathlib.Tactic.Ring.ringCompare
   compare zx zy := compare zx.value zy.value
 
 中文:
-定义 _root_.Mathlib.Tactic.Ring.ringCompare
+定义 _root_.Mathlib.Tactic.环.ringCompare
   签名: {u : Lean.Level} {α : Q(类型u)}
   定义体: zx.value == zy.value
   compare zx zy := compare zx.value zy.value
@@ -1269,7 +1269,7 @@ definition _root_.Mathlib.Tactic.Ring.ringCompute
   toRingCompare := ringCompare
 
 中文:
-定义 _root_.Mathlib.Tactic.Ring.ringCompute
+定义 _root_.Mathlib.Tactic.环.ringCompute
   定义体: add sα
   mul := mul sα
   cast := cast sα cα
@@ -1309,7 +1309,7 @@ definition rcNat
 universe u
 
 中文:
-定义 rcNat
+定义 rc自然数
   签名: : Common.RingCompute (u := 0) Common.bt自然数 Common.s自然数
   定义体: Ring.ringCompute .nat
 
@@ -1336,7 +1336,7 @@ class CSLift
   参数: (α : 类型u) (β : outParam (类型u))
   公理与运算 (2 个):
     - lift : α -> β
-    - inj : Function.Injective lift
+    - inj : 函数.单射 lift
 -/
 class CSLift (α : Type u) (β : outParam (Type u)) where
   /-- `lift` is the "canonical injection" from `α` to `β` -/

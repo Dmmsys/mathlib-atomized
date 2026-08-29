@@ -57,7 +57,7 @@ smul_def' c x := unop_injective by
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R Aᵐᵒᵖ where
+  签名: : 代数 R Aᵐᵒᵖ where
   定义体: (algebraMap R A).toOpposite fun _ _ => Algebra.commutes _ _
 smul_def' c x := unop_injective by
     simp only [unop_smul, RingHom.toOpposite_apply, Function.comp_apply, unop_mul,
@@ -132,7 +132,7 @@ theorem toRingEquiv_opOp
 
 中文:
 定理 toRingEquiv_opOp
-  结论: (opOp R A : A ≃+* Aᵐᵒᵖᵐᵒᵖ) = RingEquiv.opOp A
+  结论: (opOp R A : A ≃+* Aᵐᵒᵖᵐᵒᵖ) = 环等价.opOp A
   证明: rfl
 -/
 @[simp] theorem toRingEquiv_opOp : (opOp R A : A ≃+* Aᵐᵒᵖᵐᵒᵖ) = RingEquiv.opOp A := rfl
@@ -319,7 +319,7 @@ theorem toRingHom_op
 中文:
 定理 toRingHom_op
   条件: (f : A ->ₐ[R] B)
-  结论: f.op.toRingHom = RingHom.op f.toRingHom
+  结论: f.op.toRingHom = 环态射.op f.toRingHom
   证明: rfl
 -/
 theorem toRingHom_op (f : A ->ₐ[R] B) : f.op.toRingHom = RingHom.op f.toRingHom :=
@@ -354,7 +354,7 @@ theorem toRingHom_unop
 中文:
 定理 toRingHom_unop
   条件: (f : Aᵐᵒᵖ ->ₐ[R] Bᵐᵒᵖ)
-  结论: f.unop.toRingHom = RingHom.unop f.toRingHom
+  结论: f.unop.toRingHom = 环态射.unop f.toRingHom
   证明: rfl
 -/
 theorem toRingHom_unop (f : Aᵐᵒᵖ ->ₐ[R] Bᵐᵒᵖ) : f.unop.toRingHom = RingHom.unop f.toRingHom :=
@@ -484,7 +484,7 @@ theorem toAlgHom_unop
 中文:
 定理 toAlgHom_unop
   条件: (f : Aᵐᵒᵖ ≃ₐ[R] Bᵐᵒᵖ)
-  结论: f.unop.toAlgHom = AlgHom.unop f.toAlgHom
+  结论: f.unop.toAlgHom = 代数态射.unop f.toAlgHom
   证明: rfl
 -/
 theorem toAlgHom_unop (f : Aᵐᵒᵖ ≃ₐ[R] Bᵐᵒᵖ) : f.unop.toAlgHom = AlgHom.unop f.toAlgHom :=
@@ -547,7 +547,7 @@ definition moduleEndSelf
 
 中文:
 定义 moduleEndSelf
-  签名: : Aᵐᵒᵖ ≃ₐ[R] Module.End A A where
+  签名: : Aᵐᵒᵖ ≃ₐ[R] 模.End A A where
   定义体: RingEquiv.moduleEndSelf A
   commutes' _ := by ext; simp [Algebra.algebraMap_eq_smul_one]
 -/
@@ -566,7 +566,7 @@ definition moduleEndSelfOp
 
 中文:
 定义 moduleEndSelfOp
-  签名: : A ≃ₐ[R] Module.End Aᵐᵒᵖ A where
+  签名: : A ≃ₐ[R] 模.End Aᵐᵒᵖ A where
   定义体: RingEquiv.moduleEndSelfOp A
   commutes' _ := by ext; simp [Algebra.algebraMap_eq_smul_one]
 -/
@@ -616,7 +616,7 @@ lemma toRingEquiv_toOpposite
 
 中文:
 引理 toRingEquiv_toOpposite
-  结论: (toOpposite R A : A ≃+* Aᵐᵒᵖ) = RingEquiv.toOpposite A
+  结论: (toOpposite R A : A ≃+* Aᵐᵒᵖ) = 环等价.toOpposite A
   证明: rfl
 -/
 @[simp] lemma toRingEquiv_toOpposite : (toOpposite R A : A ≃+* Aᵐᵒᵖ) = RingEquiv.toOpposite A := rfl

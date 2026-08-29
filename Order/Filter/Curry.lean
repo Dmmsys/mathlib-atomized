@@ -103,7 +103,7 @@ theorem mem_curry_iff
 
 中文:
 定理 mem_curry_iff
-  条件: {s : Set (α × β)}
+  条件: {s : 集合 (α × β)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -137,8 +137,8 @@ theorem Tendsto.curry
   proof: fun _s hs => h.mono fun _a ha => ha hs
 
 中文:
-定理 Tendsto.curry
-  结论: {f : α -> β -> γ} {la : Filter α} {lb : Filter β} {lc : Filter γ}
+定理 收敛.curry
+  结论: {f : α -> β -> γ} {la : 滤子 α} {lb : 滤子 β} {lc : 滤子 γ}
   证明: fun _s hs => h.mono fun _a ha => ha hs
 
 Depends on / 依赖: h.mono

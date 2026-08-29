@@ -266,7 +266,7 @@ lemma symmetry
 
 中文:
 引理 symmetry
-  条件: [SymmetricCategory C] [HasTensor X Y] [HasTensor Y X]
+  条件: [对称范畴 C] [HasTensor X Y] [HasTensor Y X]
   证明: by
   dsimp [braiding]
   cat_disch
@@ -307,7 +307,7 @@ instance braidedCategory
 
 中文:
 实例 braidedCategory
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: Monoidal.braiding X Y
   braiding_naturality_left _ _ := Monoidal.braiding_naturality_left _ _
   braiding_naturality_right _ _ _ _ := Monoidal.braiding_naturality_right _ _
@@ -334,7 +334,7 @@ instance symmetricCategory
 
 中文:
 实例 symmetricCategory
-  签名: [SymmetricCategory C]
+  签名: [对称范畴 C]
   定义体: Monoidal.symmetry _ _
 
 Depends on / 依赖: Monoidal, Monoidal.symmetry, symmetry

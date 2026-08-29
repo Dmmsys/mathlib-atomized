@@ -49,7 +49,7 @@ definition boxProd
 
 中文:
 定义 boxProd
-  签名: (G : SimpleGraph α) (H : SimpleGraph β)
+  签名: (G : 简单图 α) (H : 简单图 β)
   定义体: G.Adj x.1 y.1 ∧ x.2 = y.2 ∨ H.Adj x.2 y.2 ∧ x.1 = y.1
   symm.symm x y := by simp [eq_comm, adj_comm]
 
@@ -117,7 +117,7 @@ theorem boxProd_adj_right
 中文:
 定理 boxProd_adj_right
   条件: {a : α} {b₁ b₂ : β}
-  结论: (G □ H).Adj (a, b₁) (a, b₂) ↔ H.Adj b₁ b₂
+  结论: (G □ H).伴随 (a, b₁) (a, b₂) ↔ H.伴随 b₁ b₂
   证明: by
   simp only [boxProd_adj, SimpleGraph.irrefl, false_and, and_true, false_or]
 
@@ -188,7 +188,7 @@ definition boxProdAssoc
 
 中文:
 定义 boxProdAssoc
-  签名: (I : SimpleGraph γ)
+  签名: (I : 简单图 γ)
   定义体: ⟨Equiv.prodAssoc _ _ _, fun {x y} => by
     simp only [boxProd_adj, Equiv.prodAssoc_apply, or_and_right, or_assoc, Prod.ext_iff,
       and_assoc, @and_comm (x.fst.fst = _)]⟩
@@ -265,7 +265,7 @@ definition boxProdSumDistrib
 
 中文:
 定义 boxProdSumDistrib
-  签名: (G : SimpleGraph V) (H₁ : SimpleGraph W₁) (H₂ : SimpleGraph W₂)
+  签名: (G : 简单图 V) (H₁ : 简单图 W₁) (H₂ : 简单图 W₂)
   定义体: .prodSumDistrib ..
   map_rel_iff' := by simp
 
@@ -289,7 +289,7 @@ definition sumBoxProdDistrib
 
 中文:
 定义 sumBoxProdDistrib
-  签名: (G₁ : SimpleGraph V₁) (G₂ : SimpleGraph V₂) (H : SimpleGraph W)
+  签名: (G₁ : 简单图 V₁) (G₂ : 简单图 V₂) (H : 简单图 W)
   定义体: .sumProdDistrib ..
   map_rel_iff' := by simp
 
@@ -351,7 +351,7 @@ definition ofBoxProdLeft
 
 中文:
 定义 ofBoxProdLeft
-  签名: [DecidableEq β] [DecidableRel G.Adj] {x y : α × β}
+  签名: [DecidableEq β] [DecidableRel G.伴随] {x y : α × β}
 -/
 def ofBoxProdLeft [DecidableEq β] [DecidableRel G.Adj] {x y : α × β} :
     (G □ H).Walk x y -> G.Walk x.1 y.1
@@ -370,7 +370,7 @@ definition ofBoxProdRight
 
 中文:
 定义 ofBoxProdRight
-  签名: [DecidableEq α] [DecidableRel H.Adj] {x y : α × β}
+  签名: [DecidableEq α] [DecidableRel H.伴随] {x y : α × β}
 -/
 def ofBoxProdRight [DecidableEq α] [DecidableRel H.Adj] {x y : α × β} :
     (G □ H).Walk x y -> H.Walk x.2 y.2
@@ -391,7 +391,7 @@ theorem ofBoxProdLeft_boxProdLeft
 
 中文:
 定理 ofBoxProdLeft_boxProdLeft
-  条件: [DecidableEq β] [DecidableRel G.Adj] {a₁ a₂ : α} {b : β}
+  条件: [DecidableEq β] [DecidableRel G.伴随] {a₁ a₂ : α} {b : β}
 -/
 theorem ofBoxProdLeft_boxProdLeft [DecidableEq β] [DecidableRel G.Adj] {a₁ a₂ : α} {b : β} :
     forall (w : G.Walk a₁ a₂), (w.boxProdLeft H b).ofBoxProdLeft = w
@@ -412,7 +412,7 @@ theorem ofBoxProdRight_boxProdRight
 
 中文:
 定理 ofBoxProdRight_boxProdRight
-  条件: [DecidableEq α] [DecidableRel G.Adj] {a b₁ b₂ : α}
+  条件: [DecidableEq α] [DecidableRel G.伴随] {a b₁ b₂ : α}
 -/
 theorem ofBoxProdRight_boxProdRight [DecidableEq α] [DecidableRel G.Adj] {a b₁ b₂ : α} :
     forall (w : G.Walk b₁ b₂), (w.boxProdRight G a).ofBoxProdRight = w
@@ -487,8 +487,8 @@ theorem Preconnected.boxProd
   exact ⟨(w₁.boxProdLeft _ _).append (w₂.boxProdRight _ _)⟩
 
 中文:
-定理 Preconnected.boxProd
-  条件: (hG : G.Preconnected) (hH : H.Preconnected)
+定理 预连通.boxProd
+  条件: (hG : G.预连通) (hH : H.预连通)
   证明: by
   rintro x y
   obtain ⟨w₁⟩ := hG x.1 y.1
@@ -515,8 +515,8 @@ theorem Preconnected.ofBoxProdLeft
   exact ⟨w.ofBoxProdLeft⟩
 
 中文:
-定理 Preconnected.ofBoxProdLeft
-  条件: [Nonempty β] (h : (G □ H).Preconnected)
+定理 预连通.ofBoxProdLeft
+  条件: [非空 β] (h : (G □ H).预连通)
   证明: by
   classical
   rintro a₁ a₂
@@ -543,8 +543,8 @@ theorem Preconnected.ofBoxProdRight
   exact ⟨w.ofBoxProdRight⟩
 
 中文:
-定理 Preconnected.ofBoxProdRight
-  条件: [Nonempty α] (h : (G □ H).Preconnected)
+定理 预连通.ofBoxProdRight
+  条件: [非空 α] (h : (G □ H).预连通)
   证明: by
   classical
   rintro b₁ b₂
@@ -571,9 +571,9 @@ theorem Connected.boxProd
   exact ⟨hG.preconnected.boxProd hH.preconnected⟩
 
 中文:
-定理 Connected.boxProd
-  条件: (hG : G.Connected) (hH : H.Connected)
-  结论: (G □ H).Connected
+定理 连通.boxProd
+  条件: (hG : G.连通) (hH : H.连通)
+  结论: (G □ H).连通
   证明: by
   have := hG.nonempty
   have := hH.nonempty
@@ -597,9 +597,9 @@ theorem Connected.ofBoxProdLeft
   exact ⟨h.preconnected.ofBoxProdLeft⟩
 
 中文:
-定理 Connected.ofBoxProdLeft
-  条件: (h : (G □ H).Connected)
-  结论: G.Connected
+定理 连通.ofBoxProdLeft
+  条件: (h : (G □ H).连通)
+  结论: G.连通
   证明: by
   have := (nonempty_prod.1 h.nonempty).1
   have := (nonempty_prod.1 h.nonempty).2
@@ -625,9 +625,9 @@ theorem Connected.ofBoxProdRight
 @[simp]
 
 中文:
-定理 Connected.ofBoxProdRight
-  条件: (h : (G □ H).Connected)
-  结论: H.Connected
+定理 连通.ofBoxProdRight
+  条件: (h : (G □ H).连通)
+  结论: H.连通
   证明: by
   have := (nonempty_prod.1 h.nonempty).1
   have := (nonempty_prod.1 h.nonempty).2
@@ -651,7 +651,7 @@ theorem connected_boxProd
 
 中文:
 定理 connected_boxProd
-  结论: (G □ H).Connected ↔ G.Connected ∧ H.Connected
+  结论: (G □ H).连通 ↔ G.连通 ∧ H.连通
   证明: ⟨fun h => ⟨h.ofBoxProdLeft, h.ofBoxProdRight⟩, fun h => h.1.boxProd h.2⟩
 
 Depends on / 依赖: boxProd, h.ofBoxProdLeft, h.ofBoxProdRight, ofBoxProdLeft, ofBoxProdRight

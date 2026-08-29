@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: (L').IsLocalization W
+  签名: (L').是Localization W
   定义体: inferInstanceAs (L.IsLocalization W)
 
 Depends on / 依赖: IsLocalization, L.IsLocalization
@@ -91,7 +91,7 @@ definition braidingNatIso
     _ _ (isoWhiskerRight (curriedBraidingNatIso C) _)
 
 中文:
-定义 braidingNatIso
+定义 braiding自然数Iso
   签名: : tensorBifunctor L W ε ≅ (tensorBifunctor L W ε).flip
   定义体: lift₂NatIso L' L' W W
     ((curriedTensor C) ⋙ (whiskeringRight C C
@@ -123,7 +123,7 @@ lemma braidingNatIso_hom_app
 #adaptation_note
 
 中文:
-引理 braidingNatIso_hom_app
+引理 braiding自然数Iso_hom_app
   条件: (X Y : C)
   证明: by
   simp [braidingNatIso, lift₂NatIso]
@@ -156,7 +156,7 @@ lemma braidingNatIso_hom_app_naturality_μ_left
 #adaptation_note
 
 中文:
-引理 braidingNatIso_hom_app_naturality_μ_left
+引理 braiding自然数Iso_hom_app_naturality_μ_left
   条件: (X Y Z : C)
   证明: (((braidingNatIso L W ε).hom.app ((L').obj X)).naturality ((Functor.LaxMonoidal.μ (L') Y Z))).symm
 
@@ -185,7 +185,7 @@ lemma braidingNatIso_hom_app_naturality_μ_right
     ((Functor.LaxMonoidal.μ (L') X Y))) ((L').obj Z)).symm
 
 中文:
-引理 braidingNatIso_hom_app_naturality_μ_right
+引理 braiding自然数Iso_hom_app_naturality_μ_right
   条件: (X Y Z : C)
   证明: (NatTrans.congr_app ((braidingNatIso L W ε).hom.naturality
     ((Functor.LaxMonoidal.μ (L') X Y))) ((L').obj Z)).symm
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (LocalizedMonoidal L W ε)
+  签名: 辫范畴 (LocalizedMonoidal L W ε)
   定义体: by
   refine .ofBifunctor (braidingNatIso L W ε) ?_ ?_
   · apply natTrans₃_ext (L') (L') (L') W W W
@@ -350,7 +350,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toMonoidalCategory L W ε).Braided
+  签名: (toMonoidalCategory L W ε).辫
   定义体: by simp [β_hom_app]
 -/
 noncomputable instance : (toMonoidalCategory L W ε).Braided where
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory (LocalizedMonoidal L W ε)
+  签名: 对称范畴 (LocalizedMonoidal L W ε)
   定义体: by
   refine .ofCurried (natTrans₂_ext (L') (L') W W fun X Y => ?_)
   simp [-Functor.map_braiding, β_hom_app, ← Functor.map_comp_assoc]

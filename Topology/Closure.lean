@@ -49,7 +49,7 @@ theorem mem_interior
 
 中文:
 定理 mem_interior
-  结论: x in interior s ↔ 存在 t subseteq s, IsOpen t ∧ x in t
+  结论: x in interior s ↔ 存在 t subseteq s, 是开集 t ∧ x in t
   证明: by
   simp only [interior, mem_sUnion, mem_ofPred_eq, and_assoc, and_left_comm]
 
@@ -71,7 +71,7 @@ theorem isOpen_interior
 
 中文:
 定理 isOpen_interior
-  结论: IsOpen (interior s)
+  结论: 是开集 (interior s)
   证明: isOpen_sUnion fun _ => And.left
 
 Depends on / 依赖: And.left, isOpen_sUnion
@@ -110,7 +110,7 @@ theorem interior_maximal
 
 中文:
 定理 interior_maximal
-  条件: (h₁ : t subseteq s) (h₂ : IsOpen t)
+  条件: (h₁ : t subseteq s) (h₂ : 是开集 t)
   结论: t subseteq interior s
   证明: subset_sUnion_of_mem ⟨h₂, h₁⟩
 
@@ -132,8 +132,8 @@ theorem IsOpen.interior_eq
   proof: interior_subset.antisymm (interior_maximal (Subset.refl s) h)
 
 中文:
-定理 IsOpen.interior_eq
-  条件: (h : IsOpen s)
+定理 是开集.interior_eq
+  条件: (h : 是开集 s)
   结论: interior s = s
   证明: interior_subset.antisymm (interior_maximal (Subset.refl s) h)
 
@@ -151,8 +151,8 @@ theorem forall_isOpen_iff
   proof: ⟨fun h t => h (interior t) isOpen_interior, fun h t ht => ht.interior_eq ▸ h t⟩
 
 中文:
-定理 forall_isOpen_iff
-  条件: {p : Set X -> 命题}
+定理 对任意_isOpen_iff
+  条件: {p : 集合 X -> 命题}
   证明: ⟨fun h t => h (interior t) isOpen_interior, fun h t ht => ht.interior_eq ▸ h t⟩
 
 Depends on / 依赖: ht.interior_eq, interior, interior_eq, isOpen_interior
@@ -170,8 +170,8 @@ theorem exists_isOpen_iff
   proof: ⟨fun ⟨_, h⟩ => ⟨_, h.1.interior_eq ▸ h.2⟩, fun ⟨_, h⟩ => ⟨_, isOpen_interior, h⟩⟩
 
 中文:
-定理 exists_isOpen_iff
-  条件: {p : Set X -> 命题}
+定理 存在_isOpen_iff
+  条件: {p : 集合 X -> 命题}
   证明: ⟨fun ⟨_, h⟩ => ⟨_, h.1.interior_eq ▸ h.2⟩, fun ⟨_, h⟩ => ⟨_, isOpen_interior, h⟩⟩
 
 Depends on / 依赖: interior_eq, isOpen_interior
@@ -190,7 +190,7 @@ theorem interior_eq_iff_isOpen
 
 中文:
 定理 interior_eq_iff_isOpen
-  结论: interior s = s ↔ IsOpen s
+  结论: interior s = s ↔ 是开集 s
   证明: ⟨fun h => h ▸ isOpen_interior, IsOpen.interior_eq⟩
 
 Depends on / 依赖: IsOpen, IsOpen.interior_eq, interior_eq, isOpen_interior
@@ -209,7 +209,7 @@ theorem subset_interior_iff_isOpen
 
 中文:
 定理 subset_interior_iff_isOpen
-  结论: s subseteq interior s ↔ IsOpen s
+  结论: s subseteq interior s ↔ 是开集 s
   证明: by
   simp only [interior_eq_iff_isOpen.symm, Subset.antisymm_iff, interior_subset, true_and]
 
@@ -228,8 +228,8 @@ theorem IsOpen.subset_interior_iff
   proof: ⟨fun h => Subset.trans h interior_subset, fun h₂ => interior_maximal h₂ h₁⟩
 
 中文:
-定理 IsOpen.subset_interior_iff
-  条件: (h₁ : IsOpen s)
+定理 是开集.subset_interior_iff
+  条件: (h₁ : 是开集 s)
   结论: s subseteq interior t ↔ s subseteq t
   证明: ⟨fun h => Subset.trans h interior_subset, fun h₂ => interior_maximal h₂ h₁⟩
 
@@ -249,7 +249,7 @@ theorem subset_interior_iff
 
 中文:
 定理 subset_interior_iff
-  结论: t subseteq interior s ↔ 存在 U, IsOpen U ∧ t subseteq U ∧ U subseteq s
+  结论: t subseteq interior s ↔ 存在 U, 是开集 U ∧ t subseteq U ∧ U subseteq s
   证明: ⟨fun h => ⟨interior s, isOpen_interior, h, interior_subset⟩, fun ⟨_U, hU, htU, hUs⟩ =>
     htU.trans (interior_maximal hUs hU)⟩
 
@@ -272,7 +272,7 @@ lemma interior_subset_iff
 
 中文:
 引理 interior_subset_iff
-  结论: interior s subseteq t ↔ 对任意 U, IsOpen U -> U subseteq s -> U subseteq t
+  结论: interior s subseteq t ↔ 对任意 U, 是开集 U -> U subseteq s -> U subseteq t
   证明: by
   simp [interior]
 
@@ -339,7 +339,7 @@ theorem interior_empty
 
 中文:
 定理 interior_empty
-  结论: interior (∅ : Set X) = ∅
+  结论: interior (∅ : 集合 X) = ∅
   证明: isOpen_empty.interior_eq
 
 @[simp]
@@ -362,7 +362,7 @@ theorem interior_univ
 
 中文:
 定理 interior_univ
-  结论: interior (univ : Set X) = univ
+  结论: interior (univ : 集合 X) = univ
   证明: isOpen_univ.interior_eq
 
 @[simp]
@@ -455,8 +455,8 @@ theorem Set.Finite.interior_biInter
   | insert _ _ _ => simp [*]
 
 中文:
-定理 Set.Finite.interior_biInter
-  条件: {ι : 类型} {s : Set ι} (hs : s.Finite) (f : ι -> Set X)
+定理 集合.有限.interior_bi整数er
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.有限) (f : ι -> 集合 X)
   证明: by
   induction s, hs using Set.Finite.induction_on with
   | empty => simp
@@ -482,8 +482,8 @@ theorem Set.Finite.interior_sInter
 @[simp]
 
 中文:
-定理 Set.Finite.interior_sInter
-  条件: {S : Set (Set X)} (hS : S.Finite)
+定理 集合.有限.interior_s整数er
+  条件: {S : 集合 (集合 X)} (hS : S.有限)
   证明: by
   rw [sInter_eq_biInter]; rw [hS.interior_biInter]
 
@@ -507,8 +507,8 @@ theorem Finset.interior_iInter
 @[simp]
 
 中文:
-定理 Finset.interior_iInter
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Set X)
+定理 有限集.interior_i整数er
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 集合 X)
   证明: s.finite_toSet.interior_biInter f
 
 @[simp]
@@ -532,8 +532,8 @@ theorem interior_iInter_of_finite
 @[simp]
 
 中文:
-定理 interior_iInter_of_finite
-  条件: [Finite ι] (f : ι -> Set X)
+定理 interior_i整数er_of_finite
+  条件: [有限 ι] (f : ι -> 集合 X)
   证明: by
   rw [← sInter_range]; rw [(finite_range f).interior_sInter]; rw [biInter_range]
 
@@ -557,8 +557,8 @@ theorem interior_iInter₂_lt_nat
 @[simp]
 
 中文:
-定理 interior_iInter₂_lt_nat
-  条件: {n : 自然数} (f : 自然数 -> Set X)
+定理 interior_i整数er₂_lt_nat
+  条件: {n : 自然数} (f : 自然数 -> 集合 X)
   证明: (finite_lt_nat n).interior_biInter f
 
 @[simp]
@@ -579,8 +579,8 @@ theorem interior_iInter₂_le_nat
   proof: (finite_le_nat n).interior_biInter f
 
 中文:
-定理 interior_iInter₂_le_nat
-  条件: {n : 自然数} (f : 自然数 -> Set X)
+定理 interior_i整数er₂_le_nat
+  条件: {n : 自然数} (f : 自然数 -> 集合 X)
   证明: (finite_le_nat n).interior_biInter f
 
 Depends on / 依赖: finite_le_nat, interior_biInter
@@ -636,7 +636,7 @@ theorem interior_union_isClosed_of_interior_empty
 
 中文:
 定理 interior_union_isClosed_of_interior_empty
-  结论: (h₁ : IsClosed s)
+  结论: (h₁ : 是闭集 s)
   证明: have : interior (s union t) subseteq s := fun x ⟨u, ⟨(hu₁ : IsOpen u), (hu₂ : u subseteq s union t)⟩, (hx₁ : x in u)⟩ =>
     by_contradiction fun hx₂ : x ∉ s =>
       have : u \ s subseteq t := fun _ ⟨h₁, h₂⟩ => Or.resolve_left (hu₂ h₁) h₂
@@ -665,8 +665,8 @@ theorem isOpen_iff_forall_mem_open
   simp only [subset_def, mem_interior]
 
 中文:
-定理 isOpen_iff_forall_mem_open
-  结论: IsOpen s ↔ 对任意 x in s, 存在 t, t subseteq s ∧ IsOpen t ∧ x in t
+定理 isOpen_iff_对任意_mem_open
+  结论: 是开集 s ↔ 对任意 x in s, 存在 t, t subseteq s ∧ 是开集 t ∧ x in t
   证明: by
   rw [← subset_interior_iff_isOpen]
   simp only [subset_def, mem_interior]
@@ -687,8 +687,8 @@ theorem interior_iInter_subset
   proof: subset_iInter fun _ => interior_mono iInter_subset _ _
 
 中文:
-定理 interior_iInter_subset
-  条件: (s : ι -> Set X)
+定理 interior_i整数er_subset
+  条件: (s : ι -> 集合 X)
   结论: interior (⋂ i, s i) subseteq ⋂ i, interior (s i)
   证明: subset_iInter fun _ => interior_mono iInter_subset _ _
 
@@ -706,8 +706,8 @@ theorem interior_iInter₂_subset
   proof: (interior_iInter_subset _).trans iInter_mono fun _ => interior_iInter_subset _
 
 中文:
-定理 interior_iInter₂_subset
-  条件: (p : ι -> Sort*) (s : 对任意 i, p i -> Set X)
+定理 interior_i整数er₂_subset
+  条件: (p : ι -> 类型层*) (s : 对任意 i, p i -> 集合 X)
   证明: (interior_iInter_subset _).trans iInter_mono fun _ => interior_iInter_subset _
 
 Depends on / 依赖: iInter_mono, interior_iInter_subset
@@ -728,8 +728,8 @@ theorem interior_sInter_subset
     _ subseteq ⋂ s in S, interior s := interior_iInter₂_subset _ _
 
 中文:
-定理 interior_sInter_subset
-  条件: (S : Set (Set X))
+定理 interior_s整数er_subset
+  条件: (S : 集合 (集合 X))
   结论: interior (⋂₀ S) subseteq ⋂ s in S, interior s
   证明: calc
     interior (⋂₀ S) = interior (⋂ s in S, s) := by rw [sInter_eq_biInter]
@@ -751,8 +751,8 @@ theorem Filter.HasBasis.lift'_interior
   proof: h.lift' fun _ _ => interior_mono
 
 中文:
-定理 Filter.HasBasis.lift'_interior
-  结论: {l : Filter X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.lift'_interior
+  结论: {l : 滤子 X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: h.lift' fun _ _ => interior_mono
 
 Depends on / 依赖: h.lift, interior_mono
@@ -772,8 +772,8 @@ theorem Filter.lift'_interior_le
   mem_of_superset (mem_lift' hs) interior_subset
 
 中文:
-定理 Filter.lift'_interior_le
-  条件: (l : Filter X)
+定理 滤子.lift'_interior_le
+  条件: (l : 滤子 X)
   结论: l.lift' interior <= l
   证明: fun _s hs =>
   mem_of_superset (mem_lift' hs) interior_subset
@@ -791,8 +791,8 @@ theorem Filter.HasBasis.lift'_interior_eq_self
     simpa only [(ho i hi).interior_eq] using h.mem_of_mem hi
 
 中文:
-定理 Filter.HasBasis.lift'_interior_eq_self
-  结论: {l : Filter X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.lift'_interior_eq_self
+  结论: {l : 滤子 X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: le_antisymm l.lift'_interior_le h.lift'_interior.ge_iff.2 fun i hi => by
     simpa only [(ho i hi).interior_eq] using h.mem_of_mem hi
 -/
@@ -816,7 +816,7 @@ theorem isClosed_closure
 
 中文:
 定理 isClosed_closure
-  结论: IsClosed (closure s)
+  结论: 是闭集 (closure s)
   证明: isClosed_sInter fun _ => And.left
 
 Depends on / 依赖: And.left, isClosed_sInter
@@ -873,7 +873,7 @@ theorem closure_minimal
 
 中文:
 定理 closure_minimal
-  条件: (h₁ : s subseteq t) (h₂ : IsClosed t)
+  条件: (h₁ : s subseteq t) (h₂ : 是闭集 t)
   结论: closure s subseteq t
   证明: sInter_subset_of_mem ⟨h₂, h₁⟩
 
@@ -892,7 +892,7 @@ theorem Disjoint.closure_left
 
 中文:
 定理 Disjoint.closure_left
-  条件: (hd : Disjoint s t) (ht : IsOpen t)
+  条件: (hd : Disjoint s t) (ht : 是开集 t)
   证明: disjoint_compl_left.mono_left closure_minimal hd.subset_compl_right ht.isClosed_compl
 
 Depends on / 依赖: closure_minimal, disjoint_compl_left, disjoint_compl_left.mono_left, hd.subset_compl_right, ht.isClosed_compl, isClosed_compl, mono_left, subset_compl_right
@@ -913,7 +913,7 @@ theorem Disjoint.closure_right
 
 中文:
 定理 Disjoint.closure_right
-  条件: (hd : Disjoint s t) (hs : IsOpen s)
+  条件: (hd : Disjoint s t) (hs : 是开集 s)
   证明: (hd.symm.closure_left hs).symm
 
 @[simp, closedness =]
@@ -935,8 +935,8 @@ theorem IsClosed.closure_eq
   proof: Subset.antisymm (closure_minimal (Subset.refl s) h) subset_closure
 
 中文:
-定理 IsClosed.closure_eq
-  条件: (h : IsClosed s)
+定理 是闭集.closure_eq
+  条件: (h : 是闭集 s)
   结论: closure s = s
   证明: Subset.antisymm (closure_minimal (Subset.refl s) h) subset_closure
 -/
@@ -952,8 +952,8 @@ theorem forall_isClosed_iff
   proof: ⟨fun h t => h (closure t) isClosed_closure, fun h t ht => ht.closure_eq ▸ h t⟩
 
 中文:
-定理 forall_isClosed_iff
-  条件: {p : Set X -> 命题}
+定理 对任意_isClosed_iff
+  条件: {p : 集合 X -> 命题}
   证明: ⟨fun h t => h (closure t) isClosed_closure, fun h t ht => ht.closure_eq ▸ h t⟩
 
 Depends on / 依赖: closure, closure_eq, ht.closure_eq, isClosed_closure
@@ -971,8 +971,8 @@ theorem exists_isClosed_iff
   proof: ⟨fun ⟨_, h⟩ => ⟨_, h.1.closure_eq ▸ h.2⟩, fun ⟨_, h⟩ => ⟨_, isClosed_closure, h⟩⟩
 
 中文:
-定理 exists_isClosed_iff
-  条件: {p : Set X -> 命题}
+定理 存在_isClosed_iff
+  条件: {p : 集合 X -> 命题}
   证明: ⟨fun ⟨_, h⟩ => ⟨_, h.1.closure_eq ▸ h.2⟩, fun ⟨_, h⟩ => ⟨_, isClosed_closure, h⟩⟩
 
 Depends on / 依赖: closure_eq, isClosed_closure
@@ -991,8 +991,8 @@ theorem IsClosed.closure_subset
   proof: closure_minimal (Subset.refl _) hs
 
 中文:
-定理 IsClosed.closure_subset
-  条件: (hs : IsClosed s)
+定理 是闭集.closure_subset
+  条件: (hs : 是闭集 s)
   结论: closure s subseteq s
   证明: closure_minimal (Subset.refl _) hs
 
@@ -1011,8 +1011,8 @@ theorem IsClosed.closure_subset_iff
   proof: ⟨Subset.trans subset_closure, fun h => closure_minimal h h₁⟩
 
 中文:
-定理 IsClosed.closure_subset_iff
-  条件: (h₁ : IsClosed t)
+定理 是闭集.closure_subset_iff
+  条件: (h₁ : 是闭集 t)
   结论: closure s subseteq t ↔ s subseteq t
   证明: ⟨Subset.trans subset_closure, fun h => closure_minimal h h₁⟩
 
@@ -1032,8 +1032,8 @@ theorem IsClosed.mem_iff_closure_subset
 @[mono, gcongr]
 
 中文:
-定理 IsClosed.mem_iff_closure_subset
-  条件: (hs : IsClosed s)
+定理 是闭集.mem_iff_closure_subset
+  条件: (hs : 是闭集 s)
   证明: (hs.closure_subset_iff.trans Set.singleton_subset_iff).symm
 
 @[mono, gcongr]
@@ -1077,8 +1077,8 @@ theorem monotone_closure
 
 中文:
 定理 monotone_closure
-  条件: (X : 类型) [TopologicalSpace X]
-  结论: Monotone (@closure X _)
+  条件: (X : 类型) [拓扑空间 X]
+  结论: 递增 (@closure X _)
   证明: fun _ _ =>
   closure_mono
 -/
@@ -1139,7 +1139,7 @@ theorem closure_inter_subset_inter_closure
 
 中文:
 定理 closure_inter_subset_inter_closure
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   证明: (monotone_closure X).map_inf_le s t
 
 Depends on / 依赖: map_inf_le, monotone_closure
@@ -1161,7 +1161,7 @@ theorem isClosed_of_closure_subset
 中文:
 定理 isClosed_of_closure_subset
   条件: (h : closure s subseteq s)
-  结论: IsClosed s
+  结论: 是闭集 s
   证明: by
   rw [subset_closure.antisymm h]; exact isClosed_closure
 
@@ -1180,7 +1180,7 @@ theorem closure_eq_iff_isClosed
 
 中文:
 定理 closure_eq_iff_isClosed
-  结论: closure s = s ↔ IsClosed s
+  结论: closure s = s ↔ 是闭集 s
   证明: ⟨fun h => h ▸ isClosed_closure, IsClosed.closure_eq⟩
 
 Depends on / 依赖: IsClosed, IsClosed.closure_eq, closure_eq, isClosed_closure
@@ -1198,7 +1198,7 @@ theorem closure_subset_iff_isClosed
 
 中文:
 定理 closure_subset_iff_isClosed
-  结论: closure s subseteq s ↔ IsClosed s
+  结论: closure s subseteq s ↔ 是闭集 s
   证明: ⟨isClosed_of_closure_subset, IsClosed.closure_subset⟩
 
 Depends on / 依赖: IsClosed, IsClosed.closure_subset, closure_subset, isClosed_of_closure_subset
@@ -1218,7 +1218,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set X) = ∅
+  结论: closure (∅ : 集合 X) = ∅
   证明: isClosed_empty.closure_eq
 
 @[simp]
@@ -1242,7 +1242,7 @@ theorem closure_empty_iff
 
 中文:
 定理 closure_empty_iff
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: closure s = ∅ ↔ s = ∅
   证明: ⟨subset_eq_empty subset_closure, fun h => h.symm ▸ closure_empty⟩
 
@@ -1267,7 +1267,7 @@ alias ⟨Set.Nonempty.of_closure, Set.Nonempty.closure⟩ := closure_nonempty_if
 
 中文:
 定理 closure_nonempty_iff
-  结论: (closure s).Nonempty ↔ s.Nonempty
+  结论: (closure s).非空 ↔ s.非空
   证明: by
   simp only [nonempty_iff_ne_empty, Ne, closure_empty_iff]
 
@@ -1290,7 +1290,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (univ : Set X) = univ
+  结论: closure (univ : 集合 X) = univ
   证明: isClosed_univ.closure_eq
 
 Depends on / 依赖: closure_eq, isClosed_univ, isClosed_univ.closure_eq
@@ -1374,8 +1374,8 @@ theorem Set.Finite.closure_biUnion
   simp [closure_eq_compl_interior_compl, hs.interior_biInter]
 
 中文:
-定理 Set.Finite.closure_biUnion
-  条件: {ι : 类型} {s : Set ι} (hs : s.Finite) (f : ι -> Set X)
+定理 集合.有限.closure_biUnion
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.有限) (f : ι -> 集合 X)
   证明: by
   simp [closure_eq_compl_interior_compl, hs.interior_biInter]
 
@@ -1397,8 +1397,8 @@ theorem Set.Finite.closure_sUnion
 @[simp]
 
 中文:
-定理 Set.Finite.closure_sUnion
-  条件: {S : Set (Set X)} (hS : S.Finite)
+定理 集合.有限.closure_sUnion
+  条件: {S : 集合 (集合 X)} (hS : S.有限)
   证明: by
   rw [sUnion_eq_biUnion]; rw [hS.closure_biUnion]
 
@@ -1422,8 +1422,8 @@ theorem Finset.closure_biUnion
 @[simp]
 
 中文:
-定理 Finset.closure_biUnion
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Set X)
+定理 有限集.closure_biUnion
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 集合 X)
   证明: s.finite_toSet.closure_biUnion f
 
 @[simp]
@@ -1448,7 +1448,7 @@ theorem closure_iUnion_of_finite
 
 中文:
 定理 closure_iUnion_of_finite
-  条件: [Finite ι] (f : ι -> Set X)
+  条件: [有限 ι] (f : ι -> 集合 X)
   证明: by
   rw [← sUnion_range]; rw [(finite_range _).closure_sUnion]; rw [biUnion_range]
 
@@ -1473,7 +1473,7 @@ theorem closure_iUnion₂_lt_nat
 
 中文:
 定理 closure_iUnion₂_lt_nat
-  条件: {n : 自然数} (f : 自然数 -> Set X)
+  条件: {n : 自然数} (f : 自然数 -> 集合 X)
   证明: (finite_lt_nat n).closure_biUnion f
 
 @[simp]
@@ -1495,7 +1495,7 @@ theorem closure_iUnion₂_le_nat
 
 中文:
 定理 closure_iUnion₂_le_nat
-  条件: {n : 自然数} (f : 自然数 -> Set X)
+  条件: {n : 自然数} (f : 自然数 -> 集合 X)
   证明: (finite_le_nat n).closure_biUnion f
 
 Depends on / 依赖: closure_biUnion, finite_le_nat
@@ -1734,7 +1734,7 @@ h.mono inf_le_inf_right t subset_closure⟩
 
 中文:
 定理 closure_inter_open_nonempty_iff
-  条件: (h : IsOpen t)
+  条件: (h : 是开集 t)
   证明: ⟨fun ⟨_x, hxcs, hxt⟩ => inter_comm t s ▸ mem_closure_iff.1 hxcs t h hxt, fun h =>
 h.mono inf_le_inf_right t subset_closure⟩
 
@@ -1755,8 +1755,8 @@ theorem Filter.le_lift'_closure
   proof: le_lift'.2 fun _ h => mem_of_superset h subset_closure
 
 中文:
-定理 Filter.le_lift'_closure
-  条件: (l : Filter X)
+定理 滤子.le_lift'_closure
+  条件: (l : 滤子 X)
   结论: l <= l.lift' closure
   证明: le_lift'.2 fun _ h => mem_of_superset h subset_closure
 -/
@@ -1772,8 +1772,8 @@ theorem Filter.HasBasis.lift'_closure
   proof: h.lift' (monotone_closure X)
 
 中文:
-定理 Filter.HasBasis.lift'_closure
-  结论: {l : Filter X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.lift'_closure
+  结论: {l : 滤子 X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: h.lift' (monotone_closure X)
 -/
 theorem Filter.HasBasis.lift'_closure {l : Filter X} {p : ι -> Prop} {s : ι -> Set X}
@@ -1792,8 +1792,8 @@ theorem Filter.HasBasis.lift'_closure_eq_self
 @[simp]
 
 中文:
-定理 Filter.HasBasis.lift'_closure_eq_self
-  结论: {l : Filter X} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.lift'_closure_eq_self
+  结论: {l : 滤子 X} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: le_antisymm (h.ge_iff.2 fun i hi => (hc i hi).closure_eq ▸ mem_lift' (h.mem_of_mem hi))
     l.le_lift'_closure
 
@@ -1816,8 +1816,8 @@ theorem Filter.lift'_closure_eq_bot
     h.symm ▸ by rw [lift'_bot (monotone_closure _), closure_empty, principal_empty]⟩
 
 中文:
-定理 Filter.lift'_closure_eq_bot
-  条件: {l : Filter X}
+定理 滤子.lift'_closure_eq_bot
+  条件: {l : 滤子 X}
   结论: l.lift' closure = ⊥ ↔ l = ⊥
   证明: ⟨fun h => bot_unique h ▸ l.le_lift'_closure, fun h =>
     h.symm ▸ by rw [lift'_bot (monotone_closure _), closure_empty, principal_empty]⟩
@@ -1838,7 +1838,7 @@ alias ⟨Dense.closure_eq, _⟩ := dense_iff_closure_eq
 
 中文:
 定理 dense_iff_closure_eq
-  结论: Dense s ↔ closure s = univ
+  结论: 稠密 s ↔ closure s = univ
   证明: eq_univ_iff_forall.symm
 
 alias ⟨Dense.closure_eq, _⟩ := dense_iff_closure_eq
@@ -1861,7 +1861,7 @@ theorem interior_eq_empty_iff_dense_compl
 
 中文:
 定理 interior_eq_empty_iff_dense_compl
-  结论: interior s = ∅ ↔ Dense sᶜ
+  结论: interior s = ∅ ↔ 稠密 sᶜ
   证明: by
   rw [dense_iff_closure_eq]; rw [closure_compl]; rw [compl_univ_iff]
 
@@ -1880,8 +1880,8 @@ theorem Dense.interior_compl
   proof: interior_eq_empty_iff_dense_compl.2 by rwa [compl_compl]
 
 中文:
-定理 Dense.interior_compl
-  条件: (h : Dense s)
+定理 稠密.interior_compl
+  条件: (h : 稠密 s)
   结论: interior sᶜ = ∅
   证明: interior_eq_empty_iff_dense_compl.2 by rwa [compl_compl]
 
@@ -1908,7 +1908,7 @@ alias ⟨Dense.of_closure, _⟩ := dense_closure
 
 中文:
 定理 dense_closure
-  结论: Dense (closure s) ↔ Dense s
+  结论: 稠密 (closure s) ↔ 稠密 s
   证明: by
   rw [Dense]; rw [Dense]; rw [closure_closure]
 
@@ -1936,7 +1936,7 @@ theorem dense_univ
 
 中文:
 定理 dense_univ
-  结论: Dense (univ : Set X)
+  结论: 稠密 (univ : 集合 X)
   证明: fun _ => subset_closure trivial
 
 Depends on / 依赖: subset_closure
@@ -1996,8 +1996,8 @@ theorem Dense.exists_mem_open
   ⟨x, hx.2, hx.1⟩
 
 中文:
-定理 Dense.exists_mem_open
-  结论: (hs : Dense s) {U : Set X} (ho : IsOpen U)
+定理 稠密.存在_mem_open
+  结论: (hs : 稠密 s) {U : 集合 X} (ho : 是开集 U)
   证明: let ⟨x, hx⟩ := hs.inter_open_nonempty U ho hne
   ⟨x, hx.2, hx.1⟩
 
@@ -2020,9 +2020,9 @@ theorem Dense.nonempty_iff
     ⟨y, hy.2⟩⟩
 
 中文:
-定理 Dense.nonempty_iff
-  条件: (hs : Dense s)
-  结论: s.Nonempty ↔ Nonempty X
+定理 稠密.nonempty_iff
+  条件: (hs : 稠密 s)
+  结论: s.非空 ↔ 非空 X
   证明: ⟨fun ⟨x, _⟩ => ⟨x⟩, fun ⟨x⟩ =>
     let ⟨y, hy⟩ := hs.inter_open_nonempty _ isOpen_univ ⟨x, trivial⟩
     ⟨y, hy.2⟩⟩
@@ -2046,9 +2046,9 @@ theorem Dense.nonempty
 @[mono, gcongr]
 
 中文:
-定理 Dense.nonempty
-  条件: [h : Nonempty X] (hs : Dense s)
-  结论: s.Nonempty
+定理 稠密.nonempty
+  条件: [h : 非空 X] (hs : 稠密 s)
+  结论: s.非空
   证明: hs.nonempty_iff.2 h
 
 @[mono, gcongr]
@@ -2070,9 +2070,9 @@ theorem Dense.mono
   closure_mono h (hd x)
 
 中文:
-定理 Dense.mono
-  条件: (h : s₁ subseteq s₂) (hd : Dense s₁)
-  结论: Dense s₂
+定理 稠密.mono
+  条件: (h : s₁ subseteq s₂) (hd : 稠密 s₁)
+  结论: 稠密 s₂
   证明: fun x =>
   closure_mono h (hd x)
 -/
@@ -2141,8 +2141,8 @@ lemma Dense.induction
   proof: hs.closure_eq.symm.subset.trans (isClosed.closure_subset_iff.mpr mem) (Set.mem_univ _)
 
 中文:
-引理 Dense.induction
-  结论: (hs : Dense s) {P : X -> 命题}
+引理 稠密.induction
+  结论: (hs : 稠密 s) {P : X -> 命题}
   证明: hs.closure_eq.symm.subset.trans (isClosed.closure_subset_iff.mpr mem) (Set.mem_univ _)
 
 Depends on / 依赖: Set.mem_univ, closure_eq, closure_subset_iff, hs.closure_eq.symm.subset.trans, isClosed, isClosed.closure_subset_iff.mpr, mem_univ, subset
@@ -2160,8 +2160,8 @@ theorem IsOpen.subset_interior_closure
   proof: s_open.subset_interior_iff.mpr subset_closure
 
 中文:
-定理 IsOpen.subset_interior_closure
-  条件: {s : Set X} (s_open : IsOpen s)
+定理 是开集.subset_interior_closure
+  条件: {s : 集合 X} (s_open : 是开集 s)
   证明: s_open.subset_interior_iff.mpr subset_closure
 
 Depends on / 依赖: s_open, s_open.subset_interior_iff.mpr, subset_closure, subset_interior_iff
@@ -2178,8 +2178,8 @@ theorem IsClosed.closure_interior_subset
   proof: s_closed.closure_subset_iff.mpr interior_subset
 
 中文:
-定理 IsClosed.closure_interior_subset
-  条件: {s : Set X} (s_closed : IsClosed s)
+定理 是闭集.closure_interior_subset
+  条件: {s : 集合 X} (s_closed : 是闭集 s)
   证明: s_closed.closure_subset_iff.mpr interior_subset
 
 Depends on / 依赖: closure_subset_iff, interior_subset, s_closed, s_closed.closure_subset_iff.mpr
@@ -2241,7 +2241,7 @@ theorem closure_sdiff_interior
 
 中文:
 定理 closure_sdiff_interior
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: closure s \ interior s = frontier s
   证明: rfl
 
@@ -2293,7 +2293,7 @@ theorem closure_sdiff_frontier
 
 中文:
 定理 closure_sdiff_frontier
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: closure s \ frontier s = interior s
   证明: by
   rw [frontier]; rw [sdiff_sdiff_right_self]; rw [inter_eq_self_of_subset_right interior_subset_closure]
@@ -2324,7 +2324,7 @@ theorem self_sdiff_frontier
 
 中文:
 定理 self_sdiff_frontier
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: s \ frontier s = interior s
   证明: by
   rw [frontier]; rw [sdiff_sdiff_right]; rw [sdiff_eq_empty.2 subset_closure]; rw [inter_eq_self_of_subset_right interior_subset]; rw [empty_union]
@@ -2349,7 +2349,7 @@ lemma mem_interior_iff_notMem_frontier
 
 中文:
 引理 mem_interior_iff_notMem_frontier
-  条件: {s : Set X} {x : X} (hx : x in s)
+  条件: {s : 集合 X} {x : X} (hx : x in s)
   证明: by
   simp [← self_sdiff_frontier, hx]
 
@@ -2370,7 +2370,7 @@ lemma mem_frontier_iff_notMem_interior
 
 中文:
 引理 mem_frontier_iff_notMem_interior
-  条件: {s : Set X} {x : X} (hx : x in s)
+  条件: {s : 集合 X} {x : X} (hx : x in s)
   证明: by
   simp [← self_sdiff_frontier, hx]
 
@@ -2431,7 +2431,7 @@ alias ⟨_, IsClosed.frontier_subset⟩ := frontier_subset_iff_isClosed
 
 中文:
 定理 frontier_subset_iff_isClosed
-  结论: frontier s subseteq s ↔ IsClosed s
+  结论: frontier s subseteq s ↔ 是闭集 s
   证明: by
   rw [frontier]; rw [sdiff_subset_iff]; rw [union_eq_right.mpr interior_subset]; rw [closure_subset_iff_isClosed]
 
@@ -2496,7 +2496,7 @@ theorem frontier_compl
 
 中文:
 定理 frontier_compl
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: frontier sᶜ = frontier s
   证明: by
   simp only [frontier_eq_closure_inter_closure, compl_compl, inter_comm]
@@ -2521,7 +2521,7 @@ theorem frontier_univ
 
 中文:
 定理 frontier_univ
-  结论: frontier (univ : Set X) = ∅
+  结论: frontier (univ : 集合 X) = ∅
   证明: by simp [frontier]
 
 @[simp]
@@ -2541,7 +2541,7 @@ theorem frontier_empty
 
 中文:
 定理 frontier_empty
-  结论: frontier (∅ : Set X) = ∅
+  结论: frontier (∅ : 集合 X) = ∅
   证明: by simp [frontier]
 
 Depends on / 依赖: frontier
@@ -2562,7 +2562,7 @@ theorem frontier_inter_subset
 
 中文:
 定理 frontier_inter_subset
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   证明: by
   simp only [frontier_eq_closure_inter_closure, compl_inter, closure_union]
   refine (inter_subset_inter_left _ (closure_inter_subset_inter_closure s t)).trans_eq ?_
@@ -2589,7 +2589,7 @@ theorem frontier_union_subset
 
 中文:
 定理 frontier_union_subset
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   证明: by
   simpa only [frontier_compl, ← compl_union] using frontier_inter_subset sᶜ tᶜ
 
@@ -2610,8 +2610,8 @@ theorem IsClosed.frontier_eq
   rw [frontier]; rw [hs.closure_eq]
 
 中文:
-定理 IsClosed.frontier_eq
-  条件: (hs : IsClosed s)
+定理 是闭集.frontier_eq
+  条件: (hs : 是闭集 s)
   结论: frontier s = s \ interior s
   证明: by
   rw [frontier]; rw [hs.closure_eq]
@@ -2632,8 +2632,8 @@ theorem IsOpen.frontier_eq
   rw [frontier]; rw [hs.interior_eq]
 
 中文:
-定理 IsOpen.frontier_eq
-  条件: (hs : IsOpen s)
+定理 是开集.frontier_eq
+  条件: (hs : 是开集 s)
   结论: frontier s = closure s \ s
   证明: by
   rw [frontier]; rw [hs.interior_eq]
@@ -2654,8 +2654,8 @@ theorem IsOpen.inter_frontier_eq
   rw [hs.frontier_eq]; rw [inter_sdiff_self]
 
 中文:
-定理 IsOpen.inter_frontier_eq
-  条件: (hs : IsOpen s)
+定理 是开集.inter_frontier_eq
+  条件: (hs : 是开集 s)
   结论: s inter frontier s = ∅
   证明: by
   rw [hs.frontier_eq]; rw [inter_sdiff_self]
@@ -2676,7 +2676,7 @@ theorem disjoint_frontier_iff_isOpen
 
 中文:
 定理 disjoint_frontier_iff_isOpen
-  结论: Disjoint (frontier s) s ↔ IsOpen s
+  结论: Disjoint (frontier s) s ↔ 是开集 s
   证明: by
   rw [← isClosed_compl_iff]; rw [← frontier_subset_iff_isClosed]; rw [frontier_compl]; rw [subset_compl_iff_disjoint_right]
 
@@ -2696,7 +2696,7 @@ theorem isClosed_frontier
 
 中文:
 定理 isClosed_frontier
-  结论: IsClosed (frontier s)
+  结论: 是闭集 (frontier s)
   证明: by
   rw [frontier_eq_closure_inter_closure]; exact IsClosed.inter isClosed_closure isClosed_closure
 
@@ -2720,7 +2720,7 @@ theorem interior_frontier
 
 中文:
 定理 interior_frontier
-  条件: (h : IsClosed s)
+  条件: (h : 是闭集 s)
   结论: interior (frontier s) = ∅
   证明: by
   have A : frontier s = s \ interior s := h.frontier_eq
@@ -2749,7 +2749,7 @@ theorem closure_eq_interior_union_frontier
 
 中文:
 定理 closure_eq_interior_union_frontier
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: closure s = interior s union frontier s
   证明: (union_sdiff_cancel interior_subset_closure).symm
 
@@ -2769,7 +2769,7 @@ theorem closure_eq_self_union_frontier
 
 中文:
 定理 closure_eq_self_union_frontier
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: closure s = s union frontier s
   证明: (union_sdiff_cancel' interior_subset subset_closure).symm
 
@@ -2790,7 +2790,7 @@ frontier_subset_closure.trans closure_minimal (disjoint_left.1 hd) isClosed_comp
 
 中文:
 定理 Disjoint.frontier_left
-  条件: (ht : IsOpen t) (hd : Disjoint s t)
+  条件: (ht : 是开集 t) (hd : Disjoint s t)
   结论: Disjoint (frontier s) t
   证明: subset_compl_iff_disjoint_right.1
 frontier_subset_closure.trans closure_minimal (disjoint_left.1 hd) isClosed_compl_iff.2 ht
@@ -2812,7 +2812,7 @@ theorem Disjoint.frontier_right
 
 中文:
 定理 Disjoint.frontier_right
-  条件: (hs : IsOpen s) (hd : Disjoint s t)
+  条件: (hs : 是开集 s) (hd : Disjoint s t)
   结论: Disjoint s (frontier t)
   证明: (hd.symm.frontier_left hs).symm
 

@@ -45,7 +45,7 @@ theorem hasStrictFDerivAt_cpow
 
 中文:
 定理 hasStrictFDerivAt_cpow
-  条件: {p : Complex × Complex} (hp : p.1 in slitPlane)
+  条件: {p : 复形 × 复形} (hp : p.1 in slitPlane)
   证明: by
   have A : p.1 != 0 := slitPlane_ne_zero hp
   have : (fun x : Complex × Complex => x.1 ^ x.2) =ᶠ[𝓝 p] fun x => exp (log x.1 * x.2) :=
@@ -78,7 +78,7 @@ theorem hasStrictFDerivAt_cpow'
 
 中文:
 定理 hasStrictFDerivAt_cpow'
-  条件: {x y : Complex} (hp : x in slitPlane)
+  条件: {x y : 复形} (hp : x in slitPlane)
   证明: @hasStrictFDerivAt_cpow (x, y) hp
 
 Depends on / 依赖: hasStrictFDerivAt_cpow
@@ -105,7 +105,7 @@ theorem hasStrictDerivAt_const_cpow
 
 中文:
 定理 hasStrictDerivAt_const_cpow
-  条件: {x y : Complex} (h : x != 0 ∨ y != 0)
+  条件: {x y : 复形} (h : x != 0 ∨ y != 0)
   证明: by
   rcases em (x = 0) with (rfl | hx)
   · replace h := h.neg_resolve_left rfl
@@ -136,7 +136,7 @@ theorem hasFDerivAt_cpow
 
 中文:
 定理 hasFDerivAt_cpow
-  条件: {p : Complex × Complex} (hp : p.1 in slitPlane)
+  条件: {p : 复形 × 复形} (hp : p.1 in slitPlane)
   证明: (hasStrictFDerivAt_cpow hp).hasFDerivAt
 
 Depends on / 依赖: hasFDerivAt, hasStrictFDerivAt_cpow
@@ -205,8 +205,8 @@ theorem HasFDerivAt.cpow
   convert! (@Complex.hasFDerivAt_cpow ((fun x => (f x, g x)) x) h0).comp x (hf.prodMk hg)
 
 中文:
-定理 HasFDerivAt.cpow
-  结论: (hf : HasFDerivAt f f' x) (hg : HasFDerivAt g g' x)
+定理 在点处Fréchet可导.cpow
+  结论: (hf : 在点处Fréchet可导 f f' x) (hg : 在点处Fréchet可导 g g' x)
   证明: by
   convert! (@Complex.hasFDerivAt_cpow ((fun x => (f x, g x)) x) h0).comp x (hf.prodMk hg)
 
@@ -226,8 +226,8 @@ theorem HasFDerivAt.const_cpow
   proof: (hasStrictDerivAt_const_cpow h0).hasDerivAt.comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.const_cpow
-  条件: (hf : HasFDerivAt f f' x) (h0 : c != 0 ∨ f x != 0)
+定理 在点处Fréchet可导.const_cpow
+  条件: (hf : 在点处Fréchet可导 f f' x) (h0 : c != 0 ∨ f x != 0)
   证明: (hasStrictDerivAt_const_cpow h0).hasDerivAt.comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt, hasDerivAt.comp_hasFDerivAt, hasStrictDerivAt_const_cpow
@@ -297,7 +297,7 @@ theorem DifferentiableAt.cpow
 
 中文:
 定理 DifferentiableAt.cpow
-  结论: (hf : DifferentiableAt Complex f x) (hg : DifferentiableAt Complex g x)
+  结论: (hf : DifferentiableAt 复形 f x) (hg : DifferentiableAt 复形 g x)
   证明: (hf.hasFDerivAt.cpow hg.hasFDerivAt h0).differentiableAt
 
 @[fun_prop]
@@ -321,7 +321,7 @@ theorem DifferentiableAt.const_cpow
 
 中文:
 定理 DifferentiableAt.const_cpow
-  条件: (hf : DifferentiableAt Complex f x) (h0 : c != 0 ∨ f x != 0)
+  条件: (hf : DifferentiableAt 复形 f x) (h0 : c != 0 ∨ f x != 0)
   证明: (hf.hasFDerivAt.const_cpow h0).differentiableAt
 
 @[fun_prop]
@@ -345,7 +345,7 @@ theorem DifferentiableAt.cpow_const
 
 中文:
 定理 DifferentiableAt.cpow_const
-  条件: (hf : DifferentiableAt Complex f x) (h0 : f x in slitPlane)
+  条件: (hf : DifferentiableAt 复形 f x) (h0 : f x in slitPlane)
   证明: hf.cpow (differentiableAt_const c) h0
 
 @[fun_prop]
@@ -369,7 +369,7 @@ theorem DifferentiableWithinAt.cpow
 
 中文:
 定理 DifferentiableWithinAt.cpow
-  结论: (hf : DifferentiableWithinAt Complex f s x)
+  结论: (hf : DifferentiableWithinAt 复形 f s x)
   证明: (hf.hasFDerivWithinAt.cpow hg.hasFDerivWithinAt h0).differentiableWithinAt
 
 @[fun_prop]
@@ -394,7 +394,7 @@ theorem DifferentiableWithinAt.const_cpow
 
 中文:
 定理 DifferentiableWithinAt.const_cpow
-  结论: (hf : DifferentiableWithinAt Complex f s x)
+  结论: (hf : DifferentiableWithinAt 复形 f s x)
   证明: (hf.hasFDerivWithinAt.const_cpow h0).differentiableWithinAt
 
 @[fun_prop]
@@ -418,7 +418,7 @@ theorem DifferentiableWithinAt.cpow_const
 
 中文:
 定理 DifferentiableWithinAt.cpow_const
-  结论: (hf : DifferentiableWithinAt Complex f s x)
+  结论: (hf : DifferentiableWithinAt 复形 f s x)
   证明: hf.cpow (differentiableWithinAt_const c) h0
 
 @[fun_prop]
@@ -443,7 +443,7 @@ theorem DifferentiableOn.cpow
 
 中文:
 定理 DifferentiableOn.cpow
-  结论: (hf : DifferentiableOn Complex f s) (hg : DifferentiableOn Complex g s)
+  结论: (hf : DifferentiableOn 复形 f s) (hg : DifferentiableOn 复形 g s)
   证明: fun x hx => (hf x hx).cpow (hg x hx) (h0 hx)
 
 @[fun_prop]
@@ -465,7 +465,7 @@ theorem DifferentiableOn.const_cpow
 
 中文:
 定理 DifferentiableOn.const_cpow
-  结论: (hf : DifferentiableOn Complex f s)
+  结论: (hf : DifferentiableOn 复形 f s)
   证明: fun x hx => (hf x hx).const_cpow (h0.imp_right fun h => h x hx)
 
 @[fun_prop]
@@ -489,7 +489,7 @@ theorem DifferentiableOn.cpow_const
 
 中文:
 定理 DifferentiableOn.cpow_const
-  结论: (hf : DifferentiableOn Complex f s)
+  结论: (hf : DifferentiableOn 复形 f s)
   证明: hf.cpow (differentiableOn_const c) h0
 
 @[fun_prop]
@@ -513,8 +513,8 @@ theorem Differentiable.cpow
 @[fun_prop]
 
 中文:
-定理 Differentiable.cpow
-  结论: (hf : Differentiable Complex f) (hg : Differentiable Complex g)
+定理 可微.cpow
+  结论: (hf : 可微 复形 f) (hg : 可微 复形 g)
   证明: fun x => (hf x).cpow (hg x) (h0 x)
 
 @[fun_prop]
@@ -535,8 +535,8 @@ theorem Differentiable.const_cpow
 @[fun_prop]
 
 中文:
-定理 Differentiable.const_cpow
-  结论: (hf : Differentiable Complex f)
+定理 可微.const_cpow
+  结论: (hf : 可微 复形 f)
   证明: fun x => (hf x).const_cpow (h0.imp_right fun h => h x)
 
 @[fun_prop]
@@ -560,7 +560,7 @@ lemma differentiable_const_cpow_of_neZero
 
 中文:
 引理 differentiable_const_cpow_of_neZero
-  条件: (z : Complex) [NeZero z]
+  条件: (z : 复形) [NeZero z]
   证明: differentiable_id.const_cpow (.inl <| NeZero.ne z)
 
 @[fun_prop]
@@ -582,7 +582,7 @@ lemma differentiableAt_const_cpow_of_neZero
 
 中文:
 引理 differentiableAt_const_cpow_of_neZero
-  条件: (z : Complex) [NeZero z] (t : Complex)
+  条件: (z : 复形) [NeZero z] (t : 复形)
   证明: differentiableAt_id.const_cpow (.inl <| NeZero.ne z)
 
 Depends on / 依赖: NeZero, NeZero.ne, const_cpow, differentiableAt_id, differentiableAt_id.const_cpow
@@ -634,7 +634,7 @@ theorem Complex.hasStrictDerivAt_cpow_const
     (hasStrictDerivAt_id x).cpow (hasStrictDerivAt_const x c) h
 
 中文:
-定理 Complex.hasStrictDerivAt_cpow_const
+定理 复形.hasStrictDerivAt_cpow_const
   条件: (h : x in slitPlane)
   证明: by
   simpa only [mul_zero, add_zero, mul_one] using!
@@ -677,8 +677,8 @@ theorem HasDerivAt.cpow
   simpa using (hf.hasFDerivAt.cpow hg h0).hasDerivAt
 
 中文:
-定理 HasDerivAt.cpow
-  结论: (hf : HasDerivAt f f' x) (hg : HasDerivAt g g' x)
+定理 在点处可导.cpow
+  结论: (hf : 在点处可导 f f' x) (hg : 在点处可导 g g' x)
   证明: by
   simpa using (hf.hasFDerivAt.cpow hg h0).hasDerivAt
 
@@ -698,8 +698,8 @@ theorem HasDerivAt.const_cpow
   proof: (hasStrictDerivAt_const_cpow h0).hasDerivAt.comp x hf
 
 中文:
-定理 HasDerivAt.const_cpow
-  条件: (hf : HasDerivAt f f' x) (h0 : c != 0 ∨ f x != 0)
+定理 在点处可导.const_cpow
+  条件: (hf : 在点处可导 f f' x) (h0 : c != 0 ∨ f x != 0)
   证明: (hasStrictDerivAt_const_cpow h0).hasDerivAt.comp x hf
 
 Depends on / 依赖: hasDerivAt, hasDerivAt.comp, hasStrictDerivAt_const_cpow
@@ -717,8 +717,8 @@ theorem HasDerivAt.cpow_const
   proof: (Complex.hasStrictDerivAt_cpow_const h0).hasDerivAt.comp x hf
 
 中文:
-定理 HasDerivAt.cpow_const
-  条件: (hf : HasDerivAt f f' x) (h0 : f x in slitPlane)
+定理 在点处可导.cpow_const
+  条件: (hf : 在点处可导 f f' x) (h0 : f x in slitPlane)
   证明: (Complex.hasStrictDerivAt_cpow_const h0).hasDerivAt.comp x hf
 
 Depends on / 依赖: Complex.hasStrictDerivAt_cpow_const, hasDerivAt, hasDerivAt.comp, hasStrictDerivAt_cpow_const
@@ -803,8 +803,8 @@ theorem Complex.derivWithin_const_cpow
     exact (hf.hasDerivWithinAt.const_cpow (Or.inl hc)).deriv
 
 中文:
-定理 Complex.derivWithin_const_cpow
-  条件: (hf : DifferentiableWithinAt Complex f s x) (c : Complex)
+定理 复形.derivWithin_const_cpow
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (c : 复形)
   证明: by
   by_cases h : UniqueDiffWithinAt Complex s x; swap
   · rw [derivWithin_zero_of_not_uniqueDiffWithinAt h,
@@ -839,8 +839,8 @@ theorem Complex.deriv_const_cpow
   rwa [differentiableWithinAt_univ]
 
 中文:
-定理 Complex.deriv_const_cpow
-  条件: (hf : DifferentiableAt Complex f x) (c : Complex)
+定理 复形.deriv_const_cpow
+  条件: (hf : DifferentiableAt 复形 f x) (c : 复形)
   证明: by
   rw [← derivWithin_univ]; rw [derivWithin_const_cpow]; rw [derivWithin_univ]
   rwa [differentiableWithinAt_univ]
@@ -867,8 +867,8 @@ theorem hasDerivAt_ofReal_cpow_const'
     · exact (m
 
 中文:
-定理 hasDerivAt_ofReal_cpow_const'
-  条件: {x : 实数} (hx : x != 0) {r : Complex} (hr : r != -1)
+定理 hasDerivAt_of实数_cpow_const'
+  条件: {x : 实数} (hx : x != 0) {r : 复形} (hr : r != -1)
   证明: by
   rw [Ne]; rw [← add_eq_zero_iff_eq_neg]; rw [← Ne] at hr
   rcases lt_or_gt_of_ne hx.symm with (hx | hx)
@@ -929,8 +929,8 @@ have := HasDerivAt.const_mul r hasDerivAt_ofReal_cpow_const' hx
   simpa [sub_add_cancel, mul_div_cancel₀ _ hr] using this
 
 中文:
-定理 hasDerivAt_ofReal_cpow_const
-  条件: {x : 实数} (hx : x != 0) {r : Complex} (hr : r != 0)
+定理 hasDerivAt_of实数_cpow_const
+  条件: {x : 实数} (hx : x != 0) {r : 复形} (hr : r != 0)
   证明: by
 have := HasDerivAt.const_mul r hasDerivAt_ofReal_cpow_const' hx
     (by rwa [ne_eq, sub_eq_neg_self])
@@ -953,7 +953,7 @@ theorem DifferentiableAt.ofReal_cpow_const
   proof: (hasDerivAt_ofReal_cpow_const h0 h1).differentiableAt.comp x hf
 
 中文:
-定理 DifferentiableAt.ofReal_cpow_const
+定理 DifferentiableAt.of实数_cpow_const
   结论: {f : 实数 -> 实数} {x : 实数} (hf : DifferentiableAt 实数 f x)
   证明: (hasDerivAt_ofReal_cpow_const h0 h1).differentiableAt.comp x hf
 
@@ -973,8 +973,8 @@ theorem Complex.deriv_cpow_const
   proof: (hasStrictDerivAt_cpow_const hx).hasDerivAt.deriv
 
 中文:
-定理 Complex.deriv_cpow_const
-  条件: (hx : x in Complex.slitPlane)
+定理 复形.deriv_cpow_const
+  条件: (hx : x in 复形.slitPlane)
   证明: (hasStrictDerivAt_cpow_const hx).hasDerivAt.deriv
 
 Depends on / 依赖: hasDerivAt, hasDerivAt.deriv, hasStrictDerivAt_cpow_const
@@ -992,7 +992,7 @@ theorem Complex.deriv_ofReal_cpow_const
   proof: (hasDerivAt_ofReal_cpow_const hx hc).deriv
 
 中文:
-定理 Complex.deriv_ofReal_cpow_const
+定理 复形.deriv_of实数_cpow_const
   条件: {x : 实数} (hx : x != 0) (hc : c != 0)
   证明: (hasDerivAt_ofReal_cpow_const hx hc).deriv
 
@@ -1012,7 +1012,7 @@ theorem deriv_cpow_const
 
 中文:
 定理 deriv_cpow_const
-  条件: (hf : DifferentiableAt Complex f x) (hx : f x in Complex.slitPlane)
+  条件: (hf : DifferentiableAt 复形 f x) (hx : f x in 复形.slitPlane)
   证明: (hf.hasDerivAt.cpow_const hx).deriv
 
 Depends on / 依赖: cpow_const, hasDerivAt, hf.hasDerivAt.cpow_const
@@ -1035,8 +1035,8 @@ theorem isTheta_deriv_ofReal_cpow_const_atTop
       (Asymptotics.IsTheta.of_norm_eventuallyEq EventuallyEq.rfl).const_mul_
 
 中文:
-定理 isTheta_deriv_ofReal_cpow_const_atTop
-  条件: {c : Complex} (hc : c != 0)
+定理 isTheta_deriv_of实数_cpow_const_atTop
+  条件: {c : 复形} (hc : c != 0)
   证明: by
   calc
     _ =ᶠ[atTop] fun x : Real => c * x ^ (c - 1) := by
@@ -1069,8 +1069,8 @@ theorem isBigO_deriv_ofReal_cpow_const_atTop
   · exact (isTheta_deriv_ofReal_cpow_const_atTop hc).1
 
 中文:
-定理 isBigO_deriv_ofReal_cpow_const_atTop
-  条件: (c : Complex)
+定理 isBigO_deriv_of实数_cpow_const_atTop
+  条件: (c : 复形)
   证明: by
   obtain rfl | hc := eq_or_ne c 0
   · simp_rw [cpow_zero, deriv_const', Asymptotics.isBigO_zero]
@@ -1458,7 +1458,7 @@ theorem differentiable_rpow_const
 中文:
 定理 differentiable_rpow_const
   条件: {p : 实数} (hp : 1 <= p)
-  结论: Differentiable 实数 fun x : 实数 => x ^ p
+  结论: 可微 实数 fun x : 实数 => x ^ p
   证明: fun _ => (hasDerivAt_rpow_const (Or.inr hp)).differentiableAt
 
 Depends on / 依赖: Or.inr, differentiableAt, hasDerivAt_rpow_const
@@ -1730,8 +1730,8 @@ theorem HasFDerivAt.rpow
   exact (hasStrictFDerivAt_rpow_of_pos (f x, g x) h).hasFDerivAt.comp x (hf.prodMk hg)
 
 中文:
-定理 HasFDerivAt.rpow
-  条件: (hf : HasFDerivAt f f' x) (hg : HasFDerivAt g g' x) (h : 0 < f x)
+定理 在点处Fréchet可导.rpow
+  条件: (hf : 在点处Fréchet可导 f f' x) (hg : 在点处Fréchet可导 g g' x) (h : 0 < f x)
   证明: by
   exact (hasStrictFDerivAt_rpow_of_pos (f x, g x) h).hasFDerivAt.comp x (hf.prodMk hg)
 
@@ -1857,8 +1857,8 @@ theorem Differentiable.rpow
 @[fun_prop]
 
 中文:
-定理 Differentiable.rpow
-  条件: (hf : Differentiable 实数 f) (hg : Differentiable 实数 g) (h : 对任意 x, f x != 0)
+定理 可微.rpow
+  条件: (hf : 可微 实数 f) (hg : 可微 实数 g) (h : 对任意 x, f x != 0)
   证明: fun x => (hf x).rpow (hg x) (h x)
 
 @[fun_prop]
@@ -1900,8 +1900,8 @@ theorem HasFDerivAt.rpow_const
   proof: (hasDerivAt_rpow_const h).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.rpow_const
-  条件: (hf : HasFDerivAt f f' x) (h : f x != 0 ∨ 1 <= p)
+定理 在点处Fréchet可导.rpow_const
+  条件: (hf : 在点处Fréchet可导 f f' x) (h : f x != 0 ∨ 1 <= p)
   证明: (hasDerivAt_rpow_const h).comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_rpow_const
@@ -2014,8 +2014,8 @@ theorem Differentiable.rpow_const
   proof: fun x => (hf x).rpow_const (h x)
 
 中文:
-定理 Differentiable.rpow_const
-  条件: (hf : Differentiable 实数 f) (h : 对任意 x, f x != 0 ∨ 1 <= p)
+定理 可微.rpow_const
+  条件: (hf : 可微 实数 f) (h : 对任意 x, f x != 0 ∨ 1 <= p)
   证明: fun x => (hf x).rpow_const (h x)
 
 Depends on / 依赖: rpow_const
@@ -2051,8 +2051,8 @@ theorem HasFDerivAt.const_rpow
   proof: (hasStrictDerivAt_const_rpow hc (f x)).hasDerivAt.comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.const_rpow
-  条件: (hf : HasFDerivAt f f' x) (hc : 0 < c)
+定理 在点处Fréchet可导.const_rpow
+  条件: (hf : 在点处Fréchet可导 f f' x) (hc : 0 < c)
   证明: (hasStrictDerivAt_const_rpow hc (f x)).hasDerivAt.comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt, hasDerivAt.comp_hasFDerivAt, hasStrictDerivAt_const_rpow
@@ -2171,8 +2171,8 @@ theorem ContDiff.rpow
 @[fun_prop]
 
 中文:
-定理 ContDiff.rpow
-  条件: (hf : ContDiff 实数 n f) (hg : ContDiff 实数 n g) (h : 对任意 x, f x != 0)
+定理 连续可微.rpow
+  条件: (hf : 连续可微 实数 n f) (hg : 连续可微 实数 n g) (h : 对任意 x, f x != 0)
   证明: contDiff_iff_contDiffAt.mpr fun x => hf.contDiffAt.rpow hg.contDiffAt (h x)
 
 @[fun_prop]
@@ -2264,8 +2264,8 @@ theorem ContDiff.rpow_const_of_ne
   proof: hf.rpow contDiff_const h
 
 中文:
-定理 ContDiff.rpow_const_of_ne
-  条件: (hf : ContDiff 实数 n f) (h : 对任意 x, f x != 0)
+定理 连续可微.rpow_const_of_ne
+  条件: (hf : 连续可微 实数 n f) (h : 对任意 x, f x != 0)
   证明: hf.rpow contDiff_const h
 
 Depends on / 依赖: contDiff_const, hf.rpow
@@ -2359,8 +2359,8 @@ theorem ContDiff.rpow_const_of_le
   proof: contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.rpow_const_of_le h
 
 中文:
-定理 ContDiff.rpow_const_of_le
-  条件: (hf : ContDiff 实数 m f) (h : ↑m <= p)
+定理 连续可微.rpow_const_of_le
+  条件: (hf : 连续可微 实数 m f) (h : ↑m <= p)
   证明: contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.rpow_const_of_le h
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, contDiff_iff_contDiffAt.mpr, hf.contDiffAt.rpow_const_of_le, rpow_const_of_le
@@ -2411,8 +2411,8 @@ theorem HasDerivAt.rpow
   exact hf.rpow hg h
 
 中文:
-定理 HasDerivAt.rpow
-  条件: (hf : HasDerivAt f f' x) (hg : HasDerivAt g g' x) (h : 0 < f x)
+定理 在点处可导.rpow
+  条件: (hf : 在点处可导 f f' x) (hg : 在点处可导 g g' x) (h : 0 < f x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hf.rpow hg h
@@ -2460,8 +2460,8 @@ theorem HasDerivAt.rpow_const
   exact hf.rpow_const hx
 
 中文:
-定理 HasDerivAt.rpow_const
-  条件: (hf : HasDerivAt f f' x) (hx : f x != 0 ∨ 1 <= p)
+定理 在点处可导.rpow_const
+  条件: (hf : 在点处可导 f f' x) (hx : f x != 0 ∨ 1 <= p)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hf.rpow_const hx
@@ -2530,8 +2530,8 @@ theorem deriv_norm_ofReal_cpow
     rw [Complex.norm_cpow_eq_rpow_re_of_pos hx]
 
 中文:
-定理 deriv_norm_ofReal_cpow
-  条件: (c : Complex) {t : 实数} (ht : 0 < t)
+定理 deriv_norm_of实数_cpow
+  条件: (c : 复形) {t : 实数} (ht : 0 < t)
   证明: by
   rw [EventuallyEq.deriv_eq (f := fun x => x ^ c.re)]
   · rw [Real.deriv_rpow_const t]
@@ -2644,8 +2644,8 @@ theorem HasDerivAt.const_rpow
   exact hf.const_rpow ha
 
 中文:
-定理 HasDerivAt.const_rpow
-  条件: (ha : 0 < a) (hf : HasDerivAt f f' x)
+定理 在点处可导.const_rpow
+  条件: (ha : 0 < a) (hf : 在点处可导 f f' x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hf.const_rpow ha

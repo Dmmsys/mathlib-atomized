@@ -227,7 +227,7 @@ lemma index_equiv
 
 中文:
 引理 index_equiv
-  条件: {E : 类型} [EquivLike E ι' ι] (f : E) (v₁ : ι -> P₁) (v₂ : ι -> P₂)
+  条件: {E : 类型} [等价状 E ι' ι] (f : E) (v₁ : ι -> P₁) (v₂ : ι -> P₂)
   证明: by
   refine ⟨fun h i₁ i₂ => ?_, fun h => index_map h f⟩
   simpa [(EquivLike.toEquiv f).right_inv i₁, (EquivLike.toEquiv f).right_inv i₂]
@@ -252,7 +252,7 @@ lemma of_subsingleton_index
 
 中文:
 引理 of_subsingleton_index
-  条件: [Subsingleton ι]
+  条件: [子单例 ι]
   结论: v₁ ≅ v₂
   证明: fun i j => by simp [Subsingleton.elim i j]
 
@@ -272,7 +272,7 @@ lemma comp_left
 
 中文:
 引理 comp_left
-  条件: {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂)
+  条件: {f : P₁ -> P₃} (hf : 等距 f) (h : v₁ ≅ v₂)
   结论: f ∘ v₁ ≅ v₂
   证明: .trans (fun _ _ => hf _ _) h
 -/
@@ -292,7 +292,7 @@ lemma comp_right
 
 中文:
 引理 comp_right
-  条件: {f : P₂ -> P₃} (hf : Isometry f) (h : v₁ ≅ v₂)
+  条件: {f : P₂ -> P₃} (hf : 等距 f) (h : v₁ ≅ v₂)
   结论: v₁ ≅ f ∘ v₂
   证明: .trans h (.symm <| fun _ _ => hf _ _)
 
@@ -315,7 +315,7 @@ lemma comp_left_iff
 
 中文:
 引理 comp_left_iff
-  条件: {f : P₁ -> P₃} (hf : Isometry f)
+  条件: {f : P₁ -> P₃} (hf : 等距 f)
   结论: f ∘ v₁ ≅ v₂ ↔ v₁ ≅ v₂
   证明: ⟨.trans .comp_right hf (.refl _), .comp_left hf⟩
 
@@ -339,7 +339,7 @@ lemma comp_right_iff
 
 中文:
 引理 comp_right_iff
-  条件: {f : P₂ -> P₃} (hf : Isometry f)
+  条件: {f : P₂ -> P₃} (hf : 等距 f)
   结论: v₁ ≅ f ∘ v₂ ↔ v₁ ≅ v₂
   证明: by
   rw [congruent_comm]; rw [comp_left_iff hf]; rw [congruent_comm]

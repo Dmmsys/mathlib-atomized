@@ -381,7 +381,7 @@ theorem MultilinearMap.domCoprod_alternization_coe
   rfl
 
 中文:
-定理 MultilinearMap.domCoprod_alternization_coe
+定理 多重线性映射.domCoprod_alternization_coe
   结论: [DecidableEq ιa] [DecidableEq ιb]
   证明: by
   simp_rw [← MultilinearMap.domCoprod'_apply, MultilinearMap.alternatization_coe]
@@ -425,7 +425,7 @@ theorem MultilinearMap.domCoprod_alternization
    
 
 中文:
-定理 MultilinearMap.domCoprod_alternization
+定理 多重线性映射.domCoprod_alternization
   结论: [DecidableEq ιa] [DecidableEq ιb]
   证明: by
   apply coe_multilinearMap_injective
@@ -479,7 +479,7 @@ theorem MultilinearMap.domCoprod_alternization_eq
   rw [MultilinearMap.domCoprod_alternization]; rw [coe_alternatization]; rw [coe_alternatization]; rw [mul_smul]; rw [← AlternatingMap.domCoprod'_apply]; rw [← AlternatingMap.domCoprod'_apply]; rw [← TensorProduct.smul_tmul']; rw [TensorProduct.tmul_smul]; rw [LinearMap.map_smul_of_tower Alternat
 
 中文:
-定理 MultilinearMap.domCoprod_alternization_eq
+定理 多重线性映射.domCoprod_alternization_eq
   结论: [DecidableEq ιa] [DecidableEq ιb]
   证明: by
   rw [MultilinearMap.domCoprod_alternization]; rw [coe_alternatization]; rw [coe_alternatization]; rw [mul_smul]; rw [← AlternatingMap.domCoprod'_apply]; rw [← AlternatingMap.domCoprod'_apply]; rw [← TensorProduct.smul_tmul']; rw [TensorProduct.tmul_smul]; rw [LinearMap.map_smul_of_tower Alternat

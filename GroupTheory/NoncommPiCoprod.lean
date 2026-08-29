@@ -71,7 +71,7 @@ theorem eq_one_of_noncommProd_eq_one_of_iSupIndep
 
 中文:
 定理 eq_one_of_noncommProd_eq_one_of_iSupIndep
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> G) (comm)
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> G) (comm)
   证明: by
   classical
     revert heq1
@@ -395,7 +395,7 @@ theorem comp_noncommPiCoprod
 
 中文:
 定理 comp_noncommPiCoprod
-  结论: {P : 类型} [Monoid P] {f : M ->* P}
+  结论: {P : 类型} [幺半群 P] {f : M ->* P}
   证明: MonoidHom.ext fun _ => by
     simp only [MonoidHom.noncommPiCoprod, MonoidHom.coe_comp, MonoidHom.coe_mk, OneHom.coe_mk,
       Function.comp_apply, Finset.map_noncommProd]
@@ -447,7 +447,7 @@ theorem noncommPiCoprod_range
 
 中文:
 定理 noncommPiCoprod_range
-  结论: [Fintype ι]
+  结论: [有限类型 ι]
   证明: by
   let := Classical.decEq ι
   apply le_antisymm
@@ -498,7 +498,7 @@ theorem injective_noncommPiCoprod_of_iSupIndep
 
 中文:
 定理 injective_noncommPiCoprod_of_iSupIndep
-  结论: [Fintype ι]
+  结论: [有限类型 ι]
   证明: by
   apply (MonoidHom.ker_eq_bot_iff _).mp
   rw [eq_bot_iff]
@@ -689,7 +689,7 @@ definition noncommPiCoprod
 
 中文:
 定义 noncommPiCoprod
-  签名: (hcomm : Pairwise fun i j : ι => 对任意 x y : G, x in H i -> y in H j -> Commute x y)
+  签名: (hcomm : 两两 fun i j : ι => 对任意 x y : G, x in H i -> y in H j -> Commute x y)
   定义体: MonoidHom.noncommPiCoprod (fun i => (H i).subtype) (commute_subtype_of_commute hcomm)
 
 @[to_additive (attr := simp)]

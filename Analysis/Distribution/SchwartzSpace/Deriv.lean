@@ -119,7 +119,7 @@ theorem hasDerivAt
 中文:
 定理 hasDerivAt
   条件: (f : 𝓢(实数, F)) (x : 实数)
-  结论: HasDerivAt f (deriv f x) x
+  结论: 在点处可导 f (deriv f x) x
   证明: f.differentiableAt.hasDerivAt
 
 Depends on / 依赖: differentiableAt, f.differentiableAt.hasDerivAt, hasDerivAt
@@ -196,7 +196,7 @@ theorem hasFDerivAt
 中文:
 定理 hasFDerivAt
   条件: (f : 𝓢(E, F)) (x : E)
-  结论: HasFDerivAt f (fderiv 实数 f x) x
+  结论: 在点处Fréchet可导 f (fderiv 实数 f x) x
   证明: f.differentiableAt.hasFDerivAt
 
 Depends on / 依赖: differentiableAt, f.differentiableAt.hasFDerivAt, hasFDerivAt
@@ -317,7 +317,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousLineDeriv E 𝓢(E, F) 𝓢(E, F)
+  签名: 余ntinuousLineDeriv E 𝓢(E, F) 𝓢(E, F)
   定义体: (SchwartzMap.evalCLM Real E F m ∘L fderivCLM Real E F).continuous
 
 Depends on / 依赖: SchwartzMap, SchwartzMap.evalCLM, continuous, evalCLM, fderivCLM
@@ -379,7 +379,7 @@ theorem iteratedLineDerivOp_eq_iteratedFDeriv
 
 中文:
 定理 iteratedLineDerivOp_eq_iteratedFDeriv
-  条件: {n : 自然数} {m : Fin n -> E} {f : 𝓢(E, F)} {x : E}
+  条件: {n : 自然数} {m : 有限集 n -> E} {f : 𝓢(E, F)} {x : E}
   证明: by
   induction n generalizing x with
   | zero => simp
@@ -521,7 +521,7 @@ theorem tsupport_iteratedLineDerivOp_subset
 
 中文:
 定理 tsupport_iteratedLineDerivOp_subset
-  条件: {n : 自然数} (m : Fin n -> E) (f : 𝓢(E, F))
+  条件: {n : 自然数} (m : 有限集 n -> E) (f : 𝓢(E, F))
   证明: by
   induction n with
   | zero => simp
@@ -559,7 +559,7 @@ instance :
 
 中文:
 实例 :
-  签名: Laplacian 𝓢(E, F) 𝓢(E, F)
+  签名: Laplace算子 𝓢(E, F) 𝓢(E, F)
   定义体: laplacianCLM Real E 𝓢(E, F)
 
 Depends on / 依赖: laplacianCLM
@@ -594,7 +594,7 @@ theorem laplacian_eq_sum
 
 中文:
 定理 laplacian_eq_sum
-  条件: [Fintype ι] (b : OrthonormalBasis ι 实数 E) (f : 𝓢(E, F))
+  条件: [有限类型 ι] (b : 正交标准基 ι 实数 E) (f : 𝓢(E, F))
   证明: LineDeriv.laplacianCLM_eq_sum b f
 
 Depends on / 依赖: LineDeriv, LineDeriv.laplacianCLM_eq_sum, laplacianCLM_eq_sum
@@ -616,7 +616,7 @@ theorem laplacianCLM_eq
 
 中文:
 定理 laplacianCLM_eq
-  条件: [RCLike 𝕜] [NormedSpace 𝕜 F] (f : 𝓢(E, F))
+  条件: [RCLike 𝕜] [赋范空间 𝕜 F] (f : 𝓢(E, F))
   证明: by
   simp [laplacianCLM, laplacian_eq_sum (stdOrthonormalBasis Real E)]
 

@@ -76,7 +76,7 @@ theorem artanh_eq_half_log
 
 中文:
 定理 artanh_eq_half_log
-  条件: {x : 实数} (hx : x in Icc (-1) 1)
+  条件: {x : 实数} (hx : x in 闭区间 (-1) 1)
   证明: by
   rw [artanh]; rw [log_sqrt <| div_nonneg (by grind) (by grind)]; rw [one_div_mul_eq_div]
 
@@ -99,7 +99,7 @@ theorem exp_artanh
 
 中文:
 定理 exp_artanh
-  条件: {x : 实数} (hx : x in Ioo (-1) 1)
+  条件: {x : 实数} (hx : x in 开区间 (-1) 1)
   结论: exp (artanh x) = √((1 + x) / (1 - x))
   证明: exp_log sqrt_pos_of_pos div_pos (by grind) (by grind)
 
@@ -142,7 +142,7 @@ have : 0 < √((1 + x) / (1 - x)) := sqrt_pos_of_pos div_pos (by grind) (by grin
 
 中文:
 定理 sinh_artanh
-  条件: {x : 实数} (hx : x in Ioo (-1) 1)
+  条件: {x : 实数} (hx : x in 开区间 (-1) 1)
   结论: sinh (artanh x) = x / √(1 - x ^ 2)
   证明: by
 have : 0 < √((1 + x) / (1 - x)) := sqrt_pos_of_pos div_pos (by grind) (by grind)
@@ -170,7 +170,7 @@ have : 0 < √((1 + x) / (1 - x)) := sqrt_pos_of_pos div_pos (by grind) (by grin
 
 中文:
 定理 cosh_artanh
-  条件: {x : 实数} (hx : x in Ioo (-1) 1)
+  条件: {x : 实数} (hx : x in 开区间 (-1) 1)
   结论: cosh (artanh x) = 1 / √(1 - x ^ 2)
   证明: by
 have : 0 < √((1 + x) / (1 - x)) := sqrt_pos_of_pos div_pos (by grind) (by grind)
@@ -197,7 +197,7 @@ theorem tanh_artanh
 
 中文:
 定理 tanh_artanh
-  条件: {x : 实数} (hx : x in Ioo (-1) 1)
+  条件: {x : 实数} (hx : x in 开区间 (-1) 1)
   结论: tanh (artanh x) = x
   证明: by
   have := sq_sub_sq 1 x
@@ -274,7 +274,7 @@ apply strictMonoOn_log.comp ?_ fun x hx => sqrt_pos_of_pos div_pos (by grind) (b
 
 中文:
 定理 strictMonoOn_artanh
-  结论: StrictMonoOn artanh (Ioo (-1) 1)
+  结论: StrictMonoOn artanh (开区间 (-1) 1)
   证明: by
 apply strictMonoOn_log.comp ?_ fun x hx => sqrt_pos_of_pos div_pos (by grind) (by grind)
   apply strictMonoOn_sqrt.comp strictMonoOn_one_add_div_one_sub
@@ -297,7 +297,7 @@ theorem artanh_le_artanh_iff
 
 中文:
 定理 artanh_le_artanh_iff
-  条件: {x y : 实数} (hx : x in Ioo (-1) 1) (hy : y in Ioo (-1) 1)
+  条件: {x y : 实数} (hx : x in 开区间 (-1) 1) (hy : y in 开区间 (-1) 1)
   证明: strictMonoOn_artanh.le_iff_le hx hy
 
 Depends on / 依赖: le_iff_le, strictMonoOn_artanh, strictMonoOn_artanh.le_iff_le
@@ -316,7 +316,7 @@ theorem artanh_lt_artanh_iff
 
 中文:
 定理 artanh_lt_artanh_iff
-  条件: {x y : 实数} (hx : x in Ioo (-1) 1) (hy : y in Ioo (-1) 1)
+  条件: {x y : 实数} (hx : x in 开区间 (-1) 1) (hy : y in 开区间 (-1) 1)
   证明: strictMonoOn_artanh.lt_iff_lt hx hy
 
 Depends on / 依赖: lt_iff_lt, strictMonoOn_artanh, strictMonoOn_artanh.lt_iff_lt
@@ -398,7 +398,7 @@ theorem artanh_pos
 
 中文:
 定理 artanh_pos
-  条件: {x : 实数} (hx : x in Ioo 0 1)
+  条件: {x : 实数} (hx : x in 开区间 0 1)
   结论: 0 < artanh x
   证明: by
   rw [← artanh_zero]; rw [artanh_lt_artanh_iff (by grind) (by grind)]
@@ -423,7 +423,7 @@ theorem artanh_neg
 
 中文:
 定理 artanh_neg
-  条件: {x : 实数} (hx : x in Ioo (-1) 0)
+  条件: {x : 实数} (hx : x in 开区间 (-1) 0)
   结论: artanh x < 0
   证明: by
   rw [← artanh_zero]; rw [artanh_lt_artanh_iff (by grind) (by grind)]
@@ -520,7 +520,7 @@ definition tanhPartialEquiv
 
 中文:
 定义 tanhPartialEquiv
-  签名: : PartialEquiv 实数 实数 where
+  签名: : 部分等价 实数 实数 where
   定义体: tanh
   invFun := artanh
   source := univ
@@ -550,7 +550,7 @@ theorem tanh_bijOn
 
 中文:
 定理 tanh_bijOn
-  结论: BijOn tanh univ (Ioo (-1) 1)
+  结论: 双射限制 tanh univ (开区间 (-1) 1)
   证明: tanhPartialEquiv.bijOn
 
 Depends on / 依赖: tanhPartialEquiv, tanhPartialEquiv.bijOn
@@ -567,7 +567,7 @@ theorem tanh_injective
 
 中文:
 定理 tanh_injective
-  结论: Injective tanh
+  结论: 单射 tanh
   证明: fun _ _ => tanhPartialEquiv.injOn trivial trivial
 
 Depends on / 依赖: tanhPartialEquiv, tanhPartialEquiv.injOn
@@ -584,7 +584,7 @@ theorem tanh_surjOn
 
 中文:
 定理 tanh_surjOn
-  结论: SurjOn tanh univ (Ioo (-1) 1)
+  结论: 满射限制 tanh univ (开区间 (-1) 1)
   证明: tanhPartialEquiv.surjOn
 
 Depends on / 依赖: surjOn, tanhPartialEquiv, tanhPartialEquiv.surjOn
@@ -601,7 +601,7 @@ theorem artanh_bijOn
 
 中文:
 定理 artanh_bijOn
-  结论: BijOn artanh (Ioo (-1) 1) univ
+  结论: 双射限制 artanh (开区间 (-1) 1) univ
   证明: tanhPartialEquiv.symm.bijOn
 
 Depends on / 依赖: tanhPartialEquiv, tanhPartialEquiv.symm.bijOn
@@ -618,7 +618,7 @@ theorem artanh_injOn
 
 中文:
 定理 artanh_injOn
-  结论: InjOn artanh (Ioo (-1) 1)
+  结论: 单射限制 artanh (开区间 (-1) 1)
   证明: tanhPartialEquiv.symm.injOn
 
 Depends on / 依赖: tanhPartialEquiv, tanhPartialEquiv.symm.injOn
@@ -635,7 +635,7 @@ theorem artanh_surjOn
 
 中文:
 定理 artanh_surjOn
-  结论: SurjOn artanh (Ioo (-1) 1) univ
+  结论: 满射限制 artanh (开区间 (-1) 1) univ
   证明: tanhPartialEquiv.symm.surjOn
 
 Depends on / 依赖: surjOn, tanhPartialEquiv, tanhPartialEquiv.symm.surjOn

@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WidePullbackShape J)
+  签名: 可居 (WidePullbackShape J)
   定义体: none
 -/
 instance : Inhabited (WidePullbackShape J) where
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WidePushoutShape J)
+  签名: 可居 (WidePushoutShape J)
   定义体: none
 -/
 instance : Inhabited (WidePushoutShape J) where
@@ -114,11 +114,11 @@ inductive Hom
     - term: forall j : J, Hom (some j) none
 
 中文:
-归纳类型 Hom
-  参数: : WidePullbackShape J -> WidePullbackShape J -> Type w
+归纳类型 态射
+  参数: : WidePullbackShape J -> WidePullbackShape J -> 类型 w
   构造子 (2 个):
-    - id: 对任意 X, Hom X X
-    - term: 对任意 j : J, Hom (some j) none
+    - id: 对任意 X, 态射 X X
+    - term: 对任意 j : J, 态射 (some j) none
 -/
 inductive Hom : WidePullbackShape J -> WidePullbackShape J -> Type w
   | id : forall X, Hom X X
@@ -171,8 +171,8 @@ instance Hom.inhabited
   body: ⟨Hom.id (none : WidePullbackShape J)⟩
 
 中文:
-实例 Hom.inhabited
-  签名: : Inhabited (Hom (none : WidePullbackShape J) none)
+实例 态射.inhabited
+  签名: : 可居 (态射 (none : WidePullbackShape J) none)
   定义体: ⟨Hom.id (none : WidePullbackShape J)⟩
 
 Depends on / 依赖: Hom.id, WidePullbackShape
@@ -208,7 +208,7 @@ instance subsingleton_hom
 
 中文:
 实例 subsingleton_hom
-  签名: : Quiver.IsThin (WidePullbackShape J)
+  签名: : 箭图.IsThin (WidePullbackShape J)
   定义体: fun _ _ => by
   constructor
   intro a b
@@ -239,7 +239,7 @@ instance category
 
 中文:
 实例 category
-  签名: : SmallCategory (WidePullbackShape J)
+  签名: : 小范畴 (WidePullbackShape J)
   定义体: thin_category
 
 @[simp]
@@ -262,7 +262,7 @@ theorem hom_id
 中文:
 定理 hom_id
   条件: (X : WidePullbackShape J)
-  结论: Hom.id X = 𝟙 X
+  结论: 态射.id X = 𝟙 X
   证明: rfl
 -/
 theorem hom_id (X : WidePullbackShape J) : Hom.id X = 𝟙 X :=
@@ -384,7 +384,7 @@ definition equivalenceOfEquiv
 
 中文:
 定义 equivalenceOfEquiv
-  签名: (J' : Type w') (h : J ≃ J')
+  签名: (J' : 类型 w') (h : J ≃ J')
   定义体: wideCospan none (fun j => some (h j)) fun j => Hom.term (h j)
   inverse := wideCospan none (fun j => some (h.invFun j)) fun j => Hom.term (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
@@ -536,11 +536,11 @@ inductive Hom
     - init: forall j : J, Hom none (some j)
 
 中文:
-归纳类型 Hom
-  参数: : WidePushoutShape J -> WidePushoutShape J -> Type w
+归纳类型 态射
+  参数: : WidePushoutShape J -> WidePushoutShape J -> 类型 w
   构造子 (2 个):
-    - id: 对任意 X, Hom X X
-    - init: 对任意 j : J, Hom none (some j)
+    - id: 对任意 X, 态射 X X
+    - init: 对任意 j : J, 态射 none (some j)
 -/
 inductive Hom : WidePushoutShape J -> WidePushoutShape J -> Type w
   | id : forall X, Hom X X
@@ -593,8 +593,8 @@ instance Hom.inhabited
   body: ⟨Hom.id (none : WidePushoutShape J)⟩
 
 中文:
-实例 Hom.inhabited
-  签名: : Inhabited (Hom (none : WidePushoutShape J) none)
+实例 态射.inhabited
+  签名: : 可居 (态射 (none : WidePushoutShape J) none)
   定义体: ⟨Hom.id (none : WidePushoutShape J)⟩
 -/
 instance Hom.inhabited : Inhabited (Hom (none : WidePushoutShape J) none) :=
@@ -625,7 +625,7 @@ instance subsingleton_hom
 
 中文:
 实例 subsingleton_hom
-  签名: : Quiver.IsThin (WidePushoutShape J)
+  签名: : 箭图.IsThin (WidePushoutShape J)
   定义体: fun _ _ => by
   constructor
   intro a b
@@ -652,7 +652,7 @@ instance category
 
 中文:
 实例 category
-  签名: : SmallCategory (WidePushoutShape J)
+  签名: : 小范畴 (WidePushoutShape J)
   定义体: thin_category
 
 @[simp]
@@ -675,7 +675,7 @@ theorem hom_id
 中文:
 定理 hom_id
   条件: (X : WidePushoutShape J)
-  结论: Hom.id X = 𝟙 X
+  结论: 态射.id X = 𝟙 X
   证明: rfl
 -/
 theorem hom_id (X : WidePushoutShape J) : Hom.id X = 𝟙 X :=
@@ -811,7 +811,7 @@ definition equivalenceOfEquiv
 
 中文:
 定义 equivalenceOfEquiv
-  签名: (J' : Type w') (h : J ≃ J')
+  签名: (J' : 类型 w') (h : J ≃ J')
   定义体: wideSpan none (fun j => some (h j)) fun j => Hom.init (h j)
   inverse := wideSpan none (fun j => some (h.invFun j)) fun j => Hom.init (h.invFun j)
   unitIso := NatIso.ofComponents (fun j => by cases j <;> exact eqToIso (by simp))
@@ -1360,7 +1360,7 @@ definition IsLimit.mk
   uniq t m hm := uniq _ _ (hm none) fun _ => hm (some _)
 
 中文:
-定义 IsLimit.mk
+定义 是极限.mk
   签名: (s : WidePullbackCone f) (lift : 对任意 t : WidePullbackCone f, t.pt ⟶ s.pt)
   定义体: lift
   fac t j := by
@@ -1393,8 +1393,8 @@ lemma IsLimit.hom_ext
   · exact hπ j
 
 中文:
-引理 IsLimit.hom_ext
-  结论: {s : WidePullbackCone f} (hs : IsLimit s)
+引理 是极限.hom_ext
+  结论: {s : WidePullbackCone f} (hs : 是极限 s)
   证明: by
   apply hs.hom_ext
   rintro (_ | j)
@@ -1421,8 +1421,8 @@ definition IsLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsLimit.lift
-  签名: {s : WidePullbackCone f} (hs : IsLimit s)
+定义 是极限.lift
+  签名: {s : WidePullbackCone f} (hs : 是极限 s)
   定义体: hs.lift (WidePullbackCone.mk b a w)
 
 @[reassoc (attr := simp)]
@@ -1444,8 +1444,8 @@ lemma IsLimit.lift_base
 @[reassoc (attr := simp)]
 
 中文:
-引理 IsLimit.lift_base
-  结论: {s : WidePullbackCone f} (hs : IsLimit s)
+引理 是极限.lift_base
+  结论: {s : WidePullbackCone f} (hs : 是极限 s)
   证明: hs.fac _ _
 
 @[reassoc (attr := simp)]
@@ -1467,8 +1467,8 @@ lemma IsLimit.lift_π
   proof: hs.fac _ _
 
 中文:
-引理 IsLimit.lift_π
-  结论: {s : WidePullbackCone f} (hs : IsLimit s)
+引理 是极限.lift_π
+  结论: {s : WidePullbackCone f} (hs : 是极限 s)
   证明: hs.fac _ _
 
 Depends on / 依赖: Iso.refl, hs.fac
@@ -2119,7 +2119,7 @@ theorem hasWidePushouts_shrink
 
 中文:
 定理 hasWidePushouts_shrink
-  条件: [HasWidePushouts.{max w w'} C]
+  条件: [HasWidePushouts.{最大值 w w'} C]
   结论: HasWidePushouts.{w} C
   证明: fun _ =>
   hasColimitsOfShape_of_equivalence (WidePushoutShape.equivalenceOfEquiv _ Equiv.ulift.{w'})
@@ -2139,7 +2139,7 @@ theorem hasWidePullbacks_shrink
 
 中文:
 定理 hasWidePullbacks_shrink
-  条件: [HasWidePullbacks.{max w w'} C]
+  条件: [HasWidePullbacks.{最大值 w w'} C]
   结论: HasWidePullbacks.{w} C
   证明: fun _ =>
   hasLimitsOfShape_of_equivalence (WidePullbackShape.equivalenceOfEquiv _ Equiv.ulift.{w'})

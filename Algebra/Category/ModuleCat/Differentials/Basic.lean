@@ -43,8 +43,8 @@ definition Derivation
   _root_.Derivation A B M
 
 中文:
-定义 Derivation
-  签名: : Type _
+定义 导子
+  签名: : 类型 _
   定义体: letI := f.hom.toAlgebra
   letI := Module.compHom M f.hom
   _root_.Derivation A B M
@@ -231,7 +231,7 @@ definition KaehlerDifferential
 
 中文:
 定义 KaehlerDifferential
-  签名: : ModuleCat.{u} B
+  签名: : 模范畴.{u} B
   定义体: letI := f.hom.toAlgebra
   ModuleCat.of B (_root_.KaehlerDifferential A B)
 
@@ -258,7 +258,7 @@ definition D
 
 中文:
 定义 D
-  签名: : (KaehlerDifferential f).Derivation f
+  签名: : (KaehlerDifferential f).导子 f
   定义体: letI := f.hom.toAlgebra
   ModuleCat.Derivation.mk
     (fun b => _root_.KaehlerDifferential.D A B b) (by simp) (by simp)
@@ -306,7 +306,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {M : ModuleCat B} {α β : KaehlerDifferential f ⟶ M}
+  结论: {M : 模范畴 B} {α β : KaehlerDifferential f ⟶ M}
   证明: by
   rw [← sub_eq_zero]
   have : ⊤ <= LinearMap.ker (α - β).hom := by
@@ -428,7 +428,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: : CommRingCat.KaehlerDifferential f ⟶ M
+  签名: : 交换环范畴.KaehlerDifferential f ⟶ M
   定义体: letI := f.hom.toAlgebra
   letI := Module.compHom M f.hom
   ofHom D.liftKaehlerDifferential
@@ -457,7 +457,7 @@ lemma desc_d
 中文:
 引理 desc_d
   条件: (b : B)
-  结论: D.desc (CommRingCat.KaehlerDifferential.d b) = D.d b
+  结论: D.desc (交换环范畴.KaehlerDifferential.d b) = D.d b
   证明: by
   let := f.hom.toAlgebra
   let := Module.compHom M f.hom

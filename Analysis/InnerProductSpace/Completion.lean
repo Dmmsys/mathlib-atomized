@@ -35,7 +35,7 @@ theorem Inseparable.inner_eq_inner
   proof: ((hx.prod hy).map continuous_inner).eq
 
 中文:
-定理 Inseparable.inner_eq_inner
+定理 不可分.inner_eq_inner
   结论: {x₁ x₂ y₁ y₂ : E}
   证明: ((hx.prod hy).map continuous_inner).eq
 
@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inner 𝕜 (SeparationQuotient E)
+  签名: 内积 𝕜 (SeparationQuotient E)
   定义体: SeparationQuotient.lift₂ (inner 𝕜) fun _ _ _ _ => Inseparable.inner_eq_inner
 
 @[simp]
@@ -100,7 +100,7 @@ add_left := Quotient.ind fun x => Quotient.ind₂ inner_add_left x
 
 中文:
 实例 :
-  签名: InnerProductSpace 𝕜 (SeparationQuotient E)
+  签名: 内积空间 𝕜 (SeparationQuotient E)
   定义体: Quotient.ind norm_sq_eq_re_inner
   conj_inner_symm := Quotient.ind₂ inner_conj_symm
 add_left := Quotient.ind fun x => Quotient.ind₂ inner_add_left x
@@ -138,7 +138,7 @@ instance toInner
 
 中文:
 实例 toInner
-  签名: {𝕜' E' : 类型} [TopologicalSpace 𝕜'] [UniformSpace E'] [Inner 𝕜' E']
+  签名: {𝕜' E' : 类型} [拓扑空间 𝕜'] [一致空间 E'] [内积 𝕜' E']
   定义体: curry (isDenseInducing_coe.prodMap isDenseInducing_coe).extend (uncurry (inner 𝕜'))
 
 @[simp]
@@ -163,7 +163,7 @@ theorem inner_coe
 中文:
 定理 inner_coe
   条件: (a b : E)
-  结论: ⟪(a : Completion E), (b : Completion E)⟫ = ⟪a, b⟫
+  结论: ⟪(a : 完备化 E), (b : 完备化 E)⟫ = ⟪a, b⟫
   证明: (isDenseInducing_coe.prodMap isDenseInducing_coe).extend_eq
     (continuous_inner : Continuous (uncurry (inner 𝕜))) (a, b)
 
@@ -220,8 +220,8 @@ theorem Continuous.inner
   proof: UniformSpace.Completion.continuous_inner.comp (hf.prodMk hg :)
 
 中文:
-定理 Continuous.inner
-  结论: {α : 类型} [TopologicalSpace α] {f g : α -> Completion E}
+定理 连续.inner
+  结论: {α : 类型} [拓扑空间 α] {f g : α -> 完备化 E}
   证明: UniformSpace.Completion.continuous_inner.comp (hf.prodMk hg :)
 -/
 protected theorem Continuous.inner {α : Type*} [TopologicalSpace α] {f g : α -> Completion E}
@@ -243,7 +243,7 @@ instance innerProductSpace
 
 中文:
 实例 innerProductSpace
-  签名: : InnerProductSpace 𝕜 (Completion E) where
+  签名: : 内积空间 𝕜 (完备化 E) where
   定义体: Completion.induction_on x (isClosed_eq (by fun_prop) (by fun_prop))
       fun a => by simp only [norm_coe, inner_coe, inner_self_eq_norm_sq]
   conj_inner_symm x y :=

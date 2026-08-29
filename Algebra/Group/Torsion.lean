@@ -33,8 +33,8 @@ instance [AddCommMonoid
   body: IsAddTorsionFree.nsmul_right_injective hk habk
 
 中文:
-实例 [AddCommMonoid
-  签名: M] [IsAddTorsionFree M] : Lean.Grind.No自然数ZeroDivisors M where
+实例 [加法交换幺半群
+  签名: M] [是加法无挠 M] : Lean.Grind.No自然数ZeroDivisors M where
   定义体: IsAddTorsionFree.nsmul_right_injective hk habk
 
 Depends on / 依赖: IsAddTorsionFree, IsAddTorsionFree.nsmul_right_injective, nsmul_right_injective
@@ -51,8 +51,8 @@ instance Subsingleton.to_isMulTorsionFree
   body: injective_of_subsingleton _
 
 中文:
-实例 Subsingleton.to_isMulTorsionFree
-  签名: [Subsingleton M]
+实例 子单例.to_isMulTorsionFree
+  签名: [子单例 M]
   定义体: injective_of_subsingleton _
 -/
 @[to_additive] instance Subsingleton.to_isMulTorsionFree [Subsingleton M] : IsMulTorsionFree M where
@@ -75,7 +75,7 @@ lemma pow_left_injective
 中文:
 引理 pow_left_injective
   条件: (hn : n != 0)
-  结论: Injective fun a : M => a ^ n
+  结论: 单射 fun a : M => a ^ n
   证明: IsMulTorsionFree.pow_left_injective hn
 
 @[to_additive nsmul_right_inj]
@@ -210,7 +210,7 @@ lemma zpow_left_injective
 
 中文:
 引理 zpow_left_injective
-  结论: 对任意 {n : 整数}, n != 0 -> Injective fun a : G => a ^ n
+  结论: 对任意 {n : 整数}, n != 0 -> 单射 fun a : G => a ^ n
 -/
 lemma zpow_left_injective : forall {n : Int}, n != 0 -> Injective fun a : G => a ^ n
   | (n + 1 : Nat), _ => by
@@ -276,7 +276,7 @@ lemma IsMulTorsionFree.zpow_eq_one_iff_left
   rw [← zpow_left_inj (a := a) hn]; rw [one_zpow]
 
 中文:
-引理 IsMulTorsionFree.zpow_eq_one_iff_left
+引理 是MulTorsionFree.zpow_eq_one_iff_left
   条件: (hn : n != 0)
   结论: a ^ n = 1 ↔ a = 1
   证明: by
@@ -301,7 +301,7 @@ lemma IsMulTorsionFree.zpow_eq_one_iff
 @[to_additive IsAddTorsionFree.zsmul_eq_zero_iff_left]
 
 中文:
-引理 IsMulTorsionFree.zpow_eq_one_iff
+引理 是MulTorsionFree.zpow_eq_one_iff
   结论: a ^ n = 1 ↔ a = 1 ∨ n = 0
   证明: by
   obtain rfl | hn := eq_or_ne n 0 <;> simp [zpow_eq_one_iff_left, *]
@@ -324,7 +324,7 @@ lemma IsMulTorsionFree.zpow_eq_one_iff_right
   proof: by simp [*]
 
 中文:
-引理 IsMulTorsionFree.zpow_eq_one_iff_right
+引理 是MulTorsionFree.zpow_eq_one_iff_right
   条件: (ha : a != 1)
   结论: a ^ n = 1 ↔ n = 0
   证明: by simp [*]

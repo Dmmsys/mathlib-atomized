@@ -35,8 +35,8 @@ theorem MvPolynomial.continuous_eval
   continuity
 
 中文:
-定理 MvPolynomial.continuous_eval
-  结论: Continuous fun x => eval x p
+定理 多元多项式.continuous_eval
+  结论: 连续 fun x => eval x p
   证明: by
   continuity
 

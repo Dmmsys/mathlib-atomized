@@ -85,7 +85,7 @@ theorem summable_iff_vanishing_norm
 
 中文:
 定理 summable_iff_vanishing_norm
-  条件: [CompleteSpace E] {f : ι -> E}
+  条件: [完备空间 E] {f : ι -> E}
   证明: by
   rw [summable_iff_cauchySeq_finset]; rw [cauchySeq_finset_iff_vanishing_norm]
 
@@ -230,7 +230,7 @@ theorem hasSum_of_subseq_of_summable
 
 中文:
 定理 hasSum_of_subseq_of_summable
-  结论: {f : ι -> E} (hf : Summable fun a => ‖f a‖) {s : α -> Finset ι}
+  结论: {f : ι -> E} (hf : Summable fun a => ‖f a‖) {s : α -> 有限集 ι}
   证明: tendsto_nhds_of_cauchySeq_of_subseq (cauchySeq_finset_of_summable_norm hf) hs ha
 
 Depends on / 依赖: cauchySeq_finset_of_summable_norm, tendsto_nhds_of_cauchySeq_of_subseq
@@ -271,7 +271,7 @@ theorem Summable.of_norm_bounded
 
 中文:
 定理 Summable.of_norm_bounded
-  结论: [CompleteSpace E] {f : ι -> E} {g : ι -> 实数} (hg : Summable g)
+  结论: [完备空间 E] {f : ι -> E} {g : ι -> 实数} (hg : Summable g)
   证明: by
   rw [summable_iff_cauchySeq_finset]
   exact cauchySeq_finset_of_norm_bounded hg h

@@ -131,7 +131,7 @@ lemma weightedVSubOfPoint_vadd
 
 中文:
 引理 weightedVSubOfPoint_vadd
-  条件: (s : Finset ι) (w : ι -> k) (p : ι -> P) (b : P) (v : V)
+  条件: (s : 有限集 ι) (w : ι -> k) (p : ι -> P) (b : P) (v : V)
   证明: by
   simp [vadd_vsub_assoc, vsub_vadd_eq_vsub_sub, add_comm]
 
@@ -152,7 +152,7 @@ lemma weightedVSubOfPoint_smul
 
 中文:
 引理 weightedVSubOfPoint_smul
-  结论: {G : 类型} [Group G] [DistribMulAction G V] [SMulCommClass G k V]
+  结论: {G : 类型} [群 G] [分配乘法作用 G V] [标量交换类 G k V]
   证明: by
   simp [smul_sum, smul_sub, smul_comm a (w _)]
 
@@ -387,7 +387,7 @@ exact Eq.symm
 
 中文:
 定理 weightedVSubOfPoint_indicator_subset
-  结论: (w : ι -> k) (p : ι -> P) (b : P) {s₁ s₂ : Finset ι}
+  结论: (w : ι -> k) (p : ι -> P) (b : P) {s₁ s₂ : 有限集 ι}
   证明: by
   rw [weightedVSubOfPoint_apply]; rw [weightedVSubOfPoint_apply]
 exact Eq.symm
@@ -501,7 +501,7 @@ theorem weightedVSubOfPoint_sdiff
 
 中文:
 定理 weightedVSubOfPoint_sdiff
-  结论: [DecidableEq ι] {s₂ : Finset ι} (h : s₂ subseteq s) (w : ι -> k)
+  结论: [DecidableEq ι] {s₂ : 有限集 ι} (h : s₂ subseteq s) (w : ι -> k)
   证明: by
   simp_rw [weightedVSubOfPoint_apply, sum_sdiff h]
 
@@ -524,7 +524,7 @@ theorem weightedVSubOfPoint_sdiff_sub
 
 中文:
 定理 weightedVSubOfPoint_sdiff_sub
-  结论: [DecidableEq ι] {s₂ : Finset ι} (h : s₂ subseteq s) (w : ι -> k)
+  结论: [DecidableEq ι] {s₂ : 有限集 ι} (h : s₂ subseteq s) (w : ι -> k)
   证明: by
   rw [map_neg]; rw [sub_neg_eq_add]; rw [s.weightedVSubOfPoint_sdiff h]
 
@@ -711,7 +711,7 @@ theorem weightedVSub_empty
 中文:
 定理 weightedVSub_empty
   条件: (w : ι -> k) (p : ι -> P)
-  结论: (∅ : Finset ι).weightedVSub p w = (0 : V)
+  结论: (∅ : 有限集 ι).weightedVSub p w = (0 : V)
   证明: by
   simp [weightedVSub_apply]
 
@@ -731,7 +731,7 @@ lemma weightedVSub_vadd
 
 中文:
 引理 weightedVSub_vadd
-  条件: {s : Finset ι} {w : ι -> k} (h : ∑ i in s, w i = 0) (p : ι -> P) (v : V)
+  条件: {s : 有限集 ι} {w : ι -> k} (h : ∑ i in s, w i = 0) (p : ι -> P) (v : V)
   证明: by
   rw [weightedVSub]; rw [weightedVSubOfPoint_vadd]; rw [weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero _ _ _ h]
 
@@ -752,7 +752,7 @@ lemma weightedVSub_smul
 
 中文:
 引理 weightedVSub_smul
-  结论: {G : 类型} [Group G] [DistribMulAction G V] [SMulCommClass G k V]
+  结论: {G : 类型} [群 G] [分配乘法作用 G V] [标量交换类 G k V]
   证明: by
   rw [weightedVSub]; rw [weightedVSubOfPoint_smul]; rw [weightedVSub_eq_weightedVSubOfPoint_of_sum_eq_zero _ _ _ h]
 
@@ -792,7 +792,7 @@ theorem weightedVSub_indicator_subset
 
 中文:
 定理 weightedVSub_indicator_subset
-  条件: (w : ι -> k) (p : ι -> P) {s₁ s₂ : Finset ι} (h : s₁ subseteq s₂)
+  条件: (w : ι -> k) (p : ι -> P) {s₁ s₂ : 有限集 ι} (h : s₁ subseteq s₂)
   证明: weightedVSubOfPoint_indicator_subset _ _ _ h
 
 Depends on / 依赖: weightedVSubOfPoint_indicator_subset
@@ -891,7 +891,7 @@ theorem weightedVSub_sdiff
 
 中文:
 定理 weightedVSub_sdiff
-  条件: [DecidableEq ι] {s₂ : Finset ι} (h : s₂ subseteq s) (w : ι -> k) (p : ι -> P)
+  条件: [DecidableEq ι] {s₂ : 有限集 ι} (h : s₂ subseteq s) (w : ι -> k) (p : ι -> P)
   证明: s.weightedVSubOfPoint_sdiff h _ _ _
 
 Depends on / 依赖: s.weightedVSubOfPoint_sdiff, weightedVSubOfPoint_sdiff
@@ -910,7 +910,7 @@ theorem weightedVSub_sdiff_sub
 
 中文:
 定理 weightedVSub_sdiff_sub
-  结论: [DecidableEq ι] {s₂ : Finset ι} (h : s₂ subseteq s) (w : ι -> k)
+  结论: [DecidableEq ι] {s₂ : 有限集 ι} (h : s₂ subseteq s) (w : ι -> k)
   证明: s.weightedVSubOfPoint_sdiff_sub h _ _ _
 
 Depends on / 依赖: s.weightedVSubOfPoint_sdiff_sub, weightedVSubOfPoint_sdiff_sub
@@ -988,7 +988,7 @@ instance :
 
 中文:
 实例 :
-  签名: AffineSpace (ι -> k) (ι -> k)
+  签名: 仿射空间 (ι -> k) (ι -> k)
   定义体: Pi.instAddTorsor
 
 Depends on / 依赖: Pi.instAddTorsor, instAddTorsor
@@ -1178,7 +1178,7 @@ theorem attach_affineCombination_of_injective
 
 中文:
 定理 attach_affineCombination_of_injective
-  结论: [DecidableEq P] (s : Finset P) (w : P -> k) (f : s -> P)
+  结论: [DecidableEq P] (s : 有限集 P) (w : P -> k) (f : s -> P)
   证明: by
   simp [affineCombination, hf]
 
@@ -1201,7 +1201,7 @@ theorem attach_affineCombination_coe
 
 中文:
 定理 attach_affineCombination_coe
-  条件: (s : Finset P) (w : P -> k)
+  条件: (s : 有限集 P) (w : P -> k)
   证明: by
   classical rw [attach_affineCombination_of_injective s w ((↑) : s -> P) Subtype.coe_injective,
       univ_eq_attach, attach_image_val]
@@ -1227,7 +1227,7 @@ theorem weightedVSub_eq_linear_combination
 
 中文:
 定理 weightedVSub_eq_linear_combination
-  结论: {ι} (s : Finset ι) {w : ι -> k} {p : ι -> V}
+  结论: {ι} (s : 有限集 ι) {w : ι -> k} {p : ι -> V}
   证明: by
   simp [s.weightedVSub_apply, vsub_eq_sub, smul_sub, ← Finset.sum_smul, hw]
 
@@ -1251,7 +1251,7 @@ theorem affineCombination_eq_linear_combination
 
 中文:
 定理 affineCombination_eq_linear_combination
-  结论: (s : Finset ι) (p : ι -> V) (w : ι -> k)
+  结论: (s : 有限集 ι) (p : ι -> V) (w : ι -> k)
   证明: by
   simp [s.affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one w p hw 0]
 
@@ -1313,7 +1313,7 @@ theorem affineCombination_indicator_subset
 
 中文:
 定理 affineCombination_indicator_subset
-  结论: (w : ι -> k) (p : ι -> P) {s₁ s₂ : Finset ι}
+  结论: (w : ι -> k) (p : ι -> P) {s₁ s₂ : 有限集 ι}
   证明: by
   rw [affineCombination_apply]; rw [affineCombination_apply]; rw [weightedVSubOfPoint_indicator_subset _ _ _ h]
 
@@ -1424,7 +1424,7 @@ theorem affineCombination_sdiff_sub
 
 中文:
 定理 affineCombination_sdiff_sub
-  结论: [DecidableEq ι] {s₂ : Finset ι} (h : s₂ subseteq s) (w : ι -> k)
+  结论: [DecidableEq ι] {s₂ : 有限集 ι} (h : s₂ subseteq s) (w : ι -> k)
   证明: by
   simp_rw [affineCombination_apply, vadd_vsub_vadd_cancel_right]
   exact s.weightedVSub_sdiff_sub h _ _
@@ -1537,7 +1537,7 @@ theorem eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
 
 中文:
 定理 eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
-  结论: {v : V} {x : k} {s : Set ι}
+  结论: {v : V} {x : k} {s : 集合 ι}
   证明: by
   classical
     simp_rw [weightedVSubOfPoint_apply]
@@ -1578,7 +1578,7 @@ theorem eq_weightedVSub_subset_iff_eq_weightedVSub_subtype
 
 中文:
 定理 eq_weightedVSub_subset_iff_eq_weightedVSub_subtype
-  条件: {v : V} {s : Set ι} {p : ι -> P}
+  条件: {v : V} {s : 集合 ι} {p : ι -> P}
   证明: eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
 
 Depends on / 依赖: eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
@@ -1604,7 +1604,7 @@ theorem eq_affineCombination_subset_iff_eq_affineCombination_subtype
 
 中文:
 定理 eq_affineCombination_subset_iff_eq_affineCombination_subtype
-  结论: {p0 : P} {s : Set ι}
+  结论: {p0 : P} {s : 集合 ι}
   证明: by
   simp_rw [affineCombination_apply, eq_vadd_iff_vsub_eq]
   exact eq_weightedVSubOfPoint_subset_iff_eq_weightedVSubOfPoint_subtype
@@ -1635,7 +1635,7 @@ theorem map_affineCombination
 
 中文:
 定理 map_affineCombination
-  结论: {V₂ P₂ : 类型} [AddCommGroup V₂] [Module k V₂] [AffineSpace V₂ P₂]
+  结论: {V₂ P₂ : 类型} [加法交换群 V₂] [模 k V₂] [仿射空间 V₂ P₂]
   证明: by
   have b := Classical.choice (inferInstance : AffineSpace V P).nonempty
   have b₂ := Classical.choice (inferInstance : AffineSpace V₂ P₂).nonempty
@@ -2217,7 +2217,7 @@ theorem homothety_affineCombination
 
 中文:
 定理 homothety_affineCombination
-  结论: {k V P : 类型} [CommRing k] [AddCommGroup V] [Module k V]
+  结论: {k V P : 类型} [交换环 k] [加法交换群 V] [模 k V]
   证明: by
   rw [AffineMap.homothety_eq_lineMap]; rw [← Finset.lineMap_affineCombination]; rw [Finset.affineCombination_piSingle _ _ _ hi]
 
@@ -2252,7 +2252,7 @@ theorem weightedVSub_mem_vectorSpan
 
 中文:
 定理 weightedVSub_mem_vectorSpan
-  结论: {s : Finset ι} {w : ι -> k} (h : ∑ i in s, w i = 0)
+  结论: {s : 有限集 ι} {w : ι -> k} (h : ∑ i in s, w i = 0)
   证明: by
   classical
     rcases isEmpty_or_nonempty ι with (hι | ⟨⟨i0⟩⟩)
@@ -2298,7 +2298,7 @@ theorem affineCombination_mem_affineSpan
 
 中文:
 定理 affineCombination_mem_affineSpan
-  结论: [Nontrivial k] {s : Finset ι} {w : ι -> k}
+  结论: [非平凡 k] {s : 有限集 ι} {w : ι -> k}
   证明: by
   classical
     have hnz : ∑ i in s, w i != 0 := h.symm ▸ one_ne_zero
@@ -2347,7 +2347,7 @@ theorem affineCombination_mem_affineSpan_of_nonempty
 
 中文:
 定理 affineCombination_mem_affineSpan_of_nonempty
-  结论: [Nonempty ι] {s : Finset ι} {w : ι -> k}
+  结论: [非空 ι] {s : 有限集 ι} {w : ι -> k}
   证明: by
   rcases subsingleton_or_nontrivial k with hs | hn
   · have hnv := Module.subsingleton k V
@@ -2513,7 +2513,7 @@ theorem eq_affineCombination_of_mem_affineSpan_of_fintype
 
 中文:
 定理 eq_affineCombination_of_mem_affineSpan_of_fintype
-  结论: [Fintype ι] {p1 : P} {p : ι -> P}
+  结论: [有限类型 ι] {p1 : P} {p : ι -> P}
   证明: by
   classical
     obtain ⟨s, w, hw, rfl⟩ := eq_affineCombination_of_mem_affineSpan h
@@ -2550,7 +2550,7 @@ lemma eq_affineCombination_of_mem_affineSpan_image
 
 中文:
 引理 eq_affineCombination_of_mem_affineSpan_image
-  结论: {p₁ : P} {p : ι -> P} {s : Set ι}
+  结论: {p₁ : P} {p : ι -> P} {s : 集合 ι}
   证明: by
   classical
   rw [Set.image_eq_range] at h
@@ -2591,7 +2591,7 @@ lemma affineCombination_mem_affineSpan_image
 
 中文:
 引理 affineCombination_mem_affineSpan_image
-  结论: [Nontrivial k] {s : Finset ι} {w : ι -> k}
+  结论: [非平凡 k] {s : 有限集 ι} {w : ι -> k}
   证明: by
   classical
   rw [Set.image_eq_range]
@@ -2639,7 +2639,7 @@ theorem mem_affineSpan_iff_eq_affineCombination
 
 中文:
 定理 mem_affineSpan_iff_eq_affineCombination
-  条件: [Nontrivial k] {p1 : P} {p : ι -> P}
+  条件: [非平凡 k] {p1 : P} {p : ι -> P}
   证明: by
   constructor
   · exact eq_affineCombination_of_mem_affineSpan
@@ -2674,7 +2674,7 @@ theorem mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd
 
 中文:
 定理 mem_affineSpan_iff_eq_weightedVSubOfPoint_vadd
-  条件: [Nontrivial k] (p : ι -> P) (j : ι) (q : P)
+  条件: [非平凡 k] (p : ι -> P) (j : ι) (q : P)
   证明: by
   constructor
   · intro hq
@@ -2732,7 +2732,7 @@ theorem affineSpan_eq_affineSpan_lineMap_units
 
 中文:
 定理 affineSpan_eq_affineSpan_lineMap_units
-  结论: [Nontrivial k] {s : Set P} {p : P} (hp : p in s)
+  结论: [非平凡 k] {s : 集合 P} {p : P} (hp : p in s)
   证明: by
   have : s = Set.range ((↑) : s -> P) := by simp
   conv_rhs =>

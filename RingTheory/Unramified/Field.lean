@@ -59,8 +59,8 @@ theorem of_isSeparable
 
 中文:
 定理 of_isSeparable
-  条件: [Algebra.IsSeparable K L]
-  结论: FormallyUnramified K L
+  条件: [代数.是可分 K L]
+  结论: 形式非分歧 K L
   证明: by
   rw [iff_comp_injective]
   intro B _ _ I hI f₁ f₂ e
@@ -275,7 +275,7 @@ theorem isRadical_map_isMaximal
 
 中文:
 定理 isRadical_map_isMaximal
-  结论: (B : 类型) [CommRing B] [Algebra A B]
+  结论: (B : 类型) [交换环 B] [代数 A B]
   证明: by
   let : Field (A ⧸ p) := Ideal.Quotient.field p
   rw [Ideal.isRadical_iff_quotient_reduced]
@@ -377,7 +377,7 @@ theorem isSeparable
 
 中文:
 定理 isSeparable
-  结论: Algebra.IsSeparable K L
+  结论: 代数.是可分 K L
   证明: by
   have := finite_of_free (R := K) (S := L)
   rw [← separableClosure.eq_top_iff]
@@ -409,7 +409,7 @@ theorem iff_isSeparable
 
 中文:
 定理 iff_isSeparable
-  条件: (L : 类型u) [Field L] [Algebra K L] [EssFiniteType K L]
+  条件: (L : 类型u) [域 L] [代数 K L] [EssFiniteType K L]
   证明: ⟨fun _ => isSeparable K L, fun _ => of_isSeparable K L⟩
 
 Depends on / 依赖: isSeparable, of_isSeparable
@@ -434,7 +434,7 @@ theorem Algebra.IsUnramifiedAt.not_minpoly_sq_dvd
     have := Algebra.FormallyUnramified.isReduced_of_f
 
 中文:
-定理 Algebra.IsUnramifiedAt.not_minpoly_sq_dvd
+定理 代数.IsUnramifiedAt.not_minpoly_sq_dvd
   证明: by
   have : Algebra.FiniteType K A := .of_surjective _ hp₂
   have := Algebra.FormallyUnramified.finite_of_free K (Localization.AtPrime Q)

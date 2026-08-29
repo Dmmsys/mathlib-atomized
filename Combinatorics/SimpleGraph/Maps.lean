@@ -61,7 +61,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : V -> W) (G : SimpleGraph V)
+  签名: (f : V -> W) (G : 简单图 V)
   定义体: Ne ⊓ Relation.Map G.Adj f f
   symm.symm a b := by aesop (add norm unfold Relation.Map) (add forward safe Adj.symm)
 -/
@@ -105,7 +105,7 @@ theorem map_adj
 
 中文:
 定理 map_adj
-  条件: (f : V ↪ W) (G : SimpleGraph V) (u v : W)
+  条件: (f : V ↪ W) (G : 简单图 V) (u v : W)
   证明: by
   dsimp [SimpleGraph.map, Relation.Map]
   grind [SimpleGraph.Adj.ne]
@@ -127,7 +127,7 @@ theorem map_adj'
 
 中文:
 定理 map_adj'
-  条件: (f : V -> W) (G : SimpleGraph V) (u v : W)
+  条件: (f : V -> W) (G : 简单图 V) (u v : W)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -156,7 +156,7 @@ theorem edgeSet_map
 
 中文:
 定理 edgeSet_map
-  条件: (f : V ↪ W) (G : SimpleGraph V)
+  条件: (f : V ↪ W) (G : 简单图 V)
   证明: by
   ext v
   induction v
@@ -223,7 +223,7 @@ lemma map_adj_apply
 
 中文:
 引理 map_adj_apply
-  条件: {G : SimpleGraph V} {f : V ↪ W} {a b : V}
+  条件: {G : 简单图 V} {f : V ↪ W} {a b : V}
   证明: by simp
 -/
 lemma map_adj_apply {G : SimpleGraph V} {f : V ↪ W} {a b : V} :
@@ -242,7 +242,7 @@ theorem map_adj_apply'
 
 中文:
 定理 map_adj_apply'
-  条件: {f : V -> W} (hadj : G.Adj u v) (hne : f u != f v)
+  条件: {f : V -> W} (hadj : G.伴随 u v) (hne : f u != f v)
   证明: ⟨hne, u, v, hadj, rfl, rfl⟩
 
 @[gcongr]
@@ -266,7 +266,7 @@ theorem map_monotone
 中文:
 定理 map_monotone
   条件: (f : V -> W)
-  结论: Monotone (SimpleGraph.map f)
+  结论: 递增 (简单图.map f)
   证明: by
   rintro G G' h z1 z2 ⟨huv, u, v, ha, rfl, rfl⟩
   exact ⟨huv, _, _, h ha, rfl, rfl⟩
@@ -336,7 +336,7 @@ theorem support_map
 
 中文:
 定理 support_map
-  条件: (f : V ↪ W) (G : SimpleGraph V)
+  条件: (f : V ↪ W) (G : 简单图 V)
   证明: by
   ext; simp [mem_support]
 
@@ -357,7 +357,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : V -> W) (G : SimpleGraph W)
+  签名: (f : V -> W) (G : 简单图 W)
   定义体: G.Adj (f u) (f v)
   symm.symm _ _ h := h.symm
 -/
@@ -375,7 +375,7 @@ lemma comap_adj
 
 中文:
 引理 comap_adj
-  条件: {G : SimpleGraph W} {f : V -> W}
+  条件: {G : 简单图 W} {f : V -> W}
   证明: Iff.rfl
 -/
 @[simp] lemma comap_adj {G : SimpleGraph W} {f : V -> W} :
@@ -392,7 +392,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: {G : SimpleGraph V}
+  条件: {G : 简单图 V}
   结论: G.comap id = G
   证明: SimpleGraph.ext rfl
 -/
@@ -408,7 +408,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  条件: {G : SimpleGraph X} (f : V -> W) (g : W -> X)
+  条件: {G : 简单图 X} (f : V -> W) (g : W -> X)
   证明: rfl
 -/
 @[simp] lemma comap_comap {G : SimpleGraph X} (f : V -> W) (g : W -> X) :
@@ -424,7 +424,7 @@ theorem support_comap_subset
 
 中文:
 定理 support_comap_subset
-  条件: (f : V -> W) (G : SimpleGraph W)
+  条件: (f : V -> W) (G : 简单图 W)
   证明: fun _ ⟨v, h⟩ => ⟨f v, h⟩
 -/
 theorem support_comap_subset (f : V -> W) (G : SimpleGraph W) :
@@ -441,7 +441,7 @@ instance instDecidableComapAdj
 
 中文:
 实例 instDecidableComapAdj
-  签名: (f : V -> W) (G : SimpleGraph W) [DecidableRel G.Adj]
+  签名: (f : V -> W) (G : 简单图 W) [DecidableRel G.伴随]
   定义体: fun _ _ => ‹DecidableRel G.Adj› _ _
 
 Depends on / 依赖: DecidableRel, G.Adj
@@ -461,7 +461,7 @@ lemma comap_symm
 
 中文:
 引理 comap_symm
-  条件: (G : SimpleGraph V) (e : V ≃ W)
+  条件: (G : 简单图 V) (e : V ≃ W)
   证明: by
   ext; simp only [← Equiv.eq_symm_apply, comap_adj, map_adj, Equiv.toEmbedding_apply,
     exists_eq_right_right, exists_eq_right]
@@ -485,7 +485,7 @@ lemma map_symm
 
 中文:
 引理 map_symm
-  条件: (G : SimpleGraph W) (e : V ≃ W)
+  条件: (G : 简单图 W) (e : V ≃ W)
   证明: by rw [← comap_symm, e.symm_symm]
 
 @[gcongr]
@@ -508,7 +508,7 @@ theorem comap_monotone
 中文:
 定理 comap_monotone
   条件: (f : V ↪ W)
-  结论: Monotone (SimpleGraph.comap f)
+  结论: 递增 (简单图.comap f)
   证明: fun _ _ h _ _ ha => h ha
 -/
 theorem comap_monotone (f : V ↪ W) : Monotone (SimpleGraph.comap f) :=
@@ -545,7 +545,7 @@ lemma comap_top
 
 中文:
 引理 comap_top
-  条件: {f : V -> W} (hf : f.Injective)
+  条件: {f : V -> W} (hf : f.单射)
   结论: (completeGraph W).comap f = completeGraph V
   证明: by
   ext; simp [hf.eq_iff]
@@ -571,7 +571,7 @@ theorem comap_map_eq
 
 中文:
 定理 comap_map_eq
-  条件: (f : V ↪ W) (G : SimpleGraph V)
+  条件: (f : V ↪ W) (G : 简单图 V)
   结论: (G.map f).comap f = G
   证明: by
   ext
@@ -612,7 +612,7 @@ theorem map_injective
 中文:
 定理 map_injective
   条件: (f : V ↪ W)
-  结论: Function.Injective (SimpleGraph.map f)
+  结论: 函数.单射 (简单图.map f)
   证明: (leftInverse_comap_map f).injective
 
 Depends on / 依赖: injective, leftInverse_comap_map
@@ -632,7 +632,7 @@ theorem comap_surjective
 中文:
 定理 comap_surjective
   条件: (f : V ↪ W)
-  结论: Function.Surjective (SimpleGraph.comap f)
+  结论: 函数.满射 (简单图.comap f)
   证明: (leftInverse_comap_map f).surjective
 
 Depends on / 依赖: leftInverse_comap_map, surjective
@@ -652,7 +652,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: (f : V ↪ W) (G : SimpleGraph V) (G' : SimpleGraph W)
+  条件: (f : V ↪ W) (G : 简单图 V) (G' : 简单图 W)
   证明: ⟨fun h _ _ ha => h ⟨f.injective.ne ha.ne, _, _, ha, rfl, rfl⟩, by
     rintro h _ _ ⟨-, u, v, ha, rfl, rfl⟩
     exact h ha⟩
@@ -677,7 +677,7 @@ theorem map_comap_le
 
 中文:
 定理 map_comap_le
-  条件: (f : V ↪ W) (G : SimpleGraph W)
+  条件: (f : V ↪ W) (G : 简单图 W)
   结论: (G.comap f).map f <= G
   证明: by
   rw [map_le_iff_le_comap]
@@ -699,7 +699,7 @@ lemma le_comap_of_subsingleton
 
 中文:
 引理 le_comap_of_subsingleton
-  条件: (f : V -> W) [Subsingleton V]
+  条件: (f : V -> W) [子单例 V]
   结论: G <= G'.comap f
   证明: by
   intro v w; simp [Subsingleton.elim v w]
@@ -721,7 +721,7 @@ lemma map_le_of_subsingleton
 
 中文:
 引理 map_le_of_subsingleton
-  条件: (f : V ↪ W) [Subsingleton V]
+  条件: (f : V ↪ W) [子单例 V]
   结论: G.map f <= G'
   证明: by
   rw [map_le_iff_le_comap]; apply le_comap_of_subsingleton
@@ -763,7 +763,7 @@ definition _root_.Equiv.simpleGraph
   right_inv _ := by simp
 
 中文:
-定义 _root_.Equiv.simpleGraph
+定义 _root_.等价.simpleGraph
   签名: (e : V ≃ W)
   定义体: .comap e.symm
   invFun := .comap e
@@ -786,8 +786,8 @@ lemma _root_.Equiv.simpleGraph_refl
   ext; rfl
 
 中文:
-引理 _root_.Equiv.simpleGraph_refl
-  结论: (Equiv.refl V).simpleGraph = Equiv.refl _
+引理 _root_.等价.simpleGraph_refl
+  结论: (等价.refl V).simpleGraph = 等价.refl _
   证明: by
   ext; rfl
 -/
@@ -805,7 +805,7 @@ lemma _root_.Equiv.simpleGraph_trans
 @[simp]
 
 中文:
-引理 _root_.Equiv.simpleGraph_trans
+引理 _root_.等价.simpleGraph_trans
   条件: (e₁ : V ≃ W) (e₂ : W ≃ X)
   证明: rfl
 
@@ -825,7 +825,7 @@ lemma _root_.Equiv.symm_simpleGraph
   proof: rfl
 
 中文:
-引理 _root_.Equiv.symm_simpleGraph
+引理 _root_.等价.symm_simpleGraph
   条件: (e : V ≃ W)
   结论: e.simpleGraph.symm = e.symm.simpleGraph
   证明: rfl
@@ -849,7 +849,7 @@ abbreviation induce
 
 中文:
 缩写 induce
-  签名: (s : Set V) (G : SimpleGraph V)
+  签名: (s : 集合 V) (G : 简单图 V)
   定义体: G.comap (Function.Embedding.subtype _)
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.subtype, G.comap, subtype
@@ -869,8 +869,8 @@ lemma induce_adj
 
 中文:
 引理 induce_adj
-  条件: {s : Set V} {u v : s}
-  结论: (G.induce s).Adj u v ↔ G.Adj u v
+  条件: {s : 集合 V} {u v : s}
+  结论: (G.induce s).伴随 u v ↔ G.伴随 u v
   证明: .rfl
 -/
 lemma induce_adj {s : Set V} {u v : s} : (G.induce s).Adj u v ↔ G.Adj u v := .rfl
@@ -886,7 +886,7 @@ lemma induce_top
 
 中文:
 引理 induce_top
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   结论: (completeGraph V).induce s = completeGraph s
   证明: comap_top Subtype.val_injective
 -/
@@ -905,8 +905,8 @@ lemma induce_bot
 
 中文:
 引理 induce_bot
-  条件: (s : Set V)
-  结论: (⊥ : SimpleGraph V).induce s = ⊥
+  条件: (s : 集合 V)
+  结论: (⊥ : 简单图 V).induce s = ⊥
   证明: by
   dsimp
 -/
@@ -924,7 +924,7 @@ lemma support_induce_subset_coe_preimage
 
 中文:
 引理 support_induce_subset_coe_preimage
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   结论: (G.induce s).support subseteq (↑) ⁻¹' s
   证明: fun v _ => v.prop
 
@@ -943,7 +943,7 @@ lemma support_induce_subset_coe_preimage_support
 
 中文:
 引理 support_induce_subset_coe_preimage_support
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   证明: fun _ ⟨v, hadj⟩ => ⟨v, hadj⟩
 -/
 lemma support_induce_subset_coe_preimage_support (s : Set V) :
@@ -980,7 +980,7 @@ abbreviation spanningCoe
 
 中文:
 缩写 spanningCoe
-  签名: {s : Set V} (G : SimpleGraph s)
+  签名: {s : 集合 V} (G : 简单图 s)
   定义体: G.map (Function.Embedding.subtype _)
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.subtype, G.map, subtype
@@ -998,7 +998,7 @@ theorem support_spanningCoe
 
 中文:
 定理 support_spanningCoe
-  条件: {s : Set V} (G : SimpleGraph s)
+  条件: {s : 集合 V} (G : 简单图 s)
   证明: G.support_map _
 
 Depends on / 依赖: G.support_map, support_map
@@ -1018,7 +1018,7 @@ theorem induce_spanningCoe
 
 中文:
 定理 induce_spanningCoe
-  条件: {s : Set V} {G : SimpleGraph s}
+  条件: {s : 集合 V} {G : 简单图 s}
   结论: G.spanningCoe.induce s = G
   证明: comap_map_eq _ _
 
@@ -1038,7 +1038,7 @@ theorem spanningCoe_induce_le
 
 中文:
 定理 spanningCoe_induce_le
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   结论: (G.induce s).spanningCoe <= G
   证明: map_comap_le _ _
 
@@ -1065,7 +1065,7 @@ theorem spanningCoe_induce_eq_self
 
 中文:
 定理 spanningCoe_induce_eq_self
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   结论: (G.induce s).spanningCoe = G ↔ G.support subseteq s
   证明: by
   refine ⟨fun h v hv => ?_, fun h => le_antisymm (G.spanningCoe_induce_le s) fun u v hadj => ?_⟩
@@ -1141,7 +1141,7 @@ theorem IsCompleteBetween.induce
 
 中文:
 定理 IsCompleteBetween.induce
-  条件: {s t : Set V} (h : G.IsCompleteBetween s t) (u : Set V)
+  条件: {s t : 集合 V} (h : G.IsCompleteBetween s t) (u : 集合 V)
   证明: by
   intro _ hs _ ht
   rw [comap_adj]; rw [Embedding.coe_subtype]
@@ -1166,7 +1166,7 @@ abbreviation Hom
   body: RelHom G.Adj G'.Adj
 
 中文:
-缩写 Hom
+缩写 态射
   定义体: RelHom G.Adj G'.Adj
 
 Depends on / 依赖: G.Adj, RelHom
@@ -1182,7 +1182,7 @@ abbreviation Embedding
   body: RelEmbedding G.Adj G'.Adj
 
 中文:
-缩写 Embedding
+缩写 嵌入
   定义体: RelEmbedding G.Adj G'.Adj
 
 Depends on / 依赖: G.Adj, RelEmbedding
@@ -1202,7 +1202,7 @@ abbreviation Iso
 @[inherit_doc] infixl:50 " ≃g " => Iso
 
 中文:
-缩写 Iso
+缩写 同构
   定义体: RelIso G.Adj G'.Adj
 
 @[inherit_doc] infixl:50 " ->g " => Hom
@@ -1227,8 +1227,8 @@ abbreviation HomClass
   body: RelHomClass F G.Adj H.Adj
 
 中文:
-缩写 HomClass
-  签名: (F : 类型) (G : SimpleGraph V) (H : SimpleGraph W) [FunLike F V W]
+缩写 态射类
+  签名: (F : 类型) (G : 简单图 V) (H : 简单图 W) [函数状 F V W]
   定义体: RelHomClass F G.Adj H.Adj
 
 Depends on / 依赖: G.Adj, H.Adj, RelHomClass
@@ -1266,7 +1266,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  结论: ⇑(Hom.id : G ->g G) = id
+  结论: ⇑(态射.id : G ->g G) = id
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_id : ⇑(Hom.id : G ->g G) = id := rfl
@@ -1280,8 +1280,8 @@ instance [IsEmpty
   body: DFunLike.coe.isEmpty
 
 中文:
-实例 [IsEmpty
-  签名: (V -> W)] : IsEmpty (G ->g H)
+实例 [是空
+  签名: (V -> W)] : 是空 (G ->g H)
   定义体: DFunLike.coe.isEmpty
 
 Depends on / 依赖: DFunLike, DFunLike.coe.isEmpty, isEmpty
@@ -1297,8 +1297,8 @@ instance [Subsingleton
   body: DFunLike.coe_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: (V -> W)] : Subsingleton (G ->g H)
+实例 [子单例
+  签名: (V -> W)] : 子单例 (G ->g H)
   定义体: DFunLike.coe_injective.subsingleton
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.subsingleton, coe_injective, subsingleton
@@ -1315,8 +1315,8 @@ instance [IsEmpty
   uniq _ := Subsingleton.elim _ _
 
 中文:
-实例 [IsEmpty
-  签名: V] : Unique (G ->g H) where
+实例 [是空
+  签名: V] : 唯一 (G ->g H) where
   定义体: ⟨isEmptyElim, fun {a} => isEmptyElim a⟩
   uniq _ := Subsingleton.elim _ _
 
@@ -1335,8 +1335,8 @@ instance [Finite
   body: DFunLike.finite _
 
 中文:
-实例 [Finite
-  签名: V] [Finite W] : Finite (G ->g H)
+实例 [有限
+  签名: V] [有限 W] : 有限 (G ->g H)
   定义体: DFunLike.finite _
 
 Depends on / 依赖: DFunLike, DFunLike.finite, finite
@@ -1354,8 +1354,8 @@ theorem map_adj
 
 中文:
 定理 map_adj
-  条件: {v w : V} (h : G.Adj v w)
-  结论: G'.Adj (f v) (f w)
+  条件: {v w : V} (h : G.伴随 v w)
+  结论: G'.伴随 (f v) (f w)
   证明: f.map_rel' h
 
 Depends on / 依赖: f.map_rel, map_rel
@@ -1625,8 +1625,8 @@ theorem mapEdgeSet.injective
 
 中文:
 定理 mapEdgeSet.injective
-  条件: (hinj : Function.Injective f)
-  结论: Function.Injective f.mapEdgeSet
+  条件: (hinj : 函数.单射 f)
+  结论: 函数.单射 f.mapEdgeSet
   证明: by
   rintro ⟨e₁, h₁⟩ ⟨e₂, h₂⟩
   dsimp [Hom.mapEdgeSet]
@@ -1655,8 +1655,8 @@ theorem injective_of_top_hom
 
 中文:
 定理 injective_of_top_hom
-  条件: (f : (⊤ : SimpleGraph V) ->g G')
-  结论: Function.Injective f
+  条件: (f : (⊤ : 简单图 V) ->g G')
+  结论: 函数.单射 f
   证明: by
   intro v w h
   contrapose! h
@@ -1684,7 +1684,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : V -> W) (G : SimpleGraph V) (h : 对任意 {u v}, G.Adj u v -> f u != f v)
+  签名: (f : V -> W) (G : 简单图 V) (h : 对任意 {u v}, G.伴随 u v -> f u != f v)
   定义体: f
   map_rel' {u v} hadj := ⟨h hadj, u, v, hadj, rfl, rfl⟩
 -/
@@ -1707,7 +1707,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : V -> W) (G : SimpleGraph W)
+  签名: (f : V -> W) (G : 简单图 W)
   定义体: f
   map_rel' := by simp
 -/
@@ -1744,8 +1744,8 @@ theorem nonempty_hom_iff_exists_le_comap
   proof: ⟨fun ⟨f⟩ => ⟨f, f.le_comap⟩, fun ⟨f, h⟩ => ⟨f, (h ·)⟩⟩
 
 中文:
-定理 nonempty_hom_iff_exists_le_comap
-  结论: Nonempty (H ->g G) ↔ 存在 f, H <= G.comap f
+定理 nonempty_hom_iff_存在_le_comap
+  结论: 非空 (H ->g G) ↔ 存在 f, H <= G.comap f
   证明: ⟨fun ⟨f⟩ => ⟨f, f.le_comap⟩, fun ⟨f, h⟩ => ⟨f, (h ·)⟩⟩
 
 Depends on / 依赖: f.le_comap, le_comap
@@ -1950,7 +1950,7 @@ theorem map_adj_iff
 中文:
 定理 map_adj_iff
   条件: {v w : V}
-  结论: G'.Adj (f v) (f w) ↔ G.Adj v w
+  结论: G'.伴随 (f v) (f w) ↔ G.伴随 v w
   证明: f.map_rel_iff
 -/
 @[simp] theorem map_adj_iff {v w : V} : G'.Adj (f v) (f w) ↔ G.Adj v w :=
@@ -2105,7 +2105,7 @@ definition isoInduceRange
 
 中文:
 定义 isoInduceRange
-  签名: : G ≃g G'.induce (Set.range f) where
+  签名: : G ≃g G'.induce (集合.range f) where
   定义体: Equiv.ofInjective f f.injective
   map_rel_iff' := by simp
 
@@ -2130,7 +2130,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : V ↪ W) (G : SimpleGraph W)
+  签名: (f : V ↪ W) (G : 简单图 W)
   定义体: f
   map_rel_iff' := by simp
 
@@ -2151,7 +2151,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: (f : V ↪ W) (G : SimpleGraph W) (v : V)
+  条件: (f : V ↪ W) (G : 简单图 W) (v : V)
   证明: rfl
 -/
 theorem comap_apply (f : V ↪ W) (G : SimpleGraph W) (v : V) :
@@ -2197,7 +2197,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : V ↪ W) (G : SimpleGraph V)
+  签名: (f : V ↪ W) (G : 简单图 V)
   定义体: f
   map_rel_iff' := by simp
 
@@ -2219,8 +2219,8 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: (f : V ↪ W) (G : SimpleGraph V) (v : V)
-  结论: Embedding.map f G v = f v
+  条件: (f : V ↪ W) (G : 简单图 V) (v : V)
+  结论: 嵌入.map f G v = f v
   证明: rfl
 -/
 theorem map_apply (f : V ↪ W) (G : SimpleGraph V) (v : V) : Embedding.map f G v = f v :=
@@ -2236,7 +2236,7 @@ abbreviation induce
 
 中文:
 缩写 induce
-  签名: (s : Set V)
+  签名: (s : 集合 V)
   定义体: .comap (.subtype _) G
 -/
 protected abbrev induce (s : Set V) : G.induce s ↪g G :=
@@ -2252,7 +2252,7 @@ abbreviation spanningCoe
 
 中文:
 缩写 spanningCoe
-  签名: {s : Set V} (G : SimpleGraph s)
+  签名: {s : 集合 V} (G : 简单图 s)
   定义体: .map (.subtype _) G
 -/
 protected abbrev spanningCoe {s : Set V} (G : SimpleGraph s) : G ↪g G.spanningCoe :=
@@ -2289,7 +2289,7 @@ lemma coe_completeGraph
 中文:
 引理 coe_completeGraph
   条件: {α β : 类型} (f : α ↪ β)
-  结论: ⇑(Embedding.completeGraph f) = f
+  结论: ⇑(嵌入.completeGraph f) = f
   证明: rfl
 -/
 @[simp] lemma coe_completeGraph {α β : Type*} (f : α ↪ β) : ⇑(Embedding.completeGraph f) = f := rfl
@@ -2465,7 +2465,7 @@ lemma coe_induceHom
 
 中文:
 引理 coe_induceHom
-  结论: ⇑(induceHom φ φst) = Set.MapsTo.restrict φ s t φst
+  结论: ⇑(induceHom φ φst) = 集合.映射到.restrict φ s t φst
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_induceHom : ⇑(induceHom φ φst) = Set.MapsTo.restrict φ s t φst :=
@@ -2483,7 +2483,7 @@ lemma induceHom_id
 
 中文:
 引理 induceHom_id
-  条件: (G : SimpleGraph V) (s)
+  条件: (G : 简单图 V) (s)
   证明: by
   ext x
   rfl
@@ -2524,7 +2524,7 @@ lemma induceHom_injective
 
 中文:
 引理 induceHom_injective
-  条件: (hi : Set.InjOn φ s)
+  条件: (hi : 集合.单射限制 φ s)
   证明: by
   simpa [Set.MapsTo.restrict_inj]
 
@@ -2572,7 +2572,7 @@ lemma induceHomOfLE_apply
 中文:
 引理 induceHomOfLE_apply
   条件: (v : s)
-  结论: (G.induceHomOfLE h) v = Set.inclusion h v
+  结论: (G.induceHomOfLE h) v = 集合.inclusion h v
   证明: rfl
 -/
 @[simp] lemma induceHomOfLE_apply (v : s) : (G.induceHomOfLE h) v = Set.inclusion h v := rfl
@@ -2685,7 +2685,7 @@ theorem map_adj_iff
 中文:
 定理 map_adj_iff
   条件: {v w : V}
-  结论: G'.Adj (f v) (f w) ↔ G.Adj v w
+  结论: G'.伴随 (f v) (f w) ↔ G.伴随 v w
   证明: f.map_rel_iff
 
 Depends on / 依赖: f.map_rel_iff, map_rel_iff
@@ -2776,7 +2776,7 @@ theorem symm_toHom_comp_toHom
 
 中文:
 定理 symm_toHom_comp_toHom
-  结论: f.symm.toHom.comp f.toHom = Hom.id
+  结论: f.symm.toHom.comp f.toHom = 态射.id
   证明: by
   ext v
   simp only [RelHom.comp_apply, RelEmbedding.coe_toRelHom, RelIso.coe_toRelEmbedding,
@@ -2805,7 +2805,7 @@ theorem toHom_comp_symm_toHom
 
 中文:
 定理 toHom_comp_symm_toHom
-  结论: f.toHom.comp f.symm.toHom = Hom.id
+  结论: f.toHom.comp f.symm.toHom = 态射.id
   证明: by
   ext v
   simp only [RelHom.comp_apply, RelEmbedding.coe_toRelHom, RelIso.coe_toRelEmbedding,
@@ -2920,8 +2920,8 @@ theorem card_eq
 
 中文:
 定理 card_eq
-  条件: [Fintype V] [Fintype W]
-  结论: Fintype.card V = Fintype.card W
+  条件: [有限类型 V] [有限类型 W]
+  结论: 有限类型.card V = 有限类型.card W
   证明: by
   rw [← Fintype.ofEquiv_card f.toEquiv]
   convert! rfl
@@ -2947,7 +2947,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : V ≃ W) (G : SimpleGraph W)
+  签名: (f : V ≃ W) (G : 简单图 W)
   定义体: f
   map_rel_iff' := by simp
 
@@ -2969,8 +2969,8 @@ lemma comap_apply
 
 中文:
 引理 comap_apply
-  条件: (f : V ≃ W) (G : SimpleGraph W) (v : V)
-  结论: Iso.comap f G v = f v
+  条件: (f : V ≃ W) (G : 简单图 W) (v : V)
+  结论: 同构.comap f G v = f v
   证明: rfl
 -/
 lemma comap_apply (f : V ≃ W) (G : SimpleGraph W) (v : V) : Iso.comap f G v = f v := rfl
@@ -2988,7 +2988,7 @@ lemma comap_symm_apply
 
 中文:
 引理 comap_symm_apply
-  条件: (f : V ≃ W) (G : SimpleGraph W) (w : W)
+  条件: (f : V ≃ W) (G : 简单图 W) (w : W)
   证明: rfl
 -/
 lemma comap_symm_apply (f : V ≃ W) (G : SimpleGraph W) (w : W) :
@@ -3007,7 +3007,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : V ≃ W) (G : SimpleGraph V)
+  签名: (f : V ≃ W) (G : 简单图 V)
   定义体: f
   map_rel_iff' := by aesop (add simp map_adj')
 
@@ -3031,8 +3031,8 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  条件: (f : V ≃ W) (G : SimpleGraph V) (v : V)
-  结论: Iso.map f G v = f v
+  条件: (f : V ≃ W) (G : 简单图 V) (v : V)
+  结论: 同构.map f G v = f v
   证明: rfl
 
 @[simp]
@@ -3050,7 +3050,7 @@ lemma map_symm_apply
 
 中文:
 引理 map_symm_apply
-  条件: (f : V ≃ W) (G : SimpleGraph V) (w : W)
+  条件: (f : V ≃ W) (G : 简单图 V) (w : W)
   证明: rfl
 -/
 lemma map_symm_apply (f : V ≃ W) (G : SimpleGraph V) (w : W) :
@@ -3281,7 +3281,7 @@ lemma induce_refl
 
 中文:
 引理 induce_refl
-  条件: (G : SimpleGraph V) (s : Set V)
+  条件: (G : 简单图 V) (s : 集合 V)
   证明: rfl
 
 @[simp]
@@ -3338,7 +3338,7 @@ theorem neighborSet_induce
 
 中文:
 定理 neighborSet_induce
-  条件: (s : Set V) (v : s)
+  条件: (s : 集合 V) (v : s)
   证明: G.neighborSet_comap _ v
 
 Depends on / 依赖: G.neighborSet_comap, neighborSet_comap
@@ -3381,7 +3381,7 @@ definition induceUnivIso
 
 中文:
 定义 induceUnivIso
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: Equiv.Set.univ V
   map_rel_iff' := by simp only [Equiv.Set.univ, Equiv.coe_fn_mk, comap_adj, Embedding.coe_subtype,
                                 implies_true]
@@ -3432,7 +3432,7 @@ definition overFin
 
 中文:
 定义 overFin
-  签名: (hc : Fintype.card V = n)
+  签名: (hc : 有限类型.card V = n)
   定义体: G.comap (Fintype.equivFinOfCardEq hc).symm
 
 Depends on / 依赖: Fintype, Fintype.equivFinOfCardEq, G.comap, equivFinOfCardEq
@@ -3450,7 +3450,7 @@ definition overFinIso
 
 中文:
 定义 overFinIso
-  签名: (hc : Fintype.card V = n)
+  签名: (hc : 有限类型.card V = n)
   定义体: .symm .comap ..
 -/
 noncomputable def overFinIso (hc : Fintype.card V = n) : G ≃g G.overFin hc :=

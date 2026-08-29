@@ -75,8 +75,8 @@ structure AkraBazziRecurrence
     - dist_r_b : forall i, (fun n => (r i n : Real) - b i * n) =o[atTop] fun n => n / (log n) ^ 2
 
 中文:
-结构 AkraBazziRecurrence
-  参数: {α : 类型} [Fintype α] [Nonempty α]
+结构 Akra-Bazzi递推
+  参数: {α : 类型} [有限类型 α] [非空 α]
   公理与运算 (11 个):
     - n₀ : 自然数
     - n₀_gt_zero : 0 < n₀
@@ -84,7 +84,7 @@ structure AkraBazziRecurrence
     - b_pos : 对任意 i, 0 < b i
     - b_lt_one : 对任意 i, b i < 1
     - g_nonneg : 对任意 x >= 0, 0 <= g x
-    - g_grows_poly : AkraBazziRecurrence.GrowsPolynomially g
+    - g_grows_poly : Akra-Bazzi递推.GrowsPolynomially g
     - h_rec((n : 自然数) (hn₀ : n₀ <= n)) : T n = (∑ i, a i * T (r i n)) + g n
     - T_gt_zero'((n : 自然数) (hn : n < n₀)) : 0 < T n
     - r_lt_n : 对任意 i n, n₀ <= n -> r i n < n
@@ -466,7 +466,7 @@ lemma exists_eventually_const_mul_le_r
   exact ⟨b (min_bi b) / 2, ⟨⟨by positivity, R.bi_min_div_two_lt_one⟩, R.eventually_bi_mul_le_r⟩⟩
 
 中文:
-引理 exists_eventually_const_mul_le_r
+引理 存在_eventually_const_mul_le_r
   证明: by
   have gt_zero : 0 < b (min_bi b) := R.b_pos (min_bi b)
   exact ⟨b (min_bi b) / 2, ⟨⟨by positivity, R.bi_min_div_two_lt_one⟩, R.eventually_bi_mul_le_r⟩⟩
@@ -540,7 +540,7 @@ lemma tendsto_atTop_r
 中文:
 引理 tendsto_atTop_r
   条件: (i : α)
-  结论: Tendsto (r i) atTop atTop
+  结论: 收敛 (r i) atTop atTop
   证明: by
   rw [tendsto_atTop]
   intro b
@@ -569,7 +569,7 @@ lemma tendsto_atTop_r_real
 中文:
 引理 tendsto_atTop_r_real
   条件: (i : α)
-  结论: Tendsto (fun n => (r i n : 实数)) atTop atTop
+  结论: 收敛 (fun n => (r i n : 实数)) atTop atTop
   证明: Tendsto.comp tendsto_natCast_atTop_atTop (R.tendsto_atTop_r i)
 
 Depends on / 依赖: R.tendsto_atTop_r, Tendsto, Tendsto.comp, tendsto_atTop_r, tendsto_natCast_atTop_atTop
@@ -592,7 +592,7 @@ lemma exists_eventually_r_le_const_mul
   have h₁ : 0 < (1 - b (max_bi b)) / 2 := by pos
 
 中文:
-引理 exists_eventually_r_le_const_mul
+引理 存在_eventually_r_le_const_mul
   证明: by
   let c := b (max_bi b) + (1 - b (max_bi b)) / 2
   have h_max_bi_pos : 0 < b (max_bi b) := R.b_pos _
@@ -1146,7 +1146,7 @@ lemma differentiableOn_one_sub_smoothingFn
 
 中文:
 引理 differentiableOn_one_sub_smoothingFn
-  结论: DifferentiableOn 实数 (fun z => 1 - ε z) (Set.Ioi 1)
+  结论: DifferentiableOn 实数 (fun z => 1 - ε z) (集合.左开右无界区间 1)
   证明: fun _ hx => (differentiableAt_one_sub_smoothingFn hx).differentiableWithinAt
 
 @[aesop safe apply]
@@ -1186,7 +1186,7 @@ lemma differentiableOn_one_add_smoothingFn
 
 中文:
 引理 differentiableOn_one_add_smoothingFn
-  结论: DifferentiableOn 实数 (fun z => 1 + ε z) (Set.Ioi 1)
+  结论: DifferentiableOn 实数 (fun z => 1 + ε z) (集合.左开右无界区间 1)
   证明: fun _ hx => (differentiableAt_one_add_smoothingFn hx).differentiableWithinAt
 
 Depends on / 依赖: differentiableAt_one_add_smoothingFn, differentiableWithinAt
@@ -1478,7 +1478,7 @@ lemma strictAntiOn_smoothingFn
 
 中文:
 引理 strictAntiOn_smoothingFn
-  结论: StrictAntiOn ε (Set.Ioi 1)
+  结论: StrictAntiOn ε (集合.左开右无界区间 1)
   证明: by
   change StrictAntiOn (fun x => 1 / log x) (Set.Ioi 1)
   simp_rw [one_div]
@@ -1527,7 +1527,7 @@ lemma strictAntiOn_one_add_smoothingFn
 
 中文:
 引理 strictAntiOn_one_add_smoothingFn
-  结论: StrictAntiOn (fun (x : 实数) => (1 : 实数) + ε x) (Set.Ioi 1)
+  结论: StrictAntiOn (fun (x : 实数) => (1 : 实数) + ε x) (集合.左开右无界区间 1)
   证明: StrictAntiOn.const_add strictAntiOn_smoothingFn 1
 
 Depends on / 依赖: StrictAntiOn, StrictAntiOn.const_add, const_add, strictAntiOn_smoothingFn
@@ -1645,7 +1645,7 @@ lemma continuous_sumCoeffsExp
 
 中文:
 引理 continuous_sumCoeffsExp
-  结论: Continuous (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
+  结论: 连续 (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
   证明: by
   refine continuous_finsetSum Finset.univ fun i _ => Continuous.mul (by fun_prop) ?_
   exact Continuous.rpow continuous_const continuous_id (fun x => Or.inl (ne_of_gt (R.b_pos i)))
@@ -1670,7 +1670,7 @@ lemma strictAnti_sumCoeffsExp
 
 中文:
 引理 strictAnti_sumCoeffsExp
-  结论: StrictAnti (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
+  结论: 严格递减 (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
   证明: by
   rw [← Finset.sum_fn]
   refine Finset.sum_induction_nonempty _ _ (fun _ _ => StrictAnti.add) univ_nonempty ?terms
@@ -1702,7 +1702,7 @@ refine Tendsto.mul (by simp) tendsto_rpow_atTop_of_base_lt_one _ ?_ (R.b_lt_one 
 
 中文:
 引理 tendsto_zero_sumCoeffsExp
-  结论: Tendsto (fun (p : 实数) => ∑ i, a i * (b i) ^ p) atTop (𝓝 0)
+  结论: 收敛 (fun (p : 实数) => ∑ i, a i * (b i) ^ p) atTop (𝓝 0)
   证明: by
   have h₁ : Finset.univ.sum (fun _ : α => (0 : Real)) = 0 := by simp
   rw [← h₁]
@@ -1738,7 +1738,7 @@ Tendsto.const_mul_atTop (R.a_pos (max_bi b)) tendsto_rpow_atBot_of_base_lt_one _
 
 中文:
 引理 tendsto_atTop_sumCoeffsExp
-  结论: Tendsto (fun (p : 实数) => ∑ i, a i * (b i) ^ p) atBot atTop
+  结论: 收敛 (fun (p : 实数) => ∑ i, a i * (b i) ^ p) atBot atTop
   证明: by
   have h₁ : Tendsto (fun p : Real => (a (max_bi b) : Real) * b (max_bi b) ^ p) atBot atTop :=
 Tendsto.const_mul_atTop (R.a_pos (max_bi b)) tendsto_rpow_atBot_of_base_lt_one _
@@ -1771,7 +1771,7 @@ lemma one_mem_range_sumCoeffsExp
 
 中文:
 引理 one_mem_range_sumCoeffsExp
-  结论: 1 in Set.range (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
+  结论: 1 in 集合.range (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
   证明: by
   refine mem_range_of_exists_le_of_exists_ge R.continuous_sumCoeffsExp ?le_one ?ge_one
   case le_one =>
@@ -1798,7 +1798,7 @@ lemma injective_sumCoeffsExp
 
 中文:
 引理 injective_sumCoeffsExp
-  结论: Function.Injective (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
+  结论: 函数.单射 (fun (p : 实数) => ∑ i, a i * (b i) ^ p)
   证明: R.strictAnti_sumCoeffsExp.injective
 
 Depends on / 依赖: R.strictAnti_sumCoeffsExp.injective, injective, strictAnti_sumCoeffsExp
@@ -1911,7 +1911,7 @@ lemma asympBound_def
 
 中文:
 引理 asympBound_def
-  条件: {α} [Fintype α] (a b : α -> 实数) {n : 自然数}
+  条件: {α} [有限类型 α] (a b : α -> 实数) {n : 自然数}
   证明: rfl
 -/
 lemma asympBound_def {α} [Fintype α] (a b : α -> Real) {n : Nat} :
@@ -1930,7 +1930,7 @@ lemma asympBound_def'
 
 中文:
 引理 asympBound_def'
-  条件: {α} [Fintype α] (a b : α -> 实数) {n : 自然数}
+  条件: {α} [有限类型 α] (a b : α -> 实数) {n : 自然数}
   证明: by
   simp [asympBound_def, sumTransform, mul_add, mul_one]
 

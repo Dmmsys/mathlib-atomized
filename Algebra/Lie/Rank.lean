@@ -89,7 +89,7 @@ lemma polyCharpoly_coeff_rank_ne_zero
 
 中文:
 引理 polyCharpoly_coeff_rank_ne_zero
-  条件: [Nontrivial R] [DecidableEq ι]
+  条件: [非平凡 R] [DecidableEq ι]
   证明: polyCharpoly_coeff_nilRank_ne_zero _ _
 
 Depends on / 依赖: polyCharpoly_coeff_nilRank_ne_zero
@@ -109,7 +109,7 @@ lemma rank_eq_natTrailingDegree
 
 中文:
 引理 rank_eq_natTrailingDegree
-  条件: [Nontrivial R] [DecidableEq ι]
+  条件: [非平凡 R] [DecidableEq ι]
   证明: by
   apply nilRank_eq_polyCharpoly_natTrailingDegree
 
@@ -133,8 +133,8 @@ lemma rank_le_card
 
 中文:
 引理 rank_le_card
-  条件: [Nontrivial R]
-  结论: rank R L M <= Fintype.card ιₘ
+  条件: [非平凡 R]
+  结论: rank R L M <= 有限类型.card ιₘ
   证明: nilRank_le_card _ bₘ
 
 Depends on / 依赖: nilRank_le_card
@@ -154,7 +154,7 @@ lemma rank_le_finrank
 
 中文:
 引理 rank_le_finrank
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: rank R L M <= finrank R M
   证明: nilRank_le_finrank _
 
@@ -175,7 +175,7 @@ lemma rank_le_natTrailingDegree_charpoly_ad
 
 中文:
 引理 rank_le_natTrailingDegree_charpoly_ad
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: nilRank_le_natTrailingDegree_charpoly _ _
 
 Depends on / 依赖: nilRank_le_natTrailingDegree_charpoly
@@ -193,7 +193,7 @@ definition IsRegular
   body: LinearMap.IsNilRegular φ x
 
 中文:
-定义 IsRegular
+定义 是正则
   签名: (x : L)
   定义体: LinearMap.IsNilRegular φ x
 
@@ -248,7 +248,7 @@ lemma isRegular_iff_natTrailingDegree_charpoly_eq_rank
 
 中文:
 引理 isRegular_iff_natTrailingDegree_charpoly_eq_rank
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: LinearMap.isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank _ _
 
 Depends on / 依赖: LinearMap, LinearMap.isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank, e.symm, isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
@@ -271,7 +271,7 @@ lemma exists_isRegular_of_finrank_le_card
   proof: LinearMap.exists_isNilRegular_of_finrank_le_card _ h
 
 中文:
-引理 exists_isRegular_of_finrank_le_card
+引理 存在_isRegular_of_finrank_le_card
   条件: (h : finrank R M <= #R)
   证明: LinearMap.exists_isNilRegular_of_finrank_le_card _ h
 
@@ -291,9 +291,9 @@ lemma exists_isRegular
   proof: LinearMap.exists_isNilRegular _
 
 中文:
-引理 exists_isRegular
-  条件: [Infinite R]
-  结论: 存在 x : L, IsRegular R M x
+引理 存在_isRegular
+  条件: [无限 R]
+  结论: 存在 x : L, 是正则 R M x
   证明: LinearMap.exists_isNilRegular _
 
 Depends on / 依赖: LinearMap, LinearMap.exists_isNilRegular, exists_isNilRegular
@@ -346,7 +346,7 @@ lemma polyCharpoly_coeff_rank_ne_zero
 
 中文:
 引理 polyCharpoly_coeff_rank_ne_zero
-  条件: [Nontrivial R] [DecidableEq ι]
+  条件: [非平凡 R] [DecidableEq ι]
   证明: polyCharpoly_coeff_nilRank_ne_zero _ _
 
 Depends on / 依赖: polyCharpoly_coeff_nilRank_ne_zero
@@ -366,7 +366,7 @@ lemma rank_eq_natTrailingDegree
 
 中文:
 引理 rank_eq_natTrailingDegree
-  条件: [Nontrivial R] [DecidableEq ι]
+  条件: [非平凡 R] [DecidableEq ι]
   证明: by
   apply nilRank_eq_polyCharpoly_natTrailingDegree
 
@@ -390,8 +390,8 @@ lemma rank_le_card
 
 中文:
 引理 rank_le_card
-  条件: [Nontrivial R]
-  结论: rank R L <= Fintype.card ι
+  条件: [非平凡 R]
+  结论: rank R L <= 有限类型.card ι
   证明: nilRank_le_card _ b
 
 Depends on / 依赖: nilRank_le_card
@@ -410,7 +410,7 @@ lemma rank_le_finrank
 
 中文:
 引理 rank_le_finrank
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: rank R L <= finrank R L
   证明: nilRank_le_finrank _
 
@@ -431,7 +431,7 @@ lemma rank_le_natTrailingDegree_charpoly_ad
 
 中文:
 引理 rank_le_natTrailingDegree_charpoly_ad
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: nilRank_le_natTrailingDegree_charpoly _ _
 
 Depends on / 依赖: nilRank_le_natTrailingDegree_charpoly
@@ -449,7 +449,7 @@ abbreviation IsRegular
   body: LieModule.IsRegular R L x
 
 中文:
-缩写 IsRegular
+缩写 是正则
   签名: (x : L)
   定义体: LieModule.IsRegular R L x
 
@@ -504,7 +504,7 @@ lemma isRegular_iff_natTrailingDegree_charpoly_eq_rank
 
 中文:
 引理 isRegular_iff_natTrailingDegree_charpoly_eq_rank
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: LinearMap.isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank _ _
 
 Depends on / 依赖: LinearMap, LinearMap.isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank, isNilRegular_iff_natTrailingDegree_charpoly_eq_nilRank
@@ -527,7 +527,7 @@ lemma exists_isRegular_of_finrank_le_card
   proof: LinearMap.exists_isNilRegular_of_finrank_le_card _ h
 
 中文:
-引理 exists_isRegular_of_finrank_le_card
+引理 存在_isRegular_of_finrank_le_card
   条件: (h : finrank R L <= #R)
   证明: LinearMap.exists_isNilRegular_of_finrank_le_card _ h
 
@@ -547,9 +547,9 @@ lemma exists_isRegular
   proof: LinearMap.exists_isNilRegular _
 
 中文:
-引理 exists_isRegular
-  条件: [Infinite R]
-  结论: 存在 x : L, IsRegular R x
+引理 存在_isRegular
+  条件: [无限 R]
+  结论: 存在 x : L, 是正则 R x
   证明: LinearMap.exists_isNilRegular _
 
 Depends on / 依赖: LinearMap, LinearMap.exists_isNilRegular, exists_isNilRegular

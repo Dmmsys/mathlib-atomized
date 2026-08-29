@@ -49,8 +49,8 @@ definition Algebra.trdeg
   body: ⨆ ι : { s : Set A // AlgebraicIndepOn R _root_.id s }, Cardinal.mk ι.1
 
 中文:
-定义 Algebra.trdeg
-  签名: : Cardinal.{v}
+定义 代数.trdeg
+  签名: : 基数.{v}
   定义体: ⨆ ι : { s : Set A // AlgebraicIndepOn R _root_.id s }, Cardinal.mk ι.1
 -/
 @[stacks 030G] def Algebra.trdeg : Cardinal.{v} :=
@@ -90,7 +90,7 @@ theorem algebraicIndependent_empty_type_iff
 
 中文:
 定理 algebraicIndependent_empty_type_iff
-  条件: [IsEmpty ι]
+  条件: [是空 ι]
   证明: by
   rw [algebraicIndependent_iff_injective_aeval]; rw [MvPolynomial.aeval_injective_iff_of_isEmpty]
 
@@ -109,8 +109,8 @@ instance [FaithfulSMul
   body: ⟨∅, algebraicIndependent_empty_type_iff.mpr FaithfulSMul.algebraMap_injective R A⟩
 
 中文:
-实例 [FaithfulSMul
-  签名: R A] : Nonempty { s
+实例 [忠实标量乘法
+  签名: R A] : 非空 { s
   定义体: ⟨∅, algebraicIndependent_empty_type_iff.mpr FaithfulSMul.algebraMap_injective R A⟩
 -/
 instance [FaithfulSMul R A] : Nonempty { s : Set A // AlgebraicIndepOn R id s } :=
@@ -134,7 +134,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: Injective (algebraMap R A)
+  结论: 单射 (algebraMap R A)
   证明: by
   simpa [Function.comp_def] using
     (Injective.of_comp_iff (algebraicIndependent_iff_injective_aeval.1 hx) MvPolynomial.C).2
@@ -200,8 +200,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: [Nontrivial R]
-  结论: Injective x
+  条件: [非平凡 R]
+  结论: 单射 x
   证明: hx.linearIndependent.injective
 -/
 protected theorem injective [Nontrivial R] : Injective x :=
@@ -218,7 +218,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial R] (i : ι)
+  条件: [非平凡 R] (i : ι)
   结论: x i != 0
   证明: hx.linearIndependent.ne_zero i
 
@@ -243,7 +243,7 @@ theorem map
 
 中文:
 定理 map
-  条件: {f : A ->ₐ[R] A'} (hf_inj : Set.InjOn f (adjoin R (range x)))
+  条件: {f : A ->ₐ[R] A'} (hf_inj : 集合.单射限制 f (adjoin R (range x)))
   证明: by
   have : aeval (f ∘ x) = f.comp (aeval x) := by ext; simp
   have h : forall p : MvPolynomial ι R, aeval x p in (@aeval R _ _ _ _ _ ((↑) : range x -> A)).range := by
@@ -278,7 +278,7 @@ theorem map'
 
 中文:
 定理 map'
-  条件: {f : A ->ₐ[R] A'} (hf_inj : Injective f)
+  条件: {f : A ->ₐ[R] A'} (hf_inj : 单射 f)
   结论: AlgebraicIndependent R (f ∘ x)
   证明: hx.map hf_inj.injOn
 
@@ -331,7 +331,7 @@ theorem of_aeval
 
 中文:
 定理 of_aeval
-  结论: {f : ι -> MvPolynomial ι R}
+  结论: {f : ι -> 多元多项式 ι R}
   证明: by
   rw [algebraicIndependent_iff] at H ⊢
   intro p hp
@@ -358,7 +358,7 @@ theorem isEmpty_algebraicIndependent
 
 中文:
 定理 isEmpty_algebraicIndependent
-  条件: (h : ¬ Injective (algebraMap R A))
+  条件: (h : ¬ 单射 (algebraMap R A))
   证明: h s.2.algebraMap_injective
 
 Depends on / 依赖: algebraMap_injective
@@ -380,7 +380,7 @@ theorem trdeg_eq_zero_of_not_injective
 
 中文:
 定理 trdeg_eq_zero_of_not_injective
-  条件: (h : ¬ Injective (algebraMap R A))
+  条件: (h : ¬ 单射 (algebraMap R A))
   结论: trdeg R A = 0
   证明: by
   have := isEmpty_algebraicIndependent h
@@ -403,8 +403,8 @@ theorem MvPolynomial.algebraicIndependent_X
   exact injective_id
 
 中文:
-定理 MvPolynomial.algebraicIndependent_X
-  条件: (σ R : 类型) [CommRing R]
+定理 多元多项式.algebraicIndependent_X
+  条件: (σ R : 类型) [交换环 R]
   证明: by
   rw [AlgebraicIndependent]; rw [aeval_X_left]
   exact injective_id
@@ -429,8 +429,8 @@ theorem AlgHom.algebraicIndependent_iff
 @[nontriviality]
 
 中文:
-定理 AlgHom.algebraicIndependent_iff
-  条件: (f : A ->ₐ[R] A') (hf : Injective f)
+定理 代数态射.algebraicIndependent_iff
+  条件: (f : A ->ₐ[R] A') (hf : 单射 f)
   证明: ⟨fun h => h.of_comp f, fun h => h.map hf.injOn⟩
 
 @[nontriviality]
@@ -453,7 +453,7 @@ theorem AlgebraicIndependent.of_subsingleton
 
 中文:
 定理 AlgebraicIndependent.of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: AlgebraicIndependent R x
   证明: algebraicIndependent_iff.2 fun _ _ => Subsingleton.elim _ _
 
@@ -478,7 +478,7 @@ theorem isTranscendenceBasis_iff_of_subsingleton
 
 中文:
 定理 isTranscendenceBasis_iff_of_subsingleton
-  条件: [Subsingleton R] (x : ι -> A)
+  条件: [子单例 R] (x : ι -> A)
   证明: by
   have := Module.subsingleton R A
   refine ⟨fun h => ?_, fun h => ⟨.of_subsingleton, fun s hs hx =>
@@ -508,7 +508,7 @@ theorem IsTranscendenceBasis.of_subsingleton
 
 中文:
 定理 IsTranscendenceBasis.of_subsingleton
-  条件: [Subsingleton R] [Nonempty ι]
+  条件: [子单例 R] [非空 ι]
   证明: (isTranscendenceBasis_iff_of_subsingleton x).mpr ‹_›
 -/
 @[nontriviality] theorem IsTranscendenceBasis.of_subsingleton [Subsingleton R] [Nonempty ι] :
@@ -528,7 +528,7 @@ theorem trdeg_subsingleton
 
 中文:
 定理 trdeg_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: trdeg R A = 1
   证明: have := Module.subsingleton R A
 (ciSup_le' fun s => by simpa using Set.subsingleton_of_subsingleton).antisymm le_ciSup_of_le
@@ -575,7 +575,7 @@ theorem AlgebraicIndependent.restrictScalars
 
 中文:
 定理 AlgebraicIndependent.restrictScalars
-  结论: {K : 类型} [CommRing K] [Algebra R K] [Algebra K A]
+  结论: {K : 类型} [交换环 K] [代数 R K] [代数 K A]
   证明: by
   have : (aeval x : MvPolynomial ι K ->ₐ[K] A).toRingHom.comp (MvPolynomial.map (algebraMap R K)) =
       (aeval x : MvPolynomial ι R ->ₐ[R] A).toRingHom := by
@@ -727,7 +727,7 @@ theorem algebraicIndependent_finset_map_embedding_subtype
 
 中文:
 定理 algebraicIndependent_finset_map_embedding_subtype
-  结论: (s : Set A)
+  结论: (s : 集合 A)
   证明: by
   let f : t.map (Embedding.subtype (· in s)) -> s := fun x =>
     ⟨x.1, by
@@ -806,7 +806,7 @@ theorem AlgebraicIndependent.restrict_of_comp_subtype
 
 中文:
 定理 AlgebraicIndependent.restrict_of_comp_subtype
-  结论: {s : Set ι}
+  结论: {s : 集合 ι}
   证明: hs
 -/
 theorem AlgebraicIndependent.restrict_of_comp_subtype {s : Set ι}
@@ -936,7 +936,7 @@ lemma IsTranscendenceBasis.of_comp
 
 中文:
 引理 IsTranscendenceBasis.of_comp
-  结论: {x : ι -> A} (f : A ->ₐ[R] A') (h : Function.Injective f)
+  结论: {x : ι -> A} (f : A ->ₐ[R] A') (h : 函数.单射 f)
   证明: by
   refine ⟨(AlgHom.algebraicIndependent_iff f h).mp H.1, ?_⟩
   intro s hs hs'
@@ -967,7 +967,7 @@ lemma IsTranscendenceBasis.of_comp_algebraMap
 
 中文:
 引理 IsTranscendenceBasis.of_comp_algebraMap
-  结论: [Algebra A A'] [IsScalarTower R A A']
+  结论: [代数 A A'] [标量塔 R A A']
   证明: .of_comp (IsScalarTower.toAlgHom R A A') (FaithfulSMul.algebraMap_injective A A') H
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, IsScalarTower, IsScalarTower.toAlgHom, algebraMap_injective, of_comp, toAlgHom
@@ -986,7 +986,7 @@ theorem AlgEquiv.isTranscendenceBasis
   proof: .of_comp e.symm.toAlgHom e.symm.injective (by convert! hx; ext; simp)
 
 中文:
-定理 AlgEquiv.isTranscendenceBasis
+定理 代数等价.isTranscendenceBasis
   条件: (e : A ≃ₐ[R] A') (hx : IsTranscendenceBasis R x)
   证明: .of_comp e.symm.toAlgHom e.symm.injective (by convert! hx; ext; simp)
 
@@ -1005,7 +1005,7 @@ theorem AlgEquiv.isTranscendenceBasis_iff
   proof: ⟨fun hx => by convert! e.symm.isTranscendenceBasis hx; ext; simp, e.isTranscendenceBasis⟩
 
 中文:
-定理 AlgEquiv.isTranscendenceBasis_iff
+定理 代数等价.isTranscendenceBasis_iff
   条件: (e : A ≃ₐ[R] A')
   证明: ⟨fun hx => by convert! e.symm.isTranscendenceBasis hx; ext; simp, e.isTranscendenceBasis⟩
 
@@ -1031,7 +1031,7 @@ theorem AlgebraicIndependent.lift_cardinalMk_le_trdeg
 
 中文:
 定理 AlgebraicIndependent.lift_cardinalMk_le_trdeg
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   rw [lift_mk_eq'.mpr ⟨.ofInjective _ hx.injective⟩]; rw [lift_le]
   exact le_ciSup_of_le bddAbove_of_small ⟨_, hx.to_subtype_range⟩ le_rfl
@@ -1054,7 +1054,7 @@ theorem AlgebraicIndependent.cardinalMk_le_trdeg
 
 中文:
 定理 AlgebraicIndependent.cardinalMk_le_trdeg
-  结论: [Nontrivial R] {ι : 类型v} {x : ι -> A}
+  结论: [非平凡 R] {ι : 类型v} {x : ι -> A}
   证明: by
   rw [← (#ι).lift_id]; rw [← (trdeg R A).lift_id]; exact hx.lift_cardinalMk_le_trdeg
 
@@ -1077,7 +1077,7 @@ theorem lift_trdeg_le_of_injective
 
 中文:
 定理 lift_trdeg_le_of_injective
-  条件: (f : A ->ₐ[R] A') (hf : Injective f)
+  条件: (f : A ->ₐ[R] A') (hf : 单射 f)
   证明: by
   nontriviality R
   rw [trdeg]; rw [lift_iSup bddAbove_of_small]
@@ -1102,7 +1102,7 @@ theorem trdeg_le_of_injective
 
 中文:
 定理 trdeg_le_of_injective
-  结论: {A' : 类型v} [CommRing A'] [Algebra R A'] (f : A ->ₐ[R] A')
+  结论: {A' : 类型v} [交换环 A'] [代数 R A'] (f : A ->ₐ[R] A')
   证明: by
   rw [← (trdeg R A).lift_id]; rw [← (trdeg R A').lift_id]; exact lift_trdeg_le_of_injective f hf
 
@@ -1127,7 +1127,7 @@ theorem lift_trdeg_le_of_surjective
 
 中文:
 定理 lift_trdeg_le_of_surjective
-  条件: (f : A ->ₐ[R] A') (hf : Surjective f)
+  条件: (f : A ->ₐ[R] A') (hf : 满射 f)
   证明: by
   nontriviality R
   rw [trdeg]; rw [lift_iSup bddAbove_of_small]
@@ -1156,7 +1156,7 @@ theorem trdeg_le_of_surjective
 
 中文:
 定理 trdeg_le_of_surjective
-  结论: {A' : 类型v} [CommRing A'] [Algebra R A'] (f : A ->ₐ[R] A')
+  结论: {A' : 类型v} [交换环 A'] [代数 R A'] (f : A ->ₐ[R] A')
   证明: by
   rw [← (trdeg R A).lift_id]; rw [← (trdeg R A').lift_id]; exact lift_trdeg_le_of_surjective f hf
 
@@ -1176,7 +1176,7 @@ theorem AlgEquiv.lift_trdeg_eq
     (lift_trdeg_le_of_surjective e.toAlgHom e.surjective)
 
 中文:
-定理 AlgEquiv.lift_trdeg_eq
+定理 代数等价.lift_trdeg_eq
   条件: (e : A ≃ₐ[R] A')
   证明: (lift_trdeg_le_of_injective e.toAlgHom e.injective).antisymm
     (lift_trdeg_le_of_surjective e.toAlgHom e.surjective)
@@ -1198,8 +1198,8 @@ theorem AlgEquiv.trdeg_eq
   rw [← (trdeg R A).lift_id]; rw [e.lift_trdeg_eq]; rw [lift_id]
 
 中文:
-定理 AlgEquiv.trdeg_eq
-  条件: {A' : 类型v} [CommRing A'] [Algebra R A'] (e : A ≃ₐ[R] A')
+定理 代数等价.trdeg_eq
+  条件: {A' : 类型v} [交换环 A'] [代数 R A'] (e : A ≃ₐ[R] A')
   证明: by
   rw [← (trdeg R A).lift_id]; rw [e.lift_trdeg_eq]; rw [lift_id]
 
@@ -1225,7 +1225,7 @@ theorem algebraicIndependent_comp_subtype
 
 中文:
 定理 algebraicIndependent_comp_subtype
-  条件: {s : Set ι}
+  条件: {s : 集合 ι}
   证明: by
   have : (aeval (x ∘ (↑) : s -> A) : _ ->ₐ[R] _) = (aeval x).comp (rename (↑)) := by ext; simp
   have : forall p : MvPolynomial s R, rename ((↑) : s -> ι) p = 0 ↔ p = 0 :=
@@ -1254,7 +1254,7 @@ theorem algebraicIndependent_subtype
 
 中文:
 定理 algebraicIndependent_subtype
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   证明: by
   apply @algebraicIndependent_comp_subtype _ _ _ id
 
@@ -1276,7 +1276,7 @@ theorem algebraicIndependent_of_finite
 
 中文:
 定理 algebraicIndependent_of_finite
-  结论: (s : Set A)
+  结论: (s : 集合 A)
   证明: algebraicIndependent_subtype.2 fun p hp =>
     algebraicIndependent_subtype.1 (H _ (mem_supported.1 hp) (Finset.finite_toSet _)) _ (by simp)
 
@@ -1322,7 +1322,7 @@ theorem AlgebraicIndependent.image_of_comp
 
 中文:
 定理 AlgebraicIndependent.image_of_comp
-  结论: {ι ι'} (s : Set ι) (f : ι -> ι') (g : ι' -> A)
+  结论: {ι ι'} (s : 集合 ι) (f : ι -> ι') (g : ι' -> A)
   证明: by
   nontriviality R
   have : InjOn f s := injOn_iff_injective.2 hs.injective.of_comp
@@ -1347,8 +1347,8 @@ theorem AlgebraicIndependent.image
   convert! AlgebraicIndependent.image_of_comp s f id hs
 
 中文:
-定理 AlgebraicIndependent.image
-  结论: {ι} {s : Set ι} {f : ι -> A}
+定理 AlgebraicIndependent.像
+  结论: {ι} {s : 集合 ι} {f : ι -> A}
   证明: by
   convert! AlgebraicIndependent.image_of_comp s f id hs
 
@@ -1373,7 +1373,7 @@ theorem algebraicIndependent_iUnion_of_directed
 
 中文:
 定理 algebraicIndependent_iUnion_of_directed
-  结论: {η : 类型} [Nonempty η] {s : η -> Set A}
+  结论: {η : 类型} [非空 η] {s : η -> 集合 A}
   证明: by
   refine algebraicIndependent_of_finite (⋃ i, s i) fun t ht ft => ?_
   rcases finite_subset_iUnion ft ht with ⟨I, fi, hI⟩
@@ -1403,7 +1403,7 @@ theorem algebraicIndependent_sUnion_of_directed
 
 中文:
 定理 algebraicIndependent_sUnion_of_directed
-  结论: {s : Set (Set A)} (hsn : s.Nonempty)
+  结论: {s : 集合 (集合 A)} (hsn : s.非空)
   证明: by
   let : Nonempty s := Nonempty.to_subtype hsn
   rw [sUnion_eq_iUnion]
@@ -1431,8 +1431,8 @@ theorem exists_maximal_algebraicIndependent
   exact fun 
 
 中文:
-定理 exists_maximal_algebraicIndependent
-  结论: (s t : Set A) (hst : s subseteq t)
+定理 存在_maximal_algebraicIndependent
+  结论: (s t : 集合 A) (hst : s subseteq t)
   证明: by
   refine zorn_subset_nonempty { u : Set A | AlgebraicIndependent R ((↑) : u -> A) ∧ u subseteq t}
     (fun c hc chainc hcn => ⟨⋃₀ c, ⟨?_, ?_⟩, fun _ => subset_sUnion_of_mem⟩) s ⟨hs, hst⟩
@@ -1659,7 +1659,7 @@ theorem algebraicIndependent_empty_type
 
 中文:
 定理 algebraicIndependent_empty_type
-  条件: [IsEmpty ι] [Nontrivial A]
+  条件: [是空 ι] [非平凡 A]
   结论: AlgebraicIndependent K x
   证明: by
   rw [algebraicIndependent_empty_type_iff]
@@ -1681,7 +1681,7 @@ theorem algebraicIndependent_empty
 
 中文:
 定理 algebraicIndependent_empty
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   证明: algebraicIndependent_empty_type
 
 Depends on / 依赖: algebraicIndependent_empty_type

@@ -94,7 +94,7 @@ theorem nth_of_card_le
 
 中文:
 定理 nth_of_card_le
-  条件: (hf : (Set.ofPred p).Finite) {n : 自然数} (hn : #hf.toFinset <= n)
+  条件: (hf : (集合.ofPred p).有限) {n : 自然数} (hn : #hf.toFinset <= n)
   证明: by rw [nth, dif_pos hf, List.getD_eq_default]; rwa [Finset.length_sort]
 
 Depends on / 依赖: Finset, Finset.length_sort, List.getD_eq_default, dif_pos, getD_eq_default, length_sort
@@ -112,7 +112,7 @@ theorem nth_eq_getD_sort
 
 中文:
 定理 nth_eq_getD_sort
-  条件: (h : (Set.ofPred p).Finite) (n : 自然数)
+  条件: (h : (集合.ofPred p).有限) (n : 自然数)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -132,7 +132,7 @@ theorem nth_eq_orderEmbOfFin
 
 中文:
 定理 nth_eq_orderEmbOfFin
-  条件: (hf : (Set.ofPred p).Finite) {n : 自然数} (hn : n < #hf.toFinset)
+  条件: (hf : (集合.ofPred p).有限) {n : 自然数} (hn : n < #hf.toFinset)
   证明: by
   rw [nth_eq_getD_sort hf]; rw [Finset.orderEmbOfFin_apply]; rw [List.getD_eq_getElem]; rw [Fin.getElem_fin]
 
@@ -155,7 +155,7 @@ theorem nth_strictMonoOn
 
 中文:
 定理 nth_strictMonoOn
-  条件: (hf : (Set.ofPred p).Finite)
+  条件: (hf : (集合.ofPred p).有限)
   证明: by
   rintro m (hm : m < _) n (hn : n < _) h
   simp only [nth_eq_orderEmbOfFin, *]
@@ -179,7 +179,7 @@ theorem nth_lt_nth_of_lt_card
 
 中文:
 定理 nth_lt_nth_of_lt_card
-  结论: (hf : (Set.ofPred p).Finite) {m n : 自然数} (h : m < n)
+  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : m < n)
   证明: nth_strictMonoOn hf (h.trans hn) hn h
 
 Depends on / 依赖: h.trans, nth_strictMonoOn
@@ -198,7 +198,7 @@ theorem nth_le_nth_of_lt_card
 
 中文:
 定理 nth_le_nth_of_lt_card
-  结论: (hf : (Set.ofPred p).Finite) {m n : 自然数} (h : m <= n)
+  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : m <= n)
   证明: (nth_strictMonoOn hf).monotoneOn (h.trans_lt hn) hn h
 
 Depends on / 依赖: h.trans_lt, monotoneOn, nth_strictMonoOn, trans_lt
@@ -217,7 +217,7 @@ theorem lt_of_nth_lt_nth_of_lt_card
 
 中文:
 定理 lt_of_nth_lt_nth_of_lt_card
-  结论: (hf : (Set.ofPred p).Finite) {m n : 自然数} (h : nth p m < nth p n)
+  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : nth p m < nth p n)
   证明: not_le.1 fun hle => h.not_ge nth_le_nth_of_lt_card hf hle hm
 
 Depends on / 依赖: h.not_ge, not_ge, not_le, nth_le_nth_of_lt_card
@@ -236,7 +236,7 @@ theorem le_of_nth_le_nth_of_lt_card
 
 中文:
 定理 le_of_nth_le_nth_of_lt_card
-  结论: (hf : (Set.ofPred p).Finite) {m n : 自然数} (h : nth p m <= nth p n)
+  结论: (hf : (集合.ofPred p).有限) {m n : 自然数} (h : nth p m <= nth p n)
   证明: not_lt.1 fun hlt => h.not_gt nth_lt_nth_of_lt_card hf hlt hm
 
 Depends on / 依赖: h.not_gt, not_gt, not_lt, nth_lt_nth_of_lt_card
@@ -256,8 +256,8 @@ theorem nth_injOn
 
 中文:
 定理 nth_injOn
-  条件: (hf : (Set.ofPred p).Finite)
-  结论: (Set.Iio #hf.toFinset).InjOn (nth p)
+  条件: (hf : (集合.ofPred p).有限)
+  结论: (集合.左无界右开区间 #hf.toFinset).单射限制 (nth p)
   证明: (nth_strictMonoOn hf).injOn
 
 Depends on / 依赖: nth_strictMonoOn
@@ -279,7 +279,7 @@ theorem range_nth_of_finite
 
 中文:
 定理 range_nth_of_finite
-  条件: (hf : (Set.ofPred p).Finite)
+  条件: (hf : (集合.ofPred p).有限)
   证明: by
   simpa only [← List.getD_eq_getElem?_getD, ← nth_eq_getD_sort hf, mem_sort,
     Set.Finite.mem_toFinset] using! Set.range_list_getD (hf.toFinset.sort (· <= ·)) 0
@@ -309,7 +309,7 @@ theorem image_nth_Iio_card
 
 中文:
 定理 image_nth_Iio_card
-  条件: (hf : (Set.ofPred p).Finite)
+  条件: (hf : (集合.ofPred p).有限)
   证明: calc
     nth p '' Set.Iio #hf.toFinset = Set.range (hf.toFinset.orderEmbOfFin rfl) := by
       ext x
@@ -338,7 +338,7 @@ theorem nth_mem_of_lt_card
 
 中文:
 定理 nth_mem_of_lt_card
-  条件: {n : 自然数} (hf : (Set.ofPred p).Finite) (hlt : n < #hf.toFinset)
+  条件: {n : 自然数} (hf : (集合.ofPred p).有限) (hlt : n < #hf.toFinset)
   证明: (image_nth_Iio_card hf).subset Set.mem_image_of_mem _ hlt
 
 Depends on / 依赖: Set.mem_image_of_mem, image_nth_Iio_card, mem_image_of_mem, subset
@@ -357,8 +357,8 @@ theorem exists_lt_card_finite_nth_eq
   rwa [← @Set.mem_ofPred_eq _ _ p, ← image_nth_Iio_card hf] at h
 
 中文:
-定理 exists_lt_card_finite_nth_eq
-  条件: (hf : (Set.ofPred p).Finite) {x} (h : p x)
+定理 存在_lt_card_finite_nth_eq
+  条件: (hf : (集合.ofPred p).有限) {x} (h : p x)
   证明: by
   rwa [← @Set.mem_ofPred_eq _ _ p, ← image_nth_Iio_card hf] at h
 
@@ -381,8 +381,8 @@ theorem nth_apply_eq_orderIsoOfNat
   proof: by rw [nth, dif_neg hf]
 
 中文:
-定理 nth_apply_eq_orderIsoOfNat
-  条件: (hf : (Set.ofPred p).Infinite) (n : 自然数)
+定理 nth_apply_eq_orderIsoOf自然数
+  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
   证明: by rw [nth, dif_neg hf]
 
 Depends on / 依赖: dif_neg
@@ -399,8 +399,8 @@ theorem nth_eq_orderIsoOfNat
   proof: funext nth_apply_eq_orderIsoOfNat hf
 
 中文:
-定理 nth_eq_orderIsoOfNat
-  条件: (hf : (Set.ofPred p).Infinite)
+定理 nth_eq_orderIsoOf自然数
+  条件: (hf : (集合.ofPred p).无限)
   证明: funext nth_apply_eq_orderIsoOfNat hf
 
 Depends on / 依赖: nth_apply_eq_orderIsoOfNat
@@ -422,8 +422,8 @@ theorem nth_strictMono
 
 中文:
 定理 nth_strictMono
-  条件: (hf : (Set.ofPred p).Infinite)
-  结论: StrictMono (nth p)
+  条件: (hf : (集合.ofPred p).无限)
+  结论: 严格递增 (nth p)
   证明: by
   rw [nth_eq_orderIsoOfNat hf]
   exact (Subtype.strictMono_coe _).comp (OrderIso.strictMono _)
@@ -445,8 +445,8 @@ theorem nth_injective
 
 中文:
 定理 nth_injective
-  条件: (hf : (Set.ofPred p).Infinite)
-  结论: Function.Injective (nth p)
+  条件: (hf : (集合.ofPred p).无限)
+  结论: 函数.单射 (nth p)
   证明: (nth_strictMono hf).injective
 
 Depends on / 依赖: injective, nth_strictMono
@@ -465,8 +465,8 @@ theorem nth_monotone
 
 中文:
 定理 nth_monotone
-  条件: (hf : (Set.ofPred p).Infinite)
-  结论: Monotone (nth p)
+  条件: (hf : (集合.ofPred p).无限)
+  结论: 递增 (nth p)
   证明: (nth_strictMono hf).monotone
 
 Depends on / 依赖: monotone, nth_strictMono
@@ -485,7 +485,7 @@ theorem nth_lt_nth
 
 中文:
 定理 nth_lt_nth
-  条件: (hf : (Set.ofPred p).Infinite) {k n}
+  条件: (hf : (集合.ofPred p).无限) {k n}
   结论: nth p k < nth p n ↔ k < n
   证明: (nth_strictMono hf).lt_iff_lt
 
@@ -505,7 +505,7 @@ theorem nth_le_nth
 
 中文:
 定理 nth_le_nth
-  条件: (hf : (Set.ofPred p).Infinite) {k n}
+  条件: (hf : (集合.ofPred p).无限) {k n}
   结论: nth p k <= nth p n ↔ k <= n
   证明: (nth_strictMono hf).le_iff_le
 
@@ -527,7 +527,7 @@ theorem range_nth_of_infinite
 
 中文:
 定理 range_nth_of_infinite
-  条件: (hf : (Set.ofPred p).Infinite)
+  条件: (hf : (集合.ofPred p).无限)
   证明: by
   rw [nth_eq_orderIsoOfNat hf]
   have := hf.to_subtype
@@ -552,7 +552,7 @@ theorem nth_mem_of_infinite
 
 中文:
 定理 nth_mem_of_infinite
-  条件: (hf : (Set.ofPred p).Infinite) (n : 自然数)
+  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
   结论: p (nth p n)
   证明: Set.range_subset_iff.1 (range_nth_of_infinite hf).le n
 
@@ -577,7 +577,7 @@ theorem exists_lt_card_nth_eq
     exact ⟨n, fun hf' => absurd h
 
 中文:
-定理 exists_lt_card_nth_eq
+定理 存在_lt_card_nth_eq
   条件: {x} (h : p x)
   证明: by
   refine (Set.ofPred p).finite_or_infinite.elim (fun hf => ?_) fun hf => ?_
@@ -610,7 +610,7 @@ theorem subset_range_nth
 
 中文:
 定理 subset_range_nth
-  结论: Set.ofPred p subseteq Set.range (nth p)
+  结论: 集合.ofPred p subseteq 集合.range (nth p)
   证明: fun x (hx : p x) =>
   let ⟨n, _, hn⟩ := exists_lt_card_nth_eq hx
   ⟨n, hn⟩
@@ -630,7 +630,7 @@ theorem range_nth_subset
 
 中文:
 定理 range_nth_subset
-  结论: Set.range (nth p) subseteq insert 0 (Set.ofPred p)
+  结论: 集合.range (nth p) subseteq insert 0 (集合.ofPred p)
   证明: (Set.ofPred p).finite_or_infinite.elim (fun h => (range_nth_of_finite h).subset) fun h =>
     (range_nth_of_infinite h).trans_subset (Set.subset_insert _ _)
 
@@ -652,7 +652,7 @@ theorem nth_mem
 
 中文:
 定理 nth_mem
-  条件: (n : 自然数) (h : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: (n : 自然数) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   结论: p (nth p n)
   证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_mem_of_lt_card hf (h hf)) fun h =>
     nth_mem_of_infinite h n
@@ -674,7 +674,7 @@ theorem nth_lt_nth'
 
 中文:
 定理 nth_lt_nth'
-  条件: {m n : 自然数} (hlt : m < n) (h : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {m n : 自然数} (hlt : m < n) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_lt_nth_of_lt_card hf hlt (h _)) fun hf =>
     (nth_lt_nth hf).2 hlt
 
@@ -696,7 +696,7 @@ theorem nth_le_nth'
 
 中文:
 定理 nth_le_nth'
-  条件: {m n : 自然数} (hle : m <= n) (h : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {m n : 自然数} (hle : m <= n) (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   证明: (Set.ofPred p).finite_or_infinite.elim (fun hf => nth_le_nth_of_lt_card hf hle (h _)) fun hf =>
     (nth_le_nth hf).2 hle
 
@@ -720,7 +720,7 @@ theorem le_nth
 
 中文:
 定理 le_nth
-  条件: {n : 自然数} (h : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {n : 自然数} (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   结论: n <= nth p n
   证明: (Set.ofPred p).finite_or_infinite.elim
     (fun hf => ((nth_strictMonoOn hf).mono <| Set.Iic_subset_Iio.2 (h _)).Iic_id_le _ le_rfl)
@@ -745,7 +745,7 @@ theorem isLeast_nth
 
 中文:
 定理 isLeast_nth
-  条件: {n} (h : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {n} (h : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   证明: ⟨⟨nth_mem n h, fun _k hk => nth_lt_nth' hk h⟩, fun _x hx =>
     let ⟨k, hk, hkx⟩ := exists_lt_card_nth_eq hx.1
     (lt_or_ge k n).elim (fun hlt => absurd hkx (hx.2 _ hlt).ne) fun hle => hkx ▸ nth_le_nth' hle hk⟩
@@ -768,7 +768,7 @@ theorem isLeast_nth_of_lt_card
 
 中文:
 定理 isLeast_nth_of_lt_card
-  条件: {n : 自然数} (hf : (Set.ofPred p).Finite) (hn : n < #hf.toFinset)
+  条件: {n : 自然数} (hf : (集合.ofPred p).有限) (hn : n < #hf.toFinset)
   证明: isLeast_nth fun _ => hn
 
 Depends on / 依赖: isLeast_nth
@@ -787,7 +787,7 @@ theorem isLeast_nth_of_infinite
 
 中文:
 定理 isLeast_nth_of_infinite
-  条件: (hf : (Set.ofPred p).Infinite) (n : 自然数)
+  条件: (hf : (集合.ofPred p).无限) (n : 自然数)
   证明: isLeast_nth fun h => absurd h hf
 
 Depends on / 依赖: absurd, isLeast_nth
@@ -846,7 +846,7 @@ theorem nth_zero
 
 中文:
 定理 nth_zero
-  结论: nth p 0 = sInf (Set.ofPred p)
+  结论: nth p 0 = sInf (集合.ofPred p)
   证明: by rw [nth_eq_sInf]; simp
 
 @[simp]
@@ -887,7 +887,7 @@ theorem nth_zero_of_exists
   rw [nth_zero]; convert! Nat.sInf_def h
 
 中文:
-定理 nth_zero_of_exists
+定理 nth_zero_of_存在
   条件: [DecidablePred p] (h : 存在 n, p n)
   结论: nth p 0 = 自然数.find h
   证明: by
@@ -943,7 +943,7 @@ lemma lt_card_toFinset_of_nth_ne_zero
 
 中文:
 引理 lt_card_toFinset_of_nth_ne_zero
-  条件: {n : 自然数} (h : nth p n != 0) (hf : (Set.ofPred p).Finite)
+  条件: {n : 自然数} (h : nth p n != 0) (hf : (集合.ofPred p).有限)
   证明: by
   simp only [ne_eq, nth_eq_zero, not_or, not_exists, not_le] at h
   exact h.2 hf
@@ -1254,7 +1254,7 @@ lemma nth_comp_of_strictMono
 
 中文:
 引理 nth_comp_of_strictMono
-  结论: {n : 自然数} {f : 自然数 -> 自然数} (hf : StrictMono f)
+  结论: {n : 自然数} {f : 自然数 -> 自然数} (hf : 严格递增 f)
   证明: by
   have hs {p' : Nat -> Prop} (h0p' : forall k, p' k -> k in Set.range f) :
       f '' {i | p' (f i)} = Set.ofPred p' := by
@@ -1490,7 +1490,7 @@ theorem filter_range_nth_eq_insert_of_finite
 
 中文:
 定理 filter_range_nth_eq_insert_of_finite
-  结论: (hf : (Set.ofPred p).Finite) {k : 自然数}
+  结论: (hf : (集合.ofPred p).有限) {k : 自然数}
   证明: filter_range_nth_eq_insert fun _ => hlt
 
 Depends on / 依赖: filter_range_nth_eq_insert
@@ -1510,7 +1510,7 @@ theorem filter_range_nth_eq_insert_of_infinite
 
 中文:
 定理 filter_range_nth_eq_insert_of_infinite
-  条件: (hp : (Set.ofPred p).Infinite) (k : 自然数)
+  条件: (hp : (集合.ofPred p).无限) (k : 自然数)
   证明: filter_range_nth_eq_insert fun hf => absurd hf hp
 
 Depends on / 依赖: absurd, filter_range_nth_eq_insert
@@ -1534,7 +1534,7 @@ theorem count_nth
 
 中文:
 定理 count_nth
-  条件: {n : 自然数} (hn : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {n : 自然数} (hn : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   证明: by
   induction n with
   | zero => exact count_nth_zero _
@@ -1562,7 +1562,7 @@ theorem count_nth_of_lt_card_finite
 
 中文:
 定理 count_nth_of_lt_card_finite
-  条件: {n : 自然数} (hp : (Set.ofPred p).Finite) (hlt : n < #hp.toFinset)
+  条件: {n : 自然数} (hp : (集合.ofPred p).有限) (hlt : n < #hp.toFinset)
   证明: count_nth fun _ => hlt
 
 Depends on / 依赖: count_nth
@@ -1582,7 +1582,7 @@ theorem count_nth_of_infinite
 
 中文:
 定理 count_nth_of_infinite
-  条件: (hp : (Set.ofPred p).Infinite) (n : 自然数)
+  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
   结论: count p (nth p n) = n
   证明: count_nth fun hf => absurd hf hp
 
@@ -1604,7 +1604,7 @@ alias surjective_count_of_infinite_setOf := surjective_count_of_infinite_setOfPr
 
 中文:
 定理 surjective_count_of_infinite_setOfPred
-  条件: (h : {n | p n}.Infinite)
+  条件: (h : {n | p n}.无限)
   证明: fun n => ⟨nth p n, count_nth_of_infinite h n⟩
 
 @[deprecated (since := "2026-07-09")]
@@ -1629,7 +1629,7 @@ theorem count_nth_succ
 
 中文:
 定理 count_nth_succ
-  条件: {n : 自然数} (hn : 对任意 hf : (Set.ofPred p).Finite, n < #hf.toFinset)
+  条件: {n : 自然数} (hn : 对任意 hf : (集合.ofPred p).有限, n < #hf.toFinset)
   证明: by rw [count_succ, count_nth hn, if_pos (nth_mem _ hn)]
 
 Depends on / 依赖: count_nth, count_succ, if_pos, nth_mem
@@ -1650,7 +1650,7 @@ lemma count_nth_succ_of_infinite
 
 中文:
 引理 count_nth_succ_of_infinite
-  条件: (hp : (Set.ofPred p).Infinite) (n : 自然数)
+  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
   证明: by
   rw [count_succ]; rw [count_nth_of_infinite hp]; rw [if_pos (nth_mem_of_infinite hp _)]
 
@@ -1821,7 +1821,7 @@ theorem le_nth_count
 
 中文:
 定理 le_nth_count
-  条件: (hp : (Set.ofPred p).Infinite) (n : 自然数)
+  条件: (hp : (集合.ofPred p).无限) (n : 自然数)
   结论: n <= nth p (count p n)
   证明: let ⟨m, hp, hn⟩ := hp.exists_gt n
   le_nth_count' ⟨m, hp, hn.le⟩
@@ -1843,7 +1843,7 @@ definition giCountNth
 
 中文:
 定义 giCountNth
-  签名: (hp : (Set.ofPred p).Infinite)
+  签名: (hp : (集合.ofPred p).无限)
   定义体: GaloisInsertion.monotoneIntro (nth_monotone hp) (count_monotone p) (le_nth_count hp)
     (count_nth_of_infinite hp)
 
@@ -1864,7 +1864,7 @@ theorem gc_count_nth
 
 中文:
 定理 gc_count_nth
-  条件: (hp : (Set.ofPred p).Infinite)
+  条件: (hp : (集合.ofPred p).无限)
   结论: GaloisConnection (count p) (nth p)
   证明: (giCountNth hp).gc
 
@@ -1883,7 +1883,7 @@ theorem count_le_iff_le_nth
 
 中文:
 定理 count_le_iff_le_nth
-  条件: (hp : (Set.ofPred p).Infinite) {a b : 自然数}
+  条件: (hp : (集合.ofPred p).无限) {a b : 自然数}
   证明: gc_count_nth hp _ _
 
 Depends on / 依赖: gc_count_nth
@@ -1902,7 +1902,7 @@ theorem lt_nth_iff_count_lt
 
 中文:
 定理 lt_nth_iff_count_lt
-  条件: (hp : (Set.ofPred p).Infinite) {a b : 自然数}
+  条件: (hp : (集合.ofPred p).无限) {a b : 自然数}
   证明: (gc_count_nth hp).lt_iff_lt
 
 Depends on / 依赖: gc_count_nth, lt_iff_lt
@@ -1924,7 +1924,7 @@ theorem nth_of_forall
   classical nth_rw 1 [← count_of_forall (hp · ·.le), nth_count (hp n le_rfl)]
 
 中文:
-定理 nth_of_forall
+定理 nth_of_对任意
   条件: {n : 自然数} (hp : 对任意 n' <= n, p n')
   结论: nth p n = n
   证明: by
@@ -1947,7 +1947,7 @@ theorem nth_true
 中文:
 定理 nth_true
   条件: (n : 自然数)
-  结论: nth (fun _ => True) n = n
+  结论: nth (fun _ => 真) n = n
   证明: nth_of_forall fun _ _ => trivial
 -/
 @[simp] theorem nth_true (n : Nat) : nth (fun _ => True) n = n := nth_of_forall fun _ _ => trivial
@@ -1969,7 +1969,7 @@ theorem nth_of_forall_not
     exact Set.Finite.toFinset_su
 
 中文:
-定理 nth_of_forall_not
+定理 nth_of_对任意_not
   条件: {n : 自然数} (hp : 对任意 n' >= n, ¬p n')
   结论: nth p n = 0
   证明: by
@@ -2004,7 +2004,7 @@ theorem nth_false
 中文:
 定理 nth_false
   条件: (n : 自然数)
-  结论: nth (fun _ => False) n = 0
+  结论: nth (fun _ => 假) n = 0
   证明: nth_of_forall_not fun _ _ => id
 -/
 @[simp] theorem nth_false (n : Nat) : nth (fun _ => False) n = 0 := nth_of_forall_not fun _ _ => id

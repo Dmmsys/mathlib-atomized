@@ -115,7 +115,7 @@ definition buildIsLimit
 
 中文:
 定义 buildIsLimit
-  签名: (t₁ : IsLimit c₁) (t₂ : IsLimit c₂) (hi : IsLimit i)
+  签名: (t₁ : 是极限 c₁) (t₂ : 是极限 c₂) (hi : 是极限 i)
   定义体: by
     refine hi.lift (Fork.ofι ?_ ?_)
     · refine t₁.lift (Fan.mk _ fun j => ?_)
@@ -159,7 +159,7 @@ definition limitConeOfEqualizerAndProduct
 
 中文:
 定义 limitConeOfEqualizerAndProduct
-  签名: (F : J ⥤ C) [HasLimit (Discrete.functor F.obj)]
+  签名: (F : J ⥤ C) [有极限 (离散.functor F.obj)]
   定义体: _
   isLimit :=
     buildIsLimit (Pi.lift fun f => limit.π (Discrete.functor F.obj) ⟨_⟩ ≫ F.map f.2)
@@ -185,7 +185,7 @@ theorem hasLimit_of_equalizer_and_product
 
 中文:
 定理 hasLimit_of_equalizer_and_product
-  结论: (F : J ⥤ C) [HasLimit (Discrete.functor F.obj)]
+  结论: (F : J ⥤ C) [有极限 (离散.functor F.obj)]
   证明: HasLimit.mk (limitConeOfEqualizerAndProduct F)
 
 Depends on / 依赖: HasLimit, HasLimit.mk, limitConeOfEqualizerAndProduct
@@ -206,7 +206,7 @@ definition limitSubobjectProduct
 
 中文:
 定义 limitSubobjectProduct
-  签名: [HasLimitsOfSize.{w, w} C] (F : J ⥤ C)
+  签名: [有LimitsOfSize.{w, w} C] (F : J ⥤ C)
   定义体: have := hasFiniteLimits_of_hasLimitsOfSize C
   (limit.isoLimitCone (limitConeOfEqualizerAndProduct F)).hom ≫ equalizer.ι _ _
 
@@ -228,7 +228,7 @@ instance limitSubobjectProduct_mono
 
 中文:
 实例 limitSubobjectProduct_mono
-  签名: [HasLimitsOfSize.{w, w} C] (F : J ⥤ C)
+  签名: [有LimitsOfSize.{w, w} C] (F : J ⥤ C)
   定义体: mono_comp _ _
 
 Depends on / 依赖: mono_comp
@@ -273,7 +273,7 @@ theorem hasFiniteLimits_of_hasEqualizers_and_finite_products
 
 中文:
 定理 hasFiniteLimits_of_hasEqualizers_and_finite_products
-  结论: [HasFiniteProducts C]
+  结论: [有FiniteProducts C]
   证明: { has_limit := fun F => hasLimit_of_equalizer_and_product F }
 
 Depends on / 依赖: hasLimit_of_equalizer_and_product, has_limit
@@ -532,7 +532,7 @@ theorem hasFiniteLimits_of_hasTerminal_and_pullbacks
 
 中文:
 定理 hasFiniteLimits_of_hasTerminal_and_pullbacks
-  条件: [HasTerminal C] [HasPullbacks C]
+  条件: [有终止 C] [有Pullbacks C]
   证明: @hasFiniteLimits_of_hasEqualizers_and_finite_products C _
     (@hasFiniteProducts_of_has_binary_and_terminal C _
       (hasBinaryProducts_of_hasTerminal_and_pullbacks C) inferInstance)
@@ -564,7 +564,7 @@ lemma preservesFiniteLimits_of_preservesTerminal_and_pullbacks
 
 中文:
 引理 preservesFiniteLimits_of_preservesTerminal_and_pullbacks
-  结论: [HasTerminal C]
+  结论: [有终止 C]
   证明: by
   have : HasFiniteLimits C := hasFiniteLimits_of_hasTerminal_and_pullbacks
   have : PreservesLimitsOfShape (Discrete WalkingPair) G :=
@@ -607,7 +607,7 @@ definition createsFiniteLimitsOfCreatesTerminalAndPullbacks
 
 中文:
 定义 createsFiniteLimitsOfCreatesTerminalAndPullbacks
-  签名: [HasTerminal D]
+  签名: [有终止 D]
   定义体: { CreatesLimit :=
         have : HasTerminal C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
         have : HasPullbacks C := hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape G
@@ -709,7 +709,7 @@ definition buildIsColimit
 
 中文:
 定义 buildIsColimit
-  签名: (t₁ : IsColimit c₁) (t₂ : IsColimit c₂) (hi : IsColimit i)
+  签名: (t₁ : 是余极限 c₁) (t₂ : 是余极限 c₂) (hi : 是余极限 i)
   定义体: by
     refine hi.desc (Cofork.ofπ ?_ ?_)
     · refine t₂.desc (Cofan.mk _ fun j => ?_)
@@ -787,7 +787,7 @@ theorem hasColimit_of_coequalizer_and_coproduct
 
 中文:
 定理 hasColimit_of_coequalizer_and_coproduct
-  结论: (F : J ⥤ C) [HasColimit (Discrete.functor F.obj)]
+  结论: (F : J ⥤ C) [有余极限 (离散.functor F.obj)]
   证明: HasColimit.mk (colimitCoconeOfCoequalizerAndCoproduct F)
 
 Depends on / 依赖: HasColimit, HasColimit.mk, colimitCoconeOfCoequalizerAndCoproduct
@@ -808,7 +808,7 @@ definition colimitQuotientCoproduct
 
 中文:
 定义 colimitQuotientCoproduct
-  签名: [HasColimitsOfSize.{w, w} C] (F : J ⥤ C)
+  签名: [有余limitsOfSize.{w, w} C] (F : J ⥤ C)
   定义体: have := hasFiniteColimits_of_hasColimitsOfSize C
   coequalizer.π _ _ ≫ (colimit.isoColimitCocone (colimitCoconeOfCoequalizerAndCoproduct F)).inv
 
@@ -830,7 +830,7 @@ instance colimitQuotientCoproduct_epi
 
 中文:
 实例 colimitQuotientCoproduct_epi
-  签名: [HasColimitsOfSize.{w, w} C] (F : J ⥤ C)
+  签名: [有余limitsOfSize.{w, w} C] (F : J ⥤ C)
   定义体: epi_comp _ _
 
 Depends on / 依赖: epi_comp
@@ -873,7 +873,7 @@ theorem hasFiniteColimits_of_hasCoequalizers_and_finite_coproducts
 
 中文:
 定理 hasFiniteColimits_of_hasCoequalizers_and_finite_coproducts
-  结论: [HasFiniteCoproducts C]
+  结论: [有FiniteCoproducts C]
   证明: { has_colimit := fun F => hasColimit_of_coequalizer_and_coproduct F }
 
 Depends on / 依赖: hasColimit_of_coequalizer_and_coproduct, has_colimit
@@ -1130,7 +1130,7 @@ theorem hasFiniteColimits_of_hasInitial_and_pushouts
 
 中文:
 定理 hasFiniteColimits_of_hasInitial_and_pushouts
-  条件: [HasInitial C] [HasPushouts C]
+  条件: [HasInitial C] [有Pushouts C]
   证明: @hasFiniteColimits_of_hasCoequalizers_and_finite_coproducts C _
     (@hasFiniteCoproducts_of_has_binary_and_initial C _
       (hasBinaryCoproducts_of_hasInitial_and_pushouts C) inferInstance)

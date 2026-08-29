@@ -108,7 +108,7 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.truncation
   exact (stronglyMeasurable_id.indicator measurableSet_Ioc).aestronglyMeasurable
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.truncation
+定理 _root_.测度论.AEStronglyMeasurable.truncation
   结论: (hf : AEStronglyMeasurable f μ)
   证明: by
   apply AEStronglyMeasurable.comp_aemeasurable _ hf.aemeasurable
@@ -308,8 +308,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.memLp_truncation
   proof: MemLp.of_bound hf.truncation |A| (Eventually.of_forall fun _ => abs_truncation_le_bound _ _ _)
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.memLp_truncation
-  结论: [IsFiniteMeasure μ]
+定理 _root_.测度论.AEStronglyMeasurable.memLp_truncation
+  结论: [是有限测度 μ]
   证明: MemLp.of_bound hf.truncation |A| (Eventually.of_forall fun _ => abs_truncation_le_bound _ _ _)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, MemLp.of_bound, abs_truncation_le_bound, hf.truncation, of_bound, of_forall, truncation
@@ -328,8 +328,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integrable_truncation
   rw [← memLp_one_iff_integrable]; exact hf.memLp_truncation
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integrable_truncation
-  结论: [IsFiniteMeasure μ]
+定理 _root_.测度论.AEStronglyMeasurable.integrable_truncation
+  结论: [是有限测度 μ]
   证明: by
   rw [← memLp_one_iff_integrable]; exact hf.memLp_truncation
 
@@ -352,7 +352,7 @@ theorem moment_truncation_eq_intervalIntegral
   · simp only [indicator, zero_po
 
 中文:
-定理 moment_truncation_eq_intervalIntegral
+定理 moment_truncation_eq_interval整数egral
   结论: (hf : AEStronglyMeasurable f μ) {A : 实数} (hA : 0 <= A)
   证明: by
   have M : MeasurableSet (Set.Ioc (-A) A) := measurableSet_Ioc
@@ -386,7 +386,7 @@ theorem moment_truncation_eq_intervalIntegral_of_nonneg
   · rw [← integral_map (f := fun 
 
 中文:
-定理 moment_truncation_eq_intervalIntegral_of_nonneg
+定理 moment_truncation_eq_interval整数egral_of_nonneg
   结论: (hf : AEStronglyMeasurable f μ) {A : 实数}
   证明: by
   have M : MeasurableSet (Set.Ioc 0 A) := measurableSet_Ioc
@@ -434,7 +434,7 @@ theorem integral_truncation_eq_intervalIntegral
   simpa using moment_truncation_eq_intervalIntegral hf hA one_ne_zero
 
 中文:
-定理 integral_truncation_eq_intervalIntegral
+定理 integral_truncation_eq_interval整数egral
   结论: (hf : AEStronglyMeasurable f μ) {A : 实数}
   证明: by
   simpa using moment_truncation_eq_intervalIntegral hf hA one_ne_zero
@@ -455,7 +455,7 @@ theorem integral_truncation_eq_intervalIntegral_of_nonneg
   simpa using moment_truncation_eq_intervalIntegral_of_nonneg hf one_ne_zero h'f
 
 中文:
-定理 integral_truncation_eq_intervalIntegral_of_nonneg
+定理 integral_truncation_eq_interval整数egral_of_nonneg
   结论: (hf : AEStronglyMeasurable f μ) {A : 实数}
   证明: by
   simpa using moment_truncation_eq_intervalIntegral_of_nonneg hf one_ne_zero h'f
@@ -483,7 +483,7 @@ theorem integral_truncation_le_integral_of_nonneg
 
 中文:
 定理 integral_truncation_le_integral_of_nonneg
-  条件: (hf : 整数egrable f μ) (h'f : 0 <= f) {A : 实数}
+  条件: (hf : 可积 f μ) (h'f : 0 <= f) {A : 实数}
   证明: by
   apply integral_mono_of_nonneg
     (Eventually.of_forall fun x => ?_) hf (Eventually.of_forall fun x => ?_)
@@ -522,7 +522,7 @@ theorem tendsto_integral_truncation
 
 中文:
 定理 tendsto_integral_truncation
-  条件: {f : α -> 实数} (hf : 整数egrable f μ)
+  条件: {f : α -> 实数} (hf : 可积 f μ)
   证明: by
   refine tendsto_integral_filter_of_dominated_convergence (fun x => abs (f x)) ?_ ?_ ?_ ?_
   · exact Eventually.of_forall fun A => hf.aestronglyMeasurable.truncation
@@ -557,8 +557,8 @@ theorem IdentDistrib.truncation
   proof: h.comp (measurable_id.indicator measurableSet_Ioc)
 
 中文:
-定理 IdentDistrib.truncation
-  结论: {β : 类型} [MeasurableSpace β] {ν : Measure β} {f : α -> 实数}
+定理 同分布.truncation
+  结论: {β : 类型} [可测空间 β] {ν : 测度 β} {f : α -> 实数}
   证明: h.comp (measurable_id.indicator measurableSet_Ioc)
 
 Depends on / 依赖: h.comp, indicator, measurableSet_Ioc, measurable_id, measurable_id.indicator
@@ -592,7 +592,7 @@ theorem sum_prob_mem_Ioc_le
 
 中文:
 定理 sum_prob_mem_Ioc_le
-  结论: {X : Ω -> 实数} (hint : 整数egrable X) (hnonneg : 0 <= X) {K : 自然数} {N : 自然数}
+  结论: {X : Ω -> 实数} (hint : 可积 X) (hnonneg : 0 <= X) {K : 自然数} {N : 自然数}
   证明: by
   let ρ : Measure Real := Measure.map X ℙ
   have : IsProbabilityMeasure ρ := Measure.isProbabilityMeasure_map hint.aemeasurable
@@ -688,7 +688,7 @@ theorem tsum_prob_mem_Ioi_lt_top
 
 中文:
 定理 tsum_prob_mem_Ioi_lt_top
-  条件: {X : Ω -> 实数} (hint : 整数egrable X) (hnonneg : 0 <= X)
+  条件: {X : Ω -> 实数} (hint : 可积 X) (hnonneg : 0 <= X)
   证明: by
   suffices forall K : Nat, ∑ j in range K, ℙ {ω | X ω in Set.Ioi (j : Real)} <= ENNReal.ofReal (𝔼[X] + 1) from
     (le_of_tendsto_of_tendsto (ENNReal.tendsto_nat_tsum _) tendsto_const_nhds
@@ -740,7 +740,7 @@ theorem sum_variance_truncation_le
 
 中文:
 定理 sum_variance_truncation_le
-  条件: {X : Ω -> 实数} (hint : 整数egrable X) (hnonneg : 0 <= X) (K : 自然数)
+  条件: {X : Ω -> 实数} (hint : 可积 X) (hnonneg : 0 <= X) (K : 自然数)
   证明: by
   set Y := fun n : Nat => truncation X n
   let ρ : Measure Real := Measure.map X ℙ
@@ -1198,7 +1198,7 @@ theorem strong_law_ae_real
 
 中文:
 定理 strong_law_ae_real
-  结论: {Ω : 类型} {m : MeasurableSpace Ω} {μ : Measure Ω}
+  结论: {Ω : 类型} {m : 可测空间 Ω} {μ : 测度 Ω}
   证明: by
   let mΩ : MeasureSpace Ω := ⟨μ⟩
   -- first get rid of the trivial case where the space is not a probability space
@@ -1269,7 +1269,7 @@ lemma strong_law_ae_simpleFunc_comp
 
 中文:
 引理 strong_law_ae_simpleFunc_comp
-  结论: (X : 自然数 -> Ω -> E) (h' : Measurable (X 0))
+  结论: (X : 自然数 -> Ω -> E) (h' : 可测 (X 0))
   证明: by
   -- this follows from the one-dimensional version when `φ` takes a single value, and is then
   -- extended to the general case by linearity.
@@ -1446,7 +1446,7 @@ theorem strong_law_ae
 
 中文:
 定理 strong_law_ae
-  结论: (X : 自然数 -> Ω -> E) (hint : 整数egrable (X 0) μ)
+  结论: (X : 自然数 -> Ω -> E) (hint : 可积 (X 0) μ)
   证明: by
   -- First exclude the trivial case where the space is not a probability space
   by_cases h : forallᵐ ω ∂μ, X 0 ω = 0

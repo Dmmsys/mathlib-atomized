@@ -50,7 +50,7 @@ theorem mul_subst
 
 中文:
 定理 mul_subst
-  结论: {α} [CommRing α] {n1 n2 k e1 e2 t1 t2 : α}
+  结论: {α} [交换环 α] {n1 n2 k e1 e2 t1 t2 : α}
   证明: by
   rw [← h3]; rw [mul_comm n1]; rw [mul_assoc n2]; rw [← mul_assoc n1]; rw [h1]; rw [← mul_assoc n2]; rw [mul_comm n2]; rw [mul_assoc]; rw [h2]
 
@@ -71,7 +71,7 @@ theorem div_subst
 
 中文:
 定理 div_subst
-  结论: {α} [Field α] {n1 n2 k e1 e2 t1 : α}
+  结论: {α} [域 α] {n1 n2 k e1 e2 t1 : α}
   证明: by
   rw [← h3]; rw [mul_assoc]; rw [mul_div_left_comm]; rw [h2]; rw [← mul_assoc]; rw [h1]; rw [mul_comm]; rw [one_mul]
 
@@ -91,7 +91,7 @@ theorem cancel_factors_eq_div
 
 中文:
 定理 cancel_factors_eq_div
-  结论: {α} [Field α] {n e e' : α}
+  结论: {α} [域 α] {n e e' : α}
   证明: eq_div_of_mul_eq h2 by rwa [mul_comm] at h
 
 Depends on / 依赖: eq_div_of_mul_eq, mul_comm
@@ -110,7 +110,7 @@ theorem add_subst
 
 中文:
 定理 add_subst
-  条件: {α} [Ring α] {n e1 e2 t1 t2 : α} (h1 : n * e1 = t1) (h2 : n * e2 = t2)
+  条件: {α} [环 α] {n e1 e2 t1 t2 : α} (h1 : n * e1 = t1) (h2 : n * e2 = t2)
   证明: by simp [left_distrib, *]
 
 Depends on / 依赖: left_distrib
@@ -128,7 +128,7 @@ theorem sub_subst
 
 中文:
 定理 sub_subst
-  条件: {α} [Ring α] {n e1 e2 t1 t2 : α} (h1 : n * e1 = t1) (h2 : n * e2 = t2)
+  条件: {α} [环 α] {n e1 e2 t1 t2 : α} (h1 : n * e1 = t1) (h2 : n * e2 = t2)
   证明: by simp [left_distrib, *, sub_eq_add_neg]
 
 Depends on / 依赖: left_distrib, sub_eq_add_neg
@@ -147,7 +147,7 @@ theorem neg_subst
 
 中文:
 定理 neg_subst
-  条件: {α} [Ring α] {n e t : α} (h1 : n * e = t)
+  条件: {α} [环 α] {n e t : α} (h1 : n * e = t)
   结论: n * -e = -t
   证明: by simp [*]
 -/
@@ -164,7 +164,7 @@ theorem pow_subst
 
 中文:
 定理 pow_subst
-  结论: {α} [CommRing α] {n e1 t1 k l : α} {e2 : 自然数}
+  结论: {α} [交换环 α] {n e1 t1 k l : α} {e2 : 自然数}
   证明: by
   rw [← h2]; rw [← h1]; rw [mul_pow]; rw [mul_assoc]
 
@@ -184,7 +184,7 @@ theorem inv_subst
 
 中文:
 定理 inv_subst
-  条件: {α} [Field α] {n k e : α} (h2 : e != 0) (h3 : n * e = k)
+  条件: {α} [域 α] {n k e : α} (h2 : e != 0) (h3 : n * e = k)
   证明: by rw [← div_eq_mul_inv, ← h3, mul_div_cancel_right₀ _ h2]
 
 Depends on / 依赖: div_eq_mul_inv
@@ -205,7 +205,7 @@ theorem cancel_factors_lt
 
 中文:
 定理 cancel_factors_lt
-  结论: {α} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: {α} [域 α] [线性序 α] [是StrictOrdered环 α]
   证明: by
   rw [mul_lt_mul_iff_right₀]; rw [← ha]; rw [← hb]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm bd]; rw [mul_lt_mul_iff_right₀]
   · exact mul_pos had hbd
@@ -234,7 +234,7 @@ theorem cancel_factors_le
 
 中文:
 定理 cancel_factors_le
-  结论: {α} [Field α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: {α} [域 α] [线性序 α] [是StrictOrdered环 α]
   证明: by
   rw [mul_le_mul_iff_right₀]; rw [← ha]; rw [← hb]; rw [← mul_assoc]; rw [← mul_assoc]; rw [mul_comm bd]; rw [mul_le_mul_iff_right₀]
   · exact mul_pos had hbd
@@ -261,7 +261,7 @@ theorem cancel_factors_eq
 
 中文:
 定理 cancel_factors_eq
-  结论: {α} [Field α] {a b ad bd a' b' gcd : α} (ha : ad * a = a')
+  结论: {α} [域 α] {a b ad bd a' b' 最大公约数 : α} (ha : ad * a = a')
   证明: by
   grind
 -/
@@ -281,7 +281,7 @@ theorem cancel_factors_ne
 
 中文:
 定理 cancel_factors_ne
-  结论: {α} [Field α] {a b ad bd a' b' gcd : α} (ha : ad * a = a')
+  结论: {α} [域 α] {a b ad bd a' b' 最大公约数 : α} (ha : ad * a = a')
   证明: by
   rw [eq_iff_iff]; rw [not_iff_not]; rw [cancel_factors_eq ha hb had hbd hgcd]
 
@@ -393,8 +393,8 @@ structure CancelResult
     - pf : Q($v * $e = $cancelled)
 
 中文:
-结构 CancelResult
-  参数: {u : Level} {α : Q(类型u)} (mα : Q(Mul $α)) (e : Q($α)) (v : Q($α))
+结构 消去Result
+  参数: {u : Level} {α : Q(类型u)} (mα : Q(乘法 $α)) (e : Q($α)) (v : Q($α))
   公理与运算 (2 个):
     - cancelled : Q($α)
     - pf : Q($v * $e = $cancelled)
@@ -422,7 +422,7 @@ definition mkProdPrf
 
 中文:
 定义 mkProdPrf
-  签名: {u : Level} (α : Q(类型u)) (sα : Q(Field $α)) (v : 自然数) (v' : Q($α))
+  签名: {u : Level} (α : Q(类型u)) (sα : Q(域 $α)) (v : 自然数) (v' : Q($α))
   定义体: do
   let amwo : Q(AddMonoidWithOne $α) := q(inferInstance)
   trace[CancelDenoms] "mkProdPrf {e} {v}"
@@ -491,7 +491,7 @@ definition deriveThms
 
 中文:
 定义 deriveThms
-  签名: : List Name
+  签名: : 列表 Name
   定义体: [``div_div_eq_mul_div, ``div_neg]
 
 Depends on / 依赖: div_div_eq_mul_div, div_neg
@@ -510,7 +510,7 @@ theorem derive_trans
 
 中文:
 定理 derive_trans
-  条件: {α} [Mul α] {a b c d : α} (h : a = b) (h' : c * b = d)
+  条件: {α} [乘法 α] {a b c d : α} (h : a = b) (h' : c * b = d)
   结论: c * a = d
   证明: h ▸ h'
 -/
@@ -526,7 +526,7 @@ theorem derive_trans₂
 
 中文:
 定理 derive_trans₂
-  条件: {α} [Mul α] {a b c d e : α} (h : a = b) (h' : b = c) (h'' : d * c = e)
+  条件: {α} [乘法 α] {a b c d e : α} (h : a = b) (h' : b = c) (h'' : d * c = e)
   证明: h ▸ h' ▸ h''
 -/
 theorem derive_trans₂ {α} [Mul α] {a b c d e : α} (h : a = b) (h' : b = c) (h'' : d * c = e) :
@@ -735,7 +735,7 @@ definition cancelDenominatorsTarget
 
 中文:
 定义 cancelDenominatorsTarget
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: do
   let (new, eqPrf) ← CancelDenoms.cancelDenominatorsInType (← getMainTarget)
   liftMetaTactic' fun g => g.replaceTargetEq new eqPrf

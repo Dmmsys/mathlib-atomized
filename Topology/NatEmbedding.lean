@@ -37,7 +37,7 @@ theorem exists_seq_infinite_isOpen_pairwise_disjoint
     · refine fun n => infinite_iUnion fun i j 
 
 中文:
-定理 exists_seq_infinite_isOpen_pairwise_disjoint
+定理 存在_seq_infinite_isOpen_pairwise_disjoint
   证明: by
   suffices exists U : Nat -> Set X, (forall n, (U n).Nonempty) ∧ (forall n, IsOpen (U n)) ∧
       Pairwise (Disjoint on U) by
@@ -96,8 +96,8 @@ theorem exists_topology_isEmbedding_nat
   exact h
 
 中文:
-定理 exists_topology_isEmbedding_nat
-  结论: 存在 f : 自然数 -> X, IsEmbedding f
+定理 存在_topology_isEmbedding_nat
+  结论: 存在 f : 自然数 -> X, 是嵌入 f
   证明: by
   rcases exists_seq_infinite_isOpen_pairwise_disjoint X with ⟨U, hUi, hUo, hd⟩
   choose f hf using fun n => (hUi n).nonempty
@@ -126,8 +126,8 @@ theorem exists_infinite_discreteTopology
   exact hf.toHomeomorph.symm.isEmbedding.discreteTopology
 
 中文:
-定理 exists_infinite_discreteTopology
-  结论: 存在 s : Set X, s.Infinite ∧ DiscreteTopology s
+定理 存在_infinite_discreteTopology
+  结论: 存在 s : 集合 X, s.无限 ∧ 离散拓扑 s
   证明: by
   rcases exists_topology_isEmbedding_nat X with ⟨f, hf⟩
   refine ⟨range f, infinite_range_of_injective hf.injective, ?_⟩

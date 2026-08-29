@@ -71,7 +71,7 @@ definition IsCompactElement
 
 中文:
 定义 IsCompactElement
-  签名: {α : 类型} [PartialOrder α] (k : α)
+  签名: {α : 类型} [偏序 α] (k : α)
   定义体: forall (s : Set α) (u : α),
     s.Nonempty ->
     DirectedOn (· <= ·) s ->
@@ -187,7 +187,7 @@ theorem isCompactElement_iff_exists_le_sSup_of_le_sSup
       -- S is directed, nonempty, and
 
 中文:
-定理 isCompactElement_iff_exists_le_sSup_of_le_sSup
+定理 isCompactElement_iff_存在_le_sSup_of_le_sSup
   条件: (k : α)
   证明: by
   classical
@@ -257,8 +257,8 @@ theorem isCompactElement_iff_exists_le_iSup_of_le_iSup.{u}
       refine ⟨Finset.univ.image f, ht'.trans ?_⟩
 
 中文:
-定理 isCompactElement_iff_exists_le_iSup_of_le_iSup.{u}
-  结论: {α : 类型u} [CompleteLattice α]
+定理 isCompactElement_iff_存在_le_iSup_of_le_iSup.{u}
+  结论: {α : 类型u} [完备格 α]
   证明: by
   classical
     rw [isCompactElement_iff_exists_le_sSup_of_le_sSup]
@@ -312,7 +312,7 @@ theorem IsCompactElement.exists_finset_of_le_iSup
         ⟨g (s union t), ⟨s union t, rfl⟩, iSup_le_iSup_of_subset Finset.s
 
 中文:
-定理 IsCompactElement.exists_finset_of_le_iSup
+定理 IsCompactElement.存在_finset_of_le_iSup
   结论: {k : α} (hk : IsCompactElement k) {ι : 类型}
   证明: by
   classical
@@ -360,7 +360,7 @@ theorem IsCompactElement.directed_sSup_lt_of_lt
 
 中文:
 定理 IsCompactElement.directed_sSup_lt_of_lt
-  结论: {α : 类型} [CompleteLattice α] {k : α}
+  结论: {α : 类型} [完备格 α] {k : α}
   证明: by
   rw [isCompactElement_iff_le_of_directed_sSup_le] at hk
   by_contra h
@@ -402,7 +402,7 @@ theorem isCompactElement_finsetSup
 
 中文:
 定理 isCompactElement_finsetSup
-  结论: {α β : 类型} [CompleteLattice α] {f : β -> α} (s : Finset β)
+  结论: {α β : 类型} [完备格 α] {f : β -> α} (s : 有限集 β)
   证明: by
   classical
     simp_rw [isCompactElement_iff_le_of_directed_sSup_le] at ⊢ h
@@ -614,7 +614,7 @@ theorem wellFoundedGT_characterisations
 
 中文:
 定理 wellFoundedGT_characterisations
-  结论: List.TFAE
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 2 := @WellFoundedGT.isSupFiniteCompact α _
   tfae_have 2 -> 3 := IsSupFiniteCompact.isSupClosedCompact α
@@ -721,7 +721,7 @@ theorem WellFoundedGT.finite_of_sSupIndep
 
 中文:
 定理 WellFoundedGT.finite_of_sSupIndep
-  结论: [WellFoundedGT α] {s : Set α}
+  结论: [WellFoundedGT α] {s : 集合 α}
   证明: by
   classical
     by_contra! contra
@@ -811,7 +811,7 @@ theorem WellFoundedLT.finite_of_sSupIndep
 
 中文:
 定理 WellFoundedLT.finite_of_sSupIndep
-  结论: [WellFoundedLT α] {s : Set α}
+  结论: [WellFoundedLT α] {s : 集合 α}
   证明: by
   by_contra inf
   let e := (Infinite.sdiff inf <| finite_singleton ⊥).to_subtype.natEmbedding
@@ -890,10 +890,10 @@ class IsCompactlyGenerated
     - exists_sSup_eq : forall x : α, exists s : Set α, (forall x in s, IsCompactElement x) ∧ sSup s = x
 
 中文:
-类 IsCompactlyGenerated
-  参数: (α : 类型) [CompleteLattice α]
+类 是余mpactlyGenerated
+  参数: (α : 类型) [完备格 α]
   公理与运算 (1 个):
-    - exists_sSup_eq : 对任意 x : α, 存在 s : Set α, (对任意 x in s, IsCompactElement x) ∧ sSup s = x
+    - exists_sSup_eq : 对任意 x : α, 存在 s : 集合 α, (对任意 x in s, IsCompactElement x) ∧ sSup s = x
 -/
 class IsCompactlyGenerated (α : Type*) [CompleteLattice α] : Prop where
   /-- In a compactly generated complete lattice,
@@ -1222,7 +1222,7 @@ theorem sSupIndep_iff_finite
 
 中文:
 定理 sSupIndep_iff_finite
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨fun hs _ ht => hs.mono ht, fun h a ha => by
     rw [disjoint_iff]; rw [inf_sSup_eq_iSup_inf_sup_finset]; rw [iSup_eq_bot]
     intro t
@@ -1379,7 +1379,7 @@ theorem sSupIndep_iUnion_of_directed
 
 中文:
 定理 sSupIndep_iUnion_of_directed
-  结论: {η : 类型} {s : η -> Set α}
+  结论: {η : 类型} {s : η -> 集合 α}
   证明: by
   by_cases hη : Nonempty η
   · rw [sSupIndep_iff_finite]
@@ -1417,7 +1417,7 @@ theorem iSupIndep_sUnion_of_directed
 
 中文:
 定理 iSupIndep_sUnion_of_directed
-  结论: {s : Set (Set α)} (hs : DirectedOn (· subseteq ·) s)
+  结论: {s : 集合 (集合 α)} (hs : DirectedOn (· subseteq ·) s)
   证明: by
   rw [Set.sUnion_eq_iUnion]
   exact sSupIndep_iUnion_of_directed hs.directed_val (by simpa using h)
@@ -1444,7 +1444,7 @@ Set.Finite.exists_subset_finite_image_eq u.finite_toSet by rwa [Set.image_eq_ran
 
 中文:
 引理 disjoint_biSup_of_finite_disjoint_biSup
-  结论: {ι : 类型} {f : ι -> α} {s : Set ι} {a : α}
+  结论: {ι : 类型} {f : ι -> α} {s : 集合 ι} {a : α}
   证明: by
   simp_rw [disjoint_iff, iSup_subtype', ← sSup_range, inf_comm, inf_sSup_eq_iSup_inf_sup_finset,
     iSup_eq_bot]
@@ -1478,7 +1478,7 @@ lemma iSupIndep.disjoint_biSup_biSup
 
 中文:
 引理 iSupIndep.disjoint_biSup_biSup
-  结论: {ι : 类型} [IsModularLattice α]
+  结论: {ι : 类型} [是Modular格 α]
   证明: disjoint_biSup_of_finite_disjoint_biSup fun _ h₁ h₂ =>
     disjoint_biSup_biSup' hf (Set.disjoint_of_subset_left h₁ hst) h₂
 
@@ -1584,7 +1584,7 @@ theorem coatomic_of_top_compact
 中文:
 定理 coatomic_of_top_compact
   条件: (h : IsCompactElement (⊤ : α))
-  结论: IsCoatomic α
+  结论: 是余原子的 α
   证明: (@OrderIso.IicTop α _ _).isCoatomic_iff.mp (Iic_coatomic_of_compact_element h)
 
 Depends on / 依赖: IicTop, Iic_coatomic_of_compact_element, OrderIso, OrderIso.IicTop, isCoatomic_iff, isCoatomic_iff.mp
@@ -1704,7 +1704,7 @@ theorem exists_sSupIndep_disjoint_sSup_atoms
         ⟨iSupIndep_s
 
 中文:
-定理 exists_sSupIndep_disjoint_sSup_atoms
+定理 存在_sSupIndep_disjoint_sSup_atoms
   结论: (b c : α) (hbc : b <= c)
   证明: by
   -- porting note(https://github.com/leanprover-community/mathlib4/issues/5732):
@@ -1779,7 +1779,7 @@ theorem exists_sSupIndep_isCompl_sSup_atoms
 using exists_sSupIndep_disjoint_sSup_atoms b ⊤ le_top by simpa using h
 
 中文:
-定理 exists_sSupIndep_isCompl_sSup_atoms
+定理 存在_sSupIndep_isCompl_sSup_atoms
   条件: (h : sSup { a : α | IsAtom a } = ⊤) (b : α)
   证明: by
   simpa [isCompl_iff, codisjoint_iff, and_assoc]
@@ -1802,7 +1802,7 @@ theorem exists_sSupIndep_of_sSup_atoms
   ⟨s, s_ind, by simpa using s_atoms⟩
 
 中文:
-定理 exists_sSupIndep_of_sSup_atoms
+定理 存在_sSupIndep_of_sSup_atoms
   条件: (b : α) (h : sSup {a <= b | IsAtom a} = b)
   证明: let ⟨s, s_ind, _, s_atoms⟩ := exists_sSupIndep_disjoint_sSup_atoms ⊥ b bot_le h
   ⟨s, s_ind, by simpa using s_atoms⟩
@@ -1823,7 +1823,7 @@ theorem exists_sSupIndep_of_sSup_atoms_eq_top
   proof: exists_sSupIndep_of_sSup_atoms ⊤ (by simpa)
 
 中文:
-定理 exists_sSupIndep_of_sSup_atoms_eq_top
+定理 存在_sSupIndep_of_sSup_atoms_eq_top
   条件: (h : sSup {a : α | IsAtom a} = ⊤)
   证明: exists_sSupIndep_of_sSup_atoms ⊤ (by simpa)
 
@@ -1867,8 +1867,8 @@ theorem complementedLattice_of_isAtomistic
 
 中文:
 定理 complementedLattice_of_isAtomistic
-  条件: [IsAtomistic α]
-  结论: ComplementedLattice α
+  条件: [是Atomistic α]
+  结论: 有补格 α
   证明: complementedLattice_of_sSup_atoms_eq_top sSup_atoms_eq_top
 
 Depends on / 依赖: complementedLattice_of_sSup_atoms_eq_top, sSup_atoms_eq_top
@@ -1889,7 +1889,7 @@ theorem complementedLattice_iff_isAtomistic
 
 中文:
 定理 complementedLattice_iff_isAtomistic
-  结论: ComplementedLattice α ↔ IsAtomistic α
+  结论: 有补格 α ↔ 是Atomistic α
   证明: by
   constructor <;> intros
   · exact isAtomistic_of_complementedLattice

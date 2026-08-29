@@ -77,7 +77,7 @@ lemma Subcomplex.ofSimplexProd_eq_range
   simp [Subcomplex.range_tensorHom, Subcomplex.range_eq_ofSimplex]
 
 中文:
-引理 Subcomplex.ofSimplexProd_eq_range
+引理 子复形.ofSimplexProd_eq_range
   条件: {p q : 自然数} (x₁ : X₁ _⦋p⦌) (x₂ : X₂ _⦋q⦌)
   证明: by
   simp [Subcomplex.range_tensorHom, Subcomplex.range_eq_ofSimplex]
@@ -165,8 +165,8 @@ instance [X₁.Finite]
   exact finite_of_hasDimensionLT _ (d₁ + d₂) (fun _ _ => inferInstance)
 
 中文:
-实例 [X₁.Finite]
-  签名: [X₂.Finite]
+实例 [X₁.有限]
+  签名: [X₂.有限]
   定义体: by
   obtain ⟨d₁, _⟩ := X₁.hasDimensionLT_of_finite
   obtain ⟨d₂, _⟩ := X₂.hasDimensionLT_of_finite
@@ -214,8 +214,8 @@ instance [X₂.Finite]
   body: finite_of_isPullback (IsPullback.of_hasPullback r b)
 
 中文:
-实例 [X₂.Finite]
-  签名: [X₃.Finite] (r : X₂ ⟶ X₄) (b : X₃ ⟶ X₄)
+实例 [X₂.有限]
+  签名: [X₃.有限] (r : X₂ ⟶ X₄) (b : X₃ ⟶ X₄)
   定义体: finite_of_isPullback (IsPullback.of_hasPullback r b)
 
 Depends on / 依赖: IsPullback, IsPullback.of_hasPullback, finite_of_isPullback, of_hasPullback

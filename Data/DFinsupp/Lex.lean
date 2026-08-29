@@ -52,7 +52,7 @@ theorem _root_.Pi.lex_eq_dfinsupp_lex
   proof: rfl
 
 中文:
-定理 _root_.Pi.lex_eq_dfinsupp_lex
+定理 _root_.依赖函数类型.lex_eq_dfinsupp_lex
   结论: {r : ι -> ι -> 命题} {s : 对任意 i, α i -> α i -> 命题}
   证明: rfl
 -/
@@ -165,7 +165,7 @@ theorem lex_lt_of_lt_of_preorder
 
 中文:
 定理 lex_lt_of_lt_of_preorder
-  结论: [对任意 i, Preorder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
+  结论: [对任意 i, 预序 (α i)] (r) [是Strict序 ι r] {x y : Π₀ i, α i}
   证明: by
   obtain ⟨hle, j, hlt⟩ := Pi.lt_def.1 hlt
   classical
@@ -197,7 +197,7 @@ theorem lex_lt_of_lt
 
 中文:
 定理 lex_lt_of_lt
-  结论: [对任意 i, PartialOrder (α i)] (r) [IsStrictOrder ι r] {x y : Π₀ i, α i}
+  结论: [对任意 i, 偏序 (α i)] (r) [是Strict序 ι r] {x y : Π₀ i, α i}
   证明: by
   simp_rw [Pi.Lex, le_antisymm_iff]
   exact lex_lt_of_lt_of_preorder r hlt
@@ -219,7 +219,7 @@ theorem lex_iff_of_unique
 
 中文:
 定理 lex_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i}
+  条件: [唯一 ι] [对任意 i, LT (α i)] {r} [Std.Irrefl r] {x y : Π₀ i, α i}
   证明: Pi.lex_iff_of_unique
 
 Depends on / 依赖: Pi.lex_iff_of_unique, lex_iff_of_unique
@@ -239,7 +239,7 @@ theorem Lex.lt_iff_of_unique
 
 中文:
 定理 Lex.lt_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (α i)] [Preorder ι] {x y : Lex (Π₀ i, α i)}
+  条件: [唯一 ι] [对任意 i, LT (α i)] [预序 ι] {x y : Lex (Π₀ i, α i)}
   证明: lex_iff_of_unique
 
 Depends on / 依赖: lex_iff_of_unique
@@ -259,7 +259,7 @@ theorem colex_lt_iff_of_unique
 
 中文:
 定理 colex_lt_iff_of_unique
-  条件: [Unique ι] [对任意 i, LT (α i)] [Preorder ι] {x y : Colex (Π₀ i, α i)}
+  条件: [唯一 ι] [对任意 i, LT (α i)] [预序 ι] {x y : Colex (Π₀ i, α i)}
   证明: lex_iff_of_unique
 
 Depends on / 依赖: lex_iff_of_unique
@@ -281,7 +281,7 @@ instance Lex.isStrictOrder
 
 中文:
 实例 Lex.isStrictOrder
-  签名: [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 偏序 (α i)]
   定义体: lt_irrefl (α := Lex (forall i, α i)) _
   trans _ _ _ := lt_trans (α := Lex (forall i, α i))
 
@@ -303,7 +303,7 @@ instance Colex.isStrictOrder
 
 中文:
 实例 Colex.isStrictOrder
-  签名: [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 偏序 (α i)]
   定义体: Lex.isStrictOrder (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.isStrictOrder, isStrictOrder
@@ -325,7 +325,7 @@ instance Lex.partialOrder
 
 中文:
 实例 Lex.partialOrder
-  签名: [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 偏序 (α i)]
   定义体: ⇑(ofLex x) = ⇑(ofLex y) ∨ x < y
   toLT := instLTLex
   __ := PartialOrder.lift (fun x : Lex (Π₀ i, α i) => toLex (⇑(ofLex x)))
@@ -350,7 +350,7 @@ instance Colex.partialOrder
 
 中文:
 实例 Colex.partialOrder
-  签名: [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 偏序 (α i)]
   定义体: ⇑(ofColex x) = ⇑(ofColex y) ∨ x < y
   toLT := instLTColex
   __ := PartialOrder.lift (fun x : Colex (Π₀ i, α i) => toColex (⇑(ofColex x)))
@@ -375,7 +375,7 @@ theorem Lex.le_iff_of_unique
 
 中文:
 定理 Lex.le_iff_of_unique
-  条件: [Unique ι] [对任意 i, PartialOrder (α i)] {x y : Lex (Π₀ i, α i)}
+  条件: [唯一 ι] [对任意 i, 偏序 (α i)] {x y : Lex (Π₀ i, α i)}
   证明: Pi.lex_le_iff_of_unique
 
 Depends on / 依赖: Pi.lex_le_iff_of_unique, lex_le_iff_of_unique
@@ -395,7 +395,7 @@ theorem Colex.le_iff_of_unique
 
 中文:
 定理 Colex.le_iff_of_unique
-  条件: [Unique ι] [对任意 i, PartialOrder (α i)] {x y : Colex (Π₀ i, α i)}
+  条件: [唯一 ι] [对任意 i, 偏序 (α i)] {x y : Colex (Π₀ i, α i)}
   证明: Lex.le_iff_of_unique (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.le_iff_of_unique, le_iff_of_unique
@@ -423,7 +423,7 @@ definition lt_trichotomy_rec
 
 中文:
 定义 lt_trichotomy_rec
-  签名: {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> Sort*}
+  签名: {P : Lex (Π₀ i, α i) -> Lex (Π₀ i, α i) -> 类型层*}
   定义体: Lex.rec fun f => Lex.rec fun g => match (motive := forall y, (f.neLocus g).min = y -> _) _, rfl with
   | ⊤, h => h_eq (neLocus_eq_empty.mp <| Finset.min_eq_top.mp h)
   | (wit : ι), h => by
@@ -452,7 +452,7 @@ instance Lex.total_le
 
 中文:
 实例 Lex.total_le
-  签名: : @Std.Total (Lex (Π₀ i, α i)) (· <= ·) where
+  签名: : @Std.全 (Lex (Π₀ i, α i)) (· <= ·) where
   定义体: lt_trichotomy_rec (fun h => Or.inl h.le) (fun h => Or.inl h.le) fun h => Or.inr h.le
 
 Depends on / 依赖: Or.inl, Or.inr, h.le, lt_trichotomy_rec
@@ -471,7 +471,7 @@ instance Colex.total_le
 
 中文:
 实例 Colex.total_le
-  签名: : @Std.Total (Colex (Π₀ i, α i)) (· <= ·)
+  签名: : @Std.全 (Colex (Π₀ i, α i)) (· <= ·)
   定义体: Lex.total_le (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.total_le, total_le
@@ -575,7 +575,7 @@ instance Lex.linearOrder
 
 中文:
 实例 Lex.linearOrder
-  签名: : LinearOrder (Lex (Π₀ i, α i)) where
+  签名: : 线性序 (Lex (Π₀ i, α i)) where
   定义体: total_of _
   toDecidableLT := decidableLT
   toDecidableLE := decidableLE
@@ -599,7 +599,7 @@ instance Colex.linearOrder
 
 中文:
 实例 Colex.linearOrder
-  签名: : LinearOrder (Colex (Π₀ i, α i)) where
+  签名: : 线性序 (Colex (Π₀ i, α i)) where
   定义体: total_of _
   toDecidableLT := decidableLT
   toDecidableLE := decidableLE
@@ -631,7 +631,7 @@ theorem toLex_monotone
 
 中文:
 定理 toLex_monotone
-  结论: Monotone (@toLex (Π₀ i, α i))
+  结论: 递增 (@toLex (Π₀ i, α i))
   证明: by
   intro a b h
   refine le_of_lt_or_eq (or_iff_not_imp_right.2 fun hne => ?_)
@@ -661,7 +661,7 @@ theorem toColex_monotone
 
 中文:
 定理 toColex_monotone
-  结论: Monotone (@toColex (Π₀ i, α i))
+  结论: 递增 (@toColex (Π₀ i, α i))
   证明: toLex_monotone (ι := ιᵒᵈ)
 
 Depends on / 依赖: toLex_monotone
@@ -864,7 +864,7 @@ instance Lex.orderBot
 
 中文:
 实例 Lex.orderBot
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: 0
   bot_le _ := DFinsupp.toLex_monotone bot_le
 -/
@@ -884,7 +884,7 @@ instance Lex.isBotZeroClass
 
 中文:
 实例 Lex.isBotZeroClass
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: isBot_bot
 
 Depends on / 依赖: isBot_bot
@@ -905,7 +905,7 @@ instance Colex.orderBot
 
 中文:
 实例 Colex.orderBot
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: 0
   bot_le _ := DFinsupp.toColex_monotone bot_le
 -/
@@ -925,7 +925,7 @@ instance Colex.isBotZeroClass
 
 中文:
 实例 Colex.isBotZeroClass
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: isBot_bot
 
 Depends on / 依赖: isBot_bot
@@ -946,7 +946,7 @@ instance Lex.isOrderedCancelAddMonoid
 
 中文:
 实例 Lex.isOrderedCancelAddMonoid
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: add_le_add_left (α := Lex (forall i, α i)) h _
   le_of_add_le_add_left _ _ _ := le_of_add_le_add_left (α := Lex (forall i, α i))
 
@@ -969,7 +969,7 @@ instance Colex.isOrderedCancelAddMonoid
 
 中文:
 实例 Colex.isOrderedCancelAddMonoid
-  签名: [对任意 i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: Lex.isOrderedCancelAddMonoid (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.isOrderedCancelAddMonoid, isOrderedCancelAddMonoid
@@ -989,7 +989,7 @@ instance Lex.isOrderedAddMonoid
 
 中文:
 实例 Lex.isOrderedAddMonoid
-  签名: [对任意 i, AddCommGroup (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: add_le_add_left
 
 Depends on / 依赖: add_le_add_left
@@ -1010,7 +1010,7 @@ instance Colex.isOrderedAddMonoid
 
 中文:
 实例 Colex.isOrderedAddMonoid
-  签名: [对任意 i, AddCommGroup (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 加法交换群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: Lex.isOrderedAddMonoid (ι := ιᵒᵈ)
 
 Depends on / 依赖: Lex.isOrderedAddMonoid, isOrderedAddMonoid

@@ -146,7 +146,7 @@ class PosSMulMono
     - smul_le_smul_of_nonneg_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b₁ b₂ : β⦄ (hb : b₁ <= b₂) : a • b₁ <= a • b₂
 
 中文:
-类 PosSMulMono
+类 正标量乘递增
   参数: : 命题 where
   公理与运算 (1 个):
     - smul_le_smul_of_nonneg_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b₁ b₂ : β⦄ (hb : b₁ <= b₂) : a • b₁ <= a • b₂
@@ -166,7 +166,7 @@ class PosSMulStrictMono
     - smul_lt_smul_of_pos_left(⦃a) : α⦄ (ha : 0 < a) ⦃b₁ b₂ : β⦄ (hb : b₁ < b₂) : a • b₁ < a • b₂
 
 中文:
-类 PosSMulStrictMono
+类 正标量乘严格递增
   参数: : 命题 where
   公理与运算 (1 个):
     - smul_lt_smul_of_pos_left(⦃a) : α⦄ (ha : 0 < a) ⦃b₁ b₂ : β⦄ (hb : b₁ < b₂) : a • b₁ < a • b₂
@@ -186,7 +186,7 @@ class PosSMulReflectLT
     - lt_of_smul_lt_smul_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b₁ b₂ : β⦄ (hb : a • b₁ < a • b₂) : b₁ < b₂
 
 中文:
-类 PosSMulReflectLT
+类 正标量乘反映严格偏序
   参数: : 命题 where
   公理与运算 (1 个):
     - lt_of_smul_lt_smul_left(⦃a) : α⦄ (ha : 0 <= a) ⦃b₁ b₂ : β⦄ (hb : a • b₁ < a • b₂) : b₁ < b₂
@@ -206,7 +206,7 @@ class PosSMulReflectLE
     - le_of_smul_le_smul_left(⦃a) : α⦄ (ha : 0 < a) ⦃b₁ b₂ : β⦄ (hb : a • b₁ <= a • b₂) : b₁ <= b₂
 
 中文:
-类 PosSMulReflectLE
+类 正标量乘反映偏序
   参数: : 命题 where
   公理与运算 (1 个):
     - le_of_smul_le_smul_left(⦃a) : α⦄ (ha : 0 < a) ⦃b₁ b₂ : β⦄ (hb : a • b₁ <= a • b₂) : b₁ <= b₂
@@ -231,7 +231,7 @@ class SMulPosMono
     - smul_le_smul_of_nonneg_right(⦃b) : β⦄ (hb : 0 <= b) ⦃a₁ a₂ : α⦄ (ha : a₁ <= a₂) : a₁ • b <= a₂ • b
 
 中文:
-类 SMulPosMono
+类 标量乘正递增
   参数: : 命题 where
   公理与运算 (1 个):
     - smul_le_smul_of_nonneg_right(⦃b) : β⦄ (hb : 0 <= b) ⦃a₁ a₂ : α⦄ (ha : a₁ <= a₂) : a₁ • b <= a₂ • b
@@ -251,7 +251,7 @@ class SMulPosStrictMono
     - smul_lt_smul_of_pos_right(⦃b) : β⦄ (hb : 0 < b) ⦃a₁ a₂ : α⦄ (ha : a₁ < a₂) : a₁ • b < a₂ • b
 
 中文:
-类 SMulPosStrictMono
+类 标量乘正严格递增
   参数: : 命题 where
   公理与运算 (1 个):
     - smul_lt_smul_of_pos_right(⦃b) : β⦄ (hb : 0 < b) ⦃a₁ a₂ : α⦄ (ha : a₁ < a₂) : a₁ • b < a₂ • b
@@ -271,7 +271,7 @@ class SMulPosReflectLT
     - lt_of_smul_lt_smul_right(⦃b) : β⦄ (hb : 0 <= b) ⦃a₁ a₂ : α⦄ (hb : a₁ • b < a₂ • b) : a₁ < a₂
 
 中文:
-类 SMulPosReflectLT
+类 标量乘正反映严格偏序
   参数: : 命题 where
   公理与运算 (1 个):
     - lt_of_smul_lt_smul_right(⦃b) : β⦄ (hb : 0 <= b) ⦃a₁ a₂ : α⦄ (hb : a₁ • b < a₂ • b) : a₁ < a₂
@@ -291,7 +291,7 @@ class SMulPosReflectLE
     - le_of_smul_le_smul_right(⦃b) : β⦄ (hb : 0 < b) ⦃a₁ a₂ : α⦄ (hb : a₁ • b <= a₂ • b) : a₁ <= a₂
 
 中文:
-类 SMulPosReflectLE
+类 标量乘正反映偏序
   参数: : 命题 where
   公理与运算 (1 个):
     - le_of_smul_le_smul_right(⦃b) : β⦄ (hb : 0 < b) ⦃a₁ a₂ : α⦄ (hb : a₁ • b <= a₂ • b) : a₁ <= a₂
@@ -316,9 +316,9 @@ class IsOrderedModule
   (no additional axioms)
 
 中文:
-类 IsOrderedModule
-  参数: extends PosSMulMono α β, SMulPosMono α β
-  继承: PosSMulMono α β, SMulPosMono α β
+类 是Ordered模
+  参数: extends 正标量乘递增 α β, 标量乘正递增 α β
+  继承: 正标量乘递增 α β, 标量乘正递增 α β
   (无附加公理)
 -/
 class IsOrderedModule extends PosSMulMono α β, SMulPosMono α β
@@ -333,9 +333,9 @@ class IsStrictOrderedModule
   (no additional axioms)
 
 中文:
-类 IsStrictOrderedModule
-  参数: extends PosSMulStrictMono α β, SMulPosStrictMono α β
-  继承: PosSMulStrictMono α β, SMulPosStrictMono α β
+类 是StrictOrdered模
+  参数: extends 正标量乘严格递增 α β, 标量乘正严格递增 α β
+  继承: 正标量乘严格递增 α β, 标量乘正严格递增 α β
   (无附加公理)
 -/
 class IsStrictOrderedModule extends PosSMulStrictMono α β, SMulPosStrictMono α β
@@ -432,8 +432,8 @@ lemma monotone_smul_left_of_nonneg
 
 中文:
 引理 monotone_smul_left_of_nonneg
-  条件: [PosSMulMono α β] (ha : 0 <= a)
-  结论: Monotone ((a • ·) : β -> β)
+  条件: [正标量乘递增 α β] (ha : 0 <= a)
+  结论: 递增 ((a • ·) : β -> β)
   证明: PosSMulMono.smul_le_smul_of_nonneg_left ha
 
 Depends on / 依赖: PosSMulMono, PosSMulMono.smul_le_smul_of_nonneg_left, smul_le_smul_of_nonneg_left
@@ -451,7 +451,7 @@ lemma strictMono_smul_left_of_pos
 
 中文:
 引理 strictMono_smul_left_of_pos
-  条件: [PosSMulStrictMono α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] (ha : 0 < a)
   证明: PosSMulStrictMono.smul_lt_smul_of_pos_left ha
 
 Depends on / 依赖: PosSMulStrictMono, PosSMulStrictMono.smul_lt_smul_of_pos_left, smul_lt_smul_of_pos_left
@@ -469,7 +469,7 @@ lemma smul_le_smul_of_nonneg_left
 
 中文:
 引理 smul_le_smul_of_nonneg_left
-  条件: [PosSMulMono α β] (hb : b₁ <= b₂) (ha : 0 <= a)
+  条件: [正标量乘递增 α β] (hb : b₁ <= b₂) (ha : 0 <= a)
   证明: monotone_smul_left_of_nonneg ha hb
 -/
 @[gcongr] lemma smul_le_smul_of_nonneg_left [PosSMulMono α β] (hb : b₁ <= b₂) (ha : 0 <= a) :
@@ -485,7 +485,7 @@ lemma smul_lt_smul_of_pos_left
 
 中文:
 引理 smul_lt_smul_of_pos_left
-  条件: [PosSMulStrictMono α β] (hb : b₁ < b₂) (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] (hb : b₁ < b₂) (ha : 0 < a)
   证明: strictMono_smul_left_of_pos ha hb
 -/
 @[gcongr] lemma smul_lt_smul_of_pos_left [PosSMulStrictMono α β] (hb : b₁ < b₂) (ha : 0 < a) :
@@ -500,8 +500,8 @@ lemma Monotone.const_smul
   proof: (monotone_smul_left_of_nonneg ha).comp hf
 
 中文:
-引理 Monotone.const_smul
-  结论: [PosSMulMono α β] {γ : 类型} [Preorder γ] {f : γ -> β}
+引理 递增.const_smul
+  结论: [正标量乘递增 α β] {γ : 类型} [预序 γ] {f : γ -> β}
   证明: (monotone_smul_left_of_nonneg ha).comp hf
 
 Depends on / 依赖: monotone_smul_left_of_nonneg
@@ -519,8 +519,8 @@ lemma Antitone.const_smul
   proof: (monotone_smul_left_of_nonneg ha).comp_antitone hf
 
 中文:
-引理 Antitone.const_smul
-  结论: [PosSMulMono α β] {γ : 类型} [Preorder γ] {f : γ -> β}
+引理 递减.const_smul
+  结论: [正标量乘递增 α β] {γ : 类型} [预序 γ] {f : γ -> β}
   证明: (monotone_smul_left_of_nonneg ha).comp_antitone hf
 
 Depends on / 依赖: comp_antitone, monotone_smul_left_of_nonneg
@@ -538,8 +538,8 @@ lemma StrictMono.const_smul
   proof: (strictMono_smul_left_of_pos ha).comp hf
 
 中文:
-引理 StrictMono.const_smul
-  结论: [PosSMulStrictMono α β] {γ : 类型} [Preorder γ] {f : γ -> β}
+引理 严格递增.const_smul
+  结论: [正标量乘严格递增 α β] {γ : 类型} [预序 γ] {f : γ -> β}
   证明: (strictMono_smul_left_of_pos ha).comp hf
 
 Depends on / 依赖: strictMono_smul_left_of_pos
@@ -557,8 +557,8 @@ lemma StrictAnti.const_smul
   proof: (strictMono_smul_left_of_pos ha).comp_strictAnti hf
 
 中文:
-引理 StrictAnti.const_smul
-  结论: [PosSMulStrictMono α β] {γ : 类型} [Preorder γ] {f : γ -> β}
+引理 严格递减.const_smul
+  结论: [正标量乘严格递增 α β] {γ : 类型} [预序 γ] {f : γ -> β}
   证明: (strictMono_smul_left_of_pos ha).comp_strictAnti hf
 
 Depends on / 依赖: comp_strictAnti, strictMono_smul_left_of_pos
@@ -578,7 +578,7 @@ lemma lt_of_smul_lt_smul_left
 
 中文:
 引理 lt_of_smul_lt_smul_left
-  条件: [PosSMulReflectLT α β] (h : a • b₁ < a • b₂) (ha : 0 <= a)
+  条件: [正标量乘反映严格偏序 α β] (h : a • b₁ < a • b₂) (ha : 0 <= a)
   结论: b₁ < b₂
   证明: PosSMulReflectLT.lt_of_smul_lt_smul_left ha h
 
@@ -603,7 +603,7 @@ alias le_of_smul_le_smul_of_pos_left := le_of_smul_le_smul_left
 
 中文:
 引理 le_of_smul_le_smul_left
-  条件: [PosSMulReflectLE α β] (h : a • b₁ <= a • b₂) (ha : 0 < a)
+  条件: [正标量乘反映偏序 α β] (h : a • b₁ <= a • b₂) (ha : 0 < a)
   结论: b₁ <= b₂
   证明: PosSMulReflectLE.le_of_smul_le_smul_left ha h
 
@@ -633,7 +633,7 @@ lemma smul_le_smul_iff_of_pos_left
 
 中文:
 引理 smul_le_smul_iff_of_pos_left
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a)
   证明: ⟨fun h => le_of_smul_le_smul_left h ha, fun h => smul_le_smul_of_nonneg_left h ha.le⟩
 
 @[simp]
@@ -655,7 +655,7 @@ lemma smul_lt_smul_iff_of_pos_left
 
 中文:
 引理 smul_lt_smul_iff_of_pos_left
-  条件: [PosSMulStrictMono α β] [PosSMulReflectLT α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] [正标量乘反映严格偏序 α β] (ha : 0 < a)
   证明: ⟨fun h => lt_of_smul_lt_smul_left h ha.le, fun hb => smul_lt_smul_of_pos_left hb ha⟩
 
 Depends on / 依赖: ha.le, lt_of_smul_lt_smul_left, smul_lt_smul_of_pos_left
@@ -680,8 +680,8 @@ lemma monotone_smul_right_of_nonneg
 
 中文:
 引理 monotone_smul_right_of_nonneg
-  条件: [SMulPosMono α β] (hb : 0 <= b)
-  结论: Monotone ((· • b) : α -> β)
+  条件: [标量乘正递增 α β] (hb : 0 <= b)
+  结论: 递增 ((· • b) : α -> β)
   证明: SMulPosMono.smul_le_smul_of_nonneg_right hb
 
 Depends on / 依赖: SMulPosMono, SMulPosMono.smul_le_smul_of_nonneg_right, smul_le_smul_of_nonneg_right
@@ -699,7 +699,7 @@ lemma strictMono_smul_right_of_pos
 
 中文:
 引理 strictMono_smul_right_of_pos
-  条件: [SMulPosStrictMono α β] (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] (hb : 0 < b)
   证明: SMulPosStrictMono.smul_lt_smul_of_pos_right hb
 
 Depends on / 依赖: SMulPosStrictMono, SMulPosStrictMono.smul_lt_smul_of_pos_right, smul_lt_smul_of_pos_right
@@ -716,8 +716,8 @@ lemma Monotone.smul_const
   proof: (monotone_smul_right_of_nonneg hb).comp hf
 
 中文:
-引理 Monotone.smul_const
-  结论: [SMulPosMono α β] {γ : 类型} [Preorder γ] {f : γ -> α}
+引理 递增.smul_const
+  结论: [标量乘正递增 α β] {γ : 类型} [预序 γ] {f : γ -> α}
   证明: (monotone_smul_right_of_nonneg hb).comp hf
 
 Depends on / 依赖: monotone_smul_right_of_nonneg
@@ -735,8 +735,8 @@ lemma Antitone.smul_const
   proof: (monotone_smul_right_of_nonneg hb).comp_antitone hf
 
 中文:
-引理 Antitone.smul_const
-  结论: [SMulPosMono α β] {γ : 类型} [Preorder γ] {f : γ -> α}
+引理 递减.smul_const
+  结论: [标量乘正递增 α β] {γ : 类型} [预序 γ] {f : γ -> α}
   证明: (monotone_smul_right_of_nonneg hb).comp_antitone hf
 
 Depends on / 依赖: comp_antitone, monotone_smul_right_of_nonneg
@@ -754,8 +754,8 @@ lemma StrictMono.smul_const
   proof: (strictMono_smul_right_of_pos hb).comp hf
 
 中文:
-引理 StrictMono.smul_const
-  结论: [SMulPosStrictMono α β] {γ : 类型} [Preorder γ] {f : γ -> α}
+引理 严格递增.smul_const
+  结论: [标量乘正严格递增 α β] {γ : 类型} [预序 γ] {f : γ -> α}
   证明: (strictMono_smul_right_of_pos hb).comp hf
 
 Depends on / 依赖: strictMono_smul_right_of_pos
@@ -773,8 +773,8 @@ lemma StrictAnti.smul_const
   proof: (strictMono_smul_right_of_pos hb).comp_strictAnti hf
 
 中文:
-引理 StrictAnti.smul_const
-  结论: [SMulPosStrictMono α β] {γ : 类型} [Preorder γ] {f : γ -> α}
+引理 严格递减.smul_const
+  结论: [标量乘正严格递增 α β] {γ : 类型} [预序 γ] {f : γ -> α}
   证明: (strictMono_smul_right_of_pos hb).comp_strictAnti hf
 
 Depends on / 依赖: comp_strictAnti, strictMono_smul_right_of_pos
@@ -793,7 +793,7 @@ lemma smul_le_smul_of_nonneg_right
 
 中文:
 引理 smul_le_smul_of_nonneg_right
-  条件: [SMulPosMono α β] (ha : a₁ <= a₂) (hb : 0 <= b)
+  条件: [标量乘正递增 α β] (ha : a₁ <= a₂) (hb : 0 <= b)
   证明: monotone_smul_right_of_nonneg hb ha
 -/
 @[gcongr] lemma smul_le_smul_of_nonneg_right [SMulPosMono α β] (ha : a₁ <= a₂) (hb : 0 <= b) :
@@ -811,7 +811,7 @@ lemma smul_one_mono
 
 中文:
 引理 smul_one_mono
-  条件: [One β] [ZeroLEOneClass β] [SMulPosMono α β]
+  条件: [幺 β] [ZeroLEOne类 β] [标量乘正递增 α β]
   证明: fun _ _ ha => smul_le_smul_of_nonneg_right ha zero_le_one
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right, zero_le_one
@@ -830,7 +830,7 @@ lemma smul_lt_smul_of_pos_right
 
 中文:
 引理 smul_lt_smul_of_pos_right
-  条件: [SMulPosStrictMono α β] (ha : a₁ < a₂) (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] (ha : a₁ < a₂) (hb : 0 < b)
   证明: strictMono_smul_right_of_pos hb ha
 -/
 @[gcongr] lemma smul_lt_smul_of_pos_right [SMulPosStrictMono α β] (ha : a₁ < a₂) (hb : 0 < b) :
@@ -846,7 +846,7 @@ lemma lt_of_smul_lt_smul_right
 
 中文:
 引理 lt_of_smul_lt_smul_right
-  条件: [SMulPosReflectLT α β] (h : a₁ • b < a₂ • b) (hb : 0 <= b)
+  条件: [标量乘正反映严格偏序 α β] (h : a₁ • b < a₂ • b) (hb : 0 <= b)
   证明: SMulPosReflectLT.lt_of_smul_lt_smul_right hb h
 
 Depends on / 依赖: SMulPosReflectLT, SMulPosReflectLT.lt_of_smul_lt_smul_right, lt_of_smul_lt_smul_right
@@ -869,7 +869,7 @@ alias le_of_smul_le_smul_of_pos_right := le_of_smul_le_smul_right
 
 中文:
 引理 le_of_smul_le_smul_right
-  条件: [SMulPosReflectLE α β] (h : a₁ • b <= a₂ • b) (hb : 0 < b)
+  条件: [标量乘正反映偏序 α β] (h : a₁ • b <= a₂ • b) (hb : 0 < b)
   证明: SMulPosReflectLE.le_of_smul_le_smul_right hb h
 
 alias lt_of_smul_lt_smul_of_nonneg_right := lt_of_smul_lt_smul_right
@@ -898,7 +898,7 @@ lemma smul_le_smul_iff_of_pos_right
 
 中文:
 引理 smul_le_smul_iff_of_pos_right
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] (hb : 0 < b)
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] (hb : 0 < b)
   证明: ⟨fun h => le_of_smul_le_smul_right h hb, fun ha => smul_le_smul_of_nonneg_right ha hb.le⟩
 
 @[simp]
@@ -920,7 +920,7 @@ lemma smul_lt_smul_iff_of_pos_right
 
 中文:
 引理 smul_lt_smul_iff_of_pos_right
-  条件: [SMulPosStrictMono α β] [SMulPosReflectLT α β] (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] [标量乘正反映严格偏序 α β] (hb : 0 < b)
   证明: ⟨fun h => lt_of_smul_lt_smul_right h hb.le, fun ha => smul_lt_smul_of_pos_right ha hb⟩
 
 Depends on / 依赖: hb.le, lt_of_smul_lt_smul_right, smul_lt_smul_of_pos_right
@@ -944,7 +944,7 @@ lemma smul_lt_smul_of_le_of_lt
 
 中文:
 引理 smul_lt_smul_of_le_of_lt
-  结论: [PosSMulStrictMono α β] [SMulPosMono α β] (ha : a₁ <= a₂)
+  结论: [正标量乘严格递增 α β] [标量乘正递增 α β] (ha : a₁ <= a₂)
   证明: (smul_lt_smul_of_pos_left hb h₁).trans_le (smul_le_smul_of_nonneg_right ha h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right, smul_lt_smul_of_pos_left, trans_le
@@ -963,7 +963,7 @@ lemma smul_lt_smul_of_le_of_lt'
 
 中文:
 引理 smul_lt_smul_of_le_of_lt'
-  结论: [PosSMulStrictMono α β] [SMulPosMono α β] (ha : a₁ <= a₂)
+  结论: [正标量乘严格递增 α β] [标量乘正递增 α β] (ha : a₁ <= a₂)
   证明: (smul_le_smul_of_nonneg_right ha h₁).trans_lt (smul_lt_smul_of_pos_left hb h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right, smul_lt_smul_of_pos_left, trans_lt
@@ -982,7 +982,7 @@ lemma smul_lt_smul_of_lt_of_le
 
 中文:
 引理 smul_lt_smul_of_lt_of_le
-  结论: [PosSMulMono α β] [SMulPosStrictMono α β] (ha : a₁ < a₂)
+  结论: [正标量乘递增 α β] [标量乘正严格递增 α β] (ha : a₁ < a₂)
   证明: (smul_le_smul_of_nonneg_left hb h₁).trans_lt (smul_lt_smul_of_pos_right ha h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_right, trans_lt
@@ -1001,7 +1001,7 @@ lemma smul_lt_smul_of_lt_of_le'
 
 中文:
 引理 smul_lt_smul_of_lt_of_le'
-  结论: [PosSMulMono α β] [SMulPosStrictMono α β] (ha : a₁ < a₂)
+  结论: [正标量乘递增 α β] [标量乘正严格递增 α β] (ha : a₁ < a₂)
   证明: (smul_lt_smul_of_pos_right ha h₁).trans_le (smul_le_smul_of_nonneg_left hb h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left, smul_lt_smul_of_pos_right, trans_le
@@ -1020,7 +1020,7 @@ lemma smul_lt_smul
 
 中文:
 引理 smul_lt_smul
-  结论: [PosSMulStrictMono α β] [SMulPosStrictMono α β] (ha : a₁ < a₂) (hb : b₁ < b₂)
+  结论: [正标量乘严格递增 α β] [标量乘正严格递增 α β] (ha : a₁ < a₂) (hb : b₁ < b₂)
   证明: (smul_lt_smul_of_pos_left hb h₁).trans (smul_lt_smul_of_pos_right ha h₂)
 
 Depends on / 依赖: smul_lt_smul_of_pos_left, smul_lt_smul_of_pos_right
@@ -1039,7 +1039,7 @@ lemma smul_lt_smul'
 
 中文:
 引理 smul_lt_smul'
-  结论: [PosSMulStrictMono α β] [SMulPosStrictMono α β] (ha : a₁ < a₂) (hb : b₁ < b₂)
+  结论: [正标量乘严格递增 α β] [标量乘正严格递增 α β] (ha : a₁ < a₂) (hb : b₁ < b₂)
   证明: (smul_lt_smul_of_pos_right ha h₁).trans (smul_lt_smul_of_pos_left hb h₂)
 
 Depends on / 依赖: smul_lt_smul_of_pos_left, smul_lt_smul_of_pos_right
@@ -1058,7 +1058,7 @@ lemma smul_le_smul
 
 中文:
 引理 smul_le_smul
-  结论: [PosSMulMono α β] [SMulPosMono α β] (ha : a₁ <= a₂) (hb : b₁ <= b₂)
+  结论: [正标量乘递增 α β] [标量乘正递增 α β] (ha : a₁ <= a₂) (hb : b₁ <= b₂)
   证明: (smul_le_smul_of_nonneg_left hb h₁).trans (smul_le_smul_of_nonneg_right ha h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left, smul_le_smul_of_nonneg_right
@@ -1077,7 +1077,7 @@ lemma smul_le_smul'
 
 中文:
 引理 smul_le_smul'
-  结论: [PosSMulMono α β] [SMulPosMono α β] (ha : a₁ <= a₂) (hb : b₁ <= b₂) (h₂ : 0 <= a₂)
+  结论: [正标量乘递增 α β] [标量乘正递增 α β] (ha : a₁ <= a₂) (hb : b₁ <= b₂) (h₂ : 0 <= a₂)
   证明: (smul_le_smul_of_nonneg_right ha h₁).trans (smul_le_smul_of_nonneg_left hb h₂)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left, smul_le_smul_of_nonneg_right
@@ -1101,7 +1101,7 @@ lemma smul_one_strictMono
 
 中文:
 引理 smul_one_strictMono
-  结论: [Preorder α] [PartialOrder β] [Zero β] [One β] [ZeroLEOneClass β]
+  结论: [预序 α] [偏序 β] [零 β] [幺 β] [ZeroLEOne类 β]
   证明: fun _ _ ha => smul_lt_smul_of_pos_right ha (zero_lt_one (α := β))
 
 Depends on / 依赖: smul_lt_smul_of_pos_right, zero_lt_one
@@ -1145,9 +1145,9 @@ lemma PosSMulReflectLE.toPosSMulStrictMono
   proof: not_le.1 fun h => hb.not_ge le_of_smul_le_smul_left h ha
 
 中文:
-引理 PosSMulReflectLE.toPosSMulStrictMono
-  条件: [PosSMulReflectLE α β]
-  结论: PosSMulStrictMono α β where
+引理 正标量乘反映偏序.toPosSMulStrictMono
+  条件: [正标量乘反映偏序 α β]
+  结论: 正标量乘严格递增 α β where
   证明: not_le.1 fun h => hb.not_ge le_of_smul_le_smul_left h ha
 
 Depends on / 依赖: hb.not_ge, le_of_smul_le_smul_left, not_ge, not_le
@@ -1166,7 +1166,7 @@ lemma posSMulStrictMono_iff_PosSMulReflectLE
 
 中文:
 引理 posSMulStrictMono_iff_PosSMulReflectLE
-  结论: PosSMulStrictMono α β ↔ PosSMulReflectLE α β
+  结论: 正标量乘严格递增 α β ↔ 正标量乘反映偏序 α β
   证明: ⟨fun _ => inferInstance, fun _ => PosSMulReflectLE.toPosSMulStrictMono⟩
 
 Depends on / 依赖: PosSMulReflectLE, PosSMulReflectLE.toPosSMulStrictMono, toPosSMulStrictMono
@@ -1183,8 +1183,8 @@ instance PosSMulMono.toPosSMulReflectLT
   body: (monotone_smul_left_of_nonneg ha).reflect_lt
 
 中文:
-实例 PosSMulMono.toPosSMulReflectLT
-  签名: [PosSMulMono α β]
+实例 正标量乘递增.toPosSMulReflectLT
+  签名: [正标量乘递增 α β]
   定义体: (monotone_smul_left_of_nonneg ha).reflect_lt
 
 Depends on / 依赖: monotone_smul_left_of_nonneg, reflect_lt
@@ -1202,9 +1202,9 @@ lemma PosSMulReflectLT.toPosSMulMono
   proof: not_lt.1 fun h => hb.not_gt lt_of_smul_lt_smul_left h ha
 
 中文:
-引理 PosSMulReflectLT.toPosSMulMono
-  条件: [PosSMulReflectLT α β]
-  结论: PosSMulMono α β where
+引理 正标量乘反映严格偏序.toPosSMulMono
+  条件: [正标量乘反映严格偏序 α β]
+  结论: 正标量乘递增 α β where
   证明: not_lt.1 fun h => hb.not_gt lt_of_smul_lt_smul_left h ha
 
 Depends on / 依赖: hb.not_gt, lt_of_smul_lt_smul_left, not_gt, not_lt
@@ -1223,7 +1223,7 @@ lemma posSMulMono_iff_posSMulReflectLT
 
 中文:
 引理 posSMulMono_iff_posSMulReflectLT
-  结论: PosSMulMono α β ↔ PosSMulReflectLT α β
+  结论: 正标量乘递增 α β ↔ 正标量乘反映严格偏序 α β
   证明: ⟨fun _ => PosSMulMono.toPosSMulReflectLT, fun _ => PosSMulReflectLT.toPosSMulMono⟩
 
 Depends on / 依赖: PosSMulMono, PosSMulMono.toPosSMulReflectLT, PosSMulReflectLT, PosSMulReflectLT.toPosSMulMono, toPosSMulMono, toPosSMulReflectLT
@@ -1241,7 +1241,7 @@ lemma smul_max_of_nonneg
 
 中文:
 引理 smul_max_of_nonneg
-  条件: [PosSMulMono α β] (ha : 0 <= a) (b₁ b₂ : β)
+  条件: [正标量乘递增 α β] (ha : 0 <= a) (b₁ b₂ : β)
   证明: (monotone_smul_left_of_nonneg ha).map_max
 
 Depends on / 依赖: map_max, monotone_smul_left_of_nonneg
@@ -1259,7 +1259,7 @@ lemma smul_min_of_nonneg
 
 中文:
 引理 smul_min_of_nonneg
-  条件: [PosSMulMono α β] (ha : 0 <= a) (b₁ b₂ : β)
+  条件: [正标量乘递增 α β] (ha : 0 <= a) (b₁ b₂ : β)
   证明: (monotone_smul_left_of_nonneg ha).map_min
 
 Depends on / 依赖: map_min, monotone_smul_left_of_nonneg
@@ -1282,9 +1282,9 @@ lemma SMulPosReflectLE.toSMulPosStrictMono
   proof: not_le.1 fun h => ha.not_ge le_of_smul_le_smul_of_pos_right h hb
 
 中文:
-引理 SMulPosReflectLE.toSMulPosStrictMono
-  条件: [SMulPosReflectLE α β]
-  结论: SMulPosStrictMono α β where
+引理 标量乘正反映偏序.toSMulPosStrictMono
+  条件: [标量乘正反映偏序 α β]
+  结论: 标量乘正严格递增 α β where
   证明: not_le.1 fun h => ha.not_ge le_of_smul_le_smul_of_pos_right h hb
 
 Depends on / 依赖: ha.not_ge, le_of_smul_le_smul_of_pos_right, not_ge, not_le
@@ -1303,9 +1303,9 @@ lemma SMulPosReflectLT.toSMulPosMono
   proof: not_lt.1 fun h => ha.not_gt lt_of_smul_lt_smul_right h hb
 
 中文:
-引理 SMulPosReflectLT.toSMulPosMono
-  条件: [SMulPosReflectLT α β]
-  结论: SMulPosMono α β where
+引理 标量乘正反映严格偏序.toSMulPosMono
+  条件: [标量乘正反映严格偏序 α β]
+  结论: 标量乘正递增 α β where
   证明: not_lt.1 fun h => ha.not_gt lt_of_smul_lt_smul_right h hb
 
 Depends on / 依赖: ha.not_gt, lt_of_smul_lt_smul_right, not_gt, not_lt
@@ -1339,9 +1339,9 @@ lemma SMulPosMono.toSMulPosReflectLT
   proof: not_le.1 fun ha => h.not_ge smul_le_smul_of_nonneg_right ha hb
 
 中文:
-引理 SMulPosMono.toSMulPosReflectLT
-  条件: [SMulPosMono α β]
-  结论: SMulPosReflectLT α β where
+引理 标量乘正递增.toSMulPosReflectLT
+  条件: [标量乘正递增 α β]
+  结论: 标量乘正反映严格偏序 α β where
   证明: not_le.1 fun ha => h.not_ge smul_le_smul_of_nonneg_right ha hb
 
 Depends on / 依赖: h.not_ge, not_ge, not_le, smul_le_smul_of_nonneg_right
@@ -1369,7 +1369,7 @@ lemma smulPosStrictMono_iff_SMulPosReflectLE
 
 中文:
 引理 smulPosStrictMono_iff_SMulPosReflectLE
-  结论: SMulPosStrictMono α β ↔ SMulPosReflectLE α β
+  结论: 标量乘正严格递增 α β ↔ 标量乘正反映偏序 α β
   证明: ⟨fun _ => SMulPosStrictMono.toSMulPosReflectLE, fun _ => SMulPosReflectLE.toSMulPosStrictMono⟩
 
 Depends on / 依赖: SMulPosReflectLE, SMulPosReflectLE.toSMulPosStrictMono, SMulPosStrictMono, SMulPosStrictMono.toSMulPosReflectLE, toSMulPosReflectLE, toSMulPosStrictMono
@@ -1387,7 +1387,7 @@ lemma smulPosMono_iff_smulPosReflectLT
 
 中文:
 引理 smulPosMono_iff_smulPosReflectLT
-  结论: SMulPosMono α β ↔ SMulPosReflectLT α β
+  结论: 标量乘正递增 α β ↔ 标量乘正反映严格偏序 α β
   证明: ⟨fun _ => SMulPosMono.toSMulPosReflectLT, fun _ => SMulPosReflectLT.toSMulPosMono⟩
 
 Depends on / 依赖: SMulPosMono, SMulPosMono.toSMulPosReflectLT, SMulPosReflectLT, SMulPosReflectLT.toSMulPosMono, toSMulPosMono, toSMulPosReflectLT
@@ -1417,7 +1417,7 @@ lemma smul_pos
 
 中文:
 引理 smul_pos
-  条件: [PosSMulStrictMono α β] (ha : 0 < a) (hb : 0 < b)
+  条件: [正标量乘严格递增 α β] (ha : 0 < a) (hb : 0 < b)
   结论: 0 < a • b
   证明: by
   simpa only [smul_zero] using smul_lt_smul_of_pos_left hb ha
@@ -1441,7 +1441,7 @@ lemma smul_neg_of_pos_of_neg
 
 中文:
 引理 smul_neg_of_pos_of_neg
-  条件: [PosSMulStrictMono α β] (ha : 0 < a) (hb : b < 0)
+  条件: [正标量乘严格递增 α β] (ha : 0 < a) (hb : b < 0)
   结论: a • b < 0
   证明: by
   simpa only [smul_zero] using smul_lt_smul_of_pos_left hb ha
@@ -1465,7 +1465,7 @@ lemma smul_pos_iff_of_pos_left
 
 中文:
 引理 smul_pos_iff_of_pos_left
-  条件: [PosSMulStrictMono α β] [PosSMulReflectLT α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] [正标量乘反映严格偏序 α β] (ha : 0 < a)
   证明: by
   simpa only [smul_zero] using smul_lt_smul_iff_of_pos_left ha (b₁ := 0) (b₂ := b)
 
@@ -1486,7 +1486,7 @@ lemma smul_neg_iff_of_pos_left
 
 中文:
 引理 smul_neg_iff_of_pos_left
-  条件: [PosSMulStrictMono α β] [PosSMulReflectLT α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] [正标量乘反映严格偏序 α β] (ha : 0 < a)
   证明: by
   simpa only [smul_zero] using smul_lt_smul_iff_of_pos_left ha (b₂ := (0 : β))
 
@@ -1508,7 +1508,7 @@ lemma smul_nonneg
 
 中文:
 引理 smul_nonneg
-  条件: [PosSMulMono α β] (ha : 0 <= a) (hb : 0 <= b₁)
+  条件: [正标量乘递增 α β] (ha : 0 <= a) (hb : 0 <= b₁)
   结论: 0 <= a • b₁
   证明: by
   simpa only [smul_zero] using smul_le_smul_of_nonneg_left hb ha
@@ -1530,7 +1530,7 @@ lemma smul_nonpos_of_nonneg_of_nonpos
 
 中文:
 引理 smul_nonpos_of_nonneg_of_nonpos
-  条件: [PosSMulMono α β] (ha : 0 <= a) (hb : b <= 0)
+  条件: [正标量乘递增 α β] (ha : 0 <= a) (hb : b <= 0)
   结论: a • b <= 0
   证明: by
   simpa only [smul_zero] using smul_le_smul_of_nonneg_left hb ha
@@ -1551,7 +1551,7 @@ lemma pos_of_smul_pos_left
 
 中文:
 引理 pos_of_smul_pos_left
-  条件: [PosSMulReflectLT α β] (h : 0 < a • b) (ha : 0 <= a)
+  条件: [正标量乘反映严格偏序 α β] (h : 0 < a • b) (ha : 0 <= a)
   结论: 0 < b
   证明: lt_of_smul_lt_smul_left (by rwa [smul_zero]) ha
 
@@ -1571,7 +1571,7 @@ lemma neg_of_smul_neg_left
 
 中文:
 引理 neg_of_smul_neg_left
-  条件: [PosSMulReflectLT α β] (h : a • b < 0) (ha : 0 <= a)
+  条件: [正标量乘反映严格偏序 α β] (h : a • b < 0) (ha : 0 <= a)
   结论: b < 0
   证明: lt_of_smul_lt_smul_left (by rwa [smul_zero]) ha
 
@@ -1590,7 +1590,7 @@ lemma nonneg_of_smul_nonneg_of_pos_left
 
 中文:
 引理 nonneg_of_smul_nonneg_of_pos_left
-  条件: [PosSMulReflectLE α β] (h : 0 <= a • b) (ha : 0 < a)
+  条件: [正标量乘反映偏序 α β] (h : 0 <= a • b) (ha : 0 < a)
   证明: le_of_smul_le_smul_of_pos_left (by simpa) ha
 
 Depends on / 依赖: le_of_smul_le_smul_of_pos_left
@@ -1609,7 +1609,7 @@ lemma nonpos_of_smul_nonpos_of_pos_left
 
 中文:
 引理 nonpos_of_smul_nonpos_of_pos_left
-  条件: [PosSMulReflectLE α β] (h : a • b <= 0) (ha : 0 < a)
+  条件: [正标量乘反映偏序 α β] (h : a • b <= 0) (ha : 0 < a)
   证明: le_of_smul_le_smul_of_pos_left (by simpa) ha
 
 Depends on / 依赖: le_of_smul_le_smul_of_pos_left
@@ -1628,7 +1628,7 @@ lemma smul_nonneg_iff_nonneg_of_pos_left
 
 中文:
 引理 smul_nonneg_iff_nonneg_of_pos_left
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a)
   证明: ⟨(nonneg_of_smul_nonneg_of_pos_left · ha), smul_nonneg ha.le⟩
 
 Depends on / 依赖: ha.le, nonneg_of_smul_nonneg_of_pos_left, smul_nonneg
@@ -1647,7 +1647,7 @@ lemma smul_nonpos_iff_nonpos_of_pos_left
 
 中文:
 引理 smul_nonpos_iff_nonpos_of_pos_left
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a)
   证明: ⟨(nonpos_of_smul_nonpos_of_pos_left · ha), smul_nonpos_of_nonneg_of_nonpos ha.le⟩
 
 Depends on / 依赖: ha.le, nonpos_of_smul_nonpos_of_pos_left, smul_nonpos_of_nonneg_of_nonpos
@@ -1677,7 +1677,7 @@ lemma smul_pos'
 
 中文:
 引理 smul_pos'
-  条件: [SMulPosStrictMono α β] (ha : 0 < a) (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] (ha : 0 < a) (hb : 0 < b)
   结论: 0 < a • b
   证明: by
   simpa only [zero_smul] using smul_lt_smul_of_pos_right ha hb
@@ -1701,7 +1701,7 @@ lemma smul_neg_of_neg_of_pos
 
 中文:
 引理 smul_neg_of_neg_of_pos
-  条件: [SMulPosStrictMono α β] (ha : a < 0) (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] (ha : a < 0) (hb : 0 < b)
   结论: a • b < 0
   证明: by
   simpa only [zero_smul] using smul_lt_smul_of_pos_right ha hb
@@ -1725,7 +1725,7 @@ lemma smul_pos_iff_of_pos_right
 
 中文:
 引理 smul_pos_iff_of_pos_right
-  条件: [SMulPosStrictMono α β] [SMulPosReflectLT α β] (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] [标量乘正反映严格偏序 α β] (hb : 0 < b)
   证明: by
   simpa only [zero_smul] using smul_lt_smul_iff_of_pos_right hb (a₁ := 0) (a₂ := a)
 
@@ -1747,7 +1747,7 @@ lemma smul_nonneg'
 
 中文:
 引理 smul_nonneg'
-  条件: [SMulPosMono α β] (ha : 0 <= a) (hb : 0 <= b₁)
+  条件: [标量乘正递增 α β] (ha : 0 <= a) (hb : 0 <= b₁)
   结论: 0 <= a • b₁
   证明: by
   simpa only [zero_smul] using smul_le_smul_of_nonneg_right ha hb
@@ -1769,7 +1769,7 @@ lemma smul_nonpos_of_nonpos_of_nonneg
 
 中文:
 引理 smul_nonpos_of_nonpos_of_nonneg
-  条件: [SMulPosMono α β] (ha : a <= 0) (hb : 0 <= b)
+  条件: [标量乘正递增 α β] (ha : a <= 0) (hb : 0 <= b)
   结论: a • b <= 0
   证明: by
   simpa only [zero_smul] using smul_le_smul_of_nonneg_right ha hb
@@ -1790,7 +1790,7 @@ lemma pos_of_smul_pos_right
 
 中文:
 引理 pos_of_smul_pos_right
-  条件: [SMulPosReflectLT α β] (h : 0 < a • b) (hb : 0 <= b)
+  条件: [标量乘正反映严格偏序 α β] (h : 0 < a • b) (hb : 0 <= b)
   结论: 0 < a
   证明: lt_of_smul_lt_smul_right (by rwa [zero_smul]) hb
 
@@ -1810,7 +1810,7 @@ lemma neg_of_smul_neg_right
 
 中文:
 引理 neg_of_smul_neg_right
-  条件: [SMulPosReflectLT α β] (h : a • b < 0) (hb : 0 <= b)
+  条件: [标量乘正反映严格偏序 α β] (h : a • b < 0) (hb : 0 <= b)
   结论: a < 0
   证明: lt_of_smul_lt_smul_right (by rwa [zero_smul]) hb
 
@@ -1829,7 +1829,7 @@ lemma pos_iff_pos_of_smul_pos
 
 中文:
 引理 pos_iff_pos_of_smul_pos
-  条件: [PosSMulReflectLT α β] [SMulPosReflectLT α β] (hab : 0 < a • b)
+  条件: [正标量乘反映严格偏序 α β] [标量乘正反映严格偏序 α β] (hab : 0 < a • b)
   证明: ⟨pos_of_smul_pos_left hab ∘ le_of_lt, pos_of_smul_pos_right hab ∘ le_of_lt⟩
 
 Depends on / 依赖: le_of_lt, pos_of_smul_pos_left, pos_of_smul_pos_right
@@ -1848,7 +1848,7 @@ lemma nonneg_of_smul_nonneg_of_pos_right
 
 中文:
 引理 nonneg_of_smul_nonneg_of_pos_right
-  条件: [SMulPosReflectLE α β] (h : 0 <= a • b) (hb : 0 < b)
+  条件: [标量乘正反映偏序 α β] (h : 0 <= a • b) (hb : 0 < b)
   证明: le_of_smul_le_smul_of_pos_right (by simpa) hb
 
 Depends on / 依赖: le_of_smul_le_smul_of_pos_right, npowRec
@@ -1867,7 +1867,7 @@ lemma nonpos_of_smul_nonpos_of_pos_right
 
 中文:
 引理 nonpos_of_smul_nonpos_of_pos_right
-  条件: [SMulPosReflectLE α β] (h : a • b <= 0) (hb : 0 < b)
+  条件: [标量乘正反映偏序 α β] (h : a • b <= 0) (hb : 0 < b)
   证明: le_of_smul_le_smul_of_pos_right (by simpa) hb
 
 Depends on / 依赖: le_of_smul_le_smul_of_pos_right
@@ -1886,7 +1886,7 @@ lemma smul_nonneg_iff_nonneg_of_pos_right
 
 中文:
 引理 smul_nonneg_iff_nonneg_of_pos_right
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] (hb : 0 < b)
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] (hb : 0 < b)
   证明: ⟨(nonneg_of_smul_nonneg_of_pos_right · hb), (smul_nonneg' · hb.le)⟩
 
 Depends on / 依赖: hb.le, nonneg_of_smul_nonneg_of_pos_right, smul_nonneg
@@ -1905,7 +1905,7 @@ lemma smul_nonpos_iff_nonpos_of_pos_right
 
 中文:
 引理 smul_nonpos_iff_nonpos_of_pos_right
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] (hb : 0 < b)
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] (hb : 0 < b)
   证明: ⟨(nonpos_of_smul_nonpos_of_pos_right · hb), (smul_nonpos_of_nonpos_of_nonneg · hb.le)⟩
 
 Depends on / 依赖: hb.le, nonpos_of_smul_nonpos_of_pos_right, smul_nonpos_of_nonpos_of_nonneg
@@ -1926,7 +1926,7 @@ lemma IsOrderedModule.of_smul_one_mono
     simpa using mul_le_mul_of_nonneg_right (h hb) ha
 
 中文:
-引理 IsOrderedModule.of_smul_one_mono
+引理 是Ordered模.of_smul_one_mono
   证明: by
     have := mul_le_mul_of_nonneg_left hb (by simpa using h ha)
     simpa
@@ -1982,7 +1982,7 @@ lemma PosSMulMono.of_pos
     · exact h₀ _ ha _ _ h
 
 中文:
-引理 PosSMulMono.of_pos
+引理 正标量乘递增.of_pos
   条件: (h₀ : 对任意 a : α, 0 < a -> 对任意 b₁ b₂ : β, b₁ <= b₂ -> a • b₁ <= a • b₂)
   证明: by
     obtain ha | ha := ha.eq_or_lt
@@ -2010,7 +2010,7 @@ lemma PosSMulReflectLT.of_pos
     · exact h₀ _ ha _ _ h
 
 中文:
-引理 PosSMulReflectLT.of_pos
+引理 正标量乘反映严格偏序.of_pos
   条件: (h₀ : 对任意 a : α, 0 < a -> 对任意 b₁ b₂ : β, a • b₁ < a • b₂ -> b₁ < b₂)
   证明: by
     obtain ha | ha := ha.eq_or_lt
@@ -2043,7 +2043,7 @@ lemma SMulPosMono.of_pos
     · exact h₀ _ hb _ _ h
 
 中文:
-引理 SMulPosMono.of_pos
+引理 标量乘正递增.of_pos
   条件: (h₀ : 对任意 b : β, 0 < b -> 对任意 a₁ a₂ : α, a₁ <= a₂ -> a₁ • b <= a₂ • b)
   证明: by
     obtain hb | hb := hb.eq_or_lt
@@ -2071,7 +2071,7 @@ lemma SMulPosReflectLT.of_pos
     · exact h₀ _ hb _ _ h
 
 中文:
-引理 SMulPosReflectLT.of_pos
+引理 标量乘正反映严格偏序.of_pos
   条件: (h₀ : 对任意 b : β, 0 < b -> 对任意 a₁ a₂ : α, a₁ • b < a₂ • b -> a₁ < a₂)
   证明: by
     obtain hb | hb := hb.eq_or_lt
@@ -2133,7 +2133,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos
 
 中文:
 引理 smul_eq_smul_iff_eq_and_eq_of_pos
-  结论: [PosSMulStrictMono α β] [SMulPosStrictMono α β]
+  结论: [正标量乘严格递增 α β] [标量乘正严格递增 α β]
   证明: by
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
@@ -2167,7 +2167,7 @@ lemma smul_eq_smul_iff_eq_and_eq_of_pos'
 
 中文:
 引理 smul_eq_smul_iff_eq_and_eq_of_pos'
-  结论: [PosSMulStrictMono α β] [SMulPosStrictMono α β]
+  结论: [正标量乘严格递增 α β] [标量乘正严格递增 α β]
   证明: by
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   simp only [eq_iff_le_not_lt, ha, hb, true_and]
@@ -2208,7 +2208,7 @@ lemma pos_and_pos_or_neg_and_neg_of_smul_pos
 
 中文:
 引理 pos_and_pos_or_neg_and_neg_of_smul_pos
-  条件: [PosSMulMono α β] [SMulPosMono α β] (hab : 0 < a • b)
+  条件: [正标量乘递增 α β] [标量乘正递增 α β] (hab : 0 < a • b)
   证明: by
   obtain ha | rfl | ha := lt_trichotomy a 0
   · refine Or.inr ⟨ha, lt_imp_lt_of_le_imp_le (fun hb => ?_) hab⟩
@@ -2240,7 +2240,7 @@ lemma neg_of_smul_pos_right
 
 中文:
 引理 neg_of_smul_pos_right
-  条件: [PosSMulMono α β] [SMulPosMono α β] (h : 0 < a • b) (ha : a <= 0)
+  条件: [正标量乘递增 α β] [标量乘正递增 α β] (h : 0 < a • b) (ha : a <= 0)
   证明: ((pos_and_pos_or_neg_and_neg_of_smul_pos h).resolve_left fun h => h.1.not_ge ha).2
 
 Depends on / 依赖: not_ge, pos_and_pos_or_neg_and_neg_of_smul_pos, resolve_left
@@ -2258,7 +2258,7 @@ lemma neg_of_smul_pos_left
 
 中文:
 引理 neg_of_smul_pos_left
-  条件: [PosSMulMono α β] [SMulPosMono α β] (h : 0 < a • b) (ha : b <= 0)
+  条件: [正标量乘递增 α β] [标量乘正递增 α β] (h : 0 < a • b) (ha : b <= 0)
   证明: ((pos_and_pos_or_neg_and_neg_of_smul_pos h).resolve_left fun h => h.2.not_ge ha).1
 
 Depends on / 依赖: not_ge, pos_and_pos_or_neg_and_neg_of_smul_pos, resolve_left
@@ -2276,7 +2276,7 @@ lemma neg_iff_neg_of_smul_pos
 
 中文:
 引理 neg_iff_neg_of_smul_pos
-  条件: [PosSMulMono α β] [SMulPosMono α β] (hab : 0 < a • b)
+  条件: [正标量乘递增 α β] [标量乘正递增 α β] (hab : 0 < a • b)
   证明: ⟨neg_of_smul_pos_right hab ∘ le_of_lt, neg_of_smul_pos_left hab ∘ le_of_lt⟩
 
 Depends on / 依赖: le_of_lt, neg_of_smul_pos_left, neg_of_smul_pos_right
@@ -2296,7 +2296,7 @@ lemma neg_of_smul_neg_left'
 
 中文:
 引理 neg_of_smul_neg_left'
-  条件: [SMulPosMono α β] (h : a • b < 0) (ha : 0 <= a)
+  条件: [标量乘正递增 α β] (h : a • b < 0) (ha : 0 <= a)
   结论: b < 0
   证明: lt_of_not_ge fun hb => (smul_nonneg' ha hb).not_gt h
 
@@ -2316,7 +2316,7 @@ lemma neg_of_smul_neg_right'
 
 中文:
 引理 neg_of_smul_neg_right'
-  条件: [PosSMulMono α β] (h : a • b < 0) (hb : 0 <= b)
+  条件: [正标量乘递增 α β] (h : a • b < 0) (hb : 0 <= b)
   结论: a < 0
   证明: lt_of_not_ge fun ha => (smul_nonneg ha hb).not_gt h
 
@@ -2347,7 +2347,7 @@ lemma le_smul_iff_one_le_left
 
 中文:
 引理 le_smul_iff_one_le_left
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] (hb : 0 < b)
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] (hb : 0 < b)
   证明: Iff.trans (by rw [one_smul]) (smul_le_smul_iff_of_pos_right hb)
 
 @[simp]
@@ -2370,7 +2370,7 @@ lemma lt_smul_iff_one_lt_left
 
 中文:
 引理 lt_smul_iff_one_lt_left
-  条件: [SMulPosStrictMono α β] [SMulPosReflectLT α β] (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] [标量乘正反映严格偏序 α β] (hb : 0 < b)
   证明: Iff.trans (by rw [one_smul]) (smul_lt_smul_iff_of_pos_right hb)
 
 @[simp]
@@ -2393,7 +2393,7 @@ lemma smul_le_iff_le_one_left
 
 中文:
 引理 smul_le_iff_le_one_left
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] (hb : 0 < b)
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] (hb : 0 < b)
   证明: Iff.trans (by rw [one_smul]) (smul_le_smul_iff_of_pos_right hb)
 
 @[simp]
@@ -2414,7 +2414,7 @@ lemma smul_lt_iff_lt_one_left
 
 中文:
 引理 smul_lt_iff_lt_one_left
-  条件: [SMulPosStrictMono α β] [SMulPosReflectLT α β] (hb : 0 < b)
+  条件: [标量乘正严格递增 α β] [标量乘正反映严格偏序 α β] (hb : 0 < b)
   证明: Iff.trans (by rw [one_smul]) (smul_lt_smul_iff_of_pos_right hb)
 
 Depends on / 依赖: Iff.trans, one_smul, smul_lt_smul_iff_of_pos_right
@@ -2434,7 +2434,7 @@ lemma smul_le_of_le_one_left
 
 中文:
 引理 smul_le_of_le_one_left
-  条件: [SMulPosMono α β] (hb : 0 <= b) (h : a <= 1)
+  条件: [标量乘正递增 α β] (hb : 0 <= b) (h : a <= 1)
   结论: a • b <= b
   证明: by
   simpa only [one_smul] using smul_le_smul_of_nonneg_right h hb
@@ -2456,7 +2456,7 @@ lemma le_smul_of_one_le_left
 
 中文:
 引理 le_smul_of_one_le_left
-  条件: [SMulPosMono α β] (hb : 0 <= b) (h : 1 <= a)
+  条件: [标量乘正递增 α β] (hb : 0 <= b) (h : 1 <= a)
   结论: b <= a • b
   证明: by
   simpa only [one_smul] using smul_le_smul_of_nonneg_right h hb
@@ -2478,7 +2478,7 @@ lemma smul_lt_of_lt_one_left
 
 中文:
 引理 smul_lt_of_lt_one_left
-  条件: [SMulPosStrictMono α β] (hb : 0 < b) (h : a < 1)
+  条件: [标量乘正严格递增 α β] (hb : 0 < b) (h : a < 1)
   结论: a • b < b
   证明: by
   simpa only [one_smul] using smul_lt_smul_of_pos_right h hb
@@ -2500,7 +2500,7 @@ lemma lt_smul_of_one_lt_left
 
 中文:
 引理 lt_smul_of_one_lt_left
-  条件: [SMulPosStrictMono α β] (hb : 0 < b) (h : 1 < a)
+  条件: [标量乘正严格递增 α β] (hb : 0 < b) (h : 1 < a)
   结论: b < a • b
   证明: by
   simpa only [one_smul] using smul_lt_smul_of_pos_right h hb
@@ -2525,8 +2525,8 @@ lemma PosSMulMono.of_smul_nonneg
   proof: by simpa [sub_nonneg, smul_sub] using h _ ha (b₂ - b₁)
 
 中文:
-引理 PosSMulMono.of_smul_nonneg
-  结论: [PartialOrder α] [PartialOrder β] [IsOrderedAddMonoid β]
+引理 正标量乘递增.of_smul_nonneg
+  结论: [偏序 α] [偏序 β] [是OrderedAdd幺半群 β]
   证明: by simpa [sub_nonneg, smul_sub] using h _ ha (b₂ - b₁)
 
 Depends on / 依赖: smul_sub, sub_nonneg
@@ -2551,9 +2551,9 @@ lemma PosSMulMono.toPosSMulStrictMono
     (smul_right_injective _ ha.ne').ne hb.ne⟩
 
 中文:
-引理 PosSMulMono.toPosSMulStrictMono
-  条件: [PosSMulMono α β]
-  结论: PosSMulStrictMono α β
+引理 正标量乘递增.toPosSMulStrictMono
+  条件: [正标量乘递增 α β]
+  结论: 正标量乘严格递增 α β
   证明: ⟨fun _a ha _b₁ _b₂ hb => (smul_le_smul_of_nonneg_left hb.le ha.le).lt_of_ne
     (smul_right_injective _ ha.ne').ne hb.ne⟩
 
@@ -2574,8 +2574,8 @@ instance PosSMulReflectLT.toPosSMulReflectLE
     (lt_of_smul_lt_smul_left h' ha.le).le⟩
 
 中文:
-实例 PosSMulReflectLT.toPosSMulReflectLE
-  签名: [PosSMulReflectLT α β]
+实例 正标量乘反映严格偏序.toPosSMulReflectLE
+  签名: [正标量乘反映严格偏序 α β]
   定义体: ⟨fun _a ha _b₁ _b₂ h => h.eq_or_lt.elim
     (fun h => (smul_right_injective _ ha.ne' h).le) fun h' =>
     (lt_of_smul_lt_smul_left h' ha.le).le⟩
@@ -2602,7 +2602,7 @@ lemma posSMulMono_iff_posSMulStrictMono
 
 中文:
 引理 posSMulMono_iff_posSMulStrictMono
-  结论: PosSMulMono α β ↔ PosSMulStrictMono α β
+  结论: 正标量乘递增 α β ↔ 正标量乘严格递增 α β
   证明: ⟨fun _ => PosSMulMono.toPosSMulStrictMono, fun _ => inferInstance⟩
 
 Depends on / 依赖: PosSMulMono, PosSMulMono.toPosSMulStrictMono, toPosSMulStrictMono
@@ -2620,7 +2620,7 @@ lemma PosSMulReflectLE_iff_posSMulReflectLT
 
 中文:
 引理 PosSMulReflectLE_iff_posSMulReflectLT
-  结论: PosSMulReflectLE α β ↔ PosSMulReflectLT α β
+  结论: 正标量乘反映偏序 α β ↔ 正标量乘反映严格偏序 α β
   证明: ⟨fun _ => inferInstance, fun _ => PosSMulReflectLT.toPosSMulReflectLE⟩
 
 Depends on / 依赖: PosSMulReflectLT, PosSMulReflectLT.toPosSMulReflectLE, toPosSMulReflectLE
@@ -2645,8 +2645,8 @@ lemma IsOrderedModule.of_smul_nonneg
     simpa [sub_nonneg, sub_smul] using (h (a₂ - a₁) · _ hb)
 
 中文:
-引理 IsOrderedModule.of_smul_nonneg
-  结论: [IsOrderedAddMonoid α] [IsOrderedAddMonoid β]
+引理 是Ordered模.of_smul_nonneg
+  结论: [是OrderedAdd幺半群 α] [是OrderedAdd幺半群 β]
   证明: .of_smul_nonneg h
   smul_le_smul_of_nonneg_right _b hb a₁ a₂ := by
     simpa [sub_nonneg, sub_smul] using (h (a₂ - a₁) · _ hb)
@@ -2672,9 +2672,9 @@ lemma SMulPosMono.toSMulPosStrictMono
     (smul_left_injective _ hb.ne').ne ha.ne⟩
 
 中文:
-引理 SMulPosMono.toSMulPosStrictMono
-  条件: [SMulPosMono α β]
-  结论: SMulPosStrictMono α β
+引理 标量乘正递增.toSMulPosStrictMono
+  条件: [标量乘正递增 α β]
+  结论: 标量乘正严格递增 α β
   证明: ⟨fun _b hb _a₁ _a₂ ha => (smul_le_smul_of_nonneg_right ha.le hb.le).lt_of_ne
     (smul_left_injective _ hb.ne').ne ha.ne⟩
 
@@ -2694,7 +2694,7 @@ lemma smulPosMono_iff_smulPosStrictMono
 
 中文:
 引理 smulPosMono_iff_smulPosStrictMono
-  结论: SMulPosMono α β ↔ SMulPosStrictMono α β
+  结论: 标量乘正递增 α β ↔ 标量乘正严格递增 α β
   证明: ⟨fun _ => SMulPosMono.toSMulPosStrictMono, fun _ => inferInstance⟩
 
 Depends on / 依赖: SMulPosMono, SMulPosMono.toSMulPosStrictMono, toSMulPosStrictMono
@@ -2713,9 +2713,9 @@ lemma SMulPosReflectLT.toSMulPosReflectLE
     (lt_of_smul_lt_smul_right h' hb.le).le⟩
 
 中文:
-引理 SMulPosReflectLT.toSMulPosReflectLE
-  条件: [SMulPosReflectLT α β]
-  结论: SMulPosReflectLE α β
+引理 标量乘正反映严格偏序.toSMulPosReflectLE
+  条件: [标量乘正反映严格偏序 α β]
+  结论: 标量乘正反映偏序 α β
   证明: ⟨fun _b hb _a₁ _a₂ h => h.eq_or_lt.elim (fun h => (smul_left_injective _ hb.ne' h).le) fun h' =>
     (lt_of_smul_lt_smul_right h' hb.le).le⟩
 
@@ -2735,7 +2735,7 @@ lemma SMulPosReflectLE_iff_smulPosReflectLT
 
 中文:
 引理 SMulPosReflectLE_iff_smulPosReflectLT
-  结论: SMulPosReflectLE α β ↔ SMulPosReflectLT α β
+  结论: 标量乘正反映偏序 α β ↔ 标量乘正反映严格偏序 α β
   证明: ⟨fun _ => inferInstance, fun _ => SMulPosReflectLT.toSMulPosReflectLE⟩
 
 Depends on / 依赖: SMulPosReflectLT, SMulPosReflectLT.toSMulPosReflectLE, toSMulPosReflectLE
@@ -2758,7 +2758,7 @@ lemma inv_smul_le_iff_of_pos
 
 中文:
 引理 inv_smul_le_iff_of_pos
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a)
   证明: by rw [← smul_le_smul_iff_of_pos_left ha, smul_inv_smul₀ ha.ne']
 
 Depends on / 依赖: ha.ne, smul_le_smul_iff_of_pos_left
@@ -2776,7 +2776,7 @@ lemma le_inv_smul_iff_of_pos
 
 中文:
 引理 le_inv_smul_iff_of_pos
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : 0 < a)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : 0 < a)
   证明: by rw [← smul_le_smul_iff_of_pos_left ha, smul_inv_smul₀ ha.ne']
 
 Depends on / 依赖: ha.ne, smul_le_smul_iff_of_pos_left
@@ -2794,7 +2794,7 @@ lemma inv_smul_lt_iff_of_pos
 
 中文:
 引理 inv_smul_lt_iff_of_pos
-  条件: [PosSMulStrictMono α β] [PosSMulReflectLT α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] [正标量乘反映严格偏序 α β] (ha : 0 < a)
   证明: by rw [← smul_lt_smul_iff_of_pos_left ha, smul_inv_smul₀ ha.ne']
 
 Depends on / 依赖: ha.ne, smul_lt_smul_iff_of_pos_left
@@ -2812,7 +2812,7 @@ lemma lt_inv_smul_iff_of_pos
 
 中文:
 引理 lt_inv_smul_iff_of_pos
-  条件: [PosSMulStrictMono α β] [PosSMulReflectLT α β] (ha : 0 < a)
+  条件: [正标量乘严格递增 α β] [正标量乘反映严格偏序 α β] (ha : 0 < a)
   证明: by rw [← smul_lt_smul_iff_of_pos_left ha, smul_inv_smul₀ ha.ne']
 
 Depends on / 依赖: ha.ne, smul_lt_smul_iff_of_pos_left
@@ -2833,7 +2833,7 @@ definition OrderIso.smulRight
 
 中文:
 定义 OrderIso.smulRight
-  签名: [PosSMulMono α β] [PosSMulReflectLE α β] {a : α} (ha : 0 < a)
+  签名: [正标量乘递增 α β] [正标量乘反映偏序 α β] {a : α} (ha : 0 < a)
   定义体: Equiv.smulRight ha.ne'
   map_rel_iff' := smul_le_smul_iff_of_pos_left ha
 
@@ -2860,7 +2860,7 @@ instance instPosSMulMono
 
 中文:
 实例 instPosSMulMono
-  签名: [PosSMulMono α β]
+  签名: [正标量乘递增 α β]
   定义体: smul_le_smul_of_nonneg_left (β := β) hb ha
 
 Depends on / 依赖: hs.isSMulRegular, isSMulRegular, smul_le_smul_of_nonneg_left, toFinsupp
@@ -2877,7 +2877,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: [PosSMulStrictMono α β]
+  签名: [正标量乘严格递增 α β]
   定义体: smul_lt_smul_of_pos_left (β := β) hb ha
 
 Depends on / 依赖: smul_lt_smul_of_pos_left
@@ -2894,7 +2894,7 @@ instance instPosSMulReflectLT
 
 中文:
 实例 instPosSMulReflectLT
-  签名: [PosSMulReflectLT α β]
+  签名: [正标量乘反映严格偏序 α β]
   定义体: lt_of_smul_lt_smul_of_nonneg_left (β := β) h ha
 
 Depends on / 依赖: lt_of_smul_lt_smul_of_nonneg_left
@@ -2911,7 +2911,7 @@ instance instPosSMulReflectLE
 
 中文:
 实例 instPosSMulReflectLE
-  签名: [PosSMulReflectLE α β]
+  签名: [正标量乘反映偏序 α β]
   定义体: le_of_smul_le_smul_of_pos_left (β := β) h ha
 
 Depends on / 依赖: le_of_smul_le_smul_of_pos_left
@@ -2937,7 +2937,7 @@ exact smul_le_smul_of_nonneg_right (β := β) ha neg_nonneg.2 hb
 
 中文:
 实例 instSMulPosMono
-  签名: [SMulPosMono α β]
+  签名: [标量乘正递增 α β]
   定义体: by
     rw [← neg_le_neg_iff]; rw [← smul_neg]; rw [← smul_neg]
 exact smul_le_smul_of_nonneg_right (β := β) ha neg_nonneg.2 hb
@@ -2961,7 +2961,7 @@ exact smul_lt_smul_of_pos_right (β := β) ha neg_pos.2 hb
 
 中文:
 实例 instSMulPosStrictMono
-  签名: [SMulPosStrictMono α β]
+  签名: [标量乘正严格递增 α β]
   定义体: by
     rw [← neg_lt_neg_iff]; rw [← smul_neg]; rw [← smul_neg]
 exact smul_lt_smul_of_pos_right (β := β) ha neg_pos.2 hb
@@ -2985,7 +2985,7 @@ exact lt_of_smul_lt_smul_right (β := β) h neg_nonneg.2 hb
 
 中文:
 实例 instSMulPosReflectLT
-  签名: [SMulPosReflectLT α β]
+  签名: [标量乘正反映严格偏序 α β]
   定义体: by
     rw [← neg_lt_neg_iff]; rw [← smul_neg]; rw [← smul_neg] at h
 exact lt_of_smul_lt_smul_right (β := β) h neg_nonneg.2 hb
@@ -3009,7 +3009,7 @@ exact le_of_smul_le_smul_right (β := β) h neg_pos.2 hb
 
 中文:
 实例 instSMulPosReflectLE
-  签名: [SMulPosReflectLE α β]
+  签名: [标量乘正反映偏序 α β]
   定义体: by
     rw [← neg_le_neg_iff]; rw [← smul_neg]; rw [← smul_neg] at h
 exact le_of_smul_le_smul_right (β := β) h neg_pos.2 hb
@@ -3036,7 +3036,7 @@ instance instIsOrderedModule
 
 中文:
 实例 instIsOrderedModule
-  签名: [IsOrderedModule α β]
+  签名: [是Ordered模 α β]
 -/
 instance instIsOrderedModule [IsOrderedModule α β] : IsOrderedModule α βᵒᵈ where
 /--
@@ -3048,7 +3048,7 @@ instance instIsStrictOrderedModule
 
 中文:
 实例 instIsStrictOrderedModule
-  签名: [IsStrictOrderedModule α β]
+  签名: [是StrictOrdered模 α β]
 -/
 instance instIsStrictOrderedModule [IsStrictOrderedModule α β] : IsStrictOrderedModule α βᵒᵈ where
 
@@ -3212,7 +3212,7 @@ lemma antitone_smul_left
 中文:
 引理 antitone_smul_left
   条件: (ha : a <= 0)
-  结论: Antitone ((a • ·) : β -> β)
+  结论: 递减 ((a • ·) : β -> β)
   证明: fun _ _ h => smul_le_smul_of_nonpos_left h ha
 
 Depends on / 依赖: smul_le_smul_of_nonpos_left
@@ -3230,8 +3230,8 @@ instance PosSMulMono.toSMulPosMono
     rw [← sub_nonneg]; rw [← sub_smul]; exact smul_nonneg (sub_nonneg.2 ha) hb
 
 中文:
-实例 PosSMulMono.toSMulPosMono
-  签名: : SMulPosMono α β where
+实例 正标量乘递增.toSMulPosMono
+  签名: : 标量乘正递增 α β where
   定义体: by
     rw [← sub_nonneg]; rw [← sub_smul]; exact smul_nonneg (sub_nonneg.2 ha) hb
 
@@ -3283,7 +3283,7 @@ lemma strictAnti_smul_left
 中文:
 引理 strictAnti_smul_left
   条件: (ha : a < 0)
-  结论: StrictAnti ((a • ·) : β -> β)
+  结论: 严格递减 ((a • ·) : β -> β)
   证明: fun _ _ h => smul_lt_smul_of_neg_left h ha
 
 Depends on / 依赖: smul_lt_smul_of_neg_left
@@ -3301,8 +3301,8 @@ instance PosSMulStrictMono.toSMulPosStrictMono
     rw [← sub_pos]; rw [← sub_smul]; exact smul_pos (sub_pos.2 ha) hb
 
 中文:
-实例 PosSMulStrictMono.toSMulPosStrictMono
-  签名: : SMulPosStrictMono α β where
+实例 正标量乘严格递增.toSMulPosStrictMono
+  签名: : 标量乘正严格递增 α β where
   定义体: by
     rw [← sub_pos]; rw [← sub_smul]; exact smul_pos (sub_pos.2 ha) hb
 
@@ -3326,7 +3326,7 @@ exact le_of_smul_le_smul_of_pos_left h neg_pos.2 ha
 
 中文:
 引理 le_of_smul_le_smul_of_neg
-  条件: [PosSMulReflectLE α β] (h : a • b₁ <= a • b₂) (ha : a < 0)
+  条件: [正标量乘反映偏序 α β] (h : a • b₁ <= a • b₂) (ha : a < 0)
   证明: by
   rw [← neg_neg a]; rw [neg_smul]; rw [neg_smul (-a)]; rw [neg_le_neg_iff] at h
 exact le_of_smul_le_smul_of_pos_left h neg_pos.2 ha
@@ -3352,7 +3352,7 @@ omit [IsOrderedRing α] in
 
 中文:
 引理 lt_of_smul_lt_smul_of_nonpos
-  条件: [PosSMulReflectLT α β] (h : a • b₁ < a • b₂) (ha : a <= 0)
+  条件: [正标量乘反映严格偏序 α β] (h : a • b₁ < a • b₂) (ha : a <= 0)
   证明: by
   rw [← neg_neg a]; rw [neg_smul]; rw [neg_smul (-a)]; rw [neg_lt_neg_iff] at h
   exact lt_of_smul_lt_smul_of_nonneg_left h (neg_nonneg_of_nonpos ha)
@@ -3378,7 +3378,7 @@ lemma smul_nonneg_of_nonpos_of_nonpos
 
 中文:
 引理 smul_nonneg_of_nonpos_of_nonpos
-  条件: [SMulPosMono α β] (ha : a <= 0) (hb : b <= 0)
+  条件: [标量乘正递增 α β] (ha : a <= 0) (hb : b <= 0)
   结论: 0 <= a • b
   证明: smul_nonpos_of_nonpos_of_nonneg (β := βᵒᵈ) ha hb
 
@@ -3399,7 +3399,7 @@ lemma smul_le_smul_iff_of_neg_left
 
 中文:
 引理 smul_le_smul_iff_of_neg_left
-  条件: [PosSMulMono α β] [PosSMulReflectLE α β] (ha : a < 0)
+  条件: [正标量乘递增 α β] [正标量乘反映偏序 α β] (ha : a < 0)
   证明: by
   rw [← neg_neg a]; rw [neg_smul]; rw [neg_smul (-a)]; rw [neg_le_neg_iff]
   exact smul_le_smul_iff_of_pos_left (neg_pos_of_neg ha)
@@ -3508,7 +3508,7 @@ lemma smul_max_of_nonpos
 中文:
 引理 smul_max_of_nonpos
   条件: (ha : a <= 0) (b₁ b₂ : β)
-  结论: a • max b₁ b₂ = min (a • b₁) (a • b₂)
+  结论: a • 最大值 b₁ b₂ = 最小值 (a • b₁) (a • b₂)
   证明: (antitone_smul_left ha : Antitone (_ : β -> β)).map_max
 
 Depends on / 依赖: Antitone, antitone_smul_left, map_max
@@ -3528,7 +3528,7 @@ lemma smul_min_of_nonpos
 中文:
 引理 smul_min_of_nonpos
   条件: (ha : a <= 0) (b₁ b₂ : β)
-  结论: a • min b₁ b₂ = max (a • b₁) (a • b₂)
+  结论: a • 最小值 b₁ b₂ = 最大值 (a • b₁) (a • b₂)
   证明: (antitone_smul_left ha : Antitone (_ : β -> β)).map_min
 
 Depends on / 依赖: Antitone, antitone_smul_left, map_min
@@ -3714,7 +3714,7 @@ instance instPosSMulMono
 
 中文:
 实例 instPosSMulMono
-  签名: [PosSMulMono α β] [PosSMulMono α γ]
+  签名: [正标量乘递增 α β] [正标量乘递增 α γ]
   定义体: ⟨smul_le_smul_of_nonneg_left hb.1 ha, smul_le_smul_of_nonneg_left hb.2 ha⟩
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left
@@ -3733,7 +3733,7 @@ instance instPosSMulReflectLE
 
 中文:
 实例 instPosSMulReflectLE
-  签名: [PosSMulReflectLE α β] [PosSMulReflectLE α γ]
+  签名: [正标量乘反映偏序 α β] [正标量乘反映偏序 α γ]
   定义体: ⟨le_of_smul_le_smul_left h.1 ha, le_of_smul_le_smul_left h.2 ha⟩
 
 Depends on / 依赖: le_of_smul_le_smul_left
@@ -3755,7 +3755,7 @@ instance instSMulPosMono
 
 中文:
 实例 instSMulPosMono
-  签名: [SMulPosMono α β] [SMulPosMono α γ]
+  签名: [标量乘正递增 α β] [标量乘正递增 α γ]
   定义体: ⟨smul_le_smul_of_nonneg_right ha hb.1, smul_le_smul_of_nonneg_right ha hb.2⟩
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right
@@ -3777,7 +3777,7 @@ instance instSMulPosReflectLE
 
 中文:
 实例 instSMulPosReflectLE
-  签名: [SMulPosReflectLE α β] [SMulPosReflectLE α γ]
+  签名: [标量乘正反映偏序 α β] [标量乘正反映偏序 α γ]
   定义体: by
     rcases lt_iff.mp hb with ⟨h₁, -⟩ | ⟨-, h₁⟩
     · exact le_of_smul_le_smul_right h.1 h₁
@@ -3812,7 +3812,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: [PosSMulStrictMono α β] [PosSMulStrictMono α γ]
+  签名: [正标量乘严格递增 α β] [正标量乘严格递增 α γ]
   定义体: by
     simp_rw [lt_iff]
     rintro _a ha _b₁ _b₂ (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩)
@@ -3843,7 +3843,7 @@ instance instSMulPosStrictMono
 
 中文:
 实例 instSMulPosStrictMono
-  签名: [SMulPosStrictMono α β] [SMulPosStrictMono α γ]
+  签名: [标量乘正严格递增 α β] [标量乘正严格递增 α γ]
   定义体: by
     simp_rw [lt_iff]
     rintro a (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩) _b₁ _b₂ hb
@@ -3874,7 +3874,7 @@ instance instSMulPosReflectLT
 
 中文:
 实例 instSMulPosReflectLT
-  签名: [SMulPosReflectLT α β] [SMulPosReflectLT α γ]
+  签名: [标量乘正反映严格偏序 α β] [标量乘正反映严格偏序 α γ]
   定义体: by
     simp_rw [lt_iff]
     rintro b hb _a₁ _a₂ (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩)
@@ -3910,7 +3910,7 @@ instance instPosSMulMono
 
 中文:
 实例 instPosSMulMono
-  签名: [对任意 i, PosSMulMono α (β i)]
+  签名: [对任意 i, 正标量乘递增 α (β i)]
   定义体: smul_le_smul_of_nonneg_left (hb i) ha
 
 Depends on / 依赖: smul_le_smul_of_nonneg_left
@@ -3928,7 +3928,7 @@ instance instPosSMulReflectLE
 
 中文:
 实例 instPosSMulReflectLE
-  签名: [对任意 i, PosSMulReflectLE α (β i)]
+  签名: [对任意 i, 正标量乘反映偏序 α (β i)]
   定义体: le_of_smul_le_smul_left (h i) ha
 
 Depends on / 依赖: le_of_smul_le_smul_left
@@ -3948,7 +3948,7 @@ instance instSMulPosMono
 
 中文:
 实例 instSMulPosMono
-  签名: [对任意 i, SMulPosMono α (β i)]
+  签名: [对任意 i, 标量乘正递增 α (β i)]
   定义体: smul_le_smul_of_nonneg_right ha (hb i)
 
 Depends on / 依赖: smul_le_smul_of_nonneg_right
@@ -3967,7 +3967,7 @@ instance instSMulPosReflectLE
 
 中文:
 实例 instSMulPosReflectLE
-  签名: [对任意 i, SMulPosReflectLE α (β i)]
+  签名: [对任意 i, 标量乘正反映偏序 α (β i)]
   定义体: by
     obtain ⟨-, i, hi⟩ := lt_def.1 hb; exact le_of_smul_le_smul_right (h _) hi
 
@@ -3996,7 +3996,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: [对任意 i, PosSMulStrictMono α (β i)]
+  签名: [对任意 i, 正标量乘严格递增 α (β i)]
   定义体: by
     simp_rw [lt_def]
     rintro _a ha _b₁ _b₂ ⟨hb, i, hi⟩
@@ -4024,7 +4024,7 @@ instance instSMulPosStrictMono
 
 中文:
 实例 instSMulPosStrictMono
-  签名: [对任意 i, SMulPosStrictMono α (β i)]
+  签名: [对任意 i, 标量乘正严格递增 α (β i)]
   定义体: by
     simp_rw [lt_def]
     rintro a ⟨ha, i, hi⟩ _b₁ _b₂ hb
@@ -4055,7 +4055,7 @@ exact lt_of_smul_lt_smul_right hi hb _
 
 中文:
 实例 instSMulPosReflectLT
-  签名: [对任意 i, SMulPosReflectLT α (β i)]
+  签名: [对任意 i, 标量乘正反映严格偏序 α (β i)]
   定义体: by
     simp_rw [lt_def]
     rintro b hb _a₁ _a₂ ⟨-, i, hi⟩
@@ -4089,8 +4089,8 @@ lemma PosSMulMono.lift
     simp only [← hf, smul] at *; exact smul_le_smul_of_nonneg_left hb ha
 
 中文:
-引理 PosSMulMono.lift
-  结论: [PosSMulMono α γ]
+引理 正标量乘递增.lift
+  结论: [正标量乘递增 α γ]
   证明: by
     simp only [← hf, smul] at *; exact smul_le_smul_of_nonneg_left hb ha
 
@@ -4112,8 +4112,8 @@ lemma PosSMulStrictMono.lift
     simp only [← lt_iff_lt_of_le_iff_le' hf hf, smul] at *; exact smul_lt_smul_of_pos_left hb ha
 
 中文:
-引理 PosSMulStrictMono.lift
-  结论: [PosSMulStrictMono α γ]
+引理 正标量乘严格递增.lift
+  结论: [正标量乘严格递增 α γ]
   证明: by
     simp only [← lt_iff_lt_of_le_iff_le' hf hf, smul] at *; exact smul_lt_smul_of_pos_left hb ha
 
@@ -4134,8 +4134,8 @@ lemma PosSMulReflectLE.lift
   proof: hf.1 le_of_smul_le_smul_left (by simpa only [smul] using hf.2 h) ha
 
 中文:
-引理 PosSMulReflectLE.lift
-  结论: [PosSMulReflectLE α γ]
+引理 正标量乘反映偏序.lift
+  结论: [正标量乘反映偏序 α γ]
   证明: hf.1 le_of_smul_le_smul_left (by simpa only [smul] using hf.2 h) ha
 
 Depends on / 依赖: le_of_smul_le_smul_left
@@ -4156,8 +4156,8 @@ lemma PosSMulReflectLT.lift
     simp only [← lt_iff_lt_of_le_iff_le' hf hf, smul] at *; exact lt_of_smul_lt_smul_left h ha
 
 中文:
-引理 PosSMulReflectLT.lift
-  结论: [PosSMulReflectLT α γ]
+引理 正标量乘反映严格偏序.lift
+  结论: [正标量乘反映严格偏序 α γ]
   证明: by
     simp only [← lt_iff_lt_of_le_iff_le' hf hf, smul] at *; exact lt_of_smul_lt_smul_left h ha
 
@@ -4184,8 +4184,8 @@ lemma SMulPosMono.lift
     simp only [← hf, zero, smul] at *; exact smul_le_smul_of_nonneg_right ha hb
 
 中文:
-引理 SMulPosMono.lift
-  结论: [SMulPosMono α γ]
+引理 标量乘正递增.lift
+  结论: [标量乘正递增 α γ]
   证明: by
     simp only [← hf, zero, smul] at *; exact smul_le_smul_of_nonneg_right ha hb
 
@@ -4209,8 +4209,8 @@ lemma SMulPosStrictMono.lift
     exact smul_lt_smul_of_pos_right ha hb
 
 中文:
-引理 SMulPosStrictMono.lift
-  结论: [SMulPosStrictMono α γ]
+引理 标量乘正严格递增.lift
+  结论: [标量乘正严格递增 α γ]
   证明: by
     simp only [← lt_iff_lt_of_le_iff_le' hf hf, zero, smul] at *
     exact smul_lt_smul_of_pos_right ha hb
@@ -4236,8 +4236,8 @@ lemma SMulPosReflectLE.lift
     exact le_of_smul_le_smul_right h hb
 
 中文:
-引理 SMulPosReflectLE.lift
-  结论: [SMulPosReflectLE α γ]
+引理 标量乘正反映偏序.lift
+  结论: [标量乘正反映偏序 α γ]
   证明: by
     simp only [← hf, ← lt_iff_lt_of_le_iff_le' hf hf, zero, smul] at *
     exact le_of_smul_le_smul_right h hb
@@ -4263,8 +4263,8 @@ lemma SMulPosReflectLT.lift
     exact lt_of_smul_lt_smul_right h hb
 
 中文:
-引理 SMulPosReflectLT.lift
-  结论: [SMulPosReflectLT α γ]
+引理 标量乘正反映严格偏序.lift
+  结论: [标量乘正反映严格偏序 α γ]
   证明: by
     simp only [← hf, ← lt_iff_lt_of_le_iff_le' hf hf, zero, smul] at *
     exact lt_of_smul_lt_smul_right h hb
@@ -4294,8 +4294,8 @@ instance OrderedSemiring.toPosSMulMonoNat
   body: nsmul_le_nsmul_right hab _
 
 中文:
-实例 OrderedSemiring.toPosSMulMonoNat
-  签名: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+实例 OrderedSemiring.toPosSMulMono自然数
+  签名: [半环 α] [偏序 α] [是Ordered环 α]
   定义体: nsmul_le_nsmul_right hab _
 
 Depends on / 依赖: nsmul_le_nsmul_right
@@ -4313,8 +4313,8 @@ instance OrderedSemiring.toSMulPosMonoNat
   body: nsmul_le_nsmul_left ha hmn
 
 中文:
-实例 OrderedSemiring.toSMulPosMonoNat
-  签名: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+实例 OrderedSemiring.toSMulPosMono自然数
+  签名: [半环 α] [偏序 α] [是Ordered环 α]
   定义体: nsmul_le_nsmul_left ha hmn
 
 Depends on / 依赖: nsmul_le_nsmul_left
@@ -4331,7 +4331,7 @@ instance StrictOrderedSemiring.toPosSMulStrictMonoNat
   body: nsmul_right_strictMono hn.ne' hab
 
 中文:
-实例 StrictOrderedSemiring.toPosSMulStrictMonoNat
+实例 StrictOrderedSemiring.toPosSMulStrictMono自然数
   定义体: nsmul_right_strictMono hn.ne' hab
 
 Depends on / 依赖: hn.ne, nsmul_right_strictMono
@@ -4349,7 +4349,7 @@ instance StrictOrderedSemiring.toSMulPosStrictMonoNat
   body: nsmul_lt_nsmul_left ha hmn
 
 中文:
-实例 StrictOrderedSemiring.toSMulPosStrictMonoNat
+实例 StrictOrderedSemiring.toSMulPosStrictMono自然数
   定义体: nsmul_lt_nsmul_left ha hmn
 
 Depends on / 依赖: nsmul_lt_nsmul_left

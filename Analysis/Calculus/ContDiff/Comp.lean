@@ -96,7 +96,7 @@ theorem ContDiffWithinAt.comp
 
 中文:
 定理 ContDiffWithinAt.comp
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F} (x : E)
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F} (x : E)
   证明: by
   match n with
   | ω =>
@@ -161,7 +161,7 @@ theorem ContDiffOn.comp
 
 中文:
 定理 ContDiffOn.comp
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F} (hg : ContDiffOn 𝕜 n g t)
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F} (hg : ContDiffOn 𝕜 n g t)
   证明: fun x hx => ContDiffWithinAt.comp x (hg (f x) (st hx)) (hf x hx) st
 
 Depends on / 依赖: ContDiffWithinAt, ContDiffWithinAt.comp
@@ -199,8 +199,8 @@ theorem ContDiff.comp_contDiffOn
 @[fun_prop]
 
 中文:
-定理 ContDiff.comp_contDiffOn
-  结论: {s : Set E} {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 n g)
+定理 连续可微.comp_contDiffOn
+  结论: {s : 集合 E} {g : F -> G} {f : E -> F} (hg : 连续可微 𝕜 n g)
   证明: (contDiffOn_univ.2 hg).comp hf (mapsTo_univ _ _)
 
 @[fun_prop]
@@ -221,8 +221,8 @@ theorem ContDiff.fun_comp_contDiffOn
   proof: (contDiffOn_univ.2 hg).comp hf (mapsTo_univ _ _)
 
 中文:
-定理 ContDiff.fun_comp_contDiffOn
-  结论: {s : Set E} {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 n g)
+定理 连续可微.fun_comp_contDiffOn
+  结论: {s : 集合 E} {g : F -> G} {f : E -> F} (hg : 连续可微 𝕜 n g)
   证明: (contDiffOn_univ.2 hg).comp hf (mapsTo_univ _ _)
 
 Depends on / 依赖: contDiffOn_univ, mapsTo_univ
@@ -243,7 +243,7 @@ theorem ContDiffOn.comp_contDiff
 
 中文:
 定理 ContDiffOn.comp_contDiff
-  结论: {s : Set F} {g : F -> G} {f : E -> F} (hg : ContDiffOn 𝕜 n g s)
+  结论: {s : 集合 F} {g : F -> G} {f : E -> F} (hg : ContDiffOn 𝕜 n g s)
   证明: by
   rw [← contDiffOn_univ] at *
   exact hg.comp hf fun x _ => hs x
@@ -265,7 +265,7 @@ theorem ContDiffOn.image_comp_contDiff
 
 中文:
 定理 ContDiffOn.image_comp_contDiff
-  结论: {s : Set E} {g : F -> G} {f : E -> F}
+  结论: {s : 集合 E} {g : F -> G} {f : E -> F}
   证明: hg.comp hf.contDiffOn (s.mapsTo_image f)
 
 Depends on / 依赖: contDiffOn, hf.contDiffOn, hg.comp, mapsTo_image, s.mapsTo_image
@@ -285,8 +285,8 @@ theorem ContDiff.comp
 @[fun_prop]
 
 中文:
-定理 ContDiff.comp
-  条件: {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiff 𝕜 n f)
+定理 连续可微.comp
+  条件: {g : F -> G} {f : E -> F} (hg : 连续可微 𝕜 n g) (hf : 连续可微 𝕜 n f)
   证明: contDiffOn_univ.1 ContDiffOn.comp (contDiffOn_univ.2 hg) (contDiffOn_univ.2 hf) (subset_univ _)
 
 @[fun_prop]
@@ -307,8 +307,8 @@ theorem ContDiff.fun_comp
   proof: hg.comp hf
 
 中文:
-定理 ContDiff.fun_comp
-  条件: {g : F -> G} {f : E -> F} (hg : ContDiff 𝕜 n g) (hf : ContDiff 𝕜 n f)
+定理 连续可微.fun_comp
+  条件: {g : F -> G} {f : E -> F} (hg : 连续可微 𝕜 n g) (hf : 连续可微 𝕜 n f)
   证明: hg.comp hf
 
 Depends on / 依赖: hg.comp
@@ -327,7 +327,7 @@ theorem ContDiffWithinAt.comp_of_eq
 
 中文:
 定理 ContDiffWithinAt.comp_of_eq
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F} {y : F} (x : E)
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F} {y : F} (x : E)
   证明: by
   subst hy; exact hg.comp x hf st
 
@@ -389,7 +389,7 @@ theorem ContDiffWithinAt.comp_inter
 
 中文:
 定理 ContDiffWithinAt.comp_inter
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F} (x : E)
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F} (x : E)
   证明: hg.comp x (hf.mono inter_subset_left) inter_subset_right
 
 Depends on / 依赖: hf.mono, hg.comp, inter_subset_left, inter_subset_right
@@ -410,7 +410,7 @@ theorem ContDiffWithinAt.comp_inter_of_eq
 
 中文:
 定理 ContDiffWithinAt.comp_inter_of_eq
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F} {y : F}
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F} {y : F}
   证明: by
   subst hy; exact hg.comp_inter x hf
 
@@ -535,8 +535,8 @@ theorem ContDiff.comp_contDiffWithinAt
   this.comp x hf (subset_univ _)
 
 中文:
-定理 ContDiff.comp_contDiffWithinAt
-  结论: {g : F -> G} {f : E -> F} (h : ContDiff 𝕜 n g)
+定理 连续可微.comp_contDiffWithinAt
+  结论: {g : F -> G} {f : E -> F} (h : 连续可微 𝕜 n g)
   证明: haveI : ContDiffWithinAt 𝕜 n g univ (f x) := h.contDiffAt.contDiffWithinAt
   this.comp x hf (subset_univ _)
 
@@ -556,8 +556,8 @@ theorem ContDiff.comp_contDiffAt
   proof: hg.comp_contDiffWithinAt hf
 
 中文:
-定理 ContDiff.comp_contDiffAt
-  结论: {g : F -> G} {f : E -> F} (x : E) (hg : ContDiff 𝕜 n g)
+定理 连续可微.comp_contDiffAt
+  结论: {g : F -> G} {f : E -> F} (x : E) (hg : 连续可微 𝕜 n g)
   证明: hg.comp_contDiffWithinAt hf
 
 Depends on / 依赖: comp_contDiffWithinAt, hg.comp_contDiffWithinAt
@@ -581,7 +581,7 @@ theorem iteratedFDerivWithin_comp_of_eventually_mem
 
 中文:
 定理 iteratedFDerivWithin_comp_of_eventually_mem
-  结论: {t : Set F}
+  结论: {t : 集合 F}
   证明: by
   obtain ⟨u, hxu, huo, hfu, hgu⟩ : exists u, x in u ∧ IsOpen u ∧
       HasFTaylorSeriesUpToOn i f (ftaylorSeriesWithin 𝕜 f s) (s inter u) ∧
@@ -625,7 +625,7 @@ theorem iteratedFDerivWithin_comp
 
 中文:
 定理 iteratedFDerivWithin_comp
-  结论: {t : Set F} (hg : ContDiffWithinAt 𝕜 n g t (f x))
+  结论: {t : 集合 F} (hg : ContDiffWithinAt 𝕜 n g t (f x))
   证明: iteratedFDerivWithin_comp_of_eventually_mem hg hf ht hs hx (eventually_mem_nhdsWithin.mono hst) hi
 
 Depends on / 依赖: eventually_mem_nhdsWithin, eventually_mem_nhdsWithin.mono, iteratedFDerivWithin_comp_of_eventually_mem
@@ -684,7 +684,7 @@ theorem contDiff_fst
 
 中文:
 定理 contDiff_fst
-  结论: ContDiff 𝕜 n (Prod.fst : E × F -> E)
+  结论: 连续可微 𝕜 n (积类型.fst : E × F -> E)
   证明: IsBoundedLinearMap.contDiff IsBoundedLinearMap.fst
 
 Depends on / 依赖: IsBoundedLinearMap, IsBoundedLinearMap.contDiff, IsBoundedLinearMap.fst, contDiff
@@ -704,9 +704,9 @@ theorem ContDiff.fst
   proof: contDiff_fst.comp hf
 
 中文:
-定理 ContDiff.fst
-  条件: {f : E -> F × G} (hf : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x => (f x).1
+定理 连续可微.fst
+  条件: {f : E -> F × G} (hf : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x => (f x).1
   证明: contDiff_fst.comp hf
 
 Depends on / 依赖: contDiff_fst, contDiff_fst.comp
@@ -724,9 +724,9 @@ theorem ContDiff.fst'
   proof: hf.comp contDiff_fst
 
 中文:
-定理 ContDiff.fst'
-  条件: {f : E -> G} (hf : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x : E × F => f x.1
+定理 连续可微.fst'
+  条件: {f : E -> G} (hf : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x : E × F => f x.1
   证明: hf.comp contDiff_fst
 
 Depends on / 依赖: contDiff_fst, hf.comp
@@ -749,8 +749,8 @@ theorem contDiffOn_fst
 
 中文:
 定理 contDiffOn_fst
-  条件: {s : Set (E × F)}
-  结论: ContDiffOn 𝕜 n (Prod.fst : E × F -> E) s
+  条件: {s : 集合 (E × F)}
+  结论: ContDiffOn 𝕜 n (积类型.fst : E × F -> E) s
   证明: ContDiff.contDiffOn contDiff_fst
 
 @[fun_prop]
@@ -771,7 +771,7 @@ theorem ContDiffOn.fst
 
 中文:
 定理 ContDiffOn.fst
-  条件: {f : E -> F × G} {s : Set E} (hf : ContDiffOn 𝕜 n f s)
+  条件: {f : E -> F × G} {s : 集合 E} (hf : ContDiffOn 𝕜 n f s)
   证明: contDiff_fst.comp_contDiffOn hf
 
 Depends on / 依赖: comp_contDiffOn, contDiff_fst, contDiff_fst.comp_contDiffOn
@@ -794,7 +794,7 @@ theorem contDiffAt_fst
 中文:
 定理 contDiffAt_fst
   条件: {p : E × F}
-  结论: ContDiffAt 𝕜 n (Prod.fst : E × F -> E) p
+  结论: ContDiffAt 𝕜 n (积类型.fst : E × F -> E) p
   证明: contDiff_fst.contDiffAt
 
 Depends on / 依赖: contDiffAt, contDiff_fst, contDiff_fst.contDiffAt
@@ -873,7 +873,7 @@ theorem contDiffWithinAt_fst
 
 中文:
 定理 contDiffWithinAt_fst
-  条件: {s : Set (E × F)} {p : E × F}
+  条件: {s : 集合 (E × F)} {p : E × F}
   证明: contDiff_fst.contDiffWithinAt
 
 Depends on / 依赖: contDiffWithinAt, contDiff_fst, contDiff_fst.contDiffWithinAt
@@ -915,7 +915,7 @@ theorem contDiff_snd
 
 中文:
 定理 contDiff_snd
-  结论: ContDiff 𝕜 n (Prod.snd : E × F -> F)
+  结论: 连续可微 𝕜 n (积类型.snd : E × F -> F)
   证明: IsBoundedLinearMap.contDiff IsBoundedLinearMap.snd
 
 Depends on / 依赖: IsBoundedLinearMap, IsBoundedLinearMap.contDiff, IsBoundedLinearMap.snd, contDiff
@@ -935,9 +935,9 @@ theorem ContDiff.snd
   proof: contDiff_snd.comp hf
 
 中文:
-定理 ContDiff.snd
-  条件: {f : E -> F × G} (hf : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x => (f x).2
+定理 连续可微.snd
+  条件: {f : E -> F × G} (hf : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x => (f x).2
   证明: contDiff_snd.comp hf
 
 Depends on / 依赖: contDiff_snd, contDiff_snd.comp
@@ -955,9 +955,9 @@ theorem ContDiff.snd'
   proof: hf.comp contDiff_snd
 
 中文:
-定理 ContDiff.snd'
-  条件: {f : F -> G} (hf : ContDiff 𝕜 n f)
-  结论: ContDiff 𝕜 n fun x : E × F => f x.2
+定理 连续可微.snd'
+  条件: {f : F -> G} (hf : 连续可微 𝕜 n f)
+  结论: 连续可微 𝕜 n fun x : E × F => f x.2
   证明: hf.comp contDiff_snd
 
 Depends on / 依赖: contDiff_snd, hf.comp
@@ -980,8 +980,8 @@ theorem contDiffOn_snd
 
 中文:
 定理 contDiffOn_snd
-  条件: {s : Set (E × F)}
-  结论: ContDiffOn 𝕜 n (Prod.snd : E × F -> F) s
+  条件: {s : 集合 (E × F)}
+  结论: ContDiffOn 𝕜 n (积类型.snd : E × F -> F) s
   证明: ContDiff.contDiffOn contDiff_snd
 
 @[fun_prop]
@@ -1002,7 +1002,7 @@ theorem ContDiffOn.snd
 
 中文:
 定理 ContDiffOn.snd
-  条件: {f : E -> F × G} {s : Set E} (hf : ContDiffOn 𝕜 n f s)
+  条件: {f : E -> F × G} {s : 集合 E} (hf : ContDiffOn 𝕜 n f s)
   证明: contDiff_snd.comp_contDiffOn hf
 
 Depends on / 依赖: comp_contDiffOn, contDiff_snd, contDiff_snd.comp_contDiffOn
@@ -1023,7 +1023,7 @@ theorem contDiffWithinAt_snd
 
 中文:
 定理 contDiffWithinAt_snd
-  条件: {s : Set (E × F)} {p : E × F}
+  条件: {s : 集合 (E × F)} {p : E × F}
   证明: contDiff_snd.contDiffWithinAt
 
 Depends on / 依赖: contDiffWithinAt, contDiff_snd, contDiff_snd.contDiffWithinAt
@@ -1046,7 +1046,7 @@ theorem contDiffAt_snd
 中文:
 定理 contDiffAt_snd
   条件: {p : E × F}
-  结论: ContDiffAt 𝕜 n (Prod.snd : E × F -> F) p
+  结论: ContDiffAt 𝕜 n (积类型.snd : E × F -> F) p
   证明: contDiff_snd.contDiffAt
 
 Depends on / 依赖: contDiffAt, contDiff_snd, contDiff_snd.contDiffAt
@@ -1229,8 +1229,8 @@ theorem ContDiff.comp₂
   proof: hg.comp hf₁.prodMk hf₂
 
 中文:
-定理 ContDiff.comp₂
-  结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} (hg : ContDiff 𝕜 n g)
+定理 连续可微.comp₂
+  结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} (hg : 连续可微 𝕜 n g)
   证明: hg.comp hf₁.prodMk hf₂
 
 Depends on / 依赖: hg.comp, prodMk
@@ -1290,7 +1290,7 @@ theorem ContDiff.comp₂_contDiffAt
   proof: hg.contDiffAt.comp₂ hf₁ hf₂
 
 中文:
-定理 ContDiff.comp₂_contDiffAt
+定理 连续可微.comp₂_contDiffAt
   结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} {x : F}
   证明: hg.contDiffAt.comp₂ hf₁ hf₂
 
@@ -1310,7 +1310,7 @@ theorem ContDiff.comp₂_contDiffWithinAt
   proof: hg.contDiffAt.comp_contDiffWithinAt x (hf₁.prodMk hf₂)
 
 中文:
-定理 ContDiff.comp₂_contDiffWithinAt
+定理 连续可微.comp₂_contDiffWithinAt
   结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂}
   证明: hg.contDiffAt.comp_contDiffWithinAt x (hf₁.prodMk hf₂)
 
@@ -1331,8 +1331,8 @@ theorem ContDiff.comp₂_contDiffOn
   proof: hg.comp_contDiffOn hf₁.prodMk hf₂
 
 中文:
-定理 ContDiff.comp₂_contDiffOn
-  结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} {s : Set F}
+定理 连续可微.comp₂_contDiffOn
+  结论: {g : E₁ × E₂ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} {s : 集合 F}
   证明: hg.comp_contDiffOn hf₁.prodMk hf₂
 
 Depends on / 依赖: comp_contDiffOn, hg.comp_contDiffOn, prodMk
@@ -1351,7 +1351,7 @@ theorem ContDiff.comp₃
   proof: hg.comp₂ hf₁ hf₂.prodMk hf₃
 
 中文:
-定理 ContDiff.comp₃
+定理 连续可微.comp₃
   结论: {g : E₁ × E₂ × E₃ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} {f₃ : F -> E₃}
   证明: hg.comp₂ hf₁ hf₂.prodMk hf₃
 
@@ -1371,7 +1371,7 @@ theorem ContDiff.comp₃_contDiffOn
   proof: hg.comp₂_contDiffOn hf₁ hf₂.prodMk hf₃
 
 中文:
-定理 ContDiff.comp₃_contDiffOn
+定理 连续可微.comp₃_contDiffOn
   结论: {g : E₁ × E₂ × E₃ -> G} {f₁ : F -> E₁} {f₂ : F -> E₂} {f₃ : F -> E₃}
   证明: hg.comp₂_contDiffOn hf₁ hf₂.prodMk hf₃
 
@@ -1398,8 +1398,8 @@ theorem ContDiff.clm_comp
 @[fun_prop]
 
 中文:
-定理 ContDiff.clm_comp
-  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} (hg : ContDiff 𝕜 n g)
+定理 连续可微.clm_comp
+  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} (hg : 连续可微 𝕜 n g)
   证明: isBoundedBilinearMap_comp.contDiff.comp₂ (g := fun p => p.1.comp p.2) hg hf
 
 @[fun_prop]
@@ -1423,7 +1423,7 @@ theorem ContDiffOn.clm_comp
 
 中文:
 定理 ContDiffOn.clm_comp
-  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} {s : Set X}
+  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} {s : 集合 X}
   证明: (isBoundedBilinearMap_comp (E := E) (F := F) (G := G)).contDiff.comp₂_contDiffOn hg hf
 
 @[fun_prop]
@@ -1473,7 +1473,7 @@ theorem ContDiffWithinAt.clm_comp
 
 中文:
 定理 ContDiffWithinAt.clm_comp
-  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} {s : Set X} {x : X}
+  结论: {g : X -> F ->L[𝕜] G} {f : X -> E ->L[𝕜] F} {s : 集合 X} {x : X}
   证明: (isBoundedBilinearMap_comp (E := E) (G := G)).contDiff.comp₂_contDiffWithinAt hg hf
 
 @[fun_prop]
@@ -1497,8 +1497,8 @@ theorem ContDiff.clm_apply
 @[fun_prop]
 
 中文:
-定理 ContDiff.clm_apply
-  结论: {f : E -> F ->L[𝕜] G} {g : E -> F} (hf : ContDiff 𝕜 n f)
+定理 连续可微.clm_apply
+  结论: {f : E -> F ->L[𝕜] G} {g : E -> F} (hf : 连续可微 𝕜 n f)
   证明: isBoundedBilinearMap_apply.contDiff.comp₂ hf hg
 
 @[fun_prop]
@@ -1594,8 +1594,8 @@ theorem ContDiff.smulRight
 @[fun_prop]
 
 中文:
-定理 ContDiff.smulRight
-  结论: {f : E -> StrongDual 𝕜 F} {g : E -> G} (hf : ContDiff 𝕜 n f)
+定理 连续可微.smulRight
+  结论: {f : E -> StrongDual 𝕜 F} {g : E -> G} (hf : 连续可微 𝕜 n f)
   证明: isBoundedBilinearMap_smulRight.contDiff.comp₂ (g := fun p => p.1.smulRight p.2) hf hg
 
 @[fun_prop]
@@ -1769,7 +1769,7 @@ theorem ContDiffWithinAt.hasFDerivWithinAt_nhds
 
 中文:
 定理 ContDiffWithinAt.hasFDerivWithinAt_nhds
-  结论: {f : E -> F -> G} {g : E -> F} {t : Set F} (hn : n != ∞)
+  结论: {f : E -> F -> G} {g : E -> F} {t : 集合 F} (hn : n != ∞)
   证明: by
   have hst : insert x₀ s ×ˢ t in 𝓝[(fun x => (x, g x)) '' s] (x₀, g x₀) := by
     refine nhdsWithin_mono _ ?_ (nhdsWithin_prod self_mem_nhdsWithin hgt)
@@ -1823,7 +1823,7 @@ theorem ContDiffWithinAt.fderivWithin''
 
 中文:
 定理 ContDiffWithinAt.fderivWithin''
-  结论: {f : E -> F -> G} {g : E -> F} {t : Set F}
+  结论: {f : E -> F -> G} {g : E -> F} {t : 集合 F}
   证明: by
   have : forall k : Nat, k <= m -> ContDiffWithinAt 𝕜 k (fun x => fderivWithin 𝕜 (f x) t (g x)) s x₀ := by
     intro k hkm
@@ -1868,7 +1868,7 @@ theorem ContDiffWithinAt.fderivWithin'
 
 中文:
 定理 ContDiffWithinAt.fderivWithin'
-  结论: {f : E -> F -> G} {g : E -> F} {t : Set F}
+  结论: {f : E -> F -> G} {g : E -> F} {t : 集合 F}
   证明: hf.fderivWithin'' hg ht hmn mem_of_superset self_mem_nhdsWithin image_subset_iff.mpr hst
 
 Depends on / 依赖: fderivWithin, hf.fderivWithin, image_subset_iff, image_subset_iff.mpr, mem_of_superset, self_mem_nhdsWithin
@@ -1894,7 +1894,7 @@ theorem ContDiffWithinAt.fderivWithin
 
 中文:
 定理 ContDiffWithinAt.fderivWithin
-  结论: {f : E -> F -> G} {g : E -> F} {t : Set F}
+  结论: {f : E -> F -> G} {g : E -> F} {t : 集合 F}
   证明: by
   rw [← insert_eq_self.mpr hx₀] at hf
   refine hf.fderivWithin' hg ?_ hmn hst
@@ -1921,7 +1921,7 @@ theorem ContDiffWithinAt.fderivWithin_apply
 
 中文:
 定理 ContDiffWithinAt.fderivWithin_apply
-  结论: {f : E -> F -> G} {g k : E -> F} {t : Set F}
+  结论: {f : E -> F -> G} {g k : E -> F} {t : 集合 F}
   证明: (contDiff_fst.clm_apply contDiff_snd).contDiffAt.comp_contDiffWithinAt x₀
     ((hf.fderivWithin hg ht hmn hx₀ hst).prodMk hk)
 
@@ -2156,7 +2156,7 @@ theorem ContDiff.fderiv
 @[fun_prop]
 
 中文:
-定理 ContDiff.fderiv
+定理 连续可微.fderiv
   结论: {f : E -> F -> G} {g : E -> F}
   证明: contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.fderiv hg.contDiffAt hnm
 
@@ -2177,7 +2177,7 @@ theorem ContDiff.fderiv_succ
   proof: contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.fderiv hg.contDiffAt (le_refl (n + 1))
 
 中文:
-定理 ContDiff.fderiv_succ
+定理 连续可微.fderiv_succ
   结论: {f : E -> F -> G} {g : E -> F}
   证明: contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.fderiv hg.contDiffAt (le_refl (n + 1))
 -/
@@ -2195,8 +2195,8 @@ theorem ContDiff.fderiv_right
   proof: contDiff_iff_contDiffAt.mpr fun _x => hf.contDiffAt.fderiv_right hmn
 
 中文:
-定理 ContDiff.fderiv_right
-  条件: (hf : ContDiff 𝕜 n f) (hmn : m + 1 <= n)
+定理 连续可微.fderiv_right
+  条件: (hf : 连续可微 𝕜 n f) (hmn : m + 1 <= n)
   证明: contDiff_iff_contDiffAt.mpr fun _x => hf.contDiffAt.fderiv_right hmn
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, contDiff_iff_contDiffAt.mpr, fderiv_right, hf.contDiffAt.fderiv_right
@@ -2216,8 +2216,8 @@ theorem ContDiff.iteratedFDeriv_right
 @[fun_prop]
 
 中文:
-定理 ContDiff.iteratedFDeriv_right
-  结论: {i : 自然数} (hf : ContDiff 𝕜 n f)
+定理 连续可微.iteratedFDeriv_right
+  结论: {i : 自然数} (hf : 连续可微 𝕜 n f)
   证明: contDiff_iff_contDiffAt.mpr fun _x => hf.contDiffAt.iteratedFDeriv_right hmn
 
 @[fun_prop]
@@ -2238,8 +2238,8 @@ theorem ContDiff.iteratedFDeriv_right'
   proof: contDiff_iff_contDiffAt.mpr fun _x => hf.contDiffAt.iteratedFDeriv_right (le_refl _)
 
 中文:
-定理 ContDiff.iteratedFDeriv_right'
-  条件: {i : 自然数} (hf : ContDiff 𝕜 (m + i) f)
+定理 连续可微.iteratedFDeriv_right'
+  条件: {i : 自然数} (hf : 连续可微 𝕜 (m + i) f)
   证明: contDiff_iff_contDiffAt.mpr fun _x => hf.contDiffAt.iteratedFDeriv_right (le_refl _)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, contDiff_iff_contDiffAt.mpr, hf.contDiffAt.iteratedFDeriv_right, iteratedFDeriv_right, le_refl
@@ -2259,7 +2259,7 @@ theorem Continuous.fderiv
 @[fun_prop]
 
 中文:
-定理 Continuous.fderiv
+定理 连续.fderiv
   结论: {f : E -> F -> G} {g : E -> F}
   证明: (hf.fderiv (contDiff_zero.mpr hg) hn).continuous
 
@@ -2284,7 +2284,7 @@ theorem Continuous.fderiv_one
 @[fun_prop]
 
 中文:
-定理 Continuous.fderiv_one
+定理 连续.fderiv_one
   结论: {f : E -> F -> G} {g : E -> F}
   证明: (hf.fderiv (contDiff_zero.mpr hg) (le_refl 1)).continuous
 
@@ -2309,7 +2309,7 @@ theorem Differentiable.fderiv_two
     one_ne_zero
 
 中文:
-定理 Differentiable.fderiv_two
+定理 可微.fderiv_two
   结论: {f : E -> F -> G} {g : E -> F}
   证明: ContDiff.differentiable
     (contDiff_iff_contDiffAt.mpr fun _ => hf.contDiffAt.fderiv hg.contDiffAt (le_refl 2))
@@ -2331,7 +2331,7 @@ theorem ContDiff.fderiv_apply
   proof: (hf.fderiv hg hnm).clm_apply hk
 
 中文:
-定理 ContDiff.fderiv_apply
+定理 连续可微.fderiv_apply
   结论: {f : E -> F -> G} {g k : E -> F}
   证明: (hf.fderiv hg hnm).clm_apply hk
 
@@ -2353,7 +2353,7 @@ theorem contDiffOn_fderivWithin_apply
 
 中文:
 定理 contDiffOn_fderivWithin_apply
-  结论: {s : Set E} {f : E -> F} (hf : ContDiffOn 𝕜 n f s)
+  结论: {s : 集合 E} {f : E -> F} (hf : ContDiffOn 𝕜 n f s)
   证明: ((hf.fderivWithin hs hmn).comp contDiffOn_fst (prod_subset_preimage_fst _ _)).clm_apply
     contDiffOn_snd
 
@@ -2397,8 +2397,8 @@ theorem ContDiff.contDiff_fderiv_apply
   exact contDiffOn_fderivWithin_apply hf uniqueDiffOn_univ hmn
 
 中文:
-定理 ContDiff.contDiff_fderiv_apply
-  条件: {f : E -> F} (hf : ContDiff 𝕜 n f) (hmn : m + 1 <= n)
+定理 连续可微.contDiff_fderiv_apply
+  条件: {f : E -> F} (hf : 连续可微 𝕜 n f) (hmn : m + 1 <= n)
   证明: by
   rw [← contDiffOn_univ] at hf ⊢
   rw [← fderivWithin_univ]; rw [← univ_prod_univ]

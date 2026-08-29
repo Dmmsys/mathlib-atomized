@@ -39,7 +39,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (K : ConvexCone 𝕜 E)
+  签名: (K : 余nvexCone 𝕜 E)
   定义体: closure ↑K
   smul_mem' c hc _ h₁ := map_mem_closure (by fun_prop) h₁ fun _ h₂ => K.smul_mem hc h₂
   add_mem' _ h₁ _ h₂ := map_mem_closure₂ continuous_add h₁ h₂ K.add_mem
@@ -65,8 +65,8 @@ theorem coe_closure
 
 中文:
 定理 coe_closure
-  条件: (K : ConvexCone 𝕜 E)
-  结论: (K.closure : Set E) = closure K
+  条件: (K : 余nvexCone 𝕜 E)
+  结论: (K.closure : 集合 E) = closure K
   证明: rfl
 
 @[simp]
@@ -87,7 +87,7 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {K : ConvexCone 𝕜 E} {a : E}
+  条件: {K : 余nvexCone 𝕜 E} {a : E}
   证明: Iff.rfl
 
 @[simp]
@@ -108,8 +108,8 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  条件: {K L : ConvexCone 𝕜 E}
-  结论: K.closure = L ↔ closure (K : Set E) = L
+  条件: {K L : 余nvexCone 𝕜 E}
+  结论: K.closure = L ↔ closure (K : 集合 E) = L
   证明: SetLike.ext'_iff
 
 Depends on / 依赖: SetLike, SetLike.ext, _iff
@@ -139,7 +139,7 @@ lemma toConvexCone_closure_pointed
 中文:
 引理 toConvexCone_closure_pointed
   条件: (K : PointedCone 𝕜 E)
-  结论: (K : ConvexCone 𝕜 E).closure.Pointed
+  结论: (K : 余nvexCone 𝕜 E).closure.Pointed
   证明: subset_closure PointedCone.pointed_toConvexCone _
 
 Depends on / 依赖: PointedCone, PointedCone.pointed_toConvexCone, pointed_toConvexCone, subset_closure
@@ -191,7 +191,7 @@ theorem coe_closure
 中文:
 定理 coe_closure
   条件: (K : PointedCone 𝕜 E)
-  结论: (K.closure : Set E) = closure K
+  结论: (K.closure : 集合 E) = closure K
   证明: rfl
 
 @[simp]
@@ -234,7 +234,7 @@ theorem closure_eq
 中文:
 定理 closure_eq
   条件: {K L : PointedCone 𝕜 E}
-  结论: K.closure = L ↔ closure (K : Set E) = L
+  结论: K.closure = L ↔ closure (K : 集合 E) = L
   证明: SetLike.ext'_iff
 
 Depends on / 依赖: SetLike, SetLike.ext, _iff

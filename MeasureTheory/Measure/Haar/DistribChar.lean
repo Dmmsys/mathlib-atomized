@@ -196,7 +196,7 @@ lemma distribHaarChar_mul
 
 中文:
 引理 distribHaarChar_mul
-  条件: (g : G) (s : Set A)
+  条件: (g : G) (s : 集合 A)
   结论: distribHaarChar A g * μ s = μ (g • s)
   证明: by
   have : (DomMulAct.mk g • μ) s = μ (g • s) := by simp [domSMul_apply]

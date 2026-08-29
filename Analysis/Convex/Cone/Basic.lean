@@ -84,7 +84,7 @@ abbreviation toPointedCone
 
 中文:
 缩写 toPointedCone
-  签名: (C : 命题erCone R E)
+  签名: (C : ProperCone R E)
   定义体: C.toSubmodule
 -/
 @[coe] abbrev toPointedCone (C : ProperCone R E) : PointedCone R E := C.toSubmodule
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (命题erCone R E) (PointedCone R E)
+  签名: Coe (ProperCone R E) (PointedCone R E)
   定义体: ⟨toPointedCone⟩
 
 Depends on / 依赖: toPointedCone
@@ -116,7 +116,7 @@ lemma toPointedCone_injective
 
 中文:
 引理 toPointedCone_injective
-  结论: Injective ((↑) : 命题erCone R E -> PointedCone R E)
+  结论: 单射 ((↑) : ProperCone R E -> PointedCone R E)
   证明: ClosedSubmodule.toSubmodule_injective
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.toSubmodule_injective, toSubmodule_injective
@@ -136,7 +136,7 @@ coe_injective _ _ h := ProperCone.toPointedCone_injective SetLike.coe_injective 
 
 中文:
 实例 :
-  签名: SetLike (命题erCone R E) E
+  签名: 集合状 (ProperCone R E) E
   定义体: C.carrier
 coe_injective _ _ h := ProperCone.toPointedCone_injective SetLike.coe_injective h
 
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (命题erCone R E)
+  签名: 偏序 (ProperCone R E)
   定义体: .ofSetLike (ProperCone R E) E
 
 Depends on / 依赖: ProperCone, ofSetLike
@@ -206,8 +206,8 @@ lemma pointed_toConvexCone
 
 中文:
 引理 pointed_toConvexCone
-  条件: (C : 命题erCone R E)
-  结论: (C : ConvexCone R E).Pointed
+  条件: (C : ProperCone R E)
+  结论: (C : 余nvexCone R E).Pointed
   证明: C.toPointedCone.pointed_toConvexCone
 
 Depends on / 依赖: C.toPointedCone.pointed_toConvexCone, pointed_toConvexCone, toPointedCone
@@ -226,8 +226,8 @@ lemma nonempty
 
 中文:
 引理 nonempty
-  条件: (C : 命题erCone R E)
-  结论: (C : Set E).Nonempty
+  条件: (C : ProperCone R E)
+  结论: (C : 集合 E).非空
   证明: C.toSubmodule.nonempty
 -/
 protected lemma nonempty (C : ProperCone R E) : (C : Set E).Nonempty := C.toSubmodule.nonempty
@@ -242,8 +242,8 @@ lemma isClosed
 
 中文:
 引理 isClosed
-  条件: (C : 命题erCone R E)
-  结论: IsClosed (C : Set E)
+  条件: (C : ProperCone R E)
+  结论: 是闭集 (C : 集合 E)
   证明: C.isClosed'
 -/
 protected lemma isClosed (C : ProperCone R E) : IsClosed (C : Set E) := C.isClosed'
@@ -261,8 +261,8 @@ protected nonrec lemma smul_mem (C : ProperCone R E) (hx : x in C) (hr : 0 <= r)
 
 中文:
 引理 convex
-  条件: (C : 命题erCone R E)
-  结论: Convex R (C : Set E)
+  条件: (C : ProperCone R E)
+  结论: 凸 R (C : 集合 E)
   证明: C.toPointedCone.convex
 
 protected nonrec lemma smul_mem (C : ProperCone R E) (hx : x in C) (hr : 0 <= r) : r • x in C :=
@@ -286,7 +286,7 @@ lemma mem_bot
 
 中文:
 引理 mem_bot
-  结论: x in (⊥ : 命题erCone R E) ↔ x = 0
+  结论: x in (⊥ : ProperCone R E) ↔ x = 0
   证明: .rfl
 -/
 lemma mem_bot : x in (⊥ : ProperCone R E) ↔ x = 0 := .rfl
@@ -301,7 +301,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: (⊥ : 命题erCone R E) = ({0} : Set E)
+  结论: (⊥ : ProperCone R E) = ({0} : 集合 E)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : (⊥ : ProperCone R E) = ({0} : Set E) := rfl
@@ -315,7 +315,7 @@ lemma toPointedCone_bot
 
 中文:
 引理 toPointedCone_bot
-  结论: (⊥ : 命题erCone R E).toPointedCone = ⊥
+  结论: (⊥ : ProperCone R E).toPointedCone = ⊥
   证明: rfl
 -/
 @[simp, norm_cast] lemma toPointedCone_bot : (⊥ : ProperCone R E).toPointedCone = ⊥ := rfl
@@ -332,7 +332,7 @@ abbreviation comap
 
 中文:
 缩写 comap
-  签名: (f : E ->L[R] F) (C : 命题erCone R F)
+  签名: (f : E ->L[R] F) (C : ProperCone R F)
   定义体: ClosedSubmodule.comap (f.restrictScalars R>=0) C
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.comap, f.restrictScalars, restrictScalars
@@ -351,7 +351,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (C : 命题erCone R F)
+  条件: (C : ProperCone R F)
   结论: C.comap (.id _ _) = C
   证明: rfl
 -/
@@ -368,8 +368,8 @@ lemma coe_comap
 
 中文:
 引理 coe_comap
-  条件: (f : E ->L[R] F) (C : 命题erCone R F)
-  结论: (C.comap f : Set E) = f ⁻¹' C
+  条件: (f : E ->L[R] F) (C : ProperCone R F)
+  结论: (C.comap f : 集合 E) = f ⁻¹' C
   证明: rfl
 -/
 @[simp] lemma coe_comap (f : E ->L[R] F) (C : ProperCone R F) : (C.comap f : Set E) = f ⁻¹' C := rfl
@@ -384,7 +384,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  条件: (g : F ->L[R] G) (f : E ->L[R] F) (C : 命题erCone R G)
+  条件: (g : F ->L[R] G) (f : E ->L[R] F) (C : ProperCone R G)
   证明: rfl
 -/
 lemma comap_comap (g : F ->L[R] G) (f : E ->L[R] F) (C : ProperCone R G) :
@@ -401,7 +401,7 @@ lemma mem_comap
 
 中文:
 引理 mem_comap
-  条件: {C : 命题erCone R F} {f : E ->L[R] F}
+  条件: {C : ProperCone R F} {f : E ->L[R] F}
   结论: x in C.comap f ↔ f x in C
   证明: .rfl
 -/
@@ -419,7 +419,7 @@ abbreviation map
 
 中文:
 缩写 map
-  签名: (f : E ->L[R] F) (C : 命题erCone R E)
+  签名: (f : E ->L[R] F) (C : ProperCone R E)
   定义体: ClosedSubmodule.map (f.restrictScalars R>=0) C
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.map, f.restrictScalars, restrictScalars
@@ -440,7 +440,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (C : 命题erCone R F)
+  条件: (C : ProperCone R F)
   结论: C.map (.id _ _) = C
   证明: ClosedSubmodule.map_id _
 
@@ -461,7 +461,7 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  条件: (f : E ->L[R] F) (C : 命题erCone R E)
+  条件: (f : E ->L[R] F) (C : ProperCone R E)
   证明: rfl
 
 @[simp]
@@ -480,7 +480,7 @@ lemma mem_map
 
 中文:
 引理 mem_map
-  条件: {f : E ->L[R] F} {C : 命题erCone R E} {y : F}
+  条件: {f : E ->L[R] F} {C : ProperCone R E} {y : F}
   证明: .rfl
 -/
 lemma mem_map {f : E ->L[R] F} {C : ProperCone R E} {y : F} :
@@ -506,7 +506,7 @@ definition positive
 
 中文:
 定义 positive
-  签名: : 命题erCone R E where
+  签名: : ProperCone R E where
   定义体: PointedCone.positive R E
   isClosed' := isClosed_Ici
 
@@ -588,7 +588,7 @@ hSclos.closure_subset_iff.2 by rintro _ ⟨_, h, rfl⟩; exact C.smul_mem h hx
 
 中文:
 引理 Pointed.of_nonempty_of_isClosed
-  条件: (hC : (C : Set E).Nonempty) (hSclos : IsClosed (C : Set E))
+  条件: (hC : (C : 集合 E).非空) (hSclos : 是闭集 (C : 集合 E))
   证明: by
   obtain ⟨x, hx⟩ := hC
   let f : 𝕜 -> E := (· • x)
@@ -622,7 +622,7 @@ instance canLift
 
 中文:
 实例 canLift
-  签名: : CanLift (ConvexCone 𝕜 E) (命题erCone 𝕜 E) (↑)
+  签名: : CanLift (余nvexCone 𝕜 E) (ProperCone 𝕜 E) (↑)
   定义体: ⟨⟨C.toPointedCone .of_nonempty_of_isClosed hC.1 hC.2, hC.2⟩, rfl⟩
 
 Depends on / 依赖: C.toPointedCone, of_nonempty_of_isClosed, toPointedCone

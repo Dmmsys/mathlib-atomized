@@ -33,7 +33,7 @@ class Nontrivial
     - exists_pair_ne : exists x y : α, x != y
 
 中文:
-类 Nontrivial
+类 非平凡
   参数: (α : 类型)
   公理与运算 (1 个):
     - exists_pair_ne : 存在 x y : α, x != y
@@ -52,7 +52,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial α ↔ 存在 x y : α, x != y
+  结论: 非平凡 α ↔ 存在 x y : α, x != y
   证明: ⟨fun h => h.exists_pair_ne, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: exists_pair_ne, h.exists_pair_ne
@@ -70,8 +70,8 @@ theorem exists_pair_ne
   proof: Nontrivial.exists_pair_ne
 
 中文:
-定理 exists_pair_ne
-  条件: (α : 类型) [Nontrivial α]
+定理 存在_pair_ne
+  条件: (α : 类型) [非平凡 α]
   结论: 存在 x y : α, x != y
   证明: Nontrivial.exists_pair_ne
 
@@ -90,8 +90,8 @@ theorem Function.Injective.nontrivial
   ⟨⟨f x, f y, hf.ne h⟩⟩
 
 中文:
-定理 Function.Injective.nontrivial
-  结论: [Nontrivial α] {f : α -> β}
+定理 函数.单射.nontrivial
+  结论: [非平凡 α] {f : α -> β}
   证明: let ⟨x, y, h⟩ := exists_pair_ne α
   ⟨⟨f x, f y, hf.ne h⟩⟩
 -/
@@ -113,8 +113,8 @@ theorem Function.Injective.exists_ne
   · exact ⟨x₂, h⟩
 
 中文:
-定理 Function.Injective.exists_ne
-  结论: [Nontrivial α] {f : α -> β}
+定理 函数.单射.存在_ne
+  结论: [非平凡 α] {f : α -> β}
   证明: by
   rcases exists_pair_ne α with ⟨x₁, x₂, hx⟩
   by_cases h : f x₂ = y
@@ -144,8 +144,8 @@ theorem Decidable.exists_ne
   · exact ⟨y, Ne.symm hx⟩
 
 中文:
-定理 Decidable.exists_ne
-  条件: [Nontrivial α] [DecidableEq α] (x : α)
+定理 可判定.存在_ne
+  条件: [非平凡 α] [DecidableEq α] (x : α)
   结论: 存在 y, y != x
   证明: by
   rcases exists_pair_ne α with ⟨y, y', h⟩
@@ -173,8 +173,8 @@ theorem exists_ne
   exact Decidable.exists_ne x
 
 中文:
-定理 exists_ne
-  条件: [Nontrivial α] (x : α)
+定理 存在_ne
+  条件: [非平凡 α] (x : α)
   结论: 存在 y, y != x
   证明: by
   classical
@@ -199,7 +199,7 @@ theorem nontrivial_of_ne
 中文:
 定理 nontrivial_of_ne
   条件: (x y : α) (h : x != y)
-  结论: Nontrivial α
+  结论: 非平凡 α
   证明: ⟨⟨x, y, h⟩⟩
 -/
 theorem nontrivial_of_ne (x y : α) (h : x != y) : Nontrivial α :=
@@ -215,9 +215,9 @@ theorem nontrivial_iff_exists_ne
   proof: ⟨fun h => @exists_ne α h x, fun ⟨_, hy⟩ => nontrivial_of_ne _ _ hy⟩
 
 中文:
-定理 nontrivial_iff_exists_ne
+定理 nontrivial_iff_存在_ne
   条件: (x : α)
-  结论: Nontrivial α ↔ 存在 y, y != x
+  结论: 非平凡 α ↔ 存在 y, y != x
   证明: ⟨fun h => @exists_ne α h x, fun ⟨_, hy⟩ => nontrivial_of_ne _ _ hy⟩
 
 Depends on / 依赖: exists_ne, nontrivial_of_ne
@@ -238,8 +238,8 @@ theorem Function.nontrivial_of_nontrivial
   exact nontrivial_of_ne _ _ h
 
 中文:
-定理 Function.nontrivial_of_nontrivial
-  条件: (α β : 类型) [Nontrivial (α -> β)]
+定理 函数.nontrivial_of_nontrivial
+  条件: (α β : 类型) [非平凡 (α -> β)]
   证明: by
   obtain ⟨f, g, h⟩ := exists_pair_ne (α -> β)
   rw [ne_eq]; rw [funext_iff]; rw [Classical.not_forall] at h
@@ -265,7 +265,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial 命题
+  签名: 非平凡 命题
   定义体: ⟨⟨True, False, true_ne_false⟩⟩
 
 Depends on / 依赖: true_ne_false
@@ -296,7 +296,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton α ↔ 对任意 x y : α, x = y
+  结论: 子单例 α ↔ 对任意 x y : α, x = y
   证明: ⟨by
     intro h
     exact Subsingleton.elim, fun h => ⟨h⟩⟩
@@ -322,7 +322,7 @@ theorem not_nontrivial_iff_subsingleton
 
 中文:
 定理 not_nontrivial_iff_subsingleton
-  结论: ¬Nontrivial α ↔ Subsingleton α
+  结论: ¬非平凡 α ↔ 子单例 α
   证明: by
   simp only [nontrivial_iff, subsingleton_iff, not_exists, Classical.not_not]
 
@@ -342,8 +342,8 @@ theorem not_nontrivial
 
 中文:
 定理 not_nontrivial
-  条件: (α) [Subsingleton α]
-  结论: ¬Nontrivial α
+  条件: (α) [子单例 α]
+  结论: ¬非平凡 α
   证明: fun ⟨⟨x, y, h⟩⟩ => h Subsingleton.elim x y
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -364,8 +364,8 @@ theorem not_subsingleton
 
 中文:
 定理 not_subsingleton
-  条件: (α) [Nontrivial α]
-  结论: ¬Subsingleton α
+  条件: (α) [非平凡 α]
+  结论: ¬子单例 α
   证明: fun _ => not_nontrivial _ ‹_›
 
 @[push]
@@ -387,7 +387,7 @@ lemma not_subsingleton_iff_nontrivial
 
 中文:
 引理 not_subsingleton_iff_nontrivial
-  结论: ¬Subsingleton α ↔ Nontrivial α
+  结论: ¬子单例 α ↔ 非平凡 α
   证明: by
   rw [← not_nontrivial_iff_subsingleton]; rw [Classical.not_not]
 
@@ -410,7 +410,7 @@ theorem subsingleton_or_nontrivial
 中文:
 定理 subsingleton_or_nontrivial
   条件: (α : 类型)
-  结论: Subsingleton α ∨ Nontrivial α
+  结论: 子单例 α ∨ 非平凡 α
   证明: by
   rw [← not_nontrivial_iff_subsingleton]; rw [or_comm]
   exact Classical.em _
@@ -432,8 +432,8 @@ theorem false_of_nontrivial_of_subsingleton
 
 中文:
 定理 false_of_nontrivial_of_subsingleton
-  条件: (α : 类型) [Nontrivial α] [Subsingleton α]
-  结论: False
+  条件: (α : 类型) [非平凡 α] [子单例 α]
+  结论: 假
   证明: not_nontrivial _ ‹_›
 
 Depends on / 依赖: not_nontrivial
@@ -457,8 +457,8 @@ theorem Function.Surjective.nontrivial
   exact ⟨⟨x', y', this⟩⟩
 
 中文:
-定理 Function.Surjective.nontrivial
-  结论: [Nontrivial β] {f : α -> β}
+定理 函数.满射.nontrivial
+  结论: [非平凡 β] {f : α -> β}
   证明: by
   rcases exists_pair_ne β with ⟨x, y, h⟩
   rcases hf x with ⟨x', hx'⟩
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial 布尔
+  签名: 非平凡 布尔值
   定义体: ⟨⟨true, false, nofun⟩⟩
 -/
 instance : Nontrivial Bool :=
@@ -509,8 +509,8 @@ theorem NeZero.nontrivial
 
 中文:
 定理 NeZero.nontrivial
-  条件: {α : 类型} [Zero α] (a : α) [NeZero a]
-  结论: Nontrivial α
+  条件: {α : 类型} [零 α] (a : α) [NeZero a]
+  结论: 非平凡 α
   证明: ⟨⟨a, 0, NeZero.ne a⟩⟩
 
 Depends on / 依赖: NeZero, NeZero.ne

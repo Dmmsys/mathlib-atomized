@@ -47,7 +47,7 @@ definition locallyInjective
 
 中文:
 定义 locallyInjective
-  签名: : Morphism命题erty (Sheaf J A)
+  签名: : MorphismProperty (层 J A)
   定义体: fun _ _ f => IsLocallyInjective f
 
 Depends on / 依赖: IsLocallyInjective
@@ -65,7 +65,7 @@ definition locallySurjective
 
 中文:
 定义 locallySurjective
-  签名: : Morphism命题erty (Sheaf J A)
+  签名: : MorphismProperty (层 J A)
   定义体: fun _ _ f => IsLocallySurjective f
 
 Depends on / 依赖: IsLocallySurjective
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallySurjective
+  签名: 是LocallySurjective
   定义体: by
   apply (functorialLocallySurjectiveInjectiveFactorization J data).hi
 
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallyInjective
+  签名: 是LocallyInjective
   定义体: by
   apply (functorialLocallySurjectiveInjectiveFactorization J data).hp
 
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi ((functorialLocallySurjectiveInjectiveFactorization J data).i.app f)
+  签名: 满态射 ((functorialLocallySurjectiveInjectiveFactorization J data).i.app f)
   定义体: by
   apply epi_of_isLocallySurjective
 
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono ((functorialLocallySurjectiveInjectiveFactorization J data).p.app f)
+  签名: 单态射 ((functorialLocallySurjectiveInjectiveFactorization J data).p.app f)
   定义体: by
   apply mono_of_isLocallyInjective
 
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: (locallySurjective J A).HasFunctorialFactorization (locallyInjective J A)
+  签名: (locallySurjective J A).有FunctorialFactorization (locallyInjective J A)
   定义体: ⟨functorialLocallySurjectiveInjectiveFactorization J
       (MorphismProperty.functorialFactorizationData _ _)⟩
 

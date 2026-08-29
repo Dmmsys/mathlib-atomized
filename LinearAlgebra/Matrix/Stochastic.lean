@@ -56,7 +56,7 @@ definition rowStochastic
 
 中文:
 定义 rowStochastic
-  签名: (R n : 类型) [Fintype n] [DecidableEq n] [Semiring R] [PartialOrder R]
+  签名: (R n : 类型) [有限类型 n] [DecidableEq n] [半环 R] [偏序 R]
   定义体: {M | (forall i j, 0 <= M i j) ∧ M *ᵥ 1 = 1 }
   mul_mem' {M N} hM hN := by
     refine ⟨fun i j => sum_nonneg fun i _ => mul_nonneg (hM.1 _ _) (hN.1 _ _), ?_⟩
@@ -297,7 +297,7 @@ lemma convex_rowStochastic
 
 中文:
 引理 convex_rowStochastic
-  结论: Convex R (rowStochastic R n : Set (Matrix n n R))
+  结论: 凸 R (rowStochastic R n : 集合 (矩阵 n n R))
   证明: by
   intro x hx y hy a b ha hb h
   simp only [SetLike.mem_coe, mem_rowStochastic_iff_sum] at hx hy ⊢
@@ -326,7 +326,7 @@ lemma permMatrix_mem_rowStochastic
 
 中文:
 引理 permMatrix_mem_rowStochastic
-  条件: {σ : Equiv.Perm n}
+  条件: {σ : 等价.置换 n}
   证明: by
   rw [mem_rowStochastic_iff_sum]
   refine ⟨fun i j => ?g1, ?g2⟩
@@ -363,7 +363,7 @@ definition colStochastic
 
 中文:
 定义 colStochastic
-  签名: (R n : 类型) [Fintype n] [DecidableEq n] [Semiring R] [PartialOrder R]
+  签名: (R n : 类型) [有限类型 n] [DecidableEq n] [半环 R] [偏序 R]
   定义体: {M | (forall i j, 0 <= M i j) ∧ 1 ᵥ* M = 1 }
   mul_mem' {M N} hM hN := by
     refine Set.mem_sep ?_ ?_
@@ -611,7 +611,7 @@ lemma sum_mulVec_of_mem_colStochastic
 
 中文:
 引理 sum_mulVec_of_mem_colStochastic
-  结论: {M : Matrix n n R} {x : n -> R}
+  结论: {M : 矩阵 n n R} {x : n -> R}
   证明: by
   simp only [Matrix.mulVec, dotProduct]
   rw [Finset.sum_comm]
@@ -638,7 +638,7 @@ lemma convex_colStochastic
 
 中文:
 引理 convex_colStochastic
-  结论: Convex R (colStochastic R n : Set (Matrix n n R))
+  结论: 凸 R (colStochastic R n : 集合 (矩阵 n n R))
   证明: by
   intro x hx y hy a b ha hb h
   simp only [SetLike.mem_coe, mem_colStochastic_iff_sum] at hx hy ⊢
@@ -667,7 +667,7 @@ lemma permMatrix_mem_colStochastic
 
 中文:
 引理 permMatrix_mem_colStochastic
-  条件: {σ : Equiv.Perm n}
+  条件: {σ : 等价.置换 n}
   证明: by
   rw [mem_colStochastic_iff_sum]
   refine ⟨fun i j => ?g1, ?g2⟩
@@ -749,7 +749,7 @@ lemma reindex_mem_rowStochastic
 
 中文:
 引理 reindex_mem_rowStochastic
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {M : Matrix n n R}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {M : 矩阵 n n R}
   证明: ⟨fun _ _ => by simpa using nonneg_of_mem_rowStochastic hM, by simp [submatrix_mulVec_equiv, hM.2]⟩
 
 Depends on / 依赖: nonneg_of_mem_rowStochastic, submatrix_mulVec_equiv
@@ -774,7 +774,7 @@ lemma reindex_mem_rowStochastic_iff
 
 中文:
 引理 reindex_mem_rowStochastic_iff
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {M : Matrix n n R}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {M : 矩阵 n n R}
   证明: by
   refine ⟨fun h => ?_, reindex_mem_rowStochastic⟩
   have : M = (M.reindex e₁ e₂).reindex e₁.symm e₂.symm := by simp
@@ -803,7 +803,7 @@ lemma reindex_mem_colStochastic_iff
 
 中文:
 引理 reindex_mem_colStochastic_iff
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {M : Matrix n n R}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {M : 矩阵 n n R}
   证明: by
   rw [← transpose_transpose (reindex e₁ e₂ M)]; rw [transpose_reindex]; rw [transpose_mem_colStochastic_iff_mem_rowStochastic]; rw [reindex_mem_rowStochastic_iff]; rw [← transpose_mem_colStochastic_iff_mem_rowStochastic]; rw [transpose_transpose]
 

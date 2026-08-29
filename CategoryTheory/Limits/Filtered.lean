@@ -50,8 +50,8 @@ theorem IsFiltered.iff_nonempty_limit
     exact ⟨⟨pt, (limitCompYonedaIsoCocone F pt).hom ι⟩⟩
 
 中文:
-定理 IsFiltered.iff_nonempty_limit
-  结论: IsFiltered C ↔
+定理 是Filtered.iff_nonempty_limit
+  结论: 是Filtered C ↔
   证明: by
   rw [IsFiltered.iff_cocone_nonempty.{v}]
   refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
@@ -87,8 +87,8 @@ theorem IsCofiltered.iff_nonempty_limit
     exact ⟨⟨pt, (limitCompCoyonedaIsoCone F pt).hom π⟩⟩
 
 中文:
-定理 IsCofiltered.iff_nonempty_limit
-  结论: IsCofiltered C ↔
+定理 是余filtered.iff_nonempty_limit
+  结论: 是余filtered C ↔
   证明: by
   rw [IsCofiltered.iff_cone_nonempty.{v}]
   refine ⟨fun h J _ _ F => ?_, fun h J _ _ F => ?_⟩
@@ -133,10 +133,10 @@ class HasCofilteredLimitsOfSize
     - HasLimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsCofiltered I], HasLimitsOfShape I C
 
 中文:
-类 HasCofilteredLimitsOfSize
+类 有余filteredLimitsOfSize
   参数: : 命题 where
   公理与运算 (1 个):
-    - HasLimitsOfShape : 对任意 (I : Type w) [Category.{w'} I] [IsCofiltered I], HasLimitsOfShape I C
+    - HasLimitsOfShape : 对任意 (I : 类型 w) [范畴.{w'} I] [是余filtered I], 有形状极限 I C
 -/
 class HasCofilteredLimitsOfSize : Prop where
   /-- For all filtered types of size `w`, we have limits -/
@@ -154,10 +154,10 @@ class HasFilteredColimitsOfSize
     - HasColimitsOfShape : forall (I : Type w) [Category.{w'} I] [IsFiltered I], HasColimitsOfShape I C
 
 中文:
-类 HasFilteredColimitsOfSize
+类 有FilteredColimitsOfSize
   参数: : 命题 where
   公理与运算 (1 个):
-    - HasColimitsOfShape : 对任意 (I : Type w) [Category.{w'} I] [IsFiltered I], HasColimitsOfShape I C
+    - HasColimitsOfShape : 对任意 (I : 类型 w) [范畴.{w'} I] [是Filtered I], 有形状余极限 I C
 -/
 class HasFilteredColimitsOfSize : Prop where
   /-- For all filtered types of a size `w`, we have colimits -/
@@ -253,7 +253,7 @@ lemma hasCofilteredLimitsOfSize_shrink
 
 中文:
 引理 hasCofilteredLimitsOfSize_shrink
-  条件: [HasCofilteredLimitsOfSize.{max w' w₂', max w w₂} C]
+  条件: [有余filteredLimitsOfSize.{最大值 w' w₂', 最大值 w w₂} C]
   证明: hasCofilteredLimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
 
 Depends on / 依赖: hasCofilteredLimitsOfSize_of_univLE
@@ -302,7 +302,7 @@ lemma hasFilteredColimitsOfSize_shrink
 
 中文:
 引理 hasFilteredColimitsOfSize_shrink
-  条件: [HasFilteredColimitsOfSize.{max w' w₂', max w w₂} C]
+  条件: [有FilteredColimitsOfSize.{最大值 w' w₂', 最大值 w w₂} C]
   证明: hasFilteredColimitsOfSize_of_univLE.{w', w, max w' w₂', max w w₂}
 
 Depends on / 依赖: hasFilteredColimitsOfSize_of_univLE

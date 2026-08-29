@@ -151,7 +151,7 @@ lemma bernoulliMeasure_apply
 
 中文:
 引理 bernoulliMeasure_apply
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   split_ifs <;> simp_all [bernoulliMeasure_def, ← ENNReal.coe_add]
 
@@ -182,7 +182,7 @@ lemma bernoulliMeasure_real_apply
 
 中文:
 引理 bernoulliMeasure_real_apply
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   simp [measureReal_def, bernoulliMeasure_apply p hs, apply_ite ENNReal.toReal]
 
@@ -217,7 +217,7 @@ lemma bernoulliMeasure_apply_of_mem_of_mem
 
 中文:
 引理 bernoulliMeasure_apply_of_mem_of_mem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_apply]
@@ -247,7 +247,7 @@ lemma bernoulliMeasure_real_apply_of_mem_of_mem
 
 中文:
 引理 bernoulliMeasure_real_apply_of_mem_of_mem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_real_apply]
@@ -277,7 +277,7 @@ lemma bernoulliMeasure_apply_of_mem_of_notMem
 
 中文:
 引理 bernoulliMeasure_apply_of_mem_of_notMem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_apply]
@@ -307,7 +307,7 @@ lemma bernoulliMeasure_real_apply_of_mem_of_notMem
 
 中文:
 引理 bernoulliMeasure_real_apply_of_mem_of_notMem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_real_apply]
@@ -337,7 +337,7 @@ lemma bernoulliMeasure_apply_of_notMem_of_mem
 
 中文:
 引理 bernoulliMeasure_apply_of_notMem_of_mem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_apply]
@@ -367,7 +367,7 @@ lemma bernoulliMeasure_real_apply_of_notMem_of_mem
 
 中文:
 引理 bernoulliMeasure_real_apply_of_notMem_of_mem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_real_apply]
@@ -397,7 +397,7 @@ lemma bernoulliMeasure_apply_of_notMem_of_notMem
 
 中文:
 引理 bernoulliMeasure_apply_of_notMem_of_notMem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_apply]
@@ -425,7 +425,7 @@ lemma bernoulliMeasure_real_apply_of_notMem_of_notMem
 
 中文:
 引理 bernoulliMeasure_real_apply_of_notMem_of_notMem
-  结论: (p : I) {s : Set X}
+  结论: (p : I) {s : 集合 X}
   证明: by
   classical
   simp_all [bernoulliMeasure_real_apply]
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure Ber(x, y, p)
+  签名: 是概率测度 Ber(x, y, p)
   定义体: by simp [bernoulliMeasure_def]
 
 @[simp]
@@ -501,7 +501,7 @@ theorem map_bernoulliMeasure
 
 中文:
 定理 map_bernoulliMeasure
-  结论: [MeasurableSingletonClass X] [MeasurableSingletonClass Y]
+  结论: [MeasurableSingleton类 X] [MeasurableSingleton类 Y]
   证明: by
   have hf (x : X) : AEMeasurable f (dirac x) := by fun_prop
   simp only [bernoulliMeasure_def]
@@ -529,7 +529,7 @@ theorem map_bernoulliMeasure'
 
 中文:
 定理 map_bernoulliMeasure'
-  条件: (x y : X) {f : X -> Y} (hf : Measurable f) (p : I)
+  条件: (x y : X) {f : X -> Y} (hf : 可测 f) (p : I)
   证明: by
   simp [bernoulliMeasure_def, Measure.map_add _ _ hf, Measure.map_smul, map_dirac' hf]
 
@@ -555,7 +555,7 @@ lemma integrable_bernoulliMeasure
 
 中文:
 引理 integrable_bernoulliMeasure
-  条件: [MeasurableSingletonClass X] (x y : X) (p : I) (f : X -> E)
+  条件: [MeasurableSingleton类 X] (x y : X) (p : I) (f : X -> E)
   证明: by
   simp [bernoulliMeasure_def, integrable_add_measure, integrable_dirac,
     Integrable.smul_measure_nnreal]
@@ -582,7 +582,7 @@ lemma integral_bernoulliMeasure
 
 中文:
 引理 integral_bernoulliMeasure
-  条件: [MeasurableSingletonClass X] (x y : X) (p : I) (f : X -> E)
+  条件: [MeasurableSingleton类 X] (x y : X) (p : I) (f : X -> E)
   证明: by
   rw [bernoulliMeasure_def]; rw [integral_add_measure]
   · simp [NNReal.smul_def]

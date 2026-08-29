@@ -67,7 +67,7 @@ lemma tendsto_integral_cexp_sq_smul
 
 中文:
 引理 tendsto_integral_cexp_sq_smul
-  条件: (hf : 整数egrable f)
+  条件: (hf : 可积 f)
   证明: by
   apply tendsto_integral_filter_of_dominated_convergence _ _ _ hf.norm
   · filter_upwards with v
@@ -115,7 +115,7 @@ lemma tendsto_integral_gaussian_smul
 
 中文:
 引理 tendsto_integral_gaussian_smul
-  条件: (hf : 整数egrable f) (h'f : 整数egrable (𝓕 f)) (v : V)
+  条件: (hf : 可积 f) (h'f : 可积 (𝓕 f)) (v : V)
   证明: by
   have A : Tendsto (fun (c : Real) => (∫ w : V, cexp (- c⁻¹ * ‖w‖ ^ 2 + 2 * π * I * ⟪v, w⟫)
        • (𝓕 f) w)) atTop (𝓝 (𝓕⁻ (𝓕 f) v)) := by
@@ -173,7 +173,7 @@ lemma tendsto_integral_gaussian_smul'
 
 中文:
 引理 tendsto_integral_gaussian_smul'
-  条件: (hf : 整数egrable f) {v : V} (h'f : ContinuousAt f v)
+  条件: (hf : 可积 f) {v : V} (h'f : ContinuousAt f v)
   证明: by
   let φ : V -> Real := fun w => π ^ (finrank Real V / 2 : Real) * Real.exp (-π ^ 2 * ‖w‖ ^ 2)
   have A : Tendsto (fun (c : Real) => ∫ w : V, (c ^ finrank Real V * φ (c • (v - w))) • f w)
@@ -243,7 +243,7 @@ theorem MeasureTheory.Integrable.fourierInv_fourier_eq
     (Real.tendsto_integral_gaussian_smul' hf hv)
 
 中文:
-定理 MeasureTheory.Integrable.fourierInv_fourier_eq
+定理 测度论.可积.fourierInv_fourier_eq
   证明: tendsto_nhds_unique (Real.tendsto_integral_gaussian_smul hf h'f v)
     (Real.tendsto_integral_gaussian_smul' hf hv)
 
@@ -266,8 +266,8 @@ theorem Continuous.fourierInv_fourier_eq
   exact hf.fourierInv_fourier_eq h'f h.continuousAt
 
 中文:
-定理 Continuous.fourierInv_fourier_eq
-  结论: (h : Continuous f)
+定理 连续.fourierInv_fourier_eq
+  结论: (h : 连续 f)
   证明: by
   ext v
   exact hf.fourierInv_fourier_eq h'f h.continuousAt
@@ -290,7 +290,7 @@ theorem MeasureTheory.Integrable.fourier_fourierInv_eq
   exact hf.fourierInv_fourier_eq h'f hv
 
 中文:
-定理 MeasureTheory.Integrable.fourier_fourierInv_eq
+定理 测度论.可积.fourier_fourierInv_eq
   证明: by
   rw [fourierInv_comm]
   exact hf.fourierInv_fourier_eq h'f hv
@@ -314,8 +314,8 @@ theorem Continuous.fourier_fourierInv_eq
   exact hf.fourier_fourierInv_eq h'f h.continuousAt
 
 中文:
-定理 Continuous.fourier_fourierInv_eq
-  结论: (h : Continuous f)
+定理 连续.fourier_fourierInv_eq
+  结论: (h : 连续 f)
   证明: by
   ext v
   exact hf.fourier_fourierInv_eq h'f h.continuousAt

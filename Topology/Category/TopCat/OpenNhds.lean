@@ -125,7 +125,7 @@ instance opensNhds.instFunLike
 
 中文:
 实例 opensNhds.instFunLike
-  签名: : FunLike (U ⟶ V) U.1 V.1 where
+  签名: : 函数状 (U ⟶ V) U.1 V.1 where
   定义体: Set.inclusion f.le
   coe_injective := by rintro ⟨⟨_⟩⟩ _ _; congr!
 
@@ -309,7 +309,7 @@ theorem isOpenEmbedding
 中文:
 定理 isOpenEmbedding
   条件: {x : X} (U : OpenNhds x)
-  结论: IsOpenEmbedding U.1.inclusion'
+  结论: 是开嵌入 U.1.inclusion'
   证明: U.1.isOpenEmbedding
 
 Depends on / 依赖: isOpenEmbedding
@@ -533,7 +533,7 @@ definition functorNhds
 
 中文:
 定义 functorNhds
-  签名: (h : IsOpenMap f) (x : X)
+  签名: (h : 是开映射 f) (x : X)
   定义体: ⟨h.functor.obj U.1, ⟨x, U.2, rfl⟩⟩
   map i := h.functor.map i
 
@@ -554,7 +554,7 @@ definition adjunctionNhds
 
 中文:
 定义 adjunctionNhds
-  签名: (h : IsOpenMap f) (x : X)
+  签名: (h : 是开映射 f) (x : X)
   定义体: { app := fun _ => homOfLE fun x hxU => ⟨x, hxU, rfl⟩ }
   counit := { app := fun _ => homOfLE fun _ ⟨_, hfxV, hxy⟩ => hxy ▸ hfxV }
 
@@ -579,8 +579,8 @@ abbreviation Topology.IsOpenEmbedding.functorNhds
   body: h.isOpenMap.functorNhds x
 
 中文:
-缩写 Topology.IsOpenEmbedding.functorNhds
-  签名: (h : Topology.IsOpenEmbedding f) (x : X)
+缩写 拓扑.是开嵌入.functorNhds
+  签名: (h : 拓扑.是开嵌入 f) (x : X)
   定义体: h.isOpenMap.functorNhds x
 
 Depends on / 依赖: functorNhds, h.isOpenMap.functorNhds, isOpenMap
@@ -597,8 +597,8 @@ abbreviation Topology.IsOpenEmbedding.adjunctionNhds
   body: h.isOpenMap.adjunctionNhds x
 
 中文:
-缩写 Topology.IsOpenEmbedding.adjunctionNhds
-  签名: (h : Topology.IsOpenEmbedding f) (x : X)
+缩写 拓扑.是开嵌入.adjunctionNhds
+  签名: (h : 拓扑.是开嵌入 f) (x : X)
   定义体: h.isOpenMap.adjunctionNhds x
 
 Depends on / 依赖: adjunctionNhds, h.isOpenMap.adjunctionNhds, isOpenMap
@@ -627,7 +627,7 @@ definition functorNhds
 
 中文:
 定义 functorNhds
-  签名: (h : IsInducing f) (x : X)
+  签名: (h : 是Inducing f) (x : X)
   定义体: ⟨h.functor.obj U.1, (h.mem_functorObj_iff U.1).mpr U.2⟩
   map := h.functor.map
 
@@ -649,7 +649,7 @@ definition adjunctionNhds
 
 中文:
 定义 adjunctionNhds
-  签名: (h : IsInducing f) (x : X)
+  签名: (h : 是Inducing f) (x : X)
   定义体: { app := fun U => homOfLE (h.adjunction.unit.app U.1).le }
   counit := { app := fun U => homOfLE (h.adjunction.counit.app U.1).le }
 

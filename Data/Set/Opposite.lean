@@ -32,7 +32,7 @@ definition op
 
 中文:
 定义 op
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: unop ⁻¹' s
 -/
 protected def op (s : Set α) : Set αᵒᵖ :=
@@ -50,7 +50,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (s : Set αᵒᵖ)
+  签名: (s : 集合 αᵒᵖ)
   定义体: op ⁻¹' s
 
 @[simp]
@@ -72,7 +72,7 @@ theorem mem_op
 
 中文:
 定理 mem_op
-  条件: {s : Set α} {a : αᵒᵖ}
+  条件: {s : 集合 α} {a : αᵒᵖ}
   结论: a in s.op ↔ unop a in s
   证明: Iff.rfl
 
@@ -97,7 +97,7 @@ theorem op_mem_op
 
 中文:
 定理 op_mem_op
-  条件: {s : Set α} {a : α}
+  条件: {s : 集合 α} {a : α}
   结论: op a in s.op ↔ a in s
   证明: by rfl
 
@@ -119,7 +119,7 @@ theorem mem_unop
 
 中文:
 定理 mem_unop
-  条件: {s : Set αᵒᵖ} {a : α}
+  条件: {s : 集合 αᵒᵖ} {a : α}
   结论: a in s.unop ↔ op a in s
   证明: Iff.rfl
 
@@ -144,7 +144,7 @@ theorem unop_mem_unop
 
 中文:
 定理 unop_mem_unop
-  条件: {s : Set αᵒᵖ} {a : αᵒᵖ}
+  条件: {s : 集合 αᵒᵖ} {a : αᵒᵖ}
   结论: unop a in s.unop ↔ a in s
   证明: by rfl
 
@@ -168,7 +168,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s.op.unop = s
   证明: rfl
 
@@ -188,7 +188,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (s : Set αᵒᵖ)
+  条件: (s : 集合 αᵒᵖ)
   结论: s.unop.op = s
   证明: rfl
 -/
@@ -206,7 +206,7 @@ definition opEquiv_self
 
 中文:
 定义 opEquiv_self
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ⟨fun x => ⟨unop x, x.2⟩, fun x => ⟨op x, x.2⟩, fun _ => rfl, fun _ => rfl⟩
 -/
 def opEquiv_self (s : Set α) : s.op ≃ s :=
@@ -226,7 +226,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Set α ≃ Set αᵒᵖ
+  签名: : 集合 α ≃ 集合 αᵒᵖ
   定义体: ⟨Set.op, Set.unop, op_unop, unop_op⟩
 
 @[simp]
@@ -255,7 +255,7 @@ theorem singleton_op
 中文:
 定理 singleton_op
   条件: (x : α)
-  结论: ({x} : Set α).op = {op x}
+  结论: ({x} : 集合 α).op = {op x}
   证明: by
   ext
   constructor
@@ -291,7 +291,7 @@ theorem singleton_unop
 中文:
 定理 singleton_unop
   条件: (x : αᵒᵖ)
-  结论: ({x} : Set αᵒᵖ).unop = {unop x}
+  结论: ({x} : 集合 αᵒᵖ).unop = {unop x}
   证明: by
   ext
   constructor
@@ -327,7 +327,7 @@ theorem singleton_op_unop
 中文:
 定理 singleton_op_unop
   条件: (x : α)
-  结论: ({op x} : Set αᵒᵖ).unop = {x}
+  结论: ({op x} : 集合 αᵒᵖ).unop = {x}
   证明: by
   ext
   constructor
@@ -361,7 +361,7 @@ theorem singleton_unop_op
 中文:
 定理 singleton_unop_op
   条件: (x : αᵒᵖ)
-  结论: ({unop x} : Set α).op = {x}
+  结论: ({unop x} : 集合 α).op = {x}
   证明: by
   ext
   constructor

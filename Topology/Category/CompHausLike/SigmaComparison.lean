@@ -44,7 +44,7 @@ instance :
 
 中文:
 实例 :
-  签名: Has命题 P (Σ (a : α), (σ a))
+  签名: 有命题 P (Σ (a : α), (σ a))
   定义体: HasExplicitFiniteCoproducts.hasProp (fun a => of P (σ a))
 
 Depends on / 依赖: HasExplicitFiniteCoproducts, HasExplicitFiniteCoproducts.hasProp, hasProp
@@ -132,7 +132,7 @@ instance isIsoSigmaComparison
 
 中文:
 实例 isIsoSigmaComparison
-  签名: : IsIso sigmaComparison X σ
+  签名: : 是同构 sigmaComparison X σ
   定义体: by
   rw [sigmaComparison_eq_comp_isos]
   infer_instance

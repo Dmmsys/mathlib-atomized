@@ -45,7 +45,7 @@ lemma prod_univ_pi
 
 中文:
 引理 prod_univ_pi
-  结论: [DecidableEq ι] [Fintype ι] {κ : ι -> 类型} (t : 对任意 i, Finset (κ i))
+  结论: [DecidableEq ι] [有限类型 ι] {κ : ι -> 类型} (t : 对任意 i, 有限集 (κ i))
   证明: by
   apply prod_nbij' (fun x i => x i <| mem_univ _) (fun x i _ => x i) <;> simp
 

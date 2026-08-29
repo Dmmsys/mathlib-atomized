@@ -93,7 +93,7 @@ lemma locallySmall_of_hasLocalization
 
 中文:
 引理 locallySmall_of_hasLocalization
-  结论: {D : 类型u₂} [Category.{v₂} D]
+  结论: {D : 类型u₂} [范畴.{v₂} D]
   证明: small_of_injective (fun _ _ h =>
     (Localization.uniq L W.Q' W).functor.map_injective h)
 

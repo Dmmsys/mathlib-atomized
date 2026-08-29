@@ -213,8 +213,8 @@ instance [Nonempty
   body: NatTrans.congr_app e (Classical.arbitrary J)
 
 中文:
-实例 [Nonempty
-  签名: J] : Faithful (const J
+实例 [非空
+  签名: J] : 忠实 (const J
   定义体: NatTrans.congr_app e (Classical.arbitrary J)
 
 Depends on / 依赖: Classical, Classical.arbitrary, NatTrans, NatTrans.congr_app, arbitrary, congr_app

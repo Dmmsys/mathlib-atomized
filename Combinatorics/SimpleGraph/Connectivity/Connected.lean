@@ -96,7 +96,7 @@ lemma not_reachable_iff_isEmpty_walk
 中文:
 引理 not_reachable_iff_isEmpty_walk
   条件: {u v : V}
-  结论: ¬G.Reachable u v ↔ IsEmpty (G.Walk u v)
+  结论: ¬G.Reachable u v ↔ 是空 (G.途径 u v)
   证明: not_nonempty_iff
 
 Depends on / 依赖: not_nonempty_iff
@@ -147,8 +147,8 @@ theorem Walk.reachable
   proof: ⟨p⟩
 
 中文:
-定理 Walk.reachable
-  条件: {G : SimpleGraph V} {u v : V} (p : G.Walk u v)
+定理 途径.reachable
+  条件: {G : 简单图 V} {u v : V} (p : G.途径 u v)
   结论: G.Reachable u v
   证明: ⟨p⟩
 -/
@@ -165,8 +165,8 @@ theorem Adj.reachable
   proof: h.toWalk.reachable
 
 中文:
-定理 Adj.reachable
-  条件: {u v : V} (h : G.Adj u v)
+定理 伴随.reachable
+  条件: {u v : V} (h : G.伴随 u v)
   结论: G.Reachable u v
   证明: h.toWalk.reachable
 -/
@@ -186,8 +186,8 @@ theorem adj_le_reachable
 
 中文:
 定理 adj_le_reachable
-  条件: (G : SimpleGraph V)
-  结论: G.Adj <= G.Reachable
+  条件: (G : 简单图 V)
+  结论: G.伴随 <= G.Reachable
   证明: fun _ _ => Adj.reachable
 
 @[refl]
@@ -354,7 +354,7 @@ theorem reachable_eq_reflTransGen
 
 中文:
 定理 reachable_eq_reflTransGen
-  结论: G.Reachable = Relation.ReflTransGen G.Adj
+  结论: G.Reachable = 关系.ReflTransGen G.伴随
   证明: by
   ext
   exact reachable_iff_reflTransGen ..
@@ -379,7 +379,7 @@ theorem reachable_fromEdgeSet_eq_reflTransGen_toRel
 
 中文:
 定理 reachable_fromEdgeSet_eq_reflTransGen_toRel
-  条件: {s : Set (Sym2 V)}
+  条件: {s : 集合 (Sym2 V)}
   证明: by
   rw [reachable_eq_reflTransGen]; rw [← Relation.transGen_reflGen]; rw [← Relation.transGen_reflGen]
   congr 1
@@ -426,7 +426,7 @@ theorem Reachable.map
 
 中文:
 定理 Reachable.map
-  结论: {u v : V} {G : SimpleGraph V} {G' : SimpleGraph V'} (f : G ->g G')
+  结论: {u v : V} {G : 简单图 V} {G' : 简单图 V'} (f : G ->g G')
   证明: h.elim fun p => ⟨p.map f⟩
 
 @[gcongr, mono]
@@ -448,7 +448,7 @@ lemma Reachable.mono
 
 中文:
 引理 Reachable.mono
-  结论: {u v : V} {G G' : SimpleGraph V}
+  结论: {u v : V} {G G' : 简单图 V}
   证明: Guv.map (.ofLE h)
 
 @[gcongr, mono]
@@ -468,7 +468,7 @@ theorem Reachable.mono'
 
 中文:
 定理 Reachable.mono'
-  条件: {G G' : SimpleGraph V} (h : G <= G')
+  条件: {G G' : 简单图 V} (h : G <= G')
   结论: G.Reachable <= G'.Reachable
   证明: fun _ _ => Reachable.mono h
 
@@ -490,9 +490,9 @@ theorem Reachable.exists_isPath
   exact ⟨_, Path.isPath W.toPath⟩
 
 中文:
-定理 Reachable.exists_isPath
+定理 Reachable.存在_isPath
   条件: {u v} (hr : G.Reachable u v)
-  结论: 存在 p : G.Walk u v, p.IsPath
+  结论: 存在 p : G.途径 u v, p.是道路
   证明: by
   classical
   obtain ⟨W⟩ := hr
@@ -514,8 +514,8 @@ theorem Iso.reachable_iff
   proof: ⟨fun r => φ.left_inv u ▸ φ.left_inv v ▸ r.map φ.symm.toHom, Reachable.map φ.toHom⟩
 
 中文:
-定理 Iso.reachable_iff
-  条件: {G : SimpleGraph V} {G' : SimpleGraph V'} {φ : G ≃g G'} {u v : V}
+定理 同构.reachable_iff
+  条件: {G : 简单图 V} {G' : 简单图 V'} {φ : G ≃g G'} {u v : V}
   证明: ⟨fun r => φ.left_inv u ▸ φ.left_inv v ▸ r.map φ.symm.toHom, Reachable.map φ.toHom⟩
 
 Depends on / 依赖: Reachable, Reachable.map, left_inv, r.map, symm.toHom
@@ -534,8 +534,8 @@ theorem Iso.symm_apply_reachable
   rw [← Iso.reachable_iff]; rw [RelIso.apply_symm_apply]
 
 中文:
-定理 Iso.symm_apply_reachable
-  结论: {G : SimpleGraph V} {G' : SimpleGraph V'} {φ : G ≃g G'} {u : V}
+定理 同构.symm_apply_reachable
+  结论: {G : 简单图 V} {G' : 简单图 V'} {φ : G ≃g G'} {u : V}
   证明: by
   rw [← Iso.reachable_iff]; rw [RelIso.apply_symm_apply]
 
@@ -564,7 +564,7 @@ lemma Reachable.mem_subgraphVerts
 
 中文:
 引理 Reachable.mem_subgraphVerts
-  结论: {u v} {H : G.Subgraph} (hr : G.Reachable u v)
+  结论: {u v} {H : G.子图} (hr : G.Reachable u v)
   证明: by
   let rec aux {v' : V} (hv' : v' in H.verts) (p : G.Walk v' v) : v in H.verts := by
     by_cases hnp : p.Nil
@@ -604,7 +604,7 @@ theorem reachable_is_equivalence
 
 中文:
 定理 reachable_is_equivalence
-  结论: Equivalence G.Reachable
+  结论: 等价 G.Reachable
   证明: Equivalence.mk (@Reachable.refl _ G) (@Reachable.symm _ G) (@Reachable.trans _ G)
 
 Depends on / 依赖: Equivalence, Equivalence.mk, Reachable, Reachable.refl, Reachable.symm, Reachable.trans
@@ -626,7 +626,7 @@ lemma reachable_bot
 中文:
 引理 reachable_bot
   条件: {u v : V}
-  结论: (⊥ : SimpleGraph V).Reachable u v ↔ u = v
+  结论: (⊥ : 简单图 V).Reachable u v ↔ u = v
   证明: ⟨fun h => h.elim fun p => match p with | .nil => rfl, fun h => h ▸ .rfl⟩
 
 Depends on / 依赖: h.elim
@@ -676,7 +676,7 @@ lemma Reachable.of_subsingleton
 
 中文:
 引理 Reachable.of_subsingleton
-  条件: {G : SimpleGraph V} [Subsingleton V] {u v : V}
+  条件: {G : 简单图 V} [子单例 V] {u v : V}
   证明: by
   rw [Subsingleton.allEq u v]
 
@@ -699,7 +699,7 @@ lemma Reachable.nonempty_neighborSet_left
 
 中文:
 引理 Reachable.nonempty_neighborSet_left
-  结论: {G : SimpleGraph V} {u v : V} (huv : u != v)
+  结论: {G : 简单图 V} {u v : V} (huv : u != v)
   证明: by
   obtain ⟨_ | @⟨u, x, v, hadj, w'⟩⟩ := hreach
   · contradiction
@@ -723,7 +723,7 @@ lemma Reachable.nonempty_neighborSet_right
 
 中文:
 引理 Reachable.nonempty_neighborSet_right
-  结论: {G : SimpleGraph V} {u v : V} (huv : u != v)
+  结论: {G : 简单图 V} {u v : V} (huv : u != v)
   证明: hreach.symm.nonempty_neighborSet_left huv.symm
 
 Depends on / 依赖: hreach, hreach.symm.nonempty_neighborSet_left, huv.symm, nonempty_neighborSet_left
@@ -742,7 +742,7 @@ lemma Reachable.degree_pos_left
 
 中文:
 引理 Reachable.degree_pos_left
-  结论: {G : SimpleGraph V} {u v : V} [Fintype (G.neighborSet u)]
+  结论: {G : 简单图 V} {u v : V} [有限类型 (G.neighborSet u)]
   证明: degree_pos_iff_nonempty.mpr (hreach.nonempty_neighborSet_left huv)
 
 Depends on / 依赖: degree_pos_iff_nonempty, degree_pos_iff_nonempty.mpr, hreach, hreach.nonempty_neighborSet_left, nonempty_neighborSet_left
@@ -761,7 +761,7 @@ lemma Reachable.degree_pos_right
 
 中文:
 引理 Reachable.degree_pos_right
-  结论: {G : SimpleGraph V} {u v : V} [Fintype (G.neighborSet v)]
+  结论: {G : 简单图 V} {u v : V} [有限类型 (G.neighborSet v)]
   证明: hreach.symm.degree_pos_left huv.symm
 
 Depends on / 依赖: degree_pos_left, hreach, hreach.symm.degree_pos_left, huv.symm
@@ -783,7 +783,7 @@ lemma Reachable.of_isUniversal
 
 中文:
 引理 Reachable.of_isUniversal
-  条件: {G : SimpleGraph V} {u : V} (v : V) (h : G.IsUniversal u)
+  条件: {G : 简单图 V} {u : V} (v : V) (h : G.是泛 u)
   证明: by
   by_cases! h' : u = v
   · exact h' ▸ Reachable.rfl
@@ -807,7 +807,7 @@ lemma not_reachable_of_neighborSet_left_eq_empty
 
 中文:
 引理 not_reachable_of_neighborSet_left_eq_empty
-  结论: {G : SimpleGraph V} {u v : V} (huv : u != v)
+  结论: {G : 简单图 V} {u v : V} (huv : u != v)
   证明: (Reachable.nonempty_neighborSet_left huv).mt (Set.not_nonempty_iff_eq_empty.mpr hu)
 
 Depends on / 依赖: Reachable, Reachable.nonempty_neighborSet_left, Set.not_nonempty_iff_eq_empty.mpr, nonempty_neighborSet_left, not_nonempty_iff_eq_empty
@@ -826,7 +826,7 @@ lemma not_reachable_of_neighborSet_right_eq_empty
 
 中文:
 引理 not_reachable_of_neighborSet_right_eq_empty
-  结论: {G : SimpleGraph V} {u v : V} (huv : u != v)
+  结论: {G : 简单图 V} {u v : V} (huv : u != v)
   证明: fun r => not_reachable_of_neighborSet_left_eq_empty huv.symm hv r.symm
 
 Depends on / 依赖: huv.symm, not_reachable_of_neighborSet_left_eq_empty, r.symm
@@ -845,7 +845,7 @@ lemma not_reachable_of_left_degree_zero
 
 中文:
 引理 not_reachable_of_left_degree_zero
-  结论: {G : SimpleGraph V} {u v : V} [Fintype (G.neighborSet u)]
+  结论: {G : 简单图 V} {u v : V} [有限类型 (G.neighborSet u)]
   证明: (Reachable.degree_pos_left huv).mt (by simp [hu])
 
 Depends on / 依赖: Reachable, Reachable.degree_pos_left, degree_pos_left
@@ -866,7 +866,7 @@ lemma not_reachable_of_right_degree_zero
 
 中文:
 引理 not_reachable_of_right_degree_zero
-  结论: {G : SimpleGraph V} {u v : V} [Fintype (G.neighborSet v)]
+  结论: {G : 简单图 V} {u v : V} [有限类型 (G.neighborSet v)]
   证明: by
   rw [reachable_comm]
   exact not_reachable_of_left_degree_zero huv.symm hu
@@ -890,7 +890,7 @@ definition reachableSetoid
 
 中文:
 定义 reachableSetoid
-  签名: : Setoid V
+  签名: : 集合等价关系 V
   定义体: Setoid.mk _ G.reachable_is_equivalence
 
 Depends on / 依赖: G.reachable_is_equivalence, Setoid, Setoid.mk, reachable_is_equivalence
@@ -906,7 +906,7 @@ definition Preconnected
   body: forall u v : V, G.Reachable u v
 
 中文:
-定义 Preconnected
+定义 预连通
   签名: : 命题
   定义体: forall u v : V, G.Reachable u v
 
@@ -925,8 +925,8 @@ theorem Preconnected.map
 @[gcongr, mono]
 
 中文:
-定理 Preconnected.map
-  结论: {G : SimpleGraph V} {H : SimpleGraph V'} (f : G ->g H) (hf : Surjective f)
+定理 预连通.map
+  结论: {G : 简单图 V} {H : 简单图 V'} (f : G ->g H) (hf : 满射 f)
   证明: hf.forall₂.2 fun _ _ => Nonempty.map (Walk.map _) hG _ _
 
 @[gcongr, mono]
@@ -947,8 +947,8 @@ lemma Preconnected.mono
   proof: fun u v => (hG u v).mono h
 
 中文:
-引理 Preconnected.mono
-  条件: {G G' : SimpleGraph V} (h : G <= G') (hG : G.Preconnected)
+引理 预连通.mono
+  条件: {G G' : 简单图 V} (h : G <= G') (hG : G.预连通)
   证明: fun u v => (hG u v).mono h
 -/
 protected lemma Preconnected.mono {G G' : SimpleGraph V} (h : G <= G') (hG : G.Preconnected) :
@@ -965,7 +965,7 @@ lemma preconnected_iff_reachable_eq_top
 
 中文:
 引理 preconnected_iff_reachable_eq_top
-  结论: G.Preconnected ↔ G.Reachable = ⊤
+  结论: G.预连通 ↔ G.Reachable = ⊤
   证明: by
   aesop (add simp Preconnected)
 
@@ -987,7 +987,7 @@ lemma preconnected_bot_iff_subsingleton
 
 中文:
 引理 preconnected_bot_iff_subsingleton
-  结论: (⊥ : SimpleGraph V).Preconnected ↔ Subsingleton V
+  结论: (⊥ : 简单图 V).预连通 ↔ 子单例 V
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [Preconnected]⟩
   contrapose! h
@@ -1011,8 +1011,8 @@ lemma preconnected_bot
 
 中文:
 引理 preconnected_bot
-  条件: [Subsingleton V]
-  结论: (⊥ : SimpleGraph V).Preconnected
+  条件: [子单例 V]
+  结论: (⊥ : 简单图 V).预连通
   证明: preconnected_bot_iff_subsingleton.mpr ‹_›
 
 Depends on / 依赖: preconnected_bot_iff_subsingleton, preconnected_bot_iff_subsingleton.mpr
@@ -1031,8 +1031,8 @@ lemma not_preconnected_bot
 
 中文:
 引理 not_preconnected_bot
-  条件: [Nontrivial V]
-  结论: ¬(⊥ : SimpleGraph V).Preconnected
+  条件: [非平凡 V]
+  结论: ¬(⊥ : 简单图 V).预连通
   证明: preconnected_bot_iff_subsingleton.not.mpr not_subsingleton_iff_nontrivial.mpr ‹_›
 
 Depends on / 依赖: not_subsingleton_iff_nontrivial, not_subsingleton_iff_nontrivial.mpr, preconnected_bot_iff_subsingleton, preconnected_bot_iff_subsingleton.not.mpr
@@ -1053,7 +1053,7 @@ lemma preconnected_top
 
 中文:
 引理 preconnected_top
-  结论: (⊤ : SimpleGraph V).Preconnected
+  结论: (⊤ : 简单图 V).预连通
   证明: fun x y => by
   if h : x = y then rw [h] else exact Adj.reachable h
 
@@ -1073,9 +1073,9 @@ lemma Preconnected.of_subsingleton
   proof: fun _ _ => .of_subsingleton
 
 中文:
-引理 Preconnected.of_subsingleton
-  条件: {G : SimpleGraph V} [Subsingleton V]
-  结论: G.Preconnected
+引理 预连通.of_subsingleton
+  条件: {G : 简单图 V} [子单例 V]
+  结论: G.预连通
   证明: fun _ _ => .of_subsingleton
 
 Depends on / 依赖: of_subsingleton
@@ -1095,8 +1095,8 @@ theorem Iso.preconnected_iff
 @[simp]
 
 中文:
-定理 Iso.preconnected_iff
-  条件: {G : SimpleGraph V} {H : SimpleGraph V'} (e : G ≃g H)
+定理 同构.preconnected_iff
+  条件: {G : 简单图 V} {H : 简单图 V'} (e : G ≃g H)
   证明: ⟨Preconnected.map e.toHom e.toEquiv.surjective,
     Preconnected.map e.symm.toHom e.symm.toEquiv.surjective⟩
 
@@ -1128,8 +1128,8 @@ lemma Preconnected.support_eq_univ
 @[simp]
 
 中文:
-引理 Preconnected.support_eq_univ
-  结论: [Nontrivial V] {G : SimpleGraph V}
+引理 预连通.support_eq_univ
+  结论: [非平凡 V] {G : 简单图 V}
   证明: by
   simp only [Set.eq_univ_iff_forall]
   intro v
@@ -1163,8 +1163,8 @@ lemma Preconnected.not_isIsolated
   proof: by simp [← mem_support_iff_not_isIsolated, hG]
 
 中文:
-引理 Preconnected.not_isIsolated
-  条件: [Nontrivial V] {G : SimpleGraph V} (hG : G.Preconnected) (v : V)
+引理 预连通.not_isIsolated
+  条件: [非平凡 V] {G : 简单图 V} (hG : G.预连通) (v : V)
   证明: by simp [← mem_support_iff_not_isIsolated, hG]
 
 Depends on / 依赖: mem_support_iff_not_isIsolated
@@ -1182,8 +1182,8 @@ lemma Preconnected.degree_pos_of_nontrivial
   simp [degree_pos_iff_mem_support, h.support_eq_univ]
 
 中文:
-引理 Preconnected.degree_pos_of_nontrivial
-  结论: [Nontrivial V] {G : SimpleGraph V} (h : G.Preconnected)
+引理 预连通.degree_pos_of_nontrivial
+  结论: [非平凡 V] {G : 简单图 V} (h : G.预连通)
   证明: by
   simp [degree_pos_iff_mem_support, h.support_eq_univ]
 
@@ -1205,8 +1205,8 @@ lemma Preconnected.minDegree_pos_of_nontrivial
   exact h.degree_pos_of_nontrivial v
 
 中文:
-引理 Preconnected.minDegree_pos_of_nontrivial
-  结论: [Nontrivial V] [Fintype V] {G : SimpleGraph V}
+引理 预连通.minDegree_pos_of_nontrivial
+  结论: [非平凡 V] [有限类型 V] {G : 简单图 V}
   证明: by
   obtain ⟨v, hv⟩ := G.exists_minimal_degree_vertex
   rw [hv]
@@ -1231,7 +1231,7 @@ lemma adj_of_mem_walk_support
 
 中文:
 引理 adj_of_mem_walk_support
-  结论: {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (hp : ¬p.Nil) {x : V}
+  结论: {G : 简单图 V} {u v : V} (p : G.途径 u v) (hp : ¬p.Nil) {x : V}
   证明: by
   induction p with grind [Walk.nil_iff_support_eq, Walk.cons_tail_support, adj_comm]
 
@@ -1253,7 +1253,7 @@ lemma mem_support_of_mem_walk_support
 
 中文:
 引理 mem_support_of_mem_walk_support
-  结论: {G : SimpleGraph V} {u v : V} (p : G.Walk u v) (hp : ¬p.Nil)
+  结论: {G : 简单图 V} {u v : V} (p : G.途径 u v) (hp : ¬p.Nil)
   证明: by
   obtain ⟨y, hy⟩ := adj_of_mem_walk_support p hp hw
   exact (mem_support G).mpr ⟨y, hy.right⟩
@@ -1278,7 +1278,7 @@ lemma mem_support_of_reachable
 
 中文:
 引理 mem_support_of_reachable
-  条件: {G : SimpleGraph V} {u v : V} (huv : u != v) (h : G.Reachable u v)
+  条件: {G : 简单图 V} {u v : V} (huv : u != v) (h : G.Reachable u v)
   证明: by
   let p : G.Walk u v := Classical.choice h
   have hp : ¬p.Nil := Walk.not_nil_of_ne huv
@@ -1301,8 +1301,8 @@ theorem Preconnected.exists_isPath
   proof: (h u v).exists_isPath
 
 中文:
-定理 Preconnected.exists_isPath
-  条件: {G : SimpleGraph V} (h : G.Preconnected) (u v : V)
+定理 预连通.存在_isPath
+  条件: {G : 简单图 V} (h : G.预连通) (u v : V)
   证明: (h u v).exists_isPath
 
 Depends on / 依赖: exists_isPath
@@ -1328,11 +1328,11 @@ structure Connected
     - [nonempty : Nonempty V]
 
 中文:
-结构 Connected
+结构 连通
   参数: : 命题 where
   公理与运算 (2 个):
-    - preconnected : G.Preconnected
-    - [nonempty : Nonempty V]
+    - preconnected : G.预连通
+    - [nonempty : 非空 V]
 -/
 structure Connected : Prop where
   protected preconnected : G.Preconnected
@@ -1353,8 +1353,8 @@ lemma connected_iff_exists_forall_reachable
     exact ⟨fun u w => (h u).symm.trans (h w), ⟨v⟩⟩
 
 中文:
-引理 connected_iff_exists_forall_reachable
-  结论: G.Connected ↔ 存在 v, 对任意 w, G.Reachable v w
+引理 connected_iff_存在_对任意_reachable
+  结论: G.连通 ↔ 存在 v, 对任意 w, G.Reachable v w
   证明: by
   rw [connected_iff]
   constructor
@@ -1383,7 +1383,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun G.Connected fun _ => 对任意 u v
+  签名: CoeFun G.连通 fun _ => 对任意 u v
   定义体: ⟨fun h => h.preconnected⟩
 
 Depends on / 依赖: h.preconnected, preconnected
@@ -1402,8 +1402,8 @@ theorem Connected.map
 @[gcongr, mono]
 
 中文:
-定理 Connected.map
-  结论: {G : SimpleGraph V} {H : SimpleGraph V'} (f : G ->g H) (hf : Surjective f)
+定理 连通.map
+  结论: {G : 简单图 V} {H : 简单图 V'} (f : G ->g H) (hf : 满射 f)
   证明: haveI := hG.nonempty.map f
   ⟨hG.preconnected.map f hf⟩
 
@@ -1427,8 +1427,8 @@ lemma Connected.mono
   nonempty := hG.nonempty
 
 中文:
-引理 Connected.mono
-  结论: {G G' : SimpleGraph V} (h : G <= G')
+引理 连通.mono
+  结论: {G G' : 简单图 V} (h : G <= G')
   证明: hG.preconnected.mono h
   nonempty := hG.nonempty
 -/
@@ -1446,8 +1446,8 @@ theorem Connected.exists_isPath
   proof: (h u v).exists_isPath
 
 中文:
-定理 Connected.exists_isPath
-  条件: {G : SimpleGraph V} (h : G.Connected) (u v : V)
+定理 连通.存在_isPath
+  条件: {G : 简单图 V} (h : G.连通) (u v : V)
   证明: (h u v).exists_isPath
 
 Depends on / 依赖: exists_isPath
@@ -1467,7 +1467,7 @@ lemma connected_bot_iff
 
 中文:
 引理 connected_bot_iff
-  结论: (⊥ : SimpleGraph V).Connected ↔ Subsingleton V ∧ Nonempty V
+  结论: (⊥ : 简单图 V).连通 ↔ 子单例 V ∧ 非空 V
   证明: by
   simp [preconnected_bot_iff_subsingleton, connected_iff]
 
@@ -1488,8 +1488,8 @@ lemma not_connected_bot
 
 中文:
 引理 not_connected_bot
-  条件: [Nontrivial V]
-  结论: ¬(⊥ : SimpleGraph V).Connected
+  条件: [非平凡 V]
+  结论: ¬(⊥ : 简单图 V).连通
   证明: by
   simp [not_preconnected_bot, connected_iff]
 
@@ -1508,7 +1508,7 @@ lemma connected_top_iff
 
 中文:
 引理 connected_top_iff
-  结论: (completeGraph V).Connected ↔ Nonempty V
+  结论: (completeGraph V).连通 ↔ 非空 V
   证明: by simp [connected_iff]
 
 Depends on / 依赖: connected_iff
@@ -1528,8 +1528,8 @@ lemma connected_top
 
 中文:
 引理 connected_top
-  条件: [Nonempty V]
-  结论: (completeGraph V).Connected
+  条件: [非空 V]
+  结论: (completeGraph V).连通
   证明: by rwa [connected_top_iff]
 
 @[nontriviality]
@@ -1546,8 +1546,8 @@ lemma Connected.of_subsingleton
   proof: ⟨.of_subsingleton⟩
 
 中文:
-引理 Connected.of_subsingleton
-  条件: {G : SimpleGraph V} [Nonempty V] [Subsingleton V]
+引理 连通.of_subsingleton
+  条件: {G : 简单图 V} [非空 V] [子单例 V]
   证明: ⟨.of_subsingleton⟩
 
 Depends on / 依赖: of_subsingleton
@@ -1565,8 +1565,8 @@ theorem Iso.connected_iff
   proof: ⟨Connected.map e.toHom e.toEquiv.surjective, Connected.map e.symm.toHom e.symm.toEquiv.surjective⟩
 
 中文:
-定理 Iso.connected_iff
-  条件: {G : SimpleGraph V} {H : SimpleGraph V'} (e : G ≃g H)
+定理 同构.connected_iff
+  条件: {G : 简单图 V} {H : 简单图 V'} (e : G ≃g H)
   证明: ⟨Connected.map e.toHom e.toEquiv.surjective, Connected.map e.symm.toHom e.symm.toEquiv.surjective⟩
 
 Depends on / 依赖: Connected, Connected.map, e.symm.toEquiv.surjective, e.symm.toHom, e.toEquiv.surjective, e.toHom, surjective, toEquiv
@@ -1587,7 +1587,7 @@ lemma reachable_or_compl_adj
 中文:
 引理 reachable_or_compl_adj
   条件: (u v : V)
-  结论: G.Reachable u v ∨ Gᶜ.Adj u v
+  结论: G.Reachable u v ∨ Gᶜ.伴随 u v
   证明: or_iff_not_imp_left.mpr fun huv => ⟨fun heq => huv heq ▸ Reachable.rfl, mt Adj.reachable huv⟩
 
 Depends on / 依赖: Adj.reachable, Reachable, Reachable.rfl, or_iff_not_imp_left, or_iff_not_imp_left.mpr, reachable
@@ -1647,7 +1647,7 @@ theorem connected_or_preconnected_compl
 
 中文:
 定理 connected_or_preconnected_compl
-  结论: G.Connected ∨ Gᶜ.Preconnected
+  结论: G.连通 ∨ Gᶜ.预连通
   证明: by
   rw [or_iff_not_imp_left]; rw [G.connected_iff_exists_forall_reachable]
   intro h u v
@@ -1675,8 +1675,8 @@ theorem connected_or_connected_compl
 
 中文:
 定理 connected_or_connected_compl
-  条件: [Nonempty V]
-  结论: G.Connected ∨ Gᶜ.Connected
+  条件: [非空 V]
+  结论: G.连通 ∨ Gᶜ.连通
   证明: G.connected_or_preconnected_compl.elim .inl (.inr ⟨·⟩)
 
 Depends on / 依赖: G.connected_or_preconnected_compl.elim, connected_or_preconnected_compl
@@ -1697,9 +1697,9 @@ lemma Connected.of_isUniversal
   exact (Reachable.of_isUniversal u h).symm.trans (Reachable.of_isUniversal w h)
 
 中文:
-引理 Connected.of_isUniversal
-  条件: (h : G.IsUniversal v)
-  结论: G.Connected
+引理 连通.of_isUniversal
+  条件: (h : G.是泛 v)
+  结论: G.连通
   证明: by
 .mpr ⟨fun u w => ?_, ⟨v⟩⟩ refine connected_iff _
   exact (Reachable.of_isUniversal u h).symm.trans (Reachable.of_isUniversal w h)
@@ -1757,7 +1757,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Inhabited V]
+  签名: [可居 V]
   定义体: ⟨G.connectedComponentMk default⟩
 
 Depends on / 依赖: G.connectedComponentMk, connectedComponentMk
@@ -1775,7 +1775,7 @@ instance isEmpty
 
 中文:
 实例 isEmpty
-  签名: [IsEmpty V]
+  签名: [是空 V]
   定义体: Quot.instIsEmpty
 
 Depends on / 依赖: Quot.instIsEmpty, instIsEmpty
@@ -1790,8 +1790,8 @@ instance [Subsingleton
   body: Quot.Subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: V] : Subsingleton G.ConnectedComponent
+实例 [子单例
+  签名: V] : 子单例 G.ConnectedComponent
   定义体: Quot.Subsingleton
 
 Depends on / 依赖: Quot.Subsingleton, Subsingleton
@@ -1806,8 +1806,8 @@ instance [Unique
   body: Quot.instUnique
 
 中文:
-实例 [Unique
-  签名: V] : Unique G.ConnectedComponent
+实例 [唯一
+  签名: V] : 唯一 G.ConnectedComponent
   定义体: Quot.instUnique
 
 Depends on / 依赖: Quot.instUnique, instUnique
@@ -1822,8 +1822,8 @@ instance [Nonempty
   body: Nonempty.map G.connectedComponentMk ‹_›
 
 中文:
-实例 [Nonempty
-  签名: V] : Nonempty G.ConnectedComponent
+实例 [非空
+  签名: V] : 非空 G.ConnectedComponent
   定义体: Nonempty.map G.connectedComponentMk ‹_›
 
 Depends on / 依赖: G.connectedComponentMk, Nonempty, Nonempty.map, connectedComponentMk
@@ -1840,8 +1840,8 @@ instance [Finite
 @[elab_as_elim]
 
 中文:
-实例 [Finite
-  签名: V] : Finite G.ConnectedComponent
+实例 [有限
+  签名: V] : 有限 G.ConnectedComponent
   定义体: Quot.finite _
 
 @[elab_as_elim]
@@ -1957,7 +1957,7 @@ theorem connectedComponentMk_eq_of_adj
 
 中文:
 定理 connectedComponentMk_eq_of_adj
-  条件: {v w : V} (a : G.Adj v w)
+  条件: {v w : V} (a : G.伴随 v w)
   证明: ConnectedComponent.sound a.reachable
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.sound, a.reachable, reachable
@@ -1978,7 +1978,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {β : Sort*} (f : V -> β)
+  签名: {β : 类型层*} (f : V -> β)
   定义体: Quot.lift f fun v w (h' : G.Reachable v w) => h'.elim_path fun hp => h v w hp hp.2
 
 @[simp]
@@ -1998,7 +1998,7 @@ theorem lift_mk
 
 中文:
 定理 lift_mk
-  结论: {β : Sort*} {f : V -> β}
+  结论: {β : 类型层*} {f : V -> β}
   证明: rfl
 -/
 protected theorem lift_mk {β : Sort*} {f : V -> β}
@@ -2015,7 +2015,7 @@ theorem «exists»
   proof: Quot.mk_surjective.exists
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : G.ConnectedComponent -> 命题}
   证明: Quot.mk_surjective.exists
 -/
@@ -2032,7 +2032,7 @@ theorem «forall»
   proof: Quot.mk_surjective.forall
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : G.ConnectedComponent -> 命题}
   证明: Quot.mk_surjective.forall
 -/
@@ -2049,8 +2049,8 @@ theorem _root_.SimpleGraph.Preconnected.subsingleton_connectedComponent
   proof: ⟨ConnectedComponent.ind₂ fun v w => ConnectedComponent.sound (h v w)⟩
 
 中文:
-定理 _root_.SimpleGraph.Preconnected.subsingleton_connectedComponent
-  条件: (h : G.Preconnected)
+定理 _root_.简单图.预连通.subsingleton_connectedComponent
+  条件: (h : G.预连通)
   证明: ⟨ConnectedComponent.ind₂ fun v w => ConnectedComponent.sound (h v w)⟩
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.ind, ConnectedComponent.sound
@@ -2147,7 +2147,7 @@ theorem map_id
 中文:
 定理 map_id
   条件: (C : ConnectedComponent G)
-  结论: C.map Hom.id = C
+  结论: C.map 态射.id = C
   证明: C.ind (fun _ => rfl)
 
 @[simp]
@@ -2192,8 +2192,8 @@ theorem surjective_map_ofLE
 
 中文:
 定理 surjective_map_ofLE
-  条件: {G' : SimpleGraph V} (h : G <= G')
-  结论: (map <| Hom.ofLE h).Surjective
+  条件: {G' : 简单图 V} (h : G <= G')
+  结论: (map <| 态射.ofLE h).满射
   证明: Quot.ind fun v => ⟨G.connectedComponentMk v, rfl⟩
 
 Depends on / 依赖: G.connectedComponentMk, Quot.ind, connectedComponentMk
@@ -2469,7 +2469,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike G.ConnectedComponent V
+  签名: 集合状 G.ConnectedComponent V
   定义体: ConnectedComponent.supp
   coe_injective := ConnectedComponent.supp_injective
 
@@ -2515,7 +2515,7 @@ lemma mem_supp_congr_adj
 
 中文:
 引理 mem_supp_congr_adj
-  条件: {v w : V} (c : G.ConnectedComponent) (hadj : G.Adj v w)
+  条件: {v w : V} (c : G.ConnectedComponent) (hadj : G.伴随 v w)
   证明: by
   simp only [ConnectedComponent.mem_supp_iff] at *
   constructor <;> intro h <;> simp only [← h] <;> apply connectedComponentMk_eq_of_adj
@@ -2561,7 +2561,7 @@ theorem nonempty_supp
 中文:
 定理 nonempty_supp
   条件: (C : G.ConnectedComponent)
-  结论: C.supp.Nonempty
+  结论: C.supp.非空
   证明: C.exists_rep
 
 Depends on / 依赖: C.exists_rep, exists_rep
@@ -2610,7 +2610,7 @@ exact ⟨connectedComponentMk_eq_of_adj Subgraph.Adj.coe h.2 ▸ hadj.symm, rfl�
 
 中文:
 引理 mem_coe_supp_of_adj
-  结论: {v w : V} {H : Subgraph G} {c : ConnectedComponent H.coe}
+  结论: {v w : V} {H : 子图 G} {c : ConnectedComponent H.coe}
   证明: by
   obtain ⟨_, h⟩ := hv
   use ⟨w, hw⟩
@@ -2698,7 +2698,7 @@ lemma biUnion_supp_eq_supp
 
 中文:
 引理 biUnion_supp_eq_supp
-  条件: {G G' : SimpleGraph V} (h : G <= G') (c' : ConnectedComponent G')
+  条件: {G G' : 简单图 V} (h : G <= G') (c' : ConnectedComponent G')
   证明: by
   ext v
   simp_rw [Set.mem_iUnion]
@@ -2733,7 +2733,7 @@ lemma top_supp_eq_univ
 
 中文:
 引理 top_supp_eq_univ
-  条件: (c : ConnectedComponent (⊤ : SimpleGraph V))
+  条件: (c : ConnectedComponent (⊤ : 简单图 V))
   证明: by
   obtain ⟨w, rfl⟩ := c.exists_rep
   ext v
@@ -2759,7 +2759,7 @@ lemma reachable_of_mem_supp
 
 中文:
 引理 reachable_of_mem_supp
-  结论: {G : SimpleGraph V} (C : G.ConnectedComponent) {u v : V}
+  结论: {G : 简单图 V} (C : G.ConnectedComponent) {u v : V}
   证明: by
   rw [mem_supp_iff] at hu hv
   exact ConnectedComponent.exact (hv ▸ hu)
@@ -2781,7 +2781,7 @@ lemma mem_supp_of_adj_mem_supp
 
 中文:
 引理 mem_supp_of_adj_mem_supp
-  结论: {G : SimpleGraph V} (C : G.ConnectedComponent) {u v : V}
+  结论: {G : 简单图 V} (C : G.ConnectedComponent) {u v : V}
   证明: (mem_supp_congr_adj C hadj).mp hu
 
 Depends on / 依赖: mem_supp_congr_adj
@@ -2799,7 +2799,7 @@ definition toSimpleGraph
 
 中文:
 定义 toSimpleGraph
-  签名: {G : SimpleGraph V} (C : G.ConnectedComponent)
+  签名: {G : 简单图 V} (C : G.ConnectedComponent)
   定义体: G.induce C.supp
 
 Depends on / 依赖: C.supp, G.induce, induce
@@ -2817,7 +2817,7 @@ definition toSimpleGraph_hom
 
 中文:
 定义 toSimpleGraph_hom
-  签名: {G : SimpleGraph V} (C : G.ConnectedComponent)
+  签名: {G : 简单图 V} (C : G.ConnectedComponent)
   定义体: u.val
   map_rel' := id
 
@@ -2837,7 +2837,7 @@ lemma toSimpleGraph_hom_apply
 
 中文:
 引理 toSimpleGraph_hom_apply
-  条件: {G : SimpleGraph V} (C : G.ConnectedComponent) (u : C)
+  条件: {G : 简单图 V} (C : G.ConnectedComponent) (u : C)
   证明: rfl
 -/
 lemma toSimpleGraph_hom_apply {G : SimpleGraph V} (C : G.ConnectedComponent) (u : C) :
@@ -2854,7 +2854,7 @@ lemma toSimpleGraph_adj
 
 中文:
 引理 toSimpleGraph_adj
-  结论: {G : SimpleGraph V} (C : G.ConnectedComponent) {u v : V} (hu : u in C)
+  结论: {G : 简单图 V} (C : G.ConnectedComponent) {u v : V} (hu : u in C)
   证明: by
   simp [toSimpleGraph]
 
@@ -2923,7 +2923,7 @@ definition walk_toSimpleGraph
 
 中文:
 定义 walk_toSimpleGraph
-  签名: {G : SimpleGraph V} (C : G.ConnectedComponent) {u v : V}
+  签名: {G : 简单图 V} (C : G.ConnectedComponent) {u v : V}
   定义体: by
   cases p with
   | nil => exact Walk.nil
@@ -2951,7 +2951,7 @@ lemma reachable_toSimpleGraph
 
 中文:
 引理 reachable_toSimpleGraph
-  结论: {G : SimpleGraph V} (C : G.ConnectedComponent) {u v : V}
+  结论: {G : 简单图 V} (C : G.ConnectedComponent) {u v : V}
   证明: Walk.reachable (C.walk_toSimpleGraph hu hv (C.reachable_of_mem_supp hu hv).some)
 
 Depends on / 依赖: C.reachable_of_mem_supp, C.walk_toSimpleGraph, Walk.reachable, reachable, reachable_of_mem_supp, walk_toSimpleGraph
@@ -2975,7 +2975,7 @@ lemma connected_toSimpleGraph
 中文:
 引理 connected_toSimpleGraph
   条件: (C : ConnectedComponent G)
-  结论: (C.toSimpleGraph).Connected where
+  结论: (C.toSimpleGraph).连通 where
   证明: by
     intro ⟨u, hu⟩ ⟨v, hv⟩
     exact C.reachable_toSimpleGraph hu hv
@@ -3032,7 +3032,7 @@ exact fun u hu => ConnectedComponent.sound
 
 中文:
 定理 maximal_connected_induce_iff
-  条件: (s : Set V)
+  条件: (s : 集合 V)
   证明: by
   refine ⟨fun ⟨hconn, h⟩ => ?_, fun ⟨C, h⟩ => ?_⟩
   · have ⟨v, hv⟩ := hconn.nonempty
@@ -3072,7 +3072,7 @@ definition homOfConnectedComponents
 
 中文:
 定义 homOfConnectedComponents
-  签名: (G : SimpleGraph V) {H : SimpleGraph V'}
+  签名: (G : 简单图 V) {H : 简单图 V'}
   定义体: fun x => (C (G.connectedComponentMk x)) ⟨x, ConnectedComponent.connectedComponentMk_mem⟩
   map_rel' := fun hab => by
     have h : (G.connectedComponentMk _).toSimpleGraph.Adj ⟨_, rfl⟩
@@ -3106,7 +3106,7 @@ lemma pairwise_disjoint_supp_connectedComponent
 
 中文:
 引理 pairwise_disjoint_supp_connectedComponent
-  条件: (G : SimpleGraph V)
+  条件: (G : 简单图 V)
   证明: by
   simp_rw [Set.disjoint_left]
   intro _ _ h a hsx hsy
@@ -3138,7 +3138,7 @@ lemma iUnion_connectedComponentSupp
 
 中文:
 引理 iUnion_connectedComponentSupp
-  条件: (G : SimpleGraph V)
+  条件: (G : 简单图 V)
   证明: by
   refine Set.eq_univ_of_forall fun v => ⟨G.connectedComponentMk v, ?_⟩
   simp only [Set.mem_range, SetLike.mem_coe]
@@ -3163,8 +3163,8 @@ theorem Preconnected.set_univ_walk_nonempty
   exact hconn u v
 
 中文:
-定理 Preconnected.set_univ_walk_nonempty
-  条件: (hconn : G.Preconnected) (u v : V)
+定理 预连通.set_univ_walk_nonempty
+  条件: (hconn : G.预连通) (u v : V)
   证明: by
   rw [← Set.nonempty_iff_univ_nonempty]
   exact hconn u v
@@ -3185,8 +3185,8 @@ theorem Connected.set_univ_walk_nonempty
   proof: hconn.preconnected.set_univ_walk_nonempty u v
 
 中文:
-定理 Connected.set_univ_walk_nonempty
-  条件: (hconn : G.Connected) (u v : V)
+定理 连通.set_univ_walk_nonempty
+  条件: (hconn : G.连通) (u v : V)
   证明: hconn.preconnected.set_univ_walk_nonempty u v
 
 Depends on / 依赖: hconn.preconnected.set_univ_walk_nonempty, preconnected, set_univ_walk_nonempty
@@ -3207,8 +3207,8 @@ lemma Preconnected.exists_adj_of_nontrivial
 exact ⟨_, w.adj_snd w.not_nil_of_ne huv.symm⟩
 
 中文:
-引理 Preconnected.exists_adj_of_nontrivial
-  结论: [Nontrivial V] {G : SimpleGraph V} (h : G.Preconnected)
+引理 预连通.存在_adj_of_nontrivial
+  结论: [非平凡 V] {G : 简单图 V} (h : G.预连通)
   证明: by
   have ⟨u, huv⟩ := exists_ne v
   have ⟨w⟩ := h v u
@@ -3237,7 +3237,7 @@ definition IsBridge
 
 中文:
 定义 IsBridge
-  签名: (G : SimpleGraph V) (e : Sym2 V)
+  签名: (G : 简单图 V) (e : Sym2 V)
   定义体: Sym2.lift ⟨fun v w => ¬ (G.deleteEdges {e}).Reachable v w, by simp [reachable_comm]⟩ e
 
 Depends on / 依赖: G.deleteEdges, Reachable, Sym2.lift, deleteEdges, reachable_comm
@@ -3292,7 +3292,7 @@ theorem IsBridge.reachable_iff_adj
 中文:
 定理 IsBridge.reachable_iff_adj
   条件: (h : G.IsBridge s(u, v))
-  结论: G.Reachable u v ↔ G.Adj u v
+  结论: G.Reachable u v ↔ G.伴随 u v
   证明: by
   refine ⟨fun hreach => G.mem_edgeSet.mp ?_, Adj.reachable⟩
 .lt_of_ne by grind [isBridge_iff] have : G.deleteEdges {s(u, v)} < G := deleteEdges_le _
@@ -3318,7 +3318,7 @@ lemma IsBridge.nontrivial
 中文:
 引理 IsBridge.nontrivial
   条件: {e : Sym2 V} (he : G.IsBridge e)
-  结论: Nontrivial V
+  结论: 非平凡 V
   证明: by
   cases e with | h u v; exact ⟨u, v, by rintro rfl; simp [IsBridge] at he⟩
 
@@ -3347,7 +3347,7 @@ theorem reachable_deleteEdges_iff_exists_walk
     exa
 
 中文:
-定理 reachable_deleteEdges_iff_exists_walk
+定理 reachable_deleteEdges_iff_存在_walk
   条件: {v w v' w' : V}
   证明: by
   constructor
@@ -3392,7 +3392,7 @@ theorem isBridge_iff_forall_walk_mem_edges
 alias isBridge_iff_adj_and_forall_walk_mem_edges := isBridge_iff_forall_walk_mem_edges
 
 中文:
-定理 isBridge_iff_forall_walk_mem_edges
+定理 isBridge_iff_对任意_walk_mem_edges
   条件: {v w : V}
   证明: by
   rw [isBridge_iff]; rw [reachable_deleteEdges_iff_exists_walk]; rw [not_exists_not]
@@ -3426,7 +3426,7 @@ theorem reachable_deleteEdges_iff_exists_cycle.aux
   have : c = (puw.append pwv).append pvu := by simp [puw
 
 中文:
-定理 reachable_deleteEdges_iff_exists_cycle.aux
+定理 reachable_deleteEdges_iff_存在_cycle.aux
   结论: [DecidableEq V] {u v w : V}
   证明: by
   have hv := c.fst_mem_support_of_mem_edges he
@@ -3485,7 +3485,7 @@ theorem adj_and_reachable_delete_edges_iff_exists_cycle
   · rintro ⟨u, c, hc, h
 
 中文:
-定理 adj_and_reachable_delete_edges_iff_exists_cycle
+定理 adj_and_reachable_delete_edges_iff_存在_cycle
   条件: {v w : V}
   证明: by
   classical
@@ -3541,7 +3541,7 @@ theorem isBridge_iff_forall_cycle_notMem
 alias isBridge_iff_adj_and_forall_cycle_notMem := isBridge_iff_forall_cycle_notMem
 
 中文:
-定理 isBridge_iff_forall_cycle_notMem
+定理 isBridge_iff_对任意_cycle_notMem
   条件: {e : Sym2 V} (he : e in G.edgeSet)
   证明: by
   obtain ⟨v, w⟩ := e
@@ -3575,7 +3575,7 @@ alias isBridge_iff_mem_and_forall_cycle_notMem := isBridge_iff_forall_cycle_notM
 
 中文:
 引理 IsBridge.notMem_edges_of_isCycle
-  结论: {e : Sym2 V} {u : V} {p : G.Walk u u}
+  结论: {e : Sym2 V} {u : V} {p : G.途径 u u}
   证明: fun hep => (isBridge_iff_forall_cycle_notMem <| p.edges_subset_edgeSet hep).mp he _ hp hep
 
 @[deprecated (since := "2026-06-04")]
@@ -3606,8 +3606,8 @@ obtain hxy | hxy := em' G.Adj x y
 obtain heP | heP := em' s(x, y) in P.edges
 
 中文:
-引理 Connected.connected_delete_edge_of_not_isBridge
-  结论: (hG : G.Connected) {x y : V}
+引理 连通.connected_delete_edge_of_not_isBridge
+  结论: (hG : G.连通) {x y : V}
   证明: by
   classical
   simp only [isBridge_iff, not_not] at h
@@ -3647,7 +3647,7 @@ theorem IsBridge.anti
 
 中文:
 定理 IsBridge.anti
-  条件: {G' : SimpleGraph V} {e : Sym2 V} (hG : G <= G') (h : G'.IsBridge e)
+  条件: {G' : 简单图 V} {e : Sym2 V} (hG : G <= G') (h : G'.IsBridge e)
   证明: by obtain ⟨a, b⟩ := e; rw [isBridge_iff] at ⊢ h; grw [hG]; assumption
 
 @[deprecated (since := "2026-05-16")] alias IsBridge.anti_of_mem_edgeSet := IsBridge.anti
@@ -3786,8 +3786,8 @@ lemma exists_mem_edges_of_not_reachable_deleteEdges
 contrapose! huv; exact ⟨w.toDeleteEdges _ fun _ => imp_not_comm.1 huv _⟩
 
 中文:
-引理 exists_mem_edges_of_not_reachable_deleteEdges
-  结论: (w : G.Walk u v) {s : Set (Sym2 V)}
+引理 存在_mem_edges_of_not_reachable_deleteEdges
+  结论: (w : G.途径 u v) {s : 集合 (Sym2 V)}
   证明: by
 contrapose! huv; exact ⟨w.toDeleteEdges _ fun _ => imp_not_comm.1 huv _⟩
 
@@ -3808,7 +3808,7 @@ lemma mem_edges_of_not_reachable_deleteEdges
 
 中文:
 引理 mem_edges_of_not_reachable_deleteEdges
-  结论: (w : G.Walk u v) {e : Sym2 V}
+  结论: (w : G.途径 u v) {e : Sym2 V}
   证明: by
   simpa using w.exists_mem_edges_of_not_reachable_deleteEdges huv
 
@@ -3831,8 +3831,8 @@ lemma IsTrail.not_mem_edges_of_not_reachable
     (by simpa using (w.dropUntil y _).reverse.mem_edges_of_not_reachable_deleteEdges hvy)
 
 中文:
-引理 IsTrail.not_mem_edges_of_not_reachable
-  结论: (hw : w.IsTrail)
+引理 是Trail.not_mem_edges_of_not_reachable
+  结论: (hw : w.是Trail)
   证明: by
   classical
   exact fun hxy => hw.disjoint_edges_takeUntil_dropUntil (w.snd_mem_support_of_mem_edges hxy)
@@ -3861,8 +3861,8 @@ exact fun hy => hw.not_mem_edges_of_not_reachable huy hvy w.edges_takeUntil_subs
     mem_edges_of_not_reachable_deleteEdges (w.takeUntil y hy) huy
 
 中文:
-引理 IsTrail.not_mem_support_of_not_reachable
-  结论: (hw : w.IsTrail)
+引理 是Trail.not_mem_support_of_not_reachable
+  结论: (hw : w.是Trail)
   证明: by
   classical
 exact fun hy => hw.not_mem_edges_of_not_reachable huy hvy w.edges_takeUntil_subset_edges hy
@@ -3892,8 +3892,8 @@ lemma IsTrail.not_mem_support_of_subsingleton_neighborSet
       simpa using p.reverse.adj_snd (not_n
 
 中文:
-引理 IsTrail.not_mem_support_of_subsingleton_neighborSet
-  结论: (hw : w.IsTrail) (hxu : x != u)
+引理 是Trail.not_mem_support_of_subsingleton_neighborSet
+  结论: (hw : w.是Trail) (hxu : x != u)
   证明: by
   rintro hxw
   obtain ⟨y, -, hxy⟩ := adj_of_mem_walk_support w (by rintro ⟨⟩; simp_all) hxw
@@ -3932,8 +3932,8 @@ lemma Preconnected.induce_of_degree_eq_one
   exact hp.not_mem_support_of_subsingleton_neighborSet (by grind) (by grind) (hs _ hws) hwp
 
 中文:
-引理 Preconnected.induce_of_degree_eq_one
-  结论: (hG : G.Preconnected) {s : Set V}
+引理 预连通.induce_of_degree_eq_one
+  结论: (hG : G.预连通) {s : 集合 V}
   证明: by
   rintro ⟨u, hu⟩ ⟨v, hv⟩
   obtain ⟨p, hp⟩ := hG.exists_isPath u v

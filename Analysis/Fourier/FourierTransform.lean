@@ -86,8 +86,8 @@ definition fourierIntegral
   body: ∫ v, e (-L v w) • f v ∂μ
 
 中文:
-定义 fourierIntegral
-  签名: (e : AddChar 𝕜 𝕊) (μ : Measure V) (L : V ->ₗ[𝕜] W ->ₗ[𝕜] 𝕜) (f : V -> E)
+定义 fourier整数egral
+  签名: (e : 加法特征 𝕜 𝕊) (μ : 测度 V) (L : V ->ₗ[𝕜] W ->ₗ[𝕜] 𝕜) (f : V -> E)
   定义体: ∫ v, e (-L v w) • f v ∂μ
 -/
 def fourierIntegral (e : AddChar 𝕜 𝕊) (μ : Measure V) (L : V ->ₗ[𝕜] W ->ₗ[𝕜] 𝕜) (f : V -> E)
@@ -107,8 +107,8 @@ theorem fourierIntegral_congr_ae
   rw [hf']
 
 中文:
-定理 fourierIntegral_congr_ae
-  结论: (e : AddChar 𝕜 𝕊) (μ : Measure V) (L : V ->ₗ[𝕜] W ->ₗ[𝕜] 𝕜)
+定理 fourier整数egral_congr_ae
+  结论: (e : 加法特征 𝕜 𝕊) (μ : 测度 V) (L : V ->ₗ[𝕜] W ->ₗ[𝕜] 𝕜)
   证明: by
   ext
   apply integral_congr_ae
@@ -135,8 +135,8 @@ theorem fourierIntegral_const_smul
   simp only [Pi.smul_apply, fourierIntegral, smul_comm _ r, integral_smul]
 
 中文:
-定理 fourierIntegral_const_smul
-  结论: (e : AddChar 𝕜 𝕊) (μ : Measure V)
+定理 fourier整数egral_const_smul
+  结论: (e : 加法特征 𝕜 𝕊) (μ : 测度 V)
   证明: by
   ext1 w
   simp only [Pi.smul_apply, fourierIntegral, smul_comm _ r, integral_smul]
@@ -160,8 +160,8 @@ theorem norm_fourierIntegral_le_integral_norm
   simp_rw [Circle.norm_smul]
 
 中文:
-定理 norm_fourierIntegral_le_integral_norm
-  结论: (e : AddChar 𝕜 𝕊) (μ : Measure V)
+定理 norm_fourier整数egral_le_integral_norm
+  结论: (e : 加法特征 𝕜 𝕊) (μ : 测度 V)
   证明: by
   refine (norm_integral_le_integral_norm _).trans (le_of_eq ?_)
   simp_rw [Circle.norm_smul]
@@ -189,8 +189,8 @@ theorem fourierIntegral_comp_add_right
   rw [← smul_assoc]; rw [smul_eq_mul]; rw [← Ci
 
 中文:
-定理 fourierIntegral_comp_add_right
-  结论: [MeasurableAdd V] (e : AddChar 𝕜 𝕊) (μ : Measure V)
+定理 fourier整数egral_comp_add_right
+  结论: [MeasurableAdd V] (e : 加法特征 𝕜 𝕊) (μ : 测度 V)
   证明: by
   ext1 w
   dsimp only [fourierIntegral, Function.comp_apply, Circle.smul_def]
@@ -242,8 +242,8 @@ theorem fourierIntegral_convergent_iff
     simp_rw [← integrable_norm_iff (c.aestronglyMeasurable.fu
 
 中文:
-定理 fourierIntegral_convergent_iff
-  结论: (he : Continuous e)
+定理 fourier整数egral_convergent_iff
+  结论: (he : 连续 e)
   证明: by
   -- first prove one-way implication
   have aux {g : V -> E} (hg : Integrable g μ) (x : W) :
@@ -282,8 +282,8 @@ theorem fourierIntegral_add
   · exact (fourierIntegral_convergent_iff he hL w).2 hg
 
 中文:
-定理 fourierIntegral_add
-  结论: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2)
+定理 fourier整数egral_add
+  结论: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2)
   证明: by
   ext1 w
   dsimp only [Pi.add_apply, fourierIntegral]
@@ -319,8 +319,8 @@ theorem fourierIntegral_continuous
     fun_prop
 
 中文:
-定理 fourierIntegral_continuous
-  结论: [FirstCountableTopology W] (he : Continuous e)
+定理 fourier整数egral_continuous
+  结论: [第一可数拓扑 W] (he : 连续 e)
   证明: by
   apply continuous_of_dominated
   · exact fun w => ((fourierIntegral_convergent_iff he hL w).2 hf).1
@@ -366,7 +366,7 @@ theorem integral_fourierIntegral_swap
     have A : AEStronglyMeasurable
 
 中文:
-定理 integral_fourierIntegral_swap
+定理 integral_fourier整数egral_swap
   证明: by
   rw [integral_integral_swap]
   have : Integrable (fun (p : W × V) => ‖M‖ * (‖g p.1‖ * ‖f p.2‖)) (ν.prod μ) :=
@@ -419,7 +419,7 @@ theorem integral_bilin_fourierIntegral_eq_flip
     exact (fourierIntegral_convergent_if
 
 中文:
-定理 integral_bilin_fourierIntegral_eq_flip
+定理 integral_bilin_fourier整数egral_eq_flip
   证明: by
   by_cases hG : CompleteSpace G; swap; · simp [integral, hG]
   calc
@@ -462,7 +462,7 @@ theorem integral_fourierIntegral_smul_eq_flip
   proof: integral_bilin_fourierIntegral_eq_flip (ContinuousLinearMap.lsmul Complex Complex) he hL hf hg
 
 中文:
-定理 integral_fourierIntegral_smul_eq_flip
+定理 integral_fourier整数egral_smul_eq_flip
   证明: integral_bilin_fourierIntegral_eq_flip (ContinuousLinearMap.lsmul Complex Complex) he hL hf hg
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, integral_bilin_fourierIntegral_eq_flip
@@ -489,7 +489,7 @@ theorem integral_sesq_fourierIntegral_eq_neg_flip
     exact (fourierInt
 
 中文:
-定理 integral_sesq_fourierIntegral_eq_neg_flip
+定理 integral_sesq_fourier整数egral_eq_neg_flip
   证明: by
   by_cases hG : CompleteSpace G; swap; · simp [integral, hG]
   calc
@@ -544,8 +544,8 @@ lemma fourierIntegral_probChar
   simp_rw [fourierIntegral, Circle.smul_def, Real.probChar_apply, Complex.ofReal_neg]
 
 中文:
-引理 fourierIntegral_probChar
-  结论: {V W : 类型} {_ : MeasurableSpace V}
+引理 fourier整数egral_probChar
+  结论: {V W : 类型} {_ : 可测空间 V}
   证明: by
   simp_rw [fourierIntegral, Circle.smul_def, Real.probChar_apply, Complex.ofReal_neg]
 
@@ -582,7 +582,7 @@ theorem fourierIntegral_continuousLinearMap_apply
     exact L.continuous₂
 
 中文:
-定理 fourierIntegral_continuousLinearMap_apply
+定理 fourier整数egral_continuousLinearMap_apply
   证明: by
   rw [fourierIntegral]; rw [ContinuousLinearMap.integral_apply]
   · rfl
@@ -612,7 +612,7 @@ theorem fourierIntegral_continuousMultilinearMap_apply
     exact L.continuous₂
 
 中文:
-定理 fourierIntegral_continuousMultilinearMap_apply
+定理 fourier整数egral_continuousMultilinearMap_apply
   证明: by
   rw [fourierIntegral]; rw [ContinuousMultilinearMap.integral_apply]
   · rfl
@@ -653,8 +653,8 @@ definition fourierIntegral
   body: VectorFourier.fourierIntegral e μ (LinearMap.mul 𝕜 𝕜) f w
 
 中文:
-定义 fourierIntegral
-  签名: (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜) (f : 𝕜 -> E) (w : 𝕜)
+定义 fourier整数egral
+  签名: (e : 加法特征 𝕜 𝕊) (μ : 测度 𝕜) (f : 𝕜 -> E) (w : 𝕜)
   定义体: VectorFourier.fourierIntegral e μ (LinearMap.mul 𝕜 𝕜) f w
 
 Depends on / 依赖: LinearMap, LinearMap.mul, VectorFourier, VectorFourier.fourierIntegral, fourierIntegral
@@ -671,8 +671,8 @@ theorem fourierIntegral_def
   proof: rfl
 
 中文:
-定理 fourierIntegral_def
-  条件: (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜) (f : 𝕜 -> E) (w : 𝕜)
+定理 fourier整数egral_def
+  条件: (e : 加法特征 𝕜 𝕊) (μ : 测度 𝕜) (f : 𝕜 -> E) (w : 𝕜)
   证明: rfl
 -/
 theorem fourierIntegral_def (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜) (f : 𝕜 -> E) (w : 𝕜) :
@@ -688,8 +688,8 @@ theorem fourierIntegral_const_smul
   proof: VectorFourier.fourierIntegral_const_smul _ _ _ _ _
 
 中文:
-定理 fourierIntegral_const_smul
-  条件: (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜) (f : 𝕜 -> E) (r : Complex)
+定理 fourier整数egral_const_smul
+  条件: (e : 加法特征 𝕜 𝕊) (μ : 测度 𝕜) (f : 𝕜 -> E) (r : 复形)
   证明: VectorFourier.fourierIntegral_const_smul _ _ _ _ _
 
 Depends on / 依赖: VectorFourier, VectorFourier.fourierIntegral_const_smul, fourierIntegral_const_smul
@@ -707,8 +707,8 @@ theorem norm_fourierIntegral_le_integral_norm
   proof: VectorFourier.norm_fourierIntegral_le_integral_norm _ _ _ _ _
 
 中文:
-定理 norm_fourierIntegral_le_integral_norm
-  结论: (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜)
+定理 norm_fourier整数egral_le_integral_norm
+  结论: (e : 加法特征 𝕜 𝕊) (μ : 测度 𝕜)
   证明: VectorFourier.norm_fourierIntegral_le_integral_norm _ _ _ _ _
 
 Depends on / 依赖: VectorFourier, VectorFourier.norm_fourierIntegral_le_integral_norm, norm_fourierIntegral_le_integral_norm
@@ -726,8 +726,8 @@ theorem fourierIntegral_comp_add_right
   proof: VectorFourier.fourierIntegral_comp_add_right _ _ _ _ _
 
 中文:
-定理 fourierIntegral_comp_add_right
-  结论: [MeasurableAdd 𝕜] (e : AddChar 𝕜 𝕊) (μ : Measure 𝕜)
+定理 fourier整数egral_comp_add_right
+  结论: [MeasurableAdd 𝕜] (e : 加法特征 𝕜 𝕊) (μ : 测度 𝕜)
   证明: VectorFourier.fourierIntegral_comp_add_right _ _ _ _ _
 
 Depends on / 依赖: VectorFourier, VectorFourier.fourierIntegral_comp_add_right, fourierIntegral_comp_add_right
@@ -760,8 +760,8 @@ theorem vector_fourierIntegral_eq_integral_exp_smul
     neg_mul]
 
 中文:
-定理 vector_fourierIntegral_eq_integral_exp_smul
-  结论: {V : 类型} [AddCommGroup V] [Module 实数 V]
+定理 vector_fourier整数egral_eq_integral_exp_smul
+  结论: {V : 类型} [加法交换群 V] [模 实数 V]
   证明: by
   simp_rw [VectorFourier.fourierIntegral, Circle.smul_def, Real.fourierChar_apply, mul_neg,
     neg_mul]
@@ -790,8 +790,8 @@ theorem fourierIntegral_convergent_iff'
     continuous_fourierChar L.continuous₂ _
 
 中文:
-定理 fourierIntegral_convergent_iff'
-  结论: {V W : 类型} [NormedAddCommGroup V] [NormedSpace 实数 V]
+定理 fourier整数egral_convergent_iff'
+  结论: {V W : 类型} [赋范交换加群 V] [赋范空间 实数 V]
   证明: VectorFourier.fourierIntegral_convergent_iff (E := E) (L := L.toLinearMap₁₂)
     continuous_fourierChar L.continuous₂ _
 
@@ -821,7 +821,7 @@ theorem fourierIntegral_continuousLinearMap_apply'
   proof: VectorFourier.fourierIntegral_continuousLinearMap_apply continuous_fourierChar hf
 
 中文:
-定理 fourierIntegral_continuousLinearMap_apply'
+定理 fourier整数egral_continuousLinearMap_apply'
   证明: VectorFourier.fourierIntegral_continuousLinearMap_apply continuous_fourierChar hf
 
 Depends on / 依赖: VectorFourier, VectorFourier.fourierIntegral_continuousLinearMap_apply, continuous_fourierChar, fourierIntegral_continuousLinearMap_apply
@@ -840,7 +840,7 @@ theorem fourierIntegral_continuousMultilinearMap_apply'
   proof: VectorFourier.fourierIntegral_continuousMultilinearMap_apply continuous_fourierChar hf
 
 中文:
-定理 fourierIntegral_continuousMultilinearMap_apply'
+定理 fourier整数egral_continuousMultilinearMap_apply'
   证明: VectorFourier.fourierIntegral_continuousMultilinearMap_apply continuous_fourierChar hf
 
 Depends on / 依赖: VectorFourier, VectorFourier.fourierIntegral_continuousMultilinearMap_apply, continuous_fourierChar, fourierIntegral_continuousMultilinearMap_apply
@@ -868,8 +868,8 @@ theorem fourierIntegral_convergent_iff
   proof: fourierIntegral_convergent_iff' (innerSL Real) w
 
 中文:
-定理 fourierIntegral_convergent_iff
-  条件: {μ : Measure V} {f : V -> E} (w : V)
+定理 fourier整数egral_convergent_iff
+  条件: {μ : 测度 V} {f : V -> E} (w : V)
   证明: fourierIntegral_convergent_iff' (innerSL Real) w
 -/
 @[simp] theorem fourierIntegral_convergent_iff {μ : Measure V} {f : V -> E} (w : V) :
@@ -888,7 +888,7 @@ instance instFourierTransform
 
 中文:
 实例 instFourierTransform
-  签名: : FourierTransform (V -> E) (V -> E) where
+  签名: : Fourier变换 (V -> E) (V -> E) where
   定义体: VectorFourier.fourierIntegral 𝐞 volume (innerₗ V) f
 
 Depends on / 依赖: VectorFourier, VectorFourier.fourierIntegral, fourierIntegral, volume
@@ -1218,7 +1218,7 @@ theorem fourier_continuousMultilinearMap_apply
 
 中文:
 定理 fourier_continuousMultilinearMap_apply
-  结论: {ι : 类型} [Fintype ι]
+  结论: {ι : 类型} [有限类型 ι]
   证明: fourierIntegral_continuousMultilinearMap_apply' (L := innerSL Real) hf
 
 Depends on / 依赖: fourierIntegral_continuousMultilinearMap_apply, innerSL
@@ -1355,7 +1355,7 @@ definition Lp.fourierTransformCLM
 
 中文:
 定义 Lp.fourierTransformCLM
-  签名: : Lp (α := V) E 1 ->L[Complex] V ->ᵇ E
+  签名: : Lp (α := V) E 1 ->L[复形] V ->ᵇ E
   定义体: LinearMap.mkContinuous
     { toFun := Lp.fourierTransform
       map_add' f g := by
@@ -1551,7 +1551,7 @@ definition Lp.fourierTransformInvCLM
 
 中文:
 定义 Lp.fourierTransformInvCLM
-  签名: : Lp (α := V) E 1 ->L[Complex] V ->ᵇ E
+  签名: : Lp (α := V) E 1 ->L[复形] V ->ᵇ E
   定义体: BoundedContinuousFunction.compContinuousCLM _ Complex (-.id V) ∘L Lp.fourierTransformCLM V E
 
 @[simp]

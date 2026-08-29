@@ -41,7 +41,7 @@ theorem IsLUB.frequently_mem
 
 中文:
 定理 IsLUB.frequently_mem
-  条件: {a : α} {s : Set α} (ha : IsLUB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsLUB s a) (hs : s.非空)
   证明: by
   rcases hs with ⟨a', ha'⟩
   intro h
@@ -73,7 +73,7 @@ theorem IsLUB.frequently_nhds_mem
 
 中文:
 定理 IsLUB.frequently_nhds_mem
-  条件: {a : α} {s : Set α} (ha : IsLUB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsLUB s a) (hs : s.非空)
   证明: (ha.frequently_mem hs).filter_mono inf_le_left
 
 Depends on / 依赖: filter_mono, frequently_mem, ha.frequently_mem, inf_le_left
@@ -92,7 +92,7 @@ theorem IsGLB.frequently_mem
 
 中文:
 定理 IsGLB.frequently_mem
-  条件: {a : α} {s : Set α} (ha : IsGLB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsGLB s a) (hs : s.非空)
   证明: IsLUB.frequently_mem (α := αᵒᵈ) ha hs
 
 Depends on / 依赖: IsLUB.frequently_mem, frequently_mem
@@ -111,7 +111,7 @@ theorem IsGLB.frequently_nhds_mem
 
 中文:
 定理 IsGLB.frequently_nhds_mem
-  条件: {a : α} {s : Set α} (ha : IsGLB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsGLB s a) (hs : s.非空)
   证明: (ha.frequently_mem hs).filter_mono inf_le_left
 
 Depends on / 依赖: filter_mono, frequently_mem, ha.frequently_mem, inf_le_left
@@ -131,7 +131,7 @@ theorem IsLUB.mem_closure
 
 中文:
 定理 IsLUB.mem_closure
-  条件: {a : α} {s : Set α} (ha : IsLUB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsLUB s a) (hs : s.非空)
   结论: a in closure s
   证明: (ha.frequently_nhds_mem hs).mem_closure
 
@@ -151,7 +151,7 @@ theorem IsGLB.mem_closure
 
 中文:
 定理 IsGLB.mem_closure
-  条件: {a : α} {s : Set α} (ha : IsGLB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsGLB s a) (hs : s.非空)
   结论: a in closure s
   证明: (ha.frequently_nhds_mem hs).mem_closure
 
@@ -170,7 +170,7 @@ theorem IsLUB.nhdsWithin_neBot
 
 中文:
 定理 IsLUB.nhdsWithin_neBot
-  条件: {a : α} {s : Set α} (ha : IsLUB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsLUB s a) (hs : s.非空)
   证明: mem_closure_iff_nhdsWithin_neBot.1 (ha.mem_closure hs)
 
 Depends on / 依赖: ha.mem_closure, mem_closure, mem_closure_iff_nhdsWithin_neBot
@@ -189,7 +189,7 @@ theorem IsGLB.nhdsWithin_neBot
 
 中文:
 定理 IsGLB.nhdsWithin_neBot
-  条件: {a : α} {s : Set α} (ha : IsGLB s a) (hs : s.Nonempty)
+  条件: {a : α} {s : 集合 α} (ha : IsGLB s a) (hs : s.非空)
   证明: IsLUB.nhdsWithin_neBot (α := αᵒᵈ) ha hs
 
 Depends on / 依赖: IsLUB.nhdsWithin_neBot, nhdsWithin_neBot
@@ -213,7 +213,7 @@ have : b < b := lt_of_lt_of_le hxb hb hxs
 
 中文:
 定理 isLUB_of_mem_nhds
-  结论: {s : Set α} {a : α} {f : Filter α} (hsa : a in upperBounds s) (hsf : s in f)
+  结论: {s : 集合 α} {a : α} {f : 滤子 α} (hsa : a in upperBounds s) (hsf : s in f)
   证明: ⟨hsa, fun b hb =>
     not_lt.1 fun hba =>
       have : s inter { a | b < a } in f ⊓ 𝓝 a := inter_mem_inf hsf (IsOpen.mem_nhds (isOpen_lt' _) hba)
@@ -244,7 +244,7 @@ theorem isLUB_of_mem_closure
 
 中文:
 定理 isLUB_of_mem_closure
-  条件: {s : Set α} {a : α} (hsa : a in upperBounds s) (hsf : a in closure s)
+  条件: {s : 集合 α} {a : α} (hsa : a in upperBounds s) (hsf : a in closure s)
   证明: by
   rw [mem_closure_iff_clusterPt]; rw [ClusterPt]; rw [inf_comm] at hsf
   exact isLUB_of_mem_nhds hsa (mem_principal_self s)
@@ -267,7 +267,7 @@ theorem isGLB_of_mem_nhds
 
 中文:
 定理 isGLB_of_mem_nhds
-  结论: {s : Set α} {a : α} {f : Filter α} (hsa : a in lowerBounds s) (hsf : s in f)
+  结论: {s : 集合 α} {a : α} {f : 滤子 α} (hsa : a in lowerBounds s) (hsf : s in f)
   证明: isLUB_of_mem_nhds (α := αᵒᵈ) hsa hsf
 
 Depends on / 依赖: isLUB_of_mem_nhds
@@ -287,7 +287,7 @@ theorem isGLB_of_mem_closure
 
 中文:
 定理 isGLB_of_mem_closure
-  条件: {s : Set α} {a : α} (hsa : a in lowerBounds s) (hsf : a in closure s)
+  条件: {s : 集合 α} {a : α} (hsa : a in lowerBounds s) (hsf : a in closure s)
   证明: isLUB_of_mem_closure (α := αᵒᵈ) hsa hsf
 
 Depends on / 依赖: isLUB_of_mem_closure
@@ -311,7 +311,7 @@ theorem IsLUB.mem_upperBounds_of_tendsto
 
 中文:
 定理 IsLUB.mem_upperBounds_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ]
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ]
   证明: by
   rintro _ ⟨x, hx, rfl⟩
   replace ha := ha.inter_Ici_of_mem hx
@@ -344,7 +344,7 @@ theorem IsLUB.isLUB_of_tendsto
 
 中文:
 定理 IsLUB.isLUB_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ] {f : α -> γ}
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ] {f : α -> γ}
   证明: haveI := ha.nhdsWithin_neBot hs
   ⟨ha.mem_upperBounds_of_tendsto hf hb, fun _b' hb' =>
     le_of_tendsto hb (mem_of_superset self_mem_nhdsWithin fun _ hx => hb' <| mem_image_of_mem _ hx)⟩
@@ -368,7 +368,7 @@ theorem IsGLB.mem_lowerBounds_of_tendsto
 
 中文:
 定理 IsGLB.mem_lowerBounds_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ]
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ]
   证明: IsLUB.mem_upperBounds_of_tendsto (α := αᵒᵈ) (γ := γᵒᵈ) hf.dual ha hb
 
 Depends on / 依赖: IsLUB.mem_upperBounds_of_tendsto, hf.dual, mem_upperBounds_of_tendsto
@@ -392,7 +392,7 @@ theorem IsGLB.isGLB_of_tendsto
 
 中文:
 定理 IsGLB.isGLB_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ] {f : α -> γ}
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ] {f : α -> γ}
   证明: IsLUB.isLUB_of_tendsto (α := αᵒᵈ) (γ := γᵒᵈ) hf.dual
 
 Depends on / 依赖: IsLUB.isLUB_of_tendsto, hf.dual, isLUB_of_tendsto
@@ -412,7 +412,7 @@ theorem IsLUB.mem_lowerBounds_of_tendsto
 
 中文:
 定理 IsLUB.mem_lowerBounds_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ]
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ]
   证明: IsLUB.mem_upperBounds_of_tendsto (γ := γᵒᵈ) hf ha hb
 
 Depends on / 依赖: IsLUB.mem_upperBounds_of_tendsto, mem_upperBounds_of_tendsto
@@ -432,7 +432,7 @@ theorem IsLUB.isGLB_of_tendsto
 
 中文:
 定理 IsLUB.isGLB_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ] {f : α -> γ}
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ] {f : α -> γ}
   证明: IsLUB.isLUB_of_tendsto (γ := γᵒᵈ) hf ha hs hb
 
 Depends on / 依赖: IsLUB.isLUB_of_tendsto, isLUB_of_tendsto
@@ -452,7 +452,7 @@ theorem IsGLB.mem_upperBounds_of_tendsto
 
 中文:
 定理 IsGLB.mem_upperBounds_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ]
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ]
   证明: IsGLB.mem_lowerBounds_of_tendsto (γ := γᵒᵈ) hf ha hb
 
 Depends on / 依赖: IsGLB.mem_lowerBounds_of_tendsto, mem_lowerBounds_of_tendsto
@@ -472,7 +472,7 @@ theorem IsGLB.isLUB_of_tendsto
 
 中文:
 定理 IsGLB.isLUB_of_tendsto
-  结论: [Preorder γ] [TopologicalSpace γ] [OrderClosedTopology γ] {f : α -> γ}
+  结论: [预序 γ] [拓扑空间 γ] [OrderClosed拓扑 γ] {f : α -> γ}
   证明: IsGLB.isGLB_of_tendsto (γ := γᵒᵈ) hf ha hs hb
 
 Depends on / 依赖: IsGLB.isGLB_of_tendsto, isGLB_of_tendsto
@@ -494,7 +494,7 @@ alias IsClosed.isLUB_mem := IsLUB.mem_of_isClosed
 
 中文:
 定理 IsLUB.mem_of_isClosed
-  结论: {a : α} {s : Set α} (ha : IsLUB s a) (hs : s.Nonempty)
+  结论: {a : α} {s : 集合 α} (ha : IsLUB s a) (hs : s.非空)
   证明: sc.closure_subset ha.mem_closure hs
 
 alias IsClosed.isLUB_mem := IsLUB.mem_of_isClosed
@@ -519,7 +519,7 @@ alias IsClosed.isGLB_mem := IsGLB.mem_of_isClosed
 
 中文:
 定理 IsGLB.mem_of_isClosed
-  结论: {a : α} {s : Set α} (ha : IsGLB s a) (hs : s.Nonempty)
+  结论: {a : α} {s : 集合 α} (ha : IsGLB s a) (hs : s.非空)
   证明: sc.closure_subset ha.mem_closure hs
 
 alias IsClosed.isGLB_mem := IsGLB.mem_of_isClosed
@@ -543,7 +543,7 @@ theorem isLUB_iff_of_subset_of_subset_closure
 
 中文:
 定理 isLUB_iff_of_subset_of_subset_closure
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α]
+  结论: {α : 类型} [拓扑空间 α] [预序 α]
   证明: isLUB_congr (upperBounds_closure (s := s) ▸ upperBounds_mono_set hts).antisymm
     upperBounds_mono_set hst
 
@@ -565,7 +565,7 @@ theorem isGLB_iff_of_subset_of_subset_closure
 
 中文:
 定理 isGLB_iff_of_subset_of_subset_closure
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α]
+  结论: {α : 类型} [拓扑空间 α] [预序 α]
   证明: isLUB_iff_of_subset_of_subset_closure (α := αᵒᵈ) hst hts
 
 Depends on / 依赖: isLUB_iff_of_subset_of_subset_closure
@@ -584,8 +584,8 @@ theorem Dense.isLUB_inter_iff
   proof: isLUB_iff_of_subset_of_subset_closure (by simp) hs.open_subset_closure_inter ht
 
 中文:
-定理 Dense.isLUB_inter_iff
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α] [ClosedIicTopology α]
+定理 稠密.isLUB_inter_iff
+  结论: {α : 类型} [拓扑空间 α] [预序 α] [ClosedIic拓扑 α]
   证明: isLUB_iff_of_subset_of_subset_closure (by simp) hs.open_subset_closure_inter ht
 
 Depends on / 依赖: hs.open_subset_closure_inter, isLUB_iff_of_subset_of_subset_closure, open_subset_closure_inter
@@ -604,8 +604,8 @@ theorem Dense.isGLB_inter_iff
   proof: hs.isLUB_inter_iff (α := αᵒᵈ) ht
 
 中文:
-定理 Dense.isGLB_inter_iff
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α] [ClosedIciTopology α]
+定理 稠密.isGLB_inter_iff
+  结论: {α : 类型} [拓扑空间 α] [预序 α] [ClosedIci拓扑 α]
   证明: hs.isLUB_inter_iff (α := αᵒᵈ) ht
 
 Depends on / 依赖: hs.isLUB_inter_iff, isLUB_inter_iff
@@ -629,8 +629,8 @@ theorem Dense.upperBounds_image
   exact (hi.mono hx).mem_of_closed isClosed_Iic
 
 中文:
-定理 Dense.upperBounds_image
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α]
+定理 稠密.upperBounds_image
+  结论: {α : 类型} [拓扑空间 α] [预序 α]
   证明: by
   refine subset_antisymm ?_ fun _ => upperBounds_mono (Set.image_subset_range f S) le_rfl
   refine subset_trans ?_ fun _ => upperBounds_mono (hf.range_subset_closure_image_dense hS) le_rfl
@@ -659,8 +659,8 @@ theorem Dense.lowerBounds_image
   proof: hS.upperBounds_image (α := αᵒᵈ) hf
 
 中文:
-定理 Dense.lowerBounds_image
-  结论: {α : 类型} [TopologicalSpace α] [Preorder α]
+定理 稠密.lowerBounds_image
+  结论: {α : 类型} [拓扑空间 α] [预序 α]
   证明: hS.upperBounds_image (α := αᵒᵈ) hf
 
 Depends on / 依赖: hS.upperBounds_image, upperBounds_image
@@ -686,8 +686,8 @@ theorem Dense.ciSup
   exact h.mono (by grind)
 
 中文:
-定理 Dense.ciSup
-  结论: {α : 类型} [TopologicalSpace α]
+定理 稠密.ciSup
+  结论: {α : 类型} [拓扑空间 α]
   证明: by
   rw [← sSup_range]; rw [← sSup_range]
   obtain (_ | _) := isEmpty_or_nonempty γ
@@ -718,8 +718,8 @@ theorem Dense.ciInf
   proof: hS.ciSup (α := αᵒᵈ) hf h
 
 中文:
-定理 Dense.ciInf
-  结论: {α : 类型} [TopologicalSpace α]
+定理 稠密.ciInf
+  结论: {α : 类型} [拓扑空间 α]
   证明: hS.ciSup (α := αᵒᵈ) hf h
 
 Depends on / 依赖: hS.ciSup
@@ -745,8 +745,8 @@ theorem Dense.ciSup'
     grind [h.mono]
 
 中文:
-定理 Dense.ciSup'
-  结论: {α : 类型} [TopologicalSpace α]
+定理 稠密.ciSup'
+  结论: {α : 类型} [拓扑空间 α]
   证明: by
   by_cases h : BddAbove (range (fun x : S => f x))
 · refine hS.ciSup hf h.closure.mono ?_
@@ -777,8 +777,8 @@ theorem Dense.ciInf'
   proof: hS.ciSup' (α := αᵒᵈ) hf
 
 中文:
-定理 Dense.ciInf'
-  结论: {α : 类型} [TopologicalSpace α]
+定理 稠密.ciInf'
+  结论: {α : 类型} [拓扑空间 α]
   证明: hS.ciSup' (α := αᵒᵈ) hf
 
 Depends on / 依赖: hS.ciSup
@@ -808,7 +808,7 @@ lemma ConditionallyCompleteLinearOrder.isCompact_Icc
   h
 
 中文:
-引理 ConditionallyCompleteLinearOrder.isCompact_Icc
+引理 条件完备线性序.isCompact_Icc
   条件: (a b : α)
   证明: by
   simp only [isCompact_iff_ultrafilter_le_nhds, le_principal_iff]
@@ -850,7 +850,7 @@ lemma upperClosure_eq_Ici_csInf
 
 中文:
 引理 upperClosure_eq_Ici_csInf
-  条件: {s : Set α} (h₁ : s.Nonempty) (h₂ : BddBelow s) (hs : IsClosed s)
+  条件: {s : 集合 α} (h₁ : s.非空) (h₂ : BddBelow s) (hs : 是闭集 s)
   证明: Set.ext fun _ => ⟨fun ⟨_, h, h'⟩ => csInf_le_of_le h₂ h h',
     (⟨_, (isGLB_csInf h₁ h₂).mem_of_isClosed h₁ hs, ·⟩)⟩
 
@@ -871,7 +871,7 @@ lemma lowerClosure_eq_Iic_csSup
 
 中文:
 引理 lowerClosure_eq_Iic_csSup
-  条件: {s : Set α} (h₁ : s.Nonempty) (h₂ : BddAbove s) (hs : IsClosed s)
+  条件: {s : 集合 α} (h₁ : s.非空) (h₂ : BddAbove s) (hs : 是闭集 s)
   证明: upperClosure_eq_Ici_csInf (α := αᵒᵈ) h₁ h₂ hs
 
 Depends on / 依赖: upperClosure_eq_Ici_csInf
@@ -894,8 +894,8 @@ lemma IsClosed.upperClosure
   · exact upperClosure_eq_bot h₂ ▸ isClosed_univ
 
 中文:
-引理 IsClosed.upperClosure
-  条件: {s : Set α} (hs : IsClosed s)
+引理 是闭集.upperClosure
+  条件: {s : 集合 α} (hs : 是闭集 s)
   证明: by
   obtain rfl | h₁ := s.eq_empty_or_nonempty
   · simp
@@ -920,8 +920,8 @@ lemma IsClosed.lowerClosure
   proof: IsClosed.upperClosure (α := αᵒᵈ) hs
 
 中文:
-引理 IsClosed.lowerClosure
-  条件: {s : Set α} (hs : IsClosed s)
+引理 是闭集.lowerClosure
+  条件: {s : 集合 α} (hs : 是闭集 s)
   证明: IsClosed.upperClosure (α := αᵒᵈ) hs
 -/
 protected lemma IsClosed.lowerClosure {s : Set α} (hs : IsClosed s) :
@@ -944,8 +944,8 @@ theorem IsLUB.exists_seq_strictMono_tendsto_of_notMem
   have : forall k, forallᶠ l in atTop, v k < v l := fun k => hvx
 
 中文:
-定理 IsLUB.exists_seq_strictMono_tendsto_of_notMem
-  结论: {t : Set α} {x : α}
+定理 IsLUB.存在_seq_strictMono_tendsto_of_notMem
+  结论: {t : 集合 α} {x : α}
   证明: by
   obtain ⟨v, hvx, hvt⟩ := exists_seq_forall_of_frequently (htx.frequently_mem ht)
   replace hvx := hvx.mono_right nhdsWithin_le_nhds
@@ -980,8 +980,8 @@ theorem IsLUB.exists_seq_monotone_tendsto
     exact ⟨u, hu.1.monotone, fun n => (hu.2.1 n).le, hu.2.2⟩
 
 中文:
-定理 IsLUB.exists_seq_monotone_tendsto
-  结论: {t : Set α} {x : α} [IsCountablyGenerated (𝓝 x)]
+定理 IsLUB.存在_seq_monotone_tendsto
+  结论: {t : 集合 α} {x : α} [是余untablyGenerated (𝓝 x)]
   证明: by
   by_cases h : x in t
   · exact ⟨fun _ => x, monotone_const, fun n => le_rfl, tendsto_const_nhds, fun _ => h⟩
@@ -1011,8 +1011,8 @@ theorem exists_seq_strictMono_tendsto'
   exact ⟨u, hu.1, hu.2.2.symm⟩
 
 中文:
-定理 exists_seq_strictMono_tendsto'
-  结论: {α : 类型} [LinearOrder α] [TopologicalSpace α]
+定理 存在_seq_strictMono_tendsto'
+  结论: {α : 类型} [线性序 α] [拓扑空间 α]
   证明: by
   have hx : x ∉ Ioo y x := fun h => (lt_irrefl x h.2).elim
   have ht : Set.Nonempty (Ioo y x) := nonempty_Ioo.2 hy
@@ -1041,8 +1041,8 @@ theorem exists_seq_strictMono_tendsto
   exact ⟨u, hu_mono, fun n => (hu_mem n).2, hux⟩
 
 中文:
-定理 exists_seq_strictMono_tendsto
-  结论: [DenselyOrdered α] [NoMinOrder α] [FirstCountableTopology α]
+定理 存在_seq_strictMono_tendsto
+  结论: [稠密序 α] [NoMin序 α] [第一可数拓扑 α]
   证明: by
   obtain ⟨y, hy⟩ : exists y, y < x := exists_lt x
   rcases exists_seq_strictMono_tendsto' hy with ⟨u, hu_mono, hu_mem, hux⟩
@@ -1066,8 +1066,8 @@ theorem exists_seq_strictMono_tendsto_nhdsWithin
 ⟨u, hu, hx, tendsto_nhdsWithin_mono_right (range_subset_iff.2 hx) tendsto_nhdsWithin_range.2 h⟩
 
 中文:
-定理 exists_seq_strictMono_tendsto_nhdsWithin
-  结论: [DenselyOrdered α] [NoMinOrder α]
+定理 存在_seq_strictMono_tendsto_nhdsWithin
+  结论: [稠密序 α] [NoMin序 α]
   证明: let ⟨u, hu, hx, h⟩ := exists_seq_strictMono_tendsto x
 ⟨u, hu, hx, tendsto_nhdsWithin_mono_right (range_subset_iff.2 hx) tendsto_nhdsWithin_range.2 h⟩
 
@@ -1090,8 +1090,8 @@ theorem exists_seq_tendsto_sSup
   exact ⟨u, hu.1, hu.2.2⟩
 
 中文:
-定理 exists_seq_tendsto_sSup
-  结论: {α : 类型} [ConditionallyCompleteLinearOrder α]
+定理 存在_seq_tendsto_sSup
+  结论: {α : 类型} [条件完备线性序 α]
   证明: by
   rcases (isLUB_csSup hS hS').exists_seq_monotone_tendsto hS with ⟨u, hu⟩
   exact ⟨u, hu.1, hu.2.2⟩
@@ -1119,8 +1119,8 @@ theorem Dense.exists_seq_strictMono_tendsto_of_lt
   
 
 中文:
-定理 Dense.exists_seq_strictMono_tendsto_of_lt
-  结论: [DenselyOrdered α] [FirstCountableTopology α]
+定理 稠密.存在_seq_strictMono_tendsto_of_lt
+  结论: [稠密序 α] [第一可数拓扑 α]
   证明: by
   have hnonempty : (Ioo y x inter s).Nonempty := by
     obtain ⟨z, hyz, hzx⟩ := hs.exists_between hy
@@ -1153,8 +1153,8 @@ theorem Dense.exists_seq_strictMono_tendsto
   simp_all
 
 中文:
-定理 Dense.exists_seq_strictMono_tendsto
-  结论: [DenselyOrdered α] [NoMinOrder α]
+定理 稠密.存在_seq_strictMono_tendsto
+  结论: [稠密序 α] [NoMin序 α]
   证明: by
   obtain ⟨y, hy⟩ := exists_lt x
 .imp apply hs.exists_seq_strictMono_tendsto_of_lt (exists_lt x).choose_spec
@@ -1184,8 +1184,8 @@ theorem DenseRange.exists_seq_strictMono_tendsto_of_lt
 exact ⟨v, fun a b hlt => hmono.reflect_lt hu
 
 中文:
-定理 DenseRange.exists_seq_strictMono_tendsto_of_lt
-  结论: {β : 类型} [LinearOrder β]
+定理 DenseRange.存在_seq_strictMono_tendsto_of_lt
+  结论: {β : 类型} [线性序 β]
   证明: by
   rcases Dense.exists_seq_strictMono_tendsto_of_lt hf hlt with ⟨u, hu, huyxf, hlim⟩
   have huyx (n : Nat) : u n in Ioo y x := (huyxf n).1
@@ -1222,8 +1222,8 @@ theorem DenseRange.exists_seq_strictMono_tendsto
 exact ⟨v, fun a b hlt => hmono.reflect_lt hu hlt, hux, hli
 
 中文:
-定理 DenseRange.exists_seq_strictMono_tendsto
-  结论: {β : 类型} [LinearOrder β] [DenselyOrdered α]
+定理 DenseRange.存在_seq_strictMono_tendsto
+  结论: {β : 类型} [线性序 β] [稠密序 α]
   证明: by
   rcases Dense.exists_seq_strictMono_tendsto hf x with ⟨u, hu, huxf, hlim⟩
   have hux (n : Nat) : u n in Iio x := (huxf n).1
@@ -1255,8 +1255,8 @@ theorem IsGLB.exists_seq_strictAnti_tendsto_of_notMem
   proof: IsLUB.exists_seq_strictMono_tendsto_of_notMem (α := αᵒᵈ) htx notMem ht
 
 中文:
-定理 IsGLB.exists_seq_strictAnti_tendsto_of_notMem
-  结论: {t : Set α} {x : α}
+定理 IsGLB.存在_seq_strictAnti_tendsto_of_notMem
+  结论: {t : 集合 α} {x : α}
   证明: IsLUB.exists_seq_strictMono_tendsto_of_notMem (α := αᵒᵈ) htx notMem ht
 
 Depends on / 依赖: IsLUB.exists_seq_strictMono_tendsto_of_notMem, exists_seq_strictMono_tendsto_of_notMem, notMem
@@ -1276,8 +1276,8 @@ theorem IsGLB.exists_seq_antitone_tendsto
   proof: IsLUB.exists_seq_monotone_tendsto (α := αᵒᵈ) htx ht
 
 中文:
-定理 IsGLB.exists_seq_antitone_tendsto
-  结论: {t : Set α} {x : α} [IsCountablyGenerated (𝓝 x)]
+定理 IsGLB.存在_seq_antitone_tendsto
+  结论: {t : 集合 α} {x : α} [是余untablyGenerated (𝓝 x)]
   证明: IsLUB.exists_seq_monotone_tendsto (α := αᵒᵈ) htx ht
 
 Depends on / 依赖: IsLUB.exists_seq_monotone_tendsto, exists_seq_monotone_tendsto
@@ -1297,8 +1297,8 @@ theorem exists_seq_strictAnti_tendsto'
   simpa using! exists_seq_strictMono_tendsto' (α := αᵒᵈ) (OrderDual.toDual_lt_toDual.2 hy)
 
 中文:
-定理 exists_seq_strictAnti_tendsto'
-  结论: [DenselyOrdered α] [FirstCountableTopology α] {x y : α}
+定理 存在_seq_strictAnti_tendsto'
+  结论: [稠密序 α] [第一可数拓扑 α] {x y : α}
   证明: by
   simpa using! exists_seq_strictMono_tendsto' (α := αᵒᵈ) (OrderDual.toDual_lt_toDual.2 hy)
 
@@ -1317,8 +1317,8 @@ theorem exists_seq_strictAnti_tendsto
   proof: exists_seq_strictMono_tendsto (α := αᵒᵈ) x
 
 中文:
-定理 exists_seq_strictAnti_tendsto
-  结论: [DenselyOrdered α] [NoMaxOrder α] [FirstCountableTopology α]
+定理 存在_seq_strictAnti_tendsto
+  结论: [稠密序 α] [NoMax序 α] [第一可数拓扑 α]
   证明: exists_seq_strictMono_tendsto (α := αᵒᵈ) x
 
 Depends on / 依赖: exists_seq_strictMono_tendsto
@@ -1336,8 +1336,8 @@ theorem exists_seq_strictAnti_tendsto_nhdsWithin
   proof: exists_seq_strictMono_tendsto_nhdsWithin (α := αᵒᵈ) _
 
 中文:
-定理 exists_seq_strictAnti_tendsto_nhdsWithin
-  结论: [DenselyOrdered α] [NoMaxOrder α]
+定理 存在_seq_strictAnti_tendsto_nhdsWithin
+  结论: [稠密序 α] [NoMax序 α]
   证明: exists_seq_strictMono_tendsto_nhdsWithin (α := αᵒᵈ) _
 
 Depends on / 依赖: exists_seq_strictMono_tendsto_nhdsWithin
@@ -1361,8 +1361,8 @@ theorem exists_seq_strictAnti_strictMono_tendsto
       fun k l => (hu_anti.antitone ze
 
 中文:
-定理 exists_seq_strictAnti_strictMono_tendsto
-  结论: [DenselyOrdered α] [FirstCountableTopology α]
+定理 存在_seq_strictAnti_strictMono_tendsto
+  结论: [稠密序 α] [第一可数拓扑 α]
   证明: by
   rcases exists_seq_strictAnti_tendsto' h with ⟨u, hu_anti, hu_mem, hux⟩
   rcases exists_seq_strictMono_tendsto' (hu_mem 0).2 with ⟨v, hv_mono, hv_mem, hvy⟩
@@ -1391,8 +1391,8 @@ theorem exists_seq_tendsto_sInf
   proof: exists_seq_tendsto_sSup (α := αᵒᵈ) hS hS'
 
 中文:
-定理 exists_seq_tendsto_sInf
-  结论: {α : 类型} [ConditionallyCompleteLinearOrder α]
+定理 存在_seq_tendsto_sInf
+  结论: {α : 类型} [条件完备线性序 α]
   证明: exists_seq_tendsto_sSup (α := αᵒᵈ) hS hS'
 
 Depends on / 依赖: exists_seq_tendsto_sSup
@@ -1412,8 +1412,8 @@ theorem Dense.exists_seq_strictAnti_tendsto_of_lt
   simpa using! hs.exists_seq_strictMono_tendsto_of_lt (α := αᵒᵈ) (OrderDual.toDual_lt_toDual.2 hy)
 
 中文:
-定理 Dense.exists_seq_strictAnti_tendsto_of_lt
-  结论: [DenselyOrdered α] [FirstCountableTopology α]
+定理 稠密.存在_seq_strictAnti_tendsto_of_lt
+  结论: [稠密序 α] [第一可数拓扑 α]
   证明: by
   simpa using! hs.exists_seq_strictMono_tendsto_of_lt (α := αᵒᵈ) (OrderDual.toDual_lt_toDual.2 hy)
 
@@ -1433,8 +1433,8 @@ theorem Dense.exists_seq_strictAnti_tendsto
   proof: hs.exists_seq_strictMono_tendsto (α := αᵒᵈ) x
 
 中文:
-定理 Dense.exists_seq_strictAnti_tendsto
-  结论: [DenselyOrdered α] [NoMaxOrder α]
+定理 稠密.存在_seq_strictAnti_tendsto
+  结论: [稠密序 α] [NoMax序 α]
   证明: hs.exists_seq_strictMono_tendsto (α := αᵒᵈ) x
 
 Depends on / 依赖: exists_seq_strictMono_tendsto, hs.exists_seq_strictMono_tendsto
@@ -1455,8 +1455,8 @@ theorem DenseRange.exists_seq_strictAnti_tendsto_of_lt
     (OrderDual.toDual_lt_toDual.2 hlt)
 
 中文:
-定理 DenseRange.exists_seq_strictAnti_tendsto_of_lt
-  结论: {β : 类型} [LinearOrder β]
+定理 DenseRange.存在_seq_strictAnti_tendsto_of_lt
+  结论: {β : 类型} [线性序 β]
   证明: by
   simpa using! hf.exists_seq_strictMono_tendsto_of_lt (α := αᵒᵈ) (β := βᵒᵈ) hmono.dual
     (OrderDual.toDual_lt_toDual.2 hlt)
@@ -1479,8 +1479,8 @@ theorem DenseRange.exists_seq_strictAnti_tendsto
   proof: hf.exists_seq_strictMono_tendsto (α := αᵒᵈ) (β := βᵒᵈ) hmono.dual x
 
 中文:
-定理 DenseRange.exists_seq_strictAnti_tendsto
-  结论: {β : 类型} [LinearOrder β] [DenselyOrdered α]
+定理 DenseRange.存在_seq_strictAnti_tendsto
+  结论: {β : 类型} [线性序 β] [稠密序 α]
   证明: hf.exists_seq_strictMono_tendsto (α := αᵒᵈ) (β := βᵒᵈ) hmono.dual x
 
 Depends on / 依赖: exists_seq_strictMono_tendsto, hf.exists_seq_strictMono_tendsto, hmono.dual
@@ -1506,8 +1506,8 @@ theorem eventually_le_const_iff_forall_gt_eventually_lt_const
       obtain ⟨u, -, -, hu_tt, hu_gt⟩ := hd.exists_seq_antitone_
 
 中文:
-定理 eventually_le_const_iff_forall_gt_eventually_lt_const
-  结论: [FirstCountableTopology α]
+定理 eventually_le_const_iff_对任意_gt_eventually_lt_const
+  结论: [第一可数拓扑 α]
   证明: h.mono fun x hx => lt_of_le_of_lt hx hbc
   mpr h := by
     rcases exists_glb_Ioi a with ⟨d, hd⟩
@@ -1546,8 +1546,8 @@ theorem eventually_const_le_iff_forall_lt_eventually_const_lt
   proof: eventually_le_const_iff_forall_gt_eventually_lt_const (α := αᵒᵈ)
 
 中文:
-定理 eventually_const_le_iff_forall_lt_eventually_const_lt
-  结论: [FirstCountableTopology α]
+定理 eventually_const_le_iff_对任意_lt_eventually_const_lt
+  结论: [第一可数拓扑 α]
   证明: eventually_le_const_iff_forall_gt_eventually_lt_const (α := αᵒᵈ)
 
 Depends on / 依赖: eventually_le_const_iff_forall_gt_eventually_lt_const

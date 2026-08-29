@@ -115,8 +115,8 @@ structure HasFDerivAtFilter
     - of_isLittleOTVS : : isLittleOTVS : (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p => p.1 - p.2)
 
 中文:
-结构 HasFDerivAtFilter
-  参数: (f : E -> F) (f' : E ->L[𝕜] F) (L : Filter (E × E))
+结构 有FDerivAtFilter
+  参数: (f : E -> F) (f' : E ->L[𝕜] F) (L : 滤子 (E × E))
   公理与运算 (1 个):
     - of_isLittleOTVS : : isLittleOTVS : (fun p => f p.1 - f p.2 - f' (p.1 - p.2)) =o[𝕜; L] (fun p => p.1 - p.2)
 -/
@@ -137,7 +137,7 @@ definition HasFDerivWithinAt
 
 中文:
 定义 HasFDerivWithinAt
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (x : E)
+  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : 集合 E) (x : E)
   定义体: HasFDerivAtFilter f f' (𝓝[s] x ×ˢ pure x)
 
 Depends on / 依赖: HasFDerivAtFilter
@@ -157,7 +157,7 @@ definition HasFDerivAt
   body: HasFDerivAtFilter f f' (𝓝 x ×ˢ pure x)
 
 中文:
-定义 HasFDerivAt
+定义 在点处Fréchet可导
   签名: (f : E -> F) (f' : E ->L[𝕜] F) (x : E)
   定义体: HasFDerivAtFilter f f' (𝓝 x ×ˢ pure x)
 
@@ -204,7 +204,7 @@ definition DifferentiableWithinAt
 
 中文:
 定义 DifferentiableWithinAt
-  签名: (f : E -> F) (s : Set E) (x : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E)
   定义体: exists f' : E ->L[𝕜] F, HasFDerivWithinAt f f' s x
 
 Depends on / 依赖: HasFDerivWithinAt
@@ -260,7 +260,7 @@ definition DifferentiableOn
 
 中文:
 定义 DifferentiableOn
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: forall x in s, DifferentiableWithinAt 𝕜 f s x
 
 Depends on / 依赖: DifferentiableWithinAt
@@ -279,7 +279,7 @@ definition Differentiable
   body: forall x, DifferentiableAt 𝕜 f x
 
 中文:
-定义 Differentiable
+定义 可微
   签名: (f : E -> F)
   定义体: forall x, DifferentiableAt 𝕜 f x
 
@@ -440,7 +440,7 @@ alias ⟨HasFDerivAtFilter.isLittleO, HasFDerivAtFilter.of_isLittleO⟩ :=
 
 中文:
 定理 hasFDerivAtFilter_iff_isLittleO
-  条件: {L : Filter (E × E)}
+  条件: {L : 滤子 (E × E)}
   证明: (hasFDerivAtFilter_iff_isLittleOTVS ..).trans isLittleOTVS_iff_isLittleO
 
 alias ⟨HasFDerivAtFilter.isLittleO, HasFDerivAtFilter.of_isLittleO⟩ :=

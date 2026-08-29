@@ -49,7 +49,7 @@ inductive Fin2
 
 中文:
 归纳类型 Fin2
-  参数: : 自然数 -> Type
+  参数: : 自然数 -> 类型
   构造子 (2 个):
     - fz: {n} : Fin2 (n + 1)
     - fs: {n} : Fin2 n -> Fin2 (n + 1)
@@ -74,7 +74,7 @@ definition cases'
 
 中文:
 定义 cases'
-  签名: {n} {C : Fin2 (succ n) -> Sort u} (H1 : C fz) (H2 : 对任意 n, C (fs n))
+  签名: {n} {C : Fin2 (succ n) -> 类型层 u} (H1 : C fz) (H2 : 对任意 n, C (fs n))
 -/
 protected def cases' {n} {C : Fin2 (succ n) -> Sort u} (H1 : C fz) (H2 : forall n, C (fs n)) :
     forall i : Fin2 (succ n), C i
@@ -91,7 +91,7 @@ definition elim0
 
 中文:
 定义 elim0
-  签名: {C : Fin2 0 -> Sort u}
+  签名: {C : Fin2 0 -> 类型层 u}
   定义体: nofun
 -/
 def elim0 {C : Fin2 0 -> Sort u} : forall i : Fin2 0, C i := nofun
@@ -104,7 +104,7 @@ definition toNat
   signature: : forall {n}, Fin2 n -> Nat
 
 中文:
-定义 toNat
+定义 to自然数
   签名: : 对任意 {n}, Fin2 n -> 自然数
 -/
 def toNat : forall {n}, Fin2 n -> Nat
@@ -119,8 +119,8 @@ definition optOfNat
   signature: : forall {n}, Nat -> Option (Fin2 n)
 
 中文:
-定义 optOfNat
-  签名: : 对任意 {n}, 自然数 -> Option (Fin2 n)
+定义 optOf自然数
+  签名: : 对任意 {n}, 自然数 -> 选项类型 (Fin2 n)
 -/
 def optOfNat : forall {n}, Nat -> Option (Fin2 n)
   | 0, _ => none
@@ -203,7 +203,7 @@ class IsLT
     - h : m < n
 
 中文:
-类 IsLT
+类 是LT
   参数: (m n : 自然数)
   公理与运算 (1 个):
     - h : m < n
@@ -221,7 +221,7 @@ instance IsLT.zero
   body: ⟨succ_pos _⟩
 
 中文:
-实例 IsLT.zero
+实例 是LT.zero
   签名: (n)
   定义体: ⟨succ_pos _⟩
 
@@ -239,8 +239,8 @@ instance IsLT.succ
   body: ⟨succ_lt_succ l.h⟩
 
 中文:
-实例 IsLT.succ
-  签名: (m n) [l : IsLT m n]
+实例 是LT.succ
+  签名: (m n) [l : 是LT m n]
   定义体: ⟨succ_lt_succ l.h⟩
 
 Depends on / 依赖: succ_lt_succ
@@ -256,8 +256,8 @@ definition ofNat'
   signature: : forall {n} (m) [IsLT m n], Fin2 n
 
 中文:
-定义 ofNat'
-  签名: : 对任意 {n} (m) [IsLT m n], Fin2 n
+定义 of自然数'
+  签名: : 对任意 {n} (m) [是LT m n], Fin2 n
 -/
 def ofNat' : forall {n} (m) [IsLT m n], Fin2 n
   | 0, _, h => absurd h.h (Nat.not_lt_zero _)
@@ -383,7 +383,7 @@ theorem rev_involutive
 中文:
 定理 rev_involutive
   条件: {n}
-  结论: Function.Involutive (@rev n)
+  结论: 函数.对合 (@rev n)
   证明: rev_rev
 
 @[inherit_doc] local prefix:arg "&" => ofNat'
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Fin2 1)
+  签名: 可居 (Fin2 1)
   定义体: ⟨fz⟩
 -/
 instance : Inhabited (Fin2 1) :=
@@ -424,7 +424,7 @@ instance instFintype
 
 中文:
 实例 instFintype
-  签名: : 对任意 n, Fintype (Fin2 n)
+  签名: : 对任意 n, 有限类型 (Fin2 n)
   定义体: instFintype n
     { elems := elems.map ⟨Fin2.fs, @fs.inj _⟩ |>.cons .fz (by simp)
       complete := by rintro (_ | i) <;> simp [compl] }
@@ -518,7 +518,7 @@ definition ofFin
 
 中文:
 定义 ofFin
-  签名: {n : 自然数} (i : Fin n)
+  签名: {n : 自然数} (i : 有限集 n)
   定义体: i.succRec (fun _ => fz) (fun _ _ => fs)
 
 @[simp]
@@ -564,7 +564,7 @@ theorem ofFin_succ
 
 中文:
 定理 ofFin_succ
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   结论: ofFin i.succ = fs (ofFin i)
   证明: rfl
 
@@ -586,7 +586,7 @@ theorem toFin_ofFin
 
 中文:
 定理 toFin_ofFin
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   结论: toFin (ofFin i) = i
   证明: i.succRec (fun _ => rfl) (fun _ _ ih => congrArg Fin.succ ih)
 

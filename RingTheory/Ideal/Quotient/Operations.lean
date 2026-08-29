@@ -68,7 +68,7 @@ theorem kerLift_mk
 中文:
 定理 kerLift_mk
   条件: (r : R)
-  结论: kerLift f (Ideal.Quotient.mk (ker f) r) = f r
+  结论: kerLift f (理想.商.mk (ker f) r) = f r
   证明: Ideal.Quotient.lift_mk _ _ _
 
 Depends on / 依赖: Ideal.Quotient.lift_mk, Quotient, lift_mk
@@ -92,7 +92,7 @@ theorem lift_injective_of_ker_le_ideal
 
 中文:
 定理 lift_injective_of_ker_le_ideal
-  结论: (I : Ideal R) [I.IsTwoSided]
+  结论: (I : 理想 R) [I.是TwoSided]
   证明: by
   rw [RingHom.injective_iff_ker_eq_bot]; rw [RingHom.ker_eq_bot_iff_eq_zero]
   intro u hu
@@ -123,7 +123,7 @@ theorem kerLift_injective
 
 中文:
 定理 kerLift_injective
-  结论: Function.Injective (kerLift f)
+  结论: 函数.单射 (kerLift f)
   证明: lift_injective_of_ker_le_ideal (ker f) (fun a => by simp only [mem_ker, imp_self]) le_rfl
 
 Depends on / 依赖: imp_self, le_rfl, lift_injective_of_ker_le_ideal, mem_ker
@@ -154,7 +154,7 @@ definition quotientKerEquivOfRightInverse
 
 中文:
 定义 quotientKerEquivOfRightInverse
-  签名: {g : S -> R} (hf : Function.RightInverse g f)
+  签名: {g : S -> R} (hf : 函数.右逆 g f)
   定义体: { kerLift f with
     toFun := kerLift f
     invFun := Ideal.Quotient.mk (ker f) ∘ g
@@ -194,7 +194,7 @@ theorem quotientKerEquivOfRightInverse.apply
 
 中文:
 定理 quotientKerEquivOfRightInverse.apply
-  结论: {g : S -> R} (hf : Function.RightInverse g f)
+  结论: {g : S -> R} (hf : 函数.右逆 g f)
   证明: rfl
 
 @[simp]
@@ -214,7 +214,7 @@ theorem quotientKerEquivOfRightInverse.Symm.apply
 
 中文:
 定理 quotientKerEquivOfRightInverse.Symm.apply
-  结论: {g : S -> R} (hf : Function.RightInverse g f)
+  结论: {g : S -> R} (hf : 函数.右逆 g f)
   证明: rfl
 -/
 theorem quotientKerEquivOfRightInverse.Symm.apply {g : S -> R} (hf : Function.RightInverse g f)
@@ -233,7 +233,7 @@ definition quotientKerEquivOfSurjective
 
 中文:
 定义 quotientKerEquivOfSurjective
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: quotientKerEquivOfRightInverse (Classical.choose_spec hf.hasRightInverse)
 
 @[simp]
@@ -256,7 +256,7 @@ lemma quotientKerEquivOfSurjective_apply_mk
 
 中文:
 引理 quotientKerEquivOfSurjective_apply_mk
-  条件: {f : R ->+* S} (hf : Function.Surjective f) (x : R)
+  条件: {f : R ->+* S} (hf : 函数.满射 f) (x : R)
   证明: rfl
 
 @[simp]
@@ -278,7 +278,7 @@ lemma quotientKerEquivOfSurjective_symm_apply
 
 中文:
 引理 quotientKerEquivOfSurjective_symm_apply
-  条件: {f : R ->+* S} (hf : Function.Surjective f) (x : R)
+  条件: {f : R ->+* S} (hf : 函数.满射 f) (x : R)
   证明: by
   apply (RingHom.quotientKerEquivOfSurjective hf).injective
   simp
@@ -301,7 +301,7 @@ lemma quotientKerEquivOfSurjective_symm_comp
 
 中文:
 引理 quotientKerEquivOfSurjective_symm_comp
-  条件: {f : R ->+* S} (hf : Function.Surjective f)
+  条件: {f : R ->+* S} (hf : 函数.满射 f)
   证明: by
   ext; simp
 -/
@@ -376,8 +376,8 @@ theorem map_quotient_self
 
 中文:
 定理 map_quotient_self
-  条件: (I : Ideal R) [I.IsTwoSided]
-  结论: map (Quotient.mk I) I = ⊥
+  条件: (I : 理想 R) [I.是TwoSided]
+  结论: map (商.mk I) I = ⊥
   证明: eq_bot_iff.2
     Ideal.map_le_iff_le_comap.2 fun _ hx =>
 (Submodule.mem_bot (R ⧸ I)).2 Ideal.Quotient.eq_zero_iff_mem.2 hx
@@ -405,8 +405,8 @@ theorem mk_ker
 
 中文:
 定理 mk_ker
-  条件: {I : Ideal R} [I.IsTwoSided]
-  结论: ker (Quotient.mk I) = I
+  条件: {I : 理想 R} [I.是TwoSided]
+  结论: ker (商.mk I) = I
   证明: by
   ext
   rw [ker]; rw [mem_comap]; rw [Submodule.mem_bot]; rw [Quotient.eq_zero_iff_mem]
@@ -429,7 +429,7 @@ theorem map_mk_eq_bot_of_le
 
 中文:
 定理 map_mk_eq_bot_of_le
-  条件: {I J : Ideal R} [J.IsTwoSided] (h : I <= J)
+  条件: {I J : 理想 R} [J.是TwoSided] (h : I <= J)
   证明: by
   rw [map_eq_bot_iff_le_ker]; rw [mk_ker]
   exact h
@@ -461,7 +461,7 @@ theorem ker_quotient_lift
 
 中文:
 定理 ker_quotient_lift
-  结论: {I : Ideal R} [I.IsTwoSided] (f : R ->+* S)
+  结论: {I : 理想 R} [I.是TwoSided] (f : R ->+* S)
   证明: by
   apply Ideal.ext
   intro x
@@ -507,7 +507,7 @@ lemma injective_lift_iff
 
 中文:
 引理 injective_lift_iff
-  结论: {I : Ideal R} [I.IsTwoSided]
+  结论: {I : 理想 R} [I.是TwoSided]
   证明: by
   rw [injective_iff_ker_eq_bot]; rw [ker_quotient_lift]; rw [map_eq_bot_iff_le_ker]; rw [mk_ker]
   constructor
@@ -537,7 +537,7 @@ lemma ker_Pi_Quotient_mk
 
 中文:
 引理 ker_Pi_Quotient_mk
-  条件: {ι : 类型} (I : ι -> Ideal R) [对任意 i, (I i).IsTwoSided]
+  条件: {ι : 类型} (I : ι -> 理想 R) [对任意 i, (I i).是TwoSided]
   证明: by
   simp [Pi.ker_ringHom, mk_ker]
 
@@ -565,7 +565,7 @@ theorem bot_quotient_isMaximal_iff
 
 中文:
 定理 bot_quotient_isMaximal_iff
-  条件: (I : Ideal R) [I.IsTwoSided]
+  条件: (I : 理想 R) [I.是TwoSided]
   证明: ⟨fun hI =>
     mk_ker (I := I) ▸
       comap_isMaximal_of_surjective (Quotient.mk I) Quotient.mk_surjective (K := ⊥) (H := hI),
@@ -598,7 +598,7 @@ theorem mem_quotient_iff_mem_sup
 
 中文:
 定理 mem_quotient_iff_mem_sup
-  条件: {I J : Ideal R} [I.IsTwoSided] {x : R}
+  条件: {I J : 理想 R} [I.是TwoSided] {x : R}
   证明: by
   rw [← mem_comap]; rw [comap_map_of_surjective (Quotient.mk I) Quotient.mk_surjective]; rw [←
     ker_eq_comap_bot]; rw [mk_ker]
@@ -621,7 +621,7 @@ theorem mem_quotient_iff_mem
 
 中文:
 定理 mem_quotient_iff_mem
-  条件: {I J : Ideal R} [I.IsTwoSided] (hIJ : I <= J) {x : R}
+  条件: {I J : 理想 R} [I.是TwoSided] (hIJ : I <= J) {x : R}
   证明: by
   rw [mem_quotient_iff_mem_sup]; rw [sup_eq_left.mpr hIJ]
 
@@ -647,7 +647,7 @@ definition quotientInfToPiQuotient
 
 中文:
 定义 quotientInfToPiQuotient
-  签名: (I : ι -> Ideal R) [对任意 i, (I i).IsTwoSided]
+  签名: (I : ι -> 理想 R) [对任意 i, (I i).是TwoSided]
   定义体: Quotient.lift (⨅ i, I i) (RingHom.pi fun i : ι => Quotient.mk (I i))
     (by simp [← RingHom.mem_ker, ker_Pi_Quotient_mk])
 
@@ -668,7 +668,7 @@ lemma quotientInfToPiQuotient_mk
 
 中文:
 引理 quotientInfToPiQuotient_mk
-  条件: (I : ι -> Ideal R) [对任意 i, (I i).IsTwoSided] (x : R)
+  条件: (I : ι -> 理想 R) [对任意 i, (I i).是TwoSided] (x : R)
   证明: rfl
 -/
 lemma quotientInfToPiQuotient_mk (I : ι -> Ideal R) [forall i, (I i).IsTwoSided] (x : R) :
@@ -685,7 +685,7 @@ lemma quotientInfToPiQuotient_mk'
 
 中文:
 引理 quotientInfToPiQuotient_mk'
-  条件: (I : ι -> Ideal R) [对任意 i, (I i).IsTwoSided] (x : R) (i : ι)
+  条件: (I : ι -> 理想 R) [对任意 i, (I i).是TwoSided] (x : R) (i : ι)
   证明: rfl
 -/
 lemma quotientInfToPiQuotient_mk' (I : ι -> Ideal R) [forall i, (I i).IsTwoSided] (x : R) (i : ι) :
@@ -703,7 +703,7 @@ lemma quotientInfToPiQuotient_inj
 
 中文:
 引理 quotientInfToPiQuotient_inj
-  条件: (I : ι -> Ideal R) [对任意 i, (I i).IsTwoSided]
+  条件: (I : ι -> 理想 R) [对任意 i, (I i).是TwoSided]
   证明: by
   rw [quotientInfToPiQuotient]; rw [injective_lift_iff]; rw [ker_Pi_Quotient_mk]
 
@@ -734,7 +734,7 @@ lemma quotientInfToPiQuotient_surj
 
 中文:
 引理 quotientInfToPiQuotient_surj
-  结论: {I : ι -> Ideal R}
+  结论: {I : ι -> 理想 R}
   证明: by
   classical
   cases nonempty_fintype ι
@@ -786,7 +786,7 @@ definition quotientInfRingEquivPiQuotient
 
 中文:
 定义 quotientInfRingEquivPiQuotient
-  签名: (f : ι -> Ideal R)
+  签名: (f : ι -> 理想 R)
   定义体: { Equiv.ofBijective _ ⟨quotientInfToPiQuotient_inj f, quotientInfToPiQuotient_surj hf⟩,
     quotientInfToPiQuotient f with }
 
@@ -810,7 +810,7 @@ lemma pi_quotient_surjective
 
 中文:
 引理 pi_quotient_surjective
-  结论: {I : ι -> Ideal R}
+  结论: {I : ι -> 理想 R}
   证明: by
   obtain ⟨y, rfl⟩ := Ideal.quotientInfToPiQuotient_surj hf x
   obtain ⟨r, rfl⟩ := Ideal.Quotient.mk_surjective y
@@ -835,7 +835,7 @@ lemma pi_mkQ_surjective
 
 中文:
 引理 pi_mkQ_surjective
-  条件: {I : ι -> Ideal R} (hI : Pairwise (IsCoprime on I))
+  条件: {I : ι -> 理想 R} (hI : 两两 (IsCoprime on I))
   证明: fun x => have ⟨r, eq⟩ := pi_quotient_surjective hI x; ⟨r, funext eq⟩
 
 Depends on / 依赖: pi_quotient_surjective
@@ -855,7 +855,7 @@ lemma exists_forall_sub_mem_ideal
 exact ⟨y, fun i => (Submodule.Quotient.eq (I i)).mp hy i⟩
 
 中文:
-引理 exists_forall_sub_mem_ideal
+引理 存在_对任意_sub_mem_ideal
   证明: by
   obtain ⟨y, hy⟩ := Ideal.pi_quotient_surjective hI (fun i => x i)
 exact ⟨y, fun i => (Submodule.Quotient.eq (I i)).mp hy i⟩
@@ -885,7 +885,7 @@ definition quotientInfEquivQuotientProd
 
 中文:
 定义 quotientInfEquivQuotientProd
-  签名: (I J : Ideal R) (coprime : IsCoprime I J)
+  签名: (I J : 理想 R) (coprime : IsCoprime I J)
   定义体: let f : Fin 2 -> Ideal R := ![I, J]
   have hf : Pairwise (IsCoprime on f) := by
     intro i j h
@@ -921,7 +921,7 @@ theorem quotientInfEquivQuotientProd_fst
 
 中文:
 定理 quotientInfEquivQuotientProd_fst
-  条件: (I J : Ideal R) (coprime : IsCoprime I J) (x : R ⧸ I ⊓ J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J) (x : R ⧸ I ⊓ J)
   证明: Quot.inductionOn x fun _ => rfl
 
 @[simp]
@@ -946,7 +946,7 @@ theorem quotientInfEquivQuotientProd_snd
 
 中文:
 定理 quotientInfEquivQuotientProd_snd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J) (x : R ⧸ I ⊓ J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J) (x : R ⧸ I ⊓ J)
   证明: Quot.inductionOn x fun _ => rfl
 
 @[simp]
@@ -972,7 +972,7 @@ theorem fst_comp_quotientInfEquivQuotientProd
 
 中文:
 定理 fst_comp_quotientInfEquivQuotientProd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J)
   证明: by
   apply Quotient.ringHom_ext; ext; rfl
 
@@ -998,7 +998,7 @@ theorem snd_comp_quotientInfEquivQuotientProd
 
 中文:
 定理 snd_comp_quotientInfEquivQuotientProd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J)
   证明: by
   apply Quotient.ringHom_ext; ext; rfl
 
@@ -1023,7 +1023,7 @@ definition quotientMulEquivQuotientProd
 
 中文:
 定义 quotientMulEquivQuotientProd
-  签名: (I J : Ideal R) (coprime : IsCoprime I J)
+  签名: (I J : 理想 R) (coprime : IsCoprime I J)
   定义体: .trans Ideal.quotEquivOfEq (mul_eq_inf_of_isCoprime coprime)
     Ideal.quotientInfEquivQuotientProd I J coprime
 
@@ -1049,7 +1049,7 @@ theorem quotientMulEquivQuotientProd_fst
 
 中文:
 定理 quotientMulEquivQuotientProd_fst
-  条件: (I J : Ideal R) (coprime : IsCoprime I J) (x : R ⧸ I * J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J) (x : R ⧸ I * J)
   证明: Quot.inductionOn x fun _ => rfl
 
 @[simp]
@@ -1074,7 +1074,7 @@ theorem quotientMulEquivQuotientProd_snd
 
 中文:
 定理 quotientMulEquivQuotientProd_snd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J) (x : R ⧸ I * J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J) (x : R ⧸ I * J)
   证明: Quot.inductionOn x fun _ => rfl
 
 @[simp]
@@ -1100,7 +1100,7 @@ theorem fst_comp_quotientMulEquivQuotientProd
 
 中文:
 定理 fst_comp_quotientMulEquivQuotientProd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J)
   证明: by
   apply Quotient.ringHom_ext; ext; rfl
 
@@ -1126,7 +1126,7 @@ theorem snd_comp_quotientMulEquivQuotientProd
 
 中文:
 定理 snd_comp_quotientMulEquivQuotientProd
-  条件: (I J : Ideal R) (coprime : IsCoprime I J)
+  条件: (I J : 理想 R) (coprime : IsCoprime I J)
   证明: by
   apply Quotient.ringHom_ext; ext; rfl
 
@@ -1159,8 +1159,8 @@ instance Quotient.algebra
   commutes' := by rintro r ⟨x⟩; exact congr_arg (⟦·⟧) (Algebra.commutes r x)
 
 中文:
-实例 Quotient.algebra
-  签名: {I : Ideal A} [I.IsTwoSided]
+实例 商.algebra
+  签名: {I : 理想 A} [I.是TwoSided]
   定义体: (Ideal.Quotient.mk I).comp (algebraMap R₁ A)
   smul_def' := fun _ x =>
     Quotient.inductionOn' x fun _ =>
@@ -1188,8 +1188,8 @@ instance Quotient.isScalarTower
   body: inferInstance
 
 中文:
-实例 Quotient.isScalarTower
-  签名: [SMul R₁ R₂] [IsScalarTower R₁ R₂ A] (I : Ideal A)
+实例 商.isScalarTower
+  签名: [标量乘法 R₁ R₂] [标量塔 R₁ R₂ A] (I : 理想 A)
   定义体: inferInstance
 -/
 instance Quotient.isScalarTower [SMul R₁ R₂] [IsScalarTower R₁ R₂ A] (I : Ideal A) :
@@ -1204,8 +1204,8 @@ definition Quotient.mkₐ
   body: ⟨⟨⟨⟨fun a => Submodule.Quotient.mk a, rfl⟩, fun _ _ => rfl⟩, rfl, fun _ _ => rfl⟩, fun _ => rfl⟩
 
 中文:
-定义 Quotient.mkₐ
-  签名: (I : Ideal A) [I.IsTwoSided]
+定义 商.mkₐ
+  签名: (I : 理想 A) [I.是TwoSided]
   定义体: ⟨⟨⟨⟨fun a => Submodule.Quotient.mk a, rfl⟩, fun _ _ => rfl⟩, rfl, fun _ _ => rfl⟩, fun _ => rfl⟩
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk
@@ -1222,8 +1222,8 @@ theorem Quotient.algHom_ext
   proof: AlgHom.ext fun x => Quotient.inductionOn' x AlgHom.congr_fun h
 
 中文:
-定理 Quotient.algHom_ext
-  结论: {I : Ideal A} [I.IsTwoSided]
+定理 商.algHom_ext
+  结论: {I : 理想 A} [I.是TwoSided]
   证明: AlgHom.ext fun x => Quotient.inductionOn' x AlgHom.congr_fun h
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, AlgHom.ext, Quotient, Quotient.inductionOn, congr_fun, inductionOn
@@ -1242,8 +1242,8 @@ theorem Quotient.alg_map_eq
   proof: rfl
 
 中文:
-定理 Quotient.alg_map_eq
-  条件: {A} [CommRing A] [Algebra R₁ A] (I : Ideal A)
+定理 商.alg_map_eq
+  条件: {A} [交换环 A] [代数 R₁ A] (I : 理想 A)
   证明: rfl
 -/
 theorem Quotient.alg_map_eq {A} [CommRing A] [Algebra R₁ A] (I : Ideal A) :
@@ -1261,8 +1261,8 @@ theorem Quotient.mkₐ_toRingHom
 @[simp]
 
 中文:
-定理 Quotient.mkₐ_toRingHom
-  条件: (I : Ideal A) [I.IsTwoSided]
+定理 商.mkₐ_toRingHom
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: rfl
 
 @[simp]
@@ -1284,9 +1284,9 @@ theorem Quotient.mkₐ_eq_mk
 @[simp]
 
 中文:
-定理 Quotient.mkₐ_eq_mk
-  条件: (I : Ideal A) [I.IsTwoSided]
-  结论: ⇑(Quotient.mkₐ R₁ I) = Quotient.mk I
+定理 商.mkₐ_eq_mk
+  条件: (I : 理想 A) [I.是TwoSided]
+  结论: ⇑(商.mkₐ R₁ I) = 商.mk I
   证明: rfl
 
 @[simp]
@@ -1306,8 +1306,8 @@ theorem Quotient.algebraMap_eq
 @[simp]
 
 中文:
-定理 Quotient.algebraMap_eq
-  条件: {R} [CommRing R] (I : Ideal R)
+定理 商.algebraMap_eq
+  条件: {R} [交换环 R] (I : 理想 R)
   证明: rfl
 
 @[simp]
@@ -1328,8 +1328,8 @@ theorem Quotient.mk_comp_algebraMap
 @[simp]
 
 中文:
-定理 Quotient.mk_comp_algebraMap
-  条件: (I : Ideal A) [I.IsTwoSided]
+定理 商.mk_comp_algebraMap
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: rfl
 
 @[simp]
@@ -1348,8 +1348,8 @@ theorem Quotient.mk_algebraMap
   proof: rfl
 
 中文:
-定理 Quotient.mk_algebraMap
-  条件: (I : Ideal A) [I.IsTwoSided] (x : R₁)
+定理 商.mk_algebraMap
+  条件: (I : 理想 A) [I.是TwoSided] (x : R₁)
   证明: rfl
 -/
 theorem Quotient.mk_algebraMap (I : Ideal A) [I.IsTwoSided] (x : R₁) :
@@ -1365,8 +1365,8 @@ theorem Quotient.mkₐ_surjective
   proof: Quot.mk_surjective
 
 中文:
-定理 Quotient.mkₐ_surjective
-  条件: (I : Ideal A) [I.IsTwoSided]
+定理 商.mkₐ_surjective
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -1386,8 +1386,8 @@ theorem Quotient.mkₐ_ker
   proof: Ideal.mk_ker
 
 中文:
-定理 Quotient.mkₐ_ker
-  条件: (I : Ideal A) [I.IsTwoSided]
+定理 商.mkₐ_ker
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: Ideal.mk_ker
 
 Depends on / 依赖: Ideal.mk_ker, mk_ker
@@ -1410,8 +1410,8 @@ exact (map_eq_bot_iff_le_ker _).mpr le_of_eq mk_ker.symm
 · exact fun h => ⟨(injective_iff_ker_eq_bot _).mpr by rw [mk_ker, h], mk_surjective⟩
 
 中文:
-引理 Quotient.mk_bijective_iff_eq_bot
-  条件: (I : Ideal A) [I.IsTwoSided]
+引理 商.mk_bijective_iff_eq_bot
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: by
   constructor
   · intro h
@@ -1441,8 +1441,8 @@ definition Quotient.factorₐ
   commutes' _ := rfl
 
 中文:
-定义 Quotient.factorₐ
-  签名: {I J : Ideal A} [I.IsTwoSided] [J.IsTwoSided] (hIJ : I <= J)
+定义 商.factorₐ
+  签名: {I J : 理想 A} [I.是TwoSided] [J.是TwoSided] (hIJ : I <= J)
   定义体: Ideal.Quotient.factor hIJ
   commutes' _ := rfl
 
@@ -1466,7 +1466,7 @@ lemma Quotient.coe_factorₐ
 @[simp]
 
 中文:
-引理 Quotient.coe_factorₐ
+引理 商.coe_factorₐ
   证明: rfl
 
 @[simp]
@@ -1488,7 +1488,7 @@ lemma Quotient.factorₐ_apply_mk
 @[simp]
 
 中文:
-引理 Quotient.factorₐ_apply_mk
+引理 商.factorₐ_apply_mk
   条件: (x : A)
   证明: rfl
 
@@ -1508,7 +1508,7 @@ lemma Quotient.factorₐ_comp_mk
 @[simp]
 
 中文:
-引理 Quotient.factorₐ_comp_mk
+引理 商.factorₐ_comp_mk
   证明: rfl
 
 @[simp]
@@ -1528,7 +1528,7 @@ theorem Quotient.factorₐ_apply
 @[simp]
 
 中文:
-定理 Quotient.factorₐ_apply
+定理 商.factorₐ_apply
   条件: (x : A ⧸ I)
   证明: rfl
 
@@ -1551,8 +1551,8 @@ lemma Quotient.factorₐ_refl
 @[simp]
 
 中文:
-引理 Quotient.factorₐ_refl
-  条件: {R A : 类型} [CommRing R] [CommRing A] [Algebra R A] (I : Ideal A)
+引理 商.factorₐ_refl
+  条件: {R A : 类型} [交换环 R] [交换环 A] [代数 R A] (I : 理想 A)
   证明: by
   ext
   simp
@@ -1574,8 +1574,8 @@ lemma Quotient.factorₐ_comp
   proof: Ideal.Quotient.algHom_ext _ (by ext; simp)
 
 中文:
-引理 Quotient.factorₐ_comp
-  条件: {K : Ideal A} [K.IsTwoSided] (hJK : J <= K)
+引理 商.factorₐ_comp
+  条件: {K : 理想 A} [K.是TwoSided] (hJK : J <= K)
   证明: Ideal.Quotient.algHom_ext _ (by ext; simp)
 
 Depends on / 依赖: Ideal.Quotient.algHom_ext, Quotient, algHom_ext
@@ -1609,8 +1609,8 @@ definition Quotient.liftₐ
       rw
 
 中文:
-定义 Quotient.liftₐ
-  签名: (I : Ideal A) [I.IsTwoSided] (f : A ->ₐ[R₁] B) (hI : 对任意 a : A, a in I -> f a = 0)
+定义 商.liftₐ
+  签名: (I : 理想 A) [I.是TwoSided] (f : A ->ₐ[R₁] B) (hI : 对任意 a : A, a in I -> f a = 0)
   定义体: { -- this is IsScalarTower.algebraMap_apply R₁ A (A ⧸ I) but the file `Algebra.Algebra.Tower`
     -- imports this file.
       Ideal.Quotient.lift
@@ -1641,8 +1641,8 @@ theorem Quotient.liftₐ_apply
   proof: rfl
 
 中文:
-定理 Quotient.liftₐ_apply
-  结论: (I : Ideal A) [I.IsTwoSided]
+定理 商.liftₐ_apply
+  结论: (I : 理想 A) [I.是TwoSided]
   证明: rfl
 -/
 theorem Quotient.liftₐ_apply (I : Ideal A) [I.IsTwoSided]
@@ -1659,8 +1659,8 @@ theorem Quotient.liftₐ_comp
   proof: AlgHom.ext fun _ => (Ideal.Quotient.lift_mk I (f : A ->+* B) hI :)
 
 中文:
-定理 Quotient.liftₐ_comp
-  结论: (I : Ideal A) [I.IsTwoSided]
+定理 商.liftₐ_comp
+  结论: (I : 理想 A) [I.是TwoSided]
   证明: AlgHom.ext fun _ => (Ideal.Quotient.lift_mk I (f : A ->+* B) hI :)
 
 Depends on / 依赖: AlgHom, AlgHom.ext, Ideal.Quotient.lift_mk, Quotient, lift_mk
@@ -1680,8 +1680,8 @@ theorem Quotient.span_singleton_one
   rw [← map_one (mk _)]; rw [← Submodule.range_mkQ I]; rw [← Submodule.map_top]; rw [← Ideal.span_singleton_one]; rw [Ideal.span]; rw [Submodule.map_span]; rw [Set.image_singleton]; rw [Submodule.mkQ_apply]; rw [Quotient.mk_eq_mk]
 
 中文:
-定理 Quotient.span_singleton_one
-  条件: (I : Ideal A) [I.IsTwoSided]
+定理 商.span_singleton_one
+  条件: (I : 理想 A) [I.是TwoSided]
   证明: by
   rw [← map_one (mk _)]; rw [← Submodule.range_mkQ I]; rw [← Submodule.map_top]; rw [← Ideal.span_singleton_one]; rw [Ideal.span]; rw [Submodule.map_span]; rw [Set.image_singleton]; rw [Submodule.mkQ_apply]; rw [Quotient.mk_eq_mk]
 
@@ -1702,8 +1702,8 @@ lemma Quotient.smul_top
   simp [← Ideal.Quotient.span_singleton_one, Algebra.smul_def, Submodule.smul_span]
 
 中文:
-引理 Quotient.smul_top
-  条件: {R : 类型} [CommRing R] (a : R) (I : Ideal R)
+引理 商.smul_top
+  条件: {R : 类型} [交换环 R] (a : R) (I : 理想 R)
   证明: by
   simp [← Ideal.Quotient.span_singleton_one, Algebra.smul_def, Submodule.smul_span]
 
@@ -1725,7 +1725,7 @@ theorem KerLift.map_smul
 
 中文:
 定理 KerLift.map_smul
-  条件: (f : A ->ₐ[R₁] B) (r : R₁) (x : A ⧸ (RingHom.ker f))
+  条件: (f : A ->ₐ[R₁] B) (r : R₁) (x : A ⧸ (环态射.ker f))
   证明: by
   obtain ⟨a, rfl⟩ := Quotient.mkₐ_surjective R₁ _ x
   exact _root_.map_smul f _ _
@@ -1813,7 +1813,7 @@ theorem kerLiftAlg_injective
 中文:
 定理 kerLiftAlg_injective
   条件: (f : A ->ₐ[R₁] B)
-  结论: Function.Injective (kerLiftAlg f)
+  结论: 函数.单射 (kerLiftAlg f)
   证明: RingHom.kerLift_injective (R := A) (S := B) f
 
 Depends on / 依赖: RingHom, RingHom.kerLift_injective, kerLift_injective
@@ -1859,7 +1859,7 @@ definition quotientKerAlgEquivOfSurjective
 
 中文:
 定义 quotientKerAlgEquivOfSurjective
-  签名: {f : A ->ₐ[R₁] B} (hf : Function.Surjective f)
+  签名: {f : A ->ₐ[R₁] B} (hf : 函数.满射 f)
   定义体: quotientKerAlgEquivOfRightInverse (Classical.choose_spec hf.hasRightInverse)
 
 @[simp]
@@ -1883,7 +1883,7 @@ lemma quotientKerAlgEquivOfSurjective_mk
 
 中文:
 引理 quotientKerAlgEquivOfSurjective_mk
-  结论: {f : A ->ₐ[R₁] B} (hf : Function.Surjective f)
+  结论: {f : A ->ₐ[R₁] B} (hf : 函数.满射 f)
   证明: rfl
 
 @[simp]
@@ -1905,7 +1905,7 @@ lemma quotientKerAlgEquivOfSurjective_symm_apply
 
 中文:
 引理 quotientKerAlgEquivOfSurjective_symm_apply
-  结论: {f : A ->ₐ[R₁] B} (hf : Function.Surjective f)
+  结论: {f : A ->ₐ[R₁] B} (hf : 函数.满射 f)
   证明: by
   apply (Ideal.quotientKerAlgEquivOfSurjective hf).injective
   simp
@@ -1934,8 +1934,8 @@ definition _root_.AlgHom.liftOfSurjective
   body: .comp (Ideal.Quotient.liftₐ _ g H) (Ideal.quotientKerAlgEquivOfSurjective hf).symm.toAlgHom
 
 中文:
-定义 _root_.AlgHom.liftOfSurjective
-  签名: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+定义 _root_.代数态射.liftOfSurjective
+  签名: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   定义体: .comp (Ideal.Quotient.liftₐ _ g H) (Ideal.quotientKerAlgEquivOfSurjective hf).symm.toAlgHom
 
 Depends on / 依赖: Ideal.Quotient.lift, Ideal.quotientKerAlgEquivOfSurjective, Quotient, quotientKerAlgEquivOfSurjective, symm.toAlgHom, toAlgHom
@@ -1959,8 +1959,8 @@ lemma _root_.AlgHom.liftOfSurjective_apply
   rfl
 
 中文:
-引理 _root_.AlgHom.liftOfSurjective_apply
-  结论: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+引理 _root_.代数态射.liftOfSurjective_apply
+  结论: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   证明: by
   dsimp [AlgHom.liftOfSurjective]
   erw [AlgEquiv.coe_toAlgHom] -- fixed after #21031
@@ -1987,8 +1987,8 @@ lemma _root_.AlgHom.liftOfSurjective_comp
   ext; simp
 
 中文:
-引理 _root_.AlgHom.liftOfSurjective_comp
-  结论: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+引理 _root_.代数态射.liftOfSurjective_comp
+  结论: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   证明: by
   ext; simp
 -/
@@ -2006,8 +2006,8 @@ lemma _root_.AlgHom.liftOfSurjective_surjective
   proof: .of_comp (g := f) (by convert! hg; ext; simp)
 
 中文:
-引理 _root_.AlgHom.liftOfSurjective_surjective
-  结论: (f : A ->ₐ[R] B) (hf : Function.Surjective f)
+引理 _root_.代数态射.liftOfSurjective_surjective
+  结论: (f : A ->ₐ[R] B) (hf : 函数.满射 f)
   证明: .of_comp (g := f) (by convert! hg; ext; simp)
 
 Depends on / 依赖: convert, of_comp
@@ -2038,7 +2038,7 @@ definition quotientMap
 
 中文:
 定义 quotientMap
-  签名: {I : Ideal R} (J : Ideal S) [I.IsTwoSided] [J.IsTwoSided] (f : R ->+* S)
+  签名: {I : 理想 R} (J : 理想 S) [I.是TwoSided] [J.是TwoSided] (f : R ->+* S)
   定义体: Quotient.lift I ((Quotient.mk J).comp f) fun _ ha => by
     simpa [Function.comp_apply, RingHom.coe_comp, Quotient.eq_zero_iff_mem] using hIJ ha
 
@@ -2064,7 +2064,7 @@ theorem quotientMap_mk
 
 中文:
 定理 quotientMap_mk
-  结论: {J : Ideal R} {I : Ideal S} [I.IsTwoSided] [J.IsTwoSided]
+  结论: {J : 理想 R} {I : 理想 S} [I.是TwoSided] [J.是TwoSided]
   证明: Quotient.lift_mk J _ _
 
 @[simp]
@@ -2087,7 +2087,7 @@ theorem quotientMap_algebraMap
 
 中文:
 定理 quotientMap_algebraMap
-  结论: {J : Ideal A} {I : Ideal S} [I.IsTwoSided] [J.IsTwoSided]
+  结论: {J : 理想 A} {I : 理想 S} [I.是TwoSided] [J.是TwoSided]
   证明: Quotient.lift_mk J _ _
 
 Depends on / 依赖: Quotient, Quotient.lift_mk, lift_mk
@@ -2107,7 +2107,7 @@ theorem quotientMap_comp_mk
 
 中文:
 定理 quotientMap_comp_mk
-  结论: {J : Ideal R} {I : Ideal S} [I.IsTwoSided] [J.IsTwoSided]
+  结论: {J : 理想 R} {I : 理想 S} [I.是TwoSided] [J.是TwoSided]
   证明: RingHom.ext fun x => by simp only [Function.comp_apply, RingHom.coe_comp, Ideal.quotientMap_mk]
 
 Depends on / 依赖: Function, Function.comp_apply, Ideal.quotientMap_mk, RingHom, RingHom.coe_comp, RingHom.ext, coe_comp, comp_apply, quotientMap_mk
@@ -2129,7 +2129,7 @@ lemma ker_quotientMap_mk
 
 中文:
 引理 ker_quotientMap_mk
-  条件: {I J : Ideal R} [I.IsTwoSided] [J.IsTwoSided]
+  条件: {I J : 理想 R} [I.是TwoSided] [J.是TwoSided]
   证明: by
   rw [Ideal.quotientMap]; rw [Ideal.ker_quotient_lift]; rw [← RingHom.comap_ker]; rw [Ideal.mk_ker]; rw [Ideal.comap_map_of_surjective _ Ideal.Quotient.mk_surjective]; rw [← RingHom.ker_eq_comap_bot]; rw [Ideal.mk_ker]; rw [Ideal.map_sup]; rw [Ideal.map_quotient_self]; rw [bot_sup_eq]
 
@@ -2235,7 +2235,7 @@ theorem quotientMap_injective'
 
 中文:
 定理 quotientMap_injective'
-  结论: {J : Ideal R} {I : Ideal S} [I.IsTwoSided] [J.IsTwoSided]
+  结论: {J : 理想 R} {I : 理想 S} [I.是TwoSided] [J.是TwoSided]
   证明: by
   refine (injective_iff_map_eq_zero (quotientMap I f H)).2 fun a ha => ?_
   obtain ⟨r, rfl⟩ := Quotient.mk_surjective a
@@ -2262,7 +2262,7 @@ theorem quotientMap_injective
 
 中文:
 定理 quotientMap_injective
-  条件: {I : Ideal S} {f : R ->+* S} [I.IsTwoSided]
+  条件: {I : 理想 S} {f : R ->+* S} [I.是TwoSided]
   证明: quotientMap_injective' le_rfl
 
 Depends on / 依赖: le_rfl, quotientMap_injective
@@ -2284,7 +2284,7 @@ theorem quotientMap_surjective
 
 中文:
 定理 quotientMap_surjective
-  结论: {J : Ideal R} {I : Ideal S} [I.IsTwoSided] [J.IsTwoSided]
+  结论: {J : 理想 R} {I : 理想 S} [I.是TwoSided] [J.是TwoSided]
   证明: fun x =>
   let ⟨x, hx⟩ := Quotient.mk_surjective x
   let ⟨y, hy⟩ := hf x
@@ -2312,7 +2312,7 @@ theorem comp_quotientMap_eq_of_comp_eq
 
 中文:
 定理 comp_quotientMap_eq_of_comp_eq
-  结论: {R' S' : 类型} [Ring R'] [Ring S'] {f : R ->+* S}
+  结论: {R' S' : 类型} [环 R'] [环 S'] {f : R ->+* S}
   证明: le_of_eq (_root_.trans (comap_comap f g') (hfg ▸ comap_comap g f'))
     (quotientMap I g' le_rfl).comp (quotientMap (I.comap g') f le_rfl) =
     (quotientMap I f' le_rfl).comp (quotientMap (I.comap f') g leq) := by
@@ -2491,8 +2491,8 @@ smul := Quotient.lift₂ (⟦· • ·⟧) fun r₁ a₁ r₂ a₂ hr ha => Quot
       (P.mul_sub_mul_mem this <| P.quotientRel_d
 
 中文:
-缩写 Quotient.algebraQuotientOfLEComap
-  签名: {R} [CommRing R] [Algebra R A] {p : Ideal R}
+缩写 商.algebraQuotientOfLEComap
+  签名: {R} [交换环 R] [代数 R A] {p : 理想 R}
   定义体: quotientMap P (algebraMap R A) h
 smul := Quotient.lift₂ (⟦· • ·⟧) fun r₁ a₁ r₂ a₂ hr ha => Quotient.sound by
     have := h (p.quotientRel_def.mp hr)
@@ -2535,7 +2535,7 @@ theorem algebraMap_quotient_injective
 
 中文:
 定理 algebraMap_quotient_injective
-  条件: {R} [CommRing R] {I : Ideal A} [I.IsTwoSided] [Algebra R A]
+  条件: {R} [交换环 R] {I : 理想 A} [I.是TwoSided] [代数 R A]
   证明: by
   rintro ⟨a⟩ ⟨b⟩ hab
   replace hab := Quotient.eq.mp hab
@@ -2565,7 +2565,7 @@ definition quotientEquivAlgOfEq
 
 中文:
 定义 quotientEquivAlgOfEq
-  签名: {I J : Ideal A} [I.IsTwoSided] [J.IsTwoSided] (h : I = J)
+  签名: {I J : 理想 A} [I.是TwoSided] [J.是TwoSided] (h : I = J)
   定义体: quotientEquivAlg I J AlgEquiv.refl h ▸ (map_id I).symm
 
 @[simp]
@@ -2589,7 +2589,7 @@ theorem quotientEquivAlgOfEq_mk
 
 中文:
 定理 quotientEquivAlgOfEq_mk
-  条件: {I J : Ideal A} [I.IsTwoSided] [J.IsTwoSided] (h : I = J) (x : A)
+  条件: {I J : 理想 A} [I.是TwoSided] [J.是TwoSided] (h : I = J) (x : A)
   证明: rfl
 
 @[simp]
@@ -2653,7 +2653,7 @@ theorem quotientEquivAlgOfEq_symm
 
 中文:
 定理 quotientEquivAlgOfEq_symm
-  条件: {I J : Ideal A} [I.IsTwoSided] [J.IsTwoSided] (h : I = J)
+  条件: {I J : 理想 A} [I.是TwoSided] [J.是TwoSided] (h : I = J)
   证明: by
   ext
   rfl
@@ -2678,7 +2678,7 @@ lemma comap_map_quotientMk
 
 中文:
 引理 comap_map_quotientMk
-  条件: (I J : Ideal R) [I.IsTwoSided]
+  条件: (I J : 理想 R) [I.是TwoSided]
   证明: by
   ext x
   simp only [mem_comap, mem_quotient_iff_mem_sup, sup_comm]
@@ -2701,7 +2701,7 @@ lemma comap_map_mk
 
 中文:
 引理 comap_map_mk
-  条件: {I J : Ideal R} [I.IsTwoSided] (h : I <= J)
+  条件: {I J : 理想 R} [I.是TwoSided] (h : I <= J)
   证明: by
   simpa
 -/
@@ -2722,7 +2722,7 @@ lemma isPrime_map_quotientMk_of_isPrime
 
 中文:
 引理 isPrime_map_quotientMk_of_isPrime
-  结论: {I : Ideal R} [I.IsTwoSided] {p : Ideal R}
+  结论: {I : 理想 R} [I.是TwoSided] {p : 理想 R}
   证明: by
   apply Ideal.map_isPrime_of_surjective
   · exact Quotient.mk_surjective
@@ -2779,8 +2779,8 @@ definition RingEquiv.quotientBot
 @[simp]
 
 中文:
-定义 RingEquiv.quotientBot
-  签名: [Ring R]
+定义 环等价.quotientBot
+  签名: [环 R]
   定义体: (Ideal.quotEquivOfEq (RingHom.ker_coe_equiv <| .refl _).symm).trans
     RingHom.quotientKerEquivOfRightInverse (f := .id R) (g := _root_.id) fun _ => rfl
 
@@ -2804,8 +2804,8 @@ lemma RingEquiv.quotientBot_mk
 @[simp]
 
 中文:
-引理 RingEquiv.quotientBot_mk
-  条件: [Ring R] (r : R)
+引理 环等价.quotientBot_mk
+  条件: [环 R] (r : R)
   证明: rfl
 
 @[simp]
@@ -2824,8 +2824,8 @@ lemma RingEquiv.quotientBot_symm_mk
   proof: rfl
 
 中文:
-引理 RingEquiv.quotientBot_symm_mk
-  条件: [Ring R] (r : R)
+引理 环等价.quotientBot_symm_mk
+  条件: [环 R] (r : R)
   证明: rfl
 -/
 lemma RingEquiv.quotientBot_symm_mk [Ring R] (r : R) :
@@ -2845,8 +2845,8 @@ definition AlgEquiv.quotientBot
 @[simp]
 
 中文:
-定义 AlgEquiv.quotientBot
-  签名: [CommSemiring R] [Ring S] [Algebra R S]
+定义 代数等价.quotientBot
+  签名: [交换半环 R] [环 S] [代数 R S]
   定义体: RingEquiv.quotientBot S
   commutes' x := by simp [← Ideal.Quotient.mk_algebraMap]
 
@@ -2871,8 +2871,8 @@ lemma AlgEquiv.quotientBot_mk
 @[simp]
 
 中文:
-引理 AlgEquiv.quotientBot_mk
-  条件: [CommSemiring R] [CommRing S] [Algebra R S] (s : S)
+引理 代数等价.quotientBot_mk
+  条件: [交换半环 R] [交换环 S] [代数 R S] (s : S)
   证明: rfl
 
 @[simp]
@@ -2891,8 +2891,8 @@ lemma AlgEquiv.quotientBot_symm_mk
   proof: rfl
 
 中文:
-引理 AlgEquiv.quotientBot_symm_mk
-  结论: [CommSemiring R] [CommRing S] [Algebra R S]
+引理 代数等价.quotientBot_symm_mk
+  结论: [交换半环 R] [交换环 S] [代数 R S]
   证明: rfl
 -/
 lemma AlgEquiv.quotientBot_symm_mk [CommSemiring R] [CommRing S] [Algebra R S]
@@ -2942,7 +2942,7 @@ theorem ker_quotLeftToQuotSup
 
 中文:
 定理 ker_quotLeftToQuotSup
-  结论: RingHom.ker (quotLeftToQuotSup I J) =
+  结论: 环态射.ker (quotLeftToQuotSup I J) =
   证明: by
   simp only [mk_ker, sup_idem, sup_comm, quotLeftToQuotSup, Quotient.factor, ker_quotient_lift,
     map_eq_iff_sup_ker_eq_of_surjective (Ideal.Quotient.mk I) Quotient.mk_surjective, ← sup_assoc]
@@ -2965,7 +2965,7 @@ definition quotQuotToQuotSup
 
 中文:
 定义 quotQuotToQuotSup
-  签名: : (R ⧸ I) ⧸ J.map (Ideal.Quotient.mk I) ->+* R ⧸ I ⊔ J
+  签名: : (R ⧸ I) ⧸ J.map (理想.商.mk I) ->+* R ⧸ I ⊔ J
   定义体: Ideal.Quotient.lift (J.map (Ideal.Quotient.mk I)) (quotLeftToQuotSup I J)
     (ker_quotLeftToQuotSup I J).symm.le
 
@@ -2985,7 +2985,7 @@ definition quotQuotMk
 
 中文:
 定义 quotQuotMk
-  签名: : R ->+* (R ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)
+  签名: : R ->+* (R ⧸ I) ⧸ J.map (理想.商.mk I)
   定义体: (Ideal.Quotient.mk (J.map (Ideal.Quotient.mk I))).comp (Ideal.Quotient.mk I)
 
 Depends on / 依赖: Ideal.Quotient.mk, J.map, Quotient
@@ -3004,7 +3004,7 @@ theorem ker_quotQuotMk
 
 中文:
 定理 ker_quotQuotMk
-  结论: RingHom.ker (quotQuotMk I J) = I ⊔ J
+  结论: 环态射.ker (quotQuotMk I J) = I ⊔ J
   证明: by
   rw [RingHom.ker_eq_comap_bot]; rw [quotQuotMk]; rw [← comap_comap]; rw [← RingHom.ker]; rw [mk_ker]; rw [comap_map_of_surjective (Ideal.Quotient.mk I) Ideal.Quotient.mk_surjective]; rw [← RingHom.ker]; rw [mk_ker]; rw [sup_comm]
 
@@ -3023,7 +3023,7 @@ definition liftSupQuotQuotMk
 
 中文:
 定义 liftSupQuotQuotMk
-  签名: (I J : Ideal R)
+  签名: (I J : 理想 R)
   定义体: Ideal.Quotient.lift (I ⊔ J) (quotQuotMk I J) (ker_quotQuotMk I J).symm.le
 
 Depends on / 依赖: Ideal.Quotient.lift, Quotient, ker_quotQuotMk, quotQuotMk, symm.le
@@ -3049,7 +3049,7 @@ definition quotQuotEquivQuotSup
 
 中文:
 定义 quotQuotEquivQuotSup
-  签名: : (R ⧸ I) ⧸ J.map (Ideal.Quotient.mk I) ≃+* R ⧸ I ⊔ J
+  签名: : (R ⧸ I) ⧸ J.map (理想.商.mk I) ≃+* R ⧸ I ⊔ J
   定义体: RingEquiv.ofRingHom (quotQuotToQuotSup I J) (liftSupQuotQuotMk I J)
     (by
       repeat apply Ideal.Quotient.ringHom_ext
@@ -3124,7 +3124,7 @@ definition quotQuotEquivComm
 
 中文:
 定义 quotQuotEquivComm
-  签名: : (R ⧸ I) ⧸ J.map (Ideal.Quotient.mk I) ≃+*
+  签名: : (R ⧸ I) ⧸ J.map (理想.商.mk I) ≃+*
   定义体: ((quotQuotEquivQuotSup I J).trans (quotEquivOfEq (sup_comm ..))).trans
     (quotQuotEquivQuotSup J I).symm
 
@@ -3323,7 +3323,7 @@ theorem quotQuotEquivComm_mk_mk
 
 中文:
 定理 quotQuotEquivComm_mk_mk
-  条件: [CommRing R] (I J : Ideal R) (x : R)
+  条件: [交换环 R] (I J : 理想 R) (x : R)
   证明: rfl
 -/
 theorem quotQuotEquivComm_mk_mk [CommRing R] (I J : Ideal R) (x : R) :
@@ -3449,7 +3449,7 @@ definition quotQuotToQuotSupₐ
 
 中文:
 定义 quotQuotToQuotSupₐ
-  签名: : (A ⧸ I) ⧸ J.map (Quotient.mkₐ R I) ->ₐ[R] A ⧸ I ⊔ J
+  签名: : (A ⧸ I) ⧸ J.map (商.mkₐ R I) ->ₐ[R] A ⧸ I ⊔ J
   定义体: AlgHom.mk (quotQuotToQuotSup I J) fun _ => rfl
 
 @[simp]
@@ -3509,7 +3509,7 @@ definition quotQuotMkₐ
 
 中文:
 定义 quotQuotMkₐ
-  签名: : A ->ₐ[R] (A ⧸ I) ⧸ J.map (Quotient.mkₐ R I)
+  签名: : A ->ₐ[R] (A ⧸ I) ⧸ J.map (商.mkₐ R I)
   定义体: AlgHom.mk (quotQuotMk I J) fun _ => rfl
 
 @[simp]
@@ -3568,7 +3568,7 @@ definition liftSupQuotQuotMkₐ
 
 中文:
 定义 liftSupQuotQuotMkₐ
-  签名: (I J : Ideal A)
+  签名: (I J : 理想 A)
   定义体: AlgHom.mk (liftSupQuotQuotMk I J) fun _ => rfl
 
 @[simp]
@@ -3627,7 +3627,7 @@ definition quotQuotEquivQuotSupₐ
 
 中文:
 定义 quotQuotEquivQuotSupₐ
-  签名: : ((A ⧸ I) ⧸ J.map (Quotient.mkₐ R I)) ≃ₐ[R] A ⧸ I ⊔ J
+  签名: : ((A ⧸ I) ⧸ J.map (商.mkₐ R I)) ≃ₐ[R] A ⧸ I ⊔ J
   定义体: AlgEquiv.ofRingEquiv (f := quotQuotEquivQuotSup I J) fun _ => rfl
 
 @[simp]

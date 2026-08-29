@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetrizableSpace ENN实数
+  签名: Metrizable空间 广义非负实数
   定义体: orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace
 
 Depends on / 依赖: isEmbedding, metrizableSpace, orderIsoUnitIntervalBirational, orderIsoUnitIntervalBirational.toHomeomorph.isEmbedding.metrizableSpace, toHomeomorph

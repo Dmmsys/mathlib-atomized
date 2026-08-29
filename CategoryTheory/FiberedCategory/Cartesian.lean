@@ -63,7 +63,7 @@ class IsCartesian
     - universal_property({a' : 𝒳} (φ' : a' ⟶ b) [IsHomLift p f φ']) : exists! χ : a' ⟶ a, IsHomLift p (𝟙 R) χ ∧ χ ≫ φ = φ'
 
 中文:
-类 IsCartesian
+类 是Cartesian
   参数: : 命题 where
   公理与运算 (2 个):
     - [toIsHomLift : IsHomLift p f φ]
@@ -96,7 +96,7 @@ class IsStronglyCartesian
     - universal_property'({a' : 𝒳} (g : p.obj a' ⟶ R) (φ' : a' ⟶ b) [IsHomLift p (g ≫ f) φ']) : exists! χ : a' ⟶ a, IsHomLift p g χ ∧ χ ≫ φ = φ'
 
 中文:
-类 IsStronglyCartesian
+类 是StronglyCartesian
   参数: : 命题 where
   公理与运算 (2 个):
     - [toIsHomLift : IsHomLift p f φ]
@@ -146,7 +146,7 @@ instance map_isHomLift
 
 中文:
 实例 map_isHomLift
-  签名: : IsHomLift p (𝟙 R) (IsCartesian.map p f φ φ')
+  签名: : IsHomLift p (𝟙 R) (是Cartesian.map p f φ φ')
   定义体: (Classical.choose_spec <| IsCartesian.universal_property (p := p) (f := f) (φ := φ) φ').1.1
 
 @[reassoc (attr := simp)]
@@ -167,7 +167,7 @@ lemma fac
 
 中文:
 引理 fac
-  结论: IsCartesian.map p f φ φ' ≫ φ = φ'
+  结论: 是Cartesian.map p f φ φ' ≫ φ = φ'
   证明: (Classical.choose_spec <| IsCartesian.universal_property (p := p) (f := f) (φ := φ) φ').1.2
 
 Depends on / 依赖: Classical, Classical.choose_spec, IsCartesian, IsCartesian.universal_property, choose_spec, universal_property
@@ -212,7 +212,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (φ : a ⟶ b) [IsCartesian p f φ] {a' : 𝒳} (ψ ψ' : a' ⟶ a)
+  结论: (φ : a ⟶ b) [是Cartesian p f φ] {a' : 𝒳} (ψ ψ' : a' ⟶ a)
   证明: by
   rw [map_uniq p f φ (ψ ≫ φ) ψ rfl]; rw [map_uniq p f φ (ψ ≫ φ) ψ' h.symm]
 
@@ -236,7 +236,7 @@ lemma map_self
 
 中文:
 引理 map_self
-  结论: IsCartesian.map p f φ φ = 𝟙 a
+  结论: 是Cartesian.map p f φ φ = 𝟙 a
   证明: by
   subst_hom_lift p f φ; symm
   apply map_uniq
@@ -311,7 +311,7 @@ definition domainUniqueUpToIso
 
 中文:
 定义 domainUniqueUpToIso
-  签名: {a' : 𝒳} (φ' : a' ⟶ b) [IsCartesian p f φ']
+  签名: {a' : 𝒳} (φ' : a' ⟶ b) [是Cartesian p f φ']
   定义体: IsCartesian.map p f φ φ'
   inv := IsCartesian.map p f φ' φ
   hom_inv_id := by
@@ -347,7 +347,7 @@ instance domainUniqueUpToIso_inv_isHomLift
 
 中文:
 实例 domainUniqueUpToIso_inv_isHomLift
-  签名: {a' : 𝒳} (φ' : a' ⟶ b) [IsCartesian p f φ']
+  签名: {a' : 𝒳} (φ' : a' ⟶ b) [是Cartesian p f φ']
   定义体: domainUniqueUpToIso_hom p f φ φ' ▸ IsCartesian.map_isHomLift p f φ φ'
 
 Depends on / 依赖: IsCartesian, IsCartesian.map_isHomLift, domainUniqueUpToIso_hom, map_isHomLift
@@ -366,7 +366,7 @@ instance domainUniqueUpToIso_hom_isHomLift
 
 中文:
 实例 domainUniqueUpToIso_hom_isHomLift
-  签名: {a' : 𝒳} (φ' : a' ⟶ b) [IsCartesian p f φ']
+  签名: {a' : 𝒳} (φ' : a' ⟶ b) [是Cartesian p f φ']
   定义体: domainUniqueUpToIso_inv p f φ φ' ▸ IsCartesian.map_isHomLift p f φ' φ
 
 Depends on / 依赖: IsCartesian, IsCartesian.map_isHomLift, domainUniqueUpToIso_inv, map_isHomLift
@@ -460,7 +460,7 @@ instance isCartesian_of_isStronglyCartesian
 
 中文:
 实例 isCartesian_of_isStronglyCartesian
-  签名: : p.IsCartesian f φ where
+  签名: : p.是Cartesian f φ where
   定义体: fun φ' => universal_property p f φ (𝟙 R) f (by simp) φ'
 
 Depends on / 依赖: universal_property
@@ -567,7 +567,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (φ : a ⟶ b) [IsStronglyCartesian p f φ] {R' : 𝒮} {a' : 𝒳} (g : R' ⟶ R)
+  结论: (φ : a ⟶ b) [是StronglyCartesian p f φ] {R' : 𝒮} {a' : 𝒳} (g : R' ⟶ R)
   证明: by
   rw [map_uniq p f φ (g := g) rfl (ψ ≫ φ) ψ rfl]; rw [map_uniq p f φ (g := g) rfl (ψ ≫ φ) ψ' h.symm]
 
@@ -681,7 +681,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: [IsStronglyCartesian p f φ] [IsStronglyCartesian p g ψ]
+  签名: [是StronglyCartesian p f φ] [是StronglyCartesian p g ψ]
   定义体: by
     intro a' h τ hτ
     use map p f φ (f' := h ≫ f) rfl (map p g ψ (assoc h f g).symm τ)
@@ -721,7 +721,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: [IsStronglyCartesian p g ψ] [IsStronglyCartesian p (f ≫ g) (φ ≫ ψ)]
+  结论: [是StronglyCartesian p g ψ] [是StronglyCartesian p (f ≫ g) (φ ≫ ψ)]
   证明: by
     intro a' h τ hτ
     have h₁ : IsHomLift p (h ≫ f ≫ g) (τ ≫ ψ) := by simpa using IsHomLift.comp p (h ≫ f) _ τ ψ
@@ -792,7 +792,7 @@ instance of_isIso
 
 中文:
 实例 of_isIso
-  签名: (φ : a ⟶ b) [IsHomLift p f φ] [IsIso φ]
+  签名: (φ : a ⟶ b) [IsHomLift p f φ] [是同构 φ]
   定义体: @IsStronglyCartesian.of_iso _ _ _ _ p _ _ _ _ f (asIso φ) (by aesop)
 
 Depends on / 依赖: IsStronglyCartesian, IsStronglyCartesian.of_iso, of_iso
@@ -817,8 +817,8 @@ lemma isIso_of_base_isIso
 
 中文:
 引理 isIso_of_base_isIso
-  条件: (φ : a ⟶ b) [IsStronglyCartesian p f φ] [IsIso f]
-  结论: IsIso φ
+  条件: (φ : a ⟶ b) [是StronglyCartesian p f φ] [是同构 f]
+  结论: 是同构 φ
   证明: by
   subst_hom_lift p f φ; clear a b R S
   -- Let `φ` be the morphism induced by applying universal property to `𝟙 b` lying over `f⁻¹ ≫ f`.

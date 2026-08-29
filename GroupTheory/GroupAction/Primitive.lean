@@ -89,11 +89,11 @@ class _root_.AddAction.IsPreprimitive
     - isTrivialBlock_of_isBlock : forall {B : Set X}, AddAction.IsBlock G B -> AddAction.IsTrivialBlock B
 
 中文:
-类 _root_.AddAction.IsPreprimitive
-  参数: [VAdd G X]
-  继承: AddAction.IsPretransitive G X
+类 _root_.加法作用.是Preprimitive
+  参数: [向量加法 G X]
+  继承: 加法作用.是Pretransitive G X
   公理与运算 (1 个):
-    - isTrivialBlock_of_isBlock : 对任意 {B : Set X}, AddAction.IsBlock G B -> AddAction.IsTrivialBlock B
+    - isTrivialBlock_of_isBlock : 对任意 {B : 集合 X}, 加法作用.IsBlock G B -> 加法作用.IsTrivialBlock B
 -/
 class _root_.AddAction.IsPreprimitive [VAdd G X] : Prop extends AddAction.IsPretransitive G X where
   /-- An action is preprimitive if it is pretransitive and
@@ -114,11 +114,11 @@ class IsPreprimitive
     - isTrivialBlock_of_isBlock : forall {B : Set X}, IsBlock G B -> IsTrivialBlock B
 
 中文:
-类 IsPreprimitive
-  参数: [SMul G X]
-  继承: IsPretransitive G X
+类 是Preprimitive
+  参数: [标量乘法 G X]
+  继承: 是Pretransitive G X
   公理与运算 (1 个):
-    - isTrivialBlock_of_isBlock : 对任意 {B : Set X}, IsBlock G B -> IsTrivialBlock B
+    - isTrivialBlock_of_isBlock : 对任意 {B : 集合 X}, IsBlock G B -> IsTrivialBlock B
 -/
 class IsPreprimitive [SMul G X] : Prop extends IsPretransitive G X where
   /-- An action is preprimitive if it is pretransitive and
@@ -137,10 +137,10 @@ class _root_.AddAction.IsQuasiPreprimitive
     - isPretransitive_of_normal : forall {N : AddSubgroup G} [N.Normal], AddAction.fixedPoints N X != .univ -> AddAction.IsPretransitive N X
 
 中文:
-类 _root_.AddAction.IsQuasiPreprimitive
-  继承: AddAction.IsPretransitive G X
+类 _root_.加法作用.是QuasiPreprimitive
+  继承: 加法作用.是Pretransitive G X
   公理与运算 (1 个):
-    - isPretransitive_of_normal : 对任意 {N : AddSubgroup G} [N.Normal], AddAction.fixedPoints N X != .univ -> AddAction.IsPretransitive N X
+    - isPretransitive_of_normal : 对任意 {N : 加法子群 G} [N.正规], 加法作用.fixedPoints N X != .univ -> 加法作用.是Pretransitive N X
 -/
 class _root_.AddAction.IsQuasiPreprimitive
     [AddGroup G] [AddAction G X] : Prop extends AddAction.IsPretransitive G X where
@@ -162,11 +162,11 @@ class IsQuasiPreprimitive
     - isPretransitive_of_normal : forall {N : Subgroup G} [N.Normal], fixedPoints N X != .univ -> IsPretransitive N X
 
 中文:
-类 IsQuasiPreprimitive
-  参数: [Group G] [MulAction G X]
-  继承: IsPretransitive G X
+类 是QuasiPreprimitive
+  参数: [群 G] [乘法作用 G X]
+  继承: 是Pretransitive G X
   公理与运算 (1 个):
-    - isPretransitive_of_normal : 对任意 {N : Subgroup G} [N.Normal], fixedPoints N X != .univ -> IsPretransitive N X
+    - isPretransitive_of_normal : 对任意 {N : 子群 G} [N.正规], fixedPoints N X != .univ -> 是Pretransitive N X
 -/
 class IsQuasiPreprimitive [Group G] [MulAction G X] : Prop extends IsPretransitive G X where
   isPretransitive_of_normal :
@@ -213,8 +213,8 @@ theorem IsPreprimitive.of_subsingleton
     exact Set.subsingleton_of_subsingleton
 
 中文:
-定理 IsPreprimitive.of_subsingleton
-  条件: [SMul G X] [Nonempty G] [Subsingleton X]
+定理 是Preprimitive.of_subsingleton
+  条件: [标量乘法 G X] [非空 G] [子单例 X]
   证明: by
     use Classical.arbitrary G
     rw [eq_iff_true_of_subsingleton]
@@ -286,8 +286,8 @@ theorem IsPreprimitive.of_isTrivialBlock_base
       use b
 
 中文:
-定理 IsPreprimitive.of_isTrivialBlock_base
-  结论: [IsPretransitive G X] (a : X)
+定理 是Preprimitive.of_isTrivialBlock_base
+  结论: [是Pretransitive G X] (a : X)
   证明: by
     obtain rfl | ⟨b, hb⟩ := B.eq_empty_or_nonempty
     · simp [IsTrivialBlock]
@@ -332,7 +332,7 @@ theorem IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints
       rw [← Set.mem_singleton_if
 
 中文:
-定理 IsPreprimitive.of_isTrivialBlock_of_notMem_fixedPoints
+定理 是Preprimitive.of_isTrivialBlock_of_notMem_fixedPoints
   结论: {a : X} (ha : a ∉ fixedPoints G X)
   证明: have : IsPretransitive G X := by
     rw [isPretransitive_iff_base a]
@@ -382,7 +382,7 @@ theorem IsPreprimitive.mk'
   exact .of_isTrivialBlock_of_notMem_fixedPoints ha fun {B} _ => H
 
 中文:
-定理 IsPreprimitive.mk'
+定理 是Preprimitive.mk'
   结论: (Hnt : fixedPoints G X != ⊤)
   证明: by
   simp only [Set.top_eq_univ, Set.ne_univ_iff_exists_notMem] at Hnt
@@ -420,8 +420,8 @@ theorem IsPreprimitive.of_surjective
 @[to_additive]
 
 中文:
-定理 IsPreprimitive.of_surjective
-  条件: [IsPreprimitive M α] (hf : Function.Surjective f)
+定理 是Preprimitive.of_surjective
+  条件: [是Preprimitive M α] (hf : 函数.满射 f)
   证明: toIsPretransitive.of_surjective_map hf
   isTrivialBlock_of_isBlock {B} hB := by
     rw [← Set.image_preimage_eq B hf]
@@ -460,7 +460,7 @@ theorem isPreprimitive_congr
 
 中文:
 定理 isPreprimitive_congr
-  条件: (hφ : Function.Surjective φ) (hf : Function.Bijective f)
+  条件: (hφ : 函数.满射 φ) (hf : 函数.双射 f)
   证明: by
   constructor
   · intro _
@@ -518,7 +518,7 @@ theorem isSimpleOrder_blockMem_iff_isPreprimitive
 
 中文:
 定理 isSimpleOrder_blockMem_iff_isPreprimitive
-  条件: [IsPretransitive G X] [Nontrivial X] (a : X)
+  条件: [是Pretransitive G X] [非平凡 X] (a : X)
   证明: by
   constructor
   · intro h; let h_bot_or_top := h.eq_bot_or_eq_top
@@ -568,7 +568,7 @@ theorem isCoatom_stabilizer_iff_preprimitive
 
 中文:
 定理 isCoatom_stabilizer_iff_preprimitive
-  条件: [IsPretransitive G X] [Nontrivial X] (a : X)
+  条件: [是Pretransitive G X] [非平凡 X] (a : X)
   证明: by
   rw [← isSimpleOrder_blockMem_iff_isPreprimitive G a]; rw [← Set.isSimpleOrder_Ici_iff_isCoatom]
   simp only [isSimpleOrder_iff_isCoatom_bot]
@@ -593,7 +593,7 @@ theorem IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive
   rwa [isCoatom_stabilizer_iff_preprimitive]
 
 中文:
-定理 IsPreprimitive.isCoatom_stabilizer_of_isPreprimitive
+定理 是Preprimitive.isCoatom_stabilizer_of_isPreprimitive
   证明: by
   rwa [isCoatom_stabilizer_iff_preprimitive]
 
@@ -655,7 +655,7 @@ theorem of_prime_card
 
 中文:
 定理 of_prime_card
-  条件: [hGX : IsPretransitive G X] (hp : 自然数.Prime (自然数.card X))
+  条件: [hGX : 是Pretransitive G X] (hp : 自然数.素 (自然数.card X))
   证明: by
   refine ⟨fun {B} hB => B.subsingleton_or_nontrivial.imp id fun hB' => ?_⟩
   have : Finite X := (Nat.card_ne_zero.mp hp.ne_zero).2
@@ -693,7 +693,7 @@ theorem of_card_lt
 
 中文:
 定理 of_card_lt
-  结论: [Finite Y] [IsPretransitive H Y] [IsPreprimitive G X]
+  结论: [有限 Y] [是Pretransitive H Y] [是Preprimitive G X]
   证明: by
   refine ⟨fun {B} hB => ?_⟩
   rcases B.eq_empty_or_nonempty with hB' | hB'; · simp [IsTrivialBlock, hB']
@@ -769,8 +769,8 @@ theorem exists_mem_smul_and_notMem_smul
   rcases isT
 
 中文:
-定理 exists_mem_smul_and_notMem_smul
-  结论: [IsPreprimitive G X]
+定理 存在_mem_smul_and_notMem_smul
+  结论: [是Preprimitive G X]
   证明: by
   let B := ⋂ (g : G) (_ : a in g • A), g • A
   suffices b ∉ B by

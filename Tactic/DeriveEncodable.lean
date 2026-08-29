@@ -39,7 +39,7 @@ inductive S
 
 中文:
 归纳类型 S
-  参数: : Type where
+  参数: : 类型 where
   构造子 (2 个):
     - nat: (n : 自然数)
     - cons: (a b : S)
@@ -211,7 +211,7 @@ public meta section
 
 中文:
 实例 :
-  签名: Encodable S
+  签名: 可编码 S
   定义体: Encodable.ofEquiv Nat S_equiv
 
 public meta section
@@ -238,7 +238,7 @@ definition mkToSMatch
 
 中文:
 定义 mkToSMatch
-  签名: (ctx : Deriving.Context) (header : Header) (indVal : InductiveVal)
+  签名: (ctx : Deriving.余ntext) (header : Header) (indVal : InductiveVal)
   定义体: do
   let discrs ← mkDiscrs header indVal
   let alts ← mkAlts
@@ -296,7 +296,7 @@ res := res.push ← `(
 
 中文:
 定义 mkToSFuns
-  签名: (ctx : Deriving.Context) (toSFunNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (toSFunNames : 数组 Name)
   定义体: do
   let mut res : Array (TSyntax `command) := #[]
   for i in [:toSFunNames.size] do
@@ -333,7 +333,7 @@ definition mkFromSMatch
 
 中文:
 定义 mkFromSMatch
-  签名: (ctx : Deriving.Context) (indVal : InductiveVal)
+  签名: (ctx : Deriving.余ntext) (indVal : InductiveVal)
   定义体: do
   let alts ← mkAlts
   `(fun $alts:matchAlt*)
@@ -404,7 +404,7 @@ definition mkFromSFuns
 
 中文:
 定义 mkFromSFuns
-  签名: (ctx : Deriving.Context) (fromSFunNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (fromSFunNames : 数组 Name)
   定义体: do
   let mut res : Array (TSyntax `command) := #[]
   for i in [:fromSFunNames.size] do
@@ -452,7 +452,7 @@ definition mkInjThms
 
 中文:
 定义 mkInjThms
-  签名: (ctx : Deriving.Context) (toSFunNames fromSFunNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (toSFunNames fromSFunNames : 数组 Name)
   定义体: do
   let mut res : Array (TSyntax `command) := #[]
   for i in [:toSFunNames.size] do
@@ -511,7 +511,7 @@ definition mkEncodableInstanceCmds
 
 中文:
 定义 mkEncodableInstanceCmds
-  签名: (ctx : Deriving.Context) (typeNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (typeNames : 数组 Name)
   定义体: do
   let mut instances := #[]
   for i in [:ctx.typeInfos.size] do
@@ -581,7 +581,7 @@ mkFreshUserName .str n' (s ++ "_toS")
 
 中文:
 定义 mkEncodableCmds
-  签名: (indVal : InductiveVal) (declNames : Array Name)
+  签名: (indVal : InductiveVal) (declNames : 数组 Name)
   定义体: do
   let ctx ← mkContext ``Encodable "encodable" indVal.name
   let toSFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
@@ -626,7 +626,7 @@ definition mkEncodableInstance
 
 中文:
 定义 mkEncodableInstance
-  签名: (declNames : Array Name)
+  签名: (declNames : 数组 Name)
   定义体: do
   let mut seen : NameSet := {}
   let mut toVisit : Array InductiveVal := #[]

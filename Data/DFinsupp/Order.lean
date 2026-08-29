@@ -126,7 +126,7 @@ lemma coe_orderEmbeddingToFun
 
 中文:
 引理 coe_orderEmbeddingToFun
-  结论: ⇑(orderEmbeddingToFun (α := α)) = DFunLike.coe
+  结论: ⇑(orderEmbeddingToFun (α := α)) = 依赖函数状.coe
   证明: rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (Π₀ i, α i)
+  签名: 预序 (Π₀ i, α i)
   定义体: { (inferInstance : LE (DFinsupp α)) with
     le_refl := fun _ _ => le_rfl
     le_trans := fun _ _ _ hfg hgh i => (hfg i).trans (hgh i) }
@@ -220,7 +220,7 @@ lemma coe_mono
 
 中文:
 引理 coe_mono
-  结论: Monotone ((⇑) : (Π₀ i, α i) -> 对任意 i, α i)
+  结论: 递增 ((⇑) : (Π₀ i, α i) -> 对任意 i, α i)
   证明: fun _ _ => id
 -/
 lemma coe_mono : Monotone ((⇑) : (Π₀ i, α i) -> forall i, α i) := fun _ _ => id
@@ -235,7 +235,7 @@ lemma coe_strictMono
 
 中文:
 引理 coe_strictMono
-  结论: Monotone ((⇑) : (Π₀ i, α i) -> 对任意 i, α i)
+  结论: 递增 ((⇑) : (Π₀ i, α i) -> 对任意 i, α i)
   证明: fun _ _ => id
 -/
 lemma coe_strictMono : Monotone ((⇑) : (Π₀ i, α i) -> forall i, α i) := fun _ _ => id
@@ -268,7 +268,7 @@ lemma single_mono
 
 中文:
 引理 single_mono
-  结论: Monotone (single i : α i -> Π₀ i, α i)
+  结论: 递增 (single i : α i -> Π₀ i, α i)
   证明: fun _ _ => single_le_single.2
 
 Depends on / 依赖: single_le_single
@@ -316,8 +316,8 @@ instance [forall
     le_antisymm := fun _ _ hfg hgf => ext fun i => (hfg i).antisymm (hgf i) }
 
 中文:
-实例 [forall
-  签名: i, PartialOrder (α i)] : PartialOrder (Π₀ i, α i)
+实例 [对任意
+  签名: i, 偏序 (α i)] : 偏序 (Π₀ i, α i)
   定义体: { (inferInstance : Preorder (DFinsupp α)) with
     le_antisymm := fun _ _ hfg hgf => ext fun i => (hfg i).antisymm (hgf i) }
 
@@ -342,7 +342,7 @@ instance [forall
 @[simp, norm_cast]
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, SemilatticeInf (α i)] : SemilatticeInf (Π₀ i, α i)
   定义体: { (inferInstance : PartialOrder (DFinsupp α)) with
     inf := zipWith (fun _ => (· ⊓ ·)) fun _ => inf_idem _
@@ -414,7 +414,7 @@ instance [forall
 @[simp, norm_cast]
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, SemilatticeSup (α i)] : SemilatticeSup (Π₀ i, α i)
   定义体: { (inferInstance : PartialOrder (DFinsupp α)) with
     sup := zipWith (fun _ => (· ⊔ ·)) fun _ => sup_idem _
@@ -485,7 +485,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: : Lattice (Π₀ i, α i)
+  签名: : 格 (Π₀ i, α i)
   定义体: { (inferInstance : SemilatticeInf (DFinsupp α)),
     (inferInstance : SemilatticeSup (DFinsupp α)) with }
 
@@ -556,8 +556,8 @@ instance [forall
   body: le_of_add_le_add_left H i
 
 中文:
-实例 [forall
-  签名: i, AddCommMonoid (α i)] [对任意 i, PartialOrder (α i)] [对任意 i, AddLeftReflectLE (α i)] :
+实例 [对任意
+  签名: i, 加法交换幺半群 (α i)] [对任意 i, 偏序 (α i)] [对任意 i, 加法LeftReflectLE (α i)] :
   定义体: le_of_add_le_add_left H i
 
 Depends on / 依赖: le_of_add_le_add_left
@@ -580,7 +580,7 @@ instance instPosSMulMono
 
 中文:
 实例 instPosSMulMono
-  签名: [对任意 i, PosSMulMono α (β i)]
+  签名: [对任意 i, 正标量乘递增 α (β i)]
   定义体: PosSMulMono.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulMono, PosSMulMono.lift, coe_le_coe, coe_smul
@@ -598,7 +598,7 @@ instance instSMulPosMono
 
 中文:
 实例 instSMulPosMono
-  签名: [对任意 i, SMulPosMono α (β i)]
+  签名: [对任意 i, 标量乘正递增 α (β i)]
   定义体: SMulPosMono.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosMono, SMulPosMono.lift, coe_le_coe, coe_smul, coe_zero
@@ -616,7 +616,7 @@ instance instPosSMulReflectLE
 
 中文:
 实例 instPosSMulReflectLE
-  签名: [对任意 i, PosSMulReflectLE α (β i)]
+  签名: [对任意 i, 正标量乘反映偏序 α (β i)]
   定义体: PosSMulReflectLE.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulReflectLE, PosSMulReflectLE.lift, coe_le_coe, coe_smul
@@ -634,7 +634,7 @@ instance instSMulPosReflectLE
 
 中文:
 实例 instSMulPosReflectLE
-  签名: [对任意 i, SMulPosReflectLE α (β i)]
+  签名: [对任意 i, 标量乘正反映偏序 α (β i)]
   定义体: SMulPosReflectLE.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosReflectLE, SMulPosReflectLE.lift, coe_le_coe, coe_smul, coe_zero
@@ -658,7 +658,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: [对任意 i, PosSMulStrictMono α (β i)]
+  签名: [对任意 i, 正标量乘严格递增 α (β i)]
   定义体: PosSMulStrictMono.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulStrictMono, PosSMulStrictMono.lift, coe_le_coe, coe_smul
@@ -676,7 +676,7 @@ instance instSMulPosStrictMono
 
 中文:
 实例 instSMulPosStrictMono
-  签名: [对任意 i, SMulPosStrictMono α (β i)]
+  签名: [对任意 i, 标量乘正严格递增 α (β i)]
   定义体: SMulPosStrictMono.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosStrictMono, SMulPosStrictMono.lift, _eq_some_iff_getElem, coe_le_coe, coe_smul, coe_zero, i.isLt, length_ofFn
@@ -697,7 +697,7 @@ instance instSMulPosReflectLT
 
 中文:
 实例 instSMulPosReflectLT
-  签名: [对任意 i, SMulPosReflectLT α (β i)]
+  签名: [对任意 i, 标量乘正反映严格偏序 α (β i)]
   定义体: SMulPosReflectLT.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: Bool.not_eq_true, SMulPosReflectLT, SMulPosReflectLT.lift, _ofFn_eq_some, coe_le_coe, coe_smul, coe_zero, eq_iff, exists_eq_left, h.eq_iff, not_eq_true
@@ -721,8 +721,8 @@ instance [forall
   bot_le := by simp [le_def]
 
 中文:
-实例 [forall
-  签名: i, IsBotZeroClass (α i)] : OrderBot (Π₀ i, α i) where
+实例 [对任意
+  签名: i, 是BotZero类 (α i)] : 有底序 (Π₀ i, α i) where
   定义体: 0
   bot_le := by simp [le_def]
 -/
@@ -739,8 +739,8 @@ instance [forall
   body: isBot_bot
 
 中文:
-实例 [forall
-  签名: i, IsBotZeroClass (α i)] : IsBotZeroClass (Π₀ i, α i) where
+实例 [对任意
+  签名: i, 是BotZero类 (α i)] : 是BotZero类 (Π₀ i, α i) where
   定义体: isBot_bot
 
 Depends on / 依赖: isBot_bot
@@ -762,7 +762,7 @@ theorem bot_eq_zero
 
 中文:
 定理 bot_eq_zero
-  条件: [对任意 i, IsBotZeroClass (α i)]
+  条件: [对任意 i, 是BotZero类 (α i)]
   结论: (⊥ : Π₀ i, α i) = 0
   证明: rfl
 -/
@@ -853,7 +853,7 @@ lemma support_monotone
 
 中文:
 引理 support_monotone
-  结论: Monotone (support (ι := ι) (β := α))
+  结论: 递增 (support (ι := ι) (β := α))
   证明: fun f g h a ha => by rw [mem_support_iff, ← pos_iff_ne_zero] at ha ⊢; exact ha.trans_le (h _)
 -/
 lemma support_monotone : Monotone (support (ι := ι) (β := α)) :=
@@ -935,7 +935,7 @@ instance tsub
 
 中文:
 实例 tsub
-  签名: : Sub (Π₀ i, α i)
+  签名: : 减法 (Π₀ i, α i)
   定义体: ⟨zipWith (fun _ m n => m - n) fun _ => tsub_self 0⟩
 
 Depends on / 依赖: tsub_self, zipWith
@@ -1030,8 +1030,8 @@ instance [forall
   le_self_add := fun _ _ _ => le_self_add
 
 中文:
-实例 [forall
-  签名: i, AddLeftMono (α i)] : CanonicallyOrderedAdd (Π₀ i, α i) where
+实例 [对任意
+  签名: i, AddLeftMono (α i)] : 典范有序加法 (Π₀ i, α i) where
   定义体: by
     intro f g h
     exists g - f

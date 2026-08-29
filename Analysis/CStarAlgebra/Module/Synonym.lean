@@ -107,7 +107,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial E]
+  签名: [非平凡 E]
   定义体: ‹Nontrivial E›
 
 Depends on / 依赖: Nontrivial
@@ -123,7 +123,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited E]
+  签名: [可居 E]
   定义体: ‹Inhabited E›
 
 Depends on / 依赖: Inhabited
@@ -139,7 +139,7 @@ instance instNonempty
 
 中文:
 实例 instNonempty
-  签名: [Nonempty E]
+  签名: [非空 E]
   定义体: ‹Nonempty E›
 
 Depends on / 依赖: Nonempty
@@ -155,7 +155,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Unique E]
+  签名: [唯一 E]
   定义体: ‹Unique E›
 
 Depends on / 依赖: Unique
@@ -173,7 +173,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero E]
+  签名: [零 E]
   定义体: ‹Zero E›
 -/
 instance instZero [Zero E] : Zero C⋆ᵐᵒᵈ(A, E) := ‹Zero E›
@@ -187,7 +187,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: [Add E]
+  签名: [加法 E]
   定义体: ‹Add E›
 -/
 instance instAdd [Add E] : Add C⋆ᵐᵒᵈ(A, E) := ‹Add E›
@@ -201,7 +201,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [Sub E]
+  签名: [减法 E]
   定义体: ‹Sub E›
 -/
 instance instSub [Sub E] : Sub C⋆ᵐᵒᵈ(A, E) := ‹Sub E›
@@ -215,7 +215,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [Neg E]
+  签名: [取负 E]
   定义体: ‹Neg E›
 -/
 instance instNeg [Neg E] : Neg C⋆ᵐᵒᵈ(A, E) := ‹Neg E›
@@ -229,7 +229,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: [AddMonoid E]
+  签名: [加法幺半群 E]
   定义体: ‹AddMonoid E›
 
 Depends on / 依赖: AddMonoid
@@ -245,7 +245,7 @@ instance instSubNegMonoid
 
 中文:
 实例 instSubNegMonoid
-  签名: [SubNegMonoid E]
+  签名: [SubNeg幺半群 E]
   定义体: ‹SubNegMonoid E›
 
 Depends on / 依赖: SubNegMonoid
@@ -261,7 +261,7 @@ instance instSubNegZeroMonoid
 
 中文:
 实例 instSubNegZeroMonoid
-  签名: [SubNegZeroMonoid E]
+  签名: [SubNegZero幺半群 E]
   定义体: ‹SubNegZeroMonoid E›
 
 Depends on / 依赖: SubNegZeroMonoid
@@ -279,7 +279,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup E]
+  签名: [加法交换群 E]
   定义体: ‹AddCommGroup E›
 
 Depends on / 依赖: AddCommGroup
@@ -296,7 +296,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {R : 类型} [SMul R E]
+  签名: {R : 类型} [标量乘法 R E]
   定义体: ‹SMul R E›
 -/
 instance instSMul {R : Type*} [SMul R E] : SMul R C⋆ᵐᵒᵈ(A, E) := ‹SMul R E›
@@ -311,7 +311,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {R : 类型} [Semiring R] [AddCommGroup E] [Module R E]
+  签名: {R : 类型} [半环 R] [加法交换群 E] [模 R E]
   定义体: ‹Module R E›
 
 Depends on / 依赖: Module
@@ -330,7 +330,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul R R'] [SMul R E] [SMul R' E]
+  签名: [标量乘法 R R'] [标量乘法 R E] [标量乘法 R' E]
   定义体: ‹IsScalarTower R R' E›
 
 Depends on / 依赖: IsScalarTower
@@ -349,7 +349,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul R E] [SMul R' E] [SMulCommClass R R' E]
+  签名: [标量乘法 R E] [标量乘法 R' E] [标量交换类 R R' E]
   定义体: ‹SMulCommClass R R' E›
 
 Depends on / 依赖: SMulCommClass
@@ -585,7 +585,7 @@ definition addEquiv
 
 中文:
 定义 addEquiv
-  签名: [AddCommGroup E]
+  签名: [加法交换群 E]
   定义体: { AddEquiv.refl _ with
     toFun := equiv _ _
     invFun := (equiv _ _).symm }
@@ -611,7 +611,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [Semiring R] [AddCommGroup E] [Module R E]
+  签名: [半环 R] [加法交换群 E] [模 R E]
   定义体: { LinearEquiv.refl _ _ with
     toFun := equiv _ _
     invFun := (equiv _ _).symm }
@@ -633,7 +633,7 @@ lemma map_top_submodule
 
 中文:
 引理 map_top_submodule
-  条件: {R : 类型} [Semiring R] [AddCommGroup E] [Module R E]
+  条件: {R : 类型} [半环 R] [加法交换群 E] [模 R E]
   证明: Submodule.map_eq_top_iff.mpr rfl
 
 Depends on / 依赖: Submodule, Submodule.map_eq_top_iff.mpr, map_eq_top_iff
@@ -652,7 +652,7 @@ instance instModuleFinite
 
 中文:
 实例 instModuleFinite
-  签名: [Semiring R] [AddCommGroup E] [Module R E] [Module.Finite R E]
+  签名: [半环 R] [加法交换群 E] [模 R E] [模.有限 R E]
   定义体: ‹Module.Finite R E›
 
 Depends on / 依赖: Finite, Module, Module.Finite
@@ -674,7 +674,7 @@ instance [u
 
 中文:
 实例 [u
-  签名: : UniformSpace E] : UniformSpace C⋆ᵐᵒᵈ(A, E)
+  签名: : 一致空间 E] : 一致空间 C⋆ᵐᵒᵈ(A, E)
   定义体: u.comap equiv A E
 
 Depends on / 依赖: u.comap
@@ -690,8 +690,8 @@ instance [Bornology
   body: Bornology.induced equiv A E
 
 中文:
-实例 [Bornology
-  签名: E] : Bornology C⋆ᵐᵒᵈ(A, E)
+实例 [有界结构
+  签名: E] : 有界结构 C⋆ᵐᵒᵈ(A, E)
   定义体: Bornology.induced equiv A E
 
 Depends on / 依赖: Bornology, Bornology.induced, induced
@@ -709,7 +709,7 @@ definition uniformEquiv
 
 中文:
 定义 uniformEquiv
-  签名: [UniformSpace E]
+  签名: [一致空间 E]
   定义体: .toUniformEquivOfIsUniformInducing ⟨rfl⟩ equiv A E
 
 Depends on / 依赖: toUniformEquivOfIsUniformInducing
@@ -731,7 +731,7 @@ definition equivL
 
 中文:
 定义 equivL
-  签名: [Semiring R] [AddCommGroup E] [UniformSpace E] [Module R E]
+  签名: [半环 R] [加法交换群 E] [一致空间 E] [模 R E]
   定义体: { linearEquiv R A E with
     continuous_toFun := UniformEquiv.continuous uniformEquiv
     continuous_invFun := UniformEquiv.continuous uniformEquiv.symm }
@@ -752,8 +752,8 @@ instance [UniformSpace
   body: uniformEquiv.completeSpace_iff.mpr inferInstance
 
 中文:
-实例 [UniformSpace
-  签名: E] [CompleteSpace E] : CompleteSpace C⋆ᵐᵒᵈ(A, E)
+实例 [一致空间
+  签名: E] [完备空间 E] : 完备空间 C⋆ᵐᵒᵈ(A, E)
   定义体: uniformEquiv.completeSpace_iff.mpr inferInstance
 
 Depends on / 依赖: completeSpace_iff, uniformEquiv, uniformEquiv.completeSpace_iff.mpr
@@ -770,8 +770,8 @@ instance [AddCommGroup
   body: ContinuousAdd.induced (addEquiv A E)
 
 中文:
-实例 [AddCommGroup
-  签名: E] [UniformSpace E] [ContinuousAdd E] : ContinuousAdd C⋆ᵐᵒᵈ(A, E)
+实例 [加法交换群
+  签名: E] [一致空间 E] [连续加法 E] : 连续加法 C⋆ᵐᵒᵈ(A, E)
   定义体: ContinuousAdd.induced (addEquiv A E)
 
 Depends on / 依赖: ContinuousAdd, ContinuousAdd.induced, addEquiv, induced
@@ -788,8 +788,8 @@ instance [AddCommGroup
   body: IsUniformAddGroup.comap (addEquiv A E)
 
 中文:
-实例 [AddCommGroup
-  签名: E] [UniformSpace E] [IsUniformAddGroup E] : IsUniformAddGroup C⋆ᵐᵒᵈ(A, E)
+实例 [加法交换群
+  签名: E] [一致空间 E] [是UniformAdd群 E] : 是UniformAdd群 C⋆ᵐᵒᵈ(A, E)
   定义体: IsUniformAddGroup.comap (addEquiv A E)
 
 Depends on / 依赖: IsUniformAddGroup, IsUniformAddGroup.comap, addEquiv
@@ -806,8 +806,8 @@ instance [Semiring
   body: ContinuousSMul.induced (linearEquiv R A E)
 
 中文:
-实例 [Semiring
-  签名: R] [TopologicalSpace R] [AddCommGroup E] [UniformSpace E] [Module R E]
+实例 [半环
+  签名: R] [拓扑空间 R] [加法交换群 E] [一致空间 E] [模 R E]
   定义体: ContinuousSMul.induced (linearEquiv R A E)
 
 Depends on / 依赖: ContinuousSMul, ContinuousSMul.induced, induced, linearEquiv

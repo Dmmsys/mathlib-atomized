@@ -93,7 +93,7 @@ theorem pderiv_def
 中文:
 定理 pderiv_def
   条件: [DecidableEq σ] (i : σ)
-  结论: pderiv i = mkDerivation R (Pi.single i 1)
+  结论: pderiv i = mkDerivation R (依赖函数类型.single i 1)
   证明: by
   unfold pderiv; congr!
 
@@ -206,7 +206,7 @@ theorem pderiv_one
 中文:
 定理 pderiv_one
   条件: {i : σ}
-  结论: pderiv i (1 : MvPolynomial σ R) = 0
+  结论: pderiv i (1 : 多元多项式 σ R) = 0
   证明: pderiv_C
 
 @[simp]
@@ -256,7 +256,7 @@ theorem pderiv_X_self
 中文:
 定理 pderiv_X_self
   条件: (i : σ)
-  结论: pderiv i (X i : MvPolynomial σ R) = 1
+  结论: pderiv i (X i : 多元多项式 σ R) = 1
   证明: by classical simp
 
 @[simp]
@@ -279,7 +279,7 @@ theorem pderiv_X_of_ne
 中文:
 定理 pderiv_X_of_ne
   条件: {i j : σ} (h : j != i)
-  结论: pderiv i (X j : MvPolynomial σ R) = 0
+  结论: pderiv i (X j : 多元多项式 σ R) = 0
   证明: by
   classical simp [h]
 
@@ -298,7 +298,7 @@ theorem pderiv_eq_zero_of_notMem_vars
 
 中文:
 定理 pderiv_eq_zero_of_notMem_vars
-  条件: {i : σ} {f : MvPolynomial σ R} (h : i ∉ f.vars)
+  条件: {i : σ} {f : 多元多项式 σ R} (h : i ∉ f.vars)
   证明: derivation_eq_zero_of_forall_mem_vars fun _ hj => pderiv_X_of_ne ne_of_mem_of_not_mem hj h
 
 Depends on / 依赖: derivation_eq_zero_of_forall_mem_vars, ne_of_mem_of_not_mem, pderiv_X_of_ne
@@ -336,7 +336,7 @@ theorem pderiv_mul
 
 中文:
 定理 pderiv_mul
-  条件: {i : σ} {f g : MvPolynomial σ R}
+  条件: {i : σ} {f g : 多元多项式 σ R}
   证明: by
   simp only [(pderiv i).leibniz f g, smul_eq_mul, mul_comm, add_comm]
 
@@ -357,7 +357,7 @@ theorem pderiv_pow
 
 中文:
 定理 pderiv_pow
-  条件: {i : σ} {f : MvPolynomial σ R} {n : 自然数}
+  条件: {i : σ} {f : 多元多项式 σ R} {n : 自然数}
   证明: by
   rw [(pderiv i).leibniz_pow f n]; rw [nsmul_eq_mul]; rw [smul_eq_mul]; rw [mul_assoc]
 
@@ -379,7 +379,7 @@ theorem pderiv_C_mul
 
 中文:
 定理 pderiv_C_mul
-  条件: {f : MvPolynomial σ R} {i : σ}
+  条件: {f : 多元多项式 σ R} {i : σ}
   结论: pderiv i (C a * f) = C a * pderiv i f
   证明: by
   rw [C_mul']; rw [Derivation.map_smul]; rw [C_mul']
@@ -408,7 +408,7 @@ theorem coeff_pderiv
 
 中文:
 定理 coeff_pderiv
-  条件: {i : σ} (p : MvPolynomial σ R) (m : σ ->₀ 自然数)
+  条件: {i : σ} (p : 多元多项式 σ R) (m : σ ->₀ 自然数)
   证明: by
   classical
   induction p using MvPolynomial.induction_on' with
@@ -451,7 +451,7 @@ theorem pderiv_map
 
 中文:
 定理 pderiv_map
-  条件: {S} [CommSemiring S] {φ : R ->+* S} {f : MvPolynomial σ R} {i : σ}
+  条件: {S} [交换半环 S] {φ : R ->+* S} {f : 多元多项式 σ R} {i : σ}
   证明: by
   apply induction_on f (fun r => by simp) (fun p q hp hq => by simp [hp, hq]) fun p j eq => ?_
   obtain rfl | h := eq_or_ne j i
@@ -484,7 +484,7 @@ lemma pderiv_rename
 
 中文:
 引理 pderiv_rename
-  结论: {τ : 类型} {f : σ -> τ} (hf : Function.Injective f)
+  结论: {τ : 类型} {f : σ -> τ} (hf : 函数.单射 f)
   证明: by
   classical
   induction p using MvPolynomial.induction_on with
@@ -527,7 +527,7 @@ lemma aeval_sumElim_pderiv_inl
 
 中文:
 引理 aeval_sumElim_pderiv_inl
-  结论: {S τ : 类型} [CommRing S] [Algebra R S]
+  结论: {S τ : 类型} [交换环 S] [代数 R S]
   证明: by
   classical
   induction p using MvPolynomial.induction_on with
@@ -608,7 +608,7 @@ lemma pderiv_sumAlgEquiv
 
 中文:
 引理 pderiv_sumAlgEquiv
-  结论: {R S₁ S₂ : 类型} [CommSemiring R]
+  结论: {R S₁ S₂ : 类型} [交换半环 R]
   证明: pderiv_sumRingEquiv ..
 
 Depends on / 依赖: pderiv_sumRingEquiv

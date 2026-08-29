@@ -99,7 +99,7 @@ definition prodLift₁
 
 中文:
 定义 prodLift₁
-  签名: [W₂.ContainsIdentities]
+  签名: [W₂.余ntainsIdentities]
   定义体: Construction.lift (curry.obj F) (fun _ _ f₁ hf₁ => by
     have : forall (X₂ : C₂), IsIso (((curry.obj F).map f₁).app X₂) :=
       fun X₂ => hF _ ⟨hf₁, MorphismProperty.id_mem _ _⟩
@@ -127,7 +127,7 @@ lemma prod_fac₁
 
 中文:
 引理 prod_fac₁
-  条件: [W₂.ContainsIdentities]
+  条件: [W₂.余ntainsIdentities]
   证明: Construction.fac _ _
 
 Depends on / 依赖: Construction, Construction.fac
@@ -233,7 +233,7 @@ definition prod
   uniq := prod_uniq
 
 中文:
-定义 prod
+定义 乘积
   签名: :
   定义体: (Localization.inverts W₁.Q W₁).prod (Localization.inverts W₂.Q W₂)
   lift := fun F hF => prodLift F hF
@@ -301,8 +301,8 @@ instance prod
     (NatIso.prod (compUniqFunctor W₁.Q L₁ W₁) (compUniqFunctor W₂.Q L₂ W₂))
 
 中文:
-实例 prod
-  签名: [L₁.IsLocalization W₁] [L₂.IsLocalization W₂]
+实例 乘积
+  签名: [L₁.是Localization W₁] [L₂.是Localization W₂]
   定义体: by
   have := Construction.prodIsLocalization W₁ W₂
   exact of_equivalence_target (W₁.Q.prod W₂.Q) (W₁.prod W₂) (L₁.prod L₂)

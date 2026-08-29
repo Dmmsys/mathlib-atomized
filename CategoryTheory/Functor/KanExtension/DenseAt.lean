@@ -112,7 +112,7 @@ definition DenseAt.ofNatIso
     (hY.whiskerEquivalence (CostructuredArrow.mapNatIso e.symm))
 
 中文:
-定义 DenseAt.ofNatIso
+定义 DenseAt.of自然数Iso
   签名: {G : C ⥤ D} (e : F ≅ G)
   定义体: (IsColimit.equivOfNatIsoOfIso
       ((Functor.associator _ _ _).symm ≪≫ Functor.isoWhiskerLeft _ e) _ _
@@ -217,7 +217,7 @@ definition isDenseAt
 
 中文:
 定义 isDenseAt
-  签名: : Object命题erty D
+  签名: : ObjectProperty D
   定义体: fun Y => Nonempty (F.DenseAt Y)
 
 Depends on / 依赖: DenseAt, F.DenseAt, Nonempty
@@ -270,7 +270,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.isDenseAt.IsClosedUnderIsomorphisms
+  签名: F.isDenseAt.在同构下封闭
   定义体: by
   rw [isDenseAt_eq_isPointwiseLeftKanExtensionAt]
   infer_instance
@@ -315,7 +315,7 @@ lemma IsDenseAt.iff_of_final
 
 中文:
 引理 IsDenseAt.iff_of_final
-  结论: {C' : 类型} [Category* C'] (G : C' ⥤ C)
+  结论: {C' : 类型} [范畴* C'] (G : C' ⥤ C)
   证明: (DenseAt.precompEquivOfFinal G).nonempty_congr
 
 Depends on / 依赖: DenseAt, DenseAt.precompEquivOfFinal, nonempty_congr, precompEquivOfFinal
@@ -335,7 +335,7 @@ lemma IsDenseAt.of_final
 
 中文:
 引理 IsDenseAt.of_final
-  结论: {C' : 类型} [Category* C'] (G : C' ⥤ C)
+  结论: {C' : 类型} [范畴* C'] (G : C' ⥤ C)
   证明: (iff_of_final G).mpr hY
 
 Depends on / 依赖: iff_of_final

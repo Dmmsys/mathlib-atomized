@@ -82,8 +82,8 @@ This is specified using cycle notation. For example `(reorder := α β, 5 6)` sw
 
 中文:
 定理 max_comm'
-  条件: {α} [LinearOrder α] (x y : α)
-  结论: max x y = max y x
+  条件: {α} [线性序 α] (x y : α)
+  结论: 最大值 x y = 最大值 y x
   证明: max_comm x y
 ```
 
@@ -125,7 +125,7 @@ generates `_assoc` theorems that aren't dual to any other theorem. To deal with 
 中文:
 引理 min_self
   条件: (a : α)
-  结论: min a a = a
+  结论: 最小值 a a = a
   证明: sorry
 ```
 
@@ -220,7 +220,7 @@ definition nameDict
 
 中文:
 定义 nameDict
-  签名: : Std.HashMap String (List String)
+  签名: : Std.HashMap String (列表 String)
   定义体: .ofList [
   ("top", ["Bot"]),
   ("bot", ["Top"]),

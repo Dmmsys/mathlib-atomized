@@ -55,7 +55,7 @@ deriving CommRing, IsDomain, ValuationRing, LinearOrder, IsStrictOrderedRing
 
 中文:
 定义 FiniteElement
-  签名: : Type _
+  签名: : 类型 _
   定义体: (addValuation K).toValuation.valuationSubring
 deriving CommRing, IsDomain, ValuationRing, LinearOrder, IsStrictOrderedRing
 
@@ -383,7 +383,7 @@ theorem not_isUnit_iff_mk_pos
 中文:
 定理 not_isUnit_iff_mk_pos
   条件: {x : FiniteElement K}
-  结论: ¬ IsUnit x ↔ 0 < mk x.1
+  结论: ¬ 是单位 x ↔ 0 < mk x.1
   证明: Valuation.Integer.not_isUnit_iff_valuation_lt_one
 
 Depends on / 依赖: Integer, Valuation, Valuation.Integer.not_isUnit_iff_valuation_lt_one, not_isUnit_iff_valuation_lt_one
@@ -404,7 +404,7 @@ theorem isUnit_iff_mk_eq_zero
 中文:
 定理 isUnit_iff_mk_eq_zero
   条件: {x : FiniteElement K}
-  结论: IsUnit x ↔ mk x.1 = 0
+  结论: 是单位 x ↔ mk x.1 = 0
   证明: by
   rw [← not_iff_not]; rw [not_isUnit_iff_mk_pos]; rw [lt_iff_not_ge]; rw [x.2.ge_iff_eq']
 
@@ -423,7 +423,7 @@ instance :
 
 中文:
 实例 :
-  签名: RatCast (FiniteElement K)
+  签名: 有理数嵌入 (FiniteElement K)
   定义体: .mk q (mk_ratCast_nonneg q)
 
 Depends on / 依赖: mk_ratCast_nonneg
@@ -444,7 +444,7 @@ theorem mk_ratCast
 
 中文:
 定理 mk_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: FiniteElement.mk (q : K) (mk_ratCast_nonneg q) = q
   证明: rfl
 
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: FloorRing (FiniteElement K)
+  签名: Floor环 (FiniteElement K)
   定义体: .ofBounded _ fun x => by
     obtain ⟨n, hn⟩ := x.2
     refine ⟨n, (le_abs_self x).trans ?_⟩
@@ -495,7 +495,7 @@ deriving Field
 
 中文:
 定义 FiniteResidueField
-  签名: : Type _
+  签名: : 类型 _
   定义体: IsLocalRing.ResidueField (FiniteElement K)
 deriving Field
 
@@ -523,7 +523,7 @@ instance ordConnected_preimage_mk'
 
 中文:
 实例 ordConnected_preimage_mk'
-  签名: : 对任意 x, Set.OrdConnected Quotient.mk
+  签名: : 对任意 x, 集合.序连通 商.mk
   定义体: by
   refine fun x => ⟨?_⟩
   rintro x rfl y hy z ⟨hxz, hzy⟩
@@ -555,7 +555,7 @@ inferInstanceAs LinearOrder (Quotient _)
 
 中文:
 实例 :
-  签名: LinearOrder (FiniteResidueField K)
+  签名: 线性序 (FiniteResidueField K)
   定义体: haveI := Classical.decRel fun x y : FiniteElement K =>
     letI := Submodule.quotientRel (IsLocalRing.maximalIdeal (FiniteElement K))
     x ≈ y
@@ -843,7 +843,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing (FiniteResidueField K)
+  签名: 是Ordered环 (FiniteResidueField K)
   定义体: mk.monotone' zero_le_one
   add_le_add_left x y h z := by
     induction x with | mk x
@@ -891,7 +891,7 @@ instance :
 
 中文:
 实例 :
-  签名: Archimedean (FiniteResidueField K)
+  签名: 阿基米德 (FiniteResidueField K)
   定义体: by
     induction x with | mk x
     induction y with | mk y
@@ -937,7 +937,7 @@ theorem mk_ratCast
 
 中文:
 定理 mk_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: mk (q : FiniteElement K) = q
   证明: by
   change mk (FiniteElement.mk ..) = _
@@ -1035,7 +1035,7 @@ theorem ofArchimedean_injective
 中文:
 定理 ofArchimedean_injective
   条件: (f : R ->+*o K)
-  结论: Function.Injective (ofArchimedean f)
+  结论: 函数.单射 (ofArchimedean f)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro r hr
@@ -1573,7 +1573,7 @@ theorem stdPart_ratCast
 
 中文:
 定理 stdPart_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: stdPart (q : K) = q
   证明: by
   rw [stdPart_of_mk_nonneg Classical.ofNonempty (mk_ratCast_nonneg q)]; rw [FiniteElement.mk_ratCast]; rw [FiniteResidueField.mk_ratCast]; rw [map_ratCast]
@@ -1648,7 +1648,7 @@ theorem stdPart_ofNat
 @[simp]
 
 中文:
-定理 stdPart_ofNat
+定理 stdPart_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: stdPart (of自然数(n) : K) = n
   证明: stdPart_natCast n

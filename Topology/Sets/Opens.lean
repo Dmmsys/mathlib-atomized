@@ -75,8 +75,8 @@ structure Opens
 结构 Opens
   参数: where
   公理与运算 (2 个):
-    - carrier : Set α
-    - is_open' : IsOpen carrier
+    - carrier : 集合 α
+    - is_open' : 是开集 carrier
 -/
 structure Opens where
   /-- The underlying set of a bundled `TopologicalSpace.Opens` object. -/
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Opens α) α
+  签名: 集合状 (Opens α) α
   定义体: Opens.carrier
   coe_injective := fun ⟨_, _⟩ ⟨_, _⟩ _ => by congr
 
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Opens α)
+  签名: 偏序 (Opens α)
   定义体: fast_instance% .ofSetLike (Opens α) α
 
 Depends on / 依赖: fast_instance, ofSetLike
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Set α) (Opens α) (↑) IsOpen
+  签名: CanLift (集合 α) (Opens α) (↑) 是开集
   定义体: ⟨fun s h => ⟨⟨s, h⟩, rfl⟩⟩
 -/
 instance : CanLift (Set α) (Opens α) (↑) IsOpen :=
@@ -150,7 +150,7 @@ instance instSecondCountableOpens
 
 中文:
 实例 instSecondCountableOpens
-  签名: [SecondCountableTopology α] (U : Opens α)
+  签名: [第二可数拓扑 α] (U : Opens α)
   定义体: inferInstanceAs (SecondCountableTopology U.1)
 
 Depends on / 依赖: SecondCountableTopology
@@ -168,9 +168,9 @@ theorem «forall»
   proof: ⟨fun h _ _ => h _, fun h _ => h _ _⟩
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : Opens α -> 命题}
-  结论: (对任意 U, p U) ↔ 对任意 (U : Set α) (hU : IsOpen U), p ⟨U, hU⟩
+  结论: (对任意 U, p U) ↔ 对任意 (U : 集合 α) (hU : 是开集 U), p ⟨U, hU⟩
   证明: ⟨fun h _ _ => h _, fun h _ => h _ _⟩
 -/
 theorem «forall» {p : Opens α -> Prop} : (forall U, p U) ↔ forall (U : Set α) (hU : IsOpen U), p ⟨U, hU⟩ :=
@@ -208,7 +208,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: {U : Set α} {hU : IsOpen U}
+  条件: {U : 集合 α} {hU : 是开集 U}
   结论: ↑(⟨U, hU⟩ : Opens α) = U
   证明: rfl
 
@@ -229,7 +229,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {x : α} {U : Set α} {h : IsOpen U}
+  条件: {x : α} {U : 集合 α} {h : 是开集 U}
   结论: x in mk U h ↔ x in U
   证明: Iff.rfl
 
@@ -249,7 +249,7 @@ theorem nonempty_coeSort
 中文:
 定理 nonempty_coeSort
   条件: {U : Opens α}
-  结论: Nonempty U ↔ (U : Set α).Nonempty
+  结论: 非空 U ↔ (U : 集合 α).非空
   证明: Set.nonempty_coe_sort
 -/
 protected theorem nonempty_coeSort {U : Opens α} : Nonempty U ↔ (U : Set α).Nonempty :=
@@ -270,7 +270,7 @@ theorem nonempty_coe
 中文:
 定理 nonempty_coe
   条件: {U : Opens α}
-  结论: (U : Set α).Nonempty ↔ 存在 x, x in U
+  结论: (U : 集合 α).非空 ↔ 存在 x, x in U
   证明: Iff.rfl
 
 @[ext] -- TODO: replace with `∀ x, x ∈ U ↔ x ∈ V`?
@@ -290,7 +290,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {U V : Opens α} (h : (U : Set α) = V)
+  条件: {U V : Opens α} (h : (U : 集合 α) = V)
   结论: U = V
   证明: SetLike.coe_injective h
 
@@ -311,7 +311,7 @@ theorem coe_inj
 中文:
 定理 coe_inj
   条件: {U V : Opens α}
-  结论: (U : Set α) = V ↔ U = V
+  结论: (U : 集合 α) = V ↔ U = V
   证明: SetLike.ext'_iff.symm
 
 Depends on / 依赖: SetLike, SetLike.ext, _iff, _iff.symm
@@ -348,7 +348,7 @@ theorem isOpen
 中文:
 定理 isOpen
   条件: (U : Opens α)
-  结论: IsOpen (U : Set α)
+  结论: 是开集 (U : 集合 α)
   证明: U.is_open'
 -/
 protected theorem isOpen (U : Opens α) : IsOpen (U : Set α) :=
@@ -406,7 +406,7 @@ definition interior
 
 中文:
 定义 interior
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ⟨interior s, isOpen_interior⟩
 
 @[simp]
@@ -426,7 +426,7 @@ theorem mem_interior
 
 中文:
 定理 mem_interior
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: x in Opens.interior s ↔ x in _root_.interior s
   证明: .rfl
 -/
@@ -443,7 +443,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection ((↑) : Opens α -> Set α) Opens.interior
+  结论: GaloisConnection ((↑) : Opens α -> 集合 α) Opens.interior
   证明: fun U _ =>
   ⟨fun h => interior_maximal h U.isOpen, fun h => le_trans h interior_subset⟩
 -/
@@ -463,7 +463,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisCoinsertion (↑) (@Opens.interior α _) where
+  签名: : Galois余嵌入 (↑) (@Opens.interior α _) where
   定义体: ⟨s, interior_eq_iff_isOpen.mp le_antisymm interior_subset hs⟩
   gc := gc
   u_l_le _ := interior_subset
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Opens α)
+  签名: 完备格 (Opens α)
   定义体: fast_instance% CompleteLattice.copy (GaloisCoinsertion.liftCompleteLattice gi)
     -- le
     (fun U V => (U : Set α) subseteq V) rfl
@@ -542,7 +542,7 @@ theorem mk_inf_mk
 
 中文:
 定理 mk_inf_mk
-  条件: {U V : Set α} {hU : IsOpen U} {hV : IsOpen V}
+  条件: {U V : 集合 α} {hU : 是开集 U} {hV : 是开集 V}
   证明: rfl
 
 @[simp, norm_cast]
@@ -566,7 +566,7 @@ theorem coe_inf
 中文:
 定理 coe_inf
   条件: (s t : Opens α)
-  结论: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
   证明: rfl
 
 @[simp]
@@ -613,7 +613,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (s t : Opens α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: rfl
 
 @[simp]
@@ -657,7 +657,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Opens α) : Set α) = ∅
+  结论: ((⊥ : Opens α) : 集合 α) = ∅
   证明: rfl
 
 @[simp]
@@ -678,7 +678,7 @@ lemma mem_bot
 中文:
 引理 mem_bot
   条件: {x : α}
-  结论: x in (⊥ : Opens α) ↔ False
+  结论: x in (⊥ : Opens α) ↔ 假
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -719,7 +719,7 @@ theorem coe_eq_empty
 中文:
 定理 coe_eq_empty
   条件: {U : Opens α}
-  结论: (U : Set α) = ∅ ↔ U = ⊥
+  结论: (U : 集合 α) = ∅ ↔ U = ⊥
   证明: SetLike.coe_injective.eq_iff' rfl
 
 @[simp]
@@ -762,7 +762,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Opens α) : Set α) = Set.univ
+  结论: ((⊤ : Opens α) : 集合 α) = 集合.univ
   证明: rfl
 -/
 theorem coe_top : ((⊤ : Opens α) : Set α) = Set.univ :=
@@ -802,7 +802,7 @@ theorem coe_eq_univ
 中文:
 定理 coe_eq_univ
   条件: {U : Opens α}
-  结论: (U : Set α) = univ ↔ U = ⊤
+  结论: (U : 集合 α) = univ ↔ U = ⊤
   证明: SetLike.coe_injective.eq_iff' rfl
 
 @[simp, norm_cast]
@@ -826,8 +826,8 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: {S : Set (Opens α)}
-  结论: (↑(sSup S) : Set α) = ⋃ i in S, ↑i
+  条件: {S : 集合 (Opens α)}
+  结论: (↑(sSup S) : 集合 α) = ⋃ i in S, ↑i
   证明: rfl
 
 @[simp, norm_cast]
@@ -849,8 +849,8 @@ theorem coe_finset_sup
 
 中文:
 定理 coe_finset_sup
-  条件: (f : ι -> Opens α) (s : Finset ι)
-  结论: (↑(s.sup f) : Set α) = s.sup ((↑) ∘ f)
+  条件: (f : ι -> Opens α) (s : 有限集 ι)
+  结论: (↑(s.上确界 f) : 集合 α) = s.上确界 ((↑) ∘ f)
   证明: map_finset_sup (⟨⟨(↑), coe_sup⟩, coe_bot⟩ : SupBotHom (Opens α) (Set α)) _ _
 
 @[simp, norm_cast]
@@ -874,8 +874,8 @@ theorem coe_finset_inf
 
 中文:
 定理 coe_finset_inf
-  条件: (f : ι -> Opens α) (s : Finset ι)
-  结论: (↑(s.inf f) : Set α) = s.inf ((↑) ∘ f)
+  条件: (f : ι -> Opens α) (s : 有限集 ι)
+  结论: (↑(s.下确界 f) : 集合 α) = s.下确界 ((↑) ∘ f)
   证明: map_finset_inf (⟨⟨(↑), coe_inf⟩, coe_top⟩ : InfTopHom (Opens α) (Set α)) _ _
 
 @[simp, norm_cast]
@@ -899,7 +899,7 @@ lemma coe_disjoint
 中文:
 引理 coe_disjoint
   条件: {s t : Opens α}
-  结论: Disjoint (s : Set α) t ↔ Disjoint s t
+  结论: Disjoint (s : 集合 α) t ↔ Disjoint s t
   证明: by
   simp [disjoint_iff, ← SetLike.coe_set_eq]
 
@@ -918,7 +918,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Opens α)
+  签名: 可居 (Opens α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Opens α) := ⟨⊥⟩
@@ -932,8 +932,8 @@ instance [IsEmpty
   body: ext Subsingleton.elim _ _
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (Opens α) where
+实例 [是空
+  签名: α] : 唯一 (Opens α) where
   定义体: ext Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -952,8 +952,8 @@ instance [Nonempty
 @[simp, norm_cast]
 
 中文:
-实例 [Nonempty
-  签名: α] : Nontrivial (Opens α) where
+实例 [非空
+  签名: α] : 非平凡 (Opens α) where
   定义体: ⟨⊥, ⊤, mt coe_inj.2 empty_ne_univ⟩
 
 @[simp, norm_cast]
@@ -977,7 +977,7 @@ theorem coe_iSup
 中文:
 定理 coe_iSup
   条件: {ι} (s : ι -> Opens α)
-  结论: ((⨆ i, s i : Opens α) : Set α) = ⋃ i, s i
+  结论: ((⨆ i, s i : Opens α) : 集合 α) = ⋃ i, s i
   证明: by
   simp [iSup]
 -/
@@ -998,7 +998,7 @@ lemma coe_iInf
 
 中文:
 引理 coe_iInf
-  条件: {ι : 类型} [Finite ι] (U : ι -> TopologicalSpace.Opens α)
+  条件: {ι : 类型} [有限 ι] (U : ι -> 拓扑空间.Opens α)
   证明: by
   induction ι using Finite.induction_empty_option with
   | of_equiv e ih => rw [← e.iInf_comp, ← e.surjective.iInter_comp, ih]
@@ -1051,7 +1051,7 @@ theorem iSup_mk
 
 中文:
 定理 iSup_mk
-  条件: {ι} (s : ι -> Set α) (h : 对任意 i, IsOpen (s i))
+  条件: {ι} (s : ι -> 集合 α) (h : 对任意 i, 是开集 (s i))
   证明: iSup_def _
 
 @[simp]
@@ -1105,7 +1105,7 @@ theorem mem_sSup
 
 中文:
 定理 mem_sSup
-  条件: {Us : Set (Opens α)} {x : α}
+  条件: {Us : 集合 (Opens α)} {x : α}
   结论: x in sSup Us ↔ 存在 u in Us, x in u
   证明: by
   simp_rw [sSup_eq_iSup, mem_iSup, exists_prop]
@@ -1127,7 +1127,7 @@ instance instFrame
 
 中文:
 实例 instFrame
-  签名: : Frame (Opens α)
+  签名: : 框架 (Opens α)
   定义体: fast_instance% .ofMinimalAxioms {
   inf_sSup_le_iSup_inf a s :=
     (ext <| by simp only [coe_inf, coe_iSup, coe_sSup, Set.inter_iUnion₂]).le }
@@ -1177,7 +1177,7 @@ theorem himp_def
 中文:
 定理 himp_def
   条件: {U V : Opens α}
-  结论: U ⇨ V = Opens.interior ((U : Set α) ⇨ V)
+  结论: U ⇨ V = Opens.interior ((U : 集合 α) ⇨ V)
   证明: by
   ext x
   simp_rw [BooleanAlgebra.himp_eq, sup_eq_union, coe_interior, _root_.mem_interior,
@@ -1207,7 +1207,7 @@ theorem coe_himp
 中文:
 定理 coe_himp
   条件: {U V : Opens α}
-  结论: ↑(U ⇨ V) = interior ((U : Set α) ⇨ V)
+  结论: ↑(U ⇨ V) = interior ((U : 集合 α) ⇨ V)
   证明: by
   rw [himp_def]; rw [coe_interior]
 
@@ -1251,7 +1251,7 @@ theorem interior_compl
 中文:
 定理 interior_compl
   条件: {U : Opens α}
-  结论: Opens.interior (U : Set α)ᶜ = Uᶜ
+  结论: Opens.interior (U : 集合 α)ᶜ = Uᶜ
   证明: by
   simp [← himp_bot, himp_def]
 
@@ -1273,7 +1273,7 @@ theorem coe_compl_eq_interior_compl
 中文:
 定理 coe_compl_eq_interior_compl
   条件: {U : Opens α}
-  结论: ↑(Uᶜ) = interior (U : Set α)ᶜ
+  结论: ↑(Uᶜ) = interior (U : 集合 α)ᶜ
   证明: by
   rw [← interior_compl]; rw [coe_interior]
 
@@ -1295,7 +1295,7 @@ definition frameHom
 
 中文:
 定义 frameHom
-  签名: : FrameHom (Opens α) (Set α) where
+  签名: : 框架态射 (Opens α) (集合 α) where
   定义体: (·)
   map_inf' _ _ := rfl
   map_top' := rfl
@@ -1319,7 +1319,7 @@ theorem isOpenEmbedding'
 中文:
 定理 isOpenEmbedding'
   条件: (U : Opens α)
-  结论: IsOpenEmbedding (Subtype.val : U -> α)
+  结论: 是开嵌入 (子类型.val : U -> α)
   证明: U.isOpen.isOpenEmbedding_subtypeVal
 
 Depends on / 依赖: U.isOpen.isOpenEmbedding_subtypeVal, isOpen, isOpenEmbedding_subtypeVal
@@ -1368,7 +1368,7 @@ theorem not_nonempty_iff_eq_bot
 中文:
 定理 not_nonempty_iff_eq_bot
   条件: (U : Opens α)
-  结论: ¬Set.Nonempty (U : Set α) ↔ U = ⊥
+  结论: ¬集合.非空 (U : 集合 α) ↔ U = ⊥
   证明: by
   rw [← coe_inj]; rw [coe_bot]; rw [← Set.not_nonempty_iff_eq_empty]
 
@@ -1390,7 +1390,7 @@ theorem ne_bot_iff_nonempty
 中文:
 定理 ne_bot_iff_nonempty
   条件: (U : Opens α)
-  结论: U != ⊥ ↔ Set.Nonempty (U : Set α)
+  结论: U != ⊥ ↔ 集合.非空 (U : 集合 α)
   证明: by
   rw [Ne]; rw [← not_nonempty_iff_eq_bot]; rw [not_not]
 
@@ -1411,7 +1411,7 @@ theorem eq_bot_or_top
 
 中文:
 定理 eq_bot_or_top
-  条件: [IndiscreteTopology α] (U : Opens α)
+  条件: [Indiscrete拓扑 α] (U : Opens α)
   证明: by
   rw [← coe_eq_empty]; rw [← coe_eq_univ]; rw [← IndiscreteTopology.isOpen_iff]
   exact U.2
@@ -1432,8 +1432,8 @@ instance [Nonempty
   body: eq_bot_or_top
 
 中文:
-实例 [Nonempty
-  签名: α] [IndiscreteTopology α] : IsSimpleOrder (Opens α) where
+实例 [非空
+  签名: α] [Indiscrete拓扑 α] : 是单序 (Opens α) where
   定义体: eq_bot_or_top
 
 Depends on / 依赖: eq_bot_or_top
@@ -1450,8 +1450,8 @@ definition IsBasis
   body: IsTopologicalBasis (((↑) : _ -> Set α) '' B)
 
 中文:
-定义 IsBasis
-  签名: (B : Set (Opens α))
+定义 是基
+  签名: (B : 集合 (Opens α))
   定义体: IsTopologicalBasis (((↑) : _ -> Set α) '' B)
 
 Depends on / 依赖: IsTopologicalBasis
@@ -1480,7 +1480,7 @@ theorem isBasis_iff_nbhd
 
 中文:
 定理 isBasis_iff_nbhd
-  条件: {B : Set (Opens α)}
+  条件: {B : 集合 (Opens α)}
   证明: by
   constructor <;> intro h
   · rintro ⟨sU, hU⟩ x hx
@@ -1533,7 +1533,7 @@ theorem isBasis_iff_cover
 
 中文:
 定理 isBasis_iff_cover
-  条件: {B : Set (Opens α)}
+  条件: {B : 集合 (Opens α)}
   证明: by
   constructor
   · intro hB U
@@ -1576,8 +1576,8 @@ lemma IsBasis.exists_iSup_eq
   simp [hUs, ha, sSup_eq_iSup' Us]
 
 中文:
-引理 IsBasis.exists_iSup_eq
-  结论: {X : 类型u} [TopologicalSpace X] {ι : 类型}
+引理 是基.存在_iSup_eq
+  结论: {X : 类型u} [拓扑空间 X] {ι : 类型}
   证明: by
   obtain ⟨Us, hsub, hUs⟩ := Opens.isBasis_iff_cover.mp hU W
   choose a ha using hsub
@@ -1611,8 +1611,8 @@ lemma IsBasis.exists_iSup_eq_of_isCompact
  
 
 中文:
-引理 IsBasis.exists_iSup_eq_of_isCompact
-  结论: {X : 类型u} [TopologicalSpace X] {ι : 类型}
+引理 是基.存在_iSup_eq_of_isCompact
+  结论: {X : 类型u} [拓扑空间 X] {ι : 类型}
   证明: by
   obtain ⟨κ, a, heq⟩ := hU.exists_iSup_eq W
   obtain ⟨s, hs⟩ := hW.elim_finite_subcover _ (fun k : κ => (U (a k)).2) (by simp [heq])
@@ -1652,7 +1652,7 @@ theorem IsBasis.isCompact_open_iff_eq_finite_iUnion
   · exact hb'
 
 中文:
-定理 IsBasis.isCompact_open_iff_eq_finite_iUnion
+定理 是基.isCompact_open_iff_eq_finite_iUnion
   结论: {ι : 类型} (b : ι -> Opens α)
   证明: by
   apply isCompact_open_iff_eq_finite_iUnion_of_isTopologicalBasis fun i : ι => (b i).1
@@ -1686,8 +1686,8 @@ lemma IsBasis.exists_finite_of_isCompact
   exact le_antisymm (subset_trans (a
 
 中文:
-引理 IsBasis.exists_finite_of_isCompact
-  结论: {B : Set (Opens α)} (hB : IsBasis B) {U : Opens α}
+引理 是基.存在_finite_of_isCompact
+  结论: {B : 集合 (Opens α)} (hB : 是基 B) {U : Opens α}
   证明: by
   classical
   obtain ⟨Us', hsub, hsup⟩ := isBasis_iff_cover.mp hB U
@@ -1717,8 +1717,8 @@ lemma IsBasis.le_iff
   simp [Set.subset_def, le_generateFrom_iff_subset_isOpen]
 
 中文:
-引理 IsBasis.le_iff
-  结论: {α} {t₁ t₂ : TopologicalSpace α}
+引理 是基.le_iff
+  结论: {α} {t₁ t₂ : 拓扑空间 α}
   证明: by
   conv_lhs => rw [hUs.eq_generateFrom]
   simp [Set.subset_def, le_generateFrom_iff_subset_isOpen]
@@ -1744,7 +1744,7 @@ lemma isBasis_sigma
 
 中文:
 引理 isBasis_sigma
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, TopologicalSpace (α i)]
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 拓扑空间 (α i)]
   证明: by
   convert! TopologicalSpace.IsTopologicalBasis.sigma hB
   simp only [IsBasis, Set.image_iUnion, ← Set.image_comp]
@@ -1773,8 +1773,8 @@ lemma IsBasis.of_isInducing
 @[simp]
 
 中文:
-引理 IsBasis.of_isInducing
-  条件: {B : Set (Opens β)} (H : IsBasis B) {f : α -> β} (h : IsInducing f)
+引理 是基.of_isInducing
+  条件: {B : 集合 (Opens β)} (H : 是基 B) {f : α -> β} (h : 是Inducing f)
   证明: by
   simp only [IsBasis] at H ⊢
   convert! H.isInducing h
@@ -1878,7 +1878,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: comap (ContinuousMap.id α) = FrameHom.id _
+  结论: comap (连续映射.id α) = 框架态射.id _
   证明: FrameHom.ext fun _ => ext rfl
 
 @[gcongr]
@@ -2004,8 +2004,8 @@ Inseparable.eq
 
 中文:
 定理 comap_injective
-  条件: [T0Space β]
-  结论: Injective (comap : C(α, β) -> FrameHom (Opens β) (Opens α))
+  条件: [T0空间 β]
+  结论: 单射 (comap : C(α, β) -> 框架态射 (Opens β) (Opens α))
   证明: fun f g h =>
   ContinuousMap.ext fun a =>
 Inseparable.eq
@@ -2041,7 +2041,7 @@ right_inv _ := ext f.toEquiv.symm_preimage_preimage _
 @[simp]
 
 中文:
-定义 _root_.Homeomorph.opensCongr
+定义 _root_.同胚.opensCongr
   签名: (f : α ≃ₜ β)
   定义体: Opens.comap (f.symm : C(β, α))
   invFun := Opens.comap (f : C(α, β))
@@ -2073,7 +2073,7 @@ theorem _root_.Homeomorph.opensCongr_symm
   proof: rfl
 
 中文:
-定理 _root_.Homeomorph.opensCongr_symm
+定理 _root_.同胚.opensCongr_symm
   条件: (f : α ≃ₜ β)
   结论: f.opensCongr.symm = f.symm.opensCongr
   证明: rfl
@@ -2090,8 +2090,8 @@ instance [Finite
   body: Finite.of_injective _ SetLike.coe_injective
 
 中文:
-实例 [Finite
-  签名: α] : Finite (Opens α)
+实例 [有限
+  签名: α] : 有限 (Opens α)
   定义体: Finite.of_injective _ SetLike.coe_injective
 
 Depends on / 依赖: Finite, Finite.of_injective, SetLike, SetLike.coe_injective, coe_injective, of_injective
@@ -2135,7 +2135,7 @@ theorem toOpens_injective
 
 中文:
 定理 toOpens_injective
-  结论: Injective (toOpens : OpenNhdsOf x -> Opens α)
+  结论: 单射 (toOpens : OpenNhdsOf x -> Opens α)
 -/
 theorem toOpens_injective : Injective (toOpens : OpenNhdsOf x -> Opens α)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -2151,7 +2151,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (OpenNhdsOf x) α
+  签名: 集合状 (OpenNhdsOf x) α
   定义体: U.1
   coe_injective := SetLike.coe_injective.comp toOpens_injective
 -/
@@ -2169,7 +2169,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (OpenNhdsOf x)
+  签名: 偏序 (OpenNhdsOf x)
   定义体: fast_instance% .ofSetLike (OpenNhdsOf x) α
 
 Depends on / 依赖: OpenNhdsOf, fast_instance, ofSetLike
@@ -2186,7 +2186,7 @@ instance canLiftSet
 
 中文:
 实例 canLiftSet
-  签名: : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x in s
+  签名: : CanLift (集合 α) (OpenNhdsOf x) (↑) fun s => 是开集 s ∧ x in s
   定义体: ⟨fun s hs => ⟨⟨⟨s, hs.1⟩, hs.2⟩, rfl⟩⟩
 -/
 instance canLiftSet : CanLift (Set α) (OpenNhdsOf x) (↑) fun s => IsOpen s ∧ x in s :=
@@ -2222,7 +2222,7 @@ theorem isOpen
 中文:
 定理 isOpen
   条件: (U : OpenNhdsOf x)
-  结论: IsOpen (U : Set α)
+  结论: 是开集 (U : 集合 α)
   证明: U.is_open'
 -/
 protected theorem isOpen (U : OpenNhdsOf x) : IsOpen (U : Set α) :=
@@ -2239,7 +2239,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (OpenNhdsOf x)
+  签名: 有顶序 (OpenNhdsOf x)
   定义体: ⟨⊤, Set.mem_univ _⟩
   le_top _ := subset_univ _
 
@@ -2259,7 +2259,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OpenNhdsOf x)
+  签名: 可居 (OpenNhdsOf x)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (OpenNhdsOf x) := ⟨⊤⟩
@@ -2273,7 +2273,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (OpenNhdsOf x)
+  签名: 最小值 (OpenNhdsOf x)
   定义体: ⟨fun U V => ⟨U.1 ⊓ V.1, U.2, V.2⟩⟩
 -/
 instance : Min (OpenNhdsOf x) := ⟨fun U V => ⟨U.1 ⊓ V.1, U.2, V.2⟩⟩
@@ -2287,7 +2287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (OpenNhdsOf x)
+  签名: 最大值 (OpenNhdsOf x)
   定义体: ⟨fun U V => ⟨U.1 ⊔ V.1, Or.inl U.2⟩⟩
 
 Depends on / 依赖: Or.inl
@@ -2303,8 +2303,8 @@ instance [Subsingleton
   body: SetLike.ext' Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
 
 中文:
-实例 [Subsingleton
-  签名: α] : Unique (OpenNhdsOf x) where
+实例 [子单例
+  签名: α] : 唯一 (OpenNhdsOf x) where
   定义体: SetLike.ext' Subsingleton.eq_univ_of_nonempty ⟨x, U.mem⟩
 
 Depends on / 依赖: SetLike, SetLike.ext, Subsingleton, Subsingleton.eq_univ_of_nonempty, U.mem, eq_univ_of_nonempty
@@ -2323,7 +2323,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice (OpenNhdsOf x)
+  签名: Distrib格 (OpenNhdsOf x)
   定义体: fast_instance%
   toOpens_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -2343,7 +2343,7 @@ theorem basis_nhds
 
 中文:
 定理 basis_nhds
-  结论: (𝓝 x).HasBasis (fun _ : OpenNhdsOf x => True) (↑)
+  结论: (𝓝 x).有基 (fun _ : OpenNhdsOf x => 真) (↑)
   证明: (nhds_basis_opens x).to_hasBasis (fun U hU => ⟨⟨⟨U, hU.2⟩, hU.1⟩, trivial, Subset.rfl⟩) fun U _ =>
     ⟨U, ⟨⟨U.mem, U.isOpen⟩, Subset.rfl⟩⟩
 

@@ -48,8 +48,8 @@ lemma Submodule.iUnion_ssubset_of_forall_ne_top_of_card_lt
     replace h₂ : s.card + 1 < ENat.
 
 中文:
-引理 Submodule.iUnion_ssubset_of_forall_ne_top_of_card_lt
-  结论: (s : Finset ι) (p : ι -> Submodule K M)
+引理 子模.iUnion_ssubset_of_对任意_ne_top_of_card_lt
+  结论: (s : 有限集 ι) (p : ι -> 子模 K M)
   证明: by
   -- Following https://mathoverflow.net/a/14241
   classical
@@ -130,8 +130,8 @@ lemma Submodule.exists_forall_notMem_of_forall_ne_top
   simpa using iUnion_ssubset_of_forall_ne_top_of_card_lt Finset.univ p h (by simp)
 
 中文:
-引理 Submodule.exists_forall_notMem_of_forall_ne_top
-  条件: (p : ι -> Submodule K M) (h : 对任意 i, p i != ⊤)
+引理 子模.存在_对任意_notMem_of_对任意_ne_top
+  条件: (p : ι -> 子模 K M) (h : 对任意 i, p i != ⊤)
   证明: by
   let _i : Fintype ι := Fintype.ofFinite ι
   suffices ⋃ i, (p i : Set M) ⊂ univ by simpa [ssubset_univ_iff, iUnion_eq_univ_iff] using this
@@ -157,7 +157,7 @@ lemma Module.Dual.exists_forall_ne_zero_of_forall_exists
   exact ⟨x, by simpa [p] using hx⟩
 
 中文:
-引理 Module.Dual.exists_forall_ne_zero_of_forall_exists
+引理 模.对偶.存在_对任意_ne_zero_of_对任意_存在
   证明: by
   let p i := LinearMap.ker (f i)
   replace h i : p i != ⊤ := by specialize h i; aesop
@@ -187,8 +187,8 @@ lemma Module.Dual.exists_forall_mem_ne_zero_of_forall_exists
   exact ⟨x, hxp, hx₀⟩
 
 中文:
-引理 Module.Dual.exists_forall_mem_ne_zero_of_forall_exists
-  结论: (p : Submodule K M)
+引理 模.对偶.存在_对任意_mem_ne_zero_of_对任意_存在
+  结论: (p : 子模 K M)
   证明: by
   let f' (i : ι) : Dual K p := (f i).domRestrict p
   replace h (i : ι) : exists x : p, f' i x != 0 := by obtain ⟨x, hxp, hx₀⟩ := h i; exact ⟨⟨x, hxp⟩, hx₀⟩
@@ -218,7 +218,7 @@ lemma Module.exists_dual_forall_apply_ne_zero
   exact hv i contra
 
 中文:
-引理 Module.exists_dual_forall_apply_ne_zero
+引理 模.存在_dual_对任意_apply_ne_zero
   条件: (v : ι -> M) (hv : 对任意 i, v i != 0)
   证明: by
   refine Dual.exists_forall_ne_zero_of_forall_exists (fun i => Dual.eval K M (v i)) fun i => ?_

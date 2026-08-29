@@ -48,7 +48,7 @@ instance seminormedGroup
 
 中文:
 实例 seminormedGroup
-  签名: : SeminormedGroup s
+  签名: : 半赋范群 s
   定义体: fast_instance% SeminormedGroup.induced _ _ s.subtype
 
 Depends on / 依赖: SeminormedGroup, SeminormedGroup.induced, fast_instance, induced, s.subtype, subtype
@@ -97,7 +97,7 @@ theorem norm_coe
 
 中文:
 定理 norm_coe
-  条件: {s : Subgroup E} (x : s)
+  条件: {s : 子群 E} (x : s)
   结论: ‖(x : E)‖ = ‖x‖
   证明: rfl
 -/
@@ -119,7 +119,7 @@ instance seminormedCommGroup
 
 中文:
 实例 seminormedCommGroup
-  签名: [SeminormedCommGroup E] {s : Subgroup E}
+  签名: [SeminormedComm群 E] {s : 子群 E}
   定义体: fast_instance% SeminormedCommGroup.induced _ _ s.subtype
 
 @[to_additive]
@@ -142,7 +142,7 @@ instance normedGroup
 
 中文:
 实例 normedGroup
-  签名: [NormedGroup E] {s : Subgroup E}
+  签名: [赋范群 E] {s : 子群 E}
   定义体: fast_instance% NormedGroup.induced _ _ s.subtype Subtype.coe_injective
 
 @[to_additive]
@@ -163,7 +163,7 @@ instance normedCommGroup
 
 中文:
 实例 normedCommGroup
-  签名: [NormedCommGroup E] {s : Subgroup E}
+  签名: [NormedComm群 E] {s : 子群 E}
   定义体: fast_instance% NormedCommGroup.induced _ _ s.subtype Subtype.coe_injective
 
 Depends on / 依赖: NormedCommGroup, NormedCommGroup.induced, Subtype, Subtype.coe_injective, coe_injective, fast_instance, induced, s.subtype, subtype

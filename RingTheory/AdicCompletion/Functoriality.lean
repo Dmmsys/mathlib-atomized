@@ -176,7 +176,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map I (LinearMap.id (M := M)) = LinearMap.id
+  结论: map I (线性映射.id (M := M)) = 线性映射.id
   证明: rfl
 
 Depends on / 依赖: LinearMap, LinearMap.id
@@ -639,7 +639,7 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
+定义 求和
   签名: [DecidableEq ι]
   定义体: toModule (AdicCompletion I R) ι (AdicCompletion I (⨁ j, M j))
     (fun j => map I (lof R ι M j))
@@ -807,7 +807,7 @@ theorem sumInv_comp_sum
 
 中文:
 定理 sumInv_comp_sum
-  结论: sumInv I M ∘ₗ sum I M = LinearMap.id
+  结论: sumInv I M ∘ₗ 求和 I M = 线性映射.id
   证明: by
   ext j x : 2
   apply DirectSum.ext_component (AdicCompletion I R) (fun i => ?_)
@@ -844,7 +844,7 @@ theorem sum_comp_sumInv
 
 中文:
 定理 sum_comp_sumInv
-  结论: sum I M ∘ₗ sumInv I M = LinearMap.id
+  结论: 求和 I M ∘ₗ sumInv I M = 线性映射.id
   证明: by
   ext f n
   simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq, mk_apply_coe,
@@ -1034,7 +1034,7 @@ theorem piEquivFin_apply
 
 中文:
 定理 piEquivFin_apply
-  条件: (n : 自然数) (x : AdicCompletion I (Fin n -> R))
+  条件: (n : 自然数) (x : AdicCompletion I (有限集 n -> R))
   证明: by
   simp only [piEquivFin, piEquivOfFintype_apply]
 
@@ -1070,7 +1070,7 @@ theorem exists_smodEq_pow_add_one_smul
   |
 
 中文:
-定理 exists_smodEq_pow_add_one_smul
+定理 存在_smodEq_pow_add_one_smul
   结论: {f : M ->ₗ[R] N}
   证明: by
   induction hy using smul_induction_on' with
@@ -1117,7 +1117,7 @@ theorem exists_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top
   · simpa [SModEq.sub_mem, sub_sub_eq_add_sub, add_comm] using hz'
 
 中文:
-定理 exists_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top
+定理 存在_smodEq_pow_smul_top_and_smodEq_pow_add_one_smul_top
   结论: {f : M ->ₗ[R] N}
   证明: by
   obtain ⟨z, hz, hz'⟩ :=
@@ -1155,7 +1155,7 @@ theorem exists_smodEq_pow_smul_top_and_mkQ_eq
     exists_smodEq_pow_smul_top
 
 中文:
-定理 exists_smodEq_pow_smul_top_and_mkQ_eq
+定理 存在_smodEq_pow_smul_top_and_mkQ_eq
   结论: {f : M ->ₗ[R] N}
   证明: by
   obtain ⟨y0, hy0⟩ := mkQ_surjective _ y'
@@ -1251,7 +1251,7 @@ theorem surjective_of_mkQ_comp_surjective
 
 中文:
 定理 surjective_of_mkQ_comp_surjective
-  结论: [IsPrecomplete I M] [IsHausdorff I N]
+  结论: [是Precomplete I M] [是豪斯多夫 I N]
   证明: by
   intro y
   obtain ⟨x', hx'⟩ := AdicCompletion.map_surjective_of_mkQ_comp_surjective h (of I N y)
@@ -1288,7 +1288,7 @@ theorem surjective_of_mk_map_comp_surjective
 
 中文:
 定理 surjective_of_mk_map_comp_surjective
-  结论: [IsPrecomplete I R] [haus : IsHausdorff (I.map f) S]
+  结论: [是Precomplete I R] [haus : 是豪斯多夫 (I.map f) S]
   证明: by
   let _ := f.toAlgebra
   let fₗ := (Algebra.ofId R S).toLinearMap

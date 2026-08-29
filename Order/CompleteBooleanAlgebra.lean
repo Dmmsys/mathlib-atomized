@@ -68,10 +68,10 @@ structure Order.Frame.MinimalAxioms
     - inf_sSup_le_iSup_inf((a : α) (s : Set α)) : a ⊓ sSup s <= ⨆ b in s, a ⊓ b
 
 中文:
-结构 Order.Frame.MinimalAxioms
-  参数: (α : 类型u) [CompleteLattice α]
+结构 Order.框架.MinimalAxioms
+  参数: (α : 类型u) [完备格 α]
   公理与运算 (1 个):
-    - inf_sSup_le_iSup_inf((a : α) (s : Set α)) : a ⊓ sSup s <= ⨆ b in s, a ⊓ b
+    - inf_sSup_le_iSup_inf((a : α) (s : 集合 α)) : a ⊓ sSup s <= ⨆ b in s, a ⊓ b
 -/
 structure Order.Frame.MinimalAxioms (α : Type u) [CompleteLattice α] where
   inf_sSup_le_iSup_inf (a : α) (s : Set α) : a ⊓ sSup s <= ⨆ b in s, a ⊓ b
@@ -92,10 +92,10 @@ structure Order.Coframe.MinimalAxioms
     - iInf_sup_le_sup_sInf((a : α) (s : Set α)) : ⨅ b in s, a ⊔ b <= a ⊔ sInf s
 
 中文:
-结构 Order.Coframe.MinimalAxioms
-  参数: (α : 类型u) [CompleteLattice α]
+结构 Order.余frame.MinimalAxioms
+  参数: (α : 类型u) [完备格 α]
   公理与运算 (1 个):
-    - iInf_sup_le_sup_sInf((a : α) (s : Set α)) : ⨅ b in s, a ⊔ b <= a ⊔ sInf s
+    - iInf_sup_le_sup_sInf((a : α) (s : 集合 α)) : ⨅ b in s, a ⊔ b <= a ⊔ sInf s
 -/
 structure Order.Coframe.MinimalAxioms (α : Type u) [CompleteLattice α] where
   iInf_sup_le_sup_sInf (a : α) (s : Set α) : ⨅ b in s, a ⊔ b <= a ⊔ sInf s
@@ -110,9 +110,9 @@ class Order.Frame
   (no additional axioms)
 
 中文:
-类 Order.Frame
+类 Order.框架
   参数: (α : 类型)
-  继承: CompleteLattice α, HeytingAlgebra α
+  继承: 完备格 α, Heyting代数 α
   (无附加公理)
 -/
 class Order.Frame (α : Type*) extends CompleteLattice α, HeytingAlgebra α where
@@ -131,9 +131,9 @@ class Order.Coframe
   (no additional axioms)
 
 中文:
-类 Order.Coframe
+类 Order.余frame
   参数: (α : 类型)
-  继承: CompleteLattice α, CoheytingAlgebra α
+  继承: 完备格 α, 余heyting代数 α
   (无附加公理)
 -/
 class Order.Coframe (α : Type*) extends CompleteLattice α, CoheytingAlgebra α where
@@ -153,7 +153,7 @@ theorem inf_sSup_eq
 
 中文:
 定理 inf_sSup_eq
-  条件: [Frame α] {s : Set α} {a : α}
+  条件: [框架 α] {s : 集合 α} {a : α}
   结论: a ⊓ sSup s = ⨆ b in s, a ⊓ b
   证明: gc_inf_himp.l_sSup
 
@@ -171,8 +171,8 @@ structure CompleteDistribLattice.MinimalAxioms
   (no additional axioms)
 
 中文:
-结构 CompleteDistribLattice.MinimalAxioms
-  参数: (α : 类型u) [CompleteLattice α]
+结构 完备分配格.MinimalAxioms
+  参数: (α : 类型u) [完备格 α]
   (无附加公理)
 -/
 structure CompleteDistribLattice.MinimalAxioms (α : Type u) [CompleteLattice α] extends
@@ -194,9 +194,9 @@ class CompleteDistribLattice
   (no additional axioms)
 
 中文:
-类 CompleteDistribLattice
+类 完备分配格
   参数: (α : 类型)
-  继承: Frame α, Coframe α, BiheytingAlgebra α
+  继承: 框架 α, 余frame α, Biheyting代数 α
   (无附加公理)
 -/
 class CompleteDistribLattice (α : Type*) extends Frame α, Coframe α, BiheytingAlgebra α
@@ -213,8 +213,8 @@ structure CompletelyDistribLattice.MinimalAxioms
     - iInf_iSup_eq({ι : Type u} {κ : ι -> Type u} (f : forall a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : forall a, κ a, ⨅ a, f a (g a)
 
 中文:
-结构 CompletelyDistribLattice.MinimalAxioms
-  参数: (α : 类型u) [CompleteLattice α]
+结构 余mpletelyDistrib格.MinimalAxioms
+  参数: (α : 类型u) [完备格 α]
   公理与运算 (1 个):
     - iInf_iSup_eq({ι : 类型u} {κ : ι -> 类型u} (f : 对任意 a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : 对任意 a, κ a, ⨅ a, f a (g a)
 -/
@@ -233,9 +233,9 @@ class CompletelyDistribLattice
     - iInf_iSup_eq({ι : Type u} {κ : ι -> Type u} (f : forall a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : forall a, κ a, ⨅ a, f a (g a)
 
 中文:
-类 CompletelyDistribLattice
+类 余mpletelyDistrib格
   参数: (α : 类型u)
-  继承: CompleteLattice α, BiheytingAlgebra α
+  继承: 完备格 α, Biheyting代数 α
   公理与运算 (1 个):
     - iInf_iSup_eq({ι : 类型u} {κ : ι -> 类型u} (f : 对任意 a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : 对任意 a, κ a, ⨅ a, f a (g a)
 -/
@@ -253,7 +253,7 @@ theorem le_iInf_iSup
 
 中文:
 定理 le_iInf_iSup
-  条件: [CompleteLattice α] {f : 对任意 a, κ a -> α}
+  条件: [完备格 α] {f : 对任意 a, κ a -> α}
   证明: iSup_le fun _ => le_iInf fun a => le_trans (iInf_le _ a) (le_iSup _ _)
 
 Depends on / 依赖: iInf_le, iSup_le, le_iInf, le_iSup, le_trans
@@ -272,7 +272,7 @@ lemma iSup_iInf_le
 
 中文:
 引理 iSup_iInf_le
-  条件: [CompleteLattice α] {f : 对任意 a, κ a -> α}
+  条件: [完备格 α] {f : 对任意 a, κ a -> α}
   证明: le_iInf_iSup (α := αᵒᵈ)
 
 Depends on / 依赖: le_iInf_iSup
@@ -418,7 +418,7 @@ theorem of
 
 中文:
 定理 of
-  条件: [Frame α]
+  条件: [框架 α]
   结论: MinimalAxioms α where
   证明: ‹Frame α›
   inf_sSup_le_iSup_inf a s := _root_.inf_sSup_eq.le
@@ -444,7 +444,7 @@ abbreviation ofMinimalAxioms
 
 中文:
 缩写 ofMinimalAxioms
-  签名: [CompleteLattice α] (minAx : MinimalAxioms α)
+  签名: [完备格 α] (minAx : MinimalAxioms α)
   定义体: sSup {c | c ⊓ a <= ⊥}
   himp a b := sSup {c | c ⊓ a <= b}
   le_himp_iff _ b c :=
@@ -481,7 +481,7 @@ abbreviation ofMinimalAxioms
 
 中文:
 缩写 ofMinimalAxioms
-  签名: [CompleteLattice α] (minAx : MinimalAxioms α)
+  签名: [完备格 α] (minAx : MinimalAxioms α)
   定义体: sInf {c | ⊤ <= a ⊔ c}
   sdiff a b := sInf {c | a <= b ⊔ c}
   sdiff_le_iff a b _ :=
@@ -512,7 +512,7 @@ theorem of
 
 中文:
 定理 of
-  条件: [CompleteDistribLattice α]
+  条件: [完备分配格 α]
   结论: MinimalAxioms α where
   证明: ‹CompleteDistribLattice α›
   inf_sSup_le_iSup_inf a s := inf_sSup_eq.le
@@ -541,7 +541,7 @@ abbreviation ofMinimalAxioms
 
 中文:
 缩写 ofMinimalAxioms
-  签名: [CompleteLattice α] (minAx : MinimalAxioms α)
+  签名: [完备格 α] (minAx : MinimalAxioms α)
   定义体: Frame.ofMinimalAxioms minAx.toFrame
   __ := Coframe.ofMinimalAxioms minAx.toCoframe
 
@@ -573,7 +573,7 @@ refine le_trans ?_ le_iSup _ fun a => Classical.choose (g ⟨_,
 
 中文:
 引理 iInf_iSup_eq'
-  条件: [CompleteLattice α] (minAx : MinimalAxioms α) (f : 对任意 a, κ a -> α)
+  条件: [完备格 α] (minAx : MinimalAxioms α) (f : 对任意 a, κ a -> α)
   证明: by
   refine le_antisymm ?_ le_iInf_iSup
   calc
@@ -615,7 +615,7 @@ lemma iSup_iInf_eq
 
 中文:
 引理 iSup_iInf_eq
-  条件: [CompleteLattice α] (minAx : MinimalAxioms α) (f : 对任意 i, κ i -> α)
+  条件: [完备格 α] (minAx : MinimalAxioms α) (f : 对任意 i, κ i -> α)
   证明: by
   refine le_antisymm iSup_iInf_le ?_
   rw [minAx.iInf_iSup_eq']
@@ -659,7 +659,7 @@ theorem toCompleteDistribLattice
 
 中文:
 定理 toCompleteDistribLattice
-  条件: [CompleteLattice α] (minAx : MinimalAxioms α)
+  条件: [完备格 α] (minAx : MinimalAxioms α)
   证明: by
     calc
       _ = ⨅ i : ULift.{u} Bool, ⨆ j : match i with | .up true => PUnit.{u + 1} | .up false => s,
@@ -703,7 +703,7 @@ theorem of
 
 中文:
 定理 of
-  条件: [CompletelyDistribLattice α]
+  条件: [余mpletelyDistrib格 α]
   结论: MinimalAxioms α
   证明: { ‹CompletelyDistribLattice α› with }
 
@@ -725,7 +725,7 @@ abbreviation ofMinimalAxioms
 
 中文:
 缩写 ofMinimalAxioms
-  签名: [CompleteLattice α] (minAx : MinimalAxioms α)
+  签名: [完备格 α] (minAx : MinimalAxioms α)
   定义体: fast_instance%
   { CompleteDistribLattice.ofMinimalAxioms minAx.toCompleteDistribLattice, minAx with }
 
@@ -748,7 +748,7 @@ theorem iInf_iSup_eq
 
 中文:
 定理 iInf_iSup_eq
-  条件: [CompletelyDistribLattice α] {f : 对任意 a, κ a -> α}
+  条件: [余mpletelyDistrib格 α] {f : 对任意 a, κ a -> α}
   证明: CompletelyDistribLattice.MinimalAxioms.of.iInf_iSup_eq' _
 
 Depends on / 依赖: CompletelyDistribLattice, CompletelyDistribLattice.MinimalAxioms.of.iInf_iSup_eq, MinimalAxioms, iInf_iSup_eq
@@ -773,8 +773,8 @@ theorem biSup_iInter_of_pairwise_disjoint
   · exact le_iSup₂_of_le (I j) (fun k => (H k) ▸ (hI k)) (iInf_le _ 
 
 中文:
-定理 biSup_iInter_of_pairwise_disjoint
-  结论: [CompletelyDistribLattice α] {ι κ : 类型}
+定理 biSup_i整数er_of_pairwise_disjoint
+  结论: [余mpletelyDistrib格 α] {ι κ : 类型}
   证明: by
   rcases hκ with ⟨j⟩
   simp_rw [iInf_iSup_eq, mem_iInter]
@@ -852,7 +852,7 @@ instance OrderDual.instCoframe
 
 中文:
 实例 OrderDual.instCoframe
-  签名: : Coframe αᵒᵈ where
+  签名: : 余frame αᵒᵈ where
   定义体: instCompleteLattice
   __ := instCoheytingAlgebra
 
@@ -1092,7 +1092,7 @@ theorem biSup_inf_biSup
 
 中文:
 定理 biSup_inf_biSup
-  条件: {ι ι' : 类型} {f : ι -> α} {g : ι' -> α} {s : Set ι} {t : Set ι'}
+  条件: {ι ι' : 类型} {f : ι -> α} {g : ι' -> α} {s : 集合 ι} {t : 集合 ι'}
   证明: by
   simp only [iSup_subtype', iSup_inf_iSup]
   exact (Equiv.surjective _).iSup_congr (Equiv.Set.prod s t).symm fun x => rfl
@@ -1297,7 +1297,7 @@ theorem sSup_disjoint_iff
 
 中文:
 定理 sSup_disjoint_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: Disjoint (sSup s) a ↔ 对任意 b in s, Disjoint b a
   证明: by
   simp only [disjoint_iff, sSup_inf_eq, iSup_eq_bot]
@@ -1324,7 +1324,7 @@ theorem disjoint_sSup_iff
 
 中文:
 定理 disjoint_sSup_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: Disjoint a (sSup s) ↔ 对任意 b in s, Disjoint a b
   证明: by
   simpa only [disjoint_comm] using @sSup_disjoint_iff
@@ -1354,7 +1354,7 @@ theorem iSup_inf_of_monotone
 
 中文:
 定理 iSup_inf_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι] {f g : ι -> α}
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι] {f g : ι -> α}
   证明: by
   refine (le_iSup_inf_iSup f g).antisymm ?_
   rw [iSup_inf_iSup]
@@ -1385,7 +1385,7 @@ theorem iSup_inf_of_antitone
 
 中文:
 定理 iSup_inf_of_antitone
-  结论: {ι : 类型} [Preorder ι] [IsCodirectedOrder ι] {f g : ι -> α}
+  结论: {ι : 类型} [预序 ι] [IsCodirectedOrder ι] {f g : ι -> α}
   证明: @iSup_inf_of_monotone α _ ιᵒᵈ _ _ f g hf.dual_left hg.dual_left
 
 Depends on / 依赖: dual_left, hf.dual_left, hg.dual_left, iSup_inf_of_monotone
@@ -1463,8 +1463,8 @@ instance Prod.instFrame
   __ := instHeytingAlgebra
 
 中文:
-实例 Prod.instFrame
-  签名: [Frame β]
+实例 积类型.instFrame
+  签名: [框架 β]
   定义体: instCompleteLattice
   __ := instHeytingAlgebra
 
@@ -1484,8 +1484,8 @@ instance Pi.instFrame
   __ := instHeytingAlgebra
 
 中文:
-实例 Pi.instFrame
-  签名: {ι : 类型} {π : ι -> 类型} [对任意 i, Frame (π i)]
+实例 依赖函数类型.instFrame
+  签名: {ι : 类型} {π : ι -> 类型} [对任意 i, 框架 (π i)]
   定义体: instCompleteLattice
   __ := instHeytingAlgebra
 
@@ -1513,7 +1513,7 @@ instance OrderDual.instFrame
 
 中文:
 实例 OrderDual.instFrame
-  签名: : Frame αᵒᵈ where
+  签名: : 框架 αᵒᵈ where
   定义体: instCompleteLattice
   __ := instHeytingAlgebra
 
@@ -1593,8 +1593,8 @@ instance Prod.instCoframe
 @[to_dual existing]
 
 中文:
-实例 Prod.instCoframe
-  签名: [Coframe β]
+实例 积类型.instCoframe
+  签名: [余frame β]
   定义体: instCompleteLattice
   __ := instCoheytingAlgebra
 
@@ -1617,8 +1617,8 @@ instance Pi.instCoframe
   __ := instCoheytingAlgebra
 
 中文:
-实例 Pi.instCoframe
-  签名: {ι : 类型} {π : ι -> 类型} [对任意 i, Coframe (π i)]
+实例 依赖函数类型.instCoframe
+  签名: {ι : 类型} {π : ι -> 类型} [对任意 i, 余frame (π i)]
   定义体: instCompleteLattice
   __ := instCoheytingAlgebra
 
@@ -1643,7 +1643,7 @@ instance OrderDual.instCompleteDistribLattice
 
 中文:
 实例 OrderDual.instCompleteDistribLattice
-  签名: [CompleteDistribLattice α]
+  签名: [完备分配格 α]
   定义体: instFrame
   __ := instCoframe
 
@@ -1664,8 +1664,8 @@ instance Prod.instCompleteDistribLattice
   __ := instCoframe
 
 中文:
-实例 Prod.instCompleteDistribLattice
-  签名: [CompleteDistribLattice α] [CompleteDistribLattice β]
+实例 积类型.instCompleteDistribLattice
+  签名: [完备分配格 α] [完备分配格 β]
   定义体: instFrame
   __ := instCoframe
 
@@ -1686,7 +1686,7 @@ instance Pi.instCompleteDistribLattice
   __ := instCoframe
 
 中文:
-实例 Pi.instCompleteDistribLattice
+实例 依赖函数类型.instCompleteDistribLattice
   签名: {ι : 类型} {π : ι -> 类型}
   定义体: instFrame
   __ := instCoframe
@@ -1714,7 +1714,7 @@ instance OrderDual.instCompletelyDistribLattice
 
 中文:
 实例 OrderDual.instCompletelyDistribLattice
-  签名: [CompletelyDistribLattice α]
+  签名: [余mpletelyDistrib格 α]
   定义体: instFrame
   __ := instCoframe
   iInf_iSup_eq _ := iSup_iInf_eq (α := α)
@@ -1738,8 +1738,8 @@ instance Prod.instCompletelyDistribLattice
   iInf_iSup_eq f := by ext <;> simp [fst_iSup, fst_iInf, snd_iSup, snd_iInf, iInf_iSup_eq]
 
 中文:
-实例 Prod.instCompletelyDistribLattice
-  签名: [CompletelyDistribLattice α]
+实例 积类型.instCompletelyDistribLattice
+  签名: [余mpletelyDistrib格 α]
   定义体: instFrame
   __ := instCoframe
   iInf_iSup_eq f := by ext <;> simp [fst_iSup, fst_iInf, snd_iSup, snd_iInf, iInf_iSup_eq]
@@ -1763,7 +1763,7 @@ instance Pi.instCompletelyDistribLattice
   iInf_iSup_eq f := by ext i; simp only [iInf_apply, iSup_apply, iInf_iSup_eq]
 
 中文:
-实例 Pi.instCompletelyDistribLattice
+实例 依赖函数类型.instCompletelyDistribLattice
   签名: {ι : 类型} {π : ι -> 类型}
   定义体: instFrame
   __ := instCoframe
@@ -1790,9 +1790,9 @@ class CompleteBooleanAlgebra
   (no additional axioms)
 
 中文:
-类 CompleteBooleanAlgebra
+类 完备布尔代数
   参数: (α)
-  继承: CompleteLattice α, BooleanAlgebra α
+  继承: 完备格 α, 布尔代数 α
   (无附加公理)
 -/
 class CompleteBooleanAlgebra (α) extends CompleteLattice α, BooleanAlgebra α
@@ -1813,8 +1813,8 @@ instance Prod.instCompleteBooleanAlgebra
   __ := instCompleteDistribLattice
 
 中文:
-实例 Prod.instCompleteBooleanAlgebra
-  签名: [Complete布尔eanAlgebra α] [Complete布尔eanAlgebra β]
+实例 积类型.instComplete布尔eanAlgebra
+  签名: [完备布尔代数 α] [完备布尔代数 β]
   定义体: instBooleanAlgebra
   __ := instCompleteDistribLattice
 
@@ -1835,7 +1835,7 @@ instance Pi.instCompleteBooleanAlgebra
   __ := instCompleteDistribLattice
 
 中文:
-实例 Pi.instCompleteBooleanAlgebra
+实例 依赖函数类型.instComplete布尔eanAlgebra
   签名: {ι : 类型} {π : ι -> 类型}
   定义体: instBooleanAlgebra
   __ := instCompleteDistribLattice
@@ -1857,8 +1857,8 @@ instance OrderDual.instCompleteBooleanAlgebra
   __ := instCompleteDistribLattice
 
 中文:
-实例 OrderDual.instCompleteBooleanAlgebra
-  签名: [Complete布尔eanAlgebra α]
+实例 OrderDual.instComplete布尔eanAlgebra
+  签名: [完备布尔代数 α]
   定义体: instBooleanAlgebra
   __ := instCompleteDistribLattice
 
@@ -1962,7 +1962,7 @@ theorem compl_sInf'
 
 中文:
 定理 compl_sInf'
-  结论: (sInf s)ᶜ = sSup (Compl.compl '' s)
+  结论: (sInf s)ᶜ = sSup (补集.compl '' s)
   证明: compl_sInf.trans sSup_image.symm
 
 Depends on / 依赖: compl_sInf, compl_sInf.trans, sSup_image, sSup_image.symm
@@ -1980,7 +1980,7 @@ theorem compl_sSup'
 
 中文:
 定理 compl_sSup'
-  结论: (sSup s)ᶜ = sInf (Compl.compl '' s)
+  结论: (sSup s)ᶜ = sInf (补集.compl '' s)
   证明: compl_sSup.trans sInf_image.symm
 
 Depends on / 依赖: compl_sSup, compl_sSup.trans, sInf_image, sInf_image.symm
@@ -2032,7 +2032,7 @@ theorem iSup_symmDiff_le
 
 中文:
 定理 iSup_symmDiff_le
-  条件: [Nonempty ι] {a : α}
+  条件: [非空 ι] {a : α}
   结论: (⨆ i, f i) ∆ a <= ⨆ i, f i ∆ a
   证明: by
   simpa [iSup_const] using iSup_symmDiff_iSup_le (g := fun _ : ι => a)
@@ -2054,7 +2054,7 @@ theorem symmDiff_iSup_le
 
 中文:
 定理 symmDiff_iSup_le
-  条件: [Nonempty ι] {a : α}
+  条件: [非空 ι] {a : α}
   结论: a ∆ (⨆ i, f i) <= ⨆ i, a ∆ f i
   证明: by
   simpa [symmDiff_comm] using iSup_symmDiff_le (a := a)
@@ -2078,7 +2078,7 @@ theorem sSup_symmDiff_le
 
 中文:
 定理 sSup_symmDiff_le
-  条件: (hs : s.Nonempty) {a : α}
+  条件: (hs : s.非空) {a : α}
   结论: sSup s ∆ a <= sSup ((· ∆ a) '' s)
   证明: by
   rw [sSup_image']; rw [sSup_eq_iSup']
@@ -2104,7 +2104,7 @@ theorem symmDiff_sSup_le
 
 中文:
 定理 symmDiff_sSup_le
-  条件: (hs : s.Nonempty) {a : α}
+  条件: (hs : s.非空) {a : α}
   结论: a ∆ sSup s <= sSup ((a ∆ ·) '' s)
   证明: by
   simpa [symmDiff_comm] using sSup_symmDiff_le (a := a) hs
@@ -2128,7 +2128,7 @@ theorem sSup_symmDiff_sSup_le
 
 中文:
 定理 sSup_symmDiff_sSup_le
-  条件: {s t : Set α} (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: {s t : 集合 α} (hs : s.非空) (ht : t.非空)
   证明: by
   rw [sSup_image2]
   calc
@@ -2180,9 +2180,9 @@ class CompleteAtomicBooleanAlgebra
     - iInf_iSup_eq({ι : Type u} {κ : ι -> Type u} (f : forall a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : forall a, κ a, ⨅ a, f a (g a)
 
 中文:
-类 CompleteAtomicBooleanAlgebra
+类 余mpleteAtomic布尔ean代数
   参数: (α : 类型u)
-  继承: CompleteBooleanAlgebra α
+  继承: 完备布尔代数 α
   公理与运算 (1 个):
     - iInf_iSup_eq({ι : 类型u} {κ : ι -> 类型u} (f : 对任意 a, κ a -> α)) : (⨅ a, ⨆ b, f a b) = ⨆ g : 对任意 a, κ a, ⨅ a, f a (g a)
 -/
@@ -2206,8 +2206,8 @@ instance Prod.instCompleteAtomicBooleanAlgebra
   __ := instCompletelyDistribLattice
 
 中文:
-实例 Prod.instCompleteAtomicBooleanAlgebra
-  签名: [CompleteAtomic布尔eanAlgebra α]
+实例 积类型.instCompleteAtomic布尔eanAlgebra
+  签名: [余mpleteAtomic布尔ean代数 α]
   定义体: instBooleanAlgebra
   __ := instCompletelyDistribLattice
 
@@ -2228,7 +2228,7 @@ instance Pi.instCompleteAtomicBooleanAlgebra
   iInf_iSup_eq f := by ext; rw [iInf_iSup_eq]
 
 中文:
-实例 Pi.instCompleteAtomicBooleanAlgebra
+实例 依赖函数类型.instCompleteAtomic布尔eanAlgebra
   签名: {ι : 类型} {π : ι -> 类型}
   定义体: Pi.instCompleteBooleanAlgebra
   iInf_iSup_eq f := by ext; rw [iInf_iSup_eq]
@@ -2250,8 +2250,8 @@ instance OrderDual.instCompleteAtomicBooleanAlgebra
   __ := instCompletelyDistribLattice
 
 中文:
-实例 OrderDual.instCompleteAtomicBooleanAlgebra
-  签名: [CompleteAtomic布尔eanAlgebra α]
+实例 OrderDual.instCompleteAtomic布尔eanAlgebra
+  签名: [余mpleteAtomic布尔ean代数 α]
   定义体: instCompleteBooleanAlgebra
   __ := instCompletelyDistribLattice
 
@@ -2273,8 +2273,8 @@ instance Prop.instCompleteAtomicBooleanAlgebra
   iInf_iSup_eq f := by simp [Classical.skolem]
 
 中文:
-实例 Prop.instCompleteAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra 命题 where
+实例 命题.instCompleteAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 命题 where
   定义体: Prop.instCompleteLattice
   __ := Prop.instBooleanAlgebra
   iInf_iSup_eq f := by simp [Classical.skolem]
@@ -2295,8 +2295,8 @@ instance Prop.instCompleteBooleanAlgebra
   body: inferInstance
 
 中文:
-实例 Prop.instCompleteBooleanAlgebra
-  签名: : Complete布尔eanAlgebra 命题
+实例 命题.instComplete布尔eanAlgebra
+  签名: : 完备布尔代数 命题
   定义体: inferInstance
 -/
 instance Prop.instCompleteBooleanAlgebra : CompleteBooleanAlgebra Prop := inferInstance
@@ -2320,8 +2320,8 @@ theorem Function.frameMinimalAxioms
 alias Function.Injective.frameMinimalAxioms := Function.frameMinimalAxioms
 
 中文:
-定理 Function.frameMinimalAxioms
-  结论: [CompleteLattice α] [CompleteLattice β]
+定理 函数.frameMinimalAxioms
+  结论: [完备格 α] [完备格 β]
   证明: by
     rw [← le]; rw [← sSup_image]; rw [map_inf]; rw [map_sSup s]; rw [minAx.inf_iSup₂_eq]
     simp_rw [← map_inf]
@@ -2354,8 +2354,8 @@ abbreviation Function.Injective.frame
   __ := hf.heytingAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_himp
 
 中文:
-缩写 Function.Injective.frame
-  签名: [Max α] [Min α] [LE α] [LT α] [SupSet α] [InfSet α]
+缩写 函数.单射.frame
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [上确界集 α] [下确界集 α]
   定义体: hf.completeLattice f le lt map_sup map_inf map_sSup map_sInf map_top map_bot
   __ := hf.heytingAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_himp
 -/
@@ -2380,8 +2380,8 @@ abbreviation Function.Injective.coframe
   __ := hf.coheytingAlgebra f le lt map_sup map_inf map_top map_bot map_hnot map_sdiff
 
 中文:
-缩写 Function.Injective.coframe
-  签名: [Max α] [Min α] [LE α] [LT α] [SupSet α] [InfSet α]
+缩写 函数.单射.coframe
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [上确界集 α] [下确界集 α]
   定义体: hf.completeLattice f le lt map_sup map_inf map_sSup map_sInf map_top map_bot
   __ := hf.coheytingAlgebra f le lt map_sup map_inf map_top map_bot map_hnot map_sdiff
 -/
@@ -2408,7 +2408,7 @@ alias Function.Injective.completeDistribLatticeMinimalAxioms :=
   Function.completeDistribLatticeMinimalAxioms
 
 中文:
-定理 Function.completeDistribLatticeMinimalAxioms
+定理 函数.completeDistribLatticeMinimalAxioms
   证明: f.frameMinimalAxioms minAx.toFrame le map_inf map_sSup
   __ := f.coframeMinimalAxioms minAx.toCoframe le map_sup map_sInf
 
@@ -2441,8 +2441,8 @@ abbreviation Function.Injective.completeDistribLattice
   __ := hf.coframe f le lt map_sup map_inf map_sSup map_sInf map_top map_bot map_hnot map_sdiff
 
 中文:
-缩写 Function.Injective.completeDistribLattice
-  签名: [Max α] [Min α]
+缩写 函数.单射.completeDistribLattice
+  签名: [最大值 α] [最小值 α]
   定义体: hf.frame f le lt map_sup map_inf map_sSup map_sInf map_top map_bot map_compl map_himp
   __ := hf.coframe f le lt map_sup map_inf map_sSup map_sInf map_top map_bot map_hnot map_sdiff
 -/
@@ -2469,7 +2469,7 @@ theorem Function.Injective.completelyDistribLatticeMinimalAxioms
       minAx.iInf_iSup_eq']
 
 中文:
-定理 Function.Injective.completelyDistribLatticeMinimalAxioms
+定理 函数.单射.completelyDistribLatticeMinimalAxioms
   证明: hf by
     simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range,
       minAx.iInf_iSup_eq']
@@ -2497,8 +2497,8 @@ iInf_iSup_eq g := hf by
     simp_rw [iInf, map_sInf, iInf_range, iSup, map_sSup, iSup_range, map_sInf, iInf_range
 
 中文:
-缩写 Function.Injective.completelyDistribLattice
-  签名: [Max α] [Min α]
+缩写 函数.单射.completelyDistribLattice
+  签名: [最大值 α] [最小值 α]
   定义体: hf.completeLattice f le lt map_sup map_inf map_sSup map_sInf map_top map_bot
   __ := hf.biheytingAlgebra f
     le lt map_sup map_inf map_top map_bot map_compl map_hnot map_himp map_sdiff
@@ -2533,8 +2533,8 @@ abbreviation Function.Injective.completeBooleanAlgebra
   __ := hf.booleanAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_sdiff map_himp
 
 中文:
-缩写 Function.Injective.completeBooleanAlgebra
-  签名: [Max α] [Min α]
+缩写 函数.单射.complete布尔eanAlgebra
+  签名: [最大值 α] [最小值 α]
   定义体: hf.completeLattice f le lt map_sup map_inf map_sSup map_sInf map_top map_bot
   __ := hf.booleanAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_sdiff map_himp
 -/
@@ -2563,8 +2563,8 @@ abbreviation Function.Injective.completeAtomicBooleanAlgebra
   __ := hf.booleanAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_sdiff map_himp
 
 中文:
-缩写 Function.Injective.completeAtomicBooleanAlgebra
-  签名: [Max α] [Min α]
+缩写 函数.单射.completeAtomic布尔eanAlgebra
+  签名: [最大值 α] [最小值 α]
   定义体: hf.completelyDistribLattice f
     le lt map_sup map_inf map_sSup map_sInf map_top map_bot map_compl map_himp map_hnot map_sdiff
   __ := hf.booleanAlgebra f le lt map_sup map_inf map_top map_bot map_compl map_sdiff map_himp
@@ -2600,7 +2600,7 @@ abbreviation frame
 
 中文:
 缩写 frame
-  签名: [Frame β]
+  签名: [框架 β]
   定义体: by
   let completeLattice := e.completeLattice
   let heytingAlgebra := e.heytingAlgebra
@@ -2624,7 +2624,7 @@ abbreviation coframe
 
 中文:
 缩写 coframe
-  签名: [Coframe β]
+  签名: [余frame β]
   定义体: by
   let completeLattice := e.completeLattice
   let coheytingAlgebra := e.coheytingAlgebra
@@ -2648,7 +2648,7 @@ abbreviation completeDistribLattice
 
 中文:
 缩写 completeDistribLattice
-  签名: [CompleteDistribLattice β]
+  签名: [完备分配格 β]
   定义体: by
   let completeLattice := e.completeLattice
   let biheytingAlgebra := e.biheytingAlgebra
@@ -2671,7 +2671,7 @@ abbreviation completelyDistribLattice
 
 中文:
 缩写 completelyDistribLattice
-  签名: [CompletelyDistribLattice β]
+  签名: [余mpletelyDistrib格 β]
   定义体: by
   let completeDistribLattice := e.completeDistribLattice
   apply e.injective.completelyDistribLattice <;> intros <;> first | rfl | exact e.apply_symm_apply _
@@ -2693,8 +2693,8 @@ abbreviation completeBooleanAlgebra
   apply e.injective.completeBooleanAlgebra <;> intros <;> first | rfl | exact e.apply_symm_apply _
 
 中文:
-缩写 completeBooleanAlgebra
-  签名: [Complete布尔eanAlgebra β]
+缩写 complete布尔eanAlgebra
+  签名: [完备布尔代数 β]
   定义体: by
   let completeLattice := e.completeLattice
   let booleanAlgebra := e.booleanAlgebra
@@ -2717,8 +2717,8 @@ abbreviation completeAtomicBooleanAlgebra
   first | rfl | exact e.apply_symm_apply _
 
 中文:
-缩写 completeAtomicBooleanAlgebra
-  签名: [CompleteAtomic布尔eanAlgebra β]
+缩写 completeAtomic布尔eanAlgebra
+  签名: [余mpleteAtomic布尔ean代数 β]
   定义体: by
   let completeBooleanAlgebra := e.completeBooleanAlgebra
   apply e.injective.completeAtomicBooleanAlgebra <;> intros <;>
@@ -2746,8 +2746,8 @@ instance instCompleteBooleanAlgebra
   signature: : CompleteBooleanAlgebra PUnit where
 
 中文:
-实例 instCompleteBooleanAlgebra
-  签名: : Complete布尔eanAlgebra PUnit where
+实例 instComplete布尔eanAlgebra
+  签名: : 完备布尔代数 命题单元 where
 -/
 instance instCompleteBooleanAlgebra : CompleteBooleanAlgebra PUnit where
 
@@ -2762,8 +2762,8 @@ instance instCompleteAtomicBooleanAlgebra
 @[to_dual (attr := simp)]
 
 中文:
-实例 instCompleteAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra PUnit where
+实例 instCompleteAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 命题单元 where
   定义体: rfl
 
 @[to_dual (attr := simp)]

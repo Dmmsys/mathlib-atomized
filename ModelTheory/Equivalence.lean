@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans (L.BoundedFormula α n) T.Imp
+  签名: 是Trans (L.BoundedFormula α n) T.Imp
   定义体: ⟨fun _ _ _ => Imp.trans⟩
 
 Depends on / 依赖: Imp.trans
@@ -392,7 +392,7 @@ scoped[FirstOrder]
 notation:51 φ:50 " ⇔[" T "] " ψ:51 => Language.Theory.Iff T φ ψ
 
 中文:
-定义 Iff
+定义 当且仅当
   签名: (T : L.Theory) (φ ψ : L.BoundedFormula α n)
   定义体: T ⊨ᵇ φ.iff ψ
 
@@ -519,7 +519,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Refl (L.BoundedFormula α n) T.Iff
+  签名: @Std.Refl (L.BoundedFormula α n) T.当且仅当
   定义体: ⟨Iff.refl⟩
 
 @[symm]
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Symm (α := L.BoundedFormula α n) T.Iff
+  签名: Std.Symm (α := L.BoundedFormula α n) T.当且仅当
   定义体: ⟨fun _ _ => Iff.symm⟩
 
 @[trans]
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans (L.BoundedFormula α n) T.Iff
+  签名: 是Trans (L.BoundedFormula α n) T.当且仅当
   定义体: ⟨fun _ _ _ => Iff.trans⟩
 
 Depends on / 依赖: Iff.trans
@@ -651,7 +651,7 @@ theorem realize_iff
 
 中文:
 定理 realize_iff
-  结论: {φ ψ : L.Formula α} {M : 类型} [Nonempty M]
+  结论: {φ ψ : L.公式 α} {M : 类型} [非空 M]
   证明: h.realize_bd_iff
 
 Depends on / 依赖: h.realize_bd_iff, realize_bd_iff
@@ -671,7 +671,7 @@ theorem models_sentence_iff
 
 中文:
 定理 models_sentence_iff
-  结论: {φ ψ : L.Sentence} {M : 类型} [Nonempty M]
+  结论: {φ ψ : L.Sentence} {M : 类型} [非空 M]
   证明: h.realize_iff
 
 Depends on / 依赖: h.realize_iff, realize_iff

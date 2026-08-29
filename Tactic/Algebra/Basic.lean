@@ -63,9 +63,9 @@ structure Cache
 中文:
 结构 Cache
   参数: {u : Level} {A : Q(类型u)}
-  继承: Ring.Common.Cache sA
+  继承: 环.Common.Cache sA
   公理与运算 (1 个):
-    - field : Option Q(Field $A)
+    - field : 选项类型 Q(域 $A)
 -/
 structure Cache {u : Level} {A : Q(Type u)}
     (sA : Q(CommSemiring $A)) extends Ring.Common.Cache sA where
@@ -85,7 +85,7 @@ definition mkCache
 
 中文:
 定义 mkCache
-  签名: {u : Level} {A : Q(类型u)} (sA : Q(CommSemiring $A))
+  签名: {u : Level} {A : Q(类型u)} (sA : Q(交换半环 $A))
   定义体: do return {
   field := (← trySynthInstanceQ q(Field $A)).toOption
   toCache := ← Ring.Common.mkCache sA
@@ -116,9 +116,9 @@ inductive BaseType
 
 中文:
 归纳类型 BaseType
-  参数: : (a : Q($A)) -> Type
+  参数: : (a : Q($A)) -> 类型
   构造子 (1 个):
-    - mk: (r : Q($R)) (_ : Ring.ExSum q($sR) r) : BaseType q(algebraMap $R $A $r)
+    - mk: (r : Q($R)) (_ : 环.ExSum q($sR) r) : BaseType q(algebraMap $R $A $r)
 -/
 inductive BaseType : (a : Q($A)) -> Type
   | mk (r : Q($R)) (_ : Ring.ExSum q($sR) r) : BaseType q(algebraMap $R $A $r)
@@ -192,7 +192,7 @@ have : r =Q Nat.rawCast lit := ⟨⟩
 
 中文:
 定义 evalCast
-  签名: (cR : Algebra.Cache q($sR)) (cA : Algebra.Cache q($sA))
+  签名: (cR : 代数.Cache q($sR)) (cA : 代数.Cache q($sA))
   定义体: Ring.ExProd.mkNat sR lit.natLit!
     -- Lift the literal to the base ring as a scalar multiple of 1
     pure ⟨_, (Common.ExProd.const ⟨_, (vr.toSum)⟩).toSum,
@@ -425,7 +425,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: (cR : Algebra.Cache sR) (u' : Level) (R' : Q(类型u'))
+  签名: (cR : 代数.Cache sR) (u' : Level) (R' : Q(类型u'))
   定义体: do
   let ⟨r, pf_smul⟩ ← evalSMulCast q($sAlg) q($_smul) r'
   let ⟨_r'', vr, pr⟩ ←
@@ -469,7 +469,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: (cR : Algebra.Cache sR) {a : Q($A)} (_rA : Q(CommRing $A)) (za : BaseType sAlg a)
+  签名: (cR : 代数.Cache sR) {a : Q($A)} (_rA : Q(交换环 $A)) (za : BaseType sAlg a)
   定义体: match za with
   | .mk r vr => do
     match cR.rα with
@@ -542,7 +542,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (cR : Algebra.Cache sR) {a : Q($A)} (_ : Option Q(CharZero $A)) (fA : Q(Semifield $A))
+  签名: (cR : 代数.Cache sR) {a : Q($A)} (_ : 选项类型 Q(特征零 $A)) (fA : Q(半域 $A))
   定义体: match za with
   | .mk r vr => do
     match cR.dsα with
@@ -580,7 +580,7 @@ definition derive
 
 中文:
 定义 derive
-  签名: (cR : Algebra.Cache sR) (cA : Algebra.Cache sA) (x : Q($A))
+  签名: (cR : 代数.Cache sR) (cA : 代数.Cache sA) (x : Q($A))
   定义体: do
   let res ← NormNum.derive x
   let ⟨_, vr, pr⟩ ← evalCast sAlg cR cA res
@@ -678,7 +678,7 @@ have hr : r =Q (nat_lit 1).rawCast := ⟨⟩
 
 中文:
 定义 ringCompute
-  签名: (cR : Algebra.Cache sR) (cA : Algebra.Cache sA)
+  签名: (cR : 代数.Cache sR) (cA : 代数.Cache sA)
   定义体: add sAlg cR.toCache
   mul := mul sAlg cR.toCache
   cast := cast sAlg cR
@@ -724,8 +724,8 @@ theorem Nat.cast_eq_algebraMap
   proof: rfl
 
 中文:
-定理 Nat.cast_eq_algebraMap
-  条件: (A : 类型) [CommSemiring A] (n : 自然数)
+定理 自然数.cast_eq_algebraMap
+  条件: (A : 类型) [交换半环 A] (n : 自然数)
   证明: rfl
 -/
 theorem Nat.cast_eq_algebraMap (A : Type*) [CommSemiring A] (n : Nat) :
@@ -740,8 +740,8 @@ theorem Int.cast_eq_algebraMap
   proof: rfl
 
 中文:
-定理 Int.cast_eq_algebraMap
-  条件: (A : 类型) [CommRing A] (n : 整数)
+定理 整数.cast_eq_algebraMap
+  条件: (A : 类型) [交换环 A] (n : 整数)
   证明: rfl
 -/
 theorem Int.cast_eq_algebraMap (A : Type*) [CommRing A] (n : Int) :
@@ -989,7 +989,7 @@ definition proveEq
 
 中文:
 定义 proveEq
-  签名: (base : Option (Σ u : Lean.Level, Q(类型u))) (g : MVarId)
+  签名: (base : 选项类型 (Σ u : Lean.Level, Q(类型u))) (g : MVarId)
   定义体: do
   let some (α, e₁, e₂) := (← whnfR <|← instantiateMVars <|← g.getType).eq?
     | throwError "algebra failed: not an equality"

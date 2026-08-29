@@ -238,7 +238,7 @@ theorem disjSum_mono_left
 中文:
 定理 disjSum_mono_left
   条件: (t : Multiset β)
-  结论: Monotone fun s : Multiset α => s.disjSum t
+  结论: 递增 fun s : Multiset α => s.disjSum t
   证明: fun _ _ hs => Multiset.add_le_add_right (map_le_map hs)
 
 Depends on / 依赖: Multiset, Multiset.add_le_add_right, add_le_add_right, map_le_map
@@ -315,7 +315,7 @@ theorem disjSum_strictMono_left
 中文:
 定理 disjSum_strictMono_left
   条件: (t : Multiset β)
-  结论: StrictMono fun s : Multiset α => s.disjSum t
+  结论: 严格递增 fun s : Multiset α => s.disjSum t
   证明: fun _ _ hs => disjSum_lt_disjSum_of_lt_of_le hs le_rfl
 
 Depends on / 依赖: disjSum_lt_disjSum_of_lt_of_le, le_rfl

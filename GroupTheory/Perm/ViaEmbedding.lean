@@ -35,7 +35,7 @@ definition viaEmbedding
 
 中文:
 定义 viaEmbedding
-  签名: : Perm β
+  签名: : 置换 β
   定义体: extendDomain e (ofInjective ι.1 ι.2)
 
 Depends on / 依赖: extendDomain, ofInjective
@@ -81,7 +81,7 @@ theorem viaEmbedding_apply_of_notMem
 
 中文:
 定理 viaEmbedding_apply_of_notMem
-  条件: (x : β) (hx : x ∉ Set.range ι)
+  条件: (x : β) (hx : x ∉ 集合.range ι)
   结论: e.viaEmbedding ι x = x
   证明: by
   classical
@@ -104,7 +104,7 @@ definition viaEmbeddingHom
 
 中文:
 定义 viaEmbeddingHom
-  签名: : Perm α ->* Perm β
+  签名: : 置换 α ->* 置换 β
   定义体: extendDomainHom (ofInjective ι.1 ι.2)
 
 Depends on / 依赖: extendDomainHom, ofInjective
@@ -140,7 +140,7 @@ theorem viaEmbeddingHom_injective
 
 中文:
 定理 viaEmbeddingHom_injective
-  结论: Function.Injective (viaEmbeddingHom ι)
+  结论: 函数.单射 (viaEmbeddingHom ι)
   证明: by
   classical
   exact extendDomainHom_injective (ofInjective ι.1 ι.2)

@@ -322,7 +322,7 @@ definition app
 
 中文:
 定义 app
-  签名: (n : (SimplexCategory.Truncated 2)ᵒᵖ)
+  签名: (n : (单纯形范畴.Truncated 2)ᵒᵖ)
   定义体: by
   obtain ⟨⟨n⟩, hn⟩ := n
   match n with
@@ -349,7 +349,7 @@ include H hσ in
 
 中文:
 缩写 naturalityProperty
-  签名: : Morphism命题erty (SimplexCategory.Truncated 2)
+  签名: : MorphismProperty (单纯形范畴.Truncated 2)
   定义体: (MorphismProperty.naturalityProperty (app f₀ f₁ hδ₁ hδ₀ hY)).unop
 
 include H hσ in
@@ -696,7 +696,7 @@ lemma homToNerveMk_app_edge
 
 中文:
 引理 homToNerveMk_app_edge
-  条件: (F : X.HomotopyCategory ⥤ C) {x y : X _⦋0⦌₂} (e : Edge x y)
+  条件: (F : X.HomotopyCategory ⥤ C) {x y : X _⦋0⦌₂} (e : 边 x y)
   证明: by
   rw [homToNerveMk_app_one]
   exact ComposableArrows.arrowEquiv.injective
@@ -782,7 +782,7 @@ lemma homToNerveMk_comp
 
 中文:
 引理 homToNerveMk_comp
-  结论: {D : 类型u} [SmallCategory D]
+  结论: {D : 类型u} [小范畴 D]
   证明: IsStrictSegal.hom_ext (fun s => by
     obtain ⟨x₀, x₁, f, rfl⟩ := Edge.exists_of_simplex s
     dsimp
@@ -942,7 +942,7 @@ definition fullyFaithfulNerveFunctor₂
 
 中文:
 定义 fullyFaithfulNerveFunctor₂
-  签名: : nerveFunctor₂.{u, u}.FullyFaithful where
+  签名: : nerveFunctor₂.{u, u}.满忠实 where
   定义体: (functorOfNerveMap φ).toCatHom
   map_preimage _ := nerveFunctor₂_map_functorOfNerveMap _
   preimage_map _ := by ext1; exact functorOfNerveMap_nerveFunctor₂_map _
@@ -964,7 +964,7 @@ instance :
 
 中文:
 实例 :
-  签名: nerveFunctor₂.{u, u}.Faithful
+  签名: nerveFunctor₂.{u, u}.忠实
   定义体: (fullyFaithfulNerveFunctor₂).faithful
 
 Depends on / 依赖: faithful
@@ -982,7 +982,7 @@ instance :
 
 中文:
 实例 :
-  签名: nerveFunctor₂.{u, u}.Full
+  签名: nerveFunctor₂.{u, u}.满
   定义体: (fullyFaithfulNerveFunctor₂).full
 -/
 instance : nerveFunctor₂.{u, u}.Full :=
@@ -998,7 +998,7 @@ instance :
 
 中文:
 实例 :
-  签名: Reflective nerveFunctor₂.{u, u}
+  签名: 反射 nerveFunctor₂.{u, u}
   定义体: Reflective.mk _ SSet.Truncated.nerve₂Adj
 
 Depends on / 依赖: Reflective, Reflective.mk, SSet.Truncated.nerve, Truncated
@@ -1038,7 +1038,7 @@ instance nerveFunctor.faithful
 
 中文:
 实例 nerveFunctor.faithful
-  签名: : nerveFunctor.{u, u}.Faithful
+  签名: : nerveFunctor.{u, u}.忠实
   定义体: Functor.Faithful.of_iso Nerve.cosk₂Iso.symm
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, Iso.symm, Nerve.cosk, of_iso
@@ -1056,7 +1056,7 @@ instance nerveFunctor.full
 
 中文:
 实例 nerveFunctor.full
-  签名: : nerveFunctor.{u, u}.Full
+  签名: : nerveFunctor.{u, u}.满
   定义体: Functor.Full.of_iso Nerve.cosk₂Iso.symm
 
 Depends on / 依赖: Functor, Functor.Full.of_iso, Iso.symm, Nerve.cosk, of_iso
@@ -1074,7 +1074,7 @@ definition nerveFunctor.fullyfaithful
 
 中文:
 定义 nerveFunctor.fullyfaithful
-  签名: : nerveFunctor.FullyFaithful
+  签名: : nerveFunctor.满忠实
   定义体: Functor.FullyFaithful.ofFullyFaithful _
 
 Depends on / 依赖: FullyFaithful, Functor, Functor.FullyFaithful.ofFullyFaithful, ofFullyFaithful
@@ -1092,7 +1092,7 @@ instance nerveAdjunction.isIso_counit
 
 中文:
 实例 nerveAdjunction.isIso_counit
-  签名: : IsIso nerveAdjunction.counit
+  签名: : 是同构 nerveAdjunction.counit
   定义体: Adjunction.counit_isIso_of_R_fully_faithful _
 
 Depends on / 依赖: Adjunction, Adjunction.counit_isIso_of_R_fully_faithful, counit_isIso_of_R_fully_faithful
@@ -1129,7 +1129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Reflective nerveFunctor
+  签名: 反射 nerveFunctor
   定义体: hoFunctor
   adj := nerveAdjunction
 
@@ -1162,7 +1162,7 @@ instance :
 
 中文:
 实例 :
-  签名: hoFunctor.IsLeftAdjoint
+  签名: hoFunctor.是左伴随
   定义体: nerveAdjunction.isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, nerveAdjunction, nerveAdjunction.isLeftAdjoint
@@ -1319,7 +1319,7 @@ instance preservesFiniteProducts
 
 中文:
 实例 preservesFiniteProducts
-  签名: : PreservesFiniteProducts hoFunctor
+  签名: : 保持FiniteProducts hoFunctor
   定义体: PreservesFiniteProducts.of_preserves_binary_and_terminal _
 
 Depends on / 依赖: PreservesFiniteProducts, PreservesFiniteProducts.of_preserves_binary_and_terminal, of_preserves_binary_and_terminal

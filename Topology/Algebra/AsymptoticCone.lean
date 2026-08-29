@@ -144,7 +144,7 @@ theorem _root_.Filter.Tendsto.asymptoticNhds_vadd_const
   exact tendsto_map.comp hf
 
 中文:
-定理 _root_.Filter.Tendsto.asymptoticNhds_vadd_const
+定理 _root_.滤子.收敛.asymptoticNhds_vadd_const
   结论: {f : α -> V} {v : V} (p : P)
   证明: by
   rw [← asymptoticNhds_vadd_pure]; rw [vadd_pure]
@@ -169,7 +169,7 @@ theorem _root_.Filter.Tendsto.const_vadd_asymptoticNhds
   exact tendsto_map.comp hf
 
 中文:
-定理 _root_.Filter.Tendsto.const_vadd_asymptoticNhds
+定理 _root_.滤子.收敛.const_vadd_asymptoticNhds
   结论: {f : α -> P} {v : V} (u : V)
   证明: by
   rw [← vadd_asymptoticNhds u]; rw [← Filter.map_vadd]
@@ -339,7 +339,7 @@ theorem _root_.Filter.Tendsto.atTop_smul_nhds_tendsto_asymptoticNhds
   exact tendsto_map.comp (hf.prodMk hg)
 
 中文:
-定理 _root_.Filter.Tendsto.atTop_smul_nhds_tendsto_asymptoticNhds
+定理 _root_.滤子.收敛.atTop_smul_nhds_tendsto_asymptoticNhds
   结论: {f : α -> k} {g : α -> V} {v : V}
   证明: by
   rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]
@@ -362,7 +362,7 @@ theorem _root_.Filter.Tendsto.atTop_smul_const_tendsto_asymptoticNhds
   proof: hf.atTop_smul_nhds_tendsto_asymptoticNhds tendsto_const_nhds
 
 中文:
-定理 _root_.Filter.Tendsto.atTop_smul_const_tendsto_asymptoticNhds
+定理 _root_.滤子.收敛.atTop_smul_const_tendsto_asymptoticNhds
   结论: {f : α -> k} (v : V)
   证明: hf.atTop_smul_nhds_tendsto_asymptoticNhds tendsto_const_nhds
 
@@ -473,7 +473,7 @@ theorem asymptoticNhds_bind_nhds
 
 中文:
 定理 asymptoticNhds_bind_nhds
-  条件: [TopologicalSpace P] [IsTopologicalAddTorsor P] (v : V)
+  条件: [拓扑空间 P] [是TopologicalAddTorsor P] (v : V)
   证明: by
   refine le_antisymm (fun s h => ?_) (bind_mono le_rfl (.of_forall pure_le_nhds))
   have ⟨p⟩ : Nonempty P := inferInstance
@@ -555,7 +555,7 @@ definition asymptoticCone
 
 中文:
 定义 asymptoticCone
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: {v | existsᶠ p in asymptoticNhds k P v, p in s}
 
 Depends on / 依赖: asymptoticNhds
@@ -574,7 +574,7 @@ theorem mem_asymptoticCone_iff
 
 中文:
 定理 mem_asymptoticCone_iff
-  条件: {v : V} {s : Set P}
+  条件: {v : V} {s : 集合 P}
   证明: Iff.rfl
 
 @[simp]
@@ -598,7 +598,7 @@ theorem asymptoticCone_empty
 
 中文:
 定理 asymptoticCone_empty
-  结论: asymptoticCone k (∅ : Set P) = ∅
+  结论: asymptoticCone k (∅ : 集合 P) = ∅
   证明: Set.eq_empty_iff_forall_notMem.mpr fun _ => frequently_false _
 
 @[gcongr]
@@ -620,7 +620,7 @@ theorem asymptoticCone_mono
 
 中文:
 定理 asymptoticCone_mono
-  条件: {s t : Set P} (h : s subseteq t)
+  条件: {s t : 集合 P} (h : s subseteq t)
   结论: asymptoticCone k s subseteq asymptoticCone k t
   证明: fun _ h' => h'.mono h
 -/
@@ -639,7 +639,7 @@ theorem asymptoticCone_union
 
 中文:
 定理 asymptoticCone_union
-  条件: {s t : Set P}
+  条件: {s t : 集合 P}
   证明: by
   ext
   simp only [Set.mem_union, mem_asymptoticCone_iff, Filter.frequently_or_distrib]
@@ -663,7 +663,7 @@ theorem asymptoticCone_biUnion
 
 中文:
 定理 asymptoticCone_biUnion
-  条件: {ι : 类型} {s : Set ι} (hs : s.Finite) (f : ι -> Set P)
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.有限) (f : ι -> 集合 P)
   证明: by
   induction s, hs using Set.Finite.induction_on <;>
     simp [asymptoticCone_union, *]
@@ -690,7 +690,7 @@ nonrec theorem Finset.asymptoticCone_biUnion {ι : Type*} (s : Finset ι) (f : �
 
 中文:
 定理 asymptoticCone_sUnion
-  条件: {S : Set (Set P)} (hS : S.Finite)
+  条件: {S : 集合 (集合 P)} (hS : S.有限)
   证明: by
   rw [Set.sUnion_eq_biUnion]; rw [asymptoticCone_biUnion hS]
 
@@ -719,7 +719,7 @@ theorem asymptoticCone_iUnion_of_finite
 
 中文:
 定理 asymptoticCone_iUnion_of_finite
-  条件: {ι : 类型} [Finite ι] (f : ι -> Set P)
+  条件: {ι : 类型} [有限 ι] (f : ι -> 集合 P)
   证明: by
   rw [← Set.sUnion_range]; rw [asymptoticCone_sUnion (Set.finite_range f)]; rw [Set.biUnion_range]
 
@@ -746,8 +746,8 @@ theorem zero_mem_asymptoticCone
 
 中文:
 定理 zero_mem_asymptoticCone
-  条件: {s : Set P}
-  结论: 0 in asymptoticCone k s ↔ s.Nonempty
+  条件: {s : 集合 P}
+  结论: 0 in asymptoticCone k s ↔ s.非空
   证明: by
   refine ⟨Function.mtr ?_, fun _ => ?_⟩
   · simp +contextual [Set.not_nonempty_iff_eq_empty]
@@ -775,8 +775,8 @@ theorem asymptoticCone_nonempty
 
 中文:
 定理 asymptoticCone_nonempty
-  条件: {s : Set P}
-  结论: (asymptoticCone k s).Nonempty ↔ s.Nonempty
+  条件: {s : 集合 P}
+  结论: (asymptoticCone k s).非空 ↔ s.非空
   证明: by
   refine ⟨Function.mtr ?_, fun h => ⟨0, zero_mem_asymptoticCone.mpr h⟩⟩
   simp +contextual [Set.not_nonempty_iff_eq_empty]
@@ -801,7 +801,7 @@ theorem smul_mem_asymptoticCone_iff
 
 中文:
 定理 smul_mem_asymptoticCone_iff
-  条件: {s : Set P} {c : k} {v : V} (hc : 0 < c)
+  条件: {s : 集合 P} {c : k} {v : V} (hc : 0 < c)
   证明: by
   simp_rw [mem_asymptoticCone_iff, asymptoticNhds_smul v hc]
 
@@ -824,7 +824,7 @@ theorem smul_mem_asymptoticCone
 
 中文:
 定理 smul_mem_asymptoticCone
-  结论: {s : Set P} {c : k} {v : V} (hc : 0 <= c)
+  结论: {s : 集合 P} {c : k} {v : V} (hc : 0 <= c)
   证明: by
   rcases hc.eq_or_lt with rfl | hc
   · rw [zero_smul, zero_mem_asymptoticCone, ← asymptoticCone_nonempty (k := k)]; exact ⟨v, h⟩
@@ -851,8 +851,8 @@ theorem asymptoticCone_eq_closure_of_forall_smul_mem
   filter_upwards [tendsto_fst.eventually (e
 
 中文:
-定理 asymptoticCone_eq_closure_of_forall_smul_mem
-  结论: {s : Set V}
+定理 asymptoticCone_eq_closure_of_对任意_smul_mem
+  结论: {s : 集合 V}
   证明: by
   ext v
   rw [mem_closure_iff_frequently]; rw [← map_snd_prod (atTop (α := k)) (𝓝 v)]; rw [frequently_map]; rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map]
@@ -882,8 +882,8 @@ theorem asymptoticCone_submodule
 
 中文:
 定理 asymptoticCone_submodule
-  条件: {s : Submodule k V}
-  结论: asymptoticCone k (s : Set V) = closure s
+  条件: {s : 子模 k V}
+  结论: asymptoticCone k (s : 集合 V) = closure s
   证明: asymptoticCone_eq_closure_of_forall_smul_mem fun _ _ _ h => s.smul_mem _ h
 
 Depends on / 依赖: asymptoticCone_eq_closure_of_forall_smul_mem, s.smul_mem, smul_mem
@@ -907,7 +907,7 @@ theorem asymptoticCone_affineSubspace
 
 中文:
 定理 asymptoticCone_affineSubspace
-  条件: {s : AffineSubspace k P} (hs : (s : Set P).Nonempty)
+  条件: {s : 仿射子空间 k P} (hs : (s : 集合 P).非空)
   证明: by
   have ⟨p, hp⟩ := hs
   ext v
@@ -937,7 +937,7 @@ theorem asymptoticCone_univ
 
 中文:
 定理 asymptoticCone_univ
-  结论: asymptoticCone k (Set.univ : Set P) = Set.univ
+  结论: asymptoticCone k (集合.univ : 集合 P) = 集合.univ
   证明: by
   rw [← AffineSubspace.top_coe k]; rw [asymptoticCone_affineSubspace Set.univ_nonempty]; rw [AffineSubspace.direction_top]; rw [Submodule.top_coe]; rw [closure_univ]
 
@@ -959,7 +959,7 @@ theorem asymptoticCone_closure
 
 中文:
 定理 asymptoticCone_closure
-  条件: [TopologicalSpace P] [IsTopologicalAddTorsor P] (s : Set P)
+  条件: [拓扑空间 P] [是TopologicalAddTorsor P] (s : 集合 P)
   证明: by
   ext
   simp_rw [mem_asymptoticCone_iff, mem_closure_iff_frequently, ← frequently_bind,
@@ -991,8 +991,8 @@ theorem isClosed_asymptoticCone
 
 中文:
 定理 isClosed_asymptoticCone
-  条件: {s : Set P}
-  结论: IsClosed (asymptoticCone k s)
+  条件: {s : 集合 P}
+  结论: 是闭集 (asymptoticCone k s)
   证明: by
   have ⟨p⟩ : Nonempty P := inferInstance
   rw [isClosed_iff_frequently]
@@ -1024,7 +1024,7 @@ theorem asymptoticCone_asymptoticCone
 
 中文:
 定理 asymptoticCone_asymptoticCone
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: by
   ext
   simp_rw [mem_asymptoticCone_iff, ← Filter.frequently_bind, asymptoticNhds_bind_asymptoticNhds]
@@ -1095,7 +1095,7 @@ theorem Convex.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone
   proof: (hs₁ hp).smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs₂ hc hv
 
 中文:
-定理 Convex.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone
+定理 凸.smul_vadd_mem_of_isClosed_of_mem_asymptoticCone
   结论: {c : k} {v p : V}
   证明: (hs₁ hp).smul_vadd_mem_of_isClosed_of_mem_asymptoticCone hs₂ hc hv
 
@@ -1123,9 +1123,9 @@ theorem Convex.asymptoticCone
 .asymptoticNhds_vadd_
 
 中文:
-定理 Convex.asymptoticCone
-  条件: (hs : Convex k s)
-  结论: Convex k (asymptoticCone k s)
+定理 凸.asymptoticCone
+  条件: (hs : 凸 k s)
+  结论: 凸 k (asymptoticCone k s)
   证明: by
   wlog hs' : IsClosed s generalizing s
   · rw [← asymptoticCone_closure]; exact this hs.closure isClosed_closure
@@ -1166,7 +1166,7 @@ theorem Convex.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
  
 
 中文:
-定理 Convex.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
+定理 凸.smul_vadd_mem_of_mem_nhds_of_mem_asymptoticCone
   结论: {c : k} {v p : V}
   证明: by
   rw [mem_asymptoticCone_iff]; rw [asymptoticNhds_eq_smul_vadd v (c • v +ᵥ p)]; rw [vadd_pure]; rw [frequently_map]; rw [← map₂_smul]; rw [← map_prod_eq_map₂]; rw [frequently_map] at hv

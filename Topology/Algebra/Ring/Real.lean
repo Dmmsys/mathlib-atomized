@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace 实数
+  签名: Noncompact空间 实数
   定义体: Int.isClosedEmbedding_coe_real.noncompactSpace
 
 Depends on / 依赖: Int.isClosedEmbedding_coe_real.noncompactSpace, isClosedEmbedding_coe_real, noncompactSpace
@@ -65,8 +65,8 @@ theorem Real.uniformContinuous_add
       Hδ h₁ h₂⟩
 
 中文:
-定理 Real.uniformContinuous_add
-  结论: UniformContinuous fun p : 实数 × 实数 => p.1 + p.2
+定理 实数.uniformContinuous_add
+  结论: 一致连续 fun p : 实数 × 实数 => p.1 + p.2
   证明: Metric.uniformContinuous_iff.2 fun _ε ε0 =>
     let ⟨δ, δ0, Hδ⟩ := rat_add_continuous_lemma abs ε0
     ⟨δ, δ0, fun _ _ h =>
@@ -92,8 +92,8 @@ theorem Real.uniformContinuous_neg
     ⟨_, ε0, fun _ _ h => by simpa only [abs_sub_comm, Real.dist_eq, neg_sub_neg] using h⟩
 
 中文:
-定理 Real.uniformContinuous_neg
-  结论: UniformContinuous (@Neg.neg 实数 _)
+定理 实数.uniformContinuous_neg
+  结论: 一致连续 (@取负.neg 实数 _)
   证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨_, ε0, fun _ _ h => by simpa only [abs_sub_comm, Real.dist_eq, neg_sub_neg] using h⟩
 
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUniformAddGroup 实数
+  签名: 是UniformAdd群 实数
   定义体: IsUniformAddGroup.mk' Real.uniformContinuous_add Real.uniformContinuous_neg
 
 Depends on / 依赖: IsUniformAddGroup, IsUniformAddGroup.mk, Real.uniformContinuous_add, Real.uniformContinuous_neg, uniformContinuous_add, uniformContinuous_neg
@@ -132,9 +132,9 @@ theorem Real.uniformContinuous_const_mul
     (continuous_const_smul x).continuousAt
 
 中文:
-定理 Real.uniformContinuous_const_mul
+定理 实数.uniformContinuous_const_mul
   条件: {x : 实数}
-  结论: UniformContinuous (x * ·)
+  结论: 一致连续 (x * ·)
   证明: uniformContinuous_of_continuousAt_zero (DistribSMul.toAddMonoidHom Real x)
     (continuous_const_smul x).continuousAt
 
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalAddGroup 实数
+  签名: 是拓扑加群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalRing 实数
+  签名: 是拓扑环 实数
   定义体: inferInstance
 -/
 instance : IsTopologicalRing Real := inferInstance
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalDivisionRing 实数
+  签名: 是TopologicalDivision环 实数
   定义体: inferInstance
 -/
 instance : IsTopologicalDivisionRing Real := inferInstance
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousNeg E实数
+  签名: 连续取负 E实数
   定义体: ⟨negOrderIso.continuous⟩
 
 Depends on / 依赖: continuous, negOrderIso, negOrderIso.continuous
@@ -225,7 +225,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalSemiring 实数>=0
+  签名: 是TopologicalSemiring 实数>=0
   定义体: continuousAdd_induced toRealHom
   toContinuousMul := continuousMul_induced toRealHom
 
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSub 实数>=0
+  签名: 余ntinuousSub 实数>=0
   定义体: ⟨((continuous_coe.fst'.sub continuous_coe.snd').max continuous_const).subtype_mk _⟩
 
 Depends on / 依赖: continuous_coe, continuous_coe.fst, continuous_coe.snd, continuous_const, subtype_mk
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousInv₀ 实数>=0
+  签名: 余ntinuousInv₀ 实数>=0
   定义体: inferInstance
 -/
 instance : ContinuousInv₀ Real>=0 := inferInstance
@@ -279,8 +279,8 @@ instance [TopologicalSpace
   body: continuous_induced_dom.fst'.smul continuous_snd
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [MulAction 实数 α] [ContinuousSMul 实数 α] :
+实例 [拓扑空间
+  签名: α] [乘法作用 实数 α] [连续标量乘法 实数 α] :
   定义体: continuous_induced_dom.fst'.smul continuous_snd
 
 Depends on / 依赖: continuous_induced_dom, continuous_induced_dom.fst, continuous_snd
@@ -307,7 +307,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: IsEmbedding ((↑) : 实数>=0 -> 实数>=0∞)
+  结论: 是嵌入 ((↑) : 实数>=0 -> 实数>=0∞)
   证明: coe_strictMono.isEmbedding_of_ordConnected by rw [range_coe']; exact ordConnected_Iio
 
 @[simp, norm_cast]
@@ -328,7 +328,7 @@ theorem tendsto_coe
 
 中文:
 定理 tendsto_coe
-  条件: {f : Filter α} {m : α -> 实数>=0} {a : 实数>=0}
+  条件: {f : 滤子 α} {m : α -> 实数>=0} {a : 实数>=0}
   证明: isEmbedding_coe.tendsto_nhds_iff.symm
 
 Depends on / 依赖: isEmbedding_coe, isEmbedding_coe.tendsto_nhds_iff.symm, tendsto_nhds_iff
@@ -347,7 +347,7 @@ theorem isOpenEmbedding_coe
 
 中文:
 定理 isOpenEmbedding_coe
-  结论: IsOpenEmbedding ((↑) : 实数>=0 -> 实数>=0∞)
+  结论: 是开嵌入 ((↑) : 实数>=0 -> 实数>=0∞)
   证明: ⟨isEmbedding_coe, by rw [range_coe']; exact isOpen_Iio⟩
 
 Depends on / 依赖: isEmbedding_coe, isOpen_Iio, range_coe
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousAdd 实数>=0∞
+  签名: 连续加法 实数>=0∞
   定义体: by
   refine ⟨continuous_iff_continuousAt.2 ?_⟩
   rintro ⟨_ | a, b⟩
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousInv 实数>=0∞
+  签名: 连续取逆 实数>=0∞
   定义体: ⟨OrderIso.invENNReal.continuous⟩
 
 Depends on / 依赖: OrderIso, OrderIso.invENNReal.continuous, continuous, invENNReal

@@ -62,7 +62,7 @@ lemma val_mem_rootsOfUnity
 
 中文:
 引理 val_mem_rootsOfUnity
-  条件: (φ : AddChar R R') (a : R) (h : 0 < ringChar R)
+  条件: (φ : 加法特征 R R') (a : R) (h : 0 < ringChar R)
   证明: by
   simp only [mem_rootsOfUnity', IsUnit.unit_spec, Nat.toPNat'_coe, h, ↓reduceIte,
     ← map_nsmul_eq_pow, nsmul_eq_mul, CharP.cast_eq_zero, zero_mul, map_zero_eq_one]
@@ -83,8 +83,8 @@ definition IsPrimitive
   body: forall ⦃a : R⦄, a != 0 -> mulShift ψ a != 1
 
 中文:
-定义 IsPrimitive
-  签名: (ψ : AddChar R R')
+定义 是Primitive
+  签名: (ψ : 加法特征 R R')
   定义体: forall ⦃a : R⦄, a != 0 -> mulShift ψ a != 1
 
 Depends on / 依赖: mulShift
@@ -101,8 +101,8 @@ lemma IsPrimitive.compMulHom_of_isPrimitive
   simpa [DFunLike.ext_iff] using (MonoidHom.compAddChar_injective_right f hf).ne (hφ ha)
 
 中文:
-引理 IsPrimitive.compMulHom_of_isPrimitive
-  结论: {R'' : 类型} [CommMonoid R''] {φ : AddChar R R'}
+引理 是Primitive.compMulHom_of_isPrimitive
+  结论: {R'' : 类型} [交换幺半群 R''] {φ : 加法特征 R R'}
   证明: fun a ha => by
   simpa [DFunLike.ext_iff] using (MonoidHom.compAddChar_injective_right f hf).ne (hφ ha)
 
@@ -127,7 +127,7 @@ theorem to_mulShift_inj_of_isPrimitive
 
 中文:
 定理 to_mulShift_inj_of_isPrimitive
-  条件: {ψ : AddChar R R'} (hψ : IsPrimitive ψ)
+  条件: {ψ : 加法特征 R R'} (hψ : 是Primitive ψ)
   证明: by
   intro a b h
   apply_fun fun x => x * mulShift ψ (-b) at h
@@ -156,8 +156,8 @@ theorem IsPrimitive.of_ne_one
   proof: fun a ha h => hψ by simpa [mulShift_mulShift, ha] using! congr_arg (mulShift · a⁻¹) h
 
 中文:
-定理 IsPrimitive.of_ne_one
-  条件: {F : 类型u} [Field F] {ψ : AddChar F R'} (hψ : ψ != 1)
+定理 是Primitive.of_ne_one
+  条件: {F : 类型u} [域 F] {ψ : 加法特征 F R'} (hψ : ψ != 1)
   证明: fun a ha h => hψ by simpa [mulShift_mulShift, ha] using! congr_arg (mulShift · a⁻¹) h
 
 Depends on / 依赖: congr_arg, mulShift, mulShift_mulShift
@@ -181,7 +181,7 @@ lemma not_isPrimitive_mulShift
 
 中文:
 引理 not_isPrimitive_mulShift
-  结论: [Finite R] (e : AddChar R R') {r : R}
+  结论: [有限 R] (e : 加法特征 R R') {r : R}
   证明: by
   simp only [IsPrimitive, not_forall]
   simp only [isUnit_iff_mem_nonZeroDivisors_of_finite,
@@ -211,12 +211,12 @@ structure PrimitiveAddChar
     - prim : IsPrimitive char
 
 中文:
-结构 PrimitiveAddChar
-  参数: (R : 类型u) [CommRing R] (R' : 类型v) [Field R']
+结构 本原加法特征
+  参数: (R : 类型u) [交换环 R] (R' : 类型v) [域 R']
   公理与运算 (3 个):
     - n : 自然数+
-    - char : AddChar R (CyclotomicField n R')
-    - prim : IsPrimitive char
+    - char : 加法特征 R (CyclotomicField n R')
+    - prim : 是Primitive char
 -/
 structure PrimitiveAddChar (R : Type u) [CommRing R] (R' : Type v) [Field R'] where
   /-- The first projection from `PrimitiveAddChar`, giving the cyclotomic field. -/
@@ -249,8 +249,8 @@ lemma exists_divisor_of_not_isPrimitive
   · exact fun h => by simp on
 
 中文:
-引理 exists_divisor_of_not_isPrimitive
-  条件: (he : ¬e.IsPrimitive)
+引理 存在_divisor_of_not_isPrimitive
+  条件: (he : ¬e.是Primitive)
   证明: by
   simp_rw [IsPrimitive, not_forall, not_ne_iff] at he
   rcases he with ⟨b, hb_ne, hb⟩
@@ -364,7 +364,7 @@ theorem zmod_char_ne_one_iff
 
 中文:
 定理 zmod_char_ne_one_iff
-  条件: (n : 自然数) [NeZero n] (ψ : AddChar (ZMod n) C)
+  条件: (n : 自然数) [NeZero n] (ψ : 加法特征 (ZMod n) C)
   结论: ψ != 1 ↔ ψ 1 != 1
   证明: by
   rw [ne_one_iff]
@@ -397,7 +397,7 @@ theorem IsPrimitive.zmod_char_eq_one_iff
   rw [zmod_char_ne_one_iff n (mulShift ψ a)]; rw [mulShift_apply]; rw [mul_one]; rw [h]; rw [Classical.not_not]
 
 中文:
-定理 IsPrimitive.zmod_char_eq_one_iff
+定理 是Primitive.zmod_char_eq_one_iff
   结论: (n : 自然数) [NeZero n]
   证明: by
   refine ⟨fun h => not_imp_comm.mp (@hψ a) ?_, fun ha => by rw [ha, map_zero_eq_one]⟩
@@ -426,7 +426,7 @@ theorem zmod_char_primitive_of_eq_one_only_at_zero
 
 中文:
 定理 zmod_char_primitive_of_eq_one_only_at_zero
-  结论: (n : 自然数) (ψ : AddChar (ZMod n) C)
+  结论: (n : 自然数) (ψ : 加法特征 (ZMod n) C)
   证明: by
   intro a ha hf
   have h : mulShift ψ a 1 = (1 : AddChar (ZMod n) C) (1 : ZMod n) :=
@@ -458,7 +458,7 @@ theorem zmodChar_primitive_of_primitive_root
 
 中文:
 定理 zmodChar_primitive_of_primitive_root
-  条件: (n : 自然数) [NeZero n] {ζ : C} (h : IsPrimitiveRoot ζ n)
+  条件: (n : 自然数) [NeZero n] {ζ : C} (h : 是PrimitiveRoot ζ n)
   证明: by
   apply zmod_char_primitive_of_eq_one_only_at_zero
   intro a ha
@@ -486,7 +486,7 @@ definition primitiveZModChar
 
 中文:
 定义 primitiveZModChar
-  签名: (n : 自然数+) (F' : 类型v) [Field F'] (h : (n : F') != 0)
+  签名: (n : 自然数+) (F' : 类型v) [域 F'] (h : (n : F') != 0)
   定义体: have : NeZero (n : F') := ⟨h⟩
   ⟨n, zmodChar n (IsCyclotomicExtension.zeta_pow n F' _),
     zmodChar_primitive_of_primitive_root n (IsCyclotomicExtension.zeta_spec n F' _)⟩
@@ -524,7 +524,7 @@ definition FiniteField.primitiveChar
 
 中文:
 定义 FiniteField.primitiveChar
-  签名: (F F' : 类型) [Field F] [Finite F] [Field F']
+  签名: (F F' : 类型) [域 F] [有限 F] [域 F']
   定义体: by
   let p := ringChar F
   haveI hp : Fact p.Prime := ⟨CharP.char_is_prime F _⟩
@@ -581,7 +581,7 @@ theorem sum_eq_zero_of_ne_one
 
 中文:
 定理 sum_eq_zero_of_ne_one
-  条件: [IsDomain R'] {ψ : AddChar R R'} (hψ : ψ != 1)
+  条件: [是整环 R'] {ψ : 加法特征 R R'} (hψ : ψ != 1)
   结论: ∑ a, ψ a = 0
   证明: by
   rcases ne_one_iff.1 hψ with ⟨b, hb⟩
@@ -613,7 +613,7 @@ theorem sum_eq_card_of_eq_one
 
 中文:
 定理 sum_eq_card_of_eq_one
-  条件: {ψ : AddChar R R'} (hψ : ψ = 1)
+  条件: {ψ : 加法特征 R R'} (hψ : ψ = 1)
   证明: by simp [hψ]
 -/
 theorem sum_eq_card_of_eq_one {ψ : AddChar R R'} (hψ : ψ = 1) :
@@ -638,7 +638,7 @@ theorem sum_mulShift
 
 中文:
 定理 sum_mulShift
-  结论: {R : 类型} [CommRing R] [Fintype R] [DecidableEq R]
+  结论: {R : 类型} [交换环 R] [有限类型 R] [DecidableEq R]
   证明: by
   split_ifs with h
   · -- case `b = 0`
@@ -684,7 +684,7 @@ have H := Complex.norm_eq_one_of_mem_rootsOfUnity φ.val_mem_rootsOfUnity a hR
 
 中文:
 引理 starComp_eq_inv
-  条件: (hR : 0 < ringChar R) {φ : AddChar R Complex}
+  条件: (hR : 0 < ringChar R) {φ : 加法特征 R 复形}
   证明: by
   ext1 a
   simp only [RingHom.toMonoidHom_eq_coe, MonoidHom.coe_compAddChar, MonoidHom.coe_coe,
@@ -714,7 +714,7 @@ lemma starComp_apply
 
 中文:
 引理 starComp_apply
-  条件: (hR : 0 < ringChar R) {φ : AddChar R Complex} (a : R)
+  条件: (hR : 0 < ringChar R) {φ : 加法特征 R 复形} (a : R)
   证明: by
   rw [← starComp_eq_inv hR]
   rfl

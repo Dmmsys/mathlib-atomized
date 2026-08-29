@@ -41,12 +41,12 @@ structure Rep
 
 中文:
 结构 Rep
-  参数: (k : 类型u) (G : 类型v) [Semiring k] [Monoid G]
+  参数: (k : 类型u) (G : 类型v) [半环 k] [幺半群 G]
   公理与运算 (5 个):
     - private(mk) : :
-    - V : Type w
-    - [hV1 : AddCommGroup V]
-    - [hV2 : Module k V]
+    - V : 类型 w
+    - [hV1 : 加法交换群 V]
+    - [hV2 : 模 k V]
     - ρ : Representation k G V
 -/
 structure Rep (k : Type u) (G : Type v) [Semiring k] [Monoid G] where
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (Rep k G) (Type w)
+  签名: CoeSort (Rep k G) (类型 w)
   定义体: ⟨Rep.V⟩
 
 Depends on / 依赖: Rep.V
@@ -158,11 +158,11 @@ structure Hom
     - hom' : A.ρ.IntertwiningMap B.ρ
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : A.ρ.整数ertwiningMap B.ρ
+    - hom' : A.ρ.整数ertwining映射 B.ρ
 -/
 structure Hom where
   private mk ::
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Rep.{w} k G)
+  签名: 范畴 (Rep.{w} k G)
   定义体: Hom A B
   id A := ⟨.id A.ρ⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (Rep.{w} k G) (fun A B => A.ρ.整数ertwiningMap B.ρ)
+  签名: 余ncrete范畴 (Rep.{w} k G) (fun A B => A.ρ.整数ertwining映射 B.ρ)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -226,8 +226,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := Rep k G) f
 
 中文:
-缩写 Hom.hom
-  签名: (f : Hom A B)
+缩写 态射.hom
+  签名: (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := Rep k G) f
 -/
 abbrev Hom.hom (f : Hom A B) := ConcreteCategory.hom (C := Rep k G) f
@@ -243,7 +243,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: (f : ρ.整数ertwiningMap σ)
+  签名: (f : ρ.整数ertwining映射 σ)
   定义体: ConcreteCategory.ofHom (C := Rep.{w} k G) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -262,8 +262,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -399,7 +399,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: (f : ρ.整数ertwiningMap σ)
+  条件: (f : ρ.整数ertwining映射 σ)
   结论: (ofHom f).hom = f
   证明: rfl
 -/
@@ -451,7 +451,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  条件: (f : ρ.整数ertwiningMap σ) (g : σ.整数ertwiningMap τ)
+  条件: (f : ρ.整数ertwining映射 σ) (g : σ.整数ertwining映射 τ)
   证明: rfl
 -/
 lemma ofHom_comp (f : ρ.IntertwiningMap σ) (g : σ.IntertwiningMap τ) :
@@ -468,7 +468,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: (f : ρ.整数ertwiningMap σ) (x : X)
+  条件: (f : ρ.整数ertwining映射 σ) (x : X)
   结论: ofHom f x = f x
   证明: rfl
 -/
@@ -518,7 +518,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Rep.{u} k G)
+  签名: 可居 (Rep.{u} k G)
   定义体: ⟨of (Representation.trivial k G PUnit)⟩
 
 Depends on / 依赖: Representation, Representation.trivial
@@ -573,7 +573,7 @@ definition mkIso
 
 中文:
 定义 mkIso
-  签名: (e : ρ.Equiv σ)
+  签名: (e : ρ.等价 σ)
   定义体: ofHom e.toIntertwiningMap
   inv := ofHom e.symm.toIntertwiningMap
 
@@ -598,7 +598,7 @@ lemma mkIso_hom_hom_apply
 
 中文:
 引理 mkIso_hom_hom_apply
-  条件: (e : ρ.Equiv σ) (x : X)
+  条件: (e : ρ.等价 σ) (x : X)
   证明: rfl
 
 @[simp]
@@ -619,7 +619,7 @@ lemma mkIso_hom_hom_toLinearMap
 
 中文:
 引理 mkIso_hom_hom_toLinearMap
-  条件: (e : ρ.Equiv σ)
+  条件: (e : ρ.等价 σ)
   证明: rfl
 
 @[simp]
@@ -640,7 +640,7 @@ lemma mkIso_inv_hom_toLinearMap
 
 中文:
 引理 mkIso_inv_hom_toLinearMap
-  条件: (e : ρ.Equiv σ)
+  条件: (e : ρ.等价 σ)
   证明: rfl
 
 @[simp]
@@ -661,7 +661,7 @@ lemma mkIso_inv_hom_apply
 
 中文:
 引理 mkIso_inv_hom_apply
-  条件: (e : ρ.Equiv σ) (y : Y)
+  条件: (e : ρ.等价 σ) (y : Y)
   证明: rfl
 
 @[simp]
@@ -680,7 +680,7 @@ lemma mkIso_hom_hom
 
 中文:
 引理 mkIso_hom_hom
-  条件: (e : ρ.Equiv σ)
+  条件: (e : ρ.等价 σ)
   证明: rfl
 -/
 lemma mkIso_hom_hom (e : ρ.Equiv σ) :
@@ -733,7 +733,7 @@ instance reflectsIsomorphisms_forget
 
 中文:
 实例 reflectsIsomorphisms_forget
-  签名: : (forget (Rep.{w} k G)).ReflectsIsomorphisms where
+  签名: : (forget (Rep.{w} k G)).反映同构 where
   定义体: by
     let i := asIso ((forget (Rep.{w} k G)).map f)
     let e : X.ρ.Equiv Y.ρ := { f.hom, i.toEquiv with }
@@ -815,7 +815,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: : (A ⟶ B) ≃ (A.ρ.整数ertwiningMap B.ρ) where
+  签名: : (A ⟶ B) ≃ (A.ρ.整数ertwining映射 B.ρ) where
   定义体: Hom.hom
   invFun := ofHom
 
@@ -835,7 +835,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (A ⟶ B)
+  签名: 加法 (A ⟶ B)
   定义体: ofHom (f.hom + g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -852,7 +852,7 @@ lemma ofHom_add
 
 中文:
 引理 ofHom_add
-  条件: (f g : ρ.整数ertwiningMap σ)
+  条件: (f g : ρ.整数ertwining映射 σ)
   证明: rfl
 -/
 lemma ofHom_add (f g : ρ.IntertwiningMap σ) :
@@ -951,7 +951,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (A ⟶ B)
+  签名: 零 (A ⟶ B)
   定义体: ofHom (0 : A.ρ.IntertwiningMap B.ρ)
 
 @[simp]
@@ -974,7 +974,7 @@ lemma ofHom_zero
 
 中文:
 引理 ofHom_zero
-  结论: ofHom (0 : ρ.整数ertwiningMap σ) = 0
+  结论: ofHom (0 : ρ.整数ertwining映射 σ) = 0
   证明: rfl
 
 @[simp]
@@ -1007,7 +1007,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (A ⟶ B)
+  签名: 标量乘法 自然数 (A ⟶ B)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: f.hom
@@ -1024,7 +1024,7 @@ lemma ofHom_nsmul
 
 中文:
 引理 ofHom_nsmul
-  条件: (f : ρ.整数ertwiningMap σ) (n : 自然数)
+  条件: (f : ρ.整数ertwining映射 σ) (n : 自然数)
   证明: rfl
 -/
 lemma ofHom_nsmul (f : ρ.IntertwiningMap σ) (n : Nat) :
@@ -1057,7 +1057,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (A ⟶ B)
+  签名: 取负 (A ⟶ B)
   定义体: ofHom (-f.hom)
 
 Depends on / 依赖: f.hom
@@ -1075,7 +1075,7 @@ lemma ofHom_neg
 
 中文:
 引理 ofHom_neg
-  条件: (f : ρ.整数ertwiningMap σ)
+  条件: (f : ρ.整数ertwining映射 σ)
   结论: ofHom (-f) = -ofHom f
   证明: rfl
 -/
@@ -1108,7 +1108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (A ⟶ B)
+  签名: 减法 (A ⟶ B)
   定义体: ofHom (f.hom - g.hom)
 
 Depends on / 依赖: f.hom, g.hom
@@ -1126,7 +1126,7 @@ lemma ofHom_sub
 
 中文:
 引理 ofHom_sub
-  条件: (f g : ρ.整数ertwiningMap σ)
+  条件: (f g : ρ.整数ertwining映射 σ)
   结论: ofHom (f - g) = ofHom f - ofHom g
   证明: rfl
 -/
@@ -1159,7 +1159,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (A ⟶ B)
+  签名: 标量乘法 整数 (A ⟶ B)
   定义体: ofHom (n • f.hom)
 
 Depends on / 依赖: f.hom
@@ -1177,7 +1177,7 @@ lemma ofHom_zsmul
 
 中文:
 引理 ofHom_zsmul
-  条件: (f : ρ.整数ertwiningMap σ) (n : 整数)
+  条件: (f : ρ.整数ertwining映射 σ) (n : 整数)
   结论: ofHom (n • f) = n • ofHom f
   证明: rfl
 -/
@@ -1211,7 +1211,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (A ⟶ B)
+  签名: 加法交换群 (A ⟶ B)
   定义体: fast_instance% hom_injective.addCommGroup
     Rep.Hom.hom zero_hom add_hom neg_hom sub_hom nsmul_hom zsmul_hom
 
@@ -1231,7 +1231,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Rep.{w} k G)
+  签名: 预加性 (Rep.{w} k G)
   定义体: add_comp
   comp_add _ _ _ := comp_add
 
@@ -1254,7 +1254,7 @@ lemma sum_hom
 
 中文:
 引理 sum_hom
-  条件: {ι : 类型u'} (f : ι -> (A ⟶ B)) (s : Finset ι)
+  条件: {ι : 类型u'} (f : ι -> (A ⟶ B)) (s : 有限集 ι)
   证明: by
   classical induction s using Finset.induction with
   | empty => simp
@@ -1281,7 +1281,7 @@ lemma ofHom_sum
 
 中文:
 引理 ofHom_sum
-  结论: {ι : 类型u'} {M N : 类型v'} [AddCommGroup M] [AddCommGroup N] [Module k M]
+  结论: {ι : 类型u'} {M N : 类型v'} [加法交换群 M] [加法交换群 N] [模 k M]
   证明: by
   classical induction s using Finset.induction with
   | empty => simp
@@ -1308,7 +1308,7 @@ abbreviation trivial
 
 中文:
 缩写 trivial
-  签名: (V : Type w) [AddCommGroup V] [Module k V]
+  签名: (V : 类型 w) [加法交换群 V] [模 k V]
   定义体: Rep.of (Representation.trivial k G V)
 
 Depends on / 依赖: Rep.of, Representation, Representation.trivial
@@ -1327,7 +1327,7 @@ lemma trivial_V
 
 中文:
 引理 trivial_V
-  条件: {V : Type w} [AddCommGroup V] [Module k V]
+  条件: {V : 类型 w} [加法交换群 V] [模 k V]
   结论: (trivial k G V).V = V
   证明: rfl
 -/
@@ -1345,7 +1345,7 @@ lemma trivial_ρ
 
 中文:
 引理 trivial_ρ
-  条件: {V : Type w} [AddCommGroup V] [Module k V] (g : G)
+  条件: {V : 类型 w} [加法交换群 V] [模 k V] (g : G)
   证明: rfl
 
 @[simp]
@@ -1364,7 +1364,7 @@ lemma trivial_ρ_apply
 
 中文:
 引理 trivial_ρ_apply
-  条件: {V : Type w} [AddCommGroup V] [Module k V] (g : G) (v : V)
+  条件: {V : 类型 w} [加法交换群 V] [模 k V] (g : G) (v : V)
   证明: rfl
 -/
 lemma trivial_ρ_apply {V : Type w} [AddCommGroup V] [Module k V] (g : G) (v : V) :
@@ -1479,7 +1479,7 @@ abbreviation ofMulAction
 
 中文:
 缩写 ofMulAction
-  签名: (H : Type w') [MulAction G H]
+  签名: (H : 类型 w') [乘法作用 G H]
   定义体: of Representation.ofMulAction k G H
 
 Depends on / 依赖: Representation, Representation.ofMulAction, ofMulAction
@@ -1606,7 +1606,7 @@ definition ofAlgebraAut
 
 中文:
 定义 ofAlgebraAut
-  签名: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+  签名: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   定义体: ofDistribMulAction Int (S ≃ₐ[R] S) S
 -/
 @[simp] def ofAlgebraAut (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] :
@@ -1648,7 +1648,7 @@ definition toAdditive
 
 中文:
 定义 toAdditive
-  签名: : ofMulDistribMulAction M G ≃+ Additive G
+  签名: : ofMulDistribMulAction M G ≃+ 加性 G
   定义体: AddEquiv.refl _
 
 Depends on / 依赖: AddEquiv, AddEquiv.refl
@@ -1665,7 +1665,7 @@ theorem ofMulDistribMulAction_ρ_apply_apply
 
 中文:
 定理 ofMulDistribMulAction_ρ_apply_apply
-  条件: (g : M) (a : Additive G)
+  条件: (g : M) (a : 加性 G)
   证明: rfl
 -/
 @[simp] theorem ofMulDistribMulAction_ρ_apply_apply (g : M) (a : Additive G) :
@@ -1681,7 +1681,7 @@ definition ofAlgebraAutOnUnits
 
 中文:
 定义 ofAlgebraAutOnUnits
-  签名: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+  签名: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   定义体: Rep.ofMulDistribMulAction (S ≃ₐ[R] S) Sˣ
 -/
 @[simp] def ofAlgebraAutOnUnits (R S : Type*) [CommRing R] [CommRing S] [Algebra R S] :
@@ -1745,7 +1745,7 @@ abbreviation subrepresentation
 
 中文:
 缩写 subrepresentation
-  签名: (W : Submodule k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
+  签名: (W : 子模 k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
   定义体: Rep.of (A.ρ.subrepresentation W le_comap)
 
 Depends on / 依赖: Rep.of, le_comap, subrepresentation
@@ -1765,7 +1765,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (W : Submodule k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
+  签名: (W : 子模 k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
   定义体: Rep.ofHom ⟨W.subtype, fun _ => rfl⟩
 
 Depends on / 依赖: Rep.ofHom, W.subtype, subtype
@@ -1783,7 +1783,7 @@ abbreviation quotient
 
 中文:
 缩写 quotient
-  签名: (W : Submodule k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
+  签名: (W : 子模 k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
   定义体: Rep.of (A.ρ.quotient W le_comap)
 
 Depends on / 依赖: Rep.of, le_comap, quotient
@@ -1803,7 +1803,7 @@ definition mkQ
 
 中文:
 定义 mkQ
-  签名: (W : Submodule k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
+  签名: (W : 子模 k A) (le_comap : 对任意 g, W <= W.comap (A.ρ g))
   定义体: Rep.ofHom ⟨W.mkQ, fun _ => rfl⟩
 
 Depends on / 依赖: Rep.ofHom, W.mkQ
@@ -1827,7 +1827,7 @@ definition trivialFunctor
 
 中文:
 定义 trivialFunctor
-  签名: : ModuleCat.{w} k ⥤ Rep.{w} k G where
+  签名: : 模范畴.{w} k ⥤ Rep.{w} k G where
   定义体: trivial k G V
   map f := ofHom ⟨f.hom, fun _ => rfl⟩
 -/
@@ -1844,7 +1844,7 @@ abbreviation IsTrivial
   body: A.ρ.IsTrivial
 
 中文:
-缩写 IsTrivial
+缩写 是平凡
   签名: (A : Rep k G)
   定义体: A.ρ.IsTrivial
 
@@ -1896,7 +1896,7 @@ abbreviation Hom.toModuleCatHom
   body: ModuleCat.ofHom f.hom.toLinearMap
 
 中文:
-缩写 Hom.toModuleCatHom
+缩写 态射.toModuleCatHom
   签名: (f : A ⟶ B)
   定义体: ModuleCat.ofHom f.hom.toLinearMap
 
@@ -1947,7 +1947,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (Rep.{w} k G) (ModuleCat.{w} k)).Faithful
+  签名: (forget₂ (Rep.{w} k G) (模范畴.{w} k)).忠实
   定义体: inferInstance
 -/
 instance : (forget₂ (Rep.{w} k G) (ModuleCat.{w} k)).Faithful := inferInstance
@@ -1971,7 +1971,7 @@ map f := ⟨f.toModuleCatHom, fun g => ModuleCat.hom_ext by
 
 中文:
 定义 RepToAction
-  签名: : Rep.{w} k G ⥤ Action (ModuleCat.{w} k) G where
+  签名: : Rep.{w} k G ⥤ 作用 (模范畴.{w} k) G where
   定义体: ⟨.of k X, (ModuleCat.endRingEquiv (.of k X)).symm.toMonoidHom.comp X.ρ⟩
 map f := ⟨f.toModuleCatHom, fun g => ModuleCat.hom_ext by
     simp [ModuleCat.endRingEquiv, f.hom.2]⟩
@@ -2014,7 +2014,7 @@ definition ActionToRep
 
 中文:
 定义 ActionToRep
-  签名: : Action (ModuleCat.{w} k) G ⥤ Rep.{w} k G where
+  签名: : 作用 (模范畴.{w} k) G ⥤ Rep.{w} k G where
   定义体: of (ModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
   map f := ofHom ⟨f.hom.hom, fun g => by simpa using ModuleCat.hom_ext_iff.1 (f.comm g)⟩
 
@@ -2035,7 +2035,7 @@ definition RepToAction_ActionToRep
 
 中文:
 定义 RepToAction_ActionToRep
-  签名: (A : Action (ModuleCat.{w} k) G)
+  签名: (A : 作用 (模范畴.{w} k) G)
   定义体: ⟨𝟙 _, fun g => by rfl⟩
   inv := ⟨𝟙 _, fun g => by rfl⟩
 -/
@@ -2079,7 +2079,7 @@ definition repIsoAction
 
 中文:
 定义 repIsoAction
-  签名: : Rep.{w} k G ≌ Action (ModuleCat.{w} k) G where
+  签名: : Rep.{w} k G ≌ 作用 (模范畴.{w} k) G where
   定义体: RepToAction k G
   inverse := ActionToRep k G
   unitIso := NatIso.ofComponents (ActionToRep_RepToAction k G)
@@ -2103,7 +2103,7 @@ instance :
 
 中文:
 实例 :
-  签名: (RepToAction k G).IsEquivalence
+  签名: (RepToAction k G).是等价
   定义体: .isEquivalence_functor repIsoAction k G
 
 Depends on / 依赖: isEquivalence_functor, repIsoAction
@@ -2121,7 +2121,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ActionToRep k G).IsEquivalence
+  签名: (ActionToRep k G).是等价
   定义体: .isEquivalence_inverse repIsoAction k G
 
 Depends on / 依赖: isEquivalence_inverse, repIsoAction
@@ -2139,7 +2139,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (Rep.{w} k G) (ModuleCat.{w} k)).Additive
+  签名: (forget₂ (Rep.{w} k G) (模范畴.{w} k)).加性
   定义体: by ext1; simp [add_hom]
 
 Depends on / 依赖: add_hom
@@ -2156,8 +2156,8 @@ abbreviation forgetNatIsoActionForget
   body: .refl _
 
 中文:
-缩写 forgetNatIsoActionForget
-  签名: : forget₂ (Rep.{w} k G) (ModuleCat k) ≅ (RepToAction k G) ⋙
+缩写 forget自然数IsoActionForget
+  签名: : forget₂ (Rep.{w} k G) (模范畴 k) ≅ (RepToAction k G) ⋙
   定义体: .refl _
 -/
 abbrev forgetNatIsoActionForget : forget₂ (Rep.{w} k G) (ModuleCat k) ≅ (RepToAction k G) ⋙
@@ -2215,7 +2215,7 @@ by ext1; simp [zero_hom], by ext1; simp [zero_hom], by ext1; simp⟩ by
 
 中文:
 实例 :
-  签名: Limits.HasBinaryBiproducts (Rep.{w} k G)
+  签名: Limits.有BinaryBiproducts (Rep.{w} k G)
   定义体: Limits.hasBinaryBiproduct_of_total
     ⟨Rep.of (X := A.V × B.V) (A.ρ.prod B.ρ), Rep.ofHom (.fst k A.ρ B.ρ), Rep.ofHom (.snd k A.ρ B.ρ),
       Rep.ofHom (.inl k A.ρ B.ρ), Rep.ofHom (.inr k A.ρ B.ρ), by ext1; simp,
@@ -2245,7 +2245,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasZeroObject (Rep.{w} k G)
+  签名: Limits.有ZeroObject (Rep.{w} k G)
   定义体: ⟨Rep.trivial k G PUnit, {
     unique_to X := Nonempty.intro ⟨⟨0⟩, fun f => by
       ext x; have : x = 0 := Subsingleton.elim _ _; subst this; simp⟩
@@ -2275,7 +2275,7 @@ lemma isZero_iff
 中文:
 引理 isZero_iff
   条件: (M : Rep k G)
-  结论: Limits.IsZero M ↔ Subsingleton M.V
+  结论: Limits.是零 M ↔ 子单例 M.V
   证明: by
   simp [Limits.IsZero.iff_id_eq_zero, Rep.hom_ext_iff, Representation.IntertwiningMap.ext_iff,
     ← ModuleCat.isZero_of_iff_subsingleton (R := k), ModuleCat.hom_ext_iff]
@@ -2296,7 +2296,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasLimits (Rep.{w} k G)
+  签名: Limits.有极限 (Rep.{w} k G)
   定义体: Adjunction.has_limits_of_equivalence (repIsoAction k G).functor
 
 Depends on / 依赖: Adjunction, Adjunction.has_limits_of_equivalence, functor, has_limits_of_equivalence, repIsoAction
@@ -2314,7 +2314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasColimits (Rep.{w} k G)
+  签名: Limits.有余极限 (Rep.{w} k G)
   定义体: Adjunction.has_colimits_of_equivalence (repIsoAction k G).functor
 
 Depends on / 依赖: Adjunction, Adjunction.has_colimits_of_equivalence, functor, has_colimits_of_equivalence, repIsoAction
@@ -2332,7 +2332,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.ReflectsLimitsOfSize.{w, w} (forget₂ (Rep.{w} k G) (ModuleCat k))
+  签名: Limits.ReflectsLimitsOfSize.{w, w} (forget₂ (Rep.{w} k G) (模范畴 k))
   定义体: Limits.reflectsLimits_of_reflectsIsomorphisms
 
 Depends on / 依赖: Limits, Limits.reflectsLimits_of_reflectsIsomorphisms, reflectsLimits_of_reflectsIsomorphisms
@@ -2350,7 +2350,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.ReflectsColimitsOfSize.{w, w} (forget₂ (Rep.{w} k G) (ModuleCat k))
+  签名: Limits.ReflectsColimitsOfSize.{w, w} (forget₂ (Rep.{w} k G) (模范畴 k))
   定义体: Limits.reflectsColimits_of_reflectsIsomorphisms
 
 Depends on / 依赖: Limits, Limits.reflectsColimits_of_reflectsIsomorphisms, reflectsColimits_of_reflectsIsomorphisms
@@ -2368,7 +2368,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (Rep.{w} k G)
+  签名: 交换 (Rep.{w} k G)
   定义体: abelianOfEquivalence (RepToAction k G)
 
 Depends on / 依赖: RepToAction, abelianOfEquivalence
@@ -2390,7 +2390,7 @@ theorem epi_iff_surjective
 中文:
 定理 epi_iff_surjective
   条件: (f : A ⟶ B)
-  结论: Epi f ↔ Function.Surjective f.hom
+  结论: 满态射 f ↔ 函数.满射 f.hom
   证明: ⟨fun _ => (ModuleCat.epi_iff_surjective ((forget₂ _ _).map f)).1 inferInstance,
   fun h => (forget₂ _ _).epi_of_epi_map ((ModuleCat.epi_iff_surjective <|
     (forget₂ _ _).map f).2 h)⟩
@@ -2417,7 +2417,7 @@ theorem mono_iff_injective
 中文:
 定理 mono_iff_injective
   条件: (f : A ⟶ B)
-  结论: Mono f ↔ Function.Injective f.hom
+  结论: 单态射 f ↔ 函数.单射 f.hom
   证明: ⟨fun _ => (ModuleCat.mono_iff_injective ((forget₂ _ _).map f)).1 inferInstance,
   fun h => (forget₂ _ _).mono_of_mono_map ((ModuleCat.mono_iff_injective <|
     (forget₂ _ _).map f).2 h)⟩
@@ -2456,7 +2456,7 @@ lemma ofHom_smul
 
 中文:
 引理 ofHom_smul
-  结论: {M N : Type w} [AddCommGroup M] [AddCommGroup N] [Module k M] [Module k N]
+  结论: {M N : 类型 w} [加法交换群 M] [加法交换群 N] [模 k M] [模 k N]
   证明: rfl
 -/
 lemma ofHom_smul {M N : Type w} [AddCommGroup M] [AddCommGroup N] [Module k M] [Module k N]
@@ -2542,7 +2542,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear k (Rep k G)
+  签名: 线性 k (Rep k G)
   定义体: smul_comp
   comp_smul _ _ _ := comp_smul
 
@@ -2568,7 +2568,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Linear k (forget₂ (Rep.{w} k G) (ModuleCat.{w} k))
+  签名: 函子.线性 k (forget₂ (Rep.{w} k G) (模范畴.{w} k))
   定义体: by
     ext
     simp [smul_hom]
@@ -2626,7 +2626,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategory (Rep.{u} k G)
+  签名: 幺半群范畴 (Rep.{u} k G)
   定义体: of (X.ρ.tprod Y.ρ)
   whiskerLeft X _ _ f := ofHom (lTensor X.ρ f.hom)
   whiskerRight f Z := ofHom (rTensor Z.ρ f.hom)
@@ -2708,7 +2708,7 @@ lemma tensor_V
 中文:
 引理 tensor_V
   条件: {X Y : Rep k G}
-  结论: (X otimes Y).V = TensorProduct k X.V Y.V
+  结论: (X otimes Y).V = 张量积 k X.V Y.V
   证明: rfl
 
 @[simp]
@@ -2813,7 +2813,7 @@ lemma of_tensor
 
 中文:
 引理 of_tensor
-  结论: {X Y : 类型u} [AddCommGroup X] [AddCommGroup Y] [Module k X] [Module k Y]
+  结论: {X Y : 类型u} [加法交换群 X] [加法交换群 Y] [模 k X] [模 k Y]
   证明: rfl
 
 @[simp]
@@ -2979,7 +2979,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalPreadditive (Rep.{u} k G)
+  签名: 幺半群预加性 (Rep.{u} k G)
   定义体: by ext1; simp
   zero_whiskerRight {_ _ _} := by ext1; simp
   whiskerLeft_add _ _ := by ext1; simp [add_hom]
@@ -3004,7 +3004,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalLinear k (Rep.{u} k G)
+  签名: 幺半群线性 k (Rep.{u} k G)
   定义体: by ext1; simp [smul_hom]
   smul_whiskerRight _ _ _ _ _ := by ext1; simp [smul_hom]
 
@@ -3030,7 +3030,7 @@ exact TensorProduct.ext_threefold fun _ _ _ => by simp
 
 中文:
 实例 :
-  签名: BraidedCategory (Rep.{u} k G)
+  签名: 辫范畴 (Rep.{u} k G)
   定义体: Rep.mkIso (Representation.TensorProduct.comm X.ρ Y.ρ)
   braiding_naturality_right _ _ _ _ := by ext1; simp [comm_comp_lTensor]
   braiding_naturality_left _ _ := by ext1; simp [comm_comp_rTensor]
@@ -3086,7 +3086,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory (Rep.{u} k G)
+  签名: 对称范畴 (Rep.{u} k G)
   定义体: by ext1; simp [← comm_symm Y.ρ X.ρ, ← toIntertwiningMap_trans,
     trans_symm, toIntertwiningMap_refl]
 
@@ -3217,7 +3217,7 @@ Representation.Intertwin
 
 中文:
 实例 :
-  签名: MonoidalClosed (Rep k G)
+  签名: 幺半群闭 (Rep k G)
   定义体: { rightAdj := Rep.ihom A
       adj := Adjunction.mkOfHomEquiv ({
         homEquiv := Rep.tensorHomEquiv A
@@ -3338,7 +3338,7 @@ definition MonoidalClosed.linearHomEquiv
     map_smul' := fun _ _ => rfl }
 
 中文:
-定义 MonoidalClosed.linearHomEquiv
+定义 幺半群闭.linearHomEquiv
   签名: (A B C : Rep.{u} k G)
   定义体: { (ihom.adjunction A).homEquiv _ _ with
     map_add' := fun _ _ => rfl
@@ -3362,7 +3362,7 @@ definition MonoidalClosed.linearHomEquivComm
 @[simp]
 
 中文:
-定义 MonoidalClosed.linearHomEquivComm
+定义 幺半群闭.linearHomEquivComm
   签名: (A B C : Rep.{u} k G)
   定义体: Linear.homCongr k (β_ A B) (Iso.refl _) ≪≫ₗ MonoidalClosed.linearHomEquiv _ _ _
 
@@ -3386,7 +3386,7 @@ theorem MonoidalClosed.linearHomEquiv_hom
 @[simp]
 
 中文:
-定理 MonoidalClosed.linearHomEquiv_hom
+定理 幺半群闭.linearHomEquiv_hom
   条件: (A B C : Rep.{u} k G) (f : A otimes B ⟶ C)
   证明: rfl
 
@@ -3407,7 +3407,7 @@ theorem MonoidalClosed.linearHomEquivComm_hom
   proof: rfl
 
 中文:
-定理 MonoidalClosed.linearHomEquivComm_hom
+定理 幺半群闭.linearHomEquivComm_hom
   条件: (A B C : Rep.{u} k G) (f : A otimes B ⟶ C)
   证明: rfl
 -/
@@ -3427,7 +3427,7 @@ theorem MonoidalClosed.linearHomEquiv_symm_hom
   rfl
 
 中文:
-定理 MonoidalClosed.linearHomEquiv_symm_hom
+定理 幺半群闭.linearHomEquiv_symm_hom
   条件: (A B C : Rep.{u} k G) (f : B ⟶ A ⟶[Rep k G] C)
   证明: by
   simp [linearHomEquiv]
@@ -3450,7 +3450,7 @@ theorem MonoidalClosed.linearHomEquivComm_symm_hom
   proof: TensorProduct.ext' fun _ _ => rfl
 
 中文:
-定理 MonoidalClosed.linearHomEquivComm_symm_hom
+定理 幺半群闭.linearHomEquivComm_symm_hom
   条件: (A B C : Rep.{u} k G) (f : A ⟶ B ⟶[Rep k G] C)
   证明: TensorProduct.ext' fun _ _ => rfl
 
@@ -3549,7 +3549,7 @@ definition normNatTrans
   naturality _ _ := norm_comm
 
 中文:
-定义 normNatTrans
+定义 norm自然数Trans
   签名: : End (𝟭 (Rep k G)) where
   定义体: norm
   naturality _ _ := norm_comm
@@ -3766,7 +3766,7 @@ map f := Rep.ofHom Representation.linearizeMap f
 
 中文:
 缩写 linearization
-  签名: : Action (Type w) G ⥤ Rep.{max w u} k G where
+  签名: : 作用 (类型 w) G ⥤ Rep.{最大值 w u} k G where
   定义体: .of .linearize k G X
 map f := Rep.ofHom Representation.linearizeMap f
 
@@ -3793,7 +3793,7 @@ right_unitality X := hom_ext μ_rightUnitor X
 
 中文:
 实例 :
-  签名: (linearization k G).LaxMonoidal
+  签名: (linearization k G).松弛幺半群
   定义体: ofHom (ε k G)
   μ X Y := ofHom (μ X Y)
 μ_natural_left f Z := hom_ext μ_comp_rTensor f Z
@@ -3828,7 +3828,7 @@ oplax_right_unitality X := hom_ex
 
 中文:
 实例 :
-  签名: (linearization k G).OplaxMonoidal
+  签名: (linearization k G).反松弛幺半群
   定义体: ofHom (η k G)
   δ X Y := ofHom (δ X Y)
 δ_natural_left f Z := hom_ext rTensor_comp_δ Z f
@@ -3860,7 +3860,7 @@ instance :
 
 中文:
 实例 :
-  签名: (linearization k G).Monoidal
+  签名: (linearization k G).幺半群
   定义体: hom_ext η_ε k G
 η_ε := hom_ext ε_η k G
 μ_δ X Y := hom_ext δ_μ (k := k) X Y
@@ -3895,8 +3895,8 @@ lemma μ_def
 
 中文:
 引理 μ_def
-  条件: {X Y : Action (类型u) G}
-  结论: Functor.LaxMonoidal.μ (linearization k G) X Y =
+  条件: {X Y : 作用 (类型u) G}
+  结论: 函子.松弛幺半群.μ (linearization k G) X Y =
   证明: rfl
 -/
 lemma μ_def {X Y : Action (Type u) G} : Functor.LaxMonoidal.μ (linearization k G) X Y =
@@ -3913,8 +3913,8 @@ lemma μ_hom
 
 中文:
 引理 μ_hom
-  条件: {X Y : Action (类型u) G}
-  结论: (Functor.LaxMonoidal.μ (linearization k G) X Y).hom
+  条件: {X Y : 作用 (类型u) G}
+  结论: (函子.松弛幺半群.μ (linearization k G) X Y).hom
   证明: rfl
 -/
 lemma μ_hom {X Y : Action (Type u) G} : (Functor.LaxMonoidal.μ (linearization k G) X Y).hom
@@ -3930,7 +3930,7 @@ lemma ε_def
 
 中文:
 引理 ε_def
-  结论: Functor.LaxMonoidal.ε (linearization k G) = ofHom (ε k G)
+  结论: 函子.松弛幺半群.ε (linearization k G) = ofHom (ε k G)
   证明: rfl
 -/
 lemma ε_def : Functor.LaxMonoidal.ε (linearization k G) = ofHom (ε k G) := rfl
@@ -3945,7 +3945,7 @@ lemma ε_hom
 
 中文:
 引理 ε_hom
-  结论: (Functor.LaxMonoidal.ε (linearization k G)).hom = ε k G
+  结论: (函子.松弛幺半群.ε (linearization k G)).hom = ε k G
   证明: rfl
 -/
 lemma ε_hom : (Functor.LaxMonoidal.ε (linearization k G)).hom = ε k G := rfl
@@ -3961,8 +3961,8 @@ lemma δ_def
 
 中文:
 引理 δ_def
-  条件: {X Y : Action (类型u) G}
-  结论: Functor.OplaxMonoidal.δ (linearization k G) X Y =
+  条件: {X Y : 作用 (类型u) G}
+  结论: 函子.反松弛幺半群.δ (linearization k G) X Y =
   证明: rfl
 -/
 lemma δ_def {X Y : Action (Type u) G} : Functor.OplaxMonoidal.δ (linearization k G) X Y =
@@ -3979,8 +3979,8 @@ lemma δ_hom
 
 中文:
 引理 δ_hom
-  条件: {X Y : Action (类型u) G}
-  结论: (Functor.OplaxMonoidal.δ (linearization k G) X Y).hom
+  条件: {X Y : 作用 (类型u) G}
+  结论: (函子.反松弛幺半群.δ (linearization k G) X Y).hom
   证明: rfl
 -/
 lemma δ_hom {X Y : Action (Type u) G} : (Functor.OplaxMonoidal.δ (linearization k G) X Y).hom
@@ -3996,7 +3996,7 @@ lemma η_def
 
 中文:
 引理 η_def
-  结论: Functor.OplaxMonoidal.η (linearization k G) = ofHom (η k G)
+  结论: 函子.反松弛幺半群.η (linearization k G) = ofHom (η k G)
   证明: rfl
 -/
 lemma η_def : Functor.OplaxMonoidal.η (linearization k G) = ofHom (η k G) := rfl
@@ -4011,7 +4011,7 @@ lemma η_hom
 
 中文:
 引理 η_hom
-  结论: (Functor.OplaxMonoidal.η (linearization k G)).hom = η k G
+  结论: (函子.反松弛幺半群.η (linearization k G)).hom = η k G
   证明: rfl
 -/
 lemma η_hom : (Functor.OplaxMonoidal.η (linearization k G)).hom = η k G := rfl
@@ -4049,7 +4049,7 @@ abbreviation linearizationOfMulActionIso
 
 中文:
 缩写 linearizationOfMulActionIso
-  签名: (H : 类型u) [MulAction G H]
+  签名: (H : 类型u) [乘法作用 G H]
   定义体: Rep.mkIso (Representation.linearizeOfMulActionIso k G H)
 
 Depends on / 依赖: Rep.mkIso, Representation, Representation.linearizeOfMulActionIso, linearizeOfMulActionIso

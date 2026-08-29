@@ -39,7 +39,7 @@ theorem HasCompactMulSupport.sup
   exact Function.mulSupport_sup f g
 
 中文:
-定理 HasCompactMulSupport.sup
+定理 HasCompactMulSupport.上确界
   结论: {f g : X -> M} (hf : HasCompactMulSupport f)
   证明: by
   apply IsCompact.of_isClosed_subset (IsCompact.union hf hg) (isClosed_mulTSupport _)
@@ -76,7 +76,7 @@ theorem HasCompactMulSupport.inf
   exact Function.mulSupport_inf f g
 
 中文:
-定理 HasCompactMulSupport.inf
+定理 HasCompactMulSupport.下确界
   结论: {f g : X -> M} (hf : HasCompactMulSupport f)
   证明: by
   apply IsCompact.of_isClosed_subset (IsCompact.union hf hg) (isClosed_mulTSupport _)

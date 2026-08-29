@@ -56,8 +56,8 @@ definition Submonoid.units
   inv_mem' ha := ⟨ha.2, ha.1⟩
 
 中文:
-定义 Submonoid.units
-  签名: (S : Submonoid M)
+定义 子幺半群.units
+  签名: (S : 子幺半群 M)
   定义体: S.comap (coeHom M) ⊓ (S.comap (coeHom M))⁻¹
   inv_mem' ha := ⟨ha.2, ha.1⟩
 
@@ -81,8 +81,8 @@ definition Subgroup.ofUnits
 @[to_additive]
 
 中文:
-定义 Subgroup.ofUnits
-  签名: (S : Subgroup Mˣ)
+定义 子群.ofUnits
+  签名: (S : 子群 Mˣ)
   定义体: S.toSubmonoid.map (coeHom M)
 
 @[to_additive]
@@ -103,8 +103,8 @@ lemma Submonoid.units_mono
 @[to_additive (attr := simp)]
 
 中文:
-引理 Submonoid.units_mono
-  结论: Monotone (Submonoid.units (M := M))
+引理 子幺半群.units_mono
+  结论: 递增 (子幺半群.units (M := M))
   证明: fun _ _ hST _ ⟨h₁, h₂⟩ => ⟨hST h₁, hST h₂⟩
 
 @[to_additive (attr := simp)]
@@ -125,8 +125,8 @@ lemma Submonoid.ofUnits_units_le
 @[to_additive]
 
 中文:
-引理 Submonoid.ofUnits_units_le
-  条件: (S : Submonoid M)
+引理 子幺半群.ofUnits_units_le
+  条件: (S : 子幺半群 M)
   结论: S.units.ofUnits <= S
   证明: fun _ ⟨_, hm, he⟩ => he ▸ hm.1
 
@@ -147,8 +147,8 @@ lemma Subgroup.ofUnits_mono
 @[to_additive (attr := simp)]
 
 中文:
-引理 Subgroup.ofUnits_mono
-  结论: Monotone (Subgroup.ofUnits (M := M))
+引理 子群.ofUnits_mono
+  结论: 递增 (子群.ofUnits (M := M))
   证明: fun _ _ hST _ ⟨x, hx, hy⟩ => ⟨x, hST hx, hy⟩
 
 @[to_additive (attr := simp)]
@@ -168,8 +168,8 @@ lemma Subgroup.units_ofUnits_eq
   ⟨fun ⟨⟨_, hm, he⟩, _⟩ => (Units.ext he) ▸ hm, fun hm => ⟨⟨_, hm, rfl⟩, _, S.inv_mem hm, rfl⟩⟩)
 
 中文:
-引理 Subgroup.units_ofUnits_eq
-  条件: (S : Subgroup Mˣ)
+引理 子群.units_ofUnits_eq
+  条件: (S : 子群 Mˣ)
   结论: S.ofUnits.units = S
   证明: Subgroup.ext (fun _ =>
   ⟨fun ⟨⟨_, hm, he⟩, _⟩ => (Units.ext he) ▸ hm, fun hm => ⟨⟨_, hm, rfl⟩, _, S.inv_mem hm, rfl⟩⟩)
@@ -198,7 +198,7 @@ definition ofUnits_units_gci
 
 中文:
 定义 ofUnits_units_gci
-  签名: : GaloisCoinsertion (Subgroup.ofUnits (M := M)) (Submonoid.units)
+  签名: : Galois余嵌入 (子群.ofUnits (M := M)) (子幺半群.units)
   定义体: GaloisCoinsertion.monotoneIntro Submonoid.units_mono Subgroup.ofUnits_mono
   Submonoid.ofUnits_units_le Subgroup.units_ofUnits_eq
 
@@ -223,7 +223,7 @@ lemma ofUnits_units_gc
 
 中文:
 引理 ofUnits_units_gc
-  结论: GaloisConnection (Subgroup.ofUnits (M := M)) (Submonoid.units)
+  结论: GaloisConnection (子群.ofUnits (M := M)) (子幺半群.units)
   证明: ofUnits_units_gci.gc
 
 @[to_additive]
@@ -246,7 +246,7 @@ lemma ofUnits_le_iff_le_units
 
 中文:
 引理 ofUnits_le_iff_le_units
-  条件: (S : Submonoid M) (H : Subgroup Mˣ)
+  条件: (S : 子幺半群 M) (H : 子群 Mˣ)
   证明: ofUnits_units_gc _ _
 
 @[to_additive]
@@ -266,8 +266,8 @@ theorem IsUnit.coe
   proof: ha.map (SubmonoidClass.subtype N)
 
 中文:
-定理 IsUnit.coe
-  结论: {S : 类型} [SetLike S M] [SubmonoidClass S M] {N : S} {a : N}
+定理 是单位.coe
+  结论: {S : 类型} [集合状 S M] [子幺半群类 S M] {N : S} {a : N}
   证明: ha.map (SubmonoidClass.subtype N)
 
 Depends on / 依赖: SubmonoidClass, SubmonoidClass.subtype, ha.map, subtype
@@ -293,7 +293,7 @@ lemma mem_units_iff
 
 中文:
 引理 mem_units_iff
-  条件: (S : Submonoid M) (x : Mˣ)
+  条件: (S : 子幺半群 M) (x : Mˣ)
   结论: x in S.units ↔
   证明: Iff.rfl
 
@@ -317,7 +317,7 @@ lemma mem_units_of_val_mem_inv_val_mem
 
 中文:
 引理 mem_units_of_val_mem_inv_val_mem
-  结论: (S : Submonoid M) {x : Mˣ} (h₁ : (x : M) in S)
+  结论: (S : 子幺半群 M) {x : Mˣ} (h₁ : (x : M) in S)
   证明: ⟨h₁, h₂⟩
 
 @[to_additive]
@@ -339,7 +339,7 @@ lemma val_mem_of_mem_units
 
 中文:
 引理 val_mem_of_mem_units
-  条件: (S : Submonoid M) {x : Mˣ} (h : x in S.units)
+  条件: (S : 子幺半群 M) {x : Mˣ} (h : x in S.units)
   结论: (x : M) in S
   证明: h.1
 
@@ -360,7 +360,7 @@ lemma inv_val_mem_of_mem_units
 
 中文:
 引理 inv_val_mem_of_mem_units
-  条件: (S : Submonoid M) {x : Mˣ} (h : x in S.units)
+  条件: (S : 子幺半群 M) {x : Mˣ} (h : x in S.units)
   证明: h.2
 
 @[to_additive]
@@ -381,7 +381,7 @@ lemma coe_inv_val_mul_coe_val
 
 中文:
 引理 coe_inv_val_mul_coe_val
-  条件: (S : Submonoid M) {x : Sˣ}
+  条件: (S : 子幺半群 M) {x : Sˣ}
   证明: DFunLike.congr_arg S.subtype x.inv_mul
 
 @[to_additive]
@@ -404,7 +404,7 @@ lemma coe_val_mul_coe_inv_val
 
 中文:
 引理 coe_val_mul_coe_inv_val
-  条件: (S : Submonoid M) {x : Sˣ}
+  条件: (S : 子幺半群 M) {x : Sˣ}
   证明: DFunLike.congr_arg S.subtype x.mul_inv
 
 @[to_additive]
@@ -427,7 +427,7 @@ lemma mk_inv_mul_mk_eq_one
 
 中文:
 引理 mk_inv_mul_mk_eq_one
-  条件: (S : Submonoid M) {x : Mˣ} (h : x in S.units)
+  条件: (S : 子幺半群 M) {x : Mˣ} (h : x in S.units)
   证明: Subtype.ext x.inv_mul
 
 @[to_additive]
@@ -450,7 +450,7 @@ lemma mk_mul_mk_inv_eq_one
 
 中文:
 引理 mk_mul_mk_inv_eq_one
-  条件: (S : Submonoid M) {x : Mˣ} (h : x in S.units)
+  条件: (S : 子幺半群 M) {x : Mˣ} (h : x in S.units)
   证明: Subtype.ext x.mul_inv
 
 @[to_additive]
@@ -473,7 +473,7 @@ lemma mul_mem_units
 
 中文:
 引理 mul_mem_units
-  条件: (S : Submonoid M) {x y : Mˣ} (h₁ : x in S.units) (h₂ : y in S.units)
+  条件: (S : 子幺半群 M) {x y : Mˣ} (h₁ : x in S.units) (h₂ : y in S.units)
   证明: mul_mem h₁ h₂
 
 @[to_additive]
@@ -497,7 +497,7 @@ lemma inv_mem_units
 
 中文:
 引理 inv_mem_units
-  条件: (S : Submonoid M) {x : Mˣ} (h : x in S.units)
+  条件: (S : 子幺半群 M) {x : Mˣ} (h : x in S.units)
   结论: x⁻¹ in S.units
   证明: inv_mem h
 
@@ -519,7 +519,7 @@ lemma inv_mem_units_iff
 
 中文:
 引理 inv_mem_units_iff
-  条件: (S : Submonoid M) {x : Mˣ}
+  条件: (S : 子幺半群 M) {x : Mˣ}
   结论: x⁻¹ in S.units ↔ x in S.units
   证明: inv_mem_iff
 
@@ -545,7 +545,7 @@ definition unitsEquivUnitsType
 
 中文:
 定义 unitsEquivUnitsType
-  签名: (S : Submonoid M)
+  签名: (S : 子幺半群 M)
   定义体: fun ⟨_, h⟩ => ⟨⟨_, h.1⟩, ⟨_, h.2⟩, S.mk_mul_mk_inv_eq_one h, S.mk_inv_mul_mk_eq_one h⟩
   invFun := fun x => ⟨⟨_, _, S.coe_val_mul_coe_inv_val, S.coe_inv_val_mul_coe_val⟩, ⟨x.1.2, x.2.2⟩⟩
   map_mul' := fun _ _ => rfl
@@ -572,7 +572,7 @@ lemma units_top
 
 中文:
 引理 units_top
-  结论: (⊤ : Submonoid M).units = ⊤
+  结论: (⊤ : 子幺半群 M).units = ⊤
   证明: ofUnits_units_gc.u_top
 
 @[to_additive]
@@ -595,7 +595,7 @@ lemma units_inf
 
 中文:
 引理 units_inf
-  条件: (S T : Submonoid M)
+  条件: (S T : 子幺半群 M)
   结论: (S ⊓ T).units = S.units ⊓ T.units
   证明: ofUnits_units_gc.u_inf
 
@@ -620,7 +620,7 @@ lemma units_sInf
 
 中文:
 引理 units_sInf
-  条件: {s : Set (Submonoid M)}
+  条件: {s : 集合 (子幺半群 M)}
   结论: (sInf s).units = ⨅ S in s, S.units
   证明: ofUnits_units_gc.u_sInf
 
@@ -645,7 +645,7 @@ lemma units_iInf
 
 中文:
 引理 units_iInf
-  条件: {ι : Sort*} (f : ι -> Submonoid M)
+  条件: {ι : 类型层*} (f : ι -> 子幺半群 M)
   结论: (iInf f).units = ⨅ (i : ι), (f i).units
   证明: ofUnits_units_gc.u_iInf
 
@@ -669,7 +669,7 @@ lemma units_iInf₂
 
 中文:
 引理 units_iInf₂
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : (i : ι) -> κ i -> Submonoid M)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 子幺半群 M)
   证明: ofUnits_units_gc.u_iInf₂
 
 @[to_additive (attr := simp)]
@@ -693,7 +693,7 @@ lemma units_bot
 
 中文:
 引理 units_bot
-  结论: (⊥ : Submonoid M).units = ⊥
+  结论: (⊥ : 子幺半群 M).units = ⊥
   证明: ofUnits_units_gci.u_bot
 
 @[to_additive]
@@ -715,7 +715,7 @@ lemma units_surjective
 
 中文:
 引理 units_surjective
-  结论: Function.Surjective (units (M := M))
+  结论: 函数.满射 (units (M := M))
   证明: ofUnits_units_gci.u_surjective
 
 @[to_additive]
@@ -755,7 +755,7 @@ definition unitsEquivIsUnitSubmonoid
 
 中文:
 定义 unitsEquivIsUnitSubmonoid
-  签名: (S : Submonoid M)
+  签名: (S : 子幺半群 M)
   定义体: S.unitsEquivUnitsType.trans unitsTypeEquivIsUnitSubmonoid
 
 Depends on / 依赖: S.unitsEquivUnitsType.trans, unitsEquivUnitsType, unitsTypeEquivIsUnitSubmonoid
@@ -775,7 +775,7 @@ instance instSubsingletonUnits
 
 中文:
 实例 instSubsingletonUnits
-  签名: [Subsingleton Mˣ] {S : Submonoid M}
+  签名: [子单例 Mˣ] {S : 子幺半群 M}
   定义体: .units_of_isUnit fun _a ha => Subtype.ext (ha.map S.subtype).eq_one
 
 Depends on / 依赖: S.subtype, Subtype, Subtype.ext, eq_one, ha.map, subtype, units_of_isUnit
@@ -801,7 +801,7 @@ lemma mem_ofUnits_iff
 
 中文:
 引理 mem_ofUnits_iff
-  条件: (S : Subgroup Mˣ) (x : M)
+  条件: (S : 子群 Mˣ) (x : M)
   结论: x in S.ofUnits ↔ 存在 y in S, y = x
   证明: Iff.rfl
 
@@ -825,7 +825,7 @@ lemma mem_ofUnits
 
 中文:
 引理 mem_ofUnits
-  条件: (S : Subgroup Mˣ) {x : M} {y : Mˣ} (h₁ : y in S) (h₂ : y = x)
+  条件: (S : 子群 Mˣ) {x : M} {y : Mˣ} (h₁ : y in S) (h₂ : y = x)
   结论: x in S.ofUnits
   证明: ⟨_, h₁, h₂⟩
 
@@ -846,8 +846,8 @@ lemma exists_mem_ofUnits_val_eq
 @[to_additive]
 
 中文:
-引理 exists_mem_ofUnits_val_eq
-  条件: (S : Subgroup Mˣ) {x : M} (h : x in S.ofUnits)
+引理 存在_mem_ofUnits_val_eq
+  条件: (S : 子群 Mˣ) {x : M} (h : x in S.ofUnits)
   证明: h
 
 @[to_additive]
@@ -870,7 +870,7 @@ lemma mem_of_mem_val_ofUnits
 
 中文:
 引理 mem_of_mem_val_ofUnits
-  条件: (S : Subgroup Mˣ) {y : Mˣ} (hy : (y : M) in S.ofUnits)
+  条件: (S : 子群 Mˣ) {y : Mˣ} (hy : (y : M) in S.ofUnits)
   结论: y in S
   证明: match hy with
   | ⟨_, hm, he⟩ => (Units.ext he) ▸ hm
@@ -896,8 +896,8 @@ lemma isUnit_of_mem_ofUnits
 
 中文:
 引理 isUnit_of_mem_ofUnits
-  条件: (S : Subgroup Mˣ) {x : M} (hx : x in S.ofUnits)
-  结论: IsUnit x
+  条件: (S : 子群 Mˣ) {x : M} (hx : x in S.ofUnits)
+  结论: 是单位 x
   证明: match hx with
   | ⟨_, _, h⟩ => ⟨_, h⟩
 -/
@@ -922,7 +922,7 @@ definition unit_of_mem_ofUnits
 
 中文:
 定义 unit_of_mem_ofUnits
-  签名: (S : Subgroup Mˣ) {x : M} (h : x in S.ofUnits)
+  签名: (S : 子群 Mˣ) {x : M} (h : x in S.ofUnits)
   定义体: (Classical.choose h).copy x (Classical.choose_spec h).2.symm _ rfl
 
 @[to_additive]
@@ -945,7 +945,7 @@ lemma unit_of_mem_ofUnits_spec_eq_of_val_mem
 
 中文:
 引理 unit_of_mem_ofUnits_spec_eq_of_val_mem
-  条件: (S : Subgroup Mˣ) {x : Mˣ} (h : (x : M) in S.ofUnits)
+  条件: (S : 子群 Mˣ) {x : Mˣ} (h : (x : M) in S.ofUnits)
   证明: Units.ext rfl
 
 @[to_additive]
@@ -968,7 +968,7 @@ lemma unit_of_mem_ofUnits_spec_val_eq_of_mem
 
 中文:
 引理 unit_of_mem_ofUnits_spec_val_eq_of_mem
-  条件: (S : Subgroup Mˣ) {x : M} (h : x in S.ofUnits)
+  条件: (S : 子群 Mˣ) {x : M} (h : x in S.ofUnits)
   证明: rfl
 
 @[to_additive]
@@ -989,7 +989,7 @@ lemma unit_of_mem_ofUnits_spec_mem
 
 中文:
 引理 unit_of_mem_ofUnits_spec_mem
-  条件: (S : Subgroup Mˣ) {x : M} {h : x in S.ofUnits}
+  条件: (S : 子群 Mˣ) {x : M} {h : x in S.ofUnits}
   证明: S.mem_of_mem_val_ofUnits h
 
 @[to_additive]
@@ -1012,7 +1012,7 @@ lemma unit_eq_unit_of_mem_ofUnits
 
 中文:
 引理 unit_eq_unit_of_mem_ofUnits
-  结论: (S : Subgroup Mˣ) {x : M} (h₁ : IsUnit x)
+  结论: (S : 子群 Mˣ) {x : M} (h₁ : 是单位 x)
   证明: Units.ext rfl
 
 @[to_additive]
@@ -1035,7 +1035,7 @@ lemma unit_mem_of_mem_ofUnits
 
 中文:
 引理 unit_mem_of_mem_ofUnits
-  结论: (S : Subgroup Mˣ) {x : M} {h₁ : IsUnit x}
+  结论: (S : 子群 Mˣ) {x : M} {h₁ : 是单位 x}
   证明: S.unit_eq_unit_of_mem_ofUnits h₁ h₂ ▸ (S.unit_of_mem_ofUnits_spec_mem)
 
 @[to_additive]
@@ -1059,7 +1059,7 @@ lemma mem_ofUnits_of_isUnit_of_unit_mem
 
 中文:
 引理 mem_ofUnits_of_isUnit_of_unit_mem
-  结论: (S : Subgroup Mˣ) {x : M} (h₁ : IsUnit x)
+  结论: (S : 子群 Mˣ) {x : M} (h₁ : 是单位 x)
   证明: S.mem_ofUnits h₂ h₁.unit_spec
 
 @[to_additive]
@@ -1080,8 +1080,8 @@ lemma mem_ofUnits_iff_exists_isUnit
   fun ⟨hm, he⟩ => S.mem_ofUnits_of_isUnit_of_unit_mem hm he⟩
 
 中文:
-引理 mem_ofUnits_iff_exists_isUnit
-  条件: (S : Subgroup Mˣ) (x : M)
+引理 mem_ofUnits_iff_存在_isUnit
+  条件: (S : 子群 Mˣ) (x : M)
   证明: ⟨fun h => ⟨S.isUnit_of_mem_ofUnits h, S.unit_mem_of_mem_ofUnits h⟩,
   fun ⟨hm, he⟩ => S.mem_ofUnits_of_isUnit_of_unit_mem hm he⟩
 
@@ -1110,7 +1110,7 @@ definition ofUnitsEquivType
 
 中文:
 定义 ofUnitsEquivType
-  签名: (S : Subgroup Mˣ)
+  签名: (S : 子群 Mˣ)
   定义体: fun x => ⟨S.unit_of_mem_ofUnits x.2, S.unit_of_mem_ofUnits_spec_mem⟩
   invFun := fun x => ⟨x.1, ⟨x.1, x.2, rfl⟩⟩
   map_mul' := fun _ _ => Subtype.ext (Units.ext rfl)
@@ -1137,7 +1137,7 @@ lemma ofUnits_bot
 
 中文:
 引理 ofUnits_bot
-  结论: (⊥ : Subgroup Mˣ).ofUnits = ⊥
+  结论: (⊥ : 子群 Mˣ).ofUnits = ⊥
   证明: ofUnits_units_gc.l_bot
 
 @[to_additive]
@@ -1160,7 +1160,7 @@ lemma ofUnits_inf
 
 中文:
 引理 ofUnits_inf
-  条件: (S T : Subgroup Mˣ)
+  条件: (S T : 子群 Mˣ)
   结论: (S ⊔ T).ofUnits = S.ofUnits ⊔ T.ofUnits
   证明: ofUnits_units_gc.l_sup
 
@@ -1185,7 +1185,7 @@ lemma ofUnits_sSup
 
 中文:
 引理 ofUnits_sSup
-  条件: (s : Set (Subgroup Mˣ))
+  条件: (s : 集合 (子群 Mˣ))
   结论: (sSup s).ofUnits = ⨆ S in s, S.ofUnits
   证明: ofUnits_units_gc.l_sSup
 
@@ -1209,7 +1209,7 @@ lemma ofUnits_iSup
 
 中文:
 引理 ofUnits_iSup
-  条件: {ι : Sort*} {f : ι -> Subgroup Mˣ}
+  条件: {ι : 类型层*} {f : ι -> 子群 Mˣ}
   证明: ofUnits_units_gc.l_iSup
 
 @[to_additive]
@@ -1232,7 +1232,7 @@ lemma ofUnits_iSup₂
 
 中文:
 引理 ofUnits_iSup₂
-  条件: {ι : Sort*} {κ : ι -> Sort*} (f : (i : ι) -> κ i -> Subgroup Mˣ)
+  条件: {ι : 类型层*} {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 子群 Mˣ)
   证明: ofUnits_units_gc.l_iSup₂
 
 @[to_additive]
@@ -1256,7 +1256,7 @@ lemma ofUnits_injective
 
 中文:
 引理 ofUnits_injective
-  结论: Function.Injective (ofUnits (M := M))
+  结论: 函数.单射 (ofUnits (M := M))
   证明: ofUnits_units_gci.l_injective
 
 @[to_additive (attr := simp)]
@@ -1278,7 +1278,7 @@ lemma ofUnits_sup_units
 
 中文:
 引理 ofUnits_sup_units
-  条件: (S T : Subgroup Mˣ)
+  条件: (S T : 子群 Mˣ)
   结论: (S.ofUnits ⊔ T.ofUnits).units = S ⊔ T
   证明: ofUnits_units_gci.u_sup_l _ _
 
@@ -1303,7 +1303,7 @@ lemma ofUnits_inf_units
 
 中文:
 引理 ofUnits_inf_units
-  条件: (S T : Subgroup Mˣ)
+  条件: (S T : 子群 Mˣ)
   结论: (S.ofUnits ⊓ T.ofUnits).units = S ⊓ T
   证明: ofUnits_units_gci.u_inf_l _ _
 
@@ -1347,7 +1347,7 @@ lemma ofUnits_strictMono
 
 中文:
 引理 ofUnits_strictMono
-  结论: StrictMono (ofUnits (M := M))
+  结论: 严格递增 (ofUnits (M := M))
   证明: ofUnits_units_gci.strictMono_l
 
 Depends on / 依赖: ofUnits_units_gci, ofUnits_units_gci.strictMono_l, strictMono_l
@@ -1365,7 +1365,7 @@ lemma ofUnits_le_ofUnits_iff
 
 中文:
 引理 ofUnits_le_ofUnits_iff
-  条件: {S T : Subgroup Mˣ}
+  条件: {S T : 子群 Mˣ}
   结论: S.ofUnits <= T.ofUnits ↔ S <= T
   证明: ofUnits_units_gci.l_le_l_iff
 
@@ -1388,7 +1388,7 @@ definition ofUnitsTopEquiv
 
 中文:
 定义 ofUnitsTopEquiv
-  签名: : (⊤ : Subgroup Mˣ).ofUnits ≃* Mˣ
+  签名: : (⊤ : 子群 Mˣ).ofUnits ≃* Mˣ
   定义体: (⊤ : Subgroup Mˣ).ofUnitsEquivType.trans topEquiv
 
 Depends on / 依赖: Subgroup, ofUnitsEquivType, ofUnitsEquivType.trans, topEquiv
@@ -1413,7 +1413,7 @@ lemma mem_units_iff_val_mem
 
 中文:
 引理 mem_units_iff_val_mem
-  条件: (H : Subgroup G) (x : Gˣ)
+  条件: (H : 子群 G) (x : Gˣ)
   结论: x in H.units ↔ (x : G) in H
   证明: by
   simp_rw [Submonoid.mem_units_iff, mem_toSubmonoid, val_inv_eq_inv_val, inv_mem_iff, and_self]
@@ -1440,7 +1440,7 @@ lemma mem_ofUnits_iff_toUnits_mem
 
 中文:
 引理 mem_ofUnits_iff_toUnits_mem
-  条件: (H : Subgroup Gˣ) (x : G)
+  条件: (H : 子群 Gˣ) (x : G)
   结论: x in H.ofUnits ↔ (toUnits x) in H
   证明: by
   simp_rw [mem_ofUnits_iff, toUnits.surjective.exists, val_toUnits_apply, exists_eq_right]
@@ -1467,7 +1467,7 @@ lemma mem_iff_toUnits_mem_units
 
 中文:
 引理 mem_iff_toUnits_mem_units
-  条件: (H : Subgroup G) (x : G)
+  条件: (H : 子群 G) (x : G)
   结论: toUnits x in H.units ↔ x in H
   证明: by
   simp_rw [mem_units_iff_val_mem, val_toUnits_apply]
@@ -1492,7 +1492,7 @@ lemma val_mem_ofUnits_iff_mem
 
 中文:
 引理 val_mem_ofUnits_iff_mem
-  条件: (H : Subgroup Gˣ) (x : Gˣ)
+  条件: (H : 子群 Gˣ) (x : Gˣ)
   结论: (x : G) in H.ofUnits ↔ x in H
   证明: by
   simp_rw [mem_ofUnits_iff_toUnits_mem, toUnits_val_apply]
@@ -1515,7 +1515,7 @@ definition unitsEquivSelf
 
 中文:
 定义 unitsEquivSelf
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: H.unitsEquivUnitsType.trans (toUnits (G := H)).symm
 
 Depends on / 依赖: H.unitsEquivUnitsType.trans, toUnits, unitsEquivUnitsType
@@ -1541,8 +1541,8 @@ theorem MonoidHom.isUnit_eqLocusM_mk_iff
   rw [← mul_one (f s)]; rw [← map_one g]; rw 
 
 中文:
-定理 MonoidHom.isUnit_eqLocusM_mk_iff
-  结论: {N : 类型} [Monoid N] (f g : M ->* N) {r : M}
+定理 幺半群态射.isUnit_eqLocusM_mk_iff
+  结论: {N : 类型} [幺半群 N] (f g : M ->* N) {r : M}
   证明: by
   refine ⟨fun h => h.map (SubmonoidClass.subtype _), fun h => ?_⟩
   obtain ⟨s, hs⟩ := isUnit_iff_exists.mp h

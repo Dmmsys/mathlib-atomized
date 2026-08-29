@@ -60,7 +60,7 @@ lemma isCofiltered_of_isCofiltered_costructuredArrow
 
 中文:
 引理 isCofiltered_of_isCofiltered_costructuredArrow
-  结论: [IsCofiltered A] [IsCofiltered B]
+  结论: [是余filtered A] [是余filtered B]
   证明: by
     obtain ⟨b⟩ := IsCofiltered.nonempty (C := B)
     obtain ⟨X⟩ : Nonempty (CostructuredArrow L (R.obj b)) := IsCofiltered.nonempty
@@ -115,7 +115,7 @@ lemma initial_fst_of_isCofiltered_costructuredArrow
 
 中文:
 引理 initial_fst_of_isCofiltered_costructuredArrow
-  结论: [IsCofiltered A] [IsCofiltered B]
+  结论: [是余filtered A] [是余filtered B]
   证明: by
   have := isCofiltered_of_isCofiltered_costructuredArrow L R
   rw [Functor.initial_iff_of_isCofiltered]
@@ -178,7 +178,7 @@ lemma isFiltered_of_isFiltered_structuredArrow
 
 中文:
 引理 isFiltered_of_isFiltered_structuredArrow
-  结论: [IsFiltered A] [IsFiltered B]
+  结论: [是Filtered A] [是Filtered B]
   证明: by
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
@@ -242,7 +242,7 @@ lemma final_snd_of_isFiltered_structuredArrow
 
 中文:
 引理 final_snd_of_isFiltered_structuredArrow
-  结论: [IsFiltered A] [IsFiltered B]
+  结论: [是Filtered A] [是Filtered B]
   证明: by
   have (a : Aᵒᵖ) : IsCofiltered (CostructuredArrow R.op (L.op.obj a)) :=
     IsCofiltered.of_equivalence (structuredArrowOpEquivalence R (L.obj a.unop))
@@ -273,7 +273,7 @@ instance initial_snd
 
 中文:
 实例 initial_snd
-  签名: [L.Initial]
+  签名: [L.初始]
   定义体: initial_snd_of_isConnected_costructuredArrow L R
 
 Depends on / 依赖: initial_snd_of_isConnected_costructuredArrow
@@ -291,7 +291,7 @@ instance final_fst
 
 中文:
 实例 final_fst
-  签名: [R.Final]
+  签名: [R.终]
   定义体: final_fst_of_isConnected_structuredArrow L R
 
 Depends on / 依赖: final_fst_of_isConnected_structuredArrow
@@ -310,7 +310,7 @@ instance isConnected_comma_of_final
 
 中文:
 实例 isConnected_comma_of_final
-  签名: [IsConnected A] [R.Final]
+  签名: [是连通 A] [R.终]
   定义体: by
   rwa [isConnected_iff_of_final (fst L R)]
 
@@ -330,7 +330,7 @@ instance isConnected_comma_of_initial
 
 中文:
 实例 isConnected_comma_of_initial
-  签名: [IsConnected B] [L.Initial]
+  签名: [是连通 B] [L.初始]
   定义体: by
   rwa [isConnected_iff_of_initial (snd L R)]
 
@@ -355,7 +355,7 @@ lemma map_final
 
 中文:
 引理 map_final
-  结论: {A : 类型u₁} [Category.{v₁} A] {B : 类型u₂} [Category.{v₂} B] {T : 类型u₃}
+  结论: {A : 类型u₁} [范畴.{v₁} A] {B : 类型u₂} [范畴.{v₂} B] {T : 类型u₃}
   证明: ⟨fun ⟨i₂, j₂, u₂⟩ => by
   have := final_of_natIso iR
   rw [isConnected_iff_of_equivalence (StructuredArrow.commaMapEquivalence iL.hom iR.inv _)]
@@ -402,7 +402,7 @@ instance isFiltered_of_final
 
 中文:
 实例 isFiltered_of_final
-  签名: [IsFiltered A] [IsFiltered B] [R.Final]
+  签名: [是Filtered A] [是Filtered B] [R.终]
   定义体: by
   have := R.final_iff_isFiltered_structuredArrow.mp inferInstance
   exact isFiltered_of_isFiltered_structuredArrow L R
@@ -425,7 +425,7 @@ lemma isCofiltered_of_initial
 
 中文:
 引理 isCofiltered_of_initial
-  条件: [IsCofiltered A] [IsCofiltered B] [L.Initial]
+  条件: [是余filtered A] [是余filtered B] [L.初始]
   证明: by
   have := L.initial_iff_isCofiltered_costructuredArrow.mp inferInstance
   exact isCofiltered_of_isCofiltered_costructuredArrow L R
@@ -450,7 +450,7 @@ instance final_snd
 
 中文:
 实例 final_snd
-  签名: [IsFiltered A] [IsFiltered B] [R.Final]
+  签名: [是Filtered A] [是Filtered B] [R.终]
   定义体: by
   have := R.final_iff_isFiltered_structuredArrow.mp inferInstance
   exact final_snd_of_isFiltered_structuredArrow L R
@@ -473,7 +473,7 @@ instance initial_fst
 
 中文:
 实例 initial_fst
-  签名: [IsCofiltered A] [IsCofiltered B] [L.Initial]
+  签名: [是余filtered A] [是余filtered B] [L.初始]
   定义体: by
   have := L.initial_iff_isCofiltered_costructuredArrow.mp inferInstance
   exact initial_fst_of_isCofiltered_costructuredArrow L R

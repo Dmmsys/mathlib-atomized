@@ -63,11 +63,11 @@ structure IsAdjMatrix
     - apply_diag : forall i, A i i = 0  [default: by aesop]
 
 中文:
-结构 IsAdjMatrix
-  参数: [Zero α] [One α] (A : Matrix V V α)
+结构 是AdjMatrix
+  参数: [零 α] [幺 α] (A : 矩阵 V V α)
   公理与运算 (3 个):
     - zero_or_one : 对任意 i j, A i j = 0 ∨ A i j = 1  [默认: by aesop]
-    - symm : A.IsSymm  [默认: by aesop]
+    - symm : A.是Symm  [默认: by aesop]
     - apply_diag : 对任意 i, A i i = 0  [默认: by aesop]
 
 Depends on / 依赖: A.IsSymm, IsSymm, apply_diag
@@ -91,8 +91,8 @@ theorem zero
 
 中文:
 定理 zero
-  条件: [Zero α] [One α]
-  结论: (0 : Matrix V V α).IsAdjMatrix where
+  条件: [零 α] [幺 α]
+  结论: (0 : 矩阵 V V α).是AdjMatrix where
 -/
 @[simp] protected theorem zero [Zero α] [One α] : (0 : Matrix V V α).IsAdjMatrix where
 
@@ -109,7 +109,7 @@ theorem apply_diag_ne
 
 中文:
 定理 apply_diag_ne
-  条件: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (i : V)
+  条件: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (i : V)
   证明: by simp [h.apply_diag i]
 
 @[simp]
@@ -132,7 +132,7 @@ theorem apply_ne_one_iff
 
 中文:
 定理 apply_ne_one_iff
-  条件: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (i j : V)
+  条件: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (i j : V)
   证明: by obtain h | h := h.zero_or_one i j <;> simp [h]
 
 @[simp]
@@ -155,7 +155,7 @@ theorem apply_ne_zero_iff
 
 中文:
 定理 apply_ne_zero_iff
-  条件: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (i j : V)
+  条件: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (i j : V)
   证明: by rw [← apply_ne_one_iff h, Classical.not_not]
 
 @[simp]
@@ -179,7 +179,7 @@ theorem diag_eq_zero
 
 中文:
 定理 diag_eq_zero
-  条件: [Zero α] [One α] (h : IsAdjMatrix A)
+  条件: [零 α] [幺 α] (h : 是AdjMatrix A)
   结论: A.diag = 0
   证明: by
   ext
@@ -203,7 +203,7 @@ theorem submatrix
 
 中文:
 定理 submatrix
-  条件: [Zero α] [One α] (h : IsAdjMatrix A) (f : W -> V)
+  条件: [零 α] [幺 α] (h : 是AdjMatrix A) (f : W -> V)
   证明: by simp [h.zero_or_one]
   symm := h.symm.submatrix f
   apply_diag i := by simp [h.apply_diag]
@@ -229,8 +229,8 @@ theorem _root_.Matrix.isAdjMatrix_submatrix_iff
   h.submatrix f.symm
 
 中文:
-定理 _root_.Matrix.isAdjMatrix_submatrix_iff
-  条件: [Zero α] [One α] {f : W -> V} (hf : f.Surjective)
+定理 _root_.矩阵.isAdjMatrix_submatrix_iff
+  条件: [零 α] [幺 α] {f : W -> V} (hf : f.满射)
   证明: by
   refine ⟨fun h => ?_, (·.submatrix f)⟩
   rw [← A.submatrix_id_id]; rw [← f.comp_surjInv hf]
@@ -259,8 +259,8 @@ theorem _root_.Matrix.isAdjMatrix_reindex_iff
   proof: isAdjMatrix_submatrix_iff f.symm.surjective
 
 中文:
-定理 _root_.Matrix.isAdjMatrix_reindex_iff
-  条件: [Zero α] [One α] {f : V ≃ W}
+定理 _root_.矩阵.isAdjMatrix_reindex_iff
+  条件: [零 α] [幺 α] {f : V ≃ W}
   证明: isAdjMatrix_submatrix_iff f.symm.surjective
 
 Depends on / 依赖: f.symm.surjective, isAdjMatrix_submatrix_iff, surjective
@@ -283,7 +283,7 @@ definition toGraph
 
 中文:
 定义 toGraph
-  签名: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A)
+  签名: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A)
   定义体: A i j = 1
   symm.symm i j hij := by rwa [h.symm.apply i j]
 -/
@@ -303,8 +303,8 @@ instance [MulZeroOneClass
   infer_instance
 
 中文:
-实例 [MulZeroOneClass
-  签名: α] [Nontrivial α] [DecidableEq α] (h
+实例 [乘零幺类
+  签名: α] [非平凡 α] [DecidableEq α] (h
   定义体: by
   simp only [toGraph]
   infer_instance
@@ -331,7 +331,7 @@ definition toGraphSubmatrixHom
 
 中文:
 定义 toGraphSubmatrixHom
-  签名: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (f : W -> V)
+  签名: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (f : W -> V)
   定义体: f
   map_rel' := by simp
 -/
@@ -352,7 +352,7 @@ definition toGraphSubmatrixEmbedding
 
 中文:
 定义 toGraphSubmatrixEmbedding
-  签名: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (f : W ↪ V)
+  签名: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (f : W ↪ V)
   定义体: f
   map_rel_iff' := by simp
 -/
@@ -373,7 +373,7 @@ theorem toGraphSubmatrixEmbedding_apply
 
 中文:
 定理 toGraphSubmatrixEmbedding_apply
-  结论: [MulZeroOneClass α] [Nontrivial α] (h : A.IsAdjMatrix)
+  结论: [乘零幺类 α] [非平凡 α] (h : A.是AdjMatrix)
   证明: rfl
 -/
 theorem toGraphSubmatrixEmbedding_apply [MulZeroOneClass α] [Nontrivial α] (h : A.IsAdjMatrix)
@@ -395,7 +395,7 @@ definition toGraphReindexIso
 
 中文:
 定义 toGraphReindexIso
-  签名: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A) (f : V ≃ W)
+  签名: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A) (f : V ≃ W)
   定义体: f.symm
   map_rel_iff' := by simp
 
@@ -416,7 +416,7 @@ theorem hadamard_self
 
 中文:
 定理 hadamard_self
-  条件: [MulZeroOneClass α] {A : Matrix V V α} (hA : A.IsAdjMatrix)
+  条件: [乘零幺类 α] {A : 矩阵 V V α} (hA : A.是AdjMatrix)
   证明: by ext i j; have := hA.zero_or_one i j; aesop
 -/
 @[simp] theorem hadamard_self [MulZeroOneClass α] {A : Matrix V V α} (hA : A.IsAdjMatrix) :
@@ -437,7 +437,7 @@ theorem isAdjMatrix_iff_hadamard
 
 中文:
 定理 isAdjMatrix_iff_hadamard
-  结论: [DecidableEq V] [MonoidWithZero α]
+  结论: [DecidableEq V] [带零幺半群 α]
   证明: by
   simp only [hadamard_self_eq_self_iff, IsIdempotentElem.iff_eq_zero_or_one,
     one_hadamard_eq_zero_iff, funext_iff, diag, Pi.zero_apply]
@@ -462,7 +462,7 @@ definition compl
 
 中文:
 定义 compl
-  签名: [Zero α] [One α] [DecidableEq α] [DecidableEq V] (A : Matrix V V α)
+  签名: [零 α] [幺 α] [DecidableEq α] [DecidableEq V] (A : 矩阵 V V α)
   定义体: of fun i j => if i = j then 0 else if A i j = 0 then 1 else 0
 -/
 def compl [Zero α] [One α] [DecidableEq α] [DecidableEq V] (A : Matrix V V α) : Matrix V V α :=
@@ -486,7 +486,7 @@ theorem compl_apply_diag
 
 中文:
 定理 compl_apply_diag
-  条件: [Zero α] [One α] (i : V)
+  条件: [零 α] [幺 α] (i : V)
   结论: A.compl i i = 0
   证明: by simp [compl]
 
@@ -510,7 +510,7 @@ theorem compl_apply
 
 中文:
 定理 compl_apply
-  条件: [Zero α] [One α] (i j : V)
+  条件: [零 α] [幺 α] (i j : V)
   结论: A.compl i j = 0 ∨ A.compl i j = 1
   证明: by
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
@@ -544,8 +544,8 @@ theorem isSymm_compl
 
 中文:
 定理 isSymm_compl
-  条件: [Zero α] [One α] (h : A.IsSymm)
-  结论: A.compl.IsSymm
+  条件: [零 α] [幺 α] (h : A.是Symm)
+  结论: A.compl.是Symm
   证明: by
   ext
   simp [compl, h.apply, eq_comm]
@@ -570,8 +570,8 @@ theorem isAdjMatrix_compl
 
 中文:
 定理 isAdjMatrix_compl
-  条件: [Zero α] [One α] (h : A.IsSymm)
-  结论: IsAdjMatrix A.compl
+  条件: [零 α] [幺 α] (h : A.是Symm)
+  结论: 是AdjMatrix A.compl
   证明: { symm := by simp [h] }
 -/
 theorem isAdjMatrix_compl [Zero α] [One α] (h : A.IsSymm) : IsAdjMatrix A.compl :=
@@ -590,8 +590,8 @@ theorem IsAdjMatrix.compl_inj
     as
 
 中文:
-定理 IsAdjMatrix.compl_inj
-  结论: [Zero α] [One α] {A B : Matrix V V α}
+定理 是AdjMatrix.compl_inj
+  结论: [零 α] [幺 α] {A B : 矩阵 V V α}
   证明: ⟨fun h => ext fun i j => by
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
@@ -624,8 +624,8 @@ theorem IsAdjMatrix.compl_compl
   as we are relying on seeing t
 
 中文:
-定理 IsAdjMatrix.compl_compl
-  条件: [Zero α] [One α] {A : Matrix V V α} (hA : A.IsAdjMatrix)
+定理 是AdjMatrix.compl_compl
+  条件: [零 α] [幺 α] {A : 矩阵 V V α} (hA : A.是AdjMatrix)
   证明: by
   ext
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
@@ -659,8 +659,8 @@ theorem compl
 
 中文:
 定理 compl
-  条件: [Zero α] [One α] (h : IsAdjMatrix A)
-  结论: IsAdjMatrix A.compl
+  条件: [零 α] [幺 α] (h : 是AdjMatrix A)
+  结论: 是AdjMatrix A.compl
   证明: isAdjMatrix_compl A h.symm
 
 Depends on / 依赖: h.symm, isAdjMatrix_compl
@@ -680,7 +680,7 @@ theorem toGraph_compl_eq
 
 中文:
 定理 toGraph_compl_eq
-  条件: [MulZeroOneClass α] [Nontrivial α] (h : IsAdjMatrix A)
+  条件: [乘零幺类 α] [非平凡 α] (h : 是AdjMatrix A)
   证明: by
   ext v w
   rcases h.zero_or_one v w with h | h <;> by_cases hvw : v = w <;> simp [Matrix.compl, h, hvw]
@@ -713,7 +713,7 @@ definition adjMatrix
 
 中文:
 定义 adjMatrix
-  签名: [Zero α] [One α]
+  签名: [零 α] [幺 α]
   定义体: of fun i j => if G.Adj i j then (1 : α) else 0
 
 Depends on / 依赖: G.Adj
@@ -735,7 +735,7 @@ theorem adjMatrix_apply
 
 中文:
 定理 adjMatrix_apply
-  条件: (v w : V) [Zero α] [One α]
+  条件: (v w : V) [零 α] [幺 α]
   证明: rfl
 
 @[simp]
@@ -758,7 +758,7 @@ theorem adjMatrix_bot
 
 中文:
 定理 adjMatrix_bot
-  条件: [Zero α] [One α]
+  条件: [零 α] [幺 α]
   证明: by
   ext; simp
 
@@ -783,7 +783,7 @@ theorem adjMatrix_top
 
 中文:
 定理 adjMatrix_top
-  条件: [DecidableEq V] [Ring α]
+  条件: [DecidableEq V] [环 α]
   证明: by
   ext i j
   cases eq_or_ne i j <;> simp [‹_›]
@@ -813,7 +813,7 @@ theorem transpose_adjMatrix
 
 中文:
 定理 transpose_adjMatrix
-  条件: [Zero α] [One α]
+  条件: [零 α] [幺 α]
   结论: (G.adjMatrix α)ᵀ = G.adjMatrix α
   证明: by
   ext
@@ -839,8 +839,8 @@ theorem isSymm_adjMatrix
 
 中文:
 定理 isSymm_adjMatrix
-  条件: [Zero α] [One α]
-  结论: (G.adjMatrix α).IsSymm
+  条件: [零 α] [幺 α]
+  结论: (G.adjMatrix α).是Symm
   证明: transpose_adjMatrix G
 
 Depends on / 依赖: transpose_adjMatrix
@@ -863,8 +863,8 @@ theorem isAdjMatrix_adjMatrix
 
 中文:
 定理 isAdjMatrix_adjMatrix
-  条件: [Zero α] [One α]
-  结论: (G.adjMatrix α).IsAdjMatrix where
+  条件: [零 α] [幺 α]
+  结论: (G.adjMatrix α).是AdjMatrix where
   证明: by grind [adjMatrix_apply]
 
 Depends on / 依赖: adjMatrix_apply
@@ -884,7 +884,7 @@ theorem diag_adjMatrix
 
 中文:
 定理 diag_adjMatrix
-  条件: [Zero α] [One α]
+  条件: [零 α] [幺 α]
   结论: (G.adjMatrix α).diag = 0
   证明: by
   simp
@@ -907,7 +907,7 @@ theorem toGraph_adjMatrix_eq
 
 中文:
 定理 toGraph_adjMatrix_eq
-  条件: [MulZeroOneClass α] [Nontrivial α]
+  条件: [乘零幺类 α] [非平凡 α]
   证明: by
   ext
   simp only [IsAdjMatrix.toGraph_adj, adjMatrix_apply, ite_eq_left_iff, zero_ne_one]
@@ -931,7 +931,7 @@ theorem compl_adjMatrix_eq_adjMatrix_compl
 
 中文:
 定理 compl_adjMatrix_eq_adjMatrix_compl
-  条件: [DecidableEq V] [DecidableEq α] [Zero α] [One α]
+  条件: [DecidableEq V] [DecidableEq α] [零 α] [幺 α]
   证明: by aesop (add simp [Matrix.compl])
 
 Depends on / 依赖: Matrix, Matrix.compl
@@ -952,8 +952,8 @@ theorem Embedding.submatrix_adjMatrix
   simp
 
 中文:
-定理 Embedding.submatrix_adjMatrix
-  结论: [Zero α] [One α] {H : SimpleGraph W} [DecidableRel H.Adj]
+定理 嵌入.submatrix_adjMatrix
+  结论: [零 α] [幺 α] {H : 简单图 W} [DecidableRel H.伴随]
   证明: by
   ext
   simp
@@ -973,8 +973,8 @@ theorem Iso.reindex_adjMatrix
   proof: f.symm.toEmbedding.submatrix_adjMatrix α
 
 中文:
-定理 Iso.reindex_adjMatrix
-  结论: [Zero α] [One α] {H : SimpleGraph W} [DecidableRel H.Adj]
+定理 同构.reindex_adjMatrix
+  结论: [零 α] [幺 α] {H : 简单图 W} [DecidableRel H.伴随]
   证明: f.symm.toEmbedding.submatrix_adjMatrix α
 
 Depends on / 依赖: f.symm.toEmbedding.submatrix_adjMatrix, submatrix_adjMatrix, toEmbedding
@@ -995,8 +995,8 @@ theorem IsCompl.adjMatrix_add_adjMatrix_eq_adjMatrix_completeGraph
   _ = _ := by aesop (add simp Matrix.compl)
 
 中文:
-定理 IsCompl.adjMatrix_add_adjMatrix_eq_adjMatrix_completeGraph
-  结论: [DecidableEq V] [AddZeroClass α]
+定理 是补集.adjMatrix_add_adjMatrix_eq_adjMatrix_completeGraph
+  结论: [DecidableEq V] [加法零类 α]
   证明: calc
   _ = G.adjMatrix α + Gᶜ.adjMatrix α := by have := h.compl_eq; subst this; congr
   _ = _ := by aesop (add simp Matrix.compl)
@@ -1070,7 +1070,7 @@ theorem compl_adjMatrix_completeGraph
 
 中文:
 定理 compl_adjMatrix_completeGraph
-  条件: [Zero α] [One α] [DecidableEq α] [DecidableEq V]
+  条件: [零 α] [幺 α] [DecidableEq α] [DecidableEq V]
   证明: by aesop (add simp Matrix.compl)
 -/
 @[simp] theorem compl_adjMatrix_completeGraph [Zero α] [One α] [DecidableEq α] [DecidableEq V] :
@@ -1085,8 +1085,8 @@ theorem _root_.Matrix.compl_zero
   proof: by simp [← IsAdjMatrix.compl_inj]
 
 中文:
-定理 _root_.Matrix.compl_zero
-  条件: [Zero α] [One α] [DecidableEq α] [DecidableEq V]
+定理 _root_.矩阵.compl_zero
+  条件: [零 α] [幺 α] [DecidableEq α] [DecidableEq V]
   证明: by simp [← IsAdjMatrix.compl_inj]
 -/
 @[simp] theorem _root_.Matrix.compl_zero [Zero α] [One α] [DecidableEq α] [DecidableEq V] :
@@ -1102,7 +1102,7 @@ theorem adjMatrix_completeGraph_eq_of_one_sub_one
 
 中文:
 定理 adjMatrix_completeGraph_eq_of_one_sub_one
-  条件: [AddGroup α] [One α] [DecidableEq V]
+  条件: [加法群 α] [幺 α] [DecidableEq V]
   证明: by ext; simp [one_apply, sub_ite]
 
 Depends on / 依赖: one_apply, sub_ite
@@ -1120,8 +1120,8 @@ theorem _root_.Matrix.compl_zero_eq_of_one_sub_one
   simp [adjMatrix_completeGraph_eq_of_one_sub_one]
 
 中文:
-定理 _root_.Matrix.compl_zero_eq_of_one_sub_one
-  结论: [AddGroup α] [One α] [DecidableEq V]
+定理 _root_.矩阵.compl_zero_eq_of_one_sub_one
+  结论: [加法群 α] [幺 α] [DecidableEq V]
   证明: by
   simp [adjMatrix_completeGraph_eq_of_one_sub_one]
 
@@ -1141,8 +1141,8 @@ theorem _root_.Matrix.compl_of_one_sub_one
   simp [← adjMatrix_completeGraph_eq_of_one_sub_one]
 
 中文:
-定理 _root_.Matrix.compl_of_one_sub_one
-  结论: [AddGroup α] [One α] [DecidableEq V]
+定理 _root_.矩阵.compl_of_one_sub_one
+  结论: [加法群 α] [幺 α] [DecidableEq V]
   证明: by
   simp [← adjMatrix_completeGraph_eq_of_one_sub_one]
 -/
@@ -1162,7 +1162,7 @@ theorem adjMatrix_hadamard_self
 
 中文:
 定理 adjMatrix_hadamard_self
-  条件: [MulZeroOneClass α]
+  条件: [乘零幺类 α]
   证明: by simp
 -/
 theorem adjMatrix_hadamard_self [MulZeroOneClass α] :
@@ -1187,7 +1187,7 @@ theorem adjMatrix_dotProduct
 
 中文:
 定理 adjMatrix_dotProduct
-  条件: [NonAssocSemiring α] (v : V) (vec : V -> α)
+  条件: [非结合半环 α] (v : V) (vec : V -> α)
   证明: by
   simp [neighborFinset_eq_filter, dotProduct, sum_filter]
 
@@ -1213,7 +1213,7 @@ theorem dotProduct_adjMatrix
 
 中文:
 定理 dotProduct_adjMatrix
-  条件: [NonAssocSemiring α] (v : V) (vec : V -> α)
+  条件: [非结合半环 α] (v : V) (vec : V -> α)
   证明: by
   simp [neighborFinset_eq_filter, dotProduct, sum_filter]
 
@@ -1239,7 +1239,7 @@ theorem adjMatrix_mulVec_apply
 
 中文:
 定理 adjMatrix_mulVec_apply
-  条件: [NonAssocSemiring α] (v : V) (vec : V -> α)
+  条件: [非结合半环 α] (v : V) (vec : V -> α)
   证明: by
   rw [mulVec]; rw [adjMatrix_dotProduct]
 
@@ -1267,7 +1267,7 @@ theorem adjMatrix_vecMul_apply
 
 中文:
 定理 adjMatrix_vecMul_apply
-  条件: [NonAssocSemiring α] (v : V) (vec : V -> α)
+  条件: [非结合半环 α] (v : V) (vec : V -> α)
   证明: by
   simp only [← dotProduct_adjMatrix, vecMul]
   refine congr rfl ?_; ext x
@@ -1297,7 +1297,7 @@ theorem adjMatrix_mul_apply
 
 中文:
 定理 adjMatrix_mul_apply
-  条件: [NonAssocSemiring α] (M : Matrix V V α) (v w : V)
+  条件: [非结合半环 α] (M : 矩阵 V V α) (v w : V)
   证明: by
   simp [mul_apply, neighborFinset_eq_filter, sum_filter]
 
@@ -1321,7 +1321,7 @@ theorem mul_adjMatrix_apply
 
 中文:
 定理 mul_adjMatrix_apply
-  条件: [NonAssocSemiring α] (M : Matrix V V α) (v w : V)
+  条件: [非结合半环 α] (M : 矩阵 V V α) (v w : V)
   证明: by
   simp [mul_apply, neighborFinset_eq_filter, sum_filter, adj_comm]
 
@@ -1345,8 +1345,8 @@ theorem trace_adjMatrix
 
 中文:
 定理 trace_adjMatrix
-  条件: [AddCommMonoid α] [One α]
-  结论: Matrix.trace (G.adjMatrix α) = 0
+  条件: [加法交换幺半群 α] [幺 α]
+  结论: 矩阵.trace (G.adjMatrix α) = 0
   证明: by
   simp [Matrix.trace]
 
@@ -1365,7 +1365,7 @@ theorem adjMatrix_mul_self_apply_self
 
 中文:
 定理 adjMatrix_mul_self_apply_self
-  条件: [NonAssocSemiring α] (i : V)
+  条件: [非结合半环 α] (i : V)
   证明: by simp [filter_true_of_mem]
 
 Depends on / 依赖: filter_true_of_mem
@@ -1385,7 +1385,7 @@ theorem natCast_card_dart_eq_dotProduct
 
 中文:
 定理 natCast_card_dart_eq_dotProduct
-  条件: [NonAssocSemiring α]
+  条件: [非结合半环 α]
   证明: by
   simp [G.dart_card_eq_sum_degrees, dotProduct_one]
 
@@ -1407,7 +1407,7 @@ theorem adjMatrix_mulVec_const_apply
 
 中文:
 定理 adjMatrix_mulVec_const_apply
-  条件: [NonAssocSemiring α] {a : α} {v : V}
+  条件: [非结合半环 α] {a : α} {v : V}
   证明: by simp
 -/
 theorem adjMatrix_mulVec_const_apply [NonAssocSemiring α] {a : α} {v : V} :
@@ -1424,7 +1424,7 @@ theorem adjMatrix_mulVec_const_apply_of_regular
 
 中文:
 定理 adjMatrix_mulVec_const_apply_of_regular
-  结论: [NonAssocSemiring α] {d : 自然数} {a : α}
+  结论: [非结合半环 α] {d : 自然数} {a : α}
   证明: by
   simp [hd v]
 -/
@@ -1450,7 +1450,7 @@ theorem adjMatrix_pow_apply_eq_card_walk
 
 中文:
 定理 adjMatrix_pow_apply_eq_card_walk
-  条件: [DecidableEq V] [Semiring α] (n : 自然数) (u v : V)
+  条件: [DecidableEq V] [半环 α] (n : 自然数) (u v : V)
   证明: by
   rw [card_set_walk_length_eq]
   induction n generalizing u v with
@@ -1494,7 +1494,7 @@ theorem dotProduct_mulVec_adjMatrix
 
 中文:
 定理 dotProduct_mulVec_adjMatrix
-  条件: [NonAssocSemiring α] (x y : V -> α)
+  条件: [非结合半环 α] (x y : V -> α)
   证明: by
   simp [dotProduct, mulVec, mul_sum]
 
@@ -1553,7 +1553,7 @@ theorem adjMatrix_hadamard_natCast
 
 中文:
 定理 adjMatrix_hadamard_natCast
-  条件: [自然数Cast α] (a : 自然数)
+  条件: [自然数嵌入 α] (a : 自然数)
   证明: adjMatrix_hadamard_diagonal _ _ _
 -/
 @[simp] theorem adjMatrix_hadamard_natCast [NatCast α] (a : Nat) :
@@ -1569,7 +1569,7 @@ theorem natCast_hadamard_adjMatrix
 
 中文:
 定理 natCast_hadamard_adjMatrix
-  条件: [自然数Cast α] (a : 自然数)
+  条件: [自然数嵌入 α] (a : 自然数)
   证明: diagonal_hadamard_adjMatrix _ _ _
 -/
 @[simp] theorem natCast_hadamard_adjMatrix [NatCast α] (a : Nat) :
@@ -1584,8 +1584,8 @@ theorem adjMatrix_hadamard_ofNat
   proof: adjMatrix_hadamard_diagonal _ _ _
 
 中文:
-定理 adjMatrix_hadamard_ofNat
-  条件: [自然数Cast α] (a : 自然数) [a.AtLeastTwo]
+定理 adjMatrix_hadamard_of自然数
+  条件: [自然数嵌入 α] (a : 自然数) [a.AtLeastTwo]
   证明: adjMatrix_hadamard_diagonal _ _ _
 -/
 @[simp] theorem adjMatrix_hadamard_ofNat [NatCast α] (a : Nat) [a.AtLeastTwo] :
@@ -1600,8 +1600,8 @@ theorem ofNat_hadamard_adjMatrix
   proof: diagonal_hadamard_adjMatrix _ _ _
 
 中文:
-定理 ofNat_hadamard_adjMatrix
-  条件: [自然数Cast α] (a : 自然数) [a.AtLeastTwo]
+定理 of自然数_hadamard_adjMatrix
+  条件: [自然数嵌入 α] (a : 自然数) [a.AtLeastTwo]
   证明: diagonal_hadamard_adjMatrix _ _ _
 -/
 @[simp] theorem ofNat_hadamard_adjMatrix [NatCast α] (a : Nat) [a.AtLeastTwo] :
@@ -1617,7 +1617,7 @@ theorem adjMatrix_hadamard_intCast
 
 中文:
 定理 adjMatrix_hadamard_intCast
-  条件: [整数Cast α] (a : 整数)
+  条件: [整数嵌入 α] (a : 整数)
   证明: adjMatrix_hadamard_diagonal _ _ _
 -/
 @[simp] theorem adjMatrix_hadamard_intCast [IntCast α] (a : Int) :
@@ -1633,7 +1633,7 @@ theorem intCast_hadamard_adjMatrix
 
 中文:
 定理 intCast_hadamard_adjMatrix
-  条件: [整数Cast α] (a : 整数)
+  条件: [整数嵌入 α] (a : 整数)
   证明: diagonal_hadamard_adjMatrix _ _ _
 -/
 @[simp] theorem intCast_hadamard_adjMatrix [IntCast α] (a : Int) :

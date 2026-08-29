@@ -42,7 +42,7 @@ theorem cast_one
 
 中文:
 定理 cast_one
-  条件: [One α] [Add α]
+  条件: [幺 α] [加法 α]
   结论: ((1 : PosNum) : α) = 1
   证明: rfl
 
@@ -65,7 +65,7 @@ theorem cast_one'
 
 中文:
 定理 cast_one'
-  条件: [One α] [Add α]
+  条件: [幺 α] [加法 α]
   结论: (PosNum.one : α) = 1
   证明: rfl
 
@@ -88,7 +88,7 @@ theorem cast_bit0
 
 中文:
 定理 cast_bit0
-  条件: [One α] [Add α] (n : PosNum)
+  条件: [幺 α] [加法 α] (n : PosNum)
   结论: (n.bit0 : α) = (n : α) + n
   证明: rfl
 
@@ -111,7 +111,7 @@ theorem cast_bit1
 
 中文:
 定理 cast_bit1
-  条件: [One α] [Add α] (n : PosNum)
+  条件: [幺 α] [加法 α] (n : PosNum)
   结论: (n.bit1 : α) = ((n : α) + n) + 1
   证明: rfl
 
@@ -131,7 +131,7 @@ theorem cast_to_nat
 
 中文:
 定理 cast_to_nat
-  条件: [AddMonoidWithOne α]
+  条件: [加法带幺幺半群 α]
   结论: 对任意 n : PosNum, ((n : 自然数) : α) = n
 -/
 theorem cast_to_nat [AddMonoidWithOne α] : forall n : PosNum, ((n : Nat) : α) = n
@@ -177,7 +177,7 @@ theorem cast_to_int
 
 中文:
 定理 cast_to_int
-  条件: [AddGroupWithOne α] (n : PosNum)
+  条件: [加法带幺群 α] (n : PosNum)
   结论: ((n : 整数) : α) = n
   证明: by
   rw [← to_nat_to_int]; rw [Int.cast_natCast]; rw [cast_to_nat]
@@ -668,7 +668,7 @@ theorem ofNat'_zero
   proof: by simp [Num.ofNat']
 
 中文:
-定理 ofNat'_zero
+定理 of自然数'_zero
   结论: Num.of自然数' 0 = 0
   证明: by simp [Num.ofNat']
 -/
@@ -686,7 +686,7 @@ theorem ofNat'_bit
 @[simp]
 
 中文:
-定理 ofNat'_bit
+定理 of自然数'_bit
   条件: (b n)
   结论: of自然数' (自然数.bit b n) = cond b Num.bit1 Num.bit0 (of自然数' n)
   证明: Nat.binaryRec_eq _ _ (.inl rfl)
@@ -706,7 +706,7 @@ theorem ofNat'_one
   proof: by simp [Num.ofNat', Num.bit1]
 
 中文:
-定理 ofNat'_one
+定理 of自然数'_one
   结论: Num.of自然数' 1 = 1
   证明: by simp [Num.ofNat', Num.bit1]
 -/
@@ -742,7 +742,7 @@ theorem ofNat'_succ
       simp only [cond, 
 
 中文:
-定理 ofNat'_succ
+定理 of自然数'_succ
   结论: 对任意 {n}, of自然数' (n + 1) = of自然数' n + 1
   证明: @(Nat.binaryRec (by simp [zero_add]) fun b n ih => by
     cases b
@@ -777,7 +777,7 @@ theorem add_ofNat'
 @[simp, norm_cast]
 
 中文:
-定理 add_ofNat'
+定理 add_of自然数'
   条件: (m n)
   结论: Num.of自然数' (m + n) = Num.of自然数' m + Num.of自然数' n
   证明: by
@@ -808,7 +808,7 @@ theorem cast_zero
 
 中文:
 定理 cast_zero
-  条件: [Zero α] [One α] [Add α]
+  条件: [零 α] [幺 α] [加法 α]
   结论: ((0 : Num) : α) = 0
   证明: rfl
 
@@ -831,7 +831,7 @@ theorem cast_zero'
 
 中文:
 定理 cast_zero'
-  条件: [Zero α] [One α] [Add α]
+  条件: [零 α] [幺 α] [加法 α]
   结论: (Num.zero : α) = 0
   证明: rfl
 
@@ -854,7 +854,7 @@ theorem cast_one
 
 中文:
 定理 cast_one
-  条件: [Zero α] [One α] [Add α]
+  条件: [零 α] [幺 α] [加法 α]
   结论: ((1 : Num) : α) = 1
   证明: rfl
 
@@ -875,7 +875,7 @@ theorem cast_pos
 
 中文:
 定理 cast_pos
-  条件: [Zero α] [One α] [Add α] (n : PosNum)
+  条件: [零 α] [幺 α] [加法 α] (n : PosNum)
   结论: (Num.pos n : α) = n
   证明: rfl
 -/
@@ -932,7 +932,7 @@ theorem cast_to_nat
 
 中文:
 定理 cast_to_nat
-  条件: [AddMonoidWithOne α]
+  条件: [加法带幺幺半群 α]
   结论: 对任意 n : Num, ((n : 自然数) : α) = n
 -/
 theorem cast_to_nat [AddMonoidWithOne α] : forall n : Num, ((n : Nat) : α) = n
@@ -1120,8 +1120,8 @@ lemma toNat_injective
 @[norm_cast]
 
 中文:
-引理 toNat_injective
-  结论: Function.Injective (castNum : Num -> 自然数)
+引理 to自然数_injective
+  结论: 函数.单射 (castNum : Num -> 自然数)
   证明: Function.LeftInverse.injective of_to_nat'
 
 @[norm_cast]
@@ -1185,7 +1185,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid Num where
+  签名: : 加法幺半群 Num where
   定义体: zero_add
   add_zero := add_zero
   add_assoc := by transfer
@@ -1212,7 +1212,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: : AddMonoidWithOne Num
+  签名: : 加法带幺幺半群 Num
   定义体: { Num.addMonoid with
     natCast := Num.ofNat'
     natCast_zero := ofNat'_zero
@@ -1242,7 +1242,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring Num where
+  签名: : 交换半环 Num where
   定义体: Num.addMonoid
   __ := Num.addMonoidWithOne
   npow := @npowRec Num ⟨1⟩ ⟨(· * ·)⟩
@@ -1280,7 +1280,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder Num where
+  签名: : 偏序 Num where
   定义体: by simp only [← lt_to_nat, ← le_to_nat, lt_iff_le_not_ge]
   le_refl := by transfer
   le_trans a b c := by transfer_rw; apply le_trans
@@ -1305,7 +1305,7 @@ instance isOrderedCancelAddMonoid
 
 中文:
 实例 isOrderedCancelAddMonoid
-  签名: : IsOrderedCancelAddMonoid Num where
+  签名: : 是OrderedCancelAdd幺半群 Num where
   定义体: by revert h; transfer_rw; exact fun h => add_le_add_left h c
   le_of_add_le_add_left a b c := by transfer_rw; apply le_of_add_le_add_left
 
@@ -1333,7 +1333,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder Num
+  签名: : 线性序 Num
   定义体: { le_total := by
       intro a b
       transfer_rw
@@ -1379,7 +1379,7 @@ instance isStrictOrderedRing
 
 中文:
 实例 isStrictOrderedRing
-  签名: : IsStrictOrderedRing Num where
+  签名: : 是StrictOrdered环 Num where
   定义体: by decide
   exists_pair_ne := ⟨0, 1, by decide⟩
   mul_lt_mul_of_pos_left a ha b c := by
@@ -1470,7 +1470,7 @@ theorem cast_to_int
 
 中文:
 定理 cast_to_int
-  条件: {α} [AddGroupWithOne α] (n : Num)
+  条件: {α} [加法带幺群 α] (n : Num)
   结论: ((n : 整数) : α) = n
   证明: by
   rw [← to_nat_to_int]; rw [Int.cast_natCast]; rw [cast_to_nat]
@@ -1510,7 +1510,7 @@ theorem of_natCast
 
 中文:
 定理 of_natCast
-  条件: {α} [AddMonoidWithOne α] (n : 自然数)
+  条件: {α} [加法带幺幺半群 α] (n : 自然数)
   结论: ((n : Num) : α) = n
   证明: by
   rw [← cast_to_nat]; rw [to_of_nat]
@@ -1887,7 +1887,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: : AddCommSemigroup PosNum where
+  签名: : 加法交换半群 PosNum where
   定义体: by transfer
   add_comm := by transfer
 
@@ -1911,7 +1911,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: : CommMonoid PosNum where
+  签名: : 交换幺半群 PosNum where
   定义体: @npowRec PosNum ⟨1⟩ ⟨(· * ·)⟩
   mul_assoc := by transfer
   one_mul := by transfer
@@ -1975,7 +1975,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder PosNum where
+  签名: : 线性序 PosNum where
   定义体: by
     intro a b
     transfer_rw
@@ -2082,7 +2082,7 @@ theorem cast_add
 
 中文:
 定理 cast_add
-  条件: [AddMonoidWithOne α] (m n)
+  条件: [加法带幺幺半群 α] (m n)
   结论: ((m + n : PosNum) : α) = m + n
   证明: by
   rw [← cast_to_nat]; rw [add_to_nat]; rw [Nat.cast_add]; rw [cast_to_nat]; rw [cast_to_nat]
@@ -2109,7 +2109,7 @@ theorem cast_succ
 
 中文:
 定理 cast_succ
-  条件: [AddMonoidWithOne α] (n : PosNum)
+  条件: [加法带幺幺半群 α] (n : PosNum)
   结论: (succ n : α) = n + 1
   证明: by
   rw [← add_one]; rw [cast_add]; rw [cast_one]
@@ -2136,7 +2136,7 @@ theorem cast_inj
 
 中文:
 定理 cast_inj
-  条件: [AddMonoidWithOne α] [CharZero α] {m n : PosNum}
+  条件: [加法带幺幺半群 α] [特征零 α] {m n : PosNum}
   结论: (m : α) = n ↔ m = n
   证明: by
   rw [← cast_to_nat m]; rw [← cast_to_nat n]; rw [Nat.cast_inj]; rw [to_nat_inj]
@@ -2162,7 +2162,7 @@ theorem one_le_cast
 
 中文:
 定理 one_le_cast
-  条件: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] (n : PosNum)
+  条件: [半环 α] [偏序 α] [是StrictOrdered环 α] (n : PosNum)
   证明: by
   rw [← cast_to_nat]; rw [← Nat.cast_one]; rw [Nat.cast_le (α := α)]; apply to_nat_pos
 
@@ -2188,7 +2188,7 @@ theorem cast_pos
 
 中文:
 定理 cast_pos
-  条件: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] (n : PosNum)
+  条件: [半环 α] [偏序 α] [是StrictOrdered环 α] (n : PosNum)
   结论: 0 < (n : α)
   证明: lt_of_lt_of_le zero_lt_one (one_le_cast n)
 
@@ -2214,7 +2214,7 @@ theorem cast_mul
 
 中文:
 定理 cast_mul
-  条件: [NonAssocSemiring α] (m n)
+  条件: [非结合半环 α] (m n)
   结论: ((m * n : PosNum) : α) = m * n
   证明: by
   rw [← cast_to_nat]; rw [mul_to_nat]; rw [Nat.cast_mul]; rw [cast_to_nat]; rw [cast_to_nat]
@@ -2276,7 +2276,7 @@ theorem cast_lt
 
 中文:
 定理 cast_lt
-  条件: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : PosNum}
+  条件: [半环 α] [偏序 α] [是StrictOrdered环 α] {m n : PosNum}
   证明: by
   rw [← cast_to_nat m]; rw [← cast_to_nat n]; rw [Nat.cast_lt (α := α)]; rw [lt_to_nat]
 
@@ -2300,7 +2300,7 @@ theorem cast_le
 
 中文:
 定理 cast_le
-  条件: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : PosNum}
+  条件: [半环 α] [线性序 α] [是StrictOrdered环 α] {m n : PosNum}
   证明: by
   rw [← not_lt]; exact not_congr cast_lt
 
@@ -2352,7 +2352,7 @@ theorem cast_succ'
 
 中文:
 定理 cast_succ'
-  条件: [AddMonoidWithOne α] (n)
+  条件: [加法带幺幺半群 α] (n)
   结论: (succ' n : α) = n + 1
   证明: by
   rw [← PosNum.cast_to_nat]; rw [succ'_to_nat]; rw [Nat.cast_add_one]; rw [cast_to_nat]
@@ -2375,7 +2375,7 @@ theorem cast_succ
 
 中文:
 定理 cast_succ
-  条件: [AddMonoidWithOne α] (n)
+  条件: [加法带幺幺半群 α] (n)
   结论: (succ n : α) = n + 1
   证明: cast_succ' n
 
@@ -2401,7 +2401,7 @@ theorem cast_add
 
 中文:
 定理 cast_add
-  条件: [AddMonoidWithOne α] (m n)
+  条件: [加法带幺幺半群 α] (m n)
   结论: ((m + n : Num) : α) = m + n
   证明: by
   rw [← cast_to_nat]; rw [add_to_nat]; rw [Nat.cast_add]; rw [cast_to_nat]; rw [cast_to_nat]
@@ -2428,7 +2428,7 @@ theorem cast_bit0
 
 中文:
 定理 cast_bit0
-  条件: [NonAssocSemiring α] (n : Num)
+  条件: [非结合半环 α] (n : Num)
   结论: (n.bit0 : α) = 2 * (n : α)
   证明: by
   rw [← bit0_of_bit0]; rw [two_mul]; rw [cast_add]
@@ -2455,7 +2455,7 @@ theorem cast_bit1
 
 中文:
 定理 cast_bit1
-  条件: [NonAssocSemiring α] (n : Num)
+  条件: [非结合半环 α] (n : Num)
   结论: (n.bit1 : α) = 2 * (n : α) + 1
   证明: by
   rw [← bit1_of_bit1]; rw [bit0_of_bit0]; rw [cast_add]; rw [cast_bit0]; rfl
@@ -2478,7 +2478,7 @@ theorem cast_mul
 
 中文:
 定理 cast_mul
-  条件: [NonAssocSemiring α]
+  条件: [非结合半环 α]
   结论: 对任意 m n, ((m * n : Num) : α) = m * n
 -/
 theorem cast_mul [NonAssocSemiring α] : forall m n, ((m * n : Num) : α) = m * n
@@ -2550,7 +2550,7 @@ theorem ofNat'_eq
   proof: Nat.binaryRec (by simp) fun b n IH => by tauto
 
 中文:
-定理 ofNat'_eq
+定理 of自然数'_eq
   结论: 对任意 n, Num.of自然数' n = n
   证明: Nat.binaryRec (by simp) fun b n IH => by tauto
 -/
@@ -2626,7 +2626,7 @@ theorem cast_toZNum
 
 中文:
 定理 cast_toZNum
-  条件: [Zero α] [One α] [Add α] [Neg α]
+  条件: [零 α] [幺 α] [加法 α] [取负 α]
   结论: 对任意 n : Num, (n.toZNum : α) = n
 -/
 theorem cast_toZNum [Zero α] [One α] [Add α] [Neg α] : forall n : Num, (n.toZNum : α) = n
@@ -2644,7 +2644,7 @@ theorem cast_toZNumNeg
 
 中文:
 定理 cast_toZNumNeg
-  条件: [SubtractionMonoid α] [One α]
+  条件: [Subtraction幺半群 α] [幺 α]
   结论: 对任意 n : Num, (n.toZNumNeg : α) = -n
 -/
 theorem cast_toZNumNeg [SubtractionMonoid α] [One α] : forall n : Num, (n.toZNumNeg : α) = -n
@@ -2904,7 +2904,7 @@ theorem cast_lt
 
 中文:
 定理 cast_lt
-  条件: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : Num}
+  条件: [半环 α] [偏序 α] [是StrictOrdered环 α] {m n : Num}
   证明: by
   rw [← cast_to_nat m]; rw [← cast_to_nat n]; rw [Nat.cast_lt (α := α)]; rw [lt_to_nat]
 
@@ -2930,7 +2930,7 @@ theorem cast_le
 
 中文:
 定理 cast_le
-  条件: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α] {m n : Num}
+  条件: [半环 α] [线性序 α] [是StrictOrdered环 α] {m n : Num}
   证明: by
   rw [← not_lt]; exact not_congr cast_lt
 
@@ -2954,7 +2954,7 @@ theorem cast_inj
 
 中文:
 定理 cast_inj
-  条件: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] {m n : Num}
+  条件: [半环 α] [偏序 α] [是StrictOrdered环 α] {m n : Num}
   证明: by
   rw [← cast_to_nat m]; rw [← cast_to_nat n]; rw [Nat.cast_inj]; rw [to_nat_inj]
 
@@ -3022,7 +3022,7 @@ theorem castNum_eq_bitwise
 
 中文:
 定理 castNum_eq_bitwise
-  结论: {f : Num -> Num -> Num} {g : 布尔 -> 布尔 -> 布尔}
+  结论: {f : Num -> Num -> Num} {g : 布尔值 -> 布尔值 -> 布尔值}
   证明: by
   intro m n
   obtain - | m := m <;> obtain - | n := n <;>

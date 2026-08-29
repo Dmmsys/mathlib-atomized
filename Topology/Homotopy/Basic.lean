@@ -86,7 +86,7 @@ structure Homotopy
     - map_one_left : forall x, toFun (1, x) = f₁ x
 
 中文:
-结构 Homotopy
+结构 同伦
   参数: (f₀ f₁ : C(X, Y))
   继承: C(I × X, Y)
   公理与运算 (2 个):
@@ -114,8 +114,8 @@ class HomotopyLike
 
 中文:
 类 HomotopyLike
-  参数: {X Y : outParam 类型} [TopologicalSpace X] [TopologicalSpace Y]
-  继承: ContinuousMapClass F (I × X) Y
+  参数: {X Y : outParam 类型} [拓扑空间 X] [拓扑空间 Y]
+  继承: 连续映射类 F (I × X) Y
   公理与运算 (2 个):
     - map_zero_left((f : F)) : 对任意 x, f (0, x) = f₀ x
     - map_one_left((f : F)) : 对任意 x, f (1, x) = f₁ x
@@ -150,7 +150,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Homotopy f₀ f₁) (I × X) Y where
+  签名: : 函数状 (同伦 f₀ f₁) (I × X) Y where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomotopyLike (Homotopy f₀ f₁) f₀ f₁
+  签名: HomotopyLike (同伦 f₀ f₁) f₀ f₁
   定义体: f.continuous_toFun
   map_zero_left f := f.map_zero_left
   map_one_left f := f.map_one_left
@@ -206,7 +206,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {F G : Homotopy f₀ f₁} (h : 对任意 x, F x = G x)
+  条件: {F G : 同伦 f₀ f₁} (h : 对任意 x, F x = G x)
   结论: F = G
   证明: DFunLike.ext _ _ h
 
@@ -227,7 +227,7 @@ initialize_simps_projections Homotopy (toFun -> apply, -toContinuousMap)
 
 中文:
 定义 Simps.apply
-  签名: (F : Homotopy f₀ f₁)
+  签名: (F : 同伦 f₀ f₁)
   定义体: F
 
 initialize_simps_projections Homotopy (toFun -> apply, -toContinuousMap)
@@ -250,8 +250,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (F : Homotopy f₀ f₁)
-  结论: Continuous F
+  条件: (F : 同伦 f₀ f₁)
+  结论: 连续 F
   证明: F.continuous_toFun
 
 @[simp]
@@ -273,7 +273,7 @@ theorem apply_zero
 
 中文:
 定理 apply_zero
-  条件: (F : Homotopy f₀ f₁) (x : X)
+  条件: (F : 同伦 f₀ f₁) (x : X)
   结论: F (0, x) = f₀ x
   证明: F.map_zero_left x
 
@@ -298,7 +298,7 @@ theorem apply_one
 
 中文:
 定理 apply_one
-  条件: (F : Homotopy f₀ f₁) (x : X)
+  条件: (F : 同伦 f₀ f₁) (x : X)
   结论: F (1, x) = f₁ x
   证明: F.map_one_left x
 
@@ -321,7 +321,7 @@ theorem coe_toContinuousMap
 
 中文:
 定理 coe_toContinuousMap
-  条件: (F : Homotopy f₀ f₁)
+  条件: (F : 同伦 f₀ f₁)
   结论: ⇑F.toContinuousMap = F
   证明: rfl
 -/
@@ -340,7 +340,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: (F : Homotopy f₀ f₁)
+  签名: (F : 同伦 f₀ f₁)
   定义体: F.toContinuousMap.curry
 
 @[simp]
@@ -362,7 +362,7 @@ theorem curry_apply
 
 中文:
 定理 curry_apply
-  条件: (F : Homotopy f₀ f₁) (t : I) (x : X)
+  条件: (F : 同伦 f₀ f₁) (t : I) (x : X)
   结论: F.curry t x = F (t, x)
   证明: rfl
 -/
@@ -380,7 +380,7 @@ theorem curry_zero
 
 中文:
 定理 curry_zero
-  条件: (F : Homotopy f₀ f₁)
+  条件: (F : 同伦 f₀ f₁)
   结论: F.curry 0 = f₀
   证明: by ext; simp
 -/
@@ -396,7 +396,7 @@ theorem curry_one
 
 中文:
 定理 curry_one
-  条件: (F : Homotopy f₀ f₁)
+  条件: (F : 同伦 f₀ f₁)
   结论: F.curry 1 = f₁
   证明: by ext; simp
 -/
@@ -412,7 +412,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (F : Homotopy f₀ f₁)
+  签名: (F : 同伦 f₀ f₁)
   定义体: F.curry.IccExtend zero_le_one
 
 Depends on / 依赖: F.curry.IccExtend, IccExtend, zero_le_one
@@ -432,7 +432,7 @@ theorem extend_apply_of_le_zero
 
 中文:
 定理 extend_apply_of_le_zero
-  条件: (F : Homotopy f₀ f₁) {t : 实数} (ht : t <= 0) (x : X)
+  条件: (F : 同伦 f₀ f₁) {t : 实数} (ht : t <= 0) (x : X)
   证明: by
   rw [← F.apply_zero]
   exact ContinuousMap.congr_fun (Set.IccExtend_of_le_left (zero_le_one' Real) F.curry ht) x
@@ -456,7 +456,7 @@ theorem extend_apply_of_one_le
 
 中文:
 定理 extend_apply_of_one_le
-  条件: (F : Homotopy f₀ f₁) {t : 实数} (ht : 1 <= t) (x : X)
+  条件: (F : 同伦 f₀ f₁) {t : 实数} (ht : 1 <= t) (x : X)
   证明: by
   rw [← F.apply_one]
   exact ContinuousMap.congr_fun (Set.IccExtend_of_right_le (zero_le_one' Real) F.curry ht) x
@@ -481,7 +481,7 @@ theorem extend_apply_coe
 
 中文:
 定理 extend_apply_coe
-  条件: (F : Homotopy f₀ f₁) (t : I) (x : X)
+  条件: (F : 同伦 f₀ f₁) (t : I) (x : X)
   结论: F.extend t x = F (t, x)
   证明: ContinuousMap.congr_fun (Set.IccExtend_val (zero_le_one' Real) F.curry t) x
 
@@ -503,7 +503,7 @@ theorem extend_of_mem_I
 
 中文:
 定理 extend_of_mem_I
-  条件: (F : Homotopy f₀ f₁) {t : 实数} (ht : t in I)
+  条件: (F : 同伦 f₀ f₁) {t : 实数} (ht : t in I)
   证明: Set.IccExtend_of_mem (zero_le_one' Real) F.curry ht
 
 Depends on / 依赖: F.curry, IccExtend_of_mem, Set.IccExtend_of_mem, zero_le_one
@@ -523,7 +523,7 @@ theorem extend_zero
 
 中文:
 定理 extend_zero
-  条件: (F : Homotopy f₀ f₁)
+  条件: (F : 同伦 f₀ f₁)
   结论: F.extend 0 = f₀
   证明: by simp
 -/
@@ -539,7 +539,7 @@ theorem extend_one
 
 中文:
 定理 extend_one
-  条件: (F : Homotopy f₀ f₁)
+  条件: (F : 同伦 f₀ f₁)
   结论: F.extend 1 = f₁
   证明: by simp
 -/
@@ -556,7 +556,7 @@ theorem extend_apply_of_mem_I
 
 中文:
 定理 extend_apply_of_mem_I
-  条件: (F : Homotopy f₀ f₁) {t : 实数} (ht : t in I) (x : X)
+  条件: (F : 同伦 f₀ f₁) {t : 实数} (ht : t in I) (x : X)
   证明: by
   simp [ht]
 -/
@@ -575,7 +575,7 @@ theorem congr_fun
 
 中文:
 定理 congr_fun
-  条件: {F G : Homotopy f₀ f₁} (h : F = G) (x : I × X)
+  条件: {F G : 同伦 f₀ f₁} (h : F = G) (x : I × X)
   结论: F x = G x
   证明: ContinuousMap.congr_fun (congr_arg _ h) x
 -/
@@ -593,7 +593,7 @@ theorem congr_arg
 
 中文:
 定理 congr_arg
-  条件: (F : Homotopy f₀ f₁) {x y : I × X} (h : x = y)
+  条件: (F : 同伦 f₀ f₁) {x y : I × X} (h : x = y)
   结论: F x = F y
   证明: F.toContinuousMap.congr_arg h
 -/
@@ -638,7 +638,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Homotopy (ContinuousMap.id X) (ContinuousMap.id X))
+  签名: 可居 (同伦 (连续映射.id X) (连续映射.id X))
   定义体: ⟨Homotopy.refl _⟩
 
 Depends on / 依赖: Homotopy, Homotopy.refl
@@ -664,7 +664,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {f₀ f₁ : C(X, Y)} (F : Homotopy f₀ f₁)
+  签名: {f₀ f₁ : C(X, Y)} (F : 同伦 f₀ f₁)
   定义体: F (σ x.1, x.2)
   map_zero_left := by simp
   map_one_left := by norm_num
@@ -690,7 +690,7 @@ theorem symm_symm
 
 中文:
 定理 symm_symm
-  条件: {f₀ f₁ : C(X, Y)} (F : Homotopy f₀ f₁)
+  条件: {f₀ f₁ : C(X, Y)} (F : 同伦 f₀ f₁)
   结论: F.symm.symm = F
   证明: by
   ext
@@ -734,7 +734,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: {f₀ f₁ f₂ : C(X, Y)} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
+  签名: {f₀ f₁ f₂ : C(X, Y)} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
   定义体: if (x.1 : Real) <= 1 / 2 then F.extend (2 * x.1) x.2 else G.extend (2 * x.1 - 1) x.2
   continuous_toFun :=
     continuous_if_le (by fun_prop) continuous_const
@@ -766,7 +766,7 @@ theorem trans_apply
 
 中文:
 定理 trans_apply
-  条件: {f₀ f₁ f₂ : C(X, Y)} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂) (x : I × X)
+  条件: {f₀ f₁ f₂ : C(X, Y)} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂) (x : I × X)
   证明: show ite _ _ _ = _ by
     split_ifs <;>
       · rw [extend, ContinuousMap.coe_IccExtend, Set.IccExtend_of_mem]
@@ -808,7 +808,7 @@ theorem symm_trans
 
 中文:
 定理 symm_trans
-  条件: {f₀ f₁ f₂ : C(X, Y)} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
+  条件: {f₀ f₁ f₂ : C(X, Y)} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
   证明: by
   ext ⟨t, _⟩
   rw [trans_apply]; rw [symm_apply]; rw [trans_apply]
@@ -860,7 +860,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {f₀ f₁ g₀ g₁ : C(X, Y)} (F : Homotopy f₀ f₁) (h₀ : f₀ = g₀) (h₁ : f₁ = g₁)
+  签名: {f₀ f₁ g₀ g₁ : C(X, Y)} (F : 同伦 f₀ f₁) (h₀ : f₀ = g₀) (h₁ : f₁ = g₁)
   定义体: F
   map_zero_left := by simp [← h₀]
   map_one_left := by simp [← h₁]
@@ -887,7 +887,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Y, Z)} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
+  签名: {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Y, Z)} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
   定义体: G (x.1, F x)
   map_zero_left := by simp
   map_one_left := by simp
@@ -911,7 +911,7 @@ definition compContinuousMap
 
 中文:
 定义 compContinuousMap
-  签名: {g₀ g₁ : C(Y, Z)} (G : Homotopy g₀ g₁) (f : C(X, Y))
+  签名: {g₀ g₁ : C(Y, Z)} (G : 同伦 g₀ g₁) (f : C(X, Y))
   定义体: G.comp (.refl f)
 
 Depends on / 依赖: G.comp
@@ -939,7 +939,7 @@ definition prodMap
 
 中文:
 定义 prodMap
-  签名: {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Z, Z')} (F : Homotopy f₀ f₁) (G : Homotopy g₀ g₁)
+  签名: {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Z, Z')} (F : 同伦 f₀ f₁) (G : 同伦 g₀ g₁)
   定义体: .prodMk (F.compContinuousMap .fst) (G.compContinuousMap .snd)
 
 Depends on / 依赖: F.compContinuousMap, G.compContinuousMap, compContinuousMap, prodMk
@@ -960,7 +960,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {Y : ι -> 类型} [对任意 i, TopologicalSpace (Y i)] {f₀ f₁ : 对任意 i, C(X, Y i)}
+  签名: {Y : ι -> 类型} [对任意 i, 拓扑空间 (Y i)] {f₀ f₁ : 对任意 i, C(X, Y i)}
   定义体: .pi fun i => F i
   map_zero_left x := funext fun i => (F i).map_zero_left x
   map_one_left x := funext fun i => (F i).map_one_left x
@@ -982,7 +982,7 @@ definition piMap
 
 中文:
 定义 piMap
-  签名: {X Y : ι -> 类型} [对任意 i, TopologicalSpace (X i)] [对任意 i, TopologicalSpace (Y i)]
+  签名: {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)] [对任意 i, 拓扑空间 (Y i)]
   定义体: .pi fun i => (F i).compContinuousMap .eval i
 -/
 protected def piMap {X Y : ι -> Type*} [forall i, TopologicalSpace (X i)] [forall i, TopologicalSpace (Y i)]
@@ -1001,7 +1001,7 @@ definition Homotopic
   body: Nonempty (Homotopy f₀ f₁)
 
 中文:
-定义 Homotopic
+定义 同伦
   签名: (f₀ f₁ : C(X, Y))
   定义体: Nonempty (Homotopy f₀ f₁)
 
@@ -1027,7 +1027,7 @@ theorem refl
 中文:
 定理 refl
   条件: (f : C(X, Y))
-  结论: Homotopic f f
+  结论: 同伦 f f
   证明: ⟨Homotopy.refl f⟩
 
 @[symm]
@@ -1052,7 +1052,7 @@ theorem symm
 中文:
 定理 symm
   条件: ⦃f g
-  结论: C(X, Y)⦄ (h : Homotopic f g) : Homotopic g f
+  结论: C(X, Y)⦄ (h : 同伦 f g) : 同伦 g f
   证明: h.map Homotopy.symm
 
 @[trans]
@@ -1075,7 +1075,7 @@ theorem trans
 中文:
 定理 trans
   条件: ⦃f g h
-  结论: C(X, Y)⦄ (h₀ : Homotopic f g) (h₁ : Homotopic g h) : Homotopic f h
+  结论: C(X, Y)⦄ (h₀ : 同伦 f g) (h₁ : 同伦 g h) : 同伦 f h
   证明: h₀.map2 Homotopy.trans h₁
 
 Depends on / 依赖: Homotopy, Homotopy.trans
@@ -1093,7 +1093,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g₀ g₁ : C(Y, Z)} {f₀ f₁ : C(X, Y)} (hg : Homotopic g₀ g₁) (hf : Homotopic f₀ f₁)
+  条件: {g₀ g₁ : C(Y, Z)} {f₀ f₁ : C(X, Y)} (hg : 同伦 g₀ g₁) (hf : 同伦 f₀ f₁)
   证明: hg.map2 Homotopy.comp hf
 
 Depends on / 依赖: Homotopy, Homotopy.comp, hg.map2
@@ -1119,7 +1119,7 @@ nonrec theorem prodMap {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(Z, Z')} :
 
 中文:
 定理 equivalence
-  结论: Equivalence (@Homotopic X Y _ _)
+  结论: 等价 (@同伦 X Y _ _)
   证明: ⟨refl, by apply symm, by apply trans⟩
 
 nonrec theorem prodMk {f₀ f₁ : C(X, Y)} {g₀ g₁ : C(X, Z)} :
@@ -1150,7 +1150,7 @@ theorem pi
 
 中文:
 定理 pi
-  结论: {Y : ι -> 类型} [对任意 i, TopologicalSpace (Y i)] {f₀ f₁ : 对任意 i, C(X, Y i)}
+  结论: {Y : ι -> 类型} [对任意 i, 拓扑空间 (Y i)] {f₀ f₁ : 对任意 i, C(X, Y i)}
   证明: ⟨.pi fun i => (F i).some⟩
 -/
 protected theorem pi {Y : ι -> Type*} [forall i, TopologicalSpace (Y i)] {f₀ f₁ : forall i, C(X, Y i)}
@@ -1168,7 +1168,7 @@ theorem piMap
 
 中文:
 定理 piMap
-  结论: {X Y : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  结论: {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: .pi fun i => .comp (F i) (.refl <| .eval i)
 -/
 protected theorem piMap {X Y : ι -> Type*} [forall i, TopologicalSpace (X i)]
@@ -1191,7 +1191,7 @@ structure HomotopyWith
 中文:
 结构 HomotopyWith
   参数: (f₀ f₁ : C(X, Y)) (P : C(X, Y) -> 命题)
-  继承: Homotopy f₀ f₁
+  继承: 同伦 f₀ f₁
   公理与运算 (1 个):
     - prop' : 对任意 t, P ⟨fun x => toFun (t, x), continuous_toFun.comp (by fun_prop)⟩
 -/
@@ -1218,7 +1218,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (HomotopyWith f₀ f₁ P) (I × X) Y where
+  签名: : 函数状 (HomotopyWith f₀ f₁ P) (I × X) Y where
   定义体: ⇑F.toHomotopy
   coe_injective
   | ⟨⟨⟨_, _⟩, _, _⟩, _⟩, ⟨⟨⟨_, _⟩, _, _⟩, _⟩, rfl => rfl
@@ -1266,7 +1266,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Function.Injective (HomotopyWith f₀ f₁ P) (I × X -> Y) (⇑)
+  结论: @函数.单射 (HomotopyWith f₀ f₁ P) (I × X -> Y) (⇑)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -1336,7 +1336,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (F : HomotopyWith f₀ f₁ P)
-  结论: Continuous F
+  结论: 连续 F
   证明: F.continuous_toFun
 
 @[simp]
@@ -1508,7 +1508,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (HomotopyWith (ContinuousMap.id X) (ContinuousMap.id X) fun _ => True)
+  签名: 可居 (HomotopyWith (连续映射.id X) (连续映射.id X) fun _ => 真)
   定义体: ⟨HomotopyWith.refl _ trivial⟩
 
 Depends on / 依赖: HomotopyWith, HomotopyWith.refl
@@ -1797,7 +1797,7 @@ abbreviation HomotopyRel
 
 中文:
 缩写 HomotopyRel
-  签名: (f₀ f₁ : C(X, Y)) (S : Set X)
+  签名: (f₀ f₁ : C(X, Y)) (S : 集合 X)
   定义体: HomotopyWith f₀ f₁ fun f => forall x in S, f x = f₀ x
 
 Depends on / 依赖: HomotopyWith
@@ -1892,7 +1892,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (f : C(X, Y)) (S : Set X)
+  签名: (f : C(X, Y)) (S : 集合 X)
   定义体: HomotopyWith.refl f fun _ _ => rfl
 
 Depends on / 依赖: HomotopyWith, HomotopyWith.refl
@@ -2099,7 +2099,7 @@ definition HomotopicRel
 
 中文:
 定义 HomotopicRel
-  签名: (f₀ f₁ : C(X, Y)) (S : Set X)
+  签名: (f₀ f₁ : C(X, Y)) (S : 集合 X)
   定义体: Nonempty (HomotopyRel f₀ f₁ S)
 
 Depends on / 依赖: HomotopyRel, Nonempty
@@ -2123,7 +2123,7 @@ theorem homotopic
 中文:
 定理 homotopic
   条件: {f₀ f₁ : C(X, Y)} (h : HomotopicRel f₀ f₁ S)
-  结论: Homotopic f₀ f₁
+  结论: 同伦 f₀ f₁
   证明: h.map fun F => F.1
 -/
 protected theorem homotopic {f₀ f₁ : C(X, Y)} (h : HomotopicRel f₀ f₁ S) : Homotopic f₀ f₁ :=
@@ -2231,7 +2231,7 @@ theorem equivalence
 
 中文:
 定理 equivalence
-  结论: Equivalence fun f g : C(X, Y) => HomotopicRel f g S
+  结论: 等价 fun f g : C(X, Y) => HomotopicRel f g S
   证明: ⟨refl, by apply symm, by apply trans⟩
 -/
 theorem equivalence : Equivalence fun f g : C(X, Y) => HomotopicRel f g S :=
@@ -2271,7 +2271,7 @@ theorem homotopicRel_empty
 中文:
 定理 homotopicRel_empty
   条件: {f₀ f₁ : C(X, Y)}
-  结论: HomotopicRel f₀ f₁ ∅ ↔ Homotopic f₀ f₁
+  结论: HomotopicRel f₀ f₁ ∅ ↔ 同伦 f₀ f₁
   证明: ⟨fun h => h.homotopic, fun ⟨F⟩ => ⟨⟨F, fun _ _ => False.elim⟩⟩⟩
 -/
 @[simp] theorem homotopicRel_empty {f₀ f₁ : C(X, Y)} : HomotopicRel f₀ f₁ ∅ ↔ Homotopic f₀ f₁ :=

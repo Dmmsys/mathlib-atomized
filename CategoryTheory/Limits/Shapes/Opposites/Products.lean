@@ -221,7 +221,7 @@ instance hasFiniteCoproducts_opposite
 
 中文:
 实例 hasFiniteCoproducts_opposite
-  签名: [HasFiniteProducts C]
+  签名: [有FiniteProducts C]
   定义体: Limits.hasCoproductsOfShape_opposite _
 
 Depends on / 依赖: Limits, Limits.hasCoproductsOfShape_opposite, hasCoproductsOfShape_opposite
@@ -240,8 +240,8 @@ theorem hasFiniteCoproducts_of_opposite
 
 中文:
 定理 hasFiniteCoproducts_of_opposite
-  条件: [HasFiniteProducts Cᵒᵖ]
-  结论: HasFiniteCoproducts C
+  条件: [有FiniteProducts Cᵒᵖ]
+  结论: 有FiniteCoproducts C
   证明: { out := fun _ => hasCoproductsOfShape_of_opposite _ }
 
 Depends on / 依赖: hasCoproductsOfShape_of_opposite
@@ -259,7 +259,7 @@ instance hasFiniteProducts_opposite
 
 中文:
 实例 hasFiniteProducts_opposite
-  签名: [HasFiniteCoproducts C]
+  签名: [有FiniteCoproducts C]
   定义体: inferInstance
 -/
 instance hasFiniteProducts_opposite [HasFiniteCoproducts C] : HasFiniteProducts Cᵒᵖ where
@@ -276,8 +276,8 @@ theorem hasFiniteProducts_of_opposite
 
 中文:
 定理 hasFiniteProducts_of_opposite
-  条件: [HasFiniteCoproducts Cᵒᵖ]
-  结论: HasFiniteProducts C
+  条件: [有FiniteCoproducts Cᵒᵖ]
+  结论: 有FiniteProducts C
   证明: { out := fun _ => hasProductsOfShape_of_opposite _ }
 
 Depends on / 依赖: hasProductsOfShape_of_opposite
@@ -302,7 +302,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimit (Discrete.functor Z).op
+  签名: 有极限 (离散.functor Z).op
   定义体: hasLimit_op_of_hasColimit (Discrete.functor Z)
 
 Depends on / 依赖: Discrete, Discrete.functor, functor, hasLimit_op_of_hasColimit
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimit ((Discrete.opposite α).inverse ⋙ (Discrete.functor Z).op)
+  签名: 有极限 ((离散.opposite α).inverse ⋙ (离散.functor Z).op)
   定义体: hasLimit_equivalence_comp (Discrete.opposite α).symm
 
 Depends on / 依赖: Discrete, Discrete.opposite, hasLimit_equivalence_comp, opposite
@@ -389,8 +389,8 @@ definition Cofan.IsColimit.op
     (Cone.ext 
 
 中文:
-定义 Cofan.IsColimit.op
-  签名: {c : Cofan Z} (hc : IsColimit c)
+定义 Cofan.是余极限.op
+  签名: {c : Cofan Z} (hc : 是余极限 c)
   定义体: by
   let e : Discrete.functor (Opposite.op <| Z ·) ≅ (Discrete.opposite α).inverse ⋙
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
@@ -667,7 +667,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit (Discrete.functor Z).op
+  签名: 有余极限 (离散.functor Z).op
   定义体: hasColimit_op_of_hasLimit (Discrete.functor Z)
 
 Depends on / 依赖: Discrete, Discrete.functor, functor, hasColimit_op_of_hasLimit
@@ -684,7 +684,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit ((Discrete.opposite α).inverse ⋙ (Discrete.functor Z).op)
+  签名: 有余极限 ((离散.opposite α).inverse ⋙ (离散.functor Z).op)
   定义体: hasColimit_equivalence_comp (Discrete.opposite α).symm
 
 Depends on / 依赖: Discrete, Discrete.opposite, hasColimit_equivalence_comp, opposite
@@ -754,8 +754,8 @@ definition Fan.IsLimit.op
     (Co
 
 中文:
-定义 Fan.IsLimit.op
-  签名: {f : Fan Z} (hf : IsLimit f)
+定义 Fan.是极限.op
+  签名: {f : Fan Z} (hf : 是极限 f)
   定义体: by
   let e : Discrete.functor (Opposite.op <| Z ·) ≅ (Discrete.opposite α).inverse ⋙
     (Discrete.functor Z).op := Discrete.natIso (fun _ => Iso.refl _)
@@ -1068,7 +1068,7 @@ lemma fst_opProdIsoCoprod_hom
 
 中文:
 引理 fst_opProdIsoCoprod_hom
-  结论: prod.fst.op ≫ (opProdIsoCoprod A B).hom = coprod.inl
+  结论: 乘积.fst.op ≫ (opProdIsoCoprod A B).hom = coprod.inl
   证明: by
   rw [opProdIsoCoprod]; rw [← op_comp]; rw [prod.lift_fst]; rw [Quiver.Hom.op_unop]
 
@@ -1092,7 +1092,7 @@ lemma snd_opProdIsoCoprod_hom
 
 中文:
 引理 snd_opProdIsoCoprod_hom
-  结论: prod.snd.op ≫ (opProdIsoCoprod A B).hom = coprod.inr
+  结论: 乘积.snd.op ≫ (opProdIsoCoprod A B).hom = coprod.inr
   证明: by
   rw [opProdIsoCoprod]; rw [← op_comp]; rw [prod.lift_snd]; rw [Quiver.Hom.op_unop]
 
@@ -1117,7 +1117,7 @@ lemma inl_opProdIsoCoprod_inv
 
 中文:
 引理 inl_opProdIsoCoprod_inv
-  结论: coprod.inl ≫ (opProdIsoCoprod A B).inv = prod.fst.op
+  结论: coprod.inl ≫ (opProdIsoCoprod A B).inv = 乘积.fst.op
   证明: by
   rw [Iso.comp_inv_eq]; rw [fst_opProdIsoCoprod_hom]
 
@@ -1140,7 +1140,7 @@ lemma inr_opProdIsoCoprod_inv
 
 中文:
 引理 inr_opProdIsoCoprod_inv
-  结论: coprod.inr ≫ (opProdIsoCoprod A B).inv = prod.snd.op
+  结论: coprod.inr ≫ (opProdIsoCoprod A B).inv = 乘积.snd.op
   证明: by
   rw [Iso.comp_inv_eq]; rw [snd_opProdIsoCoprod_hom]
 
@@ -1162,7 +1162,7 @@ lemma opProdIsoCoprod_hom_fst
 
 中文:
 引理 opProdIsoCoprod_hom_fst
-  结论: (opProdIsoCoprod A B).hom.unop ≫ prod.fst = coprod.inl.unop
+  结论: (opProdIsoCoprod A B).hom.unop ≫ 乘积.fst = coprod.inl.unop
   证明: by
   simp [opProdIsoCoprod]
 
@@ -1186,7 +1186,7 @@ lemma opProdIsoCoprod_hom_snd
 
 中文:
 引理 opProdIsoCoprod_hom_snd
-  结论: (opProdIsoCoprod A B).hom.unop ≫ prod.snd = coprod.inr.unop
+  结论: (opProdIsoCoprod A B).hom.unop ≫ 乘积.snd = coprod.inr.unop
   证明: by
   simp [opProdIsoCoprod]
 
@@ -1211,7 +1211,7 @@ lemma opProdIsoCoprod_inv_inl
 
 中文:
 引理 opProdIsoCoprod_inv_inl
-  结论: (opProdIsoCoprod A B).inv.unop ≫ coprod.inl.unop = prod.fst
+  结论: (opProdIsoCoprod A B).inv.unop ≫ coprod.inl.unop = 乘积.fst
   证明: by
   rw [← unop_comp]; rw [inl_opProdIsoCoprod_inv]; rw [Quiver.Hom.unop_op]
 
@@ -1234,7 +1234,7 @@ lemma opProdIsoCoprod_inv_inr
 
 中文:
 引理 opProdIsoCoprod_inv_inr
-  结论: (opProdIsoCoprod A B).inv.unop ≫ coprod.inr.unop = prod.snd
+  结论: (opProdIsoCoprod A B).inv.unop ≫ coprod.inr.unop = 乘积.snd
   证明: by
   rw [← unop_comp]; rw [inr_opProdIsoCoprod_inv]; rw [Quiver.Hom.unop_op]
 

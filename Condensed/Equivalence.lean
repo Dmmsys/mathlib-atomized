@@ -57,7 +57,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: (A : 类型) [Category* A]
+  签名: (A : 类型) [范畴* A]
   定义体: coherentTopology.equivalence' Stonean.toCompHaus A
 
 Depends on / 依赖: Stonean, Stonean.toCompHaus, coherentTopology, coherentTopology.equivalence, equivalence, toCompHaus
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: Stonean.toProfinite.PreservesEffectiveEpis
+  签名: Stonean.toProfinite.保持EffectiveEpis
   定义体: ((Profinite.effectiveEpi_tfae _).out 0 2).mpr (((Stonean.effectiveEpi_tfae _).out 0 2).mp h)
 
 Depends on / 依赖: Profinite, Profinite.effectiveEpi_tfae, Stonean, Stonean.effectiveEpi_tfae, effectiveEpi_tfae
@@ -164,7 +164,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: (A : 类型) [Category* A]
+  签名: (A : 类型) [范畴* A]
   定义体: coherentTopology.equivalence' Stonean.toProfinite A
 
 Depends on / 依赖: Stonean, Stonean.toProfinite, coherentTopology, coherentTopology.equivalence, equivalence, toProfinite
@@ -191,7 +191,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: (A : 类型) [Category* A]
+  签名: (A : 类型) [范畴* A]
   定义体: coherentTopology.equivalence' profiniteToCompHaus A
 
 Depends on / 依赖: coherentTopology, coherentTopology.equivalence, equivalence, profiniteToCompHaus

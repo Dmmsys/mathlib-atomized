@@ -62,7 +62,7 @@ definition productConeIsLimit
 
 中文:
 定义 productConeIsLimit
-  签名: : IsLimit (productCone Z) where
+  签名: : 是极限 (productCone Z) where
   定义体: ofHom (LinearMap.pi fun j => (s.π.app ⟨j⟩).hom : s.pt ->ₗ[R] forall i : ι, Z i)
   uniq s m w := by
     ext x
@@ -92,7 +92,7 @@ definition piIsoPi
 
 中文:
 定义 piIsoPi
-  签名: : ∏ᶜ Z ≅ ModuleCat.of R (对任意 i, Z i)
+  签名: : ∏ᶜ Z ≅ 模范畴.of R (对任意 i, Z i)
   定义体: limit.isoLimitCone ⟨_, productConeIsLimit Z⟩
 
 Depends on / 依赖: isoLimitCone, limit.isoLimitCone, productConeIsLimit
@@ -188,7 +188,7 @@ definition coproductCoconeIsColimit
 
 中文:
 定义 coproductCoconeIsColimit
-  签名: : IsColimit (coproductCocone Z) where
+  签名: : 是余极限 (coproductCocone Z) where
   定义体: ofHom DirectSum.toModule R ι _ fun i => (s.ι.app ⟨i⟩).hom
   fac := by
     rintro s ⟨i⟩
@@ -229,7 +229,7 @@ definition coprodIsoDirectSum
 
 中文:
 定义 coprodIsoDirectSum
-  签名: : ∐ Z ≅ ModuleCat.of R (⨁ i, Z i)
+  签名: : ∐ Z ≅ 模范畴.of R (⨁ i, Z i)
   定义体: colimit.isoColimitCocone ⟨_, coproductCoconeIsColimit Z⟩
 
 @[simp, elementwise]

@@ -40,7 +40,7 @@ structure DiffContOnCl
 
 中文:
 结构 DiffContOnCl
-  参数: (f : E -> F) (s : Set E)
+  参数: (f : E -> F) (s : 集合 E)
   公理与运算 (2 个):
     - differentiableOn : DifferentiableOn 𝕜 f s
     - continuousOn : ContinuousOn f (closure s)
@@ -81,8 +81,8 @@ theorem Differentiable.diffContOnCl
   proof: ⟨h.differentiableOn, h.continuous.continuousOn⟩
 
 中文:
-定理 Differentiable.diffContOnCl
-  条件: (h : Differentiable 𝕜 f)
+定理 可微.diffContOnCl
+  条件: (h : 可微 𝕜 f)
   结论: DiffContOnCl 𝕜 f s
   证明: ⟨h.differentiableOn, h.continuous.continuousOn⟩
 
@@ -101,8 +101,8 @@ theorem IsClosed.diffContOnCl_iff
   proof: ⟨fun h => h.differentiableOn, fun h => ⟨h, hs.closure_eq.symm ▸ h.continuousOn⟩⟩
 
 中文:
-定理 IsClosed.diffContOnCl_iff
-  条件: (hs : IsClosed s)
+定理 是闭集.diffContOnCl_iff
+  条件: (hs : 是闭集 s)
   结论: DiffContOnCl 𝕜 f s ↔ DifferentiableOn 𝕜 f s
   证明: ⟨fun h => h.differentiableOn, fun h => ⟨h, hs.closure_eq.symm ▸ h.continuousOn⟩⟩
 
@@ -121,7 +121,7 @@ theorem diffContOnCl_univ
 
 中文:
 定理 diffContOnCl_univ
-  结论: DiffContOnCl 𝕜 f univ ↔ Differentiable 𝕜 f
+  结论: DiffContOnCl 𝕜 f univ ↔ 可微 𝕜 f
   证明: isClosed_univ.diffContOnCl_iff.trans differentiableOn_univ
 
 Depends on / 依赖: diffContOnCl_iff, differentiableOn_univ, isClosed_univ, isClosed_univ.diffContOnCl_iff.trans
@@ -161,7 +161,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : G -> E} {t : Set G} (hf : DiffContOnCl 𝕜 f s) (hg : DiffContOnCl 𝕜 g t)
+  结论: {g : G -> E} {t : 集合 G} (hf : DiffContOnCl 𝕜 f s) (hg : DiffContOnCl 𝕜 g t)
   证明: ⟨hf.1.comp hg.1 h, hf.2.comp hg.2 h.closure_of_continuousOn hg.2⟩
 
 Depends on / 依赖: closure_of_continuousOn, h.closure_of_continuousOn
@@ -185,7 +185,7 @@ theorem continuousOn_ball
 
 中文:
 定理 continuousOn_ball
-  条件: [NormedSpace 实数 E] {x : E} {r : 实数} (h : DiffContOnCl 𝕜 f (ball x r))
+  条件: [赋范空间 实数 E] {x : E} {r : 实数} (h : DiffContOnCl 𝕜 f (ball x r))
   证明: by
   rcases eq_or_ne r 0 with (rfl | hr)
   · rw [closedBall_zero]
@@ -232,7 +232,7 @@ theorem differentiableAt
 
 中文:
 定理 differentiableAt
-  条件: (h : DiffContOnCl 𝕜 f s) (hs : IsOpen s) (hx : x in s)
+  条件: (h : DiffContOnCl 𝕜 f s) (hs : 是开集 s) (hx : x in s)
   证明: h.differentiableOn.differentiableAt hs.mem_nhds hx
 -/
 protected theorem differentiableAt (h : DiffContOnCl 𝕜 f s) (hs : IsOpen s) (hx : x in s) :
@@ -421,7 +421,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  结论: {R : 类型} [Semiring R] [Module R F] [SMulCommClass 𝕜 R F]
+  结论: {R : 类型} [半环 R] [模 R F] [标量交换类 𝕜 R F]
   证明: ⟨hf.1.const_smul c, hf.2.const_smul c⟩
 
 Depends on / 依赖: const_smul
@@ -440,7 +440,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {𝕜' : 类型} [NontriviallyNormedField 𝕜'] [NormedAlgebra 𝕜 𝕜'] [NormedSpace 𝕜' F]
+  结论: {𝕜' : 类型} [NontriviallyNormedField 𝕜'] [赋范代数 𝕜 𝕜'] [赋范空间 𝕜' F]
   证明: ⟨hc.1.smul hf.1, hc.2.smul hf.2⟩
 -/
 theorem smul {𝕜' : Type*} [NontriviallyNormedField 𝕜'] [NormedAlgebra 𝕜 𝕜'] [NormedSpace 𝕜' F]
@@ -458,7 +458,7 @@ theorem smul_const
 
 中文:
 定理 smul_const
-  结论: {𝕜' : 类型} [NontriviallyNormedField 𝕜'] [NormedAlgebra 𝕜 𝕜']
+  结论: {𝕜' : 类型} [NontriviallyNormedField 𝕜'] [赋范代数 𝕜 𝕜']
   证明: hc.smul diffContOnCl_const
 
 Depends on / 依赖: diffContOnCl_const, hc.smul
@@ -498,8 +498,8 @@ theorem Differentiable.comp_diffContOnCl
   proof: hf.diffContOnCl.comp hg (mapsTo_image _ _)
 
 中文:
-定理 Differentiable.comp_diffContOnCl
-  结论: {g : G -> E} {t : Set G} (hf : Differentiable 𝕜 f)
+定理 可微.comp_diffContOnCl
+  结论: {g : G -> E} {t : 集合 G} (hf : 可微 𝕜 f)
   证明: hf.diffContOnCl.comp hg (mapsTo_image _ _)
 
 Depends on / 依赖: diffContOnCl, hf.diffContOnCl.comp, mapsTo_image
@@ -518,7 +518,7 @@ theorem DifferentiableOn.diffContOnCl_ball
 
 中文:
 定理 DifferentiableOn.diffContOnCl_ball
-  结论: {U : Set E} {c : E} {R : 实数} (hf : DifferentiableOn 𝕜 f U)
+  结论: {U : 集合 E} {c : E} {R : 实数} (hf : DifferentiableOn 𝕜 f U)
   证明: DiffContOnCl.mk_ball (hf.mono (ball_subset_closedBall.trans hc)) (hf.continuousOn.mono hc)
 
 Depends on / 依赖: DiffContOnCl, DiffContOnCl.mk_ball, ball_subset_closedBall, ball_subset_closedBall.trans, continuousOn, hf.continuousOn.mono, hf.mono, mk_ball

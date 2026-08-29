@@ -68,7 +68,7 @@ lemma mem_piFinset_iff_pivot_removeNth
 
 中文:
 引理 mem_piFinset_iff_pivot_removeNth
-  条件: (p : Fin (n + 1))
+  条件: (p : 有限集 (n + 1))
   证明: by
   simp only [Fintype.mem_piFinset, forall_iff_succAbove p, removeNth]
 
@@ -89,7 +89,7 @@ lemma cons_mem_piFinset_cons
 
 中文:
 引理 cons_mem_piFinset_cons
-  结论: {x_zero : α 0} {x_tail : (i : Fin n) -> α i.succ}
+  结论: {x_zero : α 0} {x_tail : (i : 有限集 n) -> α i.succ}
   证明: by
   simp_rw [mem_piFinset_iff_zero_tail, cons_zero, tail_cons]
 
@@ -112,7 +112,7 @@ lemma snoc_mem_piFinset_snoc
 
 中文:
 引理 snoc_mem_piFinset_snoc
-  结论: {x_last : α (last n)} {x_init : (i : Fin n) -> α i.castSucc}
+  结论: {x_last : α (last n)} {x_init : (i : 有限集 n) -> α i.castSucc}
   证明: by
   simp_rw [mem_piFinset_iff_last_init, init_snoc, snoc_last]
 

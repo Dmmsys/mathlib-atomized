@@ -38,7 +38,7 @@ definition Module.length
   body: (Order.krullDim (Submodule R M)).unbot (by simp [Order.krullDim_eq_bot_iff])
 
 中文:
-定义 Module.length
+定义 模.length
   签名: : 自然数∞
   定义体: (Order.krullDim (Submodule R M)).unbot (by simp [Order.krullDim_eq_bot_iff])
 
@@ -55,7 +55,7 @@ lemma Module.coe_length
   proof: WithBot.coe_unbot _ _
 
 中文:
-引理 Module.coe_length
+引理 模.coe_length
   证明: WithBot.coe_unbot _ _
 
 Depends on / 依赖: WithBot, WithBot.coe_unbot, coe_unbot
@@ -75,8 +75,8 @@ lemma Module.length_eq_height
   rw [Module.coe_length]; rw [Order.height_top_eq_krullDim]
 
 中文:
-引理 Module.length_eq_height
-  结论: Module.length R M = Order.height (⊤ : Submodule R M)
+引理 模.length_eq_height
+  结论: 模.length R M = Order.height (⊤ : 子模 R M)
   证明: by
   apply WithBot.coe_injective
   rw [Module.coe_length]; rw [Order.height_top_eq_krullDim]
@@ -98,8 +98,8 @@ lemma Module.length_eq_coheight
   rw [Module.coe_length]; rw [Order.coheight_bot_eq_krullDim]
 
 中文:
-引理 Module.length_eq_coheight
-  结论: Module.length R M = Order.coheight (⊥ : Submodule R M)
+引理 模.length_eq_coheight
+  结论: 模.length R M = Order.coheight (⊥ : 子模 R M)
   证明: by
   apply WithBot.coe_injective
   rw [Module.coe_length]; rw [Order.coheight_bot_eq_krullDim]
@@ -124,8 +124,8 @@ lemma Module.length_eq_zero_iff
 @[simp, nontriviality]
 
 中文:
-引理 Module.length_eq_zero_iff
-  结论: Module.length R M = 0 ↔ Subsingleton M
+引理 模.length_eq_zero_iff
+  结论: 模.length R M = 0 ↔ 子单例 M
   证明: by
   rw [← WithBot.coe_inj]; rw [Module.coe_length]; rw [WithBot.coe_zero]; rw [Order.krullDim_eq_zero_iff_of_orderTop]; rw [Submodule.subsingleton_iff]
 
@@ -149,9 +149,9 @@ lemma Module.length_eq_zero
 @[simp, nontriviality]
 
 中文:
-引理 Module.length_eq_zero
-  条件: [Subsingleton M]
-  结论: Module.length R M = 0
+引理 模.length_eq_zero
+  条件: [子单例 M]
+  结论: 模.length R M = 0
   证明: Module.length_eq_zero_iff.mpr ‹_›
 
 @[simp, nontriviality]
@@ -173,9 +173,9 @@ lemma Module.length_eq_zero_of_subsingleton_ring
   Module.length_eq_zero
 
 中文:
-引理 Module.length_eq_zero_of_subsingleton_ring
-  条件: [Subsingleton R]
-  结论: Module.length R M = 0
+引理 模.length_eq_zero_of_subsingleton_ring
+  条件: [子单例 R]
+  结论: 模.length R M = 0
   证明: have := Module.subsingleton R M
   Module.length_eq_zero
 
@@ -195,8 +195,8 @@ lemma Module.length_pos_iff
   rw [pos_iff_ne_zero]; rw [ne_eq]; rw [Module.length_eq_zero_iff]; rw [not_subsingleton_iff_nontrivial]
 
 中文:
-引理 Module.length_pos_iff
-  结论: 0 < Module.length R M ↔ Nontrivial M
+引理 模.length_pos_iff
+  结论: 0 < 模.length R M ↔ 非平凡 M
   证明: by
   rw [pos_iff_ne_zero]; rw [ne_eq]; rw [Module.length_eq_zero_iff]; rw [not_subsingleton_iff_nontrivial]
 
@@ -215,9 +215,9 @@ lemma Module.length_pos
   proof: Module.length_pos_iff.mpr ‹_›
 
 中文:
-引理 Module.length_pos
-  条件: [Nontrivial M]
-  结论: 0 < Module.length R M
+引理 模.length_pos
+  条件: [非平凡 M]
+  结论: 0 < 模.length R M
   证明: Module.length_pos_iff.mpr ‹_›
 
 Depends on / 依赖: Module, Module.length_pos_iff.mpr, length_pos_iff
@@ -240,8 +240,8 @@ lemma Module.length_compositionSeries
   · exact (Order.LTSeries.length_le_k
 
 中文:
-引理 Module.length_compositionSeries
-  结论: (s : CompositionSeries (Submodule R M)) (h₁ : s.head = ⊥)
+引理 模.length_compositionSeries
+  结论: (s : 合成列 (子模 R M)) (h₁ : s.head = ⊥)
   证明: by
   have H := isFiniteLength_of_exists_compositionSeries ⟨s, h₁, h₂⟩
   have := (isFiniteLength_iff_isNoetherian_isArtinian.mp H).1
@@ -278,7 +278,7 @@ lemma Module.length_eq_top_iff_infiniteDimensionalOrder
   rw [← WithBot.coe_inj]; rw [WithBot.coe_top]; rw [coe_length]; rw [Order.krullDim_eq_top_iff]; rw [← not_finiteDimensionalOrder_iff]
 
 中文:
-引理 Module.length_eq_top_iff_infiniteDimensionalOrder
+引理 模.length_eq_top_iff_infiniteDimensionalOrder
   证明: by
   rw [← WithBot.coe_inj]; rw [WithBot.coe_top]; rw [coe_length]; rw [Order.krullDim_eq_top_iff]; rw [← not_finiteDimensionalOrder_iff]
 
@@ -297,7 +297,7 @@ lemma Module.length_ne_top_iff_finiteDimensionalOrder
   rw [Ne]; rw [length_eq_top_iff_infiniteDimensionalOrder]; rw [← not_finiteDimensionalOrder_iff]; rw [not_not]
 
 中文:
-引理 Module.length_ne_top_iff_finiteDimensionalOrder
+引理 模.length_ne_top_iff_finiteDimensionalOrder
   证明: by
   rw [Ne]; rw [length_eq_top_iff_infiniteDimensionalOrder]; rw [← not_finiteDimensionalOrder_iff]; rw [not_not]
 
@@ -321,8 +321,8 @@ lemma Module.length_ne_top_iff
       {(N₁, N₂) : Submodule R M × Submodule R M | N₁ < N
 
 中文:
-引理 Module.length_ne_top_iff
-  结论: Module.length R M != ⊤ ↔ IsFiniteLength R M
+引理 模.length_ne_top_iff
+  结论: 模.length R M != ⊤ ↔ 是FiniteLength R M
   证明: by
   refine ⟨fun h => ?_, fun H => ?_⟩
   · rw [length_ne_top_iff_finiteDimensionalOrder] at h
@@ -358,9 +358,9 @@ lemma Module.length_ne_top
 @[simp]
 
 中文:
-引理 Module.length_ne_top
-  条件: [IsArtinian R M] [IsNoetherian R M]
-  结论: Module.length R M != ⊤
+引理 模.length_ne_top
+  条件: [是Artin R M] [是Noether R M]
+  结论: 模.length R M != ⊤
   证明: by
   rw [length_ne_top_iff]; rw [isFiniteLength_iff_isNoetherian_isArtinian]
   exact ⟨‹_›, ‹_›⟩
@@ -383,7 +383,7 @@ lemma Module.finiteDimensionalOrder_submodule_iff
   rw [← Module.length_ne_top_iff_finiteDimensionalOrder]; rw [Module.length_ne_top_iff]
 
 中文:
-引理 Module.finiteDimensionalOrder_submodule_iff
+引理 模.finiteDimensionalOrder_submodule_iff
   证明: by
   rw [← Module.length_ne_top_iff_finiteDimensionalOrder]; rw [Module.length_ne_top_iff]
 
@@ -404,8 +404,8 @@ instance [IsArtinian
   tauto
 
 中文:
-实例 [IsArtinian
-  签名: R M] [IsNoetherian R M] : FiniteDimensionalOrder (Submodule R M)
+实例 [是Artin
+  签名: R M] [是Noether R M] : FiniteDimensionalOrder (子模 R M)
   定义体: by
   rw [Module.finiteDimensionalOrder_submodule_iff]; rw [isFiniteLength_iff_isNoetherian_isArtinian]
   tauto
@@ -427,8 +427,8 @@ lemma Module.length_submodule
   rw [Order.height_eq_krullDim_Iic]; rw [coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.mapIic _)]
 
 中文:
-引理 Module.length_submodule
-  条件: {N : Submodule R M}
+引理 模.length_submodule
+  条件: {N : 子模 R M}
   证明: by
   apply WithBot.coe_injective
   rw [Order.height_eq_krullDim_Iic]; rw [coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.mapIic _)]
@@ -451,8 +451,8 @@ lemma Module.length_quotient
   rw [Order.coheight_eq_krullDim_Ici]; rw [coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.comapMkQRelIso N)]
 
 中文:
-引理 Module.length_quotient
-  条件: {N : Submodule R M}
+引理 模.length_quotient
+  条件: {N : 子模 R M}
   证明: by
   apply WithBot.coe_injective
   rw [Order.coheight_eq_krullDim_Ici]; rw [coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.comapMkQRelIso N)]
@@ -475,8 +475,8 @@ lemma LinearEquiv.length_eq
   rw [Module.coe_length]; rw [Module.coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.orderIsoMapComap e)]
 
 中文:
-引理 LinearEquiv.length_eq
-  条件: {N : 类型} [AddCommGroup N] [Module R N] (e : M ≃ₗ[R] N)
+引理 线性等价.length_eq
+  条件: {N : 类型} [加法交换群 N] [模 R N] (e : M ≃ₗ[R] N)
   证明: by
   apply WithBot.coe_injective
   rw [Module.coe_length]; rw [Module.coe_length]; rw [Order.krullDim_eq_of_orderIso (Submodule.orderIsoMapComap e)]
@@ -500,8 +500,8 @@ theorem Module.length_eq_of_surjective
   rw [Module.length]; rw [Module.length]; rw [WithBot.unbot_inj]; rw [Order.krullDim_eq_of_orderIso (Submodule.orderIsoMapComapOfBijective f Function.bijective_id)]
 
 中文:
-定理 Module.length_eq_of_surjective
-  结论: {S : 类型} [CommRing S] [Algebra S R] [Module S M]
+定理 模.length_eq_of_surjective
+  结论: {S : 类型} [交换环 S] [代数 S R] [模 S M]
   证明: by
   have : RingHomSurjective (algebraMap S R) := ⟨h⟩
   let f : M ->ₛₗ[algebraMap S R] M := ⟨AddHom.id M, by simp⟩
@@ -524,7 +524,7 @@ lemma Module.length_bot
   proof: Module.length_eq_zero
 
 中文:
-引理 Module.length_bot
+引理 模.length_bot
   证明: Module.length_eq_zero
 
 Depends on / 依赖: Module, Module.length_eq_zero, length_eq_zero
@@ -542,7 +542,7 @@ lemma Module.length_top
   rw [Module.length_submodule]; rw [Module.length_eq_height]
 
 中文:
-引理 Module.length_top
+引理 模.length_top
   证明: by
   rw [Module.length_submodule]; rw [Module.length_eq_height]
 -/
@@ -560,8 +560,8 @@ lemma Submodule.height_lt_top
   simpa only [← Module.length_submodule] using Module.length_ne_top.lt_top
 
 中文:
-引理 Submodule.height_lt_top
-  条件: [IsArtinian R M] [IsNoetherian R M] (N : Submodule R M)
+引理 子模.height_lt_top
+  条件: [是Artin R M] [是Noether R M] (N : 子模 R M)
   证明: by
   simpa only [← Module.length_submodule] using Module.length_ne_top.lt_top
 
@@ -580,8 +580,8 @@ lemma Submodule.height_strictMono
   proof: fun N _ h => Order.height_strictMono h N.height_lt_top
 
 中文:
-引理 Submodule.height_strictMono
-  条件: [IsArtinian R M] [IsNoetherian R M]
+引理 子模.height_strictMono
+  条件: [是Artin R M] [是Noether R M]
   证明: fun N _ h => Order.height_strictMono h N.height_lt_top
 
 Depends on / 依赖: N.height_lt_top, Order.height_strictMono, height_lt_top, height_strictMono
@@ -600,8 +600,8 @@ lemma Submodule.length_lt
   simpa [← Module.length_top (M := M), Module.length_submodule] using height_strictMono h.lt_top
 
 中文:
-引理 Submodule.length_lt
-  条件: [IsArtinian R M] [IsNoetherian R M] {N : Submodule R M} (h : N != ⊤)
+引理 子模.length_lt
+  条件: [是Artin R M] [是Noether R M] {N : 子模 R M} (h : N != ⊤)
   证明: by
   simpa [← Module.length_top (M := M), Module.length_submodule] using height_strictMono h.lt_top
 
@@ -631,7 +631,7 @@ lemma Module.length_eq_add_of_exact
         s.map
 
 中文:
-引理 Module.length_eq_add_of_exact
+引理 模.length_eq_add_of_exact
   证明: by
   by_cases hP : IsFiniteLength R P
   · by_cases hN : IsFiniteLength R N
@@ -681,8 +681,8 @@ lemma Module.length_le_of_injective
 include hg in
 
 中文:
-引理 Module.length_le_of_injective
-  结论: Module.length R N <= Module.length R M
+引理 模.length_le_of_injective
+  结论: 模.length R N <= 模.length R M
   证明: by
   rw [Module.length_eq_add_of_exact f (LinearMap.range f).mkQ hf
     (Submodule.mkQ_surjective _) (LinearMap.exact_map_mkQ_range f)]
@@ -710,8 +710,8 @@ lemma Module.length_le_of_surjective
   exact le_add_self
 
 中文:
-引理 Module.length_le_of_surjective
-  结论: Module.length R P <= Module.length R M
+引理 模.length_le_of_surjective
+  结论: 模.length R P <= 模.length R M
   证明: by
   rw [Module.length_eq_add_of_exact (LinearMap.ker g).subtype g (Submodule.subtype_injective _) hg
     (LinearMap.exact_subtype_ker_map g)]
@@ -734,7 +734,7 @@ lemma Module.length_prod
   proof: Module.length_eq_add_of_exact _ _ LinearMap.inl_injective LinearMap.snd_surjective .inl_snd
 
 中文:
-引理 Module.length_prod
+引理 模.length_prod
   证明: Module.length_eq_add_of_exact _ _ LinearMap.inl_injective LinearMap.snd_surjective .inl_snd
 
 Depends on / 依赖: LinearMap, LinearMap.inl_injective, LinearMap.snd_surjective, Module, Module.length_eq_add_of_exact, inl_injective, inl_snd, length_eq_add_of_exact, snd_surjective
@@ -762,8 +762,8 @@ lemma Module.length_pi_of_fintype
     rw [(LinearEqui
 
 中文:
-引理 Module.length_pi_of_fintype
-  结论: 对任意 {ι : 类型} [Fintype ι]
+引理 模.length_pi_of_fintype
+  结论: 对任意 {ι : 类型} [有限类型 ι]
   证明: by
   apply Fintype.induction_empty_option
   · intro α β _ e IH M _ _
@@ -805,7 +805,7 @@ lemma Module.length_finsupp
   obtain ⟨s, hs⟩ := Infinite.exists_subset_card_e
 
 中文:
-引理 Module.length_finsupp
+引理 模.length_finsupp
   条件: {ι : 类型}
   证明: by
   cases finite_or_infinite ι
@@ -851,7 +851,7 @@ lemma Module.length_pi
   simp [ENat.top_mul length_pos
 
 中文:
-引理 Module.length_pi
+引理 模.length_pi
   条件: {ι : 类型}
   证明: by
   cases finite_or_infinite ι
@@ -894,8 +894,8 @@ lemma Module.length_of_free
   let b := Module.Free
 
 中文:
-引理 Module.length_of_free
-  条件: [Module.Free R M]
+引理 模.length_of_free
+  条件: [模.自由 R M]
   证明: by
   let b := Module.Free.chooseBasis R M
   nontriviality R
@@ -930,7 +930,7 @@ lemma Module.length_of_free_of_finite
   rw [length_of_free]; rw [Cardinal.toENat_eq_natCast.mpr (finrank_eq_rank _ _).symm]
 
 中文:
-引理 Module.length_of_free_of_finite
+引理 模.length_of_free_of_finite
   证明: by
   rw [length_of_free]; rw [Cardinal.toENat_eq_natCast.mpr (finrank_eq_rank _ _).symm]
 
@@ -950,7 +950,7 @@ lemma Module.length_eq_one_iff
   rw [← WithBot.coe_inj]; rw [Module.coe_length]; rw [WithBot.coe_one]; rw [Order.krullDim_eq_one_iff_of_boundedOrder]; rw [isSimpleModule_iff]
 
 中文:
-引理 Module.length_eq_one_iff
+引理 模.length_eq_one_iff
   证明: by
   rw [← WithBot.coe_inj]; rw [Module.coe_length]; rw [WithBot.coe_one]; rw [Order.krullDim_eq_one_iff_of_boundedOrder]; rw [isSimpleModule_iff]
 
@@ -971,8 +971,8 @@ lemma Module.length_eq_one
   proof: Module.length_eq_one_iff.mpr ‹_›
 
 中文:
-引理 Module.length_eq_one
-  条件: [IsSimpleModule R M]
+引理 模.length_eq_one
+  条件: [是单模 R M]
   证明: Module.length_eq_one_iff.mpr ‹_›
 
 Depends on / 依赖: Module, Module.length_eq_one_iff.mpr, length_eq_one_iff
@@ -990,7 +990,7 @@ lemma Module.length_eq_rank
   simp [Module.length_of_free]
 
 中文:
-引理 Module.length_eq_rank
+引理 模.length_eq_rank
   证明: by
   simp [Module.length_of_free]
 
@@ -1010,7 +1010,7 @@ lemma Module.length_eq_finrank
   simp [Module.length_of_free]
 
 中文:
-引理 Module.length_eq_finrank
+引理 模.length_eq_finrank
   证明: by
   simp [Module.length_of_free]
 
@@ -1032,8 +1032,8 @@ theorem Submodule.length_le_length_restrictScalars
   exact Order.krullDim_le_of_orderEmbedding (restrictScalarsEmbedding A R p)
 
 中文:
-定理 Submodule.length_le_length_restrictScalars
-  结论: (A : 类型) [Ring A] [SMul A R] [Module A M]
+定理 子模.length_le_length_restrictScalars
+  结论: (A : 类型) [环 A] [标量乘法 A R] [模 A M]
   证明: by
   rw [← WithBot.coe_le_coe]; rw [Module.coe_length]; rw [Module.coe_length]
   exact Order.krullDim_le_of_orderEmbedding (restrictScalarsEmbedding A R p)
@@ -1057,8 +1057,8 @@ theorem Submodule.length_quotient_lt
   exact Order.coheight_strictAnti (bot_lt_iff_ne_bot.mpr h) (Order.coheight_lt_top p)
 
 中文:
-定理 Submodule.length_quotient_lt
-  结论: [IsArtinian R M] [IsNoetherian R M] (p : Submodule R M)
+定理 子模.length_quotient_lt
+  结论: [是Artin R M] [是Noether R M] (p : 子模 R M)
   证明: by
   rw [Module.length_quotient]; rw [Module.length]; rw [WithBot.lt_unbot_iff]; rw [← Order.coheight_bot_eq_krullDim]; rw [WithBot.coe_lt_coe]
   exact Order.coheight_strictAnti (bot_lt_iff_ne_bot.mpr h) (Order.coheight_lt_top p)

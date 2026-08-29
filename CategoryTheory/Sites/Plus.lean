@@ -114,7 +114,7 @@ definition diagramNatTrans
       rfl)
 
 中文:
-定义 diagramNatTrans
+定义 diagram自然数Trans
   签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (X : C)
   定义体: Multiequalizer.lift _ _ (fun _ => Multiequalizer.ι _ _ ≫ η.app _) (fun i => by
       erw [Category.assoc, Category.assoc, ← η.naturality, ← η.naturality,
@@ -145,7 +145,7 @@ theorem diagramNatTrans_id
   simp
 
 中文:
-定理 diagramNatTrans_id
+定理 diagram自然数Trans_id
   条件: (X : C) (P : Cᵒᵖ ⥤ D)
   证明: by
   ext : 2
@@ -174,8 +174,8 @@ theorem diagramNatTrans_zero
   simp
 
 中文:
-定理 diagramNatTrans_zero
-  条件: [Preadditive D] (X : C) (P Q : Cᵒᵖ ⥤ D)
+定理 diagram自然数Trans_zero
+  条件: [预加性 D] (X : C) (P Q : Cᵒᵖ ⥤ D)
   证明: by
   ext : 2
   refine Multiequalizer.hom_ext _ _ _ (fun i => ?_)
@@ -203,7 +203,7 @@ theorem diagramNatTrans_comp
   simp
 
 中文:
-定理 diagramNatTrans_comp
+定理 diagram自然数Trans_comp
   条件: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (X : C)
   证明: by
   ext : 2
@@ -412,7 +412,7 @@ theorem plusMap_zero
 
 中文:
 定理 plusMap_zero
-  条件: [Preadditive D] (P Q : Cᵒᵖ ⥤ D)
+  条件: [预加性 D] (P Q : Cᵒᵖ ⥤ D)
   结论: J.plusMap (0 : P ⟶ Q) = 0
   证明: by
   ext : 2
@@ -579,7 +579,7 @@ definition toPlusNatTrans
   body: J.toPlus P
 
 中文:
-定义 toPlusNatTrans
+定义 toPlus自然数Trans
   签名: : 𝟭 (Cᵒᵖ ⥤ D) ⟶ J.plusFunctor D where
   定义体: J.toPlus P
 
@@ -662,8 +662,8 @@ theorem isIso_toPlus_of_isSheaf
 
 中文:
 定理 isIso_toPlus_of_isSheaf
-  条件: (hP : Presheaf.IsSheaf J P)
-  结论: IsIso (J.toPlus P)
+  条件: (hP : 预层.是层 J P)
+  结论: 是同构 (J.toPlus P)
   证明: by
   rw [Presheaf.isSheaf_iff_multiequalizer] at hP
   suffices forall X, IsIso ((J.toPlus P).app X) from NatIso.isIso_of_isIso_app _
@@ -699,7 +699,7 @@ definition isoToPlus
 
 中文:
 定义 isoToPlus
-  签名: (hP : Presheaf.IsSheaf J P)
+  签名: (hP : 预层.是层 J P)
   定义体: letI := isIso_toPlus_of_isSheaf J P hP
   asIso (J.toPlus P)
 
@@ -723,7 +723,7 @@ theorem isoToPlus_hom
 
 中文:
 定理 isoToPlus_hom
-  条件: (hP : Presheaf.IsSheaf J P)
+  条件: (hP : 预层.是层 J P)
   结论: (J.isoToPlus P hP).hom = J.toPlus P
   证明: rfl
 -/
@@ -742,7 +742,7 @@ definition plusLift
 
 中文:
 定义 plusLift
-  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  签名: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   定义体: J.plusMap η ≫ (J.isoToPlus Q hQ).inv
 
 @[reassoc (attr := simp)]
@@ -768,7 +768,7 @@ theorem toPlus_plusLift
 
 中文:
 定理 toPlus_plusLift
-  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  条件: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   dsimp [plusLift]
   rw [← Category.assoc]
@@ -799,7 +799,7 @@ theorem plusLift_unique
 
 中文:
 定理 plusLift_unique
-  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   dsimp only [plusLift]
   rw [Iso.eq_comp_inv]; rw [← hγ]; rw [plusMap_comp]
@@ -831,7 +831,7 @@ theorem plus_hom_ext
 
 中文:
 定理 plus_hom_ext
-  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : J.plusObj P ⟶ Q) (hQ : Presheaf.IsSheaf J Q)
+  结论: {P Q : Cᵒᵖ ⥤ D} (η γ : J.plusObj P ⟶ Q) (hQ : 预层.是层 J Q)
   证明: by
   have : γ = J.plusLift (J.toPlus P ≫ γ) hQ := by
     apply plusLift_unique
@@ -869,7 +869,7 @@ theorem isoToPlus_inv
 
 中文:
 定理 isoToPlus_inv
-  条件: (hP : Presheaf.IsSheaf J P)
+  条件: (hP : 预层.是层 J P)
   证明: by
   apply J.plusLift_unique
   rw [Iso.comp_inv_eq]; rw [Category.id_comp]
@@ -898,7 +898,7 @@ theorem plusMap_plusLift
 
 中文:
 定理 plusMap_plusLift
-  条件: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (hR : Presheaf.IsSheaf J R)
+  条件: {P Q R : Cᵒᵖ ⥤ D} (η : P ⟶ Q) (γ : Q ⟶ R) (hR : 预层.是层 J R)
   证明: by
   apply J.plusLift_unique
   rw [← Category.assoc]; rw [← J.toPlus_naturality]; rw [Category.assoc]; rw [J.toPlus_plusLift]
@@ -925,7 +925,7 @@ instance plusFunctor_preservesZeroMorphisms
 
 中文:
 实例 plusFunctor_preservesZeroMorphisms
-  签名: [Preadditive D]
+  签名: [预加性 D]
   定义体: by
     ext
     dsimp

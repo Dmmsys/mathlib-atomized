@@ -41,10 +41,10 @@ structure ContinuousOpenMap
     - map_open' : IsOpenMap toFun
 
 中文:
-结构 ContinuousOpenMap
-  参数: (α β : 类型) [TopologicalSpace α] [TopologicalSpace β]
+结构 余ntinuousOpen映射
+  参数: (α β : 类型) [拓扑空间 α] [拓扑空间 β]
   公理与运算 (1 个):
-    - map_open' : IsOpenMap toFun
+    - map_open' : 是开映射 toFun
 -/
 structure ContinuousOpenMap (α β : Type*) [TopologicalSpace α] [TopologicalSpace β] extends
   ContinuousMap α β where
@@ -65,11 +65,11 @@ class ContinuousOpenMapClass
     - map_open((f : F)) : IsOpenMap f
 
 中文:
-类 ContinuousOpenMapClass
-  参数: (F : 类型) (α β : outParam 类型) [TopologicalSpace α]
-  继承: ContinuousMapClass F α β
+类 余ntinuousOpen映射类
+  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
-    - map_open((f : F)) : IsOpenMap f
+    - map_open((f : F)) : 是开映射 f
 -/
 class ContinuousOpenMapClass (F : Type*) (α β : outParam Type*) [TopologicalSpace α]
   [TopologicalSpace β] [FunLike F α β] : Prop extends ContinuousMapClass F α β where
@@ -88,8 +88,8 @@ instance [TopologicalSpace
   body: ⟨fun f => ⟨f, map_open f⟩⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [TopologicalSpace β] [FunLike F α β]
+实例 [拓扑空间
+  签名: α] [拓扑空间 β] [函数状 F α β]
   定义体: ⟨fun f => ⟨f, map_open f⟩⟩
 
 Depends on / 依赖: map_open
@@ -120,7 +120,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->CO β) α β where
+  签名: : 函数状 (α ->CO β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousOpenMapClass (α ->CO β) α β
+  签名: 余ntinuousOpen映射类 (α ->CO β) α β
   定义体: f.continuous_toFun
   map_open f := f.map_open'
 
@@ -308,7 +308,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->CO α)
+  签名: 可居 (α ->CO α)
   定义体: ⟨ContinuousOpenMap.id _⟩
 
 @[simp, norm_cast]
@@ -329,7 +329,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(ContinuousOpenMap.id α) = id
+  结论: ⇑(余ntinuousOpen映射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(ContinuousOpenMap.id α) = id :=
@@ -350,7 +350,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: ContinuousOpenMap.id α a = a
+  结论: 余ntinuousOpen映射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : ContinuousOpenMap.id α a = a :=
@@ -461,7 +461,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->CO β)
-  结论: f.comp (ContinuousOpenMap.id α) = f
+  结论: f.comp (余ntinuousOpen映射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -484,7 +484,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->CO β)
-  结论: (ContinuousOpenMap.id β).comp f = f
+  结论: (余ntinuousOpen映射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -505,7 +505,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->CO γ} {f : α ->CO β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->CO γ} {f : α ->CO β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[simp]
@@ -527,7 +527,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->CO γ} {f₁ f₂ : α ->CO β} (hg : Injective g)
+  条件: {g : β ->CO γ} {f₁ f₂ : α ->CO β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg

@@ -26,7 +26,7 @@ lemma EmbeddingLike.pairwise_comp
 
 中文:
 引理 EmbeddingLike.pairwise_comp
-  结论: {X : 类型} {Y : 类型} {F} [FunLike F Y X] [EmbeddingLike F Y X]
+  结论: {X : 类型} {Y : 类型} {F} [函数状 F Y X] [EmbeddingLike F Y X]
   证明: h.comp_of_injective EmbeddingLike.injective f
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, comp_of_injective, h.comp_of_injective, injective
@@ -44,8 +44,8 @@ lemma EquivLike.pairwise_comp_iff
   proof: (EquivLike.bijective f).pairwise_comp_iff
 
 中文:
-引理 EquivLike.pairwise_comp_iff
-  结论: {X : 类型} {Y : 类型} {F} [EquivLike F Y X]
+引理 等价状.pairwise_comp_iff
+  结论: {X : 类型} {Y : 类型} {F} [等价状 F Y X]
   证明: (EquivLike.bijective f).pairwise_comp_iff
 
 Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, pairwise_comp_iff

@@ -182,7 +182,7 @@ theorem isOpen_setOfPred_harmonicAt
 
 中文:
 定理 isOpen_setOfPred_harmonicAt
-  结论: IsOpen { x : E | HarmonicAt f x }
+  结论: 是开集 { x : E | HarmonicAt f x }
   证明: isOpen_iff_mem_nhds.2 (fun _ hx => hx.eventually)
 
 @[deprecated (since := "2026-07-09")] alias isOpen_setOf_harmonicAt := isOpen_setOfPred_harmonicAt

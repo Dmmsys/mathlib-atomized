@@ -30,7 +30,7 @@ definition elabTermWithoutNewMVars
 
 中文:
 定义 elabTermWithoutNewMVars
-  签名: (tactic : Name) (t : Term)
+  签名: (tactic : Name) (t : 项)
   定义体: Term.withoutErrToSorry do
   let (e, mvars) ← elabTermWithHoles t none tactic
   unless mvars.isEmpty do

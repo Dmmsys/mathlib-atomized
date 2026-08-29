@@ -39,11 +39,11 @@ structure SheafOfModules
     - isSheaf : Presheaf.IsSheaf J val.presheaf
 
 中文:
-结构 SheafOfModules
+结构 模层
   参数: where
   公理与运算 (2 个):
-    - val : PresheafOfModules.{v} R.obj
-    - isSheaf : Presheaf.IsSheaf J val.presheaf
+    - val : 预模层.{v} R.obj
+    - isSheaf : 预层.是层 J val.presheaf
 -/
 structure SheafOfModules where
   /-- the underlying presheaf of modules of a sheaf of modules -/
@@ -67,8 +67,8 @@ structure Hom
     - val : X.val ⟶ Y.val
 
 中文:
-结构 Hom
-  参数: (X Y : SheafOfModules.{v} R)
+结构 态射
+  参数: (X Y : 模层.{v} R)
   公理与运算 (1 个):
     - val : X.val ⟶ Y.val
 -/
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SheafOfModules.{v} R)
+  签名: 范畴 (模层.{v} R)
   定义体: Hom
   id _ := ⟨𝟙 _⟩
   comp f g := ⟨f.val ≫ g.val⟩
@@ -116,7 +116,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : SheafOfModules.{v} R} {f g : X ⟶ Y} (h : f.val = g.val)
+  条件: {X Y : 模层.{v} R} {f g : X ⟶ Y} (h : f.val = g.val)
   结论: f = g
   证明: Hom.ext h
 
@@ -141,8 +141,8 @@ lemma id_val
 
 中文:
 引理 id_val
-  条件: (X : SheafOfModules.{v} R)
-  结论: Hom.val (𝟙 X) = 𝟙 X.val
+  条件: (X : 模层.{v} R)
+  结论: 态射.val (𝟙 X) = 𝟙 X.val
   证明: rfl
 
 @[simp, reassoc]
@@ -160,7 +160,7 @@ lemma comp_val
 
 中文:
 引理 comp_val
-  条件: {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 模层.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma comp_val {X Y Z : SheafOfModules.{v} R} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -180,7 +180,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : SheafOfModules.{v} R ⥤ PresheafOfModules R.obj where
+  签名: : 模层.{v} R ⥤ 预模层 R.obj where
   定义体: F.val
   map φ := φ.val
 
@@ -202,7 +202,7 @@ definition fullyFaithfulForget
 
 中文:
 定义 fullyFaithfulForget
-  签名: : (forget.{v} R).FullyFaithful where
+  签名: : (forget.{v} R).满忠实 where
   定义体: ⟨φ⟩
 -/
 def fullyFaithfulForget : (forget.{v} R).FullyFaithful where
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget.{v} R).Faithful
+  签名: (forget.{v} R).忠实
   定义体: (fullyFaithfulForget R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulForget
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget.{v} R).Full
+  签名: (forget.{v} R).满
   定义体: (fullyFaithfulForget R).full
 
 Depends on / 依赖: fullyFaithfulForget
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget.{v} R).ReflectsIsomorphisms
+  签名: (forget.{v} R).反映同构
   定义体: (fullyFaithfulForget R).reflectsIsomorphisms
 
 Depends on / 依赖: fullyFaithfulForget, reflectsIsomorphisms
@@ -290,7 +290,7 @@ definition toSheaf
 
 中文:
 定义 toSheaf
-  签名: : SheafOfModules.{v} R ⥤ Sheaf J AddCommGrpCat.{v} where
+  签名: : 模层.{v} R ⥤ 层 J 加法交换群范畴.{v} where
   定义体: ⟨_, M.isSheaf⟩
   map f := { hom := (forget R ⋙ PresheafOfModules.toPresheaf R.obj).map f }
 
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toSheaf.{v} R).Faithful
+  签名: (toSheaf.{v} R).忠实
   定义体: Functor.Faithful.of_comp_iso (toSheafCompSheafToPresheafIso.{v} R)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_iso, of_comp_iso, toSheafCompSheafToPresheafIso
@@ -421,7 +421,7 @@ lemma add_val
 
 中文:
 引理 add_val
-  条件: {M N : SheafOfModules.{v} R} (f g : M ⟶ N)
+  条件: {M N : 模层.{v} R} (f g : M ⟶ N)
   证明: rfl
 -/
 lemma add_val {M N : SheafOfModules.{v} R} (f g : M ⟶ N) :
@@ -438,7 +438,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (SheafOfModules.{v} R)
+  签名: 预加性 (模层.{v} R)
   定义体: by intros; ext1; dsimp; simp only [Preadditive.add_comp]
   comp_add := by tauto
 
@@ -457,7 +457,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget R).Additive
+  签名: (forget R).加性
 -/
 instance : (forget R).Additive where
 
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toSheaf R).Additive
+  签名: (toSheaf R).加性
 -/
 instance : (toSheaf R).Additive where
 
@@ -486,7 +486,7 @@ abbreviation sections
 
 中文:
 缩写 sections
-  签名: (M : SheafOfModules.{v} R)
+  签名: (M : 模层.{v} R)
   定义体: M.val.sections
 
 Depends on / 依赖: M.val.sections, sections
@@ -505,7 +505,7 @@ abbreviation sectionsMap
 
 中文:
 缩写 sectionsMap
-  签名: {M N : SheafOfModules.{v} R} (f : M ⟶ N) (s : M.sections)
+  签名: {M N : 模层.{v} R} (f : M ⟶ N) (s : M.sections)
   定义体: PresheafOfModules.sectionsMap f.val s
 
 @[simp]
@@ -528,7 +528,7 @@ lemma sectionsMap_comp
 
 中文:
 引理 sectionsMap_comp
-  条件: {M N P : SheafOfModules.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
+  条件: {M N P : 模层.{v} R} (f : M ⟶ N) (g : N ⟶ P) (s : M.sections)
   证明: rfl
 
 @[simp]
@@ -547,7 +547,7 @@ lemma sectionsMap_id
 
 中文:
 引理 sectionsMap_id
-  条件: {M : SheafOfModules.{v} R} (s : M.sections)
+  条件: {M : 模层.{v} R} (s : M.sections)
   证明: rfl
 -/
 lemma sectionsMap_id {M : SheafOfModules.{v} R} (s : M.sections) :
@@ -567,7 +567,7 @@ definition sectionsFunctor
 
 中文:
 定义 sectionsFunctor
-  签名: : SheafOfModules.{v} R ⥤ Type _ where
+  签名: : 模层.{v} R ⥤ 类型 _ where
   定义体: M.sections
   map f := ↾(sectionsMap f)
 
@@ -591,7 +591,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: : SheafOfModules R where
+  签名: : 模层 R where
   定义体: PresheafOfModules.unit R.obj
   isSheaf := ((sheafCompose J (forget₂ RingCat.{u} AddCommGrpCat.{u})).obj R).property
 
@@ -613,7 +613,7 @@ definition unitHomEquiv
 
 中文:
 定义 unitHomEquiv
-  签名: (M : SheafOfModules R)
+  签名: (M : 模层 R)
   定义体: (fullyFaithfulForget R).homEquiv.trans M.val.unitHomEquiv
 
 @[simp]
@@ -635,7 +635,7 @@ lemma unitHomEquiv_apply_coe
 
 中文:
 引理 unitHomEquiv_apply_coe
-  条件: (M : SheafOfModules R) (f : unit R ⟶ M) (X : Cᵒᵖ)
+  条件: (M : 模层 R) (f : unit R ⟶ M) (X : Cᵒᵖ)
   证明: rfl
 -/
 lemma unitHomEquiv_apply_coe (M : SheafOfModules R) (f : unit R ⟶ M) (X : Cᵒᵖ) :
@@ -651,7 +651,7 @@ lemma unitHomEquiv_comp_apply
 
 中文:
 引理 unitHomEquiv_comp_apply
-  结论: {M N : SheafOfModules.{u} R}
+  结论: {M N : 模层.{u} R}
   证明: rfl
 -/
 lemma unitHomEquiv_comp_apply {M N : SheafOfModules.{u} R}
@@ -668,7 +668,7 @@ lemma unitHomEquiv_symm_comp
 
 中文:
 引理 unitHomEquiv_symm_comp
-  条件: {M N : SheafOfModules.{u} R} (s : M.sections) (p : M ⟶ N)
+  条件: {M N : 模层.{u} R} (s : M.sections) (p : M ⟶ N)
   证明: N.unitHomEquiv.injective (by simp [unitHomEquiv_comp_apply])
 
 Depends on / 依赖: N.unitHomEquiv.injective, injective, unitHomEquiv, unitHomEquiv_comp_apply
@@ -693,7 +693,7 @@ abbreviation IsLocallySurjective
   body: Presheaf.IsLocallySurjective J ((PresheafOfModules.toPresheaf R).map f)
 
 中文:
-缩写 IsLocallySurjective
+缩写 是LocallySurjective
   签名: : 命题
   定义体: Presheaf.IsLocallySurjective J ((PresheafOfModules.toPresheaf R).map f)
 
@@ -711,7 +711,7 @@ abbreviation IsLocallyInjective
   body: Presheaf.IsLocallyInjective J ((PresheafOfModules.toPresheaf R).map f)
 
 中文:
-缩写 IsLocallyInjective
+缩写 是LocallyInjective
   签名: : 命题
   定义体: Presheaf.IsLocallyInjective J ((PresheafOfModules.toPresheaf R).map f)
 

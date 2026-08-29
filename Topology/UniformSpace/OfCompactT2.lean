@@ -58,7 +58,7 @@ definition uniformSpaceOfCompactR1
 
 中文:
 定义 uniformSpaceOfCompactR1
-  签名: [TopologicalSpace γ] [CompactSpace γ] [R1Space γ]
+  签名: [拓扑空间 γ] [紧空间 γ] [R1空间 γ]
   定义体: 𝓝ˢ (diagonal γ)
   symm := continuous_swap.tendsto_nhdsSet fun _ => Eq.symm
   comp := by

@@ -38,7 +38,7 @@ theorem effectiveEpi_desc_iff_effectiveEpiFamily
 
 中文:
 定理 effectiveEpi_desc_iff_effectiveEpiFamily
-  结论: {α : Type} [Finite α]
+  结论: {α : 类型} [有限 α]
   证明: by
   exact ⟨fun h => ⟨⟨@effectiveEpiFamilyStructOfEffectiveEpiDesc _ _ _ _ X π _ h _ _ (fun g =>
     (FinitaryPreExtensive.isIso_sigmaDesc_fst (fun a => Sigma.ι X a) g inferInstance).epi_of_iso)⟩⟩,
@@ -104,8 +104,8 @@ instance [F.PreservesEffectiveEpis]
     simp
 
 中文:
-实例 [F.PreservesEffectiveEpis]
-  签名: : F.PreservesFiniteEffectiveEpiFamilies where
+实例 [F.保持EffectiveEpis]
+  签名: : F.保持FiniteEffectiveEpiFamilies where
   定义体: by
     simp only [← effectiveEpi_desc_iff_effectiveEpiFamily]
     convert! (inferInstance : EffectiveEpi ((sigmaComparison F X) ≫ (F.map (Sigma.desc π))))

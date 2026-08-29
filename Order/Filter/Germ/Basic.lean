@@ -114,7 +114,7 @@ definition germSetoid
 
 中文:
 定义 germSetoid
-  签名: (l : Filter α) (β : 类型)
+  签名: (l : 滤子 α) (β : 类型)
   定义体: EventuallyEq l
   iseqv := ⟨EventuallyEq.refl _, EventuallyEq.symm, EventuallyEq.trans⟩
 
@@ -134,7 +134,7 @@ definition Germ
 
 中文:
 定义 Germ
-  签名: (l : Filter α) (β : 类型)
+  签名: (l : 滤子 α) (β : 类型)
   定义体: Quotient (germSetoid l β)
 
 Depends on / 依赖: Quotient, germSetoid
@@ -158,7 +158,7 @@ definition productSetoid
 
 中文:
 定义 productSetoid
-  签名: (l : Filter α) (ε : α -> 类型)
+  签名: (l : 滤子 α) (ε : α -> 类型)
   定义体: forallᶠ a in l, f a = g a
   iseqv :=
     ⟨fun _ => Eventually.of_forall fun _ => rfl, fun h => h.mono fun _ => Eq.symm,
@@ -179,8 +179,8 @@ definition Product
   body: Quotient (productSetoid l ε)
 
 中文:
-定义 Product
-  签名: (l : Filter α) (ε : α -> 类型)
+定义 积
+  签名: (l : 滤子 α) (ε : α -> 类型)
   定义体: Quotient (productSetoid l ε)
 
 Depends on / 依赖: Quotient, productSetoid
@@ -202,7 +202,7 @@ instance coeTC
 
 中文:
 实例 coeTC
-  签名: : CoeTC ((a : _) -> ε a) (l.Product ε)
+  签名: : CoeTC ((a : _) -> ε a) (l.积 ε)
   定义体: ⟨@Quotient.mk' _ (productSetoid _ ε)⟩
 
 Depends on / 依赖: Quotient, Quotient.mk, productSetoid
@@ -220,7 +220,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [(a : _) -> Inhabited (ε a)]
+  签名: [(a : _) -> 可居 (ε a)]
   定义体: ⟨(↑fun a => (default : ε a) : l.Product ε)⟩
 
 Depends on / 依赖: Product, l.Product
@@ -279,7 +279,7 @@ definition const
 
 中文:
 定义 const
-  签名: {l : Filter α} (b : β)
+  签名: {l : 滤子 α} (b : β)
   定义体: ofFun fun _ => b
 -/
 def const {l : Filter α} (b : β) : (Germ l β) := ofFun fun _ => b
@@ -312,8 +312,8 @@ definition IsConstant
     exact fun f g b hfg hf => (hfg
 
 中文:
-定义 IsConstant
-  签名: {l : Filter α} (P : Germ l β)
+定义 是常数
+  签名: {l : 滤子 α} (P : Germ l β)
   定义体: P.liftOn (fun f => exists b : β, f =ᶠ[l] (fun _ => b)) by
     suffices forall f g : α -> β, forall b : β, f =ᶠ[l] g -> (f =ᶠ[l] fun _ => b) -> (g =ᶠ[l] fun _ => b) from
       fun f g h => propext ⟨fun ⟨b, hb⟩ => ⟨b, this f g b h hb⟩, fun ⟨b, hb⟩ => ⟨b, h.trans hb⟩⟩
@@ -340,8 +340,8 @@ theorem isConstant_coe
 
 中文:
 定理 isConstant_coe
-  条件: {l : Filter α} {b} (h : 对任意 x', f x' = b)
-  结论: (↑f : Germ l β).IsConstant
+  条件: {l : 滤子 α} {b} (h : 对任意 x', f x' = b)
+  结论: (↑f : Germ l β).是常数
   证明: ⟨b, Eventually.of_forall h⟩
 
 @[simp]
@@ -364,8 +364,8 @@ theorem isConstant_coe_const
 
 中文:
 定理 isConstant_coe_const
-  条件: {l : Filter α} {b : β}
-  结论: (fun _ : α => b : Germ l β).IsConstant
+  条件: {l : 滤子 α} {b : β}
+  结论: (fun _ : α => b : Germ l β).是常数
   证明: by
   use b
 -/
@@ -386,7 +386,7 @@ lemma isConstant_comp
 
 中文:
 引理 isConstant_comp
-  结论: {l : Filter α} {f : α -> β} {g : β -> γ}
+  结论: {l : 滤子 α} {f : α -> β} {g : β -> γ}
   证明: by
   obtain ⟨b, hb⟩ := h
   exact ⟨g b, hb.fun_comp g⟩
@@ -414,8 +414,8 @@ theorem quot_mk_eq_coe
 
 中文:
 定理 quot_mk_eq_coe
-  条件: (l : Filter α) (f : α -> β)
-  结论: Quot.mk _ f = (f : Germ l β)
+  条件: (l : 滤子 α) (f : α -> β)
+  结论: 商.mk _ f = (f : Germ l β)
   证明: rfl
 
 @[simp]
@@ -438,7 +438,7 @@ theorem mk'_eq_coe
 
 中文:
 定理 mk'_eq_coe
-  条件: (l : Filter α) (f : α -> β)
+  条件: (l : 滤子 α) (f : α -> β)
   证明: rfl
 
 @[elab_as_elim]
@@ -527,7 +527,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
+  签名: {lc : 滤子 γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
   定义体: Quotient.map' F hF
 
 Depends on / 依赖: Quotient, Quotient.map
@@ -548,7 +548,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: {γ : Sort*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F)
+  签名: {γ : 类型层*} (f : Germ l β) (F : (α -> β) -> γ) (hF : (l.EventuallyEq ⇒ (· = ·)) F F)
   定义体: Quotient.liftOn' f F hF
 
 @[simp]
@@ -572,7 +572,7 @@ theorem map'_coe
 
 中文:
 定理 map'_coe
-  结论: {lc : Filter γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
+  结论: {lc : 滤子 γ} (F : (α -> β) -> γ -> δ) (hF : (l.EventuallyEq ⇒ lc.EventuallyEq) F F)
   证明: rfl
 
 @[simp, norm_cast]
@@ -746,8 +746,8 @@ definition Tendsto
 @[simp, norm_cast]
 
 中文:
-定义 Tendsto
-  签名: (f : Germ l β) (lb : Filter β)
+定义 收敛
+  签名: (f : Germ l β) (lb : 滤子 β)
   定义体: liftOn f (fun f => Tendsto f l lb) fun _f _g H => propext (tendsto_congr' H)
 
 @[simp, norm_cast]
@@ -769,8 +769,8 @@ alias ⟨_, _root_.Filter.Tendsto.germ_tendsto⟩ := coe_tendsto
 
 中文:
 定理 coe_tendsto
-  条件: {f : α -> β} {lb : Filter β}
-  结论: (f : Germ l β).Tendsto lb ↔ Tendsto f l lb
+  条件: {f : α -> β} {lb : 滤子 β}
+  结论: (f : Germ l β).收敛 lb ↔ 收敛 f l lb
   证明: Iff.rfl
 
 alias ⟨_, _root_.Filter.Tendsto.germ_tendsto⟩ := coe_tendsto
@@ -795,7 +795,7 @@ definition compTendsto'
 
 中文:
 定义 compTendsto'
-  签名: (f : Germ l β) {lc : Filter γ} (g : Germ lc α) (hg : g.Tendsto l)
+  签名: (f : Germ l β) {lc : 滤子 γ} (g : Germ lc α) (hg : g.收敛 l)
   定义体: liftOn f (fun f => g.map f) fun _f₁ _f₂ hF =>
     inductionOn g (fun _g hg => coe_eq.2 <| hg.eventually hF) hg
 
@@ -818,7 +818,7 @@ theorem coe_compTendsto'
 
 中文:
 定理 coe_compTendsto'
-  条件: (f : α -> β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tendsto l)
+  条件: (f : α -> β) {lc : 滤子 γ} {g : Germ lc α} (hg : g.收敛 l)
   证明: rfl
 -/
 theorem coe_compTendsto' (f : α -> β) {lc : Filter γ} {g : Germ lc α} (hg : g.Tendsto l) :
@@ -837,7 +837,7 @@ definition compTendsto
 
 中文:
 定义 compTendsto
-  签名: (f : Germ l β) {lc : Filter γ} (g : γ -> α) (hg : Tendsto g lc l)
+  签名: (f : Germ l β) {lc : 滤子 γ} (g : γ -> α) (hg : 收敛 g lc l)
   定义体: f.compTendsto' _ hg.germ_tendsto
 
 @[simp]
@@ -860,7 +860,7 @@ theorem coe_compTendsto
 
 中文:
 定理 coe_compTendsto
-  条件: (f : α -> β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
+  条件: (f : α -> β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
   证明: rfl
 
 @[simp]
@@ -880,7 +880,7 @@ theorem compTendsto'_coe
 
 中文:
 定理 compTendsto'_coe
-  条件: (f : Germ l β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
+  条件: (f : Germ l β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
   证明: rfl
 
 Depends on / 依赖: Set.mem_singleton, mem_singleton, subset_adjoin
@@ -898,8 +898,8 @@ theorem _root_.Filter.Tendsto.congr_germ
   proof: EventuallyEq.germ_eq (h.comp_tendsto hφ)
 
 中文:
-定理 _root_.Filter.Tendsto.congr_germ
-  结论: {f g : β -> γ} {l : Filter α} {l' : Filter β}
+定理 _root_.滤子.收敛.congr_germ
+  结论: {f g : β -> γ} {l : 滤子 α} {l' : 滤子 β}
   证明: EventuallyEq.germ_eq (h.comp_tendsto hφ)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.germ_eq, comp_tendsto, germ_eq, h.comp_tendsto
@@ -923,7 +923,7 @@ lemma isConstant_comp_tendsto
 
 中文:
 引理 isConstant_comp_tendsto
-  结论: {lc : Filter γ} {g : γ -> α}
+  结论: {lc : 滤子 γ} {g : γ -> α}
   证明: by
   rcases hf with ⟨b, hb⟩
   exact ⟨b, hb.comp_tendsto hg⟩
@@ -949,7 +949,7 @@ lemma isConstant_compTendsto
 
 中文:
 引理 isConstant_compTendsto
-  结论: {f : Germ l β} {lc : Filter γ} {g : γ -> α}
+  结论: {f : Germ l β} {lc : 滤子 γ} {g : γ -> α}
   证明: by
   induction f using Quotient.inductionOn with | _ f => ?_
   exact isConstant_comp_tendsto hf hg
@@ -1002,7 +1002,7 @@ theorem map_const
 
 中文:
 定理 map_const
-  条件: (l : Filter α) (a : β) (f : β -> γ)
+  条件: (l : 滤子 α) (a : β) (f : β -> γ)
   结论: (↑a : Germ l β).map f = ↑(f a)
   证明: rfl
 
@@ -1024,7 +1024,7 @@ theorem map₂_const
 
 中文:
 定理 map₂_const
-  条件: (l : Filter α) (b : β) (c : γ) (f : β -> γ -> δ)
+  条件: (l : 滤子 α) (b : β) (c : γ) (f : β -> γ -> δ)
   证明: rfl
 
 @[simp]
@@ -1046,7 +1046,7 @@ theorem const_compTendsto
 
 中文:
 定理 const_compTendsto
-  条件: {l : Filter α} (b : β) {lc : Filter γ} {g : γ -> α} (hg : Tendsto g lc l)
+  条件: {l : 滤子 α} (b : β) {lc : 滤子 γ} {g : γ -> α} (hg : 收敛 g lc l)
   证明: rfl
 
 @[simp]
@@ -1066,7 +1066,7 @@ theorem const_compTendsto'
 
 中文:
 定理 const_compTendsto'
-  结论: {l : Filter α} (b : β) {lc : Filter γ} {g : Germ lc α}
+  结论: {l : 滤子 α} (b : β) {lc : 滤子 γ} {g : Germ lc α}
   证明: inductionOn g (fun _ _ => rfl) hg
 
 Depends on / 依赖: Algebra, Algebra.ofId, RingHom, RingHom.codRestrict, Subalgebra, Subalgebra.val, adjoin_singleton_eq_range_aeval, adjoin_singleton_induction, aeval_algebraMap_apply, codRestrict, inductionOn, restrictScalars
@@ -1264,7 +1264,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: [Inhabited β]
+  签名: [可居 β]
   定义体: ⟨↑(default : β)⟩
 -/
 instance instInhabited [Inhabited β] : Inhabited (Germ l β) := ⟨↑(default : β)⟩
@@ -1285,7 +1285,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul M]
+  签名: [乘法 M]
   定义体: ⟨map₂ (· * ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1304,7 +1304,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul M] (f g : α -> M)
+  条件: [乘法 M] (f g : α -> M)
   结论: ↑(f * g) = (f * g : Germ l M)
   证明: rfl
 -/
@@ -1323,7 +1323,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: [One M]
+  签名: [幺 M]
   定义体: ⟨↑(1 : M)⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1344,7 +1344,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: [One M]
+  条件: [幺 M]
   结论: ↑(1 : α -> M) = (1 : Germ l M)
   证明: rfl
 
@@ -1367,7 +1367,7 @@ fun _ _ _ => congrArg ofFun mul_assoc .. }
 
 中文:
 实例 instSemigroup
-  签名: [Semigroup M]
+  签名: [半群 M]
   定义体: { mul_assoc := fun a b c => Quotient.inductionOn₃' a b c
 fun _ _ _ => congrArg ofFun mul_assoc .. }
 
@@ -1392,7 +1392,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup M]
+  签名: [交换半群 M]
   定义体: { mul_comm := Quotient.ind₂' fun _ _ => congrArg ofFun <| mul_comm .. }
 
 @[to_additive]
@@ -1416,7 +1416,7 @@ instance instIsLeftCancelMul
 
 中文:
 实例 instIsLeftCancelMul
-  签名: [Mul M] [IsLeftCancelMul M]
+  签名: [乘法 M] [左乘消去 M]
   定义体: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
       coe_eq.2 ((coe_eq.1 H).mono fun _x => mul_left_cancel)
 
@@ -1443,7 +1443,7 @@ coe_eq.2 (coe_eq.1 H).mono fun _x => mul_right_cancel
 
 中文:
 实例 instIsRightCancelMul
-  签名: [Mul M] [IsRightCancelMul M]
+  签名: [乘法 M] [右乘消去 M]
   定义体: inductionOn₃ f₁ f₂ f₃ fun _f₁ _f₂ _f₃ H =>
 coe_eq.2 (coe_eq.1 H).mono fun _x => mul_right_cancel
 
@@ -1466,7 +1466,7 @@ instance instIsCancelMul
 
 中文:
 实例 instIsCancelMul
-  签名: [Mul M] [IsCancelMul M]
+  签名: [乘法 M] [是消去乘法 M]
 -/
 instance instIsCancelMul [Mul M] [IsCancelMul M] : IsCancelMul (Germ l M) where
 
@@ -1483,7 +1483,7 @@ instance instLeftCancelSemigroup
 
 中文:
 实例 instLeftCancelSemigroup
-  签名: [LeftCancelSemigroup M]
+  签名: [左消去半群 M]
   定义体: mul_left_cancel
 
 @[to_additive]
@@ -1506,7 +1506,7 @@ instance instRightCancelSemigroup
 
 中文:
 实例 instRightCancelSemigroup
-  签名: [RightCancelSemigroup M]
+  签名: [右消去半群 M]
   定义体: mul_right_cancel
 
 @[to_additive]
@@ -1530,7 +1530,7 @@ mul_one := Quotient.ind' fun _ => congrArg ofFun mul_one _ }
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass M]
+  签名: [MulOne类 M]
   定义体: { one_mul := Quotient.ind' fun _ => congrArg ofFun <| one_mul _
 mul_one := Quotient.ind' fun _ => congrArg ofFun mul_one _ }
 
@@ -1555,7 +1555,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: [Pow G M]
+  签名: [幂 G M]
   定义体: map (· ^ n) f
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1576,7 +1576,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul M G] (n : M) (f : α -> G)
+  条件: [标量乘法 M G] (n : M) (f : α -> G)
   结论: ↑(n • f) = n • (f : Germ l G)
   证明: rfl
 
@@ -1599,7 +1599,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  条件: [SMul M G] (n : M) (a : G)
+  条件: [标量乘法 M G] (n : M) (a : G)
   结论: (↑(n • a) : Germ l G) = n • (↑a : Germ l G)
   证明: rfl
 
@@ -1622,7 +1622,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: [Pow G M] (f : α -> G) (n : M)
+  条件: [幂 G M] (f : α -> G) (n : M)
   结论: ↑(f ^ n) = (f : Germ l G) ^ n
   证明: rfl
 
@@ -1643,7 +1643,7 @@ theorem const_pow
 
 中文:
 定理 const_pow
-  条件: [Pow G M] (a : G) (n : M)
+  条件: [幂 G M] (a : G) (n : M)
   结论: (↑(a ^ n) : Germ l G) = (↑a : Germ l G) ^ n
   证明: rfl
 -/
@@ -1666,7 +1666,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid M]
+  签名: [幺半群 M]
   定义体: { Function.Surjective.monoid ofFun Quot.mk_surjective rfl
       (fun _ _ => by rfl) fun _ _ => by rfl with
     toSemigroup := instSemigroup
@@ -1696,7 +1696,7 @@ definition coeMulHom
 
 中文:
 定义 coeMulHom
-  签名: [Monoid M] (l : Filter α)
+  签名: [幺半群 M] (l : 滤子 α)
   定义体: ofFun; map_one' := rfl; map_mul' _ _ := rfl
 
 @[to_additive (attr := simp)]
@@ -1720,7 +1720,7 @@ theorem coe_coeMulHom
 
 中文:
 定理 coe_coeMulHom
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: (coeMulHom l : (α -> M) -> Germ l M) = ofFun
   证明: rfl
 
@@ -1740,7 +1740,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid M]
+  签名: [交换幺半群 M]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -1759,8 +1759,8 @@ instance instNatCast
 @[simp]
 
 中文:
-实例 instNatCast
-  签名: [自然数Cast M]
+实例 inst自然数Cast
+  签名: [自然数嵌入 M]
   定义体: (n : α -> M)
 
 @[simp]
@@ -1781,7 +1781,7 @@ theorem natCast_def
 
 中文:
 定理 natCast_def
-  条件: [自然数Cast M] (n : 自然数)
+  条件: [自然数嵌入 M] (n : 自然数)
   结论: ((fun _ => n : α -> M) : Germ l M) = n
   证明: rfl
 
@@ -1803,7 +1803,7 @@ theorem const_nat
 
 中文:
 定理 const_nat
-  条件: [自然数Cast M] (n : 自然数)
+  条件: [自然数嵌入 M] (n : 自然数)
   结论: ((n : M) : Germ l M) = n
   证明: rfl
 
@@ -1823,8 +1823,8 @@ theorem coe_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 coe_ofNat
-  条件: [自然数Cast M] (n : 自然数) [n.AtLeastTwo]
+定理 coe_of自然数
+  条件: [自然数嵌入 M] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp, norm_cast]
@@ -1843,8 +1843,8 @@ theorem const_ofNat
   proof: rfl
 
 中文:
-定理 const_ofNat
-  条件: [自然数Cast M] (n : 自然数) [n.AtLeastTwo]
+定理 const_of自然数
+  条件: [自然数嵌入 M] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
 theorem const_ofNat [NatCast M] (n : Nat) [n.AtLeastTwo] :
@@ -1862,8 +1862,8 @@ instance instIntCast
 @[simp]
 
 中文:
-实例 instIntCast
-  签名: [整数Cast M]
+实例 inst整数Cast
+  签名: [整数嵌入 M]
   定义体: (n : α -> M)
 
 @[simp]
@@ -1882,7 +1882,7 @@ theorem intCast_def
 
 中文:
 定理 intCast_def
-  条件: [整数Cast M] (n : 整数)
+  条件: [整数嵌入 M] (n : 整数)
   结论: ((fun _ => n : α -> M) : Germ l M) = n
   证明: rfl
 -/
@@ -1899,7 +1899,7 @@ natCast_succ _ := congrArg ofFun by simp; rfl
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne M]
+  签名: [加法带幺幺半群 M]
   定义体: congrArg ofFun by simp; rfl
 natCast_succ _ := congrArg ofFun by simp; rfl
 -/
@@ -1917,7 +1917,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: [AddCommMonoidWithOne M]
+  签名: [加法交换带幺幺半群 M]
   定义体: { add_comm := add_comm }
 
 Depends on / 依赖: add_comm
@@ -1937,7 +1937,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv G]
+  签名: [取逆 G]
   定义体: ⟨map Inv.inv⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1958,7 +1958,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv G] (f : α -> G)
+  条件: [取逆 G] (f : α -> G)
   结论: ↑f⁻¹ = (f⁻¹ : Germ l G)
   证明: rfl
 
@@ -1979,7 +1979,7 @@ theorem const_inv
 
 中文:
 定理 const_inv
-  条件: [Inv G] (a : G)
+  条件: [取逆 G] (a : G)
   结论: (↑(a⁻¹) : Germ l G) = (↑a)⁻¹
   证明: rfl
 -/
@@ -1998,7 +1998,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: [Div M]
+  签名: [除法 M]
   定义体: ⟨map₂ (· / ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -2019,7 +2019,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: [Div M] (f g : α -> M)
+  条件: [除法 M] (f g : α -> M)
   结论: ↑(f / g) = (f / g : Germ l M)
   证明: rfl
 
@@ -2042,7 +2042,7 @@ theorem const_div
 
 中文:
 定理 const_div
-  条件: [Div M] (a b : M)
+  条件: [除法 M] (a b : M)
   结论: (↑(a / b) : Germ l M) = ↑a / ↑b
   证明: rfl
 
@@ -2083,7 +2083,7 @@ mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun mul_neg .. }
 
 中文:
 实例 instHasDistribNeg
-  签名: [Mul G] [HasDistribNeg G]
+  签名: [乘法 G] [有DistribNeg G]
   定义体: { neg_mul := Quotient.ind₂' fun _ _ => congrArg ofFun <| neg_mul ..
 mul_neg := Quotient.ind₂' fun _ _ => congrArg ofFun mul_neg .. }
 
@@ -2108,7 +2108,7 @@ instance instInvOneClass
 
 中文:
 实例 instInvOneClass
-  签名: [InvOneClass G]
+  签名: [InvOne类 G]
   定义体: ⟨congr_arg ofFun inv_one⟩
 
 @[to_additive subNegMonoid]
@@ -2135,7 +2135,7 @@ zpow_neg' _ := Quotient.ind' fun _ => congrArg ofFun
 
 中文:
 实例 instDivInvMonoid
-  签名: [DivInvMonoid G]
+  签名: [除逆幺半群 G]
   定义体: f ^ z
 zpow_zero' := Quotient.ind' fun _ => congrArg ofFun
     funext fun _ => DivInvMonoid.zpow_zero' _
@@ -2170,7 +2170,7 @@ inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h => coe_eq.2 (coe_eq.1 h).mono 
 
 中文:
 实例 instDivisionMonoid
-  签名: [DivisionMonoid G]
+  签名: [Division幺半群 G]
   定义体: inv_inv
 mul_inv_rev x y := inductionOn₂ x y fun _ _ => congr_arg ofFun mul_inv_rev _ _
 inv_eq_of_mul x y := inductionOn₂ x y fun _ _ h => coe_eq.2 (coe_eq.1 h).mono fun _ =>
@@ -2199,7 +2199,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: [Group G]
+  签名: [群 G]
   定义体: { inv_mul_cancel := Quotient.ind' fun _ => congrArg ofFun <| inv_mul_cancel _ }
 
 @[to_additive]
@@ -2220,7 +2220,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: [CommGroup G]
+  签名: [交换群 G]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -2241,7 +2241,7 @@ intCast_negSucc _ := congrArg ofFun by simp [Function.comp_def]; rfl
 
 中文:
 实例 instAddGroupWithOne
-  签名: [AddGroupWithOne G]
+  签名: [加法带幺群 G]
   定义体: instAddMonoidWithOne
   __ := instAddGroup
 intCast_ofNat _ := congrArg ofFun by simp
@@ -2272,7 +2272,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial R] [NeBot l]
+  签名: [非平凡 R] [NeBot l]
   定义体: let ⟨x, y, h⟩ := exists_pair_ne R
   ⟨⟨↑x, ↑y, mt const_inj.1 h⟩⟩
 
@@ -2293,7 +2293,7 @@ mul_zero := Quotient.ind' fun _ => congrArg ofFun mul_zero _ }
 
 中文:
 实例 instMulZeroClass
-  签名: [MulZeroClass R]
+  签名: [乘零类 R]
   定义体: { zero_mul := Quotient.ind' fun _ => congrArg ofFun <| zero_mul _
 mul_zero := Quotient.ind' fun _ => congrArg ofFun mul_zero _ }
 
@@ -2314,7 +2314,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulZeroOneClass R]
+  签名: [乘零幺类 R]
   定义体: instMulZeroClass
   __ := instMulOneClass
 
@@ -2335,7 +2335,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [MonoidWithZero R]
+  签名: [带零幺半群 R]
   定义体: instMonoid
   __ := instMulZeroClass
 
@@ -2378,7 +2378,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
   定义体: instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
@@ -2401,7 +2401,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: [NonUnitalSemiring R]
+  签名: [非幺半环 R]
   定义体: { mul_assoc := mul_assoc }
 
 Depends on / 依赖: mul_assoc
@@ -2421,7 +2421,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddMonoidWithOne
@@ -2444,7 +2444,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R]
+  签名: [非幺非结合环 R]
   定义体: instAddCommGroup
   __ := instNonUnitalNonAssocSemiring
 
@@ -2465,7 +2465,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [NonUnitalRing R]
+  签名: [非幺环 R]
   定义体: { mul_assoc := mul_assoc }
 
 Depends on / 依赖: mul_assoc
@@ -2485,7 +2485,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [NonAssocRing R]
+  签名: [非结合环 R]
   定义体: instNonUnitalNonAssocRing
   __ := instNonAssocSemiring
   __ := instAddGroupWithOne
@@ -2509,7 +2509,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
@@ -2533,7 +2533,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring R]
+  签名: [环 R]
   定义体: instSemiring
   __ := instAddCommGroup
   __ := instNonAssocRing
@@ -2555,7 +2555,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R]
+  签名: [非幺交换半环 R]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -2574,7 +2574,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -2593,7 +2593,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: [NonUnitalCommRing R]
+  签名: [非幺交换环 R]
   定义体: instNonUnitalRing
   __ := instCommSemigroup
 
@@ -2613,7 +2613,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: { mul_comm := mul_comm }
 
 Depends on / 依赖: mul_comm
@@ -2633,7 +2633,7 @@ definition coeRingHom
 
 中文:
 定义 coeRingHom
-  签名: [Semiring R] (l : Filter α)
+  签名: [半环 R] (l : 滤子 α)
   定义体: { (coeMulHom l : _ ->* Germ l R), (coeAddHom l : _ ->+ Germ l R) with toFun := ofFun }
 
 @[simp]
@@ -2655,7 +2655,7 @@ theorem coe_coeRingHom
 
 中文:
 定理 coe_coeRingHom
-  条件: [Semiring R]
+  条件: [半环 R]
   结论: (coeRingHom l : (α -> R) -> Germ l R) = ofFun
   证明: rfl
 -/
@@ -2681,7 +2681,7 @@ instance instSMul'
 
 中文:
 实例 instSMul'
-  签名: [SMul M β]
+  签名: [标量乘法 M β]
   定义体: ⟨map₂ (· • ·)⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -2703,7 +2703,7 @@ theorem coe_smul'
 
 中文:
 定理 coe_smul'
-  条件: [SMul M β] (c : α -> M) (f : α -> β)
+  条件: [标量乘法 M β] (c : α -> M) (f : α -> β)
   结论: ↑(c • f) = (c : Germ l M) • (f : Germ l β)
   证明: rfl
 
@@ -2731,7 +2731,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid M] [MulAction M β]
+  签名: [幺半群 M] [乘法作用 M β]
   定义体: inductionOn f fun f => by
       norm_cast
       simp [one_smul]
@@ -2769,7 +2769,7 @@ instance instMulAction'
 
 中文:
 实例 instMulAction'
-  签名: [Monoid M] [MulAction M β]
+  签名: [幺半群 M] [乘法作用 M β]
   定义体: inductionOn f fun f => by simp only [← coe_one, ← coe_smul', one_smul]
   mul_smul c₁ c₂ f :=
     inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
@@ -2798,7 +2798,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid M] [AddMonoid N] [DistribMulAction M N]
+  签名: [幺半群 M] [加法幺半群 N] [分配乘法作用 M N]
   定义体: inductionOn₂ f g fun f g => by
       norm_cast
       simp [smul_add]
@@ -2827,7 +2827,7 @@ instance instDistribMulAction'
 
 中文:
 实例 instDistribMulAction'
-  签名: [Monoid M] [AddMonoid N] [DistribMulAction M N]
+  签名: [幺半群 M] [加法幺半群 N] [分配乘法作用 M N]
   定义体: inductionOn₃ c f g fun c f g => by
       norm_cast
       simp [smul_add]
@@ -2859,7 +2859,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: inductionOn f fun f => by
       norm_cast
       simp [add_smul]
@@ -2893,7 +2893,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: inductionOn₃ c₁ c₂ f fun c₁ c₂ f => by
       norm_cast
       simp [add_smul]
@@ -2982,7 +2982,7 @@ theorem coe_nonneg
 
 中文:
 定理 coe_nonneg
-  条件: [LE β] [Zero β] {f : α -> β}
+  条件: [LE β] [零 β] {f : α -> β}
   结论: 0 <= (f : Germ l β) ↔ 对任意ᶠ x in l, 0 <= f x
   证明: Iff.rfl
 
@@ -3047,7 +3047,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: [Preorder β]
+  签名: [预序 β]
   定义体: inductionOn f EventuallyLE.refl l
   le_trans f₁ f₂ f₃ := inductionOn₃ f₁ f₂ f₃ fun _ _ _ => EventuallyLE.trans
 
@@ -3067,7 +3067,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: [PartialOrder β]
+  签名: [偏序 β]
   定义体: inductionOn₂ f g fun _ _ h₁ h₂ => (EventuallyLE.antisymm h₁ h₂).germ_eq
 
 Depends on / 依赖: EventuallyLE, EventuallyLE.antisymm, antisymm, germ_eq
@@ -3085,7 +3085,7 @@ instance instBot
 
 中文:
 实例 instBot
-  签名: [Bot β]
+  签名: [底元素 β]
   定义体: ⟨↑(⊥ : β)⟩
 -/
 instance instBot [Bot β] : Bot (Germ l β) := ⟨↑(⊥ : β)⟩
@@ -3101,7 +3101,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: [Top β]
+  签名: [顶元素 β]
   定义体: ⟨↑(⊤ : β)⟩
 
 @[simp, norm_cast]
@@ -3122,7 +3122,7 @@ theorem const_bot
 
 中文:
 定理 const_bot
-  条件: [Bot β]
+  条件: [底元素 β]
   结论: (↑(⊥ : β) : Germ l β) = ⊥
   证明: rfl
 
@@ -3143,7 +3143,7 @@ theorem const_top
 
 中文:
 定理 const_top
-  条件: [Top β]
+  条件: [顶元素 β]
   结论: (↑(⊤ : β) : Germ l β) = ⊤
   证明: rfl
 -/
@@ -3160,7 +3160,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: [LE β] [OrderBot β]
+  签名: [LE β] [有底序 β]
   定义体: inductionOn f fun _ => Eventually.of_forall fun _ => bot_le
 
 Depends on / 依赖: Eventually, Eventually.of_forall, bot_le, inductionOn, of_forall
@@ -3178,7 +3178,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: [LE β] [OrderTop β]
+  签名: [LE β] [有顶序 β]
   定义体: inductionOn f fun _ => Eventually.of_forall fun _ => le_top
 
 Depends on / 依赖: Eventually, Eventually.of_forall, inductionOn, le_top, of_forall
@@ -3197,7 +3197,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [LE β] [BoundedOrder β]
+  签名: [LE β] [有界序 β]
   定义体: instOrderBot
   __ := instOrderTop
 
@@ -3217,7 +3217,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: [Max β]
+  签名: [最大值 β]
   定义体: ⟨map₂ (· ⊔ ·)⟩
 -/
 instance instSup [Max β] : Max (Germ l β) := ⟨map₂ (· ⊔ ·)⟩
@@ -3233,7 +3233,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: [Min β]
+  签名: [最小值 β]
   定义体: ⟨map₂ (· ⊓ ·)⟩
 
 @[simp, norm_cast]
@@ -3254,7 +3254,7 @@ theorem const_sup
 
 中文:
 定理 const_sup
-  条件: [Max β] (a b : β)
+  条件: [最大值 β] (a b : β)
   结论: ↑(a ⊔ b) = (↑a ⊔ ↑b : Germ l β)
   证明: rfl
 
@@ -3275,7 +3275,7 @@ theorem const_inf
 
 中文:
 定理 const_inf
-  条件: [Min β] (a b : β)
+  条件: [最小值 β] (a b : β)
   结论: ↑(a ⊓ b) = (↑a ⊓ ↑b : Germ l β)
   证明: rfl
 -/
@@ -3343,7 +3343,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [Lattice β]
+  签名: [格 β]
   定义体: instSemilatticeSup
   __ := instSemilatticeInf
 
@@ -3365,7 +3365,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: [DistribLattice β]
+  签名: [Distrib格 β]
   定义体: inductionOn₃ f g h fun _f _g _h => Eventually.of_forall fun _ => le_sup_inf
 
 @[to_additive]
@@ -3391,7 +3391,7 @@ instance instExistsMulOfLE
 
 中文:
 实例 instExistsMulOfLE
-  签名: [Mul β] [LE β] [ExistsMulOfLE β]
+  签名: [乘法 β] [LE β] [ExistsMulOfLE β]
   定义体: inductionOn₂ x y fun f g (h : f <=ᶠ[l] g) => by
     classical
     choose c hc using fun x (hx : f x <= g x) => exists_mul_of_le hx

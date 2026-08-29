@@ -34,11 +34,11 @@ structure FiniteIndexNormalSubgroup
     - isFiniteIndex' : toSubgroup.FiniteIndex  [default: by infer_instance]
 
 中文:
-结构 FiniteIndexNormalSubgroup
-  参数: (G : 类型) [Group G]
-  继承: Subgroup G
+结构 FiniteIndexNormal子群
+  参数: (G : 类型) [群 G]
+  继承: 子群 G
   公理与运算 (2 个):
-    - isNormal' : toSubgroup.Normal  [默认: by infer_instance]
+    - isNormal' : toSubgroup.正规  [默认: by infer_instance]
     - isFiniteIndex' : toSubgroup.FiniteIndex  [默认: by infer_instance]
 
 Depends on / 依赖: FiniteIndex, infer_instance, isFiniteIndex, toSubgroup, toSubgroup.FiniteIndex
@@ -61,11 +61,11 @@ structure FiniteIndexNormalAddSubgroup
     - isFiniteIndex' : toAddSubgroup.FiniteIndex  [default: by infer_instance]
 
 中文:
-结构 FiniteIndexNormalAddSubgroup
-  参数: (G : 类型) [AddGroup G]
-  继承: AddSubgroup G
+结构 FiniteIndexNormalAdd子群
+  参数: (G : 类型) [加法群 G]
+  继承: 加法子群 G
   公理与运算 (2 个):
-    - isNormal' : toAddSubgroup.Normal  [默认: by infer_instance]
+    - isNormal' : toAddSubgroup.正规  [默认: by infer_instance]
     - isFiniteIndex' : toAddSubgroup.FiniteIndex  [默认: by infer_instance]
 
 Depends on / 依赖: FiniteIndex, infer_instance, isFiniteIndex, toAddSubgroup, toAddSubgroup.FiniteIndex
@@ -96,7 +96,7 @@ theorem toSubgroup_injective
 
 中文:
 定理 toSubgroup_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun A B h => by
   ext
   dsimp at h
@@ -125,7 +125,7 @@ coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 
 中文:
 实例 :
-  签名: SetLike (FiniteIndexNormalSubgroup G) G
+  签名: 集合状 (FiniteIndexNormal子群 G) G
   定义体: U.1
 coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (FiniteIndexNormalSubgroup G)
+  签名: 偏序 (FiniteIndexNormal子群 G)
   定义体: .ofSetLike (FiniteIndexNormalSubgroup G) G
 
 @[to_additive]
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (FiniteIndexNormalSubgroup G) G
+  签名: 子群类 (FiniteIndexNormal子群 G) G
   定义体: Subsemigroup.mul_mem' _
   one_mem U := U.one_mem'
   inv_mem := Subgroup.inv_mem' _
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (FiniteIndexNormalSubgroup G) (Subgroup G)
+  签名: Coe (FiniteIndexNormal子群 G) (子群 G)
   定义体: H.toSubgroup
 
 @[to_additive]
@@ -228,7 +228,7 @@ instance instPartialOrderFiniteIndexNormalSubgroup
 
 中文:
 实例 instPartialOrderFiniteIndexNormalSubgroup
-  签名: : PartialOrder (FiniteIndexNormalSubgroup G)
+  签名: : 偏序 (FiniteIndexNormal子群 G)
   定义体: inferInstance
 
 @[to_additive]
@@ -252,7 +252,7 @@ instance instInfFiniteIndexNormalSubgroup
 
 中文:
 实例 instInfFiniteIndexNormalSubgroup
-  签名: : Min (FiniteIndexNormalSubgroup G)
+  签名: : 最小值 (FiniteIndexNormal子群 G)
   定义体: ⟨fun U V => {
     toSubgroup := U.toSubgroup ⊓ V.toSubgroup
     isNormal' := Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (FiniteIndexNormalSubgroup G)
+  签名: 最大值 (FiniteIndexNormal子群 G)
   定义体: ⟨fun U V => {
     toSubgroup := U.toSubgroup ⊔ V.toSubgroup
     isNormal' := Subgroup.sup_normal U.toSubgroup V.toSubgroup
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (FiniteIndexNormalSubgroup G)
+  签名: 格 (FiniteIndexNormal子群 G)
 -/
 instance : Lattice (FiniteIndexNormalSubgroup G) where
 
@@ -380,7 +380,7 @@ theorem mem_toSubgroup_iff
 
 中文:
 定理 mem_toSubgroup_iff
-  条件: {H : FiniteIndexNormalSubgroup G} {g : G}
+  条件: {H : FiniteIndexNormal子群 G} {g : G}
   结论: g in H.toSubgroup ↔ g in H
   证明: .rfl
 -/
@@ -402,7 +402,7 @@ definition ofSubgroup
 
 中文:
 定义 ofSubgroup
-  签名: (H : Subgroup G) [H.Normal] [H.FiniteIndex]
+  签名: (H : 子群 G) [H.正规] [H.FiniteIndex]
   定义体: { toSubgroup := H }
 
 @[to_additive (attr := simp)]
@@ -423,7 +423,7 @@ theorem toSubgroup_ofSubgroup
 
 中文:
 定理 toSubgroup_ofSubgroup
-  条件: (H : Subgroup G) [H.Normal] [H.FiniteIndex]
+  条件: (H : 子群 G) [H.正规] [H.FiniteIndex]
   证明: rfl
 -/
 theorem toSubgroup_ofSubgroup (H : Subgroup G) [H.Normal] [H.FiniteIndex] :
@@ -452,7 +452,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : G ->* H) (K : FiniteIndexNormalSubgroup H)
+  签名: (f : G ->* H) (K : FiniteIndexNormal子群 H)
   定义体: K.toSubgroup.comap f
   isFiniteIndex' := by
     let g : G ->* (H ⧸ K.toSubgroup) := (QuotientGroup.mk' K.toSubgroup).comp f
@@ -483,7 +483,7 @@ theorem toSubgroup_comap
 
 中文:
 定理 toSubgroup_comap
-  条件: (f : G ->* H) (K : FiniteIndexNormalSubgroup H)
+  条件: (f : G ->* H) (K : FiniteIndexNormal子群 H)
   证明: rfl
 
 @[to_additive (attr := gcongr)]
@@ -505,7 +505,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  条件: (f : G ->* H) {K L : FiniteIndexNormalSubgroup H} (h : K <= L)
+  条件: (f : G ->* H) {K L : FiniteIndexNormal子群 H} (h : K <= L)
   证明: fun _ hx => h hx
 
 @[to_additive (attr := simp)]
@@ -529,8 +529,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (K : FiniteIndexNormalSubgroup G)
-  结论: comap (MonoidHom.id G) K = K
+  条件: (K : FiniteIndexNormal子群 G)
+  结论: comap (幺半群态射.id G) K = K
   证明: by
   rfl
 
@@ -551,7 +551,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormalSubgroup N)
+  条件: (f : G ->* H) (g : H ->* N) (K : FiniteIndexNormal子群 N)
   证明: by
   rfl
 -/

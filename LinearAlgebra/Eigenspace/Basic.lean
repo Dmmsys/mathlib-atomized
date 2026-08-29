@@ -458,7 +458,7 @@ definition UnifEigenvalues.val
 
 中文:
 定义 UnifEigenvalues.val
-  签名: (f : Module.End R M) (k : 自然数∞)
+  签名: (f : 模.End R M) (k : 自然数∞)
   定义体: Subtype.val
 
 @[simp]
@@ -515,7 +515,7 @@ instance UnifEigenvalues.instCoeOut
 
 中文:
 实例 UnifEigenvalues.instCoeOut
-  签名: {f : Module.End R M} (k : 自然数∞)
+  签名: {f : 模.End R M} (k : 自然数∞)
   定义体: UnifEigenvalues.val f k
 
 Depends on / 依赖: UnifEigenvalues, UnifEigenvalues.val
@@ -534,7 +534,7 @@ instance UnivEigenvalues.instDecidableEq
 
 中文:
 实例 UnivEigenvalues.instDecidableEq
-  签名: [DecidableEq R] (f : Module.End R M) (k : 自然数∞)
+  签名: [DecidableEq R] (f : 模.End R M) (k : 自然数∞)
   定义体: inferInstanceAs (DecidableEq (Subtype (fun x : R => f.HasUnifEigenvalue x k)))
 
 Depends on / 依赖: DecidableEq, HasUnifEigenvalue, Subtype, f.HasUnifEigenvalue
@@ -615,7 +615,7 @@ theorem HasUnifEigenvalue.exists_hasUnifEigenvector
   proof: Submodule.exists_mem_ne_zero_of_ne_bot hμ
 
 中文:
-定理 HasUnifEigenvalue.exists_hasUnifEigenvector
+定理 HasUnifEigenvalue.存在_hasUnifEigenvector
   证明: Submodule.exists_mem_ne_zero_of_ne_bot hμ
 
 Depends on / 依赖: Submodule, Submodule.exists_mem_ne_zero_of_ne_bot, exists_mem_ne_zero_of_ne_bot
@@ -665,7 +665,7 @@ lemma HasUnifEigenvalue.isNilpotent_of_isNilpotent
 
 中文:
 引理 HasUnifEigenvalue.isNilpotent_of_isNilpotent
-  结论: [IsDomain R] [IsTorsionFree R M] {f : End R M}
+  结论: [是整环 R] [是无挠 R M] {f : End R M}
   证明: by
   obtain ⟨m : M, hm⟩ := hf.exists_hasUnifEigenvector
   obtain ⟨n : Nat, hn : f ^ n = 0⟩ := hfn
@@ -727,7 +727,7 @@ alias ⟨_, HasUnifEigenvalue.of_mem_spectrum⟩ := hasUnifEigenvalue_iff_mem_sp
 
 中文:
 引理 hasUnifEigenvalue_iff_mem_spectrum
-  条件: [FiniteDimensional K V] {f : End K V} {μ : K}
+  条件: [有限维 K V] {f : End K V} {μ : K}
   证明: by
   rw [spectrum.mem_iff]; rw [IsUnit.sub_iff]; rw [LinearMap.isUnit_iff_ker_eq_bot]; rw [HasUnifEigenvalue]; rw [genEigenspace_one]; rw [ne_eq]; rw [not_iff_not]
   simp [Submodule.ext_iff, LinearMap.mem_ker]
@@ -898,7 +898,7 @@ have := WellFoundedGT.iSup_eq_monotonicSequenceLimit
 
 中文:
 引理 genEigenspace_top_eq_maxUnifEigenspaceIndex
-  条件: [IsNoetherian R M] (f : End R M) (μ : R)
+  条件: [是Noether R M] (f : End R M) (μ : R)
   证明: by
 have := WellFoundedGT.iSup_eq_monotonicSequenceLimit
 (f.genEigenspace μ).comp WithTop.coeOrderHom.toOrderHom
@@ -932,7 +932,7 @@ lemma genEigenspace_le_genEigenspace_maxUnifEigenspaceIndex
 
 中文:
 引理 genEigenspace_le_genEigenspace_maxUnifEigenspaceIndex
-  结论: [IsNoetherian R M] (f : End R M)
+  结论: [是Noether R M] (f : End R M)
   证明: by
   rw [← genEigenspace_top_eq_maxUnifEigenspaceIndex]
   exact (f.genEigenspace μ).monotone le_top
@@ -957,7 +957,7 @@ theorem genEigenspace_eq_genEigenspace_maxUnifEigenspaceIndex_of_le
 
 中文:
 定理 genEigenspace_eq_genEigenspace_maxUnifEigenspaceIndex_of_le
-  结论: [IsNoetherian R M]
+  结论: [是Noether R M]
   证明: le_antisymm
     (genEigenspace_le_genEigenspace_maxUnifEigenspaceIndex _ _ _)
     ((f.genEigenspace μ).monotone <| by simpa using hk)
@@ -1087,7 +1087,7 @@ lemma maxUnifEigenspaceIndex_le_finrank
 
 中文:
 引理 maxUnifEigenspaceIndex_le_finrank
-  条件: [FiniteDimensional K V] (f : End K V) (μ : K)
+  条件: [有限维 K V] (f : End K V) (μ : K)
   证明: by
   apply Nat.sInf_le
   intro n hn
@@ -1124,7 +1124,7 @@ exact (f.genEigenspace _).monotone by simpa using maxUnifEigenspaceIndex_le_finr
 
 中文:
 引理 genEigenspace_le_genEigenspace_finrank
-  结论: [FiniteDimensional K V] (f : End K V)
+  结论: [有限维 K V] (f : End K V)
   证明: by
   calc f.genEigenspace μ k
       <= f.genEigenspace μ ⊤ := (f.genEigenspace _).monotone le_top
@@ -1154,7 +1154,7 @@ theorem genEigenspace_eq_genEigenspace_finrank_of_le
 
 中文:
 定理 genEigenspace_eq_genEigenspace_finrank_of_le
-  结论: [FiniteDimensional K V]
+  结论: [有限维 K V]
   证明: le_antisymm
     (genEigenspace_le_genEigenspace_finrank _ _ _)
     ((f.genEigenspace μ).monotone <| by simpa using hk)
@@ -1260,7 +1260,7 @@ lemma isNilpotent_restrict_genEigenspace_top
 
 中文:
 引理 isNilpotent_restrict_genEigenspace_top
-  结论: [IsNoetherian R M] (f : End R M) (μ : R)
+  结论: [是Noether R M] (f : End R M) (μ : R)
   证明: by
   apply isNilpotent_restrict_of_le
   on_goal 2 => apply isNilpotent_restrict_genEigenspace_nat f μ (maxUnifEigenspaceIndex f μ)
@@ -1334,7 +1334,7 @@ theorem eigenspace_zero
 中文:
 定理 eigenspace_zero
   条件: (f : End R M)
-  结论: f.eigenspace 0 = LinearMap.ker f
+  结论: f.eigenspace 0 = 线性映射.ker f
   证明: by
   simp only [eigenspace, ← Nat.cast_one (R := Nat∞), genEigenspace_zero_nat, pow_one]
 
@@ -1450,7 +1450,7 @@ abbreviation Eigenvalues.val
 
 中文:
 缩写 Eigenvalues.val
-  签名: (f : Module.End R M)
+  签名: (f : 模.End R M)
   定义体: UnifEigenvalues.val f 1
 
 @[simp]
@@ -1596,7 +1596,7 @@ theorem HasEigenvalue.exists_hasEigenvector
 nonrec
 
 中文:
-定理 HasEigenvalue.exists_hasEigenvector
+定理 HasEigenvalue.存在_hasEigenvector
   条件: {f : End R M} {μ : R} (hμ : f.HasEigenvalue μ)
   证明: Submodule.exists_mem_ne_zero_of_ne_bot hμ
 
@@ -1733,7 +1733,7 @@ nonrec
 
 中文:
 引理 HasEigenvalue.isNilpotent_of_isNilpotent
-  结论: [IsDomain R] [IsTorsionFree R M] {f : End R M}
+  结论: [是整环 R] [是无挠 R M] {f : End R M}
   证明: hf.isNilpotent_of_isNilpotent hfn
 
 nonrec
@@ -1777,7 +1777,7 @@ alias ⟨_, HasEigenvalue.of_mem_spectrum⟩ := hasEigenvalue_iff_mem_spectrum
 
 中文:
 定理 hasEigenvalue_iff_mem_spectrum
-  条件: [FiniteDimensional K V] {f : End K V} {μ : K}
+  条件: [有限维 K V] {f : End K V} {μ : K}
   证明: hasUnifEigenvalue_iff_mem_spectrum
 
 alias ⟨_, HasEigenvalue.of_mem_spectrum⟩ := hasEigenvalue_iff_mem_spectrum
@@ -2010,7 +2010,7 @@ theorem maxGenEigenspace_eq
 
 中文:
 定理 maxGenEigenspace_eq
-  条件: [IsNoetherian R M] (f : End R M) (μ : R)
+  条件: [是Noether R M] (f : End R M) (μ : R)
   证明: genEigenspace_top_eq_maxUnifEigenspaceIndex _ _
 
 Depends on / 依赖: genEigenspace_top_eq_maxUnifEigenspaceIndex
@@ -2231,7 +2231,7 @@ lemma isNilpotent_restrict_maxGenEigenspace_sub_algebraMap
 
 中文:
 引理 isNilpotent_restrict_maxGenEigenspace_sub_algebraMap
-  结论: [IsNoetherian R M] (f : End R M) (μ : R)
+  结论: [是Noether R M] (f : End R M) (μ : R)
   证明: by
   apply isNilpotent_restrict_of_le (q := f.genEigenspace μ (maxUnifEigenspaceIndex f μ))
     _ (isNilpotent_restrict_genEigenspace_nat f μ (maxUnifEigenspaceIndex f μ))
@@ -2265,7 +2265,7 @@ lemma disjoint_genEigenspace
 
 中文:
 引理 disjoint_genEigenspace
-  结论: [IsDomain R] [IsTorsionFree R M]
+  结论: [是整环 R] [是无挠 R M]
   证明: by
   rw [genEigenspace_eq_iSup_genEigenspace_nat]; rw [genEigenspace_eq_iSup_genEigenspace_nat]
   simp_rw [genEigenspace_directed.disjoint_iSup_left, genEigenspace_directed.disjoint_iSup_right]
@@ -2320,7 +2320,7 @@ lemma injOn_genEigenspace
 
 中文:
 引理 injOn_genEigenspace
-  条件: [IsDomain R] [IsTorsionFree R M] (f : End R M) (k : 自然数∞)
+  条件: [是整环 R] [是无挠 R M] (f : End R M) (k : 自然数∞)
   证明: by
   rintro μ₁ _ μ₂ hμ₂ hμ₁₂
   by_contra contra
@@ -2346,7 +2346,7 @@ lemma injOn_maxGenEigenspace
 
 中文:
 引理 injOn_maxGenEigenspace
-  条件: [IsDomain R] [IsTorsionFree R M] (f : End R M)
+  条件: [是整环 R] [是无挠 R M] (f : End R M)
   证明: injOn_genEigenspace f ⊤
 
 Depends on / 依赖: injOn_genEigenspace
@@ -2373,7 +2373,7 @@ theorem independent_genEigenspace
 
 中文:
 定理 independent_genEigenspace
-  条件: [IsDomain R] [IsTorsionFree R M] (f : End R M) (k : 自然数∞)
+  条件: [是整环 R] [是无挠 R M] (f : End R M) (k : 自然数∞)
   证明: by
   classical
   suffices forall μ₁ (s : Finset R), μ₁ ∉ s -> Disjoint (f.genEigenspace μ₁ k)
@@ -2437,7 +2437,7 @@ theorem independent_maxGenEigenspace
 
 中文:
 定理 independent_maxGenEigenspace
-  条件: [IsDomain R] [IsTorsionFree R M] (f : End R M)
+  条件: [是整环 R] [是无挠 R M] (f : End R M)
   证明: by
   apply independent_genEigenspace
 
@@ -2457,7 +2457,7 @@ theorem eigenspaces_iSupIndep
 
 中文:
 定理 eigenspaces_iSupIndep
-  条件: [IsDomain R] [IsTorsionFree R M] (f : End R M)
+  条件: [是整环 R] [是无挠 R M] (f : End R M)
   证明: f.independent_genEigenspace 1
 
 Depends on / 依赖: f.independent_genEigenspace, independent_genEigenspace
@@ -2477,7 +2477,7 @@ theorem eigenvectors_linearIndependent'
 
 中文:
 定理 eigenvectors_linearIndependent'
-  结论: {ι : 类型} [IsDomain R] [IsTorsionFree R M]
+  结论: {ι : 类型} [是整环 R] [是无挠 R M]
   证明: .linearIndependent _ f.eigenspaces_iSupIndep.comp hμ
     (fun i => h_eigenvec i |>.left) (fun i => h_eigenvec i |>.right)
 
@@ -2499,7 +2499,7 @@ theorem eigenvectors_linearIndependent
 
 中文:
 定理 eigenvectors_linearIndependent
-  结论: [IsDomain R] [IsTorsionFree R M]
+  结论: [是整环 R] [是无挠 R M]
   证明: f.eigenvectors_linearIndependent' (fun μ : μs => μ) Subtype.coe_injective _ h_eigenvec
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective, eigenvectors_linearIndependent, f.eigenvectors_linearIndependent, h_eigenvec
@@ -2527,7 +2527,7 @@ theorem genEigenspace_restrict
 
 中文:
 定理 genEigenspace_restrict
-  结论: (f : End R M) (p : Submodule R M) (k : 自然数∞) (μ : R)
+  结论: (f : End R M) (p : 子模 R M) (k : 自然数∞) (μ : R)
   证明: by
   ext x
   suffices forall l : Nat, genEigenspace (LinearMap.restrict f hfp) μ l =
@@ -2561,8 +2561,8 @@ lemma _root_.Submodule.inf_genEigenspace
   rw [f.genEigenspace_restrict _ _ _ hfp]; rw [Submodule.map_comap_eq]; rw [Submodule.range_subtype]
 
 中文:
-引理 _root_.Submodule.inf_genEigenspace
-  结论: (f : End R M) (p : Submodule R M) {k : 自然数∞} {μ : R}
+引理 _root_.子模.inf_genEigenspace
+  结论: (f : End R M) (p : 子模 R M) {k : 自然数∞} {μ : R}
   证明: by
   rw [f.genEigenspace_restrict _ _ _ hfp]; rw [Submodule.map_comap_eq]; rw [Submodule.range_subtype]
 
@@ -2623,7 +2623,7 @@ theorem eigenspace_restrict_le_eigenspace
 
 中文:
 定理 eigenspace_restrict_le_eigenspace
-  结论: (f : End R M) {p : Submodule R M} (hfp : 对任意 x in p, f x in p)
+  结论: (f : End R M) {p : 子模 R M} (hfp : 对任意 x in p, f x in p)
   证明: by
   rintro a ⟨x, hx, rfl⟩
   simp only [SetLike.mem_coe, mem_eigenspace_iff, LinearMap.restrict_apply] at hx ⊢
@@ -2654,7 +2654,7 @@ theorem generalized_eigenvec_disjoint_range_ker
 
 中文:
 定理 generalized_eigenvec_disjoint_range_ker
-  条件: [FiniteDimensional K V] (f : End K V) (μ : K)
+  条件: [有限维 K V] (f : End K V) (μ : K)
   证明: by
   have h :=
     calc
@@ -2696,7 +2696,7 @@ theorem eigenspace_restrict_eq_bot
 
 中文:
 定理 eigenspace_restrict_eq_bot
-  结论: {f : End R M} {p : Submodule R M} (hfp : 对任意 x in p, f x in p)
+  结论: {f : End R M} {p : 子模 R M} (hfp : 对任意 x in p, f x in p)
   证明: by
   rw [eq_bot_iff]
   intro x hx
@@ -2724,7 +2724,7 @@ theorem pos_finrank_genEigenspace_of_hasEigenvalue
 
 中文:
 定理 pos_finrank_genEigenspace_of_hasEigenvalue
-  结论: [FiniteDimensional K V] {f : End K V}
+  结论: [有限维 K V] {f : End K V}
   证明: calc
     0 = finrank K (⊥ : Submodule K V) := by rw [finrank_bot]
     _ < finrank K (f.eigenspace μ) := Submodule.finrank_lt_finrank_of_lt (bot_lt_iff_ne_bot.2 hx)
@@ -2794,7 +2794,7 @@ lemma genEigenspace_le_smul
 
 中文:
 引理 genEigenspace_le_smul
-  条件: (f : Module.End R M) (μ t : R) (k : 自然数∞)
+  条件: (f : 模.End R M) (μ t : R) (k : 自然数∞)
   证明: by
   intro m hm
   simp_rw [mem_genEigenspace, ← exists_prop, LinearMap.mem_ker] at hm ⊢
@@ -2876,7 +2876,7 @@ refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
 
 中文:
 引理 map_smul_of_iInf_genEigenspace_ne_bot
-  结论: [IsDomain R] [IsTorsionFree R M]
+  结论: [是整环 R] [是无挠 R M]
   证明: by
   by_contra contra
   let g : L -> Submodule R M := fun x => (f x).genEigenspace (μ x) k
@@ -2915,7 +2915,7 @@ refine h_ne eq_bot_iff.mpr (le_trans this (disjoint_iff_inf_le.mp ?_))
 
 中文:
 引理 map_add_of_iInf_genEigenspace_ne_bot_of_commute
-  结论: [IsDomain R] [IsTorsionFree R M]
+  结论: [是整环 R] [是无挠 R M]
   证明: by
   by_contra contra
   let g : L -> Submodule R M := fun x => (f x).genEigenspace (μ x) k

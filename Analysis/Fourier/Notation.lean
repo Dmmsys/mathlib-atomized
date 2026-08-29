@@ -35,7 +35,7 @@ class FourierTransform
     - fourier : E -> F
 
 中文:
-类 FourierTransform
+类 Fourier变换
   参数: (E : 类型u) (F : outParam (类型v))
   公理与运算 (1 个):
     - fourier : E -> F
@@ -88,7 +88,7 @@ class FourierAdd
 
 中文:
 类 FourierAdd
-  参数: (E : 类型) (F : outParam (类型)) [Add E] [Add F] [FourierTransform E F]
+  参数: (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [Fourier变换 E F]
   公理与运算 (1 个):
     - fourier_add : 对任意 (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
 -/
@@ -106,7 +106,7 @@ class FourierSMul
 
 中文:
 类 FourierSMul
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [SMul R E] [SMul R F]
+  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [标量乘法 R E] [标量乘法 R F]
   公理与运算 (1 个):
     - fourier_smul : 对任意 (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
 -/
@@ -124,10 +124,10 @@ class ContinuousFourier
     - continuous_fourier : Continuous (𝓕 : E -> F)
 
 中文:
-类 ContinuousFourier
+类 余ntinuousFourier
   参数: (E : 类型) (F : outParam (类型))
   公理与运算 (1 个):
-    - continuous_fourier : Continuous (𝓕 : E -> F)
+    - continuous_fourier : 连续 (𝓕 : E -> F)
 -/
 class ContinuousFourier (E : Type*) (F : outParam (Type*))
     [TopologicalSpace E] [TopologicalSpace F] [FourierTransform E F] where
@@ -144,7 +144,7 @@ class FourierInvAdd
 
 中文:
 类 FourierInvAdd
-  参数: (E : 类型) (F : outParam (类型)) [Add E] [Add F] [FourierTransformInv E F]
+  参数: (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [FourierTransformInv E F]
   公理与运算 (1 个):
     - fourierInv_add : 对任意 (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
 -/
@@ -163,7 +163,7 @@ class FourierInvSMul
 
 中文:
 类 FourierInvSMul
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [SMul R E] [SMul R F]
+  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [标量乘法 R E] [标量乘法 R F]
   公理与运算 (1 个):
     - fourierInv_smul : 对任意 (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
 -/
@@ -181,10 +181,10 @@ class ContinuousFourierInv
     - continuous_fourierInv : Continuous (𝓕⁻ : E -> F)
 
 中文:
-类 ContinuousFourierInv
+类 余ntinuousFourierInv
   参数: (E : 类型) (F : outParam (类型))
   公理与运算 (1 个):
-    - continuous_fourierInv : Continuous (𝓕⁻ : E -> F)
+    - continuous_fourierInv : 连续 (𝓕⁻ : E -> F)
 -/
 class ContinuousFourierInv (E : Type*) (F : outParam (Type*))
     [TopologicalSpace E] [TopologicalSpace F] [FourierTransformInv E F] where
@@ -204,9 +204,9 @@ structure FourierModule
     - fourier_smul : forall (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
 
 中文:
-结构 FourierModule
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [Add E] [Add F] [SMul R E]
-  继承: FourierTransform E F
+结构 Fourier模
+  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [标量乘法 R E]
+  继承: Fourier变换 E F
   公理与运算 (2 个):
     - fourier_add : 对任意 (f g : E), 𝓕 (f + g) = 𝓕 f + 𝓕 g
     - fourier_smul : 对任意 (r : R) (f : E), 𝓕 (r • f) = r • 𝓕 f
@@ -230,8 +230,8 @@ structure FourierInvModule
     - fourierInv_smul : forall (r : R) (f : E), 𝓕⁻ (r • f) = r • 𝓕⁻ f
 
 中文:
-结构 FourierInvModule
-  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [Add E] [Add F] [SMul R E]
+结构 FourierInv模
+  参数: (R : 类型) (E : 类型) (F : outParam (类型)) [加法 E] [加法 F] [标量乘法 R E]
   继承: FourierTransformInv E F
   公理与运算 (2 个):
     - fourierInv_add : 对任意 (f g : E), 𝓕⁻ (f + g) = 𝓕⁻ f + 𝓕⁻ g
@@ -322,7 +322,7 @@ theorem fourier_sum
 
 中文:
 定理 fourier_sum
-  条件: (f : ι -> E) (s : Finset ι)
+  条件: (f : ι -> E) (s : 有限集 ι)
   结论: 𝓕 (∑ i in s, f i) = ∑ i in s, 𝓕 (f i)
   证明: map_sum (AddMonoidHom.mk' 𝓕 fourier_add) f s
 
@@ -397,7 +397,7 @@ theorem fourierInv_sum
 
 中文:
 定理 fourierInv_sum
-  条件: (f : ι -> E) (s : Finset ι)
+  条件: (f : ι -> E) (s : 有限集 ι)
   结论: 𝓕⁻ (∑ i in s, f i) = ∑ i in s, 𝓕⁻ (f i)
   证明: map_sum (AddMonoidHom.mk' 𝓕⁻ fourierInv_add) f s
 
@@ -619,7 +619,7 @@ class FourierPair
 
 中文:
 类 FourierPair
-  参数: (E F : 类型) [FourierTransform E F] [FourierTransformInv F E]
+  参数: (E F : 类型) [Fourier变换 E F] [FourierTransformInv F E]
   公理与运算 (1 个):
     - fourierInv_fourier_eq : 对任意 (f : E), 𝓕⁻ (𝓕 f) = f
 -/
@@ -637,7 +637,7 @@ class FourierInvPair
 
 中文:
 类 FourierInvPair
-  参数: (E F : 类型) [FourierTransform F E] [FourierTransformInv E F]
+  参数: (E F : 类型) [Fourier变换 F E] [FourierTransformInv E F]
   公理与运算 (1 个):
     - fourier_fourierInv_eq : 对任意 (f : E), 𝓕 (𝓕⁻ f) = f
 -/

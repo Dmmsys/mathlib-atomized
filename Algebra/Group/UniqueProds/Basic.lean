@@ -74,7 +74,7 @@ definition UniqueMul
 
 中文:
 定义 UniqueMul
-  签名: {G} [Mul G] (A B : Finset G) (a0 b0 : G)
+  签名: {G} [乘法 G] (A B : 有限集 G) (a0 b0 : G)
   定义体: forall ⦃a b⦄, a in A -> b in B -> a * b = a0 * b0 -> a = a0 ∧ b = b0
 -/
 def UniqueMul {G} [Mul G] (A B : Finset G) (a0 b0 : G) : Prop :=
@@ -97,7 +97,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {A' B' : Finset G} (hA : A subseteq A') (hB : B subseteq B') (h : UniqueMul A' B' a0 b0)
+  条件: {A' B' : 有限集 G} (hA : A subseteq A') (hB : B subseteq B') (h : UniqueMul A' B' a0 b0)
   证明: fun _ _ ha hb he => h (hA ha) (hB hb) he
 
 @[to_additive (attr := nontriviality, simp)]
@@ -120,7 +120,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton G]
+  条件: [子单例 G]
   结论: UniqueMul A B a0 b0
   证明: by
   simp [UniqueMul, eq_iff_true_of_subsingleton]
@@ -148,7 +148,7 @@ theorem of_card_le_one
 
 中文:
 定理 of_card_le_one
-  条件: (hA : A.Nonempty) (hB : B.Nonempty) (hA1 : #A <= 1) (hB1 : #B <= 1)
+  条件: (hA : A.非空) (hB : B.非空) (hA1 : #A <= 1) (hB1 : #B <= 1)
   证明: by
   rw [Finset.card_le_one_iff] at hA1 hB1
   obtain ⟨a, ha⟩ := hA; obtain ⟨b, hb⟩ := hB
@@ -277,7 +277,7 @@ theorem iff_existsUnique
         exact Prod.mk_inj.mp (J (x, y) ⟨Finset.mk_mem_product hx hy,
 
 中文:
-定理 iff_existsUnique
+定理 iff_存在Unique
   条件: (aA : a0 in A) (bB : b0 in B)
   证明: ⟨fun _ => ⟨(a0, b0), ⟨Finset.mk_mem_product aA bB, rfl⟩, by simpa⟩,
     fun h => h.elim
@@ -349,7 +349,7 @@ theorem exists_iff_exists_existsUnique
     exact ⟨a, b, ha, hb, (iff_existsUnique ha hb).mpr h⟩⟩
 
 中文:
-定理 exists_iff_exists_existsUnique
+定理 存在_iff_存在_存在Unique
   证明: ⟨fun ⟨_, _, hA, hB, h⟩ => ⟨_, (iff_existsUnique hA hB).mp h⟩, fun ⟨g, h⟩ => by
     have h' := h
     rcases h' with ⟨⟨a, b⟩, ⟨hab, rfl, -⟩, -⟩
@@ -382,7 +382,7 @@ theorem mulHom_preimage
 
 中文:
 定理 mulHom_preimage
-  结论: (f : G ->ₙ* H) (hf : Function.Injective f) (a0 b0 : G) {A B : Finset H}
+  结论: (f : G ->ₙ* H) (hf : 函数.单射 f) (a0 b0 : G) {A B : 有限集 H}
   证明: by
   intro a b ha hb ab
   simp only [← hf.eq_iff, map_mul] at ab ⊢
@@ -439,7 +439,7 @@ theorem mulHom_image_iff
 
 中文:
 定理 mulHom_image_iff
-  条件: [DecidableEq H] (f : G ->ₙ* H) (hf : Function.Injective f)
+  条件: [DecidableEq H] (f : G ->ₙ* H) (hf : 函数.单射 f)
   证明: ⟨of_mulHom_image f fun _ _ _ _ _ => .imp (hf ·) (hf ·), fun h _ _ => by
     simp_rw [Finset.mem_image]
     rintro ⟨a, aA, rfl⟩ ⟨b, bB, rfl⟩ ab
@@ -604,7 +604,7 @@ class UniqueSums
 
 中文:
 类 UniqueSums
-  参数: (G) [Add G]
+  参数: (G) [加法 G]
   (无附加公理)
 -/
 class UniqueSums (G) [Add G] : Prop where
@@ -623,7 +623,7 @@ class UniqueProds
 
 中文:
 类 UniqueProds
-  参数: (G) [Mul G]
+  参数: (G) [乘法 G]
   (无附加公理)
 -/
 class UniqueProds (G) [Mul G] : Prop where
@@ -644,7 +644,7 @@ class TwoUniqueSums
 
 中文:
 类 TwoUniqueSums
-  参数: (G) [Add G]
+  参数: (G) [加法 G]
   (无附加公理)
 -/
 class TwoUniqueSums (G) [Add G] : Prop where
@@ -663,7 +663,7 @@ class TwoUniqueProds
 
 中文:
 类 TwoUniqueProds
-  参数: (G) [Mul G]
+  参数: (G) [乘法 G]
   (无附加公理)
 -/
 class TwoUniqueProds (G) [Mul G] : Prop where
@@ -691,7 +691,7 @@ lemma uniqueMul_of_twoUniqueMul
 
 中文:
 引理 uniqueMul_of_twoUniqueMul
-  结论: {G} [Mul G] {A B : Finset G} (h : 1 < #A * #B ->
+  结论: {G} [乘法 G] {A B : 有限集 G} (h : 1 < #A * #B ->
   证明: by
   by_cases! +distrib hc : #A <= 1 ∧ #B <= 1
   · exact UniqueMul.of_card_le_one hA hB hc.1 hc.2
@@ -722,7 +722,7 @@ instance TwoUniqueProds.toUniqueProds
 
 中文:
 实例 TwoUniqueProds.toUniqueProds
-  签名: (G) [Mul G] [TwoUniqueProds G]
+  签名: (G) [乘法 G] [TwoUniqueProds G]
   定义体: uniqueMul_of_twoUniqueMul uniqueMul_of_one_lt_card
 -/
 @[to_additive] instance TwoUniqueProds.toUniqueProds (G) [Mul G] [TwoUniqueProds G] :
@@ -762,7 +762,7 @@ abbreviation I
 
 中文:
 缩写 I
-  签名: : 布尔 -> Type max u v
+  签名: : 布尔值 -> 类型 最大值 u v
   定义体: Bool.rec (ULift.{v} G) (ULift.{u} H)
 -/
 private abbrev I : Bool -> Type max u v := Bool.rec (ULift.{v} G) (ULift.{u} H)
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: 对任意 b, Mul (I G H b)
+  签名: 对任意 b, 乘法 (I G H b)
   定义体: Bool.rec ULift.mul ULift.mul
 -/
 @[to_additive] private instance : forall b, Mul (I G H b) := Bool.rec ULift.mul ULift.mul
@@ -789,7 +789,7 @@ definition Prod.upMulHom
   body: ⟨fun x => Bool.rec ⟨x.1⟩ ⟨x.2⟩, fun x y => by ext (_ | _) <;> rfl⟩
 
 中文:
-定义 Prod.upMulHom
+定义 积类型.upMulHom
   签名: : G × H ->ₙ* 对任意 b, I G H b
   定义体: ⟨fun x => Bool.rec ⟨x.1⟩ ⟨x.2⟩, fun x y => by ext (_ | _) <;> rfl⟩
 -/
@@ -805,7 +805,7 @@ definition downMulHom
 
 中文:
 定义 downMulHom
-  签名: : ULift G ->ₙ* G
+  签名: : 类型层提升 G ->ₙ* G
   定义体: ⟨ULift.down, fun _ _ => rfl⟩
 -/
 @[to_additive] private def downMulHom : ULift G ->ₙ* G := ⟨ULift.down, fun _ _ => rfl⟩
@@ -864,7 +864,7 @@ theorem of_injective_mulHom
 
 中文:
 定理 of_injective_mulHom
-  条件: (f : H ->ₙ* G) (hf : Function.Injective f) (_ : UniqueProds G)
+  条件: (f : H ->ₙ* G) (hf : 函数.单射 f) (_ : UniqueProds G)
   证明: of_mulHom f (fun _ _ _ _ _ => .imp (hf ·) (hf ·))
 
 Depends on / 依赖: of_mulHom
@@ -884,7 +884,7 @@ theorem _root_.MulEquiv.uniqueProds_iff
   proof: ⟨of_injective_mulHom f.symm f.symm.injective, of_injective_mulHom f f.injective⟩
 
 中文:
-定理 _root_.MulEquiv.uniqueProds_iff
+定理 _root_.乘法等价.uniqueProds_iff
   条件: (f : G ≃* H)
   结论: UniqueProds G ↔ UniqueProds H
   证明: ⟨of_injective_mulHom f.symm f.symm.injective, of_injective_mulHom f f.injective⟩
@@ -958,7 +958,7 @@ theorem toIsLeftCancelMul
 中文:
 定理 toIsLeftCancelMul
   条件: [UniqueProds G]
-  结论: IsLeftCancelMul G where
+  结论: 左乘消去 G where
   证明: by
     classical
     have := mem_insert_self b1 {b2}
@@ -994,7 +994,7 @@ op_injective toIsLeftCancelMul.mul_left_cancel _ unop_injective h
 中文:
 定理 toIsCancelMul
   条件: [UniqueProds G]
-  结论: IsCancelMul G where
+  结论: 是消去乘法 G where
   证明: toIsLeftCancelMul.mul_left_cancel
   mul_right_cancel _ _ _ h :=
 op_injective toIsLeftCancelMul.mul_left_cancel _ unop_injective h
@@ -1023,7 +1023,7 @@ theorem of_same
 
 中文:
 定理 of_same
-  结论: {G} [Semigroup G] [IsCancelMul G]
+  结论: {G} [半群 G] [是消去乘法 G]
   证明: by
     classical
     obtain ⟨g1, h1, g2, h2, hu⟩ := h (hB.mul hA)
@@ -1135,7 +1135,7 @@ instance instForall
 
 中文:
 实例 instForall
-  签名: {ι} (G : ι -> 类型) [对任意 i, Mul (G i)] [对任意 i, UniqueProds (G i)]
+  签名: {ι} (G : ι -> 类型) [对任意 i, 乘法 (G i)] [对任意 i, UniqueProds (G i)]
   定义体: by
     classical
     let _ := isWellFounded_ssubset (α := forall i, G i) -- why need this?
@@ -1181,7 +1181,7 @@ instance _root_.Prod.instUniqueProds
     exacts [congr_fun he fals
 
 中文:
-实例 _root_.Prod.instUniqueProds
+实例 _root_.积类型.instUniqueProds
   签名: [UniqueProds G] [UniqueProds H]
   定义体: by
   have : forall b, UniqueProds (I G H b) := Bool.rec ?_ ?_
@@ -1270,7 +1270,7 @@ theorem of_injective_mulHom
 
 中文:
 定理 of_injective_mulHom
-  结论: (f : H ->ₙ* G) (hf : Function.Injective f)
+  结论: (f : H ->ₙ* G) (hf : 函数.单射 f)
   证明: of_mulHom f (fun _ _ _ _ _ => .imp (hf ·) (hf ·))
 
 Depends on / 依赖: of_mulHom
@@ -1293,7 +1293,7 @@ theorem _root_.MulEquiv.twoUniqueProds_iff
 @[to_additive]
 
 中文:
-定理 _root_.MulEquiv.twoUniqueProds_iff
+定理 _root_.乘法等价.twoUniqueProds_iff
   条件: (f : G ≃* H)
   结论: TwoUniqueProds G ↔ TwoUniqueProds H
   证明: ⟨of_injective_mulHom f.symm f.symm.injective, of_injective_mulHom f f.injective⟩
@@ -1323,7 +1323,7 @@ instance instForall
 
 中文:
 实例 instForall
-  签名: {ι} (G : ι -> 类型) [对任意 i, Mul (G i)] [对任意 i, TwoUniqueProds (G i)]
+  签名: {ι} (G : ι -> 类型) [对任意 i, 乘法 (G i)] [对任意 i, TwoUniqueProds (G i)]
   定义体: by
     classical
     let _ := isWellFounded_ssubset (α := forall i, G i) -- why need this?
@@ -1384,7 +1384,7 @@ instance _root_.Prod.instTwoUniqueProds
     exacts [congr_fun h
 
 中文:
-实例 _root_.Prod.instTwoUniqueProds
+实例 _root_.积类型.instTwoUniqueProds
   签名: [TwoUniqueProds G] [TwoUniqueProds H]
   定义体: by
   have : forall b, TwoUniqueProds (I G H b) := Bool.rec ?_ ?_

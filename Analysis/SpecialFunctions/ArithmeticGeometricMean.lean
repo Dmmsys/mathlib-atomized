@@ -319,7 +319,7 @@ lemma agmSequences_fst_monotone
 
 中文:
 引理 agmSequences_fst_monotone
-  结论: Monotone fun n => (agmSequences x y n).1
+  结论: 递增 fun n => (agmSequences x y n).1
   证明: agmSequences_monotone_and_antitone.1
 
 Depends on / 依赖: agmSequences_monotone_and_antitone
@@ -337,7 +337,7 @@ lemma agmSequences_snd_antitone
 
 中文:
 引理 agmSequences_snd_antitone
-  结论: Antitone fun n => (agmSequences x y n).2
+  结论: 递减 fun n => (agmSequences x y n).2
   证明: agmSequences_monotone_and_antitone.2
 
 Depends on / 依赖: IsCorepresentable, IsCorepresentable.mk, Iso.refl, agmSequences_monotone_and_antitone
@@ -441,7 +441,7 @@ lemma agmSequences_min_max
 
 中文:
 引理 agmSequences_min_max
-  结论: agmSequences (min x y) (max x y) = agmSequences x y
+  结论: agmSequences (最小值 x y) (最大值 x y) = agmSequences x y
   证明: by
   obtain h | h := le_total x y
   · rw [min_eq_left h, max_eq_right h]
@@ -599,7 +599,7 @@ lemma tendsto_agmSequences_snd_agm
 
 中文:
 引理 tendsto_agmSequences_snd_agm
-  结论: Tendsto (fun n => (agmSequences x y n).2) atTop (𝓝 (agm x y))
+  结论: 收敛 (fun n => (agmSequences x y n).2) atTop (𝓝 (agm x y))
   证明: tendsto_atTop_ciInf agmSequences_snd_antitone (OrderBot.bddBelow _)
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, agmSequences_snd_antitone, bddBelow, tendsto_atTop_ciInf
@@ -642,7 +642,7 @@ lemma agm_le_max
 
 中文:
 引理 agm_le_max
-  结论: agm x y <= max x y
+  结论: agm x y <= 最大值 x y
   证明: by
   wlog h : x <= y generalizing x y
   · simpa [agm_comm, max_comm] using this (not_le.mp h).le
@@ -675,7 +675,7 @@ lemma bddAbove_range_agmSequences_fst
 
 中文:
 引理 bddAbove_range_agmSequences_fst
-  结论: BddAbove (Set.range fun n => (agmSequences x y n).1)
+  结论: BddAbove (集合.range fun n => (agmSequences x y n).1)
   证明: by
   rw [bddAbove_def]
   use (agmSequences x y 0).2
@@ -790,7 +790,7 @@ lemma min_le_agm
 
 中文:
 引理 min_le_agm
-  结论: min x y <= agm x y
+  结论: 最小值 x y <= agm x y
   证明: by
   wlog h : x <= y generalizing x y
   · simpa [agm_comm, min_comm] using this (not_le.mp h).le
@@ -1081,7 +1081,7 @@ lemma min_lt_agm_of_pos_of_ne
 中文:
 引理 min_lt_agm_of_pos_of_ne
   条件: (hx : 0 < x) (hy : 0 < y) (hn : x != y)
-  结论: min x y < agm x y
+  结论: 最小值 x y < agm x y
   证明: by
   wlog h : x < y generalizing x y
   · simpa [agm_comm, min_comm] using this hy hx hn.symm (hn.gt_or_lt.resolve_right h)
@@ -1118,7 +1118,7 @@ lemma agm_lt_max_of_ne
 中文:
 引理 agm_lt_max_of_ne
   条件: (hn : x != y)
-  结论: agm x y < max x y
+  结论: agm x y < 最大值 x y
   证明: by
   wlog h : x < y generalizing x y
   · simpa [agm_comm, max_comm] using this hn.symm (hn.gt_or_lt.resolve_right h)

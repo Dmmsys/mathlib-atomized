@@ -47,10 +47,10 @@ class IsOpenUnits
     - isOpenEmbedding_unitsVal : IsOpenEmbedding (Units.val : Mˣ -> M)
 
 中文:
-类 IsOpenUnits
-  参数: (M : 类型) [Monoid M] [TopologicalSpace M]
+类 是OpenUnits
+  参数: (M : 类型) [幺半群 M] [拓扑空间 M]
   公理与运算 (1 个):
-    - isOpenEmbedding_unitsVal : IsOpenEmbedding (Units.val : Mˣ -> M)
+    - isOpenEmbedding_unitsVal : 是开嵌入 (单位群.val : Mˣ -> M)
 -/
 class IsOpenUnits (M : Type*) [Monoid M] [TopologicalSpace M] : Prop where
   isOpenEmbedding_unitsVal : IsOpenEmbedding (Units.val : Mˣ -> M)
@@ -88,8 +88,8 @@ lemma IsOpenUnits.of_isAdic
   i
 
 中文:
-引理 IsOpenUnits.of_isAdic
-  结论: {R : 类型} [CommRing R] [TopologicalSpace R] [IsTopologicalRing R]
+引理 是OpenUnits.of_isAdic
+  结论: {R : 类型} [交换环 R] [拓扑空间 R] [是拓扑环 R]
   证明: by
   refine ⟨.of_continuous_injective_isOpenMap Units.continuous_val Units.val_injective ?_⟩
   refine (IsTopologicalGroup.isOpenMap_iff_nhds_one (f := Units.coeHom R)).mpr ?_

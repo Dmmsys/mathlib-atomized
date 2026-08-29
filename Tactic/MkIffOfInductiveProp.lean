@@ -152,7 +152,7 @@ else pure mkApp2 (mkConst `And) t i)
 
 中文:
 定义 mkExistsList
-  签名: (args : List Expr) (inner : Expr)
+  签名: (args : 列表 Expr) (inner : Expr)
   定义体: args.foldrM
     (fun arg i:Expr => do
       let t ← inferType arg
@@ -201,7 +201,7 @@ definition mkAndList
 
 中文:
 定义 mkAndList
-  签名: : List Expr -> Expr
+  签名: : 列表 Expr -> Expr
   定义体: mkOpList (mkConst `And) (mkConst `True)
 
 Depends on / 依赖: mkConst, mkOpList
@@ -218,7 +218,7 @@ definition mkOrList
 
 中文:
 定义 mkOrList
-  签名: : List Expr -> Expr
+  签名: : 列表 Expr -> Expr
   定义体: mkOpList (mkConst `Or) (mkConst `False)
 
 Depends on / 依赖: mkConst, mkOpList
@@ -233,7 +233,7 @@ definition List.init
   signature: {α : Type*}
 
 中文:
-定义 List.init
+定义 列表.init
   签名: {α : 类型}
 -/
 def List.init {α : Type*} : List α -> List α
@@ -252,11 +252,11 @@ structure Shape
     - neqs : Option Nat
 
 中文:
-结构 Shape
-  参数: : Type where
+结构 形状
+  参数: : 类型 where
   公理与运算 (2 个):
-    - variablesKept : List 布尔
-    - neqs : Option 自然数
+    - variablesKept : 列表 布尔值
+    - neqs : 选项类型 自然数
 -/
 structure Shape : Type where
   /-- For each forall-bound variable in the type of the constructor, minus
@@ -299,7 +299,7 @@ pure ty.replaceFVars fvars params.toArray
 
 中文:
 定义 constrToProp
-  签名: (univs : List Level) (params : List Expr) (idxs : List Expr) (c : Name)
+  签名: (univs : 列表 Level) (params : 列表 Expr) (idxs : 列表 Expr) (c : Name)
   定义体: do
   let type := (← getConstInfo c).instantiateTypeLevelParams univs
   let type' ← Meta.forallBoundedTelescope type (params.length) fun fvars ty => do
@@ -402,7 +402,7 @@ definition toCases
 
 中文:
 定义 toCases
-  签名: (mvar : MVarId) (shape : List Shape)
+  签名: (mvar : MVarId) (shape : 列表 形状)
   定义体: do
   let ⟨h, mvar'⟩ ← mvar.intro1
   let subgoals ← mvar'.cases h
@@ -512,7 +512,7 @@ definition listBoolMerge
   signature: {α : Type*}
 
 中文:
-定义 listBoolMerge
+定义 list布尔Merge
   签名: {α : 类型}
 -/
 def listBoolMerge {α : Type*} : List Bool -> List α -> List (Option α)
@@ -539,7 +539,7 @@ definition toInductive
 
 中文:
 定义 toInductive
-  签名: (mvar : MVarId) (cs : List Name)
+  签名: (mvar : MVarId) (cs : 列表 Name)
   定义体: do
   match s.length with
   | 0 => do let _ ← mvar.cases h

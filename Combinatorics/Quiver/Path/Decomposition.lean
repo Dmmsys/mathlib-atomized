@@ -38,8 +38,8 @@ theorem exists_notMem_mem_hom_path_path_of_notMem_mem
     obtain ⟨c, p', e, rfl⟩ := (length_ne_zero_iff_eq_cons p).mp h
 
 中文:
-定理 exists_notMem_mem_hom_path_path_of_notMem_mem
-  结论: {a b : V} (p : Path a b) (S : Set V)
+定理 存在_notMem_mem_hom_path_path_of_notMem_mem
+  结论: {a b : V} (p : 道路 a b) (S : 集合 V)
   证明: by
   induction h_len : p.length generalizing a b S ha_not_in_S hb_in_S with
   | zero =>
@@ -85,8 +85,8 @@ theorem exists_mem_notMem_hom_path_path_of_notMem_mem
   simp only [Set.mem_compl_iff, not_not] at hu_not_in_compl hv_in
 
 中文:
-定理 exists_mem_notMem_hom_path_path_of_notMem_mem
-  结论: {a b : V} (p : Path a b) (S : Set V)
+定理 存在_mem_notMem_hom_path_path_of_notMem_mem
+  结论: {a b : V} (p : 道路 a b) (S : 集合 V)
   证明: by
   have ha_not_in_compl : a ∉ Sᶜ := by simpa
   have hb_in_compl : b in Sᶜ := by simpa

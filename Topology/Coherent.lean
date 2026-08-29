@@ -50,7 +50,7 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (hS : IsCoherentWith S)
+  条件: (hS : 是余herentWith S)
   证明: ⟨fun ht _ _ => ht.preimage continuous_subtype_val, hS.1 t⟩
 -/
 protected theorem isOpen_iff (hS : IsCoherentWith S) :
@@ -68,7 +68,7 @@ theorem isClosed_iff
 
 中文:
 定理 isClosed_iff
-  条件: (hS : IsCoherentWith S)
+  条件: (hS : 是余herentWith S)
   证明: by
   simp only [← isOpen_compl_iff, hS.isOpen_iff, preimage_compl]
 -/
@@ -87,7 +87,7 @@ hu.preimage (h s hs).domRestrict⟩
 
 中文:
 定理 continuous_iff
-  结论: {Y : 类型} [TopologicalSpace Y] {f : X -> Y}
+  结论: {Y : 类型} [拓扑空间 Y] {f : X -> Y}
   证明: ⟨fun h _ _ => h.continuousOn, fun h => continuous_def.2 fun _u hu => hS.isOpen_iff.2 fun s hs =>
 hu.preimage (h s hs).domRestrict⟩
 -/
@@ -109,7 +109,7 @@ theorem of_continuous_prop
 
 中文:
 定理 of_continuous_prop
-  条件: (h : 对任意 f : X -> 命题, (对任意 s in S, ContinuousOn f s) -> Continuous f)
+  条件: (h : 对任意 f : X -> 命题, (对任意 s in S, ContinuousOn f s) -> 连续 f)
   证明: by
     simp only [continuousOn_iff_continuous_domRestrict, continuous_Prop] at *
     exact h _ hu
@@ -132,7 +132,7 @@ theorem of_isClosed
 
 中文:
 定理 of_isClosed
-  条件: (h : 对任意 t : Set X, (对任意 s in S, IsClosed ((↑) ⁻¹' t : Set s)) -> IsClosed t)
+  条件: (h : 对任意 t : 集合 X, (对任意 s in S, 是闭集 ((↑) ⁻¹' t : 集合 s)) -> 是闭集 t)
   证明: ⟨fun _t ht => isClosed_compl_iff.1 h _ fun s hs => (ht s hs).isClosed_compl⟩
 
 Depends on / 依赖: isClosed_compl, isClosed_compl_iff
@@ -152,7 +152,7 @@ theorem enlarge
 
 中文:
 定理 enlarge
-  条件: {T} (hS : IsCoherentWith S) (hT : 对任意 s in S, 存在 t in T, s subseteq t)
+  条件: {T} (hS : 是余herentWith S) (hT : 对任意 s in S, 存在 t in T, s subseteq t)
   证明: of_continuous_prop fun _f hf => hS.continuous_iff.2 fun s hs =>
     let ⟨t, htT, hst⟩ := hT s hs; (hf t htT).mono hst
 -/
@@ -172,8 +172,8 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {T} (hS : IsCoherentWith S) (hT : S subseteq T)
-  结论: IsCoherentWith T
+  条件: {T} (hS : 是余herentWith S) (hT : S subseteq T)
+  结论: 是余herentWith T
   证明: hS.enlarge fun s hs => ⟨s, hT hs, Subset.rfl⟩
 -/
 protected theorem mono {T} (hS : IsCoherentWith S) (hT : S subseteq T) : IsCoherentWith T :=
@@ -194,7 +194,7 @@ refine hsc.mem_of_tendsto hux Even
 
 中文:
 引理 of_seq
-  结论: [SequentialSpace X]
+  结论: [Sequential空间 X]
   证明: by
   refine of_isClosed fun t ht => IsSeqClosed.isClosed fun u x hut hux => ?_
   rcases isClosed_induced_iff.1 (ht _ (h hux)) with ⟨s, hsc, hst⟩
@@ -229,7 +229,7 @@ lemma of_nhds
 中文:
 引理 of_nhds
   条件: (h : 对任意 x, 存在 s in S, s in 𝓝 x)
-  结论: IsCoherentWith S
+  结论: 是余herentWith S
   证明: of_continuous_prop fun _f hf => continuous_iff_continuousAt.2 fun x =>
     let ⟨s, hsS, hsx⟩ := h x
     (hf s hsS).continuousAt hsx

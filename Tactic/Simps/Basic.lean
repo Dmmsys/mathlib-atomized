@@ -76,7 +76,7 @@ structure NameStruct
   参数: where
   公理与运算 (2 个):
     - parent : Name
-    - components : List String
+    - components : 列表 String
 -/
 private structure NameStruct where
   /-- The namespace that the final name will reside in. -/
@@ -137,7 +137,7 @@ definition NameStruct.update
 
 中文:
 定义 NameStruct.update
-  签名: (nm : NameStruct) (s : String) (isPrefix : 布尔 := false)
+  签名: (nm : NameStruct) (s : String) (isPrefix : 布尔值 := false)
   定义体: { nm with components := if isPrefix then s :: nm.components else nm.components ++ [s] }
 -/
 private def NameStruct.update (nm : NameStruct) (s : String) (isPrefix : Bool := false) :
@@ -165,7 +165,7 @@ definition mkSimpContextResult
 
 中文:
 定义 mkSimpContextResult
-  签名: (cfg : Meta.Simp.Config := {}) (simpOnly := false) (kind := SimpKind.simp)
+  签名: (cfg : Meta.Simp.余nfig := {}) (simpOnly := false) (kind := SimpKind.simp)
   定义体: do
   match dischargeWrapper with
   | .default => pure ()
@@ -220,7 +220,7 @@ definition mkSimpContext
 
 中文:
 定义 mkSimpContext
-  签名: (cfg : Meta.Simp.Config := {}) (simpOnly := false) (kind := SimpKind.simp)
+  签名: (cfg : Meta.Simp.余nfig := {}) (simpOnly := false) (kind := SimpKind.simp)
   定义体: do
   let data ← mkSimpContextResult cfg simpOnly kind dischargeWrapper hasStar
   return data.ctx
@@ -507,9 +507,9 @@ structure ProjectionData
   公理与运算 (5 个):
     - name : Name
     - expr : Expr
-    - projNrs : List 自然数
-    - isDefault : 布尔
-    - isPrefix : 布尔
+    - projNrs : 列表 自然数
+    - isDefault : 布尔值
+    - isPrefix : 布尔值
 -/
 structure ProjectionData where
   /-- The name used in the generated `simp` lemmas -/
@@ -585,11 +585,11 @@ structure ParsedProjectionData
     - strStx : Syntax  [默认: .missing]
     - newName : Name
     - newStx : Syntax  [默认: .missing]
-    - isDefault : 布尔  [默认: true]
-    - isPrefix : 布尔  [默认: false]
-    - expr? : Option Expr  [默认: none]
-    - projNrs : Array 自然数  [默认: #[]]
-    - isCustom : 布尔  [默认: false]
+    - isDefault : 布尔值  [默认: true]
+    - isPrefix : 布尔值  [默认: false]
+    - expr? : 选项类型 Expr  [默认: none]
+    - projNrs : 数组 自然数  [默认: #[]]
+    - isCustom : 布尔值  [默认: false]
 
 Depends on / 依赖: missing
 -/
@@ -720,7 +720,7 @@ String.join (nondefaults.map fun nm :
 
 中文:
 定义 projectionsInfo
-  签名: (l : List ProjectionData) (pref : String) (str : Name)
+  签名: (l : 列表 ProjectionData) (pref : String) (str : Name)
   定义体: let ⟨defaults, nondefaults⟩ := l.partition (·.isDefault)
   let toPrint : List MessageData :=
     defaults.map fun s =>
@@ -877,7 +877,7 @@ definition getCompositeOfProjectionsAux
 
 中文:
 定义 getCompositeOfProjectionsAux
-  签名: (proj : String) (e : Expr) (pos : Array 自然数)
+  签名: (proj : String) (e : Expr) (pos : 数组 自然数)
   定义体: do
   let env ← getEnv
   let .const structName _ := (← whnf (← inferType e)).getAppFn |
@@ -994,7 +994,7 @@ definition applyProjectionRules
 
 中文:
 定义 applyProjectionRules
-  签名: (projs : Array ParsedProjectionData) (rules : Array ProjectionRule)
+  签名: (projs : 数组 ParsedProjectionData) (rules : 数组 ProjectionRule)
   定义体: do
   let projs : Array ParsedProjectionData := rules.foldl (init := projs) fun projs rule =>
     match rule with
@@ -1128,7 +1128,7 @@ definition checkForUnusedCustomProjs
 
 中文:
 定义 checkForUnusedCustomProjs
-  签名: (stx : Syntax) (str : Name) (projs : Array ParsedProjectionData)
+  签名: (stx : Syntax) (str : Name) (projs : 数组 ParsedProjectionData)
   定义体: do
   let nrCustomProjections := projs.toList.countP (·.isCustom)
   let env ← getEnv
@@ -1169,7 +1169,7 @@ definition findAutomaticProjectionsAux
 
 中文:
 定义 findAutomaticProjectionsAux
-  签名: (str : Name) (proj : ParsedProjectionData) (args : Array Expr)
+  签名: (str : Name) (proj : ParsedProjectionData) (args : 数组 Expr)
   定义体: do
   if let some ⟨className, isNotation, findArgs⟩ :=
     notationClassAttr.find? (← getEnv) proj.strName then
@@ -1230,7 +1230,7 @@ MetaM.run' TermElabM.run' (s := {levelNames := strDecl.levelParams})
 
 中文:
 定义 findAutomaticProjections
-  签名: (str : Name) (projs : Array ParsedProjectionData)
+  签名: (str : Name) (projs : 数组 ParsedProjectionData)
   定义体: do
   let strDecl ← getConstInfo str
   trace[simps.debug] "debug: {projs}"
@@ -1275,7 +1275,7 @@ definition getRawProjections
 
 中文:
 定义 getRawProjections
-  签名: (stx : Syntax) (str : Name) (traceIfExists : 布尔 := false)
+  签名: (stx : Syntax) (str : Name) (traceIfExists : 布尔值 := false)
   定义体: do
   withOptions (fun o => if trc then o.set `trace.simps.verbose true else o) do
   let env ← getEnv
@@ -1407,19 +1407,19 @@ structure Config
     - nameStem : Option String  [default: none]
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (10 个):
     - isSimp : = true
-    - attrs : Array Attribute  [默认: #[]]
+    - attrs : 数组 Attribute  [默认: #[]]
     - simpRhs : = false
     - dsimpLhs : = false
     - typeMd : = TransparencyMode.instances
     - rhsMd : = TransparencyMode.reducible
     - fullyApplied : = true
-    - notRecursive : = [`Prod, `PProd, `Opposite, `PreOpposite]
+    - notRecursive : = [`积类型, `命题积类型, `对偶, `PreOpposite]
     - debug : = false
-    - nameStem : Option String  [默认: none]
+    - nameStem : 选项类型 String  [默认: none]
 -/
 structure Config where
   /-- Make generated lemmas simp lemmas -/
@@ -1472,7 +1472,7 @@ definition _root_.Lean.Expr.instantiateLambdasOrApps
 
 中文:
 定义 _root_.Lean.Expr.instantiateLambdasOrApps
-  签名: (es : Array Expr) (e : Expr)
+  签名: (es : 数组 Expr) (e : Expr)
   定义体: e.betaRev es.reverse true -- check if this is what I want
 -/
 partial def _root_.Lean.Expr.instantiateLambdasOrApps (es : Array Expr) (e : Expr) : Expr :=
@@ -1494,7 +1494,7 @@ definition getProjectionExprs
 
 中文:
 定义 getProjectionExprs
-  签名: (stx : Syntax) (tgt : Expr) (rhs : Expr) (cfg : Config)
+  签名: (stx : Syntax) (tgt : Expr) (rhs : Expr) (cfg : 余nfig)
   定义体: do
   -- the parameters of the structure
   let params := tgt.getAppArgs
@@ -1539,7 +1539,7 @@ definition addProjection
 
 中文:
 定义 addProjection
-  签名: (declName : Name) (type lhs rhs : Expr) (args : Array Expr)
+  签名: (declName : Name) (type lhs rhs : Expr) (args : 数组 Expr)
   定义体: -- Enable `backward.defeqAttrib.useBackward` so the dsimp/simp normalization
   -- below still uses `@[backward_defeq]`-only theorems (which would have been
   -- `@[defeq]` under the pre-stricter-inference rules). Without this, rfl-shaped
@@ -1832,7 +1832,7 @@ let lhs : Expr := mkConst d.name d.levelParams.map Level.param
 
 中文:
 定义 simpsTac
-  签名: (ref : Syntax) (nm : Name) (cfg : Config := {})
+  签名: (ref : Syntax) (nm : Name) (cfg : 余nfig := {})
   定义体: withOptions (fun o => if trc then o.set `trace.simps.verbose true else o) do
   -- We need access to theorem bodies
   let env ← withoutExporting getEnv

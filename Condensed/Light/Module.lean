@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (LightCondMod.{u} R)
+  签名: 交换 (LightCondMod.{u} R)
   定义体: sheafIsAbelian
 
 Depends on / 依赖: sheafIsAbelian

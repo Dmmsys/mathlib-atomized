@@ -84,7 +84,7 @@ definition _root_.ContinuousLinearEquiv.quotKerEquivRange
   body: .ofIsHomeomorph fₗ.quotKerEquivRange (fₗ.isStrictMap_iff_isHomeomorph_quotKerEquivRange.mp hf)
 
 中文:
-定义 _root_.ContinuousLinearEquiv.quotKerEquivRange
+定义 _root_.连续线性等价.quotKerEquivRange
   定义体: .ofIsHomeomorph fₗ.quotKerEquivRange (fₗ.isStrictMap_iff_isHomeomorph_quotKerEquivRange.mp hf)
 
 Depends on / 依赖: isStrictMap_iff_isHomeomorph_quotKerEquivRange, isStrictMap_iff_isHomeomorph_quotKerEquivRange.mp, ofIsHomeomorph, quotKerEquivRange

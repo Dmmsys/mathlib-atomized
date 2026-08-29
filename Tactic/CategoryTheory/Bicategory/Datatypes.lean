@@ -137,14 +137,14 @@ structure Context
     - instBicategory : Q(Bicategory.{level₂, level₁} $B)
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (5 个):
     - level₂ : Level
     - level₁ : Level
     - level₀ : Level
-    - B : Q(Type level₀)
-    - instBicategory : Q(Bicategory.{level₂, level₁} $B)
+    - B : Q(类型 level₀)
+    - instBicategory : Q(双范畴.{level₂, level₁} $B)
 -/
 structure Context where
   /-- The level for 2-morphisms. -/
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: BicategoryLike.Context Bicategory.Context
+  签名: BicategoryLike.余ntext 双范畴.余ntext
   定义体: Bicategory.mkContext?
 
 Depends on / 依赖: Bicategory, Bicategory.mkContext, e.symm, mkContext
@@ -1016,7 +1016,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonadCoherehnceHom BicategoryM
+  签名: MonadCoherehnce态射 BicategoryM
   定义体: Mor₂IsoOfExpr α.unfold
 -/
 instance : MonadCoherehnceHom BicategoryM where

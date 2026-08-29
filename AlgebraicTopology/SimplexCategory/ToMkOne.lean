@@ -36,7 +36,7 @@ lemma toMk₁_apply_eq_zero_iff
 
 中文:
 引理 toMk₁_apply_eq_zero_iff
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1))
   证明: by
   simp [toMk₁_apply]
 -/
@@ -55,7 +55,7 @@ lemma toMk₁_of_castSucc_lt
 
 中文:
 引理 toMk₁_of_castSucc_lt
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : j.castSucc < i)
   证明: by
   simpa [toMk₁_apply]
 -/
@@ -74,7 +74,7 @@ lemma toMk₁_apply_eq_one_iff
 
 中文:
 引理 toMk₁_apply_eq_one_iff
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1))
   证明: by
   simp [toMk₁_apply]
 -/
@@ -93,7 +93,7 @@ lemma toMk₁_of_le_castSucc
 
 中文:
 引理 toMk₁_of_le_castSucc
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : i <= j.castSucc)
   证明: by
   simpa [toMk₁_apply]
 -/
@@ -119,7 +119,7 @@ lemma δ_comp_toMk₁_of_le
 
 中文:
 引理 δ_comp_toMk₁_of_le
-  条件: {n : 自然数} (i : Fin (n + 3)) (j : Fin (n + 2)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 3)) (j : 有限集 (n + 2)) (h : i <= j.castSucc)
   证明: by
   obtain ⟨i, rfl⟩ := Fin.eq_castSucc_of_ne_last
     (Fin.ne_last_of_lt (lt_of_le_of_lt h j.castSucc_lt_succ))
@@ -162,7 +162,7 @@ lemma δ_comp_toMk₁_of_lt
 
 中文:
 引理 δ_comp_toMk₁_of_lt
-  条件: {n : 自然数} (i : Fin (n + 3)) (j : Fin (n + 2)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 3)) (j : 有限集 (n + 2)) (h : j.castSucc < i)
   证明: by
   obtain ⟨i, rfl⟩ := Fin.eq_succ_of_ne_zero (Fin.ne_zero_of_lt h)
   rw [Fin.pred_succ]
@@ -200,7 +200,7 @@ lemma σ_comp_toMk₁_of_le
 
 中文:
 引理 σ_comp_toMk₁_of_le
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : i <= j.castSucc)
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   change toMk₁ i (j.predAbove k) = _
@@ -244,7 +244,7 @@ lemma σ_comp_toMk₁_of_lt
 
 中文:
 引理 σ_comp_toMk₁_of_lt
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : j.castSucc < i)
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   change toMk₁ i (j.predAbove k) = _
@@ -291,7 +291,7 @@ lemma toMk₁_injective
 中文:
 引理 toMk₁_injective
   条件: {n : 自然数}
-  结论: Function.Injective (toMk₁ (n := n))
+  结论: 函数.单射 (toMk₁ (n := n))
   证明: by
   intro i j h
   wlog hij : i < j generalizing i j
@@ -328,7 +328,7 @@ lemma toMk₁_surjective
 中文:
 引理 toMk₁_surjective
   条件: {n : 自然数}
-  结论: Function.Surjective (toMk₁ (n := n))
+  结论: 函数.满射 (toMk₁ (n := n))
   证明: by
   intro f
   let S : Finset (Fin (n + 1)) := { i | f i = 1}
@@ -389,7 +389,7 @@ lemma toMk₁_bijective
 中文:
 引理 toMk₁_bijective
   条件: {n : 自然数}
-  结论: Function.Bijective (toMk₁ (n := n))
+  结论: 函数.双射 (toMk₁ (n := n))
   证明: ⟨toMk₁_injective, toMk₁_surjective⟩
 -/
 lemma toMk₁_bijective {n : Nat} : Function.Bijective (toMk₁ (n := n)) :=

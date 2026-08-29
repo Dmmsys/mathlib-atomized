@@ -89,7 +89,7 @@ lemma mulSupport_max
 
 中文:
 引理 mulSupport_max
-  条件: [LinearOrder M] (f g : α -> M)
+  条件: [线性序 M] (f g : α -> M)
   证明: mulSupport_sup f g
 
 @[to_additive]
@@ -112,7 +112,7 @@ lemma mulSupport_min
 
 中文:
 引理 mulSupport_min
-  条件: [LinearOrder M] (f g : α -> M)
+  条件: [线性序 M] (f g : α -> M)
   证明: mulSupport_inf f g
 
 @[to_additive]
@@ -138,7 +138,7 @@ lemma mulSupport_iSup
 
 中文:
 引理 mulSupport_iSup
-  条件: [ConditionallyCompleteLattice M] [Nonempty ι] (f : ι -> α -> M)
+  条件: [条件完备格 M] [非空 ι] (f : ι -> α -> M)
   证明: by
   simp only [mulSupport_subset_iff', mem_iUnion, not_exists, notMem_mulSupport]
   intro x hx
@@ -165,7 +165,7 @@ lemma mulSupport_iInf
 
 中文:
 引理 mulSupport_iInf
-  条件: [ConditionallyCompleteLattice M] [Nonempty ι] (f : ι -> α -> M)
+  条件: [条件完备格 M] [非空 ι] (f : ι -> α -> M)
   证明: mulSupport_iSup (M := Mᵒᵈ) f
 
 Depends on / 依赖: mulSupport_iSup
@@ -549,7 +549,7 @@ lemma indicator_le_indicator_nonneg
 
 中文:
 引理 indicator_le_indicator_nonneg
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   证明: by
   intro a
   classical
@@ -577,7 +577,7 @@ lemma indicator_nonpos_le_indicator
 
 中文:
 引理 indicator_nonpos_le_indicator
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   证明: indicator_le_indicator_nonneg (M := Mᵒᵈ) _ _
 
 Depends on / 依赖: indicator_le_indicator_nonneg
@@ -609,7 +609,7 @@ lemma mulIndicator_iUnion_apply
 
 中文:
 引理 mulIndicator_iUnion_apply
-  条件: (h1 : (⊥ : M) = 1) (s : ι -> Set α) (f : α -> M) (x : α)
+  条件: (h1 : (⊥ : M) = 1) (s : ι -> 集合 α) (f : α -> M) (x : α)
   证明: by
   by_cases hx : x in ⋃ i, s i
   · rw [mulIndicator_of_mem hx]
@@ -652,8 +652,8 @@ lemma mulIndicator_iInter_apply
     simpa [mulIndicator_of_notMem hj] using (iInf_le (fun i => (
 
 中文:
-引理 mulIndicator_iInter_apply
-  条件: (h1 : (⊥ : M) = 1) (s : ι -> Set α) (f : α -> M) (x : α)
+引理 mulIndicator_i整数er_apply
+  条件: (h1 : (⊥ : M) = 1) (s : ι -> 集合 α) (f : α -> M) (x : α)
   证明: by
   by_cases hx : x in ⋂ i, s i
   · simp_all
@@ -693,7 +693,7 @@ lemma iSup_mulIndicator
 
 中文:
 引理 iSup_mulIndicator
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι] {f : ι -> α -> M}
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι] {f : ι -> α -> M}
   证明: by
   simp only [le_antisymm_iff, iSup_le_iff]
   refine ⟨fun i => ?_, fun a => ?_⟩
@@ -742,7 +742,7 @@ lemma mulIndicator_le_self
 
 中文:
 引理 mulIndicator_le_self
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   结论: mulIndicator s f <= f
   证明: mulIndicator_le_self' fun _ _ => one_le
 
@@ -766,7 +766,7 @@ lemma mulIndicator_apply_le
 
 中文:
 引理 mulIndicator_apply_le
-  条件: {a : α} {s : Set α} {f g : α -> M} (hfg : a in s -> f a <= g a)
+  条件: {a : α} {s : 集合 α} {f g : α -> M} (hfg : a in s -> f a <= g a)
   证明: mulIndicator_apply_le' hfg fun _ => one_le
 
 @[to_additive]
@@ -788,7 +788,7 @@ lemma mulIndicator_le
 
 中文:
 引理 mulIndicator_le
-  条件: {s : Set α} {f g : α -> M} (hfg : 对任意 a in s, f a <= g a)
+  条件: {s : 集合 α} {f g : α -> M} (hfg : 对任意 a in s, f a <= g a)
   证明: mulIndicator_le' hfg fun _ _ => one_le
 
 Depends on / 依赖: mulIndicator_le, one_le
@@ -815,7 +815,7 @@ lemma mabs_mulIndicator_symmDiff
 
 中文:
 引理 mabs_mulIndicator_symmDiff
-  条件: (s t : Set α) (f : α -> M) (x : α)
+  条件: (s t : 集合 α) (f : α -> M) (x : α)
   证明: apply_mulIndicator_symmDiff mabs_inv s t f x
 
 Depends on / 依赖: apply_mulIndicator_symmDiff, mabs_inv

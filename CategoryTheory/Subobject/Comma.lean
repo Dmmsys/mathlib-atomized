@@ -64,7 +64,7 @@ definition projectSubobject
 
 中文:
 定义 projectSubobject
-  签名: [HasFiniteLimits C] [PreservesFiniteLimits T] {A : StructuredArrow S T}
+  签名: [有有限极限 C] [保持FiniteLimits T] {A : 结构化箭头 S T}
   定义体: by
   refine Subobject.lift (fun P f hf => Subobject.mk f.right) ?_
   intro P Q f g hf hg i hi
@@ -93,7 +93,7 @@ theorem projectSubobject_mk
 
 中文:
 定理 projectSubobject_mk
-  结论: [HasFiniteLimits C] [PreservesFiniteLimits T]
+  结论: [有有限极限 C] [保持FiniteLimits T]
   证明: rfl
 -/
 theorem projectSubobject_mk [HasFiniteLimits C] [PreservesFiniteLimits T]
@@ -113,7 +113,7 @@ theorem projectSubobject_factors
 
 中文:
 定理 projectSubobject_factors
-  结论: [HasFiniteLimits C] [PreservesFiniteLimits T]
+  结论: [有有限极限 C] [保持FiniteLimits T]
   证明: Subobject.ind _ fun P f hf =>
     ⟨P.hom ≫ T.map (Subobject.underlyingIso _).inv, by simp [← T.map_comp]⟩
 
@@ -140,7 +140,7 @@ definition liftSubobject
 
 中文:
 定义 liftSubobject
-  签名: {A : StructuredArrow S T} (P : Subobject A.right) {q}
+  签名: {A : 结构化箭头 S T} (P : Subobject A.right) {q}
   定义体: Subobject.mk (homMk P.arrow hq : mk q ⟶ A)
 
 Depends on / 依赖: P.arrow, Subobject, Subobject.mk
@@ -167,7 +167,7 @@ theorem lift_projectSubobject
 
 中文:
 定理 lift_projectSubobject
-  结论: [HasFiniteLimits C] [PreservesFiniteLimits T]
+  结论: [有有限极限 C] [保持FiniteLimits T]
   证明: Subobject.ind _
     (by
       intro P f hf q hq
@@ -209,7 +209,7 @@ definition subobjectEquiv
 
 中文:
 定义 subobjectEquiv
-  签名: [HasFiniteLimits C] [PreservesFiniteLimits T] (A : StructuredArrow S T)
+  签名: [有有限极限 C] [保持FiniteLimits T] (A : 结构化箭头 S T)
   定义体: ⟨projectSubobject P, projectSubobject_factors P⟩
   invFun P := liftSubobject P.val P.prop.choose_spec
   left_inv _ := lift_projectSubobject _ _
@@ -280,7 +280,7 @@ definition projectQuotient
 
 中文:
 定义 projectQuotient
-  签名: [HasFiniteColimits C] [PreservesFiniteColimits S] {A : CostructuredArrow S T}
+  签名: [有有限余极限 C] [保持FiniteColimits S] {A : CostructuredArrow S T}
   定义体: by
   refine Subobject.lift (fun P f hf => Subobject.mk f.unop.left.op) ?_
   intro P Q f g hf hg i hi
@@ -311,7 +311,7 @@ theorem projectQuotient_mk
 
 中文:
 定理 projectQuotient_mk
-  结论: [HasFiniteColimits C] [PreservesFiniteColimits S]
+  结论: [有有限余极限 C] [保持FiniteColimits S]
   证明: rfl
 -/
 theorem projectQuotient_mk [HasFiniteColimits C] [PreservesFiniteColimits S]
@@ -336,7 +336,7 @@ theorem projectQuotient_factors
 
 中文:
 定理 projectQuotient_factors
-  结论: [HasFiniteColimits C] [PreservesFiniteColimits S]
+  结论: [有有限余极限 C] [保持FiniteColimits S]
   证明: Subobject.ind _ fun P f hf =>
     ⟨S.map (Subobject.underlyingIso _).unop.inv ≫ P.unop.hom, by
       dsimp
@@ -431,7 +431,7 @@ theorem lift_projectQuotient
 
 中文:
 定理 lift_projectQuotient
-  结论: [HasFiniteColimits C] [PreservesFiniteColimits S]
+  结论: [有有限余极限 C] [保持FiniteColimits S]
   证明: Subobject.ind _
     (by
       intro P f hf q hq
@@ -508,7 +508,7 @@ definition quotientEquiv
 
 中文:
 定义 quotientEquiv
-  签名: [HasFiniteColimits C] [PreservesFiniteColimits S] (A : CostructuredArrow S T)
+  签名: [有有限余极限 C] [保持FiniteColimits S] (A : CostructuredArrow S T)
   定义体: ⟨projectQuotient P, projectQuotient_factors P⟩
   invFun P := liftQuotient P.val P.prop.choose_spec
   left_inv _ := lift_projectQuotient _ _
@@ -553,7 +553,7 @@ instance well_copowered_costructuredArrow
 
 中文:
 实例 well_copowered_costructuredArrow
-  签名: [LocallySmall.{w} C] [WellPowered.{w} Cᵒᵖ]
+  签名: [LocallySmall.{w} C] [良幂.{w} Cᵒᵖ]
   定义体: small_map (quotientEquiv (unop X)).toEquiv
 
 Depends on / 依赖: quotientEquiv, small_map, toEquiv

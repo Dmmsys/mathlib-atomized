@@ -32,8 +32,8 @@ class IsSuccArchimedean
     - exists_succ_iterate_of_le({a b : α} (h : a <= b)) : exists n, succ^[n] a = b
 
 中文:
-类 IsSuccArchimedean
-  参数: (α : 类型) [Preorder α] [SuccOrder α]
+类 是SuccArchimedean
+  参数: (α : 类型) [预序 α] [Succ序 α]
   公理与运算 (1 个):
     - exists_succ_iterate_of_le({a b : α} (h : a <= b)) : 存在 n, succ^[n] a = b
 -/
@@ -54,8 +54,8 @@ class IsPredArchimedean
     - exists_pred_iterate_of_le({a b : α} (h : a <= b)) : exists n, pred^[n] b = a
 
 中文:
-类 IsPredArchimedean
-  参数: (α : 类型) [Preorder α] [PredOrder α]
+类 是PredArchimedean
+  参数: (α : 类型) [预序 α] [Pred序 α]
   公理与运算 (1 个):
     - exists_pred_iterate_of_le({a b : α} (h : a <= b)) : 存在 n, pred^[n] b = a
 -/
@@ -82,8 +82,8 @@ instance [SuccOrder
 @[to_dual existing]
 
 中文:
-实例 [SuccOrder
-  签名: α] [IsSuccArchimedean α] : IsPredArchimedean αᵒᵈ
+实例 [Succ序
+  签名: α] [是SuccArchimedean α] : 是PredArchimedean αᵒᵈ
   定义体: ⟨fun {a b} h => by convert! exists_succ_iterate_of_le h.ofDual⟩
 
 @[to_dual existing]
@@ -103,8 +103,8 @@ instance [PredOrder
   body: ⟨fun {a b} h => by convert! exists_pred_iterate_of_le h.ofDual⟩
 
 中文:
-实例 [PredOrder
-  签名: α] [IsPredArchimedean α] : IsSuccArchimedean αᵒᵈ
+实例 [Pred序
+  签名: α] [是PredArchimedean α] : 是SuccArchimedean αᵒᵈ
   定义体: ⟨fun {a b} h => by convert! exists_pred_iterate_of_le h.ofDual⟩
 
 Depends on / 依赖: convert, exists_pred_iterate_of_le, h.ofDual, ofDual
@@ -129,7 +129,7 @@ theorem LE.le.exists_succ_iterate
 @[to_dual]
 
 中文:
-定理 LE.le.exists_succ_iterate
+定理 LE.le.存在_succ_iterate
   条件: (h : a <= b)
   结论: 存在 n, succ^[n] a = b
   证明: exists_succ_iterate_of_le h
@@ -154,7 +154,7 @@ theorem exists_succ_iterate_iff_le
   exact id_le_iterate_of_id_le le_succ n a
 
 中文:
-定理 exists_succ_iterate_iff_le
+定理 存在_succ_iterate_iff_le
   结论: (存在 n, succ^[n] a = b) ↔ a <= b
   证明: by
   refine ⟨?_, exists_succ_iterate_of_le⟩
@@ -317,7 +317,7 @@ lemma lt_or_le_of_codirected
 
 中文:
 引理 lt_or_le_of_codirected
-  结论: [SuccOrder α] [IsSuccArchimedean α] {r v₁ v₂ : α} (h₁ : r <= v₁)
+  结论: [Succ序 α] [是SuccArchimedean α] {r v₁ v₂ : α} (h₁ : r <= v₁)
   证明: by
   rw [Classical.or_iff_not_imp_right]
   intro nh
@@ -350,8 +350,8 @@ abbreviation IsSuccArchimedean.linearOrder
   toDecidableLT := inferInstance
 
 中文:
-缩写 IsSuccArchimedean.linearOrder
-  签名: [SuccOrder α] [IsSuccArchimedean α]
+缩写 是SuccArchimedean.linearOrder
+  签名: [Succ序 α] [是SuccArchimedean α]
   定义体: have ⟨c, ha, hb⟩ := directed_of (· >= ·) a b
     le_total_of_codirected ha hb
   toDecidableEq := inferInstance
@@ -385,8 +385,8 @@ abbreviation IsPredArchimedean.linearOrder
   inferInstanceAs (LinearOrder αᵒᵈᵒᵈ)
 
 中文:
-缩写 IsPredArchimedean.linearOrder
-  签名: [PredOrder α] [IsPredArchimedean α]
+缩写 是PredArchimedean.linearOrder
+  签名: [Pred序 α] [是PredArchimedean α]
   定义体: letI : LinearOrder αᵒᵈ := IsSuccArchimedean.linearOrder
   inferInstanceAs (LinearOrder αᵒᵈᵒᵈ)
 
@@ -427,7 +427,7 @@ theorem exists_succ_iterate_or
 @[to_dual Pred.rec_linear]
 
 中文:
-定理 exists_succ_iterate_or
+定理 存在_succ_iterate_or
   结论: (存在 n, succ^[n] a = b) ∨ 存在 n, succ^[n] b = a
   证明: (le_total a b).imp exists_succ_iterate_of_le exists_succ_iterate_of_le
 
@@ -483,8 +483,8 @@ have hm' : forall a, f a <= m := fun a => hm Set.mem_range_self _
   have h : forall a, exists a', f a < f a' 
 
 中文:
-引理 StrictMono.not_bddAbove_range_of_isSuccArchimedean
-  结论: [NoMaxOrder α] [SuccOrder β]
+引理 严格递增.not_bddAbove_range_of_isSuccArchimedean
+  结论: [NoMax序 α] [Succ序 β]
   证明: by
   rintro ⟨m, hm⟩
 have hm' : forall a, f a <= m := fun a => hm Set.mem_range_self _
@@ -524,8 +524,8 @@ alias StrictMono.not_bddBelow_range_of_isSuccArchimedean :=
   StrictMono.not_bddAbove_range_of_isSuccArchimedean
 
 中文:
-引理 StrictAnti.not_bddAbove_range_of_isSuccArchimedean
-  结论: [NoMinOrder α] [SuccOrder β]
+引理 严格递减.not_bddAbove_range_of_isSuccArchimedean
+  结论: [NoMin序 α] [Succ序 β]
   证明: hf.dual_right.not_bddBelow_range_of_isPredArchimedean
 
 @[deprecated (since := "2026-02-05")]
@@ -613,7 +613,7 @@ lemma SuccOrder.forall_ne_bot_iff
   simp only [Function.iterate_succ', Function.comp_appl
 
 中文:
-引理 SuccOrder.forall_ne_bot_iff
+引理 Succ序.对任意_ne_bot_iff
   证明: by
   refine ⟨fun h i => h _ (Order.succ_ne_bot i), fun h i hi => ?_⟩
   obtain ⟨j, rfl⟩ := exists_succ_iterate_of_le (bot_le : ⊥ <= i)
@@ -659,8 +659,8 @@ lemma BddAbove.exists_isGreatest_of_nonempty
   replace hm 
 
 中文:
-引理 BddAbove.exists_isGreatest_of_nonempty
-  结论: {X : 类型} [LinearOrder X] [SuccOrder X]
+引理 BddAbove.存在_isGreatest_of_nonempty
+  结论: {X : 类型} [线性序 X] [Succ序 X]
   证明: by
   obtain ⟨m, hm⟩ := hS
   obtain ⟨n, hn⟩ := hS'
@@ -724,8 +724,8 @@ lemma IsSuccArchimedean.of_orderIso
     | succ n IH => simp only [Function.iterate_succ', Functio
 
 中文:
-引理 IsSuccArchimedean.of_orderIso
-  结论: [SuccOrder X] [IsSuccArchimedean X] [SuccOrder Y]
+引理 是SuccArchimedean.of_orderIso
+  结论: [Succ序 X] [是SuccArchimedean X] [Succ序 Y]
   证明: by
     refine (exists_succ_iterate_of_le ((map_inv_le_map_inv_iff f).mpr h)).imp ?_
     intro n
@@ -769,8 +769,8 @@ lemma IsPredArchimedean.of_orderIso
     | succ n IH => simp only [Function.iterate_succ', Functio
 
 中文:
-引理 IsPredArchimedean.of_orderIso
-  结论: [PredOrder X] [IsPredArchimedean X] [PredOrder Y]
+引理 是PredArchimedean.of_orderIso
+  结论: [Pred序 X] [是PredArchimedean X] [Pred序 Y]
   证明: by
     refine (exists_pred_iterate_of_le ((map_inv_le_map_inv_iff f).mpr h)).imp ?_
     intro n
@@ -816,8 +816,8 @@ instance Set.OrdConnected.isPredArchimedean
       change Order.p
 
 中文:
-实例 Set.OrdConnected.isPredArchimedean
-  签名: [PredOrder α] [IsPredArchimedean α]
+实例 集合.序连通.isPredArchimedean
+  签名: [Pred序 α] [是PredArchimedean α]
   定义体: @fun ⟨b, hb⟩ ⟨c, hc⟩ hbc => by classical
     simp only [Subtype.mk_le_mk] at hbc
     obtain ⟨n, hn⟩ := hbc.exists_pred_iterate
@@ -865,8 +865,8 @@ instance Set.OrdConnected.isSuccArchimedean
   inferInstanceAs (IsSuccArchimedean sᵒᵈᵒᵈ)
 
 中文:
-实例 Set.OrdConnected.isSuccArchimedean
-  签名: [SuccOrder α] [IsSuccArchimedean α]
+实例 集合.序连通.isSuccArchimedean
+  签名: [Succ序 α] [是SuccArchimedean α]
   定义体: letI : IsPredArchimedean sᵒᵈ := inferInstanceAs (IsPredArchimedean (OrderDual.ofDual ⁻¹' s))
   inferInstanceAs (IsSuccArchimedean sᵒᵈᵒᵈ)
 
@@ -905,7 +905,7 @@ lemma monotoneOn_of_le_succ
 
 中文:
 引理 monotoneOn_of_le_succ
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: by
   rintro a ha b hb hab
   obtain ⟨n, rfl⟩ := exists_succ_iterate_of_le hab
@@ -945,7 +945,7 @@ lemma antitoneOn_of_succ_le
 
 中文:
 引理 antitoneOn_of_succ_le
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: monotoneOn_of_le_succ (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: monotoneOn_of_le_succ
@@ -974,7 +974,7 @@ lemma strictMonoOn_of_lt_succ
 
 中文:
 引理 strictMonoOn_of_lt_succ
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: by
   rintro a ha b hb hab
   obtain ⟨n, rfl⟩ := exists_succ_iterate_of_le hab.le
@@ -1016,7 +1016,7 @@ lemma strictAntiOn_of_succ_lt
 
 中文:
 引理 strictAntiOn_of_succ_lt
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: strictMonoOn_of_lt_succ (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: strictMonoOn_of_lt_succ
@@ -1038,7 +1038,7 @@ lemma monotone_of_le_succ
 中文:
 引理 monotone_of_le_succ
   条件: (hf : 对任意 a, ¬ IsMax a -> f a <= f (succ a))
-  结论: Monotone f
+  结论: 递增 f
   证明: by
   simpa using monotoneOn_of_le_succ Set.ordConnected_univ (by simpa using hf)
 
@@ -1060,7 +1060,7 @@ lemma antitone_of_succ_le
 中文:
 引理 antitone_of_succ_le
   条件: (hf : 对任意 a, ¬ IsMax a -> f (succ a) <= f a)
-  结论: Antitone f
+  结论: 递减 f
   证明: by
   simpa using antitoneOn_of_succ_le Set.ordConnected_univ (by simpa using hf)
 
@@ -1082,7 +1082,7 @@ lemma strictMono_of_lt_succ
 中文:
 引理 strictMono_of_lt_succ
   条件: (hf : 对任意 a, ¬ IsMax a -> f a < f (succ a))
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: by
   simpa using strictMonoOn_of_lt_succ Set.ordConnected_univ (by simpa using hf)
 
@@ -1104,7 +1104,7 @@ lemma strictAnti_of_succ_lt
 中文:
 引理 strictAnti_of_succ_lt
   条件: (hf : 对任意 a, ¬ IsMax a -> f (succ a) < f a)
-  结论: StrictAnti f
+  结论: 严格递减 f
   证明: by
   simpa using strictAntiOn_of_succ_lt Set.ordConnected_univ (by simpa using hf)
 
@@ -1138,7 +1138,7 @@ lemma monotoneOn_of_pred_le
 
 中文:
 引理 monotoneOn_of_pred_le
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: by
   rintro a ha b hb hab
   obtain ⟨n, rfl⟩ := exists_pred_iterate_of_le hab
@@ -1178,7 +1178,7 @@ lemma antitoneOn_of_le_pred
 
 中文:
 引理 antitoneOn_of_le_pred
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: monotoneOn_of_pred_le (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: monotoneOn_of_pred_le
@@ -1207,7 +1207,7 @@ lemma strictMonoOn_of_pred_lt
 
 中文:
 引理 strictMonoOn_of_pred_lt
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: by
   rintro a ha b hb hab
   obtain ⟨n, rfl⟩ := exists_pred_iterate_of_le hab.le
@@ -1249,7 +1249,7 @@ lemma strictAntiOn_of_lt_pred
 
 中文:
 引理 strictAntiOn_of_lt_pred
-  结论: (hs : s.OrdConnected)
+  结论: (hs : s.序连通)
   证明: strictMonoOn_of_pred_lt (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: strictMonoOn_of_pred_lt
@@ -1271,7 +1271,7 @@ lemma monotone_of_pred_le
 中文:
 引理 monotone_of_pred_le
   条件: (hf : 对任意 a, ¬ IsMin a -> f (pred a) <= f a)
-  结论: Monotone f
+  结论: 递增 f
   证明: by
   simpa using monotoneOn_of_pred_le Set.ordConnected_univ (by simpa using hf)
 
@@ -1293,7 +1293,7 @@ lemma antitone_of_le_pred
 中文:
 引理 antitone_of_le_pred
   条件: (hf : 对任意 a, ¬ IsMin a -> f a <= f (pred a))
-  结论: Antitone f
+  结论: 递减 f
   证明: by
   simpa using antitoneOn_of_le_pred Set.ordConnected_univ (by simpa using hf)
 
@@ -1315,7 +1315,7 @@ lemma strictMono_of_pred_lt
 中文:
 引理 strictMono_of_pred_lt
   条件: (hf : 对任意 a, ¬ IsMin a -> f (pred a) < f a)
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: by
   simpa using strictMonoOn_of_pred_lt Set.ordConnected_univ (by simpa using hf)
 
@@ -1337,7 +1337,7 @@ lemma strictAnti_of_lt_pred
 中文:
 引理 strictAnti_of_lt_pred
   条件: (hf : 对任意 a, ¬ IsMin a -> f a < f (pred a))
-  结论: StrictAnti f
+  结论: 严格递减 f
   证明: by
   simpa using strictAntiOn_of_lt_pred Set.ordConnected_univ (by simpa using hf)
 

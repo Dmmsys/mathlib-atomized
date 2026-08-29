@@ -34,8 +34,8 @@ abbreviation Ideal.ResidueField
   body: IsLocalRing.ResidueField (Localization.AtPrime I)
 
 中文:
-缩写 Ideal.ResidueField
-  签名: : Type _
+缩写 理想.ResidueField
+  签名: : 类型 _
   定义体: IsLocalRing.ResidueField (Localization.AtPrime I)
 
 Depends on / 依赖: AtPrime, IsLocalRing, IsLocalRing.ResidueField, Localization, Localization.AtPrime, ResidueField
@@ -56,8 +56,8 @@ abbreviation Ideal.ResidueField.map
 @[simp]
 
 中文:
-缩写 Ideal.ResidueField.map
-  签名: (I : Ideal R) [I.IsPrime] (J : Ideal S) [J.IsPrime]
+缩写 理想.ResidueField.map
+  签名: (I : 理想 R) [I.是素] (J : 理想 S) [J.是素]
   定义体: IsLocalRing.ResidueField.map (Localization.localRingHom I J f hf)
 
 @[simp]
@@ -81,8 +81,8 @@ lemma Ideal.ResidueField.map_algebraMap
   rfl
 
 中文:
-引理 Ideal.ResidueField.map_algebraMap
-  结论: (I : Ideal R) [I.IsPrime] (J : Ideal S) [J.IsPrime]
+引理 理想.ResidueField.map_algebraMap
+  结论: (I : 理想 R) [I.是素] (J : 理想 S) [J.是素]
   证明: by
   rw [IsScalarTower.algebraMap_apply R (Localization.AtPrime I)]
   simp [IsLocalRing.ResidueField.map_residue, Localization.localRingHom_to_map]
@@ -108,7 +108,7 @@ lemma RingHom.SurjectiveOnStalks.residueFieldMap_bijective
     (Ideal.Quotient.mk_surjective.comp (H J ‹_›))⟩
 
 中文:
-引理 RingHom.SurjectiveOnStalks.residueFieldMap_bijective
+引理 环态射.SurjectiveOnStalks.residueFieldMap_bijective
   证明: by
   subst hf
   exact ⟨RingHom.injective _, Ideal.Quotient.lift_surjective_of_surjective _ _
@@ -139,8 +139,8 @@ definition Ideal.ResidueField.mapₐ
       IsScalarTower.algebraMap_apply R B J.ResidueField]
 
 中文:
-定义 Ideal.ResidueField.mapₐ
-  签名: (I : Ideal A) [I.IsPrime] (J : Ideal B) [J.IsPrime]
+定义 理想.ResidueField.mapₐ
+  签名: (I : 理想 A) [I.是素] (J : 理想 B) [J.是素]
   定义体: Ideal.ResidueField.map I J f hf
   commutes' r := by
     simp [IsScalarTower.algebraMap_apply R A I.ResidueField,
@@ -164,8 +164,8 @@ lemma Ideal.ResidueField.mapₐ_apply
   proof: rfl
 
 中文:
-引理 Ideal.ResidueField.mapₐ_apply
-  结论: (I : Ideal A) [I.IsPrime] (J : Ideal B) [J.IsPrime]
+引理 理想.ResidueField.mapₐ_apply
+  结论: (I : 理想 A) [I.是素] (J : 理想 B) [J.是素]
   证明: rfl
 -/
 @[simp] lemma Ideal.ResidueField.mapₐ_apply (I : Ideal A) [I.IsPrime] (J : Ideal B) [J.IsPrime]
@@ -187,7 +187,7 @@ lemma Ideal.algebraMap_residueField_eq_zero
 @[simp high] -- marked `high` to override the more general `FaithfulSMul.ker_algebraMap_
 
 中文:
-引理 Ideal.algebraMap_residueField_eq_zero
+引理 理想.algebraMap_residueField_eq_zero
   条件: {x}
   证明: by
   rw [IsScalarTower.algebraMap_apply R (Localization.AtPrime I)]; rw [IsLocalRing.ResidueField.algebraMap_eq]; rw [IsLocalRing.residue_eq_zero_iff]
@@ -211,7 +211,7 @@ lemma Ideal.ker_algebraMap_residueField
   proof: Ideal.ext fun _ => Ideal.algebraMap_residueField_eq_zero
 
 中文:
-引理 Ideal.ker_algebraMap_residueField
+引理 理想.ker_algebraMap_residueField
   证明: Ideal.ext fun _ => Ideal.algebraMap_residueField_eq_zero
 
 Depends on / 依赖: Ideal.algebraMap_residueField_eq_zero, Ideal.ext, algebraMap_residueField_eq_zero
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (R ⧸ I) I.ResidueField
+  签名: 代数 (R ⧸ I) I.ResidueField
   定义体: (Ideal.Quotient.liftₐ I (Algebra.ofId _ _)
     fun _ => Ideal.algebraMap_residueField_eq_zero.mpr).toRingHom.toAlgebra
 
@@ -258,7 +258,7 @@ lemma Ideal.algebraMap_quotient_residueField_mk
   proof: rfl
 
 中文:
-引理 Ideal.algebraMap_quotient_residueField_mk
+引理 理想.algebraMap_quotient_residueField_mk
   条件: (x)
   证明: rfl
 -/
@@ -278,7 +278,7 @@ lemma Ideal.injective_algebraMap_quotient_residueField
   rw [Ideal.ker_algebraMap_residueField]; rw [map_quotient_self]
 
 中文:
-引理 Ideal.injective_algebraMap_quotient_residueField
+引理 理想.injective_algebraMap_quotient_residueField
   证明: by
   rw [RingHom.injective_iff_ker_eq_bot]
   refine (Ideal.ker_quotient_lift _ _).trans ?_
@@ -347,7 +347,7 @@ instance [IsDomain
     (MulEquivClass.map_nonZeroDivisors (RingEquiv.quotientBot R).symm) (by simp)
 
 中文:
-实例 [IsDomain
+实例 [是整环
   签名: R] : IsFractionRing R (⊥
   定义体: IsLocalization.of_ringEquiv_left (RingEquiv.quotientBot R).symm
     (MulEquivClass.map_nonZeroDivisors (RingEquiv.quotientBot R).symm) (by simp)
@@ -367,8 +367,8 @@ instance [Finite
   body: IsLocalization.finite (R ⧸ I) (nonZeroDivisors (R ⧸ I))
 
 中文:
-实例 [Finite
-  签名: (R ⧸ I)] : Finite I.ResidueField
+实例 [有限
+  签名: (R ⧸ I)] : 有限 I.ResidueField
   定义体: IsLocalization.finite (R ⧸ I) (nonZeroDivisors (R ⧸ I))
 
 Depends on / 依赖: IsLocalization, IsLocalization.finite, finite, nonZeroDivisors
@@ -386,8 +386,8 @@ lemma Ideal.bijective_algebraMap_quotient_residueField
     ((Quotient.maximal_ideal_iff_isField_quotient I).mp inferInstance)⟩
 
 中文:
-引理 Ideal.bijective_algebraMap_quotient_residueField
-  条件: (I : Ideal R) [I.IsMaximal]
+引理 理想.bijective_algebraMap_quotient_residueField
+  条件: (I : 理想 R) [I.是极大]
   证明: ⟨I.injective_algebraMap_quotient_residueField, IsFractionRing.surjective_iff_isField.mpr
     ((Quotient.maximal_ideal_iff_isField_quotient I).mp inferInstance)⟩
 
@@ -409,8 +409,8 @@ lemma Ideal.algebraMap_residueField_surjective
   exact I.bijective_algebraMap_quotient_residueField.surjective.comp Ideal.Quotient.mk_surjective
 
 中文:
-引理 Ideal.algebraMap_residueField_surjective
-  条件: (I : Ideal R) [I.IsMaximal]
+引理 理想.algebraMap_residueField_surjective
+  条件: (I : 理想 R) [I.是极大]
   证明: by
   rw [IsScalarTower.algebraMap_eq R (R ⧸ I) _]
   exact I.bijective_algebraMap_quotient_residueField.surjective.comp Ideal.Quotient.mk_surjective
@@ -438,8 +438,8 @@ definition Ideal.algEquivResidueFieldOfField
 @[simp]
 
 中文:
-定义 Ideal.algEquivResidueFieldOfField
-  签名: {k : 类型} [Field k]
+定义 理想.algEquivResidueFieldOfField
+  签名: {k : 类型} [域 k]
   定义体: AlgEquiv.ofBijective (Algebra.ofId k _) ⟨RingHom.injective _,
     haveI : p.IsMaximal := by simpa [p.eq_bot_of_prime] using Ideal.bot_isMaximal
     p.algebraMap_residueField_surjective⟩
@@ -464,8 +464,8 @@ lemma Ideal.algEquivResidueFieldOfField_apply
   proof: rfl
 
 中文:
-引理 Ideal.algEquivResidueFieldOfField_apply
-  结论: {k : 类型} [Field k] (p : Ideal k) [p.IsPrime]
+引理 理想.algEquivResidueFieldOfField_apply
+  结论: {k : 类型} [域 k] (p : 理想 k) [p.是素]
   证明: rfl
 -/
 lemma Ideal.algEquivResidueFieldOfField_apply {k : Type*} [Field k] (p : Ideal k) [p.IsPrime]
@@ -482,8 +482,8 @@ lemma Ideal.surjectiveOnStalks_residueField
     (RingHom.surjectiveOnStalks_of_isLocalization I.primeCompl _)
 
 中文:
-引理 Ideal.surjectiveOnStalks_residueField
-  条件: (I : Ideal R) [I.IsPrime]
+引理 理想.surjectiveOnStalks_residueField
+  条件: (I : 理想 R) [I.是素]
   证明: (RingHom.surjectiveOnStalks_of_surjective Ideal.Quotient.mk_surjective).comp
     (RingHom.surjectiveOnStalks_of_isLocalization I.primeCompl _)
 
@@ -514,7 +514,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (algebraMap (Localization.AtPrime I) (Localization.AtPrime J))
+  签名: 是Local态射 (algebraMap (Localization.AtPrime I) (Localization.AtPrime J))
   定义体: by
   rw [IsLiesOverAlgebra.algebraMap_eq]
   exact isLocalHom_localRingHom _ _ _ (J.over_def I)
@@ -534,7 +534,7 @@ definition Ideal.residueFieldRingEquiv
   body: IsLocalRing.ResidueField.mapEquiv (localRingEquiv J K f h)
 
 中文:
-定义 Ideal.residueFieldRingEquiv
+定义 理想.residueFieldRingEquiv
   签名: (f : A ≃+* B) (h : J = K.comap f)
   定义体: IsLocalRing.ResidueField.mapEquiv (localRingEquiv J K f h)
 
@@ -553,7 +553,7 @@ abbreviation Ideal.residueFieldAlgEquiv
   body: IsLocalRing.ResidueField.mapAlgEquiv (localAlgEquiv J K f h)
 
 中文:
-缩写 Ideal.residueFieldAlgEquiv
+缩写 理想.residueFieldAlgEquiv
   签名: (f : A ≃ₐ[R] B) (h : J = K.comap f)
   定义体: IsLocalRing.ResidueField.mapAlgEquiv (localAlgEquiv J K f h)
 
@@ -572,7 +572,7 @@ abbreviation Ideal.residueFieldAlgEquiv'
   body: IsLocalRing.ResidueField.mapAlgEquiv' (localAlgEquiv' I J K f h)
 
 中文:
-缩写 Ideal.residueFieldAlgEquiv'
+缩写 理想.residueFieldAlgEquiv'
   签名: (f : A ≃ₐ[R] B) (h : J = K.comap f)
   定义体: IsLocalRing.ResidueField.mapAlgEquiv' (localAlgEquiv' I J K f h)
 
@@ -598,7 +598,7 @@ instance [Algebra.EssFiniteType
   refine .of_comp R _ _
 
 中文:
-实例 [Algebra.EssFiniteType
+实例 [代数.EssFiniteType
   签名: R A]
   定义体: by
   have : Algebra.EssFiniteType R q.ResidueField := .comp _ A _
@@ -623,7 +623,7 @@ definition Ideal.ResidueField.lift
     simpa [Ideal.Quotient.mk_surjective.forall, Ideal.Quotient.eq_zero_iff_mem]
 
 中文:
-定义 Ideal.ResidueField.lift
+定义 理想.ResidueField.lift
   定义体: IsLocalization.lift (M := (R ⧸ I)⁰) (g := Ideal.Quotient.lift I (f := f) hf₁) by
     simpa [Ideal.Quotient.mk_surjective.forall, Ideal.Quotient.eq_zero_iff_mem]
 
@@ -646,7 +646,7 @@ lemma Ideal.ResidueField.lift_algebraMap
   simp
 
 中文:
-引理 Ideal.ResidueField.lift_algebraMap
+引理 理想.ResidueField.lift_algebraMap
   证明: by
   rw [lift]; rw [IsScalarTower.algebraMap_apply R (R ⧸ I) I.ResidueField]; rw [IsLocalization.lift_eq]
   simp
@@ -672,8 +672,8 @@ definition Ideal.ResidueField.liftₐ
 @[simp]
 
 中文:
-定义 Ideal.ResidueField.liftₐ
-  签名: (I : Ideal A) [I.IsPrime] (f : A ->ₐ[R] B) (hf₁ : I <= RingHom.ker f)
+定义 理想.ResidueField.liftₐ
+  签名: (I : 理想 A) [I.是素] (f : A ->ₐ[R] B) (hf₁ : I <= 环态射.ker f)
   定义体: Ideal.ResidueField.lift I f.toRingHom hf₁ hf₂
   commutes' r := by simp [IsScalarTower.algebraMap_apply R A I.ResidueField]
 
@@ -696,8 +696,8 @@ lemma Ideal.ResidueField.liftₐ_algebraMap
   proof: lift_algebraMap _ _ _ hf₂ _
 
 中文:
-引理 Ideal.ResidueField.liftₐ_algebraMap
-  结论: (I : Ideal A) [I.IsPrime] (f : A ->ₐ[R] B)
+引理 理想.ResidueField.liftₐ_algebraMap
+  结论: (I : 理想 A) [I.是素] (f : A ->ₐ[R] B)
   证明: lift_algebraMap _ _ _ hf₂ _
 
 Depends on / 依赖: lift_algebraMap
@@ -718,8 +718,8 @@ lemma Ideal.ResidueField.liftₐ_comp_toAlgHom
 @[ext high] -- higher than `RingHom.ext`.
 
 中文:
-引理 Ideal.ResidueField.liftₐ_comp_toAlgHom
-  结论: (I : Ideal A) [I.IsPrime] (f : A ->ₐ[R] B)
+引理 理想.ResidueField.liftₐ_comp_toAlgHom
+  结论: (I : 理想 A) [I.是素] (f : A ->ₐ[R] B)
   证明: AlgHom.ext fun _ => liftₐ_algebraMap _ _ _ hf₂ _
 
 @[ext high] -- higher than `RingHom.ext`.
@@ -743,8 +743,8 @@ lemma Ideal.ResidueField.ringHom_ext
 @[ext high] -- higher than `AlgHom.ext`.
 
 中文:
-引理 Ideal.ResidueField.ringHom_ext
-  结论: {I : Ideal R} [I.IsPrime]
+引理 理想.ResidueField.ringHom_ext
+  结论: {I : 理想 R} [I.是素]
   证明: IsLocalization.ringHom_ext (R ⧸ I)⁰ (Ideal.Quotient.ringHom_ext H)
 
 @[ext high] -- higher than `AlgHom.ext`.
@@ -765,8 +765,8 @@ lemma Ideal.ResidueField.algHom_ext
   proof: AlgHom.coe_ringHom_injective (ringHom_ext congr($H))
 
 中文:
-引理 Ideal.ResidueField.algHom_ext
-  结论: {I : Ideal A} [I.IsPrime] {f g : I.ResidueField ->ₐ[R] B}
+引理 理想.ResidueField.algHom_ext
+  结论: {I : 理想 A} [I.是素] {f g : I.ResidueField ->ₐ[R] B}
   证明: AlgHom.coe_ringHom_injective (ringHom_ext congr($H))
 
 Depends on / 依赖: AlgHom, AlgHom.coe_ringHom_injective, coe_ringHom_injective, ringHom_ext
@@ -785,8 +785,8 @@ lemma Ideal.ResidueField.mapₐ_id
   proof: by ext; simp
 
 中文:
-引理 Ideal.ResidueField.mapₐ_id
-  条件: (I : Ideal A) [I.IsPrime]
+引理 理想.ResidueField.mapₐ_id
+  条件: (I : 理想 A) [I.是素]
   证明: by ext; simp
 -/
 @[simp] lemma Ideal.ResidueField.mapₐ_id (I : Ideal A) [I.IsPrime] :

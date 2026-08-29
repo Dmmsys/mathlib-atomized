@@ -43,7 +43,7 @@ definition ringEquivEndForget₂
 
 中文:
 定义 ringEquivEndForget₂
-  签名: (R : 类型u) [Ring R]
+  签名: (R : 类型u) [环 R]
   定义体: ObjectProperty.homMk
       { app M := @AddCommGrpCat.ofHom M.carrier M.carrier _ _
           (DistribSMul.toAddMonoidHom M r) }

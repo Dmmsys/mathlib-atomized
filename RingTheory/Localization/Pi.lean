@@ -67,7 +67,7 @@ theorem iff_map_piEvalRingHom
 
 中文:
 定理 iff_map_piEvalRingHom
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: iff_of_le_of_exists_dvd M _ (fun m hm i _ => ⟨m, hm, rfl⟩) fun n hn => by
     choose m mem eq using hn
     have := Fintype.ofFinite ι
@@ -119,7 +119,7 @@ theorem bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom
 
 中文:
 定理 bijective_lift_piRingHom_algebraMap_comp_piEvalRingHom
-  条件: [IsLocalization M S'] [Finite ι]
+  条件: [是Localization M S'] [有限 ι]
   证明: have := (iff_map_piEvalRingHom R (Π i, S i) M).mpr inferInstance
   (ringEquivOfRingEquiv (M := M) (T := M) _ _ (.refl _) <|
     Submonoid.map_equiv_eq_comap_symm _ _).bijective
@@ -185,7 +185,7 @@ lemma algebraMap_pi_surjective_of_isLocalization
 
 中文:
 引理 algebraMap_pi_surjective_of_isLocalization
-  结论: [对任意 i, Ring.KrullDimLE 0 (R i)]
+  结论: [对任意 i, 环.Krull维数不超过 0 (R i)]
   证明: by
   intro s
   set S := fun (i : ι) => Localization (M.map (Pi.evalRingHom R i))

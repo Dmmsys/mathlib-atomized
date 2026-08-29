@@ -30,8 +30,8 @@ theorem Algebra.leftMulMatrix_complex
       sub_zero
 
 中文:
-定理 Algebra.leftMulMatrix_complex
-  条件: (z : Complex)
+定理 代数.leftMulMatrix_complex
+  条件: (z : 复形)
   证明: by
   ext i j
   rw [Algebra.leftMulMatrix_eq_repr_mul]; rw [Complex.coe_basisOneI_repr]; rw [Complex.coe_basisOneI]; rw [mul_re]; rw [mul_im]; rw [Matrix.of_apply]
@@ -65,9 +65,9 @@ theorem Algebra.trace_complex_apply
   exact (two_mul _).symm
 
 中文:
-定理 Algebra.trace_complex_apply
-  条件: (z : Complex)
-  结论: Algebra.trace 实数 Complex z = 2 * z.re
+定理 代数.trace_complex_apply
+  条件: (z : 复形)
+  结论: 代数.trace 实数 复形 z = 2 * z.re
   证明: by
   rw [Algebra.trace_eq_matrix_trace Complex.basisOneI]; rw [Algebra.leftMulMatrix_complex]; rw [Matrix.trace_fin_two]
   exact (two_mul _).symm
@@ -90,9 +90,9 @@ theorem Algebra.norm_complex_apply
   simp
 
 中文:
-定理 Algebra.norm_complex_apply
-  条件: (z : Complex)
-  结论: Algebra.norm 实数 z = Complex.normSq z
+定理 代数.norm_complex_apply
+  条件: (z : 复形)
+  结论: 代数.norm 实数 z = 复形.normSq z
   证明: by
   rw [Algebra.norm_eq_matrix_det Complex.basisOneI]; rw [Algebra.leftMulMatrix_complex]; rw [Matrix.det_fin_two]; rw [normSq_apply]
   simp
@@ -112,8 +112,8 @@ theorem Algebra.norm_complex_eq
   proof: MonoidHom.ext Algebra.norm_complex_apply
 
 中文:
-定理 Algebra.norm_complex_eq
-  结论: Algebra.norm 实数 = normSq.toMonoidHom
+定理 代数.norm_complex_eq
+  结论: 代数.norm 实数 = normSq.toMonoidHom
   证明: MonoidHom.ext Algebra.norm_complex_apply
 
 Depends on / 依赖: Algebra, Algebra.norm_complex_apply, MonoidHom, MonoidHom.ext, norm_complex_apply

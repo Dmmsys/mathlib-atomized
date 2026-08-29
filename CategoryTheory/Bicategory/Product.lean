@@ -48,8 +48,8 @@ instance prod
   
 
 中文:
-实例 prod
-  签名: : Bicategory (B × C) where
+实例 乘积
+  签名: : 双范畴 (B × C) where
   定义体: CategoryTheory.prod' (X.1 ⟶ Y.1) (X.2 ⟶ Y.2)
   whiskerLeft f g h θ := f.1 ◁ θ.1 ×ₘ f.2 ◁ θ.2
   whiskerRight θ g := θ.1 ▷ g.1 ×ₘ θ.2 ▷ g.2
@@ -102,7 +102,7 @@ definition sectL
 
 中文:
 定义 sectL
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B] {C : 类型u₂} [Bicategory.{w₂, v₂} C] (c : C)
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B] {C : 类型u₂} [双范畴.{w₂, v₂} C] (c : C)
   定义体: .mk'
   { obj X := (X, c)
     map f := f ×ₘ 𝟙 c
@@ -132,7 +132,7 @@ definition sectR
 
 中文:
 定义 sectR
-  签名: {B : 类型u₁} [Bicategory.{w₁, v₁} B] (b : B) (C : 类型u₂) [Bicategory.{w₂, v₂} C]
+  签名: {B : 类型u₁} [双范畴.{w₁, v₁} B] (b : B) (C : 类型u₂) [双范畴.{w₂, v₂} C]
   定义体: .mk'
   { obj Y := (b, Y)
     map f := 𝟙 b ×ₘ f
@@ -247,7 +247,7 @@ instance uniformProd
 
 中文:
 实例 uniformProd
-  签名: : Bicategory (B × C)
+  签名: : 双范畴 (B × C)
   定义体: Bicategory.prod B C
 
 Depends on / 依赖: Bicategory, Bicategory.prod

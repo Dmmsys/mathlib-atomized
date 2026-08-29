@@ -55,7 +55,7 @@ abbreviation one
 
 中文:
 缩写 one
-  签名: [One β]
+  签名: [幺 β]
   定义体: e.invFun 1
 
 @[to_additive]
@@ -74,7 +74,7 @@ lemma one_def
 
 中文:
 引理 one_def
-  条件: [One β]
+  条件: [幺 β]
   证明: e.one
     1 = e.symm 1 := rfl
 
@@ -98,7 +98,7 @@ abbreviation mul
 
 中文:
 缩写 mul
-  签名: [Mul β]
+  签名: [乘法 β]
   定义体: e.invFun (e.toFun x * e.toFun y)
 
 @[to_additive]
@@ -117,7 +117,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  条件: [Mul β] (x y : α)
+  条件: [乘法 β] (x y : α)
   证明: Equiv.mul e
     x * y = e.symm (e x * e y) := rfl
 
@@ -141,7 +141,7 @@ abbreviation div
 
 中文:
 缩写 div
-  签名: [Div β]
+  签名: [除法 β]
   定义体: ⟨fun x y => e.invFun (e.toFun x / e.toFun y)⟩
 
 @[to_additive]
@@ -161,7 +161,7 @@ lemma div_def
 
 中文:
 引理 div_def
-  条件: [Div β] (x y : α)
+  条件: [除法 β] (x y : α)
   证明: Equiv.div e
     x / y = e.symm (e x / e y) := rfl
 
@@ -186,8 +186,8 @@ abbreviation Inv
 @[to_additive]
 
 中文:
-缩写 Inv
-  签名: [Inv β]
+缩写 取逆
+  签名: [取逆 β]
   定义体: e.invFun (e.toFun x)⁻¹
 
 @[to_additive]
@@ -206,7 +206,7 @@ lemma inv_def
 
 中文:
 引理 inv_def
-  条件: [Inv β] (x : α)
+  条件: [取逆 β] (x : α)
   证明: e.Inv
     x⁻¹ = e.symm (e x)⁻¹ := rfl
 
@@ -232,7 +232,7 @@ abbreviation pow
 
 中文:
 缩写 pow
-  签名: [Pow β M]
+  签名: [幂 β M]
   定义体: e.invFun (e.toFun x ^ n)
 
 @[to_additive (attr := to_additive) smul_def]
@@ -251,7 +251,7 @@ lemma pow_def
 
 中文:
 引理 pow_def
-  条件: [Pow β M] (n : M) (x : α)
+  条件: [幂 β M] (n : M) (x : α)
   证明: e.pow M
     x ^ n = e.symm (e x ^ n) := rfl
 
@@ -285,7 +285,7 @@ definition mulEquiv
 
 中文:
 定义 mulEquiv
-  签名: (e : α ≃ β) [Mul β]
+  签名: (e : α ≃ β) [乘法 β]
   定义体: Equiv.mul e
     α ≃* β := by
   intros
@@ -321,7 +321,7 @@ lemma mulEquiv_apply
 
 中文:
 引理 mulEquiv_apply
-  条件: (e : α ≃ β) [Mul β] (a : α)
+  条件: (e : α ≃ β) [乘法 β] (a : α)
   结论: (mulEquiv e) a = e a
   证明: rfl
 
@@ -341,7 +341,7 @@ lemma mulEquiv_symm_apply
 
 中文:
 引理 mulEquiv_symm_apply
-  条件: (e : α ≃ β) [Mul β] (b : β)
+  条件: (e : α ≃ β) [乘法 β] (b : β)
   证明: Equiv.mul e
     (mulEquiv e).symm b = e.symm b := rfl
 
@@ -365,7 +365,7 @@ abbreviation semigroup
 
 中文:
 缩写 semigroup
-  签名: [Semigroup β]
+  签名: [半群 β]
   定义体: by
   let mul := e.mul
   apply e.injective.semigroup _; intros; exact e.apply_symm_apply _
@@ -388,7 +388,7 @@ abbreviation commSemigroup
 
 中文:
 缩写 commSemigroup
-  签名: [CommSemigroup β]
+  签名: [交换半群 β]
   定义体: by
   let mul := e.mul
   apply e.injective.commSemigroup _; intros; exact e.apply_symm_apply _
@@ -411,7 +411,7 @@ lemma isLeftCancelMul
 
 中文:
 引理 isLeftCancelMul
-  条件: [Mul β] [IsLeftCancelMul β]
+  条件: [乘法 β] [左乘消去 β]
   证明: e.mul
     IsLeftCancelMul α := by
   let := e.mul; exact e.injective.isLeftCancelMul _ fun _ _ => e.apply_symm_apply _
@@ -435,7 +435,7 @@ lemma isRightCancelMul
 
 中文:
 引理 isRightCancelMul
-  条件: [Mul β] [IsRightCancelMul β]
+  条件: [乘法 β] [右乘消去 β]
   证明: e.mul
     IsRightCancelMul α := by
   let := e.mul; exact e.injective.isRightCancelMul _ fun _ _ => e.apply_symm_apply _
@@ -459,7 +459,7 @@ lemma isCancelMul
 
 中文:
 引理 isCancelMul
-  条件: [Mul β] [IsCancelMul β]
+  条件: [乘法 β] [是消去乘法 β]
   证明: e.mul
     IsCancelMul α := by
   let := e.mul; exact e.injective.isCancelMul _ fun _ _ => e.apply_symm_apply _
@@ -484,7 +484,7 @@ abbreviation mulOneClass
 
 中文:
 缩写 mulOneClass
-  签名: [MulOneClass β]
+  签名: [MulOne类 β]
   定义体: by
   let one := e.one
   let mul := e.mul
@@ -511,7 +511,7 @@ abbreviation monoid
 
 中文:
 缩写 monoid
-  签名: [Monoid β]
+  签名: [幺半群 β]
   定义体: by
   let one := e.one
   let mul := e.mul
@@ -540,7 +540,7 @@ abbreviation commMonoid
 
 中文:
 缩写 commMonoid
-  签名: [CommMonoid β]
+  签名: [交换幺半群 β]
   定义体: by
   let one := e.one
   let mul := e.mul
@@ -572,7 +572,7 @@ abbreviation group
 
 中文:
 缩写 group
-  签名: [Group β]
+  签名: [群 β]
   定义体: by
   let one := e.one
   let mul := e.mul
@@ -610,7 +610,7 @@ abbreviation commGroup
 
 中文:
 缩写 commGroup
-  签名: [CommGroup β]
+  签名: [交换群 β]
   定义体: by
   let one := e.one
   let mul := e.mul
@@ -651,9 +651,9 @@ lemma exists_type_univ_nonempty_mulEquiv.{u,
 exact ⟨ULift (Fin n), groupH, inferInstance, ⟨MulEquiv.symm e.symm.mulEquiv⟩⟩
 
 中文:
-引理 exists_type_univ_nonempty_mulEquiv.{u,
+引理 存在_type_univ_nonempty_mulEquiv.{u,
   条件: v} (G
-  结论: 类型u) [Group G] [Finite G] :
+  结论: 类型u) [群 G] [有限 G] :
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin G
   let f : Fin n ≃ ULift (Fin n) := Equiv.ulift.symm

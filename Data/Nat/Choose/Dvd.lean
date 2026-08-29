@@ -34,7 +34,7 @@ theorem dvd_choose_add
 
 中文:
 定理 dvd_choose_add
-  条件: (hp : Prime p) (hap : a < p) (hbp : b < p) (h : p <= a + b)
+  条件: (hp : 素 p) (hap : a < p) (hbp : b < p) (h : p <= a + b)
   证明: by
   have h₁ : p ∣ (a + b)! := hp.dvd_factorial.2 h
   rw [← add_choose_mul_factorial_mul_factorial]; rw [← choose_symm_add]; rw [hp.dvd_mul]; rw [hp.dvd_mul]; rw [hp.dvd_factorial]; rw [hp.dvd_factorial] at h₁
@@ -60,7 +60,7 @@ lemma dvd_choose
 
 中文:
 引理 dvd_choose
-  条件: (hp : Prime p) (ha : a < p) (hab : b - a < p) (h : p <= b)
+  条件: (hp : 素 p) (ha : a < p) (hab : b - a < p) (h : p <= b)
   结论: p ∣ choose b a
   证明: have : a + (b - a) = b := Nat.add_sub_of_le (ha.le.trans h)
   this ▸ hp.dvd_choose_add ha hab (this.symm ▸ h)
@@ -82,7 +82,7 @@ lemma dvd_choose_self
 
 中文:
 引理 dvd_choose_self
-  条件: (hp : Prime p) (hk : k != 0) (hkp : k < p)
+  条件: (hp : 素 p) (hk : k != 0) (hkp : k < p)
   结论: p ∣ choose p k
   证明: hp.dvd_choose hkp (sub_lt ((zero_le _).trans_lt hkp) <| zero_lt_of_ne_zero hk) le_rfl
 
@@ -104,7 +104,7 @@ lemma coprime_choose_of_lt
 
 中文:
 引理 coprime_choose_of_lt
-  条件: (hp : p.Prime) (hb : b < p) (ha : a <= b)
+  条件: (hp : p.素) (hb : b < p) (ha : a <= b)
   证明: by
   rw [Nat.choose_eq_descFactorial_div_factorial]
   exact (hp.coprime_descFactorial_of_lt_of_le hb ha).coprime_div_right

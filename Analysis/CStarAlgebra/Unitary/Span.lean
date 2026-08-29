@@ -144,7 +144,7 @@ lemma CStarAlgebra.norm_smul_two_inv_smul_add_four_unitary
       (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! imaginaryPart.
 
 中文:
-引理 CStarAlgebra.norm_smul_two_inv_smul_add_four_unitary
+引理 CStar代数.norm_smul_two_inv_smul_add_four_unitary
   条件: (x : A) (hx : x != 0)
   证明: selfAdjoint.unitarySelfAddISMul (ℜ (‖x‖⁻¹ • x))
       (by simpa [norm_smul, inv_mul_le_one₀ (norm_pos_iff.2 hx)] using! realPart.norm_le x)
@@ -182,7 +182,7 @@ lemma CStarAlgebra.exists_sum_four_unitary
     use ![u₁, star u₁, u₂, star u₂], ![‖x‖ * 2⁻¹, ‖
 
 中文:
-引理 CStarAlgebra.exists_sum_four_unitary
+引理 CStar代数.存在_sum_four_unitary
   条件: (x : A)
   证明: by
   let _ := CStarAlgebra.spectralOrder
@@ -227,8 +227,8 @@ lemma CStarAlgebra.span_unitary
   exact sum_mem fun i _ => smul_mem _ _ (subset_span (u i).2)
 
 中文:
-引理 CStarAlgebra.span_unitary
-  结论: span Complex (unitary A : Set A) = ⊤
+引理 CStar代数.span_unitary
+  结论: span 复形 (unitary A : 集合 A) = ⊤
   证明: by
   rw [eq_top_iff]
   rintro x -

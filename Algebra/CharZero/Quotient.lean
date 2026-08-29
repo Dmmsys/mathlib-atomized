@@ -36,7 +36,7 @@ theorem zsmul_mem_zmultiples_iff_exists_sub_div
   simp_rw [← zsmul_eq_mul, smul_add,
 
 中文:
-定理 zsmul_mem_zmultiples_iff_exists_sub_div
+定理 zsmul_mem_zmultiples_iff_存在_sub_div
   条件: {r : R} {z : 整数} (hz : z != 0)
   证明: by
   rw [AddSubgroup.mem_zmultiples_iff]
@@ -79,7 +79,7 @@ theorem nsmul_mem_zmultiples_iff_exists_sub_div
   rfl
 
 中文:
-定理 nsmul_mem_zmultiples_iff_exists_sub_div
+定理 nsmul_mem_zmultiples_iff_存在_sub_div
   条件: {r : R} {n : 自然数} (hn : n != 0)
   证明: by
   rw [← natCast_zsmul r]; rw [zsmul_mem_zmultiples_iff_exists_sub_div (Int.natCast_ne_zero.mpr hn)]; rw [Int.cast_natCast]
@@ -112,7 +112,7 @@ theorem zmultiples_zsmul_eq_zsmul_iff
 
 中文:
 定理 zmultiples_zsmul_eq_zsmul_iff
-  条件: {ψ θ : R ⧸ AddSubgroup.zmultiples p} {z : 整数} (hz : z != 0)
+  条件: {ψ θ : R ⧸ 加法子群.zmultiples p} {z : 整数} (hz : z != 0)
   证明: by
   induction ψ using Quotient.inductionOn
   induction θ using Quotient.inductionOn
@@ -142,7 +142,7 @@ theorem zmultiples_nsmul_eq_nsmul_iff
 
 中文:
 定理 zmultiples_nsmul_eq_nsmul_iff
-  条件: {ψ θ : R ⧸ AddSubgroup.zmultiples p} {n : 自然数} (hz : n != 0)
+  条件: {ψ θ : R ⧸ 加法子群.zmultiples p} {n : 自然数} (hz : n != 0)
   证明: by
   rw [← natCast_zsmul ψ]; rw [← natCast_zsmul θ]; rw [zmultiples_zsmul_eq_zsmul_iff (Int.natCast_ne_zero.mpr hz)]; rw [Int.cast_natCast]
   rfl

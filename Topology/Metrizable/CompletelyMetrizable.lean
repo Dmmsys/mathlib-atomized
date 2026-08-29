@@ -57,10 +57,10 @@ class IsCompletelyPseudoMetrizableSpace
     - complete : exists m : PseudoMetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧ @CompleteSpace X m.toUniformSpace
 
 中文:
-类 IsCompletelyPseudoMetrizableSpace
-  参数: (X : 类型) [t : TopologicalSpace X]
+类 是余mpletelyPseudoMetrizable空间
+  参数: (X : 类型) [t : 拓扑空间 X]
   公理与运算 (1 个):
-    - complete : 存在 m : PseudoMetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧ @CompleteSpace X m.toUniformSpace
+    - complete : 存在 m : 伪度量空间 X, m.toUniformSpace.toTopologicalSpace = t ∧ @完备空间 X m.toUniformSpace
 -/
 class IsCompletelyPseudoMetrizableSpace (X : Type*) [t : TopologicalSpace X] : Prop where
   complete : exists m : PseudoMetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧
@@ -79,7 +79,7 @@ class UpgradedIsCompletelyPseudoMetrizableSpace
   (no additional axioms)
 
 中文:
-类 UpgradedIsCompletelyPseudoMetrizableSpace
+类 UpgradedIsCompletelyPseudoMetrizable空间
   参数: (X : 类型)
   (无附加公理)
 -/
@@ -105,7 +105,7 @@ definition completelyPseudoMetrizableMetric
 
 中文:
 定义 completelyPseudoMetrizableMetric
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: h.complete.choose.replaceTopology h.complete.choose_spec.1.symm
 
 Depends on / 依赖: choose_spec, complete, h.complete.choose.replaceTopology, h.complete.choose_spec, replaceTopology
@@ -126,7 +126,7 @@ theorem complete_completelyPseudoMetrizableMetric
 
 中文:
 定理 complete_completelyPseudoMetrizableMetric
-  结论: (X : 类型) [ht : TopologicalSpace X]
+  结论: (X : 类型) [ht : 拓扑空间 X]
   证明: by
   convert! h.complete.choose_spec.2
   exact PseudoMetricSpace.replaceTopology_eq _ _
@@ -154,7 +154,7 @@ definition upgradeIsCompletelyPseudoMetrizable
 
 中文:
 定义 upgradeIsCompletelyPseudoMetrizable
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: letI := completelyPseudoMetrizableMetric X
   { complete_completelyPseudoMetrizableMetric X with }
 
@@ -188,7 +188,7 @@ instance pi_countable
 
 中文:
 实例 pi_countable
-  签名: {ι : 类型} [Countable ι] {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  签名: {ι : 类型} [可数 ι] {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: by
   let := fun i => upgradeIsCompletelyPseudoMetrizable (X i)
   infer_instance
@@ -212,8 +212,8 @@ instance prod
   inferInstance
 
 中文:
-实例 prod
-  签名: [TopologicalSpace X] [IsCompletelyPseudoMetrizableSpace X] [TopologicalSpace Y]
+实例 乘积
+  签名: [拓扑空间 X] [是余mpletelyPseudoMetrizable空间 X] [拓扑空间 Y]
   定义体: letI := upgradeIsCompletelyPseudoMetrizable X
   letI := upgradeIsCompletelyPseudoMetrizable Y
   inferInstance
@@ -237,8 +237,8 @@ instance sum
   inferInstance
 
 中文:
-实例 sum
-  签名: [TopologicalSpace X] [IsCompletelyPseudoMetrizableSpace X] [TopologicalSpace Y]
+实例 求和
+  签名: [拓扑空间 X] [是余mpletelyPseudoMetrizable空间 X] [拓扑空间 Y]
   定义体: letI := upgradeIsCompletelyPseudoMetrizable X
   letI := upgradeIsCompletelyPseudoMetrizable Y
   inferInstance
@@ -266,8 +266,8 @@ theorem _root_.Topology.IsClosedEmbedding.IsCompletelyPseudoMetrizableSpace
   infer_instance
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.IsCompletelyPseudoMetrizableSpace
-  结论: [TopologicalSpace X]
+定理 _root_.拓扑.是闭嵌入.是余mpletelyPseudoMetrizable空间
+  结论: [拓扑空间 X]
   证明: by
   let := upgradeIsCompletelyPseudoMetrizable Y
   let : PseudoMetricSpace X := hf.isEmbedding.comapPseudoMetricSpace
@@ -297,7 +297,7 @@ theorem _root_.IsClosed.isCompletelyPseudoMetrizableSpace
   proof: hs.isClosedEmbedding_subtypeVal.IsCompletelyPseudoMetrizableSpace
 
 中文:
-定理 _root_.IsClosed.isCompletelyPseudoMetrizableSpace
+定理 _root_.是闭集.isCompletelyPseudoMetrizableSpace
   证明: hs.isClosedEmbedding_subtypeVal.IsCompletelyPseudoMetrizableSpace
 
 Depends on / 依赖: IsCompletelyPseudoMetrizableSpace, hs.isClosedEmbedding_subtypeVal.IsCompletelyPseudoMetrizableSpace, isClosedEmbedding_subtypeVal
@@ -319,10 +319,10 @@ class IsCompletelyMetrizableSpace
     - complete : exists m : MetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧ @CompleteSpace X m.toUniformSpace
 
 中文:
-类 IsCompletelyMetrizableSpace
-  参数: (X : 类型) [t : TopologicalSpace X]
+类 是余mpletelyMetrizable空间
+  参数: (X : 类型) [t : 拓扑空间 X]
   公理与运算 (1 个):
-    - complete : 存在 m : MetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧ @CompleteSpace X m.toUniformSpace
+    - complete : 存在 m : 度量空间 X, m.toUniformSpace.toTopologicalSpace = t ∧ @完备空间 X m.toUniformSpace
 -/
 class IsCompletelyMetrizableSpace (X : Type*) [t : TopologicalSpace X] : Prop where
   complete : exists m : MetricSpace X, m.toUniformSpace.toTopologicalSpace = t ∧
@@ -339,8 +339,8 @@ instance IsCompletelyMetrizableSpace.toIsCompletelyPseudoMetrizableSpace
   use m.toPseudoMetricSpace
 
 中文:
-实例 IsCompletelyMetrizableSpace.toIsCompletelyPseudoMetrizableSpace
-  签名: [TopologicalSpace X]
+实例 是余mpletelyMetrizable空间.toIsCompletelyPseudoMetrizableSpace
+  签名: [拓扑空间 X]
   定义体: by
   obtain ⟨m, _⟩ := ‹_›
   use m.toPseudoMetricSpace
@@ -365,7 +365,7 @@ lemma IsCompletelyMetrizableSpace_of_isCompletelyPseudoMetrizableSpace
 
 中文:
 引理 IsCompletelyMetrizableSpace_of_isCompletelyPseudoMetrizableSpace
-  结论: [TopologicalSpace X]
+  结论: [拓扑空间 X]
   证明: by
   let := upgradeIsCompletelyPseudoMetrizable X
   use MetricSpace.ofT0PseudoMetricSpace X
@@ -394,9 +394,9 @@ class UpgradedIsCompletelyMetrizableSpace
   (no additional axioms)
 
 中文:
-类 UpgradedIsCompletelyMetrizableSpace
+类 UpgradedIsCompletelyMetrizable空间
   参数: (X : 类型)
-  继承: MetricSpace X, CompleteSpace X
+  继承: 度量空间 X, 完备空间 X
   (无附加公理)
 -/
 class UpgradedIsCompletelyMetrizableSpace (X : Type*) extends MetricSpace X, CompleteSpace X
@@ -420,7 +420,7 @@ definition completelyMetrizableMetric
 
 中文:
 定义 completelyMetrizableMetric
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: h.complete.choose.replaceTopology h.complete.choose_spec.1.symm
 
 Depends on / 依赖: choose_spec, complete, h.complete.choose.replaceTopology, h.complete.choose_spec, replaceTopology
@@ -441,7 +441,7 @@ theorem complete_completelyMetrizableMetric
 
 中文:
 定理 complete_completelyMetrizableMetric
-  结论: (X : 类型) [ht : TopologicalSpace X]
+  结论: (X : 类型) [ht : 拓扑空间 X]
   证明: by
   convert! h.complete.choose_spec.2
   exact MetricSpace.replaceTopology_eq _ _
@@ -469,7 +469,7 @@ definition upgradeIsCompletelyMetrizable
 
 中文:
 定义 upgradeIsCompletelyMetrizable
-  签名: (X : 类型) [TopologicalSpace X] [IsCompletelyMetrizableSpace X]
+  签名: (X : 类型) [拓扑空间 X] [是余mpletelyMetrizable空间 X]
   定义体: letI := completelyMetrizableMetric X
   { complete_completelyMetrizableMetric X with }
 
@@ -501,7 +501,7 @@ instance pi_countable
 
 中文:
 实例 pi_countable
-  签名: {ι : 类型} [Countable ι] {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  签名: {ι : 类型} [可数 ι] {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: by
   let := fun i => upgradeIsCompletelyMetrizable (X i)
   infer_instance
@@ -526,7 +526,7 @@ instance sigma
 
 中文:
 实例 sigma
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 n, TopologicalSpace (X n)]
+  签名: {ι : 类型} {X : ι -> 类型} [对任意 n, 拓扑空间 (X n)]
   定义体: letI := fun n => upgradeIsCompletelyMetrizable (X n)
   letI : MetricSpace (Σ n, X n) := Metric.Sigma.metricSpace
   haveI : CompleteSpace (Σ n, X n) := Metric.Sigma.completeSpace
@@ -552,8 +552,8 @@ instance prod
   inferInstance
 
 中文:
-实例 prod
-  签名: [TopologicalSpace X] [IsCompletelyMetrizableSpace X] [TopologicalSpace Y]
+实例 乘积
+  签名: [拓扑空间 X] [是余mpletelyMetrizable空间 X] [拓扑空间 Y]
   定义体: letI := upgradeIsCompletelyMetrizable X
   letI := upgradeIsCompletelyMetrizable Y
   inferInstance
@@ -577,8 +577,8 @@ instance sum
   inferInstance
 
 中文:
-实例 sum
-  签名: [TopologicalSpace X] [IsCompletelyMetrizableSpace X] [TopologicalSpace Y]
+实例 求和
+  签名: [拓扑空间 X] [是余mpletelyMetrizable空间 X] [拓扑空间 Y]
   定义体: letI := upgradeIsCompletelyMetrizable X
   letI := upgradeIsCompletelyMetrizable Y
   inferInstance
@@ -606,8 +606,8 @@ theorem _root_.Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace
   infer_instance
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.IsCompletelyMetrizableSpace
-  结论: [TopologicalSpace X]
+定理 _root_.拓扑.是闭嵌入.是余mpletelyMetrizable空间
+  结论: [拓扑空间 X]
   证明: by
   let := upgradeIsCompletelyMetrizable Y
   let : MetricSpace X := hf.isEmbedding.comapMetricSpace f
@@ -670,7 +670,7 @@ theorem _root_.IsClosed.isCompletelyMetrizableSpace
   proof: hs.isClosedEmbedding_subtypeVal.IsCompletelyMetrizableSpace
 
 中文:
-定理 _root_.IsClosed.isCompletelyMetrizableSpace
+定理 _root_.是闭集.isCompletelyMetrizableSpace
   证明: hs.isClosedEmbedding_subtypeVal.IsCompletelyMetrizableSpace
 
 Depends on / 依赖: IsCompletelyMetrizableSpace, hs.isClosedEmbedding_subtypeVal.IsCompletelyMetrizableSpace, isClosedEmbedding_subtypeVal
@@ -690,7 +690,7 @@ instance univ
 
 中文:
 实例 univ
-  签名: [TopologicalSpace X] [IsCompletelyMetrizableSpace X]
+  签名: [拓扑空间 X] [是余mpletelyMetrizable空间 X]
   定义体: isClosed_univ.isCompletelyMetrizableSpace
 
 Depends on / 依赖: isClosed_univ, isClosed_univ.isCompletelyMetrizableSpace, isCompletelyMetrizableSpace

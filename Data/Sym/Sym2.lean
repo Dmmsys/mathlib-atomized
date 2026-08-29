@@ -71,11 +71,11 @@ inductive Rel
     - swap: (x y : α) : Rel _ (x, y) (y, x)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: (α : 类型u)
   构造子 (2 个):
-    - refl: (x y : α) : Rel _ (x, y) (x, y)
-    - swap: (x y : α) : Rel _ (x, y) (y, x)
+    - refl: (x y : α) : 关系 _ (x, y) (x, y)
+    - swap: (x y : α) : 关系 _ (x, y) (y, x)
 -/
 inductive Rel (α : Type u) : α × α -> α × α -> Prop
   | refl (x y : α) : Rel _ (x, y) (x, y)
@@ -96,9 +96,9 @@ theorem Rel.symm
 @[trans]
 
 中文:
-定理 Rel.symm
+定理 关系.symm
   条件: {x y : α × α}
-  结论: Rel α x y -> Rel α y x
+  结论: 关系 α x y -> 关系 α y x
   证明: by aesop (rule_sets := [Sym2])
 
 @[trans]
@@ -119,9 +119,9 @@ theorem Rel.trans
   aesop (rule_sets := [Sym2])
 
 中文:
-定理 Rel.trans
-  条件: {x y z : α × α} (a : Rel α x y) (b : Rel α y z)
-  结论: Rel α x z
+定理 关系.trans
+  条件: {x y z : α × α} (a : 关系 α x y) (b : 关系 α y z)
+  结论: 关系 α x z
   证明: by
   aesop (rule_sets := [Sym2])
 -/
@@ -137,8 +137,8 @@ theorem Rel.is_equivalence
   proof: { refl := fun (x, y) => Rel.refl x y, symm := Rel.symm, trans := Rel.trans }
 
 中文:
-定理 Rel.is_equivalence
-  结论: Equivalence (Rel α)
+定理 关系.is_equivalence
+  结论: 等价 (关系 α)
   证明: { refl := fun (x, y) => Rel.refl x y, symm := Rel.symm, trans := Rel.trans }
 
 Depends on / 依赖: Rel.refl, Rel.symm, Rel.trans
@@ -160,7 +160,7 @@ definition Rel.setoid
 @[simp, grind =]
 
 中文:
-定义 Rel.setoid
+定义 关系.setoid
   签名: (α : 类型u)
   定义体: ⟨Rel α, Rel.is_equivalence⟩
 
@@ -185,7 +185,7 @@ theorem rel_iff'
 中文:
 定理 rel_iff'
   条件: {p q : α × α}
-  结论: Rel α p q ↔ p = q ∨ p = q.swap
+  结论: 关系 α p q ↔ p = q ∨ p = q.swap
   证明: by
   aesop (rule_sets := [Sym2])
 
@@ -207,7 +207,7 @@ theorem rel_iff
 中文:
 定理 rel_iff
   条件: {x y z w : α}
-  结论: Rel α (x, y) (z, w) ↔ x = z ∧ y = w ∨ x = w ∧ y = z
+  结论: 关系 α (x, y) (z, w) ↔ x = z ∧ y = w ∨ x = w ∧ y = z
   证明: by
   simp
 -/
@@ -267,7 +267,7 @@ theorem sound
 
 中文:
 定理 sound
-  条件: {a b c d : α} (h : Rel α (a, b) (c, d))
+  条件: {a b c d : α} (h : 关系 α (a, b) (c, d))
   结论: s(a, b) = s(c, d)
   证明: Quot.sound h
 -/
@@ -288,7 +288,7 @@ theorem exact
 中文:
 定理 exact
   条件: {a b c d : α} (h : s(a, b) = s(c, d))
-  结论: Rel α (a, b) (c, d)
+  结论: 关系 α (a, b) (c, d)
   证明: Quotient.exact (s := Sym2.Rel.setoid α) h
 
 @[simp, grind =]
@@ -311,7 +311,7 @@ theorem eq
 中文:
 定理 eq
   条件: {a b c d : α}
-  结论: s(a, b) = s(c, d) ↔ Rel α (a, b) (c, d)
+  结论: s(a, b) = s(c, d) ↔ 关系 α (a, b) (c, d)
   证明: Quotient.eq' (s₁ := Sym2.Rel.setoid α)
 
 @[elab_as_elim, cases_eliminator, induction_eliminator]
@@ -401,7 +401,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : Sym2 α -> Sort*}
+  签名: {motive : Sym2 α -> 类型层*}
   定义体: Quot.rec (fun (a, b) => f a b) (fun (a, b) (c, d) => h a b c d) z
 -/
 protected def rec {motive : Sym2 α -> Sort*}
@@ -422,7 +422,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {motive : Sym2 α -> Sort*} (z : Sym2 α)
+  签名: {motive : Sym2 α -> 类型层*} (z : Sym2 α)
   定义体: Quot.recOn z (fun (a, b) => f a b) (fun (a, b) (c, d) => h a b c d)
 -/
 protected def recOn {motive : Sym2 α -> Sort*} (z : Sym2 α)
@@ -446,7 +446,7 @@ definition hrec
 
 中文:
 定义 hrec
-  签名: {motive : Sym2 α -> Sort*}
+  签名: {motive : Sym2 α -> 类型层*}
   定义体: Quot.hrecOn _ (fun (a, b) => f a b) by
     simp only [rel_iff']
     rintro _ _ (rfl | rfl)
@@ -474,7 +474,7 @@ abbreviation recOnSubsingleton
 
 中文:
 缩写 recOnSubsingleton
-  签名: {motive : Sym2 α -> Sort*}
+  签名: {motive : Sym2 α -> 类型层*}
   定义体: Quot.recOnSubsingleton z fun (a, b) => f a b
 -/
 protected abbrev recOnSubsingleton {motive : Sym2 α -> Sort*}
@@ -492,7 +492,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: (Sym2.mk (α := α)).uncurry.Surjective
+  结论: (Sym2.mk (α := α)).uncurry.满射
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, Surjective, mk_surjective, uncurry, uncurry.Surjective
@@ -508,8 +508,8 @@ theorem «exists»
   proof: mk_surjective.exists.trans Prod.exists
 
 中文:
-定理 «exists»
-  条件: {α : Sort _} {f : Sym2 α -> 命题}
+定理 «存在»
+  条件: {α : 类型层 _} {f : Sym2 α -> 命题}
   证明: mk_surjective.exists.trans Prod.exists
 -/
 protected theorem «exists» {α : Sort _} {f : Sym2 α -> Prop} :
@@ -525,8 +525,8 @@ theorem «forall»
   proof: mk_surjective.forall.trans Prod.forall
 
 中文:
-定理 «forall»
-  条件: {α : Sort _} {f : Sym2 α -> 命题}
+定理 «对任意»
+  条件: {α : 类型层 _} {f : Sym2 α -> 命题}
   证明: mk_surjective.forall.trans Prod.forall
 -/
 protected theorem «forall» {α : Sort _} {f : Sym2 α -> Prop} :
@@ -933,8 +933,8 @@ theorem map.injective
 
 中文:
 定理 map.injective
-  条件: {f : α -> β} (hinj : Injective f)
-  结论: Injective (map f)
+  条件: {f : α -> β} (hinj : 单射 f)
+  结论: 单射 (map f)
   证明: by
   intro z z'
   refine Sym2.inductionOn₂ z z' (fun x y x' y' => ?_)
@@ -986,7 +986,7 @@ definition _root_.Function.Embedding.sym2Map
   inj' := map.injective f.injective
 
 中文:
-定义 _root_.Function.Embedding.sym2Map
+定义 _root_.函数.嵌入.sym2Map
   签名: (f : α ↪ β)
   定义体: map f
   inj' := map.injective f.injective
@@ -1122,7 +1122,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Sym2 α) α
+  签名: 集合状 (Sym2 α) α
   定义体: { x | z.Mem x }
   coe_injective z z' h := by
     simp only [Set.ext_iff, Set.mem_ofPred_eq] at h
@@ -1156,7 +1156,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Sym2 α)
+  签名: 偏序 (Sym2 α)
   定义体: .ofSetLike (Sym2 α) α
 
 @[simp]
@@ -1198,7 +1198,7 @@ theorem mem_iff_exists
 @[ext]
 
 中文:
-定理 mem_iff_exists
+定理 mem_iff_存在
   条件: {x : α} {z : Sym2 α}
   结论: x in z ↔ 存在 y : α, z = s(x, y)
   证明: Iff.rfl
@@ -1366,7 +1366,7 @@ lemma coe_mk
 中文:
 引理 coe_mk
   条件: {x y : α}
-  结论: (s(x, y) : Set α) = {x, y}
+  结论: (s(x, y) : 集合 α) = {x, y}
   证明: by ext z; simp
 -/
 @[simp] lemma coe_mk {x y : α} : (s(x, y) : Set α) = {x, y} := by ext z; simp
@@ -1674,7 +1674,7 @@ theorem forall_mem_pair
   simp only [mem_iff, forall_eq_or_imp, forall_eq]
 
 中文:
-定理 forall_mem_pair
+定理 对任意_mem_pair
   条件: {P : α -> 命题} {a b : α}
   结论: (对任意 x in s(a, b), P x) ↔ P a ∧ P b
   证明: by
@@ -1925,7 +1925,7 @@ theorem diag_injective
 
 中文:
 定理 diag_injective
-  结论: Function.Injective (Sym2.diag : α -> Sym2 α)
+  结论: 函数.单射 (Sym2.diag : α -> Sym2 α)
   证明: fun x y h => by
   cases Sym2.exact h <;> rfl
 
@@ -2011,7 +2011,7 @@ lemma isDiag_map
 
 中文:
 引理 isDiag_map
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: (z.map f).IsDiag ↔ z.IsDiag
   证明: Sym2.ind (fun _ _ => hf.eq_iff) z
 
@@ -2059,7 +2059,7 @@ lemma isDiag_of_subsingleton
 
 中文:
 引理 isDiag_of_subsingleton
-  条件: [Subsingleton α] (z : Sym2 α)
+  条件: [子单例 α] (z : Sym2 α)
   结论: z.IsDiag
   证明: z.ind Subsingleton.elim
 
@@ -2178,7 +2178,7 @@ definition diagSet
 
 中文:
 定义 diagSet
-  签名: : Set (Sym2 α)
+  签名: : 集合 (Sym2 α)
   定义体: {z | z.IsDiag}
 
 Depends on / 依赖: IsDiag, z.IsDiag
@@ -2253,8 +2253,8 @@ theorem diagSet_eq_univ_of_subsingleton
 
 中文:
 定理 diagSet_eq_univ_of_subsingleton
-  条件: [Subsingleton α]
-  结论: @diagSet α = Set.univ
+  条件: [子单例 α]
+  结论: @diagSet α = 集合.univ
   证明: by ext; simp
 -/
 theorem diagSet_eq_univ_of_subsingleton [Subsingleton α] : @diagSet α = Set.univ := by ext; simp
@@ -2547,7 +2547,7 @@ theorem fromRel_ne
 
 中文:
 定理 fromRel_ne
-  结论: fromRel (α := α) (r := Ne) inferInstance = {z | ¬IsDiag z}
+  结论: fromRel (α := α) (r := 不等) inferInstance = {z | ¬IsDiag z}
   证明: by
   ext z; exact z.ind (by simp)
 
@@ -2588,7 +2588,7 @@ lemma diagSet_compl_eq_fromRel_ne
 
 中文:
 引理 diagSet_compl_eq_fromRel_ne
-  结论: diagSetᶜ = fromRel (α := α) (r := Ne) inferInstance
+  结论: diagSetᶜ = fromRel (α := α) (r := 不等) inferInstance
   证明: by
   ext ⟨a, b⟩; simp
 -/
@@ -2761,7 +2761,7 @@ definition fromRelNdrec
 
 中文:
 定义 fromRelNdrec
-  签名: {motive : Sort*} {sym : Std.Symm r} (z : Sym2 α) (hz : z in fromRel sym)
+  签名: {motive : 类型层*} {sym : Std.Symm r} (z : Sym2 α) (hz : z in fromRel sym)
   定义体: z.hrec f (fun _ _ => Function.hfunext (sym.iff .. |>.eq) fun _ _ _ => heq_of_eq <| h ..) hz
 
 @[simp]
@@ -2784,7 +2784,7 @@ theorem fromRelNdrec_mk
 
 中文:
 定理 fromRelNdrec_mk
-  结论: {motive : Sort*} {sym : Std.Symm r} {a b : α} (hz : r a b)
+  结论: {motive : 类型层*} {sym : Std.Symm r} {a b : α} (hz : r a b)
   证明: rfl
 -/
 theorem fromRelNdrec_mk {motive : Sort*} {sym : Std.Symm r} {a b : α} (hz : r a b)
@@ -2813,8 +2813,8 @@ definition _root_.Equiv.sigmaFiberFromRel
   right
 
 中文:
-定义 _root_.Equiv.sigmaFiberFromRel
-  签名: (sym : Std.Symm r) {f : α -> β} (hf : r <= Setoid.ker f)
+定义 _root_.等价.sigmaFiberFromRel
+  签名: (sym : Std.Symm r) {f : α -> β} (hf : r <= 集合等价关系.ker f)
   定义体: z.val.fromRelNdrec z.prop
     (fun a₁ a₂ h => ⟨f a₁, s(⟨a₁, rfl⟩, ⟨a₂, hf a₁ a₂ h |>.symm⟩), h⟩)
     fun a₁ a₂ h => by
@@ -2856,7 +2856,7 @@ definition _root_.Equiv.sigmaQuotFromRel
   body: .sigmaFiberFromRel sym fun _ _ h => Quot.sound f.map_rel h
 
 中文:
-定义 _root_.Equiv.sigmaQuotFromRel
+定义 _root_.等价.sigmaQuotFromRel
   签名: (sym : Std.Symm r) {r' : β -> β -> 命题} (f : r ->r r')
   定义体: .sigmaFiberFromRel sym fun _ _ h => Quot.sound f.map_rel h
 
@@ -2879,8 +2879,8 @@ definition _root_.Equiv.sigmaQuotientFromRel
   body: .sigmaFiberFromRel sym fun _ _ h => Quotient.sound f.map_rel h
 
 中文:
-定义 _root_.Equiv.sigmaQuotientFromRel
-  签名: (sym : Std.Symm r) {r' : Setoid β} (f : r ->r r')
+定义 _root_.等价.sigmaQuotientFromRel
+  签名: (sym : Std.Symm r) {r' : 集合等价关系 β} (f : r ->r r')
   定义体: .sigmaFiberFromRel sym fun _ _ h => Quotient.sound f.map_rel h
 
 Depends on / 依赖: sym.comap
@@ -2901,7 +2901,7 @@ definition ToRel
 
 中文:
 定义 ToRel
-  签名: (s : Set (Sym2 α)) (x y : α)
+  签名: (s : 集合 (Sym2 α)) (x y : α)
   定义体: s(x, y) in s
 
 @[simp]
@@ -2921,7 +2921,7 @@ theorem toRel_prop
 
 中文:
 定理 toRel_prop
-  条件: (s : Set (Sym2 α)) (x y : α)
+  条件: (s : 集合 (Sym2 α)) (x y : α)
   结论: ToRel s x y ↔ s(x, y) in s
   证明: Iff.rfl
 
@@ -2942,7 +2942,7 @@ instance toRel_symm
 
 中文:
 实例 toRel_symm
-  签名: (s : Set (Sym2 α))
+  签名: (s : 集合 (Sym2 α))
   定义体: by simp [eq_swap]
 
 @[deprecated (since := "2026-06-10")] alias toRel_symmetric := toRel_symm
@@ -2983,7 +2983,7 @@ theorem fromRel_toRel
 
 中文:
 定理 fromRel_toRel
-  条件: (s : Set (Sym2 α))
+  条件: (s : 集合 (Sym2 α))
   结论: fromRel (toRel_symm s) = s
   证明: Set.ext fun z => Sym2.ind (fun _ _ => Iff.rfl) z
 
@@ -3006,7 +3006,7 @@ alias ⟨_, toRel_mono⟩ := toRel_mono_iff
 
 中文:
 定理 toRel_mono_iff
-  条件: (s₁ s₂ : Set (Sym2 α))
+  条件: (s₁ s₂ : 集合 (Sym2 α))
   结论: ToRel s₁ <= ToRel s₂ ↔ s₁ subseteq s₂
   证明: ⟨(Sym2.ind ·), (@· s(·, ·))⟩
 
@@ -3032,7 +3032,7 @@ definition toRelOrderEmbedding
 
 中文:
 定义 toRelOrderEmbedding
-  签名: : Set (Sym2 α) ↪o (α -> α -> 命题)
+  签名: : 集合 (Sym2 α) ↪o (α -> α -> 命题)
   定义体: .ofMapLEIff ToRel toRel_mono_iff
 
 Depends on / 依赖: ofMapLEIff, toRel_mono_iff
@@ -3058,7 +3058,7 @@ definition fromRelOrderIso
 
 中文:
 定义 fromRelOrderIso
-  签名: : { r : α -> α -> 命题 // Std.Symm r } ≃o Set (Sym2 α) where
+  签名: : { r : α -> α -> 命题 // Std.Symm r } ≃o 集合 (Sym2 α) where
   定义体: fromRel r.prop
   invFun s := ⟨ToRel s, toRel_symm s⟩
   left_inv r := by simp [toRel_fromRel]
@@ -3088,7 +3088,7 @@ definition fromRelOrderEmbedding
 
 中文:
 定义 fromRelOrderEmbedding
-  签名: : { r : α -> α -> 命题 // Std.Symm r } ↪o Set (Sym2 α)
+  签名: : { r : α -> α -> 命题 // Std.Symm r } ↪o 集合 (Sym2 α)
   定义体: .toOrderEmbedding fromRelOrderIso α
 
 @[simp]
@@ -3409,7 +3409,7 @@ definition fromVector
 
 中文:
 定义 fromVector
-  签名: : List.Vector α 2 -> α × α
+  签名: : 列表.Vector α 2 -> α × α
 -/
 private def fromVector : List.Vector α 2 -> α × α
   | ⟨[a, b], _⟩ => (a, b)
@@ -3474,7 +3474,7 @@ definition sym2EquivSym'
 
 中文:
 定义 sym2EquivSym'
-  签名: : Equiv (Sym2 α) (Sym' α 2) where
+  签名: : 等价 (Sym2 α) (Sym' α 2) where
   定义体: Quot.map (fun x : α × α => ⟨[x.1, x.2], rfl⟩)
       (by
         rintro _ _ ⟨_⟩
@@ -3815,7 +3815,7 @@ theorem filter_image_mk_isDiag
 
 中文:
 定理 filter_image_mk_isDiag
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: by aesop
 -/
 theorem filter_image_mk_isDiag [DecidableEq α] (s : Finset α) :
@@ -3831,7 +3831,7 @@ theorem filter_image_mk_not_isDiag
 
 中文:
 定理 filter_image_mk_not_isDiag
-  条件: [DecidableEq α] (s : Finset α)
+  条件: [DecidableEq α] (s : 有限集 α)
   证明: by aesop
 -/
 theorem filter_image_mk_not_isDiag [DecidableEq α] (s : Finset α) :
@@ -3848,8 +3848,8 @@ instance [Subsingleton
   body: (equivSym α).injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Sym2 α)
+实例 [子单例
+  签名: α] : 子单例 (Sym2 α)
   定义体: (equivSym α).injective.subsingleton
 
 Depends on / 依赖: equivSym, injective, injective.subsingleton, subsingleton
@@ -3866,8 +3866,8 @@ instance [Unique
   body: Unique.mk' _
 
 中文:
-实例 [Unique
-  签名: α] : Unique (Sym2 α)
+实例 [唯一
+  签名: α] : 唯一 (Sym2 α)
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -3884,8 +3884,8 @@ instance [IsEmpty
   body: (equivSym α).isEmpty
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (Sym2 α)
+实例 [是空
+  签名: α] : 是空 (Sym2 α)
   定义体: (equivSym α).isEmpty
 
 Depends on / 依赖: equivSym, isEmpty
@@ -3902,8 +3902,8 @@ instance [Nontrivial
   body: diag_injective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial (Sym2 α)
+实例 [非平凡
+  签名: α] : 非平凡 (Sym2 α)
   定义体: diag_injective.nontrivial
 
 Depends on / 依赖: diag_injective, diag_injective.nontrivial, nontrivial
@@ -3927,7 +3927,7 @@ lemma lift_smul_lift
 
 中文:
 引理 lift_smul_lift
-  结论: {α R N} [SMul R N] (f : { f : α -> α -> R // 对任意 a₁ a₂, f a₁ a₂ = f a₂ a₁ })
+  结论: {α R N} [标量乘法 R N] (f : { f : α -> α -> R // 对任意 a₁ a₂, f a₁ a₂ = f a₂ a₁ })
   证明: by
   ext ⟨i, j⟩
   simp_all only [Pi.smul_apply', lift_mk]
@@ -3957,7 +3957,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: {M} [CommMagma M]
+  签名: {M} [交换原群 M]
   定义体: lift ⟨(· * ·), mul_comm⟩
 
 @[to_additive (attr := simp)]
@@ -3978,7 +3978,7 @@ lemma mul_mk
 
 中文:
 引理 mul_mk
-  条件: {M} [CommMagma M] (a b : M)
+  条件: {M} [交换原群 M] (a b : M)
   结论: mul s(a, b) = a * b
   证明: rfl
 -/
@@ -4002,7 +4002,7 @@ definition sym2
 
 中文:
 定义 sym2
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: fromRel (r := fun x y => x in s ∧ y in s) ⟨fun _ _ => .symm⟩
 
 Depends on / 依赖: fromRel
@@ -4046,7 +4046,7 @@ lemma mem_sym2_iff_subset
 中文:
 引理 mem_sym2_iff_subset
   条件: {z : Sym2 α}
-  结论: z in s.sym2 ↔ (z : Set α) subseteq s
+  结论: z in s.sym2 ↔ (z : 集合 α) subseteq s
   证明: by
   induction z using Sym2.inductionOn
   simp [pair_subset_iff]
@@ -4097,7 +4097,7 @@ lemma sym2_empty
 
 中文:
 引理 sym2_empty
-  结论: (∅ : Set α).sym2 = ∅
+  结论: (∅ : 集合 α).sym2 = ∅
   证明: by ext ⟨x, y⟩; simp
 -/
 @[simp] lemma sym2_empty : (∅ : Set α).sym2 = ∅ := by ext ⟨x, y⟩; simp
@@ -4111,7 +4111,7 @@ lemma sym2_univ
 
 中文:
 引理 sym2_univ
-  结论: (Set.univ : Set α).sym2 = Set.univ
+  结论: (集合.univ : 集合 α).sym2 = 集合.univ
   证明: by ext ⟨x, y⟩; simp
 -/
 @[simp] lemma sym2_univ : (Set.univ : Set α).sym2 = Set.univ := by ext ⟨x, y⟩; simp
@@ -4128,7 +4128,7 @@ lemma sym2_singleton
 中文:
 引理 sym2_singleton
   条件: (a : α)
-  结论: ({a} : Set α).sym2 = {s(a, a)}
+  结论: ({a} : 集合 α).sym2 = {s(a, a)}
   证明: by ext ⟨x, y⟩; simp
 -/
 @[simp] lemma sym2_singleton (a : α) : ({a} : Set α).sym2 = {s(a, a)} := by ext ⟨x, y⟩; simp
@@ -4143,7 +4143,7 @@ lemma sym2_insert
 
 中文:
 引理 sym2_insert
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   证明: by
   ext ⟨x, y⟩; aesop
 -/
@@ -4164,7 +4164,7 @@ lemma sym2_preimage
 
 中文:
 引理 sym2_preimage
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: (f ⁻¹' s).sym2 = Sym2.map f ⁻¹' s.sym2
   证明: by
   ext ⟨x, y⟩
@@ -4186,7 +4186,7 @@ lemma sym2_image
 
 中文:
 引理 sym2_image
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   结论: (f '' s).sym2 = Sym2.map f '' s.sym2
   证明: by
   simp_rw [sym2_eq_mk_image, prod_image_image_eq, image_image, uncurry, Sym2.map_mk]
@@ -4207,7 +4207,7 @@ lemma sym2_inter
 
 中文:
 引理 sym2_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s inter t).sym2 = s.sym2 inter t.sym2
   证明: preimage_injective.mpr Sym2.mk_surjective Set.prod_inter_prod.symm
 
@@ -4227,8 +4227,8 @@ lemma sym2_iInter
   ext ⟨x, y⟩; simp [forall_and]
 
 中文:
-引理 sym2_iInter
-  条件: {ι : 类型} (f : ι -> Set α)
+引理 sym2_i整数er
+  条件: {ι : 类型} (f : ι -> 集合 α)
   结论: (⋂ i, f i).sym2 = ⋂ i, (f i).sym2
   证明: by
   ext ⟨x, y⟩; simp [forall_and]

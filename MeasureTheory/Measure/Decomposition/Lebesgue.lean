@@ -69,10 +69,10 @@ class HaveLebesgueDecomposition
     - lebesgue_decomposition : exists p : Measure α × (α -> Real>=0∞), Measurable p.2 ∧ p.1 ⟂ₘ ν ∧ μ = p.1 + ν.withDensity p.2
 
 中文:
-类 HaveLebesgueDecomposition
-  参数: (μ ν : Measure α)
+类 有Lebesgue分解
+  参数: (μ ν : 测度 α)
   公理与运算 (1 个):
-    - lebesgue_decomposition : 存在 p : Measure α × (α -> 实数>=0∞), Measurable p.2 ∧ p.1 ⟂ₘ ν ∧ μ = p.1 + ν.withDensity p.2
+    - lebesgue_decomposition : 存在 p : 测度 α × (α -> 实数>=0∞), 可测 p.2 ∧ p.1 ⟂ₘ ν ∧ μ = p.1 + ν.withDensity p.2
 
 Depends on / 依赖: Classical, Classical.choose, HaveLebesgueDecomposition, h.lebesgue_decomposition, lebesgue_decomposition
 -/
@@ -108,7 +108,7 @@ theorem haveLebesgueDecomposition_spec
 
 中文:
 定理 haveLebesgueDecomposition_spec
-  条件: (μ ν : Measure α) [h : HaveLebesgueDecomposition μ ν]
+  条件: (μ ν : 测度 α) [h : 有Lebesgue分解 μ ν]
   证明: by
   rw [singularPart]; rw [rnDeriv]; rw [dif_pos h]; rw [dif_pos h]
   exact Classical.choose_spec h.lebesgue_decomposition
@@ -132,7 +132,7 @@ lemma rnDeriv_of_not_haveLebesgueDecomposition
 
 中文:
 引理 rnDeriv_of_not_haveLebesgueDecomposition
-  条件: (h : ¬ HaveLebesgueDecomposition μ ν)
+  条件: (h : ¬ 有Lebesgue分解 μ ν)
   证明: by
   rw [rnDeriv]; rw [dif_neg h]
 
@@ -155,7 +155,7 @@ lemma singularPart_of_not_haveLebesgueDecomposition
 
 中文:
 引理 singularPart_of_not_haveLebesgueDecomposition
-  条件: (h : ¬ HaveLebesgueDecomposition μ ν)
+  条件: (h : ¬ 有Lebesgue分解 μ ν)
   证明: by
   rw [singularPart]; rw [dif_neg h]
 
@@ -183,8 +183,8 @@ theorem measurable_rnDeriv
 
 中文:
 定理 measurable_rnDeriv
-  条件: (μ ν : Measure α)
-  结论: Measurable μ.rnDeriv ν
+  条件: (μ ν : 测度 α)
+  结论: 可测 μ.rnDeriv ν
   证明: by
   by_cases h : HaveLebesgueDecomposition μ ν
   · exact (haveLebesgueDecomposition_spec μ ν).1
@@ -214,7 +214,7 @@ theorem mutuallySingular_singularPart
 
 中文:
 定理 mutuallySingular_singularPart
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   结论: μ.singularPart ν ⟂ₘ ν
   证明: by
   by_cases h : HaveLebesgueDecomposition μ ν
@@ -240,9 +240,9 @@ theorem MutuallySingular.haveLebesgueDecomposition
   proof: ⟨⟨(μ, 0), measurable_zero, h, by simp⟩⟩
 
 中文:
-定理 MutuallySingular.haveLebesgueDecomposition
+定理 互奇异.haveLebesgueDecomposition
   条件: (h : μ ⟂ₘ ν)
-  结论: HaveLebesgueDecomposition μ ν
+  结论: 有Lebesgue分解 μ ν
   证明: ⟨⟨(μ, 0), measurable_zero, h, by simp⟩⟩
 
 Depends on / 依赖: measurable_zero
@@ -260,7 +260,7 @@ theorem haveLebesgueDecomposition_add
 
 中文:
 定理 haveLebesgueDecomposition_add
-  条件: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  条件: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   证明: (haveLebesgueDecomposition_spec μ ν).2.2
 
 Depends on / 依赖: haveLebesgueDecomposition_spec
@@ -279,7 +279,7 @@ lemma singularPart_add_rnDeriv
 
 中文:
 引理 singularPart_add_rnDeriv
-  条件: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  条件: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   证明: (haveLebesgueDecomposition_add μ ν).symm
 
 Depends on / 依赖: haveLebesgueDecomposition_add
@@ -297,7 +297,7 @@ lemma rnDeriv_add_singularPart
 
 中文:
 引理 rnDeriv_add_singularPart
-  条件: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  条件: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   证明: by rw [add_comm, singularPart_add_rnDeriv]
 
 Depends on / 依赖: add_comm, singularPart_add_rnDeriv
@@ -319,7 +319,7 @@ instance instHaveLebesgueDecompositionZeroLeft
 
 中文:
 实例 instHaveLebesgueDecompositionZeroLeft
-  签名: : HaveLebesgueDecomposition 0 ν
+  签名: : 有Lebesgue分解 0 ν
   定义体: MutuallySingular.zero_left.haveLebesgueDecomposition
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.zero_left.haveLebesgueDecomposition, haveLebesgueDecomposition, zero_left
@@ -337,7 +337,7 @@ instance instHaveLebesgueDecompositionZeroRight
 
 中文:
 实例 instHaveLebesgueDecompositionZeroRight
-  签名: : HaveLebesgueDecomposition μ 0
+  签名: : 有Lebesgue分解 μ 0
   定义体: MutuallySingular.zero_right.haveLebesgueDecomposition
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.zero_right.haveLebesgueDecomposition, haveLebesgueDecomposition, zero_right
@@ -355,7 +355,7 @@ instance instHaveLebesgueDecompositionSelf
 
 中文:
 实例 instHaveLebesgueDecompositionSelf
-  签名: : HaveLebesgueDecomposition μ μ where
+  签名: : 有Lebesgue分解 μ μ where
   定义体: ⟨⟨0, 1⟩, measurable_const, MutuallySingular.zero_left, by simp⟩
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.zero_left, measurable_const, zero_left
@@ -374,8 +374,8 @@ instance HaveLebesgueDecomposition.sum_left
       simp [withDensity_tsum, measurable_rnDeriv, Measure.sum_add_sum, singularPart_add_rnDeriv]⟩
 
 中文:
-实例 HaveLebesgueDecomposition.sum_left
-  签名: {ι : 类型} [Countable ι] (μ : ι -> Measure α)
+实例 有Lebesgue分解.sum_left
+  签名: {ι : 类型} [可数 ι] (μ : ι -> 测度 α)
   定义体: ⟨(.sum fun i => (μ i).singularPart ν, ∑' i, rnDeriv (μ i) ν),
     by dsimp only; fun_prop, by simp [mutuallySingular_singularPart], by
       simp [withDensity_tsum, measurable_rnDeriv, Measure.sum_add_sum, singularPart_add_rnDeriv]⟩
@@ -399,8 +399,8 @@ instance HaveLebesgueDecomposition.add_left
   simpa using sum_left (cond · μ μ')
 
 中文:
-实例 HaveLebesgueDecomposition.add_left
-  签名: {μ' : Measure α} [HaveLebesgueDecomposition μ ν]
+实例 有Lebesgue分解.add_left
+  签名: {μ' : 测度 α} [有Lebesgue分解 μ ν]
   定义体: by
   have : forall b, HaveLebesgueDecomposition (cond b μ μ') ν := by simp [*]
   simpa using sum_left (cond · μ μ')
@@ -426,7 +426,7 @@ instance haveLebesgueDecompositionSMul'
 
 中文:
 实例 haveLebesgueDecompositionSMul'
-  签名: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  签名: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   定义体: by
     obtain ⟨hmeas, hsing, hadd⟩ := haveLebesgueDecomposition_spec μ ν
     refine ⟨⟨r • μ.singularPart ν, r • μ.rnDeriv ν⟩, hmeas.const_smul _, hsing.smul _, ?_⟩
@@ -454,7 +454,7 @@ instance haveLebesgueDecompositionSMul
 
 中文:
 实例 haveLebesgueDecompositionSMul
-  签名: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  签名: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   定义体: by
   rw [ENNReal.smul_def]; infer_instance
 
@@ -479,7 +479,7 @@ instance haveLebesgueDecompositionSMulRight
 
 中文:
 实例 haveLebesgueDecompositionSMulRight
-  签名: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  签名: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   定义体: by
     obtain ⟨hmeas, hsing, hadd⟩ := haveLebesgueDecomposition_spec μ ν
     by_cases hr : r = 0
@@ -514,7 +514,7 @@ theorem haveLebesgueDecomposition_withDensity
 
 中文:
 定理 haveLebesgueDecomposition_withDensity
-  条件: (μ : Measure α) {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (μ : 测度 α) {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: ⟨⟨⟨0, f⟩, hf, .zero_left, (zero_add _).symm⟩⟩
 
 Depends on / 依赖: zero_add, zero_left
@@ -532,7 +532,7 @@ instance haveLebesgueDecompositionRnDeriv
 
 中文:
 实例 haveLebesgueDecompositionRnDeriv
-  签名: (μ ν : Measure α)
+  签名: (μ ν : 测度 α)
   定义体: haveLebesgueDecomposition_withDensity ν (measurable_rnDeriv _ _)
 
 Depends on / 依赖: haveLebesgueDecomposition_withDensity, measurable_rnDeriv
@@ -578,7 +578,7 @@ theorem singularPart_le
 
 中文:
 定理 singularPart_le
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   结论: μ.singularPart ν <= μ
   证明: by
   by_cases hl : HaveLebesgueDecomposition μ ν
@@ -612,7 +612,7 @@ theorem withDensity_rnDeriv_le
 
 中文:
 定理 withDensity_rnDeriv_le
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   结论: ν.withDensity (μ.rnDeriv ν) <= μ
   证明: by
   by_cases hl : HaveLebesgueDecomposition μ ν
@@ -639,8 +639,8 @@ lemma _root_.AEMeasurable.singularPart
   proof: AEMeasurable.mono_measure hf (Measure.singularPart_le _ _)
 
 中文:
-引理 _root_.AEMeasurable.singularPart
-  结论: {β : 类型} {_ : MeasurableSpace β} {f : α -> β}
+引理 _root_.几乎处处可测.singularPart
+  结论: {β : 类型} {_ : 可测空间 β} {f : α -> β}
   证明: AEMeasurable.mono_measure hf (Measure.singularPart_le _ _)
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mono_measure, Measure, Measure.singularPart_le, mono_measure, singularPart_le
@@ -659,8 +659,8 @@ lemma _root_.AEMeasurable.withDensity_rnDeriv
   proof: AEMeasurable.mono_measure hf (Measure.withDensity_rnDeriv_le _ _)
 
 中文:
-引理 _root_.AEMeasurable.withDensity_rnDeriv
-  结论: {β : 类型} {_ : MeasurableSpace β} {f : α -> β}
+引理 _root_.几乎处处可测.withDensity_rnDeriv
+  结论: {β : 类型} {_ : 可测空间 β} {f : α -> β}
   证明: AEMeasurable.mono_measure hf (Measure.withDensity_rnDeriv_le _ _)
 
 Depends on / 依赖: AEMeasurable, AEMeasurable.mono_measure, Measure, Measure.withDensity_rnDeriv_le, mono_measure, withDensity_rnDeriv_le
@@ -679,8 +679,8 @@ lemma MutuallySingular.singularPart
   proof: h.mono (singularPart_le μ ν') le_rfl
 
 中文:
-引理 MutuallySingular.singularPart
-  条件: (h : μ ⟂ₘ ν) (ν' : Measure α)
+引理 互奇异.singularPart
+  条件: (h : μ ⟂ₘ ν) (ν' : 测度 α)
   证明: h.mono (singularPart_le μ ν') le_rfl
 -/
 protected lemma MutuallySingular.singularPart (h : μ ⟂ₘ ν) (ν' : Measure α) :
@@ -703,7 +703,7 @@ lemma absolutelyContinuous_withDensity_rnDeriv
 
 中文:
 引理 absolutelyContinuous_withDensity_rnDeriv
-  条件: [HaveLebesgueDecomposition ν μ] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 ν μ] (hμν : μ ≪ ν)
   证明: by
   rw [haveLebesgueDecomposition_add ν μ] at hμν
   refine AbsolutelyContinuous.mk (fun s _ hνs => ?_)
@@ -743,7 +743,7 @@ lemma AbsolutelyContinuous.withDensity_rnDeriv
 
 中文:
 引理 AbsolutelyContinuous.withDensity_rnDeriv
-  结论: {ξ : Measure α} [μ.HaveLebesgueDecomposition ν]
+  结论: {ξ : 测度 α} [μ.有Lebesgue分解 ν]
   证明: by
   conv_rhs at hξμ => rw [μ.haveLebesgueDecomposition_add ν, add_comm]
   refine absolutelyContinuous_of_add_of_mutuallySingular hξμ ?_
@@ -769,7 +769,7 @@ lemma absolutelyContinuous_withDensity_rnDeriv_swap
 
 中文:
 引理 absolutelyContinuous_withDensity_rnDeriv_swap
-  条件: [ν.HaveLebesgueDecomposition μ]
+  条件: [ν.有Lebesgue分解 μ]
   证明: (withDensity_absolutelyContinuous ν (μ.rnDeriv ν)).withDensity_rnDeriv
     (absolutelyContinuous_of_le (withDensity_rnDeriv_le _ _))
 
@@ -826,8 +826,8 @@ theorem singularPart_zero
 
 中文:
 定理 singularPart_zero
-  条件: (ν : Measure α)
-  结论: (0 : Measure α).singularPart ν = 0
+  条件: (ν : 测度 α)
+  结论: (0 : 测度 α).singularPart ν = 0
   证明: singularPart_eq_zero_of_ac (AbsolutelyContinuous.zero _)
 
 @[simp]
@@ -851,7 +851,7 @@ lemma singularPart_zero_right
 
 中文:
 引理 singularPart_zero_right
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: μ.singularPart 0 = μ
   证明: by
   conv_rhs => rw [haveLebesgueDecomposition_add μ 0]
@@ -880,7 +880,7 @@ lemma singularPart_eq_zero
 
 中文:
 引理 singularPart_eq_zero
-  条件: (μ ν : Measure α) [μ.HaveLebesgueDecomposition ν]
+  条件: (μ ν : 测度 α) [μ.有Lebesgue分解 ν]
   证明: by
   have h_dec := haveLebesgueDecomposition_add μ ν
   refine ⟨fun h => ?_, singularPart_eq_zero_of_ac⟩
@@ -919,7 +919,7 @@ lemma withDensity_rnDeriv_eq_zero
 
 中文:
 引理 withDensity_rnDeriv_eq_zero
-  条件: (μ ν : Measure α) [μ.HaveLebesgueDecomposition ν]
+  条件: (μ ν : 测度 α) [μ.有Lebesgue分解 ν]
   证明: by
   have h_dec := haveLebesgueDecomposition_add μ ν
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -956,7 +956,7 @@ lemma rnDeriv_eq_zero
 
 中文:
 引理 rnDeriv_eq_zero
-  条件: (μ ν : Measure α) [μ.HaveLebesgueDecomposition ν]
+  条件: (μ ν : 测度 α) [μ.有Lebesgue分解 ν]
   证明: by
   rw [← withDensity_rnDeriv_eq_zero]; rw [withDensity_eq_zero_iff (measurable_rnDeriv _ _).aemeasurable]
 
@@ -979,8 +979,8 @@ lemma rnDeriv_zero
 
 中文:
 引理 rnDeriv_zero
-  条件: (ν : Measure α)
-  结论: (0 : Measure α).rnDeriv ν =ᵐ[ν] 0
+  条件: (ν : 测度 α)
+  结论: (0 : 测度 α).rnDeriv ν =ᵐ[ν] 0
   证明: by
   rw [rnDeriv_eq_zero]
   exact MutuallySingular.zero_left
@@ -1006,7 +1006,7 @@ lemma MutuallySingular.rnDeriv_ae_eq_zero
 @[simp]
 
 中文:
-引理 MutuallySingular.rnDeriv_ae_eq_zero
+引理 互奇异.rnDeriv_ae_eq_zero
   条件: (hμν : μ ⟂ₘ ν)
   证明: by
   by_cases h : μ.HaveLebesgueDecomposition ν
@@ -1036,7 +1036,7 @@ theorem singularPart_withDensity
 
 中文:
 定理 singularPart_withDensity
-  条件: (ν : Measure α) (f : α -> 实数>=0∞)
+  条件: (ν : 测度 α) (f : α -> 实数>=0∞)
   证明: singularPart_eq_zero_of_ac (withDensity_absolutelyContinuous _ _)
 
 Depends on / 依赖: singularPart_eq_zero_of_ac, withDensity_absolutelyContinuous
@@ -1059,7 +1059,7 @@ lemma rnDeriv_singularPart
 
 中文:
 引理 rnDeriv_singularPart
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   证明: by
   rw [rnDeriv_eq_zero]
   exact mutuallySingular_singularPart μ ν
@@ -1085,7 +1085,7 @@ lemma singularPart_self
 
 中文:
 引理 singularPart_self
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: μ.singularPart μ = 0
   证明: singularPart_eq_zero_of_ac Measure.AbsolutelyContinuous.rfl
 
@@ -1111,7 +1111,7 @@ lemma rnDeriv_self
 
 中文:
 引理 rnDeriv_self
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   结论: μ.rnDeriv μ =ᵐ[μ] fun _ => 1
   证明: by
   have h := rnDeriv_add_singularPart μ μ
@@ -1183,7 +1183,7 @@ lemma singularPart_singularPart
 
 中文:
 引理 singularPart_singularPart
-  条件: (μ ν : Measure α)
+  条件: (μ ν : 测度 α)
   证明: by
   rw [Measure.singularPart_eq_self]
   exact Measure.mutuallySingular_singularPart _ _
@@ -1205,7 +1205,7 @@ instance singularPart.instIsFiniteMeasure
 
 中文:
 实例 singularPart.instIsFiniteMeasure
-  签名: [IsFiniteMeasure μ]
+  签名: [是有限测度 μ]
   定义体: isFiniteMeasure_of_le μ singularPart_le μ ν
 
 Depends on / 依赖: isFiniteMeasure_of_le, singularPart_le
@@ -1224,7 +1224,7 @@ instance singularPart.instSigmaFinite
 
 中文:
 实例 singularPart.instSigmaFinite
-  签名: [SigmaFinite μ]
+  签名: [σ有限 μ]
   定义体: sigmaFinite_of_le μ singularPart_le μ ν
 
 Depends on / 依赖: sigmaFinite_of_le, singularPart_le
@@ -1242,7 +1242,7 @@ instance singularPart.instIsLocallyFiniteMeasure
 
 中文:
 实例 singularPart.instIsLocallyFiniteMeasure
-  签名: [TopologicalSpace α] [IsLocallyFiniteMeasure μ]
+  签名: [拓扑空间 α] [是局部有限测度 μ]
   定义体: isLocallyFiniteMeasure_of_le singularPart_le μ ν
 
 Depends on / 依赖: isLocallyFiniteMeasure_of_le, singularPart_le
@@ -1261,7 +1261,7 @@ instance withDensity.instIsFiniteMeasure
 
 中文:
 实例 withDensity.instIsFiniteMeasure
-  签名: [IsFiniteMeasure μ]
+  签名: [是有限测度 μ]
   定义体: isFiniteMeasure_of_le μ withDensity_rnDeriv_le μ ν
 
 Depends on / 依赖: isFiniteMeasure_of_le, withDensity_rnDeriv_le
@@ -1280,7 +1280,7 @@ instance withDensity.instSigmaFinite
 
 中文:
 实例 withDensity.instSigmaFinite
-  签名: [SigmaFinite μ]
+  签名: [σ有限 μ]
   定义体: sigmaFinite_of_le μ withDensity_rnDeriv_le μ ν
 
 Depends on / 依赖: sigmaFinite_of_le, withDensity_rnDeriv_le
@@ -1299,7 +1299,7 @@ instance withDensity.instIsLocallyFiniteMeasure
 
 中文:
 实例 withDensity.instIsLocallyFiniteMeasure
-  签名: [TopologicalSpace α] [IsLocallyFiniteMeasure μ]
+  签名: [拓扑空间 α] [是局部有限测度 μ]
   定义体: isLocallyFiniteMeasure_of_le withDensity_rnDeriv_le μ ν
 
 Depends on / 依赖: isLocallyFiniteMeasure_of_le, withDensity_rnDeriv_le
@@ -1326,7 +1326,7 @@ theorem lintegral_rnDeriv_lt_top_of_measure_ne_top
 
 中文:
 定理 lintegral_rnDeriv_lt_top_of_measure_ne_top
-  条件: (ν : Measure α) {s : Set α} (hs : μ s != ∞)
+  条件: (ν : 测度 α) {s : 集合 α} (hs : μ s != ∞)
   证明: by
   by_cases hl : HaveLebesgueDecomposition μ ν
   · suffices (∫⁻ x in toMeasurable μ s, μ.rnDeriv ν x ∂ν) < ∞ from
@@ -1361,7 +1361,7 @@ theorem lintegral_rnDeriv_lt_top
 
 中文:
 定理 lintegral_rnDeriv_lt_top
-  条件: (μ ν : Measure α) [IsFiniteMeasure μ]
+  条件: (μ ν : 测度 α) [是有限测度 μ]
   证明: by
   rw [← setLIntegral_univ]
   exact lintegral_rnDeriv_lt_top_of_measure_ne_top _ (measure_lt_top _ _).ne
@@ -1390,7 +1390,7 @@ theorem rnDeriv_lt_top
 
 中文:
 定理 rnDeriv_lt_top
-  条件: (μ ν : Measure α) [SigmaFinite μ]
+  条件: (μ ν : 测度 α) [σ有限 μ]
   结论: 对任意ᵐ x ∂ν, μ.rnDeriv ν x < ∞
   证明: by
   suffices forall n, forallᵐ x ∂ν, x in spanningSets μ n -> μ.rnDeriv ν x < ∞ by
@@ -1423,7 +1423,7 @@ lemma rnDeriv_ne_top
 
 中文:
 引理 rnDeriv_ne_top
-  条件: (μ ν : Measure α) [SigmaFinite μ]
+  条件: (μ ν : 测度 α) [σ有限 μ]
   结论: 对任意ᵐ x ∂ν, μ.rnDeriv ν x != ∞
   证明: by
   filter_upwards [Measure.rnDeriv_lt_top μ ν] with x hx using hx.ne
@@ -1452,7 +1452,7 @@ theorem eq_singularPart
 
 中文:
 定理 eq_singularPart
-  结论: {s : Measure α} {f : α -> 实数>=0∞} (hf : Measurable f) (hs : s ⟂ₘ ν)
+  结论: {s : 测度 α} {f : α -> 实数>=0∞} (hf : 可测 f) (hs : s ⟂ₘ ν)
   证明: by
   have : HaveLebesgueDecomposition μ ν := ⟨⟨⟨s, f⟩, hf, hs, hadd⟩⟩
   obtain ⟨hmeas, hsing, hadd'⟩ := haveLebesgueDecomposition_spec μ ν
@@ -1514,7 +1514,7 @@ theorem singularPart_smul
 
 中文:
 定理 singularPart_smul
-  条件: (μ ν : Measure α) (r : 实数>=0)
+  条件: (μ ν : 测度 α) (r : 实数>=0)
   证明: by
   by_cases hr : r = 0
   · rw [hr, zero_smul, zero_smul, singularPart_zero]
@@ -1553,7 +1553,7 @@ theorem singularPart_smul_right
 
 中文:
 定理 singularPart_smul_right
-  条件: (μ ν : Measure α) (r : 实数>=0) (hr : r != 0)
+  条件: (μ ν : 测度 α) (r : 实数>=0) (hr : r != 0)
   证明: by
   by_cases hl : HaveLebesgueDecomposition μ ν
   · refine (eq_singularPart ((measurable_rnDeriv μ ν).const_smul r⁻¹) ?_ ?_).symm
@@ -1594,7 +1594,7 @@ theorem singularPart_add
 
 中文:
 定理 singularPart_add
-  结论: (μ₁ μ₂ ν : Measure α) [HaveLebesgueDecomposition μ₁ ν]
+  结论: (μ₁ μ₂ ν : 测度 α) [有Lebesgue分解 μ₁ ν]
   证明: by
   refine (eq_singularPart ((measurable_rnDeriv μ₁ ν).add (measurable_rnDeriv μ₂ ν))
     ((mutuallySingular_singularPart _ _).add_left (mutuallySingular_singularPart _ _)) ?_).symm
@@ -1627,7 +1627,7 @@ lemma singularPart_restrict
 
 中文:
 引理 singularPart_restrict
-  结论: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  结论: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   证明: by
   refine (Measure.eq_singularPart (f := s.indicator (μ.rnDeriv ν)) ?_ ?_ ?_).symm
   · exact (μ.measurable_rnDeriv ν).indicator hs
@@ -1658,7 +1658,7 @@ theorem singularPart_eq_restrict'
 
 中文:
 定理 singularPart_eq_restrict'
-  结论: {s : Set α} [μ.HaveLebesgueDecomposition ν]
+  结论: {s : 集合 α} [μ.有Lebesgue分解 ν]
   证明: by
   conv_rhs => rw [← singularPart_add_rnDeriv μ ν]
   rwa [restrict_add, restrict_eq_self_of_ae_mem, restrict_eq_zero.2 hνs, add_zero]
@@ -1681,7 +1681,7 @@ theorem singularPart_eq_restrict
 
 中文:
 定理 singularPart_eq_restrict
-  结论: {s : Set α} [μ.HaveLebesgueDecomposition ν]
+  结论: {s : 集合 α} [μ.有Lebesgue分解 ν]
   证明: singularPart_eq_restrict' hμs withDensity_absolutelyContinuous _ _ hνs
 
 Depends on / 依赖: singularPart_eq_restrict, withDensity_absolutelyContinuous
@@ -1703,7 +1703,7 @@ lemma measure_sub_singularPart
 
 中文:
 引理 measure_sub_singularPart
-  结论: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν]
+  结论: (μ ν : 测度 α) [有Lebesgue分解 μ ν]
   证明: by
   nth_rw 1 [← rnDeriv_add_singularPart μ ν]
   exact Measure.add_sub_cancel
@@ -1728,7 +1728,7 @@ lemma measure_sub_rnDeriv
 
 中文:
 引理 measure_sub_rnDeriv
-  条件: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν] [IsFiniteMeasure μ]
+  条件: (μ ν : 测度 α) [有Lebesgue分解 μ ν] [是有限测度 μ]
   证明: by
   nth_rw 1 [← singularPart_add_rnDeriv μ ν]
   exact Measure.add_sub_cancel
@@ -1757,7 +1757,7 @@ theorem eq_withDensity_rnDeriv
 
 中文:
 定理 eq_withDensity_rnDeriv
-  结论: {s : Measure α} {f : α -> 实数>=0∞} (hf : Measurable f) (hs : s ⟂ₘ ν)
+  结论: {s : 测度 α} {f : α -> 实数>=0∞} (hf : 可测 f) (hs : s ⟂ₘ ν)
   证明: by
   have : HaveLebesgueDecomposition μ ν := ⟨⟨⟨s, f⟩, hf, hs, hadd⟩⟩
   obtain ⟨hmeas, hsing, hadd'⟩ := haveLebesgueDecomposition_spec μ ν
@@ -1817,7 +1817,7 @@ theorem eq_withDensity_rnDeriv₀
 
 中文:
 定理 eq_withDensity_rnDeriv₀
-  结论: {s : Measure α} {f : α -> 实数>=0∞}
+  结论: {s : 测度 α} {f : α -> 实数>=0∞}
   证明: by
   rw [withDensity_congr_ae hf.ae_eq_mk] at hadd ⊢
   exact eq_withDensity_rnDeriv hf.measurable_mk hs hadd
@@ -1841,7 +1841,7 @@ theorem eq_rnDeriv₀
 
 中文:
 定理 eq_rnDeriv₀
-  结论: [SigmaFinite ν] {s : Measure α} {f : α -> 实数>=0∞}
+  结论: [σ有限 ν] {s : 测度 α} {f : α -> 实数>=0∞}
   证明: (withDensity_eq_iff_of_sigmaFinite hf (measurable_rnDeriv _ _).aemeasurable).mp
     (eq_withDensity_rnDeriv₀ hf hs hadd)
 
@@ -1863,7 +1863,7 @@ theorem eq_rnDeriv
 
 中文:
 定理 eq_rnDeriv
-  结论: [SigmaFinite ν] {s : Measure α} {f : α -> 实数>=0∞} (hf : Measurable f) (hs : s ⟂ₘ ν)
+  结论: [σ有限 ν] {s : 测度 α} {f : α -> 实数>=0∞} (hf : 可测 f) (hs : s ⟂ₘ ν)
   证明: eq_rnDeriv₀ hf.aemeasurable hs hadd
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable
@@ -1883,7 +1883,7 @@ theorem rnDeriv_withDensity₀
 
 中文:
 定理 rnDeriv_withDensity₀
-  结论: (ν : Measure α) [SigmaFinite ν] {f : α -> 实数>=0∞}
+  结论: (ν : 测度 α) [σ有限 ν] {f : α -> 实数>=0∞}
   证明: have : ν.withDensity f = 0 + ν.withDensity f := by rw [zero_add]
   (eq_rnDeriv₀ hf MutuallySingular.zero_left this).symm
 
@@ -1905,7 +1905,7 @@ theorem rnDeriv_withDensity
 
 中文:
 定理 rnDeriv_withDensity
-  条件: (ν : Measure α) [SigmaFinite ν] {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (ν : 测度 α) [σ有限 ν] {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: rnDeriv_withDensity₀ ν hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable
@@ -1927,7 +1927,7 @@ lemma rnDeriv_restrict
 
 中文:
 引理 rnDeriv_restrict
-  结论: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν] [SigmaFinite ν]
+  结论: (μ ν : 测度 α) [有Lebesgue分解 μ ν] [σ有限 ν]
   证明: by
   refine (eq_rnDeriv (s := (μ.restrict s).singularPart ν)
     ((measurable_rnDeriv _ _).indicator hs) (mutuallySingular_singularPart _ _) ?_).symm
@@ -1954,7 +1954,7 @@ theorem rnDeriv_restrict_self
 
 中文:
 定理 rnDeriv_restrict_self
-  条件: (ν : Measure α) [SigmaFinite ν] {s : Set α} (hs : MeasurableSet s)
+  条件: (ν : 测度 α) [σ有限 ν] {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [← withDensity_indicator_one hs]
   exact rnDeriv_withDensity _ (measurable_one.indicator hs)
@@ -1983,7 +1983,7 @@ theorem rnDeriv_smul_left
 
 中文:
 定理 rnDeriv_smul_left
-  结论: (ν μ : Measure α) [IsFiniteMeasure ν]
+  结论: (ν μ : 测度 α) [是有限测度 ν]
   证明: by
   rw [← withDensity_eq_iff]
   · simp_rw [ENNReal.smul_def]
@@ -2022,7 +2022,7 @@ theorem rnDeriv_smul_left_of_ne_top
 
 中文:
 定理 rnDeriv_smul_left_of_ne_top
-  结论: (ν μ : Measure α) [IsFiniteMeasure ν]
+  结论: (ν μ : 测度 α) [是有限测度 ν]
   证明: by
   have h : (r.toNNReal • ν).rnDeriv μ =ᵐ[μ] r.toNNReal • ν.rnDeriv μ :=
     rnDeriv_smul_left ν μ r.toNNReal
@@ -2054,7 +2054,7 @@ theorem rnDeriv_smul_right
 
 中文:
 定理 rnDeriv_smul_right
-  结论: (ν μ : Measure α) [IsFiniteMeasure ν]
+  结论: (ν μ : 测度 α) [是有限测度 ν]
   证明: by
   refine (absolutelyContinuous_smul <| ENNReal.coe_ne_zero.2 hr).ae_le
     (?_ : ν.rnDeriv (r • μ) =ᵐ[r • μ] r⁻¹ • ν.rnDeriv μ)
@@ -2101,7 +2101,7 @@ theorem rnDeriv_smul_right_of_ne_top
 
 中文:
 定理 rnDeriv_smul_right_of_ne_top
-  结论: (ν μ : Measure α) [IsFiniteMeasure ν]
+  结论: (ν μ : 测度 α) [是有限测度 ν]
   证明: by
   have h : ν.rnDeriv (r.toNNReal • μ) =ᵐ[μ] r.toNNReal⁻¹ • ν.rnDeriv μ := by
     refine rnDeriv_smul_right ν μ ?_
@@ -2141,7 +2141,7 @@ theorem rnDeriv_smul_same
 
 中文:
 定理 rnDeriv_smul_same
-  结论: (ν μ : Measure α) [IsFiniteMeasure ν]
+  结论: (ν μ : 测度 α) [是有限测度 ν]
   证明: by
   filter_upwards [rnDeriv_smul_left ν μ r, rnDeriv_smul_right (r • ν) μ hr] with x hx1 hx2
   simp [hx1, hx2, hr]
@@ -2169,7 +2169,7 @@ lemma rnDeriv_add
 
 中文:
 引理 rnDeriv_add
-  结论: (ν₁ ν₂ μ : Measure α) [IsFiniteMeasure ν₁] [IsFiniteMeasure ν₂]
+  结论: (ν₁ ν₂ μ : 测度 α) [是有限测度 ν₁] [是有限测度 ν₂]
   证明: by
   rw [← withDensity_eq_iff]
   · suffices (ν₁ + ν₂).singularPart μ + μ.withDensity ((ν₁ + ν₂).rnDeriv μ)
@@ -2205,8 +2205,8 @@ theorem exists_positive_of_not_mutuallySingular
         ∧ (forall t, MeasurableSet t -> μ (t inter sᶜ) <= ((1 /
 
 中文:
-定理 exists_positive_of_not_mutuallySingular
-  结论: (μ ν : Measure α) [IsFiniteMeasure μ]
+定理 存在_positive_of_not_mutuallySingular
+  结论: (μ ν : 测度 α) [是有限测度 μ]
   证明: by
   -- for all `n : ℕ`, obtain the Hahn decomposition for `μ - (1 / n) ν`
   have h_decomp (n : Nat) : exists s : Set α, MeasurableSet s
@@ -2284,7 +2284,7 @@ definition measurableLE
 
 中文:
 定义 measurableLE
-  签名: (μ ν : Measure α)
+  签名: (μ ν : 测度 α)
   定义体: {f | Measurable f ∧ forall (A : Set α), MeasurableSet A -> (∫⁻ x in A, f x ∂μ) <= ν A}
 
 Depends on / 依赖: Measurable, MeasurableSet
@@ -2537,7 +2537,7 @@ definition measurableLEEval
 
 中文:
 定义 measurableLEEval
-  签名: (μ ν : Measure α)
+  签名: (μ ν : 测度 α)
   定义体: (fun f : α -> Real>=0∞ => ∫⁻ x, f x ∂μ) '' measurableLE μ ν
 
 Depends on / 依赖: measurableLE
@@ -2564,7 +2564,7 @@ theorem haveLebesgueDecomposition_of_finiteMeasure
 
 中文:
 定理 haveLebesgueDecomposition_of_finiteMeasure
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: [是有限测度 μ] [是有限测度 ν]
   证明: by
     have h := @exists_seq_tendsto_sSup _ _ _ _ _ (measurableLEEval ν μ)
       ⟨0, 0, zero_mem_measurableLE, by simp⟩ (OrderTop.bddAbove _)
@@ -2666,7 +2666,7 @@ theorem HaveLebesgueDecomposition.sfinite_of_isFiniteMeasure
   proof: sum_sfiniteSeq μ ▸ sum_left _
 
 中文:
-定理 HaveLebesgueDecomposition.sfinite_of_isFiniteMeasure
+定理 有Lebesgue分解.sfinite_of_isFiniteMeasure
   结论: [SFinite μ]
   证明: sum_sfiniteSeq μ ▸ sum_left _
 
@@ -2737,7 +2737,7 @@ theorem rnDeriv_smul_left'
 
 中文:
 定理 rnDeriv_smul_left'
-  条件: (ν μ : Measure α) [SigmaFinite ν] [SigmaFinite μ] (r : 实数>=0)
+  条件: (ν μ : 测度 α) [σ有限 ν] [σ有限 μ] (r : 实数>=0)
   证明: by
   rw [← withDensity_eq_iff_of_sigmaFinite]
   · simp_rw [ENNReal.smul_def]
@@ -2773,7 +2773,7 @@ theorem rnDeriv_smul_left_of_ne_top'
 
 中文:
 定理 rnDeriv_smul_left_of_ne_top'
-  结论: (ν μ : Measure α) [SigmaFinite ν] [SigmaFinite μ]
+  结论: (ν μ : 测度 α) [σ有限 ν] [σ有限 μ]
   证明: by
   have h : (r.toNNReal • ν).rnDeriv μ =ᵐ[μ] r.toNNReal • ν.rnDeriv μ :=
     rnDeriv_smul_left' ν μ r.toNNReal
@@ -2804,7 +2804,7 @@ theorem rnDeriv_smul_right'
 
 中文:
 定理 rnDeriv_smul_right'
-  结论: (ν μ : Measure α) [SigmaFinite ν] [SigmaFinite μ]
+  结论: (ν μ : 测度 α) [σ有限 ν] [σ有限 μ]
   证明: by
   refine (absolutelyContinuous_smul <| ENNReal.coe_ne_zero.2 hr).ae_le
     (?_ : ν.rnDeriv (r • μ) =ᵐ[r • μ] r⁻¹ • ν.rnDeriv μ)
@@ -2847,7 +2847,7 @@ theorem rnDeriv_smul_right_of_ne_top'
 
 中文:
 定理 rnDeriv_smul_right_of_ne_top'
-  结论: (ν μ : Measure α) [SigmaFinite ν] [SigmaFinite μ]
+  结论: (ν μ : 测度 α) [σ有限 ν] [σ有限 μ]
   证明: by
   have h : ν.rnDeriv (r.toNNReal • μ) =ᵐ[μ] r.toNNReal⁻¹ • ν.rnDeriv μ := by
     refine rnDeriv_smul_right' ν μ ?_
@@ -2883,7 +2883,7 @@ lemma rnDeriv_add'
 
 中文:
 引理 rnDeriv_add'
-  条件: (ν₁ ν₂ μ : Measure α) [SigmaFinite ν₁] [SigmaFinite ν₂] [SigmaFinite μ]
+  条件: (ν₁ ν₂ μ : 测度 α) [σ有限 ν₁] [σ有限 ν₂] [σ有限 μ]
   证明: by
   rw [← withDensity_eq_iff_of_sigmaFinite]
   · suffices (ν₁ + ν₂).singularPart μ + μ.withDensity ((ν₁ + ν₂).rnDeriv μ)
@@ -2915,7 +2915,7 @@ lemma rnDeriv_add_of_mutuallySingular
 
 中文:
 引理 rnDeriv_add_of_mutuallySingular
-  结论: (ν₁ ν₂ μ : Measure α)
+  结论: (ν₁ ν₂ μ : 测度 α)
   证明: by
   filter_upwards [rnDeriv_add' ν₁ ν₂ μ, (rnDeriv_eq_zero ν₂ μ).mpr h] with x hx_add hx_zero
   simp [hx_add, hx_zero]
@@ -2947,7 +2947,7 @@ lemma add_sub_of_mutuallySingular
 
 中文:
 引理 add_sub_of_mutuallySingular
-  条件: {ξ : Measure α} (h : μ ⟂ₘ ξ)
+  条件: {ξ : 测度 α} (h : μ ⟂ₘ ξ)
   结论: μ + (ν - ξ) = μ + ν - ξ
   证明: by
   let s := h.nullSet

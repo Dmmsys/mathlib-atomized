@@ -55,7 +55,7 @@ theorem irrational_rpow_rat_of_not_power
 
 中文:
 定理 irrational_rpow_rat_of_not_power
-  结论: {q : Rat} {a b : 自然数}
+  结论: {q : 有理数} {a b : 自然数}
   证明: by
   simp only [Irrational, Rat.cast_div, Rat.cast_natCast, Real.rpow_eq_pow, Set.mem_range,
     not_exists]

@@ -47,7 +47,7 @@ lemma IsIntegralCurveOn.comp_add
   rwa [mem_vadd_set_iff_neg_vadd_mem, neg_neg, vadd_eq_add, add_comm] 
 
 中文:
-引理 IsIntegralCurveOn.comp_add
+引理 Is整数egralCurveOn.comp_add
   条件: (hγ : Is整数egralCurveOn γ v s) (dt : 实数)
   证明: by
   intros t ht
@@ -80,7 +80,7 @@ lemma isIntegralCurveOn_comp_add
   · simp only [neg_neg, vadd_neg_vadd]
 
 中文:
-引理 isIntegralCurveOn_comp_add
+引理 is整数egralCurveOn_comp_add
   条件: {dt : 实数}
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_add _⟩
@@ -113,7 +113,7 @@ lemma isIntegralCurveOn_comp_sub
   simpa using! isIntegralCurveOn_comp_add (dt := -dt)
 
 中文:
-引理 isIntegralCurveOn_comp_sub
+引理 is整数egralCurveOn_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isIntegralCurveOn_comp_add (dt := -dt)
@@ -133,7 +133,7 @@ lemma IsIntegralCurveOn.comp_sub
   proof: isIntegralCurveOn_comp_sub.mpr hγ
 
 中文:
-引理 IsIntegralCurveOn.comp_sub
+引理 Is整数egralCurveOn.comp_sub
   条件: (hγ : Is整数egralCurveOn γ v s) (dt : 实数)
   证明: isIntegralCurveOn_comp_sub.mpr hγ
 
@@ -156,7 +156,7 @@ lemma isIntegralCurveAt_comp_add
   simp [neg_add_eq_sub]
 
 中文:
-引理 isIntegralCurveAt_comp_add
+引理 is整数egralCurveAt_comp_add
   条件: {dt : 实数}
   证明: by
   simp_rw [isIntegralCurveAt_iff_exists_pos]
@@ -182,7 +182,7 @@ lemma IsIntegralCurveAt.comp_add
   proof: isIntegralCurveAt_comp_add.mpr hγ
 
 中文:
-引理 IsIntegralCurveAt.comp_add
+引理 Is整数egralCurveAt.comp_add
   条件: (hγ : Is整数egralCurveAt γ v t₀) (dt : 实数)
   证明: isIntegralCurveAt_comp_add.mpr hγ
 
@@ -202,7 +202,7 @@ lemma isIntegralCurveAt_comp_sub
   simpa using! isIntegralCurveAt_comp_add (dt := -dt)
 
 中文:
-引理 isIntegralCurveAt_comp_sub
+引理 is整数egralCurveAt_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isIntegralCurveAt_comp_add (dt := -dt)
@@ -222,7 +222,7 @@ lemma IsIntegralCurveAt.comp_sub
   proof: isIntegralCurveAt_comp_sub.mpr hγ
 
 中文:
-引理 IsIntegralCurveAt.comp_sub
+引理 Is整数egralCurveAt.comp_sub
   条件: (hγ : Is整数egralCurveAt γ v t₀) (dt : 实数)
   证明: isIntegralCurveAt_comp_sub.mpr hγ
 
@@ -243,7 +243,7 @@ lemma IsIntegralCurve.comp_add
   simpa using hγ.comp_add dt
 
 中文:
-引理 IsIntegralCurve.comp_add
+引理 Is整数egralCurve.comp_add
   条件: (hγ : Is整数egralCurve γ v) (dt : 实数)
   证明: by
   rw [← isIntegralCurveOn_univ] at *
@@ -268,7 +268,7 @@ lemma isIntegralCurve_comp_add
   simp
 
 中文:
-引理 isIntegralCurve_comp_add
+引理 is整数egralCurve_comp_add
   条件: {dt : 实数}
   证明: by
   simp_rw [← isIntegralCurveOn_univ]
@@ -293,7 +293,7 @@ lemma isIntegralCurve_comp_sub
   simpa using! isIntegralCurve_comp_add (dt := -dt)
 
 中文:
-引理 isIntegralCurve_comp_sub
+引理 is整数egralCurve_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isIntegralCurve_comp_add (dt := -dt)
@@ -313,7 +313,7 @@ lemma IsIntegralCurve.comp_sub
   proof: isIntegralCurve_comp_sub.mpr hγ
 
 中文:
-引理 IsIntegralCurve.comp_sub
+引理 Is整数egralCurve.comp_sub
   条件: (hγ : Is整数egralCurve γ v) (dt : 实数)
   证明: isIntegralCurve_comp_sub.mpr hγ
 
@@ -341,7 +341,7 @@ lemma IsIntegralCurveOn.comp_mul
     fun _ ht' => ht'
 
 中文:
-引理 IsIntegralCurveOn.comp_mul
+引理 Is整数egralCurveOn.comp_mul
   条件: (hγ : Is整数egralCurveOn γ v s) (a : 实数)
   证明: fun t ht => by
   simp only [comp_apply, Pi.smul_apply]
@@ -373,7 +373,7 @@ lemma isIntegralCurveOn_comp_mul_ne_zero
     simp only [comp_apply, mul_assoc, inv_mul_eq_div, div_self ha, mul_o
 
 中文:
-引理 isIntegralCurveOn_comp_mul_ne_zero
+引理 is整数egralCurveOn_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   have heq : a⁻¹ • s = { t | t * a in s } := by
@@ -418,7 +418,7 @@ lemma IsIntegralCurveAt.comp_mul_ne_zero
   rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; r
 
 中文:
-引理 IsIntegralCurveAt.comp_mul_ne_zero
+引理 Is整数egralCurveAt.comp_mul_ne_zero
   条件: (hγ : Is整数egralCurveAt γ v t₀) {a : 实数} (ha : a != 0)
   证明: by
   rw [isIntegralCurveAt_iff_exists_pos] at *
@@ -455,7 +455,7 @@ lemma isIntegralCurveAt_comp_mul_ne_zero
     
 
 中文:
-引理 isIntegralCurveAt_comp_mul_ne_zero
+引理 is整数egralCurveAt_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_mul_ne_zero ha⟩
@@ -490,7 +490,7 @@ lemma IsIntegralCurve.comp_mul
   exact hγ.comp_mul _
 
 中文:
-引理 IsIntegralCurve.comp_mul
+引理 Is整数egralCurve.comp_mul
   条件: (hγ : Is整数egralCurve γ v) (a : 实数)
   证明: by
   rw [← isIntegralCurveOn_univ] at *
@@ -519,7 +519,7 @@ lemma isIntegralCurve_comp_mul_ne_zero
       smul_smul, one_smul]
 
 中文:
-引理 isIntegralCurve_comp_mul_ne_zero
+引理 is整数egralCurve_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_mul _⟩
@@ -552,7 +552,7 @@ lemma isIntegralCurve_const
   proof: fun t => (h t) ▸ hasDerivAt_const _ _
 
 中文:
-引理 isIntegralCurve_const
+引理 is整数egralCurve_const
   条件: {x : E} (h : 对任意 t, v t x = 0)
   结论: Is整数egralCurve (fun _ => x) v
   证明: fun t => (h t) ▸ hasDerivAt_const _ _

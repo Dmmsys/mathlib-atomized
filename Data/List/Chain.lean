@@ -79,7 +79,7 @@ theorem isChain_cons_iff
 
 中文:
 定理 isChain_cons_iff
-  条件: (R : α -> α -> 命题) (a : α) (l : List α)
+  条件: (R : α -> α -> 命题) (a : α) (l : 列表 α)
   证明: (isChain_iff _ _).trans by
     simp only [cons_ne_nil, List.cons_eq_cons, exists_and_right,
       exists_eq', true_and, exists_and_left, false_or]
@@ -106,7 +106,7 @@ theorem IsChain.imp_of_mem_tail_imp
 
 中文:
 定理 IsChain.imp_of_mem_tail_imp
-  结论: {S : α -> α -> 命题} {l : List α}
+  结论: {S : α -> α -> 命题} {l : 列表 α}
   证明: by
   induction p with grind
 -/
@@ -124,7 +124,7 @@ theorem IsChain.imp_of_mem_imp
 
 中文:
 定理 IsChain.imp_of_mem_imp
-  结论: {S : α -> α -> 命题} {l : List α}
+  结论: {S : α -> α -> 命题} {l : 列表 α}
   证明: p.imp_of_mem_tail_imp (H · · · <| mem_of_mem_tail ·)
 
 Depends on / 依赖: imp_of_mem_tail_imp, mem_of_mem_tail, p.imp_of_mem_tail_imp
@@ -143,7 +143,7 @@ theorem IsChain.iff
 
 中文:
 定理 IsChain.iff
-  条件: {S : α -> α -> 命题} (H : 对任意 a b, R a b ↔ S a b) {l : List α}
+  条件: {S : α -> α -> 命题} (H : 对任意 a b, R a b ↔ S a b) {l : 列表 α}
   证明: ⟨IsChain.imp fun a b => (H a b).1, IsChain.imp fun a b => (H a b).2⟩
 
 Depends on / 依赖: IsChain, IsChain.imp
@@ -162,7 +162,7 @@ theorem IsChain.iff_of_mem_imp
 
 中文:
 定理 IsChain.iff_of_mem_imp
-  结论: {S : α -> α -> 命题} {l : List α}
+  结论: {S : α -> α -> 命题} {l : 列表 α}
   证明: ⟨IsChain.imp_of_mem_imp (Iff.mp <| H · · · ·), IsChain.imp_of_mem_imp (Iff.mpr <| H · · · ·)⟩
 
 Depends on / 依赖: Iff.mp, Iff.mpr, IsChain, IsChain.imp_of_mem_imp, imp_of_mem_imp
@@ -182,7 +182,7 @@ theorem IsChain.iff_of_mem_tail_imp
 
 中文:
 定理 IsChain.iff_of_mem_tail_imp
-  结论: {S : α -> α -> 命题} {l : List α}
+  结论: {S : α -> α -> 命题} {l : 列表 α}
   证明: ⟨IsChain.imp_of_mem_tail_imp (Iff.mp <| H · · · ·),
   IsChain.imp_of_mem_tail_imp (Iff.mpr <| H · · · ·)⟩
 
@@ -203,7 +203,7 @@ theorem IsChain.iff_mem
 
 中文:
 定理 IsChain.iff_mem
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: IsChain.iff_of_mem_imp by grind
 
 Depends on / 依赖: IsChain, IsChain.iff_of_mem_imp, iff_of_mem_imp
@@ -222,7 +222,7 @@ theorem IsChain.iff_mem_mem_tail
 
 中文:
 定理 IsChain.iff_mem_mem_tail
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: IsChain.iff_of_mem_tail_imp by grind
 
 Depends on / 依赖: IsChain, IsChain.iff_of_mem_tail_imp, iff_of_mem_tail_imp
@@ -262,7 +262,7 @@ theorem isChain_isInfix
 
 中文:
 定理 isChain_isInfix
-  结论: 对任意 l : List α, IsChain (fun x y => [x, y] <:+: l) l
+  结论: 对任意 l : 列表 α, IsChain (fun x y => [x, y] <:+: l) l
 -/
 theorem isChain_isInfix : forall l : List α, IsChain (fun x y => [x, y] <:+: l) l
   | [] => .nil
@@ -281,7 +281,7 @@ theorem isChain_split
 
 中文:
 定理 isChain_split
-  条件: {c : α} {l₁ l₂ : List α}
+  条件: {c : α} {l₁ l₂ : 列表 α}
   证明: by
   induction l₁ using twoStepInduction generalizing l₂ with grind
 
@@ -304,7 +304,7 @@ theorem isChain_cons_split
 
 中文:
 定理 isChain_cons_split
-  条件: {c : α} {l₁ l₂ : List α}
+  条件: {c : α} {l₁ l₂ : 列表 α}
   证明: by
   simp_rw [← cons_append, isChain_split (l₂ := l₂)]
 
@@ -330,7 +330,7 @@ theorem isChain_append_cons_cons
 
 中文:
 定理 isChain_append_cons_cons
-  条件: {b c : α} {l₁ l₂ : List α}
+  条件: {b c : α} {l₁ l₂ : 列表 α}
   证明: by
   rw [isChain_split]; rw [isChain_cons_cons]
 
@@ -354,7 +354,7 @@ theorem isChain_cons_append_cons_cons
 
 中文:
 定理 isChain_cons_append_cons_cons
-  条件: {a b c : α} {l₁ l₂ : List α}
+  条件: {a b c : α} {l₁ l₂ : 列表 α}
   证明: by
   rw [isChain_cons_split]; rw [isChain_cons_cons]
 
@@ -381,8 +381,8 @@ theorem isChain_iff_forall_rel_of_append_cons_cons
  
 
 中文:
-定理 isChain_iff_forall_rel_of_append_cons_cons
-  条件: {l : List α}
+定理 isChain_iff_对任意_rel_of_append_cons_cons
+  条件: {l : 列表 α}
   证明: by
   refine ⟨fun h _ _ _ _ eq => (isChain_append_cons_cons.mp (eq ▸ h)).2.1, ?_⟩
   induction l using twoStepInduction with
@@ -414,8 +414,8 @@ theorem isChain_iff_forall₂
   induction l using twoStepInduction <;> simp_all
 
 中文:
-定理 isChain_iff_forall₂
-  条件: {l : List α}
+定理 isChain_iff_对任意₂
+  条件: {l : 列表 α}
   证明: by
   induction l using twoStepInduction <;> simp_all
 
@@ -435,7 +435,7 @@ theorem isChain_cons_iff_forall₂
   cases l <;> simp [isChain_iff_forall₂]
 
 中文:
-定理 isChain_cons_iff_forall₂
+定理 isChain_cons_iff_对任意₂
   结论: IsChain R (a :: l) ↔ l = [] ∨ Forall₂ R (a :: dropLast l) l
   证明: by
   cases l <;> simp [isChain_iff_forall₂]
@@ -452,7 +452,7 @@ theorem isChain_cons_append_singleton_iff_forall₂
   simp_rw [isChain_iff_forall₂, dropLast_concat, cons_append, tail_cons]
 
 中文:
-定理 isChain_cons_append_singleton_iff_forall₂
+定理 isChain_cons_append_singleton_iff_对任意₂
   证明: by
   simp_rw [isChain_iff_forall₂, dropLast_concat, cons_append, tail_cons]
 
@@ -473,7 +473,7 @@ theorem isChain_map
 
 中文:
 定理 isChain_map
-  条件: (f : β -> α) {l : List β}
+  条件: (f : β -> α) {l : 列表 β}
   证明: by
   induction l using twoStepInduction <;> grind
 
@@ -531,7 +531,7 @@ theorem isChain_cons_map
 
 中文:
 定理 isChain_cons_map
-  条件: (f : β -> α) {l : List β} {b : β}
+  条件: (f : β -> α) {l : 列表 β} {b : β}
   证明: isChain_map f (l := b :: l)
 
 Depends on / 依赖: isChain_map
@@ -591,7 +591,7 @@ theorem isChain_pmap
 
 中文:
 定理 isChain_pmap
-  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : List α}
+  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α}
   证明: by
   induction l using twoStepInduction <;> grind
 
@@ -634,7 +634,7 @@ theorem isChain_of_isChain_pmap
 
 中文:
 定理 isChain_of_isChain_pmap
-  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : List α}
+  结论: {S : β -> β -> 命题} {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α}
   证明: ((isChain_pmap f _).1 hl₂).imp (by grind)
 
 Depends on / 依赖: isChain_pmap
@@ -654,7 +654,7 @@ theorem isChain_cons_pmap
 
 中文:
 定理 isChain_cons_pmap
-  结论: {p : β -> 命题} (f : 对任意 b, p b -> α) {l : List β} (hl : 对任意 b in l, p b)
+  结论: {p : β -> 命题} (f : 对任意 b, p b -> α) {l : 列表 β} (hl : 对任意 b in l, p b)
   证明: isChain_pmap (l := a :: _) f (by grind)
 
 Depends on / 依赖: isChain_pmap
@@ -762,7 +762,7 @@ theorem IsChain.tail
 
 中文:
 定理 IsChain.tail
-  条件: {l : List α} (h : IsChain R l)
+  条件: {l : 列表 α} (h : IsChain R l)
   结论: IsChain R l.tail
   证明: by
   grind +splitIndPred
@@ -813,7 +813,7 @@ theorem IsChain.rel_getLast_dropLast
 
 中文:
 定理 IsChain.rel_getLast_dropLast
-  条件: {l : List α} (h : l.IsChain R) (hne : l.dropLast != [])
+  条件: {l : 列表 α} (h : l.IsChain R) (hne : l.dropLast != [])
   证明: match l with
   | [_, _] => h.rel
 | _ :: _ :: _ :: _ => h.tail.rel_getLast_dropLast by simp
@@ -837,7 +837,7 @@ theorem IsChain.cons
 中文:
 定理 IsChain.cons
   条件: {x}
-  结论: 对任意 {l : List α}, IsChain R l -> (对任意 y in l.head?, R x y) ->
+  结论: 对任意 {l : 列表 α}, IsChain R l -> (对任意 y in l.head?, R x y) ->
 -/
 theorem IsChain.cons {x} : forall {l : List α}, IsChain R l -> (forall y in l.head?, R x y) ->
     IsChain R (x :: l)
@@ -855,7 +855,7 @@ lemma IsChain.cons_of_ne_nil
 
 中文:
 引理 IsChain.cons_of_ne_nil
-  结论: {x : α} {l : List α} (l_ne_nil : l != [])
+  结论: {x : α} {l : 列表 α} (l_ne_nil : l != [])
   证明: by
   grind +splitIndPred
 
@@ -974,7 +974,7 @@ theorem IsChain.rel_getLast_head_of_append
 
 中文:
 定理 IsChain.rel_getLast_head_of_append
-  结论: {l₁ l₂ : List α} (h : (l₁ ++ l₂).IsChain R)
+  结论: {l₁ l₂ : 列表 α} (h : (l₁ ++ l₂).IsChain R)
   证明: match l₁, l₂ with
   | [_], _ :: _ => h.rel
   | _ :: _ :: _, _ :: _ => h.tail.rel_getLast_head_of_append (by simp) (by simp)
@@ -1140,8 +1140,8 @@ theorem exists_not_getElem_of_not_isChain
   proof: by simp_all [isChain_iff_getElem]
 
 中文:
-定理 exists_not_getElem_of_not_isChain
-  条件: (h : ¬List.IsChain R l)
+定理 存在_not_getElem_of_not_isChain
+  条件: (h : ¬列表.IsChain R l)
   证明: by simp_all [isChain_iff_getElem]
 
 Depends on / 依赖: isChain_iff_getElem
@@ -1165,7 +1165,7 @@ theorem isChain_reverse
 
 中文:
 定理 isChain_reverse
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: l.reverse.IsChain R ↔ l.IsChain (fun a b => R b a)
   证明: by
   induction l using twoStepInduction with
@@ -1194,7 +1194,7 @@ theorem IsChain.append_overlap
 
 中文:
 定理 IsChain.append_overlap
-  结论: {l₁ l₂ l₃ : List α} (h₁ : IsChain R (l₁ ++ l₂))
+  结论: {l₁ l₂ l₃ : 列表 α} (h₁ : IsChain R (l₁ ++ l₂))
   证明: h₁.append h₂.right_of_append by
     simpa only [getLast?_append_of_ne_nil _ hn] using (isChain_append.1 h₂).2.2
 
@@ -1214,7 +1214,7 @@ lemma isChain_flatten
 
 中文:
 引理 isChain_flatten
-  结论: 对任意 {L : List (List α)}, [] ∉ L ->
+  结论: 对任意 {L : 列表 (列表 α)}, [] ∉ L ->
 -/
 lemma isChain_flatten : forall {L : List (List α)}, [] ∉ L ->
     (IsChain R L.flatten ↔ (forall l in L, IsChain R l) ∧
@@ -1239,7 +1239,7 @@ theorem isChain_attachWith
 
 中文:
 定理 isChain_attachWith
-  结论: {l : List α} {p : α -> 命题} (h : 对任意 x in l, p x)
+  结论: {l : 列表 α} {p : α -> 命题} (h : 对任意 x in l, p x)
   证明: by
   induction l with grind +splitIndPred
 
@@ -1260,7 +1260,7 @@ theorem isChain_attach
 
 中文:
 定理 isChain_attach
-  条件: {l : List α} {r : {a // a in l} -> {a // a in l} -> 命题}
+  条件: {l : 列表 α} {r : {a // a in l} -> {a // a in l} -> 命题}
   证明: isChain_attachWith fun _ => id
 
 Depends on / 依赖: isChain_attachWith
@@ -1284,8 +1284,8 @@ theorem exists_isChain_cons_of_relationReflTransGen
     rwa [getLast_cons_cons]
 
 中文:
-定理 exists_isChain_cons_of_relationReflTransGen
-  条件: (h : Relation.ReflTransGen r a b)
+定理 存在_isChain_cons_of_relationReflTransGen
+  条件: (h : 关系.ReflTransGen r a b)
   证明: by
   refine Relation.ReflTransGen.head_induction_on h ?_ ?_
   · exact ⟨[], .singleton _, rfl⟩
@@ -1315,8 +1315,8 @@ theorem exists_isChain_ne_nil_of_relationReflTransGen
   rcases exists_isChain_cons_of_relationReflTransGen h with ⟨l, _⟩; grind
 
 中文:
-定理 exists_isChain_ne_nil_of_relationReflTransGen
-  条件: (h : Relation.ReflTransGen r a b)
+定理 存在_isChain_ne_nil_of_relationReflTransGen
+  条件: (h : 关系.ReflTransGen r a b)
   证明: by
   rcases exists_isChain_cons_of_relationReflTransGen h with ⟨l, _⟩; grind
 
@@ -1337,7 +1337,7 @@ theorem IsChain.induction
 
 中文:
 定理 IsChain.induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r l)
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r l)
   证明: by
   induction l using twoStepInduction with grind
 
@@ -1359,7 +1359,7 @@ theorem IsChain.cons_induction
 
 中文:
 定理 IsChain.cons_induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (a :: l))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
   证明: fun _ hi =>
   h.induction _ _ carries (fun _ => initial) _ (mem_cons_of_mem _ hi)
 -/
@@ -1379,7 +1379,7 @@ theorem IsChain.concat_induction
 
 中文:
 定理 IsChain.concat_induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (l ++ [b]))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
   证明: h.induction _ _ carries (fun _ => hb ▸ initial)
 
 @[elab_as_elim]
@@ -1402,7 +1402,7 @@ theorem IsChain.concat_induction_head
 
 中文:
 定理 IsChain.concat_induction_head
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (l ++ [b]))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
   证明: (IsChain.concat_induction p l h hb carries initial) _ mem_concat_self
 
 Depends on / 依赖: IsChain, IsChain.concat_induction, carries, concat_induction, initial, mem_concat_self
@@ -1425,7 +1425,7 @@ theorem IsChain.backwards_induction
 
 中文:
 定理 IsChain.backwards_induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r l)
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r l)
   证明: by
   have H : IsChain (flip (flip r)) l := h
   replace H := (isChain_reverse.mpr H).induction _ _ (fun _ _ h => carries h)
@@ -1451,7 +1451,7 @@ theorem IsChain.backwards_concat_induction
 
 中文:
 定理 IsChain.backwards_concat_induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (l ++ [b]))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (l ++ [b]))
   证明: fun _ hi =>
   h.backwards_induction _ _ carries (fun _ => getLast_concat ▸ final) _ (mem_append_left _ hi)
 -/
@@ -1469,7 +1469,7 @@ theorem IsChain.backwards_cons_induction
 
 中文:
 定理 IsChain.backwards_cons_induction
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (a :: l))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
   证明: h.backwards_induction _ _ carries (fun _ => hb ▸ final)
 
 Depends on / 依赖: backwards_induction, carries, h.backwards_induction
@@ -1494,7 +1494,7 @@ theorem IsChain.backwards_cons_induction_head
 
 中文:
 定理 IsChain.backwards_cons_induction_head
-  结论: (p : α -> 命题) (l : List α) (h : IsChain r (a :: l))
+  结论: (p : α -> 命题) (l : 列表 α) (h : IsChain r (a :: l))
   证明: (IsChain.backwards_cons_induction p l h hb carries final) _ mem_cons_self
 
 Depends on / 依赖: IsChain, IsChain.backwards_cons_induction, backwards_cons_induction, carries, mem_cons_self
@@ -1514,8 +1514,8 @@ theorem relationReflTransGen_of_exists_isChain
   (fun _ _ h₁ h₂ => Trans.trans h₂ h₁) (fun _ => Relation.ReflTransGen.refl) _ (getLast_mem _)
 
 中文:
-定理 relationReflTransGen_of_exists_isChain
-  条件: (l : List α) (hl₁ : IsChain r l) (hne : l != [])
+定理 relationReflTransGen_of_存在_isChain
+  条件: (l : 列表 α) (hl₁ : IsChain r l) (hne : l != [])
   证明: IsChain.induction (Relation.ReflTransGen r (head l hne) ·) l hl₁
   (fun _ _ h₁ h₂ => Trans.trans h₂ h₁) (fun _ => Relation.ReflTransGen.refl) _ (getLast_mem _)
 
@@ -1536,8 +1536,8 @@ theorem relationReflTransGen_of_exists_isChain_cons
   Relation.ReflTransGen.refl
 
 中文:
-定理 relationReflTransGen_of_exists_isChain_cons
-  结论: (l : List α) (hl₁ : IsChain r (a :: l))
+定理 relationReflTransGen_of_存在_isChain_cons
+  结论: (l : 列表 α) (hl₁ : IsChain r (a :: l))
   证明: IsChain.backwards_cons_induction_head _ l hl₁ hl₂ (fun _ _ => Relation.ReflTransGen.head)
   Relation.ReflTransGen.refl
 
@@ -1569,7 +1569,7 @@ theorem IsChain.cons_of_le
 
 中文:
 定理 IsChain.cons_of_le
-  结论: [LinearOrder α] {a : α} {as m : List α}
+  结论: [线性序 α] {a : α} {as m : 列表 α}
   证明: by
   cases m with
   | nil => grind
@@ -1615,7 +1615,7 @@ lemma IsChain.isChain_cons
 
 中文:
 引理 IsChain.isChain_cons
-  结论: {α : 类型} {R : α -> α -> 命题} {l : List α} {v : α}
+  结论: {α : 类型} {R : α -> α -> 命题} {l : 列表 α} {v : α}
   证明: by
   cases l <;> grind
 -/
@@ -1639,7 +1639,7 @@ lemma IsChain.iterate_eq_of_apply_eq
 
 中文:
 引理 IsChain.iterate_eq_of_apply_eq
-  结论: {α : 类型} {f : α -> α} {l : List α}
+  结论: {α : 类型} {f : α -> α} {l : 列表 α}
   证明: by
   induction i with
   | zero => rfl
@@ -1696,7 +1696,7 @@ theorem isChain_eq_iff_eq_replicate
 
 中文:
 定理 isChain_eq_iff_eq_replicate
-  条件: {l : List α}
+  条件: {l : 列表 α}
   证明: by
   induction l using twoStepInduction with
   | nil | singleton => simp
@@ -1723,7 +1723,7 @@ theorem isChain_cons_eq_iff_eq_replicate
 
 中文:
 定理 isChain_cons_eq_iff_eq_replicate
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   证明: by
   simp [isChain_eq_iff_eq_replicate, replicate_succ]
 
@@ -1748,8 +1748,8 @@ theorem WellFoundedRelation.asymmetricₙ
 termination_by l.head hne
 
 中文:
-定理 WellFoundedRelation.asymmetricₙ
-  结论: [WellFoundedRelation α] {l : List α} (hne : l != [])
+定理 良基关系.asymmetricₙ
+  结论: [良基关系 α] {l : 列表 α} (hne : l != [])
   证明: match l with
   | [x] => irrefl x
   | _ :: _ :: _ =>
@@ -1776,8 +1776,8 @@ theorem WellFounded.asymmetricₙ
   proof: @WellFoundedRelation.asymmetricₙ α ⟨r, wf⟩ l hne h
 
 中文:
-定理 WellFounded.asymmetricₙ
-  条件: (wf : WellFounded r) (hne : l != []) (h : l.IsChain r)
+定理 良基.asymmetricₙ
+  条件: (wf : 良基 r) (hne : l != []) (h : l.IsChain r)
   证明: @WellFoundedRelation.asymmetricₙ α ⟨r, wf⟩ l hne h
 
 Depends on / 依赖: WellFoundedRelation, WellFoundedRelation.asymmetric
@@ -1798,8 +1798,8 @@ have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
   simpa
 
 中文:
-定理 WellFounded.listPairwise_reverse_compl
-  条件: (wf : WellFounded r) (h : l.IsChain r)
+定理 良基.listPairwise_reverse_compl
+  条件: (wf : 良基 r) (h : l.IsChain r)
   证明: by
   refine List.pairwise_iff_forall_infix.mpr fun l' hne hsub => ?_
 have := wf.asymmetricₙ (by grind) h.infix l.reverse_reverse ▸ hsub.reverse
@@ -1826,7 +1826,7 @@ abbreviation List.chains
   body: { l : List α // l.IsChain (flip r) }
 
 中文:
-缩写 List.chains
+缩写 列表.chains
   定义体: { l : List α // l.IsChain (flip r) }
 
 Depends on / 依赖: IsChain, l.IsChain
@@ -1842,8 +1842,8 @@ abbreviation List.lex_chains
   body: List.Lex r l.val m.val
 
 中文:
-缩写 List.lex_chains
-  签名: (l m : List.chains r)
+缩写 列表.lex_chains
+  签名: (l m : 列表.chains r)
   定义体: List.Lex r l.val m.val
 
 Depends on / 依赖: List.Lex, l.val, m.val
@@ -1870,7 +1870,7 @@ theorem Acc.list_chain'
 
 中文:
 定理 Acc.list_chain'
-  条件: {l : List.chains r} (acc : 对任意 a in l.val.head?, Acc r a)
+  条件: {l : 列表.chains r} (acc : 对任意 a in l.val.head?, Acc r a)
   证明: by
   obtain ⟨_ | ⟨a, l⟩, hl⟩ := l
   · apply Acc.intro; rintro ⟨_⟩ ⟨_⟩
@@ -1922,8 +1922,8 @@ theorem WellFounded.list_chain'
   proof: ⟨fun _ => Acc.list_chain' (fun _ _ => hwf.apply _)⟩
 
 中文:
-定理 WellFounded.list_chain'
-  条件: (hwf : WellFounded r)
+定理 良基.list_chain'
+  条件: (hwf : 良基 r)
   证明: ⟨fun _ => Acc.list_chain' (fun _ _ => hwf.apply _)⟩
 
 Depends on / 依赖: Acc.list_chain, hwf.apply, list_chain
@@ -1942,7 +1942,7 @@ instance [hwf
 
 中文:
 实例 [hwf
-  签名: : IsWellFounded α r] :
+  签名: : 是良基 α r] :
   定义体: ⟨hwf.wf.list_chain'⟩
 
 Depends on / 依赖: hwf.wf.list_chain, list_chain

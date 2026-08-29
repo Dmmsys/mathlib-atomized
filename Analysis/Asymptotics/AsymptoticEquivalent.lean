@@ -229,7 +229,7 @@ theorem IsEquivalent.trans
 
 中文:
 定理 IsEquivalent.trans
-  条件: {l : Filter α} {u v w : α -> β} (huv : u ~[l] v) (hvw : v ~[l] w)
+  条件: {l : 滤子 α} {u v w : α -> β} (huv : u ~[l] v) (hvw : v ~[l] w)
   证明: (huv.isLittleO.trans_isBigO hvw.isBigO).triangle hvw.isLittleO
 
 Depends on / 依赖: huv.isLittleO.trans_isBigO, hvw.isBigO, hvw.isLittleO, isBigO, isLittleO, trans_isBigO, triangle
@@ -248,7 +248,7 @@ theorem IsEquivalent.congr_left
 
 中文:
 定理 IsEquivalent.congr_left
-  条件: {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (huw : u =ᶠ[l] w)
+  条件: {u v w : α -> β} {l : 滤子 α} (huv : u ~[l] v) (huw : u =ᶠ[l] w)
   证明: huv.congr' (huw.sub (EventuallyEq.refl _ _)) (EventuallyEq.refl _ _)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl, huv.congr, huw.sub
@@ -267,7 +267,7 @@ theorem IsEquivalent.congr_right
 
 中文:
 定理 IsEquivalent.congr_right
-  条件: {u v w : α -> β} {l : Filter α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w)
+  条件: {u v w : α -> β} {l : 滤子 α} (huv : u ~[l] v) (hvw : v =ᶠ[l] w)
   证明: (huv.symm.congr_left hvw).symm
 
 Depends on / 依赖: congr_left, huv.symm.congr_left
@@ -379,7 +379,7 @@ rcases em c = 0 with rfl | h
 中文:
 定理 IsEquivalent.tendsto_const
   条件: {c : β} (hu : u ~[l] const _ c)
-  结论: Tendsto u l (𝓝 c)
+  结论: 收敛 u l (𝓝 c)
   证明: by
 rcases em c = 0 with rfl | h
   · exact (tendsto_congr' <| isEquivalent_zero_iff_eventually_zero.mp hu).mpr tendsto_const_nhds
@@ -408,7 +408,7 @@ theorem IsEquivalent.tendsto_nhds
 
 中文:
 定理 IsEquivalent.tendsto_nhds
-  条件: {c : β} (huv : u ~[l] v) (hu : Tendsto u l (𝓝 c))
+  条件: {c : β} (huv : u ~[l] v) (hu : 收敛 u l (𝓝 c))
   证明: by
   by_cases h : c = 0
   · subst c
@@ -618,7 +618,7 @@ theorem isEquivalent_iff_exists_eq_mul
   · conv 
 
 中文:
-定理 isEquivalent_iff_exists_eq_mul
+定理 isEquivalent_iff_存在_eq_mul
   证明: by
   rw [IsEquivalent]; rw [isLittleO_iff_exists_eq_mul]
   constructor <;> rintro ⟨φ, hφ, h⟩ <;> [refine ⟨φ + 1, ?_, ?_⟩; refine ⟨φ - 1, ?_, ?_⟩]
@@ -649,7 +649,7 @@ theorem IsEquivalent.exists_eq_mul
   proof: isEquivalent_iff_exists_eq_mul.mp huv
 
 中文:
-定理 IsEquivalent.exists_eq_mul
+定理 IsEquivalent.存在_eq_mul
   条件: (huv : u ~[l] v)
   证明: isEquivalent_iff_exists_eq_mul.mp huv
 
@@ -675,7 +675,7 @@ theorem isEquivalent_of_tendsto_one
 
 中文:
 定理 isEquivalent_of_tendsto_one
-  条件: (huv : Tendsto (u / v) l (𝓝 1))
+  条件: (huv : 收敛 (u / v) l (𝓝 1))
   证明: by
   suffices forallᶠ x in l, v x = 0 -> u x = 0 by
     rw [isEquivalent_iff_exists_eq_mul]
@@ -761,7 +761,7 @@ theorem IsEquivalent.smul
 
 中文:
 定理 IsEquivalent.smul
-  结论: {α E 𝕜 : 类型} [NormedField 𝕜] [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+  结论: {α E 𝕜 : 类型} [赋范域 𝕜] [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: by
   rcases hab.exists_eq_mul with ⟨φ, hφ, habφ⟩
   have : ((fun x => a x • u x) - (fun x => b x • v x)) =ᶠ[l] fun x => b x • (φ x • u x - v x) := by
@@ -846,7 +846,7 @@ theorem IsEquivalent.listProd
 
 中文:
 定理 IsEquivalent.listProd
-  条件: {L : List ι} {f g : ι -> α -> β} (h : 对任意 i in L, f i ~[l] g i)
+  条件: {L : 列表 ι} {f g : ι -> α -> β} (h : 对任意 i in L, f i ~[l] g i)
   证明: by
   induction L with
   | nil => simp [IsEquivalent.refl]
@@ -898,7 +898,7 @@ theorem IsEquivalent.finsetProd
 
 中文:
 定理 IsEquivalent.finsetProd
-  条件: {s : Finset ι} {f g : ι -> α -> β} (h : 对任意 i in s, f i ~[l] g i)
+  条件: {s : 有限集 ι} {f g : ι -> α -> β} (h : 对任意 i in s, f i ~[l] g i)
   证明: multisetProd h
 
 Depends on / 依赖: multisetProd
@@ -1031,7 +1031,7 @@ theorem IsEquivalent.tendsto_atTop
 
 中文:
 定理 IsEquivalent.tendsto_atTop
-  条件: [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atTop)
+  条件: [Order拓扑 β] (huv : u ~[l] v) (hu : 收敛 u l atTop)
   证明: let ⟨φ, hφ, h⟩ := huv.symm.exists_eq_mul
   Tendsto.congr' h.symm (mul_comm u φ ▸ hu.atTop_mul_pos zero_lt_one hφ)
 
@@ -1052,7 +1052,7 @@ theorem IsEquivalent.tendsto_atTop_iff
 
 中文:
 定理 IsEquivalent.tendsto_atTop_iff
-  条件: [OrderTopology β] (huv : u ~[l] v)
+  条件: [Order拓扑 β] (huv : u ~[l] v)
   证明: ⟨huv.tendsto_atTop, huv.symm.tendsto_atTop⟩
 
 Depends on / 依赖: huv.symm.tendsto_atTop, huv.tendsto_atTop, tendsto_atTop
@@ -1074,7 +1074,7 @@ theorem IsEquivalent.tendsto_atBot
 
 中文:
 定理 IsEquivalent.tendsto_atBot
-  条件: [OrderTopology β] (huv : u ~[l] v) (hu : Tendsto u l atBot)
+  条件: [Order拓扑 β] (huv : u ~[l] v) (hu : 收敛 u l atBot)
   证明: by
   convert! tendsto_neg_atTop_atBot.comp (huv.neg.tendsto_atTop <| tendsto_neg_atBot_atTop.comp hu)
   ext
@@ -1098,7 +1098,7 @@ theorem IsEquivalent.tendsto_atBot_iff
 
 中文:
 定理 IsEquivalent.tendsto_atBot_iff
-  条件: [OrderTopology β] (huv : u ~[l] v)
+  条件: [Order拓扑 β] (huv : u ~[l] v)
   证明: ⟨huv.tendsto_atBot, huv.symm.tendsto_atBot⟩
 
 Depends on / 依赖: huv.symm.tendsto_atBot, huv.tendsto_atBot, tendsto_atBot
@@ -1122,7 +1122,7 @@ lemma IsEquivalent.exists_pos_eq_mul
   exact ⟨φ, hφ.eventually_const_lt (zero_lt_one' β), h_eq⟩
 
 中文:
-引理 IsEquivalent.exists_pos_eq_mul
+引理 IsEquivalent.存在_pos_eq_mul
   条件: (h : u ~[l] v)
   证明: by
   obtain ⟨φ, hφ, h_eq⟩ := h.exists_eq_mul
@@ -1254,7 +1254,7 @@ theorem IsEquivalent.add_add_of_nonneg
 
 中文:
 定理 IsEquivalent.add_add_of_nonneg
-  结论: {α : 类型} {u v t w : α -> 实数} {l : Filter α}
+  结论: {α : 类型} {u v t w : α -> 实数} {l : 滤子 α}
   证明: by
   simp only [IsEquivalent, add_sub_add_comm]
   change (fun x => (u - v) x + (t - w) x) =o[l] (fun x => v x + w x)
@@ -1293,7 +1293,7 @@ theorem Filter.EventuallyEq.isEquivalent
 @[trans]
 
 中文:
-定理 Filter.EventuallyEq.isEquivalent
+定理 滤子.EventuallyEq.isEquivalent
   条件: {u v : α -> β} (h : u =ᶠ[l] v)
   结论: u ~[l] v
   证明: IsEquivalent.congr_right (isLittleO_refl_left _ _) h
@@ -1315,7 +1315,7 @@ theorem Filter.EventuallyEq.trans_isEquivalent
   proof: h.isEquivalent.trans h₂
 
 中文:
-定理 Filter.EventuallyEq.trans_isEquivalent
+定理 滤子.EventuallyEq.trans_isEquivalent
   结论: {f g₁ g₂ : α -> β} (h : f =ᶠ[l] g₁)
   证明: h.isEquivalent.trans h₂
 
@@ -1678,7 +1678,7 @@ theorem IsEquivalent.comp_tendsto
 
 中文:
 定理 IsEquivalent.comp_tendsto
-  结论: {α₂ : 类型} {f g : α₂ -> β} {l' : Filter α₂}
+  结论: {α₂ : 类型} {f g : α₂ -> β} {l' : 滤子 α₂}
   证明: IsLittleO.comp_tendsto hfg hk
 
 @[simp]
@@ -1719,7 +1719,7 @@ theorem IsEquivalent.mono
 
 中文:
 定理 IsEquivalent.mono
-  条件: {f g : α -> β} {l' : Filter α} (h : f ~[l'] g) (hl : l <= l')
+  条件: {f g : α -> β} {l' : 滤子 α} (h : f ~[l'] g) (hl : l <= l')
   证明: IsLittleO.mono h hl
 
 Depends on / 依赖: IsLittleO, IsLittleO.mono

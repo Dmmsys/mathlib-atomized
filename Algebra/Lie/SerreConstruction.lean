@@ -80,11 +80,11 @@ inductive Generators
     - F: B -> Generators
 
 中文:
-归纳类型 Generators
+归纳类型 生成元
   构造子 (3 个):
-    - H: B -> Generators
-    - E: B -> Generators
-    - F: B -> Generators
+    - H: B -> 生成元
+    - E: B -> 生成元
+    - F: B -> 生成元
 
 Depends on / 依赖: congr_arg, one_smul
 -/
@@ -102,8 +102,8 @@ instance [Inhabited
   body: ⟨Generators.H default⟩
 
 中文:
-实例 [Inhabited
-  签名: B] : Inhabited (Generators B)
+实例 [可居
+  签名: B] : 可居 (生成元 B)
   定义体: ⟨Generators.H default⟩
 
 Depends on / 依赖: Generators, Generators.H
@@ -132,7 +132,7 @@ definition HH
 
 中文:
 定义 HH
-  签名: : B × B -> FreeLieAlgebra R (Generators B)
+  签名: : B × B -> FreeLieAlgebra R (生成元 B)
   定义体: uncurry fun i j => ⁅H i, H j⁆
 
 Depends on / 依赖: uncurry
@@ -168,7 +168,7 @@ definition HE
 
 中文:
 定义 HE
-  签名: : B × B -> FreeLieAlgebra R (Generators B)
+  签名: : B × B -> FreeLieAlgebra R (生成元 B)
   定义体: uncurry fun i j => ⁅H i, E j⁆ - CM i j • E j
 
 Depends on / 依赖: uncurry
@@ -186,7 +186,7 @@ definition HF
 
 中文:
 定义 HF
-  签名: : B × B -> FreeLieAlgebra R (Generators B)
+  签名: : B × B -> FreeLieAlgebra R (生成元 B)
   定义体: uncurry fun i j => ⁅H i, F j⁆ + CM i j • F j
 
 Depends on / 依赖: uncurry
@@ -204,7 +204,7 @@ definition adE
 
 中文:
 定义 adE
-  签名: : B × B -> FreeLieAlgebra R (Generators B)
+  签名: : B × B -> FreeLieAlgebra R (生成元 B)
   定义体: uncurry fun i j => ad (E i) ^ (-CM i j).toNat ⁅E i, E j⁆
 
 Depends on / 依赖: uncurry
@@ -222,7 +222,7 @@ definition adF
 
 中文:
 定义 adF
-  签名: : B × B -> FreeLieAlgebra R (Generators B)
+  签名: : B × B -> FreeLieAlgebra R (生成元 B)
   定义体: uncurry fun i j => ad (F i) ^ (-CM i j).toNat ⁅F i, F j⁆
 
 Depends on / 依赖: uncurry
@@ -333,7 +333,7 @@ definition Matrix.ToLieAlgebra
 deriving LieRing, Inhabited, LieAlgebra R
 
 中文:
-定义 Matrix.ToLieAlgebra
+定义 矩阵.ToLieAlgebra
   定义体: FreeLieAlgebra R _ ⧸ CartanMatrix.Relations.toIdeal R CM
 deriving LieRing, Inhabited, LieAlgebra R
 

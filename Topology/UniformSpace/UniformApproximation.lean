@@ -333,7 +333,7 @@ theorem tendsto_comp_of_locally_uniform_limit
 
 中文:
 定理 tendsto_comp_of_locally_uniform_limit
-  结论: (h : ContinuousAt f x) (hg : Tendsto g p (𝓝 x))
+  结论: (h : ContinuousAt f x) (hg : 收敛 g p (𝓝 x))
   证明: by
   rw [← continuousWithinAt_univ] at h
   rw [← nhdsWithin_univ] at hunif hg

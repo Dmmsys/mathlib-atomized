@@ -56,7 +56,7 @@ instance ResidueField.field
 
 中文:
 实例 ResidueField.field
-  签名: : Field (ResidueField R)
+  签名: : 域 (ResidueField R)
   定义体: fast_instance% Ideal.Quotient.field (maximalIdeal R)
 
 Depends on / 依赖: Ideal.Quotient.field, Quotient, fast_instance, maximalIdeal

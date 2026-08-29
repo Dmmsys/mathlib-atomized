@@ -47,7 +47,7 @@ definition overEquivOfIsInitial
 
 中文:
 定义 overEquivOfIsInitial
-  签名: [HasStrictInitialObjects C] (X : C) (h : IsInitial X)
+  签名: [有StrictInitialObjects C] (X : C) (h : IsInitial X)
   定义体: Functor.star _
   inverse := Functor.fromPUnit (.mk (𝟙 X))
   unitIso := NatIso.ofComponents fun A =>
@@ -87,7 +87,7 @@ definition underEquivOfIsTerminal
 
 中文:
 定义 underEquivOfIsTerminal
-  签名: [HasStrictTerminalObjects C] (X : C) (h : IsTerminal X)
+  签名: [有StrictTerminalObjects C] (X : C) (h : 是终止 X)
   定义体: Functor.star _
   inverse := Functor.fromPUnit (.mk (𝟙 X))
   counitIso := Iso.refl _
@@ -129,7 +129,7 @@ definition MorphismProperty.overEquivOfIsInitial
 
 中文:
 定义 MorphismProperty.overEquivOfIsInitial
-  签名: [HasStrictInitialObjects C] (X : C) (h : IsInitial X)
+  签名: [有StrictInitialObjects C] (X : C) (h : IsInitial X)
   定义体: Functor.star _
   inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
   unitIso := NatIso.ofComponents fun A =>
@@ -168,7 +168,7 @@ definition MorphismProperty.underEquivOfIsTerminal
 
 中文:
 定义 MorphismProperty.underEquivOfIsTerminal
-  签名: [HasStrictTerminalObjects C] (X : C)
+  签名: [有StrictTerminalObjects C] (X : C)
   定义体: Functor.star _
   inverse := Functor.fromPUnit (.mk _ (𝟙 X) (P.id_mem _))
   counitIso := Iso.refl _

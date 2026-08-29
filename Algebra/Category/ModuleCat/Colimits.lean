@@ -106,7 +106,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: mkOfSMul (coconePointSMul F)
   ι :=
     { app := fun j => homMk (colimit.ι (F ⋙ forget₂ _ AddCommGrpCat) j) (fun r => by
@@ -152,7 +152,7 @@ definition isColimitColimitCocone
 
 中文:
 定义 isColimitColimitCocone
-  签名: : IsColimit (colimitCocone F) where
+  签名: : 是余极限 (colimitCocone F) where
   定义体: homMk (colimit.desc _ ((forget₂ _ AddCommGrpCat).mapCocone s)) (fun r => by
     apply colimit.hom_ext
     intro j
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: ⟨_, isColimitColimitCocone F⟩
 
 Depends on / 依赖: isColimitColimitCocone
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimit F (forget₂ _ AddCommGrpCat)
+  签名: 保持余极限 F (forget₂ _ 加法交换群范畴)
   定义体: preservesColimit_of_preserves_colimit_cocone (isColimitColimitCocone F) (colimit.isColimit _)
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitColimitCocone, preservesColimit_of_preserves_colimit_cocone
@@ -256,7 +256,7 @@ instance hasColimitsOfShape
 
 中文:
 实例 hasColimitsOfShape
-  签名: [HasColimitsOfShape J AddCommGrpCat.{w'}]
+  签名: [有形状余极限 J 加法交换群范畴.{w'}]
 -/
 instance hasColimitsOfShape [HasColimitsOfShape J AddCommGrpCat.{w'}] :
     HasColimitsOfShape J (ModuleCat.{w'} R) where
@@ -270,7 +270,7 @@ instance reflectsColimitsOfShape
 
 中文:
 实例 reflectsColimitsOfShape
-  签名: [HasColimitsOfShape J AddCommGrpCat.{w'}]
+  签名: [有形状余极限 J 加法交换群范畴.{w'}]
 -/
 noncomputable instance reflectsColimitsOfShape [HasColimitsOfShape J AddCommGrpCat.{w'}] :
     ReflectsColimitsOfShape J (forget₂ (ModuleCat.{w'} R) AddCommGrpCat) where
@@ -284,7 +284,7 @@ instance hasColimitsOfSize
 
 中文:
 实例 hasColimitsOfSize
-  签名: [HasColimitsOfSize.{v, u} AddCommGrpCat.{w'}]
+  签名: [有余limitsOfSize.{v, u} 加法交换群范畴.{w'}]
 -/
 instance hasColimitsOfSize [HasColimitsOfSize.{v, u} AddCommGrpCat.{w'}] :
     HasColimitsOfSize.{v, u} (ModuleCat.{w'} R) where
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteColimits (ModuleCat.{w'} R)
+  签名: 有有限余极限 (模范畴.{w'} R)
   定义体: inferInstance
 -/
 instance : HasFiniteColimits (ModuleCat.{w'} R) := inferInstance
@@ -358,7 +358,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCoequalizers (ModuleCat.{v} R)
+  签名: HasCoequalizers (模范畴.{v} R)
   定义体: inferInstance
 -/
 instance : HasCoequalizers (ModuleCat.{v} R) where
@@ -383,7 +383,7 @@ definition finsuppCocone
 
 中文:
 定义 finsuppCocone
-  签名: : Cofan fun _ : ι => ModuleCat.of R M
+  签名: : Cofan fun _ : ι => 模范畴.of R M
   定义体: Cofan.mk (ModuleCat.of R (ι ->₀ M)) fun i =>
     ModuleCat.ofHom (Finsupp.lsingle i (R := R) (M := ModuleCat.of R M))
 
@@ -411,7 +411,7 @@ definition finsuppCoconeIsColimit
 
 中文:
 定义 finsuppCoconeIsColimit
-  签名: : IsColimit (finsuppCocone R M ι) where
+  签名: : 是余极限 (finsuppCocone R M ι) where
   定义体: ModuleCat.ofHom Finsupp.lsum R (N := s.pt) (fun i => (s.ι.app ⟨i⟩).hom)
   fac := by aesop (add simp finsuppCocone)
   uniq s f h := by

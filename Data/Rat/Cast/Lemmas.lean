@@ -41,7 +41,7 @@ lemma cast_pow
 
 中文:
 引理 cast_pow
-  条件: (p : Rat) (n : 自然数)
+  条件: (p : 有理数) (n : 自然数)
   结论: ↑(p ^ n) = (p ^ n : α)
   证明: by
   rw [cast_def]; rw [cast_def]; rw [den_pow]; rw [num_pow]; rw [Nat.cast_pow]; rw [Int.cast_pow]; rw [div_eq_mul_inv]; rw [← inv_pow]; rw [← (Int.cast_commute _ _).mul_pow]; rw [← div_eq_mul_inv]
@@ -71,7 +71,7 @@ theorem cast_inv_nat
 中文:
 定理 cast_inv_nat
   条件: (n : 自然数)
-  结论: ((n⁻¹ : Rat) : α) = (n : α)⁻¹
+  结论: ((n⁻¹ : 有理数) : α) = (n : α)⁻¹
   证明: by
   rcases n with - | n
   · simp
@@ -104,7 +104,7 @@ theorem cast_inv_int
 中文:
 定理 cast_inv_int
   条件: (n : 整数)
-  结论: ((n⁻¹ : Rat) : α) = (n : α)⁻¹
+  结论: ((n⁻¹ : 有理数) : α) = (n : α)⁻¹
   证明: by
   rcases n with n | n
   · simp [cast_inv_nat]
@@ -135,7 +135,7 @@ theorem cast_nnratCast
 
 中文:
 定理 cast_nnratCast
-  条件: {K} [DivisionRing K] (q : Rat>=0)
+  条件: {K} [除环 K] (q : 有理数>=0)
   证明: by
   rw [Rat.cast_def]; rw [NNRat.cast_def]; rw [NNRat.cast_def]
   have hn := @num_div_eq_of_coprime q.num q.den ?hdp q.coprime_num_den
@@ -167,7 +167,7 @@ theorem cast_ofScientific
 
 中文:
 定理 cast_ofScientific
-  条件: {K} [DivisionRing K] (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: {K} [除环 K] (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: by
   rw [← NNRat.cast_ofScientific (K := K)]; rw [← NNRat.cast_ofScientific]; rw [cast_nnratCast]
 
@@ -193,7 +193,7 @@ theorem cast_pow
 
 中文:
 定理 cast_pow
-  条件: {K} [DivisionSemiring K] (q : Rat>=0) (n : 自然数)
+  条件: {K} [除半环 K] (q : 有理数>=0) (n : 自然数)
   证明: by
   rw [cast_def]; rw [cast_def]; rw [den_pow]; rw [num_pow]; rw [Nat.cast_pow]; rw [Nat.cast_pow]; rw [div_eq_mul_inv]; rw [← inv_pow]; rw [← (Nat.cast_commute _ _).mul_pow]; rw [← div_eq_mul_inv]
 
@@ -218,7 +218,7 @@ theorem cast_zpow_of_ne_zero
 
 中文:
 定理 cast_zpow_of_ne_zero
-  条件: {K} [DivisionSemiring K] (q : Rat>=0) (z : 整数) (hq : (q.num : K) != 0)
+  条件: {K} [除半环 K] (q : 有理数>=0) (z : 整数) (hq : (q.num : K) != 0)
   证明: by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · simp
@@ -250,7 +250,7 @@ theorem cast_mk
 
 中文:
 定理 cast_mk
-  条件: {K} [DivisionRing K] (q : Rat) (h : 0 <= q)
+  条件: {K} [除环 K] (q : 有理数) (h : 0 <= q)
   证明: by
   simp only [NNRat.cast_def, NNRat.num_mk, Nat.cast_natAbs, NNRat.den_mk, Rat.cast_def]
   rw [abs_of_nonneg (by simpa)]
@@ -273,7 +273,7 @@ theorem Nonneg.coe_ofScientific
 
 中文:
 定理 Nonneg.coe_ofScientific
-  结论: {K} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+  结论: {K} [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: rfl
 -/
 theorem Nonneg.coe_ofScientific {K} [Field K] [LinearOrder K] [IsStrictOrderedRing K]

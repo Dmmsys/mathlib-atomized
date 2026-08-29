@@ -50,7 +50,7 @@ theorem eval_T_real_mem_Icc
 
 中文:
 定理 eval_T_real_mem_Icc
-  条件: (n : 整数) {x : 实数} (hx : x in Set.Icc (-1) 1)
+  条件: (n : 整数) {x : 实数} (hx : x in 集合.闭区间 (-1) 1)
   证明: by
   rw [← cos_arccos (x := x) (by grind) (by grind)]
   grind [T_real_cos, cos_mem_Icc]
@@ -930,7 +930,7 @@ theorem isExtrOn_T_real_iff
 
 中文:
 定理 isExtrOn_T_real_iff
-  条件: {n : 自然数} (hn : n != 0) {x : 实数} (hx : x in Set.Icc (-1) 1)
+  条件: {n : 自然数} (hn : n != 0) {x : 实数} (hx : x in 集合.闭区间 (-1) 1)
   证明: by
   constructor
   · intro h

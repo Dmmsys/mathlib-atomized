@@ -168,7 +168,7 @@ instance colimitOne
 
 中文:
 实例 colimitOne
-  签名: : One (M.{v, u} F) where
+  签名: : 幺 (M.{v, u} F) where
   定义体: M.mk F ⟨IsFiltered.nonempty.some,1⟩
 
 Depends on / 依赖: IsFiltered, IsFiltered.nonempty.some, M.mk, nonempty
@@ -349,7 +349,7 @@ instance colimitMul
 
 中文:
 实例 colimitMul
-  签名: : Mul (M.{v, u} F)
+  签名: : 乘法 (M.{v, u} F)
   定义体: { mul := fun x y => by
     refine Quot.lift₂ (colimitMulAux F) ?_ ?_ x y
     · intro x y y' h
@@ -469,7 +469,7 @@ instance colimitMulOneClass
 
 中文:
 实例 colimitMulOneClass
-  签名: : MulOneClass (M.{v, u} F)
+  签名: : MulOne类 (M.{v, u} F)
   定义体: { colimitOne F,
     colimitMul F with
     one_mul := fun x => by
@@ -508,7 +508,7 @@ instance colimitMonoid
 
 中文:
 实例 colimitMonoid
-  签名: : Monoid (M.{v, u} F)
+  签名: : 幺半群 (M.{v, u} F)
   定义体: { colimitMulOneClass F with
     mul_assoc := fun x y z => by
       obtain ⟨j₁, x₁, rfl⟩ := x.mk_surjective
@@ -547,7 +547,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : MonCat.{max v u}
+  签名: : 幺半群范畴.{最大值 v u}
   定义体: MonCat.of (M.{v, u} F)
 
 Depends on / 依赖: MonCat, MonCat.of
@@ -627,7 +627,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι := { app := coconeMorphism F }
 
@@ -665,7 +665,7 @@ definition colimitDesc
 
 中文:
 定义 colimitDesc
-  签名: (t : Cocone F)
+  签名: (t : 余锥 F)
   定义体: ofHom
   { toFun := (F ⋙ forget MonCat).descColimitType
         ((F ⋙ forget MonCat).coconeTypesEquiv.symm ((forget MonCat).mapCocone t))
@@ -710,7 +710,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit (colimitCocone.{v, u} F) where
+  签名: : 是余极限 (colimitCocone.{v, u} F) where
   定义体: colimitDesc.{v, u} F
   fac t j := rfl
   uniq t m h := MonCat.ext fun y => by
@@ -781,7 +781,7 @@ abbreviation M
 
 中文:
 缩写 M
-  签名: : MonCat.{max v u}
+  签名: : 幺半群范畴.{最大值 v u}
   定义体: MonCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ CommMonCat MonCat.{max v u})
 
 Depends on / 依赖: CommMonCat, FilteredColimits, MonCat, MonCat.FilteredColimits.colimit, colimit
@@ -809,7 +809,7 @@ instance colimitCommMonoid
 
 中文:
 实例 colimitCommMonoid
-  签名: : CommMonoid.{max v u} (M.{v, u} F)
+  签名: : 交换幺半群.{最大值 v u} (M.{v, u} F)
   定义体: { (M.{v, u} F) with
     mul_comm := fun x y => by
       obtain ⟨i, x, rfl⟩ := x.mk_surjective
@@ -846,7 +846,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : CommMonCat.{max v u}
+  签名: : 交换幺半群范畴.{最大值 v u}
   定义体: CommMonCat.of (M.{v, u} F)
 
 Depends on / 依赖: CommMonCat, CommMonCat.of
@@ -871,7 +871,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι.app j := ofHom ((MonCat.FilteredColimits.colimitCocone.{v, u}
     (F ⋙ forget₂ CommMonCat MonCat.{max v u})).ι.app j).hom
@@ -904,7 +904,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit (colimitCocone.{v, u} F)
+  签名: : 是余极限 (colimitCocone.{v, u} F)
   定义体: isColimitOfReflects (forget₂ CommMonCat MonCat)
     (MonCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ _ _))
 

@@ -58,8 +58,8 @@ lemma toReal_rnDeriv_map
   refine
 
 中文:
-引理 toReal_rnDeriv_map
-  结论: [IsFiniteMeasure μ] (hμν : μ ≪ ν)
+引理 to实数_rnDeriv_map
+  结论: [是有限测度 μ] (hμν : μ ≪ ν)
   证明: by
   have : SigmaFinite (ν.trim hg.comap_le) := by
     rw [← map_trim_comap hg] at hσ
@@ -108,7 +108,7 @@ lemma rnDeriv_map
 
 中文:
 引理 rnDeriv_map
-  结论: [IsFiniteMeasure μ] (hμν : μ ≪ ν)
+  结论: [是有限测度 μ] (hμν : μ ≪ ν)
   证明: by
   have : SigmaFinite ν := SigmaFinite.of_map _ hg.aemeasurable hσ
   have h_ne_top1 : forallᵐ x ∂ν, (μ.map g).rnDeriv (ν.map g) (g x) != ∞ :=
@@ -147,7 +147,7 @@ lemma rnDeriv_map_ae_eq_trim
 
 中文:
 引理 rnDeriv_map_ae_eq_trim
-  结论: [IsFiniteMeasure μ] (hμν : μ ≪ ν)
+  结论: [是有限测度 μ] (hμν : μ ≪ ν)
   证明: by
   rw [StronglyMeasurable.ae_eq_trim_iff]
   · exact rnDeriv_map hμν hg
@@ -183,8 +183,8 @@ lemma toReal_rnDeriv_map_ae_eq_trim
   · fun_prop
 
 中文:
-引理 toReal_rnDeriv_map_ae_eq_trim
-  结论: [IsFiniteMeasure μ] (hμν : μ ≪ ν)
+引理 to实数_rnDeriv_map_ae_eq_trim
+  结论: [是有限测度 μ] (hμν : μ ≪ ν)
   证明: by
   rw [StronglyMeasurable.ae_eq_trim_iff]
   · exact toReal_rnDeriv_map hμν hg
@@ -222,8 +222,8 @@ lemma toReal_rnDeriv_trim
   convert! h <;> rw [MeasurableSpace.comap_id]
 
 中文:
-引理 toReal_rnDeriv_trim
-  结论: (hm : m <= m𝓧) [IsFiniteMeasure μ] [hsf : SigmaFinite (ν.trim hm)]
+引理 to实数_rnDeriv_trim
+  结论: (hm : m <= m𝓧) [是有限测度 μ] [hsf : σ有限 (ν.trim hm)]
   证明: by
   simp_rw [trim_eq_map hm]
   have : SigmaFinite (@Measure.map _ _ m𝓧 m id ν) := by rwa [← trim_eq_map hm]
@@ -256,7 +256,7 @@ lemma rnDeriv_trim
 
 中文:
 引理 rnDeriv_trim
-  条件: (hm : m <= m𝓧) [IsFiniteMeasure μ] [SigmaFinite (ν.trim hm)] (hμν : μ ≪ ν)
+  条件: (hm : m <= m𝓧) [是有限测度 μ] [σ有限 (ν.trim hm)] (hμν : μ ≪ ν)
   证明: by
   filter_upwards [toReal_rnDeriv_trim hm hμν, Measure.rnDeriv_ne_top (μ.trim hm) (ν.trim hm)]
     with x hx hx_ne_top

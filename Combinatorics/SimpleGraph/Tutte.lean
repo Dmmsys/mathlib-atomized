@@ -42,7 +42,7 @@ definition IsTutteViolator
 
 中文:
 定义 IsTutteViolator
-  签名: (G : SimpleGraph V) (u : Set V)
+  签名: (G : 简单图 V) (u : 集合 V)
   定义体: u.ncard < ((⊤ : G.Subgraph).deleteVerts u).coe.oddComponents.ncard
 
 Depends on / 依赖: G.Subgraph, Subgraph, coe.oddComponents.ncard, deleteVerts, oddComponents, u.ncard
@@ -63,8 +63,8 @@ lemma tutte_exists_isAlternating_isCycles
   · refine hp.isCycles_spanni
 
 中文:
-引理 tutte_exists_isAlternating_isCycles
-  结论: {x b a c : V} {M : Subgraph (G ⊔ edge a c)}
+引理 tutte_存在_isAlternating_isCycles
+  结论: {x b a c : V} {M : 子图 (G ⊔ edge a c)}
   证明: by
   refine ⟨p.toSubgraph.spanningCoe ⊔ edge x a, (hcalt.spanningCoe p.toSubgraph).sup_edge (by simpa)
     (fun u' hu'x hadj => ?_) aux, ?_, ?_, by aesop, sup_le_iff.mpr ⟨hle, fun v w hvw => ?_⟩⟩
@@ -105,7 +105,7 @@ lemma IsTutteViolator.mono
 
 中文:
 引理 IsTutteViolator.mono
-  条件: {u : Set V} (h : G <= G') (ht : G'.IsTutteViolator u)
+  条件: {u : 集合 V} (h : G <= G') (ht : G'.IsTutteViolator u)
   证明: by
   simp only [IsTutteViolator] at *
   have := ncard_oddComponents_mono _ (Subgraph.deleteVerts_mono' (G := G) (G' := G') u h)
@@ -138,7 +138,7 @@ lemma Subgraph.IsMatching.exists_verts_compl_subset_universalVerts
       (disjoint_image_val_universalVerts _).symm (by
 
 中文:
-引理 Subgraph.IsMatching.exists_verts_compl_subset_universalVerts
+引理 子图.IsMatching.存在_verts_compl_subset_universalVerts
   证明: by
   have hrep := ConnectedComponent.Represents.image_out G.deleteUniversalVerts.coe.oddComponents
   -- First we match one node from each odd component to a universal vertex
@@ -200,7 +200,7 @@ theorem Subgraph.IsPerfectMatching.exists_of_isClique_supp
     (Set.toFinite _)).mp (by simpa [Set.even_ncard_compl_iff hveven, -Set.toFinset_ca
 
 中文:
-定理 Subgraph.IsPerfectMatching.exists_of_isClique_supp
+定理 子图.IsPerfectMatching.存在_of_isClique_supp
   证明: by
   classical
   cases nonempty_fintype V
@@ -265,7 +265,7 @@ exact Subtype.val_injective ConnectedComponent.eq_of_common_vertex (hg c
 
 中文:
 引理 not_isTutteViolator_of_isPerfectMatching
-  结论: {M : Subgraph G} (hM : M.IsPerfectMatching)
+  结论: {M : 子图 G} (hM : M.IsPerfectMatching)
   证明: by
   choose f hf g hgf hg using ConnectedComponent.odd_matches_node_outside hM (u := u)
   have hfinj : f.Injective := fun c d hcd => by
@@ -300,7 +300,7 @@ theorem tutte_exists_isPerfectMatching_of_near_matchings
     exact (Subgraph.IsPerfectMatching.toSubgraph_iff (M1.spanningCoe_sup_edge_le _ hM
 
 中文:
-定理 tutte_exists_isPerfectMatching_of_near_matchings
+定理 tutte_存在_isPerfectMatching_of_near_matchings
   结论: {x a b c : V}
   证明: by
   classical
@@ -436,8 +436,8 @@ lemma exists_isTutteViolator
   simp only [IsTutteViolator, Set.ncard_eq_toFinset_c
 
 中文:
-引理 exists_isTutteViolator
-  结论: (h : 对任意 (M : G.Subgraph), ¬M.IsPerfectMatching)
+引理 存在_isTutteViolator
+  结论: (h : 对任意 (M : G.子图), ¬M.IsPerfectMatching)
   证明: by
   classical
   cases nonempty_fintype V
@@ -507,7 +507,7 @@ theorem tutte
 
 中文:
 定理 tutte
-  结论: (存在 M : Subgraph G, M.IsPerfectMatching) ↔ 对任意 u, ¬ G.IsTutteViolator u
+  结论: (存在 M : 子图 G, M.IsPerfectMatching) ↔ 对任意 u, ¬ G.IsTutteViolator u
   证明: by
   refine ⟨by rintro ⟨M, hM⟩; apply not_isTutteViolator_of_isPerfectMatching hM, ?_⟩
   contrapose!

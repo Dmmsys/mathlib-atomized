@@ -99,7 +99,7 @@ lemma DiscreteTopology.of_forall_le_norm'
 @[to_additive (attr := simp)]
 
 中文:
-引理 DiscreteTopology.of_forall_le_norm'
+引理 离散拓扑.of_对任意_le_norm'
   条件: (hpos : 0 < r) (hr : 对任意 x : E, x != 1 -> r <= ‖x‖)
   证明: .of_forall_le_dist hpos fun x y hne => by
     simp only [dist_eq_norm_inv_mul]
@@ -155,7 +155,7 @@ theorem inseparable_one_iff_norm
 中文:
 定理 inseparable_one_iff_norm
   条件: {a : E}
-  结论: Inseparable a 1 ↔ ‖a‖ = 0
+  结论: 不可分 a 1 ↔ ‖a‖ = 0
   证明: by
   rw [Metric.inseparable_iff]; rw [dist_one_right]
 
@@ -335,7 +335,7 @@ theorem norm_zpow_isUnit
 
 中文:
 定理 norm_zpow_isUnit
-  条件: (a : E) {n : 整数} (hn : IsUnit n)
+  条件: (a : E) {n : 整数} (hn : 是单位 n)
   结论: ‖a ^ n‖ = ‖a‖
   证明: by
   rw [← norm_pow_natAbs]; rw [Int.isUnit_iff_natAbs_eq.mp hn]; rw [pow_one]
@@ -359,7 +359,7 @@ theorem norm_units_zsmul
 
 中文:
 定理 norm_units_zsmul
-  条件: {E : 类型} [SeminormedAddGroup E] (n : 整数ˣ) (a : E)
+  条件: {E : 类型} [半赋范加群 E] (n : 整数ˣ) (a : E)
   结论: ‖n • a‖ = ‖a‖
   证明: norm_isUnit_zsmul a n.isUnit
 
@@ -383,7 +383,7 @@ theorem dist_mulIndicator
 
 中文:
 定理 dist_mulIndicator
-  条件: (s t : Set α) (f : α -> E) (x : α)
+  条件: (s t : 集合 α) (f : α -> E) (x : α)
   证明: by
   rw [dist_eq_norm_inv_mul]; rw [Set.apply_mulIndicator_symmDiff norm_inv']
   simp only [Set.mulIndicator, mul_ite, mul_one]
@@ -659,7 +659,7 @@ theorem norm_of_subsingleton'
 
 中文:
 定理 norm_of_subsingleton'
-  条件: [Subsingleton E] (a : E)
+  条件: [子单例 E] (a : E)
   结论: ‖a‖ = 0
   证明: by
   rw [Subsingleton.elim a 1]; rw [norm_one']
@@ -1479,7 +1479,7 @@ lemma norm_mul_sub_norm_div_le_two_mul
 
 中文:
 引理 norm_mul_sub_norm_div_le_two_mul
-  条件: {E : 类型} [SeminormedGroup E] (u v : E)
+  条件: {E : 类型} [半赋范群 E] (u v : E)
   证明: by
   simpa [-tsub_le_iff_right, tsub_le_iff_left, two_mul, add_assoc]
     using norm_mul₃_le' (a := (u / v)) (b := v) (c := v)
@@ -1508,7 +1508,7 @@ lemma norm_mul_sub_norm_div_le_two_mul_min
 
 中文:
 引理 norm_mul_sub_norm_div_le_two_mul_min
-  条件: {E : 类型} [SeminormedCommGroup E] (u v : E)
+  条件: {E : 类型} [SeminormedComm群 E] (u v : E)
   证明: by
   rw [mul_min_of_nonneg _ _ (by positivity)]
   refine le_min ?_ (norm_mul_sub_norm_div_le_two_mul u v)
@@ -1657,7 +1657,7 @@ definition normGroupSeminorm
 
 中文:
 定义 normGroupSeminorm
-  签名: : GroupSeminorm E
+  签名: : 群半范数 E
   定义体: ⟨norm, norm_one', norm_mul_le', norm_inv'⟩
 
 @[to_additive (attr := simp)]
@@ -1704,8 +1704,8 @@ alias NormedAddCommGroup.tendsto_nhds_zero := NormedAddGroup.tendsto_nhds_zero
 @[to_additive]
 
 中文:
-定理 NormedGroup.tendsto_nhds_one
-  条件: {f : α -> E} {l : Filter α}
+定理 赋范群.tendsto_nhds_one
+  条件: {f : α -> E} {l : 滤子 α}
   证明: Metric.tendsto_nhds.trans by simp only [dist_one_right]
 
 @[deprecated (since := "2026-02-17")]
@@ -1741,7 +1741,7 @@ theorem NormedGroup.tendsto_nhds_nhds
 @[to_additive]
 
 中文:
-定理 NormedGroup.tendsto_nhds_nhds
+定理 赋范群.tendsto_nhds_nhds
   条件: {f : E -> F} {x : E} {y : F}
   证明: by
   simp_rw [Metric.tendsto_nhds_nhds, dist_eq_norm_inv_mul]
@@ -1768,7 +1768,7 @@ theorem NormedGroup.nhds_basis_norm_lt
 @[to_additive]
 
 中文:
-定理 NormedGroup.nhds_basis_norm_lt
+定理 赋范群.nhds_basis_norm_lt
   条件: (x : E)
   证明: by
   simp_rw [← ball_eq_norm_inv_mul_lt]
@@ -1800,7 +1800,7 @@ alias NormedCommGroup.nhds_one_basis_norm_lt := NormedGroup.nhds_one_basis_norm_
 alias NormedAddCommGroup.nhds_zero_basis_norm_lt := NormedAddGroup.nhds
 
 中文:
-定理 NormedGroup.nhds_one_basis_norm_lt
+定理 赋范群.nhds_one_basis_norm_lt
   证明: by
   convert! NormedGroup.nhds_basis_norm_lt (1 : E) using 1
   simp
@@ -1835,7 +1835,7 @@ theorem NormedGroup.uniformity_basis_dist
   simp [dist_eq_norm_inv_mul]
 
 中文:
-定理 NormedGroup.uniformity_basis_dist
+定理 赋范群.uniformity_basis_dist
   证明: by
   convert Metric.uniformity_basis_dist (α := E)
   simp [dist_eq_norm_inv_mul]
@@ -1913,7 +1913,7 @@ theorem norm_toNNReal'
 @[to_additive (attr := simp) toReal_enorm]
 
 中文:
-定理 norm_toNNReal'
+定理 norm_toNN实数'
   结论: ‖a‖.toNN实数 = ‖a‖₊
   证明: @Real.toNNReal_coe ‖a‖₊
 
@@ -1937,7 +1937,7 @@ lemma toReal_enorm'
 @[to_additive (attr := simp) ofReal_norm]
 
 中文:
-引理 toReal_enorm'
+引理 to实数_enorm'
   条件: (x : E)
   结论: ‖x‖ₑ.to实数 = ‖x‖
   证明: by simp [enorm]
@@ -1963,7 +1963,7 @@ lemma ofReal_norm'
 @[to_additive enorm_eq_iff_norm_eq]
 
 中文:
-引理 ofReal_norm'
+引理 of实数_norm'
   条件: (x : E)
   结论: .of实数 ‖x‖ = ‖x‖ₑ
   证明: ENNReal.ofReal_eq_coe_nnreal _
@@ -2335,7 +2335,7 @@ theorem nnnorm_zpow_isUnit
 
 中文:
 定理 nnnorm_zpow_isUnit
-  条件: (a : E) {n : 整数} (hn : IsUnit n)
+  条件: (a : E) {n : 整数} (hn : 是单位 n)
   结论: ‖a ^ n‖₊ = ‖a‖₊
   证明: NNReal.eq norm_zpow_isUnit a hn
 
@@ -2360,7 +2360,7 @@ theorem nnnorm_units_zsmul
 
 中文:
 定理 nnnorm_units_zsmul
-  条件: {E : 类型} [SeminormedAddGroup E] (n : 整数ˣ) (a : E)
+  条件: {E : 类型} [半赋范加群 E] (n : 整数ˣ) (a : E)
   结论: ‖n • a‖₊ = ‖a‖₊
   证明: NNReal.eq norm_isUnit_zsmul a n.isUnit
 
@@ -2432,7 +2432,7 @@ theorem nndist_mulIndicator
 
 中文:
 定理 nndist_mulIndicator
-  条件: (s t : Set α) (f : α -> E) (x : α)
+  条件: (s t : 集合 α) (f : α -> E) (x : α)
   证明: NNReal.eq dist_mulIndicator s t f x
 
 @[to_additive]
@@ -2736,7 +2736,7 @@ theorem toReal_coe_nnnorm'
   proof: rfl
 
 中文:
-定理 toReal_coe_nnnorm'
+定理 to实数_coe_nnnorm'
   条件: (a : E)
   结论: (‖a‖₊ : 实数>=0∞).to实数 = ‖a‖
   证明: rfl
@@ -2758,7 +2758,7 @@ theorem edist_mulIndicator
 
 中文:
 定理 edist_mulIndicator
-  条件: (s t : Set α) (f : α -> E) (x : α)
+  条件: (s t : 集合 α) (f : α -> E) (x : α)
   证明: by
   rw [edist_nndist]; rw [nndist_mulIndicator]
 
@@ -2784,7 +2784,7 @@ theorem nontrivialTopology_iff_exists_nnnorm_ne_zero'
 @[to_additive indiscreteTopology_iff_forall_nnnorm_eq_zero]
 
 中文:
-定理 nontrivialTopology_iff_exists_nnnorm_ne_zero'
+定理 nontrivialTopology_iff_存在_nnnorm_ne_zero'
   证明: by
   simp_rw [TopologicalSpace.nontrivial_iff_exists_not_inseparable, Metric.inseparable_iff_nndist,
     nndist_eq_nnnorm_inv_mul]
@@ -2810,7 +2810,7 @@ theorem indiscreteTopology_iff_forall_nnnorm_eq_zero'
   simpa using nontrivialTopology_iff_exists_nnnorm_ne_zero' (E := E).not
 
 中文:
-定理 indiscreteTopology_iff_forall_nnnorm_eq_zero'
+定理 indiscreteTopology_iff_对任意_nnnorm_eq_zero'
   证明: by
   simpa using nontrivialTopology_iff_exists_nnnorm_ne_zero' (E := E).not
 
@@ -2834,8 +2834,8 @@ theorem exists_nnnorm_ne_zero'
 @[to_additive (attr := nontriviality) nnnorm_eq_zero]
 
 中文:
-定理 exists_nnnorm_ne_zero'
-  条件: [NontrivialTopology E]
+定理 存在_nnnorm_ne_zero'
+  条件: [非平凡拓扑 E]
   结论: 存在 x : E, ‖x‖₊ != 0
   证明: nontrivialTopology_iff_exists_nnnorm_ne_zero'.1 ‹_›
 
@@ -2862,8 +2862,8 @@ alias ⟨_, NontrivialTopology.of_exists_nnnorm_ne_zero⟩ :=
   nontrivialTopology_iff_exists_nnnorm_ne_zero
 
 中文:
-定理 IndiscreteTopology.nnnorm_eq_zero'
-  条件: [IndiscreteTopology E]
+定理 Indiscrete拓扑.nnnorm_eq_zero'
+  条件: [Indiscrete拓扑 E]
   结论: 对任意 x : E, ‖x‖₊ = 0
   证明: indiscreteTopology_iff_forall_nnnorm_eq_zero'.1 ‹_›
 
@@ -2903,7 +2903,7 @@ theorem nontrivialTopology_iff_exists_norm_ne_zero'
 @[to_additive indiscreteTopology_iff_forall_norm_eq_zero]
 
 中文:
-定理 nontrivialTopology_iff_exists_norm_ne_zero'
+定理 nontrivialTopology_iff_存在_norm_ne_zero'
   证明: by
   simp [nontrivialTopology_iff_exists_nnnorm_ne_zero', ← NNReal.ne_iff]
 
@@ -2925,7 +2925,7 @@ theorem indiscreteTopology_iff_forall_norm_eq_zero'
   simpa using nontrivialTopology_iff_exists_norm_ne_zero' (E := E).not
 
 中文:
-定理 indiscreteTopology_iff_forall_norm_eq_zero'
+定理 indiscreteTopology_iff_对任意_norm_eq_zero'
   证明: by
   simpa using nontrivialTopology_iff_exists_norm_ne_zero' (E := E).not
 
@@ -2949,8 +2949,8 @@ theorem exists_norm_ne_zero'
 @[to_additive (attr := nontriviality) IndiscreteTopology.norm_eq_zero]
 
 中文:
-定理 exists_norm_ne_zero'
-  条件: [NontrivialTopology E]
+定理 存在_norm_ne_zero'
+  条件: [非平凡拓扑 E]
   结论: 存在 x : E, ‖x‖ != 0
   证明: nontrivialTopology_iff_exists_norm_ne_zero'.1 ‹_›
 
@@ -2977,8 +2977,8 @@ alias ⟨_, NontrivialTopology.of_exists_norm_ne_zero⟩ :=
   nontrivialTopology_iff_exists_norm_ne_zero
 
 中文:
-定理 IndiscreteTopology.norm_eq_zero'
-  条件: [IndiscreteTopology E]
+定理 Indiscrete拓扑.norm_eq_zero'
+  条件: [Indiscrete拓扑 E]
   结论: 对任意 x : E, ‖x‖ = 0
   证明: indiscreteTopology_iff_forall_norm_eq_zero'.1 ‹_›
 
@@ -3025,7 +3025,7 @@ lemma enorm_one'
 
 中文:
 引理 enorm_one'
-  条件: {E : 类型} [TopologicalSpace E] [ESeminormedMonoid E]
+  条件: {E : 类型} [拓扑空间 E] [ESeminormed幺半群 E]
   结论: ‖(1 : E)‖ₑ = 0
   证明: by
   rw [ESeminormedMonoid.enorm_zero]
@@ -3051,8 +3051,8 @@ lemma exists_enorm_lt'
 @[to_additive (attr := simp) enorm_neg]
 
 中文:
-引理 exists_enorm_lt'
-  结论: (E : 类型) [TopologicalSpace E] [ESeminormedMonoid E]
+引理 存在_enorm_lt'
+  结论: (E : 类型) [拓扑空间 E] [ESeminormed幺半群 E]
   证明: .and_eventually frequently_iff_neBot.mpr hbot
     (ContinuousENorm.continuous_enorm.tendsto' 1 0 (by simp) |>.eventually_lt_const hc.bot_lt)
 .exists
@@ -3143,7 +3143,7 @@ lemma enorm_div_rev
 
 中文:
 引理 enorm_div_rev
-  条件: {E : 类型} [SeminormedGroup E] (a b : E)
+  条件: {E : 类型} [半赋范群 E] (a b : E)
   结论: ‖a / b‖ₑ = ‖b / a‖ₑ
   证明: by
   rw [← enorm_inv']; rw [inv_div]
@@ -3391,8 +3391,8 @@ lemma SeminormedGroup.disjoint_nhds
 @[to_additive]
 
 中文:
-引理 SeminormedGroup.disjoint_nhds
-  条件: (x : E) (f : Filter E)
+引理 半赋范群.disjoint_nhds
+  条件: (x : E) (f : 滤子 E)
   证明: by
   simp [NormedGroup.nhds_basis_norm_lt x |>.disjoint_iff_left, compl_ofPred, eventually_iff]
 
@@ -3415,8 +3415,8 @@ lemma SeminormedGroup.disjoint_nhds_one
   simpa using disjoint_nhds 1 f
 
 中文:
-引理 SeminormedGroup.disjoint_nhds_one
-  条件: (f : Filter E)
+引理 半赋范群.disjoint_nhds_one
+  条件: (f : 滤子 E)
   证明: by
   simpa using disjoint_nhds 1 f
 
@@ -3449,8 +3449,8 @@ abbreviation SeminormedGroup.induced
     dist_eq := fun x y => by simp only [map_mul, map_inv, ← dist_eq_norm_inv_mul]; rfl }
 
 中文:
-缩写 SeminormedGroup.induced
-  签名: [Group E] [SeminormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕)
+缩写 半赋范群.induced
+  签名: [群 E] [半赋范群 F] [幺半群态射类 𝓕 E F] (f : 𝓕)
   定义体: fast_instance% { PseudoMetricSpace.induced f toPseudoMetricSpace with
     norm := fun x => ‖f x‖
     dist_eq := fun x y => by simp only [map_mul, map_inv, ← dist_eq_norm_inv_mul]; rfl }
@@ -3477,7 +3477,7 @@ abbreviation SeminormedCommGroup.induced
     mul_comm := mul_comm }
 
 中文:
-缩写 SeminormedCommGroup.induced
+缩写 SeminormedComm群.induced
   定义体: fast_instance% { SeminormedGroup.induced E F f with
     mul_comm := mul_comm }
 
@@ -3502,7 +3502,7 @@ abbreviation NormedGroup.induced
   body: fast_instance% { SeminormedGroup.induced E F f, MetricSpace.induced f h _ with }
 
 中文:
-缩写 NormedGroup.induced
+缩写 赋范群.induced
   定义体: fast_instance% { SeminormedGroup.induced E F f, MetricSpace.induced f h _ with }
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, SeminormedGroup, SeminormedGroup.induced, fast_instance, induced
@@ -3526,8 +3526,8 @@ abbreviation NormedCommGroup.induced
   body: fast_instance% { SeminormedCommGroup.induced E F f, MetricSpace.induced f h _ with }
 
 中文:
-缩写 NormedCommGroup.induced
-  签名: [CommGroup E] [NormedGroup F] [MonoidHomClass 𝓕 E F] (f : 𝓕)
+缩写 NormedComm群.induced
+  签名: [交换群 E] [赋范群 F] [幺半群态射类 𝓕 E F] (f : 𝓕)
   定义体: fast_instance% { SeminormedCommGroup.induced E F f, MetricSpace.induced f h _ with }
 
 Depends on / 依赖: MetricSpace, MetricSpace.induced, SeminormedCommGroup, SeminormedCommGroup.induced, fast_instance, induced
@@ -3827,7 +3827,7 @@ theorem norm_multiset_sum_le
 
 中文:
 定理 norm_multiset_sum_le
-  条件: {E} [SeminormedAddCommGroup E] (m : Multiset E)
+  条件: {E} [SeminormedAddComm群 E] (m : Multiset E)
   证明: m.le_sum_of_subadditive norm norm_zero.le norm_add_le
 
 Depends on / 依赖: le_sum_of_subadditive, m.le_sum_of_subadditive, norm_add_le, norm_zero, norm_zero.le
@@ -3873,7 +3873,7 @@ theorem norm_multiset_prod_le
 中文:
 定理 norm_multiset_prod_le
   条件: (m : Multiset E)
-  结论: ‖m.prod‖ <= (m.map fun x => ‖x‖).sum
+  结论: ‖m.乘积‖ <= (m.map fun x => ‖x‖).求和
   证明: m.apply_prod_le_sum_map _ norm_one'.le norm_mul_le'
 
 Depends on / 依赖: apply_prod_le_sum_map, m.apply_prod_le_sum_map, norm_mul_le, norm_one
@@ -3916,7 +3916,7 @@ theorem enorm_sum_le
 
 中文:
 定理 enorm_sum_le
-  条件: (s : Finset ι) (f : ι -> ε)
+  条件: (s : 有限集 ι) (f : ι -> ε)
   证明: s.le_sum_of_subadditive enorm enorm_zero.le enorm_add_le f
 
 @[bound]
@@ -3940,7 +3940,7 @@ theorem norm_sum_le
 
 中文:
 定理 norm_sum_le
-  条件: {E} [SeminormedAddCommGroup E] (s : Finset ι) (f : ι -> E)
+  条件: {E} [SeminormedAddComm群 E] (s : 有限集 ι) (f : ι -> E)
   证明: s.le_sum_of_subadditive norm norm_zero.le norm_add_le f
 
 @[to_additive existing]
@@ -3965,7 +3965,7 @@ theorem enorm_prod_le
 
 中文:
 定理 enorm_prod_le
-  条件: (s : Finset ι) (f : ι -> ε)
+  条件: (s : 有限集 ι) (f : ι -> ε)
   结论: ‖∏ i in s, f i‖ₑ <= ∑ i in s, ‖f i‖ₑ
   证明: s.apply_prod_le_sum_apply _ enorm_one'.le enorm_mul_le'
 
@@ -3990,7 +3990,7 @@ theorem norm_prod_le
 
 中文:
 定理 norm_prod_le
-  条件: (s : Finset ι) (f : ι -> E)
+  条件: (s : 有限集 ι) (f : ι -> E)
   结论: ‖∏ i in s, f i‖ <= ∑ i in s, ‖f i‖
   证明: s.apply_prod_le_sum_apply _ norm_one'.le norm_mul_le'
 
@@ -4014,7 +4014,7 @@ theorem enorm_prod_le_of_le
 
 中文:
 定理 enorm_prod_le_of_le
-  条件: (s : Finset ι) {f : ι -> ε} {n : ι -> 实数>=0∞} (h : 对任意 b in s, ‖f b‖ₑ <= n b)
+  条件: (s : 有限集 ι) {f : ι -> ε} {n : ι -> 实数>=0∞} (h : 对任意 b in s, ‖f b‖ₑ <= n b)
   证明: (enorm_prod_le s f).trans Finset.sum_le_sum h
 
 @[to_additive]
@@ -4038,7 +4038,7 @@ theorem norm_prod_le_of_le
 
 中文:
 定理 norm_prod_le_of_le
-  条件: (s : Finset ι) {f : ι -> E} {n : ι -> 实数} (h : 对任意 b in s, ‖f b‖ <= n b)
+  条件: (s : 有限集 ι) {f : ι -> E} {n : ι -> 实数} (h : 对任意 b in s, ‖f b‖ <= n b)
   证明: (norm_prod_le s f).trans Finset.sum_le_sum h
 
 @[to_additive]
@@ -4065,7 +4065,7 @@ theorem dist_prod_prod_le_of_le
 
 中文:
 定理 dist_prod_prod_le_of_le
-  结论: (s : Finset ι) {f a : ι -> E} {d : ι -> 实数}
+  结论: (s : 有限集 ι) {f a : ι -> E} {d : ι -> 实数}
   证明: by
   simp_rw [dist_eq_norm_inv_mul] at h
   rw [dist_eq_norm_inv_mul]; rw [← Finset.prod_inv_distrib]; rw [← Finset.prod_mul_distrib]
@@ -4095,7 +4095,7 @@ theorem dist_prod_prod_le
 
 中文:
 定理 dist_prod_prod_le
-  条件: (s : Finset ι) (f a : ι -> E)
+  条件: (s : 有限集 ι) (f a : ι -> E)
   证明: dist_prod_prod_le_of_le s fun _ _ => le_rfl
 
 @[to_additive ball_eq]
@@ -4678,7 +4678,7 @@ theorem nnnorm_multiset_prod_le
 中文:
 定理 nnnorm_multiset_prod_le
   条件: (m : Multiset E)
-  结论: ‖m.prod‖₊ <= (m.map fun x => ‖x‖₊).sum
+  结论: ‖m.乘积‖₊ <= (m.map fun x => ‖x‖₊).求和
   证明: NNReal.coe_le_coe.1 by
     push_cast
     rw [Multiset.map_map]
@@ -4710,7 +4710,7 @@ theorem nnnorm_prod_le
 
 中文:
 定理 nnnorm_prod_le
-  条件: (s : Finset ι) (f : ι -> E)
+  条件: (s : 有限集 ι) (f : ι -> E)
   结论: ‖∏ a in s, f a‖₊ <= ∑ a in s, ‖f a‖₊
   证明: NNReal.coe_le_coe.1 by
     push_cast
@@ -4738,7 +4738,7 @@ theorem nnnorm_prod_le_of_le
 
 中文:
 定理 nnnorm_prod_le_of_le
-  条件: (s : Finset ι) {f : ι -> E} {n : ι -> 实数>=0} (h : 对任意 b in s, ‖f b‖₊ <= n b)
+  条件: (s : 有限集 ι) {f : ι -> E} {n : ι -> 实数>=0} (h : 对任意 b in s, ‖f b‖₊ <= n b)
   证明: (norm_prod_le_of_le s h).trans_eq (NNReal.coe_sum ..).symm
 
 @[to_additive]
@@ -4762,7 +4762,7 @@ theorem NormedCommGroup.tendsto_nhds_nhds
 @[to_additive]
 
 中文:
-定理 NormedCommGroup.tendsto_nhds_nhds
+定理 NormedComm群.tendsto_nhds_nhds
   条件: {f : E -> F} {x : E} {y : F}
   证明: by
   simpa [norm_inv_mul] using NormedGroup.tendsto_nhds_nhds (f := f) (x := x) (y := y)
@@ -4788,7 +4788,7 @@ theorem NormedCommGroup.nhds_basis_norm_lt
 @[to_additive]
 
 中文:
-定理 NormedCommGroup.nhds_basis_norm_lt
+定理 NormedComm群.nhds_basis_norm_lt
   条件: (x : E)
   证明: by
   simpa [norm_inv_mul] using NormedGroup.nhds_basis_norm_lt x
@@ -4811,7 +4811,7 @@ theorem NormedCommGroup.uniformity_basis_dist
   simpa [norm_inv_mul] using NormedGroup.uniformity_basis_dist (E := E)
 
 中文:
-定理 NormedCommGroup.uniformity_basis_dist
+定理 NormedComm群.uniformity_basis_dist
   证明: by
   simpa [norm_inv_mul] using NormedGroup.uniformity_basis_dist (E := E)
 
@@ -5130,7 +5130,7 @@ definition normGroupNorm
 
 中文:
 定义 normGroupNorm
-  签名: : GroupNorm E
+  签名: : 群范数 E
   定义体: { normGroupSeminorm _ with eq_one_of_map_eq_zero' := fun _ => norm_eq_zero'.1 }
 
 @[simp]

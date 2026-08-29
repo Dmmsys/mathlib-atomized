@@ -59,7 +59,7 @@ abbreviation ofFan
 
 中文:
 缩写 ofFan
-  签名: (hB : IsTerminal B)
+  签名: (hB : 是终止 B)
   定义体: WidePullbackCone.mk (hB.from _) c.proj (fun _ => hB.hom_ext _ _)
 
 Depends on / 依赖: WidePullbackCone, WidePullbackCone.mk, c.proj, hB.from, hB.hom_ext, hom_ext
@@ -83,7 +83,7 @@ definition isLimitOfFan
 
 中文:
 定义 isLimitOfFan
-  签名: (hc : IsLimit c) (hB : IsTerminal B)
+  签名: (hc : 是极限 c) (hB : 是终止 B)
   定义体: IsLimit.mk _
     (fun s => hc.lift s.toFan)
     (fun s => hB.hom_ext _ _)

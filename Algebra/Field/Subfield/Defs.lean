@@ -63,9 +63,9 @@ class SubfieldClass
   (no additional axioms)
 
 中文:
-类 SubfieldClass
-  参数: (S K : 类型) [DivisionRing K] [SetLike S K]
-  继承: SubringClass S K, InvMemClass S K
+类 子域类
+  参数: (S K : 类型) [除环 K] [集合状 S K]
+  继承: 子环类 S K, InvMem类 S K
   (无附加公理)
 -/
 class SubfieldClass (S K : Type*) [DivisionRing K] [SetLike S K] : Prop
@@ -101,7 +101,7 @@ lemma nnratCast_mem
 
 中文:
 引理 nnratCast_mem
-  条件: (s : S) (q : Rat>=0)
+  条件: (s : S) (q : 有理数>=0)
   结论: (q : K) in s
   证明: by
   simpa only [NNRat.cast_def] using div_mem (natCast_mem s q.num) (natCast_mem s q.den)
@@ -126,7 +126,7 @@ lemma ratCast_mem
 
 中文:
 引理 ratCast_mem
-  条件: (s : S) (q : Rat)
+  条件: (s : S) (q : 有理数)
   结论: (q : K) in s
   证明: by
   simpa only [Rat.cast_def] using div_mem (intCast_mem s q.num) (natCast_mem s q.den)
@@ -180,7 +180,7 @@ lemma coe_nnratCast
 
 中文:
 引理 coe_nnratCast
-  条件: (s : S) (q : Rat>=0)
+  条件: (s : S) (q : 有理数>=0)
   结论: ((q : s) : K) = q
   证明: rfl
 -/
@@ -198,7 +198,7 @@ lemma coe_ratCast
 
 中文:
 引理 coe_ratCast
-  条件: (s : S) (x : Rat)
+  条件: (s : S) (x : 有理数)
   结论: ((x : s) : K) = x
   证明: rfl
 
@@ -221,7 +221,7 @@ lemma nnqsmul_mem
 
 中文:
 引理 nnqsmul_mem
-  条件: (s : S) (q : Rat>=0) (hx : x in s)
+  条件: (s : S) (q : 有理数>=0) (hx : x in s)
   结论: q • x in s
   证明: by
   simpa only [NNRat.smul_def] using mul_mem (nnratCast_mem _ _) hx
@@ -248,7 +248,7 @@ lemma qsmul_mem
 
 中文:
 引理 qsmul_mem
-  条件: (s : S) (q : Rat) (hx : x in s)
+  条件: (s : S) (q : 有理数) (hx : x in s)
   结论: q • x in s
   证明: by
   simpa only [Rat.smul_def] using mul_mem (ratCast_mem _ _) hx
@@ -271,7 +271,7 @@ lemma ofScientific_mem
 
 中文:
 引理 ofScientific_mem
-  条件: (s : S) {b : 布尔} {n m : 自然数}
+  条件: (s : S) {b : 布尔值} {n m : 自然数}
   证明: SubfieldClass.nnratCast_mem s (OfScientific.ofScientific n b m)
 
 Depends on / 依赖: OfScientific, OfScientific.ofScientific, SubfieldClass, SubfieldClass.nnratCast_mem, nnratCast_mem, ofScientific
@@ -324,7 +324,7 @@ lemma coe_nnqsmul
 
 中文:
 引理 coe_nnqsmul
-  条件: (s : S) (q : Rat>=0) (x : s)
+  条件: (s : S) (q : 有理数>=0) (x : s)
   结论: ↑(q • x) = q • (x : K)
   证明: rfl
 -/
@@ -340,7 +340,7 @@ lemma coe_qsmul
 
 中文:
 引理 coe_qsmul
-  条件: (s : S) (q : Rat) (x : s)
+  条件: (s : S) (q : 有理数) (x : s)
   结论: ↑(q • x) = q • (x : K)
   证明: rfl
 -/
@@ -381,9 +381,9 @@ structure Subfield
     - inv_mem' : forall x in carrier, x⁻¹ in carrier
 
 中文:
-结构 Subfield
-  参数: (K : 类型u) [DivisionRing K]
-  继承: Subring K
+结构 子域
+  参数: (K : 类型u) [除环 K]
+  继承: 子环 K
   公理与运算 (1 个):
     - inv_mem' : 对任意 x in carrier, x⁻¹ in carrier
 -/
@@ -408,7 +408,7 @@ definition toAddSubgroup
 
 中文:
 定义 toAddSubgroup
-  签名: (s : Subfield K)
+  签名: (s : 子域 K)
   定义体: { s.toSubring.toAddSubgroup with }
 
 Depends on / 依赖: s.toSubring.toAddSubgroup, toAddSubgroup, toSubring
@@ -427,7 +427,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subfield K) K
+  签名: 集合状 (子域 K) K
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
 
@@ -447,7 +447,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Subfield K)
+  签名: 偏序 (子域 K)
   定义体: .ofSetLike (Subfield K) K
 
 Depends on / 依赖: Subfield, ofSetLike
@@ -469,7 +469,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubfieldClass (Subfield K) K
+  签名: 子域类 (子域 K) K
   定义体: s.add_mem'
   zero_mem s := s.zero_mem'
   neg_mem {s} := s.neg_mem'
@@ -500,7 +500,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subfield K} {x : K}
+  条件: {s : 子域 K} {x : K}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -525,8 +525,8 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {S : Subring K} {x : K} (h)
-  结论: x in (⟨S, h⟩ : Subfield K) ↔ x in S
+  条件: {S : 子环 K} {x : K} (h)
+  结论: x in (⟨S, h⟩ : 子域 K) ↔ x in S
   证明: Iff.rfl
 
 @[simp]
@@ -550,8 +550,8 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (S : Subring K) (h)
-  结论: ((⟨S, h⟩ : Subfield K) : Set K) = S
+  条件: (S : 子环 K) (h)
+  结论: ((⟨S, h⟩ : 子域 K) : 集合 K) = S
   证明: rfl
 
 @[simp]
@@ -571,8 +571,8 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {S S' : Subring K} (h h')
-  结论: (⟨S, h⟩ : Subfield K) <= (⟨S', h'⟩ : Subfield K) ↔
+  条件: {S S' : 子环 K} (h h')
+  结论: (⟨S, h⟩ : 子域 K) <= (⟨S', h'⟩ : 子域 K) ↔
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -594,7 +594,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Subfield K} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 子域 K} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -617,7 +617,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Subfield K) (s : Set K) (hs : s = ↑S)
+  签名: (S : 子域 K) (s : 集合 K) (hs : s = ↑S)
   定义体: { S.toSubring.copy s hs with
     carrier := s
     inv_mem' := hs.symm ▸ S.inv_mem' }
@@ -641,8 +641,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : Subfield K) (s : Set K) (hs : s = ↑S)
-  结论: (S.copy s hs : Set K) = s
+  条件: (S : 子域 K) (s : 集合 K) (hs : s = ↑S)
+  结论: (S.copy s hs : 集合 K) = s
   证明: rfl
 -/
 theorem coe_copy (S : Subfield K) (s : Set K) (hs : s = ↑S) : (S.copy s hs : Set K) = s :=
@@ -661,7 +661,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : Subfield K) (s : Set K) (hs : s = ↑S)
+  条件: (S : 子域 K) (s : 集合 K) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -686,8 +686,8 @@ theorem coe_toSubring
 
 中文:
 定理 coe_toSubring
-  条件: (s : Subfield K)
-  结论: (s.toSubring : Set K) = s
+  条件: (s : 子域 K)
+  结论: (s.toSubring : 集合 K) = s
   证明: rfl
 
 @[simp]
@@ -707,7 +707,7 @@ theorem mem_toSubring
 
 中文:
 定理 mem_toSubring
-  条件: (s : Subfield K) (x : K)
+  条件: (s : 子域 K) (x : K)
   结论: x in s.toSubring ↔ x in s
   证明: Iff.rfl
 
@@ -727,8 +727,8 @@ definition Subring.toSubfield
   body: { s with inv_mem' := hinv }
 
 中文:
-定义 Subring.toSubfield
-  签名: (s : Subring K) (hinv : 对任意 x in s, x⁻¹ in s)
+定义 子环.toSubfield
+  签名: (s : 子环 K) (hinv : 对任意 x in s, x⁻¹ in s)
   定义体: { s with inv_mem' := hinv }
 
 Depends on / 依赖: inv_mem
@@ -964,7 +964,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring s
+  签名: 环 s
   定义体: s.toSubring.toRing
 
 Depends on / 依赖: s.toSubring.toRing, toRing, toSubring
@@ -982,7 +982,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div s
+  签名: 除法 s
   定义体: ⟨fun x y => ⟨x / y, s.div_mem x.2 y.2⟩⟩
 
 Depends on / 依赖: div_mem, s.div_mem
@@ -1000,7 +1000,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv s
+  签名: 取逆 s
   定义体: ⟨fun x => ⟨x⁻¹, s.inv_mem x.2⟩⟩
 
 Depends on / 依赖: inv_mem, s.inv_mem
@@ -1018,7 +1018,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow s 整数
+  签名: 幂 s 整数
   定义体: ⟨fun x z => ⟨x ^ z, s.zpow_mem x.2 z⟩⟩
 
 Depends on / 依赖: s.zpow_mem, zpow_mem
@@ -1036,7 +1036,7 @@ instance toDivisionRing
 
 中文:
 实例 toDivisionRing
-  签名: (s : Subfield K)
+  签名: (s : 子域 K)
   定义体: SubfieldClass.toDivisionRing s
 
 Depends on / 依赖: SubfieldClass, SubfieldClass.toDivisionRing, toDivisionRing
@@ -1055,7 +1055,7 @@ instance toField
 
 中文:
 实例 toField
-  签名: {K} [Field K] (s : Subfield K)
+  签名: {K} [域 K] (s : 子域 K)
   定义体: SubfieldClass.toField s
 
 @[simp, norm_cast]
@@ -1254,7 +1254,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (s : Subfield K)
+  签名: (s : 子域 K)
   定义体: { s.toSubmonoid.subtype, s.toAddSubgroup.subtype with toFun := (↑) }
 
 @[simp]
@@ -1275,7 +1275,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: {s : Subfield K} (x : s)
+  条件: {s : 子域 K} (x : s)
   证明: rfl
 -/
 lemma subtype_apply {s : Subfield K} (x : s) :
@@ -1293,7 +1293,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (s : Subfield K)
+  条件: (s : 子域 K)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -1332,7 +1332,7 @@ theorem toSubring_subtype_eq_subtype
 
 中文:
 定理 toSubring_subtype_eq_subtype
-  条件: (S : Subfield K)
+  条件: (S : 子域 K)
   证明: rfl
 -/
 theorem toSubring_subtype_eq_subtype (S : Subfield K) :
@@ -1354,7 +1354,7 @@ theorem mem_toSubmonoid
 
 中文:
 定理 mem_toSubmonoid
-  条件: {s : Subfield K} {x : K}
+  条件: {s : 子域 K} {x : K}
   结论: x in s.toSubmonoid ↔ x in s
   证明: Iff.rfl
 
@@ -1376,7 +1376,7 @@ theorem coe_toSubmonoid
 
 中文:
 定理 coe_toSubmonoid
-  结论: (s.toSubmonoid : Set K) = s
+  结论: (s.toSubmonoid : 集合 K) = s
   证明: rfl
 -/
 theorem coe_toSubmonoid : (s.toSubmonoid : Set K) = s :=
@@ -1395,7 +1395,7 @@ theorem mem_toAddSubgroup
 
 中文:
 定理 mem_toAddSubgroup
-  条件: {s : Subfield K} {x : K}
+  条件: {s : 子域 K} {x : K}
   结论: x in s.toAddSubgroup ↔ x in s
   证明: Iff.rfl
 
@@ -1417,7 +1417,7 @@ theorem coe_toAddSubgroup
 
 中文:
 定理 coe_toAddSubgroup
-  结论: (s.toAddSubgroup : Set K) = s
+  结论: (s.toAddSubgroup : 集合 K) = s
   证明: rfl
 -/
 theorem coe_toAddSubgroup : (s.toAddSubgroup : Set K) = s :=

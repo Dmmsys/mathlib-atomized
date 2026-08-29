@@ -115,7 +115,7 @@ theorem convs'Aux_stable_step_of_terminated
 
 中文:
 定理 convs'Aux_stable_step_of_terminated
-  结论: {s : Stream'.Seq <| Pair K}
+  结论: {s : Stream'.序列 <| 对 K}
   证明: by
   change s.get? n = none at terminatedAt_n
   induction n generalizing s with
@@ -156,7 +156,7 @@ theorem convs'Aux_stable_of_terminated
 
 中文:
 定理 convs'Aux_stable_of_terminated
-  结论: {s : Stream'.Seq <| Pair K} (n_le_m : n <= m)
+  结论: {s : Stream'.序列 <| 对 K} (n_le_m : n <= m)
   证明: by
   induction n_le_m with
   | refl => rfl

@@ -251,7 +251,7 @@ definition toChainHomotopy
 
 中文:
 定义 toChainHomotopy
-  签名: (H : Homotopy f g)
+  签名: (H : 同伦 f g)
   定义体: ToChainHomotopy.hom H
   zero i j hij := ToChainHomotopy.hom_eq_zero _ _ _ hij
   comm n := by
@@ -290,7 +290,7 @@ theorem map_homology_eq
 
 中文:
 定理 map_homology_eq
-  条件: [CategoryWithHomology C] (H : Homotopy f g) (n : 自然数)
+  条件: [带同调范畴 C] (H : 同伦 f g) (n : 自然数)
   证明: by
   simpa using! (H.toChainHomotopy).homologyMap_eq n
 

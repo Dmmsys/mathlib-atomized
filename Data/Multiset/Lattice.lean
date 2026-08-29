@@ -39,7 +39,7 @@ definition sup
 @[to_dual (attr := simp)]
 
 中文:
-定义 sup
+定义 上确界
   签名: (s : Multiset α)
   定义体: s.fold (· ⊔ ·) ⊥
 
@@ -64,8 +64,8 @@ theorem sup_coe
 
 中文:
 定理 sup_coe
-  条件: (l : List α)
-  结论: sup (l : Multiset α) = l.foldr (· ⊔ ·) ⊥
+  条件: (l : 列表 α)
+  结论: 上确界 (l : Multiset α) = l.foldr (· ⊔ ·) ⊥
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -86,7 +86,7 @@ theorem sup_zero
 
 中文:
 定理 sup_zero
-  结论: (0 : Multiset α).sup = ⊥
+  结论: (0 : Multiset α).上确界 = ⊥
   证明: fold_zero _ _
 
 @[to_dual (attr := simp)]
@@ -111,7 +111,7 @@ theorem sup_cons
 中文:
 定理 sup_cons
   条件: (a : α) (s : Multiset α)
-  结论: (a ::ₘ s).sup = a ⊔ s.sup
+  结论: (a ::ₘ s).上确界 = a ⊔ s.上确界
   证明: fold_cons_left _ _ _ _
 
 @[to_dual (attr := simp)]
@@ -136,7 +136,7 @@ theorem sup_singleton
 中文:
 定理 sup_singleton
   条件: {a : α}
-  结论: ({a} : Multiset α).sup = a
+  结论: ({a} : Multiset α).上确界 = a
   证明: sup_bot_eq _
 
 @[to_dual (attr := simp)]
@@ -160,7 +160,7 @@ theorem sup_add
 中文:
 定理 sup_add
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ + s₂).sup = s₁.sup ⊔ s₂.sup
+  结论: (s₁ + s₂).上确界 = s₁.上确界 ⊔ s₂.上确界
   证明: Eq.trans (by simp [sup]) (fold_add _ _ _ _ _)
 
 @[to_dual (attr := simp) le_inf]
@@ -186,7 +186,7 @@ theorem sup_le
 中文:
 定理 sup_le
   条件: {s : Multiset α} {a : α}
-  结论: s.sup <= a ↔ 对任意 b in s, b <= a
+  结论: s.上确界 <= a ↔ 对任意 b in s, b <= a
   证明: Multiset.induction_on s (by simp)
     (by simp +contextual [or_imp, forall_and])
 
@@ -213,7 +213,7 @@ theorem le_sup
 中文:
 定理 le_sup
   条件: {s : Multiset α} {a : α} (h : a in s)
-  结论: a <= s.sup
+  结论: a <= s.上确界
   证明: sup_le.1 le_rfl _ h
 
 @[to_dual (attr := gcongr)]
@@ -236,7 +236,7 @@ theorem sup_mono
 中文:
 定理 sup_mono
   条件: {s₁ s₂ : Multiset α} (h : s₁ subseteq s₂)
-  结论: s₁.sup <= s₂.sup
+  结论: s₁.上确界 <= s₂.上确界
   证明: sup_le.2 fun _ hb => le_sup (h hb)
 
 Depends on / 依赖: le_sup, sup_le
@@ -261,7 +261,7 @@ theorem sup_dedup
 中文:
 定理 sup_dedup
   条件: (s : Multiset α)
-  结论: (dedup s).sup = s.sup
+  结论: (dedup s).上确界 = s.上确界
   证明: fold_dedup_idem _ _ _
 
 @[to_dual (attr := simp)]
@@ -287,7 +287,7 @@ theorem sup_ndunion
 中文:
 定理 sup_ndunion
   条件: (s₁ s₂ : Multiset α)
-  结论: (ndunion s₁ s₂).sup = s₁.sup ⊔ s₂.sup
+  结论: (ndunion s₁ s₂).上确界 = s₁.上确界 ⊔ s₂.上确界
   证明: by
   rw [← sup_dedup]; rw [dedup_ext.2]; rw [sup_dedup]; rw [sup_add]; simp
 
@@ -314,7 +314,7 @@ theorem sup_union
 中文:
 定理 sup_union
   条件: (s₁ s₂ : Multiset α)
-  结论: (s₁ union s₂).sup = s₁.sup ⊔ s₂.sup
+  结论: (s₁ union s₂).上确界 = s₁.上确界 ⊔ s₂.上确界
   证明: by
   rw [← sup_dedup]; rw [dedup_ext.2]; rw [sup_dedup]; rw [sup_add]; simp
 
@@ -339,7 +339,7 @@ theorem sup_ndinsert
 中文:
 定理 sup_ndinsert
   条件: (a : α) (s : Multiset α)
-  结论: (ndinsert a s).sup = a ⊔ s.sup
+  结论: (ndinsert a s).上确界 = a ⊔ s.上确界
   证明: by
   rw [← sup_dedup]; rw [dedup_ext.2]; rw [sup_dedup]; rw [sup_cons]; simp
 

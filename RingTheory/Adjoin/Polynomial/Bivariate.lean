@@ -39,8 +39,8 @@ definition Transcendental.algEquivAdjoin
   body: mapAlgEquiv (algEquivOfTranscendental _ x hx)
 
 中文:
-定义 Transcendental.algEquivAdjoin
-  签名: (hx : Transcendental R x)
+定义 超越.algEquivAdjoin
+  签名: (hx : 超越 R x)
   定义体: mapAlgEquiv (algEquivOfTranscendental _ x hx)
 
 Depends on / 依赖: algEquivOfTranscendental, mapAlgEquiv
@@ -58,8 +58,8 @@ theorem Transcendental.algEquivAdjoin_apply
   proof: rfl
 
 中文:
-定理 Transcendental.algEquivAdjoin_apply
-  条件: (hx : Transcendental R x) (p : R[X][Y])
+定理 超越.algEquivAdjoin_apply
+  条件: (hx : 超越 R x) (p : R[X][Y])
   证明: rfl
 -/
 theorem Transcendental.algEquivAdjoin_apply (hx : Transcendental R x) (p : R[X][Y]) :
@@ -77,8 +77,8 @@ theorem Transcendental.algEquivAdjoin_swap_eq_aeval
   simp [algEquivAdjoin, Bivariate.aveal_eq_map_swap]
 
 中文:
-定理 Transcendental.algEquivAdjoin_swap_eq_aeval
-  条件: (hx : Transcendental R x) (p : R[X][Y])
+定理 超越.algEquivAdjoin_swap_eq_aeval
+  条件: (hx : 超越 R x) (p : R[X][Y])
   证明: by
   simp [algEquivAdjoin, Bivariate.aveal_eq_map_swap]
 
@@ -142,8 +142,8 @@ theorem _root_.IsAlgebraic.adjoin_singleton
   simpa [Transcendental.algEquivAdjoin_swap_eq_aeval hy, aeval_aeval_eq_aeval_algEquivAdjoin y hx]
 
 中文:
-定理 _root_.IsAlgebraic.adjoin_singleton
-  结论: {x : A} {y : B} (hx : Transcendental R x)
+定理 _root_.是代数.adjoin_singleton
+  结论: {x : A} {y : B} (hx : 超越 R x)
   证明: by
   obtain ⟨f, hnezero, halg⟩ := h
   refine ⟨hy.algEquivAdjoin (swap (hx.algEquivAdjoin.symm f)),

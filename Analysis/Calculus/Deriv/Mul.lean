@@ -88,7 +88,7 @@ theorem hasDerivAt_of_bilinear
 
 中文:
 定理 hasDerivAt_of_bilinear
-  结论: (hu : x in tsupport v -> HasDerivAt u u' x)
+  结论: (hu : x in tsupport v -> 在点处可导 u u' x)
   证明: by
   by_cases hxu : x in tsupport u
   · by_cases hxv : x in tsupport v
@@ -237,8 +237,8 @@ theorem HasDerivAt.smul
 @[to_fun]
 
 中文:
-定理 HasDerivAt.smul
-  条件: (hc : HasDerivAt c c' x) (hf : HasDerivAt f f' x)
+定理 在点处可导.smul
+  条件: (hc : 在点处可导 c c' x) (hf : 在点处可导 f f' x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.smul hf
@@ -419,8 +419,8 @@ theorem HasDerivAt.smul_const
   exact hc.smul_const f
 
 中文:
-定理 HasDerivAt.smul_const
-  条件: (hc : HasDerivAt c c' x) (f : F)
+定理 在点处可导.smul_const
+  条件: (hc : 在点处可导 c c' x) (f : F)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.smul_const f
@@ -576,8 +576,8 @@ theorem HasDerivAt.const_smul
   proof: HasDerivAtFilter.const_smul c hf
 
 中文:
-定理 HasDerivAt.const_smul
-  条件: (c : R) (hf : HasDerivAt f f' x)
+定理 在点处可导.const_smul
+  条件: (c : R) (hf : 在点处可导 f f' x)
   证明: HasDerivAtFilter.const_smul c hf
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.const_smul, const_smul
@@ -838,8 +838,8 @@ theorem HasDerivAt.mul
 @[to_fun]
 
 中文:
-定理 HasDerivAt.mul
-  条件: (hc : HasDerivAt c c' x) (hd : HasDerivAt d d' x)
+定理 在点处可导.mul
+  条件: (hc : 在点处可导 c c' x) (hd : 在点处可导 d d' x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact HasDerivWithinAt.mul hc hd
@@ -1006,8 +1006,8 @@ theorem HasDerivAt.mul_const
   exact hc.mul_const d
 
 中文:
-定理 HasDerivAt.mul_const
-  条件: (hc : HasDerivAt c c' x) (d : 𝔸)
+定理 在点处可导.mul_const
+  条件: (hc : 在点处可导 c c' x) (d : 𝔸)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.mul_const d
@@ -1032,7 +1032,7 @@ theorem hasDerivAt_mul_const
 中文:
 定理 hasDerivAt_mul_const
   条件: (c : 𝕜)
-  结论: HasDerivAt (fun x => x * c) c x
+  结论: 在点处可导 (fun x => x * c) c x
   证明: by
   simpa only [one_mul] using (hasDerivAt_id' x).mul_const c
 
@@ -1244,8 +1244,8 @@ theorem HasDerivAt.const_mul
   exact hd.const_mul c
 
 中文:
-定理 HasDerivAt.const_mul
-  条件: (c : 𝔸) (hd : HasDerivAt d d' x)
+定理 在点处可导.const_mul
+  条件: (c : 𝔸) (hd : 在点处可导 d d' x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hd.const_mul c
@@ -1270,7 +1270,7 @@ theorem hasDerivAt_const_mul
 中文:
 定理 hasDerivAt_const_mul
   条件: (c : 𝕜)
-  结论: HasDerivAt (fun y => c * y) c x
+  结论: 在点处可导 (fun y => c * y) c x
   证明: by
   simpa only [mul_one] using (hasDerivAt_id' x).const_mul c
 
@@ -1485,8 +1485,8 @@ theorem HasDerivAt.fun_finsetProd
 @[deprecated (since := "2026-04-08")] alias HasDerivAt.fun_finset_prod := HasDerivAt.fun_finsetProd
 
 中文:
-定理 HasDerivAt.fun_finsetProd
-  条件: (hf : 对任意 i in u, HasDerivAt (f i) (f' i) x)
+定理 在点处可导.fun_finsetProd
+  条件: (hf : 对任意 i in u, 在点处可导 (f i) (f' i) x)
   证明: by
   simpa using (HasFDerivAt.finsetProd (hf · · |> hasFDerivAt)).hasDerivAt
 
@@ -1512,8 +1512,8 @@ theorem HasDerivAt.finsetProd
 @[deprecated (since := "2026-04-08")] alias HasDerivAt.finset_prod := HasDerivAt.finsetProd
 
 中文:
-定理 HasDerivAt.finsetProd
-  条件: (hf : 对任意 i in u, HasDerivAt (f i) (f' i) x)
+定理 在点处可导.finsetProd
+  条件: (hf : 对任意 i in u, 在点处可导 (f i) (f' i) x)
   证明: by
   convert! HasDerivAt.fun_finsetProd hf; simp
 
@@ -2000,8 +2000,8 @@ alias Differentiable.fun_finset_prod := Differentiable.fun_finsetProd
 @[fun_prop]
 
 中文:
-定理 Differentiable.fun_finsetProd
-  条件: (hd : 对任意 i in u, Differentiable 𝕜 (f i))
+定理 可微.fun_finsetProd
+  条件: (hd : 对任意 i in u, 可微 𝕜 (f i))
   证明: fun x => .fun_finsetProd (fun i hi => hd i hi x)
 
 @[deprecated (since := "2026-04-08")]
@@ -2030,8 +2030,8 @@ theorem Differentiable.finsetProd
 @[deprecated (since := "2026-04-08")] alias Differentiable.finset_prod := Differentiable.finsetProd
 
 中文:
-定理 Differentiable.finsetProd
-  条件: (hd : 对任意 i in u, Differentiable 𝕜 (f i))
+定理 可微.finsetProd
+  条件: (hd : 对任意 i in u, 可微 𝕜 (f i))
   证明: fun x => .finsetProd (fun i hi => hd i hi x)
 
 @[deprecated (since := "2026-04-08")] alias Differentiable.finset_prod := Differentiable.finsetProd
@@ -2060,8 +2060,8 @@ theorem HasDerivAt.div_const
   simpa only [div_eq_mul_inv] using hc.mul_const d⁻¹
 
 中文:
-定理 HasDerivAt.div_const
-  条件: (hc : HasDerivAt c c' x) (d : 𝕜')
+定理 在点处可导.div_const
+  条件: (hc : 在点处可导 c c' x) (d : 𝕜')
   证明: by
   simpa only [div_eq_mul_inv] using hc.mul_const d⁻¹
 
@@ -2198,8 +2198,8 @@ theorem Differentiable.div_const
   proof: fun x => (hc x).div_const d
 
 中文:
-定理 Differentiable.div_const
-  条件: (hc : Differentiable 𝕜 c) (d : 𝕜')
+定理 可微.div_const
+  条件: (hc : 可微 𝕜 c) (d : 𝕜')
   证明: fun x => (hc x).div_const d
 
 Depends on / 依赖: div_const
@@ -2321,8 +2321,8 @@ theorem HasDerivAt.clm_comp
   exact hc.clm_comp hd
 
 中文:
-定理 HasDerivAt.clm_comp
-  条件: (hc : HasDerivAt c c' x) (hd : HasDerivAt d d' x)
+定理 在点处可导.clm_comp
+  条件: (hc : 在点处可导 c c' x) (hd : 在点处可导 d d' x)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.clm_comp hd
@@ -2435,8 +2435,8 @@ theorem HasDerivAt.clm_apply
   simpa [add_comm] using (hc.hasFDerivAt.clm_apply hu.hasFDerivAt).hasDerivAt
 
 中文:
-定理 HasDerivAt.clm_apply
-  条件: (hc : HasDerivAt c c' x) (hu : HasDerivAt u u' x)
+定理 在点处可导.clm_apply
+  条件: (hc : 在点处可导 c c' x) (hu : 在点处可导 u u' x)
   证明: by
   simpa [add_comm] using (hc.hasFDerivAt.clm_apply hu.hasFDerivAt).hasDerivAt
 

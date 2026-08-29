@@ -43,7 +43,7 @@ definition Abelianization
   body: G ⧸ commutator G
 
 中文:
-定义 Abelianization
+定义 交换化
   签名: : 类型u
   定义体: G ⧸ commutator G
 
@@ -69,7 +69,7 @@ QuotientGroup.leftRel_apply.mpr Subgroup.subset_closure
 
 中文:
 实例 commGroup
-  签名: : CommGroup (Abelianization G) where
+  签名: : 交换群 (交换化 G) where
   定义体: QuotientGroup.Quotient.group _
 mul_comm x y := Quotient.inductionOn₂ x y fun a b => Quotient.sound'
 QuotientGroup.leftRel_apply.mpr Subgroup.subset_closure
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Abelianization G)
+  签名: 可居 (交换化 G)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (Abelianization G) :=
@@ -119,7 +119,7 @@ definition of
 
 中文:
 定义 of
-  签名: : G ->* Abelianization G where
+  签名: : G ->* 交换化 G where
   定义体: QuotientGroup.mk
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -146,7 +146,7 @@ theorem mk_eq_of
 中文:
 定理 mk_eq_of
   条件: (a : G)
-  结论: Quot.mk _ a = of a
+  结论: 商.mk _ a = of a
   证明: rfl
 -/
 theorem mk_eq_of (a : G) : Quot.mk _ a = of a :=
@@ -219,7 +219,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (G ->* A) ≃ (Abelianization G ->* A) where
+  签名: : (G ->* A) ≃ (交换化 G ->* A) where
   定义体: QuotientGroup.lift _ f fun _ h => MonoidHom.mem_ker.2 commutator_subset_ker _ h
   invFun F := F.comp of
   right_inv _ := MonoidHom.ext fun x => QuotientGroup.induction_on x fun _ => rfl
@@ -264,7 +264,7 @@ theorem coe_lift_symm
 
 中文:
 定理 coe_lift_symm
-  结论: (lift.symm : (Abelianization G ->* A) -> (G ->* A)) = (·.comp of)
+  结论: (lift.symm : (交换化 G ->* A) -> (G ->* A)) = (·.comp of)
   证明: rfl
 
 @[simp]
@@ -283,7 +283,7 @@ theorem lift_symm_apply
 
 中文:
 定理 lift_symm_apply
-  条件: (f : Abelianization G ->* A)
+  条件: (f : 交换化 G ->* A)
   结论: lift.symm f = f.comp of
   证明: rfl
 -/
@@ -301,7 +301,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: (φ : Abelianization G ->* A)
+  结论: (φ : 交换化 G ->* A)
   证明: QuotientGroup.induction_on x hφ
 
 @[simp]
@@ -325,7 +325,7 @@ theorem lift_of
 
 中文:
 定理 lift_of
-  结论: lift of = MonoidHom.id (Abelianization G)
+  结论: lift of = 幺半群态射.id (交换化 G)
   证明: lift.apply_symm_apply MonoidHom.id _
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, apply_symm_apply, lift.apply_symm_apply
@@ -350,7 +350,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: (φ ψ : Abelianization G ->* A) (h : φ.comp of = ψ.comp of)
+  条件: (φ ψ : 交换化 G ->* A) (h : φ.comp of = ψ.comp of)
   结论: φ = ψ
   证明: MonoidHom.ext fun x => QuotientGroup.induction_on x DFunLike.congr_fun h
 
@@ -373,7 +373,7 @@ definition map
 
 中文:
 定义 map
-  签名: : Abelianization G ->* Abelianization H
+  签名: : 交换化 G ->* 交换化 H
   定义体: lift (of.comp f)
 
 Depends on / 依赖: of.comp
@@ -435,7 +435,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (MonoidHom.id G) = MonoidHom.id (Abelianization G)
+  结论: map (幺半群态射.id G) = 幺半群态射.id (交换化 G)
   证明: hom_ext _ _ rfl
 
 @[simp]
@@ -459,7 +459,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {I : Type w} [Group I] (g : H ->* I)
+  条件: {I : 类型 w} [群 I] (g : H ->* I)
   结论: (map g).comp (map f) = map (g.comp f)
   证明: hom_ext _ _ rfl
 
@@ -481,7 +481,7 @@ theorem map_map_apply
 
 中文:
 定理 map_map_apply
-  条件: {I : Type w} [Group I] {g : H ->* I} {x : Abelianization G}
+  条件: {I : 类型 w} [群 I] {g : H ->* I} {x : 交换化 G}
   证明: DFunLike.congr_fun (map_comp _ _) x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, map_comp
@@ -517,7 +517,7 @@ definition MulEquiv.abelianizationCongr
 @[simp]
 
 中文:
-定义 MulEquiv.abelianizationCongr
+定义 乘法等价.abelianizationCongr
   签名: (e : G ≃* H)
   定义体: Abelianization.map e.toMonoidHom
   invFun := Abelianization.map e.symm.toMonoidHom
@@ -621,7 +621,7 @@ theorem abelianizationCongr_trans
 
 中文:
 定理 abelianizationCongr_trans
-  条件: {I : 类型v} [Group I] (e : G ≃* H) (e₂ : H ≃* I)
+  条件: {I : 类型v} [群 I] (e : G ≃* H) (e₂ : H ≃* I)
   证明: MulEquiv.toMonoidHom_injective (Abelianization.hom_ext _ _ rfl)
 
 Depends on / 依赖: Abelianization, Abelianization.hom_ext, MulEquiv, MulEquiv.toMonoidHom_injective, hom_ext, toMonoidHom_injective
@@ -648,8 +648,8 @@ definition Abelianization.equivOfComm
       rfl }
 
 中文:
-定义 Abelianization.equivOfComm
-  签名: {H : 类型} [CommGroup H]
+定义 交换化.equivOfComm
+  签名: {H : 类型} [交换群 H]
   定义体: { Abelianization.of with
     toFun := Abelianization.of
     invFun := Abelianization.lift (MonoidHom.id H)
@@ -676,8 +676,8 @@ instance [Unique
   body: Quotient.instUniqueQuotient _
 
 中文:
-实例 [Unique
-  签名: G] : Unique (Abelianization G)
+实例 [唯一
+  签名: G] : 唯一 (交换化 G)
   定义体: Quotient.instUniqueQuotient _
 -/
 instance [Unique G] : Unique (Abelianization G) := Quotient.instUniqueQuotient _

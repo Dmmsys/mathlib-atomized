@@ -46,7 +46,7 @@ inductive Palindrome
 
 中文:
 归纳类型 Palindrome
-  参数: : List α -> 命题
+  参数: : 列表 α -> 命题
   构造子 (3 个):
     - nil: Palindrome []
     - singleton: 对任意 x, Palindrome [x]
@@ -74,7 +74,7 @@ theorem reverse_eq
 
 中文:
 定理 reverse_eq
-  条件: {l : List α} (p : Palindrome l)
+  条件: {l : 列表 α} (p : Palindrome l)
   结论: reverse l = l
   证明: by
   induction p <;> try (exact rfl)
@@ -101,7 +101,7 @@ theorem of_reverse_eq
 
 中文:
 定理 of_reverse_eq
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: reverse l = l -> Palindrome l
   证明: by
   refine bidirectionalRecOn l (fun _ => Palindrome.nil) (fun a _ => Palindrome.singleton a) ?_
@@ -132,7 +132,7 @@ theorem iff_reverse_eq
 
 中文:
 定理 iff_reverse_eq
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Palindrome l ↔ reverse l = l
   证明: Iff.intro reverse_eq of_reverse_eq
 
@@ -154,7 +154,7 @@ theorem append_reverse
 
 中文:
 定理 append_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: Palindrome (l ++ reverse l)
   证明: by
   apply of_reverse_eq

@@ -56,7 +56,7 @@ instance Const.inhabited
 
 中文:
 实例 Const.inhabited
-  签名: {A α} [Inhabited A]
+  签名: {A α} [可居 A]
   定义体: ⟨(default : A)⟩
 -/
 instance Const.inhabited {A α} [Inhabited A] : Inhabited (Const n A α) := ⟨(default : A)⟩
@@ -165,8 +165,8 @@ instance MvFunctor
   body: Const.map
 
 中文:
-实例 MvFunctor
-  签名: : MvFunctor (Const n A) where map _f
+实例 Mv函子
+  签名: : Mv函子 (Const n A) where map _f
   定义体: Const.map
 
 Depends on / 依赖: Const.map

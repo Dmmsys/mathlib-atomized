@@ -49,8 +49,8 @@ class IsPrime
     - mem_or_mem' : forall {x y : α}, x * y in I -> x in I ∨ y in I
 
 中文:
-类 IsPrime
-  参数: (I : Ideal α)
+类 是素
+  参数: (I : 理想 α)
   公理与运算 (2 个):
     - ne_top' : I != ⊤
     - mem_or_mem' : 对任意 {x y : α}, x * y in I -> x in I ∨ y in I
@@ -72,8 +72,8 @@ theorem isPrime_iff
 
 中文:
 定理 isPrime_iff
-  条件: {I : Ideal α}
-  结论: IsPrime I ↔ I != ⊤ ∧ 对任意 {x y : α}, x * y in I -> x in I ∨ y in I
+  条件: {I : 理想 α}
+  结论: 是素 I ↔ I != ⊤ ∧ 对任意 {x y : α}, x * y in I -> x in I ∨ y in I
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isPrime_iff {I : Ideal α} : IsPrime I ↔ I != ⊤ ∧ forall {x y : α}, x * y in I -> x in I ∨ y in I :=
@@ -89,8 +89,8 @@ theorem IsPrime.ne_top
   proof: hI.1
 
 中文:
-定理 IsPrime.ne_top
-  条件: {I : Ideal α} (hI : I.IsPrime)
+定理 是素.ne_top
+  条件: {I : 理想 α} (hI : I.是素)
   结论: I != ⊤
   证明: hI.1
 -/
@@ -108,7 +108,7 @@ lemma notMem_of_isUnit
 
 中文:
 引理 notMem_of_isUnit
-  条件: (I : Ideal α) [I.IsPrime] {x : α} (hx : IsUnit x)
+  条件: (I : 理想 α) [I.是素] {x : α} (hx : 是单位 x)
   结论: x ∉ I
   证明: fun h => ‹I.IsPrime›.ne_top (eq_top_of_isUnit_mem _ h hx)
 
@@ -127,8 +127,8 @@ theorem IsPrime.one_notMem
   proof: notMem_of_isUnit _ isUnit_one
 
 中文:
-定理 IsPrime.one_notMem
-  条件: {I : Ideal α} (hI : I.IsPrime)
+定理 是素.one_notMem
+  条件: {I : 理想 α} (hI : I.是素)
   结论: 1 ∉ I
   证明: notMem_of_isUnit _ isUnit_one
 
@@ -148,7 +148,7 @@ theorem one_notMem
 
 中文:
 定理 one_notMem
-  条件: (I : Ideal α) [hI : I.IsPrime]
+  条件: (I : 理想 α) [hI : I.是素]
   结论: 1 ∉ I
   证明: hI.one_notMem
 
@@ -167,8 +167,8 @@ theorem IsPrime.mem_or_mem
   proof: hI.2
 
 中文:
-定理 IsPrime.mem_or_mem
-  条件: {I : Ideal α} (hI : I.IsPrime) {x y : α}
+定理 是素.mem_or_mem
+  条件: {I : 理想 α} (hI : I.是素) {x y : α}
   结论: x * y in I -> x in I ∨ y in I
   证明: hI.2
 -/
@@ -185,8 +185,8 @@ theorem IsPrime.mul_notMem
   hy ((hI.mem_or_mem h).resolve_left hx)
 
 中文:
-定理 IsPrime.mul_notMem
-  条件: {I : Ideal α} (hI : I.IsPrime) {x y : α}
+定理 是素.mul_notMem
+  条件: {I : 理想 α} (hI : I.是素) {x y : α}
   证明: fun hx hy h =>
   hy ((hI.mem_or_mem h).resolve_left hx)
 -/
@@ -203,8 +203,8 @@ theorem IsPrime.mem_or_mem_of_mul_eq_zero
   proof: hI.mem_or_mem (h.symm ▸ I.zero_mem)
 
 中文:
-定理 IsPrime.mem_or_mem_of_mul_eq_zero
-  条件: {I : Ideal α} (hI : I.IsPrime) {x y : α} (h : x * y = 0)
+定理 是素.mem_or_mem_of_mul_eq_zero
+  条件: {I : 理想 α} (hI : I.是素) {x y : α} (h : x * y = 0)
   证明: hI.mem_or_mem (h.symm ▸ I.zero_mem)
 
 Depends on / 依赖: I.zero_mem, h.symm, hI.mem_or_mem, mem_or_mem, zero_mem
@@ -229,8 +229,8 @@ theorem IsPrime.mem_of_pow_mem
     exact Or.casesOn (hI.mem_or_mem H) ih id
 
 中文:
-定理 IsPrime.mem_of_pow_mem
-  条件: {I : Ideal α} (hI : I.IsPrime) {r : α} (n : 自然数) (H : r ^ n in I)
+定理 是素.mem_of_pow_mem
+  条件: {I : 理想 α} (hI : I.是素) {r : α} (n : 自然数) (H : r ^ n in I)
   证明: by
   induction n with
   | zero =>
@@ -267,7 +267,7 @@ theorem not_isPrime_iff
 
 中文:
 定理 not_isPrime_iff
-  条件: {I : Ideal α}
+  条件: {I : 理想 α}
   证明: by
   simp_rw [Ideal.isPrime_iff, not_and_or, Ne, Classical.not_not, not_forall, not_or]
   exact
@@ -298,7 +298,7 @@ instance isPrime_bot
 
 中文:
 实例 isPrime_bot
-  签名: [Nontrivial α] [NoZeroDivisors α]
+  签名: [非平凡 α] [无零因子 α]
   定义体: ⟨fun h => one_ne_zero (α := α) (by rwa [Ideal.eq_top_iff_one, Submodule.mem_bot] at h), fun h =>
     mul_eq_zero.mp (by simpa only [Submodule.mem_bot] using h)⟩
 
@@ -322,8 +322,8 @@ theorem bot_prime
 
 中文:
 定理 bot_prime
-  条件: [Nontrivial α] [NoZeroDivisors α]
-  结论: (⊥ : Ideal α).IsPrime
+  条件: [非平凡 α] [无零因子 α]
+  结论: (⊥ : 理想 α).是素
   证明: isPrime_bot
 
 Depends on / 依赖: isPrime_bot
@@ -342,8 +342,8 @@ theorem IsPrime.mul_mem_iff_mem_or_mem
     exacts [I.mul_mem_right y h, I.mul_mem_left x h]⟩
 
 中文:
-定理 IsPrime.mul_mem_iff_mem_or_mem
-  条件: {I : Ideal α} [I.IsTwoSided] (hI : I.IsPrime)
+定理 是素.mul_mem_iff_mem_or_mem
+  条件: {I : 理想 α} [I.是TwoSided] (hI : I.是素)
   证明: @fun x y =>
   ⟨hI.mem_or_mem, by
     rintro (h | h)
@@ -364,8 +364,8 @@ theorem IsPrime.pow_mem_iff_mem
   proof: ⟨hI.mem_of_pow_mem n, fun hr => I.pow_mem_of_mem hr n hn⟩
 
 中文:
-定理 IsPrime.pow_mem_iff_mem
-  条件: {I : Ideal α} (hI : I.IsPrime) {r : α} (n : 自然数) (hn : 0 < n)
+定理 是素.pow_mem_iff_mem
+  条件: {I : 理想 α} (hI : I.是素) {r : α} (n : 自然数) (hn : 0 < n)
   证明: ⟨hI.mem_of_pow_mem n, fun hr => I.pow_mem_of_mem hr n hn⟩
 
 Depends on / 依赖: I.pow_mem_of_mem, hI.mem_of_pow_mem, mem_of_pow_mem, pow_mem_of_mem
@@ -384,8 +384,8 @@ lemma IsPrime.mul_mem_left_iff
   grind [Ideal.IsPrime.mul_mem_iff_mem_or_mem]
 
 中文:
-引理 IsPrime.mul_mem_left_iff
-  结论: {I : Ideal α} [I.IsTwoSided] [I.IsPrime]
+引理 是素.mul_mem_left_iff
+  结论: {I : 理想 α} [I.是TwoSided] [I.是素]
   证明: by
   grind [Ideal.IsPrime.mul_mem_iff_mem_or_mem]
 
@@ -405,8 +405,8 @@ lemma IsPrime.mul_mem_right_iff
   rw [Ideal.IsPrime.mul_mem_iff_mem_or_mem] <;> aesop
 
 中文:
-引理 IsPrime.mul_mem_right_iff
-  结论: {I : Ideal α} [I.IsTwoSided] [I.IsPrime]
+引理 是素.mul_mem_right_iff
+  结论: {I : 理想 α} [I.是TwoSided] [I.是素]
   证明: by
   rw [Ideal.IsPrime.mul_mem_iff_mem_or_mem] <;> aesop
 
@@ -430,7 +430,7 @@ definition primeCompl
 
 中文:
 定义 primeCompl
-  签名: (P : Ideal α) [hp : P.IsPrime]
+  签名: (P : 理想 α) [hp : P.是素]
   定义体: (Pᶜ : Set α)
   one_mem' := P.one_notMem
   mul_mem' {_ _} hnx hny hxy := Or.casesOn (hp.mem_or_mem hxy) hnx hny
@@ -453,7 +453,7 @@ theorem mem_primeCompl_iff
 
 中文:
 定理 mem_primeCompl_iff
-  条件: {P : Ideal α} [P.IsPrime] {x : α}
+  条件: {P : 理想 α} [P.是素] {x : α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -473,7 +473,7 @@ theorem primeCompl_bot
 
 中文:
 定理 primeCompl_bot
-  条件: [Nontrivial α] [NoZeroDivisors α]
+  条件: [非平凡 α] [无零因子 α]
   证明: by
   ext
   simp
@@ -499,9 +499,9 @@ theorem IsDomain.of_bot_isPrime
   proof: @NoZeroDivisors.to_isDomain A _ ⟨1, 0, fun h => hbp.one_notMem h⟩ ⟨fun h => hbp.2 h⟩
 
 中文:
-定理 IsDomain.of_bot_isPrime
-  条件: (A : 类型) [Ring A] [hbp : (⊥ : Ideal A).IsPrime]
-  结论: IsDomain A
+定理 是整环.of_bot_isPrime
+  条件: (A : 类型) [环 A] [hbp : (⊥ : 理想 A).是素]
+  结论: 是整环 A
   证明: @NoZeroDivisors.to_isDomain A _ ⟨1, 0, fun h => hbp.one_notMem h⟩ ⟨fun h => hbp.2 h⟩
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, hbp.one_notMem, one_notMem, to_isDomain
@@ -528,7 +528,7 @@ theorem eq_bot_of_prime
 
 中文:
 定理 eq_bot_of_prime
-  条件: [h : I.IsPrime]
+  条件: [h : I.是素]
   结论: I = ⊥
   证明: or_iff_not_imp_right.mp I.eq_bot_or_top h.1
 

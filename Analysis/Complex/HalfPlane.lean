@@ -30,9 +30,9 @@ lemma isOpen_re_lt_EReal
   proof: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_re) continuous_const
 
 中文:
-引理 isOpen_re_lt_EReal
+引理 isOpen_re_lt_E实数
   条件: (x : E实数)
-  结论: IsOpen {z : Complex | z.re < x}
+  结论: 是开集 {z : 复形 | z.re < x}
   证明: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_re) continuous_const
 
 Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_re, isOpen_lt
@@ -50,9 +50,9 @@ lemma isOpen_re_gt_EReal
   proof: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_re
 
 中文:
-引理 isOpen_re_gt_EReal
+引理 isOpen_re_gt_E实数
   条件: (x : E实数)
-  结论: IsOpen {z : Complex | x < z.re}
+  结论: 是开集 {z : 复形 | x < z.re}
   证明: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_re
 
 Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_re, isOpen_lt
@@ -70,9 +70,9 @@ lemma isOpen_im_lt_EReal
   proof: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_im) continuous_const
 
 中文:
-引理 isOpen_im_lt_EReal
+引理 isOpen_im_lt_E实数
   条件: (x : E实数)
-  结论: IsOpen {z : Complex | z.im < x}
+  结论: 是开集 {z : 复形 | z.im < x}
   证明: isOpen_lt (EReal.continuous_coe_iff.mpr continuous_im) continuous_const
 
 Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_im, isOpen_lt
@@ -90,9 +90,9 @@ lemma isOpen_im_gt_EReal
   proof: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_im
 
 中文:
-引理 isOpen_im_gt_EReal
+引理 isOpen_im_gt_E实数
   条件: (x : E实数)
-  结论: IsOpen {z : Complex | x < z.im}
+  结论: 是开集 {z : 复形 | x < z.im}
   证明: isOpen_lt continuous_const EReal.continuous_coe_iff.mpr continuous_im
 
 Depends on / 依赖: EReal.continuous_coe_iff.mpr, continuous_coe_iff, continuous_const, continuous_im, isOpen_lt
@@ -113,7 +113,7 @@ lemma isOpen_re_lt
 中文:
 引理 isOpen_re_lt
   条件: (x : 实数)
-  结论: IsOpen {z : Complex | z.re < x}
+  结论: 是开集 {z : 复形 | z.re < x}
   证明: by
   simpa using isOpen_re_lt_EReal x
 
@@ -135,7 +135,7 @@ lemma isOpen_re_gt
 中文:
 引理 isOpen_re_gt
   条件: (x : 实数)
-  结论: IsOpen {z : Complex | x < z.re}
+  结论: 是开集 {z : 复形 | x < z.re}
   证明: by
   simpa using isOpen_re_gt_EReal x
 
@@ -157,7 +157,7 @@ lemma isOpen_im_lt
 中文:
 引理 isOpen_im_lt
   条件: (x : 实数)
-  结论: IsOpen {z : Complex | z.im < x}
+  结论: 是开集 {z : 复形 | z.im < x}
   证明: by
   simpa using isOpen_im_lt_EReal x
 
@@ -179,7 +179,7 @@ lemma isOpen_im_gt
 中文:
 引理 isOpen_im_gt
   条件: (x : 实数)
-  结论: IsOpen {z : Complex | x < z.im}
+  结论: 是开集 {z : 复形 | x < z.im}
   证明: by
   simpa using isOpen_im_gt_EReal x
 

@@ -48,8 +48,8 @@ lemma RelCWComplex.Subcomplex.closedCell_subset_of_mem
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-引理 RelCWComplex.Subcomplex.closedCell_subset_of_mem
-  结论: [T2Space X] [RelCWComplex C D]
+引理 RelCWComplex.子复形.closedCell_subset_of_mem
+  结论: [T2空间 X] [RelCWComplex C D]
   证明: by
   rw [← closure_openCell_eq_closedCell]; rw [E.closed.closure_subset_iff]; rw [← E.union]
   apply subset_union_of_subset_right
@@ -80,8 +80,8 @@ lemma RelCWComplex.Subcomplex.openCell_subset_of_mem
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-引理 RelCWComplex.Subcomplex.openCell_subset_of_mem
-  结论: [T2Space X] [RelCWComplex C D]
+引理 RelCWComplex.子复形.openCell_subset_of_mem
+  结论: [T2空间 X] [RelCWComplex C D]
   证明: (openCell_subset_closedCell n i).trans (closedCell_subset_of_mem E hi)
 
 @[alias_in CWComplex.Subcomplex]
@@ -103,8 +103,8 @@ lemma RelCWComplex.Subcomplex.cellFrontier_subset_of_mem
   proof: (cellFrontier_subset_closedCell n i).trans (closedCell_subset_of_mem E hi)
 
 中文:
-引理 RelCWComplex.Subcomplex.cellFrontier_subset_of_mem
-  结论: [T2Space X] [RelCWComplex C D]
+引理 RelCWComplex.子复形.cellFrontier_subset_of_mem
+  结论: [T2空间 X] [RelCWComplex C D]
   证明: (cellFrontier_subset_closedCell n i).trans (closedCell_subset_of_mem E hi)
 
 Depends on / 依赖: cellFrontier_subset_closedCell, closedCell_subset_of_mem
@@ -130,8 +130,8 @@ lemma RelCWComplex.Subcomplex.union_closedCell
     exact openCell_subset_closedCell (C := C) n i
 
 中文:
-引理 RelCWComplex.Subcomplex.union_closedCell
-  条件: [T2Space X] [RelCWComplex C D] (E : Subcomplex C)
+引理 RelCWComplex.子复形.union_closedCell
+  条件: [T2空间 X] [RelCWComplex C D] (E : 子复形 C)
   证明: by
   apply subset_antisymm
   · apply union_subset E.base_subset
@@ -164,8 +164,8 @@ lemma CWComplex.Subcomplex.union_closedCell
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-引理 CWComplex.Subcomplex.union_closedCell
-  条件: [T2Space X] [CWComplex C] (E : Subcomplex C)
+引理 CWComplex.子复形.union_closedCell
+  条件: [T2空间 X] [CWComplex C] (E : 子复形 C)
   证明: (empty_union _).symm.trans (RelCWComplex.Subcomplex.union_closedCell E)
 
 @[alias_in CWComplex.Subcomplex]
@@ -186,7 +186,7 @@ lemma RelCWComplex.Subcomplex.disjoint_openCell_subcomplex_of_not_mem
   exact ⟨disjointBase n i , fun _ _ => disjoint_openCell_of_ne (by lia)⟩
 
 中文:
-引理 RelCWComplex.Subcomplex.disjoint_openCell_subcomplex_of_not_mem
+引理 RelCWComplex.子复形.disjoint_openCell_subcomplex_of_not_mem
   结论: [RelCWComplex C D]
   证明: by
   simp_rw [← union, disjoint_union_right, disjoint_iUnion_right]
@@ -218,8 +218,8 @@ instance RelCWComplex.Subcomplex.instRelCWComplex
     refine @pairwiseDisjoint' _ _ C D _ ⟨n, i⟩ trivial ⟨m,
 
 中文:
-实例 RelCWComplex.Subcomplex.instRelCWComplex
-  签名: [T2Space X] [RelCWComplex C D]
+实例 RelCWComplex.子复形.instRelCWComplex
+  签名: [T2空间 X] [RelCWComplex C D]
   定义体: E.I n
   map n i := map (C := C) n i
   source_eq n i := source_eq (C := C) n i
@@ -278,8 +278,8 @@ instance CWComplex.Subcomplex.instCWComplex
 @[simp]
 
 中文:
-实例 CWComplex.Subcomplex.instCWComplex
-  签名: [T2Space X] [CWComplex C] (E : Subcomplex C)
+实例 CWComplex.子复形.instCWComplex
+  签名: [T2空间 X] [CWComplex C] (E : 子复形 C)
   定义体: RelCWComplex.toCWComplex (E : Set X)
 
 @[simp]
@@ -302,8 +302,8 @@ lemma CWComplex.Subcomplex.cell_def
 @[simp]
 
 中文:
-引理 CWComplex.Subcomplex.cell_def
-  结论: [T2Space X] [CWComplex C] (E : Subcomplex C)
+引理 CWComplex.子复形.cell_def
+  结论: [T2空间 X] [CWComplex C] (E : 子复形 C)
   证明: rfl
 
 @[simp]
@@ -324,8 +324,8 @@ lemma CWComplex.Subcomplex.map_def
 @[simp]
 
 中文:
-引理 CWComplex.Subcomplex.map_def
-  结论: [T2Space X] [CWComplex C] (E : Subcomplex C) (n : 自然数)
+引理 CWComplex.子复形.map_def
+  结论: [T2空间 X] [CWComplex C] (E : 子复形 C) (n : 自然数)
   证明: rfl
 
 @[simp]
@@ -347,8 +347,8 @@ lemma RelCWComplex.Subcomplex.openCell_eq
 @[simp]
 
 中文:
-引理 RelCWComplex.Subcomplex.openCell_eq
-  结论: [T2Space X] [RelCWComplex C D] (E : Subcomplex C) (n : 自然数)
+引理 RelCWComplex.子复形.openCell_eq
+  结论: [T2空间 X] [RelCWComplex C D] (E : 子复形 C) (n : 自然数)
   证明: by
   rfl
 
@@ -373,8 +373,8 @@ lemma RelCWComplex.Subcomplex.closedCell_eq
 @[simp]
 
 中文:
-引理 RelCWComplex.Subcomplex.closedCell_eq
-  结论: [T2Space X] [RelCWComplex C D] (E : Subcomplex C)
+引理 RelCWComplex.子复形.closedCell_eq
+  结论: [T2空间 X] [RelCWComplex C D] (E : 子复形 C)
   证明: by
   rfl
 
@@ -399,8 +399,8 @@ lemma RelCWComplex.Subcomplex.cellFrontier_eq
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-引理 RelCWComplex.Subcomplex.cellFrontier_eq
-  结论: [T2Space X] [RelCWComplex C D] (E : Subcomplex C)
+引理 RelCWComplex.子复形.cellFrontier_eq
+  结论: [T2空间 X] [RelCWComplex C D] (E : 子复形 C)
   证明: by
   rfl
 
@@ -425,8 +425,8 @@ instance RelCWComplex.Subcomplex.finiteType_subcomplex_of_finiteType
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-实例 RelCWComplex.Subcomplex.finiteType_subcomplex_of_finiteType
-  签名: [T2Space X]
+实例 RelCWComplex.子复形.finiteType_subcomplex_of_finiteType
+  签名: [T2空间 X]
   定义体: let _ := FiniteType.finite_cell (C := C) (D := D) n
     Subtype.finite
 
@@ -451,7 +451,7 @@ instance RelCWComplex.Subcomplex.finiteDimensional_subcomplex_of_finiteDimension
     simp [isEmpty_subtype]
 
 中文:
-实例 RelCWComplex.Subcomplex.finiteDimensional_subcomplex_of_finiteDimensional
+实例 RelCWComplex.子复形.finiteDimensional_subcomplex_of_finiteDimensional
   定义体: by
     filter_upwards [FiniteDimensional.eventually_isEmpty_cell (C := C) (D := D)] with n hn
     simp [isEmpty_subtype]
@@ -476,8 +476,8 @@ instance RelCWComplex.Subcomplex.finite_subcomplex_of_finite
   body: finite_of_finiteDimensional_finiteType _
 
 中文:
-实例 RelCWComplex.Subcomplex.finite_subcomplex_of_finite
-  签名: [T2Space X] [RelCWComplex C D]
+实例 RelCWComplex.子复形.finite_subcomplex_of_finite
+  签名: [T2空间 X] [RelCWComplex C D]
   定义体: finite_of_finiteDimensional_finiteType _
 
 Depends on / 依赖: finite_of_finiteDimensional_finiteType

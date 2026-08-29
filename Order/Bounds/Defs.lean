@@ -41,7 +41,7 @@ definition upperBounds
 
 中文:
 定义 upperBounds
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { x | forall ⦃a⦄, a in s -> a <= x }
 -/
 def upperBounds (s : Set α) : Set α :=
@@ -59,7 +59,7 @@ definition BddAbove
 
 中文:
 定义 BddAbove
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: (upperBounds s).Nonempty
 
 Depends on / 依赖: Nonempty, upperBounds
@@ -80,7 +80,7 @@ definition IsLeast
 
 中文:
 定义 IsLeast
-  签名: (s : Set α) (a : α)
+  签名: (s : 集合 α) (a : α)
   定义体: a in s ∧ a in lowerBounds s
 
 Depends on / 依赖: lowerBounds
@@ -101,7 +101,7 @@ definition IsLUB
 
 中文:
 定义 IsLUB
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: IsLeast (upperBounds s)
 
 Depends on / 依赖: IsLeast, upperBounds
@@ -123,7 +123,7 @@ definition IsCofinalFor
 
 中文:
 定义 IsCofinalFor
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: forall ⦃a⦄, a in s -> exists b in t, a <= b
 -/
 def IsCofinalFor (s t : Set α) := forall ⦃a⦄, a in s -> exists b in t, a <= b
@@ -140,7 +140,7 @@ definition IsCofinal
 
 中文:
 定义 IsCofinal
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall x, exists y in s, x <= y
 -/
 def IsCofinal (s : Set α) : Prop :=

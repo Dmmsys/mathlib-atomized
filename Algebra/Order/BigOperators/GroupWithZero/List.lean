@@ -38,8 +38,8 @@ lemma prod_nonneg
 
 中文:
 引理 prod_nonneg
-  条件: {s : List R} (h : 对任意 a in s, 0 <= a)
-  结论: 0 <= s.prod
+  条件: {s : 列表 R} (h : 对任意 a in s, 0 <= a)
+  结论: 0 <= s.乘积
   证明: by
   induction s with
   | nil => simp
@@ -76,8 +76,8 @@ lemma one_le_prod
 
 中文:
 引理 one_le_prod
-  条件: {s : List R} (h : 对任意 a in s, 1 <= a)
-  结论: 1 <= s.prod
+  条件: {s : 列表 R} (h : 对任意 a in s, 1 <= a)
+  结论: 1 <= s.乘积
   证明: by
   induction s with
   | nil => simp
@@ -117,7 +117,7 @@ theorem prod_map_le_prod_map₀
 
 中文:
 定理 prod_map_le_prod_map₀
-  结论: {ι : 类型} {s : List ι} (f : ι -> R) (g : ι -> R)
+  结论: {ι : 类型} {s : 列表 ι} (f : ι -> R) (g : ι -> R)
   证明: by
   induction s with
   | nil => simp
@@ -162,7 +162,7 @@ omit [PosMulMono R]
 
 中文:
 定理 prod_map_le_pow_length₀
-  结论: {F L : 类型} [FunLike F L R] {f : F} {r : R} {t : List L}
+  结论: {F L : 类型} [函数状 F L R] {f : F} {r : R} {t : 列表 L}
   证明: by
   convert! prod_map_le_prod_map₀ f (Function.const L r) hf0 hf
   simp [map_const, prod_replicate]
@@ -197,8 +197,8 @@ lemma prod_pos
 
 中文:
 引理 prod_pos
-  条件: {s : List R} (h : 对任意 a in s, 0 < a)
-  结论: 0 < s.prod
+  条件: {s : 列表 R} (h : 对任意 a in s, 0 < a)
+  结论: 0 < s.乘积
   证明: by
   induction s with
   | nil => simp
@@ -239,7 +239,7 @@ theorem prod_map_lt_prod_map
 
 中文:
 定理 prod_map_lt_prod_map
-  结论: {ι : 类型} {s : List ι} (hs : s != [])
+  结论: {ι : 类型} {s : 列表 ι} (hs : s != [])
   证明: by
   match s with
   | [] => contradiction

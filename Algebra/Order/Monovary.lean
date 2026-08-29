@@ -1468,7 +1468,7 @@ lemma monovaryOn_iff_forall_smul_nonneg
   exact (and_iff_right_of_imp MonovaryOn.symm).symm
 
 中文:
-引理 monovaryOn_iff_forall_smul_nonneg
+引理 monovaryOn_iff_对任意_smul_nonneg
   证明: by
   simp_rw [smul_nonneg_iff_pos_imp_nonneg, sub_pos, sub_nonneg, forall_and]
   exact (and_iff_right_of_imp MonovaryOn.symm).symm
@@ -1488,7 +1488,7 @@ lemma antivaryOn_iff_forall_smul_nonpos
   proof: monovaryOn_toDual_right.symm.trans by rw [monovaryOn_iff_forall_smul_nonneg]; rfl
 
 中文:
-引理 antivaryOn_iff_forall_smul_nonpos
+引理 antivaryOn_iff_对任意_smul_nonpos
   证明: monovaryOn_toDual_right.symm.trans by rw [monovaryOn_iff_forall_smul_nonneg]; rfl
 
 Depends on / 依赖: monovaryOn_iff_forall_smul_nonneg, monovaryOn_toDual_right, monovaryOn_toDual_right.symm.trans
@@ -1507,7 +1507,7 @@ lemma monovary_iff_forall_smul_nonneg
     simp only [Set.mem_univ, forall_true_left]
 
 中文:
-引理 monovary_iff_forall_smul_nonneg
+引理 monovary_iff_对任意_smul_nonneg
   结论: Monovary f g ↔ 对任意 i j, 0 <= (f j - f i) • (g j - g i)
   证明: monovaryOn_univ.symm.trans monovaryOn_iff_forall_smul_nonneg.trans by
     simp only [Set.mem_univ, forall_true_left]
@@ -1527,7 +1527,7 @@ lemma antivary_iff_forall_smul_nonpos
   proof: monovary_toDual_right.symm.trans by rw [monovary_iff_forall_smul_nonneg]; rfl
 
 中文:
-引理 antivary_iff_forall_smul_nonpos
+引理 antivary_iff_对任意_smul_nonpos
   结论: Antivary f g ↔ 对任意 i j, (f j - f i) • (g j - g i) <= 0
   证明: monovary_toDual_right.symm.trans by rw [monovary_iff_forall_smul_nonneg]; rfl
 
@@ -1646,7 +1646,7 @@ lemma monovaryOn_iff_forall_mul_nonneg
   simp only [smul_eq_mul, monovaryOn_iff_forall_smul_nonneg]
 
 中文:
-引理 monovaryOn_iff_forall_mul_nonneg
+引理 monovaryOn_iff_对任意_mul_nonneg
   证明: by
   simp only [smul_eq_mul, monovaryOn_iff_forall_smul_nonneg]
 
@@ -1665,7 +1665,7 @@ lemma antivaryOn_iff_forall_mul_nonpos
   simp only [smul_eq_mul, antivaryOn_iff_forall_smul_nonpos]
 
 中文:
-引理 antivaryOn_iff_forall_mul_nonpos
+引理 antivaryOn_iff_对任意_mul_nonpos
   证明: by
   simp only [smul_eq_mul, antivaryOn_iff_forall_smul_nonpos]
 
@@ -1685,7 +1685,7 @@ lemma monovary_iff_forall_mul_nonneg
   simp only [smul_eq_mul, monovary_iff_forall_smul_nonneg]
 
 中文:
-引理 monovary_iff_forall_mul_nonneg
+引理 monovary_iff_对任意_mul_nonneg
   结论: Monovary f g ↔ 对任意 i j, 0 <= (f j - f i) * (g j - g i)
   证明: by
   simp only [smul_eq_mul, monovary_iff_forall_smul_nonneg]
@@ -1705,7 +1705,7 @@ lemma antivary_iff_forall_mul_nonpos
   simp only [smul_eq_mul, antivary_iff_forall_smul_nonpos]
 
 中文:
-引理 antivary_iff_forall_mul_nonpos
+引理 antivary_iff_对任意_mul_nonpos
   结论: Antivary f g ↔ 对任意 i j, (f j - f i) * (g j - g i) <= 0
   证明: by
   simp only [smul_eq_mul, antivary_iff_forall_smul_nonpos]

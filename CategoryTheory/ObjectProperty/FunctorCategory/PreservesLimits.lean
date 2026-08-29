@@ -189,7 +189,7 @@ abbreviation preservesLimitsOfShape
 
 中文:
 缩写 preservesLimitsOfShape
-  签名: : Object命题erty (J ⥤ C)
+  签名: : ObjectProperty (J ⥤ C)
   定义体: PreservesLimitsOfShape K
 
 @[simp]
@@ -284,7 +284,7 @@ instance :
 
 中文:
 实例 :
-  签名: (preservesLimitsOfShape (J := J) (C := C) K).IsClosedUnderIsomorphisms
+  签名: (preservesLimitsOfShape (J := J) (C := C) K).在同构下封闭
   定义体: by
   rw [preservesLimitsOfShape_eq_iSup]
   infer_instance
@@ -307,7 +307,7 @@ abbreviation preservesColimitsOfShape
 
 中文:
 缩写 preservesColimitsOfShape
-  签名: : Object命题erty (J ⥤ C)
+  签名: : ObjectProperty (J ⥤ C)
   定义体: PreservesColimitsOfShape K
 
 @[simp]
@@ -402,7 +402,7 @@ instance :
 
 中文:
 实例 :
-  签名: (preservesColimitsOfShape (J := J) (C := C) K).IsClosedUnderIsomorphisms
+  签名: (preservesColimitsOfShape (J := J) (C := C) K).在同构下封闭
   定义体: by
   rw [preservesColimitsOfShape_eq_iSup]
   infer_instance
@@ -425,7 +425,7 @@ abbreviation preservesFiniteLimits
 
 中文:
 缩写 preservesFiniteLimits
-  签名: : Object命题erty (J ⥤ C)
+  签名: : ObjectProperty (J ⥤ C)
   定义体: PreservesFiniteLimits
 
 @[simp]
@@ -463,7 +463,7 @@ instance :
 
 中文:
 实例 :
-  签名: (preservesFiniteLimits (J := J) (C := C)).IsClosedUnderIsomorphisms
+  签名: (preservesFiniteLimits (J := J) (C := C)).在同构下封闭
   定义体: preservesFiniteLimits_of_natIso e
 
 Depends on / 依赖: IsClosedUnderIsomorphisms
@@ -481,7 +481,7 @@ abbreviation preservesFiniteColimits
 
 中文:
 缩写 preservesFiniteColimits
-  签名: : Object命题erty (J ⥤ C)
+  签名: : ObjectProperty (J ⥤ C)
   定义体: PreservesFiniteColimits
 
 Depends on / 依赖: PreservesFiniteColimits
@@ -500,7 +500,7 @@ instance :
 
 中文:
 实例 :
-  签名: (preservesFiniteColimits (J := J) (C := C)).IsClosedUnderIsomorphisms
+  签名: (preservesFiniteColimits (J := J) (C := C)).在同构下封闭
   定义体: preservesFiniteColimits_of_natIso e
 
 @[simp]
@@ -548,7 +548,7 @@ instance [HasColimitsOfShape
        
 
 中文:
-实例 [HasColimitsOfShape
+实例 [有形状余极限
   签名: K' C]
   定义体: by
     rintro G ⟨h⟩
@@ -587,8 +587,8 @@ instance [HasColimitsOfShape
     exact ⟨fun K _ _ => (preservesLimitsOfShape K).prop_of_isColimit h.isColimit inferInstance⟩
 
 中文:
-实例 [HasColimitsOfShape
-  签名: K' C] [HasExactColimitsOfShape K' C] :
+实例 [有形状余极限
+  签名: K' C] [有ExactColimitsOfShape K' C] :
   定义体: by
     rintro G ⟨h⟩
     have := h.prop_diag_obj

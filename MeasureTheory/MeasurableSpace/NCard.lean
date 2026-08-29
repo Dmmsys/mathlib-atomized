@@ -35,7 +35,7 @@ theorem measurable_encard
 
 中文:
 定理 measurable_encard
-  结论: Measurable (Set.encard : Set α -> 自然数∞)
+  结论: 可测 (集合.encard : 集合 α -> 自然数∞)
   证明: ENat.measurable_iff.2 fun _n => Countable.measurableSet Countable.ofPred_finite.mono fun _s hs =>
     finite_of_encard_eq_coe hs
 
@@ -58,7 +58,7 @@ theorem measurable_ncard
 
 中文:
 定理 measurable_ncard
-  结论: Measurable (Set.ncard : Set α -> 自然数)
+  结论: 可测 (集合.ncard : 集合 α -> 自然数)
   证明: Measurable.of_discrete.comp measurable_encard
 
 Depends on / 依赖: Measurable, Measurable.of_discrete.comp, measurable_encard, of_discrete

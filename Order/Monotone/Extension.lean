@@ -37,7 +37,7 @@ theorem MonotoneOn.exists_monotone_extension
       hu.mono (image_mono inter_subset_ri
 
 中文:
-定理 MonotoneOn.exists_monotone_extension
+定理 MonotoneOn.存在_monotone_extension
   结论: (h : MonotoneOn f s) (hl : BddBelow (f '' s))
   证明: by
   classical
@@ -81,7 +81,7 @@ theorem AntitoneOn.exists_antitone_extension
   proof: h.dual_right.exists_monotone_extension hu hl
 
 中文:
-定理 AntitoneOn.exists_antitone_extension
+定理 AntitoneOn.存在_antitone_extension
   结论: (h : AntitoneOn f s) (hl : BddBelow (f '' s))
   证明: h.dual_right.exists_monotone_extension hu hl
 

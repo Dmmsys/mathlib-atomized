@@ -123,7 +123,7 @@ theorem Filter.nonneg_of_eventually_pow_nonneg
   ho.pow_nonneg_iff.1 hn
 
 中文:
-定理 Filter.nonneg_of_eventually_pow_nonneg
+定理 滤子.nonneg_of_eventually_pow_nonneg
   结论: {α : 类型}
   证明: let ⟨_n, ho, hn⟩ := (Nat.frequently_odd.and_eventually h).exists
   ho.pow_nonneg_iff.1 hn

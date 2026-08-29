@@ -447,7 +447,7 @@ lemma Nat.pred_mul_geom_sum_le
     
 
 中文:
-引理 Nat.pred_mul_geom_sum_le
+引理 自然数.pred_mul_geom_sum_le
   条件: (a b n : 自然数)
   证明: calc
     ((b - 1) * ∑ i in range n.succ, a / b ^ i) =
@@ -484,7 +484,7 @@ lemma Nat.geom_sum_le
   exact (Nat.pred_mul_geom_sum_le a b n).trans tsub_le_self
 
 中文:
-引理 Nat.geom_sum_le
+引理 自然数.geom_sum_le
   条件: {b : 自然数} (hb : 2 <= b) (a n : 自然数)
   证明: by
   refine (Nat.le_div_iff_mul_le <| tsub_pos_of_lt hb).2 ?_
@@ -522,7 +522,7 @@ lemma Nat.geom_sum_Ico_le
     _ = ∑ i in range n.succ, a / b 
 
 中文:
-引理 Nat.geom_sum_Ico_le
+引理 自然数.geom_sum_Ico_le
   条件: {b : 自然数} (hb : 2 <= b) (a n : 自然数)
   证明: by
   rcases n with - | n
@@ -569,7 +569,7 @@ mem_range.2 hs _ hk
     _ < m ^ n := tsub_lt_self (Nat.pow_pos <| by lia) (by lia)
 
 中文:
-引理 Nat.geomSum_lt
+引理 自然数.geomSum_lt
   条件: (hm : 2 <= m) (hs : 对任意 k in s, k < n)
   结论: ∑ k in s, m ^ k < m ^ n
   证明: calc

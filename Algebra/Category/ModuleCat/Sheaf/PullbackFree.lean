@@ -56,7 +56,7 @@ definition pushforwardSections
 
 中文:
 定义 pushforwardSections
-  签名: {M : SheafOfModules.{v} R} (s : M.sections)
+  签名: {M : 模层.{v} R} (s : M.sections)
   定义体: s.val _
   property _ := s.property _
 
@@ -78,7 +78,7 @@ lemma bijective_pushforwardSections
 
 中文:
 引理 bijective_pushforwardSections
-  条件: [F.Final]
+  条件: [F.终]
   证明: Functor.bijective_sectionsPrecomp _ _
 -/
 lemma bijective_pushforwardSections [F.Final] :
@@ -246,8 +246,8 @@ instance [F.Final]
   rw [pushforwa
 
 中文:
-实例 [F.Final]
-  签名: : IsIso (pullbackObjUnitToUnit φ)
+实例 [F.终]
+  签名: : 是同构 (pullbackObjUnitToUnit φ)
   定义体: by
   rw [isIso_iff_coyoneda_map_bijective]
   intro M

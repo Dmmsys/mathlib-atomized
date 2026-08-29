@@ -53,7 +53,7 @@ definition toScheme
 
 中文:
 定义 toScheme
-  签名: {X : Scheme.{u}} (U : X.Opens)
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: X.restrict U.isOpenEmbedding
 
 Depends on / 依赖: U.isOpenEmbedding, X.restrict, isOpenEmbedding, restrict
@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut X.Opens Scheme
+  签名: CoeOut X.Opens 概形
   定义体: ⟨toScheme⟩
 
 Depends on / 依赖: toScheme
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion U.ι
+  签名: 是开浸入 U.ι
   定义体: inferInstanceAs (IsOpenImmersion (X.ofRestrict _))
 
 Depends on / 依赖: IsOpenImmersion, X.ofRestrict, ofRestrict
@@ -161,7 +161,7 @@ lemma ι_comp_over
 
 中文:
 引理 ι_comp_over
-  条件: (S : Scheme.{u}) [X.Over S]
+  条件: (S : 概形.{u}) [X.Over S]
   结论: U.ι ≫ X ↘ S = U.toScheme ↘ S
   证明: rfl
 -/
@@ -179,7 +179,7 @@ lemma toScheme_carrier
 
 中文:
 引理 toScheme_carrier
-  结论: (U : 类型u) = (U : Set X)
+  结论: (U : 类型u) = (U : 集合 X)
   证明: rfl
 -/
 lemma toScheme_carrier : (U : Type u) = (U : Set X) := rfl
@@ -210,7 +210,7 @@ lemma forall_toScheme
   proof: Subtype.forall
 
 中文:
-引理 forall_toScheme
+引理 对任意_toScheme
   条件: {U : X.Opens} {P : U.toScheme -> 命题}
   证明: Subtype.forall
 
@@ -230,7 +230,7 @@ lemma exists_toScheme
 @[simp]
 
 中文:
-引理 exists_toScheme
+引理 存在_toScheme
   条件: {U : X.Opens} {P : U.toScheme -> 命题}
   证明: Subtype.exists
 
@@ -355,7 +355,7 @@ lemma ι_appIso
 中文:
 引理 ι_appIso
   条件: (V)
-  结论: U.ι.appIso V = Iso.refl _
+  结论: U.ι.appIso V = 同构.refl _
   证明: X.ofRestrict_appIso _ _
 
 @[simp]
@@ -399,7 +399,7 @@ lemma range_ι
 
 中文:
 引理 range_ι
-  结论: Set.range U.ι = U
+  结论: 集合.range U.ι = U
   证明: Subtype.range_val
 
 Depends on / 依赖: Subtype, Subtype.range_val, range_val
@@ -512,7 +512,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (U.ι.appLE U ⊤ U.ι_preimage_self.ge)
+  签名: 是同构 (U.ι.appLE U ⊤ U.ι_preimage_self.ge)
   定义体: by
   simp only [ι, ofRestrict_appLE]
   change IsIso (X.presheaf.map (eqToIso U.ι_image_top).hom.op)
@@ -574,7 +574,7 @@ lemma nonempty_iff
 
 中文:
 引理 nonempty_iff
-  结论: Nonempty U.toScheme ↔ (U : Set X).Nonempty
+  结论: 非空 U.toScheme ↔ (U : 集合 X).非空
   证明: by
   simp only [toScheme_carrier, SetLike.coe_sort_coe, nonempty_subtype]
   rfl
@@ -618,7 +618,7 @@ definition stalkIso
 
 中文:
 定义 stalkIso
-  签名: {X : Scheme.{u}} (U : X.Opens) (x : U)
+  签名: {X : 概形.{u}} (U : X.Opens) (x : U)
   定义体: X.restrictStalkIso (Opens.isOpenEmbedding _) _
 
 @[reassoc (attr := simp)]
@@ -642,7 +642,7 @@ lemma germ_stalkIso_hom
 
 中文:
 引理 germ_stalkIso_hom
-  结论: {X : Scheme.{u}} (U : X.Opens)
+  结论: {X : 概形.{u}} (U : X.Opens)
   证明: PresheafedSpace.restrictStalkIso_hom_eq_germ _ U.isOpenEmbedding _ _ _
 
 @[reassoc]
@@ -666,7 +666,7 @@ lemma germ_stalkIso_inv
 
 中文:
 引理 germ_stalkIso_inv
-  结论: {X : Scheme.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x : U)
+  结论: {X : 概形.{u}} (U : X.Opens) (V : U.toScheme.Opens) (x : U)
   证明: PresheafedSpace.restrictStalkIso_inv_eq_germ X.toPresheafedSpace U.isOpenEmbedding V x hx
 
 Depends on / 依赖: PresheafedSpace, PresheafedSpace.restrictStalkIso_inv_eq_germ, U.isOpenEmbedding, X.toPresheafedSpace, isOpenEmbedding, restrictStalkIso_inv_eq_germ, toPresheafedSpace
@@ -693,7 +693,7 @@ lemma stalkIso_inv
 
 中文:
 引理 stalkIso_inv
-  条件: {X : Scheme.{u}} (U : X.Opens) (x : U)
+  条件: {X : 概形.{u}} (U : X.Opens) (x : U)
   证明: by
   rw [← Category.comp_id (U.stalkIso x).inv]; rw [Iso.inv_comp_eq]
   apply TopCat.Presheaf.stalk_hom_ext
@@ -739,8 +739,8 @@ definition Scheme.openCoverOfIsOpenCover
 #adaptation_note
 
 中文:
-定义 Scheme.openCoverOfIsOpenCover
-  签名: {s : 类型} (X : Scheme.{u}) (U : s -> X.Opens)
+定义 概形.openCoverOfIsOpenCover
+  签名: {s : 类型} (X : 概形.{u}) (U : s -> X.Opens)
   定义体: s
   X i := U i
   f i := (U i).ι
@@ -803,7 +803,7 @@ instance ΓRestrictAlgebra
 
 中文:
 实例 ΓRestrictAlgebra
-  签名: {X : Scheme.{u}} (U : X.Opens)
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: U.ι.appTop.hom.toAlgebra
 
 Depends on / 依赖: appTop, appTop.hom.toAlgebra, toAlgebra
@@ -826,7 +826,7 @@ lemma Scheme.Opens.ι_image_basicOpen'
   co
 
 中文:
-引理 Scheme.Opens.ι_image_basicOpen'
+引理 概形.Opens.ι_image_basicOpen'
   条件: (r : Γ(U, ⊤))
   证明: by
   refine (Scheme.image_basicOpen (X.ofRestrict U.isOpenEmbedding) r).trans ?_
@@ -857,7 +857,7 @@ lemma Scheme.Opens.ι_image_basicOpen
   rw [Scheme.Opens.ι_image_basicOpen']; rw [Scheme.basicOpen_res_eq]
 
 中文:
-引理 Scheme.Opens.ι_image_basicOpen
+引理 概形.Opens.ι_image_basicOpen
   条件: (r : Γ(U, ⊤))
   证明: by
   rw [Scheme.Opens.ι_image_basicOpen']; rw [Scheme.basicOpen_res_eq]
@@ -882,7 +882,7 @@ lemma Scheme.Opens.ι_image_basicOpen_topIso_inv
 @[simp]
 
 中文:
-引理 Scheme.Opens.ι_image_basicOpen_topIso_inv
+引理 概形.Opens.ι_image_basicOpen_topIso_inv
   条件: (r : Γ(X, U))
   证明: by
   simp only [Scheme.Opens.toScheme_presheaf_obj]
@@ -909,8 +909,8 @@ lemma Scheme.Opens.mem_basicOpen_toScheme
   exact congr(x in $(U.ι.preimage_basicOpen r)).to_iff.symm
 
 中文:
-引理 Scheme.Opens.mem_basicOpen_toScheme
-  条件: {U : X.Opens} {V : Scheme.Opens U} {r : Γ(U, V)} {x : U}
+引理 概形.Opens.mem_basicOpen_toScheme
+  条件: {U : X.Opens} {V : 概形.Opens U} {r : Γ(U, V)} {x : U}
   证明: by
   rw [← U.toScheme.basicOpen_res_eq _ (eqToHom (U.ι.preimage_image_eq V)).op]
   exact congr(x in $(U.ι.preimage_basicOpen r)).to_iff.symm
@@ -935,8 +935,8 @@ definition Scheme.homOfLE
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.homOfLE
-  签名: (X : Scheme.{u}) {U V : X.Opens} (e : U <= V)
+定义 概形.homOfLE
+  签名: (X : 概形.{u}) {U V : X.Opens} (e : U <= V)
   定义体: IsOpenImmersion.lift V.ι U.ι (by simpa using e)
 
 @[reassoc (attr := simp)]
@@ -956,8 +956,8 @@ lemma Scheme.homOfLE_ι
   proof: IsOpenImmersion.lift_fac _ _ _
 
 中文:
-引理 Scheme.homOfLE_ι
-  条件: (X : Scheme.{u}) {U V : X.Opens} (e : U <= V)
+引理 概形.homOfLE_ι
+  条件: (X : 概形.{u}) {U V : X.Opens} (e : U <= V)
   证明: IsOpenImmersion.lift_fac _ _ _
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.lift_fac, lift_fac
@@ -982,8 +982,8 @@ lemma Scheme.homOfLE_rfl
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.homOfLE_rfl
-  条件: (X : Scheme.{u}) (U : X.Opens)
+引理 概形.homOfLE_rfl
+  条件: (X : 概形.{u}) (U : X.Opens)
   结论: X.homOfLE (refl U) = 𝟙 _
   证明: by
   rw [← cancel_mono U.ι]; rw [Scheme.homOfLE_ι]; rw [Category.id_comp]
@@ -1006,8 +1006,8 @@ lemma Scheme.homOfLE_homOfLE
   rw [← cancel_mono W.ι]; rw [Category.assoc]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]
 
 中文:
-引理 Scheme.homOfLE_homOfLE
-  条件: (X : Scheme.{u}) {U V W : X.Opens} (e₁ : U <= V) (e₂ : V <= W)
+引理 概形.homOfLE_homOfLE
+  条件: (X : 概形.{u}) {U V W : X.Opens} (e₁ : U <= V) (e₂ : V <= W)
   证明: by
   rw [← cancel_mono W.ι]; rw [Category.assoc]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]; rw [Scheme.homOfLE_ι]
 
@@ -1028,7 +1028,7 @@ theorem Scheme.homOfLE_base
   exact congr($(X.homOfLE_ι e) a)
 
 中文:
-定理 Scheme.homOfLE_base
+定理 概形.homOfLE_base
   条件: {U V : X.Opens} (e : U <= V)
   证明: by
   ext a; refine Subtype.ext ?_ -- Porting note: `ext` did not pick up `Subtype.ext`
@@ -1054,7 +1054,7 @@ theorem Scheme.homOfLE_apply'
 @[simp]
 
 中文:
-定理 Scheme.homOfLE_apply'
+定理 概形.homOfLE_apply'
   条件: {U V : X.Opens} (e : U <= V) (x : X) (hx : x in U)
   证明: by
   rw [homOfLE_base]
@@ -1080,7 +1080,7 @@ theorem Scheme.homOfLE_apply
   rw [Scheme.homOfLE_apply']
 
 中文:
-定理 Scheme.homOfLE_apply
+定理 概形.homOfLE_apply
   条件: {U V : X.Opens} (e : U <= V) (x : U)
   证明: by
   rw [Scheme.homOfLE_apply']
@@ -1107,7 +1107,7 @@ theorem Scheme.ι_image_homOfLE_eq_ι_image_inf
     exact ⟨⟨y.1, hyU⟩, by simpa [homOfLE_apply'] using hyW, rfl⟩
 
 中文:
-定理 Scheme.ι_image_homOfLE_eq_ι_image_inf
+定理 概形.ι_image_homOfLE_eq_ι_image_inf
   条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
   证明: by
   ext x
@@ -1138,7 +1138,7 @@ theorem Scheme.ι_image_homOfLE_le_ι_image
   simp [Scheme.ι_image_homOfLE_eq_ι_image_inf]
 
 中文:
-定理 Scheme.ι_image_homOfLE_le_ι_image
+定理 概形.ι_image_homOfLE_le_ι_image
   条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
   证明: by
   simp [Scheme.ι_image_homOfLE_eq_ι_image_inf]
@@ -1166,7 +1166,7 @@ theorem Scheme.homOfLE_app
   rw [← IsIso.eq_comp_inv]; rw [← Functor.map_inv]; rw [← Functor.map
 
 中文:
-定理 Scheme.homOfLE_app
+定理 概形.homOfLE_app
   条件: {U V : X.Opens} (e : U <= V) (W : Opens V)
   证明: by
   have e₁ := Scheme.Hom.congr_app (X.homOfLE_ι e) (V.ι ''ᵁ W)
@@ -1201,7 +1201,7 @@ theorem Scheme.homOfLE_appLE
   simp [Scheme.Hom.appLE, Scheme.homOfLE_app, ← Functor.map_comp, ← op_comp]
 
 中文:
-定理 Scheme.homOfLE_appLE
+定理 概形.homOfLE_appLE
   条件: {U V : X.Opens} (e : U <= V) (W : Opens V) (W' : Opens U) (e')
   证明: by
   simp [Scheme.Hom.appLE, Scheme.homOfLE_app, ← Functor.map_comp, ← op_comp]
@@ -1222,7 +1222,7 @@ theorem Scheme.homOfLE_appTop
   proof: homOfLE_app ..
 
 中文:
-定理 Scheme.homOfLE_appTop
+定理 概形.homOfLE_appTop
   条件: {U V : X.Opens} (e : U <= V)
   证明: homOfLE_app ..
 
@@ -1253,8 +1253,8 @@ lemma Scheme.Hom.appIso_homOfLE_inv
 @[simp]
 
 中文:
-引理 Scheme.Hom.appIso_homOfLE_inv
-  结论: {X : Scheme.{u}} {U V : X.Opens} (h : U <= V)
+引理 概形.态射.appIso_homOfLE_inv
+  结论: {X : 概形.{u}} {U V : X.Opens} (h : U <= V)
   证明: by
   rw [eq_comm]; rw [← Iso.hom_comp_eq_id]
   dsimp
@@ -1288,7 +1288,7 @@ lemma Scheme.opensRange_homOfLE
   proof: V.ι.image_injective (by simp [← Hom.opensRange_comp, Hom.image_preimage_eq_opensRange_inf, e])
 
 中文:
-引理 Scheme.opensRange_homOfLE
+引理 概形.opensRange_homOfLE
   条件: {U V : X.Opens} (e : U <= V)
   证明: V.ι.image_injective (by simp [← Hom.opensRange_comp, Hom.image_preimage_eq_opensRange_inf, e])
 
@@ -1316,8 +1316,8 @@ definition Scheme.Opens.iSupOpenCover
     simp
 
 中文:
-定义 Scheme.Opens.iSupOpenCover
-  签名: {J : 类型} {X : Scheme} (U : J -> X.Opens)
+定义 概形.Opens.iSupOpenCover
+  签名: {J : 类型} {X : 概形} (U : J -> X.Opens)
   定义体: J
   X i := U i
   f j := X.homOfLE (le_iSup _ _)
@@ -1362,7 +1362,7 @@ definition Scheme.restrictFunctor
     exact (X.homOfLE_homOfLE i.le j.le).symm
 
 中文:
-定义 Scheme.restrictFunctor
+定义 概形.restrictFunctor
   签名: : X.Opens ⥤ Over X where
   定义体: Over.mk U.ι
   map {U V} i := Over.homMk (X.homOfLE i.le) (by simp)
@@ -1405,8 +1405,8 @@ definition Scheme.restrictFunctorΓ
       congr 1)
 
 中文:
-定义 Scheme.restrictFunctorΓ
-  签名: : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ Scheme.Γ ≅ X.presheaf
+定义 概形.restrictFunctorΓ
+  签名: : X.restrictFunctor.op ⋙ (Over.forget X).op ⋙ 概形.Γ ≅ X.presheaf
   定义体: NatIso.ofComponents
     (fun U => X.presheaf.mapIso ((eqToIso (unop U).isOpenEmbedding_obj_top).symm.op :))
     (by
@@ -1439,8 +1439,8 @@ definition Scheme.restrictRestrictComm
       Set.image_preimage_eq_inter_range, Set.inter_comm (U : Set X)]
 
 中文:
-定义 Scheme.restrictRestrictComm
-  签名: (X : Scheme.{u}) (U V : X.Opens)
+定义 概形.restrictRestrictComm
+  签名: (X : 概形.{u}) (U V : X.Opens)
   定义体: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ U.ι) (Opens.ι _ ≫ V.ι) by
     simp only [Hom.comp_base, TopCat.coe_comp, Set.range_comp, Opens.range_ι, Opens.map_coe,
       Set.image_preimage_eq_inter_range, Set.inter_comm (U : Set X)]
@@ -1466,7 +1466,7 @@ definition Scheme.Hom.isoImage
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.Hom.isoImage
+定义 概形.态射.isoImage
   定义体: IsOpenImmersion.isoOfRangeEq (Opens.ι _ ≫ f) (Opens.ι _) (by simp [Set.range_comp])
 
 @[reassoc (attr := simp)]
@@ -1489,7 +1489,7 @@ lemma Scheme.Hom.isoImage_hom_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Hom.isoImage_hom_ι
+引理 概形.态射.isoImage_hom_ι
   证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
@@ -1512,7 +1512,7 @@ lemma Scheme.Hom.isoImage_inv_ι
 @[reassoc]
 
 中文:
-引理 Scheme.Hom.isoImage_inv_ι
+引理 概形.态射.isoImage_inv_ι
   证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 @[reassoc]
@@ -1536,7 +1536,7 @@ lemma Scheme.Hom.isoImage_hom_homOfLE
 @[reassoc]
 
 中文:
-引理 Scheme.Hom.isoImage_hom_homOfLE
+引理 概形.态射.isoImage_hom_homOfLE
   证明: by
   simp [← cancel_mono (f ''ᵁ V).ι]
 
@@ -1561,7 +1561,7 @@ lemma Scheme.Hom.isoImage_inv_homOfLE
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Hom.isoImage_inv_homOfLE
+引理 概形.态射.isoImage_inv_homOfLE
   证明: by
   simp [← cancel_mono (f.isoImage V).hom, ← f.isoImage_hom_homOfLE]
 
@@ -1585,8 +1585,8 @@ lemma Scheme.Opens.isoImage_ι_inv_ι
   simp [← cancel_mono U.ι]
 
 中文:
-引理 Scheme.Opens.isoImage_ι_inv_ι
-  条件: {X : Scheme.{u}} (U : Opens X) (V : Opens U)
+引理 概形.Opens.isoImage_ι_inv_ι
+  条件: {X : 概形.{u}} (U : Opens X) (V : Opens U)
   证明: by
   simp [← cancel_mono U.ι]
 
@@ -1607,8 +1607,8 @@ definition Scheme.Hom.isoOpensRange
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.Hom.isoOpensRange
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+定义 概形.态射.isoOpensRange
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   定义体: IsOpenImmersion.isoOfRangeEq f f.opensRange.ι (by simp)
 
 @[reassoc (attr := simp)]
@@ -1632,8 +1632,8 @@ lemma Scheme.Hom.isoOpensRange_hom_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Hom.isoOpensRange_hom_ι
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+引理 概形.态射.isoOpensRange_hom_ι
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   simp [isoOpensRange]
 
@@ -1656,8 +1656,8 @@ lemma Scheme.Hom.isoOpensRange_inv_comp
   simp [isoOpensRange]
 
 中文:
-引理 Scheme.Hom.isoOpensRange_inv_comp
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+引理 概形.态射.isoOpensRange_inv_comp
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   simp [isoOpensRange]
 
@@ -1683,8 +1683,8 @@ definition Scheme.topIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.topIso
-  签名: (X : Scheme)
+定义 概形.topIso
+  签名: (X : 概形)
   定义体: Scheme.Opens.ι _
   inv := ⟨X.restrictTopIso.inv⟩
   hom_inv_id := Hom.ext' X.restrictTopIso.hom_inv_id
@@ -1713,8 +1713,8 @@ lemma Scheme.toIso_inv_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.toIso_inv_ι
-  条件: (X : Scheme.{u})
+引理 概形.toIso_inv_ι
+  条件: (X : 概形.{u})
   结论: X.topIso.inv ≫ Opens.ι _ = 𝟙 _
   证明: X.topIso.inv_hom_id
 
@@ -1736,8 +1736,8 @@ lemma Scheme.ι_toIso_inv
   proof: X.topIso.hom_inv_id
 
 中文:
-引理 Scheme.ι_toIso_inv
-  条件: (X : Scheme.{u})
+引理 概形.ι_toIso_inv
+  条件: (X : 概形.{u})
   结论: Opens.ι _ ≫ X.topIso.inv = 𝟙 _
   证明: X.topIso.hom_inv_id
 
@@ -1759,8 +1759,8 @@ definition Scheme.isoOfEq
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.isoOfEq
-  签名: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
+定义 概形.isoOfEq
+  签名: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
   定义体: IsOpenImmersion.isoOfRangeEq U.ι V.ι (by rw [e])
 
 @[reassoc (attr := simp)]
@@ -1783,8 +1783,8 @@ lemma Scheme.isoOfEq_hom_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.isoOfEq_hom_ι
-  条件: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
+引理 概形.isoOfEq_hom_ι
+  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
   证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
@@ -1805,8 +1805,8 @@ lemma Scheme.isoOfEq_inv_ι
   proof: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 中文:
-引理 Scheme.isoOfEq_inv_ι
-  条件: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
+引理 概形.isoOfEq_inv_ι
+  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
   证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.isoOfRangeEq_inv_fac, isoOfRangeEq_inv_fac
@@ -1824,8 +1824,8 @@ lemma Scheme.isoOfEq_hom
   proof: rfl
 
 中文:
-引理 Scheme.isoOfEq_hom
-  条件: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
+引理 概形.isoOfEq_hom
+  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
   证明: rfl
 -/
 lemma Scheme.isoOfEq_hom (X : Scheme.{u}) {U V : X.Opens} (e : U = V) :
@@ -1842,8 +1842,8 @@ lemma Scheme.isoOfEq_inv
 @[simp]
 
 中文:
-引理 Scheme.isoOfEq_inv
-  条件: (X : Scheme.{u}) {U V : X.Opens} (e : U = V)
+引理 概形.isoOfEq_inv
+  条件: (X : 概形.{u}) {U V : X.Opens} (e : U = V)
   证明: rfl
 
 @[simp]
@@ -1864,9 +1864,9 @@ lemma Scheme.isoOfEq_rfl
   rw [← cancel_mono U.ι]; rw [Scheme.isoOfEq_hom_ι]; rw [Iso.refl_hom]; rw [Category.id_comp]
 
 中文:
-引理 Scheme.isoOfEq_rfl
-  条件: (X : Scheme.{u}) (U : X.Opens)
-  结论: X.isoOfEq (refl U) = Iso.refl _
+引理 概形.isoOfEq_rfl
+  条件: (X : 概形.{u}) (U : X.Opens)
+  结论: X.isoOfEq (refl U) = 同构.refl _
   证明: by
   ext1
   rw [← cancel_mono U.ι]; rw [Scheme.isoOfEq_hom_ι]; rw [Iso.refl_hom]; rw [Category.id_comp]
@@ -1894,8 +1894,8 @@ definition Scheme.Hom.preimageIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.Hom.preimageIso
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
+定义 概形.态射.preimageIso
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
   定义体: by
   apply IsOpenImmersion.isoOfRangeEq (f := (f ⁻¹ᵁ U).ι ≫ f) U.ι _
   dsimp
@@ -1925,8 +1925,8 @@ lemma Scheme.Hom.preimageIso_hom_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Hom.preimageIso_hom_ι
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
+引理 概形.态射.preimageIso_hom_ι
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
   证明: IsOpenImmersion.isoOfRangeEq_hom_fac _ _ _
 
 @[reassoc (attr := simp)]
@@ -1947,8 +1947,8 @@ lemma Scheme.Hom.preimageIso_inv_ι
   proof: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 中文:
-引理 Scheme.Hom.preimageIso_inv_ι
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsIso (C := Scheme) f]
+引理 概形.态射.preimageIso_inv_ι
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是同构 (C := 概形) f]
   证明: IsOpenImmersion.isoOfRangeEq_inv_fac _ _ _
 
 Depends on / 依赖: Scheme
@@ -1971,8 +1971,8 @@ definition Scheme.Opens.isoOfLE
 @[reassoc (attr := simp)]
 
 中文:
-定义 Scheme.Opens.isoOfLE
-  签名: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
+定义 概形.Opens.isoOfLE
+  签名: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
   定义体: IsOpenImmersion.isoOfRangeEq ((V.ι ⁻¹ᵁ U).ι ≫ V.ι) U.ι by
     have : V.ι ''ᵁ (V.ι ⁻¹ᵁ U) = U := by simpa [Scheme.Hom.image_preimage_eq_opensRange_inf]
     rw [Scheme.Hom.comp_base]; rw [TopCat.coe_comp]; rw [Scheme.Opens.range_ι]; rw [Set.range_comp]; rw [← this]
@@ -2002,8 +2002,8 @@ lemma Scheme.Opens.isoOfLE_hom_ι
 @[reassoc (attr := simp)]
 
 中文:
-引理 Scheme.Opens.isoOfLE_hom_ι
-  条件: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
+引理 概形.Opens.isoOfLE_hom_ι
+  条件: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
   证明: by
   simp [isoOfLE]
 
@@ -2026,8 +2026,8 @@ lemma Scheme.Opens.isoOfLE_inv_ι
   simp [isoOfLE]
 
 中文:
-引理 Scheme.Opens.isoOfLE_inv_ι
-  条件: {X : Scheme.{u}} {U V : X.Opens} (hUV : U <= V)
+引理 概形.Opens.isoOfLE_inv_ι
+  条件: {X : 概形.{u}} {U V : X.Opens} (hUV : U <= V)
   证明: by
   simp [isoOfLE]
 
@@ -2053,7 +2053,7 @@ definition basicOpenIsoSpecAway
 
 中文:
 定义 basicOpenIsoSpecAway
-  签名: {R : CommRingCat.{u}} (f : R)
+  签名: {R : 交换环范畴.{u}} (f : R)
   定义体: IsOpenImmersion.isoOfRangeEq (Scheme.Opens.ι _) (Spec.map (CommRingCat.ofHom (algebraMap _ _)))
     (by
       simp only [Scheme.Opens.range_ι]
@@ -2083,7 +2083,7 @@ lemma basicOpenIsoSpecAway_hom_SpecMap
 
 中文:
 引理 basicOpenIsoSpecAway_hom_SpecMap
-  条件: {R : CommRingCat.{u}} (f : R)
+  条件: {R : 交换环范畴.{u}} (f : R)
   证明: by
   simp [basicOpenIsoSpecAway]
 
@@ -2112,7 +2112,7 @@ lemma basicOpenIsoSpecAway_inv_homOfLE
 
 中文:
 引理 basicOpenIsoSpecAway_inv_homOfLE
-  条件: {R : CommRingCat.{u}} (f g x : R) (hx : x = f * g)
+  条件: {R : 交换环范畴.{u}} (f g x : R) (hx : x = f * g)
   证明: by rw [hx]; infer_instance
     (basicOpenIsoSpecAway x).inv ≫ (Spec R).homOfLE (by simp [hx, PrimeSpectrum.basicOpen_mul]) =
       Spec.map (CommRingCat.ofHom (IsLocalization.Away.awayToAwayRight f g)) ≫
@@ -2153,7 +2153,7 @@ definition pullbackRestrictIsoRestrict
 
 中文:
 定义 pullbackRestrictIsoRestrict
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   定义体: by
   refine IsOpenImmersion.isoOfRangeEq (pullback.fst f _) (Scheme.Opens.ι _) ?_
   simp [IsOpenImmersion.range_pullbackFst]
@@ -2181,7 +2181,7 @@ theorem pullbackRestrictIsoRestrict_inv_fst
 
 中文:
 定理 pullbackRestrictIsoRestrict_inv_fst
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: by
   delta pullbackRestrictIsoRestrict; simp
 
@@ -2205,7 +2205,7 @@ theorem pullbackRestrictIsoRestrict_hom_ι
 
 中文:
 定理 pullbackRestrictIsoRestrict_hom_ι
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: by
   delta pullbackRestrictIsoRestrict; simp
 
@@ -2225,7 +2225,7 @@ definition morphismRestrict
 
 中文:
 定义 morphismRestrict
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   定义体: (pullbackRestrictIsoRestrict f U).inv ≫ pullback.snd _ _
 
 Depends on / 依赖: pullback, pullback.snd, pullbackRestrictIsoRestrict
@@ -2249,7 +2249,7 @@ theorem pullbackRestrictIsoRestrict_hom_morphismRestrict
 
 中文:
 定理 pullbackRestrictIsoRestrict_hom_morphismRestrict
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: Iso.hom_inv_id_assoc _ _
 
 @[reassoc (attr := simp)]
@@ -2273,7 +2273,7 @@ theorem morphismRestrict_ι
 
 中文:
 定理 morphismRestrict_ι
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: by
   delta morphismRestrict
   rw [Category.assoc]; rw [pullback.condition.symm]; rw [pullbackRestrictIsoRestrict_inv_fst_assoc]
@@ -2297,7 +2297,7 @@ theorem isPullback_morphismRestrict
 
 中文:
 定理 isPullback_morphismRestrict
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: by
   apply IsOpenImmersion.isPullback <;>
   simp
@@ -2324,7 +2324,7 @@ lemma isPullback_opens_inf_le
 
 中文:
 引理 isPullback_opens_inf_le
-  条件: {X : Scheme} {U V W : X.Opens} (hU : U <= W) (hV : V <= W)
+  条件: {X : 概形} {U V W : X.Opens} (hU : U <= W) (hV : V <= W)
   证明: by
   refine (isPullback_morphismRestrict (X.homOfLE hV) (W.ι ⁻¹ᵁ U)).of_iso (V.ι.isoImage _ ≪≫
     X.isoOfEq ?_) (W.ι.isoImage _ ≪≫ X.isoOfEq ?_) (Iso.refl _) (Iso.refl _) ?_ ?_ ?_ ?_
@@ -2355,7 +2355,7 @@ lemma isPullback_opens_inf
 
 中文:
 引理 isPullback_opens_inf
-  条件: {X : Scheme} (U V : X.Opens)
+  条件: {X : 概形} (U V : X.Opens)
   证明: (isPullback_morphismRestrict V.ι U).of_iso (V.ι.isoImage _ ≪≫ X.isoOfEq
     (V.functor_map_eq_inf U)) (Iso.refl _) (Iso.refl _) (Iso.refl _) (by simp [← cancel_mono U.ι])
     (by simp [← cancel_mono V.ι]) (by simp) (by simp)
@@ -2383,7 +2383,7 @@ lemma morphismRestrict_id
 
 中文:
 引理 morphismRestrict_id
-  条件: {X : Scheme.{u}} (U : X.Opens)
+  条件: {X : 概形.{u}} (U : X.Opens)
   结论: 𝟙 X ∣_ U = 𝟙 _
   证明: by
   rw [← cancel_mono U.ι]; rw [morphismRestrict_ι]; rw [Category.comp_id]; rw [Category.id_comp]
@@ -2414,7 +2414,7 @@ theorem morphismRestrict_comp
 
 中文:
 定理 morphismRestrict_comp
-  条件: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Opens Z)
+  条件: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z) (U : Opens Z)
   证明: by
   delta morphismRestrict
   rw [← pullbackRightPullbackFstIso_inv_snd_snd]
@@ -2453,7 +2453,7 @@ theorem morphismRestrict_homOfLE
 
 中文:
 定理 morphismRestrict_homOfLE
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U <= V)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U V : Y.Opens) (e : U <= V)
   证明: by
   simp [← cancel_mono V.ι]
 
@@ -2476,8 +2476,8 @@ lemma Scheme.Hom.isoImage_preimage_hom_homOfLE
   simp [← cancel_mono U.ι]
 
 中文:
-引理 Scheme.Hom.isoImage_preimage_hom_homOfLE
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsOpenImmersion f]
+引理 概形.态射.isoImage_preimage_hom_homOfLE
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   simp [← cancel_mono U.ι]
 
@@ -2503,7 +2503,7 @@ theorem morphismRestrict_base_coe
 
 中文:
 定理 morphismRestrict_base_coe
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
   证明: congr_arg (fun f => (Scheme.Hom.toLRSHom f).base x)
     (morphismRestrict_ι f U)
 
@@ -2524,7 +2524,7 @@ theorem morphismRestrict_base
 
 中文:
 定理 morphismRestrict_base
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: funext fun x => Subtype.ext (morphismRestrict_base_coe f U x)
 
 Depends on / 依赖: Subtype, Subtype.ext, morphismRestrict_base_coe
@@ -2543,7 +2543,7 @@ theorem image_morphismRestrict_preimage
 
 中文:
 定理 image_morphismRestrict_preimage
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
   证明: IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback (isPullback_morphismRestrict f U) V
 
 Depends on / 依赖: IsOpenImmersion, IsOpenImmersion.image_preimage_eq_preimage_image_of_isPullback, image_preimage_eq_preimage_image_of_isPullback, isPullback_morphismRestrict
@@ -2568,7 +2568,7 @@ theorem morphismRestrict_app
 
 中文:
 定理 morphismRestrict_app
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
   证明: by
   obtain ⟨V, rfl⟩ : exists V', U.ι ⁻¹ᵁ U.ι ''ᵁ V' = V := ⟨_, U.ι.preimage_image_eq V⟩
   simpa [← Functor.map_comp_assoc, ← Functor.map_comp] using!
@@ -2597,7 +2597,7 @@ theorem morphismRestrict_appTop
 
 中文:
 定理 morphismRestrict_appTop
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens)
   证明: morphismRestrict_app ..
 
 @[simp]
@@ -2620,7 +2620,7 @@ theorem morphismRestrict_app'
 
 中文:
 定理 morphismRestrict_app'
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : Opens U)
   证明: morphismRestrict_app f U V
 
 Depends on / 依赖: morphismRestrict_app
@@ -2644,7 +2644,7 @@ theorem morphismRestrict_appLE
 
 中文:
 定理 morphismRestrict_appLE
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V W e)
   证明: by
   rw [Scheme.Hom.appLE]; rw [morphismRestrict_app']; rw [Scheme.Opens.toScheme_presheaf_map]; rw [Scheme.Hom.appLE_map]
 
@@ -2695,7 +2695,7 @@ theorem isoImage_ι_inv_morphismRestrict_homOfLE
 
 中文:
 定理 isoImage_ι_inv_morphismRestrict_homOfLE
-  结论: {X : Scheme.{u}} {U V : X.Opens}
+  结论: {X : 概形.{u}} {U V : X.Opens}
   证明: by
   simp [← cancel_mono (V.ι.isoImage W).hom, morphismRestrict_homOfLE_isoImage_ι_hom]
 
@@ -2725,7 +2725,7 @@ definition morphismRestrictOpensRange
 
 中文:
 定义 morphismRestrictOpensRange
-  签名: {X Y U : Scheme.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [IsOpenImmersion g]
+  签名: {X Y U : 概形.{u}} (f : X ⟶ Y) (g : U ⟶ Y) [是开浸入 g]
   定义体: by
   let V : Y.Opens := g.opensRange
   let e :=
@@ -2762,7 +2762,7 @@ definition morphismRestrictEq
 
 中文:
 定义 morphismRestrictEq
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) {U V : Y.Opens} (e : U = V)
   定义体: eqToIso (by subst e; rfl)
 
 @[reassoc]
@@ -2835,7 +2835,7 @@ definition morphismRestrictRestrict
 
 中文:
 定义 morphismRestrictRestrict
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (V : U.toScheme.Opens)
   定义体: by
   refine Arrow.isoMk' _ _ ((Scheme.Opens.ι _).isoImage _ ≪≫ Scheme.isoOfEq _ ?_)
     ((Scheme.Opens.ι _).isoImage _) ?_
@@ -2864,7 +2864,7 @@ definition morphismRestrictRestrictBasicOpen
 
 中文:
 定义 morphismRestrictRestrictBasicOpen
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (r : Γ(Y, U))
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (r : Γ(Y, U))
   定义体: by
   refine morphismRestrictRestrict _ _ _ ≪≫ morphismRestrictEq _ ?_
   simp [Scheme.Opens.ι_image_basicOpen]
@@ -2893,7 +2893,7 @@ definition morphismRestrictStalkMap
 
 中文:
 定义 morphismRestrictStalkMap
-  签名: {X Y : Scheme.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
+  签名: {X Y : 概形.{u}} (f : X ⟶ Y) (U : Y.Opens) (x)
   定义体: Arrow.isoMk' _ _
   (U.stalkIso ((f ∣_ U) x) ≪≫
     (TopCat.Presheaf.stalkCongr _ <| Inseparable.of_eq <| morphismRestrict_base_coe f U x))
@@ -2928,7 +2928,7 @@ definition resLE
 
 中文:
 定义 resLE
-  签名: (f : Hom X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
+  签名: (f : 态射 X Y) (U : Y.Opens) (V : X.Opens) (e : V <= f ⁻¹ᵁ U)
   定义体: X.homOfLE e ≫ f ∣_ U
 
 Depends on / 依赖: X.homOfLE, homOfLE
@@ -3025,7 +3025,7 @@ lemma resLE_comp_resLE
 
 中文:
 引理 resLE_comp_resLE
-  条件: {Z : Scheme.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e')
+  条件: {Z : 概形.{u}} (g : Y ⟶ Z) {W : Z.Opens} (e')
   证明: by
   simp [← cancel_mono W.ι]
 
@@ -3094,7 +3094,7 @@ lemma resLE_congr
 
 中文:
 引理 resLE_congr
-  条件: (e₁ : U = U') (e₂ : V = V') (P : Morphism命题erty Scheme.{u})
+  条件: (e₁ : U = U') (e₂ : V = V') (P : MorphismProperty 概形.{u})
   证明: by
   subst e₁; subst e₂; rfl
 -/
@@ -3293,7 +3293,7 @@ lemma Scheme.Hom.isPullback_resLE
     rw [Scheme.Hom.comp_p
 
 中文:
-引理 Scheme.Hom.isPullback_resLE
+引理 概形.态射.isPullback_resLE
   证明: by
   refine .paste_horiz (v₁₂ := iY.resLE _ _
     ((g.preimage_mono hUSX).trans_eq congr(($H.w) ⁻¹ᵁ US) :)) ?_ ?_
@@ -3342,8 +3342,8 @@ definition Scheme.OpenCover.restrict
       PreZeroHypercover.pullback₁_I₀, Equiv.refl_apply, PreZeroHyperc
 
 中文:
-定义 Scheme.OpenCover.restrict
-  签名: {X : Scheme.{u}} (𝒰 : Scheme.OpenCover.{v} X) (U : Opens X)
+定义 概形.OpenCover.restrict
+  签名: {X : 概形.{u}} (𝒰 : 概形.OpenCover.{v} X) (U : Opens X)
   定义体: by
   refine Cover.copy (𝒰.pullback₁ U.ι) 𝒰.I₀ _ (𝒰.f · ∣_ U) (Equiv.refl _)
     (fun i => IsOpenImmersion.isoOfRangeEq (Opens.ι _) (pullback.snd _ _) ?_) ?_

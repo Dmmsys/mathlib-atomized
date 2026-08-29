@@ -41,7 +41,7 @@ definition mapDerivedCategory
 
 中文:
 定义 mapDerivedCategory
-  签名: : DerivedCategory C₁ ⥤ DerivedCategory C₂
+  签名: : 导出范畴 C₁ ⥤ 导出范畴 C₂
   定义体: F.mapHomologicalComplexUpToQuasiIso (ComplexShape.up Int)
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, F.mapHomologicalComplexUpToQuasiIso, mapHomologicalComplexUpToQuasiIso
@@ -84,7 +84,7 @@ lemma mapDerivedCategoryFactors_hom_naturality
 
 中文:
 引理 mapDerivedCategoryFactors_hom_naturality
-  条件: {X Y : CochainComplex C₁ 整数} (f : X ⟶ Y)
+  条件: {X Y : 上链复形 C₁ 整数} (f : X ⟶ Y)
   证明: F.mapDerivedCategoryFactors.hom.naturality f
 
 Depends on / 依赖: F.mapDerivedCategoryFactors.hom.naturality, mapDerivedCategoryFactors, naturality
@@ -144,7 +144,7 @@ lemma mapDerivedCategoryFactorsh_hom_app
 
 中文:
 引理 mapDerivedCategoryFactorsh_hom_app
-  条件: (K : CochainComplex C₁ 整数)
+  条件: (K : 上链复形 C₁ 整数)
   证明: F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app K
 
 Depends on / 依赖: F.mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app, mapHomologicalComplexUpToQuasiIsoFactorsh_hom_app
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.mapDerivedCategory.CommShift 整数
+  签名: F.mapDerivedCategory.交换Shift 整数
   定义体: Functor.commShiftOfLocalization DerivedCategory.Qh
     (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int)) Int
     (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift F.mapDerivedCategoryFactorsh.hom 整数
+  签名: 自然变换.交换Shift F.mapDerivedCategoryFactorsh.hom 整数
   定义体: inferInstanceAs (NatTrans.CommShift (Localization.Lifting.iso
       DerivedCategory.Qh (HomotopyCategory.quasiIso C₁ (ComplexShape.up Int))
         (F.mapHomotopyCategory _ ⋙ DerivedCategory.Qh)
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift F.mapDerivedCategoryFactors.hom 整数
+  签名: 自然变换.交换Shift F.mapDerivedCategoryFactors.hom 整数
   定义体: NatTrans.CommShift.verticalComposition (DerivedCategory.quotientCompQhIso C₁).inv
     (DerivedCategory.quotientCompQhIso C₂).hom
     (F.mapHomotopyCategoryFactors (ComplexShape.up Int)).hom
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.mapDerivedCategory.IsTriangulated
+  签名: F.mapDerivedCategory.是三角
   定义体: Functor.isTriangulated_of_precomp_iso F.mapDerivedCategoryFactorsh
 
 Depends on / 依赖: F.mapDerivedCategoryFactorsh, Functor, Functor.isTriangulated_of_precomp_iso, isTriangulated_of_precomp_iso, mapDerivedCategoryFactorsh
@@ -349,8 +349,8 @@ instance [F.Linear
   infer_instance
 
 中文:
-实例 [F.Linear
-  签名: R] : F.mapDerivedCategory.Linear R
+实例 [F.线性
+  签名: R] : F.mapDerivedCategory.线性 R
   定义体: by
   rw [← Localization.functor_linear_iff DerivedCategory.Qh (HomotopyCategory.quasiIso C₁
     (ComplexShape.up Int)) R ((F.mapHomotopyCategory (ComplexShape.up Int)).comp DerivedCategory.Qh)]

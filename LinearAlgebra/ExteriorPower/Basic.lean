@@ -61,7 +61,7 @@ ExteriorAlgebra.ιMulti_range R n Set.mem_range_self _
 
 中文:
 定义 ιMulti
-  签名: : M [⋀^Fin n]->ₗ[R] (⋀[R]^n M)
+  签名: : M [⋀^有限集 n]->ₗ[R] (⋀[R]^n M)
   定义体: (ExteriorAlgebra.ιMulti R n).codRestrict (⋀[R]^n M) fun _ =>
 ExteriorAlgebra.ιMulti_range R n Set.mem_range_self _
 
@@ -82,7 +82,7 @@ lemma ιMulti_apply_coe
 
 中文:
 引理 ιMulti_apply_coe
-  条件: (a : Fin n -> M)
+  条件: (a : 有限集 n -> M)
   结论: ιMulti R n a = ExteriorAlgebra.ιMulti R n a
   证明: rfl
 -/
@@ -98,7 +98,7 @@ definition ιMulti_family
 
 中文:
 定义 ιMulti_family
-  签名: {I : 类型} [LinearOrder I] (v : I -> M)
+  签名: {I : 类型} [线性序 I] (v : I -> M)
   定义体: ιMulti R n (v ∘ (ofFinEmbEquiv.symm s))
 
 Depends on / 依赖: ofFinEmbEquiv, ofFinEmbEquiv.symm
@@ -117,7 +117,7 @@ lemma ιMulti_family_eq_coe_comp
 
 中文:
 引理 ιMulti_family_eq_coe_comp
-  条件: {I : 类型} [LinearOrder I] (v : I -> M)
+  条件: {I : 类型} [线性序 I] (v : I -> M)
   证明: rfl
 -/
 lemma ιMulti_family_eq_coe_comp {I : Type*} [LinearOrder I] (v : I -> M) :
@@ -134,7 +134,7 @@ lemma ιMulti_family_apply_coe
 
 中文:
 引理 ιMulti_family_apply_coe
-  结论: {I : 类型} [LinearOrder I] (v : I -> M)
+  结论: {I : 类型} [线性序 I] (v : I -> M)
   证明: rfl
 -/
 @[simp] lemma ιMulti_family_apply_coe {I : Type*} [LinearOrder I] (v : I -> M)
@@ -179,7 +179,7 @@ lemma ιMulti_span_fixedDegree_of_span_eq_top
 
 中文:
 引理 ιMulti_span_fixedDegree_of_span_eq_top
-  条件: {s : Set M} (hs : span R s = ⊤)
+  条件: {s : 集合 M} (hs : span R s = ⊤)
   证明: by
   apply le_antisymm
   · rw [span_le]
@@ -257,7 +257,7 @@ lemma ιMulti_span_of_span
 
 中文:
 引理 ιMulti_span_of_span
-  条件: {s : Set M} (hs : span R s = ⊤)
+  条件: {s : 集合 M} (hs : span R s = ⊤)
   证明: by
   apply LinearMap.map_injective (ker_subtype (⋀[R]^n M))
   simpa [LinearMap.map_span, Set.image_image] using ιMulti_span_fixedDegree_of_span_eq_top R n M hs
@@ -445,7 +445,7 @@ definition presentation
 
 中文:
 定义 presentation
-  签名: : Module.Presentation R (⋀[R]^n M)
+  签名: : 模.呈现 R (⋀[R]^n M)
   定义体: .ofIsPresentation (presentation.isPresentationCore R n M).isPresentation
 
 Depends on / 依赖: isPresentation, isPresentationCore, ofIsPresentation, presentation, presentation.isPresentationCore
@@ -493,7 +493,7 @@ definition alternatingMapLinearEquiv
 
 中文:
 定义 alternatingMapLinearEquiv
-  签名: : (M [⋀^Fin n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N
+  签名: : (M [⋀^有限集 n]->ₗ[R] N) ≃ₗ[R] ⋀[R]^n M ->ₗ[R] N
   定义体: LinearEquiv.symm
     (Equiv.toLinearEquiv
       ((presentation R n M).linearMapEquiv.trans presentation.relationsSolutionEquiv)
@@ -528,7 +528,7 @@ lemma alternatingMapLinearEquiv_comp_ιMulti
 
 中文:
 引理 alternatingMapLinearEquiv_comp_ιMulti
-  条件: (f : M [⋀^Fin n]->ₗ[R] N)
+  条件: (f : M [⋀^有限集 n]->ₗ[R] N)
   证明: by
   obtain ⟨φ, rfl⟩ := alternatingMapLinearEquiv.symm.surjective f
   dsimp [alternatingMapLinearEquiv]
@@ -559,7 +559,7 @@ lemma alternatingMapLinearEquiv_apply_ιMulti
 
 中文:
 引理 alternatingMapLinearEquiv_apply_ιMulti
-  条件: (f : M [⋀^Fin n]->ₗ[R] N) (a : Fin n -> M)
+  条件: (f : M [⋀^有限集 n]->ₗ[R] N) (a : 有限集 n -> M)
   证明: DFunLike.congr_fun (alternatingMapLinearEquiv_comp_ιMulti f) a
 
 @[simp]
@@ -585,7 +585,7 @@ lemma alternatingMapLinearEquiv_symm_apply
 
 中文:
 引理 alternatingMapLinearEquiv_symm_apply
-  条件: (F : ⋀[R]^n M ->ₗ[R] N) (m : Fin n -> M)
+  条件: (F : ⋀[R]^n M ->ₗ[R] N) (m : 有限集 n -> M)
   证明: by
   obtain ⟨f, rfl⟩ := alternatingMapLinearEquiv.surjective F
   simp only [LinearEquiv.symm_apply_apply, alternatingMapLinearEquiv_comp_ιMulti]
@@ -638,7 +638,7 @@ lemma alternatingMapLinearEquiv_comp
 
 中文:
 引理 alternatingMapLinearEquiv_comp
-  条件: (g : N ->ₗ[R] N') (f : M [⋀^Fin n]->ₗ[R] N)
+  条件: (g : N ->ₗ[R] N') (f : M [⋀^有限集 n]->ₗ[R] N)
   证明: by
   ext
   simp only [alternatingMapLinearEquiv_comp_ιMulti, LinearMap.compAlternatingMap_apply,
@@ -735,7 +735,7 @@ theorem map_apply_ιMulti
 
 中文:
 定理 map_apply_ιMulti
-  条件: (f : M ->ₗ[R] N) (m : Fin n -> M)
+  条件: (f : M ->ₗ[R] N) (m : 有限集 n -> M)
   证明: by
   simp only [map, alternatingMapLinearEquiv_apply_ιMulti, AlternatingMap.compLinearMap_apply,
     Function.comp_def]
@@ -765,7 +765,7 @@ lemma map_comp_ιMulti_family
 
 中文:
 引理 map_comp_ιMulti_family
-  条件: {I : 类型} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N)
+  条件: {I : 类型} [线性序 I] (v : I -> M) (f : M ->ₗ[R] N)
   证明: by
   ext ⟨s, hs⟩
   simp only [ιMulti_family, Function.comp_apply, map_apply_ιMulti]
@@ -796,7 +796,7 @@ lemma map_apply_ιMulti_family
 
 中文:
 引理 map_apply_ιMulti_family
-  结论: {I : 类型} [LinearOrder I] (v : I -> M) (f : M ->ₗ[R] N)
+  结论: {I : 类型} [线性序 I] (v : I -> M) (f : M ->ₗ[R] N)
   证明: by
   simp only [ιMulti_family, map, alternatingMapLinearEquiv_apply_ιMulti]
   rfl
@@ -887,7 +887,7 @@ lemma map_injective_field
 
 中文:
 引理 map_injective_field
-  结论: {K : 类型} [Field K] [Module K M] [Module K N]
+  结论: {K : 类型} [域 K] [模 K M] [模 K N]
   证明: map_injective _ (f.exists_leftInverse_of_injective (LinearMap.ker_eq_bot.mpr hf)).choose_spec
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot.mpr, choose_spec, exists_leftInverse_of_injective, f.exists_leftInverse_of_injective, ker_eq_bot, map_injective
@@ -909,7 +909,7 @@ lemma map_surjective
 
 中文:
 引理 map_surjective
-  条件: {f : M ->ₗ[R] N} (hf : Surjective f)
+  条件: {f : M ->ₗ[R] N} (hf : 满射 f)
   证明: by
   rw [← LinearMap.range_eq_top]; rw [LinearMap.range_eq_map]; rw [← ιMulti_span]; rw [← ιMulti_span]; rw [Submodule.map_span]; rw [← Set.range_comp]; rw [← LinearMap.coe_compAlternatingMap]; rw [map_comp_ιMulti]; rw [AlternatingMap.coe_compLinearMap]; rw [Set.range_comp]
   conv_rhs => rw [← Set.i
@@ -996,7 +996,7 @@ lemma ιMulti_family_span_fixedDegree_of_span
 
 中文:
 引理 ιMulti_family_span_fixedDegree_of_span
-  结论: {I : 类型} [LinearOrder I] {v : I -> M}
+  结论: {I : 类型} [线性序 I] {v : I -> M}
   证明: by
   apply le_antisymm
   · rw [Submodule.span_le, Set.range_subset_iff]
@@ -1036,7 +1036,7 @@ lemma ιMulti_family_span_of_span
 
 中文:
 引理 ιMulti_family_span_of_span
-  结论: {I : 类型} [LinearOrder I]
+  结论: {I : 类型} [线性序 I]
   证明: by
   apply LinearMap.map_injective (Submodule.ker_subtype (⋀[R]^n M))
   rw [LinearMap.map_span]; rw [← Set.image_univ]; rw [Set.image_image]
@@ -1067,7 +1067,7 @@ lemma ιMulti_family_span
 
 中文:
 引理 ιMulti_family_span
-  条件: {I : 类型} [LinearOrder I] (v : I -> M)
+  条件: {I : 类型} [线性序 I] (v : I -> M)
   证明: by
   have ⟨f, hf⟩ : exists f : I -> Submodule.span R (Set.range v), Submodule.subtype _ ∘ f = v :=
     ⟨fun i => ⟨v i, Submodule.subset_span (Set.mem_range_self i)⟩, rfl⟩
@@ -1137,7 +1137,7 @@ lemma zeroEquiv_ιMulti
 
 中文:
 引理 zeroEquiv_ιMulti
-  条件: (f : Fin 0 -> M)
+  条件: (f : 有限集 0 -> M)
   证明: by
   simp [zeroEquiv]
 
@@ -1224,7 +1224,7 @@ lemma oneEquiv_ιMulti
 
 中文:
 引理 oneEquiv_ιMulti
-  条件: (f : Fin 1 -> M)
+  条件: (f : 有限集 1 -> M)
   证明: by
   simp [oneEquiv]
 

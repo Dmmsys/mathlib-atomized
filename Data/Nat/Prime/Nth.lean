@@ -29,7 +29,7 @@ theorem nth_prime_zero_eq_two
 
 中文:
 定理 nth_prime_zero_eq_two
-  结论: nth Prime 0 = 2
+  结论: nth 素 0 = 2
   证明: nth_count prime_two
 
 @[simp]
@@ -51,7 +51,7 @@ theorem nth_prime_one_eq_three
 
 中文:
 定理 nth_prime_one_eq_three
-  结论: nth 自然数.Prime 1 = 3
+  结论: nth 自然数.素 1 = 3
   证明: nth_count prime_three
 
 @[simp]
@@ -73,7 +73,7 @@ theorem nth_prime_two_eq_five
 
 中文:
 定理 nth_prime_two_eq_five
-  结论: nth 自然数.Prime 2 = 5
+  结论: nth 自然数.素 2 = 5
   证明: nth_count prime_five
 
 @[simp]
@@ -95,7 +95,7 @@ theorem nth_prime_three_eq_seven
 
 中文:
 定理 nth_prime_three_eq_seven
-  结论: nth 自然数.Prime 3 = 7
+  结论: nth 自然数.素 3 = 7
   证明: nth_count prime_seven
 
 @[simp]
@@ -115,7 +115,7 @@ theorem nth_prime_four_eq_eleven
 
 中文:
 定理 nth_prime_four_eq_eleven
-  结论: nth 自然数.Prime 4 = 11
+  结论: nth 自然数.素 4 = 11
   证明: nth_count prime_eleven
 
 Depends on / 依赖: nth_count, prime_eleven

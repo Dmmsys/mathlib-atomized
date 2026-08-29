@@ -70,7 +70,7 @@ lemma coversTop_iff_of_isTerminal
 
 中文:
 引理 coversTop_iff_of_isTerminal
-  结论: (X : C) (hX : IsTerminal X)
+  结论: (X : C) (hX : 是终止 X)
   证明: by
   constructor
   · tauto
@@ -127,7 +127,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: (F : Sheaf J A) {c : Cone F.1} (hc : IsLimit c) {X : A} {f g : X ⟶ c.pt}
+  结论: (F : 层 J A) {c : 锥 F.1} (hc : 是极限 c) {X : A} {f g : X ⟶ c.pt}
   证明: by
   refine hc.hom_ext (fun Z => F.2.hom_ext (hY.cover Z.unop) _ _ ?_)
   rintro ⟨W, a, ⟨i, ⟨b⟩⟩⟩
@@ -157,7 +157,7 @@ lemma sections_ext
 
 中文:
 引理 sections_ext
-  结论: (F : Sheaf J 类型) {x y : F.1.sections}
+  结论: (F : 层 J 类型) {x y : F.1.sections}
   证明: by
   ext W
   apply (((isSheaf_iff_isSheaf_of_type _ _).1 F.2).isSeparated _ (hY W.unop)).ext
@@ -309,8 +309,8 @@ lemma existsUnique_section
       have h
 
 中文:
-引理 existsUnique_section
-  条件: (hx : x.IsCompatible) (hY : J.CoversTop Y) (hF : IsSheaf J F)
+引理 存在Unique_section
+  条件: (hx : x.IsCompatible) (hY : J.CoversTop Y) (hF : 是层 J F)
   证明: by
   have H := (isSheaf_iff_isSheaf_of_type _ _).1 hF
   apply existsUnique_of_exists_of_unique
@@ -383,7 +383,7 @@ lemma section_apply
 中文:
 引理 section_apply
   条件: (i : I)
-  结论: (hx.section_ hY hF).1 (Opposite.op (Y i)) = x i
+  结论: (hx.section_ hY hF).1 (对偶.op (Y i)) = x i
   证明: (hx.existsUnique_section hY hF).choose_spec.1 i
 
 Depends on / 依赖: choose_spec, existsUnique_section, hx.existsUnique_section

@@ -31,7 +31,7 @@ definition List.Vector
   body: { l : List α // l.length = n }
 
 中文:
-定义 List.Vector
+定义 列表.Vector
   签名: (α : 类型u) (n : 自然数)
   定义体: { l : List α // l.length = n }
 
@@ -226,7 +226,7 @@ definition get
 
 中文:
 定义 get
-  签名: (l : Vector α n) (i : Fin n)
+  签名: (l : Vector α n) (i : 有限集 n)
   定义体: l.1.get i.cast l.2.symm
 
 Depends on / 依赖: i.cast
@@ -266,7 +266,7 @@ definition elim
 
 中文:
 定义 elim
-  签名: {α} {C : 对任意 {n}, Vector α n -> Sort u}
+  签名: {α} {C : 对任意 {n}, Vector α n -> 类型层 u}
 -/
 def elim {α} {C : forall {n}, Vector α n -> Sort u}
     (H : forall l : List α, C ⟨l, rfl⟩) {n : Nat} : forall v : Vector α n, C v
@@ -428,7 +428,7 @@ definition eraseIdx
 
 中文:
 定义 eraseIdx
-  签名: (i : Fin n)
+  签名: (i : 有限集 n)
 -/
 def eraseIdx (i : Fin n) : Vector α n -> Vector α (n - 1)
   | ⟨l, p⟩ => ⟨List.eraseIdx l i.1, by rw [l.length_eraseIdx_of_lt] <;> rw [p]; exact i.2⟩
@@ -442,7 +442,7 @@ definition ofFn
 
 中文:
 定义 ofFn
-  签名: : 对任意 {n}, (Fin n -> α) -> Vector α n
+  签名: : 对任意 {n}, (有限集 n -> α) -> Vector α n
 -/
 def ofFn : forall {n}, (Fin n -> α) -> Vector α n
   | 0, _ => nil
@@ -603,8 +603,8 @@ theorem toList_mk
 
 中文:
 定理 toList_mk
-  条件: (v : List α) (P : List.length v = n)
-  结论: toList (Subtype.mk v P) = v
+  条件: (v : 列表 α) (P : 列表.length v = n)
+  结论: toList (子类型.mk v P) = v
   证明: rfl
 -/
 theorem toList_mk (v : List α) (P : List.length v = n) : toList (Subtype.mk v P) = v :=
@@ -622,7 +622,7 @@ theorem toList_nil
 
 中文:
 定理 toList_nil
-  结论: toList nil = @List.nil α
+  结论: toList nil = @列表.nil α
   证明: rfl
 -/
 theorem toList_nil : toList nil = @List.nil α :=
@@ -705,7 +705,7 @@ theorem toList_drop
 中文:
 定理 toList_drop
   条件: {n m : 自然数} (v : Vector α m)
-  结论: toList (drop n v) = List.drop n (toList v)
+  结论: toList (drop n v) = 列表.drop n (toList v)
   证明: by
   cases v
   rfl
@@ -730,7 +730,7 @@ theorem toList_take
 中文:
 定理 toList_take
   条件: {n m : 自然数} (v : Vector α m)
-  结论: toList (take n v) = List.take n (toList v)
+  结论: toList (take n v) = 列表.take n (toList v)
   证明: by
   cases v
   rfl

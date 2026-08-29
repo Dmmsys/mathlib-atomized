@@ -50,7 +50,7 @@ theorem left_div_gcd_ne_zero
 中文:
 定理 left_div_gcd_ne_zero
   条件: {p q : R} (hp : p != 0)
-  结论: p / GCDMonoid.gcd p q != 0
+  结论: p / 最大公约数幺半群.最大公约数 p q != 0
   证明: by
   obtain ⟨r, hr⟩ := GCDMonoid.gcd_dvd_left p q
   obtain ⟨pq0, r0⟩ : GCDMonoid.gcd p q != 0 ∧ r != 0 := mul_ne_zero_iff.mp (hr ▸ hp)
@@ -84,7 +84,7 @@ theorem right_div_gcd_ne_zero
 中文:
 定理 right_div_gcd_ne_zero
   条件: {p q : R} (hq : q != 0)
-  结论: q / GCDMonoid.gcd p q != 0
+  结论: q / 最大公约数幺半群.最大公约数 p q != 0
   证明: by
   obtain ⟨r, hr⟩ := GCDMonoid.gcd_dvd_right p q
   obtain ⟨pq0, r0⟩ : GCDMonoid.gcd p q != 0 ∧ r != 0 := mul_ne_zero_iff.mp (hr ▸ hq)
@@ -145,7 +145,7 @@ theorem isCoprime_div_gcd_div_gcd_of_gcd_ne_zero
 
 中文:
 定理 isCoprime_div_gcd_div_gcd_of_gcd_ne_zero
-  条件: (hpq : GCDMonoid.gcd p q != 0)
+  条件: (hpq : 最大公约数幺半群.最大公约数 p q != 0)
   证明: (gcd_isUnit_iff _ _).1
     isUnit_gcd_of_eq_mul_gcd
         (EuclideanDomain.mul_div_cancel' (hpq) <| gcd_dvd_left _ _).symm
@@ -183,7 +183,7 @@ definition gcdMonoid
 
 中文:
 定义 gcdMonoid
-  签名: (R) [EuclideanDomain R] [DecidableEq R]
+  签名: (R) [欧几里得整环 R] [DecidableEq R]
   定义体: gcd
   lcm := lcm
   gcd_dvd_left := gcd_dvd_left
@@ -240,7 +240,7 @@ theorem gcd_isUnit_iff
 中文:
 定理 gcd_isUnit_iff
   条件: [DecidableEq α] {x y : α}
-  结论: IsUnit (gcd x y) ↔ IsCoprime x y
+  结论: 是单位 (最大公约数 x y) ↔ IsCoprime x y
   证明: letI := EuclideanDomain.gcdMonoid α
   _root_.gcd_isUnit_iff x y
 
@@ -289,7 +289,7 @@ theorem dvd_or_coprime
 
 中文:
 定理 dvd_or_coprime
-  条件: (x y : α) (h : Irreducible x)
+  条件: (x y : α) (h : 不可约 x)
   证明: letI := Classical.decEq α
   letI := EuclideanDomain.gcdMonoid α
   _root_.dvd_or_isCoprime x y h

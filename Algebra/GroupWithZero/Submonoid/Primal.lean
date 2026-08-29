@@ -27,8 +27,8 @@ definition Submonoid.isPrimal
   one_mem' := isUnit_one.isPrimal
 
 中文:
-定义 Submonoid.isPrimal
-  签名: (M₀ : 类型) [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
+定义 子幺半群.isPrimal
+  签名: (M₀ : 类型) [带零交换幺半群 M₀] [是乘零消去 M₀]
   定义体: {a | IsPrimal a}
   mul_mem' := .mul
   one_mem' := isUnit_one.isPrimal

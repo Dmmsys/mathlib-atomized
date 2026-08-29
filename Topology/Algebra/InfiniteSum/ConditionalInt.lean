@@ -385,7 +385,7 @@ lemma _root_.HasProd.hasProd_symmetricIco_of_hasProd_symmetricIcc
 @[to_additive]
 
 中文:
-引理 _root_.HasProd.hasProd_symmetricIco_of_hasProd_symmetricIcc
+引理 _root_.有积类型.hasProd_symmetricIco_of_hasProd_symmetricIcc
   结论: {a : α}
   证明: by
   simp only [HasProd, tendsto_map'_iff, symmetricIcc_eq_map_Icc_nat,
@@ -443,7 +443,7 @@ lemma tprod_symmetricIcc_eq_tprod_symmetricIco
 
 中文:
 引理 tprod_symmetricIcc_eq_tprod_symmetricIco
-  结论: [T2Space α]
+  结论: [T2空间 α]
   证明: (hf.hasProd.hasProd_symmetricIco_of_hasProd_symmetricIcc hf2).tprod_eq
 
 @[to_additive]
@@ -469,7 +469,7 @@ lemma hasProd_symmetricIcc_iff
 
 中文:
 引理 hasProd_symmetricIcc_iff
-  结论: {α : 类型} [CommMonoid α] [TopologicalSpace α]
+  结论: {α : 类型} [交换幺半群 α] [拓扑空间 α]
   证明: by
   simp [HasProd, symmetricIcc, ← Nat.map_cast_int_atTop, comp_def]
 
@@ -496,7 +496,7 @@ lemma hasProd_symmetricIco_int_iff
 
 中文:
 引理 hasProd_symmetricIco_int_iff
-  结论: {α : 类型} [CommMonoid α] [TopologicalSpace α]
+  结论: {α : 类型} [交换幺半群 α] [拓扑空间 α]
   证明: by
   simp [HasProd, symmetricIco, ← Nat.map_cast_int_atTop, comp_def]
 
@@ -521,7 +521,7 @@ lemma hasProd_symmetricIoc_int_iff
 
 中文:
 引理 hasProd_symmetricIoc_int_iff
-  结论: {α : 类型} [CommMonoid α] [TopologicalSpace α]
+  结论: {α : 类型} [交换幺半群 α] [拓扑空间 α]
   证明: by
   simp [HasProd, symmetricIoc, ← Nat.map_cast_int_atTop, comp_def]
 
@@ -547,7 +547,7 @@ lemma _root_.Summable.tendsto_zero_of_even_summable_symmetricIcc
 
 中文:
 引理 _root_.Summable.tendsto_zero_of_even_summable_symmetricIcc
-  结论: {F : 类型} [NormedAddCommGroup F]
+  结论: {F : 类型} [赋范交换加群 F]
   证明: by
   rw [tendsto_zero_iff_norm_tendsto_zero]
   obtain ⟨L, hL⟩ := hf

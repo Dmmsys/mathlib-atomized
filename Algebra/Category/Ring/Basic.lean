@@ -39,12 +39,12 @@ structure SemiRingCat
     - [semiring : Semiring carrier]
 
 中文:
-结构 SemiRingCat
+结构 Semi环范畴
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [semiring : Semiring carrier]
+    - [semiring : 半环 carrier]
 -/
 structure SemiRingCat where
   /-- The object in the category of semirings associated to a type equipped with the appropriate
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort SemiRingCat (类型u)
+  签名: CoeSort Semi环范畴 (类型u)
   定义体: ⟨SemiRingCat.carrier⟩
 
 Depends on / 依赖: SemiRingCat, SemiRingCat.carrier, carrier
@@ -102,7 +102,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (R : 类型u) [Semiring R]
+  条件: (R : 类型u) [半环 R]
   结论: (of R : 类型u) = R
   证明: rfl
 -/
@@ -120,7 +120,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (R : SemiRingCat.{u})
+  条件: (R : Semi环范畴.{u})
   结论: of R = R
   证明: rfl
 -/
@@ -140,8 +140,8 @@ structure Hom
     - hom' : R ->+* S
 
 中文:
-结构 Hom
-  参数: (R S : SemiRingCat.{u})
+结构 态射
+  参数: (R S : Semi环范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : R ->+* S
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category SemiRingCat
+  签名: 范畴 Semi环范畴
   定义体: Hom R S
   id R := ⟨RingHom.id R⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} SemiRingCat (fun R S => R ->+* S)
+  签名: 余ncrete范畴.{u} Semi环范畴 (fun R S => R ->+* S)
   定义体: Hom.hom'
   ofHom f := ⟨f⟩
 
@@ -207,8 +207,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := SemiRingCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {R S : SemiRingCat.{u}} (f : Hom R S)
+缩写 态射.hom
+  签名: {R S : Semi环范畴.{u}} (f : 态射 R S)
   定义体: ConcreteCategory.hom (C := SemiRingCat) f
 -/
 abbrev Hom.hom {R S : SemiRingCat.{u}} (f : Hom R S) :=
@@ -224,7 +224,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {R S : 类型u} [Semiring R] [Semiring S] (f : R ->+* S)
+  签名: {R S : 类型u} [半环 R] [半环 S] (f : R ->+* S)
   定义体: ConcreteCategory.ofHom (C := SemiRingCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, SemiRingCat
@@ -243,8 +243,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (R S : SemiRingCat) (f : Hom R S)
+定义 态射.Simps.hom
+  签名: (R S : Semi环范畴) (f : 态射 R S)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -270,8 +270,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {R : SemiRingCat}
-  结论: (𝟙 R : R ⟶ R).hom = RingHom.id R
+  条件: {R : Semi环范畴}
+  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
   证明: rfl
 -/
 lemma hom_id {R : SemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
@@ -288,7 +288,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (R : SemiRingCat) (r : R)
+  条件: (R : Semi环范畴) (r : R)
   证明: by simp
 
 @[simp]
@@ -307,7 +307,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : Semi环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) :
@@ -325,7 +325,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {R S T : SemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
+  条件: {R S T : Semi环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
   证明: by simp
 
 @[ext]
@@ -347,7 +347,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R S : SemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
+  条件: {R S : Semi环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -372,7 +372,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {R S : 类型u} [Semiring R] [Semiring S] (f : R ->+* S)
+  条件: {R S : 类型u} [半环 R] [半环 S] (f : R ->+* S)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -393,7 +393,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {R S : SemiRingCat} (f : R ⟶ S)
+  条件: {R S : Semi环范畴} (f : R ⟶ S)
   证明: rfl
 
 @[simp]
@@ -415,8 +415,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {R : 类型u} [Semiring R]
-  结论: ofHom (RingHom.id R) = 𝟙 (of R)
+  条件: {R : 类型u} [半环 R]
+  结论: ofHom (环态射.id R) = 𝟙 (of R)
   证明: rfl
 
 @[simp]
@@ -434,7 +434,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {R S T : 类型u} [Semiring R] [Semiring S] [Semiring T]
+  结论: {R S T : 类型u} [半环 R] [半环 S] [半环 T]
   证明: rfl
 -/
 lemma ofHom_comp {R S T : Type u} [Semiring R] [Semiring S] [Semiring T]
@@ -452,7 +452,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {R S : 类型u} [Semiring R] [Semiring S]
+  结论: {R S : 类型u} [半环 R] [半环 S]
   证明: rfl
 -/
 lemma ofHom_apply {R S : Type u} [Semiring R] [Semiring S]
@@ -470,7 +470,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {R S : SemiRingCat} (e : R ≅ S) (r : R)
+  条件: {R S : Semi环范畴} (e : R ≅ S) (r : R)
   结论: e.inv (e.hom r) = r
   证明: by
   simp
@@ -490,7 +490,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {R S : SemiRingCat} (e : R ≅ S) (s : S)
+  条件: {R S : Semi环范畴} (e : R ≅ S) (s : S)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SemiRingCat
+  签名: 可居 Semi环范畴
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited SemiRingCat :=
@@ -536,7 +536,7 @@ instance hasForgetToMonCat
 
 中文:
 实例 hasForgetToMonCat
-  签名: : HasForget₂ SemiRingCat MonCat where
+  签名: : 有Forget₂ Semi环范畴 幺半群范畴 where
   定义体: { obj := fun R => MonCat.of R
       map := fun f => MonCat.ofHom f.hom.toMonoidHom }
 
@@ -558,7 +558,7 @@ instance hasForgetToAddCommMonCat
 
 中文:
 实例 hasForgetToAddCommMonCat
-  签名: : HasForget₂ SemiRingCat AddCommMonCat where
+  签名: : 有Forget₂ Semi环范畴 加法交换幺半群范畴 where
   定义体: { obj := fun R => AddCommMonCat.of R
       map := fun f => AddCommMonCat.ofHom f.hom.toAddMonoidHom }
 
@@ -579,7 +579,7 @@ lemma forget₂_monCat_map
 
 中文:
 引理 forget₂_monCat_map
-  条件: {R S : SemiRingCat} (f : R ⟶ S) (x)
+  条件: {R S : Semi环范畴} (f : R ⟶ S) (x)
   证明: rfl
 -/
 @[simp] lemma forget₂_monCat_map {R S : SemiRingCat} (f : R ⟶ S) (x) :
@@ -595,7 +595,7 @@ lemma forget₂_addCommMonCat_map
 
 中文:
 引理 forget₂_addCommMonCat_map
-  条件: {R S : SemiRingCat} (f : R ⟶ S) (x)
+  条件: {R S : Semi环范畴} (f : R ⟶ S) (x)
   证明: rfl
 -/
 @[simp] lemma forget₂_addCommMonCat_map {R S : SemiRingCat} (f : R ⟶ S) (x) :
@@ -613,8 +613,8 @@ definition _root_.RingEquiv.toSemiRingCatIso
   inv := ofHom e.symm
 
 中文:
-定义 _root_.RingEquiv.toSemiRingCatIso
-  签名: {R S : 类型u} [Semiring R] [Semiring S] (e : R ≃+* S)
+定义 _root_.环等价.toSemiRingCatIso
+  签名: {R S : 类型u} [半环 R] [半环 S] (e : R ≃+* S)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -637,7 +637,7 @@ instance forgetReflectIsos
 
 中文:
 实例 forgetReflectIsos
-  签名: : (forget SemiRingCat).ReflectsIsomorphisms where
+  签名: : (forget Semi环范畴).反映同构 where
   定义体: by
     let i := asIso ((forget SemiRingCat).map f)
     let ff : X ->+* Y := f.hom
@@ -667,12 +667,12 @@ structure RingCat
     - [ring : Ring carrier]
 
 中文:
-结构 RingCat
+结构 环范畴
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [ring : Ring carrier]
+    - [ring : 环 carrier]
 -/
 structure RingCat where
   /-- The object in the category of rings associated to a type equipped with the appropriate
@@ -709,7 +709,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort RingCat (类型u)
+  签名: CoeSort 环范畴 (类型u)
   定义体: ⟨RingCat.carrier⟩
 
 Depends on / 依赖: RingCat, RingCat.carrier, carrier
@@ -730,7 +730,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (R : 类型u) [Ring R]
+  条件: (R : 类型u) [环 R]
   结论: (of R : 类型u) = R
   证明: rfl
 -/
@@ -748,7 +748,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (R : RingCat.{u})
+  条件: (R : 环范畴.{u})
   结论: of R = R
   证明: rfl
 -/
@@ -768,8 +768,8 @@ structure Hom
     - hom' : R ->+* S
 
 中文:
-结构 Hom
-  参数: (R S : RingCat.{u})
+结构 态射
+  参数: (R S : 环范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : R ->+* S
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category RingCat
+  签名: 范畴 环范畴
   定义体: Hom R S
   id R := ⟨RingHom.id R⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -816,7 +816,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} RingCat (fun R S => R ->+* S)
+  签名: 余ncrete范畴.{u} 环范畴 (fun R S => R ->+* S)
   定义体: Hom.hom'
   ofHom f := ⟨f⟩
 
@@ -835,8 +835,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := RingCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {R S : RingCat.{u}} (f : Hom R S)
+缩写 态射.hom
+  签名: {R S : 环范畴.{u}} (f : 态射 R S)
   定义体: ConcreteCategory.hom (C := RingCat) f
 -/
 abbrev Hom.hom {R S : RingCat.{u}} (f : Hom R S) :=
@@ -852,7 +852,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {R S : 类型u} [Ring R] [Ring S] (f : R ->+* S)
+  签名: {R S : 类型u} [环 R] [环 S] (f : R ->+* S)
   定义体: ConcreteCategory.ofHom (C := RingCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, RingCat
@@ -871,8 +871,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (R S : RingCat) (f : Hom R S)
+定义 态射.Simps.hom
+  签名: (R S : 环范畴) (f : 态射 R S)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -898,8 +898,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {R : RingCat}
-  结论: (𝟙 R : R ⟶ R).hom = RingHom.id R
+  条件: {R : 环范畴}
+  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
   证明: rfl
 -/
 lemma hom_id {R : RingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
@@ -916,7 +916,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (R : RingCat) (r : R)
+  条件: (R : 环范畴) (r : R)
   证明: by simp
 
 @[simp]
@@ -935,7 +935,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) :
@@ -953,7 +953,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {R S T : RingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
+  条件: {R S T : 环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
   证明: by simp
 
 @[ext]
@@ -975,7 +975,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R S : RingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
+  条件: {R S : 环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -1000,7 +1000,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {R S : 类型u} [Ring R] [Ring S] (f : R ->+* S)
+  条件: {R S : 类型u} [环 R] [环 S] (f : R ->+* S)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -1021,7 +1021,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {R S : RingCat} (f : R ⟶ S)
+  条件: {R S : 环范畴} (f : R ⟶ S)
   证明: rfl
 
 @[simp]
@@ -1043,8 +1043,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {R : 类型u} [Ring R]
-  结论: ofHom (RingHom.id R) = 𝟙 (of R)
+  条件: {R : 类型u} [环 R]
+  结论: ofHom (环态射.id R) = 𝟙 (of R)
   证明: rfl
 
 @[simp]
@@ -1062,7 +1062,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {R S T : 类型u} [Ring R] [Ring S] [Ring T]
+  结论: {R S T : 类型u} [环 R] [环 S] [环 T]
   证明: rfl
 -/
 lemma ofHom_comp {R S T : Type u} [Ring R] [Ring S] [Ring T]
@@ -1080,7 +1080,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {R S : 类型u} [Ring R] [Ring S]
+  结论: {R S : 类型u} [环 R] [环 S]
   证明: rfl
 -/
 lemma ofHom_apply {R S : Type u} [Ring R] [Ring S]
@@ -1098,7 +1098,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {R S : RingCat} (e : R ≅ S) (r : R)
+  条件: {R S : 环范畴} (e : R ≅ S) (r : R)
   结论: e.inv (e.hom r) = r
   证明: by
   simp
@@ -1118,7 +1118,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {R S : RingCat} (e : R ≅ S) (s : S)
+  条件: {R S : 环范畴} (e : R ≅ S) (s : S)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -1136,7 +1136,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited RingCat
+  签名: 可居 环范畴
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited RingCat :=
@@ -1168,7 +1168,7 @@ instance hasForgetToSemiRingCat
 
 中文:
 实例 hasForgetToSemiRingCat
-  签名: : HasForget₂ RingCat SemiRingCat where
+  签名: : 有Forget₂ 环范畴 Semi环范畴 where
   定义体: { obj := fun R => SemiRingCat.of R
       map := fun f => SemiRingCat.ofHom f.hom }
 
@@ -1189,7 +1189,7 @@ lemma forget₂_map
 
 中文:
 引理 forget₂_map
-  条件: {R S : RingCat} (f : R ⟶ S) (x)
+  条件: {R S : 环范畴} (f : R ⟶ S) (x)
   证明: rfl
 -/
 @[simp] lemma forget₂_map {R S : RingCat} (f : R ⟶ S) (x) :
@@ -1224,7 +1224,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ RingCat SemiRingCat).Full
+  签名: (forget₂ 环范畴 Semi环范畴).满
   定义体: fullyFaithfulForget₂ToSemiRingCat.full
 
 Depends on / 依赖: ToSemiRingCat.full
@@ -1243,7 +1243,7 @@ instance hasForgetToAddCommGrp
 
 中文:
 实例 hasForgetToAddCommGrp
-  签名: : HasForget₂ RingCat AddCommGrpCat where
+  签名: : 有Forget₂ 环范畴 加法交换群范畴 where
   定义体: { obj := fun R => AddCommGrpCat.of R
       map := fun f => AddCommGrpCat.ofHom f.hom.toAddMonoidHom }
 
@@ -1266,8 +1266,8 @@ definition _root_.RingEquiv.toRingCatIso
   inv := ofHom e.symm
 
 中文:
-定义 _root_.RingEquiv.toRingCatIso
-  签名: {R S : 类型u} [Ring R] [Ring S] (e : R ≃+* S)
+定义 _root_.环等价.toRingCatIso
+  签名: {R S : 类型u} [环 R] [环 S] (e : R ≃+* S)
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -1290,7 +1290,7 @@ instance forgetReflectIsos
 
 中文:
 实例 forgetReflectIsos
-  签名: : (forget RingCat).ReflectsIsomorphisms where
+  签名: : (forget 环范畴).反映同构 where
   定义体: by
     let i := asIso ((forget RingCat).map f)
     let ff : X ->+* Y := f.hom
@@ -1320,12 +1320,12 @@ structure CommSemiRingCat
     - [commSemiring : CommSemiring carrier]
 
 中文:
-结构 CommSemiRingCat
+结构 交换Semi环范畴
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [commSemiring : CommSemiring carrier]
+    - [commSemiring : 交换半环 carrier]
 -/
 structure CommSemiRingCat where
   /-- The object in the category of commutative semirings associated to a type equipped with the
@@ -1362,7 +1362,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CommSemiRingCat) (类型u)
+  签名: CoeSort (交换Semi环范畴) (类型u)
   定义体: ⟨CommSemiRingCat.carrier⟩
 
 Depends on / 依赖: CommSemiRingCat, CommSemiRingCat.carrier, carrier
@@ -1383,7 +1383,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (R : 类型u) [CommSemiring R]
+  条件: (R : 类型u) [交换半环 R]
   结论: (of R : 类型u) = R
   证明: rfl
 -/
@@ -1401,7 +1401,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (R : CommSemiRingCat.{u})
+  条件: (R : 交换Semi环范畴.{u})
   结论: of R = R
   证明: rfl
 -/
@@ -1421,8 +1421,8 @@ structure Hom
     - hom' : R ->+* S
 
 中文:
-结构 Hom
-  参数: (R S : CommSemiRingCat.{u})
+结构 态射
+  参数: (R S : 交换Semi环范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : R ->+* S
@@ -1446,7 +1446,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category CommSemiRingCat
+  签名: 范畴 交换Semi环范畴
   定义体: Hom R S
   id R := ⟨RingHom.id R⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -1469,7 +1469,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} CommSemiRingCat (fun R S => R ->+* S)
+  签名: 余ncrete范畴.{u} 交换Semi环范畴 (fun R S => R ->+* S)
   定义体: Hom.hom'
   ofHom f := ⟨f⟩
 
@@ -1488,8 +1488,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommSemiRingCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {R S : CommSemiRingCat.{u}} (f : Hom R S)
+缩写 态射.hom
+  签名: {R S : 交换Semi环范畴.{u}} (f : 态射 R S)
   定义体: ConcreteCategory.hom (C := CommSemiRingCat) f
 -/
 abbrev Hom.hom {R S : CommSemiRingCat.{u}} (f : Hom R S) :=
@@ -1505,7 +1505,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {R S : 类型u} [CommSemiring R] [CommSemiring S] (f : R ->+* S)
+  签名: {R S : 类型u} [交换半环 R] [交换半环 S] (f : R ->+* S)
   定义体: ConcreteCategory.ofHom (C := CommSemiRingCat) f
 
 Depends on / 依赖: CommSemiRingCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -1524,8 +1524,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (R S : CommSemiRingCat) (f : Hom R S)
+定义 态射.Simps.hom
+  签名: (R S : 交换Semi环范畴) (f : 态射 R S)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -1551,8 +1551,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {R : CommSemiRingCat}
-  结论: (𝟙 R : R ⟶ R).hom = RingHom.id R
+  条件: {R : 交换Semi环范畴}
+  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
   证明: rfl
 -/
 lemma hom_id {R : CommSemiRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
@@ -1569,7 +1569,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (R : CommSemiRingCat) (r : R)
+  条件: (R : 交换Semi环范畴) (r : R)
   证明: by simp
 
 @[simp]
@@ -1588,7 +1588,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换Semi环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) :
@@ -1606,7 +1606,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {R S T : CommSemiRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
+  条件: {R S T : 交换Semi环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
   证明: by simp
 
 @[ext]
@@ -1628,7 +1628,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R S : CommSemiRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
+  条件: {R S : 交换Semi环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -1652,7 +1652,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {R S : 类型u} [CommSemiring R] [CommSemiring S] (f : R ->+* S)
+  条件: {R S : 类型u} [交换半环 R] [交换半环 S] (f : R ->+* S)
   证明: rfl
 
 @[simp]
@@ -1673,7 +1673,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {R S : CommSemiRingCat} (f : R ⟶ S)
+  条件: {R S : 交换Semi环范畴} (f : R ⟶ S)
   证明: rfl
 
 @[simp]
@@ -1695,8 +1695,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {R : 类型u} [CommSemiring R]
-  结论: ofHom (RingHom.id R) = 𝟙 (of R)
+  条件: {R : 类型u} [交换半环 R]
+  结论: ofHom (环态射.id R) = 𝟙 (of R)
   证明: rfl
 
 @[simp]
@@ -1714,7 +1714,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {R S T : 类型u} [CommSemiring R] [CommSemiring S] [CommSemiring T]
+  结论: {R S T : 类型u} [交换半环 R] [交换半环 S] [交换半环 T]
   证明: rfl
 -/
 lemma ofHom_comp {R S T : Type u} [CommSemiring R] [CommSemiring S] [CommSemiring T]
@@ -1732,7 +1732,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {R S : 类型u} [CommSemiring R] [CommSemiring S]
+  结论: {R S : 类型u} [交换半环 R] [交换半环 S]
   证明: rfl
 -/
 lemma ofHom_apply {R S : Type u} [CommSemiring R] [CommSemiring S]
@@ -1750,7 +1750,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {R S : CommSemiRingCat} (e : R ≅ S) (r : R)
+  条件: {R S : 交换Semi环范畴} (e : R ≅ S) (r : R)
   结论: e.inv (e.hom r) = r
   证明: by
   simp
@@ -1770,7 +1770,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {R S : CommSemiRingCat} (e : R ≅ S) (s : S)
+  条件: {R S : 交换Semi环范畴} (e : R ≅ S) (s : S)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -1788,7 +1788,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CommSemiRingCat
+  签名: 可居 交换Semi环范畴
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited CommSemiRingCat :=
@@ -1818,7 +1818,7 @@ instance hasForgetToSemiRingCat
 
 中文:
 实例 hasForgetToSemiRingCat
-  签名: : HasForget₂ CommSemiRingCat SemiRingCat where
+  签名: : 有Forget₂ 交换Semi环范畴 Semi环范畴 where
   定义体: { obj := fun R => ⟨R⟩
       map := fun f => ⟨f.hom⟩ }
 
@@ -1858,7 +1858,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommSemiRingCat SemiRingCat).Full
+  签名: (forget₂ 交换Semi环范畴 Semi环范畴).满
   定义体: fullyFaithfulForget₂ToSemiRingCat.full
 
 Depends on / 依赖: ToSemiRingCat.full
@@ -1877,7 +1877,7 @@ instance hasForgetToCommMonCat
 
 中文:
 实例 hasForgetToCommMonCat
-  签名: : HasForget₂ CommSemiRingCat CommMonCat where
+  签名: : 有Forget₂ 交换Semi环范畴 交换幺半群范畴 where
   定义体: { obj := fun R => CommMonCat.of R
       map := fun f => CommMonCat.ofHom f.hom.toMonoidHom }
 
@@ -1899,7 +1899,7 @@ definition _root_.RingEquiv.toCommSemiRingCatIso
   inv := ofHom e.symm
 
 中文:
-定义 _root_.RingEquiv.toCommSemiRingCatIso
+定义 _root_.环等价.toCommSemiRingCatIso
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -1923,7 +1923,7 @@ instance forgetReflectIsos
 
 中文:
 实例 forgetReflectIsos
-  签名: : (forget CommSemiRingCat).ReflectsIsomorphisms where
+  签名: : (forget 交换Semi环范畴).反映同构 where
   定义体: by
     let i := asIso ((forget CommSemiRingCat).map f)
     let ff : X ->+* Y := f.hom
@@ -1953,12 +1953,12 @@ structure CommRingCat
     - [commRing : CommRing carrier]
 
 中文:
-结构 CommRingCat
+结构 交换环范畴
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型u
-    - [commRing : CommRing carrier]
+    - [commRing : 交换环 carrier]
 -/
 structure CommRingCat where
   /-- The object in the category of commutative rings associated to a type equipped with the
@@ -1995,7 +1995,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CommRingCat (类型u)
+  签名: CoeSort 交换环范畴 (类型u)
   定义体: ⟨CommRingCat.carrier⟩
 
 Depends on / 依赖: CommRingCat, CommRingCat.carrier, carrier
@@ -2016,7 +2016,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   结论: (of R : 类型u) = R
   证明: rfl
 -/
@@ -2034,7 +2034,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   结论: of R = R
   证明: rfl
 -/
@@ -2054,8 +2054,8 @@ structure Hom
     - hom' : R ->+* S
 
 中文:
-结构 Hom
-  参数: (R S : CommRingCat.{u})
+结构 态射
+  参数: (R S : 交换环范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : R ->+* S
@@ -2079,7 +2079,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category CommRingCat
+  签名: 范畴 交换环范畴
   定义体: Hom R S
   id R := ⟨RingHom.id R⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -2102,7 +2102,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} CommRingCat (fun R S => R ->+* S)
+  签名: 余ncrete范畴.{u} 交换环范畴 (fun R S => R ->+* S)
   定义体: Hom.hom'
   ofHom f := ⟨f⟩
 
@@ -2121,8 +2121,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommRingCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {R S : CommRingCat.{u}} (f : Hom R S)
+缩写 态射.hom
+  签名: {R S : 交换环范畴.{u}} (f : 态射 R S)
   定义体: ConcreteCategory.hom (C := CommRingCat) f
 -/
 abbrev Hom.hom {R S : CommRingCat.{u}} (f : Hom R S) :=
@@ -2138,7 +2138,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {R S : 类型u} [CommRing R] [CommRing S] (f : R ->+* S)
+  签名: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: ConcreteCategory.ofHom (C := CommRingCat) f
 
 Depends on / 依赖: CommRingCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -2157,8 +2157,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (R S : CommRingCat) (f : Hom R S)
+定义 态射.Simps.hom
+  签名: (R S : 交换环范畴) (f : 态射 R S)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -2184,8 +2184,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {R : CommRingCat}
-  结论: (𝟙 R : R ⟶ R).hom = RingHom.id R
+  条件: {R : 交换环范畴}
+  结论: (𝟙 R : R ⟶ R).hom = 环态射.id R
   证明: rfl
 -/
 lemma hom_id {R : CommRingCat} : (𝟙 R : R ⟶ R).hom = RingHom.id R := rfl
@@ -2202,7 +2202,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (R : CommRingCat) (r : R)
+  条件: (R : 交换环范畴) (r : R)
   证明: by simp
 
 @[simp]
@@ -2221,7 +2221,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 
 Depends on / 依赖: Finite
@@ -2241,7 +2241,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {R S T : CommRingCat} (f : R ⟶ S) (g : S ⟶ T) (r : R)
+  条件: {R S T : 交换环范畴} (f : R ⟶ S) (g : S ⟶ T) (r : R)
   证明: by simp
 
 @[ext]
@@ -2263,7 +2263,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {R S : CommRingCat} {f g : R ⟶ S} (hf : f.hom = g.hom)
+  条件: {R S : 交换环范畴} {f g : R ⟶ S} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -2288,7 +2288,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {R S : 类型u} [CommRing R] [CommRing S] (f : R ->+* S)
+  条件: {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -2309,7 +2309,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {R S : CommRingCat} (f : R ⟶ S)
+  条件: {R S : 交换环范畴} (f : R ⟶ S)
   证明: rfl
 
 @[simp]
@@ -2331,8 +2331,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {R : 类型u} [CommRing R]
-  结论: ofHom (RingHom.id R) = 𝟙 (of R)
+  条件: {R : 类型u} [交换环 R]
+  结论: ofHom (环态射.id R) = 𝟙 (of R)
   证明: rfl
 
 @[simp]
@@ -2350,7 +2350,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {R S T : 类型u} [CommRing R] [CommRing S] [CommRing T]
+  结论: {R S T : 类型u} [交换环 R] [交换环 S] [交换环 T]
   证明: rfl
 -/
 lemma ofHom_comp {R S T : Type u} [CommRing R] [CommRing S] [CommRing T]
@@ -2368,7 +2368,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {R S : 类型u} [CommRing R] [CommRing S]
+  结论: {R S : 类型u} [交换环 R] [交换环 S]
   证明: rfl
 -/
 lemma ofHom_apply {R S : Type u} [CommRing R] [CommRing S]
@@ -2386,7 +2386,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {R S : CommRingCat} (e : R ≅ S) (r : R)
+  条件: {R S : 交换环范畴} (e : R ≅ S) (r : R)
   结论: e.inv (e.hom r) = r
   证明: by
   simp
@@ -2406,7 +2406,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {R S : CommRingCat} (e : R ≅ S) (s : S)
+  条件: {R S : 交换环范畴} (e : R ≅ S) (s : S)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -2427,7 +2427,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CommRingCat
+  签名: 可居 交换环范畴
   定义体: ⟨of PUnit⟩
 
 @[deprecated (since := "2026-02-16")] alias forget_obj := CategoryTheory.forget_obj
@@ -2463,7 +2463,7 @@ instance hasForgetToRingCat
 
 中文:
 实例 hasForgetToRingCat
-  签名: : HasForget₂ CommRingCat RingCat where
+  签名: : 有Forget₂ 交换环范畴 环范畴 where
   定义体: { obj := fun R => RingCat.of R
       map := fun f => RingCat.ofHom f.hom }
 
@@ -2503,7 +2503,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommRingCat RingCat).Full
+  签名: (forget₂ 交换环范畴 环范畴).满
   定义体: fullyFaithfulForget₂ToRingCat.full
 
 Depends on / 依赖: ToRingCat.full
@@ -2521,7 +2521,7 @@ lemma forgetToRingCat_map_hom
 
 中文:
 引理 forgetToRingCat_map_hom
-  条件: {R S : CommRingCat} (f : R ⟶ S)
+  条件: {R S : 交换环范畴} (f : R ⟶ S)
   证明: rfl
 -/
 @[simp] lemma forgetToRingCat_map_hom {R S : CommRingCat} (f : R ⟶ S) :
@@ -2538,7 +2538,7 @@ lemma forgetToRingCat_obj
 
 中文:
 引理 forgetToRingCat_obj
-  条件: {R : CommRingCat}
+  条件: {R : 交换环范畴}
   证明: rfl
 -/
 @[simp] lemma forgetToRingCat_obj {R : CommRingCat} :
@@ -2558,7 +2558,7 @@ instance hasForgetToAddCommMonCat
 
 中文:
 实例 hasForgetToAddCommMonCat
-  签名: : HasForget₂ CommRingCat CommSemiRingCat where
+  签名: : 有Forget₂ 交换环范畴 交换Semi环范畴 where
   定义体: { obj := fun R => CommSemiRingCat.of R
       map := fun f => CommSemiRingCat.ofHom f.hom }
 
@@ -2583,7 +2583,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ CommRingCat CommMonCat
+  签名: 有Forget₂ 交换环范畴 交换幺半群范畴
   定义体: { obj M := .of M, map f := CommMonCat.ofHom f.hom }
   forget_comp := rfl
 
@@ -2604,7 +2604,7 @@ definition _root_.RingEquiv.toCommRingCatIso
   inv := ofHom e.symm
 
 中文:
-定义 _root_.RingEquiv.toCommRingCatIso
+定义 _root_.环等价.toCommRingCatIso
   定义体: ofHom e
   inv := ofHom e.symm
 -/
@@ -2628,7 +2628,7 @@ instance forgetReflectIsos
 
 中文:
 实例 forgetReflectIsos
-  签名: : (forget CommRingCat).ReflectsIsomorphisms where
+  签名: : (forget 交换环范畴).反映同构 where
   定义体: by
     let i := asIso ((forget CommRingCat).map f)
     let ff : X ->+* Y := f.hom
@@ -2658,7 +2658,7 @@ definition semiRingCatIsoToRingEquiv
 
 中文:
 定义 semiRingCatIsoToRingEquiv
-  签名: {R S : SemiRingCat.{u}} (e : R ≅ S)
+  签名: {R S : Semi环范畴.{u}} (e : R ≅ S)
   定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
@@ -2676,7 +2676,7 @@ definition ringCatIsoToRingEquiv
 
 中文:
 定义 ringCatIsoToRingEquiv
-  签名: {R S : RingCat.{u}} (e : R ≅ S)
+  签名: {R S : 环范畴.{u}} (e : R ≅ S)
   定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
@@ -2694,7 +2694,7 @@ definition commSemiRingCatIsoToRingEquiv
 
 中文:
 定义 commSemiRingCatIsoToRingEquiv
-  签名: {R S : CommSemiRingCat.{u}} (e : R ≅ S)
+  签名: {R S : 交换Semi环范畴.{u}} (e : R ≅ S)
   定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
@@ -2712,7 +2712,7 @@ definition commRingCatIsoToRingEquiv
 
 中文:
 定义 commRingCatIsoToRingEquiv
-  签名: {R S : CommRingCat.{u}} (e : R ≅ S)
+  签名: {R S : 交换环范畴.{u}} (e : R ≅ S)
   定义体: RingEquiv.ofRingHom e.hom.hom e.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofRingHom, e.hom.hom, e.inv.hom, ofRingHom
@@ -2730,7 +2730,7 @@ lemma semiRingCatIsoToRingEquiv_toRingHom
 
 中文:
 引理 semiRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : SemiRingCat.{u}} (e : R ≅ S)
+  条件: {R S : Semi环范畴.{u}} (e : R ≅ S)
   证明: rfl
 
 Depends on / 依赖: free.generatingSections_, infer_instance
@@ -2748,7 +2748,7 @@ lemma ringCatIsoToRingEquiv_toRingHom
 
 中文:
 引理 ringCatIsoToRingEquiv_toRingHom
-  条件: {R S : RingCat.{u}} (e : R ≅ S)
+  条件: {R S : 环范畴.{u}} (e : R ≅ S)
   证明: rfl
 
 Depends on / 依赖: IsLocallyFreeData, localGeneratorsData, localGeneratorsData.IsLocallyFreeData
@@ -2766,7 +2766,7 @@ lemma commSemiRingCatIsoToRingEquiv_toRingHom
 
 中文:
 引理 commSemiRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : CommSemiRingCat.{u}} (e : R ≅ S)
+  条件: {R S : 交换Semi环范畴.{u}} (e : R ≅ S)
   证明: rfl
 
 Depends on / 依赖: IsLocallyFree
@@ -2784,7 +2784,7 @@ lemma commRingCatIsoToRingEquiv_toRingHom
 
 中文:
 引理 commRingCatIsoToRingEquiv_toRingHom
-  条件: {R S : CommRingCat.{u}} (e : R ≅ S)
+  条件: {R S : 交换环范畴.{u}} (e : R ≅ S)
   证明: rfl
 -/
 @[simp] lemma commRingCatIsoToRingEquiv_toRingHom {R S : CommRingCat.{u}} (e : R ≅ S) :
@@ -2801,8 +2801,8 @@ lemma RingCat.forget_map_apply
   proof: rfl
 
 中文:
-引理 RingCat.forget_map_apply
-  结论: {R S : RingCat} (f : R ⟶ S)
+引理 环范畴.forget_map_apply
+  结论: {R S : 环范畴} (f : R ⟶ S)
   证明: rfl
 -/
 lemma RingCat.forget_map_apply {R S : RingCat} (f : R ⟶ S)
@@ -2819,8 +2819,8 @@ lemma CommRingCat.forget_map_apply
   proof: rfl
 
 中文:
-引理 CommRingCat.forget_map_apply
-  结论: {R S : CommRingCat} (f : R ⟶ S)
+引理 交换环范畴.forget_map_apply
+  结论: {R S : 交换环范畴} (f : R ⟶ S)
   证明: rfl
 
 Depends on / 依赖: IsLocallyFree, IsQuasicoherent, M.IsLocallyFree, M.IsQuasicoherent, SheafOfModules

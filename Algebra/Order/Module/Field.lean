@@ -248,7 +248,7 @@ theorem smul_ne_zero_of_pos_of_ne_zero
 
 中文:
 定理 smul_ne_zero_of_pos_of_ne_zero
-  条件: [Preorder α] (ha : 0 < a) (hb : b != 0)
+  条件: [预序 α] (ha : 0 < a) (hb : b != 0)
   结论: a • b != 0
   证明: smul_ne_zero ha.ne' hb
 
@@ -268,7 +268,7 @@ theorem smul_ne_zero_of_ne_zero_of_pos
 
 中文:
 定理 smul_ne_zero_of_ne_zero_of_pos
-  条件: [Preorder β] (ha : a != 0) (hb : 0 < b)
+  条件: [预序 β] (ha : a != 0) (hb : 0 < b)
   结论: a • b != 0
   证明: smul_ne_zero ha hb.ne'
 

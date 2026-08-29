@@ -55,7 +55,7 @@ definition findConstValOfKind?
 
 中文:
 定义 findConstValOfKind?
-  签名: (env : Environment) (p : ConstantKind -> 布尔) (decl : Name)
+  签名: (env : Environment) (p : ConstantKind -> 布尔值) (decl : Name)
   定义体: do
   let info ← env.findAsync? decl skipRealize
   if p info.kind then info.toConstantVal else none

@@ -47,7 +47,7 @@ theorem bubble_sort_induction'
 
 中文:
 定理 bubble_sort_induction'
-  结论: {n : 自然数} {α : 类型} [LinearOrder α] {f : Fin n -> α}
+  结论: {n : 自然数} {α : 类型} [线性序 α] {f : 有限集 n -> α}
   证明: by
   let := @Preorder.lift _ (Lex (Fin n -> α)) _ fun σ : Equiv.Perm (Fin n) => toLex (f ∘ σ)
   refine
@@ -79,7 +79,7 @@ theorem bubble_sort_induction
 
 中文:
 定理 bubble_sort_induction
-  结论: {n : 自然数} {α : 类型} [LinearOrder α] {f : Fin n -> α}
+  结论: {n : 自然数} {α : 类型} [线性序 α] {f : 有限集 n -> α}
   证明: bubble_sort_induction' hf fun _ => h _
 
 Depends on / 依赖: bubble_sort_induction

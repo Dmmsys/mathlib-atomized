@@ -53,11 +53,11 @@ class IsGalois
     - quotientByAutTerminal : Nonempty (IsTerminal <| colimit <| SingleObj.functor <| Aut.toEnd X)
 
 中文:
-类 IsGalois
-  参数: {C : 类型u₁} [Category.{u₂, u₁} C] [GaloisCategory C] (X : C)
-  继承: IsConnected X
+类 是Galois
+  参数: {C : 类型u₁} [范畴.{u₂, u₁} C] [Galois范畴 C] (X : C)
+  继承: 是连通 X
   公理与运算 (1 个):
-    - quotientByAutTerminal : Nonempty (IsTerminal <| colimit <| SingleObj.functor <| Aut.toEnd X)
+    - quotientByAutTerminal : 非空 (是终止 <| colimit <| SingleObj.functor <| Aut.toEnd X)
 -/
 class IsGalois {C : Type u₁} [Category.{u₂, u₁} C] [GaloisCategory C] (X : C) : Prop
     extends IsConnected X where
@@ -151,7 +151,7 @@ lemma isGalois_iff_aux
 
 中文:
 引理 isGalois_iff_aux
-  条件: (X : C) [IsConnected X]
+  条件: (X : C) [是连通 X]
   证明: ⟨fun h => h.quotientByAutTerminal, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro, h.quotientByAutTerminal, quotientByAutTerminal
@@ -172,7 +172,7 @@ theorem isGalois_iff_pretransitive
 
 中文:
 定理 isGalois_iff_pretransitive
-  条件: (X : C) [IsConnected X]
+  条件: (X : C) [是连通 X]
   证明: by
   rw [isGalois_iff_aux]; rw [Equiv.nonempty_congr <| quotientByAutTerminalEquivUniqueQuotient F X]
   exact (MulAction.pretransitive_iff_unique_quotient_of_nonempty (Aut X) (F.obj X)).symm
@@ -194,7 +194,7 @@ definition isTerminalQuotientOfIsGalois
 
 中文:
 定义 isTerminalQuotientOfIsGalois
-  签名: (X : C) [IsGalois X]
+  签名: (X : C) [是Galois X]
   定义体: Nonempty.some IsGalois.quotientByAutTerminal
 
 Depends on / 依赖: IsGalois, IsGalois.quotientByAutTerminal, Nonempty, Nonempty.intro, Nonempty.some, quotientByAutTerminal
@@ -215,7 +215,7 @@ instance isPretransitive_of_isGalois
 
 中文:
 实例 isPretransitive_of_isGalois
-  签名: (X : C) [IsGalois X]
+  签名: (X : C) [是Galois X]
   定义体: by
   rw [← isGalois_iff_pretransitive]
   infer_instance
@@ -244,7 +244,7 @@ lemma stabilizer_normal_of_isGalois
 
 中文:
 引理 stabilizer_normal_of_isGalois
-  条件: (X : C) [IsGalois X] (x : F.obj X)
+  条件: (X : C) [是Galois X] (x : F.obj X)
   证明: by
     rw [MulAction.mem_stabilizer_iff]
     change g • n • (g⁻¹ • x) = x
@@ -277,7 +277,7 @@ theorem evaluation_aut_surjective_of_isGalois
 
 中文:
 定理 evaluation_aut_surjective_of_isGalois
-  条件: (A : C) [IsGalois A] (a : F.obj A)
+  条件: (A : C) [是Galois A] (a : F.obj A)
   证明: MulAction.IsPretransitive.exists_smul_eq a
 
 Depends on / 依赖: IsPretransitive, MulAction, MulAction.IsPretransitive.exists_smul_eq, exists_smul_eq
@@ -296,7 +296,7 @@ theorem evaluation_aut_bijective_of_isGalois
 
 中文:
 定理 evaluation_aut_bijective_of_isGalois
-  条件: (A : C) [IsGalois A] (a : F.obj A)
+  条件: (A : C) [是Galois A] (a : F.obj A)
   证明: ⟨evaluation_aut_injective_of_isConnected F A a, evaluation_aut_surjective_of_isGalois F A a⟩
 
 Depends on / 依赖: evaluation_aut_injective_of_isConnected, evaluation_aut_surjective_of_isGalois
@@ -317,7 +317,7 @@ definition evaluationEquivOfIsGalois
 
 中文:
 定义 evaluationEquivOfIsGalois
-  签名: (A : C) [IsGalois A] (a : F.obj A)
+  签名: (A : C) [是Galois A] (a : F.obj A)
   定义体: Equiv.ofBijective _ (evaluation_aut_bijective_of_isGalois F A a)
 
 @[simp]
@@ -340,7 +340,7 @@ lemma evaluationEquivOfIsGalois_apply
 
 中文:
 引理 evaluationEquivOfIsGalois_apply
-  条件: (A : C) [IsGalois A] (a : F.obj A) (φ : Aut A)
+  条件: (A : C) [是Galois A] (a : F.obj A) (φ : Aut A)
   证明: rfl
 
 @[simp]
@@ -362,7 +362,7 @@ lemma evaluationEquivOfIsGalois_symm_fiber
 
 中文:
 引理 evaluationEquivOfIsGalois_symm_fiber
-  条件: (A : C) [IsGalois A] (a b : F.obj A)
+  条件: (A : C) [是Galois A] (a b : F.obj A)
   证明: by
   change (evaluationEquivOfIsGalois F A a) _ = _
   simp
@@ -393,8 +393,8 @@ lemma exists_autMap
     apply evaluation_a
 
 中文:
-引理 exists_autMap
-  条件: {A B : C} (f : A ⟶ B) [IsConnected A] [IsGalois B] (σ : Aut A)
+引理 存在_autMap
+  条件: {A B : C} (f : A ⟶ B) [是连通 A] [是Galois B] (σ : Aut A)
   证明: by
   let F := GaloisCategory.getFiberFunctor C
   obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
@@ -431,7 +431,7 @@ definition autMap
 
 中文:
 定义 autMap
-  签名: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
+  签名: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
   定义体: (exists_autMap f σ).choose
 
 @[simp]
@@ -455,7 +455,7 @@ lemma comp_autMap
 
 中文:
 引理 comp_autMap
-  条件: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
+  条件: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
   证明: (exists_autMap f σ).choose_spec.left
 
 @[simp]
@@ -478,7 +478,7 @@ lemma comp_autMap_apply
 
 中文:
 引理 comp_autMap_apply
-  结论: (F : C ⥤ FintypeCat.{w}) {A B : C} [IsConnected A] [IsGalois B]
+  结论: (F : C ⥤ FintypeCat.{w}) {A B : C} [是连通 A] [是Galois B]
   证明: by
   simpa [-comp_autMap] using ConcreteCategory.congr_hom (F.congr_map (comp_autMap f σ)) a
 
@@ -501,7 +501,7 @@ lemma autMap_unique
 
 中文:
 引理 autMap_unique
-  结论: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ : Aut A)
+  结论: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ : Aut A)
   证明: ((exists_autMap f σ).choose_spec.right τ h).symm
 
 @[simp]
@@ -527,7 +527,7 @@ lemma autMap_id
 
 中文:
 引理 autMap_id
-  条件: {A : C} [IsGalois A]
+  条件: {A : C} [是Galois A]
   结论: autMap (𝟙 A) = id
   证明: funext fun σ => autMap_unique (𝟙 A) σ _ (by simp)
 
@@ -552,7 +552,7 @@ lemma autMap_comp
 
 中文:
 引理 autMap_comp
-  结论: {X Y Z : C} [IsConnected X] [IsGalois Y] [IsGalois Z] (f : X ⟶ Y)
+  结论: {X Y Z : C} [是连通 X] [是Galois Y] [是Galois Z] (f : X ⟶ Y)
   证明: by
   refine funext fun σ => autMap_unique _ σ _ ?_
   rw [Function.comp_apply]; rw [Category.assoc]; rw [comp_autMap]; rw [← Category.assoc]
@@ -583,7 +583,7 @@ lemma autMap_surjective_of_isGalois
 
 中文:
 引理 autMap_surjective_of_isGalois
-  条件: {A B : C} [IsGalois A] [IsGalois B] (f : A ⟶ B)
+  条件: {A B : C} [是Galois A] [是Galois B] (f : A ⟶ B)
   证明: by
   intro σ
   let F := GaloisCategory.getFiberFunctor C
@@ -622,7 +622,7 @@ lemma autMap_apply_mul
 
 中文:
 引理 autMap_apply_mul
-  条件: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B) (σ τ : Aut A)
+  条件: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B) (σ τ : Aut A)
   证明: by
   let F := GaloisCategory.getFiberFunctor C
   obtain ⟨a⟩ := nonempty_fiber_of_isConnected F A
@@ -650,7 +650,7 @@ definition autMapHom
 
 中文:
 定义 autMapHom
-  签名: {A B : C} [IsConnected A] [IsGalois B] (f : A ⟶ B)
+  签名: {A B : C} [是连通 A] [是Galois B] (f : A ⟶ B)
   定义体: MonoidHom.mk' (autMap f) (autMap_apply_mul f)
 
 Depends on / 依赖: MonoidHom, MonoidHom.mk, autMap, autMap_apply_mul

@@ -31,8 +31,8 @@ theorem Filter.Tendsto.IccExtend
   proof: hf.comp tendsto_id.prodMap tendsto_map
 
 中文:
-定理 Filter.Tendsto.IccExtend
-  结论: (f : γ -> Icc a b -> β) {la : Filter α} {lb : Filter β}
+定理 滤子.收敛.IccExtend
+  结论: (f : γ -> 闭区间 a b -> β) {la : 滤子 α} {lb : 滤子 β}
   证明: hf.comp tendsto_id.prodMap tendsto_map
 -/
 protected theorem Filter.Tendsto.IccExtend (f : γ -> Icc a b -> β) {la : Filter α} {lb : Filter β}
@@ -53,7 +53,7 @@ theorem continuous_projIcc
 
 中文:
 定理 continuous_projIcc
-  结论: Continuous (projIcc a b h)
+  结论: 连续 (projIcc a b h)
   证明: Continuous.subtype_mk (by fun_prop) _
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -74,7 +74,7 @@ theorem isQuotientMap_projIcc
 
 中文:
 定理 isQuotientMap_projIcc
-  结论: IsQuotientMap (projIcc a b h) where
+  结论: 是商映射 (projIcc a b h) where
   证明: projIcc_surjective h
   isCoinducing := .of_isOpen_preimage_iff_isOpen fun s =>
     ⟨fun hs => ⟨_, hs, by ext; simp⟩, fun hs => hs.preimage continuous_projIcc⟩
@@ -100,8 +100,8 @@ theorem continuous_IccExtend_iff
 
 中文:
 定理 continuous_IccExtend_iff
-  条件: {f : Icc a b -> β}
-  结论: Continuous (IccExtend h f) ↔ Continuous f
+  条件: {f : 闭区间 a b -> β}
+  结论: 连续 (IccExtend h f) ↔ 连续 f
   证明: isQuotientMap_projIcc.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, isQuotientMap_projIcc, isQuotientMap_projIcc.continuous_iff.symm
@@ -121,8 +121,8 @@ theorem Continuous.IccExtend
 from hf.comp continuous_id.prodMk continuous_projIcc.comp hg
 
 中文:
-定理 Continuous.IccExtend
-  结论: {f : γ -> Icc a b -> β} {g : γ -> α} (hf : Continuous ↿f)
+定理 连续.IccExtend
+  结论: {f : γ -> 闭区间 a b -> β} {g : γ -> α} (hf : 连续 ↿f)
   证明: show Continuous (↿f ∘ fun x => (x, projIcc a b h (g x)))
 from hf.comp continuous_id.prodMk continuous_projIcc.comp hg
 -/
@@ -144,8 +144,8 @@ theorem Continuous.Icc_extend'
 @[fun_prop]
 
 中文:
-定理 Continuous.Icc_extend'
-  条件: {f : Icc a b -> β} (hf : Continuous f)
+定理 连续.Icc_extend'
+  条件: {f : 闭区间 a b -> β} (hf : 连续 f)
   证明: hf.comp continuous_projIcc
 
 @[fun_prop]
@@ -166,7 +166,7 @@ ContinuousAt.comp hf continuousAt_id.prodMk continuous_projIcc.continuousAt.comp
 
 中文:
 定理 ContinuousAt.IccExtend
-  结论: {x : γ} (f : γ -> Icc a b -> β) {g : γ -> α}
+  结论: {x : γ} (f : γ -> 闭区间 a b -> β) {g : γ -> α}
   证明: show ContinuousAt (↿f ∘ fun x => (x, projIcc a b h (g x))) x from
 ContinuousAt.comp hf continuousAt_id.prodMk continuous_projIcc.continuousAt.comp hg
 

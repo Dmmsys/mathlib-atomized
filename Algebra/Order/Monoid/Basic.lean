@@ -34,8 +34,8 @@ lemma Function.Injective.isOrderedMonoid
   proof: le.1 by rw [mul, mul]; grw [le.2 ab]
 
 中文:
-引理 Function.Injective.isOrderedMonoid
-  结论: [IsOrderedMonoid α] [CommMonoid β]
+引理 函数.单射.isOrderedMonoid
+  结论: [是Ordered幺半群 α] [交换幺半群 β]
   证明: le.1 by rw [mul, mul]; grw [le.2 ab]
 -/
 lemma Function.Injective.isOrderedMonoid [IsOrderedMonoid α] [CommMonoid β]
@@ -55,8 +55,8 @@ lemma StrictMono.isOrderedMonoid
   proof: Function.Injective.isOrderedMonoid f mul hf.le_iff_le
 
 中文:
-引理 StrictMono.isOrderedMonoid
-  结论: [IsOrderedMonoid α] [CommMonoid β] [LinearOrder β]
+引理 严格递增.isOrderedMonoid
+  结论: [是Ordered幺半群 α] [交换幺半群 β] [线性序 β]
   证明: Function.Injective.isOrderedMonoid f mul hf.le_iff_le
 
 Depends on / 依赖: Function, Function.Injective.isOrderedMonoid, Injective, hf.le_iff_le, isOrderedMonoid, le_iff_le
@@ -80,8 +80,8 @@ le_of_mul_le_mul_left a b c bc := le.1
       (mul_le_mul_iff_left (f a)).1 (by rwa [← mul, ← mul, le])
 
 中文:
-引理 Function.Injective.isOrderedCancelMonoid
-  结论: [IsOrderedCancelMonoid α] [CommMonoid β]
+引理 函数.单射.isOrderedCancelMonoid
+  结论: [是OrderedCancel幺半群 α] [交换幺半群 β]
   证明: Function.Injective.isOrderedMonoid f mul le
 le_of_mul_le_mul_left a b c bc := le.1
       (mul_le_mul_iff_left (f a)).1 (by rwa [← mul, ← mul, le])
@@ -109,8 +109,8 @@ lemma StrictMono.isOrderedCancelMonoid
   le_of_mul_le_mul_left a b c h := by simpa [← hf.le_iff_le, mul] using h
 
 中文:
-引理 StrictMono.isOrderedCancelMonoid
-  结论: [IsOrderedCancelMonoid α] [CommMonoid β] [LinearOrder β]
+引理 严格递增.isOrderedCancelMonoid
+  结论: [是OrderedCancel幺半群 α] [交换幺半群 β] [线性序 β]
   证明: hf.isOrderedMonoid f mul
   le_of_mul_le_mul_left a b c h := by simpa [← hf.le_iff_le, mul] using h
 
@@ -138,7 +138,7 @@ definition OrderEmbedding.mulLeft
 
 中文:
 定义 OrderEmbedding.mulLeft
-  签名: {α : 类型} [Mul α] [LinearOrder α]
+  签名: {α : 类型} [乘法 α] [线性序 α]
   定义体: OrderEmbedding.ofStrictMono (fun n => m * n) mul_right_strictMono
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, mul_right_strictMono, ofStrictMono
@@ -162,7 +162,7 @@ definition OrderEmbedding.mulRight
 
 中文:
 定义 OrderEmbedding.mulRight
-  签名: {α : 类型} [Mul α] [LinearOrder α]
+  签名: {α : 类型} [乘法 α] [线性序 α]
   定义体: OrderEmbedding.ofStrictMono (fun n => n * m) mul_left_strictMono
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, mul_left_strictMono, ofStrictMono

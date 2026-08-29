@@ -65,7 +65,7 @@ definition toComonObj
 
 中文:
 定义 toComonObj
-  签名: (X : CoalgCat R)
+  签名: (X : 余alg范畴 R)
   定义体: ⟨ModuleCat.of R X⟩
 
 Depends on / 依赖: ModuleCat, ModuleCat.of
@@ -90,7 +90,7 @@ definition toComon
 
 中文:
 定义 toComon
-  签名: : CoalgCat R ⥤ Comon (ModuleCat R) where
+  签名: : 余alg范畴 R ⥤ 余mon (模范畴 R) where
   定义体: toComonObj X
   map f :=
     { hom := ModuleCat.ofHom f.1
@@ -122,7 +122,7 @@ instance ofComonObjCoalgebraStruct
 
 中文:
 实例 ofComonObjCoalgebraStruct
-  签名: (X : ModuleCat R) [ComonObj X]
+  签名: (X : 模范畴 R) [余monObj X]
   定义体: Δ[X].hom
   counit := ε[X].hom
 -/
@@ -146,7 +146,7 @@ definition ofComonObj
 
 中文:
 定义 ofComonObj
-  签名: (X : ModuleCat R) [ComonObj X]
+  签名: (X : 模范畴 R) [余monObj X]
   定义体: { ModuleCat.of R X with
     instCoalgebra :=
       { ofComonObjCoalgebraStruct X with
@@ -181,7 +181,7 @@ definition ofComon
 
 中文:
 定义 ofComon
-  签名: : Comon (ModuleCat R) ⥤ CoalgCat R where
+  签名: : 余mon (模范畴 R) ⥤ 余alg范畴 R where
   定义体: ofComonObj X.X
   map f :=
     { toCoalgHom' :=
@@ -215,7 +215,7 @@ definition comonEquivalence
 
 中文:
 定义 comonEquivalence
-  签名: : CoalgCat R ≌ Comon (ModuleCat R) where
+  签名: : 余alg范畴 R ≌ 余mon (模范畴 R) where
   定义体: toComon R
   inverse := ofComon R
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _) fun _ => by rfl
@@ -246,7 +246,7 @@ definition instMonoidalCategoryAux
 
 中文:
 定义 instMonoidalCategoryAux
-  签名: : MonoidalCategory (CoalgCat R)
+  签名: : 幺半群范畴 (余alg范畴 R)
   定义体: Monoidal.transport (comonEquivalence R).symm
 
 Depends on / 依赖: Monoidal, Monoidal.transport, comonEquivalence, transport
@@ -281,7 +281,7 @@ theorem tensorObj_comul
 
 中文:
 定理 tensorObj_comul
-  条件: (K L : CoalgCat R)
+  条件: (K L : 余alg范畴 R)
   证明: by
   rw [ofComonObjCoalgebraStruct_comul]
   simp only [Comon.monoidal_tensorObj_comon_comul,

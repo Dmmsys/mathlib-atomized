@@ -35,7 +35,7 @@ definition Set.powersetCard
   body: {s : Finset α | s.card = n}
 
 中文:
-定义 Set.powersetCard
+定义 集合.powersetCard
   签名: (n : 自然数)
   定义体: {s : Finset α | s.card = n}
 
@@ -61,7 +61,7 @@ theorem mem_iff
 
 中文:
 定理 mem_iff
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   证明: by
   rw [powersetCard]; rw [Set.mem_ofPred_eq]
 
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (powersetCard α n) α
+  签名: 集合状 (powersetCard α n) α
   定义体: SetLike.instSubtype
 
 Depends on / 依赖: SetLike, SetLike.instSubtype, instSubtype
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Set.powersetCard α n)
+  签名: 偏序 (集合.powersetCard α n)
   定义体: .ofSetLike (Set.powersetCard α n) α
 
 @[simp]
@@ -139,8 +139,8 @@ theorem mem_coe_iff
 
 中文:
 定理 mem_coe_iff
-  条件: {s : Set.powersetCard α n} {a : α}
-  结论: a in (s : Finset α) ↔ a in s
+  条件: {s : 集合.powersetCard α n} {a : α}
+  结论: a in (s : 有限集 α) ↔ a in s
   证明: .rfl
 
 @[simp]
@@ -161,8 +161,8 @@ theorem card_eq
 
 中文:
 定理 card_eq
-  条件: (s : Set.powersetCard α n)
-  结论: (s : Finset α).card = n
+  条件: (s : 集合.powersetCard α n)
+  结论: (s : 有限集 α).card = n
   证明: s.prop
 
 @[simp]
@@ -184,8 +184,8 @@ theorem ncard_eq
 
 中文:
 定理 ncard_eq
-  条件: (s : Set.powersetCard α n)
-  结论: (s : Set α).ncard = n
+  条件: (s : 集合.powersetCard α n)
+  结论: (s : 集合 α).ncard = n
   证明: by
   rw [← coe_coe]; rw [Set.ncard_coe_finset]; rw [s.prop]
 
@@ -205,7 +205,7 @@ theorem coe_nonempty_iff
 
 中文:
 定理 coe_nonempty_iff
-  条件: {s : Set.powersetCard α n}
+  条件: {s : 集合.powersetCard α n}
   证明: by
   rw [← Set.powersetCard.coe_coe]; rw [Finset.coe_nonempty]; rw [← one_le_card]; rw [s.prop]
 
@@ -226,7 +226,7 @@ theorem coe_nontrivial_iff
 
 中文:
 定理 coe_nontrivial_iff
-  条件: {s : Set.powersetCard α n}
+  条件: {s : 集合.powersetCard α n}
   证明: by
   rw [← coe_coe]; rw [Finset.nontrivial_coe]; rw [← one_lt_card_iff_nontrivial]; rw [card_eq]
 
@@ -248,8 +248,8 @@ theorem eq_iff_subset
 
 中文:
 定理 eq_iff_subset
-  条件: {s t : Set.powersetCard α n}
-  结论: s = t ↔ (s : Finset α) subseteq (t : Finset α)
+  条件: {s t : 集合.powersetCard α n}
+  结论: s = t ↔ (s : 有限集 α) subseteq (t : 有限集 α)
   证明: by
   rw [Finset.subset_iff_eq_of_card_le (t.prop.trans_le s.prop.ge)]; rw [Subtype.ext_iff]
 
@@ -272,7 +272,7 @@ theorem exists_mem_notMem
     Set.exists_superset_subset_encard_eq (s := {a}) (by simp [Ne
 
 中文:
-定理 exists_mem_notMem
+定理 存在_mem_notMem
   条件: (hn : 1 <= n) (hα : n < E自然数.card α) {a b : α} (hab : a != b)
   证明: by
   have ha' : n <= Set.encard {b}ᶜ := by
@@ -308,8 +308,8 @@ theorem exists_mem_notMem_iff_ne
   rfl
 
 中文:
-定理 exists_mem_notMem_iff_ne
-  条件: (s t : Set.powersetCard α n)
+定理 存在_mem_notMem_iff_ne
+  条件: (s t : 集合.powersetCard α n)
   结论: s != t ↔ 存在 a in s, a ∉ t
   证明: by
   contrapose!
@@ -388,7 +388,7 @@ lemma coe_map
 中文:
 引理 coe_map
   条件: (f : α ↪ β) (s : powersetCard α n)
-  结论: SetLike.coe (map n f s) = f '' s
+  结论: 集合状.coe (map n f s) = f '' s
   证明: by
   ext
   simp [mem_map_iff_mem_range]
@@ -414,7 +414,7 @@ lemma val_map
 中文:
 引理 val_map
   条件: (f : α ↪ β) (s : powersetCard α n)
-  结论: Subtype.val (map n f s) = s.val.map f
+  结论: 子类型.val (map n f s) = s.val.map f
   证明: rfl
 -/
 lemma val_map (f : α ↪ β) (s : powersetCard α n) : Subtype.val (map n f s) = s.val.map f := rfl
@@ -435,7 +435,7 @@ definition ofCard
 
 中文:
 定义 ofCard
-  签名: {s : Finset α} (s_card : s.card = n)
+  签名: {s : 有限集 α} (s_card : s.card = n)
   定义体: ⟨s, mem_iff.mpr s_card⟩
 
 @[simp]
@@ -458,8 +458,8 @@ lemma val_ofCard
 
 中文:
 引理 val_ofCard
-  条件: {s : Finset α} (s_card : s.card = n)
-  结论: Subtype.val (ofCard s_card) = s
+  条件: {s : 有限集 α} (s_card : s.card = n)
+  结论: 子类型.val (ofCard s_card) = s
   证明: rfl
 
 @[simp]
@@ -527,7 +527,7 @@ definition ofFinEmb
 
 中文:
 定义 ofFinEmb
-  签名: (f : Fin n ↪ β)
+  签名: (f : 有限集 n ↪ β)
   定义体: map n f ⟨Finset.univ, by rw [mem_iff, Finset.card_univ, Fintype.card_fin]⟩
 
 @[simp]
@@ -551,7 +551,7 @@ lemma mem_ofFinEmb_iff_mem_range
 
 中文:
 引理 mem_ofFinEmb_iff_mem_range
-  条件: (f : Fin n ↪ β) (b : β)
+  条件: (f : 有限集 n ↪ β) (b : β)
   证明: by
   simp [ofFinEmb, mem_map_iff_mem_range]
 
@@ -579,8 +579,8 @@ lemma coe_ofFinEmb
 
 中文:
 引理 coe_ofFinEmb
-  条件: (f : Fin n ↪ β)
-  结论: SetLike.coe (ofFinEmb n β f) = Set.range f
+  条件: (f : 有限集 n ↪ β)
+  结论: 集合状.coe (ofFinEmb n β f) = 集合.range f
   证明: by
   ext
   simp [mem_ofFinEmb_iff_mem_range]
@@ -605,7 +605,7 @@ lemma val_ofFinEmb
 
 中文:
 引理 val_ofFinEmb
-  条件: (f : Fin n ↪ β)
+  条件: (f : 有限集 n ↪ β)
   证明: by
   simp [← coe_inj, coe_ofFinEmb]
 
@@ -774,7 +774,7 @@ theorem coe_disjUnion
 
 中文:
 定理 coe_disjUnion
-  结论: (disjUnion hst : Finset α) = s.val.disjUnion t hst
+  结论: (disjUnion hst : 有限集 α) = s.val.disjUnion t hst
   证明: rfl
 
 @[simp]
@@ -817,7 +817,7 @@ theorem coe_finset
 
 中文:
 定理 coe_finset
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   ext; simp
 -/
@@ -836,8 +836,8 @@ instance [Fintype
   infer_instance
 
 中文:
-实例 [Fintype
-  签名: α] : Fintype (powersetCard α n)
+实例 [有限类型
+  签名: α] : 有限类型 (powersetCard α n)
   定义体: by
   rw [coe_finset]
   infer_instance
@@ -859,8 +859,8 @@ instance [Finite
   simpa [coe_finset] using Subtype.finite
 
 中文:
-实例 [Finite
-  签名: α] : Finite (powersetCard α n)
+实例 [有限
+  签名: α] : 有限 (powersetCard α n)
   定义体: by
   have : Fintype α := Fintype.ofFinite α
   simpa [coe_finset] using Subtype.finite
@@ -885,7 +885,7 @@ lemma exist_mem_powersetCard_of_inf
 
 中文:
 引理 exist_mem_powersetCard_of_inf
-  条件: (h : 0 < n) [Infinite α] (a : α)
+  条件: (h : 0 < n) [无限 α] (a : α)
   证明: by
   obtain ⟨s, a_mem, s_card⟩ := Infinite.exists_superset_card_eq ({a} : Finset α) n
     (by rw [Finset.card_singleton]; exact h)
@@ -920,7 +920,7 @@ instance instInfinite
 
 中文:
 实例 instInfinite
-  签名: [NeZero n] [Infinite α]
+  签名: [NeZero n] [无限 α]
   定义体: by
   rw [← not_finite_iff_infinite]
   by_contra finite
@@ -1074,7 +1074,7 @@ theorem eq_empty_iff
 
 中文:
 定理 eq_empty_iff
-  条件: [Finite α]
+  条件: [有限 α]
   证明: by
   rw [← Set.ncard_eq_zero]; rw [← _root_.Nat.card_coe_set_eq]; rw [powersetCard.card]; rw [Nat.choose_eq_zero_iff]
 
@@ -1096,7 +1096,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  条件: [Finite α]
+  条件: [有限 α]
   证明: by
   rw [← Finite.one_lt_card_iff_nontrivial]; rw [powersetCard.card]; rw [Nat.one_lt_iff_ne_zero_and_ne_one]; rw [ne_eq]; rw [Nat.choose_eq_zero_iff]; rw [ne_eq]; rw [Nat.choose_eq_one_iff]
   grind
@@ -1122,7 +1122,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: : (n : 自然数) × (powersetCard α n) ≃ Finset α where
+  签名: : (n : 自然数) × (powersetCard α n) ≃ 有限集 α where
   定义体: x.2
   invFun x := ⟨x.card, ⟨x, rfl⟩⟩
   left_inv x := by ext <;> simp
@@ -1168,7 +1168,7 @@ lemma prodEquiv_symm_apply
 
 中文:
 引理 prodEquiv_symm_apply
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: prodEquiv.symm s = ⟨s.card, ofCard rfl⟩
   证明: rfl
 -/

@@ -63,11 +63,11 @@ structure ProjectiveSpectrum
     - not_irrelevant_le : ¬HomogeneousIdeal.irrelevant 𝒜 <= asHomogeneousIdeal
 
 中文:
-结构 ProjectiveSpectrum
+结构 射影谱
   参数: where
   公理与运算 (3 个):
     - asHomogeneousIdeal : HomogeneousIdeal 𝒜
-    - isPrime : asHomogeneousIdeal.toIdeal.IsPrime
+    - isPrime : asHomogeneousIdeal.toIdeal.是素
     - not_irrelevant_le : ¬HomogeneousIdeal.irrelevant 𝒜 <= asHomogeneousIdeal
 -/
 structure ProjectiveSpectrum where
@@ -93,7 +93,7 @@ definition zeroLocus
 
 中文:
 定义 zeroLocus
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { x | s subseteq x.asHomogeneousIdeal }
 
 @[simp]
@@ -116,7 +116,7 @@ theorem mem_zeroLocus
 
 中文:
 定理 mem_zeroLocus
-  条件: (x : ProjectiveSpectrum 𝒜) (s : Set A)
+  条件: (x : 射影谱 𝒜) (s : 集合 A)
   证明: Iff.rfl
 
 @[simp]
@@ -141,8 +141,8 @@ theorem zeroLocus_span
 
 中文:
 定理 zeroLocus_span
-  条件: (s : Set A)
-  结论: zeroLocus 𝒜 (Ideal.span s) = zeroLocus 𝒜 s
+  条件: (s : 集合 A)
+  结论: zeroLocus 𝒜 (理想.span s) = zeroLocus 𝒜 s
   证明: by
   ext x
   exact (Submodule.gi _ _).gc s x.asHomogeneousIdeal.toIdeal
@@ -165,7 +165,7 @@ definition vanishingIdeal
 
 中文:
 定义 vanishingIdeal
-  签名: (t : Set (ProjectiveSpectrum 𝒜))
+  签名: (t : 集合 (射影谱 𝒜))
   定义体: ⨅ (x : ProjectiveSpectrum 𝒜) (_ : x in t), x.asHomogeneousIdeal
 
 Depends on / 依赖: ProjectiveSpectrum, asHomogeneousIdeal, isFibrant_of_fibration, terminal, terminal.from, x.asHomogeneousIdeal
@@ -187,7 +187,7 @@ theorem coe_vanishingIdeal
 
 中文:
 定理 coe_vanishingIdeal
-  条件: (t : Set (ProjectiveSpectrum 𝒜))
+  条件: (t : 集合 (射影谱 𝒜))
   证明: by
   ext f
   rw [vanishingIdeal]; rw [SetLike.mem_coe]; rw [← HomogeneousIdeal.mem_iff]; rw [HomogeneousIdeal.toIdeal_iInf]; rw [Submodule.mem_iInf]
@@ -217,7 +217,7 @@ theorem mem_vanishingIdeal
 
 中文:
 定理 mem_vanishingIdeal
-  条件: (t : Set (ProjectiveSpectrum 𝒜)) (f : A)
+  条件: (t : 集合 (射影谱 𝒜)) (f : A)
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_vanishingIdeal]; rw [Set.mem_ofPred_eq]
 
@@ -241,7 +241,7 @@ theorem vanishingIdeal_singleton
 
 中文:
 定理 vanishingIdeal_singleton
-  条件: (x : ProjectiveSpectrum 𝒜)
+  条件: (x : 射影谱 𝒜)
   证明: by
   simp [vanishingIdeal]
 
@@ -263,7 +263,7 @@ theorem subset_zeroLocus_iff_le_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_iff_le_vanishingIdeal
-  条件: (t : Set (ProjectiveSpectrum 𝒜)) (I : Ideal A)
+  条件: (t : 集合 (射影谱 𝒜)) (I : 理想 A)
   证明: ⟨fun h _ k => (mem_vanishingIdeal _ _).mpr fun _ j => (mem_zeroLocus _ _ _).mpr (h j) k, fun h =>
     fun x j =>
     (mem_zeroLocus _ _ _).mpr (le_trans h fun _ h => ((mem_vanishingIdeal _ _).mp h) x j)⟩
@@ -354,7 +354,7 @@ theorem subset_zeroLocus_iff_subset_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_iff_subset_vanishingIdeal
-  条件: (t : Set (ProjectiveSpectrum 𝒜)) (s : Set A)
+  条件: (t : 集合 (射影谱 𝒜)) (s : 集合 A)
   证明: (gc_set _) s t
 
 Depends on / 依赖: gc_set
@@ -374,7 +374,7 @@ theorem subset_vanishingIdeal_zeroLocus
 
 中文:
 定理 subset_vanishingIdeal_zeroLocus
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: s subseteq vanishingIdeal (zeroLocus 𝒜 s)
   证明: (gc_set _).le_u_l s
 
@@ -393,7 +393,7 @@ theorem ideal_le_vanishingIdeal_zeroLocus
 
 中文:
 定理 ideal_le_vanishingIdeal_zeroLocus
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: (gc_ideal _).le_u_l I
 
 Depends on / 依赖: AncestralRel, Finite, Finite.of_injective, N.ext_iff, N.le_iff_exists_mono, P.AncestralRel, P.II, S.mk, SSet.N.dim_lt_of_lt, SSet.S.ext_iff, Subtype, Subtype.ext_iff, X.map, dim_lt_of_lt, ext_iff, f.op, gc_ideal, le_iff_exists_mono, le_u_l, of_injective
@@ -431,7 +431,7 @@ theorem subset_zeroLocus_vanishingIdeal
 
 中文:
 定理 subset_zeroLocus_vanishingIdeal
-  条件: (t : Set (ProjectiveSpectrum 𝒜))
+  条件: (t : 集合 (射影谱 𝒜))
   证明: (gc_ideal _).l_u_le t
 
 Depends on / 依赖: Acc.intro, P.rank, gc_ideal, hy.inv, l_u_le
@@ -451,7 +451,7 @@ theorem zeroLocus_anti_mono
 
 中文:
 定理 zeroLocus_anti_mono
-  条件: {s t : Set A} (h : s subseteq t)
+  条件: {s t : 集合 A} (h : s subseteq t)
   结论: zeroLocus 𝒜 t subseteq zeroLocus 𝒜 s
   证明: (gc_set _).monotone_l h
 
@@ -470,7 +470,7 @@ theorem zeroLocus_anti_mono_ideal
 
 中文:
 定理 zeroLocus_anti_mono_ideal
-  条件: {s t : Ideal A} (h : s <= t)
+  条件: {s t : 理想 A} (h : s <= t)
   证明: (gc_ideal _).monotone_l h
 
 Depends on / 依赖: gc_ideal, monotone_l
@@ -508,7 +508,7 @@ theorem vanishingIdeal_anti_mono
 
 中文:
 定理 vanishingIdeal_anti_mono
-  条件: {s t : Set (ProjectiveSpectrum 𝒜)} (h : s subseteq t)
+  条件: {s t : 集合 (射影谱 𝒜)} (h : s subseteq t)
   证明: (gc_ideal _).monotone_u h
 
 Depends on / 依赖: gc_ideal, monotone_u
@@ -529,7 +529,7 @@ theorem zeroLocus_bot
 
 中文:
 定理 zeroLocus_bot
-  结论: zeroLocus 𝒜 ((⊥ : Ideal A) : Set A) = Set.univ
+  结论: zeroLocus 𝒜 ((⊥ : 理想 A) : 集合 A) = 集合.univ
   证明: (gc_ideal 𝒜).l_bot
 
 @[simp]
@@ -552,7 +552,7 @@ theorem zeroLocus_singleton_zero
 
 中文:
 定理 zeroLocus_singleton_zero
-  结论: zeroLocus 𝒜 ({0} : Set A) = Set.univ
+  结论: zeroLocus 𝒜 ({0} : 集合 A) = 集合.univ
   证明: zeroLocus_bot _
 
 @[simp]
@@ -575,7 +575,7 @@ theorem zeroLocus_empty
 
 中文:
 定理 zeroLocus_empty
-  结论: zeroLocus 𝒜 (∅ : Set A) = Set.univ
+  结论: zeroLocus 𝒜 (∅ : 集合 A) = 集合.univ
   证明: (gc_set 𝒜).l_bot
 
 @[simp]
@@ -597,7 +597,7 @@ theorem vanishingIdeal_univ
 
 中文:
 定理 vanishingIdeal_univ
-  结论: vanishingIdeal (∅ : Set (ProjectiveSpectrum 𝒜)) = ⊤
+  结论: vanishingIdeal (∅ : 集合 (射影谱 𝒜)) = ⊤
   证明: by
   simpa using! (gc_ideal _).u_top
 
@@ -621,7 +621,7 @@ x.asHomogeneousIdeal.toIdeal.eq_top_iff_one.mpr hx h
 
 中文:
 定理 zeroLocus_empty_of_one_mem
-  条件: {s : Set A} (h : (1 : A) in s)
+  条件: {s : 集合 A} (h : (1 : A) in s)
   结论: zeroLocus 𝒜 s = ∅
   证明: Set.eq_empty_iff_forall_notMem.mpr fun x hx =>
 (inferInstance : x.asHomogeneousIdeal.toIdeal.IsPrime).ne_top
@@ -649,7 +649,7 @@ theorem zeroLocus_singleton_one
 
 中文:
 定理 zeroLocus_singleton_one
-  结论: zeroLocus 𝒜 ({1} : Set A) = ∅
+  结论: zeroLocus 𝒜 ({1} : 集合 A) = ∅
   证明: zeroLocus_empty_of_one_mem 𝒜 (Set.mem_singleton (1 : A))
 
 @[simp]
@@ -670,7 +670,7 @@ theorem zeroLocus_univ
 
 中文:
 定理 zeroLocus_univ
-  结论: zeroLocus 𝒜 (Set.univ : Set A) = ∅
+  结论: zeroLocus 𝒜 (集合.univ : 集合 A) = ∅
   证明: zeroLocus_empty_of_one_mem _ (Set.mem_univ 1)
 
 Depends on / 依赖: Set.mem_univ, mem_univ, zeroLocus_empty_of_one_mem
@@ -688,7 +688,7 @@ theorem zeroLocus_sup_ideal
 
 中文:
 定理 zeroLocus_sup_ideal
-  条件: (I J : Ideal A)
+  条件: (I J : 理想 A)
   证明: (gc_ideal 𝒜).l_sup
 
 Depends on / 依赖: gc_ideal, l_sup
@@ -727,7 +727,7 @@ theorem zeroLocus_union
 
 中文:
 定理 zeroLocus_union
-  条件: (s s' : Set A)
+  条件: (s s' : 集合 A)
   结论: zeroLocus 𝒜 (s union s') = zeroLocus _ s inter zeroLocus _ s'
   证明: (gc_set 𝒜).l_sup
 
@@ -747,7 +747,7 @@ theorem vanishingIdeal_union
 
 中文:
 定理 vanishingIdeal_union
-  条件: (t t' : Set (ProjectiveSpectrum 𝒜))
+  条件: (t t' : 集合 (射影谱 𝒜))
   证明: by
   ext1; exact (gc_ideal 𝒜).u_inf
 
@@ -767,7 +767,7 @@ theorem zeroLocus_iSup_ideal
 
 中文:
 定理 zeroLocus_iSup_ideal
-  条件: {γ : Sort*} (I : γ -> Ideal A)
+  条件: {γ : 类型层*} (I : γ -> 理想 A)
   证明: (gc_ideal 𝒜).l_iSup
 
 Depends on / 依赖: gc_ideal, l_iSup
@@ -786,7 +786,7 @@ theorem zeroLocus_iSup_homogeneousIdeal
 
 中文:
 定理 zeroLocus_iSup_homogeneousIdeal
-  条件: {γ : Sort*} (I : γ -> HomogeneousIdeal 𝒜)
+  条件: {γ : 类型层*} (I : γ -> HomogeneousIdeal 𝒜)
   证明: (gc_homogeneousIdeal 𝒜).l_iSup
 
 Depends on / 依赖: gc_homogeneousIdeal, l_iSup
@@ -805,7 +805,7 @@ theorem zeroLocus_iUnion
 
 中文:
 定理 zeroLocus_iUnion
-  条件: {γ : Sort*} (s : γ -> Set A)
+  条件: {γ : 类型层*} (s : γ -> 集合 A)
   证明: (gc_set 𝒜).l_iSup
 
 Depends on / 依赖: gc_set, l_iSup
@@ -825,7 +825,7 @@ theorem zeroLocus_bUnion
 
 中文:
 定理 zeroLocus_bUnion
-  条件: (s : Set (Set A))
+  条件: (s : 集合 (集合 A))
   证明: by
   simp only [zeroLocus_iUnion]
 
@@ -846,7 +846,7 @@ theorem vanishingIdeal_iUnion
 
 中文:
 定理 vanishingIdeal_iUnion
-  条件: {γ : Sort*} (t : γ -> Set (ProjectiveSpectrum 𝒜))
+  条件: {γ : 类型层*} (t : γ -> 集合 (射影谱 𝒜))
   证明: HomogeneousIdeal.toIdeal_injective by
     convert! (gc_ideal 𝒜).u_iInf; exact HomogeneousIdeal.toIdeal_iInf _
 
@@ -867,7 +867,7 @@ theorem zeroLocus_inf
 
 中文:
 定理 zeroLocus_inf
-  条件: (I J : Ideal A)
+  条件: (I J : 理想 A)
   证明: Set.ext fun x => x.isPrime.inf_le
 
 Depends on / 依赖: Set.ext, inf_le, isPrime, x.isPrime.inf_le
@@ -888,7 +888,7 @@ theorem union_zeroLocus
 
 中文:
 定理 union_zeroLocus
-  条件: (s s' : Set A)
+  条件: (s s' : 集合 A)
   证明: by
   rw [zeroLocus_inf]
   simp
@@ -910,7 +910,7 @@ theorem zeroLocus_mul_ideal
 
 中文:
 定理 zeroLocus_mul_ideal
-  条件: (I J : Ideal A)
+  条件: (I J : 理想 A)
   证明: Set.ext fun x => x.isPrime.mul_le
 
 Depends on / 依赖: Set.ext, isPrime, mul_le, x.isPrime.mul_le
@@ -996,7 +996,7 @@ theorem sup_vanishingIdeal_le
 
 中文:
 定理 sup_vanishingIdeal_le
-  条件: (t t' : Set (ProjectiveSpectrum 𝒜))
+  条件: (t t' : 集合 (射影谱 𝒜))
   证明: by
   intro r
   rw [← HomogeneousIdeal.mem_iff]; rw [HomogeneousIdeal.toIdeal_sup]; rw [mem_vanishingIdeal]; rw [Submodule.mem_sup]
@@ -1025,7 +1025,7 @@ theorem mem_compl_zeroLocus_iff_notMem
 
 中文:
 定理 mem_compl_zeroLocus_iff_notMem
-  条件: {f : A} {I : ProjectiveSpectrum 𝒜}
+  条件: {f : A} {I : 射影谱 𝒜}
   证明: by
   rw [Set.mem_compl_iff]; rw [mem_zeroLocus]; rw [Set.singleton_subset_iff]; rfl
 
@@ -1051,7 +1051,7 @@ instance zariskiTopology
 
 中文:
 实例 zariskiTopology
-  签名: : TopologicalSpace (ProjectiveSpectrum 𝒜)
+  签名: : 拓扑空间 (射影谱 𝒜)
   定义体: TopologicalSpace.ofClosed (Set.range (ProjectiveSpectrum.zeroLocus 𝒜)) ⟨Set.univ, by simp⟩
     (by
       intro Zs h
@@ -1087,7 +1087,7 @@ definition top
 
 中文:
 定义 top
-  签名: : TopCat
+  签名: : 顶元素范畴
   定义体: TopCat.of (ProjectiveSpectrum 𝒜)
 
 Depends on / 依赖: ProjectiveSpectrum, TopCat, TopCat.of
@@ -1107,8 +1107,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: (U : Set (ProjectiveSpectrum 𝒜))
-  结论: IsOpen U ↔ 存在 s, Uᶜ = zeroLocus 𝒜 s
+  条件: (U : 集合 (射影谱 𝒜))
+  结论: 是开集 U ↔ 存在 s, Uᶜ = zeroLocus 𝒜 s
   证明: by
   simp only [@eq_comm _ Uᶜ]; rfl
 
@@ -1127,7 +1127,7 @@ theorem isClosed_iff_zeroLocus
 
 中文:
 定理 isClosed_iff_zeroLocus
-  条件: (Z : Set (ProjectiveSpectrum 𝒜))
+  条件: (Z : 集合 (射影谱 𝒜))
   证明: by rw [← isOpen_compl_iff, isOpen_iff, compl_compl]
 
 Depends on / 依赖: compl_compl, isOpen_compl_iff, isOpen_iff
@@ -1148,8 +1148,8 @@ theorem isClosed_zeroLocus
 
 中文:
 定理 isClosed_zeroLocus
-  条件: (s : Set A)
-  结论: IsClosed (zeroLocus 𝒜 s)
+  条件: (s : 集合 A)
+  结论: 是闭集 (zeroLocus 𝒜 s)
   证明: by
   rw [isClosed_iff_zeroLocus]
   exact ⟨s, rfl⟩
@@ -1177,7 +1177,7 @@ theorem zeroLocus_vanishingIdeal_eq_closure
 
 中文:
 定理 zeroLocus_vanishingIdeal_eq_closure
-  条件: (t : Set (ProjectiveSpectrum 𝒜))
+  条件: (t : 集合 (射影谱 𝒜))
   证明: by
   apply Set.Subset.antisymm
   · rintro x hx t' ⟨ht', ht⟩
@@ -1213,7 +1213,7 @@ theorem vanishingIdeal_closure
 
 中文:
 定理 vanishingIdeal_closure
-  条件: (t : Set (ProjectiveSpectrum 𝒜))
+  条件: (t : 集合 (射影谱 𝒜))
   证明: by
   have : (vanishingIdeal (zeroLocus 𝒜 (vanishingIdeal t))).toIdeal = _ := (gc_ideal 𝒜).u_l_u_eq_u t
   ext1
@@ -1267,7 +1267,7 @@ theorem mem_basicOpen
 
 中文:
 定理 mem_basicOpen
-  条件: (f : A) (x : ProjectiveSpectrum 𝒜)
+  条件: (f : A) (x : 射影谱 𝒜)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1286,7 +1286,7 @@ theorem mem_coe_basicOpen
 
 中文:
 定理 mem_coe_basicOpen
-  条件: (f : A) (x : ProjectiveSpectrum 𝒜)
+  条件: (f : A) (x : 射影谱 𝒜)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1309,7 +1309,7 @@ theorem isOpen_basicOpen
 中文:
 定理 isOpen_basicOpen
   条件: {a : A}
-  结论: IsOpen (basicOpen 𝒜 a : Set (ProjectiveSpectrum 𝒜))
+  结论: 是开集 (basicOpen 𝒜 a : 集合 (射影谱 𝒜))
   证明: (basicOpen 𝒜 a).isOpen
 
 @[simp]
@@ -1580,7 +1580,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ProjectiveSpectrum 𝒜)
+  签名: 偏序 (射影谱 𝒜)
   定义体: PartialOrder.lift asHomogeneousIdeal fun ⟨_, _, _⟩ ⟨_, _, _⟩ => by simp only [mk.injEq, imp_self]
 
 @[simp]
@@ -1603,7 +1603,7 @@ theorem as_ideal_le_as_ideal
 
 中文:
 定理 as_ideal_le_as_ideal
-  条件: (x y : ProjectiveSpectrum 𝒜)
+  条件: (x y : 射影谱 𝒜)
   证明: Iff.rfl
 
 @[simp]
@@ -1625,7 +1625,7 @@ theorem as_ideal_lt_as_ideal
 
 中文:
 定理 as_ideal_lt_as_ideal
-  条件: (x y : ProjectiveSpectrum 𝒜)
+  条件: (x y : 射影谱 𝒜)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1646,7 +1646,7 @@ theorem le_iff_mem_closure
 
 中文:
 定理 le_iff_mem_closure
-  条件: (x y : ProjectiveSpectrum 𝒜)
+  条件: (x y : 射影谱 𝒜)
   证明: by
   rw [← as_ideal_le_as_ideal]; rw [← zeroLocus_vanishingIdeal_eq_closure]; rw [mem_zeroLocus]; rw [vanishingIdeal_singleton]
   simp only [as_ideal_le_as_ideal, coe_subset_coe]

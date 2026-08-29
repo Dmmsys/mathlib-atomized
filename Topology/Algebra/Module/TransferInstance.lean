@@ -136,7 +136,7 @@ exact this.congr fun p => by simp [f]
     exact this.congr (fun p => b
 
 中文:
-引理 ContinuousMulEquiv.isTopologicalGroup
+引理 连续乘法等价.isTopologicalGroup
   证明: by
     let f := (fun q => q.1 * q.2 : β × β -> β)
     have : Continuous (fun p => e.symm <| f (e p.1, e p.2) : (α × α -> α)) := by fun_prop
@@ -169,7 +169,7 @@ let f : R × α -> α := fun p => e.symm p.1 • (e p.2)
     exact this.congr (fun p => by simp [f])
 
 中文:
-引理 ContinuousLinearEquiv.continuousSMul
+引理 连续线性等价.continuousSMul
   证明: by
 let f : R × α -> α := fun p => e.symm p.1 • (e p.2)
     have : Continuous f := by fun_prop

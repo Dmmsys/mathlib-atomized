@@ -79,11 +79,11 @@ structure CoxeterMatrix
     - off_diagonal(i i') : i != i' -> M i i' != 1  [default: by decide]
 
 中文:
-结构 CoxeterMatrix
+结构 余xeterMatrix
   参数: (B : 类型)
   公理与运算 (4 个):
-    - M : Matrix B B 自然数
-    - isSymm : M.IsSymm  [默认: by decide]
+    - M : 矩阵 B B 自然数
+    - isSymm : M.是Symm  [默认: by decide]
     - diagonal(i) : M i i = 1  [默认: by decide]
     - off_diagonal(i i') : i != i' -> M i i' != 1  [默认: by decide]
 
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (CoxeterMatrix B) fun _ => (Matrix B B 自然数)
+  签名: CoeFun (余xeterMatrix B) fun _ => (矩阵 B B 自然数)
   定义体: ⟨M⟩
 -/
 instance : CoeFun (CoxeterMatrix B) fun _ => (Matrix B B Nat) := ⟨M⟩
@@ -151,7 +151,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: : CoxeterMatrix B' where
+  签名: : 余xeterMatrix B' where
   定义体: Matrix.reindex e e M
   isSymm := M.isSymm.submatrix _
   diagonal i := M.diagonal (e.symm i)
@@ -199,7 +199,7 @@ definition A
 
 中文:
 定义 A
-  签名: : CoxeterMatrix (Fin n) where
+  签名: : 余xeterMatrix (有限集 n) where
   定义体: Matrix.of fun i j : Fin n =>
     if i = j then 1
       else (if (j : Nat) + 1 = i ∨ (i : Nat) + 1 = j then 3 else 2)
@@ -237,7 +237,7 @@ definition B
 
 中文:
 定义 B
-  签名: : CoxeterMatrix (Fin n) where
+  签名: : 余xeterMatrix (有限集 n) where
   定义体: Matrix.of fun i j : Fin n =>
     if i = j then 1
       else (if i = n - 1 ∧ j = n - 2 ∨ j = n - 1 ∧ i = n - 2 then 4
@@ -277,7 +277,7 @@ definition D
 
 中文:
 定义 D
-  签名: : CoxeterMatrix (Fin n) where
+  签名: : 余xeterMatrix (有限集 n) where
   定义体: Matrix.of fun i j : Fin n =>
     if i = j then 1
       else (if i = n - 1 ∧ j = n - 3 ∨ j = n - 1 ∧ i = n - 3 then 3
@@ -346,7 +346,7 @@ definition E₆
 
 中文:
 定义 E₆
-  签名: : CoxeterMatrix (Fin 6) where
+  签名: : 余xeterMatrix (有限集 6) where
   定义体: !![1, 2, 3, 2, 2, 2;
           2, 1, 2, 3, 2, 2;
           3, 2, 1, 3, 2, 2;
@@ -379,7 +379,7 @@ definition E₇
 
 中文:
 定义 E₇
-  签名: : CoxeterMatrix (Fin 7) where
+  签名: : 余xeterMatrix (有限集 7) where
   定义体: !![1, 2, 3, 2, 2, 2, 2;
           2, 1, 2, 3, 2, 2, 2;
           3, 2, 1, 3, 2, 2, 2;
@@ -415,7 +415,7 @@ definition E₈
 
 中文:
 定义 E₈
-  签名: : CoxeterMatrix (Fin 8) where
+  签名: : 余xeterMatrix (有限集 8) where
   定义体: !![1, 2, 3, 2, 2, 2, 2, 2;
           2, 1, 2, 3, 2, 2, 2, 2;
           3, 2, 1, 3, 2, 2, 2, 2;
@@ -449,7 +449,7 @@ definition F₄
 
 中文:
 定义 F₄
-  签名: : CoxeterMatrix (Fin 4) where
+  签名: : 余xeterMatrix (有限集 4) where
   定义体: !![1, 3, 2, 2;
           3, 1, 4, 2;
           2, 4, 1, 3;
@@ -473,7 +473,7 @@ definition G₂
 
 中文:
 定义 G₂
-  签名: : CoxeterMatrix (Fin 2) where
+  签名: : 余xeterMatrix (有限集 2) where
   定义体: !![1, 6;
           6, 1]
 -/
@@ -494,7 +494,7 @@ definition H₃
 
 中文:
 定义 H₃
-  签名: : CoxeterMatrix (Fin 3) where
+  签名: : 余xeterMatrix (有限集 3) where
   定义体: !![1, 3, 2;
           3, 1, 5;
           2, 5, 1]
@@ -518,7 +518,7 @@ definition H₄
 
 中文:
 定义 H₄
-  签名: : CoxeterMatrix (Fin 4) where
+  签名: : 余xeterMatrix (有限集 4) where
   定义体: !![1, 3, 2, 2;
           3, 1, 3, 2;
           2, 3, 1, 5;

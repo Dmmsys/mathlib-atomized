@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRegularEpiCategory SSet.{u}
+  签名: 是正则满态射范畴 SSet.{u}
   定义体: inferInstanceAs (IsRegularEpiCategory (_ ⥤ _))
 
 Depends on / 依赖: IsRegularEpiCategory

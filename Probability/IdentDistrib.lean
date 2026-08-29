@@ -77,12 +77,12 @@ structure IdentDistrib
     - map_eq : Measure.map f μ = Measure.map g ν
 
 中文:
-结构 IdentDistrib
+结构 同分布
   参数: (f : α -> γ) (g : β -> γ)
   公理与运算 (3 个):
-    - aemeasurable_fst : AEMeasurable f μ
-    - aemeasurable_snd : AEMeasurable g ν
-    - map_eq : Measure.map f μ = Measure.map g ν
+    - aemeasurable_fst : 几乎处处可测 f μ
+    - aemeasurable_snd : 几乎处处可测 g ν
+    - map_eq : 测度.map f μ = 测度.map g ν
 
 Depends on / 依赖: AEMeasurable, Measure, Measure.map, aemeasurable_fst, aemeasurable_snd, map_eq, volume_tac
 -/
@@ -112,8 +112,8 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (hf : AEMeasurable f μ)
-  结论: IdentDistrib f f μ μ
+  条件: (hf : 几乎处处可测 f μ)
+  结论: 同分布 f f μ μ
   证明: { aemeasurable_fst := hf
     aemeasurable_snd := hf
     map_eq := rfl }
@@ -136,8 +136,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : IdentDistrib f g μ ν)
-  结论: IdentDistrib g f ν μ
+  条件: (h : 同分布 f g μ ν)
+  结论: 同分布 g f ν μ
   证明: { aemeasurable_fst := h.aemeasurable_snd
     aemeasurable_snd := h.aemeasurable_fst
     map_eq := h.map_eq.symm }
@@ -159,7 +159,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: {ρ : Measure δ} {h : δ -> γ} (h₁ : IdentDistrib f g μ ν)
+  结论: {ρ : 测度 δ} {h : δ -> γ} (h₁ : 同分布 f g μ ν)
   证明: { aemeasurable_fst := h₁.aemeasurable_fst
     aemeasurable_snd := h₂.aemeasurable_snd
     map_eq := h₁.map_eq.trans h₂.map_eq }
@@ -184,7 +184,7 @@ theorem comp_of_aemeasurable
 
 中文:
 定理 comp_of_aemeasurable
-  结论: {u : γ -> δ} (h : IdentDistrib f g μ ν)
+  结论: {u : γ -> δ} (h : 同分布 f g μ ν)
   证明: { aemeasurable_fst := hu.comp_aemeasurable h.aemeasurable_fst
     aemeasurable_snd := by rw [h.map_eq] at hu; exact hu.comp_aemeasurable h.aemeasurable_snd
     map_eq := by
@@ -210,7 +210,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {u : γ -> δ} (h : IdentDistrib f g μ ν) (hu : Measurable u)
+  条件: {u : γ -> δ} (h : 同分布 f g μ ν) (hu : 可测 u)
   证明: h.comp_of_aemeasurable hu.aemeasurable
 -/
 protected theorem comp {u : γ -> δ} (h : IdentDistrib f g μ ν) (hu : Measurable u) :
@@ -229,7 +229,7 @@ theorem of_ae_eq
 
 中文:
 定理 of_ae_eq
-  条件: {g : α -> γ} (hf : AEMeasurable f μ) (heq : f =ᵐ[μ] g)
+  条件: {g : α -> γ} (hf : 几乎处处可测 f μ) (heq : f =ᵐ[μ] g)
   证明: { aemeasurable_fst := hf
     aemeasurable_snd := hf.congr heq
     map_eq := Measure.map_congr heq }
@@ -248,7 +248,7 @@ lemma _root_.MeasureTheory.AEMeasurable.identDistrib_mk
   proof: IdentDistrib.of_ae_eq hf hf.ae_eq_mk
 
 中文:
-引理 _root_.MeasureTheory.AEMeasurable.identDistrib_mk
+引理 _root_.测度论.几乎处处可测.identDistrib_mk
   证明: IdentDistrib.of_ae_eq hf hf.ae_eq_mk
 
 Depends on / 依赖: IdentDistrib, IdentDistrib.of_ae_eq, ae_eq_mk, hf.ae_eq_mk, of_ae_eq
@@ -265,7 +265,7 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk
   proof: IdentDistrib.of_ae_eq hf.aemeasurable hf.ae_eq_mk
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.identDistrib_mk
+引理 _root_.测度论.AEStronglyMeasurable.identDistrib_mk
   证明: IdentDistrib.of_ae_eq hf.aemeasurable hf.ae_eq_mk
 
 Depends on / 依赖: IdentDistrib, IdentDistrib.of_ae_eq, ae_eq_mk, aemeasurable, hf.ae_eq_mk, hf.aemeasurable, of_ae_eq
@@ -289,7 +289,7 @@ alias measure_preimage_eq := measure_mem_eq
 
 中文:
 定理 measure_mem_eq
-  条件: (h : IdentDistrib f g μ ν) {s : Set γ} (hs : MeasurableSet s)
+  条件: (h : 同分布 f g μ ν) {s : 集合 γ} (hs : 可测集 s)
   证明: by
   rw [← Measure.map_apply_of_aemeasurable h.aemeasurable_fst hs]; rw [←
     Measure.map_apply_of_aemeasurable h.aemeasurable_snd hs]; rw [h.map_eq]
@@ -318,7 +318,7 @@ theorem ae_snd
 
 中文:
 定理 ae_snd
-  结论: (h : IdentDistrib f g μ ν) {p : γ -> 命题} (pmeas : MeasurableSet {x | p x})
+  结论: (h : 同分布 f g μ ν) {p : γ -> 命题} (pmeas : 可测集 {x | p x})
   证明: by
   apply (ae_map_iff h.aemeasurable_snd pmeas).1
   rw [← h.map_eq]
@@ -342,7 +342,7 @@ theorem ae_mem_snd
 
 中文:
 定理 ae_mem_snd
-  结论: (h : IdentDistrib f g μ ν) {t : Set γ} (tmeas : MeasurableSet t)
+  结论: (h : 同分布 f g μ ν) {t : 集合 γ} (tmeas : 可测集 t)
   证明: h.ae_snd tmeas ht
 
 Depends on / 依赖: ae_snd, h.ae_snd
@@ -360,8 +360,8 @@ theorem _root_.ProbabilityTheory.HasLaw.identDistrib
   proof: ⟨h₀.aemeasurable, h₁.aemeasurable, by simp [h₀.map_eq, h₁.map_eq]⟩
 
 中文:
-定理 _root_.ProbabilityTheory.HasLaw.identDistrib
-  结论: {κ : Measure γ} (h₀ : HasLaw f κ μ)
+定理 _root_.ProbabilityTheory.有Law.identDistrib
+  结论: {κ : 测度 γ} (h₀ : 有Law f κ μ)
   证明: ⟨h₀.aemeasurable, h₁.aemeasurable, by simp [h₀.map_eq, h₁.map_eq]⟩
 
 Depends on / 依赖: aemeasurable, map_eq
@@ -381,8 +381,8 @@ theorem hasLaw
 
 中文:
 定理 hasLaw
-  条件: {κ : Measure γ} (h₀ : IdentDistrib f g μ ν) (h₁ : HasLaw f κ μ)
-  结论: HasLaw g κ ν
+  条件: {κ : 测度 γ} (h₀ : 同分布 f g μ ν) (h₁ : 有Law f κ μ)
+  结论: 有Law g κ ν
   证明: ⟨h₀.aemeasurable_snd, by simp [h₀.map_eq, ← h₁.map_eq]⟩
 
 Depends on / 依赖: aemeasurable_snd, map_eq
@@ -400,7 +400,7 @@ theorem aestronglyMeasurable_fst
 
 中文:
 定理 aestronglyMeasurable_fst
-  结论: [TopologicalSpace γ] [PseudoMetrizableSpace γ]
+  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ]
   证明: h.aemeasurable_fst.aestronglyMeasurable
 
 Depends on / 依赖: aemeasurable_fst, aestronglyMeasurable, h.aemeasurable_fst.aestronglyMeasurable
@@ -425,7 +425,7 @@ theorem aestronglyMeasurable_snd
 
 中文:
 定理 aestronglyMeasurable_snd
-  结论: [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
+  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ] [Borel空间 γ]
   证明: by
   refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨h.aemeasurable_snd, ?_⟩
   rcases (aestronglyMeasurable_iff_aemeasurable_separable.1 hf).2 with ⟨t, t_sep, ht⟩
@@ -453,7 +453,7 @@ theorem aestronglyMeasurable_iff
 
 中文:
 定理 aestronglyMeasurable_iff
-  结论: [TopologicalSpace γ] [PseudoMetrizableSpace γ] [BorelSpace γ]
+  结论: [拓扑空间 γ] [PseudoMetrizable空间 γ] [Borel空间 γ]
   证明: ⟨fun hf => h.aestronglyMeasurable_snd hf, fun hg => h.symm.aestronglyMeasurable_snd hg⟩
 
 Depends on / 依赖: aestronglyMeasurable_snd, h.aestronglyMeasurable_snd, h.symm.aestronglyMeasurable_snd
@@ -475,7 +475,7 @@ theorem essSup_eq
 
 中文:
 定理 essSup_eq
-  结论: [ConditionallyCompleteLinearOrder γ] [TopologicalSpace γ] [OpensMeasurableSpace γ]
+  结论: [条件完备线性序 γ] [拓扑空间 γ] [OpensMeasurable空间 γ]
   证明: by
   have I : forall a, μ {x : α | a < f x} = ν {x : β | a < g x} := fun a =>
     h.measure_mem_eq measurableSet_Ioi
@@ -502,7 +502,7 @@ theorem lintegral_eq
 
 中文:
 定理 lintegral_eq
-  条件: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (h : IdentDistrib f g μ ν)
+  条件: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (h : 同分布 f g μ ν)
   证明: by
   change ∫⁻ x, id (f x) ∂μ = ∫⁻ x, id (g x) ∂ν
   rw [← lintegral_map' aemeasurable_id h.aemeasurable_fst]; rw [←
@@ -531,7 +531,7 @@ theorem integral_eq
 
 中文:
 定理 integral_eq
-  结论: [NormedAddCommGroup γ] [NormedSpace 实数 γ] [BorelSpace γ]
+  结论: [赋范交换加群 γ] [赋范空间 实数 γ] [Borel空间 γ]
   证明: by
   by_cases hf : AEStronglyMeasurable f μ
   · have A : AEStronglyMeasurable id (Measure.map f μ) := by
@@ -577,7 +577,7 @@ theorem eLpNorm_eq
 
 中文:
 定理 eLpNorm_eq
-  结论: [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν)
+  结论: [赋范交换加群 γ] [OpensMeasurable空间 γ] (h : 同分布 f g μ ν)
   证明: by
   by_cases h0 : p = 0
   · simp [h0]
@@ -618,7 +618,7 @@ theorem memLp_snd
 
 中文:
 定理 memLp_snd
-  结论: [NormedAddCommGroup γ] [BorelSpace γ] {p : 实数>=0∞} (h : IdentDistrib f g μ ν)
+  结论: [赋范交换加群 γ] [Borel空间 γ] {p : 实数>=0∞} (h : 同分布 f g μ ν)
   证明: by
   refine ⟨h.aestronglyMeasurable_snd hf.aestronglyMeasurable, ?_⟩
   rw [← h.eLpNorm_eq]
@@ -642,7 +642,7 @@ theorem memLp_iff
 
 中文:
 定理 memLp_iff
-  条件: [NormedAddCommGroup γ] [BorelSpace γ] {p : 实数>=0∞} (h : IdentDistrib f g μ ν)
+  条件: [赋范交换加群 γ] [Borel空间 γ] {p : 实数>=0∞} (h : 同分布 f g μ ν)
   证明: ⟨fun hf => h.memLp_snd hf, fun hg => h.symm.memLp_snd hg⟩
 
 Depends on / 依赖: h.memLp_snd, h.symm.memLp_snd, memLp_snd
@@ -663,7 +663,7 @@ theorem integrable_snd
 
 中文:
 定理 integrable_snd
-  结论: [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν)
+  结论: [赋范交换加群 γ] [Borel空间 γ] (h : 同分布 f g μ ν)
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact h.memLp_snd hf
@@ -685,7 +685,7 @@ theorem integrable_iff
 
 中文:
 定理 integrable_iff
-  条件: [NormedAddCommGroup γ] [BorelSpace γ] (h : IdentDistrib f g μ ν)
+  条件: [赋范交换加群 γ] [Borel空间 γ] (h : 同分布 f g μ ν)
   证明: ⟨fun hf => h.integrable_snd hf, fun hg => h.symm.integrable_snd hg⟩
 
 Depends on / 依赖: h.integrable_snd, h.symm.integrable_snd, integrable_snd
@@ -704,7 +704,7 @@ theorem norm
 
 中文:
 定理 norm
-  条件: [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν)
+  条件: [赋范交换加群 γ] [OpensMeasurable空间 γ] (h : 同分布 f g μ ν)
   证明: h.comp measurable_norm
 -/
 protected theorem norm [NormedAddCommGroup γ] [OpensMeasurableSpace γ] (h : IdentDistrib f g μ ν) :
@@ -721,7 +721,7 @@ theorem nnnorm
 
 中文:
 定理 nnnorm
-  结论: [NormedAddCommGroup γ] [OpensMeasurableSpace γ]
+  结论: [赋范交换加群 γ] [OpensMeasurable空间 γ]
   证明: h.comp measurable_nnnorm
 -/
 protected theorem nnnorm [NormedAddCommGroup γ] [OpensMeasurableSpace γ]
@@ -739,7 +739,7 @@ theorem pow
 
 中文:
 定理 pow
-  条件: [Pow γ 自然数] [MeasurablePow γ 自然数] (h : IdentDistrib f g μ ν) {n : 自然数}
+  条件: [幂 γ 自然数] [MeasurablePow γ 自然数] (h : 同分布 f g μ ν) {n : 自然数}
   证明: h.comp (measurable_id.pow_const n)
 -/
 protected theorem pow [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν) {n : Nat} :
@@ -756,7 +756,7 @@ theorem sq
 
 中文:
 定理 sq
-  条件: [Pow γ 自然数] [MeasurablePow γ 自然数] (h : IdentDistrib f g μ ν)
+  条件: [幂 γ 自然数] [MeasurablePow γ 自然数] (h : 同分布 f g μ ν)
   证明: h.comp (measurable_id.pow_const 2)
 -/
 protected theorem sq [Pow γ Nat] [MeasurablePow γ Nat] (h : IdentDistrib f g μ ν) :
@@ -775,7 +775,7 @@ theorem coe_nnreal_ennreal
 
 中文:
 定理 coe_nnreal_ennreal
-  条件: {f : α -> 实数>=0} {g : β -> 实数>=0} (h : IdentDistrib f g μ ν)
+  条件: {f : α -> 实数>=0} {g : β -> 实数>=0} (h : 同分布 f g μ ν)
   证明: h.comp measurable_coe_nnreal_ennreal
 
 @[to_additive]
@@ -797,7 +797,7 @@ theorem mul_const
 
 中文:
 定理 mul_const
-  条件: [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ)
+  条件: [乘法 γ] [MeasurableMul γ] (h : 同分布 f g μ ν) (c : γ)
   证明: h.comp (measurable_mul_const c)
 
 @[to_additive]
@@ -821,7 +821,7 @@ theorem const_mul
 
 中文:
 定理 const_mul
-  条件: [Mul γ] [MeasurableMul γ] (h : IdentDistrib f g μ ν) (c : γ)
+  条件: [乘法 γ] [MeasurableMul γ] (h : 同分布 f g μ ν) (c : γ)
   证明: h.comp (measurable_const_mul c)
 
 @[to_additive]
@@ -845,7 +845,7 @@ theorem div_const
 
 中文:
 定理 div_const
-  条件: [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ)
+  条件: [除法 γ] [MeasurableDiv γ] (h : 同分布 f g μ ν) (c : γ)
   证明: h.comp (MeasurableDiv.measurable_div_const c)
 
 @[to_additive]
@@ -869,7 +869,7 @@ theorem const_div
 
 中文:
 定理 const_div
-  条件: [Div γ] [MeasurableDiv γ] (h : IdentDistrib f g μ ν) (c : γ)
+  条件: [除法 γ] [MeasurableDiv γ] (h : 同分布 f g μ ν) (c : γ)
   证明: h.comp (MeasurableDiv.measurable_const_div c)
 
 @[to_additive]
@@ -891,7 +891,7 @@ lemma inv
 
 中文:
 引理 inv
-  条件: [Inv γ] [MeasurableInv γ] (h : IdentDistrib f g μ ν)
+  条件: [取逆 γ] [MeasurableInv γ] (h : 同分布 f g μ ν)
   证明: h.comp measurable_inv
 
 Depends on / 依赖: h.comp, measurable_inv
@@ -912,7 +912,7 @@ theorem evariance_eq
 
 中文:
 定理 evariance_eq
-  条件: {f : α -> 实数} {g : β -> 实数} (h : IdentDistrib f g μ ν)
+  条件: {f : α -> 实数} {g : β -> 实数} (h : 同分布 f g μ ν)
   证明: by
   convert! (h.sub_const (∫ x, f x ∂μ)).nnnorm.coe_nnreal_ennreal.sq.lintegral_eq
   rw [h.integral_eq]
@@ -936,7 +936,7 @@ theorem variance_eq
 
 中文:
 定理 variance_eq
-  条件: {f : α -> 实数} {g : β -> 实数} (h : IdentDistrib f g μ ν)
+  条件: {f : α -> 实数} {g : β -> 实数} (h : 同分布 f g μ ν)
   证明: by rw [variance, h.evariance_eq]; rfl
 
 Depends on / 依赖: evariance_eq, h.evariance_eq, variance
@@ -969,7 +969,7 @@ theorem MemLp.uniformIntegrable_of_identDistrib_aux
   have 
 
 中文:
-定理 MemLp.uniformIntegrable_of_identDistrib_aux
+定理 MemLp.uniform整数egrable_of_identDistrib_aux
   结论: {ι : 类型} {f : ι -> α -> E} {j : ι} {p : 实数>=0∞}
   证明: by
   refine uniformIntegrable_of' hp hp' hfmeas fun ε hε => ?_
@@ -1018,7 +1018,7 @@ theorem MemLp.uniformIntegrable_of_identDistrib
   have hgeq : forall i, g i =ᵐ[μ] f 
 
 中文:
-定理 MemLp.uniformIntegrable_of_identDistrib
+定理 MemLp.uniform整数egrable_of_identDistrib
   结论: {ι : 类型} {f : ι -> α -> E} {j : ι} {p : 实数>=0∞}
   证明: by
   have hfmeas : forall i, AEStronglyMeasurable (f i) μ := fun i =>

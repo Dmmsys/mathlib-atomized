@@ -64,7 +64,7 @@ abbreviation Permutation
   body: List {l : List Nat // 2 <= l.length}
 
 中文:
-缩写 Permutation
+缩写 置换
   定义体: List {l : List Nat // 2 <= l.length}
 
 Depends on / 依赖: l.length, length
@@ -83,7 +83,7 @@ definition permute!
 
 中文:
 定义 permute!
-  签名: {α} [Inhabited α] (c : Permutation)
+  签名: {α} [可居 α] (c : 置换)
   定义体: c.foldl (cyclicPermute! · ·.1)
 
 Depends on / 依赖: c.foldl, cyclicPermute
@@ -113,7 +113,7 @@ definition permuteList!
 
 中文:
 定义 permuteList!
-  签名: {α} [Inhabited α] (p : Permutation) (us : List α)
+  签名: {α} [可居 α] (p : 置换) (us : 列表 α)
   定义体: if p.isEmpty then us else (p.permute! us.toArray).toList
 
 Depends on / 依赖: isEmpty, p.isEmpty, p.permute, permute, toArray, toList, us.toArray
@@ -131,7 +131,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: (c : Permutation)
+  签名: (c : 置换)
   定义体: c.map (⟨·.1.reverse, by grind⟩)
 
 Depends on / 依赖: c.map, reverse
@@ -149,7 +149,7 @@ definition range
 
 中文:
 定义 range
-  签名: (p : Permutation)
+  签名: (p : 置换)
   定义体: .fold max 0 .map (· + 1) p.iter.flatMap (·.1.iter)
 
 Depends on / 依赖: flatMap, p.iter.flatMap
@@ -169,7 +169,7 @@ definition beq
 
 中文:
 定义 beq
-  签名: (p₁ p₂ : Permutation)
+  签名: (p₁ p₂ : 置换)
   定义体: p₁.range == p₂.range &&
     let rangeArr := (0...p₁.range).toArray;
     p₁.permute! rangeArr == p₂.permute! rangeArr
@@ -197,8 +197,8 @@ structure ArgReorder
 结构 ArgReorder
   参数: where
   公理与运算 (2 个):
-    - perm : Permutation  [默认: []]
-    - argReorders : Array (自然数 × ArgReorder)  [默认: #[]]
+    - perm : 置换  [默认: []]
+    - argReorders : 数组 (自然数 × ArgReorder)  [默认: #[]]
 -/
 structure ArgReorder where
   /-- The list of disjoint cycles that represents the permutation. -/
@@ -237,7 +237,7 @@ definition permute!
 
 中文:
 定义 permute!
-  签名: {α} [Inhabited α] (r : ArgReorder)
+  签名: {α} [可居 α] (r : ArgReorder)
   定义体: r.perm.permute!
 
 Depends on / 依赖: permute, r.perm.permute
@@ -420,7 +420,7 @@ structure Reorder
 结构 Reorder
   参数: where
   公理与运算 (2 个):
-    - univReorder : Permutation  [默认: []]
+    - univReorder : 置换  [默认: []]
     - reorder : ArgReorder  [默认: {}]
 -/
 structure Reorder where
@@ -465,7 +465,7 @@ definition fixBinderInfos
 
 中文:
 定义 fixBinderInfos
-  签名: (bis : List BinderInfo) (e : Expr)
+  签名: (bis : 列表 BinderInfo) (e : Expr)
   定义体: match bis, e with
   | bi :: bis, .forallE n d b _ => .forallE n d (fixBinderInfos bis b) bi
   | bi :: bis, .lam n d b _ => .lam n d (fixBinderInfos bis b) bi
@@ -501,7 +501,7 @@ definition reorderMVars
 
 中文:
 定义 reorderMVars
-  签名: (mvars : Array Expr) (reorder : ArgReorder)
+  签名: (mvars : 数组 Expr) (reorder : ArgReorder)
   定义体: do
   let mut mvars := mvars
   for (arg, argReorder) in reorder.argReorders do
@@ -612,7 +612,7 @@ definition decomposePerm
 
 中文:
 定义 decomposePerm
-  签名: {n} (map : Vector (Option (Fin n)) n)
+  签名: {n} (map : Vector (选项类型 (有限集 n)) n)
   定义体: Id.run do
   let mut map := map
   let mut perm := []
@@ -659,7 +659,7 @@ definition getPermutation
 
 中文:
 定义 getPermutation
-  签名: {α : 类型} [BEq α] (src : Array α) (tgt : Array α)
+  签名: {α : 类型} [BEq α] (src : 数组 α) (tgt : 数组 α)
   定义体: do
   let n := src.size
   if h : n = tgt.size then
@@ -829,7 +829,7 @@ definition elabArgStx
 
 中文:
 定义 elabArgStx
-  签名: (stx : TSyntax [`ident, `num]) (argNames : Array Name) (fvars : Array Expr)
+  签名: (stx : TSyntax [`ident, `num]) (argNames : 数组 Name) (fvars : 数组 Expr)
   定义体: do
   let n ← match stx with
     | `($name:ident) => match argNames.idxOf? name.getId with
@@ -873,7 +873,7 @@ definition elabReorder
 
 中文:
 定义 elabReorder
-  签名: (stx : TSyntax `translateReorder) (argNames : Array Name)
+  签名: (stx : TSyntax `translateReorder) (argNames : 数组 Name)
   定义体: match stx with
   | `(reorder| $[$parts],*) => withRef stx do
     let mut perm := []

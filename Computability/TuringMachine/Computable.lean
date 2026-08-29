@@ -64,17 +64,17 @@ structure FinTM2
 结构 FinTM2
   参数: where
   公理与运算 (12 个):
-    - {K : Type} [kDecidableEq : DecidableEq K]
-    - [kFin : Fintype K]
+    - {K : 类型} [kDecidableEq : DecidableEq K]
+    - [kFin : 有限类型 K]
     - (k₀(k₁) : K)
-    - (Γ : K -> Type)
-    - (Λ : Type)
+    - (Γ : K -> 类型)
+    - (Λ : 类型)
     - (main : Λ)
-    - [ΛFin : Fintype Λ]
-    - (σ : Type)
+    - [ΛFin : 有限类型 Λ]
+    - (σ : 类型)
     - (initialState : σ)
-    - [σFin : Fintype σ]
-    - [Γk₀Fin : Fintype (Γ k₀)]
+    - [σFin : 有限类型 σ]
+    - [Γk₀Fin : 有限类型 (Γ k₀)]
     - (m : Λ -> Turing.TM2.Stmt Γ Λ σ)
 -/
 structure FinTM2 where
@@ -139,7 +139,7 @@ instance inhabitedσ
 
 中文:
 实例 inhabitedσ
-  签名: : Inhabited tm.σ
+  签名: : 可居 tm.σ
   定义体: ⟨tm.initialState⟩
 
 Depends on / 依赖: initialState, tm.initialState
@@ -157,7 +157,7 @@ definition Stmt
 
 中文:
 定义 Stmt
-  签名: : Type
+  签名: : 类型
   定义体: Turing.TM2.Stmt tm.Γ tm.Λ tm.σ
 
 Depends on / 依赖: Turing, Turing.TM2.Stmt
@@ -175,7 +175,7 @@ instance inhabitedStmt
 
 中文:
 实例 inhabitedStmt
-  签名: : Inhabited (Stmt tm)
+  签名: : 可居 (Stmt tm)
   定义体: inferInstanceAs (Inhabited (Turing.TM2.Stmt tm.Γ tm.Λ tm.σ))
 
 Depends on / 依赖: Inhabited, Turing, Turing.TM2.Stmt
@@ -193,7 +193,7 @@ definition Cfg
 
 中文:
 定义 Cfg
-  签名: : Type
+  签名: : 类型
   定义体: Turing.TM2.Cfg tm.Γ tm.Λ tm.σ
 
 Depends on / 依赖: Turing, Turing.TM2.Cfg
@@ -211,7 +211,7 @@ instance inhabitedCfg
 
 中文:
 实例 inhabitedCfg
-  签名: : Inhabited (Cfg tm)
+  签名: : 可居 (Cfg tm)
   定义体: Turing.TM2.Cfg.inhabited _ _ _
 
 Depends on / 依赖: Turing, Turing.TM2.Cfg.inhabited, inhabited
@@ -231,7 +231,7 @@ definition step
 
 中文:
 定义 step
-  签名: : tm.Cfg -> Option tm.Cfg
+  签名: : tm.Cfg -> 选项类型 tm.Cfg
   定义体: Turing.TM2.step tm.m
 
 Depends on / 依赖: Turing, Turing.TM2.step, tm.m
@@ -257,7 +257,7 @@ definition initList
 
 中文:
 定义 initList
-  签名: (tm : FinTM2) (s : List (tm.Γ tm.k₀))
+  签名: (tm : FinTM2) (s : 列表 (tm.Γ tm.k₀))
   定义体: Option.some tm.main
   var := tm.initialState
   stk k :=
@@ -291,7 +291,7 @@ definition haltList
 
 中文:
 定义 haltList
-  签名: (tm : FinTM2) (s : List (tm.Γ tm.k₁))
+  签名: (tm : FinTM2) (s : 列表 (tm.Γ tm.k₁))
   定义体: Option.none
   var := tm.initialState
   stk k :=
@@ -326,7 +326,7 @@ definition TM2Outputs
 
 中文:
 定义 TM2Outputs
-  签名: (tm : FinTM2) (l : List (tm.Γ tm.k₀)) (l' : Option (List (tm.Γ tm.k₁)))
+  签名: (tm : FinTM2) (l : 列表 (tm.Γ tm.k₀)) (l' : 选项类型 (列表 (tm.Γ tm.k₁)))
   定义体: EvalsTo tm.step (initList tm l) ((Option.map (haltList tm)) l')
 
 Depends on / 依赖: EvalsTo, Option.map, haltList, initList, tm.step
@@ -344,7 +344,7 @@ definition TM2OutputsInTime
 
 中文:
 定义 TM2OutputsInTime
-  签名: (tm : FinTM2) (l : List (tm.Γ tm.k₀)) (l' : Option (List (tm.Γ tm.k₁)))
+  签名: (tm : FinTM2) (l : 列表 (tm.Γ tm.k₀)) (l' : 选项类型 (列表 (tm.Γ tm.k₁)))
   定义体: EvalsToInTime tm.step (initList tm l) ((Option.map (haltList tm)) l') m
 
 Depends on / 依赖: EvalsToInTime, Option.map, haltList, initList, tm.step
@@ -363,7 +363,7 @@ definition TM2OutputsInTime.toTM2Outputs
 
 中文:
 定义 TM2OutputsInTime.toTM2Outputs
-  签名: {tm : FinTM2} {l : List (tm.Γ tm.k₀)}
+  签名: {tm : FinTM2} {l : 列表 (tm.Γ tm.k₀)}
   定义体: h.toEvalsTo
 
 Depends on / 依赖: h.toEvalsTo, toEvalsTo
@@ -386,7 +386,7 @@ structure TM2ComputableAux
 
 中文:
 结构 TM2ComputableAux
-  参数: (Γ₀ Γ₁ : Type)
+  参数: (Γ₀ Γ₁ : 类型)
   公理与运算 (3 个):
     - tm : FinTM2
     - inputAlphabet : tm.Γ tm.k₀ ≃ Γ₀
@@ -411,9 +411,9 @@ structure TM2Computable
 
 中文:
 结构 TM2Computable
-  参数: {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ) (f : α -> β)
+  参数: {α β αΓ βΓ : 类型} (ea : α -> 列表 αΓ) (eb : β -> 列表 βΓ) (f : α -> β)
   公理与运算 (1 个):
-    - outputsFun : 对任意 a, TM2Outputs tm (List.map inputAlphabet.invFun (ea a)) (Option.some ((List.map outputAlphabet.invFun) (eb (f a))))
+    - outputsFun : 对任意 a, TM2Outputs tm (列表.map inputAlphabet.invFun (ea a)) (选项类型.some ((列表.map outputAlphabet.invFun) (eb (f a))))
 -/
 structure TM2Computable {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ) (f : α -> β) extends
   TM2ComputableAux αΓ βΓ where
@@ -436,11 +436,11 @@ structure TM2ComputableInTime
 
 中文:
 结构 TM2ComputableInTime
-  参数: {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ)
+  参数: {α β αΓ βΓ : 类型} (ea : α -> 列表 αΓ) (eb : β -> 列表 βΓ)
   继承: TM2ComputableAux αΓ βΓ
   公理与运算 (2 个):
     - time : 自然数 -> 自然数
-    - outputsFun : 对任意 a, TM2OutputsInTime tm (List.map inputAlphabet.invFun (ea a)) (Option.some ((List.map outputAlphabet.invFun) (eb (f a)))) (time (ea a).length)
+    - outputsFun : 对任意 a, TM2OutputsInTime tm (列表.map inputAlphabet.invFun (ea a)) (选项类型.some ((列表.map outputAlphabet.invFun) (eb (f a)))) (time (ea a).length)
 -/
 structure TM2ComputableInTime {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ)
   (f : α -> β) extends TM2ComputableAux αΓ βΓ where
@@ -466,11 +466,11 @@ structure TM2ComputableInPolyTime
 
 中文:
 结构 TM2ComputableInPolyTime
-  参数: {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ)
+  参数: {α β αΓ βΓ : 类型} (ea : α -> 列表 αΓ) (eb : β -> 列表 βΓ)
   继承: TM2ComputableAux αΓ βΓ
   公理与运算 (2 个):
-    - time : Polynomial 自然数
-    - outputsFun : 对任意 a, TM2OutputsInTime tm (List.map inputAlphabet.invFun (ea a)) (Option.some ((List.map outputAlphabet.invFun) (eb (f a)))) (time.eval (ea a).length)
+    - time : 多项式 自然数
+    - outputsFun : 对任意 a, TM2OutputsInTime tm (列表.map inputAlphabet.invFun (ea a)) (选项类型.some ((列表.map outputAlphabet.invFun) (eb (f a)))) (time.eval (ea a).length)
 -/
 structure TM2ComputableInPolyTime {α β αΓ βΓ : Type} (ea : α -> List αΓ) (eb : β -> List βΓ)
   (f : α -> β) extends TM2ComputableAux αΓ βΓ where
@@ -493,7 +493,7 @@ definition TM2ComputableInTime.toTM2Computable
 
 中文:
 定义 TM2ComputableInTime.toTM2Computable
-  签名: {α β αΓ βΓ : Type} {ea : α -> List αΓ} {eb : β -> List βΓ}
+  签名: {α β αΓ βΓ : 类型} {ea : α -> 列表 αΓ} {eb : β -> 列表 βΓ}
   定义体: ⟨h.toTM2ComputableAux, fun a => TM2OutputsInTime.toTM2Outputs (h.outputsFun a)⟩
 
 Depends on / 依赖: TM2OutputsInTime, TM2OutputsInTime.toTM2Outputs, h.outputsFun, h.toTM2ComputableAux, outputsFun, toTM2ComputableAux, toTM2Outputs
@@ -512,7 +512,7 @@ definition TM2ComputableInPolyTime.toTM2ComputableInTime
 
 中文:
 定义 TM2ComputableInPolyTime.toTM2ComputableInTime
-  签名: {α β αΓ βΓ : Type} {ea : α -> List αΓ}
+  签名: {α β αΓ βΓ : 类型} {ea : α -> 列表 αΓ}
   定义体: ⟨h.toTM2ComputableAux, fun n => h.time.eval n, h.outputsFun⟩
 
 Depends on / 依赖: h.outputsFun, h.time.eval, h.toTM2ComputableAux, outputsFun, toTM2ComputableAux
@@ -542,7 +542,7 @@ definition idComputer
 
 中文:
 定义 idComputer
-  签名: (αΓ : Type) [Fintype αΓ]
+  签名: (αΓ : 类型) [有限类型 αΓ]
   定义体: Unit
   k₀ := ⟨⟩
   k₁ := ⟨⟩
@@ -576,7 +576,7 @@ noncomputable section
 
 中文:
 实例 inhabitedFinTM2
-  签名: : Inhabited FinTM2
+  签名: : 可居 FinTM2
   定义体: ⟨idComputer Bool⟩
 
 noncomputable section
@@ -605,7 +605,7 @@ definition idComputableInPolyTime
 
 中文:
 定义 idComputableInPolyTime
-  签名: {α αΓ : Type} [Fintype αΓ] (ea : α -> List αΓ)
+  签名: {α αΓ : 类型} [有限类型 αΓ] (ea : α -> 列表 αΓ)
   定义体: idComputer αΓ
   inputAlphabet := Equiv.cast rfl
   outputAlphabet := Equiv.cast rfl
@@ -718,7 +718,7 @@ instance inhabitedTM2EvalsTo
 
 中文:
 实例 inhabitedTM2EvalsTo
-  签名: : Inhabited (EvalsTo (fun _ : Unit => some ⟨⟩) ⟨⟩ (some ⟨⟩))
+  签名: : 可居 (EvalsTo (fun _ : 单元 => some ⟨⟩) ⟨⟩ (some ⟨⟩))
   定义体: ⟨EvalsTo.refl _ _⟩
 
 Depends on / 依赖: EvalsTo, EvalsTo.refl
@@ -736,7 +736,7 @@ definition idComputableInTime
 
 中文:
 定义 idComputableInTime
-  签名: {α αΓ : Type} [Fintype αΓ] (ea : α -> List αΓ)
+  签名: {α αΓ : 类型} [有限类型 αΓ] (ea : α -> 列表 αΓ)
   定义体: TM2ComputableInPolyTime.toTM2ComputableInTime idComputableInPolyTime ea
 
 Depends on / 依赖: TM2ComputableInPolyTime, TM2ComputableInPolyTime.toTM2ComputableInTime, idComputableInPolyTime, toTM2ComputableInTime
@@ -774,7 +774,7 @@ definition idComputable
 
 中文:
 定义 idComputable
-  签名: {α αΓ : Type} [Fintype αΓ] (ea : α -> List αΓ)
+  签名: {α αΓ : 类型} [有限类型 αΓ] (ea : α -> 列表 αΓ)
   定义体: TM2ComputableInTime.toTM2Computable idComputableInTime ea
 
 Depends on / 依赖: TM2ComputableInTime, TM2ComputableInTime.toTM2Computable, idComputableInTime, toTM2Computable
@@ -812,7 +812,7 @@ instance inhabitedTM2ComputableAux
 
 中文:
 实例 inhabitedTM2ComputableAux
-  签名: : Inhabited (TM2ComputableAux 布尔 布尔)
+  签名: : 可居 (TM2ComputableAux 布尔值 布尔值)
   定义体: ⟨(default : TM2Computable encodeBool encodeBool id).toTM2ComputableAux⟩
 
 Depends on / 依赖: TM2Computable, encodeBool, toTM2ComputableAux

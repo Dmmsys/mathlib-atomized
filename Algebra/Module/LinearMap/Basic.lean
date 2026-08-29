@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S'ᵈᵐᵃ (M ->ₛₗ[σ₁₂] M')
+  签名: 标量乘法 S'ᵈᵐᵃ (M ->ₛₗ[σ₁₂] M')
   定义体: { toFun := a • (f : M -> M')
       map_add' := fun x y => by simp only [DomMulAct.smul_apply, f.map_add, smul_add]
       map_smul' := fun c x => by simp_rw [DomMulAct.smul_apply, ← smul_comm, f.map_smulₛₗ] }
@@ -178,8 +178,8 @@ instance [SMulCommClass
   body: ⟨fun s t f => ext fun m => by simp_rw [DomMulAct.smul_linearMap_apply, smul_comm]⟩
 
 中文:
-实例 [SMulCommClass
-  签名: S' T' M] : SMulCommClass S'ᵈᵐᵃ T'ᵈᵐᵃ (M ->ₛₗ[σ₁₂] M')
+实例 [标量交换类
+  签名: S' T' M] : 标量交换类 S'ᵈᵐᵃ T'ᵈᵐᵃ (M ->ₛₗ[σ₁₂] M')
   定义体: ⟨fun s t f => ext fun m => by simp_rw [DomMulAct.smul_linearMap_apply, smul_comm]⟩
 
 Depends on / 依赖: DomMulAct, DomMulAct.smul_linearMap_apply, simp_rw, smul_comm, smul_linearMap_apply
@@ -221,8 +221,8 @@ instance [Module.IsTorsionFree
   body: coe_injective.moduleIsTorsionFree _ coe_smul
 
 中文:
-实例 [Module.IsTorsionFree
-  签名: S M'] : Module.IsTorsionFree S (M ->ₛₗ[σ₁₂] M')
+实例 [模.是无挠
+  签名: S M'] : 模.是无挠 S (M ->ₛₗ[σ₁₂] M')
   定义体: coe_injective.moduleIsTorsionFree _ coe_smul
 
 Depends on / 依赖: coe_injective, coe_injective.moduleIsTorsionFree, coe_smul, moduleIsTorsionFree
@@ -243,8 +243,8 @@ instance [SMulCommClass
     simp [DomMulAct.smul_linearMap_apply, DomMulAct.mk, MulOpposite.opEquiv]
 
 中文:
-实例 [SMulCommClass
-  签名: R S M] : Module Sᵈᵐᵃ (M ->ₛₗ[σ₁₂] M') where
+实例 [标量交换类
+  签名: R S M] : 模 Sᵈᵐᵃ (M ->ₛₗ[σ₁₂] M') where
   定义体: ext fun _ => by
     simp_rw [add_apply, DomMulAct.smul_linearMap_apply, ← map_add, ← add_smul]; rfl
   zero_smul _ := ext fun _ => by
@@ -283,7 +283,7 @@ theorem mulLeft_mul
 
 中文:
 定理 mulLeft_mul
-  条件: [SMulCommClass R A A] (a b : A)
+  条件: [标量交换类 R A A] (a b : A)
   证明: by
   ext
   simp only [mulLeft_apply, comp_apply, mul_assoc]
@@ -310,7 +310,7 @@ theorem mulRight_mul
 
 中文:
 定理 mulRight_mul
-  条件: [IsScalarTower R A A] (a b : A)
+  条件: [标量塔 R A A] (a b : A)
   证明: by
   ext
   simp only [mulRight_apply, comp_apply, mul_assoc]
@@ -337,7 +337,7 @@ lemma mulLeft_inj
 
 中文:
 引理 mulLeft_inj
-  条件: [SMulCommClass R A A] {a b : A}
+  条件: [标量交换类 R A A] {a b : A}
   证明: ⟨fun h => by simpa using LinearMap.ext_iff.mp h 1, fun h => h ▸ rfl⟩
 -/
 @[simp] lemma mulLeft_inj [SMulCommClass R A A] {a b : A} :
@@ -354,7 +354,7 @@ lemma mulRight_inj
 
 中文:
 引理 mulRight_inj
-  条件: [IsScalarTower R A A] {a b : A}
+  条件: [标量塔 R A A] {a b : A}
   证明: ⟨fun h => by simpa using LinearMap.ext_iff.mp h 1, fun h => h ▸ rfl⟩
 -/
 @[simp] lemma mulRight_inj [IsScalarTower R A A] {a b : A} :
@@ -378,8 +378,8 @@ theorem mulLeft_one
 
 中文:
 定理 mulLeft_one
-  条件: [SMulCommClass R A A]
-  结论: mulLeft R (1 : A) = LinearMap.id
+  条件: [标量交换类 R A A]
+  结论: mulLeft R (1 : A) = 线性映射.id
   证明: ext one_mul
 
 @[simp]
@@ -402,7 +402,7 @@ theorem mulLeft_eq_zero_iff
 
 中文:
 定理 mulLeft_eq_zero_iff
-  条件: [SMulCommClass R A A] (a : A)
+  条件: [标量交换类 R A A] (a : A)
   结论: mulLeft R a = 0 ↔ a = 0
   证明: mulLeft_zero_eq_zero R A ▸ mulLeft_inj
 
@@ -427,8 +427,8 @@ theorem mulRight_one
 
 中文:
 定理 mulRight_one
-  条件: [IsScalarTower R A A]
-  结论: mulRight R (1 : A) = LinearMap.id
+  条件: [标量塔 R A A]
+  结论: mulRight R (1 : A) = 线性映射.id
   证明: ext mul_one
 
 @[simp]
@@ -450,7 +450,7 @@ theorem mulRight_eq_zero_iff
 
 中文:
 定理 mulRight_eq_zero_iff
-  条件: [IsScalarTower R A A] (a : A)
+  条件: [标量塔 R A A] (a : A)
   结论: mulRight R a = 0 ↔ a = 0
   证明: mulRight_zero_eq_zero R A ▸ mulRight_inj
 

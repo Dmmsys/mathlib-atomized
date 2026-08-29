@@ -59,9 +59,9 @@ structure FreeAddGroupBasis
 
 中文:
 结构 FreeAddGroupBasis
-  参数: (ι : 类型) (G : 类型) [AddGroup G]
+  参数: (ι : 类型) (G : 类型) [加法群 G]
   公理与运算 (1 个):
-    - ofRepr : : repr : G ≃+ FreeAddGroup ι
+    - ofRepr : : repr : G ≃+ 自由加法群 ι
 -/
 structure FreeAddGroupBasis (ι : Type*) (G : Type*) [AddGroup G] where
   /-- `FreeAddGroupBasis.ofRepr` constructs a basis given an equivalence with an additive free
@@ -87,9 +87,9 @@ structure FreeGroupBasis
 
 中文:
 结构 FreeGroupBasis
-  参数: (ι : 类型) (G : 类型) [Group G]
+  参数: (ι : 类型) (G : 类型) [群 G]
   公理与运算 (1 个):
-    - ofRepr : : repr : G ≃* FreeGroup ι
+    - ofRepr : : repr : G ≃* 自由群 ι
 -/
 structure FreeGroupBasis (ι : Type*) (G : Type*) [Group G] where
   /-- `FreeGroupBasis.ofRepr` constructs a basis given an equivalence with a free group. -/
@@ -107,10 +107,10 @@ class IsFreeAddGroup
     - nonempty_basis : exists (ι : Type u), Nonempty (FreeAddGroupBasis ι G)
 
 中文:
-类 IsFreeAddGroup
-  参数: (G : 类型u) [AddGroup G]
+类 是自由加法群
+  参数: (G : 类型u) [加法群 G]
   公理与运算 (1 个):
-    - nonempty_basis : 存在 (ι : 类型u), Nonempty (FreeAddGroupBasis ι G)
+    - nonempty_basis : 存在 (ι : 类型u), 非空 (FreeAddGroupBasis ι G)
 -/
 class IsFreeAddGroup (G : Type u) [AddGroup G] : Prop where
   nonempty_basis : exists (ι : Type u), Nonempty (FreeAddGroupBasis ι G)
@@ -129,10 +129,10 @@ class IsFreeGroup
     - nonempty_basis : exists (ι : Type u), Nonempty (FreeGroupBasis ι G)
 
 中文:
-类 IsFreeGroup
-  参数: (G : 类型u) [Group G]
+类 是自由群
+  参数: (G : 类型u) [群 G]
   公理与运算 (1 个):
-    - nonempty_basis : 存在 (ι : 类型u), Nonempty (FreeGroupBasis ι G)
+    - nonempty_basis : 存在 (ι : 类型u), 非空 (FreeGroupBasis ι G)
 -/
 class IsFreeGroup (G : Type u) [Group G] : Prop where
   nonempty_basis : exists (ι : Type u), Nonempty (FreeGroupBasis ι G)
@@ -162,7 +162,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (FreeGroupBasis ι G) ι G where
+  签名: : 函数状 (FreeGroupBasis ι G) ι G where
   定义体: fun i => b.repr.symm (FreeGroup.of i)
   coe_injective := by
     rintro ⟨b⟩ ⟨b'⟩ hbb'
@@ -197,7 +197,7 @@ lemma repr_apply_coe
 中文:
 引理 repr_apply_coe
   条件: (b : FreeGroupBasis ι G) (i : ι)
-  结论: b.repr (b i) = FreeGroup.of i
+  结论: b.repr (b i) = 自由群.of i
   证明: by
   change b.repr (b.repr.symm (FreeGroup.of i)) = FreeGroup.of i
   simp
@@ -344,7 +344,7 @@ lemma injective
 中文:
 引理 injective
   条件: (b : FreeGroupBasis ι G)
-  结论: Injective b
+  结论: 单射 b
   证明: b.repr.symm.injective.comp FreeGroup.of_injective
 -/
 protected lemma injective (b : FreeGroupBasis ι G) : Injective b :=
@@ -367,7 +367,7 @@ lemma isFreeGroup
 中文:
 引理 isFreeGroup
   条件: (b : FreeGroupBasis ι G)
-  结论: IsFreeGroup G
+  结论: 是自由群 G
   证明: ⟨range b, ⟨b.reindex (Equiv.ofInjective (↑b) b.injective)⟩⟩
 
 @[to_additive]
@@ -477,7 +477,7 @@ definition ofLift
 
 中文:
 定义 ofLift
-  签名: {G : 类型u} [Group G] (X : 类型u) (of : X -> G)
+  签名: {G : 类型u} [群 G] (X : 类型u) (of : X -> G)
   定义体: MulEquiv.symm MonoidHom.toMulEquiv (FreeGroup.lift of) (lift FreeGroup.of)
       (by
         apply FreeGroup.ext_hom; intro x
@@ -525,7 +525,7 @@ definition ofUniqueLift
 
 中文:
 定义 ofUniqueLift
-  签名: {G : 类型u} [Group G] (X : 类型u) (of : X -> G)
+  签名: {G : 类型u} [群 G] (X : 类型u) (of : X -> G)
   定义体: let lift {H : Type u} [Group H] : (X -> H) ≃ (G ->* H) :=
     { toFun := fun f => Classical.choose (h f)
       invFun := fun F => F ∘ of
@@ -563,8 +563,8 @@ definition Generators
   body: (IsFreeGroup.nonempty_basis (G := G)).choose
 
 中文:
-定义 Generators
-  签名: : Type _
+定义 生成元
+  签名: : 类型 _
   定义体: (IsFreeGroup.nonempty_basis (G := G)).choose
 
 Depends on / 依赖: IsFreeGroup, IsFreeGroup.nonempty_basis, nonempty_basis
@@ -589,7 +589,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : FreeGroupBasis (Generators G) G
+  签名: : FreeGroupBasis (生成元 G) G
   定义体: FreeGroupBasis.ofRepr (mulEquiv G).symm
 
 Depends on / 依赖: FreeGroupBasis, FreeGroupBasis.ofRepr, mulEquiv, ofRepr
@@ -609,7 +609,7 @@ definition toFreeGroup
 
 中文:
 定义 toFreeGroup
-  签名: : G ≃* FreeGroup (Generators G)
+  签名: : G ≃* 自由群 (生成元 G)
   定义体: (mulEquiv G).symm
 
 Depends on / 依赖: mulEquiv
@@ -631,7 +631,7 @@ definition of
 
 中文:
 定义 of
-  签名: : Generators G -> G
+  签名: : 生成元 G -> G
   定义体: (mulEquiv G).toFun ∘ FreeGroup.of
 
 Depends on / 依赖: FreeGroup, FreeGroup.of, mulEquiv
@@ -658,7 +658,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (Generators G -> H) ≃ (G ->* H)
+  签名: : (生成元 G -> H) ≃ (G ->* H)
   定义体: (basis G).lift
 
 @[to_additive (attr := simp)]
@@ -680,7 +680,7 @@ theorem lift_of
 
 中文:
 定理 lift_of
-  条件: (f : Generators G -> H) (a : Generators G)
+  条件: (f : 生成元 G -> H) (a : 生成元 G)
   结论: lift f (of a) = f a
   证明: congr_fun (lift.symm_apply_apply f) a
 
@@ -703,7 +703,7 @@ theorem lift_symm_apply
 
 中文:
 定理 lift_symm_apply
-  条件: (f : G ->* H) (a : Generators G)
+  条件: (f : G ->* H) (a : 生成元 G)
   结论: (lift.symm f) a = f (of a)
   证明: rfl
 -/
@@ -724,7 +724,7 @@ theorem ext_hom
 中文:
 定理 ext_hom
   条件: ⦃f g
-  结论: G ->* H⦄ (h : 对任意 a : Generators G, f (of a) = g (of a)) : f = g
+  结论: G ->* H⦄ (h : 对任意 a : 生成元 G, f (of a) = g (of a)) : f = g
   证明: lift.symm.injective (funext h)
 
 Depends on / 依赖: injective, lift.symm.injective
@@ -755,7 +755,7 @@ theorem unique_lift
 
 中文:
 定理 unique_lift
-  条件: (f : Generators G -> H)
+  条件: (f : 生成元 G -> H)
   结论: 存在! F : G ->* H, 对任意 a, F (of a) = f a
   证明: by
   simpa only [funext_iff] using! lift.symm.bijective.existsUnique f
@@ -782,7 +782,7 @@ lemma ofLift
 
 中文:
 引理 ofLift
-  结论: {G : 类型u} [Group G] (X : 类型u) (of : X -> G)
+  结论: {G : 类型u} [群 G] (X : 类型u) (of : X -> G)
   证明: (FreeGroupBasis.ofLift X of lift lift_of).isFreeGroup
 
 Depends on / 依赖: FreeGroupBasis, FreeGroupBasis.ofLift, isFreeGroup, lift_of, ofLift
@@ -811,7 +811,7 @@ lemma ofUniqueLift
 
 中文:
 引理 ofUniqueLift
-  结论: {G : 类型u} [Group G] (X : 类型u) (of : X -> G)
+  结论: {G : 类型u} [群 G] (X : 类型u) (of : X -> G)
   证明: (FreeGroupBasis.ofUniqueLift X of h).isFreeGroup
 
 @[to_additive]
@@ -836,7 +836,7 @@ lemma ofMulEquiv
 中文:
 引理 ofMulEquiv
   条件: (e : G ≃* H)
-  结论: IsFreeGroup H
+  结论: 是自由群 H
   证明: ((basis G).map e).isFreeGroup
 
 Depends on / 依赖: isFreeGroup

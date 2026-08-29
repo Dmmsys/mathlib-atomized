@@ -92,12 +92,12 @@ structure AtomNode
 
 中文:
 结构 AtomNode
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (4 个):
     - vPos : 自然数
     - hPosSrc : 自然数
     - hPosTar : 自然数
-    - atom : Atom
+    - atom : 原子
 -/
 structure AtomNode : Type where
   /-- The vertical position of the node in the string diagram. -/
@@ -123,7 +123,7 @@ structure IdNode
 
 中文:
 结构 IdNode
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (4 个):
     - vPos : 自然数
     - hPosSrc : 自然数
@@ -152,7 +152,7 @@ inductive Node
 
 中文:
 归纳类型 Node
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - atom: AtomNode -> Node
     - id: IdNode -> Node
@@ -185,7 +185,7 @@ definition Node.srcList
 
 中文:
 定义 Node.srcList
-  签名: : Node -> List (Node × Atom₁)
+  签名: : Node -> 列表 (Node × Atom₁)
 -/
 def Node.srcList : Node -> List (Node × Atom₁)
   | Node.atom n => n.atom.src.toList.map (fun f => (.atom n, f))
@@ -200,7 +200,7 @@ definition Node.tarList
 
 中文:
 定义 Node.tarList
-  签名: : Node -> List (Node × Atom₁)
+  签名: : Node -> 列表 (Node × Atom₁)
 -/
 def Node.tarList : Node -> List (Node × Atom₁)
   | Node.atom n => n.atom.tgt.toList.map (fun f => (.atom n, f))
@@ -267,7 +267,7 @@ structure Strand
 
 中文:
 结构 Strand
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (4 个):
     - hPos : 自然数
     - startPoint : Node
@@ -523,10 +523,10 @@ structure PenroseVar
 
 中文:
 结构 PenroseVar
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (3 个):
     - ident : String
-    - indices : List 自然数
+    - indices : 列表 自然数
     - e : Expr
 -/
 structure PenroseVar : Type where
@@ -630,7 +630,7 @@ definition addConstructor
 
 中文:
 定义 addConstructor
-  签名: (tp : String) (v : PenroseVar) (nm : String) (vs : List PenroseVar)
+  签名: (tp : String) (v : PenroseVar) (nm : String) (vs : 列表 PenroseVar)
   定义体: do
   let vs' := ", ".intercalate (vs.map (fun v => toString v))
   addInstruction s!"{tp} {v} := {nm} ({vs'})"
@@ -660,7 +660,7 @@ definition mkStringDiagram
 
 中文:
 定义 mkStringDiagram
-  签名: (nodes : List (List Node)) (strands : List (List Strand))
+  签名: (nodes : 列表 (列表 Node)) (strands : 列表 (列表 Strand))
   定义体: do
   /- Add 2-morphisms. -/
   for x in nodes.flatten do
@@ -1033,7 +1033,7 @@ definition rpc
 
 中文:
 定义 rpc
-  签名: (props : PanelWidget命题s)
+  签名: (props : PanelWidgetProps)
   定义体: RequestM.asTask do
     let html : Option Html ← (do
       if props.goals.isEmpty then
@@ -1077,7 +1077,7 @@ definition StringDiagram
 
 中文:
 定义 StringDiagram
-  签名: : Component PanelWidget命题s
+  签名: : Component PanelWidgetProps
   定义体: mk_rpc_widget% StringDiagram.rpc
 
 Depends on / 依赖: StringDiagram, StringDiagram.rpc, mk_rpc_widget

@@ -55,7 +55,7 @@ theorem iff_exists_tensorProduct
     intro 
 
 中文:
-定理 iff_exists_tensorProduct
+定理 iff_存在_tensorProduct
   条件: [EssFiniteType R S]
   证明: by
   rw [formallyUnramified_iff]; rw [KaehlerDifferential]; rw [Ideal.cotangent_subsingleton_iff]; rw [Ideal.isIdempotentElem_iff_of_fg _
@@ -117,7 +117,7 @@ lemma finite_of_free_aux
 
 中文:
 引理 finite_of_free_aux
-  结论: (I) [DecidableEq I] (b : Basis I R S)
+  结论: (I) [DecidableEq I] (b : 基 I R S)
   证明: by
   rw [Finsupp.sum]; rw [Finset.mul_sum]
   subst ha
@@ -274,8 +274,8 @@ lemma finite_of_free
 
 中文:
 引理 finite_of_free
-  条件: [Module.Free R S]
-  结论: Module.Finite R S
+  条件: [模.自由 R S]
+  结论: 模.有限 R S
   证明: by
   classical
   let I := Module.Free.ChooseBasisIndex R S
@@ -459,8 +459,8 @@ lemma flat_of_restrictScalars
 
 中文:
 引理 flat_of_restrictScalars
-  条件: [Module.Flat R M]
-  结论: Module.Flat S M
+  条件: [模.平坦 R M]
+  结论: 模.平坦 S M
   证明: Module.Flat.of_retract _ _ (comp_sec R S M)
 
 Depends on / 依赖: Module, Module.Flat.of_retract, comp_sec, of_retract
@@ -479,8 +479,8 @@ lemma projective_of_restrictScalars
 
 中文:
 引理 projective_of_restrictScalars
-  条件: [Module.Projective R M]
-  结论: Module.Projective S M
+  条件: [模.投射 R M]
+  结论: 模.投射 S M
   证明: Module.Projective.of_split _ _ (comp_sec R S M)
 
 Depends on / 依赖: Module, Module.Projective.of_split, Projective, comp_sec, of_split

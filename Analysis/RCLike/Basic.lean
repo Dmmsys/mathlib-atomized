@@ -84,7 +84,7 @@ class RCLike
 中文:
 类 RCLike
   参数: (K : semiOutParam 类型)
-  继承: DenselyNormedField K, StarRing K, 
+  继承: DenselyNormedField K, 对合环 K, 
   公理与运算 (18 个):
     - re : K ->+ 实数
     - im : K ->+ 实数
@@ -101,7 +101,7 @@ class RCLike
     - conj_I_ax : conj I = -I
     - norm_sq_eq_def_ax : 对任意 z : K, ‖z‖ ^ 2 = re z * re z + im z * im z
     - mul_im_I_ax : 对任意 z : K, im z * im I = im z
-    - [toPartialOrder : PartialOrder K]
+    - [toPartialOrder : 偏序 K]
     - le_iff_re_im({z w : K}) : z <= w ↔ re z <= re w ∧ im z = im w
     - [toDecidableEq : DecidableEq K]
 -/
@@ -150,7 +150,7 @@ abbreviation ofReal
   body: Algebra.cast
 
 中文:
-缩写 ofReal
+缩写 of实数
   签名: : 实数 -> K
   定义体: Algebra.cast
 -/
@@ -171,7 +171,7 @@ theorem ofReal_alg
   proof: Algebra.algebraMap_eq_smul_one x
 
 中文:
-定理 ofReal_alg
+定理 of实数_alg
   条件: (x : 实数)
   结论: (x : K) = x • (1 : K)
   证明: Algebra.algebraMap_eq_smul_one x
@@ -211,7 +211,7 @@ theorem real_smul_eq_coe_smul
 
 中文:
 定理 real_smul_eq_coe_smul
-  结论: [AddCommGroup E] [Module K E] [Module 实数 E] [IsScalarTower 实数 K E]
+  结论: [加法交换群 E] [模 K E] [模 实数 E] [标量塔 实数 K E]
   证明: by rw [RCLike.ofReal_alg, smul_one_smul]
 
 Depends on / 依赖: RCLike, RCLike.ofReal_alg, ofReal_alg, smul_one_smul
@@ -230,7 +230,7 @@ theorem algebraMap_eq_ofReal
 @[simp, rclike_simps]
 
 中文:
-定理 algebraMap_eq_ofReal
+定理 algebraMap_eq_of实数
   结论: ⇑(algebraMap 实数 K) = of实数
   证明: rfl
 
@@ -276,7 +276,7 @@ theorem ofReal_re
 @[simp, norm_cast, rclike_simps]
 
 中文:
-定理 ofReal_re
+定理 of实数_re
   结论: 对任意 r : 实数, re (r : K) = r
   证明: RCLike.ofReal_re_ax
 
@@ -299,7 +299,7 @@ theorem ofReal_im
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_im
+定理 of实数_im
   结论: 对任意 r : 实数, im (r : K) = 0
   证明: RCLike.ofReal_im_ax
 
@@ -408,7 +408,7 @@ theorem ofReal_zero
 @[rclike_simps]
 
 中文:
-定理 ofReal_zero
+定理 of实数_zero
   结论: ((0 : 实数) : K) = 0
   证明: algebraMap.coe_zero
 
@@ -477,7 +477,7 @@ theorem ofReal_one
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_one
+定理 of实数_one
   结论: ((1 : 实数) : K) = 1
   证明: map_one (algebraMap Real K)
 
@@ -539,8 +539,8 @@ theorem ofReal_injective
 @[norm_cast]
 
 中文:
-定理 ofReal_injective
-  结论: Function.Injective ((↑) : 实数 -> K)
+定理 of实数_injective
+  结论: 函数.单射 ((↑) : 实数 -> K)
   证明: (algebraMap Real K).injective
 
 @[norm_cast]
@@ -561,7 +561,7 @@ theorem ofReal_inj
   proof: algebraMap.coe_inj _ _
 
 中文:
-定理 ofReal_inj
+定理 of实数_inj
   条件: {z w : 实数}
   结论: (z : K) = (w : K) ↔ z = w
   证明: algebraMap.coe_inj _ _
@@ -581,7 +581,7 @@ theorem ofReal_eq_zero
   proof: algebraMap.coe_eq_zero_iff _ _ _
 
 中文:
-定理 ofReal_eq_zero
+定理 of实数_eq_zero
   条件: {x : 实数}
   结论: (x : K) = 0 ↔ x = 0
   证明: algebraMap.coe_eq_zero_iff _ _ _
@@ -603,7 +603,7 @@ theorem ofReal_ne_zero
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_ne_zero
+定理 of实数_ne_zero
   条件: {x : 实数}
   结论: (x : K) != 0 ↔ x != 0
   证明: ofReal_eq_zero.not
@@ -628,7 +628,7 @@ theorem ofReal_add
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_add
+定理 of实数_add
   条件: (r s : 实数)
   结论: ((r + s : 实数) : K) = r + s
   证明: algebraMap.coe_add _ _
@@ -653,7 +653,7 @@ theorem ofReal_neg
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_neg
+定理 of实数_neg
   条件: (r : 实数)
   结论: ((-r : 实数) : K) = -r
   证明: algebraMap.coe_neg r
@@ -678,7 +678,7 @@ theorem ofReal_sub
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_sub
+定理 of实数_sub
   条件: (r s : 实数)
   结论: ((r - s : 实数) : K) = r - s
   证明: map_sub (algebraMap Real K) r s
@@ -702,8 +702,8 @@ theorem ofReal_sum
 @[simp, rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_sum
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+定理 of实数_sum
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   证明: map_sum (algebraMap Real K) _ _
 
 @[simp, rclike_simps, norm_cast]
@@ -726,8 +726,8 @@ theorem ofReal_finsupp_sum
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_finsupp_sum
-  条件: {α M : 类型} [Zero M] (f : α ->₀ M) (g : α -> M -> 实数)
+定理 of实数_finsupp_sum
+  条件: {α M : 类型} [零 M] (f : α ->₀ M) (g : α -> M -> 实数)
   证明: map_finsuppSum (algebraMap Real K) f g
 
 @[rclike_simps, norm_cast]
@@ -751,7 +751,7 @@ theorem ofReal_mul
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_mul
+定理 of实数_mul
   条件: (r s : 实数)
   结论: ((r * s : 实数) : K) = r * s
   证明: algebraMap.coe_mul _ _
@@ -776,7 +776,7 @@ theorem ofReal_pow
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_pow
+定理 of实数_pow
   条件: (r : 实数) (n : 自然数)
   结论: ((r ^ n : 实数) : K) = (r : K) ^ n
   证明: map_pow (algebraMap Real K) r n
@@ -800,8 +800,8 @@ theorem ofReal_prod
 @[simp, rclike_simps, norm_cast]
 
 中文:
-定理 ofReal_prod
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+定理 of实数_prod
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   证明: map_prod (algebraMap Real K) _ _
 
 @[simp, rclike_simps, norm_cast]
@@ -824,8 +824,8 @@ theorem ofReal_finsuppProd
 @[simp, norm_cast, rclike_simps]
 
 中文:
-定理 ofReal_finsuppProd
-  条件: {α M : 类型} [Zero M] (f : α ->₀ M) (g : α -> M -> 实数)
+定理 of实数_finsuppProd
+  条件: {α M : 类型} [零 M] (f : α ->₀ M) (g : α -> M -> 实数)
   证明: map_finsuppProd _ f g
 
 @[simp, norm_cast, rclike_simps]
@@ -849,7 +849,7 @@ theorem real_smul_ofReal
 @[rclike_simps]
 
 中文:
-定理 real_smul_ofReal
+定理 real_smul_of实数
   条件: (r x : 实数)
   结论: r • (x : K) = (r : K) * (x : K)
   证明: real_smul_eq_coe_mul _ _
@@ -875,7 +875,7 @@ theorem re_ofReal_mul
 @[rclike_simps]
 
 中文:
-定理 re_ofReal_mul
+定理 re_of实数_mul
   条件: (r : 实数) (z : K)
   结论: re (↑r * z) = r * re z
   证明: by
@@ -902,7 +902,7 @@ theorem re_mul_ofReal
 @[rclike_simps]
 
 中文:
-定理 re_mul_ofReal
+定理 re_mul_of实数
   条件: (z : K) (r : 实数)
   结论: re (z * ↑r) = re z * r
   证明: by
@@ -929,7 +929,7 @@ theorem im_ofReal_mul
 @[rclike_simps]
 
 中文:
-定理 im_ofReal_mul
+定理 im_of实数_mul
   条件: (r : 实数) (z : K)
   结论: im (↑r * z) = r * im z
   证明: by
@@ -956,7 +956,7 @@ theorem im_mul_ofReal
 @[rclike_simps]
 
 中文:
-定理 im_mul_ofReal
+定理 im_mul_of实数
   条件: (z : K) (r : 实数)
   结论: im (z * ↑r) = im z * r
   证明: by
@@ -1036,7 +1036,7 @@ theorem norm_ofReal
 @[simp]
 
 中文:
-定理 norm_ofReal
+定理 norm_of实数
   条件: (r : 实数)
   结论: ‖(r : K)‖ = |r|
   证明: norm_algebraMap' K r
@@ -1062,7 +1062,7 @@ theorem re_ofReal_pow
 @[simp]
 
 中文:
-定理 re_ofReal_pow
+定理 re_of实数_pow
   条件: (a : 实数) (n : 自然数)
   结论: re ((a : K) ^ n) = a ^ n
   证明: by
@@ -1087,7 +1087,7 @@ theorem im_ofReal_pow
   rw [← @ofReal_pow]; rw [@ofReal_im_ax]
 
 中文:
-定理 im_ofReal_pow
+定理 im_of实数_pow
   条件: (a : 实数) (n : 自然数)
   结论: im ((a : K) ^ n) = 0
   证明: by
@@ -1118,8 +1118,8 @@ lemma ofReal_expect
 @[norm_cast]
 
 中文:
-引理 ofReal_expect
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数)
+引理 of实数_expect
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数)
   结论: 𝔼 i in s, f i = 𝔼 i in s, (f i : K)
   证明: map_expect (algebraMap ..) ..
 
@@ -1140,8 +1140,8 @@ lemma ofReal_balance
   proof: map_balance (algebraMap ..) ..
 
 中文:
-引理 ofReal_balance
-  条件: {ι : 类型} [Fintype ι] (f : ι -> 实数) (i : ι)
+引理 of实数_balance
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> 实数) (i : ι)
   证明: map_balance (algebraMap ..) ..
 
 Depends on / 依赖: algebraMap, map_balance
@@ -1158,8 +1158,8 @@ lemma ofReal_comp_balance
   proof: funext ofReal_balance _
 
 中文:
-引理 ofReal_comp_balance
-  条件: {ι : 类型} [Fintype ι] (f : ι -> 实数)
+引理 of实数_comp_balance
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> 实数)
   证明: funext ofReal_balance _
 -/
 @[simp] lemma ofReal_comp_balance {ι : Type*} [Fintype ι] (f : ι -> Real) :
@@ -1387,7 +1387,7 @@ theorem conj_ofReal
   simp only [ofReal_im, conj_im, conj_re, and_self_iff, neg_zero]
 
 中文:
-定理 conj_ofReal
+定理 conj_of实数
   条件: (r : 实数)
   结论: conj (r : K) = (r : K)
   证明: by
@@ -1431,7 +1431,7 @@ theorem conj_ofNat
 @[rclike_simps, simp]
 
 中文:
-定理 conj_ofNat
+定理 conj_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: conj (of自然数(n) : K) = of自然数(n)
   证明: map_ofNat _ _
@@ -1735,7 +1735,7 @@ theorem star_def
 
 中文:
 定理 star_def
-  结论: (Star.star : K -> K) = conj
+  结论: (对合.star : K -> K) = conj
   证明: rfl
 -/
 theorem star_def : (Star.star : K -> K) = conj :=
@@ -1771,7 +1771,7 @@ lemma re_eq_ofReal_of_isSelfAdjoint
   simp [RCLike.ext_iff (K := K), hx, im_eq_zero_iff_isSelfAdjoint]
 
 中文:
-引理 re_eq_ofReal_of_isSelfAdjoint
+引理 re_eq_of实数_of_isSelfAdjoint
   条件: {x : K} {y : 实数} (hx : IsSelfAdjoint x)
   证明: by
   simp [RCLike.ext_iff (K := K), hx, im_eq_zero_iff_isSelfAdjoint]
@@ -1792,7 +1792,7 @@ lemma ofReal_eq_re_of_isSelfAdjoint
   simpa [eq_comm] using re_eq_ofReal_of_isSelfAdjoint hx
 
 中文:
-引理 ofReal_eq_re_of_isSelfAdjoint
+引理 of实数_eq_re_of_isSelfAdjoint
   条件: {x : K} {y : 实数} (hx : IsSelfAdjoint x)
   证明: by
   simpa [eq_comm] using re_eq_ofReal_of_isSelfAdjoint hx
@@ -2285,7 +2285,7 @@ theorem ofReal_inv
   proof: map_inv₀ _ r
 
 中文:
-定理 ofReal_inv
+定理 of实数_inv
   条件: (r : 实数)
   结论: ((r⁻¹ : 实数) : K) = (r : K)⁻¹
   证明: map_inv₀ _ r
@@ -2486,7 +2486,7 @@ lemma exists_norm_eq_mul_self
   · exact ⟨‖x‖ / x, by simp [norm_ne_zero_iff.2, hx]⟩
 
 中文:
-引理 exists_norm_eq_mul_self
+引理 存在_norm_eq_mul_self
   条件: (x : K)
   结论: 存在 c, ‖c‖ = 1 ∧ ↑‖x‖ = c * x
   证明: by
@@ -2516,7 +2516,7 @@ lemma exists_norm_mul_eq_self
 @[rclike_simps, norm_cast]
 
 中文:
-引理 exists_norm_mul_eq_self
+引理 存在_norm_mul_eq_self
   条件: (x : K)
   结论: 存在 c, ‖c‖ = 1 ∧ c * ‖x‖ = x
   证明: by
@@ -2544,7 +2544,7 @@ theorem ofReal_div
   proof: map_div₀ (algebraMap Real K) r s
 
 中文:
-定理 ofReal_div
+定理 of实数_div
   条件: (r s : 实数)
   结论: ((r / s : 实数) : K) = r / s
   证明: map_div₀ (algebraMap Real K) r s
@@ -2567,7 +2567,7 @@ theorem div_re_ofReal
 @[rclike_simps, norm_cast]
 
 中文:
-定理 div_re_ofReal
+定理 div_re_of实数
   条件: {z : K} {r : 实数}
   结论: re (z / r) = re z / r
   证明: by
@@ -2591,7 +2591,7 @@ theorem ofReal_zpow
   proof: map_zpow₀ (algebraMap Real K) r n
 
 中文:
-定理 ofReal_zpow
+定理 of实数_zpow
   条件: (r : 实数) (n : 整数)
   结论: ((r ^ n : 实数) : K) = (r : K) ^ n
   证明: map_zpow₀ (algebraMap Real K) r n
@@ -2793,7 +2793,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 实数 K
+  签名: 对合模 实数 K
   定义体: by
     apply RCLike.ext <;> simp [RCLike.smul_re, RCLike.smul_im]
 
@@ -2818,7 +2818,7 @@ theorem ofReal_natCast
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_natCast
+定理 of实数_natCast
   条件: (n : 自然数)
   结论: ((n : 实数) : K) = n
   证明: map_natCast (algebraMap Real K) n
@@ -2887,7 +2887,7 @@ theorem ofNat_re
 @[simp, rclike_simps]
 
 中文:
-定理 ofNat_re
+定理 of自然数_re
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: re (of自然数(n) : K) = of自然数(n)
   证明: natCast_re n
@@ -2910,7 +2910,7 @@ theorem ofNat_im
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofNat_im
+定理 of自然数_im
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: im (of自然数(n) : K) = 0
   证明: natCast_im n
@@ -2933,7 +2933,7 @@ theorem ofReal_ofNat
   proof: ofReal_natCast n
 
 中文:
-定理 ofReal_ofNat
+定理 of实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ((of自然数(n) : 实数) : K) = of自然数(n)
   证明: ofReal_natCast n
@@ -2953,7 +2953,7 @@ theorem ofNat_mul_re
   rw [← ofReal_ofNat]; rw [re_ofReal_mul]
 
 中文:
-定理 ofNat_mul_re
+定理 of自然数_mul_re
   条件: (n : 自然数) [n.AtLeastTwo] (z : K)
   证明: by
   rw [← ofReal_ofNat]; rw [re_ofReal_mul]
@@ -2976,7 +2976,7 @@ theorem ofNat_mul_im
 @[rclike_simps, norm_cast]
 
 中文:
-定理 ofNat_mul_im
+定理 of自然数_mul_im
   条件: (n : 自然数) [n.AtLeastTwo] (z : K)
   证明: by
   rw [← ofReal_ofNat]; rw [im_ofReal_mul]
@@ -3002,7 +3002,7 @@ theorem ofReal_intCast
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_intCast
+定理 of实数_intCast
   条件: (n : 整数)
   结论: ((n : 实数) : K) = n
   证明: map_intCast _ n
@@ -3075,8 +3075,8 @@ theorem ofReal_nnratCast
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_nnratCast
-  条件: (n : Rat>=0)
+定理 of实数_nnratCast
+  条件: (n : 有理数>=0)
   结论: ((n : 实数) : K) = n
   证明: map_nnratCast _ n
 
@@ -3101,7 +3101,7 @@ theorem nnratCast_re
 
 中文:
 定理 nnratCast_re
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: re (q : K) = q
   证明: by rw [← ofReal_nnratCast, ofReal_re]
 
@@ -3125,7 +3125,7 @@ theorem nnratCast_im
 
 中文:
 定理 nnratCast_im
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: im (q : K) = 0
   证明: by rw [← ofReal_nnratCast, ofReal_im]
 
@@ -3148,8 +3148,8 @@ theorem ofReal_ratCast
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_ratCast
-  条件: (n : Rat)
+定理 of实数_ratCast
+  条件: (n : 有理数)
   结论: ((n : 实数) : K) = n
   证明: map_ratCast _ n
 
@@ -3174,7 +3174,7 @@ theorem ratCast_re
 
 中文:
 定理 ratCast_re
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: re (q : K) = q
   证明: by rw [← ofReal_ratCast, ofReal_re]
 
@@ -3196,7 +3196,7 @@ theorem ratCast_im
 
 中文:
 定理 ratCast_im
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: im (q : K) = 0
   证明: by rw [← ofReal_ratCast, ofReal_im]
 
@@ -3218,8 +3218,8 @@ theorem ofReal_ofScientific
 @[simp, rclike_simps]
 
 中文:
-定理 ofReal_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+定理 of实数_ofScientific
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: ofReal_nnratCast _
 
 @[simp, rclike_simps]
@@ -3242,7 +3242,7 @@ theorem ofScientific_re
 
 中文:
 定理 ofScientific_re
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: by rw [← ofReal_ofScientific, ofReal_re]
 
 @[simp, rclike_simps, norm_cast]
@@ -3263,7 +3263,7 @@ theorem ofScientific_im
 
 中文:
 定理 ofScientific_im
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: by rw [← ofReal_ofScientific, ofReal_im]
 
 Depends on / 依赖: ofReal_im, ofReal_ofScientific
@@ -3356,7 +3356,7 @@ theorem norm_ofNat
 @[simp, rclike_simps]
 
 中文:
-定理 norm_ofNat
+定理 norm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ‖(of自然数(n) : K)‖ = of自然数(n)
   证明: norm_natCast n
@@ -3379,7 +3379,7 @@ lemma nnnorm_ofNat
   proof: nnnorm_natCast n
 
 中文:
-引理 nnnorm_ofNat
+引理 nnnorm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ‖(of自然数(n) : K)‖₊ = of自然数(n)
   证明: nnnorm_natCast n
@@ -3441,7 +3441,7 @@ lemma norm_nnratCast
 
 中文:
 引理 norm_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ‖(q : K)‖ = q
   证明: by
   rw [← ofReal_nnratCast]; exact norm_of_nonneg q.cast_nonneg
@@ -3465,7 +3465,7 @@ lemma nnnorm_nnratCast
 
 中文:
 引理 nnnorm_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ‖(q : K)‖₊ = q
   证明: by simp [nnnorm]; rfl
 
@@ -3486,7 +3486,7 @@ lemma norm_nsmul
 
 中文:
 引理 norm_nsmul
-  条件: [NormedAddCommGroup E] [NormedSpace K E] (n : 自然数) (x : E)
+  条件: [赋范交换加群 E] [赋范空间 K E] (n : 自然数) (x : E)
   结论: ‖n • x‖ = n • ‖x‖
   证明: by
   simpa [Nat.cast_smul_eq_nsmul] using norm_smul (n : K) x
@@ -3507,7 +3507,7 @@ lemma nnnorm_nsmul
 
 中文:
 引理 nnnorm_nsmul
-  条件: [NormedAddCommGroup E] [NormedSpace K E] (n : 自然数) (x : E)
+  条件: [赋范交换加群 E] [赋范空间 K E] (n : 自然数) (x : E)
   证明: by simpa [Nat.cast_smul_eq_nsmul] using nnnorm_smul (n : K) x
 
 Depends on / 依赖: Nat.cast_smul_eq_nsmul, cast_smul_eq_nsmul, nnnorm_smul
@@ -3884,7 +3884,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormSMulClass 整数 K
+  签名: NormSMul类 整数 K
   定义体: by
     rw [zsmul_eq_mul]; rw [norm_mul]; rw [← ofReal_intCast]; rw [norm_ofReal]; rw [Int.norm_eq_abs]
 
@@ -4082,7 +4082,7 @@ instance Real.instRCLike
   mul_re_ax z w
 
 中文:
-实例 Real.instRCLike
+实例 实数.instRCLike
   签名: : RCLike 实数 where
   定义体: AddMonoidHom.id Real
   im := 0
@@ -4138,7 +4138,7 @@ lemma norm_nnqsmul
 
 中文:
 引理 norm_nnqsmul
-  条件: (q : Rat>=0) (x : E)
+  条件: (q : 有理数>=0) (x : E)
   结论: ‖q • x‖ = q • ‖x‖
   证明: by
   simpa [NNRat.cast_smul_eq_nnqsmul] using! norm_smul (q : K) x
@@ -4163,7 +4163,7 @@ lemma nnnorm_nnqsmul
 
 中文:
 引理 nnnorm_nnqsmul
-  条件: (q : Rat>=0) (x : E)
+  条件: (q : 有理数>=0) (x : E)
   结论: ‖q • x‖₊ = q • ‖x‖₊
   证明: by
   simpa [NNRat.cast_smul_eq_nnqsmul] using! nnnorm_smul (q : K) x
@@ -4187,7 +4187,7 @@ lemma norm_expect_le
 
 中文:
 引理 norm_expect_le
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> E}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> E}
   结论: ‖𝔼 i in s, f i‖ <= 𝔼 i in s, ‖f i‖
   证明: Finset.le_expect_of_subadditive norm_zero norm_add_le fun _ _ => by rw [norm_nnqsmul K]
 
@@ -4328,7 +4328,7 @@ lemma nonneg_iff_exists_ofReal
   simp_rw [nonneg_iff (K := K), ext_iff (K := K)]; aesop
 
 中文:
-引理 nonneg_iff_exists_ofReal
+引理 nonneg_iff_存在_of实数
   结论: 0 <= z ↔ 存在 x >= (0 : 实数), x = z
   证明: by
   simp_rw [nonneg_iff (K := K), ext_iff (K := K)]; aesop
@@ -4348,7 +4348,7 @@ lemma pos_iff_exists_ofReal
   simp_rw [pos_iff (K := K), ext_iff (K := K)]; aesop
 
 中文:
-引理 pos_iff_exists_ofReal
+引理 pos_iff_存在_of实数
   结论: 0 < z ↔ 存在 x > (0 : 实数), x = z
   证明: by
   simp_rw [pos_iff (K := K), ext_iff (K := K)]; aesop
@@ -4368,7 +4368,7 @@ lemma nonpos_iff_exists_ofReal
   simp_rw [nonpos_iff (K := K), ext_iff (K := K)]; aesop
 
 中文:
-引理 nonpos_iff_exists_ofReal
+引理 nonpos_iff_存在_of实数
   结论: z <= 0 ↔ 存在 x <= (0 : 实数), x = z
   证明: by
   simp_rw [nonpos_iff (K := K), ext_iff (K := K)]; aesop
@@ -4390,7 +4390,7 @@ lemma neg_iff_exists_ofReal
 @[simp, norm_cast]
 
 中文:
-引理 neg_iff_exists_ofReal
+引理 neg_iff_存在_of实数
   结论: z < 0 ↔ 存在 x < (0 : 实数), x = z
   证明: by
   simp_rw [neg_iff (K := K), ext_iff (K := K)]; aesop
@@ -4417,7 +4417,7 @@ lemma ofReal_le_ofReal
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_le_ofReal
+引理 of实数_le_of实数
   条件: {x y : 实数}
   结论: (x : K) <= (y : K) ↔ x <= y
   证明: by
@@ -4447,7 +4447,7 @@ lemma ofReal_lt_ofReal
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_lt_ofReal
+引理 of实数_lt_of实数
   条件: {x y : 实数}
   结论: (x : K) < (y : K) ↔ x < y
   证明: by
@@ -4476,7 +4476,7 @@ lemma ofReal_nonneg
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_nonneg
+引理 of实数_nonneg
   条件: {x : 实数}
   结论: 0 <= (x : K) ↔ 0 <= x
   证明: by
@@ -4503,7 +4503,7 @@ lemma ofReal_nonpos
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_nonpos
+引理 of实数_nonpos
   条件: {x : 实数}
   结论: (x : K) <= 0 ↔ x <= 0
   证明: by
@@ -4530,7 +4530,7 @@ lemma ofReal_pos
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_pos
+引理 of实数_pos
   条件: {x : 实数}
   结论: 0 < (x : K) ↔ 0 < x
   证明: by
@@ -4555,7 +4555,7 @@ lemma ofReal_lt_zero
   rw [← ofReal_zero]; rw [ofReal_lt_ofReal]
 
 中文:
-引理 ofReal_lt_zero
+引理 of实数_lt_zero
   条件: {x : 实数}
   结论: (x : K) < 0 ↔ x < 0
   证明: by
@@ -4707,7 +4707,7 @@ lemma re_monotone
 
 中文:
 引理 re_monotone
-  结论: Monotone (re : K -> 实数)
+  结论: 递增 (re : K -> 实数)
   证明: fun _ _ => re_le_re
 
 Depends on / 依赖: re_le_re
@@ -4784,7 +4784,7 @@ lemma toStarOrderedRing
 
 中文:
 引理 toStarOrderedRing
-  结论: StarOrderedRing K
+  结论: StarOrdered环 K
   证明: StarOrderedRing.of_nonneg_iff'
     (h_add := fun {x y} hxy z => by
       rw [RCLike.le_iff_re_im] at *
@@ -4820,7 +4820,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.toZeroLEOneClass
 
 中文:
 引理 toZeroLEOneClass
-  结论: ZeroLEOneClass K where
+  结论: ZeroLEOne类 K where
   证明: by simp [@RCLike.le_iff_re_im K]
 
 scoped[ComplexOrder] attribute [instance] RCLike.toZeroLEOneClass
@@ -4844,7 +4844,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.toIsOrderedAddMonoid
 
 中文:
 引理 toIsOrderedAddMonoid
-  结论: IsOrderedAddMonoid K where
+  结论: 是OrderedAdd幺半群 K where
   证明: add_le_add_left
 
 scoped[ComplexOrder] attribute [instance] RCLike.toIsOrderedAddMonoid
@@ -4870,7 +4870,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.toIsStrictOrderedRing
 
 中文:
 引理 toIsStrictOrderedRing
-  结论: IsStrictOrderedRing K
+  结论: 是StrictOrdered环 K
   证明: .of_mul_pos fun z w hz hw => by
     rw [lt_iff_re_im]; rw [map_zero] at hz hw ⊢
     simp [mul_re, mul_im, ← hz.2, ← hw.2, mul_pos hz.1 hw.1]
@@ -4902,7 +4902,7 @@ lemma toPosMulReflectLT
 
 中文:
 引理 toPosMulReflectLT
-  结论: PosMulReflectLT K where
+  结论: 正乘反映严格偏序 K where
   证明: by
     rintro ⟨x, hx⟩ y z hyz
     dsimp at *
@@ -4943,7 +4943,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.toIs
 
 中文:
 定理 toIsStrictOrderedModule
-  结论: IsStrictOrderedModule 实数 K where
+  结论: 是StrictOrdered模 实数 K where
   证明: by
     simpa [RCLike.lt_iff_re_im (K := K), smul_re, smul_im, hr, hr.ne'] using hab
   smul_lt_smul_of_pos_right a ha r₁ r₂ hr := by
@@ -4977,7 +4977,7 @@ theorem ofReal_mul_pos_iff
   · simp only [hx, zero_mul, lt_self_iff_false, false_and, 
 
 中文:
-定理 ofReal_mul_pos_iff
+定理 of实数_mul_pos_iff
   条件: (x : 实数) (z : K)
   证明: by
   simp only [pos_iff (K := K), neg_iff (K := K), re_ofReal_mul, im_ofReal_mul]
@@ -5008,7 +5008,7 @@ theorem ofReal_mul_neg_iff
   simpa only [mul_neg, neg_pos, neg_neg_iff_pos] using ofReal_mul_pos_iff x (-z)
 
 中文:
-定理 ofReal_mul_neg_iff
+定理 of实数_mul_neg_iff
   条件: (x : 实数) (z : K)
   证明: by
   simpa only [mul_neg, neg_pos, neg_neg_iff_pos] using ofReal_mul_pos_iff x (-z)
@@ -5035,7 +5035,7 @@ lemma instPosMulReflectLE
 
 中文:
 引理 instPosMulReflectLE
-  结论: PosMulReflectLE K where
+  结论: 正乘反映偏序 K where
   证明: by
     obtain ⟨a', ha1, ha2⟩ := pos_iff_exists_ofReal.mp a.2
     rw [← sub_nonneg]
@@ -5072,7 +5072,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.instMulPosReflectLE
 
 中文:
 引理 instMulPosReflectLE
-  结论: MulPosReflectLE K
+  结论: 乘正反映偏序 K
   证明: PosMulReflectLE.toMulPosReflectLE
 
 scoped[ComplexOrder] attribute [instance] RCLike.instMulPosReflectLE
@@ -5216,7 +5216,7 @@ theorem ofReal_real_eq_id
   proof: rfl
 
 中文:
-定理 ofReal_real_eq_id
+定理 of实数_real_eq_id
   结论: @of实数 实数 _ = id
   证明: rfl
 
@@ -5349,7 +5349,7 @@ theorem continuous_re
 
 中文:
 定理 continuous_re
-  结论: Continuous (re : K -> 实数)
+  结论: 连续 (re : K -> 实数)
   证明: reCLM.continuous
 
 Depends on / 依赖: continuous, reCLM.continuous
@@ -5477,7 +5477,7 @@ theorem continuous_im
 
 中文:
 定理 continuous_im
-  结论: Continuous (im : K -> 实数)
+  结论: 连续 (im : K -> 实数)
   证明: imCLM.continuous
 
 Depends on / 依赖: continuous, imCLM.continuous
@@ -5649,7 +5649,7 @@ theorem continuous_conj
 
 中文:
 定理 continuous_conj
-  结论: Continuous (conj : K -> K)
+  结论: 连续 (conj : K -> K)
   证明: continuous_star
 
 Depends on / 依赖: continuous_star
@@ -5668,7 +5668,7 @@ definition ofRealAm
 @[simp, rclike_simps]
 
 中文:
-定义 ofRealAm
+定义 of实数Am
   签名: : 实数 ->ₐ[实数] K
   定义体: Algebra.ofId Real K
 
@@ -5689,7 +5689,7 @@ theorem ofRealAm_coe
   proof: rfl
 
 中文:
-定理 ofRealAm_coe
+定理 of实数Am_coe
   结论: (of实数Am : 实数 -> K) = of实数
   证明: rfl
 -/
@@ -5706,7 +5706,7 @@ definition ofRealStarAlgHom
   body: .ofId Real K
 
 中文:
-定义 ofRealStarAlgHom
+定义 of实数StarAlgHom
   签名: : 实数 ->⋆ₐ[实数] K
   定义体: .ofId Real K
 -/
@@ -5721,7 +5721,7 @@ theorem coe_ofRealStarAlgHom
   proof: rfl
 
 中文:
-定理 coe_ofRealStarAlgHom
+定理 coe_of实数StarAlgHom
   结论: (of实数StarAlgHom K : 实数 -> K) = of实数
   证明: rfl
 -/
@@ -5735,7 +5735,7 @@ lemma toAlgHom_ofRealStarAlgHom
   proof: rfl
 
 中文:
-引理 toAlgHom_ofRealStarAlgHom
+引理 toAlgHom_of实数StarAlgHom
   结论: (of实数StarAlgHom K).toAlgHom = of实数Am
   证明: rfl
 -/
@@ -5753,7 +5753,7 @@ definition ofRealLI
 @[simp, rclike_simps]
 
 中文:
-定义 ofRealLI
+定义 of实数LI
   签名: : 实数 ->ₗᵢ[实数] K where
   定义体: ofRealAm.toLinearMap
   norm_map' := norm_ofReal
@@ -5776,7 +5776,7 @@ theorem ofRealLI_apply
   proof: rfl
 
 中文:
-定理 ofRealLI_apply
+定理 of实数LI_apply
   结论: (of实数LI : 实数 -> K) = of实数
   证明: rfl
 -/
@@ -5794,7 +5794,7 @@ definition ofRealCLM
 @[simp, rclike_simps]
 
 中文:
-定义 ofRealCLM
+定义 of实数CLM
   签名: : 实数 ->L[实数] K
   定义体: ofRealLI.toContinuousLinearMap
 
@@ -5817,7 +5817,7 @@ theorem ofRealCLM_coe
 @[simp, rclike_simps]
 
 中文:
-定理 ofRealCLM_coe
+定理 of实数CLM_coe
   结论: (@of实数CLM K _ : 实数 ->ₗ[实数] K) = of实数Am.toLinearMap
   证明: rfl
 
@@ -5838,7 +5838,7 @@ theorem ofRealCLM_apply
 @[continuity, fun_prop]
 
 中文:
-定理 ofRealCLM_apply
+定理 of实数CLM_apply
   结论: (of实数CLM : 实数 -> K) = of实数
   证明: rfl
 
@@ -5859,8 +5859,8 @@ theorem continuous_ofReal
 @[continuity]
 
 中文:
-定理 continuous_ofReal
-  结论: Continuous (of实数 : 实数 -> K)
+定理 continuous_of实数
+  结论: 连续 (of实数 : 实数 -> K)
   证明: ofRealLI.continuous
 
 @[continuity]
@@ -5881,7 +5881,7 @@ theorem continuous_normSq
 
 中文:
 定理 continuous_normSq
-  结论: Continuous (normSq : K -> 实数)
+  结论: 连续 (normSq : K -> 实数)
   证明: (continuous_re.mul continuous_re).add (continuous_im.mul continuous_im)
 
 Depends on / 依赖: continuous_im, continuous_im.mul, continuous_re, continuous_re.mul
@@ -5898,7 +5898,7 @@ theorem lipschitzWith_ofReal
   proof: ofRealLI.lipschitz
 
 中文:
-定理 lipschitzWith_ofReal
+定理 lipschitzWith_of实数
   结论: LipschitzWith 1 (of实数 : 实数 -> K)
   证明: ofRealLI.lipschitz
 
@@ -6057,7 +6057,7 @@ scoped[ComplexOrder] attribute [instance] RCLike.instOrderClosedTopology
 
 中文:
 引理 instOrderClosedTopology
-  结论: OrderClosedTopology K where
+  结论: OrderClosed拓扑 K where
   证明: by
     conv in _ <= _ => rw [RCLike.le_iff_re_im]
     simp_rw [Set.ofPred_and]
@@ -6244,7 +6244,7 @@ lemma inv_apply_eq_conj
 
 中文:
 引理 inv_apply_eq_conj
-  条件: [AddLeftCancelMonoid G] (ψ : AddChar G K) (x : G)
+  条件: [加法左消去幺半群 G] (ψ : 加法特征 G K) (x : G)
   结论: (ψ x)⁻¹ = conj (ψ x)
   证明: RCLike.inv_eq_conj norm_apply _ _
 
@@ -6265,7 +6265,7 @@ lemma map_neg_eq_conj
 
 中文:
 引理 map_neg_eq_conj
-  条件: [AddCommGroup G] (ψ : AddChar G K) (x : G)
+  条件: [加法交换群 G] (ψ : 加法特征 G K) (x : G)
   结论: ψ (-x) = conj (ψ x)
   证明: by
   rw [map_neg_eq_inv]; rw [inv_apply_eq_conj]
@@ -6289,8 +6289,8 @@ class IsRCLikeNormedField
     - out : exists h : RCLike 𝕜, hk = h.toNormedField
 
 中文:
-类 IsRCLikeNormedField
-  参数: (𝕜 : 类型) [hk : NormedField 𝕜]
+类 是RCLikeNormedField
+  参数: (𝕜 : 类型) [hk : 赋范域 𝕜]
   公理与运算 (1 个):
     - out : 存在 h : RCLike 𝕜, hk = h.toNormedField
 -/
@@ -6319,7 +6319,7 @@ definition RCLike.copy_of_normedField
 
 中文:
 定义 RCLike.copy_of_normedField
-  签名: {𝕜 : 类型} (h : RCLike 𝕜) (hk : NormedField 𝕜)
+  签名: {𝕜 : 类型} (h : RCLike 𝕜) (hk : 赋范域 𝕜)
   定义体: hk
   toPartialOrder := h.toPartialOrder
   toDecidableEq := h.toDecidableEq
@@ -6384,7 +6384,7 @@ definition IsRCLikeNormedField.rclike
   exact p.copy_of_normedField hk hp
 
 中文:
-定义 IsRCLikeNormedField.rclike
+定义 是RCLikeNormedField.rclike
   签名: (𝕜 : 类型)
   定义体: by
   choose p hp using h.out
@@ -6414,7 +6414,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (unitary 𝕜) (V ≃ₗᵢ[𝕜] W)
+  签名: 标量乘法 (unitary 𝕜) (V ≃ₗᵢ[𝕜] W)
   定义体: { __ := Unitary.toUnits α • e.toLinearEquiv
     norm_map' _ := by simp [norm_smul] }
 

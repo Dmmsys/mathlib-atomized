@@ -33,7 +33,7 @@ theorem setOfPred_mem_eq_empty_iff
 
 中文:
 定理 setOfPred_mem_eq_empty_iff
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: { x | x in l } = ∅ ↔ l = []
   证明: Set.eq_empty_iff_forall_notMem.trans eq_nil_iff_forall_not_mem.symm
 
@@ -66,7 +66,7 @@ theorem injOn_insertIdx_index_of_notMem
 
 中文:
 定理 injOn_insertIdx_index_of_notMem
-  条件: (l : List α) (x : α) (hx : x ∉ l)
+  条件: (l : 列表 α) (x : α) (hx : x ∉ l)
   证明: by
   intro n hn m hm h
   induction l generalizing n m with
@@ -187,7 +187,7 @@ theorem foldr_range_eq_of_range_eq
 
 中文:
 定理 foldr_range_eq_of_range_eq
-  结论: {f : β -> α -> α} {g : γ -> α -> α} (hfg : Set.range f = Set.range g)
+  结论: {f : β -> α -> α} {g : γ -> α -> α} (hfg : 集合.range f = 集合.range g)
   证明: (foldr_range_subset_of_range_subset hfg.le a).antisymm
     (foldr_range_subset_of_range_subset hfg.ge a)
 
@@ -240,7 +240,7 @@ theorem mapAccumr_eq_foldr
 中文:
 定理 mapAccumr_eq_foldr
   条件: {σ : 类型} (f : α -> σ -> σ × β)
-  结论: 对任意 (as : List α) (s : σ),
+  结论: 对任意 (as : 列表 α) (s : σ),
 -/
 theorem mapAccumr_eq_foldr {σ : Type*} (f : α -> σ -> σ × β) : forall (as : List α) (s : σ),
     mapAccumr f as s = List.foldr (fun a s =>

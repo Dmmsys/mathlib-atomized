@@ -76,7 +76,7 @@ add_aesop_rules safe tactic
 
 中文:
 定义 StronglyMeasurable
-  签名: [MeasurableSpace α] (f : α -> β)
+  签名: [可测空间 α] (f : α -> β)
   定义体: exists fs : Nat -> α ->ₛ β, forall x, Tendsto (fun n => fs n x) atTop (𝓝 (f x))
 
 add_aesop_rules safe tactic
@@ -107,7 +107,7 @@ definition FinStronglyMeasurable
 
 中文:
 定义 FinStronglyMeasurable
-  签名: [Zero β]
+  签名: [零 β]
   定义体: exists fs : Nat -> α ->ₛ β, (forall n, μ (support (fs n)) < ∞) ∧ forall x, Tendsto (fun n => fs n x) atTop (𝓝 (f x))
 
 Depends on / 依赖: Tendsto, support, volume_tac
@@ -166,7 +166,7 @@ lemma StronglyMeasurable.of_subsingleton_dom
 
 中文:
 引理 StronglyMeasurable.of_subsingleton_dom
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: StronglyMeasurable f
   证明: ⟨fun _ => SimpleFunc.ofFinite f, fun _ => tendsto_const_nhds⟩
 
@@ -194,7 +194,7 @@ lemma StronglyMeasurable.of_subsingleton_cod
 
 中文:
 引理 StronglyMeasurable.of_subsingleton_cod
-  条件: [Subsingleton β]
+  条件: [子单例 β]
   结论: StronglyMeasurable f
   证明: by
   let f_sf : α ->ₛ β := ⟨f, fun x => ?_, Set.Subsingleton.finite Set.subsingleton_of_subsingleton⟩
@@ -247,7 +247,7 @@ theorem stronglyMeasurable_one
 
 中文:
 定理 stronglyMeasurable_one
-  条件: [One β]
+  条件: [幺 β]
   结论: StronglyMeasurable (1 : α -> β)
   证明: stronglyMeasurable_const
 
@@ -361,7 +361,7 @@ lemma StronglyMeasurable.of_discrete
 
 中文:
 引理 StronglyMeasurable.of_discrete
-  条件: [Countable α]
+  条件: [可数 α]
   结论: StronglyMeasurable f
   证明: by
   nontriviality α
@@ -397,7 +397,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def approx {_ : MeasurableSpace α} (hf : StronglyMeasurable f)
+  签名: def approx {_ : 可测空间 α} (hf : StronglyMeasurable f)
   定义体: hf.choose
 -/
 protected noncomputable def approx {_ : MeasurableSpace α} (hf : StronglyMeasurable f) :
@@ -414,7 +414,7 @@ theorem tendsto_approx
 
 中文:
 定理 tendsto_approx
-  条件: {_ : MeasurableSpace α} (hf : StronglyMeasurable f)
+  条件: {_ : 可测空间 α} (hf : StronglyMeasurable f)
   证明: hf.choose_spec
 -/
 protected theorem tendsto_approx {_ : MeasurableSpace α} (hf : StronglyMeasurable f) :
@@ -432,7 +432,7 @@ definition approxBounded
 
 中文:
 定义 approxBounded
-  签名: {_ : MeasurableSpace α} [Norm β] [SMul 实数 β]
+  签名: {_ : 可测空间 α} [范数 β] [标量乘法 实数 β]
   定义体: fun n =>
   (hf.approx n).map fun x => min 1 (c / ‖x‖) • x
 -/
@@ -457,7 +457,7 @@ theorem tendsto_approxBounded_of_norm_le
 
 中文:
 定理 tendsto_approxBounded_of_norm_le
-  结论: {β} {f : α -> β} [NormedAddCommGroup β] [NormedSpace 实数 β]
+  结论: {β} {f : α -> β} [赋范交换加群 β] [赋范空间 实数 β]
   证明: by
   have h_tendsto := hf.tendsto_approx x
   simp only [StronglyMeasurable.approxBounded, SimpleFunc.coe_map, Function.comp_apply]
@@ -511,7 +511,7 @@ theorem tendsto_approxBounded_ae
 
 中文:
 定理 tendsto_approxBounded_ae
-  结论: {β} {f : α -> β} [NormedAddCommGroup β] [NormedSpace 实数 β]
+  结论: {β} {f : α -> β} [赋范交换加群 β] [赋范空间 实数 β]
   证明: by
   filter_upwards [hf_bound] with x hfx using tendsto_approxBounded_of_norm_le hf hfx
 
@@ -539,7 +539,7 @@ theorem norm_approxBounded_le
 
 中文:
 定理 norm_approxBounded_le
-  结论: {β} {f : α -> β} [SeminormedAddCommGroup β] [NormedSpace 实数 β]
+  结论: {β} {f : α -> β} [SeminormedAddComm群 β] [赋范空间 实数 β]
   证明: by
   simp only [StronglyMeasurable.approxBounded, SimpleFunc.coe_map, Function.comp_apply]
   refine (norm_smul_le _ _).trans ?_
@@ -584,7 +584,7 @@ theorem _root_.stronglyMeasurable_bot_iff
 
 中文:
 定理 _root_.stronglyMeasurable_bot_iff
-  条件: [Nonempty β] [T2Space β]
+  条件: [非空 β] [T2空间 β]
   证明: by
   rcases isEmpty_or_nonempty α with hα | hα
   · simp [eq_iff_true_of_subsingleton]
@@ -632,7 +632,7 @@ theorem finStronglyMeasurable_of_set_sigmaFinite
 
 中文:
 定理 finStronglyMeasurable_of_set_sigmaFinite
-  结论: [TopologicalSpace β] [Zero β]
+  结论: [拓扑空间 β] [零 β]
   证明: by
   have : SigmaFinite (μ.restrict t) := htμ
   let S := spanningSets (μ.restrict t)
@@ -706,7 +706,7 @@ theorem finStronglyMeasurable
 
 中文:
 定理 finStronglyMeasurable
-  结论: [TopologicalSpace β] [Zero β] {m0 : MeasurableSpace α}
+  结论: [拓扑空间 β] [零 β] {m0 : 可测空间 α}
   证明: hf.finStronglyMeasurable_of_set_sigmaFinite MeasurableSet.univ (by simp)
     (by rwa [Measure.restrict_univ])
 -/
@@ -728,7 +728,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β] [PseudoMetrizableSpace β]
+  结论: {_ : 可测空间 α} [拓扑空间 β] [PseudoMetrizable空间 β]
   证明: measurable_of_tendsto_metrizable (fun n => (hf.approx n).measurable)
     (tendsto_pi_nhds.mpr hf.tendsto_approx)
 -/
@@ -749,7 +749,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β]
+  结论: {_ : 可测空间 α} [拓扑空间 β]
   证明: hf.measurable.aemeasurable
 -/
 protected theorem aemeasurable {_ : MeasurableSpace α} [TopologicalSpace β]
@@ -771,8 +771,8 @@ nonrec theorem measurableSet_mulSupport {m : MeasurableSpace α} [One β] [Topol
   boreli
 
 中文:
-定理 _root_.Continuous.comp_stronglyMeasurable
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β]
+定理 _root_.连续.comp_stronglyMeasurable
+  结论: {_ : 可测空间 α} [拓扑空间 β]
   证明: ⟨fun n => SimpleFunc.map g (hf.approx n), fun x => (hg.tendsto _).comp (hf.tendsto_approx x)⟩
 
 @[to_additive]
@@ -811,7 +811,7 @@ theorem mono
 
 中文:
 定理 mono
-  结论: {m m' : MeasurableSpace α} [TopologicalSpace β]
+  结论: {m m' : 可测空间 α} [拓扑空间 β]
   证明: by
   let f_approx : Nat -> @SimpleFunc α m β := fun n =>
     @SimpleFunc.mk α m β
@@ -844,7 +844,7 @@ theorem fst
 
 中文:
 定理 fst
-  结论: {m : MeasurableSpace α} [TopologicalSpace β] [TopologicalSpace γ]
+  结论: {m : 可测空间 α} [拓扑空间 β] [拓扑空间 γ]
   证明: continuous_fst.comp_stronglyMeasurable hf
 
 @[fun_prop]
@@ -866,7 +866,7 @@ theorem snd
 
 中文:
 定理 snd
-  结论: {m : MeasurableSpace α} [TopologicalSpace β] [TopologicalSpace γ]
+  结论: {m : 可测空间 α} [拓扑空间 β] [拓扑空间 γ]
   证明: continuous_snd.comp_stronglyMeasurable hf
 
 @[fun_prop]
@@ -891,7 +891,7 @@ theorem prodMk
 
 中文:
 定理 prodMk
-  结论: {m : MeasurableSpace α} [TopologicalSpace β] [TopologicalSpace γ]
+  结论: {m : 可测空间 α} [拓扑空间 β] [拓扑空间 γ]
   证明: by
   refine ⟨fun n => SimpleFunc.pair (hf.approx n) (hg.approx n), fun x => ?_⟩
   rw [nhds_prod_eq]
@@ -917,7 +917,7 @@ theorem comp_measurable
 
 中文:
 定理 comp_measurable
-  结论: [TopologicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ}
+  结论: [拓扑空间 β] {_ : 可测空间 α} {_ : 可测空间 γ}
   证明: ⟨fun n => SimpleFunc.comp (hf.approx n) g hg, fun x => hf.tendsto_approx (g x)⟩
 
 Depends on / 依赖: SimpleFunc, SimpleFunc.comp, approx, hf.approx, hf.tendsto_approx, tendsto_approx
@@ -937,7 +937,7 @@ theorem of_uncurry_left
 
 中文:
 定理 of_uncurry_left
-  结论: [TopologicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ}
+  结论: [拓扑空间 β] {_ : 可测空间 α} {_ : 可测空间 γ}
   证明: hf.comp_measurable measurable_prodMk_left
 
 Depends on / 依赖: comp_measurable, hf.comp_measurable, measurable_prodMk_left
@@ -956,7 +956,7 @@ theorem of_uncurry_right
 
 中文:
 定理 of_uncurry_right
-  结论: [TopologicalSpace β] {_ : MeasurableSpace α} {_ : MeasurableSpace γ}
+  结论: [拓扑空间 β] {_ : 可测空间 α} {_ : 可测空间 γ}
   证明: hf.comp_measurable measurable_prodMk_right
 
 Depends on / 依赖: comp_measurable, hf.comp_measurable, measurable_prodMk_right
@@ -976,7 +976,7 @@ theorem prod_swap
 
 中文:
 定理 prod_swap
-  结论: {_ : MeasurableSpace α} {_ : MeasurableSpace β} [TopologicalSpace γ]
+  结论: {_ : 可测空间 α} {_ : 可测空间 β} [拓扑空间 γ]
   证明: hf.comp_measurable measurable_swap
 -/
 protected theorem prod_swap {_ : MeasurableSpace α} {_ : MeasurableSpace β} [TopologicalSpace γ]
@@ -994,7 +994,7 @@ theorem comp_fst
 
 中文:
 定理 comp_fst
-  结论: {_ : MeasurableSpace α} [mβ : MeasurableSpace β] [TopologicalSpace γ]
+  结论: {_ : 可测空间 α} [mβ : 可测空间 β] [拓扑空间 γ]
   证明: hf.comp_measurable measurable_fst
 -/
 protected theorem comp_fst {_ : MeasurableSpace α} [mβ : MeasurableSpace β] [TopologicalSpace γ]
@@ -1012,7 +1012,7 @@ theorem comp_snd
 
 中文:
 定理 comp_snd
-  结论: [mα : MeasurableSpace α] {_ : MeasurableSpace β} [TopologicalSpace γ]
+  结论: [mα : 可测空间 α] {_ : 可测空间 β} [拓扑空间 γ]
   证明: hf.comp_measurable measurable_snd
 -/
 protected theorem comp_snd [mα : MeasurableSpace α] {_ : MeasurableSpace β} [TopologicalSpace γ]
@@ -1037,7 +1037,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [Mul β] [ContinuousMul β] (hf : StronglyMeasurable f)
+  结论: [乘法 β] [连续乘法 β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => hf.approx n * hg.approx n, fun x => (hf.tendsto_approx x).mul (hg.tendsto_approx x)⟩
 
 @[to_additive (attr := fun_prop)]
@@ -1059,7 +1059,7 @@ theorem mul_const
 
 中文:
 定理 mul_const
-  条件: [Mul β] [ContinuousMul β] (hf : StronglyMeasurable f) (c : β)
+  条件: [乘法 β] [连续乘法 β] (hf : StronglyMeasurable f) (c : β)
   证明: hf.mul stronglyMeasurable_const
 
 @[to_additive (attr := fun_prop)]
@@ -1083,7 +1083,7 @@ theorem const_mul
 
 中文:
 定理 const_mul
-  条件: [Mul β] [ContinuousMul β] (hf : StronglyMeasurable f) (c : β)
+  条件: [乘法 β] [连续乘法 β] (hf : StronglyMeasurable f) (c : β)
   证明: stronglyMeasurable_const.mul hf
 
 @[to_additive (attr := to_fun (attr := fun_prop)) const_nsmul]
@@ -1107,7 +1107,7 @@ theorem pow
 
 中文:
 定理 pow
-  条件: [Monoid β] [ContinuousMul β] (hf : StronglyMeasurable f) (n : 自然数)
+  条件: [幺半群 β] [连续乘法 β] (hf : StronglyMeasurable f) (n : 自然数)
   证明: ⟨fun k => hf.approx k ^ n, fun x => (hf.tendsto_approx x).pow n⟩
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1129,7 +1129,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: [Inv β] [ContinuousInv β] (hf : StronglyMeasurable f)
+  条件: [取逆 β] [连续取逆 β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => (hf.approx n)⁻¹, fun x => (hf.tendsto_approx x).inv⟩
 
 @[to_fun (attr := fun_prop)]
@@ -1154,7 +1154,7 @@ theorem inv₀
 
 中文:
 定理 inv₀
-  结论: [GroupWithZero β] [ContinuousInv₀ β] [MetrizableSpace β]
+  结论: [带零群 β] [余ntinuousInv₀ β] [Metrizable空间 β]
   证明: by
   borelize β
   refine ⟨fun n => ((hf.approx n).restrict {x | f x != 0})⁻¹, fun x => ?_⟩
@@ -1189,7 +1189,7 @@ theorem div'
 
 中文:
 定理 div'
-  结论: [Div β] [ContinuousDiv β] (hf : StronglyMeasurable f)
+  结论: [除法 β] [余ntinuousDiv β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => hf.approx n / hg.approx n, fun x => (hf.tendsto_approx x).div' (hg.tendsto_approx x)⟩
 
 @[fun_prop]
@@ -1210,7 +1210,7 @@ theorem div₀
 
 中文:
 定理 div₀
-  结论: [GroupWithZero β] [ContinuousMul β] [ContinuousInv₀ β] (hf : StronglyMeasurable f)
+  结论: [带零群 β] [连续乘法 β] [余ntinuousInv₀ β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => hf.approx n / hg.approx n,
     fun x => (hf.tendsto_approx x).div (hg.tendsto_approx x) (h₀ x)⟩
 
@@ -1238,7 +1238,7 @@ theorem div
 
 中文:
 定理 div
-  结论: [GroupWithZero β] [ContinuousMul β] [ContinuousInv₀ β] [MetrizableSpace β]
+  结论: [带零群 β] [连续乘法 β] [余ntinuousInv₀ β] [Metrizable空间 β]
   证明: by
   borelize β
   refine ⟨fun n => hf.approx n / (hg.approx n).restrict {x | g x != 0}, fun x => ?_⟩
@@ -1276,7 +1276,7 @@ theorem mul_iff_right
 
 中文:
 定理 mul_iff_right
-  条件: [CommGroup β] [IsTopologicalGroup β] (hf : StronglyMeasurable f)
+  条件: [交换群 β] [是拓扑群 β] (hf : StronglyMeasurable f)
   证明: ⟨fun h => show g = f * g * f⁻¹ by simp only [mul_inv_cancel_comm] ▸ h.mul hf.inv,
     fun h => hf.mul h⟩
 
@@ -1302,7 +1302,7 @@ theorem mul_iff_left
 
 中文:
 定理 mul_iff_left
-  条件: [CommGroup β] [IsTopologicalGroup β] (hf : StronglyMeasurable f)
+  条件: [交换群 β] [是拓扑群 β] (hf : StronglyMeasurable f)
   证明: mul_comm g f ▸ mul_iff_right hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1326,7 +1326,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
+  结论: {𝕜} [拓扑空间 𝕜] [标量乘法 𝕜 β] [连续标量乘法 𝕜 β] {f : α -> 𝕜}
   证明: continuous_smul.comp_stronglyMeasurable (hf.prodMk hg)
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -1355,7 +1355,7 @@ alias const_vadd' := StronglyMeasurable.fun_const_vadd
 
 中文:
 定理 const_smul
-  结论: {𝕜} [SMul 𝕜 β] [ContinuousConstSMul 𝕜 β] (hf : StronglyMeasurable f)
+  结论: {𝕜} [标量乘法 𝕜 β] [连续常数标量乘法 𝕜 β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => c • hf.approx n, fun x => (hf.tendsto_approx x).const_smul c⟩
 
 @[deprecated (since := "2026-06-26")]
@@ -1387,7 +1387,7 @@ theorem smul_const
 
 中文:
 定理 smul_const
-  结论: {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
+  结论: {𝕜} [拓扑空间 𝕜] [标量乘法 𝕜 β] [连续标量乘法 𝕜 β] {f : α -> 𝕜}
   证明: continuous_smul.comp_stronglyMeasurable (hf.prodMk stronglyMeasurable_const)
 -/
 protected theorem smul_const {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
@@ -1406,7 +1406,7 @@ theorem star
 
 中文:
 定理 star
-  结论: {R : 类型} [MeasurableSpace α] [Star R] [TopologicalSpace R]
+  结论: {R : 类型} [可测空间 α] [对合 R] [拓扑空间 R]
   证明: ⟨fun n => star (hf.approx n), fun x => (hf.tendsto_approx x).star⟩
 -/
 protected theorem star {R : Type*} [MeasurableSpace α] [Star R] [TopologicalSpace R]
@@ -1426,7 +1426,7 @@ theorem _root_.Measurable.add_stronglyMeasurable
   exact hg.add_simpleFunc _
 
 中文:
-定理 _root_.Measurable.add_stronglyMeasurable
+定理 _root_.可测.add_stronglyMeasurable
   证明: by
   rcases hf with ⟨φ, hφ⟩
   have : Tendsto (fun n x => g x + φ n x) atTop (𝓝 (g + f)) :=
@@ -1457,7 +1457,7 @@ theorem _root_.Measurable.sub_stronglyMeasurable
   exact hg.add_stronglyMeasurable hf.neg
 
 中文:
-定理 _root_.Measurable.sub_stronglyMeasurable
+定理 _root_.可测.sub_stronglyMeasurable
   证明: by
   rw [sub_eq_add_neg]
   exact hg.add_stronglyMeasurable hf.neg
@@ -1485,7 +1485,7 @@ theorem _root_.Measurable.stronglyMeasurable_add
   exact hg.simpleFunc_add _
 
 中文:
-定理 _root_.Measurable.stronglyMeasurable_add
+定理 _root_.可测.stronglyMeasurable_add
   证明: by
   rcases hf with ⟨φ, hφ⟩
   have : Tendsto (fun n x => φ n x + g x) atTop (𝓝 (f + g)) :=
@@ -1532,7 +1532,7 @@ nonrec theorem _root_.IsUnit.stronglyMeasurable_const_smul_iff {_ : MeasurableSp
 
 中文:
 定理 _root_.stronglyMeasurable_const_smul_iff
-  条件: {m : MeasurableSpace α} (c : G)
+  条件: {m : 可测空间 α} (c : G)
   证明: ⟨fun h => by simpa only [inv_smul_smul] using h.fun_const_smul c⁻¹, fun h => h.const_smul c⟩
 
 nonrec theorem _root_.IsUnit.stronglyMeasurable_const_smul_iff {_ : MeasurableSpace α} {c : M}
@@ -1563,7 +1563,7 @@ theorem _root_.stronglyMeasurable_const_smul_iff₀
 
 中文:
 定理 _root_.stronglyMeasurable_const_smul_iff₀
-  条件: {_ : MeasurableSpace α} {c : G₀} (hc : c != 0)
+  条件: {_ : 可测空间 α} {c : G₀} (hc : c != 0)
   证明: (IsUnit.mk0 _ hc).stronglyMeasurable_const_smul_iff
 
 Depends on / 依赖: IsUnit, IsUnit.mk0, stronglyMeasurable_const_smul_iff
@@ -1593,8 +1593,8 @@ theorem sup
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 sup
-  结论: [Max β] [ContinuousSup β] (hf : StronglyMeasurable f)
+定理 上确界
+  结论: [最大值 β] [余ntinuousSup β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => hf.approx n ⊔ hg.approx n, fun x =>
     (hf.tendsto_approx x).sup_nhds (hg.tendsto_approx x)⟩
 
@@ -1618,8 +1618,8 @@ theorem inf
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 inf
-  结论: [Min β] [ContinuousInf β] (hf : StronglyMeasurable f)
+定理 下确界
+  结论: [最小值 β] [余ntinuousInf β] (hf : StronglyMeasurable f)
   证明: ⟨fun n => hf.approx n ⊓ hg.approx n, fun x =>
     (hf.tendsto_approx x).inf_nhds (hg.tendsto_approx x)⟩
 
@@ -1643,7 +1643,7 @@ theorem oneLePart
 
 中文:
 定理 oneLePart
-  条件: [Group β] [Lattice β] [ContinuousSup β] (hf : StronglyMeasurable f)
+  条件: [群 β] [格 β] [余ntinuousSup β] (hf : StronglyMeasurable f)
   证明: hf.sup stronglyMeasurable_const
 
 @[to_additive (attr := fun_prop)]
@@ -1663,7 +1663,7 @@ theorem leOnePart
 
 中文:
 定理 leOnePart
-  结论: [Group β] [Lattice β] [ContinuousSup β] [ContinuousInv β]
+  结论: [群 β] [格 β] [余ntinuousSup β] [连续取逆 β]
   证明: hf.inv.sup stronglyMeasurable_const
 -/
 protected theorem leOnePart [Group β] [Lattice β] [ContinuousSup β] [ContinuousInv β]
@@ -1701,8 +1701,8 @@ theorem _root_.List.stronglyMeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 _root_.List.stronglyMeasurable_prod
-  结论: (l : List (α -> M))
+定理 _root_.列表.stronglyMeasurable_prod
+  结论: (l : 列表 (α -> M))
   证明: by
   induction l with
   | nil => exact stronglyMeasurable_one
@@ -1735,8 +1735,8 @@ theorem _root_.List.stronglyMeasurable_fun_prod
   simpa only [← Pi.list_prod_apply] using l.stronglyMeasurable_prod hl
 
 中文:
-定理 _root_.List.stronglyMeasurable_fun_prod
-  结论: (l : List (α -> M))
+定理 _root_.列表.stronglyMeasurable_fun_prod
+  结论: (l : 列表 (α -> M))
   证明: by
   simpa only [← Pi.list_prod_apply] using l.stronglyMeasurable_prod hl
 
@@ -1822,8 +1822,8 @@ theorem _root_.Finset.stronglyMeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 _root_.Finset.stronglyMeasurable_prod
-  结论: {ι : 类型} {f : ι -> α -> M} (s : Finset ι)
+定理 _root_.有限集.stronglyMeasurable_prod
+  结论: {ι : 类型} {f : ι -> α -> M} (s : 有限集 ι)
   证明: Finset.prod_induction _ _ (fun _a _b ha hb => ha.mul hb) (@stronglyMeasurable_one α M _ _ _) hf
 
 @[to_additive (attr := fun_prop)]
@@ -1845,8 +1845,8 @@ theorem _root_.Finset.stronglyMeasurable_fun_prod
   simpa only [← Finset.prod_apply] using s.stronglyMeasurable_prod hf
 
 中文:
-定理 _root_.Finset.stronglyMeasurable_fun_prod
-  结论: {ι : 类型} {f : ι -> α -> M} (s : Finset ι)
+定理 _root_.有限集.stronglyMeasurable_fun_prod
+  结论: {ι : 类型} {f : ι -> α -> M} (s : 有限集 ι)
   证明: by
   simpa only [← Finset.prod_apply] using s.stronglyMeasurable_prod hf
 
@@ -1870,7 +1870,7 @@ lemma Finset.stronglyMeasurable_prod_apply
   simp only [Finset.prod_apply]; fun_prop
 
 中文:
-引理 Finset.stronglyMeasurable_prod_apply
+引理 有限集.stronglyMeasurable_prod_apply
   结论: {ι : 类型} {f : ι -> α -> β -> M} {g : α -> β}
   证明: by
   simp only [Finset.prod_apply]; fun_prop
@@ -1902,7 +1902,7 @@ theorem isSeparable_range
 
 中文:
 定理 isSeparable_range
-  结论: {m : MeasurableSpace α} [TopologicalSpace β]
+  结论: {m : 可测空间 α} [拓扑空间 β]
   证明: by
   have : IsSeparable (closure (⋃ n, range (hf.approx n))) :=
 .closure .iUnion fun n => (hf.approx n).finite_range.isSeparable
@@ -1935,7 +1935,7 @@ theorem separableSpace_range_union_singleton
 
 中文:
 定理 separableSpace_range_union_singleton
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β]
+  结论: {_ : 可测空间 α} [拓扑空间 β]
   证明: letI := pseudoMetrizableSpacePseudoMetric β
   (hf.isSeparable_range.union (finite_singleton _).isSeparable).separableSpace
 
@@ -1966,8 +1966,8 @@ theorem _root_.Measurable.stronglyMeasurable
     SimpleFunc.tendsto_approxOn hf (Set.mem_univ _) (by simp)⟩
 
 中文:
-定理 _root_.Measurable.stronglyMeasurable
-  结论: [TopologicalSpace β] [PseudoMetrizableSpace β]
+定理 _root_.可测.stronglyMeasurable
+  结论: [拓扑空间 β] [PseudoMetrizable空间 β]
   证明: by
   let := pseudoMetrizableSpacePseudoMetric β
   nontriviality β; inhabit β
@@ -1996,7 +1996,7 @@ theorem _root_.stronglyMeasurable_iff_measurable
 
 中文:
 定理 _root_.stronglyMeasurable_iff_measurable
-  结论: [TopologicalSpace β] [PseudoMetrizableSpace β]
+  结论: [拓扑空间 β] [PseudoMetrizable空间 β]
   证明: ⟨fun h => h.measurable, fun h => Measurable.stronglyMeasurable h⟩
 
 @[fun_prop]
@@ -2018,7 +2018,7 @@ theorem _root_.stronglyMeasurable_id
 
 中文:
 定理 _root_.stronglyMeasurable_id
-  结论: [TopologicalSpace α] [PseudoMetrizableSpace α]
+  结论: [拓扑空间 α] [PseudoMetrizable空间 α]
   证明: measurable_id.stronglyMeasurable
 
 Depends on / 依赖: measurable_id, measurable_id.stronglyMeasurable, stronglyMeasurable
@@ -2043,7 +2043,7 @@ theorem _root_.stronglyMeasurable_iff_measurable_separable
 
 中文:
 定理 _root_.stronglyMeasurable_iff_measurable_separable
-  结论: {m : MeasurableSpace α}
+  结论: {m : 可测空间 α}
   证明: by
   refine ⟨fun H => ⟨H.measurable, H.isSeparable_range⟩, fun ⟨Hm, Hsep⟩ => ?_⟩
   have := Hsep.secondCountableTopology
@@ -2075,8 +2075,8 @@ theorem _root_.Continuous.stronglyMeasurable
   · exact hf.measurable.stronglyMeasurable
 
 中文:
-定理 _root_.Continuous.stronglyMeasurable
-  结论: [MeasurableSpace α] [TopologicalSpace α]
+定理 _root_.连续.stronglyMeasurable
+  结论: [可测空间 α] [拓扑空间 α]
   证明: by
   borelize β
   cases h.out
@@ -2113,7 +2113,7 @@ theorem _root_.Continuous.stronglyMeasurable_of_mulSupport_subset_isCompact
   exact ⟨hf.measurable, (isCompact_range_of_mulSupport_subset_isCompact hf hk h'f).isSeparable⟩
 
 中文:
-定理 _root_.Continuous.stronglyMeasurable_of_mulSupport_subset_isCompact
+定理 _root_.连续.stronglyMeasurable_of_mulSupport_subset_isCompact
   证明: by
   borelize β
   let : PseudoMetricSpace β := pseudoMetrizableSpacePseudoMetric β
@@ -2141,7 +2141,7 @@ theorem _root_.Continuous.stronglyMeasurable_of_hasCompactMulSupport
   proof: hf.stronglyMeasurable_of_mulSupport_subset_isCompact h'f (subset_mulTSupport f)
 
 中文:
-定理 _root_.Continuous.stronglyMeasurable_of_hasCompactMulSupport
+定理 _root_.连续.stronglyMeasurable_of_hasCompactMulSupport
   证明: hf.stronglyMeasurable_of_mulSupport_subset_isCompact h'f (subset_mulTSupport f)
 
 Depends on / 依赖: hf.stronglyMeasurable_of_mulSupport_subset_isCompact, stronglyMeasurable_of_mulSupport_subset_isCompact, subset_mulTSupport
@@ -2166,7 +2166,7 @@ lemma _root_.HasCompactSupport.stronglyMeasurable_of_prod
 
 中文:
 引理 _root_.HasCompactSupport.stronglyMeasurable_of_prod
-  结论: {X Y : 类型} [Zero α]
+  结论: {X Y : 类型} [零 α]
   证明: by
   borelize α
   apply stronglyMeasurable_iff_measurable_separable.2 ⟨h'f.measurable_of_prod hf, ?_⟩
@@ -2202,8 +2202,8 @@ theorem _root_.Embedding.comp_stronglyMeasurable_iff
       { hg.codRe
 
 中文:
-定理 _root_.Embedding.comp_stronglyMeasurable_iff
-  结论: {m : MeasurableSpace α} [TopologicalSpace β]
+定理 _root_.嵌入.comp_stronglyMeasurable_iff
+  结论: {m : 可测空间 α} [拓扑空间 β]
   证明: by
   let := pseudoMetrizableSpacePseudoMetric γ
   borelize β γ
@@ -2251,7 +2251,7 @@ theorem _root_.stronglyMeasurable_of_tendsto
 
 中文:
 定理 _root_.stronglyMeasurable_of_tendsto
-  结论: {ι : 类型} {m : MeasurableSpace α}
+  结论: {ι : 类型} {m : 可测空间 α}
   证明: by
   borelize β
   refine stronglyMeasurable_iff_measurable_separable.2 ⟨?_, ?_⟩
@@ -2295,7 +2295,7 @@ theorem piecewise
 
 中文:
 定理 piecewise
-  结论: {m : MeasurableSpace α} [TopologicalSpace β] {s : Set α}
+  结论: {m : 可测空间 α} [拓扑空间 β] {s : 集合 α}
   证明: by
   refine ⟨fun n => SimpleFunc.piecewise s hs (hf.approx n) (hg.approx n), fun x => ?_⟩
   by_cases hx : x in s
@@ -2323,7 +2323,7 @@ theorem ite
 
 中文:
 定理 ite
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β] {p : α -> 命题}
+  结论: {_ : 可测空间 α} [拓扑空间 β] {p : α -> 命题}
   证明: StronglyMeasurable.piecewise hp hf hg
 -/
 protected theorem ite {_ : MeasurableSpace α} [TopologicalSpace β] {p : α -> Prop}
@@ -2345,7 +2345,7 @@ theorem dite
 
 中文:
 定理 dite
-  结论: {s : Set α} {m : MeasurableSpace α} [TopologicalSpace β]
+  结论: {s : 集合 α} {m : 可测空间 α} [拓扑空间 β]
   证明: by
   refine ⟨fun n => SimpleFunc.dite s hs (hf.approx n) (hg.approx n), fun x => ?_⟩
   by_cases hx : x in s
@@ -2377,7 +2377,7 @@ theorem _root_.ContinuousOn.stronglyMeasurable_of_countable_compl
 
 中文:
 定理 _root_.ContinuousOn.stronglyMeasurable_of_countable_compl
-  结论: [MeasurableSpace α]
+  结论: [可测空间 α]
   证明: by
   classical
   have h's : MeasurableSet s := by simpa using hs.measurableSet.compl
@@ -2419,7 +2419,7 @@ theorem of_countable_not_continuousAt
 
 中文:
 定理 of_countable_not_continuousAt
-  结论: [MeasurableSpace α] [TopologicalSpace α]
+  结论: [可测空间 α] [拓扑空间 α]
   证明: by
   have : ContinuousOn f {x | ContinuousAt f x} := fun x hx => hx.continuousWithinAt
   apply this.stronglyMeasurable_of_countable_compl
@@ -2457,7 +2457,7 @@ theorem _root_.MeasurableEmbedding.stronglyMeasurable_extend
   · simpa only [hx, SimpleFunc.extend_
 
 中文:
-定理 _root_.MeasurableEmbedding.stronglyMeasurable_extend
+定理 _root_.可测嵌入.stronglyMeasurable_extend
   结论: {f : α -> β} {g : α -> γ} {g' : γ -> β}
   证明: by
   refine ⟨fun n => SimpleFunc.extend (hf.approx n) g hg (hg'.approx n), ?_⟩
@@ -2494,7 +2494,7 @@ theorem _root_.MeasurableEmbedding.exists_stronglyMeasurable_extend
     funext fun _ => hg.injective.extend_apply _ _ _⟩
 
 中文:
-定理 _root_.MeasurableEmbedding.exists_stronglyMeasurable_extend
+定理 _root_.可测嵌入.存在_stronglyMeasurable_extend
   结论: {f : α -> β} {g : α -> γ}
   证明: ⟨Function.extend g f fun x => Classical.choice (hne x),
     hg.stronglyMeasurable_extend hf (stronglyMeasurable_const' fun _ _ => rfl),
@@ -2525,7 +2525,7 @@ this ▸ (MeasurableEmbedding.subtype_coe hs).stronglyMeasurable_extend hc
 
 中文:
 定理 _root_.stronglyMeasurable_of_stronglyMeasurable_union_cover
-  结论: {m : MeasurableSpace α}
+  结论: {m : 可测空间 α}
   证明: by
   nontriviality β; inhabit β
   suffices Function.extend Subtype.val (fun x : s => f x)
@@ -2565,7 +2565,7 @@ theorem _root_.stronglyMeasurable_of_restrict_of_restrict_compl
 
 中文:
 定理 _root_.stronglyMeasurable_of_restrict_of_restrict_compl
-  结论: {_ : MeasurableSpace α}
+  结论: {_ : 可测空间 α}
   证明: stronglyMeasurable_of_stronglyMeasurable_union_cover s sᶜ hs hs.compl (union_compl_self s).ge h₁
     h₂
 
@@ -2591,7 +2591,7 @@ theorem indicator
 
 中文:
 定理 indicator
-  结论: {_ : MeasurableSpace α} [TopologicalSpace β] [Zero β]
+  结论: {_ : 可测空间 α} [拓扑空间 β] [零 β]
   证明: hf.piecewise hs stronglyMeasurable_const
 -/
 protected theorem indicator {_ : MeasurableSpace α} [TopologicalSpace β] [Zero β]
@@ -2615,7 +2615,7 @@ theorem induction
 
 中文:
 定理 induction
-  结论: [MeasurableSpace α] [AddZeroClass β] [TopologicalSpace β]
+  结论: [可测空间 α] [加法零类 β] [拓扑空间 β]
   证明: by
   let s := hf.approx
   refine lim (fun n => (s n).stronglyMeasurable) hf (fun n => ?_) hf.tendsto_approx
@@ -2664,7 +2664,7 @@ theorem induction'
 
 中文:
 定理 induction'
-  结论: [MeasurableSpace α] [Nonempty β] [TopologicalSpace β]
+  结论: [可测空间 α] [非空 β] [拓扑空间 β]
   证明: by
   let s := hf.approx
   refine lim (fun n => (s n).stronglyMeasurable) hf (fun n => ?_) hf.tendsto_approx
@@ -2708,7 +2708,7 @@ theorem dist
 
 中文:
 定理 dist
-  结论: {_ : MeasurableSpace α} {β : 类型} [PseudoMetricSpace β] {f g : α -> β}
+  结论: {_ : 可测空间 α} {β : 类型} [伪度量空间 β] {f g : α -> β}
   证明: continuous_dist.comp_stronglyMeasurable (hf.prodMk hg)
 
 @[fun_prop]
@@ -2731,7 +2731,7 @@ theorem edist
 
 中文:
 定理 edist
-  结论: {_ : MeasurableSpace α} {β : 类型} [PseudoEMetricSpace β] {f g : α -> β}
+  结论: {_ : 可测空间 α} {β : 类型} [PseudoEMetric空间 β] {f g : α -> β}
   证明: continuous_edist.comp_stronglyMeasurable (hf.prodMk hg)
 
 @[fun_prop]
@@ -2754,7 +2754,7 @@ theorem norm
 
 中文:
 定理 norm
-  结论: {_ : MeasurableSpace α} {β : 类型} [SeminormedAddCommGroup β] {f : α -> β}
+  结论: {_ : 可测空间 α} {β : 类型} [SeminormedAddComm群 β] {f : α -> β}
   证明: continuous_norm.comp_stronglyMeasurable hf
 
 @[fun_prop]
@@ -2774,7 +2774,7 @@ theorem nnnorm
 
 中文:
 定理 nnnorm
-  结论: {_ : MeasurableSpace α} {β : 类型} [SeminormedAddCommGroup β] {f : α -> β}
+  结论: {_ : 可测空间 α} {β : 类型} [SeminormedAddComm群 β] {f : α -> β}
   证明: continuous_nnnorm.comp_stronglyMeasurable hf
 -/
 protected theorem nnnorm {_ : MeasurableSpace α} {β : Type*} [SeminormedAddCommGroup β] {f : α -> β}
@@ -2799,7 +2799,7 @@ theorem enorm
 
 中文:
 定理 enorm
-  结论: {_ : MeasurableSpace α} {ε : 类型} [TopologicalSpace ε] [ContinuousENorm ε]
+  结论: {_ : 可测空间 α} {ε : 类型} [拓扑空间 ε] [余ntinuousE范数 ε]
   证明: (continuous_enorm.comp_stronglyMeasurable hf).measurable
 
 @[fun_prop]
@@ -2818,8 +2818,8 @@ theorem real_toNNReal
   proof: continuous_real_toNNReal.comp_stronglyMeasurable hf
 
 中文:
-定理 real_toNNReal
-  条件: {_ : MeasurableSpace α} {f : α -> 实数} (hf : StronglyMeasurable f)
+定理 real_toNN实数
+  条件: {_ : 可测空间 α} {f : α -> 实数} (hf : StronglyMeasurable f)
   证明: continuous_real_toNNReal.comp_stronglyMeasurable hf
 -/
 protected theorem real_toNNReal {_ : MeasurableSpace α} {f : α -> Real} (hf : StronglyMeasurable f) :
@@ -3010,7 +3010,7 @@ theorem stronglyMeasurable_in_set
 
 中文:
 定理 stronglyMeasurable_in_set
-  结论: {m : MeasurableSpace α} [TopologicalSpace β] [Zero β] {s : Set α}
+  结论: {m : 可测空间 α} [拓扑空间 β] [零 β] {s : 集合 α}
   证明: by
   refine ⟨fun n => (hf.approx n).restrict s, ?_, ?_⟩
   · intro x
@@ -3053,7 +3053,7 @@ theorem stronglyMeasurable_of_measurableSpace_le_on
 
 中文:
 定理 stronglyMeasurable_of_measurableSpace_le_on
-  结论: {α E} {m m₂ : MeasurableSpace α}
+  结论: {α E} {m m₂ : 可测空间 α}
   证明: by
   have hs_m₂ : MeasurableSet[m₂] s := by
     have : MeasurableSet (s inter univ) := hs univ (by simpa)
@@ -3097,8 +3097,8 @@ theorem exists_spanning_measurableSet_norm_le
   norm_cast
 
 中文:
-定理 exists_spanning_measurableSet_norm_le
-  结论: [SeminormedAddCommGroup β] {m m0 : MeasurableSpace α}
+定理 存在_spanning_measurableSet_norm_le
+  结论: [SeminormedAddComm群 β] {m m0 : 可测空间 α}
   证明: by
   obtain ⟨s, hs, hs_univ⟩ :=
     @exists_spanning_measurableSet_le _ m _ hf.nnnorm.measurable (μ.trim hm) _
@@ -3138,7 +3138,7 @@ theorem finStronglyMeasurable_zero
 
 中文:
 定理 finStronglyMeasurable_zero
-  结论: {α β} {m : MeasurableSpace α} {μ : Measure α} [Zero β]
+  结论: {α β} {m : 可测空间 α} {μ : 测度 α} [零 β]
   证明: ⟨0, by
     simp only [Pi.zero_apply, SimpleFunc.coe_zero, support_zero, measure_empty,
       zero_lt_top, forall_const],
@@ -3203,7 +3203,7 @@ theorem tendsto_approx
 
 中文:
 定理 tendsto_approx
-  结论: 对任意 x, Tendsto (fun n => hf.approx n x) atTop (𝓝 (f x))
+  结论: 对任意 x, 收敛 (fun n => hf.approx n x) atTop (𝓝 (f x))
   证明: hf.choose_spec.2
 -/
 protected theorem tendsto_approx : forall x, Tendsto (fun n => hf.approx n x) atTop (𝓝 (f x)) :=
@@ -3223,7 +3223,7 @@ theorem stronglyMeasurable
 
 中文:
 定理 stronglyMeasurable
-  结论: [Zero β] [TopologicalSpace β]
+  结论: [零 β] [拓扑空间 β]
   证明: ⟨hf.approx, hf.tendsto_approx⟩
 -/
 protected theorem stronglyMeasurable [Zero β] [TopologicalSpace β]
@@ -3245,8 +3245,8 @@ theorem exists_set_sigmaFinite
   · have h_fs_zero : forall n, forall x in tᶜ, fs n x = 
 
 中文:
-定理 exists_set_sigmaFinite
-  结论: [Zero β] [TopologicalSpace β] [T2Space β]
+定理 存在_set_sigmaFinite
+  结论: [零 β] [拓扑空间 β] [T2空间 β]
   证明: by
   rcases hf with ⟨fs, hT_lt_top, h_approx⟩
   let T n := support (fs n)
@@ -3289,7 +3289,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  结论: [Zero β] [TopologicalSpace β] [PseudoMetrizableSpace β]
+  结论: [零 β] [拓扑空间 β] [PseudoMetrizable空间 β]
   证明: hf.stronglyMeasurable.measurable
 -/
 protected theorem measurable [Zero β] [TopologicalSpace β] [PseudoMetrizableSpace β]
@@ -3318,7 +3318,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [MulZeroClass β] [ContinuousMul β] (hf : FinStronglyMeasurable f μ)
+  结论: [乘零类 β] [连续乘法 β] (hf : FinStronglyMeasurable f μ)
   证明: by
   refine
     ⟨fun n => hf.approx n * hg.approx n, ?_, fun x =>
@@ -3353,7 +3353,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [AddZeroClass β] [ContinuousAdd β] (hf : FinStronglyMeasurable f μ)
+  结论: [加法零类 β] [连续加法 β] (hf : FinStronglyMeasurable f μ)
   证明: ⟨fun n => hf.approx n + hg.approx n, fun n =>
     (measure_mono (Function.support_add _ _)).trans_lt
       ((measure_union_le _ _).trans_lt
@@ -3387,7 +3387,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: [SubtractionMonoid β] [ContinuousNeg β] (hf : FinStronglyMeasurable f μ)
+  条件: [Subtraction幺半群 β] [连续取负 β] (hf : FinStronglyMeasurable f μ)
   证明: by
   refine ⟨fun n => -hf.approx n, fun n => ?_, fun x => (hf.tendsto_approx x).neg⟩
   suffices μ (Function.support fun x => -(hf.approx n) x) < ∞ by convert! this
@@ -3420,7 +3420,7 @@ theorem sub
 
 中文:
 定理 sub
-  结论: [SubtractionMonoid β] [ContinuousSub β] (hf : FinStronglyMeasurable f μ)
+  结论: [Subtraction幺半群 β] [余ntinuousSub β] (hf : FinStronglyMeasurable f μ)
   证明: ⟨fun n => hf.approx n - hg.approx n, fun n =>
     (measure_mono (Function.support_sub _ _)).trans_lt
       ((measure_union_le _ _).trans_lt
@@ -3451,7 +3451,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  结论: {𝕜} [TopologicalSpace 𝕜] [Zero β]
+  结论: {𝕜} [拓扑空间 𝕜] [零 β]
   证明: by
   refine ⟨fun n => c • hf.approx n, fun n => ?_, fun x => (hf.tendsto_approx x).const_smul c⟩
   rw [SimpleFunc.coe_smul]
@@ -3487,8 +3487,8 @@ theorem sup
 @[aesop safe 20 (rule_
 
 中文:
-定理 sup
-  结论: [SemilatticeSup β] [ContinuousSup β] (hf : FinStronglyMeasurable f μ)
+定理 上确界
+  结论: [SemilatticeSup β] [余ntinuousSup β] (hf : FinStronglyMeasurable f μ)
   证明: by
   refine
     ⟨fun n => hf.approx n ⊔ hg.approx n, fun n => ?_, fun x =>
@@ -3521,8 +3521,8 @@ theorem inf
   exact measure_union_lt_top_iff.mpr ⟨hf.fin_support_approx n, hg.fin_support_approx n⟩
 
 中文:
-定理 inf
-  结论: [SemilatticeInf β] [ContinuousInf β] (hf : FinStronglyMeasurable f μ)
+定理 下确界
+  结论: [SemilatticeInf β] [余ntinuousInf β] (hf : FinStronglyMeasurable f μ)
   证明: by
   refine
     ⟨fun n => hf.approx n ⊓ hg.approx n, fun n => ?_, fun x =>
@@ -3553,7 +3553,7 @@ theorem finStronglyMeasurable_iff_stronglyMeasurable_and_exists_set_sigmaFinite
       hf.2.choose_spec.2.2⟩
 
 中文:
-定理 finStronglyMeasurable_iff_stronglyMeasurable_and_exists_set_sigmaFinite
+定理 finStronglyMeasurable_iff_stronglyMeasurable_and_存在_set_sigmaFinite
   结论: {α β} {f : α -> β}
   证明: ⟨fun hf => ⟨hf.stronglyMeasurable, hf.exists_set_sigmaFinite⟩, fun hf =>
     hf.1.finStronglyMeasurable_of_set_sigmaFinite hf.2.choose_spec.1 hf.2.choose_spec.2.1
@@ -3585,7 +3585,7 @@ theorem finStronglyMeasurable_iff_measurable
 
 中文:
 定理 finStronglyMeasurable_iff_measurable
-  结论: {_m0 : MeasurableSpace α} (μ : Measure α)
+  结论: {_m0 : 可测空间 α} (μ : 测度 α)
   证明: ⟨fun h => h.measurable, fun h => (Measurable.stronglyMeasurable h).finStronglyMeasurable μ⟩
 
 Depends on / 依赖: Measurable, Measurable.stronglyMeasurable, finStronglyMeasurable, h.measurable, measurable, stronglyMeasurable
@@ -3607,7 +3607,7 @@ theorem finStronglyMeasurable_of_measurable
 
 中文:
 定理 finStronglyMeasurable_of_measurable
-  结论: {_m0 : MeasurableSpace α} (μ : Measure α)
+  结论: {_m0 : 可测空间 α} (μ : 测度 α)
   证明: (finStronglyMeasurable_iff_measurable μ).mpr hf
 
 Depends on / 依赖: finStronglyMeasurable_iff_measurable
@@ -3633,7 +3633,7 @@ theorem measurable_uncurry_of_continuous_of_measurable
 
 中文:
 定理 measurable_uncurry_of_continuous_of_measurable
-  结论: {α β ι : 类型} [TopologicalSpace ι]
+  结论: {α β ι : 类型} [拓扑空间 ι]
   证明: by
   obtain ⟨t_sf, ht_sf⟩ :
     exists t : Nat -> SimpleFunc ι ι, forall j x, Tendsto (fun n => u (t n j) x) atTop (𝓝 <| u j x) := by

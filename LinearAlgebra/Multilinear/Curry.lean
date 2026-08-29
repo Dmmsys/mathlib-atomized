@@ -68,8 +68,8 @@ definition LinearMap.uncurryLeft
 @[simp]
 
 中文:
-定义 LinearMap.uncurryLeft
-  签名: (f : M 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => M i.succ) M₂)
+定义 线性映射.uncurryLeft
+  签名: (f : M 0 ->ₗ[R] 多重线性映射 R (fun i : 有限集 n => M i.succ) M₂)
   定义体: MultilinearMap.mk' (fun m => f (m 0) (tail m))
     (fun m i x y => by cases i using Fin.cases <;> simp [Ne.symm])
     (fun m i c x => by cases i using Fin.cases <;> simp [Ne.symm])
@@ -94,8 +94,8 @@ theorem LinearMap.uncurryLeft_apply
   proof: rfl
 
 中文:
-定理 LinearMap.uncurryLeft_apply
-  结论: (f : M 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => M i.succ) M₂)
+定理 线性映射.uncurryLeft_apply
+  结论: (f : M 0 ->ₗ[R] 多重线性映射 R (fun i : 有限集 n => M i.succ) M₂)
   证明: rfl
 -/
 theorem LinearMap.uncurryLeft_apply (f : M 0 ->ₗ[R] MultilinearMap R (fun i : Fin n => M i.succ) M₂)
@@ -119,8 +119,8 @@ definition MultilinearMap.curryLeft
 @[simp]
 
 中文:
-定义 MultilinearMap.curryLeft
-  签名: (f : MultilinearMap R M M₂)
+定义 多重线性映射.curryLeft
+  签名: (f : 多重线性映射 R M M₂)
   定义体: MultilinearMap.mk' fun m => f (cons x m)
   map_add' x y := by
     ext m
@@ -155,8 +155,8 @@ theorem MultilinearMap.curryLeft_apply
 @[simp]
 
 中文:
-定理 MultilinearMap.curryLeft_apply
-  结论: (f : MultilinearMap R M M₂) (x : M 0)
+定理 多重线性映射.curryLeft_apply
+  结论: (f : 多重线性映射 R M M₂) (x : M 0)
   证明: rfl
 
 @[simp]
@@ -178,8 +178,8 @@ theorem LinearMap.curry_uncurryLeft
 @[simp]
 
 中文:
-定理 LinearMap.curry_uncurryLeft
-  结论: (f : M 0 ->ₗ[R] MultilinearMap R (fun i :
+定理 线性映射.curry_uncurryLeft
+  结论: (f : M 0 ->ₗ[R] 多重线性映射 R (fun i :
   证明: by
   rfl
 
@@ -201,8 +201,8 @@ theorem MultilinearMap.uncurry_curryLeft
   simp
 
 中文:
-定理 MultilinearMap.uncurry_curryLeft
-  条件: (f : MultilinearMap R M M₂)
+定理 多重线性映射.uncurry_curryLeft
+  条件: (f : 多重线性映射 R M M₂)
   证明: by
   ext m
   simp
@@ -272,7 +272,7 @@ definition MultilinearMap.uncurryRight
 @[simp]
 
 中文:
-定义 MultilinearMap.uncurryRight
+定义 多重线性映射.uncurryRight
   定义体: MultilinearMap.mk' (fun m => f (init m) (m (last n)))
     (fun m i x y => by cases i using Fin.lastCases <;> simp [Ne.symm])
     (fun m i c x => by cases i using Fin.lastCases <;> simp [Ne.symm])
@@ -297,7 +297,7 @@ theorem MultilinearMap.uncurryRight_apply
   proof: rfl
 
 中文:
-定理 MultilinearMap.uncurryRight_apply
+定理 多重线性映射.uncurryRight_apply
   证明: rfl
 -/
 theorem MultilinearMap.uncurryRight_apply
@@ -319,8 +319,8 @@ definition MultilinearMap.curryRight
 @[simp]
 
 中文:
-定义 MultilinearMap.curryRight
-  签名: (f : MultilinearMap R M M₂)
+定义 多重线性映射.curryRight
+  签名: (f : 多重线性映射 R M M₂)
   定义体: MultilinearMap.mk' fun m =>
     { toFun := fun x => f (snoc m x)
       map_add' := fun x y => by simp_rw [f.snoc_add]
@@ -349,8 +349,8 @@ theorem MultilinearMap.curryRight_apply
 @[simp]
 
 中文:
-定理 MultilinearMap.curryRight_apply
-  结论: (f : MultilinearMap R M M₂)
+定理 多重线性映射.curryRight_apply
+  结论: (f : 多重线性映射 R M M₂)
   证明: rfl
 
 @[simp]
@@ -373,7 +373,7 @@ theorem MultilinearMap.curry_uncurryRight
 @[simp]
 
 中文:
-定理 MultilinearMap.curry_uncurryRight
+定理 多重线性映射.curry_uncurryRight
   证明: by
   ext m x
   simp only [snoc_last, MultilinearMap.curryRight_apply, MultilinearMap.uncurryRight_apply]
@@ -402,8 +402,8 @@ theorem MultilinearMap.uncurry_curryRight
   simp
 
 中文:
-定理 MultilinearMap.uncurry_curryRight
-  条件: (f : MultilinearMap R M M₂)
+定理 多重线性映射.uncurry_curryRight
+  条件: (f : 多重线性映射 R M M₂)
   证明: by
   ext m
   simp
@@ -467,8 +467,8 @@ definition LinearMap.uncurryMid
     (fun m i x y => by cases i using Fin.succAboveCases p <;> simp)
 
 中文:
-定义 LinearMap.uncurryMid
-  签名: (p : Fin (n + 1))
+定义 线性映射.uncurryMid
+  签名: (p : 有限集 (n + 1))
   定义体: .mk' (fun m => f (m p) (p.removeNth m))
     (fun m i x y => by cases i using Fin.succAboveCases p <;> simp)
     (fun m i x y => by cases i using Fin.succAboveCases p <;> simp)
@@ -497,8 +497,8 @@ definition MultilinearMap.curryMid
 @[simp]
 
 中文:
-定义 MultilinearMap.curryMid
-  签名: (p : Fin (n + 1)) (f : MultilinearMap R M M₂)
+定义 多重线性映射.curryMid
+  签名: (p : 有限集 (n + 1)) (f : 多重线性映射 R M M₂)
   定义体: .mk' fun m => f (p.insertNth x m)
   map_add' x y := by ext; simp [map_insertNth_add]
   map_smul' c x := by ext; simp [map_insertNth_smul]
@@ -525,8 +525,8 @@ theorem LinearMap.curryMid_uncurryMid
 @[simp]
 
 中文:
-定理 LinearMap.curryMid_uncurryMid
-  结论: (i : Fin (n + 1))
+定理 线性映射.curryMid_uncurryMid
+  结论: (i : 有限集 (n + 1))
   证明: by ext; simp
 
 @[simp]
@@ -545,8 +545,8 @@ theorem MultilinearMap.uncurryMid_curryMid
   proof: by ext; simp
 
 中文:
-定理 MultilinearMap.uncurryMid_curryMid
-  条件: (i : Fin (n + 1)) (f : MultilinearMap R M M₂)
+定理 多重线性映射.uncurryMid_curryMid
+  条件: (i : 有限集 (n + 1)) (f : 多重线性映射 R M M₂)
   证明: by ext; simp
 -/
 theorem MultilinearMap.uncurryMid_curryMid (i : Fin (n + 1)) (f : MultilinearMap R M M₂) :
@@ -570,8 +570,8 @@ definition MultilinearMap.curryMidLinearEquiv
   right_inv := LinearMap.curryMid_uncurryMid p
 
 中文:
-定义 MultilinearMap.curryMidLinearEquiv
-  签名: (p : Fin (n + 1))
+定义 多重线性映射.curryMidLinearEquiv
+  签名: (p : 有限集 (n + 1))
   定义体: MultilinearMap.curryMid p
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -611,7 +611,7 @@ definition currySum
 
 中文:
 定义 currySum
-  签名: (f : MultilinearMap R N M₂)
+  签名: (f : 多重线性映射 R N M₂)
   定义体: { toFun v := f (Sum.rec u v)
       map_update_add' := by let := Classical.decEq ι; simp
       map_update_smul' := by let := Classical.decEq ι; simp }
@@ -646,7 +646,7 @@ theorem currySum_apply
 
 中文:
 定理 currySum_apply
-  结论: (f : MultilinearMap R N M₂)
+  结论: (f : 多重线性映射 R N M₂)
   证明: rfl
 
 @[simp]
@@ -668,7 +668,7 @@ theorem currySum_apply'
 
 中文:
 定理 currySum_apply'
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: rfl
 
 @[simp]
@@ -691,7 +691,7 @@ lemma currySum_add
 
 中文:
 引理 currySum_add
-  条件: (f₁ f₂ : MultilinearMap R N M₂)
+  条件: (f₁ f₂ : 多重线性映射 R N M₂)
   证明: rfl
 
 @[simp]
@@ -710,7 +710,7 @@ lemma currySum_smul
 
 中文:
 引理 currySum_smul
-  条件: (r : R) (f : MultilinearMap R N M₂)
+  条件: (r : R) (f : 多重线性映射 R N M₂)
   证明: rfl
 -/
 lemma currySum_smul (r : R) (f : MultilinearMap R N M₂) :
@@ -839,7 +839,7 @@ lemma uncurrySum_currySum
 
 中文:
 引理 uncurrySum_currySum
-  条件: (f : MultilinearMap R N M₂)
+  条件: (f : 多重线性映射 R N M₂)
   证明: by
   ext
   simp only [uncurrySum_apply, currySum_apply]
@@ -895,7 +895,7 @@ definition currySumEquiv
 
 中文:
 定义 currySumEquiv
-  签名: : MultilinearMap R N M₂ ≃ₗ[R]
+  签名: : 多重线性映射 R N M₂ ≃ₗ[R]
   定义体: currySum
   invFun := uncurrySum
   left_inv _ := by simp
@@ -970,7 +970,7 @@ definition curryFinFinset
 
 中文:
 定义 curryFinFinset
-  签名: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k) (hl : #sᶜ = l)
+  签名: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k) (hl : #sᶜ = l)
   定义体: (domDomCongrLinearEquiv R R M' M₂ (finSumEquivOfFinset hk hl).symm).trans
     currySumEquiv
 
@@ -997,7 +997,7 @@ theorem curryFinFinset_apply
 
 中文:
 定理 curryFinFinset_apply
-  结论: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k) (hl : #sᶜ = l)
+  结论: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k) (hl : #sᶜ = l)
   证明: rfl
 
 @[simp]
@@ -1019,7 +1019,7 @@ theorem curryFinFinset_symm_apply
 
 中文:
 定理 curryFinFinset_symm_apply
-  结论: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k)
+  结论: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k)
   证明: rfl
 -/
 theorem curryFinFinset_symm_apply {k l n : Nat} {s : Finset (Fin n)} (hk : #s = k)
@@ -1050,7 +1050,7 @@ theorem curryFinFinset_symm_apply_piecewise_const
 
 中文:
 定理 curryFinFinset_symm_apply_piecewise_const
-  结论: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k)
+  结论: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k)
   证明: by
   rw [curryFinFinset_symm_apply]; congr
   · ext
@@ -1089,7 +1089,7 @@ theorem curryFinFinset_symm_apply_const
 
 中文:
 定理 curryFinFinset_symm_apply_const
-  结论: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k)
+  结论: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k)
   证明: rfl
 -/
 theorem curryFinFinset_symm_apply_const {k l n : Nat} {s : Finset (Fin n)} (hk : #s = k)
@@ -1109,7 +1109,7 @@ theorem curryFinFinset_apply_const
 
 中文:
 定理 curryFinFinset_apply_const
-  结论: {k l n : 自然数} {s : Finset (Fin n)} (hk : #s = k)
+  结论: {k l n : 自然数} {s : 有限集 (有限集 n)} (hk : #s = k)
   证明: by
   rw [← curryFinFinset_symm_apply_piecewise_const hk hl]; rw [LinearEquiv.symm_apply_apply]
 

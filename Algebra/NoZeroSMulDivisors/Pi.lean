@@ -35,8 +35,8 @@ instance Pi.noZeroSMulDivisors
       funext fun i => (smul_eq_zero.mp (congr_fun h i)).resolve_left hc⟩
 
 中文:
-实例 Pi.noZeroSMulDivisors
-  签名: (α) [Semiring α] [IsDomain α] [对任意 i, AddCommGroup <| f i]
+实例 依赖函数类型.noZeroSMulDivisors
+  签名: (α) [半环 α] [是整环 α] [对任意 i, 加法交换群 <| f i]
   定义体: ⟨fun {_ _} h =>
     or_iff_not_imp_left.mpr fun hc =>
       funext fun i => (smul_eq_zero.mp (congr_fun h i)).resolve_left hc⟩
@@ -59,8 +59,8 @@ instance _root_.Function.noZeroSMulDivisors
   body: Pi.noZeroSMulDivisors _
 
 中文:
-实例 _root_.Function.noZeroSMulDivisors
-  签名: {ι α β : 类型} [Semiring α] [IsDomain α]
+实例 _root_.函数.noZeroSMulDivisors
+  签名: {ι α β : 类型} [半环 α] [是整环 α]
   定义体: Pi.noZeroSMulDivisors _
 
 Depends on / 依赖: Pi.noZeroSMulDivisors, noZeroSMulDivisors

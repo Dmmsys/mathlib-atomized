@@ -38,8 +38,8 @@ lemma exists_monic_span
   simp [eq0, spanx] at ne
 
 中文:
-引理 exists_monic_span
-  条件: {k : 类型} [Field k] (I : Ideal k[X]) (ne : I != ⊥)
+引理 存在_monic_span
+  条件: {k : 类型} [域 k] (I : 理想 k[X]) (ne : I != ⊥)
   证明: by
   classical
   obtain ⟨x, h, spanx⟩ := Ideal.exists_normalized_span_of_isPrincipal I
@@ -72,8 +72,8 @@ lemma exists_monic_span_sup_map_eq
   rcase
 
 中文:
-引理 exists_monic_span_sup_map_eq
-  结论: (p : Ideal R[X])
+引理 存在_monic_span_sup_map_eq
+  结论: (p : 理想 R[X])
   证明: by
   let q := p.comap C
   let : Field (R ⧸ q) := Ideal.Quotient.field q

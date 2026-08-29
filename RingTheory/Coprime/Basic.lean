@@ -130,7 +130,7 @@ theorem isCoprime_self
 
 中文:
 定理 isCoprime_self
-  结论: IsCoprime x x ↔ IsUnit x
+  结论: IsCoprime x x ↔ 是单位 x
   证明: ⟨fun ⟨a, b, h⟩ => .of_mul_eq_one (a + b) by rwa [mul_comm, add_mul], fun h =>
     let ⟨b, hb⟩ := isUnit_iff_exists_inv'.1 h
     ⟨b, 0, by rwa [zero_mul, add_zero]⟩⟩
@@ -154,7 +154,7 @@ theorem isCoprime_zero_left
 
 中文:
 定理 isCoprime_zero_left
-  结论: IsCoprime 0 x ↔ IsUnit x
+  结论: IsCoprime 0 x ↔ 是单位 x
   证明: ⟨fun ⟨a, b, H⟩ => .of_mul_eq_one b by rwa [mul_zero, zero_add, mul_comm] at H, fun H =>
     let ⟨b, hb⟩ := isUnit_iff_exists_inv'.1 H
     ⟨1, b, by rwa [one_mul, zero_add]⟩⟩
@@ -176,7 +176,7 @@ theorem isCoprime_zero_right
 
 中文:
 定理 isCoprime_zero_right
-  结论: IsCoprime x 0 ↔ IsUnit x
+  结论: IsCoprime x 0 ↔ 是单位 x
   证明: isCoprime_comm.trans isCoprime_zero_left
 
 Depends on / 依赖: isCoprime_comm, isCoprime_comm.trans, isCoprime_zero_left
@@ -195,7 +195,7 @@ theorem not_isCoprime_zero_zero
 
 中文:
 定理 not_isCoprime_zero_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: ¬IsCoprime (0 : R) 0
   证明: mt isCoprime_zero_right.mp not_isUnit_zero
 
@@ -218,7 +218,7 @@ lemma IsCoprime.intCast
 
 中文:
 引理 IsCoprime.intCast
-  条件: {R : 类型} [CommRing R] {a b : 整数} (h : IsCoprime a b)
+  条件: {R : 类型} [交换环 R] {a b : 整数} (h : IsCoprime a b)
   证明: by
   rcases h with ⟨u, v, H⟩
   use u, v
@@ -247,7 +247,7 @@ theorem IsCoprime.ne_zero
 
 中文:
 定理 IsCoprime.ne_zero
-  条件: [Nontrivial R] {p : Fin 2 -> R} (h : IsCoprime (p 0) (p 1))
+  条件: [非平凡 R] {p : 有限集 2 -> R} (h : IsCoprime (p 0) (p 1))
   结论: p != 0
   证明: by
   rintro rfl
@@ -273,7 +273,7 @@ theorem IsCoprime.ne_zero_or_ne_zero
 
 中文:
 定理 IsCoprime.ne_zero_or_ne_zero
-  条件: [Nontrivial R] (h : IsCoprime x y)
+  条件: [非平凡 R] (h : IsCoprime x y)
   结论: x != 0 ∨ y != 0
   证明: by
   apply not_or_of_imp
@@ -701,7 +701,7 @@ isCoprime_self.1 IsCoprime.of_mul_right_left show IsCoprime x (x * k) from hk �
 中文:
 定理 IsCoprime.isUnit_of_dvd
   条件: (H : IsCoprime x y) (d : x ∣ y)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: let ⟨k, hk⟩ := d
 isCoprime_self.1 IsCoprime.of_mul_right_left show IsCoprime x (x * k) from hk ▸ H
 
@@ -780,7 +780,7 @@ theorem IsCoprime.map
 
 中文:
 定理 IsCoprime.map
-  条件: (H : IsCoprime x y) {S : 类型v} [CommSemiring S] (f : R ->+* S)
+  条件: (H : IsCoprime x y) {S : 类型v} [交换半环 S] (f : R ->+* S)
   证明: let ⟨a, b, h⟩ := H
   ⟨f a, f b, by rw [← f.map_mul, ← f.map_mul, ← f.map_add, h, f.map_one]⟩
 
@@ -1241,7 +1241,7 @@ theorem isCoprime_mul_unit_left_left
 
 中文:
 定理 isCoprime_mul_unit_left_left
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: let ⟨u, hu⟩ := hu
   hu ▸ isCoprime_group_smul_left u y z
 
@@ -1263,7 +1263,7 @@ theorem isCoprime_mul_unit_left_right
 
 中文:
 定理 isCoprime_mul_unit_left_right
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: let ⟨u, hu⟩ := hu
   hu ▸ isCoprime_group_smul_right u y z
 
@@ -1284,7 +1284,7 @@ theorem isCoprime_mul_unit_right_left
 
 中文:
 定理 isCoprime_mul_unit_right_left
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: mul_comm x y ▸ isCoprime_mul_unit_left_left hu y z
 
 Depends on / 依赖: isCoprime_mul_unit_left_left, mul_comm
@@ -1303,7 +1303,7 @@ theorem isCoprime_mul_unit_right_right
 
 中文:
 定理 isCoprime_mul_unit_right_right
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: mul_comm x z ▸ isCoprime_mul_unit_left_right hu y z
 
 Depends on / 依赖: isCoprime_mul_unit_left_right, mul_comm
@@ -1324,7 +1324,7 @@ theorem isCoprime_mul_units_left
 
 中文:
 定理 isCoprime_mul_units_left
-  条件: (hu : IsUnit u) (hv : IsUnit v) (y z : R)
+  条件: (hu : 是单位 u) (hv : 是单位 v) (y z : R)
   证明: Iff.trans
     (isCoprime_mul_unit_left_left hu _ _)
     (isCoprime_mul_unit_left_right hv _ _)
@@ -1349,7 +1349,7 @@ theorem isCoprime_mul_units_right
 
 中文:
 定理 isCoprime_mul_units_right
-  条件: (hu : IsUnit u) (hv : IsUnit v) (y z : R)
+  条件: (hu : 是单位 u) (hv : 是单位 v) (y z : R)
   证明: Iff.trans
     (isCoprime_mul_unit_right_left hu _ _)
     (isCoprime_mul_unit_right_right hv _ _)
@@ -1372,7 +1372,7 @@ theorem isCoprime_mul_unit_left
 
 中文:
 定理 isCoprime_mul_unit_left
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: isCoprime_mul_units_left hu hu _ _
 
 Depends on / 依赖: isCoprime_mul_units_left
@@ -1391,7 +1391,7 @@ theorem isCoprime_mul_unit_right
 
 中文:
 定理 isCoprime_mul_unit_right
-  条件: (hu : IsUnit x) (y z : R)
+  条件: (hu : 是单位 x) (y z : R)
   证明: isCoprime_mul_units_right hu hu _ _
 
 Depends on / 依赖: isCoprime_mul_units_right
@@ -2274,7 +2274,7 @@ theorem sq_add_sq_ne_zero
 
 中文:
 定理 sq_add_sq_ne_zero
-  结论: {R : 类型} [CommRing R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: {R : 类型} [交换环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   intro h'
   obtain ⟨ha, hb⟩ := (add_eq_zero_iff_of_nonneg (sq_nonneg _) (sq_nonneg _)).mp h'
@@ -2313,7 +2313,7 @@ lemma Nat.isCoprime_iff
     · exact isCoprime_one_right
 
 中文:
-引理 Nat.isCoprime_iff
+引理 自然数.isCoprime_iff
   条件: {m n : 自然数}
   结论: IsCoprime m n ↔ m = 1 ∨ n = 1
   证明: by
@@ -2344,7 +2344,7 @@ lemma PNat.isCoprime_iff
   proof: by simp
 
 中文:
-引理 PNat.isCoprime_iff
+引理 正自然数.isCoprime_iff
   条件: {m n : 自然数+}
   结论: IsCoprime (m : 自然数) n ↔ m = 1 ∨ n = 1
   证明: by simp
@@ -2367,8 +2367,8 @@ lemma Semifield.isCoprime_iff
   simp [inv_mul_cancel₀ hn]
 
 中文:
-引理 Semifield.isCoprime_iff
-  条件: {R : 类型} [Semifield R] {m n : R}
+引理 半域.isCoprime_iff
+  条件: {R : 类型} [半域 R] {m n : R}
   证明: by
   obtain rfl | hn := eq_or_ne n 0
   · simp [isCoprime_zero_right]

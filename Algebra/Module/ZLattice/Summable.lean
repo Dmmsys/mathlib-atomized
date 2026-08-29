@@ -49,7 +49,7 @@ lemma exists_forall_abs_repr_le_norm
     let e : L' ≃ₗ[Int] L := Submodule.comapSubty
 
 中文:
-引理 exists_forall_abs_repr_le_norm
+引理 存在_对任意_abs_repr_le_norm
   证明: by
   wlog H : IsZLattice Real L
   · let E' := Submodule.span Real (L : Set E)
@@ -99,7 +99,7 @@ definition normBound
 
 中文:
 定义 normBound
-  签名: {ι : 类型} (b : Basis ι 整数 L)
+  签名: {ι : 类型} (b : 基 ι 整数 L)
   定义体: (exists_forall_abs_repr_le_norm b).choose
 
 Depends on / 依赖: exists_forall_abs_repr_le_norm
@@ -118,7 +118,7 @@ lemma normBound_pos
 
 中文:
 引理 normBound_pos
-  条件: {ι : 类型} (b : Basis ι 整数 L)
+  条件: {ι : 类型} (b : 基 ι 整数 L)
   结论: 0 < normBound b
   证明: (exists_forall_abs_repr_le_norm b).choose_spec.1
 
@@ -137,7 +137,7 @@ lemma normBound_spec
 
 中文:
 引理 normBound_spec
-  条件: {ι : 类型} (b : Basis ι 整数 L) (x : L) (i : ι)
+  条件: {ι : 类型} (b : 基 ι 整数 L) (x : L) (i : ι)
   证明: (exists_forall_abs_repr_le_norm b).choose_spec.2 x i
 
 Depends on / 依赖: choose_spec, exists_forall_abs_repr_le_norm
@@ -158,7 +158,7 @@ lemma abs_repr_le
 
 中文:
 引理 abs_repr_le
-  条件: {ι : 类型} (b : Basis ι 整数 L) (x : L) (i : ι)
+  条件: {ι : 类型} (b : 基 ι 整数 L) (x : L) (i : ι)
   证明: by
   rw [le_inv_mul_iff₀ (normBound_pos b)]
   exact normBound_spec b x i
@@ -182,7 +182,7 @@ lemma abs_repr_lt_of_norm_lt
 
 中文:
 引理 abs_repr_lt_of_norm_lt
-  结论: {ι : 类型} (b : Basis ι 整数 L) (x : L) (n : 自然数)
+  结论: {ι : 类型} (b : 基 ι 整数 L) (x : L) (n : 自然数)
   证明: by
   refine Int.cast_lt.mp ((abs_repr_le b x i).trans_lt ?_)
   rwa [inv_mul_lt_iff₀ (normBound_pos b)]
@@ -206,7 +206,7 @@ lemma le_norm_of_le_abs_repr
 
 中文:
 引理 le_norm_of_le_abs_repr
-  结论: {ι : 类型} (b : Basis ι 整数 L) (x : L) (n : 自然数) (i : ι)
+  结论: {ι : 类型} (b : 基 ι 整数 L) (x : L) (n : 自然数) (i : ι)
   证明: by
   contrapose! hi
   exact abs_repr_lt_of_norm_lt b x n hi i
@@ -237,7 +237,7 @@ lemma sum_piFinset_Icc_rpow_le
 
 中文:
 引理 sum_piFinset_Icc_rpow_le
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι]
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
   let s (n : Nat) := Fintype.piFinset fun i : ι => Icc (-n : Int) n
   subst hd
@@ -325,7 +325,7 @@ lemma exists_finsetSum_norm_rpow_le_tsum
   have : Fi
 
 中文:
-引理 exists_finsetSum_norm_rpow_le_tsum
+引理 存在_finsetSum_norm_rpow_le_tsum
   证明: by
   cases subsingleton_or_nontrivial L
   · refine ⟨1, zero_lt_one, fun r hr s => ?_⟩
@@ -433,7 +433,7 @@ lemma tsumNormRPowBound_spec
 
 中文:
 引理 tsumNormRPowBound_spec
-  条件: (r : 实数) (h : r < -Module.finrank 整数 L) (s : Finset L)
+  条件: (r : 实数) (h : r < -模.finrank 整数 L) (s : 有限集 L)
   证明: (exists_finsetSum_norm_rpow_le_tsum L).choose_spec.2 r h s
 
 Depends on / 依赖: choose_spec, exists_finsetSum_norm_rpow_le_tsum
@@ -453,7 +453,7 @@ lemma summable_norm_rpow
 
 中文:
 引理 summable_norm_rpow
-  条件: (r : 实数) (hr : r < -Module.finrank 整数 L)
+  条件: (r : 实数) (hr : r < -模.finrank 整数 L)
   证明: summable_of_sum_le (fun _ => by positivity) (tsumNormRPowBound_spec L r hr)
 
 Depends on / 依赖: summable_of_sum_le, tsumNormRPowBound_spec
@@ -472,7 +472,7 @@ lemma tsum_norm_rpow_le
 
 中文:
 引理 tsum_norm_rpow_le
-  条件: (r : 实数) (hr : r < -Module.finrank 整数 L)
+  条件: (r : 实数) (hr : r < -模.finrank 整数 L)
   证明: Summable.tsum_le_of_sum_le (summable_norm_rpow L r hr) (tsumNormRPowBound_spec L r hr)
 
 Depends on / 依赖: Summable, Summable.tsum_le_of_sum_le, summable_norm_rpow, tsumNormRPowBound_spec, tsum_le_of_sum_le
@@ -499,7 +499,7 @@ lemma summable_norm_sub_rpow
 
 中文:
 引理 summable_norm_sub_rpow
-  条件: (r : 实数) (hr : r < -Module.finrank 整数 L) (x : E)
+  条件: (r : 实数) (hr : r < -模.finrank 整数 L) (x : E)
   证明: by
   cases subsingleton_or_nontrivial L
   · exact .of_finite
@@ -544,7 +544,7 @@ lemma summable_norm_sub_zpow
 
 中文:
 引理 summable_norm_sub_zpow
-  条件: (n : 整数) (hn : n < -Module.finrank 整数 L) (x : E)
+  条件: (n : 整数) (hn : n < -模.finrank 整数 L) (x : E)
   证明: mod_cast summable_norm_sub_rpow L n (mod_cast hn) x
 
 Depends on / 依赖: mod_cast, summable_norm_sub_rpow
@@ -564,7 +564,7 @@ lemma summable_norm_zpow
 
 中文:
 引理 summable_norm_zpow
-  条件: (n : 整数) (hn : n < -Module.finrank 整数 L)
+  条件: (n : 整数) (hn : n < -模.finrank 整数 L)
   证明: by
   simpa using summable_norm_sub_zpow L n hn 0
 
@@ -585,7 +585,7 @@ lemma summable_norm_sub_inv_pow
 
 中文:
 引理 summable_norm_sub_inv_pow
-  条件: (n : 自然数) (hn : Module.finrank 整数 L < n) (x : E)
+  条件: (n : 自然数) (hn : 模.finrank 整数 L < n) (x : E)
   证明: by
   simpa using summable_norm_sub_zpow L (-n) (by gcongr) x
 
@@ -606,7 +606,7 @@ lemma summable_norm_pow_inv
 
 中文:
 引理 summable_norm_pow_inv
-  条件: (n : 自然数) (hn : Module.finrank 整数 L < n)
+  条件: (n : 自然数) (hn : 模.finrank 整数 L < n)
   证明: by
   simpa using summable_norm_sub_inv_pow L n hn 0
 

@@ -45,7 +45,7 @@ definition cochainComplex
 
 中文:
 定义 cochainComplex
-  签名: : CochainComplex C 整数
+  签名: : 上链复形 C 整数
   定义体: R.complex.extend ComplexShape.embeddingDownNat
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingDownNat, R.complex.extend, complex, embeddingDownNat, extend
@@ -137,7 +137,7 @@ definition π'
 
 中文:
 定义 π'
-  签名: : R.cochainComplex ⟶ (CochainComplex.singleFunctor C 0).obj X
+  签名: : R.cochainComplex ⟶ (上链复形.singleFunctor C 0).obj X
   定义体: (ComplexShape.embeddingDownNat.extendFunctor C).map R.π ≫
       (HomologicalComplex.extendSingleIso _ _ _ _ (by simp)).hom
 
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso R.π'
+  签名: 拟同构 R.π'
   定义体: by dsimp [π']; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: R.cochainComplex.IsGE 0
+  签名: R.cochainComplex.是GE 0
   定义体: by
   simp only [HomologicalComplex.isSupported_iff_of_quasiIso R.π']
   infer_instance

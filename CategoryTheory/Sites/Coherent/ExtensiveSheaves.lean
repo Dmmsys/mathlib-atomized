@@ -43,10 +43,10 @@ class Presieve.Extensive
     - arrows_nonempty_isColimit : exists (α : Type) (_ : Finite α) (Z : α -> C) (π : (a : α) -> (Z a ⟶ X)), R = Presieve.ofArrows Z π ∧ Nonempty (IsColimit (Cofan.mk X π))
 
 中文:
-类 Presieve.Extensive
+类 Presieve.广延
   参数: {X : C} (R : Presieve X)
   公理与运算 (1 个):
-    - arrows_nonempty_isColimit : 存在 (α : Type) (_ : Finite α) (Z : α -> C) (π : (a : α) -> (Z a ⟶ X)), R = Presieve.ofArrows Z π ∧ Nonempty (IsColimit (Cofan.mk X π))
+    - arrows_nonempty_isColimit : 存在 (α : 类型) (_ : 有限 α) (Z : α -> C) (π : (a : α) -> (Z a ⟶ X)), R = Presieve.ofArrows Z π ∧ 非空 (是余极限 (Cofan.mk X π))
 -/
 class Presieve.Extensive {X : C} (R : Presieve X) : Prop where
   /-- `R` consists of a finite collection of arrows that together induce an isomorphism from the
@@ -76,7 +76,7 @@ theorem isSheafFor_extensive_of_preservesFiniteProducts
 
 中文:
 定理 isSheafFor_extensive_of_preservesFiniteProducts
-  结论: {X : C} (S : Presieve X) [S.Extensive]
+  结论: {X : C} (S : Presieve X) [S.广延]
   证明: by
   obtain ⟨α, _, Z, π, rfl, ⟨hc⟩⟩ := Extensive.arrows_nonempty_isColimit (R := S)
   have : (ofArrows Z (Cofan.mk X π).inj).HasPairwisePullbacks :=
@@ -114,7 +114,7 @@ theorem extensiveTopology.isSheaf_yoneda_obj
 中文:
 定理 extensiveTopology.isSheaf_yoneda_obj
   条件: (W : C)
-  结论: Presieve.IsSheaf (extensiveTopology C)
+  结论: Presieve.是层 (extensiveTopology C)
   证明: by
   rw [extensiveTopology]; rw [isSheaf_coverage]
   intro X R ⟨Y, α, Z, π, hR, hi⟩
@@ -142,7 +142,7 @@ instance extensiveTopology.subcanonical
 
 中文:
 实例 extensiveTopology.subcanonical
-  签名: : (extensiveTopology C).Subcanonical
+  签名: : (extensiveTopology C).子典范
   定义体: GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj _ isSheaf_yoneda_obj
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj, Subcanonical, isSheaf_yoneda_obj, of_isSheaf_yoneda_obj
@@ -167,7 +167,7 @@ theorem Presieve.isSheaf_iff_preservesFiniteProducts
 
 中文:
 定理 Presieve.isSheaf_iff_preservesFiniteProducts
-  条件: (F : Cᵒᵖ ⥤ Type w)
+  条件: (F : Cᵒᵖ ⥤ 类型 w)
   证明: by
   refine ⟨fun hF => ⟨fun n => ⟨fun {K} => ?_⟩⟩, fun hF => ?_⟩
   · rw [extensiveTopology, isSheaf_coverage] at hF
@@ -223,7 +223,7 @@ theorem Presheaf.isSheaf_iff_preservesFiniteProducts
     exact isLimitOfPreserves (F.comp (coyoneda.
 
 中文:
-定理 Presheaf.isSheaf_iff_preservesFiniteProducts
+定理 预层.isSheaf_iff_preservesFiniteProducts
   条件: (F : Cᵒᵖ ⥤ D)
   证明: by
   constructor

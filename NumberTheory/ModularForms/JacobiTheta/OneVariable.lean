@@ -35,7 +35,7 @@ definition jacobiTheta
 
 中文:
 定义 jacobiTheta
-  签名: (τ : Complex)
+  签名: (τ : 复形)
   定义体: ∑' n : Int, cexp (π * I * (n : Complex) ^ 2 * τ)
 -/
 noncomputable def jacobiTheta (τ : Complex) : Complex := ∑' n : Int, cexp (π * I * (n : Complex) ^ 2 * τ)
@@ -51,7 +51,7 @@ lemma jacobiTheta_eq_jacobiTheta₂
 
 中文:
 引理 jacobiTheta_eq_jacobiTheta₂
-  条件: (τ : Complex)
+  条件: (τ : 复形)
   结论: jacobiTheta τ = jacobiTheta₂ 0 τ
   证明: tsum_congr (by simp [jacobiTheta₂_term])
 
@@ -72,7 +72,7 @@ theorem jacobiTheta_two_add
 
 中文:
 定理 jacobiTheta_two_add
-  条件: (τ : Complex)
+  条件: (τ : 复形)
   结论: jacobiTheta (2 + τ) = jacobiTheta τ
   证明: by
   simp_rw [jacobiTheta_eq_jacobiTheta₂, add_comm, jacobiTheta₂_add_right]
@@ -166,7 +166,7 @@ theorem norm_exp_mul_sq_le
 
 中文:
 定理 norm_exp_mul_sq_le
-  条件: {τ : Complex} (hτ : 0 < τ.im) (n : 整数)
+  条件: {τ : 复形} (hτ : 0 < τ.im) (n : 整数)
   证明: by
   let y := rexp (-π * τ.im)
   have h : y < 1 := exp_lt_one_iff.mpr (mul_neg_of_neg_of_pos (neg_lt_zero.mpr pi_pos) hτ)
@@ -208,7 +208,7 @@ theorem hasSum_nat_jacobiTheta
 
 中文:
 定理 hasSum_nat_jacobiTheta
-  条件: {τ : Complex} (hτ : 0 < im τ)
+  条件: {τ : 复形} (hτ : 0 < im τ)
   证明: by
   have := hasSum_jacobiTheta₂_term 0 hτ
   simp_rw [jacobiTheta₂_term, mul_zero, zero_add, ← jacobiTheta_eq_jacobiTheta₂] at this
@@ -243,7 +243,7 @@ theorem jacobiTheta_eq_tsum_nat
 
 中文:
 定理 jacobiTheta_eq_tsum_nat
-  条件: {τ : Complex} (hτ : 0 < im τ)
+  条件: {τ : 复形} (hτ : 0 < im τ)
   证明: by
   rw [(hasSum_nat_jacobiTheta hτ).tsum_eq]; rw [mul_div_cancel₀ _ (two_ne_zero' Complex)]; rw [← add_sub_assoc]; rw [add_sub_cancel_left]
 
@@ -268,7 +268,7 @@ theorem norm_jacobiTheta_sub_one_le
 
 中文:
 定理 norm_jacobiTheta_sub_one_le
-  条件: {τ : Complex} (hτ : 0 < im τ)
+  条件: {τ : 复形} (hτ : 0 < im τ)
   证明: by
   suffices ‖∑' n : Nat, cexp (π * I * ((n : Complex) + 1) ^ 2 * τ)‖ <=
       rexp (-π * τ.im) / (1 - rexp (-π * τ.im)) by
@@ -343,7 +343,7 @@ theorem differentiableAt_jacobiTheta
 
 中文:
 定理 differentiableAt_jacobiTheta
-  条件: {τ : Complex} (hτ : 0 < im τ)
+  条件: {τ : 复形} (hτ : 0 < im τ)
   证明: by
   simp_rw [funext jacobiTheta_eq_jacobiTheta₂]
   exact differentiableAt_jacobiTheta₂_snd 0 hτ
@@ -366,7 +366,7 @@ theorem continuousAt_jacobiTheta
 
 中文:
 定理 continuousAt_jacobiTheta
-  条件: {τ : Complex} (hτ : 0 < im τ)
+  条件: {τ : 复形} (hτ : 0 < im τ)
   结论: ContinuousAt jacobiTheta τ
   证明: (differentiableAt_jacobiTheta hτ).continuousAt
 

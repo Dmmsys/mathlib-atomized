@@ -86,11 +86,11 @@ structure IsAddFreimanHom
     - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : forall ⦃x⦄, x in s -> x in A) (htA : forall ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.sum = t.sum) : (s.map f).sum = (t.map f).sum
 
 中文:
-结构 IsAddFreimanHom
-  参数: [AddCommMonoid α] [AddCommMonoid β] (n : 自然数) (A : Set α) (B : Set β)
+结构 是加法Freiman态射
+  参数: [加法交换幺半群 α] [加法交换幺半群 β] (n : 自然数) (A : 集合 α) (B : 集合 β)
   公理与运算 (2 个):
-    - mapsTo : MapsTo f A B
-    - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.sum = t.sum) : (s.map f).sum = (t.map f).sum
+    - mapsTo : 映射到 f A B
+    - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.求和 = t.求和) : (s.map f).求和 = (t.map f).求和
 -/
 structure IsAddFreimanHom [AddCommMonoid α] [AddCommMonoid β] (n : Nat) (A : Set α) (B : Set β)
     (f : α -> β) : Prop where
@@ -114,11 +114,11 @@ structure IsMulFreimanHom
     - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : forall ⦃x⦄, x in s -> x in A) (htA : forall ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.prod = t.prod) : (s.map f).prod = (t.map f).prod
 
 中文:
-结构 IsMulFreimanHom
-  参数: (n : 自然数) (A : Set α) (B : Set β) (f : α -> β)
+结构 是MulFreiman态射
+  参数: (n : 自然数) (A : 集合 α) (B : 集合 β) (f : α -> β)
   公理与运算 (2 个):
-    - mapsTo : MapsTo f A B
-    - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.prod = t.prod) : (s.map f).prod = (t.map f).prod
+    - mapsTo : 映射到 f A B
+    - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) (h : s.乘积 = t.乘积) : (s.map f).乘积 = (t.map f).乘积
 -/
 structure IsMulFreimanHom (n : Nat) (A : Set α) (B : Set β) (f : α -> β) : Prop where
   mapsTo : MapsTo f A B
@@ -138,11 +138,11 @@ structure IsAddFreimanIso
     - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : forall ⦃x⦄, x in s -> x in A) (htA : forall ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).sum = (t.map f).sum ↔ s.sum = t.sum
 
 中文:
-结构 IsAddFreimanIso
-  参数: [AddCommMonoid α] [AddCommMonoid β] (n : 自然数) (A : Set α) (B : Set β)
+结构 是加法FreimanIso
+  参数: [加法交换幺半群 α] [加法交换幺半群 β] (n : 自然数) (A : 集合 α) (B : 集合 β)
   公理与运算 (2 个):
-    - bijOn : BijOn f A B
-    - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).sum = (t.map f).sum ↔ s.sum = t.sum
+    - bijOn : 双射限制 f A B
+    - map_sum_eq_map_sum(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).求和 = (t.map f).求和 ↔ s.求和 = t.求和
 -/
 structure IsAddFreimanIso [AddCommMonoid α] [AddCommMonoid β] (n : Nat) (A : Set α) (B : Set β)
     (f : α -> β) : Prop where
@@ -166,11 +166,11 @@ structure IsMulFreimanIso
     - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : forall ⦃x⦄, x in s -> x in A) (htA : forall ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).prod = (t.map f).prod ↔ s.prod = t.prod
 
 中文:
-结构 IsMulFreimanIso
-  参数: (n : 自然数) (A : Set α) (B : Set β) (f : α -> β)
+结构 是MulFreimanIso
+  参数: (n : 自然数) (A : 集合 α) (B : 集合 β) (f : α -> β)
   公理与运算 (2 个):
-    - bijOn : BijOn f A B
-    - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).prod = (t.map f).prod ↔ s.prod = t.prod
+    - bijOn : 双射限制 f A B
+    - map_prod_eq_map_prod(⦃s t) : Multiset α⦄ (hsA : 对任意 ⦃x⦄, x in s -> x in A) (htA : 对任意 ⦃x⦄, x in t -> x in A) (hs : Multiset.card s = n) (ht : Multiset.card t = n) : (s.map f).乘积 = (t.map f).乘积 ↔ s.乘积 = t.乘积
 -/
 structure IsMulFreimanIso (n : Nat) (A : Set α) (B : Set β) (f : α -> β) : Prop where
   bijOn : BijOn f A B
@@ -191,9 +191,9 @@ lemma IsMulFreimanIso.isMulFreimanHom
   map_prod_eq_map_prod _s _t hsA htA hs ht := (hf.map_prod_eq_map_prod hsA htA hs ht).2
 
 中文:
-引理 IsMulFreimanIso.isMulFreimanHom
-  条件: (hf : IsMulFreimanIso n A B f)
-  结论: IsMulFreimanHom n A B f where
+引理 是MulFreimanIso.isMulFreimanHom
+  条件: (hf : 是MulFreimanIso n A B f)
+  结论: 是MulFreiman态射 n A B f where
   证明: hf.bijOn.mapsTo
   map_prod_eq_map_prod _s _t hsA htA hs ht := (hf.map_prod_eq_map_prod hsA htA hs ht).2
 
@@ -214,8 +214,8 @@ lemma IsMulFreimanHom.congr
     rw [map_congr rfl fun x hx => (h (hsA hx)).symm]; rw [map_congr rfl fun x hx => (h (htA hx)).symm]; rw [hf₁.map_prod_eq_map_prod hsA htA hs ht h']
 
 中文:
-引理 IsMulFreimanHom.congr
-  条件: (hf₁ : IsMulFreimanHom n A B f₁) (h : EqOn f₁ f₂ A)
+引理 是MulFreiman态射.congr
+  条件: (hf₁ : 是MulFreiman态射 n A B f₁) (h : EqOn f₁ f₂ A)
   证明: hf₁.mapsTo.congr h
   map_prod_eq_map_prod s t hsA htA hs ht h' := by
     rw [map_congr rfl fun x hx => (h (hsA hx)).symm]; rw [map_congr rfl fun x hx => (h (htA hx)).symm]; rw [hf₁.map_prod_eq_map_prod hsA htA hs ht h']
@@ -239,8 +239,8 @@ lemma IsMulFreimanIso.congr
     rw [map_congr rfl fun x hx => h.symm (hsA hx)]; rw [map_congr rfl fun x hx => h.symm (htA hx)]; rw [hf₁.map_prod_eq_map_prod hsA htA hs ht]
 
 中文:
-引理 IsMulFreimanIso.congr
-  条件: (hf₁ : IsMulFreimanIso n A B f₁) (h : EqOn f₁ f₂ A)
+引理 是MulFreimanIso.congr
+  条件: (hf₁ : 是MulFreimanIso n A B f₁) (h : EqOn f₁ f₂ A)
   证明: hf₁.bijOn.congr h
   map_prod_eq_map_prod s t hsA htA hs ht := by
     rw [map_congr rfl fun x hx => h.symm (hsA hx)]; rw [map_congr rfl fun x hx => h.symm (htA hx)]; rw [hf₁.map_prod_eq_map_prod hsA htA hs ht]
@@ -275,8 +275,8 @@ lemma IsMulFreimanIso.symm
     all_goals aes
 
 中文:
-引理 IsMulFreimanIso.symm
-  结论: {g : β -> α} (hg₁ : MapsTo g B A) (hg₂ : RightInvOn g f B)
+引理 是MulFreimanIso.symm
+  结论: {g : β -> α} (hg₁ : 映射到 g B A) (hg₂ : RightInvOn g f B)
   证明: hf.bijOn.symm ⟨hg₂, InjOn.rightInvOn_of_leftInvOn hf.bijOn.injOn hg₂ hf.bijOn.mapsTo hg₁⟩
   map_prod_eq_map_prod := fun s t hsB htB hs ht => by
     rw [← hf.map_prod_eq_map_prod _ _ (by simp [hs]) (by simp [ht]), map_map, map_congr rfl, map_id,
@@ -318,7 +318,7 @@ lemma IsMulFreimanHom.to_isMulFreimanIso
     rwa [map_
 
 中文:
-引理 IsMulFreimanHom.to_isMulFreimanIso
+引理 是MulFreiman态射.to_isMulFreimanIso
   结论: {g : β -> α} (h : InvOn g f A B)
   证明: h.bijOn hf.mapsTo hg.mapsTo
   map_prod_eq_map_prod s t hsA htA hs ht := by
@@ -357,8 +357,8 @@ lemma IsMulFreimanIso.invFunOn
   proof: hf.symm hf.bijOn.surjOn.mapsTo_invFunOn hf.bijOn.surjOn.rightInvOn_invFunOn
 
 中文:
-引理 IsMulFreimanIso.invFunOn
-  条件: (hf : IsMulFreimanIso n A B f)
+引理 是MulFreimanIso.invFunOn
+  条件: (hf : 是MulFreimanIso n A B f)
   证明: hf.symm hf.bijOn.surjOn.mapsTo_invFunOn hf.bijOn.surjOn.rightInvOn_invFunOn
 -/
 protected lemma IsMulFreimanIso.invFunOn (hf : IsMulFreimanIso n A B f) :
@@ -380,8 +380,8 @@ lemma IsMulFreimanHom.prod_apply
 @[to_additive]
 
 中文:
-引理 IsMulFreimanHom.prod_apply
-  结论: (hf : IsMulFreimanHom n A B f) {s t : Finset α}
+引理 是MulFreiman态射.prod_apply
+  结论: (hf : 是MulFreiman态射 n A B f) {s t : 有限集 α}
   证明: by
   simpa using hf.map_prod_eq_map_prod hsA htA hs ht
 
@@ -409,8 +409,8 @@ lemma IsMulFreimanHom.mul_eq_mul
 @[to_additive]
 
 中文:
-引理 IsMulFreimanHom.mul_eq_mul
-  结论: (hf : IsMulFreimanHom 2 A B f) {a b c d : α}
+引理 是MulFreiman态射.mul_eq_mul
+  结论: (hf : 是MulFreiman态射 2 A B f) {a b c d : α}
   证明: by
   simp_rw [← prod_pair] at h ⊢
   refine hf.map_prod_eq_map_prod ?_ ?_ (card_pair _ _) (card_pair _ _) h <;> simp [ha, hb, hc, hd]
@@ -437,8 +437,8 @@ lemma IsMulFreimanIso.mul_eq_mul
   refine hf.map_prod_eq_map_prod ?_ ?_ (card_pair _ _) (card_pair _ _) <;> simp [ha, hb, hc, hd]
 
 中文:
-引理 IsMulFreimanIso.mul_eq_mul
-  结论: (hf : IsMulFreimanIso 2 A B f) {a b c d : α}
+引理 是MulFreimanIso.mul_eq_mul
+  结论: (hf : 是MulFreimanIso 2 A B f) {a b c d : α}
   证明: by
   simp_rw [← prod_pair]
   refine hf.map_prod_eq_map_prod ?_ ?_ (card_pair _ _) (card_pair _ _) <;> simp [ha, hb, hc, hd]
@@ -510,7 +510,7 @@ lemma isMulFreimanHom_id
 中文:
 引理 isMulFreimanHom_id
   条件: (hA : A₁ subseteq A₂)
-  结论: IsMulFreimanHom n A₁ A₂ id where
+  结论: 是MulFreiman态射 n A₁ A₂ id where
   证明: hA
   map_prod_eq_map_prod s t _ _ _ _ h := by simpa using h
 -/
@@ -529,7 +529,7 @@ lemma isMulFreimanIso_id
 
 中文:
 引理 isMulFreimanIso_id
-  结论: IsMulFreimanIso n A A id where
+  结论: 是MulFreimanIso n A A id where
   证明: bijOn_id _
   map_prod_eq_map_prod s t _ _ _ _ := by simp
 -/
@@ -552,8 +552,8 @@ lemma IsMulFreimanHom.comp
     · simpa usi
 
 中文:
-引理 IsMulFreimanHom.comp
-  结论: (hg : IsMulFreimanHom n B C g)
+引理 是MulFreiman态射.comp
+  结论: (hg : 是MulFreiman态射 n B C g)
   证明: hg.mapsTo.comp hf.mapsTo
   map_prod_eq_map_prod s t hsA htA hs ht h := by
     rw [← map_map]; rw [← map_map]
@@ -587,8 +587,8 @@ lemma IsMulFreimanIso.comp
     · simpa using fu
 
 中文:
-引理 IsMulFreimanIso.comp
-  结论: (hg : IsMulFreimanIso n B C g)
+引理 是MulFreimanIso.comp
+  结论: (hg : 是MulFreimanIso n B C g)
   证明: hg.bijOn.comp hf.bijOn
   map_prod_eq_map_prod s t hsA htA hs ht := by
     rw [← map_map]; rw [← map_map]
@@ -617,8 +617,8 @@ lemma IsMulFreimanHom.subset
   __ := hf.comp (isMulFreimanHom_id hA)
 
 中文:
-引理 IsMulFreimanHom.subset
-  结论: (hA : A₁ subseteq A₂) (hf : IsMulFreimanHom n A₂ B₂ f)
+引理 是MulFreiman态射.subset
+  结论: (hA : A₁ subseteq A₂) (hf : 是MulFreiman态射 n A₂ B₂ f)
   证明: hf'
   __ := hf.comp (isMulFreimanHom_id hA)
 -/
@@ -636,8 +636,8 @@ lemma IsMulFreimanHom.superset
   proof: (isMulFreimanHom_id hB).comp hf
 
 中文:
-引理 IsMulFreimanHom.superset
-  条件: (hB : B₁ subseteq B₂) (hf : IsMulFreimanHom n A B₁ f)
+引理 是MulFreiman态射.superset
+  条件: (hB : B₁ subseteq B₂) (hf : 是MulFreiman态射 n A B₁ f)
   证明: (isMulFreimanHom_id hB).comp hf
 -/
 @[to_additive] lemma IsMulFreimanHom.superset (hB : B₁ subseteq B₂) (hf : IsMulFreimanHom n A B₁ f) :
@@ -656,8 +656,8 @@ lemma IsMulFreimanIso.subset
 @[to_additive]
 
 中文:
-引理 IsMulFreimanIso.subset
-  结论: (hA : A₁ subseteq A₂) (hf : IsMulFreimanIso n A₂ B₂ f)
+引理 是MulFreimanIso.subset
+  结论: (hA : A₁ subseteq A₂) (hf : 是MulFreimanIso n A₂ B₂ f)
   证明: hf'
   map_prod_eq_map_prod s t hsA htA hs ht := by
     refine hf.map_prod_eq_map_prod (fun a ha => hA (hsA ha)) (fun a ha => hA (htA ha)) hs ht
@@ -686,7 +686,7 @@ lemma isMulFreimanHom_const
 中文:
 引理 isMulFreimanHom_const
   条件: {b : β} (hb : b in B)
-  结论: IsMulFreimanHom n A B fun _ => b where
+  结论: 是MulFreiman态射 n A B fun _ => b where
   证明: hb
   map_prod_eq_map_prod s t _ _ hs ht _ := by simp only [map_const', hs, prod_replicate, ht]
 
@@ -709,7 +709,7 @@ lemma isMulFreimanHom_zero_iff
 
 中文:
 引理 isMulFreimanHom_zero_iff
-  结论: IsMulFreimanHom 0 A B f ↔ MapsTo f A B
+  结论: 是MulFreiman态射 0 A B f ↔ 映射到 f A B
   证明: ⟨fun h => h.mapsTo, fun h => ⟨h, by simp_all⟩⟩
 
 @[to_additive (attr := simp)]
@@ -732,7 +732,7 @@ lemma isMulFreimanIso_zero_iff
 
 中文:
 引理 isMulFreimanIso_zero_iff
-  结论: IsMulFreimanIso 0 A B f ↔ BijOn f A B
+  结论: 是MulFreimanIso 0 A B f ↔ 双射限制 f A B
   证明: ⟨fun h => h.bijOn, fun h => ⟨h, by simp_all⟩⟩
 
 @[to_additive (attr := simp) isAddFreimanHom_one_iff]
@@ -755,7 +755,7 @@ lemma isMulFreimanHom_one_iff
 
 中文:
 引理 isMulFreimanHom_one_iff
-  结论: IsMulFreimanHom 1 A B f ↔ MapsTo f A B
+  结论: 是MulFreiman态射 1 A B f ↔ 映射到 f A B
   证明: ⟨fun h => h.mapsTo, fun h => ⟨h, by aesop (add simp card_eq_one)⟩⟩
 
 @[to_additive (attr := simp) isAddFreimanIso_one_iff]
@@ -778,7 +778,7 @@ lemma isMulFreimanIso_one_iff
 
 中文:
 引理 isMulFreimanIso_one_iff
-  结论: IsMulFreimanIso 1 A B f ↔ BijOn f A B
+  结论: 是MulFreimanIso 1 A B f ↔ 双射限制 f A B
   证明: ⟨fun h => h.bijOn, fun h => ⟨h, by aesop (add simp [card_eq_one, BijOn])⟩⟩
 
 @[to_additive (attr := simp)]
@@ -802,7 +802,7 @@ lemma isMulFreimanHom_empty
 
 中文:
 引理 isMulFreimanHom_empty
-  结论: IsMulFreimanHom n (∅ : Set α) B f where
+  结论: 是MulFreiman态射 n (∅ : 集合 α) B f where
   证明: mapsTo_empty f B
   map_prod_eq_map_prod s t := by aesop (add simp eq_zero_of_forall_notMem)
 
@@ -827,7 +827,7 @@ lemma isMulFreimanIso_empty
 
 中文:
 引理 isMulFreimanIso_empty
-  结论: IsMulFreimanIso n (∅ : Set α) (∅ : Set β) f where
+  结论: 是MulFreimanIso n (∅ : 集合 α) (∅ : 集合 β) f where
   证明: bijOn_empty _
   map_prod_eq_map_prod s t hs ht := by
     simp [eq_zero_of_forall_notMem hs, eq_zero_of_forall_notMem ht]
@@ -850,8 +850,8 @@ lemma IsMulFreimanHom.mul
     rw [Pi.mul_def]; rw [prod_map_mul]; rw [prod_map_mul]; rw [h₁.map_prod_eq_map_prod hsA htA hs ht h]; rw [h₂.map_prod_eq_map_prod hsA htA hs ht h]
 
 中文:
-引理 IsMulFreimanHom.mul
-  结论: (h₁ : IsMulFreimanHom n A B₁ f₁)
+引理 是MulFreiman态射.mul
+  结论: (h₁ : 是MulFreiman态射 n A B₁ f₁)
   证明: h₁.mapsTo.mul h₂.mapsTo
   map_prod_eq_map_prod s t hsA htA hs ht h := by
     rw [Pi.mul_def]; rw [prod_map_mul]; rw [prod_map_mul]; rw [h₁.map_prod_eq_map_prod hsA htA hs ht h]; rw [h₂.map_prod_eq_map_prod hsA htA hs ht h]
@@ -878,8 +878,8 @@ lemma MulHomClass.isMulFreimanHom
 alias MonoidHo
 
 中文:
-引理 MulHomClass.isMulFreimanHom
-  结论: [FunLike F α β] [MulHomClass F α β] (f : F)
+引理 乘法态射类.isMulFreimanHom
+  结论: [函数状 F α β] [乘法态射类 F α β] (f : F)
   证明: match n with
   | 0 => by simpa
   | n + 1 => IsMulFreimanHom.mk hfAB fun s t hsA htA hs ht h => by
@@ -916,8 +916,8 @@ lemma MulEquivClass.isMulFreimanIso
 @[to_additive]
 
 中文:
-引理 MulEquivClass.isMulFreimanIso
-  结论: [EquivLike F α β] [MulEquivClass F α β] (f : F)
+引理 乘法等价类.isMulFreimanIso
+  结论: [等价状 F α β] [乘法等价类 F α β] (f : F)
   证明: hfAB
   map_prod_eq_map_prod s t _ _ _ _ := by
     rw [← map_multiset_prod]; rw [← map_multiset_prod]; rw [EquivLike.apply_eq_iff_eq]
@@ -940,8 +940,8 @@ lemma IsMulFreimanHom.subtypeVal
   proof: MulHomClass.isMulFreimanHom (SubmonoidClass.subtype s) (mapsTo_univ ..)
 
 中文:
-引理 IsMulFreimanHom.subtypeVal
-  条件: {S : 类型} [SetLike S α] [SubmonoidClass S α] {s : S}
+引理 是MulFreiman态射.subtypeVal
+  条件: {S : 类型} [集合状 S α] [子幺半群类 S α] {s : S}
   证明: MulHomClass.isMulFreimanHom (SubmonoidClass.subtype s) (mapsTo_univ ..)
 
 Depends on / 依赖: MulHomClass, MulHomClass.isMulFreimanHom, SubmonoidClass, SubmonoidClass.subtype, isMulFreimanHom, mapsTo_univ, subtype
@@ -972,7 +972,7 @@ lemma isMulFreimanHom_antitone
 
 中文:
 引理 isMulFreimanHom_antitone
-  结论: Antitone (IsMulFreimanHom · A B f)
+  结论: 递减 (是MulFreiman态射 · A B f)
   证明: antitone_nat_of_succ_le fun n hf =>
   { mapsTo := hf.mapsTo,
     map_prod_eq_map_prod := fun s t hsA htA hs _ h => match n with
@@ -1004,9 +1004,9 @@ lemma IsMulFreimanHom.mono
   proof: isMulFreimanHom_antitone hmn hf
 
 中文:
-引理 IsMulFreimanHom.mono
-  条件: (hmn : m <= n) (hf : IsMulFreimanHom n A B f)
-  结论: IsMulFreimanHom m A B f
+引理 是MulFreiman态射.mono
+  条件: (hmn : m <= n) (hf : 是MulFreiman态射 n A B f)
+  结论: 是MulFreiman态射 m A B f
   证明: isMulFreimanHom_antitone hmn hf
 
 Depends on / 依赖: isMulFreimanHom_antitone
@@ -1030,8 +1030,8 @@ lemma IsMulFreimanIso.mono
     (hf.invFunOn.isMulFreimanHom.mono hmn)
 
 中文:
-引理 IsMulFreimanIso.mono
-  条件: {hmn : m <= n} (hf : IsMulFreimanIso n A B f)
+引理 是MulFreimanIso.mono
+  条件: {hmn : m <= n} (hf : 是MulFreimanIso n A B f)
   证明: (hf.isMulFreimanHom.mono hmn).to_isMulFreimanIso hf.bijOn.invOn_invFunOn
     (hf.invFunOn.isMulFreimanHom.mono hmn)
 
@@ -1060,9 +1060,9 @@ lemma IsMulFreimanHom.inv
     rw [Pi.inv_def]; rw [prod_map_inv]; rw [prod_map_inv]; rw [hf.map_prod_eq_map_prod hsA htA hs ht h]
 
 中文:
-引理 IsMulFreimanHom.inv
-  条件: (hf : IsMulFreimanHom n A B f)
-  结论: IsMulFreimanHom n A B⁻¹ f⁻¹ where
+引理 是MulFreiman态射.inv
+  条件: (hf : 是MulFreiman态射 n A B f)
+  结论: 是MulFreiman态射 n A B⁻¹ f⁻¹ where
   证明: hf.mapsTo.inv
   map_prod_eq_map_prod s t hsA htA hs ht h := by
     rw [Pi.inv_def]; rw [prod_map_inv]; rw [prod_map_inv]; rw [hf.map_prod_eq_map_prod hsA htA hs ht h]
@@ -1085,8 +1085,8 @@ lemma IsMulFreimanHom.div
     rw [Pi.div_def]; rw [prod_map_div]; rw [prod_map_div]; rw [h₁.map_prod_eq_map_prod hsA htA hs ht h]; rw [h₂.map_prod_eq_map_prod hsA htA hs ht h]
 
 中文:
-引理 IsMulFreimanHom.div
-  结论: {β : 类型} [DivisionCommMonoid β] {B₁ B₂ : Set β}
+引理 是MulFreiman态射.div
+  结论: {β : 类型} [DivisionComm幺半群 β] {B₁ B₂ : 集合 β}
   证明: h₁.mapsTo.div h₂.mapsTo
   map_prod_eq_map_prod s t hsA htA hs ht h := by
     rw [Pi.div_def]; rw [prod_map_div]; rw [prod_map_div]; rw [h₁.map_prod_eq_map_prod hsA htA hs ht h]; rw [h₂.map_prod_eq_map_prod hsA htA hs ht h]
@@ -1114,8 +1114,8 @@ lemma IsMulFreimanHom.fst
 @[to_additive]
 
 中文:
-引理 IsMulFreimanHom.fst
-  条件: [CommMonoid α] [CommMonoid β] {A : Set α} {B : Set β} {n : 自然数}
+引理 是MulFreiman态射.fst
+  条件: [交换幺半群 α] [交换幺半群 β] {A : 集合 α} {B : 集合 β} {n : 自然数}
   证明: MulHomClass.isMulFreimanHom (MonoidHom.fst _ _) mapsTo_fst_prod
 
 @[to_additive]
@@ -1136,8 +1136,8 @@ lemma IsMulFreimanHom.snd
   proof: MulHomClass.isMulFreimanHom (MonoidHom.snd _ _) mapsTo_snd_prod
 
 中文:
-引理 IsMulFreimanHom.snd
-  条件: [CommMonoid α] [CommMonoid β] {A : Set α} {B : Set β} {n : 自然数}
+引理 是MulFreiman态射.snd
+  条件: [交换幺半群 α] [交换幺半群 β] {A : 集合 α} {B : 集合 β} {n : 自然数}
   证明: MulHomClass.isMulFreimanHom (MonoidHom.snd _ _) mapsTo_snd_prod
 
 Depends on / 依赖: MonoidHom, MonoidHom.snd, MulHomClass, MulHomClass.isMulFreimanHom, isMulFreimanHom, mapsTo_snd_prod
@@ -1164,8 +1164,8 @@ lemma IsMulFreimanHom.prodMk
       h₁.map_prod_eq_map_prod hsA htA hs ht h, h₂.map_prod_eq_map_prod hsA htA hs ht h]
 
 中文:
-引理 IsMulFreimanHom.prodMk
-  条件: (h₁ : IsMulFreimanHom n A B₁ f₁) (h₂ : IsMulFreimanHom n A B₂ f₂)
+引理 是MulFreiman态射.prodMk
+  条件: (h₁ : 是MulFreiman态射 n A B₁ f₁) (h₂ : 是MulFreiman态射 n A B₂ f₂)
   证明: fun x hx => mk_mem_prod (h₁.mapsTo hx) (h₂.mapsTo hx)
   map_prod_eq_map_prod s t hsA htA hs ht h := by
     simp [Prod.ext_iff, fst_prod, snd_prod,
@@ -1199,8 +1199,8 @@ lemma IsMulFreimanHom.prodMap
 @[to_additive prodMap]
 
 中文:
-引理 IsMulFreimanHom.prodMap
-  条件: (h₁ : IsMulFreimanHom n A₁ B₁ f₁) (h₂ : IsMulFreimanHom n A₂ B₂ f₂)
+引理 是MulFreiman态射.prodMap
+  条件: (h₁ : 是MulFreiman态射 n A₁ B₁ f₁) (h₂ : 是MulFreiman态射 n A₂ B₂ f₂)
   证明: (h₁.comp .fst).prodMk (h₂.comp .snd)
 
 @[to_additive prodMap]
@@ -1223,8 +1223,8 @@ lemma IsMulFreimanIso.prodMap
     (h₁.invFunOn.isMulFreimanHom.prodMap h₂.invFunOn.isMulFreimanHom)
 
 中文:
-引理 IsMulFreimanIso.prodMap
-  条件: (h₁ : IsMulFreimanIso n A₁ B₁ f₁) (h₂ : IsMulFreimanIso n A₂ B₂ f₂)
+引理 是MulFreimanIso.prodMap
+  条件: (h₁ : 是MulFreimanIso n A₁ B₁ f₁) (h₂ : 是MulFreimanIso n A₂ B₂ f₂)
   证明: (h₁.isMulFreimanHom.prodMap h₂.isMulFreimanHom).to_isMulFreimanIso
     (h₁.bijOn.invOn_invFunOn.prodMap h₂.bijOn.invOn_invFunOn)
     (h₁.invFunOn.isMulFreimanHom.prodMap h₂.invFunOn.isMulFreimanHom)

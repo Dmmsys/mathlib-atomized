@@ -62,7 +62,7 @@ definition innerDual
 
 中文:
 定义 innerDual
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: .dual (innerₗ E) s
 -/
 noncomputable def innerDual (s : Set E) : ProperCone Real E := .dual (innerₗ E) s
@@ -92,7 +92,7 @@ lemma innerDual_empty
 
 中文:
 引理 innerDual_empty
-  结论: innerDual (∅ : Set E) = ⊤
+  结论: innerDual (∅ : 集合 E) = ⊤
   证明: by ext; simp
 -/
 @[simp] lemma innerDual_empty : innerDual (∅ : Set E) = ⊤ := by ext; simp
@@ -107,7 +107,7 @@ lemma innerDual_zero
 
 中文:
 引理 innerDual_zero
-  结论: innerDual (0 : Set E) = ⊤
+  结论: innerDual (0 : 集合 E) = ⊤
   证明: by ext; simp
 -/
 @[simp] lemma innerDual_zero : innerDual (0 : Set E) = ⊤ := by ext; simp
@@ -124,7 +124,7 @@ lemma innerDual_univ
 
 中文:
 引理 innerDual_univ
-  结论: innerDual (univ : Set E) = ⊥
+  结论: innerDual (univ : 集合 E) = ⊥
   证明: le_antisymm (fun x hx => by simpa using hx (mem_univ (-x))) (by simp)
 
 Depends on / 依赖: le_antisymm, mem_univ
@@ -178,7 +178,7 @@ lemma innerDual_union
 
 中文:
 引理 innerDual_union
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: innerDual (s union t) = innerDual s ⊓ innerDual t
   证明: le_antisymm (le_inf (fun _ hx _ hy => hx <| .inl hy) fun _ hx _ hy => hx <| .inr hy)
     fun _ hx _ => Or.rec (fun h => hx.1 h) (fun h => hx.2 h)
@@ -200,7 +200,7 @@ lemma innerDual_insert
 
 中文:
 引理 innerDual_insert
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   证明: by
   rw [insert_eq]; rw [innerDual_union]
 
@@ -221,7 +221,7 @@ lemma innerDual_iUnion
 
 中文:
 引理 innerDual_iUnion
-  条件: {ι : Sort*} (f : ι -> Set E)
+  条件: {ι : 类型层*} (f : ι -> 集合 E)
   证明: by
   ext; simp [forall_comm (α := E)]
 
@@ -243,7 +243,7 @@ lemma innerDual_sUnion
 
 中文:
 引理 innerDual_sUnion
-  条件: (S : Set (Set E))
+  条件: (S : 集合 (集合 E))
   结论: innerDual (⋃₀ S) = sInf (innerDual '' S)
   证明: by
   ext; simp [forall_comm (α := E)]
@@ -271,7 +271,7 @@ theorem hyperplane_separation'
 
 中文:
 定理 hyperplane_separation'
-  条件: (C : 命题erCone 实数 E) (hx₀ : x₀ ∉ C)
+  条件: (C : ProperCone 实数 E) (hx₀ : x₀ ∉ C)
   证明: by
   obtain ⟨f, hf, hf₀⟩ := C.hyperplane_separation_point hx₀
   refine ⟨(InnerProductSpace.toDual Real E).symm f, ?_⟩
@@ -303,7 +303,7 @@ theorem innerDual_innerDual
 
 中文:
 定理 innerDual_innerDual
-  条件: (C : 命题erCone 实数 E)
+  条件: (C : ProperCone 实数 E)
   证明: by
   simpa using! C.dual_flip_dual (innerₗ E)
 -/
@@ -328,7 +328,7 @@ theorem relative_hyperplane_separation
 
 中文:
 定理 relative_hyperplane_separation
-  条件: {C : 命题erCone 实数 E} {f : E ->L[实数] F} {b : F}
+  条件: {C : ProperCone 实数 E} {f : E ->L[实数] F} {b : F}
   证明: by
     -- suppose `b ∈ C.map f`
     simp only [map, ClosedSubmodule.map, Submodule.closure, Submodule.topologicalClosure,
@@ -373,7 +373,7 @@ theorem hyperplane_separation_of_notMem
 
 中文:
 定理 hyperplane_separation_of_notMem
-  结论: (K : 命题erCone 实数 E) {f : E ->L[实数] F} {b : F}
+  结论: (K : ProperCone 实数 E) {f : E ->L[实数] F} {b : F}
   证明: by
   contrapose! disj; rwa [K.relative_hyperplane_separation]
 

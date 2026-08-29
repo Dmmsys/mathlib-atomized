@@ -73,7 +73,7 @@ lemma of_injective
 
 中文:
 引理 of_injective
-  条件: {f : F} (hf : Injective f) [NeZero a]
+  条件: {f : F} (hf : 单射 f) [NeZero a]
   结论: NeZero (f a)
   证明: ⟨by rw [← ZeroHomClass.map_zero f]; exact hf.ne NeZero.out⟩
 
@@ -97,9 +97,9 @@ class MonoidWithZeroHomClass
   (no additional axioms)
 
 中文:
-类 MonoidWithZeroHomClass
-  参数: (F : 类型) (α β : outParam 类型) [MulZeroOneClass α]
-  继承: MonoidHomClass F α β, ZeroHomClass F α β
+类 带零幺半群态射类
+  参数: (F : 类型) (α β : outParam 类型) [乘零幺类 α]
+  继承: 幺半群态射类 F α β, 保零态射类 F α β
   (无附加公理)
 -/
 class MonoidWithZeroHomClass (F : Type*) (α β : outParam Type*) [MulZeroOneClass α]
@@ -116,9 +116,9 @@ structure MonoidWithZeroHom
   (no additional axioms)
 
 中文:
-结构 MonoidWithZeroHom
-  参数: (α β : 类型) [MulZeroOneClass α] [MulZeroOneClass β]
-  继承: ZeroHom α β, MonoidHom α β
+结构 带零幺半群态射
+  参数: (α β : 类型) [乘零幺类 α] [乘零幺类 β]
+  继承: 保零态射 α β, 幺半群态射 α β
   (无附加公理)
 -/
 structure MonoidWithZeroHom (α β : Type*) [MulZeroOneClass α] [MulZeroOneClass β]
@@ -136,8 +136,8 @@ definition MonoidWithZeroHom.ofClass
   body: { (f : α ->* β), (f : ZeroHom α β) with }
 
 中文:
-定义 MonoidWithZeroHom.ofClass
-  签名: [FunLike F α β] [MonoidWithZeroHomClass F α β]
+定义 带零幺半群态射.ofClass
+  签名: [函数状 F α β] [带零幺半群态射类 F α β]
   定义体: { (f : α ->* β), (f : ZeroHom α β) with }
 
 Depends on / 依赖: ZeroHom
@@ -161,7 +161,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (α ->*₀ β) α β where
+  签名: : 函数状 (α ->*₀ β) α β where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; obtain ⟨⟨_, _⟩, _⟩ := g; congr
 
@@ -183,7 +183,7 @@ instance monoidWithZeroHomClass
 
 中文:
 实例 monoidWithZeroHomClass
-  签名: : MonoidWithZeroHomClass (α ->*₀ β) α β where
+  签名: : 带零幺半群态射类 (α ->*₀ β) α β where
   定义体: MonoidWithZeroHom.map_mul'
   map_one := MonoidWithZeroHom.map_one'
   map_zero f := f.map_zero'
@@ -204,8 +204,8 @@ instance [Subsingleton
   body: .of_oneHomClass
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (α ->*₀ β)
+实例 [子单例
+  签名: α] : 子单例 (α ->*₀ β)
   定义体: .of_oneHomClass
 
 Depends on / 依赖: of_oneHomClass
@@ -224,7 +224,7 @@ lemma coe_ofClass
 
 中文:
 引理 coe_ofClass
-  条件: [MonoidWithZeroHomClass F α β] (f : F)
+  条件: [带零幺半群态射类 F α β] (f : F)
   证明: rfl
 -/
 @[simp] lemma coe_ofClass [MonoidWithZeroHomClass F α β] (f : F) :
@@ -267,7 +267,7 @@ instance coeToZeroHom
 
 中文:
 实例 coeToZeroHom
-  签名: : Coe (α ->*₀ β) (ZeroHom α β)
+  签名: : Coe (α ->*₀ β) (保零态射 α β)
   定义体: ⟨toZeroHom⟩
 
 Depends on / 依赖: toZeroHom
@@ -494,7 +494,7 @@ theorem map_ite_zero_one
 
 中文:
 定理 map_ite_zero_one
-  结论: {F : 类型} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
+  结论: {F : 类型} [函数状 F α β] [带零幺半群态射类 F α β] (f : F)
   证明: by
   split_ifs with h <;> simp
 
@@ -519,7 +519,7 @@ theorem map_ite_one_zero
 
 中文:
 定理 map_ite_one_zero
-  结论: {F : 类型} [FunLike F α β] [MonoidWithZeroHomClass F α β] (f : F)
+  结论: {F : 类型} [函数状 F α β] [带零幺半群态射类 F α β] (f : F)
   证明: by
   split_ifs with h <;> simp
 
@@ -545,7 +545,7 @@ definition id
 
 中文:
 定义 id
-  签名: (α : 类型) [MulZeroOneClass α]
+  签名: (α : 类型) [乘零幺类 α]
   定义体: x
   map_zero' := rfl
   map_one' := rfl
@@ -642,7 +642,7 @@ lemma cancel_right
 
 中文:
 引理 cancel_right
-  条件: {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->*₀ γ} {f : α ->*₀ β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 (DFunLike.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, hf.forall
@@ -662,7 +662,7 @@ lemma cancel_left
 
 中文:
 引理 cancel_left
-  条件: {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : Injective g)
+  条件: {g : β ->*₀ γ} {f₁ f₂ : α ->*₀ β} (hg : 单射 g)
   证明: ⟨fun h => ext fun x => hg by rw [← comp_apply, h,
     comp_apply], fun h => h ▸ rfl⟩
 
@@ -683,7 +683,7 @@ lemma toMonoidHom_injective
 
 中文:
 引理 toMonoidHom_injective
-  结论: Injective (toMonoidHom : (α ->*₀ β) -> α ->* β)
+  结论: 单射 (toMonoidHom : (α ->*₀ β) -> α ->* β)
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -701,7 +701,7 @@ lemma toZeroHom_injective
 
 中文:
 引理 toZeroHom_injective
-  结论: Injective (toZeroHom : (α ->*₀ β) -> ZeroHom α β)
+  结论: 单射 (toZeroHom : (α ->*₀ β) -> 保零态射 α β)
   证明: Injective.of_comp (f := DFunLike.coe) DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Injective, Injective.of_comp, coe_injective, of_comp
@@ -756,7 +756,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->*₀ α)
+  签名: 可居 (α ->*₀ α)
   定义体: ⟨id α⟩
 
 Depends on / 依赖: eqToIso, id_comp, mkXIso, of.d
@@ -783,7 +783,7 @@ instance one
 
 中文:
 实例 one
-  签名: (M₀ N₀ : 类型) [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  签名: (M₀ N₀ : 类型) [乘零幺类 M₀] [乘零幺类 N₀]
   定义体: if x = 0 then 0 else 1
   one.map_zero' := by simp
   one.map_one' := by simp
@@ -809,7 +809,7 @@ lemma one_apply_def
 
 中文:
 引理 one_apply_def
-  结论: {M₀ N₀ : 类型} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
   证明: rfl
 
 @[simp]
@@ -832,7 +832,7 @@ lemma one_apply_zero
 
 中文:
 引理 one_apply_zero
-  结论: {M₀ N₀ : 类型} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
   证明: if_pos rfl
 
 Depends on / 依赖: if_pos
@@ -854,7 +854,7 @@ lemma one_apply_of_ne_zero
 
 中文:
 引理 one_apply_of_ne_zero
-  结论: {M₀ N₀ : 类型} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
   证明: if_neg hx
 
 @[simp]
@@ -880,7 +880,7 @@ lemma one_apply_eq_zero_iff
 
 中文:
 引理 one_apply_eq_zero_iff
-  结论: {M₀ N₀ : 类型} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
   证明: by
   rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
 
@@ -906,7 +906,7 @@ lemma one_apply_eq_one_iff
 
 中文:
 引理 one_apply_eq_one_iff
-  结论: {M₀ N₀ : 类型} [MulZeroOneClass M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [乘零幺类 M₀] [乘零幺类 N₀]
   证明: by
   rcases eq_or_ne x 0 with rfl | hx <;> simp_all [one_apply_of_ne_zero]
 

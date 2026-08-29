@@ -47,7 +47,7 @@ instance cartesianMonoidalCategory
 
 中文:
 实例 cartesianMonoidalCategory
-  签名: : CartesianMonoidalCategory (J ⥤ C) where
+  签名: : CartesianMonoidal范畴 (J ⥤ C) where
   定义体: { app _ := CartesianMonoidalCategory.fst _ _ }
   snd X Y := { app _ := CartesianMonoidalCategory.snd _ _ }
   tensorProductIsBinaryProduct X Y :=
@@ -456,7 +456,7 @@ definition tensorObjComp
 
 中文:
 定义 tensorObjComp
-  签名: (F G : D ⥤ C) (H : C ⥤ E) [PreservesFiniteProducts H]
+  签名: (F G : D ⥤ C) (H : C ⥤ E) [保持FiniteProducts H]
   定义体: NatIso.ofComponents (fun X => prodComparisonIso H (F.obj X) (G.obj X)) fun {X Y} f => by
     dsimp; ext <;> simp [← Functor.map_comp]
 
@@ -483,7 +483,7 @@ definition RepresentableBy.tensorObj
     · change h₂.homEquiv ((f ≫ g) ≫ snd X Y) = G.map f.op (h₂.homEqui
 
 中文:
-定义 RepresentableBy.tensorObj
+定义 可表示.tensorObj
   签名: {F : Cᵒᵖ ⥤ 类型v} {G : Cᵒᵖ ⥤ 类型v} {X Y : C}
   定义体: homEquivToProd.trans (h₁.homEquiv.prodCongr h₂.homEquiv)
   homEquiv_comp {I W} f g := by

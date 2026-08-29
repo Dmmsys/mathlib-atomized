@@ -52,7 +52,7 @@ definition MulExact
 
 中文:
 定义 MulExact
-  签名: [One P]
+  签名: [幺 P]
   定义体: forall y, g y = 1 ↔ y in Set.range f
 
 Depends on / 依赖: Set.range
@@ -76,7 +76,7 @@ lemma apply_apply_eq_one
 
 中文:
 引理 apply_apply_eq_one
-  条件: [One P] (h : MulExact f g) (x : M)
+  条件: [幺 P] (h : MulExact f g) (x : M)
   证明: (h _).mpr Set.mem_range_self _
 
 @[to_additive]
@@ -100,7 +100,7 @@ lemma comp_eq_one
 
 中文:
 引理 comp_eq_one
-  条件: [One P] (h : MulExact f g)
+  条件: [幺 P] (h : MulExact f g)
   结论: g.comp f = 1
   证明: funext h.apply_apply_eq_one
 
@@ -125,7 +125,7 @@ lemma of_comp_of_mem_range
 
 中文:
 引理 of_comp_of_mem_range
-  结论: [One P] (h1 : g ∘ f = 1)
+  结论: [幺 P] (h1 : g ∘ f = 1)
   证明: fun y => Iff.intro (h2 y)
     Exists.rec ((forall_apply_eq_imp_iff (p := (g · = 1))).mpr (congrFun h1) y)
 
@@ -155,7 +155,7 @@ lemma comp_injective
 
 中文:
 引理 comp_injective
-  结论: [One P] [One P'] (mulExact : MulExact f g)
+  结论: [幺 P] [幺 P'] (mulExact : MulExact f g)
   证明: by
   intro x
 .mp inj h0 ▸ H, ?_⟩ refine ⟨fun H => mulExact x
@@ -185,7 +185,7 @@ lemma of_comp_eq_one_of_ker_in_range
 
 中文:
 引理 of_comp_eq_one_of_ker_in_range
-  结论: [One P] (hc : g.comp f = 1)
+  结论: [幺 P] (hc : g.comp f = 1)
   证明: fun y => ⟨hr y, fun ⟨x, hx⟩ => hx ▸ congrFun hc x⟩
 -/
 lemma of_comp_eq_one_of_ker_in_range [One P] (hc : g.comp f = 1)
@@ -217,7 +217,7 @@ lemma iff_rangeFactorization
 
 中文:
 引理 iff_rangeFactorization
-  条件: [One P] (hg : 1 in Set.range g)
+  条件: [幺 P] (hg : 1 in 集合.range g)
   证明: ⟨⟨1, hg⟩⟩
     MulExact f g ↔ MulExact ((↑) : Set.range f -> N) (Set.rangeFactorization g) := by
   let : One (Set.range g) := ⟨⟨1, hg⟩⟩
@@ -253,7 +253,7 @@ lemma rangeFactorization
 
 中文:
 引理 rangeFactorization
-  条件: [One P] (h : MulExact f g) (hg : 1 in Set.range g)
+  条件: [幺 P] (h : MulExact f g) (hg : 1 in 集合.range g)
   证明: ⟨⟨1, hg⟩⟩
     MulExact ((↑) : Set.range f -> N) (Set.rangeFactorization g) :=
   (iff_rangeFactorization hg).1 h
@@ -485,7 +485,7 @@ lemma iff_of_ladder_mulEquiv
 
 中文:
 引理 iff_of_ladder_mulEquiv
-  结论: (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+  结论: (comm₁₂ : g₁₂.comp e₁ = 幺半群态射.comp e₂ f₁₂)
   证明: (mulExact_iff_of_surjective_of_bijective_of_injective _ _ _ _ e₁ e₂ e₃ comm₁₂ comm₂₃
     e₁.surjective e₂.bijective e₃.injective).symm
 
@@ -511,7 +511,7 @@ lemma of_ladder_mulEquiv_of_mulExact
 
 中文:
 引理 of_ladder_mulEquiv_of_mulExact
-  结论: (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+  结论: (comm₁₂ : g₁₂.comp e₁ = 幺半群态射.comp e₂ f₁₂)
   证明: (iff_of_ladder_mulEquiv _ _ _ comm₁₂ comm₂₃).2 H
 
 @[to_additive]
@@ -533,7 +533,7 @@ lemma of_ladder_mulEquiv_of_mulExact'
 
 中文:
 引理 of_ladder_mulEquiv_of_mulExact'
-  结论: (comm₁₂ : g₁₂.comp e₁ = MonoidHom.comp e₂ f₁₂)
+  结论: (comm₁₂ : g₁₂.comp e₁ = 幺半群态射.comp e₂ f₁₂)
   证明: (iff_of_ladder_mulEquiv _ _ _ comm₁₂ comm₂₃).1 H
 
 Depends on / 依赖: iff_of_ladder_mulEquiv
@@ -657,7 +657,7 @@ lemma exact_subtype_mkQ
 
 中文:
 引理 exact_subtype_mkQ
-  条件: (Q : Submodule R N)
+  条件: (Q : 子模 R N)
   证明: by
   rw [exact_iff]; rw [Submodule.ker_mkQ]; rw [Submodule.range_subtype Q]
 
@@ -774,7 +774,7 @@ lemma LinearEquiv.conj_exact_iff_exact
   exact (Submodule.map_injective_of_injective e.injective).eq_iff
 
 中文:
-引理 LinearEquiv.conj_exact_iff_exact
+引理 线性等价.conj_exact_iff_exact
   条件: (e : N ≃ₗ[R] N')
   证明: by
   simp_rw [LinearMap.exact_iff, LinearMap.ker_comp, ← Submodule.map_equiv_eq_comap_symm,
@@ -799,7 +799,7 @@ lemma LinearEquiv.conj_symm_exact_iff_exact
   proof: LinearEquiv.conj_exact_iff_exact _ _ e.symm
 
 中文:
-引理 LinearEquiv.conj_symm_exact_iff_exact
+引理 线性等价.conj_symm_exact_iff_exact
   条件: (e : N' ≃ₗ[R] N)
   证明: LinearEquiv.conj_exact_iff_exact _ _ e.symm
 
@@ -823,8 +823,8 @@ lemma Exact.linearMap_ker_eq
   proof: SetLike.ext hfg
 
 中文:
-引理 Exact.linearMap_ker_eq
-  条件: (hfg : Exact f g)
+引理 正合.linearMap_ker_eq
+  条件: (hfg : 正合 f g)
   结论: ker g = range f
   证明: SetLike.ext hfg
 
@@ -843,8 +843,8 @@ lemma Exact.linearMap_comp_eq_zero
   proof: DFunLike.coe_injective h.comp_eq_zero
 
 中文:
-引理 Exact.linearMap_comp_eq_zero
-  条件: (h : Exact f g)
+引理 正合.linearMap_comp_eq_zero
+  条件: (h : 正合 f g)
   结论: g.comp f = 0
   证明: DFunLike.coe_injective h.comp_eq_zero
 
@@ -863,8 +863,8 @@ lemma Surjective.comp_exact_iff_exact
     congrArg (g x = 0 ↔ x in ·) (h.range_comp f)
 
 中文:
-引理 Surjective.comp_exact_iff_exact
-  条件: {p : M' ->ₗ[R] M} (h : Surjective p)
+引理 满射.comp_exact_iff_exact
+  条件: {p : M' ->ₗ[R] M} (h : 满射 p)
   证明: iff_of_eq forall_congr fun x =>
     congrArg (g x = 0 ↔ x in ·) (h.range_comp f)
 
@@ -884,7 +884,7 @@ lemma _root_.LinearEquiv.precomp_exact_iff_exact
   proof: e.surjective.comp_exact_iff_exact
 
 中文:
-引理 _root_.LinearEquiv.precomp_exact_iff_exact
+引理 _root_.线性等价.precomp_exact_iff_exact
   条件: {e : M' ≃ₗ[R] M}
   证明: e.surjective.comp_exact_iff_exact
 
@@ -903,8 +903,8 @@ lemma Injective.comp_exact_iff_exact
   proof: forall_congr' fun _ => iff_congr (map_eq_zero_iff _ h) Iff.rfl
 
 中文:
-引理 Injective.comp_exact_iff_exact
-  条件: {i : P ->ₗ[R] P'} (h : Injective i)
+引理 单射.comp_exact_iff_exact
+  条件: {i : P ->ₗ[R] P'} (h : 单射 i)
   证明: forall_congr' fun _ => iff_congr (map_eq_zero_iff _ h) Iff.rfl
 
 Depends on / 依赖: Iff.rfl, forall_congr, iff_congr, map_eq_zero_iff
@@ -922,7 +922,7 @@ lemma _root_.LinearEquiv.postcomp_exact_iff_exact
   proof: e.injective.comp_exact_iff_exact
 
 中文:
-引理 _root_.LinearEquiv.postcomp_exact_iff_exact
+引理 _root_.线性等价.postcomp_exact_iff_exact
   条件: {e : P ≃ₗ[R] P'}
   证明: e.injective.comp_exact_iff_exact
 
@@ -1041,8 +1041,8 @@ definition Exact.splitSurjectiveEquiv
     have h₂ : forall x, g (f x) =
 
 中文:
-定义 Exact.splitSurjectiveEquiv
-  签名: (h : Function.Exact f g) (hf : Function.Injective f)
+定义 正合.splitSurjectiveEquiv
+  签名: (h : 函数.正合 f g) (hf : 函数.单射 f)
   定义体: by
   refine
   { toFun := fun l => ⟨(LinearEquiv.ofBijective (f ∘ₗ fst R M P + l.1 ∘ₗ snd R M P) ?_).symm, ?_⟩
@@ -1107,7 +1107,7 @@ definition Exact.splitInjectiveEquiv
   
 
 中文:
-定义 Exact.splitInjectiveEquiv
+定义 正合.splitInjectiveEquiv
   定义体: by
   refine
   { toFun := fun l => ⟨(LinearEquiv.ofBijective (l.1.prod g) ?_), ?_⟩
@@ -1169,8 +1169,8 @@ theorem Exact.split_tfae'
     exact
 
 中文:
-定理 Exact.split_tfae'
-  条件: (h : Function.Exact f g)
+定理 正合.split_tfae'
+  条件: (h : 函数.正合 f g)
   证明: by
   tfae_have 1 -> 3
   | ⟨hf, l, hl⟩ => ⟨_, (h.splitSurjectiveEquiv hf ⟨l, hl⟩).2⟩
@@ -1215,7 +1215,7 @@ theorem Exact.split_tfae
   tfae_finish
 
 中文:
-定理 Exact.split_tfae
+定理 正合.split_tfae
   证明: by
   tfae_have 1 ↔ 3 := by
     simpa using (h.splitSurjectiveEquiv hf).nonempty_congr
@@ -1257,8 +1257,8 @@ lemma Exact.inr_fst
     exists_eq_right]
 
 中文:
-引理 Exact.inr_fst
-  结论: Function.Exact (LinearMap.inr R M N) (LinearMap.fst R M N)
+引理 正合.inr_fst
+  结论: 函数.正合 (线性映射.inr R M N) (线性映射.fst R M N)
   证明: by
   rintro ⟨x, y⟩
   simp only [LinearMap.fst_apply, @eq_comm _ x, LinearMap.coe_inr, Set.mem_range, Prod.mk.injEq,
@@ -1283,8 +1283,8 @@ lemma Exact.inl_snd
     exists_eq_left]
 
 中文:
-引理 Exact.inl_snd
-  结论: Function.Exact (LinearMap.inl R M N) (LinearMap.snd R M N)
+引理 正合.inl_snd
+  结论: 函数.正合 (线性映射.inl R M N) (线性映射.snd R M N)
   证明: by
   rintro ⟨x, y⟩
   simp only [LinearMap.snd_apply, @eq_comm _ y, LinearMap.coe_inl, Set.mem_range, Prod.mk.injEq,
@@ -1322,7 +1322,7 @@ lemma Exact.exact_mapQ_iff
   rw [← ker_comp]; rw [range_liftQ]; rw [liftQ_mkQ]; rw [ker_comp]; rw [range_comp]; rw [comap_map_eq]; rw [ker_mkQ]; rw [ker_mkQ]; rw [← hfg.linearMap_ker_eq]; rw [sup_comm]; rw [← (sup_le hqr 
 
 中文:
-引理 Exact.exact_mapQ_iff
+引理 正合.exact_mapQ_iff
   证明: by
   rw [exact_iff]; rw [← (comap_injective_of_surjective (mkQ_surjective _)).eq_iff]
   dsimp only [mapQ]
@@ -1388,7 +1388,7 @@ lemma surjective_range_liftQ
 
 中文:
 引理 surjective_range_liftQ
-  条件: (h : range f <= ker g) (hg : Function.Surjective g)
+  条件: (h : range f <= ker g) (hg : 函数.满射 g)
   证明: by
   intro x₃
   obtain ⟨x₂, rfl⟩ := hg x₃
@@ -1453,7 +1453,7 @@ lemma injective_range_liftQ_of_exact
 
 中文:
 引理 injective_range_liftQ_of_exact
-  条件: (h : Function.Exact f g)
+  条件: (h : 函数.正合 f g)
   证明: by
   simpa only [← LinearMap.ker_eq_bot, ker_eq_bot_range_liftQ_iff, exact_iff] using h
 
@@ -1474,7 +1474,7 @@ lemma surjective_iff_eq_zero_of_exact
 
 中文:
 引理 surjective_iff_eq_zero_of_exact
-  条件: (h : Function.Exact f g)
+  条件: (h : 函数.正合 f g)
   证明: by
   rw [← LinearMap.ker_eq_top]; rw [h.linearMap_ker_eq]; rw [LinearMap.range_eq_top]
 
@@ -1495,7 +1495,7 @@ lemma injective_iff_eq_zero_of_exact
 
 中文:
 引理 injective_iff_eq_zero_of_exact
-  条件: (h : Function.Exact f g)
+  条件: (h : 函数.正合 f g)
   证明: by
   rw [← LinearMap.ker_eq_bot]; rw [h.linearMap_ker_eq]; rw [LinearMap.range_eq_bot]
 
@@ -1520,8 +1520,8 @@ definition Function.Exact.linearEquivOfSurjective
     ⟨LinearMap.injective_range_liftQ_of_exact h, LinearMap.surjective_range_liftQ _ hg⟩
 
 中文:
-定义 Function.Exact.linearEquivOfSurjective
-  签名: (h : Function.Exact f g)
+定义 函数.正合.linearEquivOfSurjective
+  签名: (h : 函数.正合 f g)
   定义体: LinearEquiv.ofBijective ((LinearMap.range f).liftQ g (h · |>.mpr))
     ⟨LinearMap.injective_range_liftQ_of_exact h, LinearMap.surjective_range_liftQ _ hg⟩
 
@@ -1544,8 +1544,8 @@ lemma Function.Exact.linearEquivOfSurjective_symm_apply
   simp [LinearEquiv.symm_apply_eq]
 
 中文:
-引理 Function.Exact.linearEquivOfSurjective_symm_apply
-  结论: (h : Function.Exact f g)
+引理 函数.正合.linearEquivOfSurjective_symm_apply
+  结论: (h : 函数.正合 f g)
   证明: by
   simp [LinearEquiv.symm_apply_eq]
 

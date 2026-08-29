@@ -33,12 +33,12 @@ structure Born
     - [str : Bornology carrier]
 
 中文:
-结构 Born
+结构 有界
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型
-    - [str : Bornology carrier]
+    - [str : 有界结构 carrier]
 -/
 structure Born where
   /-- Construct a bundled `Born` from a `Bornology`. -/
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Born 类型
+  签名: CoeSort 有界 类型
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Born
+  签名: 可居 有界
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited Born :=
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} Born
+  签名: 大范畴.{u} 有界
   定义体: LocallyBoundedMap X Y
   id X := LocallyBoundedMap.id X
   comp f g := g.comp f
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory Born (LocallyBoundedMap · ·)
+  签名: 余ncrete范畴 有界 (LocallyBounded映射 · ·)
   定义体: f
   ofHom f := f
 -/

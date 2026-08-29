@@ -40,7 +40,7 @@ definition PowSaturated
 
 中文:
 定义 PowSaturated
-  签名: (H : Submonoid G)
+  签名: (H : 子幺半群 G)
   定义体: forall ⦃n g⦄, g ^ n in H -> n = 0 ∨ g in H
 
 @[to_additive]
@@ -59,7 +59,7 @@ theorem powSaturated_iff_npow
 
 中文:
 定理 powSaturated_iff_npow
-  条件: {H : Submonoid G}
+  条件: {H : 子幺半群 G}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -94,7 +94,7 @@ theorem saturated_iff_zpow
 
 中文:
 定理 saturated_iff_zpow
-  条件: {H : Subgroup G}
+  条件: {H : 子群 G}
   证明: by
   refine ⟨fun h n g hgn => ?_, fun h n g hgn => by simpa using h n g (by simpa using hgn)⟩
   obtain ⟨n, rfl | rfl⟩ := n.eq_nat_or_neg <;> simpa using h (by simpa using hgn)
@@ -120,7 +120,7 @@ theorem ker_saturated
 
 中文:
 定理 ker_saturated
-  结论: {A₁ A₂ : 类型} [AddGroup A₁] [AddMonoid A₂] [IsAddTorsionFree A₂]
+  结论: {A₁ A₂ : 类型} [加法群 A₁] [加法幺半群 A₂] [是加法无挠 A₂]
   证明: by simp [NSMulSaturated, or_comm]
 
 Depends on / 依赖: NSMulSaturated, or_comm

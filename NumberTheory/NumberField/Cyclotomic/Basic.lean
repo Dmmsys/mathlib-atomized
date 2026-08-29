@@ -53,8 +53,8 @@ theorem finrank
 
 中文:
 定理 finrank
-  条件: [NeZero k] [IsCyclotomicExtension {k} Rat K]
-  结论: Module.finrank Rat K = k.totient
+  条件: [NeZero k] [是CyclotomicExtension {k} 有理数 K]
+  结论: 模.finrank 有理数 K = k.totient
   证明: IsCyclotomicExtension.finrank K Polynomial.cyclotomic.irreducible_rat (NeZero.pos _)
 
 Depends on / 依赖: IsCyclotomicExtension, IsCyclotomicExtension.finrank, NeZero, NeZero.pos, Polynomial, Polynomial.cyclotomic.irreducible_rat, cyclotomic, finrank, irreducible_rat
@@ -74,7 +74,7 @@ theorem discr_prime_pow_ne_two'
 
 中文:
 定理 discr_prime_pow_ne_two'
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   rw [← discr_prime_pow_ne_two hζ (cyclotomic.irreducible_rat (NeZero.pos _)) hk]
   exact hζ.discr_zeta_eq_discr_zeta_sub_one.symm
@@ -100,7 +100,7 @@ theorem discr_odd_prime'
 
 中文:
 定理 discr_odd_prime'
-  条件: [IsCyclotomicExtension {p} Rat K] (hζ : IsPrimitiveRoot ζ p) (hodd : p != 2)
+  条件: [是CyclotomicExtension {p} 有理数 K] (hζ : 是PrimitiveRoot ζ p) (hodd : p != 2)
   证明: by
   rw [← discr_odd_prime hζ (cyclotomic.irreducible_rat hp.out.pos) hodd]
   exact hζ.discr_zeta_eq_discr_zeta_sub_one.symm
@@ -124,7 +124,7 @@ theorem discr_prime_pow'
 
 中文:
 定理 discr_prime_pow'
-  条件: [IsCyclotomicExtension {p ^ k} Rat K] (hζ : IsPrimitiveRoot ζ (p ^ k))
+  条件: [是CyclotomicExtension {p ^ k} 有理数 K] (hζ : 是PrimitiveRoot ζ (p ^ k))
   证明: by
   rw [← discr_prime_pow hζ (cyclotomic.irreducible_rat (NeZero.pos _))]
   exact hζ.discr_zeta_eq_discr_zeta_sub_one.symm
@@ -149,7 +149,7 @@ theorem discr_prime_pow_eq_unit_mul_pow'
 
 中文:
 定理 discr_prime_pow_eq_unit_mul_pow'
-  结论: [IsCyclotomicExtension {p ^ k} Rat K]
+  结论: [是CyclotomicExtension {p ^ k} 有理数 K]
   证明: by
   rw [hζ.discr_zeta_eq_discr_zeta_sub_one.symm]
   exact discr_prime_pow_eq_unit_mul_pow hζ (cyclotomic.irreducible_rat (NeZero.pos _))
@@ -179,8 +179,8 @@ theorem isIntegralClosure_adjoin_singleton_of_prime_pow
   let B := hζ.subOnePowerBas
 
 中文:
-定理 isIntegralClosure_adjoin_singleton_of_prime_pow
-  结论: [hcycl : IsCyclotomicExtension {p ^ k} Rat K]
+定理 is整数egralClosure_adjoin_singleton_of_prime_pow
+  结论: [hcycl : 是CyclotomicExtension {p ^ k} 有理数 K]
   证明: by
   refine ⟨Subtype.val_injective, @fun x => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
   swap
@@ -246,8 +246,8 @@ theorem isIntegralClosure_adjoin_singleton_of_prime
   exact isIntegralClosure_adjoin_singleton_of_prime_pow hζ
 
 中文:
-定理 isIntegralClosure_adjoin_singleton_of_prime
-  结论: [hcycl : IsCyclotomicExtension {p} Rat K]
+定理 is整数egralClosure_adjoin_singleton_of_prime
+  结论: [hcycl : 是CyclotomicExtension {p} 有理数 K]
   证明: by
   rw [← pow_one p] at hζ hcycl
   exact isIntegralClosure_adjoin_singleton_of_prime_pow hζ
@@ -273,7 +273,7 @@ theorem cyclotomicRing_isIntegralClosure_of_prime_pow
     simp only [Set.singlet
 
 中文:
-定理 cyclotomicRing_isIntegralClosure_of_prime_pow
+定理 cyclotomicRing_is整数egralClosure_of_prime_pow
   证明: by
   have hζ := zeta_spec (p ^ k) Rat (CyclotomicField (p ^ k) Rat)
   refine ⟨IsFractionRing.injective _ _, @fun x => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
@@ -304,7 +304,7 @@ theorem cyclotomicRing_isIntegralClosure_of_prime
   exact cyclotomicRing_isIntegralClosure_of_prime_pow
 
 中文:
-定理 cyclotomicRing_isIntegralClosure_of_prime
+定理 cyclotomicRing_is整数egralClosure_of_prime
   证明: by
   rw [← pow_one p]
   exact cyclotomicRing_isIntegralClosure_of_prime_pow
@@ -340,7 +340,7 @@ definition _root_.IsPrimitiveRoot.adjoinEquivRingOfIntegersOfPrimePow
   IsIntegralClosure.equiv Int (adjoin Int ({ζ} : Set K)) K (𝓞 K)
 
 中文:
-定义 _root_.IsPrimitiveRoot.adjoinEquivRingOfIntegersOfPrimePow
+定义 _root_.是PrimitiveRoot.adjoinEquivRingOf整数egersOfPrimePow
   定义体: let _ := isIntegralClosure_adjoin_singleton_of_prime_pow hζ
   IsIntegralClosure.equiv Int (adjoin Int ({ζ} : Set K)) K (𝓞 K)
 
@@ -362,8 +362,8 @@ instance IsCyclotomicExtension.ringOfIntegersOfPrimePow
   IsCyclotomicExtension.equiv _ Int _ (zeta_spec (p ^ k) Rat K).adjoinEquivRingOfIntegersOfPrimePow
 
 中文:
-实例 IsCyclotomicExtension.ringOfIntegersOfPrimePow
-  签名: [IsCyclotomicExtension {p ^ k} Rat K]
+实例 是CyclotomicExtension.ringOf整数egersOfPrimePow
+  签名: [是CyclotomicExtension {p ^ k} 有理数 K]
   定义体: let _ := (zeta_spec (p ^ k) Rat K).adjoin_isCyclotomicExtension Int
   IsCyclotomicExtension.equiv _ Int _ (zeta_spec (p ^ k) Rat K).adjoinEquivRingOfIntegersOfPrimePow
 
@@ -385,7 +385,7 @@ definition integralPowerBasisOfPrimePow
 
 中文:
 定义 integralPowerBasisOfPrimePow
-  签名: [IsCyclotomicExtension {p ^ k} Rat K]
+  签名: [是CyclotomicExtension {p ^ k} 有理数 K]
   定义体: (Algebra.adjoin.powerBasis' (hζ.isIntegral (NeZero.pos _))).map
     hζ.adjoinEquivRingOfIntegersOfPrimePow
 
@@ -405,8 +405,8 @@ abbreviation toInteger
   body: ⟨ζ, hζ.isIntegral (NeZero.pos _)⟩
 
 中文:
-缩写 toInteger
-  签名: {k : 自然数} [NeZero k] (hζ : IsPrimitiveRoot ζ k)
+缩写 to整数eger
+  签名: {k : 自然数} [NeZero k] (hζ : 是PrimitiveRoot ζ k)
   定义体: ⟨ζ, hζ.isIntegral (NeZero.pos _)⟩
 
 Depends on / 依赖: NeZero, NeZero.pos, isIntegral
@@ -428,8 +428,8 @@ lemma coe_toInteger
 @[simp]
 
 中文:
-引理 coe_toInteger
-  条件: {k : 自然数} [NeZero k] (hζ : IsPrimitiveRoot ζ k)
+引理 coe_to整数eger
+  条件: {k : 自然数} [NeZero k] (hζ : 是PrimitiveRoot ζ k)
   结论: hζ.to整数eger.1 = ζ
   证明: rfl
 
@@ -447,8 +447,8 @@ lemma toInteger_coe
   proof: rfl
 
 中文:
-引理 toInteger_coe
-  条件: {k : 自然数} [NeZero k] {x : 𝓞 K} (hx : IsPrimitiveRoot (x : K) k)
+引理 to整数eger_coe
+  条件: {k : 自然数} [NeZero k] {x : 𝓞 K} (hx : 是PrimitiveRoot (x : K) k)
   证明: rfl
 -/
 lemma toInteger_coe {k : Nat} [NeZero k] {x : 𝓞 K} (hx : IsPrimitiveRoot (x : K) k) :
@@ -467,8 +467,8 @@ lemma finite_quotient_toInteger_sub_one
   exact hζ.ne_one hk (RingOfIntegers.ext_iff.1 h)
 
 中文:
-引理 finite_quotient_toInteger_sub_one
-  结论: [NumberField K] {k : 自然数} (hk : 1 < k)
+引理 finite_quotient_to整数eger_sub_one
+  结论: [数域 K] {k : 自然数} (hk : 1 < k)
   证明: NeZero.of_gt hk
     Finite (𝓞 K ⧸ Ideal.span {hζ.toInteger - 1}) := by
   refine Ideal.finiteQuotientOfFreeOfNeBot _ (fun h => ?_)
@@ -495,8 +495,8 @@ lemma card_quotient_toInteger_sub_one
   rw [← Submodule.cardQuot_apply]; rw [← Ideal.absNorm_apply]; rw [Ideal.absNorm_span_singleton]
 
 中文:
-引理 card_quotient_toInteger_sub_one
-  结论: [NumberField K] {k : 自然数} [NeZero k]
+引理 card_quotient_to整数eger_sub_one
+  结论: [数域 K] {k : 自然数} [NeZero k]
   证明: by
   rw [← Submodule.cardQuot_apply]; rw [← Ideal.absNorm_apply]; rw [Ideal.absNorm_span_singleton]
 
@@ -517,8 +517,8 @@ lemma toInteger_isPrimitiveRoot
   proof: IsPrimitiveRoot.of_map_of_injective (by exact hζ) RingOfIntegers.coe_injective
 
 中文:
-引理 toInteger_isPrimitiveRoot
-  条件: {k : 自然数} [NeZero k] (hζ : IsPrimitiveRoot ζ k)
+引理 to整数eger_isPrimitiveRoot
+  条件: {k : 自然数} [NeZero k] (hζ : 是PrimitiveRoot ζ k)
   证明: IsPrimitiveRoot.of_map_of_injective (by exact hζ) RingOfIntegers.coe_injective
 
 Depends on / 依赖: IsPrimitiveRoot, IsPrimitiveRoot.of_map_of_injective, RingOfIntegers, RingOfIntegers.coe_injective, coe_injective, of_map_of_injective
@@ -543,7 +543,7 @@ theorem integralPowerBasisOfPrimePow_gen
 
 中文:
 定理 integralPowerBasisOfPrimePow_gen
-  结论: [hcycl : IsCyclotomicExtension {p ^ k} Rat K]
+  结论: [hcycl : 是CyclotomicExtension {p ^ k} 有理数 K]
   证明: Subtype.ext show algebraMap _ K hζ.integralPowerBasisOfPrimePow.gen = _ by
     rw [integralPowerBasisOfPrimePow]; rw [PowerBasis.map_gen]; rw [adjoin.powerBasis'_gen]
     simp only [adjoinEquivRingOfIntegersOfPrimePow_apply, IsIntegralClosure.algebraMap_lift]
@@ -573,7 +573,7 @@ theorem integralPowerBasisOfPrimePow_dim
 
 中文:
 定理 integralPowerBasisOfPrimePow_dim
-  结论: [hcycl : IsCyclotomicExtension {p ^ k} Rat K]
+  结论: [hcycl : 是CyclotomicExtension {p ^ k} 有理数 K]
   证明: by
   simp [integralPowerBasisOfPrimePow, ← cyclotomic_eq_minpoly hζ (NeZero.pos _),
     natDegree_cyclotomic]
@@ -599,8 +599,8 @@ definition subOneIntegralPowerBasisOfPrimePow
     simp [R
 
 中文:
-定义 subOneIntegralPowerBasisOfPrimePow
-  签名: [IsCyclotomicExtension {p ^ k} Rat K]
+定义 subOne整数egralPowerBasisOfPrimePow
+  签名: [是CyclotomicExtension {p ^ k} 有理数 K]
   定义体: PowerBasis.ofAdjoinEqTop'
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasisOfPrimePow.adjoin_eq_top_of_gen_mem_adjoin ?_
@@ -629,8 +629,8 @@ theorem subOneIntegralPowerBasisOfPrimePow_gen
   simp [subOneIntegralPowerBasisOfPrimePow]
 
 中文:
-定理 subOneIntegralPowerBasisOfPrimePow_gen
-  结论: [IsCyclotomicExtension {p ^ k} Rat K]
+定理 subOne整数egralPowerBasisOfPrimePow_gen
+  结论: [是CyclotomicExtension {p ^ k} 有理数 K]
   证明: by
   simp [subOneIntegralPowerBasisOfPrimePow]
 
@@ -659,7 +659,7 @@ theorem zeta_sub_one_prime_of_ne_two
 
 中文:
 定理 zeta_sub_one_prime_of_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   let := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
   refine Ideal.prime_of_irreducible_absNorm_span (fun h => ?_) ?_
@@ -702,7 +702,7 @@ theorem zeta_sub_one_prime_of_two_pow
 
 中文:
 定理 zeta_sub_one_prime_of_two_pow
-  结论: [IsCyclotomicExtension {2 ^ (k + 1)} Rat K]
+  结论: [是CyclotomicExtension {2 ^ (k + 1)} 有理数 K]
   证明: by
   have := IsCyclotomicExtension.numberField {2 ^ (k + 1)} Rat K
   refine Ideal.prime_of_irreducible_absNorm_span (fun h => ?_) ?_
@@ -750,7 +750,7 @@ theorem zeta_sub_one_prime
 
 中文:
 定理 zeta_sub_one_prime
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   by_cases htwo : p = 2
   · subst htwo
@@ -778,7 +778,7 @@ theorem zeta_sub_one_prime'
 
 中文:
 定理 zeta_sub_one_prime'
-  条件: [h : IsCyclotomicExtension {p} Rat K] (hζ : IsPrimitiveRoot ζ p)
+  条件: [h : 是CyclotomicExtension {p} 有理数 K] (hζ : 是PrimitiveRoot ζ p)
   证明: by
   convert! zeta_sub_one_prime (k := 0) (by simpa only [zero_add, pow_one])
   simpa only [zero_add, pow_one]
@@ -800,8 +800,8 @@ theorem subOneIntegralPowerBasisOfPrimePow_gen_prime
   simpa only [subOneIntegralPowerBasisOfPrimePow_gen] using! hζ.zeta_sub_one_prime
 
 中文:
-定理 subOneIntegralPowerBasisOfPrimePow_gen_prime
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+定理 subOne整数egralPowerBasisOfPrimePow_gen_prime
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   simpa only [subOneIntegralPowerBasisOfPrimePow_gen] using! hζ.zeta_sub_one_prime
 
@@ -827,8 +827,8 @@ theorem norm_toInteger_sub_one_eq_one
   rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [map_one]; rw [RingOfIntegers.map_mk];
 
 中文:
-定理 norm_toInteger_sub_one_eq_one
-  结论: {n : 自然数} [IsCyclotomicExtension {n} Rat K]
+定理 norm_to整数eger_sub_one_eq_one
+  结论: {n : 自然数} [是CyclotomicExtension {n} 有理数 K]
   证明: NeZero.of_gt h₁
     norm Int (hζ.toInteger - 1) = 1 := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
@@ -860,8 +860,8 @@ lemma norm_toInteger_pow_sub_one_of_prime_pow_ne_two
   simp [hζ.norm_pow_sub_one_of_prime_pow_ne_two (cyclotomic.irreducible_rat (NeZero.pos _)) hs htwo]
 
 中文:
-引理 norm_toInteger_pow_sub_one_of_prime_pow_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 norm_to整数eger_pow_sub_one_of_prime_pow_ne_two
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
   rw [Algebra.norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]
@@ -889,8 +889,8 @@ lemma norm_toInteger_pow_sub_one_of_two
   simp [hζ.norm_pow_sub_one_two (cyclotomic.irreducible_rat (pow_pos (by decide) _))]
 
 中文:
-引理 norm_toInteger_pow_sub_one_of_two
-  结论: [IsCyclotomicExtension {2 ^ (k + 1)} Rat K]
+引理 norm_to整数eger_pow_sub_one_of_two
+  结论: [是CyclotomicExtension {2 ^ (k + 1)} 有理数 K]
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {2 ^ (k + 1)} Rat K
   rw [Algebra.norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]
@@ -917,8 +917,8 @@ lemma norm_toInteger_pow_sub_one_of_prime_ne_two
   rwa [pow_one]
 
 中文:
-引理 norm_toInteger_pow_sub_one_of_prime_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 norm_to整数eger_pow_sub_one_of_prime_ne_two
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   refine hζ.norm_toInteger_pow_sub_one_of_prime_pow_ne_two hs (fun h => hodd ?_)
   apply eq_of_prime_pow_eq hp.out.prime Nat.prime_two.prime (k - s).succ_pos
@@ -946,8 +946,8 @@ theorem norm_toInteger_sub_one_of_eq_two_pow
     (Polynomial.cyclotom
 
 中文:
-定理 norm_toInteger_sub_one_of_eq_two_pow
-  结论: {k : 自然数} {K : 类型} [Field K]
+定理 norm_to整数eger_sub_one_of_eq_two_pow
+  结论: {k : 自然数} {K : 类型} [域 K]
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {2 ^ (k + 2)} Rat K
   rw [norm_eq_iff Int (Sₘ := K) (Rₘ := Rat) le_rfl]; rw [map_sub]; rw [map_one]; rw [eq_intCast]; rw [Int.cast_ofNat]; rw [RingOfIntegers.map_mk]; rw [hζ.norm_sub_one_two (Nat.le_add_left 2 k)
@@ -974,8 +974,8 @@ lemma norm_toInteger_sub_one_of_prime_ne_two
     hζ.norm_toInteger_pow_sub_one_of_prime_ne_two (Nat.zero_le _) hodd
 
 中文:
-引理 norm_toInteger_sub_one_of_prime_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 norm_to整数eger_sub_one_of_prime_ne_two
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   simpa only [pow_zero, pow_one] using
     hζ.norm_toInteger_pow_sub_one_of_prime_ne_two (Nat.zero_le _) hodd
@@ -999,8 +999,8 @@ theorem norm_toInteger_sub_one_of_eq_two
   simpa using hζ.norm_toInteger_pow_sub_one_of_two
 
 中文:
-定理 norm_toInteger_sub_one_of_eq_two
-  结论: [IsCyclotomicExtension {2} Rat K]
+定理 norm_to整数eger_sub_one_of_eq_two
+  结论: [是CyclotomicExtension {2} 有理数 K]
   证明: by
   rw [show 2 = (2 ^ (0 + 1)) by norm_num] at hζ
   simpa using hζ.norm_toInteger_pow_sub_one_of_two
@@ -1025,8 +1025,8 @@ lemma norm_toInteger_sub_one_of_prime_ne_two'
   exact hζ.norm_toInteger_sub_one_of_prime_ne_two h
 
 中文:
-引理 norm_toInteger_sub_one_of_prime_ne_two'
-  结论: [hcycl : IsCyclotomicExtension {p} Rat K]
+引理 norm_to整数eger_sub_one_of_prime_ne_two'
+  结论: [hcycl : 是CyclotomicExtension {p} 有理数 K]
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by simpa using hcycl
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
@@ -1053,8 +1053,8 @@ lemma prime_norm_toInteger_sub_one_of_prime_pow_ne_two
   exact Nat.prime_iff_prime_int.1 hp.out
 
 中文:
-引理 prime_norm_toInteger_sub_one_of_prime_pow_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 prime_norm_to整数eger_sub_one_of_prime_pow_ne_two
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   have := hζ.norm_toInteger_pow_sub_one_of_prime_pow_ne_two zero_le htwo
   simp only [pow_zero, pow_one] at this
@@ -1083,8 +1083,8 @@ lemma prime_norm_toInteger_sub_one_of_prime_ne_two
   exact Nat.prime_iff_prime_int.1 hp.out
 
 中文:
-引理 prime_norm_toInteger_sub_one_of_prime_ne_two
-  结论: [hcycl : IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 prime_norm_to整数eger_sub_one_of_prime_ne_two
+  结论: [hcycl : 是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   have := hζ.norm_toInteger_sub_one_of_prime_ne_two hodd
   rw [this]
@@ -1111,8 +1111,8 @@ lemma prime_norm_toInteger_sub_one_of_prime_ne_two'
   exact hζ.prime_norm_toInteger_sub_one_of_prime_ne_two hodd
 
 中文:
-引理 prime_norm_toInteger_sub_one_of_prime_ne_two'
-  结论: [hcycl : IsCyclotomicExtension {p} Rat K]
+引理 prime_norm_to整数eger_sub_one_of_prime_ne_two'
+  结论: [hcycl : 是CyclotomicExtension {p} 有理数 K]
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by simpa using hcycl
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
@@ -1141,7 +1141,7 @@ theorem not_exists_int_prime_dvd_sub_of_prime_pow_ne_two
   replace hdim : 1 < pB.di
 
 中文:
-定理 not_exists_int_prime_dvd_sub_of_prime_pow_ne_two
+定理 not_存在_int_prime_dvd_sub_of_prime_pow_ne_two
   证明: by
   intro ⟨n, x, h⟩
   -- Let `pB` be the power basis of `𝓞 K` given by powers of `ζ`.
@@ -1193,7 +1193,7 @@ theorem not_exists_int_prime_dvd_sub_of_prime_ne_two
     pow_one, ne_eq]
 
 中文:
-定理 not_exists_int_prime_dvd_sub_of_prime_ne_two
+定理 not_存在_int_prime_dvd_sub_of_prime_ne_two
   证明: by
   refine not_exists_int_prime_dvd_sub_of_prime_pow_ne_two hζ (fun h => ?_)
   simp_all only [(@Nat.Prime.pow_eq_iff 2 p (k + 1) Nat.prime_two).mp (by assumption_mod_cast),
@@ -1220,7 +1220,7 @@ theorem not_exists_int_prime_dvd_sub_of_prime_ne_two'
   exact not_exists_int_prime_dvd_sub_of_prime_ne_two hζ hodd
 
 中文:
-定理 not_exists_int_prime_dvd_sub_of_prime_ne_two'
+定理 not_存在_int_prime_dvd_sub_of_prime_ne_two'
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by simpa using hcycl
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
@@ -1251,7 +1251,7 @@ theorem finite_quotient_span_sub_one
 
 中文:
 定理 finite_quotient_span_sub_one
-  结论: [hcycl : IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+  结论: [hcycl : 是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
   refine Ideal.finiteQuotientOfFreeOfNeBot _ (fun h => ?_)
@@ -1283,7 +1283,7 @@ theorem finite_quotient_span_sub_one'
 
 中文:
 定理 finite_quotient_span_sub_one'
-  结论: [hcycl : IsCyclotomicExtension {p} Rat K]
+  结论: [hcycl : 是CyclotomicExtension {p} 有理数 K]
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by simpa using hcycl
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
@@ -1314,8 +1314,8 @@ lemma toInteger_sub_one_dvd_prime
     replace hζ' : hζ.toInteger = 
 
 中文:
-引理 toInteger_sub_one_dvd_prime
-  结论: [hcycl : IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 to整数eger_sub_one_dvd_prime
+  结论: [hcycl : 是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: by
   by_cases htwo : p ^ (k + 1) = 2
   · have ⟨hp2, hk⟩ := (Nat.Prime.pow_eq_iff Nat.prime_two).1 htwo
@@ -1360,8 +1360,8 @@ lemma toInteger_sub_one_dvd_prime'
   exact toInteger_sub_one_dvd_prime hζ
 
 中文:
-引理 toInteger_sub_one_dvd_prime'
-  结论: [hcycl : IsCyclotomicExtension {p} Rat K]
+引理 to整数eger_sub_one_dvd_prime'
+  结论: [hcycl : 是CyclotomicExtension {p} 有理数 K]
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by simpa using hcycl
   replace hζ : IsPrimitiveRoot ζ (p ^ (0 + 1)) := by simpa using hζ
@@ -1389,8 +1389,8 @@ lemma toInteger_sub_one_not_dvd_two
     · exact Na
 
 中文:
-引理 toInteger_sub_one_not_dvd_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+引理 to整数eger_sub_one_not_dvd_two
+  结论: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: fun h => by
   have : NumberField K := IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
   replace h : hζ.toInteger - 1 ∣ (2 : Int) := by simp [h]
@@ -1514,7 +1514,7 @@ theorem discr_prime_pow
 
 中文:
 定理 discr_prime_pow
-  条件: [IsCyclotomicExtension {p ^ k} Rat K]
+  条件: [是CyclotomicExtension {p ^ k} 有理数 K]
   证明: IsCyclotomicExtension.numberField {p ^ k} Rat K
     NumberField.discr K =
     (-1) ^ ((p ^ k).totient / 2) * p ^ (p ^ (k - 1) * ((p - 1) * k - 1)) := by
@@ -1560,7 +1560,7 @@ theorem discr_prime_pow_succ
 
 中文:
 定理 discr_prime_pow_succ
-  条件: [IsCyclotomicExtension {p ^ (k + 1)} Rat K]
+  条件: [是CyclotomicExtension {p ^ (k + 1)} 有理数 K]
   证明: IsCyclotomicExtension.numberField {p ^ (k + 1)} Rat K
     NumberField.discr K =
     (-1) ^ (p ^ k * (p - 1) / 2) * p ^ (p ^ k * ((p - 1) * (k + 1) - 1)) := by
@@ -1590,7 +1590,7 @@ theorem discr_prime
 
 中文:
 定理 discr_prime
-  条件: [IsCyclotomicExtension {p} Rat K]
+  条件: [是CyclotomicExtension {p} 有理数 K]
   证明: IsCyclotomicExtension.numberField {p} Rat K
     NumberField.discr K = (-1) ^ ((p - 1) / 2) * p ^ (p - 2) := by
   have : IsCyclotomicExtension {p ^ (0 + 1)} Rat K := by
@@ -1627,7 +1627,7 @@ theorem discr
 
 中文:
 定理 discr
-  条件: [hK : IsCyclotomicExtension {n} Rat K]
+  条件: [hK : 是CyclotomicExtension {n} 有理数 K]
   证明: IsCyclotomicExtension.numberField {n} Rat K
     discr K = (-1) ^ (φ n / 2) * (n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1))) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
@@ -1706,7 +1706,7 @@ theorem natAbs_discr
 
 中文:
 定理 natAbs_discr
-  条件: [hK : IsCyclotomicExtension {n} Rat K]
+  条件: [hK : 是CyclotomicExtension {n} 有理数 K]
   证明: IsCyclotomicExtension.numberField {n} Rat K
     (NumberField.discr K).natAbs = n ^ φ n / ∏ p in n.primeFactors, p ^ (φ n / (p - 1)) := by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
@@ -1737,7 +1737,7 @@ theorem adjoin_singleton_eq_top_aux
 
 中文:
 定理 adjoin_singleton_eq_top_aux
-  结论: [NumberField K] (F₁ F₂ : 整数ermediateField Rat K)
+  结论: [数域 K] (F₁ F₂ : 中间域 有理数 K)
   证明: by
   have h_cpr : IsCoprime (NumberField.discr F₁) (NumberField.discr F₂) := by
     rw [Int.isCoprime_iff_nat_coprime]; rw [natAbs_discr n₁ F₁]; rw [natAbs_discr n₂ F₂]
@@ -1792,7 +1792,7 @@ theorem adjoin_singleton_eq_top
 
 中文:
 定理 adjoin_singleton_eq_top
-  结论: [hK : IsCyclotomicExtension {n} Rat K]
+  结论: [hK : 是CyclotomicExtension {n} 有理数 K]
   证明: by
   have : NumberField K := IsCyclotomicExtension.numberField {n} Rat K
   induction n using Nat.recOnPrimeCoprime generalizing K hn with
@@ -1852,8 +1852,8 @@ theorem isIntegralClosure_adjoin_singleton
       Algebra.ma
 
 中文:
-定理 isIntegralClosure_adjoin_singleton
-  结论: {ζ : K} [hcycl : IsCyclotomicExtension {n} Rat K]
+定理 is整数egralClosure_adjoin_singleton
+  结论: {ζ : K} [hcycl : 是CyclotomicExtension {n} 有理数 K]
   证明: by
   constructor
   · exact FaithfulSMul.algebraMap_injective _ K
@@ -1893,7 +1893,7 @@ theorem cyclotomicRing_isIntegralClosure
     simp only [Set.singleton_subset_iff, Set.mem_o
 
 中文:
-定理 cyclotomicRing_isIntegralClosure
+定理 cyclotomicRing_is整数egralClosure
   证明: by
   have hζ := zeta_spec n Rat (CyclotomicField n Rat)
   refine ⟨IsFractionRing.injective _ _, fun {x} => ⟨fun h => ⟨⟨x, ?_⟩, rfl⟩, ?_⟩⟩
@@ -1933,8 +1933,8 @@ definition adjoinEquivRingOfIntegers
   IsIntegralClosure.equiv Int (adjoin Int ({ζ} : Set K)) K (𝓞 K)
 
 中文:
-定义 adjoinEquivRingOfIntegers
-  签名: [IsCyclotomicExtension {n} Rat K]
+定义 adjoinEquivRingOf整数egers
+  签名: [是CyclotomicExtension {n} 有理数 K]
   定义体: let _ := isIntegralClosure_adjoin_singleton hζ
   IsIntegralClosure.equiv Int (adjoin Int ({ζ} : Set K)) K (𝓞 K)
 
@@ -1956,8 +1956,8 @@ instance _root_.IsCyclotomicExtension.ringOfIntegers
   IsCyclotomicExtension.equiv _ Int _ (zeta_spec n Rat K).adjoinEquivRingOfIntegers
 
 中文:
-实例 _root_.IsCyclotomicExtension.ringOfIntegers
-  签名: [IsCyclotomicExtension {n} Rat K]
+实例 _root_.是CyclotomicExtension.ringOf整数egers
+  签名: [是CyclotomicExtension {n} 有理数 K]
   定义体: let _ := (zeta_spec n Rat K).adjoin_isCyclotomicExtension Int
   IsCyclotomicExtension.equiv _ Int _ (zeta_spec n Rat K).adjoinEquivRingOfIntegers
 
@@ -1980,7 +1980,7 @@ definition integralPowerBasis
 
 中文:
 定义 integralPowerBasis
-  签名: [IsCyclotomicExtension {n} Rat K]
+  签名: [是CyclotomicExtension {n} 有理数 K]
   定义体: (Algebra.adjoin.powerBasis' (hζ.isIntegral (NeZero.pos _))).map hζ.adjoinEquivRingOfIntegers
 
 @[simp]
@@ -2006,7 +2006,7 @@ theorem integralPowerBasis_gen
 
 中文:
 定理 integralPowerBasis_gen
-  条件: [hcycl : IsCyclotomicExtension {n} Rat K] (hζ : IsPrimitiveRoot ζ n)
+  条件: [hcycl : 是CyclotomicExtension {n} 有理数 K] (hζ : 是PrimitiveRoot ζ n)
   证明: Subtype.ext show algebraMap _ K hζ.integralPowerBasis.gen = _ by
     rw [integralPowerBasis]; rw [PowerBasis.map_gen]; rw [adjoin.powerBasis'_gen]
     simp
@@ -2033,7 +2033,7 @@ theorem integralPowerBasis_dim
 
 中文:
 定理 integralPowerBasis_dim
-  条件: [IsCyclotomicExtension {n} Rat K] (hζ : IsPrimitiveRoot ζ n)
+  条件: [是CyclotomicExtension {n} 有理数 K] (hζ : 是PrimitiveRoot ζ n)
   证明: by
   simp [integralPowerBasis, ← cyclotomic_eq_minpoly hζ (NeZero.pos _), natDegree_cyclotomic]
 
@@ -2057,8 +2057,8 @@ definition subOneIntegralPowerBasis
     simp [RingOfInteg
 
 中文:
-定义 subOneIntegralPowerBasis
-  签名: [IsCyclotomicExtension {n} Rat K]
+定义 subOne整数egralPowerBasis
+  签名: [是CyclotomicExtension {n} 有理数 K]
   定义体: PowerBasis.ofAdjoinEqTop'
     (RingOfIntegers.isIntegral ⟨ζ- 1, (hζ.isIntegral (NeZero.pos _)).sub isIntegral_one⟩) (by
     refine hζ.integralPowerBasis.adjoin_eq_top_of_gen_mem_adjoin ?_
@@ -2087,8 +2087,8 @@ theorem subOneIntegralPowerBasis_gen
   simp [subOneIntegralPowerBasis]
 
 中文:
-定理 subOneIntegralPowerBasis_gen
-  结论: [IsCyclotomicExtension {n} Rat K]
+定理 subOne整数egralPowerBasis_gen
+  结论: [是CyclotomicExtension {n} 有理数 K]
   证明: by
   simp [subOneIntegralPowerBasis]
 
@@ -2125,7 +2125,7 @@ theorem NumberField.Units.dvd_torsionOrder_of_isPrimitiveRoot
     rw [isPeriodicPt_mul_i
 
 中文:
-定理 NumberField.Units.dvd_torsionOrder_of_isPrimitiveRoot
+定理 数域.单位群.dvd_torsionOrder_of_isPrimitiveRoot
   结论: [NeZero n] {ζ : K}
   证明: by
   replace hζ := (hζ.toInteger_isPrimitiveRoot).isUnit_unit (NeZero.ne n)
@@ -2161,8 +2161,8 @@ theorem IsCyclotomicExtension.Rat.torsionOrder_eq
   rw [← IsPrimitiveRoot.iff_orderOf]; rw [← IsPrimitiveRoot.coe_submono
 
 中文:
-定理 IsCyclotomicExtension.Rat.torsionOrder_eq
-  结论: [NeZero n] [NumberField K]
+定理 是CyclotomicExtension.有理数.torsionOrder_eq
+  结论: [NeZero n] [数域 K]
   证明: by
   have hζ := hK.zeta_spec
   -- We first prove that `K` contains a primitive root of order `torsionOrder K`

@@ -145,7 +145,7 @@ structure BiconeMorphism
     - wι : forall j : J, A.ι j ≫ hom = B.ι j  [default: by cat_disch]
 
 中文:
-结构 BiconeMorphism
+结构 Bicone态射
   参数: {F : J -> C} (A B : Bicone F)
   公理与运算 (3 个):
     - hom : A.pt ⟶ B.pt
@@ -178,7 +178,7 @@ instance Bicone.category
 
 中文:
 实例 Bicone.category
-  签名: : Category (Bicone F) where
+  签名: : 范畴 (Bicone F) where
   定义体: BiconeMorphism A B
   comp f g := { hom := f.hom ≫ g.hom }
   id B := { hom := 𝟙 B.pt }
@@ -207,7 +207,7 @@ theorem BiconeMorphism.ext
   congr
 
 中文:
-定理 BiconeMorphism.ext
+定理 Bicone态射.ext
   条件: {c c' : Bicone F} (f g : c ⟶ c') (w : f.hom = g.hom)
   结论: f = g
   证明: by
@@ -280,7 +280,7 @@ definition functoriality
 
 中文:
 定义 functoriality
-  签名: (G : C ⥤ D) [Functor.PreservesZeroMorphisms G]
+  签名: (G : C ⥤ D) [函子.保持ZeroMorphisms G]
   定义体: { pt := G.obj A.pt
       π := fun j => G.map (A.π j)
       ι := fun j => G.map (A.ι j)
@@ -323,7 +323,7 @@ instance functoriality_full
 
 中文:
 实例 functoriality_full
-  签名: [G.PreservesZeroMorphisms] [G.Full] [G.Faithful]
+  签名: [G.保持ZeroMorphisms] [G.满] [G.忠实]
   定义体: ⟨{ hom := G.preimage t.hom
       wι := fun j => G.map_injective (by simpa using! t.wι j)
       wπ := fun j => G.map_injective (by simpa using! t.wπ j) }, by cat_disch⟩
@@ -347,7 +347,7 @@ instance functoriality_faithful
 
 中文:
 实例 functoriality_faithful
-  签名: [G.PreservesZeroMorphisms] [G.Faithful]
+  签名: [G.保持ZeroMorphisms] [G.忠实]
   定义体: BiconeMorphism.ext f g G.map_injective congr_arg BiconeMorphism.hom h
 
 Depends on / 依赖: BiconeMorphism, BiconeMorphism.ext, BiconeMorphism.hom, G.map_injective, congr_arg, map_injective
@@ -378,7 +378,7 @@ definition toConeFunctor
 
 中文:
 定义 toConeFunctor
-  签名: : Bicone F ⥤ Cone (Discrete.functor F) where
+  签名: : Bicone F ⥤ 锥 (离散.functor F) where
   定义体: { pt := B.pt, π := { app := fun j => B.π j.as } }
   map {_ _} F := { hom := F.hom, w := fun _ => F.wπ _ }
 
@@ -435,7 +435,7 @@ theorem toCone_π_app
 
 中文:
 定理 toCone_π_app
-  条件: (B : Bicone F) (j : Discrete J)
+  条件: (B : Bicone F) (j : 离散 J)
   结论: B.toCone.π.app j = B.π j.as
   证明: rfl
 -/
@@ -487,7 +487,7 @@ definition toCoconeFunctor
 
 中文:
 定义 toCoconeFunctor
-  签名: : Bicone F ⥤ Cocone (Discrete.functor F) where
+  签名: : Bicone F ⥤ 余锥 (离散.functor F) where
   定义体: { pt := B.pt, ι := { app := fun j => B.ι j.as } }
   map {_ _} F := { hom := F.hom, w := fun _ => F.wι _ }
 
@@ -547,7 +547,7 @@ theorem toCocone_ι_app
 
 中文:
 定理 toCocone_ι_app
-  条件: (B : Bicone F) (j : Discrete J)
+  条件: (B : Bicone F) (j : 离散 J)
   结论: B.toCocone.ι.app j = B.ι j.as
   证明: rfl
 -/
@@ -627,7 +627,7 @@ definition ofLimitCone
 
 中文:
 定义 ofLimitCone
-  签名: {f : J -> C} {t : Cone (Discrete.functor f)} (ht : IsLimit t)
+  签名: {f : J -> C} {t : 锥 (离散.functor f)} (ht : 是极限 t)
   定义体: t.pt
   π j := t.π.app ⟨j⟩
   ι j := ht.lift (Fan.mk _ fun j' => if h : j = j' then eqToHom (congr_arg f h) else 0)
@@ -655,7 +655,7 @@ theorem ι_of_isLimit
 
 中文:
 定理 ι_of_isLimit
-  条件: {f : J -> C} {t : Bicone f} (ht : IsLimit t.toCone) (j : J)
+  条件: {f : J -> C} {t : Bicone f} (ht : 是极限 t.toCone) (j : J)
   证明: ht.hom_ext fun j' => by
     rw [ht.fac]
     simp [t.ι_π]
@@ -685,7 +685,7 @@ definition ofColimitCocone
 
 中文:
 定义 ofColimitCocone
-  签名: {f : J -> C} {t : Cocone (Discrete.functor f)} (ht : IsColimit t)
+  签名: {f : J -> C} {t : 余锥 (离散.functor f)} (ht : 是余极限 t)
   定义体: t.pt
   π j := ht.desc (Cofan.mk _ fun j' => if h : j' = j then eqToHom (congr_arg f h) else 0)
   ι j := t.ι.app ⟨j⟩
@@ -714,7 +714,7 @@ theorem π_of_isColimit
 
 中文:
 定理 π_of_isColimit
-  条件: {f : J -> C} {t : Bicone f} (ht : IsColimit t.toCocone) (j : J)
+  条件: {f : J -> C} {t : Bicone f} (ht : 是余极限 t.toCocone) (j : J)
   证明: ht.hom_ext fun j' => by
     rw [ht.fac]
     simp [t.ι_π]
@@ -738,11 +738,11 @@ structure IsBilimit
     - isColimit : IsColimit B.toCocone
 
 中文:
-结构 IsBilimit
+结构 是Bilimit
   参数: {F : J -> C} (B : Bicone F)
   公理与运算 (2 个):
-    - isLimit : IsLimit B.toCone
-    - isColimit : IsColimit B.toCocone
+    - isLimit : 是极限 B.toCone
+    - isColimit : 是余极限 B.toCocone
 -/
 structure IsBilimit {F : J -> C} (B : Bicone F) where
   isLimit : IsLimit B.toCone
@@ -916,7 +916,7 @@ structure LimitBicone
   参数: (F : J -> C)
   公理与运算 (2 个):
     - bicone : Bicone F
-    - isBilimit : bicone.IsBilimit
+    - isBilimit : bicone.是Bilimit
 -/
 structure LimitBicone (F : J -> C) where
   bicone : Bicone F
@@ -933,7 +933,7 @@ class HasBiproduct
   (no additional axioms)
 
 中文:
-类 HasBiproduct
+类 有Biproduct
   参数: (F : J -> C)
   (无附加公理)
 -/
@@ -952,9 +952,9 @@ theorem HasBiproduct.mk
   proof: ⟨Nonempty.intro d⟩
 
 中文:
-定理 HasBiproduct.mk
+定理 有Biproduct.mk
   条件: {F : J -> C} (d : LimitBicone F)
-  结论: HasBiproduct F
+  结论: 有Biproduct F
   证明: ⟨Nonempty.intro d⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -972,7 +972,7 @@ definition getBiproductData
 
 中文:
 定义 getBiproductData
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: Classical.choice HasBiproduct.exists_biproduct
 
 Depends on / 依赖: Classical, Classical.choice, HasBiproduct, HasBiproduct.exists_biproduct, choice, exists_biproduct
@@ -990,7 +990,7 @@ definition biproduct.bicone
 
 中文:
 定义 biproduct.bicone
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: (getBiproductData F).bicone
 
 Depends on / 依赖: bicone, getBiproductData
@@ -1008,7 +1008,7 @@ definition biproduct.isBilimit
 
 中文:
 定义 biproduct.isBilimit
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: (getBiproductData F).isBilimit
 
 Depends on / 依赖: getBiproductData, isBilimit
@@ -1026,7 +1026,7 @@ definition biproduct.isLimit
 
 中文:
 定义 biproduct.isLimit
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: (getBiproductData F).isBilimit.isLimit
 
 Depends on / 依赖: getBiproductData, isBilimit, isBilimit.isLimit, isLimit
@@ -1044,7 +1044,7 @@ definition biproduct.isColimit
 
 中文:
 定义 biproduct.isColimit
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: (getBiproductData F).isBilimit.isColimit
 
 Depends on / 依赖: getBiproductData, isBilimit, isBilimit.isColimit, isColimit
@@ -1074,10 +1074,10 @@ class HasBiproductsOfShape
     - has_biproduct : forall F : J -> C, HasBiproduct F
 
 中文:
-类 HasBiproductsOfShape
+类 有BiproductsOfShape
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_biproduct : 对任意 F : J -> C, HasBiproduct F
+    - has_biproduct : 对任意 F : J -> C, 有Biproduct F
 -/
 class HasBiproductsOfShape : Prop where
   has_biproduct : forall F : J -> C, HasBiproduct F
@@ -1094,10 +1094,10 @@ class HasFiniteBiproducts
     - out : forall n, HasBiproductsOfShape (Fin n) C
 
 中文:
-类 HasFiniteBiproducts
+类 有FiniteBiproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 n, HasBiproductsOfShape (Fin n) C
+    - out : 对任意 n, 有BiproductsOfShape (有限集 n) C
 -/
 class HasFiniteBiproducts : Prop where
   out : forall n, HasBiproductsOfShape (Fin n) C
@@ -1121,7 +1121,7 @@ HasBiproduct.mk by
 
 中文:
 定理 hasBiproductsOfShape_of_equiv
-  条件: {K : Type w'} [HasBiproductsOfShape K C] (e : J ≃ K)
+  条件: {K : 类型 w'} [有BiproductsOfShape K C] (e : J ≃ K)
   证明: ⟨fun F =>
     let ⟨⟨h⟩⟩ := HasBiproductsOfShape.has_biproduct (F ∘ e.symm)
     let ⟨c, hc⟩ := h
@@ -1175,7 +1175,7 @@ definition biproductIso
 
 中文:
 定义 biproductIso
-  签名: (F : J -> C) [HasBiproduct F]
+  签名: (F : J -> C) [有Biproduct F]
   定义体: (IsLimit.conePointUniqueUpToIso (limit.isLimit _) (biproduct.isLimit F)).trans
     IsColimit.coconePointUniqueUpToIso (biproduct.isColimit F) (colimit.isColimit _)
 
@@ -1201,7 +1201,7 @@ notation "⨁ " f:20 => biproduct f
 
 中文:
 缩写 biproduct
-  签名: (f : J -> C) [HasBiproduct f]
+  签名: (f : J -> C) [有Biproduct f]
   定义体: (biproduct.bicone f).pt
 
 @[inherit_doc biproduct]
@@ -1227,7 +1227,7 @@ abbreviation biproduct.π
 
 中文:
 缩写 biproduct.π
-  签名: (f : J -> C) [HasBiproduct f] (b : J)
+  签名: (f : J -> C) [有Biproduct f] (b : J)
   定义体: (biproduct.bicone f).π b
 
 @[simp]
@@ -1248,7 +1248,7 @@ theorem biproduct.bicone_π
 
 中文:
 定理 biproduct.bicone_π
-  条件: (f : J -> C) [HasBiproduct f] (b : J)
+  条件: (f : J -> C) [有Biproduct f] (b : J)
   证明: rfl
 -/
 theorem biproduct.bicone_π (f : J -> C) [HasBiproduct f] (b : J) :
@@ -1266,7 +1266,7 @@ abbreviation biproduct.ι
 
 中文:
 缩写 biproduct.ι
-  签名: (f : J -> C) [HasBiproduct f] (b : J)
+  签名: (f : J -> C) [有Biproduct f] (b : J)
   定义体: (biproduct.bicone f).ι b
 
 @[simp]
@@ -1287,7 +1287,7 @@ theorem biproduct.bicone_ι
 
 中文:
 定理 biproduct.bicone_ι
-  条件: (f : J -> C) [HasBiproduct f] (b : J)
+  条件: (f : J -> C) [有Biproduct f] (b : J)
   证明: rfl
 -/
 theorem biproduct.bicone_ι (f : J -> C) [HasBiproduct f] (b : J) :
@@ -1309,7 +1309,7 @@ theorem biproduct.ι_π
 
 中文:
 定理 biproduct.ι_π
-  条件: [DecidableEq J] (f : J -> C) [HasBiproduct f] (j j' : J)
+  条件: [DecidableEq J] (f : J -> C) [有Biproduct f] (j j' : J)
   证明: by
   convert! (biproduct.bicone f).ι_π j j'
 
@@ -1334,7 +1334,7 @@ theorem biproduct.ι_π_self
 
 中文:
 定理 biproduct.ι_π_self
-  条件: (f : J -> C) [HasBiproduct f] (j : J)
+  条件: (f : J -> C) [有Biproduct f] (j : J)
   证明: by simp
 
 @[reassoc]
@@ -1355,7 +1355,7 @@ theorem biproduct.ι_π_ne
 
 中文:
 定理 biproduct.ι_π_ne
-  条件: (f : J -> C) [HasBiproduct f] {j j' : J} (h : j != j')
+  条件: (f : J -> C) [有Biproduct f] {j j' : J} (h : j != j')
   证明: by simp [h]
 
 @[reassoc (attr := simp)]
@@ -1376,7 +1376,7 @@ theorem biproduct.eqToHom_comp_ι
 
 中文:
 定理 biproduct.eqToHom_comp_ι
-  条件: (f : J -> C) [HasBiproduct f] {j j' : J} (w : j = j')
+  条件: (f : J -> C) [有Biproduct f] {j j' : J} (w : j = j')
   证明: by
   cases w
   simp
@@ -1402,7 +1402,7 @@ theorem biproduct.π_comp_eqToHom
 
 中文:
 定理 biproduct.π_comp_eqToHom
-  条件: (f : J -> C) [HasBiproduct f] {j j' : J} (w : j = j')
+  条件: (f : J -> C) [有Biproduct f] {j j' : J} (w : j = j')
   证明: by
   simp [*]
 
@@ -1422,7 +1422,7 @@ abbreviation biproduct.lift
 
 中文:
 缩写 biproduct.lift
-  签名: {f : J -> C} [HasBiproduct f] {P : C} (p : 对任意 b, P ⟶ f b)
+  签名: {f : J -> C} [有Biproduct f] {P : C} (p : 对任意 b, P ⟶ f b)
   定义体: (biproduct.isLimit f).lift (Fan.mk P p)
 
 Depends on / 依赖: Fan.mk, biproduct, biproduct.isLimit, isLimit
@@ -1442,7 +1442,7 @@ abbreviation biproduct.desc
 
 中文:
 缩写 biproduct.desc
-  签名: {f : J -> C} [HasBiproduct f] {P : C} (p : 对任意 b, f b ⟶ P)
+  签名: {f : J -> C} [有Biproduct f] {P : C} (p : 对任意 b, f b ⟶ P)
   定义体: (biproduct.isColimit f).desc (Cofan.mk P p)
 
 @[reassoc (attr := simp)]
@@ -1465,7 +1465,7 @@ theorem biproduct.lift_π
 
 中文:
 定理 biproduct.lift_π
-  条件: {f : J -> C} [HasBiproduct f] {P : C} (p : 对任意 b, P ⟶ f b) (j : J)
+  条件: {f : J -> C} [有Biproduct f] {P : C} (p : 对任意 b, P ⟶ f b) (j : J)
   证明: (biproduct.isLimit f).fac _ ⟨j⟩
 
 @[reassoc (attr := simp)]
@@ -1486,7 +1486,7 @@ theorem biproduct.ι_desc
 
 中文:
 定理 biproduct.ι_desc
-  条件: {f : J -> C} [HasBiproduct f] {P : C} (p : 对任意 b, f b ⟶ P) (j : J)
+  条件: {f : J -> C} [有Biproduct f] {P : C} (p : 对任意 b, f b ⟶ P) (j : J)
   证明: (biproduct.isColimit f).fac _ ⟨j⟩
 
 Depends on / 依赖: biproduct, biproduct.isColimit, isColimit
@@ -1505,7 +1505,7 @@ abbreviation biproduct.map
 
 中文:
 缩写 biproduct.map
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 b, f b ⟶ g b)
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: IsLimit.map (biproduct.bicone f).toCone (biproduct.isLimit g)
     (Discrete.natTrans (fun j => p j.as))
 
@@ -1527,7 +1527,7 @@ abbreviation biproduct.map'
 
 中文:
 缩写 biproduct.map'
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 b, f b ⟶ g b)
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 b, f b ⟶ g b)
   定义体: IsColimit.map (biproduct.isColimit f) (biproduct.bicone g).toCocone
     (Discrete.natTrans fun j => p j.as)
 
@@ -1553,7 +1553,7 @@ theorem biproduct.hom_ext
 
 中文:
 定理 biproduct.hom_ext
-  结论: {f : J -> C} [HasBiproduct f] {Z : C} (g h : Z ⟶ ⨁ f)
+  结论: {f : J -> C} [有Biproduct f] {Z : C} (g h : Z ⟶ ⨁ f)
   证明: (biproduct.isLimit f).hom_ext fun j => w j.as
 
 @[ext]
@@ -1575,7 +1575,7 @@ theorem biproduct.hom_ext'
 
 中文:
 定理 biproduct.hom_ext'
-  结论: {f : J -> C} [HasBiproduct f] {Z : C} (g h : ⨁ f ⟶ Z)
+  结论: {f : J -> C} [有Biproduct f] {Z : C} (g h : ⨁ f ⟶ Z)
   证明: (biproduct.isColimit f).hom_ext fun j => w j.as
 
 Depends on / 依赖: biproduct, biproduct.isColimit, hom_ext, isColimit, j.as
@@ -1594,7 +1594,7 @@ definition biproduct.isoProduct
 
 中文:
 定义 biproduct.isoProduct
-  签名: (f : J -> C) [HasBiproduct f]
+  签名: (f : J -> C) [有Biproduct f]
   定义体: IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (limit.isLimit _)
 
 Depends on / 依赖: IsLimit, IsLimit.conePointUniqueUpToIso, biproduct, biproduct.isLimit, conePointUniqueUpToIso, isLimit, limit.isLimit
@@ -1614,7 +1614,7 @@ theorem biproduct.isoProduct_hom
 
 中文:
 定理 biproduct.isoProduct_hom
-  条件: {f : J -> C} [HasBiproduct f]
+  条件: {f : J -> C} [有Biproduct f]
   证明: limit.hom_ext fun j => by simp [biproduct.isoProduct]
 
 Depends on / 依赖: biproduct, biproduct.isoProduct, hom_ext, isoProduct, limit.hom_ext
@@ -1635,7 +1635,7 @@ theorem biproduct.isoProduct_inv
 
 中文:
 定理 biproduct.isoProduct_inv
-  条件: {f : J -> C} [HasBiproduct f]
+  条件: {f : J -> C} [有Biproduct f]
   证明: biproduct.hom_ext _ _ fun j => by simp [Iso.inv_comp_eq]
 
 Depends on / 依赖: Iso.inv_comp_eq, biproduct, biproduct.hom_ext, hom_ext, inv_comp_eq
@@ -1654,7 +1654,7 @@ definition biproduct.isoCoproduct
 
 中文:
 定义 biproduct.isoCoproduct
-  签名: (f : J -> C) [HasBiproduct f]
+  签名: (f : J -> C) [有Biproduct f]
   定义体: IsColimit.coconePointUniqueUpToIso (biproduct.isColimit f) (colimit.isColimit _)
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointUniqueUpToIso, biproduct, biproduct.isColimit, coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit
@@ -1674,7 +1674,7 @@ theorem biproduct.isoCoproduct_inv
 
 中文:
 定理 biproduct.isoCoproduct_inv
-  条件: {f : J -> C} [HasBiproduct f]
+  条件: {f : J -> C} [有Biproduct f]
   证明: colimit.hom_ext fun j => by simp [biproduct.isoCoproduct]
 
 Depends on / 依赖: biproduct, biproduct.isoCoproduct, colimit, colimit.hom_ext, hom_ext, isoCoproduct
@@ -1695,7 +1695,7 @@ theorem biproduct.isoCoproduct_hom
 
 中文:
 定理 biproduct.isoCoproduct_hom
-  条件: {f : J -> C} [HasBiproduct f]
+  条件: {f : J -> C} [有Biproduct f]
   证明: biproduct.hom_ext' _ _ fun j => by simp [← Iso.eq_comp_inv]
 
 Depends on / 依赖: Iso.eq_comp_inv, biproduct, biproduct.hom_ext, eq_comp_inv, hom_ext
@@ -1722,8 +1722,8 @@ definition HasBiproductsOfShape.colimIsoLim
        simp_all [Sigma.isoColimit, Pi.isoLimit
 
 中文:
-定义 HasBiproductsOfShape.colimIsoLim
-  签名: [HasBiproductsOfShape J C]
+定义 有BiproductsOfShape.colimIsoLim
+  签名: [有BiproductsOfShape J C]
   定义体: NatIso.ofComponents (fun F => (Sigma.isoColimit F).symm ≪≫
       (biproduct.isoCoproduct _).symm ≪≫ biproduct.isoProduct _ ≪≫ Pi.isoLimit F)
     fun η => colimit.hom_ext fun ⟨i⟩ => limit.hom_ext fun ⟨j⟩ => by
@@ -1764,7 +1764,7 @@ theorem biproduct.map_eq_map'
 
 中文:
 定理 biproduct.map_eq_map'
-  条件: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 b, f b ⟶ g b)
+  条件: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 b, f b ⟶ g b)
   证明: by
   classical
   ext
@@ -1805,7 +1805,7 @@ theorem biproduct.map_π
 
 中文:
 定理 biproduct.map_π
-  结论: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+  结论: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   证明: Limits.IsLimit.map_π _ _ _ (Discrete.mk j)
 
 @[reassoc (attr := simp)]
@@ -1833,7 +1833,7 @@ theorem biproduct.ι_map
 
 中文:
 定理 biproduct.ι_map
-  结论: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+  结论: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   证明: by
   rw [biproduct.map_eq_map']
   apply
@@ -1865,7 +1865,7 @@ theorem biproduct.map_desc
 
 中文:
 定理 biproduct.map_desc
-  结论: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+  结论: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   证明: by
   ext; simp
 
@@ -1888,7 +1888,7 @@ theorem biproduct.lift_map
 
 中文:
 定理 biproduct.lift_map
-  结论: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] {P : C}
+  结论: {f g : J -> C} [有Biproduct f] [有Biproduct g] {P : C}
   证明: by
   ext; simp
 -/
@@ -1911,7 +1911,7 @@ definition biproduct.mapIso
 
 中文:
 定义 biproduct.mapIso
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 b, f b ≅ g b)
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 b, f b ≅ g b)
   定义体: biproduct.map fun b => (p b).hom
   inv := biproduct.map fun b => (p b).inv
 
@@ -1944,7 +1944,7 @@ instance biproduct.map_epi
 
 中文:
 实例 biproduct.map_epi
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   定义体: by
   classical
   have : biproduct.map p =
@@ -1986,8 +1986,8 @@ instance Pi.map_epi
   infer_instance
 
 中文:
-实例 Pi.map_epi
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+实例 依赖函数类型.map_epi
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   定义体: by
   rw [show Pi.map p = (biproduct.isoProduct _).inv ≫ biproduct.map p ≫
     (biproduct.isoProduct _).hom by aesop]
@@ -2015,7 +2015,7 @@ instance biproduct.map_mono
 
 中文:
 实例 biproduct.map_mono
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   定义体: by
   rw [show biproduct.map p = (biproduct.isoProduct _).hom ≫ Pi.map p ≫
     (biproduct.isoProduct _).inv by aesop]
@@ -2042,8 +2042,8 @@ instance Sigma.map_mono
   infer_instance
 
 中文:
-实例 Sigma.map_mono
-  签名: {f g : J -> C} [HasBiproduct f] [HasBiproduct g] (p : 对任意 j, f j ⟶ g j)
+实例 依赖和类型.map_mono
+  签名: {f g : J -> C} [有Biproduct f] [有Biproduct g] (p : 对任意 j, f j ⟶ g j)
   定义体: by
   rw [show Sigma.map p = (biproduct.isoCoproduct _).inv ≫ biproduct.map p ≫
     (biproduct.isoCoproduct _).hom by aesop]
@@ -2254,7 +2254,7 @@ definition biproduct.fromSubtype
 
 中文:
 定义 biproduct.fromSubtype
-  签名: : ⨁ Subtype.restrict p f ⟶ ⨁ f
+  签名: : ⨁ 子类型.restrict p f ⟶ ⨁ f
   定义体: biproduct.desc fun j => biproduct.ι _ j.val
 
 Depends on / 依赖: biproduct, biproduct.desc, j.val
@@ -2272,7 +2272,7 @@ definition biproduct.toSubtype
 
 中文:
 定义 biproduct.toSubtype
-  签名: : ⨁ f ⟶ ⨁ Subtype.restrict p f
+  签名: : ⨁ f ⟶ ⨁ 子类型.restrict p f
   定义体: biproduct.lift fun _ => biproduct.π _ _
 
 Depends on / 依赖: biproduct, biproduct.lift
@@ -2364,7 +2364,7 @@ theorem biproduct.fromSubtype_π_subtype
 
 中文:
 定理 biproduct.fromSubtype_π_subtype
-  条件: (j : Subtype p)
+  条件: (j : 子类型 p)
   证明: by
   classical
   ext
@@ -2395,7 +2395,7 @@ theorem biproduct.toSubtype_π
 
 中文:
 定理 biproduct.toSubtype_π
-  条件: (j : Subtype p)
+  条件: (j : 子类型 p)
   证明: biproduct.lift_π _ _
 
 Depends on / 依赖: biproduct, biproduct.lift_
@@ -2488,7 +2488,7 @@ theorem biproduct.ι_toSubtype_subtype
 
 中文:
 定理 biproduct.ι_toSubtype_subtype
-  条件: (j : Subtype p)
+  条件: (j : 子类型 p)
   证明: by
   classical
   ext
@@ -2519,7 +2519,7 @@ theorem biproduct.ι_fromSubtype
 
 中文:
 定理 biproduct.ι_fromSubtype
-  条件: (j : Subtype p)
+  条件: (j : 子类型 p)
   证明: biproduct.ι_desc _ _
 
 Depends on / 依赖: biproduct
@@ -2660,7 +2660,7 @@ definition kernelBiproductπIso
 
 中文:
 定义 kernelBiproductπIso
-  签名: : kernel (biproduct.π f i) ≅ ⨁ Subtype.restrict (fun j => j != i) f
+  签名: : kernel (biproduct.π f i) ≅ ⨁ 子类型.restrict (fun j => j != i) f
   定义体: limit.isoLimitCone ⟨_, biproduct.isLimitFromSubtype f i⟩
 
 Depends on / 依赖: biproduct, biproduct.isLimitFromSubtype, isLimitFromSubtype, isoLimitCone, limit.isoLimitCone
@@ -2739,7 +2739,7 @@ definition cokernelBiproductιIso
 
 中文:
 定义 cokernelBiproductιIso
-  签名: : cokernel (biproduct.ι f i) ≅ ⨁ Subtype.restrict (fun j => j != i) f
+  签名: : cokernel (biproduct.ι f i) ≅ ⨁ 子类型.restrict (fun j => j != i) f
   定义体: colimit.isoColimitCocone ⟨_, biproduct.isColimitToSubtype f i⟩
 
 Depends on / 依赖: biproduct, biproduct.isColimitToSubtype, colimit, colimit.isoColimitCocone, isColimitToSubtype, isoColimitCocone
@@ -3127,7 +3127,7 @@ instance biproduct.ι_mono
 
 中文:
 实例 biproduct.ι_mono
-  签名: (f : J -> C) [HasBiproduct f] (b : J)
+  签名: (f : J -> C) [有Biproduct f] (b : J)
   定义体: (biproduct.bicone f).instIsSplitMonoι b
 
 Depends on / 依赖: bicone, biproduct, biproduct.bicone
@@ -3145,7 +3145,7 @@ instance biproduct.π_epi
 
 中文:
 实例 biproduct.π_epi
-  签名: (f : J -> C) [HasBiproduct f] (b : J)
+  签名: (f : J -> C) [有Biproduct f] (b : J)
   定义体: (biproduct.bicone f).instIsSplitEpiπ b
 
 Depends on / 依赖: bicone, biproduct, biproduct.bicone
@@ -3163,7 +3163,7 @@ theorem biproduct.conePointUniqueUpToIso_hom
 
 中文:
 定理 biproduct.conePointUniqueUpToIso_hom
-  结论: (f : J -> C) [HasBiproduct f] {b : Bicone f}
+  结论: (f : J -> C) [有Biproduct f] {b : Bicone f}
   证明: rfl
 -/
 theorem biproduct.conePointUniqueUpToIso_hom (f : J -> C) [HasBiproduct f] {b : Bicone f}
@@ -3185,7 +3185,7 @@ theorem biproduct.conePointUniqueUpToIso_inv
 
 中文:
 定理 biproduct.conePointUniqueUpToIso_inv
-  结论: (f : J -> C) [HasBiproduct f] {b : Bicone f}
+  结论: (f : J -> C) [有Biproduct f] {b : Bicone f}
   证明: by
   classical
   refine biproduct.hom_ext' _ _ fun j => hb.isLimit.hom_ext fun j' => ?_
@@ -3223,7 +3223,7 @@ definition biproduct.uniqueUpToIso
 
 中文:
 定义 biproduct.uniqueUpToIso
-  签名: (f : J -> C) [HasBiproduct f] {b : Bicone f} (hb : b.IsBilimit)
+  签名: (f : J -> C) [有Biproduct f] {b : Bicone f} (hb : b.是Bilimit)
   定义体: biproduct.lift b.π
   inv := biproduct.desc b.ι
   hom_inv_id := by
@@ -3278,7 +3278,7 @@ definition limitBiconeOfUnique
 
 中文:
 定义 limitBiconeOfUnique
-  签名: [Unique J] (f : J -> C)
+  签名: [唯一 J] (f : J -> C)
   定义体: { pt := f default
       π := fun j => eqToHom (by congr; rw [← Unique.uniq])
       ι := fun j => eqToHom (by congr; rw [← Unique.uniq]) }
@@ -3313,7 +3313,7 @@ definition biproductUniqueIso
 
 中文:
 定义 biproductUniqueIso
-  签名: [Unique J] (f : J -> C)
+  签名: [唯一 J] (f : J -> C)
   定义体: (biproduct.uniqueUpToIso _ (limitBiconeOfUnique f).isBilimit).symm
 
 Depends on / 依赖: biproduct, biproduct.uniqueUpToIso, isBilimit, limitBiconeOfUnique, uniqueUpToIso

@@ -46,9 +46,9 @@ class OrderTop
     - le_top : forall a : α, a <= ⊤
 
 中文:
-类 OrderTop
+类 有顶序
   参数: (α : 类型u) [LE α]
-  继承: Top α
+  继承: 顶元素 α
   公理与运算 (1 个):
     - le_top : 对任意 a : α, a <= ⊤
 -/
@@ -67,9 +67,9 @@ class OrderBot
     - bot_le : forall a : α, ⊥ <= a
 
 中文:
-类 OrderBot
+类 有底序
   参数: (α : 类型u) [LE α]
-  继承: Bot α
+  继承: 底元素 α
   公理与运算 (1 个):
     - bot_le : 对任意 a : α, ⊥ <= a
 -/
@@ -227,7 +227,7 @@ definition IsTop.rec
 
 中文:
 定义 IsTop.rec
-  签名: [LE α] {motive : (x : α) -> IsTop x -> Sort*}
+  签名: [LE α] {motive : (x : α) -> IsTop x -> 类型层*}
   定义体: @top { top := x, le_top a := hx a }
 -/
 protected def IsTop.rec [LE α] {motive : (x : α) -> IsTop x -> Sort*}
@@ -706,7 +706,7 @@ theorem Ne.lt_top
 @[to_dual bot_lt']
 
 中文:
-定理 Ne.lt_top
+定理 不等.lt_top
   条件: (h : a != ⊤)
   结论: a < ⊤
   证明: lt_top_iff_ne_top.mpr h
@@ -731,7 +731,7 @@ theorem Ne.lt_top'
 @[to_dual]
 
 中文:
-定理 Ne.lt_top'
+定理 不等.lt_top'
   条件: (h : ⊤ != a)
   结论: a < ⊤
   证明: h.symm.lt_top
@@ -780,7 +780,7 @@ lemma top_notMem_iff
 
 中文:
 引理 top_notMem_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: ⊤ ∉ s ↔ 对任意 x in s, x < ⊤
   证明: ⟨fun h x hx => Ne.lt_top (fun hx' : x = ⊤ => h (hx' ▸ hx)), fun h h₀ => (h ⊤ h₀).false⟩
 
@@ -828,8 +828,8 @@ theorem OrderTop.ext_top
   exact @le_top _ _ A _
 
 中文:
-定理 OrderTop.ext_top
-  结论: {α} {hA : PartialOrder α} (A : OrderTop α) {hB : PartialOrder α}
+定理 有顶序.ext_top
+  结论: {α} {hA : 偏序 α} (A : 有顶序 α) {hB : 偏序 α}
   证明: by
   cases PartialOrder.ext H
   apply top_unique
@@ -859,7 +859,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Bot α] : Top αᵒᵈ
+  签名: : 底元素 α] : 顶元素 αᵒᵈ
   定义体: ⟨h.bot⟩
 
 @[to_dual]
@@ -899,7 +899,7 @@ lemma ofDual_top
 
 中文:
 引理 ofDual_top
-  条件: [Bot α]
+  条件: [底元素 α]
   结论: ofDual ⊤ = (⊥ : α)
   证明: rfl
 -/
@@ -915,7 +915,7 @@ lemma toDual_top
 
 中文:
 引理 toDual_top
-  条件: [Top α]
+  条件: [顶元素 α]
   结论: toDual (⊤ : α) = ⊥
   证明: rfl
 -/
@@ -932,7 +932,7 @@ lemma ofDual_eq_top
 
 中文:
 引理 ofDual_eq_top
-  条件: [Top α] {a : αᵒᵈ}
+  条件: [顶元素 α] {a : αᵒᵈ}
   结论: ofDual a = ⊤ ↔ a = ⊥
   证明: .rfl
 -/
@@ -948,7 +948,7 @@ lemma toDual_eq_top
 
 中文:
 引理 toDual_eq_top
-  条件: [Bot α] {a : α}
+  条件: [底元素 α] {a : α}
   结论: toDual a = ⊤ ↔ a = ⊥
   证明: .rfl
 -/
@@ -970,9 +970,9 @@ class BoundedOrder
   (no additional axioms)
 
 中文:
-类 BoundedOrder
+类 有界序
   参数: (α : 类型u) [LE α]
-  继承: OrderTop α, OrderBot α
+  继承: 有顶序 α, 有底序 α
   (无附加公理)
 
 Depends on / 依赖: BoundedOrder, BoundedOrder.mk
@@ -991,7 +991,7 @@ instance OrderDual.instBoundedOrder
 
 中文:
 实例 OrderDual.instBoundedOrder
-  签名: (α : 类型u) [LE α] [BoundedOrder α]
+  签名: (α : 类型u) [LE α] [有界序 α]
 -/
 instance OrderDual.instBoundedOrder (α : Type u) [LE α] [BoundedOrder α] : BoundedOrder αᵒᵈ where
 
@@ -1008,8 +1008,8 @@ instance OrderBot.instSubsingleton
   body: by rintro @⟨⟨a⟩, ha⟩ @⟨⟨b⟩, hb⟩; congr; exact le_antisymm (ha _) (hb _)
 
 中文:
-实例 OrderBot.instSubsingleton
-  签名: : Subsingleton (OrderBot α) where
+实例 有底序.instSubsingleton
+  签名: : 子单例 (有底序 α) where
   定义体: by rintro @⟨⟨a⟩, ha⟩ @⟨⟨b⟩, hb⟩; congr; exact le_antisymm (ha _) (hb _)
 
 Depends on / 依赖: le_antisymm
@@ -1026,8 +1026,8 @@ instance BoundedOrder.instSubsingleton
   body: by rintro ⟨⟩ ⟨⟩; congr <;> exact Subsingleton.elim _ _
 
 中文:
-实例 BoundedOrder.instSubsingleton
-  签名: : Subsingleton (BoundedOrder α) where
+实例 有界序.instSubsingleton
+  签名: : 子单例 (有界序 α) where
   定义体: by rintro ⟨⟩ ⟨⟩; congr <;> exact Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1055,8 +1055,8 @@ instance [forall
 @[to_dual (attr := simp)]
 
 中文:
-实例 [forall
-  签名: i, Bot (α' i)] : Bot (对任意 i, α' i)
+实例 [对任意
+  签名: i, 底元素 (α' i)] : 底元素 (对任意 i, α' i)
   定义体: ⟨fun _ => ⊥⟩
 
 @[to_dual (attr := simp)]
@@ -1078,7 +1078,7 @@ theorem bot_apply
 
 中文:
 定理 bot_apply
-  条件: [对任意 i, Bot (α' i)] (i : ι)
+  条件: [对任意 i, 底元素 (α' i)] (i : ι)
   结论: (⊥ : 对任意 i, α' i) i = ⊥
   证明: rfl
 
@@ -1101,7 +1101,7 @@ theorem bot_def
 
 中文:
 定理 bot_def
-  条件: [对任意 i, Bot (α' i)]
+  条件: [对任意 i, 底元素 (α' i)]
   结论: (⊥ : 对任意 i, α' i) = fun _ => ⊥
   证明: rfl
 
@@ -1125,7 +1125,7 @@ theorem bot_comp
 
 中文:
 定理 bot_comp
-  条件: {α β γ : 类型} [Bot γ] (x : α -> β)
+  条件: {α β γ : 类型} [底元素 γ] (x : α -> β)
   结论: (⊥ : β -> γ) ∘ x = ⊥
   证明: by
   rfl
@@ -1146,7 +1146,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: [对任意 i, LE (α' i)] [对任意 i, OrderBot (α' i)]
+  签名: [对任意 i, LE (α' i)] [对任意 i, 有底序 (α' i)]
   定义体: fun _ => bot_le
 
 Depends on / 依赖: bot_le
@@ -1165,7 +1165,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [对任意 i, LE (α' i)] [对任意 i, BoundedOrder (α' i)]
+  签名: [对任意 i, LE (α' i)] [对任意 i, 有界序 (α' i)]
   定义体: (inferInstance : OrderTop (forall i, α' i))
   __ := (inferInstance : OrderBot (forall i, α' i))
 
@@ -1194,8 +1194,8 @@ definition BoundedOrder.ofUnique
   bot_le := by simp
 
 中文:
-定义 BoundedOrder.ofUnique
-  签名: (α : 类型) [Preorder α] [Unique α]
+定义 有界序.ofUnique
+  签名: (α : 类型) [预序 α] [唯一 α]
   定义体: default
   top := default
   le_top := by simp
@@ -1270,7 +1270,7 @@ theorem subsingleton_of_top_le_bot
 中文:
 定理 subsingleton_of_top_le_bot
   条件: (h : (⊤ : α) <= (⊥ : α))
-  结论: Subsingleton α
+  结论: 子单例 α
   证明: ⟨fun _ _ => le_antisymm
     (le_trans le_top <| le_trans h bot_le) (le_trans le_top <| le_trans h bot_le)⟩
 
@@ -1297,7 +1297,7 @@ theorem subsingleton_of_bot_eq_top
 中文:
 定理 subsingleton_of_bot_eq_top
   条件: (hα : (⊥ : α) = (⊤ : α))
-  结论: Subsingleton α
+  结论: 子单例 α
   证明: subsingleton_of_top_le_bot (ge_of_eq hα)
 
 @[to_dual]
@@ -1318,7 +1318,7 @@ theorem subsingleton_iff_bot_eq_top
 
 中文:
 定理 subsingleton_iff_bot_eq_top
-  结论: (⊥ : α) = (⊤ : α) ↔ Subsingleton α
+  结论: (⊥ : α) = (⊤ : α) ↔ 子单例 α
   证明: ⟨subsingleton_of_bot_eq_top, fun _ => Subsingleton.elim ⊥ ⊤⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, subsingleton_of_bot_eq_top
@@ -1345,8 +1345,8 @@ map_le _ _ by
       exact le_top _⟩
 
 中文:
-缩写 OrderTop.lift
-  签名: [LE α] [Top α] [LE β] [OrderTop β] (f : α -> β)
+缩写 有顶序.lift
+  签名: [LE α] [顶元素 α] [LE β] [有顶序 β] (f : α -> β)
   定义体: ⟨fun a =>
 map_le _ _ by
       rw [map_top]
@@ -1374,8 +1374,8 @@ abbreviation BoundedOrder.lift
   __ := OrderBot.lift f map_le map_bot
 
 中文:
-缩写 BoundedOrder.lift
-  签名: [LE α] [Top α] [Bot α] [LE β] [BoundedOrder β] (f : α -> β)
+缩写 有界序.lift
+  签名: [LE α] [顶元素 α] [底元素 α] [LE β] [有界序 β] (f : α -> β)
   定义体: OrderTop.lift f map_le map_top
   __ := OrderBot.lift f map_le map_bot
 
@@ -1410,7 +1410,7 @@ abbreviation orderBot
 
 中文:
 缩写 orderBot
-  签名: [LE α] [OrderBot α] (hbot : p ⊥)
+  签名: [LE α] [有底序 α] (hbot : p ⊥)
   定义体: ⟨⊥, hbot⟩
   bot_le _ := bot_le
 -/
@@ -1432,7 +1432,7 @@ abbreviation boundedOrder
 
 中文:
 缩写 boundedOrder
-  签名: [LE α] [BoundedOrder α] (hbot : p ⊥) (htop : p ⊤)
+  签名: [LE α] [有界序 α] (hbot : p ⊥) (htop : p ⊤)
   定义体: Subtype.orderTop htop
   __ := Subtype.orderBot hbot
 -/
@@ -1457,7 +1457,7 @@ theorem mk_bot
 
 中文:
 定理 mk_bot
-  条件: [OrderBot α] [OrderBot (Subtype p)] (hbot : p ⊥)
+  条件: [有底序 α] [有底序 (子类型 p)] (hbot : p ⊥)
   结论: mk ⊥ hbot = ⊥
   证明: le_bot_iff.1 coe_le_coe.1 bot_le
 
@@ -1482,8 +1482,8 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  条件: [OrderBot α] [OrderBot (Subtype p)] (hbot : p ⊥)
-  结论: ((⊥ : Subtype p) : α) = ⊥
+  条件: [有底序 α] [有底序 (子类型 p)] (hbot : p ⊥)
+  结论: ((⊥ : 子类型 p) : α) = ⊥
   证明: congr_arg Subtype.val (mk_bot hbot).symm
 
 @[to_dual (attr := simp)]
@@ -1505,7 +1505,7 @@ theorem coe_eq_bot_iff
 
 中文:
 定理 coe_eq_bot_iff
-  条件: [OrderBot α] [OrderBot (Subtype p)] (hbot : p ⊥) {x : { x // p x }}
+  条件: [有底序 α] [有底序 (子类型 p)] (hbot : p ⊥) {x : { x // p x }}
   证明: by
   rw [← coe_bot hbot]; rw [Subtype.ext_iff]
 
@@ -1528,7 +1528,7 @@ theorem mk_eq_bot_iff
 
 中文:
 定理 mk_eq_bot_iff
-  条件: [OrderBot α] [OrderBot (Subtype p)] (hbot : p ⊥) {x : α} (hx : p x)
+  条件: [有底序 α] [有底序 (子类型 p)] (hbot : p ⊥) {x : α} (hx : p x)
   证明: (coe_eq_bot_iff hbot).symm
 
 Depends on / 依赖: coe_eq_bot_iff
@@ -1554,7 +1554,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: [Top α] [Top β]
+  签名: [顶元素 α] [顶元素 β]
   定义体: ⟨⟨⊤, ⊤⟩⟩
 -/
 instance instTop [Top α] [Top β] : Top (α × β) :=
@@ -1571,7 +1571,7 @@ lemma fst_top
 
 中文:
 引理 fst_top
-  条件: [Top α] [Top β]
+  条件: [顶元素 α] [顶元素 β]
   结论: (⊤ : α × β).fst = ⊤
   证明: rfl
 -/
@@ -1589,7 +1589,7 @@ lemma snd_top
 
 中文:
 引理 snd_top
-  条件: [Top α] [Top β]
+  条件: [顶元素 α] [顶元素 β]
   结论: (⊤ : α × β).snd = ⊤
   证明: rfl
 
@@ -1609,7 +1609,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: [LE α] [LE β] [OrderTop α] [OrderTop β]
+  签名: [LE α] [LE β] [有顶序 α] [有顶序 β]
   定义体: (inferInstance : Top (α × β))
   le_top _ := ⟨le_top, le_top⟩
 -/
@@ -1628,7 +1628,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [LE α] [LE β] [BoundedOrder α] [BoundedOrder β]
+  签名: [LE α] [LE β] [有界序 α] [有界序 β]
   定义体: (inferInstance : OrderTop (α × β))
   __ := (inferInstance : OrderBot (α × β))
 
@@ -1653,8 +1653,8 @@ instance [Top
   body: up ⊤
 
 中文:
-实例 [Top
-  签名: α] : Top (ULift.{v} α) where top
+实例 [顶元素
+  签名: α] : 顶元素 (类型层提升.{v} α) where top
   定义体: up ⊤
 -/
 instance [Top α] : Top (ULift.{v} α) where top := up ⊤
@@ -1670,7 +1670,7 @@ theorem up_top
 
 中文:
 定理 up_top
-  条件: [Top α]
+  条件: [顶元素 α]
   结论: up (⊤ : α) = ⊤
   证明: rfl
 -/
@@ -1688,8 +1688,8 @@ theorem down_top
 
 中文:
 定理 down_top
-  条件: [Top α]
-  结论: down (⊤ : ULift α) = ⊤
+  条件: [顶元素 α]
+  结论: down (⊤ : 类型层提升 α) = ⊤
   证明: rfl
 
 @[to_dual]
@@ -1707,7 +1707,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [OrderBot α] : OrderBot (ULift.{v} α)
+  签名: α] [有底序 α] : 有底序 (类型层提升.{v} α)
   定义体: OrderBot.lift ULift.down (fun _ _ => down_le.mp) down_bot
 
 Depends on / 依赖: OrderBot, OrderBot.lift, ULift.down, down_bot, down_le, down_le.mp
@@ -1724,7 +1724,7 @@ instance [LE
 
 中文:
 实例 [LE
-  签名: α] [BoundedOrder α] : BoundedOrder (ULift.{v} α) where
+  签名: α] [有界序 α] : 有界序 (类型层提升.{v} α) where
 -/
 instance [LE α] [BoundedOrder α] : BoundedOrder (ULift.{v} α) where
 
@@ -1795,8 +1795,8 @@ instance Bool.instBoundedOrder
 @[simp]
 
 中文:
-实例 Bool.instBoundedOrder
-  签名: : BoundedOrder 布尔 where
+实例 布尔值.instBoundedOrder
+  签名: : 有界序 布尔值 where
   定义体: true
   le_top := Bool.le_true
   bot := false

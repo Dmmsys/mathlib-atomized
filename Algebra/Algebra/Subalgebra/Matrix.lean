@@ -45,7 +45,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S.toSubsemiring.matrix
   algebraMap_mem' _ :=
     (diagonal_mem_matrix_iff (Subalgebra.zero_mem _)).mpr (fun _ => Subalgebra.algebraMap_mem _ _)

@@ -71,8 +71,8 @@ theorem hasKernels
 
 中文:
 定理 hasKernels
-  条件: [PreservesFiniteLimits G] (i : F ⋙ G ≅ 𝟭 C)
-  结论: HasKernels C
+  条件: [保持FiniteLimits G] (i : F ⋙ G ≅ 𝟭 C)
+  结论: 有Kernels C
   证明: { has_limit {X Y} f := by
       have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
         simpa using NatIso.naturality_1 i f
@@ -108,7 +108,7 @@ theorem hasCokernels
 中文:
 定理 hasCokernels
   条件: (i : F ⋙ G ≅ 𝟭 C) (adj : G ⊣ F)
-  结论: HasCokernels C
+  结论: 有余kernels C
   证明: { has_colimit {X Y} f := by
       have : PreservesColimits G := adj.leftAdjoint_preservesColimits
       have : i.inv.app X ≫ G.map (F.map f) ≫ i.hom.app Y = f := by
@@ -154,7 +154,7 @@ definition abelianOfAdjunction
 
 中文:
 定义 abelianOfAdjunction
-  签名: {C : 类型u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
+  签名: {C : 类型u₁} [范畴.{v₁} C] [预加性 C] [有FiniteProducts C]
   定义体: by
   haveI := hasKernels F G i
   haveI := hasCokernels F G i adj
@@ -200,7 +200,7 @@ definition abelianOfEquivalence
 
 中文:
 定义 abelianOfEquivalence
-  签名: {C : 类型u₁} [Category.{v₁} C] [Preadditive C] [HasFiniteProducts C]
+  签名: {C : 类型u₁} [范畴.{v₁} C] [预加性 C] [有FiniteProducts C]
   定义体: abelianOfAdjunction F F.inv F.asEquivalence.unitIso.symm F.asEquivalence.symm.toAdjunction
 
 Depends on / 依赖: F.asEquivalence.symm.toAdjunction, F.asEquivalence.unitIso.symm, F.inv, abelianOfAdjunction, asEquivalence, toAdjunction, unitIso
@@ -232,7 +232,7 @@ instance preadditive
 
 中文:
 实例 preadditive
-  签名: : Preadditive.{w} (ShrinkHoms C)
+  签名: : 预加性.{w} (ShrinkHoms C)
   定义体: .ofFullyFaithful (equivalence C).fullyFaithfulInverse
 
 Depends on / 依赖: equivalence, fullyFaithfulInverse, ofFullyFaithful
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inverse C).Additive
+  签名: (inverse C).加性
   定义体: (equivalence C).symm.fullyFaithfulFunctor.additive_ofFullyFaithful
 
 Depends on / 依赖: additive_ofFullyFaithful, equivalence, fullyFaithfulFunctor, symm.fullyFaithfulFunctor.additive_ofFullyFaithful
@@ -268,7 +268,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor C).Additive
+  签名: (functor C).加性
   定义体: (equivalence C).symm.additive_inverse_of_FullyFaithful
 
 Depends on / 依赖: additive_inverse_of_FullyFaithful, equivalence, symm.additive_inverse_of_FullyFaithful
@@ -286,7 +286,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: (J : 类型) [Category* J]
+  签名: (J : 类型) [范畴* J]
   定义体: Adjunction.hasLimitsOfShape_of_equivalence (inverse C)
 
 Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, hasLimitsOfShape_of_equivalence, inverse
@@ -305,7 +305,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits C]
+  签名: [有有限极限 C]
   定义体: ⟨fun _ => inferInstance⟩
 
 Depends on / 依赖: Action, Action.preservesColimitsOfShape_of_preserves, PreservesColimitsOfShape, SingleObj, preservesColimitsOfShape_of_preserves
@@ -326,7 +326,7 @@ instance abelian
 
 中文:
 实例 abelian
-  签名: [Abelian C]
+  签名: [交换 C]
   定义体: abelianOfEquivalence (inverse C)
 
 Depends on / 依赖: abelianOfEquivalence, inverse
@@ -359,7 +359,7 @@ instance preadditive
 
 中文:
 实例 preadditive
-  签名: : Preadditive (AsSmall.{w} C)
+  签名: : 预加性 (AsSmall.{w} C)
   定义体: .ofFullyFaithful equiv.fullyFaithfulInverse
 
 Depends on / 依赖: equiv.fullyFaithfulInverse, fullyFaithfulInverse, ofFullyFaithful
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: (down (C := C)).Additive
+  签名: (down (C := C)).加性
   定义体: equiv.symm.fullyFaithfulFunctor.additive_ofFullyFaithful
 
 Depends on / 依赖: Additive
@@ -395,7 +395,7 @@ instance :
 
 中文:
 实例 :
-  签名: (up (C := C)).Additive
+  签名: (up (C := C)).加性
   定义体: equiv.symm.additive_inverse_of_FullyFaithful
 
 Depends on / 依赖: Additive
@@ -413,7 +413,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: (J : 类型) [Category* J]
+  签名: (J : 类型) [范畴* J]
   定义体: Adjunction.hasLimitsOfShape_of_equivalence equiv.inverse
 
 Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, equiv.inverse, hasLimitsOfShape_of_equivalence, inverse
@@ -432,7 +432,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits C]
+  签名: [有有限极限 C]
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasFiniteLimits [HasFiniteLimits C] :
@@ -451,7 +451,7 @@ instance abelian
 
 中文:
 实例 abelian
-  签名: [Abelian C]
+  签名: [交换 C]
   定义体: abelianOfEquivalence equiv.inverse
 
 Depends on / 依赖: Finite, Finite.exists_type_univ_nonempty_mulEquiv, Limits, Limits.hasColimitsOfShape_of_equivalence, abelianOfEquivalence, e.toSingleObjEquiv.symm, equiv.inverse, exists_type_univ_nonempty_mulEquiv, hasColimitsOfShape_of_equivalence, inverse, toSingleObjEquiv

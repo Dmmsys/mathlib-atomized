@@ -94,7 +94,7 @@ scoped[Pointwise] attribute [instance] Filter.instOne Filter.instZero
 
 中文:
 定义 instOne
-  签名: : One (Filter α)
+  签名: : 幺 (滤子 α)
   定义体: ⟨pure 1⟩
 
 scoped[Pointwise] attribute [instance] Filter.instOne Filter.instZero
@@ -119,7 +119,7 @@ theorem mem_one
 
 中文:
 定理 mem_one
-  结论: s in (1 : Filter α) ↔ (1 : α) in s
+  结论: s in (1 : 滤子 α) ↔ (1 : α) in s
   证明: mem_pure
 
 @[to_additive]
@@ -142,7 +142,7 @@ theorem one_mem_one
 
 中文:
 定理 one_mem_one
-  结论: (1 : Set α) in (1 : Filter α)
+  结论: (1 : 集合 α) in (1 : 滤子 α)
   证明: mem_pure.2 Set.one_mem_one
 
 @[to_additive (attr := simp)]
@@ -165,7 +165,7 @@ theorem pure_one
 
 中文:
 定理 pure_one
-  结论: pure 1 = (1 : Filter α)
+  结论: pure 1 = (1 : 滤子 α)
   证明: rfl
 
 @[to_additive (attr := simp) zero_prod]
@@ -187,8 +187,8 @@ theorem one_prod
 
 中文:
 定理 one_prod
-  条件: {l : Filter β}
-  结论: (1 : Filter α) ×ˢ l = map (1, ·) l
+  条件: {l : 滤子 β}
+  结论: (1 : 滤子 α) ×ˢ l = map (1, ·) l
   证明: pure_prod
 
 @[to_additive (attr := simp) prod_zero]
@@ -211,8 +211,8 @@ theorem prod_one
 
 中文:
 定理 prod_one
-  条件: {l : Filter β}
-  结论: l ×ˢ (1 : Filter α) = map (·, 1) l
+  条件: {l : 滤子 β}
+  结论: l ×ˢ (1 : 滤子 α) = map (·, 1) l
   证明: prod_pure
 
 @[to_additive (attr := simp)]
@@ -234,7 +234,7 @@ theorem principal_one
 
 中文:
 定理 principal_one
-  结论: 𝓟 1 = (1 : Filter α)
+  结论: 𝓟 1 = (1 : 滤子 α)
   证明: principal_singleton _
 
 @[to_additive]
@@ -259,7 +259,7 @@ scoped[Pointwise] attribute [instance] one_neBot zero_neBot
 
 中文:
 定理 one_neBot
-  结论: (1 : Filter α).NeBot
+  结论: (1 : 滤子 α).NeBot
   证明: Filter.pure_neBot
 
 scoped[Pointwise] attribute [instance] one_neBot zero_neBot
@@ -288,7 +288,7 @@ theorem map_one'
 中文:
 定理 map_one'
   条件: (f : α -> β)
-  结论: (1 : Filter α).map f = pure (f 1)
+  结论: (1 : 滤子 α).map f = pure (f 1)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -309,7 +309,7 @@ theorem le_one_iff
 
 中文:
 定理 le_one_iff
-  结论: f <= 1 ↔ (1 : Set α) in f
+  结论: f <= 1 ↔ (1 : 集合 α) in f
   证明: le_pure_iff
 
 @[to_additive]
@@ -406,8 +406,8 @@ theorem tendsto_one
 
 中文:
 定理 tendsto_one
-  条件: {a : Filter β} {f : β -> α}
-  结论: Tendsto f a 1 ↔ 对任意ᶠ x in a, f x = 1
+  条件: {a : 滤子 β} {f : β -> α}
+  结论: 收敛 f a 1 ↔ 对任意ᶠ x in a, f x = 1
   证明: tendsto_pure
 
 @[to_additive zero_prod_zero]
@@ -429,8 +429,8 @@ theorem one_prod_one
 
 中文:
 定理 one_prod_one
-  条件: [One β]
-  结论: (1 : Filter α) ×ˢ (1 : Filter β) = 1
+  条件: [幺 β]
+  结论: (1 : 滤子 α) ×ˢ (1 : 滤子 β) = 1
   证明: prod_pure_pure
 
 Depends on / 依赖: prod_pure_pure
@@ -452,7 +452,7 @@ definition pureOneHom
 
 中文:
 定义 pureOneHom
-  签名: : OneHom α (Filter α) where
+  签名: : 幺态射 α (滤子 α) where
   定义体: pure; map_one' := pure_one
 
 @[to_additive (attr := simp)]
@@ -475,7 +475,7 @@ theorem coe_pureOneHom
 
 中文:
 定理 coe_pureOneHom
-  结论: (pureOneHom : α -> Filter α) = pure
+  结论: (pureOneHom : α -> 滤子 α) = pure
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -517,7 +517,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: [FunLike F α β] [OneHomClass F α β] (φ : F)
+  条件: [函数状 F α β] [幺态射类 F α β] (φ : F)
   结论: map φ 1 = 1
   证明: by
   simp
@@ -551,7 +551,7 @@ scoped[Pointwise] attribute [instance] instInv instNeg
 
 中文:
 定义 instInv
-  签名: : Inv (Filter α)
+  签名: : 取逆 (滤子 α)
   定义体: ⟨map Inv.inv⟩
 
 scoped[Pointwise] attribute [instance] instInv instNeg
@@ -578,7 +578,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  结论: f.map Inv.inv = f⁻¹
+  结论: f.map 取逆.inv = f⁻¹
   证明: rfl
 
 @[to_additive]
@@ -599,7 +599,7 @@ theorem mem_inv
 
 中文:
 定理 mem_inv
-  结论: s in f⁻¹ ↔ Inv.inv ⁻¹' s in f
+  结论: s in f⁻¹ ↔ 取逆.inv ⁻¹' s in f
   证明: Iff.rfl
 
 @[to_additive (attr := gcongr)]
@@ -645,7 +645,7 @@ theorem inv_pure
 
 中文:
 定理 inv_pure
-  结论: (pure a : Filter α)⁻¹ = pure a⁻¹
+  结论: (pure a : 滤子 α)⁻¹ = pure a⁻¹
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -812,7 +812,7 @@ lemma comap_inv
 
 中文:
 引理 comap_inv
-  结论: comap Inv.inv f = f⁻¹
+  结论: comap 取逆.inv f = f⁻¹
   证明: .symm map_eq_comap_of_inverse (inv_comp_inv _) (inv_comp_inv _)
 
 @[to_additive]
@@ -855,8 +855,8 @@ theorem HasBasis.inv
   simpa using h.map Inv.inv
 
 中文:
-定理 HasBasis.inv
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set α}
+定理 有基.inv
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: by
   simpa using h.map Inv.inv
 -/
@@ -882,7 +882,7 @@ scoped[Pointwise] attribute [instance] Filter.instInvolutiveInv Filter.instInvol
 
 中文:
 定义 instInvolutiveInv
-  签名: : InvolutiveInv (Filter α)
+  签名: : InvolutiveInv (滤子 α)
   定义体: { Filter.instInv with
 inv_inv := fun f => map_map.trans by rw [inv_involutive.comp_self, map_id] }
 
@@ -971,7 +971,7 @@ lemma inv_atTop
 
 中文:
 引理 inv_atTop
-  条件: {G : 类型} [CommGroup G] [Preorder G] [IsOrderedMonoid G]
+  条件: {G : 类型} [交换群 G] [预序 G] [是Ordered幺半群 G]
   证明: (OrderIso.inv G).map_atTop
 
 Depends on / 依赖: OrderIso, OrderIso.inv, map_atTop
@@ -1003,7 +1003,7 @@ scoped[Pointwise] attribute [instance] Filt
 
 中文:
 定义 instMul
-  签名: : Mul (Filter α)
+  签名: : 乘法 (滤子 α)
   定义体: ⟨/- This is defeq to `map₂ (· * ·) f g`, but the hypothesis unfolds to `t₁ * t₂ ⊆ s` rather
   than all the way to `Set.image2 (· * ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· * ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ * t₂ subseteq s } }⟩
@@ -1029,8 +1029,8 @@ theorem HasBasis.mul
 @[to_additive (attr := simp)]
 
 中文:
-定理 HasBasis.mul
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> Set α}
+定理 有基.mul
+  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
   证明: hf.map₂ (· * ·) hg
 
 @[to_additive (attr := simp)]
@@ -1341,7 +1341,7 @@ theorem pure_mul_pure
 
 中文:
 定理 pure_mul_pure
-  结论: (pure a : Filter α) * pure b = pure (a * b)
+  结论: (pure a : 滤子 α) * pure b = pure (a * b)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -1382,7 +1382,7 @@ instance mulLeftMono
 
 中文:
 实例 mulLeftMono
-  签名: : MulLeftMono (Filter α)
+  签名: : MulLeftMono (滤子 α)
   定义体: ⟨fun _ _ _ => map₂_mono_left⟩
 
 @[to_additive]
@@ -1403,7 +1403,7 @@ instance mulRightMono
 
 中文:
 实例 mulRightMono
-  签名: : MulRightMono (Filter α)
+  签名: : MulRightMono (滤子 α)
   定义体: ⟨fun _ _ _ => map₂_mono_right⟩
 
 @[to_additive]
@@ -1422,7 +1422,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  条件: [FunLike F α β] [MulHomClass F α β] (m : F)
+  条件: [函数状 F α β] [乘法态射类 F α β] (m : F)
   证明: map_map₂_distrib map_mul m
 -/
 protected theorem map_mul [FunLike F α β] [MulHomClass F α β] (m : F) :
@@ -1443,7 +1443,7 @@ definition pureMulHom
 
 中文:
 定义 pureMulHom
-  签名: : α ->ₙ* Filter α where
+  签名: : α ->ₙ* 滤子 α where
   定义体: pure; map_mul' _ _ := pure_mul_pure.symm
 
 @[to_additive (attr := simp)]
@@ -1466,7 +1466,7 @@ theorem coe_pureMulHom
 
 中文:
 定理 coe_pureMulHom
-  结论: (pureMulHom : α -> Filter α) = pure
+  结论: (pureMulHom : α -> 滤子 α) = pure
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1518,7 +1518,7 @@ scoped[Pointwise] attribute [instance] Filt
 
 中文:
 定义 instDiv
-  签名: : Div (Filter α)
+  签名: : 除法 (滤子 α)
   定义体: ⟨/- This is defeq to `map₂ (· / ·) f g`, but the hypothesis unfolds to `t₁ / t₂ ⊆ s`
   rather than all the way to `Set.image2 (· / ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· / ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ / t₂ subseteq s } }⟩
@@ -1544,8 +1544,8 @@ theorem HasBasis.div
 @[to_additive (attr := simp)]
 
 中文:
-定理 HasBasis.div
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> Set α}
+定理 有基.div
+  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
   证明: hf.map₂ (· / ·) hg
 
 @[to_additive (attr := simp)]
@@ -1856,7 +1856,7 @@ theorem pure_div_pure
 
 中文:
 定理 pure_div_pure
-  结论: (pure a : Filter α) / pure b = pure (a / b)
+  结论: (pure a : 滤子 α) / pure b = pure (a / b)
   证明: by simp
 
 @[to_additive (attr := gcongr)]
@@ -1960,7 +1960,7 @@ instance covariant_div
 
 中文:
 实例 covariant_div
-  签名: : CovariantClass (Filter α) (Filter α) (· / ·) (· <= ·)
+  签名: : 协变类 (滤子 α) (滤子 α) (· / ·) (· <= ·)
   定义体: ⟨fun _ _ _ => map₂_mono_left⟩
 
 @[to_additive]
@@ -1979,7 +1979,7 @@ instance covariant_swap_div
 
 中文:
 实例 covariant_swap_div
-  签名: : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (· <= ·)
+  签名: : 协变类 (滤子 α) (滤子 α) (swap (· / ·)) (· <= ·)
   定义体: ⟨fun _ _ _ => map₂_mono_right⟩
 -/
 instance covariant_swap_div : CovariantClass (Filter α) (Filter α) (swap (· / ·)) (· <= ·) :=
@@ -2002,7 +2002,7 @@ definition instNPow
 
 中文:
 定义 instNPow
-  签名: [One α] [Mul α]
+  签名: [幺 α] [乘法 α]
   定义体: ⟨fun s n => npowRec n s⟩
 -/
 protected def instNPow [One α] [Mul α] : Pow (Filter α) Nat :=
@@ -2026,7 +2026,7 @@ scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
 
 中文:
 定义 instZPow
-  签名: [One α] [Mul α] [Inv α]
+  签名: [幺 α] [乘法 α] [取逆 α]
   定义体: ⟨fun s n => zpowRec npowRec n s⟩
 
 scoped[Pointwise] attribute [instance] Filter.instNSMul Filter.instNPow
@@ -2051,7 +2051,7 @@ definition semigroup
 
 中文:
 定义 semigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: map₂_assoc mul_assoc
 -/
 protected def semigroup [Semigroup α] : Semigroup (Filter α) where
@@ -2070,7 +2070,7 @@ definition commSemigroup
 
 中文:
 定义 commSemigroup
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: { Filter.semigroup with mul_comm := fun _ _ => map₂_comm mul_comm }
 -/
 protected def commSemigroup [CommSemigroup α] : CommSemigroup (Filter α) :=
@@ -2097,7 +2097,7 @@ scoped[Pointwise] attribute [instance] Filter.semigroup Filter.addSemigroup
 
 中文:
 定义 mulOneClass
-  签名: : MulOneClass (Filter α) where
+  签名: : MulOne类 (滤子 α) where
   定义体: map₂_left_identity one_mul
   mul_one := map₂_right_identity mul_one
 
@@ -2129,7 +2129,7 @@ definition mapMonoidHom
 
 中文:
 定义 mapMonoidHom
-  签名: [MonoidHomClass F α β] (φ : F)
+  签名: [幺半群态射类 F α β] (φ : F)
   定义体: map φ
   map_one' := Filter.map_one φ
   map_mul' _ _ := Filter.map_mul φ
@@ -2155,7 +2155,7 @@ theorem comap_mul_comap_le
 
 中文:
 定理 comap_mul_comap_le
-  条件: [MulHomClass F α β] (m : F) {f g : Filter β}
+  条件: [乘法态射类 F α β] (m : F) {f g : 滤子 β}
   证明: fun _ ⟨_, ⟨t₁, ht₁, t₂, ht₂, t₁t₂⟩, mt⟩ =>
   ⟨m ⁻¹' t₁, ⟨t₁, ht₁, Subset.rfl⟩, m ⁻¹' t₂, ⟨t₂, ht₂, Subset.rfl⟩,
 (preimage_mul_preimage_subset _).trans (preimage_mono t₁t₂).trans mt⟩
@@ -2178,8 +2178,8 @@ theorem Tendsto.mul_mul
 (Filter.map_mul m).trans_le mul_le_mul' hf hg
 
 中文:
-定理 Tendsto.mul_mul
-  条件: [MulHomClass F α β] (m : F) {f₁ g₁ : Filter α} {f₂ g₂ : Filter β}
+定理 收敛.mul_mul
+  条件: [乘法态射类 F α β] (m : F) {f₁ g₁ : 滤子 α} {f₂ g₂ : 滤子 β}
   证明: fun hf hg =>
 (Filter.map_mul m).trans_le mul_le_mul' hf hg
 -/
@@ -2201,7 +2201,7 @@ definition pureMonoidHom
 
 中文:
 定义 pureMonoidHom
-  签名: : α ->* Filter α
+  签名: : α ->* 滤子 α
   定义体: { pureMulHom, pureOneHom with }
 
 @[to_additive (attr := simp)]
@@ -2224,7 +2224,7 @@ theorem coe_pureMonoidHom
 
 中文:
 定理 coe_pureMonoidHom
-  结论: (pureMonoidHom : α -> Filter α) = pure
+  结论: (pureMonoidHom : α -> 滤子 α) = pure
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2274,7 +2274,7 @@ scoped[Pointwise] attribute [instance] Filter.monoid Filter.addMonoid
 
 中文:
 定义 monoid
-  签名: : Monoid (Filter α)
+  签名: : 幺半群 (滤子 α)
   定义体: { Filter.mulOneClass, Filter.semigroup, @Filter.instNPow α _ _ with }
 
 scoped[Pointwise] attribute [instance] Filter.monoid Filter.addMonoid
@@ -2324,7 +2324,7 @@ theorem bot_pow
 中文:
 定理 bot_pow
   条件: {n : 自然数} (hn : n != 0)
-  结论: (⊥ : Filter α) ^ n = ⊥
+  结论: (⊥ : 滤子 α) ^ n = ⊥
   证明: by
   rw [← Nat.sub_one_add_one hn]; rw [pow_succ']; rw [bot_mul]
 
@@ -2420,7 +2420,7 @@ theorem top_mul_top
 
 中文:
 定理 top_mul_top
-  结论: (⊤ : Filter α) * ⊤ = ⊤
+  结论: (⊤ : 滤子 α) * ⊤ = ⊤
   证明: mul_top_of_one_le le_top
 
 @[to_additive nsmul_top]
@@ -2440,7 +2440,7 @@ theorem top_pow
 
 中文:
 定理 top_pow
-  结论: 对任意 {n : 自然数}, n != 0 -> (⊤ : Filter α) ^ n = ⊤
+  结论: 对任意 {n : 自然数}, n != 0 -> (⊤ : 滤子 α) ^ n = ⊤
 -/
 theorem top_pow : forall {n : Nat}, n != 0 -> (⊤ : Filter α) ^ n = ⊤
   | 0 => fun h => (h rfl).elim
@@ -2457,8 +2457,8 @@ theorem _root_.IsUnit.filter
   proof: IsUnit.map (pureMonoidHom : α ->* Filter α)
 
 中文:
-定理 _root_.IsUnit.filter
-  结论: IsUnit a -> IsUnit (pure a : Filter α)
+定理 _root_.是单位.filter
+  结论: 是单位 a -> 是单位 (pure a : 滤子 α)
   证明: IsUnit.map (pureMonoidHom : α ->* Filter α)
 -/
 protected theorem _root_.IsUnit.filter : IsUnit a -> IsUnit (pure a : Filter α) :=
@@ -2479,7 +2479,7 @@ definition commMonoid
 
 中文:
 定义 commMonoid
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: { Filter.mulOneClass, Filter.commSemigroup with }
 -/
 protected def commMonoid [CommMonoid α] : CommMonoid (Filter α) :=
@@ -2542,7 +2542,7 @@ definition divisionMonoid
 
 中文:
 定义 divisionMonoid
-  签名: : DivisionMonoid (Filter α)
+  签名: : Division幺半群 (滤子 α)
   定义体: { Filter.monoid, Filter.instInvolutiveInv, Filter.instDiv, Filter.instZPow (α := α) with
     mul_inv_rev := fun _ _ => map_map₂_antidistrib mul_inv_rev
     inv_eq_of_mul := fun s t h => by
@@ -2576,7 +2576,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit f ↔ 存在 a, f = pure a ∧ IsUnit a
+  结论: 是单位 f ↔ 存在 a, f = pure a ∧ 是单位 a
   证明: by
   constructor
   · rintro ⟨u, rfl⟩
@@ -2614,7 +2614,7 @@ definition divisionCommMonoid
 
 中文:
 定义 divisionCommMonoid
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
   定义体: { Filter.divisionMonoid, Filter.commSemigroup with }
 -/
 protected def divisionCommMonoid [DivisionCommMonoid α] : DivisionCommMonoid (Filter α) :=
@@ -2637,7 +2637,7 @@ scoped[Pointwise] attribute [instance] Filter.commMonoid Filter.addCommMonoid Fi
 
 中文:
 定义 instDistribNeg
-  签名: [Mul α] [HasDistribNeg α]
+  签名: [乘法 α] [有DistribNeg α]
   定义体: { Filter.instInvolutiveNeg with
     neg_mul := fun _ _ => map₂_map_left_comm neg_mul
     mul_neg := fun _ _ => map_map₂_right_comm mul_neg }
@@ -2859,7 +2859,7 @@ theorem isUnit_pure
 中文:
 定理 isUnit_pure
   条件: (a : α)
-  结论: IsUnit (pure a : Filter α)
+  结论: 是单位 (pure a : 滤子 α)
   证明: (Group.isUnit a).filter
 
 @[simp]
@@ -2883,7 +2883,7 @@ theorem isUnit_iff_singleton
 
 中文:
 定理 isUnit_iff_singleton
-  结论: IsUnit f ↔ 存在 a, f = pure a
+  结论: 是单位 f ↔ 存在 a, f = pure a
   证明: by
   simp only [isUnit_iff, Group.isUnit, and_true]
 
@@ -2930,8 +2930,8 @@ theorem Tendsto.inv_inv
 @[to_additive]
 
 中文:
-定理 Tendsto.inv_inv
-  结论: Tendsto m f₁ f₂ -> Tendsto m f₁⁻¹ f₂⁻¹
+定理 收敛.inv_inv
+  结论: 收敛 m f₁ f₂ -> 收敛 m f₁⁻¹ f₂⁻¹
   证明: fun hf =>
 (Filter.map_inv' m).trans_le Filter.inv_le_inv hf
 
@@ -2971,8 +2971,8 @@ theorem Tendsto.div_div
   proof: (Filter.map_div m).trans_le Filter.div_le_div hf hg
 
 中文:
-定理 Tendsto.div_div
-  条件: (hf : Tendsto m f₁ f₂) (hg : Tendsto m g₁ g₂)
+定理 收敛.div_div
+  条件: (hf : 收敛 m f₁ f₂) (hg : 收敛 m g₁ g₂)
   证明: (Filter.map_div m).trans_le Filter.div_le_div hf hg
 -/
 protected theorem Tendsto.div_div (hf : Tendsto m f₁ f₂) (hg : Tendsto m g₁ g₂) :
@@ -3065,7 +3065,7 @@ scoped[Pointwise] attribute [instance] Filt
 
 中文:
 定义 instSMul
-  签名: : SMul (Filter α) (Filter β)
+  签名: : 标量乘法 (滤子 α) (滤子 β)
   定义体: ⟨/- This is defeq to `map₂ (· • ·) f g`, but the hypothesis unfolds to `t₁ • t₂ ⊆ s`
   rather than all the way to `Set.image2 (· • ·) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· • ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ • t₂ subseteq s } }⟩
@@ -3091,8 +3091,8 @@ theorem HasBasis.smul
 @[to_additive (attr := simp)]
 
 中文:
-定理 HasBasis.smul
-  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> Set α}
+定理 有基.smul
+  结论: {ιf ιg : 类型} {pf : ιf -> 命题} {sf : ιf -> 集合 α}
   证明: hf.map₂ (· • ·) hg
 
 @[to_additive (attr := simp)]
@@ -3182,7 +3182,7 @@ theorem bot_smul
 
 中文:
 定理 bot_smul
-  结论: (⊥ : Filter α) • g = ⊥
+  结论: (⊥ : 滤子 α) • g = ⊥
   证明: map₂_bot_left
 
 @[to_additive (attr := simp)]
@@ -3203,7 +3203,7 @@ theorem smul_bot
 
 中文:
 定理 smul_bot
-  结论: f • (⊥ : Filter β) = ⊥
+  结论: f • (⊥ : 滤子 β) = ⊥
   证明: map₂_bot_right
 
 @[to_additive (attr := simp)]
@@ -3361,7 +3361,7 @@ theorem pure_smul
 
 中文:
 定理 pure_smul
-  结论: (pure a : Filter α) • g = g.map (a • ·)
+  结论: (pure a : 滤子 α) • g = g.map (a • ·)
   证明: map₂_pure_left
 
 @[to_additive (attr := simp)]
@@ -3403,7 +3403,7 @@ theorem pure_smul_pure
 
 中文:
 定理 pure_smul_pure
-  结论: (pure a : Filter α) • (pure b : Filter β) = pure (a • b)
+  结论: (pure a : 滤子 α) • (pure b : 滤子 β) = pure (a • b)
   证明: by simp
 
 @[to_additive (attr := gcongr)]
@@ -3505,7 +3505,7 @@ instance covariant_smul
 
 中文:
 实例 covariant_smul
-  签名: : CovariantClass (Filter α) (Filter β) (· • ·) (· <= ·)
+  签名: : 协变类 (滤子 α) (滤子 β) (· • ·) (· <= ·)
   定义体: ⟨fun _ _ _ => map₂_mono_left⟩
 -/
 instance covariant_smul : CovariantClass (Filter α) (Filter β) (· • ·) (· <= ·) :=
@@ -3536,7 +3536,7 @@ scoped[Pointwise] attribute [instance] Filter.
 
 中文:
 定义 instVSub
-  签名: : VSub (Filter α) (Filter β)
+  签名: : 向量减法 (滤子 α) (滤子 β)
   定义体: ⟨/- This is defeq to `map₂ (-ᵥ) f g`, but the hypothesis unfolds to `t₁ -ᵥ t₂ ⊆ s` rather than all
   the way to `Set.image2 (-ᵥ) t₁ t₂ ⊆ s`. -/
   fun f g => { map₂ (· -ᵥ ·) f g with sets := { s | exists t₁ in f, exists t₂ in g, t₁ -ᵥ t₂ subseteq s } }⟩
@@ -3578,7 +3578,7 @@ theorem mem_vsub
 
 中文:
 定理 mem_vsub
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s in f -ᵥ g ↔ 存在 t₁ in f, 存在 t₂ in g, t₁ -ᵥ t₂ subseteq s
   证明: Iff.rfl
 
@@ -3620,7 +3620,7 @@ theorem bot_vsub
 
 中文:
 定理 bot_vsub
-  结论: (⊥ : Filter β) -ᵥ g = ⊥
+  结论: (⊥ : 滤子 β) -ᵥ g = ⊥
   证明: map₂_bot_left
 
 @[simp]
@@ -3641,7 +3641,7 @@ theorem vsub_bot
 
 中文:
 定理 vsub_bot
-  结论: f -ᵥ (⊥ : Filter β) = ⊥
+  结论: f -ᵥ (⊥ : 滤子 β) = ⊥
   证明: map₂_bot_right
 
 @[simp]
@@ -3681,7 +3681,7 @@ theorem vsub_neBot_iff
 
 中文:
 定理 vsub_neBot_iff
-  结论: (f -ᵥ g : Filter α).NeBot ↔ f.NeBot ∧ g.NeBot
+  结论: (f -ᵥ g : 滤子 α).NeBot ↔ f.NeBot ∧ g.NeBot
   证明: map₂_neBot_iff
 -/
 theorem vsub_neBot_iff : (f -ᵥ g : Filter α).NeBot ↔ f.NeBot ∧ g.NeBot :=
@@ -3713,7 +3713,7 @@ theorem NeBot.of_vsub_left
 
 中文:
 定理 NeBot.of_vsub_left
-  结论: (f -ᵥ g : Filter α).NeBot -> f.NeBot
+  结论: (f -ᵥ g : 滤子 α).NeBot -> f.NeBot
   证明: NeBot.of_map₂_left
 
 Depends on / 依赖: NeBot.of_map
@@ -3731,7 +3731,7 @@ theorem NeBot.of_vsub_right
 
 中文:
 定理 NeBot.of_vsub_right
-  结论: (f -ᵥ g : Filter α).NeBot -> g.NeBot
+  结论: (f -ᵥ g : 滤子 α).NeBot -> g.NeBot
   证明: NeBot.of_map₂_right
 
 Depends on / 依赖: NeBot.of_map
@@ -3779,7 +3779,7 @@ theorem pure_vsub
 
 中文:
 定理 pure_vsub
-  结论: (pure a : Filter β) -ᵥ g = g.map (a -ᵥ ·)
+  结论: (pure a : 滤子 β) -ᵥ g = g.map (a -ᵥ ·)
   证明: map₂_pure_left
 
 @[simp]
@@ -3816,7 +3816,7 @@ theorem pure_vsub_pure
 
 中文:
 定理 pure_vsub_pure
-  结论: (pure a : Filter β) -ᵥ pure b = (pure (a -ᵥ b) : Filter α)
+  结论: (pure a : 滤子 β) -ᵥ pure b = (pure (a -ᵥ b) : 滤子 α)
   证明: by simp
 
 @[gcongr]
@@ -3919,7 +3919,7 @@ scoped[Pointwise] attribute [instance] Filter.instSMulFilter Filter.instVAddFilt
 
 中文:
 定义 instSMulFilter
-  签名: : SMul α (Filter β)
+  签名: : 标量乘法 α (滤子 β)
   定义体: ⟨fun a => map (a • ·)⟩
 
 scoped[Pointwise] attribute [instance] Filter.instSMulFilter Filter.instVAddFilter
@@ -4010,7 +4010,7 @@ theorem smul_filter_bot
 
 中文:
 定理 smul_filter_bot
-  结论: a • (⊥ : Filter β) = ⊥
+  结论: a • (⊥ : 滤子 β) = ⊥
   证明: map_bot
 
 @[to_additive (attr := simp)]
@@ -4227,7 +4227,7 @@ instance covariant_smul_filter
 
 中文:
 实例 covariant_smul_filter
-  签名: : CovariantClass α (Filter β) (· • ·) (· <= ·)
+  签名: : 协变类 α (滤子 β) (· • ·) (· <= ·)
   定义体: ⟨fun _ => @map_mono β β _⟩
 
 Depends on / 依赖: map_mono
@@ -4250,7 +4250,7 @@ instance smulCommClass_filter
 
 中文:
 实例 smulCommClass_filter
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ _ => map_comm (funext <| smul_comm _ _) _⟩
 
 @[to_additive]
@@ -4274,7 +4274,7 @@ instance smulCommClass_filter'
 
 中文:
 实例 smulCommClass_filter'
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun a _ _ => map_map₂_distrib_right smul_comm a⟩
 
 @[to_additive]
@@ -4299,7 +4299,7 @@ instance smulCommClass_filter''
 
 中文:
 实例 smulCommClass_filter''
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: haveI := SMulCommClass.symm α β γ
   SMulCommClass.symm _ _ _
 
@@ -4325,7 +4325,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨fun _ _ _ => map₂_left_comm smul_comm⟩
 
 @[to_additive]
@@ -4349,7 +4349,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun a b f => by simp only [← Filter.map_smul, map_map, smul_assoc]; rfl⟩
 
 @[to_additive]
@@ -4375,7 +4375,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun a f g => by
     refine (map_map₂_distrib_left fun _ _ => ?_).symm
     exact (smul_assoc a _ _).symm⟩
@@ -4403,7 +4403,7 @@ instance isScalarTower''
 
 中文:
 实例 isScalarTower''
-  签名: [SMul α β] [SMul α γ] [SMul β γ] [IsScalarTower α β γ]
+  签名: [标量乘法 α β] [标量乘法 α γ] [标量乘法 β γ] [标量塔 α β γ]
   定义体: ⟨fun _ _ _ => map₂_assoc smul_assoc⟩
 
 @[to_additive]
@@ -4425,7 +4425,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul α β] [SMul αᵐᵒᵖ β] [IsCentralScalar α β]
+  签名: [标量乘法 α β] [标量乘法 αᵐᵒᵖ β] [中心标量 α β]
   定义体: ⟨fun _ f => (congr_arg fun m => map m f) funext fun _ => op_smul_eq_smul _ _⟩
 
 Depends on / 依赖: congr_arg, op_smul_eq_smul
@@ -4450,7 +4450,7 @@ definition mulAction
 
 中文:
 定义 mulAction
-  签名: [Monoid α] [MulAction α β]
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: map₂_pure_left.trans by simp_rw [one_smul, map_id']
   mul_smul _ _ _ := map₂_assoc mul_smul
 -/
@@ -4477,7 +4477,7 @@ scoped[Pointwise] attribute [instance] Filter.mulAction Filter.addAction Filter.
 
 中文:
 定义 mulActionFilter
-  签名: [Monoid α] [MulAction α β]
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: by simp only [← Filter.map_smul, map_map, Function.comp_def, ← mul_smul]
   one_smul f := by simp only [← Filter.map_smul, one_smul, map_id']
 
@@ -4505,7 +4505,7 @@ smul_zero _ := (map_pure _ _).trans by rw [smul_zero, pure_zero]
 
 中文:
 定义 distribMulActionFilter
-  签名: [Monoid α] [AddMonoid β] [DistribMulAction α β]
+  签名: [幺半群 α] [加法幺半群 β] [分配乘法作用 α β]
   定义体: map_map₂_distrib smul_add _
 smul_zero _ := (map_pure _ _).trans by rw [smul_zero, pure_zero]
 -/
@@ -4564,7 +4564,7 @@ theorem NeBot.smul_zero_nonneg
 中文:
 定理 NeBot.smul_zero_nonneg
   条件: (hf : f.NeBot)
-  结论: 0 <= f • (0 : Filter β)
+  结论: 0 <= f • (0 : 滤子 β)
   证明: le_smul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, ha⟩ := hf.nonempty_of_mem h₁
     ⟨_, ha, _, h₂, smul_zero _⟩
@@ -4590,7 +4590,7 @@ theorem NeBot.zero_smul_nonneg
 中文:
 定理 NeBot.zero_smul_nonneg
   条件: (hg : g.NeBot)
-  结论: 0 <= (0 : Filter α) • g
+  结论: 0 <= (0 : 滤子 α) • g
   证明: le_smul_iff.2 fun _ h₁ _ h₂ =>
     let ⟨_, hb⟩ := hg.nonempty_of_mem h₂
     ⟨_, h₁, _, hb, zero_smul _ _⟩
@@ -4679,8 +4679,8 @@ theorem _root_.IsUnit.smul_tendsto_smul_iff
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.IsUnit.smul_tendsto_smul_iff
-  结论: [Monoid γ] [MulAction γ β] {m : α -> β} {c : γ}
+定理 _root_.是单位.smul_tendsto_smul_iff
+  结论: [幺半群 γ] [乘法作用 γ β] {m : α -> β} {c : γ}
   证明: by
   rcases hc.exists_left_inv with ⟨d, hd⟩
   refine ⟨fun H => ?_, fun H => tendsto_map.comp H⟩
@@ -4708,7 +4708,7 @@ theorem smul_tendsto_smul_iff
 
 中文:
 定理 smul_tendsto_smul_iff
-  结论: [Group γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
+  结论: [群 γ] [乘法作用 γ β] {m : α -> β} {c : γ} {f : 滤子 α}
   证明: .smul_tendsto_smul_iff Group.isUnit _
 
 Depends on / 依赖: Group.isUnit, isUnit, smul_tendsto_smul_iff
@@ -4727,7 +4727,7 @@ theorem smul_tendsto_smul_iff₀
 
 中文:
 定理 smul_tendsto_smul_iff₀
-  结论: [GroupWithZero γ] [MulAction γ β] {m : α -> β} {c : γ} {f : Filter α}
+  结论: [带零群 γ] [乘法作用 γ β] {m : α -> β} {c : γ} {f : 滤子 α}
   证明: hc.isUnit.smul_tendsto_smul_iff
 
 Depends on / 依赖: hc.isUnit.smul_tendsto_smul_iff, isUnit, smul_tendsto_smul_iff

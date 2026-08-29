@@ -44,8 +44,8 @@ instance [NoZeroDivisors
     exact WithTop.add_eq_top.mp h
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] : NoZeroDivisors R⟦X⟧ where
+实例 [无零因子
+  签名: R] : 无零因子 R⟦X⟧ where
   定义体: by
     simp_rw [← order_eq_top, order_mul] at h ⊢
     exact WithTop.add_eq_top.mp h
@@ -70,8 +70,8 @@ instance [Ring
   body: NoZeroDivisors.to_isDomain _
 
 中文:
-实例 [Ring
-  签名: R] [IsDomain R] : IsDomain R⟦X⟧
+实例 [环
+  签名: R] [是整环 R] : 是整环 R⟦X⟧
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -97,7 +97,7 @@ theorem span_X_isPrime
 
 中文:
 定理 span_X_isPrime
-  结论: (Ideal.span ({X} : Set R⟦X⟧)).IsPrime
+  结论: (理想.span ({X} : 集合 R⟦X⟧)).是素
   证明: by
   suffices Ideal.span ({X} : Set R⟦X⟧) = RingHom.ker constantCoeff by
     rw [this]
@@ -130,7 +130,7 @@ theorem X_prime
 
 中文:
 定理 X_prime
-  结论: Prime (X : R⟦X⟧)
+  结论: 素 (X : R⟦X⟧)
   证明: by
   rw [← Ideal.span_singleton_prime]
   · exact span_X_isPrime
@@ -155,7 +155,7 @@ theorem X_irreducible
 
 中文:
 定理 X_irreducible
-  结论: Irreducible (X : R⟦X⟧)
+  结论: 不可约 (X : R⟦X⟧)
   证明: X_prime.irreducible
 
 Depends on / 依赖: X_prime, X_prime.irreducible, irreducible
@@ -179,7 +179,7 @@ theorem rescale_injective
 中文:
 定理 rescale_injective
   条件: {a : R} (ha : a != 0)
-  结论: Function.Injective (rescale a)
+  结论: 函数.单射 (rescale a)
   证明: by
   intro p q h
   rw [PowerSeries.ext_iff] at *

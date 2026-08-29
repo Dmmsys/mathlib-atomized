@@ -130,7 +130,7 @@ theorem embeddingOfSubset_isometry
 中文:
 定理 embeddingOfSubset_isometry
   条件: (H : DenseRange x)
-  结论: Isometry (embeddingOfSubset x)
+  结论: 等距 (embeddingOfSubset x)
   证明: by
   refine Isometry.of_dist_eq fun a b => ?_
   refine (embeddingOfSubset_dist_le x a b).antisymm (le_of_forall_pos_le_add fun e epos => ?_)
@@ -179,8 +179,8 @@ theorem exists_isometric_embedding
     have : exists s : Set α, s.Countable
 
 中文:
-定理 exists_isometric_embedding
-  条件: (α : 类型u) [MetricSpace α] [SeparableSpace α]
+定理 存在_isometric_embedding
+  条件: (α : 类型u) [度量空间 α] [可分空间 α]
   证明: by
   rcases (univ : Set α).eq_empty_or_nonempty with h | h
   · use fun _ => 0; intro x; exact absurd h (Nonempty.ne_empty ⟨x, mem_univ x⟩)
@@ -218,7 +218,7 @@ definition kuratowskiEmbedding
 
 中文:
 定义 kuratowskiEmbedding
-  签名: (α : 类型u) [MetricSpace α] [SeparableSpace α]
+  签名: (α : 类型u) [度量空间 α] [可分空间 α]
   定义体: Classical.choose (KuratowskiEmbedding.exists_isometric_embedding α)
 
 Depends on / 依赖: Classical, Classical.choose, KuratowskiEmbedding, KuratowskiEmbedding.exists_isometric_embedding, exists_isometric_embedding
@@ -236,7 +236,7 @@ theorem kuratowskiEmbedding.isometry
 
 中文:
 定理 kuratowskiEmbedding.isometry
-  条件: (α : 类型u) [MetricSpace α] [SeparableSpace α]
+  条件: (α : 类型u) [度量空间 α] [可分空间 α]
   证明: Classical.choose_spec (exists_isometric_embedding α)
 -/
 protected theorem kuratowskiEmbedding.isometry (α : Type u) [MetricSpace α] [SeparableSpace α] :
@@ -266,7 +266,7 @@ theorem LipschitzOnWith.extend_lp_infty
 
 中文:
 定理 LipschitzOnWith.extend_lp_infty
-  结论: [PseudoMetricSpace α] {s : Set α} {ι : 类型}
+  结论: [伪度量空间 α] {s : 集合 α} {ι : 类型}
   证明: by
   -- Construct the coordinate-wise extensions
   rw [LipschitzOnWith.coordinate] at hfl

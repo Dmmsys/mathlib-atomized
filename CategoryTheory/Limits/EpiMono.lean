@@ -59,8 +59,8 @@ lemma mono_iff_fst_eq_snd
 
 中文:
 引理 mono_iff_fst_eq_snd
-  条件: (hc : IsLimit c)
-  结论: Mono f ↔ c.fst = c.snd
+  条件: (hc : 是极限 c)
+  结论: 单态射 f ↔ c.fst = c.snd
   证明: by
   constructor
   · intro hf
@@ -102,8 +102,8 @@ lemma mono_iff_isIso_fst
 
 中文:
 引理 mono_iff_isIso_fst
-  条件: (hc : IsLimit c)
-  结论: Mono f ↔ IsIso c.fst
+  条件: (hc : 是极限 c)
+  结论: 单态射 f ↔ 是同构 c.fst
   证明: by
   rw [mono_iff_fst_eq_snd hc]
   constructor
@@ -141,8 +141,8 @@ lemma mono_iff_isIso_snd
 
 中文:
 引理 mono_iff_isIso_snd
-  条件: (hc : IsLimit c)
-  结论: Mono f ↔ IsIso c.snd
+  条件: (hc : 是极限 c)
+  结论: 单态射 f ↔ 是同构 c.snd
   证明: mono_iff_isIso_fst (PullbackCone.flipIsLimit hc)
 
 Depends on / 依赖: PullbackCone, PullbackCone.flipIsLimit, flipIsLimit, mono_iff_isIso_fst
@@ -167,7 +167,7 @@ lemma mono_iff_isPullback
 
 中文:
 引理 mono_iff_isPullback
-  结论: Mono f ↔ IsPullback (𝟙 X) (𝟙 X) f f
+  结论: 单态射 f ↔ 是拉回 (𝟙 X) (𝟙 X) f f
   证明: by
   constructor
   · intro
@@ -209,8 +209,8 @@ lemma epi_iff_inl_eq_inr
 
 中文:
 引理 epi_iff_inl_eq_inr
-  条件: (hc : IsColimit c)
-  结论: Epi f ↔ c.inl = c.inr
+  条件: (hc : 是余极限 c)
+  结论: 满态射 f ↔ c.inl = c.inr
   证明: by
   constructor
   · intro hf
@@ -252,8 +252,8 @@ lemma epi_iff_isIso_inl
 
 中文:
 引理 epi_iff_isIso_inl
-  条件: (hc : IsColimit c)
-  结论: Epi f ↔ IsIso c.inl
+  条件: (hc : 是余极限 c)
+  结论: 满态射 f ↔ 是同构 c.inl
   证明: by
   rw [epi_iff_inl_eq_inr hc]
   constructor
@@ -291,8 +291,8 @@ lemma epi_iff_isIso_inr
 
 中文:
 引理 epi_iff_isIso_inr
-  条件: (hc : IsColimit c)
-  结论: Epi f ↔ IsIso c.inr
+  条件: (hc : 是余极限 c)
+  结论: 满态射 f ↔ 是同构 c.inr
   证明: epi_iff_isIso_inl (PushoutCocone.flipIsColimit hc)
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.flipIsColimit, epi_iff_isIso_inl, flipIsColimit
@@ -317,7 +317,7 @@ lemma epi_iff_isPushout
 
 中文:
 引理 epi_iff_isPushout
-  结论: Epi f ↔ IsPushout f f (𝟙 Y) (𝟙 Y)
+  结论: 满态射 f ↔ 是推出 f f (𝟙 Y) (𝟙 Y)
   证明: by
   constructor
   · intro

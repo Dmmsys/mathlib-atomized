@@ -40,7 +40,7 @@ definition stdSimplex
 
 中文:
 定义 stdSimplex
-  签名: : Set (ι -> 𝕜)
+  签名: : 集合 (ι -> 𝕜)
   定义体: { f | (forall x, 0 <= f x) ∧ ∑ x, f x = 1 }
 -/
 def stdSimplex : Set (ι -> 𝕜) :=
@@ -85,8 +85,8 @@ theorem convex_stdSimplex
 
 中文:
 定理 convex_stdSimplex
-  条件: [IsOrderedRing 𝕜]
-  结论: Convex 𝕜 (stdSimplex 𝕜 ι)
+  条件: [是Ordered环 𝕜]
+  结论: 凸 𝕜 (stdSimplex 𝕜 ι)
   证明: by
   refine fun f hf g hg a b ha hb hab => ⟨fun x => ?_, ?_⟩
   · apply_rules [add_nonneg, mul_nonneg, hf.1, hg.1]
@@ -114,7 +114,7 @@ lemma stdSimplex_of_subsingleton
 
 中文:
 引理 stdSimplex_of_subsingleton
-  条件: [Subsingleton 𝕜]
+  条件: [子单例 𝕜]
   结论: stdSimplex 𝕜 ι = univ
   证明: eq_univ_of_forall fun _ => ⟨fun _ => (Subsingleton.elim _ _).le, Subsingleton.elim _ _⟩
 -/
@@ -132,7 +132,7 @@ lemma stdSimplex_of_isEmpty_index
 
 中文:
 引理 stdSimplex_of_isEmpty_index
-  条件: [IsEmpty ι] [Nontrivial 𝕜]
+  条件: [是空 ι] [非平凡 𝕜]
   结论: stdSimplex 𝕜 ι = ∅
   证明: eq_empty_of_forall_notMem by rintro f ⟨-, hf⟩; simp at hf
 
@@ -156,7 +156,7 @@ lemma stdSimplex_unique
 
 中文:
 引理 stdSimplex_unique
-  条件: [ZeroLEOneClass 𝕜] [Nonempty ι] [Subsingleton ι]
+  条件: [ZeroLEOne类 𝕜] [非空 ι] [子单例 ι]
   证明: by
   cases nonempty_unique ι
   refine eq_singleton_iff_unique_mem.2 ⟨⟨fun _ => zero_le_one, Fintype.sum_unique _⟩, ?_⟩
@@ -187,7 +187,7 @@ theorem mem_Icc_of_mem_stdSimplex
 
 中文:
 定理 mem_Icc_of_mem_stdSimplex
-  结论: [IsOrderedAddMonoid 𝕜]
+  结论: [是OrderedAdd幺半群 𝕜]
   证明: ⟨hf.1 x, hf.2 ▸ Finset.single_le_sum (fun y _ => hf.1 y) (Finset.mem_univ x)⟩
 
 Depends on / 依赖: Finset, Finset.mem_univ, Finset.single_le_sum, mem_univ, single_le_sum
@@ -211,8 +211,8 @@ theorem stdSimplex_subset_Icc
 
 中文:
 定理 stdSimplex_subset_Icc
-  条件: [IsOrderedAddMonoid 𝕜]
-  结论: stdSimplex 𝕜 ι subseteq Icc 0 1
+  条件: [是OrderedAdd幺半群 𝕜]
+  结论: stdSimplex 𝕜 ι subseteq 闭区间 0 1
   证明: by
   intro f h
   rw [← pi_univ_Icc]; rw [univ_pi_eq_iInter]; rw [mem_iInter]
@@ -239,7 +239,7 @@ theorem single_mem_stdSimplex
 中文:
 定理 single_mem_stdSimplex
   条件: (i : ι)
-  结论: Pi.single i 1 in stdSimplex 𝕜 ι
+  结论: 依赖函数类型.single i 1 in stdSimplex 𝕜 ι
   证明: ⟨le_update_iff.2 ⟨zero_le_one, fun _ _ => le_rfl⟩, by simp⟩
 
 Depends on / 依赖: le_rfl, le_update_iff, zero_le_one
@@ -348,7 +348,7 @@ left_inv f := Subtype.ext funext Fin.forall_fin_two.2 by
 
 中文:
 定义 stdSimplexEquivIcc
-  签名: : stdSimplex 𝕜 (Fin 2) ≃ Icc (0 : 𝕜) 1 where
+  签名: : stdSimplex 𝕜 (有限集 2) ≃ 闭区间 (0 : 𝕜) 1 where
   定义体: ⟨f.1 1, f.2.1 _, f.2.2 ▸
     Finset.single_le_sum (fun i _ => f.2.1 i) (Finset.mem_univ _)⟩
   invFun x := ⟨![1 - x, x], Fin.forall_fin_two.2 ⟨sub_nonneg.2 x.2.2, x.2.1⟩, by simp⟩
@@ -485,8 +485,8 @@ theorem Set.Finite.convexHull_eq_image
   aesop
 
 中文:
-定理 Set.Finite.convexHull_eq_image
-  结论: {E : 类型} [AddCommGroup E] [Module R E]
+定理 集合.有限.convexHull_eq_image
+  结论: {E : 类型} [加法交换群 E] [模 R E]
   证明: hs.fintype
     (⇑(∑ x : s, (LinearMap.proj (R := R) x).smulRight x.1)) '' stdSimplex R s := by
   classical
@@ -528,7 +528,7 @@ theorem isClosed_stdSimplex
 
 中文:
 定理 isClosed_stdSimplex
-  结论: IsClosed (stdSimplex 𝕜 ι)
+  结论: 是闭集 (stdSimplex 𝕜 ι)
   证明: by
   rw [stdSimplex_eq_inter]
   apply IsClosed.inter
@@ -555,7 +555,7 @@ theorem isCompact_stdSimplex
 
 中文:
 定理 isCompact_stdSimplex
-  条件: [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜]
+  条件: [余mpactIcc空间 𝕜] [是OrderedAdd幺半群 𝕜]
   证明: IsCompact.of_isClosed_subset isCompact_Icc (isClosed_stdSimplex 𝕜 ι) (stdSimplex_subset_Icc 𝕜)
 
 Depends on / 依赖: IsCompact, IsCompact.of_isClosed_subset, isClosed_stdSimplex, isCompact_Icc, of_isClosed_subset, stdSimplex_subset_Icc
@@ -574,7 +574,7 @@ instance stdSimplex.instCompactSpace_coe
 
 中文:
 实例 stdSimplex.instCompactSpace_coe
-  签名: [CompactIccSpace 𝕜] [IsOrderedAddMonoid 𝕜]
+  签名: [余mpactIcc空间 𝕜] [是OrderedAdd幺半群 𝕜]
   定义体: isCompact_iff_compactSpace.mp isCompact_stdSimplex 𝕜 _
 
 Depends on / 依赖: geometric_hahn_banach_point_point, hf.ne, hx.symm, isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_stdSimplex, map_zero
@@ -650,7 +650,7 @@ theorem isPathConnected_stdSimplex
 
 中文:
 定理 isPathConnected_stdSimplex
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   证明: (convex_stdSimplex Real ι).isPathConnected (by
     classical
     exact ⟨_, single_mem_stdSimplex Real (Classical.arbitrary ι)⟩)
@@ -672,8 +672,8 @@ instance [Nonempty
   body: isPathConnected_iff_pathConnectedSpace.1 (isPathConnected_stdSimplex _)
 
 中文:
-实例 [Nonempty
-  签名: ι] : PathConnectedSpace (stdSimplex 实数 ι)
+实例 [非空
+  签名: ι] : 道路连通空间 (stdSimplex 实数 ι)
   定义体: isPathConnected_iff_pathConnectedSpace.1 (isPathConnected_stdSimplex _)
 
 Depends on / 依赖: isPathConnected_iff_pathConnectedSpace, isPathConnected_stdSimplex
@@ -700,8 +700,8 @@ definition stdSimplexHomeomorphUnitInterval
 @[si
 
 中文:
-定义 stdSimplexHomeomorphUnitInterval
-  签名: : stdSimplex 实数 (Fin 2) ≃ₜ unit整数erval where
+定义 stdSimplexHomeomorphUnit整数erval
+  签名: : stdSimplex 实数 (有限集 2) ≃ₜ unit整数erval where
   定义体: stdSimplexEquivIcc Real
   continuous_toFun := .subtype_mk ((continuous_apply 1).comp continuous_subtype_val) _
   continuous_invFun := by
@@ -732,7 +732,7 @@ lemma stdSimplexHomeomorphUnitInterval_zero
 @[simp]
 
 中文:
-引理 stdSimplexHomeomorphUnitInterval_zero
+引理 stdSimplexHomeomorphUnit整数erval_zero
   证明: rfl
 
 @[simp]
@@ -749,7 +749,7 @@ lemma stdSimplexHomeomorphUnitInterval_one
   proof: rfl
 
 中文:
-引理 stdSimplexHomeomorphUnitInterval_one
+引理 stdSimplexHomeomorphUnit整数erval_one
   证明: rfl
 -/
 lemma stdSimplexHomeomorphUnitInterval_one :
@@ -805,7 +805,7 @@ theorem diam_stdSimplex_of_subsingleton
 
 中文:
 定理 diam_stdSimplex_of_subsingleton
-  条件: [Subsingleton ι]
+  条件: [子单例 ι]
   结论: Metric.diam (stdSimplex 实数 ι) = 0
   证明: by
   cases isEmpty_or_nonempty ι with
@@ -838,7 +838,7 @@ theorem diam_stdSimplex
 
 中文:
 定理 diam_stdSimplex
-  条件: [Nontrivial ι]
+  条件: [非平凡 ι]
   结论: Metric.diam (stdSimplex 实数 ι) = 1
   证明: by
   refine le_antisymm diam_stdSimplex_le ?_
@@ -879,7 +879,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (stdSimplex S X) X S
+  签名: 函数状 (stdSimplex S X) X S
   定义体: s.val
   coe_injective := by aesop
 
@@ -970,7 +970,7 @@ lemma add_eq_one
 
 中文:
 引理 add_eq_one
-  条件: (s : stdSimplex S (Fin 2))
+  条件: (s : stdSimplex S (有限集 2))
   证明: by
   simpa only [Fin.sum_univ_two] using sum_eq_one s
 
@@ -1219,7 +1219,7 @@ lemma continuous_map
 
 中文:
 引理 continuous_map
-  条件: [TopologicalSpace S] [IsTopologicalSemiring S] (f : X -> Y)
+  条件: [拓扑空间 S] [是TopologicalSemiring S] (f : X -> Y)
   证明: Continuous.subtype_mk ((FunOnFinite.continuous_linearMap S S f).comp continuous_induced_dom) _
 -/
 lemma continuous_map [TopologicalSpace S] [IsTopologicalSemiring S] (f : X -> Y) :
@@ -1240,7 +1240,7 @@ lemma vertex_injective
 
 中文:
 引理 vertex_injective
-  条件: [Nontrivial S] [DecidableEq X]
+  条件: [非平凡 S] [DecidableEq X]
   证明: by
   intro x y h
   replace h := DFunLike.congr_fun h x
@@ -1267,8 +1267,8 @@ instance [Nonempty
   exact ⟨vertex (Classical.arbitrary _)⟩
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty (stdSimplex S X)
+实例 [非空
+  签名: X] : 非空 (stdSimplex S X)
   定义体: by
   classical
   exact ⟨vertex (Classical.arbitrary _)⟩
@@ -1291,8 +1291,8 @@ instance [Nontrivial
     exact ⟨vertex x, vertex y, fun h => hxy (vertex_injective h)⟩
 
 中文:
-实例 [Nontrivial
-  签名: S] [Nontrivial X] : Nontrivial (stdSimplex S X) where
+实例 [非平凡
+  签名: S] [非平凡 X] : 非平凡 (stdSimplex S X) where
   定义体: by
     classical
     obtain ⟨x, y, hxy⟩ := exists_pair_ne X
@@ -1321,8 +1321,8 @@ instance [Subsingleton
     simp [this]
 
 中文:
-实例 [Subsingleton
-  签名: X] : Subsingleton (stdSimplex S X) where
+实例 [子单例
+  签名: X] : 子单例 (stdSimplex S X) where
   定义体: by
     ext i
     have (u : stdSimplex S X) : u i = 1 := by
@@ -1354,8 +1354,8 @@ instance [Unique
 @[simp]
 
 中文:
-实例 [Unique
-  签名: X] : Unique (stdSimplex S X) where
+实例 [唯一
+  签名: X] : 唯一 (stdSimplex S X) where
   定义体: ⟨1, by simp, by simp⟩
   uniq := by subsingleton
 
@@ -1378,7 +1378,7 @@ lemma eq_one_of_unique
 
 中文:
 引理 eq_one_of_unique
-  条件: [Unique X] (s : stdSimplex S X) (x : X)
+  条件: [唯一 X] (s : stdSimplex S X) (x : X)
   证明: by
   obtain rfl : s = default := by subsingleton
   rfl

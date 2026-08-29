@@ -126,7 +126,7 @@ definition collapse
 
 中文:
 定义 collapse
-  签名: (𝒜 : Finset (Finset α)) (a : α) (f : Finset α -> β) (s : Finset α)
+  签名: (𝒜 : 有限集 (有限集 α)) (a : α) (f : 有限集 α -> β) (s : 有限集 α)
   定义体: ∑ t in 𝒜 with t.erase a = s, f t
 -/
 private def collapse (𝒜 : Finset (Finset α)) (a : α) (f : Finset α -> β) (s : Finset α) : β :=
@@ -163,7 +163,7 @@ lemma filter_collapse_eq
 
 中文:
 引理 filter_collapse_eq
-  条件: (ha : a ∉ s) (𝒜 : Finset (Finset α))
+  条件: (ha : a ∉ s) (𝒜 : 有限集 (有限集 α))
   证明: by
   ext t; split_ifs <;> simp [erase_eq_iff ha] <;> aesop
 -/
@@ -190,7 +190,7 @@ lemma collapse_eq
 
 中文:
 引理 collapse_eq
-  条件: (ha : a ∉ s) (𝒜 : Finset (Finset α)) (f : Finset α -> β)
+  条件: (ha : a ∉ s) (𝒜 : 有限集 (有限集 α)) (f : 有限集 α -> β)
   证明: by
   rw [collapse]; rw [filter_collapse_eq ha]
   split_ifs <;> simp [(ne_of_mem_of_not_mem' (mem_insert_self a s) ha).symm, *]
@@ -502,8 +502,8 @@ lemma Finset.four_functions_theorem
   | insert a u h
 
 中文:
-引理 Finset.four_functions_theorem
-  结论: (u : Finset α)
+引理 有限集.four_functions_theorem
+  结论: (u : 有限集 α)
   证明: by
   induction u using Finset.induction generalizing f₁ f₂ f₃ f₄ 𝒜 ℬ with
   | empty =>
@@ -639,8 +639,8 @@ lemma Finset.le_card_infs_mul_card_sups
     zero_le_one (fun _ _ => le_rfl) s t
 
 中文:
-引理 Finset.le_card_infs_mul_card_sups
-  条件: [DecidableEq α] (s t : Finset α)
+引理 有限集.le_card_infs_mul_card_sups
+  条件: [DecidableEq α] (s t : 有限集 α)
   证明: by
   simpa using four_functions_theorem (1 : α -> Nat) 1 1 1 zero_le_one zero_le_one zero_le_one
     zero_le_one (fun _ _ => le_rfl) s t
@@ -693,7 +693,7 @@ lemma holley
 
 中文:
 引理 holley
-  结论: (hμ₀ : 0 <= μ) (hf : 0 <= f) (hg : 0 <= g) (hμ : Monotone μ)
+  结论: (hμ₀ : 0 <= μ) (hf : 0 <= f) (hg : 0 <= g) (hμ : 递增 μ)
   证明: by
   classical
   obtain rfl | hf := hf.eq_or_lt
@@ -737,7 +737,7 @@ lemma fkg
 
 中文:
 引理 fkg
-  结论: (hμ₀ : 0 <= μ) (hf₀ : 0 <= f) (hg₀ : 0 <= g) (hf : Monotone f) (hg : Monotone g)
+  结论: (hμ₀ : 0 <= μ) (hf₀ : 0 <= f) (hg₀ : 0 <= g) (hf : 递增 f) (hg : 递增 g)
   证明: by
   refine four_functions_theorem_univ (μ * f) (μ * g) μ _ (mul_nonneg hμ₀ hf₀) (mul_nonneg hμ₀ hg₀)
     hμ₀ (mul_nonneg hμ₀ <| mul_nonneg hf₀ hg₀) (fun a b => ?_)
@@ -778,8 +778,8 @@ lemma Finset.le_card_diffs_mul_card_diffs
   simpa [← card_compls (_ ⊻ _), ← map_sup, ← 
 
 中文:
-引理 Finset.le_card_diffs_mul_card_diffs
-  条件: (s t : Finset α)
+引理 有限集.le_card_diffs_mul_card_diffs
+  条件: (s t : 有限集 α)
   证明: by
   have : forall s t : Finset α, (s \\ t).map ⟨_, liftLatticeHom_injective⟩ =
       s.map ⟨_, liftLatticeHom_injective⟩ \\ t.map ⟨_, liftLatticeHom_injective⟩ := by
@@ -812,8 +812,8 @@ lemma Finset.card_le_card_diffs
     simpa [← sq] using s.le_card_diffs_mul_card_diffs s
 
 中文:
-引理 Finset.card_le_card_diffs
-  条件: (s : Finset α)
+引理 有限集.card_le_card_diffs
+  条件: (s : 有限集 α)
   结论: #s <= #(s \\ s)
   证明: le_of_pow_le_pow_left₀ two_ne_zero zero_le by
     simpa [← sq] using s.le_card_diffs_mul_card_diffs s

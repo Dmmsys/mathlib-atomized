@@ -44,7 +44,7 @@ definition Commute
 
 中文:
 定义 Commute
-  签名: [Mul S] (a b : S)
+  签名: [乘法 S] (a b : S)
   定义体: SemiconjBy a b b
 
 Depends on / 依赖: SemiconjBy
@@ -67,7 +67,7 @@ theorem commute_iff_eq
 
 中文:
 定理 commute_iff_eq
-  条件: [Mul S] (a b : S)
+  条件: [乘法 S] (a b : S)
   结论: Commute a b ↔ a * b = b * a
   证明: Iff.rfl
 
@@ -388,7 +388,7 @@ theorem all
 
 中文:
 定理 all
-  条件: [CommMagma S] (a b : S)
+  条件: [交换原群 S] (a b : S)
   结论: Commute a b
   证明: mul_comm a b
 -/
@@ -748,7 +748,7 @@ lemma IsLeftRegular.commute_mul_left_iff
 
 中文:
 引理 IsLeftRegular.commute_mul_left_iff
-  结论: [Semigroup S] {a b : S}
+  结论: [半群 S] {a b : S}
   证明: by
   simp [commute_iff_eq, mul_assoc, reg.eq_iff, eq_comm]
 -/
@@ -767,7 +767,7 @@ lemma IsRightRegular.commute_mul_right_iff
 
 中文:
 引理 IsRightRegular.commute_mul_right_iff
-  结论: [Semigroup S] {a b : S}
+  结论: [半群 S] {a b : S}
   证明: by
   simp [commute_iff_eq, ← mul_assoc, reg.eq_iff, eq_comm]
 -/

@@ -33,7 +33,7 @@ structure Edge
     - proof : Expr
 
 中文:
-结构 Edge
+结构 边
   参数: where
   公理与运算 (3 个):
     - src : 自然数
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: ToString Edge
+  签名: ToString 边
   定义体: s!"{e.src} ⟶ {e.dst}"
 
 Depends on / 依赖: e.dst, e.src
@@ -75,7 +75,7 @@ abbreviation Graph
   body: Std.HashMap Nat (Array Edge)
 
 中文:
-缩写 Graph
+缩写 图
   定义体: Std.HashMap Nat (Array Edge)
 
 Depends on / 依赖: HashMap, Std.HashMap
@@ -94,7 +94,7 @@ definition addEdge
 
 中文:
 定义 addEdge
-  签名: (g : Graph) (edge : Edge)
+  签名: (g : 图) (edge : 边)
   定义体: g.alter edge.src fun | none => #[edge] | some edges => edges.push edge
 
 Depends on / 依赖: edge.src, edges.push, g.alter
@@ -117,7 +117,7 @@ definition constructLeGraph
 
 中文:
 定义 constructLeGraph
-  签名: (facts : Array AtomicFact)
+  签名: (facts : 数组 AtomicFact)
   定义体: do
   let mut res : Graph := ∅
   for fact in facts do
@@ -171,7 +171,7 @@ definition buildTransitiveLeProofDFS
 
 中文:
 定义 buildTransitiveLeProofDFS
-  签名: (g : Graph) (v t : 自然数) (tExpr : Expr)
+  签名: (g : 图) (v t : 自然数) (tExpr : Expr)
   定义体: do
   modify fun s => {s with visited := s.visited.insert v}
   if v == t then
@@ -211,7 +211,7 @@ definition buildTransitiveLeProof
 
 中文:
 定义 buildTransitiveLeProof
-  签名: (g : Graph) (s t : 自然数)
+  签名: (g : 图) (s t : 自然数)
   定义体: do
   let state : DFSState := ⟨∅⟩
   (buildTransitiveLeProofDFS g s t ((← get).atoms[t]!)).run' state

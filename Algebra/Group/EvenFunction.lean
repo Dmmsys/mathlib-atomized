@@ -53,7 +53,7 @@ definition Odd
 
 中文:
 定义 Odd
-  签名: [Neg β] (f : α -> β)
+  签名: [取负 β] (f : α -> β)
   定义体: forall a, f (-a) = -(f a)
 -/
 protected def Odd [Neg β] (f : α -> β) : Prop := forall a, f (-a) = -(f a)
@@ -87,7 +87,7 @@ lemma Even.const
 中文:
 引理 Even.const
   条件: (b : β)
-  结论: Function.Even (fun _ : α => b)
+  结论: 函数.Even (fun _ : α => b)
   证明: fun _ => rfl
 -/
 lemma Even.const (b : β) : Function.Even (fun _ : α => b) := fun _ => rfl
@@ -103,8 +103,8 @@ lemma Even.zero
 
 中文:
 引理 Even.zero
-  条件: [Zero β]
-  结论: Function.Even (fun (_ : α) => (0 : β))
+  条件: [零 β]
+  结论: 函数.Even (fun (_ : α) => (0 : β))
   证明: Even.const 0
 
 Depends on / 依赖: Even.const
@@ -122,7 +122,7 @@ lemma Odd.eq
 
 中文:
 引理 Odd.eq
-  条件: [Neg β] {f : α -> β} (hf : f.Odd) (x : α)
+  条件: [取负 β] {f : α -> β} (hf : f.Odd) (x : α)
   结论: f (-x) = -f x
   证明: hf x
 -/
@@ -139,8 +139,8 @@ lemma Odd.zero
 
 中文:
 引理 Odd.zero
-  条件: [NegZeroClass β]
-  结论: Function.Odd (fun (_ : α) => (0 : β))
+  条件: [NegZero类 β]
+  结论: 函数.Odd (fun (_ : α) => (0 : β))
   证明: fun _ => neg_zero.symm
 
 Depends on / 依赖: neg_zero, neg_zero.symm
@@ -183,7 +183,7 @@ lemma Even.comp_odd
 
 中文:
 引理 Even.comp_odd
-  条件: [Neg β] {f : β -> γ} (hf : f.Even) {g : α -> β} (hg : g.Odd)
+  条件: [取负 β] {f : β -> γ} (hf : f.Even) {g : α -> β} (hg : g.Odd)
   证明: by
   intro a
   simp only [comp_apply, hg a, hf _]
@@ -207,7 +207,7 @@ lemma Odd.comp_odd
 
 中文:
 引理 Odd.comp_odd
-  条件: [Neg β] [Neg γ] {f : β -> γ} (hf : f.Odd) {g : α -> β} (hg : g.Odd)
+  条件: [取负 β] [取负 γ] {f : β -> γ} (hf : f.Odd) {g : α -> β} (hg : g.Odd)
   证明: by
   intro a
   simp only [comp_apply, hg a, hf _]
@@ -234,7 +234,7 @@ lemma Even.add
 
 中文:
 引理 Even.add
-  条件: [Add β] {f g : α -> β} (hf : f.Even) (hg : g.Even)
+  条件: [加法 β] {f g : α -> β} (hf : f.Even) (hg : g.Even)
   结论: (f + g).Even
   证明: by
   intro a
@@ -259,7 +259,7 @@ lemma Odd.add
 
 中文:
 引理 Odd.add
-  条件: [SubtractionCommMonoid β] {f g : α -> β} (hf : f.Odd) (hg : g.Odd)
+  条件: [SubtractionComm幺半群 β] {f g : α -> β} (hf : f.Odd) (hg : g.Odd)
   结论: (f + g).Odd
   证明: by
   intro a
@@ -288,7 +288,7 @@ lemma Even.smul_even
 
 中文:
 引理 Even.smul_even
-  条件: [SMul β γ] (hf : f.Even) (hg : g.Even)
+  条件: [标量乘法 β γ] (hf : f.Even) (hg : g.Even)
   结论: (f • g).Even
   证明: by
   intro a
@@ -312,7 +312,7 @@ lemma Even.smul_odd
 
 中文:
 引理 Even.smul_odd
-  条件: [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hf : f.Even) (hg : g.Odd)
+  条件: [幺半群 β] [加法群 γ] [分配乘法作用 β γ] (hf : f.Even) (hg : g.Odd)
   证明: by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, smul_neg]
@@ -336,7 +336,7 @@ lemma Odd.smul_even
 
 中文:
 引理 Odd.smul_even
-  条件: [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Even)
+  条件: [环 β] [加法交换群 γ] [模 β γ] (hf : f.Odd) (hg : g.Even)
   证明: by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, neg_smul]
@@ -360,7 +360,7 @@ lemma Odd.smul_odd
 
 中文:
 引理 Odd.smul_odd
-  条件: [Ring β] [AddCommGroup γ] [Module β γ] (hf : f.Odd) (hg : g.Odd)
+  条件: [环 β] [加法交换群 γ] [模 β γ] (hf : f.Odd) (hg : g.Odd)
   证明: by
   intro a
   simp only [Pi.smul_apply', hf a, hg a, smul_neg, neg_smul, neg_neg]
@@ -385,7 +385,7 @@ lemma Even.const_smul
 
 中文:
 引理 Even.const_smul
-  条件: [SMul β γ] (hg : g.Even) (r : β)
+  条件: [标量乘法 β γ] (hg : g.Even) (r : β)
   结论: (r • g).Even
   证明: by
   intro a
@@ -409,7 +409,7 @@ lemma Odd.const_smul
 
 中文:
 引理 Odd.const_smul
-  条件: [Monoid β] [AddGroup γ] [DistribMulAction β γ] (hg : g.Odd) (r : β)
+  条件: [幺半群 β] [加法群 γ] [分配乘法作用 β γ] (hg : g.Odd) (r : β)
   证明: by
   intro a
   simp only [Pi.smul_apply, hg a, smul_neg]
@@ -465,7 +465,7 @@ lemma Even.mul_odd
 
 中文:
 引理 Even.mul_odd
-  条件: [HasDistribNeg R] (hf : f.Even) (hg : g.Odd)
+  条件: [有DistribNeg R] (hf : f.Even) (hg : g.Odd)
   结论: (f * g).Odd
   证明: by
   intro a
@@ -490,7 +490,7 @@ lemma Odd.mul_even
 
 中文:
 引理 Odd.mul_even
-  条件: [HasDistribNeg R] (hf : f.Odd) (hg : g.Even)
+  条件: [有DistribNeg R] (hf : f.Odd) (hg : g.Even)
   结论: (f * g).Odd
   证明: by
   intro a
@@ -515,7 +515,7 @@ lemma Odd.mul_odd
 
 中文:
 引理 Odd.mul_odd
-  条件: [HasDistribNeg R] (hf : f.Odd) (hg : g.Odd)
+  条件: [有DistribNeg R] (hf : f.Odd) (hg : g.Odd)
   结论: (f * g).Even
   证明: by
   intro a
@@ -547,7 +547,7 @@ lemma zero_of_even_and_odd
 
 中文:
 引理 zero_of_even_and_odd
-  条件: [Neg α] (he : f.Even) (ho : f.Odd)
+  条件: [取负 α] (he : f.Even) (ho : f.Odd)
   结论: f = 0
   证明: by
   ext r
@@ -572,7 +572,7 @@ lemma Odd.finsetSum_eq_zero
 
 中文:
 引理 Odd.finsetSum_eq_zero
-  结论: [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) {s : Finset α}
+  结论: [InvolutiveNeg α] {f : α -> β} (hf : f.Odd) {s : 有限集 α}
   证明: by
   simpa [neg_eq_self, funext hf, hs] using (Finset.sum_map s (Equiv.neg α).toEmbedding f).symm
 
@@ -598,7 +598,7 @@ lemma Odd.sum_eq_zero
 
 中文:
 引理 Odd.sum_eq_zero
-  条件: [Fintype α] [InvolutiveNeg α] {f : α -> β} (hf : f.Odd)
+  条件: [有限类型 α] [InvolutiveNeg α] {f : α -> β} (hf : f.Odd)
   结论: ∑ a, f a = 0
   证明: hf.finsetSum_eq_zero Finset.map_univ_equiv (Equiv.neg α)
 
@@ -618,7 +618,7 @@ lemma Odd.map_zero
 
 中文:
 引理 Odd.map_zero
-  条件: [NegZeroClass α] (hf : f.Odd)
+  条件: [NegZero类 α] (hf : f.Odd)
   结论: f 0 = 0
   证明: by simp [← neg_eq_self, ← hf 0]
 

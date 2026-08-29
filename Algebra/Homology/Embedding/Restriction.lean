@@ -44,7 +44,7 @@ definition restriction
 
 中文:
 定义 restriction
-  签名: : HomologicalComplex C c where
+  签名: : 同调复形 C c where
   定义体: K.X (e.f i)
   d _ _ := K.d _ _
   shape i j hij := K.shape _ _ (by simpa only [← e.rel_iff] using hij)
@@ -207,7 +207,7 @@ definition restrictionFunctor
 
 中文:
 定义 restrictionFunctor
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: K.restriction e
   map φ := HomologicalComplex.restrictionMap φ e
 
@@ -226,8 +226,8 @@ instance [HasZeroMorphisms
   signature: C] : (e.restrictionFunctor C).PreservesZeroMorphisms where
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : (e.restrictionFunctor C).PreservesZeroMorphisms where
+实例 [有ZeroMorphisms
+  签名: C] : (e.restrictionFunctor C).保持ZeroMorphisms where
 -/
 instance [HasZeroMorphisms C] : (e.restrictionFunctor C).PreservesZeroMorphisms where
 
@@ -239,8 +239,8 @@ instance [Preadditive
   signature: C] : (e.restrictionFunctor C).Additive where
 
 中文:
-实例 [Preadditive
-  签名: C] : (e.restrictionFunctor C).Additive where
+实例 [预加性
+  签名: C] : (e.restrictionFunctor C).加性 where
 -/
 instance [Preadditive C] : (e.restrictionFunctor C).Additive where
 

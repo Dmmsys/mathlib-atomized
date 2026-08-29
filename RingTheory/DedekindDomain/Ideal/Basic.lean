@@ -74,7 +74,7 @@ theorem FractionalIdeal.adjoinIntegral_eq_one_of_isUnit
     simp only [(mul_inv_cancel_if
 
 中文:
-定理 FractionalIdeal.adjoinIntegral_eq_one_of_isUnit
+定理 FractionalIdeal.adjoin整数egral_eq_one_of_isUnit
   结论: (x : K)
   证明: by
   set I := adjoinIntegral A⁰ x hx
@@ -114,7 +114,7 @@ alias one_mem_inv_coe_ideal := FractionalIdeal.one_mem_inv_coe_ideal
 
 中文:
 定理 FractionalIdeal.one_mem_inv_coe_ideal
-  条件: [IsDomain A] {I : Ideal A} (hI : I != ⊥)
+  条件: [是整环 A] {I : 理想 A} (hI : I != ⊥)
   证明: by
   rw [mem_inv_iff (coeIdeal_ne_zero.mpr hI)]
   intro y hy
@@ -150,8 +150,8 @@ theorem PrimeSpectrum.exists_multiset_prod_cons_le_and_prod_not_le
       {Z | (Z.map asIdeal).prod <= I ∧ (Z.map asIdeal).pro
 
 中文:
-定理 PrimeSpectrum.exists_multiset_prod_cons_le_and_prod_not_le
-  结论: [IsDedekindDomain A]
+定理 素谱.存在_multiset_prod_cons_le_and_prod_not_le
+  结论: [是Dedekind整环 A]
   证明: by
   -- Let `Z` be a minimal set of prime ideals such that their product is contained in `J`.
   obtain ⟨Z₀, hZ₀⟩ := exists_primeSpectrum_prod_le_and_ne_bot_of_domain hNF hI0
@@ -318,7 +318,7 @@ theorem coe_ideal_mul_inv
 
 中文:
 定理 coe_ideal_mul_inv
-  条件: (I : Ideal A) (hI0 : I != ⊥)
+  条件: (I : 理想 A) (hI0 : I != ⊥)
   结论: I * (I : FractionalIdeal A⁰ K)⁻¹ = 1
   证明: by
   -- We'll show `1 ≤ J⁻¹ = (I * I⁻¹)⁻¹ ≤ 1`.
@@ -377,7 +377,7 @@ definition IsDedekindDomainInv
 
 中文:
 定义 IsDedekindDomainInv
-  签名: [IsDomain A]
+  签名: [是整环 A]
   定义体: forall I != (⊥ : FractionalIdeal A⁰ (FractionRing A)), I * I⁻¹ = 1
 
 Depends on / 依赖: FractionRing, FractionalIdeal
@@ -405,7 +405,7 @@ theorem isDedekindDomainInv_iff
 
 中文:
 定理 isDedekindDomainInv_iff
-  条件: [IsDomain A]
+  条件: [是整环 A]
   证明: by
   let h : FractionalIdeal A⁰ (FractionRing A) ≃+* FractionalIdeal A⁰ K :=
     FractionalIdeal.mapEquiv (FractionRing.algEquiv A K)
@@ -445,7 +445,7 @@ abbreviation commGroupWithZero
 
 中文:
 缩写 commGroupWithZero
-  签名: : CommGroupWithZero (FractionalIdeal A⁰ K) where
+  签名: : 带零交换群 (FractionalIdeal A⁰ K) where
   定义体: inv_zero' _
   mul_inv_cancel := isDedekindDomainInv_iff.mp h
   div_eq_mul_inv I J := by
@@ -485,7 +485,7 @@ theorem isNoetherianRing
 
 中文:
 定理 isNoetherianRing
-  结论: IsNoetherianRing A
+  结论: 是Noether环 A
   证明: by
   let := h.commGroupWithZero (FractionRing A)
   refine isNoetherianRing_iff.mpr ⟨fun I : Ideal A => ?_⟩
@@ -519,7 +519,7 @@ theorem integrallyClosed
 
 中文:
 定理 integrallyClosed
-  结论: Is整数egrallyClosed A
+  结论: 是整闭 A
   证明: by
   let := h.commGroupWithZero (FractionRing A)
   -- It suffices to show that for integral `x`,
@@ -558,7 +558,7 @@ theorem dimensionLEOne
 
 中文:
 定理 dimensionLEOne
-  结论: DimensionLEOne A
+  结论: 维数不超过一 A
   证明: by
   -- We're going to show that `P` is maximal because any (maximal) ideal `M`
   -- that is strictly larger would be `⊤`.
@@ -618,7 +618,7 @@ theorem isDedekindDomain_iff_isDedekindDomainInv
 
 中文:
 定理 isDedekindDomain_iff_isDedekindDomainInv
-  条件: [IsDomain A]
+  条件: [是整环 A]
   证明: by
   refine ⟨fun _ I hI => ?_, fun h =>
     { h.isNoetherianRing, h.dimensionLEOne, h.integrallyClosed with }⟩
@@ -672,7 +672,7 @@ instance semifield
 
 中文:
 实例 semifield
-  签名: : Semifield (FractionalIdeal A⁰ K) where
+  签名: : 半域 (FractionalIdeal A⁰ K) where
   定义体: coeIdeal_injective.nontrivial
   __ : CommSemiring (FractionalIdeal A⁰ K) := inferInstance
   inv_zero := inv_zero' K
@@ -703,7 +703,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulStrictMono (FractionalIdeal A⁰ K)
+  签名: 正乘严格递增 (FractionalIdeal A⁰ K)
   定义体: PosMulMono.toPosMulStrictMono
 
 Depends on / 依赖: PosMulMono, PosMulMono.toPosMulStrictMono, toPosMulStrictMono
@@ -719,7 +719,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulPosStrictMono (FractionalIdeal A⁰ K)
+  签名: 乘正严格递增 (FractionalIdeal A⁰ K)
   定义体: MulPosMono.toMulPosStrictMono
 
 Depends on / 依赖: MulPosMono, MulPosMono.toMulPosStrictMono, toMulPosStrictMono
@@ -736,7 +736,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulReflectLE (FractionalIdeal A⁰ K)
+  签名: 正乘反映偏序 (FractionalIdeal A⁰ K)
   定义体: by simpa [I.2.ne'] using mul_right_mono (a := I.1⁻¹) hJK
 
 Depends on / 依赖: mul_right_mono
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulPosReflectLE (FractionalIdeal A⁰ K)
+  签名: 乘正反映偏序 (FractionalIdeal A⁰ K)
   定义体: by simpa [I.2.ne'] using mul_left_mono (a := I.1⁻¹) hJK
 
 Depends on / 依赖: mul_left_mono
@@ -774,7 +774,7 @@ lemma mul_left_strictMono
 中文:
 引理 mul_left_strictMono
   条件: {I : FractionalIdeal A⁰ K} (hI : I != 0)
-  结论: StrictMono (· * I)
+  结论: 严格递增 (· * I)
   证明: fun _J _K hJK => mul_lt_mul_of_pos_right hJK pos_iff_ne_zero.2 hI
 
 Depends on / 依赖: mul_lt_mul_of_pos_right, pos_iff_ne_zero
@@ -794,7 +794,7 @@ lemma mul_right_strictMono
 中文:
 引理 mul_right_strictMono
   条件: {I : FractionalIdeal A⁰ K} (hI : I != 0)
-  结论: StrictMono (I * ·)
+  结论: 严格递增 (I * ·)
   证明: fun _J _K hJK => mul_lt_mul_of_pos_left hJK pos_iff_ne_zero.2 hI
 
 Depends on / 依赖: mul_lt_mul_of_pos_left, pos_iff_ne_zero
@@ -818,7 +818,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulReflectLE (Ideal A)
+  签名: 正乘反映偏序 (理想 A)
   定义体: by
     dsimp
     rwa [← FractionalIdeal.coeIdeal_le_coeIdeal (FractionRing A),
@@ -850,8 +850,8 @@ instance Ideal.isCancelMulZero
     (map_zero _) (map_mul _)
 
 中文:
-实例 Ideal.isCancelMulZero
-  签名: : IsCancelMulZero (Ideal A)
+实例 理想.isCancelMulZero
+  签名: : 是乘零消去 (理想 A)
   定义体: Function.Injective.isCancelMulZero (coeIdealHom A⁰ (FractionRing A)) coeIdeal_injective
     (map_zero _) (map_mul _)
 
@@ -869,8 +869,8 @@ instance Ideal.isDomain
   signature: : IsDomain (Ideal A) where
 
 中文:
-实例 Ideal.isDomain
-  签名: : IsDomain (Ideal A) where
+实例 理想.isDomain
+  签名: : 是整环 (理想 A) where
 
 Depends on / 依赖: Definable, Definable.out
 -/
@@ -886,7 +886,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosMulStrictMono (Ideal A)
+  签名: 正乘严格递增 (理想 A)
   定义体: PosMulMono.toPosMulStrictMono
 
 Depends on / 依赖: PosMulMono, PosMulMono.toPosMulStrictMono, toPosMulStrictMono
@@ -903,7 +903,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulPosStrictMono (Ideal A)
+  签名: 乘正严格递增 (理想 A)
   定义体: MulPosMono.toMulPosStrictMono
 -/
 instance : MulPosStrictMono (Ideal A) := MulPosMono.toMulPosStrictMono
@@ -924,8 +924,8 @@ theorem Ideal.dvd_iff_le
       rw
 
 中文:
-定理 Ideal.dvd_iff_le
-  条件: {I J : Ideal A}
+定理 理想.dvd_iff_le
+  条件: {I J : 理想 A}
   结论: I ∣ J ↔ J <= I
   证明: ⟨Ideal.le_of_dvd, fun h => by
     by_cases hI : I = ⊥
@@ -960,8 +960,8 @@ theorem Ideal.liesOver_iff_dvd_map
   rw [liesOver_iff]; rw [dvd_iff_le]; rw [under_def]; rw [map_le_iff_le_comap]; rw [IsCoatom.le_iff_eq (by rwa [← isMaximal_def]) (comap_ne_top _ hP), eq_comm]
 
 中文:
-定理 Ideal.liesOver_iff_dvd_map
-  结论: [Algebra R A] {p : Ideal R} {P : Ideal A} (hP : P != ⊤)
+定理 理想.liesOver_iff_dvd_map
+  结论: [代数 R A] {p : 理想 R} {P : 理想 A} (hP : P != ⊤)
   证明: by
   rw [liesOver_iff]; rw [dvd_iff_le]; rw [under_def]; rw [map_le_iff_le_comap]; rw [IsCoatom.le_iff_eq (by rwa [← isMaximal_def]) (comap_ne_top _ hP), eq_comm]
 
@@ -990,8 +990,8 @@ theorem Ideal.dvdNotUnit_iff_lt
     dvdNotUnit_of_dvd_of_not_dvd (I
 
 中文:
-定理 Ideal.dvdNotUnit_iff_lt
-  条件: {I J : Ideal A}
+定理 理想.dvdNotUnit_iff_lt
+  条件: {I J : 理想 A}
   结论: DvdNotUnit I J ↔ J < I
   证明: ⟨fun ⟨hI, H, hunit, hmul⟩ =>
     lt_of_le_of_ne (Ideal.dvd_iff_le.mp ⟨H, hmul⟩)
@@ -1030,7 +1030,7 @@ instance :
 
 中文:
 实例 :
-  签名: WfDvdMonoid (Ideal A)
+  签名: WfDvdMonoid (理想 A)
   定义体: by
     have : WellFoundedGT (Ideal A) := inferInstance
     convert! this.wf using 3
@@ -1057,8 +1057,8 @@ instance Ideal.uniqueFactorizationMonoid
           obtain ⟨_J_ne, H, hunit, P_eq⟩ := Ideal.dvdNotUnit_iff_l
 
 中文:
-实例 Ideal.uniqueFactorizationMonoid
-  签名: : UniqueFactorizationMonoid (Ideal A)
+实例 理想.uniqueFactorizationMonoid
+  签名: : 唯一分解幺半群 (理想 A)
   定义体: { irreducible_iff_prime := by
       intro P
       exact ⟨fun hirr => ⟨hirr.ne_zero, hirr.not_isUnit, fun I J => by
@@ -1097,8 +1097,8 @@ instance Ideal.strongNormalizationMonoid
 alias Ideal.normalizationMonoid := Ideal.strongNormalizationMonoid
 
 中文:
-实例 Ideal.strongNormalizationMonoid
-  签名: : StrongNormalizationMonoid (Ideal A)
+实例 理想.strongNormalizationMonoid
+  签名: : StrongNormalization幺半群 (理想 A)
   定义体: inferInstance
 
 @[deprecated (since := "2026-07-08")]

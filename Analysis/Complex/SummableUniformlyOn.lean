@@ -34,7 +34,7 @@ lemma SummableLocallyUniformlyOn.differentiableOn
 
 中文:
 引理 SummableLocallyUniformlyOn.differentiableOn
-  结论: {ι E : 类型} [NormedAddCommGroup E]
+  结论: {ι E : 类型} [赋范交换加群 E]
   证明: by
   obtain ⟨g, hg⟩ := h
   have hc := (hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn.mp hg).differentiableOn ?_ hs

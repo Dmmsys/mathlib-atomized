@@ -69,12 +69,12 @@ structure IsSetSemiring
     - sdiff_eq_sUnion' : forall s in C, forall t in C, exists I : Finset (Set α), ↑I subseteq C ∧ PairwiseDisjoint (I : Set (Set α)) id ∧ s \ t = ⋃₀ I
 
 中文:
-结构 IsSetSemiring
-  参数: (C : Set (Set α))
+结构 是SetSemiring
+  参数: (C : 集合 (集合 α))
   公理与运算 (3 个):
     - empty_mem : ∅ in C
     - inter_mem : 对任意 s in C, 对任意 t in C, s inter t in C
-    - sdiff_eq_sUnion' : 对任意 s in C, 对任意 t in C, 存在 I : Finset (Set α), ↑I subseteq C ∧ PairwiseDisjoint (I : Set (Set α)) id ∧ s \ t = ⋃₀ I
+    - sdiff_eq_sUnion' : 对任意 s in C, 对任意 t in C, 存在 I : 有限集 (集合 α), ↑I subseteq C ∧ PairwiseDisjoint (I : 集合 (集合 α)) id ∧ s \ t = ⋃₀ I
 -/
 structure IsSetSemiring (C : Set (Set α)) : Prop where
   empty_mem : ∅ in C
@@ -94,12 +94,12 @@ structure IsSetRing
     - sdiff_mem(⦃s t) : Set α⦄ : s in C -> t in C -> s \ t in C
 
 中文:
-结构 IsSetRing
-  参数: (C : Set (Set α))
+结构 是集合环
+  参数: (C : 集合 (集合 α))
   公理与运算 (3 个):
     - empty_mem : ∅ in C
-    - union_mem(⦃s t) : Set α⦄ : s in C -> t in C -> s union t in C
-    - sdiff_mem(⦃s t) : Set α⦄ : s in C -> t in C -> s \ t in C
+    - union_mem(⦃s t) : 集合 α⦄ : s in C -> t in C -> s union t in C
+    - sdiff_mem(⦃s t) : 集合 α⦄ : s in C -> t in C -> s \ t in C
 -/
 structure IsSetRing (C : Set (Set α)) : Prop where
   empty_mem : ∅ in C
@@ -120,7 +120,7 @@ lemma inter_mem
 
 中文:
 引理 inter_mem
-  条件: (hC : IsSetRing C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是集合环 C) (hs : s in C) (ht : t in C)
   结论: s inter t in C
   证明: by
   rw [← sdiff_sdiff_right_self]; exact hC.sdiff_mem hs (hC.sdiff_mem hs ht)
@@ -148,8 +148,8 @@ lemma isSetSemiring
 
 中文:
 引理 isSetSemiring
-  条件: (hC : IsSetRing C)
-  结论: IsSetSemiring C where
+  条件: (hC : 是集合环 C)
+  结论: 是SetSemiring C where
   证明: hC.empty_mem
   inter_mem := fun _ hs _ ht => hC.inter_mem hs ht
   sdiff_eq_sUnion' := by
@@ -188,7 +188,7 @@ lemma biUnion_mem
 
 中文:
 引理 biUnion_mem
-  结论: {ι : 类型} (hC : IsSetRing C) {s : ι -> Set α}
+  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
   证明: by
   classical
   induction S using Finset.induction with
@@ -227,8 +227,8 @@ lemma biInter_mem
     refine hC.inter_mem hs.1 ?
 
 中文:
-引理 biInter_mem
-  结论: {ι : 类型} (hC : IsSetRing C) {s : ι -> Set α}
+引理 bi整数er_mem
+  结论: {ι : 类型} (hC : 是集合环 C) {s : ι -> 集合 α}
   证明: by
   classical
   induction hS using Finset.Nonempty.cons_induction with
@@ -263,7 +263,7 @@ lemma finsetSup_mem
 
 中文:
 引理 finsetSup_mem
-  结论: (hC : IsSetRing C) {ι : 类型} {s : ι -> Set α} {t : Finset ι}
+  结论: (hC : 是集合环 C) {ι : 类型} {s : ι -> 集合 α} {t : 有限集 ι}
   证明: by
   simpa using biUnion_mem hC _ hs
 
@@ -285,7 +285,7 @@ lemma partialSups_mem
 
 中文:
 引理 partialSups_mem
-  结论: {ι : 类型} [Preorder ι] [LocallyFiniteOrderBot ι]
+  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
   证明: by
   simpa only [partialSups_apply, sup'_eq_sup] using hC.finsetSup_mem (fun i hi => hs i)
 
@@ -306,7 +306,7 @@ lemma disjointed_mem
 
 中文:
 引理 disjointed_mem
-  结论: {ι : 类型} [Preorder ι] [LocallyFiniteOrderBot ι]
+  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
   证明: disjointedRec (fun _ j ht => hC.sdiff_mem ht <| hs j) (hs i)
 
 Depends on / 依赖: disjointedRec, hC.sdiff_mem, sdiff_mem
@@ -329,7 +329,7 @@ theorem iUnion_le_mem
 
 中文:
 定理 iUnion_le_mem
-  条件: (hC : IsSetRing C) {s : 自然数 -> Set α} (hs : 对任意 n, s n in C) (n : 自然数)
+  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 n, s n in C) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [hs 0]
@@ -355,8 +355,8 @@ theorem iInter_le_mem
   | succ n hn => rw [biInter_le_succ]; exact hC.inter_mem hn (hs _)
 
 中文:
-定理 iInter_le_mem
-  条件: (hC : IsSetRing C) {s : 自然数 -> Set α} (hs : 对任意 n, s n in C) (n : 自然数)
+定理 i整数er_le_mem
+  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 n, s n in C) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [hs 0]
@@ -383,7 +383,7 @@ theorem accumulate_mem
 
 中文:
 定理 accumulate_mem
-  条件: (hC : IsSetRing C) {s : 自然数 -> Set α} (hs : 对任意 i, s i in C) (n : 自然数)
+  条件: (hC : 是集合环 C) {s : 自然数 -> 集合 α} (hs : 对任意 i, s i in C) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [hs 0]
@@ -412,7 +412,7 @@ lemma isPiSystem
 
 中文:
 引理 isPiSystem
-  条件: (hC : IsSetSemiring C)
+  条件: (hC : 是SetSemiring C)
   结论: IsPiSystem C
   证明: fun s hs t ht _ => hC.inter_mem s hs t ht
 
@@ -435,8 +435,8 @@ theorem exists_finpartition_sdiff
 @[deprecated (since := "2026-06-03")] alias exists_finpartit
 
 中文:
-定理 exists_finpartition_sdiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+定理 存在_finpartition_sdiff
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: by
   obtain ⟨I, hIC, hI, hst⟩ := hC.sdiff_eq_sUnion' s hs t ht
   refine ⟨.ofErase I (supIndep_iff_pairwiseDisjoint.mpr hI) ?_, ?_⟩
@@ -477,7 +477,7 @@ theorem mem_supClosure_iff
 
 中文:
 定理 mem_supClosure_iff
-  条件: (hC : IsSetSemiring C)
+  条件: (hC : 是SetSemiring C)
   证明: by
     rintro ⟨S, hS, hSC, rfl⟩
     rw [sup'_eq_sup]
@@ -537,7 +537,7 @@ theorem sdiff_mem_supClosure
 
 中文:
 定理 sdiff_mem_supClosure
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: hC.mem_supClosure_iff.mpr hC.exists_finpartition_sdiff hs ht
 
 @[deprecated (since := "2026-06-03")] alias diff_mem_supClosure := sdiff_mem_supClosure
@@ -570,8 +570,8 @@ theorem isSetRing_supClosure
 
 中文:
 定理 isSetRing_supClosure
-  条件: (hC : IsSetSemiring C)
-  结论: IsSetRing (supClosure C) where
+  条件: (hC : 是SetSemiring C)
+  结论: 是集合环 (supClosure C) where
   证明: subset_supClosure hC.empty_mem
   union_mem _ _ h₁ h₂ := supClosed_supClosure h₁ h₂
   sdiff_mem := by
@@ -616,7 +616,7 @@ definition disjointOfDiff
 
 中文:
 定义 disjointOfDiff
-  签名: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  签名: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   定义体: (hC.exists_finpartition_sdiff hs ht).choose.parts
 
 Depends on / 依赖: choose.parts, exists_finpartition_sdiff, hC.exists_finpartition_sdiff
@@ -635,7 +635,7 @@ lemma empty_notMem_disjointOfDiff
 
 中文:
 引理 empty_notMem_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: Finpartition.bot_notMem _
 
 Depends on / 依赖: Finpartition, Finpartition.bot_notMem, bot_notMem
@@ -654,7 +654,7 @@ lemma subset_disjointOfDiff
 
 中文:
 引理 subset_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: (hC.exists_finpartition_sdiff hs ht).choose_spec
 
 Depends on / 依赖: choose_spec, exists_finpartition_sdiff, hC.exists_finpartition_sdiff
@@ -673,7 +673,7 @@ lemma pairwiseDisjoint_disjointOfDiff
 
 中文:
 引理 pairwiseDisjoint_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: .pairwiseDisjoint Finpartition.supIndep _
 
 Depends on / 依赖: Finpartition, Finpartition.supIndep, pairwiseDisjoint, supIndep
@@ -692,7 +692,7 @@ lemma sUnion_disjointOfDiff
 
 中文:
 引理 sUnion_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: (sup_id_eq_sSup _).symm.trans (Finpartition.sup_parts _)
 
 Depends on / 依赖: Finpartition, Finpartition.sup_parts, sup_id_eq_sSup, sup_parts, symm.trans
@@ -714,7 +714,7 @@ lemma notMem_disjointOfDiff
 
 中文:
 引理 notMem_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: by
   intro hs_mem
   cases disjoint_sdiff_self_right.eq_bot_of_le (Finpartition.le _ hs_mem)
@@ -740,7 +740,7 @@ lemma sUnion_insert_disjointOfDiff
 
 中文:
 引理 sUnion_insert_disjointOfDiff
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   conv_rhs => rw [← union_sdiff_cancel hst, ← hC.sUnion_disjointOfDiff hs ht]
   simp only [sUnion_insert]
@@ -765,7 +765,7 @@ lemma disjoint_sUnion_disjointOfDiff
 
 中文:
 引理 disjoint_sUnion_disjointOfDiff
-  条件: (hC : IsSetSemiring C) (hs : s in C) (ht : t in C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (ht : t in C)
   证明: by
   rw [hC.sUnion_disjointOfDiff]
   exact disjoint_sdiff_right
@@ -792,7 +792,7 @@ lemma pairwiseDisjoint_insert_disjointOfDiff
 
 中文:
 引理 pairwiseDisjoint_insert_disjointOfDiff
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   have h := hC.pairwiseDisjoint_disjointOfDiff hs ht
   refine PairwiseDisjoint.insert_of_notMem h (hC.notMem_disjointOfDiff hs ht) fun u hu => ?_
@@ -829,8 +829,8 @@ theorem exists_finpartition_sdiff_sUnion
 exact hC'.sdiff_mem (subset_supClosure hs) hC'.finsetSup_mem hI.trans subset_supClosure
 
 中文:
-定理 exists_finpartition_sdiff_sUnion
-  条件: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+定理 存在_finpartition_sdiff_sUnion
+  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   证明: by
   rw [← hC.mem_supClosure_iff]; rw [← sSup_eq_sUnion]; rw [← sup_id_eq_sSup]
   have hC' := hC.isSetRing_supClosure
@@ -852,7 +852,7 @@ definition disjointOfDiffUnion
 
 中文:
 定义 disjointOfDiffUnion
-  签名: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+  签名: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   定义体: (hC.exists_finpartition_sdiff_sUnion hs hI).choose.parts
 
 Depends on / 依赖: choose.parts, exists_finpartition_sdiff_sUnion, hC.exists_finpartition_sdiff_sUnion
@@ -871,7 +871,7 @@ lemma empty_notMem_disjointOfDiffUnion
 
 中文:
 引理 empty_notMem_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: Finpartition.bot_notMem _
 
 Depends on / 依赖: Finpartition, Finpartition.bot_notMem, bot_notMem
@@ -891,7 +891,7 @@ lemma disjointOfDiffUnion_subset
 
 中文:
 引理 disjointOfDiffUnion_subset
-  条件: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   证明: (hC.exists_finpartition_sdiff_sUnion hs hI).choose_spec
 
 Depends on / 依赖: choose_spec, exists_finpartition_sdiff_sUnion, hC.exists_finpartition_sdiff_sUnion
@@ -910,7 +910,7 @@ lemma pairwiseDisjoint_disjointOfDiffUnion
 
 中文:
 引理 pairwiseDisjoint_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: (Finpartition.supIndep _).pairwiseDisjoint
 
 Depends on / 依赖: Finpartition, Finpartition.supIndep, pairwiseDisjoint, supIndep
@@ -932,7 +932,7 @@ alias diff_sUnion_eq_sUnion_disjointOfDiffUnion := sdiff_sUnion_eq_sUnion_disjoi
 
 中文:
 引理 sdiff_sUnion_eq_sUnion_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: (Finpartition.sup_parts _).symm.trans (sup_id_eq_sSup _)
 
 @[deprecated (since := "2026-06-03")]
@@ -962,8 +962,8 @@ lemma exists_disjoint_finset_sdiff_eq
 alias exists_disjoint_finset_diff_eq := exists_disjoint_finset_sdiff_eq
 
 中文:
-引理 exists_disjoint_finset_sdiff_eq
-  条件: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+引理 存在_disjoint_finset_sdiff_eq
+  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   证明: ⟨hC.disjointOfDiffUnion hs hI,
    hC.disjointOfDiffUnion_subset hs hI,
    hC.pairwiseDisjoint_disjointOfDiffUnion hs hI,
@@ -997,7 +997,7 @@ lemma sUnion_disjointOfDiffUnion_subset
 
 中文:
 引理 sUnion_disjointOfDiffUnion_subset
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]
   exact sdiff_subset
@@ -1021,7 +1021,7 @@ lemma subset_of_diffUnion_disjointOfDiffUnion
 
 中文:
 引理 subset_of_diffUnion_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+  结论: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   证明: by
   revert t ht
   rw [← sUnion_subset_iff]; rw [hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
@@ -1046,7 +1046,7 @@ apply le_trans hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
 
 中文:
 引理 subset_of_mem_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) {I : Finset (Set α)}
+  结论: (hC : 是SetSemiring C) {I : 有限集 (集合 α)}
   证明: by
 apply le_trans hC.subset_of_diffUnion_disjointOfDiffUnion hs hI t ht
   exact sdiff_le (a := s) (b := ⋃₀ I)
@@ -1071,7 +1071,7 @@ lemma disjoint_sUnion_disjointOfDiffUnion
 
 中文:
 引理 disjoint_sUnion_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   rw [← hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion]; exact Set.disjoint_sdiff_right
 
@@ -1099,7 +1099,7 @@ lemma disjoint_disjointOfDiffUnion
 
 中文:
 引理 disjoint_disjointOfDiffUnion
-  条件: (hC : IsSetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
+  条件: (hC : 是SetSemiring C) (hs : s in C) (hI : ↑I subseteq C)
   证明: by
   by_contra h
   rw [Finset.not_disjoint_iff] at h
@@ -1138,7 +1138,7 @@ lemma pairwiseDisjoint_union_disjointOfDiffUnion
 
 中文:
 引理 pairwiseDisjoint_union_disjointOfDiffUnion
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   rw [pairwiseDisjoint_union]
   refine ⟨h_dis, hC.pairwiseDisjoint_disjointOfDiffUnion hs hI, fun u hu v hv _ => ?_⟩
@@ -1169,7 +1169,7 @@ lemma sUnion_union_sUnion_disjointOfDiffUnion_of_subset
 
 中文:
 引理 sUnion_union_sUnion_disjointOfDiffUnion_of_subset
-  结论: (hC : IsSetSemiring C)
+  结论: (hC : 是SetSemiring C)
   证明: by
   conv_rhs => rw [← union_sdiff_cancel (Set.sUnion_subset hI_ss : ⋃₀ ↑I subseteq s),
     hC.sdiff_sUnion_eq_sUnion_disjointOfDiffUnion hs hI]
@@ -1195,7 +1195,7 @@ lemma sUnion_union_disjointOfDiffUnion_of_subset
 
 中文:
 引理 sUnion_union_disjointOfDiffUnion_of_subset
-  结论: (hC : IsSetSemiring C) (hs : s in C)
+  结论: (hC : 是SetSemiring C) (hs : s in C)
   证明: by
   conv_rhs => rw [← sUnion_union_sUnion_disjointOfDiffUnion_of_subset hC hs hI hI_ss]
   simp_rw [coe_union]
@@ -1229,8 +1229,8 @@ theorem exists_partition_disjointed
     hC.isSetRing_supClosure.disjointed_mem (fun _ => subset_supClosure (hJ (Subtype.coe_prop _))) _
 
 中文:
-定理 exists_partition_disjointed
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J)
+定理 存在_partition_disjointed
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : J)
   证明: hC.mem_supClosure_iff.mp
     hC.isSetRing_supClosure.disjointed_mem (fun _ => subset_supClosure (hJ (Subtype.coe_prop _))) _
 -/
@@ -1250,7 +1250,7 @@ definition disjointOfUnion
 
 中文:
 定义 disjointOfUnion
-  签名: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : Set α)
+  签名: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : 集合 α)
   定义体: if hj : j in J then (hC.exists_partition_disjointed hJ ⟨j, hj⟩).choose.parts else ∅
 
 Depends on / 依赖: choose.parts, exists_partition_disjointed, hC.exists_partition_disjointed
@@ -1270,7 +1270,7 @@ theorem disjointOfUnion_coe
 
 中文:
 定理 disjointOfUnion_coe
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (j : J)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (j : J)
   证明: by
   rw [disjointOfUnion]; rw [dif_pos j.2]
 -/
@@ -1293,7 +1293,7 @@ disjoint_disjointed _ J.equivFin.injective.ne hjk
 
 中文:
 引理 pairwiseDisjoint_disjointOfUnion
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
   证明: by
   refine Pairwise.set_of_subtype _ _ fun j k hjk => ?_
   simp_rw [Function.onFun, hC.disjointOfUnion_coe hJ, Finset.disjoint_iff_ne]
@@ -1324,7 +1324,7 @@ lemma disjointOfUnion_subset
 
 中文:
 引理 disjointOfUnion_subset
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
   证明: by
   lift j to J using hj
   rw [hC.disjointOfUnion_coe hJ]
@@ -1351,7 +1351,7 @@ lemma pairwiseDisjoint_disjointOfUnion_of_mem
 
 中文:
 引理 pairwiseDisjoint_disjointOfUnion_of_mem
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
   证明: by
   lift j to J using hj
   rw [disjointOfUnion_coe]; rw [← supIndep_iff_pairwiseDisjoint]
@@ -1382,7 +1382,7 @@ lemma pairwiseDisjoint_biUnion_disjointOfUnion
 
 中文:
 引理 pairwiseDisjoint_biUnion_disjointOfUnion
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
   证明: by
   simp_rw [← SetLike.mem_coe]
   refine Set.PairwiseDisjoint.biUnion
@@ -1417,7 +1417,7 @@ lemma disjointOfUnion_subset_of_mem
 
 中文:
 引理 disjointOfUnion_subset_of_mem
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
   证明: by
   lift j to J using hj
   grw [disjointOfUnion_coe, ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts,
@@ -1441,7 +1441,7 @@ lemma subset_of_mem_disjointOfUnion
 
 中文:
 引理 subset_of_mem_disjointOfUnion
-  结论: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) {x : Set α}
+  结论: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J) {x : 集合 α}
   证明: sUnion_subset_iff.mp (hC.disjointOfUnion_subset_of_mem hJ hj) x hx
 
 Depends on / 依赖: IsTrans, IsTrans.trans, disjointOfUnion_subset_of_mem, hC.disjointOfUnion_subset_of_mem, sUnion_subset_iff, sUnion_subset_iff.mp
@@ -1463,7 +1463,7 @@ lemma empty_notMem_disjointOfUnion
 
 中文:
 引理 empty_notMem_disjointOfUnion
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C) (hj : j in J)
   证明: by
   lift j to J using hj
   rw [disjointOfUnion_coe]
@@ -1490,7 +1490,7 @@ lemma sUnion_disjointOfUnion
 
 中文:
 引理 sUnion_disjointOfUnion
-  条件: (hC : IsSetSemiring C) (hJ : ↑J subseteq C)
+  条件: (hC : 是SetSemiring C) (hJ : ↑J subseteq C)
   证明: by
   simp_rw [sUnion_iUnion, ← iSup_eq_iUnion, iSup_subtype', disjointOfUnion_coe,
     ← Finset.sup_id_set_eq_sUnion, Finpartition.sup_parts, J.equivFin.surjective.iSup_comp,
@@ -1520,7 +1520,7 @@ theorem disjointOfUnion_props
 
 中文:
 定理 disjointOfUnion_props
-  条件: (hC : IsSetSemiring C) (h1 : ↑J subseteq C)
+  条件: (hC : 是SetSemiring C) (h1 : ↑J subseteq C)
   证明: ⟨hC.disjointOfUnion h1,
    hC.pairwiseDisjoint_disjointOfUnion h1,
    fun _ => hC.disjointOfUnion_subset h1,
@@ -1558,8 +1558,8 @@ lemma _root_.Set.Ioc_mem_ofPred_Ioc_le
   proof: ⟨u, max u v, by grind, by grind⟩
 
 中文:
-引理 _root_.Set.Ioc_mem_ofPred_Ioc_le
-  条件: [LinearOrder α] (u v : α)
+引理 _root_.集合.Ioc_mem_ofPred_Ioc_le
+  条件: [线性序 α] (u v : α)
   证明: ⟨u, max u v, by grind, by grind⟩
 -/
 private lemma _root_.Set.Ioc_mem_ofPred_Ioc_le [LinearOrder α] (u v : α) :
@@ -1584,8 +1584,8 @@ lemma Ioc
     rcases le_or_gt u' u with
 
 中文:
-引理 Ioc
-  条件: [LinearOrder α] [Nonempty α]
+引理 左开右闭区间
+  条件: [线性序 α] [非空 α]
   证明: by
     inhabit α
     exact ⟨default, default, le_rfl, by simp⟩

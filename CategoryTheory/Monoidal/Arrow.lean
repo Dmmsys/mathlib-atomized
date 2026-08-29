@@ -66,7 +66,7 @@ lemma tensorHom_comp_tensorHom
 
 中文:
 引理 tensorHom_comp_tensorHom
-  结论: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : Arrow C}
+  结论: {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : 箭头 C}
   证明: by
   refine Arrow.hom_ext _ _ ?_ (by simp [whisker_exchange_assoc])
   apply pushout.hom_ext <;> simp [whisker_exchange_assoc]
@@ -95,7 +95,7 @@ lemma associator_naturality
 
 中文:
 引理 associator_naturality
-  结论: {X₁ X₂ X₃ Y₁ Y₂ Y₃ : Arrow C}
+  结论: {X₁ X₂ X₃ Y₁ Y₂ Y₃ : 箭头 C}
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp [whisker_exchange_assoc]) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
@@ -134,7 +134,7 @@ lemma leftUnitor_naturality
 
 中文:
 引理 leftUnitor_naturality
-  条件: {X Y : Arrow C} (f : X ⟶ Y)
+  条件: {X Y : 箭头 C} (f : X ⟶ Y)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply (initialIsInitial.ofIso (mulZero initialIsInitial).symm).hom_ext
@@ -160,7 +160,7 @@ lemma rightUnitor_naturality
 
 中文:
 引理 rightUnitor_naturality
-  条件: {X Y : Arrow C} (f : X ⟶ Y)
+  条件: {X Y : 箭头 C} (f : X ⟶ Y)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext ?_ (by simp)) (by simp)
   apply (initialIsInitial.ofIso (zeroMul initialIsInitial).symm).hom_ext
@@ -188,7 +188,7 @@ lemma pentagon
 
 中文:
 引理 pentagon
-  条件: (W X Y Z : Arrow C)
+  条件: (W X Y Z : 箭头 C)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext (by simp)
@@ -221,7 +221,7 @@ lemma triangle
 
 中文:
 引理 triangle
-  条件: (X Y : Arrow C)
+  条件: (X Y : 箭头 C)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext
@@ -262,7 +262,7 @@ lemma hexagon_forward
 
 中文:
 引理 hexagon_forward
-  条件: (X Y Z : Arrow C)
+  条件: (X Y Z : 箭头 C)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext (by simp) ?_) (by simp)
   apply ((tensorRight _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp
@@ -289,7 +289,7 @@ lemma hexagon_reverse
 
 中文:
 引理 hexagon_reverse
-  条件: (X Y Z : Arrow C)
+  条件: (X Y Z : 箭头 C)
   证明: by
   refine Arrow.hom_ext _ _ (pushout.hom_ext ?_ (by simp)) (by simp)
   apply ((tensorLeft _).map_isPushout (IsPushout.of_hasPushout _ _)).hom_ext <;> simp

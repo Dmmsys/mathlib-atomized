@@ -52,11 +52,11 @@ structure OrderMonoidWithZeroHom
     - monotone' : Monotone toFun
 
 中文:
-结构 OrderMonoidWithZeroHom
-  参数: (α β : 类型) [Preorder α] [Preorder β] [MulZeroOneClass α]
+结构 带零Order幺半群态射
+  参数: (α β : 类型) [预序 α] [预序 β] [乘零幺类 α]
   继承: α ->*₀ β
   公理与运算 (1 个):
-    - monotone' : Monotone toFun
+    - monotone' : 递增 toFun
 -/
 structure OrderMonoidWithZeroHom (α β : Type*) [Preorder α] [Preorder β] [MulZeroOneClass α]
   [MulZeroOneClass β] extends α ->*₀ β where
@@ -89,7 +89,7 @@ definition OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom
 
 中文:
 定义 OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom
-  签名: [OrderHomClass F α β]
+  签名: [序态射类 F α β]
   定义体: { (.ofClass f : α ->*₀ β) with monotone' := OrderHomClass.monotone f }
 
 Depends on / 依赖: OrderHomClass, OrderHomClass.monotone, monotone, ofClass
@@ -111,8 +111,8 @@ instance [OrderHomClass
   body: ⟨OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom⟩
 
 中文:
-实例 [OrderHomClass
-  签名: F α β] [MonoidWithZeroHomClass F α β] : CoeTC F (α ->*₀o β)
+实例 [序态射类
+  签名: F α β] [带零幺半群态射类 F α β] : CoeTC F (α ->*₀o β)
   定义体: ⟨OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom⟩
 
 Depends on / 依赖: OrderMonoidWithZeroHomClass, OrderMonoidWithZeroHomClass.toOrderMonoidWithZeroHom, toOrderMonoidWithZeroHom
@@ -145,7 +145,7 @@ initialize_simps_projections OrderMonoidWithZeroHom (toFun -> apply, -toMonoidWi
 
 中文:
 实例 :
-  签名: FunLike (α ->*₀o β) α β
+  签名: 函数状 (α ->*₀o β) α β
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨⟨_, _⟩⟩, _⟩ := f
@@ -177,7 +177,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZeroHomClass (α ->*₀o β) α β
+  签名: 带零幺半群态射类 (α ->*₀o β) α β
   定义体: f.map_mul'
   map_one f := f.map_one'
   map_zero f := f.map_zero'
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (α ->*₀o β) α β
+  签名: 序态射类 (α ->*₀o β) α β
   定义体: f.monotone' h
 
 Depends on / 依赖: f.monotone, monotone
@@ -266,7 +266,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : α ->*₀ β) (h)
-  结论: (OrderMonoidWithZeroHom.mk f h : α -> β) = f
+  结论: (带零Order幺半群态射.mk f h : α -> β) = f
   证明: rfl
 
 @[simp]
@@ -287,7 +287,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f : α ->*₀o β) (h)
-  结论: OrderMonoidWithZeroHom.mk (.ofClass f) h = f
+  结论: 带零Order幺半群态射.mk (.ofClass f) h = f
   证明: rfl
 -/
 theorem mk_coe (f : α ->*₀o β) (h) : OrderMonoidWithZeroHom.mk (.ofClass f) h = f := rfl
@@ -365,7 +365,7 @@ ext by convert! DFunLike.ext_iff.1 h using 0
 
 中文:
 定理 toOrderMonoidHom_injective
-  结论: Injective (toOrderMonoidHom : _ -> α ->*o β)
+  结论: 单射 (toOrderMonoidHom : _ -> α ->*o β)
   证明: fun f g h =>
 ext by convert! DFunLike.ext_iff.1 h using 0
 -/
@@ -382,7 +382,7 @@ theorem toMonoidWithZeroHom_injective
 
 中文:
 定理 toMonoidWithZeroHom_injective
-  结论: Injective (toMonoidWithZeroHom : _ -> α ->*₀ β)
+  结论: 单射 (toMonoidWithZeroHom : _ -> α ->*₀ β)
   证明: fun f g h => ext by convert! DFunLike.ext_iff.1 h using 0
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, convert, ext_iff
@@ -482,7 +482,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(OrderMonoidWithZeroHom.id α) = id
+  结论: ⇑(带零Order幺半群态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(OrderMonoidWithZeroHom.id α) = id :=
@@ -498,7 +498,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->*₀o α)
+  签名: 可居 (α ->*₀o α)
   定义体: ⟨OrderMonoidWithZeroHom.id α⟩
 
 Depends on / 依赖: OrderMonoidWithZeroHom, OrderMonoidWithZeroHom.id
@@ -647,7 +647,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (f : α ->*₀o β)
-  结论: f.comp (OrderMonoidWithZeroHom.id α) = f
+  结论: f.comp (带零Order幺半群态射.id α) = f
   证明: rfl
 
 @[simp]
@@ -669,7 +669,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (f : α ->*₀o β)
-  结论: (OrderMonoidWithZeroHom.id β).comp f = f
+  结论: (带零Order幺半群态射.id β).comp f = f
   证明: rfl
 
 @[simp]
@@ -689,7 +689,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : Function.Surjective f)
+  条件: {g₁ g₂ : β ->*₀o γ} {f : α ->*₀o β} (hf : 函数.满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun _ => by congr⟩
 
 @[simp]
@@ -711,7 +711,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : Function.Injective g)
+  条件: {g : β ->*₀o γ} {f₁ f₂ : α ->*₀o β} (hg : 函数.单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -740,7 +740,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (α ->*₀o β)
+  签名: 乘法 (α ->*₀o β)
   定义体: ⟨ fun f g => {(.ofClass f : α ->*₀ β) * (.ofClass g : α ->*₀ β) with
       monotone' := f.monotone'.mul' g.monotone'} ⟩
 
@@ -878,7 +878,7 @@ theorem ofClass_mk
 
 中文:
 定理 ofClass_mk
-  条件: (f : α ->*₀ β) (hf : Monotone f)
+  条件: (f : α ->*₀ β) (hf : 递增 f)
   证明: by
   rfl
 
@@ -969,7 +969,7 @@ definition OrderMonoidIso.unitsWithZero
 
 中文:
 定义 OrderMonoidIso.unitsWithZero
-  签名: {α : 类型} [Group α] [Preorder α]
+  签名: {α : 类型} [群 α] [预序 α]
   定义体: WithZero.unitsWithZeroEquiv
   map_le_map_iff' {a b} := by simp [WithZero.unitsWithZeroEquiv]
 
@@ -1025,7 +1025,7 @@ definition OrderMonoidIso.withZeroUnits
 
 中文:
 定义 OrderMonoidIso.withZeroUnits
-  签名: {α : 类型} [LinearOrderedCommGroupWithZero α]
+  签名: {α : 类型} [带零LinearOrderedComm群 α]
   定义体: WithZero.withZeroUnitsEquiv
   map_le_map_iff' {a b} := by
     cases a <;> cases b <;>

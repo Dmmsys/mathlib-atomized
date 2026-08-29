@@ -91,7 +91,7 @@ lemma objEquiv_apply_fst
 
 中文:
 引理 objEquiv_apply_fst
-  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1))
+  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : 有限集 (n + 1))
   证明: rfl
 
 @[simp]
@@ -110,7 +110,7 @@ lemma objEquiv_apply_snd
 
 中文:
 引理 objEquiv_apply_snd
-  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1))
+  条件: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : 有限集 (n + 1))
   证明: rfl
 -/
 lemma objEquiv_apply_snd {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n⦌) (i : Fin (n + 1)) :
@@ -162,7 +162,7 @@ lemma objEquiv_δ_apply
 
 中文:
 引理 objEquiv_δ_apply
-  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : Fin (n + 2))
+  结论: {n : 自然数} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : 有限集 (n + 2))
   证明: rfl
 -/
 lemma objEquiv_δ_apply {n : Nat} (x : (Δ[p] otimes Δ[q] : SSet.{u}) _⦋n + 1⦌) (i : Fin (n + 2))
@@ -182,7 +182,7 @@ definition isoNerve
 
 中文:
 定义 isoNerve
-  签名: : Δ[p] otimes Δ[q] ≅ nerve (ULift.{u} (Fin (p + 1) × Fin (q + 1)))
+  签名: : Δ[p] otimes Δ[q] ≅ nerve (类型层提升.{u} (有限集 (p + 1) × 有限集 (q + 1)))
   定义体: NatIso.ofComponents (fun ⟨⟨d⟩⟩ => Equiv.toIso (objEquiv.trans
       { toFun f := (ULift.orderIso.symm.monotone.comp f.monotone).functor
         invFun s := ULift.orderIso.toOrderEmbedding.toOrderHom.comp ⟨_, s.monotone⟩ }))
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Δ[p] otimes Δ[q] : SSet.{u}).Finite
+  签名: (Δ[p] otimes Δ[q] : SSet.{u}).有限
   定义体: finite_of_hasDimensionLT _ (p + q + 1) inferInstance
 
 Depends on / 依赖: finite_of_hasDimensionLT

@@ -75,7 +75,7 @@ theorem fixedPoints_eq_bot
 
 中文:
 定理 fixedPoints_eq_bot
-  条件: [IsGaloisGroup G K L]
+  条件: [是Galois群 G K L]
   证明: by
   rw [eq_bot_iff]
   exact Algebra.IsInvariant.isInvariant
@@ -100,8 +100,8 @@ theorem isGalois
 
 中文:
 定理 isGalois
-  条件: [Finite G] [IsGaloisGroup G K L]
-  结论: IsGalois K L
+  条件: [有限 G] [是Galois群 G K L]
+  结论: 是Galois K L
   证明: by
   rw [← isGalois_iff_isGalois_bot]; rw [← fixedPoints_eq_bot G]
   exact IsGalois.of_fixed_field L G
@@ -124,7 +124,7 @@ instance of_isGalois
 
 中文:
 实例 of_isGalois
-  签名: [IsGalois K L]
+  签名: [是Galois K L]
   定义体: inferInstance
   commutes := inferInstance
   isInvariant := ⟨fun x => (InfiniteGalois.mem_bot_iff_fixed x).mpr⟩
@@ -151,8 +151,8 @@ theorem card_eq_finrank
 
 中文:
 定理 card_eq_finrank
-  条件: [IsGaloisGroup G K L]
-  结论: 自然数.card G = Module.finrank K L
+  条件: [是Galois群 G K L]
+  结论: 自然数.card G = 模.finrank K L
   证明: by
   rcases fintypeOrInfinite G with _ | hG
   · have : FaithfulSMul G L := faithful K
@@ -185,8 +185,8 @@ theorem finiteDimensional
 
 中文:
 定理 finiteDimensional
-  条件: [Finite G] [IsGaloisGroup G K L]
-  结论: FiniteDimensional K L
+  条件: [有限 G] [是Galois群 G K L]
+  结论: 有限维 K L
   证明: FiniteDimensional.of_finrank_pos (card_eq_finrank G K L ▸ Nat.card_pos)
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_finrank_pos, Nat.card_pos, card_eq_finrank, card_pos, of_finrank_pos
@@ -210,7 +210,7 @@ theorem finite
 
 中文:
 定理 finite
-  结论: (R B : 类型) [CommRing R] [CommRing B] [Algebra R B] [Module.Finite R B]
+  结论: (R B : 类型) [交换环 R] [交换环 B] [代数 R B] [模.有限 R B]
   证明: by
   let A : Subring B := (algebraMap R B).range
   let := FractionRing.liftAlgebra A (FractionRing B)
@@ -252,7 +252,7 @@ theorem card_eq_finrank'
 
 中文:
 定理 card_eq_finrank'
-  结论: 自然数.card G = Module.finrank A B
+  结论: 自然数.card G = 模.finrank A B
   证明: by
   have := IsDomain.of_faithfulSMul A B
   let := FractionRing.liftAlgebra A (FractionRing B)
@@ -281,7 +281,7 @@ theorem map_mulEquivAlgEquiv_fixingSubgroup
 
 中文:
 定理 map_mulEquivAlgEquiv_fixingSubgroup
-  条件: [IsGaloisGroup G K L] (F : 整数ermediateField K L)
+  条件: [是Galois群 G K L] (F : 中间域 K L)
   证明: by
   ext g
   obtain ⟨g, rfl⟩ := (mulEquivAlgEquiv G K L).surjective g
@@ -385,7 +385,7 @@ theorem mulEquivCongr_mapSubgroup_fixingSubgroup
 
 中文:
 定理 mulEquivCongr_mapSubgroup_fixingSubgroup
-  条件: (S : Set B)
+  条件: (S : 集合 B)
   证明: by
   ext g
   simp [Subgroup.map_equiv_eq_comap_symm, mem_fixingSubgroup_iff]
@@ -411,7 +411,7 @@ instance subgroup
 
 中文:
 实例 subgroup
-  签名: [hGKL : IsGaloisGroup G K L]
+  签名: [hGKL : 是Galois群 G K L]
   定义体: inferInstanceAs (IsGaloisGroup H (FixedPoints.subalgebra K L H) L)
 
 Depends on / 依赖: FixedPoints, FixedPoints.subalgebra, IsGaloisGroup, subalgebra
@@ -437,7 +437,7 @@ theorem fixedPoints_of_isGaloisGroup
 
 中文:
 定理 fixedPoints_of_isGaloisGroup
-  条件: [hGKL : IsGaloisGroup G K L] [hHFL : IsGaloisGroup H F L]
+  条件: [hGKL : 是Galois群 G K L] [hHFL : 是Galois群 H F L]
   证明: by
   refine IntermediateField.ext_iff.mpr fun x => ⟨fun hx => ?_, fun hx => ?_⟩
   · obtain ⟨a, rfl⟩ := hHFL.isInvariant.isInvariant x hx
@@ -469,7 +469,7 @@ theorem of_fixedPoints_eq
 
 中文:
 定理 of_fixedPoints_eq
-  条件: [hGKL : IsGaloisGroup G K L] (hF : FixedPoints.intermediateField H = F)
+  条件: [hGKL : 是Galois群 G K L] (hF : FixedPoints.intermediateField H = F)
   证明: by
   rw [eq_comm] at hF
   convert! IsGaloisGroup.subgroup G K L H
@@ -494,7 +494,7 @@ theorem subgroup_iff
 
 中文:
 定理 subgroup_iff
-  条件: [hGKL : IsGaloisGroup G K L]
+  条件: [hGKL : 是Galois群 G K L]
   证明: ⟨fun _ => fixedPoints_of_isGaloisGroup G K L H F, fun h => of_fixedPoints_eq G K L H F h⟩
 
 @[simp]
@@ -516,7 +516,7 @@ theorem finrank_fixedPoints_eq_card_subgroup
 
 中文:
 定理 finrank_fixedPoints_eq_card_subgroup
-  条件: [IsGaloisGroup G K L]
+  条件: [是Galois群 G K L]
   证明: (card_eq_finrank H (FixedPoints.intermediateField H) L).symm
 
 Depends on / 依赖: FixedPoints, FixedPoints.intermediateField, card_eq_finrank, intermediateField
@@ -536,7 +536,7 @@ theorem of_mulEquiv_algEquiv
 
 中文:
 定理 of_mulEquiv_algEquiv
-  条件: [IsGalois K L] (e : G ≃* Gal(L/K)) (he : 对任意 g x, e g x = g • x)
+  条件: [是Galois K L] (e : G ≃* Gal(L/K)) (he : 对任意 g x, e g x = g • x)
   证明: .of_mulEquiv e he
 
 Depends on / 依赖: of_mulEquiv
@@ -554,7 +554,7 @@ instance fixedPoints
 
 中文:
 实例 fixedPoints
-  签名: [Finite G] [FaithfulSMul G L]
+  签名: [有限 G] [忠实标量乘法 G L]
   定义体: of_mulEquiv_algEquiv (FixedPoints.toAlgAutMulEquiv _ _) fun _ _ => rfl
 
 Depends on / 依赖: FixedPoints, FixedPoints.toAlgAutMulEquiv, of_mulEquiv_algEquiv, toAlgAutMulEquiv
@@ -579,7 +579,7 @@ include K in
 
 中文:
 实例 intermediateField
-  签名: [Finite G] [hGKL : IsGaloisGroup G K L]
+  签名: [有限 G] [hGKL : 是Galois群 G K L]
   定义体: let e := ((mulEquivAlgEquiv G K L).subgroupMap (fixingSubgroup G (F : Set L))).trans
 (MulEquiv.subgroupCongr (map_mulEquivAlgEquiv_fixingSubgroup ..)).trans
     IntermediateField.fixingSubgroupEquiv F
@@ -615,7 +615,7 @@ theorem of_isScalarTower
 
 中文:
 定理 of_isScalarTower
-  结论: [Finite G] [IsGaloisGroup G K L] (E : 类型) [Field E] [Algebra K E]
+  结论: [有限 G] [是Galois群 G K L] (E : 类型) [域 E] [代数 K E]
   证明: by
   rw [← IsScalarTower.toAlgHom_fieldRange K E L]
   refine IsGaloisGroup.of_ringEquiv _ _ _ L
@@ -645,7 +645,7 @@ theorem card_fixingSubgroup_eq_finrank
 
 中文:
 定理 card_fixingSubgroup_eq_finrank
-  条件: [Finite G] [IsGaloisGroup G K L]
+  条件: [有限 G] [是Galois群 G K L]
   证明: card_eq_finrank ..
 
 Depends on / 依赖: card_eq_finrank
@@ -691,7 +691,7 @@ theorem fixingSubgroup_bot
 
 中文:
 定理 fixingSubgroup_bot
-  结论: fixingSubgroup G ((⊥ : 整数ermediateField K L) : Set L) = ⊤
+  结论: fixingSubgroup G ((⊥ : 中间域 K L) : 集合 L) = ⊤
   证明: by
   simp [Subgroup.ext_iff, mem_fixingSubgroup_iff, IntermediateField.mem_bot]
 
@@ -776,7 +776,7 @@ theorem fixingSubgroup_top
 
 中文:
 定理 fixingSubgroup_top
-  结论: fixingSubgroup G ((⊤ : 整数ermediateField K L) : Set L) = ⊥
+  结论: fixingSubgroup G ((⊤ : 中间域 K L) : 集合 L) = ⊥
   证明: by
   have := hGKL.faithful
   ext; simpa [mem_fixingSubgroup_iff, Set.ext_iff] using MulAction.fixedBy_eq_univ_iff_eq_one
@@ -824,7 +824,7 @@ IsGalois.intermediateFieldEquivSubgroup.trans (mulEquivAlgEquiv G K L).comapSubg
 
 中文:
 定义 intermediateFieldEquivSubgroup
-  签名: [Finite G]
+  签名: [有限 G]
   定义体: have := isGalois G K L
   have := finiteDimensional G K L
 IsGalois.intermediateFieldEquivSubgroup.trans (mulEquivAlgEquiv G K L).comapSubgroup.dual
@@ -847,7 +847,7 @@ theorem intermediateFieldEquivSubgroup_apply
 
 中文:
 定理 intermediateFieldEquivSubgroup_apply
-  条件: [Finite G] {F}
+  条件: [有限 G] {F}
   证明: rfl
 -/
 @[simp] theorem intermediateFieldEquivSubgroup_apply [Finite G] {F} :
@@ -863,7 +863,7 @@ theorem ofDual_intermediateFieldEquivSubgroup_apply
 
 中文:
 定理 ofDual_intermediateFieldEquivSubgroup_apply
-  条件: [Finite G] {F}
+  条件: [有限 G] {F}
   证明: rfl
 -/
 theorem ofDual_intermediateFieldEquivSubgroup_apply [Finite G] {F} :
@@ -883,7 +883,7 @@ theorem intermediateFieldEquivSubgroup_symm_apply
 
 中文:
 定理 intermediateFieldEquivSubgroup_symm_apply
-  条件: [Finite G] {H}
+  条件: [有限 G] {H}
   证明: by
   obtain ⟨H, rfl⟩ := OrderDual.toDual.surjective H
   simp [IntermediateField.ext_iff, intermediateFieldEquivSubgroup,
@@ -907,7 +907,7 @@ theorem intermediateFieldEquivSubgroup_symm_apply_toDual
 
 中文:
 定理 intermediateFieldEquivSubgroup_symm_apply_toDual
-  条件: [Finite G] {H}
+  条件: [有限 G] {H}
   证明: intermediateFieldEquivSubgroup_symm_apply ..
 
 @[simp]
@@ -932,7 +932,7 @@ theorem fixingSubgroup_fixedPoints
 
 中文:
 定理 fixingSubgroup_fixedPoints
-  条件: [Finite G]
+  条件: [有限 G]
   证明: by
   rw [← intermediateFieldEquivSubgroup_symm_apply_toDual]; rw [← ofDual_intermediateFieldEquivSubgroup_apply]; rw [OrderIso.apply_symm_apply]; rw [OrderDual.ofDual_toDual]
 
@@ -956,7 +956,7 @@ theorem fixedPoints_fixingSubgroup
 
 中文:
 定理 fixedPoints_fixingSubgroup
-  条件: [Finite G]
+  条件: [有限 G]
   证明: by
   rw [← ofDual_intermediateFieldEquivSubgroup_apply]; rw [← intermediateFieldEquivSubgroup_symm_apply]; rw [OrderIso.symm_apply_apply]
 
@@ -1016,7 +1016,7 @@ theorem fixingSubgroup_range_algebraMap'
 
 中文:
 定理 fixingSubgroup_range_algebraMap'
-  结论: [Finite G] (B : 类型) [CommSemiring B] [Algebra B L]
+  结论: [有限 G] (B : 类型) [交换半环 B] [代数 B L]
   证明: by
   rw [← fixedPoints_eq_range_algebraMap G K L H]; rw [fixingSubgroup_fixedPoints]
 
@@ -1044,7 +1044,7 @@ theorem fixingSubgroup_range_algebraMap
 
 中文:
 定理 fixingSubgroup_range_algebraMap
-  结论: [Finite G] (A B C : 类型) (H : Subgroup G)
+  结论: [有限 G] (A B C : 类型) (H : 子群 G)
   证明: by
   have : IsDomain B := (FaithfulSMul.algebraMap_injective B C).isDomain
   have : IsDomain A := (FaithfulSMul.algebraMap_injective A C).isDomain
@@ -1098,7 +1098,7 @@ theorem normal_of_isGalois
 
 中文:
 定理 normal_of_isGalois
-  结论: (E : 类型) [Field E] [Algebra K E] [Algebra E L] [IsScalarTower K E L]
+  结论: (E : 类型) [域 E] [代数 K E] [代数 E L] [标量塔 K E L]
   证明: by
   let F := (IsScalarTower.toAlgHom K E L).fieldRange
   have : IsGalois K F := .of_algEquiv (IsScalarTower.toAlgHom K E L).equivFieldRange
@@ -1143,7 +1143,7 @@ theorem quotient
 
 中文:
 定理 quotient
-  结论: [Finite G] (N : Subgroup G) [N.Normal] [MulSemiringAction G C]
+  结论: [有限 G] (N : 子群 G) [N.正规] [MulSemiring作用 G C]
   证明: fun {g₁} {g₂} => Quotient.inductionOn₂' g₁ g₂ fun g₁ g₂ h => by
     have : FaithfulSMul A C := FaithfulSMul.trans A B C
     have h' : forall g : G, (forall x : B, g • x = x) -> g in N := by
@@ -1192,7 +1192,7 @@ definition quotientMulEquiv
 
 中文:
 定义 quotientMulEquiv
-  签名: [Finite G] [Finite G'] (N : Subgroup G) [N.Normal]
+  签名: [有限 G] [有限 G'] (N : 子群 G) [N.正规]
   定义体: haveI : IsDomain B := (FaithfulSMul.algebraMap_injective B C).isDomain
   letI := mulSemiringActionOfNormal G B C N
   letI := mulSemiringActionQuotient G B C N
@@ -1234,7 +1234,7 @@ theorem algebraMap_quotientMulEquiv_smul
 
 中文:
 定理 algebraMap_quotientMulEquiv_smul
-  结论: [Finite G] [Finite G'] (N : Subgroup G) [N.Normal]
+  结论: [有限 G] [有限 G'] (N : 子群 G) [N.正规]
   证明: by
   have : IsDomain B := (FaithfulSMul.algebraMap_injective B C).isDomain
   let := mulSemiringActionOfNormal G B C N
@@ -1276,7 +1276,7 @@ definition restrictHom
 
 中文:
 定义 restrictHom
-  签名: [Finite G] [Finite G'] [MulSemiringAction G C] [IsGaloisGroup G A C]
+  签名: [有限 G] [有限 G'] [MulSemiring作用 G C] [是Galois群 G A C]
   定义体: haveI : IsDomain B := IsDomain.of_faithfulSMul B C
   haveI : IsDomain A := IsDomain.of_faithfulSMul A B
   haveI : FaithfulSMul A C := FaithfulSMul.trans A B C
@@ -1322,7 +1322,7 @@ theorem algebraMap_restrictHom_smul
 
 中文:
 定理 algebraMap_restrictHom_smul
-  结论: [Finite G] [Finite G'] [MulSemiringAction G C]
+  结论: [有限 G] [有限 G'] [MulSemiring作用 G C]
   证明: by
   have : IsDomain B := IsDomain.of_faithfulSMul B C
   have : IsDomain A := IsDomain.of_faithfulSMul A B
@@ -1361,7 +1361,7 @@ theorem restrictHom_surjective
 
 中文:
 定理 restrictHom_surjective
-  结论: [Finite G] [Finite G'] [MulSemiringAction G C]
+  结论: [有限 G] [有限 G'] [MulSemiring作用 G C]
   证明: by
   simpa [restrictHom] using QuotientGroup.mk_surjective
 
@@ -1384,7 +1384,7 @@ theorem restrictHom_smul_under
 
 中文:
 定理 restrictHom_smul_under
-  结论: [Finite G] [Finite G'] [MulSemiringAction G C]
+  结论: [有限 G] [有限 G'] [MulSemiring作用 G C]
   证明: by
   simp [Ideal.ext_iff, Ideal.mem_pointwise_smul_iff_inv_smul_mem, ← map_inv]
 
@@ -1413,8 +1413,8 @@ instance [Finite
   quotient G K F L N
 
 中文:
-实例 [Finite
-  签名: G] [IsGaloisGroup G K L] : IsGaloisGroup (G ⧸ N) K F
+实例 [有限
+  签名: G] [是Galois群 G K L] : 是Galois群 (G ⧸ N) K F
   定义体: letI := smulOfNormal G F L N
   haveI := smulDistribClass_smulOfNormal G F L N
   letI := mulSemiringActionOfSmulDistribClass F L G
@@ -1446,7 +1446,7 @@ theorem map_quotientMk'
 
 中文:
 定理 map_quotientMk'
-  条件: [Finite G] [IsGaloisGroup G K L] (h : E <= F)
+  条件: [有限 G] [是Galois群 G K L] (h : E <= F)
   证明: (IntermediateField.inclusion h).toAlgebra
     IsGaloisGroup (H.map (QuotientGroup.mk' N)) E F :=
   let : Algebra E F := (IntermediateField.inclusion h).toAlgebra

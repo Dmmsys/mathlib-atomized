@@ -144,7 +144,7 @@ theorem convexOn_log_Gamma
 
 中文:
 定理 convexOn_log_Gamma
-  结论: ConvexOn 实数 (Ioi 0) (log ∘ Gamma)
+  结论: ConvexOn 实数 (左开右无界区间 0) (log ∘ Gamma)
   证明: by
   refine convexOn_iff_forall_pos.mpr ⟨convex_Ioi _, fun x hx y hy a b ha hb hab => ?_⟩
   have : b = 1 - a := by linarith
@@ -185,7 +185,7 @@ theorem convexOn_Gamma
 
 中文:
 定理 convexOn_Gamma
-  结论: ConvexOn 实数 (Ioi 0) Gamma
+  结论: ConvexOn 实数 (左开右无界区间 0) Gamma
   证明: by
   refine
     ((convexOn_exp.subset (subset_univ _) ?_).comp convexOn_log_Gamma
@@ -324,7 +324,7 @@ theorem f_add_nat_le
 
 中文:
 定理 f_add_nat_le
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   have hn' : 0 < (n : Real) := Nat.cast_pos.mpr (Nat.pos_of_ne_zero hn)
   have : f n + x * log n = (1 - x) * f n + x * f (n + 1) := by rw [hf_feq hn']; ring
@@ -358,7 +358,7 @@ theorem f_add_nat_ge
 
 中文:
 定理 f_add_nat_ge
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   have npos : 0 < (n : Real) - 1 := by rw [← Nat.cast_one, sub_pos, Nat.cast_lt]; lia
   have c :=
@@ -438,7 +438,7 @@ theorem le_logGammaSeq
 
 中文:
 定理 le_logGammaSeq
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   rw [logGammaSeq]; rw [← add_sub_assoc]; rw [le_sub_iff_add_le]; rw [← f_add_nat_eq (@hf_feq) hx]; rw [add_comm x]
   refine (f_add_nat_le hf_conv (@hf_feq) (Nat.add_one_ne_zero n) hx hx').trans (le_of_eq ?_)
@@ -470,7 +470,7 @@ theorem ge_logGammaSeq
 
 中文:
 定理 ge_logGammaSeq
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   dsimp [logGammaSeq]
   rw [← add_sub_assoc]; rw [sub_le_iff_le_add]; rw [← f_add_nat_eq (@hf_feq) hx]; rw [add_comm x _]
@@ -507,7 +507,7 @@ theorem tendsto_logGammaSeq_of_le_one
 
 中文:
 定理 tendsto_logGammaSeq_of_le_one
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' (f := logGammaSeq x)
     (g := fun n => f x - f 1 - x * (log (n + 1) - log n)) ?_ tendsto_const_nhds ?_ ?_
@@ -548,7 +548,7 @@ theorem tendsto_logGammaSeq
 
 中文:
 定理 tendsto_logGammaSeq
-  结论: (hf_conv : ConvexOn 实数 (Ioi 0) f)
+  结论: (hf_conv : ConvexOn 实数 (左开右无界区间 0) f)
   证明: by
   suffices forall m : Nat, ↑m < x -> x <= m + 1 -> Tendsto (logGammaSeq x) atTop (𝓝 <| f x - f 1) by
     refine this ⌈x - 1⌉₊ ?_ ?_
@@ -661,7 +661,7 @@ theorem eq_Gamma_of_log_convex
 
 中文:
 定理 eq_Gamma_of_log_convex
-  结论: {f : 实数 -> 实数} (hf_conv : ConvexOn 实数 (Ioi 0) (log ∘ f))
+  结论: {f : 实数 -> 实数} (hf_conv : ConvexOn 实数 (左开右无界区间 0) (log ∘ f))
   证明: by
   suffices EqOn (log ∘ f) (log ∘ Gamma) (Ioi (0 : Real)) from
     fun x hx => log_injOn_pos (hf_pos hx) (Gamma_pos_of_pos hx) (this hx)
@@ -758,7 +758,7 @@ theorem Gamma_strictAntiOn_Ioc
 
 中文:
 定理 Gamma_strictAntiOn_Ioc
-  结论: StrictAntiOn Gamma (Ioc 0 1)
+  结论: StrictAntiOn Gamma (左开右闭区间 0 1)
   证明: convexOn_Gamma.strictAntiOn (by simp) (by norm_num)
     Gamma_one.symm ▸ Gamma_three_div_two_lt_one
 
@@ -784,7 +784,7 @@ exact fun x hx => two_pos.trans_le mem_Ici.mp hx
 
 中文:
 定理 Gamma_strictMonoOn_Ici
-  结论: StrictMonoOn Gamma (Ici 2)
+  结论: StrictMonoOn Gamma (左闭右无界区间 2)
   证明: by
   convert!
     convexOn_Gamma.strictMonoOn (by simp : (0 : Real) < 3 / 2) (by norm_num : (3 / 2 : Real) < 2)
@@ -818,8 +818,8 @@ simpa [Gamma_three_div_two_lt_one] using hmin by norm_num
   refine ⟨x, by gri
 
 中文:
-定理 exists_isMinOn_Gamma_Ioi
-  结论: 存在 x in Ioo 1 2, IsMinOn Gamma (Ioi 0) x
+定理 存在_isMinOn_Gamma_Ioi
+  结论: 存在 x in 开区间 1 2, IsMinOn Gamma (左开右无界区间 0) x
   证明: by
 have ⟨x, hx, hmin⟩ := isCompact_Icc.exists_isMinOn (nonempty_Icc.mpr one_le_two)
 differentiableOn_Gamma_Ioi.continuousOn.mono by grind
@@ -969,7 +969,7 @@ theorem doublingGamma_log_convex_Ioi
 
 中文:
 定理 doublingGamma_log_convex_Ioi
-  结论: ConvexOn 实数 (Ioi (0 : 实数)) (log ∘ doublingGamma)
+  结论: ConvexOn 实数 (左开右无界区间 (0 : 实数)) (log ∘ doublingGamma)
   证明: by
   refine (((ConvexOn.add ?_ ?_).add ?_).add_const _).congr log_doublingGamma_eq.symm
   · convert!

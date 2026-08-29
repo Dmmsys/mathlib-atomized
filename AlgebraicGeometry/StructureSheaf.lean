@@ -74,8 +74,8 @@ definition PrimeSpectrum.Top
   body: TopCat.of (PrimeSpectrum R)
 
 中文:
-定义 PrimeSpectrum.Top
-  签名: : TopCat
+定义 素谱.顶元素
+  签名: : 顶元素范畴
   定义体: TopCat.of (PrimeSpectrum R)
 
 Depends on / 依赖: PrimeSpectrum, TopCat, TopCat.of
@@ -115,7 +115,7 @@ definition IsFraction
 
 中文:
 定义 IsFraction
-  签名: {U : Opens (PrimeSpectrum.Top R)} (f : Π x : U, Localizations M x.1)
+  签名: {U : Opens (素谱.顶元素 R)} (f : Π x : U, Localizations M x.1)
   定义体: exists r s, forall x : U, exists hs : s ∉ x.1.asIdeal, f x = LocalizedModule.mk r ⟨s, hs⟩
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mk, asIdeal
@@ -178,7 +178,7 @@ definition sectionsSubmodule
 
 中文:
 定义 sectionsSubmodule
-  签名: (U : (Opens (PrimeSpectrum.Top R)))
+  签名: (U : (Opens (素谱.顶元素 R)))
   定义体: { f | (isLocallyFraction R M).pred f }
   add_mem' {a b} ha hb x := by
     obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
@@ -224,7 +224,7 @@ definition sectionsSubalgebra
 
 中文:
 定义 sectionsSubalgebra
-  签名: (U : (Opens (PrimeSpectrum.Top R)))
+  签名: (U : (Opens (素谱.顶元素 R)))
   定义体: sectionsSubmodule A U
   mul_mem' {a b} ha hb x := by
     obtain ⟨Va, ma, ia, ra, sa, wa⟩ := ha x
@@ -267,7 +267,7 @@ definition sectionsSubalgebraSubmodule
 
 中文:
 定义 sectionsSubalgebraSubmodule
-  签名: (U : (Opens (PrimeSpectrum.Top R)))
+  签名: (U : (Opens (素谱.顶元素 R)))
   定义体: sectionsSubmodule M U
   smul_mem' r {a} ha x := by
     obtain ⟨V, hxV, hVU, rx, rs, hr⟩ := r.2 x
@@ -304,7 +304,7 @@ definition structureSheafInType
 
 中文:
 定义 structureSheafInType
-  签名: : Sheaf (类型u) (PrimeSpectrum.Top R)
+  签名: : 层 (类型u) (素谱.顶元素 R)
   定义体: subsheafToTypes (isLocallyFraction R M)
 
 Depends on / 依赖: isLocallyFraction, subsheafToTypes
@@ -344,7 +344,7 @@ lemma structureSheafInType.add_apply
 
 中文:
 引理 structureSheafInType.add_apply
-  条件: {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(M, U)) (x : U)
+  条件: {U : Opens (素谱.顶元素 R)} (s t : Γ(M, U)) (x : U)
   证明: rfl
 
 @[simp]
@@ -365,7 +365,7 @@ lemma structureSheafInType.mul_apply
 
 中文:
 引理 structureSheafInType.mul_apply
-  条件: {U : Opens (PrimeSpectrum.Top R)} (s t : Γ(A, U)) (x : U)
+  条件: {U : Opens (素谱.顶元素 R)} (s t : Γ(A, U)) (x : U)
   证明: rfl
 
 @[simp]
@@ -384,7 +384,7 @@ lemma structureSheafInType.smul_apply
 
 中文:
 引理 structureSheafInType.smul_apply
-  结论: {U : Opens (PrimeSpectrum.Top R)}
+  结论: {U : Opens (素谱.顶元素 R)}
   证明: rfl
 -/
 lemma structureSheafInType.smul_apply {U : Opens (PrimeSpectrum.Top R)}
@@ -409,7 +409,7 @@ definition structurePresheafInModuleCat
 
 中文:
 定义 structurePresheafInModuleCat
-  签名: : Presheaf (ModuleCat R) (PrimeSpectrum.Top R) where
+  签名: : 预层 (模范畴 R) (素谱.顶元素 R) where
   定义体: ModuleCat.of R ((structureSheafInType R M).1.obj U)
   map i := ModuleCat.ofHom
     { toFun := (structureSheafInType R M).1.map i
@@ -445,7 +445,7 @@ definition structurePresheafInCommRingCat
 
 中文:
 定义 structurePresheafInCommRingCat
-  签名: : Presheaf CommRingCat (PrimeSpectrum.Top R) where
+  签名: : 预层 交换环范畴 (素谱.顶元素 R) where
   定义体: .of ((structureSheafInType R R).1.obj U)
   map i := CommRingCat.ofHom
     { toFun := (structureSheafInType R R).1.map i
@@ -491,7 +491,7 @@ definition moduleStructurePresheaf
 
 中文:
 定义 moduleStructurePresheaf
-  签名: : PresheafOfModules (structurePresheafInCommRingCat R ⋙ forget₂ _ _)
+  签名: : 预模层 (structurePresheafInCommRingCat R ⋙ forget₂ _ _)
   定义体: letI (X : (Opens ↑(PrimeSpectrum.Top R))ᵒᵖ) :
     Module ↑((structurePresheafInCommRingCat R ⋙ forget₂ CommRingCat RingCat).obj X)
       ↑((structurePresheafInModuleCat R M ⋙ forget₂ (ModuleCat R) Ab).obj X) := by
@@ -545,7 +545,7 @@ theorem res_apply
 
 中文:
 定理 res_apply
-  结论: (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
+  结论: (U V : Opens (素谱.顶元素 R)) (i : V ⟶ U)
   证明: rfl
 -/
 theorem res_apply (U V : Opens (PrimeSpectrum.Top R)) (i : V ⟶ U)
@@ -562,7 +562,7 @@ definition const
 
 中文:
 定义 const
-  签名: (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
+  签名: (f : M) (g : R) (U : Opens (素谱.顶元素 R))
   定义体: ⟨fun x => .mk f ⟨g, hu x.2⟩, fun x => ⟨U, x.2, 𝟙 _, f, g, fun y => ⟨hu y.2, rfl⟩⟩⟩
 -/
 def const (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
@@ -582,7 +582,7 @@ theorem const_apply
 
 中文:
 定理 const_apply
-  结论: (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
+  结论: (f : M) (g : R) (U : Opens (素谱.顶元素 R))
   证明: rfl
 -/
 theorem const_apply (f : M) (g : R) (U : Opens (PrimeSpectrum.Top R))
@@ -605,8 +605,8 @@ refine ⟨g' * g, ?_, ?_, g' • f, Subtype.ext funext fun ⟨y, hy⟩ => ?_⟩ 
   · exact
 
 中文:
-定理 exists_const
-  结论: (U) (s : Γ(M, U)) (x : PrimeSpectrum.Top R)
+定理 存在_const
+  结论: (U) (s : Γ(M, U)) (x : 素谱.顶元素 R)
   证明: by
   obtain ⟨V, hxV, iVU, f, g, hfg⟩ := s.2 ⟨x, hx⟩
   obtain ⟨_, ⟨_, ⟨g', rfl⟩, rfl⟩, hxg', hg'U⟩ :=
@@ -950,7 +950,7 @@ definition toOpenₗ
 
 中文:
 定义 toOpenₗ
-  签名: (U : Opens (PrimeSpectrum.Top R))
+  签名: (U : Opens (素谱.顶元素 R))
   定义体: const m 1 U (by simp)
   map_add' _ _ := by simp [const_add]
   map_smul' _ _ := by simp [smul_const]
@@ -972,7 +972,7 @@ theorem toOpenₗ_eq_const
 
 中文:
 定理 toOpenₗ_eq_const
-  条件: (U : Opens (PrimeSpectrum.Top R)) (f : M)
+  条件: (U : Opens (素谱.顶元素 R)) (f : M)
   证明: rfl
 -/
 theorem toOpenₗ_eq_const (U : Opens (PrimeSpectrum.Top R)) (f : M) :
@@ -1091,7 +1091,7 @@ theorem toBasicOpenₗ_mk
 
 中文:
 定理 toBasicOpenₗ_mk
-  条件: (s : R) (f : M) (g : Submonoid.powers s)
+  条件: (s : R) (f : M) (g : 子幺半群.powers s)
   证明: by
   obtain ⟨_, n, rfl⟩ := g
   apply ((Module.End.isUnit_iff _).mp ((isUnit_basicOpen_end ..).pow n)).1 ?_
@@ -1131,7 +1131,7 @@ theorem toBasicOpenₗ_injective
 中文:
 定理 toBasicOpenₗ_injective
   条件: (f : R)
-  结论: Function.Injective (toBasicOpenₗ R M f)
+  结论: 函数.单射 (toBasicOpenₗ R M f)
   证明: by
   intro s t h_eq
   induction s using LocalizedModule.induction_on with | h a b =>
@@ -1173,7 +1173,7 @@ theorem exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
     simp only 
 
 中文:
-定理 exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
+定理 存在_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const
   证明: by
   choose g hxg igU f H using fun x : U => exists_const U s x.1 x.2
   have (i j : _) : LocalizedModule.mk (g i • f j) ⟨g i * g j, Submonoid.mem_powers _⟩ =
@@ -1243,7 +1243,7 @@ theorem toBasicOpenₗ_surjective
 中文:
 定理 toBasicOpenₗ_surjective
   条件: (f : R)
-  结论: Function.Surjective (toBasicOpenₗ R M f)
+  结论: 函数.满射 (toBasicOpenₗ R M f)
   证明: by
   intro s
   obtain ⟨ι, _, a, b, ibU, iU, hab, H⟩ := exists_le_iSup_basicOpen_and_smul_eq_smul_and_eq_const _
@@ -1370,7 +1370,7 @@ definition germₗ
 
 中文:
 定义 germₗ
-  签名: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hxU : x in U)
+  签名: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hxU : x in U)
   定义体: (TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf U x hxU).hom
   map_smul' r m := by
     change _ = toStalk R x _ • TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf _ _ _ _
@@ -1412,7 +1412,7 @@ definition modulePresheafStalkIso
 
 中文:
 定义 modulePresheafStalkIso
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves (forget₂ (ModuleCat R) Ab)
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
       structurePresheafInModuleCat R M))⟩:).addCommGroupIsoToAddEquiv
@@ -1465,7 +1465,7 @@ lemma toStalk_smul
 
 中文:
 引理 toStalk_smul
-  结论: (x : PrimeSpectrum.Top R) (r : R)
+  结论: (x : 素谱.顶元素 R) (r : R)
   证明: by
   change modulePresheafStalkIso R M x (toStalk R x r • (modulePresheafStalkIso R M x).symm m) = _
   rw [← (modulePresheafStalkIso R M x).eq_symm_apply]; rw [map_smul]
@@ -1491,7 +1491,7 @@ definition toStalkₗ'
 
 中文:
 定义 toStalkₗ'
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: ModuleCat.ofHom (toOpenₗ R M ⊤) ≫ (structurePresheafInModuleCat R M).germ _ x trivial
 
 Depends on / 依赖: ModuleCat, ModuleCat.ofHom, structurePresheafInModuleCat
@@ -1514,7 +1514,7 @@ theorem toOpenₗ_germ
 
 中文:
 定理 toOpenₗ_germ
-  条件: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U)
+  条件: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hx : x in U)
   证明: by
   rw [toStalkₗ']; rw [← Presheaf.germ_res _ (homOfLE le_top) _ hx]; rw [← Category.assoc]
   rfl
@@ -1540,7 +1540,7 @@ theorem isUnit_toStalk
 
 中文:
 定理 isUnit_toStalk
-  条件: (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f)
+  条件: (x : 素谱.顶元素 R) (f : R) (hf : x in basicOpen f)
   证明: by
   convert! (isUnit_basicOpen f).map ((structurePresheafInCommRingCat R).germ _ x hf).hom
   exact ((structurePresheafInCommRingCat R).germ_res_apply (homOfLE (le_top : basicOpen f <= ⊤))
@@ -1572,7 +1572,7 @@ theorem isUnit_toStalkₗ'
 
 中文:
 定理 isUnit_toStalkₗ'
-  条件: (x : PrimeSpectrum.Top R) (f : R) (hf : x in basicOpen f)
+  条件: (x : 素谱.顶元素 R) (f : R) (hf : x in basicOpen f)
   证明: by
   have := (isUnit_toStalk x f hf).map (algebraMap _
     (Module.End ((structurePresheafInCommRingCat R).stalk x)
@@ -1610,7 +1610,7 @@ definition localizationtoStalkₗ
 
 中文:
 定义 localizationtoStalkₗ
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: ModuleCat.ofHom (IsLocalizedModule.lift x.asIdeal.primeCompl
     (LocalizedModule.mkLinearMap x.asIdeal.primeCompl M)
     (toStalkₗ' R M x).hom fun f => isUnit_toStalkₗ' x f.1 f.2 :)
@@ -1639,7 +1639,7 @@ theorem localizationtoStalkₗ_mk
 
 中文:
 定理 localizationtoStalkₗ_mk
-  条件: (x : PrimeSpectrum.Top R) (f : M) (s)
+  条件: (x : 素谱.顶元素 R) (f : M) (s)
   证明: by
   apply ((Module.End.isUnit_iff _).mp (isUnit_toStalkₗ' _ s.1 s.2)).1 ?_
   dsimp [localizationtoStalkₗ]
@@ -1672,7 +1672,7 @@ definition openToLocalizationₗ
 
 中文:
 定义 openToLocalizationₗ
-  签名: (U : Opens (PrimeSpectrum.Top R)) (x : PrimeSpectrum.Top R) (hx : x in U)
+  签名: (U : Opens (素谱.顶元素 R)) (x : 素谱.顶元素 R) (hx : x in U)
   定义体: ModuleCat.ofHom
   { toFun s := s.1 ⟨x, hx⟩
     map_smul' _ _ := rfl
@@ -1704,7 +1704,7 @@ definition stalkToLocalizationₗ
 
 中文:
 定义 stalkToLocalizationₗ
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: Limits.colimit.desc ((OpenNhds.inclusion x).op ⋙ structurePresheafInModuleCat R M)
     { pt := _
       ι.app U := openToLocalizationₗ R M ((OpenNhds.inclusion _).obj (unop U)) x (unop U).2 }
@@ -1752,7 +1752,7 @@ theorem toStalkₗ'_stalkToFiberRingHom
 
 中文:
 定理 toStalkₗ'_stalkToFiberRingHom
-  条件: (x : PrimeSpectrum.Top R)
+  条件: (x : 素谱.顶元素 R)
   证明: by
   rw [toStalkₗ']; rw [Category.assoc]; rw [germ_stalkToLocalizationₗ]; rfl
 -/
@@ -1788,7 +1788,7 @@ definition stalkIsoₗ
 
 中文:
 定义 stalkIsoₗ
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: stalkToLocalizationₗ R M x
   inv := localizationtoStalkₗ R M x
   hom_inv_id := by
@@ -1843,7 +1843,7 @@ theorem stalkToFiberRingHom_localizationToStalk
 
 中文:
 定理 stalkToFiberRingHom_localizationToStalk
-  条件: (x : PrimeSpectrum.Top R)
+  条件: (x : 素谱.顶元素 R)
   证明: (stalkIsoₗ R M x).hom_inv_id
 
 @[simp, reassoc]
@@ -1865,7 +1865,7 @@ theorem localizationToStalk_stalkToFiberRingHom
 
 中文:
 定理 localizationToStalk_stalkToFiberRingHom
-  条件: (x : PrimeSpectrum.Top R)
+  条件: (x : 素谱.顶元素 R)
   证明: (stalkIsoₗ R M x).inv_hom_id
 
 Depends on / 依赖: inv_hom_id
@@ -1906,7 +1906,7 @@ definition toStalkₗ
 
 中文:
 定义 toStalkₗ
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: TopCat.Presheaf.germ (moduleStructurePresheaf R M).presheaf ⊤ x (by simp) (toOpenₗ R M ⊤ m)
   map_add' := by simp
   map_smul' r m := by
@@ -1966,7 +1966,7 @@ definition commRingCatStalkEquivModuleStalk
 
 中文:
 定义 commRingCatStalkEquivModuleStalk
-  签名: (x : PrimeSpectrum.Top R)
+  签名: (x : 素谱.顶元素 R)
   定义体: (Limits.colimit.isoColimitCocone ⟨_, Limits.isColimitOfPreserves
       (forget₂ CommRingCat RingCat ⋙ forget₂ RingCat AddCommGrpCat)
     (Limits.colimit.isColimit ((OpenNhds.inclusion x).op ⋙
@@ -2057,7 +2057,7 @@ definition _root_.AlgebraicGeometry.Spec.structureSheaf
 
 中文:
 定义 _root_.AlgebraicGeometry.Spec.structureSheaf
-  签名: : Sheaf CommRingCat (PrimeSpectrum.Top R)
+  签名: : 层 交换环范畴 (素谱.顶元素 R)
   定义体: ⟨structurePresheafInCommRingCat R,
     (TopCat.Presheaf.isSheaf_iff_isSheaf_comp _ _).mpr (TopCat.Presheaf.isSheaf_of_iso
       (structurePresheafCompForget R).symm (structureSheafInType R R).property)⟩
@@ -2086,7 +2086,7 @@ definition toOpen
 
 中文:
 定义 toOpen
-  签名: (U : Opens (PrimeSpectrum.Top R))
+  签名: (U : Opens (素谱.顶元素 R))
   定义体: CommRingCat.ofHom (algebraMap _ _)
 
 @[simp]
@@ -2109,7 +2109,7 @@ theorem algebraMap_self_map
 
 中文:
 定理 algebraMap_self_map
-  条件: (U V : (Opens (PrimeSpectrum.Top R))ᵒᵖ) (i : V ⟶ U)
+  条件: (U V : (Opens (素谱.顶元素 R))ᵒᵖ) (i : V ⟶ U)
   证明: rfl
 
 @[deprecated (since := "2026-02-10")] alias toOpen_res := algebraMap_self_map
@@ -2133,7 +2133,7 @@ instance stalkAlgebra
 
 中文:
 实例 stalkAlgebra
-  签名: (p : PrimeSpectrum R)
+  签名: (p : 素谱 R)
   定义体: (toStalk R p).hom.toAlgebra
 
 @[simp]
@@ -2154,7 +2154,7 @@ theorem stalkAlgebra_map
 
 中文:
 定理 stalkAlgebra_map
-  条件: (p : PrimeSpectrum R) (r : R)
+  条件: (p : 素谱 R) (r : R)
   证明: rfl
 -/
 theorem stalkAlgebra_map (p : PrimeSpectrum R) (r : R) :
@@ -2171,8 +2171,8 @@ instance IsLocalization.to_stalk
   body: inferInstanceAs (IsLocalization.AtPrime ((structurePresheafInCommRingCat R).stalk p) p.asIdeal)
 
 中文:
-实例 IsLocalization.to_stalk
-  签名: (p : PrimeSpectrum R)
+实例 是Localization.to_stalk
+  签名: (p : 素谱 R)
   定义体: inferInstanceAs (IsLocalization.AtPrime ((structurePresheafInCommRingCat R).stalk p) p.asIdeal)
 
 Depends on / 依赖: AtPrime, IsLocalization, IsLocalization.AtPrime, asIdeal, p.asIdeal, structurePresheafInCommRingCat
@@ -2192,7 +2192,7 @@ instance openAlgebra
 
 中文:
 实例 openAlgebra
-  签名: (U : (Opens (PrimeSpectrum R))ᵒᵖ)
+  签名: (U : (Opens (素谱 R))ᵒᵖ)
   定义体: inferInstanceAs (Algebra R ((structureSheafInType R R).presheaf.obj _))
 
 Depends on / 依赖: Algebra, presheaf, presheaf.obj, structureSheafInType
@@ -2210,7 +2210,7 @@ instance IsLocalization.to_basicOpen
   body: inferInstanceAs (IsLocalization.Away r Γ(R, basicOpen r))
 
 中文:
-实例 IsLocalization.to_basicOpen
+实例 是Localization.to_basicOpen
   签名: (r : R)
   定义体: inferInstanceAs (IsLocalization.Away r Γ(R, basicOpen r))
 
@@ -2256,7 +2256,7 @@ definition globalSectionsIso
 
 中文:
 定义 globalSectionsIso
-  签名: : CommRingCat.of R ≅ (structureSheaf R).1.obj (op ⊤)
+  签名: : 交换环范畴.of R ≅ (structureSheaf R).1.obj (op ⊤)
   定义体: RingEquiv.toCommRingCatIso (.ofBijective _ algebraMap_obj_top_bijective)
 
 Depends on / 依赖: RingEquiv, RingEquiv.toCommRingCatIso, algebraMap_obj_top_bijective, ofBijective, toCommRingCatIso
@@ -2274,7 +2274,7 @@ theorem globalSectionsIso_hom
 
 中文:
 定理 globalSectionsIso_hom
-  条件: (R : CommRingCat)
+  条件: (R : 交换环范畴)
   证明: rfl
 -/
 theorem globalSectionsIso_hom (R : CommRingCat) :
@@ -2295,7 +2295,7 @@ theorem toStalk_stalkSpecializes
 
 中文:
 定理 toStalk_stalkSpecializes
-  条件: {R : 类型} [CommRing R] {x y : PrimeSpectrum R} (h : x ⤳ y)
+  条件: {R : 类型} [交换环 R] {x y : 素谱 R} (h : x ⤳ y)
   证明: by
   dsimp [toStalk]
   simp [structureSheaf]
@@ -2331,7 +2331,7 @@ definition Localizations.comapFun
 
 中文:
 定义 Localizations.comapFun
-  签名: (y : PrimeSpectrum.Top S)
+  签名: (y : 素谱.顶元素 S)
   定义体: letI := Module.compHom N σ
   letI := σ.toAlgebra
   haveI : IsScalarTower R S N := .of_algebraMap_smul fun _ _ => rfl
@@ -2381,7 +2381,7 @@ lemma Localizations.comapFun_mk
 
 中文:
 引理 Localizations.comapFun_mk
-  结论: (y : PrimeSpectrum.Top S)
+  结论: (y : 素谱.顶元素 S)
   证明: by
   let := Module.compHom N σ
   let := σ.toAlgebra
@@ -2419,7 +2419,7 @@ definition comapFun
 
 中文:
 定义 comapFun
-  签名: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
+  签名: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
   定义体: Localizations.comapFun f _ (s ⟨y.1.comap σ, hUV y.2⟩)
 
 Depends on / 依赖: Localizations, Localizations.comapFun, comapFun
@@ -2447,7 +2447,7 @@ theorem isLocallyFraction_comapFun
 
 中文:
 定理 isLocallyFraction_comapFun
-  结论: (U : Opens (PrimeSpectrum.Top R))
+  结论: (U : Opens (素谱.顶元素 R))
   证明: by
   let := Module.compHom N σ
   let := σ.toAlgebra
@@ -2492,7 +2492,7 @@ map_smul' r m := Subtype.ext funext fun _ => by
 
 中文:
 定义 comapₗ
-  签名: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
+  签名: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
   定义体: ⟨comapFun f U V hUV s.1, isLocallyFraction_comapFun f U V hUV s.1 s.2⟩
 map_add' s t := Subtype.ext funext fun _ => by dsimp [comapFun]; rw [map_add]
 map_smul' r m := Subtype.ext funext fun _ => by
@@ -2521,7 +2521,7 @@ theorem comapₗ_const
 
 中文:
 定理 comapₗ_const
-  结论: (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
+  结论: (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
   证明: Subtype.ext funext fun _ => by simp [comapₗ, comapFun]
 
 Depends on / 依赖: Subtype, Subtype.ext, comapFun
@@ -2556,7 +2556,7 @@ theorem comapₗ_eq_localRingHom
 
 中文:
 定理 comapₗ_eq_localRingHom
-  结论: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
+  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
   证明: by
   dsimp [comapₗ, comapFun]
   suffices ⇑(Localizations.comapFun f.toSemilinearMap p.1) =
@@ -2603,7 +2603,7 @@ map_mul' r s := Subtype.ext funext fun p => by
 
 中文:
 定义 comap
-  签名: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R)) (V : Opens (PrimeSpectrum.Top S))
+  签名: (f : R ->+* S) (U : Opens (素谱.顶元素 R)) (V : Opens (素谱.顶元素 S))
   定义体: comapₗ f.toSemilinearMap U V hUV
 map_one' := Subtype.ext funext fun _ => by
     dsimp
@@ -2645,7 +2645,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  结论: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
+  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
   证明: comapₗ_eq_localRingHom ..
 -/
 theorem comap_apply (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
@@ -2670,7 +2670,7 @@ theorem comap_const
 
 中文:
 定理 comap_const
-  结论: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
+  结论: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
   证明: Subtype.ext funext fun p => by
     rw [comap_apply]; rw [const_apply]; rw [const_apply]
     convert_to! Localization.localRingHom _ _ _ _ (Localization.mk _ _) = Localization.mk _ _
@@ -2701,7 +2701,7 @@ theorem comap_id_eq_map
 
 中文:
 定理 comap_id_eq_map
-  条件: (U V : Opens (PrimeSpectrum.Top R)) (iVU : V ⟶ U)
+  条件: (U V : Opens (素谱.顶元素 R)) (iVU : V ⟶ U)
   证明: RingHom.ext fun s => Subtype.ext funext fun p => by
     rw [comap_apply]
     exact congr($(Localization.localRingHom_id ..) _)
@@ -2728,7 +2728,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: {U V : Opens (PrimeSpectrum.Top R)} (hUV : U = V)
+  条件: {U V : Opens (素谱.顶元素 R)} (hUV : U = V)
   证明: by
   rw [comap_id_eq_map U V (eqToHom hUV.symm)]; rw [eqToHom_op]; rw [eqToHom_map]
 
@@ -2753,7 +2753,7 @@ theorem comap_id'
 
 中文:
 定理 comap_id'
-  条件: (U : Opens (PrimeSpectrum.Top R))
+  条件: (U : Opens (素谱.顶元素 R))
   证明: by
   rw [comap_id rfl]; rfl
 
@@ -2778,7 +2778,7 @@ Subtype.ext
 
 中文:
 定理 comap_comp
-  结论: (f : R ->+* S) (g : S ->+* P) (U : Opens (PrimeSpectrum.Top R))
+  结论: (f : R ->+* S) (g : S ->+* P) (U : Opens (素谱.顶元素 R))
   证明: RingHom.ext fun s =>
 Subtype.ext
       funext fun p => by
@@ -2813,7 +2813,7 @@ theorem toOpen_comp_comap
 
 中文:
 定理 toOpen_comp_comap
-  条件: (f : R ->+* S) (U : Opens (PrimeSpectrum.Top R))
+  条件: (f : R ->+* S) (U : Opens (素谱.顶元素 R))
   证明: CommRingCat.hom_ext RingHom.ext fun _ => Subtype.ext funext fun x => by
     dsimp
     rw [comap_apply]

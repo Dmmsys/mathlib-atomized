@@ -69,9 +69,9 @@ class Algebra.IsCentral
     - out : Subalgebra.center K D <= ⊥
 
 中文:
-类 Algebra.IsCentral
+类 代数.是中心
   公理与运算 (1 个):
-    - out : Subalgebra.center K D <= ⊥
+    - out : 子代数.center K D <= ⊥
 -/
 class Algebra.IsCentral
     (K : Type u) [CommSemiring K] (D : Type v) [Semiring D] [Algebra K D] : Prop where

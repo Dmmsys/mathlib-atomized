@@ -56,7 +56,7 @@ lemma avgRisk_le_iSup_risk
 
 中文:
 引理 avgRisk_le_iSup_risk
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨)
   证明: lintegral_le_iSup _
 
 Depends on / 依赖: lintegral_le_iSup
@@ -75,7 +75,7 @@ lemma bayesRisk_le_avgRisk
 
 中文:
 引理 bayesRisk_le_avgRisk
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨)
   证明: iInf₂_le κ hκ
 -/
 lemma bayesRisk_le_avgRisk (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨)
@@ -92,7 +92,7 @@ lemma bayesRisk_le_minimaxRisk
 
 中文:
 引理 bayesRisk_le_minimaxRisk
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: iInf₂_mono fun _ _ => avgRisk_le_iSup_risk _ _ _ _
 
 Depends on / 依赖: avgRisk_le_iSup_risk
@@ -111,7 +111,7 @@ lemma iSup_bayesRisk_le_minimaxRisk
 
 中文:
 引理 iSup_bayesRisk_le_minimaxRisk
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: iSup₂_le fun _ _ => bayesRisk_le_minimaxRisk _ _ _
 
 Depends on / 依赖: bayesRisk_le_minimaxRisk
@@ -135,7 +135,7 @@ lemma avgRisk_const_left
 
 中文:
 引理 avgRisk_const_left
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (μ : Measure 𝓧) (κ : Kernel 𝓧 𝓨) (π : Measure Θ)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (μ : 测度 𝓧) (κ : 核 𝓧 𝓨) (π : 测度 Θ)
   证明: by
   simp [avgRisk]
 
@@ -156,7 +156,7 @@ lemma avgRisk_const_left'
 
 中文:
 引理 avgRisk_const_left'
-  结论: (hl : Measurable (uncurry ℓ)) (μ : Measure 𝓧) [SFinite μ]
+  结论: (hl : 可测 (uncurry ℓ)) (μ : 测度 𝓧) [SFinite μ]
   证明: by
   rw [avgRisk_const_left]; rw [lintegral_lintegral_swap (by fun_prop)]
 
@@ -178,7 +178,7 @@ lemma avgRisk_const_right'
 
 中文:
 引理 avgRisk_const_right'
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (ν : Measure 𝓨) (π : Measure Θ)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (ν : 测度 𝓨) (π : 测度 Θ)
   证明: by
   simp [avgRisk, Kernel.const_comp]
 
@@ -199,7 +199,7 @@ lemma avgRisk_const_right
 
 中文:
 引理 avgRisk_const_right
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) [IsMarkovKernel P]
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) [是MarkovKernel P]
   证明: by
   simp [avgRisk_const_right']
 
@@ -225,7 +225,7 @@ lemma bayesRisk_le_iInf'
 
 中文:
 引理 bayesRisk_le_iInf'
-  条件: (hl : Measurable (uncurry ℓ)) (P : Kernel Θ 𝓧) (π : Measure Θ)
+  条件: (hl : 可测 (uncurry ℓ)) (P : 核 Θ 𝓧) (π : 测度 Θ)
   证明: by
   simp_rw [le_iInf_iff, bayesRisk]
   refine fun y => iInf_le_of_le (Kernel.const _ (Measure.dirac y)) ?_
@@ -253,7 +253,7 @@ lemma bayesRisk_le_iInf
 
 中文:
 引理 bayesRisk_le_iInf
-  结论: (hl : Measurable (uncurry ℓ)) (P : Kernel Θ 𝓧) [IsMarkovKernel P]
+  结论: (hl : 可测 (uncurry ℓ)) (P : 核 Θ 𝓧) [是MarkovKernel P]
   证明: (bayesRisk_le_iInf' hl P π).trans_eq (by simp)
 
 Depends on / 依赖: bayesRisk_le_iInf, trans_eq
@@ -279,7 +279,7 @@ lemma bayesRisk_const'
 
 中文:
 引理 bayesRisk_const'
-  结论: (hl : Measurable (uncurry ℓ))
+  结论: (hl : 可测 (uncurry ℓ))
   证明: by
   refine le_antisymm ((bayesRisk_le_iInf' hl _ _).trans_eq (by simp)) ?_
   simp_rw [bayesRisk, le_iInf_iff]
@@ -315,7 +315,7 @@ lemma bayesRisk_const_of_neZero
 
 中文:
 引理 bayesRisk_const_of_neZero
-  结论: (hl : Measurable (uncurry ℓ))
+  结论: (hl : 可测 (uncurry ℓ))
   证明: bayesRisk_const' hl μ π (by simp) (by simp [NeZero.out])
 
 Depends on / 依赖: NeZero, NeZero.out, bayesRisk_const
@@ -335,7 +335,7 @@ lemma bayesRisk_const_of_nonempty
 
 中文:
 引理 bayesRisk_const_of_nonempty
-  结论: [Nonempty 𝓨] (hl : Measurable (uncurry ℓ))
+  结论: [非空 𝓨] (hl : 可测 (uncurry ℓ))
   证明: bayesRisk_const' hl μ π (by simp) (fun _ => inferInstance)
 
 Depends on / 依赖: bayesRisk_const
@@ -356,7 +356,7 @@ lemma bayesRisk_const
 
 中文:
 引理 bayesRisk_const
-  结论: (hl : Measurable (uncurry ℓ))
+  结论: (hl : 可测 (uncurry ℓ))
   证明: by
   simp [bayesRisk_const_of_neZero hl μ π]
 
@@ -386,7 +386,7 @@ lemma avgRisk_le_mul'
 
 中文:
 引理 avgRisk_le_mul'
-  结论: (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) (π : Measure Θ)
+  结论: (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨) (π : 测度 Θ)
   证明: calc ∫⁻ θ, ∫⁻ y, ℓ θ y ∂(κ ∘ₖ P) θ ∂π
   _ <= ∫⁻ θ, ∫⁻ y, C ∂(κ ∘ₖ P) θ ∂π := by gcongr with θ y; exact hℓC θ y
   _ = ∫⁻ θ, C * ∫⁻ x, κ x .univ ∂P θ ∂π := by simp [Kernel.comp_apply' _ _ _ .univ]
@@ -425,7 +425,7 @@ lemma avgRisk_le_mul
 
 中文:
 引理 avgRisk_le_mul
-  结论: (P : Kernel Θ 𝓧) [IsMarkovKernel P] (κ : Kernel 𝓧 𝓨) [IsMarkovKernel κ]
+  结论: (P : 核 Θ 𝓧) [是MarkovKernel P] (κ : 核 𝓧 𝓨) [是MarkovKernel κ]
   证明: by
   refine (avgRisk_le_mul' P κ π hℓC).trans ?_
   rcases isEmpty_or_nonempty Θ
@@ -455,7 +455,7 @@ lemma bayesRisk_le_mul'
 
 中文:
 引理 bayesRisk_le_mul'
-  结论: [h𝓨 : Nonempty 𝓨] (P : Kernel Θ 𝓧) (π : Measure Θ)
+  结论: [h𝓨 : 非空 𝓨] (P : 核 Θ 𝓧) (π : 测度 Θ)
   证明: by
   refine (bayesRisk_le_avgRisk ℓ P (Kernel.const 𝓧 (Measure.dirac h𝓨.some)) π).trans ?_
   refine (avgRisk_le_mul' P (Kernel.const 𝓧 (Measure.dirac h𝓨.some)) π hℓC).trans ?_
@@ -482,7 +482,7 @@ lemma bayesRisk_le_mul
 
 中文:
 引理 bayesRisk_le_mul
-  结论: [Nonempty 𝓨] (P : Kernel Θ 𝓧) [IsMarkovKernel P]
+  结论: [非空 𝓨] (P : 核 Θ 𝓧) [是MarkovKernel P]
   证明: by
   refine (bayesRisk_le_mul' P π hℓC).trans ?_
   rcases isEmpty_or_nonempty Θ <;> simp
@@ -507,7 +507,7 @@ lemma bayesRisk_lt_top
 
 中文:
 引理 bayesRisk_lt_top
-  结论: [Nonempty 𝓨] (P : Kernel Θ 𝓧)
+  结论: [非空 𝓨] (P : 核 Θ 𝓧)
   证明: by
   refine (bayesRisk_le_mul' P π hℓC).trans_lt ?_
   simp [ENNReal.mul_lt_top_iff, P.bound_lt_top]
@@ -533,7 +533,7 @@ lemma bayesRisk_discard
 
 中文:
 引理 bayesRisk_discard
-  条件: (hl : Measurable (uncurry ℓ)) (π : Measure Θ) [SFinite π]
+  条件: (hl : 可测 (uncurry ℓ)) (π : 测度 Θ) [SFinite π]
   证明: by
   rw [Kernel.discard_eq_const]; rw [bayesRisk_const hl]
 
@@ -606,7 +606,7 @@ lemma bayesRisk_of_subsingleton'
 
 中文:
 引理 bayesRisk_of_subsingleton'
-  条件: [SFinite π] (hl : Measurable (uncurry ℓ))
+  条件: [SFinite π] (hl : 可测 (uncurry ℓ))
   证明: by
   refine le_antisymm (bayesRisk_le_iInf' hl _ _) ?_
   rw [bayesRisk_eq_iInf_measure_of_subsingleton]
@@ -641,7 +641,7 @@ lemma bayesRisk_of_subsingleton
 
 中文:
 引理 bayesRisk_of_subsingleton
-  条件: [IsMarkovKernel P] [SFinite π] (hl : Measurable (uncurry ℓ))
+  条件: [是MarkovKernel P] [SFinite π] (hl : 可测 (uncurry ℓ))
   证明: by
   simp [bayesRisk_of_subsingleton' hl]
 
@@ -669,7 +669,7 @@ lemma bayesRisk_le_bayesRisk_comp
 
 中文:
 引理 bayesRisk_le_bayesRisk_comp
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: by
   simp only [bayesRisk, avgRisk, le_iInf_iff]
   intro κ hκ
@@ -698,7 +698,7 @@ lemma bayesRisk_le_bayesRisk_map
 
 中文:
 引理 bayesRisk_le_bayesRisk_map
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: by
   rw [← Kernel.deterministic_comp_eq_map hf]
   exact bayesRisk_le_bayesRisk_comp _ _ _ _
@@ -725,7 +725,7 @@ lemma bayesRisk_compProd_le_bayesRisk
 
 中文:
 引理 bayesRisk_compProd_le_bayesRisk
-  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  结论: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: by
   have : P = (Kernel.deterministic Prod.fst (by fun_prop)) ∘ₖ (P otimesₖ η) := by
     rw [Kernel.deterministic_comp_eq_map]; rw [← Kernel.fst_eq]; rw [Kernel.fst_compProd]

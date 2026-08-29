@@ -45,7 +45,7 @@ definition arithGeom
 
 中文:
 定义 arithGeom
-  签名: [Mul R] [Add R] (a b u₀ : R)
+  签名: [乘法 R] [加法 R] (a b u₀ : R)
 -/
 def arithGeom [Mul R] [Add R] (a b u₀ : R) : Nat -> R
 | 0 => u₀
@@ -62,7 +62,7 @@ lemma arithGeom_zero
 
 中文:
 引理 arithGeom_zero
-  条件: [Mul R] [Add R]
+  条件: [乘法 R] [加法 R]
   结论: arithGeom a b u₀ 0 = u₀
   证明: rfl
 -/
@@ -78,7 +78,7 @@ lemma arithGeom_succ
 
 中文:
 引理 arithGeom_succ
-  条件: [Mul R] [Add R] (n : 自然数)
+  条件: [乘法 R] [加法 R] (n : 自然数)
   证明: rfl
 -/
 lemma arithGeom_succ [Mul R] [Add R] (n : Nat) :
@@ -100,7 +100,7 @@ lemma arithGeom_eq_add_sum
 
 中文:
 引理 arithGeom_eq_add_sum
-  条件: [CommSemiring R] (n : 自然数)
+  条件: [交换半环 R] (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -133,7 +133,7 @@ lemma arithGeom_same_eq_sum
 
 中文:
 引理 arithGeom_same_eq_sum
-  条件: [CommSemiring R] (n : 自然数)
+  条件: [交换半环 R] (n : 自然数)
   证明: by
   rw [arithGeom_eq_add_sum]; rw [Finset.sum_range_succ]; rw [mul_add]; rw [add_comm]; rw [mul_comm _ b]
 
@@ -154,7 +154,7 @@ lemma arithGeom_zero_eq_sum
 
 中文:
 引理 arithGeom_zero_eq_sum
-  条件: [CommSemiring R] (n : 自然数)
+  条件: [交换半环 R] (n : 自然数)
   证明: by
   simp [arithGeom_eq_add_sum]
 
@@ -392,7 +392,7 @@ lemma tendsto_arithGeom_atTop_of_one_lt
 
 中文:
 引理 tendsto_arithGeom_atTop_of_one_lt
-  条件: [Archimedean R] (ha : 1 < a) (h0 : b / (1 - a) < u₀)
+  条件: [阿基米德 R] (ha : 1 < a) (h0 : b / (1 - a) < u₀)
   证明: by
   rw [arithGeom_eq' ha.ne']
   refine tendsto_atTop_add_const_right _ _ ?_
@@ -423,7 +423,7 @@ lemma tendsto_arithGeom_nhds_of_lt_one
 
 中文:
 引理 tendsto_arithGeom_nhds_of_lt_one
-  结论: [Archimedean R] [TopologicalSpace R] [OrderTopology R]
+  结论: [阿基米德 R] [拓扑空间 R] [Order拓扑 R]
   证明: by
   rw [arithGeom_eq' ha.ne]
   conv_rhs => rw [← zero_add (b / (1 - a))]

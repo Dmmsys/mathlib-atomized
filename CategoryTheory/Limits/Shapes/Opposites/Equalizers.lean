@@ -337,7 +337,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: Cocone.unop ((Cocone.precompose (opParallelPairIso f.unop g.unop).hom).obj
     (Cocone.whisker walkingParallelPairOpEquiv.inverse c))
 
@@ -359,7 +359,7 @@ lemma unop_π_app_one
 
 中文:
 引理 unop_π_app_one
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by
   simp [unop]
 -/
@@ -379,7 +379,7 @@ lemma unop_π_app_zero
 
 中文:
 引理 unop_π_app_zero
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by
   simp [unop]
 -/
@@ -398,7 +398,7 @@ theorem unop_ι
 
 中文:
 定理 unop_ι
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by simp [Cofork.unop, Fork.ι]
 
 Depends on / 依赖: Cofork, Cofork.unop
@@ -417,7 +417,7 @@ definition op
 
 中文:
 定义 op
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: (Cone.postcompose (parallelPairOpIso f g).symm.hom).obj
     (Cone.whisker walkingParallelPairOpEquiv.functor (Cocone.op c))
 
@@ -440,7 +440,7 @@ lemma op_π_app_one
 
 中文:
 引理 op_π_app_one
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by
   simp [op]
 -/
@@ -461,7 +461,7 @@ lemma op_π_app_zero
 
 中文:
 引理 op_π_app_zero
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by
   simp [op]
 -/
@@ -481,7 +481,7 @@ theorem op_ι
 
 中文:
 定理 op_ι
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   证明: by simp [Cofork.op, Fork.ι]
 
 Depends on / 依赖: Cofork, Cofork.op
@@ -504,7 +504,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: Cone.unop ((Cone.postcompose (opParallelPairIso f.unop g.unop).symm.hom).obj
     (Cone.whisker walkingParallelPairOpEquiv.inverse c))
 
@@ -527,7 +527,7 @@ lemma unop_ι_app_one
 
 中文:
 引理 unop_ι_app_one
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by
   simp [unop]
 
@@ -550,7 +550,7 @@ lemma unop_ι_app_zero
 
 中文:
 引理 unop_ι_app_zero
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by
   simp [unop]
 -/
@@ -570,7 +570,7 @@ theorem unop_π
 
 中文:
 定理 unop_π
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by simp [Fork.unop, Cofork.π]
 
 Depends on / 依赖: Cofork, Fork.unop
@@ -591,7 +591,7 @@ definition op
 
 中文:
 定义 op
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: (Cocone.precompose (parallelPairOpIso f g).hom).obj
     (Cocone.whisker walkingParallelPairOpEquiv.functor (Cone.op c))
 
@@ -613,7 +613,7 @@ lemma op_ι_app_one
 
 中文:
 引理 op_ι_app_one
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by
   simp [op]
 -/
@@ -633,7 +633,7 @@ lemma op_ι_app_zero
 
 中文:
 引理 op_ι_app_zero
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by
   simp [op]
 -/
@@ -652,7 +652,7 @@ theorem op_π
 
 中文:
 定理 op_π
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   证明: by simp [Fork.op, Cofork.π]
 
 Depends on / 依赖: Cofork, Fork.op
@@ -677,7 +677,7 @@ theorem op_unop_π
 
 中文:
 定理 op_unop_π
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   结论: c.op.unop.π = c.π
   证明: by
   simp [Fork.unop_π, Cofork.op_ι]
@@ -700,7 +700,7 @@ theorem unop_op_π
 
 中文:
 定理 unop_op_π
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   结论: c.unop.op.π = c.π
   证明: by
   simp [Fork.op_π, Cofork.unop_ι]
@@ -721,7 +721,7 @@ definition opUnopIso
 
 中文:
 定义 opUnopIso
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: Cofork.ext (Iso.refl _) (by simp [op_unop_π])
 
 Depends on / 依赖: Cofork, Cofork.ext, Iso.refl
@@ -740,7 +740,7 @@ definition unopOpIso
 
 中文:
 定义 unopOpIso
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: Cofork.ext (Iso.refl _) (by simp [unop_op_π])
 
 Depends on / 依赖: Cofork, Cofork.ext, Iso.refl
@@ -765,7 +765,7 @@ theorem op_unop_ι
 
 中文:
 定理 op_unop_ι
-  条件: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   结论: c.op.unop.ι = c.ι
   证明: by
   simp [Cofork.unop_ι, Fork.op_π]
@@ -788,7 +788,7 @@ theorem unop_op_ι
 
 中文:
 定理 unop_op_ι
-  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  条件: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   结论: c.unop.op.ι = c.ι
   证明: by
   simp [Fork.unop_π, Cofork.op_ι]
@@ -809,7 +809,7 @@ definition opUnopIso
 
 中文:
 定义 opUnopIso
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: Fork.ext (Iso.refl _) (by simp [op_unop_ι])
 
 Depends on / 依赖: Fork.ext, Iso.refl
@@ -828,7 +828,7 @@ definition unopOpIso
 
 中文:
 定义 unopOpIso
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: Fork.ext (Iso.refl _) (by simp [unop_op_ι])
 
 Depends on / 依赖: Fork.ext, Iso.refl
@@ -859,7 +859,7 @@ definition isColimitEquivIsLimitOp
 
 中文:
 定义 isColimitEquivIsLimitOp
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: by
   apply equivOfSubsingletonOfSubsingleton
   · intro h
@@ -899,7 +899,7 @@ definition isColimitEquivIsLimitUnop
 
 中文:
 定义 isColimitEquivIsLimitUnop
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Cofork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 余叉 f g)
   定义体: by
   apply equivOfSubsingletonOfSubsingleton
   · intro h
@@ -1020,7 +1020,7 @@ definition isLimitEquivIsColimitOp
 
 中文:
 定义 isLimitEquivIsColimitOp
-  签名: {X Y : C} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : C} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: (IsLimit.equivIsoLimit c.opUnopIso).symm.trans c.op.isColimitEquivIsLimitUnop.symm
 
 Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, c.op.isColimitEquivIsLimitUnop.symm, c.opUnopIso, equivIsoLimit, isColimitEquivIsLimitUnop, opUnopIso, symm.trans
@@ -1039,7 +1039,7 @@ definition isLimitEquivIsColimitUnop
 
 中文:
 定义 isLimitEquivIsColimitUnop
-  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : Fork f g)
+  签名: {X Y : Cᵒᵖ} {f g : X ⟶ Y} (c : 叉 f g)
   定义体: (IsLimit.equivIsoLimit c.unopOpIso).symm.trans c.unop.isColimitEquivIsLimitOp.symm
 
 Depends on / 依赖: IsLimit, IsLimit.equivIsoLimit, c.unop.isColimitEquivIsLimitOp.symm, c.unopOpIso, equivIsoLimit, isColimitEquivIsLimitOp, symm.trans, unopOpIso

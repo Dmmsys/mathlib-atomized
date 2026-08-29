@@ -63,7 +63,7 @@ definition N₁
 
 中文:
 定义 N₁
-  签名: : SimplicialObject C ⥤ Karoubi (ChainComplex C 自然数) where
+  签名: : SimplicialObject C ⥤ Karoubi (链复形 C 自然数) where
   定义体: { X := AlternatingFaceMapComplex.obj X
       p := PInfty
       idem := PInfty_idem }
@@ -92,7 +92,7 @@ definition N₂
 
 中文:
 定义 N₂
-  签名: : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C 自然数)
+  签名: : Karoubi (SimplicialObject C) ⥤ Karoubi (链复形 C 自然数)
   定义体: (functorExtension₁ _ _).obj N₁
 -/
 def N₂ : Karoubi (SimplicialObject C) ⥤ Karoubi (ChainComplex C Nat) :=

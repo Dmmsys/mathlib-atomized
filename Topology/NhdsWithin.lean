@@ -51,7 +51,7 @@ theorem nhds_bind_nhdsWithin
 
 中文:
 定理 nhds_bind_nhdsWithin
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: ((𝓝 a).bind fun x => 𝓝[s] x) = 𝓝[s] a
   证明: bind_inf_principal.trans congr_arg₂ _ nhds_bind_nhds rfl
 
@@ -73,7 +73,7 @@ theorem eventually_nhds_nhdsWithin
 
 中文:
 定理 eventually_nhds_nhdsWithin
-  条件: {a : α} {s : Set α} {p : α -> 命题}
+  条件: {a : α} {s : 集合 α} {p : α -> 命题}
   证明: Filter.ext_iff.1 nhds_bind_nhdsWithin { x | p x }
 
 Depends on / 依赖: Filter, Filter.ext_iff, ext_iff, nhds_bind_nhdsWithin
@@ -92,7 +92,7 @@ theorem eventually_nhdsWithin_iff
 
 中文:
 定理 eventually_nhdsWithin_iff
-  条件: {a : α} {s : Set α} {p : α -> 命题}
+  条件: {a : α} {s : 集合 α} {p : α -> 命题}
   证明: eventually_inf_principal
 
 Depends on / 依赖: eventually_inf_principal
@@ -111,7 +111,7 @@ theorem frequently_nhdsWithin_iff
 
 中文:
 定理 frequently_nhdsWithin_iff
-  条件: {z : α} {s : Set α} {p : α -> 命题}
+  条件: {z : α} {s : 集合 α} {p : α -> 命题}
   证明: frequently_inf_principal.trans by simp only [and_comm]
 
 Depends on / 依赖: and_comm, frequently_inf_principal, frequently_inf_principal.trans
@@ -133,7 +133,7 @@ theorem mem_closure_ne_iff_frequently_within
 
 中文:
 定理 mem_closure_ne_iff_frequently_within
-  条件: {z : α} {s : Set α}
+  条件: {z : α} {s : 集合 α}
   证明: by
   simp [mem_closure_iff_frequently, frequently_nhdsWithin_iff]
 
@@ -161,7 +161,7 @@ theorem eventually_eventually_nhdsWithin
 
 中文:
 定理 eventually_eventually_nhdsWithin
-  条件: {a : α} {s : Set α} {p : α -> 命题}
+  条件: {a : α} {s : 集合 α} {p : α -> 命题}
   证明: by
   refine ⟨fun h => ?_, fun h => (eventually_nhds_nhdsWithin.2 h).filter_mono inf_le_left⟩
   simp only [eventually_nhdsWithin_iff] at h ⊢
@@ -188,7 +188,7 @@ theorem eventually_mem_nhdsWithin_iff
 
 中文:
 定理 eventually_mem_nhdsWithin_iff
-  条件: {x : α} {s t : Set α}
+  条件: {x : α} {s t : 集合 α}
   证明: eventually_eventually_nhdsWithin
 
 Depends on / 依赖: eventually_eventually_nhdsWithin
@@ -207,7 +207,7 @@ theorem nhdsWithin_eq
 
 中文:
 定理 nhdsWithin_eq
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   证明: ((nhds_basis_opens a).inf_principal s).eq_biInf
 
 Depends on / 依赖: eq_biInf, inf_principal, nhds_basis_opens
@@ -229,7 +229,7 @@ lemma nhdsWithin_univ
 中文:
 引理 nhdsWithin_univ
   条件: (a : α)
-  结论: 𝓝[Set.univ] a = 𝓝 a
+  结论: 𝓝[集合.univ] a = 𝓝 a
   证明: by
   rw [nhdsWithin]; rw [principal_univ]; rw [inf_top_eq]
 -/
@@ -246,7 +246,7 @@ theorem nhdsWithin_hasBasis
 
 中文:
 定理 nhdsWithin_hasBasis
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set α} {a : α}
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α} {a : α}
   证明: h.inf_principal t
 
 Depends on / 依赖: h.inf_principal, inf_principal
@@ -265,7 +265,7 @@ theorem nhdsWithin_basis_open
 
 中文:
 定理 nhdsWithin_basis_open
-  条件: (a : α) (t : Set α)
+  条件: (a : α) (t : 集合 α)
   证明: nhdsWithin_hasBasis (nhds_basis_opens a) t
 
 Depends on / 依赖: nhdsWithin_hasBasis, nhds_basis_opens
@@ -285,7 +285,7 @@ theorem mem_nhdsWithin
 
 中文:
 定理 mem_nhdsWithin
-  条件: {t : Set α} {a : α} {s : Set α}
+  条件: {t : 集合 α} {a : α} {s : 集合 α}
   证明: by
   simpa only [and_assoc, and_left_comm] using (nhdsWithin_basis_open a s).mem_iff
 
@@ -304,8 +304,8 @@ theorem mem_nhdsWithin_iff_exists_mem_nhds_inter
   proof: (nhdsWithin_hasBasis (𝓝 a).basis_sets s).mem_iff
 
 中文:
-定理 mem_nhdsWithin_iff_exists_mem_nhds_inter
-  条件: {t : Set α} {a : α} {s : Set α}
+定理 mem_nhdsWithin_iff_存在_mem_nhds_inter
+  条件: {t : 集合 α} {a : α} {s : 集合 α}
   证明: (nhdsWithin_hasBasis (𝓝 a).basis_sets s).mem_iff
 
 Depends on / 依赖: basis_sets, mem_iff, nhdsWithin_hasBasis
@@ -326,7 +326,7 @@ theorem sdiff_mem_nhdsWithin_compl
 
 中文:
 定理 sdiff_mem_nhdsWithin_compl
-  条件: {x : α} {s : Set α} (hs : s in 𝓝 x) (t : Set α)
+  条件: {x : α} {s : 集合 α} (hs : s in 𝓝 x) (t : 集合 α)
   证明: sdiff_mem_inf_principal_compl hs t
 
 @[deprecated (since := "2026-06-03")] alias diff_mem_nhdsWithin_compl := sdiff_mem_nhdsWithin_compl
@@ -353,7 +353,7 @@ theorem sdiff_mem_nhdsWithin_sdiff
 
 中文:
 定理 sdiff_mem_nhdsWithin_sdiff
-  条件: {x : α} {s t : Set α} (hs : s in 𝓝[t] x) (t' : Set α)
+  条件: {x : α} {s t : 集合 α} (hs : s in 𝓝[t] x) (t' : 集合 α)
   证明: by
   rw [nhdsWithin]; rw [sdiff_eq]; rw [sdiff_eq]; rw [← inf_principal]; rw [← inf_assoc]
   exact inter_mem_inf hs (mem_principal_self _)
@@ -381,7 +381,7 @@ theorem nhds_of_nhdsWithin_of_nhds
 
 中文:
 定理 nhds_of_nhdsWithin_of_nhds
-  条件: {s t : Set α} {a : α} (h1 : s in 𝓝 a) (h2 : t in 𝓝[s] a)
+  条件: {s t : 集合 α} {a : α} (h1 : s in 𝓝 a) (h2 : t in 𝓝[s] a)
   证明: by
   rcases mem_nhdsWithin_iff_exists_mem_nhds_inter.mp h2 with ⟨_, Hw, hw⟩
   exact (𝓝 a).sets_of_superset ((𝓝 a).inter_sets Hw h1) hw
@@ -403,7 +403,7 @@ theorem mem_nhdsWithin_iff_eventually
 
 中文:
 定理 mem_nhdsWithin_iff_eventually
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   证明: eventually_inf_principal
 
 Depends on / 依赖: eventually_inf_principal
@@ -423,7 +423,7 @@ theorem mem_nhdsWithin_iff_eventuallyEq
 
 中文:
 定理 mem_nhdsWithin_iff_eventuallyEq
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   证明: by
   simp_rw [mem_nhdsWithin_iff_eventually, eventuallyEq_set, mem_inter_iff, iff_self_and]
 
@@ -445,7 +445,7 @@ lemma mem_nhdsWithin_inter_self
 
 中文:
 引理 mem_nhdsWithin_inter_self
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   结论: t in 𝓝[s inter t] x
   证明: mem_nhdsWithin_iff_eventuallyEq.mpr by simp [inter_assoc]
 
@@ -466,7 +466,7 @@ lemma mem_nhdsWithin_self_inter
 
 中文:
 引理 mem_nhdsWithin_self_inter
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   结论: s in 𝓝[s inter t] x
   证明: mem_nhdsWithin_iff_eventuallyEq.mpr by simp [inter_comm s t, inter_assoc]
 
@@ -486,7 +486,7 @@ theorem nhdsWithin_eq_iff_eventuallyEq
 
 中文:
 定理 nhdsWithin_eq_iff_eventuallyEq
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   结论: 𝓝[s] x = 𝓝[t] x ↔ s =ᶠ[𝓝 x] t
   证明: set_eventuallyEq_iff_inf_principal.symm
 
@@ -506,7 +506,7 @@ theorem nhdsWithin_le_iff
 
 中文:
 定理 nhdsWithin_le_iff
-  条件: {s t : Set α} {x : α}
+  条件: {s t : 集合 α} {x : α}
   结论: 𝓝[s] x <= 𝓝[t] x ↔ t in 𝓝[s] x
   证明: set_eventuallyLE_iff_inf_principal_le.symm.trans set_eventuallyLE_iff_mem_inf_principal
 
@@ -528,7 +528,7 @@ theorem preimage_nhdsWithin_coinduced'
 
 中文:
 定理 preimage_nhdsWithin_coinduced'
-  结论: {X : α -> β} {s : Set β} {t : Set α} {a : α} (h : a in t)
+  结论: {X : α -> β} {s : 集合 β} {t : 集合 α} {a : α} (h : a in t)
   证明: by
   lift a to t using h
   replace hs : (fun x : t => X x) ⁻¹' s in 𝓝 a := preimage_nhds_coinduced hs
@@ -554,7 +554,7 @@ theorem mem_nhdsWithin_of_mem_nhds
 
 中文:
 定理 mem_nhdsWithin_of_mem_nhds
-  条件: {s t : Set α} {a : α} (h : s in 𝓝 a)
+  条件: {s t : 集合 α} {a : α} (h : s in 𝓝 a)
   结论: s in 𝓝[t] a
   证明: mem_inf_of_left h
 
@@ -574,7 +574,7 @@ theorem self_mem_nhdsWithin
 
 中文:
 定理 self_mem_nhdsWithin
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: s in 𝓝[s] a
   证明: mem_inf_of_right (mem_principal_self s)
 
@@ -594,7 +594,7 @@ theorem eventually_mem_nhdsWithin
 
 中文:
 定理 eventually_mem_nhdsWithin
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: 对任意ᶠ x in 𝓝[s] a, x in s
   证明: self_mem_nhdsWithin
 
@@ -614,7 +614,7 @@ theorem inter_mem_nhdsWithin
 
 中文:
 定理 inter_mem_nhdsWithin
-  条件: (s : Set α) {t : Set α} {a : α} (h : t in 𝓝 a)
+  条件: (s : 集合 α) {t : 集合 α} {a : α} (h : t in 𝓝 a)
   结论: s inter t in 𝓝[s] a
   证明: inter_mem self_mem_nhdsWithin (mem_inf_of_left h)
 
@@ -634,7 +634,7 @@ theorem pure_le_nhdsWithin
 
 中文:
 定理 pure_le_nhdsWithin
-  条件: {a : α} {s : Set α} (ha : a in s)
+  条件: {a : α} {s : 集合 α} (ha : a in s)
   结论: pure a <= 𝓝[s] a
   证明: le_inf (pure_le_nhds a) (le_principal_iff.2 ha)
 
@@ -654,7 +654,7 @@ theorem mem_of_mem_nhdsWithin
 
 中文:
 定理 mem_of_mem_nhdsWithin
-  条件: {a : α} {s t : Set α} (ha : a in s) (ht : t in 𝓝[s] a)
+  条件: {a : α} {s t : 集合 α} (ha : a in s) (ht : t in 𝓝[s] a)
   结论: a in t
   证明: pure_le_nhdsWithin ha ht
 
@@ -672,8 +672,8 @@ theorem Filter.Eventually.self_of_nhdsWithin
   proof: mem_of_mem_nhdsWithin hx h
 
 中文:
-定理 Filter.Eventually.self_of_nhdsWithin
-  结论: {p : α -> 命题} {s : Set α} {x : α}
+定理 滤子.Eventually.self_of_nhdsWithin
+  结论: {p : α -> 命题} {s : 集合 α} {x : α}
   证明: mem_of_mem_nhdsWithin hx h
 
 Depends on / 依赖: mem_of_mem_nhdsWithin
@@ -692,7 +692,7 @@ theorem tendsto_const_nhdsWithin
 
 中文:
 定理 tendsto_const_nhdsWithin
-  条件: {l : Filter β} {s : Set α} {a : α} (ha : a in s)
+  条件: {l : 滤子 β} {s : 集合 α} {a : α} (ha : a in s)
   证明: tendsto_const_pure.mono_right pure_le_nhdsWithin ha
 
 Depends on / 依赖: mono_right, pure_le_nhdsWithin, tendsto_const_pure, tendsto_const_pure.mono_right
@@ -712,7 +712,7 @@ theorem nhdsWithin_restrict''
 
 中文:
 定理 nhdsWithin_restrict''
-  条件: {a : α} (s : Set α) {t : Set α} (h : t in 𝓝[s] a)
+  条件: {a : α} (s : 集合 α) {t : 集合 α} (h : t in 𝓝[s] a)
   证明: le_antisymm (le_inf inf_le_left (le_principal_iff.mpr (inter_mem self_mem_nhdsWithin h)))
     (inf_le_inf_left _ (principal_mono.mpr Set.inter_subset_left))
 
@@ -734,7 +734,7 @@ theorem nhdsWithin_restrict'
 
 中文:
 定理 nhdsWithin_restrict'
-  条件: {a : α} (s : Set α) {t : Set α} (h : t in 𝓝 a)
+  条件: {a : α} (s : 集合 α) {t : 集合 α} (h : t in 𝓝 a)
   结论: 𝓝[s] a = 𝓝[s inter t] a
   证明: nhdsWithin_restrict'' s mem_inf_of_left h
 
@@ -753,7 +753,7 @@ theorem nhdsWithin_restrict
 
 中文:
 定理 nhdsWithin_restrict
-  条件: {a : α} (s : Set α) {t : Set α} (h₀ : a in t) (h₁ : IsOpen t)
+  条件: {a : α} (s : 集合 α) {t : 集合 α} (h₀ : a in t) (h₁ : 是开集 t)
   证明: nhdsWithin_restrict' s (IsOpen.mem_nhds h₁ h₀)
 
 Depends on / 依赖: IsOpen, IsOpen.mem_nhds, mem_nhds, nhdsWithin_restrict
@@ -773,7 +773,7 @@ theorem nhdsWithin_le_of_mem
 
 中文:
 定理 nhdsWithin_le_of_mem
-  条件: {a : α} {s t : Set α} (h : s in 𝓝[t] a)
+  条件: {a : α} {s t : 集合 α} (h : s in 𝓝[t] a)
   结论: 𝓝[t] a <= 𝓝[s] a
   证明: nhdsWithin_le_iff.mpr h
 
@@ -796,7 +796,7 @@ theorem nhdsWithin_le_nhds
 
 中文:
 定理 nhdsWithin_le_nhds
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: 𝓝[s] a <= 𝓝 a
   证明: by
   rw [← nhdsWithin_univ]
@@ -820,7 +820,7 @@ theorem nhdsWithin_eq_nhdsWithin'
 
 中文:
 定理 nhdsWithin_eq_nhdsWithin'
-  条件: {a : α} {s t u : Set α} (hs : s in 𝓝 a) (h₂ : t inter s = u inter s)
+  条件: {a : α} {s t u : 集合 α} (hs : s in 𝓝 a) (h₂ : t inter s = u inter s)
   证明: by rw [nhdsWithin_restrict' t hs, nhdsWithin_restrict' u hs, h₂]
 
 Depends on / 依赖: nhdsWithin_restrict
@@ -839,7 +839,7 @@ theorem nhdsWithin_eq_nhdsWithin
 
 中文:
 定理 nhdsWithin_eq_nhdsWithin
-  结论: {a : α} {s t u : Set α} (h₀ : a in s) (h₁ : IsOpen s)
+  结论: {a : α} {s t u : 集合 α} (h₀ : a in s) (h₁ : 是开集 s)
   证明: by
   rw [nhdsWithin_restrict t h₀ h₁]; rw [nhdsWithin_restrict u h₀ h₁]; rw [h₂]
 
@@ -860,7 +860,7 @@ theorem nhdsWithin_eq_nhds
 
 中文:
 定理 nhdsWithin_eq_nhds
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: 𝓝[s] a = 𝓝 a ↔ s in 𝓝 a
   证明: inf_eq_left.trans le_principal_iff
 -/
@@ -877,8 +877,8 @@ theorem IsOpen.nhdsWithin_eq
   proof: nhdsWithin_eq_nhds.2 h.mem_nhds ha
 
 中文:
-定理 IsOpen.nhdsWithin_eq
-  条件: {a : α} {s : Set α} (h : IsOpen s) (ha : a in s)
+定理 是开集.nhdsWithin_eq
+  条件: {a : α} {s : 集合 α} (h : 是开集 s) (ha : a in s)
   结论: 𝓝[s] a = 𝓝 a
   证明: nhdsWithin_eq_nhds.2 h.mem_nhds ha
 
@@ -901,7 +901,7 @@ theorem preimage_nhds_within_coinduced
 
 中文:
 定理 preimage_nhds_within_coinduced
-  结论: {X : α -> β} {s : Set β} {t : Set α} {a : α} (h : a in t)
+  结论: {X : α -> β} {s : 集合 β} {t : 集合 α} {a : α} (h : a in t)
   证明: by
   rw [← ht.nhdsWithin_eq h]
   exact preimage_nhdsWithin_coinduced' h hs
@@ -950,7 +950,7 @@ theorem nhdsWithin_union
 
 中文:
 定理 nhdsWithin_union
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   结论: 𝓝[s union t] a = 𝓝[s] a ⊔ 𝓝[t] a
   证明: by
   delta nhdsWithin
@@ -973,7 +973,7 @@ theorem nhds_eq_nhdsWithin_sup_nhdsWithin
 
 中文:
 定理 nhds_eq_nhdsWithin_sup_nhdsWithin
-  条件: (b : α) {I₁ I₂ : Set α} (hI : Set.univ = I₁ union I₂)
+  条件: (b : α) {I₁ I₂ : 集合 α} (hI : 集合.univ = I₁ union I₂)
   证明: by
   rw [← nhdsWithin_univ b]; rw [hI]; rw [nhdsWithin_union]
 
@@ -993,7 +993,7 @@ lemma inter_mem_nhdsWithin_inter
 
 中文:
 引理 inter_mem_nhdsWithin_inter
-  条件: {a b c d : Set α} {x : α} (h : a in 𝓝[b] x) (h' : c in 𝓝[d] x)
+  条件: {a b c d : 集合 α} {x : α} (h : a in 𝓝[b] x) (h' : c in 𝓝[d] x)
   证明: inter_mem (nhdsWithin_mono _ inter_subset_left h) (nhdsWithin_mono _ inter_subset_right h')
 
 Depends on / 依赖: inter_mem, inter_subset_left, inter_subset_right, nhdsWithin_mono
@@ -1040,7 +1040,7 @@ lemma punctured_nhds_eq_nhdsWithin_sup_nhdsWithin
 
 中文:
 引理 punctured_nhds_eq_nhdsWithin_sup_nhdsWithin
-  条件: [LinearOrder α] {x : α}
+  条件: [线性序 α] {x : α}
   证明: by
   rw [← Iio_union_Ioi]; rw [nhdsWithin_union]
 
@@ -1062,7 +1062,7 @@ theorem nhds_of_Ici_Iic
 
 中文:
 定理 nhds_of_Ici_Iic
-  结论: [LinearOrder α] {b : α}
+  结论: [线性序 α] {b : α}
   证明: union_mem_nhds_of_mem_nhdsWithin Iic_union_Ici.symm
     (inter_mem hL self_mem_nhdsWithin) (inter_mem hR self_mem_nhdsWithin)
 
@@ -1087,7 +1087,7 @@ theorem nhdsWithin_biUnion
 
 中文:
 定理 nhdsWithin_biUnion
-  条件: {ι} {I : Set ι} (hI : I.Finite) (s : ι -> Set α) (a : α)
+  条件: {ι} {I : 集合 ι} (hI : I.有限) (s : ι -> 集合 α) (a : α)
   证明: by
   induction I, hI using Set.Finite.induction_on with
   | empty => simp
@@ -1112,7 +1112,7 @@ theorem nhdsWithin_sUnion
 
 中文:
 定理 nhdsWithin_sUnion
-  条件: {S : Set (Set α)} (hS : S.Finite) (a : α)
+  条件: {S : 集合 (集合 α)} (hS : S.有限) (a : α)
   证明: by
   rw [sUnion_eq_biUnion]; rw [nhdsWithin_biUnion hS]
 
@@ -1133,7 +1133,7 @@ theorem nhdsWithin_iUnion
 
 中文:
 定理 nhdsWithin_iUnion
-  条件: {ι} [Finite ι] (s : ι -> Set α) (a : α)
+  条件: {ι} [有限 ι] (s : ι -> 集合 α) (a : α)
   证明: by
   rw [← sUnion_range]; rw [nhdsWithin_sUnion (finite_range s)]; rw [iSup_range]
 
@@ -1156,7 +1156,7 @@ theorem nhdsWithin_inter
 
 中文:
 定理 nhdsWithin_inter
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   结论: 𝓝[s inter t] a = 𝓝[s] a ⊓ 𝓝[t] a
   证明: by
   delta nhdsWithin
@@ -1181,7 +1181,7 @@ theorem nhdsWithin_inter'
 
 中文:
 定理 nhdsWithin_inter'
-  条件: (a : α) (s t : Set α)
+  条件: (a : α) (s t : 集合 α)
   结论: 𝓝[s inter t] a = 𝓝[s] a ⊓ 𝓟 t
   证明: by
   delta nhdsWithin
@@ -1206,7 +1206,7 @@ theorem nhdsWithin_inter_of_mem
 
 中文:
 定理 nhdsWithin_inter_of_mem
-  条件: {a : α} {s t : Set α} (h : s in 𝓝[t] a)
+  条件: {a : α} {s t : 集合 α} (h : s in 𝓝[t] a)
   结论: 𝓝[s inter t] a = 𝓝[t] a
   证明: by
   rw [nhdsWithin_inter]; rw [inf_eq_right]
@@ -1232,7 +1232,7 @@ theorem nhdsWithin_inter_of_mem'
 
 中文:
 定理 nhdsWithin_inter_of_mem'
-  条件: {a : α} {s t : Set α} (h : t in 𝓝[s] a)
+  条件: {a : α} {s t : 集合 α} (h : t in 𝓝[s] a)
   结论: 𝓝[s inter t] a = 𝓝[s] a
   证明: by
   rw [inter_comm]; rw [nhdsWithin_inter_of_mem h]
@@ -1284,7 +1284,7 @@ theorem nhdsWithin_insert
 
 中文:
 定理 nhdsWithin_insert
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: 𝓝[insert a s] a = pure a ⊔ 𝓝[s] a
   证明: by
   rw [← singleton_union]; rw [nhdsWithin_union]; rw [nhdsWithin_singleton]
@@ -1306,7 +1306,7 @@ theorem mem_nhdsWithin_insert
 
 中文:
 定理 mem_nhdsWithin_insert
-  条件: {a : α} {s t : Set α}
+  条件: {a : α} {s t : 集合 α}
   结论: t in 𝓝[insert a s] a ↔ a in t ∧ t in 𝓝[s] a
   证明: by
   simp
@@ -1324,7 +1324,7 @@ theorem insert_mem_nhdsWithin_insert
 
 中文:
 定理 insert_mem_nhdsWithin_insert
-  条件: {a : α} {s t : Set α} (h : t in 𝓝[s] a)
+  条件: {a : α} {s t : 集合 α} (h : t in 𝓝[s] a)
   证明: by simp [mem_of_superset h]
 
 Depends on / 依赖: mem_of_superset
@@ -1347,7 +1347,7 @@ theorem insert_mem_nhds_iff
 
 中文:
 定理 insert_mem_nhds_iff
-  条件: {a : α} {s : Set α}
+  条件: {a : α} {s : 集合 α}
   结论: insert a s in 𝓝 a ↔ s in 𝓝[!=] a
   证明: by
   simp only [nhdsWithin, mem_inf_principal, mem_compl_iff, mem_singleton_iff, or_iff_not_imp_left,
@@ -1419,7 +1419,7 @@ lemma continuousAt_iff_punctured_nhds
 
 中文:
 引理 continuousAt_iff_punctured_nhds
-  条件: [TopologicalSpace β] {f : α -> β} {a : α}
+  条件: [拓扑空间 β] {f : α -> β} {a : α}
   证明: by
   simp [ContinuousAt, -pure_sup_nhdsNE, ← pure_sup_nhdsNE a, tendsto_pure_nhds]
 
@@ -1441,7 +1441,7 @@ theorem nhdsWithin_prod
 
 中文:
 定理 nhdsWithin_prod
-  结论: [TopologicalSpace β]
+  结论: [拓扑空间 β]
   证明: by
   rw [nhdsWithin_prod_eq]
   exact prod_mem_prod hu hv
@@ -1465,8 +1465,8 @@ lemma Filter.EventuallyEq.mem_interior
   simpa [mem_interior_iff_mem_nhds, ← nhdsWithin_eq_nhds, hst] using h
 
 中文:
-引理 Filter.EventuallyEq.mem_interior
-  结论: {x : α} {s t : Set α} (hst : s =ᶠ[𝓝 x] t)
+引理 滤子.EventuallyEq.mem_interior
+  结论: {x : α} {s t : 集合 α} (hst : s =ᶠ[𝓝 x] t)
   证明: by
   rw [← nhdsWithin_eq_iff_eventuallyEq] at hst
   simpa [mem_interior_iff_mem_nhds, ← nhdsWithin_eq_nhds, hst] using h
@@ -1487,8 +1487,8 @@ lemma Filter.EventuallyEq.mem_interior_iff
   proof: ⟨fun h => hst.mem_interior h, fun h => hst.symm.mem_interior h⟩
 
 中文:
-引理 Filter.EventuallyEq.mem_interior_iff
-  条件: {x : α} {s t : Set α} (hst : s =ᶠ[𝓝 x] t)
+引理 滤子.EventuallyEq.mem_interior_iff
+  条件: {x : α} {s t : 集合 α} (hst : s =ᶠ[𝓝 x] t)
   证明: ⟨fun h => hst.mem_interior h, fun h => hst.symm.mem_interior h⟩
 
 Depends on / 依赖: hst.mem_interior, hst.symm.mem_interior, mem_interior
@@ -1513,7 +1513,7 @@ theorem nhdsWithin_pi_eq'
 
 中文:
 定理 nhdsWithin_pi_eq'
-  条件: {I : Set ι} (hI : I.Finite) (s : 对任意 i, Set (X i)) (x : 对任意 i, X i)
+  条件: {I : 集合 ι} (hI : I.有限) (s : 对任意 i, 集合 (X i)) (x : 对任意 i, X i)
   证明: by
   simp only [nhdsWithin, nhds_pi, Filter.pi, comap_inf, comap_iInf, pi_def, comap_principal, ←
     iInf_principal_finite hI, ← iInf_inf_eq]
@@ -1539,7 +1539,7 @@ theorem nhdsWithin_pi_eq
 
 中文:
 定理 nhdsWithin_pi_eq
-  条件: {I : Set ι} (hI : I.Finite) (s : 对任意 i, Set (X i)) (x : 对任意 i, X i)
+  条件: {I : 集合 ι} (hI : I.有限) (s : 对任意 i, 集合 (X i)) (x : 对任意 i, X i)
   证明: by
   simp only [nhdsWithin, nhds_pi, Filter.pi, pi_def, ← iInf_principal_finite hI, comap_inf,
     comap_principal]
@@ -1568,7 +1568,7 @@ theorem nhdsWithin_pi_univ_eq
 
 中文:
 定理 nhdsWithin_pi_univ_eq
-  条件: [Finite ι] (s : 对任意 i, Set (X i)) (x : 对任意 i, X i)
+  条件: [有限 ι] (s : 对任意 i, 集合 (X i)) (x : 对任意 i, X i)
   证明: by
   simpa [nhdsWithin] using nhdsWithin_pi_eq finite_univ s x
 
@@ -1589,7 +1589,7 @@ theorem nhdsWithin_pi_eq_bot
 
 中文:
 定理 nhdsWithin_pi_eq_bot
-  条件: {I : Set ι} {s : 对任意 i, Set (X i)} {x : 对任意 i, X i}
+  条件: {I : 集合 ι} {s : 对任意 i, 集合 (X i)} {x : 对任意 i, X i}
   证明: by
   simp only [nhdsWithin, nhds_pi, pi_inf_principal_pi_eq_bot]
 
@@ -1610,7 +1610,7 @@ theorem nhdsWithin_pi_neBot
 
 中文:
 定理 nhdsWithin_pi_neBot
-  条件: {I : Set ι} {s : 对任意 i, Set (X i)} {x : 对任意 i, X i}
+  条件: {I : 集合 ι} {s : 对任意 i, 集合 (X i)} {x : 对任意 i, X i}
   证明: by
   simp [neBot_iff, nhdsWithin_pi_eq_bot]
 
@@ -1631,7 +1631,7 @@ instance instNeBotNhdsWithinUnivPi
 
 中文:
 实例 instNeBotNhdsWithinUnivPi
-  签名: {s : 对任意 i, Set (X i)} {x : 对任意 i, X i}
+  签名: {s : 对任意 i, 集合 (X i)} {x : 对任意 i, X i}
   定义体: by
   simpa [nhdsWithin_pi_neBot]
 
@@ -1651,8 +1651,8 @@ instance Pi.instNeBotNhdsWithinIio
 this.mono nhdsWithin_mono _ fun _y hy => lt_of_strongLT fun i => hy i trivial
 
 中文:
-实例 Pi.instNeBotNhdsWithinIio
-  签名: [Nonempty ι] [对任意 i, Preorder (X i)] {x : 对任意 i, X i}
+实例 依赖函数类型.instNeBotNhdsWithinIio
+  签名: [非空 ι] [对任意 i, 预序 (X i)] {x : 对任意 i, X i}
   定义体: have : (𝓝[pi univ fun i => Iio (x i)] x).NeBot := inferInstance
 this.mono nhdsWithin_mono _ fun _y hy => lt_of_strongLT fun i => hy i trivial
 
@@ -1672,8 +1672,8 @@ instance Pi.instNeBotNhdsWithinIoi
   body: Pi.instNeBotNhdsWithinIio (X := fun i => (X i)ᵒᵈ) (x := fun i => OrderDual.toDual (x i))
 
 中文:
-实例 Pi.instNeBotNhdsWithinIoi
-  签名: [Nonempty ι] [对任意 i, Preorder (X i)] {x : 对任意 i, X i}
+实例 依赖函数类型.instNeBotNhdsWithinIoi
+  签名: [非空 ι] [对任意 i, 预序 (X i)] {x : 对任意 i, X i}
   定义体: Pi.instNeBotNhdsWithinIio (X := fun i => (X i)ᵒᵈ) (x := fun i => OrderDual.toDual (x i))
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, Pi.instNeBotNhdsWithinIio, instNeBotNhdsWithinIio, toDual
@@ -1694,8 +1694,8 @@ theorem Filter.Tendsto.piecewise_nhdsWithin
   apply Tendsto.piecewise <;> rwa [← nhdsWithin_inter']
 
 中文:
-定理 Filter.Tendsto.piecewise_nhdsWithin
-  结论: {f g : α -> β} {t : Set α} [对任意 x, Decidable (x in t)]
+定理 滤子.收敛.piecewise_nhdsWithin
+  结论: {f g : α -> β} {t : 集合 α} [对任意 x, 可判定 (x in t)]
   证明: by
   apply Tendsto.piecewise <;> rwa [← nhdsWithin_inter']
 
@@ -1715,7 +1715,7 @@ theorem Filter.Tendsto.if_nhdsWithin
   proof: h₀.piecewise_nhdsWithin h₁
 
 中文:
-定理 Filter.Tendsto.if_nhdsWithin
+定理 滤子.收敛.if_nhdsWithin
   结论: {f g : α -> β} {p : α -> 命题} [DecidablePred p] {a : α}
   证明: h₀.piecewise_nhdsWithin h₁
 
@@ -1737,7 +1737,7 @@ theorem map_nhdsWithin
 
 中文:
 定理 map_nhdsWithin
-  条件: (f : α -> β) (a : α) (s : Set α)
+  条件: (f : α -> β) (a : α) (s : 集合 α)
   证明: ((nhdsWithin_basis_open a s).map f).eq_biInf
 
 Depends on / 依赖: eq_biInf, nhdsWithin_basis_open
@@ -1756,7 +1756,7 @@ theorem tendsto_nhdsWithin_mono_left
 
 中文:
 定理 tendsto_nhdsWithin_mono_left
-  结论: {f : α -> β} {a : α} {s t : Set α} {l : Filter β} (hst : s subseteq t)
+  结论: {f : α -> β} {a : α} {s t : 集合 α} {l : 滤子 β} (hst : s subseteq t)
   证明: h.mono_left nhdsWithin_mono a hst
 
 Depends on / 依赖: h.mono_left, mono_left, nhdsWithin_mono
@@ -1775,7 +1775,7 @@ theorem tendsto_nhdsWithin_mono_right
 
 中文:
 定理 tendsto_nhdsWithin_mono_right
-  结论: {f : β -> α} {l : Filter β} {a : α} {s t : Set α} (hst : s subseteq t)
+  结论: {f : β -> α} {l : 滤子 β} {a : α} {s t : 集合 α} (hst : s subseteq t)
   证明: h.mono_right (nhdsWithin_mono a hst)
 
 Depends on / 依赖: h.mono_right, mono_right, nhdsWithin_mono
@@ -1794,7 +1794,7 @@ theorem tendsto_nhdsWithin_of_tendsto_nhds
 
 中文:
 定理 tendsto_nhdsWithin_of_tendsto_nhds
-  结论: {f : α -> β} {a : α} {s : Set α} {l : Filter β}
+  结论: {f : α -> β} {a : α} {s : 集合 α} {l : 滤子 β}
   证明: h.mono_left inf_le_left
 
 Depends on / 依赖: h.mono_left, inf_le_left, mono_left
@@ -1816,7 +1816,7 @@ theorem eventually_mem_of_tendsto_nhdsWithin
 
 中文:
 定理 eventually_mem_of_tendsto_nhdsWithin
-  结论: {f : β -> α} {a : α} {s : Set α} {l : Filter β}
+  结论: {f : β -> α} {a : α} {s : 集合 α} {l : 滤子 β}
   证明: by
   simp_rw [nhdsWithin_eq, tendsto_iInf, mem_ofPred_eq, tendsto_principal, mem_inter_iff,
     eventually_and] at h
@@ -1840,7 +1840,7 @@ theorem tendsto_nhds_of_tendsto_nhdsWithin
 
 中文:
 定理 tendsto_nhds_of_tendsto_nhdsWithin
-  结论: {f : β -> α} {a : α} {s : Set α} {l : Filter β}
+  结论: {f : β -> α} {a : α} {s : 集合 α} {l : 滤子 β}
   证明: h.mono_right nhdsWithin_le_nhds
 
 Depends on / 依赖: h.mono_right, mono_right, nhdsWithin_le_nhds
@@ -1860,7 +1860,7 @@ theorem nhdsWithin_neBot_of_mem
 
 中文:
 定理 nhdsWithin_neBot_of_mem
-  条件: {s : Set α} {x : α} (hx : x in s)
+  条件: {s : 集合 α} {x : α} (hx : x in s)
   结论: NeBot (𝓝[s] x)
   证明: mem_closure_iff_nhdsWithin_neBot.1 subset_closure hx
 
@@ -1878,8 +1878,8 @@ theorem IsClosed.mem_of_nhdsWithin_neBot
   proof: hs.closure_eq ▸ mem_closure_iff_nhdsWithin_neBot.2 hx
 
 中文:
-定理 IsClosed.mem_of_nhdsWithin_neBot
-  结论: {s : Set α} (hs : IsClosed s) {x : α}
+定理 是闭集.mem_of_nhdsWithin_neBot
+  结论: {s : 集合 α} (hs : 是闭集 s) {x : α}
   证明: hs.closure_eq ▸ mem_closure_iff_nhdsWithin_neBot.2 hx
 
 Depends on / 依赖: closure_eq, hs.closure_eq, mem_closure_iff_nhdsWithin_neBot
@@ -1918,7 +1918,7 @@ theorem mem_closure_pi
 
 中文:
 定理 mem_closure_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, TopologicalSpace (α i)] {I : Set ι}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 拓扑空间 (α i)] {I : 集合 ι}
   证明: by
   simp only [mem_closure_iff_nhdsWithin_neBot, nhdsWithin_pi_neBot]
 
@@ -1938,7 +1938,7 @@ theorem closure_pi_set
 
 中文:
 定理 closure_pi_set
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, TopologicalSpace (α i)] (I : Set ι)
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 拓扑空间 (α i)] (I : 集合 ι)
   证明: Set.ext fun _ => mem_closure_pi
 
 Depends on / 依赖: Set.ext, mem_closure_pi
@@ -1959,7 +1959,7 @@ theorem dense_pi
 
 中文:
 定理 dense_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, TopologicalSpace (α i)] {s : 对任意 i, Set (α i)}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 拓扑空间 (α i)] {s : 对任意 i, 集合 (α i)}
   证明: by
   simp only [dense_iff_closure_eq, closure_pi_set, pi_congr rfl fun i hi => (hs i hi).closure_eq,
     pi_univ]
@@ -1983,7 +1983,7 @@ theorem DenseRange.piMap
 
 中文:
 定理 DenseRange.piMap
-  结论: {ι : 类型} {X Y : ι -> 类型} [对任意 i, TopologicalSpace (Y i)]
+  结论: {ι : 类型} {X Y : ι -> 类型} [对任意 i, 拓扑空间 (Y i)]
   证明: by
   rw [DenseRange]; rw [Set.range_piMap]
   exact dense_pi Set.univ (fun i _ => hf i)
@@ -2006,7 +2006,7 @@ theorem eventuallyEq_nhdsWithin_iff
 
 中文:
 定理 eventuallyEq_nhdsWithin_iff
-  条件: {f g : α -> β} {s : Set α} {a : α}
+  条件: {f g : α -> β} {s : 集合 α} {a : α}
   证明: mem_inf_principal
 
 Depends on / 依赖: mem_inf_principal
@@ -2050,7 +2050,7 @@ theorem eventuallyEq_nhdsWithin_of_eqOn
 
 中文:
 定理 eventuallyEq_nhdsWithin_of_eqOn
-  条件: {f g : α -> β} {s : Set α} {a : α} (h : EqOn f g s)
+  条件: {f g : α -> β} {s : 集合 α} {a : α} (h : EqOn f g s)
   证明: mem_inf_of_right h
 
 Depends on / 依赖: mem_inf_of_right
@@ -2068,8 +2068,8 @@ theorem Set.EqOn.eventuallyEq_nhdsWithin
   proof: eventuallyEq_nhdsWithin_of_eqOn h
 
 中文:
-定理 Set.EqOn.eventuallyEq_nhdsWithin
-  条件: {f g : α -> β} {s : Set α} {a : α} (h : EqOn f g s)
+定理 集合.EqOn.eventuallyEq_nhdsWithin
+  条件: {f g : α -> β} {s : 集合 α} {a : α} (h : EqOn f g s)
   证明: eventuallyEq_nhdsWithin_of_eqOn h
 
 Depends on / 依赖: eventuallyEq_nhdsWithin_of_eqOn
@@ -2088,7 +2088,7 @@ theorem tendsto_nhdsWithin_congr
 
 中文:
 定理 tendsto_nhdsWithin_congr
-  结论: {f g : α -> β} {s : Set α} {a : α} {l : Filter β}
+  结论: {f g : α -> β} {s : 集合 α} {a : α} {l : 滤子 β}
   证明: (tendsto_congr' <| eventuallyEq_nhdsWithin_of_eqOn hfg).1 hf
 
 Depends on / 依赖: eventuallyEq_nhdsWithin_of_eqOn, tendsto_congr
@@ -2106,8 +2106,8 @@ theorem eventually_nhdsWithin_of_forall
   proof: mem_inf_of_right h
 
 中文:
-定理 eventually_nhdsWithin_of_forall
-  条件: {s : Set α} {a : α} {p : α -> 命题} (h : 对任意 x in s, p x)
+定理 eventually_nhdsWithin_of_对任意
+  条件: {s : 集合 α} {a : α} {p : α -> 命题} (h : 对任意 x in s, p x)
   证明: mem_inf_of_right h
 
 Depends on / 依赖: mem_inf_of_right
@@ -2126,7 +2126,7 @@ theorem tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
 
 中文:
 定理 tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within
-  结论: {a : α} {l : Filter β} {s : Set α}
+  结论: {a : α} {l : 滤子 β} {s : 集合 α}
   证明: tendsto_inf.2 ⟨h1, tendsto_principal.2 h2⟩
 
 Depends on / 依赖: tendsto_inf, tendsto_principal
@@ -2148,7 +2148,7 @@ theorem tendsto_nhdsWithin_iff
 
 中文:
 定理 tendsto_nhdsWithin_iff
-  条件: {a : α} {l : Filter β} {s : Set α} {f : β -> α}
+  条件: {a : α} {l : 滤子 β} {s : 集合 α} {f : β -> α}
   证明: ⟨fun h => ⟨tendsto_nhds_of_tendsto_nhdsWithin h, eventually_mem_of_tendsto_nhdsWithin h⟩, fun h =>
     tendsto_nhdsWithin_of_tendsto_nhds_of_eventually_within _ h.1 h.2⟩
 
@@ -2173,7 +2173,7 @@ tendsto_inf.2 ⟨h, tendsto_principal.2 Eventually.of_forall mem_range_self⟩�
 
 中文:
 定理 tendsto_nhdsWithin_range
-  条件: {a : α} {l : Filter β} {f : β -> α}
+  条件: {a : α} {l : 滤子 β} {f : β -> α}
   证明: ⟨fun h => h.mono_right inf_le_left, fun h =>
 tendsto_inf.2 ⟨h, tendsto_principal.2 Eventually.of_forall mem_range_self⟩⟩
 
@@ -2193,8 +2193,8 @@ theorem Filter.EventuallyEq.eq_of_nhdsWithin
   proof: h.self_of_nhdsWithin hmem
 
 中文:
-定理 Filter.EventuallyEq.eq_of_nhdsWithin
-  结论: {s : Set α} {f g : α -> β} {a : α} (h : f =ᶠ[𝓝[s] a] g)
+定理 滤子.EventuallyEq.eq_of_nhdsWithin
+  结论: {s : 集合 α} {f g : α -> β} {a : α} (h : f =ᶠ[𝓝[s] a] g)
   证明: h.self_of_nhdsWithin hmem
 
 Depends on / 依赖: h.self_of_nhdsWithin, self_of_nhdsWithin
@@ -2213,7 +2213,7 @@ theorem eventually_nhdsWithin_of_eventually_nhds
 
 中文:
 定理 eventually_nhdsWithin_of_eventually_nhds
-  结论: {s : Set α}
+  结论: {s : 集合 α}
   证明: mem_nhdsWithin_of_mem_nhds h
 
 Depends on / 依赖: mem_nhdsWithin_of_mem_nhds
@@ -2231,8 +2231,8 @@ lemma Set.MapsTo.preimage_mem_nhdsWithin
   proof: Filter.mem_of_superset self_mem_nhdsWithin hst
 
 中文:
-引理 Set.MapsTo.preimage_mem_nhdsWithin
-  结论: {f : α -> β} {s : Set α} {t : Set β} {x : α}
+引理 集合.映射到.preimage_mem_nhdsWithin
+  结论: {f : α -> β} {s : 集合 α} {t : 集合 β} {x : α}
   证明: Filter.mem_of_superset self_mem_nhdsWithin hst
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, mem_of_superset, self_mem_nhdsWithin
@@ -2253,7 +2253,7 @@ theorem mem_nhdsWithin_subtype
 
 中文:
 定理 mem_nhdsWithin_subtype
-  条件: {s : Set α} {a : { x // x in s }} {t u : Set { x // x in s }}
+  条件: {s : 集合 α} {a : { x // x in s }} {t u : 集合 { x // x in s }}
   证明: by
   rw [nhdsWithin]; rw [nhds_subtype]; rw [principal_subtype]; rw [← comap_inf]; rw [← nhdsWithin]
 
@@ -2273,7 +2273,7 @@ theorem nhdsWithin_subtype
 
 中文:
 定理 nhdsWithin_subtype
-  条件: (s : Set α) (a : { x // x in s }) (t : Set { x // x in s })
+  条件: (s : 集合 α) (a : { x // x in s }) (t : 集合 { x // x in s })
   证明: Filter.ext fun _ => mem_nhdsWithin_subtype
 
 Depends on / 依赖: Filter, Filter.ext, mem_nhdsWithin_subtype
@@ -2292,7 +2292,7 @@ theorem nhdsWithin_eq_map_subtype_coe
 
 中文:
 定理 nhdsWithin_eq_map_subtype_coe
-  条件: {s : Set α} {a : α} (h : a in s)
+  条件: {s : 集合 α} {a : α} (h : a in s)
   证明: (map_nhds_subtype_val ⟨a, h⟩).symm
 
 Depends on / 依赖: map_nhds_subtype_val
@@ -2312,7 +2312,7 @@ theorem mem_nhds_subtype_iff_nhdsWithin
 
 中文:
 定理 mem_nhds_subtype_iff_nhdsWithin
-  条件: {s : Set α} {a : s} {t : Set s}
+  条件: {s : 集合 α} {a : s} {t : 集合 s}
   证明: by
   rw [← map_nhds_subtype_val]; rw [image_mem_map_iff Subtype.val_injective]
 
@@ -2334,7 +2334,7 @@ theorem preimage_coe_mem_nhds_subtype
 
 中文:
 定理 preimage_coe_mem_nhds_subtype
-  条件: {s t : Set α} {a : s}
+  条件: {s t : 集合 α} {a : s}
   结论: (↑) ⁻¹' t in 𝓝 a ↔ t in 𝓝[s] ↑a
   证明: by
   rw [← map_nhds_subtype_val]; rw [mem_map]
@@ -2354,7 +2354,7 @@ theorem eventually_nhds_subtype_iff
 
 中文:
 定理 eventually_nhds_subtype_iff
-  条件: (s : Set α) (a : s) (P : α -> 命题)
+  条件: (s : 集合 α) (a : s) (P : α -> 命题)
   证明: preimage_coe_mem_nhds_subtype
 
 Depends on / 依赖: preimage_coe_mem_nhds_subtype
@@ -2373,7 +2373,7 @@ theorem frequently_nhds_subtype_iff
 
 中文:
 定理 frequently_nhds_subtype_iff
-  条件: (s : Set α) (a : s) (P : α -> 命题)
+  条件: (s : 集合 α) (a : s) (P : α -> 命题)
   证明: .not eventually_nhds_subtype_iff s a (¬ P ·)
 
 Depends on / 依赖: eventually_nhds_subtype_iff
@@ -2393,7 +2393,7 @@ theorem tendsto_nhdsWithin_iff_subtype
 
 中文:
 定理 tendsto_nhdsWithin_iff_subtype
-  条件: {s : Set α} {a : α} (h : a in s) (f : α -> β) (l : Filter β)
+  条件: {s : 集合 α} {a : α} (h : a in s) (f : α -> β) (l : 滤子 β)
   证明: by
   rw [nhdsWithin_eq_map_subtype_coe h]; rw [tendsto_map'_iff]; rfl
 
@@ -2414,7 +2414,7 @@ theorem clusterPt_principal_subtype_iff_frequently
 
 中文:
 定理 clusterPt_principal_subtype_iff_frequently
-  条件: {s t : Set α} (hst : s subseteq t) {J : Set s} {a : s}
+  条件: {s t : 集合 α} (hst : s subseteq t) {J : 集合 s} {a : s}
   证明: by
   rw [nhdsWithin_eq_map_subtype_coe (hst a.prop)]; rw [Filter.frequently_map]; rw [clusterPt_principal_iff_frequently]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Topology.IsInducing.subtypeVal.nhds_eq_comap]; rw [Filter.frequently_comap]; rw [Subtype.coe
 
@@ -2449,7 +2449,7 @@ lemma nhdsSetWithin_mono_left
 
 中文:
 引理 nhdsSetWithin_mono_left
-  条件: {s s' t : Set α} (h : s subseteq s')
+  条件: {s s' t : 集合 α} (h : s subseteq s')
   结论: 𝓝ˢ[t] s <= 𝓝ˢ[t] s'
   证明: inf_le_inf_right _ nhdsSet_mono h
 
@@ -2472,7 +2472,7 @@ lemma nhdsSetWithin_mono_right
 
 中文:
 引理 nhdsSetWithin_mono_right
-  条件: {s t t' : Set α} (h : t subseteq t')
+  条件: {s t t' : 集合 α} (h : t subseteq t')
   结论: 𝓝ˢ[t] s <= 𝓝ˢ[t'] s
   证明: inf_le_inf_left _ principal_mono.2 h
 
@@ -2491,7 +2491,7 @@ lemma nhdsSetWithin_hasBasis
 
 中文:
 引理 nhdsSetWithin_hasBasis
-  结论: {ι : Sort*} {p : ι -> 命题} {s' : ι -> Set α} {s : Set α}
+  结论: {ι : 类型层*} {p : ι -> 命题} {s' : ι -> 集合 α} {s : 集合 α}
   证明: h.inf_principal t
 
 Depends on / 依赖: h.inf_principal, inf_principal
@@ -2510,7 +2510,7 @@ lemma nhdsSetWithin_basis_open
 
 中文:
 引理 nhdsSetWithin_basis_open
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: nhdsSetWithin_hasBasis (hasBasis_nhdsSet s) t
 
 Depends on / 依赖: hasBasis_nhdsSet, nhdsSetWithin_hasBasis
@@ -2533,8 +2533,8 @@ lemma mem_nhdsSetWithin
 
 中文:
 引理 mem_nhdsSetWithin
-  条件: {s t u : Set α}
-  结论: u in 𝓝ˢ[t] s ↔ 存在 v, IsOpen v ∧ s subseteq v ∧ v inter t subseteq u
+  条件: {s t u : 集合 α}
+  结论: u in 𝓝ˢ[t] s ↔ 存在 v, 是开集 v ∧ s subseteq v ∧ v inter t subseteq u
   证明: by
   simpa [and_assoc] using (nhdsSetWithin_basis_open s t).mem_iff
 
@@ -2560,7 +2560,7 @@ lemma nhdsSetWithin_singleton
 
 中文:
 引理 nhdsSetWithin_singleton
-  条件: {x : α} {s : Set α}
+  条件: {x : α} {s : 集合 α}
   结论: 𝓝ˢ[s] {x} = 𝓝[s] x
   证明: by
   simp [nhdsSetWithin, nhdsWithin]
@@ -2585,7 +2585,7 @@ lemma nhdsSetWithin_univ
 
 中文:
 引理 nhdsSetWithin_univ
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓝ˢ[univ] s = 𝓝ˢ s
   证明: by
   simp [nhdsSetWithin]
@@ -2609,8 +2609,8 @@ theorem mem_nhdsSet
 
 中文:
 定理 mem_nhdsSet
-  条件: {s t : Set α}
-  结论: s in 𝓝ˢ t ↔ 存在 u subseteq s, IsOpen u ∧ t subseteq u
+  条件: {s t : 集合 α}
+  结论: s in 𝓝ˢ t ↔ 存在 u subseteq s, 是开集 u ∧ t subseteq u
   证明: by
   simp [← nhdsSetWithin_univ, mem_nhdsSetWithin, and_comm, and_assoc]
 
@@ -2636,7 +2636,7 @@ lemma nhdsSetWithin_univ'
 
 中文:
 引理 nhdsSetWithin_univ'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓝ˢ[s] univ = 𝓟 s
   证明: by
   simp [nhdsSetWithin]
@@ -2661,7 +2661,7 @@ lemma nhdsSetWithin_self
 
 中文:
 引理 nhdsSetWithin_self
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓝ˢ[s] s = 𝓟 s
   证明: by
   simp [nhdsSetWithin, principal_le_nhdsSet]
@@ -2685,7 +2685,7 @@ lemma nhdsSetWithin_eq_principal_of_subset
 
 中文:
 引理 nhdsSetWithin_eq_principal_of_subset
-  条件: {s t : Set α} (h : t subseteq s)
+  条件: {s t : 集合 α} (h : t subseteq s)
   结论: 𝓝ˢ[t] s = 𝓟 t
   证明: by
   simp [nhdsSetWithin, (principal_mono.2 h).trans principal_le_nhdsSet]
@@ -2712,7 +2712,7 @@ lemma nhdsSetWithin_empty
 
 中文:
 引理 nhdsSetWithin_empty
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓝ˢ[∅] s = ⊥
   证明: by
   simp [nhdsSetWithin]
@@ -2737,7 +2737,7 @@ lemma nhdsSetWithin_empty'
 
 中文:
 引理 nhdsSetWithin_empty'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 𝓝ˢ[s] ∅ = ⊥
   证明: by
   simp [nhdsSetWithin]
@@ -2759,7 +2759,7 @@ simpa [nhdsSetWithin] using inf_le_of_left_le (b := 𝓟 t) principal_le_nhdsSet
 
 中文:
 引理 principal_inter_le_nhdsSetWithin
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: 𝓟 (s inter t) <= 𝓝ˢ[t] s
   证明: by
 simpa [nhdsSetWithin] using inf_le_of_left_le (b := 𝓟 t) principal_le_nhdsSet
@@ -2780,7 +2780,7 @@ simpa [nhdsSetWithin, ← prod_inf_prod] using inf_le_of_left_le nhdsSet_prod_le
 
 中文:
 引理 nhdsSetWithin_prod_le
-  条件: {s s' : Set α} {t t' : Set β}
+  条件: {s s' : 集合 α} {t t' : 集合 β}
   证明: by
 simpa [nhdsSetWithin, ← prod_inf_prod] using inf_le_of_left_le nhdsSet_prod_le _ _
 
@@ -2806,7 +2806,7 @@ lemma mem_nhdsSet_induced
 
 中文:
 引理 mem_nhdsSet_induced
-  条件: {α β : 类型} {t : TopologicalSpace β} (f : α -> β) (s u : Set α)
+  条件: {α β : 类型} {t : 拓扑空间 β} (f : α -> β) (s u : 集合 α)
   证明: by
   let := t.induced f
   simp_rw [mem_nhdsSet_iff_exists, isOpen_induced_iff]
@@ -2838,7 +2838,7 @@ lemma nhdsSet_induced
 
 中文:
 引理 nhdsSet_induced
-  条件: {α β : 类型} {t : TopologicalSpace β} (f : α -> β) (s : Set α)
+  条件: {α β : 类型} {t : 拓扑空间 β} (f : α -> β) (s : 集合 α)
   证明: by
   ext s
   rw [mem_nhdsSet_induced]; rw [mem_comap]
@@ -2861,7 +2861,7 @@ lemma map_nhdsSet_induced_eq
 
 中文:
 引理 map_nhdsSet_induced_eq
-  条件: {α β : 类型} {t : TopologicalSpace β} {f : α -> β} (s : Set α)
+  条件: {α β : 类型} {t : 拓扑空间 β} {f : α -> β} (s : 集合 α)
   证明: by
   rw [nhdsSet_induced]; rw [Filter.map_comap]; rw [nhdsSetWithin]
 
@@ -2880,8 +2880,8 @@ lemma Topology.IsInducing.map_nhdsSet_eq
   proof: hf.eq_induced ▸ map_nhdsSet_induced_eq s
 
 中文:
-引理 Topology.IsInducing.map_nhdsSet_eq
-  条件: {f : α -> β} (hf : IsInducing f) (s : Set α)
+引理 拓扑.是Inducing.map_nhdsSet_eq
+  条件: {f : α -> β} (hf : 是Inducing f) (s : 集合 α)
   证明: hf.eq_induced ▸ map_nhdsSet_induced_eq s
 
 Depends on / 依赖: eq_induced, hf.eq_induced, map_nhdsSet_induced_eq
@@ -2901,7 +2901,7 @@ lemma map_nhdsSet_subtype_val
 
 中文:
 引理 map_nhdsSet_subtype_val
-  条件: {s : Set α} (t : Set s)
+  条件: {s : 集合 α} (t : 集合 s)
   证明: by
   rw [IsInducing.subtypeVal.map_nhdsSet_eq]; rw [Subtype.range_val]
 
@@ -2922,7 +2922,7 @@ lemma mem_nhdsSet_subtype_iff_nhdsSetWithin
 
 中文:
 引理 mem_nhdsSet_subtype_iff_nhdsSetWithin
-  条件: {s : Set α} {t u : Set s}
+  条件: {s : 集合 α} {t u : 集合 s}
   证明: by
   rw [← map_nhdsSet_subtype_val]; rw [image_mem_map_iff Subtype.val_injective]
 

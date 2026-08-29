@@ -34,12 +34,12 @@ structure CommMon
     - [comm : IsCommMonObj X]
 
 中文:
-结构 CommMon
+结构 交换幺半群
   参数: where
   公理与运算 (3 个):
     - X : C
     - [mon : MonObj X]
-    - [comm : IsCommMonObj X]
+    - [comm : 是交换MonObj X]
 -/
 structure CommMon where
   /-- The underlying object in the ambient monoidal category -/
@@ -63,7 +63,7 @@ definition toMon
 
 中文:
 定义 toMon
-  签名: (A : CommMon C)
+  签名: (A : 交换幺半群 C)
   定义体: ⟨A.X⟩
 -/
 def toMon (A : CommMon C) : Mon C := ⟨A.X⟩
@@ -82,7 +82,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : CommMon C
+  签名: : 交换幺半群 C
   定义体: { X := 𝟙_ C }
 -/
 def trivial : CommMon C := { X := 𝟙_ C }
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommMon C)
+  签名: 可居 (交换幺半群 C)
   定义体: ⟨trivial C⟩
 -/
 instance : Inhabited (CommMon C) :=
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommMon C)
+  签名: 范畴 (交换幺半群 C)
   定义体: inferInstanceAs (Category (InducedCategory _ CommMon.toMon))
 
 @[simp]
@@ -141,8 +141,8 @@ theorem id_hom
 
 中文:
 定理 id_hom
-  条件: (A : CommMon C)
-  结论: Mon.Hom.hom (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.X
+  条件: (A : 交换幺半群 C)
+  结论: 幺半群.态射.hom (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.X
   证明: rfl
 
 @[simp]
@@ -163,7 +163,7 @@ theorem comp_hom
 
 中文:
 定理 comp_hom
-  条件: {R S T : CommMon C} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换幺半群 C} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 
 @[ext]
@@ -184,7 +184,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {A B : CommMon C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
+  条件: {A B : 交换幺半群 C} (f g : A ⟶ B) (h : f.hom.hom = g.hom.hom)
   结论: f = g
   证明: InducedCategory.hom_ext (Mon.Hom.ext h)
 
@@ -205,7 +205,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {A B : CommMon C} (f : A.toMon ⟶ B.toMon)
+  签名: {A B : 交换幺半群 C} (f : A.toMon ⟶ B.toMon)
   定义体: f
 -/
 def homMk {A B : CommMon C} (f : A.toMon ⟶ B.toMon) : A ⟶ B where
@@ -227,7 +227,7 @@ definition forget₂Mon
 
 中文:
 定义 forget₂Mon
-  签名: : CommMon C ⥤ Mon C
+  签名: : 交换幺半群 C ⥤ 幺半群 C
   定义体: inducedFunctor CommMon.toMon
 
 Depends on / 依赖: CommMon, CommMon.toMon, inducedFunctor
@@ -245,7 +245,7 @@ definition fullyFaithfulForget₂Mon
 
 中文:
 定义 fullyFaithfulForget₂Mon
-  签名: : (forget₂Mon C).FullyFaithful
+  签名: : (forget₂Mon C).满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -265,7 +265,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Mon C).Full
+  签名: (forget₂Mon C).满
   定义体: InducedCategory.full _
 
 Depends on / 依赖: InducedCategory, InducedCategory.full
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Mon C).Faithful
+  签名: (forget₂Mon C).忠实
   定义体: InducedCategory.faithful _
 
 @[simp]
@@ -306,7 +306,7 @@ theorem forget₂Mon_obj_one
 
 中文:
 定理 forget₂Mon_obj_one
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   结论: η[((forget₂Mon C).obj A).X] = η[A.X]
   证明: rfl
 
@@ -329,7 +329,7 @@ theorem forget₂Mon_obj_mul
 
 中文:
 定理 forget₂Mon_obj_mul
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   结论: μ[((forget₂Mon C).obj A).X] = μ[A.X]
   证明: rfl
 
@@ -349,7 +349,7 @@ theorem forget₂Mon_map_hom
 
 中文:
 定理 forget₂Mon_map_hom
-  条件: {A B : CommMon C} (f : A ⟶ B)
+  条件: {A B : 交换幺半群 C} (f : A ⟶ B)
   证明: rfl
 -/
 theorem forget₂Mon_map_hom {A B : CommMon C} (f : A ⟶ B) :
@@ -368,7 +368,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : CommMon C ⥤ C
+  签名: : 交换幺半群 C ⥤ C
   定义体: forget₂Mon C ⋙ Mon.forget C
 
 Depends on / 依赖: Mon.forget, forget
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
 -/
 instance : (forget C).Faithful where
 
@@ -400,7 +400,7 @@ theorem forget₂Mon_comp_forget
 
 中文:
 定理 forget₂Mon_comp_forget
-  结论: forget₂Mon C ⋙ Mon.forget C = forget C
+  结论: forget₂Mon C ⋙ 幺半群.forget C = forget C
   证明: rfl
 -/
 theorem forget₂Mon_comp_forget : forget₂Mon C ⋙ Mon.forget C = forget C := rfl
@@ -423,7 +423,7 @@ definition mkIso'
 
 中文:
 定义 mkIso'
-  签名: {M N : C} (e : M ≅ N) [MonObj M] [IsCommMonObj M] [MonObj N] [IsCommMonObj N]
+  签名: {M N : C} (e : M ≅ N) [MonObj M] [是交换MonObj M] [MonObj N] [是交换MonObj N]
   定义体: (fullyFaithfulForget₂Mon C).preimageIso (Mon.mkIso' e)
 
 Depends on / 依赖: Mon.mkIso, preimageIso
@@ -443,7 +443,7 @@ abbreviation mkIso
 
 中文:
 缩写 mkIso
-  签名: {M N : CommMon C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
+  签名: {M N : 交换幺半群 C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
   定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
 
@@ -465,7 +465,7 @@ instance uniqueHomFromTrivial
 
 中文:
 实例 uniqueHomFromTrivial
-  签名: (A : CommMon C)
+  签名: (A : 交换幺半群 C)
   定义体: Equiv.unique (show _ ≃ (Mon.trivial C ⟶ A.toMon) from
     InducedCategory.homEquiv)
 
@@ -487,7 +487,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInitial (CommMon C)
+  签名: HasInitial (交换幺半群 C)
   定义体: hasInitial_of_unique (trivial C)
 
 Depends on / 依赖: hasInitial_of_unique
@@ -519,7 +519,7 @@ instance isCommMonObj_obj
 
 中文:
 实例 isCommMonObj_obj
-  签名: {M : C} [MonObj M] [IsCommMonObj M]
+  签名: {M : C} [MonObj M] [是交换MonObj M]
   定义体: by
     dsimp; rw [← Functor.LaxBraided.braided_assoc, ← Functor.map_comp, IsCommMonObj.mul_comm]
 
@@ -554,7 +554,7 @@ definition mapCommMon
 
 中文:
 定义 mapCommMon
-  签名: : CommMon C ⥤ CommMon D where
+  签名: : 交换幺半群 C ⥤ 交换幺半群 D where
   定义体: { F.mapMon.obj A.toMon with
       comm :=
         { mul_comm := by
@@ -588,7 +588,7 @@ theorem mapCommMon_id_one
 
 中文:
 定理 mapCommMon_id_one
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 
 @[simp]
@@ -610,7 +610,7 @@ theorem mapCommMon_id_mul
 
 中文:
 定理 mapCommMon_id_mul
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 
 @[simp]
@@ -632,7 +632,7 @@ theorem comp_mapCommMon_one
 
 中文:
 定理 comp_mapCommMon_one
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 
 @[simp]
@@ -652,7 +652,7 @@ theorem comp_mapCommMon_mul
 
 中文:
 定理 comp_mapCommMon_mul
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 -/
 theorem comp_mapCommMon_mul (A : CommMon C) :
@@ -673,7 +673,7 @@ definition mapCommMonIdIso
 
 中文:
 定义 mapCommMonIdIso
-  签名: : mapCommMon (𝟭 C) ≅ 𝟭 (CommMon C)
+  签名: : mapCommMon (𝟭 C) ≅ 𝟭 (交换幺半群 C)
   定义体: NatIso.ofComponents fun X => CommMon.mkIso (.refl _)
 
 Depends on / 依赖: CommMon, CommMon.mkIso, G.IsContinuous, IsContinuous, NatIso, NatIso.ofComponents, ofComponents
@@ -719,7 +719,7 @@ definition mapCommMonFunctor
 
 中文:
 定义 mapCommMonFunctor
-  签名: : LaxBraidedFunctor C D ⥤ CommMon C ⥤ CommMon D where
+  签名: : 松弛辫函子 C D ⥤ 交换幺半群 C ⥤ 交换幺半群 D where
   定义体: F.mapCommMon
   map α := { app A := CommMon.homMk (.mk' (α.hom.hom.app A.X)) }
 
@@ -738,8 +738,8 @@ instance Faithful.mapCommMon
   body: (CommMon.forget₂Mon _ ⋙ F.mapMon).map_injective ((CommMon.forget₂Mon _).congr_map hfg)
 
 中文:
-实例 Faithful.mapCommMon
-  签名: [F.Faithful]
+实例 忠实.mapCommMon
+  签名: [F.忠实]
   定义体: (CommMon.forget₂Mon _ ⋙ F.mapMon).map_injective ((CommMon.forget₂Mon _).congr_map hfg)
 -/
 protected instance Faithful.mapCommMon [F.Faithful] : F.mapCommMon.Faithful where
@@ -759,8 +759,8 @@ definition mapCommMonNatTrans
   body: CommMon.homMk (.mk' (f.app _))
 
 中文:
-定义 mapCommMonNatTrans
-  签名: (f : F ⟶ F') [自然数Trans.IsMonoidal f]
+定义 mapCommMon自然数Trans
+  签名: (f : F ⟶ F') [自然变换.是幺半群 f]
   定义体: CommMon.homMk (.mk' (f.app _))
 
 Depends on / 依赖: CommMon, CommMon.homMk, f.app
@@ -782,8 +782,8 @@ definition mapCommMonNatIso
   body: NatIso.ofComponents fun X => CommMon.mkIso (e.app _)
 
 中文:
-定义 mapCommMonNatIso
-  签名: (e : F ≅ F') [自然数Trans.IsMonoidal e.hom]
+定义 mapCommMon自然数Iso
+  签名: (e : F ≅ F') [自然变换.是幺半群 e.hom]
   定义体: NatIso.ofComponents fun X => CommMon.mkIso (e.app _)
 
 Depends on / 依赖: CommMon, CommMon.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
@@ -810,8 +810,8 @@ definition FullyFaithful.mapCommMon
   body: CommMon.homMk (hF.mapMon.preimage f.hom)
 
 中文:
-定义 FullyFaithful.mapCommMon
-  签名: (hF : F.FullyFaithful)
+定义 满忠实.mapCommMon
+  签名: (hF : F.满忠实)
   定义体: CommMon.homMk (hF.mapMon.preimage f.hom)
 -/
 protected def FullyFaithful.mapCommMon (hF : F.FullyFaithful) : F.mapCommMon.FullyFaithful where
@@ -826,8 +826,8 @@ instance Full.mapCommMon
   body: (FullyFaithful.ofFullyFaithful F).mapCommMon.full
 
 中文:
-实例 Full.mapCommMon
-  签名: [F.Full] [F.Faithful]
+实例 满.mapCommMon
+  签名: [F.满] [F.忠实]
   定义体: (FullyFaithful.ofFullyFaithful F).mapCommMon.full
 -/
 protected instance Full.mapCommMon [F.Full] [F.Faithful] : F.mapCommMon.Full :=
@@ -882,7 +882,7 @@ definition mapCommMon
 
 中文:
 定义 mapCommMon
-  签名: (e : C ≌ D) [e.functor.Braided] [e.inverse.Braided] [e.IsMonoidal]
+  签名: (e : C ≌ D) [e.functor.辫] [e.inverse.辫] [e.是幺半群]
   定义体: e.functor.mapCommMon
   inverse := e.inverse.mapCommMon
   unitIso := mapCommMonIdIso.symm ≪≫ mapCommMonNatIso e.unitIso ≪≫ mapCommMonCompIso
@@ -919,7 +919,7 @@ definition laxBraidedToCommMon
 
 中文:
 定义 laxBraidedToCommMon
-  签名: : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ⥤ CommMon C where
+  签名: : 松弛辫函子 (离散 命题单元.{u + 1}) C ⥤ 交换幺半群 C where
   定义体: (F.mapCommMon : CommMon _ ⥤ CommMon C).obj (trivial (Discrete PUnit.{u + 1}))
   map α := ((Functor.mapCommMonFunctor (Discrete PUnit) C).map α).app _
 
@@ -941,7 +941,7 @@ definition commMonToLaxBraidedObj
 
 中文:
 定义 commMonToLaxBraidedObj
-  签名: (A : CommMon C)
+  签名: (A : 交换幺半群 C)
   定义体: (Functor.const _).obj A.X
 
 Depends on / 依赖: Functor, Functor.const
@@ -969,7 +969,7 @@ lemma commMonToLaxBraidedObj_ε
 
 中文:
 引理 commMonToLaxBraidedObj_ε
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 
 @[simp]
@@ -988,7 +988,7 @@ lemma commMonToLaxBraidedObj_μ
 
 中文:
 引理 commMonToLaxBraidedObj_μ
-  条件: (A : CommMon C) (X Y)
+  条件: (A : 交换幺半群 C) (X Y)
   证明: rfl
 -/
 lemma commMonToLaxBraidedObj_μ (A : CommMon C) (X Y) :
@@ -1017,7 +1017,7 @@ definition commMonToLaxBraided
 
 中文:
 定义 commMonToLaxBraided
-  签名: : CommMon C ⥤ LaxBraidedFunctor (Discrete PUnit.{u + 1}) C where
+  签名: : 交换幺半群 C ⥤ 松弛辫函子 (离散 命题单元.{u + 1}) C where
   定义体: LaxBraidedFunctor.of (commMonToLaxBraidedObj A)
   map f :=
     { hom :=
@@ -1080,7 +1080,7 @@ theorem counitIso_aux_one
 
 中文:
 定理 counitIso_aux_one
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 
 @[simp]
@@ -1100,7 +1100,7 @@ theorem counitIso_aux_mul
 
 中文:
 定理 counitIso_aux_mul
-  条件: (A : CommMon C)
+  条件: (A : 交换幺半群 C)
   证明: rfl
 -/
 theorem counitIso_aux_mul (A : CommMon C) :
@@ -1121,7 +1121,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (CommMon C)
+  签名: : commMonToLaxBraided C ⋙ laxBraidedToCommMon C ≅ 𝟭 (交换幺半群 C)
   定义体: NatIso.ofComponents (fun F => mkIso (Iso.refl _))
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1152,7 +1152,7 @@ definition equivLaxBraidedFunctorPUnit
 
 中文:
 定义 equivLaxBraidedFunctorPUnit
-  签名: : LaxBraidedFunctor (Discrete PUnit.{u + 1}) C ≌ CommMon C where
+  签名: : 松弛辫函子 (离散 命题单元.{u + 1}) C ≌ 交换幺半群 C where
   定义体: laxBraidedToCommMon C
   inverse := commMonToLaxBraided C
   unitIso := unitIso C

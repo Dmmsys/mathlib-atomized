@@ -46,7 +46,7 @@ instance finite
 
 中文:
 实例 finite
-  签名: [Finite Mˣ] [IsDomain R]
+  签名: [有限 Mˣ] [是整环 R]
   定义体: .of_equiv _ equivToUnitHom.symm
 
 Depends on / 依赖: equivToUnitHom, equivToUnitHom.symm, of_equiv
@@ -67,7 +67,7 @@ lemma exists_apply_ne_one_iff_exists_monoidHom
     simpa only [ofUnitHom_eq, equivToUnitHom_symm_coe, Units.val_eq_one] using hφ
 
 中文:
-引理 exists_apply_ne_one_iff_exists_monoidHom
+引理 存在_apply_ne_one_iff_存在_monoidHom
   条件: (a : Mˣ)
   证明: by
   refine ⟨fun ⟨χ, hχ⟩ => ⟨χ.toUnitHom, ?_⟩, fun ⟨φ, hφ⟩ => ⟨ofUnitHom φ, ?_⟩⟩
@@ -104,8 +104,8 @@ theorem exists_apply_ne_one_of_hasEnoughRootsOfUnity
   · exact ⟨1, by simpa only [map_nonunit _ hu] using ze
 
 中文:
-定理 exists_apply_ne_one_of_hasEnoughRootsOfUnity
-  条件: [Nontrivial R] {a : M} (ha : a != 1)
+定理 存在_apply_ne_one_of_hasEnoughRootsOfUnity
+  条件: [非平凡 R] {a : M} (ha : a != 1)
   证明: by
   by_cases hu : IsUnit a
   · refine (exists_apply_ne_one_iff_exists_monoidHom hu.unit).mpr ?_
@@ -136,7 +136,7 @@ lemma mulEquiv_units
 
 中文:
 引理 mulEquiv_units
-  结论: Nonempty (MulChar M R ≃* Mˣ)
+  结论: 非空 (乘法特征 M R ≃* Mˣ)
   证明: ⟨mulEquivToUnitHom.trans
     (CommGroup.monoidHom_mulEquiv_of_hasEnoughRootsOfUnity Mˣ R).some⟩
 
@@ -156,7 +156,7 @@ lemma card_eq_card_units_of_hasEnoughRootsOfUnity
 
 中文:
 引理 card_eq_card_units_of_hasEnoughRootsOfUnity
-  结论: 自然数.card (MulChar M R) = 自然数.card Mˣ
+  结论: 自然数.card (乘法特征 M R) = 自然数.card Mˣ
   证明: Nat.card_congr (mulEquiv_units M R).some.toEquiv
 
 Depends on / 依赖: Nat.card_congr, card_congr, mulEquiv_units, some.toEquiv, toEquiv
@@ -183,7 +183,7 @@ theorem domRestrictHom_surjective
 
 中文:
 定理 domRestrictHom_surjective
-  条件: (N : Submonoid M)
+  条件: (N : 子幺半群 M)
   证明: by
   intro χ
   obtain ⟨ψ, hψ⟩ := (χ.toUnitHom.comp N.unitsEquivUnitsType).domRestrict_surjective R N.units
@@ -218,7 +218,7 @@ mulEquivToUnitHom.monoidHomCongrLeft.trans CommGroup.monoidHomMonoidHomEquiv Mˣ
 
 中文:
 定义 mulCharEquiv
-  签名: : MulChar (MulChar M R) R ≃* Mˣ
+  签名: : 乘法特征 (乘法特征 M R) R ≃* Mˣ
   定义体: mulEquivToUnitHom.trans toUnits.monoidHomCongrLeft.symm.trans
 mulEquivToUnitHom.monoidHomCongrLeft.trans CommGroup.monoidHomMonoidHomEquiv Mˣ R
 
@@ -246,7 +246,7 @@ theorem mulCharEquiv_symm_apply_apply
 
 中文:
 定理 mulCharEquiv_symm_apply_apply
-  条件: (m : Mˣ) (χ : MulChar M R)
+  条件: (m : Mˣ) (χ : 乘法特征 M R)
   证明: by
   classical
   rw [show ((mulCharEquiv M R).symm m) χ =
@@ -274,7 +274,7 @@ theorem apply_mulCharEquiv
 
 中文:
 定理 apply_mulCharEquiv
-  条件: (χ : MulChar M R) (η : MulChar (MulChar M R) R)
+  条件: (χ : 乘法特征 M R) (η : 乘法特征 (乘法特征 M R) R)
   证明: by
   rw [← mulCharEquiv_symm_apply_apply (mulCharEquiv M R η) χ]; rw [MulEquiv.symm_apply_apply]
 
@@ -297,7 +297,7 @@ definition subgroupOrderIsoSubgroupMulChar
 
 中文:
 定义 subgroupOrderIsoSubgroupMulChar
-  签名: : Subgroup Mˣ ≃o (Subgroup (MulChar M R))ᵒᵈ
+  签名: : 子群 Mˣ ≃o (子群 (乘法特征 M R))ᵒᵈ
   定义体: (CommGroup.subgroupOrderIsoSubgroupMonoidHom Mˣ R).trans mulEquivToUnitHom.symm.mapSubgroup.dual
 
 @[simp]
@@ -322,7 +322,7 @@ theorem mem_subgroupOrderIsoSubgroupMulChar_iff
 
 中文:
 定理 mem_subgroupOrderIsoSubgroupMulChar_iff
-  条件: {H : Subgroup Mˣ} {χ : MulChar M R}
+  条件: {H : 子群 Mˣ} {χ : 乘法特征 M R}
   证明: by
   rw [subgroupOrderIsoSubgroupMulChar]; rw [OrderIso.trans_apply]; rw [OrderIso.dual_apply]; rw [MulEquiv.coe_mapSubgroup]; rw [OrderDual.ofDual_toDual]; rw [Subgroup.mem_map_equiv]
   simp [← Units.val_eq_one]
@@ -348,7 +348,7 @@ theorem mem_subgroupOrderIsoSubgroupMulChar_symm_iff
 
 中文:
 定理 mem_subgroupOrderIsoSubgroupMulChar_symm_iff
-  条件: {X : Subgroup (MulChar M R)} {m : Mˣ}
+  条件: {X : 子群 (乘法特征 M R)} {m : Mˣ}
   证明: by
   simp [subgroupOrderIsoSubgroupMulChar, ← Units.val_eq_one]
 
@@ -369,7 +369,7 @@ theorem card_subgroupOrderIsoSubgroupMulChar
 
 中文:
 定理 card_subgroupOrderIsoSubgroupMulChar
-  条件: {H : Subgroup Mˣ}
+  条件: {H : 子群 Mˣ}
   证明: by
   rw [subgroupOrderIsoSubgroupMulChar]; rw [OrderIso.trans_apply]; rw [OrderIso.dual_apply]; rw [OrderDual.ofDual_toDual]; rw [Subgroup.card_mapSubgroup]; rw [CommGroup.card_subgroupOrderIsoSubgroupMonoidHom]
 

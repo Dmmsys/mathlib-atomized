@@ -40,8 +40,8 @@ lemma fg
 
 中文:
 引理 fg
-  条件: [Monoid.FG M] (hS : S.FG)
-  结论: Monoid.FG Localization S
+  条件: [幺半群.FG M] (hS : S.FG)
+  结论: 幺半群.FG Localization S
   证明: by
   rw [← Monoid.fg_iff_submonoid_fg] at hS; exact Monoid.fg_of_surjective mkHom mkHom_surjective
 
@@ -66,7 +66,7 @@ instance instFG
 
 中文:
 实例 instFG
-  签名: [Monoid.FG M]
+  签名: [幺半群.FG M]
   定义体: fg Monoid.FG.fg_top
 
 Depends on / 依赖: Monoid, Monoid.FG.fg_top, fg_top

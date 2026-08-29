@@ -318,7 +318,7 @@ lemma mulSingle_injective
 中文:
 引理 mulSingle_injective
   条件: (i : ι)
-  结论: Function.Injective (mulSingle i : M i -> 对任意 i, M i)
+  结论: 函数.单射 (mulSingle i : M i -> 对任意 i, M i)
   证明: Function.update_injective _ i
 
 @[to_additive (attr := simp)]

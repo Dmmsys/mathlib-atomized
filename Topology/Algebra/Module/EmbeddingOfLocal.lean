@@ -86,8 +86,8 @@ lemma ContinuousSMul.topology_eq_of_nhds_inf_principal_eq
   -- Because both `t
 
 中文:
-引理 ContinuousSMul.topology_eq_of_nhds_inf_principal_eq
-  结论: (t₁ t₂ : TopologicalSpace E)
+引理 连续标量乘法.topology_eq_of_nhds_inf_principal_eq
+  结论: (t₁ t₂ : 拓扑空间 E)
   证明: by
   classical
   -- For `i = 1, 2`, denote by `𝓕ᵢ` the filter of neighborhoods of `0` for the topology `tᵢ`.
@@ -159,8 +159,8 @@ lemma ContinuousSMul.topology_eq_of_induced_eq
   rw [H]
 
 中文:
-引理 ContinuousSMul.topology_eq_of_induced_eq
-  结论: (t₁ t₂ : TopologicalSpace E)
+引理 连续标量乘法.topology_eq_of_induced_eq
+  结论: (t₁ t₂ : 拓扑空间 E)
   证明: by
   apply topology_eq_of_nhds_inf_principal_eq 𝕜₁ t₁ t₂ V_mem
   set o : V := ⟨0, letI := t₁; mem_of_mem_nhds V_mem⟩
@@ -199,8 +199,8 @@ lemma LinearMap.isInducing_of_restrict_nhds_zero
   -- Because `Set.domRestri
 
 中文:
-引理 LinearMap.isInducing_of_restrict_nhds_zero
-  结论: {V : Set E}
+引理 线性映射.isInducing_of_restrict_nhds_zero
+  结论: {V : 集合 E}
   证明: by
   rw [isInducing_iff]
   -- Call `t₁` the original topology on `E`, and `t₂` the topology induced by `f`. Because
@@ -238,8 +238,8 @@ lemma LinearMap.isEmbedding_of_restrict_nhds_zero
 .exists .and eventually_m
 
 中文:
-引理 LinearMap.isEmbedding_of_restrict_nhds_zero
-  结论: {V : Set E}
+引理 线性映射.isEmbedding_of_restrict_nhds_zero
+  结论: {V : 集合 E}
   证明: by
   refine ⟨isInducing_of_restrict_nhds_zero V_mem H.isInducing, ?_⟩
   have f_injOn : InjOn f V := injOn_iff_injective.2 H.injective

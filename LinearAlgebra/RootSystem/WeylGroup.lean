@@ -63,7 +63,7 @@ definition weylGroup
 
 中文:
 定义 weylGroup
-  签名: : Subgroup (Aut P)
+  签名: : 子群 (Aut P)
   定义体: Subgroup.closure (range (Equiv.reflection P))
 
 Depends on / 依赖: Equiv.reflection, Subgroup, Subgroup.closure, closure, reflection
@@ -81,7 +81,7 @@ lemma reflection_mem_weylGroup
 
 中文:
 引理 reflection_mem_weylGroup
-  结论: Equiv.reflection P i in P.weylGroup
+  结论: 等价.reflection P i in P.weylGroup
   证明: Subgroup.subset_closure mem_range_self i
 
 Depends on / 依赖: Subgroup, Subgroup.subset_closure, mem_range_self, subset_closure
@@ -210,7 +210,7 @@ lemma weylGroup.induction'
 
 中文:
 引理 weylGroup.induction'
-  结论: [Nonempty ι] {pred : (g : Aut P) -> g in P.weylGroup -> 命题}
+  结论: [非空 ι] {pred : (g : Aut P) -> g in P.weylGroup -> 命题}
   证明: by
   refine weylGroup.induction P mem ?_ mul hx
   obtain ⟨i⟩ : Nonempty ι := inferInstance
@@ -485,8 +485,8 @@ lemma InvariantForm.apply_weylGroup_smul
     rw [← Submonoid.mk_mul_mk _ _ _ hg₁ hg₂]; rw [mul_smul]; rw [mul_smul]; rw [hg₁']; rw [hg₂']
 
 中文:
-引理 InvariantForm.apply_weylGroup_smul
-  条件: {B : P.InvariantForm} (g : P.weylGroup) (x y : M)
+引理 不变形式.apply_weylGroup_smul
+  条件: {B : P.不变形式} (g : P.weylGroup) (x y : M)
   证明: by
   revert x y
   obtain ⟨g, hg⟩ := g

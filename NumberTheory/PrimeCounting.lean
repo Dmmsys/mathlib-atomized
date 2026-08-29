@@ -146,7 +146,7 @@ theorem monotone_primeCounting'
 
 中文:
 定理 monotone_primeCounting'
-  结论: Monotone primeCounting'
+  结论: 递增 primeCounting'
   证明: count_monotone Prime
 
 Depends on / 依赖: count_monotone
@@ -166,7 +166,7 @@ theorem monotone_primeCounting
 
 中文:
 定理 monotone_primeCounting
-  结论: Monotone primeCounting
+  结论: 递增 primeCounting
   证明: monotone_primeCounting'.comp (monotone_id.add_const _)
 
 @[simp]
@@ -189,7 +189,7 @@ theorem primeCounting'_nth_eq
 中文:
 定理 primeCounting'_nth_eq
   条件: (n : 自然数)
-  结论: π' (nth Prime n) = n
+  结论: π' (nth 素 n) = n
   证明: count_nth_of_infinite infinite_setOfPred_prime _
 -/
 theorem primeCounting'_nth_eq (n : Nat) : π' (nth Prime n) = n :=
@@ -207,7 +207,7 @@ theorem add_two_le_nth_prime
 中文:
 定理 add_two_le_nth_prime
   条件: (n : 自然数)
-  结论: n + 2 <= nth Prime n
+  结论: n + 2 <= nth 素 n
   证明: nth_prime_zero_eq_two ▸ (nth_strictMono infinite_setOfPred_prime).add_le_nat n 0
 
 Depends on / 依赖: add_le_nat, infinite_setOfPred_prime, nth_prime_zero_eq_two, nth_strictMono
@@ -225,7 +225,7 @@ theorem surjective_primeCounting'
 
 中文:
 定理 surjective_primeCounting'
-  结论: Function.Surjective π'
+  结论: 函数.满射 π'
   证明: Nat.surjective_count_of_infinite_setOfPred infinite_setOfPred_prime
 
 Depends on / 依赖: Nat.surjective_count_of_infinite_setOfPred, infinite_setOfPred_prime, surjective_count_of_infinite_setOfPred
@@ -247,7 +247,7 @@ theorem surjective_primeCounting
 
 中文:
 定理 surjective_primeCounting
-  结论: Function.Surjective π
+  结论: 函数.满射 π
   证明: by
   suffices Function.Surjective (π ∘ fun n => n - 1) from this.of_comp
   convert! surjective_primeCounting'
@@ -276,7 +276,7 @@ theorem tendsto_primeCounting'
 
 中文:
 定理 tendsto_primeCounting'
-  结论: Tendsto π' atTop atTop
+  结论: 收敛 π' atTop atTop
   证明: by
   apply tendsto_atTop_atTop_of_monotone' monotone_primeCounting'
   simp [Set.range_eq_univ.mpr surjective_primeCounting']
@@ -299,7 +299,7 @@ theorem tendsto_primeCounting
 
 中文:
 定理 tendsto_primeCounting
-  结论: Tendsto π atTop atTop
+  结论: 收敛 π atTop atTop
   证明: (tendsto_add_atTop_iff_nat 1).mpr tendsto_primeCounting'
 
 @[simp]
@@ -324,7 +324,7 @@ theorem prime_nth_prime
 中文:
 定理 prime_nth_prime
   条件: (n : 自然数)
-  结论: Prime (nth Prime n)
+  结论: 素 (nth 素 n)
   证明: nth_mem_of_infinite infinite_setOfPred_prime _
 
 @[simp]
@@ -478,7 +478,7 @@ lemma primesBelow_eq_filter_range
 中文:
 引理 primesBelow_eq_filter_range
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (range n)
+  结论: primesBelow n = filter 自然数.素 (range n)
   证明: rfl
 -/
 lemma primesBelow_eq_filter_range (n : Nat) : primesBelow n = filter Nat.Prime (range n) := rfl
@@ -497,7 +497,7 @@ lemma primesLE_eq_filter_range
 中文:
 引理 primesLE_eq_filter_range
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (range (n + 1))
+  结论: primesLE n = filter 自然数.素 (range (n + 1))
   证明: rfl
 
 @[simp]
@@ -662,7 +662,7 @@ lemma mem_primesLE
 
 中文:
 引理 mem_primesLE
-  结论: p in primesLE n ↔ p <= n ∧ p.Prime
+  结论: p in primesLE n ↔ p <= n ∧ p.素
   证明: by
   simp [primesLE, mem_primesBelow]
 
@@ -683,7 +683,7 @@ lemma prime_of_mem_primesBelow
 中文:
 引理 prime_of_mem_primesBelow
   条件: (h : p in n.primesBelow)
-  结论: p.Prime
+  结论: p.素
   证明: (Finset.mem_filter.mp h).2
 
 Depends on / 依赖: Finset, Finset.mem_filter.mp, mem_filter
@@ -703,7 +703,7 @@ lemma prime_of_mem_primesLE
 中文:
 引理 prime_of_mem_primesLE
   条件: (hp : p in primesLE n)
-  结论: p.Prime
+  结论: p.素
   证明: prime_of_mem_primesBelow hp
 
 Depends on / 依赖: prime_of_mem_primesBelow
@@ -844,7 +844,7 @@ lemma primesBelow_eq_filter_Ico_zero
 中文:
 引理 primesBelow_eq_filter_Ico_zero
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (Ico 0 n)
+  结论: primesBelow n = filter 自然数.素 (左闭右开区间 0 n)
   证明: by
   ext p
   simp [primesBelow_eq_filter_range]
@@ -869,7 +869,7 @@ lemma primesLE_eq_filter_Icc_zero
 中文:
 引理 primesLE_eq_filter_Icc_zero
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (Icc 0 n)
+  结论: primesLE n = filter 自然数.素 (闭区间 0 n)
   证明: by
   ext p
   simp [primesLE_eq_filter_range]
@@ -894,7 +894,7 @@ lemma primesBelow_eq_filter_Ioo_zero
 中文:
 引理 primesBelow_eq_filter_Ioo_zero
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (Ioo 0 n)
+  结论: primesBelow n = filter 自然数.素 (开区间 0 n)
   证明: by
   ext p
   simp +contextual [primesBelow_eq_filter_range, Nat.Prime.pos]
@@ -919,7 +919,7 @@ lemma primesLE_eq_filter_Ioc_zero
 中文:
 引理 primesLE_eq_filter_Ioc_zero
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (Ioc 0 n)
+  结论: primesLE n = filter 自然数.素 (左开右闭区间 0 n)
   证明: by
   ext p
   simp +contextual [primesLE_eq_filter_range, Nat.Prime.pos]
@@ -944,7 +944,7 @@ lemma primesBelow_eq_filter_Ico_one
 中文:
 引理 primesBelow_eq_filter_Ico_one
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (Ico 1 n)
+  结论: primesBelow n = filter 自然数.素 (左闭右开区间 1 n)
   证明: by
   ext p
   simp +contextual [primesBelow_eq_filter_range, Nat.Prime.one_le]
@@ -969,7 +969,7 @@ lemma primesLE_eq_filter_Icc_one
 中文:
 引理 primesLE_eq_filter_Icc_one
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (Icc 1 n)
+  结论: primesLE n = filter 自然数.素 (闭区间 1 n)
   证明: by
   ext p
   simp +contextual [primesLE_eq_filter_range, Nat.Prime.one_le]
@@ -994,7 +994,7 @@ lemma primesBelow_eq_filter_Ioo_one
 中文:
 引理 primesBelow_eq_filter_Ioo_one
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (Ioo 1 n)
+  结论: primesBelow n = filter 自然数.素 (开区间 1 n)
   证明: by
   ext p
   simp +contextual [primesBelow_eq_filter_range, Nat.Prime.one_lt]
@@ -1019,7 +1019,7 @@ lemma primesLE_eq_filter_Ioc_one
 中文:
 引理 primesLE_eq_filter_Ioc_one
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (Ioc 1 n)
+  结论: primesLE n = filter 自然数.素 (左开右闭区间 1 n)
   证明: by
   ext p
   simp +contextual [primesLE_eq_filter_range, Nat.Prime.one_lt]
@@ -1044,7 +1044,7 @@ lemma primesBelow_eq_filter_Ico_two
 中文:
 引理 primesBelow_eq_filter_Ico_two
   条件: (n : 自然数)
-  结论: primesBelow n = filter 自然数.Prime (Ico 2 n)
+  结论: primesBelow n = filter 自然数.素 (左闭右开区间 2 n)
   证明: by
   ext p
   simp +contextual [primesBelow_eq_filter_range, Nat.Prime.two_le]
@@ -1069,7 +1069,7 @@ lemma primesLE_eq_filter_Icc_two
 中文:
 引理 primesLE_eq_filter_Icc_two
   条件: (n : 自然数)
-  结论: primesLE n = filter 自然数.Prime (Icc 2 n)
+  结论: primesLE n = filter 自然数.素 (闭区间 2 n)
   证明: by
   ext p
   simp +contextual [primesLE_eq_filter_range, Nat.Prime.two_le]
@@ -1092,7 +1092,7 @@ lemma primesBelow_mono
 
 中文:
 引理 primesBelow_mono
-  结论: Monotone primesBelow
+  结论: 递增 primesBelow
   证明: by
   intros n m _ p
   simp [mem_primesBelow]; grind
@@ -1115,7 +1115,7 @@ lemma primesLE_mono
 
 中文:
 引理 primesLE_mono
-  结论: Monotone primesLE
+  结论: 递增 primesLE
   证明: by
   intros n m _ p
   simp [mem_primesLE]; grind

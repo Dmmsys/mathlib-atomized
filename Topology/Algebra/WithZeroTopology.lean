@@ -60,7 +60,7 @@ exact le_iInf₂ fun γ hγ => le_principal_iff.2 zero_lt_iff.2 hγ
 
 中文:
 定理 nhds_eq_update
-  结论: (𝓝 : Γ₀ -> Filter Γ₀) = update pure 0 (⨅ γ != 0, 𝓟 (Iio γ))
+  结论: (𝓝 : Γ₀ -> 滤子 Γ₀) = update pure 0 (⨅ γ != 0, 𝓟 (左无界右开区间 γ))
   证明: by
   rw [nhds_nhdsAdjoint]; rw [sup_of_le_right]
 exact le_iInf₂ fun γ hγ => le_principal_iff.2 zero_lt_iff.2 hγ
@@ -83,7 +83,7 @@ theorem nhds_zero
 
 中文:
 定理 nhds_zero
-  结论: 𝓝 (0 : Γ₀) = ⨅ γ != 0, 𝓟 (Iio γ)
+  结论: 𝓝 (0 : Γ₀) = ⨅ γ != 0, 𝓟 (左无界右开区间 γ)
   证明: by
   rw [nhds_eq_update]; rw [update_self]
 
@@ -105,7 +105,7 @@ theorem hasBasis_nhds_zero
 
 中文:
 定理 hasBasis_nhds_zero
-  结论: (𝓝 (0 : Γ₀)).HasBasis (fun γ : Γ₀ => γ != 0) Iio
+  结论: (𝓝 (0 : Γ₀)).有基 (fun γ : Γ₀ => γ != 0) 左无界右开区间
   证明: by
   rw [nhds_zero]
   refine hasBasis_biInf_principal ?_ ⟨1, one_ne_zero⟩
@@ -130,7 +130,7 @@ theorem Iio_mem_nhds_zero
 中文:
 定理 Iio_mem_nhds_zero
   条件: (hγ : γ != 0)
-  结论: Iio γ in 𝓝 (0 : Γ₀)
+  结论: 左无界右开区间 γ in 𝓝 (0 : Γ₀)
   证明: hasBasis_nhds_zero.mem_of_mem hγ
 
 Depends on / 依赖: hasBasis_nhds_zero, hasBasis_nhds_zero.mem_of_mem, mem_of_mem
@@ -150,7 +150,7 @@ theorem nhds_zero_of_units
 中文:
 定理 nhds_zero_of_units
   条件: (γ : Γ₀ˣ)
-  结论: Iio ↑γ in 𝓝 (0 : Γ₀)
+  结论: 左无界右开区间 ↑γ in 𝓝 (0 : Γ₀)
   证明: Iio_mem_nhds_zero γ.ne_zero
 
 Depends on / 依赖: Iio_mem_nhds_zero, ne_zero
@@ -169,7 +169,7 @@ theorem tendsto_zero
 
 中文:
 定理 tendsto_zero
-  结论: Tendsto f l (𝓝 (0 : Γ₀)) ↔ 对任意 (γ₀) (_ : γ₀ != 0), 对任意ᶠ x in l, f x < γ₀
+  结论: 收敛 f l (𝓝 (0 : Γ₀)) ↔ 对任意 (γ₀) (_ : γ₀ != 0), 对任意ᶠ x in l, f x < γ₀
   证明: by
   simp [nhds_zero]
 
@@ -237,7 +237,7 @@ theorem singleton_mem_nhds_of_units
 中文:
 定理 singleton_mem_nhds_of_units
   条件: (γ : Γ₀ˣ)
-  结论: ({↑γ} : Set Γ₀) in 𝓝 (γ : Γ₀)
+  结论: ({↑γ} : 集合 Γ₀) in 𝓝 (γ : Γ₀)
   证明: by simp
 -/
 theorem singleton_mem_nhds_of_units (γ : Γ₀ˣ) : ({↑γ} : Set Γ₀) in 𝓝 (γ : Γ₀) := by simp
@@ -254,7 +254,7 @@ theorem singleton_mem_nhds_of_ne_zero
 中文:
 定理 singleton_mem_nhds_of_ne_zero
   条件: (h : γ != 0)
-  结论: ({γ} : Set Γ₀) in 𝓝 (γ : Γ₀)
+  结论: ({γ} : 集合 Γ₀) in 𝓝 (γ : Γ₀)
   证明: by simp [h]
 -/
 theorem singleton_mem_nhds_of_ne_zero (h : γ != 0) : ({γ} : Set Γ₀) in 𝓝 (γ : Γ₀) := by simp [h]
@@ -315,7 +315,7 @@ theorem tendsto_of_ne_zero
 中文:
 定理 tendsto_of_ne_zero
   条件: {γ : Γ₀} (h : γ != 0)
-  结论: Tendsto f l (𝓝 γ) ↔ 对任意ᶠ x in l, f x = γ
+  结论: 收敛 f l (𝓝 γ) ↔ 对任意ᶠ x in l, f x = γ
   证明: by
   rw [nhds_of_ne_zero h]; rw [tendsto_pure]
 
@@ -336,7 +336,7 @@ theorem tendsto_units
 中文:
 定理 tendsto_units
   条件: {γ₀ : Γ₀ˣ}
-  结论: Tendsto f l (𝓝 (γ₀ : Γ₀)) ↔ 对任意ᶠ x in l, f x = γ₀
+  结论: 收敛 f l (𝓝 (γ₀ : Γ₀)) ↔ 对任意ᶠ x in l, f x = γ₀
   证明: tendsto_of_ne_zero γ₀.ne_zero
 
 Depends on / 依赖: ne_zero, tendsto_of_ne_zero
@@ -357,7 +357,7 @@ theorem Iio_mem_nhds
 中文:
 定理 Iio_mem_nhds
   条件: (h : γ₁ < γ₂)
-  结论: Iio γ₂ in 𝓝 γ₁
+  结论: 左无界右开区间 γ₂ in 𝓝 γ₁
   证明: by
   rcases eq_or_ne γ₁ 0 with (rfl | h₀) <;> simp [*, h.ne', Iio_mem_nhds_zero]
 
@@ -381,8 +381,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: {s : Set Γ₀}
-  结论: IsOpen s ↔ (0 : Γ₀) ∉ s ∨ 存在 γ, γ != 0 ∧ Iio γ subseteq s
+  条件: {s : 集合 Γ₀}
+  结论: 是开集 s ↔ (0 : Γ₀) ∉ s ∨ 存在 γ, γ != 0 ∧ 左无界右开区间 γ subseteq s
   证明: by
   rw [isOpen_iff_mem_nhds]; rw [← and_forall_ne (0 : Γ₀)]
   simp +contextual [nhds_of_ne_zero, imp_iff_not_or,
@@ -408,8 +408,8 @@ theorem isClosed_iff
 
 中文:
 定理 isClosed_iff
-  条件: {s : Set Γ₀}
-  结论: IsClosed s ↔ (0 : Γ₀) in s ∨ 存在 γ, γ != 0 ∧ s subseteq Ici γ
+  条件: {s : 集合 Γ₀}
+  结论: 是闭集 s ↔ (0 : Γ₀) in s ∨ 存在 γ, γ != 0 ∧ s subseteq 左闭右无界区间 γ
   证明: by
   simp only [← isOpen_compl_iff, isOpen_iff, mem_compl_iff, not_not, ← compl_Ici,
     compl_subset_compl]
@@ -432,7 +432,7 @@ theorem isOpen_Iio
 中文:
 定理 isOpen_Iio
   条件: {a : Γ₀}
-  结论: IsOpen (Iio a)
+  结论: 是开集 (左无界右开区间 a)
   证明: isOpen_iff.mpr imp_iff_not_or.mp fun ha => ⟨a, ne_of_gt ha, Subset.rfl⟩
 
 Depends on / 依赖: Subset, Subset.rfl, imp_iff_not_or, imp_iff_not_or.mp, isOpen_iff, isOpen_iff.mpr, ne_of_gt

@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (inclusionOfMooreComplexMap X)
+  签名: 单态射 (inclusionOfMooreComplexMap X)
   定义体: ⟨fun _ _ hf => by
     ext n
     dsimp

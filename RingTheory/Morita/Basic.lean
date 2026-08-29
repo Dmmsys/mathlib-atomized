@@ -64,8 +64,8 @@ structure MoritaEquivalence
 中文:
 结构 MoritaEquivalence
   公理与运算 (2 个):
-    - eqv : ModuleCat.{max u₁ u₂} A ≌ ModuleCat.{max u₁ u₂} B
-    - linear : eqv.functor.Linear R  [默认: by infer_instance]
+    - eqv : 模范畴.{最大值 u₁ u₂} A ≌ 模范畴.{最大值 u₁ u₂} B
+    - linear : eqv.functor.线性 R  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -95,7 +95,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (A : 类型u₁) [Ring A] [Algebra R A]
+  签名: (A : 类型u₁) [环 A] [代数 R A]
   定义体: CategoryTheory.Equivalence.refl
   linear := Functor.instLinearId
 
@@ -116,7 +116,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {A : 类型u₁} [Ring A] [Algebra R A] {B : 类型u₂} [Ring B] [Algebra R B]
+  签名: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
   定义体: e.eqv.symm
   linear := e.eqv.inverseLinear R
 
@@ -193,9 +193,9 @@ structure IsMoritaEquivalent
     - cond : Nonempty MoritaEquivalence R A B
 
 中文:
-结构 IsMoritaEquivalent
+结构 是MoritaEquivalent
   公理与运算 (1 个):
-    - cond : Nonempty MoritaEquivalence R A B
+    - cond : 非空 MoritaEquivalence R A B
 -/
 structure IsMoritaEquivalent
     (A : Type u₁) [Ring A] [Algebra R A]
@@ -215,8 +215,8 @@ lemma refl
 
 中文:
 引理 refl
-  条件: (A : 类型u₁) [Ring A] [Algebra R A]
-  结论: IsMoritaEquivalent R A A where
+  条件: (A : 类型u₁) [环 A] [代数 R A]
+  结论: 是MoritaEquivalent R A A where
   证明: ⟨.refl R A⟩
 -/
 lemma refl (A : Type u₁) [Ring A] [Algebra R A] : IsMoritaEquivalent R A A where
@@ -232,7 +232,7 @@ lemma symm
 
 中文:
 引理 symm
-  结论: {A : 类型u₁} [Ring A] [Algebra R A] {B : 类型u₂} [Ring B] [Algebra R B]
+  结论: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
   证明: h.cond.map .symm R
 
 Depends on / 依赖: h.cond.map
@@ -251,7 +251,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: {A B C : 类型u₁} [Ring A] [Ring B] [Ring C] [Algebra R A] [Algebra R B] [Algebra R C]
+  结论: {A B C : 类型u₁} [环 A] [环 B] [环 C] [代数 R A] [代数 R B] [代数 R C]
   证明: Nonempty.map2 (.trans R) h.cond h'.cond
 
 Depends on / 依赖: Nonempty, Nonempty.map2, h.cond
@@ -271,7 +271,7 @@ lemma of_algEquiv
 
 中文:
 引理 of_algEquiv
-  结论: {A : 类型u₁} [Ring A] [Algebra R A] {B : 类型u₂} [Ring B] [Algebra R B]
+  结论: {A : 类型u₁} [环 A] [代数 R A] {B : 类型u₂} [环 B] [代数 R B]
   证明: ⟨.ofAlgEquiv f⟩
 
 Depends on / 依赖: ofAlgEquiv

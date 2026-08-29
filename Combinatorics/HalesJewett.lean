@@ -99,11 +99,11 @@ structure Subspace
     - proper : forall e, exists i, idxFun i = Sum.inr e
 
 中文:
-结构 Subspace
+结构 子空间
   参数: (η α ι : 类型)
   公理与运算 (2 个):
     - idxFun : ι -> α oplus η
-    - proper : 对任意 e, 存在 i, idxFun i = Sum.inr e
+    - proper : 对任意 e, 存在 i, idxFun i = 和.inr e
 -/
 structure Subspace (η α ι : Type*) where
   /-- The word representing a combinatorial subspace. `l.idxfun i = Sum.inr e` means that
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subspace ι α ι)
+  签名: 可居 (子空间 ι α ι)
   定义体: ⟨⟨Sum.inr, fun i => ⟨i, rfl⟩⟩⟩
 
 Depends on / 依赖: Sum.inr
@@ -143,7 +143,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: (l : Subspace η α ι) (x : η -> α) (i : ι)
+  签名: (l : 子空间 η α ι) (x : η -> α) (i : ι)
   定义体: (l.idxFun i).elim id x
 -/
 @[coe] def toFun (l : Subspace η α ι) (x : η -> α) (i : ι) : α := (l.idxFun i).elim id x
@@ -158,7 +158,7 @@ instance instCoeFun
 
 中文:
 实例 instCoeFun
-  签名: : CoeFun (Subspace η α ι) (fun _ => (η -> α) -> ι -> α)
+  签名: : CoeFun (子空间 η α ι) (fun _ => (η -> α) -> ι -> α)
   定义体: ⟨toFun⟩
 -/
 instance instCoeFun : CoeFun (Subspace η α ι) (fun _ => (η -> α) -> ι -> α) := ⟨toFun⟩
@@ -174,7 +174,7 @@ lemma coe_apply
 
 中文:
 引理 coe_apply
-  条件: (l : Subspace η α ι) (x : η -> α) (i : ι)
+  条件: (l : 子空间 η α ι) (x : η -> α) (i : ι)
   结论: l x i = (l.idxFun i).elim id x
   证明: rfl
 -/
@@ -204,8 +204,8 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  条件: [Nontrivial α]
-  结论: Injective ((⇑) : Subspace η α ι -> (η -> α) -> ι -> α)
+  条件: [非平凡 α]
+  结论: 单射 ((⇑) : 子空间 η α ι -> (η -> α) -> ι -> α)
   证明: by
   classical
   rintro l m hlm
@@ -253,7 +253,7 @@ lemma apply_def
 
 中文:
 引理 apply_def
-  条件: (l : Subspace η α ι) (x : η -> α) (i : ι)
+  条件: (l : 子空间 η α ι) (x : η -> α) (i : ι)
   结论: l x i = (l.idxFun i).elim id x
   证明: rfl
 
@@ -271,7 +271,7 @@ lemma apply_inl
 
 中文:
 引理 apply_inl
-  条件: (h : l.idxFun i = Sum.inl a)
+  条件: (h : l.idxFun i = 和.inl a)
   结论: l x i = a
   证明: by simp [apply_def, h]
 
@@ -289,7 +289,7 @@ lemma apply_inr
 
 中文:
 引理 apply_inr
-  条件: (h : l.idxFun i = Sum.inr e)
+  条件: (h : l.idxFun i = 和.inr e)
   结论: l x i = x e
   证明: by simp [apply_def, h]
 
@@ -307,7 +307,7 @@ definition IsMono
 
 中文:
 定义 IsMono
-  签名: (C : (ι -> α) -> κ) (l : Subspace η α ι)
+  签名: (C : (ι -> α) -> κ) (l : 子空间 η α ι)
   定义体: exists c, forall x, C (l x) = c
 -/
 def IsMono (C : (ι -> α) -> κ) (l : Subspace η α ι) : Prop := exists c, forall x, C (l x) = c
@@ -326,7 +326,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (l : Subspace η α ι) (eη : η ≃ η') (eα : α ≃ α') (eι : ι ≃ ι')
+  签名: (l : 子空间 η α ι) (eη : η ≃ η') (eα : α ≃ α') (eι : ι ≃ ι')
   定义体: (l.idxFun <| eι.symm i).map eα eη
   proper e := (eι.exists_congr fun i => by cases h : idxFun l i <;>
     simp [*, Equiv.eq_symm_apply]).1 <| l.proper <| eη.symm e
@@ -349,7 +349,7 @@ lemma reindex_apply
 
 中文:
 引理 reindex_apply
-  条件: (l : Subspace η α ι) (eη : η ≃ η') (eα : α ≃ α') (eι : ι ≃ ι') (x i)
+  条件: (l : 子空间 η α ι) (eη : η ≃ η') (eα : α ≃ α') (eι : ι ≃ ι') (x i)
   证明: by
   cases h : l.idxFun (eι.symm i) <;> simp [h, reindex, coe_apply]
 
@@ -427,7 +427,7 @@ structure Line
 结构 Line
   参数: (α ι : 类型)
   公理与运算 (2 个):
-    - idxFun : ι -> Option α
+    - idxFun : ι -> 选项类型 α
     - proper : 存在 i, idxFun i = none
 -/
 structure Line (α ι : Type*) where
@@ -508,8 +508,8 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  条件: [Nontrivial α]
-  结论: Injective ((⇑) : Line α ι -> α -> ι -> α)
+  条件: [非平凡 α]
+  结论: 单射 ((⇑) : Line α ι -> α -> ι -> α)
   证明: by
   rintro l m hlm
   ext i a
@@ -692,7 +692,7 @@ definition diagonal
 
 中文:
 定义 diagonal
-  签名: (α ι) [Nonempty ι]
+  签名: (α ι) [非空 ι]
   定义体: none
   proper := ⟨Classical.arbitrary ι, rfl⟩
 -/
@@ -716,9 +716,9 @@ structure AlmostMono
 
 中文:
 结构 AlmostMono
-  参数: {α ι κ : 类型} (C : (ι -> Option α) -> κ)
+  参数: {α ι κ : 类型} (C : (ι -> 选项类型 α) -> κ)
   公理与运算 (3 个):
-    - line : Line (Option α) ι
+    - line : Line (选项类型 α) ι
     - color : κ
     - has_color : 对任意 x : α, C (line (some x)) = color
 -/
@@ -751,11 +751,11 @@ structure ColorFocused
     - distinct_colors : (lines.map AlmostMono.color).Nodup
 
 中文:
-结构 ColorFocused
-  参数: {α ι κ : 类型} (C : (ι -> Option α) -> κ)
+结构 余lorFocused
+  参数: {α ι κ : 类型} (C : (ι -> 选项类型 α) -> κ)
   公理与运算 (4 个):
     - lines : Multiset (AlmostMono C)
-    - focus : ι -> Option α
+    - focus : ι -> 选项类型 α
     - is_focused : 对任意 p in lines, p.line none = focus
     - distinct_colors : (lines.map AlmostMono.color).Nodup
 -/
@@ -846,7 +846,7 @@ definition prod
   proper := ⟨Sum.inl l.proper.choose, l.proper.choose_spec⟩
 
 中文:
-定义 prod
+定义 乘积
   签名: {α ι ι'} (l : Line α ι) (l' : Line α ι')
   定义体: Sum.elim l.idxFun l'.idxFun
   proper := ⟨Sum.inl l.proper.choose, l.proper.choose_spec⟩
@@ -1040,7 +1040,7 @@ theorem diagonal_apply
 
 中文:
 定理 diagonal_apply
-  条件: {α ι} [Nonempty ι] (x : α)
+  条件: {α ι} [非空 ι] (x : α)
   结论: diagonal α ι x = fun _ => x
   证明: by
   ext; simp [diagonal]
@@ -1057,7 +1057,7 @@ English:
 theorem exists_mono_in_high_dimension'
 
 中文:
-定理 exists_mono_in_high_dimension'
+定理 存在_mono_in_high_dimension'
 -/
 private theorem exists_mono_in_high_dimension' :
     forall (α : Type u) [Finite α] (κ : Type max v u) [Finite κ],
@@ -1177,8 +1177,8 @@ theorem exists_mono_in_high_dimension
     ⟨l, c.down, fun x => by rw [← hc x, Function.comp_apply]⟩⟩
 
 中文:
-定理 exists_mono_in_high_dimension
-  条件: (α : 类型u) [Finite α] (κ : 类型v) [Finite κ]
+定理 存在_mono_in_high_dimension
+  条件: (α : 类型u) [有限 α] (κ : 类型v) [有限 κ]
   证明: let ⟨ι, ιfin, hι⟩ := exists_mono_in_high_dimension'.{u, v} α (ULift.{u, v} κ)
   ⟨ι, ιfin, fun C =>
     let ⟨l, c, hc⟩ := hι (ULift.up ∘ C)
@@ -1211,8 +1211,8 @@ specialize hι fun v => C ∑ i, v i
     c, 
 
 中文:
-定理 exists_mono_homothetic_copy
-  结论: {M κ : 类型} [AddCommMonoid M] (S : Finset M) [Finite κ]
+定理 存在_mono_homothetic_copy
+  结论: {M κ : 类型} [加法交换幺半群 M] (S : 有限集 M) [有限 κ]
   证明: by
   classical
   obtain ⟨ι, _inst, hι⟩ := Line.exists_mono_in_high_dimension S κ
@@ -1268,8 +1268,8 @@ theorem exists_mono_in_high_dimension
   refine ⟨l.toSubspace.reindex (equivShrink.{0} η).symm (Equiv.refl _) (Equiv.refl _
 
 中文:
-定理 exists_mono_in_high_dimension
-  条件: (α κ η) [Finite α] [Finite κ] [Finite η]
+定理 存在_mono_in_high_dimension
+  条件: (α κ η) [有限 α] [有限 κ] [有限 η]
   证明: by
   cases nonempty_fintype η
   obtain ⟨ι, _, hι⟩ := Line.exists_mono_in_high_dimension (Shrink.{0} η -> α) κ
@@ -1304,8 +1304,8 @@ theorem exists_mono_in_high_dimension_fin
   use Fintype.equivFin _ i
 
 中文:
-定理 exists_mono_in_high_dimension_fin
-  条件: (α κ η) [Finite α] [Finite κ] [Finite η]
+定理 存在_mono_in_high_dimension_fin
+  条件: (α κ η) [有限 α] [有限 κ] [有限 η]
   证明: by
   obtain ⟨ι, ιfin, hι⟩ := exists_mono_in_high_dimension α κ η
   refine ⟨Fintype.card ι, fun C => ?_⟩

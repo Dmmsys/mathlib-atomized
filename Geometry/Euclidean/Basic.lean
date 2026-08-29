@@ -70,7 +70,7 @@ theorem inner_weightedVSub
 
 中文:
 定理 inner_weightedVSub
-  结论: {ι₁ : 类型} {s₁ : Finset ι₁} {w₁ : ι₁ -> 实数} (p₁ : ι₁ -> P)
+  结论: {ι₁ : 类型} {s₁ : 有限集 ι₁} {w₁ : ι₁ -> 实数} (p₁ : ι₁ -> P)
   证明: by
   rw [Finset.weightedVSub_apply]; rw [Finset.weightedVSub_apply]; rw [inner_sum_smul_sum_smul_of_sum_eq_zero _ h₁ _ h₂]
   simp_rw [vsub_sub_vsub_cancel_right]
@@ -103,7 +103,7 @@ theorem dist_affineCombination
 
 中文:
 定理 dist_affineCombination
-  结论: {ι : 类型} {s : Finset ι} {w₁ w₂ : ι -> 实数} (p : ι -> P)
+  结论: {ι : 类型} {s : 有限集 ι} {w₁ w₂ : ι -> 实数} (p : ι -> P)
   证明: s.affineCombination Real p w₁
       have a₂ := s.affineCombination Real p w₂
       exact dist a₁ a₂ * dist a₁ a₂ = (-∑ i₁ in s, ∑ i₂ in s,
@@ -203,7 +203,7 @@ theorem eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two
 
 中文:
 定理 eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two
-  结论: {s : AffineSubspace 实数 P}
+  结论: {s : 仿射子空间 实数 P}
   证明: by
   have ho : ⟪c₂ -ᵥ c₁, p₂ -ᵥ p₁⟫ = 0 :=
     inner_vsub_vsub_of_dist_eq_of_dist_eq (hp₁c₁.trans hp₂c₁.symm) (hp₁c₂.trans hp₂c₂.symm)
@@ -279,7 +279,7 @@ theorem eq_of_dist_eq_of_dist_eq_of_finrank_eq_two
 
 中文:
 定理 eq_of_dist_eq_of_dist_eq_of_finrank_eq_two
-  结论: [FiniteDimensional 实数 V] (hd : finrank 实数 V = 2)
+  结论: [有限维 实数 V] (hd : finrank 实数 V = 2)
   证明: haveI hd' : finrank Real (⊤ : AffineSubspace Real P).direction = 2 := by
     rw [direction_top]; rw [finrank_top]
     exact hd

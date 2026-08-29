@@ -48,7 +48,7 @@ definition zeroLocus
 
 中文:
 定义 zeroLocus
-  签名: (I : Ideal (MvPolynomial σ k))
+  签名: (I : 理想 (多元多项式 σ k))
   定义体: {x : σ -> K | forall p in I, aeval x p = 0}
 
 @[simp]
@@ -67,7 +67,7 @@ theorem mem_zeroLocus_iff
 
 中文:
 定理 mem_zeroLocus_iff
-  条件: {I : Ideal (MvPolynomial σ k)} {x : σ -> K}
+  条件: {I : 理想 (多元多项式 σ k)} {x : σ -> K}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -88,7 +88,7 @@ theorem zeroLocus_anti_mono
 
 中文:
 定理 zeroLocus_anti_mono
-  条件: {I J : Ideal (MvPolynomial σ k)} (h : I <= J)
+  条件: {I J : 理想 (多元多项式 σ k)} (h : I <= J)
   证明: fun _ hx p hp => hx p h hp
 
 @[simp]
@@ -109,7 +109,7 @@ theorem zeroLocus_bot
 
 中文:
 定理 zeroLocus_bot
-  结论: zeroLocus K (⊥ : Ideal (MvPolynomial σ k)) = ⊤
+  结论: zeroLocus K (⊥ : 理想 (多元多项式 σ k)) = ⊤
   证明: eq_top_iff.2 fun x _ _ hp => Trans.trans (congr_arg (aeval x) (mem_bot.1 hp)) (eval x).map_zero
 
 @[simp]
@@ -131,7 +131,7 @@ theorem zeroLocus_top
 
 中文:
 定理 zeroLocus_top
-  结论: zeroLocus K (⊤ : Ideal (MvPolynomial σ k)) = ⊥
+  结论: zeroLocus K (⊤ : 理想 (多元多项式 σ k)) = ⊥
   证明: eq_bot_iff.2 fun x hx => one_ne_zero
     ((aeval (R := k) x).map_one ▸ hx 1 Submodule.mem_top : (1 : K) = 0)
 
@@ -158,7 +158,7 @@ definition vanishingIdeal
 
 中文:
 定义 vanishingIdeal
-  签名: (V : Set (σ -> K))
+  签名: (V : 集合 (σ -> K))
   定义体: {p | forall x in V, aeval x p = 0}
   zero_mem' _ _ := map_zero _
   add_mem' {p q} hp hq x hx := by simp only [hq x hx, hp x hx, add_zero, map_add]
@@ -185,7 +185,7 @@ theorem mem_vanishingIdeal_iff
 
 中文:
 定理 mem_vanishingIdeal_iff
-  条件: {V : Set (σ -> K)} {p : MvPolynomial σ k}
+  条件: {V : 集合 (σ -> K)} {p : 多元多项式 σ k}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -204,7 +204,7 @@ theorem vanishingIdeal_anti_mono
 
 中文:
 定理 vanishingIdeal_anti_mono
-  条件: {A B : Set (σ -> K)} (h : A <= B)
+  条件: {A B : 集合 (σ -> K)} (h : A <= B)
   证明: fun _ hp x hx => hp x h hx
 -/
 theorem vanishingIdeal_anti_mono {A B : Set (σ -> K)} (h : A <= B) :
@@ -220,7 +220,7 @@ theorem vanishingIdeal_empty
 
 中文:
 定理 vanishingIdeal_empty
-  结论: vanishingIdeal k (∅ : Set (σ -> K)) = ⊤
+  结论: vanishingIdeal k (∅ : 集合 (σ -> K)) = ⊤
   证明: le_antisymm le_top fun _ _ x hx => absurd hx (Set.notMem_empty x)
 
 Depends on / 依赖: Set.notMem_empty, absurd, le_antisymm, le_top, notMem_empty
@@ -238,7 +238,7 @@ theorem le_vanishingIdeal_zeroLocus
 
 中文:
 定理 le_vanishingIdeal_zeroLocus
-  条件: (I : Ideal (MvPolynomial σ k))
+  条件: (I : 理想 (多元多项式 σ k))
   证明: fun p hp _ hx => hx p hp
 -/
 theorem le_vanishingIdeal_zeroLocus (I : Ideal (MvPolynomial σ k)) :
@@ -255,7 +255,7 @@ theorem zeroLocus_vanishingIdeal_le
 
 中文:
 定理 zeroLocus_vanishingIdeal_le
-  条件: (V : Set (σ -> K))
+  条件: (V : 集合 (σ -> K))
   结论: V <= zeroLocus K (vanishingIdeal k V)
   证明: fun V hV _ hp => hp V hV
 -/
@@ -293,7 +293,7 @@ theorem le_zeroLocus_iff_le_vanishingIdeal
 
 中文:
 定理 le_zeroLocus_iff_le_vanishingIdeal
-  条件: {V : Set (σ -> K)} {I : Ideal (MvPolynomial σ k)}
+  条件: {V : 集合 (σ -> K)} {I : 理想 (多元多项式 σ k)}
   证明: zeroLocus_vanishingIdeal_galoisConnection.le_iff_le
 
 Depends on / 依赖: le_iff_le, zeroLocus_vanishingIdeal_galoisConnection, zeroLocus_vanishingIdeal_galoisConnection.le_iff_le
@@ -313,7 +313,7 @@ theorem zeroLocus_span
 
 中文:
 定理 zeroLocus_span
-  条件: (S : Set (MvPolynomial σ k))
+  条件: (S : 集合 (多元多项式 σ k))
   证明: eq_of_forall_le_iff fun _ => le_zeroLocus_iff_le_vanishingIdeal.trans
     Ideal.span_le.trans forall₂_comm
 
@@ -334,7 +334,7 @@ theorem mem_vanishingIdeal_singleton_iff
 
 中文:
 定理 mem_vanishingIdeal_singleton_iff
-  条件: (x : σ -> K) (p : MvPolynomial σ k)
+  条件: (x : σ -> K) (p : 多元多项式 σ k)
   证明: ⟨fun h => h x rfl, fun hpx _ hy => hy.symm ▸ hpx⟩
 
 Depends on / 依赖: hy.symm
@@ -370,7 +370,7 @@ theorem radical_le_vanishingIdeal_zeroLocus
 
 中文:
 定理 radical_le_vanishingIdeal_zeroLocus
-  条件: (I : Ideal (MvPolynomial σ k))
+  条件: (I : 理想 (多元多项式 σ k))
   证明: by
   intro p hp x hx
   rw [← mem_vanishingIdeal_singleton_iff]
@@ -435,7 +435,7 @@ theorem vanishingIdeal_pointToPoint
 
 中文:
 定理 vanishingIdeal_pointToPoint
-  条件: (V : Set (σ -> K))
+  条件: (V : 集合 (σ -> K))
   证明: le_antisymm
     (fun _ hp x hx =>
       (((PrimeSpectrum.mem_vanishingIdeal _ _).1 hp) ⟨vanishingIdeal k {x}, by infer_instance⟩
@@ -474,7 +474,7 @@ theorem pointToPoint_zeroLocus_le
 
 中文:
 定理 pointToPoint_zeroLocus_le
-  条件: (I : Ideal (MvPolynomial σ K))
+  条件: (I : 理想 (多元多项式 σ K))
   证明: fun J hJ =>
   let ⟨_, hx⟩ := hJ
   (le_trans (le_vanishingIdeal_zeroLocus (K := K) I)
@@ -508,7 +508,7 @@ theorem eq_vanishingIdeal_singleton_of_isMaximal
 
 中文:
 定理 eq_vanishingIdeal_singleton_of_isMaximal
-  条件: {I : Ideal (MvPolynomial σ k)} (hI : I.IsMaximal)
+  条件: {I : 理想 (多元多项式 σ k)} (hI : I.是极大)
   证明: by
   let : Field (MvPolynomial σ k ⧸ I) := Quotient.field I
   have : Algebra.IsAlgebraic k (MvPolynomial σ k ⧸ I) := by
@@ -542,7 +542,7 @@ theorem isMaximal_iff_eq_vanishingIdeal_singleton
 
 中文:
 定理 isMaximal_iff_eq_vanishingIdeal_singleton
-  条件: {I : Ideal (MvPolynomial σ K)}
+  条件: {I : 理想 (多元多项式 σ K)}
   证明: ⟨eq_vanishingIdeal_singleton_of_isMaximal K,
     fun ⟨_, hx⟩ => hx ▸ inferInstance⟩
 
@@ -572,7 +572,7 @@ theorem vanishingIdeal_zeroLocus_eq_radical
 
 中文:
 定理 vanishingIdeal_zeroLocus_eq_radical
-  条件: (I : Ideal (MvPolynomial σ k))
+  条件: (I : 理想 (多元多项式 σ k))
   证明: by
   refine le_antisymm ?_ (radical_le_vanishingIdeal_zeroLocus _)
   rw [I.radical_eq_jacobson]
@@ -605,8 +605,8 @@ theorem IsPrime.vanishingIdeal_zeroLocus
   proof: Trans.trans (vanishingIdeal_zeroLocus_eq_radical P) h.radical
 
 中文:
-定理 IsPrime.vanishingIdeal_zeroLocus
-  条件: (P : Ideal (MvPolynomial σ k)) [h : P.IsPrime]
+定理 是素.vanishingIdeal_zeroLocus
+  条件: (P : 理想 (多元多项式 σ k)) [h : P.是素]
   证明: Trans.trans (vanishingIdeal_zeroLocus_eq_radical P) h.radical
 
 Depends on / 依赖: Trans.trans, h.radical, radical, vanishingIdeal_zeroLocus_eq_radical

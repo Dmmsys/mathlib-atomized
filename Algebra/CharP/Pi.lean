@@ -36,7 +36,7 @@ Iff.symm
 
 中文:
 实例 pi
-  签名: (ι : 类型u) [hi : Nonempty ι] (R : 类型v) [Semiring R] (p : 自然数) [CharP R p]
+  签名: (ι : 类型u) [hi : 非空 ι] (R : 类型v) [半环 R] (p : 自然数) [特征p R p]
   定义体: ⟨fun x =>
     let ⟨i⟩ := hi
 Iff.symm
@@ -70,7 +70,7 @@ instance pi'
 
 中文:
 实例 pi'
-  签名: (ι : 类型u) [Nonempty ι] (R : 类型v) [CommRing R] (p : 自然数) [CharP R p]
+  签名: (ι : 类型u) [非空 ι] (R : 类型v) [交换环 R] (p : 自然数) [特征p R p]
   定义体: CharP.pi ι R p
 
 Depends on / 依赖: CharP.pi

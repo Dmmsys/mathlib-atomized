@@ -54,13 +54,13 @@ structure IsSRGWith
     - of_not_adj : Pairwise fun v w => ¬G.Adj v w -> Fintype.card (G.commonNeighbors v w) = μ
 
 中文:
-结构 IsSRGWith
+结构 是SRGWith
   参数: (n k ℓ μ : 自然数)
   公理与运算 (4 个):
-    - card : Fintype.card V = n
+    - card : 有限类型.card V = n
     - regular : G.IsRegularOfDegree k
-    - of_adj : 对任意 v w, G.Adj v w -> Fintype.card (G.commonNeighbors v w) = ℓ
-    - of_not_adj : Pairwise fun v w => ¬G.Adj v w -> Fintype.card (G.commonNeighbors v w) = μ
+    - of_adj : 对任意 v w, G.伴随 v w -> 有限类型.card (G.commonNeighbors v w) = ℓ
+    - of_not_adj : 两两 fun v w => ¬G.伴随 v w -> 有限类型.card (G.commonNeighbors v w) = μ
 -/
 structure IsSRGWith (n k ℓ μ : Nat) : Prop where
   card : Fintype.card V = n
@@ -86,7 +86,7 @@ theorem bot_strongly_regular
 
 中文:
 定理 bot_strongly_regular
-  结论: (⊥ : SimpleGraph V).IsSRGWith (Fintype.card V) 0 ℓ 0 where
+  结论: (⊥ : 简单图 V).是SRGWith (有限类型.card V) 0 ℓ 0 where
   证明: rfl
   regular := .bot
   of_adj _ _ h := h.elim
@@ -123,8 +123,8 @@ theorem IsSRGWith.ediam_eq_two
     simp_all [Order.le_one_iff]
 
 中文:
-定理 IsSRGWith.ediam_eq_two
-  条件: [Nontrivial V] (h : G.IsSRGWith n k ℓ μ) (ht : G != ⊤) (hm : μ != 0)
+定理 是SRGWith.ediam_eq_two
+  条件: [非平凡 V] (h : G.是SRGWith n k ℓ μ) (ht : G != ⊤) (hm : μ != 0)
   证明: by
   apply le_antisymm
   · rw [ediam_le_iff]
@@ -171,7 +171,7 @@ theorem IsSRGWith.top
   of_not_adj v w h h' := (h' ((top_adj v w).2 h)).elim
 
 中文:
-定理 IsSRGWith.top
+定理 是SRGWith.top
   证明: rfl
   regular := IsRegularOfDegree.top
   of_adj _ _ := card_commonNeighbors_top
@@ -199,8 +199,8 @@ theorem IsSRGWith.card_neighborFinset_union_eq
   · apply le_trans (card_commonNeighbors_le_degree_le
 
 中文:
-定理 IsSRGWith.card_neighborFinset_union_eq
-  条件: {v w : V} (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.card_neighborFinset_union_eq
+  条件: {v w : V} (h : G.是SRGWith n k ℓ μ)
   证明: by
   apply Nat.add_right_cancel (m := Fintype.card (G.commonNeighbors v w))
   rw [Nat.sub_add_cancel]; rw [← Set.toFinset_card]
@@ -231,8 +231,8 @@ theorem IsSRGWith.card_neighborFinset_union_of_not_adj
   exact h.card_neighborFinset_union_eq
 
 中文:
-定理 IsSRGWith.card_neighborFinset_union_of_not_adj
-  结论: {v w : V} (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.card_neighborFinset_union_of_not_adj
+  结论: {v w : V} (h : G.是SRGWith n k ℓ μ)
   证明: by
   rw [← h.of_not_adj hne ha]
   exact h.card_neighborFinset_union_eq
@@ -256,8 +256,8 @@ theorem IsSRGWith.card_neighborFinset_union_of_adj
   exact h.card_neighborFinset_union_eq
 
 中文:
-定理 IsSRGWith.card_neighborFinset_union_of_adj
-  结论: {v w : V} (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.card_neighborFinset_union_of_adj
+  结论: {v w : V} (h : G.是SRGWith n k ℓ μ)
   证明: by
   rw [← h.of_adj v w ha]
   exact h.card_neighborFinset_union_eq
@@ -300,7 +300,7 @@ theorem sdiff_compl_neighborFinset_inter_eq
 
 中文:
 定理 sdiff_compl_neighborFinset_inter_eq
-  条件: {v w : V} (h : G.Adj v w)
+  条件: {v w : V} (h : G.伴随 v w)
   证明: by
   simpa using ⟨h, adj_symm _ h⟩
 
@@ -322,8 +322,8 @@ theorem IsSRGWith.compl_is_regular
   exact h.regular.compl
 
 中文:
-定理 IsSRGWith.compl_is_regular
-  条件: (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.compl_is_regular
+  条件: (h : G.是SRGWith n k ℓ μ)
   证明: by
   rw [← h.card]; rw [Nat.sub_sub]; rw [add_comm]; rw [← Nat.sub_sub]
   exact h.regular.compl
@@ -350,8 +350,8 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_adj_compl
   rw [ca
 
 中文:
-定理 IsSRGWith.card_commonNeighbors_eq_of_adj_compl
-  结论: (h : G.IsSRGWith n k ℓ μ) {v w : V}
+定理 是SRGWith.card_commonNeighbors_eq_of_adj_compl
+  结论: (h : G.是SRGWith n k ℓ μ) {v w : V}
   证明: by
   simp only [← Set.toFinset_card, commonNeighbors, Set.toFinset_inter, neighborSet_compl,
     Set.toFinset_sdiff, Set.toFinset_singleton, Set.toFinset_compl, ← neighborFinset_def]
@@ -390,8 +390,8 @@ theorem IsSRGWith.card_commonNeighbors_eq_of_not_adj_compl
   simp_rw [compl_neighborFinset_sdiff
 
 中文:
-定理 IsSRGWith.card_commonNeighbors_eq_of_not_adj_compl
-  结论: (h : G.IsSRGWith n k ℓ μ) {v w : V}
+定理 是SRGWith.card_commonNeighbors_eq_of_not_adj_compl
+  结论: (h : G.是SRGWith n k ℓ μ) {v w : V}
   证明: by
   simp only [← Set.toFinset_card, commonNeighbors, Set.toFinset_inter, neighborSet_compl,
     Set.toFinset_sdiff, Set.toFinset_singleton, Set.toFinset_compl, ← neighborFinset_def]
@@ -423,8 +423,8 @@ theorem IsSRGWith.compl
   of_not_adj _ _ := h.card_commonNeighbors_eq_of_not_adj_compl
 
 中文:
-定理 IsSRGWith.compl
-  条件: (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.compl
+  条件: (h : G.是SRGWith n k ℓ μ)
   证明: h.card
   regular := h.compl_is_regular
   of_adj _ _ := h.card_commonNeighbors_eq_of_adj_compl
@@ -456,7 +456,7 @@ theorem IsSRGWith.param_eq
     si
 
 中文:
-定理 IsSRGWith.param_eq
+定理 是SRGWith.param_eq
   证明: by
   let := Classical.decEq V
   rw [← h.card]; rw [Fintype.card_pos_iff] at hn
@@ -517,8 +517,8 @@ theorem IsSRGWith.matrix_eq
   · rw [← Set.toFinset_card
 
 中文:
-定理 IsSRGWith.matrix_eq
-  条件: {α : 类型} [Semiring α] (h : G.IsSRGWith n k ℓ μ)
+定理 是SRGWith.matrix_eq
+  条件: {α : 类型} [半环 α] (h : G.是SRGWith n k ℓ μ)
   证明: by
   ext v w
   simp only [adjMatrix_pow_apply_eq_card_walk, Matrix.add_apply, Matrix.smul_apply,

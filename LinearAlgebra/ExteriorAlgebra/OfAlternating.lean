@@ -42,7 +42,7 @@ instance AlternatingMap.instModuleAddCommGroup
   infer_instance
 
 中文:
-实例 AlternatingMap.instModuleAddCommGroup
+实例 交错映射.instModuleAddCommGroup
   签名: {ι : 类型}
   定义体: by
   infer_instance
@@ -74,7 +74,7 @@ definition liftAlternating
 
 中文:
 定义 liftAlternating
-  签名: : (对任意 i, M [⋀^Fin i]->ₗ[R] N) ->ₗ[R] ExteriorAlgebra R M ->ₗ[R] N
+  签名: : (对任意 i, M [⋀^有限集 i]->ₗ[R] N) ->ₗ[R] ExteriorAlgebra R M ->ₗ[R] N
   定义体: by
   suffices
     (forall i, M [⋀^Fin i]->ₗ[R] N) ->ₗ[R]
@@ -121,7 +121,7 @@ theorem liftAlternating_ι
 
 中文:
 定理 liftAlternating_ι
-  条件: (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N) (m : M)
+  条件: (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N) (m : M)
   证明: by
   dsimp [liftAlternating]
   rw [foldl_ι]; rw [LinearMap.mk₂_apply]; rw [AlternatingMap.curryLeft_apply_apply]
@@ -148,7 +148,7 @@ theorem liftAlternating_ι_mul
 
 中文:
 定理 liftAlternating_ι_mul
-  结论: (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N) (m : M)
+  结论: (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N) (m : M)
   证明: by
   dsimp [liftAlternating]
   rw [foldl_mul]; rw [foldl_ι]
@@ -178,7 +178,7 @@ theorem liftAlternating_one
 
 中文:
 定理 liftAlternating_one
-  条件: (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N)
+  条件: (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N)
   证明: by
   dsimp [liftAlternating]
   rw [foldl_one]
@@ -206,7 +206,7 @@ theorem liftAlternating_algebraMap
 
 中文:
 定理 liftAlternating_algebraMap
-  条件: (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N) (r : R)
+  条件: (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N) (r : R)
   证明: by
   rw [Algebra.algebraMap_eq_smul_one]; rw [map_smul]; rw [liftAlternating_one]
 
@@ -237,7 +237,7 @@ theorem liftAlternating_apply_ιMulti
 
 中文:
 定理 liftAlternating_apply_ιMulti
-  结论: {n : 自然数} (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N)
+  结论: {n : 自然数} (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N)
   证明: by
   rw [ιMulti_apply]
   induction n generalizing f with
@@ -272,7 +272,7 @@ theorem liftAlternating_comp_ιMulti
 
 中文:
 定理 liftAlternating_comp_ιMulti
-  条件: {n : 自然数} (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N)
+  条件: {n : 自然数} (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N)
   证明: AlternatingMap.ext liftAlternating_apply_ιMulti f
 
 @[simp]
@@ -300,7 +300,7 @@ theorem liftAlternating_comp
 
 中文:
 定理 liftAlternating_comp
-  条件: (g : N ->ₗ[R] N') (f : 对任意 i, M [⋀^Fin i]->ₗ[R] N)
+  条件: (g : N ->ₗ[R] N') (f : 对任意 i, M [⋀^有限集 i]->ₗ[R] N)
   证明: by
   ext v
   rw [LinearMap.comp_apply]
@@ -379,7 +379,7 @@ definition liftAlternatingEquiv
 
 中文:
 定义 liftAlternatingEquiv
-  签名: : (对任意 i, M [⋀^Fin i]->ₗ[R] N) ≃ₗ[R] ExteriorAlgebra R M ->ₗ[R] N where
+  签名: : (对任意 i, M [⋀^有限集 i]->ₗ[R] N) ≃ₗ[R] ExteriorAlgebra R M ->ₗ[R] N where
   定义体: liftAlternating (R := R)
   map_add' := map_add _
   map_smul' := map_smul _

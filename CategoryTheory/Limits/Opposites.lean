@@ -53,7 +53,7 @@ Quiver.Hom.op_inj by
 
 中文:
 定义 isLimitConeLeftOpOfCocone
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cocone F} (hc : IsColimit c)
+  签名: (F : J ⥤ Cᵒᵖ) {c : 余锥 F} (hc : 是余极限 c)
   定义体: (hc.desc (coconeOfConeLeftOp s)).unop
   fac s j :=
 Quiver.Hom.op_inj by
@@ -96,7 +96,7 @@ Quiver.Hom.op_inj by
 
 中文:
 定义 isColimitCoconeLeftOpOfCone
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cone F} (hc : IsLimit c)
+  签名: (F : J ⥤ Cᵒᵖ) {c : 锥 F} (hc : 是极限 c)
   定义体: (hc.lift (coneOfCoconeLeftOp s)).unop
   fac s j :=
 Quiver.Hom.op_inj by
@@ -136,7 +136,7 @@ definition isLimitConeRightOpOfCocone
 
 中文:
 定义 isLimitConeRightOpOfCocone
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cocone F} (hc : IsColimit c)
+  签名: (F : Jᵒᵖ ⥤ C) {c : 余锥 F} (hc : 是余极限 c)
   定义体: (hc.desc (coconeOfConeRightOp s)).op
   fac s j := Quiver.Hom.unop_inj (by simp)
   uniq s m w := by
@@ -170,7 +170,7 @@ definition isColimitCoconeRightOpOfCone
 
 中文:
 定义 isColimitCoconeRightOpOfCone
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cone F} (hc : IsLimit c)
+  签名: (F : Jᵒᵖ ⥤ C) {c : 锥 F} (hc : 是极限 c)
   定义体: (hc.lift (coneOfCoconeRightOp s)).op
   fac s j := Quiver.Hom.unop_inj (by simp)
   uniq s m w := by
@@ -204,7 +204,7 @@ definition isLimitConeUnopOfCocone
 
 中文:
 定义 isLimitConeUnopOfCocone
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cocone F} (hc : IsColimit c)
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 余锥 F} (hc : 是余极限 c)
   定义体: (hc.desc (coconeOfConeUnop s)).unop
   fac s j := Quiver.Hom.op_inj (by simp)
   uniq s m w := by
@@ -238,7 +238,7 @@ definition isColimitCoconeUnopOfCone
 
 中文:
 定义 isColimitCoconeUnopOfCone
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cone F} (hc : IsLimit c)
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 锥 F} (hc : 是极限 c)
   定义体: (hc.lift (coneOfCoconeUnop s)).unop
   fac s j := Quiver.Hom.op_inj (by simp)
   uniq s m w := by
@@ -275,7 +275,7 @@ Quiver.Hom.unop_inj by
 
 中文:
 定义 isLimitConeOfCoconeLeftOp
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cocone F.leftOp} (hc : IsColimit c)
+  签名: (F : J ⥤ Cᵒᵖ) {c : 余锥 F.leftOp} (hc : 是余极限 c)
   定义体: (hc.desc (coconeLeftOpOfCone s)).op
   fac s j :=
 Quiver.Hom.unop_inj by
@@ -318,7 +318,7 @@ Quiver.Hom.unop_inj by
 
 中文:
 定义 isColimitCoconeOfConeLeftOp
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cone F.leftOp} (hc : IsLimit c)
+  签名: (F : J ⥤ Cᵒᵖ) {c : 锥 F.leftOp} (hc : 是极限 c)
   定义体: (hc.lift (coneLeftOpOfCocone s)).op
   fac s j :=
 Quiver.Hom.unop_inj by
@@ -358,7 +358,7 @@ definition isLimitConeOfCoconeRightOp
 
 中文:
 定义 isLimitConeOfCoconeRightOp
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cocone F.rightOp} (hc : IsColimit c)
+  签名: (F : Jᵒᵖ ⥤ C) {c : 余锥 F.rightOp} (hc : 是余极限 c)
   定义体: (hc.desc (coconeRightOpOfCone s)).unop
   fac s j := Quiver.Hom.op_inj (by simp)
   uniq s m w := by
@@ -392,7 +392,7 @@ definition isColimitCoconeOfConeRightOp
 
 中文:
 定义 isColimitCoconeOfConeRightOp
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cone F.rightOp} (hc : IsLimit c)
+  签名: (F : Jᵒᵖ ⥤ C) {c : 锥 F.rightOp} (hc : 是极限 c)
   定义体: (hc.lift (coneRightOpOfCocone s)).unop
   fac s j := Quiver.Hom.op_inj (by simp)
   uniq s m w := by
@@ -426,7 +426,7 @@ definition isLimitConeOfCoconeUnop
 
 中文:
 定义 isLimitConeOfCoconeUnop
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cocone F.unop} (hc : IsColimit c)
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 余锥 F.unop} (hc : 是余极限 c)
   定义体: (hc.desc (coconeUnopOfCone s)).op
   fac s j := Quiver.Hom.unop_inj (by simp)
   uniq s m w := by
@@ -460,7 +460,7 @@ definition isColimitCoconeOfConeUnop
 
 中文:
 定义 isColimitCoconeOfConeUnop
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cone F.unop} (hc : IsLimit c)
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 锥 F.unop} (hc : 是极限 c)
   定义体: (hc.lift (coneUnopOfCocone s)).op
   fac s j := Quiver.Hom.unop_inj (by simp)
   uniq s m w := by
@@ -489,7 +489,7 @@ definition isColimitOfConeLeftOpOfCocone
 
 中文:
 定义 isColimitOfConeLeftOpOfCocone
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cocone F}
+  签名: (F : J ⥤ Cᵒᵖ) {c : 余锥 F}
   定义体: isColimitCoconeOfConeLeftOp F hc
 
 Depends on / 依赖: isColimitCoconeOfConeLeftOp
@@ -510,7 +510,7 @@ definition isLimitOfCoconeLeftOpOfCone
 
 中文:
 定义 isLimitOfCoconeLeftOpOfCone
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cone F}
+  签名: (F : J ⥤ Cᵒᵖ) {c : 锥 F}
   定义体: isLimitConeOfCoconeLeftOp F hc
 
 Depends on / 依赖: isLimitConeOfCoconeLeftOp
@@ -531,7 +531,7 @@ definition isColimitOfConeRightOpOfCocone
 
 中文:
 定义 isColimitOfConeRightOpOfCocone
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cocone F}
+  签名: (F : Jᵒᵖ ⥤ C) {c : 余锥 F}
   定义体: isColimitCoconeOfConeRightOp F hc
 
 Depends on / 依赖: isColimitCoconeOfConeRightOp
@@ -552,7 +552,7 @@ definition isLimitOfCoconeRightOpOfCone
 
 中文:
 定义 isLimitOfCoconeRightOpOfCone
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cone F}
+  签名: (F : Jᵒᵖ ⥤ C) {c : 锥 F}
   定义体: isLimitConeOfCoconeRightOp F hc
 
 Depends on / 依赖: isLimitConeOfCoconeRightOp
@@ -573,7 +573,7 @@ definition isColimitOfConeUnopOfCocone
 
 中文:
 定义 isColimitOfConeUnopOfCocone
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cocone F}
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 余锥 F}
   定义体: isColimitCoconeOfConeUnop F hc
 
 Depends on / 依赖: isColimitCoconeOfConeUnop
@@ -594,7 +594,7 @@ definition isLimitOfCoconeUnopOfCone
 
 中文:
 定义 isLimitOfCoconeUnopOfCone
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cone F}
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 锥 F}
   定义体: isLimitConeOfCoconeUnop F hc
 
 Depends on / 依赖: isLimitConeOfCoconeUnop
@@ -615,7 +615,7 @@ definition isColimitOfConeOfCoconeLeftOp
 
 中文:
 定义 isColimitOfConeOfCoconeLeftOp
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cocone F.leftOp}
+  签名: (F : J ⥤ Cᵒᵖ) {c : 余锥 F.leftOp}
   定义体: isColimitCoconeLeftOpOfCone F hc
 
 Depends on / 依赖: isColimitCoconeLeftOpOfCone
@@ -636,7 +636,7 @@ definition isLimitOfCoconeOfConeLeftOp
 
 中文:
 定义 isLimitOfCoconeOfConeLeftOp
-  签名: (F : J ⥤ Cᵒᵖ) {c : Cone F.leftOp}
+  签名: (F : J ⥤ Cᵒᵖ) {c : 锥 F.leftOp}
   定义体: isLimitConeLeftOpOfCocone F hc
 
 Depends on / 依赖: isLimitConeLeftOpOfCocone
@@ -657,7 +657,7 @@ definition isColimitOfConeOfCoconeRightOp
 
 中文:
 定义 isColimitOfConeOfCoconeRightOp
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cocone F.rightOp}
+  签名: (F : Jᵒᵖ ⥤ C) {c : 余锥 F.rightOp}
   定义体: isColimitCoconeRightOpOfCone F hc
 
 Depends on / 依赖: isColimitCoconeRightOpOfCone
@@ -678,7 +678,7 @@ definition isLimitOfCoconeOfConeRightOp
 
 中文:
 定义 isLimitOfCoconeOfConeRightOp
-  签名: (F : Jᵒᵖ ⥤ C) {c : Cone F.rightOp}
+  签名: (F : Jᵒᵖ ⥤ C) {c : 锥 F.rightOp}
   定义体: isLimitConeRightOpOfCocone F hc
 
 Depends on / 依赖: isLimitConeRightOpOfCocone
@@ -699,7 +699,7 @@ definition isColimitOfConeOfCoconeUnop
 
 中文:
 定义 isColimitOfConeOfCoconeUnop
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cocone F.unop}
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 余锥 F.unop}
   定义体: isColimitCoconeUnopOfCone F hc
 
 Depends on / 依赖: isColimitCoconeUnopOfCone
@@ -720,7 +720,7 @@ definition isLimitOfCoconeOfConeUnop
 
 中文:
 定义 isLimitOfCoconeOfConeUnop
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : Cone F.unop}
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) {c : 锥 F.unop}
   定义体: isLimitConeUnopOfCocone F hc
 
 Depends on / 依赖: isLimitConeUnopOfCocone
@@ -742,8 +742,8 @@ theorem hasLimit_of_hasColimit_leftOp
 
 中文:
 定理 hasLimit_of_hasColimit_leftOp
-  条件: (F : J ⥤ Cᵒᵖ) [HasColimit F.leftOp]
-  结论: HasLimit F
+  条件: (F : J ⥤ Cᵒᵖ) [有余极限 F.leftOp]
+  结论: 有极限 F
   证明: HasLimit.mk
     { cone := coneOfCoconeLeftOp (colimit.cocone F.leftOp)
       isLimit := isLimitConeOfCoconeLeftOp _ (colimit.isColimit _) }
@@ -768,8 +768,8 @@ theorem hasLimit_of_hasColimit_op
 
 中文:
 定理 hasLimit_of_hasColimit_op
-  条件: (F : J ⥤ C) [HasColimit F.op]
-  结论: HasLimit F
+  条件: (F : J ⥤ C) [有余极限 F.op]
+  结论: 有极限 F
   证明: HasLimit.mk
     { cone := (colimit.cocone F.op).unop
       isLimit := (colimit.isColimit _).unop }
@@ -794,8 +794,8 @@ theorem hasLimit_of_hasColimit_rightOp
 
 中文:
 定理 hasLimit_of_hasColimit_rightOp
-  条件: (F : Jᵒᵖ ⥤ C) [HasColimit F.rightOp]
-  结论: HasLimit F
+  条件: (F : Jᵒᵖ ⥤ C) [有余极限 F.rightOp]
+  结论: 有极限 F
   证明: HasLimit.mk
     { cone := coneOfCoconeRightOp (colimit.cocone F.rightOp)
       isLimit := isLimitConeOfCoconeRightOp _ (colimit.isColimit _) }
@@ -820,8 +820,8 @@ theorem hasLimit_of_hasColimit_unop
 
 中文:
 定理 hasLimit_of_hasColimit_unop
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasColimit F.unop]
-  结论: HasLimit F
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有余极限 F.unop]
+  结论: 有极限 F
   证明: HasLimit.mk
     { cone := coneOfCoconeUnop (colimit.cocone F.unop)
       isLimit := isLimitConeOfCoconeUnop _ (colimit.isColimit _) }
@@ -845,7 +845,7 @@ instance hasLimit_op_of_hasColimit
 
 中文:
 实例 hasLimit_op_of_hasColimit
-  签名: (F : J ⥤ C) [HasColimit F]
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: HasLimit.mk
     { cone := (colimit.cocone F).op
       isLimit := (colimit.isColimit _).op }
@@ -869,7 +869,7 @@ instance hasLimit_leftOp_of_hasColimit
 
 中文:
 实例 hasLimit_leftOp_of_hasColimit
-  签名: (F : J ⥤ Cᵒᵖ) [HasColimit F]
+  签名: (F : J ⥤ Cᵒᵖ) [有余极限 F]
   定义体: HasLimit.mk
     { cone := coneLeftOpOfCocone (colimit.cocone F)
       isLimit := isLimitConeLeftOpOfCocone _ (colimit.isColimit _) }
@@ -893,7 +893,7 @@ instance hasLimit_rightOp_of_hasColimit
 
 中文:
 实例 hasLimit_rightOp_of_hasColimit
-  签名: (F : Jᵒᵖ ⥤ C) [HasColimit F]
+  签名: (F : Jᵒᵖ ⥤ C) [有余极限 F]
   定义体: HasLimit.mk
     { cone := coneRightOpOfCocone (colimit.cocone F)
       isLimit := isLimitConeRightOpOfCocone _ (colimit.isColimit _) }
@@ -917,7 +917,7 @@ instance hasLimit_unop_of_hasColimit
 
 中文:
 实例 hasLimit_unop_of_hasColimit
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasColimit F]
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有余极限 F]
   定义体: HasLimit.mk
     { cone := coneUnopOfCocone (colimit.cocone F)
       isLimit := isLimitConeUnopOfCocone _ (colimit.isColimit _) }
@@ -939,7 +939,7 @@ definition limitOpIsoOpColimit
 
 中文:
 定义 limitOpIsoOpColimit
-  签名: (F : J ⥤ C) [HasColimit F]
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: limit.isoLimitCone ⟨_, (colimit.isColimit _).op⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isoLimitCone, limit.isoLimitCone
@@ -961,7 +961,7 @@ lemma limitOpIsoOpColimit_inv_comp_π
 
 中文:
 引理 limitOpIsoOpColimit_inv_comp_π
-  条件: (F : J ⥤ C) [HasColimit F] (j : Jᵒᵖ)
+  条件: (F : J ⥤ C) [有余极限 F] (j : Jᵒᵖ)
   证明: by
   simp [limitOpIsoOpColimit]
 
@@ -984,7 +984,7 @@ lemma limitOpIsoOpColimit_hom_comp_ι
 
 中文:
 引理 limitOpIsoOpColimit_hom_comp_ι
-  条件: (F : J ⥤ C) [HasColimit F] (j : J)
+  条件: (F : J ⥤ C) [有余极限 F] (j : J)
   证明: by
   simp [← Iso.eq_inv_comp]
 
@@ -1004,7 +1004,7 @@ definition limitLeftOpIsoUnopColimit
 
 中文:
 定义 limitLeftOpIsoUnopColimit
-  签名: (F : J ⥤ Cᵒᵖ) [HasColimit F]
+  签名: (F : J ⥤ Cᵒᵖ) [有余极限 F]
   定义体: limit.isoLimitCone ⟨_, isLimitConeLeftOpOfCocone _ (colimit.isColimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isLimitConeLeftOpOfCocone, isoLimitCone, limit.isoLimitCone
@@ -1026,7 +1026,7 @@ lemma limitLeftOpIsoUnopColimit_inv_comp_π
 
 中文:
 引理 limitLeftOpIsoUnopColimit_inv_comp_π
-  条件: (F : J ⥤ Cᵒᵖ) [HasColimit F] (j : Jᵒᵖ)
+  条件: (F : J ⥤ Cᵒᵖ) [有余极限 F] (j : Jᵒᵖ)
   证明: by
   simp [limitLeftOpIsoUnopColimit]
 
@@ -1049,7 +1049,7 @@ lemma limitLeftOpIsoUnopColimit_hom_comp_ι
 
 中文:
 引理 limitLeftOpIsoUnopColimit_hom_comp_ι
-  条件: (F : J ⥤ Cᵒᵖ) [HasColimit F] (j : J)
+  条件: (F : J ⥤ Cᵒᵖ) [有余极限 F] (j : J)
   证明: by
   simp [← Iso.eq_inv_comp]
 
@@ -1069,7 +1069,7 @@ definition limitRightOpIsoOpColimit
 
 中文:
 定义 limitRightOpIsoOpColimit
-  签名: (F : Jᵒᵖ ⥤ C) [HasColimit F]
+  签名: (F : Jᵒᵖ ⥤ C) [有余极限 F]
   定义体: limit.isoLimitCone ⟨_, isLimitConeRightOpOfCocone _ (colimit.isColimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isLimitConeRightOpOfCocone, isoLimitCone, limit.isoLimitCone
@@ -1091,7 +1091,7 @@ lemma limitRightOpIsoOpColimit_inv_comp_π
 
 中文:
 引理 limitRightOpIsoOpColimit_inv_comp_π
-  条件: (F : Jᵒᵖ ⥤ C) [HasColimit F] (j : J)
+  条件: (F : Jᵒᵖ ⥤ C) [有余极限 F] (j : J)
   证明: by
   simp [limitRightOpIsoOpColimit]
 
@@ -1114,7 +1114,7 @@ lemma limitRightOpIsoOpColimit_hom_comp_ι
 
 中文:
 引理 limitRightOpIsoOpColimit_hom_comp_ι
-  条件: (F : Jᵒᵖ ⥤ C) [HasColimit F] (j : Jᵒᵖ)
+  条件: (F : Jᵒᵖ ⥤ C) [有余极限 F] (j : Jᵒᵖ)
   证明: by
   simp [← Iso.eq_inv_comp]
 
@@ -1134,7 +1134,7 @@ definition limitUnopIsoUnopColimit
 
 中文:
 定义 limitUnopIsoUnopColimit
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasColimit F]
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有余极限 F]
   定义体: limit.isoLimitCone ⟨_, isLimitConeUnopOfCocone _ (colimit.isColimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isLimitConeUnopOfCocone, isoLimitCone, limit.isoLimitCone
@@ -1156,7 +1156,7 @@ lemma limitUnopIsoUnopColimit_inv_comp_π
 
 中文:
 引理 limitUnopIsoUnopColimit_inv_comp_π
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasColimit F] (j : J)
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有余极限 F] (j : J)
   证明: by
   simp [limitUnopIsoUnopColimit]
 
@@ -1179,7 +1179,7 @@ lemma limitUnopIsoUnopColimit_hom_comp_ι
 
 中文:
 引理 limitUnopIsoUnopColimit_hom_comp_ι
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasColimit F] (j : Jᵒᵖ)
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有余极限 F] (j : Jᵒᵖ)
   证明: by
   simp [← Iso.eq_inv_comp]
 
@@ -1199,7 +1199,7 @@ theorem hasLimitsOfShape_op_of_hasColimitsOfShape
 
 中文:
 定理 hasLimitsOfShape_op_of_hasColimitsOfShape
-  条件: [HasColimitsOfShape Jᵒᵖ C]
+  条件: [有形状余极限 Jᵒᵖ C]
   证明: { has_limit := fun F => hasLimit_of_hasColimit_leftOp F }
 
 Depends on / 依赖: hasLimit_of_hasColimit_leftOp, has_limit
@@ -1218,7 +1218,7 @@ theorem hasLimitsOfShape_of_hasColimitsOfShape_op
 
 中文:
 定理 hasLimitsOfShape_of_hasColimitsOfShape_op
-  条件: [HasColimitsOfShape Jᵒᵖ Cᵒᵖ]
+  条件: [有形状余极限 Jᵒᵖ Cᵒᵖ]
   证明: { has_limit := fun F => hasLimit_of_hasColimit_op F }
 
 Depends on / 依赖: hasLimit_of_hasColimit_op, has_limit
@@ -1239,7 +1239,7 @@ instance hasLimits_op_of_hasColimits
 
 中文:
 实例 hasLimits_op_of_hasColimits
-  签名: [HasColimitsOfSize.{v₂, u₂} C]
+  签名: [有余limitsOfSize.{v₂, u₂} C]
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasLimits_op_of_hasColimits [HasColimitsOfSize.{v₂, u₂} C] :
@@ -1256,7 +1256,7 @@ theorem hasLimits_of_hasColimits_op
 
 中文:
 定理 hasLimits_of_hasColimits_op
-  条件: [HasColimitsOfSize.{v₂, u₂} Cᵒᵖ]
+  条件: [有余limitsOfSize.{v₂, u₂} Cᵒᵖ]
   证明: { has_limits_of_shape := fun _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op }
 
 Depends on / 依赖: hasLimitsOfShape_of_hasColimitsOfShape_op, has_limits_of_shape
@@ -1278,8 +1278,8 @@ theorem hasColimit_of_hasLimit_leftOp
 
 中文:
 定理 hasColimit_of_hasLimit_leftOp
-  条件: (F : J ⥤ Cᵒᵖ) [HasLimit F.leftOp]
-  结论: HasColimit F
+  条件: (F : J ⥤ Cᵒᵖ) [有极限 F.leftOp]
+  结论: 有余极限 F
   证明: HasColimit.mk
     { cocone := coconeOfConeLeftOp (limit.cone F.leftOp)
       isColimit := isColimitCoconeOfConeLeftOp _ (limit.isLimit _) }
@@ -1304,8 +1304,8 @@ theorem hasColimit_of_hasLimit_op
 
 中文:
 定理 hasColimit_of_hasLimit_op
-  条件: (F : J ⥤ C) [HasLimit F.op]
-  结论: HasColimit F
+  条件: (F : J ⥤ C) [有极限 F.op]
+  结论: 有余极限 F
   证明: HasColimit.mk
     { cocone := (limit.cone F.op).unop
       isColimit := (limit.isLimit _).unop }
@@ -1330,8 +1330,8 @@ theorem hasColimit_of_hasLimit_rightOp
 
 中文:
 定理 hasColimit_of_hasLimit_rightOp
-  条件: (F : Jᵒᵖ ⥤ C) [HasLimit F.rightOp]
-  结论: HasColimit F
+  条件: (F : Jᵒᵖ ⥤ C) [有极限 F.rightOp]
+  结论: 有余极限 F
   证明: HasColimit.mk
     { cocone := coconeOfConeRightOp (limit.cone F.rightOp)
       isColimit := isColimitCoconeOfConeRightOp _ (limit.isLimit _) }
@@ -1356,8 +1356,8 @@ theorem hasColimit_of_hasLimit_unop
 
 中文:
 定理 hasColimit_of_hasLimit_unop
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasLimit F.unop]
-  结论: HasColimit F
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有极限 F.unop]
+  结论: 有余极限 F
   证明: HasColimit.mk
     { cocone := coconeOfConeUnop (limit.cone F.unop)
       isColimit := isColimitCoconeOfConeUnop _ (limit.isLimit _) }
@@ -1381,7 +1381,7 @@ instance hasColimit_op_of_hasLimit
 
 中文:
 实例 hasColimit_op_of_hasLimit
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: HasColimit.mk
     { cocone := (limit.cone F).op
       isColimit := (limit.isLimit _).op }
@@ -1405,7 +1405,7 @@ instance hasColimit_leftOp_of_hasLimit
 
 中文:
 实例 hasColimit_leftOp_of_hasLimit
-  签名: (F : J ⥤ Cᵒᵖ) [HasLimit F]
+  签名: (F : J ⥤ Cᵒᵖ) [有极限 F]
   定义体: HasColimit.mk
     { cocone := coconeLeftOpOfCone (limit.cone F)
       isColimit := isColimitCoconeLeftOpOfCone _ (limit.isLimit _) }
@@ -1429,7 +1429,7 @@ instance hasColimit_rightOp_of_hasLimit
 
 中文:
 实例 hasColimit_rightOp_of_hasLimit
-  签名: (F : Jᵒᵖ ⥤ C) [HasLimit F]
+  签名: (F : Jᵒᵖ ⥤ C) [有极限 F]
   定义体: HasColimit.mk
     { cocone := coconeRightOpOfCone (limit.cone F)
       isColimit := isColimitCoconeRightOpOfCone _ (limit.isLimit _) }
@@ -1453,7 +1453,7 @@ instance hasColimit_unop_of_hasLimit
 
 中文:
 实例 hasColimit_unop_of_hasLimit
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasLimit F]
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有极限 F]
   定义体: HasColimit.mk
     { cocone := coconeUnopOfCone (limit.cone F)
       isColimit := isColimitCoconeUnopOfCone _ (limit.isLimit _) }
@@ -1475,7 +1475,7 @@ definition colimitOpIsoOpLimit
 
 中文:
 定义 colimitOpIsoOpLimit
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: colimit.isoColimitCocone ⟨_, (limit.isLimit _).op⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isLimit, isoColimitCocone, limit.isLimit
@@ -1497,7 +1497,7 @@ lemma ι_comp_colimitOpIsoOpLimit_hom
 
 中文:
 引理 ι_comp_colimitOpIsoOpLimit_hom
-  条件: (F : J ⥤ C) [HasLimit F] (j : Jᵒᵖ)
+  条件: (F : J ⥤ C) [有极限 F] (j : Jᵒᵖ)
   证明: by
   simp [colimitOpIsoOpLimit]
 
@@ -1520,7 +1520,7 @@ lemma π_comp_colimitOpIsoOpLimit_inv
 
 中文:
 引理 π_comp_colimitOpIsoOpLimit_inv
-  条件: (F : J ⥤ C) [HasLimit F] (j : J)
+  条件: (F : J ⥤ C) [有极限 F] (j : J)
   证明: by
   simp [Iso.comp_inv_eq]
 
@@ -1540,7 +1540,7 @@ definition colimitLeftOpIsoUnopLimit
 
 中文:
 定义 colimitLeftOpIsoUnopLimit
-  签名: (F : J ⥤ Cᵒᵖ) [HasLimit F]
+  签名: (F : J ⥤ Cᵒᵖ) [有极限 F]
   定义体: colimit.isoColimitCocone ⟨_, isColimitCoconeLeftOpOfCone _ (limit.isLimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isColimitCoconeLeftOpOfCone, isLimit, isoColimitCocone, limit.isLimit
@@ -1562,7 +1562,7 @@ lemma ι_comp_colimitLeftOpIsoUnopLimit_hom
 
 中文:
 引理 ι_comp_colimitLeftOpIsoUnopLimit_hom
-  条件: (F : J ⥤ Cᵒᵖ) [HasLimit F] (j : Jᵒᵖ)
+  条件: (F : J ⥤ Cᵒᵖ) [有极限 F] (j : Jᵒᵖ)
   证明: by
   simp [colimitLeftOpIsoUnopLimit]
 
@@ -1585,7 +1585,7 @@ lemma π_comp_colimitLeftOpIsoUnopLimit_inv
 
 中文:
 引理 π_comp_colimitLeftOpIsoUnopLimit_inv
-  条件: (F : J ⥤ Cᵒᵖ) [HasLimit F] (j : J)
+  条件: (F : J ⥤ Cᵒᵖ) [有极限 F] (j : J)
   证明: by
   simp [Iso.comp_inv_eq]
 
@@ -1605,7 +1605,7 @@ definition colimitRightOpIsoUnopLimit
 
 中文:
 定义 colimitRightOpIsoUnopLimit
-  签名: (F : Jᵒᵖ ⥤ C) [HasLimit F]
+  签名: (F : Jᵒᵖ ⥤ C) [有极限 F]
   定义体: colimit.isoColimitCocone ⟨_, isColimitCoconeRightOpOfCone _ (limit.isLimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isColimitCoconeRightOpOfCone, isLimit, isoColimitCocone, limit.isLimit
@@ -1627,7 +1627,7 @@ lemma ι_comp_colimitRightOpIsoUnopLimit_hom
 
 中文:
 引理 ι_comp_colimitRightOpIsoUnopLimit_hom
-  条件: (F : Jᵒᵖ ⥤ C) [HasLimit F] (j : J)
+  条件: (F : Jᵒᵖ ⥤ C) [有极限 F] (j : J)
   证明: by
   simp [colimitRightOpIsoUnopLimit]
 
@@ -1650,7 +1650,7 @@ lemma π_comp_colimitRightOpIsoUnopLimit_inv
 
 中文:
 引理 π_comp_colimitRightOpIsoUnopLimit_inv
-  条件: (F : Jᵒᵖ ⥤ C) [HasLimit F] (j : Jᵒᵖ)
+  条件: (F : Jᵒᵖ ⥤ C) [有极限 F] (j : Jᵒᵖ)
   证明: by
   simp [Iso.comp_inv_eq]
 
@@ -1670,7 +1670,7 @@ definition colimitUnopIsoOpLimit
 
 中文:
 定义 colimitUnopIsoOpLimit
-  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasLimit F]
+  签名: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有极限 F]
   定义体: colimit.isoColimitCocone ⟨_, isColimitCoconeUnopOfCone _ (limit.isLimit _)⟩
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, isColimitCoconeUnopOfCone, isLimit, isoColimitCocone, limit.isLimit
@@ -1692,7 +1692,7 @@ lemma ι_comp_colimitUnopIsoOpLimit_hom
 
 中文:
 引理 ι_comp_colimitUnopIsoOpLimit_hom
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasLimit F] (j : J)
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有极限 F] (j : J)
   证明: by
   simp [colimitUnopIsoOpLimit]
 
@@ -1715,7 +1715,7 @@ lemma π_comp_colimitUnopIsoOpLimit_inv
 
 中文:
 引理 π_comp_colimitUnopIsoOpLimit_inv
-  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [HasLimit F] (j : Jᵒᵖ)
+  条件: (F : Jᵒᵖ ⥤ Cᵒᵖ) [有极限 F] (j : Jᵒᵖ)
   证明: by
   simp [Iso.comp_inv_eq]
 
@@ -1735,7 +1735,7 @@ instance hasColimitsOfShape_op_of_hasLimitsOfShape
 
 中文:
 实例 hasColimitsOfShape_op_of_hasLimitsOfShape
-  签名: [HasLimitsOfShape Jᵒᵖ C]
+  签名: [有形状极限 Jᵒᵖ C]
   定义体: hasColimit_of_hasLimit_leftOp F
 
 Depends on / 依赖: hasColimit_of_hasLimit_leftOp
@@ -1753,7 +1753,7 @@ theorem hasColimitsOfShape_of_hasLimitsOfShape_op
 
 中文:
 定理 hasColimitsOfShape_of_hasLimitsOfShape_op
-  条件: [HasLimitsOfShape Jᵒᵖ Cᵒᵖ]
+  条件: [有形状极限 Jᵒᵖ Cᵒᵖ]
   证明: { has_colimit := fun F => hasColimit_of_hasLimit_op F }
 
 Depends on / 依赖: hasColimit_of_hasLimit_op, has_colimit
@@ -1772,7 +1772,7 @@ instance hasColimits_op_of_hasLimits
 
 中文:
 实例 hasColimits_op_of_hasLimits
-  签名: [HasLimitsOfSize.{v₂, u₂} C]
+  签名: [有LimitsOfSize.{v₂, u₂} C]
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasColimits_op_of_hasLimits [HasLimitsOfSize.{v₂, u₂} C] :
@@ -1789,7 +1789,7 @@ theorem hasColimits_of_hasLimits_op
 
 中文:
 定理 hasColimits_of_hasLimits_op
-  条件: [HasLimitsOfSize.{v₂, u₂} Cᵒᵖ]
+  条件: [有LimitsOfSize.{v₂, u₂} Cᵒᵖ]
   证明: { has_colimits_of_shape := fun _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op }
 
 Depends on / 依赖: hasColimitsOfShape_of_hasLimitsOfShape_op, has_colimits_of_shape
@@ -1842,7 +1842,7 @@ instance hasFiniteColimits_opposite
 
 中文:
 实例 hasFiniteColimits_opposite
-  签名: [HasFiniteLimits C]
+  签名: [有有限极限 C]
   定义体: ⟨fun _ _ _ => hasColimitsOfShape_op_of_hasLimitsOfShape⟩
 
 Depends on / 依赖: hasColimitsOfShape_op_of_hasLimitsOfShape
@@ -1860,7 +1860,7 @@ instance hasFiniteLimits_opposite
 
 中文:
 实例 hasFiniteLimits_opposite
-  签名: [HasFiniteColimits C]
+  签名: [有有限余极限 C]
   定义体: ⟨fun _ _ _ => hasLimitsOfShape_op_of_hasColimitsOfShape⟩
 
 Depends on / 依赖: hasLimitsOfShape_op_of_hasColimitsOfShape
@@ -1878,7 +1878,7 @@ lemma hasFiniteLimits_opposite_iff
 
 中文:
 引理 hasFiniteLimits_opposite_iff
-  结论: HasFiniteLimits Cᵒᵖ ↔ HasFiniteColimits C
+  结论: 有有限极限 Cᵒᵖ ↔ 有有限余极限 C
   证明: ⟨fun _ => ⟨fun _ _ _ => hasColimitsOfShape_of_hasLimitsOfShape_op⟩, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasColimitsOfShape_of_hasLimitsOfShape_op
@@ -1896,7 +1896,7 @@ lemma hasFiniteColimits_opposite_iff
 
 中文:
 引理 hasFiniteColimits_opposite_iff
-  结论: HasFiniteColimits Cᵒᵖ ↔ HasFiniteLimits C
+  结论: 有有限余极限 Cᵒᵖ ↔ 有有限极限 C
   证明: ⟨fun _ => ⟨fun _ _ _ => hasLimitsOfShape_of_hasColimitsOfShape_op⟩, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_hasColimitsOfShape_op
@@ -1916,7 +1916,7 @@ lemma hasColimit_op_iff_hasLimit
 中文:
 引理 hasColimit_op_iff_hasLimit
   条件: {F : J ⥤ C}
-  结论: HasColimit F.op ↔ HasLimit F
+  结论: 有余极限 F.op ↔ 有极限 F
   证明: ⟨fun _ => hasLimit_of_hasColimit_op F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasLimit_of_hasColimit_op
@@ -1936,7 +1936,7 @@ lemma hasColimit_leftOp_iff_hasLimit
 中文:
 引理 hasColimit_leftOp_iff_hasLimit
   条件: {F : J ⥤ Cᵒᵖ}
-  结论: HasColimit F.leftOp ↔ HasLimit F
+  结论: 有余极限 F.leftOp ↔ 有极限 F
   证明: ⟨fun _ => hasLimit_of_hasColimit_leftOp F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasLimit_of_hasColimit_leftOp
@@ -1956,7 +1956,7 @@ lemma hasColimit_rightOp_iff_hasLimit
 中文:
 引理 hasColimit_rightOp_iff_hasLimit
   条件: {F : Jᵒᵖ ⥤ C}
-  结论: HasColimit F.rightOp ↔ HasLimit F
+  结论: 有余极限 F.rightOp ↔ 有极限 F
   证明: ⟨fun _ => hasLimit_of_hasColimit_rightOp F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasLimit_of_hasColimit_rightOp
@@ -1976,7 +1976,7 @@ lemma hasLimit_op_iff_hasColimit
 中文:
 引理 hasLimit_op_iff_hasColimit
   条件: {F : J ⥤ C}
-  结论: HasLimit F.op ↔ HasColimit F
+  结论: 有极限 F.op ↔ 有余极限 F
   证明: ⟨fun _ => hasColimit_of_hasLimit_op F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasColimit_of_hasLimit_op
@@ -1996,7 +1996,7 @@ lemma hasLimit_leftOp_iff_hasColimit
 中文:
 引理 hasLimit_leftOp_iff_hasColimit
   条件: {F : J ⥤ Cᵒᵖ}
-  结论: HasLimit F.leftOp ↔ HasColimit F
+  结论: 有极限 F.leftOp ↔ 有余极限 F
   证明: ⟨fun _ => hasColimit_of_hasLimit_leftOp F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasColimit_of_hasLimit_leftOp
@@ -2016,7 +2016,7 @@ lemma hasLimit_rightOp_iff_hasColimit
 中文:
 引理 hasLimit_rightOp_iff_hasColimit
   条件: {F : Jᵒᵖ ⥤ C}
-  结论: HasLimit F.rightOp ↔ HasColimit F
+  结论: 有极限 F.rightOp ↔ 有余极限 F
   证明: ⟨fun _ => hasColimit_of_hasLimit_rightOp F, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasColimit_of_hasLimit_rightOp
@@ -2037,7 +2037,7 @@ lemma hasLimitsOfShape_opposite_iff
 
 中文:
 引理 hasLimitsOfShape_opposite_iff
-  结论: HasLimitsOfShape J Cᵒᵖ ↔ HasColimitsOfShape Jᵒᵖ C
+  结论: 有形状极限 J Cᵒᵖ ↔ 有形状余极限 Jᵒᵖ C
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   have : HasLimitsOfShape Jᵒᵖᵒᵖ Cᵒᵖ := hasLimitsOfShape_of_equivalence (opOpEquivalence J).symm
@@ -2063,7 +2063,7 @@ lemma hasColimitsOfShape_opposite_iff
 
 中文:
 引理 hasColimitsOfShape_opposite_iff
-  结论: HasColimitsOfShape J Cᵒᵖ ↔ HasLimitsOfShape Jᵒᵖ C
+  结论: 有形状余极限 J Cᵒᵖ ↔ 有形状极限 Jᵒᵖ C
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   have : HasColimitsOfShape Jᵒᵖᵒᵖ Cᵒᵖ := hasColimitsOfShape_of_equivalence (opOpEquivalence J).symm
@@ -2240,8 +2240,8 @@ instance [HasFiniteWidePullbacks
   exact hasLimitsOfShape_of_equivalence (widePushoutShapeOpEquiv _).symm
 
 中文:
-实例 [HasFiniteWidePullbacks
-  签名: C] : HasFiniteWidePushouts Cᵒᵖ
+实例 [有FiniteWidePullbacks
+  签名: C] : 有FiniteWidePushouts Cᵒᵖ
   定义体: by
   refine ⟨fun J _ => ?_⟩
   rw [hasColimitsOfShape_opposite_iff]
@@ -2266,8 +2266,8 @@ instance [HasFiniteWidePushouts
   exact hasColimitsOfShape_of_equivalence (widePullbackShapeOpEquiv _).symm
 
 中文:
-实例 [HasFiniteWidePushouts
-  签名: C] : HasFiniteWidePullbacks Cᵒᵖ
+实例 [有FiniteWidePushouts
+  签名: C] : 有FiniteWidePullbacks Cᵒᵖ
   定义体: by
   refine ⟨fun J _ => ?_⟩
   rw [hasLimitsOfShape_opposite_iff]

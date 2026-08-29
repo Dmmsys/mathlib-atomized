@@ -68,8 +68,8 @@ instance sum
     match X, Y, Z, f,
 
 中文:
-实例 sum
-  签名: : Category.{max v₁ v₂} (C oplus D) where
+实例 求和
+  签名: : 范畴.{最大值 v₁ v₂} (C oplus D) where
   定义体: match X, Y with
     | inl X, inl Y => ULift.{max v₁ v₂} (X ⟶ Y)
     | inl _, inr _ => PEmpty
@@ -115,8 +115,8 @@ theorem hom_inl_inr_false
 
 中文:
 定理 hom_inl_inr_false
-  条件: {X : C} {Y : D} (f : Sum.inl X ⟶ Sum.inr Y)
-  结论: False
+  条件: {X : C} {Y : D} (f : 和.inl X ⟶ 和.inr Y)
+  结论: 假
   证明: by
   cases f
 
@@ -138,8 +138,8 @@ theorem hom_inr_inl_false
 
 中文:
 定理 hom_inr_inl_false
-  条件: {X : C} {Y : D} (f : Sum.inr X ⟶ Sum.inl Y)
-  结论: False
+  条件: {X : C} {Y : D} (f : 和.inr X ⟶ 和.inl Y)
+  结论: 假
   证明: by
   cases f
 -/
@@ -214,7 +214,7 @@ definition homInduction
 
 中文:
 定义 homInduction
-  签名: {P : {x y : C oplus D} -> (x ⟶ y) -> Sort*}
+  签名: {P : {x y : C oplus D} -> (x ⟶ y) -> 类型层*}
   定义体: match x, y, f with
   | .inl x, .inl y, f => inl x y f.down
   | .inr x, .inr y, f => inr x y f.down
@@ -244,7 +244,7 @@ lemma homInduction_left
 
 中文:
 引理 homInduction_left
-  结论: {P : {x y : C oplus D} -> (x ⟶ y) -> Sort*}
+  结论: {P : {x y : C oplus D} -> (x ⟶ y) -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -266,7 +266,7 @@ lemma homInduction_right
 
 中文:
 引理 homInduction_right
-  结论: {P : {x y : C oplus D} -> (x ⟶ y) -> Sort*}
+  结论: {P : {x y : C oplus D} -> (x ⟶ y) -> 类型层*}
   证明: rfl
 -/
 lemma homInduction_right {P : {x y : C oplus D} -> (x ⟶ y) -> Sort*}
@@ -300,7 +300,7 @@ definition sum'
     cases x <;> (simp only [← map_id]; rfl)
 
 中文:
-定义 sum'
+定义 求和'
   签名: : A oplus B ⥤ C where
   定义体: Sum.homInduction (inl := fun _ _ f => F.map f) (inr := fun _ _ g => G.map g) f
   map_comp {x y z} f g := by
@@ -333,7 +333,7 @@ definition inlCompSum'
 
 中文:
 定义 inlCompSum'
-  签名: : Sum.inl_ A B ⋙ F.sum' G ≅ F
+  签名: : 和.inl_ A B ⋙ F.求和' G ≅ F
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -356,7 +356,7 @@ definition inrCompSum'
 
 中文:
 定义 inrCompSum'
-  签名: : Sum.inr_ A B ⋙ F.sum' G ≅ G
+  签名: : 和.inr_ A B ⋙ F.求和' G ≅ G
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 
 @[simp]
@@ -379,9 +379,9 @@ theorem sum'_obj_inl
 @[simp]
 
 中文:
-定理 sum'_obj_inl
+定理 求和'_obj_inl
   条件: (a : A)
-  结论: (F.sum' G).obj (inl a) = (F.obj a)
+  结论: (F.求和' G).obj (inl a) = (F.obj a)
   证明: rfl
 
 @[simp]
@@ -402,9 +402,9 @@ theorem sum'_obj_inr
 @[simp]
 
 中文:
-定理 sum'_obj_inr
+定理 求和'_obj_inr
   条件: (b : B)
-  结论: (F.sum' G).obj (inr b) = (G.obj b)
+  结论: (F.求和' G).obj (inr b) = (G.obj b)
   证明: rfl
 
 @[simp]
@@ -424,7 +424,7 @@ theorem sum'_map_inl
 @[simp]
 
 中文:
-定理 sum'_map_inl
+定理 求和'_map_inl
   条件: {a a' : A} (f : a ⟶ a')
   证明: rfl
 
@@ -446,7 +446,7 @@ theorem sum'_map_inr
   proof: rfl
 
 中文:
-定理 sum'_map_inr
+定理 求和'_map_inr
   条件: {b b' : B} (f : b ⟶ b')
   证明: rfl
 -/
@@ -467,7 +467,7 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
+定义 求和
   签名: (F : A ⥤ B) (G : C ⥤ D)
   定义体: (F ⋙ Sum.inl_ _ _).sum' (G ⋙ Sum.inr_ _ _)
 
@@ -492,7 +492,7 @@ theorem sum_obj_inl
 中文:
 定理 sum_obj_inl
   条件: (F : A ⥤ B) (G : C ⥤ D) (a : A)
-  结论: (F.sum G).obj (inl a) = inl (F.obj a)
+  结论: (F.求和 G).obj (inl a) = inl (F.obj a)
   证明: rfl
 
 @[simp]
@@ -513,7 +513,7 @@ theorem sum_obj_inr
 中文:
 定理 sum_obj_inr
   条件: (F : A ⥤ B) (G : C ⥤ D) (c : C)
-  结论: (F.sum G).obj (inr c) = inr (G.obj c)
+  结论: (F.求和 G).obj (inr c) = inr (G.obj c)
   证明: rfl
 -/
 theorem sum_obj_inr (F : A ⥤ B) (G : C ⥤ D) (c : C) : (F.sum G).obj (inr c) = inr (G.obj c) :=
@@ -710,7 +710,7 @@ definition isoSum
 
 中文:
 定义 isoSum
-  签名: : F ≅ (Sum.inl_ A B ⋙ F).sum' (Sum.inr_ A B ⋙ F)
+  签名: : F ≅ (和.inl_ A B ⋙ F).求和' (和.inr_ A B ⋙ F)
   定义体: sumIsoExt (inlCompSum' _ _).symm (inrCompSum' _ _).symm
 
 Depends on / 依赖: inlCompSum, inrCompSum, sumIsoExt
@@ -822,7 +822,7 @@ definition sum'
 @[simp]
 
 中文:
-定义 sum'
+定义 求和'
   签名: {F G : A ⥤ C} {H I : B ⥤ C} (α : F ⟶ G) (β : H ⟶ I)
   定义体: match X with
     | inl X => α.app X
@@ -854,7 +854,7 @@ theorem sum'_app_inl
 @[simp]
 
 中文:
-定理 sum'_app_inl
+定理 求和'_app_inl
   条件: {F G : A ⥤ C} {H I : B ⥤ C} (α : F ⟶ G) (β : H ⟶ I) (a : A)
   证明: rfl
 
@@ -874,7 +874,7 @@ theorem sum'_app_inr
   proof: rfl
 
 中文:
-定理 sum'_app_inr
+定理 求和'_app_inr
   条件: {F G : A ⥤ C} {H I : B ⥤ C} (α : F ⟶ G) (β : H ⟶ I) (b : B)
   证明: rfl
 -/
@@ -899,7 +899,7 @@ definition sum
 @[simp]
 
 中文:
-定义 sum
+定义 求和
   签名: {F G : A ⥤ B} {H I : C ⥤ D} (α : F ⟶ G) (β : H ⟶ I)
   定义体: match X with
     | inl X => (Sum.inl_ B D).map (α.app X)
@@ -1182,7 +1182,7 @@ instance isEquivalence
 
 中文:
 实例 isEquivalence
-  签名: : (swap C D).IsEquivalence
+  签名: : (swap C D).是等价
   定义体: (by infer_instance : (equivalence C D).functor.IsEquivalence)
 
 Depends on / 依赖: IsEquivalence, equivalence, functor, functor.IsEquivalence, infer_instance

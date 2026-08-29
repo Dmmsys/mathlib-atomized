@@ -42,7 +42,7 @@ instance pseudoMetricSpacePi
 
 中文:
 实例 pseudoMetricSpacePi
-  签名: : PseudoMetricSpace (对任意 b, X b)
+  签名: : 伪度量空间 (对任意 b, X b)
   定义体: by
   /- we construct the instance from the pseudoemetric space instance to avoid checking again that
     the uniformity is the same as the product uniformity, but we register nevertheless a nice
@@ -79,7 +79,7 @@ lemma nndist_pi_def
 中文:
 引理 nndist_pi_def
   条件: (f g : 对任意 b, X b)
-  结论: nndist f g = sup univ fun b => nndist (f b) (g b)
+  结论: nndist f g = 上确界 univ fun b => nndist (f b) (g b)
   证明: rfl
 -/
 lemma nndist_pi_def (f g : forall b, X b) : nndist f g = sup univ fun b => nndist (f b) (g b) := rfl
@@ -96,7 +96,7 @@ lemma dist_pi_def
 中文:
 引理 dist_pi_def
   条件: (f g : 对任意 b, X b)
-  结论: dist f g = (sup univ fun b => nndist (f b) (g b) : 实数>=0)
+  结论: dist f g = (上确界 univ fun b => nndist (f b) (g b) : 实数>=0)
   证明: rfl
 -/
 lemma dist_pi_def (f g : forall b, X b) : dist f g = (sup univ fun b => nndist (f b) (g b) : Real>=0) := rfl
@@ -259,7 +259,7 @@ hr dist_nonneg.trans h Classical.arbitrary _
 
 中文:
 引理 dist_pi_le_iff'
-  条件: [Nonempty β] {f g : 对任意 b, X b} {r : 实数}
+  条件: [非空 β] {f g : 对任意 b, X b} {r : 实数}
   证明: by
   by_cases hr : 0 <= r
   · exact dist_pi_le_iff hr
@@ -334,7 +334,7 @@ lemma dist_pi_const
 
 中文:
 引理 dist_pi_const
-  条件: [Nonempty β] (a b : α)
+  条件: [非空 β] (a b : α)
   结论: (dist (fun _ : β => a) fun _ => b) = dist a b
   证明: by
   simpa only [dist_edist] using congr_arg ENNReal.toReal (edist_pi_const a b)
@@ -358,7 +358,7 @@ lemma nndist_pi_const
 
 中文:
 引理 nndist_pi_const
-  条件: [Nonempty β] (a b : α)
+  条件: [非空 β] (a b : α)
   结论: (nndist (fun _ : β => a) fun _ => b) = nndist a b
   证明: NNReal.eq dist_pi_const a b
 
@@ -448,7 +448,7 @@ lemma ball_pi'
 
 中文:
 引理 ball_pi'
-  条件: [Nonempty β] (x : 对任意 b, X b) (r : 实数)
+  条件: [非空 β] (x : 对任意 b, X b) (r : 实数)
   证明: (lt_or_ge 0 r).elim (ball_pi x) fun hr => by simp [ball_eq_empty.2 hr]
 
 Depends on / 依赖: ball_eq_empty, ball_pi, lt_or_ge
@@ -491,7 +491,7 @@ lemma closedBall_pi'
 
 中文:
 引理 closedBall_pi'
-  条件: [Nonempty β] (x : 对任意 b, X b) (r : 实数)
+  条件: [非空 β] (x : 对任意 b, X b) (r : 实数)
   证明: (le_or_gt 0 r).elim (closedBall_pi x) fun hr => by simp [closedBall_eq_empty.2 hr]
 
 Depends on / 依赖: closedBall_eq_empty, closedBall_pi, le_or_gt
@@ -519,7 +519,7 @@ lemma sphere_pi
 
 中文:
 引理 sphere_pi
-  条件: (x : 对任意 b, X b) {r : 实数} (h : 0 < r ∨ Nonempty β)
+  条件: (x : 对任意 b, X b) {r : 实数} (h : 0 < r ∨ 非空 β)
   证明: by
   obtain hr | rfl | hr := lt_trichotomy r 0
   · simp [hr]
@@ -560,8 +560,8 @@ lemma Fin.nndist_insertNth_insertNth
 @[simp]
 
 中文:
-引理 Fin.nndist_insertNth_insertNth
-  结论: {n : 自然数} {α : Fin (n + 1) -> 类型}
+引理 有限集.nndist_insertNth_insertNth
+  结论: {n : 自然数} {α : 有限集 (n + 1) -> 类型}
   证明: eq_of_forall_ge_iff fun c => by simp [nndist_pi_le_iff, i.forall_iff_succAbove]
 
 @[simp]
@@ -584,8 +584,8 @@ lemma Fin.dist_insertNth_insertNth
   simp only [dist_nndist, Fin.nndist_insertNth_insertNth, NNReal.coe_max]
 
 中文:
-引理 Fin.dist_insertNth_insertNth
-  结论: {n : 自然数} {α : Fin (n + 1) -> 类型}
+引理 有限集.dist_insertNth_insertNth
+  结论: {n : 自然数} {α : 有限集 (n + 1) -> 类型}
   证明: by
   simp only [dist_nndist, Fin.nndist_insertNth_insertNth, NNReal.coe_max]
 
@@ -611,7 +611,7 @@ lemma nndist_single_single
 
 中文:
 引理 nndist_single_single
-  结论: {Y : 类型} [PseudoMetricSpace Y] [Zero Y] [DecidableEq β]
+  结论: {Y : 类型} [伪度量空间 Y] [零 Y] [DecidableEq β]
   证明: by
   refine le_antisymm (nndist_pi_le_iff.2 fun k => ?_) (max_le ?_ ?_)
   · simp only [Pi.single_apply]
@@ -641,7 +641,7 @@ lemma dist_single_single
 
 中文:
 引理 dist_single_single
-  结论: {Y : 类型} [PseudoMetricSpace Y] [Zero Y] [DecidableEq β]
+  结论: {Y : 类型} [伪度量空间 Y] [零 Y] [DecidableEq β]
   证明: by
   simp only [dist_nndist, nndist_single_single i j a b h, NNReal.coe_max]
 

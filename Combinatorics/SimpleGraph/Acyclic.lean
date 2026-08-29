@@ -81,7 +81,7 @@ structure IsTree
     - isAcyclic : G.IsAcyclic
 
 中文:
-结构 IsTree
+结构 是树
   参数: : 命题 extends
   公理与运算 (1 个):
     - isAcyclic : G.IsAcyclic
@@ -106,7 +106,7 @@ lemma isAcyclic_bot
 
 中文:
 引理 isAcyclic_bot
-  结论: IsAcyclic (⊥ : SimpleGraph V)
+  结论: IsAcyclic (⊥ : 简单图 V)
   证明: fun _a _w hw => hw.ne_bot rfl
 -/
 @[simp] lemma isAcyclic_bot : IsAcyclic (⊥ : SimpleGraph V) := fun _a _w hw => hw.ne_bot rfl
@@ -121,7 +121,7 @@ lemma IsAcyclic.comap
 
 中文:
 引理 IsAcyclic.comap
-  条件: (f : G ->g G') (hinj : Function.Injective f) (h : G'.IsAcyclic)
+  条件: (f : G ->g G') (hinj : 函数.单射 f) (h : G'.IsAcyclic)
   证明: fun _ _ => mt (.map hinj) (h _)
 -/
 lemma IsAcyclic.comap (f : G ->g G') (hinj : Function.Injective f) (h : G'.IsAcyclic) :
@@ -158,7 +158,7 @@ lemma Iso.isAcyclic_iff
   proof: ⟨fun h => h.embedding f.symm, fun h => h.embedding f⟩
 
 中文:
-引理 Iso.isAcyclic_iff
+引理 同构.isAcyclic_iff
   条件: (f : G ≃g G')
   结论: G.IsAcyclic ↔ G'.IsAcyclic
   证明: ⟨fun h => h.embedding f.symm, fun h => h.embedding f⟩
@@ -179,9 +179,9 @@ lemma Iso.isTree_iff
    fun ⟨hc, ha⟩ => ⟨f.connected_iff.mpr hc, f.isAcyclic_iff.mpr ha⟩⟩
 
 中文:
-引理 Iso.isTree_iff
+引理 同构.isTree_iff
   条件: (f : G ≃g G')
-  结论: G.IsTree ↔ G'.IsTree
+  结论: G.是树 ↔ G'.是树
   证明: ⟨fun ⟨hc, ha⟩ => ⟨f.connected_iff.mp hc, f.isAcyclic_iff.mp ha⟩,
    fun ⟨hc, ha⟩ => ⟨f.connected_iff.mpr hc, f.isAcyclic_iff.mpr ha⟩⟩
 
@@ -235,7 +235,7 @@ lemma IsAcyclic.subgraph
 
 中文:
 引理 IsAcyclic.subgraph
-  条件: (h : G.IsAcyclic) (H : G.Subgraph)
+  条件: (h : G.IsAcyclic) (H : G.子图)
   结论: H.coe.IsAcyclic
   证明: h.comap _ H.hom_injective
 
@@ -255,7 +255,7 @@ lemma IsAcyclic.anti
 
 中文:
 引理 IsAcyclic.anti
-  条件: {G' : SimpleGraph V} (hsub : G <= G') (h : G'.IsAcyclic)
+  条件: {G' : 简单图 V} (hsub : G <= G') (h : G'.IsAcyclic)
   结论: G.IsAcyclic
   证明: h.comap ⟨_, fun h => hsub h⟩ Function.injective_id
 
@@ -280,8 +280,8 @@ lemma Walk.exists_mem_contains_edges_of_directed
     simpa using ⟨H, hH, (le_iff_adj.mp h₂) _ _ h_
 
 中文:
-引理 Walk.exists_mem_contains_edges_of_directed
-  结论: (Hs : Set <| SimpleGraph V)
+引理 途径.存在_mem_contains_edges_of_directed
+  结论: (Hs : 集合 <| 简单图 V)
   证明: by
   induction p with
   | nil => exact ⟨hHs.some, hHs.some_mem, by simp⟩
@@ -317,7 +317,7 @@ exact h_acyc H hH (p.transfer H hpH) Walk.IsCycle.transfer hp hpH
 
 中文:
 引理 isAcyclic_sSup_of_isAcyclic_directedOn
-  结论: (Hs : Set <| SimpleGraph V)
+  结论: (Hs : 集合 <| 简单图 V)
   证明: by
   rcases Hs.eq_empty_or_nonempty with rfl | hnemp
   · simp
@@ -347,7 +347,7 @@ theorem exists_maximal_isAcyclic_of_le_isAcyclic
   · exact isAcyclic_sSup_of_isAcyclic_directedOn c (by grind) hc.directedOn
 
 中文:
-定理 exists_maximal_isAcyclic_of_le_isAcyclic
+定理 存在_maximal_isAcyclic_of_le_isAcyclic
   证明: by
   refine zorn_le_nonempty₀ {H | H <= G ∧ H.IsAcyclic} (fun c hcs hc y hy => ?_) _ ⟨hHG, hH⟩
   refine ⟨sSup c, ⟨?_, ?_⟩, fun _ => le_sSup⟩
@@ -432,7 +432,7 @@ lemma IsAcyclic.of_subsingleton
 
 中文:
 引理 IsAcyclic.of_subsingleton
-  条件: [Subsingleton V] {G : SimpleGraph V}
+  条件: [子单例 V] {G : 简单图 V}
   结论: G.IsAcyclic
   证明: .of_card_le_two ENat.card_le_one.trans one_le_two
 
@@ -451,9 +451,9 @@ lemma Subgraph.isAcyclic_coe_bot
   proof: @IsAcyclic.of_subsingleton _ (Set.isEmpty_coe_sort.mpr rfl).instSubsingleton _
 
 中文:
-引理 Subgraph.isAcyclic_coe_bot
-  条件: (G : SimpleGraph V)
-  结论: (⊥ : G.Subgraph).coe.IsAcyclic
+引理 子图.isAcyclic_coe_bot
+  条件: (G : 简单图 V)
+  结论: (⊥ : G.子图).coe.IsAcyclic
   证明: @IsAcyclic.of_subsingleton _ (Set.isEmpty_coe_sort.mpr rfl).instSubsingleton _
 
 Depends on / 依赖: IsAcyclic, IsAcyclic.of_subsingleton, Set.isEmpty_coe_sort.mpr, instSubsingleton, isEmpty_coe_sort, of_subsingleton
@@ -471,9 +471,9 @@ lemma IsTree.of_subsingleton
   proof: ⟨.of_subsingleton, .of_subsingleton⟩
 
 中文:
-引理 IsTree.of_subsingleton
-  条件: [Nonempty V] [Subsingleton V] {G : SimpleGraph V}
-  结论: G.IsTree
+引理 是树.of_subsingleton
+  条件: [非空 V] [子单例 V] {G : 简单图 V}
+  结论: G.是树
   证明: ⟨.of_subsingleton, .of_subsingleton⟩
 
 Depends on / 依赖: of_subsingleton
@@ -491,8 +491,8 @@ theorem IsTree.coe_singletonSubgraph
   .of_subsingleton
 
 中文:
-定理 IsTree.coe_singletonSubgraph
-  条件: (G : SimpleGraph V) (v : V)
+定理 是树.coe_singletonSubgraph
+  条件: (G : 简单图 V) (v : V)
   证明: G.singletonSubgraph v
   .of_subsingleton
 
@@ -527,7 +527,7 @@ obtain ⟨e, he⟩ := c.edges.exists_mem_of_ne_nil by simp [hc.not_nil]
     exact (hG <| c.edges_subset_edgeSet he).notMem_edges_of_isCycle hc he
 
 中文:
-定理 isAcyclic_iff_forall_isBridge
+定理 isAcyclic_iff_对任意_isBridge
   结论: G.IsAcyclic ↔ 对任意 ⦃e⦄, e in G.edgeSet -> G.IsBridge e where
   证明: isBridge_iff_forall_cycle_notMem he
   mpr hG v c hc := by
@@ -554,7 +554,7 @@ lemma isAcyclic_iff_forall_adj_isBridge
 alias isAcyclic_iff_forall_edge_isBridge := isAcyclic_iff_forall_isBridge
 
 中文:
-引理 isAcyclic_iff_forall_adj_isBridge
+引理 isAcyclic_iff_对任意_adj_isBridge
   证明: by
   simp [isAcyclic_iff_forall_isBridge, Sym2.forall]
 
@@ -585,7 +585,7 @@ theorem isAcyclic_iff_subsingleton_path
 
 中文:
 定理 isAcyclic_iff_subsingleton_path
-  结论: G.IsAcyclic ↔ 对任意 u v, Subsingleton (G.Path u v)
+  结论: G.IsAcyclic ↔ 对任意 u v, 子单例 (G.道路 u v)
   证明: by
   refine ⟨fun h u v => ⟨fun p q => ?_⟩, fun h v c hc => ?_⟩
   · have := p.isPath.exists_isCycle_of_ne q.isPath
@@ -617,7 +617,7 @@ theorem IsAcyclic.path_unique
 
 中文:
 定理 IsAcyclic.path_unique
-  条件: {G : SimpleGraph V} (h : G.IsAcyclic) {v w : V} (p q : G.Path v w)
+  条件: {G : 简单图 V} (h : G.IsAcyclic) {v w : V} (p q : G.道路 v w)
   证明: .elim p q h.subsingleton_path v w
 
 @[deprecated isAcyclic_iff_subsingleton_path (since := "2026-06-30")]
@@ -642,7 +642,7 @@ theorem isAcyclic_of_path_unique
 
 中文:
 定理 isAcyclic_of_path_unique
-  条件: (h : 对任意 (v w : V) (p q : G.Path v w), p = q)
+  条件: (h : 对任意 (v w : V) (p q : G.道路 v w), p = q)
   结论: G.IsAcyclic
   证明: isAcyclic_iff_subsingleton_path.mpr (⟨h · ·⟩)
 
@@ -664,7 +664,7 @@ theorem isAcyclic_iff_path_unique
 
 中文:
 定理 isAcyclic_iff_path_unique
-  结论: G.IsAcyclic ↔ 对任意 ⦃v w : V⦄ (p q : G.Path v w), p = q
+  结论: G.IsAcyclic ↔ 对任意 ⦃v w : V⦄ (p q : G.道路 v w), p = q
   证明: isAcyclic_iff_subsingleton_path.trans forall₂_congr fun _ _ => subsingleton_iff
 
 Depends on / 依赖: isAcyclic_iff_subsingleton_path, isAcyclic_iff_subsingleton_path.trans, subsingleton_iff
@@ -685,7 +685,7 @@ theorem IsAcyclic.eq_snd_of_adj_start
 
 中文:
 定理 IsAcyclic.eq_snd_of_adj_start
-  结论: (h : G.IsAcyclic) {u v w : V} {p : G.Walk u v} (hp : p.IsPath)
+  结论: (h : G.IsAcyclic) {u v w : V} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   classical
 .elim ⟨_, hp.takeUntil hsupp⟩ .singleton hadj have := h.subsingleton_path u w
@@ -712,7 +712,7 @@ theorem IsAcyclic.eq_penultimate_of_adj_end
 
 中文:
 定理 IsAcyclic.eq_penultimate_of_adj_end
-  结论: (h : G.IsAcyclic) {u v w : V} {p : G.Walk u v}
+  结论: (h : G.IsAcyclic) {u v w : V} {p : G.途径 u v}
   证明: by
   rw [← snd_reverse]
   apply h.eq_snd_of_adj_start hp.reverse hadj
@@ -794,7 +794,7 @@ exact Subtype.mk.inj .elim ⟨q, hq⟩ ⟨_, hp.concat hw hadj⟩ hG.subsingleto
 
 中文:
 引理 IsAcyclic.path_concat
-  结论: (hG : G.IsAcyclic) {u v w : V} {p : G.Walk u v} {q : G.Walk u w}
+  结论: (hG : G.IsAcyclic) {u v w : V} {p : G.途径 u v} {q : G.途径 u w}
   证明: by
   have hw : w ∉ p.support := hG.ne_mem_support_of_support_of_adj_of_isPath hq hp hadj.symm hv
 exact Subtype.mk.inj .elim ⟨q, hq⟩ ⟨_, hp.concat hw hadj⟩ hG.subsingleton_path u w
@@ -827,7 +827,7 @@ theorem isTree_iff_existsUnique_path
     e
 
 中文:
-定理 isTree_iff_existsUnique_path
+定理 isTree_iff_存在Unique_path
   证明: by
   classical
   simp_rw [isTree_iff, isAcyclic_iff_subsingleton_path, subsingleton_iff]
@@ -876,9 +876,9 @@ lemma IsTree.existsUnique_path
   proof: (isTree_iff_existsUnique_path.1 hG).2
 
 中文:
-引理 IsTree.existsUnique_path
-  条件: (hG : G.IsTree)
-  结论: 对任意 v w, 存在! p : G.Walk v w, p.IsPath
+引理 是树.存在Unique_path
+  条件: (hG : G.是树)
+  结论: 对任意 v w, 存在! p : G.途径 v w, p.是道路
   证明: (isTree_iff_existsUnique_path.1 hG).2
 
 Depends on / 依赖: isTree_iff_existsUnique_path
@@ -904,7 +904,7 @@ theorem IsAcyclic.isPath_iff_isChain
 
 中文:
 定理 IsAcyclic.isPath_iff_isChain
-  条件: (hG : G.IsAcyclic) {v w : V} (p : G.Walk v w)
+  条件: (hG : G.IsAcyclic) {v w : V} (p : G.途径 v w)
   证明: by
   classical
   refine ⟨fun h => (edges_nodup_of_support_nodup <| p.isPath_def.mp h).isChain, fun h => ?_⟩
@@ -952,7 +952,7 @@ theorem IsAcyclic.isPath_iff_isTrail
 
 中文:
 定理 IsAcyclic.isPath_iff_isTrail
-  条件: (hG : G.IsAcyclic) {v w : V} (p : G.Walk v w)
+  条件: (hG : G.IsAcyclic) {v w : V} (p : G.途径 v w)
   证明: .mpr .isChain⟩ p.isTrail_def.mp h ⟨IsPath.isTrail, fun h => hG.isPath_iff_isChain p
 
 Depends on / 依赖: IsPath, IsPath.isTrail, hG.isPath_iff_isChain, isChain, isPath_iff_isChain, isTrail, isTrail_def, p.isTrail_def.mp
@@ -978,8 +978,8 @@ lemma IsTree.card_edgeFinset
   choose f hf hf' using (hG.existsUniqu
 
 中文:
-引理 IsTree.card_edgeFinset
-  条件: [Fintype V] [Fintype G.edgeSet] (hG : G.IsTree)
+引理 是树.card_edgeFinset
+  条件: [有限类型 V] [有限类型 G.edgeSet] (hG : G.是树)
   证明: by
   have := hG.connected.nonempty
   inhabit V
@@ -1054,8 +1054,8 @@ lemma isTree_of_minimal_connected
 
 中文:
 引理 isTree_of_minimal_connected
-  条件: (h : Minimal Connected G)
-  结论: IsTree G
+  条件: (h : 极小 连通 G)
+  结论: 是树 G
   证明: by
   rw [isTree_iff]; rw [and_iff_right h.prop]; rw [isAcyclic_iff_forall_adj_isBridge]
   exact fun _ _ _ => by_contra fun hbr => h.not_prop_of_lt
@@ -1086,7 +1086,7 @@ have := congrArg Walk.edges congrArg Subtype.val
 
 中文:
 引理 isTree_iff_minimal_connected
-  结论: IsTree G ↔ Minimal Connected G
+  结论: 是树 G ↔ 极小 连通 G
   证明: by
   refine ⟨fun htree => ⟨htree.connected, fun G' h' hle u v hadj => ?_⟩, isTree_of_minimal_connected⟩
   have ⟨p, hp⟩ := h'.exists_isPath u v
@@ -1213,7 +1213,7 @@ lemma reachable_eq_of_maximal_isAcyclic
 
 中文:
 引理 reachable_eq_of_maximal_isAcyclic
-  结论: (F : SimpleGraph V)
+  结论: (F : 简单图 V)
   证明: by
   ext u v
   refine ⟨.mono h.prop.left, fun ⟨p⟩ => ?_⟩
@@ -1255,7 +1255,7 @@ refine isAcyclic_iff_forall_isBr
 
 中文:
 定理 maximal_isAcyclic_iff_reachable_eq
-  条件: {F : SimpleGraph V} (hle : F <= G) (hF : F.IsAcyclic)
+  条件: {F : 简单图 V} (hle : F <= G) (hF : F.IsAcyclic)
   证明: by
   refine ⟨reachable_eq_of_maximal_isAcyclic F, fun h => ?_⟩
   by_contra
@@ -1295,8 +1295,8 @@ theorem Connected.maximal_le_isAcyclic_iff_isTree
       G.preconnecte
 
 中文:
-定理 Connected.maximal_le_isAcyclic_iff_isTree
-  结论: {T : SimpleGraph V} (hG : G.Connected)
+定理 连通.maximal_le_isAcyclic_iff_isTree
+  结论: {T : 简单图 V} (hG : G.连通)
   证明: by
   have := hG.nonempty
   refine ⟨fun h => ⟨⟨fun u v => ?_⟩, h.1.2⟩, fun hT' => ?_⟩
@@ -1328,7 +1328,7 @@ theorem maximal_isAcyclic_iff_isTree
 
 中文:
 定理 maximal_isAcyclic_iff_isTree
-  条件: [Nonempty V] {T : SimpleGraph V}
+  条件: [非空 V] {T : 简单图 V}
   证明: by
   simp [← connected_top.maximal_le_isAcyclic_iff_isTree le_top]
 
@@ -1351,7 +1351,7 @@ theorem isTree_iff_maximal_isAcyclic
 
 中文:
 定理 isTree_iff_maximal_isAcyclic
-  结论: G.IsTree ↔ Nonempty V ∧ Maximal IsAcyclic G
+  结论: G.是树 ↔ 非空 V ∧ 极大 IsAcyclic G
   证明: by
   refine ⟨fun h => ?_, fun ⟨_, h⟩ => G.maximal_isAcyclic_iff_isTree.mp h⟩
   have := h.nonempty
@@ -1375,8 +1375,8 @@ theorem exists_isAcyclic_reachable_eq_le_of_le_of_isAcyclic
   grind [maximal_isAcyclic_iff_reachable_eq, Maximal]
 
 中文:
-定理 exists_isAcyclic_reachable_eq_le_of_le_of_isAcyclic
-  结论: {H : SimpleGraph V} (hH_le : H <= G)
+定理 存在_isAcyclic_reachable_eq_le_of_le_of_isAcyclic
+  结论: {H : 简单图 V} (hH_le : H <= G)
   证明: by
   obtain ⟨F, hF⟩ := G.exists_maximal_isAcyclic_of_le_isAcyclic hH_le hH_isAcyclic
   grind [maximal_isAcyclic_iff_reachable_eq, Maximal]
@@ -1399,7 +1399,7 @@ theorem exists_isAcyclic_reachable_eq_le
   grind
 
 中文:
-定理 exists_isAcyclic_reachable_eq_le
+定理 存在_isAcyclic_reachable_eq_le
   证明: by
   obtain ⟨F, hF⟩ := G.exists_isAcyclic_reachable_eq_le_of_le_of_isAcyclic bot_le isAcyclic_bot
   grind
@@ -1422,8 +1422,8 @@ lemma Connected.exists_isTree_le_of_le_of_isAcyclic
   grind [IsTree, Connected, preconnected_iff_reachable_eq_top]
 
 中文:
-引理 Connected.exists_isTree_le_of_le_of_isAcyclic
-  结论: {H : SimpleGraph V} (h : G.Connected)
+引理 连通.存在_isTree_le_of_le_of_isAcyclic
+  结论: {H : 简单图 V} (h : G.连通)
   证明: by
   obtain ⟨F, hF⟩ := G.exists_isAcyclic_reachable_eq_le_of_le_of_isAcyclic hH_le hH_isAcyclic
   grind [IsTree, Connected, preconnected_iff_reachable_eq_top]
@@ -1448,9 +1448,9 @@ lemma Connected.exists_isTree_le
   grind [IsTree, Connected, preconnected_iff_reachable_eq_top]
 
 中文:
-引理 Connected.exists_isTree_le
-  条件: (h : G.Connected)
-  结论: 存在 T <= G, IsTree T
+引理 连通.存在_isTree_le
+  条件: (h : G.连通)
+  结论: 存在 T <= G, 是树 T
   证明: by
   obtain ⟨F, hF⟩ := G.exists_isAcyclic_reachable_eq_le_of_le_of_isAcyclic bot_le isAcyclic_bot
   grind [IsTree, Connected, preconnected_iff_reachable_eq_top]
@@ -1476,8 +1476,8 @@ lemma Connected.card_vert_le_card_edgeSet_add_one
 exact Finset.card_mono by si
 
 中文:
-引理 Connected.card_vert_le_card_edgeSet_add_one
-  条件: (h : G.Connected)
+引理 连通.card_vert_le_card_edgeSet_add_one
+  条件: (h : G.连通)
   证明: by
   obtain hV | hV := (finite_or_infinite V).symm
   · simp
@@ -1515,7 +1515,7 @@ lemma isTree_iff_connected_and_card
 
 中文:
 引理 isTree_iff_connected_and_card
-  条件: [Finite V]
+  条件: [有限 V]
   证明: by
   have := Fintype.ofFinite V
   classical
@@ -1556,8 +1556,8 @@ lemma IsTree.minDegree_eq_one_of_nontrivial
   
 
 中文:
-引理 IsTree.minDegree_eq_one_of_nontrivial
-  结论: (h : G.IsTree) [Fintype V] [Nontrivial V]
+引理 是树.minDegree_eq_one_of_nontrivial
+  结论: (h : G.是树) [有限类型 V] [非平凡 V]
   证明: by
   by_cases q : 2 <= G.minDegree
   · have := h.card_edgeFinset
@@ -1593,8 +1593,8 @@ lemma IsTree.exists_vert_degree_one_of_nontrivial
   grind [G.exists_minimal_degree_vertex, minDegree_eq_one_of_nontrivial]
 
 中文:
-引理 IsTree.exists_vert_degree_one_of_nontrivial
-  结论: [Fintype V] [Nontrivial V] [DecidableRel G.Adj]
+引理 是树.存在_vert_degree_one_of_nontrivial
+  结论: [有限类型 V] [非平凡 V] [DecidableRel G.伴随]
   证明: by
   grind [G.exists_minimal_degree_vertex, minDegree_eq_one_of_nontrivial]
 
@@ -1619,8 +1619,8 @@ theorem IsTree.exists_ne_and_degree_eq_one
     rw [degree_eq_one_iff_existsUnique_
 
 中文:
-定理 IsTree.exists_ne_and_degree_eq_one
-  结论: [Nontrivial V] [Finite G.edgeSet] [G.LocallyFinite]
+定理 是树.存在_ne_and_degree_eq_one
+  结论: [非平凡 V] [有限 G.edgeSet] [G.局部有限]
   证明: by
   have ⟨u, v, p, hp, hmax⟩ := exists_isPath_forall_isPath_length_le_length G
   have ⟨u', v', hne⟩ := exists_pair_ne V
@@ -1663,8 +1663,8 @@ lemma Connected.induce_compl_singleton_of_degree_eq_one
   obtain ⟨pwu, hpwu⟩ := hconn.exists_is
 
 中文:
-引理 Connected.induce_compl_singleton_of_degree_eq_one
-  结论: (hconn : G.Connected) {v : V}
+引理 连通.induce_compl_singleton_of_degree_eq_one
+  结论: (hconn : G.连通) {v : V}
   证明: by
   obtain ⟨u, adj_vu, hu⟩ := degree_eq_one_iff_existsUnique_adj.mp hdeg
   refine (connected_iff _).mpr ⟨?_, u, by aesop⟩
@@ -1718,7 +1718,7 @@ lemma Connected.exists_connected_induce_compl_singleton_of_finite_nontrivial
   exact ⟨v, (hT.induce_compl_singleton_of_degree_eq_one hv).mono (by tauto)⟩
 
 中文:
-引理 Connected.exists_connected_induce_compl_singleton_of_finite_nontrivial
+引理 连通.存在_connected_induce_compl_singleton_of_finite_nontrivial
   证明: by
   obtain ⟨T, _, T_isTree⟩ := hconn.exists_isTree_le
   have ⟨hT, _⟩ := T_isTree
@@ -1750,8 +1750,8 @@ lemma Connected.exists_preconnected_induce_compl_singleton_of_finite
   exact ⟨v, hv.preconnected⟩
 
 中文:
-引理 Connected.exists_preconnected_induce_compl_singleton_of_finite
-  结论: [Finite V]
+引理 连通.存在_preconnected_induce_compl_singleton_of_finite
+  结论: [有限 V]
   证明: by
   nontriviality V using hconn.nonempty
   obtain ⟨v, hv⟩ := hconn.exists_connected_induce_compl_singleton_of_finite_nontrivial
@@ -1782,7 +1782,7 @@ lemma IsAcyclic.dist_ne_of_adj
 
 中文:
 引理 IsAcyclic.dist_ne_of_adj
-  结论: (hG : G.IsAcyclic) {u v w : V} (hadj : G.Adj v w)
+  结论: (hG : G.IsAcyclic) {u v w : V} (hadj : G.伴随 v w)
   证明: by
   obtain ⟨p, hp, hp'⟩ := hreach.exists_path_of_dist
 .exists_path_of_dist obtain ⟨q, hq, hq'⟩ := hreach.trans hadj.reachable
@@ -1816,8 +1816,8 @@ lemma IsTree.dist_ne_of_adj
   proof: hG.isAcyclic.dist_ne_of_adj hadj hG.connected u v
 
 中文:
-引理 IsTree.dist_ne_of_adj
-  条件: (hG : G.IsTree) (u : V) {v w : V} (hadj : G.Adj v w)
+引理 是树.dist_ne_of_adj
+  条件: (hG : G.是树) (u : V) {v w : V} (hadj : G.伴随 v w)
   证明: hG.isAcyclic.dist_ne_of_adj hadj hG.connected u v
 
 Depends on / 依赖: connected, dist_ne_of_adj, hG.connected, hG.isAcyclic.dist_ne_of_adj, isAcyclic
@@ -1856,8 +1856,8 @@ lemma IsTree.dist_eq_dist_add_one_of_adj
   grind [dist_ne_of_adj, Adj.diff_dist_adj]
 
 中文:
-引理 IsTree.dist_eq_dist_add_one_of_adj
-  条件: (hG : G.IsTree) (u : V) {v w : V} (hadj : G.Adj v w)
+引理 是树.dist_eq_dist_add_one_of_adj
+  条件: (hG : G.是树) (u : V) {v w : V} (hadj : G.伴随 v w)
   证明: by
   grind [dist_ne_of_adj, Adj.diff_dist_adj]
 
@@ -1877,8 +1877,8 @@ definition IsTree.coloringTwoOfVert
     grind [dist_eq_dist_add_one_of_adj]
 
 中文:
-定义 IsTree.coloringTwoOfVert
-  签名: (hG : G.IsTree) (u : V)
+定义 是树.coloringTwoOfVert
+  签名: (hG : G.是树) (u : V)
   定义体: Coloring.mk (fun v => ⟨G.dist u v % 2, Nat.mod_lt (G.dist u v) Nat.zero_lt_two⟩) by
     grind [dist_eq_dist_add_one_of_adj]
 
@@ -1897,8 +1897,8 @@ definition IsTree.coloringTwo
   body: hG.coloringTwoOfVert hG.connected.nonempty.some
 
 中文:
-定义 IsTree.coloringTwo
-  签名: (hG : G.IsTree)
+定义 是树.coloringTwo
+  签名: (hG : G.是树)
   定义体: hG.coloringTwoOfVert hG.connected.nonempty.some
 
 Depends on / 依赖: DistribMulAction, DistribMulAction.compHom, coloringTwoOfVert, compHom, connected, fast_instance, hG.coloringTwoOfVert, hG.connected.nonempty.some, nonempty, ofNNRealHom, ofNNRealHom.toMonoidHom, toMonoidHom
@@ -1916,8 +1916,8 @@ lemma IsTree.isBipartite
   proof: ⟨hG.coloringTwo⟩
 
 中文:
-引理 IsTree.isBipartite
-  条件: (hG : G.IsTree)
+引理 是树.isBipartite
+  条件: (hG : G.是树)
   结论: G.IsBipartite
   证明: ⟨hG.coloringTwo⟩
 
@@ -2032,8 +2032,8 @@ lemma IsTree.colorable_two
   proof: hG.isAcyclic.colorable_two
 
 中文:
-引理 IsTree.colorable_two
-  条件: (hG : G.IsTree)
+引理 是树.colorable_two
+  条件: (hG : G.是树)
   结论: G.Colorable 2
   证明: hG.isAcyclic.colorable_two
 
@@ -2072,8 +2072,8 @@ lemma IsTree.chromaticNumber_le_two
   proof: hG.colorable_two.chromaticNumber_le
 
 中文:
-引理 IsTree.chromaticNumber_le_two
-  条件: (hG : G.IsTree)
+引理 是树.chromaticNumber_le_two
+  条件: (hG : G.是树)
   结论: G.chromaticNumber <= 2
   证明: hG.colorable_two.chromaticNumber_le
 
@@ -2096,7 +2096,7 @@ lemma exists_isCycle_of_two_le_isEdgeReachable
   exact ⟨p.rotate _ (p.fst_mem_support_of_mem_edges hp₂), hp₁.rotate _⟩
 
 中文:
-引理 exists_isCycle_of_two_le_isEdgeReachable
+引理 存在_isCycle_of_two_le_isEdgeReachable
   结论: {u v : V} (huv : u != v) {n : 自然数} (hn : 2 <= n)
   证明: by
   classical
@@ -2163,7 +2163,7 @@ theorem isAcyclic_iff_free_cycleGraph
 
 中文:
 定理 isAcyclic_iff_free_cycleGraph
-  结论: G.IsAcyclic ↔ 对任意 n >= 3, (cycleGraph n).Free G
+  结论: G.IsAcyclic ↔ 对任意 n >= 3, (cycleGraph n).自由 G
   证明: by
   refine ⟨fun h n hn hle => ?_, fun h v p hcyc => h p.length hcyc.three_le_length ?_⟩
 .mp hle · have ⟨v, p, hcyc, hlen⟩ := cycleGraph_isContained_iff hn

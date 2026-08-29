@@ -32,7 +32,7 @@ theorem ite_eq_lt_distrib
 
 中文:
 定理 ite_eq_lt_distrib
-  条件: (c : 命题) [Decidable c] (a b : Ordering)
+  条件: (c : 命题) [可判定 c] (a b : Ordering)
   证明: by
   by_cases c <;> simp [*]
 
@@ -56,7 +56,7 @@ theorem ite_eq_eq_distrib
 
 中文:
 定理 ite_eq_eq_distrib
-  条件: (c : 命题) [Decidable c] (a b : Ordering)
+  条件: (c : 命题) [可判定 c] (a b : Ordering)
   证明: by
   by_cases c <;> simp [*]
 
@@ -80,7 +80,7 @@ theorem ite_eq_gt_distrib
 
 中文:
 定理 ite_eq_gt_distrib
-  条件: (c : 命题) [Decidable c] (a b : Ordering)
+  条件: (c : 命题) [可判定 c] (a b : Ordering)
   证明: by
   by_cases c <;> simp [*]
 
@@ -163,7 +163,7 @@ theorem cmpUsing_eq_gt
 
 中文:
 定理 cmpUsing_eq_gt
-  条件: [IsStrictOrder α lt] (a b : α)
+  条件: [是Strict序 α lt] (a b : α)
   结论: cmpUsing lt a b = Ordering.gt ↔ lt b a
   证明: by
   simp only [cmpUsing, Ordering.ite_eq_gt_distrib, if_false_right, and_true, if_false_left,

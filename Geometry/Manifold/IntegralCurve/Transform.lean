@@ -53,7 +53,7 @@ lemma IsMIntegralCurveOn.comp_add
   exact (hasFDerivWithinAt_id _
 
 中文:
-引理 IsMIntegralCurveOn.comp_add
+引理 IsM整数egralCurveOn.comp_add
   条件: (hγ : IsM整数egralCurveOn γ v s) (dt : 实数)
   证明: by
   intro t ht
@@ -88,7 +88,7 @@ lemma isMIntegralCurveOn_comp_add
   · simp
 
 中文:
-引理 isMIntegralCurveOn_comp_add
+引理 isM整数egralCurveOn_comp_add
   条件: {dt : 实数}
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_add _⟩
@@ -117,7 +117,7 @@ lemma isMIntegralCurveOn_comp_sub
   simpa using! isMIntegralCurveOn_comp_add (dt := -dt)
 
 中文:
-引理 isMIntegralCurveOn_comp_sub
+引理 isM整数egralCurveOn_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isMIntegralCurveOn_comp_add (dt := -dt)
@@ -143,7 +143,7 @@ lemma IsMIntegralCurveAt.comp_add
   simp_rw [Metric.mem_ball, Real.dist_eq, ← sub_add, add_sub_right_comm]
 
 中文:
-引理 IsMIntegralCurveAt.comp_add
+引理 IsM整数egralCurveAt.comp_add
   条件: (hγ : IsM整数egralCurveAt γ v t₀) (dt : 实数)
   证明: by
   rw [isMIntegralCurveAt_iff'] at *
@@ -178,7 +178,7 @@ lemma isMIntegralCurveAt_comp_add
   · simp only [sub_neg_eq_add, sub_add_cancel]
 
 中文:
-引理 isMIntegralCurveAt_comp_add
+引理 isM整数egralCurveAt_comp_add
   条件: {dt : 实数}
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_add _⟩
@@ -207,7 +207,7 @@ lemma isMIntegralCurveAt_comp_sub
   simpa using! isMIntegralCurveAt_comp_add (dt := -dt)
 
 中文:
-引理 isMIntegralCurveAt_comp_sub
+引理 isM整数egralCurveAt_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isMIntegralCurveAt_comp_add (dt := -dt)
@@ -229,7 +229,7 @@ lemma IsMIntegralCurve.comp_add
   simpa using hγ.comp_add dt
 
 中文:
-引理 IsMIntegralCurve.comp_add
+引理 IsM整数egralCurve.comp_add
   条件: (hγ : IsM整数egralCurve γ v) (dt : 实数)
   证明: by
   rw [isMIntegralCurve_iff_isMIntegralCurveOn] at *
@@ -255,7 +255,7 @@ lemma isMIntegralCurve_comp_add
   simp only [Function.comp_apply, neg_add_cancel_right]
 
 中文:
-引理 isMIntegralCurve_comp_add
+引理 isM整数egralCurve_comp_add
   条件: {dt : 实数}
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_add _⟩
@@ -282,7 +282,7 @@ lemma isMIntegralCurve_comp_sub
   simpa using! isMIntegralCurve_comp_add (dt := -dt)
 
 中文:
-引理 isMIntegralCurve_comp_sub
+引理 isM整数egralCurve_comp_sub
   条件: {dt : 实数}
   证明: by
   simpa using! isMIntegralCurve_comp_add (dt := -dt)
@@ -316,7 +316,7 @@ lemma IsMIntegralCurveOn.comp_mul
   refi
 
 中文:
-引理 IsMIntegralCurveOn.comp_mul
+引理 IsM整数egralCurveOn.comp_mul
   条件: (hγ : IsM整数egralCurveOn γ v s) (a : 实数)
   证明: by
   intro t ht
@@ -355,7 +355,7 @@ lemma isMIntegralCurveOn_comp_mul_ne_zero
   · simp only [mem_ofPred_eq, mul_assoc, inv_mul_eq_div, div_
 
 中文:
-引理 isMIntegralCurveOn_comp_mul_ne_zero
+引理 isM整数egralCurveOn_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_mul a⟩
@@ -391,7 +391,7 @@ lemma IsMIntegralCurveAt.comp_mul_ne_zero
   rw [mem_ofPred_eq]; rw [Metric.mem_ball]; rw [Metric.mem_ball]; rw [Real.dist_eq]; rw [Real.dist_eq]; rw [lt_div_iff₀ (abs_pos.mpr ha)]; rw [← abs_mul]; rw [sub_mu
 
 中文:
-引理 IsMIntegralCurveAt.comp_mul_ne_zero
+引理 IsM整数egralCurveAt.comp_mul_ne_zero
   条件: (hγ : IsM整数egralCurveAt γ v t₀) {a : 实数} (ha : a != 0)
   证明: by
   rw [isMIntegralCurveAt_iff'] at *
@@ -427,7 +427,7 @@ lemma isMIntegralCurveAt_comp_mul_ne_zero
   · simp only [div_inv_eq_mul, 
 
 中文:
-引理 isMIntegralCurveAt_comp_mul_ne_zero
+引理 isM整数egralCurveAt_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_mul_ne_zero ha⟩
@@ -459,7 +459,7 @@ lemma IsMIntegralCurve.comp_mul
   exact hγ.comp_mul _
 
 中文:
-引理 IsMIntegralCurve.comp_mul
+引理 IsM整数egralCurve.comp_mul
   条件: (hγ : IsM整数egralCurve γ v) (a : 实数)
   证明: by
   rw [isMIntegralCurve_iff_isMIntegralCurveOn] at *
@@ -486,7 +486,7 @@ lemma isMIntegralCurve_comp_mul_ne_zero
   · simp only [smul_smul, inv_mul_eq_div, div_self ha, one_smul]
 
 中文:
-引理 isMIntegralCurve_comp_mul_ne_zero
+引理 isM整数egralCurve_comp_mul_ne_zero
   条件: {a : 实数} (ha : a != 0)
   证明: by
   refine ⟨fun hγ => ?_, fun hγ => hγ.comp_mul _⟩
@@ -519,7 +519,7 @@ lemma isMIntegralCurve_const
   exact hasMFDerivAt_const ..
 
 中文:
-引理 isMIntegralCurve_const
+引理 isM整数egralCurve_const
   条件: {x : M} (h : v x = 0)
   结论: IsM整数egralCurve (fun _ => x) v
   证明: by

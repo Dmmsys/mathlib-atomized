@@ -45,7 +45,7 @@ definition stupidTrunc
 
 中文:
 定义 stupidTrunc
-  签名: : HomologicalComplex C c'
+  签名: : 同调复形 C c'
   定义体: ((K.restriction e).extend e)
 
 Depends on / 依赖: K.restriction, extend, restriction
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictlySupported (K.stupidTrunc e) e
+  签名: 是StrictlySupported (K.stupidTrunc e) e
   定义体: by
   dsimp [stupidTrunc]
   infer_instance
@@ -276,7 +276,7 @@ definition stupidTruncFunctor
 
 中文:
 定义 stupidTruncFunctor
-  签名: [e.IsRelIff]
+  签名: [e.是RelIff]
   定义体: K.stupidTrunc e
   map φ := HomologicalComplex.stupidTruncMap φ e
 

@@ -46,9 +46,9 @@ lemma NormedField.v_eq_valuation
   proof: rfl
 
 中文:
-引理 NormedField.v_eq_valuation
+引理 赋范域.v_eq_valuation
   条件: (x : K)
-  结论: Valued.v x = NormedField.valuation x
+  结论: 赋值.v x = 赋范域.valuation x
   证明: rfl
 -/
 lemma NormedField.v_eq_valuation (x : K) : Valued.v x = NormedField.valuation x := rfl
@@ -162,7 +162,7 @@ lemma isUnit_iff_norm_eq_one
 中文:
 引理 isUnit_iff_norm_eq_one
   条件: {u : 𝒪[K]}
-  结论: IsUnit u ↔ ‖u‖ = 1
+  结论: 是单位 u ↔ ‖u‖ = 1
   证明: by
   simpa [← NNReal.coe_inj] using!
     (Valuation.integer.integers (NormedField.valuation (K := K))).isUnit_iff_valuation_eq_one
@@ -184,7 +184,7 @@ lemma norm_irreducible_lt_one
 
 中文:
 引理 norm_irreducible_lt_one
-  条件: {ϖ : 𝒪[K]} (h : Irreducible ϖ)
+  条件: {ϖ : 𝒪[K]} (h : 不可约 ϖ)
   结论: ‖ϖ‖ < 1
   证明: Valuation.integer.v_irreducible_lt_one h
 
@@ -204,7 +204,7 @@ lemma norm_irreducible_pos
 
 中文:
 引理 norm_irreducible_pos
-  条件: {ϖ : 𝒪[K]} (h : Irreducible ϖ)
+  条件: {ϖ : 𝒪[K]} (h : 不可约 ϖ)
   结论: 0 < ‖ϖ‖
   证明: Valuation.integer.v_irreducible_pos h
 
@@ -247,8 +247,8 @@ lemma _root_.Irreducible.maximalIdeal_eq_closedBall
   simp [h.maximalIdeal_eq_setOfPred_le_v_coe, Set.ext_iff, ← NNReal.coe_le_coe]
 
 中文:
-引理 _root_.Irreducible.maximalIdeal_eq_closedBall
-  结论: [IsDiscreteValuationRing 𝒪[K]]
+引理 _root_.不可约.maximalIdeal_eq_closedBall
+  结论: [是离散赋值环 𝒪[K]]
   证明: by
   simp [h.maximalIdeal_eq_setOfPred_le_v_coe, Set.ext_iff, ← NNReal.coe_le_coe]
 
@@ -269,8 +269,8 @@ lemma _root_.Irreducible.maximalIdeal_pow_eq_closedBall_pow
   simp [h.maximalIdeal_pow_eq_setOfPred_le_v_coe_pow, Set.ext_iff, ← NNReal.coe_le_coe]
 
 中文:
-引理 _root_.Irreducible.maximalIdeal_pow_eq_closedBall_pow
-  结论: [IsDiscreteValuationRing 𝒪[K]]
+引理 _root_.不可约.maximalIdeal_pow_eq_closedBall_pow
+  结论: [是离散赋值环 𝒪[K]]
   证明: by
   simp [h.maximalIdeal_pow_eq_setOfPred_le_v_coe_pow, Set.ext_iff, ← NNReal.coe_le_coe]
 
@@ -294,7 +294,7 @@ lemma exists_norm_coe_lt_one
   simpa [hx', Subtype.ext_iff] using hx
 
 中文:
-引理 exists_norm_coe_lt_one
+引理 存在_norm_coe_lt_one
   结论: 存在 x : 𝒪[K], 0 < ‖(x : K)‖ ∧ ‖(x : K)‖ < 1
   证明: by
   obtain ⟨x, hx, hx'⟩ := NormedField.exists_norm_lt_one K
@@ -318,7 +318,7 @@ lemma exists_norm_lt_one
   proof: exists_norm_coe_lt_one K
 
 中文:
-引理 exists_norm_lt_one
+引理 存在_norm_lt_one
   结论: 存在 x : 𝒪[K], 0 < ‖x‖ ∧ ‖x‖ < 1
   证明: exists_norm_coe_lt_one K
 
@@ -337,7 +337,7 @@ lemma exists_nnnorm_lt_one
   proof: exists_norm_coe_lt_one K
 
 中文:
-引理 exists_nnnorm_lt_one
+引理 存在_nnnorm_lt_one
   结论: 存在 x : 𝒪[K], 0 < ‖x‖₊ ∧ ‖x‖₊ < 1
   证明: exists_norm_coe_lt_one K
 
@@ -376,7 +376,7 @@ lemma finite_quotient_maximalIdeal_pow_of_finite_residueField
 
 中文:
 引理 finite_quotient_maximalIdeal_pow_of_finite_residueField
-  结论: [IsDiscreteValuationRing 𝒪[K]]
+  结论: [是离散赋值环 𝒪[K]]
   证明: by
   induction n with
   | zero =>
@@ -426,7 +426,7 @@ lemma totallyBounded_iff_finite_residueField
 
 中文:
 引理 totallyBounded_iff_finite_residueField
-  结论: [(Valued.v : Valuation K Γ₀).RankOne]
+  结论: [(赋值.v : 赋值 K Γ₀).秩一]
   证明: by
   constructor
   · intro H
@@ -505,7 +505,7 @@ lemma locallyFiniteOrder_units_mrange_of_isCompact_integer
 
 中文:
 引理 locallyFiniteOrder_units_mrange_of_isCompact_integer
-  条件: (hc : IsCompact (X := K) 𝒪[K])
+  条件: (hc : 是紧集 (X := K) 𝒪[K])
   证明: by
   -- This `change` line will become unnecessary once `MonoidHom.mrange` accepts `MonoidHom`
   -- directly instead of a `MonoidHomClass` instance.
@@ -628,7 +628,7 @@ lemma mulArchimedean_mrange_of_isCompact_integer
 
 中文:
 引理 mulArchimedean_mrange_of_isCompact_integer
-  条件: (hc : IsCompact (X := K) 𝒪[K])
+  条件: (hc : 是紧集 (X := K) 𝒪[K])
   证明: by
   rw [← Units.mulArchimedean_iff]
   obtain ⟨_⟩ := locallyFiniteOrder_units_mrange_of_isCompact_integer hc
@@ -655,7 +655,7 @@ lemma isPrincipalIdealRing_of_compactSpace
 
 中文:
 引理 isPrincipalIdealRing_of_compactSpace
-  条件: [hc : CompactSpace 𝒪[K]]
+  条件: [hc : 紧空间 𝒪[K]]
   证明: by
   -- The strategy to show that we have a PIR is by contradiction,
   -- assuming that the range of the valuation is densely ordered.
@@ -694,8 +694,8 @@ theorem _root_.Valuation.isNontrivial_iff_not_a_field
 
 
 中文:
-定理 _root_.Valuation.isNontrivial_iff_not_a_field
-  结论: {K Γ : 类型} [Field K]
+定理 _root_.赋值.isNontrivial_iff_not_a_field
+  结论: {K Γ : 类型} [域 K]
   证明: by
   simp_rw [ne_eq, eq_bot_iff, v.isNontrivial_iff_exists_lt_one, SetLike.le_def, Ideal.mem_bot,
     not_forall, exists_prop, IsLocalRing.notMem_maximalIdeal.not_right,
@@ -725,7 +725,7 @@ lemma isDiscreteValuationRing_of_compactSpace
 
 中文:
 引理 isDiscreteValuationRing_of_compactSpace
-  结论: [hn : (Valued.v : Valuation K Γ₀).IsNontrivial]
+  结论: [hn : (赋值.v : 赋值 K Γ₀).是非平凡]
   证明: isPrincipalIdealRing_of_compactSpace
   not_a_field' := v.isNontrivial_iff_not_a_field.mp hn
 
@@ -788,7 +788,7 @@ lemma properSpace_iff_compactSpace_integer
 
 中文:
 引理 properSpace_iff_compactSpace_integer
-  条件: [(Valued.v : Valuation K Γ₀).RankOne]
+  条件: [(赋值.v : 赋值 K Γ₀).秩一]
   证明: by
   simp only [← isCompact_univ_iff, Subtype.isCompact_iff, Set.image_univ, Subtype.range_coe_subtype,
              toNormedField.setOfPred_mem_integer_eq_closedBall]

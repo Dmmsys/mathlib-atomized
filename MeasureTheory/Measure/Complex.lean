@@ -53,8 +53,8 @@ abbreviation ComplexMeasure
   body: VectorMeasure α Complex
 
 中文:
-缩写 ComplexMeasure
-  签名: (α : 类型) [MeasurableSpace α]
+缩写 复测度
+  签名: (α : 类型) [可测空间 α]
   定义体: VectorMeasure α Complex
 
 Depends on / 依赖: VectorMeasure
@@ -76,7 +76,7 @@ definition re
 
 中文:
 定义 re
-  签名: : ComplexMeasure α ->ₗ[实数] SignedMeasure α
+  签名: : 复测度 α ->ₗ[实数] 符号测度 α
   定义体: mapRangeₗ Complex.reCLM Complex.continuous_re
 
 Depends on / 依赖: Complex.continuous_re, Complex.reCLM, continuous_re
@@ -96,7 +96,7 @@ definition im
 
 中文:
 定义 im
-  签名: : ComplexMeasure α ->ₗ[实数] SignedMeasure α
+  签名: : 复测度 α ->ₗ[实数] 符号测度 α
   定义体: mapRangeₗ Complex.imCLM Complex.continuous_im
 
 Depends on / 依赖: Complex.continuous_im, Complex.imCLM, continuous_im
@@ -118,8 +118,8 @@ definition _root_.MeasureTheory.SignedMeasure.toComplexMeasure
   m_iUnion' _ hf hfdisj := (Complex.hasSum_iff _ _).2 ⟨s.m_iUnion hf hfdisj, t.m_iUnion hf hfdisj⟩
 
 中文:
-定义 _root_.MeasureTheory.SignedMeasure.toComplexMeasure
-  签名: (s t : SignedMeasure α)
+定义 _root_.测度论.符号测度.toComplexMeasure
+  签名: (s t : 符号测度 α)
   定义体: ⟨s i, t i⟩
   empty' := by rw [s.empty, t.empty]; rfl
   not_measurable' i hi := by rw [s.not_measurable hi, t.not_measurable hi]; rfl
@@ -140,7 +140,7 @@ theorem _root_.MeasureTheory.SignedMeasure.toComplexMeasure_apply
   proof: rfl
 
 中文:
-定理 _root_.MeasureTheory.SignedMeasure.toComplexMeasure_apply
+定理 _root_.测度论.符号测度.toComplexMeasure_apply
   证明: rfl
 -/
 theorem _root_.MeasureTheory.SignedMeasure.toComplexMeasure_apply
@@ -156,7 +156,7 @@ theorem toComplexMeasure_to_signedMeasure
 
 中文:
 定理 toComplexMeasure_to_signedMeasure
-  条件: (c : ComplexMeasure α)
+  条件: (c : 复测度 α)
   证明: rfl
 -/
 theorem toComplexMeasure_to_signedMeasure (c : ComplexMeasure α) :
@@ -171,8 +171,8 @@ theorem _root_.MeasureTheory.SignedMeasure.re_toComplexMeasure
   proof: rfl
 
 中文:
-定理 _root_.MeasureTheory.SignedMeasure.re_toComplexMeasure
-  条件: (s t : SignedMeasure α)
+定理 _root_.测度论.符号测度.re_toComplexMeasure
+  条件: (s t : 符号测度 α)
   证明: rfl
 -/
 theorem _root_.MeasureTheory.SignedMeasure.re_toComplexMeasure (s t : SignedMeasure α) :
@@ -187,8 +187,8 @@ theorem _root_.MeasureTheory.SignedMeasure.im_toComplexMeasure
   proof: rfl
 
 中文:
-定理 _root_.MeasureTheory.SignedMeasure.im_toComplexMeasure
-  条件: (s t : SignedMeasure α)
+定理 _root_.测度论.符号测度.im_toComplexMeasure
+  条件: (s t : 符号测度 α)
   证明: rfl
 -/
 theorem _root_.MeasureTheory.SignedMeasure.im_toComplexMeasure (s t : SignedMeasure α) :
@@ -209,7 +209,7 @@ definition equivSignedMeasure
 
 中文:
 定义 equivSignedMeasure
-  签名: : ComplexMeasure α ≃ SignedMeasure α × SignedMeasure α where
+  签名: : 复测度 α ≃ 符号测度 α × 符号测度 α where
   定义体: ⟨ComplexMeasure.re c, ComplexMeasure.im c⟩
   invFun := fun ⟨s, t⟩ => s.toComplexMeasure t
   left_inv c := c.toComplexMeasure_to_signedMeasure
@@ -248,7 +248,7 @@ definition equivSignedMeasureₗ
 
 中文:
 定义 equivSignedMeasureₗ
-  签名: : ComplexMeasure α ≃ₗ[R] SignedMeasure α × SignedMeasure α
+  签名: : 复测度 α ≃ₗ[R] 符号测度 α × 符号测度 α
   定义体: { equivSignedMeasure with
     map_add' := fun c d => by rfl
     map_smul' := by
@@ -288,7 +288,7 @@ theorem absolutelyContinuous_ennreal_iff
 
 中文:
 定理 absolutelyContinuous_ennreal_iff
-  条件: (c : ComplexMeasure α) (μ : VectorMeasure α 实数>=0∞)
+  条件: (c : 复测度 α) (μ : 向量测度 α 实数>=0∞)
   证明: by
   constructor <;> intro h
   · constructor <;> · intro i hi; simp [h hi]

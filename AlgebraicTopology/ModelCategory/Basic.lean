@@ -65,22 +65,22 @@ class ModelCategory
     - cm5b : MorphismProperty.HasFactorization (cofibrations C) (trivialFibrations C)  [default: by infer_instance]
 
 中文:
-类 ModelCategory
+类 模型范畴
   参数: where
   公理与运算 (13 个):
-    - categoryWithFibrations : CategoryWithFibrations C  [默认: by infer_instance]
-    - categoryWithCofibrations : CategoryWithCofibrations C  [默认: by infer_instance]
-    - categoryWithWeakEquivalences : CategoryWithWeakEquivalences C  [默认: by infer_instance]
-    - cm1a : HasFiniteLimits C  [默认: by infer_instance]
-    - cm1b : HasFiniteColimits C  [默认: by infer_instance]
-    - cm2 : (weakEquivalences C).HasTwoOutOfThree命题erty  [默认: by infer_instance]
-    - cm3a : (weakEquivalences C).IsStableUnderRetracts  [默认: by infer_instance]
-    - cm3b : (fibrations C).IsStableUnderRetracts  [默认: by infer_instance]
-    - cm3c : (cofibrations C).IsStableUnderRetracts  [默认: by infer_instance]
-    - cm4a({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [Cofibration i] [WeakEquivalence i] [Fibration p]) : HasLifting命题erty i p  [默认: by intros; infer_instance]
-    - cm4b({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [Cofibration i] [Fibration p] [WeakEquivalence p]) : HasLifting命题erty i p  [默认: by intros; infer_instance]
-    - cm5a : Morphism命题erty.HasFactorization (trivialCofibrations C) (fibrations C)  [默认: by infer_instance]
-    - cm5b : Morphism命题erty.HasFactorization (cofibrations C) (trivialFibrations C)  [默认: by infer_instance]
+    - categoryWithFibrations : 带纤维化范畴 C  [默认: by infer_instance]
+    - categoryWithCofibrations : 带余纤维化范畴 C  [默认: by infer_instance]
+    - categoryWithWeakEquivalences : 带弱等价范畴 C  [默认: by infer_instance]
+    - cm1a : 有有限极限 C  [默认: by infer_instance]
+    - cm1b : 有有限余极限 C  [默认: by infer_instance]
+    - cm2 : (weakEquivalences C).有TwoOutOfThreeProperty  [默认: by infer_instance]
+    - cm3a : (weakEquivalences C).是StableUnderRetracts  [默认: by infer_instance]
+    - cm3b : (fibrations C).是StableUnderRetracts  [默认: by infer_instance]
+    - cm3c : (cofibrations C).是StableUnderRetracts  [默认: by infer_instance]
+    - cm4a({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [余纤维化 i] [弱等价 i] [纤维化 p]) : 有LiftingProperty i p  [默认: by intros; infer_instance]
+    - cm4b({A B X Y : C} (i : A ⟶ B) (p : X ⟶ Y) [余纤维化 i] [纤维化 p] [弱等价 p]) : 有LiftingProperty i p  [默认: by intros; infer_instance]
+    - cm5a : MorphismProperty.有分解 (trivialCofibrations C) (fibrations C)  [默认: by infer_instance]
+    - cm5b : MorphismProperty.有分解 (cofibrations C) (trivialFibrations C)  [默认: by infer_instance]
 
 Depends on / 依赖: CategoryWithCofibrations, CategoryWithWeakEquivalences, HasFiniteColimits, HasFiniteLimits, HasTwoOutOfThreeProperty, IsStableUnderRetracts, categoryWithCofibrations, categoryWithWeakEquivalences, cofibrations, fibrations, infer_instance, weakEquivalences
 -/
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsWeakFactorizationSystem (trivialCofibrations C) (fibrations C)
+  签名: MorphismProperty.是WeakFactorizationSystem (trivialCofibrations C) (fibrations C)
   定义体: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
 .mp hi obtain ⟨_, _⟩ := mem_trivialCofibrations_iff i
     rw [← fibration_iff] at hp
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsWeakFactorizationSystem (cofibrations C) (trivialFibrations C)
+  签名: MorphismProperty.是WeakFactorizationSystem (cofibrations C) (trivialFibrations C)
   定义体: MorphismProperty.IsWeakFactorizationSystem.mk' _ _ (fun {A B X Y} i p hi hp => by
     rw [mem_trivialFibrations_iff] at hp
     rw [← cofibration_iff] at hi
@@ -198,7 +198,7 @@ lemma mk'.cm3a_aux
 
 中文:
 引理 mk'.cm3a_aux
-  结论: [CategoryWithFibrations C] [CategoryWithCofibrations C]
+  结论: [带纤维化范畴 C] [带余纤维化范畴 C]
   证明: by
   have hw := factorizationData (trivialCofibrations C) (fibrations C) w
   have : (trivialFibrations C).IsStableUnderRetracts := by
@@ -249,7 +249,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: [CategoryWithFibrations C] [CategoryWithCofibrations C]
+  签名: [带纤维化范畴 C] [带余纤维化范畴 C]
   定义体: ⟨fun {A B X Y f w h hw} => by
     rw [← weakEquivalence_iff] at hw
     have hf := factorizationData (trivialCofibrations C) (fibrations C) f

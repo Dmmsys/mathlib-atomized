@@ -39,7 +39,7 @@ lemma integral_of_ae_eq_zero_or_one
 
 中文:
 引理 integral_of_ae_eq_zero_or_one
-  条件: (hXmeas : AEMeasurable X μ) (hX : 对任意ᵐ ω ∂μ, X ω = 0 ∨ X ω = 1)
+  条件: (hXmeas : 几乎处处可测 X μ) (hX : 对任意ᵐ ω ∂μ, X ω = 0 ∨ X ω = 1)
   证明: by
   refine (integral_map (f := id) hXmeas <| by fun_prop).symm.trans ?_
   rw [(Measure.ae_eq_or_eq_iff_map_eq_dirac_add_dirac hXmeas zero_ne_one).1 hX]
@@ -74,7 +74,7 @@ lemma integral_one_sub_of_ae_eq_zero_or_one
 
 中文:
 引理 integral_one_sub_of_ae_eq_zero_or_one
-  结论: (hXmeas : AEMeasurable X μ)
+  结论: (hXmeas : 几乎处处可测 X μ)
   证明: by
   calc
     _ = μ.real {ω | 1 - X ω = 1} :=
@@ -116,7 +116,7 @@ lemma condVar_of_ae_eq_zero_or_one
 
 中文:
 引理 condVar_of_ae_eq_zero_or_one
-  结论: {m₀ : MeasurableSpace Ω} (hm : m <= m₀) {μ : Measure[m₀] Ω}
+  结论: {m₀ : 可测空间 Ω} (hm : m <= m₀) {μ : 测度[m₀] Ω}
   证明: by
   wlog hXmeas : Measurable[m₀] X
   · obtain ⟨Y, hYmeas, hXY⟩ := ‹AEMeasurable[m₀] X μ›
@@ -177,7 +177,7 @@ lemma variance_of_ae_eq_zero_or_one
 
 中文:
 引理 variance_of_ae_eq_zero_or_one
-  结论: {μ : Measure Ω} [IsZeroOrProbabilityMeasure μ]
+  结论: {μ : 测度 Ω} [是ZeroOrProbabilityMeasure μ]
   证明: by
   obtain rfl | hμ := eq_zero_or_isProbabilityMeasure μ
   · simp

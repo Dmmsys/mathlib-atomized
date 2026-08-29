@@ -42,7 +42,7 @@ abbreviation Ring.ofMinimalAxioms
     have h₂ : (1 + 1 : R) * (a + b)
 
 中文:
-缩写 Ring.ofMinimalAxioms
+缩写 环.ofMinimalAxioms
   签名: {R : 类型u}
   定义体: letI := AddGroup.ofLeftAxioms add_assoc zero_add neg_add_cancel
   haveI add_comm : forall a b, a + b = b + a := by
@@ -108,7 +108,7 @@ abbreviation CommRing.ofMinimalAxioms
   letI := Ring.ofMinimalAxioms add_assoc zero_add neg
 
 中文:
-缩写 CommRing.ofMinimalAxioms
+缩写 交换环.ofMinimalAxioms
   签名: {R : 类型u}
   定义体: haveI mul_one : forall a : R, a * 1 = a := fun a => by
     rw [mul_comm]; rw [one_mul]

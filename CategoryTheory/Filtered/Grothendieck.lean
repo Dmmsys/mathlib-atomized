@@ -42,8 +42,8 @@ instance [IsFilteredOrEmpty
     refine ⟨⟨coe
 
 中文:
-实例 [IsFilteredOrEmpty
-  签名: C] [对任意 c, IsFilteredOrEmpty (F.obj c)] :
+实例 [是FilteredOrEmpty
+  签名: C] [对任意 c, 是FilteredOrEmpty (F.obj c)] :
   定义体: by
   refine ⟨?_, ?_⟩
   · rintro ⟨c, f⟩ ⟨d, g⟩
@@ -87,8 +87,8 @@ instance [IsFiltered
   apply IsFiltered.mk
 
 中文:
-实例 [IsFiltered
-  签名: C] [对任意 c, IsFiltered (F.obj c)] : IsFiltered (Grothendieck F)
+实例 [是Filtered
+  签名: C] [对任意 c, 是Filtered (F.obj c)] : 是Filtered (Grothendieck F)
   定义体: by
   have : Nonempty (Grothendieck F) := by
     obtain ⟨c⟩ : Nonempty C := IsFiltered.nonempty

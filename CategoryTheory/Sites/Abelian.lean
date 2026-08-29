@@ -48,7 +48,7 @@ instance sheafIsAbelian
 
 中文:
 实例 sheafIsAbelian
-  签名: : Abelian (Sheaf J D)
+  签名: : 交换 (层 J D)
   定义体: let adj := sheafificationAdjunction J D
   abelianOfAdjunction _ _ (asIso adj.counit) adj
 
@@ -70,7 +70,7 @@ instance presheafToSheaf_additive
 
 中文:
 实例 presheafToSheaf_additive
-  签名: : (presheafToSheaf J D).Additive
+  签名: : (presheafToSheaf J D).加性
   定义体: (presheafToSheaf J D).additive_of_preservesBinaryBiproducts
 
 Depends on / 依赖: additive_of_preservesBinaryBiproducts, presheafToSheaf
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Functor.const Cᵒᵖ : D ⥤ Cᵒᵖ ⥤ D).Additive
+  签名: (函子.const Cᵒᵖ : D ⥤ Cᵒᵖ ⥤ D).加性
 -/
 instance : (Functor.const Cᵒᵖ : D ⥤ Cᵒᵖ ⥤ D).Additive where
 
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf J D).Additive
+  签名: (constantSheaf J D).加性
   定义体: inferInstanceAs (Functor.const _ ⋙ presheafToSheaf _ _).Additive
 
 Depends on / 依赖: Additive, Functor, Functor.const, presheafToSheaf

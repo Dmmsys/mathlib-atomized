@@ -51,9 +51,9 @@ structure SpectralObject
   公理与运算 (5 个):
     - H((n : 整数)) : ComposableArrows ι 1 ⥤ C
     - δ'((n₀ n₁ : 整数) (h : n₀ + 1 = n₁)) : functorArrows ι 1 2 2 ⋙ H n₀ ⟶ functorArrows ι 0 1 2 ⋙ H n₁
-    - exact₁'((n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (D : ComposableArrows ι 2)) : (mk₂ ((δ' n₀ n₁ h).app D) ((H n₁).map ((mapFunctorArrows ι 0 1 0 2 2).app D))).Exact
-    - exact₂'((n : 整数) (D : ComposableArrows ι 2)) : (mk₂ ((H n).map ((mapFunctorArrows ι 0 1 0 2 2).app D)) ((H n).map ((mapFunctorArrows ι 0 2 1 2 2).app D))).Exact
-    - exact₃'((n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (D : ComposableArrows ι 2)) : (mk₂ ((H n₀).map ((mapFunctorArrows ι 0 2 1 2 2).app D)) ((δ' n₀ n₁ h).app D)).Exact
+    - exact₁'((n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (D : ComposableArrows ι 2)) : (mk₂ ((δ' n₀ n₁ h).app D) ((H n₁).map ((mapFunctorArrows ι 0 1 0 2 2).app D))).正合
+    - exact₂'((n : 整数) (D : ComposableArrows ι 2)) : (mk₂ ((H n).map ((mapFunctorArrows ι 0 1 0 2 2).app D)) ((H n).map ((mapFunctorArrows ι 0 2 1 2 2).app D))).正合
+    - exact₃'((n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (D : ComposableArrows ι 2)) : (mk₂ ((H n₀).map ((mapFunctorArrows ι 0 2 1 2 2).app D)) ((δ' n₀ n₁ h).app D)).正合
 -/
 structure SpectralObject where
   /-- A sequence of functors from `ComposableArrows ι 1` to the abelian category.
@@ -454,7 +454,7 @@ structure Hom
     - comm((n₀ n₁ : Int) (hn₁ : n₀ + 1 = n₁) {i j k : ι} (f : i ⟶ j) (g : j ⟶ k)) : X.δ f g n₀ n₁ hn₁ ≫ (hom n₁).app (mk₁ f) = (hom n₀).app (mk₁ g) ≫ X'.δ f g n₀ n₁ hn₁  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (X' : SpectralObject C ι)
   公理与运算 (2 个):
     - hom((n : 整数)) : X.H n ⟶ X'.H n
@@ -484,7 +484,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (SpectralObject C ι)
+  签名: 范畴 (SpectralObject C ι)
   定义体: Hom
   id X := { hom _ := 𝟙 _ }
   comp f g := { hom n := f.hom n ≫ g.hom n }
@@ -514,7 +514,7 @@ lemma isZero_H_map_mk₁_of_isIso
 
 中文:
 引理 isZero_H_map_mk₁_of_isIso
-  条件: (n : 整数) {i₀ i₁ : ι} (f : i₀ ⟶ i₁) [IsIso f]
+  条件: (n : 整数) {i₀ i₁ : ι} (f : i₀ ⟶ i₁) [是同构 f]
   证明: by
   let φ := twoδ₂Toδ₁ f (inv f) (𝟙 i₀) (by simp) ≫ twoδ₁Toδ₀ f (inv f) (𝟙 i₀)
   have : IsIso φ := by
@@ -553,7 +553,7 @@ include h₂ hn₁ in
 
 中文:
 引理 mono_H_map_twoδ₁Toδ₀
-  结论: Mono ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
+  结论: 单态射 ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
   证明: (X.exact₂ f g fg hfg n₀).mono_g (h₁.eq_of_src _ _)
 
 include h₂ hn₁ in
@@ -576,7 +576,7 @@ include h₁ h₂ hn₁ in
 
 中文:
 引理 epi_H_map_twoδ₁Toδ₀
-  结论: Epi ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
+  结论: 满态射 ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
   证明: (X.exact₃ f g fg hfg n₀ n₁ hn₁).epi_f (h₂.eq_of_tgt _ _)
 
 include h₁ h₂ hn₁ in
@@ -600,7 +600,7 @@ lemma isIso_H_map_twoδ₁Toδ₀
 
 中文:
 引理 isIso_H_map_twoδ₁Toδ₀
-  结论: IsIso ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
+  结论: 是同构 ((X.H n₀).map (twoδ₁Toδ₀ f g fg hfg))
   证明: by
   have := X.mono_H_map_twoδ₁Toδ₀ n₀ f g fg hfg h₁
   have := X.epi_H_map_twoδ₁Toδ₀ n₀ n₁ hn₁ f g fg hfg h₂
@@ -635,7 +635,7 @@ include h₂ hn₁ in
 
 中文:
 引理 mono_H_map_twoδ₁Toδ₀'
-  结论: Mono ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
+  结论: 单态射 ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
   证明: X'.mono_H_map_twoδ₁Toδ₀ _ _ _ _ _ h₁
 
 include h₂ hn₁ in
@@ -656,7 +656,7 @@ include h₁ h₂ hn₁ in
 
 中文:
 引理 epi_H_map_twoδ₁Toδ₀'
-  结论: Epi ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
+  结论: 满态射 ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
   证明: X'.epi_H_map_twoδ₁Toδ₀ _ _ hn₁ _ _ _ _ h₂
 
 include h₁ h₂ hn₁ in
@@ -675,7 +675,7 @@ lemma isIso_H_map_twoδ₁Toδ₀'
 
 中文:
 引理 isIso_H_map_twoδ₁Toδ₀'
-  结论: IsIso ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
+  结论: 是同构 ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂))
   证明: X'.isIso_H_map_twoδ₁Toδ₀ _ _ hn₁ _ _ _ _ h₁ h₂
 -/
 lemma isIso_H_map_twoδ₁Toδ₀' : IsIso ((X'.H n₀).map (twoδ₁Toδ₀' i₀ i₁ i₂ h₀₁ h₁₂)) :=

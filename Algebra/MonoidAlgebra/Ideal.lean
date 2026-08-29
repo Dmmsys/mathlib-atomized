@@ -33,8 +33,8 @@ theorem MonoidAlgebra.mem_ideal_span_of_image
       smul_mem' 
 
 中文:
-定理 MonoidAlgebra.mem_ideal_span_of_image
-  结论: [Monoid G] [Semiring k] {s : Set G}
+定理 幺半群代数.mem_ideal_span_of_image
+  结论: [幺半群 G] [半环 k] {s : 集合 G}
   证明: by
   classical
   let RHS : Ideal (MonoidAlgebra k G) :=
@@ -91,8 +91,8 @@ theorem AddMonoidAlgebra.mem_ideal_span_of'_image
     carrier :=
 
 中文:
-定理 AddMonoidAlgebra.mem_ideal_span_of'_image
-  结论: [AddMonoid A] [Semiring k] {s : Set A}
+定理 加法幺半群代数.mem_ideal_span_of'_image
+  结论: [加法幺半群 A] [半环 k] {s : 集合 A}
   证明: by
   -- TODO: this proof is a direct copy of MonoidAlgebra.mem_ideal_span_of_image.
   -- Alternatively, we could prove it via the equiv between `MonoidAlgebra` and `AddMonoidAlgebra`,

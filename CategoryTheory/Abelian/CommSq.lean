@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.monomorphisms C).IsStableUnderCobaseChange
+  签名: (MorphismProperty.monomorphisms C).是StableUnderCobaseChange
   定义体: .mk' (fun _ _ _ _ _ _ (_ : Mono _) => inferInstanceAs (Mono _))
 -/
 instance : (MorphismProperty.monomorphisms C).IsStableUnderCobaseChange :=
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.epimorphisms C).IsStableUnderBaseChange
+  签名: (MorphismProperty.epimorphisms C).是StableUnderBaseChange
   定义体: .mk' (fun _ _ _ _ _ _ (_ : Epi _) => inferInstanceAs (Epi _))
 -/
 instance : (MorphismProperty.epimorphisms C).IsStableUnderBaseChange :=
@@ -90,8 +90,8 @@ lemma exact_shortComplex
 
 中文:
 引理 exact_shortComplex
-  条件: (h : IsPushout t l r b)
-  结论: h.shortComplex.Exact
+  条件: (h : 是推出 t l r b)
+  结论: h.shortComplex.正合
   证明: h.shortComplex.exact_of_g_is_cokernel
     h.isColimitCokernelCofork
 
@@ -119,7 +119,7 @@ lemma hom_eq_add_up_to_refinements
 
 中文:
 引理 hom_eq_add_up_to_refinements
-  条件: (h : IsPushout t l r b) {T : C} (x₄ : T ⟶ X₄)
+  条件: (h : 是推出 t l r b) {T : C} (x₄ : T ⟶ X₄)
   证明: by
   have := h.epi_shortComplex_g
   obtain ⟨T', π, _, u, hu⟩ := surjective_up_to_refinements_of_epi h.shortComplex.g x₄
@@ -191,8 +191,8 @@ lemma exact_shortComplex'
 
 中文:
 引理 exact_shortComplex'
-  条件: (h : IsPullback t l r b)
-  结论: h.shortComplex'.Exact
+  条件: (h : 是拉回 t l r b)
+  结论: h.shortComplex'.正合
   证明: h.shortComplex'.exact_of_f_is_kernel
     h.isLimitKernelFork
 
@@ -233,7 +233,7 @@ lemma mono_cokernel_map_of_isPullback
 
 中文:
 引理 mono_cokernel_map_of_isPullback
-  条件: (sq : IsPullback t l r b)
+  条件: (sq : 是拉回 t l r b)
   证明: by
   rw [Preadditive.mono_iff_cancel_zero]
   intro A₀ z hz
@@ -276,7 +276,7 @@ lemma epi_kernel_map_of_isPushout
 
 中文:
 引理 epi_kernel_map_of_isPushout
-  条件: (sq : IsPushout t l r b)
+  条件: (sq : 是推出 t l r b)
   证明: by
   rw [epi_iff_surjective_up_to_refinements]
   intro A₀ z

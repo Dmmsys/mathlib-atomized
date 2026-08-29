@@ -38,7 +38,7 @@ theorem setOfPred_liouville_eq_iInter_iUnion
 alias setOf_liouville_eq_iInter_iUnion := setOfPred_liouville_eq_iInter_iUnion
 
 中文:
-定理 setOfPred_liouville_eq_iInter_iUnion
+定理 setOfPred_liouville_eq_i整数er_iUnion
   证明: by
   ext x
   simp only [mem_iInter, mem_iUnion, Liouville, mem_ofPred_eq, exists_prop, Set.mem_sdiff,
@@ -111,7 +111,7 @@ theorem setOfPred_liouville_eq_irrational_inter_iInter_iUnion
   · simp only [inter_iInter, inter_iUnion, setOfPred_liouville_eq_iInter_i
 
 中文:
-定理 setOfPred_liouville_eq_irrational_inter_iInter_iUnion
+定理 setOfPred_liouville_eq_irrational_inter_i整数er_iUnion
   证明: by
   refine Subset.antisymm ?_ ?_
   · refine subset_inter (fun x hx => hx.irrational) ?_
@@ -193,7 +193,7 @@ theorem dense_liouville
 
 中文:
 定理 dense_liouville
-  结论: Dense { x | Liouville x }
+  结论: 稠密 { x | Liouville x }
   证明: dense_of_mem_residual eventually_residual_liouville
 
 Depends on / 依赖: dense_of_mem_residual, eventually_residual_liouville

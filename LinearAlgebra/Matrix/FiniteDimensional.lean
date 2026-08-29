@@ -48,7 +48,7 @@ instance finiteDimensional
 
 中文:
 实例 finiteDimensional
-  签名: [Finite m] [Finite n]
+  签名: [有限 m] [有限 n]
   定义体: Module.Finite.matrix
 
 Depends on / 依赖: Finite, Module, Module.Finite.matrix, matrix
@@ -76,7 +76,7 @@ instance finiteDimensional
 
 中文:
 实例 finiteDimensional
-  签名: : FiniteDimensional K (V ->ₗ[K] W)
+  签名: : 有限维 K (V ->ₗ[K] W)
   定义体: Module.Finite.linearMap _ _ _ _
 
 Depends on / 依赖: Finite, Module, Module.Finite.linearMap, linearMap
@@ -97,7 +97,7 @@ instance finiteDimensional'
 
 中文:
 实例 finiteDimensional'
-  签名: : FiniteDimensional K (V ->ₗ[A] W)
+  签名: : 有限维 K (V ->ₗ[A] W)
   定义体: FiniteDimensional.of_injective (restrictScalarsₗ K A V W K) (restrictScalars_injective _)
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_injective, of_injective, restrictScalars_injective

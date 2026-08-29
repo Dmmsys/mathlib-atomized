@@ -347,12 +347,12 @@ class CommShift
     - commShiftIso_add((F) (a b : A)) : commShiftIso (a + b) = CommShift.isoAdd (commShiftIso a) (commShiftIso b)  [default: by cat_disch]
 
 中文:
-类 CommShift
-  参数: (F : C ⥤ D) (A : 类型) [AddMonoid A] [HasShift C A] [HasShift D A]
+类 交换Shift
+  参数: (F : C ⥤ D) (A : 类型) [加法幺半群 A] [有Shift C A] [有Shift D A]
   公理与运算 (3 个):
     - commShiftIso((F) (a : A)) : shiftFunctor C a ⋙ F ≅ F ⋙ shiftFunctor D a
-    - commShiftIso_zero((F) (A)) : commShiftIso 0 = CommShift.isoZero F A  [默认: by cat_disch]
-    - commShiftIso_add((F) (a b : A)) : commShiftIso (a + b) = CommShift.isoAdd (commShiftIso a) (commShiftIso b)  [默认: by cat_disch]
+    - commShiftIso_zero((F) (A)) : commShiftIso 0 = 交换Shift.isoZero F A  [默认: by cat_disch]
+    - commShiftIso_add((F) (a b : A)) : commShiftIso (a + b) = 交换Shift.isoAdd (commShiftIso a) (commShiftIso b)  [默认: by cat_disch]
 
 Depends on / 依赖: CommShift, CommShift.isoAdd, cat_disch, commShiftIso, commShiftIso_add, isoAdd
 -/
@@ -487,7 +487,7 @@ instance id
 
 中文:
 实例 id
-  签名: : CommShift (𝟭 C) A where
+  签名: : 交换Shift (𝟭 C) A where
   定义体: fun _ => rightUnitor _ ≪≫ (leftUnitor _).symm
 
 @[simps! -isSimp commShiftIso_hom_app commShiftIso_inv_app]
@@ -514,7 +514,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: [F.CommShift A] [G.CommShift A]
+  签名: [F.交换Shift A] [G.交换Shift A]
   定义体: (Functor.associator _ _ _).symm ≪≫ isoWhiskerRight (F.commShiftIso a) _ ≪≫
     Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (G.commShiftIso a) ≪≫
     (Functor.associator _ _ _).symm
@@ -568,7 +568,7 @@ lemma map_shiftFunctorComm_hom_app
 
 中文:
 引理 map_shiftFunctorComm_hom_app
-  条件: [F.CommShift B] (X : C) (a b : B)
+  条件: [F.交换Shift B] (X : C) (a b : B)
   证明: by
   have eq := NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add a b)) X
   simp only [comp_obj, CommShift.isoAdd_hom_app,
@@ -613,7 +613,7 @@ lemma map_shiftFunctorCompIsoId_hom_app
 
 中文:
 引理 map_shiftFunctorCompIsoId_hom_app
-  条件: [F.CommShift A] (X : C) (a b : A) (h : a + b = 0)
+  条件: [F.交换Shift A] (X : C) (a b : A) (h : a + b = 0)
   证明: by
   dsimp [shiftFunctorCompIsoId]
   have eq := NatTrans.congr_app (congr_arg Iso.hom (F.commShiftIso_add' h)) X
@@ -649,7 +649,7 @@ lemma map_shiftFunctorCompIsoId_inv_app
 
 中文:
 引理 map_shiftFunctorCompIsoId_inv_app
-  条件: [F.CommShift A] (X : C) (a b : A) (h : a + b = 0)
+  条件: [F.交换Shift A] (X : C) (a b : A) (h : a + b = 0)
   证明: by
   rw [← cancel_epi (F.map ((shiftFunctorCompIsoId C a b h).hom.app X))]; rw [← F.map_comp]; rw [Iso.hom_inv_id_app]; rw [F.map_id]; rw [map_shiftFunctorCompIsoId_hom_app]
   simp only [comp_obj, id_obj, Category.assoc, Iso.hom_inv_id_app_assoc,
@@ -687,10 +687,10 @@ structure CommShiftCore
     - shift_comm : (F₁.commShiftIso a).hom ≫ Functor.whiskerRight τ _ = Functor.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom
 
 中文:
-结构 CommShiftCore
+结构 交换ShiftCore
   参数: (a : A)
   公理与运算 (1 个):
-    - shift_comm : (F₁.commShiftIso a).hom ≫ Functor.whiskerRight τ _ = Functor.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom
+    - shift_comm : (F₁.commShiftIso a).hom ≫ 函子.whiskerRight τ _ = 函子.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom
 -/
 structure CommShiftCore (a : A) : Prop where
   shift_comm : (F₁.commShiftIso a).hom ≫ Functor.whiskerRight τ _ =
@@ -797,7 +797,7 @@ lemma zero
 
 中文:
 引理 zero
-  结论: CommShiftCore τ (0 : A) where
+  结论: 交换ShiftCore τ (0 : A) where
   证明: by
     ext X
     simp [Functor.commShiftIso_zero, ← NatTrans.naturality]
@@ -828,7 +828,7 @@ lemma add
 
 中文:
 引理 add
-  条件: {a b : A} (ha : CommShiftCore τ a) (hb : CommShiftCore τ b)
+  条件: {a b : A} (ha : 交换ShiftCore τ a) (hb : 交换ShiftCore τ b)
   证明: by
     ext X
     have := (shiftFunctorAdd D a b).inv.naturality (τ.app X)
@@ -864,10 +864,10 @@ class CommShift
     - shift_comm((a : A)) : (F₁.commShiftIso a).hom ≫ Functor.whiskerRight τ _ = Functor.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom  [default: by cat_disch]
 
 中文:
-类 CommShift
+类 交换Shift
   参数: : 命题 where
   公理与运算 (1 个):
-    - shift_comm((a : A)) : (F₁.commShiftIso a).hom ≫ Functor.whiskerRight τ _ = Functor.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom  [默认: by cat_disch]
+    - shift_comm((a : A)) : (F₁.commShiftIso a).hom ≫ 函子.whiskerRight τ _ = 函子.whiskerLeft _ τ ≫ (F₂.commShiftIso a).hom  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -889,8 +889,8 @@ lemma CommShift.of_core
   proof: (h a).shift_comm
 
 中文:
-引理 CommShift.of_core
-  条件: (h : 对任意 (a : A), CommShiftCore τ a)
+引理 交换Shift.of_core
+  条件: (h : 对任意 (a : A), 交换ShiftCore τ a)
   证明: (h a).shift_comm
 
 Depends on / 依赖: shift_comm
@@ -1020,7 +1020,7 @@ instance of_iso_inv
 
 中文:
 实例 of_iso_inv
-  签名: [自然数Trans.CommShift e.hom A]
+  签名: [自然变换.交换Shift e.hom A]
   定义体: ⟨fun a => by
   ext X
   dsimp
@@ -1044,7 +1044,7 @@ instance of_iso_symm
 
 中文:
 实例 of_iso_symm
-  签名: [自然数Trans.CommShift e.hom A]
+  签名: [自然变换.交换Shift e.hom A]
   定义体: NatTrans.CommShift.of_iso_inv e A
 
 Depends on / 依赖: CommShift, NatTrans, NatTrans.CommShift.of_iso_inv, of_iso_inv
@@ -1065,7 +1065,7 @@ lemma of_isIso
 
 中文:
 引理 of_isIso
-  条件: [IsIso τ] [自然数Trans.CommShift τ A]
+  条件: [是同构 τ] [自然变换.交换Shift τ A]
   证明: by
   have : NatTrans.CommShift (asIso τ).hom A := by assumption
   change NatTrans.CommShift (asIso τ).inv A
@@ -1089,7 +1089,7 @@ instance id
 
 中文:
 实例 id
-  签名: : 自然数Trans.CommShift (𝟙 F₁) A where
+  签名: : 自然变换.交换Shift (𝟙 F₁) A where
 -/
 instance id : NatTrans.CommShift (𝟙 F₁) A where
 
@@ -1105,7 +1105,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: [自然数Trans.CommShift τ A] [自然数Trans.CommShift τ' A]
+  签名: [自然变换.交换Shift τ A] [自然变换.交换Shift τ' A]
 -/
 instance comp [NatTrans.CommShift τ A] [NatTrans.CommShift τ' A] :
     NatTrans.CommShift (τ ≫ τ') A where
@@ -1125,7 +1125,7 @@ instance whiskerRight
 
 中文:
 实例 whiskerRight
-  签名: [自然数Trans.CommShift τ A]
+  签名: [自然变换.交换Shift τ A]
   定义体: ⟨fun a => by
   ext X
   simp only [Functor.whiskerRight_twice, comp_app, Functor.commShiftIso_comp_hom_app,
@@ -1152,7 +1152,7 @@ instance whiskerLeft
 
 中文:
 实例 whiskerLeft
-  签名: [自然数Trans.CommShift τ'' A]
+  签名: [自然变换.交换Shift τ'' A]
 -/
 instance whiskerLeft [NatTrans.CommShift τ'' A] :
     NatTrans.CommShift (Functor.whiskerLeft F₁ τ'') A where
@@ -1166,7 +1166,7 @@ instance associator
 
 中文:
 实例 associator
-  签名: : CommShift (Functor.associator F₁ G H).hom A where
+  签名: : 交换Shift (函子.associator F₁ G H).hom A where
 -/
 instance associator : CommShift (Functor.associator F₁ G H).hom A where
 
@@ -1179,7 +1179,7 @@ instance leftUnitor
 
 中文:
 实例 leftUnitor
-  签名: : CommShift F₁.leftUnitor.hom A where
+  签名: : 交换Shift F₁.leftUnitor.hom A where
 -/
 instance leftUnitor : CommShift F₁.leftUnitor.hom A where
 
@@ -1192,7 +1192,7 @@ instance rightUnitor
 
 中文:
 实例 rightUnitor
-  签名: : CommShift F₁.rightUnitor.hom A where
+  签名: : 交换Shift F₁.rightUnitor.hom A where
 -/
 instance rightUnitor : CommShift F₁.rightUnitor.hom A where
 
@@ -1229,7 +1229,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: : G.CommShift A where
+  签名: : G.交换Shift A where
   定义体: isoWhiskerLeft _ e.symm ≪≫ F.commShiftIso a ≪≫ isoWhiskerRight e _
   commShiftIso_zero := by
     ext X
@@ -1530,7 +1530,7 @@ definition ofComp
 
 中文:
 定义 ofComp
-  签名: : F.CommShift A where
+  签名: : F.交换Shift A where
   定义体: OfComp.iso e
   commShiftIso_zero := by
     ext X
@@ -1610,7 +1610,7 @@ lemma NatTrans.CommShift.verticalComposition
   infer_instance
 
 中文:
-引理 NatTrans.CommShift.verticalComposition
+引理 自然变换.交换Shift.verticalComposition
   结论: {C₁ C₂ C₃ D₁ D₂ D₃ : 类型}
   证明: by
   subst h₁₃

@@ -63,7 +63,7 @@ definition lmk
 
 中文:
 定义 lmk
-  签名: (s : Finset ι)
+  签名: (s : 有限集 ι)
   定义体: mk s
   map_add' _ _ := mk_add
   map_smul' c x := mk_smul c x
@@ -157,7 +157,7 @@ theorem lmk_apply
 
 中文:
 定理 lmk_apply
-  条件: (s : Finset ι) (x)
+  条件: (s : 有限集 ι) (x)
   结论: (lmk s : _ ->ₗ[R] Π₀ i, M i) x = mk s x
   证明: rfl
 
@@ -244,7 +244,7 @@ theorem injective_pi_lapply
 
 中文:
 定理 injective_pi_lapply
-  结论: Function.Injective (LinearMap.pi (R := R) <| lapply (M := M))
+  结论: 函数.单射 (线性映射.pi (R := R) <| lapply (M := M))
   证明: fun _ _ h => ext fun _ => congr_fun h _
 
 @[simp]
@@ -379,7 +379,7 @@ definition linearEquivFunOnFintype
 
 中文:
 定义 linearEquivFunOnFintype
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: equivFunOnFintype
   map_add' _ _ := by ext; rfl
   map_smul' _ _ := by ext; rfl
@@ -413,7 +413,7 @@ definition lsum
 
 中文:
 定义 lsum
-  签名: [Semiring S] [Module S N] [SMulCommClass R S N]
+  签名: [半环 S] [模 S N] [标量交换类 R S N]
   定义体: { toFun := sumAddHom fun i => (F i).toAddMonoidHom
       map_add' := (DFinsupp.liftAddHom fun (i : ι) => (F i).toAddMonoidHom).map_add
       map_smul' := fun c f => by
@@ -464,7 +464,7 @@ theorem lsum_single
 
 中文:
 定理 lsum_single
-  结论: [Semiring S] [Module S N] [SMulCommClass R S N] (F : 对任意 i, M i ->ₗ[R] N) (i)
+  结论: [半环 S] [模 S N] [标量交换类 R S N] (F : 对任意 i, M i ->ₗ[R] N) (i)
   证明: by
   simp
 -/
@@ -482,7 +482,7 @@ theorem lsum_lsingle
 
 中文:
 定理 lsum_lsingle
-  条件: [Semiring S] [对任意 i, Module S (M i)] [对任意 i, SMulCommClass R S (M i)]
+  条件: [半环 S] [对任意 i, 模 S (M i)] [对任意 i, 标量交换类 R S (M i)]
   证明: lhom_ext (lsum_single _ _)
 -/
 theorem lsum_lsingle [Semiring S] [forall i, Module S (M i)] [forall i, SMulCommClass R S (M i)] :
@@ -501,7 +501,7 @@ theorem iSup_range_lsingle
 
 中文:
 定理 iSup_range_lsingle
-  结论: ⨆ i, LinearMap.range (lsingle (R := R) (M := M) i) = ⊤
+  结论: ⨆ i, 线性映射.range (lsingle (R := R) (M := M) i) = ⊤
   证明: top_le_iff.mp fun m _ => by
     rw [← LinearMap.id_apply (R := R) m]; rw [← lsum_lsingle Nat]
     exact dfinsuppSumAddHom_mem _ _ _ fun i _ => Submodule.mem_iSup_of_mem i ⟨_, rfl⟩
@@ -934,7 +934,7 @@ theorem coprodMap_apply
 
 中文:
 定理 coprodMap_apply
-  条件: [对任意 x : N, Decidable (x != 0)] (f : 对任意 i : ι, M i ->ₗ[R] N) (x : Π₀ i, M i)
+  条件: [对任意 x : N, 可判定 (x != 0)] (f : 对任意 i : ι, M i ->ₗ[R] N) (x : Π₀ i, M i)
   证明: DFinsupp.sumAddHom_apply _ _
 
 Depends on / 依赖: DFinsupp, DFinsupp.sumAddHom_apply, sumAddHom_apply
@@ -990,7 +990,7 @@ theorem dfinsuppSum_mem
 
 中文:
 定理 dfinsuppSum_mem
-  结论: {β : ι -> 类型} [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: {β : ι -> 类型} [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: _root_.dfinsuppSum_mem S f g h
 
 Depends on / 依赖: _root_, _root_.dfinsuppSum_mem, dfinsuppSum_mem
@@ -1010,7 +1010,7 @@ theorem dfinsuppSumAddHom_mem
 
 中文:
 定理 dfinsuppSumAddHom_mem
-  结论: {β : ι -> 类型} [对任意 i, AddZeroClass (β i)] (S : Submodule R N)
+  结论: {β : ι -> 类型} [对任意 i, 加法零类 (β i)] (S : 子模 R N)
   证明: _root_.dfinsuppSumAddHom_mem S f g h
 
 Depends on / 依赖: _root_, _root_.dfinsuppSumAddHom_mem, dfinsuppSumAddHom_mem
@@ -1037,7 +1037,7 @@ theorem iSup_eq_range_dfinsupp_lsum
 
 中文:
 定理 iSup_eq_range_dfinsupp_lsum
-  条件: (p : ι -> Submodule R N)
+  条件: (p : ι -> 子模 R N)
   证明: by
   apply le_antisymm
   · apply iSup_le _
@@ -1075,7 +1075,7 @@ theorem biSup_eq_range_dfinsupp_lsum
 
 中文:
 定理 biSup_eq_range_dfinsupp_lsum
-  条件: (p : ι -> 命题) [DecidablePred p] (S : ι -> Submodule R N)
+  条件: (p : ι -> 命题) [DecidablePred p] (S : ι -> 子模 R N)
   证明: by
   apply le_antisymm
   · refine iSup₂_le fun i hi y hy => ⟨DFinsupp.single i ⟨y, hy⟩, ?_⟩
@@ -1112,8 +1112,8 @@ theorem mem_iSup_iff_exists_dfinsupp
   proof: SetLike.ext_iff.mp (iSup_eq_range_dfinsupp_lsum p) x
 
 中文:
-定理 mem_iSup_iff_exists_dfinsupp
-  条件: (p : ι -> Submodule R N) (x : N)
+定理 mem_iSup_iff_存在_dfinsupp
+  条件: (p : ι -> 子模 R N) (x : N)
   证明: SetLike.ext_iff.mp (iSup_eq_range_dfinsupp_lsum p) x
 
 Depends on / 依赖: SetLike, SetLike.ext_iff.mp, ext_iff, iSup_eq_range_dfinsupp_lsum
@@ -1135,8 +1135,8 @@ theorem mem_iSup_iff_exists_dfinsupp'
     LinearMap.toAddMonoidHom_coe, coe_subtype]
 
 中文:
-定理 mem_iSup_iff_exists_dfinsupp'
-  结论: (p : ι -> Submodule R N) [对任意 (i) (x : p i), Decidable (x != 0)]
+定理 mem_iSup_iff_存在_dfinsupp'
+  结论: (p : ι -> 子模 R N) [对任意 (i) (x : p i), 可判定 (x != 0)]
   证明: by
   rw [mem_iSup_iff_exists_dfinsupp]
   simp_rw [DFinsupp.lsum_apply_apply, DFinsupp.sumAddHom_apply,
@@ -1159,8 +1159,8 @@ theorem mem_biSup_iff_exists_dfinsupp
   proof: SetLike.ext_iff.mp (biSup_eq_range_dfinsupp_lsum p S) x
 
 中文:
-定理 mem_biSup_iff_exists_dfinsupp
-  结论: (p : ι -> 命题) [DecidablePred p] (S : ι -> Submodule R N)
+定理 mem_biSup_iff_存在_dfinsupp
+  结论: (p : ι -> 命题) [DecidablePred p] (S : ι -> 子模 R N)
   证明: SetLike.ext_iff.mp (biSup_eq_range_dfinsupp_lsum p S) x
 
 Depends on / 依赖: SetLike, SetLike.ext_iff.mp, biSup_eq_range_dfinsupp_lsum, ext_iff
@@ -1190,8 +1190,8 @@ lemma mem_iSup_iff_exists_finsupp
   · simp [Finsupp.mem_s
 
 中文:
-引理 mem_iSup_iff_exists_finsupp
-  条件: (p : ι -> Submodule R N) (x : N)
+引理 mem_iSup_iff_存在_finsupp
+  条件: (p : ι -> 子模 R N) (x : N)
   证明: by
   classical
   rw [mem_iSup_iff_exists_dfinsupp']
@@ -1233,8 +1233,8 @@ theorem mem_iSup_finset_iff_exists_sum
         rw [mem_suppor
 
 中文:
-定理 mem_iSup_finset_iff_exists_sum
-  条件: {s : Finset ι} (p : ι -> Submodule R N) (a : N)
+定理 mem_iSup_finset_iff_存在_sum
+  条件: {s : 有限集 ι} (p : ι -> 子模 R N) (a : N)
   证明: by
   classical
     rw [Submodule.mem_iSup_iff_exists_dfinsupp']
@@ -1306,8 +1306,8 @@ theorem iSupIndep_iff_forall_dfinsupp
   simp_rw [Submodule.coe_eq_zero]
 
 中文:
-定理 iSupIndep_iff_forall_dfinsupp
-  条件: (p : ι -> Submodule R N)
+定理 iSupIndep_iff_对任意_dfinsupp
+  条件: (p : ι -> 子模 R N)
   证明: by
   simp_rw [iSupIndep_def, Submodule.disjoint_def,
     Submodule.mem_biSup_iff_exists_dfinsupp, exists_imp, filter_ne_eq_erase]
@@ -1342,7 +1342,7 @@ theorem iSupIndep_of_dfinsupp_lsum_injective
 
 中文:
 定理 iSupIndep_of_dfinsupp_lsum_injective
-  结论: (p : ι -> Submodule R N)
+  结论: (p : ι -> 子模 R N)
   证明: by
   rw [iSupIndep_iff_forall_dfinsupp]
   intro i x v hv
@@ -1377,7 +1377,7 @@ theorem iSupIndep_of_dfinsuppSumAddHom_injective
 
 中文:
 定理 iSupIndep_of_dfinsuppSumAddHom_injective
-  结论: (p : ι -> AddSubmonoid N)
+  结论: (p : ι -> 加法子幺半群 N)
   证明: by
   rw [← iSupIndep_map_orderIso_iff (AddSubmonoid.toNatSubmodule : AddSubmonoid N ≃o _)]
   exact iSupIndep_of_dfinsupp_lsum_injective _ h
@@ -1401,7 +1401,7 @@ theorem lsum_comp_mapRange_toSpanSingleton
 
 中文:
 定理 lsum_comp_mapRange_toSpanSingleton
-  结论: [对任意 m : R, Decidable (m != 0)] (p : ι -> Submodule R N)
+  结论: [对任意 m : R, 可判定 (m != 0)] (p : ι -> 子模 R N)
   证明: by
   ext
   simp
@@ -1434,7 +1434,7 @@ theorem iSupIndep_of_dfinsuppSumAddHom_injective'
 
 中文:
 定理 iSupIndep_of_dfinsuppSumAddHom_injective'
-  结论: (p : ι -> AddSubgroup N)
+  结论: (p : ι -> 加法子群 N)
   证明: by
   rw [← iSupIndep_map_orderIso_iff (AddSubgroup.toIntSubmodule : AddSubgroup N ≃o _)]
   exact iSupIndep_of_dfinsupp_lsum_injective _ h
@@ -1462,7 +1462,7 @@ theorem iSupIndep.dfinsupp_lsum_injective
 
 中文:
 定理 iSupIndep.dfinsupp_lsum_injective
-  条件: {p : ι -> Submodule R N} (h : iSupIndep p)
+  条件: {p : ι -> 子模 R N} (h : iSupIndep p)
   证明: by
   -- simplify everything down to binders over equalities in `N`
   rw [iSupIndep_iff_forall_dfinsupp] at h
@@ -1501,7 +1501,7 @@ theorem iSupIndep.dfinsuppSumAddHom_injective
 
 中文:
 定理 iSupIndep.dfinsuppSumAddHom_injective
-  条件: {p : ι -> AddSubgroup N} (h : iSupIndep p)
+  条件: {p : ι -> 加法子群 N} (h : iSupIndep p)
   证明: by
   rw [← iSupIndep_map_orderIso_iff (AddSubgroup.toIntSubmodule : AddSubgroup N ≃o _)] at h
   exact h.dfinsupp_lsum_injective
@@ -1525,7 +1525,7 @@ omit [DecidableEq ι] in
 
 中文:
 定理 iSupIndep_iff_dfinsupp_lsum_injective
-  条件: (p : ι -> Submodule R N)
+  条件: (p : ι -> 子模 R N)
   证明: ⟨iSupIndep.dfinsupp_lsum_injective, iSupIndep_of_dfinsupp_lsum_injective p⟩
 
 omit [DecidableEq ι] in
@@ -1555,7 +1555,7 @@ theorem iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
 
 中文:
 定理 iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero
-  条件: (p : ι -> Submodule R N)
+  条件: (p : ι -> 子模 R N)
   证明: by
   classical
   simp_rw [iSupIndep_def, Submodule.disjoint_def]
@@ -1616,7 +1616,7 @@ alias iSupIndep_if
 
 中文:
 定理 iSupIndep_iff_finsetSum_eq_imp_eq
-  条件: (p : ι -> Submodule R N)
+  条件: (p : ι -> 子模 R N)
   证明: by
   rw [iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero]
   constructor
@@ -1655,7 +1655,7 @@ theorem iSupIndep_iff_dfinsuppSumAddHom_injective
 
 中文:
 定理 iSupIndep_iff_dfinsuppSumAddHom_injective
-  条件: (p : ι -> AddSubgroup N)
+  条件: (p : ι -> 加法子群 N)
   证明: ⟨iSupIndep.dfinsuppSumAddHom_injective, iSupIndep_of_dfinsuppSumAddHom_injective' p⟩
 
 Depends on / 依赖: dfinsuppSumAddHom_injective, iSupIndep, iSupIndep.dfinsuppSumAddHom_injective, iSupIndep_of_dfinsuppSumAddHom_injective
@@ -1675,7 +1675,7 @@ definition iSupIndep.linearEquiv
 
 中文:
 定义 iSupIndep.linearEquiv
-  签名: {p : ι -> Submodule R N} (ind : iSupIndep p)
+  签名: {p : ι -> 子模 R N} (ind : iSupIndep p)
   定义体: .ofBijective _ ⟨ind.dfinsupp_lsum_injective, by
     rwa [← LinearMap.range_eq_top, ← Submodule.iSup_eq_range_dfinsupp_lsum]⟩
 -/
@@ -1696,7 +1696,7 @@ theorem iSupIndep.linearEquiv_symm_apply
 
 中文:
 定理 iSupIndep.linearEquiv_symm_apply
-  结论: {p : ι -> Submodule R N} (ind : iSupIndep p)
+  结论: {p : ι -> 子模 R N} (ind : iSupIndep p)
   证明: by
   simp [← LinearEquiv.eq_symm_apply, iSupIndep.linearEquiv]
 
@@ -1727,7 +1727,7 @@ theorem iSupIndep.linearIndependent
 
 中文:
 定理 iSupIndep.linearIndependent
-  结论: [IsDomain R] [IsTorsionFree R N] {ι : 类型}
+  结论: [是整环 R] [是无挠 R N] {ι : 类型}
   证明: by
   classical
   rw [linearIndependent_iff]
@@ -1771,7 +1771,7 @@ theorem iSupIndep_iff_linearIndependent_of_ne_zero
 
 中文:
 定理 iSupIndep_iff_linearIndependent_of_ne_zero
-  结论: [IsDomain R] [IsTorsionFree R N]
+  结论: [是整环 R] [是无挠 R N]
   证明: hv.linearIndependent _ (fun i => Submodule.mem_span_singleton_self <| v i) h_ne_zero
   mpr hv := hv.iSupIndep_span_singleton
 
@@ -1909,7 +1909,7 @@ theorem map_dfinsuppSumAddHom
 
 中文:
 定理 map_dfinsuppSumAddHom
-  结论: [对任意 i, AddZeroClass (γ i)] (f : M ≃ₛₗ[τ₁₂] M₂) (t : Π₀ i, γ i)
+  结论: [对任意 i, 加法零类 (γ i)] (f : M ≃ₛₗ[τ₁₂] M₂) (t : Π₀ i, γ i)
   证明: f.toAddEquiv.map_dfinsuppSumAddHom _ _
 
 Depends on / 依赖: f.toAddEquiv.map_dfinsuppSumAddHom, map_dfinsuppSumAddHom, toAddEquiv

@@ -34,7 +34,7 @@ definition Cauchy
 
 中文:
 定义 Cauchy
-  签名: (f : Filter α)
+  签名: (f : 滤子 α)
   定义体: NeBot f ∧ f ×ˢ f <= 𝓤 α
 -/
 def Cauchy (f : Filter α) :=
@@ -49,8 +49,8 @@ definition IsComplete
   body: forall f, Cauchy f -> f <= 𝓟 s -> exists x in s, f <= 𝓝 x
 
 中文:
-定义 IsComplete
-  签名: (s : Set α)
+定义 是完备
+  签名: (s : 集合 α)
   定义体: forall f, Cauchy f -> f <= 𝓟 s -> exists x in s, f <= 𝓝 x
 
 Depends on / 依赖: Cauchy
@@ -69,8 +69,8 @@ theorem Filter.HasBasis.cauchy_iff
       simp only [subset_def, Prod.forall, mem_prod_eq, and_imp, id, forall_mem_comm]
 
 中文:
-定理 Filter.HasBasis.cauchy_iff
-  结论: {ι} {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).HasBasis p s)
+定理 滤子.有基.cauchy_iff
+  结论: {ι} {p : ι -> 命题} {s : ι -> SetRel α α} (h : (𝓤 α).有基 p s)
   证明: and_congr Iff.rfl
 (f.basis_sets.prod_self.le_basis_iff h).trans by
       simp only [subset_def, Prod.forall, mem_prod_eq, and_imp, id, forall_mem_comm]
@@ -94,7 +94,7 @@ theorem cauchy_iff'
 
 中文:
 定理 cauchy_iff'
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   证明: (𝓤 α).basis_sets.cauchy_iff
 
 Depends on / 依赖: basis_sets, basis_sets.cauchy_iff, cauchy_iff
@@ -115,7 +115,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: Cauchy f ↔ NeBot f ∧ 对任意 s in 𝓤 α, 存在 t in f, t ×ˢ t subseteq s
   证明: cauchy_iff'.trans by
     simp only [subset_def, Prod.forall, mem_prod_eq, and_imp, forall_mem_comm]
@@ -137,7 +137,7 @@ lemma cauchy_iff_le
 
 中文:
 引理 cauchy_iff_le
-  条件: {l : Filter α} [hl : l.NeBot]
+  条件: {l : 滤子 α} [hl : l.NeBot]
   证明: by
   simp only [Cauchy, hl, true_and]
 
@@ -160,7 +160,7 @@ theorem Cauchy.ultrafilter_of
 
 中文:
 定理 Cauchy.ultrafilter_of
-  条件: {l : Filter α} (h : Cauchy l)
+  条件: {l : 滤子 α} (h : Cauchy l)
   证明: by
   have := h.1
   have := Ultrafilter.of_le l
@@ -185,7 +185,7 @@ theorem cauchy_map_iff
 
 中文:
 定理 cauchy_map_iff
-  条件: {l : Filter β} {f : β -> α}
+  条件: {l : 滤子 β} {f : β -> α}
   证明: by
   rw [Cauchy]; rw [map_neBot_iff]; rw [prod_map_map_eq]; rw [Tendsto]
 
@@ -205,7 +205,7 @@ theorem cauchy_map_iff'
 
 中文:
 定理 cauchy_map_iff'
-  条件: {l : Filter β} [hl : NeBot l] {f : β -> α}
+  条件: {l : 滤子 β} [hl : NeBot l] {f : β -> α}
   证明: cauchy_map_iff.trans and_iff_right hl
 
 Depends on / 依赖: and_iff_right, cauchy_map_iff, cauchy_map_iff.trans
@@ -225,7 +225,7 @@ theorem Cauchy.mono
 
 中文:
 定理 Cauchy.mono
-  条件: {f g : Filter α} [hg : NeBot g] (h_c : Cauchy f) (h_le : g <= f)
+  条件: {f g : 滤子 α} [hg : NeBot g] (h_c : Cauchy f) (h_le : g <= f)
   结论: Cauchy g
   证明: ⟨hg, le_trans (Filter.prod_mono h_le h_le) h_c.right⟩
 
@@ -245,7 +245,7 @@ theorem Cauchy.mono'
 
 中文:
 定理 Cauchy.mono'
-  条件: {f g : Filter α} (h_c : Cauchy f) (_ : NeBot g) (h_le : g <= f)
+  条件: {f g : 滤子 α} (h_c : Cauchy f) (_ : NeBot g) (h_le : g <= f)
   结论: Cauchy g
   证明: h_c.mono h_le
 
@@ -303,8 +303,8 @@ theorem Filter.Tendsto.cauchy_map
   proof: cauchy_nhds.mono h
 
 中文:
-定理 Filter.Tendsto.cauchy_map
-  结论: {l : Filter β} [NeBot l] {f : β -> α} {a : α}
+定理 滤子.收敛.cauchy_map
+  结论: {l : 滤子 β} [NeBot l] {f : β -> α} {a : α}
   证明: cauchy_nhds.mono h
 
 Depends on / 依赖: cauchy_nhds, cauchy_nhds.mono
@@ -323,7 +323,7 @@ lemma Cauchy.mono_uniformSpace
 
 中文:
 引理 Cauchy.mono_uniformSpace
-  结论: {u v : UniformSpace β} {F : Filter β} (huv : u <= v)
+  结论: {u v : 一致空间 β} {F : 滤子 β} (huv : u <= v)
   证明: ⟨hF.1, hF.2.trans huv⟩
 
 Depends on / 依赖: Cauchy, uniformSpace
@@ -344,7 +344,7 @@ lemma cauchy_inf_uniformSpace
 
 中文:
 引理 cauchy_inf_uniformSpace
-  条件: {u v : UniformSpace β} {F : Filter β}
+  条件: {u v : 一致空间 β} {F : 滤子 β}
   证明: by
   unfold Cauchy
   rw [inf_uniformity (u := u)]; rw [le_inf_iff]; rw [and_and_left]
@@ -367,7 +367,7 @@ lemma cauchy_iInf_uniformSpace
 
 中文:
 引理 cauchy_iInf_uniformSpace
-  结论: {ι : Sort*} [Nonempty ι] {u : ι -> UniformSpace β}
+  结论: {ι : 类型层*} [非空 ι] {u : ι -> 一致空间 β}
   证明: by
   unfold Cauchy
   rw [iInf_uniformity]; rw [le_iInf_iff]; rw [forall_and]; rw [forall_const]
@@ -391,7 +391,7 @@ lemma cauchy_iInf_uniformSpace'
 
 中文:
 引理 cauchy_iInf_uniformSpace'
-  结论: {ι : Sort*} {u : ι -> UniformSpace β}
+  结论: {ι : 类型层*} {u : ι -> 一致空间 β}
   证明: by
   simp_rw [cauchy_iff_le (uniformSpace := _), iInf_uniformity, le_iInf_iff]
 
@@ -414,7 +414,7 @@ lemma cauchy_comap_uniformSpace
 
 中文:
 引理 cauchy_comap_uniformSpace
-  条件: {u : UniformSpace β} {α} {f : α -> β} {l : Filter α}
+  条件: {u : 一致空间 β} {α} {f : α -> β} {l : 滤子 α}
   证明: by
   simp only [Cauchy, map_neBot_iff, prod_map_map_eq, map_le_iff_le_comap]
   rfl
@@ -437,7 +437,7 @@ lemma cauchy_prod_iff
 
 中文:
 引理 cauchy_prod_iff
-  条件: [UniformSpace β] {F : Filter (α × β)}
+  条件: [一致空间 β] {F : 滤子 (α × β)}
   证明: by
   simp_rw +instances [instUniformSpaceProd, ← cauchy_comap_uniformSpace, ← cauchy_inf_uniformSpace]
 
@@ -458,8 +458,8 @@ theorem Cauchy.prod
   simpa [cauchy_prod_iff, hf.1] using ⟨hf, hg⟩
 
 中文:
-定理 Cauchy.prod
-  条件: [UniformSpace β] {f : Filter α} {g : Filter β} (hf : Cauchy f) (hg : Cauchy g)
+定理 Cauchy.乘积
+  条件: [一致空间 β] {f : 滤子 α} {g : 滤子 β} (hf : Cauchy f) (hg : Cauchy g)
   证明: by
   have := hf.1; have := hg.1
   simpa [cauchy_prod_iff, hf.1] using ⟨hf, hg⟩
@@ -487,7 +487,7 @@ theorem le_nhds_of_cauchy_adhp_aux
 
 中文:
 定理 le_nhds_of_cauchy_adhp_aux
-  结论: {f : Filter α} {x : α}
+  结论: {f : 滤子 α} {x : α}
   证明: by
   -- Consider a neighborhood `s` of `x`
   intro s hs
@@ -522,7 +522,7 @@ theorem le_nhds_of_cauchy_adhp
 
 中文:
 定理 le_nhds_of_cauchy_adhp
-  条件: {f : Filter α} {x : α} (hf : Cauchy f) (adhs : ClusterPt x f)
+  条件: {f : 滤子 α} {x : α} (hf : Cauchy f) (adhs : ClusterPt x f)
   证明: le_nhds_of_cauchy_adhp_aux
     (fun s hs => by
       obtain ⟨t, t_mem, ht⟩ : exists t in f, t ×ˢ t subseteq s := (cauchy_iff.1 hf).2 s hs
@@ -549,7 +549,7 @@ theorem le_nhds_iff_adhp_of_cauchy
 
 中文:
 定理 le_nhds_iff_adhp_of_cauchy
-  条件: {f : Filter α} {x : α} (hf : Cauchy f)
+  条件: {f : 滤子 α} {x : α} (hf : Cauchy f)
   证明: ⟨fun h => ClusterPt.of_le_nhds' h hf.1, le_nhds_of_cauchy_adhp hf⟩
 
 Depends on / 依赖: ClusterPt, ClusterPt.of_le_nhds, le_nhds_of_cauchy_adhp, of_le_nhds
@@ -572,7 +572,7 @@ theorem Cauchy.map
 
 中文:
 定理 Cauchy.map
-  结论: [UniformSpace β] {f : Filter α} {m : α -> β} (hf : Cauchy f)
+  结论: [一致空间 β] {f : 滤子 α} {m : α -> β} (hf : Cauchy f)
   证明: ⟨hf.1.map _,
     calc
       map m f ×ˢ map m f = map (Prod.map m m) (f ×ˢ f) := Filter.prod_map_map_eq
@@ -601,7 +601,7 @@ theorem Cauchy.comap
 
 中文:
 定理 Cauchy.comap
-  结论: [UniformSpace β] {f : Filter β} {m : α -> β} (hf : Cauchy f)
+  结论: [一致空间 β] {f : 滤子 β} {m : α -> β} (hf : Cauchy f)
   证明: ⟨‹_›,
     calc
       comap m f ×ˢ comap m f = comap (Prod.map m m) (f ×ˢ f) := prod_comap_comap_eq
@@ -627,7 +627,7 @@ theorem Cauchy.comap'
 
 中文:
 定理 Cauchy.comap'
-  结论: [UniformSpace β] {f : Filter β} {m : α -> β} (hf : Cauchy f)
+  结论: [一致空间 β] {f : 滤子 β} {m : α -> β} (hf : Cauchy f)
   证明: hf.comap hm
 
 Depends on / 依赖: hf.comap
@@ -651,7 +651,7 @@ lemma Cauchy.map_of_le
 
 中文:
 引理 Cauchy.map_of_le
-  结论: [UniformSpace β] {f : Filter α} {m : α -> β} (hf : Cauchy f) {s : Set α}
+  结论: [一致空间 β] {f : 滤子 α} {m : α -> β} (hf : Cauchy f) {s : 集合 α}
   证明: by
   suffices Cauchy (comap (Subtype.val : s -> α) f) by
     simpa [Set.domRestrict_def, ← Function.comp_def, ← map_map,
@@ -678,7 +678,7 @@ definition CauchySeq
 
 中文:
 定义 CauchySeq
-  签名: [Preorder β] (u : β -> α)
+  签名: [预序 β] (u : β -> α)
   定义体: Cauchy (atTop.map u)
 
 Depends on / 依赖: Cauchy, atTop.map
@@ -697,7 +697,7 @@ theorem CauchySeq.tendsto_uniformity
 
 中文:
 定理 CauchySeq.tendsto_uniformity
-  条件: [Preorder β] {u : β -> α} (h : CauchySeq u)
+  条件: [预序 β] {u : β -> α} (h : CauchySeq u)
   证明: by
   simpa only [Tendsto, prod_map_map_eq', prod_atTop_atTop_eq] using h.right
 
@@ -718,8 +718,8 @@ theorem CauchySeq.nonempty
 
 中文:
 定理 CauchySeq.nonempty
-  条件: [Preorder β] {u : β -> α} (hu : CauchySeq u)
-  结论: Nonempty β
+  条件: [预序 β] {u : β -> α} (hu : CauchySeq u)
+  结论: 非空 β
   证明: @nonempty_of_neBot _ _ (map_neBot_iff _).1 hu.1
 
 Depends on / 依赖: map_neBot_iff, nonempty_of_neBot
@@ -763,8 +763,8 @@ theorem Filter.Tendsto.cauchySeq
   proof: hx.cauchy_map
 
 中文:
-定理 Filter.Tendsto.cauchySeq
-  结论: [SemilatticeSup β] [Nonempty β] {f : β -> α} {x}
+定理 滤子.收敛.cauchySeq
+  结论: [SemilatticeSup β] [非空 β] {f : β -> α} {x}
   证明: hx.cauchy_map
 
 Depends on / 依赖: cauchy_map, hx.cauchy_map
@@ -784,7 +784,7 @@ theorem cauchySeq_const
 
 中文:
 定理 cauchySeq_const
-  条件: [SemilatticeSup β] [Nonempty β] (x : α)
+  条件: [SemilatticeSup β] [非空 β] (x : α)
   结论: CauchySeq fun _ : β => x
   证明: tendsto_const_nhds.cauchySeq
 
@@ -803,7 +803,7 @@ theorem cauchySeq_iff_tendsto
 
 中文:
 定理 cauchySeq_iff_tendsto
-  条件: [Nonempty β] [SemilatticeSup β] {u : β -> α}
+  条件: [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: cauchy_map_iff'.trans by simp only [prod_atTop_atTop_eq, Prod.map_def]
 
 Depends on / 依赖: Prod.map_def, cauchy_map_iff, map_def, prod_atTop_atTop_eq
@@ -822,7 +822,7 @@ theorem CauchySeq.comp_tendsto
 
 中文:
 定理 CauchySeq.comp_tendsto
-  结论: {γ} [Preorder β] [SemilatticeSup γ] [Nonempty γ] {f : β -> α}
+  结论: {γ} [预序 β] [SemilatticeSup γ] [非空 γ] {f : β -> α}
   证明: ⟨inferInstance, le_trans (prod_le_prod.mpr ⟨Tendsto.comp le_rfl hg, Tendsto.comp le_rfl hg⟩) hf.2⟩
 
 Depends on / 依赖: Tendsto, Tendsto.comp, le_rfl, le_trans, prod_le_prod, prod_le_prod.mpr
@@ -841,7 +841,7 @@ theorem CauchySeq.comp_injective
 
 中文:
 定理 CauchySeq.comp_injective
-  结论: [SemilatticeSup β] [NoMaxOrder β] [Nonempty β] {u : 自然数 -> α}
+  结论: [SemilatticeSup β] [NoMax序 β] [非空 β] {u : 自然数 -> α}
   证明: hu.comp_tendsto Nat.cofinite_eq_atTop ▸ hf.tendsto_cofinite.mono_left atTop_le_cofinite
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, atTop_le_cofinite, cofinite_eq_atTop, comp_tendsto, hf.tendsto_cofinite.mono_left, hu.comp_tendsto, mono_left, tendsto_cofinite
@@ -862,8 +862,8 @@ theorem Function.Bijective.cauchySeq_comp_iff
   simpa only [Function.comp_def, f.apply_symm_apply] using H.comp_injective f.symm.injective
 
 中文:
-定理 Function.Bijective.cauchySeq_comp_iff
-  条件: {f : 自然数 -> 自然数} (hf : Bijective f) (u : 自然数 -> α)
+定理 函数.双射.cauchySeq_comp_iff
+  条件: {f : 自然数 -> 自然数} (hf : 双射 f) (u : 自然数 -> α)
   证明: by
   refine ⟨fun H => ?_, fun H => H.comp_injective hf.injective⟩
   lift f to Nat ≃ Nat using hf
@@ -954,7 +954,7 @@ theorem CauchySeq.prodMap
 
 中文:
 定理 CauchySeq.prodMap
-  结论: {γ δ} [UniformSpace β] [Preorder γ] [Preorder δ] {u : γ -> α} {v : δ -> β}
+  结论: {γ δ} [一致空间 β] [预序 γ] [预序 δ] {u : γ -> α} {v : δ -> β}
   证明: by
   simpa only [CauchySeq, prod_map_map_eq', prod_atTop_atTop_eq] using hu.prod hv
 
@@ -975,7 +975,7 @@ theorem CauchySeq.prodMk
 
 中文:
 定理 CauchySeq.prodMk
-  结论: {γ} [UniformSpace β] [Preorder γ] {u : γ -> α} {v : γ -> β}
+  结论: {γ} [一致空间 β] [预序 γ] {u : γ -> α} {v : γ -> β}
   证明: haveI := hu.1.of_map
   (Cauchy.prod hu hv).mono (tendsto_map.prodMk tendsto_map)
 
@@ -996,7 +996,7 @@ theorem CauchySeq.eventually_eventually
 
 中文:
 定理 CauchySeq.eventually_eventually
-  结论: [Preorder β] {u : β -> α} (hu : CauchySeq u)
+  结论: [预序 β] {u : β -> α} (hu : CauchySeq u)
   证明: eventually_atTop_curry hu.tendsto_uniformity hV
 
 Depends on / 依赖: eventually_atTop_curry, hu.tendsto_uniformity, tendsto_uniformity
@@ -1014,8 +1014,8 @@ theorem UniformContinuous.comp_cauchySeq
   proof: hu.map hf
 
 中文:
-定理 UniformContinuous.comp_cauchySeq
-  结论: {γ} [UniformSpace β] [Preorder γ] {f : α -> β}
+定理 一致连续.comp_cauchySeq
+  结论: {γ} [一致空间 β] [预序 γ] {f : α -> β}
   证明: hu.map hf
 
 Depends on / 依赖: hu.map
@@ -1072,7 +1072,7 @@ theorem Filter.Tendsto.subseq_mem_entourage
   exact ⟨fun k => φ k + n, φ_mono.add_const _, hn _ le_add_self, hφV⟩
 
 中文:
-定理 Filter.Tendsto.subseq_mem_entourage
+定理 滤子.收敛.subseq_mem_entourage
   结论: {V : 自然数 -> SetRel α α} (hV : 对任意 n, V n in 𝓤 α) {u : 自然数 -> α}
   证明: by
   rcases mem_atTop_sets.1 (hu (ball_mem_nhds a (symm_le_uniformity <| hV 0))) with ⟨n, hn⟩
@@ -1100,7 +1100,7 @@ theorem tendsto_nhds_of_cauchySeq_of_subseq
 
 中文:
 定理 tendsto_nhds_of_cauchySeq_of_subseq
-  结论: [Preorder β] {u : β -> α} (hu : CauchySeq u)
+  结论: [预序 β] {u : β -> α} (hu : CauchySeq u)
   证明: le_nhds_of_cauchy_adhp hu (ha.mapClusterPt.of_comp hf)
 
 Depends on / 依赖: ha.mapClusterPt.of_comp, le_nhds_of_cauchy_adhp, mapClusterPt, of_comp
@@ -1166,8 +1166,8 @@ theorem Filter.HasBasis.cauchySeq_iff
     mem_Ici, and_imp, Prod.map, @forall_comm (_ <= _) β]
 
 中文:
-定理 Filter.HasBasis.cauchySeq_iff
-  结论: {γ} [Nonempty β] [SemilatticeSup β] {u : β -> α} {p : γ -> 命题}
+定理 滤子.有基.cauchySeq_iff
+  结论: {γ} [非空 β] [SemilatticeSup β] {u : β -> α} {p : γ -> 命题}
   证明: by
   rw [cauchySeq_iff_tendsto]; rw [← prod_atTop_atTop_eq]
   refine (atTop_basis.prod_self.tendsto_iff h).trans ?_
@@ -1198,8 +1198,8 @@ theorem Filter.HasBasis.cauchySeq_iff'
 refine (h j hj).imp fun N hN m hm n hn => hts ⟨u N, 
 
 中文:
-定理 Filter.HasBasis.cauchySeq_iff'
-  结论: {γ} [Nonempty β] [SemilatticeSup β] {u : β -> α}
+定理 滤子.有基.cauchySeq_iff'
+  结论: {γ} [非空 β] [SemilatticeSup β] {u : β -> α}
   证明: by
   refine H.cauchySeq_iff.trans ⟨fun h i hi => ?_, fun h i hi => ?_⟩
   · exact (h i hi).imp fun N hN n hn => hN n hn N le_rfl
@@ -1236,7 +1236,7 @@ theorem cauchySeq_of_controlled
 
 中文:
 定理 cauchySeq_of_controlled
-  结论: [SemilatticeSup β] [Nonempty β] (U : β -> SetRel α α)
+  结论: [SemilatticeSup β] [非空 β] (U : β -> SetRel α α)
   证明: cauchySeq_iff_tendsto.2
     (by
       intro s hs
@@ -1271,7 +1271,7 @@ theorem isComplete_iff_clusterPt
 
 中文:
 定理 isComplete_iff_clusterPt
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: forall₃_congr fun _ hl _ => exists_congr fun _ => and_congr_right fun _ =>
     le_nhds_iff_adhp_of_cauchy hl
 
@@ -1296,7 +1296,7 @@ theorem isComplete_iff_ultrafilter
 
 中文:
 定理 isComplete_iff_ultrafilter
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   refine ⟨fun h l => h l, fun H => isComplete_iff_clusterPt.2 fun l hl hls => ?_⟩
   have := hl.1
@@ -1322,7 +1322,7 @@ theorem isComplete_iff_ultrafilter'
 
 中文:
 定理 isComplete_iff_ultrafilter'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: isComplete_iff_ultrafilter.trans by simp only [le_principal_iff, Ultrafilter.mem_coe]
 
 Depends on / 依赖: Ultrafilter, Ultrafilter.mem_coe, isComplete_iff_ultrafilter, isComplete_iff_ultrafilter.trans, le_principal_iff, mem_coe
@@ -1344,8 +1344,8 @@ theorem IsComplete.union
       (ht l hl htl).imp fun x hx => ⟨Or.inr hx.1, hx.2⟩⟩
 
 中文:
-定理 IsComplete.union
-  条件: {s t : Set α} (hs : IsComplete s) (ht : IsComplete t)
+定理 是完备.union
+  条件: {s t : 集合 α} (hs : 是完备 s) (ht : 是完备 t)
   证明: by
   simp only [isComplete_iff_ultrafilter', Ultrafilter.union_mem_iff, or_imp] at *
   exact fun l hl =>
@@ -1376,7 +1376,7 @@ theorem isComplete_iUnion_separated
 
 中文:
 定理 isComplete_iUnion_separated
-  结论: {ι : Sort*} {s : ι -> Set α} (hs : 对任意 i, IsComplete (s i))
+  结论: {ι : 类型层*} {s : ι -> 集合 α} (hs : 对任意 i, 是完备 (s i))
   证明: by
   set S := ⋃ i, s i
   intro l hl hls
@@ -1421,10 +1421,10 @@ class CompleteSpace
     - complete : forall {f : Filter α}, Cauchy f -> exists x, f <= 𝓝 x
 
 中文:
-类 CompleteSpace
-  参数: (α : 类型u) [UniformSpace α]
+类 完备空间
+  参数: (α : 类型u) [一致空间 α]
   公理与运算 (1 个):
-    - complete : 对任意 {f : Filter α}, Cauchy f -> 存在 x, f <= 𝓝 x
+    - complete : 对任意 {f : 滤子 α}, Cauchy f -> 存在 x, f <= 𝓝 x
 -/
 class CompleteSpace (α : Type u) [UniformSpace α] : Prop where
   /-- In a complete uniform space, every Cauchy filter converges. -/
@@ -1444,7 +1444,7 @@ theorem isComplete_univ
 
 中文:
 定理 isComplete_univ
-  条件: {α : 类型u} [UniformSpace α] [CompleteSpace α]
+  条件: {α : 类型u} [一致空间 α] [完备空间 α]
   证明: fun f hf _ => by
   rcases CompleteSpace.complete hf with ⟨x, hx⟩
   exact ⟨x, mem_univ x, hx⟩
@@ -1471,8 +1471,8 @@ let ⟨x2, hx2⟩ := CompleteSpace.complete hf.map uniformContinuous_snd
     ⟨(x1, x2), by rw [nhds_prod_eq, le_prod]; constructor <;> assumption⟩
 
 中文:
-实例 CompleteSpace.prod
-  签名: [UniformSpace β] [CompleteSpace α] [CompleteSpace β]
+实例 完备空间.乘积
+  签名: [一致空间 β] [完备空间 α] [完备空间 β]
   定义体: let ⟨x1, hx1⟩ := CompleteSpace.complete hf.map uniformContinuous_fst
 let ⟨x2, hx2⟩ := CompleteSpace.complete hf.map uniformContinuous_snd
     ⟨(x1, x2), by rw [nhds_prod_eq, le_prod]; constructor <;> assumption⟩
@@ -1497,8 +1497,8 @@ let ⟨(a, b), hab⟩ := CompleteSpace.complete hf.prod cauchy_pure (a := y)
     ⟨a, by simpa only [map_fst_prod, nhds_prod_eq] using map_mono (m := Prod.fst) hab⟩
 
 中文:
-引理 CompleteSpace.fst_of_prod
-  条件: [UniformSpace β] [CompleteSpace (α × β)] [h : Nonempty β]
+引理 完备空间.fst_of_prod
+  条件: [一致空间 β] [完备空间 (α × β)] [h : 非空 β]
   证明: let ⟨y⟩ := h
 let ⟨(a, b), hab⟩ := CompleteSpace.complete hf.prod cauchy_pure (a := y)
     ⟨a, by simpa only [map_fst_prod, nhds_prod_eq] using map_mono (m := Prod.fst) hab⟩
@@ -1523,8 +1523,8 @@ let ⟨(a, b), hab⟩ := CompleteSpace.complete (cauchy_pure (a := x)).prod hf
     ⟨b, by simpa only [map_snd_prod, nhds_prod_eq] using map_mono (m := Prod.snd) hab⟩
 
 中文:
-引理 CompleteSpace.snd_of_prod
-  条件: [UniformSpace β] [CompleteSpace (α × β)] [h : Nonempty α]
+引理 完备空间.snd_of_prod
+  条件: [一致空间 β] [完备空间 (α × β)] [h : 非空 α]
   证明: let ⟨x⟩ := h
 let ⟨(a, b), hab⟩ := CompleteSpace.complete (cauchy_pure (a := x)).prod hf
     ⟨b, by simpa only [map_snd_prod, nhds_prod_eq] using map_mono (m := Prod.snd) hab⟩
@@ -1550,7 +1550,7 @@ lemma completeSpace_prod_of_nonempty
 
 中文:
 引理 completeSpace_prod_of_nonempty
-  条件: [UniformSpace β] [Nonempty α] [Nonempty β]
+  条件: [一致空间 β] [非空 α] [非空 β]
   证明: ⟨fun _ => ⟨.fst_of_prod (β := β), .snd_of_prod (α := α)⟩, fun ⟨_, _⟩ => .prod⟩
 
 @[to_additive]
@@ -1573,8 +1573,8 @@ instance CompleteSpace.mulOpposite
 ⟨x, (map_le_iff_le_comap.mp hx).trans_eq MulOpposite.comap_unop_nhds _⟩
 
 中文:
-实例 CompleteSpace.mulOpposite
-  签名: [CompleteSpace α]
+实例 完备空间.mulOpposite
+  签名: [完备空间 α]
   定义体: MulOpposite.op_surjective.exists.mpr
       let ⟨x, hx⟩ := CompleteSpace.complete (hf.map MulOpposite.uniformContinuous_unop)
 ⟨x, (map_le_iff_le_comap.mp hx).trans_eq MulOpposite.comap_unop_nhds _⟩
@@ -1598,8 +1598,8 @@ theorem completeSpace_of_isComplete_univ
 
 中文:
 定理 completeSpace_of_isComplete_univ
-  条件: (h : IsComplete (univ : Set α))
-  结论: CompleteSpace α
+  条件: (h : 是完备 (univ : 集合 α))
+  结论: 完备空间 α
   证明: ⟨fun hf => let ⟨x, _, hx⟩ := h _ hf ((@principal_univ α).symm ▸ le_top); ⟨x, hx⟩⟩
 
 Depends on / 依赖: le_top, principal_univ
@@ -1617,7 +1617,7 @@ theorem completeSpace_iff_isComplete_univ
 
 中文:
 定理 completeSpace_iff_isComplete_univ
-  结论: CompleteSpace α ↔ IsComplete (univ : Set α)
+  结论: 完备空间 α ↔ 是完备 (univ : 集合 α)
   证明: ⟨@isComplete_univ α _, completeSpace_of_isComplete_univ⟩
 
 Depends on / 依赖: completeSpace_of_isComplete_univ, isComplete_univ
@@ -1653,8 +1653,8 @@ theorem cauchy_iff_exists_le_nhds
   proof: ⟨CompleteSpace.complete, fun ⟨_, hx⟩ => cauchy_nhds.mono hx⟩
 
 中文:
-定理 cauchy_iff_exists_le_nhds
-  条件: [CompleteSpace α] {l : Filter α} [NeBot l]
+定理 cauchy_iff_存在_le_nhds
+  条件: [完备空间 α] {l : 滤子 α} [NeBot l]
   证明: ⟨CompleteSpace.complete, fun ⟨_, hx⟩ => cauchy_nhds.mono hx⟩
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, cauchy_nhds, cauchy_nhds.mono, complete
@@ -1672,8 +1672,8 @@ theorem cauchy_map_iff_exists_tendsto
   proof: cauchy_iff_exists_le_nhds
 
 中文:
-定理 cauchy_map_iff_exists_tendsto
-  条件: [CompleteSpace α] {l : Filter β} {f : β -> α} [NeBot l]
+定理 cauchy_map_iff_存在_tendsto
+  条件: [完备空间 α] {l : 滤子 β} {f : β -> α} [NeBot l]
   证明: cauchy_iff_exists_le_nhds
 
 Depends on / 依赖: cauchy_iff_exists_le_nhds
@@ -1692,7 +1692,7 @@ theorem cauchySeq_tendsto_of_complete
 
 中文:
 定理 cauchySeq_tendsto_of_complete
-  结论: [Preorder β] [CompleteSpace α] {u : β -> α}
+  结论: [预序 β] [完备空间 α] {u : β -> α}
   证明: CompleteSpace.complete H
 
 Depends on / 依赖: CompleteSpace, CompleteSpace.complete, complete
@@ -1712,7 +1712,7 @@ theorem cauchySeq_tendsto_of_isComplete
 
 中文:
 定理 cauchySeq_tendsto_of_isComplete
-  结论: [Preorder β] {K : Set α} (h₁ : IsComplete K)
+  结论: [预序 β] {K : 集合 α} (h₁ : 是完备 K)
   证明: h₁ _ h₃ le_principal_iff.2 mem_map_iff_exists_image.2
     ⟨univ, univ_mem, by rwa [image_univ, range_subset_iff]⟩
 
@@ -1734,7 +1734,7 @@ theorem Cauchy.le_nhds_lim
 
 中文:
 定理 Cauchy.le_nhds_lim
-  条件: [CompleteSpace α] {f : Filter α} (hf : Cauchy f)
+  条件: [完备空间 α] {f : 滤子 α} (hf : Cauchy f)
   证明: hf.1.nonempty; f <= 𝓝 (lim f) :=
   _root_.le_nhds_lim (CompleteSpace.complete hf)
 
@@ -1755,7 +1755,7 @@ theorem CauchySeq.tendsto_limUnder
 
 中文:
 定理 CauchySeq.tendsto_limUnder
-  条件: [Preorder β] [CompleteSpace α] {u : β -> α} (h : CauchySeq u)
+  条件: [预序 β] [完备空间 α] {u : β -> α} (h : CauchySeq u)
   证明: h.1.nonempty; Tendsto u atTop (𝓝 <| limUnder atTop u) :=
   h.le_nhds_lim
 
@@ -1777,9 +1777,9 @@ theorem IsClosed.isComplete
   ⟨x, isClosed_iff_clusterPt.mp h x (cf.left.mono (le_inf hx fs)), hx⟩
 
 中文:
-定理 IsClosed.isComplete
-  条件: [CompleteSpace α] {s : Set α} (h : IsClosed s)
-  结论: IsComplete s
+定理 是闭集.isComplete
+  条件: [完备空间 α] {s : 集合 α} (h : 是闭集 s)
+  结论: 是完备 s
   证明: fun _ cf fs =>
   let ⟨x, hx⟩ := CompleteSpace.complete cf
   ⟨x, isClosed_iff_clusterPt.mp h x (cf.left.mono (le_inf hx fs)), hx⟩
@@ -1811,7 +1811,7 @@ theorem eq_pure_of_cauchy
 
 中文:
 定理 eq_pure_of_cauchy
-  条件: {f : Filter α} (hf : Cauchy f)
+  条件: {f : 滤子 α} (hf : Cauchy f)
   结论: 存在 x : α, f = pure x
   证明: by
   rcases hf with ⟨f_ne_bot, f_le⟩
@@ -1842,7 +1842,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace α
+  签名: 完备空间 α
   定义体: by
     obtain ⟨x, rfl⟩ := eq_pure_of_cauchy hf
     exact ⟨x, pure_le_nhds x⟩
@@ -1866,7 +1866,7 @@ definition cauchyConst
 
 中文:
 定义 cauchyConst
-  签名: {f : Filter α} (hf : Cauchy f)
+  签名: {f : 滤子 α} (hf : Cauchy f)
   定义体: (eq_pure_of_cauchy hf).choose
 
 Depends on / 依赖: eq_pure_of_cauchy
@@ -1885,7 +1885,7 @@ theorem eq_pure_cauchyConst
 
 中文:
 定理 eq_pure_cauchyConst
-  条件: {f : Filter α} (hf : Cauchy f)
+  条件: {f : 滤子 α} (hf : Cauchy f)
   结论: f = pure (cauchyConst hf)
   证明: (eq_pure_of_cauchy hf).choose_spec
 
@@ -1905,8 +1905,8 @@ definition TotallyBounded
   body: forall d in 𝓤 α, exists t : Set α, t.Finite ∧ s subseteq ⋃ y in t, { x | (x, y) in d }
 
 中文:
-定义 TotallyBounded
-  签名: (s : Set α)
+定义 全有界
+  签名: (s : 集合 α)
   定义体: forall d in 𝓤 α, exists t : Set α, t.Finite ∧ s subseteq ⋃ y in t, { x | (x, y) in d }
 
 Depends on / 依赖: Finite, subseteq, t.Finite
@@ -1923,8 +1923,8 @@ definition Filter.TotallyBounded
   body: forall d : SetRel α α, d in 𝓤 α -> exists t : Set α, t.Finite ∧ d.preimage t in f
 
 中文:
-定义 Filter.TotallyBounded
-  签名: (f : Filter α)
+定义 滤子.全有界
+  签名: (f : 滤子 α)
   定义体: forall d : SetRel α α, d in 𝓤 α -> exists t : Set α, t.Finite ∧ d.preimage t in f
 -/
 protected def Filter.TotallyBounded (f : Filter α) :=
@@ -1940,8 +1940,8 @@ theorem Filter.totallyBounded_principal_iff
   simp only [Filter.TotallyBounded, mem_principal, SetRel.preimage_eq_biUnion, TotallyBounded]
 
 中文:
-定理 Filter.totallyBounded_principal_iff
-  条件: {s : Set α}
+定理 滤子.totallyBounded_principal_iff
+  条件: {s : 集合 α}
   证明: by
   simp only [Filter.TotallyBounded, mem_principal, SetRel.preimage_eq_biUnion, TotallyBounded]
 
@@ -1967,8 +1967,8 @@ theorem Filter.TotallyBounded.exists_subset_of_mem
   · have : Fintype u := (fk.inter_of_
 
 中文:
-定理 Filter.TotallyBounded.exists_subset_of_mem
-  结论: {f : Filter α} (hf : f.TotallyBounded)
+定理 滤子.全有界.存在_subset_of_mem
+  结论: {f : 滤子 α} (hf : f.全有界)
   证明: by
   rcases comp_symm_of_uniformity hU with ⟨r, hr, rs, rU⟩
   rcases hf r hr with ⟨k, fk, ks⟩
@@ -2008,8 +2008,8 @@ theorem TotallyBounded.exists_subset
   exact hs.exists_subset_of_mem (Filter.mem_principal_self s) hU
 
 中文:
-定理 TotallyBounded.exists_subset
-  结论: {s : Set α} (hs : TotallyBounded s) {U : SetRel α α}
+定理 全有界.存在_subset
+  结论: {s : 集合 α} (hs : 全有界 s) {U : SetRel α α}
   证明: by
   rw [← Filter.totallyBounded_principal_iff] at hs
   simp_rw [← SetRel.preimage_eq_biUnion]
@@ -2033,7 +2033,7 @@ theorem totallyBounded_iff_subset
 
 中文:
 定理 totallyBounded_iff_subset
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨fun H _ hd => H.exists_subset hd, fun H d hd => let ⟨t, _, ht⟩ := H d hd; ⟨t, ht⟩⟩
 
 Depends on / 依赖: H.exists_subset, exists_subset
@@ -2053,7 +2053,7 @@ theorem Filter.HasBasis.totallyBounded_iff
 h.imp fun _ ht => ⟨ht.1, ht.2.trans iUnion₂_mono fun _ _ _ hy => hUV hy⟩
 
 中文:
-定理 Filter.HasBasis.totallyBounded_iff
+定理 滤子.有基.totallyBounded_iff
   结论: {ι} {p : ι -> 命题} {U : ι -> SetRel α α}
   证明: H.forall_iff fun _ _ hUV h =>
 h.imp fun _ ht => ⟨ht.1, ht.2.trans iUnion₂_mono fun _ _ _ hy => hUV hy⟩
@@ -2076,7 +2076,7 @@ theorem Filter.HasBasis.filter_totallyBounded_iff
 h.imp fun _ ht => ⟨ht.1, f.mem_of_superset ht.2 by gcongr⟩
 
 中文:
-定理 Filter.HasBasis.filter_totallyBounded_iff
+定理 滤子.有基.filter_totallyBounded_iff
   结论: {ι} {p : ι -> 命题} {U : ι -> SetRel α α}
   证明: H.forall_iff fun _ _ _ h =>
 h.imp fun _ ht => ⟨ht.1, f.mem_of_superset ht.2 by gcongr⟩
@@ -2099,8 +2099,8 @@ theorem totallyBounded_of_forall_isSymm
     simpa only [ball_eq_of_symmetry] using! h V ‹_› ‹_›
 
 中文:
-定理 totallyBounded_of_forall_isSymm
-  结论: {s : Set α}
+定理 totallyBounded_of_对任意_isSymm
+  结论: {s : 集合 α}
   证明: UniformSpace.hasBasis_symmetric.totallyBounded_iff.2 fun V ⟨_, _⟩ => by
     simpa only [ball_eq_of_symmetry] using! h V ‹_› ‹_›
 
@@ -2123,8 +2123,8 @@ theorem TotallyBounded.subset
   ⟨t, ht₁, Subset.trans hs ht₂⟩
 
 中文:
-定理 TotallyBounded.subset
-  条件: {s₁ s₂ : Set α} (hs : s₁ subseteq s₂) (h : TotallyBounded s₂)
+定理 全有界.subset
+  条件: {s₁ s₂ : 集合 α} (hs : s₁ subseteq s₂) (h : 全有界 s₂)
   证明: fun d hd =>
   let ⟨t, ht₁, ht₂⟩ := h d hd
   ⟨t, ht₁, Subset.trans hs ht₂⟩
@@ -2143,8 +2143,8 @@ theorem Filter.TotallyBounded.mono
   proof: fun U hU => (hg U hU).imp fun _ => And.imp_right (@h _)
 
 中文:
-定理 Filter.TotallyBounded.mono
-  条件: {f g : Filter α} (h : f <= g) (hg : g.TotallyBounded)
+定理 滤子.全有界.mono
+  条件: {f g : 滤子 α} (h : f <= g) (hg : g.全有界)
   证明: fun U hU => (hg U hU).imp fun _ => And.imp_right (@h _)
 
 Depends on / 依赖: And.imp_right, imp_right
@@ -2169,8 +2169,8 @@ theorem Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
 @[deprecated (since :=
 
 中文:
-定理 Filter.TotallyBounded.totallyBounded_setOfPred_clusterPt
-  结论: {f : Filter α}
+定理 滤子.全有界.totallyBounded_setOfPred_clusterPt
+  结论: {f : 滤子 α}
   证明: by
   refine uniformity_hasBasis_closed.totallyBounded_iff.2 fun V hV => ?_
   obtain ⟨t, htf, hst⟩ := h V hV.1
@@ -2209,9 +2209,9 @@ theorem TotallyBounded.closure
 @[simp]
 
 中文:
-定理 TotallyBounded.closure
-  条件: {s : Set α} (h : TotallyBounded s)
-  结论: TotallyBounded (closure s)
+定理 全有界.closure
+  条件: {s : 集合 α} (h : 全有界 s)
+  结论: 全有界 (closure s)
   证明: by
   rw [closure_eq_cluster_pts]
   exact (Filter.totallyBounded_principal_iff.mpr h).totallyBounded_setOfPred_clusterPt
@@ -2238,8 +2238,8 @@ lemma totallyBounded_closure
 
 中文:
 引理 totallyBounded_closure
-  条件: {s : Set α}
-  结论: TotallyBounded (closure s) ↔ TotallyBounded s
+  条件: {s : 集合 α}
+  结论: 全有界 (closure s) ↔ 全有界 s
   证明: ⟨fun h => h.subset subset_closure, TotallyBounded.closure⟩
 
 @[simp]
@@ -2264,8 +2264,8 @@ lemma Filter.totallyBounded_iSup
   gcongr; apply ht
 
 中文:
-引理 Filter.totallyBounded_iSup
-  条件: {ι : Sort*} [Finite ι] {f : ι -> Filter α}
+引理 滤子.totallyBounded_iSup
+  条件: {ι : 类型层*} [有限 ι] {f : ι -> 滤子 α}
   证明: by
   refine ⟨fun h i => h.mono (le_iSup _ _), fun h U hU => ?_⟩
   choose t htf ht using (h · U hU)
@@ -2294,8 +2294,8 @@ lemma Filter.totallyBounded_biSup
   rw [iSup_subtype']; rw [totallyBounded_iSup]; rw [Subtype.forall]
 
 中文:
-引理 Filter.totallyBounded_biSup
-  条件: {ι : 类型} {I : Set ι} (hI : I.Finite) {f : ι -> Filter α}
+引理 滤子.totallyBounded_biSup
+  条件: {ι : 类型} {I : 集合 ι} (hI : I.有限) {f : ι -> 滤子 α}
   证明: by
   have := hI.to_subtype
   rw [iSup_subtype']; rw [totallyBounded_iSup]; rw [Subtype.forall]
@@ -2318,7 +2318,7 @@ lemma totallyBounded_sSup
 
 中文:
 引理 totallyBounded_sSup
-  条件: {S : Set (Filter α)} (hS : S.Finite)
+  条件: {S : 集合 (滤子 α)} (hS : S.有限)
   证明: by
   rw [sSup_eq_iSup]; rw [totallyBounded_biSup hS]
 
@@ -2343,7 +2343,7 @@ lemma totallyBounded_iUnion
 
 中文:
 引理 totallyBounded_iUnion
-  条件: {ι : Sort*} [Finite ι] {s : ι -> Set α}
+  条件: {ι : 类型层*} [有限 ι] {s : ι -> 集合 α}
   证明: by
   simp_rw [← Filter.totallyBounded_principal_iff, ← Filter.iSup_principal,
     Filter.totallyBounded_iSup]
@@ -2367,7 +2367,7 @@ lemma totallyBounded_biUnion
 
 中文:
 引理 totallyBounded_biUnion
-  条件: {ι : 类型} {I : Set ι} (hI : I.Finite) {s : ι -> Set α}
+  条件: {ι : 类型} {I : 集合 ι} (hI : I.有限) {s : ι -> 集合 α}
   证明: by
   have := hI.to_subtype
   rw [biUnion_eq_iUnion]; rw [totallyBounded_iUnion]; rw [Subtype.forall]
@@ -2390,7 +2390,7 @@ lemma totallyBounded_sUnion
 
 中文:
 引理 totallyBounded_sUnion
-  条件: {S : Set (Set α)} (hS : S.Finite)
+  条件: {S : 集合 (集合 α)} (hS : S.有限)
   证明: by
   rw [sUnion_eq_biUnion]; rw [totallyBounded_biUnion hS]
 
@@ -2411,9 +2411,9 @@ lemma Set.Finite.totallyBounded
 ⟨s, hs, fun _x hx => mem_biUnion hx refl_mem_uniformity hU⟩
 
 中文:
-引理 Set.Finite.totallyBounded
-  条件: {s : Set α} (hs : s.Finite)
-  结论: TotallyBounded s
+引理 集合.有限.totallyBounded
+  条件: {s : 集合 α} (hs : s.有限)
+  结论: 全有界 s
   证明: fun _U hU =>
 ⟨s, hs, fun _x hx => mem_biUnion hx refl_mem_uniformity hU⟩
 -/
@@ -2431,8 +2431,8 @@ lemma Set.Subsingleton.totallyBounded
 @[simp]
 
 中文:
-引理 Set.Subsingleton.totallyBounded
-  条件: {s : Set α} (hs : s.Subsingleton)
+引理 集合.子单例.totallyBounded
+  条件: {s : 集合 α} (hs : s.子单例)
   证明: hs.finite.totallyBounded
 
 @[simp]
@@ -2458,7 +2458,7 @@ lemma totallyBounded_singleton
 中文:
 引理 totallyBounded_singleton
   条件: (a : α)
-  结论: TotallyBounded {a}
+  结论: 全有界 {a}
   证明: (finite_singleton a).totallyBounded
 
 @[simp]
@@ -2480,7 +2480,7 @@ theorem totallyBounded_empty
 
 中文:
 定理 totallyBounded_empty
-  结论: TotallyBounded (∅ : Set α)
+  结论: 全有界 (∅ : 集合 α)
   证明: finite_empty.totallyBounded
 
 @[simp]
@@ -2501,8 +2501,8 @@ theorem Filter.totallyBounded_bot
   exact totallyBounded_empty
 
 中文:
-定理 Filter.totallyBounded_bot
-  结论: (⊥ : Filter α).TotallyBounded
+定理 滤子.totallyBounded_bot
+  结论: (⊥ : 滤子 α).全有界
   证明: by
   rw [← principal_empty]; rw [totallyBounded_principal_iff]
   exact totallyBounded_empty
@@ -2528,7 +2528,7 @@ lemma totallyBounded_union
 
 中文:
 引理 totallyBounded_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: by
   rw [union_eq_iUnion]; rw [totallyBounded_iUnion]
   simp [and_comm]
@@ -2551,8 +2551,8 @@ lemma TotallyBounded.union
 @[simp]
 
 中文:
-引理 TotallyBounded.union
-  条件: {s t : Set α} (hs : TotallyBounded s) (ht : TotallyBounded t)
+引理 全有界.union
+  条件: {s t : 集合 α} (hs : 全有界 s) (ht : 全有界 t)
   证明: totallyBounded_union.2 ⟨hs, ht⟩
 
 @[simp]
@@ -2577,7 +2577,7 @@ protected alias ⟨_, TotallyBounded.insert⟩ := totallyBounded_insert
 
 中文:
 引理 totallyBounded_insert
-  条件: (a : α) {s : Set α}
+  条件: (a : α) {s : 集合 α}
   证明: by
   simp_rw [← singleton_union, totallyBounded_union, totallyBounded_singleton, true_and]
 
@@ -2605,8 +2605,8 @@ lemma Filter.totallyBounded_sup
   simp [and_comm]
 
 中文:
-引理 Filter.totallyBounded_sup
-  条件: {f g : Filter α}
+引理 滤子.totallyBounded_sup
+  条件: {f g : 滤子 α}
   证明: by
   rw [sup_eq_iSup]; rw [totallyBounded_iSup]
   simp [and_comm]
@@ -2627,8 +2627,8 @@ lemma Filter.TotallyBounded.sup
   proof: totallyBounded_sup.2 ⟨hf, hg⟩
 
 中文:
-引理 Filter.TotallyBounded.sup
-  条件: {f g : Filter α} (hf : f.TotallyBounded) (hg : g.TotallyBounded)
+引理 滤子.全有界.上确界
+  条件: {f g : 滤子 α} (hf : f.全有界) (hg : g.全有界)
   证明: totallyBounded_sup.2 ⟨hf, hg⟩
 
 Depends on / 依赖: totallyBounded_sup
@@ -2648,8 +2648,8 @@ theorem Filter.TotallyBounded.map
   ⟨f '' c, hfc.image f, by simpa [SetRel.preimage]⟩
 
 中文:
-定理 Filter.TotallyBounded.map
-  结论: [UniformSpace β] {f : α -> β} {g : Filter α}
+定理 滤子.全有界.map
+  结论: [一致空间 β] {f : α -> β} {g : 滤子 α}
   证明: fun t ht =>
   let ⟨c, hfc, hct⟩ := hg _ (hf ht)
   ⟨f '' c, hfc.image f, by simpa [SetRel.preimage]⟩
@@ -2670,8 +2670,8 @@ theorem TotallyBounded.image
   exact hs.map hf
 
 中文:
-定理 TotallyBounded.image
-  结论: [UniformSpace β] {f : α -> β} {s : Set α} (hs : TotallyBounded s)
+定理 全有界.像
+  结论: [一致空间 β] {f : α -> β} {s : 集合 α} (hs : 全有界 s)
   证明: by
   simp only [← Filter.totallyBounded_principal_iff, ← Filter.map_principal] at hs ⊢
   exact hs.map hf
@@ -2698,7 +2698,7 @@ theorem Ultrafilter.cauchy_of_totallyBounded'
 
 中文:
 定理 Ultrafilter.cauchy_of_totallyBounded'
-  条件: (f : Ultrafilter α) (hf : f.TotallyBounded)
+  条件: (f : Ultrafilter α) (hf : f.全有界)
   证明: ⟨f.neBot', fun _ ht =>
     let ⟨t', ht'₁, ht'_symm, ht'_t⟩ := comp_symm_of_uniformity ht
     let ⟨i, hi, ht'_f⟩ := hf t' ht'₁
@@ -2729,7 +2729,7 @@ theorem Ultrafilter.cauchy_of_totallyBounded
 
 中文:
 定理 Ultrafilter.cauchy_of_totallyBounded
-  结论: {s : Set α} (f : Ultrafilter α) (hs : TotallyBounded s)
+  结论: {s : 集合 α} (f : Ultrafilter α) (hs : 全有界 s)
   证明: f.cauchy_of_totallyBounded' (Filter.totallyBounded_principal_iff.mpr hs).mono h
 
 Depends on / 依赖: Filter, Filter.totallyBounded_principal_iff.mpr, cauchy_of_totallyBounded, f.cauchy_of_totallyBounded, totallyBounded_principal_iff
@@ -2754,8 +2754,8 @@ theorem Filter.totallyBounded_iff_filter
     have hb : Antito
 
 中文:
-定理 Filter.totallyBounded_iff_filter
-  条件: {g : Filter α}
+定理 滤子.totallyBounded_iff_filter
+  条件: {g : 滤子 α}
   证明: by
   constructor
   · exact fun H f hf hfs => ⟨Ultrafilter.of f, Ultrafilter.of_le f,
@@ -2800,8 +2800,8 @@ refine ⟨fun hg f hf => f.cauchy_of_totallyBounded' hg.mono hf,
   exact ⟨Ultrafilter.of f, Ultrafilter.of_le f, H _ ((Ultrafilter.of_le f).trans hfs)⟩
 
 中文:
-定理 Filter.totallyBounded_iff_ultrafilter
-  条件: {g : Filter α}
+定理 滤子.totallyBounded_iff_ultrafilter
+  条件: {g : 滤子 α}
   证明: by
 refine ⟨fun hg f hf => f.cauchy_of_totallyBounded' hg.mono hf,
     fun H => g.totallyBounded_iff_filter.2 ?_⟩
@@ -2826,7 +2826,7 @@ theorem totallyBounded_iff_filter
 
 中文:
 定理 totallyBounded_iff_filter
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   rw [← Filter.totallyBounded_principal_iff]; rw [Filter.totallyBounded_iff_filter]
 
@@ -2847,7 +2847,7 @@ theorem totallyBounded_iff_ultrafilter
 
 中文:
 定理 totallyBounded_iff_ultrafilter
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   rw [← Filter.totallyBounded_principal_iff]; rw [Filter.totallyBounded_iff_ultrafilter]
 
@@ -2875,7 +2875,7 @@ theorem isCompact_iff_totallyBounded_isComplete
 
 中文:
 定理 isCompact_iff_totallyBounded_isComplete
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: ⟨fun hs =>
     ⟨totallyBounded_iff_ultrafilter.2 fun f hf =>
         let ⟨_, _, fx⟩ := isCompact_iff_ultrafilter_le_nhds.1 hs f hf
@@ -2911,9 +2911,9 @@ theorem IsCompact.totallyBounded
   proof: (isCompact_iff_totallyBounded_isComplete.1 h).1
 
 中文:
-定理 IsCompact.totallyBounded
-  条件: {s : Set α} (h : IsCompact s)
-  结论: TotallyBounded s
+定理 是紧集.totallyBounded
+  条件: {s : 集合 α} (h : 是紧集 s)
+  结论: 全有界 s
   证明: (isCompact_iff_totallyBounded_isComplete.1 h).1
 -/
 protected theorem IsCompact.totallyBounded {s : Set α} (h : IsCompact s) : TotallyBounded s :=
@@ -2929,9 +2929,9 @@ theorem IsCompact.isComplete
   proof: (isCompact_iff_totallyBounded_isComplete.1 h).2
 
 中文:
-定理 IsCompact.isComplete
-  条件: {s : Set α} (h : IsCompact s)
-  结论: IsComplete s
+定理 是紧集.isComplete
+  条件: {s : 集合 α} (h : 是紧集 s)
+  结论: 是完备 s
   证明: (isCompact_iff_totallyBounded_isComplete.1 h).2
 -/
 protected theorem IsCompact.isComplete {s : Set α} (h : IsCompact s) : IsComplete s :=
@@ -2951,8 +2951,8 @@ theorem TotallyBounded.isCompact_of_isComplete
   proof: isCompact_iff_totallyBounded_isComplete.mpr ⟨ht, hc⟩
 
 中文:
-定理 TotallyBounded.isCompact_of_isComplete
-  结论: {s : Set α} (ht : TotallyBounded s)
+定理 全有界.isCompact_of_isComplete
+  结论: {s : 集合 α} (ht : 全有界 s)
   证明: isCompact_iff_totallyBounded_isComplete.mpr ⟨ht, hc⟩
 
 Depends on / 依赖: isCompact_iff_totallyBounded_isComplete, isCompact_iff_totallyBounded_isComplete.mpr
@@ -2969,8 +2969,8 @@ theorem TotallyBounded.isCompact_of_isClosed
   proof: ht.isCompact_of_isComplete hc.isComplete
 
 中文:
-定理 TotallyBounded.isCompact_of_isClosed
-  结论: [CompleteSpace α] {s : Set α} (ht : TotallyBounded s)
+定理 全有界.isCompact_of_isClosed
+  结论: [完备空间 α] {s : 集合 α} (ht : 全有界 s)
   证明: ht.isCompact_of_isComplete hc.isComplete
 
 Depends on / 依赖: hc.isComplete, ht.isCompact_of_isComplete, isCompact_of_isComplete, isComplete
@@ -2990,7 +2990,7 @@ alias Filter.TotallyBounded.isCompact_setOf_clusterPt :=
   Filter.TotallyBounded.isCompact_setOfPred_clusterPt
 
 中文:
-定理 Filter.TotallyBounded.isCompact_setOfPred_clusterPt
+定理 滤子.全有界.isCompact_setOfPred_clusterPt
   证明: hf.totallyBounded_setOfPred_clusterPt.isCompact_of_isClosed isClosed_setOfPred_clusterPt
 
 @[deprecated (since := "2026-07-09")]
@@ -3021,7 +3021,7 @@ theorem Filter.TotallyBounded.exists_clusterPt
   exact ⟨x, hx.mono hmf⟩
 
 中文:
-定理 Filter.TotallyBounded.exists_clusterPt
+定理 滤子.全有界.存在_clusterPt
   证明: by
   let m := Ultrafilter.of f
   have hmf : m <= f := Ultrafilter.of_le f
@@ -3496,7 +3496,7 @@ H' u cauchySeq_of_controlled U' (fun _ hs => hU'.1 hs) hu
 
 中文:
 定理 complete_of_cauchySeq_tendsto
-  条件: (H' : 对任意 u : 自然数 -> α, CauchySeq u -> 存在 a, Tendsto u atTop (𝓝 a))
+  条件: (H' : 对任意 u : 自然数 -> α, CauchySeq u -> 存在 a, 收敛 u atTop (𝓝 a))
   证明: let ⟨U', _, hU'⟩ := (𝓤 α).exists_antitone_seq
   complete_of_convergent_controlled_sequences U' (fun n => hU'.2 ⟨n, Subset.refl _⟩) fun u hu =>
 H' u cauchySeq_of_controlled U' (fun _ hs => hU'.1 hs) hu
@@ -3531,7 +3531,7 @@ instance secondCountable_of_separable
 
 中文:
 实例 secondCountable_of_separable
-  签名: [SeparableSpace α]
+  签名: [可分空间 α]
   定义体: by
   rcases exists_countable_dense α with ⟨s, hsc, hsd⟩
   obtain
@@ -3583,7 +3583,7 @@ theorem subset_countable_closure_of_almost_dense_set
 
 中文:
 定理 subset_countable_closure_of_almost_dense_set
-  结论: (s : Set α)
+  结论: (s : 集合 α)
   证明: by
   obtain ⟨B, hB, _⟩ := has_seq_basis α
   replace hs (n : Nat) := hs (B n) (hB.mem n)
@@ -3660,8 +3660,8 @@ lemma _root_.TotallyBounded.isSeparable
   exact ⟨t, htc, hts⟩
 
 中文:
-引理 _root_.TotallyBounded.isSeparable
-  条件: {s : Set α} (h : TotallyBounded s)
+引理 _root_.全有界.isSeparable
+  条件: {s : 集合 α} (h : 全有界 s)
   证明: by
   obtain ⟨t, -, htc, hts⟩ := subset_countable_closure_of_almost_dense_set s fun U hU => by
     obtain ⟨t, ht, hst⟩ := h (SetRel.inv U)

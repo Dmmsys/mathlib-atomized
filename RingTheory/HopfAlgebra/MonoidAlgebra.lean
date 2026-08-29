@@ -99,7 +99,7 @@ instance instHopfAlgebra
 
 中文:
 实例 instHopfAlgebra
-  签名: : HopfAlgebra R A[G] where
+  签名: : Hopf代数 R A[G] where
   定义体: by
     ext a b : 2
     simpa [← (ℛ R b).eq] using congr(lsingle (R := R) (1 : G)
@@ -139,7 +139,7 @@ instance instHopfAlgebra
 
 中文:
 实例 instHopfAlgebra
-  签名: : HopfAlgebra R A[T;T⁻¹]
+  签名: : Hopf代数 R A[T;T⁻¹]
   定义体: inferInstanceAs (HopfAlgebra R <| AddMonoidAlgebra A Int)
 
 Depends on / 依赖: AddMonoidAlgebra, HopfAlgebra

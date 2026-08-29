@@ -58,8 +58,8 @@ theorem HasFDerivAtFilter.prodMk
   proof: .of_isLittleO hf₁.isLittleO.prod_left hf₂.isLittleO
 
 中文:
-定理 HasFDerivAtFilter.prodMk
-  结论: (hf₁ : HasFDerivAtFilter f₁ f₁' L)
+定理 有FDerivAtFilter.prodMk
+  结论: (hf₁ : 有FDerivAtFilter f₁ f₁' L)
   证明: .of_isLittleO hf₁.isLittleO.prod_left hf₂.isLittleO
 
 Depends on / 依赖: isLittleO, isLittleO.prod_left, of_isLittleO, prod_left
@@ -247,8 +247,8 @@ theorem Differentiable.prodMk
   (hf₁ x).prodMk (hf₂ x)
 
 中文:
-定理 Differentiable.prodMk
-  条件: (hf₁ : Differentiable 𝕜 f₁) (hf₂ : Differentiable 𝕜 f₂)
+定理 可微.prodMk
+  条件: (hf₁ : 可微 𝕜 f₁) (hf₂ : 可微 𝕜 f₂)
   证明: fun x =>
   (hf₁ x).prodMk (hf₂ x)
 -/
@@ -315,7 +315,7 @@ theorem hasFDerivAtFilter_fst
 
 中文:
 定理 hasFDerivAtFilter_fst
-  条件: {L : Filter ((E × F) × (E × F))}
+  条件: {L : 滤子 ((E × F) × (E × F))}
   证明: (fst 𝕜 E F).hasFDerivAtFilter
 
 @[fun_prop]
@@ -339,7 +339,7 @@ theorem hasStrictFDerivAt_fst
 
 中文:
 定理 hasStrictFDerivAt_fst
-  结论: HasStrictFDerivAt (@Prod.fst E F) (fst 𝕜 E F) p
+  结论: HasStrictFDerivAt (@积类型.fst E F) (fst 𝕜 E F) p
   证明: hasFDerivAtFilter_fst
 
 @[fun_prop]
@@ -378,8 +378,8 @@ theorem HasFDerivAtFilter.fst
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.fst
-  条件: (h : HasFDerivAtFilter f₂ f₂' L)
+定理 有FDerivAtFilter.fst
+  条件: (h : 有FDerivAtFilter f₂ f₂' L)
   证明: hasFDerivAtFilter_fst.comp h tendsto_map
 
 @[fun_prop]
@@ -406,7 +406,7 @@ protected nonrec theorem HasFDerivAt.fst (h : HasFDerivAt f₂ f₂' x) :
 
 中文:
 定理 hasFDerivAt_fst
-  结论: HasFDerivAt (@Prod.fst E F) (fst 𝕜 E F) p
+  结论: 在点处Fréchet可导 (@积类型.fst E F) (fst 𝕜 E F) p
   证明: hasFDerivAtFilter_fst
 
 @[fun_prop]
@@ -444,7 +444,7 @@ protected nonrec theorem HasFDerivWithinAt.fst (h : HasFDerivWithinAt f₂ f₂'
 
 中文:
 定理 hasFDerivWithinAt_fst
-  条件: {s : Set (E × F)}
+  条件: {s : 集合 (E × F)}
   证明: hasFDerivAtFilter_fst
 
 @[fun_prop]
@@ -478,7 +478,7 @@ theorem differentiableAt_fst
 
 中文:
 定理 differentiableAt_fst
-  结论: DifferentiableAt 𝕜 Prod.fst p
+  结论: DifferentiableAt 𝕜 积类型.fst p
   证明: hasFDerivAt_fst.differentiableAt
 
 @[simp, fun_prop]
@@ -524,7 +524,7 @@ theorem differentiable_fst
 
 中文:
 定理 differentiable_fst
-  结论: Differentiable 𝕜 (Prod.fst : E × F -> E)
+  结论: 可微 𝕜 (积类型.fst : E × F -> E)
   证明: fun _ =>
   differentiableAt_fst
 
@@ -545,8 +545,8 @@ theorem Differentiable.fst
 @[fun_prop]
 
 中文:
-定理 Differentiable.fst
-  条件: (h : Differentiable 𝕜 f₂)
+定理 可微.fst
+  条件: (h : 可微 𝕜 f₂)
   证明: differentiable_fst.comp h
 
 @[fun_prop]
@@ -569,8 +569,8 @@ theorem differentiableWithinAt_fst
 
 中文:
 定理 differentiableWithinAt_fst
-  条件: {s : Set (E × F)}
-  结论: DifferentiableWithinAt 𝕜 Prod.fst s p
+  条件: {s : 集合 (E × F)}
+  结论: DifferentiableWithinAt 𝕜 积类型.fst s p
   证明: differentiableAt_fst.differentiableWithinAt
 
 @[fun_prop]
@@ -616,8 +616,8 @@ theorem differentiableOn_fst
 
 中文:
 定理 differentiableOn_fst
-  条件: {s : Set (E × F)}
-  结论: DifferentiableOn 𝕜 Prod.fst s
+  条件: {s : 集合 (E × F)}
+  结论: DifferentiableOn 𝕜 积类型.fst s
   证明: differentiable_fst.differentiableOn
 
 @[fun_prop]
@@ -655,7 +655,7 @@ theorem fderiv_fst
 
 中文:
 定理 fderiv_fst
-  结论: fderiv 𝕜 Prod.fst p = fst 𝕜 E F
+  结论: fderiv 𝕜 积类型.fst p = fst 𝕜 E F
   证明: hasFDerivAt_fst.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt_fst, hasFDerivAt_fst.fderiv
@@ -692,7 +692,7 @@ theorem fderivWithin_fst
 
 中文:
 定理 fderivWithin_fst
-  条件: {s : Set (E × F)} (hs : UniqueDiffWithinAt 𝕜 s p)
+  条件: {s : 集合 (E × F)} (hs : UniqueDiffWithinAt 𝕜 s p)
   证明: hasFDerivWithinAt_fst.fderivWithin hs
 
 Depends on / 依赖: fderivWithin, hasFDerivWithinAt_fst, hasFDerivWithinAt_fst.fderivWithin
@@ -736,7 +736,7 @@ theorem hasFDerivAtFilter_snd
 
 中文:
 定理 hasFDerivAtFilter_snd
-  条件: {L : Filter ((E × F) × (E × F))}
+  条件: {L : 滤子 ((E × F) × (E × F))}
   证明: (snd 𝕜 E F).hasFDerivAtFilter
 
 Depends on / 依赖: hasFDerivAtFilter
@@ -756,8 +756,8 @@ theorem HasFDerivAtFilter.snd
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.snd
-  条件: (h : HasFDerivAtFilter f₂ f₂' L)
+定理 有FDerivAtFilter.snd
+  条件: (h : 有FDerivAtFilter f₂ f₂' L)
   证明: hasFDerivAtFilter_snd.comp h tendsto_map
 
 @[fun_prop]
@@ -779,7 +779,7 @@ theorem hasStrictFDerivAt_snd
 
 中文:
 定理 hasStrictFDerivAt_snd
-  结论: HasStrictFDerivAt (@Prod.snd E F) (snd 𝕜 E F) p
+  结论: HasStrictFDerivAt (@积类型.snd E F) (snd 𝕜 E F) p
   证明: hasFDerivAtFilter_snd
 
 @[fun_prop]
@@ -824,7 +824,7 @@ theorem hasFDerivAt_snd
 
 中文:
 定理 hasFDerivAt_snd
-  结论: HasFDerivAt (@Prod.snd E F) (snd 𝕜 E F) p
+  结论: 在点处Fréchet可导 (@积类型.snd E F) (snd 𝕜 E F) p
   证明: hasFDerivAtFilter_snd
 
 @[fun_prop]
@@ -846,8 +846,8 @@ theorem HasFDerivAt.snd
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.snd
-  条件: (h : HasFDerivAt f₂ f₂' x)
+定理 在点处Fréchet可导.snd
+  条件: (h : 在点处Fréchet可导 f₂ f₂' x)
   证明: HasFDerivAtFilter.snd h
 
 @[fun_prop]
@@ -869,7 +869,7 @@ theorem hasFDerivWithinAt_snd
 
 中文:
 定理 hasFDerivWithinAt_snd
-  条件: {s : Set (E × F)}
+  条件: {s : 集合 (E × F)}
   证明: hasFDerivAtFilter_snd
 
 @[fun_prop]
@@ -915,7 +915,7 @@ theorem differentiableAt_snd
 
 中文:
 定理 differentiableAt_snd
-  结论: DifferentiableAt 𝕜 Prod.snd p
+  结论: DifferentiableAt 𝕜 积类型.snd p
   证明: hasFDerivAt_snd.differentiableAt
 
 @[simp, fun_prop]
@@ -961,7 +961,7 @@ theorem differentiable_snd
 
 中文:
 定理 differentiable_snd
-  结论: Differentiable 𝕜 (Prod.snd : E × F -> F)
+  结论: 可微 𝕜 (积类型.snd : E × F -> F)
   证明: fun _ =>
   differentiableAt_snd
 
@@ -982,8 +982,8 @@ theorem Differentiable.snd
 @[fun_prop]
 
 中文:
-定理 Differentiable.snd
-  条件: (h : Differentiable 𝕜 f₂)
+定理 可微.snd
+  条件: (h : 可微 𝕜 f₂)
   证明: differentiable_snd.comp h
 
 @[fun_prop]
@@ -1006,8 +1006,8 @@ theorem differentiableWithinAt_snd
 
 中文:
 定理 differentiableWithinAt_snd
-  条件: {s : Set (E × F)}
-  结论: DifferentiableWithinAt 𝕜 Prod.snd s p
+  条件: {s : 集合 (E × F)}
+  结论: DifferentiableWithinAt 𝕜 积类型.snd s p
   证明: differentiableAt_snd.differentiableWithinAt
 
 @[fun_prop]
@@ -1053,8 +1053,8 @@ theorem differentiableOn_snd
 
 中文:
 定理 differentiableOn_snd
-  条件: {s : Set (E × F)}
-  结论: DifferentiableOn 𝕜 Prod.snd s
+  条件: {s : 集合 (E × F)}
+  结论: DifferentiableOn 𝕜 积类型.snd s
   证明: differentiable_snd.differentiableOn
 
 @[fun_prop]
@@ -1092,7 +1092,7 @@ theorem fderiv_snd
 
 中文:
 定理 fderiv_snd
-  结论: fderiv 𝕜 Prod.snd p = snd 𝕜 E F
+  结论: fderiv 𝕜 积类型.snd p = snd 𝕜 E F
   证明: hasFDerivAt_snd.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt_snd, hasFDerivAt_snd.fderiv
@@ -1129,7 +1129,7 @@ theorem fderivWithin_snd
 
 中文:
 定理 fderivWithin_snd
-  条件: {s : Set (E × F)} (hs : UniqueDiffWithinAt 𝕜 s p)
+  条件: {s : 集合 (E × F)} (hs : UniqueDiffWithinAt 𝕜 s p)
   证明: hasFDerivWithinAt_snd.fderivWithin hs
 
 Depends on / 依赖: fderivWithin, hasFDerivWithinAt_snd, hasFDerivWithinAt_snd.fderivWithin
@@ -1199,7 +1199,7 @@ theorem HasFDerivWithinAt.prodMap
 
 中文:
 定理 HasFDerivWithinAt.prodMap
-  结论: {s : Set <| E × G}
+  结论: {s : 集合 <| E × G}
   证明: (hf.comp _ hasFDerivWithinAt_fst mapsTo_fst_prod).prodMk
 .mono (by grind) (hf₂.comp _ hasFDerivWithinAt_snd mapsTo_snd_prod)
 
@@ -1224,8 +1224,8 @@ theorem HasFDerivAt.prodMap
 @[simp, fun_prop]
 
 中文:
-定理 HasFDerivAt.prodMap
-  条件: (hf : HasFDerivAt f f' p.1) (hf₂ : HasFDerivAt f₂ f₂' p.2)
+定理 在点处Fréchet可导.prodMap
+  条件: (hf : 在点处Fréchet可导 f f' p.1) (hf₂ : 在点处Fréchet可导 f₂ f₂' p.2)
   证明: (hf.comp p hasFDerivAt_fst).prodMk (hf₂.comp p hasFDerivAt_snd)
 
 @[simp, fun_prop]
@@ -1438,7 +1438,7 @@ theorem hasFDerivAt_pi''
 
 中文:
 定理 hasFDerivAt_pi''
-  条件: (hφ : 对任意 i, HasFDerivAt (fun x => Φ x i) ((proj i).comp Φ') x)
+  条件: (hφ : 对任意 i, 在点处Fréchet可导 (fun x => Φ x i) ((proj i).comp Φ') x)
   证明: hasFDerivAt_pi'.2 hφ
 
 @[fun_prop]
@@ -1543,7 +1543,7 @@ theorem hasFDerivWithinAt_apply
 
 中文:
 定理 hasFDerivWithinAt_apply
-  条件: (i : ι) (f : 对任意 i, F' i) (s' : Set (对任意 i, F' i))
+  条件: (i : ι) (f : 对任意 i, F' i) (s' : 集合 (对任意 i, F' i))
   证明: (hasFDerivAt_apply i f).hasFDerivWithinAt
 -/
 theorem hasFDerivWithinAt_apply (i : ι) (f : forall i, F' i) (s' : Set (forall i, F' i)) :
@@ -1635,7 +1635,7 @@ theorem differentiableWithinAt_apply
 
 中文:
 定理 differentiableWithinAt_apply
-  条件: (i : ι) (f : 对任意 i, F' i) (s' : Set (对任意 i, F' i))
+  条件: (i : ι) (f : 对任意 i, F' i) (s' : 集合 (对任意 i, F' i))
   证明: by
   apply HasFDerivWithinAt.differentiableWithinAt
   fun_prop
@@ -1775,7 +1775,7 @@ theorem differentiableOn_apply
 
 中文:
 定理 differentiableOn_apply
-  条件: (i : ι) (s' : Set (对任意 i, F' i))
+  条件: (i : ι) (s' : 集合 (对任意 i, F' i))
   证明: fun _ _ => differentiableWithinAt_apply ..
 -/
 theorem differentiableOn_apply (i : ι) (s' : Set (forall i, F' i)) :
@@ -1794,7 +1794,7 @@ theorem differentiable_pi
 
 中文:
 定理 differentiable_pi
-  结论: Differentiable 𝕜 Φ ↔ 对任意 i, Differentiable 𝕜 fun x => Φ x i
+  结论: 可微 𝕜 Φ ↔ 对任意 i, 可微 𝕜 fun x => Φ x i
   证明: ⟨fun h i x => differentiableAt_pi.1 (h x) i, fun h x => differentiableAt_pi.2 fun i => h i x⟩
 
 @[fun_prop]
@@ -1817,7 +1817,7 @@ theorem differentiable_pi''
 
 中文:
 定理 differentiable_pi''
-  条件: (hφ : 对任意 i, Differentiable 𝕜 fun x => Φ x i)
+  条件: (hφ : 对任意 i, 可微 𝕜 fun x => Φ x i)
   证明: differentiable_pi.2 hφ
 
 @[fun_prop]
@@ -1994,7 +1994,7 @@ theorem HasFDerivAtFilter.finCons
   proof: hasFDerivAtFilter_finCons'.mpr ⟨h, hs⟩
 
 中文:
-定理 HasFDerivAtFilter.finCons
+定理 有FDerivAtFilter.finCons
   证明: hasFDerivAtFilter_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasFDerivAtFilter_finCons
@@ -2120,7 +2120,7 @@ theorem HasFDerivAt.finCons
   proof: hasFDerivAt_finCons'.mpr ⟨h, hs⟩
 
 中文:
-定理 HasFDerivAt.finCons
+定理 在点处Fréchet可导.finCons
   证明: hasFDerivAt_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: hasFDerivAt_finCons
@@ -2440,7 +2440,7 @@ theorem Differentiable.finCons
   proof: differentiable_finCons'.mpr ⟨h, hs⟩
 
 中文:
-定理 Differentiable.finCons
+定理 可微.finCons
   证明: differentiable_finCons'.mpr ⟨h, hs⟩
 
 Depends on / 依赖: differentiable_finCons

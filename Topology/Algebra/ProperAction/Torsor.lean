@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSMul V P
+  签名: 真标量乘法 V P
   定义体: by
     let Φ : V × P ≃ₜ P × P :=
     { toFun vp := (vp.1 • vp.2, vp.2)

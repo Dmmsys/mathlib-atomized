@@ -50,11 +50,11 @@ structure LeftInvariantDerivation
     - left_invariant'' : forall g, 𝒅ₕ (smoothLeftMul_one I g) (Derivation.evalAt 1 toDerivation) = Derivation.evalAt g toDerivation
 
 中文:
-结构 LeftInvariantDerivation
-  参数: extends Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
-  继承: Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
+结构 左不变导子
+  参数: extends 导子 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
+  继承: 导子 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
   公理与运算 (1 个):
-    - left_invariant'' : 对任意 g, 𝒅ₕ (smoothLeftMul_one I g) (Derivation.evalAt 1 toDerivation) = Derivation.evalAt g toDerivation
+    - left_invariant'' : 对任意 g, 𝒅ₕ (smoothLeftMul_one I g) (导子.evalAt 1 toDerivation) = 导子.evalAt g toDerivation
 -/
 structure LeftInvariantDerivation extends Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯ where
   left_invariant'' :
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (LeftInvariantDerivation I G) (Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯)
+  签名: Coe (左不变导子 I G) (导子 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯)
   定义体: ⟨toDerivation⟩
 
 Depends on / 依赖: toDerivation
@@ -111,7 +111,7 @@ coe_injective _ _ h := toDerivation_injective DFunLike.ext' h
 
 中文:
 实例 :
-  签名: FunLike (LeftInvariantDerivation I G) C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
+  签名: 函数状 (左不变导子 I G) C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
   定义体: f.toDerivation
 coe_injective _ _ h := toDerivation_injective DFunLike.ext' h
 
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (LeftInvariantDerivation I G) 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
+  签名: 线性映射类 (左不变导子 I G) 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯
   定义体: map_add f.1
   map_smulₛₗ f := map_smul f.1.1
 
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (LeftInvariantDerivation I G)
+  签名: 零 (左不变导子 I G)
   定义体: ⟨⟨0, fun g => by simp only [map_zero]⟩⟩
 
 Depends on / 依赖: map_zero
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LeftInvariantDerivation I G)
+  签名: 可居 (左不变导子 I G)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (LeftInvariantDerivation I G) :=
@@ -379,7 +379,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (LeftInvariantDerivation I G)
+  签名: 加法 (左不变导子 I G)
   定义体: ⟨X + Y, fun g => by
       simp only [map_add, left_invariant']⟩
 
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (LeftInvariantDerivation I G)
+  签名: 取负 (左不变导子 I G)
   定义体: ⟨-X, fun g => by simp [left_invariant']⟩
 
 Depends on / 依赖: left_invariant
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (LeftInvariantDerivation I G)
+  签名: 减法 (左不变导子 I G)
   定义体: ⟨X - Y, fun g => by simp [left_invariant']⟩
 
 @[simp]
@@ -464,7 +464,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ⇑(0 : LeftInvariantDerivation I G) = 0
+  结论: ⇑(0 : 左不变导子 I G) = 0
   证明: rfl
 
 @[simp]
@@ -527,7 +527,7 @@ theorem lift_add
 
 中文:
 定理 lift_add
-  结论: (↑(X + Y) : Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯) = X + Y
+  结论: (↑(X + Y) : 导子 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯) = X + Y
   证明: rfl
 
 @[simp, norm_cast]
@@ -560,8 +560,8 @@ instance hasNatScalar
   body: ⟨r • X.1, fun g => by simp_rw [LinearMap.map_smul_of_tower _ r, left_invariant']⟩
 
 中文:
-实例 hasNatScalar
-  签名: : SMul 自然数 (LeftInvariantDerivation I G) where
+实例 has自然数Scalar
+  签名: : 标量乘法 自然数 (左不变导子 I G) where
   定义体: ⟨r • X.1, fun g => by simp_rw [LinearMap.map_smul_of_tower _ r, left_invariant']⟩
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, left_invariant, map_smul_of_tower, simp_rw
@@ -578,8 +578,8 @@ instance hasIntScalar
   body: ⟨r • X.1, fun g => by simp_rw [LinearMap.map_smul_of_tower _ r, left_invariant']⟩
 
 中文:
-实例 hasIntScalar
-  签名: : SMul 整数 (LeftInvariantDerivation I G) where
+实例 has整数Scalar
+  签名: : 标量乘法 整数 (左不变导子 I G) where
   定义体: ⟨r • X.1, fun g => by simp_rw [LinearMap.map_smul_of_tower _ r, left_invariant']⟩
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul_of_tower, left_invariant, map_smul_of_tower, simp_rw
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (LeftInvariantDerivation I G)
+  签名: 加法交换群 (左不变导子 I G)
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_sub, coe_zero
@@ -616,7 +616,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 𝕜 (LeftInvariantDerivation I G)
+  签名: 标量乘法 𝕜 (左不变导子 I G)
   定义体: ⟨r • X.1, fun g => by
     simp only [LinearMap.map_smul_of_tower, map_smul]; rw [left_invariant']⟩
 
@@ -682,7 +682,7 @@ definition coeFnAddMonoidHom
 
 中文:
 定义 coeFnAddMonoidHom
-  签名: : LeftInvariantDerivation I G ->+ C^∞⟮I, G; 𝕜⟯ -> C^∞⟮I, G; 𝕜⟯
+  签名: : 左不变导子 I G ->+ C^∞⟮I, G; 𝕜⟯ -> C^∞⟮I, G; 𝕜⟯
   定义体: ⟨⟨DFunLike.coe, coe_zero⟩, coe_add⟩
 
 Depends on / 依赖: DFunLike, DFunLike.coe, coe_add, coe_zero
@@ -702,7 +702,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 𝕜 (LeftInvariantDerivation I G)
+  签名: 模 𝕜 (左不变导子 I G)
   定义体: coe_injective.module _ (coeFnAddMonoidHom I G) coe_smul
 
 Depends on / 依赖: coeFnAddMonoidHom, coe_injective, coe_injective.module, coe_smul, module
@@ -722,7 +722,7 @@ definition evalAt
 
 中文:
 定义 evalAt
-  签名: : LeftInvariantDerivation I G ->ₗ[𝕜] PointDerivation I g where
+  签名: : 左不变导子 I G ->ₗ[𝕜] PointDerivation I g where
   定义体: Derivation.evalAt g X.1
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -765,7 +765,7 @@ theorem evalAt_coe
 
 中文:
 定理 evalAt_coe
-  结论: Derivation.evalAt g ↑X = evalAt g X
+  结论: 导子.evalAt g ↑X = evalAt g X
   证明: rfl
 -/
 theorem evalAt_coe : Derivation.evalAt g ↑X = evalAt g X :=
@@ -857,7 +857,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bracket (LeftInvariantDerivation I G) (LeftInvariantDerivation I G)
+  签名: Bracket (左不变导子 I G) (左不变导子 I G)
   定义体: ⟨⁅(X : Derivation 𝕜 C^∞⟮I, G; 𝕜⟯ C^∞⟮I, G; 𝕜⟯), Y⁆, fun g => by
       ext f
       have hX := Derivation.congr_fun (left_invariant' g X) (Y f)
@@ -934,7 +934,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (LeftInvariantDerivation I G)
+  签名: Lie环 (左不变导子 I G)
   定义体: by
     ext1
     simp only [commutator_apply, coe_add, Pi.add_apply, map_add]
@@ -978,7 +978,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra 𝕜 (LeftInvariantDerivation I G)
+  签名: Lie代数 𝕜 (左不变导子 I G)
   定义体: by
     ext1
     simp only [commutator_apply, map_smul, smul_sub, coe_smul, Pi.smul_apply]

@@ -52,8 +52,8 @@ theorem List.support_sum_subset
     exact Finsupp.support_add.trans (Finset.union_subset_union Finset.Subset.rfl IH)
 
 中文:
-定理 List.support_sum_subset
-  条件: [AddZeroClass M] (l : List (ι ->₀ M))
+定理 列表.support_sum_subset
+  条件: [加法零类 M] (l : 列表 (ι ->₀ M))
   证明: by
   induction l with
   | nil => simp
@@ -84,7 +84,7 @@ theorem Multiset.support_sum_subset
 
 中文:
 定理 Multiset.support_sum_subset
-  条件: [AddCommMonoid M] (s : Multiset (ι ->₀ M))
+  条件: [加法交换幺半群 M] (s : Multiset (ι ->₀ M))
   证明: by
   induction s using Quot.inductionOn
   simpa only [Multiset.quot_mk_to_coe'', Multiset.sum_coe, Multiset.map_coe, Multiset.sup_coe,
@@ -108,8 +108,8 @@ theorem Finset.support_sum_subset
   convert! Multiset.support_sum_subset s.1; simp
 
 中文:
-定理 Finset.support_sum_subset
-  条件: [AddCommMonoid M] (s : Finset (ι ->₀ M))
+定理 有限集.support_sum_subset
+  条件: [加法交换幺半群 M] (s : 有限集 (ι ->₀ M))
   证明: by
   convert! Multiset.support_sum_subset s.1; simp
 
@@ -134,8 +134,8 @@ theorem List.mem_foldr_sup_support_iff
       mem_cons, exists_eq_or_imp]
 
 中文:
-定理 List.mem_foldr_sup_support_iff
-  条件: [Zero M] {l : List (ι ->₀ M)} {x : ι}
+定理 列表.mem_foldr_sup_support_iff
+  条件: [零 M] {l : 列表 (ι ->₀ M)} {x : ι}
   证明: by
   simp only [Finset.sup_eq_union, Finsupp.mem_support_iff]
   induction l with
@@ -167,7 +167,7 @@ theorem Multiset.mem_sup_map_support_iff
 
 中文:
 定理 Multiset.mem_sup_map_support_iff
-  条件: [Zero M] {s : Multiset (ι ->₀ M)} {x : ι}
+  条件: [零 M] {s : Multiset (ι ->₀ M)} {x : ι}
   证明: Quot.inductionOn s fun _ => by
     simpa only [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.sup_coe, List.foldr_map]
     using! List.mem_foldr_sup_support_iff
@@ -189,8 +189,8 @@ theorem Finset.mem_sup_support_iff
   proof: Multiset.mem_sup_map_support_iff
 
 中文:
-定理 Finset.mem_sup_support_iff
-  条件: [Zero M] {s : Finset (ι ->₀ M)} {x : ι}
+定理 有限集.mem_sup_support_iff
+  条件: [零 M] {s : 有限集 (ι ->₀ M)} {x : ι}
   证明: Multiset.mem_sup_map_support_iff
 
 Depends on / 依赖: Multiset, Multiset.mem_sup_map_support_iff, mem_sup_map_support_iff
@@ -217,8 +217,8 @@ theorem List.support_sum_eq
     suffices _root_.Disjoint hd.support (tl.foldr (fun x y => (Finsupp.suppor
 
 中文:
-定理 List.support_sum_eq
-  结论: [AddZeroClass M] (l : List (ι ->₀ M))
+定理 列表.support_sum_eq
+  结论: [加法零类 M] (l : 列表 (ι ->₀ M))
   证明: by
   induction l with
   | nil => simp
@@ -264,7 +264,7 @@ theorem Multiset.support_sum_eq
 
 中文:
 定理 Multiset.support_sum_eq
-  结论: [AddCommMonoid M] (s : Multiset (ι ->₀ M))
+  结论: [加法交换幺半群 M] (s : Multiset (ι ->₀ M))
   证明: by
   induction s using Quot.inductionOn with | _ a
   obtain ⟨l, hl, hd⟩ := hs
@@ -305,8 +305,8 @@ theorem Finset.support_sum_eq
   
 
 中文:
-定理 Finset.support_sum_eq
-  结论: [AddCommMonoid M] (s : Finset (ι ->₀ M))
+定理 有限集.support_sum_eq
+  结论: [加法交换幺半群 M] (s : 有限集 (ι ->₀ M))
   证明: by
   classical
   suffices s.1.Pairwise (_root_.Disjoint on Finsupp.support) by

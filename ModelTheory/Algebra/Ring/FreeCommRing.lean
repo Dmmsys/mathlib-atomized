@@ -48,7 +48,7 @@ theorem exists_term_realize_eq_freeCommRing
       ⟨t₁ * t₂, by simp_all⟩)
 
 中文:
-定理 exists_term_realize_eq_freeCommRing
+定理 存在_term_realize_eq_freeCommRing
   条件: (p : FreeCommRing α)
   证明: FreeCommRing.induction_on p
     ⟨-1, by simp⟩

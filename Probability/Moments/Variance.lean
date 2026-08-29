@@ -170,7 +170,7 @@ lemma evariance_zero_measure
 
 中文:
 引理 evariance_zero_measure
-  结论: eVar[X; (0 : Measure Ω)] = 0
+  结论: eVar[X; (0 : 测度 Ω)] = 0
   证明: by simp [evariance]
 -/
 @[simp] lemma evariance_zero_measure : eVar[X; (0 : Measure Ω)] = 0 := by simp [evariance]
@@ -184,7 +184,7 @@ lemma variance_zero_measure
 
 中文:
 引理 variance_zero_measure
-  结论: Var[X; (0 : Measure Ω)] = 0
+  结论: Var[X; (0 : 测度 Ω)] = 0
   证明: by simp [variance]
 -/
 @[simp] lemma variance_zero_measure : Var[X; (0 : Measure Ω)] = 0 := by simp [variance]
@@ -205,7 +205,7 @@ theorem evariance_lt_top
 
 中文:
 定理 evariance_lt_top
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ)
   结论: evariance X μ < ∞
   证明: by
   have := ENNReal.pow_lt_top (hX.sub <| memLp_const <| μ[X]).2 (n := 2)
@@ -236,7 +236,7 @@ lemma evariance_ne_top
 
 中文:
 引理 evariance_ne_top
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ)
   结论: evariance X μ != ∞
   证明: (evariance_lt_top hX).ne
 
@@ -262,7 +262,7 @@ theorem evariance_eq_top
 
 中文:
 定理 evariance_eq_top
-  条件: [IsFiniteMeasure μ] (hXm : AEStronglyMeasurable X μ) (hX : ¬MemLp X 2 μ)
+  条件: [是有限测度 μ] (hXm : AEStronglyMeasurable X μ) (hX : ¬MemLp X 2 μ)
   证明: by
   by_contra h
   rw [← Ne]; rw [← lt_top_iff_ne_top] at h
@@ -299,7 +299,7 @@ theorem evariance_lt_top_iff_memLp
 
 中文:
 定理 evariance_lt_top_iff_memLp
-  条件: [IsFiniteMeasure μ] (hX : AEStronglyMeasurable X μ)
+  条件: [是有限测度 μ] (hX : AEStronglyMeasurable X μ)
   证明: by contrapose!; rw [top_le_iff]; exact evariance_eq_top hX
   mpr := evariance_lt_top
 
@@ -320,7 +320,7 @@ lemma evariance_eq_top_iff
 
 中文:
 引理 evariance_eq_top_iff
-  条件: [IsFiniteMeasure μ] (hX : AEStronglyMeasurable X μ)
+  条件: [是有限测度 μ] (hX : AEStronglyMeasurable X μ)
   证明: by simp [← evariance_lt_top_iff_memLp hX]
 
 Depends on / 依赖: evariance_lt_top_iff_memLp
@@ -338,7 +338,7 @@ lemma variance_of_not_memLp
 
 中文:
 引理 variance_of_not_memLp
-  结论: [IsFiniteMeasure μ] (hX : AEStronglyMeasurable X μ)
+  结论: [是有限测度 μ] (hX : AEStronglyMeasurable X μ)
   证明: by simp [variance, (evariance_eq_top_iff hX).mpr hX_not]
 
 Depends on / 依赖: evariance_eq_top_iff, hX_not, variance
@@ -359,7 +359,7 @@ lemma memLp_two_of_variance_ne_zero
 
 中文:
 引理 memLp_two_of_variance_ne_zero
-  结论: [IsFiniteMeasure μ] (hX : AEStronglyMeasurable X μ)
+  结论: [是有限测度 μ] (hX : AEStronglyMeasurable X μ)
   证明: by
   contrapose h
   exact variance_of_not_memLp hX h
@@ -386,8 +386,8 @@ protected alias _root_.MeasureTheory.MemLp.evariance_ne_top := evariance_ne_top
 protected alias _root_.MeasureTheory.MemLp.ofReal_variance_eq :=
 
 中文:
-定理 ofReal_variance
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+定理 of实数_variance
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ)
   证明: by
   rw [variance]; rw [ENNReal.ofReal_toReal]
   exact evariance_ne_top hX
@@ -417,7 +417,7 @@ theorem evariance_eq_lintegral_ofReal
   simp [evariance, ← enorm_pow, Real.enorm_of_nonneg (sq_nonneg _)]
 
 中文:
-定理 evariance_eq_lintegral_ofReal
+定理 evariance_eq_lintegral_of实数
   证明: by
   simp [evariance, ← enorm_pow, Real.enorm_of_nonneg (sq_nonneg _)]
 
@@ -440,7 +440,7 @@ lemma variance_eq_integral
 
 中文:
 引理 variance_eq_integral
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   结论: Var[X; μ] = ∫ ω, (X ω - μ[X]) ^ 2 ∂μ
   证明: by
   simp [variance, evariance, toReal_enorm, ← integral_toReal ((hX.sub_const _).enorm.pow_const _) <|
@@ -470,7 +470,7 @@ lemma ae_eq_integral_of_variance_eq_zero
 
 中文:
 引理 ae_eq_integral_of_variance_eq_zero
-  结论: [IsFiniteMeasure μ] (hX : MemLp X 2 μ)
+  结论: [是有限测度 μ] (hX : MemLp X 2 μ)
   证明: by
   rw [variance_eq_integral hX.aemeasurable]; rw [integral_eq_zero_iff_of_nonneg] at h
   · filter_upwards [h] with ω hω
@@ -508,7 +508,7 @@ lemma variance_of_integral_eq_zero
 
 中文:
 引理 variance_of_integral_eq_zero
-  条件: (hX : AEMeasurable X μ) (hXint : μ[X] = 0)
+  条件: (hX : 几乎处处可测 X μ) (hXint : μ[X] = 0)
   证明: by
   simp [variance_eq_integral hX, hXint]
 
@@ -550,7 +550,7 @@ theorem evariance_eq_zero_iff
 
 中文:
 定理 evariance_eq_zero_iff
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   证明: by
   simp [evariance, lintegral_eq_zero_iff' ((hX.sub_const _).enorm.pow_const _), EventuallyEq,
     sub_eq_zero]
@@ -577,7 +577,7 @@ theorem evariance_mul
 
 中文:
 定理 evariance_mul
-  条件: (c : 实数) (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (c : 实数) (X : Ω -> 实数) (μ : 测度 Ω)
   证明: by
   rw [evariance]; rw [evariance]; rw [← lintegral_const_mul' _ _ ENNReal.ofReal_lt_top.ne]
   congr with ω
@@ -606,7 +606,7 @@ theorem variance_zero
 
 中文:
 定理 variance_zero
-  条件: (μ : Measure Ω)
+  条件: (μ : 测度 Ω)
   结论: variance 0 μ = 0
   证明: by
   simp only [variance, evariance_zero, ENNReal.toReal_zero]
@@ -631,7 +631,7 @@ lemma covariance_self
 
 中文:
 引理 covariance_self
-  条件: {X : Ω -> 实数} (hX : AEMeasurable X μ)
+  条件: {X : Ω -> 实数} (hX : 几乎处处可测 X μ)
   证明: by
   rw [covariance]; rw [variance_eq_integral hX]
   congr with x
@@ -659,7 +659,7 @@ theorem variance_nonneg
 
 中文:
 定理 variance_nonneg
-  条件: (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (X : Ω -> 实数) (μ : 测度 Ω)
   结论: 0 <= variance X μ
   证明: ENNReal.toReal_nonneg
 
@@ -680,7 +680,7 @@ theorem variance_const_mul
 
 中文:
 定理 variance_const_mul
-  条件: (c : 实数) (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (c : 实数) (X : Ω -> 实数) (μ : 测度 Ω)
   证明: by
   rw [variance]; rw [evariance_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal (sq_nonneg _)]
   rfl
@@ -703,7 +703,7 @@ theorem variance_mul_const
 
 中文:
 定理 variance_mul_const
-  条件: (c : 实数) (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (c : 实数) (X : Ω -> 实数) (μ : 测度 Ω)
   证明: by
   simp [mul_comm, variance_const_mul]
 
@@ -723,7 +723,7 @@ theorem variance_smul
 
 中文:
 定理 variance_smul
-  条件: (c : 实数) (X : Ω -> 实数) (μ : Measure Ω)
+  条件: (c : 实数) (X : Ω -> 实数) (μ : 测度 Ω)
   证明: variance_const_mul c X μ
 
 Depends on / 依赖: variance_const_mul
@@ -745,7 +745,7 @@ theorem variance_smul'
 
 中文:
 定理 variance_smul'
-  结论: {A : 类型} [CommSemiring A] [Algebra A 实数] (c : A) (X : Ω -> 实数)
+  结论: {A : 类型} [交换半环 A] [代数 A 实数] (c : A) (X : Ω -> 实数)
   证明: by
   convert! variance_smul (algebraMap A Real c) X μ using 1
   · simp only [algebraMap_smul]
@@ -770,7 +770,7 @@ theorem variance_eq_sub
 
 中文:
 定理 variance_eq_sub
-  条件: [IsProbabilityMeasure μ] {X : Ω -> 实数} (hX : MemLp X 2 μ)
+  条件: [是概率测度 μ] {X : Ω -> 实数} (hX : MemLp X 2 μ)
   证明: by
   rw [← covariance_self hX.aemeasurable]; rw [covariance_eq_sub hX hX]; rw [pow_two]; rw [pow_two]
 
@@ -795,7 +795,7 @@ lemma variance_add_const
 
 中文:
 引理 variance_add_const
-  条件: [IsProbabilityMeasure μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
   证明: by
   by_cases hX_Lp : MemLp X 2 μ
   · have hX_int : Integrable X μ := hX_Lp.integrable one_le_two
@@ -828,7 +828,7 @@ lemma variance_const_add
 
 中文:
 引理 variance_const_add
-  条件: [IsProbabilityMeasure μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
   证明: by
   simp_rw [add_comm c, variance_add_const hX c]
 
@@ -892,7 +892,7 @@ lemma variance_sub_const
 
 中文:
 引理 variance_sub_const
-  条件: [IsProbabilityMeasure μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
   证明: by
   simp_rw [sub_eq_add_neg, variance_add_const hX (-c)]
 
@@ -914,7 +914,7 @@ lemma variance_const_sub
 
 中文:
 引理 variance_const_sub
-  条件: [IsProbabilityMeasure μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
+  条件: [是概率测度 μ] (hX : AEStronglyMeasurable X μ) (c : 实数)
   证明: by
   simp_rw [sub_eq_add_neg]
   rw [variance_const_add (by fun_prop) c]; rw [variance_fun_neg]
@@ -941,7 +941,7 @@ lemma variance_add
 
 中文:
 引理 variance_add
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: by
   rw [← covariance_self]; rw [covariance_add_left hX hY (hX.add hY)]; rw [covariance_add_right hX hX hY]; rw [covariance_add_right hY hX hY]; rw [covariance_self]; rw [covariance_self]; rw [covariance_comm]
   · ring
@@ -969,7 +969,7 @@ lemma variance_fun_add
 
 中文:
 引理 variance_fun_add
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: variance_add hX hY
 
 Depends on / 依赖: variance_add
@@ -990,7 +990,7 @@ lemma variance_sub
 
 中文:
 引理 variance_sub
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: by
    rw [sub_eq_add_neg]; rw [variance_add hX hY.neg]; rw [variance_neg]; rw [covariance_neg_right]
    ring
@@ -1012,7 +1012,7 @@ lemma variance_fun_sub
 
 中文:
 引理 variance_fun_sub
-  条件: [IsFiniteMeasure μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
+  条件: [是有限测度 μ] (hX : MemLp X 2 μ) (hY : MemLp Y 2 μ)
   证明: variance_sub hX hY
 
 Depends on / 依赖: variance_sub
@@ -1038,7 +1038,7 @@ lemma variance_sum'
 
 中文:
 引理 variance_sum'
-  条件: [IsFiniteMeasure μ] (hX : 对任意 i in s, MemLp (X i) 2 μ)
+  条件: [是有限测度 μ] (hX : 对任意 i in s, MemLp (X i) 2 μ)
   证明: by
   rw [← covariance_self]; rw [covariance_sum_left' (by simpa)]
   · refine Finset.sum_congr rfl fun i hi => ?_
@@ -1066,7 +1066,7 @@ lemma variance_sum
 
 中文:
 引理 variance_sum
-  条件: [IsFiniteMeasure μ] [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ)
+  条件: [是有限测度 μ] [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ)
   证明: variance_sum' (fun _ _ => hX _)
 
 Depends on / 依赖: variance_sum
@@ -1087,7 +1087,7 @@ lemma variance_fun_sum'
 
 中文:
 引理 variance_fun_sum'
-  条件: [IsFiniteMeasure μ] (hX : 对任意 i in s, MemLp (X i) 2 μ)
+  条件: [是有限测度 μ] (hX : 对任意 i in s, MemLp (X i) 2 μ)
   证明: by
   convert! variance_sum' hX
   simp
@@ -1111,7 +1111,7 @@ lemma variance_fun_sum
 
 中文:
 引理 variance_fun_sum
-  条件: [IsFiniteMeasure μ] [Fintype ι] (hX : 对任意 i, MemLp (X i) 2 μ)
+  条件: [是有限测度 μ] [有限类型 ι] (hX : 对任意 i, MemLp (X i) 2 μ)
   证明: by
   convert! variance_sum hX
   simp
@@ -1140,8 +1140,8 @@ lemma variance_dirac
 
 中文:
 引理 variance_dirac
-  条件: [MeasurableSingletonClass Ω] (x : Ω)
-  结论: Var[X; Measure.dirac x] = 0
+  条件: [MeasurableSingleton类 Ω] (x : Ω)
+  结论: Var[X; 测度.dirac x] = 0
   证明: by
   rw [variance_eq_integral]
   · simp
@@ -1169,7 +1169,7 @@ lemma variance_map
 
 中文:
 引理 variance_map
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ : 测度 Ω'}
   证明: by
   rw [variance_eq_integral hX]; rw [integral_map hY]; rw [variance_eq_integral (hX.comp_aemeasurable hY)]; rw [integral_map hY]
   · congr
@@ -1198,7 +1198,7 @@ lemma _root_.MeasureTheory.MeasurePreserving.variance_fun_comp
   rw [← hX.map_eq]; rw [variance_map (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.comp_def]
 
 中文:
-引理 _root_.MeasureTheory.MeasurePreserving.variance_fun_comp
+引理 _root_.测度论.保测.variance_fun_comp
   结论: {Ω' : 类型}
   证明: by
   rw [← hX.map_eq]; rw [variance_map (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.comp_def]
@@ -1222,7 +1222,7 @@ lemma variance_map_equiv
 
 中文:
 引理 variance_map_equiv
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ : 测度 Ω'}
   证明: by
   simp_rw [variance, evariance, lintegral_map_equiv, integral_map_equiv, Function.comp_apply]
 
@@ -1245,7 +1245,7 @@ lemma variance_id_map
 
 中文:
 引理 variance_id_map
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   结论: Var[id; μ.map X] = Var[X; μ]
   证明: by
   simp [variance_map measurable_id.aemeasurable hX]
@@ -1272,7 +1272,7 @@ theorem variance_le_expectation_sq
 
 中文:
 定理 variance_le_expectation_sq
-  结论: [IsProbabilityMeasure μ] {X : Ω -> 实数}
+  结论: [是概率测度 μ] {X : Ω -> 实数}
   证明: by
   by_cases hX : MemLp X 2 μ
   · rw [variance_eq_sub hX]
@@ -1324,7 +1324,7 @@ theorem evariance_def'
 
 中文:
 定理 evariance_def'
-  条件: [IsProbabilityMeasure μ] {X : Ω -> 实数} (hX : AEStronglyMeasurable X μ)
+  条件: [是概率测度 μ] {X : Ω -> 实数} (hX : AEStronglyMeasurable X μ)
   证明: by
   by_cases hℒ : MemLp X 2 μ
   · rw [← ofReal_variance hℒ, variance_eq_sub hℒ, ENNReal.ofReal_sub _ (sq_nonneg _)]
@@ -1416,7 +1416,7 @@ theorem meas_ge_le_variance_div_sq
 
 中文:
 定理 meas_ge_le_variance_div_sq
-  结论: [IsFiniteMeasure μ] {X : Ω -> 实数} (hX : MemLp X 2 μ) {c : 实数}
+  结论: [是有限测度 μ] {X : Ω -> 实数} (hX : MemLp X 2 μ) {c : 实数}
   证明: by
   rw [ENNReal.ofReal_div_of_pos (sq_pos_of_ne_zero hc.ne.symm)]; rw [hX.ofReal_variance_eq]
   convert! @meas_ge_le_evariance_div_sq _ _ _ _ hX.1 c.toNNReal (by simp [hc]) using 1
@@ -1507,7 +1507,7 @@ lemma variance_sum_pi
 
 中文:
 引理 variance_sum_pi
-  结论: [Fintype ι] {Ω : ι -> 类型} {mΩ : 对任意 i, MeasurableSpace (Ω i)}
+  结论: [有限类型 ι] {Ω : ι -> 类型} {mΩ : 对任意 i, 可测空间 (Ω i)}
   证明: by
   rw [IndepFun.variance_sum]
   · congr with i
@@ -1549,7 +1549,7 @@ lemma variance_le_sub_mul_sub
 
 中文:
 引理 variance_le_sub_mul_sub
-  结论: [IsProbabilityMeasure μ] {a b : 实数} {X : Ω -> 实数}
+  结论: [是概率测度 μ] {a b : 实数} {X : Ω -> 实数}
   证明: by
   have ha : forallᵐ ω ∂μ, a <= X ω := h.mono fun ω h => h.1
   have hb : forallᵐ ω ∂μ, X ω <= b := h.mono fun ω h => h.2
@@ -1601,7 +1601,7 @@ lemma variance_le_sq_of_bounded
 
 中文:
 引理 variance_le_sq_of_bounded
-  结论: [IsProbabilityMeasure μ] {a b : 实数} {X : Ω -> 实数}
+  结论: [是概率测度 μ] {a b : 实数} {X : Ω -> 实数}
   证明: calc
     _ <= (b - μ[X]) * (μ[X] - a) := variance_le_sub_mul_sub h hX
     _ = ((b - a) / 2) ^ 2 - (μ[X] - (b + a) / 2) ^ 2 := by ring

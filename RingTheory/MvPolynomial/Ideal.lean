@@ -47,7 +47,7 @@ theorem mem_ideal_span_monomial_image
 
 中文:
 定理 mem_ideal_span_monomial_image
-  条件: {x : MvPolynomial σ R} {s : Set (σ ->₀ 自然数)}
+  条件: {x : 多元多项式 σ R} {s : 集合 (σ ->₀ 自然数)}
   证明: by
   refine AddMonoidAlgebra.mem_ideal_span_of'_image.trans ?_
   simp_rw [le_iff_exists_add, add_comm]
@@ -73,7 +73,7 @@ theorem mem_ideal_span_monomial_image_iff_dvd
 
 中文:
 定理 mem_ideal_span_monomial_image_iff_dvd
-  条件: {x : MvPolynomial σ R} {s : Set (σ ->₀ 自然数)}
+  条件: {x : 多元多项式 σ R} {s : 集合 (σ ->₀ 自然数)}
   证明: by
   refine mem_ideal_span_monomial_image.trans (forall₂_congr fun xi hxi => ?_)
   simp_rw [monomial_dvd_monomial, one_dvd, and_true, mem_support_iff.mp hxi, false_or]
@@ -100,7 +100,7 @@ theorem mem_ideal_span_X_image
 
 中文:
 定理 mem_ideal_span_X_image
-  条件: {x : MvPolynomial σ R} {s : Set σ}
+  条件: {x : 多元多项式 σ R} {s : 集合 σ}
   证明: by
   have := @mem_ideal_span_monomial_image σ R _ x ((fun i => Finsupp.single i 1) '' s)
   rw [Set.image_image] at this
@@ -132,7 +132,7 @@ abbreviation idealOfVars
 
 中文:
 缩写 idealOfVars
-  签名: : Ideal (MvPolynomial σ R)
+  签名: : 理想 (多元多项式 σ R)
   定义体: .span (.range X)
 -/
 noncomputable abbrev idealOfVars : Ideal (MvPolynomial σ R) := .span (.range X)
@@ -149,7 +149,7 @@ lemma idealOfVars_fg
 
 中文:
 引理 idealOfVars_fg
-  条件: [Finite σ]
+  条件: [有限 σ]
   结论: (idealOfVars σ R).FG
   证明: Submodule.fg_span Set.finite_range _
 
@@ -271,7 +271,7 @@ theorem mem_pow_idealOfVars_iff
 
 中文:
 定理 mem_pow_idealOfVars_iff
-  条件: (n : 自然数) (p : MvPolynomial σ R)
+  条件: (n : 自然数) (p : 多元多项式 σ R)
   证明: by
   rw [pow_idealOfVars]
   simp [restrictSupportIdeal, mem_restrictSupport_iff, Set.subset_def]
@@ -294,7 +294,7 @@ theorem mem_pow_idealOfVars_iff'
 
 中文:
 定理 mem_pow_idealOfVars_iff'
-  条件: (n : 自然数) (p : MvPolynomial σ R)
+  条件: (n : 自然数) (p : 多元多项式 σ R)
   证明: by
   grind only [mem_pow_idealOfVars_iff, mem_support_iff]
 
@@ -396,7 +396,7 @@ theorem mk_eq_eval₂
 
 中文:
 定理 mk_eq_eval₂
-  结论: (Ideal.Quotient.mk I).toFun =
+  结论: (理想.商.mk I).toFun =
   证明: by
   ext d
   simp_rw [RingHom.toFun_eq_coe, ← Ideal.Quotient.mkₐ_eq_mk A, mkₐ_eq_aeval, aeval_X, aeval,
@@ -429,7 +429,7 @@ lemma span_leadingTerm_sdiff_singleton_zero
 
 中文:
 引理 span_leadingTerm_sdiff_singleton_zero
-  条件: (B : Set (MvPolynomial σ R))
+  条件: (B : 集合 (多元多项式 σ R))
   证明: m.image_leadingTerm_sdiff_singleton_zero B ▸ Ideal.span_sdiff_singleton_zero
 
 Depends on / 依赖: Ideal.span_sdiff_singleton_zero, image_leadingTerm_sdiff_singleton_zero, m.image_leadingTerm_sdiff_singleton_zero, span_sdiff_singleton_zero
@@ -451,7 +451,7 @@ lemma span_leadingTerm_insert_zero
 
 中文:
 引理 span_leadingTerm_insert_zero
-  条件: (B : Set (MvPolynomial σ R))
+  条件: (B : 集合 (多元多项式 σ R))
   证明: by
   by_cases h : 0 in B
   · rw [Set.insert_eq_of_mem h]
@@ -483,7 +483,7 @@ lemma span_leadingTerm_eq_span_monomial
 
 中文:
 引理 span_leadingTerm_eq_span_monomial
-  结论: {B : Set (MvPolynomial σ R)}
+  结论: {B : 集合 (多元多项式 σ R)}
   证明: by
   apply le_antisymm
   all_goals
@@ -525,7 +525,7 @@ lemma span_leadingTerm_eq_span_monomial₀
 
 中文:
 引理 span_leadingTerm_eq_span_monomial₀
-  结论: {B : Set (MvPolynomial σ R)}
+  结论: {B : 集合 (多元多项式 σ R)}
   证明: by
   rw [← m.span_leadingTerm_sdiff_singleton_zero]
   apply span_leadingTerm_eq_span_monomial
@@ -553,7 +553,7 @@ lemma span_leadingTerm_eq_span_monomial'
 
 中文:
 引理 span_leadingTerm_eq_span_monomial'
-  条件: {k : 类型} [Field k] {B : Set (MvPolynomial σ k)}
+  条件: {k : 类型} [域 k] {B : 集合 (多元多项式 σ k)}
   证明: by
   apply span_leadingTerm_eq_span_monomial₀
   simp [em']
@@ -574,7 +574,7 @@ lemma sPolynomial_mem_sup_ideal
 
 中文:
 引理 sPolynomial_mem_sup_ideal
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: sub_mem (mul_mem_left _ _ (mem_sup_left hp)) (mul_mem_left _ _ (mem_sup_right hq))
 
 Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem_left, sub_mem
@@ -594,7 +594,7 @@ lemma sPolynomial_mem_ideal
 
 中文:
 引理 sPolynomial_mem_ideal
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: sub_mem (mul_mem_left I _ hp) (mul_mem_left I _ hq)
 
 Depends on / 依赖: mul_mem_left, sub_mem

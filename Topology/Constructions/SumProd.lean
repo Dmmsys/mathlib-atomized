@@ -56,7 +56,7 @@ instance instTopologicalSpaceSum
 
 中文:
 实例 instTopologicalSpaceSum
-  签名: [t₁ : TopologicalSpace X] [t₂ : TopologicalSpace Y]
+  签名: [t₁ : 拓扑空间 X] [t₂ : 拓扑空间 Y]
   定义体: coinduced Sum.inl t₁ ⊔ coinduced Sum.inr t₂
 
 Depends on / 依赖: Sum.inl, Sum.inr, coinduced
@@ -75,7 +75,7 @@ instance instTopologicalSpaceProd
 
 中文:
 实例 instTopologicalSpaceProd
-  签名: [t₁ : TopologicalSpace X] [t₂ : TopologicalSpace Y]
+  签名: [t₁ : 拓扑空间 X] [t₂ : 拓扑空间 Y]
   定义体: induced Prod.fst t₁ ⊓ induced Prod.snd t₂
 
 Depends on / 依赖: Prod.fst, Prod.snd, induced
@@ -124,7 +124,7 @@ theorem continuous_fst
 
 中文:
 定理 continuous_fst
-  结论: Continuous (@Prod.fst X Y)
+  结论: 连续 (@积类型.fst X Y)
   证明: (continuous_prodMk.1 continuous_id).1
 -/
 theorem continuous_fst : Continuous (@Prod.fst X Y) :=
@@ -142,9 +142,9 @@ theorem Continuous.fst
   proof: continuous_fst.comp hf
 
 中文:
-定理 Continuous.fst
-  条件: {f : X -> Y × Z} (hf : Continuous f)
-  结论: Continuous fun x : X => (f x).1
+定理 连续.fst
+  条件: {f : X -> Y × Z} (hf : 连续 f)
+  结论: 连续 fun x : X => (f x).1
   证明: continuous_fst.comp hf
 
 Depends on / 依赖: continuous_fst, continuous_fst.comp
@@ -162,9 +162,9 @@ theorem Continuous.fst'
   proof: hf.comp continuous_fst
 
 中文:
-定理 Continuous.fst'
-  条件: {f : X -> Z} (hf : Continuous f)
-  结论: Continuous fun x : X × Y => f x.fst
+定理 连续.fst'
+  条件: {f : X -> Z} (hf : 连续 f)
+  结论: 连续 fun x : X × Y => f x.fst
   证明: hf.comp continuous_fst
 
 Depends on / 依赖: continuous_fst, hf.comp
@@ -184,7 +184,7 @@ theorem continuousAt_fst
 中文:
 定理 continuousAt_fst
   条件: {p : X × Y}
-  结论: ContinuousAt Prod.fst p
+  结论: ContinuousAt 积类型.fst p
   证明: continuous_fst.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_fst, continuous_fst.continuousAt
@@ -262,8 +262,8 @@ theorem Filter.Tendsto.fst_nhds
 @[continuity]
 
 中文:
-定理 Filter.Tendsto.fst_nhds
-  结论: {X} {l : Filter X} {f : X -> Y × Z} {p : Y × Z}
+定理 滤子.收敛.fst_nhds
+  结论: {X} {l : 滤子 X} {f : X -> Y × Z} {p : Y × Z}
   证明: continuousAt_fst.tendsto.comp h
 
 @[continuity]
@@ -285,7 +285,7 @@ theorem continuous_snd
 
 中文:
 定理 continuous_snd
-  结论: Continuous (@Prod.snd X Y)
+  结论: 连续 (@积类型.snd X Y)
   证明: (continuous_prodMk.1 continuous_id).2
 -/
 theorem continuous_snd : Continuous (@Prod.snd X Y) :=
@@ -303,9 +303,9 @@ theorem Continuous.snd
   proof: continuous_snd.comp hf
 
 中文:
-定理 Continuous.snd
-  条件: {f : X -> Y × Z} (hf : Continuous f)
-  结论: Continuous fun x : X => (f x).2
+定理 连续.snd
+  条件: {f : X -> Y × Z} (hf : 连续 f)
+  结论: 连续 fun x : X => (f x).2
   证明: continuous_snd.comp hf
 
 Depends on / 依赖: continuous_snd, continuous_snd.comp
@@ -323,9 +323,9 @@ theorem Continuous.snd'
   proof: hf.comp continuous_snd
 
 中文:
-定理 Continuous.snd'
-  条件: {f : Y -> Z} (hf : Continuous f)
-  结论: Continuous fun x : X × Y => f x.snd
+定理 连续.snd'
+  条件: {f : Y -> Z} (hf : 连续 f)
+  结论: 连续 fun x : X × Y => f x.snd
   证明: hf.comp continuous_snd
 
 Depends on / 依赖: continuous_snd, hf.comp
@@ -345,7 +345,7 @@ theorem continuousAt_snd
 中文:
 定理 continuousAt_snd
   条件: {p : X × Y}
-  结论: ContinuousAt Prod.snd p
+  结论: ContinuousAt 积类型.snd p
   证明: continuous_snd.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_snd, continuous_snd.continuousAt
@@ -423,8 +423,8 @@ theorem Filter.Tendsto.snd_nhds
 @[continuity, fun_prop]
 
 中文:
-定理 Filter.Tendsto.snd_nhds
-  结论: {X} {l : Filter X} {f : X -> Y × Z} {p : Y × Z}
+定理 滤子.收敛.snd_nhds
+  结论: {X} {l : 滤子 X} {f : X -> Y × Z} {p : Y × Z}
   证明: continuousAt_snd.tendsto.comp h
 
 @[continuity, fun_prop]
@@ -447,8 +447,8 @@ theorem Continuous.prodMk
 @[continuity]
 
 中文:
-定理 Continuous.prodMk
-  条件: {f : Z -> X} {g : Z -> Y} (hf : Continuous f) (hg : Continuous g)
+定理 连续.prodMk
+  条件: {f : Z -> X} {g : Z -> Y} (hf : 连续 f) (hg : 连续 g)
   证明: continuous_prodMk.2 ⟨hf, hg⟩
 
 @[continuity]
@@ -472,9 +472,9 @@ theorem Continuous.prodMk_right
 @[continuity]
 
 中文:
-定理 Continuous.prodMk_right
+定理 连续.prodMk_right
   条件: (x : X)
-  结论: Continuous fun y : Y => (x, y)
+  结论: 连续 fun y : Y => (x, y)
   证明: by fun_prop
 
 @[continuity]
@@ -496,9 +496,9 @@ theorem Continuous.prodMk_left
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.prodMk_left
+定理 连续.prodMk_left
   条件: (y : Y)
-  结论: Continuous fun x : X => (x, y)
+  结论: 连续 fun x : X => (x, y)
   证明: by fun_prop
 
 @[continuity, fun_prop]
@@ -518,7 +518,7 @@ theorem continuous_diag
 
 中文:
 定理 continuous_diag
-  结论: Continuous (Function.diag : X -> X × X)
+  结论: 连续 (函数.diag : X -> X × X)
   证明: continuous_id.prodMk continuous_id
 
 Depends on / 依赖: continuous_id, continuous_id.prodMk, prodMk
@@ -539,8 +539,8 @@ lemma IsClosed.setOfPred_mapsTo
 alias IsClosed.setOf_mapsTo := IsClosed.setOfPred_mapsTo
 
 中文:
-引理 IsClosed.setOfPred_mapsTo
-  结论: {α : 类型} {f : X -> α -> Z} {s : Set α} {t : Set Z}
+引理 是闭集.setOfPred_mapsTo
+  结论: {α : 类型} {f : X -> α -> Z} {s : 集合 α} {t : 集合 Z}
   证明: by
   simpa only [MapsTo, ofPred_forall] using! isClosed_biInter fun y hy => ht.preimage (hf y hy)
 
@@ -566,8 +566,8 @@ theorem Continuous.comp₂
   proof: hg.comp he.prodMk hf
 
 中文:
-定理 Continuous.comp₂
-  结论: {g : X × Y -> Z} (hg : Continuous g) {e : W -> X} (he : Continuous e)
+定理 连续.comp₂
+  结论: {g : X × Y -> Z} (hg : 连续 g) {e : W -> X} (he : 连续 e)
   证明: hg.comp he.prodMk hf
 
 Depends on / 依赖: he.prodMk, hg.comp, prodMk
@@ -585,8 +585,8 @@ theorem Continuous.comp₃
   proof: hg.comp₂ he hf.prodMk hk
 
 中文:
-定理 Continuous.comp₃
-  结论: {g : X × Y × Z -> ε} (hg : Continuous g) {e : W -> X} (he : Continuous e)
+定理 连续.comp₃
+  结论: {g : X × Y × Z -> ε} (hg : 连续 g) {e : W -> X} (he : 连续 e)
   证明: hg.comp₂ he hf.prodMk hk
 
 Depends on / 依赖: hf.prodMk, hg.comp, prodMk
@@ -607,8 +607,8 @@ theorem Continuous.comp₄
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.comp₄
-  结论: {g : X × Y × Z × ζ -> ε} (hg : Continuous g) {e : W -> X} (he : Continuous e)
+定理 连续.comp₄
+  结论: {g : X × Y × Z × ζ -> ε} (hg : 连续 g) {e : W -> X} (he : 连续 e)
   证明: hg.comp₃ he hf hk.prodMk hl
 
 @[continuity, fun_prop]
@@ -630,8 +630,8 @@ theorem Continuous.prodMap
   proof: hf.fst'.prodMk hg.snd'
 
 中文:
-定理 Continuous.prodMap
-  条件: {f : Z -> X} {g : W -> Y} (hf : Continuous f) (hg : Continuous g)
+定理 连续.prodMap
+  条件: {f : Z -> X} {g : W -> Y} (hf : 连续 f) (hg : 连续 g)
   证明: hf.fst'.prodMk hg.snd'
 
 Depends on / 依赖: hf.fst, hg.snd, prodMk
@@ -653,7 +653,7 @@ theorem continuous_inf_dom_left₂
 
 中文:
 定理 continuous_inf_dom_left₂
-  结论: {X Y Z} {f : X -> Y -> Z} {ta1 ta2 : TopologicalSpace X}
+  结论: {X Y Z} {f : X -> Y -> Z} {ta1 ta2 : 拓扑空间 X}
   证明: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_left _ _ id ta1 ta2 ta1 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_left _ _ id tb1 tb2 tb1 (@continuous_id _ (id _))
@@ -683,7 +683,7 @@ theorem continuous_inf_dom_right₂
 
 中文:
 定理 continuous_inf_dom_right₂
-  结论: {X Y Z} {f : X -> Y -> Z} {ta1 ta2 : TopologicalSpace X}
+  结论: {X Y Z} {f : X -> Y -> Z} {ta1 ta2 : 拓扑空间 X}
   证明: ta1 ⊓ ta2; haveI := tb1 ⊓ tb2; exact Continuous fun p : X × Y => f p.1 p.2 := by
   have ha := @continuous_inf_dom_right _ _ id ta1 ta2 ta2 (@continuous_id _ (id _))
   have hb := @continuous_inf_dom_right _ _ id tb1 tb2 tb2 (@continuous_id _ (id _))
@@ -715,7 +715,7 @@ theorem continuous_sInf_dom₂
 
 中文:
 定理 continuous_sInf_dom₂
-  结论: {X Y Z} {f : X -> Y -> Z} {tas : Set (TopologicalSpace X)}
+  结论: {X Y Z} {f : X -> Y -> Z} {tas : 集合 (拓扑空间 X)}
   证明: sInf tas; haveI := sInf tbs
     exact @Continuous _ _ _ tc fun p : X × Y => f p.1 p.2 := by
   have hX := continuous_sInf_dom hX continuous_id
@@ -743,7 +743,7 @@ theorem Filter.Eventually.prod_inl_nhds
   proof: continuousAt_fst h
 
 中文:
-定理 Filter.Eventually.prod_inl_nhds
+定理 滤子.Eventually.prod_inl_nhds
   条件: {p : X -> 命题} {x : X} (h : 对任意ᶠ x in 𝓝 x, p x) (y : Y)
   证明: continuousAt_fst h
 
@@ -762,7 +762,7 @@ theorem Filter.Eventually.prod_inr_nhds
   proof: continuousAt_snd h
 
 中文:
-定理 Filter.Eventually.prod_inr_nhds
+定理 滤子.Eventually.prod_inr_nhds
   条件: {p : Y -> 命题} {y : Y} (h : 对任意ᶠ x in 𝓝 y, p x) (x : X)
   证明: continuousAt_snd h
 
@@ -783,7 +783,7 @@ theorem Filter.Eventually.prodMk_nhds
 @[fun_prop]
 
 中文:
-定理 Filter.Eventually.prodMk_nhds
+定理 滤子.Eventually.prodMk_nhds
   结论: {px : X -> 命题} {x} (hx : 对任意ᶠ x in 𝓝 x, px x) {py : Y -> 命题}
   证明: (hx.prod_inl_nhds y).and (hy.prod_inr_nhds x)
 
@@ -806,7 +806,7 @@ theorem continuous_swap
 
 中文:
 定理 continuous_swap
-  结论: Continuous (Prod.swap : X × Y -> Y × X)
+  结论: 连续 (积类型.swap : X × Y -> Y × X)
   证明: continuous_snd.prodMk continuous_fst
 
 Depends on / 依赖: continuous_fst, continuous_snd, continuous_snd.prodMk, prodMk
@@ -826,7 +826,7 @@ lemma isClosedMap_swap
 
 中文:
 引理 isClosedMap_swap
-  结论: IsClosedMap (Prod.swap : X × Y -> Y × X)
+  结论: 是闭映射 (积类型.swap : X × Y -> Y × X)
   证明: fun s hs => by
   rw [image_swap_eq_preimage_swap]
   exact hs.preimage continuous_swap
@@ -846,8 +846,8 @@ theorem Continuous.uncurry_left
   proof: h.comp (.prodMk_right _)
 
 中文:
-定理 Continuous.uncurry_left
-  条件: {f : X -> Y -> Z} (x : X) (h : Continuous (uncurry f))
+定理 连续.uncurry_left
+  条件: {f : X -> Y -> Z} (x : X) (h : 连续 (uncurry f))
   证明: h.comp (.prodMk_right _)
 
 Depends on / 依赖: h.comp, prodMk_right
@@ -865,8 +865,8 @@ theorem Continuous.uncurry_right
   proof: h.comp (.prodMk_left _)
 
 中文:
-定理 Continuous.uncurry_right
-  条件: {f : X -> Y -> Z} (y : Y) (h : Continuous (uncurry f))
+定理 连续.uncurry_right
+  条件: {f : X -> Y -> Z} (y : Y) (h : 连续 (uncurry f))
   证明: h.comp (.prodMk_left _)
 
 Depends on / 依赖: h.comp, prodMk_left
@@ -886,8 +886,8 @@ theorem continuous_curry
 
 中文:
 定理 continuous_curry
-  条件: {g : X × Y -> Z} (x : X) (h : Continuous g)
-  结论: Continuous (curry g x)
+  条件: {g : X × Y -> Z} (x : X) (h : 连续 g)
+  结论: 连续 (curry g x)
   证明: Continuous.uncurry_left x h
 
 Depends on / 依赖: Continuous, Continuous.uncurry_left, uncurry_left
@@ -905,9 +905,9 @@ theorem IsOpen.prod
   proof: (hs.preimage continuous_fst).inter (ht.preimage continuous_snd)
 
 中文:
-定理 IsOpen.prod
-  条件: {s : Set X} {t : Set Y} (hs : IsOpen s) (ht : IsOpen t)
-  结论: IsOpen (s ×ˢ t)
+定理 是开集.乘积
+  条件: {s : 集合 X} {t : 集合 Y} (hs : 是开集 s) (ht : 是开集 t)
+  结论: 是开集 (s ×ˢ t)
   证明: (hs.preimage continuous_fst).inter (ht.preimage continuous_snd)
 
 Depends on / 依赖: continuous_fst, continuous_snd, hs.preimage, ht.preimage, preimage
@@ -952,7 +952,7 @@ theorem nhdsWithin_prod_eq
 
 中文:
 定理 nhdsWithin_prod_eq
-  条件: (x : X) (y : Y) (s : Set X) (t : Set Y)
+  条件: (x : X) (y : Y) (s : 集合 X) (t : 集合 Y)
   证明: by
   simp only [nhdsWithin, nhds_prod_eq, ← prod_inf_prod, prod_principal_principal]
 
@@ -974,8 +974,8 @@ instance Prod.instNeBotNhdsWithinIio
 exact nhdsWithin_mono _ fun _ ⟨h₁, h₂⟩ => Prod.lt_iff.2 .inl ⟨h₁, h₂.le⟩
 
 中文:
-实例 Prod.instNeBotNhdsWithinIio
-  签名: [Preorder X] [Preorder Y] {x : X × Y}
+实例 积类型.instNeBotNhdsWithinIio
+  签名: [预序 X] [预序 Y] {x : X × Y}
   定义体: by
   refine (hx₁.prod hx₂).mono ?_
   rw [← nhdsWithin_prod_eq]
@@ -1001,8 +1001,8 @@ instance Prod.instNeBotNhdsWithinIoi
 exact nhdsWithin_mono _ fun _ ⟨h₁, h₂⟩ => Prod.lt_iff.2 .inl ⟨h₁, h₂.le⟩
 
 中文:
-实例 Prod.instNeBotNhdsWithinIoi
-  签名: [Preorder X] [Preorder Y] {x : X × Y}
+实例 积类型.instNeBotNhdsWithinIoi
+  签名: [预序 X] [预序 Y] {x : X × Y}
   定义体: by
   refine (hx₁.prod hx₂).mono ?_
   rw [← nhdsWithin_prod_eq]
@@ -1026,7 +1026,7 @@ theorem mem_nhds_prod_iff
 
 中文:
 定理 mem_nhds_prod_iff
-  条件: {x : X} {y : Y} {s : Set (X × Y)}
+  条件: {x : X} {y : Y} {s : 集合 (X × Y)}
   证明: by rw [nhds_prod_eq, mem_prod_iff]
 
 Depends on / 依赖: mem_prod_iff, nhds_prod_eq
@@ -1045,7 +1045,7 @@ theorem mem_nhdsWithin_prod_iff
 
 中文:
 定理 mem_nhdsWithin_prod_iff
-  条件: {x : X} {y : Y} {s : Set (X × Y)} {tx : Set X} {ty : Set Y}
+  条件: {x : X} {y : Y} {s : 集合 (X × Y)} {tx : 集合 X} {ty : 集合 Y}
   证明: by
   rw [nhdsWithin_prod_eq]; rw [mem_prod_iff]
 
@@ -1066,7 +1066,7 @@ theorem Filter.HasBasis.prod_nhds
   exact hx.prod hy
 
 中文:
-定理 Filter.HasBasis.prod_nhds
+定理 滤子.有基.prod_nhds
   结论: {ιX ιY : 类型} {px : ιX -> 命题} {py : ιY -> 命题}
   证明: by
   rw [nhds_prod_eq]
@@ -1090,7 +1090,7 @@ theorem Filter.HasBasis.prod_nhds'
   proof: hx.prod_nhds hy
 
 中文:
-定理 Filter.HasBasis.prod_nhds'
+定理 滤子.有基.prod_nhds'
   结论: {ιX ιY : 类型} {pX : ιX -> 命题} {pY : ιY -> 命题}
   证明: hx.prod_nhds hy
 
@@ -1113,7 +1113,7 @@ theorem mem_nhds_prod_iff'
 
 中文:
 定理 mem_nhds_prod_iff'
-  条件: {x : X} {y : Y} {s : Set (X × Y)}
+  条件: {x : X} {y : Y} {s : 集合 (X × Y)}
   证明: ((nhds_basis_opens x).prod_nhds (nhds_basis_opens y)).mem_iff.trans by
     simp only [Prod.exists, and_comm, and_assoc, and_left_comm]
 
@@ -1134,8 +1134,8 @@ theorem Prod.tendsto_iff
   rw [nhds_prod_eq]; rw [Filter.tendsto_prod_iff']
 
 中文:
-定理 Prod.tendsto_iff
-  条件: {X} (seq : X -> Y × Z) {f : Filter X} (p : Y × Z)
+定理 积类型.tendsto_iff
+  条件: {X} (seq : X -> Y × Z) {f : 滤子 X} (p : Y × Z)
   证明: by
   rw [nhds_prod_eq]; rw [Filter.tendsto_prod_iff']
 
@@ -1156,8 +1156,8 @@ instance [DiscreteTopology
     rw [nhds_prod_eq]; rw [nhds_discrete X]; rw [nhds_discrete Y]; rw [prod_pure_pure]
 
 中文:
-实例 [DiscreteTopology
-  签名: X] [DiscreteTopology Y] : DiscreteTopology (X × Y)
+实例 [离散拓扑
+  签名: X] [离散拓扑 Y] : 离散拓扑 (X × Y)
   定义体: discreteTopology_iff_nhds.2 fun (a, b) => by
     rw [nhds_prod_eq]; rw [nhds_discrete X]; rw [nhds_discrete Y]; rw [prod_pure_pure]
 
@@ -1177,7 +1177,7 @@ theorem prod_mem_nhds_iff
 
 中文:
 定理 prod_mem_nhds_iff
-  条件: {s : Set X} {t : Set Y} {x : X} {y : Y}
+  条件: {s : 集合 X} {t : 集合 Y} {x : X} {y : Y}
   证明: by rw [nhds_prod_eq, prod_mem_prod_iff]
 
 Depends on / 依赖: nhds_prod_eq, prod_mem_prod_iff
@@ -1195,7 +1195,7 @@ theorem prod_mem_nhds
 
 中文:
 定理 prod_mem_nhds
-  条件: {s : Set X} {t : Set Y} {x : X} {y : Y} (hx : s in 𝓝 x) (hy : t in 𝓝 y)
+  条件: {s : 集合 X} {t : 集合 Y} {x : X} {y : Y} (hx : s in 𝓝 x) (hy : t in 𝓝 y)
   证明: prod_mem_nhds_iff.2 ⟨hx, hy⟩
 
 Depends on / 依赖: prod_mem_nhds_iff
@@ -1219,7 +1219,7 @@ theorem isOpen_setOfPred_disjoint_nhds_nhds
 
 中文:
 定理 isOpen_setOfPred_disjoint_nhds_nhds
-  结论: IsOpen { p : X × X | Disjoint (𝓝 p.1) (𝓝 p.2) }
+  结论: 是开集 { p : X × X | Disjoint (𝓝 p.1) (𝓝 p.2) }
   证明: by
   simp only [isOpen_iff_mem_nhds, Prod.forall, mem_ofPred_eq]
   intro x y h
@@ -1248,7 +1248,7 @@ theorem Filter.Eventually.prod_nhds
   proof: prod_mem_nhds hx hy
 
 中文:
-定理 Filter.Eventually.prod_nhds
+定理 滤子.Eventually.prod_nhds
   结论: {p : X -> 命题} {q : Y -> 命题} {x : X} {y : Y}
   证明: prod_mem_nhds hx hy
 
@@ -1269,7 +1269,7 @@ theorem Filter.EventuallyEq.prodMap_nhds
   exact hf.prodMap hg
 
 中文:
-定理 Filter.EventuallyEq.prodMap_nhds
+定理 滤子.EventuallyEq.prodMap_nhds
   结论: {α β : 类型} {f₁ f₂ : X -> α} {g₁ g₂ : Y -> β}
   证明: by
   rw [nhds_prod_eq]
@@ -1294,7 +1294,7 @@ theorem Filter.EventuallyLE.prodMap_nhds
   exact hf.prodMap hg
 
 中文:
-定理 Filter.EventuallyLE.prodMap_nhds
+定理 滤子.EventuallyLE.prodMap_nhds
   结论: {α β : 类型} [LE α] [LE β] {f₁ f₂ : X -> α} {g₁ g₂ : Y -> β}
   证明: by
   rw [nhds_prod_eq]
@@ -1321,7 +1321,7 @@ theorem nhds_swap
 中文:
 定理 nhds_swap
   条件: (x : X) (y : Y)
-  结论: 𝓝 (x, y) = (𝓝 (y, x)).map Prod.swap
+  结论: 𝓝 (x, y) = (𝓝 (y, x)).map 积类型.swap
   证明: by
   rw [nhds_prod_eq]; rw [Filter.prod_comm]; rw [nhds_prod_eq]
 
@@ -1341,8 +1341,8 @@ theorem Filter.Tendsto.prodMk_nhds
   exact hx.prodMk hy
 
 中文:
-定理 Filter.Tendsto.prodMk_nhds
-  结论: {γ} {x : X} {y : Y} {f : Filter γ} {mx : γ -> X} {my : γ -> Y}
+定理 滤子.收敛.prodMk_nhds
+  结论: {γ} {x : X} {y : Y} {f : 滤子 γ} {mx : γ -> X} {my : γ -> Y}
   证明: by
   rw [nhds_prod_eq]
   exact hx.prodMk hy
@@ -1366,7 +1366,7 @@ theorem Filter.Tendsto.prodMap_nhds
   exact hf.prodMap hg
 
 中文:
-定理 Filter.Tendsto.prodMap_nhds
+定理 滤子.收敛.prodMap_nhds
   结论: {x : X} {y : Y} {z : Z} {w : W} {f : X -> Y} {g : Z -> W}
   证明: by
   rw [nhds_prod_eq]; rw [nhds_prod_eq]
@@ -1393,7 +1393,7 @@ theorem Filter.Eventually.curry_nhds
 @[fun_prop]
 
 中文:
-定理 Filter.Eventually.curry_nhds
+定理 滤子.Eventually.curry_nhds
   结论: {p : X × Y -> 命题} {x : X} {y : Y}
   证明: by
   rw [nhds_prod_eq] at h
@@ -1508,7 +1508,7 @@ theorem continuous_prodMap_iff
 
 中文:
 定理 continuous_prodMap_iff
-  条件: [Nonempty Z] [Nonempty W] {f : Z -> X} {g : W -> Y}
+  条件: [非空 Z] [非空 W] {f : Z -> X} {g : W -> Y}
   证明: by
   simp [continuous_iff_continuousAt, forall_and]
 
@@ -1573,8 +1573,8 @@ theorem Continuous.curry_left
 alias Continuous.along_fst := Continuous.curry_left
 
 中文:
-定理 Continuous.curry_left
-  条件: {f : X × Y -> Z} (hf : Continuous f) {y : Y}
+定理 连续.curry_left
+  条件: {f : X × Y -> Z} (hf : 连续 f) {y : Y}
   证明: hf.comp (.prodMk_left _)
 alias Continuous.along_fst := Continuous.curry_left
 
@@ -1595,8 +1595,8 @@ theorem Continuous.curry_right
 alias Continuous.along_snd := Continuous.curry_right
 
 中文:
-定理 Continuous.curry_right
-  条件: {f : X × Y -> Z} (hf : Continuous f) {x : X}
+定理 连续.curry_right
+  条件: {f : X × Y -> Z} (hf : 连续 f) {x : X}
   证明: hf.comp (.prodMk_right _)
 alias Continuous.along_snd := Continuous.curry_right
 
@@ -1625,7 +1625,7 @@ theorem prod_generateFrom_generateFrom_eq
 
 中文:
 定理 prod_generateFrom_generateFrom_eq
-  结论: {X Y : 类型} {s : Set (Set X)} {t : Set (Set Y)}
+  结论: {X Y : 类型} {s : 集合 (集合 X)} {t : 集合 (集合 Y)}
   证明: let G := generateFrom (image2 (· ×ˢ ·) s t)
   le_antisymm
     (le_generateFrom fun _ ⟨_, hu, _, hv, g_eq⟩ =>
@@ -1711,7 +1711,7 @@ theorem isOpen_prod_iff
 
 中文:
 定理 isOpen_prod_iff
-  条件: {s : Set (X × Y)}
+  条件: {s : 集合 (X × Y)}
   证明: isOpen_iff_mem_nhds.trans by simp_rw [Prod.forall, mem_nhds_prod_iff', and_left_comm]
 
 Depends on / 依赖: Prod.forall, and_left_comm, isOpen_iff_mem_nhds, isOpen_iff_mem_nhds.trans, mem_nhds_prod_iff, simp_rw
@@ -1759,8 +1759,8 @@ theorem exists_nhds_square
   simpa [nhds_prod_eq, (nhds_basis_opens x).prod_self.mem_iff, and_assoc, and_left_comm] using hx
 
 中文:
-定理 exists_nhds_square
-  条件: {s : Set (X × X)} {x : X} (hx : s in 𝓝 (x, x))
+定理 存在_nhds_square
+  条件: {s : 集合 (X × X)} {x : X} (hx : s in 𝓝 (x, x))
   证明: by
   simpa [nhds_prod_eq, (nhds_basis_opens x).prod_self.mem_iff, and_assoc, and_left_comm] using hx
 
@@ -1787,7 +1787,7 @@ theorem map_fst_nhdsWithin
 中文:
 定理 map_fst_nhdsWithin
   条件: (x : X × Y)
-  结论: map Prod.fst (𝓝[Prod.snd ⁻¹' {x.2}] x) = 𝓝 x.1
+  结论: map 积类型.fst (𝓝[积类型.snd ⁻¹' {x.2}] x) = 𝓝 x.1
   证明: by
   refine le_antisymm (continuousAt_fst.mono_left inf_le_left) fun s hs => ?_
   rcases x with ⟨x, y⟩
@@ -1818,7 +1818,7 @@ theorem map_fst_nhds
 中文:
 定理 map_fst_nhds
   条件: (x : X × Y)
-  结论: map Prod.fst (𝓝 x) = 𝓝 x.1
+  结论: map 积类型.fst (𝓝 x) = 𝓝 x.1
   证明: le_antisymm continuousAt_fst (map_fst_nhdsWithin x).symm.trans_le (map_mono inf_le_left)
 
 Depends on / 依赖: continuousAt_fst, inf_le_left, le_antisymm, map_fst_nhdsWithin, map_mono, symm.trans_le, trans_le
@@ -1836,7 +1836,7 @@ theorem isOpenMap_fst
 
 中文:
 定理 isOpenMap_fst
-  结论: IsOpenMap (@Prod.fst X Y)
+  结论: 是开映射 (@积类型.fst X Y)
   证明: isOpenMap_iff_nhds_le.2 fun x => (map_fst_nhds x).ge
 
 Depends on / 依赖: isOpenMap_iff_nhds_le, map_fst_nhds
@@ -1861,7 +1861,7 @@ theorem map_snd_nhdsWithin
 中文:
 定理 map_snd_nhdsWithin
   条件: (x : X × Y)
-  结论: map Prod.snd (𝓝[Prod.fst ⁻¹' {x.1}] x) = 𝓝 x.2
+  结论: map 积类型.snd (𝓝[积类型.fst ⁻¹' {x.1}] x) = 𝓝 x.2
   证明: by
   refine le_antisymm (continuousAt_snd.mono_left inf_le_left) fun s hs => ?_
   rcases x with ⟨x, y⟩
@@ -1892,7 +1892,7 @@ theorem map_snd_nhds
 中文:
 定理 map_snd_nhds
   条件: (x : X × Y)
-  结论: map Prod.snd (𝓝 x) = 𝓝 x.2
+  结论: map 积类型.snd (𝓝 x) = 𝓝 x.2
   证明: le_antisymm continuousAt_snd (map_snd_nhdsWithin x).symm.trans_le (map_mono inf_le_left)
 
 Depends on / 依赖: continuousAt_snd, inf_le_left, le_antisymm, map_mono, map_snd_nhdsWithin, symm.trans_le, trans_le
@@ -1910,7 +1910,7 @@ theorem isOpenMap_snd
 
 中文:
 定理 isOpenMap_snd
-  结论: IsOpenMap (@Prod.snd X Y)
+  结论: 是开映射 (@积类型.snd X Y)
   证明: isOpenMap_iff_nhds_le.2 fun x => (map_snd_nhds x).ge
 
 Depends on / 依赖: isOpenMap_iff_nhds_le, map_snd_nhds
@@ -1936,7 +1936,7 @@ theorem isOpen_prod_iff'
 
 中文:
 定理 isOpen_prod_iff'
-  条件: {s : Set X} {t : Set Y}
+  条件: {s : 集合 X} {t : 集合 Y}
   证明: by
   rcases (s ×ˢ t).eq_empty_or_nonempty with h | h
   · simp [h, prod_eq_empty_iff.1 h]
@@ -1974,8 +1974,8 @@ theorem isOpenQuotientMap_fst
 
 中文:
 定理 isOpenQuotientMap_fst
-  条件: [Nonempty Y]
-  结论: IsOpenQuotientMap (Prod.fst : X × Y -> X)
+  条件: [非空 Y]
+  结论: 是OpenQuotient映射 (积类型.fst : X × Y -> X)
   证明: ⟨Prod.fst_surjective, continuous_fst, isOpenMap_fst⟩
 
 Depends on / 依赖: Prod.fst_surjective, continuous_fst, fst_surjective, isOpenMap_fst
@@ -1994,8 +1994,8 @@ theorem isOpenQuotientMap_snd
 
 中文:
 定理 isOpenQuotientMap_snd
-  条件: [Nonempty X]
-  结论: IsOpenQuotientMap (Prod.snd : X × Y -> Y)
+  条件: [非空 X]
+  结论: 是OpenQuotient映射 (积类型.snd : X × Y -> Y)
   证明: ⟨Prod.snd_surjective, continuous_snd, isOpenMap_snd⟩
 
 Depends on / 依赖: Prod.snd_surjective, continuous_snd, isOpenMap_snd, snd_surjective
@@ -2014,8 +2014,8 @@ theorem isQuotientMap_fst
 
 中文:
 定理 isQuotientMap_fst
-  条件: [Nonempty Y]
-  结论: IsQuotientMap (Prod.fst : X × Y -> X)
+  条件: [非空 Y]
+  结论: 是商映射 (积类型.fst : X × Y -> X)
   证明: isOpenQuotientMap_fst.isQuotientMap
 
 Depends on / 依赖: isOpenQuotientMap_fst, isOpenQuotientMap_fst.isQuotientMap, isQuotientMap
@@ -2034,8 +2034,8 @@ theorem isQuotientMap_snd
 
 中文:
 定理 isQuotientMap_snd
-  条件: [Nonempty X]
-  结论: IsQuotientMap (Prod.snd : X × Y -> Y)
+  条件: [非空 X]
+  结论: 是商映射 (积类型.snd : X × Y -> Y)
   证明: isOpenQuotientMap_snd.isQuotientMap
 
 Depends on / 依赖: isOpenQuotientMap_snd, isOpenQuotientMap_snd.isQuotientMap, isQuotientMap
@@ -2055,7 +2055,7 @@ theorem closure_prod_eq
 
 中文:
 定理 closure_prod_eq
-  条件: {s : Set X} {t : Set Y}
+  条件: {s : 集合 X} {t : 集合 Y}
   结论: closure (s ×ˢ t) = closure s ×ˢ closure t
   证明: ext fun ⟨a, b⟩ => by
     simp_rw [mem_prod, mem_closure_iff_nhdsWithin_neBot, nhdsWithin_prod_eq, prod_neBot]
@@ -2077,7 +2077,7 @@ theorem interior_prod_eq
 
 中文:
 定理 interior_prod_eq
-  条件: (s : Set X) (t : Set Y)
+  条件: (s : 集合 X) (t : 集合 Y)
   结论: interior (s ×ˢ t) = interior s ×ˢ interior t
   证明: ext fun ⟨a, b⟩ => by simp only [mem_interior_iff_mem_nhds, mem_prod, prod_mem_nhds_iff]
 
@@ -2099,7 +2099,7 @@ theorem frontier_prod_eq
 
 中文:
 定理 frontier_prod_eq
-  条件: (s : Set X) (t : Set Y)
+  条件: (s : 集合 X) (t : 集合 Y)
   证明: by
   simp only [frontier, closure_prod_eq, interior_prod_eq, prod_sdiff_prod]
 
@@ -2125,7 +2125,7 @@ theorem frontier_prod_univ_eq
 
 中文:
 定理 frontier_prod_univ_eq
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   simp [frontier_prod_eq]
 
@@ -2149,7 +2149,7 @@ theorem frontier_univ_prod_eq
 
 中文:
 定理 frontier_univ_prod_eq
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: by
   simp [frontier_prod_eq]
 
@@ -2172,7 +2172,7 @@ theorem map_mem_closure₂'
 
 中文:
 定理 map_mem_closure₂'
-  结论: {f : X -> Y -> Z} {x : X} {y : Y} {s : Set X} {t : Set Y} {u : Set Z}
+  结论: {f : X -> Y -> Z} {x : X} {y : Y} {s : 集合 X} {t : 集合 Y} {u : 集合 Z}
   证明: by
   rw [← isClosed_closure.closure_eq]
   apply map_mem_closure (hf₁ x) hy fun b hb => ?_
@@ -2200,7 +2200,7 @@ theorem map_mem_closure₂
 
 中文:
 定理 map_mem_closure₂
-  结论: {f : X -> Y -> Z} {x : X} {y : Y} {s : Set X} {t : Set Y} {u : Set Z}
+  结论: {f : X -> Y -> Z} {x : X} {y : Y} {s : 集合 X} {t : 集合 Y} {u : 集合 Z}
   证明: have H₁ : (x, y) in closure (s ×ˢ t) := by simpa only [closure_prod_eq] using mk_mem_prod hx hy
   have H₂ : MapsTo (uncurry f) (s ×ˢ t) u := forall_prod_set.2 h
   H₂.closure hf H₁
@@ -2223,8 +2223,8 @@ theorem IsClosed.prod
   proof: closure_eq_iff_isClosed.mp by simp only [h₁.closure_eq, h₂.closure_eq, closure_prod_eq]
 
 中文:
-定理 IsClosed.prod
-  条件: {s₁ : Set X} {s₂ : Set Y} (h₁ : IsClosed s₁) (h₂ : IsClosed s₂)
+定理 是闭集.乘积
+  条件: {s₁ : 集合 X} {s₂ : 集合 Y} (h₁ : 是闭集 s₁) (h₂ : 是闭集 s₂)
   证明: closure_eq_iff_isClosed.mp by simp only [h₁.closure_eq, h₂.closure_eq, closure_prod_eq]
 
 Depends on / 依赖: closure_eq, closure_eq_iff_isClosed, closure_eq_iff_isClosed.mp, closure_prod_eq
@@ -2245,9 +2245,9 @@ theorem Dense.prod
   exact ⟨hs x.1, ht x.2⟩
 
 中文:
-定理 Dense.prod
-  条件: {s : Set X} {t : Set Y} (hs : Dense s) (ht : Dense t)
-  结论: Dense (s ×ˢ t)
+定理 稠密.乘积
+  条件: {s : 集合 X} {t : 集合 Y} (hs : 稠密 s) (ht : 稠密 t)
+  结论: 稠密 (s ×ˢ t)
   证明: fun x => by
   rw [closure_prod_eq]
   exact ⟨hs x.1, ht x.2⟩
@@ -2292,8 +2292,8 @@ lemma Topology.IsInducing.prodMap
 @[simp]
 
 中文:
-引理 Topology.IsInducing.prodMap
-  条件: {f : X -> Y} {g : Z -> W} (hf : IsInducing f) (hg : IsInducing g)
+引理 拓扑.是Inducing.prodMap
+  条件: {f : X -> Y} {g : Z -> W} (hf : 是Inducing f) (hg : 是Inducing g)
   证明: isInducing_iff_nhds.2 fun (x, z) => by simp_rw [Prod.map_def, nhds_prod_eq, hf.nhds_eq_comap,
     hg.nhds_eq_comap, prod_comap_comap_eq]
 
@@ -2320,7 +2320,7 @@ lemma Topology.isInducing_const_prod
 @[simp]
 
 中文:
-引理 Topology.isInducing_const_prod
+引理 拓扑.isInducing_const_prod
   条件: {x : X} {f : Y -> Z}
   证明: by
   simp_rw [isInducing_iff, instTopologicalSpaceProd, induced_inf, induced_compose,
@@ -2347,7 +2347,7 @@ lemma Topology.isInducing_prod_const
     Function.comp_def, induced_const, inf_top_eq]
 
 中文:
-引理 Topology.isInducing_prod_const
+引理 拓扑.isInducing_prod_const
   条件: {y : Y} {f : X -> Z}
   证明: by
   simp_rw [isInducing_iff, instTopologicalSpaceProd, induced_inf, induced_compose,
@@ -2372,7 +2372,7 @@ lemma isInducing_prodMkLeft
 中文:
 引理 isInducing_prodMkLeft
   条件: (y : Y)
-  结论: IsInducing (fun x : X => (x, y))
+  结论: 是Inducing (fun x : X => (x, y))
   证明: .of_comp (.prodMk_left y) continuous_fst .id
 
 Depends on / 依赖: continuous_fst, of_comp, prodMk_left
@@ -2392,7 +2392,7 @@ lemma isInducing_prodMkRight
 中文:
 引理 isInducing_prodMkRight
   条件: (x : X)
-  结论: IsInducing (Prod.mk x : Y -> X × Y)
+  结论: 是Inducing (积类型.mk x : Y -> X × Y)
   证明: .of_comp (.prodMk_right x) continuous_snd .id
 
 Depends on / 依赖: continuous_snd, of_comp, prodMk_right
@@ -2410,8 +2410,8 @@ lemma Topology.IsEmbedding.prodMap
   injective := hf.injective.prodMap hg.injective
 
 中文:
-引理 Topology.IsEmbedding.prodMap
-  结论: {f : X -> Y} {g : Z -> W} (hf : IsEmbedding f)
+引理 拓扑.是嵌入.prodMap
+  结论: {f : X -> Y} {g : Z -> W} (hf : 是嵌入 f)
   证明: hf.isInducing.prodMap hg.isInducing
   injective := hf.injective.prodMap hg.injective
 
@@ -2437,8 +2437,8 @@ theorem IsOpenMap.prodMap
 @[simp]
 
 中文:
-定理 IsOpenMap.prodMap
-  条件: {f : X -> Y} {g : Z -> W} (hf : IsOpenMap f) (hg : IsOpenMap g)
+定理 是开映射.prodMap
+  条件: {f : X -> Y} {g : Z -> W} (hf : 是开映射 f) (hg : 是开映射 g)
   证明: by
   rw [isOpenMap_iff_nhds_le]
   rintro ⟨a, b⟩
@@ -2470,7 +2470,7 @@ theorem isOpenMap_prodMap_iff
 
 中文:
 定理 isOpenMap_prodMap_iff
-  条件: [Nonempty X] [Nonempty Z] {f : X -> Y} {g : Z -> W}
+  条件: [非空 X] [非空 Z] {f : X -> Y} {g : Z -> W}
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun ⟨hf, hg⟩ => hf.prodMap hg⟩
   · rw [(isOpenQuotientMap_fst (Y := Z)).isOpenMap_iff]
@@ -2497,8 +2497,8 @@ lemma Topology.IsOpenEmbedding.prodMap
   proof: .of_isEmbedding_isOpenMap (hf.1.prodMap hg.1) (hf.isOpenMap.prodMap hg.isOpenMap)
 
 中文:
-引理 Topology.IsOpenEmbedding.prodMap
-  结论: {f : X -> Y} {g : Z -> W} (hf : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.prodMap
+  结论: {f : X -> Y} {g : Z -> W} (hf : 是开嵌入 f)
   证明: .of_isEmbedding_isOpenMap (hf.1.prodMap hg.1) (hf.isOpenMap.prodMap hg.isOpenMap)
 -/
 protected lemma Topology.IsOpenEmbedding.prodMap {f : X -> Y} {g : Z -> W} (hf : IsOpenEmbedding f)
@@ -2515,7 +2515,7 @@ lemma Topology.IsClosedEmbedding.prodMap
     isClosed_range := range_prodMap ▸ hf.isClosed_range.prod hg.isClosed_range }
 
 中文:
-引理 Topology.IsClosedEmbedding.prodMap
+引理 拓扑.是闭嵌入.prodMap
   结论: {f : X -> Y} {g : Z -> W}
   证明: { hf.isEmbedding.prodMap hg.isEmbedding with
     isClosed_range := range_prodMap ▸ hf.isClosed_range.prod hg.isClosed_range }
@@ -2537,8 +2537,8 @@ lemma isEmbedding_graph
 
 中文:
 引理 isEmbedding_graph
-  条件: {f : X -> Y} (hf : Continuous f)
-  结论: IsEmbedding fun x => (x, f x)
+  条件: {f : X -> Y} (hf : 连续 f)
+  结论: 是嵌入 fun x => (x, f x)
   证明: .of_comp (continuous_id.prodMk hf) continuous_fst .id
 
 Depends on / 依赖: continuous_fst, continuous_id, continuous_id.prodMk, of_comp, prodMk
@@ -2558,7 +2558,7 @@ lemma isEmbedding_prodMkLeft
 中文:
 引理 isEmbedding_prodMkLeft
   条件: (y : Y)
-  结论: IsEmbedding (fun x : X => (x, y))
+  结论: 是嵌入 (fun x : X => (x, y))
   证明: .of_comp (.prodMk_left y) continuous_fst .id
 
 Depends on / 依赖: continuous_fst, of_comp, prodMk_left
@@ -2578,7 +2578,7 @@ lemma isEmbedding_prodMkRight
 中文:
 引理 isEmbedding_prodMkRight
   条件: (x : X)
-  结论: IsEmbedding (Prod.mk x : Y -> X × Y)
+  结论: 是嵌入 (积类型.mk x : Y -> X × Y)
   证明: .of_comp (.prodMk_right x) continuous_snd .id
 
 Depends on / 依赖: continuous_snd, of_comp, prodMk_right
@@ -2597,8 +2597,8 @@ theorem IsOpenQuotientMap.prodMap
 @[simp]
 
 中文:
-定理 IsOpenQuotientMap.prodMap
-  结论: {f : X -> Y} {g : Z -> W} (hf : IsOpenQuotientMap f)
+定理 是OpenQuotient映射.prodMap
+  结论: {f : X -> Y} {g : Z -> W} (hf : 是OpenQuotient映射 f)
   证明: ⟨.prodMap hf.1 hg.1, .prodMap hf.2 hg.2, .prodMap hf.3 hg.3⟩
 
 @[simp]
@@ -2623,7 +2623,7 @@ theorem isOpenQuotientMap_prodMap_iff
 
 中文:
 定理 isOpenQuotientMap_prodMap_iff
-  条件: [Nonempty X] [Nonempty Z] {f : X -> Y} {g : Z -> W}
+  条件: [非空 X] [非空 Z] {f : X -> Y} {g : Z -> W}
   证明: by
   have : Nonempty Y := .map f inferInstance
   have : Nonempty W := .map g inferInstance
@@ -2646,8 +2646,8 @@ theorem TopologicalSpace.prod_mono
   proof: le_inf (inf_le_left.trans <| induced_mono hσ) (inf_le_right.trans <| induced_mono hτ)
 
 中文:
-定理 TopologicalSpace.prod_mono
-  结论: {α β : 类型} {σ₁ σ₂ : TopologicalSpace α}
+定理 拓扑空间.prod_mono
+  结论: {α β : 类型} {σ₁ σ₂ : 拓扑空间 α}
   证明: le_inf (inf_le_left.trans <| induced_mono hσ) (inf_le_right.trans <| induced_mono hτ)
 
 Depends on / 依赖: induced_mono, inf_le_left, inf_le_left.trans, inf_le_right, inf_le_right.trans, le_inf
@@ -2722,7 +2722,7 @@ theorem coe_prodCongr
 中文:
 定理 coe_prodCongr
   条件: (h₁ : X ≃ₜ X') (h₂ : Y ≃ₜ Y')
-  结论: ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂
+  结论: ⇑(h₁.prodCongr h₂) = 积类型.map h₁ h₂
   证明: rfl
 -/
 theorem coe_prodCongr (h₁ : X ≃ₜ X') (h₂ : Y ≃ₜ Y') : ⇑(h₁.prodCongr h₂) = Prod.map h₁ h₂ :=
@@ -2784,7 +2784,7 @@ theorem coe_prodComm
 
 中文:
 定理 coe_prodComm
-  结论: ⇑(prodComm X Y) = Prod.swap
+  结论: ⇑(prodComm X Y) = 积类型.swap
   证明: rfl
 -/
 theorem coe_prodComm : ⇑(prodComm X Y) = Prod.swap :=
@@ -2823,7 +2823,7 @@ lemma prodAssoc_toEquiv
 
 中文:
 引理 prodAssoc_toEquiv
-  结论: (prodAssoc X Y Z).toEquiv = Equiv.prodAssoc X Y Z
+  结论: (prodAssoc X Y Z).toEquiv = 等价.prodAssoc X Y Z
   证明: rfl
 -/
 lemma prodAssoc_toEquiv : (prodAssoc X Y Z).toEquiv = Equiv.prodAssoc X Y Z := rfl
@@ -2879,7 +2879,7 @@ definition prodPUnit
 
 中文:
 定义 prodPUnit
-  签名: : X × PUnit ≃ₜ X where
+  签名: : X × 命题单元 ≃ₜ X where
   定义体: Equiv.prodPUnit X
 
 Depends on / 依赖: Equiv.prodPUnit, prodPUnit
@@ -2897,7 +2897,7 @@ definition punitProd
 
 中文:
 定义 punitProd
-  签名: : PUnit × X ≃ₜ X
+  签名: : 命题单元 × X ≃ₜ X
   定义体: (prodComm _ _).trans (prodPUnit _)
 
 Depends on / 依赖: prodComm, prodPUnit
@@ -2915,7 +2915,7 @@ theorem coe_punitProd
 
 中文:
 定理 coe_punitProd
-  结论: ⇑(punitProd X) = Prod.snd
+  结论: ⇑(punitProd X) = 积类型.snd
   证明: rfl
 -/
 @[simp] theorem coe_punitProd : ⇑(punitProd X) = Prod.snd := rfl
@@ -2990,8 +2990,8 @@ theorem Continuous.sumElim
 @[continuity, fun_prop]
 
 中文:
-定理 Continuous.sumElim
-  条件: {f : X -> Z} {g : Y -> Z} (hf : Continuous f) (hg : Continuous g)
+定理 连续.sumElim
+  条件: {f : X -> Z} {g : Y -> Z} (hf : 连续 f) (hg : 连续 g)
   证明: continuous_sumElim.2 ⟨hf, hg⟩
 
 @[continuity, fun_prop]
@@ -3015,7 +3015,7 @@ theorem continuous_isLeft
 
 中文:
 定理 continuous_isLeft
-  结论: Continuous (isLeft : X oplus Y -> 布尔)
+  结论: 连续 (isLeft : X oplus Y -> 布尔值)
   证明: continuous_sum_dom.2 ⟨continuous_const, continuous_const⟩
 
 @[continuity, fun_prop]
@@ -3038,7 +3038,7 @@ theorem continuous_isRight
 
 中文:
 定理 continuous_isRight
-  结论: Continuous (isRight : X oplus Y -> 布尔)
+  结论: 连续 (isRight : X oplus Y -> 布尔值)
   证明: continuous_sum_dom.2 ⟨continuous_const, continuous_const⟩
 
 @[continuity, fun_prop]
@@ -3061,7 +3061,7 @@ theorem continuous_inl
 
 中文:
 定理 continuous_inl
-  结论: Continuous (@inl X Y)
+  结论: 连续 (@inl X Y)
   证明: ⟨fun _ => And.left⟩
 
 @[continuity, fun_prop]
@@ -3083,7 +3083,7 @@ theorem continuous_inr
 
 中文:
 定理 continuous_inr
-  结论: Continuous (@inr X Y)
+  结论: 连续 (@inr X Y)
   证明: ⟨fun _ => And.right⟩
 
 @[fun_prop, continuity]
@@ -3103,7 +3103,7 @@ lemma continuous_sum_swap
 
 中文:
 引理 continuous_sum_swap
-  结论: Continuous (@Sum.swap X Y)
+  结论: 连续 (@和.swap X Y)
   证明: Continuous.sumElim continuous_inr continuous_inl
 
 Depends on / 依赖: Continuous, Continuous.sumElim, continuous_inl, continuous_inr, sumElim
@@ -3122,8 +3122,8 @@ theorem isOpen_sum_iff
 
 中文:
 定理 isOpen_sum_iff
-  条件: {s : Set (X oplus Y)}
-  结论: IsOpen s ↔ IsOpen (inl ⁻¹' s) ∧ IsOpen (inr ⁻¹' s)
+  条件: {s : 集合 (X oplus Y)}
+  结论: 是开集 s ↔ 是开集 (inl ⁻¹' s) ∧ 是开集 (inr ⁻¹' s)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3142,7 +3142,7 @@ theorem isClosed_sum_iff
 
 中文:
 定理 isClosed_sum_iff
-  条件: {s : Set (X oplus Y)}
+  条件: {s : 集合 (X oplus Y)}
   证明: by
   simp only [← isOpen_compl_iff, isOpen_sum_iff, preimage_compl]
 
@@ -3163,7 +3163,7 @@ theorem isOpenMap_inl
 
 中文:
 定理 isOpenMap_inl
-  结论: IsOpenMap (@inl X Y)
+  结论: 是开映射 (@inl X Y)
   证明: fun u hu => by
   simpa [isOpen_sum_iff, preimage_image_eq u Sum.inl_injective]
 
@@ -3183,7 +3183,7 @@ theorem isOpenMap_inr
 
 中文:
 定理 isOpenMap_inr
-  结论: IsOpenMap (@inr X Y)
+  结论: 是开映射 (@inr X Y)
   证明: fun u hu => by
   simpa [isOpen_sum_iff, preimage_image_eq u Sum.inr_injective]
 
@@ -3203,7 +3203,7 @@ theorem isClosedMap_inl
 
 中文:
 定理 isClosedMap_inl
-  结论: IsClosedMap (@inl X Y)
+  结论: 是闭映射 (@inl X Y)
   证明: fun u hu => by
   simpa [isClosed_sum_iff, preimage_image_eq u Sum.inl_injective]
 
@@ -3223,7 +3223,7 @@ theorem isClosedMap_inr
 
 中文:
 定理 isClosedMap_inr
-  结论: IsClosedMap (@inr X Y)
+  结论: 是闭映射 (@inr X Y)
   证明: fun u hu => by
   simpa [isClosed_sum_iff, preimage_image_eq u Sum.inr_injective]
 
@@ -3241,8 +3241,8 @@ lemma Topology.IsOpenEmbedding.inl
   proof: .of_continuous_injective_isOpenMap continuous_inl inl_injective isOpenMap_inl
 
 中文:
-引理 Topology.IsOpenEmbedding.inl
-  结论: IsOpenEmbedding (@inl X Y)
+引理 拓扑.是开嵌入.inl
+  结论: 是开嵌入 (@inl X Y)
   证明: .of_continuous_injective_isOpenMap continuous_inl inl_injective isOpenMap_inl
 -/
 protected lemma Topology.IsOpenEmbedding.inl : IsOpenEmbedding (@inl X Y) :=
@@ -3257,8 +3257,8 @@ lemma Topology.IsOpenEmbedding.inr
   proof: .of_continuous_injective_isOpenMap continuous_inr inr_injective isOpenMap_inr
 
 中文:
-引理 Topology.IsOpenEmbedding.inr
-  结论: IsOpenEmbedding (@inr X Y)
+引理 拓扑.是开嵌入.inr
+  结论: 是开嵌入 (@inr X Y)
   证明: .of_continuous_injective_isOpenMap continuous_inr inr_injective isOpenMap_inr
 -/
 protected lemma Topology.IsOpenEmbedding.inr : IsOpenEmbedding (@inr X Y) :=
@@ -3273,8 +3273,8 @@ lemma Topology.IsEmbedding.inl
   proof: IsOpenEmbedding.inl.1
 
 中文:
-引理 Topology.IsEmbedding.inl
-  结论: IsEmbedding (@inl X Y)
+引理 拓扑.是嵌入.inl
+  结论: 是嵌入 (@inl X Y)
   证明: IsOpenEmbedding.inl.1
 -/
 protected lemma Topology.IsEmbedding.inl : IsEmbedding (@inl X Y) := IsOpenEmbedding.inl.1
@@ -3287,8 +3287,8 @@ lemma Topology.IsEmbedding.inr
   proof: IsOpenEmbedding.inr.1
 
 中文:
-引理 Topology.IsEmbedding.inr
-  结论: IsEmbedding (@inr X Y)
+引理 拓扑.是嵌入.inr
+  结论: 是嵌入 (@inr X Y)
   证明: IsOpenEmbedding.inr.1
 -/
 protected lemma Topology.IsEmbedding.inr : IsEmbedding (@inr X Y) := IsOpenEmbedding.inr.1
@@ -3303,7 +3303,7 @@ lemma isOpen_range_inl
 
 中文:
 引理 isOpen_range_inl
-  结论: IsOpen (range (inl : X -> X oplus Y))
+  结论: 是开集 (range (inl : X -> X oplus Y))
   证明: IsOpenEmbedding.inl.2
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.inl
@@ -3319,7 +3319,7 @@ lemma isOpen_range_inr
 
 中文:
 引理 isOpen_range_inr
-  结论: IsOpen (range (inr : Y -> X oplus Y))
+  结论: 是开集 (range (inr : Y -> X oplus Y))
   证明: IsOpenEmbedding.inr.2
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.inr
@@ -3338,7 +3338,7 @@ theorem isClosed_range_inl
 
 中文:
 定理 isClosed_range_inl
-  结论: IsClosed (range (inl : X -> X oplus Y))
+  结论: 是闭集 (range (inl : X -> X oplus Y))
   证明: by
   rw [← isOpen_compl_iff]; rw [compl_range_inl]
   exact isOpen_range_inr
@@ -3361,7 +3361,7 @@ theorem isClosed_range_inr
 
 中文:
 定理 isClosed_range_inr
-  结论: IsClosed (range (inr : Y -> X oplus Y))
+  结论: 是闭集 (range (inr : Y -> X oplus Y))
   证明: by
   rw [← isOpen_compl_iff]; rw [compl_range_inr]
   exact isOpen_range_inl
@@ -3381,8 +3381,8 @@ theorem Topology.IsClosedEmbedding.inl
   proof: ⟨.inl, isClosed_range_inl⟩
 
 中文:
-定理 Topology.IsClosedEmbedding.inl
-  结论: IsClosedEmbedding (inl : X -> X oplus Y)
+定理 拓扑.是闭嵌入.inl
+  结论: 是闭嵌入 (inl : X -> X oplus Y)
   证明: ⟨.inl, isClosed_range_inl⟩
 
 Depends on / 依赖: isClosed_range_inl
@@ -3399,8 +3399,8 @@ theorem Topology.IsClosedEmbedding.inr
   proof: ⟨.inr, isClosed_range_inr⟩
 
 中文:
-定理 Topology.IsClosedEmbedding.inr
-  结论: IsClosedEmbedding (inr : Y -> X oplus Y)
+定理 拓扑.是闭嵌入.inr
+  结论: 是闭嵌入 (inr : Y -> X oplus Y)
   证明: ⟨.inr, isClosed_range_inr⟩
 
 Depends on / 依赖: isClosed_range_inr
@@ -3489,8 +3489,8 @@ theorem Continuous.sumMap
   proof: continuous_sumMap.2 ⟨hf, hg⟩
 
 中文:
-定理 Continuous.sumMap
-  条件: {f : X -> Y} {g : Z -> W} (hf : Continuous f) (hg : Continuous g)
+定理 连续.sumMap
+  条件: {f : X -> Y} {g : Z -> W} (hf : 连续 f) (hg : 连续 g)
   证明: continuous_sumMap.2 ⟨hf, hg⟩
 
 Depends on / 依赖: continuous_sumMap
@@ -3531,8 +3531,8 @@ theorem IsOpenMap.sumMap
 @[simp]
 
 中文:
-定理 IsOpenMap.sumMap
-  条件: {f : X -> Y} {g : Z -> W} (hf : IsOpenMap f) (hg : IsOpenMap g)
+定理 是开映射.sumMap
+  条件: {f : X -> Y} {g : Z -> W} (hf : 是开映射 f) (hg : 是开映射 g)
   证明: isOpenMap_sum.2 ⟨isOpenMap_inl.comp hf, isOpenMap_inr.comp hg⟩
 
 @[simp]
@@ -3574,8 +3574,8 @@ theorem IsOpenMap.sumElim
   proof: isOpenMap_sumElim.2 ⟨hf, hg⟩
 
 中文:
-定理 IsOpenMap.sumElim
-  条件: {f : X -> Z} {g : Y -> Z} (hf : IsOpenMap f) (hg : IsOpenMap g)
+定理 是开映射.sumElim
+  条件: {f : X -> Z} {g : Y -> Z} (hf : 是开映射 f) (hg : 是开映射 g)
   证明: isOpenMap_sumElim.2 ⟨hf, hg⟩
 
 Depends on / 依赖: isOpenMap_sumElim
@@ -3595,7 +3595,7 @@ lemma Topology.IsOpenEmbedding.sumElim
   exact ⟨hf.1.sumElim hg.1, h, hf.2.2.sumElim hg.2.2⟩
 
 中文:
-引理 Topology.IsOpenEmbedding.sumElim
+引理 拓扑.是开嵌入.sumElim
   结论: {f : X -> Z} {g : Y -> Z}
   证明: by
   rw [isOpenEmbedding_iff_continuous_injective_isOpenMap] at hf hg ⊢
@@ -3662,8 +3662,8 @@ theorem IsClosedMap.sumMap
 @[simp]
 
 中文:
-定理 IsClosedMap.sumMap
-  条件: {f : X -> Y} {g : Z -> W} (hf : IsClosedMap f) (hg : IsClosedMap g)
+定理 是闭映射.sumMap
+  条件: {f : X -> Y} {g : Z -> W} (hf : 是闭映射 f) (hg : 是闭映射 g)
   证明: isClosedMap_sum.2 ⟨isClosedMap_inl.comp hf, isClosedMap_inr.comp hg⟩
 
 @[simp]
@@ -3705,8 +3705,8 @@ theorem IsClosedMap.sumElim
   proof: isClosedMap_sumElim.2 ⟨hf, hg⟩
 
 中文:
-定理 IsClosedMap.sumElim
-  条件: {f : X -> Z} {g : Y -> Z} (hf : IsClosedMap f) (hg : IsClosedMap g)
+定理 是闭映射.sumElim
+  条件: {f : X -> Z} {g : Y -> Z} (hf : 是闭映射 f) (hg : 是闭映射 g)
   证明: isClosedMap_sumElim.2 ⟨hf, hg⟩
 
 Depends on / 依赖: isClosedMap_sumElim
@@ -3726,7 +3726,7 @@ lemma Topology.IsClosedEmbedding.sumElim
   exact ⟨hf.1.sumElim hg.1, h, hf.2.2.sumElim hg.2.2⟩
 
 中文:
-引理 Topology.IsClosedEmbedding.sumElim
+引理 拓扑.是闭嵌入.sumElim
   结论: {f : X -> Z} {g : Y -> Z}
   证明: by
   rw [IsClosedEmbedding.isClosedEmbedding_iff_continuous_injective_isClosedMap] at hf hg ⊢
@@ -3829,7 +3829,7 @@ theorem sumCongr_trans
 
 中文:
 定理 sumCongr_trans
-  结论: {X'' Y'' : 类型} [TopologicalSpace X''] [TopologicalSpace Y'']
+  结论: {X'' Y'' : 类型} [拓扑空间 X''] [拓扑空间 Y'']
   证明: by
   ext i
   cases i <;> rfl
@@ -3898,7 +3898,7 @@ theorem coe_sumComm
 
 中文:
 定理 coe_sumComm
-  结论: ⇑(sumComm X Y) = Sum.swap
+  结论: ⇑(sumComm X Y) = 和.swap
   证明: rfl
 
 @[continuity, fun_prop]
@@ -3919,7 +3919,7 @@ lemma continuous_sumAssoc
 
 中文:
 引理 continuous_sumAssoc
-  结论: Continuous (Equiv.sumAssoc X Y Z)
+  结论: 连续 (等价.sumAssoc X Y Z)
   证明: Continuous.sumElim (by fun_prop) (by fun_prop)
 
 @[continuity, fun_prop]
@@ -3940,7 +3940,7 @@ lemma continuous_sumAssoc_symm
 
 中文:
 引理 continuous_sumAssoc_symm
-  结论: Continuous (Equiv.sumAssoc X Y Z).symm
+  结论: 连续 (等价.sumAssoc X Y Z).symm
   证明: Continuous.sumElim (by fun_prop) (by fun_prop)
 
 Depends on / 依赖: Continuous, Continuous.sumElim, fun_prop, sumElim
@@ -3981,7 +3981,7 @@ lemma sumAssoc_toEquiv
 
 中文:
 引理 sumAssoc_toEquiv
-  结论: (sumAssoc X Y Z).toEquiv = Equiv.sumAssoc X Y Z
+  结论: (sumAssoc X Y Z).toEquiv = 等价.sumAssoc X Y Z
   证明: rfl
 -/
 lemma sumAssoc_toEquiv : (sumAssoc X Y Z).toEquiv = Equiv.sumAssoc X Y Z := rfl
@@ -4022,7 +4022,7 @@ lemma sumSumSumComm_toEquiv
 
 中文:
 引理 sumSumSumComm_toEquiv
-  结论: (sumSumSumComm W X Y Z).toEquiv = (Equiv.sumSumSumComm W X Y Z)
+  结论: (sumSumSumComm W X Y Z).toEquiv = (等价.sumSumSumComm W X Y Z)
   证明: rfl
 
 @[simp]
@@ -4057,7 +4057,7 @@ definition sumEmpty
 
 中文:
 定义 sumEmpty
-  签名: [IsEmpty Y]
+  签名: [是空 Y]
   定义体: Equiv.sumEmpty X Y
 
 Depends on / 依赖: Equiv.sumEmpty, sumEmpty
@@ -4075,7 +4075,7 @@ definition emptySum
 
 中文:
 定义 emptySum
-  签名: [IsEmpty Y]
+  签名: [是空 Y]
   定义体: (sumComm Y X).trans (sumEmpty X Y)
 
 Depends on / 依赖: sumComm, sumEmpty
@@ -4093,8 +4093,8 @@ theorem coe_emptySum
 
 中文:
 定理 coe_emptySum
-  条件: [IsEmpty Y]
-  结论: (emptySum X Y).toEquiv = Equiv.emptySum Y X
+  条件: [是空 Y]
+  结论: (emptySum X Y).toEquiv = 等价.emptySum Y X
   证明: rfl
 -/
 @[simp] theorem coe_emptySum [IsEmpty Y] : (emptySum X Y).toEquiv = Equiv.emptySum Y X := rfl
@@ -4170,9 +4170,9 @@ lemma Topology.IsInducing.sumElim_left
   proof: elim_comp_inl f g ▸ h.comp IsEmbedding.inl.isInducing
 
 中文:
-引理 Topology.IsInducing.sumElim_left
-  条件: (h : IsInducing (Sum.elim f g))
-  结论: IsInducing f
+引理 拓扑.是Inducing.sumElim_left
+  条件: (h : 是Inducing (和.elim f g))
+  结论: 是Inducing f
   证明: elim_comp_inl f g ▸ h.comp IsEmbedding.inl.isInducing
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.inl.isInducing, elim_comp_inl, h.comp, isInducing
@@ -4190,9 +4190,9 @@ lemma Topology.IsInducing.sumElim_right
   proof: elim_comp_inr f g ▸ h.comp IsEmbedding.inr.isInducing
 
 中文:
-引理 Topology.IsInducing.sumElim_right
-  条件: (h : IsInducing (Sum.elim f g))
-  结论: IsInducing g
+引理 拓扑.是Inducing.sumElim_right
+  条件: (h : 是Inducing (和.elim f g))
+  结论: 是Inducing g
   证明: elim_comp_inr f g ▸ h.comp IsEmbedding.inr.isInducing
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.inr.isInducing, elim_comp_inr, h.comp, isInducing
@@ -4216,8 +4216,8 @@ theorem Topology.IsInducing.sumElim
   simp only [comap_sumElim_eq, nhds_inl, nhds_inr, elim_inl, elim_inr, 
 
 中文:
-定理 Topology.IsInducing.sumElim
-  结论: (hf : IsInducing f) (hg : IsInducing g)
+定理 拓扑.是Inducing.sumElim
+  结论: (hf : 是Inducing f) (hg : 是Inducing g)
   证明: by
   rw [← disjoint_principal_nhdsSet] at hFg
   rw [← disjoint_nhdsSet_principal] at hfG
@@ -4261,8 +4261,8 @@ theorem Topology.IsInducing.disjoint_of_sumElim_aux
     rw [← image_univ]; rw [disjo
 
 中文:
-定理 Topology.IsInducing.disjoint_of_sumElim_aux
-  条件: (h : IsInducing (Sum.elim f g))
+定理 拓扑.是Inducing.disjoint_of_sumElim_aux
+  条件: (h : 是Inducing (和.elim f g))
   证明: by
   rcases h.isClosed_iff.mp isClosed_range_inl with ⟨C, C_closed, hC⟩
   have A : closure (range f) subseteq C := by
@@ -4291,8 +4291,8 @@ theorem Topology.IsOpenEmbedding.sumSwap
   proof: (Homeomorph.sumComm X Y).isOpenEmbedding
 
 中文:
-定理 Topology.IsOpenEmbedding.sumSwap
-  结论: IsOpenEmbedding (@Sum.swap X Y)
+定理 拓扑.是开嵌入.sumSwap
+  结论: 是开嵌入 (@和.swap X Y)
   证明: (Homeomorph.sumComm X Y).isOpenEmbedding
 
 Depends on / 依赖: Homeomorph, Homeomorph.sumComm, isOpenEmbedding, sumComm
@@ -4309,8 +4309,8 @@ theorem Topology.IsInducing.sumSwap
   proof: IsOpenEmbedding.sumSwap.isInducing
 
 中文:
-定理 Topology.IsInducing.sumSwap
-  结论: IsInducing (@Sum.swap X Y)
+定理 拓扑.是Inducing.sumSwap
+  结论: 是Inducing (@和.swap X Y)
   证明: IsOpenEmbedding.sumSwap.isInducing
 
 Depends on / 依赖: IsOpenEmbedding, IsOpenEmbedding.sumSwap.isInducing, isInducing, sumSwap
@@ -4350,7 +4350,7 @@ lemma Topology.IsInducing.sumElim_of_separatedNhds
   proof: hf.sumElim hg hsep.disjoint_closure_left hsep.disjoint_closure_right
 
 中文:
-引理 Topology.IsInducing.sumElim_of_separatedNhds
+引理 拓扑.是Inducing.sumElim_of_separatedNhds
   证明: hf.sumElim hg hsep.disjoint_closure_left hsep.disjoint_closure_right
 
 Depends on / 依赖: disjoint_closure_left, disjoint_closure_right, hf.sumElim, hsep.disjoint_closure_left, hsep.disjoint_closure_right, sumElim
@@ -4370,9 +4370,9 @@ lemma Topology.IsEmbedding.sumElim_left
   proof: elim_comp_inl f g ▸ h.comp IsEmbedding.inl
 
 中文:
-引理 Topology.IsEmbedding.sumElim_left
-  条件: (h : IsEmbedding (Sum.elim f g))
-  结论: IsEmbedding f
+引理 拓扑.是嵌入.sumElim_left
+  条件: (h : 是嵌入 (和.elim f g))
+  结论: 是嵌入 f
   证明: elim_comp_inl f g ▸ h.comp IsEmbedding.inl
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.inl, elim_comp_inl, h.comp
@@ -4390,9 +4390,9 @@ lemma Topology.IsEmbedding.sumElim_right
   proof: elim_comp_inr f g ▸ h.comp IsEmbedding.inr
 
 中文:
-引理 Topology.IsEmbedding.sumElim_right
-  条件: (h : IsEmbedding (Sum.elim f g))
-  结论: IsEmbedding g
+引理 拓扑.是嵌入.sumElim_right
+  条件: (h : 是嵌入 (和.elim f g))
+  结论: 是嵌入 g
   证明: elim_comp_inr f g ▸ h.comp IsEmbedding.inr
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.inr, elim_comp_inr, h.comp
@@ -4447,8 +4447,8 @@ theorem Topology.IsEmbedding.sumElim
   proof: isEmbedding_sumElim.mpr ⟨hf, hg, hFg, hfG⟩
 
 中文:
-定理 Topology.IsEmbedding.sumElim
-  结论: (hf : IsEmbedding f) (hg : IsEmbedding g)
+定理 拓扑.是嵌入.sumElim
+  结论: (hf : 是嵌入 f) (hg : 是嵌入 g)
   证明: isEmbedding_sumElim.mpr ⟨hf, hg, hFg, hfG⟩
 
 Depends on / 依赖: isEmbedding_sumElim, isEmbedding_sumElim.mpr
@@ -4466,7 +4466,7 @@ lemma Topology.IsEmbedding.sumElim_of_separatedNhds
   proof: hf.sumElim hg hsep.disjoint_closure_left hsep.disjoint_closure_right
 
 中文:
-引理 Topology.IsEmbedding.sumElim_of_separatedNhds
+引理 拓扑.是嵌入.sumElim_of_separatedNhds
   证明: hf.sumElim hg hsep.disjoint_closure_left hsep.disjoint_closure_right
 
 Depends on / 依赖: disjoint_closure_left, disjoint_closure_right, hf.sumElim, hsep.disjoint_closure_left, hsep.disjoint_closure_right, sumElim

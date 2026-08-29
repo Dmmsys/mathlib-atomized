@@ -441,7 +441,7 @@ lemma d₁_eq_zero
 
 中文:
 引理 d₁_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₁.Rel i₁ (c₁.next i₁))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₁.关系 i₁ (c₁.next i₁))
   证明: by
   dsimp [d₁]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [zero_app]; rw [Functor.map_zero]; rw [zero_app]; rw [zero_comp]; rw [smul_zero]
@@ -465,7 +465,7 @@ lemma d₁_eq
 
 中文:
 引理 d₁_eq
-  条件: {i₁ i₁' : ι₁} (h₁ : c₁.Rel i₁ i₁') (i₂ : ι₂) (i₃ : ι₃) (j : ι₄)
+  条件: {i₁ i₁' : ι₁} (h₁ : c₁.关系 i₁ i₁') (i₂ : ι₂) (i₃ : ι₃) (j : ι₄)
   证明: by
   obtain rfl := c₁.next_eq' h₁
   rfl
@@ -519,7 +519,7 @@ lemma d₂_eq_zero
 
 中文:
 引理 d₂_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₂.Rel i₂ (c₂.next i₂))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₂.关系 i₂ (c₂.next i₂))
   证明: by
   dsimp [d₂]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [Functor.map_zero]; rw [zero_app]; rw [zero_comp]; rw [smul_zero]
@@ -543,7 +543,7 @@ lemma d₂_eq
 
 中文:
 引理 d₂_eq
-  条件: (i₁ : ι₁) {i₂ i₂' : ι₂} (h₂ : c₂.Rel i₂ i₂') (i₃ : ι₃) (j : ι₄)
+  条件: (i₁ : ι₁) {i₂ i₂' : ι₂} (h₂ : c₂.关系 i₂ i₂') (i₃ : ι₃) (j : ι₄)
   证明: by
   obtain rfl := c₂.next_eq' h₂
   rfl
@@ -596,7 +596,7 @@ lemma d₃_eq_zero
 
 中文:
 引理 d₃_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₃.Rel i₃ (c₃.next i₃))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₃.关系 i₃ (c₃.next i₃))
   证明: by
   dsimp [d₃]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [zero_comp]; rw [smul_zero]
@@ -620,7 +620,7 @@ lemma d₃_eq
 
 中文:
 引理 d₃_eq
-  条件: (i₁ : ι₁) (i₂ : ι₂) {i₃ i₃' : ι₃} (h₃ : c₃.Rel i₃ i₃') (j : ι₄)
+  条件: (i₁ : ι₁) (i₂ : ι₂) {i₃ i₃' : ι₃} (h₃ : c₃.关系 i₃ i₃') (j : ι₄)
   证明: by
   obtain rfl := c₃.next_eq' h₃
   rfl
@@ -1152,7 +1152,7 @@ lemma d₁_eq_zero
 
 中文:
 引理 d₁_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₁.Rel i₁ (c₁.next i₁))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₁.关系 i₁ (c₁.next i₁))
   证明: by
   dsimp [d₁]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [zero_app]; rw [zero_comp]; rw [smul_zero]
@@ -1176,7 +1176,7 @@ lemma d₁_eq
 
 中文:
 引理 d₁_eq
-  条件: {i₁ i₁' : ι₁} (h₁ : c₁.Rel i₁ i₁') (i₂ : ι₂) (i₃ : ι₃) (j : ι₄)
+  条件: {i₁ i₁' : ι₁} (h₁ : c₁.关系 i₁ i₁') (i₂ : ι₂) (i₃ : ι₃) (j : ι₄)
   证明: by
   obtain rfl := c₁.next_eq' h₁
   rfl
@@ -1229,7 +1229,7 @@ lemma d₂_eq_zero
 
 中文:
 引理 d₂_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₂.Rel i₂ (c₂.next i₂))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₂.关系 i₂ (c₂.next i₂))
   证明: by
   dsimp [d₂]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [zero_app]; rw [Functor.map_zero]; rw [zero_comp]; rw [smul_zero]
@@ -1253,7 +1253,7 @@ lemma d₂_eq
 
 中文:
 引理 d₂_eq
-  条件: (i₁ : ι₁) {i₂ i₂' : ι₂} (h₂ : c₂.Rel i₂ i₂') (i₃ : ι₃) (j : ι₄)
+  条件: (i₁ : ι₁) {i₂ i₂' : ι₂} (h₂ : c₂.关系 i₂ i₂') (i₃ : ι₃) (j : ι₄)
   证明: by
   obtain rfl := c₂.next_eq' h₂
   rfl
@@ -1309,7 +1309,7 @@ lemma d₃_eq_zero
 
 中文:
 引理 d₃_eq_zero
-  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₃.Rel i₃ (c₃.next i₃))
+  条件: (i₁ : ι₁) (i₂ : ι₂) (i₃ : ι₃) (j : ι₄) (h : ¬ c₃.关系 i₃ (c₃.next i₃))
   证明: by
   dsimp [d₃]
   rw [shape _ _ _ h]; rw [Functor.map_zero]; rw [Functor.map_zero]; rw [zero_comp]; rw [smul_zero]
@@ -1333,7 +1333,7 @@ lemma d₃_eq
 
 中文:
 引理 d₃_eq
-  条件: (i₁ : ι₁) (i₂ : ι₂) {i₃ i₃' : ι₃} (h₃ : c₃.Rel i₃ i₃') (j : ι₄)
+  条件: (i₁ : ι₁) (i₂ : ι₂) {i₃ i₃' : ι₃} (h₃ : c₃.关系 i₃ i₃') (j : ι₄)
   证明: by
   obtain rfl := c₃.next_eq' h₃
   rfl

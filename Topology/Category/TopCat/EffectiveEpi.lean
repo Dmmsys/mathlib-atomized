@@ -47,7 +47,7 @@ definition effectiveEpiStructOfQuotientMap
 
 中文:
 定义 effectiveEpiStructOfQuotientMap
-  签名: {B X : TopCat.{u}} (π : X ⟶ B) (hπ : IsQuotientMap π)
+  签名: {B X : 顶元素范畴.{u}} (π : X ⟶ B) (hπ : 是商映射 π)
   定义体: ofHom hπ.lift e.hom fun a b hab =>
     CategoryTheory.congr_fun (h
       (ofHom ⟨fun _ => a, continuous_const⟩)
@@ -102,7 +102,7 @@ theorem effectiveEpi_iff_isQuotientMap
 
 中文:
 定理 effectiveEpi_iff_isQuotientMap
-  条件: {B X : TopCat.{u}} (π : X ⟶ B)
+  条件: {B X : 顶元素范畴.{u}} (π : X ⟶ B)
   证明: by
   /- The backward direction is given by `effectiveEpiStructOfQuotientMap` above. -/
   refine ⟨fun _ => ?_, fun hπ => ⟨⟨effectiveEpiStructOfQuotientMap π hπ⟩⟩⟩

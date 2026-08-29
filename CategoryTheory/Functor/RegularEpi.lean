@@ -42,8 +42,8 @@ instance [forall
 .condition w := PullbackCone.combin
 
 中文:
-实例 [forall
-  签名: {F G : D} (f : F ⟶ G) [Epi f], HasPullback f f] [HasPushouts D]
+实例 [对任意
+  签名: {F G : D} (f : F ⟶ G) [满态射 f], HasPullback f f] [有Pushouts D]
   定义体: ⟨⟨{
 .pt W := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))
 .fst left := PullbackCone.combine f f _ (fun k => pullback.isLimit (f.app k) (f.app k))

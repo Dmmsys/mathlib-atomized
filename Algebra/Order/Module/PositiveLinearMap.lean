@@ -37,8 +37,8 @@ structure PositiveLinearMap
   (no additional axioms)
 
 中文:
-结构 PositiveLinearMap
-  参数: (R E₁ E₂ : 类型) [Semiring R]
+结构 PositiveLinear映射
+  参数: (R E₁ E₂ : 类型) [半环 R]
   继承: E₁ ->ₗ[R] E₂, E₁ ->o E₂
   (无附加公理)
 -/
@@ -71,7 +71,7 @@ definition PositiveLinearMap.ofClass
 alias PositiveLinearMapClass.toPositiveLinearMap := PositiveLinearMap.ofClass
 
 中文:
-定义 PositiveLinearMap.ofClass
+定义 PositiveLinear映射.ofClass
   签名: (f : F)
   定义体: { (f : E₁ ->ₗ[R] E₂), (f : E₁ ->o E₂) with }
 
@@ -93,8 +93,8 @@ lemma OrderHomClass.of_addMonoidHom
   proof: by simpa using h f (b - a) (sub_nonneg.mpr hab)
 
 中文:
-引理 OrderHomClass.of_addMonoidHom
-  结论: {F' E₁' E₂' : 类型} [FunLike F' E₁' E₂'] [AddGroup E₁']
+引理 序态射类.of_addMonoidHom
+  结论: {F' E₁' E₂' : 类型} [函数状 F' E₁' E₂'] [加法群 E₁']
   证明: by simpa using h f (b - a) (sub_nonneg.mpr hab)
 
 Depends on / 依赖: sub_nonneg, sub_nonneg.mpr
@@ -137,7 +137,7 @@ initialize_simps_projections PositiveLinearMap (toFun -> apply, as_prefix toLine
 
 中文:
 实例 :
-  签名: FunLike (E₁ ->ₚ[R] E₂) E₁ E₂
+  签名: 函数状 (E₁ ->ₚ[R] E₂) E₁ E₂
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -214,7 +214,7 @@ lemma toOrderHom_id
 
 中文:
 引理 toOrderHom_id
-  结论: (PositiveLinearMap.id R E₁).toOrderHom = .id
+  结论: (PositiveLinear映射.id R E₁).toOrderHom = .id
   证明: rfl
 -/
 @[simp] lemma toOrderHom_id : (PositiveLinearMap.id R E₁).toOrderHom = .id := rfl
@@ -287,7 +287,7 @@ lemma id_comp
 中文:
 引理 id_comp
   条件: (f : E₁ ->ₚ[R] E₂)
-  结论: (PositiveLinearMap.id R E₂).comp f = f
+  结论: (PositiveLinear映射.id R E₂).comp f = f
   证明: rfl
 -/
 @[simp] lemma id_comp (f : E₁ ->ₚ[R] E₂) : (PositiveLinearMap.id R E₂).comp f = f := rfl
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (E₁ ->ₚ[R] E₂) R E₁ E₂
+  签名: 线性映射类 (E₁ ->ₚ[R] E₂) R E₁ E₂
   定义体: map_add f.toLinearMap
   map_smulₛₗ f := f.toLinearMap.map_smul'
 
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (E₁ ->ₚ[R] E₂) E₁ E₂
+  签名: 序态射类 (E₁ ->ₚ[R] E₂) E₁ E₂
   定义体: fun {_ _} hab => f.monotone' hab
 
 @[simp]
@@ -346,7 +346,7 @@ lemma map_smul_of_tower
 
 中文:
 引理 map_smul_of_tower
-  结论: {S : 类型} [SMul S E₁] [SMul S E₂]
+  结论: {S : 类型} [标量乘法 S E₁] [标量乘法 S E₂]
   证明: LinearMapClass.map_smul_of_tower f _ _
 
 Depends on / 依赖: LinearMapClass, LinearMapClass.map_smul_of_tower, map_smul_of_tower
@@ -410,7 +410,7 @@ lemma toLinearMap_injective
 
 中文:
 引理 toLinearMap_injective
-  结论: Function.Injective (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂))
+  结论: 函数.单射 (toLinearMap : (E₁ ->ₚ[R] E₂) -> (E₁ ->ₗ[R] E₂))
   证明: fun _ _ h => by ext x; congrm($h x)
 
 @[simp]
@@ -453,7 +453,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (E₁ ->ₚ[R] E₂)
+  签名: 零 (E₁ ->ₚ[R] E₂)
   定义体: .mk (0 : E₁ ->ₗ[R] E₂) fun _ => by simp
 
 @[simp]
@@ -516,7 +516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (E₁ ->ₚ[R] E₂)
+  签名: 加法 (E₁ ->ₚ[R] E₂)
   定义体: .mk (f.toLinearMap + g.toLinearMap) fun _ _ h =>
     add_le_add (OrderHomClass.mono f h) (OrderHomClass.mono g h)
 
@@ -587,7 +587,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (E₁ ->ₚ[R] E₂)
+  签名: 标量乘法 自然数 (E₁ ->ₚ[R] E₂)
   定义体: .mk (n • f.toLinearMap) fun x y h => by
     induction n with
     | zero => simp
@@ -654,7 +654,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (E₁ ->ₚ[R] E₂)
+  签名: 加法交换幺半群 (E₁ ->ₚ[R] E₂)
   定义体: toLinearMap_injective.addCommMonoid _ toLinearMap_zero toLinearMap_add
     toLinearMap_nsmul
 

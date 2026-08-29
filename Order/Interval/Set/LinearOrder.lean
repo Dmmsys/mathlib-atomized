@@ -37,7 +37,7 @@ theorem notMem_Ici
 
 中文:
 定理 notMem_Ici
-  结论: c ∉ Ici a ↔ c < a
+  结论: c ∉ 左闭右无界区间 a ↔ c < a
   证明: not_le
 
 @[to_dual]
@@ -60,7 +60,7 @@ theorem notMem_Ioi
 
 中文:
 定理 notMem_Ioi
-  结论: c ∉ Ioi a ↔ c <= a
+  结论: c ∉ 左开右无界区间 a ↔ c <= a
   证明: not_lt
 
 @[to_dual (attr := simp)]
@@ -83,7 +83,7 @@ theorem compl_Iic
 
 中文:
 定理 compl_Iic
-  结论: (Iic a)ᶜ = Ioi a
+  结论: (左无界右闭区间 a)ᶜ = 左开右无界区间 a
   证明: ext fun _ => not_le
 
 @[to_dual (attr := simp)]
@@ -106,7 +106,7 @@ theorem compl_Iio
 
 中文:
 定理 compl_Iio
-  结论: (Iio a)ᶜ = Ici a
+  结论: (左无界右开区间 a)ᶜ = 左闭右无界区间 a
   证明: ext fun _ => not_lt
 
 @[to_dual (attr := simp)]
@@ -131,7 +131,7 @@ theorem Ici_sdiff_Ici
 
 中文:
 定理 Ici_sdiff_Ici
-  结论: Ici a \ Ici b = Ico a b
+  结论: 左闭右无界区间 a \ 左闭右无界区间 b = 左闭右开区间 a b
   证明: by rw [sdiff_eq, compl_Ici, Ici_inter_Iio]
 
 @[deprecated (since := "2026-06-03")] alias Ici_diff_Ici := Ici_sdiff_Ici
@@ -159,7 +159,7 @@ theorem Ici_sdiff_Ioi
 
 中文:
 定理 Ici_sdiff_Ioi
-  结论: Ici a \ Ioi b = Icc a b
+  结论: 左闭右无界区间 a \ 左开右无界区间 b = 闭区间 a b
   证明: by rw [sdiff_eq, compl_Ioi, Ici_inter_Iic]
 
 @[deprecated (since := "2026-06-03")] alias Ici_diff_Ioi := Ici_sdiff_Ioi
@@ -187,7 +187,7 @@ theorem Ioi_sdiff_Ioi
 
 中文:
 定理 Ioi_sdiff_Ioi
-  结论: Ioi a \ Ioi b = Ioc a b
+  结论: 左开右无界区间 a \ 左开右无界区间 b = 左开右闭区间 a b
   证明: by rw [sdiff_eq, compl_Ioi, Ioi_inter_Iic]
 
 @[deprecated (since := "2026-06-03")] alias Ioi_diff_Ioi := Ioi_sdiff_Ioi
@@ -215,7 +215,7 @@ theorem Ioi_sdiff_Ici
 
 中文:
 定理 Ioi_sdiff_Ici
-  结论: Ioi a \ Ici b = Ioo a b
+  结论: 左开右无界区间 a \ 左闭右无界区间 b = 开区间 a b
   证明: by rw [sdiff_eq, compl_Ici, Ioi_inter_Iio]
 
 @[deprecated (since := "2026-06-03")] alias Ioi_diff_Ici := Ioi_sdiff_Ici
@@ -242,7 +242,7 @@ theorem Ioi_injective
 
 中文:
 定理 Ioi_injective
-  结论: Injective (Ioi : α -> Set α)
+  结论: 单射 (左开右无界区间 : α -> 集合 α)
   证明: fun _ _ =>
   eq_of_forall_gt_iff ∘ Set.ext_iff.1
 
@@ -262,7 +262,7 @@ theorem Ioi_inj
 
 中文:
 定理 Ioi_inj
-  结论: Ioi a = Ioi b ↔ a = b
+  结论: 左开右无界区间 a = 左开右无界区间 b ↔ a = b
   证明: Ioi_injective.eq_iff
 
 Depends on / 依赖: Ioi_injective, Ioi_injective.eq_iff, eq_iff
@@ -285,7 +285,7 @@ theorem Ico_subset_Ico_iff
 中文:
 定理 Ico_subset_Ico_iff
   条件: (h₁ : a₁ < b₁)
-  结论: Ico a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+  结论: 左闭右开区间 a₁ b₁ subseteq 左闭右开区间 a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
   证明: ⟨fun h =>
     have : a₂ <= a₁ ∧ a₁ < b₂ := h ⟨le_rfl, h₁⟩
     ⟨this.1, le_of_not_gt fun h' => lt_irrefl b₂ (h ⟨this.2.le, h'⟩).2⟩,
@@ -312,7 +312,7 @@ theorem Ioc_subset_Ioc_iff
 中文:
 定理 Ioc_subset_Ioc_iff
   条件: (h₁ : a₁ < b₁)
-  结论: Ioc a₁ b₁ subseteq Ioc a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁
+  结论: 左开右闭区间 a₁ b₁ subseteq 左开右闭区间 a₂ b₂ ↔ b₁ <= b₂ ∧ a₂ <= a₁
   证明: by
   convert! @Ico_subset_Ico_iff αᵒᵈ _ b₁ b₂ a₁ a₂ h₁ using 2 <;> exact (@Ico_toDual α _ _ _).symm
 
@@ -337,7 +337,7 @@ theorem Ico_eq_Ico_iff
 中文:
 定理 Ico_eq_Ico_iff
   条件: (h : a < b ∨ c < d)
-  结论: Ico a b = Ico c d ↔ a = c ∧ b = d
+  结论: 左闭右开区间 a b = 左闭右开区间 c d ↔ a = c ∧ b = d
   证明: by
   refine ⟨fun h => ?_, by grind⟩
   have : c <= a ∧ b <= d := (Ico_subset_Ico_iff (show a < b by grind [Set.nonempty_Ico])).1 h.subset
@@ -368,7 +368,7 @@ theorem Ioc_eq_Ioc_iff
 中文:
 定理 Ioc_eq_Ioc_iff
   条件: (hab : a < b ∨ c < d)
-  结论: Ioc a b = Ioc c d ↔ a = c ∧ b = d
+  结论: 左开右闭区间 a b = 左开右闭区间 c d ↔ a = c ∧ b = d
   证明: by
   refine ⟨fun h => ?_, by grind⟩
   have : b <= d ∧ c <= a := (Ioc_subset_Ioc_iff (show a < b by grind [Set.nonempty_Ioc])).1 h.subset
@@ -400,7 +400,7 @@ theorem Ioo_subset_Ioo_iff
 
 中文:
 定理 Ioo_subset_Ioo_iff
-  条件: [DenselyOrdered α] (h₁ : a₁ < b₁)
+  条件: [稠密序 α] (h₁ : a₁ < b₁)
   证明: ⟨fun h => by
     rcases exists_between h₁ with ⟨x, xa, xb⟩
     constructor <;> refine le_of_not_gt fun h' => ?_
@@ -443,7 +443,7 @@ lemma Ici_eq_singleton_iff_isTop
 中文:
 引理 Ici_eq_singleton_iff_isTop
   条件: {x : α}
-  结论: (Ici x = {x}) ↔ IsTop x
+  结论: (左闭右无界区间 x = {x}) ↔ IsTop x
   证明: by
   refine ⟨fun h y => ?_, fun h => by ext y; simp [(h y).ge_iff_eq]⟩
   by_contra! H
@@ -478,7 +478,7 @@ theorem Ioi_subset_Ioi_iff
 
 中文:
 定理 Ioi_subset_Ioi_iff
-  结论: Ioi b subseteq Ioi a ↔ a <= b
+  结论: 左开右无界区间 b subseteq 左开右无界区间 a ↔ a <= b
   证明: by
   refine ⟨fun h => ?_, Ioi_subset_Ioi⟩
   by_contra ba
@@ -509,7 +509,7 @@ theorem Ioi_ssubset_Ioi_iff
 
 中文:
 定理 Ioi_ssubset_Ioi_iff
-  结论: Ioi b ⊂ Ioi a ↔ a < b
+  结论: 左开右无界区间 b ⊂ 左开右无界区间 a ↔ a < b
   证明: by
   refine ⟨fun h => ?_, Ioi_ssubset_Ioi⟩
   obtain ⟨_, c, ac, cb⟩ := ssubset_iff_exists.mp h
@@ -540,8 +540,8 @@ theorem Ioi_subset_Ici_iff
 
 中文:
 定理 Ioi_subset_Ici_iff
-  条件: [DenselyOrdered α]
-  结论: Ioi b subseteq Ici a ↔ a <= b
+  条件: [稠密序 α]
+  结论: 左开右无界区间 b subseteq 左闭右无界区间 a ↔ a <= b
   证明: by
   refine ⟨fun h => ?_, Ioi_subset_Ici⟩
   by_contra ba
@@ -573,7 +573,7 @@ theorem Iic_union_Ioi_of_le
 中文:
 定理 Iic_union_Ioi_of_le
   条件: (h : a <= b)
-  结论: Iic b union Ioi a = univ
+  结论: 左无界右闭区间 b union 左开右无界区间 a = univ
   证明: eq_univ_of_forall fun x => (h.gt_or_le x).symm
 
 @[to_dual]
@@ -598,7 +598,7 @@ theorem Iio_union_Ici_of_le
 中文:
 定理 Iio_union_Ici_of_le
   条件: (h : a <= b)
-  结论: Iio b union Ici a = univ
+  结论: 左无界右开区间 b union 左闭右无界区间 a = univ
   证明: eq_univ_of_forall fun x => (h.ge_or_lt x).symm
 
 @[to_dual]
@@ -623,7 +623,7 @@ theorem Iic_union_Ici_of_le
 中文:
 定理 Iic_union_Ici_of_le
   条件: (h : a <= b)
-  结论: Iic b union Ici a = univ
+  结论: 左无界右闭区间 b union 左闭右无界区间 a = univ
   证明: eq_univ_of_forall fun x => (h.ge_or_le x).symm
 
 @[to_dual]
@@ -648,7 +648,7 @@ theorem Iio_union_Ioi_of_lt
 中文:
 定理 Iio_union_Ioi_of_lt
   条件: (h : a < b)
-  结论: Iio b union Ioi a = univ
+  结论: 左无界右开区间 b union 左开右无界区间 a = univ
   证明: eq_univ_of_forall fun x => (h.gt_or_lt x).symm
 
 @[to_dual (attr := simp)]
@@ -671,7 +671,7 @@ theorem Iic_union_Ici
 
 中文:
 定理 Iic_union_Ici
-  结论: Iic a union Ici a = univ
+  结论: 左无界右闭区间 a union 左闭右无界区间 a = univ
   证明: Iic_union_Ici_of_le le_rfl
 
 @[to_dual (attr := simp)]
@@ -694,7 +694,7 @@ theorem Iio_union_Ici
 
 中文:
 定理 Iio_union_Ici
-  结论: Iio a union Ici a = univ
+  结论: 左无界右开区间 a union 左闭右无界区间 a = univ
   证明: Iio_union_Ici_of_le le_rfl
 
 @[to_dual (attr := simp)]
@@ -717,7 +717,7 @@ theorem Iic_union_Ioi
 
 中文:
 定理 Iic_union_Ioi
-  结论: Iic a union Ioi a = univ
+  结论: 左无界右闭区间 a union 左开右无界区间 a = univ
   证明: Iic_union_Ioi_of_le le_rfl
 
 @[to_dual (attr := simp)]
@@ -738,7 +738,7 @@ theorem Iio_union_Ioi
 
 中文:
 定理 Iio_union_Ioi
-  结论: Iio a union Ioi a = {a}ᶜ
+  结论: 左无界右开区间 a union 左开右无界区间 a = {a}ᶜ
   证明: ext fun _ => lt_or_lt_iff_ne
 
 Depends on / 依赖: lt_or_lt_iff_ne
@@ -761,8 +761,8 @@ theorem Ioo_union_Ioi
 
 中文:
 定理 Ioo_union_Ioi
-  条件: (h : c < max a b)
-  结论: Ioo a b union Ioi c = Ioi (min a c)
+  条件: (h : c < 最大值 a b)
+  结论: 开区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
   证明: by
   grind
 
@@ -784,7 +784,7 @@ theorem Ioo_union_Ioi'
 中文:
 定理 Ioo_union_Ioi'
   条件: (h₁ : c < b)
-  结论: Ioo a b union Ioi c = Ioi (min a c)
+  结论: 开区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
   证明: Ioo_union_Ioi (h₁.trans_le (le_max_right ..))
 
 Depends on / 依赖: Ioo_union_Ioi, le_max_right, trans_le
@@ -805,7 +805,7 @@ theorem Ioi_subset_Ioo_union_Ici
 
 中文:
 定理 Ioi_subset_Ioo_union_Ici
-  结论: Ioi a subseteq Ioo a b union Ici b
+  结论: 左开右无界区间 a subseteq 开区间 a b union 左闭右无界区间 b
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
@@ -827,7 +827,7 @@ theorem Ioo_union_Ici_eq_Ioi
 中文:
 定理 Ioo_union_Ici_eq_Ioi
   条件: (h : a < b)
-  结论: Ioo a b union Ici b = Ioi a
+  结论: 开区间 a b union 左闭右无界区间 b = 左开右无界区间 a
   证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioo_union_Ici
 
 Depends on / 依赖: And.left, Ioi_subset_Ioo_union_Ici, Subset, Subset.antisymm, antisymm, h.trans_le, hx.elim, trans_le
@@ -848,7 +848,7 @@ theorem Ici_subset_Ico_union_Ici
 
 中文:
 定理 Ici_subset_Ico_union_Ici
-  结论: Ici a subseteq Ico a b union Ici b
+  结论: 左闭右无界区间 a subseteq 左闭右开区间 a b union 左闭右无界区间 b
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
@@ -870,7 +870,7 @@ theorem Ico_union_Ici_eq_Ici
 中文:
 定理 Ico_union_Ici_eq_Ici
   条件: (h : a <= b)
-  结论: Ico a b union Ici b = Ici a
+  结论: 左闭右开区间 a b union 左闭右无界区间 b = 左闭右无界区间 a
   证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Ico_union_Ici
 
 Depends on / 依赖: And.left, Ici_subset_Ico_union_Ici, Subset, Subset.antisymm, antisymm, h.trans, hx.elim
@@ -892,8 +892,8 @@ theorem Ico_union_Ici
 
 中文:
 定理 Ico_union_Ici
-  条件: (h : c <= max a b)
-  结论: Ico a b union Ici c = Ici (min a c)
+  条件: (h : c <= 最大值 a b)
+  结论: 左闭右开区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
   证明: by
   grind
 
@@ -915,7 +915,7 @@ theorem Ico_union_Ici'
 中文:
 定理 Ico_union_Ici'
   条件: (h₁ : c <= b)
-  结论: Ico a b union Ici c = Ici (min a c)
+  结论: 左闭右开区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
   证明: Ico_union_Ici (h₁.trans (le_max_right ..))
 
 Depends on / 依赖: Ico_union_Ici, le_max_right
@@ -936,7 +936,7 @@ theorem Ioi_subset_Ioc_union_Ioi
 
 中文:
 定理 Ioi_subset_Ioc_union_Ioi
-  结论: Ioi a subseteq Ioc a b union Ioi b
+  结论: 左开右无界区间 a subseteq 左开右闭区间 a b union 左开右无界区间 b
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
@@ -958,7 +958,7 @@ theorem Ioc_union_Ioi_eq_Ioi
 中文:
 定理 Ioc_union_Ioi_eq_Ioi
   条件: (h : a <= b)
-  结论: Ioc a b union Ioi b = Ioi a
+  结论: 左开右闭区间 a b union 左开右无界区间 b = 左开右无界区间 a
   证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_lt) Ioi_subset_Ioc_union_Ioi
 
 Depends on / 依赖: And.left, Ioi_subset_Ioc_union_Ioi, Subset, Subset.antisymm, antisymm, h.trans_lt, hx.elim, trans_lt
@@ -980,8 +980,8 @@ theorem Ioc_union_Ioi
 
 中文:
 定理 Ioc_union_Ioi
-  条件: (h : c <= max a b)
-  结论: Ioc a b union Ioi c = Ioi (min a c)
+  条件: (h : c <= 最大值 a b)
+  结论: 左开右闭区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
   证明: by
   grind
 
@@ -1003,7 +1003,7 @@ theorem Ioc_union_Ioi'
 中文:
 定理 Ioc_union_Ioi'
   条件: (h₁ : c <= b)
-  结论: Ioc a b union Ioi c = Ioi (min a c)
+  结论: 左开右闭区间 a b union 左开右无界区间 c = 左开右无界区间 (最小值 a c)
   证明: Ioc_union_Ioi (h₁.trans (le_max_right ..))
 
 Depends on / 依赖: Ioc_union_Ioi, le_max_right
@@ -1024,7 +1024,7 @@ theorem Ici_subset_Icc_union_Ioi
 
 中文:
 定理 Ici_subset_Icc_union_Ioi
-  结论: Ici a subseteq Icc a b union Ioi b
+  结论: 左闭右无界区间 a subseteq 闭区间 a b union 左开右无界区间 b
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx, hxb⟩) fun hxb => Or.inr hxb
 
@@ -1047,7 +1047,7 @@ theorem Icc_union_Ioi_eq_Ici
 中文:
 定理 Icc_union_Ioi_eq_Ici
   条件: (h : a <= b)
-  结论: Icc a b union Ioi b = Ici a
+  结论: 闭区间 a b union 左开右无界区间 b = 左闭右无界区间 a
   证明: Subset.antisymm (fun _ hx => (hx.elim And.left) fun hx' => h.trans <| le_of_lt hx')
     Ici_subset_Icc_union_Ioi
 
@@ -1069,7 +1069,7 @@ theorem Ioi_subset_Ioc_union_Ici
 
 中文:
 定理 Ioi_subset_Ioc_union_Ici
-  结论: Ioi a subseteq Ioc a b union Ici b
+  结论: 左开右无界区间 a subseteq 左开右闭区间 a b union 左闭右无界区间 b
   证明: Subset.trans Ioi_subset_Ioo_union_Ici (union_subset_union_left _ Ioo_subset_Ioc_self)
 
 @[simp]
@@ -1092,7 +1092,7 @@ theorem Ioc_union_Ici_eq_Ioi
 中文:
 定理 Ioc_union_Ici_eq_Ioi
   条件: (h : a < b)
-  结论: Ioc a b union Ici b = Ioi a
+  结论: 左开右闭区间 a b union 左闭右无界区间 b = 左开右无界区间 a
   证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans_le) Ioi_subset_Ioc_union_Ici
 
 Depends on / 依赖: And.left, Ioi_subset_Ioc_union_Ici, Subset, Subset.antisymm, antisymm, h.trans_le, hx.elim, trans_le
@@ -1112,7 +1112,7 @@ theorem Ici_subset_Icc_union_Ici
 
 中文:
 定理 Ici_subset_Icc_union_Ici
-  结论: Ici a subseteq Icc a b union Ici b
+  结论: 左闭右无界区间 a subseteq 闭区间 a b union 左闭右无界区间 b
   证明: Subset.trans Ici_subset_Ico_union_Ici (union_subset_union_left _ Ico_subset_Icc_self)
 
 @[simp]
@@ -1135,7 +1135,7 @@ theorem Icc_union_Ici_eq_Ici
 中文:
 定理 Icc_union_Ici_eq_Ici
   条件: (h : a <= b)
-  结论: Icc a b union Ici b = Ici a
+  结论: 闭区间 a b union 左闭右无界区间 b = 左闭右无界区间 a
   证明: Subset.antisymm (fun _ hx => hx.elim And.left h.trans) Ici_subset_Icc_union_Ici
 
 Depends on / 依赖: And.left, Ici_subset_Icc_union_Ici, Subset, Subset.antisymm, antisymm, h.trans, hx.elim
@@ -1157,8 +1157,8 @@ theorem Icc_union_Ici
 
 中文:
 定理 Icc_union_Ici
-  条件: (h : c <= max a b)
-  结论: Icc a b union Ici c = Ici (min a c)
+  条件: (h : c <= 最大值 a b)
+  结论: 闭区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
   证明: by
   grind
 
@@ -1180,7 +1180,7 @@ theorem Icc_union_Ici'
 中文:
 定理 Icc_union_Ici'
   条件: (h₁ : c <= b)
-  结论: Icc a b union Ici c = Ici (min a c)
+  结论: 闭区间 a b union 左闭右无界区间 c = 左闭右无界区间 (最小值 a c)
   证明: Icc_union_Ici (h₁.trans (le_max_right ..))
 
 Depends on / 依赖: Icc_union_Ici, le_max_right
@@ -1202,7 +1202,7 @@ theorem Iic_subset_Iio_union_Icc
 
 中文:
 定理 Iic_subset_Iio_union_Icc
-  结论: Iic b subseteq Iio a union Icc a b
+  结论: 左无界右闭区间 b subseteq 左无界右开区间 a union 闭区间 a b
   证明: fun x hx =>
   (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
@@ -1225,7 +1225,7 @@ theorem Iio_union_Icc_eq_Iic
 中文:
 定理 Iio_union_Icc_eq_Iic
   条件: (h : a <= b)
-  结论: Iio a union Icc a b = Iic b
+  结论: 左无界右开区间 a union 闭区间 a b = 左无界右闭区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx => (le_of_lt hx).trans h) And.right)
     Iic_subset_Iio_union_Icc
 
@@ -1248,7 +1248,7 @@ theorem Iio_subset_Iio_union_Ico
 
 中文:
 定理 Iio_subset_Iio_union_Ico
-  结论: Iio b subseteq Iio a union Ico a b
+  结论: 左无界右开区间 b subseteq 左无界右开区间 a union 左闭右开区间 a b
   证明: fun x hx =>
   (lt_or_ge x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
@@ -1271,7 +1271,7 @@ theorem Iio_union_Ico_eq_Iio
 中文:
 定理 Iio_union_Ico_eq_Iio
   条件: (h : a <= b)
-  结论: Iio a union Ico a b = Iio b
+  结论: 左无界右开区间 a union 左闭右开区间 a b = 左无界右开区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_lt_of_le hx' h) And.right)
     Iio_subset_Iio_union_Ico
 
@@ -1295,8 +1295,8 @@ theorem Iio_union_Ico
 
 中文:
 定理 Iio_union_Ico
-  条件: (h : min c d <= b)
-  结论: Iio b union Ico c d = Iio (max b d)
+  条件: (h : 最小值 c d <= b)
+  结论: 左无界右开区间 b union 左闭右开区间 c d = 左无界右开区间 (最大值 b d)
   证明: by
   grind
 
@@ -1318,7 +1318,7 @@ theorem Iio_union_Ico'
 中文:
 定理 Iio_union_Ico'
   条件: (h₁ : c <= b)
-  结论: Iio b union Ico c d = Iio (max b d)
+  结论: 左无界右开区间 b union 左闭右开区间 c d = 左无界右开区间 (最大值 b d)
   证明: Iio_union_Ico ((min_le_left ..).trans h₁)
 
 Depends on / 依赖: Iio_union_Ico, min_le_left
@@ -1339,7 +1339,7 @@ theorem Iic_subset_Iic_union_Ioc
 
 中文:
 定理 Iic_subset_Iic_union_Ioc
-  结论: Iic b subseteq Iic a union Ioc a b
+  结论: 左无界右闭区间 b subseteq 左无界右闭区间 a union 左开右闭区间 a b
   证明: fun x hx =>
   (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
@@ -1362,7 +1362,7 @@ theorem Iic_union_Ioc_eq_Iic
 中文:
 定理 Iic_union_Ioc_eq_Iic
   条件: (h : a <= b)
-  结论: Iic a union Ioc a b = Iic b
+  结论: 左无界右闭区间 a union 左开右闭区间 a b = 左无界右闭区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
     Iic_subset_Iic_union_Ioc
 
@@ -1386,8 +1386,8 @@ theorem Iic_union_Ioc
 
 中文:
 定理 Iic_union_Ioc
-  条件: (h : min c d < b)
-  结论: Iic b union Ioc c d = Iic (max b d)
+  条件: (h : 最小值 c d < b)
+  结论: 左无界右闭区间 b union 左开右闭区间 c d = 左无界右闭区间 (最大值 b d)
   证明: by
   grind
 
@@ -1409,7 +1409,7 @@ theorem Iic_union_Ioc'
 中文:
 定理 Iic_union_Ioc'
   条件: (h₁ : c < b)
-  结论: Iic b union Ioc c d = Iic (max b d)
+  结论: 左无界右闭区间 b union 左开右闭区间 c d = 左无界右闭区间 (最大值 b d)
   证明: Iic_union_Ioc ((min_le_left ..).trans_lt h₁)
 
 Depends on / 依赖: Iic_union_Ioc, min_le_left, trans_lt
@@ -1430,7 +1430,7 @@ theorem Iio_subset_Iic_union_Ioo
 
 中文:
 定理 Iio_subset_Iic_union_Ioo
-  结论: Iio b subseteq Iic a union Ioo a b
+  结论: 左无界右开区间 b subseteq 左无界右闭区间 a union 开区间 a b
   证明: fun x hx =>
   (le_or_gt x a).elim (fun hxa => Or.inl hxa) fun hxa => Or.inr ⟨hxa, hx⟩
 
@@ -1453,7 +1453,7 @@ theorem Iic_union_Ioo_eq_Iio
 中文:
 定理 Iic_union_Ioo_eq_Iio
   条件: (h : a < b)
-  结论: Iic a union Ioo a b = Iio b
+  结论: 左无界右闭区间 a union 开区间 a b = 左无界右开区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
     Iio_subset_Iic_union_Ioo
 
@@ -1477,8 +1477,8 @@ theorem Iio_union_Ioo
 
 中文:
 定理 Iio_union_Ioo
-  条件: (h : min c d < b)
-  结论: Iio b union Ioo c d = Iio (max b d)
+  条件: (h : 最小值 c d < b)
+  结论: 左无界右开区间 b union 开区间 c d = 左无界右开区间 (最大值 b d)
   证明: by
   grind
 
@@ -1500,7 +1500,7 @@ theorem Iio_union_Ioo'
 中文:
 定理 Iio_union_Ioo'
   条件: (h₁ : c < b)
-  结论: Iio b union Ioo c d = Iio (max b d)
+  结论: 左无界右开区间 b union 开区间 c d = 左无界右开区间 (最大值 b d)
   证明: Iio_union_Ioo ((min_le_left ..).trans_lt h₁)
 
 Depends on / 依赖: Iio_union_Ioo, min_le_left, trans_lt
@@ -1520,7 +1520,7 @@ theorem Iic_subset_Iic_union_Icc
 
 中文:
 定理 Iic_subset_Iic_union_Icc
-  结论: Iic b subseteq Iic a union Icc a b
+  结论: 左无界右闭区间 b subseteq 左无界右闭区间 a union 闭区间 a b
   证明: Subset.trans Iic_subset_Iic_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
@@ -1544,7 +1544,7 @@ theorem Iic_union_Icc_eq_Iic
 中文:
 定理 Iic_union_Icc_eq_Iic
   条件: (h : a <= b)
-  结论: Iic a union Icc a b = Iic b
+  结论: 左无界右闭区间 a union 闭区间 a b = 左无界右闭区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => le_trans hx' h) And.right)
     Iic_subset_Iic_union_Icc
 
@@ -1568,8 +1568,8 @@ theorem Iic_union_Icc
 
 中文:
 定理 Iic_union_Icc
-  条件: (h : min c d <= b)
-  结论: Iic b union Icc c d = Iic (max b d)
+  条件: (h : 最小值 c d <= b)
+  结论: 左无界右闭区间 b union 闭区间 c d = 左无界右闭区间 (最大值 b d)
   证明: by
   grind
 
@@ -1591,7 +1591,7 @@ theorem Iic_union_Icc'
 中文:
 定理 Iic_union_Icc'
   条件: (h₁ : c <= b)
-  结论: Iic b union Icc c d = Iic (max b d)
+  结论: 左无界右闭区间 b union 闭区间 c d = 左无界右闭区间 (最大值 b d)
   证明: Iic_union_Icc ((min_le_left ..).trans h₁)
 
 Depends on / 依赖: Iic_union_Icc, min_le_left
@@ -1611,7 +1611,7 @@ theorem Iio_subset_Iic_union_Ico
 
 中文:
 定理 Iio_subset_Iic_union_Ico
-  结论: Iio b subseteq Iic a union Ico a b
+  结论: 左无界右开区间 b subseteq 左无界右闭区间 a union 左闭右开区间 a b
   证明: Subset.trans Iio_subset_Iic_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[simp]
@@ -1635,7 +1635,7 @@ theorem Iic_union_Ico_eq_Iio
 中文:
 定理 Iic_union_Ico_eq_Iio
   条件: (h : a < b)
-  结论: Iic a union Ico a b = Iio b
+  结论: 左无界右闭区间 a union 左闭右开区间 a b = 左无界右开区间 b
   证明: Subset.antisymm (fun _ hx => hx.elim (fun hx' => lt_of_le_of_lt hx' h) And.right)
     Iio_subset_Iic_union_Ico
 
@@ -1659,7 +1659,7 @@ theorem Ioo_subset_Ioo_union_Ico
 
 中文:
 定理 Ioo_subset_Ioo_union_Ico
-  结论: Ioo a c subseteq Ioo a b union Ico b c
+  结论: 开区间 a c subseteq 开区间 a b union 左闭右开区间 b c
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1683,7 +1683,7 @@ theorem Ioo_union_Ico_eq_Ioo
 中文:
 定理 Ioo_union_Ico_eq_Ioo
   条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: Ioo a b union Ico b c = Ioo a c
+  结论: 开区间 a b union 左闭右开区间 b c = 开区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioo_subset_Ioo_union_Ico
@@ -1708,7 +1708,7 @@ theorem Ico_subset_Ico_union_Ico
 
 中文:
 定理 Ico_subset_Ico_union_Ico
-  结论: Ico a c subseteq Ico a b union Ico b c
+  结论: 左闭右开区间 a c subseteq 左闭右开区间 a b union 左闭右开区间 b c
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1732,7 +1732,7 @@ theorem Ico_union_Ico_eq_Ico
 中文:
 定理 Ico_union_Ico_eq_Ico
   条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: Ico a b union Ico b c = Ico a c
+  结论: 左闭右开区间 a b union 左闭右开区间 b c = 左闭右开区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_le h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Ico_subset_Ico_union_Ico
@@ -1755,7 +1755,7 @@ theorem Ico_union_Ico
 
 中文:
 定理 Ico_union_Ico
-  条件: (h₁ : min a b <= max c d) (h₂ : min c d <= max a b)
+  条件: (h₁ : 最小值 a b <= 最大值 c d) (h₂ : 最小值 c d <= 最大值 a b)
   证明: by
   grind
 -/
@@ -1777,7 +1777,7 @@ theorem Ico_union_Ico'
 中文:
 定理 Ico_union_Ico'
   条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: Ico a b union Ico c d = Ico (min a c) (max b d)
+  结论: 左闭右开区间 a b union 左闭右开区间 c d = 左闭右开区间 (最小值 a c) (最大值 b d)
   证明: Ico_union_Ico
     ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
     ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
@@ -1802,7 +1802,7 @@ theorem Icc_subset_Ico_union_Icc
 
 中文:
 定理 Icc_subset_Ico_union_Icc
-  结论: Icc a c subseteq Ico a b union Icc b c
+  结论: 闭区间 a c subseteq 左闭右开区间 a b union 闭区间 b c
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1826,7 +1826,7 @@ theorem Ico_union_Icc_eq_Icc
 中文:
 定理 Ico_union_Icc_eq_Icc
   条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: Ico a b union Icc b c = Icc a c
+  结论: 左闭右开区间 a b union 闭区间 b c = 闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Icc_subset_Ico_union_Icc
@@ -1851,7 +1851,7 @@ theorem Ioc_subset_Ioo_union_Icc
 
 中文:
 定理 Ioc_subset_Ioo_union_Icc
-  结论: Ioc a c subseteq Ioo a b union Icc b c
+  结论: 左开右闭区间 a c subseteq 开区间 a b union 闭区间 b c
   证明: fun x hx =>
   (lt_or_ge x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1875,7 +1875,7 @@ theorem Ioo_union_Icc_eq_Ioc
 中文:
 定理 Ioo_union_Icc_eq_Ioc
   条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: Ioo a b union Icc b c = Ioc a c
+  结论: 开区间 a b union 闭区间 b c = 左开右闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.le.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioc_subset_Ioo_union_Icc
@@ -1903,7 +1903,7 @@ theorem Ioo_subset_Ioc_union_Ioo
 
 中文:
 定理 Ioo_subset_Ioc_union_Ioo
-  结论: Ioo a c subseteq Ioc a b union Ioo b c
+  结论: 开区间 a c subseteq 左开右闭区间 a b union 开区间 b c
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1929,7 +1929,7 @@ theorem Ioc_union_Ioo_eq_Ioo
 中文:
 定理 Ioc_union_Ioo_eq_Ioo
   条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: Ioc a b union Ioo b c = Ioo a c
+  结论: 左开右闭区间 a b union 开区间 b c = 开区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
     Ioo_subset_Ioc_union_Ioo
@@ -1957,7 +1957,7 @@ theorem Ico_subset_Icc_union_Ioo
 
 中文:
 定理 Ico_subset_Icc_union_Ioo
-  结论: Ico a c subseteq Icc a b union Ioo b c
+  结论: 左闭右开区间 a c subseteq 闭区间 a b union 开区间 b c
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -1981,7 +1981,7 @@ theorem Icc_union_Ioo_eq_Ico
 中文:
 定理 Icc_union_Ioo_eq_Ico
   条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: Icc a b union Ioo b c = Ico a c
+  结论: 闭区间 a b union 开区间 b c = 左闭右开区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
     Ico_subset_Icc_union_Ioo
@@ -2006,7 +2006,7 @@ theorem Icc_subset_Icc_union_Ioc
 
 中文:
 定理 Icc_subset_Icc_union_Ioc
-  结论: Icc a c subseteq Icc a b union Ioc b c
+  结论: 闭区间 a c subseteq 闭区间 a b union 左开右闭区间 b c
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -2030,7 +2030,7 @@ theorem Icc_union_Ioc_eq_Icc
 中文:
 定理 Icc_union_Ioc_eq_Icc
   条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: Icc a b union Ioc b c = Icc a c
+  结论: 闭区间 a b union 左开右闭区间 b c = 闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1.le, hx.2⟩)
     Icc_subset_Icc_union_Ioc
@@ -2055,7 +2055,7 @@ theorem Ioc_subset_Ioc_union_Ioc
 
 中文:
 定理 Ioc_subset_Ioc_union_Ioc
-  结论: Ioc a c subseteq Ioc a b union Ioc b c
+  结论: 左开右闭区间 a c subseteq 左开右闭区间 a b union 左开右闭区间 b c
   证明: fun x hx =>
   (le_or_gt x b).elim (fun hxb => Or.inl ⟨hx.1, hxb⟩) fun hxb => Or.inr ⟨hxb, hx.2⟩
 
@@ -2079,7 +2079,7 @@ theorem Ioc_union_Ioc_eq_Ioc
 中文:
 定理 Ioc_union_Ioc_eq_Ioc
   条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: Ioc a b union Ioc b c = Ioc a c
+  结论: 左开右闭区间 a b union 左开右闭区间 b c = 左开右闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_lt hx.1, hx.2⟩)
     Ioc_subset_Ioc_union_Ioc
@@ -2102,7 +2102,7 @@ theorem Ioc_union_Ioc
 
 中文:
 定理 Ioc_union_Ioc
-  条件: (h₁ : min a b <= max c d) (h₂ : min c d <= max a b)
+  条件: (h₁ : 最小值 a b <= 最大值 c d) (h₂ : 最小值 c d <= 最大值 a b)
   证明: by
   grind
 -/
@@ -2124,7 +2124,7 @@ theorem Ioc_union_Ioc'
 中文:
 定理 Ioc_union_Ioc'
   条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: Ioc a b union Ioc c d = Ioc (min a c) (max b d)
+  结论: 左开右闭区间 a b union 左开右闭区间 c d = 左开右闭区间 (最小值 a c) (最大值 b d)
   证明: Ioc_union_Ioc
     ((min_le_left ..).trans (h₂.trans (le_max_right ..)))
     ((min_le_left ..).trans (h₁.trans (le_max_right ..)))
@@ -2151,7 +2151,7 @@ theorem Ioo_subset_Ioc_union_Ico
 
 中文:
 定理 Ioo_subset_Ioc_union_Ico
-  结论: Ioo a c subseteq Ioc a b union Ico b c
+  结论: 开区间 a c subseteq 左开右闭区间 a b union 左闭右开区间 b c
   证明: Subset.trans Ioo_subset_Ioc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[to_dual (attr := simp)]
@@ -2177,7 +2177,7 @@ theorem Ioc_union_Ico_eq_Ioo
 中文:
 定理 Ioc_union_Ico_eq_Ioo
   条件: (h₁ : a < b) (h₂ : b < c)
-  结论: Ioc a b union Ico b c = Ioo a c
+  结论: 左开右闭区间 a b union 左闭右开区间 b c = 开区间 a c
   证明: Subset.antisymm
     (fun _ hx =>
       hx.elim (fun hx' => ⟨hx'.1, hx'.2.trans_lt h₂⟩) fun hx' => ⟨h₁.trans_le hx'.1, hx'.2⟩)
@@ -2203,7 +2203,7 @@ theorem Ico_subset_Icc_union_Ico
 
 中文:
 定理 Ico_subset_Icc_union_Ico
-  结论: Ico a c subseteq Icc a b union Ico b c
+  结论: 左闭右开区间 a c subseteq 闭区间 a b union 左闭右开区间 b c
   证明: Subset.trans Ico_subset_Icc_union_Ioo (union_subset_union_right _ Ioo_subset_Ico_self)
 
 @[simp]
@@ -2228,7 +2228,7 @@ theorem Icc_union_Ico_eq_Ico
 中文:
 定理 Icc_union_Ico_eq_Ico
   条件: (h₁ : a <= b) (h₂ : b < c)
-  结论: Icc a b union Ico b c = Ico a c
+  结论: 闭区间 a b union 左闭右开区间 b c = 左闭右开区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans_lt h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Ico_subset_Icc_union_Ico
@@ -2252,7 +2252,7 @@ theorem Icc_subset_Icc_union_Icc
 
 中文:
 定理 Icc_subset_Icc_union_Icc
-  结论: Icc a c subseteq Icc a b union Icc b c
+  结论: 闭区间 a c subseteq 闭区间 a b union 闭区间 b c
   证明: Subset.trans Icc_subset_Icc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
@@ -2277,7 +2277,7 @@ theorem Icc_union_Icc_eq_Icc
 中文:
 定理 Icc_union_Icc_eq_Icc
   条件: (h₁ : a <= b) (h₂ : b <= c)
-  结论: Icc a b union Icc b c = Icc a c
+  结论: 闭区间 a b union 闭区间 b c = 闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans hx.1, hx.2⟩)
     Icc_subset_Icc_union_Icc
@@ -2302,7 +2302,7 @@ theorem Icc_union_Icc'
 中文:
 定理 Icc_union_Icc'
   条件: (h₁ : c <= b) (h₂ : a <= d)
-  结论: Icc a b union Icc c d = Icc (min a c) (max b d)
+  结论: 闭区间 a b union 闭区间 c d = 闭区间 (最小值 a c) (最大值 b d)
   证明: by
   grind
 -/
@@ -2320,7 +2320,7 @@ theorem Icc_union_Icc
 
 中文:
 定理 Icc_union_Icc
-  条件: (h₁ : min a b < max c d) (h₂ : min c d < max a b)
+  条件: (h₁ : 最小值 a b < 最大值 c d) (h₂ : 最小值 c d < 最大值 a b)
   证明: by
   grind
 -/
@@ -2340,7 +2340,7 @@ theorem Ioc_subset_Ioc_union_Icc
 
 中文:
 定理 Ioc_subset_Ioc_union_Icc
-  结论: Ioc a c subseteq Ioc a b union Icc b c
+  结论: 左开右闭区间 a c subseteq 左开右闭区间 a b union 闭区间 b c
   证明: Subset.trans Ioc_subset_Ioc_union_Ioc (union_subset_union_right _ Ioc_subset_Icc_self)
 
 @[simp]
@@ -2365,7 +2365,7 @@ theorem Ioc_union_Icc_eq_Ioc
 中文:
 定理 Ioc_union_Icc_eq_Ioc
   条件: (h₁ : a < b) (h₂ : b <= c)
-  结论: Ioc a b union Icc b c = Ioc a c
+  结论: 左开右闭区间 a b union 闭区间 b c = 左开右闭区间 a c
   证明: Subset.antisymm
     (fun _ hx => hx.elim (fun hx => ⟨hx.1, hx.2.trans h₂⟩) fun hx => ⟨h₁.trans_le hx.1, hx.2⟩)
     Ioc_subset_Ioc_union_Icc
@@ -2390,7 +2390,7 @@ theorem Ioo_union_Ioo'
 中文:
 定理 Ioo_union_Ioo'
   条件: (h₁ : c < b) (h₂ : a < d)
-  结论: Ioo a b union Ioo c d = Ioo (min a c) (max b d)
+  结论: 开区间 a b union 开区间 c d = 开区间 (最小值 a c) (最大值 b d)
   证明: by
   grind
 -/
@@ -2408,7 +2408,7 @@ theorem Ioo_union_Ioo
 
 中文:
 定理 Ioo_union_Ioo
-  条件: (h₁ : min a b < max c d) (h₂ : min c d < max a b)
+  条件: (h₁ : 最小值 a b < 最大值 c d) (h₂ : 最小值 c d < 最大值 a b)
   证明: by
   grind
 -/
@@ -2453,7 +2453,7 @@ theorem Ioi_inter_Ioi
 
 中文:
 定理 Ioi_inter_Ioi
-  结论: Ioi a inter Ioi b = Ioi (a ⊔ b)
+  结论: 左开右无界区间 a inter 左开右无界区间 b = 左开右无界区间 (a ⊔ b)
   证明: ext fun _ => sup_lt_iff.symm
 
 @[to_dual]
@@ -2477,7 +2477,7 @@ theorem Ico_inter_Ico
 
 中文:
 定理 Ico_inter_Ico
-  结论: Ico a₁ b₁ inter Ico a₂ b₂ = Ico (a₁ ⊔ a₂) (b₁ ⊓ b₂)
+  结论: 左闭右开区间 a₁ b₁ inter 左闭右开区间 a₂ b₂ = 左闭右开区间 (a₁ ⊔ a₂) (b₁ ⊓ b₂)
   证明: by
   grind
 
@@ -2500,7 +2500,7 @@ theorem Ioo_inter_Ioo
 
 中文:
 定理 Ioo_inter_Ioo
-  结论: Ioo a₁ b₁ inter Ioo a₂ b₂ = Ioo (a₁ ⊔ a₂) (b₁ ⊓ b₂)
+  结论: 开区间 a₁ b₁ inter 开区间 a₂ b₂ = 开区间 (a₁ ⊔ a₂) (b₁ ⊓ b₂)
   证明: by
   grind
 
@@ -2523,7 +2523,7 @@ theorem Ioo_inter_Iio
 
 中文:
 定理 Ioo_inter_Iio
-  结论: Ioo a b inter Iio c = Ioo a (min b c)
+  结论: 开区间 a b inter 左无界右开区间 c = 开区间 a (最小值 b c)
   证明: by
   grind
 
@@ -2544,7 +2544,7 @@ theorem Iio_inter_Ioo
 
 中文:
 定理 Iio_inter_Ioo
-  结论: Iio a inter Ioo b c = Ioo b (min a c)
+  结论: 左无界右开区间 a inter 开区间 b c = 开区间 b (最小值 a c)
   证明: by
   grind
 -/
@@ -2564,7 +2564,7 @@ theorem Ioc_inter_Ioo_of_left_lt
 中文:
 定理 Ioc_inter_Ioo_of_left_lt
   条件: (h : b₁ < b₂)
-  结论: Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioc (max a₁ a₂) b₁
+  结论: 左开右闭区间 a₁ b₁ inter 开区间 a₂ b₂ = 左开右闭区间 (最大值 a₁ a₂) b₁
   证明: by
   grind
 -/
@@ -2584,7 +2584,7 @@ theorem Ioc_inter_Ioo_of_right_le
 中文:
 定理 Ioc_inter_Ioo_of_right_le
   条件: (h : b₂ <= b₁)
-  结论: Ioc a₁ b₁ inter Ioo a₂ b₂ = Ioo (max a₁ a₂) b₂
+  结论: 左开右闭区间 a₁ b₁ inter 开区间 a₂ b₂ = 开区间 (最大值 a₁ a₂) b₂
   证明: by
   grind
 -/
@@ -2604,7 +2604,7 @@ theorem Ioo_inter_Ioc_of_left_le
 中文:
 定理 Ioo_inter_Ioc_of_left_le
   条件: (h : b₁ <= b₂)
-  结论: Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioo (max a₁ a₂) b₁
+  结论: 开区间 a₁ b₁ inter 左开右闭区间 a₂ b₂ = 开区间 (最大值 a₁ a₂) b₁
   证明: by
   grind
 -/
@@ -2626,7 +2626,7 @@ theorem Ioo_inter_Ioc_of_right_lt
 中文:
 定理 Ioo_inter_Ioc_of_right_lt
   条件: (h : b₂ < b₁)
-  结论: Ioo a₁ b₁ inter Ioc a₂ b₂ = Ioc (max a₁ a₂) b₂
+  结论: 开区间 a₁ b₁ inter 左开右闭区间 a₂ b₂ = 左开右闭区间 (最大值 a₁ a₂) b₂
   证明: by
   grind
 
@@ -2651,7 +2651,7 @@ theorem Ico_sdiff_Iio
 
 中文:
 定理 Ico_sdiff_Iio
-  结论: Ico a b \ Iio c = Ico (max a c) b
+  结论: 左闭右开区间 a b \ 左无界右开区间 c = 左闭右开区间 (最大值 a c) b
   证明: by
   grind
 
@@ -2680,7 +2680,7 @@ theorem Ioc_sdiff_Ioi
 
 中文:
 定理 Ioc_sdiff_Ioi
-  结论: Ioc a b \ Ioi c = Ioc a (min b c)
+  结论: 左开右闭区间 a b \ 左开右无界区间 c = 左开右闭区间 a (最小值 b c)
   证明: by
   grind
 
@@ -2707,7 +2707,7 @@ theorem Ioc_inter_Ioi
 
 中文:
 定理 Ioc_inter_Ioi
-  结论: Ioc a b inter Ioi c = Ioc (a ⊔ c) b
+  结论: 左开右闭区间 a b inter 左开右无界区间 c = 左开右闭区间 (a ⊔ c) b
   证明: by
   grind
 
@@ -2730,7 +2730,7 @@ theorem Ico_inter_Iio
 
 中文:
 定理 Ico_inter_Iio
-  结论: Ico a b inter Iio c = Ico a (min b c)
+  结论: 左闭右开区间 a b inter 左无界右开区间 c = 左闭右开区间 a (最小值 b c)
   证明: by
   grind
 
@@ -2753,7 +2753,7 @@ theorem Ioc_sdiff_Iic
 
 中文:
 定理 Ioc_sdiff_Iic
-  结论: Ioc a b \ Iic c = Ioc (max a c) b
+  结论: 左开右闭区间 a b \ 左无界右闭区间 c = 左开右闭区间 (最大值 a c) b
   证明: by
   grind
 
@@ -2775,7 +2775,7 @@ theorem compl_Ioc
 
 中文:
 定理 compl_Ioc
-  结论: (Ioc a b)ᶜ = Iic a union Ioi b
+  结论: (左开右闭区间 a b)ᶜ = 左无界右闭区间 a union 左开右无界区间 b
   证明: by
   grind
 -/
@@ -2797,7 +2797,7 @@ theorem Iic_sdiff_Ioc
 
 中文:
 定理 Iic_sdiff_Ioc
-  结论: Iic b \ Ioc a b = Iic (a ⊓ b)
+  结论: 左无界右闭区间 b \ 左开右闭区间 a b = 左无界右闭区间 (a ⊓ b)
   证明: by
   grind
 
@@ -2824,7 +2824,7 @@ theorem Ioi_sdiff_Ioc
 
 中文:
 定理 Ioi_sdiff_Ioc
-  结论: Ioi a \ Ioc a b = Ioi (max a b)
+  结论: 左开右无界区间 a \ 左开右闭区间 a b = 左开右无界区间 (最大值 a b)
   证明: by
   grind
 
@@ -2852,7 +2852,7 @@ theorem Iic_sdiff_Ioc_self_of_le
 中文:
 定理 Iic_sdiff_Ioc_self_of_le
   条件: (hab : a <= b)
-  结论: Iic b \ Ioc a b = Iic a
+  结论: 左无界右闭区间 b \ 左开右闭区间 a b = 左无界右闭区间 a
   证明: by
   grind
 
@@ -2879,7 +2879,7 @@ theorem Ioc_union_Ioc_right
 
 中文:
 定理 Ioc_union_Ioc_right
-  结论: Ioc a b union Ioc a c = Ioc a (max b c)
+  结论: 左开右闭区间 a b union 左开右闭区间 a c = 左开右闭区间 a (最大值 b c)
   证明: by
   grind
 
@@ -2902,7 +2902,7 @@ theorem Ioc_union_Ioc_left
 
 中文:
 定理 Ioc_union_Ioc_left
-  结论: Ioc a c union Ioc b c = Ioc (min a b) c
+  结论: 左开右闭区间 a c union 左开右闭区间 b c = 左开右闭区间 (最小值 a b) c
   证明: by
   grind
 
@@ -2925,7 +2925,7 @@ theorem Ioc_union_Ioc_symm
 
 中文:
 定理 Ioc_union_Ioc_symm
-  结论: Ioc a b union Ioc b a = Ioc (min a b) (max a b)
+  结论: 左开右闭区间 a b union 左开右闭区间 b a = 左开右闭区间 (最小值 a b) (最大值 a b)
   证明: by
   grind
 

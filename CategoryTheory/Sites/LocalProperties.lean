@@ -46,7 +46,7 @@ lemma isIso_of_coversTop
 
 中文:
 引理 isIso_of_coversTop
-  结论: (hX : K.CoversTop X) {F G : Sheaf K A} {f : F ⟶ G}
+  结论: (hX : K.CoversTop X) {F G : 层 K A} {f : F ⟶ G}
   证明: by
   rw [← ObjectProperty.isIso_hom_iff]; rw [NatTrans.isIso_iff_isIso_app]
   have hiso (Z : C) (i : ι) (g : Z ⟶ X i) : IsIso (f.hom.app (op Z)) :=
@@ -97,7 +97,7 @@ lemma isIso_iff_of_coversTop
 
 中文:
 引理 isIso_iff_of_coversTop
-  条件: (hX : K.CoversTop X) {F G : Sheaf K A} (f : F ⟶ G)
+  条件: (hX : K.CoversTop X) {F G : 层 K A} (f : F ⟶ G)
   证明: ⟨fun _ _ => inferInstance, fun h => isIso_of_coversTop hX h⟩
 
 Depends on / 依赖: isIso_of_coversTop

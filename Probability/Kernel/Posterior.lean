@@ -77,7 +77,7 @@ definition posterior
 
 中文:
 定义 posterior
-  签名: (κ : Kernel Ω 𝓧) (μ : Measure Ω) [IsFiniteMeasure μ] [IsFiniteKernel κ]
+  签名: (κ : 核 Ω 𝓧) (μ : 测度 Ω) [是有限测度 μ] [是FiniteKernel κ]
   定义体: ((μ otimesₘ κ).map Prod.swap).condKernel
 
 Depends on / 依赖: Prod.swap, condKernel
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel κ†μ
+  签名: 是MarkovKernel κ†μ
   定义体: by rw [posterior]; infer_instance
 
 Depends on / 依赖: infer_instance, posterior
@@ -117,7 +117,7 @@ lemma compProd_posterior_eq_map_swap
 
 中文:
 引理 compProd_posterior_eq_map_swap
-  结论: (κ ∘ₘ μ) otimesₘ κ†μ = (μ otimesₘ κ).map Prod.swap
+  结论: (κ ∘ₘ μ) otimesₘ κ†μ = (μ otimesₘ κ).map 积类型.swap
   证明: by
   simpa using! ((μ otimesₘ κ).map Prod.swap).disintegrate ((μ otimesₘ κ).map Prod.swap).condKernel
 
@@ -137,7 +137,7 @@ lemma compProd_posterior_eq_swap_comp
 
 中文:
 引理 compProd_posterior_eq_swap_comp
-  结论: (κ ∘ₘ μ) otimesₘ κ†μ = Kernel.swap Ω 𝓧 ∘ₘ μ otimesₘ κ
+  结论: (κ ∘ₘ μ) otimesₘ κ†μ = 核.swap Ω 𝓧 ∘ₘ μ otimesₘ κ
   证明: by
   rw [compProd_posterior_eq_map_swap]; rw [Measure.swap_comp]
 
@@ -157,7 +157,7 @@ lemma swap_compProd_posterior
 
 中文:
 引理 swap_compProd_posterior
-  结论: Kernel.swap 𝓧 Ω ∘ₘ (κ ∘ₘ μ) otimesₘ κ†μ = μ otimesₘ κ
+  结论: 核.swap 𝓧 Ω ∘ₘ (κ ∘ₘ μ) otimesₘ κ†μ = μ otimesₘ κ
   证明: by
   rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_swap]; rw [Measure.id_comp]
 
@@ -211,7 +211,7 @@ lemma posterior_prod_id_comp
 
 中文:
 引理 posterior_prod_id_comp
-  结论: (κ†μ ×ₖ Kernel.id) ∘ₘ κ ∘ₘ μ = μ otimesₘ κ
+  结论: (κ†μ ×ₖ 核.id) ∘ₘ κ ∘ₘ μ = μ otimesₘ κ
   证明: by
   rw [← Kernel.swap_prod]; rw [← Measure.comp_assoc]; rw [← Measure.compProd_eq_comp_prod]; rw [compProd_posterior_eq_swap_comp]; rw [Measure.comp_assoc]; rw [Kernel.swap_swap]; rw [Measure.id_comp]
 
@@ -230,7 +230,7 @@ lemma ae_eq_posterior_of_compProd_eq
 
 中文:
 引理 ae_eq_posterior_of_compProd_eq
-  结论: {η : Kernel 𝓧 Ω} [IsFiniteKernel η]
+  结论: {η : 核 𝓧 Ω} [是FiniteKernel η]
   证明: (Kernel.ae_eq_of_compProd_eq (compProd_posterior_eq_map_swap.trans h.symm)).symm
 
 Depends on / 依赖: Kernel, Kernel.ae_eq_of_compProd_eq, ae_eq_of_compProd_eq, compProd_posterior_eq_map_swap, compProd_posterior_eq_map_swap.trans, h.symm
@@ -252,7 +252,7 @@ lemma ae_eq_posterior_of_compProd_eq_swap_comp
 
 中文:
 引理 ae_eq_posterior_of_compProd_eq_swap_comp
-  结论: (η : Kernel 𝓧 Ω) [IsFiniteKernel η]
+  结论: (η : 核 𝓧 Ω) [是FiniteKernel η]
   证明: ae_eq_posterior_of_compProd_eq by rw [h, Measure.swap_comp]
 
 @[simp]
@@ -277,7 +277,7 @@ lemma posterior_comp_self
 
 中文:
 引理 posterior_comp_self
-  条件: [IsMarkovKernel κ]
+  条件: [是MarkovKernel κ]
   结论: κ†μ ∘ₘ κ ∘ₘ μ = μ
   证明: by
   rw [← Measure.snd_compProd]; rw [compProd_posterior_eq_map_swap]; rw [Measure.snd_map_swap]; rw [Measure.fst_compProd]
@@ -303,8 +303,8 @@ lemma posterior_id
 
 中文:
 引理 posterior_id
-  条件: (μ : Measure Ω) [IsFiniteMeasure μ]
-  结论: Kernel.id†μ =ᵐ[μ] Kernel.id
+  条件: (μ : 测度 Ω) [是有限测度 μ]
+  结论: 核.id†μ =ᵐ[μ] 核.id
   证明: by
   suffices Kernel.id =ᵐ[Kernel.id ∘ₘ μ] (Kernel.id : Kernel Ω Ω)†μ by
     rw [Measure.id_comp] at this
@@ -337,7 +337,7 @@ lemma deterministic_comp_posterior
 
 中文:
 引理 deterministic_comp_posterior
-  结论: [MeasurableSpace.CountablyGenerated 𝓧]
+  结论: [可测空间.余untablyGenerated 𝓧]
   证明: by
   refine Kernel.ae_eq_of_compProd_eq ?_
   calc μ.map f otimesₘ (Kernel.deterministic f hf ∘ₖ (Kernel.deterministic f hf)†μ)
@@ -385,7 +385,7 @@ lemma absolutelyContinuous_posterior
 
 中文:
 引理 absolutelyContinuous_posterior
-  条件: {ν : Measure 𝓧} [SFinite ν] (h_ac : 对任意ᵐ ω ∂μ, κ ω ≪ ν)
+  条件: {ν : 测度 𝓧} [SFinite ν] (h_ac : 对任意ᵐ ω ∂μ, κ ω ≪ ν)
   证明: by
   suffices (κ ∘ₘ μ) otimesₘ (κ†μ) ≪ ν.prod μ by
     rw [← Measure.compProd_const] at this
@@ -429,7 +429,7 @@ lemma posterior_posterior
 
 中文:
 引理 posterior_posterior
-  条件: [IsMarkovKernel κ]
+  条件: [是MarkovKernel κ]
   结论: (κ†μ)†(κ ∘ₘ μ) =ᵐ[μ] κ
   证明: by
   suffices κ =ᵐ[κ†μ ∘ₘ κ ∘ₘ μ] (κ†μ)†(κ ∘ₘ μ) by
@@ -462,7 +462,7 @@ lemma posterior_comp
 
 中文:
 引理 posterior_comp
-  条件: {η : Kernel 𝓧 𝓨} [IsFiniteKernel η]
+  条件: {η : 核 𝓧 𝓨} [是FiniteKernel η]
   证明: by
   rw [Measure.comp_assoc]
   refine (ae_eq_posterior_of_compProd_eq_swap_comp ((κ†μ) ∘ₖ η†(κ ∘ₘ μ)) ?_).symm
@@ -565,8 +565,8 @@ lemma Kernel.absolutelyContinuous_comp_of_absolutelyContinuous
   exact absolutelyContinuous_posterior h_ac
 
 中文:
-引理 Kernel.absolutelyContinuous_comp_of_absolutelyContinuous
-  结论: {ν : Measure 𝓧} [SFinite ν]
+引理 核.absolutelyContinuous_comp_of_absolutelyContinuous
+  结论: {ν : 测度 𝓧} [SFinite ν]
   证明: by
   rw [← absolutelyContinuous_posterior_iff]
   exact absolutelyContinuous_posterior h_ac
@@ -742,7 +742,7 @@ lemma posterior_eq_withDensity_of_countable
 
 中文:
 引理 posterior_eq_withDensity_of_countable
-  结论: {Ω : 类型} [Countable Ω] [MeasurableSpace Ω]
+  结论: {Ω : 类型} [可数 Ω] [可测空间 Ω]
   证明: by
   have h_rnDeriv ω := Kernel.rnDeriv_eq_rnDeriv_measure (κ := κ) (η := Kernel.const Ω (κ ∘ₘ μ))
     (a := ω)
@@ -781,7 +781,7 @@ lemma posterior_boolKernel_apply_false
 
 中文:
 引理 posterior_boolKernel_apply_false
-  结论: (μ ν : Measure 𝓧) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: (μ ν : 测度 𝓧) [是有限测度 μ] [是有限测度 ν]
   证明: by
   filter_upwards [posterior_eq_withDensity_of_countable (Kernel.boolKernel μ ν) π] with x hx
   rw [hx]
@@ -810,7 +810,7 @@ lemma posterior_boolKernel_apply_true
 
 中文:
 引理 posterior_boolKernel_apply_true
-  结论: (μ ν : Measure 𝓧) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: (μ ν : 测度 𝓧) [是有限测度 μ] [是有限测度 ν]
   证明: by
   filter_upwards [posterior_eq_withDensity_of_countable (Kernel.boolKernel μ ν) π] with x hx
   rw [hx]

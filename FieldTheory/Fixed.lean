@@ -61,7 +61,7 @@ inv_mem' x hx := (smul_inv'' m x).trans congr_arg _ hx
 
 中文:
 定义 FixedBy.subfield
-  签名: : Subfield F where
+  签名: : 子域 F where
   定义体: fixedBy F m
   zero_mem' := smul_zero m
 add_mem' hx hy := (smul_add m _ _).trans congr_arg₂ _ hx hy
@@ -117,7 +117,7 @@ definition FixedBy.intermediateField
 
 中文:
 定义 FixedBy.intermediateField
-  签名: : 整数ermediateField K F where
+  签名: : 中间域 K F where
   定义体: FixedBy.subfield F m
   algebraMap_mem' x := smul_algebraMap m x
 
@@ -162,8 +162,8 @@ class IsInvariantSubfield
     - smul_mem : forall (m : M) {x : F}, x in S -> m • x in S
 
 中文:
-类 IsInvariantSubfield
-  参数: (S : Subfield F)
+类 是InvariantSubfield
+  参数: (S : 子域 F)
   公理与运算 (1 个):
     - smul_mem : 对任意 (m : M) {x : F}, x in S -> m • x in S
 -/
@@ -187,8 +187,8 @@ smul_one m := Subtype.ext smul_one m
 smul_mul m s₁ s₂ := Subtype.ext s
 
 中文:
-实例 IsInvariantSubfield.toMulSemiringAction
-  签名: [IsInvariantSubfield M S]
+实例 是InvariantSubfield.toMulSemiringAction
+  签名: [是InvariantSubfield M S]
   定义体: ⟨m • x.1, IsInvariantSubfield.smul_mem m x.2⟩
 one_smul s := Subtype.ext one_smul M s.1
 mul_smul m₁ m₂ s := Subtype.ext mul_smul m₁ m₂ s.1
@@ -218,8 +218,8 @@ instance [IsInvariantSubfield
   body: IsInvariantSubfield.smul_mem
 
 中文:
-实例 [IsInvariantSubfield
-  签名: M S] : IsInvariantSubring M S.toSubring where
+实例 [是InvariantSubfield
+  签名: M S] : 是不变子环 M S.toSubring where
   定义体: IsInvariantSubfield.smul_mem
 
 Depends on / 依赖: IsInvariantSubfield, IsInvariantSubfield.smul_mem, smul_mem
@@ -246,7 +246,7 @@ definition subfield
 
 中文:
 定义 subfield
-  签名: : Subfield F
+  签名: : 子域 F
   定义体: Subfield.copy (⨅ m : M, FixedBy.subfield F m) (fixedPoints M F)
     (by ext; simp [FixedBy.subfield])
 
@@ -266,7 +266,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsInvariantSubfield M (FixedPoints.subfield M F)
+  签名: 是InvariantSubfield M (FixedPoints.subfield M F)
   定义体: by rw [hx, hx]
 -/
 instance : IsInvariantSubfield M (FixedPoints.subfield M F) where
@@ -282,7 +282,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass M (FixedPoints.subfield M F) F
+  签名: 标量交换类 M (FixedPoints.subfield M F) F
   定义体: show m • (↑f * f') = f * m • f' by rw [smul_mul', f.prop m]
 
 Depends on / 依赖: f.prop, smul_mul
@@ -302,7 +302,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: : SMulCommClass (FixedPoints.subfield M F) M F
+  签名: : 标量交换类 (FixedPoints.subfield M F) M F
   定义体: SMulCommClass.symm _ _ _
 
 @[simp]
@@ -348,7 +348,7 @@ theorem smul_polynomial
 
 中文:
 定理 smul_polynomial
-  条件: (m : M) (p : Polynomial (FixedPoints.subfield M F))
+  条件: (m : M) (p : 多项式 (FixedPoints.subfield M F))
   结论: m • p = p
   证明: Polynomial.induction_on p (fun x => by rw [Polynomial.smul_C, smul])
     (fun p q ihp ihq => by rw [smul_add, ihp, ihq]) fun n x _ => by
@@ -371,7 +371,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (FixedPoints.subfield M F) F
+  签名: 代数 (FixedPoints.subfield M F) F
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -409,7 +409,7 @@ theorem linearIndependent_smul_of_linearIndependent
 
 中文:
 定理 linearIndependent_smul_of_linearIndependent
-  条件: {s : Finset F}
+  条件: {s : 有限集 F}
   证明: by
   classical
   have : IsEmpty ((∅ : Finset F) : Set F) := by simp
@@ -480,7 +480,7 @@ definition minpoly
 
 中文:
 定义 minpoly
-  签名: : Polynomial (FixedPoints.subfield G F)
+  签名: : 多项式 (FixedPoints.subfield G F)
   定义体: (prodXSubSMul G F x).toSubring (FixedPoints.subfield G F).toSubring fun _ hc g =>
     let ⟨n, _, hn⟩ := Polynomial.mem_coeffs_iff.1 hc
     hn.symm ▸ prodXSubSMul.coeff G F x g n
@@ -572,7 +572,7 @@ theorem ne_one
 
 中文:
 定理 ne_one
-  结论: minpoly G F x != (1 : Polynomial (FixedPoints.subfield G F))
+  结论: minpoly G F x != (1 : 多项式 (FixedPoints.subfield G F))
   证明: fun H =>
   have := eval₂ G F x
 (one_ne_zero : (1 : F) != 0) by rwa [H, Polynomial.eval₂_one] at this
@@ -597,7 +597,7 @@ theorem of_eval₂
 
 中文:
 定理 of_eval₂
-  结论: (f : Polynomial (FixedPoints.subfield G F))
+  结论: (f : 多项式 (FixedPoints.subfield G F))
   证明: by
   classical
   rw [← Polynomial.map_dvd_map' (Subfield.subtype <| FixedPoints.subfield G F)]; rw [minpoly]; rw [← Subfield.toSubring_subtype_eq_subtype]; rw [Polynomial.map_toSubring _ _]; rw [prodXSubSMul]
@@ -636,7 +636,7 @@ theorem irreducible_aux
 
 中文:
 定理 irreducible_aux
-  结论: (f g : Polynomial (FixedPoints.subfield G F)) (hf : f.Monic) (hg : g.Monic)
+  结论: (f g : 多项式 (FixedPoints.subfield G F)) (hf : f.Monic) (hg : g.Monic)
   证明: by
   have hf2 : f ∣ minpoly G F x := by rw [← hfg]; exact dvd_mul_right _ _
   have hg2 : g ∣ minpoly G F x := by rw [← hfg]; exact dvd_mul_left _ _
@@ -676,7 +676,7 @@ theorem irreducible
 
 中文:
 定理 irreducible
-  结论: Irreducible (minpoly G F x)
+  结论: 不可约 (minpoly G F x)
   证明: (Polynomial.irreducible_of_monic (monic G F x) (ne_one G F x)).2 (irreducible_aux G F x)
 
 Depends on / 依赖: Polynomial, Polynomial.irreducible_of_monic, irreducible_aux, irreducible_of_monic, ne_one
@@ -699,9 +699,9 @@ theorem isIntegral
   cases nonempty_fintype G; exact ⟨minpoly G F x, minpoly.monic G F x, minpoly.eval₂ G F x⟩
 
 中文:
-定理 isIntegral
-  条件: [Finite G] (x : F)
-  结论: Is整数egral (FixedPoints.subfield G F) x
+定理 is整数egral
+  条件: [有限 G] (x : F)
+  结论: 是整 (FixedPoints.subfield G F) x
   证明: by
   cases nonempty_fintype G; exact ⟨minpoly G F x, minpoly.monic G F x, minpoly.eval₂ G F x⟩
 
@@ -748,7 +748,7 @@ theorem rank_le_card
 
 中文:
 定理 rank_le_card
-  结论: Module.rank (FixedPoints.subfield G F) F <= Fintype.card G
+  结论: 模.rank (FixedPoints.subfield G F) F <= 有限类型.card G
   证明: rank_le fun s hs => by
     simpa only [rank_fun', Cardinal.mk_coe_finset, Finset.coe_sort_coe, Cardinal.lift_natCast,
       Nat.cast_le] using
@@ -783,7 +783,7 @@ instance normal
 
 中文:
 实例 normal
-  签名: : Normal (FixedPoints.subfield G F) F where
+  签名: : 正规 (FixedPoints.subfield G F) F where
   定义体: (isIntegral G F x).isAlgebraic
   splits' x := by
     cases nonempty_fintype G
@@ -815,7 +815,7 @@ instance isSeparable
 
 中文:
 实例 isSeparable
-  签名: : Algebra.IsSeparable (FixedPoints.subfield G F) F
+  签名: : 代数.是可分 (FixedPoints.subfield G F) F
   定义体: by
   classical
   exact ⟨fun x => by
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiniteDimensional (subfield G F) F
+  签名: 有限维 (subfield G F) F
   定义体: by
   cases nonempty_fintype G
   exact IsNoetherian.iff_fg.1
@@ -873,8 +873,8 @@ theorem finrank_le_card
 
 中文:
 定理 finrank_le_card
-  条件: [Fintype G]
-  结论: finrank (subfield G F) F <= Fintype.card G
+  条件: [有限类型 G]
+  结论: finrank (subfield G F) F <= 有限类型.card G
   证明: by
   rw [← @Nat.cast_le Cardinal]; rw [finrank_eq_rank]
   apply rank_le_card
@@ -901,7 +901,7 @@ theorem linearIndependent_toLinearMap
 
 中文:
 定理 linearIndependent_toLinearMap
-  结论: (R : 类型u) (A : 类型v) (B : Type w) [CommSemiring R]
+  结论: (R : 类型u) (A : 类型v) (B : 类型 w) [交换半环 R]
   证明: have : LinearIndependent B (LinearMap.ltoFun R A B B ∘ AlgHom.toLinearMap) :=
     ((linearIndependent_monoidHom A B).comp ((↑) : (A ->ₐ[R] B) -> A ->* B) fun _ _ hfg =>
         AlgHom.ext fun _ => DFunLike.ext_iff.1 hfg _ :
@@ -929,7 +929,7 @@ theorem cardinalMk_algHom
 
 中文:
 定理 cardinalMk_algHom
-  结论: (K : 类型u) (V : 类型v) (W : Type w) [Field K] [Ring V] [Algebra K V]
+  结论: (K : 类型u) (V : 类型v) (W : 类型 w) [域 K] [环 V] [代数 K V]
   证明: (linearIndependent_toLinearMap K V W).cardinalMk_le_finrank
 
 Depends on / 依赖: cardinalMk_le_finrank, linearIndependent_toLinearMap
@@ -948,8 +948,8 @@ instance AlgEquiv.fintype
   body: Fintype.ofEquiv (V ->ₐ[K] V) (algEquivEquivAlgHom K V).symm
 
 中文:
-实例 AlgEquiv.fintype
-  签名: (K : 类型u) (V : 类型v) [Field K] [Field V] [Algebra K V]
+实例 代数等价.fintype
+  签名: (K : 类型u) (V : 类型v) [域 K] [域 V] [代数 K V]
   定义体: Fintype.ofEquiv (V ->ₐ[K] V) (algEquivEquivAlgHom K V).symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, algEquivEquivAlgHom, ofEquiv
@@ -968,7 +968,7 @@ theorem finrank_algHom
 
 中文:
 定理 finrank_algHom
-  结论: (K : 类型u) (V : 类型v) [Field K] [Field V] [Algebra K V]
+  结论: (K : 类型u) (V : 类型v) [域 K] [域 V] [代数 K V]
   证明: (linearIndependent_toLinearMap K V V).fintype_card_le_finrank
 
 Depends on / 依赖: fintype_card_le_finrank, linearIndependent_toLinearMap
@@ -986,8 +986,8 @@ theorem AlgHom.card_le
   proof: Module.finrank_linearMap_self F K K ▸ finrank_algHom F K
 
 中文:
-定理 AlgHom.card_le
-  条件: {F K : 类型} [Field F] [Field K] [Algebra F K] [FiniteDimensional F K]
+定理 代数态射.card_le
+  条件: {F K : 类型} [域 F] [域 K] [代数 F K] [有限维 F K]
   证明: Module.finrank_linearMap_self F K K ▸ finrank_algHom F K
 
 Depends on / 依赖: Module, Module.finrank_linearMap_self, finrank_algHom, finrank_linearMap_self
@@ -1005,8 +1005,8 @@ theorem AlgEquiv.card_le
   proof: Fintype.ofEquiv_card (algEquivEquivAlgHom F K).toEquiv.symm ▸ AlgHom.card_le
 
 中文:
-定理 AlgEquiv.card_le
-  条件: {F K : 类型} [Field F] [Field K] [Algebra F K] [FiniteDimensional F K]
+定理 代数等价.card_le
+  条件: {F K : 类型} [域 F] [域 K] [代数 F K] [有限维 F K]
   证明: Fintype.ofEquiv_card (algEquivEquivAlgHom F K).toEquiv.symm ▸ AlgHom.card_le
 
 Depends on / 依赖: AlgHom, AlgHom.card_le, Fintype, Fintype.ofEquiv_card, algEquivEquivAlgHom, card_le, ofEquiv_card, toEquiv, toEquiv.symm
@@ -1036,7 +1036,7 @@ theorem finrank_eq_card
 
 中文:
 定理 finrank_eq_card
-  条件: [Fintype G] [FaithfulSMul G F]
+  条件: [有限类型 G] [忠实标量乘法 G F]
   证明: le_antisymm (FixedPoints.finrank_le_card G F)
     calc
       Fintype.card G <= Fintype.card (F ->ₐ[FixedPoints.subfield G F] F) :=
@@ -1072,7 +1072,7 @@ theorem toAlgHom_bijective
 
 中文:
 定理 toAlgHom_bijective
-  条件: [Finite G] [FaithfulSMul G F]
+  条件: [有限 G] [忠实标量乘法 G F]
   证明: by
   cases nonempty_fintype G
   rw [Fintype.bijective_iff_injective_and_card]
@@ -1106,7 +1106,7 @@ definition toAlgHomEquiv
 
 中文:
 定义 toAlgHomEquiv
-  签名: [Finite G] [FaithfulSMul G F]
+  签名: [有限 G] [忠实标量乘法 G F]
   定义体: Equiv.ofBijective _ (toAlgHom_bijective G F)
 
 Depends on / 依赖: Equiv.ofBijective, ofBijective, toAlgHom_bijective
@@ -1127,7 +1127,7 @@ theorem toAlgAut_bijective
 
 中文:
 定理 toAlgAut_bijective
-  条件: [Finite G] [FaithfulSMul G F]
+  条件: [有限 G] [忠实标量乘法 G F]
   证明: by
   refine ⟨fun _ _ h => (FixedPoints.toAlgHom_bijective G F).injective ?_,
     fun f => ((FixedPoints.toAlgHom_bijective G F).surjective f).imp (fun _ h => ?_)⟩ <;>
@@ -1151,7 +1151,7 @@ definition toAlgAutMulEquiv
 
 中文:
 定义 toAlgAutMulEquiv
-  签名: [Finite G] [FaithfulSMul G F]
+  签名: [有限 G] [忠实标量乘法 G F]
   定义体: MulEquiv.ofBijective _ (toAlgAut_bijective G F)
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofBijective, ofBijective, toAlgAut_bijective
@@ -1175,7 +1175,7 @@ theorem toAlgAut_surjective
 
 中文:
 定理 toAlgAut_surjective
-  条件: [Finite G]
+  条件: [有限 G]
   证明: by
   let f : G ->* F ≃ₐ[FixedPoints.subfield G F] F :=
     MulSemiringAction.toAlgAut G (FixedPoints.subfield G F) F

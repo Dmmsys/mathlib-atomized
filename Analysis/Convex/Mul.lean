@@ -98,7 +98,7 @@ lemma ConcaveOn.smul'
 
 中文:
 引理 ConcaveOn.smul'
-  结论: [IsOrderedModule 𝕜 E] (hf : ConcaveOn 𝕜 s f) (hg : ConcaveOn 𝕜 s g)
+  结论: [是Ordered模 𝕜 E] (hf : ConcaveOn 𝕜 s f) (hg : ConcaveOn 𝕜 s g)
   证明: by
   refine ⟨hf.1, fun x hx y hy a b ha hb hab => ?_⟩
   dsimp
@@ -141,7 +141,7 @@ lemma ConvexOn.smul''
 
 中文:
 引理 ConvexOn.smul''
-  结论: [IsOrderedModule 𝕜 E] (hf : ConvexOn 𝕜 s f) (hg : ConvexOn 𝕜 s g)
+  结论: [是Ordered模 𝕜 E] (hf : ConvexOn 𝕜 s f) (hg : ConvexOn 𝕜 s g)
   证明: by
   rw [← neg_smul_neg]
   exact hf.neg.smul' hg.neg (fun x hx => neg_nonneg.2 <| hf₀ hx) (fun x hx => neg_nonneg.2 <| hg₀ hx)
@@ -220,7 +220,7 @@ lemma ConcaveOn.smul_convexOn
 
 中文:
 引理 ConcaveOn.smul_convexOn
-  结论: [IsOrderedModule 𝕜 E] (hf : ConcaveOn 𝕜 s f) (hg : ConvexOn 𝕜 s g)
+  结论: [是Ordered模 𝕜 E] (hf : ConcaveOn 𝕜 s f) (hg : ConvexOn 𝕜 s g)
   证明: by
   rw [← neg_concaveOn_iff]; rw [← smul_neg]
   exact hf.smul' hg.neg hf₀ (fun x hx => neg_nonneg.2 <| hg₀ hx) hfg.neg_right
@@ -245,7 +245,7 @@ lemma ConvexOn.smul_concaveOn'
 
 中文:
 引理 ConvexOn.smul_concaveOn'
-  结论: [IsOrderedModule 𝕜 E] (hf : ConvexOn 𝕜 s f) (hg : ConcaveOn 𝕜 s g)
+  结论: [是Ordered模 𝕜 E] (hf : ConvexOn 𝕜 s f) (hg : ConcaveOn 𝕜 s g)
   证明: by
   rw [← neg_concaveOn_iff]; rw [← smul_neg]
   exact hf.smul'' hg.neg hf₀ (fun x hx => neg_nonpos.2 <| hg₀ hx) hfg.neg_right
@@ -466,7 +466,7 @@ lemma convexOn_pow
 
 中文:
 引理 convexOn_pow
-  结论: 对任意 n, ConvexOn 𝕜 (Ici 0) fun x : 𝕜 => x ^ n
+  结论: 对任意 n, ConvexOn 𝕜 (左闭右无界区间 0) fun x : 𝕜 => x ^ n
   证明: (convexOn_id <| convex_Ici _).pow fun _ => id
 
 Depends on / 依赖: convexOn_id, convex_Ici
@@ -529,7 +529,7 @@ lemma convexOn_zpow
 
 中文:
 引理 convexOn_zpow
-  结论: 对任意 n : 整数, ConvexOn 𝕜 (Ioi 0) fun x : 𝕜 => x ^ n
+  结论: 对任意 n : 整数, ConvexOn 𝕜 (左开右无界区间 0) fun x : 𝕜 => x ^ n
   证明: by positivity
     linear_combination H - x * y * (a + b + 1) * hab
 

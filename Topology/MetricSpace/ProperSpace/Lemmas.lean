@@ -43,8 +43,8 @@ theorem exists_pos_lt_subset_ball
   obtain ⟨y, hys, hy⟩ : exists y in s, s subseteq closedBall x (dist y x
 
 中文:
-定理 exists_pos_lt_subset_ball
-  条件: (hr : 0 < r) (hs : IsClosed s) (h : s subseteq ball x r)
+定理 存在_pos_lt_subset_ball
+  条件: (hr : 0 < r) (hs : 是闭集 s) (h : s subseteq ball x r)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hne)
   · exact ⟨r / 2, ⟨half_pos hr, half_lt_self hr⟩, empty_subset _⟩
@@ -81,8 +81,8 @@ theorem exists_lt_subset_ball
   · exact (exists_pos_lt_subset_ball hr hs h).imp fun r' hr' => ⟨hr'.1.2, hr'.2⟩
 
 中文:
-定理 exists_lt_subset_ball
-  条件: (hs : IsClosed s) (h : s subseteq ball x r)
+定理 存在_lt_subset_ball
+  条件: (hs : 是闭集 s) (h : s subseteq ball x r)
   结论: 存在 r' < r, s subseteq ball x r'
   证明: by
   rcases le_or_gt r 0 with hr | hr
@@ -114,8 +114,8 @@ theorem Metric.exists_isLocalMin_mem_ball
 @[fun_prop]
 
 中文:
-定理 Metric.exists_isLocalMin_mem_ball
-  结论: [TopologicalSpace β]
+定理 Metric.存在_isLocalMin_mem_ball
+  结论: [拓扑空间 β]
   证明: by
   simp_rw [← closedBall_sdiff_ball] at hf1
   exact (isCompact_closedBall a r).exists_isLocalMin_mem_open ball_subset_closedBall hf hz hf1
@@ -149,7 +149,7 @@ omit [ProperSpace α] in
 中文:
 引理 isProperMap_dist
   条件: (x : α)
-  结论: Is命题erMap (dist x)
+  结论: 是真映射 (dist x)
   证明: isProperMap_iff_tendsto_cocompact.mpr
     ⟨by fun_prop, (tendsto_dist_left_cocompact_atTop x).trans atTop_le_cocompact⟩
 
@@ -176,7 +176,7 @@ lemma properSpace_iff_isProperMap_dist
 
 中文:
 引理 properSpace_iff_isProperMap_dist
-  结论: 命题erSpace α ↔ 对任意 x : α, Is命题erMap (dist x)
+  结论: 真空间 α ↔ 对任意 x : α, 是真映射 (dist x)
   证明: by
   refine ⟨fun _ => isProperMap_dist, fun H => ⟨fun x r => ?_⟩⟩
   convert! (H x).isCompact_preimage (isCompact_closedBall 0 r)
@@ -203,7 +203,7 @@ lemma isClosedMap_dist
 中文:
 引理 isClosedMap_dist
   条件: (x : α)
-  结论: IsClosedMap (dist x)
+  结论: 是闭映射 (dist x)
   证明: (isProperMap_dist x).isClosedMap
 
 Depends on / 依赖: isClosedMap, isProperMap_dist
@@ -223,7 +223,7 @@ lemma isProperMap_nndist
 中文:
 引理 isProperMap_nndist
   条件: (x : α)
-  结论: Is命题erMap (nndist x)
+  结论: 是真映射 (nndist x)
   证明: isProperMap_of_comp_of_inj (Z := Real) (g := (↑)) (by fun_prop) (by fun_prop)
     (isProperMap_dist x) NNReal.coe_injective
 
@@ -245,7 +245,7 @@ lemma isClosedMap_nndist
 中文:
 引理 isClosedMap_nndist
   条件: (x : α)
-  结论: IsClosedMap (nndist x)
+  结论: 是闭映射 (nndist x)
   证明: (isProperMap_nndist _).isClosedMap
 
 Depends on / 依赖: isClosedMap, isProperMap_nndist

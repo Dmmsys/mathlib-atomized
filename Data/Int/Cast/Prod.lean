@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroupWithOne (α × β)
+  签名: 加法带幺群 (α × β)
   定义体: { Prod.instAddMonoidWithOne, Prod.instAddGroup with
     intCast := fun n => (n, n)
     intCast_ofNat := fun _ => by ext <;> simp

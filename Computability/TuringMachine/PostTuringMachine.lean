@@ -142,7 +142,7 @@ instance Stmt.inhabited
 
 中文:
 实例 Stmt.inhabited
-  签名: [Inhabited Γ]
+  签名: [可居 Γ]
   定义体: ⟨Stmt.write default⟩
 
 Depends on / 依赖: Stmt.write
@@ -171,7 +171,7 @@ deriving Inhabited
 
 中文:
 定义 Machine
-  签名: [Inhabited Λ]
+  签名: [可居 Λ]
   定义体: Λ -> Γ -> Option (Λ × (Stmt Γ))
 deriving Inhabited
 -/
@@ -191,7 +191,7 @@ structure Cfg
 
 中文:
 结构 Cfg
-  参数: [Inhabited Γ]
+  参数: [可居 Γ]
   公理与运算 (2 个):
     - q : Λ
     - Tape : Tape Γ
@@ -218,7 +218,7 @@ instance Cfg.inhabited
 
 中文:
 实例 Cfg.inhabited
-  签名: : Inhabited (Cfg Γ Λ)
+  签名: : 可居 (Cfg Γ Λ)
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance Cfg.inhabited : Inhabited (Cfg Γ Λ) := ⟨⟨default, default⟩⟩
@@ -274,7 +274,7 @@ definition init
 
 中文:
 定义 init
-  签名: (l : List Γ)
+  签名: (l : 列表 Γ)
   定义体: ⟨default, Tape.mk₁ l⟩
 
 Depends on / 依赖: Tape.mk
@@ -291,7 +291,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: (M : Machine Γ Λ) (l : List Γ)
+  签名: (M : Machine Γ Λ) (l : 列表 Γ)
   定义体: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
 
 Depends on / 依赖: StateTransition, StateTransition.eval, c.Tape.right
@@ -309,7 +309,7 @@ definition Supports
 
 中文:
 定义 Supports
-  签名: (M : Machine Γ Λ) (S : Set Λ)
+  签名: (M : Machine Γ Λ) (S : 集合 Λ)
   定义体: default in S ∧ forall {q a q' s}, (q', s) in M q a -> q in S -> q' in S
 -/
 def Supports (M : Machine Γ Λ) (S : Set Λ) :=
@@ -328,7 +328,7 @@ theorem step_supports
 
 中文:
 定理 step_supports
-  条件: (M : Machine Γ Λ) {S : Set Λ} (ss : Supports M S)
+  条件: (M : Machine Γ Λ) {S : 集合 Λ} (ss : Supports M S)
   证明: by
   intro ⟨q, T⟩ c' h₁ h₂
   rcases Option.map_eq_some_iff.1 h₁ with ⟨⟨q', a⟩, h, rfl⟩
@@ -357,7 +357,7 @@ theorem univ_supports
 中文:
 定理 univ_supports
   条件: (M : Machine Γ Λ)
-  结论: Supports M Set.univ
+  结论: Supports M 集合.univ
   证明: by
   constructor <;> intros <;> apply Set.mem_univ
 
@@ -429,7 +429,7 @@ theorem Machine.map_step
 
 中文:
 定理 Machine.map_step
-  结论: {S : Set Λ} (f₂₁ : Function.RightInverse f₁ f₂)
+  结论: {S : 集合 Λ} (f₂₁ : 函数.右逆 f₁ f₂)
 -/
 theorem Machine.map_step {S : Set Λ} (f₂₁ : Function.RightInverse f₁ f₂)
     (g₂₁ : forall q in S, g₂ (g₁ q) = q) :
@@ -455,7 +455,7 @@ theorem map_init
 
 中文:
 定理 map_init
-  条件: (g₁ : PointedMap Λ Λ') (l : List Γ)
+  条件: (g₁ : PointedMap Λ Λ') (l : 列表 Γ)
   结论: (init l).map f₁ g₁ = init (l.map f₁)
   证明: congr (congr_arg Cfg.mk g₁.map_pt) (Tape.map_mk₁ _ _)
 
@@ -571,7 +571,7 @@ inductive Stmt
     - move: Dir -> Stmt -> Stmt
     - write: (Γ -> σ -> Γ) -> Stmt -> Stmt
     - load: (Γ -> σ -> σ) -> Stmt -> Stmt
-    - branch: (Γ -> σ -> 布尔) -> Stmt -> Stmt -> Stmt
+    - branch: (Γ -> σ -> 布尔值) -> Stmt -> Stmt -> Stmt
     - goto: (Γ -> σ -> Λ) -> Stmt
     - halt: Stmt
 -/
@@ -595,7 +595,7 @@ instance Stmt.inhabited
 
 中文:
 实例 Stmt.inhabited
-  签名: : Inhabited (Stmt Γ Λ σ)
+  签名: : 可居 (Stmt Γ Λ σ)
   定义体: ⟨halt⟩
 -/
 instance Stmt.inhabited : Inhabited (Stmt Γ Λ σ) := ⟨halt⟩
@@ -613,9 +613,9 @@ structure Cfg
 
 中文:
 结构 Cfg
-  参数: [Inhabited Γ]
+  参数: [可居 Γ]
   公理与运算 (3 个):
-    - l : Option Λ
+    - l : 选项类型 Λ
     - var : σ
     - Tape : Tape Γ
 -/
@@ -637,7 +637,7 @@ instance Cfg.inhabited
 
 中文:
 实例 Cfg.inhabited
-  签名: [Inhabited Γ] [Inhabited σ]
+  签名: [可居 Γ] [可居 σ]
   定义体: ⟨⟨default, default, default⟩⟩
 -/
 instance Cfg.inhabited [Inhabited Γ] [Inhabited σ] : Inhabited (Cfg Γ Λ σ) :=
@@ -654,7 +654,7 @@ definition stepAux
 
 中文:
 定义 stepAux
-  签名: [Inhabited Γ]
+  签名: [可居 Γ]
 -/
 def stepAux [Inhabited Γ] : Stmt Γ Λ σ -> σ -> Tape Γ -> Cfg Γ Λ σ
   | move d q, v, T => stepAux q v (T.move d)
@@ -673,7 +673,7 @@ definition step
 
 中文:
 定义 step
-  签名: [Inhabited Γ] (M : Λ -> Stmt Γ Λ σ)
+  签名: [可居 Γ] (M : Λ -> Stmt Γ Λ σ)
 -/
 def step [Inhabited Γ] (M : Λ -> Stmt Γ Λ σ) : Cfg Γ Λ σ -> Option (Cfg Γ Λ σ)
   | ⟨none, _, _⟩ => none
@@ -688,7 +688,7 @@ definition SupportsStmt
 
 中文:
 定义 SupportsStmt
-  签名: (S : Finset Λ)
+  签名: (S : 有限集 Λ)
 -/
 def SupportsStmt (S : Finset Λ) : Stmt Γ Λ σ -> Prop
   | move _ q => SupportsStmt S q
@@ -708,7 +708,7 @@ definition stmts₁
 
 中文:
 定义 stmts₁
-  签名: : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
+  签名: : Stmt Γ Λ σ -> 有限集 (Stmt Γ Λ σ)
 -/
 noncomputable def stmts₁ : Stmt Γ Λ σ -> Finset (Stmt Γ Λ σ)
   | Q@(move _ q) => insert Q (stmts₁ q)
@@ -814,7 +814,7 @@ theorem stmts₁_supportsStmt_mono
 
 中文:
 定理 stmts₁_supportsStmt_mono
-  结论: {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
+  结论: {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h : q₁ in stmts₁ q₂)
   证明: by
   induction q₂ with
     simp only [stmts₁, SupportsStmt, Finset.mem_insert, Finset.mem_union, Finset.mem_singleton]
@@ -847,7 +847,7 @@ definition stmts
 
 中文:
 定义 stmts
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
+  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
   定义体: Finset.insertNone (S.biUnion fun q => stmts₁ (M q))
 
 Depends on / 依赖: Finset, Finset.insertNone, S.biUnion, biUnion, insertNone
@@ -868,7 +868,7 @@ theorem stmts_trans
 
 中文:
 定理 stmts_trans
-  条件: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
+  条件: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q₁ q₂ : Stmt Γ Λ σ} (h₁ : q₁ in stmts₁ q₂)
   证明: by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
@@ -894,7 +894,7 @@ definition Supports
 
 中文:
 定义 Supports
-  签名: (M : Λ -> Stmt Γ Λ σ) (S : Finset Λ)
+  签名: (M : Λ -> Stmt Γ Λ σ) (S : 有限集 Λ)
   定义体: default in S ∧ forall q in S, SupportsStmt S (M q)
 
 Depends on / 依赖: SupportsStmt
@@ -915,7 +915,7 @@ theorem stmts_supportsStmt
 
 中文:
 定理 stmts_supportsStmt
-  结论: {M : Λ -> Stmt Γ Λ σ} {S : Finset Λ} {q : Stmt Γ Λ σ}
+  结论: {M : Λ -> Stmt Γ Λ σ} {S : 有限集 Λ} {q : Stmt Γ Λ σ}
   证明: by
   simp only [stmts, Finset.mem_insertNone, Finset.mem_biUnion, Option.mem_def, Option.some.injEq,
     forall_eq', exists_imp, and_imp]
@@ -948,7 +948,7 @@ theorem step_supports
 
 中文:
 定理 step_supports
-  条件: (M : Λ -> Stmt Γ Λ σ) {S : Finset Λ} (ss : Supports M S)
+  条件: (M : Λ -> Stmt Γ Λ σ) {S : 有限集 Λ} (ss : Supports M S)
   证明: ss.2 _ (Finset.some_mem_insertNone.1 h₂)
     simp only [step, Option.mem_def, Option.some.injEq] at h₁; subst c'
     revert h₂; induction M l₁ generalizing v T with intro hs
@@ -986,7 +986,7 @@ definition init
 
 中文:
 定义 init
-  签名: (l : List Γ)
+  签名: (l : 列表 Γ)
   定义体: ⟨some default, default, Tape.mk₁ l⟩
 
 Depends on / 依赖: Tape.mk
@@ -1004,7 +1004,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: (M : Λ -> Stmt Γ Λ σ) (l : List Γ)
+  签名: (M : Λ -> Stmt Γ Λ σ) (l : 列表 Γ)
   定义体: (StateTransition.eval (step M) (init l)).map fun c => c.Tape.right₀
 
 Depends on / 依赖: StateTransition, StateTransition.eval, c.Tape.right
@@ -1078,7 +1078,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Λ' M)
+  签名: 可居 (Λ' M)
   定义体: ⟨(some (M default), default)⟩
 -/
 instance : Inhabited (Λ' M) :=
@@ -1129,7 +1129,7 @@ definition trCfg
 
 中文:
 定义 trCfg
-  签名: [Inhabited Γ]
+  签名: [可居 Γ]
 -/
 def trCfg [Inhabited Γ] : TM1.Cfg Γ Λ σ -> TM0.Cfg Γ (Λ' M)
   | ⟨l, v, T⟩ => ⟨(l.map M, v), T⟩
@@ -1150,7 +1150,7 @@ theorem tr_respects
 
 中文:
 定理 tr_respects
-  条件: [Inhabited Γ]
+  条件: [可居 Γ]
   证明: fun_respects.2 fun ⟨l₁, v, T⟩ => by
     rcases l₁ with - | l₁; · exact rfl
     simp only [trCfg, TM1.step, FRespects, Option.map]
@@ -1192,7 +1192,7 @@ theorem tr_eval
 
 中文:
 定理 tr_eval
-  条件: [Inhabited Γ] (l : List Γ)
+  条件: [可居 Γ] (l : 列表 Γ)
   结论: TM0.eval (tr M) l = TM1.eval M l
   证明: (congr_arg _ (tr_eval' _ _ _ (tr_respects M) ⟨some _, _, _⟩)).trans
     (by
@@ -1219,7 +1219,7 @@ definition trStmts
 
 中文:
 定义 trStmts
-  签名: (S : Finset Λ)
+  签名: (S : 有限集 Λ)
   定义体: (TM1.stmts M S) ×ˢ Finset.univ
 
 Depends on / 依赖: Finset, Finset.univ, TM1.stmts
@@ -1249,7 +1249,7 @@ theorem tr_supports
 
 中文:
 定理 tr_supports
-  条件: {S : Finset Λ} (ss : TM1.Supports M S)
+  条件: {S : 有限集 Λ} (ss : TM1.Supports M S)
   证明: by
   classical
   constructor
@@ -1354,8 +1354,8 @@ Bool.of_decide_true (congr_fun h b).trans Bool.decide_true rfl⟩
   let H := (e.toEmbedding.trans G).trans (Equiv.vectorEquivFin _ _).symm.t
 
 中文:
-定理 exists_enc_dec
-  条件: [Inhabited Γ] [Finite Γ]
+定理 存在_enc_dec
+  条件: [可居 Γ] [有限 Γ]
   证明: by
   rcases Finite.exists_equiv_fin Γ with ⟨n, ⟨e⟩⟩
   let : DecidableEq Γ := e.decidableEq
@@ -1413,8 +1413,8 @@ instance [Inhabited
   body: ⟨Λ'.normal default⟩
 
 中文:
-实例 [Inhabited
-  签名: Λ] : Inhabited (Λ' Γ Λ σ)
+实例 [可居
+  签名: Λ] : 可居 (Λ' Γ Λ σ)
   定义体: ⟨Λ'.normal default⟩
 
 Depends on / 依赖: normal
@@ -1431,7 +1431,7 @@ definition readAux
 
 中文:
 定义 readAux
-  签名: : 对任意 n, (List.Vector 布尔 n -> Stmt 布尔 (Λ' Γ Λ σ) σ) -> Stmt 布尔 (Λ' Γ Λ σ) σ
+  签名: : 对任意 n, (列表.Vector 布尔值 n -> Stmt 布尔值 (Λ' Γ Λ σ) σ) -> Stmt 布尔值 (Λ' Γ Λ σ) σ
 -/
 def readAux : forall n, (List.Vector Bool n -> Stmt Bool (Λ' Γ Λ σ) σ) -> Stmt Bool (Λ' Γ Λ σ) σ
   | 0, f => f Vector.nil
@@ -1451,7 +1451,7 @@ definition move
 
 中文:
 定义 move
-  签名: (d : Dir) (q : Stmt 布尔 (Λ' Γ Λ σ) σ)
+  签名: (d : Dir) (q : Stmt 布尔值 (Λ' Γ Λ σ) σ)
   定义体: (Stmt.move d)^[n] q
 
 Depends on / 依赖: Stmt.move
@@ -1471,7 +1471,7 @@ definition read
 
 中文:
 定义 read
-  签名: (f : Γ -> Stmt 布尔 (Λ' Γ Λ σ) σ)
+  签名: (f : Γ -> Stmt 布尔值 (Λ' Γ Λ σ) σ)
   定义体: readAux n fun v => move n Dir.left f (dec v)
 
 Depends on / 依赖: Dir.left, Finite, Finite.of_subsingleton, Subsingleton, of_subsingleton, readAux
@@ -1488,7 +1488,7 @@ definition write
 
 中文:
 定义 write
-  签名: : List 布尔 -> Stmt 布尔 (Λ' Γ Λ σ) σ -> Stmt 布尔 (Λ' Γ Λ σ) σ
+  签名: : 列表 布尔值 -> Stmt 布尔值 (Λ' Γ Λ σ) σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
 -/
 def write : List Bool -> Stmt Bool (Λ' Γ Λ σ) σ -> Stmt Bool (Λ' Γ Λ σ) σ
   | [], q => q
@@ -1503,7 +1503,7 @@ definition trNormal
 
 中文:
 定义 trNormal
-  签名: : Stmt Γ Λ σ -> Stmt 布尔 (Λ' Γ Λ σ) σ
+  签名: : Stmt Γ Λ σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
 -/
 def trNormal : Stmt Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
 | Stmt.move d q => move n d trNormal q
@@ -1532,7 +1532,7 @@ theorem stepAux_move
 
 中文:
 定理 stepAux_move
-  条件: (d : Dir) (q : Stmt 布尔 (Λ' Γ Λ σ) σ) (v : σ) (T : Tape 布尔)
+  条件: (d : Dir) (q : Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (T : Tape 布尔值)
   证明: by
   suffices forall i, stepAux ((Stmt.move d)^[i] q) v T = stepAux q v ((Tape.move d)^[i] T) from this n
   intro i
@@ -1568,7 +1568,7 @@ theorem supportsStmt_move
 
 中文:
 定理 supportsStmt_move
-  条件: {S : Finset (Λ' Γ Λ σ)} {d : Dir} {q : Stmt 布尔 (Λ' Γ Λ σ) σ}
+  条件: {S : 有限集 (Λ' Γ Λ σ)} {d : Dir} {q : Stmt 布尔值 (Λ' Γ Λ σ) σ}
   证明: by
   suffices forall {i}, SupportsStmt S ((Stmt.move d)^[i] q) = _ from this
   intro i; induction i generalizing q <;> simp only [*, iterate]; rfl
@@ -1591,7 +1591,7 @@ theorem supportsStmt_write
 
 中文:
 定理 supportsStmt_write
-  条件: {S : Finset (Λ' Γ Λ σ)} {l : List 布尔} {q : Stmt 布尔 (Λ' Γ Λ σ) σ}
+  条件: {S : 有限集 (Λ' Γ Λ σ)} {l : 列表 布尔值} {q : Stmt 布尔值 (Λ' Γ Λ σ) σ}
   证明: by
   induction l <;> simp only [write, SupportsStmt, *]
 
@@ -1618,7 +1618,7 @@ theorem supportsStmt_read
 
 中文:
 定理 supportsStmt_read
-  条件: {S : Finset (Λ' Γ Λ σ)}
+  条件: {S : 有限集 (Λ' Γ Λ σ)}
   证明: suffices
     forall (i) (f : List.Vector Bool i -> Stmt Bool (Λ' Γ Λ σ) σ),
       (forall v, SupportsStmt S (f v)) -> SupportsStmt S (readAux i f)
@@ -1733,7 +1733,7 @@ definition tr
 
 中文:
 定义 tr
-  签名: : Λ' Γ Λ σ -> Stmt 布尔 (Λ' Γ Λ σ) σ
+  签名: : Λ' Γ Λ σ -> Stmt 布尔值 (Λ' Γ Λ σ) σ
 -/
 def tr : Λ' Γ Λ σ -> Stmt Bool (Λ' Γ Λ σ) σ
   | Λ'.normal l => trNormal dec (M l)
@@ -1748,7 +1748,7 @@ definition trCfg
 
 中文:
 定义 trCfg
-  签名: : Cfg Γ Λ σ -> Cfg 布尔 (Λ' Γ Λ σ) σ
+  签名: : Cfg Γ Λ σ -> Cfg 布尔值 (Λ' Γ Λ σ) σ
 -/
 def trCfg : Cfg Γ Λ σ -> Cfg Bool (Λ' Γ Λ σ) σ
   | ⟨l, v, T⟩ => ⟨l.map Λ'.normal, v, trTape enc0 T⟩
@@ -1850,7 +1850,7 @@ theorem stepAux_write
 
 中文:
 定理 stepAux_write
-  条件: (q : Stmt 布尔 (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBlank Γ)
+  条件: (q : Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (a b : Γ) (L R : ListBlank Γ)
   证明: by
   simp only [trTape', ListBlank.cons_flatMap]
   suffices forall {L' R'} (l₁ l₂ l₂' : List Bool) (_ : l₂'.length = l₂.length),
@@ -1895,7 +1895,7 @@ theorem stepAux_read
 
 中文:
 定理 stepAux_read
-  条件: (f : Γ -> Stmt 布尔 (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ)
+  条件: (f : Γ -> Stmt 布尔值 (Λ' Γ Λ σ) σ) (v : σ) (L R : ListBlank Γ)
   证明: by
   suffices forall f, stepAux (readAux n f) v (trTape' enc0 L R) =
       stepAux (f (enc R.head)) v (trTape' enc0 (L.cons R.head) R.tail) by
@@ -2012,7 +2012,7 @@ definition writes
 
 中文:
 定义 writes
-  签名: : Stmt Γ Λ σ -> Finset (Λ' Γ Λ σ)
+  签名: : Stmt Γ Λ σ -> 有限集 (Λ' Γ Λ σ)
 -/
 noncomputable def writes : Stmt Γ Λ σ -> Finset (Λ' Γ Λ σ)
   | Stmt.move _ q => writes q
@@ -2033,7 +2033,7 @@ definition trSupp
 
 中文:
 定义 trSupp
-  签名: (S : Finset Λ)
+  签名: (S : 有限集 Λ)
   定义体: S.biUnion fun l => insert (Λ'.normal l) (writes (M l))
 
 Depends on / 依赖: S.biUnion, biUnion, insert, normal, writes
@@ -2056,7 +2056,7 @@ theorem tr_supports
 
 中文:
 定理 tr_supports
-  条件: [Inhabited Λ] {S : Finset Λ} (ss : Supports M S)
+  条件: [可居 Λ] {S : 有限集 Λ} (ss : Supports M S)
   证明: ⟨Finset.mem_biUnion.2 ⟨_, ss.1, Finset.mem_insert_self _ _⟩, fun q h => by
     suffices forall q, SupportsStmt S q -> (forall q' in writes q, q' in trSupp M S) ->
         SupportsStmt (trSupp M S) (trNormal dec q) ∧
@@ -2162,7 +2162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Λ' Γ Λ)
+  签名: 可居 (Λ' Γ Λ)
   定义体: ⟨Λ'.normal default⟩
 
 Depends on / 依赖: normal
@@ -2183,7 +2183,7 @@ definition tr
 
 中文:
 定义 tr
-  签名: : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) Unit
+  签名: : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) 单元
 -/
 def tr : Λ' Γ Λ -> TM1.Stmt Γ (Λ' Γ Λ) Unit
   | Λ'.normal q =>
@@ -2203,7 +2203,7 @@ definition trCfg
 
 中文:
 定义 trCfg
-  签名: : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) Unit
+  签名: : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) 单元
 -/
 def trCfg : TM0.Cfg Γ Λ -> TM1.Cfg Γ (Λ' Γ Λ) Unit
   | ⟨q, T⟩ => ⟨cond (M q T.1).isSome (some (Λ'.normal q)) none, (), T⟩

@@ -96,7 +96,7 @@ lemma autEmbedding_injective
 
 中文:
 引理 autEmbedding_injective
-  结论: Function.Injective (autEmbedding F)
+  结论: 函数.单射 (autEmbedding F)
   证明: by
   intro σ τ h
   ext X x
@@ -127,7 +127,7 @@ lemma obj_discreteTopology
 中文:
 引理 obj_discreteTopology
   条件: (X : C)
-  结论: DiscreteTopology (F.obj X)
+  结论: 离散拓扑 (F.obj X)
   证明: ⟨rfl⟩
 -/
 lemma obj_discreteTopology (X : C) : DiscreteTopology (F.obj X) := ⟨rfl⟩
@@ -156,7 +156,7 @@ lemma aut_discreteTopology
 中文:
 引理 aut_discreteTopology
   条件: (X : C)
-  结论: DiscreteTopology (Aut (F.obj X))
+  结论: 离散拓扑 (Aut (F.obj X))
   证明: ⟨rfl⟩
 -/
 lemma aut_discreteTopology (X : C) : DiscreteTopology (Aut (F.obj X)) := ⟨rfl⟩
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Aut F)
+  签名: 拓扑空间 (Aut F)
   定义体: TopologicalSpace.induced (autEmbedding F) inferInstance
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, autEmbedding, induced
@@ -233,7 +233,7 @@ lemma autEmbedding_range_isClosed
 
 中文:
 引理 autEmbedding_range_isClosed
-  结论: IsClosed (Set.range (autEmbedding F))
+  结论: 是闭集 (集合.range (autEmbedding F))
   证明: by
   rw [autEmbedding_range]
   exact isClosed_iInter (fun f => isClosed_eq (by fun_prop) (by fun_prop))
@@ -256,7 +256,7 @@ lemma autEmbedding_isClosedEmbedding
 
 中文:
 引理 autEmbedding_isClosedEmbedding
-  结论: IsClosedEmbedding (autEmbedding F) where
+  结论: 是闭嵌入 (autEmbedding F) where
   证明: rfl
   injective := autEmbedding_injective F
   isClosed_range := autEmbedding_range_isClosed F
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompactSpace (Aut F)
+  签名: 紧空间 (Aut F)
   定义体: (autEmbedding_isClosedEmbedding F).compactSpace
 
 Depends on / 依赖: autEmbedding_isClosedEmbedding, compactSpace
@@ -293,7 +293,7 @@ instance :
 
 中文:
 实例 :
-  签名: T2Space (Aut F)
+  签名: T2空间 (Aut F)
   定义体: T2Space.of_injective_continuous (autEmbedding_injective F) continuous_induced_dom
 
 Depends on / 依赖: T2Space, T2Space.of_injective_continuous, autEmbedding_injective, continuous_induced_dom, of_injective_continuous
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: TotallyDisconnectedSpace (Aut F)
+  签名: 全不连通空间 (Aut F)
   定义体: (autEmbedding_isClosedEmbedding F).isEmbedding.isTotallyDisconnected_range.mp
     (isTotallyDisconnected_of_totallyDisconnectedSpace _)
 
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMul (Aut F)
+  签名: 连续乘法 (Aut F)
   定义体: (autEmbedding_isClosedEmbedding F).isInducing.continuousMul (autEmbedding F)
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mk, autEmbedding, autEmbedding_isClosedEmbedding, continuousMul, isInducing, isInducing.continuousMul
@@ -350,7 +350,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousInv (Aut F)
+  签名: 连续取逆 (Aut F)
   定义体: (autEmbedding_isClosedEmbedding F).isInducing.continuousInv fun _ => rfl
 
 Depends on / 依赖: IsConnected, IsConnected.of_induct, StructuredArrow, StructuredArrow.homMk, StructuredArrow.mk, autEmbedding_isClosedEmbedding, continuousInv, isInducing, isInducing.continuousInv, of_induct
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalGroup (Aut F)
+  签名: 是拓扑群 (Aut F)
   定义体: ⟨⟩
 -/
 instance : IsTopologicalGroup (Aut F) := ⟨⟩
@@ -491,7 +491,7 @@ lemma exists_set_ker_evaluation_subset_of_isOpen
     obtai
 
 中文:
-引理 exists_set_ker_evaluation_subset_of_isOpen
+引理 存在_set_ker_evaluation_subset_of_isOpen
   证明: by
   obtain ⟨U, hUopen, rfl⟩ := isOpen_induced_iff.mp h
   obtain ⟨I, u, ho, ha⟩ := isOpen_pi_iff.mp hUopen 1 h1
@@ -545,7 +545,7 @@ lemma nhds_one_has_basis_stabilizers
 
 中文:
 引理 nhds_one_has_basis_stabilizers
-  结论: (nhds (1 : Aut F)).HasBasis (fun _ => True)
+  结论: (邻域滤子 (1 : Aut F)).有基 (fun _ => 真)
   证明: by
     rw [mem_nhds_iff]
     refine ⟨?_, ?_⟩

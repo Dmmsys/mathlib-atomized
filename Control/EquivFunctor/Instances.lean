@@ -31,7 +31,7 @@ instance EquivFunctorUnique
 
 中文:
 实例 EquivFunctorUnique
-  签名: : EquivFunctor Unique where
+  签名: : 等价函子 唯一 where
   定义体: Equiv.uniqueCongr e
   map_refl' α := by simp [eq_iff_true_of_subsingleton]
   map_trans' := by simp [eq_iff_true_of_subsingleton]
@@ -55,7 +55,7 @@ instance EquivFunctorPerm
 
 中文:
 实例 EquivFunctorPerm
-  签名: : EquivFunctor Perm where
+  签名: : 等价函子 置换 where
   定义体: (e.symm.trans p).trans e
   map_refl' α := by ext; simp
   map_trans' _ _ := by ext; simp
@@ -81,7 +81,7 @@ instance EquivFunctorFinset
 
 中文:
 实例 EquivFunctorFinset
-  签名: : EquivFunctor Finset where
+  签名: : 等价函子 有限集 where
   定义体: s.map e.toEmbedding
   map_refl' α := by ext; simp
   map_trans' k h := by ext; simp [-trans_toEmbedding]
@@ -105,7 +105,7 @@ instance EquivFunctorFintype
 
 中文:
 实例 EquivFunctorFintype
-  签名: : EquivFunctor Fintype where
+  签名: : 等价函子 有限类型 where
   定义体: Fintype.ofBijective e e.bijective
   map_refl' α := by ext; simp [eq_iff_true_of_subsingleton]
   map_trans' := by simp [eq_iff_true_of_subsingleton]

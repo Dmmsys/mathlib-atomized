@@ -32,9 +32,9 @@ class FinTrdeg
 
 中文:
 类 FinTrdeg
-  参数: (K L : 类型) [Field K] [Field L] [Algebra K L]
+  参数: (K L : 类型) [域 K] [域 L] [代数 K L]
   公理与运算 (1 个):
-    - exists_fg_isAlgebraic((K L)) : 存在 E : 整数ermediateField K L, E.FG ∧ Algebra.IsAlgebraic E L
+    - exists_fg_isAlgebraic((K L)) : 存在 E : 中间域 K L, E.FG ∧ 代数.是代数 E L
 -/
 class FinTrdeg (K L : Type*) [Field K] [Field L] [Algebra K L] where
   exists_fg_isAlgebraic (K L) : exists E : IntermediateField K L, E.FG ∧ Algebra.IsAlgebraic E L
@@ -51,7 +51,7 @@ instance [Algebra.IsAlgebraic
   body: ⟨⊥, IntermediateField.fg_bot, inferInstance⟩
 
 中文:
-实例 [Algebra.IsAlgebraic
+实例 [代数.是代数
   签名: K L] : FinTrdeg K L where
   定义体: ⟨⊥, IntermediateField.fg_bot, inferInstance⟩
 
@@ -70,7 +70,7 @@ instance [Algebra.EssFiniteType
   body: ⟨⊤, IntermediateField.fg_top_iff.mpr ‹_›, inferInstance⟩
 
 中文:
-实例 [Algebra.EssFiniteType
+实例 [代数.EssFiniteType
   签名: K L] : FinTrdeg K L where
   定义体: ⟨⊤, IntermediateField.fg_top_iff.mpr ‹_›, inferInstance⟩
 
@@ -95,7 +95,7 @@ theorem finTrdeg_iff_trdeg
 
 中文:
 定理 finTrdeg_iff_trdeg
-  结论: FinTrdeg K L ↔ Algebra.trdeg K L < .aleph0
+  结论: FinTrdeg K L ↔ 代数.trdeg K L < .aleph0
   证明: by
   constructor
   · intro ⟨E, fg, alg⟩
@@ -137,7 +137,7 @@ theorem trdeg_lt_aleph0
 中文:
 定理 trdeg_lt_aleph0
   条件: [FinTrdeg K L]
-  结论: Algebra.trdeg K L < .aleph0
+  结论: 代数.trdeg K L < .aleph0
   证明: finTrdeg_iff_trdeg.mp ‹_›
 
 Depends on / 依赖: finTrdeg_iff_trdeg, finTrdeg_iff_trdeg.mp
@@ -157,7 +157,7 @@ theorem FinTrdeg.trans
 
 中文:
 定理 FinTrdeg.trans
-  结论: (K E L : 类型) [Field K] [Field E] [Field L]
+  结论: (K E L : 类型) [域 K] [域 E] [域 L]
   证明: by
   rw [finTrdeg_iff_trdeg]; rw [← Cardinal.lift_lt_aleph0]; rw [← lift_trdeg_add_eq K E L]; rw [Cardinal.add_lt_aleph0_iff]; rw [Cardinal.lift_lt_aleph0]; rw [Cardinal.lift_lt_aleph0]
   exact ⟨trdeg_lt_aleph0 K E, trdeg_lt_aleph0 E L⟩
@@ -230,7 +230,7 @@ theorem FinTrdeg.of_isTranscendenceBasis
 
 中文:
 定理 FinTrdeg.of_isTranscendenceBasis
-  结论: {ι : 类型} [Finite ι] {x : ι -> L}
+  结论: {ι : 类型} [有限 ι] {x : ι -> L}
   证明: by
   rw [finTrdeg_iff_trdeg]; rw [← Cardinal.lift_lt_aleph0]; rw [← hx.lift_cardinalMk_eq_trdeg]; rw [Cardinal.lift_lt_aleph0]
   exact Cardinal.mk_lt_aleph0
@@ -256,7 +256,7 @@ theorem exists_finset_isTranscendenceBasis
   exact ⟨s, hs⟩
 
 中文:
-定理 exists_finset_isTranscendenceBasis
+定理 存在_finset_isTranscendenceBasis
   条件: [FinTrdeg K L]
   证明: by
   obtain ⟨s, hs⟩ := exists_isTranscendenceBasis K L

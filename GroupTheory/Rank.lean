@@ -63,7 +63,7 @@ lemma rank_spec
 中文:
 引理 rank_spec
   条件: [h : FG G]
-  结论: 存在 S : Finset G, S.card = rank G ∧ .closure S = (⊤ : Subgroup G)
+  结论: 存在 S : 有限集 G, S.card = rank G ∧ .closure S = (⊤ : 子群 G)
   证明: @Nat.find_spec _ (Classical.decPred _) (fg_iff'.mp h)
 
 @[to_additive]
@@ -85,7 +85,7 @@ lemma rank_le
 
 中文:
 引理 rank_le
-  条件: [h : FG G] {S : Finset G} (hS : .closure S = (⊤ : Subgroup G))
+  条件: [h : FG G] {S : 有限集 G} (hS : .closure S = (⊤ : 子群 G))
   结论: rank G <= S.card
   证明: @Nat.find_le _ _ (Classical.decPred _) (fg_iff'.mp h) ⟨S, rfl, hS⟩
 
@@ -111,7 +111,7 @@ theorem rank_eq_zero
 
 中文:
 定理 rank_eq_zero
-  条件: [Subsingleton G]
+  条件: [子单例 G]
   结论: rank G = 0
   证明: by
   rw [← le_zero_iff]; rw [← Finset.card_empty]
@@ -142,7 +142,7 @@ theorem rank_eq_zero_iff
 中文:
 定理 rank_eq_zero_iff
   条件: [FG G]
-  结论: rank G = 0 ↔ Subsingleton G
+  结论: rank G = 0 ↔ 子单例 G
   证明: by
   refine ⟨fun h => ?_, fun _ => rank_eq_zero G⟩
   obtain ⟨s, hs, hs'⟩ := rank_spec G
@@ -171,7 +171,7 @@ theorem rank_pos
 
 中文:
 定理 rank_pos
-  条件: [Nontrivial G] [FG G]
+  条件: [非平凡 G] [FG G]
   结论: 0 < rank G
   证明: by
   rwa [pos_iff_ne_zero, ne_eq, rank_eq_zero_iff, not_subsingleton_iff_nontrivial]
@@ -203,7 +203,7 @@ lemma rank_le_of_surjective
 
 中文:
 引理 rank_le_of_surjective
-  条件: [FG G] [FG H] (f : G ->* H) (hf : Surjective f)
+  条件: [FG G] [FG H] (f : G ->* H) (hf : 满射 f)
   结论: rank H <= rank G
   证明: by
   classical
@@ -293,7 +293,7 @@ lemma rank_congr
 
 中文:
 引理 rank_congr
-  条件: {H K : Subgroup G} [Group.FG H] [Group.FG K] (h : H = K)
+  条件: {H K : 子群 G} [群.FG H] [群.FG K] (h : H = K)
   结论: rank H = rank K
   证明: by
   subst h; rfl
@@ -322,8 +322,8 @@ lemma rank_closure_finset_le_card
 
 中文:
 引理 rank_closure_finset_le_card
-  条件: (s : Finset G)
-  结论: rank (closure (s : Set G)) <= s.card
+  条件: (s : 有限集 G)
+  结论: rank (closure (s : 集合 G)) <= s.card
   证明: by
   classical
   let t : Finset (closure (s : Set G)) := s.preimage Subtype.val Subtype.coe_injective.injOn
@@ -362,7 +362,7 @@ lemma rank_closure_finite_le_nat_card
 
 中文:
 引理 rank_closure_finite_le_nat_card
-  条件: (s : Set G) [Finite s]
+  条件: (s : 集合 G) [有限 s]
   结论: rank (closure s) <= 自然数.card s
   证明: by
   have := Fintype.ofFinite s

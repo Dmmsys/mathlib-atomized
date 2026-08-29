@@ -37,9 +37,9 @@ class ContMDiffRing
     - contMDiff_mul : CMDiff n fun p : R × R => p.1 * p.2
 
 中文:
-类 ContMDiffRing
-  参数: (I : ModelWithCorners 𝕜 E H) (n : 自然数∞ω)
-  继承: ContMDiffAdd I n R
+类 余ntMDiff环
+  参数: (I : 带角模型 𝕜 E H) (n : 自然数∞ω)
+  继承: 余ntMDiffAdd I n R
   公理与运算 (1 个):
     - contMDiff_mul : CMDiff n fun p : R × R => p.1 * p.2
 -/
@@ -89,7 +89,7 @@ theorem topologicalSemiring_of_contMDiffRing
 
 中文:
 定理 topologicalSemiring_of_contMDiffRing
-  条件: [Semiring R] [ContMDiffRing I n R]
+  条件: [半环 R] [余ntMDiff环 I n R]
   证明: { continuousMul_of_contMDiffMul I n, continuousAdd_of_contMDiffAdd I n with }
 
 Depends on / 依赖: continuousAdd_of_contMDiffAdd, continuousMul_of_contMDiffMul

@@ -47,7 +47,7 @@ theorem toAddSubmonoid_strictMono
 
 中文:
 定理 toAddSubmonoid_strictMono
-  结论: StrictMono (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
+  结论: 严格递增 (toAddSubmonoid : 子模 R M -> 加法子幺半群 M)
   证明: fun _ _ => id
 -/
 theorem toAddSubmonoid_strictMono : StrictMono (toAddSubmonoid : Submodule R M -> AddSubmonoid M) :=
@@ -88,7 +88,7 @@ theorem toAddSubmonoid_mono
 
 中文:
 定理 toAddSubmonoid_mono
-  结论: Monotone (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
+  结论: 递增 (toAddSubmonoid : 子模 R M -> 加法子幺半群 M)
   证明: toAddSubmonoid_strictMono.monotone
 
 @[gcongr, mono]
@@ -128,7 +128,7 @@ theorem toSubMulAction_mono
 
 中文:
 定理 toSubMulAction_mono
-  结论: Monotone (toSubMulAction : Submodule R M -> SubMulAction R M)
+  结论: 递增 (toSubMulAction : 子模 R M -> SubMul作用 R M)
   证明: toSubMulAction_strictMono.monotone
 
 Depends on / 依赖: monotone, toSubMulAction_strictMono, toSubMulAction_strictMono.monotone
@@ -162,7 +162,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  条件: {t : Finset ι} {f : ι -> M}
+  条件: {t : 有限集 ι} {f : ι -> M}
   结论: (对任意 c in t, f c in p) -> (∑ i in t, f i) in p
   证明: sum_mem
 -/
@@ -179,7 +179,7 @@ theorem sum_smul_mem
 
 中文:
 定理 sum_smul_mem
-  条件: {t : Finset ι} {f : ι -> M} (r : ι -> R) (hyp : 对任意 c in t, f c in p)
+  条件: {t : 有限集 ι} {f : ι -> M} (r : ι -> R) (hyp : 对任意 c in t, f c in p)
   证明: sum_mem fun i hi => smul_mem _ _ (hyp i hi)
 
 Depends on / 依赖: smul_mem, sum_mem
@@ -198,7 +198,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M]
   定义体: p.toSubMulAction.isCentralScalar
 
 Depends on / 依赖: isCentralScalar, p.toSubMulAction.isCentralScalar, toSubMulAction
@@ -217,7 +217,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [Module.IsTorsionFree R M]
+  签名: [模.是无挠 R M]
   定义体: Subtype.coe_injective.moduleIsTorsionFree _ (by simp)
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.moduleIsTorsionFree, coe_injective, moduleIsTorsionFree
@@ -247,8 +247,8 @@ instance [VAdd
   body: AddSubmonoid.instVAddSubtypeMem p
 
 中文:
-实例 [VAdd
-  签名: M α] : VAdd p α
+实例 [向量加法
+  签名: M α] : 向量加法 p α
   定义体: AddSubmonoid.instVAddSubtypeMem p
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.instVAddSubtypeMem, instVAddSubtypeMem
@@ -266,7 +266,7 @@ instance vaddCommClass
 
 中文:
 实例 vaddCommClass
-  签名: [VAdd M β] [VAdd α β] [VAddCommClass M α β]
+  签名: [向量加法 M β] [向量加法 α β] [VAddComm类 M α β]
   定义体: ⟨fun a => vadd_comm (a : M)⟩
 
 Depends on / 依赖: vadd_comm
@@ -283,8 +283,8 @@ instance [VAdd
   body: ⟨fun h => Subtype.ext eq_of_vadd_eq_vadd h⟩
 
 中文:
-实例 [VAdd
-  签名: M α] [FaithfulVAdd M α] : FaithfulVAdd p α
+实例 [向量加法
+  签名: M α] [忠实向量加法 M α] : 忠实向量加法 p α
   定义体: ⟨fun h => Subtype.ext eq_of_vadd_eq_vadd h⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, eq_of_vadd_eq_vadd
@@ -305,7 +305,7 @@ theorem vadd_def
 
 中文:
 定理 vadd_def
-  条件: [VAdd M α] (g : p) (m : α)
+  条件: [向量加法 M α] (g : p) (m : α)
   结论: g +ᵥ m = (g : M) +ᵥ m
   证明: rfl
 -/
@@ -337,7 +337,7 @@ theorem toAddSubgroup_strictMono
 
 中文:
 定理 toAddSubgroup_strictMono
-  结论: StrictMono (toAddSubgroup : Submodule R M -> AddSubgroup M)
+  结论: 严格递增 (toAddSubgroup : 子模 R M -> 加法子群 M)
   证明: fun _ _ => id
 
 @[gcongr]
@@ -381,7 +381,7 @@ theorem toAddSubgroup_mono
 
 中文:
 定理 toAddSubgroup_mono
-  结论: Monotone (toAddSubgroup : Submodule R M -> AddSubgroup M)
+  结论: 递增 (toAddSubgroup : 子模 R M -> 加法子群 M)
   证明: toAddSubgroup_strictMono.monotone
 
 @[simp]
@@ -402,7 +402,7 @@ theorem toAddSubgroup_toAddSubmonoid
 
 中文:
 定理 toAddSubgroup_toAddSubmonoid
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: rfl
 -/
 theorem toAddSubgroup_toAddSubmonoid (p : Submodule R M) :
@@ -420,7 +420,7 @@ theorem neg_coe
 
 中文:
 定理 neg_coe
-  结论: -(p : Set M) = p
+  结论: -(p : 集合 M) = p
   证明: Set.ext fun _ => p.neg_mem_iff
 
 Depends on / 依赖: Set.ext, neg_mem_iff, p.neg_mem_iff
@@ -447,7 +447,7 @@ theorem notMem_of_ortho
 
 中文:
 定理 notMem_of_ortho
-  结论: {x : M} {N : Submodule R M}
+  结论: {x : M} {N : 子模 R M}
   证明: by
   intro hx
   simpa using ortho (-1) x hx
@@ -467,7 +467,7 @@ theorem ne_zero_of_ortho
 
 中文:
 定理 ne_zero_of_ortho
-  结论: {x : M} {N : Submodule R M}
+  结论: {x : M} {N : 子模 R M}
   证明: mt (fun h => show x in N from h.symm ▸ N.zero_mem) (notMem_of_ortho ortho)
 
 Depends on / 依赖: N.zero_mem, h.symm, notMem_of_ortho, zero_mem
@@ -517,8 +517,8 @@ abbreviation Subspace
   body: Submodule R M
 
 中文:
-缩写 Subspace
-  签名: (R : 类型u) (M : 类型v) [DivisionRing R] [AddCommGroup M] [Module R M]
+缩写 子空间
+  签名: (R : 类型u) (M : 类型v) [除环 R] [加法交换群 M] [模 R M]
   定义体: Submodule R M
 
 Depends on / 依赖: Submodule

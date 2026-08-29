@@ -189,7 +189,7 @@ definition colimitLimitToLimitColimitCone
 
 中文:
 定义 colimitLimitToLimitColimitCone
-  签名: (G : J ⥤ K ⥤ C) [HasLimit G]
+  签名: (G : J ⥤ K ⥤ C) [有极限 G]
   定义体: colim.map (limitIsoSwapCompLim G).hom ≫
       colimitLimitToLimitColimit (uncurry.obj G :) ≫
         lim.map (whiskerRight (currying.unitIso.app G).inv colim)

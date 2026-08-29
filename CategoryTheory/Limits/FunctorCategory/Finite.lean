@@ -32,8 +32,8 @@ instance [HasFiniteLimits
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] : HasFiniteLimits (K ⥤ C)
+实例 [有有限极限
+  签名: C] : 有有限极限 (K ⥤ C)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasFiniteLimits C] : HasFiniteLimits (K ⥤ C) := ⟨fun _ => inferInstance⟩
@@ -47,8 +47,8 @@ instance [HasFiniteProducts
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasFiniteProducts
-  签名: C] : HasFiniteProducts (K ⥤ C)
+实例 [有FiniteProducts
+  签名: C] : 有FiniteProducts (K ⥤ C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasFiniteProducts C] : HasFiniteProducts (K ⥤ C) := ⟨inferInstance⟩
@@ -62,8 +62,8 @@ instance [HasFiniteColimits
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] : HasFiniteColimits (K ⥤ C)
+实例 [有有限余极限
+  签名: C] : 有有限余极限 (K ⥤ C)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasFiniteColimits C] : HasFiniteColimits (K ⥤ C) := ⟨fun _ => inferInstance⟩
@@ -77,8 +77,8 @@ instance [HasFiniteCoproducts
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasFiniteCoproducts
-  签名: C] : HasFiniteCoproducts (K ⥤ C)
+实例 [有FiniteCoproducts
+  签名: C] : 有FiniteCoproducts (K ⥤ C)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasFiniteCoproducts C] : HasFiniteCoproducts (K ⥤ C) := ⟨inferInstance⟩
@@ -92,7 +92,7 @@ instance [HasFiniteLimits
   body: inferInstance
 
 中文:
-实例 [HasFiniteLimits
+实例 [有有限极限
   签名: C] (k
   定义体: inferInstance
 -/
@@ -108,7 +108,7 @@ instance [HasFiniteColimits
   body: inferInstance
 
 中文:
-实例 [HasFiniteColimits
+实例 [有有限余极限
   签名: C] (k
   定义体: inferInstance
 -/

@@ -677,7 +677,7 @@ definition ofHomotopy
 
 中文:
 定义 ofHomotopy
-  签名: {φ₁ φ₂ : F ⟶ G} (ho : Homotopy φ₁ φ₂)
+  签名: {φ₁ φ₂ : F ⟶ G} (ho : 同伦 φ₁ φ₂)
   定义体: Cochain.mk (fun p q _ => ho.hom p q)
 
 @[simp]
@@ -1953,7 +1953,7 @@ lemma δ_ofHomotopy
 
 中文:
 引理 δ_ofHomotopy
-  条件: {φ₁ φ₂ : F ⟶ G} (h : Homotopy φ₁ φ₂)
+  条件: {φ₁ φ₂ : F ⟶ G} (h : 同伦 φ₁ φ₂)
   证明: by
   ext p
   have eq := h.comm p
@@ -2032,7 +2032,7 @@ definition HomComplex
 
 中文:
 定义 HomComplex
-  签名: : CochainComplex AddCommGrpCat 整数 where
+  签名: : 上链复形 加法交换群范畴 整数 where
   定义体: AddCommGrpCat.of (Cochain F G i)
   d i j := AddCommGrpCat.ofHom (δ_hom Int F G i j)
   shape _ _ hij := by ext; simp [δ_shape _ _ hij]
@@ -2058,7 +2058,7 @@ definition cocycle
 
 中文:
 定义 cocycle
-  签名: : AddSubgroup (Cochain F G n)
+  签名: : 加法子群 (Cochain F G n)
   定义体: AddMonoidHom.ker (δ_hom Int F G n (n + 1)).toAddMonoidHom
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ker, toAddMonoidHom
@@ -2159,7 +2159,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (Cocycle F G n)
+  签名: 标量乘法 R (Cocycle F G n)
   定义体: ⟨r • z.1, by
     have hz := z.2
     rw [mem_iff n (n + 1) rfl] at hz ⊢
@@ -2187,7 +2187,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (Cocycle F G n)
+  签名: 加法交换群 (Cocycle F G n)
   定义体: inferInstanceAs AddCommGroup (cocycle F G n)
 
 @[simp]
@@ -2331,7 +2331,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (Cocycle F G n)
+  签名: 模 R (Cocycle F G n)
   定义体: by aesop
   mul_smul _ _ _ := by ext; dsimp; rw [smul_smul]
   smul_zero _ := by aesop

@@ -122,7 +122,7 @@ theorem basisSets_iff
 
 中文:
 定理 basisSets_iff
-  条件: {U : Set E}
+  条件: {U : 集合 E}
   证明: by
   simp only [basisSets, mem_iUnion, exists_prop, mem_singleton_iff]
 
@@ -143,8 +143,8 @@ theorem basisSets_mem
 
 中文:
 定理 basisSets_mem
-  条件: (i : Finset ι) {r : 实数} (hr : 0 < r)
-  结论: (i.sup p).ball 0 r in p.basisSets
+  条件: (i : 有限集 ι) {r : 实数} (hr : 0 < r)
+  结论: (i.上确界 p).ball 0 r in p.basisSets
   证明: (basisSets_iff _).mpr ⟨i, _, hr, rfl⟩
 
 Depends on / 依赖: basisSets_iff
@@ -204,7 +204,7 @@ theorem basisSets_nonempty
 
 中文:
 定理 basisSets_nonempty
-  结论: p.basisSets.Nonempty
+  结论: p.basisSets.非空
   证明: by
   refine nonempty_def.mpr ⟨univ, basisSets_univ_mem _⟩
 
@@ -229,7 +229,7 @@ theorem basisSets_intersect
 
 中文:
 定理 basisSets_intersect
-  条件: (U V : Set E) (hU : U in p.basisSets) (hV : V in p.basisSets)
+  条件: (U V : 集合 E) (hU : U in p.basisSets) (hV : V in p.basisSets)
   证明: by
   classical
     rcases p.basisSets_iff.mp hU with ⟨s, r₁, hr₁, hU⟩
@@ -356,7 +356,7 @@ definition addGroupFilterBasis
 
 中文:
 定义 addGroupFilterBasis
-  签名: : AddGroupFilterBasis E
+  签名: : 加法群滤子基 E
   定义体: addGroupFilterBasisOfComm p.basisSets p.basisSets_nonempty p.basisSets_intersect p.basisSets_zero
     p.basisSets_add p.basisSets_neg
 -/
@@ -382,7 +382,7 @@ theorem basisSets_smul_right
 
 中文:
 定理 basisSets_smul_right
-  条件: (v : E) (U : Set E) (hU : U in p.basisSets)
+  条件: (v : E) (U : 集合 E) (hU : U in p.basisSets)
   证明: by
   rcases p.basisSets_iff.mp hU with ⟨s, r, hr, hU⟩
   rw [hU]; rw [Filter.eventually_iff]
@@ -459,7 +459,7 @@ theorem basisSets_smul_left
 
 中文:
 定理 basisSets_smul_left
-  条件: (x : 𝕜) (U : Set F) (hU : U in p.basisSets)
+  条件: (x : 𝕜) (U : 集合 F) (hU : U in p.basisSets)
   证明: by
   rcases p.basisSets_iff.mp hU with ⟨s, r, hr, hU⟩
   rw [hU]
@@ -577,7 +577,7 @@ lemma basisSets_mem_nhds
 
 中文:
 引理 basisSets_mem_nhds
-  结论: {𝕜 E ι : 类型} [NormedField 𝕜]
+  结论: {𝕜 E ι : 类型} [赋范域 𝕜]
   证明: by
   obtain ⟨s, r, hr, rfl⟩ := p.basisSets_iff.mp hU
   clear hU
@@ -626,7 +626,7 @@ definition IsBounded
 
 中文:
 定义 IsBounded
-  签名: (p : ι -> Seminorm 𝕜 E) (q : ι' -> Seminorm 𝕜₂ F) (f : E ->ₛₗ[σ₁₂] F)
+  签名: (p : ι -> 半范数 𝕜 E) (q : ι' -> 半范数 𝕜₂ F) (f : E ->ₛₗ[σ₁₂] F)
   定义体: forall i, exists s : Finset ι, exists C : Real>=0, (q i).comp f <= C • s.sup p
 
 Depends on / 依赖: Finset, s.sup
@@ -649,7 +649,7 @@ exact (hC x).trans mul_le_mul_of_nonneg_right C.le_coe_toNNReal (apply_nonneg _ 
 
 中文:
 定理 IsBounded.of_real
-  结论: {p : ι -> Seminorm 𝕜 E} {q : ι' -> Seminorm 𝕜₂ F} {f : E ->ₛₗ[σ₁₂] F}
+  结论: {p : ι -> 半范数 𝕜 E} {q : ι' -> 半范数 𝕜₂ F} {f : E ->ₛₗ[σ₁₂] F}
   证明: by
   rw [IsBounded]
   peel H with i s H
@@ -679,7 +679,7 @@ theorem isBounded_const
 
 中文:
 定理 isBounded_const
-  结论: (ι' : 类型) [Nonempty ι'] {p : ι -> Seminorm 𝕜 E} {q : Seminorm 𝕜₂ F}
+  结论: (ι' : 类型) [非空 ι'] {p : ι -> 半范数 𝕜 E} {q : 半范数 𝕜₂ F}
   证明: by
   simp only [IsBounded, forall_const]
 
@@ -705,7 +705,7 @@ theorem const_isBounded
 
 中文:
 定理 const_isBounded
-  结论: (ι : 类型) [Nonempty ι] {p : Seminorm 𝕜 E} {q : ι' -> Seminorm 𝕜₂ F}
+  结论: (ι : 类型) [非空 ι] {p : 半范数 𝕜 E} {q : ι' -> 半范数 𝕜₂ F}
   证明: by
   constructor <;> intro h i
   · rcases h i with ⟨s, C, h⟩
@@ -741,7 +741,7 @@ theorem isBounded_sup
 
 中文:
 定理 isBounded_sup
-  结论: {p : ι -> Seminorm 𝕜 E} {q : ι' -> Seminorm 𝕜₂ F} {f : E ->ₛₗ[σ₁₂] F}
+  结论: {p : ι -> 半范数 𝕜 E} {q : ι' -> 半范数 𝕜₂ F} {f : E ->ₛₗ[σ₁₂] F}
   证明: by
   classical
   obtain rfl | _ := s'.eq_empty_or_nonempty
@@ -790,7 +790,7 @@ structure WithSeminorms
 
 中文:
 结构 WithSeminorms
-  参数: (p : SeminormFamily 𝕜 E ι) [topology : TopologicalSpace E]
+  参数: (p : SeminormFamily 𝕜 E ι) [topology : 拓扑空间 E]
   公理与运算 (1 个):
     - topology_eq_withSeminorms : topology = p.moduleFilterBasis.topology
 -/
@@ -808,10 +808,10 @@ class PolynormableSpace
     - withSeminorms' : WithSeminorms (fun p : {p : Seminorm 𝕜 E // Continuous p} => p.1)
 
 中文:
-类 PolynormableSpace
-  参数: [topology : TopologicalSpace E]
+类 Polynormable空间
+  参数: [topology : 拓扑空间 E]
   公理与运算 (1 个):
-    - withSeminorms' : WithSeminorms (fun p : {p : Seminorm 𝕜 E // Continuous p} => p.1)
+    - withSeminorms' : WithSeminorms (fun p : {p : 半范数 𝕜 E // 连续 p} => p.1)
 -/
 class PolynormableSpace [topology : TopologicalSpace E] where
   withSeminorms' : WithSeminorms (fun p : {p : Seminorm 𝕜 E // Continuous p} => p.1)
@@ -826,7 +826,7 @@ theorem WithSeminorms.withSeminorms_eq
 
 中文:
 定理 WithSeminorms.withSeminorms_eq
-  结论: {p : SeminormFamily 𝕜 E ι} [t : TopologicalSpace E]
+  结论: {p : SeminormFamily 𝕜 E ι} [t : 拓扑空间 E]
   证明: hp.1
 -/
 theorem WithSeminorms.withSeminorms_eq {p : SeminormFamily 𝕜 E ι} [t : TopologicalSpace E]
@@ -846,8 +846,8 @@ theorem PolynormableSpace.withSeminorms
   proof: PolynormableSpace.withSeminorms'
 
 中文:
-定理 PolynormableSpace.withSeminorms
-  条件: [PolynormableSpace 𝕜 E]
+定理 Polynormable空间.withSeminorms
+  条件: [Polynormable空间 𝕜 E]
   证明: PolynormableSpace.withSeminorms'
 
 Depends on / 依赖: PolynormableSpace, PolynormableSpace.withSeminorms, withSeminorms
@@ -870,7 +870,7 @@ theorem WithSeminorms.topologicalAddGroup
 中文:
 定理 WithSeminorms.topologicalAddGroup
   条件: (hp : WithSeminorms p)
-  结论: IsTopologicalAddGroup E
+  结论: 是拓扑加群 E
   证明: by
   rw [hp.withSeminorms_eq]
   exact AddGroupFilterBasis.isTopologicalAddGroup _
@@ -895,7 +895,7 @@ theorem WithSeminorms.continuousSMul
 中文:
 定理 WithSeminorms.continuousSMul
   条件: (hp : WithSeminorms p)
-  结论: ContinuousSMul 𝕜 E
+  结论: 连续标量乘法 𝕜 E
   证明: by
   rw [hp.withSeminorms_eq]
   exact ModuleFilterBasis.continuousSMul _
@@ -1008,7 +1008,7 @@ theorem WithSeminorms.mem_nhds_iff
 
 中文:
 定理 WithSeminorms.mem_nhds_iff
-  条件: (hp : WithSeminorms p) (x : E) (U : Set E)
+  条件: (hp : WithSeminorms p) (x : E) (U : 集合 E)
   证明: by
   rw [hp.hasBasis_ball.mem_iff]; rw [Prod.exists]
 
@@ -1029,7 +1029,7 @@ theorem WithSeminorms.isOpen_iff_mem_balls
 
 中文:
 定理 WithSeminorms.isOpen_iff_mem_balls
-  条件: (hp : WithSeminorms p) (U : Set E)
+  条件: (hp : WithSeminorms p) (U : 集合 E)
   证明: by
   simp_rw [← WithSeminorms.mem_nhds_iff hp _ U, isOpen_iff_mem_nhds]
 
@@ -1097,7 +1097,7 @@ theorem WithSeminorms.separating_of_T1
 
 中文:
 定理 WithSeminorms.separating_of_T1
-  条件: [T1Space E] (hp : WithSeminorms p) (x : E) (hx : x != 0)
+  条件: [T1空间 E] (hp : WithSeminorms p) (x : E) (hx : x != 0)
   证明: by
   have := ((t1Space_TFAE E).out 0 9).mp (inferInstance : T1Space E)
   by_contra! h
@@ -1162,7 +1162,7 @@ theorem WithSeminorms.tendsto_nhds'
 
 中文:
 定理 WithSeminorms.tendsto_nhds'
-  条件: (hp : WithSeminorms p) (u : F -> E) {f : Filter F} (y₀ : E)
+  条件: (hp : WithSeminorms p) (u : F -> E) {f : 滤子 F} (y₀ : E)
   证明: by
   simp [hp.hasBasis_ball.tendsto_right_iff]
 
@@ -1187,7 +1187,7 @@ theorem WithSeminorms.tendsto_nhds
 
 中文:
 定理 WithSeminorms.tendsto_nhds
-  条件: (hp : WithSeminorms p) (u : F -> E) {f : Filter F} (y₀ : E)
+  条件: (hp : WithSeminorms p) (u : F -> E) {f : 滤子 F} (y₀ : E)
   证明: by
   rw [hp.tendsto_nhds' u y₀]
   exact
@@ -1254,7 +1254,7 @@ theorem SeminormFamily.withSeminorms_of_nhds
 
 中文:
 定理 SeminormFamily.withSeminorms_of_nhds
-  结论: [IsTopologicalAddGroup E] (p : SeminormFamily 𝕜 E ι)
+  结论: [是拓扑加群 E] (p : SeminormFamily 𝕜 E ι)
   证明: by
   refine
     ⟨IsTopologicalAddGroup.ext inferInstance p.addGroupFilterBasis.isTopologicalAddGroup ?_⟩
@@ -1281,7 +1281,7 @@ theorem SeminormFamily.withSeminorms_of_hasBasis
 
 中文:
 定理 SeminormFamily.withSeminorms_of_hasBasis
-  结论: [IsTopologicalAddGroup E]
+  结论: [是拓扑加群 E]
   证明: p.withSeminorms_of_nhds
     Filter.HasBasis.eq_of_same_basis h p.addGroupFilterBasis.toFilterBasis.hasBasis
 
@@ -1307,7 +1307,7 @@ theorem SeminormFamily.withSeminorms_iff_nhds_eq_iInf
 
 中文:
 定理 SeminormFamily.withSeminorms_iff_nhds_eq_iInf
-  结论: [IsTopologicalAddGroup E]
+  结论: [是拓扑加群 E]
   证明: by
   rw [← p.filter_eq_iInf]
   refine ⟨fun h => ?_, p.withSeminorms_of_nhds⟩
@@ -1336,7 +1336,7 @@ theorem SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf
 
 中文:
 定理 SeminormFamily.withSeminorms_iff_topologicalSpace_eq_iInf
-  结论: [IsTopologicalAddGroup E]
+  结论: [是拓扑加群 E]
   证明: by
   rw [p.withSeminorms_iff_nhds_eq_iInf]; rw [IsTopologicalAddGroup.ext_iff inferInstance (topologicalAddGroup_iInf fun i => inferInstance)]; rw [nhds_iInf]
   congrm _ = ⨅ i, ?_
@@ -1437,7 +1437,7 @@ theorem SeminormFamily.withSeminorms_iff_uniformSpace_eq_iInf
 
 中文:
 定理 SeminormFamily.withSeminorms_iff_uniformSpace_eq_iInf
-  结论: [u : UniformSpace E]
+  结论: [u : 一致空间 E]
   证明: by
   rw [p.withSeminorms_iff_nhds_eq_iInf]; rw [IsUniformAddGroup.ext_iff inferInstance (isUniformAddGroup_iInf fun i => inferInstance)]; rw [UniformSpace.toTopologicalSpace_iInf]; rw [nhds_iInf]
   congrm _ = ⨅ i, ?_
@@ -1467,7 +1467,7 @@ theorem norm_withSeminorms
 
 中文:
 定理 norm_withSeminorms
-  条件: (𝕜 E) [NormedField 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+  条件: (𝕜 E) [赋范域 𝕜] [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: by
   rw [SeminormFamily.withSeminorms_iff_nhds_eq_iInf]; rw [iInf_const]; rw [coe_normSeminorm]; rw [comap_norm_nhds_zero]
 
@@ -1486,8 +1486,8 @@ instance [NormedField
   body: .toPolynormableSpace norm_withSeminorms 𝕜 E
 
 中文:
-实例 [NormedField
-  签名: 𝕜] [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] :
+实例 [赋范域
+  签名: 𝕜] [SeminormedAddComm群 E] [赋范空间 𝕜 E] :
   定义体: .toPolynormableSpace norm_withSeminorms 𝕜 E
 
 Depends on / 依赖: norm_withSeminorms, toPolynormableSpace
@@ -1523,7 +1523,7 @@ theorem WithSeminorms.isVonNBounded_iff_finset_seminorm_bounded
 
 中文:
 定理 WithSeminorms.isVonNBounded_iff_finset_seminorm_bounded
-  条件: {s : Set E} (hp : WithSeminorms p)
+  条件: {s : 集合 E} (hp : WithSeminorms p)
   证明: by
   rw [hp.hasBasis.isVonNBounded_iff]
   constructor
@@ -1571,7 +1571,7 @@ theorem WithSeminorms.image_isVonNBounded_iff_finset_seminorm_bounded
 
 中文:
 定理 WithSeminorms.image_isVonNBounded_iff_finset_seminorm_bounded
-  结论: (f : G -> E) {s : Set G}
+  结论: (f : G -> E) {s : 集合 G}
   证明: by
   simp_rw [hp.isVonNBounded_iff_finset_seminorm_bounded, Set.forall_mem_image]
 
@@ -1604,7 +1604,7 @@ theorem WithSeminorms.isVonNBounded_iff_seminorm_bounded
 
 中文:
 定理 WithSeminorms.isVonNBounded_iff_seminorm_bounded
-  条件: {s : Set E} (hp : WithSeminorms p)
+  条件: {s : 集合 E} (hp : WithSeminorms p)
   证明: by
   rw [hp.isVonNBounded_iff_finset_seminorm_bounded]
   constructor
@@ -1651,7 +1651,7 @@ theorem WithSeminorms.image_isVonNBounded_iff_seminorm_bounded
 
 中文:
 定理 WithSeminorms.image_isVonNBounded_iff_seminorm_bounded
-  结论: (f : G -> E) {s : Set G}
+  结论: (f : G -> E) {s : 集合 G}
   证明: by
   simp_rw [hp.isVonNBounded_iff_seminorm_bounded, Set.forall_mem_image]
 
@@ -1681,7 +1681,7 @@ theorem WithSeminorms.isVonNBounded_iff_seminorm_bddAbove
 
 中文:
 定理 WithSeminorms.isVonNBounded_iff_seminorm_bddAbove
-  条件: {s : Set E} (hp : WithSeminorms p)
+  条件: {s : 集合 E} (hp : WithSeminorms p)
   证明: by
   simp_rw [hp.isVonNBounded_iff_seminorm_bounded, bddAbove_def, forall_mem_image]
   congrm forall i, ?_
@@ -1722,7 +1722,7 @@ theorem withSeminorms_iff_mem_nhds_isVonNBounded
 
 中文:
 定理 withSeminorms_iff_mem_nhds_isVonNBounded
-  结论: [IsTopologicalAddGroup E]
+  结论: [是拓扑加群 E]
   证明: by
   /- The nontrivial direction is from right to left. With `SeminormFamily.withSeminorms_of_nhds`,
   we need to see that the neighborhoods of zero for the initial topology and for `p` coincide. -/
@@ -1814,7 +1814,7 @@ theorem continuous_of_continuous_comp
 
 中文:
 定理 continuous_of_continuous_comp
-  结论: {q : SeminormFamily 𝕝₂ F ι'} [TopologicalSpace E]
+  结论: {q : SeminormFamily 𝕝₂ F ι'} [拓扑空间 E]
   证明: by
   have : IsTopologicalAddGroup F := hq.topologicalAddGroup
   refine continuous_of_continuousAt_zero f ?_
@@ -1853,7 +1853,7 @@ alias _root_.Seminorm.continuous_iff_continuous_comp := continuous_iff_continuou
 
 中文:
 定理 continuous_iff_continuous_comp
-  结论: {q : SeminormFamily 𝕝₂ F ι'} [TopologicalSpace E]
+  结论: {q : SeminormFamily 𝕝₂ F ι'} [拓扑空间 E]
   证明: ⟨fun h i => (hq.continuous_seminorm i).comp h, continuous_of_continuous_comp hq f⟩
 
 @[deprecated (since := "2026-03-09")]
@@ -1925,7 +1925,7 @@ theorem continuous_normedSpace_rng
 
 中文:
 定理 continuous_normedSpace_rng
-  结论: (F) [SeminormedAddCommGroup F] [NormedSpace 𝕝₂ F]
+  结论: (F) [SeminormedAddComm群 F] [赋范空间 𝕝₂ F]
   证明: by
   rw [← Seminorm.isBounded_const (Fin 1)] at hf
   exact continuous_of_isBounded hp (norm_withSeminorms 𝕝₂ F) f hf
@@ -1948,8 +1948,8 @@ lemma _root_.Seminorm.abs_le_of_le
   proof: abs_le.2 ⟨neg_le.1 (by simpa using hfp (-x)), hfp x⟩
 
 中文:
-引理 _root_.Seminorm.abs_le_of_le
-  结论: [Module 实数 E] {p : Seminorm 实数 E}
+引理 _root_.半范数.abs_le_of_le
+  结论: [模 实数 E] {p : 半范数 实数 E}
   证明: abs_le.2 ⟨neg_le.1 (by simpa using hfp (-x)), hfp x⟩
 
 Depends on / 依赖: abs_le, neg_le
@@ -1974,7 +1974,7 @@ alias _root_.Seminorm.cont_withSeminorms_normedSpace := continuous_normedSpace_r
 
 中文:
 定理 continuous_real_rng
-  结论: [Module 实数 E] [TopologicalSpace E] {p : ι -> Seminorm 实数 E}
+  结论: [模 实数 E] [拓扑空间 E] {p : ι -> 半范数 实数 E}
   证明: by
   obtain ⟨s, C, hC⟩ := hf
   exact continuous_normedSpace_rng Real hp f ⟨s, C, abs_le_of_le hC⟩
@@ -2009,7 +2009,7 @@ alias _root_.Seminorm.cont_normedSpace_to_withSeminorms := continuous_normedSpac
 
 中文:
 定理 continuous_normedSpace_dom
-  结论: (E) [SeminormedAddCommGroup E] [NormedSpace 𝕝 E]
+  结论: (E) [SeminormedAddComm群 E] [赋范空间 𝕝 E]
   证明: by
   rw [← Seminorm.const_isBounded (Fin 1)] at hf
   exact continuous_of_isBounded (norm_withSeminorms 𝕝 E) hq f hf
@@ -2098,7 +2098,7 @@ theorem uniformEquicontinuous_iff_exists_continuous_seminorm
   proof: (hq.equicontinuous_TFAE f).out 2 3
 
 中文:
-定理 uniformEquicontinuous_iff_exists_continuous_seminorm
+定理 uniformEquicontinuous_iff_存在_continuous_seminorm
   结论: {κ : 类型}
   证明: (hq.equicontinuous_TFAE f).out 2 3
 
@@ -2203,7 +2203,7 @@ theorem finset_sups
 
 中文:
 定理 finset_sups
-  结论: {p : SeminormFamily 𝕜 E ι} [TopologicalSpace E]
+  结论: {p : SeminormFamily 𝕜 E ι} [拓扑空间 E]
   证明: by
   refine hp.congr ?_ ?_
   · intro s
@@ -2246,7 +2246,7 @@ theorem partial_sups
 
 中文:
 定理 partial_sups
-  结论: [Preorder ι] [LocallyFiniteOrderBot ι] {p : SeminormFamily 𝕜 E ι}
+  结论: [预序 ι] [LocallyFiniteOrderBot ι] {p : SeminormFamily 𝕜 E ι}
   证明: by
   refine hp.congr ?_ ?_
   · intro i
@@ -2284,7 +2284,7 @@ theorem congr_equiv
 
 中文:
 定理 congr_equiv
-  结论: {p : SeminormFamily 𝕜 E ι} [t : TopologicalSpace E]
+  结论: {p : SeminormFamily 𝕜 E ι} [t : 拓扑空间 E]
   证明: by
   refine hp.congr ?_ ?_ <;>
   intro i <;>
@@ -2323,7 +2323,7 @@ lemma map_eq_zero_of_norm_eq_zero
 
 中文:
 引理 map_eq_zero_of_norm_eq_zero
-  结论: (q : Seminorm 𝕜 F)
+  结论: (q : 半范数 𝕜 F)
   证明: (map_zero q) ▸
     ((specializes_iff_mem_closure.mpr <| mem_closure_zero_iff_norm.mpr hx).map hq).eq.symm
 
@@ -2350,7 +2350,7 @@ lemma bound_of_continuous_normedSpace
 
 中文:
 引理 bound_of_continuous_normedSpace
-  结论: (q : Seminorm 𝕜 F)
+  结论: (q : 半范数 𝕜 F)
   证明: by
   have hq' : Tendsto q (𝓝 0) (𝓝 0) := map_zero q ▸ hq.tendsto 0
   rcases NormedAddGroup.nhds_zero_basis_norm_lt.mem_iff.mp (hq' <| Iio_mem_nhds one_pos)
@@ -2391,7 +2391,7 @@ lemma bound_of_continuous
 
 中文:
 引理 bound_of_continuous
-  结论: [t : TopologicalSpace E] (hp : WithSeminorms p)
+  结论: [t : 拓扑空间 E] (hp : WithSeminorms p)
   证明: by
   -- The continuity of `q` gives us a finset `s` and a real `ε > 0`
   -- such that `hε : (s.sup p).ball 0 ε ⊆ q.ball 0 1`.
@@ -2496,8 +2496,8 @@ theorem NormedSpace.toLocallyConvexSpace'
   proof: (norm_withSeminorms 𝕜 E).toLocallyConvexSpace
 
 中文:
-定理 NormedSpace.toLocallyConvexSpace'
-  条件: [NormedSpace 𝕜 E] [Module 实数 E] [IsScalarTower 实数 𝕜 E]
+定理 赋范空间.toLocallyConvexSpace'
+  条件: [赋范空间 𝕜 E] [模 实数 E] [标量塔 实数 𝕜 E]
   证明: (norm_withSeminorms 𝕜 E).toLocallyConvexSpace
 
 Depends on / 依赖: norm_withSeminorms, toLocallyConvexSpace
@@ -2515,8 +2515,8 @@ instance NormedSpace.toLocallyConvexSpace
   body: NormedSpace.toLocallyConvexSpace' Real
 
 中文:
-实例 NormedSpace.toLocallyConvexSpace
-  签名: [NormedSpace 实数 E]
+实例 赋范空间.toLocallyConvexSpace
+  签名: [赋范空间 实数 E]
   定义体: NormedSpace.toLocallyConvexSpace' Real
 
 Depends on / 依赖: NormedSpace, NormedSpace.toLocallyConvexSpace, toLocallyConvexSpace
@@ -2577,7 +2577,7 @@ theorem SeminormFamily.comp_smul_nnreal
 
 中文:
 定理 SeminormFamily.comp_smul_nnreal
-  结论: (q : SeminormFamily 𝕜₂ F ι) (c : NN实数)
+  结论: (q : SeminormFamily 𝕜₂ F ι) (c : 非负实数)
   证明: by
   ext
   simp [SeminormFamily.comp_apply, Seminorm.comp_apply]
@@ -2603,7 +2603,7 @@ theorem SeminormFamily.finset_sup_comp
 
 中文:
 定理 SeminormFamily.finset_sup_comp
-  结论: (q : SeminormFamily 𝕜₂ F ι) (s : Finset ι)
+  结论: (q : SeminormFamily 𝕜₂ F ι) (s : 有限集 ι)
   证明: by
   ext x
   rw [Seminorm.comp_apply]; rw [Seminorm.finset_sup_apply]; rw [Seminorm.finset_sup_apply]
@@ -2632,7 +2632,7 @@ theorem LinearMap.withSeminorms_induced
   rw [(q.comp f).withSeminorms_iff_nhds_eq_iInf]; rw [nhds_induced]; rw [map_zero]; rw [q.withSeminorms_iff_nhds_eq_iInf.mp hq]; rw [Filter.co
 
 中文:
-定理 LinearMap.withSeminorms_induced
+定理 线性映射.withSeminorms_induced
   结论: {q : SeminormFamily 𝕜₂ F ι}
   证明: by
   have := hq.topologicalAddGroup
@@ -2663,8 +2663,8 @@ theorem PolynormableSpace.induced
 .toPolynormableSpace exact f.withSeminorms_induced (PolynormableSpace.withSeminorms 𝕜₂ F)
 
 中文:
-定理 PolynormableSpace.induced
-  条件: [PolynormableSpace 𝕜₂ F] (f : E ->ₛₗ[σ₁₂] F)
+定理 Polynormable空间.induced
+  条件: [Polynormable空间 𝕜₂ F] (f : E ->ₛₗ[σ₁₂] F)
   证明: by
   let _ : TopologicalSpace E := induced f inferInstance
 .toPolynormableSpace exact f.withSeminorms_induced (PolynormableSpace.withSeminorms 𝕜₂ F)
@@ -2685,7 +2685,7 @@ lemma Topology.IsInducing.withSeminorms
   exact f.withSeminorms_induced hq
 
 中文:
-引理 Topology.IsInducing.withSeminorms
+引理 拓扑.是Inducing.withSeminorms
   结论: {q : SeminormFamily 𝕜₂ F ι}
   证明: by
   rw [hf.eq_induced]
@@ -2708,8 +2708,8 @@ theorem Topology.IsInducing.polynormableSpace
   proof: .toPolynormableSpace hf.withSeminorms (PolynormableSpace.withSeminorms 𝕜₂ F)
 
 中文:
-定理 Topology.IsInducing.polynormableSpace
-  结论: [PolynormableSpace 𝕜₂ F]
+定理 拓扑.是Inducing.polynormableSpace
+  结论: [Polynormable空间 𝕜₂ F]
   证明: .toPolynormableSpace hf.withSeminorms (PolynormableSpace.withSeminorms 𝕜₂ F)
 
 Depends on / 依赖: PolynormableSpace, PolynormableSpace.withSeminorms, hf.withSeminorms, toPolynormableSpace, withSeminorms
@@ -2728,7 +2728,7 @@ instance [PolynormableSpace
   body: IsInducing.polynormableSpace (f := S.subtype) .subtypeVal
 
 中文:
-实例 [PolynormableSpace
+实例 [Polynormable空间
   签名: 𝕜₂ F] {S
   定义体: IsInducing.polynormableSpace (f := S.subtype) .subtypeVal
 
@@ -2755,8 +2755,8 @@ theorem Seminorm.bound_comp_of_isInducing
   exact ⟨s, C, hC, hqC⟩
 
 中文:
-定理 Seminorm.bound_comp_of_isInducing
-  结论: {p : Seminorm 𝕜 E} (hp : Continuous p)
+定理 半范数.bound_comp_of_isInducing
+  结论: {p : 半范数 𝕜 E} (hp : 连续 p)
   证明: by
   obtain ⟨s, C, hC, hqC⟩ := Seminorm.bound_of_continuous (hf.withSeminorms hq) p hp
   rw [← SeminormFamily.finset_sup_comp]; rw [← Seminorm.smul_comp] at hqC
@@ -2784,8 +2784,8 @@ theorem Seminorm.exists_le_comp_of_isInducing
   exact ⟨_, Continuous.const_smul (continuous_finsetSup fun i _ => i.2) C, hqC⟩
 
 中文:
-定理 Seminorm.exists_le_comp_of_isInducing
-  结论: {p : Seminorm 𝕜 E} (hp : Continuous p)
+定理 半范数.存在_le_comp_of_isInducing
+  结论: {p : 半范数 𝕜 E} (hp : 连续 p)
   证明: by
   obtain ⟨s, C, -, hqC⟩ := Seminorm.bound_comp_of_isInducing hp
     (PolynormableSpace.withSeminorms 𝕜₂ F) hf
@@ -2864,8 +2864,8 @@ theorem PolynormableSpace.iInf
 .toPolynormableSpace exact withSeminorms_iInf (fun i => (ht i).withSeminorms')
 
 中文:
-定理 PolynormableSpace.iInf
-  结论: {t : ι -> TopologicalSpace E}
+定理 Polynormable空间.iInf
+  结论: {t : ι -> 拓扑空间 E}
   证明: by
   let _ : TopologicalSpace E := ⨅ i, t i
 .toPolynormableSpace exact withSeminorms_iInf (fun i => (ht i).withSeminorms')
@@ -2887,8 +2887,8 @@ theorem PolynormableSpace.sInf
   exact .iInf fun t => hts t.1 t.2
 
 中文:
-定理 PolynormableSpace.sInf
-  结论: {ts : Set (TopologicalSpace E)}
+定理 Polynormable空间.sInf
+  结论: {ts : 集合 (拓扑空间 E)}
   证明: by
   rw [sInf_eq_iInf']
   exact .iInf fun t => hts t.1 t.2
@@ -2910,8 +2910,8 @@ theorem PolynormableSpace.inf
   exact .sInf (by simp [ht₁, ht₂])
 
 中文:
-定理 PolynormableSpace.inf
-  结论: {t₁ t₂ : TopologicalSpace E}
+定理 Polynormable空间.下确界
+  结论: {t₁ t₂ : 拓扑空间 E}
   证明: by
   rw [← sInf_pair]
   exact .sInf (by simp [ht₁, ht₂])

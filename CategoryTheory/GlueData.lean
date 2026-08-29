@@ -54,16 +54,16 @@ structure GlueData
     - cocycle : forall i j k, t' i j k ≫ t' j k i ≫ t' k i j = 𝟙 _
 
 中文:
-结构 GlueData
+结构 粘合数据
   参数: where
   公理与运算 (12 个):
     - J : 类型v
     - U : J -> C
     - V : J × J -> C
     - f : 对任意 i j, V (i, j) ⟶ U i
-    - f_mono : 对任意 i j, Mono (f i j)  [默认: by infer_instance]
+    - f_mono : 对任意 i j, 单态射 (f i j)  [默认: by infer_instance]
     - f_hasPullback : 对任意 i j k, HasPullback (f i j) (f i k)  [默认: by infer_instance]
-    - f_id : 对任意 i, IsIso (f i i)  [默认: by infer_instance]
+    - f_id : 对任意 i, 是同构 (f i i)  [默认: by infer_instance]
     - t : 对任意 i j, V (i, j) ⟶ V (j, i)
     - t_id : 对任意 i, t i i = 𝟙 _
     - t' : 对任意 i j k, pullback (f i j) (f i k) ⟶ pullback (f j k) (f j i)
@@ -354,7 +354,7 @@ definition diagram
 
 中文:
 定义 diagram
-  签名: : MultispanIndex (.prod D.J) C where
+  签名: : MultispanIndex (.乘积 D.J) C where
   定义体: D.V
   right := D.U
   fst := fun ⟨i, j⟩ => D.f i j
@@ -567,7 +567,7 @@ instance π_epi
 
 中文:
 实例 π_epi
-  签名: : Epi D.π
+  签名: : 满态射 D.π
   定义体: inferInstanceAs Epi (Multicoequalizer.sigmaπ D.diagram)
 
 Depends on / 依赖: D.diagram, Multicoequalizer, Multicoequalizer.sigma, diagram
@@ -587,8 +587,8 @@ theorem types_π_surjective
 
 中文:
 定理 types_π_surjective
-  条件: (D : GlueData 类型)
-  结论: Function.Surjective D.π
+  条件: (D : 粘合数据 类型)
+  结论: 函数.满射 D.π
   证明: (epi_iff_surjective _).mp inferInstance
 
 Depends on / 依赖: epi_iff_surjective
@@ -613,7 +613,7 @@ theorem types_ι_jointly_surjective
 
 中文:
 定理 types_ι_jointly_surjective
-  条件: (D : GlueData (类型v)) (x : D.glued)
+  条件: (D : 粘合数据 (类型v)) (x : D.glued)
   证明: by
   delta CategoryTheory.GlueData.ι
   simp_rw [← Multicoequalizer.ι_sigmaπ D.diagram]
@@ -667,7 +667,7 @@ definition mapGlueData
 
 中文:
 定义 mapGlueData
-  签名: : GlueData C' where
+  签名: : 粘合数据 C' where
   定义体: D.J
   U i := F.obj (D.U i)
   V i := F.obj (D.V i)
@@ -883,7 +883,7 @@ theorem hasColimit_multispan_comp
 
 中文:
 定理 hasColimit_multispan_comp
-  结论: HasColimit (D.diagram.multispan ⋙ F)
+  结论: 有余极限 (D.diagram.multispan ⋙ F)
   证明: ⟨⟨⟨_, isColimitOfPreserves _ (colimit.isColimit _)⟩⟩⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitOfPreserves
@@ -1005,7 +1005,7 @@ definition vPullbackConeIsLimitOfMap
 
 中文:
 定义 vPullbackConeIsLimitOfMap
-  签名: (i j : D.J) [ReflectsLimit (cospan (D.ι i) (D.ι j)) F]
+  签名: (i j : D.J) [反映极限 (cospan (D.ι i) (D.ι j)) F]
   定义体: by
   apply isLimitOfReflects F
   apply (isLimitMapConePullbackConeEquiv _ _).symm _
@@ -1052,7 +1052,7 @@ theorem ι_jointly_surjective
 
 中文:
 定理 ι_jointly_surjective
-  结论: (F : C ⥤ 类型v) [PreservesColimit D.diagram.multispan F]
+  结论: (F : C ⥤ 类型v) [保持余极限 D.diagram.multispan F]
   证明: by
   let e := D.gluedIso F
   obtain ⟨i, y, eq⟩ := (D.mapGlueData F).types_ι_jointly_surjective (e.hom x)
@@ -1097,14 +1097,14 @@ structure GlueData'
     - cocycle : forall i j k hij hik hjk, t' i j k hij hik hjk ≫ t' j k i hjk hij.symm hik.symm ≫ t' k i j hik.symm hjk.symm hij = 𝟙 _
 
 中文:
-结构 GlueData'
+结构 粘合数据'
   参数: where
   公理与运算 (11 个):
     - J : 类型v
     - U : J -> C
     - V : 对任意 (i j : J), i != j -> C
     - f : 对任意 i j h, V i j h ⟶ U i
-    - f_mono : 对任意 i j h, Mono (f i j h)  [默认: by infer_instance]
+    - f_mono : 对任意 i j h, 单态射 (f i j h)  [默认: by infer_instance]
     - f_hasPullback : 对任意 i j k hij hik, HasPullback (f i j hij) (f i k hik)  [默认: by infer_instance]
     - t : 对任意 i j h, V i j h ⟶ V j i h.symm
     - t' : 对任意 i j k hij hik hjk, pullback (f i j hij) (f i k hik) ⟶ pullback (f j k hjk) (f j i hij.symm)
@@ -1152,8 +1152,8 @@ abbreviation GlueData'.f'
   body: if h : i = j then eqToHom (dif_pos h) else eqToHom (dif_neg h) ≫ D.f i j h
 
 中文:
-缩写 GlueData'.f'
-  签名: (D : GlueData' C) (i j : D.J)
+缩写 粘合数据'.f'
+  签名: (D : 粘合数据' C) (i j : D.J)
   定义体: if h : i = j then eqToHom (dif_pos h) else eqToHom (dif_neg h) ≫ D.f i j h
 -/
 abbrev GlueData'.f' (D : GlueData' C) (i j : D.J) :
@@ -1197,8 +1197,8 @@ definition GlueData'.t''
     pull
 
 中文:
-定义 GlueData'.t''
-  签名: (D : GlueData' C) (i j k : D.J)
+定义 粘合数据'.t''
+  签名: (D : 粘合数据' C) (i j k : D.J)
   定义体: if hij : i = j then
     (pullbackSymmetry _ _).hom ≫
       pullback.map _ _ _ _ (eqToHom (by aesop)) (eqToHom (by aesop)) (eqToHom (by aesop))
@@ -1252,8 +1252,8 @@ definition GlueData.ofGlueData'
   t
 
 中文:
-定义 GlueData.ofGlueData'
-  签名: (D : GlueData' C)
+定义 粘合数据.ofGlueData'
+  签名: (D : 粘合数据' C)
   定义体: D.J
   U := D.U
   V ij := if h : ij.1 = ij.2 then D.U ij.1 else D.V ij.1 ij.2 h

@@ -121,9 +121,9 @@ structure NonUnitalSubalgebra
   (no additional axioms)
 
 中文:
-结构 NonUnitalSubalgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R]
-  继承: NonUnitalSubsemiring A, Submodule R A
+结构 NonUnital子代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R]
+  继承: NonUnital子半环 A, 子模 R A
   (无附加公理)
 -/
 structure NonUnitalSubalgebra (R : Type u) (A : Type v) [CommSemiring R]
@@ -170,7 +170,7 @@ lemma toNonUnitalSubsemiring_inj
 
 中文:
 引理 toNonUnitalSubsemiring_inj
-  条件: {s t : NonUnitalSubalgebra R A}
+  条件: {s t : NonUnital子代数 R A}
   证明: toNonUnitalSubsemiring_injective.eq_iff
 -/
 @[simp] lemma toNonUnitalSubsemiring_inj {s t : NonUnitalSubalgebra R A} :
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (NonUnitalSubalgebra R A) A
+  签名: 集合状 (NonUnital子代数 R A) A
   定义体: s.carrier
   coe_injective := SetLike.coe_injective.comp toNonUnitalSubsemiring_injective
 
@@ -208,7 +208,7 @@ lemma toSubmodule_injective
 
 中文:
 引理 toSubmodule_injective
-  结论: (toSubmodule : NonUnitalSubalgebra R A -> Submodule R A).Injective
+  结论: (toSubmodule : NonUnital子代数 R A -> 子模 R A).单射
   证明: fun _ _ h => SetLike.ext (SetLike.ext_iff.mp h :)
 
 Depends on / 依赖: SetLike, SetLike.ext, SetLike.ext_iff.mp, ext_iff
@@ -227,7 +227,7 @@ lemma toSubmodule_inj
 
 中文:
 引理 toSubmodule_inj
-  条件: {s t : NonUnitalSubalgebra R A}
+  条件: {s t : NonUnital子代数 R A}
   结论: s.toSubmodule = t.toSubmodule ↔ s = t
   证明: toSubmodule_injective.eq_iff
 
@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonUnitalSubalgebra R A)
+  签名: 偏序 (NonUnital子代数 R A)
   定义体: .ofSetLike (NonUnitalSubalgebra R A) A
 
 Depends on / 依赖: NonUnitalSubalgebra, ofSetLike
@@ -270,7 +270,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R A : 类型} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: {S R A : 类型} [交换半环 R] [非幺非结合半环 A] [模 R A]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -332,7 +332,7 @@ instance instSMulMemClass
 
 中文:
 实例 instSMulMemClass
-  签名: : SMulMemClass (NonUnitalSubalgebra R A) R A where
+  签名: : SMulMem类 (NonUnital子代数 R A) R A where
   定义体: s.smul_mem'
 
 Depends on / 依赖: s.smul_mem, smul_mem
@@ -353,7 +353,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : NonUnitalSubalgebra R A} {x : A}
+  条件: {s : NonUnital子代数 R A} {x : A}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -378,7 +378,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : NonUnitalSubalgebra R A} (h : 对任意 x : A, x in S ↔ x in T)
+  条件: {S T : NonUnital子代数 R A} (h : 对任意 x : A, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -402,7 +402,7 @@ theorem mem_toNonUnitalSubsemiring
 
 中文:
 定理 mem_toNonUnitalSubsemiring
-  条件: {S : NonUnitalSubalgebra R A} {x}
+  条件: {S : NonUnital子代数 R A} {x}
   证明: Iff.rfl
 
 @[simp]
@@ -424,7 +424,7 @@ theorem coe_toNonUnitalSubsemiring
 
 中文:
 定理 coe_toNonUnitalSubsemiring
-  条件: (S : NonUnitalSubalgebra R A)
+  条件: (S : NonUnital子代数 R A)
   证明: rfl
 -/
 theorem coe_toNonUnitalSubsemiring (S : NonUnitalSubalgebra R A) :
@@ -444,7 +444,7 @@ theorem mem_toSubmodule
 
 中文:
 定理 mem_toSubmodule
-  条件: (S : NonUnitalSubalgebra R A) {x}
+  条件: (S : NonUnital子代数 R A) {x}
   结论: x in S.toSubmodule ↔ x in S
   证明: Iff.rfl
 
@@ -467,8 +467,8 @@ theorem coe_toSubmodule
 
 中文:
 定理 coe_toSubmodule
-  条件: (S : NonUnitalSubalgebra R A)
-  结论: (↑S.toSubmodule : Set A) = S
+  条件: (S : NonUnital子代数 R A)
+  结论: (↑S.toSubmodule : 集合 A) = S
   证明: rfl
 -/
 theorem coe_toSubmodule (S : NonUnitalSubalgebra R A) : (↑S.toSubmodule : Set A) = S :=
@@ -487,7 +487,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  签名: (S : NonUnital子代数 R A) (s : 集合 A) (hs : s = ↑S)
   定义体: { S.toNonUnitalSubsemiring.copy s hs with
     smul_mem' r a := by simpa [hs] using! S.smul_mem r }
 
@@ -509,7 +509,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : NonUnital子代数 R A) (s : 集合 A) (hs : s = ↑S)
   证明: rfl
 -/
 theorem coe_copy (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S) :
@@ -527,7 +527,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : NonUnitalSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : NonUnital子代数 R A) (s : 集合 A) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -557,7 +557,7 @@ instance instNonUnitalSubringClass
 
 中文:
 实例 instNonUnitalSubringClass
-  签名: : NonUnitalSubringClass (NonUnitalSubalgebra R A) A
+  签名: : NonUnital子环类 (NonUnital子代数 R A) A
   定义体: { NonUnitalSubalgebra.instNonUnitalSubsemiringClass with
     neg_mem {_ x} hx := neg_one_smul R x ▸ SMulMemClass.smul_mem _ hx }
 
@@ -580,7 +580,7 @@ definition toNonUnitalSubring
 
 中文:
 定义 toNonUnitalSubring
-  签名: (S : NonUnitalSubalgebra R A)
+  签名: (S : NonUnital子代数 R A)
   定义体: S.toNonUnitalSubsemiring
   neg_mem' := neg_mem (s := S)
 
@@ -602,7 +602,7 @@ theorem mem_toNonUnitalSubring
 
 中文:
 定理 mem_toNonUnitalSubring
-  条件: {S : NonUnitalSubalgebra R A} {x}
+  条件: {S : NonUnital子代数 R A} {x}
   证明: Iff.rfl
 
 @[simp]
@@ -624,7 +624,7 @@ theorem coe_toNonUnitalSubring
 
 中文:
 定理 coe_toNonUnitalSubring
-  条件: (S : NonUnitalSubalgebra R A)
+  条件: (S : NonUnital子代数 R A)
   证明: rfl
 -/
 theorem coe_toNonUnitalSubring (S : NonUnitalSubalgebra R A) :
@@ -658,7 +658,7 @@ theorem toNonUnitalSubring_inj
 
 中文:
 定理 toNonUnitalSubring_inj
-  条件: {S U : NonUnitalSubalgebra R A}
+  条件: {S U : NonUnital子代数 R A}
   证明: toNonUnitalSubring_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalSubring_injective, toNonUnitalSubring_injective.eq_iff
@@ -683,7 +683,7 @@ instance toNonUnitalNonAssocSemiring
 
 中文:
 实例 toNonUnitalNonAssocSemiring
-  签名: [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺非结合半环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalNonAssocSemiring [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
@@ -700,7 +700,7 @@ instance toNonUnitalSemiring
 
 中文:
 实例 toNonUnitalSemiring
-  签名: [CommSemiring R] [NonUnitalSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺半环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalSemiring [CommSemiring R] [NonUnitalSemiring A] [Module R A]
@@ -717,7 +717,7 @@ instance toNonUnitalCommSemiring
 
 中文:
 实例 toNonUnitalCommSemiring
-  签名: [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺交换半环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalCommSemiring [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
@@ -734,7 +734,7 @@ instance toNonUnitalNonAssocRing
 
 中文:
 实例 toNonUnitalNonAssocRing
-  签名: [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
+  签名: [交换环 R] [非幺非结合环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalNonAssocRing [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
@@ -751,7 +751,7 @@ instance toNonUnitalRing
 
 中文:
 实例 toNonUnitalRing
-  签名: [CommRing R] [NonUnitalRing A] [Module R A]
+  签名: [交换环 R] [非幺环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalRing [CommRing R] [NonUnitalRing A] [Module R A]
@@ -768,7 +768,7 @@ instance toNonUnitalCommRing
 
 中文:
 实例 toNonUnitalCommRing
-  签名: [CommRing R] [NonUnitalCommRing A] [Module R A]
+  签名: [交换环 R] [非幺交换环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalCommRing [CommRing R] [NonUnitalCommRing A] [Module R A]
@@ -789,7 +789,7 @@ inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
 
 中文:
 定义 toSubmodule'
-  签名: [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺非结合半环 A] [模 R A]
   定义体: { toFun := fun S => S.toSubmodule
 inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
   map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
@@ -815,7 +815,7 @@ inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
 
 中文:
 定义 toNonUnitalSubsemiring'
-  签名: [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A]
+  签名: [交换半环 R] [非幺非结合半环 A] [模 R A]
   定义体: { toFun := fun S => S.toNonUnitalSubsemiring
 inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
   map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
@@ -841,7 +841,7 @@ inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
 
 中文:
 定义 toNonUnitalSubring'
-  签名: [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
+  签名: [交换环 R] [非幺非结合环 A] [模 R A]
   定义体: { toFun := fun S => S.toNonUnitalSubring
 inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
   map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
@@ -873,7 +873,7 @@ instance instModule'
 
 中文:
 实例 instModule'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: SMulMemClass.toModule' _ R' R A S
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.toModule, toModule
@@ -891,7 +891,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module R S
+  签名: : 模 R S
   定义体: S.instModule'
 
 Depends on / 依赖: S.instModule, instModule
@@ -909,7 +909,7 @@ instance instIsScalarTower'
 
 中文:
 实例 instIsScalarTower'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: S.toSubmodule.isScalarTower
 
 Depends on / 依赖: S.toSubmodule.isScalarTower, isScalarTower, toSubmodule
@@ -927,8 +927,8 @@ instance [IsScalarTower
   body: Subtype.ext smul_assoc r (x : A) (y : A)
 
 中文:
-实例 [IsScalarTower
-  签名: R A A] : IsScalarTower R S S where
+实例 [标量塔
+  签名: R A A] : 标量塔 R S S where
   定义体: Subtype.ext smul_assoc r (x : A) (y : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -946,7 +946,7 @@ instance instSMulCommClass'
 
 中文:
 实例 instSMulCommClass'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: Subtype.ext smul_comm r' r (s : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -965,7 +965,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass R A A]
+  签名: [标量交换类 R A A]
   定义体: Subtype.ext smul_comm r (x : A) (y : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -983,7 +983,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [Module.IsTorsionFree R A]
+  签名: [模.是无挠 R A]
   定义体: S.toSubmodule.instIsTorsionFree
 
 Depends on / 依赖: S.toSubmodule.instIsTorsionFree, instIsTorsionFree, toSubmodule
@@ -1055,7 +1055,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 -/
 protected theorem coe_neg {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -1074,7 +1074,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 
 @[simp, norm_cast]
@@ -1094,7 +1094,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul R' R] [SMul R' A] [IsScalarTower R' R A] (r : R') (x : S)
+  条件: [标量乘法 R' R] [标量乘法 R' A] [标量塔 R' R A] (r : R') (x : S)
   证明: rfl
 -/
 theorem coe_smul [SMul R' R] [SMul R' A] [IsScalarTower R' R A] (r : R') (x : S) :
@@ -1154,7 +1154,7 @@ theorem toSubring_subtype
 
 中文:
 定理 toSubring_subtype
-  结论: {R A : 类型} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R A : 类型} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 -/
 theorem toSubring_subtype {R A : Type*} [CommRing R] [Ring A] [Algebra R A]
@@ -1172,7 +1172,7 @@ definition toSubmoduleEquiv
 
 中文:
 定义 toSubmoduleEquiv
-  签名: (S : NonUnitalSubalgebra R A)
+  签名: (S : NonUnital子代数 R A)
   定义体: LinearEquiv.ofEq _ _ rfl
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq
@@ -1197,7 +1197,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : F) (S : NonUnitalSubalgebra R A)
+  签名: (f : F) (S : NonUnital子代数 R A)
   定义体: { S.toNonUnitalSubsemiring.map (f : A ->ₙ+* B) with
     smul_mem' := fun r b hb => by
       rcases hb with ⟨a, ha, rfl⟩
@@ -1224,7 +1224,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {S₁ S₂ : NonUnitalSubalgebra R A} {f : F}
+  条件: {S₁ S₂ : NonUnital子代数 R A} {f : F}
   证明: Set.image_mono
 
 Depends on / 依赖: Set.image_mono, image_mono
@@ -1246,7 +1246,7 @@ ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
 中文:
 定理 map_injective
-  条件: {f : F} (hf : Function.Injective f)
+  条件: {f : F} (hf : 函数.单射 f)
   证明: fun _S₁ _S₂ ih =>
 ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
@@ -1271,8 +1271,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : NonUnitalSubalgebra R A)
-  结论: map (NonUnitalAlgHom.id R A) S = S
+  条件: (S : NonUnital子代数 R A)
+  结论: map (非幺Alg态射.id R A) S = S
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -1292,7 +1292,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (S : NonUnitalSubalgebra R A) (g : B ->ₙₐ[R] C) (f : A ->ₙₐ[R] B)
+  条件: (S : NonUnital子代数 R A) (g : B ->ₙₐ[R] C) (f : A ->ₙₐ[R] B)
   证明: SetLike.coe_injective Set.image_image _ _ _
 
 @[simp]
@@ -1315,7 +1315,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {S : NonUnitalSubalgebra R A} {f : F} {y : B}
+  条件: {S : NonUnital子代数 R A} {f : F} {y : B}
   结论: y in map f S ↔ 存在 x in S, f x = y
   证明: NonUnitalSubsemiring.mem_map
 
@@ -1334,7 +1334,7 @@ theorem map_toSubmodule
 
 中文:
 定理 map_toSubmodule
-  条件: {S : NonUnitalSubalgebra R A} {f : F}
+  条件: {S : NonUnital子代数 R A} {f : F}
   证明: SetLike.coe_injective rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -1356,7 +1356,7 @@ theorem map_toNonUnitalSubsemiring
 
 中文:
 定理 map_toNonUnitalSubsemiring
-  条件: {S : NonUnitalSubalgebra R A} {f : F}
+  条件: {S : NonUnital子代数 R A} {f : F}
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -1379,8 +1379,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (S : NonUnitalSubalgebra R A) (f : F)
-  结论: (map f S : Set B) = f '' S
+  条件: (S : NonUnital子代数 R A) (f : F)
+  结论: (map f S : 集合 B) = f '' S
   证明: rfl
 -/
 theorem coe_map (S : NonUnitalSubalgebra R A) (f : F) : (map f S : Set B) = f '' S :=
@@ -1398,7 +1398,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : F) (S : NonUnitalSubalgebra R B)
+  签名: (f : F) (S : NonUnital子代数 R B)
   定义体: { S.toNonUnitalSubsemiring.comap (f : A ->ₙ+* B) with
     smul_mem' := fun r a (ha : f a in S) =>
       show f (r • a) in S from (map_smulₛₗ f r a).symm ▸ SMulMemClass.smul_mem r ha }
@@ -1420,7 +1420,7 @@ theorem map_le
 
 中文:
 定理 map_le
-  条件: {S : NonUnitalSubalgebra R A} {f : F} {U : NonUnitalSubalgebra R B}
+  条件: {S : NonUnital子代数 R A} {f : F} {U : NonUnital子代数 R B}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -1466,7 +1466,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: (S : NonUnitalSubalgebra R B) (f : F) (x : A)
+  条件: (S : NonUnital子代数 R B) (f : F) (x : A)
   结论: x in comap f S ↔ f x in S
   证明: Iff.rfl
 
@@ -1489,8 +1489,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (S : NonUnitalSubalgebra R B) (f : F)
-  结论: (comap f S : Set A) = f ⁻¹' (S : Set B)
+  条件: (S : NonUnital子代数 R B) (f : F)
+  结论: (comap f S : 集合 A) = f ⁻¹' (S : 集合 B)
   证明: rfl
 -/
 theorem coe_comap (S : NonUnitalSubalgebra R B) (f : F) : (comap f S : Set A) = f ⁻¹' (S : Set B) :=
@@ -1506,7 +1506,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: {R A : 类型} [CommSemiring R] [NonUnitalSemiring A] [NoZeroDivisors A]
+  签名: {R A : 类型} [交换半环 R] [非幺半环 A] [无零因子 A]
   定义体: NonUnitalSubsemiringClass.noZeroDivisors S
 
 Depends on / 依赖: NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.noZeroDivisors, Subsingleton, noZeroDivisors
@@ -1534,7 +1534,7 @@ definition toNonUnitalSubalgebra
 
 中文:
 定义 toNonUnitalSubalgebra
-  签名: (p : Submodule R A) (h_mul : 对任意 x y, x in p -> y in p -> x * y in p)
+  签名: (p : 子模 R A) (h_mul : 对任意 x y, x in p -> y in p -> x * y in p)
   定义体: { p with
     mul_mem' := h_mul _ _ }
 
@@ -1560,7 +1560,7 @@ theorem mem_toNonUnitalSubalgebra
 
 中文:
 定理 mem_toNonUnitalSubalgebra
-  条件: {p : Submodule R A} {h_mul} {x}
+  条件: {p : 子模 R A} {h_mul} {x}
   证明: Iff.rfl
 
 @[simp]
@@ -1582,7 +1582,7 @@ theorem coe_toNonUnitalSubalgebra
 
 中文:
 定理 coe_toNonUnitalSubalgebra
-  条件: (p : Submodule R A) (h_mul)
+  条件: (p : 子模 R A) (h_mul)
   证明: rfl
 -/
 theorem coe_toNonUnitalSubalgebra (p : Submodule R A) (h_mul) :
@@ -1601,7 +1601,7 @@ theorem toNonUnitalSubalgebra_mk
 
 中文:
 定理 toNonUnitalSubalgebra_mk
-  条件: (p : Submodule R A) hmul
+  条件: (p : 子模 R A) hmul
   证明: rfl
 
 @[simp]
@@ -1624,7 +1624,7 @@ theorem toNonUnitalSubalgebra_toSubmodule
 
 中文:
 定理 toNonUnitalSubalgebra_toSubmodule
-  条件: (p : Submodule R A) (h_mul)
+  条件: (p : 子模 R A) (h_mul)
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -1645,8 +1645,8 @@ theorem _root_.NonUnitalSubalgebra.toSubmodule_toNonUnitalSubalgebra
   proof: SetLike.coe_injective rfl
 
 中文:
-定理 _root_.NonUnitalSubalgebra.toSubmodule_toNonUnitalSubalgebra
-  条件: (S : NonUnitalSubalgebra R A)
+定理 _root_.NonUnital子代数.toSubmodule_toNonUnitalSubalgebra
+  条件: (S : NonUnital子代数 R A)
   证明: SetLike.coe_injective rfl
 -/
 theorem _root_.NonUnitalSubalgebra.toSubmodule_toNonUnitalSubalgebra (S : NonUnitalSubalgebra R A) :
@@ -1804,7 +1804,7 @@ map_smul' := fun r a => Subtype.ext map_smul f r a }
 
 中文:
 定义 codRestrict
-  签名: (f : F) (S : NonUnitalSubalgebra R B) (hf : 对任意 x, f x in S)
+  签名: (f : F) (S : NonUnital子代数 R B) (hf : 对任意 x, f x in S)
   定义体: { NonUnitalRingHom.codRestrict (f : A ->ₙ+* B) S.toNonUnitalSubsemiring hf with
 map_smul' := fun r a => Subtype.ext map_smul f r a }
 
@@ -1829,7 +1829,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: (f : F) (S : NonUnitalSubalgebra R B) (hf : 对任意 x : A, f x in S)
+  条件: (f : F) (S : NonUnital子代数 R B) (hf : 对任意 x : A, f x in S)
   证明: rfl
 
 @[simp]
@@ -1849,7 +1849,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : F) (S : NonUnitalSubalgebra R B) (hf : 对任意 x, f x in S) (x : A)
+  条件: (f : F) (S : NonUnital子代数 R B) (hf : 对任意 x, f x in S) (x : A)
   证明: rfl
 -/
 theorem coe_codRestrict (f : F) (S : NonUnitalSubalgebra R B) (hf : forall x, f x in S) (x : A) :
@@ -1866,7 +1866,7 @@ theorem injective_codRestrict
 
 中文:
 定理 injective_codRestrict
-  条件: (f : F) (S : NonUnitalSubalgebra R B) (hf : 对任意 x : A, f x in S)
+  条件: (f : F) (S : NonUnital子代数 R B) (hf : 对任意 x : A, f x in S)
   证明: ⟨fun H _x _y hxy => H Subtype.ext hxy, fun H _x _y hxy => H (congr_arg Subtype.val hxy :)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, congr_arg
@@ -1955,7 +1955,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [Fintype A] [DecidableEq B] (φ : F)
+  签名: [有限类型 A] [DecidableEq B] (φ : F)
   定义体: Set.fintypeRange φ
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -1983,7 +1983,7 @@ lemma span_eq_toSubmodule
 
 中文:
 引理 span_eq_toSubmodule
-  条件: (s : NonUnitalSubalgebra R A)
+  条件: (s : NonUnital子代数 R A)
   证明: by
   simp [SetLike.ext'_iff, Submodule.coe_span_eq_self]
 
@@ -2014,7 +2014,7 @@ definition adjoin
 
 中文:
 定义 adjoin
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { Submodule.span R (NonUnitalSubsemiring.closure s : Set A) with
     mul_mem' :=
       fun {a b} (ha : a in Submodule.span R (NonUnitalSubsemiring.closure s : Set A))
@@ -2053,7 +2053,7 @@ theorem adjoin_toSubmodule
 
 中文:
 定理 adjoin_toSubmodule
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: rfl
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
@@ -2076,7 +2076,7 @@ theorem subset_adjoin
 
 中文:
 定理 subset_adjoin
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   结论: s subseteq adjoin R s
   证明: NonUnitalSubsemiring.subset_closure.trans Submodule.subset_span
 
@@ -2101,7 +2101,7 @@ theorem mem_adjoin_of_mem
 
 中文:
 定理 mem_adjoin_of_mem
-  条件: {s : Set A} {x : A} (hx : x in s)
+  条件: {s : 集合 A} {x : A} (hx : x in s)
   结论: x in adjoin R s
   证明: subset_adjoin R hx
 
@@ -2124,7 +2124,7 @@ theorem self_mem_adjoin_singleton
 中文:
 定理 self_mem_adjoin_singleton
   条件: (x : A)
-  结论: x in adjoin R ({x} : Set A)
+  结论: x in adjoin R ({x} : 集合 A)
   证明: NonUnitalAlgebra.subset_adjoin R (Set.mem_singleton x)
 
 Depends on / 依赖: NonUnitalAlgebra, NonUnitalAlgebra.subset_adjoin, Set.mem_singleton, mem_singleton, subset_adjoin
@@ -2148,7 +2148,7 @@ fun H => show Submodule.span R _ <= S.toSubmodule from Submodule.span_le.mpr
 
 中文:
 定理 gc
-  结论: GaloisConnection (adjoin R : Set A -> NonUnitalSubalgebra R A) (↑)
+  结论: GaloisConnection (adjoin R : 集合 A -> NonUnital子代数 R A) (↑)
   证明: fun s S =>
   ⟨fun H => (NonUnitalSubsemiring.subset_closure.trans Submodule.subset_span).trans H,
 fun H => show Submodule.span R _ <= S.toSubmodule from Submodule.span_le.mpr
@@ -2175,7 +2175,7 @@ le_l_u S := (NonUnitalAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (adjoin R : Set A -> NonUnitalSubalgebra R A) (↑) where
+  签名: : Galois嵌入 (adjoin R : 集合 A -> NonUnital子代数 R A) (↑) where
   定义体: (adjoin R s).copy s le_antisymm (NonUnitalAlgebra.gc.le_u_l s) hs
   gc := NonUnitalAlgebra.gc
 le_l_u S := (NonUnitalAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
@@ -2197,7 +2197,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (NonUnitalSubalgebra R A)
+  签名: 完备格 (NonUnital子代数 R A)
   定义体: GaloisInsertion.liftCompleteLattice NonUnitalAlgebra.gi
 
 Depends on / 依赖: GaloisInsertion, GaloisInsertion.liftCompleteLattice, NonUnitalAlgebra, NonUnitalAlgebra.gi, liftCompleteLattice
@@ -2218,7 +2218,7 @@ theorem adjoin_le
 
 中文:
 定理 adjoin_le
-  条件: {S : NonUnitalSubalgebra R A} {s : Set A} (hs : s subseteq S)
+  条件: {S : NonUnital子代数 R A} {s : 集合 A} (hs : s subseteq S)
   结论: adjoin R s <= S
   证明: NonUnitalAlgebra.gc.l_le hs
 
@@ -2243,7 +2243,7 @@ theorem adjoin_le_iff
 
 中文:
 定理 adjoin_le_iff
-  条件: {S : NonUnitalSubalgebra R A} {s : Set A}
+  条件: {S : NonUnital子代数 R A} {s : 集合 A}
   结论: adjoin R s <= S ↔ s subseteq S
   证明: NonUnitalAlgebra.gc _ _
 
@@ -2266,7 +2266,7 @@ theorem adjoin_mono
 
 中文:
 定理 adjoin_mono
-  条件: {s t : Set A} (H : s subseteq t)
+  条件: {s t : 集合 A} (H : s subseteq t)
   结论: adjoin R s <= adjoin R t
   证明: NonUnitalAlgebra.gc.monotone_l H
 
@@ -2288,7 +2288,7 @@ theorem adjoin_union
 
 中文:
 定理 adjoin_union
-  条件: (s t : Set A)
+  条件: (s t : 集合 A)
   结论: adjoin R (s union t) = adjoin R s ⊔ adjoin R t
   证明: (NonUnitalAlgebra.gc : GaloisConnection _ ((↑) : NonUnitalSubalgebra R A -> Set A)).l_sup
 
@@ -2311,8 +2311,8 @@ lemma adjoin_eq
 
 中文:
 引理 adjoin_eq
-  条件: (s : NonUnitalSubalgebra R A)
-  结论: adjoin R (s : Set A) = s
+  条件: (s : NonUnital子代数 R A)
+  结论: adjoin R (s : 集合 A) = s
   证明: le_antisymm (adjoin_le le_rfl) (subset_adjoin R)
 
 Depends on / 依赖: adjoin_le, le_antisymm, le_rfl, subset_adjoin
@@ -2337,7 +2337,7 @@ theorem adjoin_induction
 
 中文:
 定理 adjoin_induction
-  结论: {s : Set A} {p : (x : A) -> x in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : (x : A) -> x in adjoin R s -> 命题}
   证明: let S : NonUnitalSubalgebra R A :=
     { carrier := { x | exists hx, p x hx }
       mul_mem' := (Exists.elim · fun _ ha => (Exists.elim · fun _ hb => ⟨_, mul _ _ _ _ ha hb⟩))
@@ -2378,7 +2378,7 @@ theorem adjoin_induction₂
 
 中文:
 定理 adjoin_induction₂
-  结论: {s : Set A} {p : 对任意 x y, x in adjoin R s -> y in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : 对任意 x y, x in adjoin R s -> y in adjoin R s -> 命题}
   证明: by
   induction hy using adjoin_induction with
   | mem z hz =>
@@ -2434,8 +2434,8 @@ lemma adjoin_eq_span
 
 中文:
 引理 adjoin_eq_span
-  条件: (s : Set A)
-  结论: (adjoin R s).toSubmodule = span R (Subsemigroup.closure s)
+  条件: (s : 集合 A)
+  结论: (adjoin R s).toSubmodule = span R (子半群.closure s)
   证明: by
   apply le_antisymm
   · intro x hx
@@ -2482,7 +2482,7 @@ theorem adjoin_empty
 
 中文:
 定理 adjoin_empty
-  结论: adjoin R (∅ : Set A) = ⊥
+  结论: adjoin R (∅ : 集合 A) = ⊥
   证明: show adjoin R ⊥ = ⊥ by apply GaloisConnection.l_bot; exact NonUnitalAlgebra.gc
 
 @[simp]
@@ -2503,7 +2503,7 @@ theorem adjoin_univ
 
 中文:
 定理 adjoin_univ
-  结论: adjoin R (Set.univ : Set A) = ⊤
+  结论: adjoin R (集合.univ : 集合 A) = ⊤
   证明: eq_top_iff.2 fun _x hx => subset_adjoin R hx
 
 Depends on / 依赖: eq_top_iff, subset_adjoin
@@ -2522,8 +2522,8 @@ lemma _root_.NonUnitalAlgHom.map_adjoin
     NonUnitalAlgebra.gi.gc fun _t => rfl
 
 中文:
-引理 _root_.NonUnitalAlgHom.map_adjoin
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+引理 _root_.非幺Alg态射.map_adjoin
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) NonUnitalAlgebra.gi.gc
     NonUnitalAlgebra.gi.gc fun _t => rfl
 
@@ -2546,8 +2546,8 @@ lemma _root_.NonUnitalAlgHom.map_adjoin_singleton
   simp [NonUnitalAlgHom.map_adjoin]
 
 中文:
-引理 _root_.NonUnitalAlgHom.map_adjoin_singleton
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+引理 _root_.非幺Alg态射.map_adjoin_singleton
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: by
   simp [NonUnitalAlgHom.map_adjoin]
 
@@ -2572,7 +2572,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: (↑(⊤ : NonUnitalSubalgebra R A) : Set A) = Set.univ
+  结论: (↑(⊤ : NonUnital子代数 R A) : 集合 A) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -2595,7 +2595,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : A}
-  结论: x in (⊤ : NonUnitalSubalgebra R A)
+  结论: x in (⊤ : NonUnital子代数 R A)
   证明: Set.mem_univ x
 
 @[simp]
@@ -2618,7 +2618,7 @@ theorem top_toSubmodule
 
 中文:
 定理 top_toSubmodule
-  结论: (⊤ : NonUnitalSubalgebra R A).toSubmodule = ⊤
+  结论: (⊤ : NonUnital子代数 R A).toSubmodule = ⊤
   证明: rfl
 
 @[simp]
@@ -2639,7 +2639,7 @@ theorem top_toNonUnitalSubsemiring
 
 中文:
 定理 top_toNonUnitalSubsemiring
-  结论: (⊤ : NonUnitalSubalgebra R A).toNonUnitalSubsemiring = ⊤
+  结论: (⊤ : NonUnital子代数 R A).toNonUnitalSubsemiring = ⊤
   证明: rfl
 
 @[simp]
@@ -2660,7 +2660,7 @@ theorem toNonUnitalSubring_top
 
 中文:
 定理 toNonUnitalSubring_top
-  结论: {R A : 类型} [CommRing R] [NonUnitalNonAssocRing A] [Module R A]
+  结论: {R A : 类型} [交换环 R] [非幺非结合环 A] [模 R A]
   证明: rfl
 
 @[deprecated (since := "2026-01-03")] alias top_toSubring := toNonUnitalSubring_top
@@ -2682,7 +2682,7 @@ lemma toNonUnitalSubsemiring_eq_top
 
 中文:
 引理 toNonUnitalSubsemiring_eq_top
-  条件: {S : NonUnitalSubalgebra R A}
+  条件: {S : NonUnital子代数 R A}
   证明: by simp [← SetLike.coe_set_eq]
 -/
 @[simp] lemma toNonUnitalSubsemiring_eq_top {S : NonUnitalSubalgebra R A} :
@@ -2702,7 +2702,7 @@ lemma toSubmodule_eq_top
 
 中文:
 引理 toSubmodule_eq_top
-  条件: {S : NonUnitalSubalgebra R A}
+  条件: {S : NonUnital子代数 R A}
   结论: S.toSubmodule = ⊤ ↔ S = ⊤
   证明: by simp
 
@@ -2724,7 +2724,7 @@ theorem toNonUnitalSubring_eq_top
 
 中文:
 定理 toNonUnitalSubring_eq_top
-  结论: {R A : 类型} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R A : 类型} [交换环 R] [环 A] [代数 R A]
   证明: by
   simp [← SetLike.coe_set_eq]
 
@@ -2751,7 +2751,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : NonUnitalSubalgebra R A}
+  条件: {S T : NonUnital子代数 R A}
   结论: 对任意 {x : A}, x in S -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -2776,7 +2776,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : NonUnitalSubalgebra R A}
+  条件: {S T : NonUnital子代数 R A}
   结论: 对任意 {x : A}, x in T -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -2798,7 +2798,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : NonUnitalSubalgebra R A} {x y : A} (hx : x in S) (hy : y in T)
+  条件: {S T : NonUnital子代数 R A} {x y : A} (hx : x in S) (hy : y in T)
   证明: mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
@@ -2817,7 +2817,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: (NonUnitalSubalgebra.gc_map_comap f).l_sup
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubalgebra.gc_map_comap, gc_map_comap, l_sup
@@ -2839,7 +2839,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[simp, norm_cast]
@@ -2865,8 +2865,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (S T : NonUnitalSubalgebra R A)
-  结论: (↑(S ⊓ T) : Set A) = (S : Set A) inter T
+  条件: (S T : NonUnital子代数 R A)
+  结论: (↑(S ⊓ T) : 集合 A) = (S : 集合 A) inter T
   证明: rfl
 
 @[simp]
@@ -2888,7 +2888,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {S T : NonUnitalSubalgebra R A} {x : A}
+  条件: {S T : NonUnital子代数 R A} {x : A}
   结论: x in S ⊓ T ↔ x in S ∧ x in T
   证明: Iff.rfl
 
@@ -2912,7 +2912,7 @@ theorem inf_toSubmodule
 
 中文:
 定理 inf_toSubmodule
-  条件: (S T : NonUnitalSubalgebra R A)
+  条件: (S T : NonUnital子代数 R A)
   证明: rfl
 
 @[simp]
@@ -2934,7 +2934,7 @@ theorem inf_toNonUnitalSubsemiring
 
 中文:
 定理 inf_toNonUnitalSubsemiring
-  条件: (S T : NonUnitalSubalgebra R A)
+  条件: (S T : NonUnital子代数 R A)
   证明: rfl
 
 @[simp, norm_cast]
@@ -2957,8 +2957,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (NonUnitalSubalgebra R A))
-  结论: (↑(sInf S) : Set A) = ⋂ s in S, ↑s
+  条件: (S : 集合 (NonUnital子代数 R A))
+  结论: (↑(sInf S) : 集合 A) = ⋂ s in S, ↑s
   证明: sInf_image
 
 @[simp]
@@ -2983,7 +2983,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (NonUnitalSubalgebra R A)} {x : A}
+  条件: {S : 集合 (NonUnital子代数 R A)} {x : A}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simp only [← SetLike.mem_coe, coe_sInf, Set.mem_iInter₂]
@@ -3008,7 +3008,7 @@ theorem sInf_toSubmodule
 
 中文:
 定理 sInf_toSubmodule
-  条件: (S : Set (NonUnitalSubalgebra R A))
+  条件: (S : 集合 (NonUnital子代数 R A))
   证明: SetLike.coe_injective by simp
 
 @[simp]
@@ -3032,7 +3032,7 @@ theorem sInf_toNonUnitalSubsemiring
 
 中文:
 定理 sInf_toNonUnitalSubsemiring
-  条件: (S : Set (NonUnitalSubalgebra R A))
+  条件: (S : 集合 (NonUnital子代数 R A))
   证明: SetLike.coe_injective by simp
 
 @[simp, norm_cast]
@@ -3056,7 +3056,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalSubalgebra R A}
+  条件: {ι : 类型层*} {S : ι -> NonUnital子代数 R A}
   证明: by simp [iInf]
 
 @[simp]
@@ -3075,7 +3075,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalSubalgebra R A} {x : A}
+  条件: {ι : 类型层*} {S : ι -> NonUnital子代数 R A} {x : A}
   证明: by simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 Depends on / 依赖: Set.forall_mem_range, forall_mem_range, mem_sInf
@@ -3097,7 +3097,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι]
+  结论: {ι : 类型层*} [非空 ι]
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ S)
@@ -3124,7 +3124,7 @@ theorem iInf_toSubmodule
 
 中文:
 定理 iInf_toSubmodule
-  条件: {ι : Sort*} (S : ι -> NonUnitalSubalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> NonUnital子代数 R A)
   证明: SetLike.coe_injective by simp
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -3143,7 +3143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NonUnitalSubalgebra R A)
+  签名: 可居 (NonUnital子代数 R A)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (NonUnitalSubalgebra R A) :=
@@ -3162,7 +3162,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : A}
-  结论: x in (⊥ : NonUnitalSubalgebra R A) ↔ x = 0
+  结论: x in (⊥ : NonUnital子代数 R A) ↔ x = 0
   证明: show x in Submodule.span R (NonUnitalSubsemiring.closure (∅ : Set A) : Set A) ↔ x = 0 by
     rw [NonUnitalSubsemiring.closure_empty]; rw [NonUnitalSubsemiring.coe_bot]; rw [Submodule.span_zero_singleton]; rw [Submodule.mem_bot]
 
@@ -3186,7 +3186,7 @@ theorem toSubmodule_bot
 
 中文:
 定理 toSubmodule_bot
-  结论: (⊥ : NonUnitalSubalgebra R A).toSubmodule = ⊥
+  结论: (⊥ : NonUnital子代数 R A).toSubmodule = ⊥
   证明: by
   ext
   simp only [mem_bot, NonUnitalSubalgebra.mem_toSubmodule, Submodule.mem_bot]
@@ -3211,7 +3211,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : NonUnitalSubalgebra R A) : Set A) = {0}
+  结论: ((⊥ : NonUnital子代数 R A) : 集合 A) = {0}
   证明: by
   simp [Set.ext_iff, NonUnitalAlgebra.mem_bot]
 
@@ -3233,7 +3233,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: {S : NonUnitalSubalgebra R A}
+  条件: {S : NonUnital子代数 R A}
   结论: S = ⊤ ↔ 对任意 x : A, x in S
   证明: ⟨fun h x => by rw [h]; exact mem_top, fun h => by ext x; exact ⟨fun _ => mem_top, fun _ => h x⟩⟩
 
@@ -3257,7 +3257,7 @@ theorem range_id
 
 中文:
 定理 range_id
-  结论: NonUnitalAlgHom.range (NonUnitalAlgHom.id R A) = ⊤
+  结论: 非幺Alg态射.range (非幺Alg态射.id R A) = ⊤
   证明: SetLike.coe_injective Set.range_id
 
 @[simp]
@@ -3282,7 +3282,7 @@ theorem map_top
 中文:
 定理 map_top
   条件: (f : A ->ₙₐ[R] B)
-  结论: (⊤ : NonUnitalSubalgebra R A).map f = NonUnitalAlgHom.range f
+  结论: (⊤ : NonUnital子代数 R A).map f = 非幺Alg态射.range f
   证明: SetLike.coe_injective Set.image_univ
 
 @[simp]
@@ -3305,7 +3305,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: SetLike.coe_injective by simp [NonUnitalAlgebra.coe_bot, NonUnitalSubalgebra.coe_map]
 
 @[simp]
@@ -3327,7 +3327,7 @@ theorem comap_top
 
 中文:
 定理 comap_top
-  结论: [IsScalarTower R B B] [SMulCommClass R B B]
+  结论: [标量塔 R B B] [标量交换类 R B B]
   证明: eq_top_iff.2 fun _ => mem_top
 
 Depends on / 依赖: eq_top_iff, mem_top
@@ -3346,7 +3346,7 @@ definition toTop
 
 中文:
 定义 toTop
-  签名: : A ->ₙₐ[R] (⊤ : NonUnitalSubalgebra R A)
+  签名: : A ->ₙₐ[R] (⊤ : NonUnital子代数 R A)
   定义体: NonUnitalAlgHom.codRestrict (NonUnitalAlgHom.id R A) ⊤ fun _ => mem_top
 
 Depends on / 依赖: NonUnitalAlgHom, NonUnitalAlgHom.codRestrict, NonUnitalAlgHom.id, codRestrict, mem_top
@@ -3366,7 +3366,7 @@ theorem range_eq_top
 
 中文:
 定理 range_eq_top
-  条件: [IsScalarTower R B B] [SMulCommClass R B B] (f : A ->ₙₐ[R] B)
+  条件: [标量塔 R B B] [标量交换类 R B B] (f : A ->ₙₐ[R] B)
   证明: NonUnitalAlgebra.eq_top_iff
 
 Depends on / 依赖: NonUnitalAlgebra, NonUnitalAlgebra.eq_top_iff, eq_top_iff
@@ -3399,7 +3399,7 @@ theorem range_val
 
 中文:
 定理 range_val
-  结论: NonUnitalAlgHom.range (NonUnitalSubalgebraClass.subtype S) = S
+  结论: 非幺Alg态射.range (NonUnitalSubalgebraClass.subtype S) = S
   证明: ext Set.ext_iff.1
     (NonUnitalAlgHom.coe_range <| NonUnitalSubalgebraClass.subtype S).trans Subtype.range_val
 
@@ -3419,7 +3419,7 @@ instance subsingleton_of_subsingleton
 
 中文:
 实例 subsingleton_of_subsingleton
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: ⟨fun B C => ext fun x => by simp only [Subsingleton.elim x 0, zero_mem B, zero_mem C]⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, zero_mem
@@ -3446,8 +3446,8 @@ definition prod
 @[simp, norm_cast]
 
 中文:
-定义 prod
-  签名: : NonUnitalSubalgebra R (A × B)
+定义 乘积
+  签名: : NonUnital子代数 R (A × B)
   定义体: { S.toNonUnitalSubsemiring.prod S₁.toNonUnitalSubsemiring with
     carrier := S ×ˢ S₁
     smul_mem' := fun r _x hx => ⟨SMulMemClass.smul_mem r hx.1, SMulMemClass.smul_mem r hx.2⟩ }
@@ -3472,7 +3472,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  结论: (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ S₁
+  结论: (乘积 S S₁ : 集合 (A × B)) = (S : 集合 A) ×ˢ S₁
   证明: rfl
 -/
 theorem coe_prod : (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ S₁ :=
@@ -3490,7 +3490,7 @@ theorem prod_toSubmodule
 
 中文:
 定理 prod_toSubmodule
-  结论: (S.prod S₁).toSubmodule = S.toSubmodule.prod S₁.toSubmodule
+  结论: (S.乘积 S₁).toSubmodule = S.toSubmodule.乘积 S₁.toSubmodule
   证明: rfl
 
 @[simp]
@@ -3509,7 +3509,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {S : NonUnitalSubalgebra R A} {S₁ : NonUnitalSubalgebra R B} {x : A × B}
+  条件: {S : NonUnital子代数 R A} {S₁ : NonUnital子代数 R B} {x : A × B}
   证明: Set.mem_prod
 
 Depends on / 依赖: Set.mem_prod, mem_prod
@@ -3528,7 +3528,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {S T : NonUnitalSubalgebra R A} {S₁ T₁ : NonUnitalSubalgebra R B}
+  条件: {S T : NonUnital子代数 R A} {S₁ T₁ : NonUnital子代数 R B}
   证明: Set.prod_mono
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -3552,7 +3552,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: (prod ⊤ ⊤ : NonUnitalSubalgebra R (A × B)) = ⊤
+  结论: (乘积 ⊤ ⊤ : NonUnital子代数 R (A × B)) = ⊤
   证明: by ext; simp
 
 @[simp]
@@ -3570,7 +3570,7 @@ theorem prod_inf_prod
 
 中文:
 定理 prod_inf_prod
-  条件: {S T : NonUnitalSubalgebra R A} {S₁ T₁ : NonUnitalSubalgebra R B}
+  条件: {S T : NonUnital子代数 R A} {S₁ T₁ : NonUnital子代数 R B}
   证明: SetLike.coe_injective Set.prod_inter_prod
 
 Depends on / 依赖: Set.prod_inter_prod, SetLike, SetLike.coe_injective, coe_injective, prod_inter_prod
@@ -3596,7 +3596,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : NonUnitalSubalgebra R A} (h : S <= T)
+  签名: {S T : NonUnital子代数 R A} (h : S <= T)
   定义体: Set.inclusion h
   map_add' _ _ := rfl
   map_mul' _ _ := rfl
@@ -3624,7 +3624,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {S T : NonUnitalSubalgebra R A} (h : S <= T)
+  条件: {S T : NonUnital子代数 R A} (h : S <= T)
   证明: fun _ _ => Subtype.ext ∘ Subtype.mk.inj
 
 @[simp]
@@ -3647,7 +3647,7 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  条件: {S : NonUnitalSubalgebra R A}
+  条件: {S : NonUnital子代数 R A}
   证明: rfl
 
 @[simp]
@@ -3667,7 +3667,7 @@ theorem inclusion_mk
 
 中文:
 定理 inclusion_mk
-  条件: {S T : NonUnitalSubalgebra R A} (h : S <= T) (x : A) (hx : x in S)
+  条件: {S T : NonUnital子代数 R A} (h : S <= T) (x : A) (hx : x in S)
   证明: rfl
 -/
 theorem inclusion_mk {S T : NonUnitalSubalgebra R A} (h : S <= T) (x : A) (hx : x in S) :
@@ -3686,7 +3686,7 @@ theorem inclusion_right
 
 中文:
 定理 inclusion_right
-  条件: {S T : NonUnitalSubalgebra R A} (h : S <= T) (x : T) (m : (x : A) in S)
+  条件: {S T : NonUnital子代数 R A} (h : S <= T) (x : T) (m : (x : A) in S)
   证明: Subtype.ext rfl
 
 @[simp]
@@ -3710,7 +3710,7 @@ theorem inclusion_inclusion
 
 中文:
 定理 inclusion_inclusion
-  条件: {S T U : NonUnitalSubalgebra R A} (hst : S <= T) (htu : T <= U) (x : S)
+  条件: {S T U : NonUnital子代数 R A} (hst : S <= T) (htu : T <= U) (x : S)
   证明: Subtype.ext rfl
 
 @[simp]
@@ -3732,7 +3732,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  条件: {S T : NonUnitalSubalgebra R A} (h : S <= T) (s : S)
+  条件: {S T : NonUnital子代数 R A} (h : S <= T) (s : S)
   证明: rfl
 -/
 theorem coe_inclusion {S T : NonUnitalSubalgebra R A} (h : S <= T) (s : S) :
@@ -3754,8 +3754,8 @@ instance _root_.NonUnitalAlgHom.subsingleton
       (mem_bot.mp this).symm ▸ (map_zero f).trans (map_zero g).symm⟩
 
 中文:
-实例 _root_.NonUnitalAlgHom.subsingleton
-  签名: [Subsingleton (NonUnitalSubalgebra R A)]
+实例 _root_.非幺Alg态射.subsingleton
+  签名: [子单例 (NonUnital子代数 R A)]
   定义体: ⟨fun f g =>
     NonUnitalAlgHom.ext fun a =>
       have : a in (⊥ : NonUnitalSubalgebra R A) :=
@@ -3792,7 +3792,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: [Nonempty ι] {S : ι -> NonUnitalSubalgebra R A}
+  结论: [非空 ι] {S : ι -> NonUnital子代数 R A}
   证明: let K : NonUnitalSubalgebra R A :=
     { __ := NonUnitalSubsemiring.copy _ _ (NonUnitalSubsemiring.coe_iSup_of_directed dir).symm
       smul_mem' := fun r _x hx =>
@@ -3827,7 +3827,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : Sort*} [Nonempty ι] {S : ι -> NonUnitalSubalgebra R A}
+  结论: {ι : 类型层*} [非空 ι] {S : ι -> NonUnital子代数 R A}
   证明: by
   have := NonUnitalSubsemiring.isMulCommutative_iSup dir
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, coe_iSup_of_directed dir,
@@ -3852,7 +3852,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
@@ -3882,7 +3882,7 @@ definition iSupLift
 
 中文:
 定义 iSupLift
-  签名: [Nonempty ι] (K : ι -> NonUnitalSubalgebra R A) (dir : Directed (· <= ·) K)
+  签名: [非空 ι] (K : ι -> NonUnital子代数 R A) (dir : Directed (· <= ·) K)
   定义体: by
   subst hT
   exact
@@ -4071,8 +4071,8 @@ theorem _root_.Set.smul_mem_center
     rw [mul_smul_comm]; rw [mul_smul_comm]; rw [mul_smul_comm]; rw [ha.right_assoc]
 
 中文:
-定理 _root_.Set.smul_mem_center
-  条件: (r : R) {a : A} (ha : a in Set.center A)
+定理 _root_.集合.smul_mem_center
+  条件: (r : R) {a : A} (ha : a in 集合.center A)
   证明: by rw [commute_iff_eq, mul_smul_comm, smul_mul_assoc, ha.comm]
   left_assoc b c := by rw [smul_mul_assoc, smul_mul_assoc, smul_mul_assoc, ha.left_assoc]
   right_assoc b c := by
@@ -4100,7 +4100,7 @@ definition center
 
 中文:
 定义 center
-  签名: : NonUnitalSubalgebra R A
+  签名: : NonUnital子代数 R A
   定义体: { NonUnitalSubsemiring.center A with smul_mem' := Set.smul_mem_center }
 
 @[norm_cast]
@@ -4121,7 +4121,7 @@ theorem coe_center
 
 中文:
 定理 coe_center
-  结论: (center R A : Set A) = Set.center A
+  结论: (center R A : 集合 A) = 集合.center A
   证明: rfl
 -/
 theorem coe_center : (center R A : Set A) = Set.center A :=
@@ -4137,7 +4137,7 @@ instance center.instNonUnitalCommSemiring
 
 中文:
 实例 center.instNonUnitalCommSemiring
-  签名: : NonUnitalCommSemiring (center R A)
+  签名: : 非幺交换半环 (center R A)
   定义体: inferInstanceAs NonUnitalCommSemiring (NonUnitalSubsemiring.center A)
 
 Depends on / 依赖: NonUnitalCommSemiring, NonUnitalSubsemiring, NonUnitalSubsemiring.center, center
@@ -4157,7 +4157,7 @@ instance center.instNonUnitalCommRing
 
 中文:
 实例 center.instNonUnitalCommRing
-  签名: {A : 类型} [NonUnitalNonAssocRing A] [Module R A]
+  签名: {A : 类型} [非幺非结合环 A] [模 R A]
   定义体: inferInstanceAs NonUnitalCommRing (NonUnitalSubring.center A)
 
 @[simp]
@@ -4194,7 +4194,7 @@ lemma center_toNonUnitalSubring
 
 中文:
 引理 center_toNonUnitalSubring
-  结论: (R A : 类型) [CommRing R] [NonUnitalNonAssocRing A]
+  结论: (R A : 类型) [交换环 R] [非幺非结合环 A]
   证明: rfl
 -/
 @[simp] lemma center_toNonUnitalSubring (R A : Type*) [CommRing R] [NonUnitalNonAssocRing A]
@@ -4212,7 +4212,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  结论: {B : 类型} [NonUnitalNonAssocSemiring B] [Module R B]
+  结论: {B : 类型} [非幺非结合半环 B] [模 R B]
   证明: SetLike.coe_injective Set.center_prod
 -/
 protected theorem center_prod {B : Type*} [NonUnitalNonAssocSemiring B] [Module R B]
@@ -4241,7 +4241,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  结论: (A : 类型) [NonUnitalCommSemiring A] [Module R A] [IsScalarTower R A A]
+  结论: (A : 类型) [非幺交换半环 A] [模 R A] [标量塔 R A A]
   证明: SetLike.coe_injective (Set.center_eq_univ A)
 
 Depends on / 依赖: Set.center_eq_univ, SetLike, SetLike.coe_injective, center_eq_univ, coe_injective
@@ -4289,8 +4289,8 @@ theorem _root_.Set.smul_mem_centralizer
   proof: fun x hx => by rw [mul_smul_comm, smul_mul_assoc, ha x hx]
 
 中文:
-定理 _root_.Set.smul_mem_centralizer
-  条件: {s : Set A} (r : R) {a : A} (ha : a in s.centralizer)
+定理 _root_.集合.smul_mem_centralizer
+  条件: {s : 集合 A} (r : R) {a : A} (ha : a in s.centralizer)
   证明: fun x hx => by rw [mul_smul_comm, smul_mul_assoc, ha x hx]
 
 Depends on / 依赖: mul_smul_comm, smul_mul_assoc
@@ -4314,7 +4314,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: NonUnitalSubsemiring.centralizer s
   smul_mem' := Set.smul_mem_centralizer
 
@@ -4338,8 +4338,8 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: (s : Set A)
-  结论: (centralizer R s : Set A) = s.centralizer
+  条件: (s : 集合 A)
+  结论: (centralizer R s : 集合 A) = s.centralizer
   证明: rfl
 -/
 theorem coe_centralizer (s : Set A) : (centralizer R s : Set A) = s.centralizer :=
@@ -4356,7 +4356,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {s : Set A} {z : A}
+  条件: {s : 集合 A} {z : A}
   结论: z in centralizer R s ↔ 对任意 g in s, g * z = z * g
   证明: Iff.rfl
 
@@ -4378,7 +4378,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: (s t : Set A) (h : s subseteq t)
+  条件: (s t : 集合 A) (h : s subseteq t)
   结论: centralizer R t <= centralizer R s
   证明: Set.centralizer_subset h
 
@@ -4400,7 +4400,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer R Set.univ = center R A
+  结论: centralizer R 集合.univ = center R A
   证明: SetLike.ext' (Set.centralizer_univ A)
 
 Depends on / 依赖: Set.centralizer_univ, SetLike, SetLike.ext, centralizer_univ
@@ -4430,7 +4430,7 @@ lemma adjoin_le_centralizer_centralizer
 
 中文:
 引理 adjoin_le_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: adjoin_le Set.subset_centralizer_centralizer
 
 Depends on / 依赖: Set.subset_centralizer_centralizer, adjoin_le, subset_centralizer_centralizer
@@ -4450,8 +4450,8 @@ lemma commute_of_mem_adjoin_of_forall_mem_commute
   exact adjoin_le_centralizer_centralizer R s hb a this
 
 中文:
-引理 commute_of_mem_adjoin_of_forall_mem_commute
-  结论: {a b : A} {s : Set A}
+引理 commute_of_mem_adjoin_of_对任意_mem_commute
+  结论: {a b : A} {s : 集合 A}
   证明: by
   have : a in centralizer R s := by simpa only [Commute.symm_iff (a := a)] using! h
   exact adjoin_le_centralizer_centralizer R s hb a this
@@ -4516,7 +4516,7 @@ theorem isMulCommutative_adjoin
 
 中文:
 定理 isMulCommutative_adjoin
-  条件: {s : Set A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  条件: {s : 集合 A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   证明: have := adjoin_le_centralizer_centralizer R s
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -4567,7 +4567,7 @@ abbreviation adjoinNonUnitalCommSemiringOfComm
 
 中文:
 缩写 adjoinNonUnitalCommSemiringOfComm
-  签名: {s : Set A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  签名: {s : 集合 A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   定义体: have := isMulCommutative_adjoin R hcomm
   inferInstance
 
@@ -4588,7 +4588,7 @@ instance instIsMulCommutative_adjoin
 
 中文:
 实例 instIsMulCommutative_adjoin
-  签名: {S : 类型} [SetLike S A] [MulMemClass S A] (s : S)
+  签名: {S : 类型} [集合状 S A] [MulMem类 S A] (s : S)
   定义体: isMulCommutative_adjoin R fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 Depends on / 依赖: isMulCommutative_adjoin, setLike_mul_comm
@@ -4614,7 +4614,7 @@ abbreviation adjoinNonUnitalCommRingOfComm
 
 中文:
 缩写 adjoinNonUnitalCommRingOfComm
-  签名: (R : 类型) {A : 类型} [CommRing R] [NonUnitalRing A]
+  签名: (R : 类型) {A : 类型} [交换环 R] [非幺环 A]
   定义体: have := isMulCommutative_adjoin R hcomm
   inferInstance
 
@@ -4645,7 +4645,7 @@ definition nonUnitalSubalgebraOfNonUnitalSubsemiring
 
 中文:
 定义 nonUnitalSubalgebraOfNonUnitalSubsemiring
-  签名: (S : NonUnitalSubsemiring R)
+  签名: (S : NonUnital子半环 R)
   定义体: S
   smul_mem' n _x hx := nsmul_mem (S := S) hx n
 
@@ -4667,7 +4667,7 @@ theorem mem_nonUnitalSubalgebraOfNonUnitalSubsemiring
 
 中文:
 定理 mem_nonUnitalSubalgebraOfNonUnitalSubsemiring
-  条件: {x : R} {S : NonUnitalSubsemiring R}
+  条件: {x : R} {S : NonUnital子半环 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4695,7 +4695,7 @@ definition nonUnitalSubalgebraOfNonUnitalSubring
 
 中文:
 定义 nonUnitalSubalgebraOfNonUnitalSubring
-  签名: (S : NonUnitalSubring R)
+  签名: (S : NonUnital子环 R)
   定义体: S.toNonUnitalSubsemiring
   smul_mem' n _x hx := zsmul_mem (K := S) hx n
 
@@ -4718,7 +4718,7 @@ theorem mem_nonUnitalSubalgebraOfNonUnitalSubring
 
 中文:
 定理 mem_nonUnitalSubalgebraOfNonUnitalSubring
-  条件: {x : R} {S : NonUnitalSubring R}
+  条件: {x : R} {S : NonUnital子环 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

@@ -61,7 +61,7 @@ theorem coe_dedup
 
 中文:
 定理 coe_dedup
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: @dedup α _ l = l.dedup
   证明: rfl
 
@@ -495,7 +495,7 @@ theorem dedup_map_of_injective
 
 中文:
 定理 dedup_map_of_injective
-  结论: [DecidableEq β] {f : α -> β} (hf : Function.Injective f)
+  结论: [DecidableEq β] {f : α -> β} (hf : 函数.单射 f)
   证明: Quot.induction_on s fun l => by simp [List.dedup_map_of_injective hf l]
 
 Depends on / 依赖: List.dedup_map_of_injective, Quot.induction_on, dedup_map_of_injective, induction_on
@@ -559,7 +559,7 @@ theorem Subset.dedup_add_right
 exact congr_arg ((↑) : List α -> Multiset α) List.Subset.dedup_append_right h
 
 中文:
-定理 Subset.dedup_add_right
+定理 子集.dedup_add_right
   条件: {s t : Multiset α} (h : s subseteq t)
   证明: by
   induction s, t using Quot.induction_on₂
@@ -582,7 +582,7 @@ theorem Subset.dedup_add_left
   rw [s.add_comm]; rw [Subset.dedup_add_right h]
 
 中文:
-定理 Subset.dedup_add_left
+定理 子集.dedup_add_left
   条件: {s t : Multiset α} (h : t subseteq s)
   证明: by
   rw [s.add_comm]; rw [Subset.dedup_add_right h]
@@ -627,8 +627,8 @@ theorem _root_.List.Subset.dedup_append_left
   rw [← coe_eq_coe]; rw [← coe_dedup]; rw [← coe_add]; rw [Subset.dedup_add_left h]; rw [coe_dedup]
 
 中文:
-定理 _root_.List.Subset.dedup_append_left
-  条件: {s t : List α} (h : t subseteq s)
+定理 _root_.列表.子集.dedup_append_left
+  条件: {s t : 列表 α} (h : t subseteq s)
   证明: by
   rw [← coe_eq_coe]; rw [← coe_dedup]; rw [← coe_add]; rw [Subset.dedup_add_left h]; rw [coe_dedup]
 

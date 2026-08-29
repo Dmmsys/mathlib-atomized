@@ -75,7 +75,7 @@ theorem LinearIndependent.map_of_isPurelyInseparable_of_isSeparable
 
 中文:
 定理 LinearIndependent.map_of_isPurelyInseparable_of_isSeparable
-  结论: [IsPurelyInseparable F E]
+  结论: [是纯不可分 F E]
   证明: by
   obtain ⟨q, _⟩ := ExpChar.exists F
   have := expChar_of_injective_algebraMap (algebraMap F K).injective q
@@ -128,7 +128,7 @@ theorem IntermediateField.linearDisjoint_of_isPurelyInseparable_of_isSeparable
       simpa only [IsSeparable, minpoly_eq] using! Algebra.IsSeparable.isSeparabl
 
 中文:
-定理 IntermediateField.linearDisjoint_of_isPurelyInseparable_of_isSeparable
+定理 中间域.linearDisjoint_of_isPurelyInseparable_of_isSeparable
   证明: have ⟨ι, ⟨b⟩⟩ := Module.Basis.exists_basis F S
 .of_basis_left b b.linearIndependent.map' S.val.toLinearMap
     (LinearMap.ker_eq_bot_of_injective S.val.injective)
@@ -185,7 +185,7 @@ lemma lift_rank_mul_lift_sepDegree_of_isSeparable
 
 中文:
 引理 lift_rank_mul_lift_sepDegree_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   证明: by
   rw [sepDegree]; rw [sepDegree]; rw [separableClosure.eq_restrictScalars_of_isSeparable F E K]
   exact lift_rank_mul_lift_rank F E (separableClosure E K)
@@ -209,7 +209,7 @@ lemma rank_mul_sepDegree_of_isSeparable
 
 中文:
 引理 rank_mul_sepDegree_of_isSeparable
-  结论: (K : 类型v) [Field K] [Algebra F K]
+  结论: (K : 类型v) [域 K] [代数 F K]
   证明: by
   simpa only [Cardinal.lift_id] using lift_rank_mul_lift_sepDegree_of_isSeparable F E K
 
@@ -232,7 +232,7 @@ lemma insepDegree_eq_of_isSeparable
 
 中文:
 引理 insepDegree_eq_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   证明: by
   rw [insepDegree]; rw [insepDegree]; rw [separableClosure.eq_restrictScalars_of_isSeparable F E K]
   rfl
@@ -258,7 +258,7 @@ lemma sepDegree_eq_of_isPurelyInseparable
 
 中文:
 引理 sepDegree_eq_of_isPurelyInseparable
-  条件: [IsPurelyInseparable F E]
+  条件: [是纯不可分 F E]
   证明: by
   convert! sepDegree_eq_of_isPurelyInseparable_of_isSeparable F E (separableClosure E K)
   have : IsScalarTower F (separableClosure E K) K := IsScalarTower.of_algebraMap_eq (congrFun rfl)
@@ -289,7 +289,7 @@ lemma lift_rank_mul_lift_insepDegree_of_isPurelyInseparable
 
 中文:
 引理 lift_rank_mul_lift_insepDegree_of_isPurelyInseparable
-  条件: [IsPurelyInseparable F E]
+  条件: [是纯不可分 F E]
   证明: by
   have h := (separableClosure F K).linearDisjoint_of_isPurelyInseparable_of_isSeparable E
 .lift_rank_right_mul_lift_adjoin_rank_eq_of_isAlgebraic_left
@@ -315,7 +315,7 @@ lemma rank_mul_insepDegree_of_isPurelyInseparable
 
 中文:
 引理 rank_mul_insepDegree_of_isPurelyInseparable
-  结论: (K : 类型v) [Field K] [Algebra F K]
+  结论: (K : 类型v) [域 K] [代数 F K]
   证明: by
   simpa only [Cardinal.lift_id] using lift_rank_mul_lift_insepDegree_of_isPurelyInseparable F E K
 
@@ -338,7 +338,7 @@ theorem lift_sepDegree_mul_lift_sepDegree_of_isAlgebraic
 
 中文:
 定理 lift_sepDegree_mul_lift_sepDegree_of_isAlgebraic
-  条件: [Algebra.IsAlgebraic F E]
+  条件: [代数.是代数 F E]
   证明: by
   have h := lift_rank_mul_lift_sepDegree_of_isSeparable F (separableClosure F E) K
   rwa [sepDegree_eq_of_isPurelyInseparable (separableClosure F E) E K] at h
@@ -364,7 +364,7 @@ theorem sepDegree_mul_sepDegree_of_isAlgebraic
 
 中文:
 定理 sepDegree_mul_sepDegree_of_isAlgebraic
-  结论: (K : 类型v) [Field K] [Algebra F K]
+  结论: (K : 类型v) [域 K] [代数 F K]
   证明: by
   simpa only [Cardinal.lift_id] using lift_sepDegree_mul_lift_sepDegree_of_isAlgebraic F E K
 
@@ -387,7 +387,7 @@ theorem lift_insepDegree_mul_lift_insepDegree_of_isAlgebraic
 
 中文:
 定理 lift_insepDegree_mul_lift_insepDegree_of_isAlgebraic
-  条件: [Algebra.IsAlgebraic F E]
+  条件: [代数.是代数 F E]
   证明: by
   have h := lift_rank_mul_lift_insepDegree_of_isPurelyInseparable (separableClosure F E) E K
   rwa [← insepDegree_eq_of_isSeparable F (separableClosure F E) K] at h
@@ -413,7 +413,7 @@ theorem insepDegree_mul_insepDegree_of_isAlgebraic
 
 中文:
 定理 insepDegree_mul_insepDegree_of_isAlgebraic
-  结论: (K : 类型v) [Field K] [Algebra F K]
+  结论: (K : 类型v) [域 K] [代数 F K]
   证明: by
   simpa only [Cardinal.lift_id] using lift_insepDegree_mul_lift_insepDegree_of_isAlgebraic F E K
 
@@ -439,7 +439,7 @@ theorem finInsepDegree_mul_finInsepDegree_of_isAlgebraic
 
 中文:
 定理 finInsepDegree_mul_finInsepDegree_of_isAlgebraic
-  条件: [Algebra.IsAlgebraic F E]
+  条件: [代数.是代数 F E]
   证明: by
   simpa only [map_mul, Cardinal.toNat_lift] using!
     congr(Cardinal.toNat $(lift_insepDegree_mul_lift_insepDegree_of_isAlgebraic F E K))
@@ -468,7 +468,7 @@ theorem IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInsepara
     rw [restrictScalars_adjoin_of_algEquiv (E := K) j rfl]; rw [restrictSca
 
 中文:
-定理 IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable
+定理 中间域.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable
   证明: by
   set M := adjoin F S
   set L := adjoin E S
@@ -520,7 +520,7 @@ theorem IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInsepara
   rwa [adjoin_self] at this
 
 中文:
-定理 IntermediateField.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable'
+定理 中间域.sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable'
   证明: by
   have : Algebra.IsAlgebraic F (adjoin F (S : Set K)) := by rwa [adjoin_self]
   have := sepDegree_adjoin_eq_of_isAlgebraic_of_isPurelyInseparable (F := F) E (S : Set K)
@@ -592,8 +592,8 @@ theorem Polynomial.Separable.map_irreducible_of_isPurelyInseparable
     exact ⟨this.unit, by rw [IsUn
 
 中文:
-定理 Polynomial.Separable.map_irreducible_of_isPurelyInseparable
-  结论: {f : F[X]} (hsep : f.Separable)
+定理 多项式.可分.map_irreducible_of_isPurelyInseparable
+  结论: {f : F[X]} (hsep : f.可分)
   证明: by
   let K := AlgebraicClosure E
   obtain ⟨x, hx⟩ := IsAlgClosed.exists_aeval_eq_zero K f

@@ -181,7 +181,7 @@ lemma IsBoundedAt.add
 
 中文:
 引理 IsBoundedAt.add
-  条件: {f' : ℍ -> Complex} (hf : IsBoundedAt c f k) (hf' : IsBoundedAt c f' k)
+  条件: {f' : ℍ -> 复形} (hf : IsBoundedAt c f k) (hf' : IsBoundedAt c f' k)
   证明: fun g hg => by simpa using! (hf g hg).add (hf' g hg)
 -/
 lemma IsBoundedAt.add {f' : ℍ -> Complex} (hf : IsBoundedAt c f k) (hf' : IsBoundedAt c f' k) :
@@ -198,7 +198,7 @@ lemma IsZeroAt.add
 
 中文:
 引理 IsZeroAt.add
-  条件: {f' : ℍ -> Complex} (hf : IsZeroAt c f k) (hf' : IsZeroAt c f' k)
+  条件: {f' : ℍ -> 复形} (hf : IsZeroAt c f k) (hf' : IsZeroAt c f' k)
   证明: fun g hg => by simpa using! (hf g hg).add (hf' g hg)
 -/
 lemma IsZeroAt.add {f' : ℍ -> Complex} (hf : IsZeroAt c f k) (hf' : IsZeroAt c f' k) :
@@ -299,7 +299,7 @@ lemma isBoundedAt_iff_exists_SL2Z
     simpa [IsBoundedAt.smul_iff, isBoundedAt_infty_iff] using! b
 
 中文:
-引理 isBoundedAt_iff_exists_SL2Z
+引理 isBoundedAt_iff_存在_SL2Z
   条件: (hc : IsCusp c 𝒮ℒ)
   证明: by
   constructor
@@ -332,7 +332,7 @@ lemma isZeroAt_iff_exists_SL2Z
     simpa [IsZeroAt.smul_iff, isZeroAt_infty_iff] using! b
 
 中文:
-引理 isZeroAt_iff_exists_SL2Z
+引理 isZeroAt_iff_存在_SL2Z
   条件: (hc : IsCusp c 𝒮ℒ)
   证明: by
   constructor
@@ -363,7 +363,7 @@ lemma isBoundedAt_iff_forall_SL2Z
   simpa [IsBoundedAt.smul_iff, isBoundedAt_infty_iff] using! h γ rfl
 
 中文:
-引理 isBoundedAt_iff_forall_SL2Z
+引理 isBoundedAt_iff_对任意_SL2Z
   条件: (hc : IsCusp c 𝒮ℒ)
   证明: by
   refine ⟨fun hc _ hγ => by simpa using! hc _ hγ, fun h => ?_⟩
@@ -390,7 +390,7 @@ lemma isZeroAt_iff_forall_SL2Z
   simpa [IsZeroAt.smul_iff, isZeroAt_infty_iff] using! h γ rfl
 
 中文:
-引理 isZeroAt_iff_forall_SL2Z
+引理 isZeroAt_iff_对任意_SL2Z
   条件: (hc : IsCusp c 𝒮ℒ)
   证明: by
   refine ⟨fun hc _ hγ => by simpa using! hc _ hγ, fun h => ?_⟩

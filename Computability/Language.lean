@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (List α) (Language α)
+  签名: Membership (列表 α) (Language α)
   定义体: ⟨Set.Mem⟩
 
 Depends on / 依赖: Set.Mem
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton (List α) (Language α)
+  签名: 单例 (列表 α) (Language α)
   定义体: ⟨Set.singleton⟩
 
 Depends on / 依赖: Set.singleton, singleton
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Insert (List α) (Language α)
+  签名: Insert (列表 α) (Language α)
   定义体: ⟨Set.insert⟩
 
 Depends on / 依赖: Set.insert, insert
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Language α)
+  签名: 零 (Language α)
   定义体: ⟨(∅ : Set _)⟩
 -/
 instance : Zero (Language α) :=
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Language α)
+  签名: 幺 (Language α)
   定义体: ⟨{[]}⟩
 -/
 instance : One (Language α) :=
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Language α)
+  签名: 可居 (Language α)
   定义体: ⟨(∅ : Set _)⟩
 -/
 instance : Inhabited (Language α) := ⟨(∅ : Set _)⟩
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Language α)
+  签名: 加法 (Language α)
   定义体: ⟨((· union ·) : Set (List α) -> Set (List α) -> Set (List α))⟩
 -/
 instance : Add (Language α) :=
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Language α)
+  签名: 减法 (Language α)
   定义体: SDiff.sdiff
 
 Depends on / 依赖: SDiff.sdiff
@@ -224,7 +224,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Language α)
+  签名: 乘法 (Language α)
   定义体: ⟨image2 (· ++ ·)⟩
 
 Depends on / 依赖: image2
@@ -242,7 +242,7 @@ theorem zero_def
 
 中文:
 定理 zero_def
-  结论: (0 : Language α) = (∅ : Set _)
+  结论: (0 : Language α) = (∅ : 集合 _)
   证明: rfl
 -/
 theorem zero_def : (0 : Language α) = (∅ : Set _) :=
@@ -258,7 +258,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : Language α) = ({[]} : Set (List α))
+  结论: (1 : Language α) = ({[]} : 集合 (列表 α))
   证明: rfl
 -/
 theorem one_def : (1 : Language α) = ({[]} : Set (List α)) :=
@@ -276,7 +276,7 @@ theorem add_def
 中文:
 定理 add_def
   条件: (l m : Language α)
-  结论: l + m = (l union m : Set (List α))
+  结论: l + m = (l union m : 集合 (列表 α))
   证明: rfl
 -/
 theorem add_def (l m : Language α) : l + m = (l union m : Set (List α)) :=
@@ -294,7 +294,7 @@ theorem sub_def
 中文:
 定理 sub_def
   条件: (l m : Language α)
-  结论: l - m = (l \ m : Set (List α))
+  结论: l - m = (l \ m : 集合 (列表 α))
   证明: rfl
 -/
 theorem sub_def (l m : Language α) : l - m = (l \ m : Set (List α)) :=
@@ -349,7 +349,7 @@ lemma kstar_def
 中文:
 引理 kstar_def
   条件: (l : Language α)
-  结论: l∗ = {x | 存在 L : List (List α), x = L.flatten ∧ 对任意 y in L, y in l}
+  结论: l∗ = {x | 存在 L : 列表 (列表 α), x = L.flatten ∧ 对任意 y in L, y in l}
   证明: rfl
 
 @[ext]
@@ -371,7 +371,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {l m : Language α} (h : 对任意 (x : List α), x in l ↔ x in m)
+  条件: {l m : Language α} (h : 对任意 (x : 列表 α), x in l ↔ x in m)
   结论: l = m
   证明: Set.ext h
 
@@ -396,7 +396,7 @@ theorem notMem_zero
 
 中文:
 定理 notMem_zero
-  条件: (x : List α)
+  条件: (x : 列表 α)
   结论: x ∉ (0 : Language α)
   证明: id
 
@@ -417,7 +417,7 @@ theorem mem_one
 
 中文:
 定理 mem_one
-  条件: (x : List α)
+  条件: (x : 列表 α)
   结论: x in (1 : Language α) ↔ x = []
   证明: by rfl
 -/
@@ -452,7 +452,7 @@ theorem mem_add
 
 中文:
 定理 mem_add
-  条件: (l m : Language α) (x : List α)
+  条件: (l m : Language α) (x : 列表 α)
   结论: x in l + m ↔ x in l ∨ x in m
   证明: Iff.rfl
 
@@ -472,7 +472,7 @@ theorem mem_sub
 
 中文:
 定理 mem_sub
-  条件: (l m : Language α) (x : List α)
+  条件: (l m : Language α) (x : 列表 α)
   结论: x in l - m ↔ x in l ∧ x ∉ m
   证明: Iff.rfl
 
@@ -527,7 +527,7 @@ theorem mem_kstar
 
 中文:
 定理 mem_kstar
-  结论: x in l∗ ↔ 存在 L : List (List α), x = L.flatten ∧ 对任意 y in L, y in l
+  结论: x in l∗ ↔ 存在 L : 列表 (列表 α), x = L.flatten ∧ 对任意 y in L, y in l
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -546,7 +546,7 @@ theorem join_mem_kstar
 
 中文:
 定理 join_mem_kstar
-  条件: {L : List (List α)} (h : 对任意 y in L, y in l)
+  条件: {L : 列表 (列表 α)} (h : 对任意 y in L, y in l)
   结论: L.flatten in l∗
   证明: ⟨L, rfl, h⟩
 -/
@@ -609,7 +609,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (Language α) where
+  签名: : 半环 (Language α) where
   定义体: union_assoc
   zero_add := empty_union
   add_zero := union_empty
@@ -750,8 +750,8 @@ lemma mem_kstar_iff_exists_nonempty
   · rintro ⟨S, hx, h⟩
 
 中文:
-引理 mem_kstar_iff_exists_nonempty
-  条件: {x : List α}
+引理 mem_kstar_iff_存在_nonempty
+  条件: {x : 列表 α}
   证明: by
   constructor
   · rintro ⟨S, rfl, h⟩
@@ -862,7 +862,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {ι : Sort v} {l : ι -> Language α} {x : List α}
+  条件: {ι : 类型层 v} {l : ι -> Language α} {x : 列表 α}
   结论: (x in ⨆ i, l i) ↔ 存在 i, x in l i
   证明: mem_iUnion
 
@@ -881,7 +881,7 @@ theorem iSup_mul
 
 中文:
 定理 iSup_mul
-  条件: {ι : Sort v} (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
   证明: image2_iUnion_left _ _ _
 
 Depends on / 依赖: image2_iUnion_left
@@ -900,7 +900,7 @@ theorem mul_iSup
 
 中文:
 定理 mul_iSup
-  条件: {ι : Sort v} (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
   证明: image2_iUnion_right _ _ _
 
 Depends on / 依赖: image2_iUnion_right
@@ -919,7 +919,7 @@ theorem iSup_add
 
 中文:
 定理 iSup_add
-  条件: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
   证明: iSup_sup
 
 Depends on / 依赖: iSup_sup
@@ -938,7 +938,7 @@ theorem add_iSup
 
 中文:
 定理 add_iSup
-  条件: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
   证明: sup_iSup
 
 Depends on / 依赖: sup_iSup
@@ -957,7 +957,7 @@ theorem iSup_sub
 
 中文:
 定理 iSup_sub
-  条件: {ι : Sort v} (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} (l : ι -> Language α) (m : Language α)
   证明: iUnion_sdiff _ _
 
 Depends on / 依赖: iUnion_sdiff
@@ -976,7 +976,7 @@ theorem sub_iSup
 
 中文:
 定理 sub_iSup
-  条件: {ι : Sort v} [Nonempty ι] (l : ι -> Language α) (m : Language α)
+  条件: {ι : 类型层 v} [非空 ι] (l : ι -> Language α) (m : Language α)
   证明: sdiff_iUnion _ _
 
 Depends on / 依赖: sdiff_iUnion
@@ -1004,7 +1004,7 @@ theorem mem_pow
 
 中文:
 定理 mem_pow
-  条件: {l : Language α} {x : List α} {n : 自然数}
+  条件: {l : Language α} {x : 列表 α} {n : 自然数}
   证明: by
   induction n generalizing x with
   | zero => simp
@@ -1186,7 +1186,7 @@ instance :
 
 中文:
 实例 :
-  签名: KleeneAlgebra (Language α)
+  签名: Kleene代数 (Language α)
   定义体: inferInstance
   one_le_kstar a _ hl := ⟨[], hl, by simp⟩
   mul_kstar_le_kstar a := (one_add_self_mul_kstar_eq_kstar a).le.trans' le_sup_right
@@ -1347,7 +1347,7 @@ lemma reverse_eq_image
 中文:
 引理 reverse_eq_image
   条件: (l : Language α)
-  结论: l.reverse = List.reverse '' l
+  结论: l.reverse = 列表.reverse '' l
   证明: ((List.reverse_involutive.toPerm _).image_eq_preimage_symm _).symm
 
 @[simp]
@@ -1408,7 +1408,7 @@ lemma reverse_involutive
 
 中文:
 引理 reverse_involutive
-  结论: Function.Involutive (reverse : Language α -> _)
+  结论: 函数.对合 (reverse : Language α -> _)
   证明: List.reverse_involutive.preimage
 
 Depends on / 依赖: List.reverse_involutive.preimage, preimage, reverse_involutive
@@ -1426,7 +1426,7 @@ lemma reverse_bijective
 
 中文:
 引理 reverse_bijective
-  结论: Function.Bijective (reverse : Language α -> _)
+  结论: 函数.双射 (reverse : Language α -> _)
   证明: reverse_involutive.bijective
 
 Depends on / 依赖: bijective, reverse_involutive, reverse_involutive.bijective
@@ -1444,7 +1444,7 @@ lemma reverse_injective
 
 中文:
 引理 reverse_injective
-  结论: Function.Injective (reverse : Language α -> _)
+  结论: 函数.单射 (reverse : Language α -> _)
   证明: reverse_involutive.injective
 
 Depends on / 依赖: injective, reverse_involutive, reverse_involutive.injective
@@ -1464,7 +1464,7 @@ lemma reverse_surjective
 
 中文:
 引理 reverse_surjective
-  结论: Function.Surjective (reverse : Language α -> _)
+  结论: 函数.满射 (reverse : Language α -> _)
   证明: reverse_involutive.surjective
 
 @[simp]
@@ -1564,7 +1564,7 @@ lemma reverse_iSup
 
 中文:
 引理 reverse_iSup
-  条件: {ι : Sort*} (l : ι -> Language α)
+  条件: {ι : 类型层*} (l : ι -> Language α)
   结论: (⨆ i, l i).reverse = ⨆ i, (l i).reverse
   证明: preimage_iUnion
 
@@ -1587,7 +1587,7 @@ lemma reverse_iInf
 
 中文:
 引理 reverse_iInf
-  条件: {ι : Sort*} (l : ι -> Language α)
+  条件: {ι : 类型层*} (l : ι -> Language α)
   结论: (⨅ i, l i).reverse = ⨅ i, (l i).reverse
   证明: preimage_iInter
 
@@ -1701,7 +1701,7 @@ lemma mem_inf
 
 中文:
 引理 mem_inf
-  条件: {x : List α} {l m : Language α}
+  条件: {x : 列表 α} {l m : Language α}
   结论: x in l ⊓ m ↔ x in l ∧ x in m
   证明: by
   apply Set.mem_inter_iff

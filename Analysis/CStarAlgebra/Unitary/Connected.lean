@@ -76,7 +76,7 @@ lemma Unitary.two_mul_one_sub_le_norm_sub_one_sq
   simpa using congr(Real
 
 中文:
-引理 Unitary.two_mul_one_sub_le_norm_sub_one_sq
+引理 酉.two_mul_one_sub_le_norm_sub_one_sq
   结论: {u : A} (hu : u in unitary A)
   证明: by
   rw [← Real.sqrt_le_left (by positivity)]
@@ -112,7 +112,7 @@ lemma Unitary.norm_sub_one_sq_eq
 Complex.norm_sub_one_sq_eqO
 
 中文:
-引理 Unitary.norm_sub_one_sq_eq
+引理 酉.norm_sub_one_sq_eq
   结论: {u : A} (hu : u in unitary A) {x : 实数}
   证明: by
   obtain (_ | _) := subsingleton_or_nontrivial A
@@ -157,7 +157,7 @@ lemma Unitary.norm_sub_one_lt_two_iff
       (spe
 
 中文:
-引理 Unitary.norm_sub_one_lt_two_iff
+引理 酉.norm_sub_one_lt_two_iff
   条件: {u : A} (hu : u in unitary A)
   证明: by
   nontriviality A
@@ -204,7 +204,7 @@ lemma Unitary.spectrum_subset_slitPlane_iff_norm_lt_two
 @[aesop safe apply (rule_sets := [CStarAlgebra])]
 
 中文:
-引理 Unitary.spectrum_subset_slitPlane_iff_norm_lt_two
+引理 酉.spectrum_subset_slitPlane_iff_norm_lt_two
   条件: {u : A} (hu : u in unitary A)
   证明: by
   simp [subset_slitPlane_iff_of_subset_sphere (spectrum.subset_circle_of_unitary hu),
@@ -233,7 +233,7 @@ lemma IsSelfAdjoint.cfc_arg
 中文:
 引理 IsSelfAdjoint.cfc_arg
   条件: (u : A)
-  结论: IsSelfAdjoint (cfc (of实数 ∘ arg : Complex -> Complex) u)
+  结论: IsSelfAdjoint (cfc (of实数 ∘ arg : 复形 -> 复形) u)
   证明: by
   simp [isSelfAdjoint_iff, ← cfc_star, Function.comp_def]
 
@@ -256,7 +256,7 @@ definition Unitary.argSelfAdjoint
   body: ⟨cfc (arg · : Complex -> Complex) (u : A), .cfc_arg (u : A)⟩
 
 中文:
-定义 Unitary.argSelfAdjoint
+定义 酉.argSelfAdjoint
   签名: (u : unitary A)
   定义体: ⟨cfc (arg · : Complex -> Complex) (u : A), .cfc_arg (u : A)⟩
 
@@ -406,7 +406,7 @@ lemma Unitary.norm_argSelfAdjoint_le_pi
   proof: norm_cfc_le (by positivity) fun y hy => by simpa using abs_arg_le_pi y
 
 中文:
-引理 Unitary.norm_argSelfAdjoint_le_pi
+引理 酉.norm_argSelfAdjoint_le_pi
   条件: (u : unitary A)
   证明: norm_cfc_le (by positivity) fun y hy => by simpa using abs_arg_le_pi y
 
@@ -427,7 +427,7 @@ lemma Unitary.two_mul_one_sub_cos_norm_argSelfAdjoint
 exact Eq.symm norm_sq_expUnitary_sub_one norm_argSelfAdjoint_le_pi u
 
 中文:
-引理 Unitary.two_mul_one_sub_cos_norm_argSelfAdjoint
+引理 酉.two_mul_one_sub_cos_norm_argSelfAdjoint
   条件: {u : unitary A} (hu : ‖(u - 1 : A)‖ < 2)
   证明: by
   conv_rhs => rw [← expUnitary_argSelfAdjoint hu]
@@ -451,7 +451,7 @@ lemma Unitary.norm_argSelfAdjoint
   linarith [two_mul_one_sub_cos_norm_argSelfAdjoint hu]
 
 中文:
-引理 Unitary.norm_argSelfAdjoint
+引理 酉.norm_argSelfAdjoint
   条件: {u : unitary A} (hu : ‖(u - 1 : A)‖ < 2)
   证明: by
 .symm refine Real.arccos_eq_of_eq_cos (by positivity) (norm_argSelfAdjoint_le_pi u) ?_
@@ -481,7 +481,7 @@ lemma Unitary.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
   rw [norm_sq_expUn
 
 中文:
-引理 Unitary.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
+引理 酉.norm_expUnitary_smul_argSelfAdjoint_sub_one_le
   结论: (u : unitary A)
   证明: by
   have key : ‖t • argSelfAdjoint u‖ <= ‖argSelfAdjoint u‖ := by
@@ -524,7 +524,7 @@ lemma Unitary.continuousOn_argSelfAdjoint
   have hε : 0 < ε := lt_of_le
 
 中文:
-引理 Unitary.continuousOn_argSelfAdjoint
+引理 酉.continuousOn_argSelfAdjoint
   证明: by
   rw [Topology.IsInducing.subtypeVal.continuousOn_iff]
   simp only [Function.comp_def, argSelfAdjoint_coe]
@@ -583,7 +583,7 @@ definition Unitary.openPartialHomeomorph
       Real.arccos (1 - ‖(u - 1 : A)‖ ^ 2 / 2) < Real.arccos
 
 中文:
-定义 Unitary.openPartialHomeomorph
+定义 酉.openPartialHomeomorph
   签名: :
   定义体: argSelfAdjoint
   invFun := expUnitary
@@ -637,7 +637,7 @@ lemma Unitary.norm_sub_eq
   _ = ‖((u * star v : unitary A) - 1 : A)‖ := by simp
 
 中文:
-引理 Unitary.norm_sub_eq
+引理 酉.norm_sub_eq
   条件: (u v : unitary A)
   证明: calc
   ‖(u - v : A)‖ = ‖(u * star v - 1 : A) * v‖ := by simp [sub_mul, mul_assoc]
@@ -657,7 +657,7 @@ lemma Unitary.expUnitary_eq_mul_inv
   proof: expUnitary_argSelfAdjoint norm_sub_eq u v ▸ huv
 
 中文:
-引理 Unitary.expUnitary_eq_mul_inv
+引理 酉.expUnitary_eq_mul_inv
   条件: (u v : unitary A) (huv : ‖(u - v : A)‖ < 2)
   证明: expUnitary_argSelfAdjoint norm_sub_eq u v ▸ huv
 
@@ -737,7 +737,7 @@ definition Unitary.path
   target' := by simp [expUnitary_eq_mul_inv v u huv, mul_assoc]
 
 中文:
-定义 Unitary.path
+定义 酉.path
   签名: (u v : unitary A) (huv : ‖(v - u : A)‖ < 2)
   定义体: expUnitary ((t : Real) • argSelfAdjoint (v * star u)) * u
   continuous_toFun := by fun_prop
@@ -762,7 +762,7 @@ lemma Unitary.joined
   proof: ⟨path u v huv⟩
 
 中文:
-引理 Unitary.joined
+引理 酉.joined
   条件: (u v : unitary A) (huv : ‖(v - u : A)‖ < 2)
   证明: ⟨path u v huv⟩
 -/
@@ -786,7 +786,7 @@ lemma Unitary.isPathConnected_ball
   have hu : ‖(u - 1 : A)‖ < δ := by simpa [S
 
 中文:
-引理 Unitary.isPathConnected_ball
+引理 酉.isPathConnected_ball
   条件: (u : unitary A) (δ : 实数) (hδ₀ : 0 < δ) (hδ₂ : δ < 2)
   证明: by
   suffices IsPathConnected (ball (1 : unitary A) δ) by
@@ -822,8 +822,8 @@ instance Unitary.instLocallyPathConnectedSpace
     simpa using! isPathConnected_ball
 
 中文:
-实例 Unitary.instLocallyPathConnectedSpace
-  签名: : LocallyPathConnectedSpace (unitary A)
+实例 酉.instLocallyPathConnectedSpace
+  签名: : LocallyPathConnected空间 (unitary A)
   定义体: .of_bases (fun _ => nhds_basis_uniformity <| uniformity_basis_dist_lt zero_lt_two) by
     simpa using! isPathConnected_ball
 
@@ -850,7 +850,7 @@ lemma Unitary.mem_pathComponentOne_iff
     obtain ⟨v, ⟨⟨l, 
 
 中文:
-引理 Unitary.mem_pathComponentOne_iff
+引理 酉.mem_pathComponentOne_iff
   条件: {u : unitary A}
   证明: by
   constructor

@@ -59,7 +59,7 @@ lemma exists_lift_of_finite_of_injective_of_surjective
   have Z_closed (i) : IsClosed (
 
 中文:
-引理 exists_lift_of_finite_of_injective_of_surjective
+引理 存在_lift_of_finite_of_injective_of_surjective
   结论: {X Y S T : 类型}
   证明: by
   -- `T` is finite because it admits a surjection from a finite set
@@ -141,8 +141,8 @@ lemma exists_lift_of_finite_of_mono_of_epi
   exac
 
 中文:
-引理 exists_lift_of_finite_of_mono_of_epi
-  结论: {X Y S T : Profinite.{u}} [Finite S]
+引理 存在_lift_of_finite_of_mono_of_epi
+  结论: {X Y S T : Profinite.{u}} [有限 S]
   证明: by
   obtain ⟨k_fun, k_cont, h₁, h₂⟩ := exists_lift_of_finite_of_injective_of_surjective
     f (by fun_prop) ((CompHausLike.mono_iff_injective f).mp inferInstance)
@@ -176,7 +176,7 @@ instance injective_of_finite
 
 中文:
 实例 injective_of_finite
-  签名: (S : Profinite.{u}) [Nonempty S] [Finite S]
+  签名: (S : Profinite.{u}) [非空 S] [有限 S]
   定义体: by
     have (T : Profinite.{u}) [Nonempty T] : IsSplitEpi (CompHausLike.isTerminalPUnit.from T) :=
       IsSplitEpi.mk' { section_ := CompHausLike.const _ (Nonempty.some inferInstance) }
@@ -212,7 +212,7 @@ have : Nonempty lightToProfinite.obj (S.component 0) :=
 
 中文:
 实例 injective_of_light
-  签名: (S : LightProfinite.{u}) [Nonempty S]
+  签名: (S : LightProfinite.{u}) [非空 S]
   定义体: by
     -- help the instance inference a bit
 have (n : Nat) : Finite lightToProfinite.obj (S.component n) :=
@@ -297,7 +297,7 @@ instance LightProfinite.injective
 
 中文:
 实例 LightProfinite.injective
-  签名: (S : LightProfinite.{u}) [Nonempty S]
+  签名: (S : LightProfinite.{u}) [非空 S]
   定义体: by
     obtain ⟨h, _⟩ := Injective.factors (lightToProfinite.map g) (lightToProfinite.map f)
     refine ⟨lightToProfiniteFullyFaithful.preimage h, ?_⟩

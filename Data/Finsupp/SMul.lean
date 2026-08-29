@@ -79,7 +79,7 @@ definition comapSMul
 
 中文:
 定义 comapSMul
-  签名: : SMul G (α ->₀ M) where smul g
+  签名: : 标量乘法 G (α ->₀ M) where smul g
   定义体: mapDomain (g • ·)
 
 Depends on / 依赖: mapDomain
@@ -145,7 +145,7 @@ definition comapMulAction
 
 中文:
 定义 comapMulAction
-  签名: : MulAction G (α ->₀ M) where
+  签名: : 乘法作用 G (α ->₀ M) where
   定义体: by rw [comapSMul_def, one_smul_eq_id, mapDomain_id]
   mul_smul g g' f := by
     rw [comapSMul_def]; rw [comapSMul_def]; rw [comapSMul_def]; rw [← comp_smul_left]; rw [mapDomain_comp]
@@ -178,7 +178,7 @@ definition comapDistribMulAction
 
 中文:
 定义 comapDistribMulAction
-  签名: : DistribMulAction G (α ->₀ M) where
+  签名: : 分配乘法作用 G (α ->₀ M) where
   定义体: by
     ext a
     simp only [comapSMul_def]
@@ -251,7 +251,7 @@ theorem _root_.IsSMulRegular.finsupp
 
 中文:
 定理 _root_.IsSMulRegular.finsupp
-  结论: [Zero M] [SMulZeroClass R M] {k : R}
+  结论: [零 M] [SMulZero类 R M] {k : R}
   证明: fun _ _ h => ext fun i => hk (DFunLike.congr_fun h i)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun
@@ -271,7 +271,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: [Nonempty α] [Zero M] [SMulZeroClass R M] [FaithfulSMul R M]
+  签名: [非空 α] [零 M] [SMulZero类 R M] [忠实标量乘法 R M]
   定义体: let ⟨a⟩ := ‹Nonempty α›
     eq_of_smul_eq_smul fun m : M => by simpa using DFunLike.congr_fun (h (single a m)) a
 
@@ -297,7 +297,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid R] [AddMonoid M] [DistribMulAction R M]
+  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   定义体: { Finsupp.distribSMul _ _ with
     one_smul := fun x => ext fun y => one_smul R (x y)
     mul_smul := fun r s x => ext fun y => mul_smul r s (x y) }
@@ -322,7 +322,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { toDistribMulAction := Finsupp.distribMulAction α M
     zero_smul := fun _ => ext fun _ => zero_smul _ _
     add_smul := fun _ _ _ => ext fun _ => add_smul _ _ _ }
@@ -347,7 +347,7 @@ theorem support_smul_eq
 
 中文:
 定理 support_smul_eq
-  结论: [Semiring R] [IsDomain R] [AddCommMonoid M] [Module R M]
+  结论: [半环 R] [是整环 R] [加法交换幺半群 M] [模 R M]
   证明: Finset.ext fun a => by simp [Finsupp.smul_apply, hb]
 
 Depends on / 依赖: Finset, Finset.ext, Finsupp, Finsupp.smul_apply, smul_apply
@@ -373,7 +373,7 @@ theorem filter_smul
 
 中文:
 定理 filter_smul
-  条件: [Zero M] [SMulZeroClass R M] {b : R} {v : α ->₀ M}
+  条件: [零 M] [SMulZero类 R M] {b : R} {v : α ->₀ M}
   证明: DFunLike.coe_injective by
     simp only [filter_eq_indicator, coe_smul]
     exact Set.indicator_const_smul { x | p x } b v
@@ -398,7 +398,7 @@ theorem mapDomain_smul
 
 中文:
 定理 mapDomain_smul
-  结论: [AddCommMonoid M] [DistribSMul R M] {f : α -> β} (b : R)
+  结论: [加法交换幺半群 M] [分配标量乘法 R M] {f : α -> β} (b : R)
   证明: mapDomain_mapRange _ _ _ _ (smul_add b)
 
 Depends on / 依赖: mapDomain_mapRange, smul_add
@@ -417,7 +417,7 @@ theorem smul_single'
 
 中文:
 定理 smul_single'
-  条件: {_ : Semiring R} (c : R) (a : α) (b : R)
+  条件: {_ : 半环 R} (c : R) (a : α) (b : R)
   证明: by simp
 -/
 theorem smul_single' {_ : Semiring R} (c : R) (a : α) (b : R) :
@@ -434,7 +434,7 @@ theorem smul_single_one
 
 中文:
 定理 smul_single_one
-  条件: [MulZeroOneClass R] (a : α) (b : R)
+  条件: [乘零幺类 R] (a : α) (b : R)
   证明: by
   rw [smul_single]; rw [smul_eq_mul]; rw [mul_one]
 
@@ -456,7 +456,7 @@ theorem comapDomain_smul
 
 中文:
 定理 comapDomain_smul
-  结论: [Zero M] [SMulZeroClass R M] {f : α -> β} (r : R)
+  结论: [零 M] [SMulZero类 R M] {f : α -> β} (r : R)
   证明: by
   ext
   rfl
@@ -481,7 +481,7 @@ theorem comapDomain_smul_of_injective
 
 中文:
 定理 comapDomain_smul_of_injective
-  结论: [Zero M] [SMulZeroClass R M] {f : α -> β}
+  结论: [零 M] [SMulZero类 R M] {f : α -> β}
   证明: comapDomain_smul _ _ _ _
 
 Depends on / 依赖: comapDomain_smul
@@ -503,7 +503,7 @@ theorem sum_smul_index
 
 中文:
 定理 sum_smul_index
-  结论: [MulZeroClass R] [AddCommMonoid M] {g : α ->₀ R} {b : R} {h : α -> R -> M}
+  结论: [乘零类 R] [加法交换幺半群 M] {g : α ->₀ R} {b : R} {h : α -> R -> M}
   证明: Finsupp.sum_mapRange_index h0
 
 Depends on / 依赖: Finsupp, Finsupp.sum_mapRange_index, sum_mapRange_index
@@ -522,7 +522,7 @@ theorem sum_smul_index'
 
 中文:
 定理 sum_smul_index'
-  结论: [Zero M] [SMulZeroClass R M] [AddCommMonoid N] {g : α ->₀ M} {b : R}
+  结论: [零 M] [SMulZero类 R M] [加法交换幺半群 N] {g : α ->₀ M} {b : R}
   证明: Finsupp.sum_mapRange_index h0
 
 Depends on / 依赖: Finsupp, Finsupp.sum_mapRange_index, sum_mapRange_index
@@ -541,7 +541,7 @@ theorem sum_smul_index_addMonoidHom
 
 中文:
 定理 sum_smul_index_addMonoidHom
-  结论: [AddZeroClass M] [AddCommMonoid N] [SMulZeroClass R M]
+  结论: [加法零类 M] [加法交换幺半群 N] [SMulZero类 R M]
   证明: sum_mapRange_index fun i => (h i).map_zero
 
 Depends on / 依赖: map_zero, sum_mapRange_index
@@ -561,7 +561,7 @@ instance moduleIsTorsionFree
 
 中文:
 实例 moduleIsTorsionFree
-  签名: [Semiring R] [AddCommMonoid M] [Module R M] {ι : 类型}
+  签名: [半环 R] [加法交换幺半群 M] [模 R M] {ι : 类型}
   定义体: by ext i; exact hr.isSMulRegular congr($hfg i)
 
 Depends on / 依赖: hr.isSMulRegular, isSMulRegular
@@ -583,7 +583,7 @@ definition DistribMulActionHom.single
     map_smul' := fun k m => by simp }
 
 中文:
-定义 DistribMulActionHom.single
+定义 分配乘法作用态射.single
   签名: (a : α)
   定义体: { singleAddHom a with
     map_smul' := fun k m => by simp }

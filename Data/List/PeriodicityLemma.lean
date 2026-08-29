@@ -41,7 +41,7 @@ definition HasPeriod
 
 中文:
 定义 HasPeriod
-  签名: (w : List α) (p : 自然数)
+  签名: (w : 列表 α) (p : 自然数)
   定义体: w <+: take p w ++ w
 -/
 def HasPeriod (w : List α) (p : Nat) : Prop := w <+: take p w ++ w
@@ -65,7 +65,7 @@ lemma hasPeriod_iff_getElem?
 
 中文:
 引理 hasPeriod_iff_getElem?
-  条件: {p : 自然数} {w : List α}
+  条件: {p : 自然数} {w : 列表 α}
   证明: by
   constructor
   · rw [HasPeriod]
@@ -115,7 +115,7 @@ lemma hasPeriod_zero
 
 中文:
 引理 hasPeriod_zero
-  条件: (w : List α)
+  条件: (w : 列表 α)
   结论: HasPeriod w 0
   证明: by
   simp [HasPeriod]
@@ -140,7 +140,7 @@ lemma hasPeriod_of_length_le
 
 中文:
 引理 hasPeriod_of_length_le
-  条件: (w : List α) (p : 自然数) (large : w.length <= p)
+  条件: (w : 列表 α) (p : 自然数) (large : w.length <= p)
   结论: HasPeriod w p
   证明: by
   rw [HasPeriod]; simp_all [(take_eq_self_iff w).mpr large]
@@ -163,7 +163,7 @@ lemma hasPeriod_empty
 中文:
 引理 hasPeriod_empty
   条件: (p : 自然数)
-  结论: HasPeriod ([] : List α) p
+  结论: HasPeriod ([] : 列表 α) p
   证明: by
   simp
 -/
@@ -189,7 +189,7 @@ lemma HasPeriod.getElem?_mod
 
 中文:
 引理 HasPeriod.getElem?_mod
-  结论: (p i : 自然数) (w : List α) (per : HasPeriod w p)
+  结论: (p i : 自然数) (w : 列表 α) (per : HasPeriod w p)
   证明: by
   by_cases p_zero : p = 0
   · rw [p_zero, mod_zero]
@@ -237,8 +237,8 @@ lemma hasPeriod_iff_forall_getElem?_mod
     rw [mod (i + p) (by lia)]; rw [add_mod_right]; rw [mod i (by lia)]
 
 中文:
-引理 hasPeriod_iff_forall_getElem?_mod
-  条件: {p : 自然数} {w : List α}
+引理 hasPeriod_iff_对任意_getElem?_mod
+  条件: {p : 自然数} {w : 列表 α}
   证明: by
   constructor
   · intro per i len
@@ -276,7 +276,7 @@ lemma HasPeriod.factor
 
 中文:
 引理 HasPeriod.factor
-  条件: {u v w : List α} {p : 自然数} (per : HasPeriod (u ++ v ++ w) p)
+  条件: {u v w : 列表 α} {p : 自然数} (per : HasPeriod (u ++ v ++ w) p)
   证明: by
   suffices forall j < v.length - p, v[j]? = v[j + p]? by simpa [hasPeriod_iff_getElem?]
   intro j len
@@ -319,7 +319,7 @@ lemma HasPeriod.infix
 
 中文:
 引理 HasPeriod.infix
-  条件: {u w : List α} {p : 自然数} (per : HasPeriod w p) (h : u <:+: w)
+  条件: {u w : 列表 α} {p : 自然数} (per : HasPeriod w p) (h : u <:+: w)
   证明: by
   obtain ⟨s, t, rfl⟩ := h
   exact per.factor
@@ -343,7 +343,7 @@ lemma HasPeriod.drop_prefix
 
 中文:
 引理 HasPeriod.drop_prefix
-  条件: {w : List α} (p : 自然数) (per : HasPeriod w p)
+  条件: {w : 列表 α} (p : 自然数) (per : HasPeriod w p)
   证明: by
   rw [← prefix_append_right_inj (take p w)]
   simp_all [HasPeriod, take_append_drop]
@@ -372,7 +372,7 @@ lemma HasPeriod.take_append
 
 中文:
 引理 HasPeriod.take_append
-  结论: (p n : 自然数) (w : List α) (dvd : p ∣ n)
+  结论: (p n : 自然数) (w : 列表 α) (dvd : p ∣ n)
   证明: by
   rcases Nat.eq_zero_or_pos p with rfl | p_pos
   · simp_all [HasPeriod]
@@ -436,7 +436,7 @@ lemma HasPeriod.drop_of_hasPeriod_add
 
 中文:
 引理 HasPeriod.drop_of_hasPeriod_add
-  结论: {q k : 自然数} {w : List α}
+  结论: {q k : 自然数} {w : 列表 α}
   证明: by
   rw [hasPeriod_iff_getElem?] at per_plus per_q ⊢
   simp only [length_drop, getElem?_drop]
@@ -478,8 +478,8 @@ theorem HasPeriod.gcd
       exact (gcd_comm q p ▸
 
 中文:
-定理 HasPeriod.gcd
-  结论: {w : List α} {p q : 自然数} (per_p : HasPeriod w p) (per_q : HasPeriod w q)
+定理 HasPeriod.最大公约数
+  结论: {w : 列表 α} {p q : 自然数} (per_p : HasPeriod w p) (per_q : HasPeriod w q)
   证明: by
   rcases Nat.eq_zero_or_pos p with rfl | p_pos
   · simp_all [HasPeriod]

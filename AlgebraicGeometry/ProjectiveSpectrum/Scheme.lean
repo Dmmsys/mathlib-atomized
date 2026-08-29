@@ -178,7 +178,7 @@ definition carrier
 
 中文:
 定义 carrier
-  签名: : Ideal (A⁰_ f)
+  签名: : 理想 (A⁰_ f)
   定义体: Ideal.comap (algebraMap (A⁰_ f) (Away f))
     (x.val.asHomogeneousIdeal.toIdeal.map (algebraMap A (Away f)))
 
@@ -230,7 +230,7 @@ theorem isPrime_carrier
 
 中文:
 定理 isPrime_carrier
-  结论: Ideal.IsPrime (carrier x)
+  结论: 理想.是素 (carrier x)
   证明: by
   refine Ideal.IsPrime.comap _ (hK := ?_)
   exact IsLocalization.isPrime_of_isPrime_disjoint
@@ -752,7 +752,7 @@ definition carrier.asIdeal
 
 中文:
 定义 carrier.asIdeal
-  签名: : Ideal A where
+  签名: : 理想 A where
   定义体: carrier f_deg q
   zero_mem' := carrier.zero_mem f_deg hm q
   add_mem' := carrier.add_mem f_deg q
@@ -904,7 +904,7 @@ theorem carrier.asIdeal.prime
 
 中文:
 定理 carrier.asIdeal.prime
-  结论: (carrier.asIdeal f_deg hm q).IsPrime
+  结论: (carrier.asIdeal f_deg hm q).是素
   证明: (carrier.asIdeal.homogeneous f_deg hm q).isPrime_of_homogeneous_mem_or_mem
     (carrier.asIdeal.ne_top f_deg hm q) fun {x y} ⟨nx, hnx⟩ ⟨ny, hny⟩ hxy =>
     show (forall _, _ in _) ∨ forall _, _ in _ by
@@ -1886,7 +1886,7 @@ exact x.
 
 中文:
 定义 «Proj»
-  签名: : Scheme where
+  签名: : 概形 where
   定义体: Proj.toLocallyRingedSpace 𝒜
   local_affine (x : Proj.T) := by
     classical

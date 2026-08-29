@@ -117,7 +117,7 @@ lemma norm_aux
 中文:
 引理 norm_aux
   条件: (x : M ⧸ S)
-  结论: {m : M | (m : M ⧸ S) = x}.Nonempty
+  结论: {m : M | (m : M ⧸ S) = x}.非空
   证明: Quot.exists_rep x
 -/
 private lemma norm_aux (x : M ⧸ S) : {m : M | (m : M ⧸ S) = x}.Nonempty := Quot.exists_rep x
@@ -145,7 +145,7 @@ definition groupSeminorm
 
 中文:
 定义 groupSeminorm
-  签名: : GroupSeminorm (M ⧸ S) where
+  签名: : 群半范数 (M ⧸ S) where
   定义体: infDist 1 {m : M | (m : M ⧸ S) = x}
   map_one' := infDist_zero_of_mem (by simp)
   mul_le' x y := by
@@ -190,7 +190,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm (M ⧸ S) where norm
+  签名: : 范数 (M ⧸ S) where norm
   定义体: groupSeminorm
 
 @[to_additive]
@@ -310,7 +310,7 @@ refine fun ε => Set.ext forall_mk.2 fun x => ?_
 
 中文:
 引理 nhds_one_hasBasis
-  结论: (𝓝 (1 : M ⧸ S)).HasBasis (fun ε => 0 < ε) fun ε => {x | ‖x‖ < ε}
+  结论: (𝓝 (1 : M ⧸ S)).有基 (fun ε => 0 < ε) fun ε => {x | ‖x‖ < ε}
   证明: by
   have : forall ε : Real, mk '' ball (1 : M) ε = {x : M ⧸ S | ‖x‖ < ε} := by
 refine fun ε => Set.ext forall_mk.2 fun x => ?_
@@ -396,7 +396,7 @@ lemma norm_mk_eq_zero_iff_mem_closure
 
 中文:
 引理 norm_mk_eq_zero_iff_mem_closure
-  结论: ‖(m : M ⧸ S)‖ = 0 ↔ m in closure (S : Set M)
+  结论: ‖(m : M ⧸ S)‖ = 0 ↔ m in closure (S : 集合 M)
   证明: by
   rw [norm_mk]; rw [← mem_closure_iff_infDist_zero]
   exact ⟨1, S.one_mem⟩
@@ -423,7 +423,7 @@ lemma norm_mk_eq_zero
 
 中文:
 引理 norm_mk_eq_zero
-  条件: [hS : IsClosed (S : Set M)]
+  条件: [hS : 是闭集 (S : 集合 M)]
   结论: ‖(m : M ⧸ S)‖ = 0 ↔ m in S
   证明: by
   rw [norm_mk_eq_zero_iff_mem_closure]; rw [hS.closure_eq]; rw [SetLike.mem_coe]
@@ -447,7 +447,7 @@ lemma exists_norm_mk_lt
   proof: norm_lt_iff.1 lt_add_of_pos_right _ hε
 
 中文:
-引理 exists_norm_mk_lt
+引理 存在_norm_mk_lt
   条件: (x : M ⧸ S) (hε : 0 < ε)
   结论: 存在 m : M, m = x ∧ ‖m‖ < ‖x‖ + ε
   证明: norm_lt_iff.1 lt_add_of_pos_right _ hε
@@ -471,8 +471,8 @@ lemma exists_norm_mul_lt
   exact ⟨m⁻¹ * n, by simpa [eq_comm, QuotientGroup.eq] using hn, by simpa⟩
 
 中文:
-引理 exists_norm_mul_lt
-  条件: (S : Subgroup M) (m : M) {ε : 实数} (hε : 0 < ε)
+引理 存在_norm_mul_lt
+  条件: (S : 子群 M) (m : M) {ε : 实数} (hε : 0 < ε)
   证明: by
   obtain ⟨n : M, hn, hn'⟩ := exists_norm_mk_lt (QuotientGroup.mk' S m) hε
   exact ⟨m⁻¹ * n, by simpa [eq_comm, QuotientGroup.eq] using hn, by simpa⟩
@@ -501,7 +501,7 @@ instance instSeminormedCommGroup
 
 中文:
 实例 instSeminormedCommGroup
-  签名: : SeminormedCommGroup (M ⧸ S) where
+  签名: : SeminormedComm群 (M ⧸ S) where
   定义体: IsTopologicalGroup.leftUniformSpace (M ⧸ S)
   __ := groupSeminorm.toSeminormedCommGroup
   uniformity_dist := by
@@ -530,7 +530,7 @@ instance instNormedCommGroup
 
 中文:
 实例 instNormedCommGroup
-  签名: [hS : IsClosed (S : Set M)]
+  签名: [hS : 是闭集 (S : 集合 M)]
   定义体: MetricSpace.ofT0PseudoMetricSpace _
 
 Depends on / 依赖: MetricSpace, MetricSpace.ofT0PseudoMetricSpace, ofT0PseudoMetricSpace
@@ -560,7 +560,7 @@ definition _root_.Subgroup.quotientIsometryEquivOfEq
   isometry_toFun := by subst h; rintro ⟨_⟩ ⟨_⟩; rfl
 
 中文:
-定义 _root_.Subgroup.quotientIsometryEquivOfEq
+定义 _root_.子群.quotientIsometryEquivOfEq
   签名: (h : S = T)
   定义体: Subgroup.quotientEquivOfEq h
   isometry_toFun := by subst h; rintro ⟨_⟩ ⟨_⟩; rfl
@@ -588,7 +588,7 @@ definition quotientBotIsometryEquiv
 
 中文:
 定义 quotientBotIsometryEquiv
-  签名: : M ⧸ (⊥ : Subgroup M) ≃ᵢ M where
+  签名: : M ⧸ (⊥ : 子群 M) ≃ᵢ M where
   定义体: quotientBot
   isometry_toFun : Isometry quotientBot := by
     rw [MonoidHomClass.isometry_iff_norm]
@@ -665,7 +665,7 @@ theorem quotient_norm_mk_eq
 
 中文:
 定理 quotient_norm_mk_eq
-  条件: (S : AddSubgroup M) (m : M)
+  条件: (S : 加法子群 M) (m : M)
   证明: by
   rw [mk'_apply]; rw [norm_mk]; rw [sInf_image']; rw [← infDist_image isometry_neg]; rw [image_neg_eq_neg]; rw [neg_coe_set (H := S)]; rw [infDist_eq_iInf]
   simp only [dist_eq_norm', sub_neg_eq_add, add_comm]
@@ -688,7 +688,7 @@ theorem quotient_norm_add_le
 
 中文:
 定理 quotient_norm_add_le
-  条件: (S : AddSubgroup M) (x y : M ⧸ S)
+  条件: (S : 加法子群 M) (x y : M ⧸ S)
   结论: ‖x + y‖ <= ‖x‖ + ‖y‖
   证明: norm_add_le x y
 
@@ -712,7 +712,7 @@ definition normedMk
 
 中文:
 定义 normedMk
-  签名: (S : AddSubgroup M)
+  签名: (S : 加法子群 M)
   定义体: QuotientAddGroup.mk' S
   bound' := ⟨1, fun m => by simpa [one_mul] using norm_mk_le_norm⟩
 
@@ -735,7 +735,7 @@ theorem normedMk.apply
 
 中文:
 定理 normedMk.apply
-  条件: (S : AddSubgroup M) (m : M)
+  条件: (S : 加法子群 M) (m : M)
   结论: normedMk S m = QuotientAddGroup.mk' S m
   证明: rfl
 -/
@@ -753,8 +753,8 @@ theorem surjective_normedMk
 
 中文:
 定理 surjective_normedMk
-  条件: (S : AddSubgroup M)
-  结论: Function.Surjective (normedMk S)
+  条件: (S : 加法子群 M)
+  结论: 函数.满射 (normedMk S)
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -773,7 +773,7 @@ theorem ker_normedMk
 
 中文:
 定理 ker_normedMk
-  条件: (S : AddSubgroup M)
+  条件: (S : 加法子群 M)
   结论: S.normedMk.ker = S
   证明: QuotientAddGroup.ker_mk' _
 
@@ -793,7 +793,7 @@ theorem norm_normedMk_le
 
 中文:
 定理 norm_normedMk_le
-  条件: (S : AddSubgroup M)
+  条件: (S : 加法子群 M)
   结论: ‖S.normedMk‖ <= 1
   证明: NormedAddGroupHom.opNorm_le_bound _ zero_le_one fun m => by simp [norm_mk_le_norm]
 
@@ -821,7 +821,7 @@ theorem _root_.QuotientAddGroup.norm_lift_apply_le
 
 中文:
 定理 _root_.QuotientAddGroup.norm_lift_apply_le
-  结论: {S : AddSubgroup M} (f : NormedAddGroupHom M N)
+  结论: {S : 加法子群 M} (f : 赋范加群态射 M N)
   证明: by
   cases (norm_nonneg f).eq_or_lt' with
   | inl h =>
@@ -861,7 +861,7 @@ exact (norm_nonneg _).lt_of_ne' mt norm_mk_eq_zero_iff_mem_closure.1 hx
 
 中文:
 定理 norm_normedMk
-  条件: (S : AddSubgroup M) (h : (S.topologicalClosure : Set M) != univ)
+  条件: (S : 加法子群 M) (h : (S.topologicalClosure : 集合 M) != univ)
   证明: by
   refine le_antisymm (norm_normedMk_le S) ?_
   obtain ⟨x, hx⟩ : exists x : M, 0 < ‖(x : M ⧸ S)‖ := by
@@ -897,7 +897,7 @@ theorem norm_trivial_quotient_mk
 
 中文:
 定理 norm_trivial_quotient_mk
-  结论: (S : AddSubgroup M)
+  结论: (S : 加法子群 M)
   证明: by
   refine le_antisymm (opNorm_le_bound _ le_rfl fun x => ?_) (norm_nonneg _)
   have hker : x in S.normedMk.ker.topologicalClosure := by
@@ -932,10 +932,10 @@ structure IsQuotient
     - norm : forall x, ‖f x‖ = sInf ((fun m => ‖x + m‖) '' f.ker)
 
 中文:
-结构 IsQuotient
-  参数: (f : NormedAddGroupHom M N)
+结构 是商
+  参数: (f : 赋范加群态射 M N)
   公理与运算 (2 个):
-    - surjective : Function.Surjective f
+    - surjective : 函数.满射 f
     - norm : 对任意 x, ‖f x‖ = sInf ((fun m => ‖x + m‖) '' f.ker)
 -/
 structure IsQuotient (f : NormedAddGroupHom M N) : Prop where
@@ -953,7 +953,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  签名: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   定义体: { QuotientAddGroup.lift S f.toAddMonoidHom hf with
     bound' := ⟨‖f‖, norm_lift_apply_le f hf⟩ }
 
@@ -974,7 +974,7 @@ theorem lift_mk
 
 中文:
 定理 lift_mk
-  结论: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  结论: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   证明: rfl
 -/
 theorem lift_mk {N : Type*} [SeminormedAddCommGroup N] (S : AddSubgroup M)
@@ -997,7 +997,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  结论: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   证明: by
   ext x
   rcases AddSubgroup.surjective_normedMk _ x with ⟨x, rfl⟩
@@ -1027,8 +1027,8 @@ theorem isQuotientQuotient
 
 中文:
 定理 isQuotientQuotient
-  条件: (S : AddSubgroup M)
-  结论: IsQuotient S.normedMk
+  条件: (S : 加法子群 M)
+  结论: 是商 S.normedMk
   证明: ⟨S.surjective_normedMk, fun m => by simpa [S.ker_normedMk] using quotient_norm_mk_eq _ m⟩
 
 Depends on / 依赖: S.ker_normedMk, S.surjective_normedMk, ker_normedMk, quotient_norm_mk_eq, surjective_normedMk
@@ -1052,8 +1052,8 @@ theorem IsQuotient.norm_lift
   exact
 
 中文:
-定理 IsQuotient.norm_lift
-  结论: {f : NormedAddGroupHom M N} (hquot : IsQuotient f) {ε : 实数} (hε : 0 < ε)
+定理 是商.norm_lift
+  结论: {f : 赋范加群态射 M N} (hquot : 是商 f) {ε : 实数} (hε : 0 < ε)
   证明: by
   obtain ⟨m, rfl⟩ := hquot.surjective n
   have nonemp : ((fun m' => ‖m + m'‖) '' f.ker).Nonempty := by
@@ -1091,8 +1091,8 @@ theorem IsQuotient.norm_le
   · exact ⟨0, f.ker.zero_mem, by simp⟩
 
 中文:
-定理 IsQuotient.norm_le
-  条件: {f : NormedAddGroupHom M N} (hquot : IsQuotient f) (m : M)
+定理 是商.norm_le
+  条件: {f : 赋范加群态射 M N} (hquot : 是商 f) (m : M)
   证明: by
   rw [hquot.norm]
   apply csInf_le
@@ -1122,7 +1122,7 @@ theorem norm_lift_le
 
 中文:
 定理 norm_lift_le
-  结论: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  结论: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   证明: opNorm_le_bound _ (norm_nonneg f) (norm_lift_apply_le f hf)
 
 Depends on / 依赖: norm_lift_apply_le, norm_nonneg, opNorm_le_bound
@@ -1143,7 +1143,7 @@ theorem lift_norm_le
 
 中文:
 定理 lift_norm_le
-  结论: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  结论: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   证明: (norm_lift_le S f hf).trans fb
 
 Depends on / 依赖: norm_lift_le
@@ -1165,7 +1165,7 @@ theorem lift_normNoninc
 
 中文:
 定理 lift_normNoninc
-  结论: {N : 类型} [SeminormedAddCommGroup N] (S : AddSubgroup M)
+  结论: {N : 类型} [SeminormedAddComm群 N] (S : 加法子群 M)
   证明: fun x => by
   have fb' : ‖f‖ <= (1 : Real>=0) := NormNoninc.normNoninc_iff_norm_le_one.mp fb
   simpa using le_of_opNorm_le _ (f.lift_norm_le _ _ fb') _
@@ -1207,8 +1207,8 @@ instance Submodule.Quotient.seminormedAddCommGroup
   body: inferInstanceAs SeminormedAddCommGroup (M ⧸ S.toAddSubgroup)
 
 中文:
-实例 Submodule.Quotient.seminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (M ⧸ S)
+实例 子模.商.seminormedAddCommGroup
+  签名: : SeminormedAddComm群 (M ⧸ S)
   定义体: inferInstanceAs SeminormedAddCommGroup (M ⧸ S.toAddSubgroup)
 
 Depends on / 依赖: S.toAddSubgroup, SeminormedAddCommGroup, toAddSubgroup
@@ -1225,8 +1225,8 @@ instance Submodule.Quotient.normedAddCommGroup
   body: inferInstanceAs NormedAddCommGroup (M ⧸ S.toAddSubgroup)
 
 中文:
-实例 Submodule.Quotient.normedAddCommGroup
-  签名: [hS : IsClosed (S : Set M)]
+实例 子模.商.normedAddCommGroup
+  签名: [hS : 是闭集 (S : 集合 M)]
   定义体: inferInstanceAs NormedAddCommGroup (M ⧸ S.toAddSubgroup)
 
 Depends on / 依赖: NormedAddCommGroup, S.toAddSubgroup, toAddSubgroup
@@ -1244,8 +1244,8 @@ instance Submodule.Quotient.completeSpace
   body: QuotientAddGroup.completeSpace_left M S.toAddSubgroup
 
 中文:
-实例 Submodule.Quotient.completeSpace
-  签名: [CompleteSpace M]
+实例 子模.商.completeSpace
+  签名: [完备空间 M]
   定义体: QuotientAddGroup.completeSpace_left M S.toAddSubgroup
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.completeSpace_left, S.toAddSubgroup, completeSpace_left, toAddSubgroup
@@ -1269,9 +1269,9 @@ theorem Submodule.Quotient.norm_mk_le
   proof: norm_mk_le_norm
 
 中文:
-定理 Submodule.Quotient.norm_mk_le
+定理 子模.商.norm_mk_le
   条件: (m : M)
-  结论: ‖(Submodule.Quotient.mk m : M ⧸ S)‖ <= ‖m‖
+  结论: ‖(子模.商.mk m : M ⧸ S)‖ <= ‖m‖
   证明: norm_mk_le_norm
 
 Depends on / 依赖: norm_mk_le_norm
@@ -1292,7 +1292,7 @@ instance Submodule.Quotient.instIsBoundedSMul
       have := (nhds_basis_ball.tendsto_iff nhds
 
 中文:
-实例 Submodule.Quotient.instIsBoundedSMul
+实例 子模.商.instIsBoundedSMul
   签名: (𝕜 : 类型)
   定义体: .of_norm_smul_le fun k x =>
     -- this is `QuotientAddGroup.norm_lift_apply_le` for `f : M → M ⧸ S` given by
@@ -1328,8 +1328,8 @@ instance Submodule.Quotient.normedSpace
   body: norm_smul_le
 
 中文:
-实例 Submodule.Quotient.normedSpace
-  签名: (𝕜 : 类型) [NormedField 𝕜] [NormedSpace 𝕜 M] [SMul 𝕜 R]
+实例 子模.商.normedSpace
+  签名: (𝕜 : 类型) [赋范域 𝕜] [赋范空间 𝕜 M] [标量乘法 𝕜 R]
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -1348,7 +1348,7 @@ definition Submodule.quotLIEOfEq
   norm_map' := by subst h; rintro ⟨_⟩; rfl
 
 中文:
-定义 Submodule.quotLIEOfEq
+定义 子模.quotLIEOfEq
   签名: (h : S = T)
   定义体: Submodule.quotEquivOfEq S T h
   norm_map' := by subst h; rintro ⟨_⟩; rfl
@@ -1372,7 +1372,7 @@ definition Submodule.quotientQuotientLIEQuotient
         ((Submodule.toAddSubgroup_le S T).mpr h)).isometry
 
 中文:
-定义 Submodule.quotientQuotientLIEQuotient
+定义 子模.quotientQuotientLIEQuotient
   签名: (h : S <= T)
   定义体: Submodule.quotientQuotientEquivQuotient S T h
   norm_map' :=
@@ -1398,7 +1398,7 @@ definition Submodule.quotientQuotientLIEQuotientSup
   body: (quotLIEOfEq _ _ (by simp)).trans (quotientQuotientLIEQuotient _ _ le_sup_left)
 
 中文:
-定义 Submodule.quotientQuotientLIEQuotientSup
+定义 子模.quotientQuotientLIEQuotientSup
   签名: : (M ⧸ S) ⧸ map S.mkQ T ≃ₗᵢ[R] M ⧸ (S ⊔ T)
   定义体: (quotLIEOfEq _ _ (by simp)).trans (quotientQuotientLIEQuotient _ _ le_sup_left)
 
@@ -1427,9 +1427,9 @@ theorem Ideal.Quotient.norm_mk_le
   proof: norm_mk_le_norm
 
 中文:
-定理 Ideal.Quotient.norm_mk_le
+定理 理想.商.norm_mk_le
   条件: (r : R)
-  结论: ‖Ideal.Quotient.mk I r‖ <= ‖r‖
+  结论: ‖理想.商.mk I r‖ <= ‖r‖
   证明: norm_mk_le_norm
 
 Depends on / 依赖: norm_mk_le_norm
@@ -1450,8 +1450,8 @@ instance Ideal.Quotient.semiNormedCommRing
     simp only [Set.mem_prod, mem_ball, and_imp, Prod.
 
 中文:
-实例 Ideal.Quotient.semiNormedCommRing
-  签名: : SeminormedCommRing (R ⧸ I) where
+实例 理想.商.semiNormedCommRing
+  签名: : SeminormedComm环 (R ⧸ I) where
   定义体: dist_eq_norm_neg_add
   mul_comm := _root_.mul_comm
   norm_mul_le x y := le_of_forall_pos_le_add fun ε hε => by
@@ -1487,8 +1487,8 @@ instance Ideal.Quotient.normedCommRing
   body: { Ideal.Quotient.semiNormedCommRing I, Submodule.Quotient.normedAddCommGroup I with }
 
 中文:
-实例 Ideal.Quotient.normedCommRing
-  签名: [IsClosed (I : Set R)]
+实例 理想.商.normedCommRing
+  签名: [是闭集 (I : 集合 R)]
   定义体: { Ideal.Quotient.semiNormedCommRing I, Submodule.Quotient.normedAddCommGroup I with }
 
 Depends on / 依赖: Ideal.Quotient.semiNormedCommRing, Quotient, Submodule, Submodule.Quotient.normedAddCommGroup, normedAddCommGroup, semiNormedCommRing
@@ -1507,8 +1507,8 @@ instance Ideal.Quotient.normedAlgebra
   body: { Submodule.Quotient.normedSpace I 𝕜, Ideal.Quotient.algebra 𝕜 with }
 
 中文:
-实例 Ideal.Quotient.normedAlgebra
-  签名: [NormedAlgebra 𝕜 R]
+实例 理想.商.normedAlgebra
+  签名: [赋范代数 𝕜 R]
   定义体: { Submodule.Quotient.normedSpace I 𝕜, Ideal.Quotient.algebra 𝕜 with }
 
 Depends on / 依赖: Ideal.Quotient.algebra, Quotient, Submodule, Submodule.Quotient.normedSpace, algebra, normedSpace

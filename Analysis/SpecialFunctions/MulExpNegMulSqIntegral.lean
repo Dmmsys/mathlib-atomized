@@ -82,7 +82,7 @@ theorem integrable_mulExpNegMulSq_comp_restrict_of_isCompact
 
 中文:
 定理 integrable_mulExpNegMulSq_comp_restrict_of_isCompact
-  结论: {K : Set E} (hK : IsCompact K)
+  结论: {K : 集合 E} (hK : 是紧集 K)
   证明: g.continuous.mulExpNegMulSq.continuousOn.integrableOn_compact' hK hKmeas
 
 Depends on / 依赖: continuous, continuousOn, g.continuous.mulExpNegMulSq.continuousOn.integrableOn_compact, hKmeas, integrableOn_compact, mulExpNegMulSq
@@ -212,7 +212,7 @@ theorem integral_mulExpNegMulSq_comp_eq
 
 中文:
 定理 integral_mulExpNegMulSq_comp_eq
-  结论: {P' : Measure E} [IsFiniteMeasure P']
+  结论: {P' : 测度 E} [是有限测度 P']
   证明: by
   have one_add_inv_mul_mem (n : Nat) : g * (1 + (n : Real)⁻¹ • -(ε • g * g)) ^ n in A := by
     apply Subalgebra.mul_mem A hgA (Subalgebra.pow_mem A _ n)
@@ -250,7 +250,7 @@ theorem abs_integral_sub_setIntegral_mulExpNegMulSq_comp_lt
   exact toReal_lt_of_lt_ofReal hKP
 
 中文:
-定理 abs_integral_sub_setIntegral_mulExpNegMulSq_comp_lt
+定理 abs_integral_sub_set整数egral_mulExpNegMulSq_comp_lt
   结论: (f : C(E, 实数))
   证明: by
   apply lt_of_le_of_lt (norm_integral_sub_setIntegral_le
@@ -283,8 +283,8 @@ theorem abs_setIntegral_mulExpNegMulSq_comp_sub_le_mul_measure
     (fun x hxK => le_trans (dist_mulExpNegMulSq_le
 
 中文:
-定理 abs_setIntegral_mulExpNegMulSq_comp_sub_le_mul_measure
-  结论: {K : Set E} (hK : IsCompact K)
+定理 abs_set整数egral_mulExpNegMulSq_comp_sub_le_mul_measure
+  结论: {K : 集合 E} (hK : 是紧集 K)
   证明: by
   rw [← (integral_sub (integrable_mulExpNegMulSq_comp_restrict_of_isCompact hK hKmeas g)
       (integrable_mulExpNegMulSq_comp_restrict_of_isCompact hK hKmeas f))]; rw [← norm_eq_abs]

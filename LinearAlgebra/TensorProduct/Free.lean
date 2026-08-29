@@ -39,8 +39,8 @@ definition Algebra.TensorProduct.equivPiOfFiniteBasis
   (b.equivFun.baseChange R A _ _) ≪≫ₗ TensorProduct.piScalarRight R A A ι
 
 中文:
-定义 Algebra.TensorProduct.equivPiOfFiniteBasis
-  签名: [Finite ι]
+定义 代数.张量积.equivPiOfFiniteBasis
+  签名: [有限 ι]
   定义体: open scoped Classical in
   have : Fintype ι := .ofFinite _
   (b.equivFun.baseChange R A _ _) ≪≫ₗ TensorProduct.piScalarRight R A A ι
@@ -68,7 +68,7 @@ definition Algebra.TensorProduct.equivFinsuppOfBasis
   (b.repr.baseChange R A _ _) ≪≫ₗ TensorProduct.finsuppScalarRight R A A ι
 
 中文:
-定义 Algebra.TensorProduct.equivFinsuppOfBasis
+定义 代数.张量积.equivFinsuppOfBasis
   签名: :
   定义体: open scoped Classical in
   (b.repr.baseChange R A _ _) ≪≫ₗ TensorProduct.finsuppScalarRight R A A ι

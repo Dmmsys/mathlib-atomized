@@ -222,7 +222,7 @@ theorem Function.IsFixedPt.birkhoffSum_eq
   simp [birkhoffSum, (h.iterate _).eq]
 
 中文:
-定理 Function.IsFixedPt.birkhoffSum_eq
+定理 函数.IsFixedPt.birkhoffSum_eq
   结论: {f : α -> α} {x : α} (h : IsFixedPt f x) (g : α -> M)
   证明: by
   simp [birkhoffSum, (h.iterate _).eq]
@@ -243,7 +243,7 @@ theorem map_birkhoffSum
 
 中文:
 定理 map_birkhoffSum
-  结论: {F N : 类型} [AddCommMonoid N] [FunLike F M N] [AddMonoidHomClass F M N]
+  结论: {F N : 类型} [加法交换幺半群 N] [函数状 F M N] [加法幺半群态射类 F M N]
   证明: map_sum g' _ _
 
 Depends on / 依赖: map_sum

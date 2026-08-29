@@ -246,7 +246,7 @@ lemma hasPointwiseLeftKanExtension_iff
 
 中文:
 引理 hasPointwiseLeftKanExtension_iff
-  条件: [w.GuitartExact] [B.EssSurj] (F : C₂ ⥤ D)
+  条件: [w.GuitartExact] [B.本质满射] (F : C₂ ⥤ D)
   证明: by
   dsimp [Functor.HasPointwiseLeftKanExtension]
   simp only [hasPointwiseLeftKanExtensionAt_iff w]
@@ -437,8 +437,8 @@ instance [forall
   infer_instance
 
 中文:
-实例 [forall
-  签名: (F : C₁ ⥤ D), L.HasLeftKanExtension F]
+实例 [对任意
+  签名: (F : C₁ ⥤ D), L.有LeftKanExtension F]
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   infer_instance

@@ -42,7 +42,7 @@ theorem hasDerivAt_cexp_mul_sumIDeriv
 
 中文:
 定理 hasDerivAt_cexp_mul_sumIDeriv
-  条件: (p : Complex[X]) (s : Complex) (x : 实数)
+  条件: (p : 复形[X]) (s : 复形) (x : 实数)
   证明: by
   have h₀ := (hasDerivAt_id' x).smul_const s
   have h₁ := h₀.fun_neg.cexp
@@ -79,7 +79,7 @@ theorem integral_exp_mul_eval
 
 中文:
 定理 integral_exp_mul_eval
-  条件: (p : Complex[X]) (s : Complex)
+  条件: (p : 复形[X]) (s : 复形)
   证明: by
   rw [← intervalIntegral.integral_const_mul]; rw [intervalIntegral.integral_eq_sub_of_hasDerivAt
       (fun x hx => hasDerivAt_cexp_mul_sumIDeriv p s x)
@@ -106,7 +106,7 @@ definition P
 
 中文:
 定义 P
-  签名: (f : Complex[X]) (s : Complex)
+  签名: (f : 复形[X]) (s : 复形)
   定义体: exp s * f.sumIDeriv.eval 0 - f.sumIDeriv.eval s
 -/
 private def P (f : Complex[X]) (s : Complex) :=
@@ -123,7 +123,7 @@ theorem P_eq_integral_exp_mul_eval
 
 中文:
 定理 P_eq_integral_exp_mul_eval
-  条件: (f : Complex[X]) (s : Complex)
+  条件: (f : 复形[X]) (s : 复形)
   证明: by
   rw [integral_exp_mul_eval]; rw [mul_add]; rw [mul_neg]; rw [exp_neg]; rw [mul_inv_cancel_left₀ (exp_ne_zero s)]; rw [neg_add_eq_sub]; rw [P]
 -/
@@ -147,7 +147,7 @@ theorem P_le_aux
 
 中文:
 定理 P_le_aux
-  结论: (f : 自然数 -> Complex[X]) (s : Complex) (c : 实数)
+  结论: (f : 自然数 -> 复形[X]) (s : 复形) (c : 实数)
   证明: by
   refine ⟨|c|, abs_nonneg _, fun p => ?_⟩
   rw [P_eq_integral_exp_mul_eval (f p) s]; rw [mul_comm s]; rw [norm_mul]; rw [norm_mul]; rw [norm_exp]
@@ -197,7 +197,7 @@ theorem P_le
 
 中文:
 定理 P_le
-  结论: (f : 自然数 -> Complex[X]) (s : Complex) (c : 实数)
+  结论: (f : 自然数 -> 复形[X]) (s : 复形) (c : 实数)
   证明: by
   obtain ⟨c', hc', h'⟩ := P_le_aux f s c hc; clear c hc
   let c₁ := max (Real.exp s.re) 1
@@ -241,7 +241,7 @@ theorem exp_polynomial_approx_aux
 
 中文:
 定理 exp_polynomial_approx_aux
-  条件: (f : 整数[X]) (s : Complex)
+  条件: (f : 整数[X]) (s : 复形)
   证明: by
   have : Bornology.IsBounded
       ((fun x : Real => max (x * ‖s‖) 1 * ‖aeval (x * s) f‖) '' Set.Ioc 0 1) := by

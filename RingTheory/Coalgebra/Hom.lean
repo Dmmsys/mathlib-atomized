@@ -43,12 +43,12 @@ structure CoalgHom
     - map_comp_comul : TensorProduct.map toLinearMap toLinearMap ∘ₗ comul = comul ∘ₗ toLinearMap
 
 中文:
-结构 CoalgHom
-  参数: (R A B : 类型) [CommSemiring R]
+结构 余alg态射
+  参数: (R A B : 类型) [交换半环 R]
   继承: A ->ₗ[R] B
   公理与运算 (2 个):
     - counit_comp : counit ∘ₗ toLinearMap = counit
-    - map_comp_comul : TensorProduct.map toLinearMap toLinearMap ∘ₗ comul = comul ∘ₗ toLinearMap
+    - map_comp_comul : 张量积.map toLinearMap toLinearMap ∘ₗ comul = comul ∘ₗ toLinearMap
 -/
 structure CoalgHom (R A B : Type*) [CommSemiring R]
     [AddCommMonoid A] [Module R A] [AddCommMonoid B] [Module R B]
@@ -74,12 +74,12 @@ class CoalgHomClass
     - map_comp_comul : forall f : F, TensorProduct.map (f : A ->ₗ[R] B) (f : A ->ₗ[R] B) ∘ₗ comul = comul ∘ₗ (f : A ->ₗ[R] B)
 
 中文:
-类 CoalgHomClass
+类 余alg态射类
   参数: (F : 类型) (R A B : outParam 类型)
-  继承: SemilinearMapClass F (RingHom.id R) A B
+  继承: 半线性映射类 F (环态射.id R) A B
   公理与运算 (2 个):
     - counit_comp : 对任意 f : F, counit ∘ₗ (f : A ->ₗ[R] B) = counit
-    - map_comp_comul : 对任意 f : F, TensorProduct.map (f : A ->ₗ[R] B) (f : A ->ₗ[R] B) ∘ₗ comul = comul ∘ₗ (f : A ->ₗ[R] B)
+    - map_comp_comul : 对任意 f : F, 张量积.map (f : A ->ₗ[R] B) (f : A ->ₗ[R] B) ∘ₗ comul = comul ∘ₗ (f : A ->ₗ[R] B)
 -/
 class CoalgHomClass (F : Type*) (R A B : outParam Type*)
     [CommSemiring R] [AddCommMonoid A] [Module R A] [AddCommMonoid B] [Module R B]
@@ -217,7 +217,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (A ->ₗc[R] B) A B where
+  签名: : 函数状 (A ->ₗc[R] B) A B where
   定义体: f.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨⟨_, _⟩, _⟩, _, _⟩
@@ -246,7 +246,7 @@ instance coalgHomClass
 
 中文:
 实例 coalgHomClass
-  签名: : CoalgHomClass (A ->ₗc[R] B) R A B where
+  签名: : 余alg态射类 (A ->ₗc[R] B) R A B where
   定义体: fun f => f.map_add'
   map_smulₛₗ := fun f => f.map_smul'
   counit_comp := fun f => f.counit_comp
@@ -274,7 +274,7 @@ initialize_simps_projections CoalgHom (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: {R α β : 类型} [CommSemiring R]
+  签名: {R α β : 类型} [交换半环 R]
   定义体: f
 
 initialize_simps_projections CoalgHom (toFun -> apply)
@@ -301,7 +301,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [FunLike F A B] [CoalgHomClass F R A B] (f : F)
+  条件: {F : 类型} [函数状 F A B] [余alg态射类 F R A B] (f : F)
   证明: rfl
 
 @[simp]
@@ -454,7 +454,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: @Function.Injective (A ->ₗc[R] B) (A -> B) (↑)
+  结论: @函数.单射 (A ->ₗc[R] B) (A -> B) (↑)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -493,7 +493,7 @@ theorem coe_linearMap_injective
 
 中文:
 定理 coe_linearMap_injective
-  结论: Function.Injective ((↑) : (A ->ₗc[R] B) -> A ->ₗ[R] B)
+  结论: 函数.单射 ((↑) : (A ->ₗc[R] B) -> A ->ₗ[R] B)
   证明: fun φ₁ φ₂ H => coe_fn_injective
     show ((φ₁ : A ->ₗ[R] B) : A -> B) = ((φ₂ : A ->ₗ[R] B) : A -> B) from congr_arg _ H
 
@@ -513,7 +513,7 @@ theorem coe_addMonoidHom_injective
 
 中文:
 定理 coe_addMonoidHom_injective
-  结论: Function.Injective ((↑) : (A ->ₗc[R] B) -> A ->+ B)
+  结论: 函数.单射 ((↑) : (A ->ₗc[R] B) -> A ->+ B)
   证明: LinearMap.toAddMonoidHom_injective.comp coe_linearMap_injective
 
 Depends on / 依赖: LinearMap, LinearMap.toAddMonoidHom_injective.comp, coe_linearMap_injective, toAddMonoidHom_injective
@@ -737,7 +737,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(CoalgHom.id R A) = id
+  结论: ⇑(余alg态射.id R A) = id
   证明: rfl
 
 @[simp]
@@ -756,7 +756,7 @@ theorem id_toLinearMap
 
 中文:
 定理 id_toLinearMap
-  结论: (CoalgHom.id R A : A ->ₗ[R] A) = LinearMap.id
+  结论: (余alg态射.id R A : A ->ₗ[R] A) = 线性映射.id
   证明: rfl
 -/
 theorem id_toLinearMap : (CoalgHom.id R A : A ->ₗ[R] A) = LinearMap.id := rfl
@@ -841,7 +841,7 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  结论: φ.comp (CoalgHom.id R A) = φ
+  结论: φ.comp (余alg态射.id R A) = φ
   证明: ext fun _x => rfl
 
 @[simp]
@@ -860,7 +860,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  结论: (CoalgHom.id R B).comp φ = φ
+  结论: (余alg态射.id R B).comp φ = φ
   证明: ext fun _x => rfl
 -/
 theorem id_comp : (CoalgHom.id R B).comp φ = φ :=
@@ -895,7 +895,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A B R' R] (r : R')
+  结论: {R'} [标量乘法 R' A] [标量乘法 R' B] [线性映射.余mpatibleSMul A B R' R] (r : R')
   证明: φ.toLinearMap.map_smul_of_tower r x
 
 @[simps -isSimp toSemigroup_toMul_mul toOne_one]
@@ -923,7 +923,7 @@ instance End
 
 中文:
 实例 End
-  签名: : Monoid (A ->ₗc[R] A) where
+  签名: : 幺半群 (A ->ₗc[R] A) where
   定义体: comp
   mul_assoc _ _ _ := rfl
   one := CoalgHom.id R A
@@ -1082,7 +1082,7 @@ instance subsingleton_to_ring
 
 中文:
 实例 subsingleton_to_ring
-  签名: : Subsingleton (A ->ₗc[R] R)
+  签名: : 子单例 (A ->ₗc[R] R)
   定义体: ⟨fun f g => CoalgHom.ext fun x => by
     have hf := CoalgHomClass.counit_comp_apply f x
     have hg := CoalgHomClass.counit_comp_apply g x

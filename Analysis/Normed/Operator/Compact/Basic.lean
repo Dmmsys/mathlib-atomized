@@ -78,7 +78,7 @@ definition IsCompactOperator
 
 中文:
 定义 IsCompactOperator
-  签名: {M₁ M₂ : 类型} [Zero M₁] [TopologicalSpace M₁] [TopologicalSpace M₂]
+  签名: {M₁ M₂ : 类型} [零 M₁] [拓扑空间 M₁] [拓扑空间 M₂]
   定义体: exists K, IsCompact K ∧ f ⁻¹' K in (𝓝 0 : Filter M₁)
 
 Depends on / 依赖: Filter, IsCompact
@@ -97,7 +97,7 @@ theorem isCompactOperator_zero
 
 中文:
 定理 isCompactOperator_zero
-  结论: {M₁ M₂ : 类型} [Zero M₁] [TopologicalSpace M₁]
+  结论: {M₁ M₂ : 类型} [零 M₁] [拓扑空间 M₁]
   证明: ⟨{0}, isCompact_singleton, mem_of_superset univ_mem fun _ _ => rfl⟩
 
 Depends on / 依赖: isCompact_singleton, mem_of_superset, univ_mem
@@ -155,7 +155,7 @@ lemma isCompactOperator_id
 
 中文:
 引理 isCompactOperator_id
-  结论: {E : 类型} [AddGroup E] [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: {E : 类型} [加法群 E] [拓扑空间 E] [是拓扑加群 E]
   证明: isCompactOperator_id_iff_locallyCompactSpace.2 ‹_›
 
 Depends on / 依赖: isCompactOperator_id_iff_locallyCompactSpace
@@ -181,7 +181,7 @@ theorem isCompactOperator_iff_exists_mem_nhds_image_subset_compact
     ⟨K, hK, mem_of_superset hV (image_subset_iff.mp hVK)⟩⟩
 
 中文:
-定理 isCompactOperator_iff_exists_mem_nhds_image_subset_compact
+定理 isCompactOperator_iff_存在_mem_nhds_image_subset_compact
   条件: (f : M₁ -> M₂)
   证明: ⟨fun ⟨K, hK, hKf⟩ => ⟨f ⁻¹' K, hKf, K, hK, image_preimage_subset _ _⟩, fun ⟨_, hV, K, hK, hVK⟩ =>
     ⟨K, hK, mem_of_superset hV (image_subset_iff.mp hVK)⟩⟩
@@ -206,8 +206,8 @@ theorem isCompactOperator_iff_exists_mem_nhds_isCompact_closure_image
       fun ⟨V, hV, hVc⟩ => ⟨V, hV, closure (f '' V), hVc, subset_closure⟩⟩
 
 中文:
-定理 isCompactOperator_iff_exists_mem_nhds_isCompact_closure_image
-  条件: [T2Space M₂] (f : M₁ -> M₂)
+定理 isCompactOperator_iff_存在_mem_nhds_isCompact_closure_image
+  条件: [T2空间 M₂] (f : M₁ -> M₂)
   证明: by
   rw [isCompactOperator_iff_exists_mem_nhds_image_subset_compact]
   exact
@@ -277,7 +277,7 @@ theorem IsCompactOperator.isCompact_closure_image_of_isVonNBounded
 
 中文:
 定理 IsCompactOperator.isCompact_closure_image_of_isVonNBounded
-  结论: [T2Space M₂] {f : M₁ ->ₛₗ[σ₁₂] M₂}
+  结论: [T2空间 M₂] {f : M₁ ->ₛₗ[σ₁₂] M₂}
   证明: let ⟨_, hK, hKf⟩ := hf.image_subset_compact_of_isVonNBounded hS
   hK.closure_of_subset hKf
 
@@ -307,7 +307,7 @@ theorem IsCompactOperator.image_subset_compact_of_bounded
 
 中文:
 定理 IsCompactOperator.image_subset_compact_of_bounded
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: hf.image_subset_compact_of_isVonNBounded by rwa [NormedSpace.isVonNBounded_iff]
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_iff, hf.image_subset_compact_of_isVonNBounded, image_subset_compact_of_isVonNBounded, isVonNBounded_iff
@@ -327,7 +327,7 @@ theorem IsCompactOperator.isCompact_closure_image_of_bounded
 
 中文:
 定理 IsCompactOperator.isCompact_closure_image_of_bounded
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: hf.isCompact_closure_image_of_isVonNBounded by rwa [NormedSpace.isVonNBounded_iff]
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_iff, hf.isCompact_closure_image_of_isVonNBounded, isCompact_closure_image_of_isVonNBounded, isVonNBounded_iff
@@ -347,7 +347,7 @@ theorem IsCompactOperator.image_ball_subset_compact
 
 中文:
 定理 IsCompactOperator.image_ball_subset_compact
-  结论: [ContinuousConstSMul 𝕜₂ M₂] {f : M₁ ->ₛₗ[σ₁₂] M₂}
+  结论: [连续常数标量乘法 𝕜₂ M₂] {f : M₁ ->ₛₗ[σ₁₂] M₂}
   证明: hf.image_subset_compact_of_isVonNBounded (NormedSpace.isVonNBounded_ball 𝕜₁ M₁ r)
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_ball, hf.image_subset_compact_of_isVonNBounded, image_subset_compact_of_isVonNBounded, isVonNBounded_ball
@@ -366,7 +366,7 @@ theorem IsCompactOperator.image_closedBall_subset_compact
 
 中文:
 定理 IsCompactOperator.image_closedBall_subset_compact
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: hf.image_subset_compact_of_isVonNBounded (NormedSpace.isVonNBounded_closedBall 𝕜₁ M₁ r)
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_closedBall, hf.image_subset_compact_of_isVonNBounded, image_subset_compact_of_isVonNBounded, isVonNBounded_closedBall
@@ -386,7 +386,7 @@ theorem IsCompactOperator.isCompact_closure_image_ball
 
 中文:
 定理 IsCompactOperator.isCompact_closure_image_ball
-  结论: [ContinuousConstSMul 𝕜₂ M₂] [T2Space M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂] [T2空间 M₂]
   证明: hf.isCompact_closure_image_of_isVonNBounded (NormedSpace.isVonNBounded_ball 𝕜₁ M₁ r)
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_ball, hf.isCompact_closure_image_of_isVonNBounded, isCompact_closure_image_of_isVonNBounded, isVonNBounded_ball
@@ -406,7 +406,7 @@ theorem IsCompactOperator.isCompact_closure_image_closedBall
 
 中文:
 定理 IsCompactOperator.isCompact_closure_image_closedBall
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: hf.isCompact_closure_image_of_isVonNBounded (NormedSpace.isVonNBounded_closedBall 𝕜₁ M₁ r)
 
 Depends on / 依赖: NormedSpace, NormedSpace.isVonNBounded_closedBall, hf.isCompact_closure_image_of_isVonNBounded, isCompact_closure_image_of_isVonNBounded, isVonNBounded_closedBall
@@ -428,7 +428,7 @@ theorem isCompactOperator_iff_image_ball_subset_compact
 
 中文:
 定理 isCompactOperator_iff_image_ball_subset_compact
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: ⟨fun hf => hf.image_ball_subset_compact r, fun ⟨K, hK, hKr⟩ =>
     (isCompactOperator_iff_exists_mem_nhds_image_subset_compact f).mpr
       ⟨Metric.ball 0 r, ball_mem_nhds _ hr, K, hK, hKr⟩⟩
@@ -454,7 +454,7 @@ theorem isCompactOperator_iff_image_closedBall_subset_compact
 
 中文:
 定理 isCompactOperator_iff_image_closedBall_subset_compact
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: ⟨fun hf => hf.image_closedBall_subset_compact r, fun ⟨K, hK, hKr⟩ =>
     (isCompactOperator_iff_exists_mem_nhds_image_subset_compact f).mpr
       ⟨Metric.closedBall 0 r, closedBall_mem_nhds _ hr, K, hK, hKr⟩⟩
@@ -480,7 +480,7 @@ theorem isCompactOperator_iff_isCompact_closure_image_ball
 
 中文:
 定理 isCompactOperator_iff_isCompact_closure_image_ball
-  结论: [ContinuousConstSMul 𝕜₂ M₂] [T2Space M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂] [T2空间 M₂]
   证明: ⟨fun hf => hf.isCompact_closure_image_ball r, fun hf =>
     (isCompactOperator_iff_exists_mem_nhds_isCompact_closure_image f).mpr
       ⟨Metric.ball 0 r, ball_mem_nhds _ hr, hf⟩⟩
@@ -506,7 +506,7 @@ theorem isCompactOperator_iff_isCompact_closure_image_closedBall
 
 中文:
 定理 isCompactOperator_iff_isCompact_closure_image_closedBall
-  结论: [ContinuousConstSMul 𝕜₂ M₂]
+  结论: [连续常数标量乘法 𝕜₂ M₂]
   证明: ⟨fun hf => hf.isCompact_closure_image_closedBall r, fun hf =>
     (isCompactOperator_iff_exists_mem_nhds_isCompact_closure_image f).mpr
       ⟨Metric.closedBall 0 r, closedBall_mem_nhds _ hr, hf⟩⟩
@@ -543,7 +543,7 @@ theorem IsCompactOperator.smul
 
 中文:
 定理 IsCompactOperator.smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M₂]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M₂]
   证明: let ⟨K, hK, hKf⟩ := hf
 ⟨c • K, hK.image continuous_id.const_smul c,
     mem_of_superset hKf fun _ hx => smul_mem_smul_set hx⟩
@@ -567,7 +567,7 @@ theorem IsCompactOperator.smul_unit_iff
 
 中文:
 定理 IsCompactOperator.smul_unit_iff
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M₂]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M₂]
   证明: ⟨fun h => by simpa using h.smul c⁻¹, fun h => h.smul c⟩
 
 Depends on / 依赖: h.smul
@@ -589,7 +589,7 @@ theorem IsCompactOperator.smul_isUnit_iff
 
 中文:
 定理 IsCompactOperator.smul_isUnit_iff
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M₂]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M₂]
   证明: by
   obtain ⟨c, rfl⟩ := hc
   exact smul_unit_iff
@@ -612,7 +612,7 @@ theorem IsCompactOperator.smul_iff
 
 中文:
 定理 IsCompactOperator.smul_iff
-  结论: {S : 类型} [Group S] [DistribMulAction S M₂]
+  结论: {S : 类型} [群 S] [分配乘法作用 S M₂]
   证明: smul_isUnit_iff (Group.isUnit c)
 
 Depends on / 依赖: Group.isUnit, isUnit, smul_isUnit_iff
@@ -632,7 +632,7 @@ theorem IsCompactOperator.smul_iff₀
 
 中文:
 定理 IsCompactOperator.smul_iff₀
-  结论: {S : 类型} [GroupWithZero S] [DistribMulAction S M₂]
+  结论: {S : 类型} [带零群 S] [分配乘法作用 S M₂]
   证明: smul_isUnit_iff hc.isUnit
 
 Depends on / 依赖: hc.isUnit, isUnit, smul_isUnit_iff
@@ -655,7 +655,7 @@ theorem IsCompactOperator.add
 
 中文:
 定理 IsCompactOperator.add
-  结论: [ContinuousAdd M₂] {f g : M₁ -> M₂} (hf : IsCompactOperator f)
+  结论: [连续加法 M₂] {f g : M₁ -> M₂} (hf : IsCompactOperator f)
   证明: let ⟨A, hA, hAf⟩ := hf
   let ⟨B, hB, hBg⟩ := hg
   ⟨A + B, hA.add hB,
@@ -681,7 +681,7 @@ theorem IsCompactOperator.neg
 
 中文:
 定理 IsCompactOperator.neg
-  条件: [ContinuousNeg M₄] {f : M₁ -> M₄} (hf : IsCompactOperator f)
+  条件: [连续取负 M₄] {f : M₁ -> M₄} (hf : IsCompactOperator f)
   证明: let ⟨K, hK, hKf⟩ := hf
   ⟨-K, hK.neg, mem_of_superset hKf fun x (hx : f x in K) => Set.neg_mem_neg.mpr hx⟩
 
@@ -703,7 +703,7 @@ theorem IsCompactOperator.sub
 
 中文:
 定理 IsCompactOperator.sub
-  结论: [IsTopologicalAddGroup M₄] {f g : M₁ -> M₄} (hf : IsCompactOperator f)
+  结论: [是拓扑加群 M₄] {f g : M₁ -> M₄} (hf : IsCompactOperator f)
   证明: by
   rw [sub_eq_add_neg]; exact hf.add hg.neg
 
@@ -728,7 +728,7 @@ definition compactOperator
 
 中文:
 定义 compactOperator
-  签名: [Module R₁ M₁] [Module R₄ M₄] [ContinuousConstSMul R₄ M₄]
+  签名: [模 R₁ M₁] [模 R₄ M₄] [连续常数标量乘法 R₄ M₄]
   定义体: { f | IsCompactOperator f }
   add_mem' hf hg := hf.add hg
   zero_mem' := isCompactOperator_zero
@@ -765,7 +765,7 @@ theorem IsCompactOperator.comp_clm
 
 中文:
 定理 IsCompactOperator.comp_clm
-  结论: [AddCommMonoid M₂] [Module R₂ M₂] {f : M₂ -> M₃}
+  结论: [加法交换幺半群 M₂] [模 R₂ M₂] {f : M₂ -> M₃}
   证明: by
   have := g.continuous.tendsto 0
   rw [map_zero] at this
@@ -821,7 +821,7 @@ theorem IsCompactOperator.clm_comp
 
 中文:
 定理 IsCompactOperator.clm_comp
-  结论: [AddCommMonoid M₂] [Module R₂ M₂] [AddCommMonoid M₃]
+  结论: [加法交换幺半群 M₂] [模 R₂ M₂] [加法交换幺半群 M₃]
   证明: hf.continuous_comp g.continuous
 
 Depends on / 依赖: continuous, continuous_comp, g.continuous, hf.continuous_comp
@@ -841,7 +841,7 @@ theorem isCompactOperator_of_locallyCompactSpace_dom
 
 中文:
 定理 isCompactOperator_of_locallyCompactSpace_dom
-  结论: [AddCommGroup M₂] [Module R₂ M₂]
+  结论: [加法交换群 M₂] [模 R₂ M₂]
   证明: (isCompactOperator_id.comp_clm T :)
 
 Depends on / 依赖: comp_clm, isCompactOperator_id, isCompactOperator_id.comp_clm
@@ -860,7 +860,7 @@ theorem isCompactOperator_of_locallyCompactSpace_rng
 
 中文:
 定理 isCompactOperator_of_locallyCompactSpace_rng
-  结论: [AddCommGroup M₂] [Module R₂ M₂]
+  结论: [加法交换群 M₂] [模 R₂ M₂]
   证明: isCompactOperator_id.clm_comp T
 
 Depends on / 依赖: clm_comp, isCompactOperator_id, isCompactOperator_id.clm_comp
@@ -888,7 +888,7 @@ theorem IsCompactOperator.codRestrict
 
 中文:
 定理 IsCompactOperator.codRestrict
-  结论: {f : M₁ -> M₂} (hf : IsCompactOperator f) {V : Submodule R₂ M₂}
+  结论: {f : M₁ -> M₂} (hf : IsCompactOperator f) {V : 子模 R₂ M₂}
   证明: let ⟨_, hK, hKf⟩ := hf
   ⟨_, h_closed.isClosedEmbedding_subtypeVal.isCompact_preimage hK, hKf⟩
 
@@ -939,7 +939,7 @@ theorem IsCompactOperator.restrict'
 
 中文:
 定理 IsCompactOperator.restrict'
-  结论: [T0Space M₂] {f : M₂ ->ₗ[R₂] M₂}
+  结论: [T0空间 M₂] {f : M₂ ->ₗ[R₂] M₂}
   证明: hf.restrict hV (completeSpace_coe_iff_isComplete.mp hcomplete).isClosed
 
 Depends on / 依赖: completeSpace_coe_iff_isComplete, completeSpace_coe_iff_isComplete.mp, hcomplete, hf.restrict, isClosed, restrict
@@ -1024,7 +1024,7 @@ definition ContinuousLinearMap.mkOfIsCompactOperator
 @[simp]
 
 中文:
-定义 ContinuousLinearMap.mkOfIsCompactOperator
+定义 连续线性映射.mkOfIsCompactOperator
   签名: {f : M₁ ->ₛₗ[σ₁₂] M₂} (hf : IsCompactOperator f)
   定义体: ⟨f, hf.continuous⟩
 
@@ -1048,7 +1048,7 @@ theorem ContinuousLinearMap.mkOfIsCompactOperator_to_linearMap
 @[simp]
 
 中文:
-定理 ContinuousLinearMap.mkOfIsCompactOperator_to_linearMap
+定理 连续线性映射.mkOfIsCompactOperator_to_linearMap
   结论: {f : M₁ ->ₛₗ[σ₁₂] M₂}
   证明: rfl
 
@@ -1069,7 +1069,7 @@ theorem ContinuousLinearMap.coe_mkOfIsCompactOperator
   proof: rfl
 
 中文:
-定理 ContinuousLinearMap.coe_mkOfIsCompactOperator
+定理 连续线性映射.coe_mkOfIsCompactOperator
   结论: {f : M₁ ->ₛₗ[σ₁₂] M₂}
   证明: rfl
 -/
@@ -1086,7 +1086,7 @@ theorem ContinuousLinearMap.mkOfIsCompactOperator_mem_compactOperator
   proof: hf
 
 中文:
-定理 ContinuousLinearMap.mkOfIsCompactOperator_mem_compactOperator
+定理 连续线性映射.mkOfIsCompactOperator_mem_compactOperator
   结论: {f : M₁ ->ₛₗ[σ₁₂] M₂}
   证明: hf
 -/

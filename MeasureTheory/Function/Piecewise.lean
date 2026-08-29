@@ -37,7 +37,7 @@ theorem measurable_piecewise
 
 中文:
 定理 measurable_piecewise
-  结论: [MeasurableSpace β] [Countable ι]
+  结论: [可测空间 β] [可数 ι]
   证明: fun t ht => by simpa [piecewise_preimage] using .iUnion (fun i => (hm i).inter ((hf i) ht))
 
 @[fun_prop]
@@ -63,7 +63,7 @@ theorem aemeasurable_piecewise
 
 中文:
 定理 aemeasurable_piecewise
-  结论: {μ : Measure α} [MeasurableSpace β] [Countable ι]
+  结论: {μ : 测度 α} [可测空间 β] [可数 ι]
   证明: by
   choose p hp hq using hf
   refine ⟨hs.piecewise p, hs.measurable_piecewise hm hp, ?_⟩
@@ -95,7 +95,7 @@ definition simpleFunc_piecewise
 
 中文:
 定义 simpleFunc_piecewise
-  签名: [Finite ι] (hs : IndexedPartition s)
+  签名: [有限 ι] (hs : IndexedPartition s)
   定义体: hs.piecewise (fun i => f i)
   measurableSet_fiber' := fun _ =>
     letI : MeasurableSpace β := ⊤
@@ -132,7 +132,7 @@ theorem stronglyMeasurable_piecewise
 
 中文:
 定理 stronglyMeasurable_piecewise
-  结论: [Countable ι] (hs : IndexedPartition s)
+  结论: [可数 ι] (hs : IndexedPartition s)
   证明: by
   by_cases Fi : Finite ι
   · refine ⟨fun n => simpleFunc_piecewise hs hm (fun i => (hf i).approx n), fun x => ?_⟩
@@ -192,7 +192,7 @@ theorem aestronglyMeasurable_piecewise
 
 中文:
 定理 aestronglyMeasurable_piecewise
-  结论: {μ : Measure α} [Countable ι] (hs : IndexedPartition s)
+  结论: {μ : 测度 α} [可数 ι] (hs : IndexedPartition s)
   证明: by
   choose p hp hq using hf
   refine ⟨hs.piecewise p, hs.stronglyMeasurable_piecewise hm hp, ?_⟩

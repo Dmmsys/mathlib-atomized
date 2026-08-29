@@ -48,8 +48,8 @@ instance [P.IsStableUnderShift
     simp [hY g (P.le_shift (-n) _ hX), Adjunction.homEquiv_unit]⟩
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: M] : P.rightOrthogonal.IsStableUnderShift M where
+实例 [P.是StableUnderShift
+  签名: M] : P.rightOrthogonal.是StableUnderShift M where
   定义体: ⟨fun Y hY X f hX => by
     obtain ⟨g, rfl⟩ := ((shiftEquiv C n).symm.toAdjunction.homEquiv _ _).surjective f
     simp [hY g (P.le_shift (-n) _ hX), Adjunction.homEquiv_unit]⟩
@@ -73,8 +73,8 @@ instance [P.IsStableUnderShift
     simp [hX g (P.le_shift (-n) _ hY), Adjunction.homEquiv_counit]⟩
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: M] : P.leftOrthogonal.IsStableUnderShift M where
+实例 [P.是StableUnderShift
+  签名: M] : P.leftOrthogonal.是StableUnderShift M where
   定义体: ⟨fun X hX Y f hY => by
     obtain ⟨g, rfl⟩ := ((shiftEquiv C n).toAdjunction.homEquiv _ _).symm.surjective f
     simp [hX g (P.le_shift (-n) _ hY), Adjunction.homEquiv_counit]⟩
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.rightOrthogonal.IsTriangulatedClosed₂
+  签名: P.rightOrthogonal.是TriangulatedClosed₂
   定义体: .mk' (fun T hT h₁ h₃ X f hX => by
     obtain ⟨g, rfl⟩ := Pretriangulated.Triangle.coyoneda_exact₂ T hT f (h₃ _ hX)
     simp [h₁ g hX])
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.leftOrthogonal.IsTriangulatedClosed₂
+  签名: P.leftOrthogonal.是TriangulatedClosed₂
   定义体: .mk' (fun T hT h₁ h₃ Y f hY => by
     obtain ⟨g, rfl⟩ := Pretriangulated.Triangle.yoneda_exact₂ T hT f (h₁ _ hY)
     simp [h₃ g hY])
@@ -147,8 +147,8 @@ instance [P.IsStableUnderShift
   signature: Int] : P.rightOrthogonal.IsTriangulated where
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: 整数] : P.rightOrthogonal.IsTriangulated where
+实例 [P.是StableUnderShift
+  签名: 整数] : P.rightOrthogonal.是三角 where
 -/
 instance [P.IsStableUnderShift Int] : P.rightOrthogonal.IsTriangulated where
 
@@ -163,8 +163,8 @@ instance [P.IsStableUnderShift
 example [P.IsTriangulated] : P.leftOrthogonal.IsTriangulated := inferInstance
 
 中文:
-实例 [P.IsStableUnderShift
-  签名: 整数] : P.leftOrthogonal.IsTriangulated where
+实例 [P.是StableUnderShift
+  签名: 整数] : P.leftOrthogonal.是三角 where
   定义体: inferInstance
 
 example [P.IsTriangulated] : P.leftOrthogonal.IsTriangulated := inferInstance
@@ -191,7 +191,7 @@ lemma isLocal_trW
 
 中文:
 引理 isLocal_trW
-  条件: [P.IsTriangulated]
+  条件: [P.是三角]
   证明: by
   ext Y
   refine ⟨fun hY X f hX => ?_, fun hY X₁ X₂ f ⟨X₃, g, h, hT, hX₃⟩ => ⟨?_, fun α => ?_⟩⟩
@@ -233,7 +233,7 @@ lemma isColocal_trW
 
 中文:
 引理 isColocal_trW
-  条件: [P.IsTriangulated]
+  条件: [P.是三角]
   证明: by
   ext X
   refine ⟨fun hX Y f hY => ?_, fun hX Y₂ Y₃ h hh => ?_⟩

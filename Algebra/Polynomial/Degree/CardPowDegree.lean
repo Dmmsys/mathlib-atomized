@@ -52,7 +52,7 @@ definition cardPowDegree
 
 中文:
 定义 cardPowDegree
-  签名: : AbsoluteValue Fq[X] 整数
+  签名: : 绝对值 Fq[X] 整数
   定义体: have card_pos : 0 < Fintype.card Fq := Fintype.card_pos_iff.mpr inferInstance
   have pow_pos : forall n, 0 < (Fintype.card Fq : Int) ^ n := fun n =>
     pow_pos (Int.natCast_pos.mpr card_pos) n
@@ -170,7 +170,7 @@ theorem cardPowDegree_isEuclidean
 
 中文:
 定理 cardPowDegree_isEuclidean
-  结论: IsEuclidean (cardPowDegree : AbsoluteValue Fq[X] 整数)
+  结论: 是Euclidean (cardPowDegree : 绝对值 Fq[X] 整数)
   证明: have card_pos : 0 < Fintype.card Fq := Fintype.card_pos_iff.mpr inferInstance
   have pow_pos : forall n, 0 < (Fintype.card Fq : Int) ^ n := fun n =>
     pow_pos (Int.natCast_pos.mpr card_pos) n

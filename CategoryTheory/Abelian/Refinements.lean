@@ -129,7 +129,7 @@ lemma surjective_up_to_refinements_of_epi
 
 中文:
 引理 surjective_up_to_refinements_of_epi
-  条件: (f : X ⟶ Y) [Epi f] {A : C} (y : A ⟶ Y)
+  条件: (f : X ⟶ Y) [满态射 f] {A : C} (y : A ⟶ Y)
   证明: (epi_iff_surjective_up_to_refinements f).1 inferInstance y
 
 Depends on / 依赖: epi_iff_surjective_up_to_refinements
@@ -153,7 +153,7 @@ lemma ShortComplex.exact_iff_exact_up_to_refinements
     obtain ⟨A',
 
 中文:
-引理 ShortComplex.exact_iff_exact_up_to_refinements
+引理 短复形.exact_iff_exact_up_to_refinements
   证明: by
   rw [S.exact_iff_epi_toCycles]; rw [epi_iff_surjective_up_to_refinements]
   constructor
@@ -189,7 +189,7 @@ lemma ShortComplex.Exact.exact_up_to_refinements
   exact hS x₂ hx₂
 
 中文:
-引理 ShortComplex.Exact.exact_up_to_refinements
+引理 短复形.正合.exact_up_to_refinements
   证明: by
   rw [ShortComplex.exact_iff_exact_up_to_refinements] at hS
   exact hS x₂ hx₂
@@ -216,7 +216,7 @@ lemma ShortComplex.eq_liftCycles_homologyπ_up_to_refinements
   rw [← cancel_mono S.iCycles]; rw [liftCycles_i]
 
 中文:
-引理 ShortComplex.eq_liftCycles_homologyπ_up_to_refinements
+引理 短复形.eq_liftCycles_homologyπ_up_to_refinements
   条件: {A : C} (γ : A ⟶ S.homology)
   证明: by
   obtain ⟨A', π, hπ, z, hz⟩ := surjective_up_to_refinements_of_epi S.homologyπ γ
@@ -252,7 +252,7 @@ lemma Limits.CokernelCofork.IsColimit.comp_π_eq_zero_iff_up_to_refinements
     exact ⟨A', π, hπ, x₁,
 
 中文:
-引理 Limits.CokernelCofork.IsColimit.comp_π_eq_zero_iff_up_to_refinements
+引理 Limits.余核余叉.是余极限.comp_π_eq_zero_iff_up_to_refinements
   结论: {f : X ⟶ Y}
   证明: by
   refine ⟨fun hy => ?_, ?_⟩
@@ -289,7 +289,7 @@ lemma ShortComplex.liftCycles_comp_homologyπ_eq_zero_iff_up_to_refinements
   simp [this, ← cancel_mono S.iCycles]
 
 中文:
-引理 ShortComplex.liftCycles_comp_homologyπ_eq_zero_iff_up_to_refinements
+引理 短复形.liftCycles_comp_homologyπ_eq_zero_iff_up_to_refinements
   证明: by
   have := CokernelCofork.IsColimit.comp_π_eq_zero_iff_up_to_refinements
         S.homologyIsCokernel (S.liftCycles x₂ hx₂)
@@ -320,7 +320,7 @@ lemma ShortComplex.liftCycles_comp_homologyπ_eq_iff_up_to_refinements
   rw [← sub_eq_zero]; rw [← sub_comp];
 
 中文:
-引理 ShortComplex.liftCycles_comp_homologyπ_eq_iff_up_to_refinements
+引理 短复形.liftCycles_comp_homologyπ_eq_iff_up_to_refinements
   证明: by
   suffices S.liftCycles x₂ hx₂ ≫ S.homologyπ = S.liftCycles x₂' hx₂' ≫ S.homologyπ ↔
       S.liftCycles (x₂ - x₂') (by simp [hx₂, hx₂']) ≫ S.homologyπ = 0 by
@@ -351,7 +351,7 @@ lemma ShortComplex.comp_homologyπ_eq_zero_iff_up_to_refinements
   simp [liftCycles_comp_homologyπ_eq_zero_iff_up_to_refinements, ← cancel_mono S.iCycles]
 
 中文:
-引理 ShortComplex.comp_homologyπ_eq_zero_iff_up_to_refinements
+引理 短复形.comp_homologyπ_eq_zero_iff_up_to_refinements
   证明: by
   obtain ⟨x₂, hx₂, rfl⟩ : exists (x₂ : A ⟶ S.X₂) (hx₂ : x₂ ≫ S.g = 0), z₂ = S.liftCycles x₂ hx₂ :=
     ⟨z₂ ≫ S.iCycles, by simp, by simp [← cancel_mono S.iCycles, liftCycles_i]⟩
@@ -379,7 +379,7 @@ lemma ShortComplex.comp_homologyπ_eq_iff_up_to_refinements
     S.liftCycles x₂' hx₂' := ⟨z₂' ≫ S.iCycles, by s
 
 中文:
-引理 ShortComplex.comp_homologyπ_eq_iff_up_to_refinements
+引理 短复形.comp_homologyπ_eq_iff_up_to_refinements
   证明: by
   obtain ⟨x₂, hx₂, rfl⟩ : exists (x₂ : A ⟶ S.X₂) (hx₂ : x₂ ≫ S.g = 0), z₂ = S.liftCycles x₂ hx₂ :=
     ⟨z₂ ≫ S.iCycles, by simp, by simp [← cancel_mono S.iCycles]⟩
@@ -409,7 +409,7 @@ lemma ShortComplex.comp_pOpcycles_eq_zero_iff_up_to_refinements
     S.opcyclesIsCokernel x₂
 
 中文:
-引理 ShortComplex.comp_pOpcycles_eq_zero_iff_up_to_refinements
+引理 短复形.comp_pOpcycles_eq_zero_iff_up_to_refinements
   证明: CokernelCofork.IsColimit.comp_π_eq_zero_iff_up_to_refinements
     S.opcyclesIsCokernel x₂
 
@@ -437,7 +437,7 @@ lemma ShortComplex.mono_homologyMap_iff_up_to_refinements
       homologyπ_naturality, liftCycles_comp_cyclesMa
 
 中文:
-引理 ShortComplex.mono_homologyMap_iff_up_to_refinements
+引理 短复形.mono_homologyMap_iff_up_to_refinements
   条件: (φ : S₁ ⟶ S₂)
   证明: by
   refine ⟨fun h A x₂ hx₂ y₁ fac => ?_, fun h => ?_⟩
@@ -493,7 +493,7 @@ lemma ShortComplex.epi_homologyMap_iff_up_to_refinements
     simp only [reassoc_of% 
 
 中文:
-引理 ShortComplex.epi_homologyMap_iff_up_to_refinements
+引理 短复形.epi_homologyMap_iff_up_to_refinements
   条件: (φ : S₁ ⟶ S₂)
   证明: by
   rw [epi_iff_surjective_up_to_refinements]

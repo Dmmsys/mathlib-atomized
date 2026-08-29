@@ -75,8 +75,8 @@ instance [MeasurableSpace
   rw [condDistrib]; infer_instance
 
 中文:
-实例 [MeasurableSpace
-  签名: β] : IsMarkovKernel (condDistrib Y X μ)
+实例 [可测空间
+  签名: β] : 是MarkovKernel (condDistrib Y X μ)
   定义体: by
   rw [condDistrib]; infer_instance
 
@@ -100,7 +100,7 @@ lemma condDistrib_apply_of_ne_zero
 
 中文:
 引理 condDistrib_apply_of_ne_zero
-  结论: [MeasurableSingletonClass β]
+  结论: [MeasurableSingleton类 β]
   证明: by
   rw [condDistrib]; rw [Measure.condKernel_apply_of_ne_zero _ s]
   · rw [Measure.fst_map_prodMk hY]
@@ -126,7 +126,7 @@ lemma compProd_map_condDistrib
 
 中文:
 引理 compProd_map_condDistrib
-  条件: (hY : AEMeasurable Y μ)
+  条件: (hY : 几乎处处可测 Y μ)
   证明: by
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.disintegrate]
 
@@ -147,7 +147,7 @@ lemma condDistrib_comp_map
 
 中文:
 引理 condDistrib_comp_map
-  条件: (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ)
+  条件: (hX : 几乎处处可测 X μ) (hY : 几乎处处可测 Y μ)
   证明: by
   rw [← Measure.snd_compProd]; rw [compProd_map_condDistrib hY]; rw [Measure.snd_map_prodMk₀ hX]
 
@@ -237,7 +237,7 @@ theorem measurable_condDistrib
 
 中文:
 定理 measurable_condDistrib
-  条件: (hs : MeasurableSet s)
+  条件: (hs : 可测集 s)
   证明: (Kernel.measurable_coe _ hs).comp (Measurable.of_comap_le le_rfl)
 
 Depends on / 依赖: Kernel, Kernel.measurable_coe, Measurable, Measurable.of_comap_le, le_rfl, measurable_coe, of_comap_le
@@ -255,7 +255,7 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_
   rw [condDistrib]; rw [← hf.ae_integrable_condKernel_iff]; rw [Measure.fst_map_prodMk₀ hY]
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff
+定理 _root_.测度论.AEStronglyMeasurable.ae_integrable_condDistrib_map_iff
   证明: by
   rw [condDistrib]; rw [← hf.ae_integrable_condKernel_iff]; rw [Measure.fst_map_prodMk₀ hY]
 
@@ -280,7 +280,7 @@ theorem _root_.MeasureTheory.StronglyMeasurable.integral_condDistrib
   rw [condDistrib]; exact hf.integral_kernel_prod_right'
 
 中文:
-定理 _root_.MeasureTheory.StronglyMeasurable.integral_condDistrib
+定理 _root_.测度论.StronglyMeasurable.integral_condDistrib
   条件: (hf : StronglyMeasurable f)
   证明: by
   rw [condDistrib]; exact hf.integral_kernel_prod_right'
@@ -300,7 +300,7 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map
   rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; exact hf.integral_condKernel
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib_map
+定理 _root_.测度论.AEStronglyMeasurable.integral_condDistrib_map
   证明: by
   rw [← Measure.fst_map_prodMk₀ hY]; rw [condDistrib]; exact hf.integral_condKernel
 
@@ -320,8 +320,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib
   proof: (hf.integral_condDistrib_map hY).comp_aemeasurable hX
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.integral_condDistrib
-  结论: (hX : AEMeasurable X μ)
+定理 _root_.测度论.AEStronglyMeasurable.integral_condDistrib
+  结论: (hX : 几乎处处可测 X μ)
   证明: (hf.integral_condDistrib_map hY).comp_aemeasurable hX
 
 Depends on / 依赖: comp_aemeasurable, hf.integral_condDistrib_map, integral_condDistrib_map
@@ -360,7 +360,7 @@ theorem aestronglyMeasurable_integral_condDistrib
 
 中文:
 定理 aestronglyMeasurable_integral_condDistrib
-  结论: (hX : AEMeasurable X μ) (hY : AEMeasurable Y μ)
+  结论: (hX : 几乎处处可测 X μ) (hY : 几乎处处可测 Y μ)
   证明: (hf.integral_condDistrib_map hY).comp_ae_measurable' hX
 
 Depends on / 依赖: comp_ae_measurable, hf.integral_condDistrib_map, integral_condDistrib_map
@@ -489,7 +489,7 @@ lemma condDistrib_comp
 
 中文:
 引理 condDistrib_comp
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} [StandardBorelSpace Ω']
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} [StandardBorel空间 Ω']
   证明: by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
@@ -528,7 +528,7 @@ lemma condDistrib_comp_self
 
 中文:
 引理 condDistrib_comp_self
-  条件: (X : α -> β) {f : β -> Ω} (hf : Measurable f)
+  条件: (X : α -> β) {f : β -> Ω} (hf : 可测 f)
   证明: by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
@@ -559,7 +559,7 @@ lemma condDistrib_self
 中文:
 引理 condDistrib_self
   条件: (Y : α -> Ω)
-  结论: condDistrib Y Y μ =ᵐ[μ.map Y] Kernel.id
+  结论: condDistrib Y Y μ =ᵐ[μ.map Y] 核.id
   证明: by
   simpa using! condDistrib_comp_self Y measurable_id
 
@@ -613,7 +613,7 @@ lemma condDistrib_map
 
 中文:
 引理 condDistrib_map
-  结论: {γ : 类型} {mγ : MeasurableSpace γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ}
   证明: by
   rw [← AEMeasurable.map_map_of_aemeasurable hX hf]
   refine condDistrib_ae_eq_of_measure_eq_compProd (μ := ν.map f) X hY ?_
@@ -646,7 +646,7 @@ lemma condDistrib_fst_prod
 
 中文:
 引理 condDistrib_fst_prod
-  结论: {γ : 类型} {mγ : MeasurableSpace γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ}
   证明: by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
@@ -683,7 +683,7 @@ lemma condDistrib_snd_prod
 
 中文:
 引理 condDistrib_snd_prod
-  结论: {γ : 类型} {mγ : MeasurableSpace γ}
+  结论: {γ : 类型} {mγ : 可测空间 γ}
   证明: by
   by_cases hX : AEMeasurable X μ
   swap; · simp [Measure.map_of_not_aemeasurable hX, Filter.EventuallyEq]
@@ -723,8 +723,8 @@ theorem integrable_toReal_condDistrib
       _ < ∞ :
 
 中文:
-定理 integrable_toReal_condDistrib
-  条件: (hX : AEMeasurable X μ) (hs : MeasurableSet s)
+定理 integrable_to实数_condDistrib
+  条件: (hX : 几乎处处可测 X μ) (hs : 可测集 s)
   证明: by
   refine integrable_toReal_of_lintegral_ne_top ?_ ?_
   · exact Measurable.comp_aemeasurable (Kernel.measurable_coe _ hs) hX
@@ -755,7 +755,7 @@ theorem _root_.MeasureTheory.Integrable.condDistrib_ae_map
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
 
 中文:
-定理 _root_.MeasureTheory.Integrable.condDistrib_ae_map
+定理 _root_.测度论.可积.condDistrib_ae_map
   证明: by
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.condKernel_ae
 
@@ -775,8 +775,8 @@ theorem _root_.MeasureTheory.Integrable.condDistrib_ae
   proof: ae_of_ae_map hX (hf_int.condDistrib_ae_map hY)
 
 中文:
-定理 _root_.MeasureTheory.Integrable.condDistrib_ae
-  结论: (hX : AEMeasurable X μ)
+定理 _root_.测度论.可积.condDistrib_ae
+  结论: (hX : 几乎处处可测 X μ)
   证明: ae_of_ae_map hX (hf_int.condDistrib_ae_map hY)
 
 Depends on / 依赖: ae_of_ae_map, condDistrib_ae_map, hf_int, hf_int.condDistrib_ae_map
@@ -795,7 +795,7 @@ theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib_map
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_norm_condDistrib_map
+定理 _root_.测度论.可积.integral_norm_condDistrib_map
   证明: by
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.integral_norm_condKernel
 
@@ -815,8 +815,8 @@ theorem _root_.MeasureTheory.Integrable.integral_norm_condDistrib
   proof: (hf_int.integral_norm_condDistrib_map hY).comp_aemeasurable hX
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_norm_condDistrib
-  结论: (hX : AEMeasurable X μ)
+定理 _root_.测度论.可积.integral_norm_condDistrib
+  结论: (hX : 几乎处处可测 X μ)
   证明: (hf_int.integral_norm_condDistrib_map hY).comp_aemeasurable hX
 
 Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.integral_norm_condDistrib_map, integral_norm_condDistrib_map
@@ -837,7 +837,7 @@ theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib_map
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
 
 中文:
-定理 _root_.MeasureTheory.Integrable.norm_integral_condDistrib_map
+定理 _root_.测度论.可积.norm_integral_condDistrib_map
   证明: by
   rw [condDistrib]; rw [← Measure.fst_map_prodMk₀ (X := X) hY]; exact hf_int.norm_integral_condKernel
 
@@ -857,8 +857,8 @@ theorem _root_.MeasureTheory.Integrable.norm_integral_condDistrib
   proof: (hf_int.norm_integral_condDistrib_map hY).comp_aemeasurable hX
 
 中文:
-定理 _root_.MeasureTheory.Integrable.norm_integral_condDistrib
-  结论: (hX : AEMeasurable X μ)
+定理 _root_.测度论.可积.norm_integral_condDistrib
+  结论: (hX : 几乎处处可测 X μ)
   证明: (hf_int.norm_integral_condDistrib_map hY).comp_aemeasurable hX
 
 Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.norm_integral_condDistrib_map, norm_integral_condDistrib_map
@@ -877,7 +877,7 @@ theorem _root_.MeasureTheory.Integrable.integral_condDistrib_map
     (hf_int.norm_integral_condDistrib_map hY)
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_condDistrib_map
+定理 _root_.测度论.可积.integral_condDistrib_map
   证明: (integrable_norm_iff (hf_int.1.integral_condDistrib_map hY)).mp
     (hf_int.norm_integral_condDistrib_map hY)
 
@@ -898,8 +898,8 @@ theorem _root_.MeasureTheory.Integrable.integral_condDistrib
   proof: (hf_int.integral_condDistrib_map hY).comp_aemeasurable hX
 
 中文:
-定理 _root_.MeasureTheory.Integrable.integral_condDistrib
-  结论: (hX : AEMeasurable X μ)
+定理 _root_.测度论.可积.integral_condDistrib
+  结论: (hX : 几乎处处可测 X μ)
   证明: (hf_int.integral_condDistrib_map hY).comp_aemeasurable hX
 
 Depends on / 依赖: comp_aemeasurable, hf_int, hf_int.integral_condDistrib_map, integral_condDistrib_map
@@ -921,8 +921,8 @@ theorem setLIntegral_preimage_condDistrib
   rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preim
 
 中文:
-定理 setLIntegral_preimage_condDistrib
-  结论: (hX : Measurable X) (hY : AEMeasurable Y μ)
+定理 setL整数egral_preimage_condDistrib
+  结论: (hX : 可测 X) (hY : 几乎处处可测 Y μ)
   证明: by
   rw [← lintegral_map (Kernel.measurable_coe _ hs) hX]; rw [condDistrib]; rw [← Measure.restrict_map hX ht]; rw [← Measure.fst_map_prodMk₀ hY]; rw [Measure.setLIntegral_condKernel_eq_measure_prod ht hs]; rw [Measure.map_apply_of_aemeasurable (hX.aemeasurable.prodMk hY) (ht.prod hs)]; rw [mk_preim
 
@@ -944,8 +944,8 @@ theorem setLIntegral_condDistrib_of_measurableSet
   rw [setLIntegral_preimage_condDistrib hX hY hs ht']
 
 中文:
-定理 setLIntegral_condDistrib_of_measurableSet
-  结论: (hX : Measurable X) (hY : AEMeasurable Y μ)
+定理 setL整数egral_condDistrib_of_measurableSet
+  结论: (hX : 可测 X) (hY : 几乎处处可测 Y μ)
   证明: by
   obtain ⟨t', ht', rfl⟩ := ht
   rw [setLIntegral_preimage_condDistrib hX hY hs ht']
@@ -974,7 +974,7 @@ theorem condDistrib_ae_eq_condExp
 
 中文:
 定理 condDistrib_ae_eq_condExp
-  条件: (hX : Measurable X) (hY : Measurable Y) (hs : MeasurableSet s)
+  条件: (hX : 可测 X) (hY : 可测 Y) (hs : 可测集 s)
   证明: by
   refine ae_eq_condExp_of_forall_setIntegral_eq hX.comap_le ?_ ?_ ?_ ?_
   · exact (integrable_const _).indicator (hY hs)
@@ -1010,7 +1010,7 @@ theorem condExp_prod_ae_eq_integral_condDistrib'
 
 中文:
 定理 condExp_prod_ae_eq_integral_condDistrib'
-  结论: [NormedSpace 实数 F] [CompleteSpace F]
+  结论: [赋范空间 实数 F] [完备空间 F]
   证明: by
   have hf_int' : Integrable (fun a => f (X a, Y a)) μ :=
     (integrable_map_measure hf_int.1 (hX.aemeasurable.prodMk hY)).mp hf_int
@@ -1051,7 +1051,7 @@ theorem condExp_prod_ae_eq_integral_condDistrib₀
 
 中文:
 定理 condExp_prod_ae_eq_integral_condDistrib₀
-  结论: [NormedSpace 实数 F] [CompleteSpace F]
+  结论: [赋范空间 实数 F] [完备空间 F]
   证明: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
     rwa [integrable_map_measure hf (hX.aemeasurable.prodMk hY)]
   condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
@@ -1079,7 +1079,7 @@ theorem condExp_prod_ae_eq_integral_condDistrib
 
 中文:
 定理 condExp_prod_ae_eq_integral_condDistrib
-  结论: [NormedSpace 实数 F] [CompleteSpace F]
+  结论: [赋范空间 实数 F] [完备空间 F]
   证明: have hf_int' : Integrable f (μ.map fun a => (X a, Y a)) := by
     rwa [integrable_map_measure hf.aestronglyMeasurable (hX.aemeasurable.prodMk hY)]
   condExp_prod_ae_eq_integral_condDistrib' hX hY hf_int'
@@ -1104,7 +1104,7 @@ theorem condExp_ae_eq_integral_condDistrib
 
 中文:
 定理 condExp_ae_eq_integral_condDistrib
-  结论: [NormedSpace 实数 F] [CompleteSpace F] (hX : Measurable X)
+  结论: [赋范空间 实数 F] [完备空间 F] (hX : 可测 X)
   证明: condExp_prod_ae_eq_integral_condDistrib hX hY (hf.comp_measurable measurable_snd) hf_int
 
 Depends on / 依赖: comp_measurable, condExp_prod_ae_eq_integral_condDistrib, hf.comp_measurable, hf_int, measurable_snd
@@ -1125,7 +1125,7 @@ theorem condExp_ae_eq_integral_condDistrib'
 
 中文:
 定理 condExp_ae_eq_integral_condDistrib'
-  结论: {Ω : 类型} [NormedAddCommGroup Ω] [NormedSpace 实数 Ω]
+  结论: {Ω : 类型} [赋范交换加群 Ω] [赋范空间 实数 Ω]
   证明: condExp_ae_eq_integral_condDistrib hX hY_int.1.aemeasurable stronglyMeasurable_id hY_int
 
 Depends on / 依赖: aemeasurable, condExp_ae_eq_integral_condDistrib, hY_int, stronglyMeasurable_id
@@ -1151,8 +1151,8 @@ theorem _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk
   refine ⟨measurable_snd, Measure.AbsolutelyContinuous.mk fun
 
 中文:
-定理 _root_.MeasureTheory.AEStronglyMeasurable.comp_snd_map_prodMk
-  结论: {Ω F} {mΩ : MeasurableSpace Ω}
+定理 _root_.测度论.AEStronglyMeasurable.comp_snd_map_prodMk
+  结论: {Ω F} {mΩ : 可测空间 Ω}
   证明: by
   refine ⟨fun x => hf.mk f x.2, hf.stronglyMeasurable_mk.comp_measurable measurable_snd, ?_⟩
   suffices h : Measure.QuasiMeasurePreserving Prod.snd (μ.map fun ω => (X ω, ω)) μ from
@@ -1195,7 +1195,7 @@ theorem _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
     · cont
 
 中文:
-定理 _root_.MeasureTheory.Integrable.comp_snd_map_prodMk
+定理 _root_.测度论.可积.comp_snd_map_prodMk
   证明: by
   by_cases hX : AEMeasurable X μ
   · have hf := hf_int.1.comp_snd_map_prodMk X (mΩ := mΩ) (mβ := mβ)
@@ -1230,7 +1230,7 @@ theorem aestronglyMeasurable_comp_snd_map_prodMk_iff
 
 中文:
 定理 aestronglyMeasurable_comp_snd_map_prodMk_iff
-  结论: {Ω F} {_ : MeasurableSpace Ω}
+  结论: {Ω F} {_ : 可测空间 Ω}
   证明: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
 
 Depends on / 依赖: comp_measurable, comp_snd_map_prodMk, h.comp_measurable, h.comp_snd_map_prodMk, hX.prodMk, measurable_id, prodMk
@@ -1251,7 +1251,7 @@ theorem integrable_comp_snd_map_prodMk_iff
 
 中文:
 定理 integrable_comp_snd_map_prodMk_iff
-  结论: {Ω} {_ : MeasurableSpace Ω} {X : Ω -> β} {μ : Measure Ω}
+  结论: {Ω} {_ : 可测空间 Ω} {X : Ω -> β} {μ : 测度 Ω}
   证明: ⟨fun h => h.comp_measurable (hX.prodMk measurable_id), fun h => h.comp_snd_map_prodMk X⟩
 
 Depends on / 依赖: comp_measurable, comp_snd_map_prodMk, h.comp_measurable, h.comp_snd_map_prodMk, hX.prodMk, measurable_id, prodMk
@@ -1271,7 +1271,7 @@ theorem condExp_ae_eq_integral_condDistrib_id
 
 中文:
 定理 condExp_ae_eq_integral_condDistrib_id
-  结论: [NormedSpace 实数 F] [CompleteSpace F] {X : Ω -> β}
+  结论: [赋范空间 实数 F] [完备空间 F] {X : Ω -> β}
   证明: condExp_prod_ae_eq_integral_condDistrib' hX aemeasurable_id (hf_int.comp_snd_map_prodMk X)
 
 Depends on / 依赖: aemeasurable_id, comp_snd_map_prodMk, condExp_prod_ae_eq_integral_condDistrib, hf_int, hf_int.comp_snd_map_prodMk

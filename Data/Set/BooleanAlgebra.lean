@@ -39,8 +39,8 @@ instance instCompleteAtomicBooleanAlgebra
   iInf_iSup_eq := by intros; ext; simp [Classical.skolem]
 
 中文:
-实例 instCompleteAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra (Set α) where
+实例 instCompleteAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 (集合 α) where
   定义体: ⟨fun s hs _ hx => ⟨s, hs, hx⟩, fun _ h _ ⟨_, ⟨hs, hx⟩⟩ => h hs hx⟩
   isGLB_sInf _ := ⟨fun _ hs _ hx => hx _ hs, fun _ h _ hx _ hs => h hs hx⟩
   iInf_iSup_eq := by intros; ext; simp [Classical.skolem]
@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (Set α)
+  签名: 有顶序 (集合 α)
   定义体: univ
   le_top := by simp
 -/

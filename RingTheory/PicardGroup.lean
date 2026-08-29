@@ -82,10 +82,10 @@ class Invertible
     - bijective : Function.Bijective (contractLeft R M)
 
 中文:
-类 Invertible
+类 可逆
   参数: : 命题 where
   公理与运算 (1 个):
-    - bijective : Function.Bijective (contractLeft R M)
+    - bijective : 函数.双射 (contractLeft R M)
 -/
 protected class Invertible : Prop where
   bijective : Function.Bijective (contractLeft R M)
@@ -102,7 +102,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [Module.Invertible R M]
+  签名: [模.可逆 R M]
   定义体: .ofBijective _ Invertible.bijective
 
 Depends on / 依赖: Invertible, Invertible.bijective, bijective, ofBijective
@@ -231,7 +231,7 @@ theorem rTensorInv_leftInverse
 
 中文:
 定理 rTensorInv_leftInverse
-  结论: Function.LeftInverse (rTensorInv P Q e) (.rTensorHom M)
+  结论: 函数.左逆 (rTensorInv P Q e) (.rTensorHom M)
   证明: fun _ => by
     simp_rw [rTensorInv, LinearEquiv.coe_trans, LinearMap.comp_apply, LinearEquiv.coe_toLinearMap]
     rw [← LinearEquiv.eq_symm_apply]
@@ -256,7 +256,7 @@ theorem rTensorInv_injective
 
 中文:
 定理 rTensorInv_injective
-  结论: Function.Injective (rTensorInv P Q e)
+  结论: 函数.单射 (rTensorInv P Q e)
   证明: by
   simpa [rTensorInv] using (rTensorInv_leftInverse _ _ <| TensorProduct.comm R N M ≪≫ₗ e).injective
 
@@ -306,7 +306,7 @@ theorem bijective_curry
 
 中文:
 定理 bijective_curry
-  结论: Function.Bijective (curry e.toLinearMap)
+  结论: 函数.双射 (curry e.toLinearMap)
   证明: by
   have : curry e.toLinearMap = ((TensorProduct.lid R N).congrLeft _ R ≪≫ₗ e.congrRight) ∘ₗ
       rTensorHom N ∘ₗ (ringLmapEquivSelf R R M).symm.toLinearMap := by
@@ -334,7 +334,7 @@ include e
 
 中文:
 定义 linearEquivDual
-  签名: : M ≃ₗ[R] Dual R N
+  签名: : M ≃ₗ[R] 对偶 R N
   定义体: .ofBijective _ (bijective_curry e)
 
 include e
@@ -358,7 +358,7 @@ theorem right
 
 中文:
 定理 right
-  结论: Module.Invertible R N where
+  结论: 模.可逆 R N where
   证明: by
     rw [show contractLeft R N = ((linearEquivDual e).rTensor N).symm ≪≫ₗ e by
       rw [LinearEquiv.coe_trans]; rw [LinearEquiv.eq_comp_toLinearMap_symm]; ext; rfl]
@@ -380,7 +380,7 @@ theorem left
 
 中文:
 定理 left
-  结论: Module.Invertible R M
+  结论: 模.可逆 R M
   证明: .right (TensorProduct.comm R N M ≪≫ₗ e)
 -/
 protected theorem left : Module.Invertible R M := .right (TensorProduct.comm R N M ≪≫ₗ e)
@@ -395,7 +395,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Invertible R R
+  签名: 模.可逆 R R
   定义体: .left (TensorProduct.lid R R)
 
 Depends on / 依赖: TensorProduct, TensorProduct.lid
@@ -418,7 +418,7 @@ theorem congr
 中文:
 定理 congr
   条件: (e : M ≃ₗ[R] N)
-  结论: Module.Invertible R N
+  结论: 模.可逆 R N
   证明: .right (e.symm.lTensor _ ≪≫ₗ linearEquiv R M)
 -/
 protected theorem congr (e : M ≃ₗ[R] N) : Module.Invertible R N :=
@@ -436,7 +436,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Invertible R (Dual R M)
+  签名: 模.可逆 R (对偶 R M)
   定义体: .left (linearEquiv R M)
 
 Depends on / 依赖: linearEquiv
@@ -453,8 +453,8 @@ instance [Module.Invertible
     congr (linearEquiv R M) (linearEquiv R N) ≪≫ₗ TensorProduct.lid R R
 
 中文:
-实例 [Module.Invertible
-  签名: R N] : Module.Invertible R (M otimes[R] N)
+实例 [模.可逆
+  签名: R N] : 模.可逆 R (M otimes[R] N)
   定义体: .right (M := Dual R M otimes[R] Dual R N) tensorTensorTensorComm .. ≪≫ₗ
     congr (linearEquiv R M) (linearEquiv R N) ≪≫ₗ TensorProduct.lid R R
 
@@ -480,7 +480,7 @@ theorem finite_projective
 
 中文:
 定理 finite_projective
-  结论: Module.Finite R M ∧ Projective R M
+  结论: 模.有限 R M ∧ 投射 R M
   证明: by
   let N := Dual R M
   let e : M otimes[R] N ≃ₗ[R] R := TensorProduct.comm .. ≪≫ₗ linearEquiv R M
@@ -519,7 +519,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R M
+  签名: 模.有限 R M
   定义体: (finite_projective R M).1
 
 Depends on / 依赖: finite_projective
@@ -536,7 +536,7 @@ example : IsReflexive R M := inferInstance
 
 中文:
 实例 :
-  签名: Projective R M
+  签名: 投射 R M
   定义体: (finite_projective R M).2
 example : IsReflexive R M := inferInstance
 
@@ -707,7 +707,7 @@ have := card_eq_of_linearEquiv R
 
 中文:
 定理 free_iff_linearEquiv
-  结论: Free R M ↔ Nonempty (M ≃ₗ[R] R)
+  结论: 自由 R M ↔ 非空 (M ≃ₗ[R] R)
   证明: by
   refine ⟨fun _ => ?_, fun ⟨e⟩ => .of_equiv e.symm⟩
   nontriviality R
@@ -742,7 +742,7 @@ theorem finrank_eq_one
 
 中文:
 定理 finrank_eq_one
-  条件: [Free R M]
+  条件: [自由 R M]
   结论: finrank R M = 1
   证明: by
   rw [(free_iff_linearEquiv.mp ‹_›).some.finrank_eq]; rw [CommSemiring.finrank_self]
@@ -761,8 +761,8 @@ theorem rank_eq_one
 
 中文:
 定理 rank_eq_one
-  条件: [Free R M]
-  结论: Module.rank R M = 1
+  条件: [自由 R M]
+  结论: 模.rank R M = 1
   证明: rank_eq_one_iff_finrank_eq_one.mpr (Invertible.finrank_eq_one R M)
 
 Depends on / 依赖: Invertible, Invertible.finrank_eq_one, finrank_eq_one, rank_eq_one_iff_finrank_eq_one, rank_eq_one_iff_finrank_eq_one.mpr
@@ -785,7 +785,7 @@ theorem toModuleEnd_bijective
 
 中文:
 定理 toModuleEnd_bijective
-  结论: Function.Bijective (toModuleEnd R (S := R) M)
+  结论: 函数.双射 (toModuleEnd R (S := R) M)
   证明: by
   have : toModuleEnd R (S := R) M = (lid R M).conj ∘ rTensorEquiv R R
       (comm .. ≪≫ₗ linearEquiv R M) ∘ RingEquiv.moduleEndSelf R ∘ MulOpposite.opEquiv := by
@@ -810,7 +810,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul R M
+  签名: 忠实标量乘法 R M
   定义体: (toModuleEnd_bijective R M).injective LinearMap.ext h
 
 Depends on / 依赖: LinearMap, LinearMap.ext, injective, toModuleEnd_bijective
@@ -832,7 +832,7 @@ theorem bijective_self_of_surjective
 
 中文:
 定理 bijective_self_of_surjective
-  条件: (f : R ->ₗ[R] M) (hf : Function.Surjective f)
+  条件: (f : R ->ₗ[R] M) (hf : 函数.满射 f)
   证明: smul_left_injective' (α := M) funext fun m => by
     obtain ⟨r, rfl⟩ := hf m
     simp_rw [← map_smul, smul_eq_mul, mul_comm _ r, ← smul_eq_mul, map_smul, eq]
@@ -858,7 +858,7 @@ theorem bijective_of_surjective
 
 中文:
 定理 bijective_of_surjective
-  结论: [Module.Invertible R N] {f : M ->ₗ[R] N}
+  结论: [模.可逆 R N] {f : M ->ₗ[R] N}
   证明: by
   simpa [lTensor_bijective_iff] using bijective_self_of_surjective
     (f.lTensor _ ∘ₗ (linearEquiv R M).symm.toLinearMap) (by simpa [lTensor_surjective_iff] using hf)
@@ -884,7 +884,7 @@ theorem rightInverse_of_leftInverse
 
 中文:
 定理 rightInverse_of_leftInverse
-  条件: (hfg : Function.LeftInverse f g)
+  条件: (hfg : 函数.左逆 f g)
   证明: Function.rightInverse_of_injective_of_leftInverse
     (bijective_of_surjective hfg.surjective).injective hfg
 
@@ -905,7 +905,7 @@ theorem leftInverse_of_rightInverse
 
 中文:
 定理 leftInverse_of_rightInverse
-  条件: (hfg : Function.RightInverse f g)
+  条件: (hfg : 函数.右逆 f g)
   证明: rightInverse_of_leftInverse hfg
 
 Depends on / 依赖: rightInverse_of_leftInverse
@@ -942,7 +942,7 @@ definition linearEquivOfLeftInverse
 
 中文:
 定义 linearEquivOfLeftInverse
-  签名: (hfg : Function.LeftInverse f g)
+  签名: (hfg : 函数.左逆 f g)
   定义体: .ofLinearMap f g (LinearMap.ext hfg) (LinearMap.ext <| rightInverse_of_leftInverse hfg)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, ofLinearMap, rightInverse_of_leftInverse
@@ -960,7 +960,7 @@ lemma linearEquivOfLeftInverse_apply
 
 中文:
 引理 linearEquivOfLeftInverse_apply
-  条件: (hfg : Function.LeftInverse f g) (x : M)
+  条件: (hfg : 函数.左逆 f g) (x : M)
   证明: rfl
 -/
 @[simp] lemma linearEquivOfLeftInverse_apply (hfg : Function.LeftInverse f g) (x : M) :
@@ -976,7 +976,7 @@ lemma linearEquivOfLeftInverse_symm_apply
 
 中文:
 引理 linearEquivOfLeftInverse_symm_apply
-  条件: (hfg : Function.LeftInverse f g) (x : N)
+  条件: (hfg : 函数.左逆 f g) (x : N)
   证明: rfl
 -/
 @[simp] lemma linearEquivOfLeftInverse_symm_apply (hfg : Function.LeftInverse f g) (x : N) :
@@ -992,7 +992,7 @@ definition linearEquivOfRightInverse
 
 中文:
 定义 linearEquivOfRightInverse
-  签名: (hfg : Function.RightInverse f g)
+  签名: (hfg : 函数.右逆 f g)
   定义体: .ofLinearMap f g (LinearMap.ext <| leftInverse_of_rightInverse hfg) (LinearMap.ext hfg)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, leftInverse_of_rightInverse, ofLinearMap
@@ -1010,7 +1010,7 @@ lemma linearEquivOfRightInverse_apply
 
 中文:
 引理 linearEquivOfRightInverse_apply
-  条件: (hfg : Function.RightInverse f g) (x : M)
+  条件: (hfg : 函数.右逆 f g) (x : M)
   证明: rfl
 -/
 @[simp] lemma linearEquivOfRightInverse_apply (hfg : Function.RightInverse f g) (x : M) :
@@ -1026,7 +1026,7 @@ lemma linearEquivOfRightInverse_symm_apply
 
 中文:
 引理 linearEquivOfRightInverse_symm_apply
-  条件: (hfg : Function.RightInverse f g) (x : N)
+  条件: (hfg : 函数.右逆 f g) (x : N)
   证明: rfl
 -/
 @[simp] lemma linearEquivOfRightInverse_symm_apply (hfg : Function.RightInverse f g) (x : N) :
@@ -1113,7 +1113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Invertible A (A otimes[R] M)
+  签名: 模.可逆 A (A otimes[R] M)
   定义体: .right (M := A otimes[R] Dual R M) (AlgebraTensorModule.distribBaseChange ..).symm ≪≫ₗ
     AlgebraTensorModule.congr (.refl A A) (linearEquiv R M) ≪≫ₗ AlgebraTensorModule.rid ..
 
@@ -1134,7 +1134,7 @@ theorem of_isLocalization
 
 中文:
 定理 of_isLocalization
-  结论: (S : Submonoid R) [IsLocalization S A]
+  结论: (S : 子幺半群 R) [是Localization S A]
   证明: .congr (IsLocalizedModule.isBaseChange S A f).equiv
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.isBaseChange, isBaseChange
@@ -1165,7 +1165,7 @@ theorem exists_finset_free_localization
   · simpa [Ideal.eq_top_iff_one, (LinearEquiv.sym
 
 中文:
-定理 exists_finset_free_localization
+定理 存在_finset_free_localization
   证明: by
   classical
   -- write 1 = ∑ᵢ fᵢ(mᵢ) with `mᵢ : M` and `fᵢ : Dual R M`
@@ -1229,7 +1229,7 @@ small_of_injective (f := f) fun M N eq => Units.ext Quotient.out_equiv_out.mp
 
 中文:
 实例 :
-  签名: Small.{u} (Skeleton <| SemimoduleCat.{u} R)ˣ
+  签名: Small.{u} (Skeleton <| Semimodule范畴.{u} R)ˣ
   定义体: let sf := Σ n, ModuleCon R (Fin n -> R)
   have {c₁ c₂ : sf} : c₁ = c₂ -> c₁.2.Quotient ≃ₗ[R] c₂.2.Quotient := by rintro rfl; exact .refl ..
   let f (M : (Skeleton <| SemimoduleCat.{u} R)ˣ) : sf := ⟨_, Finite.kerReprₛ R M⟩
@@ -1257,8 +1257,8 @@ definition CommRing.Pic
   body: Shrink (Skeleton <| SemimoduleCat.{u} R)ˣ
 
 中文:
-定义 CommRing.Pic
-  签名: (R : 类型u) [CommSemiring R]
+定义 交换环.Pic
+  签名: (R : 类型u) [交换半环 R]
   定义体: Shrink (Skeleton <| SemimoduleCat.{u} R)ˣ
 
 Depends on / 依赖: SemimoduleCat, Shrink, Skeleton
@@ -1278,7 +1278,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommGroup (Pic R)
+  签名: 交换群 (Pic R)
   定义体: fast_instance% (equivShrink _).symm.commGroup
 
 Depends on / 依赖: commGroup, equivShrink, fast_instance, symm.commGroup
@@ -1297,7 +1297,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Invertible R (Finite.reprₛ R M)
+  签名: 模.可逆 R (有限.reprₛ R M)
   定义体: .congr (Finite.reprEquivₛ R M).symm
 
 Depends on / 依赖: Finite, Finite.reprEquiv
@@ -1357,7 +1357,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def equivShrinkLinearEquiv (M : (Skeleton <| SemimoduleCat.{u} R)ˣ)
+  签名: def equivShrinkLinearEquiv (M : (Skeleton <| Semimodule范畴.{u} R)ˣ)
   定义体: have {M N : Skeleton (SemimoduleCat.{u} R)} : M = N -> M ≃ₗ[R] N := by rintro rfl; exact .refl ..
   this (by simp)
 -/
@@ -1432,7 +1432,7 @@ Units.ext Quotient.mk_eq_iff_out.mpr ⟨(Finite.reprEquivₛ R M ≪≫ₗ e).to
 中文:
 定理 mk_eq_iff
   条件: {N : Pic R}
-  结论: Pic.mk R M = N ↔ Nonempty (M ≃ₗ[R] N) where
+  结论: Pic.mk R M = N ↔ 非空 (M ≃ₗ[R] N) where
   证明: (· ▸ ⟨(mk.linearEquiv R M).symm⟩)
 mpr := fun ⟨e⟩ => ((equivShrink _).eq_symm_apply).mp
 Units.ext Quotient.mk_eq_iff_out.mpr ⟨(Finite.reprEquivₛ R M ≪≫ₗ e).toModuleIsoₛ⟩
@@ -1476,7 +1476,7 @@ theorem ext_iff
 中文:
 定理 ext_iff
   条件: {M N : Pic R}
-  结论: M = N ↔ Nonempty (M ≃ₗ[R] N)
+  结论: M = N ↔ 非空 (M ≃ₗ[R] N)
   证明: by
   rw [← mk_eq_iff]; rw [mk_eq_self]
 
@@ -1496,7 +1496,7 @@ theorem mk_eq_mk_iff
 
 中文:
 定理 mk_eq_mk_iff
-  结论: Pic.mk R M = Pic.mk R N ↔ Nonempty (M ≃ₗ[R] N)
+  结论: Pic.mk R M = Pic.mk R N ↔ 非空 (M ≃ₗ[R] N)
   证明: let eN := mk.linearEquiv R N
   mk_eq_iff.trans ⟨fun ⟨e⟩ => ⟨e ≪≫ₗ eN⟩, fun ⟨e⟩ => ⟨e ≪≫ₗ eN.symm⟩⟩
 
@@ -1535,7 +1535,7 @@ theorem mk_eq_one_iff
 
 中文:
 定理 mk_eq_one_iff
-  结论: Pic.mk R M = 1 ↔ Nonempty (M ≃ₗ[R] R)
+  结论: Pic.mk R M = 1 ↔ 非空 (M ≃ₗ[R] R)
   证明: by
   rw [← mk_self]; rw [mk_eq_mk_iff]
 
@@ -1554,7 +1554,7 @@ theorem mk_eq_one_iff_free
 
 中文:
 定理 mk_eq_one_iff_free
-  结论: Pic.mk R M = 1 ↔ Free R M
+  结论: Pic.mk R M = 1 ↔ 自由 R M
   证明: mk_eq_one_iff.trans Invertible.free_iff_linearEquiv.symm
 
 Depends on / 依赖: Invertible, Invertible.free_iff_linearEquiv.symm, free_iff_linearEquiv, mk_eq_one_iff, mk_eq_one_iff.trans
@@ -1574,7 +1574,7 @@ theorem mk_eq_one
 
 中文:
 定理 mk_eq_one
-  条件: [Free R M]
+  条件: [自由 R M]
   结论: Pic.mk R M = 1
   证明: mk_eq_one_iff_free.mpr ‹_›
 
@@ -1592,7 +1592,7 @@ instance :
 
 中文:
 实例 :
-  签名: Free R (1 : Pic R)
+  签名: 自由 R (1 : Pic R)
   定义体: mk_eq_one_iff_free.mp mk_eq_self
 
 Depends on / 依赖: mk_eq_one_iff_free, mk_eq_one_iff_free.mp, mk_eq_self
@@ -1641,7 +1641,7 @@ theorem mk_dual
 
 中文:
 定理 mk_dual
-  结论: Pic.mk R (Dual R M) = (Pic.mk R M)⁻¹
+  结论: Pic.mk R (对偶 R M) = (Pic.mk R M)⁻¹
   证明: congr_arg (equivShrink _) Units.ext by
     rw [Pic.mk]; rw [Equiv.toFun_as_coe]; rw [Equiv.symm_apply_apply]
     exact Quotient.sound ⟨(Finite.reprEquivₛ R _ ≪≫ₗ (Finite.reprEquivₛ R _).dualMap).toModuleIsoₛ⟩
@@ -1666,7 +1666,7 @@ theorem inv_eq_dual
 中文:
 定理 inv_eq_dual
   条件: (M : Pic R)
-  结论: M⁻¹ = Pic.mk R (Dual R M)
+  结论: M⁻¹ = Pic.mk R (对偶 R M)
   证明: by
   rw [mk_dual]; rw [mk_eq_self]
 
@@ -1709,7 +1709,7 @@ fun h => ⟨fun M N => by rw [← mk_eq_self (M := M), ← mk_eq_self (M := N), 
 
 中文:
 定理 subsingleton_iffₛ
-  结论: Subsingleton (Pic R) ↔
+  结论: 子单例 (Pic R) ↔
   证明: .trans ⟨fun _ M _ _ _ => Subsingleton.elim ..,
 fun h => ⟨fun M N => by rw [← mk_eq_self (M := M), ← mk_eq_self (M := N), h, h]⟩⟩
     forall₄_congr fun _ _ _ _ => mk_eq_one_iff_free
@@ -1734,8 +1734,8 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  条件: {R : 类型u} [CommRing R]
-  结论: Subsingleton (Pic R) ↔
+  条件: {R : 类型u} [交换环 R]
+  结论: 子单例 (Pic R) ↔
   证明: subsingleton_iffₛ.trans
     ⟨fun h M => h M, fun h M => let _ := @Module.addCommMonoidToAddCommGroup R; h M⟩
 
@@ -1756,8 +1756,8 @@ instance [Subsingleton
   .of_equiv (Finite.reprEquivₛ R M)
 
 中文:
-实例 [Subsingleton
-  签名: (Pic R)] : Free R M
+实例 [子单例
+  签名: (Pic R)] : 自由 R M
   定义体: have := subsingleton_iffₛ.mp ‹_› (Finite.reprₛ R M) inferInstance
   .of_equiv (Finite.reprEquivₛ R M)
 
@@ -1780,8 +1780,8 @@ instance [IsLocalRing
   obtain ⟨⟨f, m⟩, mem, hfm⟩ := IsLocalRing.exists_of_isUnit_sum (hS ▸ isUn
 
 中文:
-实例 [IsLocalRing
-  签名: R] : Subsingleton (Pic R)
+实例 [是局部环
+  签名: R] : 子单例 (Pic R)
   定义体: subsingleton_iffₛ.mpr fun M _ _ _ => by
   obtain ⟨S, hS⟩ := ((Invertible.linearEquiv R M).symm 1).exists_finset
   replace hS : 1 = ∑ i in S, i.1 i.2 := by
@@ -2055,7 +2055,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : CommSemiRingCat.{u} ⥤ CommGrpCat.{u} where
+  签名: : 交换Semi环范畴.{u} ⥤ 交换群范畴.{u} where
   定义体: .of (Pic R)
   map f := CommGrpCat.ofHom (mapRingHom f.hom)
   map_id _ := CommGrpCat.Hom.ext mapRingHom_id
@@ -2081,7 +2081,7 @@ definition relPic
 
 中文:
 定义 relPic
-  签名: : Subgroup (Pic R)
+  签名: : 子群 (Pic R)
   定义体: (Pic.mapAlgebra R A).ker
 
 Depends on / 依赖: Pic.mapAlgebra, mapAlgebra
@@ -2099,7 +2099,7 @@ theorem relPic_eq_top
 
 中文:
 定理 relPic_eq_top
-  条件: [Subsingleton (Pic A)]
+  条件: [子单例 (Pic A)]
   结论: relPic R A = ⊤
   证明: top_unique fun _ _ => Subsingleton.elim ..
 
@@ -2130,7 +2130,7 @@ refine LinearEquiv.toLinearMap_injective LinearMap.eq_of_localization_maximal _ 
 
 中文:
 定理 tensorProductComm_eq_refl
-  结论: TensorProduct.comm R M M = .refl ..
+  结论: 张量积.comm R M M = .refl ..
   证明: by
   let f (P : Ideal R) [P.IsMaximal] := LocalizedModule.mkLinearMap P.primeCompl M
   let ff (P : Ideal R) [P.IsMaximal] := TensorProduct.map (f P) (f P)
@@ -2206,7 +2206,7 @@ theorem projective_units_and_mul'_comp_lTensor_bijective
 
 中文:
 定理 projective_units_and_mul'_comp_lTensor_bijective
-  条件: (I : (Submodule R A)ˣ)
+  条件: (I : (子模 R A)ˣ)
   证明: by
   obtain ⟨T, T', hT, hT', one_mem⟩ := mem_span_mul_finite_of_mem_mul (I.inv_mul ▸ one_le.mp le_rfl)
   classical
@@ -2256,7 +2256,7 @@ instance projective_units
 
 中文:
 实例 projective_units
-  签名: (I : (Submodule R A)ˣ)
+  签名: (I : (子模 R A)ˣ)
   定义体: (projective_units_and_mul'_comp_lTensor_bijective I).1
 
 Depends on / 依赖: _comp_lTensor_bijective, projective_units_and_mul
@@ -2275,8 +2275,8 @@ theorem projective_of_isUnit
 
 中文:
 定理 projective_of_isUnit
-  条件: {I : Submodule R A} (hI : IsUnit I)
-  结论: Projective R I
+  条件: {I : 子模 R A} (hI : 是单位 I)
+  结论: 投射 R I
   证明: projective_units hI.unit
 
 Depends on / 依赖: hI.unit, projective_units
@@ -2354,7 +2354,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Invertible R I
+  签名: 模.可逆 R I
   定义体: .left (tensorInvEquiv I)
 
 Depends on / 依赖: tensorInvEquiv
@@ -2377,7 +2377,7 @@ definition unitsToPic
 
 中文:
 定义 unitsToPic
-  签名: : (Submodule R A)ˣ ->* Pic R where
+  签名: : (子模 R A)ˣ ->* Pic R where
   定义体: Pic.mk R I
   map_one' := mk_eq_one_iff.mpr
     ⟨.ofEq _ _ one_eq_range ≪≫ₗ .symm (.ofInjective _ (FaithfulSMul.algebraMap_injective R A))⟩
@@ -2399,7 +2399,7 @@ definition unitsToPicEquiv
 
 中文:
 定义 unitsToPicEquiv
-  签名: (I : (Submodule R A)ˣ)
+  签名: (I : (子模 R A)ˣ)
   定义体: (mk_eq_iff.mp rfl).some.symm
 
 Depends on / 依赖: mk_eq_iff, mk_eq_iff.mp, some.symm
@@ -2510,7 +2510,7 @@ theorem toAlgebra_injective
 
 中文:
 定理 toAlgebra_injective
-  结论: Function.Injective (toAlgebra e)
+  结论: 函数.单射 (toAlgebra e)
   证明: by
   simpa [toAlgebra] using
     Flat.rTensor_preserves_injective_linearMap _ (FaithfulSMul.algebraMap_injective R A)
@@ -2531,7 +2531,7 @@ abbreviation submoduleAlgebra
 
 中文:
 缩写 submoduleAlgebra
-  签名: : Submodule R A
+  签名: : 子模 R A
   定义体: LinearMap.range (toAlgebra e)
 
 Depends on / 依赖: LinearMap, LinearMap.range, toAlgebra
@@ -2566,7 +2566,7 @@ instance :
 
 中文:
 实例 :
-  签名: Flat R (submoduleAlgebra e)
+  签名: 平坦 R (submoduleAlgebra e)
   定义体: .of_linearEquiv (submoduleAlgebraEquiv e)
 
 Depends on / 依赖: of_linearEquiv, submoduleAlgebraEquiv
@@ -2582,8 +2582,8 @@ instance [Module.Invertible
   body: .congr (submoduleAlgebraEquiv e).symm
 
 中文:
-实例 [Module.Invertible
-  签名: R M] : Module.Invertible R (submoduleAlgebra e)
+实例 [模.可逆
+  签名: R M] : 模.可逆 R (submoduleAlgebra e)
   定义体: .congr (submoduleAlgebraEquiv e).symm
 
 Depends on / 依赖: submoduleAlgebraEquiv
@@ -2672,7 +2672,7 @@ definition tensorSubmoduleAlgebraEquivMul
 
 中文:
 定义 tensorSubmoduleAlgebraEquivMul
-  签名: (I : Submodule R A)
+  签名: (I : 子模 R A)
   定义体: by
   refine .ofBijective _ ⟨.of_comp (f := Submodule.subtype _) ?_, Submodule.mulMap'_surjective _ _⟩
   convert!
@@ -2713,7 +2713,7 @@ theorem Submodule.range_unitsToPic
         I.1.subtype) (projective_units_and_mul'_c
 
 中文:
-定理 Submodule.range_unitsToPic
+定理 子模.range_unitsToPic
   结论: (unitsToPic R A).range = relPic R A
   证明: by
   ext M; constructor <;> intro h
@@ -2754,7 +2754,7 @@ theorem Submodule.mulExact_unitsToPic_mapAlgebra
 #adaptation_note
 
 中文:
-定理 Submodule.mulExact_unitsToPic_mapAlgebra
+定理 子模.mulExact_unitsToPic_mapAlgebra
   证明: MonoidHom.mulExact_iff.mpr (range_unitsToPic R A).symm
 
 #adaptation_note
@@ -2781,7 +2781,7 @@ definition Submodule.unitsQuotEquivRelPic
 #adaptation_note
 
 中文:
-定义 Submodule.unitsQuotEquivRelPic
+定义 子模.unitsQuotEquivRelPic
   签名: :
   定义体: (QuotientGroup.congr _ _ (.refl _) ((Subgroup.map_id _).trans (ker_unitsToPic R A).symm)).trans
 (quotientKerEquivRange _).trans .subgroupCongr (range_unitsToPic R A)
@@ -2807,7 +2807,7 @@ definition ClassGroup.equivPic
 
 中文:
 定义 ClassGroup.equivPic
-  签名: (R) [CommRing R] [IsDomain R]
+  签名: (R) [交换环 R] [是整环 R]
   定义体: (mulEquivUnitsSubmoduleQuotRange R).trans .trans (Submodule.unitsQuotEquivRelPic R _)
     .trans (.subgroupCongr <| relPic_eq_top R _) Subgroup.topEquiv
 -/
@@ -2845,8 +2845,8 @@ theorem Module.Invertible.exists_linearEquiv_ideal
     ⟨_, I.submodule_isFractional (S := nonZeroDivisors R)⟩⟩⟩
 
 中文:
-定理 Module.Invertible.exists_linearEquiv_ideal
-  条件: [Subsingleton (Pic (FractionRing R))]
+定理 模.可逆.存在_linearEquiv_ideal
+  条件: [子单例 (Pic (FractionRing R))]
   证明: have : Pic.mk R M in relPic R (FractionRing R) := Subsingleton.elim ..
   have ⟨I, eq⟩ := Submodule.range_unitsToPic R (FractionRing R) ▸ this
   have ⟨e⟩ := mk_eq_mk_iff.mp eq.symm
@@ -2887,8 +2887,8 @@ have : IsUnit (e 1 : R) := IsFractionRing.self_iff_nonZeroDivisors_le_isUnit.mp 
 IsRegular.mem_nonZeroDivisors isRightRegular_iff_isRegular.mp
 
 中文:
-定理 Ideal.eq_top_of_mk_tensor_eq_one
-  结论: [IsFractionRing R R] (I J : Ideal R)
+定理 理想.eq_top_of_mk_tensor_eq_one
+  结论: [IsFractionRing R R] (I J : 理想 R)
   证明: by
   have ⟨e⟩ := mk_eq_one_iff.mp h
   have e := e.symm ≪≫ₗ Submodule.LinearDisjoint.mulMap

@@ -366,7 +366,7 @@ lemma mulSupport_extend_one
 
 中文:
 引理 mulSupport_extend_one
-  条件: {f : ι -> κ} {g : ι -> N} (hf : f.Injective)
+  条件: {f : ι -> κ} {g : ι -> N} (hf : f.单射)
   证明: mulSupport_extend_one_subset.antisymm by
     rintro _ ⟨x, hx, rfl⟩; rwa [mem_mulSupport, hf.extend_apply]
 
@@ -474,7 +474,7 @@ lemma mulSupport_nonempty_iff
 
 中文:
 引理 mulSupport_nonempty_iff
-  结论: (mulSupport f).Nonempty ↔ f != 1
+  结论: (mulSupport f).非空 ↔ f != 1
   证明: by
   rw [nonempty_iff_ne_empty]; rw [Ne]; rw [mulSupport_eq_empty_iff]
 
@@ -498,8 +498,8 @@ theorem _root_.Subsingleton.mulSupport_eq
 @[to_additive]
 
 中文:
-定理 _root_.Subsingleton.mulSupport_eq
-  条件: [Subsingleton M] (f : ι -> M)
+定理 _root_.子单例.mulSupport_eq
+  条件: [子单例 M] (f : ι -> M)
   结论: mulSupport f = ∅
   证明: mulSupport_eq_empty_iff.mpr Subsingleton.elim f 1
 
@@ -555,7 +555,7 @@ lemma range_eq_image_or_of_mulSupport_subset
 
 中文:
 引理 range_eq_image_or_of_mulSupport_subset
-  条件: {k : Set ι} (h : mulSupport f subseteq k)
+  条件: {k : 集合 ι} (h : mulSupport f subseteq k)
   证明: by
   have : range f subseteq insert 1 (f '' k) :=
     (range_subset_insert_image_mulSupport f).trans (insert_subset_insert (image_mono h))
@@ -629,7 +629,7 @@ lemma mulSupport_const
 中文:
 引理 mulSupport_const
   条件: {c : M} (hc : c != 1)
-  结论: (mulSupport fun _ : ι => c) = Set.univ
+  结论: (mulSupport fun _ : ι => c) = 集合.univ
   证明: by
   ext x; simp [hc]
 -/
@@ -652,7 +652,7 @@ lemma mulSupport_eq_univ
 中文:
 引理 mulSupport_eq_univ
   条件: (hf : 对任意 x, f x != 1)
-  结论: mulSupport f = Set.univ
+  结论: mulSupport f = 集合.univ
   证明: Set.eq_univ_of_forall hf
 
 @[to_additive]
@@ -889,7 +889,7 @@ lemma mulSupport_curry
 中文:
 引理 mulSupport_curry
   条件: (f : ι × κ -> M)
-  结论: (mulSupport f.curry) = (mulSupport f).image Prod.fst
+  结论: (mulSupport f.curry) = (mulSupport f).像 积类型.fst
   证明: by
   simp [mulSupport, funext_iff, image]
 
@@ -1057,7 +1057,7 @@ lemma subsingleton_mulSupport_mulSingle
 
 中文:
 引理 subsingleton_mulSupport_mulSingle
-  结论: (mulSupport (mulSingle i a)).Subsingleton
+  结论: (mulSupport (mulSingle i a)).子单例
   证明: by
   classical
   rw [mulSupport_mulSingle]

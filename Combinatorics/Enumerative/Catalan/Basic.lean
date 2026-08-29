@@ -95,7 +95,7 @@ theorem catalan_succ
 中文:
 定理 catalan_succ
   条件: (n : 自然数)
-  结论: catalan (n + 1) = ∑ i : Fin n.succ, catalan i * catalan (n - i)
+  结论: catalan (n + 1) = ∑ i : 有限集 n.succ, catalan i * catalan (n - i)
   证明: by
   rw [catalan]
 

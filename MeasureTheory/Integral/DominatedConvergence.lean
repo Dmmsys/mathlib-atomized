@@ -92,7 +92,7 @@ theorem tendsto_integral_filter_of_dominated_convergence
 
 中文:
 定理 tendsto_integral_filter_of_dominated_convergence
-  结论: {ι} {l : Filter ι} [l.IsCountablyGenerated]
+  结论: {ι} {l : 滤子 ι} [l.是余untablyGenerated]
   证明: by
   simp only [integral_eq_setToFun]
   exact tendsto_setToFun_filter_of_dominated_convergence (dominatedFinMeasAdditive_weightedSMul μ)
@@ -122,7 +122,7 @@ theorem hasSum_integral_of_dominated_convergence
 
 中文:
 定理 hasSum_integral_of_dominated_convergence
-  结论: {ι} [Countable ι] {F : ι -> α -> G} {f : α -> G}
+  结论: {ι} [可数 ι] {F : ι -> α -> G} {f : α -> G}
   证明: by
   simp only [integral_eq_setToFun]
   exact hasSum_setToFun_of_dominated_convergence _ bound hF_meas h_bound bound_summable
@@ -155,7 +155,7 @@ theorem integral_tsum
 
 中文:
 定理 integral_tsum
-  结论: {ι} [Countable ι] {f : ι -> α -> G} (hf : 对任意 i, AEStronglyMeasurable (f i) μ)
+  结论: {ι} [可数 ι] {f : ι -> α -> G} (hf : 对任意 i, AEStronglyMeasurable (f i) μ)
   证明: by
   by_cases hG : CompleteSpace G; swap
   · simp [integral, hG]
@@ -189,7 +189,7 @@ lemma hasSum_integral_of_summable_integral_norm
 
 中文:
 引理 hasSum_integral_of_summable_integral_norm
-  结论: {ι} [Countable ι] {F : ι -> α -> E}
+  结论: {ι} [可数 ι] {F : ι -> α -> E}
   证明: by
   by_cases hE : CompleteSpace E; swap
   · simp [integral, hE, hasSum_zero]
@@ -225,7 +225,7 @@ lemma integral_tsum_of_summable_integral_norm
 
 中文:
 引理 integral_tsum_of_summable_integral_norm
-  结论: {ι} [Countable ι] {F : ι -> α -> E}
+  结论: {ι} [可数 ι] {F : ι -> α -> E}
   证明: (hasSum_integral_of_summable_integral_norm hF_int hF_sum).tsum_eq
 
 Depends on / 依赖: hF_int, hF_sum, hasSum_integral_of_summable_integral_norm, tsum_eq
@@ -247,7 +247,7 @@ theorem tendsto_integral_filter_of_norm_le_const
 
 中文:
 定理 tendsto_integral_filter_of_norm_le_const
-  结论: {ι} {l : Filter ι} [l.IsCountablyGenerated]
+  结论: {ι} {l : 滤子 ι} [l.是余untablyGenerated]
   证明: by
   simp only [integral_eq_setToFun]
   exact tendsto_setToFun_filter_of_norm_le_const _ h_meas h_bound h_lim
@@ -286,8 +286,8 @@ theorem _root_.Antitone.tendsto_setIntegral
   refine tendsto_integra
 
 中文:
-定理 _root_.Antitone.tendsto_setIntegral
-  结论: (hsm : 对任意 i, MeasurableSet (s i)) (h_anti : Antitone s)
+定理 _root_.递减.tendsto_set整数egral
+  结论: (hsm : 对任意 i, 可测集 (s i)) (h_anti : 递减 s)
   证明: by
   let bound : α -> Real := indicator (s 0) fun a => ‖f a‖
   have h_int_eq : (fun i => ∫ a in s i, f a ∂μ) = fun i => ∫ a, (s i).indicator f a ∂μ :=
@@ -357,7 +357,7 @@ theorem _root_.TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
 .aestronglyMeasurable measurableSet_uIoc exact hF.mono fun
 
 中文:
-定理 _root_.TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
+定理 _root_.TendstoUniformlyOn.tendsto_interval整数egral_of_continuousOn
   证明: by
   rcases l.eq_or_neBot with rfl | hl
   · simp
@@ -418,8 +418,8 @@ theorem hasSum_intervalIntegral_of_summable_norm
   · in
 
 中文:
-定理 hasSum_intervalIntegral_of_summable_norm
-  结论: [Countable ι] {f : ι -> C(实数, E)}
+定理 hasSum_interval整数egral_of_summable_norm
+  结论: [可数 ι] {f : ι -> C(实数, E)}
   证明: by
   by_cases hE : CompleteSpace E; swap
   · simp [intervalIntegral, integral, hE, hasSum_zero]
@@ -458,8 +458,8 @@ theorem tsum_intervalIntegral_eq_of_summable_norm
   proof: (hasSum_intervalIntegral_of_summable_norm hf_sum).tsum_eq
 
 中文:
-定理 tsum_intervalIntegral_eq_of_summable_norm
-  结论: [Countable ι] {f : ι -> C(实数, E)}
+定理 tsum_interval整数egral_eq_of_summable_norm
+  结论: [可数 ι] {f : ι -> C(实数, E)}
   证明: (hasSum_intervalIntegral_of_summable_norm hf_sum).tsum_eq
 
 Depends on / 依赖: hasSum_intervalIntegral_of_summable_norm, hf_sum, tsum_eq
@@ -669,7 +669,7 @@ theorem continuousAt_parametric_primitive_of_dominated
 
 中文:
 定理 continuousAt_parametric_primitive_of_dominated
-  结论: [FirstCountableTopology X]
+  结论: [第一可数拓扑 X]
   证明: by
   have hsub : forall {a₀ b₀}, a₀ in Ioo a b -> b₀ in Ioo a b -> Ι a₀ b₀ subseteq Ι a b := fun ha₀ hb₀ =>
     (ordConnected_Ioo.uIoc_subset ha₀ hb₀).trans (Ioo_subset_Ioc_self.trans Ioc_subset_uIoc)
@@ -770,7 +770,7 @@ theorem continuousOn_primitive
 
 中文:
 定理 continuousOn_primitive
-  条件: (h_int : 整数egrableOn f (Icc a b) μ)
+  条件: (h_int : 整数egrableOn f (闭区间 a b) μ)
   证明: by
   by_cases h : a <= b
   · have : forall x in Icc a b, ∫ t in Ioc a x, f t ∂μ = ∫ t in a..x, f t ∂μ := by
@@ -812,7 +812,7 @@ theorem continuousOn_primitive_Icc
 
 中文:
 定理 continuousOn_primitive_Icc
-  条件: (h_int : 整数egrableOn f (Icc a b) μ)
+  条件: (h_int : 整数egrableOn f (闭区间 a b) μ)
   证明: by
   have aux : (fun x => ∫ t in Icc a x, f t ∂μ) = fun x => ∫ t in Ioc a x, f t ∂μ := by
     ext x
@@ -1087,7 +1087,7 @@ theorem continuous_parametric_intervalIntegral_of_continuous
     (continuous_parametric_primitive_of_continuous hf).comp₂ continuous_id hs
 
 中文:
-定理 continuous_parametric_intervalIntegral_of_continuous
+定理 continuous_parametric_interval整数egral_of_continuous
   结论: {a₀ : 实数}
   证明: show Continuous ((fun p : X × Real => ∫ t in a₀..p.2, f p.1 t ∂μ) ∘ fun x => (x, s x)) from
     (continuous_parametric_primitive_of_continuous hf).comp₂ continuous_id hs
@@ -1108,7 +1108,7 @@ theorem continuous_parametric_intervalIntegral_of_continuous'
   proof: by fun_prop
 
 中文:
-定理 continuous_parametric_intervalIntegral_of_continuous'
+定理 continuous_parametric_interval整数egral_of_continuous'
   证明: by fun_prop
 
 Depends on / 依赖: fun_prop
@@ -1144,7 +1144,7 @@ theorem continuousWithinAt_Ici_primitive_Ioi
 
 中文:
 定理 continuousWithinAt_Ici_primitive_Ioi
-  条件: {a₀ : 实数} (hf : 整数egrableOn f (Ioi a₀) μ)
+  条件: {a₀ : 实数} (hf : 整数egrableOn f (左开右无界区间 a₀) μ)
   证明: by
   simp_rw [← integral_indicator measurableSet_Ioi]
   apply tendsto_integral_filter_of_dominated_convergence ((Ioi a₀).indicator (norm ∘ f))
@@ -1189,7 +1189,7 @@ theorem continuousOn_Ici_primitive_Ioi
 
 中文:
 定理 continuousOn_Ici_primitive_Ioi
-  结论: [NullSingletonClass μ] {a₀ : 实数}
+  结论: [NullSingleton类 μ] {a₀ : 实数}
   证明: by
   intro a (ha : a₀ <= a)
   rw [continuousWithinAt_iff_continuous_left_right]
@@ -1233,7 +1233,7 @@ theorem continuousWithinAt_Iic_primitive_Iio
 
 中文:
 定理 continuousWithinAt_Iic_primitive_Iio
-  条件: {a₀ : 实数} (hf : 整数egrableOn f (Iio a₀) μ)
+  条件: {a₀ : 实数} (hf : 整数egrableOn f (左无界右开区间 a₀) μ)
   证明: by
   simp_rw [← integral_indicator measurableSet_Iio]
   apply tendsto_integral_filter_of_dominated_convergence ((Iio a₀).indicator (norm ∘ f))
@@ -1278,7 +1278,7 @@ theorem continuousOn_Iic_primitive_Iio
 
 中文:
 定理 continuousOn_Iic_primitive_Iio
-  结论: [NullSingletonClass μ] {a₀ : 实数}
+  结论: [NullSingleton类 μ] {a₀ : 实数}
   证明: by
   intro a (ha : a <= a₀)
   rw [continuousWithinAt_iff_continuous_left_right]
@@ -1319,7 +1319,7 @@ theorem continuousOn_Ici_primitive_Ici
 
 中文:
 定理 continuousOn_Ici_primitive_Ici
-  结论: [NullSingletonClass μ] {a₀ : 实数}
+  结论: [NullSingleton类 μ] {a₀ : 实数}
   证明: by
   simp_rw [integral_Ici_eq_integral_Ioi]
   exact (hf.mono_set Ioi_subset_Ici_self).continuousOn_Ici_primitive_Ioi
@@ -1343,7 +1343,7 @@ theorem continuousOn_Iic_primitive_Iic
 
 中文:
 定理 continuousOn_Iic_primitive_Iic
-  结论: [NullSingletonClass μ] {a₀ : 实数}
+  结论: [NullSingleton类 μ] {a₀ : 实数}
   证明: by
   simp_rw [integral_Iic_eq_integral_Iio]
   exact (hf.mono_set Iio_subset_Iic_self).continuousOn_Iic_primitive_Iio

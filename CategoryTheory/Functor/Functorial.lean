@@ -35,7 +35,7 @@ class Functorial
     - map_comp : forall {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}, map (f ≫ g) = map f ≫ map g  [default: by cat_disch]
 
 中文:
-类 Functorial
+类 函子性
   参数: (F : C -> D)
   公理与运算 (3 个):
     - map((F)) : 对任意 {X Y : C}, (X ⟶ Y) -> (F X ⟶ F Y)
@@ -70,7 +70,7 @@ definition of
 
 中文:
 定义 of
-  签名: (F : C -> D) [I : Functorial.{v₁, v₂} F]
+  签名: (F : C -> D) [I : 函子性.{v₁, v₂} F]
   定义体: { I with obj := F
            map := Functorial.map F }
 
@@ -114,7 +114,7 @@ instance functorial_id
 
 中文:
 实例 functorial_id
-  签名: : Functorial.{v₁, v₁} (id : C -> C) where map f
+  签名: : 函子性.{v₁, v₁} (id : C -> C) where map f
   定义体: f
 
 Depends on / 依赖: hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
@@ -141,7 +141,7 @@ definition functorial_comp
 
 中文:
 定义 functorial_comp
-  签名: (F : C -> D) [Functorial.{v₁, v₂} F] (G : D -> E) [Functorial.{v₂, v₃} G]
+  签名: (F : C -> D) [函子性.{v₁, v₂} F] (G : D -> E) [函子性.{v₂, v₃} G]
   定义体: { Functor.of F ⋙ Functor.of G with map := fun f => map G (map F f) }
 
 Depends on / 依赖: Functor, Functor.of, HasStrongEpiImages, hasImageMapsOfHasStrongEpiImages

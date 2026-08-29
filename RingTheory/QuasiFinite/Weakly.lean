@@ -48,7 +48,7 @@ abbreviation Algebra.WeaklyQuasiFiniteAt
   body: Algebra.QuasiFiniteAt R (q.map (Ideal.Quotient.mk ((q.under R).map (algebraMap R S))))
 
 中文:
-缩写 Algebra.WeaklyQuasiFiniteAt
+缩写 代数.WeaklyQuasiFiniteAt
   定义体: Algebra.QuasiFiniteAt R (q.map (Ideal.Quotient.mk ((q.under R).map (algebraMap R S))))
 
 Depends on / 依赖: Algebra, Algebra.QuasiFiniteAt, Ideal.Quotient.mk, QuasiFiniteAt, Quotient, algebraMap, q.map, q.under
@@ -70,7 +70,7 @@ lemma Algebra.weaklyQuasiFiniteAt_iff
   let φ₁ : Localization.AtPri
 
 中文:
-引理 Algebra.weaklyQuasiFiniteAt_iff
+引理 代数.weaklyQuasiFiniteAt_iff
   证明: by
   let q' := q.map (Ideal.Quotient.mk ((q.under R).map (algebraMap R S)))
   have hq' : q = q'.comap (Ideal.Quotient.mk _) := .trans
@@ -123,7 +123,7 @@ lemma of_algHom_localization
 
 中文:
 引理 of_algHom_localization
-  结论: (p : Ideal S) [p.IsPrime] [WeaklyQuasiFiniteAt R p]
+  结论: (p : 理想 S) [p.是素] [WeaklyQuasiFiniteAt R p]
   证明: by
   rw [weaklyQuasiFiniteAt_iff] at *
   have H : (p.under R).map (algebraMap R _) <=
@@ -190,7 +190,7 @@ instance comap_algEquiv
 
 中文:
 实例 comap_algEquiv
-  签名: (p : Ideal S) [p.IsPrime]
+  签名: (p : 理想 S) [p.是素]
   定义体: .of_surjectiveOnStalks p _ f.symm.toAlgHom
     (RingHom.surjectiveOnStalks_of_surjective f.symm.surjective) (by ext; simp)
 
@@ -256,7 +256,7 @@ lemma finite_locoalization
 
 中文:
 引理 finite_locoalization
-  条件: {K : 类型} [Field K] [Algebra K S] [WeaklyQuasiFiniteAt K q]
+  条件: {K : 类型} [域 K] [代数 K S] [WeaklyQuasiFiniteAt K q]
   证明: by
   have H : Algebra.WeaklyQuasiFiniteAt K q := ‹_›
   rw [Algebra.weaklyQuasiFiniteAt_iff]; rw [← Ideal.over_def q ⊥]; rw [Ideal.map_bot] at H
@@ -289,7 +289,7 @@ lemma eq_of_le_of_under_eq
 
 中文:
 引理 eq_of_le_of_under_eq
-  结论: {P Q : Ideal S} [P.IsPrime] [Q.IsPrime]
+  结论: {P Q : 理想 S} [P.是素] [Q.是素]
   证明: by
   have : (P.map (Ideal.Quotient.mk ((Q.under R).map (algebraMap R S)))).IsPrime :=
     Ideal.map_isPrime_of_surjective Ideal.Quotient.mk_surjective
@@ -336,7 +336,7 @@ lemma baseChange
 
 中文:
 引理 baseChange
-  结论: (p : Ideal S) [p.IsPrime] [WeaklyQuasiFiniteAt R p]
+  结论: (p : 理想 S) [p.是素] [WeaklyQuasiFiniteAt R p]
   证明: by
   delta WeaklyQuasiFiniteAt at *
   let φ : A otimes[R] S ->ₐ[A] (A ⧸ q.under A) otimes[R] (S ⧸ (p.under R).map (algebraMap R S)) :=
@@ -403,7 +403,7 @@ lemma of_restrictScalars
 
 中文:
 引理 of_restrictScalars
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: by
   have : Algebra.QuasiFiniteAt S (q.map (Ideal.Quotient.mk ((q.under R).map (algebraMap R T)))) :=
     .of_restrictScalars R _ _
@@ -446,7 +446,7 @@ lemma of_quasiFiniteAt_residueField
 
 中文:
 引理 of_quasiFiniteAt_residueField
-  结论: [p.IsPrime] [q.LiesOver p]
+  结论: [p.是素] [q.LiesOver p]
   证明: by
   rw [Algebra.weaklyQuasiFiniteAt_iff]
   let Sq := Localization.AtPrime q

@@ -41,8 +41,8 @@ definition IsSymm
   body: Aᵀ = A
 
 中文:
-定义 IsSymm
-  签名: (A : Matrix n n α)
+定义 是Symm
+  签名: (A : 矩阵 n n α)
   定义体: Aᵀ = A
 -/
 def IsSymm (A : Matrix n n α) : Prop :=
@@ -61,8 +61,8 @@ theorem IsSymm.eq
   proof: h
 
 中文:
-定理 IsSymm.eq
-  条件: {A : Matrix n n α} (h : A.IsSymm)
+定理 是Symm.eq
+  条件: {A : 矩阵 n n α} (h : A.是Symm)
   结论: Aᵀ = A
   证明: h
 -/
@@ -79,9 +79,9 @@ theorem IsSymm.ext_iff
   proof: Matrix.ext_iff.symm
 
 中文:
-定理 IsSymm.ext_iff
-  条件: {A : Matrix n n α}
-  结论: A.IsSymm ↔ 对任意 i j, A j i = A i j
+定理 是Symm.ext_iff
+  条件: {A : 矩阵 n n α}
+  结论: A.是Symm ↔ 对任意 i j, A j i = A i j
   证明: Matrix.ext_iff.symm
 
 Depends on / 依赖: Matrix, Matrix.ext_iff.symm, ext_iff
@@ -99,9 +99,9 @@ theorem IsSymm.ext
   proof: Matrix.ext
 
 中文:
-定理 IsSymm.ext
-  条件: {A : Matrix n n α}
-  结论: (对任意 i j, A j i = A i j) -> A.IsSymm
+定理 是Symm.ext
+  条件: {A : 矩阵 n n α}
+  结论: (对任意 i j, A j i = A i j) -> A.是Symm
   证明: Matrix.ext
 
 Depends on / 依赖: Matrix, Matrix.ext
@@ -119,8 +119,8 @@ theorem IsSymm.apply
   proof: IsSymm.ext_iff.1 h i j
 
 中文:
-定理 IsSymm.apply
-  条件: {A : Matrix n n α} (h : A.IsSymm) (i j : n)
+定理 是Symm.apply
+  条件: {A : 矩阵 n n α} (h : A.是Symm) (i j : n)
   结论: A j i = A i j
   证明: IsSymm.ext_iff.1 h i j
 
@@ -139,7 +139,7 @@ theorem isSymm_mul_transpose_self
 
 中文:
 定理 isSymm_mul_transpose_self
-  条件: [Fintype n] [NonUnitalCommSemiring α] (A : Matrix n n α)
+  条件: [有限类型 n] [非幺交换半环 α] (A : 矩阵 n n α)
   证明: transpose_mul _ _
 
 Depends on / 依赖: transpose_mul
@@ -158,7 +158,7 @@ theorem isSymm_transpose_mul_self
 
 中文:
 定理 isSymm_transpose_mul_self
-  条件: [Fintype n] [NonUnitalCommSemiring α] (A : Matrix n n α)
+  条件: [有限类型 n] [非幺交换半环 α] (A : 矩阵 n n α)
   证明: transpose_mul _ _
 
 Depends on / 依赖: transpose_mul
@@ -178,8 +178,8 @@ theorem isSymm_add_transpose_self
 
 中文:
 定理 isSymm_add_transpose_self
-  条件: [AddCommSemigroup α] (A : Matrix n n α)
-  结论: (A + Aᵀ).IsSymm
+  条件: [加法交换半群 α] (A : 矩阵 n n α)
+  结论: (A + Aᵀ).是Symm
   证明: add_comm _ _
 
 Depends on / 依赖: add_comm
@@ -200,8 +200,8 @@ theorem isSymm_transpose_add_self
 
 中文:
 定理 isSymm_transpose_add_self
-  条件: [AddCommSemigroup α] (A : Matrix n n α)
-  结论: (Aᵀ + A).IsSymm
+  条件: [加法交换半群 α] (A : 矩阵 n n α)
+  结论: (Aᵀ + A).是Symm
   证明: add_comm _ _
 
 @[simp]
@@ -225,8 +225,8 @@ theorem isSymm_zero
 
 中文:
 定理 isSymm_zero
-  条件: [Zero α]
-  结论: (0 : Matrix n n α).IsSymm
+  条件: [零 α]
+  结论: (0 : 矩阵 n n α).是Symm
   证明: transpose_zero
 
 @[simp]
@@ -248,8 +248,8 @@ theorem isSymm_one
 
 中文:
 定理 isSymm_one
-  条件: [DecidableEq n] [Zero α] [One α]
-  结论: (1 : Matrix n n α).IsSymm
+  条件: [DecidableEq n] [零 α] [幺 α]
+  结论: (1 : 矩阵 n n α).是Symm
   证明: transpose_one
 
 Depends on / 依赖: transpose_one
@@ -269,8 +269,8 @@ theorem IsSymm.pow
 @[simp]
 
 中文:
-定理 IsSymm.pow
-  结论: [CommSemiring α] [Fintype n] [DecidableEq n] {A : Matrix n n α} (h : A.IsSymm)
+定理 是Symm.pow
+  结论: [交换半环 α] [有限类型 n] [DecidableEq n] {A : 矩阵 n n α} (h : A.是Symm)
   证明: by
   rw [IsSymm]; rw [transpose_pow]; rw [h]
 
@@ -297,9 +297,9 @@ theorem IsSymm.map
 @[simp]
 
 中文:
-定理 IsSymm.map
-  条件: {A : Matrix n n α} (h : A.IsSymm) (f : α -> β)
-  结论: (A.map f).IsSymm
+定理 是Symm.map
+  条件: {A : 矩阵 n n α} (h : A.是Symm) (f : α -> β)
+  结论: (A.map f).是Symm
   证明: by
   rw [IsSymm]; rw [← transpose_map]; rw [h.eq]
 
@@ -322,7 +322,7 @@ theorem isSymm_map_iff
 
 中文:
 定理 isSymm_map_iff
-  条件: {A : Matrix n n α} {f : α -> β} (hf : f.Injective)
+  条件: {A : 矩阵 n n α} {f : α -> β} (hf : f.单射)
   证明: by
   rw [IsSymm]; rw [IsSymm]; rw [← transpose_map]; rw [map_injective hf |>.eq_iff]
 
@@ -344,9 +344,9 @@ theorem IsSymm.transpose
 @[simp]
 
 中文:
-定理 IsSymm.transpose
-  条件: {A : Matrix n n α} (h : A.IsSymm)
-  结论: Aᵀ.IsSymm
+定理 是Symm.transpose
+  条件: {A : 矩阵 n n α} (h : A.是Symm)
+  结论: Aᵀ.是Symm
   证明: congr_arg _ h
 
 @[simp]
@@ -373,8 +373,8 @@ theorem isSymm_transpose_iff
 
 中文:
 定理 isSymm_transpose_iff
-  条件: {A : Matrix n n α}
-  结论: Aᵀ.IsSymm ↔ A.IsSymm
+  条件: {A : 矩阵 n n α}
+  结论: Aᵀ.是Symm ↔ A.是Symm
   证明: by
   refine ⟨fun h => ?_, (·.transpose)⟩
   rw [← A.transpose_transpose]
@@ -402,9 +402,9 @@ theorem IsSymm.conjTranspose
 @[simp]
 
 中文:
-定理 IsSymm.conjTranspose
-  条件: [Star α] {A : Matrix n n α} (h : A.IsSymm)
-  结论: Aᴴ.IsSymm
+定理 是Symm.conjTranspose
+  条件: [对合 α] {A : 矩阵 n n α} (h : A.是Symm)
+  结论: Aᴴ.是Symm
   证明: h.transpose.map _
 
 @[simp]
@@ -431,8 +431,8 @@ theorem isSymm_conjTranspose_iff
 
 中文:
 定理 isSymm_conjTranspose_iff
-  条件: [InvolutiveStar α] {A : Matrix n n α}
-  结论: Aᴴ.IsSymm ↔ A.IsSymm
+  条件: [InvolutiveStar α] {A : 矩阵 n n α}
+  结论: Aᴴ.是Symm ↔ A.是Symm
   证明: by
   refine ⟨fun h => ?_, (·.conjTranspose)⟩
   rw [← A.conjTranspose_conjTranspose]
@@ -460,9 +460,9 @@ theorem IsSymm.neg
 @[simp]
 
 中文:
-定理 IsSymm.neg
-  条件: [Neg α] {A : Matrix n n α} (h : A.IsSymm)
-  结论: (-A).IsSymm
+定理 是Symm.neg
+  条件: [取负 α] {A : 矩阵 n n α} (h : A.是Symm)
+  结论: (-A).是Symm
   证明: (transpose_neg _).trans (congr_arg _ h)
 
 @[simp]
@@ -489,8 +489,8 @@ theorem isSymm_neg_iff
 
 中文:
 定理 isSymm_neg_iff
-  条件: [InvolutiveNeg α] {A : Matrix n n α}
-  结论: (-A).IsSymm ↔ A.IsSymm
+  条件: [InvolutiveNeg α] {A : 矩阵 n n α}
+  结论: (-A).是Symm ↔ A.是Symm
   证明: by
   refine ⟨fun h => ?_, (·.neg)⟩
   rw [← neg_neg A]
@@ -518,9 +518,9 @@ theorem IsSymm.add
 @[simp]
 
 中文:
-定理 IsSymm.add
-  条件: {A B : Matrix n n α} [Add α] (hA : A.IsSymm) (hB : B.IsSymm)
-  结论: (A + B).IsSymm
+定理 是Symm.add
+  条件: {A B : 矩阵 n n α} [加法 α] (hA : A.是Symm) (hB : B.是Symm)
+  结论: (A + B).是Symm
   证明: (transpose_add _ _).trans (hA.symm ▸ hB.symm ▸ rfl)
 
 @[simp]
@@ -543,9 +543,9 @@ theorem IsSymm.sub
 @[simp]
 
 中文:
-定理 IsSymm.sub
-  条件: {A B : Matrix n n α} [Sub α] (hA : A.IsSymm) (hB : B.IsSymm)
-  结论: (A - B).IsSymm
+定理 是Symm.sub
+  条件: {A B : 矩阵 n n α} [减法 α] (hA : A.是Symm) (hB : B.是Symm)
+  结论: (A - B).是Symm
   证明: (transpose_sub _ _).trans (hA.symm ▸ hB.symm ▸ rfl)
 
 @[simp]
@@ -568,9 +568,9 @@ theorem IsSymm.smul
 @[simp]
 
 中文:
-定理 IsSymm.smul
-  条件: [SMul R α] {A : Matrix n n α} (h : A.IsSymm) (k : R)
-  结论: (k • A).IsSymm
+定理 是Symm.smul
+  条件: [标量乘法 R α] {A : 矩阵 n n α} (h : A.是Symm) (k : R)
+  结论: (k • A).是Symm
   证明: (transpose_smul _ _).trans (congr_arg _ h)
 
 @[simp]
@@ -596,7 +596,7 @@ theorem isSymm_smul_iff
 
 中文:
 定理 isSymm_smul_iff
-  条件: [Monoid R] [MulAction R α] {A : Matrix n n α} (k : R) [Invertible k]
+  条件: [幺半群 R] [乘法作用 R α] {A : 矩阵 n n α} (k : R) [可逆 k]
   证明: by
   refine ⟨fun h => ?_, (·.smul k)⟩
   rw [← invOf_smul_smul k A]
@@ -623,9 +623,9 @@ theorem IsSymm.submatrix
   proof: (transpose_submatrix _ _ _).trans (h.symm ▸ rfl)
 
 中文:
-定理 IsSymm.submatrix
-  条件: {A : Matrix n n α} (h : A.IsSymm) (f : m -> n)
-  结论: (A.submatrix f f).IsSymm
+定理 是Symm.submatrix
+  条件: {A : 矩阵 n n α} (h : A.是Symm) (f : m -> n)
+  结论: (A.submatrix f f).是Symm
   证明: (transpose_submatrix _ _ _).trans (h.symm ▸ rfl)
 
 Depends on / 依赖: h.symm, transpose_submatrix
@@ -645,9 +645,9 @@ theorem IsSymm.reindex
   apply submatrix h
 
 中文:
-定理 IsSymm.reindex
-  条件: {A : Matrix n n α} (h : A.IsSymm) (f : n ≃ m)
-  结论: (A.reindex f f).IsSymm
+定理 是Symm.reindex
+  条件: {A : 矩阵 n n α} (h : A.是Symm) (f : n ≃ m)
+  结论: (A.reindex f f).是Symm
   证明: by
   rw [reindex_apply]
   apply submatrix h
@@ -671,8 +671,8 @@ theorem isSymm_reindex_iff
 
 中文:
 定理 isSymm_reindex_iff
-  条件: {A : Matrix n n α} (f : n ≃ m)
-  结论: (A.reindex f f).IsSymm ↔ A.IsSymm
+  条件: {A : 矩阵 n n α} (f : n ≃ m)
+  结论: (A.reindex f f).是Symm ↔ A.是Symm
   证明: by
   refine ⟨fun h => ?_, (·.reindex f)⟩
   simpa using h.reindex f.symm
@@ -696,8 +696,8 @@ theorem isSymm_diagonal
 
 中文:
 定理 isSymm_diagonal
-  条件: [DecidableEq n] [Zero α] (v : n -> α)
-  结论: (diagonal v).IsSymm
+  条件: [DecidableEq n] [零 α] (v : n -> α)
+  结论: (diagonal v).是Symm
   证明: diagonal_transpose _
 
 Depends on / 依赖: diagonal_transpose
@@ -719,8 +719,8 @@ theorem IsSymm.fromBlocks
   rw [fromBlocks_transpose]; rw [hA]; rw [hCB]; rw [hBC]; rw [hD]
 
 中文:
-定理 IsSymm.fromBlocks
-  结论: {A : Matrix m m α} {B : Matrix m n α} {C : Matrix n m α}
+定理 是Symm.fromBlocks
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α} {C : 矩阵 n m α}
   证明: by
   have hCB : Cᵀ = B := by
     rw [← hBC]
@@ -752,7 +752,7 @@ theorem isSymm_fromBlocks_iff
 
 中文:
 定理 isSymm_fromBlocks_iff
-  结论: {A : Matrix m m α} {B : Matrix m n α} {C : Matrix n m α}
+  结论: {A : 矩阵 m m α} {B : 矩阵 m n α} {C : 矩阵 n m α}
   证明: ⟨fun h =>
     ⟨(congr_arg toBlocks₁₁ h :), (congr_arg toBlocks₂₁ h :), (congr_arg toBlocks₁₂ h :),
       (congr_arg toBlocks₂₂ h :)⟩,
@@ -778,7 +778,7 @@ theorem isSymm_comp_iff
 
 中文:
 定理 isSymm_comp_iff
-  条件: {A : Matrix m m (Matrix n n α)}
+  条件: {A : 矩阵 m m (矩阵 n n α)}
   证明: by
   rw [IsSymm]; rw [transpose_comp]; rw [transpose_map]; rw [comp .. |>.injective.eq_iff]; rw [eq_comm]; rw [.eq_iff] transpose_involutive _ _
 
@@ -799,8 +799,8 @@ theorem isSymm_comp_iff_forall
   grind
 
 中文:
-定理 isSymm_comp_iff_forall
-  条件: {A : Matrix m m (Matrix n n α)}
+定理 isSymm_comp_iff_对任意
+  条件: {A : 矩阵 m m (矩阵 n n α)}
   证明: by
   simp [IsSymm.ext_iff]
   grind

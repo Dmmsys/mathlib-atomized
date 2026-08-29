@@ -39,7 +39,7 @@ abbreviation W
 
 中文:
 缩写 W
-  签名: : Morphism命题erty (Cᵒᵖ ⥤ A)
+  签名: : MorphismProperty (Cᵒᵖ ⥤ A)
   定义体: ObjectProperty.isLocal (Presheaf.IsSheaf J)
 
 Depends on / 依赖: IsSheaf, ObjectProperty, ObjectProperty.isLocal, Presheaf, Presheaf.IsSheaf, isLocal
@@ -95,7 +95,7 @@ lemma W_sheafToPresheaf_map_iff_isIso
 
 中文:
 引理 W_sheafToPresheaf_map_iff_isIso
-  条件: {F₁ F₂ : Sheaf J A} (φ : F₁ ⟶ F₂)
+  条件: {F₁ F₂ : 层 J A} (φ : F₁ ⟶ F₂)
   证明: by
   rw [W_eq_isLocal_range_sheafToPresheaf_obj]; rw [ObjectProperty.isLocal_iff_isIso _ _ ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]; rw [isIso_iff_of_reflects_iso]
 
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: (presheafToSheaf J A).IsLocalization J.W
+  签名: (presheafToSheaf J A).是Localization J.W
   定义体: by
   rw [W_eq_inverseImage_isomorphisms]
   exact (sheafificationAdjunction J A).isLocalization
@@ -283,8 +283,8 @@ lemma Sieve.W_shrinkFunctor_ι_of_mem
   exact hZ _ hS
 
 中文:
-引理 Sieve.W_shrinkFunctor_ι_of_mem
-  条件: [LocallySmall.{w} C] {X : C} (S : Sieve X) (hS : S in J X)
+引理 筛.W_shrinkFunctor_ι_of_mem
+  条件: [LocallySmall.{w} C] {X : C} (S : 筛 X) (hS : S in J X)
   证明: by
   intro Z hZ
   rw [isSheaf_iff_isSheaf_of_type] at hZ
@@ -314,7 +314,7 @@ lemma Presieve.IsSheaf.comp_of_W_map_of_adjunction
   rwa [isSheaf_iff_isSheaf_of_type]
 
 中文:
-引理 Presieve.IsSheaf.comp_of_W_map_of_adjunction
+引理 Presieve.是层.comp_of_W_map_of_adjunction
   证明: by
   intro X S hS
   rw [Presieve.isSheafFor_iff_bijective_shrinkFunctor_ι_comp]; rw [← Functor.whiskeringLeft_obj_obj]; rw [← adj.map_comp_bijective_iff]

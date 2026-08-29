@@ -40,8 +40,8 @@ instance OrderRingHom.subsingleton
       (lt_asymm ((OrderHomClass.mon
 
 中文:
-实例 OrderRingHom.subsingleton
-  签名: [IsStrictOrderedRing β] [Archimedean β]
+实例 Order环态射.subsingleton
+  签名: [是StrictOrdered环 β] [阿基米德 β]
   定义体: ⟨fun f g => by
     ext x
     by_contra h' : f x != g x
@@ -79,7 +79,7 @@ instance OrderRingIso.subsingleton_right
 
 中文:
 实例 OrderRingIso.subsingleton_right
-  签名: [IsStrictOrderedRing β] [Archimedean β]
+  签名: [是StrictOrdered环 β] [阿基米德 β]
   定义体: OrderRingIso.toOrderRingHom_injective.subsingleton
 
 Depends on / 依赖: OrderRingIso, OrderRingIso.toOrderRingHom_injective.subsingleton, subsingleton, toOrderRingHom_injective
@@ -98,7 +98,7 @@ instance OrderRingIso.subsingleton_left
 
 中文:
 实例 OrderRingIso.subsingleton_left
-  签名: [IsStrictOrderedRing α] [Archimedean α]
+  签名: [是StrictOrdered环 α] [阿基米德 α]
   定义体: OrderRingIso.symm_bijective.injective.subsingleton
 
 Depends on / 依赖: OrderRingIso, OrderRingIso.symm_bijective.injective.subsingleton, injective, subsingleton, symm_bijective
@@ -117,8 +117,8 @@ theorem OrderRingHom.eq_id
   proof: Subsingleton.elim ..
 
 中文:
-定理 OrderRingHom.eq_id
-  条件: [IsStrictOrderedRing α] [Archimedean α] (f : α ->+*o α)
+定理 Order环态射.eq_id
+  条件: [是StrictOrdered环 α] [阿基米德 α] (f : α ->+*o α)
   结论: f = .id _
   证明: Subsingleton.elim ..
 
@@ -138,7 +138,7 @@ theorem OrderRingIso.eq_refl
 
 中文:
 定理 OrderRingIso.eq_refl
-  条件: [IsStrictOrderedRing α] [Archimedean α] (f : α ≃+*o α)
+  条件: [是StrictOrdered环 α] [阿基米德 α] (f : α ≃+*o α)
   结论: f = .refl _
   证明: Subsingleton.elim ..
 
@@ -157,8 +157,8 @@ theorem OrderRingHom.apply_eq_self
   rw [f.eq_id]; rfl
 
 中文:
-定理 OrderRingHom.apply_eq_self
-  条件: [IsStrictOrderedRing α] [Archimedean α] (f : α ->+*o α) (x : α)
+定理 Order环态射.apply_eq_self
+  条件: [是StrictOrdered环 α] [阿基米德 α] (f : α ->+*o α) (x : α)
   证明: by
   rw [f.eq_id]; rfl
 
@@ -178,7 +178,7 @@ theorem OrderRingIso.apply_eq_self
 
 中文:
 定理 OrderRingIso.apply_eq_self
-  条件: [IsStrictOrderedRing α] [Archimedean α] (f : α ≃+*o α) (x : α)
+  条件: [是StrictOrdered环 α] [阿基米德 α] (f : α ≃+*o α) (x : α)
   证明: f.toOrderRingHom.apply_eq_self x
 
 Depends on / 依赖: apply_eq_self, f.toOrderRingHom.apply_eq_self, toOrderRingHom

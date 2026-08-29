@@ -59,7 +59,7 @@ definition mapOfMeasurable
 
 中文:
 定义 mapOfMeasurable
-  签名: (κ : Kernel α β) (f : β -> γ) (hf : Measurable f)
+  签名: (κ : 核 α β) (f : β -> γ) (hf : 可测 f)
   定义体: (κ a).map f
   measurable' := by fun_prop
 -/
@@ -79,7 +79,7 @@ definition map
 
 中文:
 定义 map
-  签名: [MeasurableSpace γ] (κ : Kernel α β) (f : β -> γ)
+  签名: [可测空间 γ] (κ : 核 α β) (f : β -> γ)
   定义体: if hf : Measurable f then mapOfMeasurable κ f hf else 0
 
 Depends on / 依赖: Measurable, mapOfMeasurable
@@ -98,7 +98,7 @@ theorem map_of_not_measurable
 
 中文:
 定理 map_of_not_measurable
-  条件: (κ : Kernel α β) {f : β -> γ} (hf : ¬(Measurable f))
+  条件: (κ : 核 α β) {f : β -> γ} (hf : ¬(可测 f))
   证明: by
   simp [map, hf]
 -/
@@ -117,7 +117,7 @@ theorem mapOfMeasurable_eq_map
 
 中文:
 定理 mapOfMeasurable_eq_map
-  条件: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
+  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
   证明: by
   simp [map, hf]
 -/
@@ -137,7 +137,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: (κ : Kernel α β) (hf : Measurable f) (a : α)
+  条件: (κ : 核 α β) (hf : 可测 f) (a : α)
   结论: map κ f a = (κ a).map f
   证明: by
   simp only [map, hf, ↓reduceDIte, mapOfMeasurable, coe_mk]
@@ -157,7 +157,7 @@ theorem map_apply'
 
 中文:
 定理 map_apply'
-  条件: (κ : Kernel α β) (hf : Measurable f) (a : α) {s : Set γ} (hs : MeasurableSet s)
+  条件: (κ : 核 α β) (hf : 可测 f) (a : α) {s : 集合 γ} (hs : 可测集 s)
   证明: by rw [map_apply _ hf, Measure.map_apply hf hs]
 
 Depends on / 依赖: Measure, Measure.map_apply, map_apply
@@ -179,7 +179,7 @@ lemma map_comp_right
 
 中文:
 引理 map_comp_right
-  结论: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f) {g : γ -> δ}
+  结论: (κ : 核 α β) {f : β -> γ} (hf : 可测 f) {g : γ -> δ}
   证明: by
   ext1 x
   rw [map_apply _ hg]; rw [map_apply _ hf]; rw [Measure.map_map hg hf]; rw [← map_apply _ (hg.comp hf)]
@@ -210,7 +210,7 @@ lemma map_zero
 
 中文:
 引理 map_zero
-  结论: Kernel.map (0 : Kernel α β) f = 0
+  结论: 核.map (0 : 核 α β) f = 0
   证明: by
   ext
   by_cases hf : Measurable f
@@ -243,7 +243,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (κ : Kernel α β)
+  条件: (κ : 核 α β)
   结论: map κ id = κ
   证明: by
   ext a
@@ -273,7 +273,7 @@ nonrec theorem lintegral_map (κ : Kernel α β) (hf : Measurable f) (a : α) {g
 
 中文:
 引理 map_id'
-  条件: (κ : Kernel α β)
+  条件: (κ : 核 α β)
   结论: map κ (fun a => a) = κ
   证明: map_id κ
 
@@ -301,7 +301,7 @@ lemma map_apply_eq_iff_map_symm_apply_eq
 
 中文:
 引理 map_apply_eq_iff_map_symm_apply_eq
-  条件: (κ : Kernel α β) {f : β ≃ᵐ γ} (η : Kernel α γ)
+  条件: (κ : 核 α β) {f : β ≃ᵐ γ} (η : 核 α γ)
   证明: by
   simp_rw [Kernel.ext_iff, map_apply _ f.measurable, map_apply _ f.symm.measurable,
     f.map_apply_eq_iff_map_symm_apply_eq]
@@ -328,7 +328,7 @@ theorem sum_map_seq
 
 中文:
 定理 sum_map_seq
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ)
+  条件: (κ : 核 α β) [是SFiniteKernel κ] (f : β -> γ)
   证明: by
   by_cases hf : Measurable f
   · ext a s hs
@@ -355,8 +355,8 @@ lemma IsMarkovKernel.map
   proof: ⟨fun a => ⟨by rw [map_apply' κ hf a MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩⟩
 
 中文:
-引理 IsMarkovKernel.map
-  条件: (κ : Kernel α β) [IsMarkovKernel κ] (hf : Measurable f)
+引理 是MarkovKernel.map
+  条件: (κ : 核 α β) [是MarkovKernel κ] (hf : 可测 f)
   证明: ⟨fun a => ⟨by rw [map_apply' κ hf a MeasurableSet.univ, Set.preimage_univ, measure_univ]⟩⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, Set.preimage_univ, map_apply, measure_univ, preimage_univ
@@ -379,8 +379,8 @@ instance IsZeroOrMarkovKernel.map
   · simp only [map_of_not_measurable _ hf]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.map
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (f : β -> γ)
+实例 是ZeroOrMarkovKernel.map
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ] (f : β -> γ)
   定义体: by
   by_cases hf : Measurable f
   · rcases eq_zero_or_isMarkovKernel κ with rfl | h
@@ -412,8 +412,8 @@ instance IsFiniteKernel.map
   · simp [map_of_not_measurable _ hf]
 
 中文:
-实例 IsFiniteKernel.map
-  签名: (κ : Kernel α β) [IsFiniteKernel κ] (f : β -> γ)
+实例 是FiniteKernel.map
+  签名: (κ : 核 α β) [是FiniteKernel κ] (f : β -> γ)
   定义体: by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   by_cases hf : Measurable f
@@ -442,8 +442,8 @@ instance IsSFiniteKernel.map
 @[simp]
 
 中文:
-实例 IsSFiniteKernel.map
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ] (f : β -> γ)
+实例 是SFiniteKernel.map
+  签名: (κ : 核 α β) [是SFiniteKernel κ] (f : β -> γ)
   定义体: ⟨⟨fun n => Kernel.map (seq κ n) f, inferInstance, (sum_map_seq κ f).symm⟩⟩
 
 @[simp]
@@ -467,7 +467,7 @@ lemma map_const
 
 中文:
 引理 map_const
-  条件: (μ : Measure α) {f : α -> β} (hf : Measurable f)
+  条件: (μ : 测度 α) {f : α -> β} (hf : 可测 f)
   证明: by
   ext x s hs
   rw [map_apply' _ hf _ hs]; rw [const_apply]; rw [const_apply]; rw [Measure.map_apply hf hs]
@@ -492,7 +492,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (κ : Kernel α β) (g : γ -> α) (hg : Measurable g)
+  签名: (κ : 核 α β) (g : γ -> α) (hg : 可测 g)
   定义体: κ (g a)
   measurable' := κ.measurable.comp hg
 
@@ -514,7 +514,7 @@ lemma coe_comap
 
 中文:
 引理 coe_comap
-  条件: (κ : Kernel α β) (g : γ -> α) (hg : Measurable g)
+  条件: (κ : 核 α β) (g : γ -> α) (hg : 可测 g)
   结论: κ.comap g hg = κ ∘ g
   证明: rfl
 -/
@@ -531,7 +531,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: (κ : Kernel α β) (hg : Measurable g) (c : γ)
+  条件: (κ : 核 α β) (hg : 可测 g) (c : γ)
   结论: comap κ g hg c = κ (g c)
   证明: rfl
 -/
@@ -550,7 +550,7 @@ theorem comap_apply'
 
 中文:
 定理 comap_apply'
-  条件: (κ : Kernel α β) (hg : Measurable g) (c : γ) (s : Set β)
+  条件: (κ : 核 α β) (hg : 可测 g) (c : γ) (s : 集合 β)
   证明: rfl
 
 @[simp]
@@ -574,8 +574,8 @@ lemma comap_zero
 
 中文:
 引理 comap_zero
-  条件: (hg : Measurable g)
-  结论: Kernel.comap (0 : Kernel α β) g hg = 0
+  条件: (hg : 可测 g)
+  结论: 核.comap (0 : 核 α β) g hg = 0
   证明: by
   ext; simp
 
@@ -598,7 +598,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (κ : Kernel α β)
+  条件: (κ : 核 α β)
   结论: comap κ id measurable_id = κ
   证明: by ext; simp
 
@@ -618,7 +618,7 @@ lemma comap_id'
 
 中文:
 引理 comap_id'
-  条件: (κ : Kernel α β)
+  条件: (κ : 核 α β)
   结论: comap κ (fun a => a) measurable_id = κ
   证明: comap_id κ
 
@@ -636,7 +636,7 @@ theorem lintegral_comap
 
 中文:
 定理 lintegral_comap
-  条件: (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β -> 实数>=0∞)
+  条件: (κ : 核 α β) (hg : 可测 g) (c : γ) (g' : β -> 实数>=0∞)
   证明: rfl
 -/
 theorem lintegral_comap (κ : Kernel α β) (hg : Measurable g) (c : γ) (g' : β -> Real>=0∞) :
@@ -656,7 +656,7 @@ theorem sum_comap_seq
 
 中文:
 定理 sum_comap_seq
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g)
+  条件: (κ : 核 α β) [是SFiniteKernel κ] (hg : 可测 g)
   证明: by
   ext a s hs
   rw [Kernel.sum_apply]; rw [comap_apply' κ hg a s]; rw [Measure.sum_apply _ hs]; rw [← measure_sum_seq κ]; rw [Measure.sum_apply _ hs]
@@ -679,8 +679,8 @@ instance IsMarkovKernel.comap
   body: ⟨fun a => ⟨by rw [comap_apply' κ hg a Set.univ, measure_univ]⟩⟩
 
 中文:
-实例 IsMarkovKernel.comap
-  签名: (κ : Kernel α β) [IsMarkovKernel κ] (hg : Measurable g)
+实例 是MarkovKernel.comap
+  签名: (κ : 核 α β) [是MarkovKernel κ] (hg : 可测 g)
   定义体: ⟨fun a => ⟨by rw [comap_apply' κ hg a Set.univ, measure_univ]⟩⟩
 
 Depends on / 依赖: Set.univ, comap_apply, measure_univ
@@ -701,8 +701,8 @@ instance IsZeroOrMarkovKernel.comap
   · have := IsMarkovKernel.comap κ hg; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.comap
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ] (hg : Measurable g)
+实例 是ZeroOrMarkovKernel.comap
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ] (hg : 可测 g)
   定义体: by
   rcases eq_zero_or_isMarkovKernel κ with rfl | h
   · simp only [comap_zero]; infer_instance
@@ -728,8 +728,8 @@ instance IsFiniteKernel.comap
   exact measure_le_bound κ _ _
 
 中文:
-实例 IsFiniteKernel.comap
-  签名: (κ : Kernel α β) [IsFiniteKernel κ] (hg : Measurable g)
+实例 是FiniteKernel.comap
+  签名: (κ : 核 α β) [是FiniteKernel κ] (hg : 可测 g)
   定义体: by
   refine ⟨⟨κ.bound, κ.bound_lt_top, fun a => ?_⟩⟩
   rw [comap_apply' κ hg a Set.univ]
@@ -752,8 +752,8 @@ instance IsSFiniteKernel.comap
   body: ⟨⟨fun n => Kernel.comap (seq κ n) g hg, inferInstance, (sum_comap_seq κ hg).symm⟩⟩
 
 中文:
-实例 IsSFiniteKernel.comap
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ] (hg : Measurable g)
+实例 是SFiniteKernel.comap
+  签名: (κ : 核 α β) [是SFiniteKernel κ] (hg : 可测 g)
   定义体: ⟨⟨fun n => Kernel.comap (seq κ n) g hg, inferInstance, (sum_comap_seq κ hg).symm⟩⟩
 
 Depends on / 依赖: Kernel, Kernel.comap, sum_comap_seq
@@ -772,7 +772,7 @@ lemma comap_comp_right
 
 中文:
 引理 comap_comp_right
-  条件: (κ : Kernel α β) {f : δ -> γ} (hf : Measurable f) (hg : Measurable g)
+  条件: (κ : 核 α β) {f : δ -> γ} (hf : 可测 f) (hg : 可测 g)
   证明: by ext; simp
 -/
 lemma comap_comp_right (κ : Kernel α β) {f : δ -> γ} (hf : Measurable f) (hg : Measurable g) :
@@ -790,7 +790,7 @@ lemma comap_map_comm
 
 中文:
 引理 comap_map_comm
-  结论: (κ : Kernel β γ) {f : α -> β} {g : γ -> δ}
+  结论: (κ : 核 β γ) {f : α -> β} {g : γ -> δ}
   证明: by
   ext x s _
   rw [comap_apply]; rw [map_apply _ hg]; rw [map_apply _ hg]; rw [comap_apply]
@@ -821,8 +821,8 @@ lemma id_map
 
 中文:
 引理 id_map
-  条件: {f : α -> β} (hf : Measurable f)
-  结论: Kernel.id.map f = deterministic f hf
+  条件: {f : α -> β} (hf : 可测 f)
+  结论: 核.id.map f = deterministic f hf
   证明: by
   ext
   rw [Kernel.map_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]; rw [Measure.map_dirac' hf]
@@ -849,8 +849,8 @@ lemma id_comap
 
 中文:
 引理 id_comap
-  条件: {f : α -> β} (hf : Measurable f)
-  结论: Kernel.id.comap f hf = deterministic f hf
+  条件: {f : α -> β} (hf : 可测 f)
+  结论: 核.id.comap f hf = deterministic f hf
   证明: by
   ext
   rw [Kernel.comap_apply _ hf]; rw [Kernel.deterministic_apply]; rw [Kernel.id_apply]
@@ -872,7 +872,7 @@ lemma deterministic_map
 
 中文:
 引理 deterministic_map
-  条件: {f : α -> β} (hf : Measurable f) {g : β -> γ} (hg : Measurable g)
+  条件: {f : α -> β} (hf : 可测 f) {g : β -> γ} (hg : 可测 g)
   证明: by
   rw [← id_map]; rw [← map_comp_right _ hf hg]; rw [id_map]
 
@@ -896,7 +896,7 @@ definition prodMkLeft
 
 中文:
 定义 prodMkLeft
-  签名: (γ : 类型) [MeasurableSpace γ] (κ : Kernel α β)
+  签名: (γ : 类型) [可测空间 γ] (κ : 核 α β)
   定义体: comap κ Prod.snd measurable_snd
 
 Depends on / 依赖: Prod.snd, measurable_snd
@@ -916,7 +916,7 @@ definition prodMkRight
 
 中文:
 定义 prodMkRight
-  签名: (γ : 类型) [MeasurableSpace γ] (κ : Kernel α β)
+  签名: (γ : 类型) [可测空间 γ] (κ : 核 α β)
   定义体: comap κ Prod.fst measurable_fst
 
 @[simp]
@@ -940,7 +940,7 @@ theorem prodMkLeft_apply
 
 中文:
 定理 prodMkLeft_apply
-  条件: (κ : Kernel α β) (ca : γ × α)
+  条件: (κ : 核 α β) (ca : γ × α)
   结论: prodMkLeft γ κ ca = κ ca.snd
   证明: rfl
 
@@ -961,7 +961,7 @@ theorem prodMkRight_apply
 
 中文:
 定理 prodMkRight_apply
-  条件: (κ : Kernel α β) (ca : α × γ)
+  条件: (κ : 核 α β) (ca : α × γ)
   结论: prodMkRight γ κ ca = κ ca.fst
   证明: rfl
 -/
@@ -977,7 +977,7 @@ theorem prodMkLeft_apply'
 
 中文:
 定理 prodMkLeft_apply'
-  条件: (κ : Kernel α β) (ca : γ × α) (s : Set β)
+  条件: (κ : 核 α β) (ca : γ × α) (s : 集合 β)
   证明: rfl
 -/
 theorem prodMkLeft_apply' (κ : Kernel α β) (ca : γ × α) (s : Set β) :
@@ -996,7 +996,7 @@ theorem prodMkRight_apply'
 
 中文:
 定理 prodMkRight_apply'
-  条件: (κ : Kernel α β) (ca : α × γ) (s : Set β)
+  条件: (κ : 核 α β) (ca : α × γ) (s : 集合 β)
   证明: rfl
 
 @[simp]
@@ -1018,7 +1018,7 @@ lemma prodMkLeft_zero
 
 中文:
 引理 prodMkLeft_zero
-  结论: Kernel.prodMkLeft α (0 : Kernel β γ) = 0
+  结论: 核.prodMkLeft α (0 : 核 β γ) = 0
   证明: by
   ext x s _; simp
 
@@ -1041,7 +1041,7 @@ lemma prodMkRight_zero
 
 中文:
 引理 prodMkRight_zero
-  结论: Kernel.prodMkRight α (0 : Kernel β γ) = 0
+  结论: 核.prodMkRight α (0 : 核 β γ) = 0
   证明: by
   ext x s _; simp
 
@@ -1063,7 +1063,7 @@ lemma prodMkLeft_add
 
 中文:
 引理 prodMkLeft_add
-  条件: (κ η : Kernel α β)
+  条件: (κ η : 核 α β)
   证明: by ext; simp
 
 @[simp]
@@ -1082,7 +1082,7 @@ lemma prodMkRight_add
 
 中文:
 引理 prodMkRight_add
-  条件: (κ η : Kernel α β)
+  条件: (κ η : 核 α β)
   证明: by ext; simp
 -/
 lemma prodMkRight_add (κ η : Kernel α β) :
@@ -1100,7 +1100,7 @@ lemma sum_prodMkLeft
 
 中文:
 引理 sum_prodMkLeft
-  条件: {ι : 类型} [Countable ι] {κ : ι -> Kernel α β}
+  条件: {ι : 类型} [可数 ι] {κ : ι -> 核 α β}
   证明: by
   ext
   simp_rw [sum_apply, prodMkLeft_apply, sum_apply]
@@ -1124,7 +1124,7 @@ lemma sum_prodMkRight
 
 中文:
 引理 sum_prodMkRight
-  条件: {ι : 类型} [Countable ι] {κ : ι -> Kernel α β}
+  条件: {ι : 类型} [可数 ι] {κ : ι -> 核 α β}
   证明: by
   ext
   simp_rw [sum_apply, prodMkRight_apply, sum_apply]
@@ -1146,7 +1146,7 @@ theorem lintegral_prodMkLeft
 
 中文:
 定理 lintegral_prodMkLeft
-  条件: (κ : Kernel α β) (ca : γ × α) (g : β -> 实数>=0∞)
+  条件: (κ : 核 α β) (ca : γ × α) (g : β -> 实数>=0∞)
   证明: rfl
 -/
 theorem lintegral_prodMkLeft (κ : Kernel α β) (ca : γ × α) (g : β -> Real>=0∞) :
@@ -1162,7 +1162,7 @@ theorem lintegral_prodMkRight
 
 中文:
 定理 lintegral_prodMkRight
-  条件: (κ : Kernel α β) (ca : α × γ) (g : β -> 实数>=0∞)
+  条件: (κ : 核 α β) (ca : α × γ) (g : β -> 实数>=0∞)
   证明: rfl
 -/
 theorem lintegral_prodMkRight (κ : Kernel α β) (ca : α × γ) (g : β -> Real>=0∞) :
@@ -1177,8 +1177,8 @@ instance IsMarkovKernel.prodMkLeft
   body: by rw [Kernel.prodMkLeft]; infer_instance
 
 中文:
-实例 IsMarkovKernel.prodMkLeft
-  签名: (κ : Kernel α β) [IsMarkovKernel κ]
+实例 是MarkovKernel.prodMkLeft
+  签名: (κ : 核 α β) [是MarkovKernel κ]
   定义体: by rw [Kernel.prodMkLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
@@ -1195,8 +1195,8 @@ instance IsMarkovKernel.prodMkRight
   body: by rw [Kernel.prodMkRight]; infer_instance
 
 中文:
-实例 IsMarkovKernel.prodMkRight
-  签名: (κ : Kernel α β) [IsMarkovKernel κ]
+实例 是MarkovKernel.prodMkRight
+  签名: (κ : 核 α β) [是MarkovKernel κ]
   定义体: by rw [Kernel.prodMkRight]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkRight, MvPowerSeries, MvPowerSeries.map.isLocalHom, infer_instance, isLocalHom, prodMkRight
@@ -1213,8 +1213,8 @@ instance IsZeroOrMarkovKernel.prodMkLeft
   body: by rw [Kernel.prodMkLeft]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.prodMkLeft
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.prodMkLeft
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
   定义体: by rw [Kernel.prodMkLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
@@ -1231,8 +1231,8 @@ instance IsZeroOrMarkovKernel.prodMkRight
   body: by rw [Kernel.prodMkRight]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.prodMkRight
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.prodMkRight
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
   定义体: by rw [Kernel.prodMkRight]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
@@ -1249,8 +1249,8 @@ instance IsFiniteKernel.prodMkLeft
   body: by rw [Kernel.prodMkLeft]; infer_instance
 
 中文:
-实例 IsFiniteKernel.prodMkLeft
-  签名: (κ : Kernel α β) [IsFiniteKernel κ]
+实例 是FiniteKernel.prodMkLeft
+  签名: (κ : 核 α β) [是FiniteKernel κ]
   定义体: by rw [Kernel.prodMkLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
@@ -1267,8 +1267,8 @@ instance IsFiniteKernel.prodMkRight
   body: by rw [Kernel.prodMkRight]; infer_instance
 
 中文:
-实例 IsFiniteKernel.prodMkRight
-  签名: (κ : Kernel α β) [IsFiniteKernel κ]
+实例 是FiniteKernel.prodMkRight
+  签名: (κ : 核 α β) [是FiniteKernel κ]
   定义体: by rw [Kernel.prodMkRight]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
@@ -1285,8 +1285,8 @@ instance IsSFiniteKernel.prodMkLeft
   body: by rw [Kernel.prodMkLeft]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.prodMkLeft
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.prodMkLeft
+  签名: (κ : 核 α β) [是SFiniteKernel κ]
   定义体: by rw [Kernel.prodMkLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkLeft, infer_instance, prodMkLeft
@@ -1303,8 +1303,8 @@ instance IsSFiniteKernel.prodMkRight
   body: by rw [Kernel.prodMkRight]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.prodMkRight
-  签名: (κ : Kernel α β) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.prodMkRight
+  签名: (κ : 核 α β) [是SFiniteKernel κ]
   定义体: by rw [Kernel.prodMkRight]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.prodMkRight, infer_instance, prodMkRight
@@ -1325,7 +1325,7 @@ lemma isSFiniteKernel_prodMkLeft_unit
 
 中文:
 引理 isSFiniteKernel_prodMkLeft_unit
-  条件: {κ : Kernel α β}
+  条件: {κ : 核 α β}
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   change IsSFiniteKernel ((prodMkLeft Unit κ).comap (fun a => ((), a)) (by fun_prop))
@@ -1352,7 +1352,7 @@ lemma isSFiniteKernel_prodMkRight_unit
 
 中文:
 引理 isSFiniteKernel_prodMkRight_unit
-  条件: {κ : Kernel α β}
+  条件: {κ : 核 α β}
   证明: by
   refine ⟨fun _ => ?_, fun _ => inferInstance⟩
   change IsSFiniteKernel ((prodMkRight Unit κ).comap (fun a => (a, ())) (by fun_prop))
@@ -1380,7 +1380,7 @@ lemma map_prodMkLeft
 
 中文:
 引理 map_prodMkLeft
-  条件: (γ : 类型) [MeasurableSpace γ] (κ : Kernel α β) (f : β -> δ)
+  条件: (γ : 类型) [可测空间 γ] (κ : 核 α β) (f : β -> δ)
   证明: by
   by_cases hf : Measurable f
   · simp only [map, hf, ↓reduceDIte]
@@ -1410,7 +1410,7 @@ lemma map_prodMkRight
 
 中文:
 引理 map_prodMkRight
-  条件: (κ : Kernel α β) (γ : 类型) {mγ : MeasurableSpace γ} (f : β -> δ)
+  条件: (κ : 核 α β) (γ : 类型) {mγ : 可测空间 γ} (f : β -> δ)
   证明: by
   by_cases hf : Measurable f
   · simp only [map, hf, ↓reduceDIte]
@@ -1438,7 +1438,7 @@ definition swapLeft
 
 中文:
 定义 swapLeft
-  签名: (κ : Kernel (α × β) γ)
+  签名: (κ : 核 (α × β) γ)
   定义体: comap κ Prod.swap measurable_swap
 
 @[simp]
@@ -1461,7 +1461,7 @@ lemma swapLeft_zero
 
 中文:
 引理 swapLeft_zero
-  结论: swapLeft (0 : Kernel (α × β) γ) = 0
+  结论: swapLeft (0 : 核 (α × β) γ) = 0
   证明: by simp [swapLeft]
 
 @[simp]
@@ -1482,7 +1482,7 @@ theorem swapLeft_apply
 
 中文:
 定理 swapLeft_apply
-  条件: (κ : Kernel (α × β) γ) (a : β × α)
+  条件: (κ : 核 (α × β) γ) (a : β × α)
   结论: swapLeft κ a = κ a.swap
   证明: rfl
 -/
@@ -1498,7 +1498,7 @@ theorem swapLeft_apply'
 
 中文:
 定理 swapLeft_apply'
-  条件: (κ : Kernel (α × β) γ) (a : β × α) (s : Set γ)
+  条件: (κ : 核 (α × β) γ) (a : β × α) (s : 集合 γ)
   证明: rfl
 -/
 theorem swapLeft_apply' (κ : Kernel (α × β) γ) (a : β × α) (s : Set γ) :
@@ -1515,7 +1515,7 @@ theorem lintegral_swapLeft
 
 中文:
 定理 lintegral_swapLeft
-  条件: (κ : Kernel (α × β) γ) (a : β × α) (g : γ -> 实数>=0∞)
+  条件: (κ : 核 (α × β) γ) (a : β × α) (g : γ -> 实数>=0∞)
   证明: by
   rw [swapLeft_apply]
 
@@ -1534,8 +1534,8 @@ instance IsMarkovKernel.swapLeft
   body: by rw [Kernel.swapLeft]; infer_instance
 
 中文:
-实例 IsMarkovKernel.swapLeft
-  签名: (κ : Kernel (α × β) γ) [IsMarkovKernel κ]
+实例 是MarkovKernel.swapLeft
+  签名: (κ : 核 (α × β) γ) [是MarkovKernel κ]
   定义体: by rw [Kernel.swapLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
@@ -1552,8 +1552,8 @@ instance IsFiniteKernel.swapLeft
   body: by rw [Kernel.swapLeft]; infer_instance
 
 中文:
-实例 IsFiniteKernel.swapLeft
-  签名: (κ : Kernel (α × β) γ) [IsFiniteKernel κ]
+实例 是FiniteKernel.swapLeft
+  签名: (κ : 核 (α × β) γ) [是FiniteKernel κ]
   定义体: by rw [Kernel.swapLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
@@ -1570,8 +1570,8 @@ instance IsSFiniteKernel.swapLeft
   body: by rw [Kernel.swapLeft]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.swapLeft
-  签名: (κ : Kernel (α × β) γ) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.swapLeft
+  签名: (κ : 核 (α × β) γ) [是SFiniteKernel κ]
   定义体: by rw [Kernel.swapLeft]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapLeft, infer_instance, swapLeft
@@ -1589,7 +1589,7 @@ lemma swapLeft_prodMkLeft
 
 中文:
 引理 swapLeft_prodMkLeft
-  条件: (κ : Kernel α β) (γ : 类型) {_ : MeasurableSpace γ}
+  条件: (κ : 核 α β) (γ : 类型) {_ : 可测空间 γ}
   证明: rfl
 -/
 @[simp] lemma swapLeft_prodMkLeft (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ} :
@@ -1605,7 +1605,7 @@ lemma swapLeft_prodMkRight
 
 中文:
 引理 swapLeft_prodMkRight
-  条件: (κ : Kernel α β) (γ : 类型) {_ : MeasurableSpace γ}
+  条件: (κ : 核 α β) (γ : 类型) {_ : 可测空间 γ}
   证明: rfl
 -/
 @[simp] lemma swapLeft_prodMkRight (κ : Kernel α β) (γ : Type*) {_ : MeasurableSpace γ} :
@@ -1621,7 +1621,7 @@ definition swapRight
 
 中文:
 定义 swapRight
-  签名: (κ : Kernel α (β × γ))
+  签名: (κ : 核 α (β × γ))
   定义体: mapOfMeasurable κ Prod.swap measurable_swap
 
 Depends on / 依赖: Prod.swap, mapOfMeasurable, measurable_swap
@@ -1643,8 +1643,8 @@ lemma swapRight_eq
 
 中文:
 引理 swapRight_eq
-  条件: (κ : Kernel α (β × γ))
-  结论: swapRight κ = map κ Prod.swap
+  条件: (κ : 核 α (β × γ))
+  结论: swapRight κ = map κ 积类型.swap
   证明: by
   simp [swapRight]
 
@@ -1666,7 +1666,7 @@ lemma swapRight_zero
 
 中文:
 引理 swapRight_zero
-  结论: swapRight (0 : Kernel α (β × γ)) = 0
+  结论: swapRight (0 : 核 α (β × γ)) = 0
   证明: by simp [swapRight]
 
 Depends on / 依赖: swapRight
@@ -1684,8 +1684,8 @@ theorem swapRight_apply
 
 中文:
 定理 swapRight_apply
-  条件: (κ : Kernel α (β × γ)) (a : α)
-  结论: swapRight κ a = (κ a).map Prod.swap
+  条件: (κ : 核 α (β × γ)) (a : α)
+  结论: swapRight κ a = (κ a).map 积类型.swap
   证明: rfl
 -/
 theorem swapRight_apply (κ : Kernel α (β × γ)) (a : α) : swapRight κ a = (κ a).map Prod.swap :=
@@ -1702,7 +1702,7 @@ theorem swapRight_apply'
 
 中文:
 定理 swapRight_apply'
-  条件: (κ : Kernel α (β × γ)) (a : α) {s : Set (γ × β)} (hs : MeasurableSet s)
+  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 (γ × β)} (hs : 可测集 s)
   证明: by
   rw [swapRight_apply]; rw [Measure.map_apply measurable_swap hs]; rfl
 
@@ -1723,7 +1723,7 @@ theorem lintegral_swapRight
 
 中文:
 定理 lintegral_swapRight
-  条件: (κ : Kernel α (β × γ)) (a : α) {g : γ × β -> 实数>=0∞} (hg : Measurable g)
+  条件: (κ : 核 α (β × γ)) (a : α) {g : γ × β -> 实数>=0∞} (hg : 可测 g)
   证明: by
   rw [swapRight_eq]; rw [lintegral_map _ measurable_swap a hg]
 
@@ -1743,8 +1743,8 @@ instance IsMarkovKernel.swapRight
   rw [Kernel.swapRight_eq]; exact IsMarkovKernel.map _ measurable_swap
 
 中文:
-实例 IsMarkovKernel.swapRight
-  签名: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
+实例 是MarkovKernel.swapRight
+  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
   定义体: by
   rw [Kernel.swapRight_eq]; exact IsMarkovKernel.map _ measurable_swap
 
@@ -1763,8 +1763,8 @@ instance IsZeroOrMarkovKernel.swapRight
   body: by rw [Kernel.swapRight_eq]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.swapRight
-  签名: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.swapRight
+  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
   定义体: by rw [Kernel.swapRight_eq]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
@@ -1781,8 +1781,8 @@ instance IsFiniteKernel.swapRight
   body: by rw [Kernel.swapRight_eq]; infer_instance
 
 中文:
-实例 IsFiniteKernel.swapRight
-  签名: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
+实例 是FiniteKernel.swapRight
+  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
   定义体: by rw [Kernel.swapRight_eq]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
@@ -1799,8 +1799,8 @@ instance IsSFiniteKernel.swapRight
   body: by rw [Kernel.swapRight_eq]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.swapRight
-  签名: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.swapRight
+  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
   定义体: by rw [Kernel.swapRight_eq]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.swapRight_eq, infer_instance, swapRight_eq
@@ -1818,7 +1818,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: (κ : Kernel α (β × γ))
+  签名: (κ : 核 α (β × γ))
   定义体: mapOfMeasurable κ Prod.fst measurable_fst
 
 Depends on / 依赖: Prod.fst, mapOfMeasurable, measurable_fst
@@ -1837,8 +1837,8 @@ theorem fst_eq
 
 中文:
 定理 fst_eq
-  条件: (κ : Kernel α (β × γ))
-  结论: fst κ = map κ Prod.fst
+  条件: (κ : 核 α (β × γ))
+  结论: fst κ = map κ 积类型.fst
   证明: by simp [fst]
 -/
 theorem fst_eq (κ : Kernel α (β × γ)) : fst κ = map κ Prod.fst := by simp [fst]
@@ -1854,8 +1854,8 @@ theorem fst_apply
 
 中文:
 定理 fst_apply
-  条件: (κ : Kernel α (β × γ)) (a : α)
-  结论: fst κ a = (κ a).map Prod.fst
+  条件: (κ : 核 α (β × γ)) (a : α)
+  结论: fst κ a = (κ a).map 积类型.fst
   证明: rfl
 -/
 theorem fst_apply (κ : Kernel α (β × γ)) (a : α) : fst κ a = (κ a).map Prod.fst :=
@@ -1871,7 +1871,7 @@ theorem fst_apply'
 
 中文:
 定理 fst_apply'
-  条件: (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s)
+  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by rw [fst_apply, Measure.map_apply measurable_fst hs]; rfl
 
 Depends on / 依赖: Measure, Measure.map_apply, fst_apply, map_apply, measurable_fst
@@ -1892,7 +1892,7 @@ theorem fst_real_apply
 
 中文:
 定理 fst_real_apply
-  条件: (κ : Kernel α (β × γ)) (a : α) {s : Set β} (hs : MeasurableSet s)
+  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by
   simp [fst_apply', hs, measureReal_def]
 
@@ -1915,7 +1915,7 @@ lemma fst_zero
 
 中文:
 引理 fst_zero
-  结论: fst (0 : Kernel α (β × γ)) = 0
+  结论: fst (0 : 核 α (β × γ)) = 0
   证明: by simp [fst]
 -/
 lemma fst_zero : fst (0 : Kernel α (β × γ)) = 0 := by simp [fst]
@@ -1931,7 +1931,7 @@ theorem lintegral_fst
 
 中文:
 定理 lintegral_fst
-  条件: (κ : Kernel α (β × γ)) (a : α) {g : β -> 实数>=0∞} (hg : Measurable g)
+  条件: (κ : 核 α (β × γ)) (a : α) {g : β -> 实数>=0∞} (hg : 可测 g)
   证明: by
   rw [fst_eq]; rw [lintegral_map _ measurable_fst a hg]
 
@@ -1951,8 +1951,8 @@ instance IsMarkovKernel.fst
   rw [Kernel.fst_eq]; exact IsMarkovKernel.map _ measurable_fst
 
 中文:
-实例 IsMarkovKernel.fst
-  签名: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
+实例 是MarkovKernel.fst
+  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
   定义体: by
   rw [Kernel.fst_eq]; exact IsMarkovKernel.map _ measurable_fst
 
@@ -1971,8 +1971,8 @@ instance IsZeroOrMarkovKernel.fst
   rw [Kernel.fst_eq]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.fst
-  签名: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.fst
+  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
   定义体: by
   rw [Kernel.fst_eq]; infer_instance
 
@@ -1992,8 +1992,8 @@ instance IsFiniteKernel.fst
   rw [Kernel.fst_eq]; infer_instance
 
 中文:
-实例 IsFiniteKernel.fst
-  签名: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
+实例 是FiniteKernel.fst
+  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
   定义体: by
   rw [Kernel.fst_eq]; infer_instance
 
@@ -2011,8 +2011,8 @@ instance IsSFiniteKernel.fst
   body: by rw [Kernel.fst_eq]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.fst
-  签名: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.fst
+  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
   定义体: by rw [Kernel.fst_eq]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.fst_eq, fst_eq, infer_instance
@@ -2046,7 +2046,7 @@ lemma fst_map_prod
 
 中文:
 引理 fst_map_prod
-  条件: (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hg : Measurable g)
+  条件: (κ : 核 α β) {f : β -> γ} {g : β -> δ} (hg : 可测 g)
   证明: by
   by_cases hf : Measurable f
   · ext x s hs
@@ -2081,7 +2081,7 @@ lemma fst_map_id_prod
 
 中文:
 引理 fst_map_id_prod
-  条件: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
+  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
   证明: by
   rw [fst_map_prod _ hf]; rw [Kernel.map_id']
 
@@ -2101,7 +2101,7 @@ lemma fst_prodMkLeft
 
 中文:
 引理 fst_prodMkLeft
-  条件: (δ : 类型) [MeasurableSpace δ] (κ : Kernel α (β × γ))
+  条件: (δ : 类型) [可测空间 δ] (κ : 核 α (β × γ))
   证明: rfl
 -/
 lemma fst_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) :
@@ -2117,7 +2117,7 @@ lemma fst_prodMkRight
 
 中文:
 引理 fst_prodMkRight
-  条件: (κ : Kernel α (β × γ)) (δ : 类型) [MeasurableSpace δ]
+  条件: (κ : 核 α (β × γ)) (δ : 类型) [可测空间 δ]
   证明: rfl
 -/
 lemma fst_prodMkRight (κ : Kernel α (β × γ)) (δ : Type*) [MeasurableSpace δ] :
@@ -2133,7 +2133,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: (κ : Kernel α (β × γ))
+  签名: (κ : 核 α (β × γ))
   定义体: mapOfMeasurable κ Prod.snd measurable_snd
 
 Depends on / 依赖: Prod.snd, mapOfMeasurable, measurable_snd
@@ -2152,8 +2152,8 @@ theorem snd_eq
 
 中文:
 定理 snd_eq
-  条件: (κ : Kernel α (β × γ))
-  结论: snd κ = map κ Prod.snd
+  条件: (κ : 核 α (β × γ))
+  结论: snd κ = map κ 积类型.snd
   证明: by simp [snd]
 -/
 theorem snd_eq (κ : Kernel α (β × γ)) : snd κ = map κ Prod.snd := by simp [snd]
@@ -2169,8 +2169,8 @@ theorem snd_apply
 
 中文:
 定理 snd_apply
-  条件: (κ : Kernel α (β × γ)) (a : α)
-  结论: snd κ a = (κ a).map Prod.snd
+  条件: (κ : 核 α (β × γ)) (a : α)
+  结论: snd κ a = (κ a).map 积类型.snd
   证明: rfl
 -/
 theorem snd_apply (κ : Kernel α (β × γ)) (a : α) : snd κ a = (κ a).map Prod.snd :=
@@ -2188,7 +2188,7 @@ theorem snd_apply'
 
 中文:
 定理 snd_apply'
-  条件: (κ : Kernel α (β × γ)) (a : α) {s : Set γ} (hs : MeasurableSet s)
+  条件: (κ : 核 α (β × γ)) (a : α) {s : 集合 γ} (hs : 可测集 s)
   证明: by rw [snd_apply, Measure.map_apply measurable_snd hs]
 
 @[simp]
@@ -2209,7 +2209,7 @@ lemma snd_zero
 
 中文:
 引理 snd_zero
-  结论: snd (0 : Kernel α (β × γ)) = 0
+  结论: snd (0 : 核 α (β × γ)) = 0
   证明: by simp [snd]
 -/
 lemma snd_zero : snd (0 : Kernel α (β × γ)) = 0 := by simp [snd]
@@ -2225,7 +2225,7 @@ theorem lintegral_snd
 
 中文:
 定理 lintegral_snd
-  条件: (κ : Kernel α (β × γ)) (a : α) {g : γ -> 实数>=0∞} (hg : Measurable g)
+  条件: (κ : 核 α (β × γ)) (a : α) {g : γ -> 实数>=0∞} (hg : 可测 g)
   证明: by
   rw [snd_eq]; rw [lintegral_map _ measurable_snd a hg]
 
@@ -2245,8 +2245,8 @@ instance IsMarkovKernel.snd
   rw [Kernel.snd_eq]; exact IsMarkovKernel.map _ measurable_snd
 
 中文:
-实例 IsMarkovKernel.snd
-  签名: (κ : Kernel α (β × γ)) [IsMarkovKernel κ]
+实例 是MarkovKernel.snd
+  签名: (κ : 核 α (β × γ)) [是MarkovKernel κ]
   定义体: by
   rw [Kernel.snd_eq]; exact IsMarkovKernel.map _ measurable_snd
 
@@ -2265,8 +2265,8 @@ instance IsZeroOrMarkovKernel.snd
   rw [Kernel.snd_eq]; infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.snd
-  签名: (κ : Kernel α (β × γ)) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.snd
+  签名: (κ : 核 α (β × γ)) [是ZeroOrMarkovKernel κ]
   定义体: by
   rw [Kernel.snd_eq]; infer_instance
 
@@ -2286,8 +2286,8 @@ instance IsFiniteKernel.snd
   rw [Kernel.snd_eq]; infer_instance
 
 中文:
-实例 IsFiniteKernel.snd
-  签名: (κ : Kernel α (β × γ)) [IsFiniteKernel κ]
+实例 是FiniteKernel.snd
+  签名: (κ : 核 α (β × γ)) [是FiniteKernel κ]
   定义体: by
   rw [Kernel.snd_eq]; infer_instance
 
@@ -2305,8 +2305,8 @@ instance IsSFiniteKernel.snd
   body: by rw [Kernel.snd_eq]; infer_instance
 
 中文:
-实例 IsSFiniteKernel.snd
-  签名: (κ : Kernel α (β × γ)) [IsSFiniteKernel κ]
+实例 是SFiniteKernel.snd
+  签名: (κ : 核 α (β × γ)) [是SFiniteKernel κ]
   定义体: by rw [Kernel.snd_eq]; infer_instance
 
 Depends on / 依赖: Kernel, Kernel.snd_eq, infer_instance, snd_eq
@@ -2340,7 +2340,7 @@ lemma snd_map_prod
 
 中文:
 引理 snd_map_prod
-  条件: (κ : Kernel α β) {f : β -> γ} {g : β -> δ} (hf : Measurable f)
+  条件: (κ : 核 α β) {f : β -> γ} {g : β -> δ} (hf : 可测 f)
   证明: by
   by_cases hg : Measurable g
   · ext x s hs
@@ -2375,7 +2375,7 @@ lemma snd_map_prod_id
 
 中文:
 引理 snd_map_prod_id
-  条件: (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
+  条件: (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
   证明: by
   rw [snd_map_prod _ hf]; rw [Kernel.map_id']
 
@@ -2395,7 +2395,7 @@ lemma snd_prodMkLeft
 
 中文:
 引理 snd_prodMkLeft
-  条件: (δ : 类型) [MeasurableSpace δ] (κ : Kernel α (β × γ))
+  条件: (δ : 类型) [可测空间 δ] (κ : 核 α (β × γ))
   证明: rfl
 -/
 lemma snd_prodMkLeft (δ : Type*) [MeasurableSpace δ] (κ : Kernel α (β × γ)) :
@@ -2413,7 +2413,7 @@ lemma snd_prodMkRight
 
 中文:
 引理 snd_prodMkRight
-  条件: (κ : Kernel α (β × γ)) (δ : 类型) [MeasurableSpace δ]
+  条件: (κ : 核 α (β × γ)) (δ : 类型) [可测空间 δ]
   证明: rfl
 
 @[simp]
@@ -2439,7 +2439,7 @@ lemma fst_swapRight
 
 中文:
 引理 fst_swapRight
-  条件: (κ : Kernel α (β × γ))
+  条件: (κ : 核 α (β × γ))
   结论: fst (swapRight κ) = snd κ
   证明: by
   ext a s hs
@@ -2473,7 +2473,7 @@ lemma snd_swapRight
 
 中文:
 引理 snd_swapRight
-  条件: (κ : Kernel α (β × γ))
+  条件: (κ : 核 α (β × γ))
   结论: snd (swapRight κ) = fst κ
   证明: by
   ext a s hs
@@ -2505,7 +2505,7 @@ definition sectL
 
 中文:
 定义 sectL
-  签名: (κ : Kernel (α × β) γ) (b : β)
+  签名: (κ : 核 (α × β) γ) (b : β)
   定义体: comap κ (fun a => (a, b)) (measurable_id.prodMk measurable_const)
 
 Depends on / 依赖: measurable_const, measurable_id, measurable_id.prodMk, prodMk
@@ -2524,7 +2524,7 @@ theorem sectL_apply
 
 中文:
 定理 sectL_apply
-  条件: (κ : Kernel (α × β) γ) (b : β) (a : α)
+  条件: (κ : 核 (α × β) γ) (b : β) (a : α)
   结论: sectL κ b a = κ (a, b)
   证明: rfl
 -/
@@ -2542,7 +2542,7 @@ lemma sectL_zero
 中文:
 引理 sectL_zero
   条件: (b : β)
-  结论: sectL (0 : Kernel (α × β) γ) b = 0
+  结论: sectL (0 : 核 (α × β) γ) b = 0
   证明: by simp [sectL]
 -/
 @[simp] lemma sectL_zero (b : β) : sectL (0 : Kernel (α × β) γ) b = 0 := by simp [sectL]
@@ -2583,7 +2583,7 @@ lemma comap_sectL
 
 中文:
 引理 comap_sectL
-  条件: (κ : Kernel (α × β) γ) (b : β) {f : δ -> α} (hf : Measurable f)
+  条件: (κ : 核 (α × β) γ) (b : β) {f : δ -> α} (hf : 可测 f)
   证明: by
   ext d s
   rw [comap_apply]; rw [sectL_apply]; rw [comap_apply]
@@ -2610,7 +2610,7 @@ lemma sectL_prodMkLeft
 
 中文:
 引理 sectL_prodMkLeft
-  条件: (α : 类型) [MeasurableSpace α] (κ : Kernel β γ) (a : α) {b : β}
+  条件: (α : 类型) [可测空间 α] (κ : 核 β γ) (a : α) {b : β}
   证明: rfl
 
 @[simp]
@@ -2629,7 +2629,7 @@ lemma sectL_prodMkRight
 
 中文:
 引理 sectL_prodMkRight
-  条件: (β : 类型) [MeasurableSpace β] (κ : Kernel α γ) (b : β)
+  条件: (β : 类型) [可测空间 β] (κ : 核 α γ) (b : β)
   证明: rfl
 -/
 lemma sectL_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β) :
@@ -2645,7 +2645,7 @@ definition sectR
 
 中文:
 定义 sectR
-  签名: (κ : Kernel (α × β) γ) (a : α)
+  签名: (κ : 核 (α × β) γ) (a : α)
   定义体: comap κ (fun b => (a, b)) (measurable_const.prodMk measurable_id)
 
 Depends on / 依赖: measurable_const, measurable_const.prodMk, measurable_id, prodMk
@@ -2664,7 +2664,7 @@ theorem sectR_apply
 
 中文:
 定理 sectR_apply
-  条件: (κ : Kernel (α × β) γ) (b : β) (a : α)
+  条件: (κ : 核 (α × β) γ) (b : β) (a : α)
   结论: sectR κ a b = κ (a, b)
   证明: rfl
 -/
@@ -2682,7 +2682,7 @@ lemma sectR_zero
 中文:
 引理 sectR_zero
   条件: (a : α)
-  结论: sectR (0 : Kernel (α × β) γ) a = 0
+  结论: sectR (0 : 核 (α × β) γ) a = 0
   证明: by simp [sectR]
 -/
 @[simp] lemma sectR_zero (a : α) : sectR (0 : Kernel (α × β) γ) a = 0 := by simp [sectR]
@@ -2723,7 +2723,7 @@ lemma comap_sectR
 
 中文:
 引理 comap_sectR
-  条件: (κ : Kernel (α × β) γ) (a : α) {f : δ -> β} (hf : Measurable f)
+  条件: (κ : 核 (α × β) γ) (a : α) {f : δ -> β} (hf : 可测 f)
   证明: by
   ext d s
   rw [comap_apply]; rw [sectR_apply]; rw [comap_apply]
@@ -2750,7 +2750,7 @@ lemma sectR_prodMkLeft
 
 中文:
 引理 sectR_prodMkLeft
-  条件: (α : 类型) [MeasurableSpace α] (κ : Kernel β γ) (a : α)
+  条件: (α : 类型) [可测空间 α] (κ : 核 β γ) (a : α)
   证明: rfl
 
 @[simp]
@@ -2769,7 +2769,7 @@ lemma sectR_prodMkRight
 
 中文:
 引理 sectR_prodMkRight
-  条件: (β : 类型) [MeasurableSpace β] (κ : Kernel α γ) (b : β) {a : α}
+  条件: (β : 类型) [可测空间 β] (κ : 核 α γ) (b : β) {a : α}
   证明: rfl
 -/
 lemma sectR_prodMkRight (β : Type*) [MeasurableSpace β] (κ : Kernel α γ) (b : β) {a : α} :
@@ -2786,7 +2786,7 @@ lemma sectL_swapRight
 
 中文:
 引理 sectL_swapRight
-  条件: (κ : Kernel (α × β) γ)
+  条件: (κ : 核 (α × β) γ)
   结论: sectL (swapLeft κ) = sectR κ
   证明: rfl
 -/
@@ -2803,7 +2803,7 @@ lemma sectR_swapRight
 
 中文:
 引理 sectR_swapRight
-  条件: (κ : Kernel (α × β) γ)
+  条件: (κ : 核 (α × β) γ)
   结论: sectR (swapLeft κ) = sectL κ
   证明: rfl
 -/
@@ -2825,7 +2825,7 @@ lemma isSFiniteKernel_prodMkLeft_iff
 
 中文:
 引理 isSFiniteKernel_prodMkLeft_iff
-  条件: [Nonempty γ] {κ : Kernel α β}
+  条件: [非空 γ] {κ : 核 α β}
   证明: by
   inhabit γ
   refine ⟨fun h => ?_, fun _ => inferInstance⟩
@@ -2855,7 +2855,7 @@ lemma isSFiniteKernel_prodMkRight_iff
 
 中文:
 引理 isSFiniteKernel_prodMkRight_iff
-  条件: [Nonempty γ] {κ : Kernel α β}
+  条件: [非空 γ] {κ : 核 α β}
   证明: by
   inhabit γ
   refine ⟨fun h => ?_, fun _ => inferInstance⟩

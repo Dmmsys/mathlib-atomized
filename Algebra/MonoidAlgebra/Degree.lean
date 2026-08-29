@@ -612,7 +612,7 @@ theorem supDegree_sum_le
 
 中文:
 定理 supDegree_sum_le
-  条件: {ι} {s : Finset ι} {f : ι -> R[A]}
+  条件: {ι} {s : 有限集 ι} {f : ι -> R[A]}
   证明: by
   classical
   simp only [supDegree, coeff_sum]
@@ -714,7 +714,7 @@ theorem supDegree_withBot_some_comp
 
 中文:
 定理 supDegree_withBot_some_comp
-  条件: {s : AddMonoidAlgebra R A} (hs : s.coeff.support.Nonempty)
+  条件: {s : 加法幺半群代数 R A} (hs : s.coeff.support.非空)
   证明: by
   unfold AddMonoidAlgebra.supDegree
   rw [← Finset.coe_sup' hs]; rw [Finset.sup'_eq_sup]
@@ -814,7 +814,7 @@ theorem supDegree_eq_of_max
 
 中文:
 定理 supDegree_eq_of_max
-  结论: {b : B} (hb : b in Set.range D) (hmem : D.invFun b in p.coeff.support)
+  结论: {b : B} (hb : b in 集合.range D) (hmem : D.invFun b in p.coeff.support)
   证明: sup_eq_of_max hb hmem hmax
 
 Depends on / 依赖: sup_eq_of_max
@@ -862,7 +862,7 @@ theorem supDegree_prod_le
 
 中文:
 定理 supDegree_prod_le
-  结论: {R A B : 类型} [CommSemiring R] [AddCommMonoid A] [AddCommMonoid B]
+  结论: {R A B : 类型} [交换半环 R] [加法交换幺半群 A] [加法交换幺半群 B]
   证明: by
   classical
   refine s.induction ?_ ?_
@@ -953,7 +953,7 @@ definition leadingCoeff
 
 中文:
 定义 leadingCoeff
-  签名: [Nonempty A] (f : R[A])
+  签名: [非空 A] (f : R[A])
   定义体: f.coeff D.invFun f.supDegree D
 
 Depends on / 依赖: D.invFun, f.coeff, f.supDegree, invFun, supDegree
@@ -970,7 +970,7 @@ definition Monic
 
 中文:
 定义 Monic
-  签名: [Nonempty A] (f : R[A])
+  签名: [非空 A] (f : R[A])
   定义体: f.leadingCoeff D = 1
 -/
 @[reducible] def Monic [Nonempty A] (f : R[A]) : Prop :=
@@ -996,7 +996,7 @@ theorem leadingCoeff_single
 
 中文:
 定理 leadingCoeff_single
-  条件: [Nonempty A] (hD : D.Injective) (a : A) (r : R)
+  条件: [非空 A] (hD : D.单射) (a : A) (r : R)
   证明: by
   rw [leadingCoeff]; rw [supDegree_single]
   split_ifs with hr
@@ -1028,7 +1028,7 @@ theorem leadingCoeff_zero
 
 中文:
 定理 leadingCoeff_zero
-  条件: [Nonempty A]
+  条件: [非空 A]
   结论: (0 : R[A]).leadingCoeff D = 0
   证明: rfl
 -/
@@ -1048,7 +1048,7 @@ lemma Monic.ne_zero
 
 中文:
 引理 Monic.ne_zero
-  条件: [Nonempty A] [Nontrivial R] (hp : p.Monic D)
+  条件: [非空 A] [非平凡 R] (hp : p.Monic D)
   结论: p != 0
   证明: fun h => by
   simp_rw [Monic, h, leadingCoeff_zero, zero_ne_one] at hp
@@ -1073,7 +1073,7 @@ theorem monic_one
 
 中文:
 定理 monic_one
-  条件: [AddZeroClass A] (hD : D.Injective)
+  条件: [加法零类 A] (hD : D.单射)
   结论: (1 : R[A]).Monic D
   证明: by
   rw [Monic]; rw [one_def]; rw [leadingCoeff_single hD]
@@ -1094,7 +1094,7 @@ lemma exists_supDegree_mem_support
   proof: Finset.exists_mem_eq_sup _ (by simpa [Finsupp.support_nonempty_iff]) D
 
 中文:
-引理 exists_supDegree_mem_support
+引理 存在_supDegree_mem_support
   条件: (hp : p != 0)
   结论: 存在 a in p.coeff.support, p.supDegree D = D a
   证明: Finset.exists_mem_eq_sup _ (by simpa [Finsupp.support_nonempty_iff]) D
@@ -1118,7 +1118,7 @@ lemma supDegree_mem_range
 中文:
 引理 supDegree_mem_range
   条件: (hp : p != 0)
-  结论: p.supDegree D in Set.range D
+  结论: p.supDegree D in 集合.range D
   证明: by
   obtain ⟨a, -, he⟩ := exists_supDegree_mem_support D hp; exact ⟨a, he.symm⟩
 
@@ -1141,7 +1141,7 @@ lemma supDegree_sum_lt
 
 中文:
 引理 supDegree_sum_lt
-  结论: (hs : s.Nonempty) {b : B}
+  结论: (hs : s.非空) {b : B}
   证明: by
   refine supDegree_sum_le.trans_lt ((Finset.sup_lt_iff ?_).mpr h)
   obtain ⟨i, hi⟩ := hs; exact bot_le.trans_lt (h i hi)
@@ -1270,7 +1270,7 @@ lemma supDegree_mem_support
 
 中文:
 引理 supDegree_mem_support
-  条件: (hD : D.Injective) (hp : p != 0)
+  条件: (hD : D.单射) (hp : p != 0)
   证明: by
   obtain ⟨a, ha, he⟩ := exists_supDegree_mem_support D hp
   rwa [he, Function.leftInverse_invFun hD]
@@ -1298,7 +1298,7 @@ lemma leadingCoeff_eq_zero
 
 中文:
 引理 leadingCoeff_eq_zero
-  条件: (hD : D.Injective)
+  条件: (hD : D.单射)
   结论: p.leadingCoeff D = 0 ↔ p = 0
   证明: by
   refine ⟨(fun h => ?_).mtr, fun h => h ▸ leadingCoeff_zero⟩
@@ -1323,7 +1323,7 @@ lemma leadingCoeff_ne_zero
 
 中文:
 引理 leadingCoeff_ne_zero
-  条件: (hD : D.Injective)
+  条件: (hD : D.单射)
   结论: p.leadingCoeff D != 0 ↔ p != 0
   证明: (leadingCoeff_eq_zero hD).ne
 
@@ -1348,7 +1348,7 @@ lemma supDegree_sub_lt_of_leadingCoeff_eq
 
 中文:
 引理 supDegree_sub_lt_of_leadingCoeff_eq
-  结论: (hD : D.Injective) {R} [Ring R] {p q : R[A]}
+  结论: (hD : D.单射) {R} [环 R] {p q : R[A]}
   证明: by
   rw [or_iff_not_imp_right]
   refine fun he => (supDegree_sub_le.trans ?_).lt_of_ne ?_
@@ -1467,7 +1467,7 @@ lemma sum_ne_zero_of_injOn_supDegree
 
 中文:
 引理 sum_ne_zero_of_injOn_supDegree
-  结论: (hs : s.Nonempty)
+  结论: (hs : s.非空)
   证明: let ⟨i, hi⟩ := hs
   sum_ne_zero_of_injOn_supDegree' ⟨i, hi, hf i hi⟩ hd
 
@@ -1500,7 +1500,7 @@ lemma coeff_supDegree_add_supDegree
 
 中文:
 引理 coeff_supDegree_add_supDegree
-  条件: (hD : D.Injective) (hadd : 对任意 a1 a2, D (a1 + a2) = D a1 + D a2)
+  条件: (hD : D.单射) (hadd : 对任意 a1 a2, D (a1 + a2) = D a1 + D a2)
   证明: by
   obtain rfl | hp := eq_or_ne p 0
   · simp
@@ -1664,7 +1664,7 @@ lemma leadingCoeff_mul
 
 中文:
 引理 leadingCoeff_mul
-  结论: [NoZeroDivisors R]
+  结论: [无零因子 R]
   证明: by
   obtain rfl | hp := eq_or_ne p 0
   · simp_rw [leadingCoeff_zero, zero_mul, leadingCoeff_zero]
@@ -1877,7 +1877,7 @@ theorem infDegree_withTop_some_comp
 
 中文:
 定理 infDegree_withTop_some_comp
-  条件: {s : AddMonoidAlgebra R A} (hs : s.coeff.support.Nonempty)
+  条件: {s : 加法幺半群代数 R A} (hs : s.coeff.support.非空)
   证明: by
   unfold AddMonoidAlgebra.infDegree
   rw [← Finset.coe_inf' hs]; rw [Finset.inf'_eq_inf]
@@ -1899,7 +1899,7 @@ theorem le_infDegree_mul
 
 中文:
 定理 le_infDegree_mul
-  结论: [AddZeroClass A] [Add T] [AddLeftMono T] [AddRightMono T]
+  结论: [加法零类 A] [加法 T] [AddLeftMono T] [AddRightMono T]
   证明: le_inf_support_coeff_mul (fun {a b : A} => (map_add D a b).ge) _ _
 
 Depends on / 依赖: le_inf_support_coeff_mul, map_add

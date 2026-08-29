@@ -49,8 +49,8 @@ definition IsSeparated
   body: s.Pairwise (ε < edist · ·)
 
 中文:
-定义 IsSeparated
-  签名: (ε : 实数>=0∞) (s : Set X)
+定义 是分离
+  签名: (ε : 实数>=0∞) (s : 集合 X)
   定义体: s.Pairwise (ε < edist · ·)
 
 Depends on / 依赖: Pairwise, s.Pairwise
@@ -90,8 +90,8 @@ lemma IsSeparated.empty
   proof: pairwise_empty _
 
 中文:
-引理 IsSeparated.empty
-  结论: IsSeparated ε (∅ : Set X)
+引理 是分离.empty
+  结论: 是分离 ε (∅ : 集合 X)
   证明: pairwise_empty _
 -/
 protected lemma IsSeparated.empty : IsSeparated ε (∅ : Set X) := pairwise_empty _
@@ -104,8 +104,8 @@ lemma IsSeparated.singleton
   proof: pairwise_singleton ..
 
 中文:
-引理 IsSeparated.singleton
-  结论: IsSeparated ε {x}
+引理 是分离.singleton
+  结论: 是分离 ε {x}
   证明: pairwise_singleton ..
 -/
 protected lemma IsSeparated.singleton : IsSeparated ε {x} := pairwise_singleton ..
@@ -125,9 +125,9 @@ nonrec lemma IsSeparated.anti (hεδ : ε <= δ) (hs : IsSeparated δ s) : IsSep
   hs.mono' fun _ _ => hεδ.trans_lt
 
 中文:
-引理 IsSeparated.of_subsingleton
-  条件: (hs : s.Subsingleton)
-  结论: IsSeparated ε s
+引理 是分离.of_subsingleton
+  条件: (hs : s.子单例)
+  结论: 是分离 ε s
   证明: hs.pairwise _
 
 alias _root_.Set.Subsingleton.isSeparated := IsSeparated.of_subsingleton
@@ -152,9 +152,9 @@ lemma IsSeparated.subset
   proof: hs.mono hst
 
 中文:
-引理 IsSeparated.subset
-  条件: (hst : s subseteq t) (hs : IsSeparated ε t)
-  结论: IsSeparated ε s
+引理 是分离.subset
+  条件: (hst : s subseteq t) (hs : 是分离 ε t)
+  结论: 是分离 ε s
   证明: hs.mono hst
 
 Depends on / 依赖: hs.mono
@@ -214,8 +214,8 @@ lemma IsSeparated.insert
 @[simp]
 
 中文:
-引理 IsSeparated.insert
-  条件: (hs : IsSeparated ε s) (h : 对任意 y in s, x != y -> ε < edist x y)
+引理 是分离.insert
+  条件: (hs : 是分离 ε s) (h : 对任意 y in s, x != y -> ε < edist x y)
   证明: isSeparated_insert.2 ⟨hs, h⟩
 
 @[simp]
@@ -236,8 +236,8 @@ lemma isSeparated_zero
 
 中文:
 引理 isSeparated_zero
-  条件: {X : 类型} [EMetricSpace X] (s : Set X)
-  结论: IsSeparated 0 s
+  条件: {X : 类型} [广义度量空间 X] (s : 集合 X)
+  结论: 是分离 0 s
   证明: by
   simp [IsSeparated, Set.Pairwise]
 
@@ -259,7 +259,7 @@ lemma IsSeparated.image_antilipschitz
   exact ENNReal.coe_div hK₁.ne' ▸ ENNReal.div_lt_of_lt_mul hmul
 
 中文:
-引理 IsSeparated.image_antilipschitz
+引理 是分离.image_antilipschitz
   结论: {ε K₁ : 实数>=0} {f : X -> Y}
   证明: by
   rintro x' ⟨x, hx, rfl⟩ y' ⟨y, hy, rfl⟩ hne
@@ -297,7 +297,7 @@ definition AreSeparated
 
 中文:
 定义 AreSeparated
-  签名: (s t : Set X)
+  签名: (s t : 集合 X)
   定义体: exists r, r != 0 ∧ forall x in s, forall y in t, r <= edist x y
 -/
 def AreSeparated (s t : Set X) := exists r, r != 0 ∧ forall x in s, forall y in t, r <= edist x y
@@ -361,7 +361,7 @@ theorem empty_left
 
 中文:
 定理 empty_left
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: AreSeparated ∅ s
   证明: ⟨1, one_ne_zero, fun _x => False.elim⟩
 
@@ -384,7 +384,7 @@ theorem empty_right
 
 中文:
 定理 empty_right
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: AreSeparated s ∅
   证明: (empty_left s).symm
 
@@ -619,7 +619,7 @@ alias ⟨_, finite_iUnion_left⟩ := finite_iUnion_left_iff
 
 中文:
 定理 finite_iUnion_left_iff
-  结论: {ι : 类型} {I : Set ι} (hI : I.Finite) {s : ι -> Set X}
+  结论: {ι : 类型} {I : 集合 ι} (hI : I.有限) {s : ι -> 集合 X}
   证明: by
   induction I, hI using Set.Finite.induction_on with
   | empty => simp
@@ -650,7 +650,7 @@ theorem finite_iUnion_right_iff
 
 中文:
 定理 finite_iUnion_right_iff
-  结论: {ι : 类型} {I : Set ι} (hI : I.Finite) {s : Set X}
+  结论: {ι : 类型} {I : 集合 ι} (hI : I.有限) {s : 集合 X}
   证明: by
   simpa only [@comm _ _ s] using finite_iUnion_left_iff hI
 
@@ -677,7 +677,7 @@ alias ⟨_, finset_iUnion_left⟩ := finset_iUnion_left_iff
 
 中文:
 定理 finset_iUnion_left_iff
-  条件: {ι : 类型} {I : Finset ι} {s : ι -> Set X} {t : Set X}
+  条件: {ι : 类型} {I : 有限集 ι} {s : ι -> 集合 X} {t : 集合 X}
   证明: finite_iUnion_left_iff I.finite_toSet
 
 alias ⟨_, finset_iUnion_left⟩ := finset_iUnion_left_iff
@@ -705,7 +705,7 @@ alias ⟨_, finset_iUnion_right⟩ := finset_iUnion_right_iff
 
 中文:
 定理 finset_iUnion_right_iff
-  条件: {ι : 类型} {I : Finset ι} {s : Set X} {t : ι -> Set X}
+  条件: {ι : 类型} {I : 有限集 ι} {s : 集合 X} {t : ι -> 集合 X}
   证明: finite_iUnion_right_iff I.finite_toSet
 
 alias ⟨_, finset_iUnion_right⟩ := finset_iUnion_right_iff

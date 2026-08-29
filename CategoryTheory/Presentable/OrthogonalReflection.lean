@@ -158,7 +158,7 @@ definition D₁
 
 中文:
 定义 D₁
-  签名: : Type _
+  签名: : 类型 _
   定义体: Σ (f : W.toSet), f.1.left ⟶ Z
 
 Depends on / 依赖: W.toSet
@@ -176,7 +176,7 @@ instance [MorphismProperty.IsSmall.{w}
   infer_instance
 
 中文:
-实例 [MorphismProperty.IsSmall.{w}
+实例 [MorphismProperty.是Small.{w}
   签名: W] [LocallySmall.{w} C] :
   定义体: by
   dsimp [D₁]
@@ -200,7 +200,7 @@ lemma D₁.hasCoproductsOfShape
 
 中文:
 引理 D₁.hasCoproductsOfShape
-  结论: [Morphism命题erty.IsSmall.{w} W]
+  结论: [MorphismProperty.是Small.{w} W]
   证明: hasColimitsOfShape_of_equivalence
     (Discrete.equivalence (equivShrink.{w} _).symm)
 -/
@@ -423,7 +423,7 @@ definition D₂
 
 中文:
 定义 D₂
-  签名: : Type _
+  签名: : 类型 _
   定义体: Σ (f : W.toSet),
     { pq : (f.1.right ⟶ step W Z) × (f.1.right ⟶ step W Z) // f.1.hom ≫ pq.1 = f.1.hom ≫ pq.2 }
 
@@ -517,7 +517,7 @@ lemma D₂.hasColimitsOfShape
 
 中文:
 引理 D₂.hasColimitsOfShape
-  条件: [HasColimitsOfSize.{w, w} C]
+  条件: [有余limitsOfSize.{w, w} C]
   证明: hasColimitsOfShape_of_equivalence (equivSmallModel.{w} _).symm
 
 Depends on / 依赖: equivSmallModel, hasColimitsOfShape_of_equivalence

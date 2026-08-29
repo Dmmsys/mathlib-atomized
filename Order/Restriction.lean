@@ -68,7 +68,7 @@ lemma restrictLe_apply
 
 中文:
 引理 restrictLe_apply
-  条件: (a : α) (f : (a : α) -> π a) (i : Iic a)
+  条件: (a : α) (f : (a : α) -> π a) (i : 左无界右闭区间 a)
   结论: restrictLe a f i = f i
   证明: rfl
 -/
@@ -106,7 +106,7 @@ lemma restrictLe₂_apply
 
 中文:
 引理 restrictLe₂_apply
-  条件: {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a)
+  条件: {a b : α} (hab : a <= b) (f : (i : 左无界右闭区间 b) -> π i) (i : 左无界右闭区间 a)
   证明: rfl
 -/
 lemma restrictLe₂_apply {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a) :
@@ -160,7 +160,7 @@ lemma dependsOn_restrictLe
 中文:
 引理 dependsOn_restrictLe
   条件: (a : α)
-  结论: DependsOn (restrictLe (π := π) a) (Iic a)
+  结论: DependsOn (restrictLe (π := π) a) (左无界右闭区间 a)
   证明: (Iic a).dependsOn_domRestrict
 -/
 lemma dependsOn_restrictLe (a : α) : DependsOn (restrictLe (π := π) a) (Iic a) :=
@@ -207,7 +207,7 @@ lemma frestrictLe_apply
 
 中文:
 引理 frestrictLe_apply
-  条件: (a : α) (f : (a : α) -> π a) (i : Iic a)
+  条件: (a : α) (f : (a : α) -> π a) (i : 左无界右闭区间 a)
   结论: frestrictLe a f i = f i
   证明: rfl
 -/
@@ -245,7 +245,7 @@ lemma frestrictLe₂_apply
 
 中文:
 引理 frestrictLe₂_apply
-  条件: {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a)
+  条件: {a b : α} (hab : a <= b) (f : (i : 左无界右闭区间 b) -> π i) (i : 左无界右闭区间 a)
   证明: rfl
 -/
 lemma frestrictLe₂_apply {a b : α} (hab : a <= b) (f : (i : Iic b) -> π i) (i : Iic a) :
@@ -339,7 +339,7 @@ lemma frestrictLe_updateFinset_of_le
 
 中文:
 引理 frestrictLe_updateFinset_of_le
-  条件: {a b : α} (hab : a <= b) (x : Π c, π c) (y : Π c : Iic b, π c)
+  条件: {a b : α} (hab : a <= b) (x : Π c, π c) (y : Π c : 左无界右闭区间 b, π c)
   证明: restrict_updateFinset_of_subset (Iic_subset_Iic.2 hab) ..
 
 Depends on / 依赖: Iic_subset_Iic, restrict_updateFinset_of_subset
@@ -360,7 +360,7 @@ lemma frestrictLe_updateFinset
 
 中文:
 引理 frestrictLe_updateFinset
-  条件: {a : α} (x : Π a, π a) (y : Π b : Iic a, π b)
+  条件: {a : α} (x : Π a, π a) (y : Π b : 左无界右闭区间 a, π b)
   证明: restrict_updateFinset ..
 
 @[simp]
@@ -407,7 +407,7 @@ lemma dependsOn_frestrictLe
 中文:
 引理 dependsOn_frestrictLe
   条件: (a : α)
-  结论: DependsOn (frestrictLe (π := π) a) (Set.Iic a)
+  结论: DependsOn (frestrictLe (π := π) a) (集合.左无界右闭区间 a)
   证明: coe_Iic a ▸ (Finset.Iic a).dependsOn_restrict
 
 Depends on / 依赖: Set.Iic

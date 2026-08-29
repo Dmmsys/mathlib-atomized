@@ -54,7 +54,7 @@ mono := (AddCommGrpCat.mono_iff_injective _).mpr (injective_iff_map_eq_zero _).m
 
 中文:
 实例 enoughInjectives
-  签名: : EnoughInjectives AddCommGrpCat.{u} where
+  签名: : 有足够单射 加法交换群范畴.{u} where
   定义体: Nonempty.intro
     { J := of <| (CharacterModule A_) -> ULift.{u} (AddCircle (1 : Rat))
       injective := injective_of_divisible _
@@ -87,7 +87,7 @@ instance enoughInjectives
 
 中文:
 实例 enoughInjectives
-  签名: : EnoughInjectives CommGrpCat.{u}
+  签名: : 有足够单射 交换群范畴.{u}
   定义体: EnoughInjectives.of_equivalence commGroupAddCommGroupEquivalence.functor
 
 Depends on / 依赖: EnoughInjectives, EnoughInjectives.of_equivalence, commGroupAddCommGroupEquivalence, commGroupAddCommGroupEquivalence.functor, functor, of_equivalence

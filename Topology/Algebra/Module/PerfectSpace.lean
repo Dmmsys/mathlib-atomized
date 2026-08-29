@@ -35,7 +35,7 @@ lemma perfectSpace_of_module
 
 中文:
 引理 perfectSpace_of_module
-  结论: PerfectSpace E
+  结论: 完美空间 E
   证明: by
   refine ⟨fun x hx => ?_⟩
   let ⟨r, hr₀, hr⟩ := NormedField.exists_norm_lt_one 𝕜
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: PerfectSpace 𝕜
+  签名: 完美空间 𝕜
   定义体: perfectSpace_of_module 𝕜 𝕜
 
 Depends on / 依赖: perfectSpace_of_module

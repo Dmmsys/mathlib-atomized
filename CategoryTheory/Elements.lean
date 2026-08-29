@@ -51,8 +51,8 @@ definition Functor.Elements
   body: Σ c : C, F.obj c
 
 中文:
-定义 Functor.Elements
-  签名: (F : C ⥤ Type w)
+定义 函子.Elements
+  签名: (F : C ⥤ 类型 w)
   定义体: Σ c : C, F.obj c
 
 Depends on / 依赖: F.obj
@@ -69,8 +69,8 @@ abbreviation Functor.elementsMk
   body: ⟨X, x⟩
 
 中文:
-缩写 Functor.elementsMk
-  签名: (F : C ⥤ Type w) (X : C) (x : F.obj X)
+缩写 函子.elementsMk
+  签名: (F : C ⥤ 类型 w) (X : C) (x : F.obj X)
   定义体: ⟨X, x⟩
 -/
 abbrev Functor.elementsMk (F : C ⥤ Type w) (X : C) (x : F.obj X) : F.Elements := ⟨X, x⟩
@@ -89,8 +89,8 @@ lemma Functor.Elements.ext
   simp_all
 
 中文:
-引理 Functor.Elements.ext
-  结论: {F : C ⥤ Type w} (x y : F.Elements) (h₁ : x.fst = y.fst)
+引理 函子.Elements.ext
+  结论: {F : C ⥤ 类型 w} (x y : F.Elements) (h₁ : x.fst = y.fst)
   证明: by
   cases x
   cases y
@@ -116,7 +116,7 @@ instance categoryOfElements
 
 中文:
 实例 categoryOfElements
-  签名: (F : C ⥤ Type w)
+  签名: (F : C ⥤ 类型 w)
   定义体: { f : p.1 ⟶ q.1 // (F.map f) p.2 = q.2 }
   id p := ⟨𝟙 p.1, by simp⟩
   comp {X Y Z} f g := ⟨f.val ≫ g.val, by simp [f.2, g.2]⟩
@@ -140,8 +140,8 @@ definition NatTrans.mapElements
   map {p q} := fun ⟨f, h⟩ => ⟨f, by have hb := φ.naturality_apply f p.2; cat_disch⟩
 
 中文:
-定义 NatTrans.mapElements
-  签名: {F G : C ⥤ Type w} (φ : F ⟶ G)
+定义 自然变换.mapElements
+  签名: {F G : C ⥤ 类型 w} (φ : F ⟶ G)
   定义体: fun ⟨X, x⟩ => ⟨_, φ.app X x⟩
   map {p q} := fun ⟨f, h⟩ => ⟨f, by have hb := φ.naturality_apply f p.2; cat_disch⟩
 -/
@@ -161,8 +161,8 @@ definition Functor.elementsFunctor
   map n := (NatTrans.mapElements n).toCatHom
 
 中文:
-定义 Functor.elementsFunctor
-  签名: : (C ⥤ Type w) ⥤ Cat where
+定义 函子.elementsFunctor
+  签名: : (C ⥤ 类型 w) ⥤ Cat where
   定义体: Cat.of F.Elements
   map n := (NatTrans.mapElements n).toCatHom
 
@@ -188,7 +188,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {F : C ⥤ Type w} (x y : F.Elements) (f : x.1 ⟶ y.1) (hf : F.map f x.snd = y.snd)
+  签名: {F : C ⥤ 类型 w} (x y : F.Elements) (f : x.1 ⟶ y.1) (hf : F.map f x.snd = y.snd)
   定义体: ⟨f, hf⟩
 
 @[ext]
@@ -211,7 +211,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: (F : C ⥤ Type w) {x y : F.Elements} (f g : x ⟶ y) (w : f.val = g.val)
+  条件: (F : C ⥤ 类型 w) {x y : F.Elements} (f g : x ⟶ y) (w : f.val = g.val)
   结论: f = g
   证明: Subtype.ext w
 
@@ -235,7 +235,7 @@ theorem comp_val
 
 中文:
 定理 comp_val
-  条件: {F : C ⥤ Type w} {p q r : F.Elements} {f : p ⟶ q} {g : q ⟶ r}
+  条件: {F : C ⥤ 类型 w} {p q r : F.Elements} {f : p ⟶ q} {g : q ⟶ r}
   证明: rfl
 
 @[simp]
@@ -258,7 +258,7 @@ theorem id_val
 
 中文:
 定理 id_val
-  条件: {F : C ⥤ Type w} {p : F.Elements}
+  条件: {F : C ⥤ 类型 w} {p : F.Elements}
   结论: (𝟙 p : p ⟶ p).val = 𝟙 p.1
   证明: rfl
 
@@ -279,7 +279,7 @@ theorem map_snd
 
 中文:
 定理 map_snd
-  条件: {F : C ⥤ Type w} {p q : F.Elements} (f : p ⟶ q)
+  条件: {F : C ⥤ 类型 w} {p q : F.Elements} (f : p ⟶ q)
   结论: (F.map f.val) p.2 = q.2
   证明: f.property
 
@@ -301,7 +301,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {F : C ⥤ Type w} (x y : F.Elements) (e : x.1 ≅ y.1)
+  签名: {F : C ⥤ 类型 w} (x y : F.Elements) (e : x.1 ≅ y.1)
   定义体: homMk x y e.hom he
   inv := homMk y x e.inv (by rw [← he, Functor.map_hom_inv'_apply])
 
@@ -357,7 +357,7 @@ instance groupoidOfElements
 
 中文:
 实例 groupoidOfElements
-  签名: {G : 类型u} [Groupoid.{v} G] (F : G ⥤ Type w)
+  签名: {G : 类型u} [群胚.{v} G] (F : G ⥤ 类型 w)
   定义体: ⟨Groupoid.inv f.val,
       calc
         F.map (Groupoid.inv f.val) q.2 = F.map (Groupoid.inv f.val) (F.map f.val p.2) := by rw [f.2]
@@ -423,7 +423,7 @@ instance :
 
 中文:
 实例 :
-  签名: (π F).Faithful
+  签名: (π F).忠实
 -/
 instance : (π F).Faithful where
 
@@ -443,7 +443,7 @@ instance :
 
 中文:
 实例 :
-  签名: (π F).ReflectsIsomorphisms
+  签名: (π F).反映同构
   定义体: by
     refine ⟨⟨(inv ((π F).map f) :), ?_⟩, ?_, ?_⟩
     · simp only [← map_snd f, ← Functor.map_comp_apply,
@@ -477,7 +477,7 @@ definition map
 
 中文:
 定义 map
-  签名: {F₁ F₂ : C ⥤ Type w} (α : F₁ ⟶ F₂)
+  签名: {F₁ F₂ : C ⥤ 类型 w} (α : F₁ ⟶ F₂)
   定义体: ⟨t.1, α.app t.1 t.2⟩
   map {t₁ t₂} k := ⟨k.1, by simpa [map_snd] using (NatTrans.naturality_apply α k.1 t₁.2).symm⟩
 
@@ -499,7 +499,7 @@ theorem map_π
 
 中文:
 定理 map_π
-  条件: {F₁ F₂ : C ⥤ Type w} (α : F₁ ⟶ F₂)
+  条件: {F₁ F₂ : C ⥤ 类型 w} (α : F₁ ⟶ F₂)
   结论: map α ⋙ π F₂ = π F₁
   证明: rfl
 -/
@@ -519,7 +519,7 @@ definition toStructuredArrow
 
 中文:
 定义 toStructuredArrow
-  签名: : F.Elements ⥤ StructuredArrow PUnit F where
+  签名: : F.Elements ⥤ 结构化箭头 命题单元 F where
   定义体: StructuredArrow.mk ↾fun _ => X.2
   map {X Y} f := StructuredArrow.homMk f.val (by ext; simp [f.2])
 
@@ -588,7 +588,7 @@ definition fromStructuredArrow
 
 中文:
 定义 fromStructuredArrow
-  签名: : StructuredArrow PUnit F ⥤ F.Elements where
+  签名: : 结构化箭头 命题单元 F ⥤ F.Elements where
   定义体: Functor.elementsMk _ X.right (X.hom .unit)
   map f := ⟨f.right, by simp [ConcreteCategory.congr_hom f.w.symm .unit]; rfl⟩
 
@@ -615,7 +615,7 @@ theorem fromStructuredArrow_obj
 中文:
 定理 fromStructuredArrow_obj
   条件: (X)
-  结论: (fromStructuredArrow F).obj X = ⟨X.right, X.hom PUnit.unit⟩
+  结论: (fromStructuredArrow F).obj X = ⟨X.right, X.hom 命题单元.unit⟩
   证明: rfl
 
 @[simp]
@@ -659,7 +659,7 @@ definition structuredArrowEquivalence
 
 中文:
 定义 structuredArrowEquivalence
-  签名: : F.Elements ≌ StructuredArrow PUnit F where
+  签名: : F.Elements ≌ 结构化箭头 命题单元 F where
   定义体: toStructuredArrow F
   inverse := fromStructuredArrow F
   unitIso := Iso.refl _
@@ -913,7 +913,7 @@ definition costructuredArrowULiftYonedaEquivalence
 
 中文:
 定义 costructuredArrowULiftYonedaEquivalence
-  签名: (F : Cᵒᵖ ⥤ Type (max w v))
+  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 w v))
   定义体: { obj x := CostructuredArrow.mk (uliftYonedaEquiv.{w}.symm x.unop.2)
       map f := CostructuredArrow.homMk f.1.1.unop (by
         dsimp
@@ -953,7 +953,7 @@ definition costructuredArrowULiftYonedaEquivalenceFunctorCompProjIso
 
 中文:
 定义 costructuredArrowULiftYonedaEquivalenceFunctorCompProjIso
-  签名: (F : Cᵒᵖ ⥤ Type (max w v))
+  签名: (F : Cᵒᵖ ⥤ 类型 (最大值 w v))
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -979,7 +979,7 @@ definition Elements.initialOfRepresentableBy
 
 中文:
 定义 Elements.initialOfRepresentableBy
-  签名: {F : Cᵒᵖ ⥤ 类型} {X : C} (h : F.RepresentableBy X)
+  签名: {F : Cᵒᵖ ⥤ 类型} {X : C} (h : F.可表示 X)
   定义体: ⟨.op X, h.homEquiv (𝟙 X)⟩
 
 Depends on / 依赖: h.homEquiv, homEquiv
@@ -1001,7 +1001,7 @@ definition Elements.isInitialOfRepresentableBy
 
 中文:
 定义 Elements.isInitialOfRepresentableBy
-  签名: {F : Cᵒᵖ ⥤ 类型} {X : C} (h : F.RepresentableBy X)
+  签名: {F : Cᵒᵖ ⥤ 类型} {X : C} (h : F.可表示 X)
   定义体: .ofUniqueHom (fun Y => ⟨h.homEquiv.symm Y.snd |>.op, by simp [← h.homEquiv_comp]⟩) fun Y m => by
     simp [← m.2, ← h.homEquiv_unop_comp]
 
@@ -1024,7 +1024,7 @@ definition Elements.initialOfCorepresentableBy
 
 中文:
 定义 Elements.initialOfCorepresentableBy
-  签名: {F : C ⥤ 类型} {X : C} (h : F.CorepresentableBy X)
+  签名: {F : C ⥤ 类型} {X : C} (h : F.余representableBy X)
   定义体: ⟨X, h.homEquiv (𝟙 X)⟩
 
 Depends on / 依赖: h.homEquiv, homEquiv
@@ -1046,7 +1046,7 @@ definition Elements.isInitialOfCorepresentableBy
 
 中文:
 定义 Elements.isInitialOfCorepresentableBy
-  签名: {F : C ⥤ 类型} {X : C} (h : F.CorepresentableBy X)
+  签名: {F : C ⥤ 类型} {X : C} (h : F.余representableBy X)
   定义体: .ofUniqueHom (fun Y => ⟨h.homEquiv.symm Y.snd, by simp [← h.homEquiv_comp]⟩) fun Y m => by
     simp [← m.2, ← h.homEquiv_comp]
 
@@ -1106,7 +1106,7 @@ definition Elements.precomp
 
 中文:
 定义 Elements.precomp
-  签名: {D : 类型} [Category D] (F : C ⥤ D) (G : D ⥤ Type w)
+  签名: {D : 类型} [范畴 D] (F : C ⥤ D) (G : D ⥤ 类型 w)
   定义体: G.elementsMk (F.obj x.fst) x.snd
   map f := ⟨F.map f.1, f.2⟩
 
@@ -1132,7 +1132,7 @@ instance Elements.essentiallySmall
 
 中文:
 实例 Elements.essentiallySmall
-  签名: {C : 类型u} [Category.{v} C]
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: by
   rw [essentiallySmall_iff_objectPropertyEssentiallySmall_top]
   obtain ⟨P, _, hP⟩ := ObjectProperty.EssentiallySmall.exists_small_le' (⊤ : ObjectProperty C)

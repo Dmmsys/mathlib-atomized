@@ -161,7 +161,7 @@ lemma tensorCotangentHom_injective_of_flat
 
 中文:
 引理 tensorCotangentHom_injective_of_flat
-  条件: [Module.Flat R T]
+  条件: [模.平坦 R T]
   证明: by
   let a : S ->+* T otimes[R] S := Algebra.TensorProduct.includeRight.toRingHom
   let f : (I.map a).Cotangent ->ₗ[T] T otimes[R] S ⧸ (I.map a) ^ 2 :=
@@ -205,7 +205,7 @@ definition tensorCotangentEquiv
 
 中文:
 定义 tensorCotangentEquiv
-  签名: [Module.Flat R T]
+  签名: [模.平坦 R T]
   定义体: LinearEquiv.ofBijective (I.tensorCotangentHom R T)
     ⟨I.tensorCotangentHom_injective_of_flat R T, I.tensorCotangentHom_surjective R T⟩
 
@@ -228,7 +228,7 @@ lemma tensorCotangentEquiv_tmul
 
 中文:
 引理 tensorCotangentEquiv_tmul
-  条件: [Module.Flat R T] (t : T) (x : I)
+  条件: [模.平坦 R T] (t : T) (x : I)
   证明: rfl
 -/
 lemma tensorCotangentEquiv_tmul [Module.Flat R T] (t : T) (x : I) :

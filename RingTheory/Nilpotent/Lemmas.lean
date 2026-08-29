@@ -37,8 +37,8 @@ theorem RingHom.ker_isRadical_iff_reduced_of_surjective
   rfl
 
 中文:
-定理 RingHom.ker_isRadical_iff_reduced_of_surjective
-  结论: {S F} [CommSemiring R] [Semiring S]
+定理 环态射.ker_isRadical_iff_reduced_of_surjective
+  结论: {S F} [交换半环 R] [半环 S]
   证明: by
   simp_rw [isReduced_iff, hf.forall, IsNilpotent, ← map_pow, ← RingHom.mem_ker]
   rfl
@@ -63,7 +63,7 @@ theorem isRadical_iff_span_singleton
 
 中文:
 定理 isRadical_iff_span_singleton
-  条件: [CommSemiring R]
+  条件: [交换半环 R]
   证明: by
   simp_rw [IsRadical, ← Ideal.mem_span_singleton]
   exact forall_comm.trans (forall_congr' fun r => exists_imp.symm)
@@ -85,7 +85,7 @@ theorem isNilpotent_iff_zero_mem_powers
 
 中文:
 定理 isNilpotent_iff_zero_mem_powers
-  条件: [Monoid R] [Zero R] {x : R}
+  条件: [幺半群 R] [零 R] {x : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -107,7 +107,7 @@ definition nilradical
 
 中文:
 定义 nilradical
-  签名: (R : 类型) [CommSemiring R]
+  签名: (R : 类型) [交换半环 R]
   定义体: (0 : Ideal R).radical
 
 Depends on / 依赖: radical
@@ -125,7 +125,7 @@ theorem mem_nilradical
 
 中文:
 定理 mem_nilradical
-  结论: x in nilradical R ↔ IsNilpotent x
+  结论: x in nilradical R ↔ 是幂零 x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -143,7 +143,7 @@ theorem nilradical_eq_sInf
 
 中文:
 定理 nilradical_eq_sInf
-  条件: (R : 类型) [CommSemiring R]
+  条件: (R : 类型) [交换半环 R]
   证明: (Ideal.radical_eq_sInf ⊥).trans by simp_rw [and_iff_right bot_le]
 
 Depends on / 依赖: Ideal.radical_eq_sInf, and_iff_right, bot_le, radical_eq_sInf, simp_rw
@@ -164,7 +164,7 @@ theorem nilpotent_iff_mem_prime
 
 中文:
 定理 nilpotent_iff_mem_prime
-  结论: IsNilpotent x ↔ 对任意 J : Ideal R, J.IsPrime -> x in J
+  结论: 是幂零 x ↔ 对任意 J : 理想 R, J.是素 -> x in J
   证明: by
   rw [← mem_nilradical]; rw [nilradical_eq_sInf]; rw [Submodule.mem_sInf]
   rfl
@@ -188,7 +188,7 @@ theorem nilradical_le_prime
 
 中文:
 定理 nilradical_le_prime
-  条件: (J : Ideal R) [H : J.IsPrime]
+  条件: (J : 理想 R) [H : J.是素]
   结论: nilradical R <= J
   证明: (nilradical_eq_sInf R).symm ▸ sInf_le H
 
@@ -211,7 +211,7 @@ theorem nilradical_eq_zero
 
 中文:
 定理 nilradical_eq_zero
-  条件: (R : 类型) [CommSemiring R] [IsReduced R]
+  条件: (R : 类型) [交换半环 R] [是既约 R]
   结论: nilradical R = 0
   证明: Ideal.ext fun _ => isNilpotent_iff_eq_zero
 
@@ -232,8 +232,8 @@ theorem nilradical_eq_bot_iff
 
 中文:
 定理 nilradical_eq_bot_iff
-  条件: {R : 类型} [CommSemiring R]
-  结论: nilradical R = ⊥ ↔ IsReduced R
+  条件: {R : 类型} [交换半环 R]
+  结论: nilradical R = ⊥ ↔ 是既约 R
   证明: by
   simp_rw [eq_bot_iff, SetLike.le_def, Submodule.mem_bot, mem_nilradical, isReduced_iff]
 
@@ -266,7 +266,7 @@ theorem isNilpotent_mulLeft_iff
 中文:
 定理 isNilpotent_mulLeft_iff
   条件: (a : A)
-  结论: IsNilpotent (mulLeft R a) ↔ IsNilpotent a
+  结论: 是幂零 (mulLeft R a) ↔ 是幂零 a
   证明: by
   constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
       simp only [mulLeft_eq_zero_iff, pow_mulLeft] at hn ⊢ <;>
@@ -297,7 +297,7 @@ theorem isNilpotent_mulRight_iff
 中文:
 定理 isNilpotent_mulRight_iff
   条件: (a : A)
-  结论: IsNilpotent (mulRight R a) ↔ IsNilpotent a
+  结论: 是幂零 (mulRight R a) ↔ 是幂零 a
   证明: by
   constructor <;> rintro ⟨n, hn⟩ <;> use n <;>
       simp only [mulRight_eq_zero_iff, pow_mulRight] at hn ⊢ <;>
@@ -327,7 +327,7 @@ lemma isNilpotent_toMatrix_iff
 
 中文:
 引理 isNilpotent_toMatrix_iff
-  条件: (b : Basis ι R M) (f : M ->ₗ[R] M)
+  条件: (b : 基 ι R M) (f : M ->ₗ[R] M)
   证明: by
   refine exists_congr fun k => ?_
   rw [toMatrix_pow]
@@ -356,8 +356,8 @@ lemma Matrix.isNilpotent_toLin'_iff
   rw [LinearMap.isNilpotent_toMatrix_iff]
 
 中文:
-引理 Matrix.isNilpotent_toLin'_iff
-  结论: {ι : 类型} [DecidableEq ι] [Fintype ι] [CommSemiring R]
+引理 矩阵.isNilpotent_toLin'_iff
+  结论: {ι : 类型} [DecidableEq ι] [有限类型 ι] [交换半环 R]
   证明: by
   have : A.toLin'.toMatrix (Pi.basisFun R ι) (Pi.basisFun R ι) = A := LinearMap.toMatrix'_toLin' A
   conv_rhs => rw [← this]
@@ -397,7 +397,7 @@ lemma isNilpotent_restrict_of_le
 
 中文:
 引理 isNilpotent_restrict_of_le
-  结论: {f : End R M} {p q : Submodule R M}
+  结论: {f : End R M} {p q : 子模 R M}
   证明: by
   obtain ⟨n, hn⟩ := hf
   use n
@@ -467,9 +467,9 @@ theorem IsNilpotent.mapQ
   simp [← p.mapQ_pow, hk]
 
 中文:
-定理 IsNilpotent.mapQ
-  条件: (hnp : IsNilpotent f)
-  结论: IsNilpotent (p.mapQ p f hp)
+定理 是幂零.mapQ
+  条件: (hnp : 是幂零 f)
+  结论: 是幂零 (p.mapQ p f hp)
   证明: by
   obtain ⟨k, hk⟩ := hnp
   use k

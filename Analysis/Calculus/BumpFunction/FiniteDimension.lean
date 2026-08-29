@@ -57,8 +57,8 @@ theorem exists_contDiff_tsupport_subset
   let f : E -> Re
 
 中文:
-定理 exists_contDiff_tsupport_subset
-  条件: {s : Set E} {x : E} {n : 自然数∞} (hs : s in 𝓝 x)
+定理 存在_contDiff_tsupport_subset
+  条件: {s : 集合 E} {x : E} {n : 自然数∞} (hs : s in 𝓝 x)
   证明: by
   obtain ⟨d : Real, d_pos : 0 < d, hd : Euclidean.closedBall x d subseteq s⟩ :=
     Euclidean.nhds_basis_closedBall.mem_iff.1 hs
@@ -116,8 +116,8 @@ theorem IsOpen.exists_contDiff_support_eq
     Then `∑ i, r i • g i` will be the desired function i
 
 中文:
-定理 IsOpen.exists_contDiff_support_eq
-  条件: {n : 自然数∞} {s : Set E} (hs : IsOpen s)
+定理 是开集.存在_contDiff_support_eq
+  条件: {n : 自然数∞} {s : 集合 E} (hs : 是开集 s)
   证明: by
   /- For any given point `x` in `s`, one can construct a smooth function with support in `s` and
     nonzero at `x`. By second-countability, it follows that we may cover `s` with the supports of
@@ -283,7 +283,7 @@ theorem u_exists
   have B : forall x, f x in Icc (0 : Real) 1 := fun x =>
 
 中文:
-定理 u_exists
+定理 u_存在
   证明: by
   have A : IsOpen (ball (0 : E) 1) := isOpen_ball
   obtain ⟨f, f_support, f_smooth, f_range⟩ :
@@ -351,7 +351,7 @@ theorem u_smooth
 
 中文:
 定理 u_smooth
-  结论: ContDiff 实数 ∞ (u : E -> 实数)
+  结论: 连续可微 实数 ∞ (u : E -> 实数)
   证明: (Classical.choose_spec (u_exists E)).1
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, u_exists
@@ -369,7 +369,7 @@ theorem u_continuous
 
 中文:
 定理 u_continuous
-  结论: Continuous (u : E -> 实数)
+  结论: 连续 (u : E -> 实数)
   证明: (u_smooth E).continuous
 
 Depends on / 依赖: continuous, u_smooth
@@ -989,7 +989,7 @@ theorem y_smooth
 
 中文:
 定理 y_smooth
-  结论: ContDiffOn 实数 ∞ (uncurry y) (Ioo (0 : 实数) 1 ×ˢ (univ : Set E))
+  结论: ContDiffOn 实数 ∞ (uncurry y) (开区间 (0 : 实数) 1 ×ˢ (univ : 集合 E))
   证明: by
   have hs : IsOpen (Ioo (0 : Real) (1 : Real)) := isOpen_Ioo
   have hk : IsCompact (closedBall (0 : E) 1) := ProperSpace.isCompact_closedBall _ _

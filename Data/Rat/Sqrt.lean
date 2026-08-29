@@ -36,7 +36,7 @@ definition sqrt
 
 中文:
 定义 sqrt
-  签名: (q : Rat)
+  签名: (q : 有理数)
   定义体: mkRat (Int.sqrt q.num) (Nat.sqrt q.den)
 
 Depends on / 依赖: Int.sqrt, Nat.sqrt, q.den, q.num
@@ -55,8 +55,8 @@ theorem sqrt_eq
 
 中文:
 定理 sqrt_eq
-  条件: (q : Rat)
-  结论: Rat.sqrt (q * q) = |q|
+  条件: (q : 有理数)
+  结论: 有理数.sqrt (q * q) = |q|
   证明: by
   rw [sqrt]; rw [mul_self_num]; rw [mul_self_den]; rw [Int.sqrt_eq]; rw [Nat.sqrt_eq]; rw [abs_def]; rw [divInt_ofNat]
 
@@ -75,9 +75,9 @@ theorem exists_mul_self
   proof: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, abs_mul_abs_self], fun h => ⟨Rat.sqrt x, h⟩⟩
 
 中文:
-定理 exists_mul_self
-  条件: (x : Rat)
-  结论: (存在 q, q * q = x) ↔ Rat.sqrt x * Rat.sqrt x = x
+定理 存在_mul_self
+  条件: (x : 有理数)
+  结论: (存在 q, q * q = x) ↔ 有理数.sqrt x * 有理数.sqrt x = x
   证明: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, abs_mul_abs_self], fun h => ⟨Rat.sqrt x, h⟩⟩
 
 Depends on / 依赖: Rat.sqrt, abs_mul_abs_self, sqrt_eq
@@ -96,8 +96,8 @@ lemma sqrt_nonneg
 
 中文:
 引理 sqrt_nonneg
-  条件: (q : Rat)
-  结论: 0 <= Rat.sqrt q
+  条件: (q : 有理数)
+  结论: 0 <= 有理数.sqrt q
   证明: mkRat_nonneg (Int.sqrt_nonneg _) _
 
 Depends on / 依赖: Int.sqrt_nonneg, mkRat_nonneg, sqrt_nonneg
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidablePred (IsSquare : Rat -> 命题)
+  签名: DecidablePred (IsSquare : 有理数 -> 命题)
   定义体: fun m => decidable_of_iff' (sqrt m * sqrt m = m) by
     simp_rw [← exists_mul_self m, IsSquare, eq_comm]
 
@@ -145,7 +145,7 @@ theorem sqrt_intCast
 中文:
 定理 sqrt_intCast
   条件: (z : 整数)
-  结论: Rat.sqrt (z : Rat) = 整数.sqrt z
+  结论: 有理数.sqrt (z : 有理数) = 整数.sqrt z
   证明: by
   simp only [sqrt, num_intCast, den_intCast, Nat.sqrt_one, mkRat_one]
 
@@ -172,7 +172,7 @@ theorem sqrt_natCast
 中文:
 定理 sqrt_natCast
   条件: (n : 自然数)
-  结论: Rat.sqrt (n : Rat) = 自然数.sqrt n
+  结论: 有理数.sqrt (n : 有理数) = 自然数.sqrt n
   证明: by
   rw [← Int.cast_natCast]; rw [sqrt_intCast]; rw [Int.sqrt_natCast]; rw [Int.cast_natCast]
 
@@ -194,9 +194,9 @@ theorem sqrt_ofNat
   proof: sqrt_natCast _
 
 中文:
-定理 sqrt_ofNat
+定理 sqrt_of自然数
   条件: (n : 自然数)
-  结论: Rat.sqrt (of自然数(n) : Rat) = 自然数.sqrt (Of自然数.of自然数 n)
+  结论: 有理数.sqrt (of自然数(n) : 有理数) = 自然数.sqrt (Of自然数.of自然数 n)
   证明: sqrt_natCast _
 
 Depends on / 依赖: sqrt_natCast

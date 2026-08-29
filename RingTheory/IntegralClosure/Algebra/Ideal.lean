@@ -47,7 +47,7 @@ lemma coeff_mem_pow_of_mem_adjoin_C_mul_X
 
 中文:
 引理 coeff_mem_pow_of_mem_adjoin_C_mul_X
-  结论: {R : 类型} [CommRing R]
+  结论: {R : 类型} [交换环 R]
   证明: by
   induction hP using Algebra.adjoin_induction generalizing i with
   | mem x hx =>
@@ -91,7 +91,7 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral
     refine natDegree_eq
 
 中文:
-引理 exists_monic_aeval_eq_zero_forall_mem_pow_of_isIntegral
+引理 存在_monic_aeval_eq_zero_对任意_mem_pow_of_is整数egral
   证明: by
   cases subsingleton_or_nontrivial R
   · use 0; simp [Monic, Subsingleton.elim (α := R) 0 1]
@@ -143,8 +143,8 @@ lemma exists_monic_aeval_eq_zero_forall_mem_pow_of_mem_map
   | add x y _ _ hx hy => simpa [add_mul] u
 
 中文:
-引理 exists_monic_aeval_eq_zero_forall_mem_pow_of_mem_map
-  结论: [Algebra.Is整数egral R S]
+引理 存在_monic_aeval_eq_zero_对任意_mem_pow_of_mem_map
+  结论: [代数.是整 R S]
   证明: by
   let A : Subalgebra R R[X] := Algebra.adjoin R { C r * X | r in I }
   let := Polynomial.algebra R S
@@ -188,8 +188,8 @@ lemma exists_monic_aeval_eq_zero_forall_mem_of_mem_map
   · simp [coeff_eq_zero_of_natDegree_lt hi]
 
 中文:
-引理 exists_monic_aeval_eq_zero_forall_mem_of_mem_map
-  结论: [Algebra.Is整数egral R S]
+引理 存在_monic_aeval_eq_zero_对任意_mem_of_mem_map
+  结论: [代数.是整 R S]
   证明: by
   obtain ⟨p, hp, e, h⟩ := exists_monic_aeval_eq_zero_forall_mem_pow_of_mem_map hx
   refine ⟨p, hp, e, fun i hi => ?_⟩

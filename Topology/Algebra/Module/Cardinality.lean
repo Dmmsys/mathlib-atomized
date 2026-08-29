@@ -247,7 +247,7 @@ theorem Set.Countable.dense_compl
     _ <= #s := mk_le_mk_of_subset
 
 中文:
-定理 Set.Countable.dense_compl
+定理 集合.可数.dense_compl
   证明: by
   rw [← interior_eq_empty_iff_dense_compl]
   by_contra H

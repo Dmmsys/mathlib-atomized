@@ -50,7 +50,7 @@ instance isOrderedAddMonoid
 
 中文:
 实例 isOrderedAddMonoid
-  签名: [AddCommMonoid α] [PartialOrder α] [IsOrderedAddMonoid α]
+  签名: [加法交换幺半群 α] [偏序 α] [是OrderedAdd幺半群 α]
   定义体: Function.Injective.isOrderedAddMonoid Subtype.val Nonneg.coe_add .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedAddMonoid, Injective, Nonneg, Nonneg.coe_add, Subtype, Subtype.val, coe_add, isOrderedAddMonoid
@@ -69,7 +69,7 @@ instance isOrderedCancelAddMonoid
 
 中文:
 实例 isOrderedCancelAddMonoid
-  签名: [AddCommMonoid α] [PartialOrder α] [IsOrderedCancelAddMonoid α]
+  签名: [加法交换幺半群 α] [偏序 α] [是OrderedCancelAdd幺半群 α]
   定义体: Function.Injective.isOrderedCancelAddMonoid _ Nonneg.coe_add .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedCancelAddMonoid, Injective, Nonneg, Nonneg.coe_add, coe_add, isOrderedCancelAddMonoid
@@ -89,7 +89,7 @@ instance isOrderedRing
 
 中文:
 实例 isOrderedRing
-  签名: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+  签名: [半环 α] [偏序 α] [是Ordered环 α]
   定义体: Function.Injective.isOrderedRing Subtype.val Nonneg.coe_zero Nonneg.coe_one Nonneg.coe_add
     Nonneg.coe_mul .rfl
 
@@ -111,7 +111,7 @@ instance isStrictOrderedRing
 
 中文:
 实例 isStrictOrderedRing
-  签名: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α]
+  签名: [半环 α] [偏序 α] [是StrictOrdered环 α]
   定义体: Function.Injective.isStrictOrderedRing Subtype.val Nonneg.coe_zero Nonneg.coe_one Nonneg.coe_add
     Nonneg.coe_mul .rfl .rfl
 
@@ -136,8 +136,8 @@ instance existsAddOfLE
     exact le_of_add_le_add_left h⟩
 
 中文:
-实例 existsAddOfLE
-  签名: [Semiring α] [PartialOrder α] [IsStrictOrderedRing α] [ExistsAddOfLE α]
+实例 存在AddOfLE
+  签名: [半环 α] [偏序 α] [是StrictOrdered环 α] [ExistsAddOfLE α]
   定义体: ⟨fun {a b} h => by
     rw [← Subtype.coe_le_coe] at h
     obtain ⟨c, hc⟩ := exists_add_of_le h
@@ -166,7 +166,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: [半环 α] [线性序 α] [是StrictOrdered环 α]
   定义体: ⟨⟨0, 1, fun h => zero_ne_one (congr_arg Subtype.val h)⟩⟩
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg, zero_ne_one
@@ -188,8 +188,8 @@ instance [Nontrivial
   · exact ⟨0, ⟨a, lt.le⟩, Subtype.coe_ne_coe.mp ha.symm⟩
 
 中文:
-实例 [Nontrivial
-  签名: α] [AddGroup α] [LinearOrder α] [AddLeftMono α] :
+实例 [非平凡
+  签名: α] [加法群 α] [线性序 α] [AddLeftMono α] :
   定义体: by
   have ⟨a, ha⟩ := exists_ne (0 : α)
   obtain lt | lt := ha.lt_or_gt
@@ -215,7 +215,7 @@ instance linearOrderedCommMonoidWithZero
 
 中文:
 实例 linearOrderedCommMonoidWithZero
-  签名: [CommSemiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: [交换半环 α] [线性序 α] [是StrictOrdered环 α]
   定义体: a.2
 -/
 instance linearOrderedCommMonoidWithZero [CommSemiring α] [LinearOrder α] [IsStrictOrderedRing α] :
@@ -235,7 +235,7 @@ instance canonicallyOrderedAdd
 
 中文:
 实例 canonicallyOrderedAdd
-  签名: [Ring α] [PartialOrder α] [IsOrderedRing α]
+  签名: [环 α] [偏序 α] [是Ordered环 α]
   定义体: le_add_of_nonneg_left b.2
   le_self_add _ b := le_add_of_nonneg_right b.2
   exists_add_of_le := fun {a b} h =>
@@ -262,7 +262,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: [Semiring α] [PartialOrder α] [IsOrderedRing α] [NoZeroDivisors α]
+  签名: [半环 α] [偏序 α] [是Ordered环 α] [无零因子 α]
   定义体: { eq_zero_or_eq_zero_of_mul_eq_zero := by
       rintro ⟨a, ha⟩ ⟨b, hb⟩
       simp only [mk_mul_mk, mk_eq_zero, mul_eq_zero, imp_self] }
@@ -287,7 +287,7 @@ instance orderedSub
 
 中文:
 实例 orderedSub
-  签名: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  签名: [环 α] [线性序 α] [是StrictOrdered环 α]
   定义体: ⟨by
     rintro ⟨a, ha⟩ ⟨b, hb⟩ ⟨c, hc⟩
     simp only [sub_le_iff_le_add, Subtype.mk_le_mk, mk_sub_mk, mk_add_mk, toNonneg_le]⟩

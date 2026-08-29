@@ -51,10 +51,10 @@ structure QuasiMeasurePreserving
     - absolutelyContinuous : μa.map f ≪ μb
 
 中文:
-结构 QuasiMeasurePreserving
-  参数: {m0 : MeasurableSpace α} (f : α -> β)
+结构 拟保测
+  参数: {m0 : 可测空间 α} (f : α -> β)
   公理与运算 (2 个):
-    - measurable : Measurable f
+    - measurable : 可测 f
     - absolutelyContinuous : μa.map f ≪ μb
 
 Depends on / 依赖: Measurable, Measure, a.map, absolutelyContinuous, measurable, protected, volume_tac
@@ -81,8 +81,8 @@ theorem id
 
 中文:
 定理 id
-  条件: {_m0 : MeasurableSpace α} (μ : Measure α)
-  结论: QuasiMeasurePreserving id μ μ
+  条件: {_m0 : 可测空间 α} (μ : 测度 α)
+  结论: 拟保测 id μ μ
   证明: ⟨measurable_id, map_id.absolutelyContinuous⟩
 -/
 protected theorem id {_m0 : MeasurableSpace α} (μ : Measure α) : QuasiMeasurePreserving id μ μ :=
@@ -98,7 +98,7 @@ theorem _root_.Measurable.quasiMeasurePreserving
   proof: ⟨hf, AbsolutelyContinuous.rfl⟩
 
 中文:
-定理 _root_.Measurable.quasiMeasurePreserving
+定理 _root_.可测.quasiMeasurePreserving
   证明: ⟨hf, AbsolutelyContinuous.rfl⟩
 -/
 protected theorem _root_.Measurable.quasiMeasurePreserving
@@ -116,7 +116,7 @@ theorem mono_left
 
 中文:
 定理 mono_left
-  条件: (h : QuasiMeasurePreserving f μa μb) (ha : μa' ≪ μa)
+  条件: (h : 拟保测 f μa μb) (ha : μa' ≪ μa)
   证明: ⟨h.1, (ha.map h.1).trans h.2⟩
 
 Depends on / 依赖: ha.map
@@ -137,7 +137,7 @@ theorem mono_right
 
 中文:
 定理 mono_right
-  条件: (h : QuasiMeasurePreserving f μa μb) (ha : μb ≪ μb')
+  条件: (h : 拟保测 f μa μb) (ha : μb ≪ μb')
   证明: ⟨h.1, h.2.trans ha⟩
 
 @[gcongr, mono]
@@ -159,7 +159,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: (ha : μa' ≪ μa) (hb : μb ≪ μb') (h : QuasiMeasurePreserving f μa μb)
+  条件: (ha : μa' ≪ μa) (hb : μb ≪ μb') (h : 拟保测 f μa μb)
   证明: (h.mono_left ha).mono_right hb
 
 @[fun_prop]
@@ -183,7 +183,7 @@ theorem comp
 
 中文:
 定理 comp
-  结论: {g : β -> γ} {f : α -> β} (hg : QuasiMeasurePreserving g μb μc)
+  结论: {g : β -> γ} {f : α -> β} (hg : 拟保测 g μb μc)
   证明: ⟨hg.measurable.comp hf.measurable, by
     rw [← map_map hg.1 hf.1]
     exact (hf.2.map hg.1).trans hg.2⟩
@@ -203,7 +203,7 @@ theorem iterate
 
 中文:
 定理 iterate
-  条件: {f : α -> α} (hf : QuasiMeasurePreserving f μa μa)
+  条件: {f : α -> α} (hf : 拟保测 f μa μa)
 -/
 protected theorem iterate {f : α -> α} (hf : QuasiMeasurePreserving f μa μa) :
     forall n, QuasiMeasurePreserving f^[n] μa μa
@@ -221,8 +221,8 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  条件: (hf : QuasiMeasurePreserving f μa μb)
-  结论: AEMeasurable f μa
+  条件: (hf : 拟保测 f μa μb)
+  结论: 几乎处处可测 f μa
   证明: hf.1.aemeasurable
 -/
 protected theorem aemeasurable (hf : QuasiMeasurePreserving f μa μb) : AEMeasurable f μa :=
@@ -241,7 +241,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: (hf : QuasiMeasurePreserving f μa μb) {f' : α -> β} (hf' : Measurable f')
+  结论: (hf : 拟保测 f μa μb) {f' : α -> β} (hf' : 可测 f')
   证明: by
   refine ⟨hf', ?_⟩
   rw [Measure.map_congr h.symm]
@@ -263,7 +263,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ⟨hf.1, by rw [Measure.map_smul]; exact hf.2.smul c⟩
 
 Depends on / 依赖: Measure, Measure.map_smul, map_smul
@@ -283,7 +283,7 @@ theorem ae_map_le
 
 中文:
 定理 ae_map_le
-  条件: (h : QuasiMeasurePreserving f μa μb)
+  条件: (h : 拟保测 f μa μb)
   结论: ae (μa.map f) <= ae μb
   证明: h.2.ae_le
 
@@ -303,8 +303,8 @@ theorem tendsto_ae
 
 中文:
 定理 tendsto_ae
-  条件: (h : QuasiMeasurePreserving f μa μb)
-  结论: Tendsto f (ae μa) (ae μb)
+  条件: (h : 拟保测 f μa μb)
+  结论: 收敛 f (ae μa) (ae μb)
   证明: (tendsto_ae_map h.aemeasurable).mono_right h.ae_map_le
 
 Depends on / 依赖: ae_map_le, aemeasurable, h.ae_map_le, h.aemeasurable, mono_right, tendsto_ae_map
@@ -324,7 +324,7 @@ theorem ae
 
 中文:
 定理 ae
-  条件: (h : QuasiMeasurePreserving f μa μb) {p : β -> 命题} (hg : 对任意ᵐ x ∂μb, p x)
+  条件: (h : 拟保测 f μa μb) {p : β -> 命题} (hg : 对任意ᵐ x ∂μb, p x)
   证明: h.tendsto_ae hg
 
 @[gcongr]
@@ -346,7 +346,7 @@ theorem ae_eq
 
 中文:
 定理 ae_eq
-  条件: (h : QuasiMeasurePreserving f μa μb) {g₁ g₂ : β -> δ} (hg : g₁ =ᵐ[μb] g₂)
+  条件: (h : 拟保测 f μa μb) {g₁ g₂ : β -> δ} (hg : g₁ =ᵐ[μb] g₂)
   证明: h.ae hg
 
 Depends on / 依赖: h.ae
@@ -365,7 +365,7 @@ theorem preimage_null
 
 中文:
 定理 preimage_null
-  条件: (h : QuasiMeasurePreserving f μa μb) {s : Set β} (hs : μb s = 0)
+  条件: (h : 拟保测 f μa μb) {s : 集合 β} (hs : μb s = 0)
   证明: preimage_null_of_map_null h.aemeasurable (h.2 hs)
 
 Depends on / 依赖: aemeasurable, h.aemeasurable, preimage_null_of_map_null
@@ -385,7 +385,7 @@ theorem preimage_mono_ae
 
 中文:
 定理 preimage_mono_ae
-  条件: {s t : Set β} (hf : QuasiMeasurePreserving f μa μb) (h : s <=ᵐ[μb] t)
+  条件: {s t : 集合 β} (hf : 拟保测 f μa μb) (h : s <=ᵐ[μb] t)
   证明: eventually_map.mp
     Eventually.filter_mono (tendsto_ae_map hf.aemeasurable) (Eventually.filter_mono hf.ae_map_le h)
 
@@ -406,7 +406,7 @@ theorem preimage_ae_eq
 
 中文:
 定理 preimage_ae_eq
-  条件: {s t : Set β} (hf : QuasiMeasurePreserving f μa μb) (h : s =ᵐ[μb] t)
+  条件: {s t : 集合 β} (hf : 拟保测 f μa μb) (h : s =ᵐ[μb] t)
   证明: EventuallyLE.antisymm (hf.preimage_mono_ae h.le) (hf.preimage_mono_ae h.symm.le)
 
 Depends on / 依赖: EventuallyLE, EventuallyLE.antisymm, antisymm, h.le, h.symm.le, hf.preimage_mono_ae, preimage_mono_ae
@@ -425,8 +425,8 @@ theorem _root_.MeasureTheory.NullMeasurableSet.preimage
   ⟨f ⁻¹' t, hf.measurable htm, hf.preimage_ae_eq hst⟩
 
 中文:
-定理 _root_.MeasureTheory.NullMeasurableSet.preimage
-  结论: {s : Set β} (hs : NullMeasurableSet s μb)
+定理 _root_.测度论.NullMeasurableSet.原像
+  结论: {s : 集合 β} (hs : NullMeasurableSet s μb)
   证明: let ⟨t, htm, hst⟩ := hs
   ⟨f ⁻¹' t, hf.measurable htm, hf.preimage_ae_eq hst⟩
 
@@ -452,7 +452,7 @@ theorem preimage_iterate_ae_eq
 
 中文:
 定理 preimage_iterate_ae_eq
-  结论: {s : Set α} {f : α -> α} (hf : QuasiMeasurePreserving f μ μ) (k : 自然数)
+  结论: {s : 集合 α} {f : α -> α} (hf : 拟保测 f μ μ) (k : 自然数)
   证明: by
   induction k with
   | zero => rfl
@@ -485,7 +485,7 @@ theorem image_zpow_ae_eq
 
 中文:
 定理 image_zpow_ae_eq
-  结论: {s : Set α} {e : α ≃ α} (he : QuasiMeasurePreserving e μ μ)
+  结论: {s : 集合 α} {e : α ≃ α} (he : 拟保测 e μ μ)
   证明: by
   rw [Equiv.image_eq_preimage_symm]
   obtain ⟨k, rfl | rfl⟩ := k.eq_nat_or_neg
@@ -522,7 +522,7 @@ theorem limsup_preimage_iterate_ae_eq
 
 中文:
 定理 limsup_preimage_iterate_ae_eq
-  结论: {f : α -> α} (hf : QuasiMeasurePreserving f μ μ)
+  结论: {f : α -> α} (hf : 拟保测 f μ μ)
   证明: limsup_ae_eq_of_forall_ae_eq (fun n => (preimage f)^[n] s) fun n => by
     simpa only [Set.preimage_iterate_eq] using hf.preimage_iterate_ae_eq n hs
 
@@ -545,7 +545,7 @@ theorem liminf_preimage_iterate_ae_eq
 
 中文:
 定理 liminf_preimage_iterate_ae_eq
-  结论: {f : α -> α} (hf : QuasiMeasurePreserving f μ μ)
+  结论: {f : α -> α} (hf : 拟保测 f μ μ)
   证明: liminf_ae_eq_of_forall_ae_eq (fun n => (preimage f)^[n] s) fun n => by
     simpa only [Set.preimage_iterate_eq] using hf.preimage_iterate_ae_eq n hs
 
@@ -570,8 +570,8 @@ theorem exists_preimage_eq_of_preimage_ae
     exact limsup_ae_eq_of_forall_ae_eq _ fun n => .trans (h.preimage_iter
 
 中文:
-定理 exists_preimage_eq_of_preimage_ae
-  结论: {f : α -> α} (h : QuasiMeasurePreserving f μ μ)
+定理 存在_preimage_eq_of_preimage_ae
+  结论: {f : α -> α} (h : 拟保测 f μ μ)
   证明: by
   obtain ⟨t, htm, ht⟩ := hs
   refine ⟨limsup (f^[·] ⁻¹' t) atTop, ?_, ?_, ?_⟩
@@ -606,7 +606,7 @@ theorem smul_ae_eq_of_ae_eq
 
 中文:
 定理 smul_ae_eq_of_ae_eq
-  结论: {G α : 类型} [Group G] [MulAction G α] {_ : MeasurableSpace α}
+  结论: {G α : 类型} [群 G] [乘法作用 G α] {_ : 可测空间 α}
   证明: by
   simpa only [← preimage_smul_inv] using! h_qmp.ae_eq h_ae_eq
 
@@ -641,8 +641,8 @@ theorem pairwise_aedisjoint_of_aedisjoint_forall_ne_one
     rw [preimage_eq_iff_eq_image (MulAction.bijective g₂⁻¹)]; rw [image_smul]; rw [smul_set_inter]; rw [smul_smu
 
 中文:
-定理 pairwise_aedisjoint_of_aedisjoint_forall_ne_one
-  结论: {G α : 类型} [Group G] [MulAction G α]
+定理 pairwise_aedisjoint_of_aedisjoint_对任意_ne_one
+  结论: {G α : 类型} [群 G] [乘法作用 G α]
   证明: by
   intro g₁ g₂ hg
   let g := g₂⁻¹ * g₁
@@ -685,7 +685,7 @@ theorem NullMeasurable.comp_quasiMeasurePreserving
 
 中文:
 定理 NullMeasurable.comp_quasiMeasurePreserving
-  结论: {ν : Measure β}
+  结论: {ν : 测度 β}
   证明: fun _s hs => (hg hs).preimage hf
 
 Depends on / 依赖: preimage
@@ -780,8 +780,8 @@ theorem AEDisjoint.preimage
   proof: hf.preimage_null ht
 
 中文:
-定理 AEDisjoint.preimage
-  结论: {ν : Measure β} {f : α -> β} {s t : Set β} (ht : AEDisjoint ν s t)
+定理 AEDisjoint.原像
+  结论: {ν : 测度 β} {f : α -> β} {s t : 集合 β} (ht : AEDisjoint ν s t)
   证明: hf.preimage_null ht
 
 Depends on / 依赖: hf.preimage_null, preimage_null
@@ -808,7 +808,7 @@ theorem quasiMeasurePreserving_symm
 
 中文:
 定理 quasiMeasurePreserving_symm
-  条件: (μ : Measure α) (e : α ≃ᵐ β)
+  条件: (μ : 测度 α) (e : α ≃ᵐ β)
   证明: ⟨e.symm.measurable, by rw [Measure.map_map, e.symm_comp_self, Measure.map_id] <;> measurability⟩
 
 Depends on / 依赖: Measure, Measure.map_id, Measure.map_map, e.symm.measurable, e.symm_comp_self, map_id, map_map, measurability, measurable, symm_comp_self

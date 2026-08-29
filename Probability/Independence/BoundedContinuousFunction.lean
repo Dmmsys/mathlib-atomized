@@ -85,7 +85,7 @@ lemma IndepFun.singleton_indepSets_of_indicator
 
 中文:
 引理 IndepFun.singleton_indepSets_of_indicator
-  结论: {𝓧 : 类型} [mX : MeasurableSpace 𝓧] {A : Set Ω}
+  结论: {𝓧 : 类型} [mX : 可测空间 𝓧] {A : 集合 Ω}
   证明: by
   rw [IndepSets_iff]
   rintro s - hs ⟨t, ht, rfl⟩
@@ -139,7 +139,7 @@ lemma pi_indepFun_pi_of_prod_bcf
 
 中文:
 引理 pi_indepFun_pi_of_prod_bcf
-  结论: (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map (aemeasurable_pi_lambda _ mX)
     (aemeasurable_pi_lambda _ mY)]
@@ -179,7 +179,7 @@ lemma pi_indepFun_pi_of_bcf
 
 中文:
 引理 pi_indepFun_pi_of_bcf
-  结论: (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: by
   have := Fintype.ofFinite S; have := Fintype.ofFinite T
   refine pi_indepFun_pi_of_prod_bcf mX mY fun f g => ?_
@@ -216,7 +216,7 @@ lemma indepFun_pi_of_prod_bcf
 
 中文:
 引理 indepFun_pi_of_prod_bcf
-  结论: (mZ : AEMeasurable Z P)
+  结论: (mZ : 几乎处处可测 Z P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map mZ (aemeasurable_pi_lambda _ mY)]
   refine eq_prod_of_integral_mul_prod_boundedContinuousFunction fun f g => ?_
@@ -253,7 +253,7 @@ lemma indepFun_pi_of_bcf
 
 中文:
 引理 indepFun_pi_of_bcf
-  结论: (mZ : AEMeasurable Z P)
+  结论: (mZ : 几乎处处可测 Z P)
   证明: by
   have := Fintype.ofFinite T
   refine indepFun_pi_of_prod_bcf mZ mY fun f g => ?_
@@ -286,7 +286,7 @@ lemma pi_indepFun_of_prod_bcf
 
 中文:
 引理 pi_indepFun_of_prod_bcf
-  结论: (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map (aemeasurable_pi_lambda _ mX) mU]
   refine eq_prod_of_integral_prod_mul_boundedContinuousFunction fun f g => ?_
@@ -323,7 +323,7 @@ lemma pi_indepFun_of_bcf
 
 中文:
 引理 pi_indepFun_of_bcf
-  结论: (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: by
   have := Fintype.ofFinite S
   refine pi_indepFun_of_prod_bcf mX mU fun f g => ?_
@@ -356,7 +356,7 @@ lemma indepFun_of_bcf
 
 中文:
 引理 indepFun_of_bcf
-  结论: (mZ : AEMeasurable Z P) (mU : AEMeasurable U P)
+  结论: (mZ : 几乎处处可测 Z P) (mU : 几乎处处可测 U P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map mZ mU]
   refine eq_prod_of_integral_mul_boundedContinuousFunction fun f g => ?_
@@ -595,7 +595,7 @@ omit [Fintype S] in variable [Finite S] in
 
 中文:
 引理 indep_comap_pi_of_prod_bcf
-  结论: (hm : m <= mΩ) (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (hm : m <= mΩ) (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: (Indep_iff_IndepSets _ _ P).2
     (indepSets_comap_pi_of_prod_bcf (fun A hA => (hm A hA).nullMeasurableSet) mX h)
 
@@ -622,7 +622,7 @@ lemma indep_comap_pi_of_bcf
 
 中文:
 引理 indep_comap_pi_of_bcf
-  结论: (hm : m <= mΩ) (mX : 对任意 s, AEMeasurable (X s) P)
+  结论: (hm : m <= mΩ) (mX : 对任意 s, 几乎处处可测 (X s) P)
   证明: (Indep_iff_IndepSets _ _ P).2
     (indepSets_comap_pi_of_bcf (fun A hA => (hm A hA).nullMeasurableSet) mX h)
 
@@ -646,7 +646,7 @@ lemma indep_comap_of_bcf
 
 中文:
 引理 indep_comap_of_bcf
-  结论: (hm : m <= mΩ) (mZ : AEMeasurable Z P)
+  结论: (hm : m <= mΩ) (mZ : 几乎处处可测 Z P)
   证明: (Indep_iff_IndepSets _ _ P).2
     (indepSets_comap_of_bcf (fun A hA => (hm A hA).nullMeasurableSet) mZ h)
 

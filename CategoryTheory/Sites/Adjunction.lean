@@ -65,7 +65,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
+  签名: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
   定义体: Adjunction.restrictFullyFaithful ((adj.whiskerRight Cᵒᵖ).comp (sheafificationAdjunction J D))
     (fullyFaithfulSheafToPresheaf J E) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
 
@@ -93,7 +93,7 @@ lemma adjunction_unit_app_hom
 
 中文:
 引理 adjunction_unit_app_hom
-  结论: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
+  结论: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
   证明: by
   change (sheafToPresheaf _ _).map ((adjunction J adj).unit.app X) = _
   simp only [Functor.id_obj, Functor.comp_obj, whiskeringRight_obj_obj, adjunction,
@@ -132,7 +132,7 @@ alias adjunction_counit_app_val := adjunction_counit_
 
 中文:
 引理 adjunction_counit_app_hom
-  结论: [HasWeakSheafify J D] [HasSheafCompose J F] (adj : G ⊣ F)
+  结论: [HasWeakSheafify J D] [有SheafCompose J F] (adj : G ⊣ F)
   证明: ((sheafToPresheaf _ _).congr_map
     (Adjunction.map_restrictFullyFaithful_counit_app _ _ (Functor.FullyFaithful.id _)
       (L := composeAndSheafify J G) (R := sheafCompose J F) _ _ Y)).trans (by cat_disch)
@@ -162,7 +162,7 @@ instance [HasWeakSheafify
 
 中文:
 实例 [HasWeakSheafify
-  签名: J D] [F.IsRightAdjoint] : (sheafCompose J F).IsRightAdjoint
+  签名: J D] [F.是右伴随] : (sheafCompose J F).是右伴随
   定义体: (adjunction J (Adjunction.ofIsRightAdjoint F)).isRightAdjoint
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, adjunction, isRightAdjoint, ofIsRightAdjoint
@@ -180,7 +180,7 @@ instance [HasWeakSheafify
 
 中文:
 实例 [HasWeakSheafify
-  签名: J D] [G.IsLeftAdjoint] : (composeAndSheafify J G).IsLeftAdjoint
+  签名: J D] [G.是左伴随] : (composeAndSheafify J G).是左伴随
   定义体: (adjunction J (Adjunction.ofIsLeftAdjoint G)).isLeftAdjoint
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, adjunction, isLeftAdjoint, ofIsLeftAdjoint
@@ -249,8 +249,8 @@ instance [G.IsLeftAdjoint]
   body: preservesSheafification_of_adjunction J (Adjunction.ofIsLeftAdjoint G)
 
 中文:
-实例 [G.IsLeftAdjoint]
-  签名: : J.PreservesSheafification G
+实例 [G.是左伴随]
+  签名: : J.保持层化 G
   定义体: preservesSheafification_of_adjunction J (Adjunction.ofIsLeftAdjoint G)
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, ofIsLeftAdjoint, preservesSheafification_of_adjunction

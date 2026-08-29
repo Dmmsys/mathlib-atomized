@@ -222,7 +222,7 @@ theorem finprod_eq_prod_plift_of_mulSupport_subset
 
 中文:
 定理 finprod_eq_prod_plift_of_mulSupport_subset
-  结论: {f : α -> M} {s : Finset (PLift α)}
+  结论: {f : α -> M} {s : 有限集 (命题层提升 α)}
   证明: finprod_eq_prod_plift_of_mulSupport_toFinset_subset (s.finite_toSet.subset hs) fun x hx => by
     rw [Finite.mem_toFinset] at hx
     exact hs hx
@@ -285,7 +285,7 @@ theorem finprod_of_isEmpty
 
 中文:
 定理 finprod_of_isEmpty
-  条件: [IsEmpty α] (f : α -> M)
+  条件: [是空 α] (f : α -> M)
   结论: ∏ᶠ i, f i = 1
   证明: by
   rw [← finprod_one]
@@ -315,7 +315,7 @@ theorem finprod_false
 
 中文:
 定理 finprod_false
-  条件: (f : False -> M)
+  条件: (f : 假 -> M)
   结论: ∏ᶠ i, f i = 1
   证明: finprod_of_isEmpty _
 
@@ -378,7 +378,7 @@ theorem finprod_unique
 
 中文:
 定理 finprod_unique
-  条件: [Unique α] (f : α -> M)
+  条件: [唯一 α] (f : α -> M)
   结论: ∏ᶠ i, f i = f default
   证明: finprod_eq_single f default fun _x hx => (hx <| Unique.eq_default _).elim
 
@@ -403,7 +403,7 @@ theorem finprod_true
 
 中文:
 定理 finprod_true
-  条件: (f : True -> M)
+  条件: (f : 真 -> M)
   结论: ∏ᶠ i, f i = f trivial
   证明: @finprod_unique M True _ ⟨⟨trivial⟩, fun _ => rfl⟩ f
 
@@ -432,7 +432,7 @@ theorem finprod_eq_dif
 
 中文:
 定理 finprod_eq_dif
-  条件: {p : 命题} [Decidable p] (f : p -> M)
+  条件: {p : 命题} [可判定 p] (f : p -> M)
   证明: by
   split_ifs with h
   · have : Unique p := ⟨⟨h⟩, fun _ => rfl⟩
@@ -466,7 +466,7 @@ theorem finprod_eq_if
 
 中文:
 定理 finprod_eq_if
-  条件: {p : 命题} [Decidable p] {x : M}
+  条件: {p : 命题} [可判定 p] {x : M}
   结论: ∏ᶠ _ : p, x = if p then x else 1
   证明: finprod_eq_dif fun _ => x
 
@@ -571,7 +571,7 @@ theorem finprod_nonneg
 
 中文:
 定理 finprod_nonneg
-  结论: {R : 类型} [CommMonoidWithZero R] [Preorder R] [ZeroLEOneClass R]
+  结论: {R : 类型} [带零交换幺半群 R] [预序 R] [ZeroLEOne类 R]
   证明: finprod_induction (fun x => 0 <= x) zero_le_one (fun _ _ => mul_nonneg) hf
 
 @[to_additive finsum_nonneg]
@@ -594,7 +594,7 @@ theorem one_le_finprod'
 
 中文:
 定理 one_le_finprod'
-  结论: {M : 类型} [CommMonoid M] [Preorder M] [IsOrderedMonoid M]
+  结论: {M : 类型} [交换幺半群 M] [预序 M] [是Ordered幺半群 M]
   证明: finprod_induction _ le_rfl (fun _ _ => one_le_mul) hf
 
 Depends on / 依赖: finprod_induction, le_rfl, one_le_mul
@@ -616,7 +616,7 @@ lemma one_le_finprod
 
 中文:
 引理 one_le_finprod
-  结论: {M : 类型} [CommMonoidWithZero M] [Preorder M] [ZeroLEOneClass M]
+  结论: {M : 类型} [带零交换幺半群 M] [预序 M] [ZeroLEOne类 M]
   证明: finprod_induction _ le_rfl (fun _ _ => one_le_mul_of_one_le_of_one_le) hf
 
 @[to_additive]
@@ -643,7 +643,7 @@ theorem MonoidHom.map_finprod_plift
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod_plift
+定理 幺半群态射.map_finprod_plift
   结论: (f : M ->* N) (g : α -> M)
   证明: by
   rw [finprod_eq_prod_plift_of_mulSupport_subset h.coe_toFinset.ge]; rw [finprod_eq_prod_plift_of_mulSupport_subset]; rw [_root_.map_prod]
@@ -672,7 +672,7 @@ theorem MonoidHom.map_finprod_Prop
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod_Prop
+定理 幺半群态射.map_finprod_Prop
   条件: {p : 命题} (f : M ->* N) (g : p -> M)
   证明: f.map_finprod_plift g (Set.toFinite _)
 
@@ -699,7 +699,7 @@ by_cases hg : HasFiniteMulSupport g ∘ PLift.down; · exact f.map_finprod_plift
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod_of_preimage_one
+定理 幺半群态射.map_finprod_of_preimage_one
   条件: (f : M ->* N) (hf : 对任意 x, f x = 1 -> x = 1) (g : α -> M)
   证明: by
 by_cases hg : HasFiniteMulSupport g ∘ PLift.down; · exact f.map_finprod_plift g hg
@@ -728,8 +728,8 @@ theorem MonoidHom.map_finprod_of_injective
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod_of_injective
-  条件: (g : M ->* N) (hg : Injective g) (f : α -> M)
+定理 幺半群态射.map_finprod_of_injective
+  条件: (g : M ->* N) (hg : 单射 g) (f : α -> M)
   证明: g.map_finprod_of_preimage_one (fun _ => (hg.eq_iff' g.map_one).mp) f
 
 @[to_additive]
@@ -753,7 +753,7 @@ theorem MulEquiv.map_finprod
 @[to_additive]
 
 中文:
-定理 MulEquiv.map_finprod
+定理 乘法等价.map_finprod
   条件: (g : M ≃* N) (f : α -> M)
   结论: g (∏ᶠ i, f i) = ∏ᶠ i, g (f i)
   证明: g.toMonoidHom.map_finprod_of_injective (EquivLike.injective g) f
@@ -775,8 +775,8 @@ theorem MulEquivClass.map_finprod
   proof: MulEquiv.map_finprod (MulEquivClass.toMulEquiv g) f
 
 中文:
-定理 MulEquivClass.map_finprod
-  结论: {F : 类型} [EquivLike F M N] [MulEquivClass F M N] (g : F)
+定理 乘法等价类.map_finprod
+  结论: {F : 类型} [等价状 F M N] [乘法等价类 F M N] (g : F)
   证明: MulEquiv.map_finprod (MulEquivClass.toMulEquiv g) f
 
 Depends on / 依赖: MulEquiv, MulEquiv.map_finprod, MulEquivClass, MulEquivClass.toMulEquiv, map_finprod, toMulEquiv
@@ -798,7 +798,7 @@ theorem finsum_smul
 
 中文:
 定理 finsum_smul
-  结论: {R M : 类型} [Ring R] [IsDomain R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [环 R] [是整环 R] [加法交换群 M] [模 R M]
   证明: by
   rcases eq_or_ne x 0 with (rfl | hx)
   · simp
@@ -827,7 +827,7 @@ theorem smul_finsum
 
 中文:
 定理 smul_finsum
-  结论: {R M : 类型} [Semiring R] [IsDomain R] [AddCommGroup M] [Module R M]
+  结论: {R M : 类型} [半环 R] [是整环 R] [加法交换群 M] [模 R M]
   证明: by
   rcases eq_or_ne c 0 with (rfl | hc)
   · simp
@@ -855,7 +855,7 @@ theorem finprod_inv_distrib
 
 中文:
 定理 finprod_inv_distrib
-  条件: [DivisionCommMonoid G] (f : α -> G)
+  条件: [DivisionComm幺半群 G] (f : α -> G)
   结论: (∏ᶠ x, (f x)⁻¹) = (∏ᶠ x, f x)⁻¹
   证明: ((MulEquiv.inv G).map_finprod f).symm
 
@@ -884,7 +884,7 @@ theorem finprod_eq_mulIndicator_apply
 
 中文:
 定理 finprod_eq_mulIndicator_apply
-  条件: (s : Set α) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (f : α -> M) (a : α)
   证明: by
   convert! finprod_eq_if (M := M) (p := a in s) (x := f a)
 
@@ -937,7 +937,7 @@ theorem finprod_mem_def
 
 中文:
 定理 finprod_mem_def
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   结论: ∏ᶠ a in s, f a = ∏ᶠ a, mulIndicator s f a
   证明: finprod_congr finprod_eq_mulIndicator_apply s f
 
@@ -992,7 +992,7 @@ theorem finprod_eq_prod_of_mulSupport_subset
 
 中文:
 定理 finprod_eq_prod_of_mulSupport_subset
-  条件: (f : α -> M) {s : Finset α} (h : mulSupport f subseteq s)
+  条件: (f : α -> M) {s : 有限集 α} (h : mulSupport f subseteq s)
   证明: by
   have A : mulSupport (f ∘ PLift.down) = Equiv.plift.symm '' mulSupport f := by
     rw [mulSupport_comp_eq_preimage]
@@ -1052,7 +1052,7 @@ theorem finprod_eq_prod_of_mulSupport_subset_of_finite
 
 中文:
 定理 finprod_eq_prod_of_mulSupport_subset_of_finite
-  结论: (f : α -> M) {s : Set α}
+  结论: (f : α -> M) {s : 集合 α}
   证明: finprod_eq_prod_of_mulSupport_subset f by rwa [Set.Finite.coe_toFinset]
 
 @[to_additive]
@@ -1081,7 +1081,7 @@ alias finsum_eq_finset_sum_of_support_subset := finsum_eq_finsetSum_of_support_s
 
 中文:
 定理 finprod_eq_finsetProd_of_mulSupport_subset
-  结论: (f : α -> M) {s : Finset α}
+  结论: (f : α -> M) {s : 有限集 α}
   证明: haveI h' : (s.finite_toSet.subset h).toFinset subseteq s := by
     simpa [← Finset.coe_subset, Set.coe_toFinset]
   finprod_eq_prod_of_mulSupport_toFinset_subset _ _ h'
@@ -1121,7 +1121,7 @@ theorem finprod_def
 
 中文:
 定理 finprod_def
-  条件: (f : α -> M) [Decidable (HasFiniteMulSupport f)]
+  条件: (f : α -> M) [可判定 (HasFiniteMulSupport f)]
   证明: by
   split_ifs with h
   · exact finprod_eq_prod_of_mulSupport_toFinset_subset _ h (Finset.Subset.refl _)
@@ -1157,7 +1157,7 @@ theorem finprod_of_infinite_mulSupport
 
 中文:
 定理 finprod_of_infinite_mulSupport
-  条件: {f : α -> M} (hf : (mulSupport f).Infinite)
+  条件: {f : α -> M} (hf : (mulSupport f).无限)
   证明: by
   classical
   rw [finprod_def]
@@ -1255,7 +1255,7 @@ theorem hasFiniteSupport_of_finsum_eq_one
 
 中文:
 定理 hasFiniteSupport_of_finsum_eq_one
-  结论: {R : 类型} [NonAssocSemiring R] {f : α -> R}
+  结论: {R : 类型} [非结合半环 R] {f : α -> R}
   证明: by
   cases subsingleton_or_nontrivial R
   · simp_rw [HasFiniteSupport, Subsingleton.support_eq, finite_empty]
@@ -1314,7 +1314,7 @@ theorem finprod_eq_prod_of_fintype
 
 中文:
 定理 finprod_eq_prod_of_fintype
-  条件: [Fintype α] (f : α -> M)
+  条件: [有限类型 α] (f : α -> M)
   结论: ∏ᶠ i : α, f i = ∏ i, f i
   证明: finprod_eq_prod_of_mulSupport_toFinset_subset _ (Set.toFinite _) Finset.subset_univ _
 
@@ -1336,7 +1336,7 @@ theorem finprod_ne_zero
 
 中文:
 定理 finprod_ne_zero
-  结论: {M₀ : 类型} [CommMonoidWithZero M₀] [Nontrivial M₀] [NoZeroDivisors M₀]
+  结论: {M₀ : 类型} [带零交换幺半群 M₀] [非平凡 M₀] [无零因子 M₀]
   证明: by
   by_cases h₂ : Set.Finite f.mulSupport
   · grind [finprod_eq_prod f h₂, Finset.prod_ne_zero_iff]
@@ -1367,7 +1367,7 @@ theorem finprod_apply_ne_zero
 
 中文:
 定理 finprod_apply_ne_zero
-  结论: {ι : 类型} {N₀ M₀ : 类型} [CommMonoidWithZero M₀] [Nontrivial M₀]
+  结论: {ι : 类型} {N₀ M₀ : 类型} [带零交换幺半群 M₀] [非平凡 M₀]
   证明: by
   by_cases h₂ : f.mulSupport.Finite
   · rw [finprod_eq_prod f h₂]
@@ -1405,7 +1405,7 @@ alias map_finset_prod := map_finsetProd
 
 中文:
 定理 map_finsetProd
-  结论: {α F : 类型} [Fintype α] [EquivLike F M N] [MulEquivClass F M N] (f : F)
+  结论: {α F : 类型} [有限类型 α] [等价状 F M N] [乘法等价类 F M N] (f : F)
   证明: by
   simp [← finprod_eq_prod_of_fintype, MulEquivClass.map_finprod]
 
@@ -1446,7 +1446,7 @@ theorem finprod_cond_eq_prod_of_cond_iff
 
 中文:
 定理 finprod_cond_eq_prod_of_cond_iff
-  结论: (f : α -> M) {p : α -> 命题} {t : Finset α}
+  结论: (f : α -> M) {p : α -> 命题} {t : 有限集 α}
   证明: by
   set s := { x | p x }
   change ∏ᶠ (i : α) (_ : i in s), f i = ∏ i in t, f i
@@ -1526,7 +1526,7 @@ theorem finprod_mem_eq_prod_of_inter_mulSupport_eq
 
 中文:
 定理 finprod_mem_eq_prod_of_inter_mulSupport_eq
-  结论: (f : α -> M) {s : Set α} {t : Finset α}
+  结论: (f : α -> M) {s : 集合 α} {t : 有限集 α}
   证明: finprod_cond_eq_prod_of_cond_iff _ by
     intro x hxf
     rw [← mem_mulSupport] at hxf
@@ -1564,7 +1564,7 @@ theorem finprod_mem_eq_prod_of_subset
 
 中文:
 定理 finprod_mem_eq_prod_of_subset
-  结论: (f : α -> M) {s : Set α} {t : Finset α}
+  结论: (f : α -> M) {s : 集合 α} {t : 有限集 α}
   证明: finprod_cond_eq_prod_of_cond_iff _ fun hx => ⟨fun h => h₁ ⟨h, hx⟩, fun h => h₂ h⟩
 
 @[to_additive]
@@ -1586,7 +1586,7 @@ theorem finprod_mem_eq_prod
 
 中文:
 定理 finprod_mem_eq_prod
-  条件: (f : α -> M) {s : Set α} (hf : (s inter mulSupport f).Finite)
+  条件: (f : α -> M) {s : 集合 α} (hf : (s inter mulSupport f).有限)
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ by simp [inter_assoc]
 
 Depends on / 依赖: finprod_mem_eq_prod_of_inter_mulSupport_eq, inter_assoc
@@ -1611,7 +1611,7 @@ theorem finprod_mem_eq_prod_filter
 
 中文:
 定理 finprod_mem_eq_prod_filter
-  结论: (f : α -> M) (s : Set α) [DecidablePred (· in s)]
+  结论: (f : α -> M) (s : 集合 α) [DecidablePred (· in s)]
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ by
     ext x
     simp [and_comm]
@@ -1640,7 +1640,7 @@ theorem finprod_mem_eq_toFinset_prod
 
 中文:
 定理 finprod_mem_eq_toFinset_prod
-  条件: (f : α -> M) (s : Set α) [Fintype s]
+  条件: (f : α -> M) (s : 集合 α) [有限类型 s]
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ by simp_rw [coe_toFinset s]
 
 @[to_additive]
@@ -1664,7 +1664,7 @@ theorem finprod_mem_eq_finite_toFinset_prod
 
 中文:
 定理 finprod_mem_eq_finite_toFinset_prod
-  条件: (f : α -> M) {s : Set α} (hs : s.Finite)
+  条件: (f : α -> M) {s : 集合 α} (hs : s.有限)
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ by rw [hs.coe_toFinset]
 
 @[to_additive]
@@ -1689,7 +1689,7 @@ theorem finprod_mem_finset_eq_prod
 
 中文:
 定理 finprod_mem_finset_eq_prod
-  条件: (f : α -> M) (s : Finset α)
+  条件: (f : α -> M) (s : 有限集 α)
   结论: ∏ᶠ i in s, f i = ∏ i in s, f i
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ rfl
 
@@ -1713,7 +1713,7 @@ theorem finprod_mem_coe_finset
 
 中文:
 定理 finprod_mem_coe_finset
-  条件: (f : α -> M) (s : Finset α)
+  条件: (f : α -> M) (s : 有限集 α)
   证明: finprod_mem_eq_prod_of_inter_mulSupport_eq _ rfl
 
 @[to_additive]
@@ -1740,7 +1740,7 @@ theorem finprod_mem_eq_one_of_infinite
 
 中文:
 定理 finprod_mem_eq_one_of_infinite
-  条件: {f : α -> M} {s : Set α} (hs : (s inter mulSupport f).Infinite)
+  条件: {f : α -> M} {s : 集合 α} (hs : (s inter mulSupport f).无限)
   证明: by
   rw [finprod_mem_def]
   apply finprod_of_infinite_mulSupport
@@ -1768,8 +1768,8 @@ theorem finprod_mem_eq_one_of_forall_eq_one
 @[to_additive]
 
 中文:
-定理 finprod_mem_eq_one_of_forall_eq_one
-  条件: {f : α -> M} {s : Set α} (h : 对任意 x in s, f x = 1)
+定理 finprod_mem_eq_one_of_对任意_eq_one
+  条件: {f : α -> M} {s : 集合 α} (h : 对任意 x in s, f x = 1)
   证明: by simp +contextual [h]
 
 @[to_additive]
@@ -1793,7 +1793,7 @@ theorem finprod_mem_inter_mulSupport
 
 中文:
 定理 finprod_mem_inter_mulSupport
-  条件: (f : α -> M) (s : Set α)
+  条件: (f : α -> M) (s : 集合 α)
   证明: by
   rw [finprod_mem_def]; rw [finprod_mem_def]; rw [mulIndicator_inter_mulSupport]
 
@@ -1819,7 +1819,7 @@ theorem finprod_mem_inter_mulSupport_eq
 
 中文:
 定理 finprod_mem_inter_mulSupport_eq
-  结论: (f : α -> M) (s t : Set α)
+  结论: (f : α -> M) (s t : 集合 α)
   证明: by
   rw [← finprod_mem_inter_mulSupport]; rw [h]; rw [finprod_mem_inter_mulSupport]
 
@@ -1847,7 +1847,7 @@ theorem finprod_mem_inter_mulSupport_eq'
 
 中文:
 定理 finprod_mem_inter_mulSupport_eq'
-  结论: (f : α -> M) (s t : Set α)
+  结论: (f : α -> M) (s t : 集合 α)
   证明: by
   apply finprod_mem_inter_mulSupport_eq
   ext x
@@ -1876,7 +1876,7 @@ theorem finprod_mem_univ
 中文:
 定理 finprod_mem_univ
   条件: (f : α -> M)
-  结论: ∏ᶠ i in @Set.univ α, f i = ∏ᶠ i : α, f i
+  结论: ∏ᶠ i in @集合.univ α, f i = ∏ᶠ i : α, f i
   证明: finprod_congr fun _ => finprod_true _
 
 Depends on / 依赖: finprod_congr, finprod_true
@@ -1924,7 +1924,7 @@ theorem finprod_eq_one_of_forall_eq_one
 @[to_additive finsum_cond_pos]
 
 中文:
-定理 finprod_eq_one_of_forall_eq_one
+定理 finprod_eq_one_of_对任意_eq_one
   条件: {f : α -> M} (h : 对任意 x, f x = 1)
   结论: ∏ᶠ i, f i = 1
   证明: by
@@ -1957,7 +1957,7 @@ theorem one_lt_finprod_cond
 
 中文:
 定理 one_lt_finprod_cond
-  结论: {M : 类型} [CommMonoid M] [PartialOrder M] [IsOrderedCancelMonoid M]
+  结论: {M : 类型} [交换幺半群 M] [偏序 M] [是OrderedCancel幺半群 M]
   证明: by
   rw [finprod_cond_eq_prod_of_cond_iff (t := hf.toFinset)]
   · apply Finset.one_lt_prod'
@@ -2001,7 +2001,7 @@ alias one_lt_finprod' := one_lt_finprod
 
 中文:
 定理 one_lt_finprod
-  结论: {M : 类型} [CommMonoid M] [PartialOrder M] [IsOrderedCancelMonoid M]
+  结论: {M : 类型} [交换幺半群 M] [偏序 M] [是OrderedCancel幺半群 M]
   证明: by
   rw [← finprod_mem_univ]
   apply one_lt_finprod_cond <;> simpa
@@ -2042,7 +2042,7 @@ lemma finprod_le_finprod'
 
 中文:
 引理 finprod_le_finprod'
-  结论: [PartialOrder M] [MulLeftMono M] (hf : HasFiniteMulSupport f)
+  结论: [偏序 M] [MulLeftMono M] (hf : HasFiniteMulSupport f)
   证明: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
@@ -2071,7 +2071,7 @@ lemma finprod_le_finprod
 
 中文:
 引理 finprod_le_finprod
-  结论: {M : 类型} [CommMonoidWithZero M] [PartialOrder M] [ZeroLEOneClass M]
+  结论: {M : 类型} [带零交换幺半群 M] [偏序 M] [ZeroLEOne类 M]
   证明: by
   have : Fintype ↑(f.mulSupport union g.mulSupport) := (hf.union hg).fintype
   let s := (f.mulSupport union g.mulSupport).toFinset
@@ -2103,7 +2103,7 @@ lemma finprod_zero_le_one
 
 中文:
 引理 finprod_zero_le_one
-  结论: {M α : 类型} [CommMonoidWithZero M] [PartialOrder M]
+  结论: {M α : 类型} [带零交换幺半群 M] [偏序 M]
   证明: by
   rw [← finprod_one (α := α)]
   by_cases H : (fun _ : α => (0 : M)).HasFiniteMulSupport
@@ -2187,7 +2187,7 @@ theorem finprod_div_distrib
 
 中文:
 定理 finprod_div_distrib
-  结论: [DivisionCommMonoid G] {f g : α -> G} (hf : HasFiniteMulSupport f)
+  结论: [DivisionComm幺半群 G] {f g : α -> G} (hf : HasFiniteMulSupport f)
   证明: by
   simp only [div_eq_mul_inv, finprod_mul_distrib hf <| hg.fun_inv, finprod_inv_distrib]
 
@@ -2214,7 +2214,7 @@ theorem finprod_mem_mul_distrib'
 
 中文:
 定理 finprod_mem_mul_distrib'
-  条件: (hf : (s inter mulSupport f).Finite) (hg : (s inter mulSupport g).Finite)
+  条件: (hf : (s inter mulSupport f).有限) (hg : (s inter mulSupport g).有限)
   证明: by
   rw [← mulSupport_mulIndicator] at hf hg
   simp only [finprod_mem_def, mulIndicator_mul, finprod_mul_distrib hf hg]
@@ -2239,7 +2239,7 @@ theorem finprod_mem_one
 
 中文:
 定理 finprod_mem_one
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (∏ᶠ i in s, (1 : M)) = 1
   证明: by simp
 -/
@@ -2291,7 +2291,7 @@ theorem exists_ne_one_of_finprod_mem_ne_one
   exact h (finprod_mem_of_eqOn_one h')
 
 中文:
-定理 exists_ne_one_of_finprod_mem_ne_one
+定理 存在_ne_one_of_finprod_mem_ne_one
   条件: (h : ∏ᶠ i in s, f i != 1)
   结论: 存在 x in s, f x != 1
   证明: by
@@ -2321,7 +2321,7 @@ theorem finprod_mem_mul_distrib
 
 中文:
 定理 finprod_mem_mul_distrib
-  条件: (hs : s.Finite)
+  条件: (hs : s.有限)
   证明: finprod_mem_mul_distrib' (hs.inter_of_left _) (hs.inter_of_left _)
 
 @[to_additive]
@@ -2344,7 +2344,7 @@ theorem MonoidHom.map_finprod
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod
+定理 幺半群态射.map_finprod
   条件: {f : α -> M} (g : M ->* N) (hf : HasFiniteMulSupport f)
   证明: g.map_finprod_plift f hf.preimage Equiv.plift.injective.injOn
 
@@ -2369,7 +2369,7 @@ theorem map_finprod
 
 中文:
 定理 map_finprod
-  结论: {G : 类型} [FunLike G M N] [MonoidHomClass G M N] (g : G)
+  结论: {G : 类型} [函数状 G M N] [幺半群态射类 G M N] (g : G)
   证明: (g : M ->* N).map_finprod hf
 
 @[to_additive]
@@ -2412,7 +2412,7 @@ theorem finsum_smul'
 
 中文:
 定理 finsum_smul'
-  结论: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M] {f : ι -> R}
+  结论: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M] {f : ι -> R}
   证明: ((smulAddHom R M).flip x).map_finsum hf
 
 Depends on / 依赖: map_finsum, smulAddHom
@@ -2431,7 +2431,7 @@ theorem smul_finsum'
 
 中文:
 定理 smul_finsum'
-  结论: {R M : 类型} [AddCommMonoid M] [DistribSMul R M] (c : R)
+  结论: {R M : 类型} [加法交换幺半群 M] [分配标量乘法 R M] (c : R)
   证明: (DistribSMul.toAddMonoidHom M c).map_finsum hf
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_finsum, toAddMonoidHom
@@ -2457,8 +2457,8 @@ theorem MonoidHom.map_finprod_mem'
   · simpa only [finprod_eq_mulIndicator_apply, HasFiniteMulSupport, mulSupport_mulIndicator]
 
 中文:
-定理 MonoidHom.map_finprod_mem'
-  条件: {f : α -> M} (g : M ->* N) (h₀ : (s inter mulSupport f).Finite)
+定理 幺半群态射.map_finprod_mem'
+  条件: {f : α -> M} (g : M ->* N) (h₀ : (s inter mulSupport f).有限)
   证明: by
   rw [g.map_finprod]
   · simp only [g.map_finprod_Prop]
@@ -2488,8 +2488,8 @@ theorem MonoidHom.map_finprod_mem
 @[to_additive]
 
 中文:
-定理 MonoidHom.map_finprod_mem
-  条件: (f : α -> M) (g : M ->* N) (hs : s.Finite)
+定理 幺半群态射.map_finprod_mem
+  条件: (f : α -> M) (g : M ->* N) (hs : s.有限)
   证明: g.map_finprod_mem' (hs.inter_of_left _)
 
 @[to_additive]
@@ -2512,8 +2512,8 @@ theorem MulEquiv.map_finprod_mem
 @[to_additive]
 
 中文:
-定理 MulEquiv.map_finprod_mem
-  条件: (g : M ≃* N) (f : α -> M) {s : Set α} (hs : s.Finite)
+定理 乘法等价.map_finprod_mem
+  条件: (g : M ≃* N) (f : α -> M) {s : 集合 α} (hs : s.有限)
   证明: g.toMonoidHom.map_finprod_mem f hs
 
 @[to_additive]
@@ -2535,7 +2535,7 @@ theorem finprod_mem_inv_distrib
 
 中文:
 定理 finprod_mem_inv_distrib
-  条件: [DivisionCommMonoid G] (f : α -> G) (hs : s.Finite)
+  条件: [DivisionComm幺半群 G] (f : α -> G) (hs : s.有限)
   证明: ((MulEquiv.inv G).map_finprod_mem f hs).symm
 
 Depends on / 依赖: MulEquiv, MulEquiv.inv, map_finprod_mem
@@ -2560,7 +2560,7 @@ theorem finprod_mem_div_distrib
 
 中文:
 定理 finprod_mem_div_distrib
-  条件: [DivisionCommMonoid G] (f g : α -> G) (hs : s.Finite)
+  条件: [DivisionComm幺半群 G] (f g : α -> G) (hs : s.有限)
   证明: by
   simp only [div_eq_mul_inv, finprod_mem_mul_distrib hs, finprod_mem_inv_distrib g hs]
 
@@ -2587,7 +2587,7 @@ theorem finprod_mem_empty
 
 中文:
 定理 finprod_mem_empty
-  结论: (∏ᶠ i in (∅ : Set α), f i) = 1
+  结论: (∏ᶠ i in (∅ : 集合 α), f i) = 1
   证明: by simp
 -/
 theorem finprod_mem_empty : (∏ᶠ i in (∅ : Set α), f i) = 1 := by simp
@@ -2607,7 +2607,7 @@ theorem nonempty_of_finprod_mem_ne_one
 中文:
 定理 nonempty_of_finprod_mem_ne_one
   条件: (h : ∏ᶠ i in s, f i != 1)
-  结论: s.Nonempty
+  结论: s.非空
   证明: nonempty_iff_ne_empty.2 fun h' => h h'.symm ▸ finprod_mem_empty
 
 Depends on / 依赖: finprod_mem_empty, nonempty_iff_ne_empty
@@ -2636,7 +2636,7 @@ theorem finprod_mem_union_inter
 
 中文:
 定理 finprod_mem_union_inter
-  条件: (hs : s.Finite) (ht : t.Finite)
+  条件: (hs : s.有限) (ht : t.有限)
   证明: by
   lift s to Finset α using hs; lift t to Finset α using ht
   classical
@@ -2671,7 +2671,7 @@ theorem finprod_mem_union_inter'
 
 中文:
 定理 finprod_mem_union_inter'
-  条件: (hs : (s inter mulSupport f).Finite) (ht : (t inter mulSupport f).Finite)
+  条件: (hs : (s inter mulSupport f).有限) (ht : (t inter mulSupport f).有限)
   证明: by
   rw [← finprod_mem_inter_mulSupport f s]; rw [← finprod_mem_inter_mulSupport f t]; rw [←
     finprod_mem_union_inter hs ht]; rw [← union_inter_distrib_right]; rw [finprod_mem_inter_mulSupport]; rw [←
@@ -2703,7 +2703,7 @@ theorem finprod_mem_union'
 
 中文:
 定理 finprod_mem_union'
-  结论: (hst : Disjoint s t) (hs : (s inter mulSupport f).Finite)
+  结论: (hst : Disjoint s t) (hs : (s inter mulSupport f).有限)
   证明: by
   rw [← finprod_mem_union_inter' hs ht]; rw [disjoint_iff_inter_eq_empty.1 hst]; rw [finprod_mem_empty]; rw [mul_one]
 
@@ -2728,7 +2728,7 @@ theorem finprod_mem_union
 
 中文:
 定理 finprod_mem_union
-  条件: (hst : Disjoint s t) (hs : s.Finite) (ht : t.Finite)
+  条件: (hst : Disjoint s t) (hs : s.有限) (ht : t.有限)
   证明: finprod_mem_union' hst (hs.inter_of_left _) (ht.inter_of_left _)
 
 Depends on / 依赖: finprod_mem_union, hs.inter_of_left, ht.inter_of_left, inter_of_left
@@ -2782,7 +2782,7 @@ theorem finprod_mem_singleton
 
 中文:
 定理 finprod_mem_singleton
-  结论: (∏ᶠ i in ({a} : Set α), f i) = f a
+  结论: (∏ᶠ i in ({a} : 集合 α), f i) = f a
   证明: by
   rw [← Finset.coe_singleton]; rw [finprod_mem_coe_finset]; rw [Finset.prod_singleton]
 
@@ -2852,7 +2852,7 @@ theorem finprod_mem_insert'
 
 中文:
 定理 finprod_mem_insert'
-  条件: (f : α -> M) (h : a ∉ s) (hs : (s inter mulSupport f).Finite)
+  条件: (f : α -> M) (h : a ∉ s) (hs : (s inter mulSupport f).有限)
   证明: by
   rw [insert_eq]; rw [finprod_mem_union' _ _ hs]; rw [finprod_mem_singleton]
   · rwa [disjoint_singleton_left]
@@ -2881,7 +2881,7 @@ theorem finprod_mem_insert
 
 中文:
 定理 finprod_mem_insert
-  条件: (f : α -> M) (h : a ∉ s) (hs : s.Finite)
+  条件: (f : α -> M) (h : a ∉ s) (hs : s.有限)
   证明: finprod_mem_insert' f h hs.inter_of_left _
 
 Depends on / 依赖: finprod_mem_insert, hs.inter_of_left, inter_of_left
@@ -2997,7 +2997,7 @@ theorem finprod_mem_pair
 中文:
 定理 finprod_mem_pair
   条件: (h : a != b)
-  结论: (∏ᶠ i in ({a, b} : Set α), f i) = f a * f b
+  结论: (∏ᶠ i in ({a, b} : 集合 α), f i) = f a * f b
   证明: by
   rw [finprod_mem_insert]; rw [finprod_mem_singleton]
   exacts [h, finite_singleton b]
@@ -3031,7 +3031,7 @@ theorem finprod_mem_image'
 
 中文:
 定理 finprod_mem_image'
-  条件: {s : Set β} {g : β -> α} (hg : (s inter mulSupport (f ∘ g)).InjOn g)
+  条件: {s : 集合 β} {g : β -> α} (hg : (s inter mulSupport (f ∘ g)).单射限制 g)
   证明: by
   classical
     by_cases hs : (s inter mulSupport (f ∘ g)).Finite
@@ -3073,7 +3073,7 @@ theorem finprod_mem_image
 
 中文:
 定理 finprod_mem_image
-  条件: {s : Set β} {g : β -> α} (hg : s.InjOn g)
+  条件: {s : 集合 β} {g : β -> α} (hg : s.单射限制 g)
   证明: finprod_mem_image' hg.mono inter_subset_left
 
 Depends on / 依赖: finprod_mem_image, hg.mono, inter_subset_left
@@ -3099,7 +3099,7 @@ theorem finprod_mem_range'
 
 中文:
 定理 finprod_mem_range'
-  条件: {g : β -> α} (hg : (mulSupport (f ∘ g)).InjOn g)
+  条件: {g : β -> α} (hg : (mulSupport (f ∘ g)).单射限制 g)
   证明: by
   rw [← image_univ]; rw [finprod_mem_image']; rw [finprod_mem_univ]
   rwa [univ_inter]
@@ -3127,7 +3127,7 @@ theorem finprod_mem_range
 
 中文:
 定理 finprod_mem_range
-  条件: {g : β -> α} (hg : Injective g)
+  条件: {g : β -> α} (hg : 单射 g)
   结论: ∏ᶠ i in range g, f i = ∏ᶠ j, f (g j)
   证明: finprod_mem_range' hg.injOn
 
@@ -3150,7 +3150,7 @@ theorem finprod_mem_eq_of_bijOn
 
 中文:
 定理 finprod_mem_eq_of_bijOn
-  结论: {s : Set α} {t : Set β} {f : α -> M} {g : β -> M} (e : α -> β)
+  结论: {s : 集合 α} {t : 集合 β} {f : α -> M} {g : β -> M} (e : α -> β)
   证明: by
   rw [← Set.BijOn.image_eq he₀]; rw [finprod_mem_image he₀.2.1]
   exact finprod_mem_congr rfl he₁
@@ -3176,7 +3176,7 @@ theorem finprod_eq_of_bijective
 
 中文:
 定理 finprod_eq_of_bijective
-  结论: {f : α -> M} {g : β -> M} (e : α -> β) (he₀ : Bijective e)
+  结论: {f : α -> M} {g : β -> M} (e : α -> β) (he₀ : 双射 e)
   证明: by
   rw [← finprod_mem_univ f]; rw [← finprod_mem_univ g]
   exact finprod_mem_eq_of_bijOn _ he₀.bijOn_univ fun x _ => he₁ x
@@ -3203,7 +3203,7 @@ theorem finprod_comp
 
 中文:
 定理 finprod_comp
-  条件: {g : β -> M} (e : α -> β) (he₀ : Function.Bijective e)
+  条件: {g : β -> M} (e : α -> β) (he₀ : 函数.双射 e)
   证明: finprod_eq_of_bijective e he₀ fun _ => rfl
 
 @[to_additive]
@@ -3255,7 +3255,7 @@ theorem finprod_set_coe_eq_finprod_mem
 
 中文:
 定理 finprod_set_coe_eq_finprod_mem
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ∏ᶠ j : s, f j = ∏ᶠ i in s, f i
   证明: by
   rw [← finprod_mem_range]; rw [Subtype.range_coe]
@@ -3311,7 +3311,7 @@ alias finprod_mem_inter_mul_diff' := finprod_mem_inter_mu
 
 中文:
 定理 finprod_mem_inter_mul_sdiff'
-  条件: (t : Set α) (h : (s inter mulSupport f).Finite)
+  条件: (t : 集合 α) (h : (s inter mulSupport f).有限)
   证明: by
   rw [← finprod_mem_union']; rw [inter_union_sdiff]
   · rw [disjoint_iff_inf_le]
@@ -3347,7 +3347,7 @@ alias finprod_mem_inter_mul_diff := finprod_mem_inter_mul_sdiff
 
 中文:
 定理 finprod_mem_inter_mul_sdiff
-  条件: (t : Set α) (h : s.Finite)
+  条件: (t : 集合 α) (h : s.有限)
   证明: finprod_mem_inter_mul_sdiff' _ h.inter_of_left _
 
 @[deprecated (since := "2026-06-03")]
@@ -3380,7 +3380,7 @@ theorem finprod_mem_mul_sdiff'
 
 中文:
 定理 finprod_mem_mul_sdiff'
-  条件: (hst : s subseteq t) (ht : (t inter mulSupport f).Finite)
+  条件: (hst : s subseteq t) (ht : (t inter mulSupport f).有限)
   证明: by
   rw [← finprod_mem_inter_mul_sdiff' _ ht]; rw [inter_eq_self_of_subset_right hst]
 
@@ -3411,7 +3411,7 @@ theorem finprod_mem_mul_sdiff
 
 中文:
 定理 finprod_mem_mul_sdiff
-  条件: (hst : s subseteq t) (ht : t.Finite)
+  条件: (hst : s subseteq t) (ht : t.有限)
   证明: finprod_mem_mul_sdiff' hst (ht.inter_of_left _)
 
 @[deprecated (since := "2026-06-03")] alias finprod_mem_mul_diff := finprod_mem_mul_sdiff
@@ -3447,7 +3447,7 @@ theorem finprod_mem_iUnion
 
 中文:
 定理 finprod_mem_iUnion
-  结论: [Finite ι] {t : ι -> Set α} (h : Pairwise (Disjoint on t))
+  结论: [有限 ι] {t : ι -> 集合 α} (h : 两两 (Disjoint on t))
   证明: by
   cases nonempty_fintype ι
   lift t to ι -> Finset α using ht
@@ -3489,7 +3489,7 @@ theorem finprod_mem_biUnion
 
 中文:
 定理 finprod_mem_biUnion
-  结论: {I : Set ι} {t : ι -> Set α} (h : I.PairwiseDisjoint t) (hI : I.Finite)
+  结论: {I : 集合 ι} {t : ι -> 集合 α} (h : I.PairwiseDisjoint t) (hI : I.有限)
   证明: by
   have := hI.fintype
   rw [biUnion_eq_iUnion]; rw [finprod_mem_iUnion]; rw [← finprod_set_coe_eq_finprod_mem]
@@ -3522,7 +3522,7 @@ theorem finprod_mem_sUnion
 
 中文:
 定理 finprod_mem_sUnion
-  结论: {t : Set (Set α)} (h : t.PairwiseDisjoint id) (ht₀ : t.Finite)
+  结论: {t : 集合 (集合 α)} (h : t.PairwiseDisjoint id) (ht₀ : t.有限)
   证明: by
   rw [Set.sUnion_eq_biUnion]
   exact finprod_mem_biUnion h ht₀ ht₁
@@ -3555,7 +3555,7 @@ lemma finprod_option
 
 中文:
 引理 finprod_option
-  条件: {f : Option α -> M} (hf : HasFiniteMulSupport (f ∘ some))
+  条件: {f : 选项类型 α -> M} (hf : HasFiniteMulSupport (f ∘ some))
   证明: by
   replace hf : (mulSupport f).Finite := by simpa [finite_option]
   convert!
@@ -3591,7 +3591,7 @@ lemma finprod_mem_powerset_insert
 
 中文:
 引理 finprod_mem_powerset_insert
-  结论: {f : Set α -> M} {s : Set α} {a : α} (hs : s.Finite)
+  结论: {f : 集合 α -> M} {s : 集合 α} {a : α} (hs : s.有限)
   证明: by
   rw [Set.powerset_insert]; rw [finprod_mem_union (disjoint_powerset_insert has) hs.powerset (hs.powerset.image (insert a))]; rw [finprod_mem_image (powerset_insert_injOn has)]
 
@@ -3620,7 +3620,7 @@ alias finprod_mem_powerset_diff_elem := finprod_mem_pow
 
 中文:
 引理 finprod_mem_powerset_sdiff_elem
-  结论: {f : Set α -> M} {s : Set α} {a : α} (hs : s.Finite)
+  结论: {f : 集合 α -> M} {s : 集合 α} {a : α} (hs : s.有限)
   证明: by
   nth_rw 1 2 [← Set.insert_sdiff_self_of_mem has] -- second appearance hidden by notation
   exact finprod_mem_powerset_insert (hs.subset Set.sdiff_subset)
@@ -3705,7 +3705,7 @@ theorem finprod_mem_comm
 
 中文:
 定理 finprod_mem_comm
-  条件: {s : Set α} {t : Set β} (f : α -> β -> M) (hs : s.Finite) (ht : t.Finite)
+  条件: {s : 集合 α} {t : 集合 β} (f : α -> β -> M) (hs : s.有限) (ht : t.有限)
   证明: by
   lift s to Finset α using hs; lift t to Finset β using ht
   simp only [finprod_mem_coe_finset]
@@ -3755,7 +3755,7 @@ theorem finprod_cond_nonneg
 
 中文:
 定理 finprod_cond_nonneg
-  结论: {R : 类型} [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
+  结论: {R : 类型} [交换半环 R] [偏序 R] [是Ordered环 R]
   证明: finprod_nonneg fun x => finprod_nonneg hf x
 
 @[to_additive]
@@ -3783,7 +3783,7 @@ theorem single_le_finprod
 
 中文:
 定理 single_le_finprod
-  结论: {M : 类型} [CommMonoid M] [Preorder M] [IsOrderedMonoid M]
+  结论: {M : 类型} [交换幺半群 M] [预序 M] [是Ordered幺半群 M]
   证明: by
   classical calc
       f i <= ∏ j in insert i hf.toFinset, f j :=
@@ -3818,7 +3818,7 @@ theorem finprod_eq_zero
 
 中文:
 定理 finprod_eq_zero
-  结论: {M₀ : 类型} [CommMonoidWithZero M₀] (f : α -> M₀) (x : α) (hx : f x = 0)
+  结论: {M₀ : 类型} [带零交换幺半群 M₀] (f : α -> M₀) (x : α) (hx : f x = 0)
   证明: by
   nontriviality
   rw [finprod_eq_prod f hf]
@@ -3855,7 +3855,7 @@ theorem finprod_prod_comm
 
 中文:
 定理 finprod_prod_comm
-  结论: (s : Finset β) (f : α -> β -> M)
+  结论: (s : 有限集 β) (f : α -> β -> M)
   证明: by
   have hU :
     (mulSupport fun a => ∏ b in s, f a b) subseteq
@@ -3898,7 +3898,7 @@ theorem prod_finprod_comm
 
 中文:
 定理 prod_finprod_comm
-  条件: (s : Finset α) (f : α -> β -> M) (h : 对任意 a in s, HasFiniteMulSupport (f a))
+  条件: (s : 有限集 α) (f : α -> β -> M) (h : 对任意 a in s, HasFiniteMulSupport (f a))
   证明: (finprod_prod_comm s (fun b a => f a b) h).symm
 
 @[to_additive]
@@ -3927,7 +3927,7 @@ theorem finprod_prod_filter
 
 中文:
 定理 finprod_prod_filter
-  条件: [DecidableEq α] (f : β -> α) (s : Finset β) (g : β -> M)
+  条件: [DecidableEq α] (f : β -> α) (s : 有限集 β) (g : β -> M)
   证明: by
   rw [finprod_eq_finsetProd_of_mulSupport_subset]
   · rw [Finset.prod_image']
@@ -3960,7 +3960,7 @@ theorem mul_finsum'
 
 中文:
 定理 mul_finsum'
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] (f : α -> R) (r : R)
+  结论: {R : 类型} [非幺非结合半环 R] (f : α -> R) (r : R)
   证明: (AddMonoidHom.mulLeft r).map_finsum h
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, map_finsum, mulLeft
@@ -3979,7 +3979,7 @@ theorem mul_finsum_mem'
 
 中文:
 定理 mul_finsum_mem'
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] {s : Set α} (f : α -> R) (r : R)
+  结论: {R : 类型} [非幺非结合半环 R] {s : 集合 α} (f : α -> R) (r : R)
   证明: (AddMonoidHom.mulLeft r).map_finsum_mem f hs
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, map_finsum_mem, mulLeft
@@ -3998,7 +3998,7 @@ theorem finsum_mul'
 
 中文:
 定理 finsum_mul'
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] (f : α -> R) (r : R)
+  结论: {R : 类型} [非幺非结合半环 R] (f : α -> R) (r : R)
   证明: (AddMonoidHom.mulRight r).map_finsum h
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulRight, map_finsum, mulRight
@@ -4017,7 +4017,7 @@ theorem finsum_mem_mul'
 
 中文:
 定理 finsum_mem_mul'
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] {s : Set α} (f : α -> R) (r : R)
+  结论: {R : 类型} [非幺非结合半环 R] {s : 集合 α} (f : α -> R) (r : R)
   证明: (AddMonoidHom.mulRight r).map_finsum_mem f hs
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulRight, map_finsum_mem, mulRight
@@ -4042,7 +4042,7 @@ theorem mul_finsum
 
 中文:
 定理 mul_finsum
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] [NoZeroDivisors R] (f : α -> R)
+  结论: {R : 类型} [非幺非结合半环 R] [无零因子 R] (f : α -> R)
   证明: by
   classical
   by_cases hr : r = 0
@@ -4077,7 +4077,7 @@ theorem mul_finsum_mem
 
 中文:
 定理 mul_finsum_mem
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] [NoZeroDivisors R] {s : Set α}
+  结论: {R : 类型} [非幺非结合半环 R] [无零因子 R] {s : 集合 α}
   证明: by
   rw [mul_finsum]
   congr
@@ -4110,7 +4110,7 @@ theorem finsum_mul
 
 中文:
 定理 finsum_mul
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] [NoZeroDivisors R] (f : α -> R)
+  结论: {R : 类型} [非幺非结合半环 R] [无零因子 R] (f : α -> R)
   证明: by
   classical
   by_cases hr : r = 0
@@ -4145,7 +4145,7 @@ theorem finsum_mem_mul
 
 中文:
 定理 finsum_mem_mul
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] [NoZeroDivisors R] {s : Set α}
+  结论: {R : 类型} [非幺非结合半环 R] [无零因子 R] {s : 集合 α}
   证明: by
   rw [finsum_mul]
   congr
@@ -4216,8 +4216,8 @@ theorem Finset.mulSupport_of_fiberwise_prod_subset_image
   exact Finset.nonempty_of_prod_ne_one h
 
 中文:
-定理 Finset.mulSupport_of_fiberwise_prod_subset_image
-  结论: [DecidableEq β] (s : Finset α) (f : α -> M)
+定理 有限集.mulSupport_of_fiberwise_prod_subset_image
+  结论: [DecidableEq β] (s : 有限集 α) (f : α -> M)
   证明: by
   simp only [Finset.coe_image]
   intro b h
@@ -4258,7 +4258,7 @@ theorem finprod_mem_finset_product'
 
 中文:
 定理 finprod_mem_finset_product'
-  结论: [DecidableEq α] [DecidableEq β] (s : Finset (α × β))
+  结论: [DecidableEq α] [DecidableEq β] (s : 有限集 (α × β))
   证明: by
   have (a : _) :
       ∏ i in (s.filter fun ab => Prod.fst ab = a).image Prod.snd, f (a, i) =
@@ -4302,7 +4302,7 @@ theorem finprod_mem_finset_product
 
 中文:
 定理 finprod_mem_finset_product
-  条件: (s : Finset (α × β)) (f : α × β -> M)
+  条件: (s : 有限集 (α × β)) (f : α × β -> M)
   证明: by
   classical
     rw [finprod_mem_finset_product']
@@ -4333,7 +4333,7 @@ theorem finprod_mem_finset_product₃
 
 中文:
 定理 finprod_mem_finset_product₃
-  条件: {γ : 类型} (s : Finset (α × β × γ)) (f : α × β × γ -> M)
+  条件: {γ : 类型} (s : 有限集 (α × β × γ)) (f : α × β × γ -> M)
   证明: by
   classical
     rw [finprod_mem_finset_product']
@@ -4433,7 +4433,7 @@ theorem finprod_dmem
 
 中文:
 定理 finprod_dmem
-  条件: {s : Set α} [DecidablePred (· in s)] (f : 对任意 a : α, a in s -> M)
+  条件: {s : 集合 α} [DecidablePred (· in s)] (f : 对任意 a : α, a in s -> M)
   证明: finprod_congr fun _ => finprod_congr fun ha => (dif_pos ha).symm
 
 @[to_additive]
@@ -4461,7 +4461,7 @@ theorem finprod_emb_domain'
 
 中文:
 定理 finprod_emb_domain'
-  结论: {f : α -> β} (hf : Injective f) [DecidablePred (· in Set.range f)]
+  结论: {f : α -> β} (hf : 单射 f) [DecidablePred (· in 集合.range f)]
   证明: by
   simp_rw [← finprod_eq_dif]
   rw [finprod_dmem]; rw [finprod_mem_range hf]; rw [finprod_congr fun a => _]
@@ -4493,7 +4493,7 @@ theorem finprod_emb_domain
 
 中文:
 定理 finprod_emb_domain
-  条件: (f : α ↪ β) [DecidablePred (· in Set.range f)] (g : α -> M)
+  条件: (f : α ↪ β) [DecidablePred (· in 集合.range f)] (g : α -> M)
   证明: finprod_emb_domain' f.injective g
 
 @[simp, norm_cast]
@@ -4514,8 +4514,8 @@ lemma Nat.cast_finprod
   proof: (Nat.castRingHom R).map_finprod f.mulSupport.toFinite
 
 中文:
-引理 Nat.cast_finprod
-  条件: [Finite ι] {R : 类型} [CommSemiring R] (f : ι -> 自然数)
+引理 自然数.cast_finprod
+  条件: [有限 ι] {R : 类型} [交换半环 R] (f : ι -> 自然数)
   证明: (Nat.castRingHom R).map_finprod f.mulSupport.toFinite
 
 Depends on / 依赖: Nat.castRingHom, castRingHom, f.mulSupport.toFinite, map_finprod, mulSupport, toFinite
@@ -4543,8 +4543,8 @@ fun h => hf h.of_comp cast_one cast_injective
 @[s
 
 中文:
-引理 Nat.cast_finprod'
-  条件: {R : 类型} [CommSemiring R] [CharZero R] (f : ι -> 自然数)
+引理 自然数.cast_finprod'
+  条件: {R : 类型} [交换半环 R] [特征零 R] (f : ι -> 自然数)
   证明: by
   by_cases hf : f.HasFiniteMulSupport
   · exact map_finprod (Nat.castRingHom R) hf
@@ -4576,8 +4576,8 @@ lemma Nat.cast_finprod_mem
 @[simp, norm_cast]
 
 中文:
-引理 Nat.cast_finprod_mem
-  条件: {s : Set ι} (hs : s.Finite) {R : 类型} [CommSemiring R] (f : ι -> 自然数)
+引理 自然数.cast_finprod_mem
+  条件: {s : 集合 ι} (hs : s.有限) {R : 类型} [交换半环 R] (f : ι -> 自然数)
   证明: (Nat.castRingHom R).map_finprod_mem _ hs
 
 @[simp, norm_cast]
@@ -4600,8 +4600,8 @@ lemma Nat.cast_finsum
 @[simp, norm_cast]
 
 中文:
-引理 Nat.cast_finsum
-  结论: [Finite ι] {M : 类型} [AddCommMonoidWithOne M]
+引理 自然数.cast_finsum
+  结论: [有限 ι] {M : 类型} [加法交换带幺幺半群 M]
   证明: (Nat.castAddMonoidHom M).map_finsum f.support.toFinite
 
 @[simp, norm_cast]
@@ -4622,8 +4622,8 @@ lemma Nat.cast_finsum_mem
   proof: (Nat.castAddMonoidHom M).map_finsum_mem _ hs
 
 中文:
-引理 Nat.cast_finsum_mem
-  结论: {s : Set ι} (hs : s.Finite) {M : 类型}
+引理 自然数.cast_finsum_mem
+  结论: {s : 集合 ι} (hs : s.有限) {M : 类型}
   证明: (Nat.castAddMonoidHom M).map_finsum_mem _ hs
 
 Depends on / 依赖: Nat.castAddMonoidHom, castAddMonoidHom, map_finsum_mem

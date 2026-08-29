@@ -47,12 +47,12 @@ structure TaggedPrepartition
     - tag_mem_Icc : forall J, tag J in Box.Icc I
 
 中文:
-结构 TaggedPrepartition
+结构 标记预分拆
   参数: (I : Box ι)
-  继承: Prepartition I
+  继承: 预分拆 I
   公理与运算 (2 个):
     - tag : Box ι -> ι -> 实数
-    - tag_mem_Icc : 对任意 J, tag J in Box.Icc I
+    - tag_mem_Icc : 对任意 J, tag J in Box.闭区间 I
 -/
 structure TaggedPrepartition (I : Box ι) extends Prepartition I where
   /-- Choice of tagged point of each box in this prepartition:
@@ -77,7 +77,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Box ι) (TaggedPrepartition I)
+  签名: Membership (Box ι) (标记预分拆 I)
   定义体: ⟨fun π J => J in π.boxes⟩
 
 @[simp]
@@ -99,7 +99,7 @@ theorem mem_toPrepartition
 
 中文:
 定理 mem_toPrepartition
-  条件: {π : TaggedPrepartition I}
+  条件: {π : 标记预分拆 I}
   结论: J in π.toPrepartition ↔ J in π
   证明: Iff.rfl
 
@@ -121,7 +121,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: (π : Prepartition I) (f h)
+  条件: (π : 预分拆 I) (f h)
   结论: J in mk π f h ↔ J in π
   证明: Iff.rfl
 
@@ -139,7 +139,7 @@ definition iUnion
 
 中文:
 定义 iUnion
-  签名: : Set (ι -> 实数)
+  签名: : 集合 (ι -> 实数)
   定义体: π.toPrepartition.iUnion
 
 Depends on / 依赖: iUnion, toPrepartition, toPrepartition.iUnion
@@ -180,7 +180,7 @@ theorem iUnion_mk
 
 中文:
 定理 iUnion_mk
-  条件: (π : Prepartition I) (f h)
+  条件: (π : 预分拆 I) (f h)
   结论: (mk π f h).iUnion = π.iUnion
   证明: rfl
 
@@ -366,7 +366,7 @@ theorem iUnion_filter_not
 
 中文:
 定理 iUnion_filter_not
-  条件: (π : TaggedPrepartition I) (p : Box ι -> 命题)
+  条件: (π : 标记预分拆 I) (p : Box ι -> 命题)
   证明: π.toPrepartition.iUnion_filter_not p
 
 Depends on / 依赖: iUnion_filter_not, toPrepartition, toPrepartition.iUnion_filter_not
@@ -395,7 +395,7 @@ definition biUnionTagged
 
 中文:
 定义 biUnionTagged
-  签名: (π : Prepartition I) (πi : 对任意 J : Box ι, TaggedPrepartition J)
+  签名: (π : 预分拆 I) (πi : 对任意 J : Box ι, 标记预分拆 J)
   定义体: π.biUnion fun J => (πi J).toPrepartition
   tag J := (πi (π.biUnionIndex (fun J => (πi J).toPrepartition) J)).tag J
   tag_mem_Icc _ := Box.le_iff_Icc.1 (π.biUnionIndex_le _ _) ((πi _).tag_mem_Icc _)
@@ -421,7 +421,7 @@ theorem mem_biUnionTagged
 
 中文:
 定理 mem_biUnionTagged
-  条件: (π : Prepartition I) {πi : 对任意 J, TaggedPrepartition J}
+  条件: (π : 预分拆 I) {πi : 对任意 J, 标记预分拆 J}
   证明: π.mem_biUnion
 
 Depends on / 依赖: mem_biUnion
@@ -444,7 +444,7 @@ theorem tag_biUnionTagged
 
 中文:
 定理 tag_biUnionTagged
-  结论: (π : Prepartition I) {πi : 对任意 J, TaggedPrepartition J} (hJ : J in π) {J'}
+  结论: (π : 预分拆 I) {πi : 对任意 J, 标记预分拆 J} (hJ : J in π) {J'}
   证明: by
   rw [← π.biUnionIndex_of_mem (πi := fun J => (πi J).toPrepartition) hJ hJ']
   rfl
@@ -469,7 +469,7 @@ theorem iUnion_biUnionTagged
 
 中文:
 定理 iUnion_biUnionTagged
-  条件: (π : Prepartition I) (πi : 对任意 J, TaggedPrepartition J)
+  条件: (π : 预分拆 I) (πi : 对任意 J, 标记预分拆 J)
   证明: iUnion_biUnion _ _
 
 Depends on / 依赖: iUnion_biUnion
@@ -493,8 +493,8 @@ theorem forall_biUnionTagged
     exact H J hJ J' hJ'
 
 中文:
-定理 forall_biUnionTagged
-  结论: (p : (ι -> 实数) -> Box ι -> 命题) (π : Prepartition I)
+定理 对任意_biUnionTagged
+  结论: (p : (ι -> 实数) -> Box ι -> 命题) (π : 预分拆 I)
   证明: by
   simp only [mem_biUnionTagged]
   refine ⟨fun H J hJ J' hJ' => ?_, fun H J' ⟨J, hJ, hJ'⟩ => ?_⟩
@@ -526,7 +526,7 @@ theorem IsPartition.biUnionTagged
 
 中文:
 定理 IsPartition.biUnionTagged
-  结论: {π : Prepartition I} (h : IsPartition π)
+  结论: {π : 预分拆 I} (h : IsPartition π)
   证明: h.biUnion hi
 
 Depends on / 依赖: biUnion, h.biUnion
@@ -560,7 +560,7 @@ definition biUnionPrepartition
 
 中文:
 定义 biUnionPrepartition
-  签名: (π : TaggedPrepartition I) (πi : 对任意 J : Box ι, Prepartition J)
+  签名: (π : 标记预分拆 I) (πi : 对任意 J : Box ι, 预分拆 J)
   定义体: π.toPrepartition.biUnion πi
   tag J := π.tag (π.toPrepartition.biUnionIndex πi J)
   tag_mem_Icc _ := π.tag_mem_Icc _
@@ -583,7 +583,7 @@ theorem IsPartition.biUnionPrepartition
 
 中文:
 定理 IsPartition.biUnionPrepartition
-  结论: {π : TaggedPrepartition I} (h : IsPartition π)
+  结论: {π : 标记预分拆 I} (h : IsPartition π)
   证明: h.biUnion hi
 
 Depends on / 依赖: biUnion, h.biUnion
@@ -605,7 +605,7 @@ definition infPrepartition
 
 中文:
 定义 infPrepartition
-  签名: (π : TaggedPrepartition I) (π' : Prepartition I)
+  签名: (π : 标记预分拆 I) (π' : 预分拆 I)
   定义体: π.biUnionPrepartition fun J => π'.restrict J
 
 @[simp]
@@ -626,7 +626,7 @@ theorem infPrepartition_toPrepartition
 
 中文:
 定理 infPrepartition_toPrepartition
-  条件: (π : TaggedPrepartition I) (π' : Prepartition I)
+  条件: (π : 标记预分拆 I) (π' : 预分拆 I)
   证明: rfl
 -/
 theorem infPrepartition_toPrepartition (π : TaggedPrepartition I) (π' : Prepartition I) :
@@ -661,7 +661,7 @@ theorem IsPartition.infPrepartition
 
 中文:
 定理 IsPartition.infPrepartition
-  结论: (h₁ : π₁.IsPartition) {π₂ : Prepartition I}
+  结论: (h₁ : π₁.IsPartition) {π₂ : 预分拆 I}
   证明: h₁.inf h₂
 -/
 theorem IsPartition.infPrepartition (h₁ : π₁.IsPartition) {π₂ : Prepartition I}
@@ -682,7 +682,7 @@ definition IsHenstock
 
 中文:
 定义 IsHenstock
-  签名: (π : TaggedPrepartition I)
+  签名: (π : 标记预分拆 I)
   定义体: forall J in π, π.tag J in Box.Icc J
 
 @[simp]
@@ -703,7 +703,7 @@ theorem isHenstock_biUnionTagged
 
 中文:
 定理 isHenstock_biUnionTagged
-  条件: {π : Prepartition I} {πi : 对任意 J, TaggedPrepartition J}
+  条件: {π : 预分拆 I} {πi : 对任意 J, 标记预分拆 J}
   证明: π.forall_biUnionTagged (fun x J => x in Box.Icc J) πi
 
 Depends on / 依赖: Box.Icc, forall_biUnionTagged
@@ -729,7 +729,7 @@ theorem IsHenstock.card_filter_tag_eq_le
 
 中文:
 定理 IsHenstock.card_filter_tag_eq_le
-  条件: [Fintype ι] (h : π.IsHenstock) (x : ι -> 实数)
+  条件: [有限类型 ι] (h : π.IsHenstock) (x : ι -> 实数)
   证明: by
   classical
   calc
@@ -761,7 +761,7 @@ definition IsSubordinate
 
 中文:
 定义 IsSubordinate
-  签名: [Fintype ι] (π : TaggedPrepartition I) (r : (ι -> 实数) -> Ioi (0 : 实数))
+  签名: [有限类型 ι] (π : 标记预分拆 I) (r : (ι -> 实数) -> 左开右无界区间 (0 : 实数))
   定义体: forall J in π, Box.Icc J subseteq closedBall (π.tag J) (r <| π.tag J)
 
 Depends on / 依赖: Box.Icc, closedBall, subseteq
@@ -782,7 +782,7 @@ theorem isSubordinate_biUnionTagged
 
 中文:
 定理 isSubordinate_biUnionTagged
-  结论: [Fintype ι] {π : Prepartition I}
+  结论: [有限类型 ι] {π : 预分拆 I}
   证明: π.forall_biUnionTagged (fun x J => Box.Icc J subseteq closedBall x (r x)) πi
 
 Depends on / 依赖: Box.Icc, closedBall, forall_biUnionTagged, subseteq
@@ -803,7 +803,7 @@ h _ π.toPrepartition.biUnionIndex_mem hJ
 
 中文:
 定理 IsSubordinate.biUnionPrepartition
-  结论: [Fintype ι] (h : IsSubordinate π r)
+  结论: [有限类型 ι] (h : IsSubordinate π r)
   证明: fun _ hJ => Subset.trans (Box.le_iff_Icc.1 <| π.toPrepartition.le_biUnionIndex hJ)
 h _ π.toPrepartition.biUnionIndex_mem hJ
 
@@ -824,7 +824,7 @@ theorem IsSubordinate.infPrepartition
 
 中文:
 定理 IsSubordinate.infPrepartition
-  条件: [Fintype ι] (h : IsSubordinate π r) (π' : Prepartition I)
+  条件: [有限类型 ι] (h : IsSubordinate π r) (π' : 预分拆 I)
   证明: h.biUnionPrepartition _
 
 Depends on / 依赖: biUnionPrepartition, h.biUnionPrepartition
@@ -843,7 +843,7 @@ theorem IsSubordinate.mono'
 
 中文:
 定理 IsSubordinate.mono'
-  结论: [Fintype ι] {π : TaggedPrepartition I} (hr₁ : π.IsSubordinate r₁)
+  结论: [有限类型 ι] {π : 标记预分拆 I} (hr₁ : π.IsSubordinate r₁)
   证明: fun _ hJ _ hx => closedBall_subset_closedBall (h _ hJ) (hr₁ _ hJ hx)
 
 Depends on / 依赖: closedBall_subset_closedBall
@@ -862,7 +862,7 @@ theorem IsSubordinate.mono
 
 中文:
 定理 IsSubordinate.mono
-  结论: [Fintype ι] {π : TaggedPrepartition I} (hr₁ : π.IsSubordinate r₁)
+  结论: [有限类型 ι] {π : 标记预分拆 I} (hr₁ : π.IsSubordinate r₁)
   证明: hr₁.mono' fun J _ => h _ π.tag_mem_Icc J
 
 Depends on / 依赖: tag_mem_Icc
@@ -884,7 +884,7 @@ theorem IsSubordinate.diam_le
 
 中文:
 定理 IsSubordinate.diam_le
-  结论: [Fintype ι] {π : TaggedPrepartition I} (h : π.IsSubordinate r)
+  结论: [有限类型 ι] {π : 标记预分拆 I} (h : π.IsSubordinate r)
   证明: calc
     diam (Box.Icc J) <= diam (closedBall (π.tag J) (r <| π.tag J)) :=
       diam_mono (h J hJ) isBounded_closedBall
@@ -913,7 +913,7 @@ definition single
 
 中文:
 定义 single
-  签名: (I J : Box ι) (hJ : J <= I) (x : ι -> 实数) (h : x in Box.Icc I)
+  签名: (I J : Box ι) (hJ : J <= I) (x : ι -> 实数) (h : x in Box.闭区间 I)
   定义体: ⟨Prepartition.single I J hJ, fun _ => x, fun _ => h⟩
 
 @[simp]
@@ -935,7 +935,7 @@ theorem mem_single
 
 中文:
 定理 mem_single
-  条件: {J'} (hJ : J <= I) (h : x in Box.Icc I)
+  条件: {J'} (hJ : J <= I) (h : x in Box.闭区间 I)
   结论: J' in single I J hJ x h ↔ J' = J
   证明: Finset.mem_singleton
 
@@ -957,7 +957,7 @@ theorem isPartition_single_iff
 
 中文:
 定理 isPartition_single_iff
-  条件: (hJ : J <= I) (h : x in Box.Icc I)
+  条件: (hJ : J <= I) (h : x in Box.闭区间 I)
   证明: Prepartition.isPartition_single_iff hJ
 
 Depends on / 依赖: Prepartition, Prepartition.isPartition_single_iff, isPartition_single_iff
@@ -977,7 +977,7 @@ theorem isPartition_single
 
 中文:
 定理 isPartition_single
-  条件: (h : x in Box.Icc I)
+  条件: (h : x in Box.闭区间 I)
   结论: (single I I le_rfl x h).IsPartition
   证明: Prepartition.isPartitionTop I
 
@@ -997,8 +997,8 @@ theorem forall_mem_single
 @[simp]
 
 中文:
-定理 forall_mem_single
-  条件: (p : (ι -> 实数) -> Box ι -> 命题) (hJ : J <= I) (h : x in Box.Icc I)
+定理 对任意_mem_single
+  条件: (p : (ι -> 实数) -> Box ι -> 命题) (hJ : J <= I) (h : x in Box.闭区间 I)
   证明: by simp
 
 @[simp]
@@ -1017,7 +1017,7 @@ theorem isHenstock_single_iff
 
 中文:
 定理 isHenstock_single_iff
-  条件: (hJ : J <= I) (h : x in Box.Icc I)
+  条件: (hJ : J <= I) (h : x in Box.闭区间 I)
   证明: forall_mem_single (fun x J => x in Box.Icc J) hJ h
 
 Depends on / 依赖: Box.Icc, forall_mem_single
@@ -1039,7 +1039,7 @@ theorem isHenstock_single
 
 中文:
 定理 isHenstock_single
-  条件: (h : x in Box.Icc I)
+  条件: (h : x in Box.闭区间 I)
   结论: IsHenstock (single I I le_rfl x h)
   证明: (isHenstock_single_iff (le_refl I) h).2 h
 
@@ -1063,7 +1063,7 @@ theorem isSubordinate_single
 
 中文:
 定理 isSubordinate_single
-  条件: [Fintype ι] (hJ : J <= I) (h : x in Box.Icc I)
+  条件: [有限类型 ι] (hJ : J <= I) (h : x in Box.闭区间 I)
   证明: forall_mem_single (fun x J => Box.Icc J subseteq closedBall x (r x)) hJ h
 
 @[simp]
@@ -1086,7 +1086,7 @@ theorem iUnion_single
 
 中文:
 定理 iUnion_single
-  条件: (hJ : J <= I) (h : x in Box.Icc I)
+  条件: (hJ : J <= I) (h : x in Box.闭区间 I)
   结论: (single I J hJ x h).iUnion = J
   证明: Prepartition.iUnion_single hJ
 
@@ -1111,7 +1111,7 @@ definition disjUnion
 
 中文:
 定义 disjUnion
-  签名: (π₁ π₂ : TaggedPrepartition I) (h : Disjoint π₁.iUnion π₂.iUnion)
+  签名: (π₁ π₂ : 标记预分拆 I) (h : Disjoint π₁.iUnion π₂.iUnion)
   定义体: π₁.toPrepartition.disjUnion π₂.toPrepartition h
   tag := π₁.boxes.piecewise π₁.tag π₂.tag
   tag_mem_Icc J := by
@@ -1252,7 +1252,7 @@ theorem IsSubordinate.disjUnion
 
 中文:
 定理 IsSubordinate.disjUnion
-  结论: [Fintype ι] (h₁ : IsSubordinate π₁ r) (h₂ : IsSubordinate π₂ r)
+  结论: [有限类型 ι] (h₁ : IsSubordinate π₁ r) (h₂ : IsSubordinate π₂ r)
   证明: by
   classical
   refine fun J hJ => (Finset.mem_union.1 hJ).elim (fun hJ => ?_) fun hJ => ?_
@@ -1423,8 +1423,8 @@ theorem _root_.BoxIntegral.Prepartition.distortion_biUnionTagged
 @[simp]
 
 中文:
-定理 _root_.BoxIntegral.Prepartition.distortion_biUnionTagged
-  结论: (π : Prepartition I)
+定理 _root_.Box整数egral.预分拆.distortion_biUnionTagged
+  结论: (π : 预分拆 I)
   证明: by
   classical exact sup_biUnion _ _
 
@@ -1451,7 +1451,7 @@ theorem distortion_biUnionPrepartition
 
 中文:
 定理 distortion_biUnionPrepartition
-  条件: (π : TaggedPrepartition I) (πi : 对任意 J, Prepartition J)
+  条件: (π : 标记预分拆 I) (πi : 对任意 J, 预分拆 J)
   证明: by
   classical exact sup_biUnion _ _
 
@@ -1497,7 +1497,7 @@ theorem distortion_of_const
 
 中文:
 定理 distortion_of_const
-  条件: {c} (h₁ : π.boxes.Nonempty) (h₂ : 对任意 J in π, Box.distortion J = c)
+  条件: {c} (h₁ : π.boxes.非空) (h₂ : 对任意 J in π, Box.distortion J = c)
   证明: (sup_congr rfl h₂).trans (sup_const h₁ _)
 
 @[simp]
@@ -1519,7 +1519,7 @@ theorem distortion_single
 
 中文:
 定理 distortion_single
-  条件: (hJ : J <= I) (h : x in Box.Icc I)
+  条件: (hJ : J <= I) (h : x in Box.闭区间 I)
   证明: sup_singleton
 
 Depends on / 依赖: sup_singleton

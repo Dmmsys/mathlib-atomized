@@ -35,8 +35,8 @@ theorem IsMulTorsionFree.mk'
   grind [eq_zero_of_pow_eq_zero, zero_pow]
 
 中文:
-定理 IsMulTorsionFree.mk'
-  结论: [IsReduced M]
+定理 是MulTorsionFree.mk'
+  结论: [是既约 M]
   证明: by
   refine ⟨fun n hn x y hxy => ?_⟩
   by_cases h : x != 0 ∧ y != 0
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulTorsionFree M
+  签名: 是MulTorsionFree M
   定义体: by
   refine .mk' fun x hx y hy n hn hxy => ?_
   obtain ⟨u, hu⟩ : Associated x y := by

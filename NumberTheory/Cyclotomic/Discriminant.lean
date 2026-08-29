@@ -49,7 +49,7 @@ theorem discr_zeta_eq_discr_zeta_sub_one
 
 中文:
 定理 discr_zeta_eq_discr_zeta_sub_one
-  条件: (hζ : IsPrimitiveRoot ζ n)
+  条件: (hζ : 是PrimitiveRoot ζ n)
   证明: by
   have : NumberField K := @NumberField.mk _ _ _ (IsCyclotomicExtension.finiteDimensional {n} Rat K)
   have H₁ : (aeval (hζ.powerBasis Rat).gen) (X - 1 : Int[X]) = (hζ.subOnePowerBasis Rat).gen := by simp
@@ -91,7 +91,7 @@ theorem discr_prime_pow_ne_two
 
 中文:
 定理 discr_prime_pow_ne_two
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} K L] [hp : Fact p.Prime]
+  结论: [是CyclotomicExtension {p ^ (k + 1)} K L] [hp : Fact p.素]
   证明: by
   have hne := IsCyclotomicExtension.neZero' (p ^ (k + 1)) K L
   have mf : Module.Finite K L := finiteDimensional {p ^ (k + 1)} K L
@@ -157,7 +157,7 @@ theorem discr_prime_pow_ne_two'
 
 中文:
 定理 discr_prime_pow_ne_two'
-  结论: [IsCyclotomicExtension {p ^ (k + 1)} K L] [hp : Fact p.Prime]
+  结论: [是CyclotomicExtension {p ^ (k + 1)} K L] [hp : Fact p.素]
   证明: by
   simpa [totient_prime_pow hp.out (succ_pos k)] using discr_prime_pow_ne_two hζ hirr hk
 
@@ -186,7 +186,7 @@ theorem discr_prime_pow
 
 中文:
 定理 discr_prime_pow
-  结论: [hcycl : IsCyclotomicExtension {p ^ k} K L] [hp : Fact p.Prime]
+  结论: [hcycl : 是CyclotomicExtension {p ^ k} K L] [hp : Fact p.素]
   证明: by
   rcases k with - | k
   · simp only [coe_basis, _root_.pow_zero, powerBasis_gen _ hζ, totient_one, mul_zero,
@@ -254,7 +254,7 @@ theorem discr_prime_pow_eq_unit_mul_pow
 
 中文:
 定理 discr_prime_pow_eq_unit_mul_pow
-  结论: [IsCyclotomicExtension {p ^ k} K L]
+  结论: [是CyclotomicExtension {p ^ k} K L]
   证明: by
   rw [discr_prime_pow hζ hirr]
   by_cases heven : Even ((p ^ k).totient / 2)
@@ -290,7 +290,7 @@ theorem discr_odd_prime
 
 中文:
 定理 discr_odd_prime
-  结论: [IsCyclotomicExtension {p} K L] [hp : Fact p.Prime]
+  结论: [是CyclotomicExtension {p} K L] [hp : Fact p.素]
   证明: by
   have : IsCyclotomicExtension {p ^ (0 + 1)} K L := by
     rw [zero_add]; rw [pow_one]

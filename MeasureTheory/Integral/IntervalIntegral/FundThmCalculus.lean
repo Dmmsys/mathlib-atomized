@@ -206,12 +206,12 @@ class FTCFilter
 
 中文:
 类 FTCFilter
-  参数: (a : outParam 实数) (outer : Filter 实数) (inner : outParam <| Filter 实数)
-  继承: TendstoIxxClass Ioc outer inner
+  参数: (a : outParam 实数) (outer : 滤子 实数) (inner : outParam <| 滤子 实数)
+  继承: TendstoIxx类 左开右闭区间 outer inner
   公理与运算 (3 个):
     - pure_le : pure a <= outer
     - le_nhds : inner <= 𝓝 a
-    - [meas_gen : IsMeasurablyGenerated inner]
+    - [meas_gen : 是MeasurablyGenerated inner]
 -/
 class FTCFilter (a : outParam Real) (outer : Filter Real) (inner : outParam <| Filter Real) : Prop
     extends TendstoIxxClass Ioc outer inner where
@@ -273,7 +273,7 @@ theorem finiteAt_inner
 
 中文:
 定理 finiteAt_inner
-  结论: {a : 实数} (l : Filter 实数) {l'} [h : FTCFilter a l l'] {μ : Measure 实数}
+  结论: {a : 实数} (l : 滤子 实数) {l'} [h : FTCFilter a l l'] {μ : 测度 实数}
   证明: (μ.finiteAt_nhds a).filter_mono h.le_nhds
 
 Depends on / 依赖: filter_mono, finiteAt_nhds, h.le_nhds, le_nhds
@@ -292,7 +292,7 @@ instance nhds
   le_nhds := le_rfl
 
 中文:
-实例 nhds
+实例 邻域滤子
   签名: (a : 实数)
   定义体: pure_le_nhds a
   le_nhds := le_rfl
@@ -373,7 +373,7 @@ instance nhdsIcc
 
 中文:
 实例 nhdsIcc
-  签名: {x a b : 实数} [h : Fact (x in Icc a b)]
+  签名: {x a b : 实数} [h : Fact (x in 闭区间 a b)]
   定义体: pure_le_nhdsWithin h.out
   le_nhds := inf_le_left
 
@@ -426,7 +426,7 @@ theorem measure_integral_sub_linear_isLittleO_of_tendsto_ae'
 
 中文:
 定理 measure_integral_sub_linear_isLittleO_of_tendsto_ae'
-  结论: [IsMeasurablyGenerated l']
+  结论: [是MeasurablyGenerated l']
   证明: by
   by_cases hE : CompleteSpace E; swap
   · simp [intervalIntegral, integral, hE]
@@ -1042,8 +1042,8 @@ theorem _root_.Continuous.integral_hasStrictDerivAt
     hf.continuousAt
 
 中文:
-定理 _root_.Continuous.integral_hasStrictDerivAt
-  条件: {f : 实数 -> E} (hf : Continuous f) (a b : 实数)
+定理 _root_.连续.integral_hasStrictDerivAt
+  条件: {f : 实数 -> E} (hf : 连续 f) (a b : 实数)
   证明: integral_hasStrictDerivAt_right (hf.intervalIntegrable _ _) (hf.stronglyMeasurableAtFilter _ _)
     hf.continuousAt
 
@@ -1063,8 +1063,8 @@ theorem _root_.Continuous.deriv_integral
   proof: (hf.integral_hasStrictDerivAt a b).hasDerivAt.deriv
 
 中文:
-定理 _root_.Continuous.deriv_integral
-  条件: (f : 实数 -> E) (hf : Continuous f) (a b : 实数)
+定理 _root_.连续.deriv_integral
+  条件: (f : 实数 -> E) (hf : 连续 f) (a b : 实数)
   证明: (hf.integral_hasStrictDerivAt a b).hasDerivAt.deriv
 
 Depends on / 依赖: hasDerivAt, hasDerivAt.deriv, hf.integral_hasStrictDerivAt, integral_hasStrictDerivAt
@@ -1465,7 +1465,7 @@ theorem integral_hasDerivWithinAt_right
 
 中文:
 定理 integral_hasDerivWithinAt_right
-  结论: (hf : 整数erval整数egrable f volume a b) {s t : Set 实数}
+  结论: (hf : 整数erval整数egrable f volume a b) {s t : 集合 实数}
   证明: integral_hasDerivWithinAt_of_tendsto_ae_right hf hmeas (hb.mono_left inf_le_left)
 
 Depends on / 依赖: hb.mono_left, inf_le_left, integral_hasDerivWithinAt_of_tendsto_ae_right, mono_left
@@ -1507,7 +1507,7 @@ theorem derivWithin_integral_right
 
 中文:
 定理 derivWithin_integral_right
-  结论: (hf : 整数erval整数egrable f volume a b) {s t : Set 实数}
+  结论: (hf : 整数erval整数egrable f volume a b) {s t : 集合 实数}
   证明: (integral_hasDerivWithinAt_right hf hmeas hb).derivWithin hs
 
 Depends on / 依赖: derivWithin, integral_hasDerivWithinAt_right, uniqueDiffWithinAt_Ici_Iic_univ
@@ -1555,7 +1555,7 @@ theorem integral_hasDerivWithinAt_left
 
 中文:
 定理 integral_hasDerivWithinAt_left
-  结论: (hf : 整数erval整数egrable f volume a b) {s t : Set 实数}
+  结论: (hf : 整数erval整数egrable f volume a b) {s t : 集合 实数}
   证明: integral_hasDerivWithinAt_of_tendsto_ae_left hf hmeas (ha.mono_left inf_le_left)
 
 Depends on / 依赖: ha.mono_left, inf_le_left, integral_hasDerivWithinAt_of_tendsto_ae_left, mono_left
@@ -1575,7 +1575,7 @@ theorem derivWithin_integral_of_tendsto_ae_left
 
 中文:
 定理 derivWithin_integral_of_tendsto_ae_left
-  结论: (hf : 整数erval整数egrable f volume a b) {s t : Set 实数}
+  结论: (hf : 整数erval整数egrable f volume a b) {s t : 集合 实数}
   证明: (integral_hasDerivWithinAt_of_tendsto_ae_left hf hmeas ha).derivWithin hs
 
 Depends on / 依赖: derivWithin, integral_hasDerivWithinAt_of_tendsto_ae_left, uniqueDiffWithinAt_Ici_Iic_univ
@@ -1597,7 +1597,7 @@ theorem derivWithin_integral_left
 
 中文:
 定理 derivWithin_integral_left
-  结论: (hf : 整数erval整数egrable f volume a b) {s t : Set 实数}
+  结论: (hf : 整数erval整数egrable f volume a b) {s t : 集合 实数}
   证明: (integral_hasDerivWithinAt_left hf hmeas ha).derivWithin hs
 
 Depends on / 依赖: derivWithin, integral_hasDerivWithinAt_left, uniqueDiffWithinAt_Ici_Iic_univ
@@ -1621,7 +1621,7 @@ theorem differentiable_integral_of_continuous
 
 中文:
 定理 differentiable_integral_of_continuous
-  条件: (hcont : Continuous f)
+  条件: (hcont : 连续 f)
   证明: fun _ =>
   (integral_hasDerivAt_right (hcont.intervalIntegrable _ _)
     hcont.aestronglyMeasurable.stronglyMeasurableAtFilter hcont.continuousAt).differentiableAt
@@ -1641,7 +1641,7 @@ theorem differentiableOn_integral_of_continuous
 
 中文:
 定理 differentiableOn_integral_of_continuous
-  条件: {s : Set 实数} (hcont : Continuous f)
+  条件: {s : 集合 实数} (hcont : 连续 f)
   证明: (differentiable_integral_of_continuous hcont).differentiableOn
 
 Depends on / 依赖: differentiableOn, differentiable_integral_of_continuous
@@ -1807,7 +1807,7 @@ theorem sub_le_integral_of_hasDeriv_right_of_le
 
 中文:
 定理 sub_le_integral_of_hasDeriv_right_of_le
-  结论: (hab : a <= b) (hcont : ContinuousOn g (Icc a b))
+  结论: (hab : a <= b) (hcont : ContinuousOn g (闭区间 a b))
   证明: by
   -- This follows from the version on a closed-open interval (applied to `[t, b)` for `t` close to
   -- `a`) and a continuity argument.
@@ -1858,7 +1858,7 @@ theorem integral_le_sub_of_hasDeriv_right_of_le
 
 中文:
 定理 integral_le_sub_of_hasDeriv_right_of_le
-  结论: (hab : a <= b) (hcont : ContinuousOn g (Icc a b))
+  结论: (hab : a <= b) (hcont : ContinuousOn g (闭区间 a b))
   证明: by
   rw [← neg_le_neg_iff]
   convert!
@@ -1918,7 +1918,7 @@ theorem integral_eq_sub_of_hasDeriv_right_of_le
 
 中文:
 定理 integral_eq_sub_of_hasDeriv_right_of_le
-  结论: (hab : a <= b) (hcont : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hcont : ContinuousOn f (闭区间 a b))
   证明: by
   refine (SeparatingDual.eq_iff_forall_dual_eq (R := Real)).2 fun g => ?_
   rw [← g.intervalIntegral_comp_comm f'int]; rw [g.map_sub]
@@ -1981,7 +1981,7 @@ theorem integral_eq_sub_of_hasDerivAt_of_le
 
 中文:
 定理 integral_eq_sub_of_hasDerivAt_of_le
-  结论: (hab : a <= b) (hcont : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hcont : ContinuousOn f (闭区间 a b))
   证明: integral_eq_sub_of_hasDeriv_right_of_le hab hcont (fun x hx => (hderiv x hx).hasDerivWithinAt)
     hint
 
@@ -2004,7 +2004,7 @@ theorem integral_eq_sub_of_hasDerivAt
 
 中文:
 定理 integral_eq_sub_of_hasDerivAt
-  结论: (hderiv : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: (hderiv : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: integral_eq_sub_of_hasDeriv_right (HasDerivAt.continuousOn hderiv)
     (fun _x hx => (hderiv _ (mem_Icc_of_Ioo hx)).hasDerivWithinAt) hint
 
@@ -2155,8 +2155,8 @@ lemma integral_unitInterval_deriv_eq_sub
 refin
 
 中文:
-引理 integral_unitInterval_deriv_eq_sub
-  结论: [RCLike 𝕜] [NormedSpace 𝕜 E] [IsScalarTower 实数 𝕜 E]
+引理 integral_unit整数erval_deriv_eq_sub
+  结论: [RCLike 𝕜] [赋范空间 𝕜 E] [标量塔 实数 𝕜 E]
   证明: by
   let γ (t : Real) : 𝕜 := z₀ + t • z₁
   have hint : IntervalIntegrable (z₁ • (f' ∘ γ)) MeasureTheory.volume 0 1 :=
@@ -2202,7 +2202,7 @@ theorem integrableOn_deriv_right_of_nonneg
 
 中文:
 定理 integrableOn_deriv_right_of_nonneg
-  结论: (hcont : ContinuousOn g (Icc a b))
+  结论: (hcont : ContinuousOn g (闭区间 a b))
   证明: by
   by_cases hab : a < b; swap
   · simp [Ioc_eq_empty hab]
@@ -2257,7 +2257,7 @@ theorem integrableOn_deriv_of_nonneg
 
 中文:
 定理 integrableOn_deriv_of_nonneg
-  结论: (hcont : ContinuousOn g (Icc a b))
+  结论: (hcont : ContinuousOn g (闭区间 a b))
   证明: integrableOn_deriv_right_of_nonneg hcont (fun x hx => (hderiv x hx).hasDerivWithinAt) g'pos
 
 Depends on / 依赖: hasDerivWithinAt, hderiv, integrableOn_deriv_right_of_nonneg
@@ -2281,7 +2281,7 @@ theorem intervalIntegrable_deriv_of_nonneg
   · simp only [uIcc_of_ge, min_eq_right, max_
 
 中文:
-定理 intervalIntegrable_deriv_of_nonneg
+定理 interval整数egrable_deriv_of_nonneg
   结论: (hcont : ContinuousOn g (uIcc a b))
   证明: by
   rcases le_total a b with hab | hab

@@ -73,7 +73,7 @@ definition derivationOfSectionOfKerSqZero
 
 中文:
 定义 derivationOfSectionOfKerSqZero
-  签名: (f : P ->ₐ[R] S) (hf' : (RingHom.ker f) ^ 2 = ⊥) (g : S ->ₐ[R] P)
+  签名: (f : P ->ₐ[R] S) (hf' : (环态射.ker f) ^ 2 = ⊥) (g : S ->ₐ[R] P)
   定义体: ⟨x - g (f x), by
     simpa [RingHom.mem_ker, sub_eq_zero] using AlgHom.congr_fun hg.symm (f x)⟩
   map_add' x y := by simp only [map_add, AddMemClass.mk_add_mk, Subtype.mk.injEq]; ring
@@ -175,7 +175,7 @@ definition retractionOfSectionOfKerSqZero
 
 中文:
 定义 retractionOfSectionOfKerSqZero
-  签名: : S otimes[P] Ω[P⁄R] ->ₗ[P] RingHom.ker (algebraMap P S)
+  签名: : S otimes[P] Ω[P⁄R] ->ₗ[P] 环态射.ker (algebraMap P S)
   定义体: letI := g.toRingHom.toAlgebra
   haveI := isScalarTower_of_section_of_ker_sqZero g hf' hg
   letI f : _ ->ₗ[P] RingHom.ker (algebraMap P S) := (derivationOfSectionOfKerSqZero
@@ -777,7 +777,7 @@ lemma CotangentSpace.map_toInfinitesimal_bijective
 
 中文:
 引理 CotangentSpace.map_toInfinitesimal_bijective
-  条件: (P : Extension.{u} R S)
+  条件: (P : 扩张.{u} R S)
   证明: by
   suffices CotangentSpace.map P.toInfinitesimal =
       (tensorKaehlerQuotKerSqEquiv _ _ _).symm.toLinearMap by
@@ -818,8 +818,8 @@ lemma Cotangent.map_toInfinitesimal_bijective
         Extension.ker
 
 中文:
-引理 Cotangent.map_toInfinitesimal_bijective
-  条件: (P : Extension.{u} R S)
+引理 余切.map_toInfinitesimal_bijective
+  条件: (P : 扩张.{u} R S)
   证明: by
   constructor
   · rw [injective_iff_map_eq_zero]
@@ -872,7 +872,7 @@ lemma H1Cotangent.map_toInfinitesimal_bijective
 
 中文:
 引理 H1Cotangent.map_toInfinitesimal_bijective
-  条件: (P : Extension.{u} R S)
+  条件: (P : 扩张.{u} R S)
   证明: by
   constructor
   · intro x y e

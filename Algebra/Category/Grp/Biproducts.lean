@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasBinaryBiproducts AddCommGrpCat
+  签名: 有BinaryBiproducts 加法交换群范畴
   定义体: HasBinaryBiproducts.of_hasBinaryProducts
 
 Depends on / 依赖: HasBinaryBiproducts, HasBinaryBiproducts.of_hasBinaryProducts, of_hasBinaryProducts
@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteBiproducts AddCommGrpCat
+  签名: 有FiniteBiproducts 加法交换群范畴
   定义体: HasFiniteBiproducts.of_hasFiniteProducts
 
 Depends on / 依赖: HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteProducts, of_hasFiniteProducts
@@ -80,7 +80,7 @@ definition binaryProductLimitCone
 
 中文:
 定义 binaryProductLimitCone
-  签名: (G H : AddCommGrpCat.{u})
+  签名: (G H : 加法交换群范畴.{u})
   定义体: BinaryFan.mk (ofHom (AddMonoidHom.fst G H)) (ofHom (AddMonoidHom.snd G H))
   isLimit := BinaryFan.IsLimit.mk _ (fun l r => ofHom (AddMonoidHom.prod l.hom r.hom))
     (fun _ _ => rfl) (fun _ _ => rfl) (by cat_disch)
@@ -107,7 +107,7 @@ theorem binaryProductLimitCone_cone_π_app_left
 
 中文:
 定理 binaryProductLimitCone_cone_π_app_left
-  条件: (G H : AddCommGrpCat.{u})
+  条件: (G H : 加法交换群范畴.{u})
   证明: rfl
 
 @[simp]
@@ -127,7 +127,7 @@ theorem binaryProductLimitCone_cone_π_app_right
 
 中文:
 定理 binaryProductLimitCone_cone_π_app_right
-  条件: (G H : AddCommGrpCat.{u})
+  条件: (G H : 加法交换群范畴.{u})
   证明: rfl
 -/
 theorem binaryProductLimitCone_cone_π_app_right (G H : AddCommGrpCat.{u}) :
@@ -146,7 +146,7 @@ definition biprodIsoProd
 
 中文:
 定义 biprodIsoProd
-  签名: (G H : AddCommGrpCat.{u})
+  签名: (G H : 加法交换群范畴.{u})
   定义体: IsLimit.conePointUniqueUpToIso (BinaryBiproduct.isLimit G H) (binaryProductLimitCone G H).isLimit
 
 @[simp, elementwise]
@@ -170,7 +170,7 @@ theorem biprodIsoProd_inv_comp_fst
 
 中文:
 定理 biprodIsoProd_inv_comp_fst
-  条件: (G H : AddCommGrpCat.{u})
+  条件: (G H : 加法交换群范畴.{u})
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.left)
 
 @[simp, elementwise]
@@ -194,7 +194,7 @@ theorem biprodIsoProd_inv_comp_snd
 
 中文:
 定理 biprodIsoProd_inv_comp_snd
-  条件: (G H : AddCommGrpCat.{u})
+  条件: (G H : 加法交换群范畴.{u})
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk WalkingPair.right)
 
 @[elementwise]
@@ -217,7 +217,7 @@ lemma biprodIsoProd_inv_comp_desc
 
 中文:
 引理 biprodIsoProd_inv_comp_desc
-  条件: {G H K : AddCommGrpCat.{u}} (f : G ⟶ K) (g : H ⟶ K)
+  条件: {G H K : 加法交换群范畴.{u}} (f : G ⟶ K) (g : H ⟶ K)
   证明: by
   simp [biprod.desc_eq, ← biprodIsoProd_inv_comp_fst, ← biprodIsoProd_inv_comp_snd]
 
@@ -297,7 +297,7 @@ definition productLimitCone
 
 中文:
 定义 productLimitCone
-  签名: : Limits.LimitCone (Discrete.functor f) where
+  签名: : Limits.极限锥 (离散.functor f) where
   定义体: { pt := AddCommGrpCat.of (forall j, f j)
 π := Discrete.natTrans fun j => ofHom Pi.evalAddMonoidHom (fun j => f j) j.as }
   isLimit :=
@@ -338,7 +338,7 @@ definition biproductIsoPi
 
 中文:
 定义 biproductIsoPi
-  签名: (f : J -> AddCommGrpCat.{u})
+  签名: (f : J -> 加法交换群范畴.{u})
   定义体: IsLimit.conePointUniqueUpToIso (biproduct.isLimit f) (productLimitCone f).isLimit
 
 @[simp, elementwise]
@@ -360,7 +360,7 @@ theorem biproductIsoPi_inv_comp_π
 
 中文:
 定理 biproductIsoPi_inv_comp_π
-  条件: (f : J -> AddCommGrpCat.{u}) (j : J)
+  条件: (f : J -> 加法交换群范畴.{u}) (j : J)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ (Discrete.mk j)
 
 Depends on / 依赖: Discrete, Discrete.mk, IsLimit, IsLimit.conePointUniqueUpToIso_inv_comp, conePointUniqueUpToIso_inv_comp

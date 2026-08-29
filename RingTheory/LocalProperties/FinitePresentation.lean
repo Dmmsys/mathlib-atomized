@@ -38,8 +38,8 @@ theorem Module.FinitePresentation.of_localizationSpan'
     (fun g => TensorPro
 
 中文:
-定理 Module.FinitePresentation.of_localizationSpan'
-  结论: (hs : Ideal.span s = ⊤)
+定理 模.有限呈现.of_localizationSpan'
+  结论: (hs : 理想.span s = ⊤)
   证明: by
   have : Module.Finite R M :=
     Module.Finite.of_localizationSpan' (Rₚ := Rₚ) s hs ϕ (fun _ => inferInstance)
@@ -78,8 +78,8 @@ theorem Module.FinitePresentation.of_localizationSpan
   proof: of_localizationSpan' s hs (fun g => LocalizedModule.mkLinearMap (Submonoid.powers g.1) M) h
 
 中文:
-定理 Module.FinitePresentation.of_localizationSpan
-  结论: (hs : Ideal.span s = ⊤)
+定理 模.有限呈现.of_localizationSpan
+  结论: (hs : 理想.span s = ⊤)
   证明: of_localizationSpan' s hs (fun g => LocalizedModule.mkLinearMap (Submonoid.powers g.1) M) h
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, Submonoid, Submonoid.powers, mkLinearMap, of_localizationSpan, powers

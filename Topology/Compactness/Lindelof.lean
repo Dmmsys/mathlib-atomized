@@ -55,7 +55,7 @@ definition IsLindelof
 
 中文:
 定义 IsLindelof
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃f⦄ [NeBot f] [CountableInterFilter f], f <= 𝓟 s -> exists x in s, ClusterPt x f
 
 Depends on / 依赖: ClusterPt, CountableInterFilter
@@ -76,7 +76,7 @@ theorem IsLindelof.compl_mem_sets
 
 中文:
 定理 IsLindelof.compl_mem_sets
-  结论: (hs : IsLindelof s) {f : Filter X} [Countable整数erFilter f]
+  结论: (hs : IsLindelof s) {f : 滤子 X} [余untable整数erFilter f]
   证明: by
   contrapose! hf
   simp only [notMem_iff_inf_principal_compl, compl_compl, inf_assoc] at hf ⊢
@@ -103,7 +103,7 @@ theorem IsLindelof.compl_mem_sets_of_nhdsWithin
 
 中文:
 定理 IsLindelof.compl_mem_sets_of_nhdsWithin
-  结论: (hs : IsLindelof s) {f : Filter X}
+  结论: (hs : IsLindelof s) {f : 滤子 X}
   证明: by
   refine hs.compl_mem_sets fun x hx => ?_
   rw [← disjoint_principal_right]; rw [disjoint_right_comm]; rw [(basis_sets _).disjoint_iff_left]
@@ -134,7 +134,7 @@ theorem IsLindelof.induction_on
 
 中文:
 定理 IsLindelof.induction_on
-  结论: (hs : IsLindelof s) {p : Set X -> 命题}
+  结论: (hs : IsLindelof s) {p : 集合 X -> 命题}
   证明: by
   let f : Filter X := ofCountableUnion {t | p t} hcountable_union (fun t ht _ hsub => hmono hsub ht)
   have : sᶜ in f := hs.compl_mem_sets_of_nhdsWithin (by simpa [f] using! hnhds)
@@ -166,7 +166,7 @@ have hxt : x in t := ht.mem_of_nhdsWithin_neBot hx.mono hstf.2
 
 中文:
 定理 IsLindelof.inter_right
-  条件: (hs : IsLindelof s) (ht : IsClosed t)
+  条件: (hs : IsLindelof s) (ht : 是闭集 t)
   结论: IsLindelof (s inter t)
   证明: by
   intro f hnf _ hstf
@@ -195,7 +195,7 @@ theorem IsLindelof.inter_left
 
 中文:
 定理 IsLindelof.inter_left
-  条件: (ht : IsLindelof t) (hs : IsClosed s)
+  条件: (ht : IsLindelof t) (hs : 是闭集 s)
   结论: IsLindelof (s inter t)
   证明: inter_comm t s ▸ ht.inter_right hs
 
@@ -215,7 +215,7 @@ theorem IsLindelof.diff
 
 中文:
 定理 IsLindelof.diff
-  条件: (hs : IsLindelof s) (ht : IsOpen t)
+  条件: (hs : IsLindelof s) (ht : 是开集 t)
   结论: IsLindelof (s \ t)
   证明: hs.inter_right (isClosed_compl_iff.mpr ht)
 
@@ -234,7 +234,7 @@ theorem IsLindelof.of_isClosed_subset
 
 中文:
 定理 IsLindelof.of_isClosed_subset
-  条件: (hs : IsLindelof s) (ht : IsClosed t) (h : t subseteq s)
+  条件: (hs : IsLindelof s) (ht : 是闭集 t) (h : t subseteq s)
   证明: inter_eq_self_of_subset_right h ▸ hs.inter_right ht
 
 Depends on / 依赖: hs.inter_right, inter_eq_self_of_subset_right, inter_right
@@ -294,8 +294,8 @@ theorem IsLindelof.image
   proof: hs.image_of_continuousOn hf.continuousOn
 
 中文:
-定理 IsLindelof.image
-  条件: {f : X -> Y} (hs : IsLindelof s) (hf : Continuous f)
+定理 IsLindelof.像
+  条件: {f : X -> Y} (hs : IsLindelof s) (hf : 连续 f)
   证明: hs.image_of_continuousOn hf.continuousOn
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hs.image_of_continuousOn, image_of_continuousOn
@@ -317,7 +317,7 @@ have A : 𝓝[tᶜ] x = ⊥ := empty_mem_iff_bot.1 compl_inter_self t ▸ th
 
 中文:
 定理 IsLindelof.adherence_nhdset
-  结论: {f : Filter X} [Countable整数erFilter f] (hs : IsLindelof s)
+  结论: {f : 滤子 X} [余untable整数erFilter f] (hs : IsLindelof s)
   证明: (eq_or_neBot _).casesOn mem_of_eq_bot fun _ =>
 let ⟨x, hx, hfx⟩ := @hs (f ⊓ 𝓟 tᶜ) _ _ inf_le_of_left_le hf₂
     have : x in t := ht₂ x hx hfx.of_inf_left
@@ -351,7 +351,7 @@ theorem IsLindelof.elim_countable_subcover
 
 中文:
 定理 IsLindelof.elim_countable_subcover
-  结论: {ι : 类型v} (hs : IsLindelof s) (U : ι -> Set X)
+  结论: {ι : 类型v} (hs : IsLindelof s) (U : ι -> 集合 X)
   证明: by
   have hmono : forall ⦃s t : Set X⦄, s subseteq t -> (exists r : Set ι, r.Countable ∧ t subseteq ⋃ i in r, U i)
       -> (exists r : Set ι, r.Countable ∧ s subseteq ⋃ i in r, U i) := by
@@ -404,7 +404,7 @@ mem_iUnion.2 ⟨⟨x, hx⟩, mem_interior_iff_mem_nhds.2 hU _ _⟩
 
 中文:
 定理 IsLindelof.elim_nhds_subcover'
-  结论: (hs : IsLindelof s) (U : 对任意 x in s, Set X)
+  结论: (hs : IsLindelof s) (U : 对任意 x in s, 集合 X)
   证明: by
   have := hs.elim_countable_subcover (fun x : s => interior (U x x.2)) (fun _ => isOpen_interior)
     fun x hx =>
@@ -449,7 +449,7 @@ theorem IsLindelof.elim_nhds_subcover
 
 中文:
 定理 IsLindelof.elim_nhds_subcover
-  结论: (hs : IsLindelof s) (U : X -> Set X)
+  结论: (hs : IsLindelof s) (U : X -> 集合 X)
   证明: by
   let ⟨t, ⟨htc, htsub⟩⟩ := hs.elim_nhds_subcover' (fun x _ => U x) hU
   refine ⟨↑t, Countable.image htc Subtype.val, ?_⟩
@@ -488,7 +488,7 @@ theorem IsLindelof.indexed_countable_subcover
 
 中文:
 定理 IsLindelof.indexed_countable_subcover
-  结论: {ι : 类型v} [Nonempty ι]
+  结论: {ι : 类型v} [非空 ι]
   证明: by
   obtain ⟨c, ⟨c_count, c_cov⟩⟩ := hs.elim_countable_subcover U hUo hsU
   rcases c.eq_empty_or_nonempty with rfl | c_nonempty
@@ -526,7 +526,7 @@ refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
 
 中文:
 定理 IsLindelof.disjoint_nhdsSet_left
-  结论: {l : Filter X} [Countable整数erFilter l]
+  结论: {l : 滤子 X} [余untable整数erFilter l]
   证明: by
 refine ⟨fun h x hx => h.mono_left nhds_le_nhdsSet hx, fun H => ?_⟩
   choose! U hxU hUl using fun x hx => (nhds_basis_opens x).disjoint_iff_left.1 (H x hx)
@@ -559,7 +559,7 @@ theorem IsLindelof.disjoint_nhdsSet_right
 
 中文:
 定理 IsLindelof.disjoint_nhdsSet_right
-  结论: {l : Filter X} [Countable整数erFilter l]
+  结论: {l : 滤子 X} [余untable整数erFilter l]
   证明: by
   simpa only [disjoint_comm] using hs.disjoint_nhdsSet_left
 
@@ -628,8 +628,8 @@ theorem IsLindelof.inter_iInter_nonempty
   exact ⟨u, fun _ => husub⟩
 
 中文:
-定理 IsLindelof.inter_iInter_nonempty
-  结论: {ι : 类型v} (hs : IsLindelof s) (t : ι -> Set X)
+定理 IsLindelof.inter_i整数er_nonempty
+  结论: {ι : 类型v} (hs : IsLindelof s) (t : ι -> 集合 X)
   证明: by
   contrapose! hst
   rcases hs.elim_countable_subfamily_closed t htc hst with ⟨u, ⟨_, husub⟩⟩
@@ -659,7 +659,7 @@ theorem IsLindelof.elim_countable_subcover_image
 
 中文:
 定理 IsLindelof.elim_countable_subcover_image
-  结论: {b : Set ι} {c : ι -> Set X} (hs : IsLindelof s)
+  结论: {b : 集合 ι} {c : ι -> 集合 X} (hs : IsLindelof s)
   证明: by
   simp only [Subtype.forall', biUnion_eq_iUnion] at hc₁ hc₂
   rcases hs.elim_countable_subcover (fun i => c i : b -> Set X) hc₁ hc₂ with ⟨d, hd⟩
@@ -805,7 +805,7 @@ Not.elim hnf.ne empty_mem_iff_bot.1 le_principal_iff.1 hsf
 
 中文:
 定理 isLindelof_empty
-  结论: IsLindelof (∅ : Set X)
+  结论: IsLindelof (∅ : 集合 X)
   证明: fun _f hnf _ hsf =>
 Not.elim hnf.ne empty_mem_iff_bot.1 le_principal_iff.1 hsf
 -/
@@ -828,7 +828,7 @@ theorem isLindelof_singleton
 中文:
 定理 isLindelof_singleton
   条件: {x : X}
-  结论: IsLindelof ({x} : Set X)
+  结论: IsLindelof ({x} : 集合 X)
   证明: fun _ hf _ hfa =>
   ⟨x, rfl, ClusterPt.of_le_nhds'
     (hfa.trans <| by simpa only [principal_singleton] using pure_le_nhds x) hf⟩
@@ -847,8 +847,8 @@ theorem Set.Subsingleton.isLindelof
   proof: Subsingleton.induction_on hs isLindelof_empty fun _ => isLindelof_singleton
 
 中文:
-定理 Set.Subsingleton.isLindelof
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.isLindelof
+  条件: (hs : s.子单例)
   结论: IsLindelof s
   证明: Subsingleton.induction_on hs isLindelof_empty fun _ => isLindelof_singleton
 
@@ -873,8 +873,8 @@ theorem Set.Countable.isLindelof_biUnion
   us
 
 中文:
-定理 Set.Countable.isLindelof_biUnion
-  结论: {s : Set ι} {f : ι -> Set X} (hs : s.Countable)
+定理 集合.可数.isLindelof_biUnion
+  结论: {s : 集合 ι} {f : ι -> 集合 X} (hs : s.可数)
   证明: by
   apply isLindelof_of_countable_subcover
   intro i U hU hUcover
@@ -914,8 +914,8 @@ theorem Set.Finite.isLindelof_biUnion
   proof: Set.Countable.isLindelof_biUnion (countable hs) hf
 
 中文:
-定理 Set.Finite.isLindelof_biUnion
-  结论: {s : Set ι} {f : ι -> Set X} (hs : s.Finite)
+定理 集合.有限.isLindelof_biUnion
+  结论: {s : 集合 ι} {f : ι -> 集合 X} (hs : s.有限)
   证明: Set.Countable.isLindelof_biUnion (countable hs) hf
 
 Depends on / 依赖: Countable, Set.Countable.isLindelof_biUnion, countable, isLindelof_biUnion
@@ -933,8 +933,8 @@ theorem Finset.isLindelof_biUnion
   proof: s.finite_toSet.isLindelof_biUnion hf
 
 中文:
-定理 Finset.isLindelof_biUnion
-  条件: (s : Finset ι) {f : ι -> Set X} (hf : 对任意 i in s, IsLindelof (f i))
+定理 有限集.isLindelof_biUnion
+  条件: (s : 有限集 ι) {f : ι -> 集合 X} (hf : 对任意 i in s, IsLindelof (f i))
   证明: s.finite_toSet.isLindelof_biUnion hf
 
 Depends on / 依赖: finite_toSet, isLindelof_biUnion, s.finite_toSet.isLindelof_biUnion
@@ -953,7 +953,7 @@ theorem isLindelof_accumulate
 
 中文:
 定理 isLindelof_accumulate
-  条件: {K : 自然数 -> Set X} (hK : 对任意 n, IsLindelof (K n)) (n : 自然数)
+  条件: {K : 自然数 -> 集合 X} (hK : 对任意 n, IsLindelof (K n)) (n : 自然数)
   证明: (finite_le_nat n).isLindelof_biUnion fun k _ => hK k
 
 Depends on / 依赖: finite_le_nat, isLindelof_biUnion
@@ -972,8 +972,8 @@ theorem Set.Countable.isLindelof_sUnion
   rw [sUnion_eq_biUnion]; exact hf.isLindelof_biUnion hc
 
 中文:
-定理 Set.Countable.isLindelof_sUnion
-  结论: {S : Set (Set X)} (hf : S.Countable)
+定理 集合.可数.isLindelof_sUnion
+  结论: {S : 集合 (集合 X)} (hf : S.可数)
   证明: by
   rw [sUnion_eq_biUnion]; exact hf.isLindelof_biUnion hc
 
@@ -993,8 +993,8 @@ theorem Set.Finite.isLindelof_sUnion
   rw [sUnion_eq_biUnion]; exact hf.isLindelof_biUnion hc
 
 中文:
-定理 Set.Finite.isLindelof_sUnion
-  结论: {S : Set (Set X)} (hf : S.Finite)
+定理 集合.有限.isLindelof_sUnion
+  结论: {S : 集合 (集合 X)} (hf : S.有限)
   证明: by
   rw [sUnion_eq_biUnion]; exact hf.isLindelof_biUnion hc
 
@@ -1014,7 +1014,7 @@ theorem isLindelof_iUnion
 
 中文:
 定理 isLindelof_iUnion
-  条件: {ι : Sort*} {f : ι -> Set X} [Countable ι] (h : 对任意 i, IsLindelof (f i))
+  条件: {ι : 类型层*} {f : ι -> 集合 X} [可数 ι] (h : 对任意 i, IsLindelof (f i))
   证明: (countable_range f).isLindelof_sUnion forall_mem_range.2 h
 
 Depends on / 依赖: countable_range, forall_mem_range, isLindelof_sUnion
@@ -1032,8 +1032,8 @@ theorem Set.Countable.isLindelof
   proof: biUnion_of_singleton s ▸ hs.isLindelof_biUnion fun _ _ => isLindelof_singleton
 
 中文:
-定理 Set.Countable.isLindelof
-  条件: (hs : s.Countable)
+定理 集合.可数.isLindelof
+  条件: (hs : s.可数)
   结论: IsLindelof s
   证明: biUnion_of_singleton s ▸ hs.isLindelof_biUnion fun _ _ => isLindelof_singleton
 
@@ -1052,8 +1052,8 @@ theorem Set.Finite.isLindelof
   proof: biUnion_of_singleton s ▸ hs.isLindelof_biUnion fun _ _ => isLindelof_singleton
 
 中文:
-定理 Set.Finite.isLindelof
-  条件: (hs : s.Finite)
+定理 集合.有限.isLindelof
+  条件: (hs : s.有限)
   结论: IsLindelof s
   证明: biUnion_of_singleton s ▸ hs.isLindelof_biUnion fun _ _ => isLindelof_singleton
 
@@ -1076,7 +1076,7 @@ theorem IsLindelof.countable_of_discrete
 
 中文:
 定理 IsLindelof.countable_of_discrete
-  条件: [DiscreteTopology X] (hs : IsLindelof s)
+  条件: [离散拓扑 X] (hs : IsLindelof s)
   证明: by
   have : forall x : X, ({x} : Set X) in 𝓝 x := by simp [nhds_discrete]
   rcases hs.elim_nhds_subcover (fun x => {x}) fun x _ => this x with ⟨t, ht, _, hssubt⟩
@@ -1103,8 +1103,8 @@ theorem isLindelof_iff_countable
 
 中文:
 定理 isLindelof_iff_countable
-  条件: [DiscreteTopology X]
-  结论: IsLindelof s ↔ s.Countable
+  条件: [离散拓扑 X]
+  结论: IsLindelof s ↔ s.可数
   证明: ⟨fun h => h.countable_of_discrete, fun h => h.isLindelof⟩
 
 Depends on / 依赖: countable_of_discrete, h.countable_of_discrete, h.isLindelof, isLindelof
@@ -1171,7 +1171,7 @@ theorem isLindelof_open_iff_eq_countable_iUnion_of_isTopologicalBasis
 
 中文:
 定理 isLindelof_open_iff_eq_countable_iUnion_of_isTopologicalBasis
-  结论: (b : ι -> Set X)
+  结论: (b : ι -> 集合 X)
   证明: by
   constructor
   · rintro ⟨h₁, h₂⟩
@@ -1221,8 +1221,8 @@ definition Filter.coLindelof
   ⨅ (s : Set X) (_ : IsLindelof s), 𝓟 sᶜ
 
 中文:
-定义 Filter.coLindelof
-  签名: (X : 类型) [TopologicalSpace X]
+定义 滤子.coLindelof
+  签名: (X : 类型) [拓扑空间 X]
   定义体: --`Filter.coLindelof` is the filter generated by complements to Lindelöf sets.
   ⨅ (s : Set X) (_ : IsLindelof s), 𝓟 sᶜ
 -/
@@ -1244,7 +1244,7 @@ theorem hasBasis_coLindelof
 
 中文:
 定理 hasBasis_coLindelof
-  结论: (coLindelof X).HasBasis IsLindelof compl
+  结论: (coLindelof X).有基 IsLindelof compl
   证明: hasBasis_biInf_principal'
     (fun s hs t ht =>
       ⟨s union t, hs.union ht, compl_subset_compl.2 subset_union_left,
@@ -1350,7 +1350,7 @@ theorem Tendsto.isLindelof_insert_range_of_coLindelof
   have : f '' K in l := by
 
 中文:
-定理 Tendsto.isLindelof_insert_range_of_coLindelof
+定理 收敛.isLindelof_insert_range_of_coLindelof
   结论: {f : X -> Y} {y}
   证明: by
   intro l hne _ hle
@@ -1390,8 +1390,8 @@ definition Filter.coclosedLindelof
   ⨅ (s : Set X) (_ : IsClosed s) (_ : IsLindelof s), 𝓟 sᶜ
 
 中文:
-定义 Filter.coclosedLindelof
-  签名: (X : 类型) [TopologicalSpace X]
+定义 滤子.coclosedLindelof
+  签名: (X : 类型) [拓扑空间 X]
   定义体: -- `Filter.coclosedLindelof` is the filter generated by complements to closed Lindelof sets.
   ⨅ (s : Set X) (_ : IsClosed s) (_ : IsLindelof s), 𝓟 sᶜ
 -/
@@ -1500,7 +1500,7 @@ theorem IsLindeof.compl_mem_coclosedLindelof_of_isClosed
 
 中文:
 定理 IsLindeof.compl_mem_coclosedLindelof_of_isClosed
-  条件: (hs : IsLindelof s) (hs' : IsClosed s)
+  条件: (hs : IsLindelof s) (hs' : 是闭集 s)
   证明: hasBasis_coclosedLindelof.mem_of_mem ⟨hs', hs⟩
 
 Depends on / 依赖: hasBasis_coclosedLindelof, hasBasis_coclosedLindelof.mem_of_mem, mem_of_mem
@@ -1519,10 +1519,10 @@ class LindelofSpace
     - isLindelof_univ : IsLindelof (univ : Set X)
 
 中文:
-类 LindelofSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 Lindelof空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isLindelof_univ : IsLindelof (univ : Set X)
+    - isLindelof_univ : IsLindelof (univ : 集合 X)
 -/
 class LindelofSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a Lindelöf space, `Set.univ` is a Lindelöf set. -/
@@ -1541,7 +1541,7 @@ theorem isLindelof_univ_iff
 
 中文:
 定理 isLindelof_univ_iff
-  结论: IsLindelof (univ : Set X) ↔ LindelofSpace X
+  结论: IsLindelof (univ : 集合 X) ↔ Lindelof空间 X
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 -/
 theorem isLindelof_univ_iff : IsLindelof (univ : Set X) ↔ LindelofSpace X :=
@@ -1558,8 +1558,8 @@ theorem isLindelof_univ
 
 中文:
 定理 isLindelof_univ
-  条件: [h : LindelofSpace X]
-  结论: IsLindelof (univ : Set X)
+  条件: [h : Lindelof空间 X]
+  结论: IsLindelof (univ : 集合 X)
   证明: h.isLindelof_univ
 
 Depends on / 依赖: h.isLindelof_univ, isLindelof_univ
@@ -1578,7 +1578,7 @@ theorem cluster_point_of_Lindelof
 
 中文:
 定理 cluster_point_of_Lindelof
-  结论: [LindelofSpace X] (f : Filter X) [NeBot f]
+  结论: [Lindelof空间 X] (f : 滤子 X) [NeBot f]
   证明: by
   simpa using isLindelof_univ (show f <= 𝓟 univ by simp)
 
@@ -1600,8 +1600,8 @@ theorem LindelofSpace.elim_nhds_subcover
   apply top_unique s
 
 中文:
-定理 LindelofSpace.elim_nhds_subcover
-  条件: [LindelofSpace X] (U : X -> Set X) (hU : 对任意 x, U x in 𝓝 x)
+定理 Lindelof空间.elim_nhds_subcover
+  条件: [Lindelof空间 X] (U : X -> 集合 X) (hU : 对任意 x, U x in 𝓝 x)
   证明: by
   obtain ⟨t, tc, -, s⟩ := IsLindelof.elim_nhds_subcover isLindelof_univ U fun x _ => hU x
   use t, tc
@@ -1644,8 +1644,8 @@ theorem IsClosed.isLindelof
   proof: isLindelof_univ.of_isClosed_subset h (subset_univ _)
 
 中文:
-定理 IsClosed.isLindelof
-  条件: [LindelofSpace X] (h : IsClosed s)
+定理 是闭集.isLindelof
+  条件: [Lindelof空间 X] (h : 是闭集 s)
   结论: IsLindelof s
   证明: isLindelof_univ.of_isClosed_subset h (subset_univ _)
 
@@ -1663,8 +1663,8 @@ theorem IsCompact.isLindelof
   proof: by tauto
 
 中文:
-定理 IsCompact.isLindelof
-  条件: (hs : IsCompact s)
+定理 是紧集.isLindelof
+  条件: (hs : 是紧集 s)
   证明: by tauto
 -/
 theorem IsCompact.isLindelof (hs : IsCompact s) :
@@ -1721,10 +1721,10 @@ class NonLindelofSpace
     - nonLindelof_univ : ¬IsLindelof (univ : Set X)
 
 中文:
-类 NonLindelofSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 NonLindelof空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - nonLindelof_univ : ¬IsLindelof (univ : Set X)
+    - nonLindelof_univ : ¬IsLindelof (univ : 集合 X)
 -/
 class NonLindelofSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a non-Lindelöf space, `Set.univ` is not a Lindelöf set. -/
@@ -1740,7 +1740,7 @@ lemma nonLindelof_univ
 
 中文:
 引理 nonLindelof_univ
-  条件: (X : 类型) [TopologicalSpace X] [NonLindelofSpace X]
+  条件: (X : 类型) [拓扑空间 X] [NonLindelof空间 X]
   证明: NonLindelofSpace.nonLindelof_univ
 
 Depends on / 依赖: NonLindelofSpace, NonLindelofSpace.nonLindelof_univ, nonLindelof_univ
@@ -1761,7 +1761,7 @@ theorem IsLindelof.ne_univ
 
 中文:
 定理 IsLindelof.ne_univ
-  条件: [NonLindelofSpace X] (hs : IsLindelof s)
+  条件: [NonLindelof空间 X] (hs : IsLindelof s)
   结论: s != univ
   证明: fun h =>
   nonLindelof_univ X (h ▸ hs)
@@ -1785,8 +1785,8 @@ instance [NonLindelofSpace
 @[simp]
 
 中文:
-实例 [NonLindelofSpace
-  签名: X] : NeBot (Filter.coLindelof X)
+实例 [NonLindelof空间
+  签名: X] : NeBot (滤子.coLindelof X)
   定义体: by
   refine hasBasis_coLindelof.neBot_iff.2 fun {s} hs => ?_
   contrapose hs
@@ -1816,9 +1816,9 @@ theorem Filter.coLindelof_eq_bot
   proof: hasBasis_coLindelof.eq_bot_iff.mpr ⟨Set.univ, isLindelof_univ, Set.compl_univ⟩
 
 中文:
-定理 Filter.coLindelof_eq_bot
-  条件: [LindelofSpace X]
-  结论: Filter.coLindelof X = ⊥
+定理 滤子.coLindelof_eq_bot
+  条件: [Lindelof空间 X]
+  结论: 滤子.coLindelof X = ⊥
   证明: hasBasis_coLindelof.eq_bot_iff.mpr ⟨Set.univ, isLindelof_univ, Set.compl_univ⟩
 
 Depends on / 依赖: Set.compl_univ, Set.univ, compl_univ, eq_bot_iff, hasBasis_coLindelof, hasBasis_coLindelof.eq_bot_iff.mpr, isLindelof_univ
@@ -1835,8 +1835,8 @@ instance [NonLindelofSpace
   body: neBot_of_le coLindelof_le_coclosedLindelof
 
 中文:
-实例 [NonLindelofSpace
-  签名: X] : NeBot (Filter.coclosedLindelof X)
+实例 [NonLindelof空间
+  签名: X] : NeBot (滤子.coclosedLindelof X)
   定义体: neBot_of_le coLindelof_le_coclosedLindelof
 
 Depends on / 依赖: coLindelof_le_coclosedLindelof, neBot_of_le
@@ -1855,8 +1855,8 @@ theorem nonLindelofSpace_of_neBot
 
 中文:
 定理 nonLindelofSpace_of_neBot
-  条件: (_ : NeBot (Filter.coLindelof X))
-  结论: NonLindelofSpace X
+  条件: (_ : NeBot (滤子.coLindelof X))
+  结论: NonLindelof空间 X
   证明: ⟨fun h' => (Filter.nonempty_of_mem h'.compl_mem_coLindelof).ne_empty compl_univ⟩
 
 Depends on / 依赖: Filter, Filter.nonempty_of_mem, compl_mem_coLindelof, compl_univ, ne_empty, nonempty_of_mem
@@ -1873,8 +1873,8 @@ theorem Filter.coLindelof_neBot_iff
   proof: ⟨nonLindelofSpace_of_neBot, fun _ => inferInstance⟩
 
 中文:
-定理 Filter.coLindelof_neBot_iff
-  结论: NeBot (Filter.coLindelof X) ↔ NonLindelofSpace X
+定理 滤子.coLindelof_neBot_iff
+  结论: NeBot (滤子.coLindelof X) ↔ NonLindelof空间 X
   证明: ⟨nonLindelofSpace_of_neBot, fun _ => inferInstance⟩
 
 Depends on / 依赖: nonLindelofSpace_of_neBot
@@ -1893,7 +1893,7 @@ theorem not_LindelofSpace_iff
 
 中文:
 定理 not_LindelofSpace_iff
-  结论: ¬LindelofSpace X ↔ NonLindelofSpace X
+  结论: ¬Lindelof空间 X ↔ NonLindelof空间 X
   证明: ⟨fun h₁ => ⟨fun h₂ => h₁ ⟨h₂⟩⟩, fun ⟨h₁⟩ ⟨h₂⟩ => h₁ h₂⟩
 -/
 theorem not_LindelofSpace_iff : ¬LindelofSpace X ↔ NonLindelofSpace X :=
@@ -1910,8 +1910,8 @@ theorem countable_of_Lindelof_of_discrete
 
 中文:
 定理 countable_of_Lindelof_of_discrete
-  条件: [LindelofSpace X] [DiscreteTopology X]
-  结论: Countable X
+  条件: [Lindelof空间 X] [离散拓扑 X]
+  结论: 可数 X
   证明: countable_univ_iff.mp isLindelof_univ.countable_of_discrete
 
 Depends on / 依赖: countable_of_discrete, countable_univ_iff, countable_univ_iff.mp, isLindelof_univ, isLindelof_univ.countable_of_discrete
@@ -1931,7 +1931,7 @@ theorem countable_cover_nhds_interior
 
 中文:
 定理 countable_cover_nhds_interior
-  条件: [LindelofSpace X] {U : X -> Set X} (hU : 对任意 x, U x in 𝓝 x)
+  条件: [Lindelof空间 X] {U : X -> 集合 X} (hU : 对任意 x, U x in 𝓝 x)
   证明: let ⟨t, ht⟩ := isLindelof_univ.elim_countable_subcover (fun x => interior (U x))
     (fun _ => isOpen_interior) fun x _ => mem_iUnion.2 ⟨x, mem_interior_iff_mem_nhds.2 (hU x)⟩
   ⟨t, ⟨ht.1, univ_subset_iff.1 ht.2⟩⟩
@@ -1956,7 +1956,7 @@ theorem countable_cover_nhds
 
 中文:
 定理 countable_cover_nhds
-  条件: [LindelofSpace X] {U : X -> Set X} (hU : 对任意 x, U x in 𝓝 x)
+  条件: [Lindelof空间 X] {U : X -> 集合 X} (hU : 对任意 x, U x in 𝓝 x)
   证明: let ⟨t, ht⟩ := countable_cover_nhds_interior hU
 ⟨t, ⟨ht.1, univ_subset_iff.1 ht.2.symm.subset.trans
     iUnion₂_mono fun _ _ => interior_subset⟩⟩
@@ -1982,8 +1982,8 @@ theorem Filter.comap_coLindelof_le
   simpa using t.subset_preimage_image f
 
 中文:
-定理 Filter.comap_coLindelof_le
-  条件: {f : X -> Y} (hf : Continuous f)
+定理 滤子.comap_coLindelof_le
+  条件: {f : X -> Y} (hf : 连续 f)
   证明: by
   rw [(hasBasis_coLindelof.comap f).le_basis_iff hasBasis_coLindelof]
   intro t ht
@@ -2009,7 +2009,7 @@ theorem isLindelof_range
 
 中文:
 定理 isLindelof_range
-  条件: [LindelofSpace X] {f : X -> Y} (hf : Continuous f)
+  条件: [Lindelof空间 X] {f : X -> Y} (hf : 连续 f)
   证明: by rw [← image_univ]; exact isLindelof_univ.image hf
 
 Depends on / 依赖: image_univ, isLindelof_univ, isLindelof_univ.image
@@ -2028,7 +2028,7 @@ theorem isLindelof_diagonal
 
 中文:
 定理 isLindelof_diagonal
-  条件: [LindelofSpace X]
+  条件: [Lindelof空间 X]
   结论: IsLindelof (diagonal X)
   证明: @range_diag X ▸ isLindelof_range (continuous_id.prodMk continuous_id)
 
@@ -2050,8 +2050,8 @@ theorem Topology.IsInducing.isLindelof_iff
   exact ⟨x, x_in, hf.mapClusterPt_iff.1 hx⟩
 
 中文:
-定理 Topology.IsInducing.isLindelof_iff
-  条件: {f : X -> Y} (hf : IsInducing f)
+定理 拓扑.是Inducing.isLindelof_iff
+  条件: {f : X -> Y} (hf : 是Inducing f)
   证明: by
   refine ⟨fun hs => hs.image hf.continuous, fun hs F F_ne_bot _ F_le => ?_⟩
   obtain ⟨_, ⟨x, x_in : x in s, rfl⟩, hx : ClusterPt (f x) (map f F)⟩ :=
@@ -2076,8 +2076,8 @@ theorem Topology.IsEmbedding.isLindelof_iff
   proof: hf.isInducing.isLindelof_iff
 
 中文:
-定理 Topology.IsEmbedding.isLindelof_iff
-  条件: {f : X -> Y} (hf : IsEmbedding f)
+定理 拓扑.是嵌入.isLindelof_iff
+  条件: {f : X -> Y} (hf : 是嵌入 f)
   证明: hf.isInducing.isLindelof_iff
 
 Depends on / 依赖: hf.isInducing.isLindelof_iff, isInducing, isLindelof_iff
@@ -2096,8 +2096,8 @@ theorem Topology.IsInducing.isLindelof_preimage
   rwa [hf.isLindelof_iff, image_preimage_eq_inter_range]
 
 中文:
-定理 Topology.IsInducing.isLindelof_preimage
-  结论: {f : X -> Y} (hf : IsInducing f)
+定理 拓扑.是Inducing.isLindelof_preimage
+  结论: {f : X -> Y} (hf : 是Inducing f)
   证明: by
   replace hK := hK.inter_right hf'
   rwa [hf.isLindelof_iff, image_preimage_eq_inter_range]
@@ -2118,8 +2118,8 @@ theorem Topology.IsClosedEmbedding.isLindelof_preimage
   proof: hf.isInducing.isLindelof_preimage (hf.isClosed_range) hK
 
 中文:
-定理 Topology.IsClosedEmbedding.isLindelof_preimage
-  结论: {f : X -> Y} (hf : IsClosedEmbedding f)
+定理 拓扑.是闭嵌入.isLindelof_preimage
+  结论: {f : X -> Y} (hf : 是闭嵌入 f)
   证明: hf.isInducing.isLindelof_preimage (hf.isClosed_range) hK
 
 Depends on / 依赖: hf.isClosed_range, hf.isInducing.isLindelof_preimage, isClosed_range, isInducing, isLindelof_preimage
@@ -2138,8 +2138,8 @@ theorem Topology.IsClosedEmbedding.tendsto_coLindelof
     (hf.isLindelof_preimage hK).compl_mem_coLindelof
 
 中文:
-定理 Topology.IsClosedEmbedding.tendsto_coLindelof
-  条件: {f : X -> Y} (hf : IsClosedEmbedding f)
+定理 拓扑.是闭嵌入.tendsto_coLindelof
+  条件: {f : X -> Y} (hf : 是闭嵌入 f)
   证明: hasBasis_coLindelof.tendsto_right_iff.mpr fun _K hK =>
     (hf.isLindelof_preimage hK).compl_mem_coLindelof
 
@@ -2159,8 +2159,8 @@ theorem Subtype.isLindelof_iff
   proof: IsEmbedding.subtypeVal.isLindelof_iff
 
 中文:
-定理 Subtype.isLindelof_iff
-  条件: {p : X -> 命题} {s : Set { x // p x }}
+定理 子类型.isLindelof_iff
+  条件: {p : X -> 命题} {s : 集合 { x // p x }}
   证明: IsEmbedding.subtypeVal.isLindelof_iff
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isLindelof_iff, isLindelof_iff, subtypeVal
@@ -2180,7 +2180,7 @@ theorem isLindelof_iff_isLindelof_univ
 
 中文:
 定理 isLindelof_iff_isLindelof_univ
-  结论: IsLindelof s ↔ IsLindelof (univ : Set s)
+  结论: IsLindelof s ↔ IsLindelof (univ : 集合 s)
   证明: by
   rw [Subtype.isLindelof_iff]; rw [image_univ]; rw [Subtype.range_coe]
 
@@ -2202,7 +2202,7 @@ alias isLindelof_iff_LindelofSpace := isLindelof_iff_lindelofSpace
 
 中文:
 定理 isLindelof_iff_lindelofSpace
-  结论: IsLindelof s ↔ LindelofSpace s
+  结论: IsLindelof s ↔ Lindelof空间 s
   证明: isLindelof_iff_isLindelof_univ.trans isLindelof_univ_iff
 
 @[deprecated (since := "2026-01-12")]
@@ -2227,7 +2227,7 @@ lemma IsLindelof.of_coe
 
 中文:
 引理 IsLindelof.of_coe
-  条件: [LindelofSpace s]
+  条件: [Lindelof空间 s]
   结论: IsLindelof s
   证明: isLindelof_iff_lindelofSpace.mpr ‹_›
 
@@ -2247,8 +2247,8 @@ theorem IsLindelof.countable
 
 中文:
 定理 IsLindelof.countable
-  条件: (hs : IsLindelof s) (hs' : DiscreteTopology s)
-  结论: s.Countable
+  条件: (hs : IsLindelof s) (hs' : 离散拓扑 s)
+  结论: s.可数
   证明: countable_coe_iff.mp
   (@countable_of_Lindelof_of_discrete _ _ (isLindelof_iff_lindelofSpace.mp hs) hs')
 
@@ -2268,7 +2268,7 @@ theorem IsLindelof.countable_of_isDiscrete
 
 中文:
 定理 IsLindelof.countable_of_isDiscrete
-  条件: (hs : IsLindelof s) (hs' : IsDiscrete s)
+  条件: (hs : IsLindelof s) (hs' : 是离散 s)
   证明: hs.countable hs'.to_subtype
 
 Depends on / 依赖: countable, hs.countable, to_subtype
@@ -2285,8 +2285,8 @@ theorem Topology.IsClosedEmbedding.nonLindelofSpace
   proof: nonLindelofSpace_of_neBot hf.tendsto_coLindelof.neBot
 
 中文:
-定理 Topology.IsClosedEmbedding.nonLindelofSpace
-  结论: [NonLindelofSpace X] {f : X -> Y}
+定理 拓扑.是闭嵌入.nonLindelofSpace
+  结论: [NonLindelof空间 X] {f : X -> Y}
   证明: nonLindelofSpace_of_neBot hf.tendsto_coLindelof.neBot
 -/
 protected theorem Topology.IsClosedEmbedding.nonLindelofSpace [NonLindelofSpace X] {f : X -> Y}
@@ -2302,8 +2302,8 @@ theorem Topology.IsClosedEmbedding.LindelofSpace
   proof: ⟨by rw [hf.isInducing.isLindelof_iff, image_univ]; exact hf.isClosed_range.isLindelof⟩
 
 中文:
-定理 Topology.IsClosedEmbedding.LindelofSpace
-  结论: [h : LindelofSpace Y] {f : X -> Y}
+定理 拓扑.是闭嵌入.Lindelof空间
+  结论: [h : Lindelof空间 Y] {f : X -> Y}
   证明: ⟨by rw [hf.isInducing.isLindelof_iff, image_univ]; exact hf.isClosed_range.isLindelof⟩
 -/
 protected theorem Topology.IsClosedEmbedding.LindelofSpace [h : LindelofSpace Y] {f : X -> Y}
@@ -2325,8 +2325,8 @@ instance [LindelofSpace
     exact (isLindelof_range continuous_inl).union (isLindelof_range continuous_inr)
 
 中文:
-实例 [LindelofSpace
-  签名: X] [LindelofSpace Y] : LindelofSpace (X oplus Y) where
+实例 [Lindelof空间
+  签名: X] [Lindelof空间 Y] : Lindelof空间 (X oplus Y) where
   定义体: by
     rw [← range_inl_union_range_inr]
     exact (isLindelof_range continuous_inl).union (isLindelof_range continuous_inr)
@@ -2358,8 +2358,8 @@ instance Quot.lindelofSpace
 alias Quot.LindelofSpace := Quot.lindelofSpace
 
 中文:
-实例 Quot.lindelofSpace
-  签名: {r : X -> X -> 命题} [LindelofSpace X]
+实例 商.lindelofSpace
+  签名: {r : X -> X -> 命题} [Lindelof空间 X]
   定义体: by
     rw [← range_quot_mk]
     exact isLindelof_range continuous_quot_mk
@@ -2389,8 +2389,8 @@ instance Quotient.lindelofSpace
 alias Quotient.LindelofSpace := Quotient.lindelofSpace
 
 中文:
-实例 Quotient.lindelofSpace
-  签名: {s : Setoid X} [LindelofSpace X]
+实例 商.lindelofSpace
+  签名: {s : 集合等价关系 X} [Lindelof空间 X]
   定义体: Quot.lindelofSpace
 
 @[deprecated (since := "2026-01-12")]
@@ -2415,8 +2415,8 @@ theorem LindelofSpace.of_continuous_surjective
     exact IsLindelof.image (isLindelof_univ_iff.mpr ‹_›) hf
 
 中文:
-定理 LindelofSpace.of_continuous_surjective
-  结论: {f : X -> Y} [LindelofSpace X] (hf : Continuous f)
+定理 Lindelof空间.of_continuous_surjective
+  结论: {f : X -> Y} [Lindelof空间 X] (hf : 连续 f)
   证明: by
     rw [← Set.image_univ_of_surjective hsur]
     exact IsLindelof.image (isLindelof_univ_iff.mpr ‹_›) hf
@@ -2439,7 +2439,7 @@ definition IsHereditarilyLindelof
 
 中文:
 定义 IsHereditarilyLindelof
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall t subseteq s, IsLindelof t
 
 Depends on / 依赖: IsLindelof, subseteq
@@ -2457,10 +2457,10 @@ class HereditarilyLindelofSpace
     - isHereditarilyLindelof_univ : IsHereditarilyLindelof (univ : Set X)
 
 中文:
-类 HereditarilyLindelofSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 HereditarilyLindelof空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isHereditarilyLindelof_univ : IsHereditarilyLindelof (univ : Set X)
+    - isHereditarilyLindelof_univ : IsHereditarilyLindelof (univ : 集合 X)
 -/
 class HereditarilyLindelofSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a Hereditarily Lindelöf space, `Set.univ` is a Hereditarily Lindelöf set. -/
@@ -2518,8 +2518,8 @@ theorem HereditarilyLindelofSpace.isLindelof
 alias HereditarilyLindelof_LindelofSets := HereditarilyLindelofSpace.isLindelof
 
 中文:
-定理 HereditarilyLindelofSpace.isLindelof
-  条件: [HereditarilyLindelofSpace X] (s : Set X)
+定理 HereditarilyLindelof空间.isLindelof
+  条件: [HereditarilyLindelof空间 X] (s : 集合 X)
   证明: by
   apply HereditarilyLindelofSpace.isHereditarilyLindelof_univ
   exact subset_univ s
@@ -2550,8 +2550,8 @@ theorem HereditarilyLindelofSpace.of_forall_isOpen
   exact ⟨t, t_count, hU.trans ht⟩
 
 中文:
-定理 HereditarilyLindelofSpace.of_forall_isOpen
-  条件: (H : 对任意 s : Set X, IsOpen s -> IsLindelof s)
+定理 HereditarilyLindelof空间.of_对任意_isOpen
+  条件: (H : 对任意 s : 集合 X, 是开集 s -> IsLindelof s)
   证明: by
   refine ⟨fun s _ => isLindelof_of_countable_subcover fun U U_open hU => ?_⟩
   obtain ⟨t, t_count, ht⟩ := H (⋃ i, U i) (isOpen_iUnion U_open)
@@ -2591,7 +2591,7 @@ lemma eq_open_union_countable
 
 中文:
 引理 eq_open_union_countable
-  结论: [HereditarilyLindelofSpace X] {ι : 类型} (U : ι -> Set X)
+  结论: [HereditarilyLindelof空间 X] {ι : 类型} (U : ι -> 集合 X)
   证明: by
   have : IsLindelof (⋃ i, U i) := HereditarilyLindelofSpace.isLindelof (⋃ i, U i)
   rcases this.elim_countable_subcover U h (Eq.subset rfl) with ⟨t, ⟨htc, htu⟩⟩
@@ -2625,7 +2625,7 @@ lemma eq_open_union_nat
 
 中文:
 引理 eq_open_union_nat
-  结论: [HereditarilyLindelofSpace X] {ι : 类型} [Nonempty ι] (U : ι -> Set X)
+  结论: [HereditarilyLindelof空间 X] {ι : 类型} [非空 ι] (U : ι -> 集合 X)
   证明: by
   obtain ⟨t, htc, htu⟩ := eq_open_union_countable U h
   rcases eq_empty_or_nonempty t with rfl | t_ne
@@ -2661,7 +2661,7 @@ lemma eq_closed_inter_countable
 
 中文:
 引理 eq_closed_inter_countable
-  结论: [HereditarilyLindelofSpace X] {ι : 类型} (C : ι -> Set X)
+  结论: [HereditarilyLindelof空间 X] {ι : 类型} (C : ι -> 集合 X)
   证明: by
   conv in _ = _ => rw [← compl_inj_iff]; simp
   exact eq_open_union_countable (fun i => (C i)ᶜ) (fun i => (h i).isOpen_compl)
@@ -2685,7 +2685,7 @@ lemma eq_closed_inter_nat
 
 中文:
 引理 eq_closed_inter_nat
-  结论: [HereditarilyLindelofSpace X] {ι : 类型} [Nonempty ι] (C : ι -> Set X)
+  结论: [HereditarilyLindelof空间 X] {ι : 类型} [非空 ι] (C : ι -> 集合 X)
   证明: by
   conv in _ = _ => rw [← compl_inj_iff]; simp
   exact eq_open_union_nat (fun i => (C i)ᶜ) (fun i => (h i).isOpen_compl)
@@ -2707,7 +2707,7 @@ instance [HereditarilyLindelofSpace
 Subtype.isLindelof_iff.2 HereditarilyLindelofSpace.isLindelof _
 
 中文:
-实例 [HereditarilyLindelofSpace
+实例 [HereditarilyLindelof空间
   签名: X] (p
   定义体: HereditarilyLindelofSpace.of_forall_isOpen fun _ _ =>
 Subtype.isLindelof_iff.2 HereditarilyLindelofSpace.isLindelof _

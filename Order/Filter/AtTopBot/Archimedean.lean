@@ -37,8 +37,8 @@ theorem Nat.comap_cast_atTop
   proof: comap_embedding_atTop (fun _ _ => Nat.cast_le) exists_nat_ge
 
 中文:
-定理 Nat.comap_cast_atTop
-  条件: [Semiring R] [PartialOrder R] [IsStrictOrderedRing R] [Archimedean R]
+定理 自然数.comap_cast_atTop
+  条件: [半环 R] [偏序 R] [是StrictOrdered环 R] [阿基米德 R]
   证明: comap_embedding_atTop (fun _ _ => Nat.cast_le) exists_nat_ge
 
 Depends on / 依赖: Nat.cast_le, cast_le, comap_embedding_atTop, exists_nat_ge
@@ -57,7 +57,7 @@ theorem tendsto_natCast_atTop_iff
 
 中文:
 定理 tendsto_natCast_atTop_iff
-  结论: [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  结论: [半环 R] [偏序 R] [是StrictOrdered环 R]
   证明: tendsto_atTop_embedding (fun _ _ => Nat.cast_le) exists_nat_ge
 
 Depends on / 依赖: Nat.cast_le, cast_le, exists_nat_ge, tendsto_atTop_embedding
@@ -77,8 +77,8 @@ theorem PNat.tendsto_comp_val_iff
   exact tendsto_comp_val_Ioi_atTop
 
 中文:
-定理 PNat.tendsto_comp_val_iff
-  条件: {β : 类型} {f : 自然数 -> β} {l : Filter β}
+定理 正自然数.tendsto_comp_val_iff
+  条件: {β : 类型} {f : 自然数 -> β} {l : 滤子 β}
   证明: by
   exact tendsto_comp_val_Ioi_atTop
 
@@ -98,7 +98,7 @@ theorem tendsto_natCast_atTop_atTop
 
 中文:
 定理 tendsto_natCast_atTop_atTop
-  结论: [Semiring R] [PartialOrder R] [IsOrderedRing R]
+  结论: [半环 R] [偏序 R] [是Ordered环 R]
   证明: Nat.mono_cast.tendsto_atTop_atTop exists_nat_ge
 
 Depends on / 依赖: Nat.mono_cast.tendsto_atTop_atTop, exists_nat_ge, mono_cast, tendsto_atTop_atTop
@@ -117,8 +117,8 @@ lemma tendsto_PNat_val_atTop_atTop
   proof: tendsto_atTop_atTop_of_monotone (fun _ _ h => h) fun a => ⟨Nat.succPNat a, Nat.le_succ a⟩
 
 中文:
-引理 tendsto_PNat_val_atTop_atTop
-  结论: Tendsto P自然数.val atTop atTop
+引理 tendsto_P自然数_val_atTop_atTop
+  结论: 收敛 正自然数.val atTop atTop
   证明: tendsto_atTop_atTop_of_monotone (fun _ _ h => h) fun a => ⟨Nat.succPNat a, Nat.le_succ a⟩
 
 Depends on / 依赖: Nat.le_succ, Nat.succPNat, le_succ, succPNat, tendsto_atTop_atTop_of_monotone
@@ -135,8 +135,8 @@ theorem Filter.Eventually.natCast_atTop
   proof: tendsto_natCast_atTop_atTop.eventually h
 
 中文:
-定理 Filter.Eventually.natCast_atTop
-  结论: [Semiring R] [PartialOrder R] [IsOrderedRing R]
+定理 滤子.Eventually.natCast_atTop
+  结论: [半环 R] [偏序 R] [是Ordered环 R]
   证明: tendsto_natCast_atTop_atTop.eventually h
 
 Depends on / 依赖: eventually, tendsto_natCast_atTop_atTop, tendsto_natCast_atTop_atTop.eventually
@@ -158,8 +158,8 @@ theorem Int.comap_cast_atTop
 @[simp]
 
 中文:
-定理 Int.comap_cast_atTop
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+定理 整数.comap_cast_atTop
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R]
   证明: comap_embedding_atTop (fun _ _ => Int.cast_le) fun r =>
     let ⟨n, hn⟩ := exists_nat_ge r; ⟨n, mod_cast hn⟩
 
@@ -183,8 +183,8 @@ theorem Int.comap_cast_atBot
     ⟨-n, by simpa [neg_le] using hn⟩
 
 中文:
-定理 Int.comap_cast_atBot
-  条件: [Ring R] [PartialOrder R] [IsStrictOrderedRing R] [Archimedean R]
+定理 整数.comap_cast_atBot
+  条件: [环 R] [偏序 R] [是StrictOrdered环 R] [阿基米德 R]
   证明: comap_embedding_atBot (fun _ _ => Int.cast_le) fun r =>
     let ⟨n, hn⟩ := exists_nat_ge (-r)
     ⟨-n, by simpa [neg_le] using hn⟩
@@ -208,7 +208,7 @@ theorem tendsto_intCast_atTop_iff
 
 中文:
 定理 tendsto_intCast_atTop_iff
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R] [Archimedean R]
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R] [阿基米德 R]
   证明: by
   rw [← @Int.comap_cast_atTop R]; rw [tendsto_comap_iff]; rfl
 
@@ -230,7 +230,7 @@ theorem tendsto_intCast_atBot_iff
 
 中文:
 定理 tendsto_intCast_atBot_iff
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R]
   证明: by
   rw [← @Int.comap_cast_atBot R]; rw [tendsto_comap_iff]; rfl
 
@@ -251,7 +251,7 @@ theorem tendsto_intCast_atTop_atTop
 
 中文:
 定理 tendsto_intCast_atTop_atTop
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R]
   证明: tendsto_intCast_atTop_iff.2 tendsto_id
 
 Depends on / 依赖: tendsto_id, tendsto_intCast_atTop_iff
@@ -271,8 +271,8 @@ theorem Filter.Eventually.intCast_atTop
   rw [← Int.comap_cast_atTop (R := R)]; exact h.comap _
 
 中文:
-定理 Filter.Eventually.intCast_atTop
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+定理 滤子.Eventually.intCast_atTop
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R]
   证明: by
   rw [← Int.comap_cast_atTop (R := R)]; exact h.comap _
 
@@ -295,8 +295,8 @@ theorem Filter.Eventually.intCast_atBot
 @[simp]
 
 中文:
-定理 Filter.Eventually.intCast_atBot
-  结论: [Ring R] [PartialOrder R] [IsStrictOrderedRing R]
+定理 滤子.Eventually.intCast_atBot
+  结论: [环 R] [偏序 R] [是StrictOrdered环 R]
   证明: by
   rw [← Int.comap_cast_atBot (R := R)]; exact h.comap _
 
@@ -320,8 +320,8 @@ theorem Rat.comap_cast_atTop
     let ⟨n, hn⟩ := exists_nat_ge r; ⟨n, by simpa⟩
 
 中文:
-定理 Rat.comap_cast_atTop
-  条件: [Field R] [LinearOrder R] [IsStrictOrderedRing R] [Archimedean R]
+定理 有理数.comap_cast_atTop
+  条件: [域 R] [线性序 R] [是StrictOrdered环 R] [阿基米德 R]
   证明: comap_embedding_atTop (fun _ _ => Rat.cast_le) fun r =>
     let ⟨n, hn⟩ := exists_nat_ge r; ⟨n, by simpa⟩
 
@@ -343,8 +343,8 @@ theorem Rat.comap_cast_atBot
     ⟨-n, by simpa [neg_le]⟩
 
 中文:
-定理 Rat.comap_cast_atBot
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 有理数.comap_cast_atBot
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: comap_embedding_atBot (fun _ _ => Rat.cast_le) fun r =>
     let ⟨n, hn⟩ := exists_nat_ge (-r)
     ⟨-n, by simpa [neg_le]⟩
@@ -367,7 +367,7 @@ theorem tendsto_ratCast_atTop_iff
 
 中文:
 定理 tendsto_ratCast_atTop_iff
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R] [Archimedean R]
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R] [阿基米德 R]
   证明: by
   rw [← @Rat.comap_cast_atTop R]; rw [tendsto_comap_iff]; rfl
 
@@ -389,7 +389,7 @@ theorem tendsto_ratCast_atBot_iff
 
 中文:
 定理 tendsto_ratCast_atBot_iff
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rw [← @Rat.comap_cast_atBot R]; rw [tendsto_comap_iff]; rfl
 
@@ -410,8 +410,8 @@ theorem Filter.Eventually.ratCast_atTop
   rw [← Rat.comap_cast_atTop (R := R)]; exact h.comap _
 
 中文:
-定理 Filter.Eventually.ratCast_atTop
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 滤子.Eventually.ratCast_atTop
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rw [← Rat.comap_cast_atTop (R := R)]; exact h.comap _
 
@@ -432,8 +432,8 @@ theorem Filter.Eventually.ratCast_atBot
   rw [← Rat.comap_cast_atBot (R := R)]; exact h.comap _
 
 中文:
-定理 Filter.Eventually.ratCast_atBot
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 滤子.Eventually.ratCast_atBot
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rw [← Rat.comap_cast_atBot (R := R)]; exact h.comap _
 
@@ -454,7 +454,7 @@ theorem atTop_hasAntitoneBasis_of_archimedean
 
 中文:
 定理 atTop_hasAntitoneBasis_of_archimedean
-  结论: [Semiring R] [PartialOrder R] [IsOrderedRing R]
+  结论: [半环 R] [偏序 R] [是Ordered环 R]
   证明: hasAntitoneBasis_atTop.comp_mono Nat.mono_cast tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: Nat.mono_cast, comp_mono, hasAntitoneBasis_atTop, hasAntitoneBasis_atTop.comp_mono, mono_cast, tendsto_natCast_atTop_atTop
@@ -474,7 +474,7 @@ theorem atTop_hasCountableBasis_of_archimedean
 
 中文:
 定理 atTop_hasCountableBasis_of_archimedean
-  结论: [Semiring R] [PartialOrder R] [IsOrderedRing R]
+  结论: [半环 R] [偏序 R] [是Ordered环 R]
   证明: ⟨atTop_hasAntitoneBasis_of_archimedean.1, to_countable _⟩
 
 Depends on / 依赖: atTop_hasAntitoneBasis_of_archimedean, to_countable
@@ -498,7 +498,7 @@ theorem atBot_hasCountableBasis_of_archimedean
 
 中文:
 定理 atBot_hasCountableBasis_of_archimedean
-  结论: [Ring R] [PartialOrder R] [IsOrderedRing R]
+  结论: [环 R] [偏序 R] [是Ordered环 R]
   证明: to_countable _
   toHasBasis :=
     atBot_basis.to_hasBasis
@@ -540,7 +540,7 @@ theorem map_add_atTop_eq
 
 中文:
 定理 map_add_atTop_eq
-  结论: [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: map_atTop_eq_of_gc (fun a => a - k) 0 add_left_mono (by simp [le_sub_iff_add_le]) (by simp)
 
 Depends on / 依赖: add_left_mono, le_sub_iff_add_le, map_atTop_eq_of_gc
@@ -561,7 +561,7 @@ theorem map_sub_atTop_eq
 
 中文:
 定理 map_sub_atTop_eq
-  结论: [AddCommGroup α] [PartialOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换群 α] [偏序 α] [是OrderedAdd幺半群 α]
   证明: by
   simp_rw [sub_eq_add_neg]
   apply map_add_atTop_eq
@@ -595,8 +595,8 @@ theorem Tendsto.const_mul_atTop'
     _ <= r * n * max b 0 :=
 
 中文:
-定理 Tendsto.const_mul_atTop'
-  条件: (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.const_mul_atTop'
+  条件: (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: by
   refine tendsto_atTop.2 fun b => ?_
   obtain ⟨n : Nat, hn : 1 <= n • r⟩ := Archimedean.arch 1 hr
@@ -641,8 +641,8 @@ theorem Tendsto.atTop_mul_const'
       exact le_max_left
 
 中文:
-定理 Tendsto.atTop_mul_const'
-  条件: (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.atTop_mul_const'
+  条件: (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: by
   refine tendsto_atTop.2 fun b => ?_
   obtain ⟨n : Nat, hn : 1 <= n • r⟩ := Archimedean.arch 1 hr
@@ -685,8 +685,8 @@ theorem Tendsto.atTop_mul_const_of_neg'
   simpa only [tendsto_neg_atTop_iff, mul_neg] using hf.atTop_mul_const' (neg_pos.mpr hr)
 
 中文:
-定理 Tendsto.atTop_mul_const_of_neg'
-  条件: (hr : r < 0) (hf : Tendsto f l atTop)
+定理 收敛.atTop_mul_const_of_neg'
+  条件: (hr : r < 0) (hf : 收敛 f l atTop)
   证明: by
   simpa only [tendsto_neg_atTop_iff, mul_neg] using hf.atTop_mul_const' (neg_pos.mpr hr)
 
@@ -707,8 +707,8 @@ theorem Tendsto.atBot_mul_const'
   exact hf.atTop_mul_const' hr
 
 中文:
-定理 Tendsto.atBot_mul_const'
-  条件: (hr : 0 < r) (hf : Tendsto f l atBot)
+定理 收敛.atBot_mul_const'
+  条件: (hr : 0 < r) (hf : 收敛 f l atBot)
   证明: by
   simp only [← tendsto_neg_atTop_iff, ← neg_mul] at hf ⊢
   exact hf.atTop_mul_const' hr
@@ -730,8 +730,8 @@ theorem Tendsto.atBot_mul_const_of_neg'
   simpa only [mul_neg, tendsto_neg_atBot_iff] using hf.atBot_mul_const' (neg_pos.2 hr)
 
 中文:
-定理 Tendsto.atBot_mul_const_of_neg'
-  条件: (hr : r < 0) (hf : Tendsto f l atBot)
+定理 收敛.atBot_mul_const_of_neg'
+  条件: (hr : r < 0) (hf : 收敛 f l atBot)
   证明: by
   simpa only [mul_neg, tendsto_neg_atBot_iff] using hf.atBot_mul_const' (neg_pos.2 hr)
 
@@ -759,8 +759,8 @@ theorem Tendsto.atTop_nsmul_const
   exact (tendsto_atTop.mp hf n).mono fun a ha => hn.trans (nsmul_le_nsmul_left hr.le ha)
 
 中文:
-定理 Tendsto.atTop_nsmul_const
-  条件: {f : α -> 自然数} (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.atTop_nsmul_const
+  条件: {f : α -> 自然数} (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: by
   refine tendsto_atTop.mpr fun s => ?_
   obtain ⟨n : Nat, hn : s <= n • r⟩ := Archimedean.arch s hr
@@ -789,8 +789,8 @@ theorem Tendsto.atTop_nsmul_neg_const
   proof: by simpa using hf.atTop_nsmul_const (neg_pos.2 hr)
 
 中文:
-定理 Tendsto.atTop_nsmul_neg_const
-  条件: {f : α -> 自然数} (hr : r < 0) (hf : Tendsto f l atTop)
+定理 收敛.atTop_nsmul_neg_const
+  条件: {f : α -> 自然数} (hr : r < 0) (hf : 收敛 f l atTop)
   证明: by simpa using hf.atTop_nsmul_const (neg_pos.2 hr)
 
 Depends on / 依赖: atTop_nsmul_const, hf.atTop_nsmul_const, neg_pos
@@ -811,8 +811,8 @@ theorem Tendsto.atTop_zsmul_const
   exact (tendsto_atTop.mp hf n).mono fun a ha => hn.trans (zsmul_le_zsmul_left hr.le ha)
 
 中文:
-定理 Tendsto.atTop_zsmul_const
-  条件: {f : α -> 整数} (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.atTop_zsmul_const
+  条件: {f : α -> 整数} (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: by
   refine tendsto_atTop.mpr fun s => ?_
   obtain ⟨n : Nat, hn : s <= n • r⟩ := Archimedean.arch s hr
@@ -837,8 +837,8 @@ theorem Tendsto.atTop_zsmul_neg_const
   proof: by simpa using hf.atTop_zsmul_const (neg_pos.2 hr)
 
 中文:
-定理 Tendsto.atTop_zsmul_neg_const
-  条件: {f : α -> 整数} (hr : r < 0) (hf : Tendsto f l atTop)
+定理 收敛.atTop_zsmul_neg_const
+  条件: {f : α -> 整数} (hr : r < 0) (hf : 收敛 f l atTop)
   证明: by simpa using hf.atTop_zsmul_const (neg_pos.2 hr)
 
 Depends on / 依赖: atTop_zsmul_const, hf.atTop_zsmul_const, neg_pos
@@ -857,8 +857,8 @@ theorem Tendsto.atBot_zsmul_const
   exact hf.atTop_zsmul_const hr
 
 中文:
-定理 Tendsto.atBot_zsmul_const
-  条件: {f : α -> 整数} (hr : 0 < r) (hf : Tendsto f l atBot)
+定理 收敛.atBot_zsmul_const
+  条件: {f : α -> 整数} (hr : 0 < r) (hf : 收敛 f l atBot)
   证明: by
   simp only [← tendsto_neg_atTop_iff, ← neg_zsmul] at hf ⊢
   exact hf.atTop_zsmul_const hr
@@ -879,8 +879,8 @@ theorem Tendsto.atBot_zsmul_neg_const
   proof: by simpa using hf.atBot_zsmul_const (neg_pos.2 hr)
 
 中文:
-定理 Tendsto.atBot_zsmul_neg_const
-  条件: {f : α -> 整数} (hr : r < 0) (hf : Tendsto f l atBot)
+定理 收敛.atBot_zsmul_neg_const
+  条件: {f : α -> 整数} (hr : r < 0) (hf : 收敛 f l atBot)
   证明: by simpa using hf.atBot_zsmul_const (neg_pos.2 hr)
 
 Depends on / 依赖: atBot_zsmul_const, hf.atBot_zsmul_const, neg_pos

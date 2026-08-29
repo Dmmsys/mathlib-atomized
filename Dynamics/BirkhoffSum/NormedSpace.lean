@@ -37,7 +37,7 @@ theorem Function.IsFixedPt.tendsto_birkhoffAverage
     (h.birkhoffAverage_eq R g (Nat.cast_ne_zero.mpr hn)).symm
 
 中文:
-定理 Function.IsFixedPt.tendsto_birkhoffAverage
+定理 函数.IsFixedPt.tendsto_birkhoffAverage
   证明: tendsto_const_nhds.congr' (eventually_ne_atTop 0).mono fun _n hn =>
     (h.birkhoffAverage_eq R g (Nat.cast_ne_zero.mpr hn)).symm
 
@@ -245,7 +245,7 @@ theorem uniformEquicontinuous_birkhoffAverage
 
 中文:
 定理 uniformEquicontinuous_birkhoffAverage
-  条件: (hf : LipschitzWith 1 f) (hg : UniformContinuous g)
+  条件: (hf : LipschitzWith 1 f) (hg : 一致连续 g)
   证明: by
   refine Metric.uniformity_basis_dist_le.uniformEquicontinuous_iff_right.2 fun ε hε => ?_
   rcases (uniformity_basis_edist_le.uniformContinuous_iff Metric.uniformity_basis_dist_le).1 hg ε hε

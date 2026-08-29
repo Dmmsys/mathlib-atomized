@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monomorphisms SSet).IsStableUnderCobaseChange
+  签名: (monomorphisms SSet).是StableUnderCobaseChange
   定义体: by
   change (monomorphisms (_ ⥤ _)).IsStableUnderCobaseChange
   rw [← functorCategory_monomorphisms]
@@ -87,7 +87,7 @@ example (K : Type u) [LinearOrder K] [SuccOrder K] [OrderBot K] [WellFoundedLT K
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderFilteredColimits.{u, u} (monomorphisms SSet.{u})
+  签名: MorphismProperty.是StableUnderFilteredColimits.{u, u} (monomorphisms SSet.{u})
   定义体: by
     change (monomorphisms (_ ⥤ _)).IsStableUnderColimitsOfShape J
     rw [← functorCategory_monomorphisms]

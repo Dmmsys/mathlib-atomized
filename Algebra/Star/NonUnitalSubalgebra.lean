@@ -39,7 +39,7 @@ instance instInvolutiveStar
 
 中文:
 实例 instInvolutiveStar
-  签名: {S R : 类型} [InvolutiveStar R] [SetLike S R] [StarMemClass S R]
+  签名: {S R : 类型} [InvolutiveStar R] [集合状 S R] [StarMem类 S R]
   定义体: Subtype.ext star_star (r : R)
 
 Depends on / 依赖: Subtype, Subtype.ext, star_star
@@ -58,7 +58,7 @@ instance instStarMul
 
 中文:
 实例 instStarMul
-  签名: {S R : 类型} [Mul R] [StarMul R] [SetLike S R]
+  签名: {S R : 类型} [乘法 R] [StarMul R] [集合状 S R]
   定义体: Subtype.ext star_mul _ _
 
 Depends on / 依赖: Subtype, Subtype.ext, star_mul
@@ -77,7 +77,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: {S R : 类型} [AddMonoid R] [StarAddMonoid R] [SetLike S R]
+  签名: {S R : 类型} [加法幺半群 R] [StarAdd幺半群 R] [集合状 S R]
   定义体: Subtype.ext star_add _ _
 
 Depends on / 依赖: Subtype, Subtype.ext, star_add
@@ -96,7 +96,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: {S R : 类型} [NonUnitalNonAssocSemiring R] [StarRing R] [SetLike S R]
+  签名: {S R : 类型} [非幺非结合半环 R] [对合环 R] [集合状 S R]
   定义体: { StarMemClass.instStarMul s, StarMemClass.instStarAddMonoid s with }
 
 Depends on / 依赖: StarMemClass, StarMemClass.instStarAddMonoid, StarMemClass.instStarMul, instStarAddMonoid, instStarMul
@@ -115,7 +115,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: {S : 类型} (R : 类型) {M : 类型} [Star R] [Star M] [SMul R M]
+  签名: {S : 类型} (R : 类型) {M : 类型} [对合 R] [对合 M] [标量乘法 R M]
   定义体: Subtype.ext star_smul _ _
 
 Depends on / 依赖: Subtype, Subtype.ext, star_smul
@@ -214,7 +214,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (subtype s : s -> A) = Subtype.val
+  结论: (subtype s : s -> A) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (subtype s : s -> A) = Subtype.val :=
@@ -233,9 +233,9 @@ structure NonUnitalStarSubalgebra
     - star_mem' : forall {a : A} (_ha : a in carrier), star a in carrier
 
 中文:
-结构 NonUnitalStarSubalgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R]
-  继承: NonUnitalSubalgebra R A
+结构 非幺对合子代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R]
+  继承: NonUnital子代数 R A
   公理与运算 (1 个):
     - star_mem' : 对任意 {a : A} (_ha : a in carrier), star a in carrier
 -/
@@ -267,7 +267,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (NonUnitalStarSubalgebra R A) A where
+  签名: : 集合状 (非幺对合子代数 R A) A where
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonUnitalStarSubalgebra R A)
+  签名: 偏序 (非幺对合子代数 R A)
   定义体: .ofSetLike (NonUnitalStarSubalgebra R A) A
 
 Depends on / 依赖: NonUnitalStarSubalgebra, ofSetLike
@@ -312,7 +312,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R A : 类型} [CommSemiring R] [NonUnitalNonAssocSemiring A] [Module R A] [Star A]
+  签名: {S R A : 类型} [交换半环 R] [非幺非结合半环 A] [模 R A] [对合 A]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -377,7 +377,7 @@ instance instSMulMemClass
 
 中文:
 实例 instSMulMemClass
-  签名: : SMulMemClass (NonUnitalStarSubalgebra R A) R A where
+  签名: : SMulMem类 (非幺对合子代数 R A) R A where
   定义体: s.smul_mem'
 
 Depends on / 依赖: s.smul_mem, smul_mem
@@ -395,7 +395,7 @@ instance instStarMemClass
 
 中文:
 实例 instStarMemClass
-  签名: : StarMemClass (NonUnitalStarSubalgebra R A) A where
+  签名: : StarMem类 (非幺对合子代数 R A) A where
   定义体: s.star_mem'
 
 Depends on / 依赖: s.star_mem, star_mem
@@ -414,7 +414,7 @@ instance instNonUnitalSubringClass
 
 中文:
 实例 instNonUnitalSubringClass
-  签名: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalNonAssocRing A]
+  签名: {R : 类型u} {A : 类型v} [交换环 R] [非幺非结合环 A]
   定义体: { NonUnitalStarSubalgebra.instNonUnitalSubsemiringClass with
     neg_mem := fun _S {x} hx => neg_one_smul R x ▸ SMulMemClass.smul_mem _ hx }
 
@@ -438,7 +438,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : NonUnitalStarSubalgebra R A} {x : A}
+  条件: {s : 非幺对合子代数 R A} {x : A}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -463,7 +463,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : NonUnitalStarSubalgebra R A} (h : 对任意 x : A, x in S ↔ x in T)
+  条件: {S T : 非幺对合子代数 R A} (h : 对任意 x : A, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -487,7 +487,7 @@ theorem mem_toNonUnitalSubalgebra
 
 中文:
 定理 mem_toNonUnitalSubalgebra
-  条件: {S : NonUnitalStarSubalgebra R A} {x}
+  条件: {S : 非幺对合子代数 R A} {x}
   证明: Iff.rfl
 
 @[simp]
@@ -509,7 +509,7 @@ theorem coe_toNonUnitalSubalgebra
 
 中文:
 定理 coe_toNonUnitalSubalgebra
-  条件: (S : NonUnitalStarSubalgebra R A)
+  条件: (S : 非幺对合子代数 R A)
   证明: rfl
 -/
 theorem coe_toNonUnitalSubalgebra (S : NonUnitalStarSubalgebra R A) :
@@ -547,7 +547,7 @@ theorem toNonUnitalSubalgebra_inj
 
 中文:
 定理 toNonUnitalSubalgebra_inj
-  条件: {S U : NonUnitalStarSubalgebra R A}
+  条件: {S U : 非幺对合子代数 R A}
   证明: toNonUnitalSubalgebra_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalSubalgebra_injective, toNonUnitalSubalgebra_injective.eq_iff
@@ -566,7 +566,7 @@ theorem toNonUnitalSubalgebra_le_iff
 
 中文:
 定理 toNonUnitalSubalgebra_le_iff
-  条件: {S₁ S₂ : NonUnitalStarSubalgebra R A}
+  条件: {S₁ S₂ : 非幺对合子代数 R A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -591,7 +591,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : NonUnitalStarSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  签名: (S : 非幺对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
   定义体: { S.toNonUnitalSubalgebra.copy s hs with
     star_mem' := @fun x (hx : x in s) => by
       change star x in s
@@ -619,7 +619,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : NonUnitalStarSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : 非幺对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
   证明: rfl
 -/
 theorem coe_copy (S : NonUnitalStarSubalgebra R A) (s : Set A) (hs : s = ↑S) :
@@ -637,7 +637,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : NonUnitalStarSubalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : 非幺对合子代数 R A) (s : 集合 A) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -661,7 +661,7 @@ definition toNonUnitalSubring
 
 中文:
 定义 toNonUnitalSubring
-  签名: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalRing A] [Module R A]
+  签名: {R : 类型u} {A : 类型v} [交换环 R] [非幺环 A] [模 R A]
   定义体: S.toNonUnitalSubsemiring
   neg_mem' := neg_mem (s := S)
 
@@ -684,7 +684,7 @@ theorem mem_toNonUnitalSubring
 
 中文:
 定理 mem_toNonUnitalSubring
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalRing A] [Module R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺环 A] [模 R A]
   证明: Iff.rfl
 
 @[simp]
@@ -706,7 +706,7 @@ theorem coe_toNonUnitalSubring
 
 中文:
 定理 coe_toNonUnitalSubring
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalRing A] [Module R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺环 A] [模 R A]
   证明: rfl
 -/
 theorem coe_toNonUnitalSubring {R : Type u} {A : Type v} [CommRing R] [NonUnitalRing A] [Module R A]
@@ -723,7 +723,7 @@ theorem toNonUnitalSubring_injective
 
 中文:
 定理 toNonUnitalSubring_injective
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalRing A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺环 A]
   证明: fun S T h => ext fun x => by rw [← mem_toNonUnitalSubring, ← mem_toNonUnitalSubring, h]
 
 Depends on / 依赖: mem_toNonUnitalSubring
@@ -743,7 +743,7 @@ theorem toNonUnitalSubring_inj
 
 中文:
 定理 toNonUnitalSubring_inj
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalRing A] [Module R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺环 A] [模 R A]
   证明: toNonUnitalSubring_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalSubring_injective, toNonUnitalSubring_injective.eq_iff
@@ -763,7 +763,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited S
+  签名: : 可居 S
   定义体: ⟨(0 : S.toNonUnitalSubalgebra)⟩
 
 Depends on / 依赖: S.toNonUnitalSubalgebra, toNonUnitalSubalgebra
@@ -784,7 +784,7 @@ instance toNonUnitalSemiring
 
 中文:
 实例 toNonUnitalSemiring
-  签名: {R A} [CommSemiring R] [NonUnitalSemiring A] [Module R A] [Star A]
+  签名: {R A} [交换半环 R] [非幺半环 A] [模 R A] [对合 A]
   定义体: inferInstance
 -/
 instance toNonUnitalSemiring {R A} [CommSemiring R] [NonUnitalSemiring A] [Module R A] [Star A]
@@ -801,7 +801,7 @@ instance toNonUnitalCommSemiring
 
 中文:
 实例 toNonUnitalCommSemiring
-  签名: {R A} [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
+  签名: {R A} [交换半环 R] [非幺交换半环 A] [模 R A]
   定义体: inferInstance
 -/
 instance toNonUnitalCommSemiring {R A} [CommSemiring R] [NonUnitalCommSemiring A] [Module R A]
@@ -818,7 +818,7 @@ instance toNonUnitalRing
 
 中文:
 实例 toNonUnitalRing
-  签名: {R A} [CommRing R] [NonUnitalRing A] [Module R A] [Star A]
+  签名: {R A} [交换环 R] [非幺环 A] [模 R A] [对合 A]
   定义体: inferInstance
 -/
 instance toNonUnitalRing {R A} [CommRing R] [NonUnitalRing A] [Module R A] [Star A]
@@ -835,7 +835,7 @@ instance toNonUnitalCommRing
 
 中文:
 实例 toNonUnitalCommRing
-  签名: {R A} [CommRing R] [NonUnitalCommRing A] [Module R A] [Star A]
+  签名: {R A} [交换环 R] [非幺交换环 A] [模 R A] [对合 A]
   定义体: inferInstance
 -/
 instance toNonUnitalCommRing {R A} [CommRing R] [NonUnitalCommRing A] [Module R A] [Star A]
@@ -855,7 +855,7 @@ inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
 
 中文:
 定义 toNonUnitalSubalgebra'
-  签名: : NonUnitalStarSubalgebra R A ↪o NonUnitalSubalgebra R A where
+  签名: : 非幺对合子代数 R A ↪o NonUnital子代数 R A where
   定义体: { toFun := fun S => S.toNonUnitalSubalgebra
 inj' := fun S T h => ext by apply SetLike.ext_iff.1 h }
   map_rel_iff' := SetLike.coe_subset_coe.symm.trans SetLike.coe_subset_coe
@@ -881,7 +881,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: SMulMemClass.toModule' _ R' R A S
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.toModule, toModule
@@ -899,7 +899,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module R S
+  签名: : 模 R S
   定义体: S.module'
 
 Depends on / 依赖: S.module, module
@@ -917,7 +917,7 @@ instance instIsScalarTower'
 
 中文:
 实例 instIsScalarTower'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: S.toNonUnitalSubalgebra.instIsScalarTower'
 
 Depends on / 依赖: S.toNonUnitalSubalgebra.instIsScalarTower, instIsScalarTower, toNonUnitalSubalgebra
@@ -936,7 +936,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [IsScalarTower R A A]
+  签名: [标量塔 R A A]
   定义体: Subtype.ext smul_assoc r (x : A) (y : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -954,7 +954,7 @@ instance instSMulCommClass'
 
 中文:
 实例 instSMulCommClass'
-  签名: [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A]
+  签名: [半环 R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A]
   定义体: Subtype.ext smul_comm r' r (s : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -973,7 +973,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass R A A]
+  签名: [标量交换类 R A A]
   定义体: Subtype.ext smul_comm r (x : A) (y : A)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -993,7 +993,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [IsTorsionFree R A]
+  签名: [是无挠 R A]
   定义体: Subtype.coe_injective.moduleIsTorsionFree _ (by simp)
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.moduleIsTorsionFree, coe_injective, moduleIsTorsionFree
@@ -1063,7 +1063,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalNonAssocRing A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺非结合环 A]
   证明: rfl
 -/
 protected theorem coe_neg {R : Type u} {A : Type v} [CommRing R] [NonUnitalNonAssocRing A]
@@ -1082,7 +1082,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [NonUnitalNonAssocRing A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [非幺非结合环 A]
   证明: rfl
 
 @[simp, norm_cast]
@@ -1102,7 +1102,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul R' R] [SMul R' A] [IsScalarTower R' R A] (r : R') (x : S)
+  条件: [标量乘法 R' R] [标量乘法 R' A] [标量塔 R' R A] (r : R') (x : S)
   证明: rfl
 -/
 theorem coe_smul [SMul R' R] [SMul R' A] [IsScalarTower R' R A] (r : R') (x : S) :
@@ -1162,7 +1162,7 @@ theorem toSubring_subtype
 
 中文:
 定理 toSubring_subtype
-  结论: {R A : 类型} [CommRing R] [NonUnitalNonAssocRing A] [Module R A] [Star A]
+  结论: {R A : 类型} [交换环 R] [非幺非结合环 A] [模 R A] [对合 A]
   证明: rfl
 -/
 theorem toSubring_subtype {R A : Type*} [CommRing R] [NonUnitalNonAssocRing A] [Module R A] [Star A]
@@ -1183,7 +1183,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : F) (S : NonUnitalStarSubalgebra R A)
+  签名: (f : F) (S : 非幺对合子代数 R A)
   定义体: S.toNonUnitalSubalgebra.map (f : A ->ₙₐ[R] B)
   star_mem' := by rintro _ ⟨a, ha, rfl⟩; exact ⟨star a, star_mem (s := S) ha, map_star f a⟩
 
@@ -1206,7 +1206,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {S₁ S₂ : NonUnitalStarSubalgebra R A} {f : F}
+  条件: {S₁ S₂ : 非幺对合子代数 R A} {f : F}
   证明: Set.image_mono
 
 Depends on / 依赖: Set.image_mono, image_mono
@@ -1228,7 +1228,7 @@ ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
 中文:
 定理 map_injective
-  条件: {f : F} (hf : Function.Injective f)
+  条件: {f : F} (hf : 函数.单射 f)
   证明: fun _S₁ _S₂ ih =>
 ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
@@ -1253,8 +1253,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : NonUnitalStarSubalgebra R A)
-  结论: map (NonUnitalStarAlgHom.id R A) S = S
+  条件: (S : 非幺对合子代数 R A)
+  结论: map (非幺StarAlg态射.id R A) S = S
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -1274,7 +1274,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (S : NonUnitalStarSubalgebra R A) (g : B ->⋆ₙₐ[R] C) (f : A ->⋆ₙₐ[R] B)
+  条件: (S : 非幺对合子代数 R A) (g : B ->⋆ₙₐ[R] C) (f : A ->⋆ₙₐ[R] B)
   证明: SetLike.coe_injective Set.image_image _ _ _
 
 @[simp]
@@ -1296,7 +1296,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {S : NonUnitalStarSubalgebra R A} {f : F} {y : B}
+  条件: {S : 非幺对合子代数 R A} {f : F} {y : B}
   证明: NonUnitalSubalgebra.mem_map
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubalgebra.mem_map, mem_map
@@ -1317,7 +1317,7 @@ theorem map_toNonUnitalSubalgebra
 
 中文:
 定理 map_toNonUnitalSubalgebra
-  条件: {S : NonUnitalStarSubalgebra R A} {f : F}
+  条件: {S : 非幺对合子代数 R A} {f : F}
   证明: SetLike.coe_injective rfl
 
 @[simp, norm_cast]
@@ -1341,7 +1341,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (S : NonUnitalStarSubalgebra R A) (f : F)
+  条件: (S : 非幺对合子代数 R A) (f : F)
   结论: map f S = f '' S
   证明: rfl
 -/
@@ -1360,7 +1360,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : F) (S : NonUnitalStarSubalgebra R B)
+  签名: (f : F) (S : 非幺对合子代数 R B)
   定义体: S.toNonUnitalSubalgebra.comap f
   star_mem' := @fun a (ha : f a in S) =>
     show f (star a) in S from (map_star f a).symm ▸ star_mem (s := S) ha
@@ -1382,7 +1382,7 @@ theorem map_le
 
 中文:
 定理 map_le
-  条件: {S : NonUnitalStarSubalgebra R A} {f : F} {U : NonUnitalStarSubalgebra R B}
+  条件: {S : 非幺对合子代数 R A} {f : F} {U : 非幺对合子代数 R B}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -1429,7 +1429,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: (S : NonUnitalStarSubalgebra R B) (f : F) (x : A)
+  条件: (S : 非幺对合子代数 R B) (f : F) (x : A)
   结论: x in comap f S ↔ f x in S
   证明: Iff.rfl
 
@@ -1452,8 +1452,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (S : NonUnitalStarSubalgebra R B) (f : F)
-  结论: comap f S = f ⁻¹' (S : Set B)
+  条件: (S : 非幺对合子代数 R B) (f : F)
+  结论: comap f S = f ⁻¹' (S : 集合 B)
   证明: rfl
 -/
 theorem coe_comap (S : NonUnitalStarSubalgebra R B) (f : F) : comap f S = f ⁻¹' (S : Set B) :=
@@ -1469,7 +1469,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: {R A : 类型} [CommSemiring R] [NonUnitalSemiring A] [NoZeroDivisors A]
+  签名: {R A : 类型} [交换半环 R] [非幺半环 A] [无零因子 A]
   定义体: NonUnitalSubsemiringClass.noZeroDivisors S
 
 Depends on / 依赖: NonUnitalSubsemiringClass, NonUnitalSubsemiringClass.noZeroDivisors, noZeroDivisors
@@ -1523,7 +1523,7 @@ theorem mem_toNonUnitalStarSubalgebra
 
 中文:
 定理 mem_toNonUnitalStarSubalgebra
-  条件: {s : NonUnitalSubalgebra R A} {h_star} {x}
+  条件: {s : NonUnital子代数 R A} {h_star} {x}
   证明: Iff.rfl
 
 @[simp]
@@ -1547,7 +1547,7 @@ theorem coe_toNonUnitalStarSubalgebra
 
 中文:
 定理 coe_toNonUnitalStarSubalgebra
-  条件: (s : NonUnitalSubalgebra R A) (h_star)
+  条件: (s : NonUnital子代数 R A) (h_star)
   证明: rfl
 
 @[simp]
@@ -1569,7 +1569,7 @@ theorem toNonUnitalStarSubalgebra_toNonUnitalSubalgebra
 
 中文:
 定理 toNonUnitalStarSubalgebra_toNonUnitalSubalgebra
-  条件: (s : NonUnitalSubalgebra R A) (h_star)
+  条件: (s : NonUnital子代数 R A) (h_star)
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -1589,7 +1589,7 @@ theorem _root_.NonUnitalStarSubalgebra.toNonUnitalSubalgebra_toNonUnitalStarSuba
   proof: SetLike.coe_injective rfl
 
 中文:
-定理 _root_.NonUnitalStarSubalgebra.toNonUnitalSubalgebra_toNonUnitalStarSubalgebra
+定理 _root_.非幺对合子代数.toNonUnitalSubalgebra_toNonUnitalStarSubalgebra
   证明: SetLike.coe_injective rfl
 -/
 theorem _root_.NonUnitalStarSubalgebra.toNonUnitalSubalgebra_toNonUnitalStarSubalgebra
@@ -1744,7 +1744,7 @@ map_star' := fun a => Subtype.ext map_star f a
 
 中文:
 定义 codRestrict
-  签名: (f : F) (S : NonUnitalStarSubalgebra R B) (hf : 对任意 x, f x in S)
+  签名: (f : F) (S : 非幺对合子代数 R B) (hf : 对任意 x, f x in S)
   定义体: NonUnitalAlgHom.codRestrict f S.toNonUnitalSubalgebra hf
 map_star' := fun a => Subtype.ext map_star f a
 
@@ -1769,7 +1769,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: (f : F) (S : NonUnitalStarSubalgebra R B) (hf : 对任意 x : A, f x in S)
+  条件: (f : F) (S : 非幺对合子代数 R B) (hf : 对任意 x : A, f x in S)
   证明: NonUnitalStarAlgHom.ext fun _ => rfl
 
 @[simp]
@@ -1791,7 +1791,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : F) (S : NonUnitalStarSubalgebra R B) (hf : 对任意 x, f x in S) (x : A)
+  条件: (f : F) (S : 非幺对合子代数 R B) (hf : 对任意 x, f x in S) (x : A)
   证明: rfl
 -/
 theorem coe_codRestrict (f : F) (S : NonUnitalStarSubalgebra R B) (hf : forall x, f x in S) (x : A) :
@@ -1808,7 +1808,7 @@ theorem injective_codRestrict
 
 中文:
 定理 injective_codRestrict
-  条件: (f : F) (S : NonUnitalStarSubalgebra R B) (hf : 对任意 x : A, f x in S)
+  条件: (f : F) (S : 非幺对合子代数 R B) (hf : 对任意 x : A, f x in S)
   证明: ⟨fun H _x _y hxy => H Subtype.ext hxy, fun H _x _y hxy => H (congr_arg Subtype.val hxy :)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, congr_arg
@@ -1909,7 +1909,7 @@ Subtype.ext
 
 中文:
 定义 ofLeftInverse'
-  签名: {g : B -> A} {f : F} (h : Function.LeftInverse g f)
+  签名: {g : B -> A} {f : F} (h : 函数.左逆 g f)
   定义体: { NonUnitalStarAlgHom.rangeRestrict f with
     toFun := NonUnitalStarAlgHom.rangeRestrict f
     invFun := g ∘ (NonUnitalStarSubalgebraClass.subtype <| NonUnitalStarAlgHom.range f)
@@ -1944,7 +1944,7 @@ theorem ofLeftInverse'_apply
 
 中文:
 定理 ofLeftInverse'_apply
-  条件: {g : B -> A} {f : F} (h : Function.LeftInverse g f) (x : A)
+  条件: {g : B -> A} {f : F} (h : 函数.左逆 g f) (x : A)
   证明: rfl
 
 @[simp]
@@ -1964,7 +1964,7 @@ theorem ofLeftInverse'_symm_apply
 
 中文:
 定理 ofLeftInverse'_symm_apply
-  结论: {g : B -> A} {f : F} (h : Function.LeftInverse g f)
+  结论: {g : B -> A} {f : F} (h : 函数.左逆 g f)
   证明: rfl
 -/
 theorem ofLeftInverse'_symm_apply {g : B -> A} {f : F} (h : Function.LeftInverse g f)
@@ -1983,7 +1983,7 @@ definition ofInjective'
 
 中文:
 定义 ofInjective'
-  签名: (f : F) (hf : Function.Injective f)
+  签名: (f : F) (hf : 函数.单射 f)
   定义体: ofLeftInverse' (Classical.choose_spec hf.hasLeftInverse)
 
 @[simp]
@@ -2005,7 +2005,7 @@ theorem ofInjective'_apply
 
 中文:
 定理 ofInjective'_apply
-  条件: (f : F) (hf : Function.Injective f) (x : A)
+  条件: (f : F) (hf : 函数.单射 f) (x : A)
   证明: rfl
 -/
 theorem ofInjective'_apply (f : F) (hf : Function.Injective f) (x : A) :
@@ -2039,7 +2039,7 @@ instance instInvolutiveStar
 
 中文:
 实例 instInvolutiveStar
-  签名: : InvolutiveStar (NonUnitalSubalgebra R A) where
+  签名: : InvolutiveStar (NonUnital子代数 R A) where
   定义体: { carrier := star S.carrier
       mul_mem' := @fun x y hx hy => by simpa only [Set.mem_star, NonUnitalSubalgebra.mem_carrier]
         using (star_mul x y).symm ▸ mul_mem hy hx
@@ -2073,7 +2073,7 @@ theorem mem_star_iff
 
 中文:
 定理 mem_star_iff
-  条件: (S : NonUnitalSubalgebra R A) (x : A)
+  条件: (S : NonUnital子代数 R A) (x : A)
   结论: x in star S ↔ star x in S
   证明: Iff.rfl
 
@@ -2096,7 +2096,7 @@ theorem star_mem_star_iff
 
 中文:
 定理 star_mem_star_iff
-  条件: (S : NonUnitalSubalgebra R A) (x : A)
+  条件: (S : NonUnital子代数 R A) (x : A)
   结论: star x in star S ↔ x in S
   证明: by
   simp
@@ -2118,8 +2118,8 @@ theorem coe_star
 
 中文:
 定理 coe_star
-  条件: (S : NonUnitalSubalgebra R A)
-  结论: star S = star (S : Set A)
+  条件: (S : NonUnital子代数 R A)
+  结论: star S = star (S : 集合 A)
   证明: rfl
 -/
 theorem coe_star (S : NonUnitalSubalgebra R A) : star S = star (S : Set A) :=
@@ -2135,7 +2135,7 @@ theorem star_mono
 
 中文:
 定理 star_mono
-  结论: Monotone (star : NonUnitalSubalgebra R A -> NonUnitalSubalgebra R A)
+  结论: 递增 (star : NonUnital子代数 R A -> NonUnital子代数 R A)
   证明: fun _ _ h _ hx => h hx
 -/
 theorem star_mono : Monotone (star : NonUnitalSubalgebra R A -> NonUnitalSubalgebra R A) :=
@@ -2158,7 +2158,7 @@ theorem star_adjoin_comm
 
 中文:
 定理 star_adjoin_comm
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: have :
     forall t : Set A, NonUnitalAlgebra.adjoin R (star t) <= star (NonUnitalAlgebra.adjoin R t) := fun _ =>
     NonUnitalAlgebra.adjoin_le fun _ hx => NonUnitalAlgebra.subset_adjoin R hx
@@ -2192,7 +2192,7 @@ definition starClosure
 
 中文:
 定义 starClosure
-  签名: (S : NonUnitalSubalgebra R A)
+  签名: (S : NonUnital子代数 R A)
   定义体: S ⊔ star S
   star_mem' {a} ha := by
     simpa [← mem_star_iff _ a, ← (@NonUnitalAlgebra.gi R A _ _ _ _ _).l_sup_u _ _, star_adjoin_comm,
@@ -2219,7 +2219,7 @@ theorem coe_starClosure
 
 中文:
 定理 coe_starClosure
-  条件: (S : NonUnitalSubalgebra R A)
+  条件: (S : NonUnital子代数 R A)
   证明: rfl
 
 @[simp]
@@ -2240,7 +2240,7 @@ theorem mem_starClosure
 
 中文:
 定理 mem_starClosure
-  条件: (S : NonUnitalSubalgebra R A) {x : A}
+  条件: (S : NonUnital子代数 R A) {x : A}
   证明: Iff.rfl
 
 @[simp]
@@ -2261,7 +2261,7 @@ theorem starClosure_toNonUnitalSubalgebra
 
 中文:
 定理 starClosure_toNonUnitalSubalgebra
-  条件: (S : NonUnitalSubalgebra R A)
+  条件: (S : NonUnital子代数 R A)
   证明: rfl
 -/
 theorem starClosure_toNonUnitalSubalgebra (S : NonUnitalSubalgebra R A) :
@@ -2279,7 +2279,7 @@ theorem starClosure_le
 
 中文:
 定理 starClosure_le
-  结论: {S₁ : NonUnitalSubalgebra R A} {S₂ : NonUnitalStarSubalgebra R A}
+  结论: {S₁ : NonUnital子代数 R A} {S₂ : 非幺对合子代数 R A}
   证明: NonUnitalStarSubalgebra.toNonUnitalSubalgebra_le_iff.1
     sup_le h fun x hx =>
       (star_star x ▸ star_mem (show star x in S₂ from h <| (S₁.mem_star_iff _).1 hx) : x in S₂)
@@ -2304,7 +2304,7 @@ theorem starClosure_le_iff
 
 中文:
 定理 starClosure_le_iff
-  条件: {S₁ : NonUnitalSubalgebra R A} {S₂ : NonUnitalStarSubalgebra R A}
+  条件: {S₁ : NonUnital子代数 R A} {S₂ : 非幺对合子代数 R A}
   证明: ⟨fun h => le_sup_left.trans h, starClosure_le⟩
 
 @[gcongr, mono]
@@ -2326,7 +2326,7 @@ theorem starClosure_mono
 
 中文:
 定理 starClosure_mono
-  结论: Monotone (starClosure (R := R) (A := A))
+  结论: 递增 (starClosure (R := R) (A := A))
   证明: fun _ _ h => starClosure_le h.trans le_sup_left
 -/
 theorem starClosure_mono : Monotone (starClosure (R := R) (A := A)) :=
@@ -2364,7 +2364,7 @@ definition adjoin
 
 中文:
 定义 adjoin
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: NonUnitalAlgebra.adjoin R (s union star s)
   star_mem' _ := by
     rwa [NonUnitalSubalgebra.mem_carrier, ← NonUnitalSubalgebra.mem_star_iff,
@@ -2392,7 +2392,7 @@ theorem adjoin_eq_starClosure_adjoin
 
 中文:
 定理 adjoin_eq_starClosure_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: toNonUnitalSubalgebra_injective show
     NonUnitalAlgebra.adjoin R (s union star s) =
       NonUnitalAlgebra.adjoin R s ⊔ star (NonUnitalAlgebra.adjoin R s)
@@ -2421,7 +2421,7 @@ theorem adjoin_toNonUnitalSubalgebra
 
 中文:
 定理 adjoin_toNonUnitalSubalgebra
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: rfl
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
@@ -2443,7 +2443,7 @@ theorem subset_adjoin
 
 中文:
 定理 subset_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: s subseteq adjoin R s
   证明: Set.subset_union_left.trans NonUnitalAlgebra.subset_adjoin R
 
@@ -2468,7 +2468,7 @@ theorem star_subset_adjoin
 
 中文:
 定理 star_subset_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: star s subseteq adjoin R s
   证明: Set.subset_union_right.trans NonUnitalAlgebra.subset_adjoin R
 
@@ -2493,7 +2493,7 @@ theorem mem_adjoin_of_mem
 
 中文:
 定理 mem_adjoin_of_mem
-  条件: {s : Set A} {x : A} (hx : x in s)
+  条件: {s : 集合 A} {x : A} (hx : x in s)
   结论: x in adjoin R s
   证明: subset_adjoin R s hx
 
@@ -2516,7 +2516,7 @@ theorem self_mem_adjoin_singleton
 中文:
 定理 self_mem_adjoin_singleton
   条件: (x : A)
-  结论: x in adjoin R ({x} : Set A)
+  结论: x in adjoin R ({x} : 集合 A)
   证明: NonUnitalAlgebra.subset_adjoin R Set.mem_union_left _ (Set.mem_singleton x)
 
 Depends on / 依赖: NonUnitalAlgebra, NonUnitalAlgebra.subset_adjoin, Set.mem_singleton, Set.mem_union_left, mem_singleton, mem_union_left, subset_adjoin
@@ -2538,7 +2538,7 @@ theorem star_self_mem_adjoin_singleton
 中文:
 定理 star_self_mem_adjoin_singleton
   条件: (x : A)
-  结论: star x in adjoin R ({x} : Set A)
+  结论: star x in adjoin R ({x} : 集合 A)
   证明: star_mem self_mem_adjoin_singleton R x
 
 @[elab_as_elim]
@@ -2564,7 +2564,7 @@ lemma adjoin_induction
 
 中文:
 引理 adjoin_induction
-  结论: {s : Set A} {p : (x : A) -> x in adjoin R s -> 命题}
+  结论: {s : 集合 A} {p : (x : A) -> x in adjoin R s -> 命题}
   证明: by
   refine NonUnitalAlgebra.adjoin_induction (fun x hx => ?_) add zero mul smul ha
   push _ in _ at hx
@@ -2603,7 +2603,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection (adjoin R : Set A -> NonUnitalStarSubalgebra R A) (↑)
+  结论: GaloisConnection (adjoin R : 集合 A -> 非幺对合子代数 R A) (↑)
   证明: by
   intro s S
   rw [← toNonUnitalSubalgebra_le_iff]; rw [adjoin_toNonUnitalSubalgebra]; rw [NonUnitalAlgebra.adjoin_le_iff]; rw [coe_toNonUnitalSubalgebra]
@@ -2629,7 +2629,7 @@ le_l_u S := (NonUnitalStarAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (adjoin R : Set A -> NonUnitalStarSubalgebra R A) (↑) where
+  签名: : Galois嵌入 (adjoin R : 集合 A -> 非幺对合子代数 R A) (↑) where
   定义体: (adjoin R s).copy s le_antisymm (NonUnitalStarAlgebra.gc.le_u_l s) hs
   gc := NonUnitalStarAlgebra.gc
 le_l_u S := (NonUnitalStarAlgebra.gc (S : Set A) (adjoin R S)).1 le_rfl
@@ -2654,7 +2654,7 @@ theorem adjoin_le
 
 中文:
 定理 adjoin_le
-  条件: {S : NonUnitalStarSubalgebra R A} {s : Set A} (hs : s subseteq S)
+  条件: {S : 非幺对合子代数 R A} {s : 集合 A} (hs : s subseteq S)
   结论: adjoin R s <= S
   证明: NonUnitalStarAlgebra.gc.l_le hs
 
@@ -2679,7 +2679,7 @@ theorem adjoin_le_iff
 
 中文:
 定理 adjoin_le_iff
-  条件: {S : NonUnitalStarSubalgebra R A} {s : Set A}
+  条件: {S : 非幺对合子代数 R A} {s : 集合 A}
   结论: adjoin R s <= S ↔ s subseteq S
   证明: NonUnitalStarAlgebra.gc _ _
 
@@ -2704,7 +2704,7 @@ theorem adjoin_mono
 
 中文:
 定理 adjoin_mono
-  条件: {s t : Set A} (H : s subseteq t)
+  条件: {s t : 集合 A} (H : s subseteq t)
   结论: adjoin R s <= adjoin R t
   证明: NonUnitalStarAlgebra.gc.monotone_l H
 
@@ -2727,8 +2727,8 @@ lemma adjoin_eq
 
 中文:
 引理 adjoin_eq
-  条件: (s : NonUnitalStarSubalgebra R A)
-  结论: adjoin R (s : Set A) = s
+  条件: (s : 非幺对合子代数 R A)
+  结论: adjoin R (s : 集合 A) = s
   证明: le_antisymm (adjoin_le le_rfl) (subset_adjoin R (s : Set A))
 
 Depends on / 依赖: adjoin_le, le_antisymm, le_rfl, subset_adjoin
@@ -2749,7 +2749,7 @@ lemma adjoin_eq_span
 
 中文:
 引理 adjoin_eq_span
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [adjoin_toNonUnitalSubalgebra]; rw [NonUnitalAlgebra.adjoin_eq_span]
 
@@ -2773,7 +2773,7 @@ lemma span_eq_toSubmodule
 
 中文:
 引理 span_eq_toSubmodule
-  条件: {R} [CommSemiring R] [Module R A] (s : NonUnitalStarSubalgebra R A)
+  条件: {R} [交换半环 R] [模 R A] (s : 非幺对合子代数 R A)
   证明: by
   simp [SetLike.ext'_iff, Submodule.coe_span_eq_self]
 
@@ -2793,8 +2793,8 @@ theorem _root_.NonUnitalSubalgebra.starClosure_eq_adjoin
     (adjoin_le (le_sup_left : S <= S ⊔ star S))
 
 中文:
-定理 _root_.NonUnitalSubalgebra.starClosure_eq_adjoin
-  条件: (S : NonUnitalSubalgebra R A)
+定理 _root_.NonUnital子代数.starClosure_eq_adjoin
+  条件: (S : NonUnital子代数 R A)
   证明: le_antisymm (NonUnitalSubalgebra.starClosure_le_iff.2 <| subset_adjoin R (S : Set A))
     (adjoin_le (le_sup_left : S <= S ⊔ star S))
 
@@ -2817,7 +2817,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (NonUnitalStarSubalgebra R A)
+  签名: 完备格 (非幺对合子代数 R A)
   定义体: GaloisInsertion.liftCompleteLattice NonUnitalStarAlgebra.gi
 
 @[simp, norm_cast]
@@ -2840,7 +2840,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : NonUnitalStarSubalgebra R A) : Set A) = Set.univ
+  结论: ((⊤ : 非幺对合子代数 R A) : 集合 A) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -2863,7 +2863,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : A}
-  结论: x in (⊤ : NonUnitalStarSubalgebra R A)
+  结论: x in (⊤ : 非幺对合子代数 R A)
   证明: Set.mem_univ x
 
 @[simp]
@@ -2903,7 +2903,7 @@ theorem toNonUnitalSubalgebra_eq_top
 
 中文:
 定理 toNonUnitalSubalgebra_eq_top
-  条件: {S : NonUnitalStarSubalgebra R A}
+  条件: {S : 非幺对合子代数 R A}
   证明: NonUnitalStarSubalgebra.toNonUnitalSubalgebra_injective.eq_iff' top_toNonUnitalSubalgebra
 
 Depends on / 依赖: NonUnitalStarSubalgebra, NonUnitalStarSubalgebra.toNonUnitalSubalgebra_injective.eq_iff, eq_iff, toNonUnitalSubalgebra_injective, top_toNonUnitalSubalgebra
@@ -2925,7 +2925,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : NonUnitalStarSubalgebra R A}
+  条件: {S T : 非幺对合子代数 R A}
   结论: 对任意 {x : A}, x in S -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -2950,7 +2950,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : NonUnitalStarSubalgebra R A}
+  条件: {S T : 非幺对合子代数 R A}
   结论: 对任意 {x : A}, x in T -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -2972,7 +2972,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : NonUnitalStarSubalgebra R A} {x y : A} (hx : x in S) (hy : y in T)
+  条件: {S T : 非幺对合子代数 R A} {x y : A} (hx : x in S) (hy : y in T)
   证明: mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
 Depends on / 依赖: mem_sup_left, mem_sup_right, mul_mem
@@ -2991,7 +2991,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  结论: [IsScalarTower R B B] [SMulCommClass R B B] [StarModule R B] (f : F)
+  结论: [标量塔 R B B] [标量交换类 R B B] [对合模 R B] (f : F)
   证明: (NonUnitalStarSubalgebra.gc_map_comap f).l_sup
 
 Depends on / 依赖: NonUnitalStarSubalgebra, NonUnitalStarSubalgebra.gc_map_comap, gc_map_comap, l_sup
@@ -3013,7 +3013,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  结论: [IsScalarTower R B B] [SMulCommClass R B B] [StarModule R B] (f : F)
+  结论: [标量塔 R B B] [标量交换类 R B B] [对合模 R B] (f : F)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[simp, norm_cast]
@@ -3039,8 +3039,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (S T : NonUnitalStarSubalgebra R A)
-  结论: (↑(S ⊓ T) : Set A) = (S : Set A) inter T
+  条件: (S T : 非幺对合子代数 R A)
+  结论: (↑(S ⊓ T) : 集合 A) = (S : 集合 A) inter T
   证明: rfl
 
 @[simp]
@@ -3062,7 +3062,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {S T : NonUnitalStarSubalgebra R A} {x : A}
+  条件: {S T : 非幺对合子代数 R A} {x : A}
   结论: x in S ⊓ T ↔ x in S ∧ x in T
   证明: Iff.rfl
 
@@ -3087,7 +3087,7 @@ theorem inf_toNonUnitalSubalgebra
 
 中文:
 定理 inf_toNonUnitalSubalgebra
-  条件: (S T : NonUnitalStarSubalgebra R A)
+  条件: (S T : 非幺对合子代数 R A)
   证明: SetLike.coe_injective coe_inf _ _
   -- it's a bit surprising `rfl` fails here.
 
@@ -3114,8 +3114,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (NonUnitalStarSubalgebra R A))
-  结论: (↑(sInf S) : Set A) = ⋂ s in S, ↑s
+  条件: (S : 集合 (非幺对合子代数 R A))
+  结论: (↑(sInf S) : 集合 A) = ⋂ s in S, ↑s
   证明: sInf_image
 
 @[simp]
@@ -3140,7 +3140,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (NonUnitalStarSubalgebra R A)} {x : A}
+  条件: {S : 集合 (非幺对合子代数 R A)} {x : A}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simp only [← SetLike.mem_coe, coe_sInf, Set.mem_iInter₂]
@@ -3165,7 +3165,7 @@ theorem sInf_toNonUnitalSubalgebra
 
 中文:
 定理 sInf_toNonUnitalSubalgebra
-  条件: (S : Set (NonUnitalStarSubalgebra R A))
+  条件: (S : 集合 (非幺对合子代数 R A))
   证明: SetLike.coe_injective by simp
 
 @[simp, norm_cast]
@@ -3189,7 +3189,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalStarSubalgebra R A}
+  条件: {ι : 类型层*} {S : ι -> 非幺对合子代数 R A}
   证明: by simp [iInf]
 
 @[simp]
@@ -3208,7 +3208,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalStarSubalgebra R A} {x : A}
+  条件: {ι : 类型层*} {S : ι -> 非幺对合子代数 R A} {x : A}
   证明: by simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 Depends on / 依赖: Set.forall_mem_range, forall_mem_range, mem_sInf
@@ -3230,7 +3230,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι]
+  结论: {ι : 类型层*} [非空 ι]
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ S)
@@ -3257,7 +3257,7 @@ theorem iInf_toNonUnitalSubalgebra
 
 中文:
 定理 iInf_toNonUnitalSubalgebra
-  条件: {ι : Sort*} (S : ι -> NonUnitalStarSubalgebra R A)
+  条件: {ι : 类型层*} (S : ι -> 非幺对合子代数 R A)
   证明: SetLike.coe_injective by simp
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -3276,7 +3276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NonUnitalStarSubalgebra R A)
+  签名: 可居 (非幺对合子代数 R A)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (NonUnitalStarSubalgebra R A) :=
@@ -3295,7 +3295,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : A}
-  结论: x in (⊥ : NonUnitalStarSubalgebra R A) ↔ x = 0
+  结论: x in (⊥ : 非幺对合子代数 R A) ↔ x = 0
   证明: show x in NonUnitalAlgebra.adjoin R (∅ union star ∅ : Set A) ↔ x = 0 by
     rw [Set.star_empty]; rw [Set.union_empty]; rw [NonUnitalAlgebra.adjoin_empty]; rw [NonUnitalAlgebra.mem_bot]
 
@@ -3344,7 +3344,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : NonUnitalStarSubalgebra R A) : Set A) = {0}
+  结论: ((⊥ : 非幺对合子代数 R A) : 集合 A) = {0}
   证明: by
   simp only [Set.ext_iff, NonUnitalStarAlgebra.mem_bot, SetLike.mem_coe, Set.mem_singleton_iff,
     forall_const]
@@ -3369,7 +3369,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  条件: {S : NonUnitalStarSubalgebra R A}
+  条件: {S : 非幺对合子代数 R A}
   结论: S = ⊤ ↔ 对任意 x : A, x in S
   证明: ⟨fun h x => by rw [h]; exact mem_top,
     fun h => by ext x; exact ⟨fun _ => mem_top, fun _ => h x⟩⟩
@@ -3395,7 +3395,7 @@ theorem range_id
 
 中文:
 定理 range_id
-  结论: NonUnitalStarAlgHom.range (NonUnitalStarAlgHom.id R A) = ⊤
+  结论: 非幺StarAlg态射.range (非幺StarAlg态射.id R A) = ⊤
   证明: SetLike.coe_injective Set.range_id
 
 @[simp]
@@ -3418,7 +3418,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  条件: [IsScalarTower R B B] [SMulCommClass R B B] [StarModule R B] (f : F)
+  条件: [标量塔 R B B] [标量交换类 R B B] [对合模 R B] (f : F)
   证明: SetLike.coe_injective by simp [NonUnitalStarSubalgebra.coe_map]
 
 @[simp]
@@ -3440,7 +3440,7 @@ theorem comap_top
 
 中文:
 定理 comap_top
-  条件: [IsScalarTower R B B] [SMulCommClass R B B] [StarModule R B] (f : F)
+  条件: [标量塔 R B B] [标量交换类 R B B] [对合模 R B] (f : F)
   证明: eq_top_iff.2 fun _x => mem_top
 
 Depends on / 依赖: eq_top_iff, mem_top
@@ -3459,7 +3459,7 @@ definition toTop
 
 中文:
 定义 toTop
-  签名: : A ->⋆ₙₐ[R] (⊤ : NonUnitalStarSubalgebra R A)
+  签名: : A ->⋆ₙₐ[R] (⊤ : 非幺对合子代数 R A)
   定义体: NonUnitalStarAlgHom.codRestrict (NonUnitalStarAlgHom.id R A) ⊤ fun _ => mem_top
 
 Depends on / 依赖: NonUnitalStarAlgHom, NonUnitalStarAlgHom.codRestrict, NonUnitalStarAlgHom.id, codRestrict, mem_top
@@ -3481,7 +3481,7 @@ theorem range_eq_top
 
 中文:
 定理 range_eq_top
-  结论: [IsScalarTower R B B] [SMulCommClass R B B] [StarModule R B]
+  结论: [标量塔 R B B] [标量交换类 R B B] [对合模 R B]
   证明: NonUnitalStarAlgebra.eq_top_iff
 
 @[simp]
@@ -3504,7 +3504,7 @@ theorem map_top
 
 中文:
 定理 map_top
-  条件: [IsScalarTower R A A] [SMulCommClass R A A] [StarModule R A] (f : F)
+  条件: [标量塔 R A A] [标量交换类 R A A] [对合模 R A] (f : F)
   证明: SetLike.coe_injective Set.image_univ
 
 Depends on / 依赖: Set.image_univ, SetLike, SetLike.coe_injective, coe_injective, image_univ
@@ -3538,7 +3538,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : NonUnitalStarSubalgebra R A} (h : S <= T)
+  签名: {S T : 非幺对合子代数 R A} (h : S <= T)
   定义体: NonUnitalSubalgebra.inclusion h
   map_star' _ := rfl
 
@@ -3560,7 +3560,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {S T : NonUnitalStarSubalgebra R A} (h : S <= T)
+  条件: {S T : 非幺对合子代数 R A} (h : S <= T)
   证明: fun _ _ => Subtype.ext ∘ Subtype.mk.inj
 
 @[simp]
@@ -3584,7 +3584,7 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  条件: {S : NonUnitalStarSubalgebra R A}
+  条件: {S : 非幺对合子代数 R A}
   证明: NonUnitalAlgHom.ext fun _x => Subtype.ext rfl
 
 @[simp]
@@ -3606,7 +3606,7 @@ theorem inclusion_mk
 
 中文:
 定理 inclusion_mk
-  条件: {S T : NonUnitalStarSubalgebra R A} (h : S <= T) (x : A) (hx : x in S)
+  条件: {S T : 非幺对合子代数 R A} (h : S <= T) (x : A) (hx : x in S)
   证明: rfl
 -/
 theorem inclusion_mk {S T : NonUnitalStarSubalgebra R A} (h : S <= T) (x : A) (hx : x in S) :
@@ -3625,7 +3625,7 @@ theorem inclusion_right
 
 中文:
 定理 inclusion_right
-  条件: {S T : NonUnitalStarSubalgebra R A} (h : S <= T) (x : T) (m : (x : A) in S)
+  条件: {S T : 非幺对合子代数 R A} (h : S <= T) (x : T) (m : (x : A) in S)
   证明: Subtype.ext rfl
 
 @[simp]
@@ -3649,7 +3649,7 @@ theorem inclusion_inclusion
 
 中文:
 定理 inclusion_inclusion
-  结论: {S T U : NonUnitalStarSubalgebra R A} (hst : S <= T) (htu : T <= U)
+  结论: {S T U : 非幺对合子代数 R A} (hst : S <= T) (htu : T <= U)
   证明: Subtype.ext rfl
 
 @[simp]
@@ -3671,7 +3671,7 @@ theorem val_inclusion
 
 中文:
 定理 val_inclusion
-  条件: {S T : NonUnitalStarSubalgebra R A} (h : S <= T) (s : S)
+  条件: {S T : 非幺对合子代数 R A} (h : S <= T) (s : S)
   证明: rfl
 -/
 theorem val_inclusion {S T : NonUnitalStarSubalgebra R A} (h : S <= T) (s : S) :
@@ -3694,8 +3694,8 @@ lemma _root_.NonUnitalStarAlgHom.map_adjoin
 @[simp]
 
 中文:
-引理 _root_.NonUnitalStarAlgHom.map_adjoin
-  条件: (f : F) (s : Set A)
+引理 _root_.非幺StarAlg态射.map_adjoin
+  条件: (f : F) (s : 集合 A)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) NonUnitalStarAlgebra.gi.gc
     NonUnitalStarAlgebra.gi.gc fun _t => rfl
 
@@ -3719,7 +3719,7 @@ lemma _root_.NonUnitalStarAlgHom.map_adjoin_singleton
   simp [NonUnitalStarAlgHom.map_adjoin]
 
 中文:
-引理 _root_.NonUnitalStarAlgHom.map_adjoin_singleton
+引理 _root_.非幺StarAlg态射.map_adjoin_singleton
   条件: (f : F) (x : A)
   证明: by
   simp [NonUnitalStarAlgHom.map_adjoin]
@@ -3740,7 +3740,7 @@ instance subsingleton_of_subsingleton
 
 中文:
 实例 subsingleton_of_subsingleton
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: ⟨fun B C => ext fun x => by simp only [Subsingleton.elim x 0, zero_mem B, zero_mem C]⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, zero_mem
@@ -3761,8 +3761,8 @@ instance _root_.NonUnitalStarAlgHom.subsingleton
     (mem_bot.mp this).symm ▸ (map_zero f).trans (map_zero g).symm⟩
 
 中文:
-实例 _root_.NonUnitalStarAlgHom.subsingleton
-  签名: [Subsingleton (NonUnitalStarSubalgebra R A)]
+实例 _root_.非幺StarAlg态射.subsingleton
+  签名: [子单例 (非幺对合子代数 R A)]
   定义体: ⟨fun f g => NonUnitalStarAlgHom.ext fun a =>
     have : a in (⊥ : NonUnitalStarSubalgebra R A) :=
       Subsingleton.elim (⊤ : NonUnitalStarSubalgebra R A) ⊥ ▸ mem_top
@@ -3790,7 +3790,7 @@ theorem range_val
 
 中文:
 定理 range_val
-  结论: NonUnitalStarAlgHom.range (NonUnitalStarSubalgebraClass.subtype S) = S
+  结论: 非幺StarAlg态射.range (NonUnitalStarSubalgebraClass.subtype S) = S
   证明: ext Set.ext_iff.1
     (NonUnitalStarAlgHom.coe_range (NonUnitalStarSubalgebraClass.subtype S)).trans Subtype.range_val
 
@@ -3817,8 +3817,8 @@ definition prod
 @[simp, norm_cast]
 
 中文:
-定义 prod
-  签名: : NonUnitalStarSubalgebra R (A × B)
+定义 乘积
+  签名: : 非幺对合子代数 R (A × B)
   定义体: { S.toNonUnitalSubalgebra.prod S₁.toNonUnitalSubalgebra with
     carrier := S ×ˢ S₁
     star_mem' := fun hx => ⟨star_mem hx.1, star_mem hx.2⟩ }
@@ -3843,7 +3843,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  结论: (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ S₁
+  结论: (乘积 S S₁ : 集合 (A × B)) = (S : 集合 A) ×ˢ S₁
   证明: rfl
 -/
 theorem coe_prod : (prod S S₁ : Set (A × B)) = (S : Set A) ×ˢ S₁ :=
@@ -3879,7 +3879,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {S : NonUnitalStarSubalgebra R A} {S₁ : NonUnitalStarSubalgebra R B} {x : A × B}
+  条件: {S : 非幺对合子代数 R A} {S₁ : 非幺对合子代数 R B} {x : A × B}
   证明: Set.mem_prod
 
 Depends on / 依赖: Set.mem_prod, mem_prod
@@ -3898,7 +3898,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {S T : NonUnitalStarSubalgebra R A} {S₁ T₁ : NonUnitalStarSubalgebra R B}
+  条件: {S T : 非幺对合子代数 R A} {S₁ T₁ : 非幺对合子代数 R B}
   证明: Set.prod_mono
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -3924,7 +3924,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: (prod ⊤ ⊤ : NonUnitalStarSubalgebra R (A × B)) = ⊤
+  结论: (乘积 ⊤ ⊤ : 非幺对合子代数 R (A × B)) = ⊤
   证明: by ext; simp
 
 @[simp]
@@ -3942,7 +3942,7 @@ theorem prod_inf_prod
 
 中文:
 定理 prod_inf_prod
-  条件: {S T : NonUnitalStarSubalgebra R A} {S₁ T₁ : NonUnitalStarSubalgebra R B}
+  条件: {S T : 非幺对合子代数 R A} {S₁ T₁ : 非幺对合子代数 R B}
   证明: SetLike.coe_injective Set.prod_inter_prod
 
 Depends on / 依赖: Set.prod_inter_prod, SetLike, SetLike.coe_injective, coe_injective, prod_inter_prod
@@ -3977,7 +3977,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: [Nonempty ι] {S : ι -> NonUnitalStarSubalgebra R A}
+  结论: [非空 ι] {S : ι -> 非幺对合子代数 R A}
   证明: let K : NonUnitalStarSubalgebra R A :=
     { __ := NonUnitalSubalgebra.copy _ _ (NonUnitalSubalgebra.coe_iSup_of_directed dir).symm
       star_mem' := fun hx =>
@@ -4010,7 +4010,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: [Nonempty ι] {S : ι -> NonUnitalStarSubalgebra R A}
+  结论: [非空 ι] {S : ι -> 非幺对合子代数 R A}
   证明: by
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, NonUnitalSubsemiring.coe_iSup_of_directed dir,
     coe_iSup_of_directed dir] using NonUnitalSubsemiring.isMulCommutative_iSup dir
@@ -4033,7 +4033,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
@@ -4064,7 +4064,7 @@ definition iSupLift
 
 中文:
 定义 iSupLift
-  签名: [Nonempty ι] (K : ι -> NonUnitalStarSubalgebra R A)
+  签名: [非空 ι] (K : ι -> 非幺对合子代数 R A)
   定义体: by
   subst hT
   exact
@@ -4259,7 +4259,7 @@ definition center
 
 中文:
 定义 center
-  签名: : NonUnitalStarSubalgebra R A where
+  签名: : 非幺对合子代数 R A where
   定义体: NonUnitalSubalgebra.center R A
   star_mem' := Set.star_mem_center
 
@@ -4284,7 +4284,7 @@ theorem coe_center
 
 中文:
 定理 coe_center
-  结论: (center R A : Set A) = Set.center A
+  结论: (center R A : 集合 A) = 集合.center A
   证明: rfl
 
 @[simp]
@@ -4323,7 +4323,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  结论: (A : 类型) [StarRing R] [NonUnitalCommSemiring A] [StarRing A] [Module R A]
+  结论: (A : 类型) [对合环 R] [非幺交换半环 A] [对合环 A] [模 R A]
   证明: SetLike.coe_injective (Set.center_eq_univ A)
 
 Depends on / 依赖: Set.center_eq_univ, SetLike, SetLike.coe_injective, center_eq_univ, coe_injective
@@ -4344,7 +4344,7 @@ instance instNonUnitalCommSemiring
 
 中文:
 实例 instNonUnitalCommSemiring
-  签名: : NonUnitalCommSemiring (center R A)
+  签名: : 非幺交换半环 (center R A)
   定义体: fast_instance% NonUnitalSubalgebra.center.instNonUnitalCommSemiring
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubalgebra.center.instNonUnitalCommSemiring, center, fast_instance, instNonUnitalCommSemiring
@@ -4362,7 +4362,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: {A : 类型} [NonUnitalRing A] [StarRing A] [Module R A]
+  签名: {A : 类型} [非幺环 A] [对合环 A] [模 R A]
   定义体: fast_instance% NonUnitalSubalgebra.center.instNonUnitalCommRing
 
 Depends on / 依赖: NonUnitalSubalgebra, NonUnitalSubalgebra.center.instNonUnitalCommRing, center, fast_instance, instNonUnitalCommRing
@@ -4401,7 +4401,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  条件: [IsScalarTower R B B] [SMulCommClass R B B]
+  条件: [标量塔 R B B] [标量交换类 R B B]
   证明: SetLike.coe_injective Set.center_prod
 -/
 protected theorem center_prod [IsScalarTower R B B] [SMulCommClass R B B] :
@@ -4428,7 +4428,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { NonUnitalSubalgebra.centralizer R (s union star s) with
     star_mem' := Set.star_mem_centralizer }
 
@@ -4452,8 +4452,8 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: (s : Set A)
-  结论: (centralizer R s : Set A) = (s union star s).centralizer
+  条件: (s : 集合 A)
+  结论: (centralizer R s : 集合 A) = (s union star s).centralizer
   证明: rfl
 -/
 theorem coe_centralizer (s : Set A) : (centralizer R s : Set A) = (s union star s).centralizer :=
@@ -4473,7 +4473,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {s : Set A} {z : A}
+  条件: {s : 集合 A} {z : A}
   证明: by
   change (forall g in s union star s, g * z = z * g) ↔ forall g in s, g * z = z * g ∧ star g * z = z * star g
   simp only [Set.mem_union, or_imp, forall_and, and_congr_right_iff]
@@ -4502,7 +4502,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: (s t : Set A) (h : s subseteq t)
+  条件: (s t : 集合 A) (h : s subseteq t)
   结论: centralizer R t <= centralizer R s
   证明: Set.centralizer_subset (Set.union_subset_union h <| Set.preimage_mono h)
 
@@ -4524,7 +4524,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer R Set.univ = center R A
+  结论: centralizer R 集合.univ = center R A
   证明: SetLike.ext' by rw [coe_centralizer, Set.univ_union, coe_center, Set.centralizer_univ]
 
 Depends on / 依赖: Set.centralizer_univ, Set.univ_union, SetLike, SetLike.ext, centralizer_univ, coe_center, coe_centralizer, univ_union
@@ -4542,7 +4542,7 @@ theorem centralizer_toNonUnitalSubalgebra
 
 中文:
 定理 centralizer_toNonUnitalSubalgebra
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: rfl
 -/
 theorem centralizer_toNonUnitalSubalgebra (s : Set A) :
@@ -4560,7 +4560,7 @@ theorem coe_centralizer_centralizer
 
 中文:
 定理 coe_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [coe_centralizer]; rw [StarMemClass.star_coe_eq]; rw [Set.union_self]; rw [coe_centralizer]
 
@@ -4597,7 +4597,7 @@ lemma adjoin_le_centralizer_centralizer
 
 中文:
 引理 adjoin_le_centralizer_centralizer
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   rw [← toNonUnitalSubalgebra_le_iff]; rw [centralizer_toNonUnitalSubalgebra]; rw [adjoin_toNonUnitalSubalgebra]
   convert! NonUnitalAlgebra.adjoin_le_centralizer_centralizer R (s union star s)
@@ -4623,8 +4623,8 @@ lemma commute_of_mem_adjoin_of_forall_mem_commute
     hb.elim (h b) (by simpa using h_star (star b))
 
 中文:
-引理 commute_of_mem_adjoin_of_forall_mem_commute
-  结论: {a b : A} {s : Set A}
+引理 commute_of_mem_adjoin_of_对任意_mem_commute
+  结论: {a b : A} {s : 集合 A}
   证明: NonUnitalAlgebra.commute_of_mem_adjoin_of_forall_mem_commute hb fun b hb =>
     hb.elim (h b) (by simpa using h_star (star b))
 
@@ -4666,7 +4666,7 @@ lemma commute_of_mem_adjoin_self
 
 中文:
 引理 commute_of_mem_adjoin_self
-  条件: {a b : A} [IsStarNormal a] (hb : b in adjoin R {a})
+  条件: {a b : A} [是StarNormal a] (hb : b in adjoin R {a})
   证明: commute_of_mem_adjoin_singleton_of_commute hb rfl (isStarNormal_iff a |>.mp inferInstance).symm
 
 Depends on / 依赖: commute_of_mem_adjoin_singleton_of_commute, isStarNormal_iff
@@ -4691,7 +4691,7 @@ theorem isMulCommutative_adjoin
 
 中文:
 定理 isMulCommutative_adjoin
-  结论: {s : Set A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  结论: {s : 集合 A} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   证明: by
   have := adjoin_le_centralizer_centralizer R s
   refine .of_setLike_mul_comm fun _ h₁ _ h₂ => ?_
@@ -4725,7 +4725,7 @@ instance isMulCommutative_adjoin_singleton
 
 中文:
 实例 isMulCommutative_adjoin_singleton
-  签名: (a : A) [IsStarNormal a]
+  签名: (a : A) [是StarNormal a]
   定义体: isMulCommutative_adjoin R (by simp) (by grind)
 
 Depends on / 依赖: isMulCommutative_adjoin
@@ -4752,7 +4752,7 @@ abbreviation adjoinNonUnitalCommSemiringOfComm
 
 中文:
 缩写 adjoinNonUnitalCommSemiringOfComm
-  签名: {s : Set A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
+  签名: {s : 集合 A} (hcomm : 对任意 a in s, 对任意 b in s, a * b = b * a)
   定义体: have := isMulCommutative_adjoin R hcomm hcomm_star
   inferInstance
 
@@ -4776,7 +4776,7 @@ instance instIsMulCommutative_adjoin
 
 中文:
 实例 instIsMulCommutative_adjoin
-  签名: {S : 类型} [SetLike S A] [MulMemClass S A] [StarMemClass S A]
+  签名: {S : 类型} [集合状 S A] [MulMem类 S A] [StarMem类 S A]
   定义体: isMulCommutative_adjoin R
     (fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂)
     (fun _ h₁ _ h₂ => setLike_mul_comm h₁ (star_mem h₂))
@@ -4806,7 +4806,7 @@ abbreviation adjoinNonUnitalCommRingOfComm
 
 中文:
 缩写 adjoinNonUnitalCommRingOfComm
-  签名: (R : 类型) {A : 类型} [CommRing R] [StarRing R]
+  签名: (R : 类型) {A : 类型} [交换环 R] [对合环 R]
   定义体: have := isMulCommutative_adjoin R hcomm hcomm_star
   inferInstance
 
@@ -4829,7 +4829,7 @@ instance isMulCommutative_toNonUnitalSubalgebra
 
 中文:
 实例 isMulCommutative_toNonUnitalSubalgebra
-  签名: (S : NonUnitalStarSubalgebra R A)
+  签名: (S : 非幺对合子代数 R A)
   定义体: ‹IsMulCommutative S›
 
 Depends on / 依赖: IsMulCommutative

@@ -78,7 +78,7 @@ lemma natDegree_preHilbertPoly
 
 中文:
 引理 natDegree_preHilbertPoly
-  条件: [CharZero F] (d k : 自然数)
+  条件: [特征零 F] (d k : 自然数)
   证明: by
   have hne : (d ! : F) != 0 := by norm_cast; positivity
   rw [preHilbertPoly]; rw [natDegree_smul _ (inv_ne_zero hne)]; rw [natDegree_comp]; rw [ascPochhammer_natDegree]; rw [add_comm_sub]; rw [← C_1]; rw [← map_sub]; rw [natDegree_add_C]; rw [natDegree_X]; rw [mul_one]
@@ -107,7 +107,7 @@ lemma coeff_preHilbertPoly_self
 
 中文:
 引理 coeff_preHilbertPoly_self
-  条件: [CharZero F] (d k : 自然数)
+  条件: [特征零 F] (d k : 自然数)
   证明: by
   delta preHilbertPoly
   have hne : (d ! : F) != 0 := by norm_cast; positivity
@@ -144,7 +144,7 @@ lemma leadingCoeff_preHilbertPoly
 
 中文:
 引理 leadingCoeff_preHilbertPoly
-  条件: [CharZero F] (d k : 自然数)
+  条件: [特征零 F] (d k : 自然数)
   证明: by
   rw [leadingCoeff]; rw [natDegree_preHilbertPoly]; rw [coeff_preHilbertPoly_self]
 
@@ -170,7 +170,7 @@ lemma preHilbertPoly_eq_choose_sub_add
 
 中文:
 引理 preHilbertPoly_eq_choose_sub_add
-  条件: [CharZero F] (d : 自然数) {k n : 自然数} (hkn : k <= n)
+  条件: [特征零 F] (d : 自然数) {k n : 自然数} (hkn : k <= n)
   证明: by
   have : (d ! : F) != 0 := by norm_cast; positivity
   calc
@@ -461,7 +461,7 @@ theorem existsUnique_hilbertPoly
     rintro x ⟨n, hn,
 
 中文:
-定理 existsUnique_hilbertPoly
+定理 存在Unique_hilbertPoly
   条件: (p : F[X]) (d : 自然数)
   证明: by
   use hilbertPoly p d; constructor
@@ -496,7 +496,7 @@ theorem eq_hilbertPoly_of_forall_coeff_eq_eval
     ⟨p.natDegree, fun _ x => coeff_mul_invOneSubPow_eq_hilbertPoly_eval d x⟩
 
 中文:
-定理 eq_hilbertPoly_of_forall_coeff_eq_eval
+定理 eq_hilbertPoly_of_对任意_coeff_eq_eval
   证明: ExistsUnique.unique (existsUnique_hilbertPoly p d) ⟨N, hhN⟩
     ⟨p.natDegree, fun _ x => coeff_mul_invOneSubPow_eq_hilbertPoly_eval d x⟩
 

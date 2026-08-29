@@ -42,7 +42,7 @@ definition epiWithInjectiveKernel
 
 中文:
 定义 epiWithInjectiveKernel
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Epi f ∧ Injective (kernel f)
 
 Depends on / 依赖: Injective, kernel
@@ -108,7 +108,7 @@ lemma epiWithInjectiveKernel_of_iso
 
 中文:
 引理 epiWithInjectiveKernel_of_iso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   证明: by
   rw [epiWithInjectiveKernel_iff]
   exact ⟨0, inferInstance, 0, by simp,
@@ -136,7 +136,7 @@ lemma epiWithInjectiveKernel_iff_of_isZero
 
 中文:
 引理 epiWithInjectiveKernel_iff_of_isZero
-  条件: {X Y : C} (f : X ⟶ Y) (hY : IsZero Y)
+  条件: {X Y : C} (f : X ⟶ Y) (hY : 是零 Y)
   证明: by
   simp only [epiWithInjectiveKernel, hY.epi f, true_and]
   exact Injective.iso_iff
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: (epiWithInjectiveKernel : Morphism命题erty C).IsMultiplicative
+  签名: (epiWithInjectiveKernel : MorphismProperty C).是Multiplicative
   定义体: epiWithInjectiveKernel_of_iso _
   comp_mem {X Y Z} g₁ g₂ hg₁ hg₂ := by
     rw [epiWithInjectiveKernel_iff] at hg₁ hg₂ ⊢
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: (epiWithInjectiveKernel (C := C)).IsStableUnderRetracts
+  签名: (epiWithInjectiveKernel (C := C)).是StableUnderRetracts
   定义体: by
     rintro X' Y' X Y f' f r ⟨_, hf⟩
     have : Epi f' :=

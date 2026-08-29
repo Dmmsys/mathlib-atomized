@@ -1374,7 +1374,7 @@ theorem choose_mono
 中文:
 定理 choose_mono
   条件: (b : 自然数)
-  结论: Monotone fun a => choose a b
+  结论: 递增 fun a => choose a b
   证明: fun _ _ => choose_le_choose b
 
 Depends on / 依赖: choose_le_choose

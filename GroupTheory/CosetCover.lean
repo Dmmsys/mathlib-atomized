@@ -72,7 +72,7 @@ theorem exists_leftTransversal_of_FiniteIndex
   · rintro 
 
 中文:
-定理 exists_leftTransversal_of_FiniteIndex
+定理 存在_leftTransversal_of_FiniteIndex
   证明: by
   have ⟨t, ht⟩ := (D.subgroupOf H).exists_isComplement_left 1
   have hf : t.Finite := ht.1.finite_left_iff.mpr inferInstance
@@ -271,8 +271,8 @@ theorem exists_finiteIndex_of_leftCoset_cover_aux
     have ⟨x, hx⟩
 
 中文:
-定理 exists_finiteIndex_of_leftCoset_cover_aux
-  结论: [DecidableEq (Subgroup G)]
+定理 存在_finiteIndex_of_leftCoset_cover_aux
+  结论: [DecidableEq (子群 G)]
   证明: by
   classical
   have ⟨n, hn⟩ : exists n, n = (s.image H).card := exists_eq
@@ -366,7 +366,7 @@ theorem exists_finiteIndex_of_leftCoset_cover
   · rw [Set.iUnion₂_co
 
 中文:
-定理 exists_finiteIndex_of_leftCoset_cover
+定理 存在_finiteIndex_of_leftCoset_cover
   结论: 存在 k in s, (H k).FiniteIndex
   证明: by
   classical
@@ -597,7 +597,7 @@ theorem exists_index_le_card_of_leftCoset_cover
   have hlt : forall i in s, ((H i).index : Rat)⁻¹ < (s.card : Rat)⁻¹
 
 中文:
-定理 exists_index_le_card_of_leftCoset_cover
+定理 存在_index_le_card_of_leftCoset_cover
   证明: by
   by_contra! h
   apply (one_le_sum_inv_index_of_leftCoset_cover hcovers).not_gt
@@ -646,8 +646,8 @@ theorem Submodule.exists_finiteIndex_of_cover
   AddSubgroup.exists_finiteIndex_of_leftCoset_cover hcovers'
 
 中文:
-定理 Submodule.exists_finiteIndex_of_cover
-  条件: (hcovers : ⋃ i in s, (p i : Set M) = Set.univ)
+定理 子模.存在_finiteIndex_of_cover
+  条件: (hcovers : ⋃ i in s, (p i : 集合 M) = 集合.univ)
   证明: have hcovers' : ⋃ i in s, (0 : M) +ᵥ ((p i).toAddSubgroup : Set M) = Set.univ := by
     simpa only [zero_vadd] using! hcovers
   AddSubgroup.exists_finiteIndex_of_leftCoset_cover hcovers'
@@ -682,9 +682,9 @@ theorem Subspace.biUnion_ne_univ_of_top_notMem
   have : Infinite (E ⧸ p) := Module.Free.inf
 
 中文:
-定理 Subspace.biUnion_ne_univ_of_top_notMem
+定理 子空间.biUnion_ne_univ_of_top_notMem
   条件: (hs : ⊤ ∉ s)
-  结论: ⋃ p in s, (p : Set E) != Set.univ
+  结论: ⋃ p in s, (p : 集合 E) != 集合.univ
   证明: by
   intro hcovers
   have ⟨p, hp, hfi⟩ := Submodule.exists_finiteIndex_of_cover hcovers
@@ -713,8 +713,8 @@ theorem Subspace.top_mem_of_biUnion_eq_univ
   exact Subspace.biUnion_ne_univ_of_top_notMem hcovers
 
 中文:
-定理 Subspace.top_mem_of_biUnion_eq_univ
-  条件: (hcovers : ⋃ p in s, (p : Set E) = Set.univ)
+定理 子空间.top_mem_of_biUnion_eq_univ
+  条件: (hcovers : ⋃ p in s, (p : 集合 E) = 集合.univ)
   证明: by
   contrapose! hcovers
   exact Subspace.biUnion_ne_univ_of_top_notMem hcovers
@@ -738,8 +738,8 @@ theorem Subspace.exists_eq_top_of_iUnion_eq_univ
   apply Set.mem_toFinset.mp (Subspace.top_mem_of_biUnion_eq_univ hcovers)
 
 中文:
-定理 Subspace.exists_eq_top_of_iUnion_eq_univ
-  结论: {ι} [Finite ι] {p : ι -> Subspace k E}
+定理 子空间.存在_eq_top_of_iUnion_eq_univ
+  结论: {ι} [有限 ι] {p : ι -> 子空间 k E}
   证明: by
   have := Fintype.ofFinite (Set.range p)
   simp_rw [← Set.biUnion_range (f := p), ← Set.mem_toFinset] at hcovers

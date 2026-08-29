@@ -69,14 +69,14 @@ structure VitaliFamily
     - covering : forall (s : Set X) (f : X -> Set (Set X)), (forall x in s, f x subseteq setsAt x) -> (forall x in s, forall ε > (0 : Real), exists t in f x, t subseteq closedBall x ε) -> exists t : Set (X × Set X), (forall p in t, p.1 in s) ∧ (t.PairwiseDisjoint fun p => p.2) ∧ (forall p in t, p.2 in f p.1) ∧ μ (s \ ⋃ p in t, p.2) = 0
 
 中文:
-结构 VitaliFamily
-  参数: {m : MeasurableSpace X} (μ : Measure X)
+结构 Vitali族
+  参数: {m : 可测空间 X} (μ : 测度 X)
   公理与运算 (5 个):
-    - setsAt : X -> Set (Set X)
-    - measurableSet : 对任意 x : X, 对任意 s in setsAt x, MeasurableSet s
-    - nonempty_interior : 对任意 x : X, 对任意 s in setsAt x, (interior s).Nonempty
+    - setsAt : X -> 集合 (集合 X)
+    - measurableSet : 对任意 x : X, 对任意 s in setsAt x, 可测集 s
+    - nonempty_interior : 对任意 x : X, 对任意 s in setsAt x, (interior s).非空
     - nontrivial : 对任意 (x : X), 对任意 ε > (0 : 实数), 存在 s in setsAt x, s subseteq closedBall x ε
-    - covering : 对任意 (s : Set X) (f : X -> Set (Set X)), (对任意 x in s, f x subseteq setsAt x) -> (对任意 x in s, 对任意 ε > (0 : 实数), 存在 t in f x, t subseteq closedBall x ε) -> 存在 t : Set (X × Set X), (对任意 p in t, p.1 in s) ∧ (t.PairwiseDisjoint fun p => p.2) ∧ (对任意 p in t, p.2 in f p.1) ∧ μ (s \ ⋃ p in t, p.2) = 0
+    - covering : 对任意 (s : 集合 X) (f : X -> 集合 (集合 X)), (对任意 x in s, f x subseteq setsAt x) -> (对任意 x in s, 对任意 ε > (0 : 实数), 存在 t in f x, t subseteq closedBall x ε) -> 存在 t : 集合 (X × 集合 X), (对任意 p in t, p.1 in s) ∧ (t.PairwiseDisjoint fun p => p.2) ∧ (对任意 p in t, p.2 in f p.1) ∧ μ (s \ ⋃ p in t, p.2) = 0
 -/
 structure VitaliFamily {m : MeasurableSpace X} (μ : Measure X) where
   /-- Sets of the family "centered" at a given point. -/
@@ -113,7 +113,7 @@ definition mono
 
 中文:
 定义 mono
-  签名: (v : VitaliFamily μ) (ν : Measure X) (hν : ν ≪ μ)
+  签名: (v : Vitali族 μ) (ν : 测度 X) (hν : ν ≪ μ)
   定义体: v
   covering s f h h' :=
     let ⟨t, ts, disj, mem_f, hμ⟩ := v.covering s f h h'
@@ -135,7 +135,7 @@ definition FineSubfamilyOn
 
 中文:
 定义 FineSubfamilyOn
-  签名: (v : VitaliFamily μ) (f : X -> Set (Set X)) (s : Set X)
+  签名: (v : Vitali族 μ) (f : X -> 集合 (集合 X)) (s : 集合 X)
   定义体: forall x in s, forall ε > 0, exists t in v.setsAt x inter f x, t subseteq closedBall x ε
 
 Depends on / 依赖: closedBall, setsAt, subseteq, v.setsAt
@@ -156,7 +156,7 @@ theorem exists_disjoint_covering_ae
   proof: v.covering s (fun x => v.setsAt x inter f x) (fun _ _ => inter_subset_left) h
 
 中文:
-定理 exists_disjoint_covering_ae
+定理 存在_disjoint_covering_ae
   证明: v.covering s (fun x => v.setsAt x inter f x) (fun _ _ => inter_subset_left) h
 
 Depends on / 依赖: covering, inter_subset_left, setsAt, v.covering, v.setsAt
@@ -216,7 +216,7 @@ theorem index_subset
 
 中文:
 定理 index_subset
-  结论: 对任意 p : X × Set X, p in h.index -> p.1 in s
+  结论: 对任意 p : X × 集合 X, p in h.index -> p.1 in s
   证明: h.exists_disjoint_covering_ae.choose_spec.1
 
 Depends on / 依赖: choose_spec, exists_disjoint_covering_ae, h.exists_disjoint_covering_ae.choose_spec
@@ -253,7 +253,7 @@ theorem covering_disjoint_subtype
 
 中文:
 定理 covering_disjoint_subtype
-  结论: Pairwise (Disjoint on fun x : h.index => h.covering x)
+  结论: 两两 (Disjoint on fun x : h.index => h.covering x)
   证明: (pairwise_subtype_iff_pairwise_set _ _).2 h.covering_disjoint
 
 Depends on / 依赖: covering_disjoint, h.covering_disjoint, pairwise_subtype_iff_pairwise_set
@@ -272,7 +272,7 @@ theorem covering_mem
 
 中文:
 定理 covering_mem
-  条件: {p : X × Set X} (hp : p in h.index)
+  条件: {p : X × 集合 X} (hp : p in h.index)
   结论: h.covering p in f p.1
   证明: (h.exists_disjoint_covering_ae.choose_spec.2.2.1 p hp).2
 
@@ -292,7 +292,7 @@ theorem covering_mem_family
 
 中文:
 定理 covering_mem_family
-  条件: {p : X × Set X} (hp : p in h.index)
+  条件: {p : X × 集合 X} (hp : p in h.index)
   结论: h.covering p in v.setsAt p.1
   证明: (h.exists_disjoint_covering_ae.choose_spec.2.2.1 p hp).1
 
@@ -337,8 +337,8 @@ theorem index_countable
 
 中文:
 定理 index_countable
-  条件: [SecondCountableTopology X]
-  结论: h.index.Countable
+  条件: [第二可数拓扑 X]
+  结论: h.index.可数
   证明: h.covering_disjoint.countable_of_nonempty_interior fun _ hx =>
     v.nonempty_interior _ _ (h.covering_mem_family hx)
 
@@ -358,7 +358,7 @@ theorem measurableSet_u
 
 中文:
 定理 measurableSet_u
-  条件: {p : X × Set X} (hp : p in h.index)
+  条件: {p : X × 集合 X} (hp : p in h.index)
   证明: v.measurableSet p.1 _ (h.covering_mem_family hp)
 -/
 protected theorem measurableSet_u {p : X × Set X} (hp : p in h.index) :
@@ -380,7 +380,7 @@ theorem measure_le_tsum_of_absolutelyContinuous
 
 中文:
 定理 measure_le_tsum_of_absolutelyContinuous
-  结论: [SecondCountableTopology X] {ρ : Measure X}
+  结论: [第二可数拓扑 X] {ρ : 测度 X}
   证明: calc
     ρ s <= ρ ((s \ ⋃ p in h.index, h.covering p) union ⋃ p in h.index, h.covering p) :=
       measure_mono (by simp only [subset_union_left, sdiff_union_self])
@@ -411,7 +411,7 @@ theorem measure_le_tsum
 
 中文:
 定理 measure_le_tsum
-  条件: [SecondCountableTopology X]
+  条件: [第二可数拓扑 X]
   结论: μ s <= ∑' x : h.index, μ (h.covering x)
   证明: h.measure_le_tsum_of_absolutelyContinuous Measure.AbsolutelyContinuous.rfl
 
@@ -440,7 +440,7 @@ definition enlarge
 
 中文:
 定义 enlarge
-  签名: (v : VitaliFamily μ) (δ : 实数) (δpos : 0 < δ)
+  签名: (v : Vitali族 μ) (δ : 实数) (δpos : 0 < δ)
   定义体: v.setsAt x union {s | MeasurableSet s ∧ (interior s).Nonempty ∧ ¬s subseteq closedBall x δ}
   measurableSet := by
     rintro x s (hs | hs)
@@ -508,8 +508,8 @@ theorem _root_.Filter.HasBasis.vitaliFamily
   simpa only [← Set.ofPred_inter_eq_sep] using! h.smallSets.inf_principal _
 
 中文:
-定理 _root_.Filter.HasBasis.vitaliFamily
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set X} {x : X}
+定理 _root_.滤子.有基.vitaliFamily
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 X} {x : X}
   证明: by
   simpa only [← Set.ofPred_inter_eq_sep] using! h.smallSets.inf_principal _
 
@@ -549,7 +549,7 @@ theorem mem_filterAt_iff
 
 中文:
 定理 mem_filterAt_iff
-  条件: {x : X} {s : Set (Set X)}
+  条件: {x : X} {s : 集合 (集合 X)}
   证明: by
   simp only [(v.filterAt_basis_closedBall x).mem_iff, ← and_imp, subset_def, mem_ofPred]
 
@@ -587,7 +587,7 @@ theorem eventually_filterAt_iff
 
 中文:
 定理 eventually_filterAt_iff
-  条件: {x : X} {P : Set X -> 命题}
+  条件: {x : X} {P : 集合 X -> 命题}
   证明: v.mem_filterAt_iff
 
 Depends on / 依赖: mem_filterAt_iff, v.mem_filterAt_iff
@@ -608,7 +608,7 @@ theorem tendsto_filterAt_iff
 
 中文:
 定理 tendsto_filterAt_iff
-  条件: {ι : 类型} {l : Filter ι} {f : ι -> Set X} {x : X}
+  条件: {ι : 类型} {l : 滤子 ι} {f : ι -> 集合 X} {x : X}
   证明: by
   simp only [filterAt, tendsto_inf, nhds_basis_closedBall.smallSets.tendsto_right_iff,
     tendsto_principal, and_comm, mem_powerset_iff]
@@ -673,7 +673,7 @@ theorem eventually_filterAt_measurableSet
 中文:
 定理 eventually_filterAt_measurableSet
   条件: (x : X)
-  结论: 对任意ᶠ t in v.filterAt x, MeasurableSet t
+  结论: 对任意ᶠ t in v.filterAt x, 可测集 t
   证明: by
   filter_upwards [v.eventually_filterAt_mem_setsAt x] with _ ha using v.measurableSet _ _ ha
 
@@ -693,7 +693,7 @@ theorem frequently_filterAt_iff
 
 中文:
 定理 frequently_filterAt_iff
-  条件: {x : X} {P : Set X -> 命题}
+  条件: {x : X} {P : 集合 X -> 命题}
   证明: by
   simp only [(v.filterAt_basis_closedBall x).frequently_iff, ← and_assoc, subset_def, mem_ofPred]
 
@@ -715,7 +715,7 @@ theorem eventually_filterAt_subset_of_nhds
 
 中文:
 定理 eventually_filterAt_subset_of_nhds
-  条件: {x : X} {o : Set X} (hx : o in 𝓝 x)
+  条件: {x : X} {o : 集合 X} (hx : o in 𝓝 x)
   证明: (eventually_smallSets_subset.2 hx).filter_mono inf_le_left
 
 @[simp]
@@ -743,7 +743,7 @@ theorem filterAt_enlarge
 
 中文:
 定理 filterAt_enlarge
-  条件: (v : VitaliFamily μ) {δ : 实数} (δpos : 0 < δ)
+  条件: (v : Vitali族 μ) {δ : 实数} (δpos : 0 < δ)
   证明: by
   ext1 x
   suffices {t | MeasurableSet t -> (interior t).Nonempty -> ¬t subseteq closedBall x δ ->
@@ -776,7 +776,7 @@ theorem fineSubfamilyOn_iff_frequently
 
 中文:
 定理 fineSubfamilyOn_iff_frequently
-  条件: (v : VitaliFamily μ) {f : X -> Set (Set X)} {s : Set X}
+  条件: (v : Vitali族 μ) {f : X -> 集合 (集合 X)} {s : 集合 X}
   证明: by
   refine forall₂_congr fun x hx => ?_
   simp [frequently_filterAt_iff, ← and_assoc, and_right_comm]
@@ -799,7 +799,7 @@ theorem fineSubfamilyOn_of_frequently
 
 中文:
 定理 fineSubfamilyOn_of_frequently
-  结论: (v : VitaliFamily μ) (f : X -> Set (Set X)) (s : Set X)
+  结论: (v : Vitali族 μ) (f : X -> 集合 (集合 X)) (s : 集合 X)
   证明: by
   rwa [fineSubfamilyOn_iff_frequently]
 

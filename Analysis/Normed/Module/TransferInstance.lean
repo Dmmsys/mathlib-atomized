@@ -39,7 +39,7 @@ abbreviation seminormedCommGroup
 
 中文:
 缩写 seminormedCommGroup
-  签名: [SeminormedCommGroup β] (e : α ≃ β)
+  签名: [SeminormedComm群 β] (e : α ≃ β)
   定义体: letI := e.commGroup
   { SeminormedCommGroup.induced _ _ e.mulEquiv with toPseudoMetricSpace := e.pseudometricSpace }
 -/
@@ -62,7 +62,7 @@ abbreviation normedCommGroup
 
 中文:
 缩写 normedCommGroup
-  签名: [NormedCommGroup β] (e : α ≃ β)
+  签名: [NormedComm群 β] (e : α ≃ β)
   定义体: letI := e.commGroup
   { NormedCommGroup.induced _ _ e.mulEquiv e.injective
     with toPseudoMetricSpace := e.pseudometricSpace }
@@ -86,7 +86,7 @@ abbreviation normedSpace
 
 中文:
 缩写 normedSpace
-  签名: (𝕜 : 类型) [NormedField 𝕜]
+  签名: (𝕜 : 类型) [赋范域 𝕜]
   定义体: Equiv.seminormedAddCommGroup e
     NormedSpace 𝕜 α :=
   letI := e.seminormedAddCommGroup

@@ -84,7 +84,7 @@ definition degrees
 
 中文:
 定义 degrees
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: letI := Classical.decEq σ
   p.support.sup fun s : σ ->₀ Nat => toMultiset s
 
@@ -105,7 +105,7 @@ theorem degrees_def
 
 中文:
 定理 degrees_def
-  条件: [DecidableEq σ] (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p : 多元多项式 σ R)
   证明: by rw [degrees]; convert!
       rfl
 
@@ -182,7 +182,7 @@ theorem degrees_C
 中文:
 定理 degrees_C
   条件: (a : R)
-  结论: degrees (C a : MvPolynomial σ R) = 0
+  结论: degrees (C a : 多元多项式 σ R) = 0
   证明: Multiset.le_zero.1 degrees_monomial _ _
 
 Depends on / 依赖: Multiset, Multiset.le_zero, degrees_monomial, le_zero
@@ -204,7 +204,7 @@ theorem degrees_X'
 中文:
 定理 degrees_X'
   条件: (n : σ)
-  结论: degrees (X n : MvPolynomial σ R) <= {n}
+  结论: degrees (X n : 多元多项式 σ R) <= {n}
   证明: le_trans (degrees_monomial _ _) le_of_eq toMultiset_single _ _
 
 @[simp]
@@ -228,8 +228,8 @@ theorem degrees_X
 
 中文:
 定理 degrees_X
-  条件: [Nontrivial R] (n : σ)
-  结论: degrees (X n : MvPolynomial σ R) = {n}
+  条件: [非平凡 R] (n : σ)
+  结论: degrees (X n : 多元多项式 σ R) = {n}
   证明: (degrees_monomial_eq _ (1 : R) one_ne_zero).trans (toMultiset_single _ _)
 
 @[simp]
@@ -254,7 +254,7 @@ theorem degrees_zero
 
 中文:
 定理 degrees_zero
-  结论: degrees (0 : MvPolynomial σ R) = 0
+  结论: degrees (0 : 多元多项式 σ R) = 0
   证明: by
   rw [← C_0]
   exact degrees_C 0
@@ -278,7 +278,7 @@ theorem degrees_one
 
 中文:
 定理 degrees_one
-  结论: degrees (1 : MvPolynomial σ R) = 0
+  结论: degrees (1 : 多元多项式 σ R) = 0
   证明: degrees_C 1
 
 Depends on / 依赖: degrees_C
@@ -297,7 +297,7 @@ theorem degrees_add_le
 
 中文:
 定理 degrees_add_le
-  条件: [DecidableEq σ] {p q : MvPolynomial σ R}
+  条件: [DecidableEq σ] {p q : 多元多项式 σ R}
   证明: by
   simp_rw [degrees_def]; exact supDegree_add_le
 
@@ -318,7 +318,7 @@ theorem degrees_sum_le
 
 中文:
 定理 degrees_sum_le
-  条件: {ι : 类型} [DecidableEq σ] (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} [DecidableEq σ] (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: by
   simp_rw [degrees_def]; exact supDegree_sum_le
 
@@ -342,7 +342,7 @@ theorem degrees_mul_le
 
 中文:
 定理 degrees_mul_le
-  条件: {p q : MvPolynomial σ R}
+  条件: {p q : 多元多项式 σ R}
   结论: (p * q).degrees <= p.degrees + q.degrees
   证明: by
   classical
@@ -367,7 +367,7 @@ theorem degrees_prod_le
 
 中文:
 定理 degrees_prod_le
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> MvPolynomial σ R}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> 多元多项式 σ R}
   证明: by
   classical exact supDegree_prod_le (map_zero _) (map_add _)
 
@@ -389,7 +389,7 @@ theorem degrees_pow_le
 
 中文:
 定理 degrees_pow_le
-  条件: {p : MvPolynomial σ R} {n : 自然数}
+  条件: {p : 多元多项式 σ R} {n : 自然数}
   结论: (p ^ n).degrees <= n • p.degrees
   证明: by
   simpa using degrees_prod_le (s := .range n) (f := fun _ => p)
@@ -411,7 +411,7 @@ theorem mem_degrees
 
 中文:
 定理 mem_degrees
-  条件: {p : MvPolynomial σ R} {i : σ}
+  条件: {p : 多元多项式 σ R} {i : σ}
   证明: by
   classical
   simp only [degrees_def, Multiset.mem_sup, ← mem_support_iff, Finsupp.mem_toMultiset]
@@ -568,7 +568,7 @@ classical exact Finset.sup_mono support_map_subset ..
 
 中文:
 引理 degrees_map_le
-  条件: [CommSemiring S] {f : R ->+* S}
+  条件: [交换半环 S] {f : R ->+* S}
   结论: (map f p).degrees <= p.degrees
   证明: by
 classical exact Finset.sup_mono support_map_subset ..
@@ -598,7 +598,7 @@ theorem degrees_rename
 
 中文:
 定理 degrees_rename
-  条件: (f : σ -> τ) (φ : MvPolynomial σ R)
+  条件: (f : σ -> τ) (φ : 多元多项式 σ R)
   证明: by
   classical
   intro i
@@ -640,7 +640,7 @@ theorem degrees_map_of_injective
 
 中文:
 定理 degrees_map_of_injective
-  结论: [CommSemiring S] (p : MvPolynomial σ R) {f : R ->+* S}
+  结论: [交换半环 S] (p : 多元多项式 σ R) {f : R ->+* S}
   证明: by
   simp only [degrees, MvPolynomial.support_map_of_injective _ hf]
 
@@ -665,7 +665,7 @@ theorem degrees_rename_of_injective
 
 中文:
 定理 degrees_rename_of_injective
-  条件: {p : MvPolynomial σ R} {f : σ -> τ} (h : Function.Injective f)
+  条件: {p : 多元多项式 σ R} {f : σ -> τ} (h : 函数.单射 f)
   证明: by
   classical
   simp only [degrees, Multiset.map_finset_sup p.support Finsupp.toMultiset f h,
@@ -701,7 +701,7 @@ definition degreeOf
 
 中文:
 定义 degreeOf
-  签名: (n : σ) (p : MvPolynomial σ R)
+  签名: (n : σ) (p : 多元多项式 σ R)
   定义体: letI := Classical.decEq σ
   p.degrees.count n
 
@@ -721,7 +721,7 @@ theorem degreeOf_def
 
 中文:
 定理 degreeOf_def
-  条件: [DecidableEq σ] (n : σ) (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (n : σ) (p : 多元多项式 σ R)
   证明: by rw [degreeOf]; convert! rfl
 
 Depends on / 依赖: convert, degreeOf
@@ -744,7 +744,7 @@ theorem degreeOf_eq_sup
 
 中文:
 定理 degreeOf_eq_sup
-  条件: (n : σ) (f : MvPolynomial σ R)
+  条件: (n : σ) (f : 多元多项式 σ R)
   证明: by
   classical
   rw [degreeOf_def]; rw [degrees]; rw [Multiset.count_finset_sup]
@@ -773,7 +773,7 @@ theorem degreeOf_lt_iff
 
 中文:
 定理 degreeOf_lt_iff
-  条件: {n : σ} {f : MvPolynomial σ R} {d : 自然数} (h : 0 < d)
+  条件: {n : σ} {f : 多元多项式 σ R} {d : 自然数} (h : 0 < d)
   证明: by
   rwa [degreeOf_eq_sup, Finset.sup_lt_iff]
 
@@ -796,7 +796,7 @@ lemma degreeOf_le_iff
 
 中文:
 引理 degreeOf_le_iff
-  条件: {n : σ} {f : MvPolynomial σ R} {d : 自然数}
+  条件: {n : σ} {f : 多元多项式 σ R} {d : 自然数}
   证明: by
   rw [degreeOf_eq_sup]; rw [Finset.sup_le_iff]
 
@@ -824,7 +824,7 @@ theorem degreeOf_zero
 中文:
 定理 degreeOf_zero
   条件: (n : σ)
-  结论: degreeOf n (0 : MvPolynomial σ R) = 0
+  结论: degreeOf n (0 : 多元多项式 σ R) = 0
   证明: by
   classical simp only [degreeOf_def, degrees_zero, Multiset.count_zero]
 
@@ -851,7 +851,7 @@ theorem degreeOf_one
 中文:
 定理 degreeOf_one
   条件: (n : σ)
-  结论: degreeOf n (1 : MvPolynomial σ R) = 0
+  结论: degreeOf n (1 : 多元多项式 σ R) = 0
   证明: by
   classical simp [degreeOf_def, degrees_one]
 
@@ -876,7 +876,7 @@ theorem degreeOf_C
 中文:
 定理 degreeOf_C
   条件: (a : R) (x : σ)
-  结论: degreeOf x (C a : MvPolynomial σ R) = 0
+  结论: degreeOf x (C a : 多元多项式 σ R) = 0
   证明: by
   classical simp [degreeOf_def, degrees_C]
 
@@ -898,7 +898,7 @@ theorem degreeOf_X
 
 中文:
 定理 degreeOf_X
-  条件: [DecidableEq σ] (i j : σ) [Nontrivial R]
+  条件: [DecidableEq σ] (i j : σ) [非平凡 R]
   证明: by
   by_cases c : i = j
   · simp only [c, if_true, degreeOf_def, degrees_X, Multiset.count_singleton]
@@ -923,7 +923,7 @@ theorem degreeOf_X_self
 
 中文:
 定理 degreeOf_X_self
-  条件: [Nontrivial R] (i : σ)
+  条件: [非平凡 R] (i : σ)
   证明: by
   classical simp [degreeOf_X]
 -/
@@ -962,7 +962,7 @@ theorem degreeOf_add_le
 
 中文:
 定理 degreeOf_add_le
-  条件: (n : σ) (f g : MvPolynomial σ R)
+  条件: (n : σ) (f g : 多元多项式 σ R)
   证明: by
   simp_rw [degreeOf_eq_sup]; exact supDegree_add_le
 
@@ -984,7 +984,7 @@ theorem monomial_le_degreeOf
 
 中文:
 定理 monomial_le_degreeOf
-  条件: (i : σ) {f : MvPolynomial σ R} {m : σ ->₀ 自然数} (h_m : m in f.support)
+  条件: (i : σ) {f : 多元多项式 σ R} {m : σ ->₀ 自然数} (h_m : m in f.support)
   证明: by
   rw [degreeOf_eq_sup i]
   apply Finset.le_sup h_m
@@ -1028,7 +1028,7 @@ theorem degreeOf_X_self_pow
 
 中文:
 定理 degreeOf_X_self_pow
-  条件: [Nontrivial R] (i : σ) (k : 自然数)
+  条件: [非平凡 R] (i : σ) (k : 自然数)
   证明: by
   rw [X_pow_eq_monomial]; rw [degreeOf_monomial_eq _ _ one_ne_zero]; rw [Finsupp.single_eq_same]
 -/
@@ -1104,7 +1104,7 @@ theorem degreeOf_mul_le
 
 中文:
 定理 degreeOf_mul_le
-  条件: (i : σ) (f g : MvPolynomial σ R)
+  条件: (i : σ) (f g : 多元多项式 σ R)
   证明: by
   classical
   simp only [degreeOf]
@@ -1132,7 +1132,7 @@ theorem degreeOf_sum_le
 
 中文:
 定理 degreeOf_sum_le
-  条件: {ι : 类型} (i : σ) (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (i : σ) (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: by
   simp_rw [degreeOf_eq_sup]
   exact supDegree_sum_le
@@ -1156,7 +1156,7 @@ theorem degreeOf_prod_le
 
 中文:
 定理 degreeOf_prod_le
-  条件: {ι : 类型} (i : σ) (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (i : σ) (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: by
   simp_rw [degreeOf_eq_sup]
   exact supDegree_prod_le (by simp only [coe_zero, Pi.zero_apply]) (by simp)
@@ -1179,7 +1179,7 @@ theorem degreeOf_pow_le
 
 中文:
 定理 degreeOf_pow_le
-  条件: (i : σ) (p : MvPolynomial σ R) (n : 自然数)
+  条件: (i : σ) (p : 多元多项式 σ R) (n : 自然数)
   证明: by
   simpa using degreeOf_prod_le i (Finset.range n) (fun _ => p)
 
@@ -1205,7 +1205,7 @@ theorem degreeOf_mul_X_of_ne
 
 中文:
 定理 degreeOf_mul_X_of_ne
-  条件: {i j : σ} (f : MvPolynomial σ R) (h : i != j)
+  条件: {i j : σ} (f : 多元多项式 σ R) (h : i != j)
   证明: by
   classical
   simp only [degreeOf_eq_sup i, support_mul_X, Finset.sup_map]
@@ -1241,7 +1241,7 @@ convert! Multiset.count_le_of_le j degrees_X' j
 
 中文:
 定理 degreeOf_mul_X_self
-  条件: (j : σ) (f : MvPolynomial σ R)
+  条件: (j : σ) (f : 多元多项式 σ R)
   证明: by
   classical
   simp only [degreeOf]
@@ -1300,7 +1300,7 @@ theorem degreeOf_X_of_ne
 中文:
 定理 degreeOf_X_of_ne
   条件: {i j : σ} (h : i != j)
-  结论: (X j : MvPolynomial σ R).degreeOf i = 0
+  结论: (X j : 多元多项式 σ R).degreeOf i = 0
   证明: pow_one (X j : MvPolynomial σ R) ▸ degreeOf_X_pow_of_ne 1 h
 
 Depends on / 依赖: MvPolynomial, degreeOf_X_pow_of_ne, pow_one
@@ -1323,7 +1323,7 @@ theorem degreeOf_mul_X_eq_degreeOf_add_one_iff
 
 中文:
 定理 degreeOf_mul_X_eq_degreeOf_add_one_iff
-  条件: (j : σ) (f : MvPolynomial σ R)
+  条件: (j : σ) (f : 多元多项式 σ R)
   证明: by
   refine ⟨fun h => by by_contra ha; simp [ha] at h, fun h => ?_⟩
   apply Nat.le_antisymm (degreeOf_mul_X_self j f)
@@ -1510,7 +1510,7 @@ theorem degreeOf_C_mul_le
 
 中文:
 定理 degreeOf_C_mul_le
-  条件: (p : MvPolynomial σ R) (i : σ) (c : R)
+  条件: (p : 多元多项式 σ R) (i : σ) (c : R)
   证明: by
   unfold degreeOf
   convert! Multiset.count_le_of_le i degrees_mul_le
@@ -1537,7 +1537,7 @@ theorem degreeOf_mul_C_le
 
 中文:
 定理 degreeOf_mul_C_le
-  条件: (p : MvPolynomial σ R) (i : σ) (c : R)
+  条件: (p : 多元多项式 σ R) (i : σ) (c : R)
   证明: by
   unfold degreeOf
   convert! Multiset.count_le_of_le i degrees_mul_le
@@ -1563,7 +1563,7 @@ theorem degreeOf_rename_of_injective
 
 中文:
 定理 degreeOf_rename_of_injective
-  结论: {p : MvPolynomial σ R} {f : σ -> τ} (h : Function.Injective f)
+  结论: {p : 多元多项式 σ R} {f : σ -> τ} (h : 函数.单射 f)
   证明: by
   classical
   simp only [degreeOf, degrees_rename_of_injective h, Multiset.count_map_eq_count' f p.degrees h]
@@ -1592,7 +1592,7 @@ definition totalDegree
 
 中文:
 定义 totalDegree
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: p.support.sup fun s => s.sum fun _ e => e
 
 Depends on / 依赖: p.support.sup, s.sum, support
@@ -1613,7 +1613,7 @@ theorem totalDegree_eq
 
 中文:
 定理 totalDegree_eq
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   rw [totalDegree]
   congr; funext m
@@ -1637,7 +1637,7 @@ theorem le_totalDegree
 
 中文:
 定理 le_totalDegree
-  条件: {p : MvPolynomial σ R} {s : σ ->₀ 自然数} (h : s in p.support)
+  条件: {p : 多元多项式 σ R} {s : σ ->₀ 自然数} (h : s in p.support)
   证明: Finset.le_sup (α := Nat) (f := fun s => sum s fun _ e => e) h
 
 Depends on / 依赖: Finset, Finset.le_sup, le_sup
@@ -1659,7 +1659,7 @@ exact Finset.sup_le fun s hs => Multiset.card_le_card Finset.le_sup hs
 
 中文:
 定理 totalDegree_le_degrees_card
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   classical
   rw [totalDegree_eq]
@@ -1711,7 +1711,7 @@ theorem totalDegree_C
 中文:
 定理 totalDegree_C
   条件: (a : R)
-  结论: (C a : MvPolynomial σ R).totalDegree = 0
+  结论: (C a : 多元多项式 σ R).totalDegree = 0
   证明: (supDegree_single 0 a).trans by rw [sum_zero_index, bot_eq_zero', ite_self]
 
 @[simp]
@@ -1735,7 +1735,7 @@ theorem totalDegree_zero
 
 中文:
 定理 totalDegree_zero
-  结论: (0 : MvPolynomial σ R).totalDegree = 0
+  结论: (0 : 多元多项式 σ R).totalDegree = 0
   证明: by
   rw [← C_0]; exact totalDegree_C (0 : R)
 
@@ -1759,7 +1759,7 @@ theorem totalDegree_one
 
 中文:
 定理 totalDegree_one
-  结论: (1 : MvPolynomial σ R).totalDegree = 0
+  结论: (1 : 多元多项式 σ R).totalDegree = 0
   证明: totalDegree_C (1 : R)
 
 @[simp]
@@ -1782,7 +1782,7 @@ theorem totalDegree_X
 
 中文:
 定理 totalDegree_X
-  条件: {R} [CommSemiring R] [Nontrivial R] (s : σ)
+  条件: {R} [交换半环 R] [非平凡 R] (s : σ)
   证明: by
   rw [totalDegree]; rw [support_X]
   simp only [Finset.sup, Finsupp.sum_single_index, Finset.fold_singleton, sup_bot_eq]
@@ -1804,7 +1804,7 @@ theorem totalDegree_add
 
 中文:
 定理 totalDegree_add
-  条件: (a b : MvPolynomial σ R)
+  条件: (a b : 多元多项式 σ R)
   证明: sup_support_coeff_add_le _ _ _
 
 Depends on / 依赖: sup_support_coeff_add_le
@@ -1833,7 +1833,7 @@ theorem totalDegree_add_eq_left_of_totalDegree_lt
 
 中文:
 定理 totalDegree_add_eq_left_of_totalDegree_lt
-  结论: {p q : MvPolynomial σ R}
+  结论: {p q : 多元多项式 σ R}
   证明: by
   classical
     apply le_antisymm
@@ -1880,7 +1880,7 @@ theorem totalDegree_add_eq_right_of_totalDegree_lt
 
 中文:
 定理 totalDegree_add_eq_right_of_totalDegree_lt
-  结论: {p q : MvPolynomial σ R}
+  结论: {p q : 多元多项式 σ R}
   证明: by
   rw [add_comm]; rw [totalDegree_add_eq_left_of_totalDegree_lt h]
 
@@ -1900,7 +1900,7 @@ theorem totalDegree_mul
 
 中文:
 定理 totalDegree_mul
-  条件: (a b : MvPolynomial σ R)
+  条件: (a b : 多元多项式 σ R)
   证明: sup_support_coeff_mul_le (fun _ _ => by simp [Finsupp.sum_add_index']) _ _
 
 Depends on / 依赖: Finsupp, Finsupp.sum_add_index, sum_add_index, sup_support_coeff_mul_le
@@ -1919,7 +1919,7 @@ theorem totalDegree_smul_le
 
 中文:
 定理 totalDegree_smul_le
-  条件: [CommSemiring S] [DistribMulAction R S] (a : R) (f : MvPolynomial σ S)
+  条件: [交换半环 S] [分配乘法作用 R S] (a : R) (f : 多元多项式 σ S)
   证明: Finset.sup_mono support_smul
 
 Depends on / 依赖: Finset, Finset.sup_mono, sup_mono, support_smul
@@ -1943,7 +1943,7 @@ theorem totalDegree_pow
 
 中文:
 定理 totalDegree_pow
-  条件: (a : MvPolynomial σ R) (n : 自然数)
+  条件: (a : 多元多项式 σ R) (n : 自然数)
   证明: by
   rw [Finset.pow_eq_prod_const]; rw [← Nat.nsmul_eq_mul]; rw [Finset.nsmul_eq_sum_const]
   refine supDegree_prod_le rfl (fun _ _ => ?_)
@@ -2026,7 +2026,7 @@ theorem totalDegree_X_pow
 
 中文:
 定理 totalDegree_X_pow
-  条件: [Nontrivial R] (s : σ) (n : 自然数)
+  条件: [非平凡 R] (s : σ) (n : 自然数)
   证明: by simp [X_pow_eq_monomial, one_ne_zero]
 
 Depends on / 依赖: X_pow_eq_monomial, one_ne_zero
@@ -2044,7 +2044,7 @@ theorem totalDegree_list_prod
 
 中文:
 定理 totalDegree_list_prod
-  条件: (l : List (MvPolynomial σ R))
+  条件: (l : 列表 (多元多项式 σ R))
   证明: l.apply_prod_le_sum_map _ totalDegree_one.le totalDegree_mul
 
 Depends on / 依赖: apply_prod_le_sum_map, l.apply_prod_le_sum_map, totalDegree_mul, totalDegree_one, totalDegree_one.le
@@ -2063,7 +2063,7 @@ theorem totalDegree_multiset_prod
 
 中文:
 定理 totalDegree_multiset_prod
-  条件: (s : Multiset (MvPolynomial σ R))
+  条件: (s : Multiset (多元多项式 σ R))
   证明: s.apply_prod_le_sum_map _ totalDegree_one.le totalDegree_mul
 
 Depends on / 依赖: apply_prod_le_sum_map, s.apply_prod_le_sum_map, totalDegree_mul, totalDegree_one, totalDegree_one.le
@@ -2084,7 +2084,7 @@ theorem totalDegree_finsetProd
 
 中文:
 定理 totalDegree_finsetProd
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: s.apply_prod_le_sum_apply _ totalDegree_one.le totalDegree_mul
 
 @[deprecated (since := "2026-04-08")] alias totalDegree_finset_prod := totalDegree_finsetProd
@@ -2114,7 +2114,7 @@ theorem totalDegree_finsetSum
 
 中文:
 定理 totalDegree_finsetSum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: by
   induction s using Finset.cons_induction with
   | empty => exact zero_le
@@ -2146,7 +2146,7 @@ lemma totalDegree_finsetSum_le
 
 中文:
 引理 totalDegree_finsetSum_le
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> MvPolynomial σ R} {d : 自然数}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 多元多项式 σ R} {d : 自然数}
   证明: (totalDegree_finsetSum ..).trans Finset.sup_le hf
 
 Depends on / 依赖: Finset, Finset.sup_le, sup_le, totalDegree_finsetSum
@@ -2168,7 +2168,7 @@ lemma degreeOf_le_totalDegree
 
 中文:
 引理 degreeOf_le_totalDegree
-  条件: (f : MvPolynomial σ R) (i : σ)
+  条件: (f : 多元多项式 σ R) (i : σ)
   结论: f.degreeOf i <= f.totalDegree
   证明: degreeOf_le_iff.mpr fun d hd => (eq_or_ne (d i) 0).elim (by lia) fun h =>
     (Finset.single_le_sum (by lia) <| Finsupp.mem_support_iff.mpr h).trans
@@ -2200,8 +2200,8 @@ theorem exists_degree_lt
 
 
 中文:
-定理 exists_degree_lt
-  结论: [Fintype σ] (f : MvPolynomial σ R) (n : 自然数)
+定理 存在_degree_lt
+  结论: [有限类型 σ] (f : 多元多项式 σ R) (n : 自然数)
   证明: by
   contrapose! h
   calc
@@ -2245,7 +2245,7 @@ theorem coeff_eq_zero_of_totalDegree_lt
 
 中文:
 定理 coeff_eq_zero_of_totalDegree_lt
-  结论: {f : MvPolynomial σ R} {d : σ ->₀ 自然数}
+  结论: {f : 多元多项式 σ R} {d : σ ->₀ 自然数}
   证明: by
   rw [totalDegree]; rw [Finset.sup_lt_iff] at h
   · specialize h d
@@ -2281,7 +2281,7 @@ theorem totalDegree_eq_zero_iff_eq_C
 
 中文:
 定理 totalDegree_eq_zero_iff_eq_C
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   证明: by
   constructor <;> intro h
   · ext m; classical rw [coeff_C]; split_ifs with hm; · rw [← hm]
@@ -2316,7 +2316,7 @@ theorem totalDegree_rename_le
 
 中文:
 定理 totalDegree_rename_le
-  条件: (f : σ -> τ) (p : MvPolynomial σ R)
+  条件: (f : σ -> τ) (p : 多元多项式 σ R)
   证明: Finset.sup_le fun b h => by
     classical
     have h' := Finsupp.mapDomain_support h
@@ -2345,7 +2345,7 @@ lemma totalDegree_renameEquiv
 
 中文:
 引理 totalDegree_renameEquiv
-  条件: (f : σ ≃ τ) (p : MvPolynomial σ R)
+  条件: (f : σ ≃ τ) (p : 多元多项式 σ R)
   证明: (totalDegree_rename_le f p).antisymm (le_trans (by simp) (totalDegree_rename_le f.symm _))
 
 Depends on / 依赖: antisymm, f.symm, le_trans, totalDegree_rename_le
@@ -2378,7 +2378,7 @@ definition degreesLE
 
 中文:
 定义 degreesLE
-  签名: : Submodule R (MvPolynomial σ R) where
+  签名: : 子模 R (多元多项式 σ R) where
   定义体: {p | p.degrees <= s}
   add_mem' {a b} ha hb := by classical exact degrees_add_le.trans (sup_le ha hb)
   zero_mem' := by simp

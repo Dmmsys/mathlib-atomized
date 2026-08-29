@@ -66,12 +66,12 @@ structure Partition
     - parts_sum : parts.sum = n
 
 中文:
-结构 Partition
+结构 分拆
   参数: (n : 自然数)
   公理与运算 (3 个):
     - parts : Multiset 自然数
     - parts_pos : 对任意 {i}, i in parts -> 0 < i
-    - parts_sum : parts.sum = n
+    - parts_sum : parts.求和 = n
 -/
 structure Partition (n : Nat) where
   /-- positive integers summing to `n` -/
@@ -99,7 +99,7 @@ theorem le_of_mem_parts
 
 中文:
 定理 le_of_mem_parts
-  条件: {n : 自然数} {p : Partition n} {m : 自然数} (h : m in p.parts)
+  条件: {n : 自然数} {p : 分拆 n} {m : 自然数} (h : m in p.parts)
   结论: m <= n
   证明: by
   simpa [p.parts_sum] using Multiset.le_sum_of_mem h
@@ -123,7 +123,7 @@ definition ofComposition
 
 中文:
 定义 ofComposition
-  签名: (n : 自然数) (c : Composition n)
+  签名: (n : 自然数) (c : 余mposition n)
   定义体: c.blocks
   parts_pos hi := c.blocks_pos hi
   parts_sum := by rw [Multiset.sum_coe, c.blocks_sum]
@@ -150,7 +150,7 @@ theorem ofComposition_surj
 中文:
 定理 ofComposition_surj
   条件: {n : 自然数}
-  结论: Function.Surjective (ofComposition n)
+  结论: 函数.满射 (ofComposition n)
   证明: by
   rintro ⟨b, hb₁, hb₂⟩
   induction b using Quotient.inductionOn with | _ b => ?_
@@ -183,7 +183,7 @@ definition ofSums
 
 中文:
 定义 ofSums
-  签名: (n : 自然数) (l : Multiset 自然数) (hl : l.sum = n)
+  签名: (n : 自然数) (l : Multiset 自然数) (hl : l.求和 = n)
   定义体: l.filter (· != 0)
   parts_pos hi := (of_mem_filter hi).bot_lt
   parts_sum := by
@@ -297,7 +297,7 @@ definition ofSymShapeEquiv
 
 中文:
 定义 ofSymShapeEquiv
-  签名: (μ : Partition n) (e : σ ≃ τ)
+  签名: (μ : 分拆 n) (e : σ ≃ τ)
   定义体: fun x => ⟨Sym.equivCongr e x, by simp [ofSym_map, x.2]⟩
   invFun := fun x => ⟨Sym.equivCongr e.symm x, by simp [ofSym_map, x.2]⟩
   left_inv := by intro x; simp
@@ -326,7 +326,7 @@ definition toFinsuppAntidiag
 
 中文:
 定义 toFinsuppAntidiag
-  签名: {n : 自然数} (p : Partition n)
+  签名: {n : 自然数} (p : 分拆 n)
   定义体: p.parts.count m * m
   support := p.parts.toFinset
   mem_support_toFun m := by
@@ -363,7 +363,7 @@ theorem toFinsuppAntidiag_injective
 中文:
 定理 toFinsuppAntidiag_injective
   条件: (n : 自然数)
-  结论: Function.Injective (toFinsuppAntidiag (n := n))
+  结论: 函数.单射 (toFinsuppAntidiag (n := n))
   证明: by
   unfold toFinsuppAntidiag
   intro p q h
@@ -405,7 +405,7 @@ theorem toFinsuppAntidiag_mem_finsuppAntidiag
 
 中文:
 定理 toFinsuppAntidiag_mem_finsuppAntidiag
-  条件: {n : 自然数} (p : Partition n)
+  条件: {n : 自然数} (p : 分拆 n)
   证明: by
   have hp : p.parts.toFinset subseteq Finset.Icc 1 n := by
     grind
@@ -479,7 +479,7 @@ lemma partition_zero_parts
 
 中文:
 引理 partition_zero_parts
-  条件: (p : Partition 0)
+  条件: (p : 分拆 0)
   结论: p.parts = 0
   证明: eq_zero_of_forall_notMem fun _ h => (p.parts_pos h).ne' sum_eq_zero_iff.1 p.parts_sum _ h
 -/
@@ -496,7 +496,7 @@ instance UniquePartitionZero
 
 中文:
 实例 UniquePartitionZero
-  签名: : Unique (Partition 0) where
+  签名: : 唯一 (分拆 0) where
   定义体: Partition.ext by simp
 
 Depends on / 依赖: Partition, Partition.ext, equivSmall, fullyFaithfulFunctor, fullyFaithfulFunctor.homEquiv, functor, functor.obj, homEquiv
@@ -519,7 +519,7 @@ lemma partition_one_parts
 
 中文:
 引理 partition_one_parts
-  条件: (p : Partition 1)
+  条件: (p : 分拆 1)
   结论: p.parts = {1}
   证明: by
   have h : p.parts = replicate (card p.parts) 1 := eq_replicate_card.2 fun x hx =>
@@ -543,7 +543,7 @@ instance UniquePartitionOne
 
 中文:
 实例 UniquePartitionOne
-  签名: : Unique (Partition 1) where
+  签名: : 唯一 (分拆 1) where
   定义体: Partition.ext by simp
 
 Depends on / 依赖: Partition, Partition.ext
@@ -581,7 +581,7 @@ theorem count_ofSums_of_ne_zero
 
 中文:
 定理 count_ofSums_of_ne_zero
-  条件: {n : 自然数} {l : Multiset 自然数} (hl : l.sum = n) {i : 自然数} (hi : i != 0)
+  条件: {n : 自然数} {l : Multiset 自然数} (hl : l.求和 = n) {i : 自然数} (hi : i != 0)
   证明: count_filter_of_pos hi
 
 Depends on / 依赖: count_filter_of_pos
@@ -600,7 +600,7 @@ theorem count_ofSums_zero
 
 中文:
 定理 count_ofSums_zero
-  条件: {n : 自然数} {l : Multiset 自然数} (hl : l.sum = n)
+  条件: {n : 自然数} {l : Multiset 自然数} (hl : l.求和 = n)
   证明: count_filter_of_neg fun h => h rfl
 
 Depends on / 依赖: count_filter_of_neg

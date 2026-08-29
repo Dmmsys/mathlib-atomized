@@ -30,7 +30,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (ZMod N)
+  签名: 拓扑空间 (ZMod N)
   定义体: ⊥
 -/
 instance : TopologicalSpace (ZMod N) := ⊥
@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (ZMod N)
+  签名: 离散拓扑 (ZMod N)
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology (ZMod N) := ⟨rfl⟩

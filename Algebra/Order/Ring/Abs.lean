@@ -71,7 +71,7 @@ lemma odd_abs
 
 中文:
 引理 odd_abs
-  条件: [LinearOrder α] [Ring α] {a : α}
+  条件: [线性序 α] [环 α] {a : α}
   结论: Odd (abs a) ↔ Odd a
   证明: by
   rcases abs_choice a with h | h <;> simp only [h, odd_neg]
@@ -370,8 +370,8 @@ lemma exists_abs_lt
   proof: ⟨|a| + 1, lt_of_lt_of_le zero_lt_one by simp, lt_add_one |a|⟩
 
 中文:
-引理 exists_abs_lt
-  条件: [Nontrivial α] (a : α)
+引理 存在_abs_lt
+  条件: [非平凡 α] (a : α)
   结论: 存在 b > 0, |a| < b
   证明: ⟨|a| + 1, lt_of_lt_of_le zero_lt_one by simp, lt_add_one |a|⟩
 
@@ -832,7 +832,7 @@ lemma abs_unit_intCast
 
 中文:
 引理 abs_unit_intCast
-  条件: [IsOrderedRing α] (a : 整数ˣ)
+  条件: [是Ordered环 α] (a : 整数ˣ)
   结论: |((a : 整数) : α)| = 1
   证明: by
   cases Int.units_eq_one_or a <;> simp_all
@@ -875,8 +875,8 @@ theorem abs_geomSum_le
 
 中文:
 定理 abs_geomSum_le
-  条件: [IsOrderedRing α]
-  结论: |geomSum a b n| <= (n + 1) * max |a| |b| ^ n
+  条件: [是Ordered环 α]
+  结论: |geomSum a b n| <= (n + 1) * 最大值 |a| |b| ^ n
   证明: by
   induction n with | zero => simp [geomSum] | succ n ih => ?_
   refine (abs_add_le ..).trans ?_
@@ -931,7 +931,7 @@ theorem abs_pow_sub_pow_le
 
 中文:
 定理 abs_pow_sub_pow_le
-  条件: [IsOrderedRing α]
+  条件: [是Ordered环 α]
   证明: by
   obtain _ | n := n; · simp
   rw [Nat.add_sub_cancel]; rw [pow_sub_pow_eq_sub_mul_geomSum]; rw [abs_mul]; rw [mul_assoc]; rw [Nat.cast_succ]
@@ -1362,7 +1362,7 @@ lemma Int.le_abs_of_dvd
   proof: le_of_dvd (by simpa) (by simpa)
 
 中文:
-引理 Int.le_abs_of_dvd
+引理 整数.le_abs_of_dvd
   条件: {a b : 整数} (h₁ : b != 0) (h₂ : a ∣ b)
   结论: a <= |b|
   证明: le_of_dvd (by simpa) (by simpa)

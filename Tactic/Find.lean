@@ -45,7 +45,7 @@ definition matchHyps
 
 中文:
 定义 matchHyps
-  签名: : List Expr -> List Expr -> List Expr -> MetaM 布尔
+  签名: : 列表 Expr -> 列表 Expr -> 列表 Expr -> MetaM 布尔值
 -/
 private partial def matchHyps : List Expr -> List Expr -> List Expr -> MetaM Bool
   | p::ps, oldHyps, h::newHyps => do

@@ -50,7 +50,7 @@ definition dedekindZeta
 
 中文:
 定义 dedekindZeta
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: LSeries (fun n => Nat.card {I : Ideal (𝓞 K) // absNorm I = n}) s
 
 Depends on / 依赖: LSeries, Nat.card, absNorm

@@ -31,8 +31,8 @@ theorem Pairwise.forall
   hl₁.symm ▸ hl₂.forall
 
 中文:
-定理 Pairwise.forall
-  条件: [Std.Symm r] (hs : Pairwise r s)
+定理 两两.对任意
+  条件: [Std.Symm r] (hs : 两两 r s)
   证明: let ⟨_, hl₁, hl₂⟩ := hs
   hl₁.symm ▸ hl₂.forall
 -/

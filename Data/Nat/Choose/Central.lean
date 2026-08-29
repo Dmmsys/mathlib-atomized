@@ -164,7 +164,7 @@ theorem centralBinom_strictMono
 
 中文:
 定理 centralBinom_strictMono
-  结论: StrictMono centralBinom
+  结论: 严格递增 centralBinom
   证明: strictMono_nat_of_lt_succ (by grind [Nat.choose_pos, centralBinom])
 
 Depends on / 依赖: Nat.choose_pos, centralBinom, choose_pos, strictMono_nat_of_lt_succ

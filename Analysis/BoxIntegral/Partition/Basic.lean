@@ -61,12 +61,12 @@ structure Prepartition
     - pairwiseDisjoint : Set.Pairwise (↑boxes) (Disjoint on ((↑) : Box ι -> Set (ι -> Real)))
 
 中文:
-结构 Prepartition
+结构 预分拆
   参数: (I : Box ι)
   公理与运算 (3 个):
-    - boxes : Finset (Box ι)
+    - boxes : 有限集 (Box ι)
     - le_of_mem' : 对任意 J in boxes, J <= I
-    - pairwiseDisjoint : Set.Pairwise (↑boxes) (Disjoint on ((↑) : Box ι -> Set (ι -> 实数)))
+    - pairwiseDisjoint : 集合.两两 (↑boxes) (Disjoint on ((↑) : Box ι -> 集合 (ι -> 实数)))
 -/
 structure Prepartition (I : Box ι) where
   /-- The underlying set of boxes -/
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Box ι) (Prepartition I)
+  签名: Membership (Box ι) (预分拆 I)
   定义体: ⟨fun π J => J in π.boxes⟩
 
 @[simp]
@@ -135,7 +135,7 @@ theorem mem_mk
 中文:
 定理 mem_mk
   条件: {s h₁ h₂}
-  结论: J in (mk s h₁ h₂ : Prepartition I) ↔ J in s
+  结论: J in (mk s h₁ h₂ : 预分拆 I) ↔ J in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -295,7 +295,7 @@ theorem injective_boxes
 
 中文:
 定理 injective_boxes
-  结论: Function.Injective (boxes : Prepartition I -> Finset (Box ι))
+  结论: 函数.单射 (boxes : 预分拆 I -> 有限集 (Box ι))
   证明: by
   rintro ⟨s₁, h₁, h₁'⟩ ⟨s₂, h₂, h₂'⟩ (rfl : s₁ = s₂)
   rfl
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Prepartition I)
+  签名: LE (预分拆 I)
   定义体: ⟨fun π π' => forall ⦃I⦄, I in π -> exists I' in π', I <= I'⟩
 -/
 instance : LE (Prepartition I) :=
@@ -403,7 +403,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder (Prepartition I) where
+  签名: : 偏序 (预分拆 I) where
   定义体: ⟨I, hI, le_rfl⟩
   le_trans _ _ _ h₁₂ h₂₃ _ hI₁ :=
     let ⟨_, hI₂, hI₁₂⟩ := h₁₂ hI₁
@@ -441,7 +441,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (Prepartition I)
+  签名: 有顶序 (预分拆 I)
   定义体: single I I le_rfl
   le_top π _ hJ := ⟨I, by simp, π.le_of_mem hJ⟩
 
@@ -464,7 +464,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Prepartition I)
+  签名: 有底序 (预分拆 I)
   定义体: ⟨∅,
     fun _ hJ => (Finset.notMem_empty _ hJ).elim,
     fun _ hJ => (Set.notMem_empty _ <| Finset.coe_empty ▸ hJ).elim⟩
@@ -486,7 +486,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Prepartition I)
+  签名: 可居 (预分拆 I)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (Prepartition I) := ⟨⊤⟩
@@ -525,7 +525,7 @@ theorem mem_top
 
 中文:
 定理 mem_top
-  结论: J in (⊤ : Prepartition I) ↔ J = I
+  结论: J in (⊤ : 预分拆 I) ↔ J = I
   证明: mem_singleton
 
 @[simp]
@@ -548,7 +548,7 @@ theorem top_boxes
 
 中文:
 定理 top_boxes
-  结论: (⊤ : Prepartition I).boxes = {I}
+  结论: (⊤ : 预分拆 I).boxes = {I}
   证明: rfl
 
 @[simp]
@@ -568,7 +568,7 @@ theorem notMem_bot
 
 中文:
 定理 notMem_bot
-  结论: J ∉ (⊥ : Prepartition I)
+  结论: J ∉ (⊥ : 预分拆 I)
   证明: Finset.notMem_empty _
 
 @[simp]
@@ -589,7 +589,7 @@ theorem bot_boxes
 
 中文:
 定理 bot_boxes
-  结论: (⊥ : Prepartition I).boxes = ∅
+  结论: (⊥ : 预分拆 I).boxes = ∅
   证明: rfl
 -/
 theorem bot_boxes : (⊥ : Prepartition I).boxes = ∅ := rfl
@@ -656,7 +656,7 @@ theorem card_filter_mem_Icc_le
 
 中文:
 定理 card_filter_mem_Icc_le
-  条件: [Fintype ι] (x : ι -> 实数)
+  条件: [有限类型 ι] (x : ι -> 实数)
   证明: by
   rw [← Fintype.card_set]
   refine Finset.card_le_card_of_injOn (fun J : Box ι => { i | J.lower i = x i })
@@ -682,7 +682,7 @@ definition iUnion
 
 中文:
 定义 iUnion
-  签名: : Set (ι -> 实数)
+  签名: : 集合 (ι -> 实数)
   定义体: ⋃ J in π, ↑J
 -/
 protected def iUnion : Set (ι -> Real) :=
@@ -787,7 +787,7 @@ theorem iUnion_top
 
 中文:
 定理 iUnion_top
-  结论: (⊤ : Prepartition I).iUnion = I
+  结论: (⊤ : 预分拆 I).iUnion = I
   证明: by simp [Prepartition.iUnion]
 
 @[simp]
@@ -832,7 +832,7 @@ theorem iUnion_bot
 
 中文:
 定理 iUnion_bot
-  结论: (⊥ : Prepartition I).iUnion = ∅
+  结论: (⊥ : 预分拆 I).iUnion = ∅
   证明: iUnion_eq_empty.2 rfl
 
 Depends on / 依赖: iUnion_eq_empty
@@ -1025,7 +1025,7 @@ definition biUnion
 
 中文:
 定义 biUnion
-  签名: (πi : 对任意 J : Box ι, Prepartition J)
+  签名: (πi : 对任意 J : Box ι, 预分拆 J)
   定义体: π.boxes.biUnion fun J => (πi J).boxes
   le_of_mem' J hJ := by
     simp only [Finset.mem_biUnion, mem_boxes] at hJ
@@ -1087,7 +1087,7 @@ theorem biUnion_le
 
 中文:
 定理 biUnion_le
-  条件: (πi : 对任意 J, Prepartition J)
+  条件: (πi : 对任意 J, 预分拆 J)
   结论: π.biUnion πi <= π
   证明: fun _ hJ =>
   let ⟨J', hJ', hJ⟩ := π.mem_biUnion.1 hJ
@@ -1190,7 +1190,7 @@ theorem iUnion_biUnion
 
 中文:
 定理 iUnion_biUnion
-  条件: (πi : 对任意 J : Box ι, Prepartition J)
+  条件: (πi : 对任意 J : Box ι, 预分拆 J)
   证明: by simp [Prepartition.iUnion]
 
 Depends on / 依赖: Prepartition, Prepartition.iUnion, iUnion
@@ -1212,7 +1212,7 @@ theorem sum_biUnion_boxes
 
 中文:
 定理 sum_biUnion_boxes
-  结论: {M : 类型} [AddCommMonoid M] (π : Prepartition I)
+  结论: {M : 类型} [加法交换幺半群 M] (π : 预分拆 I)
   证明: by
   refine Finset.sum_biUnion fun J₁ h₁ J₂ h₂ hne => Finset.disjoint_left.2 fun J' h₁' h₂' => ?_
   exact hne (π.eq_of_le_of_le h₁ h₂ ((πi J₁).le_of_mem h₁') ((πi J₂).le_of_mem h₂'))
@@ -1237,7 +1237,7 @@ definition biUnionIndex
 
 中文:
 定义 biUnionIndex
-  签名: (πi : 对任意 (J : Box ι), Prepartition J) (J : Box ι)
+  签名: (πi : 对任意 (J : Box ι), 预分拆 J) (J : Box ι)
   定义体: if hJ : J in π.biUnion πi then (π.mem_biUnion.1 hJ).choose else I
 
 Depends on / 依赖: biUnion, mem_biUnion
@@ -1284,7 +1284,7 @@ theorem biUnionIndex_le
 
 中文:
 定理 biUnionIndex_le
-  条件: (πi : 对任意 J, Prepartition J) (J : Box ι)
+  条件: (πi : 对任意 J, 预分拆 J) (J : Box ι)
   结论: π.biUnionIndex πi J <= I
   证明: by
   by_cases hJ : J in π.biUnion πi
@@ -1382,7 +1382,7 @@ theorem biUnion_assoc
 
 中文:
 定理 biUnion_assoc
-  条件: (πi : 对任意 J, Prepartition J) (πi' : Box ι -> 对任意 J : Box ι, Prepartition J)
+  条件: (πi : 对任意 J, 预分拆 J) (πi' : Box ι -> 对任意 J : Box ι, 预分拆 J)
   证明: by
   ext J
   simp only [mem_biUnion]
@@ -1426,7 +1426,7 @@ definition ofWithBot
 
 中文:
 定义 ofWithBot
-  签名: (boxes : Finset (WithBot (Box ι)))
+  签名: (boxes : 有限集 (WithBot (Box ι)))
   定义体: Finset.eraseNone boxes
   le_of_mem' J hJ := by
     rw [mem_eraseNone] at hJ
@@ -1460,7 +1460,7 @@ theorem mem_ofWithBot
 
 中文:
 定理 mem_ofWithBot
-  条件: {boxes : Finset (WithBot (Box ι))} {h₁ h₂}
+  条件: {boxes : 有限集 (WithBot (Box ι))} {h₁ h₂}
   证明: mem_eraseNone
 
 Depends on / 依赖: mem_eraseNone
@@ -1485,7 +1485,7 @@ theorem iUnion_ofWithBot
 
 中文:
 定理 iUnion_ofWithBot
-  结论: (boxes : Finset (WithBot (Box ι)))
+  结论: (boxes : 有限集 (WithBot (Box ι)))
   证明: by
   suffices ⋃ (J : Box ι) (_ : ↑J in boxes), ↑J = ⋃ J in boxes, (J : Set (ι -> Real)) by
     simpa [ofWithBot, Prepartition.iUnion]
@@ -1517,7 +1517,7 @@ theorem ofWithBot_le
 
 中文:
 定理 ofWithBot_le
-  结论: {boxes : Finset (WithBot (Box ι))}
+  结论: {boxes : 有限集 (WithBot (Box ι))}
   证明: by
   have : forall J : Box ι, ↑J in boxes -> exists J' in π, J <= J' := fun J hJ => by
     simpa only [WithBot.coe_le_coe] using H J hJ WithBot.coe_ne_bot
@@ -1548,7 +1548,7 @@ theorem le_ofWithBot
 
 中文:
 定理 le_ofWithBot
-  结论: {boxes : Finset (WithBot (Box ι))}
+  结论: {boxes : 有限集 (WithBot (Box ι))}
   证明: by
   intro J hJ
   rcases H J hJ with ⟨J', J'mem, hle⟩
@@ -1576,7 +1576,7 @@ theorem ofWithBot_mono
 
 中文:
 定理 ofWithBot_mono
-  结论: {boxes₁ : Finset (WithBot (Box ι))}
+  结论: {boxes₁ : 有限集 (WithBot (Box ι))}
   证明: le_ofWithBot _ fun J hJ => H J (mem_ofWithBot.1 hJ) WithBot.coe_ne_bot
 
 Depends on / 依赖: WithBot, WithBot.coe_ne_bot, coe_ne_bot, le_ofWithBot, mem_ofWithBot
@@ -1601,7 +1601,7 @@ theorem sum_ofWithBot
 
 中文:
 定理 sum_ofWithBot
-  结论: {M : 类型} [AddCommMonoid M] (boxes : Finset (WithBot (Box ι)))
+  结论: {M : 类型} [加法交换幺半群 M] (boxes : 有限集 (WithBot (Box ι)))
   证明: Finset.sum_eraseNone _ _
 
 Depends on / 依赖: Finset, Finset.sum_eraseNone, sum_eraseNone
@@ -1631,7 +1631,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (π : Prepartition I) (J : Box ι)
+  签名: (π : 预分拆 I) (J : Box ι)
   定义体: ofWithBot (π.boxes.image fun J' : Box ι => J ⊓ J')
     (fun J' hJ' => by
       rcases Finset.mem_image.1 hJ' with ⟨J', -, rfl⟩
@@ -1690,7 +1690,7 @@ theorem mem_restrict'
 
 中文:
 定理 mem_restrict'
-  结论: J₁ in π.restrict J ↔ 存在 J' in π, (J₁ : Set (ι -> 实数)) = ↑J inter ↑J'
+  结论: J₁ in π.restrict J ↔ 存在 J' in π, (J₁ : 集合 (ι -> 实数)) = ↑J inter ↑J'
   证明: by
   simp only [mem_restrict, ← Box.withBotCoe_inj, Box.coe_inf, Box.coe_coe]
 
@@ -1718,7 +1718,7 @@ exact ⟨_, Finset.mem_image_of_mem _ hJ₂, inf_le_inf_left _ WithBot.coe_le_co
 
 中文:
 定理 restrict_mono
-  条件: {π₁ π₂ : Prepartition I} (Hle : π₁ <= π₂)
+  条件: {π₁ π₂ : 预分拆 I} (Hle : π₁ <= π₂)
   结论: π₁.restrict J <= π₂.restrict J
   证明: by
   classical
@@ -1746,7 +1746,7 @@ theorem monotone_restrict
 
 中文:
 定理 monotone_restrict
-  结论: Monotone fun π : Prepartition I => restrict π J
+  结论: 递增 fun π : 预分拆 I => restrict π J
   证明: fun _ _ => restrict_mono
 
 Depends on / 依赖: restrict_mono
@@ -1773,7 +1773,7 @@ theorem restrict_boxes_of_le
 
 中文:
 定理 restrict_boxes_of_le
-  条件: (π : Prepartition I) (h : I <= J)
+  条件: (π : 预分拆 I) (h : I <= J)
   结论: (π.restrict J).boxes = π.boxes
   证明: by
   classical
@@ -1832,7 +1832,7 @@ theorem iUnion_restrict
 
 中文:
 定理 iUnion_restrict
-  结论: (π.restrict J).iUnion = (J : Set (ι -> 实数)) inter (π.iUnion)
+  结论: (π.restrict J).iUnion = (J : 集合 (ι -> 实数)) inter (π.iUnion)
   证明: by
   simp [restrict, ← inter_iUnion, ← iUnion_def]
 
@@ -1858,7 +1858,7 @@ theorem restrict_biUnion
 
 中文:
 定理 restrict_biUnion
-  条件: (πi : 对任意 J, Prepartition J) (hJ : J in π)
+  条件: (πi : 对任意 J, 预分拆 J) (hJ : J in π)
   证明: by
   refine (eq_of_boxes_subset_iUnion_superset (fun J₁ h₁ => ?_) ?_).symm
   · refine (mem_restrict _).2 ⟨J₁, π.mem_biUnion.2 ⟨J, hJ, h₁⟩, (inf_of_le_right ?_).symm⟩
@@ -1895,7 +1895,7 @@ exact ⟨J₃, h₃, Hle.trans WithBot.coe_le_coe.1 H.trans_
 
 中文:
 定理 biUnion_le_iff
-  条件: {πi : 对任意 J, Prepartition J} {π' : Prepartition I}
+  条件: {πi : 对任意 J, 预分拆 J} {π' : 预分拆 I}
   证明: by
   constructor <;> intro H J hJ
   · rw [← π.restrict_biUnion πi hJ]
@@ -1936,7 +1936,7 @@ theorem le_biUnion_iff
 
 中文:
 定理 le_biUnion_iff
-  条件: {πi : 对任意 J, Prepartition J} {π' : Prepartition I}
+  条件: {πi : 对任意 J, 预分拆 J} {π' : 预分拆 I}
   证明: by
   refine ⟨fun H => ⟨H.trans (π.biUnion_le πi), fun J hJ => ?_⟩, ?_⟩
   · rw [← π.restrict_biUnion πi hJ]
@@ -1973,7 +1973,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (Prepartition I)
+  签名: SemilatticeInf (预分拆 I)
   定义体: { inf := fun π₁ π₂ => π₁.biUnion fun J => π₂.restrict J
     inf_le_left := fun π₁ _ => π₁.biUnion_le _
     inf_le_right := fun _ _ => (biUnion_le_iff _).2 fun _ _ => le_rfl
@@ -2000,7 +2000,7 @@ theorem inf_def
 
 中文:
 定理 inf_def
-  条件: (π₁ π₂ : Prepartition I)
+  条件: (π₁ π₂ : 预分拆 I)
   结论: π₁ ⊓ π₂ = π₁.biUnion fun J => π₂.restrict J
   证明: rfl
 
@@ -2022,7 +2022,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {π₁ π₂ : Prepartition I}
+  条件: {π₁ π₂ : 预分拆 I}
   证明: by
   simp only [inf_def, mem_biUnion, mem_restrict]
 
@@ -2047,7 +2047,7 @@ theorem iUnion_inf
 
 中文:
 定理 iUnion_inf
-  条件: (π₁ π₂ : Prepartition I)
+  条件: (π₁ π₂ : 预分拆 I)
   结论: (π₁ ⊓ π₂).iUnion = π₁.iUnion inter π₂.iUnion
   证明: by
   simp only [inf_def, iUnion_biUnion, iUnion_restrict, ← iUnion_inter, ← iUnion_def]
@@ -2074,7 +2074,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (π : Prepartition I) (p : Box ι -> 命题)
+  签名: (π : 预分拆 I) (p : Box ι -> 命题)
   定义体: {J in π.boxes | p J}
   le_of_mem' _ hJ := π.le_of_mem (mem_filter.1 hJ).1
   pairwiseDisjoint _ h₁ _ h₂ := π.disjoint_coe_of_mem (mem_filter.1 h₁).1 (mem_filter.1 h₂).1
@@ -2125,7 +2125,7 @@ theorem filter_le
 
 中文:
 定理 filter_le
-  条件: (π : Prepartition I) (p : Box ι -> 命题)
+  条件: (π : 预分拆 I) (p : Box ι -> 命题)
   结论: π.filter p <= π
   证明: fun J hJ =>
   let ⟨hπ, _⟩ := π.mem_filter.1 hJ
@@ -2175,7 +2175,7 @@ theorem filter_true
 
 中文:
 定理 filter_true
-  结论: (π.filter fun _ => True) = π
+  结论: (π.filter fun _ => 真) = π
   证明: π.filter_of_true fun _ _ => trivial
 
 @[simp]
@@ -2204,7 +2204,7 @@ theorem iUnion_filter_not
 
 中文:
 定理 iUnion_filter_not
-  条件: (π : Prepartition I) (p : Box ι -> 命题)
+  条件: (π : 预分拆 I) (p : Box ι -> 命题)
   证明: by
   simp only [Prepartition.iUnion]
   convert!
@@ -2240,7 +2240,7 @@ theorem sum_fiberwise
 
 中文:
 定理 sum_fiberwise
-  条件: {α M} [AddCommMonoid M] (π : Prepartition I) (f : Box ι -> α) (g : Box ι -> M)
+  条件: {α M} [加法交换幺半群 M] (π : 预分拆 I) (f : Box ι -> α) (g : Box ι -> M)
   证明: by
   convert! sum_fiberwise_of_maps_to (fun _ => Finset.mem_image_of_mem f) g
 
@@ -2269,7 +2269,7 @@ definition disjUnion
 
 中文:
 定义 disjUnion
-  签名: (π₁ π₂ : Prepartition I) (h : Disjoint π₁.iUnion π₂.iUnion)
+  签名: (π₁ π₂ : 预分拆 I) (h : Disjoint π₁.iUnion π₂.iUnion)
   定义体: π₁.boxes union π₂.boxes
   le_of_mem' _ hJ := (Finset.mem_union.1 hJ).elim π₁.le_of_mem π₂.le_of_mem
   pairwiseDisjoint :=
@@ -2345,7 +2345,7 @@ theorem sum_disj_union_boxes
 
 中文:
 定理 sum_disj_union_boxes
-  结论: {M : 类型} [AddCommMonoid M] (h : Disjoint π₁.iUnion π₂.iUnion)
+  结论: {M : 类型} [加法交换幺半群 M] (h : Disjoint π₁.iUnion π₂.iUnion)
   证明: sum_union disjoint_boxes_of_disjoint_iUnion h
 
 Depends on / 依赖: disjoint_boxes_of_disjoint_iUnion, sum_union
@@ -2430,7 +2430,7 @@ theorem distortion_biUnion
 
 中文:
 定理 distortion_biUnion
-  条件: (π : Prepartition I) (πi : 对任意 J, Prepartition J)
+  条件: (π : 预分拆 I) (πi : 对任意 J, 预分拆 J)
   证明: by
   classical exact sup_biUnion _ _
 
@@ -2476,7 +2476,7 @@ theorem distortion_of_const
 
 中文:
 定理 distortion_of_const
-  条件: {c} (h₁ : π.boxes.Nonempty) (h₂ : 对任意 J in π, Box.distortion J = c)
+  条件: {c} (h₁ : π.boxes.非空) (h₂ : 对任意 J in π, Box.distortion J = c)
   证明: (sup_congr rfl h₂).trans (sup_const h₁ _)
 
 @[simp]
@@ -2502,7 +2502,7 @@ theorem distortion_top
 中文:
 定理 distortion_top
   条件: (I : Box ι)
-  结论: distortion (⊤ : Prepartition I) = I.distortion
+  结论: distortion (⊤ : 预分拆 I) = I.distortion
   证明: sup_singleton
 
 @[simp]
@@ -2525,7 +2525,7 @@ theorem distortion_bot
 中文:
 定理 distortion_bot
   条件: (I : Box ι)
-  结论: distortion (⊥ : Prepartition I) = 0
+  结论: distortion (⊥ : 预分拆 I) = 0
   证明: sup_empty
 
 Depends on / 依赖: sup_empty
@@ -2545,7 +2545,7 @@ definition IsPartition
 
 中文:
 定义 IsPartition
-  签名: (π : Prepartition I)
+  签名: (π : 预分拆 I)
   定义体: forall x in I, exists J in π, x in J
 -/
 def IsPartition (π : Prepartition I) :=
@@ -2566,7 +2566,7 @@ theorem isPartition_iff_iUnion_eq
 
 中文:
 定理 isPartition_iff_iUnion_eq
-  条件: {π : Prepartition I}
+  条件: {π : 预分拆 I}
   结论: π.IsPartition ↔ π.iUnion = I
   证明: by
   simp_rw [IsPartition, Set.Subset.antisymm_iff, π.iUnion_subset, true_and, Set.subset_def,
@@ -2615,7 +2615,7 @@ theorem isPartitionTop
 中文:
 定理 isPartitionTop
   条件: (I : Box ι)
-  结论: IsPartition (⊤ : Prepartition I)
+  结论: IsPartition (⊤ : 预分拆 I)
   证明: fun _ hx => ⟨I, mem_top.2 rfl, hx⟩
 
 Depends on / 依赖: mem_top
@@ -2658,7 +2658,7 @@ theorem iUnion_subset
 
 中文:
 定理 iUnion_subset
-  条件: (h : π.IsPartition) (π₁ : Prepartition I)
+  条件: (h : π.IsPartition) (π₁ : 预分拆 I)
   结论: π₁.iUnion subseteq π.iUnion
   证明: h.iUnion_eq.symm ▸ π₁.iUnion_subset
 
@@ -2678,7 +2678,7 @@ theorem existsUnique
   exact ExistsUnique.intro J ⟨h, hx⟩ fun J' ⟨h', hx'⟩ => π.eq_of_mem_of_mem h' h hx' hx
 
 中文:
-定理 existsUnique
+定理 存在Unique
   条件: (h : π.IsPartition) (hx : x in I)
   证明: by
   rcases h x hx with ⟨J, h, hx⟩
@@ -2702,7 +2702,7 @@ theorem nonempty_boxes
 中文:
 定理 nonempty_boxes
   条件: (h : π.IsPartition)
-  结论: π.boxes.Nonempty
+  结论: π.boxes.非空
   证明: let ⟨J, hJ, _⟩ := h _ I.upper_mem
   ⟨J, hJ⟩
 
@@ -2804,7 +2804,7 @@ theorem inf
   proof: isPartition_iff_iUnion_eq.2 by simp [h₁.iUnion_eq, h₂.iUnion_eq]
 
 中文:
-定理 inf
+定理 下确界
   条件: (h₁ : IsPartition π₁) (h₂ : IsPartition π₂)
   结论: IsPartition (π₁ ⊓ π₂)
   证明: isPartition_iff_iUnion_eq.2 by simp [h₁.iUnion_eq, h₂.iUnion_eq]

@@ -40,10 +40,10 @@ class QuasiIsoAt
     - quasiIso : ShortComplex.QuasiIso ((shortComplexFunctor C c i).map f)
 
 中文:
-类 QuasiIsoAt
-  参数: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+类 在处拟同构
+  参数: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   公理与运算 (1 个):
-    - quasiIso : ShortComplex.QuasiIso ((shortComplexFunctor C c i).map f)
+    - quasiIso : 短复形.拟同构 ((shortComplexFunctor C c i).map f)
 
 Depends on / 依赖: RightHomologyMapData, RightHomologyMapData.zero, rightHomologyMap
 -/
@@ -65,7 +65,7 @@ lemma quasiIsoAt_iff
 
 中文:
 引理 quasiIsoAt_iff
-  条件: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  条件: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: by
   constructor
   · intro h
@@ -96,7 +96,7 @@ instance quasiIsoAt_of_isIso
 
 中文:
 实例 quasiIsoAt_of_isIso
-  签名: (f : K ⟶ L) [IsIso f] (i : ι) [K.HasHomology i] [L.HasHomology i]
+  签名: (f : K ⟶ L) [是同构 f] (i : ι) [K.有同调 i] [L.有同调 i]
   定义体: by
   rw [quasiIsoAt_iff]
   infer_instance
@@ -205,7 +205,7 @@ lemma quasiIsoAt_iff_exactAt
 
 中文:
 引理 quasiIsoAt_iff_exactAt
-  结论: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  结论: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: by
   simp only [quasiIsoAt_iff, ShortComplex.quasiIso_iff, exactAt_iff,
     ShortComplex.exact_iff_isZero_homology] at hK ⊢
@@ -245,7 +245,7 @@ lemma quasiIsoAt_iff_exactAt'
 
 中文:
 引理 quasiIsoAt_iff_exactAt'
-  结论: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  结论: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: by
   simp only [quasiIsoAt_iff, ShortComplex.quasiIso_iff, exactAt_iff,
     ShortComplex.exact_iff_isZero_homology] at hL ⊢
@@ -310,7 +310,7 @@ definition isoOfQuasiIsoAt
 
 中文:
 定义 isoOfQuasiIsoAt
-  签名: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  签名: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   定义体: asIso (homologyMap f i)
 
 @[reassoc (attr := simp)]
@@ -334,7 +334,7 @@ lemma isoOfQuasiIsoAt_hom_inv_id
 
 中文:
 引理 isoOfQuasiIsoAt_hom_inv_id
-  结论: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  结论: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: (isoOfQuasiIsoAt f i).hom_inv_id
 
 @[reassoc (attr := simp)]
@@ -357,7 +357,7 @@ lemma isoOfQuasiIsoAt_inv_hom_id
 
 中文:
 引理 isoOfQuasiIsoAt_inv_hom_id
-  结论: (f : K ⟶ L) (i : ι) [K.HasHomology i] [L.HasHomology i]
+  结论: (f : K ⟶ L) (i : ι) [K.有同调 i] [L.有同调 i]
   证明: (isoOfQuasiIsoAt f i).inv_hom_id
 
 Depends on / 依赖: inv_hom_id, isoOfQuasiIsoAt
@@ -376,8 +376,8 @@ lemma CochainComplex.quasiIsoAt₀_iff
   proof: quasiIsoAt_iff' _ _ _ _ (by simp) (by simp)
 
 中文:
-引理 CochainComplex.quasiIsoAt₀_iff
-  结论: {K L : CochainComplex C 自然数} (f : K ⟶ L)
+引理 上链复形.quasiIsoAt₀_iff
+  结论: {K L : 上链复形 C 自然数} (f : K ⟶ L)
   证明: quasiIsoAt_iff' _ _ _ _ (by simp) (by simp)
 
 Depends on / 依赖: quasiIsoAt_iff
@@ -397,8 +397,8 @@ lemma ChainComplex.quasiIsoAt₀_iff
   proof: quasiIsoAt_iff' _ _ _ _ (by simp) (by simp)
 
 中文:
-引理 ChainComplex.quasiIsoAt₀_iff
-  结论: {K L : ChainComplex C 自然数} (f : K ⟶ L)
+引理 链复形.quasiIsoAt₀_iff
+  结论: {K L : 链复形 C 自然数} (f : K ⟶ L)
   证明: quasiIsoAt_iff' _ _ _ _ (by simp) (by simp)
 
 Depends on / 依赖: quasiIsoAt_iff
@@ -419,10 +419,10 @@ class QuasiIso
     - quasiIsoAt : forall i, QuasiIsoAt f i  [default: by infer_instance]
 
 中文:
-类 QuasiIso
-  参数: (f : K ⟶ L) [对任意 i, K.HasHomology i] [对任意 i, L.HasHomology i]
+类 拟同构
+  参数: (f : K ⟶ L) [对任意 i, K.有同调 i] [对任意 i, L.有同调 i]
   公理与运算 (1 个):
-    - quasiIsoAt : 对任意 i, QuasiIsoAt f i  [默认: by infer_instance]
+    - quasiIsoAt : 对任意 i, 在处拟同构 f i  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -439,7 +439,7 @@ lemma quasiIso_iff
 
 中文:
 引理 quasiIso_iff
-  条件: (f : K ⟶ L) [对任意 i, K.HasHomology i] [对任意 i, L.HasHomology i]
+  条件: (f : K ⟶ L) [对任意 i, K.有同调 i] [对任意 i, L.有同调 i]
   证明: ⟨fun h => h.quasiIsoAt, fun h => ⟨h⟩⟩
 
 Depends on / 依赖: h.quasiIsoAt, quasiIsoAt
@@ -459,7 +459,7 @@ instance quasiIso_of_isIso
 
 中文:
 实例 quasiIso_of_isIso
-  签名: (f : K ⟶ L) [IsIso f] [对任意 i, K.HasHomology i] [对任意 i, L.HasHomology i]
+  签名: (f : K ⟶ L) [是同构 f] [对任意 i, K.有同调 i] [对任意 i, L.有同调 i]
 -/
 instance quasiIso_of_isIso (f : K ⟶ L) [IsIso f] [forall i, K.HasHomology i] [forall i, L.HasHomology i] :
     QuasiIso f where
@@ -477,7 +477,7 @@ instance quasiIsoAt_comp
 
 中文:
 实例 quasiIsoAt_comp
-  签名: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.HasHomology i]
+  签名: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.有同调 i]
   定义体: by
   rw [quasiIsoAt_iff] at hφ hφ' ⊢
   rw [Functor.map_comp]
@@ -502,7 +502,7 @@ instance quasiIso_comp
 
 中文:
 实例 quasiIso_comp
-  签名: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.HasHomology i]
+  签名: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.有同调 i]
 -/
 instance quasiIso_comp (φ : K ⟶ L) (φ' : L ⟶ M) [forall i, K.HasHomology i]
     [forall i, L.HasHomology i] [forall i, M.HasHomology i]
@@ -522,7 +522,7 @@ lemma quasiIsoAt_of_comp_left
 
 中文:
 引理 quasiIsoAt_of_comp_left
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.有同调 i]
   证明: by
   rw [quasiIsoAt_iff_isIso_homologyMap] at hφ hφφ' ⊢
   rw [homologyMap_comp] at hφφ'
@@ -553,7 +553,7 @@ lemma quasiIsoAt_iff_comp_left
 
 中文:
 引理 quasiIsoAt_iff_comp_left
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.有同调 i]
   证明: by
   constructor
   · intro
@@ -584,7 +584,7 @@ lemma quasiIso_iff_comp_left
 
 中文:
 引理 quasiIso_iff_comp_left
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.有同调 i]
   证明: by
   simp only [quasiIso_iff, quasiIsoAt_iff_comp_left φ φ']
 
@@ -608,7 +608,7 @@ lemma quasiIso_of_comp_left
 
 中文:
 引理 quasiIso_of_comp_left
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.有同调 i]
   证明: by
   rw [← quasiIso_iff_comp_left φ φ']
   infer_instance
@@ -635,7 +635,7 @@ lemma quasiIsoAt_of_comp_right
 
 中文:
 引理 quasiIsoAt_of_comp_right
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.有同调 i]
   证明: by
   rw [quasiIsoAt_iff_isIso_homologyMap] at hφ' hφφ' ⊢
   rw [homologyMap_comp] at hφφ'
@@ -666,7 +666,7 @@ lemma quasiIsoAt_iff_comp_right
 
 中文:
 引理 quasiIsoAt_iff_comp_right
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) (i : ι) [K.有同调 i]
   证明: by
   constructor
   · intro
@@ -697,7 +697,7 @@ lemma quasiIso_iff_comp_right
 
 中文:
 引理 quasiIso_iff_comp_right
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.有同调 i]
   证明: by
   simp only [quasiIso_iff, quasiIsoAt_iff_comp_right φ φ']
 
@@ -721,7 +721,7 @@ lemma quasiIso_of_comp_right
 
 中文:
 引理 quasiIso_of_comp_right
-  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.HasHomology i]
+  结论: (φ : K ⟶ L) (φ' : L ⟶ M) [对任意 i, K.有同调 i]
   证明: by
   rw [← quasiIso_iff_comp_right φ φ']
   infer_instance
@@ -748,7 +748,7 @@ lemma quasiIso_iff_of_arrow_mk_iso
 
 中文:
 引理 quasiIso_iff_of_arrow_mk_iso
-  结论: (φ : K ⟶ L) (φ' : K' ⟶ L') (e : Arrow.mk φ ≅ Arrow.mk φ')
+  结论: (φ : K ⟶ L) (φ' : K' ⟶ L') (e : 箭头.mk φ ≅ 箭头.mk φ')
   证明: by
   simp [← quasiIso_iff_comp_left (show K' ⟶ K from e.inv.left) φ,
     ← quasiIso_iff_comp_right φ' (show L' ⟶ L from e.inv.right)]
@@ -773,7 +773,7 @@ lemma quasiIso_of_arrow_mk_iso
 
 中文:
 引理 quasiIso_of_arrow_mk_iso
-  结论: (φ : K ⟶ L) (φ' : K' ⟶ L') (e : Arrow.mk φ ≅ Arrow.mk φ')
+  结论: (φ : K ⟶ L) (φ' : K' ⟶ L') (e : 箭头.mk φ ≅ 箭头.mk φ')
   证明: by
   simpa only [← quasiIso_iff_of_arrow_mk_iso φ φ' e]
 
@@ -833,7 +833,7 @@ instance quasiIsoAt_map_of_preservesHomology
 
 中文:
 实例 quasiIsoAt_map_of_preservesHomology
-  签名: [hφ : QuasiIsoAt φ i]
+  签名: [hφ : 在处拟同构 φ i]
   定义体: by
   rw [quasiIsoAt_iff] at hφ ⊢
   exact ShortComplex.quasiIso_map_of_preservesLeftHomology F
@@ -860,7 +860,7 @@ lemma quasiIsoAt_map_iff_of_preservesHomology
 
 中文:
 引理 quasiIsoAt_map_iff_of_preservesHomology
-  条件: [F.ReflectsIsomorphisms]
+  条件: [F.反映同构]
   证明: by
   simp only [quasiIsoAt_iff]
   exact ShortComplex.quasiIso_map_iff_of_preservesLeftHomology F
@@ -891,7 +891,7 @@ instance quasiIso_map_of_preservesHomology
 
 中文:
 实例 quasiIso_map_of_preservesHomology
-  签名: [hφ : QuasiIso φ]
+  签名: [hφ : 拟同构 φ]
 -/
 instance quasiIso_map_of_preservesHomology [hφ : QuasiIso φ] :
     QuasiIso ((F.mapHomologicalComplex c).map φ) where
@@ -907,7 +907,7 @@ lemma quasiIso_map_iff_of_preservesHomology
 
 中文:
 引理 quasiIso_map_iff_of_preservesHomology
-  条件: [F.ReflectsIsomorphisms]
+  条件: [F.反映同构]
   证明: by
   simp only [quasiIso_iff, quasiIsoAt_map_iff_of_preservesHomology φ F]
 
@@ -933,7 +933,7 @@ definition quasiIso
 
 中文:
 定义 quasiIso
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: fun _ _ f => QuasiIso f
 
 Depends on / 依赖: QuasiIso
@@ -956,7 +956,7 @@ lemma mem_quasiIso_iff
 中文:
 引理 mem_quasiIso_iff
   条件: (f : K ⟶ L)
-  结论: quasiIso C c f ↔ QuasiIso f
+  结论: quasiIso C c f ↔ 拟同构 f
   证明: by rfl
 -/
 lemma mem_quasiIso_iff (f : K ⟶ L) : quasiIso C c f ↔ QuasiIso f := by rfl
@@ -976,7 +976,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso C c).IsMultiplicative
+  签名: (quasiIso C c).是Multiplicative
   定义体: by
     rw [mem_quasiIso_iff]
     infer_instance
@@ -1009,7 +1009,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso C c).HasTwoOutOfThree命题erty
+  签名: (quasiIso C c).有TwoOutOfThreeProperty
   定义体: by
     rw [mem_quasiIso_iff] at hg hfg ⊢
     rwa [← quasiIso_iff_comp_right f g]
@@ -1039,7 +1039,7 @@ instance :
 
 中文:
 实例 :
-  签名: (quasiIso C c).IsStableUnderRetracts
+  签名: (quasiIso C c).是StableUnderRetracts
   定义体: by
     rw [mem_quasiIso_iff] at hg ⊢
     exact quasiIso_of_retractArrow h
@@ -1094,7 +1094,7 @@ instance quasiIsoAt_hom
 
 中文:
 实例 quasiIsoAt_hom
-  签名: (n : ι) [K.HasHomology n] [L.HasHomology n]
+  签名: (n : ι) [K.有同调 n] [L.有同调 n]
   定义体: by
   rw [quasiIsoAt_iff]; rw [ShortComplex.quasiIso_iff]
   exact (e.toHomologyIso n).isIso_hom
@@ -1116,7 +1116,7 @@ instance quasiIsoAt_inv
 
 中文:
 实例 quasiIsoAt_inv
-  签名: (n : ι) [K.HasHomology n] [L.HasHomology n]
+  签名: (n : ι) [K.有同调 n] [L.有同调 n]
   定义体: e.symm.quasiIsoAt_hom n
 
 Depends on / 依赖: e.symm.quasiIsoAt_hom, quasiIsoAt_hom
@@ -1135,7 +1135,7 @@ instance quasiIso_hom
 
 中文:
 实例 quasiIso_hom
-  签名: [对任意 n, K.HasHomology n] [对任意 n, L.HasHomology n]
+  签名: [对任意 n, K.有同调 n] [对任意 n, L.有同调 n]
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance quasiIso_hom [forall n, K.HasHomology n] [forall n, L.HasHomology n] :
@@ -1152,7 +1152,7 @@ instance quasiIso_inv
 
 中文:
 实例 quasiIso_inv
-  签名: [对任意 n, K.HasHomology n] [对任意 n, L.HasHomology n]
+  签名: [对任意 n, K.有同调 n] [对任意 n, L.有同调 n]
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance quasiIso_inv [forall n, K.HasHomology n] [forall n, L.HasHomology n] :

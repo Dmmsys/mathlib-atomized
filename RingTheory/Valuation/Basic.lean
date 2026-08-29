@@ -85,11 +85,11 @@ structure Valuation
     - map_add_le_max' : forall x y, toFun (x + y) <= max (toFun x) (toFun y)
 
 中文:
-结构 Valuation
+结构 赋值
   参数: extends R ->*₀ Γ₀
   继承: R ->*₀ Γ₀
   公理与运算 (1 个):
-    - map_add_le_max' : 对任意 x y, toFun (x + y) <= max (toFun x) (toFun y)
+    - map_add_le_max' : 对任意 x y, toFun (x + y) <= 最大值 (toFun x) (toFun y)
 -/
 structure Valuation extends R ->*₀ Γ₀ where
   /-- The valuation of a sum is less than or equal to the maximum of the valuations. -/
@@ -106,11 +106,11 @@ class ValuationClass
     - map_add_le_max((f : F) (x y : R)) : f (x + y) <= max (f x) (f y)
 
 中文:
-类 ValuationClass
-  参数: (F) (R Γ₀ : outParam 类型) [LinearOrderedCommMonoidWithZero Γ₀] [Ring R]
-  继承: MonoidWithZeroHomClass F R Γ₀
+类 赋值类
+  参数: (F) (R Γ₀ : outParam 类型) [带零LinearOrderedComm幺半群 Γ₀] [环 R]
+  继承: 带零幺半群态射类 F R Γ₀
   公理与运算 (1 个):
-    - map_add_le_max((f : F) (x y : R)) : f (x + y) <= max (f x) (f y)
+    - map_add_le_max((f : F) (x y : R)) : f (x + y) <= 最大值 (f x) (f y)
 -/
 class ValuationClass (F) (R Γ₀ : outParam Type*) [LinearOrderedCommMonoidWithZero Γ₀] [Ring R]
     [FunLike F R Γ₀] : Prop
@@ -134,8 +134,8 @@ instance [FunLike
       map_add_le_max' := map_add_le_max f }⟩
 
 中文:
-实例 [FunLike
-  签名: F R Γ₀] [ValuationClass F R Γ₀] : CoeTC F (Valuation R Γ₀)
+实例 [函数状
+  签名: F R Γ₀] [赋值类 F R Γ₀] : CoeTC F (赋值 R Γ₀)
   定义体: ⟨fun f =>
     { toFun := f
       map_one' := map_one f
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Valuation R Γ₀) R Γ₀
+  签名: 函数状 (赋值 R Γ₀) R Γ₀
   定义体: f.toMonoidWithZeroHom
   coe_injective := DFunLike.coe_injective.comp toMonoidWithZeroHom_injective
 
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: ValuationClass (Valuation R Γ₀) R Γ₀
+  签名: 赋值类 (赋值 R Γ₀) R Γ₀
   定义体: f.map_mul'
   map_one f := f.map_one'
   map_zero f := f.map_zero'
@@ -248,7 +248,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : R ->*₀ Γ₀) (h)
-  结论: ⇑(Valuation.mk f h) = f
+  结论: ⇑(赋值.mk f h) = f
   证明: rfl
 -/
 theorem coe_mk (f : R ->*₀ Γ₀) (h) : ⇑(Valuation.mk f h) = f := rfl
@@ -266,7 +266,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: (v : Valuation R Γ₀)
+  条件: (v : 赋值 R Γ₀)
   结论: v.toFun = v
   证明: rfl
 
@@ -287,7 +287,7 @@ theorem toMonoidWithZeroHom_coe_eq_coe
 
 中文:
 定理 toMonoidWithZeroHom_coe_eq_coe
-  条件: (v : Valuation R Γ₀)
+  条件: (v : 赋值 R Γ₀)
   证明: rfl
 
 @[ext]
@@ -307,7 +307,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {v₁ v₂ : Valuation R Γ₀} (h : 对任意 r, v₁ r = v₂ r)
+  条件: {v₁ v₂ : 赋值 R Γ₀} (h : 对任意 r, v₁ r = v₂ r)
   结论: v₁ = v₂
   证明: DFunLike.ext _ _ h
 
@@ -329,7 +329,7 @@ theorem coe_ofClass
 
 中文:
 定理 coe_ofClass
-  结论: ⇑(MonoidWithZeroHom.ofClass v) = v
+  结论: ⇑(带零幺半群态射.ofClass v) = v
   证明: rfl
 -/
 theorem coe_ofClass : ⇑(MonoidWithZeroHom.ofClass v) = v := rfl
@@ -395,7 +395,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: 对任意 x y, v (x + y) <= max (v x) (v y)
+  结论: 对任意 x y, v (x + y) <= 最大值 (v x) (v y)
   证明: v.map_add_le_max'
 
 @[simp]
@@ -484,7 +484,7 @@ theorem map_sum_le
 
 中文:
 定理 map_sum_le
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hf : 对任意 i in s, v (f i) <= g)
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hf : 对任意 i in s, v (f i) <= g)
   证明: by
   classical
   refine Finset.induction_on s (fun _ => v.map_zero ▸ zero_le) (fun a s has ih hf => ?_) hf
@@ -516,7 +516,7 @@ theorem map_sum_lt
 
 中文:
 定理 map_sum_lt
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hg : g != 0)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hg : g != 0)
   证明: by
   classical
   refine
@@ -546,7 +546,7 @@ theorem map_sum_lt'
 
 中文:
 定理 map_sum_lt'
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hg : 0 < g)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hg : 0 < g)
   证明: v.map_sum_lt (ne_of_gt hg) hf
 
 Depends on / 依赖: map_sum_lt, ne_of_gt, v.map_sum_lt
@@ -587,7 +587,7 @@ definition toPreorder
 
 中文:
 定义 toPreorder
-  签名: : Preorder R
+  签名: : 预序 R
   定义体: Preorder.lift v
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -606,7 +606,7 @@ theorem zero_iff
 
 中文:
 定理 zero_iff
-  条件: [Nontrivial Γ₀] (v : Valuation K Γ₀) {x : K}
+  条件: [非平凡 Γ₀] (v : 赋值 K Γ₀) {x : K}
   结论: v x = 0 ↔ x = 0
   证明: map_eq_zero v
 
@@ -626,7 +626,7 @@ theorem ne_zero_iff
 
 中文:
 定理 ne_zero_iff
-  条件: [Nontrivial Γ₀] (v : Valuation K Γ₀) {x : K}
+  条件: [非平凡 Γ₀] (v : 赋值 K Γ₀) {x : K}
   结论: v x != 0 ↔ x != 0
   证明: map_ne_zero v
 
@@ -647,7 +647,7 @@ lemma pos_iff
 
 中文:
 引理 pos_iff
-  条件: [Nontrivial Γ₀] (v : Valuation K Γ₀) {x : K}
+  条件: [非平凡 Γ₀] (v : 赋值 K Γ₀) {x : K}
   结论: 0 < v x ↔ x != 0
   证明: by
   rw [zero_lt_iff]; rw [ne_zero_iff]
@@ -669,7 +669,7 @@ theorem unit_map_eq
 中文:
 定理 unit_map_eq
   条件: (u : Rˣ)
-  结论: (Units.map (v : R ->* Γ₀) u : Γ₀) = v u
+  结论: (单位群.map (v : R ->* Γ₀) u : Γ₀) = v u
   证明: rfl
 -/
 theorem unit_map_eq (u : Rˣ) : (Units.map (v : R ->* Γ₀) u : Γ₀) = v u :=
@@ -687,7 +687,7 @@ theorem ne_zero_of_unit
 
 中文:
 定理 ne_zero_of_unit
-  条件: [Nontrivial Γ₀] (v : Valuation K Γ₀) (x : Kˣ)
+  条件: [非平凡 Γ₀] (v : 赋值 K Γ₀) (x : Kˣ)
   结论: v x != (0 : Γ₀)
   证明: by
   simp only [ne_eq, Valuation.zero_iff, Units.ne_zero x, not_false_iff]
@@ -708,7 +708,7 @@ theorem ne_zero_of_isUnit
 
 中文:
 定理 ne_zero_of_isUnit
-  条件: [Nontrivial Γ₀] (v : Valuation K Γ₀) (x : K) (hx : IsUnit x)
+  条件: [非平凡 Γ₀] (v : 赋值 K Γ₀) (x : K) (hx : 是单位 x)
   证明: by
   simpa [hx.choose_spec] using ne_zero_of_unit v hx.choose
 
@@ -732,7 +732,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {S : 类型} [Ring S] (f : S ->+* R) (v : Valuation R Γ₀)
+  签名: {S : 类型} [环 S] (f : S ->+* R) (v : 赋值 R Γ₀)
   定义体: { v.toMonoidWithZeroHom.comp f.toMonoidWithZeroHom with
     toFun := v ∘ f
     map_add_le_max' := fun x y => by simp }
@@ -759,7 +759,7 @@ theorem comap_apply
 
 中文:
 定理 comap_apply
-  条件: {S : 类型} [Ring S] (f : S ->+* R) (v : Valuation R Γ₀) (s : S)
+  条件: {S : 类型} [环 S] (f : S ->+* R) (v : 赋值 R Γ₀) (s : S)
   证明: rfl
 
 @[simp]
@@ -778,7 +778,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: v.comap (RingHom.id R) = v
+  结论: v.comap (环态射.id R) = v
   证明: ext fun _r => rfl
 -/
 theorem comap_id : v.comap (RingHom.id R) = v :=
@@ -794,7 +794,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: {S₁ : 类型} {S₂ : 类型} [Ring S₁] [Ring S₂] (f : S₁ ->+* S₂) (g : S₂ ->+* R)
+  条件: {S₁ : 类型} {S₂ : 类型} [环 S₁] [环 S₂] (f : S₁ ->+* S₂) (g : S₂ ->+* R)
   证明: ext fun _r => rfl
 -/
 theorem comap_comp {S₁ : Type*} {S₂ : Type*} [Ring S₁] [Ring S₂] (f : S₁ ->+* S₂) (g : S₂ ->+* R) :
@@ -819,7 +819,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Γ₀ ->*₀ Γ'₀) (hf : Monotone f) (v : Valuation R Γ₀)
+  签名: (f : Γ₀ ->*₀ Γ'₀) (hf : 递增 f) (v : 赋值 R Γ₀)
   定义体: { MonoidWithZeroHom.comp f v.toMonoidWithZeroHom with
     toFun := f ∘ v
     map_add_le_max' := fun r s =>
@@ -852,7 +852,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  条件: (f : Γ₀ ->*₀ Γ'₀) (hf : Monotone f) (v : Valuation R Γ₀) (r : R)
+  条件: (f : Γ₀ ->*₀ Γ'₀) (hf : 递增 f) (v : 赋值 R Γ₀) (r : R)
   证明: rfl
 -/
 lemma map_apply (f : Γ₀ ->*₀ Γ'₀) (hf : Monotone f) (v : Valuation R Γ₀) (r : R) :
@@ -869,8 +869,8 @@ definition IsEquiv
 @[simp]
 
 中文:
-定义 IsEquiv
-  签名: (v₁ : Valuation R Γ₀) (v₂ : Valuation R Γ'₀)
+定义 Is等价
+  签名: (v₁ : 赋值 R Γ₀) (v₂ : 赋值 R Γ'₀)
   定义体: forall r s, v₁ r <= v₁ s ↔ v₂ r <= v₂ s
 
 @[simp]
@@ -934,7 +934,7 @@ theorem map_sub
 中文:
 定理 map_sub
   条件: (x y : R)
-  结论: v (x - y) <= max (v x) (v y)
+  结论: v (x - y) <= 最大值 (v x) (v y)
   证明: calc
     v (x - y) = v (x + -y) := by rw [sub_eq_add_neg]
     _ <= max (v x) (v <| -y) := v.map_add _ _
@@ -1012,7 +1012,7 @@ lemma le_one_of_subsingleton
 
 中文:
 引理 le_one_of_subsingleton
-  条件: [Subsingleton R] (v : Valuation R Γ₀) {x : R}
+  条件: [子单例 R] (v : 赋值 R Γ₀) {x : R}
   证明: by
   rw [Subsingleton.elim x 1]; rw [Valuation.map_one]
 
@@ -1042,7 +1042,7 @@ theorem map_add_of_distinct_val
 中文:
 定理 map_add_of_distinct_val
   条件: (h : v x != v y)
-  结论: v (x + y) = max (v x) (v y)
+  结论: v (x + y) = 最大值 (v x) (v y)
   证明: by
   suffices ¬v (x + y) < max (v x) (v y) from
     or_iff_not_imp_right.1 (le_iff_eq_or_lt.1 (v.map_add x y)) this
@@ -1150,7 +1150,7 @@ theorem map_sum_eq_of_lt
 
 中文:
 定理 map_sum_eq_of_lt
-  结论: {ι : 类型} [DecidableEq ι] {s : Finset ι} {f : ι -> R} {j : ι}
+  结论: {ι : 类型} [DecidableEq ι] {s : 有限集 ι} {f : ι -> R} {j : ι}
   证明: by
   rcases eq_or_ne (v (f j)) 0 with h0 | h0
   · aesop
@@ -1376,7 +1376,7 @@ lemma OrderMonoidWithZeroHom.ofClass_monotone
   proof: hf
 
 中文:
-引理 OrderMonoidWithZeroHom.ofClass_monotone
+引理 带零Order幺半群态射.ofClass_monotone
   结论: {F : 类型u_1} {α : 类型u_2} {β : 类型u_3}
   证明: hf
 -/
@@ -1434,7 +1434,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (Valuation R Γ₀) where
+  签名: : 幺 (赋值 R Γ₀) where
   定义体: { __ : R ->*₀ Γ₀ := 1
     map_add_le_max' x y := by
       simp only [ZeroHom.toFun_eq_coe, MonoidWithZeroHom.toZeroHom_coe,
@@ -1461,7 +1461,7 @@ lemma one_apply_def
 中文:
 引理 one_apply_def
   条件: (x : R)
-  结论: (1 : Valuation R Γ₀) x = if x = 0 then 0 else 1
+  结论: (1 : 赋值 R Γ₀) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 lemma one_apply_def (x : R) : (1 : Valuation R Γ₀) x = if x = 0 then 0 else 1 := rfl
@@ -1476,7 +1476,7 @@ lemma toMonoidWithZeroHom_one
 
 中文:
 引理 toMonoidWithZeroHom_one
-  结论: (1 : Valuation R Γ₀).toMonoidWithZeroHom = 1
+  结论: (1 : 赋值 R Γ₀).toMonoidWithZeroHom = 1
   证明: rfl
 -/
 @[simp] lemma toMonoidWithZeroHom_one : (1 : Valuation R Γ₀).toMonoidWithZeroHom = 1 := rfl
@@ -1495,7 +1495,7 @@ lemma one_apply_of_ne_zero
 中文:
 引理 one_apply_of_ne_zero
   条件: {x : R} (hx : x != 0)
-  结论: (1 : Valuation R Γ₀) x = 1
+  结论: (1 : 赋值 R Γ₀) x = 1
   证明: if_neg hx
 
 @[simp]
@@ -1516,8 +1516,8 @@ lemma one_apply_eq_zero_iff
 
 中文:
 引理 one_apply_eq_zero_iff
-  条件: [Nontrivial Γ₀] {x : R}
-  结论: (1 : Valuation R Γ₀) x = 0 ↔ x = 0
+  条件: [非平凡 Γ₀] {x : R}
+  结论: (1 : 赋值 R Γ₀) x = 0 ↔ x = 0
   证明: MonoidWithZeroHom.one_apply_eq_zero_iff
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.one_apply_eq_zero_iff, one_apply_eq_zero_iff
@@ -1541,7 +1541,7 @@ lemma one_apply_le_one
 中文:
 引理 one_apply_le_one
   条件: (x : R)
-  结论: (1 : Valuation R Γ₀) x <= 1
+  结论: (1 : 赋值 R Γ₀) x <= 1
   证明: by
   rw [one_apply_def]
   split_ifs <;> simp_all
@@ -1570,8 +1570,8 @@ lemma one_apply_lt_one_iff
 
 中文:
 引理 one_apply_lt_one_iff
-  条件: [Nontrivial Γ₀] {x : R}
-  结论: (1 : Valuation R Γ₀) x < 1 ↔ x = 0
+  条件: [非平凡 Γ₀] {x : R}
+  结论: (1 : 赋值 R Γ₀) x < 1 ↔ x = 0
   证明: by
   rw [one_apply_def]
   split_ifs <;> simp_all
@@ -1596,8 +1596,8 @@ lemma one_apply_eq_one_iff
 
 中文:
 引理 one_apply_eq_one_iff
-  条件: [Nontrivial Γ₀] {x : R}
-  结论: (1 : Valuation R Γ₀) x = 1 ↔ x != 0
+  条件: [非平凡 Γ₀] {x : R}
+  结论: (1 : 赋值 R Γ₀) x = 1 ↔ x != 0
   证明: MonoidWithZeroHom.one_apply_eq_one_iff
 
 Depends on / 依赖: MonoidWithZeroHom, MonoidWithZeroHom.one_apply_eq_one_iff, one_apply_eq_one_iff
@@ -1624,7 +1624,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  条件: {R : 类型} [DivisionRing R] (v : Valuation R Γ₀)
+  条件: {R : 类型} [除环 R] (v : 赋值 R Γ₀)
   结论: 对任意 x, v x⁻¹ = (v x)⁻¹
   证明: map_inv₀ _
 -/
@@ -1642,7 +1642,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  条件: {R : 类型} [DivisionRing R] (v : Valuation R Γ₀)
+  条件: {R : 类型} [除环 R] (v : 赋值 R Γ₀)
   结论: 对任意 x y, v (x / y) = v x / v y
   证明: map_div₀ _
 -/
@@ -1661,7 +1661,7 @@ theorem one_lt_val_iff
 
 中文:
 定理 one_lt_val_iff
-  条件: (v : Valuation K Γ₀) {x : K} (h : x != 0)
+  条件: (v : 赋值 K Γ₀) {x : K} (h : x != 0)
   结论: 1 < v x ↔ v x⁻¹ < 1
   证明: by
   simp [inv_lt_one₀ (v.pos_iff.2 h)]
@@ -1683,7 +1683,7 @@ theorem one_le_val_iff
 
 中文:
 定理 one_le_val_iff
-  条件: (v : Valuation K Γ₀) {x : K} (h : x != 0)
+  条件: (v : 赋值 K Γ₀) {x : K} (h : x != 0)
   结论: 1 <= v x ↔ v x⁻¹ <= 1
   证明: by
   simp [inv_le_one₀ (v.pos_iff.2 h)]
@@ -1705,7 +1705,7 @@ theorem val_lt_one_iff
 
 中文:
 定理 val_lt_one_iff
-  条件: (v : Valuation K Γ₀) {x : K} (h : x != 0)
+  条件: (v : 赋值 K Γ₀) {x : K} (h : x != 0)
   结论: v x < 1 ↔ 1 < v x⁻¹
   证明: by
   simp [one_lt_inv₀ (v.pos_iff.2 h)]
@@ -1727,7 +1727,7 @@ theorem val_le_one_iff
 
 中文:
 定理 val_le_one_iff
-  条件: (v : Valuation K Γ₀) {x : K} (h : x != 0)
+  条件: (v : 赋值 K Γ₀) {x : K} (h : x != 0)
   结论: v x <= 1 ↔ 1 <= v x⁻¹
   证明: by
   simp [one_le_inv₀ (v.pos_iff.2 h)]
@@ -1749,7 +1749,7 @@ theorem val_eq_one_iff
 
 中文:
 定理 val_eq_one_iff
-  条件: (v : Valuation K Γ₀) {x : K}
+  条件: (v : 赋值 K Γ₀) {x : K}
   结论: v x = 1 ↔ v x⁻¹ = 1
   证明: by
   simp
@@ -1771,7 +1771,7 @@ theorem val_le_one_or_val_inv_lt_one
 
 中文:
 定理 val_le_one_or_val_inv_lt_one
-  条件: (v : Valuation K Γ₀) (x : K)
+  条件: (v : 赋值 K Γ₀) (x : K)
   结论: v x <= 1 ∨ v x⁻¹ < 1
   证明: by
   obtain rfl | h := eq_or_ne x 0
@@ -1799,7 +1799,7 @@ theorem val_le_one_or_val_inv_le_one
 
 中文:
 定理 val_le_one_or_val_inv_le_one
-  条件: (v : Valuation K Γ₀) (x : K)
+  条件: (v : 赋值 K Γ₀) (x : K)
   结论: v x <= 1 ∨ v x⁻¹ <= 1
   证明: by
   by_cases h : x = 0
@@ -1828,7 +1828,7 @@ definition leAddSubgroup
 
 中文:
 定义 leAddSubgroup
-  签名: (v : Valuation R Γ₀) (γ : Γ₀)
+  签名: (v : 赋值 R Γ₀) (γ : Γ₀)
   定义体: { x | v x <= γ }
   zero_mem' := by simp
   add_mem' {x y} x_in y_in := (v.map_add x y).trans (max_le x_in y_in)
@@ -1853,7 +1853,7 @@ lemma mem_leAddSubgroup_iff
 
 中文:
 引理 mem_leAddSubgroup_iff
-  条件: {v : Valuation R Γ₀} {γ : Γ₀} {x : R}
+  条件: {v : 赋值 R Γ₀} {γ : Γ₀} {x : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1873,8 +1873,8 @@ lemma leAddSubgroup_monotone
 
 中文:
 引理 leAddSubgroup_monotone
-  条件: (v : Valuation R Γ₀)
-  结论: Monotone v.leAddSubgroup
+  条件: (v : 赋值 R Γ₀)
+  结论: 递增 v.leAddSubgroup
   证明: fun _ _ h _ => h.trans'
 
 Depends on / 依赖: h.trans
@@ -1902,7 +1902,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: : Valuation R (ValueGroup₀ (.ofClass v)) where
+  签名: : 赋值 R (ValueGroup₀ (.ofClass v)) where
   定义体: restrict₀ (.ofClass v)
   map_add_le_max' x y := by
     by_cases H : v x != 0 ∨ v y != 0
@@ -2163,7 +2163,7 @@ theorem isEquiv_restrict
 
 中文:
 定理 isEquiv_restrict
-  结论: v.IsEquiv v.restrict
+  结论: v.Is等价 v.restrict
   证明: fun _ _ => v.restrict_le_iff.symm
 
 @[simp]
@@ -2291,7 +2291,7 @@ lemma exists_div_eq_of_unit
   use x, a, hx, ze
 
 中文:
-引理 exists_div_eq_of_unit
+引理 存在_div_eq_of_unit
   条件: (γ : (ValueGroup₀ (.ofClass v))ˣ)
   证明: by
   set u := WithZero.unzero (Units.ne_zero γ) with hu_def
@@ -2329,8 +2329,8 @@ lemma IsEquiv.restrict
   simp [h]
 
 中文:
-引理 IsEquiv.restrict
-  结论: {Γ₀' : 类型} [LinearOrderedCommGroupWithZero Γ₀']
+引理 Is等价.restrict
+  结论: {Γ₀' : 类型} [带零LinearOrderedComm群 Γ₀']
   证明: by
   simp only [IsEquiv] at h ⊢
   simp [h]
@@ -2355,7 +2355,7 @@ definition ltAddSubgroup
 
 中文:
 定义 ltAddSubgroup
-  签名: (v : Valuation R Γ₀) (γ : Γ₀ˣ)
+  签名: (v : 赋值 R Γ₀) (γ : Γ₀ˣ)
   定义体: { x | v x < γ }
   zero_mem' := by simp
   add_mem' {x y} x_in y_in := lt_of_le_of_lt (v.map_add x y) (max_lt x_in y_in)
@@ -2377,7 +2377,7 @@ lemma mem_ltAddSubgroup_iff
 
 中文:
 引理 mem_ltAddSubgroup_iff
-  条件: {v : Valuation R Γ₀} {γ x}
+  条件: {v : 赋值 R Γ₀} {γ x}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_ltAddSubgroup_iff {v : Valuation R Γ₀} {γ x} :
@@ -2395,8 +2395,8 @@ lemma ltAddSubgroup_monotone
 
 中文:
 引理 ltAddSubgroup_monotone
-  条件: (v : Valuation R Γ₀)
-  结论: Monotone v.ltAddSubgroup
+  条件: (v : 赋值 R Γ₀)
+  结论: 递增 v.ltAddSubgroup
   证明: fun _ _ h _ => (Units.val_le_val.mpr h).trans_lt'
 
 Depends on / 依赖: Units.val_le_val.mpr, trans_lt, val_le_val
@@ -2416,7 +2416,7 @@ lemma ltAddSubgroup_le_leAddSubgroup
 
 中文:
 引理 ltAddSubgroup_le_leAddSubgroup
-  条件: (v : Valuation R Γ₀) (γ : Γ₀ˣ)
+  条件: (v : 赋值 R Γ₀) (γ : Γ₀ˣ)
   证明: fun _ h => h.le
 
 @[simp]
@@ -2439,7 +2439,7 @@ lemma leAddSubgroup_zero
 
 中文:
 引理 leAddSubgroup_zero
-  条件: {K : 类型} [Field K] (v : Valuation K Γ₀)
+  条件: {K : 类型} [域 K] (v : 赋值 K Γ₀)
   证明: by
   ext; simp
 -/
@@ -2465,7 +2465,7 @@ class IsNontrivial
     - exists_val_nontrivial : exists x : R, v x != 0 ∧ v x != 1
 
 中文:
-类 IsNontrivial
+类 是非平凡
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_val_nontrivial : 存在 x : R, v x != 0 ∧ v x != 1
@@ -2484,8 +2484,8 @@ lemma IsNontrivial.nontrivial_codomain
   exact ⟨v x, 1, hx1⟩
 
 中文:
-引理 IsNontrivial.nontrivial_codomain
-  条件: [hv : IsNontrivial v]
+引理 是非平凡.nontrivial_codomain
+  条件: [hv : 是非平凡 v]
   证明: by
   obtain ⟨x, hx0, hx1⟩ := hv.exists_val_nontrivial
   exact ⟨v x, 1, hx1⟩
@@ -2510,7 +2510,7 @@ lemma not_isNontrivial_one
 
 中文:
 引理 not_isNontrivial_one
-  条件: [IsDomain R] [DecidablePred fun x : R => x = 0]
+  条件: [是整环 R] [DecidablePred fun x : R => x = 0]
   证明: by
   rintro ⟨⟨x, hx, hx'⟩⟩
   rcases eq_or_ne x 0 with rfl | hx0 <;>
@@ -2555,7 +2555,7 @@ lemma isNontrivial_iff_exists_unit
     ⟨x, w.ne_zero_iff.mpr (Units.ne_zero x), hx⟩⟩
 
 中文:
-引理 isNontrivial_iff_exists_unit
+引理 isNontrivial_iff_存在_unit
   证明: ⟨fun ⟨x, hx0, hx1⟩ =>
     have : Nontrivial Γ₀ := ⟨w x, 0, hx0⟩
     ⟨Units.mk0 x (w.ne_zero_iff.mp hx0), hx1⟩,
@@ -2590,8 +2590,8 @@ lemma IsNontrivial.exists_lt_one
     simp [-map_inv₀, ← one_lt_val_iff, hx]
 
 中文:
-引理 IsNontrivial.exists_lt_one
-  结论: {Γ₀ : 类型} [LinearOrderedCommGroupWithZero Γ₀]
+引理 是非平凡.存在_lt_one
+  结论: {Γ₀ : 类型} [带零LinearOrderedComm群 Γ₀]
   证明: by
   obtain ⟨x, hx⟩ := isNontrivial_iff_exists_unit.mp hv
   rw [ne_iff_lt_or_gt] at hx
@@ -2623,8 +2623,8 @@ theorem isNontrivial_iff_exists_lt_one
   proof: ⟨fun h => by simpa using h.exists_lt_one (v := v), fun ⟨x, hx0, hx1⟩ => ⟨x, by simp [hx0, hx1.ne]⟩⟩
 
 中文:
-定理 isNontrivial_iff_exists_lt_one
-  结论: {Γ₀ : 类型} [LinearOrderedCommGroupWithZero Γ₀]
+定理 isNontrivial_iff_存在_lt_one
+  结论: {Γ₀ : 类型} [带零LinearOrderedComm群 Γ₀]
   证明: ⟨fun h => by simpa using h.exists_lt_one (v := v), fun ⟨x, hx0, hx1⟩ => ⟨x, by simp [hx0, hx1.ne]⟩⟩
 
 Depends on / 依赖: exists_lt_one, h.exists_lt_one, hx1.ne
@@ -2645,8 +2645,8 @@ lemma IsNontrivial.exists_one_lt
   simp [one_lt_inv₀ (zero_lt_iff.mpr (by simp [h0] : v x != 0)), h1]
 
 中文:
-引理 IsNontrivial.exists_one_lt
-  结论: {Γ₀ : 类型} [LinearOrderedCommGroupWithZero Γ₀]
+引理 是非平凡.存在_one_lt
+  结论: {Γ₀ : 类型} [带零LinearOrderedComm群 Γ₀]
   证明: by
   obtain ⟨x, h0, h1⟩ := hv.exists_lt_one
   use x⁻¹
@@ -2670,8 +2670,8 @@ lemma IsNontrivial_iff_exists_one_lt
   proof: ⟨fun h => by simpa using h.exists_one_lt (v := v), fun ⟨x, hx1⟩ => ⟨x, by aesop⟩⟩
 
 中文:
-引理 IsNontrivial_iff_exists_one_lt
-  结论: {Γ₀ : 类型} [LinearOrderedCommGroupWithZero Γ₀]
+引理 IsNontrivial_iff_存在_one_lt
+  结论: {Γ₀ : 类型} [带零LinearOrderedComm群 Γ₀]
   证明: ⟨fun h => by simpa using h.exists_one_lt (v := v), fun ⟨x, hx1⟩ => ⟨x, by aesop⟩⟩
 
 Depends on / 依赖: exists_one_lt, h.exists_one_lt
@@ -2698,8 +2698,8 @@ class IsTrivialOn
     - eq_one : forall a : A, a != 0 -> v (algebraMap A B a) = 1
 
 中文:
-类 IsTrivialOn
-  参数: {B : 类型} (A : 类型) [CommSemiring A] [Ring B] [Algebra A B]
+类 是TrivialOn
+  参数: {B : 类型} (A : 类型) [交换半环 A] [环 B] [代数 A B]
   公理与运算 (1 个):
     - eq_one : 对任意 a : A, a != 0 -> v (algebraMap A B a) = 1
 
@@ -2726,7 +2726,7 @@ theorem IsTrivialOn.valuation_algebraMap_le_one
   by_cases a = 0 <;> grind [zero_le]
 
 中文:
-定理 IsTrivialOn.valuation_algebraMap_le_one
+定理 是TrivialOn.valuation_algebraMap_le_one
   条件: (a : A)
   结论: v (algebraMap A B a) <= 1
   证明: by
@@ -2758,7 +2758,7 @@ theorem refl
 
 中文:
 定理 refl
-  结论: v.IsEquiv v
+  结论: v.Is等价 v
   证明: fun _ _ => Iff.refl _
 
 @[symm]
@@ -2781,8 +2781,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : v₁.IsEquiv v₂)
-  结论: v₂.IsEquiv v₁
+  条件: (h : v₁.Is等价 v₂)
+  结论: v₂.Is等价 v₁
   证明: fun _ _ => Iff.symm (h _ _)
 
 @[trans]
@@ -2804,8 +2804,8 @@ theorem trans
 
 中文:
 定理 trans
-  条件: (h₁₂ : v₁.IsEquiv v₂) (h₂₃ : v₂.IsEquiv v₃)
-  结论: v₁.IsEquiv v₃
+  条件: (h₁₂ : v₁.Is等价 v₂) (h₂₃ : v₂.Is等价 v₃)
+  结论: v₁.Is等价 v₃
   证明: fun _ _ =>
   Iff.trans (h₁₂ _ _) (h₂₃ _ _)
 -/
@@ -2823,8 +2823,8 @@ theorem of_eq
 
 中文:
 定理 of_eq
-  条件: {v' : Valuation R Γ₀} (h : v = v')
-  结论: v.IsEquiv v'
+  条件: {v' : 赋值 R Γ₀} (h : v = v')
+  结论: v.Is等价 v'
   证明: by subst h; rfl
 -/
 theorem of_eq {v' : Valuation R Γ₀} (h : v = v') : v.IsEquiv v' := by subst h; rfl
@@ -2844,7 +2844,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {v' : Valuation R Γ₀} (f : Γ₀ ->*₀ Γ'₀) (hf : Monotone f) (inf : Injective f)
+  结论: {v' : 赋值 R Γ₀} (f : Γ₀ ->*₀ Γ'₀) (hf : 递增 f) (下确界 : 单射 f)
   证明: let H : StrictMono f := hf.strictMono_of_injective inf
   fun r s =>
   calc
@@ -2873,7 +2873,7 @@ theorem comap
 
 中文:
 定理 comap
-  条件: {S : 类型} [Ring S] (f : S ->+* R) (h : v₁.IsEquiv v₂)
+  条件: {S : 类型} [环 S] (f : S ->+* R) (h : v₁.Is等价 v₂)
   证明: fun r s => h (f r) (f s)
 -/
 theorem comap {S : Type*} [Ring S] (f : S ->+* R) (h : v₁.IsEquiv v₂) :
@@ -2892,7 +2892,7 @@ theorem eq_iff
 
 中文:
 定理 eq_iff
-  条件: (h : v₁.IsEquiv v₂) {r s : R}
+  条件: (h : v₁.Is等价 v₂) {r s : R}
   结论: v₁ r = v₁ s ↔ v₂ r = v₂ s
   证明: by
   simpa only [le_antisymm_iff] using and_congr (h r s) (h s r)
@@ -2917,7 +2917,7 @@ theorem eq_zero
 
 中文:
 定理 eq_zero
-  条件: (h : v₁.IsEquiv v₂) {r : R}
+  条件: (h : v₁.Is等价 v₂) {r : R}
   结论: v₁ r = 0 ↔ v₂ r = 0
   证明: by
   have : v₁ r = v₁ 0 ↔ v₂ r = v₂ 0 := h.eq_iff
@@ -2942,8 +2942,8 @@ lemma ofClass_eq_zero
 
 中文:
 引理 ofClass_eq_zero
-  条件: (h : v₁.IsEquiv v₂) {r : R}
-  结论: (MonoidWithZeroHom.ofClass v₁) r = 0 ↔
+  条件: (h : v₁.Is等价 v₂) {r : R}
+  结论: (带零幺半群态射.ofClass v₁) r = 0 ↔
   证明: eq_zero h
 
 @[deprecated "use `(eq_zero _).ne` instead." (since := "2026-01-05")]
@@ -2965,7 +2965,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: (h : v₁.IsEquiv v₂) {r : R}
+  条件: (h : v₁.Is等价 v₂) {r : R}
   结论: v₁ r != 0 ↔ v₂ r != 0
   证明: (eq_zero h).ne
 
@@ -2986,7 +2986,7 @@ lemma pos_iff
 
 中文:
 引理 pos_iff
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   结论: 0 < v₁ x ↔ 0 < v₂ x
   证明: by
   rw [zero_lt_iff]; rw [zero_lt_iff]; rw [h.eq_zero.ne]
@@ -3006,7 +3006,7 @@ lemma le_iff_le
 
 中文:
 引理 le_iff_le
-  条件: (h : v₁.IsEquiv v₂) {x y : R}
+  条件: (h : v₁.Is等价 v₂) {x y : R}
   证明: h x y
 -/
 lemma le_iff_le (h : v₁.IsEquiv v₂) {x y : R} :
@@ -3023,7 +3023,7 @@ lemma lt_iff_lt
 
 中文:
 引理 lt_iff_lt
-  条件: (h : v₁.IsEquiv v₂) {x y : R}
+  条件: (h : v₁.Is等价 v₂) {x y : R}
   证明: by
   rw [← le_iff_le_iff_lt_iff_lt]; rw [h]
 
@@ -3044,7 +3044,7 @@ lemma le_one_iff_le_one
 
 中文:
 引理 le_one_iff_le_one
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   证明: by
   rw [← v₁.map_one]; rw [h]; rw [map_one]
 
@@ -3065,7 +3065,7 @@ lemma one_le_iff_one_le
 
 中文:
 引理 one_le_iff_one_le
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   证明: by
   rw [← v₁.map_one]; rw [h]; rw [map_one]
 
@@ -3086,7 +3086,7 @@ lemma eq_one_iff_eq_one
 
 中文:
 引理 eq_one_iff_eq_one
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   证明: by
   rw [← v₁.map_one]; rw [h.eq_iff]; rw [map_one]
 
@@ -3107,7 +3107,7 @@ lemma lt_one_iff_lt_one
 
 中文:
 引理 lt_one_iff_lt_one
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   证明: by
   rw [← v₁.map_one]; rw [h.lt_iff_lt]; rw [map_one]
 
@@ -3128,7 +3128,7 @@ lemma one_lt_iff_one_lt
 
 中文:
 引理 one_lt_iff_one_lt
-  条件: (h : v₁.IsEquiv v₂) {x : R}
+  条件: (h : v₁.Is等价 v₂) {x : R}
   证明: by
   rw [← v₁.map_one]; rw [h.lt_iff_lt]; rw [map_one]
 
@@ -3148,7 +3148,7 @@ theorem isTrivialOn
 
 中文:
 定理 isTrivialOn
-  结论: {A : 类型} [CommSemiring A] [Algebra A R] (h : v₁.IsEquiv v₂)
+  结论: {A : 类型} [交换半环 A] [代数 A R] (h : v₁.Is等价 v₂)
   证明: h.eq_one_iff_eq_one.mp (IsTrivialOn.eq_one _ ha)
 
 Depends on / 依赖: IsTrivialOn, IsTrivialOn.eq_one, eq_one, eq_one_iff_eq_one, h.eq_one_iff_eq_one.mp
@@ -3167,7 +3167,7 @@ theorem isTrivialOn_iff
 
 中文:
 定理 isTrivialOn_iff
-  条件: {A : 类型} [CommSemiring A] [Algebra A R] (h : v₁.IsEquiv v₂)
+  条件: {A : 类型} [交换半环 A] [代数 A R] (h : v₁.Is等价 v₂)
   证明: ⟨fun h₁ => h.isTrivialOn h₁, fun h₂ => h.symm.isTrivialOn h₂⟩
 
 Depends on / 依赖: h.isTrivialOn, h.symm.isTrivialOn, isTrivialOn
@@ -3194,7 +3194,7 @@ theorem isEquiv_map_self_of_strictMono
 
 中文:
 定理 isEquiv_map_self_of_strictMono
-  条件: (f : Γ₀ ->*₀ Γ'₀) (H : StrictMono f)
+  条件: (f : Γ₀ ->*₀ Γ'₀) (H : 严格递增 f)
   证明: fun _x _y =>
   ⟨H.le_iff_le.mp, fun h => H.monotone h⟩
 -/
@@ -3214,7 +3214,7 @@ theorem isEquiv_iff_val_lt_val
 
 中文:
 定理 isEquiv_iff_val_lt_val
-  结论: v.IsEquiv v' ↔ 对任意 {x y : R}, v x < v y ↔ v' x < v' y
+  结论: v.Is等价 v' ↔ 对任意 {x y : R}, v x < v y ↔ v' x < v' y
   证明: by
   simp only [IsEquiv, le_iff_le_iff_lt_iff_lt]
   exact forall_comm
@@ -3239,8 +3239,8 @@ theorem isNontrivial_of_isEquiv
 
 中文:
 定理 isNontrivial_of_isEquiv
-  条件: (h : v.IsEquiv v') (hv : v.IsNontrivial)
-  结论: v'.IsNontrivial
+  条件: (h : v.Is等价 v') (hv : v.是非平凡)
+  结论: v'.是非平凡
   证明: by
   obtain ⟨x, hx⟩ := hv
   use x
@@ -3262,8 +3262,8 @@ theorem IsEquiv.isNontrivial_iff
   proof: ⟨fun hv => isNontrivial_of_isEquiv h hv, fun hv => isNontrivial_of_isEquiv h.symm hv⟩
 
 中文:
-定理 IsEquiv.isNontrivial_iff
-  条件: (h : v.IsEquiv v')
+定理 Is等价.isNontrivial_iff
+  条件: (h : v.Is等价 v')
   证明: ⟨fun hv => isNontrivial_of_isEquiv h hv, fun hv => isNontrivial_of_isEquiv h.symm hv⟩
 
 Depends on / 依赖: h.symm, isNontrivial_of_isEquiv
@@ -3299,7 +3299,7 @@ definition valueGroup₀Fun
 
 中文:
 定义 valueGroup₀Fun
-  签名: (h : v.IsEquiv w) (x : ValueGroup₀ (.ofClass v))
+  签名: (h : v.Is等价 w) (x : ValueGroup₀ (.ofClass v))
   定义体: if hx : x = 0 then 0 else
     haveI c := (x.zero_or_exists_mk'.resolve_left hx).choose
     valueGroup.mk (.ofClass w) c.1.1 c.1.2 (h.eq_zero.ne.mp c.2.1) (h.eq_zero.ne.mp c.2.2)
@@ -3327,7 +3327,7 @@ theorem valueGroup₀Fun_spec
 
 中文:
 定理 valueGroup₀Fun_spec
-  结论: (h : v.IsEquiv w) {r s : R} (hr : (MonoidWithZeroHom.ofClass v) r != 0)
+  结论: (h : v.Is等价 w) {r s : R} (hr : (带零幺半群态射.ofClass v) r != 0)
   证明: by
   rw [valueGroup₀Fun]; rw [dif_neg (by simp)]
   generalize_proofs _ _ _ _ H _
@@ -3360,7 +3360,7 @@ theorem valueGroup₀Fun_zero
 
 中文:
 定理 valueGroup₀Fun_zero
-  条件: (h : v.IsEquiv w)
+  条件: (h : v.Is等价 w)
   结论: valueGroup₀Fun h 0 = 0
   证明: by simp [valueGroup₀Fun]
 -/
@@ -3383,7 +3383,7 @@ definition orderMonoidIso
 
 中文:
 定义 orderMonoidIso
-  签名: (h : v.IsEquiv w)
+  签名: (h : v.Is等价 w)
   定义体: valueGroup₀Fun h
   invFun := valueGroup₀Fun h.symm
   map_mul' x y := by
@@ -3454,7 +3454,7 @@ theorem orderMonoidIso_spec
 
 中文:
 定理 orderMonoidIso_spec
-  条件: (h : v.IsEquiv w) (a : R)
+  条件: (h : v.Is等价 w) (a : R)
   证明: by
   have h_res := h.restrict
   by_cases ha : v a = 0
@@ -3486,7 +3486,7 @@ lemma orderMonoidIso_spec₀
 
 中文:
 引理 orderMonoidIso_spec₀
-  条件: (h : v.IsEquiv w) (a : R)
+  条件: (h : v.Is等价 w) (a : R)
   证明: orderMonoidIso_spec h a
 
 Depends on / 依赖: orderMonoidIso_spec
@@ -3508,7 +3508,7 @@ theorem orderMonoidIso_symm
 
 中文:
 定理 orderMonoidIso_symm
-  条件: (h : v.IsEquiv w) (h' : w.IsEquiv v)
+  条件: (h : v.Is等价 w) (h' : w.Is等价 v)
   证明: by
   rfl
 
@@ -3535,7 +3535,7 @@ theorem orderMonoidIso_eq_refl
 
 中文:
 定理 orderMonoidIso_eq_refl
-  条件: (h : v.IsEquiv v)
+  条件: (h : v.Is等价 v)
   证明: by
   ext x
   obtain (rfl | ⟨x, y, _, _, rfl⟩) := x.zero_or_exists_mk
@@ -3569,7 +3569,7 @@ theorem orderMonoidIso_trans
 
 中文:
 定理 orderMonoidIso_trans
-  条件: (h : v.IsEquiv w) (h' : w.IsEquiv u)
+  条件: (h : v.Is等价 w) (h' : w.Is等价 u)
   证明: by
   ext x
   obtain (rfl | ⟨x, y, _, _, rfl⟩) := x.zero_or_exists_mk
@@ -3612,7 +3612,7 @@ theorem isEquiv_of_val_le_one
 中文:
 定理 isEquiv_of_val_le_one
   条件: (h : 对任意 x, v x <= 1 ↔ v' x <= 1)
-  结论: v.IsEquiv v'
+  结论: v.Is等价 v'
   证明: by
   intro x y
   obtain rfl | hy := eq_or_ne y 0
@@ -3639,7 +3639,7 @@ theorem isEquiv_iff_val_le_one
 
 中文:
 定理 isEquiv_iff_val_le_one
-  结论: v.IsEquiv v' ↔ 对任意 {x}, v x <= 1 ↔ v' x <= 1
+  结论: v.Is等价 v' ↔ 对任意 {x}, v x <= 1 ↔ v' x <= 1
   证明: ⟨IsEquiv.le_one_iff_le_one, isEquiv_of_val_le_one⟩
 
 Depends on / 依赖: IsEquiv, IsEquiv.le_one_iff_le_one, isEquiv_of_val_le_one, le_one_iff_le_one
@@ -3670,7 +3670,7 @@ theorem isEquiv_iff_val_eq_one
 
 中文:
 定理 isEquiv_iff_val_eq_one
-  结论: v.IsEquiv v' ↔ 对任意 {x}, v x = 1 ↔ v' x = 1
+  结论: v.Is等价 v' ↔ 对任意 {x}, v x = 1 ↔ v' x = 1
   证明: by
   constructor
   · intro h x
@@ -3743,7 +3743,7 @@ theorem isEquiv_iff_val_lt_one
 
 中文:
 定理 isEquiv_iff_val_lt_one
-  结论: v.IsEquiv v' ↔ 对任意 {x}, v x < 1 ↔ v' x < 1
+  结论: v.Is等价 v' ↔ 对任意 {x}, v x < 1 ↔ v' x < 1
   证明: by
   constructor
   · intro h x
@@ -3879,7 +3879,7 @@ add_mem' {x y} hx hy := le_zero_iff.mp
 
 中文:
 定义 supp
-  签名: : Ideal R where
+  签名: : 理想 R where
   定义体: { x | v x = 0 }
   zero_mem' := map_zero v
 add_mem' {x y} hx hy := le_zero_iff.mp
@@ -3942,8 +3942,8 @@ one_ne_zero (α := Γ₀)
     exact eq_zero_or_eq_zero_of_mul_eq_zero hxy⟩
 
 中文:
-实例 [Nontrivial
-  签名: Γ₀] [NoZeroDivisors Γ₀] : Ideal.IsPrime (supp v)
+实例 [非平凡
+  签名: Γ₀] [无零因子 Γ₀] : 理想.是素 (supp v)
   定义体: ⟨fun h =>
 one_ne_zero (α := Γ₀)
       calc
@@ -4020,7 +4020,7 @@ theorem comap_supp
 
 中文:
 定理 comap_supp
-  条件: {S : 类型} [CommRing S] (f : S ->+* R)
+  条件: {S : 类型} [交换环 S] (f : S ->+* R)
   证明: Ideal.ext fun x => by rw [mem_supp_iff, Ideal.mem_comap, mem_supp_iff, comap_apply]
 
 Depends on / 依赖: Ideal.ext, Ideal.mem_comap, comap_apply, mem_comap, mem_supp_iff
@@ -4075,7 +4075,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (AddValuation R Γ₀) R Γ₀
+  签名: 函数状 (AddValuation R Γ₀) R Γ₀
   定义体: inferInstanceAs FunLike (Valuation R <| Multiplicative Γ₀ᵒᵈ) R Multiplicative Γ₀ᵒᵈ
 
 Depends on / 依赖: FunLike, Multiplicative, Valuation
@@ -4144,7 +4144,7 @@ definition toValuation
 
 中文:
 定义 toValuation
-  签名: : AddValuation R Γ₀ ≃ Valuation R (Multiplicative Γ₀ᵒᵈ)
+  签名: : AddValuation R Γ₀ ≃ 赋值 R (Multiplicative Γ₀ᵒᵈ)
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -4164,7 +4164,7 @@ definition ofValuation
 
 中文:
 定义 ofValuation
-  签名: : Valuation R (Multiplicative Γ₀ᵒᵈ) ≃ AddValuation R Γ₀
+  签名: : 赋值 R (Multiplicative Γ₀ᵒᵈ) ≃ AddValuation R Γ₀
   定义体: Equiv.refl _
 
 @[simp]
@@ -4247,7 +4247,7 @@ lemma toValuation_ofValuation
 
 中文:
 引理 toValuation_ofValuation
-  条件: (v : Valuation R (Multiplicative Γ₀ᵒᵈ))
+  条件: (v : 赋值 R (Multiplicative Γ₀ᵒᵈ))
   证明: rfl
 
 @[simp]
@@ -4288,7 +4288,7 @@ theorem ofValuation_apply
 
 中文:
 定理 ofValuation_apply
-  条件: (v : Valuation R (Multiplicative Γ₀ᵒᵈ)) (r : R)
+  条件: (v : 赋值 R (Multiplicative Γ₀ᵒᵈ)) (r : R)
   证明: rfl
 -/
 theorem ofValuation_apply (v : Valuation R (Multiplicative Γ₀ᵒᵈ)) (r : R) :
@@ -4369,7 +4369,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: 对任意 (x y : R), min (v x) (v y) <= v (x + y)
+  结论: 对任意 (x y : R), 最小值 (v x) (v y) <= v (x + y)
   证明: Valuation.map_add v
 
 @[simp]
@@ -4454,7 +4454,7 @@ theorem map_le_sum
 
 中文:
 定理 map_le_sum
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hf : 对任意 i in s, g <= v (f i))
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hf : 对任意 i in s, g <= v (f i))
   证明: v.map_sum_le hf
 
 Depends on / 依赖: map_sum_le, v.map_sum_le
@@ -4473,7 +4473,7 @@ theorem map_lt_sum
 
 中文:
 定理 map_lt_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hg : g != ⊤)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hg : g != ⊤)
   证明: v.map_sum_lt hg hf
 
 Depends on / 依赖: map_sum_lt, v.map_sum_lt
@@ -4494,7 +4494,7 @@ theorem map_lt_sum'
 
 中文:
 定理 map_lt_sum'
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R} {g : Γ₀} (hg : g < ⊤)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R} {g : Γ₀} (hg : g < ⊤)
   证明: v.map_sum_lt' hg hf
 
 @[simp]
@@ -4563,7 +4563,7 @@ definition toPreorder
 
 中文:
 定义 toPreorder
-  签名: : Preorder R
+  签名: : 预序 R
   定义体: Preorder.lift v
 
 Depends on / 依赖: Preorder, Preorder.lift
@@ -4584,7 +4584,7 @@ theorem top_iff
 
 中文:
 定理 top_iff
-  条件: [Nontrivial Γ₀] (v : AddValuation K Γ₀) {x : K}
+  条件: [非平凡 Γ₀] (v : AddValuation K Γ₀) {x : K}
   结论: v x = (⊤ : Γ₀) ↔ x = 0
   证明: v.zero_iff
 
@@ -4604,7 +4604,7 @@ theorem ne_top_iff
 
 中文:
 定理 ne_top_iff
-  条件: [Nontrivial Γ₀] (v : AddValuation K Γ₀) {x : K}
+  条件: [非平凡 Γ₀] (v : AddValuation K Γ₀) {x : K}
   结论: v x != (⊤ : Γ₀) ↔ x != 0
   证明: v.ne_zero_iff
 
@@ -4625,7 +4625,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {S : 类型} [Ring S] (f : S ->+* R) (v : AddValuation R Γ₀)
+  签名: {S : 类型} [环 S] (f : S ->+* R) (v : AddValuation R Γ₀)
   定义体: Valuation.comap f v
 
 @[simp]
@@ -4646,7 +4646,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: v.comap (RingHom.id R) = v
+  结论: v.comap (环态射.id R) = v
   证明: Valuation.comap_id v
 
 Depends on / 依赖: Valuation, Valuation.comap_id, comap_id
@@ -4664,7 +4664,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: {S₁ : 类型} {S₂ : 类型} [Ring S₁] [Ring S₂] (f : S₁ ->+* S₂) (g : S₂ ->+* R)
+  条件: {S₁ : 类型} {S₂ : 类型} [环 S₁] [环 S₂] (f : S₁ ->+* S₂) (g : S₂ ->+* R)
   证明: Valuation.comap_comp v f g
 
 Depends on / 依赖: Valuation, Valuation.comap_comp, comap_comp
@@ -4689,7 +4689,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : Monotone f) (v : AddValuation R Γ₀)
+  签名: (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : 递增 f) (v : AddValuation R Γ₀)
   定义体: @Valuation.map R (Multiplicative Γ₀ᵒᵈ) (Multiplicative Γ'₀ᵒᵈ) _ _ _
     { toFun := f
       map_mul' := f.map_add
@@ -4719,7 +4719,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  条件: (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : Monotone f) (v : AddValuation R Γ₀) (r : R)
+  条件: (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : 递增 f) (v : AddValuation R Γ₀) (r : R)
   证明: rfl
 -/
 lemma map_apply (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : Monotone f) (v : AddValuation R Γ₀) (r : R) :
@@ -4736,7 +4736,7 @@ definition IsEquiv
 @[simp]
 
 中文:
-定义 IsEquiv
+定义 Is等价
   签名: (v₁ : AddValuation R Γ₀) (v₂ : AddValuation R Γ'₀)
   定义体: Valuation.IsEquiv v₁ v₂
 
@@ -4800,7 +4800,7 @@ theorem map_sub
 中文:
 定理 map_sub
   条件: (x y : R)
-  结论: min (v x) (v y) <= v (x - y)
+  结论: 最小值 (v x) (v y) <= v (x - y)
   证明: Valuation.map_sub v x y
 
 Depends on / 依赖: Valuation, Valuation.map_sub, map_sub
@@ -4842,7 +4842,7 @@ theorem map_add_of_distinct_val
 中文:
 定理 map_add_of_distinct_val
   条件: (h : v x != v y)
-  结论: v (x + y) = @Min.min Γ₀ _ (v x) (v y)
+  结论: v (x + y) = @最小值.最小值 Γ₀ _ (v x) (v y)
   证明: Valuation.map_add_of_distinct_val v h
 
 Depends on / 依赖: Valuation, Valuation.map_add_of_distinct_val, map_add_of_distinct_val
@@ -5031,7 +5031,7 @@ theorem refl
 
 中文:
 定理 refl
-  结论: v.IsEquiv v
+  结论: v.Is等价 v
   证明: Valuation.IsEquiv.refl
 
 @[symm]
@@ -5055,8 +5055,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : v₁.IsEquiv v₂)
-  结论: v₂.IsEquiv v₁
+  条件: (h : v₁.Is等价 v₂)
+  结论: v₂.Is等价 v₁
   证明: Valuation.IsEquiv.symm h
 
 @[trans]
@@ -5078,8 +5078,8 @@ theorem trans
 
 中文:
 定理 trans
-  条件: (h₁₂ : v₁.IsEquiv v₂) (h₂₃ : v₂.IsEquiv v₃)
-  结论: v₁.IsEquiv v₃
+  条件: (h₁₂ : v₁.Is等价 v₂) (h₂₃ : v₂.Is等价 v₃)
+  结论: v₁.Is等价 v₃
   证明: Valuation.IsEquiv.trans h₁₂ h₂₃
 
 Depends on / 依赖: IsEquiv, Valuation, Valuation.IsEquiv.trans
@@ -5099,7 +5099,7 @@ theorem of_eq
 中文:
 定理 of_eq
   条件: {v' : AddValuation R Γ₀} (h : v = v')
-  结论: v.IsEquiv v'
+  结论: v.Is等价 v'
   证明: Valuation.IsEquiv.of_eq h
 
 Depends on / 依赖: IsEquiv, Valuation, Valuation.IsEquiv.of_eq, of_eq
@@ -5121,7 +5121,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {v' : AddValuation R Γ₀} (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : Monotone f)
+  结论: {v' : AddValuation R Γ₀} (f : Γ₀ ->+ Γ'₀) (ht : f ⊤ = ⊤) (hf : 递增 f)
   证明: @Valuation.IsEquiv.map R (Multiplicative Γ₀ᵒᵈ) (Multiplicative Γ'₀ᵒᵈ) _ _ _ _ _
     { toFun := f
       map_mul' := f.map_add
@@ -5148,7 +5148,7 @@ theorem comap
 
 中文:
 定理 comap
-  条件: {S : 类型} [Ring S] (f : S ->+* R) (h : v₁.IsEquiv v₂)
+  条件: {S : 类型} [环 S] (f : S ->+* R) (h : v₁.Is等价 v₂)
   证明: Valuation.IsEquiv.comap f h
 
 Depends on / 依赖: IsEquiv, Valuation, Valuation.IsEquiv.comap
@@ -5168,7 +5168,7 @@ theorem val_eq
 
 中文:
 定理 val_eq
-  条件: (h : v₁.IsEquiv v₂) {r s : R}
+  条件: (h : v₁.Is等价 v₂) {r s : R}
   结论: v₁ r = v₁ s ↔ v₂ r = v₂ s
   证明: Valuation.IsEquiv.eq_iff h
 
@@ -5188,7 +5188,7 @@ theorem ne_top
 
 中文:
 定理 ne_top
-  条件: (h : v₁.IsEquiv v₂) {r : R}
+  条件: (h : v₁.Is等价 v₂) {r : R}
   结论: v₁ r != (⊤ : Γ₀) ↔ v₂ r != (⊤ : Γ'₀)
   证明: (Valuation.IsEquiv.eq_zero h).ne
 
@@ -5215,7 +5215,7 @@ definition supp
 
 中文:
 定义 supp
-  签名: : Ideal R
+  签名: : 理想 R
   定义体: Valuation.supp v
 
 @[simp]
@@ -5288,7 +5288,7 @@ definition toAddValuation
 
 中文:
 定义 toAddValuation
-  签名: : Valuation R Γ₀ ≃ AddValuation R (Additive Γ₀)ᵒᵈ
+  签名: : 赋值 R Γ₀ ≃ AddValuation R (加性 Γ₀)ᵒᵈ
   定义体: .trans (congr
     { toFun := fun x => .ofAdd <| .toDual <| .toDual <| .ofMul x
       invFun := fun x => x.toAdd.ofDual.ofDual.toMul
@@ -5320,7 +5320,7 @@ invFun := fun x => .ofAdd .toDual .toDual .ofMul x
 
 中文:
 定义 ofAddValuation
-  签名: : AddValuation R (Additive Γ₀)ᵒᵈ ≃ Valuation R Γ₀
+  签名: : AddValuation R (加性 Γ₀)ᵒᵈ ≃ 赋值 R Γ₀
   定义体: AddValuation.toValuation.trans congr
     { toFun := fun x => x.toAdd.ofDual.ofDual.toMul
 invFun := fun x => .ofAdd .toDual .toDual .ofMul x
@@ -5392,7 +5392,7 @@ lemma ofAddValuation_toAddValuation
 
 中文:
 引理 ofAddValuation_toAddValuation
-  条件: (v : Valuation R Γ₀)
+  条件: (v : 赋值 R Γ₀)
   结论: ofAddValuation (toAddValuation v) = v
   证明: rfl
 
@@ -5414,7 +5414,7 @@ lemma toValuation_ofValuation
 
 中文:
 引理 toValuation_ofValuation
-  条件: (v : AddValuation R (Additive Γ₀)ᵒᵈ)
+  条件: (v : AddValuation R (加性 Γ₀)ᵒᵈ)
   证明: rfl
 
 @[simp]
@@ -5435,7 +5435,7 @@ theorem toAddValuation_apply
 
 中文:
 定理 toAddValuation_apply
-  条件: (v : Valuation R Γ₀) (r : R)
+  条件: (v : 赋值 R Γ₀) (r : R)
   证明: rfl
 
 @[simp]
@@ -5455,7 +5455,7 @@ theorem ofAddValuation_apply
 
 中文:
 定理 ofAddValuation_apply
-  条件: (v : AddValuation R (Additive Γ₀)ᵒᵈ) (r : R)
+  条件: (v : AddValuation R (加性 Γ₀)ᵒᵈ) (r : R)
   证明: rfl
 -/
 theorem ofAddValuation_apply (v : AddValuation R (Additive Γ₀)ᵒᵈ) (r : R) :
@@ -5476,7 +5476,7 @@ lemma val_mrange_zero
 
 中文:
 引理 val_mrange_zero
-  条件: (v : Valuation R Γ₀)
+  条件: (v : 赋值 R Γ₀)
   证明: rfl
 -/
 lemma val_mrange_zero (v : Valuation R Γ₀) :

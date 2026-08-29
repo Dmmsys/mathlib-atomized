@@ -65,7 +65,7 @@ theorem mem_center_of_apply_eq_smul
 
 中文:
 定理 mem_center_of_apply_eq_smul
-  结论: [Semiring R] [AddCommMonoid V]
+  结论: [半环 R] [加法交换幺半群 V]
   证明: by
   simp [mem_center_iff, isMulCentral_iff, commute_iff_eq, mul_assoc, LinearMap.ext_iff, hf]
 
@@ -155,7 +155,7 @@ theorem exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis
     simp only [Basis.coord_apply, 
 
 中文:
-定理 exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent_of_basis
+定理 存在_mem_center_apply_eq_smul_of_对任意_notLinearIndependent_of_basis
   证明: by
   -- We make the linear dependence condition explicit
   have feq (i) : f (b i) = (b.coord i) (f (b i)) • b i := by
@@ -256,7 +256,7 @@ theorem exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent
   · have : Nonempty ι := Free.instNonemptyChooseBasisIndexOfNontrivial R 
 
 中文:
-定理 exists_mem_center_apply_eq_smul_of_forall_notLinearIndependent
+定理 存在_mem_center_apply_eq_smul_of_对任意_notLinearIndependent
   证明: by
   rcases subsingleton_or_nontrivial V with hV | hV
   · use 1
@@ -305,7 +305,7 @@ theorem exists_eq_smul_id_of_forall_notLinearIndependent
   obtain ⟨a, rfl⟩ := e
 
 中文:
-定理 exists_eq_smul_id_of_forall_notLinearIndependent
+定理 存在_eq_smul_id_of_对任意_notLinearIndependent
   证明: by
   by_cases hV1 : finrank R V = 1
   · rw [finrank_eq_one_iff Unit] at hV1

@@ -227,7 +227,7 @@ theorem isSymmetric_sum
 
 中文:
 定理 isSymmetric_sum
-  结论: {ι : 类型} {T : ι -> (E ->ₗ[𝕜] E)} (s : Finset ι)
+  结论: {ι : 类型} {T : ι -> (E ->ₗ[𝕜] E)} (s : 有限集 ι)
   证明: fun _ _ => by
   simpa [sum_inner, inner_sum] using Finset.sum_congr rfl fun _ hi => hT _ hi _ _
 
@@ -436,7 +436,7 @@ theorem IsSymmetric.restrict_invariant
 
 中文:
 定理 IsSymmetric.restrict_invariant
-  结论: {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T) {V : Submodule 𝕜 E}
+  结论: {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T) {V : 子模 𝕜 E}
   证明: fun v w => hT v w
 -/
 theorem IsSymmetric.restrict_invariant {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T) {V : Submodule 𝕜 E}
@@ -578,7 +578,7 @@ structure IsSymmetricProjection
     - isSymmetric : T.IsSymmetric
 
 中文:
-结构 IsSymmetricProjection
+结构 是SymmetricProjection
   参数: (T : E ->ₗ[𝕜] E)
   公理与运算 (2 个):
     - isIdempotentElem : IsIdempotentElem T
@@ -613,7 +613,7 @@ theorem isSymmetric_iff_inner_map_self_real
 
 中文:
 定理 isSymmetric_iff_inner_map_self_real
-  条件: (T : V ->ₗ[Complex] V)
+  条件: (T : V ->ₗ[复形] V)
   证明: by
   constructor
   · intro hT v
@@ -705,7 +705,7 @@ theorem isSymmetric_linearIsometryEquiv_conj_iff
 
 中文:
 定理 isSymmetric_linearIsometryEquiv_conj_iff
-  结论: {F : 类型} [SeminormedAddCommGroup F]
+  结论: {F : 类型} [SeminormedAddComm群 F]
   证明: by
   refine ⟨fun h x y => ?_, fun h x y => ?_⟩
   · simpa [LinearIsometryEquiv.inner_map_eq_flip] using h (f x) (f y)
@@ -731,7 +731,7 @@ theorem InnerProductSpace.isSymmetric_rankOne_self
   proof: fun _ _ => by simp [inner_smul_left, inner_smul_right, mul_comm]
 
 中文:
-定理 InnerProductSpace.isSymmetric_rankOne_self
+定理 内积空间.isSymmetric_rankOne_self
   条件: (x : E)
   证明: fun _ _ => by simp [inner_smul_left, inner_smul_right, mul_comm]
 -/
@@ -749,7 +749,7 @@ theorem InnerProductSpace.isSymmetricProjection_rankOne_self
 .toLinearMap isIdempotentElem := isIdempotentElem_rankOne_self hx
 
 中文:
-定理 InnerProductSpace.isSymmetricProjection_rankOne_self
+定理 内积空间.isSymmetricProjection_rankOne_self
   条件: {x : E} (hx : ‖x‖ = 1)
   证明: isSymmetric_rankOne_self x
 .toLinearMap isIdempotentElem := isIdempotentElem_rankOne_self hx
@@ -770,7 +770,7 @@ theorem LinearMap.IsSymmetric.toLinearMap_symm
   proof: fun x y => by simpa using hT (T.symm x) (T.symm y)
 
 中文:
-定理 LinearMap.IsSymmetric.toLinearMap_symm
+定理 线性映射.IsSymmetric.toLinearMap_symm
   条件: {T : E ≃ₗ[𝕜] E} (hT : T.IsSymmetric)
   证明: fun x y => by simpa using hT (T.symm x) (T.symm y)
 
@@ -788,7 +788,7 @@ theorem LinearEquiv.isSymmetric_symm_iff
   proof: ⟨.toLinearMap_symm, .toLinearMap_symm⟩
 
 中文:
-定理 LinearEquiv.isSymmetric_symm_iff
+定理 线性等价.isSymmetric_symm_iff
   条件: {T : E ≃ₗ[𝕜] E}
   证明: ⟨.toLinearMap_symm, .toLinearMap_symm⟩
 -/
@@ -823,7 +823,7 @@ theorem IsSymmetric.continuous
 
 中文:
 定理 IsSymmetric.continuous
-  条件: [CompleteSpace E] {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T)
+  条件: [完备空间 E] {T : E ->ₗ[𝕜] E} (hT : IsSymmetric T)
   证明: by
   -- We prove it by using the closed graph theorem
   refine T.continuous_of_seq_closed_graph fun u x y hu hTu => ?_
@@ -926,7 +926,7 @@ theorem _root_.Submodule.isSymmetric_projection_iff
       map_ze
 
 中文:
-定理 _root_.Submodule.isSymmetric_projection_iff
+定理 _root_.子模.isSymmetric_projection_iff
   证明: by
   rw [projection]
   refine ⟨fun h u hu v hv => ?_, fun h x y => ?_⟩
@@ -970,7 +970,7 @@ theorem _root_.Submodule.isSymmetricProjection_projection_iff
 alias ⟨_, _root_.Submodule.isSymmetr
 
 中文:
-定理 _root_.Submodule.isSymmetricProjection_projection_iff
+定理 _root_.子模.isSymmetricProjection_projection_iff
   证明: by
   simp [isSymmetricProjection_iff, isSymmetric_projection_iff, isIdempotentElem_projection]
 
@@ -1034,7 +1034,7 @@ theorem IsSymmetric.orthogonal_range
 
 中文:
 定理 IsSymmetric.orthogonal_range
-  条件: {T : E ->ₗ[𝕜] E} (hT : LinearMap.IsSymmetric T)
+  条件: {T : E ->ₗ[𝕜] E} (hT : 线性映射.IsSymmetric T)
   证明: by
   ext x
   constructor
@@ -1088,7 +1088,7 @@ theorem IsSymmetricProjection.ext_iff
 alias ⟨_, IsSymmetricProjection
 
 中文:
-定理 IsSymmetricProjection.ext_iff
+定理 是SymmetricProjection.ext_iff
   结论: {S T : E ->ₗ[𝕜] E}
   证明: by
   refine ⟨fun h => h ▸ rfl, fun h => ?_⟩
@@ -1122,7 +1122,7 @@ theorem IsSymmetricProjection.sub_of_range_le_range
   simp_rw [Module.End.mul_apply, ← hp.isSymmetric _, ← hq.isSymmetric _, ← comp_apply, hqp]
 
 中文:
-定理 IsSymmetricProjection.sub_of_range_le_range
+定理 是SymmetricProjection.sub_of_range_le_range
   结论: {p q : E ->ₗ[𝕜] E}
   证明: by
   rw [← hq.isIdempotentElem.comp_eq_right_iff] at hqp

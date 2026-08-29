@@ -70,7 +70,7 @@ theorem num_smul_one_lt_den_smul_add
 
 中文:
 定理 num_smul_one_lt_den_smul_add
-  结论: {u v : Rat} {x y : M}
+  结论: {u v : 有理数} {x y : M}
   证明: by
   have hu' : (u.num * v.den) • 1 < (u.den * v.den : Int) • x := by
     simpa [mul_comm] using (mul_smul_one_lt_iff v.den_pos).mpr hu
@@ -108,7 +108,7 @@ theorem num_le_nat_mul_den
 
 中文:
 定理 num_le_nat_mul_den
-  结论: [ZeroLEOneClass M] [NeZero (1 : M)]
+  结论: [ZeroLEOne类 M] [NeZero (1 : M)]
   证明: by
   refine le_of_smul_le_smul_right (h.trans ?_) (by simp)
   rw [mul_comm]; rw [← smul_smul]
@@ -205,7 +205,7 @@ abbreviation embedRealFun
   body: sSup (ratLt' x)
 
 中文:
-缩写 embedRealFun
+缩写 embed实数Fun
   签名: (x : M)
   定义体: sSup (ratLt' x)
 -/
@@ -275,7 +275,7 @@ theorem ratLt_nonempty
 中文:
 定理 ratLt_nonempty
   条件: (x : M)
-  结论: (ratLt x).Nonempty
+  结论: (ratLt x).非空
   证明: by
   obtain hneg | rfl | hxpos := lt_trichotomy x 0
   · obtain ⟨n, hn⟩ := Archimedean.arch (-x - x) zero_lt_one
@@ -401,7 +401,7 @@ theorem ratLt'_nonempty
 中文:
 定理 ratLt'_nonempty
   条件: (x : M)
-  结论: (ratLt' x).Nonempty
+  结论: (ratLt' x).非空
   证明: Set.image_nonempty.mpr (ratLt_nonempty x)
 -/
 theorem ratLt'_nonempty (x : M) : (ratLt' x).Nonempty := Set.image_nonempty.mpr (ratLt_nonempty x)
@@ -445,7 +445,7 @@ theorem embedRealFun_zero
     exact (neg_of_smul_neg_right 
 
 中文:
-定理 embedRealFun_zero
+定理 embed实数Fun_zero
   结论: embed实数Fun (0 : M) = 0
   证明: by
   apply le_antisymm
@@ -491,7 +491,7 @@ theorem embedRealFun_add
     (ratLt'_nonempty y) (ratLt'_bddAbove y)]
 
 中文:
-定理 embedRealFun_add
+定理 embed实数Fun_add
   条件: (x y : M)
   结论: embed实数Fun (x + y) = embed实数Fun x + embed实数Fun y
   证明: by
@@ -521,8 +521,8 @@ theorem embedRealFun_strictMono
   have : (Rat.mk' 1 (n + 1) (by simp) (by simp) : Real) in ratL
 
 中文:
-定理 embedRealFun_strictMono
-  结论: StrictMono (embed实数Fun (M := M))
+定理 embed实数Fun_strictMono
+  结论: 严格递增 (embed实数Fun (M := M))
   证明: by
   intro x y h
   have hyz : 0 < y - x := sub_pos.mpr h
@@ -560,7 +560,7 @@ definition embedReal
   monotone' := (embedRealFun_strictMono M).monotone
 
 中文:
-定义 embedReal
+定义 embed实数
   签名: : M ->+o 实数 where
   定义体: embedRealFun
   map_zero' := embedRealFun_zero M
@@ -585,7 +585,7 @@ theorem embedReal_apply
   proof: by rfl
 
 中文:
-定理 embedReal_apply
+定理 embed实数_apply
   条件: (a : M)
   结论: embed实数 M a = embed实数Fun a
   证明: by rfl
@@ -604,8 +604,8 @@ theorem embedReal_injective
 @[simp]
 
 中文:
-定理 embedReal_injective
-  结论: Function.Injective (embed实数 M)
+定理 embed实数_injective
+  结论: 函数.单射 (embed实数 M)
   证明: (embedRealFun_strictMono M).injective
 
 @[simp]
@@ -632,7 +632,7 @@ theorem embedReal_one
     simpa [Rat.le_iff] using ((smul_lt_smul_iff_of_pos_
 
 中文:
-定理 embedReal_one
+定理 embed实数_one
   结论: (embed实数 M) 1 = 1
   证明: by
   rw [embedReal_apply]
@@ -681,7 +681,7 @@ theorem exists_orderAddMonoidHom_real_injective
     exact ⟨embedReal M, embedReal_injective
 
 中文:
-定理 exists_orderAddMonoidHom_real_injective
+定理 存在_orderAddMonoidHom_real_injective
   证明: by
   cases subsingleton_or_nontrivial M
   · exact ⟨0, Function.injective_of_subsingleton _⟩

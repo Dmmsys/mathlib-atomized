@@ -75,7 +75,7 @@ structure LaxTrans
 
 中文:
 结构 LaxTrans
-  参数: (F G : OplaxFunctor B C)
+  参数: (F G : Oplax函子 B C)
   公理与运算 (5 个):
     - app((a : B)) : F.obj a ⟶ G.obj a
     - naturality({a b : B} (f : a ⟶ b)) : app a ≫ G.map f ⟶ F.map f ≫ app b
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LaxTrans F F)
+  签名: 可居 (LaxTrans F F)
   定义体: ⟨id F⟩
 -/
 instance : Inhabited (LaxTrans F F) :=
@@ -175,7 +175,7 @@ abbreviation vCompNaturality
     η.naturality f ▷ θ.app b ≫ (α_ _ _ _).hom
 
 中文:
-缩写 vCompNaturality
+缩写 vComp自然数urality
   签名: {a b : B} (f : a ⟶ b)
   定义体: (α_ _ _ _).hom ≫ η.app a ◁ θ.naturality f ≫ (α_ _ _ _).inv ≫
     η.naturality f ▷ θ.app b ≫ (α_ _ _ _).hom
@@ -621,7 +621,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OplaxTrans F F)
+  签名: 可居 (OplaxTrans F F)
   定义体: ⟨id F⟩
 -/
 instance : Inhabited (OplaxTrans F F) :=
@@ -882,7 +882,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (StrongTrans F F)
+  签名: 可居 (StrongTrans F F)
   定义体: ⟨id F⟩
 
 Depends on / 依赖: F.op, inverse, opOpEquivalence

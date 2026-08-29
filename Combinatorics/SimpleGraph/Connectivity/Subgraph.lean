@@ -38,10 +38,10 @@ structure Preconnected
     - coe : H.coe.Preconnected
 
 中文:
-结构 Preconnected
-  参数: (H : G.Subgraph)
+结构 预连通
+  参数: (H : G.子图)
   公理与运算 (1 个):
-    - coe : H.coe.Preconnected
+    - coe : H.coe.预连通
 -/
 protected structure Preconnected (H : G.Subgraph) : Prop where
   protected coe : H.coe.Preconnected
@@ -61,7 +61,7 @@ lemma preconnected_iff
 
 中文:
 引理 preconnected_iff
-  条件: {H : G.Subgraph}
+  条件: {H : G.子图}
   证明: ⟨fun ⟨h⟩ => h, .mk⟩
 -/
 protected lemma preconnected_iff {H : G.Subgraph} :
@@ -77,10 +77,10 @@ structure Connected
     - coe : H.coe.Connected
 
 中文:
-结构 Connected
-  参数: (H : G.Subgraph)
+结构 连通
+  参数: (H : G.子图)
   公理与运算 (1 个):
-    - coe : H.coe.Connected
+    - coe : H.coe.连通
 -/
 protected structure Connected (H : G.Subgraph) : Prop where
   protected coe : H.coe.Connected
@@ -100,7 +100,7 @@ lemma connected_iff'
 
 中文:
 引理 connected_iff'
-  条件: {H : G.Subgraph}
+  条件: {H : G.子图}
   证明: ⟨fun ⟨h⟩ => h, .mk⟩
 -/
 protected lemma connected_iff' {H : G.Subgraph} :
@@ -117,7 +117,7 @@ lemma connected_iff
 
 中文:
 引理 connected_iff
-  条件: {H : G.Subgraph}
+  条件: {H : G.子图}
   证明: by
   rw [H.connected_iff']; rw [connected_iff]; rw [H.preconnected_iff]; rw [Set.nonempty_coe_sort]
 -/
@@ -136,9 +136,9 @@ lemma Connected.preconnected
   rw [H.connected_iff] at h; exact h.1
 
 中文:
-引理 Connected.preconnected
-  条件: {H : G.Subgraph} (h : H.Connected)
-  结论: H.Preconnected
+引理 连通.preconnected
+  条件: {H : G.子图} (h : H.连通)
+  结论: H.预连通
   证明: by
   rw [H.connected_iff] at h; exact h.1
 -/
@@ -156,9 +156,9 @@ lemma Connected.nonempty
   rw [H.connected_iff] at h; exact h.2
 
 中文:
-引理 Connected.nonempty
-  条件: {H : G.Subgraph} (h : H.Connected)
-  结论: H.verts.Nonempty
+引理 连通.nonempty
+  条件: {H : G.子图} (h : H.连通)
+  结论: H.verts.非空
   证明: by
   rw [H.connected_iff] at h; exact h.2
 -/
@@ -179,7 +179,7 @@ theorem singletonSubgraph_connected
 中文:
 定理 singletonSubgraph_connected
   条件: {v : V}
-  结论: (G.singletonSubgraph v).Connected
+  结论: (G.singletonSubgraph v).连通
   证明: ⟨⟨Preconnected.of_subsingleton⟩⟩
 
 @[simp]
@@ -206,8 +206,8 @@ theorem subgraphOfAdj_connected
 
 中文:
 定理 subgraphOfAdj_connected
-  条件: {v w : V} (hvw : G.Adj v w)
-  结论: (G.subgraphOfAdj hvw).Connected
+  条件: {v w : V} (hvw : G.伴随 v w)
+  结论: (G.subgraphOfAdj hvw).连通
   证明: by
   refine ⟨⟨?_⟩⟩
   rintro ⟨a, ha⟩ ⟨b, hb⟩
@@ -238,7 +238,7 @@ lemma top_induce_pair_connected_of_adj
 
 中文:
 引理 top_induce_pair_connected_of_adj
-  条件: {u v : V} (huv : G.Adj u v)
+  条件: {u v : V} (huv : G.伴随 u v)
   证明: by
   rw [← subgraphOfAdj_eq_induce huv]
   exact subgraphOfAdj_connected huv
@@ -266,8 +266,8 @@ lemma Connected.mono
   exact hle.2 hvw
 
 中文:
-引理 Connected.mono
-  结论: {H H' : G.Subgraph} (hle : H <= H') (hv : H.verts = H'.verts)
+引理 连通.mono
+  结论: {H H' : G.子图} (hle : H <= H') (hv : H.verts = H'.verts)
   证明: by
   rw [← Subgraph.copy_eq H' H.verts hv H'.Adj rfl]
   refine ⟨h.coe.mono ?_⟩
@@ -291,8 +291,8 @@ lemma Connected.mono'
   exact h.mono ⟨hv.le, hle⟩ hv
 
 中文:
-引理 Connected.mono'
-  结论: {H H' : G.Subgraph}
+引理 连通.mono'
+  结论: {H H' : G.子图}
   证明: by
   exact h.mono ⟨hv.le, hle⟩ hv
 -/
@@ -317,7 +317,7 @@ lemma connected_sup
 
 中文:
 引理 connected_sup
-  结论: {H K : G.Subgraph}
+  结论: {H K : G.子图}
   证明: by
   rw [Subgraph.connected_iff']; rw [connected_iff_exists_forall_reachable]
   obtain ⟨u, hu, hu'⟩ := hn
@@ -350,8 +350,8 @@ lemma Preconnected.degree_zero_iff
   simpa [hv] using h.coe.degree_pos_of_nontrivial v
 
 中文:
-引理 Preconnected.degree_zero_iff
-  结论: {H : G.Subgraph} (h : H.Preconnected) (v : H.verts)
+引理 预连通.degree_zero_iff
+  结论: {H : G.子图} (h : H.预连通) (v : H.verts)
   证明: by
   refine ⟨fun hv => Set.not_nontrivial_iff.mp fun hn => ?_, (degree_eq_zero_of_subsingleton H _ ·)⟩
   have := hn.coe_sort
@@ -376,8 +376,8 @@ lemma Preconnected.exists_adj_of_nontrivial
   tauto
 
 中文:
-引理 Preconnected.exists_adj_of_nontrivial
-  结论: {H : G.Subgraph} [Nontrivial H.verts]
+引理 预连通.存在_adj_of_nontrivial
+  结论: {H : G.子图} [非平凡 H.verts]
   证明: by
   have := h.coe.exists_adj_of_nontrivial v
   tauto
@@ -403,8 +403,8 @@ lemma Connected.exists_verts_eq_connectedComponentSupp
     fun a => a.symm.mem_subgraphVerts h hv⟩
 
 中文:
-引理 Connected.exists_verts_eq_connectedComponentSupp
-  结论: {H : Subgraph G}
+引理 连通.存在_verts_eq_connectedComponentSupp
+  结论: {H : 子图 G}
   证明: by
   rw [SimpleGraph.ConnectedComponent.exists]
   obtain ⟨v, hv⟩ := hc.nonempty
@@ -445,7 +445,7 @@ abbreviation toSubgraph
 
 中文:
 缩写 toSubgraph
-  签名: : G.Subgraph
+  签名: : G.子图
   定义体: .induce ⊤ C.supp
 
 @[simp]
@@ -507,7 +507,7 @@ lemma connected_toSubgraph
 
 中文:
 引理 connected_toSubgraph
-  结论: C.toSubgraph.Connected
+  结论: C.toSubgraph.连通
   证明: ⟨C.coe_toSubgraph ▸ C.connected_toSimpleGraph⟩
 
 Depends on / 依赖: C.coe_toSubgraph, C.connected_toSimpleGraph, coe_toSubgraph, connected_toSimpleGraph
@@ -557,7 +557,7 @@ exact le_trans Subgraph.le_induce_top_verts Subgraph.induce_mono_
 
 中文:
 定理 maximal_subgraph_connected_iff
-  条件: (G' : G.Subgraph)
+  条件: (G' : G.子图)
   证明: by
   refine ⟨fun ⟨hconn, h⟩ => ?_, fun ⟨C, h⟩ => ?_⟩
   · have ⟨v, hv⟩ := hconn.nonempty
@@ -612,7 +612,7 @@ theorem toSubgraph_cons_nil_eq_subgraphOfAdj
 
 中文:
 定理 toSubgraph_cons_nil_eq_subgraphOfAdj
-  条件: (h : G.Adj u v)
+  条件: (h : G.伴随 u v)
   证明: by simp
 -/
 theorem toSubgraph_cons_nil_eq_subgraphOfAdj (h : G.Adj u v) :
@@ -636,7 +636,7 @@ theorem mem_verts_toSubgraph
 
 中文:
 定理 mem_verts_toSubgraph
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: w in p.toSubgraph.verts ↔ w in p.support
   证明: by
   induction p with
@@ -669,7 +669,7 @@ lemma not_nil_of_adj_toSubgraph
 
 中文:
 引理 not_nil_of_adj_toSubgraph
-  条件: {u v} {x : V} {p : G.Walk u v} (hadj : p.toSubgraph.Adj w x)
+  条件: {u v} {x : V} {p : G.途径 u v} (hadj : p.toSubgraph.伴随 w x)
   证明: by
   cases p <;> simp_all
 -/
@@ -689,7 +689,7 @@ lemma start_mem_verts_toSubgraph
 
 中文:
 引理 start_mem_verts_toSubgraph
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: u in p.toSubgraph.verts
   证明: by
   simp [mem_verts_toSubgraph]
@@ -713,7 +713,7 @@ lemma end_mem_verts_toSubgraph
 
 中文:
 引理 end_mem_verts_toSubgraph
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: v in p.toSubgraph.verts
   证明: by
   simp [mem_verts_toSubgraph]
@@ -737,7 +737,7 @@ theorem verts_toSubgraph
 
 中文:
 定理 verts_toSubgraph
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.toSubgraph.verts = { w | w in p.support }
   证明: Set.ext fun _ => p.mem_verts_toSubgraph
 
@@ -758,7 +758,7 @@ theorem mem_edges_toSubgraph
 
 中文:
 定理 mem_edges_toSubgraph
-  条件: (p : G.Walk u v) {e : Sym2 V}
+  条件: (p : G.途径 u v) {e : Sym2 V}
   证明: by induction p <;> simp [*]
 
 @[simp]
@@ -778,7 +778,7 @@ theorem edgeSet_toSubgraph
 
 中文:
 定理 edgeSet_toSubgraph
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.toSubgraph.edgeSet = p.edgeSet
   证明: Set.ext fun _ => p.mem_edges_toSubgraph
 
@@ -799,8 +799,8 @@ theorem _root_.SimpleGraph.Adj.toSubgraph_toWalk
 @[simp]
 
 中文:
-定理 _root_.SimpleGraph.Adj.toSubgraph_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.toSubgraph_toWalk
+  条件: (h : G.伴随 u v)
   证明: by
   ext <;> simp
 
@@ -823,7 +823,7 @@ theorem toSubgraph_append
 
 中文:
 定理 toSubgraph_append
-  条件: (p : G.Walk u v) (q : G.Walk v w)
+  条件: (p : G.途径 u v) (q : G.途径 v w)
   证明: by induction p <;> simp [*, sup_assoc]
 
 @[simp]
@@ -854,7 +854,7 @@ theorem toSubgraph_reverse
 
 中文:
 定理 toSubgraph_reverse
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.reverse.toSubgraph = p.toSubgraph
   证明: by
   induction p with
@@ -892,7 +892,7 @@ theorem toSubgraph_rotate
 
 中文:
 定理 toSubgraph_rotate
-  条件: [DecidableEq V] (c : G.Walk v v) (h : u in c.support)
+  条件: [DecidableEq V] (c : G.途径 v v) (h : u in c.support)
   证明: by
   rw [rotate]; rw [toSubgraph_append]; rw [sup_comm]; rw [← toSubgraph_append]; rw [take_spec]
 
@@ -915,7 +915,7 @@ theorem toSubgraph_map
 
 中文:
 定理 toSubgraph_map
-  条件: (f : G ->g G') (p : G.Walk u v)
+  条件: (f : G ->g G') (p : G.途径 u v)
   证明: by induction p <;> simp [*, Subgraph.map_sup]
 
 Depends on / 依赖: Subgraph, Subgraph.map_sup, map_sup
@@ -937,7 +937,7 @@ lemma adj_toSubgraph_mapLe
 
 中文:
 引理 adj_toSubgraph_mapLe
-  条件: {G' : SimpleGraph V} {w x : V} {p : G.Walk u v} (h : G <= G')
+  条件: {G' : 简单图 V} {w x : V} {p : G.途径 u v} (h : G <= G')
   证明: by
   simp
 
@@ -968,8 +968,8 @@ theorem finite_neighborSet_toSubgraph
 
 中文:
 定理 finite_neighborSet_toSubgraph
-  条件: (p : G.Walk u v)
-  结论: (p.toSubgraph.neighborSet w).Finite
+  条件: (p : G.途径 u v)
+  结论: (p.toSubgraph.neighborSet w).有限
   证明: by
   induction p with
   | nil =>
@@ -1006,7 +1006,7 @@ lemma toSubgraph_le_induce_support
 
 中文:
 引理 toSubgraph_le_induce_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: by
   convert! Subgraph.le_induce_top_verts
   exact p.verts_toSubgraph.symm
@@ -1037,7 +1037,7 @@ theorem toSubgraph_adj_getVert
 
 中文:
 定理 toSubgraph_adj_getVert
-  条件: {u v} (w : G.Walk u v) {i : 自然数} (hi : i < w.length)
+  条件: {u v} (w : G.途径 u v) {i : 自然数} (hi : i < w.length)
   证明: by
   induction w generalizing i with
   | nil => cases hi
@@ -1075,8 +1075,8 @@ theorem toSubgraph_adj_snd
 
 中文:
 定理 toSubgraph_adj_snd
-  条件: {u v} (w : G.Walk u v) (h : ¬ w.Nil)
-  结论: w.toSubgraph.Adj u w.snd
+  条件: {u v} (w : G.途径 u v) (h : ¬ w.Nil)
+  结论: w.toSubgraph.伴随 u w.snd
   证明: by
   simpa using w.toSubgraph_adj_getVert (not_nil_iff_lt_length.mp h)
 
@@ -1098,7 +1098,7 @@ theorem toSubgraph_adj_penultimate
 
 中文:
 定理 toSubgraph_adj_penultimate
-  条件: {u v} (w : G.Walk u v) (h : ¬ w.Nil)
+  条件: {u v} (w : G.途径 u v) (h : ¬ w.Nil)
   证明: by
   rw [not_nil_iff_lt_length] at h
   simpa [show w.length - 1 + 1 = w.length by lia]
@@ -1123,7 +1123,7 @@ lemma adj_toSubgraph_iff_mem_edges
 
 中文:
 引理 adj_toSubgraph_iff_mem_edges
-  条件: {u v u' v' : V} {p : G.Walk u v}
+  条件: {u v u' v' : V} {p : G.途径 u v}
   证明: by
   rw [← mem_edges_toSubgraph]; rw [Subgraph.mem_edgeSet]
 
@@ -1144,7 +1144,7 @@ theorem toSubgraph_adj_iff
 
 中文:
 定理 toSubgraph_adj_iff
-  条件: {u v u' v'} (w : G.Walk u v)
+  条件: {u v u' v'} (w : G.途径 u v)
   证明: by
   grind [adj_toSubgraph_iff_mem_edges, mk_mem_edges_iff_exists]
 
@@ -1165,7 +1165,7 @@ lemma mem_support_of_adj_toSubgraph
 
 中文:
 引理 mem_support_of_adj_toSubgraph
-  条件: {u v u' v' : V} {p : G.Walk u v} (hp : p.toSubgraph.Adj u' v')
+  条件: {u v u' v' : V} {p : G.途径 u v} (hp : p.toSubgraph.伴随 u' v')
   证明: p.mem_verts_toSubgraph.mp (p.toSubgraph.edge_vert hp)
 
 Depends on / 依赖: edge_vert, mem_verts_toSubgraph, p.mem_verts_toSubgraph.mp, p.toSubgraph.edge_vert, toSubgraph
@@ -1187,7 +1187,7 @@ refine ⟨fun v' hv' => ?_, fun u' v' hadj => hw w.mem_edges_toSubgraph.mp (hadj
 
 中文:
 定理 toSubgraph_le_iff
-  条件: {w : G.Walk u v} (hnil : ¬w.Nil) {G' : G.Subgraph}
+  条件: {w : G.途径 u v} (hnil : ¬w.Nil) {G' : G.子图}
   证明: by
 refine ⟨fun hw e he => Subgraph.edgeSet_mono hw w.mem_edges_toSubgraph.mpr he, fun hw => ?_⟩
 refine ⟨fun v' hv' => ?_, fun u' v' hadj => hw w.mem_edges_toSubgraph.mp (hadj : s(_, _) in _)⟩
@@ -1217,7 +1217,7 @@ lemma toSubgraph_bypass_le_toSubgraph
 
 中文:
 引理 toSubgraph_bypass_le_toSubgraph
-  条件: {u v : V} {p : G.Walk u v} [DecidableEq V]
+  条件: {u v : V} {p : G.途径 u v} [DecidableEq V]
   证明: by
   constructor
   · simpa using! p.support_bypass_subset_support
@@ -1270,7 +1270,7 @@ theorem map_mapToSubgraph_hom
 中文:
 定理 map_mapToSubgraph_hom
   条件: {u v : V}
-  结论: 对任意 w : G.Walk u v, w.mapToSubgraph.map w.toSubgraph.hom = w
+  结论: 对任意 w : G.途径 u v, w.mapToSubgraph.map w.toSubgraph.hom = w
 -/
 theorem map_mapToSubgraph_hom {u v : V} : forall w : G.Walk u v, w.mapToSubgraph.map w.toSubgraph.hom = w
   | nil => rfl
@@ -1288,7 +1288,7 @@ theorem map_mapToSubgraph_eq_induce
 
 中文:
 定理 map_mapToSubgraph_eq_induce
-  条件: (s : Set V) {u v : V}
+  条件: (s : 集合 V) {u v : V}
 -/
 theorem map_mapToSubgraph_eq_induce (s : Set V) {u v : V} :
     forall (w : G.Walk u v) (hs : forall x in w.support, x in s),
@@ -1309,7 +1309,7 @@ theorem map_mapToSubgraph_eq_induce_id
 
 中文:
 定理 map_mapToSubgraph_eq_induce_id
-  条件: {u v : V} (w : G.Walk u v)
+  条件: {u v : V} (w : G.途径 u v)
   证明: w.map_mapToSubgraph_eq_induce ..
 
 Depends on / 依赖: map_mapToSubgraph_eq_induce, w.map_mapToSubgraph_eq_induce
@@ -1333,8 +1333,8 @@ theorem isInduced_toSubgraph
 
 中文:
 定理 isInduced_toSubgraph
-  条件: {w : G.Walk u v}
-  结论: w.toSubgraph.IsInduced ↔ w.IsChordless
+  条件: {w : G.途径 u v}
+  结论: w.toSubgraph.是Induced ↔ w.IsChordless
   证明: by
   simp_rw [Subgraph.IsInduced, IsChordless, IsChord, Sym2.forall, Sym2.lift_mk, G.mem_edgeSet,
     mem_verts_toSubgraph, adj_toSubgraph_iff_mem_edges]
@@ -1364,7 +1364,7 @@ lemma neighborSet_toSubgraph_startpoint
 
 中文:
 引理 neighborSet_toSubgraph_startpoint
-  结论: {u v} {p : G.Walk u v}
+  结论: {u v} {p : G.途径 u v}
   证明: by
   have hadj1 := p.toSubgraph_adj_snd hnp
   ext v
@@ -1395,7 +1395,7 @@ lemma neighborSet_toSubgraph_endpoint
 
 中文:
 引理 neighborSet_toSubgraph_endpoint
-  结论: {u v} {p : G.Walk u v}
+  结论: {u v} {p : G.途径 u v}
   证明: by
   simpa using IsPath.neighborSet_toSubgraph_startpoint hp.reverse
       (by rw [Walk.not_nil_iff_lt_length, Walk.length_reverse]; exact
@@ -1425,7 +1425,7 @@ lemma neighborSet_toSubgraph_internal
 
 中文:
 引理 neighborSet_toSubgraph_internal
-  结论: {u} {i : 自然数} {p : G.Walk u v} (hp : p.IsPath)
+  结论: {u} {i : 自然数} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   have hadj1 := ((show i - 1 + 1 = i by lia) ▸
     p.toSubgraph_adj_getVert (by lia : (i - 1) < p.length)).symm
@@ -1466,7 +1466,7 @@ lemma ncard_neighborSet_toSubgraph_internal_eq_two
 
 中文:
 引理 ncard_neighborSet_toSubgraph_internal_eq_two
-  结论: {u} {i : 自然数} {p : G.Walk u v} (hp : p.IsPath)
+  结论: {u} {i : 自然数} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   rw [hp.neighborSet_toSubgraph_internal h h']
   have : p.getVert (i - 1) != p.getVert (i + 1) := by
@@ -1503,7 +1503,7 @@ lemma snd_of_toSubgraph_adj
 
 中文:
 引理 snd_of_toSubgraph_adj
-  结论: {u v v'} {p : G.Walk u v} (hp : p.IsPath)
+  结论: {u v v'} {p : G.途径 u v} (hp : p.是道路)
   证明: by
   have ⟨i, hi⟩ := p.toSubgraph_adj_iff.mp hadj
   simp only [Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk] at hi
@@ -1547,7 +1547,7 @@ lemma neighborSet_toSubgraph_endpoint
 
 中文:
 引理 neighborSet_toSubgraph_endpoint
-  条件: {u} {p : G.Walk u u} (hpc : p.IsCycle)
+  条件: {u} {p : G.途径 u u} (hpc : p.是环)
   证明: by
   have hadj1 := p.toSubgraph_adj_snd hpc.not_nil
   ext v
@@ -1581,7 +1581,7 @@ lemma neighborSet_toSubgraph_internal
 
 中文:
 引理 neighborSet_toSubgraph_internal
-  结论: {u} {i : 自然数} {p : G.Walk u u} (hpc : p.IsCycle)
+  结论: {u} {i : 自然数} {p : G.途径 u u} (hpc : p.是环)
   证明: by
   have hadj1 := ((show i - 1 + 1 = i by lia) ▸
     p.toSubgraph_adj_getVert (by lia : (i - 1) < p.length)).symm
@@ -1627,7 +1627,7 @@ lemma ncard_neighborSet_toSubgraph_eq_two
 
 中文:
 引理 ncard_neighborSet_toSubgraph_eq_two
-  结论: {u v} {p : G.Walk u u} (hpc : p.IsCycle)
+  结论: {u v} {p : G.途径 u u} (hpc : p.是环)
   证明: by
   simp only [SimpleGraph.Walk.mem_support_iff_exists_getVert] at h ⊢
   obtain ⟨i, hi⟩ := h
@@ -1667,8 +1667,8 @@ lemma exists_isCycle_snd_verts_eq
     exact ⟨h.reverse, hr.symm, by rw [toSubgraph_r
 
 中文:
-引理 exists_isCycle_snd_verts_eq
-  条件: {p : G.Walk v v} (h : p.IsCycle) (hadj : p.toSubgraph.Adj v w)
+引理 存在_isCycle_snd_verts_eq
+  条件: {p : G.途径 v v} (h : p.是环) (hadj : p.toSubgraph.伴随 v w)
   证明: by
   have : w in p.toSubgraph.neighborSet v := hadj
   rw [h.neighborSet_toSubgraph_endpoint] at this
@@ -1712,8 +1712,8 @@ lemma exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty
   obtain h | h := Finset.eq_empty_or_nonempty {t in s.erase x | t in (p.takeUntil x hx).support
 
 中文:
-引理 exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty
-  结论: (s : Finset V)
+引理 存在_mem_support_mem_erase_mem_support_takeUntil_eq_empty
+  结论: (s : 有限集 V)
   证明: by
   simp only [← Finset.subset_empty]
   induction hp : p.length + #s using Nat.strong_induction_on generalizing s v with | _ n ih
@@ -1757,8 +1757,8 @@ lemma exists_mem_support_forall_mem_support_imp_eq
 
 
 中文:
-引理 exists_mem_support_forall_mem_support_imp_eq
-  结论: (s : Finset V)
+引理 存在_mem_support_对任意_mem_support_imp_eq
+  结论: (s : 有限集 V)
   证明: by
   obtain ⟨x, hxs, hx, h⟩ := p.exists_mem_support_mem_erase_mem_support_takeUntil_eq_empty s h
   use x, hxs, hx
@@ -1797,8 +1797,8 @@ lemma _root_.SimpleGraph.Walk.toSubgraph_connected
     simp
 
 中文:
-引理 _root_.SimpleGraph.Walk.toSubgraph_connected
-  条件: {u v : V} (p : G.Walk u v)
+引理 _root_.简单图.途径.toSubgraph_connected
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   induction p with
   | nil => apply singletonSubgraph_connected
@@ -1828,7 +1828,7 @@ lemma induce_union_connected
 
 中文:
 引理 induce_union_connected
-  结论: {H : G.Subgraph} {s t : Set V}
+  结论: {H : G.子图} {s t : 集合 V}
   证明: (Subgraph.connected_sup sconn tconn sintert).mono le_induce_union by simp
 
 Depends on / 依赖: Subgraph, Subgraph.connected_sup, connected_sup, le_induce_union, sintert
@@ -1853,7 +1853,7 @@ lemma connected_induce_top_sup
 
 中文:
 引理 connected_induce_top_sup
-  结论: {H K : G.Subgraph} (Hconn : H.Preconnected) (Kconn : K.Preconnected)
+  结论: {H K : G.子图} (Hconn : H.预连通) (Kconn : K.预连通)
   证明: by
   refine Subgraph.connected_sup (Subgraph.connected_sup ?_ Hconn ?_).preconnected Kconn ?_
   · exact (top_induce_pair_connected_of_adj huv).preconnected
@@ -1890,8 +1890,8 @@ lemma preconnected_iff_forall_exists_walk_subgraph
     exact Reachable.map (Subgraph.inclusion h)
 
 中文:
-引理 preconnected_iff_forall_exists_walk_subgraph
-  条件: (H : G.Subgraph)
+引理 preconnected_iff_对任意_存在_walk_subgraph
+  条件: (H : G.子图)
   证明: by
   constructor
   · intro hc u v hu hv
@@ -1930,8 +1930,8 @@ lemma connected_iff_forall_exists_walk_subgraph
   rw [H.connected_iff]; rw [preconnected_iff_forall_exists_walk_subgraph]; rw [and_comm]
 
 中文:
-引理 connected_iff_forall_exists_walk_subgraph
-  条件: (H : G.Subgraph)
+引理 connected_iff_对任意_存在_walk_subgraph
+  条件: (H : G.子图)
   证明: by
   rw [H.connected_iff]; rw [preconnected_iff_forall_exists_walk_subgraph]; rw [and_comm]
 
@@ -1959,7 +1959,7 @@ lemma preconnected_induce_iff
 
 中文:
 引理 preconnected_induce_iff
-  条件: {s : Set V}
+  条件: {s : 集合 V}
   证明: by
   rw [induce_eq_coe_induce_top]; rw [← Subgraph.preconnected_iff]
 
@@ -1981,7 +1981,7 @@ lemma connected_induce_iff
 
 中文:
 引理 connected_induce_iff
-  条件: {s : Set V}
+  条件: {s : 集合 V}
   证明: by
   rw [induce_eq_coe_induce_top]; rw [← Subgraph.connected_iff']
 
@@ -2004,7 +2004,7 @@ lemma induce_union_connected
 
 中文:
 引理 induce_union_connected
-  结论: {s t : Set V}
+  结论: {s t : 集合 V}
   证明: by
   rw [connected_induce_iff]
   rw [preconnected_induce_iff] at sconn tconn
@@ -2032,7 +2032,7 @@ lemma induce_pair_connected_of_adj
 
 中文:
 引理 induce_pair_connected_of_adj
-  条件: {u v : V} (huv : G.Adj u v)
+  条件: {u v : V} (huv : G.伴随 u v)
   证明: by
   rw [connected_induce_iff]
   exact Subgraph.top_induce_pair_connected_of_adj huv
@@ -2055,8 +2055,8 @@ lemma Subgraph.Connected.induce_verts
   exact h.mono le_induce_top_verts (by exact rfl)
 
 中文:
-引理 Subgraph.Connected.induce_verts
-  条件: {H : G.Subgraph} (h : H.Connected)
+引理 子图.连通.induce_verts
+  条件: {H : G.子图} (h : H.连通)
   证明: by
   rw [connected_induce_iff]
   exact h.mono le_induce_top_verts (by exact rfl)
@@ -2079,8 +2079,8 @@ lemma Walk.connected_induce_support
   exact p.toSubgraph_connected.induce_verts
 
 中文:
-引理 Walk.connected_induce_support
-  条件: {u v : V} (p : G.Walk u v)
+引理 途径.connected_induce_support
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   rw [← p.verts_toSubgraph]
   exact p.toSubgraph_connected.induce_verts
@@ -2108,7 +2108,7 @@ lemma connected_induce_union
 
 中文:
 引理 connected_induce_union
-  结论: {v w : V} {s t : Set V}
+  结论: {v w : V} {s t : 集合 V}
   证明: by
   rw [connected_induce_iff]
   rw [preconnected_induce_iff] at sconn tconn
@@ -2149,7 +2149,7 @@ lemma induce_connected_of_patches
 
 中文:
 引理 induce_connected_of_patches
-  结论: {s : Set V} (u : V) (hu : u in s)
+  结论: {s : 集合 V} (u : V) (hu : u in s)
   证明: by
   rw [connected_iff_exists_forall_reachable]
   refine ⟨⟨u, hu⟩, ?_⟩
@@ -2185,7 +2185,7 @@ lemma induce_sUnion_connected_of_pairwise_not_disjoint
 
 中文:
 引理 induce_sUnion_connected_of_pairwise_not_disjoint
-  结论: {S : Set (Set V)} (Sn : S.Nonempty)
+  结论: {S : 集合 (集合 V)} (Sn : S.非空)
   证明: by
   obtain ⟨s, sS⟩ := Sn
   obtain ⟨v, vs⟩ := (Sc sS).nonempty
@@ -2228,7 +2228,7 @@ lemma extend_finset_to_connected
 
 中文:
 引理 extend_finset_to_connected
-  条件: (Gpc : G.Preconnected) {t : Finset V} (tn : t.Nonempty)
+  条件: (Gpc : G.预连通) {t : 有限集 V} (tn : t.非空)
   证明: by
   classical
   obtain ⟨u, ut⟩ := tn
@@ -2272,7 +2272,7 @@ lemma Reachable.coe_toSubgraph
 
 中文:
 引理 Reachable.coe_toSubgraph
-  结论: {H : SimpleGraph V} {u v : V} (h : H <= G)
+  结论: {H : 简单图 V} {u v : V} (h : H <= G)
   证明: hreachable.map ⟨((toSubgraph H h).vert · _), (·)⟩
 -/
 protected lemma Reachable.coe_toSubgraph {H : SimpleGraph V} {u v : V} (h : H <= G)
@@ -2289,8 +2289,8 @@ lemma Preconnected.toSubgraph
   proof: Subgraph.preconnected_iff.mpr (fun u v => (hpreconn u v).coe_toSubgraph h)
 
 中文:
-引理 Preconnected.toSubgraph
-  结论: {H : SimpleGraph V} (h : H <= G)
+引理 预连通.toSubgraph
+  结论: {H : 简单图 V} (h : H <= G)
   证明: Subgraph.preconnected_iff.mpr (fun u v => (hpreconn u v).coe_toSubgraph h)
 -/
 protected lemma Preconnected.toSubgraph {H : SimpleGraph V} (h : H <= G)
@@ -2306,8 +2306,8 @@ lemma Connected.toSubgraph
   proof: Subgraph.connected_iff.mpr ⟨hconn.preconnected.toSubgraph h, by simp [hconn.nonempty]⟩
 
 中文:
-引理 Connected.toSubgraph
-  条件: {H : SimpleGraph V} (h : H <= G) (hconn : H.Connected)
+引理 连通.toSubgraph
+  条件: {H : 简单图 V} (h : H <= G) (hconn : H.连通)
   证明: Subgraph.connected_iff.mpr ⟨hconn.preconnected.toSubgraph h, by simp [hconn.nonempty]⟩
 -/
 protected lemma Connected.toSubgraph {H : SimpleGraph V} (h : H <= G) (hconn : H.Connected) :
@@ -2327,7 +2327,7 @@ lemma Reachable.coe_subgraphMap
 
 中文:
 引理 Reachable.coe_subgraphMap
-  结论: {G' : G.Subgraph} {G'' : G'.coe.Subgraph}
+  结论: {G' : G.子图} {G'' : G'.coe.子图}
   证明: hreachable.map {
     toFun v := (G''.map f).vert _ (Set.mem_image_of_mem f v.prop)
     map_rel' r := Relation.map_apply.mpr (by tauto)
@@ -2352,7 +2352,7 @@ lemma Reachable.coe_coeSubgraph
 
 中文:
 引理 Reachable.coe_coeSubgraph
-  结论: {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
+  结论: {G' : G.子图} (G'' : G'.coe.子图)
   证明: hreachable.coe_subgraphMap G'.hom
 -/
 protected lemma Reachable.coe_coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
@@ -2376,8 +2376,8 @@ lemma Preconnected.map
   exact (hpreconn.coe ⟨u, hu⟩ ⟨v, hv⟩).coe_subgraphMap f
 
 中文:
-引理 Preconnected.map
-  结论: {G' : G.Subgraph} {G'' : G'.coe.Subgraph}
+引理 预连通.map
+  结论: {G' : G.子图} {G'' : G'.coe.子图}
   证明: by
   rw [Subgraph.preconnected_iff]
   intro ⟨u', u, hu, hfu⟩ ⟨v', v, hv, hfv⟩
@@ -2400,8 +2400,8 @@ lemma Connected.map
   proof: Subgraph.connected_iff.mpr ⟨hconn.preconnected.map f, by simp [hconn.nonempty]⟩
 
 中文:
-引理 Connected.map
-  结论: {G' : G.Subgraph} {G'' : G'.coe.Subgraph}
+引理 连通.map
+  结论: {G' : G.子图} {G'' : G'.coe.子图}
   证明: Subgraph.connected_iff.mpr ⟨hconn.preconnected.map f, by simp [hconn.nonempty]⟩
 -/
 protected lemma Connected.map {G' : G.Subgraph} {G'' : G'.coe.Subgraph}
@@ -2417,8 +2417,8 @@ lemma Preconnected.coeSubgraph
   proof: hpreconn.map G'.hom
 
 中文:
-引理 Preconnected.coeSubgraph
-  结论: {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
+引理 预连通.coeSubgraph
+  结论: {G' : G.子图} (G'' : G'.coe.子图)
   证明: hpreconn.map G'.hom
 -/
 protected lemma Preconnected.coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
@@ -2434,8 +2434,8 @@ lemma Connected.coeSubgraph
   proof: hconn.map G'.hom
 
 中文:
-引理 Connected.coeSubgraph
-  结论: {G' : G.Subgraph} (G'' : G'.coe.Subgraph)
+引理 连通.coeSubgraph
+  结论: {G' : G.子图} (G'' : G'.coe.子图)
   证明: hconn.map G'.hom
 -/
 protected lemma Connected.coeSubgraph {G' : G.Subgraph} (G'' : G'.coe.Subgraph)

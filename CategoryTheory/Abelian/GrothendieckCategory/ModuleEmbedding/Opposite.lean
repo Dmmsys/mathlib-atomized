@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: Projective (projectiveSeparator C)
+  签名: 投射 (projectiveSeparator C)
   定义体: (has_projective_separator (coseparator Cᵒᵖ) (isCoseparator_coseparator Cᵒᵖ)).choose_spec.1
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.preEquivalence, isConnected_of_equivalent, preEquivalence
@@ -120,9 +120,9 @@ theorem exists_epi
   exact SplitEpi.epi ⟨Sigma.ι (fun (X
 
 中文:
-定理 exists_epi
+定理 存在_epi
   条件: (X : D)
-  结论: 存在 f : generator F ⟶ F.obj X, Epi f
+  结论: 存在 f : generator F ⟶ F.obj X, 满态射 f
   证明: by
   classical
   refine ⟨Sigma.desc (Pi.single X (𝟙 _)) ≫ Sigma.desc (fun f => f), ?_⟩
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Projective (generator F)
+  签名: 投射 (generator F)
   定义体: by
   rw [generator]
   infer_instance
@@ -178,7 +178,7 @@ theorem isSeparator
 
 中文:
 定理 isSeparator
-  条件: [Nonempty D]
+  条件: [非空 D]
   结论: IsSeparator (generator F)
   证明: by
   apply isSeparator_sigma_of_isSeparator _ Classical.ofNonempty
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (EmbeddingRing F)
+  签名: 环 (EmbeddingRing F)
   定义体: inferInstanceAs Ring (End (generator F))ᵐᵒᵖ
 
 Depends on / 依赖: generator
@@ -241,7 +241,7 @@ definition embedding
 
 中文:
 定义 embedding
-  签名: : Cᵒᵖ ⥤ ModuleCat.{v} (EmbeddingRing F)
+  签名: : Cᵒᵖ ⥤ 模范畴.{v} (EmbeddingRing F)
   定义体: preadditiveCoyonedaObj (generator F)
 
 Depends on / 依赖: generator, preadditiveCoyonedaObj
@@ -259,7 +259,7 @@ instance faithful_embedding
 
 中文:
 实例 faithful_embedding
-  签名: [Nonempty D]
+  签名: [非空 D]
   定义体: (isSeparator_iff_faithful_preadditiveCoyonedaObj _).1 (isSeparator F)
 
 Depends on / 依赖: isSeparator, isSeparator_iff_faithful_preadditiveCoyonedaObj
@@ -277,7 +277,7 @@ instance full_embedding
 
 中文:
 实例 full_embedding
-  签名: [Nonempty D] [F.Full]
+  签名: [非空 D] [F.满]
   定义体: full_comp_preadditiveCoyonedaObj _ (isSeparator F) (exists_epi F)
 
 Depends on / 依赖: exists_epi, full_comp_preadditiveCoyonedaObj, isSeparator
@@ -299,7 +299,7 @@ instance preservesFiniteLimits_embedding
 
 中文:
 实例 preservesFiniteLimits_embedding
-  签名: : PreservesFiniteLimits (embedding F)
+  签名: : 保持FiniteLimits (embedding F)
   定义体: by
   rw [embedding]
   apply preservesFiniteLimits_of_preservesFiniteLimitsOfSize
@@ -323,7 +323,7 @@ instance preservesFiniteColimits_embedding
 
 中文:
 实例 preservesFiniteColimits_embedding
-  签名: : PreservesFiniteColimits (embedding F)
+  签名: : 保持FiniteColimits (embedding F)
   定义体: by
   apply preservesFiniteColimits_preadditiveCoyonedaObj_of_projective
 

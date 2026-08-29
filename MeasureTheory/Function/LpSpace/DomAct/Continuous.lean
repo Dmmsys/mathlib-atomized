@@ -63,7 +63,7 @@ instance Lp.instContinuousSMulDomMulAct
 
 中文:
 实例 Lp.instContinuousSMulDomMulAct
-  签名: : ContinuousSMul Mᵈᵐᵃ (Lp E p μ) where
+  签名: : 连续标量乘法 Mᵈᵐᵃ (Lp E p μ) where
   定义体: let g : C(Mᵈᵐᵃ × Lp E p μ, C(X, X)) :=
 (ContinuousMap.mk (fun a : M × X => a.1 • a.2) continuous_smul).curry.comp
         .comp (.mk DomMulAct.mk.symm) ContinuousMap.fst

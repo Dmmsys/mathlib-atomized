@@ -86,7 +86,7 @@ let (f
 
 中文:
 定义 ElimApp.evalNames
-  签名: (elimInfo : ElimInfo) (alts : Array ElimApp.Alt) (withArg : Syntax)
+  签名: (elimInfo : ElimInfo) (alts : 数组 ElimApp.Alt) (withArg : Syntax)
   定义体: do
 .toList let mut names : List Syntax := withArg[1].getArgs
   let mut subgoals := #[]

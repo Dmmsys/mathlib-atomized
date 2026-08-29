@@ -69,7 +69,7 @@ definition compExactValue
 
 中文:
 定义 compExactValue
-  签名: (pconts conts : Pair K) (fr : K)
+  签名: (pconts conts : 对 K) (fr : K)
   定义体: -- if the fractional part is zero, we exactly approximated the value by the last continuants
   if fr = 0 then
     conts.a / conts.b

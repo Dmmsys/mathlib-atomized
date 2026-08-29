@@ -54,8 +54,8 @@ abbreviation Homotopy
   body: ContinuousMap.HomotopyRel p₀.toContinuousMap p₁.toContinuousMap {0, 1}
 
 中文:
-缩写 Homotopy
-  签名: (p₀ p₁ : Path x₀ x₁)
+缩写 同伦
+  签名: (p₀ p₁ : 道路 x₀ x₁)
   定义体: ContinuousMap.HomotopyRel p₀.toContinuousMap p₁.toContinuousMap {0, 1}
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel, HomotopyRel, toContinuousMap
@@ -81,7 +81,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Function.Injective (Homotopy p₀ p₁) (I × I -> X) (⇑)
+  结论: @函数.单射 (同伦 p₀ p₁) (I × I -> X) (⇑)
   证明: DFunLike.coe_injective
 
 @[simp]
@@ -106,7 +106,7 @@ theorem source
 
 中文:
 定理 source
-  条件: (F : Homotopy p₀ p₁) (t : I)
+  条件: (F : 同伦 p₀ p₁) (t : I)
   结论: F (t, 0) = x₀
   证明: calc F (t, 0) = p₀ 0 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inl rfl)
   _ = x₀ := p₀.source
@@ -132,7 +132,7 @@ theorem target
 
 中文:
 定理 target
-  条件: (F : Homotopy p₀ p₁) (t : I)
+  条件: (F : 同伦 p₀ p₁) (t : I)
   结论: F (t, 1) = x₁
   证明: calc F (t, 1) = p₀ 1 := ContinuousMap.HomotopyRel.eq_fst _ _ (.inr rfl)
   _ = x₁ := p₀.target
@@ -160,7 +160,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: (F : Homotopy p₀ p₁) (t : I)
+  签名: (F : 同伦 p₀ p₁) (t : I)
   定义体: F.toHomotopy.curry t
   source' := by simp
   target' := by simp
@@ -190,7 +190,7 @@ theorem eval_zero
 
 中文:
 定理 eval_zero
-  条件: (F : Homotopy p₀ p₁)
+  条件: (F : 同伦 p₀ p₁)
   结论: F.eval 0 = p₀
   证明: by
   ext t
@@ -216,7 +216,7 @@ theorem eval_one
 
 中文:
 定理 eval_one
-  条件: (F : Homotopy p₀ p₁)
+  条件: (F : 同伦 p₀ p₁)
   结论: F.eval 1 = p₁
   证明: by
   ext t
@@ -245,7 +245,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: ContinuousMap.HomotopyRel.refl p.toContinuousMap {0, 1}
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.refl, HomotopyRel, p.toContinuousMap, toContinuousMap
@@ -268,7 +268,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (F : Homotopy p₀ p₁)
+  签名: (F : 同伦 p₀ p₁)
   定义体: ContinuousMap.HomotopyRel.symm F
 
 @[simp]
@@ -290,7 +290,7 @@ theorem symm_symm
 
 中文:
 定理 symm_symm
-  条件: (F : Homotopy p₀ p₁)
+  条件: (F : 同伦 p₀ p₁)
   结论: F.symm.symm = F
   证明: ContinuousMap.HomotopyRel.symm_symm F
 
@@ -309,7 +309,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (Homotopy.symm : Homotopy p₀ p₁ -> Homotopy p₁ p₀)
+  结论: 函数.双射 (同伦.symm : 同伦 p₀ p₁ -> 同伦 p₁ p₀)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -327,7 +327,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂)
+  签名: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂)
   定义体: ContinuousMap.HomotopyRel.trans F G
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.trans, HomotopyRel
@@ -345,7 +345,7 @@ theorem trans_apply
 
 中文:
 定理 trans_apply
-  条件: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂) (x : I × I)
+  条件: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂) (x : I × I)
   证明: ContinuousMap.HomotopyRel.trans_apply _ _ _
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.trans_apply, HomotopyRel, trans_apply
@@ -368,7 +368,7 @@ theorem symm_trans
 
 中文:
 定理 symm_trans
-  条件: (F : Homotopy p₀ p₁) (G : Homotopy p₁ p₂)
+  条件: (F : 同伦 p₀ p₁) (G : 同伦 p₁ p₂)
   证明: ContinuousMap.HomotopyRel.symm_trans _ _
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.symm_trans, HomotopyRel, symm_trans
@@ -389,7 +389,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {p₀ p₁ q₀ q₁ : Path x₀ x₁} (F : Homotopy p₀ p₁) (h₀ : p₀ = q₀) (h₁ : p₁ = q₁)
+  签名: {p₀ p₁ q₀ q₁ : 道路 x₀ x₁} (F : 同伦 p₀ p₁) (h₀ : p₀ = q₀) (h₁ : p₁ = q₁)
   定义体: ContinuousMap.HomotopyRel.cast F (congr_arg _ h₀) (congr_arg _ h₁)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.cast, HomotopyRel, congr_arg
@@ -411,7 +411,7 @@ definition pathCast
 
 中文:
 定义 pathCast
-  签名: {x x' y y' : X} {p q : Path x y} (F : p.Homotopy q) (hx : x' = x) (hy : y' = y)
+  签名: {x x' y y' : X} {p q : 道路 x y} (F : p.同伦 q) (hx : x' = x) (hy : y' = y)
   定义体: F
 -/
 def pathCast {x x' y y' : X} {p q : Path x y} (F : p.Homotopy q) (hx : x' = x) (hy : y' = y) :
@@ -437,7 +437,7 @@ definition hcomp
 
 中文:
 定义 hcomp
-  签名: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁)
+  签名: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁)
   定义体: if (x.2 : Real) <= 1 / 2 then (F.eval x.1).extend (2 * x.2) else (G.eval x.1).extend (2 * x.2 - 1)
   continuous_toFun := continuous_if_le (continuous_induced_dom.comp continuous_snd) continuous_const
     (F.toHomotopy.continuous.comp (by fun_prop)).continuousOn
@@ -469,7 +469,7 @@ theorem hcomp_apply
 
 中文:
 定理 hcomp_apply
-  条件: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (x : I × I)
+  条件: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁) (x : I × I)
   证明: show ite _ _ _ = _ by split_ifs <;> exact Path.extend_apply _ _
 
 Depends on / 依赖: Path.extend_apply, extend_apply, split_ifs
@@ -493,7 +493,7 @@ theorem hcomp_half
 
 中文:
 定理 hcomp_half
-  条件: (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I)
+  条件: (F : 同伦 p₀ q₀) (G : 同伦 p₁ q₁) (t : I)
   证明: show ite _ _ _ = _ by norm_num
 -/
 theorem hcomp_half (F : Homotopy p₀ q₀) (G : Homotopy p₁ q₁) (t : I) :
@@ -518,7 +518,7 @@ definition reparam
 
 中文:
 定义 reparam
-  签名: (p : Path x₀ x₁) (f : I -> I) (hf : Continuous f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
+  签名: (p : 道路 x₀ x₁) (f : I -> I) (hf : 连续 f) (hf₀ : f 0 = 0) (hf₁ : f 1 = 1)
   定义体: p ⟨σ x.1 * x.2 + x.1 * f x.2,
     show (σ x.1 : Real) • (x.2 : Real) + (x.1 : Real) • (f x.2 : Real) in I from
       convex_Icc _ _ x.2.2 (f x.2).2 (by unit_interval) (by unit_interval) (by simp)⟩
@@ -566,7 +566,7 @@ definition symm₂
 
 中文:
 定义 symm₂
-  签名: {p q : Path x₀ x₁} (F : p.Homotopy q)
+  签名: {p q : 道路 x₀ x₁} (F : p.同伦 q)
   定义体: F ⟨x.1, σ x.2⟩
   map_zero_left := by simp [Path.symm]
   map_one_left := by simp [Path.symm]
@@ -612,7 +612,7 @@ definition map
 
 中文:
 定义 map
-  签名: {p q : Path x₀ x₁} (F : p.Homotopy q) (f : C(X, Y))
+  签名: {p q : 道路 x₀ x₁} (F : p.同伦 q) (f : C(X, Y))
   定义体: f ∘ F
   map_zero_left := by simp
   map_one_left := by simp
@@ -644,8 +644,8 @@ definition Homotopic
   body: Nonempty (p₀.Homotopy p₁)
 
 中文:
-定义 Homotopic
-  签名: (p₀ p₁ : Path x₀ x₁)
+定义 同伦
+  签名: (p₀ p₁ : 道路 x₀ x₁)
   定义体: Nonempty (p₀.Homotopy p₁)
 
 Depends on / 依赖: Homotopy, Nonempty
@@ -669,8 +669,8 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (p : Path x₀ x₁)
-  结论: p.Homotopic p
+  条件: (p : 道路 x₀ x₁)
+  结论: p.同伦 p
   证明: ⟨Homotopy.refl p⟩
 
 @[symm]
@@ -693,7 +693,7 @@ theorem symm
 中文:
 定理 symm
   条件: ⦃p₀ p₁
-  结论: Path x₀ x₁⦄ (h : p₀.Homotopic p₁) : p₁.Homotopic p₀
+  结论: 道路 x₀ x₁⦄ (h : p₀.同伦 p₁) : p₁.同伦 p₀
   证明: h.map Homotopy.symm
 
 Depends on / 依赖: Homotopy, Homotopy.symm, h.map
@@ -714,8 +714,8 @@ theorem symm₂
 
 中文:
 定理 symm₂
-  条件: {p q : Path x₀ x₁} (h : p.Homotopic q)
-  结论: p.symm.Homotopic q.symm
+  条件: {p q : 道路 x₀ x₁} (h : p.同伦 q)
+  结论: p.symm.同伦 q.symm
   证明: h.map Homotopy.symm₂
 
 @[trans]
@@ -738,7 +738,7 @@ theorem trans
 中文:
 定理 trans
   条件: ⦃p₀ p₁ p₂
-  结论: Path x₀ x₁⦄ (h₀ : p₀.Homotopic p₁) (h₁ : p₁.Homotopic p₂) :
+  结论: 道路 x₀ x₁⦄ (h₀ : p₀.同伦 p₁) (h₁ : p₁.同伦 p₂) :
   证明: h₀.map2 Homotopy.trans h₁
 
 Depends on / 依赖: Homotopy, Homotopy.trans
@@ -757,7 +757,7 @@ theorem equivalence
 
 中文:
 定理 equivalence
-  结论: Equivalence (@Homotopic X _ x₀ x₁)
+  结论: 等价 (@同伦 X _ x₀ x₁)
   证明: ⟨refl, (symm ·), (trans · ·)⟩
 -/
 theorem equivalence : Equivalence (@Homotopic X _ x₀ x₁) :=
@@ -779,7 +779,7 @@ nonrec theorem map {p q : Path x₀ x₁} (h : p.Homotopic q) (f : C(X, Y)) :
 
 中文:
 实例 :
-  签名: IsEquiv (Path x₀ x₁) Homotopic
+  签名: Is等价 (道路 x₀ x₁) 同伦
   定义体: refl
   symm := symm
   trans := trans
@@ -807,7 +807,7 @@ theorem hcomp
 
 中文:
 定理 hcomp
-  结论: {p₀ p₁ : Path x₀ x₁} {q₀ q₁ : Path x₁ x₂} (hp : p₀.Homotopic p₁)
+  结论: {p₀ p₁ : 道路 x₀ x₁} {q₀ q₁ : 道路 x₁ x₂} (hp : p₀.同伦 p₁)
   证明: hp.map2 Homotopy.hcomp hq
 
 Depends on / 依赖: Homotopy, Homotopy.hcomp, hp.map2
@@ -826,7 +826,7 @@ theorem pathCast
 
 中文:
 定理 pathCast
-  条件: {p q : Path x₀ x₁} (hpq : p.Homotopic q) (hsource : x₂ = x₀) (htarget : x₃ = x₁)
+  条件: {p q : 道路 x₀ x₁} (hpq : p.同伦 q) (hsource : x₂ = x₀) (htarget : x₃ = x₁)
   证明: hpq
 -/
 theorem pathCast {p q : Path x₀ x₁} (hpq : p.Homotopic q) (hsource : x₂ = x₀) (htarget : x₃ = x₁) :
@@ -863,7 +863,7 @@ definition Quotient
   body: Quotient (Homotopic.setoid x₀ x₁)
 
 中文:
-定义 Quotient
+定义 商
   签名: (x₀ x₁ : X)
   定义体: Quotient (Homotopic.setoid x₀ x₁)
 -/
@@ -882,7 +882,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Homotopic.Quotient () ())
+  签名: 可居 (同伦.商 () ())
   定义体: ⟨Quotient.mk' Path.refl ()⟩
 
 Depends on / 依赖: Path.refl, Quotient, Quotient.mk
@@ -902,7 +902,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: Quotient.mk' p
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -920,7 +920,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (@mk X _ x₀ x₁)
+  结论: 函数.满射 (@mk X _ x₀ x₁)
   证明: Quotient.mk'_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective
@@ -939,8 +939,8 @@ theorem mk'_eq_mk
 
 中文:
 定理 mk'_eq_mk
-  条件: (p : Path x₀ x₁)
-  结论: Quotient.mk' p = mk p
+  条件: (p : 道路 x₀ x₁)
+  结论: 商.mk' p = mk p
   证明: rfl
 -/
 @[simp] theorem mk'_eq_mk (p : Path x₀ x₁) : Quotient.mk' p = mk p := rfl
@@ -955,8 +955,8 @@ theorem mk''_eq_mk
 
 中文:
 定理 mk''_eq_mk
-  条件: (p : Path x₀ x₁)
-  结论: Quotient.mk'' p = mk p
+  条件: (p : 道路 x₀ x₁)
+  结论: 商.mk'' p = mk p
   证明: rfl
 -/
 @[simp] theorem mk''_eq_mk (p : Path x₀ x₁) : Quotient.mk'' p = mk p := rfl
@@ -972,7 +972,7 @@ theorem exact
 
 中文:
 定理 exact
-  条件: {p q : Path x₀ x₁} (h : Quotient.mk p = Quotient.mk q)
+  条件: {p q : 道路 x₀ x₁} (h : 商.mk p = 商.mk q)
   证明: by
   exact _root_.Quotient.exact h
 
@@ -993,8 +993,8 @@ theorem eq
 
 中文:
 定理 eq
-  条件: {p q : Path x₀ x₁}
-  结论: mk p = mk q ↔ Homotopic p q
+  条件: {p q : 道路 x₀ x₁}
+  结论: mk p = mk q ↔ 同伦 p q
   证明: _root_.Quotient.eq
 
 Depends on / 依赖: Quotient, _root_, _root_.Quotient.eq
@@ -1017,7 +1017,7 @@ theorem ind
 
 中文:
 定理 ind
-  条件: {x y : X} {motive : Homotopic.Quotient x y -> 命题}
+  条件: {x y : X} {motive : 同伦.商 x y -> 命题}
   证明: Quot.ind
 -/
 protected theorem ind {x y : X} {motive : Homotopic.Quotient x y -> Prop} :
@@ -1042,7 +1042,7 @@ theorem ind₂
 
 中文:
 定理 ind₂
-  结论: {Y : 类型} [TopologicalSpace Y] {x₀ y₀ : X} {x₁ y₁ : Y}
+  结论: {Y : 类型} [拓扑空间 Y] {x₀ y₀ : X} {x₁ y₁ : Y}
   证明: by
   induction q₀ using Quot.ind with | mk a =>
   induction q₁ using Quot.ind with | mk b =>
@@ -1091,7 +1091,7 @@ theorem mk_refl
 中文:
 定理 mk_refl
   条件: (x : X)
-  结论: mk (Path.refl x) = refl x
+  结论: mk (道路.refl x) = refl x
   证明: rfl
 -/
 theorem mk_refl (x : X) : mk (Path.refl x) = refl x :=
@@ -1109,7 +1109,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (P : Path.Homotopic.Quotient x₀ x₁)
+  签名: (P : 道路.同伦.商 x₀ x₁)
   定义体: _root_.Quotient.map Path.symm (fun _ _ h => Homotopic.symm₂ h) P
 
 @[simp, grind =]
@@ -1131,7 +1131,7 @@ theorem mk_symm
 
 中文:
 定理 mk_symm
-  条件: (P : Path x₀ x₁)
+  条件: (P : 道路 x₀ x₁)
   结论: mk P.symm = symm (mk P)
   证明: rfl
 -/
@@ -1150,7 +1150,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y)
+  签名: {x y : X} (γ : 同伦.商 x y) {x' y'} (hx : x' = x) (hy : y' = y)
   定义体: _root_.Quotient.map (fun p => p.cast hx hy) (fun _ _ h => h) γ
 
 @[simp, grind =]
@@ -1174,7 +1174,7 @@ theorem mk_cast
 
 中文:
 定理 mk_cast
-  条件: {x y : X} (P : Path x y) {x' y'} (hx : x' = x) (hy : y' = y)
+  条件: {x y : X} (P : 道路 x y) {x' y'} (hx : x' = x) (hy : y' = y)
   证明: rfl
 
 @[simp, grind =]
@@ -1199,7 +1199,7 @@ theorem cast_rfl_rfl
 
 中文:
 定理 cast_rfl_rfl
-  条件: {x y : X} (γ : Homotopic.Quotient x y)
+  条件: {x y : X} (γ : 同伦.商 x y)
   结论: γ.cast rfl rfl = γ
   证明: by
   induction γ using Quotient.ind with | mk γ =>
@@ -1226,7 +1226,7 @@ theorem cast_cast
 
 中文:
 定理 cast_cast
-  结论: {x y : X} (γ : Homotopic.Quotient x y) {x' y'} (hx : x' = x) (hy : y' = y)
+  结论: {x y : X} (γ : 同伦.商 x y) {x' y'} (hx : x' = x) (hy : y' = y)
   证明: by
   induction γ using Quotient.ind with | mk γ =>
   rfl
@@ -1250,7 +1250,7 @@ theorem cast_heq
 
 中文:
 定理 cast_heq
-  条件: {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : Homotopic.Quotient x y}
+  条件: {x y x' y' : X} (hx : x' = x) (hy : y' = y) {γ : 同伦.商 x y}
   证明: by
   cases hx; cases hy; exact heq_of_eq γ.cast_rfl_rfl
 
@@ -1272,7 +1272,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (P₀ : Path.Homotopic.Quotient x₀ x₁) (P₁ : Path.Homotopic.Quotient x₁ x₂)
+  签名: (P₀ : 道路.同伦.商 x₀ x₁) (P₁ : 道路.同伦.商 x₁ x₂)
   定义体: Quotient.map₂ Path.trans (fun (_ : Path x₀ x₁) _ hp (_ : Path x₁ x₂) _ hq => hcomp hp hq) P₀ P₁
 
 @[simp, grind =]
@@ -1294,7 +1294,7 @@ theorem mk_trans
 
 中文:
 定理 mk_trans
-  条件: (P₀ : Path x₀ x₁) (P₁ : Path x₁ x₂)
+  条件: (P₀ : 道路 x₀ x₁) (P₁ : 道路 x₁ x₂)
   证明: rfl
 -/
 theorem mk_trans (P₀ : Path x₀ x₁) (P₁ : Path x₁ x₂) :
@@ -1312,7 +1312,7 @@ definition map
 
 中文:
 定义 map
-  签名: (P₀ : Path.Homotopic.Quotient x₀ x₁) (f : C(X, Y))
+  签名: (P₀ : 道路.同伦.商 x₀ x₁) (f : C(X, Y))
   定义体: _root_.Quotient.map
     (fun q : Path x₀ x₁ => q.map f.continuous) (fun _ _ h => Path.Homotopic.map h f) P₀
 
@@ -1334,7 +1334,7 @@ theorem mk_map
 
 中文:
 定理 mk_map
-  条件: (P₀ : Path x₀ x₁) (f : C(X, Y))
+  条件: (P₀ : 道路 x₀ x₁) (f : C(X, Y))
   结论: mk (P₀.map f.continuous) = map (mk P₀) f
   证明: rfl
 -/
@@ -1352,7 +1352,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: {Z} [TopologicalSpace Z] {p : Path.Homotopic.Quotient x₀ x₁}
+  结论: {Z} [拓扑空间 Z] {p : 道路.同伦.商 x₀ x₁}
   证明: by
   rcases p; rfl
 -/
@@ -1371,7 +1371,7 @@ theorem map_cast
 
 中文:
 定理 map_cast
-  结论: {x y : X} (p : Homotopic.Quotient x y) {x' y'} {hx : x' = x} {hy : y' = y}
+  结论: {x y : X} (p : 同伦.商 x y) {x' y'} {hx : x' = x} {hy : y' = y}
   证明: by
   rcases p; rfl
 -/
@@ -1396,7 +1396,7 @@ theorem hpath_hext
 
 中文:
 定理 hpath_hext
-  条件: {p₁ : Path x₀ x₁} {p₂ : Path x₂ x₃} (hp : 对任意 t, p₁ t = p₂ t)
+  条件: {p₁ : 道路 x₀ x₁} {p₂ : 道路 x₂ x₃} (hp : 对任意 t, p₁ t = p₂ t)
   证明: by
   obtain rfl : x₀ = x₂ := by convert! hp 0 <;> simp
   obtain rfl : x₁ = x₃ := by convert! hp 1 <;> simp
@@ -1427,7 +1427,7 @@ definition toHomotopyConst
 
 中文:
 定义 toHomotopyConst
-  签名: (p : Path x₀ x₁)
+  签名: (p : 道路 x₀ x₁)
   定义体: p.toContinuousMap.comp ContinuousMap.fst
   map_zero_left _ := p.source
   map_one_left _ := p.target
@@ -1457,8 +1457,8 @@ theorem ContinuousMap.homotopic_const_iff
     fun ⟨p⟩ => ⟨p.toHomotopyConst⟩⟩ <;> simp
 
 中文:
-定理 ContinuousMap.homotopic_const_iff
-  条件: [Nonempty Y]
+定理 连续映射.homotopic_const_iff
+  条件: [非空 Y]
   证明: by
   inhabit Y
   refine ⟨fun ⟨H⟩ => ⟨⟨(H.toContinuousMap.comp .prodSwap).curry default, ?_, ?_⟩⟩,
@@ -1492,7 +1492,7 @@ definition evalAt
 
 中文:
 定义 evalAt
-  签名: {f g : C(X, Y)} (H : ContinuousMap.Homotopy f g) (x : X)
+  签名: {f g : C(X, Y)} (H : 连续映射.同伦 f g) (x : X)
   定义体: H (t, x)
   source' := H.apply_zero x
   target' := H.apply_one x
@@ -1515,7 +1515,7 @@ theorem pathExtend_evalAt
 
 中文:
 定理 pathExtend_evalAt
-  条件: {f g : C(X, Y)} (H : f.Homotopy g) (x : X)
+  条件: {f g : C(X, Y)} (H : f.同伦 g) (x : X)
   证明: rfl
 -/
 theorem pathExtend_evalAt {f g : C(X, Y)} (H : f.Homotopy g) (x : X) :

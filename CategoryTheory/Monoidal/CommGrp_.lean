@@ -34,12 +34,12 @@ structure CommGrp
     - [comm : IsCommMonObj X]
 
 中文:
-结构 CommGrp
+结构 交换群
   参数: where
   公理与运算 (3 个):
     - X : C
     - [grp : GrpObj X]
-    - [comm : IsCommMonObj X]
+    - [comm : 是交换MonObj X]
 -/
 structure CommGrp where
   /-- The underlying object in the ambient monoidal category -/
@@ -65,7 +65,7 @@ abbreviation toGrp
 
 中文:
 缩写 toGrp
-  签名: (A : CommGrp C)
+  签名: (A : 交换群 C)
   定义体: ⟨A.X⟩
 -/
 abbrev toGrp (A : CommGrp C) : Grp C := ⟨A.X⟩
@@ -82,7 +82,7 @@ definition toCommMon
 
 中文:
 定义 toCommMon
-  签名: (A : CommGrp C)
+  签名: (A : 交换群 C)
   定义体: ⟨A.X⟩
 -/
 def toCommMon (A : CommGrp C) : CommMon C := ⟨A.X⟩
@@ -97,7 +97,7 @@ abbreviation toMon
 
 中文:
 缩写 toMon
-  签名: (A : CommGrp C)
+  签名: (A : 交换群 C)
   定义体: (toCommMon A).toMon
 
 Depends on / 依赖: toCommMon
@@ -117,7 +117,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : CommGrp C
+  签名: : 交换群 C
   定义体: { X := 𝟙_ C }
 -/
 def trivial : CommGrp C := { X := 𝟙_ C }
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommGrp C)
+  签名: 可居 (交换群 C)
   定义体: trivial C
 -/
 instance : Inhabited (CommGrp C) where
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommGrp C)
+  签名: 范畴 (交换群 C)
   定义体: inferInstanceAs (Category (InducedCategory _ CommGrp.toGrp))
 
 @[simp]
@@ -174,8 +174,8 @@ theorem id_hom
 
 中文:
 定理 id_hom
-  条件: (A : CommGrp C)
-  结论: (InducedCategory.Hom.hom (𝟙 A)) = 𝟙 A.toGrp
+  条件: (A : 交换群 C)
+  结论: (InducedCategory.态射.hom (𝟙 A)) = 𝟙 A.toGrp
   证明: rfl
 
 @[simp]
@@ -196,7 +196,7 @@ theorem comp_hom
 
 中文:
 定理 comp_hom
-  条件: {R S T : CommGrp C} (f : R ⟶ S) (g : S ⟶ T)
+  条件: {R S T : 交换群 C} (f : R ⟶ S) (g : S ⟶ T)
   证明: rfl
 
 @[ext]
@@ -217,7 +217,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  条件: {A B : CommGrp C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom)
+  条件: {A B : 交换群 C} (f g : A ⟶ B) (h : f.hom.hom.hom = g.hom.hom.hom)
   结论: f = g
   证明: InducedCategory.hom_ext (Grp.hom_ext _ _ h)
 
@@ -242,7 +242,7 @@ definition forget₂Grp
 
 中文:
 定义 forget₂Grp
-  签名: : CommGrp C ⥤ Grp C
+  签名: : 交换群 C ⥤ 群 C
   定义体: inducedFunctor CommGrp.toGrp
 
 Depends on / 依赖: CommGrp, CommGrp.toGrp, inducedFunctor
@@ -260,7 +260,7 @@ definition fullyFaithfulForget₂Grp
 
 中文:
 定义 fullyFaithfulForget₂Grp
-  签名: : (forget₂Grp C).FullyFaithful
+  签名: : (forget₂Grp C).满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -278,7 +278,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Grp C).Full
+  签名: (forget₂Grp C).满
   定义体: InducedCategory.full _
 
 Depends on / 依赖: InducedCategory, InducedCategory.full
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂Grp C).Faithful
+  签名: (forget₂Grp C).忠实
   定义体: InducedCategory.faithful _
 
 @[simp]
@@ -319,7 +319,7 @@ theorem forget₂Grp_obj_one
 
 中文:
 定理 forget₂Grp_obj_one
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   结论: η[((forget₂Grp C).obj A).X] = η[A.X]
   证明: rfl
 
@@ -342,7 +342,7 @@ theorem forget₂Grp_obj_mul
 
 中文:
 定理 forget₂Grp_obj_mul
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   结论: μ[((forget₂Grp C).obj A).X] = μ[A.X]
   证明: rfl
 
@@ -362,7 +362,7 @@ theorem forget₂Grp_map_hom
 
 中文:
 定理 forget₂Grp_map_hom
-  条件: {A B : CommGrp C} (f : A ⟶ B)
+  条件: {A B : 交换群 C} (f : A ⟶ B)
   证明: rfl
 -/
 theorem forget₂Grp_map_hom {A B : CommGrp C} (f : A ⟶ B) :
@@ -380,7 +380,7 @@ definition forget₂CommMon
 
 中文:
 定义 forget₂CommMon
-  签名: : CommGrp C ⥤ CommMon C where
+  签名: : 交换群 C ⥤ 交换幺半群 C where
   定义体: CommMon.mk G.X
   map f := CommMon.homMk f.hom.hom
 
@@ -400,7 +400,7 @@ definition fullyFaithfulForget₂CommMon
 
 中文:
 定义 fullyFaithfulForget₂CommMon
-  签名: : (forget₂CommMon C).FullyFaithful where
+  签名: : (forget₂CommMon C).满忠实 where
   定义体: InducedCategory.homMk (Grp.homMk' f.hom)
 
 Depends on / 依赖: Grp.homMk, InducedCategory, InducedCategory.homMk, f.hom
@@ -418,7 +418,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂CommMon C).Full
+  签名: (forget₂CommMon C).满
   定义体: (fullyFaithfulForget₂CommMon _).full
 -/
 instance : (forget₂CommMon C).Full := (fullyFaithfulForget₂CommMon _).full
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂CommMon C).Faithful
+  签名: (forget₂CommMon C).忠实
   定义体: (fullyFaithfulForget₂CommMon _).faithful
 
 @[simp]
@@ -457,7 +457,7 @@ theorem forget₂CommMon_obj_one
 
 中文:
 定理 forget₂CommMon_obj_one
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   结论: η[((forget₂CommMon C).obj A).X] = η[A.X]
   证明: rfl
 
@@ -480,7 +480,7 @@ theorem forget₂CommMon_obj_mul
 
 中文:
 定理 forget₂CommMon_obj_mul
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   结论: μ[((forget₂CommMon C).obj A).X] = μ[A.X]
   证明: rfl
 
@@ -500,7 +500,7 @@ theorem forget₂CommMon_map_hom
 
 中文:
 定理 forget₂CommMon_map_hom
-  条件: {A B : CommGrp C} (f : A ⟶ B)
+  条件: {A B : 交换群 C} (f : A ⟶ B)
   证明: rfl
 -/
 theorem forget₂CommMon_map_hom {A B : CommGrp C} (f : A ⟶ B) :
@@ -519,7 +519,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : CommGrp C ⥤ C
+  签名: : 交换群 C ⥤ C
   定义体: forget₂Grp C ⋙ Grp.forget C
 
 Depends on / 依赖: Grp.forget, forget
@@ -536,7 +536,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Faithful
+  签名: (forget C).忠实
 -/
 instance : (forget C).Faithful where
 
@@ -553,7 +553,7 @@ theorem forget₂Grp_comp_forget
 
 中文:
 定理 forget₂Grp_comp_forget
-  结论: forget₂Grp C ⋙ Grp.forget C = forget C
+  结论: forget₂Grp C ⋙ 群.forget C = forget C
   证明: rfl
 
 @[simp]
@@ -571,7 +571,7 @@ theorem forget₂CommMon_comp_forget
 
 中文:
 定理 forget₂CommMon_comp_forget
-  结论: forget₂CommMon C ⋙ CommMon.forget C = forget C
+  结论: forget₂CommMon C ⋙ 交换幺半群.forget C = forget C
   证明: rfl
 -/
 theorem forget₂CommMon_comp_forget : forget₂CommMon C ⋙ CommMon.forget C = forget C := rfl
@@ -597,7 +597,7 @@ definition mkIso'
 
 中文:
 定义 mkIso'
-  签名: {G H : C} (e : G ≅ H) [GrpObj G] [IsCommMonObj G] [GrpObj H] [IsCommMonObj H]
+  签名: {G H : C} (e : G ≅ H) [GrpObj G] [是交换MonObj G] [GrpObj H] [是交换MonObj H]
   定义体: (fullyFaithfulForget₂Grp C).preimageIso (Grp.mkIso' e)
 
 Depends on / 依赖: Grp.mkIso, preimageIso
@@ -677,7 +677,7 @@ instance uniqueHomFromTrivial
 
 中文:
 实例 uniqueHomFromTrivial
-  签名: (A : CommGrp C)
+  签名: (A : 交换群 C)
   定义体: Equiv.unique (show _ ≃ (Grp.trivial C ⟶ A.toGrp) from
     InducedCategory.homEquiv)
 
@@ -697,7 +697,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInitial (CommGrp C)
+  签名: HasInitial (交换群 C)
   定义体: hasInitial_of_unique (trivial C)
 
 Depends on / 依赖: hasInitial_of_unique
@@ -737,7 +737,7 @@ definition mapCommGrp
 
 中文:
 定义 mapCommGrp
-  签名: : CommGrp C ⥤ CommGrp D where
+  签名: : 交换群 C ⥤ 交换群 D where
   定义体: { F.mapGrp.obj A.toGrp with
       comm :=
         { mul_comm := by
@@ -765,8 +765,8 @@ instance Faithful.mapCommGrp
   body: (CommGrp.forget _ ⋙ F).map_injective ((CommGrp.forget _).congr_map hfg)
 
 中文:
-实例 Faithful.mapCommGrp
-  签名: [F.Faithful]
+实例 忠实.mapCommGrp
+  签名: [F.忠实]
   定义体: (CommGrp.forget _ ⋙ F).map_injective ((CommGrp.forget _).congr_map hfg)
 -/
 protected instance Faithful.mapCommGrp [F.Faithful] : F.mapCommGrp.Faithful where
@@ -786,8 +786,8 @@ definition FullyFaithful.mapCommGrp
   body: InducedCategory.homMk (Grp.homMk' (hF.mapMon.preimage f.hom.hom))
 
 中文:
-定义 FullyFaithful.mapCommGrp
-  签名: (hF : F.FullyFaithful)
+定义 满忠实.mapCommGrp
+  签名: (hF : F.满忠实)
   定义体: InducedCategory.homMk (Grp.homMk' (hF.mapMon.preimage f.hom.hom))
 -/
 protected def FullyFaithful.mapCommGrp (hF : F.FullyFaithful) : F.mapCommGrp.FullyFaithful where
@@ -804,8 +804,8 @@ instance Full.mapCommGrp
 @[simp]
 
 中文:
-实例 Full.mapCommGrp
-  签名: [F.Full] [F.Faithful]
+实例 满.mapCommGrp
+  签名: [F.满] [F.忠实]
   定义体: (FullyFaithful.ofFullyFaithful F).mapCommGrp.full
 
 @[simp]
@@ -826,7 +826,7 @@ theorem mapCommGrp_id_one
 
 中文:
 定理 mapCommGrp_id_one
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   证明: rfl
 
 @[simp]
@@ -848,7 +848,7 @@ theorem mapCommpGrp_id_mul
 
 中文:
 定理 mapCommpGrp_id_mul
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   证明: rfl
 
 @[simp]
@@ -870,7 +870,7 @@ theorem comp_mapCommGrp_one
 
 中文:
 定理 comp_mapCommGrp_one
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   证明: rfl
 
 @[simp]
@@ -890,7 +890,7 @@ theorem comp_mapCommGrp_mul
 
 中文:
 定理 comp_mapCommGrp_mul
-  条件: (A : CommGrp C)
+  条件: (A : 交换群 C)
   证明: rfl
 -/
 theorem comp_mapCommGrp_mul (A : CommGrp C) :
@@ -911,7 +911,7 @@ definition mapCommGrpIdIso
 
 中文:
 定义 mapCommGrpIdIso
-  签名: : mapCommGrp (𝟭 C) ≅ 𝟭 (CommGrp C)
+  签名: : mapCommGrp (𝟭 C) ≅ 𝟭 (交换群 C)
   定义体: NatIso.ofComponents (fun X => CommGrp.mkIso (.refl _) (by simp)
     (by simp))
 
@@ -955,7 +955,7 @@ definition mapCommGrpNatTrans
   body: InducedCategory.homMk ((mapGrpNatTrans f).app X.toGrp)
 
 中文:
-定义 mapCommGrpNatTrans
+定义 mapCommGrp自然数Trans
   签名: (f : F ⟶ F')
   定义体: InducedCategory.homMk ((mapGrpNatTrans f).app X.toGrp)
 
@@ -976,7 +976,7 @@ definition mapCommGrpNatIso
   body: NatIso.ofComponents fun X => CommGrp.mkIso (e.app _)
 
 中文:
-定义 mapCommGrpNatIso
+定义 mapCommGrp自然数Iso
   签名: (e : F ≅ F')
   定义体: NatIso.ofComponents fun X => CommGrp.mkIso (e.app _)
 
@@ -999,7 +999,7 @@ definition mapCommGrpFunctor
 
 中文:
 定义 mapCommGrpFunctor
-  签名: : (C ⥤ₗ D) ⥤ CommGrp C ⥤ CommGrp D where
+  签名: : (C ⥤ₗ D) ⥤ 交换群 C ⥤ 交换群 D where
   定义体: F.1.mapCommGrp
   map α := mapCommGrpNatTrans α.hom
 
@@ -1056,7 +1056,7 @@ definition mapCommGrp
 
 中文:
 定义 mapCommGrp
-  签名: : CommGrp C ≌ CommGrp D where
+  签名: : 交换群 C ≌ 交换群 D where
   定义体: e.functor.mapCommGrp
   inverse := e.inverse.mapCommGrp
   unitIso := mapCommGrpIdIso.symm ≪≫ mapCommGrpNatIso e.unitIso ≪≫ mapCommGrpCompIso

@@ -65,13 +65,13 @@ class Bialgebra
     - mul_compr₂_comul : (LinearMap.mul R A).compr₂ comul = (LinearMap.mul R (A otimes[R] A)).compl₁₂ comul comul
 
 中文:
-类 Bialgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A]
+类 双代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
   公理与运算 (4 个):
     - counit_one : counit 1 = 1
-    - mul_compr₂_counit : (LinearMap.mul R A).compr₂ counit = (LinearMap.mul R R).compl₁₂ counit counit
+    - mul_compr₂_counit : (线性映射.mul R A).compr₂ counit = (线性映射.mul R R).compl₁₂ counit counit
     - comul_one : comul 1 = 1
-    - mul_compr₂_comul : (LinearMap.mul R A).compr₂ comul = (LinearMap.mul R (A otimes[R] A)).compl₁₂ comul comul
+    - mul_compr₂_comul : (线性映射.mul R A).compr₂ comul = (线性映射.mul R (A otimes[R] A)).compl₁₂ comul comul
 -/
 class Bialgebra (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] extends
     Algebra R A, Coalgebra R A where
@@ -170,7 +170,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A]
+  签名: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
   定义体: counit_one
   mul_compr₂_counit := by ext; exact counit_mul
   comul_one := comul_one
@@ -389,7 +389,7 @@ instance toBialgebra
 
 中文:
 实例 toBialgebra
-  签名: : Bialgebra R R where
+  签名: : 双代数 R R where
   定义体: by ext; simp
   counit_one := rfl
   mul_compr₂_comul := by ext; simp
@@ -487,7 +487,7 @@ lemma algebraMap_injective
 
 中文:
 引理 algebraMap_injective
-  结论: Injective (algebraMap R A)
+  结论: 单射 (algebraMap R A)
   证明: RightInverse.injective counit_algebraMap
 
 Depends on / 依赖: RightInverse, RightInverse.injective, counit_algebraMap, injective
@@ -506,7 +506,7 @@ include R in
 
 中文:
 引理 counit_surjective
-  结论: Surjective (Coalgebra.counit : A ->ₗ[R] R)
+  结论: 满射 (余algebra.counit : A ->ₗ[R] R)
   证明: RightInverse.surjective counit_algebraMap
 
 include R in
@@ -529,8 +529,8 @@ lemma nontrivial
 
 中文:
 引理 nontrivial
-  条件: [Nontrivial R]
-  结论: Nontrivial A
+  条件: [非平凡 R]
+  结论: 非平凡 A
   证明: (algebraMap_injective (R := R) _).nontrivial
 
 Depends on / 依赖: algebraMap_injective, nontrivial

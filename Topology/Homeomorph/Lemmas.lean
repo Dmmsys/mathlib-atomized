@@ -44,7 +44,7 @@ theorem secondCountableTopology
 
 中文:
 定理 secondCountableTopology
-  结论: [SecondCountableTopology Y]
+  结论: [第二可数拓扑 Y]
   证明: h.isInducing.secondCountableTopology
 -/
 protected theorem secondCountableTopology [SecondCountableTopology Y]
@@ -62,8 +62,8 @@ theorem baireSpace
 
 中文:
 定理 baireSpace
-  条件: [BaireSpace X] (f : X ≃ₜ Y)
-  结论: BaireSpace Y
+  条件: [Baire空间 X] (f : X ≃ₜ Y)
+  结论: Baire空间 Y
   证明: f.isOpenQuotientMap.baireSpace
 -/
 protected theorem baireSpace [BaireSpace X] (f : X ≃ₜ Y) : BaireSpace Y :=
@@ -82,8 +82,8 @@ theorem isCompact_image
 
 中文:
 定理 isCompact_image
-  条件: {s : Set X} (h : X ≃ₜ Y)
-  结论: IsCompact (h '' s) ↔ IsCompact s
+  条件: {s : 集合 X} (h : X ≃ₜ Y)
+  结论: 是紧集 (h '' s) ↔ 是紧集 s
   证明: h.isEmbedding.isCompact_iff.symm
 
 Depends on / 依赖: h.isEmbedding.isCompact_iff.symm, isCompact_iff, isEmbedding
@@ -105,8 +105,8 @@ theorem isCompact_preimage
 
 中文:
 定理 isCompact_preimage
-  条件: {s : Set Y} (h : X ≃ₜ Y)
-  结论: IsCompact (h ⁻¹' s) ↔ IsCompact s
+  条件: {s : 集合 Y} (h : X ≃ₜ Y)
+  结论: 是紧集 (h ⁻¹' s) ↔ 是紧集 s
   证明: by
   rw [← image_symm]; exact h.symm.isCompact_image
 
@@ -127,7 +127,7 @@ theorem isSigmaCompact_image
 
 中文:
 定理 isSigmaCompact_image
-  条件: {s : Set X} (h : X ≃ₜ Y)
+  条件: {s : 集合 X} (h : X ≃ₜ Y)
   证明: h.isEmbedding.isSigmaCompact_iff.symm
 
 Depends on / 依赖: h.isEmbedding.isSigmaCompact_iff.symm, isEmbedding, isSigmaCompact_iff
@@ -151,7 +151,7 @@ theorem isSigmaCompact_preimage
 
 中文:
 定理 isSigmaCompact_preimage
-  条件: {s : Set Y} (h : X ≃ₜ Y)
+  条件: {s : 集合 Y} (h : X ≃ₜ Y)
   证明: by
   rw [← image_symm]; exact h.symm.isSigmaCompact_image
 
@@ -178,7 +178,7 @@ theorem isPreconnected_image
 
 中文:
 定理 isPreconnected_image
-  条件: {s : Set X} (h : X ≃ₜ Y)
+  条件: {s : 集合 X} (h : X ≃ₜ Y)
   证明: ⟨fun hs => by simpa only [image_symm, preimage_image]
     using hs.image _ h.symm.continuous.continuousOn,
     fun hs => hs.image _ h.continuous.continuousOn⟩
@@ -207,7 +207,7 @@ theorem isPreconnected_preimage
 
 中文:
 定理 isPreconnected_preimage
-  条件: {s : Set Y} (h : X ≃ₜ Y)
+  条件: {s : 集合 Y} (h : X ≃ₜ Y)
   证明: by
   rw [← image_symm]; rw [isPreconnected_image]
 
@@ -232,7 +232,7 @@ theorem isConnected_image
 
 中文:
 定理 isConnected_image
-  条件: {s : Set X} (h : X ≃ₜ Y)
+  条件: {s : 集合 X} (h : X ≃ₜ Y)
   证明: image_nonempty.and h.isPreconnected_image
 
 @[simp]
@@ -255,7 +255,7 @@ theorem isConnected_preimage
 
 中文:
 定理 isConnected_preimage
-  条件: {s : Set Y} (h : X ≃ₜ Y)
+  条件: {s : 集合 Y} (h : X ≃ₜ Y)
   证明: by
   rw [← image_symm]; rw [isConnected_image]
 
@@ -281,7 +281,7 @@ theorem image_connectedComponentIn
 
 中文:
 定理 image_connectedComponentIn
-  条件: {s : Set X} (h : X ≃ₜ Y) {x : X} (hx : x in s)
+  条件: {s : 集合 X} (h : X ≃ₜ Y) {x : X} (hx : x in s)
   证明: by
   refine (h.continuous.continuousOn.image_connectedComponentIn_subset hx).antisymm ?_
   have := h.symm.continuous.continuousOn.image_connectedComponentIn_subset (mem_image_of_mem h hx)
@@ -364,8 +364,8 @@ theorem compactSpace
 
 中文:
 定理 compactSpace
-  条件: [CompactSpace X] (h : X ≃ₜ Y)
-  结论: CompactSpace Y where
+  条件: [紧空间 X] (h : X ≃ₜ Y)
+  结论: 紧空间 Y where
   证明: h.symm.isCompact_preimage.2 isCompact_univ
 -/
 protected theorem compactSpace [CompactSpace X] (h : X ≃ₜ Y) : CompactSpace Y where
@@ -383,7 +383,7 @@ theorem isDenseEmbedding
 中文:
 定理 isDenseEmbedding
   条件: (h : X ≃ₜ Y)
-  结论: IsDenseEmbedding h
+  结论: 是稠密嵌入 h
   证明: { h.isEmbedding with dense := h.surjective.denseRange }
 
 Depends on / 依赖: denseRange, h.isEmbedding, h.surjective.denseRange, isEmbedding, surjective
@@ -404,7 +404,7 @@ lemma totallyDisconnectedSpace
 
 中文:
 引理 totallyDisconnectedSpace
-  条件: (h : X ≃ₜ Y) [tdc : TotallyDisconnectedSpace X]
+  条件: (h : X ≃ₜ Y) [tdc : 全不连通空间 X]
   证明: (totallyDisconnectedSpace_iff Y).mpr
     (h.range_coe ▸ ((IsEmbedding.isTotallyDisconnected_range h.isEmbedding).mpr tdc))
 
@@ -512,7 +512,7 @@ theorem locallyConnectedSpace
 
 中文:
 定理 locallyConnectedSpace
-  条件: [i : LocallyConnectedSpace Y] (h : X ≃ₜ Y)
+  条件: [i : 局部连通空间 Y] (h : X ≃ₜ Y)
   证明: by
   have : forall x, (𝓝 x).HasBasis (fun s => IsOpen s ∧ h x in s ∧ IsConnected s)
       (h.symm '' ·) := fun x => by
@@ -571,7 +571,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z)
+  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : 集合 Z)
   证明: h.isInducing.continuousOn_iff.symm
 
 Depends on / 依赖: continuousOn_iff, h.isInducing.continuousOn_iff.symm, isInducing
@@ -590,7 +590,7 @@ theorem comp_continuousWithinAt_iff
 
 中文:
 定理 comp_continuousWithinAt_iff
-  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : Set Z) (z : Z)
+  条件: (h : X ≃ₜ Y) (f : Z -> X) (s : 集合 Z) (z : Z)
   证明: h.isInducing.continuousWithinAt_iff
 
 Depends on / 依赖: continuousWithinAt_iff, h.isInducing.continuousWithinAt_iff, isInducing
@@ -654,7 +654,7 @@ abbreviation sets
 
 中文:
 缩写 sets
-  签名: {s : Set X} {t : Set Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t)
+  签名: {s : 集合 X} {t : 集合 Y} (h : X ≃ₜ Y) (h_eq : s = h ⁻¹' t)
   定义体: h.subtype Set.ext_iff.mp h_eq
 
 Depends on / 依赖: Set.ext_iff.mp, ext_iff, h.subtype, h_eq, subtype
@@ -674,7 +674,7 @@ definition setCongr
 
 中文:
 定义 setCongr
-  签名: {s t : Set X} (h : s = t)
+  签名: {s t : 集合 X} (h : s = t)
   定义体: Equiv.setCongr h
 
 Depends on / 依赖: Equiv.setCongr, setCongr
@@ -698,7 +698,7 @@ definition prodUnique
 
 中文:
 定义 prodUnique
-  签名: [Unique Y]
+  签名: [唯一 Y]
   定义体: Equiv.prodUnique X Y
 
 Depends on / 依赖: Equiv.prodUnique, prodUnique
@@ -718,8 +718,8 @@ theorem coe_prodUnique
 
 中文:
 定理 coe_prodUnique
-  条件: [Unique Y]
-  结论: ⇑(prodUnique X Y) = Prod.fst
+  条件: [唯一 Y]
+  结论: ⇑(prodUnique X Y) = 积类型.fst
   证明: rfl
 -/
 @[simp] theorem coe_prodUnique [Unique Y] : ⇑(prodUnique X Y) = Prod.fst := rfl
@@ -736,7 +736,7 @@ definition uniqueProd
 
 中文:
 定义 uniqueProd
-  签名: (X Y : 类型) [TopologicalSpace X] [TopologicalSpace Y] [Unique X]
+  签名: (X Y : 类型) [拓扑空间 X] [拓扑空间 Y] [唯一 X]
   定义体: (prodComm _ _).trans (prodUnique Y X)
 
 Depends on / 依赖: prodComm, prodUnique
@@ -756,8 +756,8 @@ theorem coe_uniqueProd
 
 中文:
 定理 coe_uniqueProd
-  条件: [Unique X]
-  结论: ⇑(uniqueProd X Y) = Prod.snd
+  条件: [唯一 X]
+  结论: ⇑(uniqueProd X Y) = 积类型.snd
   证明: rfl
 -/
 @[simp] theorem coe_uniqueProd [Unique X] : ⇑(uniqueProd X Y) = Prod.snd := rfl
@@ -802,7 +802,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: {α : 类型} [Unique α] (f : α -> 类型) [对任意 x, TopologicalSpace (f x)]
+  签名: {α : 类型} [唯一 α] (f : α -> 类型) [对任意 x, 拓扑空间 (f x)]
   定义体: (Equiv.piUnique f).toHomeomorphOfContinuousOpen (continuous_apply default) (isOpenMap_eval _)
 
 Depends on / 依赖: Equiv.piUnique, continuous_apply, isOpenMap_eval, piUnique, toHomeomorphOfContinuousOpen
@@ -831,7 +831,7 @@ definition piCongrLeft
 
 中文:
 定义 piCongrLeft
-  签名: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, TopologicalSpace (Y j)]
+  签名: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
   定义体: continuous_pi e.forall_congr_right.mp fun i => by
     simpa only [Equiv.toFun_as_coe, Equiv.piCongrLeft_apply_apply] using continuous_apply i
   continuous_invFun := Pi.continuous_precomp' e
@@ -861,7 +861,7 @@ lemma piCongrLeft_refl
 
 中文:
 引理 piCongrLeft_refl
-  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  条件: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: rfl
 
 @[simp]
@@ -883,7 +883,7 @@ lemma piCongrLeft_symm_apply
 
 中文:
 引理 piCongrLeft_symm_apply
-  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, TopologicalSpace (Y j)]
+  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
   证明: rfl
 
 @[simp]
@@ -903,7 +903,7 @@ lemma piCongrLeft_apply_apply
 
 中文:
 引理 piCongrLeft_apply_apply
-  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, TopologicalSpace (Y j)]
+  结论: {ι ι' : 类型} {Y : ι' -> 类型} [对任意 j, 拓扑空间 (Y j)]
   证明: Equiv.piCongrLeft_apply_apply ..
 
 Depends on / 依赖: Equiv.piCongrLeft_apply_apply, piCongrLeft_apply_apply
@@ -928,7 +928,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, TopologicalSpace (Y₁ i)]
+  签名: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, 拓扑空间 (Y₁ i)]
   定义体: Equiv.piCongrRight fun i => (F i).toEquiv
 
 @[simp]
@@ -950,7 +950,7 @@ theorem piCongrRight_symm
 
 中文:
 定理 piCongrRight_symm
-  结论: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, TopologicalSpace (Y₁ i)]
+  结论: {ι : 类型} {Y₁ Y₂ : ι -> 类型} [对任意 i, 拓扑空间 (Y₁ i)]
   证明: rfl
 -/
 theorem piCongrRight_symm {ι : Type*} {Y₁ Y₂ : ι -> Type*} [forall i, TopologicalSpace (Y₁ i)]
@@ -1054,9 +1054,9 @@ theorem _root_.Fin.appendEquiv_eq_homeomorph
 @[fun_prop]
 
 中文:
-定理 _root_.Fin.appendEquiv_eq_homeomorph
+定理 _root_.有限集.appendEquiv_eq_homeomorph
   条件: (m n : 自然数)
-  结论: Fin.appendEquiv m n =
+  结论: 有限集.appendEquiv m n =
   证明: by
   apply Equiv.symm_bijective.injective
   ext x i <;> simp
@@ -1082,7 +1082,7 @@ theorem _root_.Fin.continuous_append
   exact Homeomorph.continuous_toFun _
 
 中文:
-定理 _root_.Fin.continuous_append
+定理 _root_.有限集.continuous_append
   条件: (m n : 自然数)
   证明: by
   suffices Continuous (Fin.appendEquiv m n) by exact this
@@ -1111,7 +1111,7 @@ definition _root_.Fin.appendHomeomorph
 @[simp]
 
 中文:
-定义 _root_.Fin.appendHomeomorph
+定义 _root_.有限集.appendHomeomorph
   签名: (m n : 自然数)
   定义体: Fin.appendEquiv m n
 
@@ -1132,7 +1132,7 @@ theorem _root_.Fin.appendHomeomorph_toEquiv
   proof: rfl
 
 中文:
-定理 _root_.Fin.appendHomeomorph_toEquiv
+定理 _root_.有限集.appendHomeomorph_toEquiv
   条件: (m n : 自然数)
   证明: rfl
 
@@ -1190,7 +1190,7 @@ definition funUnique
 
 中文:
 定义 funUnique
-  签名: (ι X : 类型) [Unique ι] [TopologicalSpace X]
+  签名: (ι X : 类型) [唯一 ι] [拓扑空间 X]
   定义体: Equiv.funUnique ι X
 
 Depends on / 依赖: Equiv.funUnique, funUnique
@@ -1210,7 +1210,7 @@ definition piFinTwo.{u}
 
 中文:
 定义 piFinTwo.{u}
-  签名: (X : Fin 2 -> 类型u) [对任意 i, TopologicalSpace (X i)]
+  签名: (X : 有限集 2 -> 类型u) [对任意 i, 拓扑空间 (X i)]
   定义体: piFinTwoEquiv X
 
 Depends on / 依赖: piFinTwoEquiv
@@ -1230,7 +1230,7 @@ definition finTwoArrow
 
 中文:
 定义 finTwoArrow
-  签名: : (Fin 2 -> X) ≃ₜ X × X
+  签名: : (有限集 2 -> X) ≃ₜ X × X
   定义体: { piFinTwo fun _ => X with toEquiv := finTwoArrowEquiv X }
 
 Depends on / 依赖: finTwoArrowEquiv, piFinTwo, toEquiv
@@ -1252,8 +1252,8 @@ definition image
   toEquiv := e.toEquiv.image s
 
 中文:
-定义 image
-  签名: (e : X ≃ₜ Y) (s : Set X)
+定义 像
+  签名: (e : X ≃ₜ Y) (s : 集合 X)
   定义体: e.continuous.continuousOn.mapsToRestrict (mapsTo_image _ _)
   continuous_invFun := (e.symm.continuous.comp continuous_subtype_val).codRestrict _
   toEquiv := e.toEquiv.image s
@@ -1277,8 +1277,8 @@ definition Set.univ
   body: Equiv.Set.univ X
 
 中文:
-定义 Set.univ
-  签名: (X : 类型) [TopologicalSpace X]
+定义 集合.univ
+  签名: (X : 类型) [拓扑空间 X]
   定义体: Equiv.Set.univ X
 -/
 def Set.univ (X : Type*) [TopologicalSpace X] : (univ : Set X) ≃ₜ X where
@@ -1299,8 +1299,8 @@ definition Set.prod
     (continuous_subtype_val.fst'.prodMk continuous_subtype_val.snd').subtype_mk _
 
 中文:
-定义 Set.prod
-  签名: (s : Set X) (t : Set Y)
+定义 集合.乘积
+  签名: (s : 集合 X) (t : 集合 Y)
   定义体: Equiv.Set.prod s t
   continuous_toFun :=
     (continuous_subtype_val.fst.subtype_mk _).prodMk (continuous_subtype_val.snd.subtype_mk _)
@@ -1335,7 +1335,7 @@ definition piEquivPiSubtypeProd
 
 中文:
 定义 piEquivPiSubtypeProd
-  签名: (p : ι -> 命题) (Y : ι -> 类型) [对任意 i, TopologicalSpace (Y i)]
+  签名: (p : ι -> 命题) (Y : ι -> 类型) [对任意 i, 拓扑空间 (Y i)]
   定义体: Equiv.piEquivPiSubtypeProd p Y
   continuous_invFun :=
     continuous_pi fun j => by
@@ -1374,7 +1374,7 @@ definition piSplitAt
 
 中文:
 定义 piSplitAt
-  签名: (Y : ι -> 类型) [对任意 j, TopologicalSpace (Y j)]
+  签名: (Y : ι -> 类型) [对任意 j, 拓扑空间 (Y j)]
   定义体: Equiv.piSplitAt i Y
   continuous_invFun :=
     continuous_pi fun j => by
@@ -1441,7 +1441,7 @@ definition toHomeomorph
 
 中文:
 定义 toHomeomorph
-  签名: {f : X -> Y} (hf : IsEmbedding f)
+  签名: {f : X -> Y} (hf : 是嵌入 f)
   定义体: .toHomeomorphOfIsInducing Equiv.ofInjective f hf.injective
     IsInducing.subtypeVal.of_comp_iff.mp hf.toIsInducing
 
@@ -1465,7 +1465,7 @@ lemma toHomeomorph_symm_apply
 
 中文:
 引理 toHomeomorph_symm_apply
-  条件: {f : X -> Y} (hf : IsEmbedding f) (x : X)
+  条件: {f : X -> Y} (hf : 是嵌入 f) (x : X)
   证明: hf.toHomeomorph.injective (by ext; simp)
 
 Depends on / 依赖: hf.toHomeomorph.injective, injective, toHomeomorph
@@ -1505,7 +1505,7 @@ definition homeomorphImage
 
 中文:
 定义 homeomorphImage
-  签名: {f : X -> Y} (hf : IsEmbedding f) (s : Set X)
+  签名: {f : X -> Y} (hf : 是嵌入 f) (s : 集合 X)
   定义体: (hf.comp .subtypeVal).toHomeomorph.trans .setCongr by simp [Set.range_comp]
 
 Depends on / 依赖: Set.range_comp, hf.comp, range_comp, setCongr, subtypeVal, toHomeomorph, toHomeomorph.trans
@@ -1525,7 +1525,7 @@ definition homeomorphOfSubsetRange
 
 中文:
 定义 homeomorphOfSubsetRange
-  签名: {f : X -> Y} (hf : IsEmbedding f)
+  签名: {f : X -> Y} (hf : 是嵌入 f)
   定义体: .trans .setCongr Set.image_preimage_eq_of_subset hs hf.homeomorphImage (f ⁻¹' s)
 
 @[simp]
@@ -1547,7 +1547,7 @@ theorem homeomorphOfSubsetRange_apply_coe
 
 中文:
 定理 homeomorphOfSubsetRange_apply_coe
-  结论: {f : X -> Y} (hf : IsEmbedding f)
+  结论: {f : X -> Y} (hf : 是嵌入 f)
   证明: rfl
 -/
 theorem homeomorphOfSubsetRange_apply_coe {f : X -> Y} (hf : IsEmbedding f)
@@ -1565,8 +1565,8 @@ lemma Topology.IsEmbedding.uliftMap
   proof: .comp Homeomorph.ulift.symm.isEmbedding (.comp hf <| Homeomorph.ulift.isEmbedding)
 
 中文:
-引理 Topology.IsEmbedding.uliftMap
-  条件: {f : X -> Y} (hf : IsEmbedding f)
+引理 拓扑.是嵌入.uliftMap
+  条件: {f : X -> Y} (hf : 是嵌入 f)
   证明: .comp Homeomorph.ulift.symm.isEmbedding (.comp hf <| Homeomorph.ulift.isEmbedding)
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift.isEmbedding, Homeomorph.ulift.symm.isEmbedding, isEmbedding
@@ -1584,8 +1584,8 @@ lemma Topology.IsOpenEmbedding.uliftMap
   proof: .comp Homeomorph.ulift.symm.isOpenEmbedding (.comp hf <| Homeomorph.ulift.isOpenEmbedding)
 
 中文:
-引理 Topology.IsOpenEmbedding.uliftMap
-  条件: {f : X -> Y} (hf : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.uliftMap
+  条件: {f : X -> Y} (hf : 是开嵌入 f)
   证明: .comp Homeomorph.ulift.symm.isOpenEmbedding (.comp hf <| Homeomorph.ulift.isOpenEmbedding)
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift.isOpenEmbedding, Homeomorph.ulift.symm.isOpenEmbedding, isOpenEmbedding
@@ -1603,8 +1603,8 @@ lemma Topology.IsClosedEmbedding.uliftMap
   proof: .comp Homeomorph.ulift.symm.isClosedEmbedding (.comp hf <| Homeomorph.ulift.isClosedEmbedding)
 
 中文:
-引理 Topology.IsClosedEmbedding.uliftMap
-  条件: {f : X -> Y} (hf : IsClosedEmbedding f)
+引理 拓扑.是闭嵌入.uliftMap
+  条件: {f : X -> Y} (hf : 是闭嵌入 f)
   证明: .comp Homeomorph.ulift.symm.isClosedEmbedding (.comp hf <| Homeomorph.ulift.isClosedEmbedding)
 
 Depends on / 依赖: Homeomorph, Homeomorph.ulift.isClosedEmbedding, Homeomorph.ulift.symm.isClosedEmbedding, isClosedEmbedding
@@ -1633,7 +1633,7 @@ theorem continuous_symm_of_equiv_compact_to_t2
 
 中文:
 定理 continuous_symm_of_equiv_compact_to_t2
-  结论: [CompactSpace X] [T2Space Y] {f : X ≃ Y}
+  结论: [紧空间 X] [T2空间 Y] {f : X ≃ Y}
   证明: by
   rw [continuous_iff_isClosed]
   intro C hC
@@ -1666,7 +1666,7 @@ definition homeoOfEquivCompactToT2
 
 中文:
 定义 homeoOfEquivCompactToT2
-  签名: [CompactSpace X] [T2Space Y] {f : X ≃ Y} (hf : Continuous f)
+  签名: [紧空间 X] [T2空间 Y] {f : X ≃ Y} (hf : 连续 f)
   定义体: { f with
     continuous_toFun := hf
     continuous_invFun := hf.continuous_symm_of_equiv_compact_to_t2 }
@@ -1697,7 +1697,7 @@ lemma isClosedMap
 
 中文:
 引理 isClosedMap
-  结论: IsClosedMap f
+  结论: 是闭映射 f
   证明: (hf.homeomorph f).isClosedMap
 -/
 protected lemma isClosedMap : IsClosedMap f := (hf.homeomorph f).isClosedMap
@@ -1711,7 +1711,7 @@ lemma isInducing
 
 中文:
 引理 isInducing
-  结论: IsInducing f
+  结论: 是Inducing f
   证明: (hf.homeomorph f).isInducing
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isInducing
@@ -1727,7 +1727,7 @@ lemma isQuotientMap
 
 中文:
 引理 isQuotientMap
-  结论: IsQuotientMap f
+  结论: 是商映射 f
   证明: (hf.homeomorph f).isQuotientMap
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isQuotientMap
@@ -1743,7 +1743,7 @@ lemma isEmbedding
 
 中文:
 引理 isEmbedding
-  结论: IsEmbedding f
+  结论: 是嵌入 f
   证明: (hf.homeomorph f).isEmbedding
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isEmbedding
@@ -1759,7 +1759,7 @@ lemma isOpenEmbedding
 
 中文:
 引理 isOpenEmbedding
-  结论: IsOpenEmbedding f
+  结论: 是开嵌入 f
   证明: (hf.homeomorph f).isOpenEmbedding
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isOpenEmbedding
@@ -1775,7 +1775,7 @@ lemma isClosedEmbedding
 
 中文:
 引理 isClosedEmbedding
-  结论: IsClosedEmbedding f
+  结论: 是闭嵌入 f
   证明: (hf.homeomorph f).isClosedEmbedding
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isClosedEmbedding
@@ -1791,7 +1791,7 @@ lemma isDenseEmbedding
 
 中文:
 引理 isDenseEmbedding
-  结论: IsDenseEmbedding f
+  结论: 是稠密嵌入 f
   证明: (hf.homeomorph f).isDenseEmbedding
 
 Depends on / 依赖: hf.homeomorph, homeomorph, isDenseEmbedding
@@ -1809,8 +1809,8 @@ lemma isHomeomorph_iff_exists_homeomorph
   proof: ⟨fun hf => ⟨hf.homeomorph f, rfl⟩, fun ⟨h, h'⟩ => h' ▸ h.isHomeomorph⟩
 
 中文:
-引理 isHomeomorph_iff_exists_homeomorph
-  结论: IsHomeomorph f ↔ 存在 h : X ≃ₜ Y, h = f
+引理 isHomeomorph_iff_存在_homeomorph
+  结论: 是同胚 f ↔ 存在 h : X ≃ₜ Y, h = f
   证明: ⟨fun hf => ⟨hf.homeomorph f, rfl⟩, fun ⟨h, h'⟩ => h' ▸ h.isHomeomorph⟩
 
 Depends on / 依赖: h.isHomeomorph, hf.homeomorph, homeomorph, isHomeomorph
@@ -1831,8 +1831,8 @@ lemma isHomeomorph_iff_exists_inverse
   · exact (Homeomorph.mk ⟨f, g, hg.1, hg.2.1⟩ hf hg.2.2).isHomeomorph
 
 中文:
-引理 isHomeomorph_iff_exists_inverse
-  结论: IsHomeomorph f ↔ Continuous f ∧ 存在 g : Y -> X,
+引理 isHomeomorph_iff_存在_inverse
+  结论: 是同胚 f ↔ 连续 f ∧ 存在 g : Y -> X,
   证明: by
   refine ⟨fun hf => ⟨hf.continuous, ?_⟩, fun ⟨hf, g, hg⟩ => ?_⟩
   · let h := hf.homeomorph f
@@ -1859,7 +1859,7 @@ theorem Equiv.isHomeomorph_iff
   exact ⟨fun h => ⟨h.continuous, h.isOpenMap⟩, fun ⟨hc, ho⟩ => ⟨hc, ho, e.bijective⟩⟩
 
 中文:
-定理 Equiv.isHomeomorph_iff
+定理 等价.isHomeomorph_iff
   条件: (e : X ≃ Y)
   证明: by
   rw [e.continuous_symm_iff]
@@ -1884,7 +1884,7 @@ lemma isHomeomorph_iff_isEmbedding_surjective
 
 中文:
 引理 isHomeomorph_iff_isEmbedding_surjective
-  结论: IsHomeomorph f ↔ IsEmbedding f ∧ Surjective f where
+  结论: 是同胚 f ↔ 是嵌入 f ∧ 满射 f where
   证明: ⟨hf.isEmbedding, hf.surjective⟩
   mpr h := ⟨h.1.continuous, ((isOpenEmbedding_iff f).2 ⟨h.1, h.2.range_eq ▸ isOpen_univ⟩).isOpenMap,
     h.1.injective, h.2⟩
@@ -1934,7 +1934,7 @@ lemma isHomeomorph_iff_continuous_isClosedMap_bijective
 
 中文:
 引理 isHomeomorph_iff_continuous_isClosedMap_bijective
-  结论: IsHomeomorph f ↔
+  结论: 是同胚 f ↔
   证明: ⟨fun hf => ⟨hf.continuous, hf.isClosedMap, hf.bijective⟩, fun ⟨hf, hf', hf''⟩ =>
     ⟨hf, fun _ hu => isClosed_compl_iff.1 (image_compl_eq hf'' ▸ hf' _ hu.isClosed_compl), hf''⟩⟩
 
@@ -1958,7 +1958,7 @@ lemma isHomeomorph_iff_continuous_bijective
 
 中文:
 引理 isHomeomorph_iff_continuous_bijective
-  条件: [CompactSpace X] [T2Space Y]
+  条件: [紧空间 X] [T2空间 Y]
   证明: by
   rw [isHomeomorph_iff_continuous_isClosedMap_bijective]
   refine and_congr_right fun hf => ?_
@@ -1981,8 +1981,8 @@ lemma IsHomeomorph.sumMap
   proof: ⟨hf.1.sumMap hg.1, hf.2.sumMap hg.2, hf.3.sumMap hg.3⟩
 
 中文:
-引理 IsHomeomorph.sumMap
-  条件: {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g)
+引理 是同胚.sumMap
+  条件: {g : Z -> W} (hf : 是同胚 f) (hg : 是同胚 g)
   证明: ⟨hf.1.sumMap hg.1, hf.2.sumMap hg.2, hf.3.sumMap hg.3⟩
 
 Depends on / 依赖: sumMap
@@ -1999,8 +1999,8 @@ lemma IsHomeomorph.prodMap
   proof: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2, hf.3.prodMap hg.3⟩
 
 中文:
-引理 IsHomeomorph.prodMap
-  条件: {g : Z -> W} (hf : IsHomeomorph f) (hg : IsHomeomorph g)
+引理 是同胚.prodMap
+  条件: {g : Z -> W} (hf : 是同胚 f) (hg : 是同胚 g)
   证明: ⟨hf.1.prodMap hg.1, hf.2.prodMap hg.2, hf.3.prodMap hg.3⟩
 
 Depends on / 依赖: prodMap
@@ -2019,7 +2019,7 @@ lemma IsHomeomorph.sigmaMap
   exact ⟨(isEmbedding_sigmaMap hf.1).2 fun i => (hg i).1, hf.2.sigma_map fun i => (hg i).2⟩
 
 中文:
-引理 IsHomeomorph.sigmaMap
+引理 是同胚.sigmaMap
   结论: {ι κ : 类型} {X : ι -> 类型} {Y : κ -> 类型}
   证明: by
   simp_rw [isHomeomorph_iff_isEmbedding_surjective] at hg ⊢
@@ -2043,8 +2043,8 @@ lemma IsHomeomorph.pi_map
   proof: (Homeomorph.piCongrRight fun i => (h i).homeomorph (f i)).isHomeomorph
 
 中文:
-引理 IsHomeomorph.pi_map
-  结论: {ι : 类型} {X Y : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+引理 是同胚.pi_map
+  结论: {ι : 类型} {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: (Homeomorph.piCongrRight fun i => (h i).homeomorph (f i)).isHomeomorph
 
 Depends on / 依赖: Homeomorph, Homeomorph.piCongrRight, homeomorph, isHomeomorph, piCongrRight
@@ -2063,8 +2063,8 @@ definition Homeomorph.ofDiscrete
   body: f
 
 中文:
-定义 Homeomorph.ofDiscrete
-  签名: [DiscreteTopology X] [DiscreteTopology Y] (f : X ≃ Y)
+定义 同胚.ofDiscrete
+  签名: [离散拓扑 X] [离散拓扑 Y] (f : X ≃ Y)
   定义体: f
 -/
 def Homeomorph.ofDiscrete [DiscreteTopology X] [DiscreteTopology Y] (f : X ≃ Y) : X ≃ₜ Y where
@@ -2079,8 +2079,8 @@ theorem Equiv.isHomeomorph_of_discrete
   proof: (Homeomorph.ofDiscrete f).isHomeomorph
 
 中文:
-定理 Equiv.isHomeomorph_of_discrete
-  结论: [DiscreteTopology X] [DiscreteTopology Y]
+定理 等价.isHomeomorph_of_discrete
+  结论: [离散拓扑 X] [离散拓扑 Y]
   证明: (Homeomorph.ofDiscrete f).isHomeomorph
 
 Depends on / 依赖: Homeomorph, Homeomorph.ofDiscrete, isHomeomorph, ofDiscrete
@@ -2103,7 +2103,7 @@ definition Topology.IsCoinducing.connectedComponentsHomeomorph
       hf.connectedComponentsMap.isOpenMap_of_injective hbij.injective, hbij⟩
 
 中文:
-定义 Topology.IsCoinducing.connectedComponentsHomeomorph
+定义 拓扑.是余inducing.connectedComponentsHomeomorph
   签名: {f : X -> Y}
   定义体: IsHomeomorph.homeomorph hf.continuous.connectedComponentsMap by
     have hbij := hf.connectedComponentsMap_bijective hf'
@@ -2134,7 +2134,7 @@ lemma Topology.IsCoinducing.connectedComponentsHomeomorph_mk
 @[simp]
 
 中文:
-引理 Topology.IsCoinducing.connectedComponentsHomeomorph_mk
+引理 拓扑.是余inducing.connectedComponentsHomeomorph_mk
   条件: (x : X)
   证明: rfl
 
@@ -2154,7 +2154,7 @@ lemma Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply
   proof: (hf.connectedComponentsHomeomorph hf').injective (by simp)
 
 中文:
-引理 Topology.IsCoinducing.connectedComponentsHomeomorph_symm_mk_apply
+引理 拓扑.是余inducing.connectedComponentsHomeomorph_symm_mk_apply
   条件: (x : X)
   证明: (hf.connectedComponentsHomeomorph hf').injective (by simp)
 

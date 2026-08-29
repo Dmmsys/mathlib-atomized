@@ -143,7 +143,7 @@ theorem nhdsWithin_source_inter
 
 中文:
 定理 nhdsWithin_source_inter
-  条件: {x} (hx : x in e.source) (s : Set X)
+  条件: {x} (hx : x in e.source) (s : 集合 X)
   结论: 𝓝[e.source inter s] x = 𝓝[s] x
   证明: nhdsWithin_inter_of_mem (mem_nhdsWithin_of_mem_nhds <| IsOpen.mem_nhds e.open_source hx)
 
@@ -163,7 +163,7 @@ theorem nhdsWithin_target_inter
 
 中文:
 定理 nhdsWithin_target_inter
-  条件: {x} (hx : x in e.target) (s : Set Y)
+  条件: {x} (hx : x in e.target) (s : 集合 Y)
   结论: 𝓝[e.target inter s] x = 𝓝[s] x
   证明: e.symm.nhdsWithin_source_inter hx s
 
@@ -223,7 +223,7 @@ theorem tendsto_symm
 中文:
 定理 tendsto_symm
   条件: {x} (hx : x in e.source)
-  结论: Tendsto e.symm (𝓝 (e x)) (𝓝 x)
+  结论: 收敛 e.symm (𝓝 (e x)) (𝓝 x)
   证明: by
   simpa only [ContinuousAt, e.left_inv hx] using e.continuousAt_symm (e.map_source hx)
 
@@ -286,7 +286,7 @@ theorem image_mem_nhds
 
 中文:
 定理 image_mem_nhds
-  条件: {x} (hx : x in e.source) {s : Set X} (hs : s in 𝓝 x)
+  条件: {x} (hx : x in e.source) {s : 集合 X} (hs : s in 𝓝 x)
   结论: e '' s in 𝓝 (e x)
   证明: e.map_nhds_eq hx ▸ Filter.image_mem_map hs
 
@@ -310,7 +310,7 @@ theorem map_nhdsWithin_eq
 
 中文:
 定理 map_nhdsWithin_eq
-  条件: {x} (hx : x in e.source) (s : Set X)
+  条件: {x} (hx : x in e.source) (s : 集合 X)
   证明: calc
     map e (𝓝[s] x) = map e (𝓝[e.source inter s] x) :=
       congr_arg (map e) (e.nhdsWithin_source_inter hx _).symm
@@ -341,7 +341,7 @@ theorem map_nhdsWithin_preimage_eq
 
 中文:
 定理 map_nhdsWithin_preimage_eq
-  条件: {x} (hx : x in e.source) (s : Set Y)
+  条件: {x} (hx : x in e.source) (s : 集合 Y)
   证明: by
   rw [e.map_nhdsWithin_eq hx]; rw [e.image_source_inter_eq']; rw [e.target_inter_inv_preimage_preimage]; rw [e.nhdsWithin_target_inter (e.map_source hx)]
 
@@ -409,7 +409,7 @@ theorem eventually_nhdsWithin
 
 中文:
 定理 eventually_nhdsWithin
-  结论: {x : X} (p : Y -> 命题) {s : Set X}
+  结论: {x : X} (p : Y -> 命题) {s : 集合 X}
   证明: by
   refine Iff.trans ?_ eventually_map
   rw [e.map_nhdsWithin_eq hx]; rw [e.image_source_inter_eq']; rw [e.nhdsWithin_target_inter (e.mapsTo hx)]
@@ -435,7 +435,7 @@ refine eventually_congr
 
 中文:
 定理 eventually_nhdsWithin'
-  结论: {x : X} (p : X -> 命题) {s : Set X}
+  结论: {x : X} (p : X -> 命题) {s : 集合 X}
   证明: by
   rw [e.eventually_nhdsWithin _ hx]
 refine eventually_congr
@@ -503,7 +503,7 @@ theorem continuousWithinAt_iff_continuousWithinAt_comp_right
 
 中文:
 定理 continuousWithinAt_iff_continuousWithinAt_comp_right
-  结论: {f : Y -> Z} {s : Set Y} {x : Y}
+  结论: {f : Y -> Z} {s : 集合 Y} {x : Y}
   证明: by
   simp_rw [ContinuousWithinAt, ← @tendsto_map'_iff _ _ _ _ e,
     e.map_nhdsWithin_preimage_eq (e.map_target h), (· ∘ ·), e.right_inv h]
@@ -551,7 +551,7 @@ theorem continuousOn_iff_continuousOn_comp_right
 
 中文:
 定理 continuousOn_iff_continuousOn_comp_right
-  条件: {f : Y -> Z} {s : Set Y} (h : s subseteq e.target)
+  条件: {f : Y -> Z} {s : 集合 Y} (h : s subseteq e.target)
   证明: by
   simp only [← e.symm_image_eq_source_inter_preimage h, ContinuousOn, forall_mem_image]
   refine forall₂_congr fun x hx => ?_
@@ -582,7 +582,7 @@ theorem continuousWithinAt_iff_continuousWithinAt_comp_left
 
 中文:
 定理 continuousWithinAt_iff_continuousWithinAt_comp_left
-  结论: {f : Z -> X} {s : Set Z} {x : Z}
+  结论: {f : Z -> X} {s : 集合 Z} {x : Z}
   证明: by
   refine ⟨(e.continuousAt hx).comp_continuousWithinAt, fun fe_cont => ?_⟩
   rw [← continuousWithinAt_inter' h] at fe_cont ⊢
@@ -642,7 +642,7 @@ theorem continuousOn_iff_continuousOn_comp_left
 
 中文:
 定理 continuousOn_iff_continuousOn_comp_left
-  条件: {f : Z -> X} {s : Set Z} (h : s subseteq f ⁻¹' e.source)
+  条件: {f : Z -> X} {s : 集合 Z} (h : s subseteq f ⁻¹' e.source)
   证明: forall₂_congr fun _x hx =>
     e.continuousWithinAt_iff_continuousWithinAt_comp_left (h hx)
       (mem_of_superset self_mem_nhdsWithin h)

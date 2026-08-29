@@ -130,7 +130,7 @@ theorem locallyIntegrable_lineDeriv
   proof: (hf.memLp_lineDeriv v).locallyIntegrable le_top
 
 中文:
-定理 locallyIntegrable_lineDeriv
+定理 locally整数egrable_lineDeriv
   条件: (hf : LipschitzWith C f) (v : E)
   证明: (hf.memLp_lineDeriv v).locallyIntegrable le_top
 
@@ -377,7 +377,7 @@ theorem ae_exists_fderiv_of_countable
   have I2 : forallᵐ
 
 中文:
-定理 ae_exists_fderiv_of_countable
+定理 ae_存在_fderiv_of_countable
   证明: by
   have B := Basis.ofVectorSpace Real E
   have I1 : forallᵐ (x : E) ∂μ, forall v in s, lineDeriv Real f x (∑ i, (B.repr v i) • B i) =

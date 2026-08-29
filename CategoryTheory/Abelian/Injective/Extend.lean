@@ -45,7 +45,7 @@ definition cochainComplex
 
 中文:
 定义 cochainComplex
-  签名: : CochainComplex C 整数
+  签名: : 上链复形 C 整数
   定义体: R.cocomplex.extend ComplexShape.embeddingUpNat
 
 Depends on / 依赖: ComplexShape, ComplexShape.embeddingUpNat, R.cocomplex.extend, cocomplex, embeddingUpNat, extend
@@ -160,7 +160,7 @@ definition ι'
 
 中文:
 定义 ι'
-  签名: : (CochainComplex.singleFunctor C 0).obj X ⟶ R.cochainComplex
+  签名: : (上链复形.singleFunctor C 0).obj X ⟶ R.cochainComplex
   定义体: (HomologicalComplex.extendSingleIso _ _ _ _ (by simp)).inv ≫
     (ComplexShape.embeddingUpNat.extendFunctor C).map R.ι
 
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso R.ι'
+  签名: 拟同构 R.ι'
   定义体: by dsimp [ι']; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -232,7 +232,7 @@ instance :
 
 中文:
 实例 :
-  签名: R.cochainComplex.IsLE 0
+  签名: R.cochainComplex.是LE 0
   定义体: by
   simp only [← HomologicalComplex.isSupported_iff_of_quasiIso R.ι']
   infer_instance

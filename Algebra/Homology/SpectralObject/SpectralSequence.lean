@@ -209,7 +209,7 @@ lemma pageD_eq
 
 中文:
 引理 pageD_eq
-  结论: (r : 整数) (hr : r₀ <= r) (pq pq' : κ) (hpq : (c r).Rel pq pq')
+  结论: (r : 整数) (hr : r₀ <= r) (pq pq' : κ) (hpq : (c r).关系 pq pq')
   证明: by
   subst hn₁' h₀ h₁ h₂ h₃ h₄ h₅
   obtain rfl : n₀ = data.deg pq - 1 := by lia
@@ -500,7 +500,7 @@ lemma isIso_mapFourδ₁Toδ₀'
 
 中文:
 引理 isIso_mapFourδ₁Toδ₀'
-  结论: (h : ¬ (c r).Rel pq' pq'')
+  结论: (h : ¬ (c r).关系 pq' pq'')
   证明: by
   apply X.isIso_map_fourδ₁Toδ₀_of_isZero ..
   refine X.isZero_H_obj_mk₁_i₀_le' data r r' hrr' hr pq' (fun k hk => ?_) _ (by lia) _ _ hi₀' hi₀
@@ -722,7 +722,7 @@ lemma isIso_mapFourδ₄Toδ₃'
 
 中文:
 引理 isIso_mapFourδ₄Toδ₃'
-  结论: (h : ¬ (c r).Rel pq pq')
+  结论: (h : ¬ (c r).关系 pq pq')
   证明: by
   apply X.isIso_map_fourδ₄Toδ₃_of_isZero _ _ _ _ _ _ _ _ _ _
   refine X.isZero_H_obj_mk₁_i₃_le' data r r' hrr' hr pq' (fun _ hk => ?_) _ (by lia) _ _ hi₃ hi₃'
@@ -973,7 +973,7 @@ definition spectralSequence
 
 中文:
 定义 spectralSequence
-  签名: : SpectralSequence C c r₀ where
+  签名: : 谱序列 C c r₀ where
   定义体: SpectralSequence.page X data
   iso r r' pq hrr' hr := SpectralSequence.homologyIso X data r r' hrr' hr pq
 
@@ -1143,7 +1143,7 @@ definition spectralSequencePageSc'Iso
   body: SpectralSequence.shortComplexIso _ _ _ hr _ _ _ hpq hpq' _ _ _ _ _ _ _ _ _ hn₂'
 
 中文:
-定义 spectralSequencePageSc'Iso
+定义 spectralSequencePageSc'同构
   签名: (r : 整数) (hr : r₀ <= r) (pq pq' pq'' : κ)
   定义体: SpectralSequence.shortComplexIso _ _ _ hr _ _ _ hpq hpq' _ _ _ _ _ _ _ _ _ hn₂'
 
@@ -1386,7 +1386,7 @@ abbreviation E₂SpectralSequenceNat
   body: Y.spectralSequence coreE₂CohomologicalNat
 
 中文:
-缩写 E₂SpectralSequenceNat
+缩写 E₂SpectralSequence自然数
   定义体: Y.spectralSequence coreE₂CohomologicalNat
 
 Depends on / 依赖: Y.spectralSequence, spectralSequence
@@ -1421,7 +1421,7 @@ abbreviation E₂HomologicalSpectralSequenceNat
   body: Y.spectralSequence coreE₂HomologicalNat
 
 中文:
-缩写 E₂HomologicalSpectralSequenceNat
+缩写 E₂HomologicalSpectralSequence自然数
   定义体: Y.spectralSequence coreE₂HomologicalNat
 
 Depends on / 依赖: Y.spectralSequence, spectralSequence

@@ -130,7 +130,7 @@ instance closed
 
 中文:
 实例 closed
-  签名: : Closed (Cat.of C) where
+  签名: : 闭 (Cat.of C) where
   定义体: exp C
   adj := Adjunction.mkOfHomEquiv
     { homEquiv _ _ := Equiv.trans (Cat.Hom.equivFunctor _ _) (curryingFlipEquiv.symm.trans
@@ -158,7 +158,7 @@ instance cartesianClosed
 
 中文:
 实例 cartesianClosed
-  签名: : MonoidalClosed Cat.{u, u} where
+  签名: : 幺半群闭 Cat.{u, u} where
   定义体: closed C
 
 @[simp]
@@ -181,7 +181,7 @@ lemma ihom_obj
 
 中文:
 引理 ihom_obj
-  条件: (D : 类型u) [Category.{u} D]
+  条件: (D : 类型u) [范畴.{u} D]
   证明: rfl
 
 @[simp]
@@ -200,7 +200,7 @@ lemma ihom_map
 
 中文:
 引理 ihom_map
-  条件: {D E : 类型u} [Category.{u} D] [Category.{u} E] (F : D ⥤ E)
+  条件: {D E : 类型u} [范畴.{u} D] [范畴.{u} E] (F : D ⥤ E)
   证明: rfl
 -/
 lemma ihom_map {D E : Type u} [Category.{u} D] [Category.{u} E] (F : D ⥤ E) :

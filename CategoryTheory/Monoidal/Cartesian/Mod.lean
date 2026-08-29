@@ -63,8 +63,8 @@ definition Mod.trivialAction
 alias Mod_.trivialAction := Mod.trivialAction
 
 中文:
-定义 Mod.trivialAction
-  签名: (M : Mon C) (X : C)
+定义 取模.trivialAction
+  签名: (M : 幺半群 C) (X : C)
   定义体: X
 
 @[deprecated (since := "2026-04-21")]
@@ -151,8 +151,8 @@ lemma IsModHom.map_smul
   simp [Hom.smul_def, Category.assoc, IsModHom.smul_hom]
 
 中文:
-引理 IsModHom.map_smul
-  条件: (f : X ⟶ Y) [IsModHom M f] {Z : C} (m : Z ⟶ M) (x : Z ⟶ X)
+引理 是取模态射.map_smul
+  条件: (f : X ⟶ Y) [是取模态射 M f] {Z : C} (m : Z ⟶ M) (x : Z ⟶ X)
   证明: by
   simp [Hom.smul_def, Category.assoc, IsModHom.smul_hom]
 
@@ -175,8 +175,8 @@ definition IsModHom.mulActionHom
   map_smul' := map_smul f
 
 中文:
-定义 IsModHom.mulActionHom
-  签名: (f : X ⟶ Y) [IsModHom M f] (Z : C)
+定义 是取模态射.mulActionHom
+  签名: (f : X ⟶ Y) [是取模态射 M f] (Z : C)
   定义体: (· ≫ f)
   map_smul' := map_smul f
 -/

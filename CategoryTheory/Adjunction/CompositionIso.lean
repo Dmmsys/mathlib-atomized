@@ -104,7 +104,7 @@ definition leftAdjointCompNatTrans
   body: (conjugateEquiv adj₀₂ (adj₀₁.comp adj₁₂)).symm τ₀₁₂
 
 中文:
-定义 leftAdjointCompNatTrans
+定义 leftAdjointComp自然数Trans
   签名: (τ₀₁₂ : G₂₀ ⟶ G₂₁ ⋙ G₁₀)
   定义体: (conjugateEquiv adj₀₂ (adj₀₁.comp adj₁₂)).symm τ₀₁₂
 
@@ -287,7 +287,7 @@ lemma leftAdjointCompNatTrans₀₁₃_eq_conjugateEquiv_symm
   simp [leftAdjointCompNatTrans, ← conjugateEquiv_whiskerLef
 
 中文:
-引理 leftAdjointCompNatTrans₀₁₃_eq_conjugateEquiv_symm
+引理 leftAdjointComp自然数Trans₀₁₃_eq_conjugateEquiv_symm
   证明: by
   obtain ⟨τ₁₂₃, rfl⟩ := (conjugateEquiv adj₁₃ (adj₁₂.comp adj₂₃)).surjective τ₁₂₃
   obtain ⟨τ₀₁₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₁.comp adj₁₃)).surjective τ₀₁₃
@@ -318,7 +318,7 @@ lemma leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm
   simp only [Equiv.apply_symm_apply, Equiv.symm_apply_apply,
 
 中文:
-引理 leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm
+引理 leftAdjointComp自然数Trans₀₂₃_eq_conjugateEquiv_symm
   证明: by
   obtain ⟨τ₀₁₂, rfl⟩ := (conjugateEquiv adj₀₂ (adj₀₁.comp adj₁₂)).surjective τ₀₁₂
   obtain ⟨τ₀₂₃, rfl⟩ := (conjugateEquiv adj₀₃ (adj₀₂.comp adj₂₃)).surjective τ₀₂₃
@@ -349,7 +349,7 @@ lemma leftAdjointCompNatTrans_assoc
     leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm, reassoc_of% h]
 
 中文:
-引理 leftAdjointCompNatTrans_assoc
+引理 leftAdjointComp自然数Trans_assoc
   证明: by
   simp [leftAdjointCompNatTrans₀₁₃_eq_conjugateEquiv_symm,
     leftAdjointCompNatTrans₀₂₃_eq_conjugateEquiv_symm, reassoc_of% h]

@@ -141,7 +141,7 @@ definition isTerminalPUnit
 
 中文:
 定义 isTerminalPUnit
-  签名: : IsTerminal (PUnit : 类型u)
+  签名: : 是终止 (命题单元 : 类型u)
   定义体: letI (X : Type u) : Unique (X ⟶ PUnit) := TypeCat.homEquiv.unique
   .ofUnique _
 
@@ -187,7 +187,7 @@ definition terminalLimitCone
 
 中文:
 定义 terminalLimitCone
-  签名: : Limits.LimitCone (Functor.empty (类型u))
+  签名: : Limits.极限锥 (函子.empty (类型u))
   定义体: ⟨_, isTerminalPUnit⟩
 
 Depends on / 依赖: isTerminalPUnit
@@ -204,7 +204,7 @@ definition terminalIso
 
 中文:
 定义 terminalIso
-  签名: : ⊤_ 类型u ≅ PUnit
+  签名: : ⊤_ 类型u ≅ 命题单元
   定义体: terminalIsTerminal.uniqueUpToIso isTerminalPUnit
 
 Depends on / 依赖: isTerminalPUnit, terminalIsTerminal, terminalIsTerminal.uniqueUpToIso, uniqueUpToIso
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (⊤_ (类型u))
+  签名: 唯一 (⊤_ (类型u))
   定义体: isTerminalEquivUnique _ terminalIsTerminal
 
 Depends on / 依赖: isTerminalEquivUnique, terminalIsTerminal
@@ -610,7 +610,7 @@ definition productLimitCone
 
 中文:
 定义 productLimitCone
-  签名: {J : 类型v} (F : J -> Type (max v u))
+  签名: {J : 类型v} (F : J -> 类型 (最大值 v u))
   定义体: { pt := (forall j, F j)
       π := Discrete.natTrans (fun ⟨j⟩ => ↾fun f => f j) }
   isLimit :=
@@ -644,7 +644,7 @@ definition productIso
 
 中文:
 定义 productIso
-  签名: {J : 类型v} (F : J -> Type (max v u))
+  签名: {J : 类型v} (F : J -> 类型 (最大值 v u))
   定义体: limit.isoLimitCone (productLimitCone.{v, u} F)
 
 @[elementwise (attr := simp)]
@@ -667,7 +667,7 @@ theorem productIso_hom_comp_eval
 
 中文:
 定理 productIso_hom_comp_eval
-  条件: {J : 类型v} (F : J -> Type (max v u)) (j : J)
+  条件: {J : 类型v} (F : J -> 类型 (最大值 v u)) (j : J)
   证明: by
   rfl
 -/
@@ -692,7 +692,7 @@ theorem productIso_inv_comp_π
 
 中文:
 定理 productIso_inv_comp_π
-  条件: {J : 类型v} (F : J -> Type max v u) (j : J)
+  条件: {J : 类型v} (F : J -> 类型 最大值 v u) (j : J)
   证明: limit.isoLimitCone_inv_π (productLimitCone.{v, u} F) ⟨j⟩
 
 Depends on / 依赖: limit.isoLimitCone_inv_, productLimitCone

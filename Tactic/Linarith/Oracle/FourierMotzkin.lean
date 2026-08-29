@@ -58,12 +58,12 @@ inductive CompSource
     - scale: Nat -> CompSource -> CompSource
 
 中文:
-归纳类型 CompSource
-  参数: : Type
+归纳类型 余mpSource
+  参数: : 类型
   构造子 (3 个):
-    - assump: 自然数 -> CompSource
-    - add: CompSource -> CompSource -> CompSource
-    - scale: 自然数 -> CompSource -> CompSource
+    - assump: 自然数 -> 余mpSource
+    - add: 余mpSource -> 余mpSource -> 余mpSource
+    - scale: 自然数 -> 余mpSource -> 余mpSource
 -/
 inductive CompSource : Type
   | assump : Nat -> CompSource
@@ -79,8 +79,8 @@ definition CompSource.flatten
   signature: : CompSource -> Std.HashMap Nat Nat
 
 中文:
-定义 CompSource.flatten
-  签名: : CompSource -> Std.HashMap 自然数 自然数
+定义 余mpSource.flatten
+  签名: : 余mpSource -> Std.HashMap 自然数 自然数
 -/
 def CompSource.flatten : CompSource -> Std.HashMap Nat Nat
   | (CompSource.assump n) => (∅ : Std.HashMap Nat Nat).insert n 1
@@ -96,8 +96,8 @@ definition CompSource.toString
   signature: : CompSource -> String
 
 中文:
-定义 CompSource.toString
-  签名: : CompSource -> String
+定义 余mpSource.toString
+  签名: : 余mpSource -> String
 -/
 def CompSource.toString : CompSource -> String
   | (CompSource.assump e) => ToString.toString e
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: ToFormat CompSource
+  签名: ToFormat 余mpSource
   定义体: ⟨fun a => CompSource.toString a⟩
 
 Depends on / 依赖: CompSource, CompSource.toString, toString
@@ -138,14 +138,14 @@ structure PComp
 
 中文:
 结构 PComp
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (6 个):
-    - c : Comp
-    - src : CompSource
-    - history : TreeSet 自然数 Ord.compare
-    - effective : TreeSet 自然数 Ord.compare
-    - implicit : TreeSet 自然数 Ord.compare
-    - vars : TreeSet 自然数 Ord.compare
+    - c : 复合
+    - src : 余mpSource
+    - history : TreeSet 自然数 序.compare
+    - effective : TreeSet 自然数 序.compare
+    - implicit : TreeSet 自然数 序.compare
+    - vars : TreeSet 自然数 序.compare
 -/
 structure PComp : Type where
   /-- The comparison `Σ cᵢ*xᵢ R 0`. -/
@@ -270,7 +270,7 @@ definition PComp.assump
 
 中文:
 定义 PComp.assump
-  签名: (c : Comp) (n : 自然数)
+  签名: (c : 复合) (n : 自然数)
   定义体: c
   src := CompSource.assump n
   history := {n}
@@ -354,7 +354,7 @@ definition elimVar
 
 中文:
 定义 elimVar
-  签名: (c1 c2 : Comp) (a : 自然数)
+  签名: (c1 c2 : 复合) (a : 自然数)
   定义体: let v1 := c1.coeffOf a
   let v2 := c2.coeffOf a
   if v1 * v2 < 0 then
@@ -451,7 +451,7 @@ structure LinarithData
 
 中文:
 结构 LinarithData
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (2 个):
     - maxVar : 自然数
     - comps : PCompSet
@@ -472,7 +472,7 @@ abbreviation LinarithM
 
 中文:
 缩写 LinarithM
-  签名: : Type -> Type
+  签名: : 类型 -> 类型
   定义体: StateT LinarithData (ExceptT PComp Lean.Core.CoreM)
 
 Depends on / 依赖: ExceptT, Lean.Core.CoreM, LinarithData, StateT
@@ -529,7 +529,7 @@ definition validate
 
 中文:
 定义 validate
-  签名: : LinarithM Unit
+  签名: : LinarithM 单元
   定义体: do
   match (← getPCompSet).toList.find? (fun p : PComp => p.isContr) with
   | none => return ()
@@ -648,7 +648,7 @@ definition elimAllVarsM
 
 中文:
 定义 elimAllVarsM
-  签名: : LinarithM Unit
+  签名: : LinarithM 单元
   定义体: do
   for i in (List.range ((← getMaxVar) + 1)).reverse do
     elimVarM i
@@ -667,7 +667,7 @@ definition mkLinarithData
 
 中文:
 定义 mkLinarithData
-  签名: (hyps : List Comp) (maxVar : 自然数)
+  签名: (hyps : 列表 复合) (maxVar : 自然数)
   定义体: ⟨maxVar, .ofList (hyps.mapIdx fun n cmp => PComp.assump cmp n) _⟩
 
 Depends on / 依赖: PComp.assump, assump, hyps.mapIdx, mapIdx, maxVar, ofList

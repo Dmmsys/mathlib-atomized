@@ -33,7 +33,7 @@ definition casesMatching
 
 中文:
 定义 casesMatching
-  签名: (matcher : Expr -> MetaM 布尔) (recursive := false) (allowSplit := true)
+  签名: (matcher : Expr -> MetaM 布尔值) (recursive := false) (allowSplit := true)
   定义体: do
   let result := (← go g).toList
   if throwOnNoMatch && result == [g] then
@@ -90,7 +90,7 @@ definition casesType
 
 中文:
 定义 casesType
-  签名: (heads : Array Name) (recursive := false) (allowSplit := true)
+  签名: (heads : 数组 Name) (recursive := false) (allowSplit := true)
   定义体: let matcher ty := pure
     if let .const n .. := ty.headBeta.getAppFn then heads.contains n else false
   casesMatching matcher recursive allowSplit
@@ -121,7 +121,7 @@ withRef p abstractMVars (← Term.elabTerm p none)
 
 中文:
 定义 elabPatterns
-  签名: (pats : Array Term)
+  签名: (pats : 数组 项)
   定义体: withTheReader Term.Context (fun ctx => { ctx with ignoreTCFailures := true })
 Term.withoutErrToSorry
   pats.mapM fun p => Term.withoutModifyingElabMetaStateWithInfo do
@@ -147,7 +147,7 @@ definition matchPatterns
 
 中文:
 定义 matchPatterns
-  签名: (pats : Array AbstractMVarsResult) (e : Expr)
+  签名: (pats : 数组 AbstractMVarsResult) (e : Expr)
   定义体: do
   let e ← instantiateMVars e
   pats.anyM fun p => return (← Conv.matchPattern? p e) matches some (_, #[])
@@ -168,7 +168,7 @@ definition elabCasesM
 
 中文:
 定义 elabCasesM
-  签名: (pats : Array Term) (recursive allowSplit : 布尔)
+  签名: (pats : 数组 项) (recursive allowSplit : 布尔值)
   定义体: do
   let pats ← elabPatterns pats
   liftMetaTactic (casesMatching (matchPatterns pats) recursive allowSplit)
@@ -219,7 +219,7 @@ definition elabCasesType
 
 中文:
 定义 elabCasesType
-  签名: (heads : Array Ident)
+  签名: (heads : 数组 Ident)
   定义体: do
   let heads ← heads.mapM (fun stx => realizeGlobalConstNoOverloadWithInfo stx)
   liftMetaTactic (casesType heads recursive allowSplit)
@@ -280,7 +280,7 @@ definition constructorMatching
 
 中文:
 定义 constructorMatching
-  签名: (g : MVarId) (matcher : Expr -> MetaM 布尔)
+  签名: (g : MVarId) (matcher : Expr -> MetaM 布尔值)
   定义体: do
   let result ←
     (if recursive then (do

@@ -37,7 +37,7 @@ theorem inner
 
 中文:
 定理 inner
-  结论: {_ : MeasurableSpace α} {f g : α -> E} (hf : StronglyMeasurable f)
+  结论: {_ : 可测空间 α} {f g : α -> E} (hf : StronglyMeasurable f)
   证明: Continuous.comp_stronglyMeasurable continuous_inner (hf.prodMk hg)
 -/
 protected theorem inner {_ : MeasurableSpace α} {f g : α -> E} (hf : StronglyMeasurable f)
@@ -106,7 +106,7 @@ theorem inner
 
 中文:
 定理 inner
-  结论: {_ : MeasurableSpace α} {μ : Measure α} {f g : α -> E}
+  结论: {_ : 可测空间 α} {μ : 测度 α} {f g : α -> E}
   证明: continuous_inner.comp_aestronglyMeasurable (hf.prodMk hg)
 
 @[fun_prop]

@@ -29,7 +29,7 @@ definition mkFreshLevelName
 
 中文:
 定义 mkFreshLevelName
-  签名: (usedLevelNames : List Name) (namePrefix : Name := `u)
+  签名: (usedLevelNames : 列表 Name) (namePrefix : Name := `u)
   定义体: go 1
 -/
 partial def mkFreshLevelName (usedLevelNames : List Name) (namePrefix : Name := `u) : Name :=

@@ -64,7 +64,7 @@ theorem hasMFDerivAt
 中文:
 定理 hasMFDerivAt
   条件: {x}
-  结论: HasMFDerivAt I 𝓘(𝕜, E) I x (ContinuousLinearMap.id _ _)
+  结论: HasMFDerivAt I 𝓘(𝕜, E) I x (连续线性映射.id _ _)
   证明: ⟨I.continuousAt, (hasFDerivWithinAt_id _ _).congr' I.rightInvOn (mem_range_self _)⟩
 -/
 protected theorem hasMFDerivAt {x} : HasMFDerivAt I 𝓘(𝕜, E) I x (ContinuousLinearMap.id _ _) :=
@@ -547,7 +547,7 @@ theorem mfderiv_bijective
 中文:
 定理 mfderiv_bijective
   条件: {x : M} (hx : x in e.source)
-  结论: Function.Bijective (mfderiv% e x)
+  结论: 函数.双射 (mfderiv% e x)
   证明: (he.mfderiv hx).bijective
 
 Depends on / 依赖: bijective, he.mfderiv, mfderiv
@@ -567,7 +567,7 @@ theorem mfderiv_injective
 中文:
 定理 mfderiv_injective
   条件: {x : M} (hx : x in e.source)
-  结论: Function.Injective (mfderiv% e x)
+  结论: 函数.单射 (mfderiv% e x)
   证明: (he.mfderiv hx).injective
 
 Depends on / 依赖: he.mfderiv, injective, mfderiv
@@ -587,7 +587,7 @@ theorem mfderiv_surjective
 中文:
 定理 mfderiv_surjective
   条件: {x : M} (hx : x in e.source)
-  结论: Function.Surjective (mfderiv% e x)
+  结论: 函数.满射 (mfderiv% e x)
   证明: (he.mfderiv hx).surjective
 
 Depends on / 依赖: he.mfderiv, mfderiv, surjective
@@ -1066,7 +1066,7 @@ theorem TangentBundle.continuousLinearMapAt_trivializationAt
   simp [hx, mfderiv, this]
 
 中文:
-定理 TangentBundle.continuousLinearMapAt_trivializationAt
+定理 切丛.continuousLinearMapAt_trivializationAt
   证明: by
   have : MDiffAt (extChartAt I x₀) x := mdifferentiableAt_extChartAt hx
   simp only [extChartAt, OpenPartialHomeomorph.extend, PartialEquiv.coe_trans,
@@ -1098,7 +1098,7 @@ theorem TangentBundle.symmL_trivializationAt
 omit [IsManifold I 1 M] in
 
 中文:
-定理 TangentBundle.symmL_trivializationAt
+定理 切丛.symmL_trivializationAt
   证明: by
   have : MDiffAt[range I] ((chartAt H x₀).symm ∘ I.symm) (I (chartAt H x₀ x)) := by
     simpa using mdifferentiableWithinAt_extChartAt_symm (by simp [hx])

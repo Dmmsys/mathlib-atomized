@@ -46,11 +46,11 @@ class IsSimpleGroup
     - eq_bot_or_eq_top_of_normal : forall H : Subgroup G, H.Normal -> H = ⊥ ∨ H = ⊤
 
 中文:
-类 IsSimpleGroup
-  参数: : 命题 extends Nontrivial G where
-  继承: Nontrivial G
+类 是单群
+  参数: : 命题 extends 非平凡 G where
+  继承: 非平凡 G
   公理与运算 (1 个):
-    - eq_bot_or_eq_top_of_normal : 对任意 H : Subgroup G, H.Normal -> H = ⊥ ∨ H = ⊤
+    - eq_bot_or_eq_top_of_normal : 对任意 H : 子群 G, H.正规 -> H = ⊥ ∨ H = ⊤
 -/
 class IsSimpleGroup : Prop extends Nontrivial G where
   /-- Any normal subgroup is either `⊥` or `⊤` -/
@@ -71,11 +71,11 @@ class IsSimpleAddGroup
     - eq_bot_or_eq_top_of_normal : forall H : AddSubgroup A, H.Normal -> H = ⊥ ∨ H = ⊤
 
 中文:
-类 IsSimpleAddGroup
-  参数: : 命题 extends Nontrivial A where
-  继承: Nontrivial A
+类 是SimpleAdd群
+  参数: : 命题 extends 非平凡 A where
+  继承: 非平凡 A
   公理与运算 (1 个):
-    - eq_bot_or_eq_top_of_normal : 对任意 H : AddSubgroup A, H.Normal -> H = ⊥ ∨ H = ⊤
+    - eq_bot_or_eq_top_of_normal : 对任意 H : 加法子群 A, H.正规 -> H = ⊥ ∨ H = ⊤
 -/
 class IsSimpleAddGroup : Prop extends Nontrivial A where
   /-- Any normal additive subgroup is either `⊥` or `⊤` -/
@@ -99,8 +99,8 @@ theorem Subgroup.Normal.eq_bot_or_eq_top
 @[to_additive]
 
 中文:
-定理 Subgroup.Normal.eq_bot_or_eq_top
-  条件: [IsSimpleGroup G] {H : Subgroup G} (Hn : H.Normal)
+定理 子群.正规.eq_bot_or_eq_top
+  条件: [是单群 G] {H : 子群 G} (Hn : H.正规)
   证明: IsSimpleGroup.eq_bot_or_eq_top_of_normal H Hn
 
 @[to_additive]
@@ -123,8 +123,8 @@ lemma Subgroup.isSimpleGroup_iff
   simp +contextual [disjoint_of_le_iff_left_eq_bot, LE.le.ge_iff_eq]
 
 中文:
-引理 Subgroup.isSimpleGroup_iff
-  条件: {H : Subgroup G}
+引理 子群.isSimpleGroup_iff
+  条件: {H : 子群 G}
   证明: by
   rw [isSimpleGroup_iff]; rw [H.nontrivial_iff_ne_bot]; rw [Subgroup.forall]
   simp +contextual [disjoint_of_le_iff_left_eq_bot, LE.le.ge_iff_eq]
@@ -159,7 +159,7 @@ theorem isSimpleGroup_of_surjective
 
 中文:
 定理 isSimpleGroup_of_surjective
-  结论: {H : 类型} [Group H] [IsSimpleGroup G] [Nontrivial H]
+  结论: {H : 类型} [群 H] [是单群 G] [非平凡 H]
   证明: ⟨fun H iH => by
     refine (iH.comap f).eq_bot_or_eq_top.imp (fun h => ?_) fun h => ?_
     · rw [← map_bot f, ← h, map_comap_eq_self_of_surjective hf]
@@ -191,8 +191,8 @@ lemma _root_.MulEquiv.isSimpleGroup
 @[to_additive]
 
 中文:
-引理 _root_.MulEquiv.isSimpleGroup
-  条件: {H : 类型} [Group H] [IsSimpleGroup H] (e : G ≃* H)
+引理 _root_.乘法等价.isSimpleGroup
+  条件: {H : 类型} [群 H] [是单群 H] (e : G ≃* H)
   证明: haveI : Nontrivial G := e.toEquiv.nontrivial
   isSimpleGroup_of_surjective e.symm.toMonoidHom e.symm.surjective
 
@@ -216,8 +216,8 @@ lemma _root_.MulEquiv.isSimpleGroup_congr
   mpr _ := e.isSimpleGroup
 
 中文:
-引理 _root_.MulEquiv.isSimpleGroup_congr
-  条件: {H : 类型} [Group H] (e : G ≃* H)
+引理 _root_.乘法等价.isSimpleGroup_congr
+  条件: {H : 类型} [群 H] (e : G ≃* H)
   证明: e.symm.isSimpleGroup
   mpr _ := e.isSimpleGroup
 

@@ -55,7 +55,7 @@ theorem natDegree_det_X_add_C_le
 
 中文:
 定理 natDegree_det_X_add_C_le
-  条件: (A B : Matrix n n α)
+  条件: (A B : 矩阵 n n α)
   证明: by
   rw [det_apply]
   refine (natDegree_sum_le _ _).trans ?_
@@ -107,7 +107,7 @@ theorem coeff_det_X_add_C_zero
 
 中文:
 定理 coeff_det_X_add_C_zero
-  条件: (A B : Matrix n n α)
+  条件: (A B : 矩阵 n n α)
   证明: by
   rw [det_apply]; rw [finsetSum_coeff]; rw [det_apply]
   refine Finset.sum_congr rfl ?_
@@ -147,7 +147,7 @@ theorem coeff_det_X_add_C_card
 
 中文:
 定理 coeff_det_X_add_C_card
-  条件: (A B : Matrix n n α)
+  条件: (A B : 矩阵 n n α)
   证明: by
   rw [det_apply]; rw [det_apply]; rw [finsetSum_coeff]
   refine Finset.sum_congr rfl ?_
@@ -190,7 +190,7 @@ theorem leadingCoeff_det_X_one_add_C
 
 中文:
 定理 leadingCoeff_det_X_one_add_C
-  条件: (A : Matrix n n α)
+  条件: (A : 矩阵 n n α)
   证明: by
   cases subsingleton_or_nontrivial α
   · simp [eq_iff_true_of_subsingleton]

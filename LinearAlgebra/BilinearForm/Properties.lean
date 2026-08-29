@@ -123,7 +123,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {α : 类型} [Semiring α] [IsDomain α] [Module α R] [SMulCommClass R α R]
+  结论: {α : 类型} [半环 α] [是整环 α] [模 α R] [标量交换类 R α R]
   证明: fun _ _ h =>
   (smul_eq_zero.mp h).elim (fun ha => smul_eq_zero_of_left ha _) fun hBz =>
     smul_eq_zero_of_right _ (hB _ _ hBz)
@@ -145,7 +145,7 @@ theorem groupSMul
 
 中文:
 定理 groupSMul
-  结论: {α} [Group α] [DistribMulAction α R] [SMulCommClass R α R] (a : α)
+  结论: {α} [群 α] [分配乘法作用 α R] [标量交换类 R α R] (a : α)
   证明: fun x y =>
   (smul_eq_zero_iff_eq _).mpr ∘ hB x y ∘ (smul_eq_zero_iff_eq _).mp
 -/
@@ -206,7 +206,7 @@ structure IsSymm
     - eq : forall x y, B x y = B y x
 
 中文:
-结构 IsSymm
+结构 是Symm
   参数: (B : BilinForm R M)
   公理与运算 (1 个):
     - eq : 对任意 x y, B x y = B y x
@@ -225,7 +225,7 @@ theorem isSymm_def
 
 中文:
 定理 isSymm_def
-  结论: IsSymm B ↔ 对任意 x y, B x y = B y x where
+  结论: 是Symm B ↔ 对任意 x y, B x y = B y x where
   证明: fun ⟨h⟩ => h
   mpr h := ⟨h⟩
 -/
@@ -244,7 +244,7 @@ theorem isSymm_iff
 
 中文:
 定理 isSymm_iff
-  结论: IsSymm B ↔ LinearMap.IsSymm B
+  结论: 是Symm B ↔ 线性映射.是Symm B
   证明: by
   simp [isSymm_def, LinearMap.isSymm_def]
 
@@ -266,7 +266,7 @@ theorem isRefl
 
 中文:
 定理 isRefl
-  条件: (H : B.IsSymm)
+  条件: (H : B.是Symm)
   结论: B.IsRefl
   证明: fun x y H1 => H.eq x y ▸ H1
 
@@ -284,7 +284,7 @@ theorem add
 
 中文:
 定理 add
-  条件: {B₁ B₂ : BilinForm R M} (hB₁ : B₁.IsSymm) (hB₂ : B₂.IsSymm)
+  条件: {B₁ B₂ : BilinForm R M} (hB₁ : B₁.是Symm) (hB₂ : B₂.是Symm)
   证明: ⟨fun x y => (congr_arg₂ (· + ·) (hB₁.eq x y) (hB₂.eq x y) :)⟩
 -/
 protected theorem add {B₁ B₂ : BilinForm R M} (hB₁ : B₁.IsSymm) (hB₂ : B₂.IsSymm) :
@@ -300,7 +300,7 @@ theorem sub
 
 中文:
 定理 sub
-  条件: {B₁ B₂ : BilinForm R₁ M₁} (hB₁ : B₁.IsSymm) (hB₂ : B₂.IsSymm)
+  条件: {B₁ B₂ : BilinForm R₁ M₁} (hB₁ : B₁.是Symm) (hB₂ : B₂.是Symm)
   证明: ⟨fun x y => (congr_arg₂ Sub.sub (hB₁.eq x y) (hB₂.eq x y) :)⟩
 -/
 protected theorem sub {B₁ B₂ : BilinForm R₁ M₁} (hB₁ : B₁.IsSymm) (hB₂ : B₂.IsSymm) :
@@ -318,8 +318,8 @@ theorem neg
 
 中文:
 定理 neg
-  条件: {B : BilinForm R₁ M₁} (hB : B.IsSymm)
-  结论: (-B).IsSymm
+  条件: {B : BilinForm R₁ M₁} (hB : B.是Symm)
+  结论: (-B).是Symm
   证明: ⟨fun x y =>
   congr_arg Neg.neg (hB.eq x y)⟩
 -/
@@ -337,7 +337,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {α} [Monoid α] [DistribMulAction α R] [SMulCommClass R α R] (a : α)
+  结论: {α} [幺半群 α] [分配乘法作用 α R] [标量交换类 R α R] (a : α)
   证明: ⟨fun x y =>
   congr_arg (a • ·) (hB.eq x y)⟩
 -/
@@ -355,7 +355,7 @@ theorem restrict
 
 中文:
 定理 restrict
-  条件: {B : BilinForm R M} (b : B.IsSymm) (W : Submodule R M)
+  条件: {B : BilinForm R M} (b : B.是Symm) (W : 子模 R M)
   证明: ⟨fun x y => b.eq x y⟩
 
 Depends on / 依赖: b.eq
@@ -378,7 +378,7 @@ theorem isSymm_zero
 
 中文:
 定理 isSymm_zero
-  结论: (0 : BilinForm R M).IsSymm
+  结论: (0 : BilinForm R M).是Symm
   证明: ⟨fun _ _ => rfl⟩
 
 @[simp]
@@ -398,7 +398,7 @@ theorem isSymm_neg
 中文:
 定理 isSymm_neg
   条件: {B : BilinForm R₁ M₁}
-  结论: (-B).IsSymm ↔ B.IsSymm
+  结论: (-B).是Symm ↔ B.是Symm
   证明: ⟨fun h => neg_neg B ▸ h.neg, IsSymm.neg⟩
 
 Depends on / 依赖: IsSymm, IsSymm.neg, h.neg, neg_neg
@@ -417,7 +417,7 @@ theorem isSymm_iff_flip
 
 中文:
 定理 isSymm_iff_flip
-  结论: B.IsSymm ↔ flipHom B = B where
+  结论: B.是Symm ↔ flipHom B = B where
   证明: fun ⟨h⟩ => by ext; simp [h]
   mpr h := ⟨fun x y => by rw [← flip_apply, h]⟩
 -/
@@ -442,8 +442,8 @@ lemma IsSymm.polarization
   rw [mul_assoc]; rw [inv_mul_cancel₀ two_ne_zero]; rw [mul_one]
 
 中文:
-引理 IsSymm.polarization
-  条件: (x y : M) (hB : B.IsSymm)
+引理 是Symm.polarization
+  条件: (x y : M) (hB : B.是Symm)
   证明: by
   simp only [map_add, LinearMap.add_apply]
   rw [hB.eq y x]
@@ -472,7 +472,7 @@ lemma ext_of_isSymm
 
 中文:
 引理 ext_of_isSymm
-  结论: (hB : IsSymm B) (hC : IsSymm C)
+  结论: (hB : 是Symm B) (hC : 是Symm C)
   证明: by
   ext x y
   rw [hB.polarization]; rw [hC.polarization]
@@ -497,7 +497,7 @@ lemma ext_iff_of_isSymm
 
 中文:
 引理 ext_iff_of_isSymm
-  条件: (hB : IsSymm B) (hC : IsSymm C)
+  条件: (hB : 是Symm B) (hC : 是Symm C)
   证明: by simp [h]
   mpr := ext_of_isSymm hB hC
 
@@ -527,7 +527,7 @@ lemma isSymm_iff_basis
 
 中文:
 引理 isSymm_iff_basis
-  条件: {ι : 类型} (b : Basis ι R M)
+  条件: {ι : 类型} (b : 基 ι R M)
   证明: fun ⟨h⟩ i j => h _ _
   mpr := by
     refine fun h => ⟨fun x y => ?_⟩
@@ -569,7 +569,7 @@ structure IsNonneg
     - nonneg : forall x, 0 <= B x x
 
 中文:
-结构 IsNonneg
+结构 是Nonneg
   参数: [LE R] (B : BilinForm R M)
   公理与运算 (1 个):
     - nonneg : 对任意 x, 0 <= B x x
@@ -589,7 +589,7 @@ lemma isNonneg_def
 中文:
 引理 isNonneg_def
   条件: [LE R] {B : BilinForm R M}
-  结论: B.IsNonneg ↔ 对任意 x, 0 <= B x x
+  结论: B.是Nonneg ↔ 对任意 x, 0 <= B x x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma isNonneg_def [LE R] {B : BilinForm R M} : B.IsNonneg ↔ forall x, 0 <= B x x :=
@@ -609,7 +609,7 @@ lemma isNonneg_iff
 中文:
 引理 isNonneg_iff
   条件: [LE R] {B : BilinForm R M}
-  结论: B.IsNonneg ↔ LinearMap.IsNonneg B
+  结论: B.是Nonneg ↔ 线性映射.是Nonneg B
   证明: isNonneg_def.trans LinearMap.isNonneg_def.symm
 
 @[simp]
@@ -631,8 +631,8 @@ lemma isNonneg_zero
 
 中文:
 引理 isNonneg_zero
-  条件: [Preorder R]
-  结论: IsNonneg (0 : BilinForm R M)
+  条件: [预序 R]
+  结论: 是Nonneg (0 : BilinForm R M)
   证明: isNonneg_iff.2 LinearMap.isNonneg_zero
 
 Depends on / 依赖: LinearMap, LinearMap.isNonneg_zero, isNonneg_iff, isNonneg_zero
@@ -649,8 +649,8 @@ lemma IsNonneg.add
   proof: add_nonneg (hB.nonneg x) (hC.nonneg x)
 
 中文:
-引理 IsNonneg.add
-  结论: [Preorder R] [AddLeftMono R] {B C : BilinForm R M}
+引理 是Nonneg.add
+  结论: [预序 R] [AddLeftMono R] {B C : BilinForm R M}
   证明: add_nonneg (hB.nonneg x) (hC.nonneg x)
 -/
 protected lemma IsNonneg.add [Preorder R] [AddLeftMono R] {B C : BilinForm R M}
@@ -666,8 +666,8 @@ lemma IsNonneg.smul
   proof: mul_nonneg hc (hB.nonneg x)
 
 中文:
-引理 IsNonneg.smul
-  结论: [Preorder R] [PosMulMono R] {B : BilinForm R M} {c : R}
+引理 是Nonneg.smul
+  结论: [预序 R] [正乘递增 R] {B : BilinForm R M} {c : R}
   证明: mul_nonneg hc (hB.nonneg x)
 -/
 protected lemma IsNonneg.smul [Preorder R] [PosMulMono R] {B : BilinForm R M} {c : R}
@@ -683,7 +683,7 @@ structure IsPosSemidef
   (no additional axioms)
 
 中文:
-结构 IsPosSemidef
+结构 是PosSemidef
   参数: [LE R] (B : BilinForm R M)
   (无附加公理)
 -/
@@ -705,7 +705,7 @@ lemma isPosSemidef_def
 中文:
 引理 isPosSemidef_def
   条件: [LE R]
-  结论: B.IsPosSemidef ↔ B.IsSymm ∧ B.IsNonneg
+  结论: B.是PosSemidef ↔ B.是Symm ∧ B.是Nonneg
   证明: ⟨fun h => ⟨h.isSymm, h.isNonneg⟩, fun ⟨h₁, h₂⟩ => ⟨h₁, h₂⟩⟩
 
 Depends on / 依赖: h.isNonneg, h.isSymm, isNonneg, isSymm
@@ -727,7 +727,7 @@ lemma isPosSemidef_iff
 中文:
 引理 isPosSemidef_iff
   条件: [LE R] {B : BilinForm R M}
-  结论: B.IsPosSemidef ↔ LinearMap.IsPosSemidef B
+  结论: B.是PosSemidef ↔ 线性映射.是PosSemidef B
   证明: isPosSemidef_def.trans (isSymm_iff.and isNonneg_iff).trans LinearMap.isPosSemidef_def.symm
 
 @[simp]
@@ -749,8 +749,8 @@ lemma isPosSemidef_zero
 
 中文:
 引理 isPosSemidef_zero
-  条件: [Preorder R]
-  结论: IsPosSemidef (0 : BilinForm R M)
+  条件: [预序 R]
+  结论: 是PosSemidef (0 : BilinForm R M)
   证明: isPosSemidef_iff.2 LinearMap.isPosSemidef_zero
 
 Depends on / 依赖: LinearMap, LinearMap.isPosSemidef_zero, isPosSemidef_iff, isPosSemidef_zero
@@ -767,8 +767,8 @@ lemma IsPosSemidef.add
   proof: isPosSemidef_iff.2 ((isPosSemidef_iff.1 hB).add (isPosSemidef_iff.1 hC))
 
 中文:
-引理 IsPosSemidef.add
-  结论: [Preorder R] [AddLeftMono R] {B C : BilinForm R M}
+引理 是PosSemidef.add
+  结论: [预序 R] [AddLeftMono R] {B C : BilinForm R M}
   证明: isPosSemidef_iff.2 ((isPosSemidef_iff.1 hB).add (isPosSemidef_iff.1 hC))
 -/
 protected lemma IsPosSemidef.add [Preorder R] [AddLeftMono R] {B C : BilinForm R M}
@@ -784,8 +784,8 @@ lemma IsPosSemidef.smul
   proof: isPosSemidef_def.2 ⟨hB.isSymm.smul c, hB.isNonneg.smul hc⟩
 
 中文:
-引理 IsPosSemidef.smul
-  结论: [Preorder R] [PosMulMono R] {B : BilinForm R M} {c : R}
+引理 是PosSemidef.smul
+  结论: [预序 R] [正乘递增 R] {B : BilinForm R M} {c : R}
   证明: isPosSemidef_def.2 ⟨hB.isSymm.smul c, hB.isNonneg.smul hc⟩
 -/
 protected lemma IsPosSemidef.smul [Preorder R] [PosMulMono R] {B : BilinForm R M} {c : R}
@@ -880,7 +880,7 @@ theorem eq_of_add_add_eq_zero
 
 中文:
 定理 eq_of_add_add_eq_zero
-  条件: [IsCancelAdd R] {a b c : M} (H : B.IsAlt) (hAdd : a + b + c = 0)
+  条件: [是消去加法 R] {a b c : M} (H : B.IsAlt) (hAdd : a + b + c = 0)
   证明: LinearMap.IsAlt.eq_of_add_add_eq_zero H hAdd
 
 Depends on / 依赖: LinearMap, LinearMap.IsAlt.eq_of_add_add_eq_zero, eq_of_add_add_eq_zero
@@ -953,7 +953,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {α} [Monoid α] [DistribMulAction α R] [SMulCommClass R α R] (a : α)
+  结论: {α} [幺半群 α] [分配乘法作用 α R] [标量交换类 R α R] (a : α)
   证明: fun x =>
 (congr_arg (a • ·) (hB x)).trans smul_zero _
 -/
@@ -1022,7 +1022,7 @@ abbreviation Nondegenerate
   body: LinearMap.Nondegenerate B
 
 中文:
-缩写 Nondegenerate
+缩写 非退化
   签名: (B : BilinForm R M)
   定义体: LinearMap.Nondegenerate B
 
@@ -1047,8 +1047,8 @@ theorem not_nondegenerate_zero
 
 中文:
 定理 not_nondegenerate_zero
-  条件: [Nontrivial M]
-  结论: ¬(0 : BilinForm R M).Nondegenerate
+  条件: [非平凡 M]
+  结论: ¬(0 : BilinForm R M).非退化
   证明: let ⟨m, hm⟩ := exists_ne (0 : M)
   fun h => hm (h.1 m fun _ => rfl)
 
@@ -1073,8 +1073,8 @@ theorem Nondegenerate.ne_zero
   proof: fun h0 => not_nondegenerate_zero R M h0 ▸ h
 
 中文:
-定理 Nondegenerate.ne_zero
-  条件: [Nontrivial M] {B : BilinForm R M} (h : B.Nondegenerate)
+定理 非退化.ne_zero
+  条件: [非平凡 M] {B : BilinForm R M} (h : B.非退化)
   结论: B != 0
   证明: fun h0 => not_nondegenerate_zero R M h0 ▸ h
 
@@ -1094,8 +1094,8 @@ theorem Nondegenerate.congr
 @[simp]
 
 中文:
-定理 Nondegenerate.congr
-  条件: {B : BilinForm R M} (e : M ≃ₗ[R] M') (h : B.Nondegenerate)
+定理 非退化.congr
+  条件: {B : BilinForm R M} (e : M ≃ₗ[R] M') (h : B.非退化)
   证明: ⟨h.1.congr e e, show (BilinForm.congr e (flip B)).SeparatingLeft from .congr e e h.2⟩
 
 @[simp]
@@ -1141,8 +1141,8 @@ theorem Nondegenerate.ker_eq_bot
   proof: LinearMap.separatingLeft_iff_ker_eq_bot.mp h.1
 
 中文:
-定理 Nondegenerate.ker_eq_bot
-  条件: {B : BilinForm R M} (h : B.Nondegenerate)
+定理 非退化.ker_eq_bot
+  条件: {B : BilinForm R M} (h : B.非退化)
   证明: LinearMap.separatingLeft_iff_ker_eq_bot.mp h.1
 
 Depends on / 依赖: LinearMap, LinearMap.separatingLeft_iff_ker_eq_bot.mp, separatingLeft_iff_ker_eq_bot
@@ -1164,7 +1164,7 @@ theorem compLeft_injective
 
 中文:
 定理 compLeft_injective
-  条件: (B : BilinForm R₁ M₁) (b : B.Nondegenerate)
+  条件: (B : BilinForm R₁ M₁) (b : B.非退化)
   证明: fun φ ψ h => by
   ext w
   refine eq_of_sub_eq_zero (b.1 _ ?_)
@@ -1190,7 +1190,7 @@ theorem isAdjointPair_unique_of_nondegenerate
 
 中文:
 定理 isAdjointPair_unique_of_nondegenerate
-  结论: (B : BilinForm R₁ M₁) (b : B.Nondegenerate)
+  结论: (B : BilinForm R₁ M₁) (b : B.非退化)
   证明: B.compLeft_injective b ext fun v w => by rw [compLeft_apply, compLeft_apply, hψ₁, hψ₂]
 
 Depends on / 依赖: B.compLeft_injective, compLeft_apply, compLeft_injective
@@ -1209,8 +1209,8 @@ lemma Nondegenerate.flip
   proof: ⟨hB.2, hB.1⟩
 
 中文:
-引理 Nondegenerate.flip
-  条件: {B : BilinForm R M} (hB : B.Nondegenerate)
+引理 非退化.flip
+  条件: {B : BilinForm R M} (hB : B.非退化)
   证明: ⟨hB.2, hB.1⟩
 -/
 lemma Nondegenerate.flip {B : BilinForm R M} (hB : B.Nondegenerate) :
@@ -1250,7 +1250,7 @@ definition toDual
 
 中文:
 定义 toDual
-  签名: (B : BilinForm K V) (b : B.Nondegenerate)
+  签名: (B : BilinForm K V) (b : B.非退化)
   定义体: B.linearEquivOfInjective (LinearMap.ker_eq_bot.mp <| b.ker_eq_bot)
     Subspace.dual_finrank_eq.symm
 
@@ -1273,7 +1273,7 @@ theorem toDual_def
 
 中文:
 定理 toDual_def
-  条件: {B : BilinForm K V} (b : B.Nondegenerate) {m n : V}
+  条件: {B : BilinForm K V} (b : B.非退化) {m n : V}
   结论: B.toDual b m n = B m n
   证明: rfl
 
@@ -1297,7 +1297,7 @@ lemma apply_toDual_symm_apply
 
 中文:
 引理 apply_toDual_symm_apply
-  结论: {B : BilinForm K V} {hB : B.Nondegenerate}
+  结论: {B : BilinForm K V} {hB : B.非退化}
   证明: by
   change B.toDual hB ((B.toDual hB).symm f) v = f v
   simp only [LinearEquiv.apply_symm_apply]
@@ -1331,7 +1331,7 @@ definition dualBasis
 
 中文:
 定义 dualBasis
-  签名: (B : BilinForm K V) (hB : B.Nondegenerate) (b : Basis ι K V)
+  签名: (B : BilinForm K V) (hB : B.非退化) (b : 基 ι K V)
   定义体: haveI := b.finiteDimensional_of_finite
   b.dualBasis.map (B.toDual hB).symm
 
@@ -1357,7 +1357,7 @@ theorem dualBasis_repr_apply
 
 中文:
 定理 dualBasis_repr_apply
-  条件: (hB : B.Nondegenerate) (b : Basis ι K V) (x i)
+  条件: (hB : B.非退化) (b : 基 ι K V) (x i)
   证明: by
   have := b.finiteDimensional_of_finite
   rw [dualBasis]; rw [Basis.map_repr]; rw [LinearEquiv.symm_symm]; rw [LinearEquiv.trans_apply]; rw [Basis.dualBasis_repr]; rw [toDual_def]
@@ -1381,7 +1381,7 @@ theorem apply_dualBasis_left
 
 中文:
 定理 apply_dualBasis_left
-  条件: (hB : B.Nondegenerate) (b : Basis ι K V) (i j)
+  条件: (hB : B.非退化) (b : 基 ι K V) (i j)
   证明: by
   have := b.finiteDimensional_of_finite
   rw [dualBasis]; rw [Basis.map_apply]; rw [Basis.coe_dualBasis]; rw [← toDual_def hB]; rw [LinearEquiv.apply_symm_apply]; rw [Basis.coord_apply]; rw [Basis.repr_self]; rw [Finsupp.single_apply]
@@ -1406,7 +1406,7 @@ theorem apply_dualBasis_right
 
 中文:
 定理 apply_dualBasis_right
-  结论: (hB : B.Nondegenerate) (sym : B.IsSymm)
+  结论: (hB : B.非退化) (sym : B.是Symm)
   证明: by
   rw [sym.eq]; rw [apply_dualBasis_left]
 
@@ -1434,7 +1434,7 @@ lemma dualBasis_dualBasis_flip
 
 中文:
 引理 dualBasis_dualBasis_flip
-  条件: (hB : B.Nondegenerate) (b : Basis ι K V)
+  条件: (hB : B.非退化) (b : 基 ι K V)
   证明: by
   ext i
   refine LinearMap.ker_eq_bot.mp hB.ker_eq_bot ((B.flip.dualBasis hB.flip b).ext (fun j => ?_))
@@ -1463,7 +1463,7 @@ lemma dualBasis_flip_dualBasis
 
 中文:
 引理 dualBasis_flip_dualBasis
-  条件: (hB : B.Nondegenerate) (b : Basis ι K V)
+  条件: (hB : B.非退化) (b : 基 ι K V)
   证明: dualBasis_dualBasis_flip hB.flip b
 
 @[simp]
@@ -1487,7 +1487,7 @@ lemma dualBasis_dualBasis
 
 中文:
 引理 dualBasis_dualBasis
-  结论: (hB : B.Nondegenerate) (hB' : B.IsSymm)
+  结论: (hB : B.非退化) (hB' : B.是Symm)
   证明: by
   convert! dualBasis_dualBasis_flip hB.flip b
   rwa [eq_comm, ← isSymm_iff_flip]
@@ -1510,7 +1510,7 @@ lemma dualBasis_involutive
 
 中文:
 引理 dualBasis_involutive
-  条件: (hB : B.Nondegenerate) (hB' : B.IsSymm)
+  条件: (hB : B.非退化) (hB' : B.是Symm)
   证明: fun b => dualBasis_dualBasis hB hB' b
 
 Depends on / 依赖: dualBasis_dualBasis
@@ -1531,7 +1531,7 @@ lemma dualBasis_injective
 
 中文:
 引理 dualBasis_injective
-  条件: (hB : B.Nondegenerate) (hB' : B.IsSymm)
+  条件: (hB : B.非退化) (hB' : B.是Symm)
   证明: (B.dualBasis_involutive hB hB').injective
 
 @[simp]
@@ -1555,7 +1555,7 @@ theorem dualBasis_eq_iff
 
 中文:
 定理 dualBasis_eq_iff
-  条件: (hB : B.Nondegenerate) (b : Basis ι K V) (v : ι -> V)
+  条件: (hB : B.非退化) (b : 基 ι K V) (v : ι -> V)
   证明: ⟨fun h _ _ => by rw [← h, apply_dualBasis_left],
     fun h => funext fun _ => (B.dualBasis hB b).ext_elem_iff.mpr fun _ => by
       rw [dualBasis_repr_apply]; rw [dualBasis_repr_apply]; rw [apply_dualBasis_left]; rw [h]⟩
@@ -1584,7 +1584,7 @@ definition symmCompOfNondegenerate
 
 中文:
 定义 symmCompOfNondegenerate
-  签名: (B₁ B₂ : BilinForm K V) (b₂ : B₂.Nondegenerate)
+  签名: (B₁ B₂ : BilinForm K V) (b₂ : B₂.非退化)
   定义体: (B₂.toDual b₂).symm.toLinearMap.comp B₁
 
 Depends on / 依赖: symm.toLinearMap.comp, toDual, toLinearMap
@@ -1657,7 +1657,7 @@ definition leftAdjointOfNondegenerate
 
 中文:
 定义 leftAdjointOfNondegenerate
-  签名: (B : BilinForm K V) (b : B.Nondegenerate)
+  签名: (B : BilinForm K V) (b : B.非退化)
   定义体: symmCompOfNondegenerate (B.compRight φ) B b
 
 Depends on / 依赖: B.compRight, compRight, symmCompOfNondegenerate
@@ -1677,7 +1677,7 @@ theorem isAdjointPairLeftAdjointOfNondegenerate
 
 中文:
 定理 isAdjointPairLeftAdjointOfNondegenerate
-  结论: (B : BilinForm K V) (b : B.Nondegenerate)
+  结论: (B : BilinForm K V) (b : B.非退化)
   证明: fun x y =>
   (B.compRight φ).symmCompOfNondegenerate_left_apply b y x
 -/
@@ -1698,7 +1698,7 @@ theorem isAdjointPair_iff_eq_of_nondegenerate
 
 中文:
 定理 isAdjointPair_iff_eq_of_nondegenerate
-  结论: (B : BilinForm K V) (b : B.Nondegenerate)
+  结论: (B : BilinForm K V) (b : B.非退化)
   证明: ⟨fun h =>
     B.isAdjointPair_unique_of_nondegenerate b φ ψ _ h
       (isAdjointPairLeftAdjointOfNondegenerate _ _ _),

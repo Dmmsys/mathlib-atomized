@@ -107,8 +107,8 @@ definition ProbabilityMeasure
   body: { μ : Measure Ω // IsProbabilityMeasure μ }
 
 中文:
-定义 ProbabilityMeasure
-  签名: (Ω : 类型) [MeasurableSpace Ω]
+定义 概率测度
+  签名: (Ω : 类型) [可测空间 Ω]
   定义体: { μ : Measure Ω // IsProbabilityMeasure μ }
 
 Depends on / 依赖: IsProbabilityMeasure, Measure
@@ -129,8 +129,8 @@ instance [Inhabited
   body: ⟨⟨Measure.dirac default, Measure.dirac.isProbabilityMeasure⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: Ω] : Inhabited (ProbabilityMeasure Ω)
+实例 [可居
+  签名: Ω] : 可居 (概率测度 Ω)
   定义体: ⟨⟨Measure.dirac default, Measure.dirac.isProbabilityMeasure⟩⟩
 
 Depends on / 依赖: Measure, Measure.dirac, Measure.dirac.isProbabilityMeasure, isProbabilityMeasure
@@ -150,7 +150,7 @@ definition toMeasure
 
 中文:
 定义 toMeasure
-  签名: : ProbabilityMeasure Ω -> Measure Ω
+  签名: : 概率测度 Ω -> 测度 Ω
   定义体: Subtype.val
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (ProbabilityMeasure Ω) (MeasureTheory.Measure Ω)
+  签名: Coe (概率测度 Ω) (测度论.测度 Ω)
   定义体: { coe := toMeasure }
 
 Depends on / 依赖: toMeasure
@@ -190,7 +190,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (μ : Measure Ω) (hμ)
+  条件: (μ : 测度 Ω) (hμ)
   结论: toMeasure ⟨μ, hμ⟩ = μ
   证明: rfl
 
@@ -210,8 +210,8 @@ theorem val_eq_to_measure
 
 中文:
 定理 val_eq_to_measure
-  条件: (ν : ProbabilityMeasure Ω)
-  结论: ν.val = (ν : Measure Ω)
+  条件: (ν : 概率测度 Ω)
+  结论: ν.val = (ν : 测度 Ω)
   证明: rfl
 -/
 theorem val_eq_to_measure (ν : ProbabilityMeasure Ω) : ν.val = (ν : Measure Ω) := rfl
@@ -226,7 +226,7 @@ theorem toMeasure_injective
 
 中文:
 定理 toMeasure_injective
-  结论: Function.Injective ((↑) : ProbabilityMeasure Ω -> Measure Ω)
+  结论: 函数.单射 ((↑) : 概率测度 Ω -> 测度 Ω)
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -246,7 +246,7 @@ coe_injective μ ν h := toMeasure_injective Measure.ext fun s _ => by
 
 中文:
 实例 instFunLike
-  签名: : FunLike (ProbabilityMeasure Ω) (Set Ω) 实数>=0 where
+  签名: : 函数状 (概率测度 Ω) (集合 Ω) 实数>=0 where
   定义体: ((μ : Measure Ω) s).toNNReal
 coe_injective μ ν h := toMeasure_injective Measure.ext fun s _ => by
     simpa [ENNReal.toNNReal_eq_toNNReal_iff, measure_ne_top] using congr_fun h s
@@ -269,8 +269,8 @@ lemma coeFn_def
 
 中文:
 引理 coeFn_def
-  条件: (μ : ProbabilityMeasure Ω)
-  结论: μ = fun s => ((μ : Measure Ω) s).toNN实数
+  条件: (μ : 概率测度 Ω)
+  结论: μ = fun s => ((μ : 测度 Ω) s).toNN实数
   证明: rfl
 -/
 lemma coeFn_def (μ : ProbabilityMeasure Ω) : μ = fun s => ((μ : Measure Ω) s).toNNReal := rfl
@@ -287,7 +287,7 @@ lemma coeFn_mk
 
 中文:
 引理 coeFn_mk
-  条件: (μ : Measure Ω) (hμ)
+  条件: (μ : 测度 Ω) (hμ)
   证明: rfl
 
 @[simp, norm_cast]
@@ -310,7 +310,7 @@ lemma mk_apply
 
 中文:
 引理 mk_apply
-  条件: (μ : Measure Ω) (hμ) (s : Set Ω)
+  条件: (μ : 测度 Ω) (hμ) (s : 集合 Ω)
   证明: rfl
 
 @[simp, norm_cast]
@@ -334,7 +334,7 @@ theorem coeFn_univ
 
 中文:
 定理 coeFn_univ
-  条件: (ν : ProbabilityMeasure Ω)
+  条件: (ν : 概率测度 Ω)
   结论: ν univ = 1
   证明: congr_arg ENNReal.toNNReal ν.prop.measure_univ
 
@@ -357,7 +357,7 @@ theorem coeFn_empty
 
 中文:
 定理 coeFn_empty
-  条件: (ν : ProbabilityMeasure Ω)
+  条件: (ν : 概率测度 Ω)
   结论: ν ∅ = 0
   证明: by simp [coeFn_def]
 
@@ -377,7 +377,7 @@ theorem coeFn_univ_ne_zero
 
 中文:
 定理 coeFn_univ_ne_zero
-  条件: (ν : ProbabilityMeasure Ω)
+  条件: (ν : 概率测度 Ω)
   结论: ν univ != 0
   证明: by
   simp only [coeFn_univ, Ne, one_ne_zero, not_false_iff]
@@ -397,8 +397,8 @@ theorem measureReal_eq_coe_coeFn
   simp [coeFn_def, Measure.real, ENNReal.toReal]
 
 中文:
-定理 measureReal_eq_coe_coeFn
-  条件: (ν : ProbabilityMeasure Ω) (s : Set Ω)
+定理 measure实数_eq_coe_coeFn
+  条件: (ν : 概率测度 Ω) (s : 集合 Ω)
   证明: by
   simp [coeFn_def, Measure.real, ENNReal.toReal]
 -/
@@ -416,8 +416,8 @@ theorem toNNReal_measureReal_eq_coeFn
   simp
 
 中文:
-定理 toNNReal_measureReal_eq_coeFn
-  条件: (ν : ProbabilityMeasure Ω) (s : Set Ω)
+定理 toNN实数_measure实数_eq_coeFn
+  条件: (ν : 概率测度 Ω) (s : 集合 Ω)
   证明: by
   simp
 -/
@@ -435,7 +435,7 @@ definition toFiniteMeasure
 
 中文:
 定义 toFiniteMeasure
-  签名: (μ : ProbabilityMeasure Ω)
+  签名: (μ : 概率测度 Ω)
   定义体: ⟨μ, inferInstance⟩
 -/
 def toFiniteMeasure (μ : ProbabilityMeasure Ω) : FiniteMeasure Ω := ⟨μ, inferInstance⟩
@@ -451,7 +451,7 @@ lemma coeFn_toFiniteMeasure
 
 中文:
 引理 coeFn_toFiniteMeasure
-  条件: (μ : ProbabilityMeasure Ω)
+  条件: (μ : 概率测度 Ω)
   结论: ⇑μ.toFiniteMeasure = μ
   证明: rfl
 -/
@@ -468,7 +468,7 @@ lemma toFiniteMeasure_apply
 
 中文:
 引理 toFiniteMeasure_apply
-  条件: (μ : ProbabilityMeasure Ω) (s : Set Ω)
+  条件: (μ : 概率测度 Ω) (s : 集合 Ω)
   证明: rfl
 
 @[simp]
@@ -489,7 +489,7 @@ theorem toMeasure_comp_toFiniteMeasure_eq_toMeasure
 
 中文:
 定理 toMeasure_comp_toFiniteMeasure_eq_toMeasure
-  条件: (ν : ProbabilityMeasure Ω)
+  条件: (ν : 概率测度 Ω)
   证明: rfl
 
 @[simp]
@@ -510,7 +510,7 @@ theorem coeFn_comp_toFiniteMeasure_eq_coeFn
 
 中文:
 定理 coeFn_comp_toFiniteMeasure_eq_coeFn
-  条件: (ν : ProbabilityMeasure Ω)
+  条件: (ν : 概率测度 Ω)
   证明: rfl
 
 @[simp]
@@ -531,7 +531,7 @@ theorem toFiniteMeasure_apply_eq_apply
 
 中文:
 定理 toFiniteMeasure_apply_eq_apply
-  条件: (ν : ProbabilityMeasure Ω) (s : Set Ω)
+  条件: (ν : 概率测度 Ω) (s : 集合 Ω)
   证明: rfl
 
 @[simp]
@@ -553,7 +553,7 @@ theorem ennreal_coeFn_eq_coeFn_toMeasure
 
 中文:
 定理 ennreal_coeFn_eq_coeFn_toMeasure
-  条件: (ν : ProbabilityMeasure Ω) (s : Set Ω)
+  条件: (ν : 概率测度 Ω) (s : 集合 Ω)
   证明: by
   rw [← coeFn_comp_toFiniteMeasure_eq_coeFn]; rw [FiniteMeasure.ennreal_coeFn_eq_coeFn_toMeasure]; rw [toMeasure_comp_toFiniteMeasure_eq_toMeasure]
 
@@ -579,7 +579,7 @@ theorem null_iff_toMeasure_null
 
 中文:
 定理 null_iff_toMeasure_null
-  条件: (ν : ProbabilityMeasure Ω) (s : Set Ω)
+  条件: (ν : 概率测度 Ω) (s : 集合 Ω)
   证明: ⟨fun h => by rw [← ennreal_coeFn_eq_coeFn_toMeasure, h, ENNReal.coe_zero],
    fun h => congrArg ENNReal.toNNReal h⟩
 
@@ -606,7 +606,7 @@ theorem apply_mono
 
 中文:
 定理 apply_mono
-  条件: (μ : ProbabilityMeasure Ω) {s₁ s₂ : Set Ω} (h : s₁ subseteq s₂)
+  条件: (μ : 概率测度 Ω) {s₁ s₂ : 集合 Ω} (h : s₁ subseteq s₂)
   结论: μ s₁ <= μ s₂
   证明: by
   rw [← coeFn_comp_toFiniteMeasure_eq_coeFn]
@@ -631,7 +631,7 @@ theorem apply_union_le
 
 中文:
 定理 apply_union_le
-  条件: (μ : ProbabilityMeasure Ω) {s₁ s₂ : Set Ω}
+  条件: (μ : 概率测度 Ω) {s₁ s₂ : 集合 Ω}
   结论: μ (s₁ union s₂) <= μ s₁ + μ s₂
   证明: by
   rw [← coeFn_comp_toFiniteMeasure_eq_coeFn]
@@ -655,7 +655,7 @@ lemma tendsto_measure_iUnion_accumulate
 
 中文:
 引理 tendsto_measure_iUnion_accumulate
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: by
   simpa [← ennreal_coeFn_eq_coeFn_toMeasure, ENNReal.tendsto_coe]
     using tendsto_measure_iUnion_accumulate (μ := μ.toMeasure)
@@ -678,7 +678,7 @@ theorem apply_le_one
 
 中文:
 定理 apply_le_one
-  条件: (μ : ProbabilityMeasure Ω) (s : Set Ω)
+  条件: (μ : 概率测度 Ω) (s : 集合 Ω)
   结论: μ s <= 1
   证明: by
   simpa using apply_mono μ (subset_univ s)
@@ -699,8 +699,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (μ : ProbabilityMeasure Ω)
-  结论: Nonempty Ω
+  条件: (μ : 概率测度 Ω)
+  结论: 非空 Ω
   证明: nonempty_of_isProbabilityMeasure μ
 
 @[ext]
@@ -723,8 +723,8 @@ theorem eq_of_forall_toMeasure_apply_eq
   exact h s s_mble
 
 中文:
-定理 eq_of_forall_toMeasure_apply_eq
-  结论: (μ ν : ProbabilityMeasure Ω)
+定理 eq_of_对任意_toMeasure_apply_eq
+  结论: (μ ν : 概率测度 Ω)
   证明: by
   apply toMeasure_injective
   ext1 s s_mble
@@ -751,8 +751,8 @@ theorem eq_of_forall_apply_eq
 @[simp]
 
 中文:
-定理 eq_of_forall_apply_eq
-  结论: (μ ν : ProbabilityMeasure Ω)
+定理 eq_of_对任意_apply_eq
+  结论: (μ ν : 概率测度 Ω)
   证明: by
   ext1 s s_mble
   simpa [ennreal_coeFn_eq_coeFn_toMeasure] using congr_arg ((↑) : Real>=0 -> Real>=0∞) (h s s_mble)
@@ -778,7 +778,7 @@ theorem mass_toFiniteMeasure
 
 中文:
 定理 mass_toFiniteMeasure
-  条件: (μ : ProbabilityMeasure Ω)
+  条件: (μ : 概率测度 Ω)
   结论: μ.toFiniteMeasure.mass = 1
   证明: μ.coeFn_univ
 
@@ -832,7 +832,7 @@ theorem toFiniteMeasure_nonzero
 
 中文:
 定理 toFiniteMeasure_nonzero
-  条件: (μ : ProbabilityMeasure Ω)
+  条件: (μ : 概率测度 Ω)
   结论: μ.toFiniteMeasure != 0
   证明: by
   simp [← FiniteMeasure.mass_nonzero_iff]
@@ -852,7 +852,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSpace (ProbabilityMeasure Ω)
+  签名: 可测空间 (概率测度 Ω)
   定义体: inferInstanceAs MeasurableSpace (Subtype _)
 
 Depends on / 依赖: MeasurableSpace, Subtype
@@ -908,7 +908,7 @@ theorem measurable_fun_prod
 
 中文:
 定理 measurable_fun_prod
-  条件: {α β : 类型} [MeasurableSpace α] [MeasurableSpace β]
+  条件: {α β : 类型} [可测空间 α] [可测空间 β]
   证明: by
   apply Measurable.measure_of_isPiSystem_of_isProbabilityMeasure generateFrom_prod.symm
     isPiSystem_prod _
@@ -943,7 +943,7 @@ lemma apply_iUnion_le
 
 中文:
 引理 apply_iUnion_le
-  结论: {μ : ProbabilityMeasure Ω} {f : 自然数 -> Set Ω}
+  结论: {μ : 概率测度 Ω} {f : 自然数 -> 集合 Ω}
   证明: by
   simpa [← ENNReal.coe_le_coe, ENNReal.coe_tsum hf] using MeasureTheory.measure_iUnion_le f
 
@@ -968,7 +968,7 @@ theorem testAgainstNN_lipschitz
 
 中文:
 定理 testAgainstNN_lipschitz
-  条件: (μ : ProbabilityMeasure Ω)
+  条件: (μ : 概率测度 Ω)
   证明: μ.mass_toFiniteMeasure ▸ μ.toFiniteMeasure.testAgainstNN_lipschitz
 
 Depends on / 依赖: mass_toFiniteMeasure, testAgainstNN_lipschitz, toFiniteMeasure, toFiniteMeasure.testAgainstNN_lipschitz
@@ -987,7 +987,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (ProbabilityMeasure Ω)
+  签名: 拓扑空间 (概率测度 Ω)
   定义体: TopologicalSpace.induced toFiniteMeasure inferInstance
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, induced, toFiniteMeasure
@@ -1024,7 +1024,7 @@ definition toWeakDualBCNN
 
 中文:
 定义 toWeakDualBCNN
-  签名: : ProbabilityMeasure Ω -> WeakDual 实数>=0 (Ω ->ᵇ 实数>=0)
+  签名: : 概率测度 Ω -> WeakDual 实数>=0 (Ω ->ᵇ 实数>=0)
   定义体: FiniteMeasure.toWeakDualBCNN ∘ toFiniteMeasure
 
 @[simp]
@@ -1047,7 +1047,7 @@ theorem coe_toWeakDualBCNN
 
 中文:
 定理 coe_toWeakDualBCNN
-  条件: (μ : ProbabilityMeasure Ω)
+  条件: (μ : 概率测度 Ω)
   证明: rfl
 
 @[simp]
@@ -1066,7 +1066,7 @@ theorem toWeakDualBCNN_apply
 
 中文:
 定理 toWeakDualBCNN_apply
-  条件: (μ : ProbabilityMeasure Ω) (f : Ω ->ᵇ 实数>=0)
+  条件: (μ : 概率测度 Ω) (f : Ω ->ᵇ 实数>=0)
   证明: rfl
 -/
 theorem toWeakDualBCNN_apply (μ : ProbabilityMeasure Ω) (f : Ω ->ᵇ Real>=0) :
@@ -1082,7 +1082,7 @@ theorem toWeakDualBCNN_continuous
 
 中文:
 定理 toWeakDualBCNN_continuous
-  结论: Continuous fun μ : ProbabilityMeasure Ω => μ.toWeakDualBCNN
+  结论: 连续 fun μ : 概率测度 Ω => μ.toWeakDualBCNN
   证明: FiniteMeasure.toWeakDualBCNN_continuous.comp toFiniteMeasure_continuous
 
 Depends on / 依赖: FiniteMeasure, FiniteMeasure.toWeakDualBCNN_continuous.comp, toFiniteMeasure_continuous, toWeakDualBCNN_continuous
@@ -1120,7 +1120,7 @@ injective _μ _ν h := Subtype.ext congr_arg FiniteMeasure.toMeasure h
 
 中文:
 定理 toFiniteMeasure_isEmbedding
-  结论: (Ω : 类型) [MeasurableSpace Ω] [TopologicalSpace Ω]
+  结论: (Ω : 类型) [可测空间 Ω] [拓扑空间 Ω]
   证明: rfl
 injective _μ _ν h := Subtype.ext congr_arg FiniteMeasure.toMeasure h
 -/
@@ -1139,8 +1139,8 @@ instance R1Space
   body: (toFiniteMeasure_isEmbedding Ω).r1Space
 
 中文:
-实例 R1Space
-  签名: : R1Space (ProbabilityMeasure Ω)
+实例 R1空间
+  签名: : R1空间 (概率测度 Ω)
   定义体: (toFiniteMeasure_isEmbedding Ω).r1Space
 
 Depends on / 依赖: r1Space, toFiniteMeasure_isEmbedding
@@ -1157,7 +1157,7 @@ theorem tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds
 
 中文:
 定理 tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds
-  结论: {δ : 类型} (F : Filter δ)
+  结论: {δ : 类型} (F : 滤子 δ)
   证明: (toFiniteMeasure_isEmbedding Ω).tendsto_nhds_iff
 
 Depends on / 依赖: tendsto_nhds_iff, toFiniteMeasure_isEmbedding
@@ -1178,8 +1178,8 @@ theorem tendsto_iff_forall_lintegral_tendsto
   exact FiniteMeasure.tendsto_iff_forall_lintegral_tendsto
 
 中文:
-定理 tendsto_iff_forall_lintegral_tendsto
-  结论: {γ : 类型} {F : Filter γ}
+定理 tendsto_iff_对任意_lintegral_tendsto
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   rw [tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds]
   exact FiniteMeasure.tendsto_iff_forall_lintegral_tendsto
@@ -1205,8 +1205,8 @@ theorem tendsto_iff_forall_integral_tendsto
     FiniteMeasure.tendsto_iff_forall_integral_tendsto]
 
 中文:
-定理 tendsto_iff_forall_integral_tendsto
-  结论: {γ : 类型} {F : Filter γ}
+定理 tendsto_iff_对任意_integral_tendsto
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   simp [tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds,
     FiniteMeasure.tendsto_iff_forall_integral_tendsto]
@@ -1232,7 +1232,7 @@ theorem tendsto_iff_forall_integral_rclike_tendsto
     FiniteMeasure.tendsto_iff_forall_integral_rclike_tendsto 𝕜]
 
 中文:
-定理 tendsto_iff_forall_integral_rclike_tendsto
+定理 tendsto_iff_对任意_integral_rclike_tendsto
   结论: {γ : 类型} (𝕜 : 类型) [RCLike 𝕜]
   证明: by
   simp [tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds,
@@ -1260,7 +1260,7 @@ lemma continuous_iff_forall_continuous_lintegral
     forall_comm (α := X)]
 
 中文:
-引理 continuous_iff_forall_continuous_lintegral
+引理 continuous_iff_对任意_continuous_lintegral
   证明: by
   simp [continuous_iff_continuousAt, ContinuousAt, tendsto_iff_forall_lintegral_tendsto,
     forall_comm (α := X)]
@@ -1282,7 +1282,7 @@ lemma continuous_iff_forall_continuous_integral
     forall_comm (α := X)]
 
 中文:
-引理 continuous_iff_forall_continuous_integral
+引理 continuous_iff_对任意_continuous_integral
   证明: by
   simp [continuous_iff_continuousAt, ContinuousAt, tendsto_iff_forall_integral_tendsto,
     forall_comm (α := X)]
@@ -1304,7 +1304,7 @@ lemma continuous_lintegral_boundedContinuousFunction
 
 中文:
 引理 continuous_lintegral_boundedContinuousFunction
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X]
+  结论: [可测空间 X] [OpensMeasurable空间 X]
   证明: continuous_iff_forall_continuous_lintegral.1 continuous_id _
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuous_lintegral
@@ -1323,7 +1323,7 @@ lemma continuous_integral_boundedContinuousFunction
 
 中文:
 引理 continuous_integral_boundedContinuousFunction
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X]
+  结论: [可测空间 X] [OpensMeasurable空间 X]
   证明: continuous_iff_forall_continuous_integral.1 continuous_id _
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuous_integral
@@ -1343,7 +1343,7 @@ lemma continuous_iff_forall_continuousMap_continuous_lintegral
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
 中文:
-引理 continuous_iff_forall_continuousMap_continuous_lintegral
+引理 continuous_iff_对任意_continuousMap_continuous_lintegral
   证明: continuous_iff_forall_continuous_lintegral.trans
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
@@ -1363,7 +1363,7 @@ lemma continuous_iff_forall_continuousMap_continuous_integral
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
 中文:
-引理 continuous_iff_forall_continuousMap_continuous_integral
+引理 continuous_iff_对任意_continuousMap_continuous_integral
   证明: continuous_iff_forall_continuous_integral.trans
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
@@ -1386,7 +1386,7 @@ lemma continuous_lintegral_continuousMap
 
 中文:
 引理 continuous_lintegral_continuousMap
-  条件: [FunLike F X 实数>=0] [ContinuousMapClass F X 实数>=0] (f : F)
+  条件: [函数状 F X 实数>=0] [连续映射类 F X 实数>=0] (f : F)
   证明: continuous_iff_forall_continuousMap_continuous_lintegral.1 continuous_id ⟨f, map_continuous f⟩
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuousMap_continuous_lintegral, map_continuous
@@ -1405,7 +1405,7 @@ lemma continuous_integral_continuousMap
 
 中文:
 引理 continuous_integral_continuousMap
-  条件: [FunLike F X 实数] [ContinuousMapClass F X 实数] (f : F)
+  条件: [函数状 F X 实数] [连续映射类 F X 实数] (f : F)
   证明: continuous_iff_forall_continuousMap_continuous_integral.1 continuous_id ⟨f, map_continuous f⟩
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuousMap_continuous_integral, map_continuous
@@ -1431,7 +1431,7 @@ instance t2Space
 
 中文:
 实例 t2Space
-  签名: : T2Space (ProbabilityMeasure Ω)
+  签名: : T2空间 (概率测度 Ω)
   定义体: (toFiniteMeasure_isEmbedding Ω).t2Space
 
 Depends on / 依赖: t2Space, toFiniteMeasure_isEmbedding
@@ -1477,7 +1477,7 @@ definition normalize
 
 中文:
 定义 normalize
-  签名: : ProbabilityMeasure Ω
+  签名: : 概率测度 Ω
   定义体: if zero : μ.mass = 0 then ⟨Measure.dirac ‹Nonempty Ω›.some, Measure.dirac.isProbabilityMeasure⟩
   else
     { val := μ.mass⁻¹ • (μ : Measure Ω)
@@ -1517,7 +1517,7 @@ theorem self_eq_mass_mul_normalize
 
 中文:
 定理 self_eq_mass_mul_normalize
-  条件: (s : Set Ω)
+  条件: (s : 集合 Ω)
   结论: μ s = μ.mass * μ.normalize s
   证明: by
   obtain rfl | h := eq_or_ne μ 0
@@ -1574,7 +1574,7 @@ theorem normalize_eq_of_nonzero
 
 中文:
 定理 normalize_eq_of_nonzero
-  条件: (nonzero : μ != 0) (s : Set Ω)
+  条件: (nonzero : μ != 0) (s : 集合 Ω)
   结论: μ.normalize s = μ.mass⁻¹ * μ s
   证明: by
   simp only [μ.self_eq_mass_mul_normalize, μ.mass_nonzero_iff.mpr nonzero, inv_mul_cancel_left₀,
@@ -1661,8 +1661,8 @@ theorem _root_.ProbabilityMeasure.toFiniteMeasure_normalize_eq_self
   simp only [ProbabilityMeasure.mass_toFiniteMeasure, inv_one, one_mul, μ.coeFn_toFiniteMeasure]
 
 中文:
-定理 _root_.ProbabilityMeasure.toFiniteMeasure_normalize_eq_self
-  结论: {m0 : MeasurableSpace Ω}
+定理 _root_.概率测度.toFiniteMeasure_normalize_eq_self
+  结论: {m0 : 可测空间 Ω}
   证明: by
   apply ProbabilityMeasure.eq_of_forall_apply_eq
   intro s _s_mble
@@ -1691,7 +1691,7 @@ theorem average_eq_integral_normalize
 
 中文:
 定理 average_eq_integral_normalize
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [μ.toMeasure_normalize_eq_of_nonzero nonzero]; rw [average]
   congr
@@ -1816,7 +1816,7 @@ theorem tendsto_normalize_testAgainstNN_of_tendsto
 
 中文:
 定理 tendsto_normalize_testAgainstNN_of_tendsto
-  结论: {γ : 类型} {F : Filter γ}
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   have lim_mass := μs_lim.mass
   have aux : {(0 : Real>=0)}ᶜ in 𝓝 μ.mass :=
@@ -1867,7 +1867,7 @@ theorem tendsto_of_tendsto_normalize_testAgainstNN_of_tendsto_mass
 
 中文:
 定理 tendsto_of_tendsto_normalize_testAgainstNN_of_tendsto_mass
-  结论: {γ : 类型} {F : Filter γ}
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   rw [tendsto_iff_forall_testAgainstNN_tendsto]
   exact fun f =>
@@ -1894,7 +1894,7 @@ theorem tendsto_normalize_of_tendsto
 
 中文:
 定理 tendsto_normalize_of_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   rw [ProbabilityMeasure.tendsto_nhds_iff_toFiniteMeasure_tendsto_nhds]; rw [tendsto_iff_forall_testAgainstNN_tendsto]
   exact fun f => tendsto_normalize_testAgainstNN_of_tendsto μs_lim nonzero f
@@ -1922,7 +1922,7 @@ theorem tendsto_normalize_iff_tendsto
 
 中文:
 定理 tendsto_normalize_iff_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   constructor
   · rintro ⟨normalized_lim, mass_lim⟩
@@ -1963,7 +1963,7 @@ definition map
 
 中文:
 定义 map
-  签名: (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'} (f_aemble : AEMeasurable f ν)
+  签名: (ν : 概率测度 Ω) {f : Ω -> Ω'} (f_aemble : 几乎处处可测 f ν)
   定义体: ⟨(ν : Measure Ω).map f, (ν : Measure Ω).isProbabilityMeasure_map f_aemble⟩
 
 Depends on / 依赖: Measure, f_aemble, isProbabilityMeasure_map
@@ -1982,7 +1982,7 @@ lemma toMeasure_map
 
 中文:
 引理 toMeasure_map
-  条件: (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'} (hf : AEMeasurable f ν)
+  条件: (ν : 概率测度 Ω) {f : Ω -> Ω'} (hf : 几乎处处可测 f ν)
   证明: rfl
 -/
 @[simp] lemma toMeasure_map (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'} (hf : AEMeasurable f ν) :
@@ -1998,7 +1998,7 @@ lemma map_apply'
 
 中文:
 引理 map_apply'
-  结论: (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'} (f_aemble : AEMeasurable f ν)
+  结论: (ν : 概率测度 Ω) {f : Ω -> Ω'} (f_aemble : 几乎处处可测 f ν)
   证明: Measure.map_apply_of_aemeasurable f_aemble A_mble
 
 Depends on / 依赖: A_mble, Measure, Measure.map_apply_of_aemeasurable, f_aemble, map_apply_of_aemeasurable
@@ -2020,7 +2020,7 @@ exact (ENNReal.toNNReal_eq_toNNReal_iff' (measure_ne_top _ _) (measure_ne_top _ 
 
 中文:
 引理 map_apply_of_aemeasurable
-  结论: (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'}
+  结论: (ν : 概率测度 Ω) {f : Ω -> Ω'}
   证明: by
 exact (ENNReal.toNNReal_eq_toNNReal_iff' (measure_ne_top _ _) (measure_ne_top _ _)).mpr
     ν.map_apply' f_aemble A_mble
@@ -2043,7 +2043,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  结论: (ν : ProbabilityMeasure Ω) {f : Ω -> Ω'} (f_aemble : AEMeasurable f ν)
+  结论: (ν : 概率测度 Ω) {f : Ω -> Ω'} (f_aemble : 几乎处处可测 f ν)
   证明: map_apply_of_aemeasurable ν f_aemble A_mble
 
 Depends on / 依赖: A_mble, f_aemble, map_apply_of_aemeasurable
@@ -2072,7 +2072,7 @@ lemma tendsto_map_of_tendsto_of_continuous
 
 中文:
 引理 tendsto_map_of_tendsto_of_continuous
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   rw [ProbabilityMeasure.tendsto_iff_forall_lintegral_tendsto] at lim ⊢
   intro g
@@ -2107,7 +2107,7 @@ lemma continuous_map
 
 中文:
 引理 continuous_map
-  条件: {f : Ω -> Ω'} (f_cont : Continuous f)
+  条件: {f : Ω -> Ω'} (f_cont : 连续 f)
   证明: by
   rw [continuous_iff_continuousAt]
   exact fun _ => tendsto_map_of_tendsto_of_continuous _ _ continuous_id.continuousAt f_cont
@@ -2138,7 +2138,7 @@ theorem isProbabilityMeasure_join
 
 中文:
 定理 isProbabilityMeasure_join
-  结论: {α : 类型} [MeasurableSpace α] {m : Measure (Measure α)}
+  结论: {α : 类型} [可测空间 α] {m : 测度 (测度 α)}
   证明: by
   simp only [isProbabilityMeasure_iff, MeasurableSet.univ, Measure.join_apply]
   simp_rw [isProbabilityMeasure_iff] at hm
@@ -2166,7 +2166,7 @@ theorem isProbabilityMeasure_bind
 
 中文:
 定理 isProbabilityMeasure_bind
-  结论: {α : 类型} {β : 类型} [MeasurableSpace α] [MeasurableSpace β]
+  结论: {α : 类型} {β : 类型} [可测空间 α] [可测空间 β]
   证明: by
   simp only [isProbabilityMeasure_iff, MeasurableSet.univ, Measure.bind_apply _ hf₀]
   simp_rw [isProbabilityMeasure_iff] at hf₁

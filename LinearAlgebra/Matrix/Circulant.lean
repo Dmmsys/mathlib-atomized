@@ -54,7 +54,7 @@ definition circulant
 
 中文:
 定义 circulant
-  签名: [Sub n] (v : n -> α)
+  签名: [减法 n] (v : n -> α)
   定义体: of fun i j => v (i - j)
 -/
 def circulant [Sub n] (v : n -> α) : Matrix n n α :=
@@ -73,7 +73,7 @@ theorem circulant_apply
 
 中文:
 定理 circulant_apply
-  条件: [Sub n] (v : n -> α) (i j)
+  条件: [减法 n] (v : n -> α) (i j)
   结论: circulant v i j = v (i - j)
   证明: rfl
 -/
@@ -90,7 +90,7 @@ theorem circulant_col_zero_eq
 
 中文:
 定理 circulant_col_zero_eq
-  条件: [SubtractionMonoid n] (v : n -> α) (i : n)
+  条件: [Subtraction幺半群 n] (v : n -> α) (i : n)
   结论: circulant v i 0 = v i
   证明: congr_arg v (sub_zero _)
 
@@ -112,7 +112,7 @@ theorem circulant_injective
 
 中文:
 定理 circulant_injective
-  条件: [SubtractionMonoid n]
+  条件: [Subtraction幺半群 n]
   证明: by
   intro v w h
   ext k
@@ -134,8 +134,8 @@ theorem Fin.circulant_injective
   statement: forall n, Injective fun v : Fin n -> α => circulant v
 
 中文:
-定理 Fin.circulant_injective
-  结论: 对任意 n, Injective fun v : Fin n -> α => circulant v
+定理 有限集.circulant_injective
+  结论: 对任意 n, 单射 fun v : 有限集 n -> α => circulant v
 -/
 theorem Fin.circulant_injective : forall n, Injective fun v : Fin n -> α => circulant v
   | 0 => by simp [Injective]
@@ -155,7 +155,7 @@ theorem circulant_inj
 
 中文:
 定理 circulant_inj
-  条件: [SubtractionMonoid n] {v w : n -> α}
+  条件: [Subtraction幺半群 n] {v w : n -> α}
   结论: circulant v = circulant w ↔ v = w
   证明: circulant_injective.eq_iff
 
@@ -177,8 +177,8 @@ theorem Fin.circulant_inj
   proof: (Fin.circulant_injective n).eq_iff
 
 中文:
-定理 Fin.circulant_inj
-  条件: {n} {v w : Fin n -> α}
+定理 有限集.circulant_inj
+  条件: {n} {v w : 有限集 n -> α}
   结论: circulant v = circulant w ↔ v = w
   证明: (Fin.circulant_injective n).eq_iff
 
@@ -197,7 +197,7 @@ theorem transpose_circulant
 
 中文:
 定理 transpose_circulant
-  条件: [SubtractionMonoid n] (v : n -> α)
+  条件: [Subtraction幺半群 n] (v : n -> α)
   证明: by ext; simp
 -/
 theorem transpose_circulant [SubtractionMonoid n] (v : n -> α) :
@@ -213,7 +213,7 @@ theorem conjTranspose_circulant
 
 中文:
 定理 conjTranspose_circulant
-  条件: [Star α] [SubtractionMonoid n] (v : n -> α)
+  条件: [对合 α] [Subtraction幺半群 n] (v : n -> α)
   证明: by ext; simp
 -/
 theorem conjTranspose_circulant [Star α] [SubtractionMonoid n] (v : n -> α) :
@@ -227,8 +227,8 @@ theorem Fin.transpose_circulant
   statement: forall {n} (v : Fin n -> α), (circulant v)ᵀ = circulant fun i => v (-i)
 
 中文:
-定理 Fin.transpose_circulant
-  结论: 对任意 {n} (v : Fin n -> α), (circulant v)ᵀ = circulant fun i => v (-i)
+定理 有限集.transpose_circulant
+  结论: 对任意 {n} (v : 有限集 n -> α), (circulant v)ᵀ = circulant fun i => v (-i)
 -/
 theorem Fin.transpose_circulant : forall {n} (v : Fin n -> α), (circulant v)ᵀ = circulant fun i => v (-i)
   | 0 => by simp [eq_iff_true_of_subsingleton]
@@ -242,8 +242,8 @@ theorem Fin.conjTranspose_circulant
   given: [Star α]
 
 中文:
-定理 Fin.conjTranspose_circulant
-  条件: [Star α]
+定理 有限集.conjTranspose_circulant
+  条件: [对合 α]
 -/
 theorem Fin.conjTranspose_circulant [Star α] :
     forall {n} (v : Fin n -> α), (circulant v)ᴴ = circulant (star fun i => v (-i))
@@ -260,7 +260,7 @@ theorem map_circulant
 
 中文:
 定理 map_circulant
-  条件: [Sub n] (v : n -> α) (f : α -> β)
+  条件: [减法 n] (v : n -> α) (f : α -> β)
   证明: ext fun _ _ => rfl
 -/
 theorem map_circulant [Sub n] (v : n -> α) (f : α -> β) :
@@ -280,7 +280,7 @@ theorem circulant_neg
 
 中文:
 定理 circulant_neg
-  条件: [Neg α] [Sub n] (v : n -> α)
+  条件: [取负 α] [减法 n] (v : n -> α)
   结论: circulant (-v) = -circulant v
   证明: ext fun _ _ => rfl
 
@@ -301,8 +301,8 @@ theorem circulant_zero
 
 中文:
 定理 circulant_zero
-  条件: (α n) [Zero α] [Sub n]
-  结论: circulant 0 = (0 : Matrix n n α)
+  条件: (α n) [零 α] [减法 n]
+  结论: circulant 0 = (0 : 矩阵 n n α)
   证明: ext fun _ _ => rfl
 -/
 theorem circulant_zero (α n) [Zero α] [Sub n] : circulant 0 = (0 : Matrix n n α) :=
@@ -318,7 +318,7 @@ theorem circulant_add
 
 中文:
 定理 circulant_add
-  条件: [Add α] [Sub n] (v w : n -> α)
+  条件: [加法 α] [减法 n] (v w : n -> α)
   证明: ext fun _ _ => rfl
 -/
 theorem circulant_add [Add α] [Sub n] (v w : n -> α) :
@@ -335,7 +335,7 @@ theorem circulant_sub
 
 中文:
 定理 circulant_sub
-  条件: [Sub α] [Sub n] (v w : n -> α)
+  条件: [减法 α] [减法 n] (v w : n -> α)
   证明: ext fun _ _ => rfl
 -/
 theorem circulant_sub [Sub α] [Sub n] (v w : n -> α) :
@@ -357,7 +357,7 @@ theorem circulant_mul
 
 中文:
 定理 circulant_mul
-  条件: [NonUnitalNonAssocSemiring α] [Fintype n] [AddGroup n] (v w : n -> α)
+  条件: [非幺非结合半环 α] [有限类型 n] [加法群 n] (v w : n -> α)
   证明: by
   ext i j
   simp only [mul_apply, mulVec, circulant_apply, dotProduct]
@@ -383,8 +383,8 @@ theorem Fin.circulant_mul
   given: [NonUnitalNonAssocSemiring α]
 
 中文:
-定理 Fin.circulant_mul
-  条件: [NonUnitalNonAssocSemiring α]
+定理 有限集.circulant_mul
+  条件: [非幺非结合半环 α]
 -/
 theorem Fin.circulant_mul [NonUnitalNonAssocSemiring α] :
     forall {n} (v w : Fin n -> α), circulant v * circulant w = circulant (circulant v *ᵥ w)
@@ -409,7 +409,7 @@ theorem circulant_mul_comm
 
 中文:
 定理 circulant_mul_comm
-  结论: [CommMagma α] [AddCommMonoid α] [Fintype n] [AddCommGroup n]
+  结论: [交换原群 α] [加法交换幺半群 α] [有限类型 n] [加法交换群 n]
   证明: by
   ext i j
   simp only [mul_apply, circulant_apply]
@@ -441,8 +441,8 @@ theorem Fin.circulant_mul_comm
   given: [CommMagma α] [AddCommMonoid α]
 
 中文:
-定理 Fin.circulant_mul_comm
-  条件: [CommMagma α] [AddCommMonoid α]
+定理 有限集.circulant_mul_comm
+  条件: [交换原群 α] [加法交换幺半群 α]
 -/
 theorem Fin.circulant_mul_comm [CommMagma α] [AddCommMonoid α] :
     forall {n} (v w : Fin n -> α), circulant v * circulant w = circulant w * circulant v
@@ -461,7 +461,7 @@ theorem circulant_smul
 
 中文:
 定理 circulant_smul
-  条件: [Sub n] [SMul R α] (k : R) (v : n -> α)
+  条件: [减法 n] [标量乘法 R α] (k : R) (v : n -> α)
   证明: rfl
 
 @[simp]
@@ -484,7 +484,7 @@ theorem circulant_single_one
 
 中文:
 定理 circulant_single_one
-  条件: (α n) [Zero α] [One α] [DecidableEq n] [AddGroup n]
+  条件: (α n) [零 α] [幺 α] [DecidableEq n] [加法群 n]
   证明: by
   ext i j
   simp [one_apply, Pi.single_apply, sub_eq_zero]
@@ -511,7 +511,7 @@ theorem circulant_single
 
 中文:
 定理 circulant_single
-  条件: (n) [Semiring α] [DecidableEq n] [AddGroup n] [Fintype n] (a : α)
+  条件: (n) [半环 α] [DecidableEq n] [加法群 n] [有限类型 n] (a : α)
   证明: by
   ext i j
   simp [Pi.single_apply, diagonal_apply, sub_eq_zero]
@@ -531,8 +531,8 @@ theorem Fin.circulant_ite
   given: (α) [Zero α] [One α]
 
 中文:
-定理 Fin.circulant_ite
-  条件: (α) [Zero α] [One α]
+定理 有限集.circulant_ite
+  条件: (α) [零 α] [幺 α]
 -/
 theorem Fin.circulant_ite (α) [Zero α] [One α] :
     forall n, circulant (fun i => ite (i.1 = 0) 1 0 : Fin n -> α) = 1
@@ -553,7 +553,7 @@ theorem circulant_isSymm_iff
 
 中文:
 定理 circulant_isSymm_iff
-  条件: [SubtractionMonoid n] {v : n -> α}
+  条件: [Subtraction幺半群 n] {v : n -> α}
   证明: by
   rw [IsSymm]; rw [transpose_circulant]; rw [circulant_inj]; rw [funext_iff]
 
@@ -571,8 +571,8 @@ theorem Fin.circulant_isSymm_iff
   statement: forall {n} {v : Fin n -> α}, (circulant v).IsSymm ↔ forall i, v (-i) = v i
 
 中文:
-定理 Fin.circulant_isSymm_iff
-  结论: 对任意 {n} {v : Fin n -> α}, (circulant v).IsSymm ↔ 对任意 i, v (-i) = v i
+定理 有限集.circulant_isSymm_iff
+  结论: 对任意 {n} {v : 有限集 n -> α}, (circulant v).是Symm ↔ 对任意 i, v (-i) = v i
 -/
 theorem Fin.circulant_isSymm_iff : forall {n} {v : Fin n -> α}, (circulant v).IsSymm ↔ forall i, v (-i) = v i
   | 0 => by simp [IsSymm.ext_iff, IsEmpty.forall_iff]
@@ -588,7 +588,7 @@ theorem circulant_isSymm_apply
 
 中文:
 定理 circulant_isSymm_apply
-  结论: [SubtractionMonoid n] {v : n -> α} (h : (circulant v).IsSymm)
+  结论: [Subtraction幺半群 n] {v : n -> α} (h : (circulant v).是Symm)
   证明: circulant_isSymm_iff.1 h i
 
 Depends on / 依赖: circulant_isSymm_iff
@@ -606,8 +606,8 @@ theorem Fin.circulant_isSymm_apply
   proof: Fin.circulant_isSymm_iff.1 h i
 
 中文:
-定理 Fin.circulant_isSymm_apply
-  条件: {n} {v : Fin n -> α} (h : (circulant v).IsSymm) (i : Fin n)
+定理 有限集.circulant_isSymm_apply
+  条件: {n} {v : 有限集 n -> α} (h : (circulant v).是Symm) (i : 有限集 n)
   证明: Fin.circulant_isSymm_iff.1 h i
 
 Depends on / 依赖: Fin.circulant_isSymm_iff, circulant_isSymm_iff

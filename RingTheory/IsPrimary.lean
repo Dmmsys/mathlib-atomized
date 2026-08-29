@@ -55,8 +55,8 @@ definition IsPrimary
   body: S != ⊤ ∧ forall {r : R} {x : M}, r • x in S -> x in S ∨ exists n : Nat, (r ^ n • ⊤ : Submodule R M) <= S
 
 中文:
-定义 IsPrimary
-  签名: (S : Submodule R M)
+定义 是准素
+  签名: (S : 子模 R M)
   定义体: S != ⊤ ∧ forall {r : R} {x : M}, r • x in S -> x in S ∨ exists n : Nat, (r ^ n • ⊤ : Submodule R M) <= S
 -/
 protected def IsPrimary (S : Submodule R M) : Prop :=
@@ -74,8 +74,8 @@ lemma IsPrimary.ne_top
   proof: h.left
 
 中文:
-引理 IsPrimary.ne_top
-  条件: (h : S.IsPrimary)
+引理 是准素.ne_top
+  条件: (h : S.是准素)
   结论: S != ⊤
   证明: h.left
 
@@ -92,8 +92,8 @@ lemma IsPrimary.mem_or_mem
   proof: h.right hrm
 
 中文:
-引理 IsPrimary.mem_or_mem
-  条件: (h : S.IsPrimary) {r : R} {m : M} (hrm : r • m in S)
+引理 是准素.mem_or_mem
+  条件: (h : S.是准素) {r : R} {m : M} (hrm : r • m in S)
   证明: h.right hrm
 
 Depends on / 依赖: h.right
@@ -117,8 +117,8 @@ lemma IsPrimary.inf
   exact ⟨hS hS', hT hT'⟩
 
 中文:
-引理 IsPrimary.inf
-  结论: (hS : S.IsPrimary) (hT : T.IsPrimary)
+引理 是准素.下确界
+  结论: (hS : S.是准素) (hT : T.是准素)
   证明: by
   obtain ⟨_, hS⟩ := hS
   obtain ⟨_, hT⟩ := hT
@@ -157,7 +157,7 @@ lemma isPrimary_finsetInf
 
 中文:
 引理 isPrimary_finsetInf
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> Submodule R M} {i : ι} (hi : i in s)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 子模 R M} {i : ι} (hi : i in s)
   证明: by
   classical
   induction s using Finset.induction_on generalizing i with
@@ -203,9 +203,9 @@ refine isPrime_iff.mpr hI.imp (by simp) fun h x y ⟨n, hn⟩ => ?_
   exact fun p => (h (hn p)).resolve_right (mt me
 
 中文:
-定理 IsPrimary.isPrime_radical_colon
-  条件: (hI : S.IsPrimary)
-  结论: (S.colon .univ).radical.IsPrime
+定理 是准素.isPrime_radical_colon
+  条件: (hI : S.是准素)
+  结论: (S.colon .univ).radical.是素
   证明: by
 refine isPrime_iff.mpr hI.imp (by simp) fun h x y ⟨n, hn⟩ => ?_
   simp_rw [← mem_colon_iff_le, ← mem_radical_iff] at h
@@ -233,8 +233,8 @@ theorem IsPrimary.radical_colon_singleton_of_notMem
     (radical_mono (Submodule.colon_mono le_rfl (Set.subset_univ {m})))
 
 中文:
-定理 IsPrimary.radical_colon_singleton_of_notMem
-  条件: (hI : S.IsPrimary) {m : M} (hm : m ∉ S)
+定理 是准素.radical_colon_singleton_of_notMem
+  条件: (hI : S.是准素) {m : M} (hm : m ∉ S)
   证明: le_antisymm (radical_le_radical_iff.mpr fun _ hy =>
     (hI.2 (Submodule.mem_colon_singleton.mp hy)).resolve_left hm)
     (radical_mono (Submodule.colon_mono le_rfl (Set.subset_univ {m})))
@@ -259,8 +259,8 @@ theorem IsPrimary.radical_colon_singleton_eq_ite
   · exact hS.radical_colon_singleton_of_notMem hm
 
 中文:
-定理 IsPrimary.radical_colon_singleton_eq_ite
-  条件: (hS : S.IsPrimary) (m : M) [Decidable (m in S)]
+定理 是准素.radical_colon_singleton_eq_ite
+  条件: (hS : S.是准素) (m : M) [可判定 (m in S)]
   证明: by
   split_ifs with hm
   · rwa [radical_eq_top, colon_eq_top_iff_subset, Set.singleton_subset_iff]

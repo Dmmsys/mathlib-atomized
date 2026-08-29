@@ -42,7 +42,7 @@ theorem measurable_of_tendsto_metrizable'
 
 中文:
 定理 measurable_of_tendsto_metrizable'
-  结论: {ι} {f : ι -> α -> β} {g : α -> β} (u : Filter ι) [NeBot u]
+  结论: {ι} {f : ι -> α -> β} {g : α -> β} (u : 滤子 ι) [NeBot u]
   证明: by
   let : PseudoMetricSpace β := pseudoMetrizableSpacePseudoMetric β
   apply measurable_of_isClosed'
@@ -81,7 +81,7 @@ theorem measurable_of_tendsto_metrizable
 
 中文:
 定理 measurable_of_tendsto_metrizable
-  结论: {f : 自然数 -> α -> β} {g : α -> β} (hf : 对任意 i, Measurable (f i))
+  结论: {f : 自然数 -> α -> β} {g : α -> β} (hf : 对任意 i, 可测 (f i))
   证明: measurable_of_tendsto_metrizable' atTop hf lim
 
 Depends on / 依赖: measurable_of_tendsto_metrizable
@@ -106,7 +106,7 @@ theorem aemeasurable_of_tendsto_metrizable_ae
 
 中文:
 定理 aemeasurable_of_tendsto_metrizable_ae
-  结论: {ι} {μ : Measure α} {f : ι -> α -> β} {g : α -> β}
+  结论: {ι} {μ : 测度 α} {f : ι -> α -> β} {g : α -> β}
   证明: by
   classical
   rcases u.exists_seq_tendsto with ⟨v, hv⟩
@@ -151,7 +151,7 @@ theorem aemeasurable_of_tendsto_metrizable_ae'
 
 中文:
 定理 aemeasurable_of_tendsto_metrizable_ae'
-  结论: {μ : Measure α} {f : 自然数 -> α -> β} {g : α -> β}
+  结论: {μ : 测度 α} {f : 自然数 -> α -> β} {g : α -> β}
   证明: aemeasurable_of_tendsto_metrizable_ae atTop hf h_ae_tendsto
 
 Depends on / 依赖: aemeasurable_of_tendsto_metrizable_ae, h_ae_tendsto
@@ -177,7 +177,7 @@ theorem aemeasurable_of_unif_approx
 
 中文:
 定理 aemeasurable_of_unif_approx
-  结论: {β} [MeasurableSpace β] [PseudoMetricSpace β] [BorelSpace β]
+  结论: {β} [可测空间 β] [伪度量空间 β] [Borel空间 β]
   证明: by
   obtain ⟨u, -, u_pos, u_lim⟩ :
     exists u : Nat -> Real, StrictAnti u ∧ (forall n : Nat, 0 < u n) ∧ Tendsto u atTop (𝓝 0) :=
@@ -215,7 +215,7 @@ theorem measurable_of_tendsto_metrizable_ae
 
 中文:
 定理 measurable_of_tendsto_metrizable_ae
-  结论: {μ : Measure α} [μ.IsComplete] {f : 自然数 -> α -> β}
+  结论: {μ : 测度 α} [μ.是完备] {f : 自然数 -> α -> β}
   证明: aemeasurable_iff_measurable.mp
     (aemeasurable_of_tendsto_metrizable_ae' (fun i => (hf i).aemeasurable) h_ae_tendsto)
 
@@ -244,7 +244,7 @@ theorem measurable_limit_of_tendsto_metrizable_ae
 
 中文:
 定理 measurable_limit_of_tendsto_metrizable_ae
-  结论: {ι} [Nonempty ι] {μ : Measure α}
+  结论: {ι} [非空 ι] {μ : 测度 α}
   证明: by
   classical
   inhabit ι
@@ -296,7 +296,7 @@ lemma measurableSet_of_tendsto_indicator
 
 中文:
 引理 measurableSet_of_tendsto_indicator
-  结论: [NeBot L] (As_mble : 对任意 i, MeasurableSet (As i))
+  结论: [NeBot L] (As_mble : 对任意 i, 可测集 (As i))
   证明: by
   simp_rw [← measurable_indicator_const_iff (1 : Real>=0∞)] at As_mble ⊢
   exact ENNReal.measurable_of_tendsto' L As_mble
@@ -324,7 +324,7 @@ lemma nullMeasurableSet_of_tendsto_indicator
 
 中文:
 引理 nullMeasurableSet_of_tendsto_indicator
-  结论: [NeBot L] {μ : Measure α}
+  结论: [NeBot L] {μ : 测度 α}
   证明: by
   simp_rw [← aemeasurable_indicator_const_iff (1 : Real>=0∞)] at As_mble ⊢
   apply aemeasurable_of_tendsto_metrizable_ae L As_mble

@@ -81,7 +81,7 @@ instance Prod.Z
   ```
 
 中文:
-实例 Prod.Z
+实例 积类型.Z
   签名: [Z M] [Z N]
   定义体: ...
   ```
@@ -107,7 +107,7 @@ instance Pi.Z
   ```
 
 中文:
-实例 Pi.Z
+实例 依赖函数类型.Z
   签名: [∀ i, Z <| f i]
   定义体: ...
   ```
@@ -161,7 +161,7 @@ instance ULift.Z
   See `Mathli
 
 中文:
-实例 ULift.Z
+实例 类型层提升.Z
   签名: [Z M]
   定义体: ...
   ```
@@ -188,8 +188,8 @@ abbreviation Function.Injective.Z
   body: ...
 
 中文:
-缩写 Function.Injective.Z
-  签名: [Z M₂] (f : M₁ → M₂) (hf : f.Injective)
+缩写 函数.单射.Z
+  签名: [Z M₂] (f : M₁ → M₂) (hf : f.单射)
   定义体: ...
 -/
   abbrev Function.Injective.Z [Z M₂] (f : M₁ → M₂) (hf : f.Injective)
@@ -208,8 +208,8 @@ abbreviation Function.Surjective.Z
   ```
 
 中文:
-缩写 Function.Surjective.Z
-  签名: [Z M₁] (f : M₁ → M₂) (hf : f.Surjective)
+缩写 函数.满射.Z
+  签名: [Z M₁] (f : M₁ → M₂) (hf : f.满射)
   定义体: ...
   ```
 * Instances transferred elementwise to `Finsupp`s, like `Finsupp.semigroup`.
@@ -235,7 +235,7 @@ instance Finsupp.Z
   ```
 
 中文:
-实例 Finsupp.Z
+实例 有限支撑.Z
   签名: [Z β]
   定义体: ...
   ```
@@ -262,7 +262,7 @@ instance Set.Z
   ```
 
 中文:
-实例 Set.Z
+实例 集合.Z
   签名: [Z α]
   定义体: ...
   ```
@@ -286,7 +286,7 @@ definition Equiv.Z
   body: ...
 
 中文:
-定义 Equiv.Z
+定义 等价.Z
   签名: (e : α ≃ β) [Z β]
   定义体: ...
 -/
@@ -310,7 +310,7 @@ This can be a lot of work; for now try to closely follow the existing examples
 We would very much like to pro
 
 中文:
-定义 Equiv.ZEquiv
+定义 等价.ZEquiv
   签名: (e : α ≃ β) [Z β]
   定义体: ...
   ```
@@ -563,7 +563,7 @@ theorem isMulCommutative_closure
 
 中文:
 定理 isMulCommutative_closure
-  结论: {G : 类型} [Group G] {k : Set G}
+  结论: {G : 类型} [群 G] {k : 集合 G}
 
 Depends on / 依赖: h.isColimit, h.isColimitEquivIsColimitCokernelCofork, isColimit, isColimitEquivIsColimitCokernelCofork
 -/
@@ -581,8 +581,8 @@ instance Subgroup.instIsMulCommutative_closure
   signature: {S G : Type*} [Group G] [SetLike S G]
 
 中文:
-实例 Subgroup.instIsMulCommutative_closure
-  签名: {S G : 类型} [Group G] [SetLike S G]
+实例 子群.instIsMulCommutative_closure
+  签名: {S G : 类型} [群 G] [集合状 S G]
 -/
 instance Subgroup.instIsMulCommutative_closure {S G : Type*} [Group G] [SetLike S G]
     [MulMemClass S G] (s : S) [IsMulCommutative s] :
@@ -598,8 +598,8 @@ instance Subgroup.isMulCommutative_topologicalClosure
   signature: [T2Space G] (s : Subgroup G)
 
 中文:
-实例 Subgroup.isMulCommutative_topologicalClosure
-  签名: [T2Space G] (s : Subgroup G)
+实例 子群.isMulCommutative_topologicalClosure
+  签名: [T2空间 G] (s : 子群 G)
 -/
 instance Subgroup.isMulCommutative_topologicalClosure [T2Space G] (s : Subgroup G)
     [IsMulCommutative s] : IsMulCommutative s.topologicalClosure

@@ -55,7 +55,7 @@ definition bilinearIteratedFDerivWithinTwo
 
 中文:
 定义 bilinearIteratedFDerivWithinTwo
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: fun x => (fderivWithin 𝕜 (fderivWithin 𝕜 f s) s x).toLinearMap₁₂
 
 Depends on / 依赖: fderivWithin
@@ -93,7 +93,7 @@ lemma bilinearIteratedFDerivWithinTwo_eq_iteratedFDeriv
 
 中文:
 引理 bilinearIteratedFDerivWithinTwo_eq_iteratedFDeriv
-  结论: {e : E} {s : Set E} (f : E -> F)
+  结论: {e : E} {s : 集合 E} (f : E -> F)
   证明: by
   simp [iteratedFDerivWithin_two_apply f hs he ![e₁, e₂], bilinearIteratedFDerivWithinTwo]
 
@@ -136,7 +136,7 @@ definition tensorIteratedFDerivWithinTwo
 
 中文:
 定义 tensorIteratedFDerivWithinTwo
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: fun e => lift (bilinearIteratedFDerivWithinTwo 𝕜 f s e)
 
 Depends on / 依赖: bilinearIteratedFDerivWithinTwo
@@ -174,7 +174,7 @@ lemma tensorIteratedFDerivWithinTwo_eq_iteratedFDerivWithin
 
 中文:
 引理 tensorIteratedFDerivWithinTwo_eq_iteratedFDerivWithin
-  结论: {e : E} {s : Set E} (f : E -> F)
+  结论: {e : E} {s : 集合 E} (f : E -> F)
   证明: by
   rw [← bilinearIteratedFDerivWithinTwo_eq_iteratedFDeriv f hs he]; rw [tensorIteratedFDerivWithinTwo]; rw [lift.tmul]
 
@@ -270,7 +270,7 @@ instance instLaplacian
 
 中文:
 实例 instLaplacian
-  签名: : Laplacian (E -> F) (E -> F) where
+  签名: : Laplace算子 (E -> F) (E -> F) where
   定义体: tensorIteratedFDerivTwo Real f x (InnerProductSpace.canonicalCovariantTensor E)
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.canonicalCovariantTensor, canonicalCovariantTensor, tensorIteratedFDerivTwo
@@ -326,7 +326,7 @@ theorem laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis
 
 中文:
 定理 laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis
-  结论: {ι : 类型} [Fintype ι] {e : E}
+  结论: {ι : 类型} [有限类型 ι] {e : E}
   证明: by
   simp [InnerProductSpace.laplacianWithin, canonicalCovariantTensor_eq_sum E v,
     tensorIteratedFDerivWithinTwo_eq_iteratedFDerivWithin f hs he]
@@ -352,7 +352,7 @@ theorem laplacian_eq_iteratedFDeriv_orthonormalBasis
 
 中文:
 定理 laplacian_eq_iteratedFDeriv_orthonormalBasis
-  结论: {ι : 类型} [Fintype ι]
+  结论: {ι : 类型} [有限类型 ι]
   证明: by
   ext x
   simp [laplacian, canonicalCovariantTensor_eq_sum E v, tensorIteratedFDerivTwo_eq_iteratedFDeriv]
@@ -422,7 +422,7 @@ theorem laplacianWithin_eq_iteratedDerivWithin_real
 
 中文:
 定理 laplacianWithin_eq_iteratedDerivWithin_real
-  结论: {e : 实数} {s : Set 实数} (f : 实数 -> F)
+  结论: {e : 实数} {s : 集合 实数} (f : 实数 -> F)
   证明: by
   simp only [laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis f hs he
         (OrthonormalBasis.singleton (Fin 1) Real),
@@ -476,7 +476,7 @@ theorem laplacianWithin_eq_iteratedFDerivWithin_complexPlane
 
 中文:
 定理 laplacianWithin_eq_iteratedFDerivWithin_complexPlane
-  结论: {e : Complex} {s : Set Complex} (f : Complex -> F)
+  结论: {e : 复形} {s : 集合 复形} (f : 复形 -> F)
   证明: by
   simp [laplacianWithin_eq_iteratedFDerivWithin_orthonormalBasis f hs he
     Complex.orthonormalBasisOneI]
@@ -501,7 +501,7 @@ theorem laplacian_eq_iteratedFDeriv_complexPlane
 
 中文:
 定理 laplacian_eq_iteratedFDeriv_complexPlane
-  条件: (f : Complex -> F)
+  条件: (f : 复形 -> F)
   证明: by
   simp [laplacian_eq_iteratedFDeriv_orthonormalBasis f Complex.orthonormalBasisOneI]
 

@@ -52,7 +52,7 @@ refine bot_unique ge_of_tendsto' (ENNReal.tendsto_tsum_compl_atTop_zero hs) fun 
 
 中文:
 定理 measure_limsup_cofinite_eq_zero
-  条件: {s : ι -> Set α} (hs : ∑' i, μ (s i) != ∞)
+  条件: {s : ι -> 集合 α} (hs : ∑' i, μ (s i) != ∞)
   证明: by
 refine bot_unique ge_of_tendsto' (ENNReal.tendsto_tsum_compl_atTop_zero hs) fun t => ?_
   calc
@@ -85,7 +85,7 @@ theorem measure_limsup_atTop_eq_zero
 
 中文:
 定理 measure_limsup_atTop_eq_zero
-  条件: {s : 自然数 -> Set α} (hs : ∑' i, μ (s i) != ∞)
+  条件: {s : 自然数 -> 集合 α} (hs : ∑' i, μ (s i) != ∞)
   证明: by
   rw [← Nat.cofinite_eq_atTop]; rw [measure_limsup_cofinite_eq_zero hs]
 
@@ -111,7 +111,7 @@ alias ae_finite_setOf_mem := ae_finite_setOfPred_mem
 
 中文:
 定理 ae_finite_setOfPred_mem
-  条件: {s : ι -> Set α} (h : ∑' i, μ (s i) != ∞)
+  条件: {s : ι -> 集合 α} (h : ∑' i, μ (s i) != ∞)
   证明: by
   rw [ae_iff]; rw [← measure_limsup_cofinite_eq_zero h]
   congr 1 with x
@@ -174,7 +174,7 @@ theorem ae_eventually_notMem
 
 中文:
 定理 ae_eventually_notMem
-  条件: {s : 自然数 -> Set α} (hs : (∑' i, μ (s i)) != ∞)
+  条件: {s : 自然数 -> 集合 α} (hs : (∑' i, μ (s i)) != ∞)
   证明: measure_setOfPred_frequently_eq_zero hs
 
 Depends on / 依赖: measure_setOfPred_frequently_eq_zero
@@ -195,7 +195,7 @@ theorem measure_liminf_cofinite_eq_zero
 
 中文:
 定理 measure_liminf_cofinite_eq_zero
-  条件: [Infinite ι] {s : ι -> Set α} (h : ∑' i, μ (s i) != ∞)
+  条件: [无限 ι] {s : ι -> 集合 α} (h : ∑' i, μ (s i) != ∞)
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [← measure_limsup_cofinite_eq_zero h]
   exact measure_mono liminf_le_limsup
@@ -218,7 +218,7 @@ theorem measure_liminf_atTop_eq_zero
 
 中文:
 定理 measure_liminf_atTop_eq_zero
-  条件: {s : 自然数 -> Set α} (h : (∑' i, μ (s i)) != ∞)
+  条件: {s : 自然数 -> 集合 α} (h : (∑' i, μ (s i)) != ∞)
   证明: by
   rw [← Nat.cofinite_eq_atTop]; rw [measure_liminf_cofinite_eq_zero h]
 
@@ -242,8 +242,8 @@ refine eventuallyEq_set.2 h.mono fun x hx => ?_
   simp [mem_limsup_iff_frequently_mem, hx]
 
 中文:
-定理 limsup_ae_eq_of_forall_ae_eq
-  结论: (s : 自然数 -> Set α) {t : Set α}
+定理 limsup_ae_eq_of_对任意_ae_eq
+  结论: (s : 自然数 -> 集合 α) {t : 集合 α}
   证明: by
   simp only [eventuallyEq_set, ← eventually_countable_forall] at h
 refine eventuallyEq_set.2 h.mono fun x hx => ?_
@@ -270,8 +270,8 @@ refine eventuallyEq_set.2 h.mono fun x hx => ?_
   simp only [mem_liminf_iff_eventually_mem, hx, eventually_const]
 
 中文:
-定理 liminf_ae_eq_of_forall_ae_eq
-  结论: (s : 自然数 -> Set α) {t : Set α}
+定理 liminf_ae_eq_of_对任意_ae_eq
+  结论: (s : 自然数 -> 集合 α) {t : 集合 α}
   证明: by
   simp only [eventuallyEq_set, ← eventually_countable_forall] at h
 refine eventuallyEq_set.2 h.mono fun x hx => ?_

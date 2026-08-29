@@ -124,8 +124,8 @@ theorem HasDerivAt.fun_pow'
 .hasDerivAt simpa using! h.hasFDerivAt.pow' n
 
 中文:
-定理 HasDerivAt.fun_pow'
-  条件: (h : HasDerivAt f f' x) (n : 自然数)
+定理 在点处可导.fun_pow'
+  条件: (h : 在点处可导 f f' x) (n : 自然数)
   证明: by
 .hasDerivAt simpa using! h.hasFDerivAt.pow' n
 
@@ -147,8 +147,8 @@ theorem HasDerivAt.pow'
 @[simp low]
 
 中文:
-定理 HasDerivAt.pow'
-  条件: (h : HasDerivAt f f' x) (n : 自然数)
+定理 在点处可导.pow'
+  条件: (h : 在点处可导 f f' x) (n : 自然数)
   证明: h.fun_pow' n
 
 @[simp low]
@@ -364,8 +364,8 @@ theorem HasDerivAt.pow
 @[to_fun (attr := simp) derivWithin_fun_pow]
 
 中文:
-定理 HasDerivAt.pow
-  条件: (h : HasDerivAt f f' x) (n : 自然数)
+定理 在点处可导.pow
+  条件: (h : 在点处可导 f f' x) (n : 自然数)
   证明: by
 .hasDerivAt simpa using! h.hasFDerivAt.pow n
 

@@ -51,7 +51,7 @@ instance trivialization.isLinear
 
 中文:
 实例 trivialization.isLinear
-  签名: : (trivialization B F).IsLinear 𝕜 where
+  签名: : (trivialization B F).是线性 𝕜 where
   定义体: ⟨fun _ _ => rfl, fun _ _ => rfl⟩
 -/
 instance trivialization.isLinear : (trivialization B F).IsLinear 𝕜 where
@@ -103,7 +103,7 @@ instance vectorBundle
 
 中文:
 实例 vectorBundle
-  签名: : VectorBundle 𝕜 F (Bundle.Trivial B F) where
+  签名: : 向量丛 𝕜 F (Bundle.平凡 B F) where
   定义体: by
     rw [eq_trivialization B F e]
     infer_instance
@@ -258,8 +258,8 @@ instance prod.isLinear
 @[simp]
 
 中文:
-实例 prod.isLinear
-  签名: [e₁.IsLinear 𝕜] [e₂.IsLinear 𝕜]
+实例 乘积.isLinear
+  签名: [e₁.是线性 𝕜] [e₂.是线性 𝕜]
   定义体: fun _ ⟨h₁, h₂⟩ =>
     (((e₁.linear 𝕜 h₁).mk' _).prodMap ((e₂.linear 𝕜 h₂).mk' _)).isLinear
 
@@ -286,7 +286,7 @@ theorem coordChangeL_prod
 
 中文:
 定理 coordChangeL_prod
-  结论: [e₁.IsLinear 𝕜] [e₁'.IsLinear 𝕜] [e₂.IsLinear 𝕜] [e₂'.IsLinear 𝕜] ⦃b⦄
+  结论: [e₁.是线性 𝕜] [e₁'.是线性 𝕜] [e₂.是线性 𝕜] [e₂'.是线性 𝕜] ⦃b⦄
   证明: by
   rw [ContinuousLinearMap.ext_iff]; rw [ContinuousLinearMap.coe_prodMap']
   rintro ⟨v₁, v₂⟩
@@ -322,7 +322,7 @@ theorem prod_apply'
 
 中文:
 定理 prod_apply'
-  结论: [e₁.IsLinear 𝕜] [e₂.IsLinear 𝕜] {x : B} (hx₁ : x in e₁.baseSet)
+  结论: [e₁.是线性 𝕜] [e₂.是线性 𝕜] {x : B} (hx₁ : x in e₁.baseSet)
   证明: rfl
 -/
 theorem prod_apply' [e₁.IsLinear 𝕜] [e₂.IsLinear 𝕜] {x : B} (hx₁ : x in e₁.baseSet)
@@ -356,8 +356,8 @@ instance VectorBundle.prod
     
 
 中文:
-实例 VectorBundle.prod
-  签名: [VectorBundle 𝕜 F₁ E₁] [VectorBundle 𝕜 F₂ E₂]
+实例 向量丛.乘积
+  签名: [向量丛 𝕜 F₁ E₁] [向量丛 𝕜 F₂ E₂]
   定义体: by
     rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩
     infer_instance
@@ -443,7 +443,7 @@ instance [Semiring
   body: inferInstanceAs SMul R (E (f x))
 
 中文:
-实例 [Semiring
+实例 [半环
   签名: R] [对任意 x
   定义体: inferInstanceAs SMul R (E (f x))
 -/
@@ -461,7 +461,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : 对任意 x : B, AddCommMonoid (E x)] (x : B') : AddCommMonoid ((f *ᵖ E) x)
+  签名: : 对任意 x : B, 加法交换幺半群 (E x)] (x : B') : 加法交换幺半群 ((f *ᵖ E) x)
   定义体: inferInstanceAs AddCommMonoid (E (f x))
 
 Depends on / 依赖: AddCommMonoid
@@ -478,7 +478,7 @@ instance [Semiring
   body: inferInstanceAs Module R (E (f x))
 
 中文:
-实例 [Semiring
+实例 [半环
   签名: R] [对任意 x
   定义体: inferInstanceAs Module R (E (f x))
 
@@ -502,7 +502,7 @@ instance Bundle.Trivialization.pullback_linear
 
 中文:
 实例 Bundle.Trivialization.pullback_linear
-  签名: (e : Trivialization F (π F E)) [e.IsLinear 𝕜]
+  签名: (e : Trivialization F (π F E)) [e.是线性 𝕜]
   定义体: e.linear 𝕜 h
 
 Depends on / 依赖: IsLinear
@@ -528,8 +528,8 @@ instance VectorBundle.pullback
 
 
 中文:
-实例 VectorBundle.pullback
-  签名: [对任意 x, TopologicalSpace (E x)] [FiberBundle F E] [VectorBundle 𝕜 F E]
+实例 向量丛.pullback
+  签名: [对任意 x, 拓扑空间 (E x)] [纤维丛 F E] [向量丛 𝕜 F E]
   定义体: by
     rintro _ ⟨e, he, rfl⟩
     infer_instance

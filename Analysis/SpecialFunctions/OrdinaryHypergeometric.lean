@@ -184,7 +184,7 @@ theorem ordinaryHypergeometric_sum_eq
 中文:
 定理 ordinaryHypergeometric_sum_eq
   条件: (x : 𝔸)
-  结论: (ordinaryHypergeometricSeries 𝔸 a b c).sum x =
+  结论: (ordinaryHypergeometricSeries 𝔸 a b c).求和 x =
   证明: tsum_congr fun n => ordinaryHypergeometricSeries_apply_eq a b c x n
 
 Depends on / 依赖: ordinaryHypergeometricSeries_apply_eq, tsum_congr

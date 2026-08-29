@@ -72,8 +72,8 @@ instance [forall
             (by simp [inv_prodComparison_map_fst])
 
 中文:
-实例 [forall
-  签名: (Y : C), HasBinaryProduct X Y] [对任意 (Y : C), PreservesLimit (pair X Y) F] :
+实例 [对任意
+  签名: (Y : C), HasBinaryProduct X Y] [对任意 (Y : C), 保持极限 (pair X Y) F] :
   定义体: by
     let P : (TwoSquare.overPost F X).StructuredArrowRightwards g :=
       TwoSquare.StructuredArrowRightwards.mk _ _ (Over.mk (Y := X ⨯ Z) prod.fst)

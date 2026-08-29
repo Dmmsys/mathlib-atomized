@@ -54,10 +54,10 @@ class UniversallyInjective
     - universally_injective : universally (topologically (Injective ·)) f
 
 中文:
-类 UniversallyInjective
+类 普遍单射
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - universally_injective : universally (topologically (Injective ·)) f
+    - universally_injective : universally (topologically (单射 ·)) f
 -/
 class UniversallyInjective (f : X ⟶ Y) : Prop where
   universally_injective : universally (topologically (Injective ·)) f
@@ -71,8 +71,8 @@ theorem Scheme.Hom.injective
   proof: UniversallyInjective.universally_injective _ _ _ .of_id_snd
 
 中文:
-定理 Scheme.Hom.injective
-  条件: (f : X ⟶ Y) [UniversallyInjective f]
+定理 概形.态射.injective
+  条件: (f : X ⟶ Y) [普遍单射 f]
   证明: UniversallyInjective.universally_injective _ _ _ .of_id_snd
 
 Depends on / 依赖: UniversallyInjective, UniversallyInjective.universally_injective, of_id_snd, universally_injective
@@ -152,7 +152,7 @@ theorem UniversallyInjective.iff_diagonal
   rw [universallyInjective_eq_diagonal]; rfl
 
 中文:
-定理 UniversallyInjective.iff_diagonal
+定理 普遍单射.iff_diagonal
   证明: by
   rw [universallyInjective_eq_diagonal]; rfl
 
@@ -176,8 +176,8 @@ theorem UniversallyInjective.respectsIso
   proof: universallyInjective_eq_diagonal.symm ▸ inferInstance
 
 中文:
-定理 UniversallyInjective.respectsIso
-  结论: RespectsIso @UniversallyInjective
+定理 普遍单射.respectsIso
+  结论: RespectsIso @普遍单射
   证明: universallyInjective_eq_diagonal.symm ▸ inferInstance
 
 Depends on / 依赖: universallyInjective_eq_diagonal, universallyInjective_eq_diagonal.symm
@@ -195,7 +195,7 @@ instance UniversallyInjective.isStableUnderBaseChange
   body: universallyInjective_eq_diagonal.symm ▸ inferInstance
 
 中文:
-实例 UniversallyInjective.isStableUnderBaseChange
+实例 普遍单射.isStableUnderBaseChange
   签名: :
   定义体: universallyInjective_eq_diagonal.symm ▸ inferInstance
 
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @UniversallyInjective
+  签名: MorphismProperty.是Multiplicative @普遍单射
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @UniversallyInjective where

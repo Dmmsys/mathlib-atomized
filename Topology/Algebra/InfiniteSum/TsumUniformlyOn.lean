@@ -43,7 +43,7 @@ theorem HasSumUniformlyOn.of_norm_le_summable
 
 中文:
 定理 HasSumUniformlyOn.of_norm_le_summable
-  结论: {f : α -> β -> F} (hu : Summable u) {s : Set β}
+  结论: {f : α -> β -> F} (hu : Summable u) {s : 集合 β}
   证明: by
   simp [hasSumUniformlyOn_iff_tendstoUniformlyOn, tendstoUniformlyOn_tsum hu hfu]
 
@@ -93,7 +93,7 @@ lemma SummableLocallyUniformlyOn.of_locally_bounded_eventually
 
 中文:
 引理 SummableLocallyUniformlyOn.of_locally_bounded_eventually
-  结论: [TopologicalSpace β]
+  结论: [拓扑空间 β]
   证明: by
   apply HasSumLocallyUniformlyOn.summableLocallyUniformlyOn (g := fun x => ∑' n, f n x)
   rw [hasSumLocallyUniformlyOn_iff_tendstoLocallyUniformlyOn]; rw [tendstoLocallyUniformlyOn_iff_forall_isCompact hs]
@@ -127,7 +127,7 @@ lemma SummableLocallyUniformlyOn_of_locally_bounded
 
 中文:
 引理 SummableLocallyUniformlyOn_of_locally_bounded
-  结论: [TopologicalSpace β] [LocallyCompactSpace β]
+  结论: [拓扑空间 β] [局部紧空间 β]
   证明: by
   apply SummableLocallyUniformlyOn.of_locally_bounded_eventually hs
   intro K hK hKc
@@ -165,7 +165,7 @@ theorem derivWithin_tsum
 
 中文:
 定理 derivWithin_tsum
-  结论: {f : ι -> 𝕜 -> F} (hs : IsOpen s) {x : 𝕜} (hx : x in s)
+  结论: {f : ι -> 𝕜 -> F} (hs : 是开集 s) {x : 𝕜} (hx : x in s)
   证明: by
   apply HasDerivWithinAt.derivWithin ?_ (hs.uniqueDiffWithinAt hx)
   apply HasDerivAt.hasDerivWithinAt
@@ -208,7 +208,7 @@ theorem iteratedDerivWithin_tsum
 
 中文:
 定理 iteratedDerivWithin_tsum
-  结论: {f : ι -> 𝕜 -> F} (m : 自然数) (hs : IsOpen s)
+  结论: {f : ι -> 𝕜 -> F} (m : 自然数) (hs : 是开集 s)
   证明: by
   induction m generalizing x with
   | zero => simp

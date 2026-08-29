@@ -144,7 +144,7 @@ lemma toLimitFun_continuous
 中文:
 引理 toLimitFun_continuous
   条件: (P : ProfiniteGrp.{u})
-  结论: Continuous (toLimitFun P)
+  结论: 连续 (toLimitFun P)
   证明: by
   apply continuous_induced_rng.mpr (continuous_pi _)
   intro H
@@ -265,7 +265,7 @@ theorem toLimit_surjective
 中文:
 定理 toLimit_surjective
   条件: (P : ProfiniteGrp.{u})
-  结论: Function.Surjective (toLimit P)
+  结论: 函数.满射 (toLimit P)
   证明: by
   have : IsClosed (Set.range P.toLimit) :=
     P.toLimit.hom.continuous_toFun.isClosedMap.isClosed_range
@@ -299,7 +299,7 @@ theorem toLimit_injective
 中文:
 定理 toLimit_injective
   条件: (P : ProfiniteGrp.{u})
-  结论: Function.Injective (toLimit P)
+  结论: 函数.单射 (toLimit P)
   证明: by
   change Function.Injective (toLimit P).hom.toMonoidHom
   rw [← MonoidHom.ker_eq_bot_iff]; rw [Subgroup.eq_bot_iff_forall]
@@ -408,7 +408,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: {P : ProfiniteGrp.{u}} (U : OpenNormalSubgroup P)
+  签名: {P : ProfiniteGrp.{u}} (U : OpenNormal子群 P)
   定义体: ProfiniteGrp.ofHom (Y := (diagram P).obj U) {
     toFun := QuotientGroup.mk
     map_one' := rfl

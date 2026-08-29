@@ -30,7 +30,7 @@ theorem map_list_prod
 
 中文:
 定理 map_list_prod
-  条件: [Semiring R] [Semiring S] (f : R ≃+* S) (l : List R)
+  条件: [半环 R] [半环 S] (f : R ≃+* S) (l : 列表 R)
   证明: map_list_prod f l
 -/
 protected theorem map_list_prod [Semiring R] [Semiring S] (f : R ≃+* S) (l : List R) :
@@ -46,7 +46,7 @@ theorem map_list_sum
 
 中文:
 定理 map_list_sum
-  结论: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+  结论: [非幺非结合半环 R] [非幺非结合半环 S]
   证明: map_list_sum f l
 -/
 protected theorem map_list_sum [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
@@ -62,7 +62,7 @@ theorem unop_map_list_prod
 
 中文:
 定理 unop_map_list_prod
-  条件: [Semiring R] [Semiring S] (f : R ≃+* Sᵐᵒᵖ) (l : List R)
+  条件: [半环 R] [半环 S] (f : R ≃+* Sᵐᵒᵖ) (l : 列表 R)
   证明: unop_map_list_prod f l
 -/
 protected theorem unop_map_list_prod [Semiring R] [Semiring S] (f : R ≃+* Sᵐᵒᵖ) (l : List R) :
@@ -79,7 +79,7 @@ theorem map_multiset_prod
 
 中文:
 定理 map_multiset_prod
-  结论: [CommSemiring R] [CommSemiring S] (f : R ≃+* S)
+  结论: [交换半环 R] [交换半环 S] (f : R ≃+* S)
   证明: map_multiset_prod f s
 -/
 protected theorem map_multiset_prod [CommSemiring R] [CommSemiring S] (f : R ≃+* S)
@@ -96,7 +96,7 @@ theorem map_multiset_sum
 
 中文:
 定理 map_multiset_sum
-  结论: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+  结论: [非幺非结合半环 R] [非幺非结合半环 S]
   证明: map_multiset_sum f s
 -/
 protected theorem map_multiset_sum [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
@@ -113,7 +113,7 @@ theorem map_prod
 
 中文:
 定理 map_prod
-  结论: [CommSemiring R] [CommSemiring S] (g : R ≃+* S) (f : α -> R)
+  结论: [交换半环 R] [交换半环 S] (g : R ≃+* S) (f : α -> R)
   证明: map_prod g f s
 -/
 protected theorem map_prod [CommSemiring R] [CommSemiring S] (g : R ≃+* S) (f : α -> R)
@@ -130,7 +130,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  结论: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] (g : R ≃+* S)
+  结论: [非幺非结合半环 R] [非幺非结合半环 S] (g : R ≃+* S)
   证明: map_sum g f s
 -/
 protected theorem map_sum [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] (g : R ≃+* S)

@@ -45,7 +45,7 @@ theorem ConnectedComponent.card_le_card_of_le
 
 中文:
 定理 ConnectedComponent.card_le_card_of_le
-  条件: [Finite V] {G G' : SimpleGraph V} (h : G <= G')
+  条件: [有限 V] {G G' : 简单图 V} (h : G <= G')
   证明: Nat.card_le_card_of_surjective _ ConnectedComponent.surjective_map_ofLE h
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.surjective_map_ofLE, Nat.card_le_card_of_surjective, card_le_card_of_surjective, surjective_map_ofLE
@@ -74,7 +74,7 @@ theorem reachable_iff_exists_finsetWalkLength_nonempty
     exact ⟨p⟩
 
 中文:
-定理 reachable_iff_exists_finsetWalkLength_nonempty
+定理 reachable_iff_存在_finsetWalkLength_nonempty
   条件: (u v : V)
   证明: by
   constructor
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype G.ConnectedComponent
+  签名: 有限类型 G.ConnectedComponent
   定义体: fast_instance% @Quotient.fintype _ _ G.reachableSetoid (inferInstance : DecidableRel G.Reachable)
 
 Depends on / 依赖: DecidableRel, G.Reachable, G.reachableSetoid, Quotient, Quotient.fintype, Reachable, fast_instance, fintype, reachableSetoid
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Decidable G.Preconnected
+  签名: 可判定 G.预连通
   定义体: inferInstanceAs Decidable (forall u v, G.Reachable u v)
 
 Depends on / 依赖: Decidable, G.Reachable, Reachable
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Decidable G.Connected
+  签名: 可判定 G.连通
   定义体: decidable_of_iff (G.Preconnected ∧ (Finset.univ : Finset V).Nonempty) by
     rw [connected_iff]; rw [← Finset.univ_nonempty_iff]
 
@@ -205,7 +205,7 @@ lemma disjiUnion_supp_toFinset_eq_supp_toFinset
 
 中文:
 引理 disjiUnion_supp_toFinset_eq_supp_toFinset
-  结论: {G' : SimpleGraph V} (h : G <= G')
+  结论: {G' : 简单图 V} (h : G <= G')
   证明: Finset.coe_injective by simpa using ConnectedComponent.biUnion_supp_eq_supp h _
 
 Depends on / 依赖: ConnectedComponent, ConnectedComponent.biUnion_supp_eq_supp, Finset, Finset.coe_injective, biUnion_supp_eq_supp, coe_injective
@@ -230,7 +230,7 @@ abbreviation oddComponents
 
 中文:
 缩写 oddComponents
-  签名: : Set G.ConnectedComponent
+  签名: : 集合 G.ConnectedComponent
   定义体: {c : G.ConnectedComponent | Odd c.supp.ncard}
 
 Depends on / 依赖: ConnectedComponent, G.ConnectedComponent, c.supp.ncard
@@ -254,7 +254,7 @@ lemma ConnectedComponent.odd_oddComponents_ncard_subset_supp
 
 中文:
 引理 ConnectedComponent.odd_oddComponents_ncard_subset_supp
-  结论: [Finite V] {G'}
+  结论: [有限 V] {G'}
   证明: by
   simp_rw [← Nat.card_coe_set_eq]
   classical
@@ -297,7 +297,7 @@ lemma odd_ncard_oddComponents
 
 中文:
 引理 odd_ncard_oddComponents
-  条件: [Finite V]
+  条件: [有限 V]
   结论: Odd G.oddComponents.ncard ↔ Odd (自然数.card V)
   证明: by
   classical
@@ -337,7 +337,7 @@ lemma ncard_oddComponents_mono
 
 中文:
 引理 ncard_oddComponents_mono
-  条件: [Finite V] {G' : SimpleGraph V} (h : G <= G')
+  条件: [有限 V] {G' : 简单图 V} (h : G <= G')
   证明: by
   have aux (c : G'.ConnectedComponent) (hc : Odd c.supp.ncard) :
       {c' : G.ConnectedComponent | Odd c'.supp.ncard ∧ c'.supp subseteq c.supp}.Nonempty := by

@@ -42,7 +42,7 @@ theorem isSheaf_of_isTerminal_of_indiscrete
 
 中文:
 定理 isSheaf_of_isTerminal_of_indiscrete
-  结论: {X : TopCat.{w}} (hind : X.str = ⊤) (F : Presheaf C X)
+  结论: {X : 顶元素范畴.{w}} (hind : X.str = ⊤) (F : 预层 C X)
   证明: fun c U s hs => by
   have : IndiscreteTopology X := ⟨hind⟩
   obtain rfl | hne := eq_or_ne U ⊥
@@ -86,7 +86,7 @@ theorem isSheaf_iff_isTerminal_of_indiscrete
 
 中文:
 定理 isSheaf_iff_isTerminal_of_indiscrete
-  结论: {X : TopCat.{w}} (hind : X.str = ⊤)
+  结论: {X : 顶元素范畴.{w}} (hind : X.str = ⊤)
   证明: ⟨fun h => ⟨Sheaf.isTerminalOfEmpty ⟨F, h⟩⟩, fun ⟨it⟩ =>
     isSheaf_of_isTerminal_of_indiscrete hind F it⟩
 
@@ -107,7 +107,7 @@ theorem isSheaf_on_punit_of_isTerminal
 
 中文:
 定理 isSheaf_on_punit_of_isTerminal
-  结论: (F : Presheaf C (TopCat.of PUnit))
+  结论: (F : 预层 C (顶元素范畴.of 命题单元))
   证明: isSheaf_of_isTerminal_of_indiscrete (@Subsingleton.elim (TopologicalSpace PUnit) _ _ _) F it
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, TopologicalSpace, isSheaf_of_isTerminal_of_indiscrete
@@ -126,7 +126,7 @@ theorem isSheaf_on_punit_iff_isTerminal
 
 中文:
 定理 isSheaf_on_punit_iff_isTerminal
-  条件: (F : Presheaf C (TopCat.of PUnit))
+  条件: (F : 预层 C (顶元素范畴.of 命题单元))
   证明: ⟨fun h => ⟨Sheaf.isTerminalOfEmpty ⟨F, h⟩⟩, fun ⟨it⟩ => isSheaf_on_punit_of_isTerminal F it⟩
 
 Depends on / 依赖: Sheaf.isTerminalOfEmpty, isSheaf_on_punit_of_isTerminal, isTerminalOfEmpty

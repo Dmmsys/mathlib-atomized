@@ -42,7 +42,7 @@ class Bifunctor
     - bimap : forall {α α' β β'}, (α -> α') -> (β -> β') -> F α β -> F α' β'
 
 中文:
-类 Bifunctor
+类 双函子
   参数: (F : 类型u₀ -> 类型u₁ -> 类型u₂)
   公理与运算 (1 个):
     - bimap : 对任意 {α α' β β'}, (α -> α') -> (β -> β') -> F α β -> F α' β'
@@ -64,7 +64,7 @@ class LawfulBifunctor
 
 中文:
 类 LawfulBifunctor
-  参数: (F : 类型u₀ -> 类型u₁ -> 类型u₂) [Bifunctor F]
+  参数: (F : 类型u₀ -> 类型u₁ -> 类型u₂) [双函子 F]
   公理与运算 (2 个):
     - id_bimap : 对任意 {α β} (x : F α β), bimap id id x = x
     - bimap_bimap : 对任意 {α₀ α₁ α₂ β₀ β₁ β₂} (f : α₀ -> α₁) (f' : α₁ -> α₂) (g : β₀ -> β₁) (g' : β₁ -> β₂) (x : F α₀ β₀), bimap f' g' (bimap f g x) = bimap (f' ∘ f) (g' ∘ g) x
@@ -272,8 +272,8 @@ instance Prod.bifunctor
   body: @Prod.map
 
 中文:
-实例 Prod.bifunctor
-  签名: : Bifunctor Prod where bimap
+实例 积类型.bifunctor
+  签名: : 双函子 积类型 where bimap
   定义体: @Prod.map
 
 Depends on / 依赖: Prod.map
@@ -290,8 +290,8 @@ instance Prod.lawfulBifunctor
   bimap_bimap _ _ _ _ _ := rfl
 
 中文:
-实例 Prod.lawfulBifunctor
-  签名: : LawfulBifunctor Prod where
+实例 积类型.lawfulBifunctor
+  签名: : LawfulBifunctor 积类型 where
   定义体: rfl
   bimap_bimap _ _ _ _ _ := rfl
 -/
@@ -308,8 +308,8 @@ instance Bifunctor.const
   body: f
 
 中文:
-实例 Bifunctor.const
-  签名: : Bifunctor Const where bimap f _
+实例 双函子.const
+  签名: : 双函子 Const where bimap f _
   定义体: f
 -/
 instance Bifunctor.const : Bifunctor Const where bimap f _ := f
@@ -342,8 +342,8 @@ instance Bifunctor.flip
   body: (bimap f' f x : F β' α')
 
 中文:
-实例 Bifunctor.flip
-  签名: : Bifunctor (flip F) where
+实例 双函子.flip
+  签名: : 双函子 (flip F) where
   定义体: (bimap f' f x : F β' α')
 -/
 instance Bifunctor.flip : Bifunctor (flip F) where
@@ -380,8 +380,8 @@ instance Sum.bifunctor
   body: @Sum.map
 
 中文:
-实例 Sum.bifunctor
-  签名: : Bifunctor Sum where bimap
+实例 和.bifunctor
+  签名: : 双函子 和 where bimap
   定义体: @Sum.map
 
 Depends on / 依赖: Sum.map
@@ -398,8 +398,8 @@ instance Sum.lawfulBifunctor
   bimap_bimap := by aesop
 
 中文:
-实例 Sum.lawfulBifunctor
-  签名: : LawfulBifunctor Sum where
+实例 和.lawfulBifunctor
+  签名: : LawfulBifunctor 和 where
   定义体: by aesop
   bimap_bimap := by aesop
 
@@ -432,8 +432,8 @@ instance Function.bicompl.bifunctor
   body: (bimap (map f) (map f') x : F (G α') (H β'))
 
 中文:
-实例 Function.bicompl.bifunctor
-  签名: : Bifunctor (bicompl F G H) where
+实例 函数.bicompl.bifunctor
+  签名: : 双函子 (bicompl F G H) where
   定义体: (bimap (map f) (map f') x : F (G α') (H β'))
 -/
 instance Function.bicompl.bifunctor : Bifunctor (bicompl F G H) where
@@ -450,8 +450,8 @@ instance Function.bicompl.lawfulBifunctor
   constructor <;> intros <;> simp [bimap, map_id, map_comp_map, functor_norm]
 
 中文:
-实例 Function.bicompl.lawfulBifunctor
-  签名: [LawfulFunctor G] [LawfulFunctor H] [LawfulBifunctor F]
+实例 函数.bicompl.lawfulBifunctor
+  签名: [Lawful函子 G] [Lawful函子 H] [LawfulBifunctor F]
   定义体: by
   constructor <;> intros <;> simp [bimap, map_id, map_comp_map, functor_norm]
 
@@ -476,8 +476,8 @@ instance Function.bicompr.bifunctor
   body: (map (bimap f f') x : G (F α' β'))
 
 中文:
-实例 Function.bicompr.bifunctor
-  签名: : Bifunctor (bicompr G F) where
+实例 函数.bicompr.bifunctor
+  签名: : 双函子 (bicompr G F) where
   定义体: (map (bimap f f') x : G (F α' β'))
 -/
 instance Function.bicompr.bifunctor : Bifunctor (bicompr G F) where
@@ -494,8 +494,8 @@ instance Function.bicompr.lawfulBifunctor
   constructor <;> intros <;> simp [bimap, functor_norm]
 
 中文:
-实例 Function.bicompr.lawfulBifunctor
-  签名: [LawfulFunctor G] [LawfulBifunctor F]
+实例 函数.bicompr.lawfulBifunctor
+  签名: [Lawful函子 G] [LawfulBifunctor F]
   定义体: by
   constructor <;> intros <;> simp [bimap, functor_norm]
 

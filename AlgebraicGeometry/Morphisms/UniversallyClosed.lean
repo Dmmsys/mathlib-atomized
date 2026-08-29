@@ -50,10 +50,10 @@ class UniversallyClosed
     - universally_isClosedMap : universally (topologically @IsClosedMap) f
 
 中文:
-类 UniversallyClosed
+类 普遍闭
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - universally_isClosedMap : universally (topologically @IsClosedMap) f
+    - universally_isClosedMap : universally (topologically @是闭映射) f
 -/
 class UniversallyClosed (f : X ⟶ Y) : Prop where
   universally_isClosedMap : universally (topologically @IsClosedMap) f
@@ -70,8 +70,8 @@ lemma Scheme.Hom.isClosedMap
   proof: UniversallyClosed.universally_isClosedMap _ _ _ IsPullback.of_id_snd
 
 中文:
-引理 Scheme.Hom.isClosedMap
-  条件: {X Y : Scheme} (f : X ⟶ Y) [UniversallyClosed f]
+引理 概形.态射.isClosedMap
+  条件: {X Y : 概形} (f : X ⟶ Y) [普遍闭 f]
   证明: UniversallyClosed.universally_isClosedMap _ _ _ IsPullback.of_id_snd
 
 Depends on / 依赖: IsPullback, IsPullback.of_id_snd, UniversallyClosed, UniversallyClosed.universally_isClosedMap, of_id_snd, universally_isClosedMap
@@ -90,7 +90,7 @@ theorem universallyClosed_eq
 
 中文:
 定理 universallyClosed_eq
-  结论: @UniversallyClosed = universally (topologically @IsClosedMap)
+  结论: @普遍闭 = universally (topologically @是闭映射)
   证明: by
   ext X Y f; rw [universallyClosed_iff]
 
@@ -116,7 +116,7 @@ theorem universallyClosed_respectsIso
 
 中文:
 定理 universallyClosed_respectsIso
-  结论: RespectsIso @UniversallyClosed
+  结论: RespectsIso @普遍闭
   证明: universallyClosed_eq.symm ▸ universally_respectsIso (topologically @IsClosedMap)
 
 Depends on / 依赖: IsClosedMap, topologically, universallyClosed_eq, universallyClosed_eq.symm, universally_respectsIso
@@ -134,7 +134,7 @@ instance universallyClosed_isStableUnderBaseChange
 
 中文:
 实例 universallyClosed_isStableUnderBaseChange
-  签名: : IsStableUnderBaseChange @UniversallyClosed
+  签名: : 是StableUnderBaseChange @普遍闭
   定义体: universallyClosed_eq.symm ▸ universally_isStableUnderBaseChange (topologically @IsClosedMap)
 
 Depends on / 依赖: IsClosedMap, topologically, universallyClosed_eq, universallyClosed_eq.symm, universally_isStableUnderBaseChange
@@ -201,8 +201,8 @@ lemma UniversallyClosed.of_comp_surjective
     (Scheme.Hom.continuous _) this
 
 中文:
-引理 UniversallyClosed.of_comp_surjective
-  结论: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+引理 普遍闭.of_comp_surjective
+  结论: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: by
   constructor
   intro X' Y' i₁ i₂ f' H
@@ -232,7 +232,7 @@ instance universallyClosedTypeComp
 
 中文:
 实例 universallyClosedTypeComp
-  签名: {X Y Z : Scheme} (f : X ⟶ Y) (g : Y ⟶ Z)
+  签名: {X Y Z : 概形} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: comp_mem _ _ _ hf hg
 
 Depends on / 依赖: comp_mem
@@ -251,7 +251,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @UniversallyClosed
+  签名: MorphismProperty.是Multiplicative @普遍闭
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @UniversallyClosed where
@@ -268,7 +268,7 @@ instance universallyClosed_fst
 
 中文:
 实例 universallyClosed_fst
-  签名: {X Y Z : Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [hg : UniversallyClosed g]
+  签名: {X Y Z : 概形} (f : X ⟶ Z) (g : Y ⟶ Z) [hg : 普遍闭 g]
   定义体: MorphismProperty.pullback_fst f g hg
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -288,7 +288,7 @@ instance universallyClosed_snd
 
 中文:
 实例 universallyClosed_snd
-  签名: {X Y Z : Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [hf : UniversallyClosed f]
+  签名: {X Y Z : 概形} (f : X ⟶ Z) (g : Y ⟶ Z) [hf : 普遍闭 f]
   定义体: MorphismProperty.pullback_snd f g hf
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
@@ -312,7 +312,7 @@ instance universallyClosed_isZariskiLocalAtTarget
 
 中文:
 实例 universallyClosed_isZariskiLocalAtTarget
-  签名: : IsZariskiLocalAtTarget @UniversallyClosed
+  签名: : IsZariskiLocalAtTarget @普遍闭
   定义体: by
   rw [universallyClosed_eq]
   apply universally_isZariskiLocalAtTarget
@@ -419,9 +419,9 @@ lemma Scheme.Hom.isProperMap
   exact isCompact_range (S
 
 中文:
-引理 Scheme.Hom.isProperMap
-  条件: (f : X ⟶ Y) [UniversallyClosed f]
-  结论: Is命题erMap f
+引理 概形.态射.isProperMap
+  条件: (f : X ⟶ Y) [普遍闭 f]
+  结论: 是真映射 f
   证明: by
   rw [isProperMap_iff_isClosedMap_and_compact_fibers]
   refine ⟨f.continuous, f.isClosedMap, fun y => ?_⟩

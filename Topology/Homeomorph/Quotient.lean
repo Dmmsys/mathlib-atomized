@@ -89,7 +89,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: {rX : Setoid X} {rY : Setoid Y} (e : X ≃ₜ Y)
+  签名: {rX : 集合等价关系 X} {rY : 集合等价关系 Y} (e : X ≃ₜ Y)
   定义体: Quot.congr e eq
 -/
 protected def congr {rX : Setoid X} {rY : Setoid Y} (e : X ≃ₜ Y)
@@ -106,7 +106,7 @@ definition congrRight
 
 中文:
 定义 congrRight
-  签名: {r r' : Setoid X}
+  签名: {r r' : 集合等价关系 X}
   定义体: Quot.congrRight eq
 -/
 protected def congrRight {r r' : Setoid X}

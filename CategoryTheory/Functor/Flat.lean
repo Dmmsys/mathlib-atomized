@@ -77,7 +77,7 @@ class RepresentablyFlat
 类 RepresentablyFlat
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - cofiltered : 对任意 X : D, IsCofiltered (StructuredArrow X F)
+    - cofiltered : 对任意 X : D, 是余filtered (结构化箭头 X F)
 -/
 class RepresentablyFlat (F : C ⥤ D) : Prop where
   cofiltered : forall X : D, IsCofiltered (StructuredArrow X F)
@@ -95,7 +95,7 @@ class RepresentablyCoflat
 类 RepresentablyCoflat
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - filtered : 对任意 X : D, IsFiltered (CostructuredArrow F X)
+    - filtered : 对任意 X : D, 是Filtered (CostructuredArrow F X)
 -/
 class RepresentablyCoflat (F : C ⥤ D) : Prop where
   filtered : forall X : D, IsFiltered (CostructuredArrow F X)
@@ -114,7 +114,7 @@ instance RepresentablyFlat.of_isRightAdjoint
 
 中文:
 实例 RepresentablyFlat.of_isRightAdjoint
-  签名: [F.IsRightAdjoint]
+  签名: [F.是右伴随]
   定义体: IsCofiltered.of_isInitial _ (mkInitialOfLeftAdjoint _ (.ofIsRightAdjoint F) _)
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.of_isInitial, mkInitialOfLeftAdjoint, ofIsRightAdjoint, of_isInitial
@@ -132,7 +132,7 @@ instance RepresentablyCoflat.of_isLeftAdjoint
 
 中文:
 实例 RepresentablyCoflat.of_isLeftAdjoint
-  签名: [F.IsLeftAdjoint]
+  签名: [F.是左伴随]
   定义体: IsFiltered.of_isTerminal _ (mkTerminalOfRightAdjoint _ (.ofIsLeftAdjoint F) _)
 
 Depends on / 依赖: IsFiltered, IsFiltered.of_isTerminal, mkTerminalOfRightAdjoint, ofIsLeftAdjoint, of_isTerminal
@@ -388,7 +388,7 @@ lemma final_of_representablyFlat
 中文:
 引理 final_of_representablyFlat
   条件: [h : RepresentablyFlat F]
-  结论: F.Final where
+  结论: F.终 where
   证明: IsCofiltered.isConnected _
 
 Depends on / 依赖: IsCofiltered, IsCofiltered.isConnected, isConnected
@@ -408,7 +408,7 @@ lemma initial_of_representablyCoflat
 中文:
 引理 initial_of_representablyCoflat
   条件: [h : RepresentablyCoflat F]
-  结论: F.Initial where
+  结论: F.初始 where
   证明: IsFiltered.isConnected _
 
 Depends on / 依赖: IsFiltered, IsFiltered.isConnected, isConnected
@@ -436,7 +436,7 @@ theorem flat_of_preservesFiniteLimits
 
 中文:
 定理 flat_of_preservesFiniteLimits
-  条件: [HasFiniteLimits C] (F : C ⥤ D) [PreservesFiniteLimits F]
+  条件: [有有限极限 C] (F : C ⥤ D) [保持FiniteLimits F]
   证明: ⟨fun X =>
     haveI : HasFiniteLimits (StructuredArrow X F) := by
       apply hasFiniteLimits_of_hasFiniteLimits_of_size.{v₁} (StructuredArrow X F)
@@ -464,7 +464,7 @@ theorem coflat_of_preservesFiniteColimits
 
 中文:
 定理 coflat_of_preservesFiniteColimits
-  结论: [HasFiniteColimits C] (F : C ⥤ D)
+  结论: [有有限余极限 C] (F : C ⥤ D)
   证明: let _ := preservesFiniteLimits_op F
   (representablyFlat_op_iff _).1 (flat_of_preservesFiniteLimits _)
 
@@ -564,7 +564,7 @@ theorem uniq
 
 中文:
 定理 uniq
-  结论: {K : J ⥤ C} {c : Cone K} (hc : IsLimit c) (s : Cone (K ⋙ F))
+  结论: {K : J ⥤ C} {c : 锥 K} (hc : 是极限 c) (s : 锥 (K ⋙ F))
   证明: by
   -- We can make two cones over the diagram of `s` via `f₁` and `f₂`.
   let α₁ : (F.mapCone c).toStructuredArrow ⋙ map f₁ ⟶ s.toStructuredArrow :=
@@ -703,7 +703,7 @@ lemma preservesFiniteLimits_iff_flat
 
 中文:
 引理 preservesFiniteLimits_iff_flat
-  条件: [HasFiniteLimits C] (F : C ⥤ D)
+  条件: [有有限极限 C] (F : C ⥤ D)
   证明: ⟨fun _ => preservesFiniteLimits_of_flat F, fun _ => flat_of_preservesFiniteLimits F⟩
 
 Depends on / 依赖: flat_of_preservesFiniteLimits, preservesFiniteLimits_of_flat
@@ -722,7 +722,7 @@ lemma preservesFiniteColimits_iff_coflat
 
 中文:
 引理 preservesFiniteColimits_iff_coflat
-  条件: [HasFiniteColimits C] (F : C ⥤ D)
+  条件: [有有限余极限 C] (F : C ⥤ D)
   证明: ⟨fun _ => preservesFiniteColimits_of_coflat F, fun _ => coflat_of_preservesFiniteColimits F⟩
 
 Depends on / 依赖: coflat_of_preservesFiniteColimits, preservesFiniteColimits_of_coflat

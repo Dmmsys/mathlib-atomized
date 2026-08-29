@@ -51,7 +51,7 @@ definition IsMinor
 
 中文:
 定义 IsMinor
-  签名: (N M : Matroid α)
+  签名: (N M : 拟阵 α)
   定义体: exists C D, N = M ／ C ＼ D
 -/
 def IsMinor (N M : Matroid α) : Prop := exists C D, N = M ／ C ＼ D
@@ -71,7 +71,7 @@ lemma contract_delete_isMinor
 
 中文:
 引理 contract_delete_isMinor
-  条件: (M : Matroid α) (C D : Set α)
+  条件: (M : 拟阵 α) (C D : 集合 α)
   结论: M ／ C ＼ D <=m M
   证明: ⟨C, D, rfl⟩
 -/
@@ -91,7 +91,7 @@ lemma IsMinor.exists_eq_contract_delete_disjoint
     by simp [delete_eq_delete_iff, inter_assoc, inter_sdiff_assoc]⟩
 
 中文:
-引理 IsMinor.exists_eq_contract_delete_disjoint
+引理 IsMinor.存在_eq_contract_delete_disjoint
   条件: (h : N <=m M)
   证明: by
   obtain ⟨C, D, rfl⟩ := h
@@ -118,7 +118,7 @@ definition IsStrictMinor
 
 中文:
 定义 IsStrictMinor
-  签名: (N M : Matroid α)
+  签名: (N M : 拟阵 α)
   定义体: N <=m M ∧ ¬ M <=m N
 -/
 def IsStrictMinor (N M : Matroid α) : Prop := N <=m M ∧ ¬ M <=m N
@@ -162,7 +162,7 @@ lemma IsMinor.refl
 
 中文:
 引理 IsMinor.refl
-  条件: {M : Matroid α}
+  条件: {M : 拟阵 α}
   结论: M <=m M
   证明: ⟨∅, ∅, by simp⟩
 -/
@@ -182,7 +182,7 @@ lemma IsMinor.trans
 
 中文:
 引理 IsMinor.trans
-  条件: {M₁ M₂ M₃ : Matroid α} (h : M₁ <=m M₂) (h' : M₂ <=m M₃)
+  条件: {M₁ M₂ M₃ : 拟阵 α} (h : M₁ <=m M₂) (h' : M₂ <=m M₃)
   结论: M₁ <=m M₃
   证明: by
   obtain ⟨C₁, D₁, rfl⟩ := h
@@ -304,7 +304,7 @@ lemma le_eq_isMinor
 
 中文:
 引理 le_eq_isMinor
-  结论: (fun M M' : Matroid α => M <= M') = Matroid.IsMinor
+  结论: (fun M M' : 拟阵 α => M <= M') = 拟阵.IsMinor
   证明: rfl
 
 @[simp]
@@ -322,7 +322,7 @@ lemma lt_eq_isStrictMinor
 
 中文:
 引理 lt_eq_isStrictMinor
-  结论: (fun M M' : Matroid α => M < M') = Matroid.IsStrictMinor
+  结论: (fun M M' : 拟阵 α => M < M') = 拟阵.IsStrictMinor
   证明: rfl
 -/
 lemma lt_eq_isStrictMinor : (fun M M' : Matroid α => M < M') = Matroid.IsStrictMinor := rfl
@@ -376,7 +376,7 @@ lemma isStrictMinor_irrefl
 
 中文:
 引理 isStrictMinor_irrefl
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: ¬ (M <m M)
   证明: lt_irrefl M
 
@@ -560,9 +560,9 @@ lemma IsNonloop.of_isMinor
   exact h.of_delete.of_contract
 
 中文:
-引理 IsNonloop.of_isMinor
-  条件: (h : N.IsNonloop e) (hNM : N <=m M)
-  结论: M.IsNonloop e
+引理 是Nonloop.of_isMinor
+  条件: (h : N.是Nonloop e) (hNM : N <=m M)
+  结论: M.是Nonloop e
   证明: by
   obtain ⟨C, D, rfl⟩ := hNM
   exact h.of_delete.of_contract
@@ -584,7 +584,7 @@ lemma Dep.of_isMinor
 
 中文:
 引理 Dep.of_isMinor
-  条件: {D : Set α} (hD : M.Dep D) (hDN : D subseteq N.E) (hNM : N <=m M)
+  条件: {D : 集合 α} (hD : M.Dep D) (hDN : D subseteq N.E) (hNM : N <=m M)
   结论: N.Dep D
   证明: ⟨fun h => hD.not_indep h.of_isMinor hNM, hDN⟩
 

@@ -41,8 +41,8 @@ definition StrictConvex
   body: s.Pairwise fun x y => forall ⦃a b : 𝕜⦄, 0 < a -> 0 < b -> a + b = 1 -> a • x + b • y in interior s
 
 中文:
-定义 StrictConvex
-  签名: (𝕜 : 类型) {E : 类型} [Semiring 𝕜] [PartialOrder 𝕜] [TopologicalSpace E]
+定义 严格凸
+  签名: (𝕜 : 类型) {E : 类型} [半环 𝕜] [偏序 𝕜] [拓扑空间 E]
   定义体: s.Pairwise fun x y => forall ⦃a b : 𝕜⦄, 0 < a -> 0 < b -> a + b = 1 -> a • x + b • y in interior s
 
 Depends on / 依赖: Pairwise, interior, s.Pairwise
@@ -90,8 +90,8 @@ theorem StrictConvex.openSegment_subset
   proof: strictConvex_iff_openSegment_subset.1 hs hx hy h
 
 中文:
-定理 StrictConvex.openSegment_subset
-  结论: (hs : StrictConvex 𝕜 s) (hx : x in s) (hy : y in s)
+定理 严格凸.openSegment_subset
+  结论: (hs : 严格凸 𝕜 s) (hx : x in s) (hy : y in s)
   证明: strictConvex_iff_openSegment_subset.1 hs hx hy h
 
 Depends on / 依赖: strictConvex_iff_openSegment_subset
@@ -110,7 +110,7 @@ theorem strictConvex_empty
 
 中文:
 定理 strictConvex_empty
-  结论: StrictConvex 𝕜 (∅ : Set E)
+  结论: 严格凸 𝕜 (∅ : 集合 E)
   证明: pairwise_empty _
 
 Depends on / 依赖: pairwise_empty
@@ -135,7 +135,7 @@ hs.eq hx hy fun H => h H ha hb hab
 
 中文:
 定理 strictConvex_univ
-  结论: StrictConvex 𝕜 (univ : Set E)
+  结论: 严格凸 𝕜 (univ : 集合 E)
   证明: by
   intro x _ y _ _ a b _ _ _
   rw [interior_univ]
@@ -168,8 +168,8 @@ theorem StrictConvex.inter
   exact ⟨hs hx.1 hy.1 hxy ha hb hab, ht hx.2 hy.2 hxy ha hb hab⟩
 
 中文:
-定理 StrictConvex.inter
-  条件: {t : Set E} (hs : StrictConvex 𝕜 s) (ht : StrictConvex 𝕜 t)
+定理 严格凸.inter
+  条件: {t : 集合 E} (hs : 严格凸 𝕜 s) (ht : 严格凸 𝕜 t)
   证明: by
   intro x hx y hy hxy a b ha hb hab
   rw [interior_inter]
@@ -197,7 +197,7 @@ theorem Directed.strictConvex_iUnion
 
 中文:
 定理 Directed.strictConvex_iUnion
-  结论: {ι : Sort*} {s : ι -> Set E} (hdir : Directed (· subseteq ·) s)
+  结论: {ι : 类型层*} {s : ι -> 集合 E} (hdir : Directed (· subseteq ·) s)
   证明: by
   rintro x hx y hy hxy a b ha hb hab
   rw [mem_iUnion] at hx hy
@@ -229,7 +229,7 @@ theorem DirectedOn.strictConvex_sUnion
 
 中文:
 定理 DirectedOn.strictConvex_sUnion
-  结论: {S : Set (Set E)} (hdir : DirectedOn (· subseteq ·) S)
+  结论: {S : 集合 (集合 E)} (hdir : DirectedOn (· subseteq ·) S)
   证明: by
   rw [sUnion_eq_iUnion]
   exact (directedOn_iff_directed.1 hdir).strictConvex_iUnion fun s => hS _ s.2
@@ -258,9 +258,9 @@ theorem StrictConvex.convex
 interior_subset hs hx hy hxy ha hb hab
 
 中文:
-定理 StrictConvex.convex
-  条件: (hs : StrictConvex 𝕜 s)
-  结论: Convex 𝕜 s
+定理 严格凸.convex
+  条件: (hs : 严格凸 𝕜 s)
+  结论: 凸 𝕜 s
   证明: convex_iff_pairwise_pos.2 fun _ hx _ hy hxy _ _ ha hb hab =>
 interior_subset hs hx hy hxy ha hb hab
 -/
@@ -277,8 +277,8 @@ theorem Convex.strictConvex_of_isOpen
   proof: fun _ hx _ hy _ _ _ ha hb hab => h.interior_eq.symm ▸ hs hx hy ha.le hb.le hab
 
 中文:
-定理 Convex.strictConvex_of_isOpen
-  条件: (h : IsOpen s) (hs : Convex 𝕜 s)
+定理 凸.strictConvex_of_isOpen
+  条件: (h : 是开集 s) (hs : 凸 𝕜 s)
   证明: fun _ hx _ hy _ _ _ ha hb hab => h.interior_eq.symm ▸ hs hx hy ha.le hb.le hab
 -/
 protected theorem Convex.strictConvex_of_isOpen (h : IsOpen s) (hs : Convex 𝕜 s) :
@@ -295,9 +295,9 @@ theorem IsOpen.strictConvex_iff
   proof: ⟨StrictConvex.convex, Convex.strictConvex_of_isOpen h⟩
 
 中文:
-定理 IsOpen.strictConvex_iff
-  条件: (h : IsOpen s)
-  结论: StrictConvex 𝕜 s ↔ Convex 𝕜 s
+定理 是开集.strictConvex_iff
+  条件: (h : 是开集 s)
+  结论: 严格凸 𝕜 s ↔ 凸 𝕜 s
   证明: ⟨StrictConvex.convex, Convex.strictConvex_of_isOpen h⟩
 
 Depends on / 依赖: Convex, Convex.strictConvex_of_isOpen, StrictConvex, StrictConvex.convex, convex, strictConvex_of_isOpen
@@ -317,7 +317,7 @@ theorem strictConvex_singleton
 中文:
 定理 strictConvex_singleton
   条件: (c : E)
-  结论: StrictConvex 𝕜 ({c} : Set E)
+  结论: 严格凸 𝕜 ({c} : 集合 E)
   证明: pairwise_singleton _ _
 
 Depends on / 依赖: pairwise_singleton
@@ -335,9 +335,9 @@ theorem Set.Subsingleton.strictConvex
   proof: hs.pairwise _
 
 中文:
-定理 Set.Subsingleton.strictConvex
-  条件: (hs : s.Subsingleton)
-  结论: StrictConvex 𝕜 s
+定理 集合.子单例.strictConvex
+  条件: (hs : s.子单例)
+  结论: 严格凸 𝕜 s
   证明: hs.pairwise _
 
 Depends on / 依赖: hs.pairwise, pairwise
@@ -357,8 +357,8 @@ theorem StrictConvex.linear_image
   rw [map_add]; rw [f.map_smul_of_tower a]; rw [f.map_smul_of_tower b]
 
 中文:
-定理 StrictConvex.linear_image
-  结论: [Semiring 𝕝] [Module 𝕝 E] [Module 𝕝 F]
+定理 严格凸.linear_image
+  结论: [半环 𝕝] [模 𝕝 E] [模 𝕝 F]
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ hxy a b ha hb hab
   refine hf.image_interior_subset _ ⟨a • x + b • y, hs hx hy (ne_of_apply_ne _ hxy) ha hb hab, ?_⟩
@@ -382,8 +382,8 @@ theorem StrictConvex.is_linear_image
   proof: hs.linear_image (h.mk' f) hf
 
 中文:
-定理 StrictConvex.is_linear_image
-  结论: (hs : StrictConvex 𝕜 s) {f : E -> F} (h : IsLinearMap 𝕜 f)
+定理 严格凸.is_linear_image
+  结论: (hs : 严格凸 𝕜 s) {f : E -> F} (h : 是线性映射 𝕜 f)
   证明: hs.linear_image (h.mk' f) hf
 
 Depends on / 依赖: h.mk, hs.linear_image, linear_image
@@ -405,8 +405,8 @@ theorem StrictConvex.linear_preimage
   exact hs hx hy (hfinj.ne hxy) ha hb hab
 
 中文:
-定理 StrictConvex.linear_preimage
-  结论: {s : Set F} (hs : StrictConvex 𝕜 s) (f : E ->ₗ[𝕜] F)
+定理 严格凸.linear_preimage
+  结论: {s : 集合 F} (hs : 严格凸 𝕜 s) (f : E ->ₗ[𝕜] F)
   证明: by
   intro x hx y hy hxy a b ha hb hab
   refine preimage_interior_subset_interior_preimage hf ?_
@@ -431,8 +431,8 @@ theorem StrictConvex.is_linear_preimage
   proof: hs.linear_preimage (h.mk' f) hf hfinj
 
 中文:
-定理 StrictConvex.is_linear_preimage
-  结论: {s : Set F} (hs : StrictConvex 𝕜 s) {f : E -> F}
+定理 严格凸.is_linear_preimage
+  结论: {s : 集合 F} (hs : 严格凸 𝕜 s) {f : E -> F}
   证明: hs.linear_preimage (h.mk' f) hf hfinj
 
 Depends on / 依赖: h.mk, hs.linear_preimage, linear_preimage
@@ -461,8 +461,8 @@ theorem Set.OrdConnected.strictConvex
         (isOpen_Ioo.subset_interior_iff.2 <| Ioo_subset_Icc_self.trans <| hs.out ‹_› ‹_›)
 
 中文:
-定理 Set.OrdConnected.strictConvex
-  条件: {s : Set β} (hs : OrdConnected s)
+定理 集合.序连通.strictConvex
+  条件: {s : 集合 β} (hs : 序连通 s)
   证明: by
   refine strictConvex_iff_openSegment_subset.2 fun x hx y hy hxy => ?_
   rcases hxy.lt_or_gt with hlt | hlt <;> [skip; rw [openSegment_symm]] <;>
@@ -490,7 +490,7 @@ theorem strictConvex_Iic
 中文:
 定理 strictConvex_Iic
   条件: (r : β)
-  结论: StrictConvex 𝕜 (Iic r)
+  结论: 严格凸 𝕜 (左无界右闭区间 r)
   证明: ordConnected_Iic.strictConvex
 
 Depends on / 依赖: ordConnected_Iic, ordConnected_Iic.strictConvex, strictConvex
@@ -510,7 +510,7 @@ theorem strictConvex_Ici
 中文:
 定理 strictConvex_Ici
   条件: (r : β)
-  结论: StrictConvex 𝕜 (Ici r)
+  结论: 严格凸 𝕜 (左闭右无界区间 r)
   证明: ordConnected_Ici.strictConvex
 
 Depends on / 依赖: ordConnected_Ici, ordConnected_Ici.strictConvex, strictConvex
@@ -530,7 +530,7 @@ theorem strictConvex_Iio
 中文:
 定理 strictConvex_Iio
   条件: (r : β)
-  结论: StrictConvex 𝕜 (Iio r)
+  结论: 严格凸 𝕜 (左无界右开区间 r)
   证明: ordConnected_Iio.strictConvex
 
 Depends on / 依赖: ordConnected_Iio, ordConnected_Iio.strictConvex, strictConvex
@@ -550,7 +550,7 @@ theorem strictConvex_Ioi
 中文:
 定理 strictConvex_Ioi
   条件: (r : β)
-  结论: StrictConvex 𝕜 (Ioi r)
+  结论: 严格凸 𝕜 (左开右无界区间 r)
   证明: ordConnected_Ioi.strictConvex
 
 Depends on / 依赖: ordConnected_Ioi, ordConnected_Ioi.strictConvex, strictConvex
@@ -570,7 +570,7 @@ theorem strictConvex_Icc
 中文:
 定理 strictConvex_Icc
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (Icc r s)
+  结论: 严格凸 𝕜 (闭区间 r s)
   证明: ordConnected_Icc.strictConvex
 
 Depends on / 依赖: ordConnected_Icc, ordConnected_Icc.strictConvex, strictConvex
@@ -590,7 +590,7 @@ theorem strictConvex_Ioo
 中文:
 定理 strictConvex_Ioo
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (Ioo r s)
+  结论: 严格凸 𝕜 (开区间 r s)
   证明: ordConnected_Ioo.strictConvex
 
 Depends on / 依赖: ordConnected_Ioo, ordConnected_Ioo.strictConvex, strictConvex
@@ -610,7 +610,7 @@ theorem strictConvex_Ico
 中文:
 定理 strictConvex_Ico
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (Ico r s)
+  结论: 严格凸 𝕜 (左闭右开区间 r s)
   证明: ordConnected_Ico.strictConvex
 
 Depends on / 依赖: ordConnected_Ico, ordConnected_Ico.strictConvex, strictConvex
@@ -630,7 +630,7 @@ theorem strictConvex_Ioc
 中文:
 定理 strictConvex_Ioc
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (Ioc r s)
+  结论: 严格凸 𝕜 (左开右闭区间 r s)
   证明: ordConnected_Ioc.strictConvex
 
 Depends on / 依赖: ordConnected_Ioc, ordConnected_Ioc.strictConvex, strictConvex
@@ -650,7 +650,7 @@ theorem strictConvex_uIcc
 中文:
 定理 strictConvex_uIcc
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (uIcc r s)
+  结论: 严格凸 𝕜 (uIcc r s)
   证明: strictConvex_Icc _ _
 
 Depends on / 依赖: strictConvex_Icc
@@ -670,7 +670,7 @@ theorem strictConvex_uIoc
 中文:
 定理 strictConvex_uIoc
   条件: (r s : β)
-  结论: StrictConvex 𝕜 (uIoc r s)
+  结论: 严格凸 𝕜 (uIoc r s)
   证明: strictConvex_Ioc _ _
 
 Depends on / 依赖: strictConvex_Ioc
@@ -701,8 +701,8 @@ theorem StrictConvex.preimage_add_right
   rwa [smul_add, smul_add, add_add_add_comm, ← _root_.add_smul, hab, one_smul] at h
 
 中文:
-定理 StrictConvex.preimage_add_right
-  条件: (hs : StrictConvex 𝕜 s) (z : E)
+定理 严格凸.preimage_add_right
+  条件: (hs : 严格凸 𝕜 s) (z : E)
   证明: by
   intro x hx y hy hxy a b ha hb hab
   refine preimage_interior_subset_interior_preimage (continuous_const_add _) ?_
@@ -728,8 +728,8 @@ theorem StrictConvex.preimage_add_left
   simpa only [add_comm] using hs.preimage_add_right z
 
 中文:
-定理 StrictConvex.preimage_add_left
-  条件: (hs : StrictConvex 𝕜 s) (z : E)
+定理 严格凸.preimage_add_left
+  条件: (hs : 严格凸 𝕜 s) (z : E)
   证明: by
   simpa only [add_comm] using hs.preimage_add_right z
 
@@ -764,8 +764,8 @@ theorem StrictConvex.add
     
 
 中文:
-定理 StrictConvex.add
-  条件: (hs : StrictConvex 𝕜 s) (ht : StrictConvex 𝕜 t)
+定理 严格凸.add
+  条件: (hs : 严格凸 𝕜 s) (ht : 严格凸 𝕜 t)
   证明: by
   rintro _ ⟨v, hv, w, hw, rfl⟩ _ ⟨x, hx, y, hy, rfl⟩ h a b ha hb hab
   rw [smul_add]; rw [smul_add]; rw [add_add_add_comm]
@@ -800,8 +800,8 @@ theorem StrictConvex.add_left
   simpa only [singleton_add] using (strictConvex_singleton z).add hs
 
 中文:
-定理 StrictConvex.add_left
-  条件: (hs : StrictConvex 𝕜 s) (z : E)
+定理 严格凸.add_left
+  条件: (hs : 严格凸 𝕜 s) (z : E)
   证明: by
   simpa only [singleton_add] using (strictConvex_singleton z).add hs
 
@@ -820,8 +820,8 @@ theorem StrictConvex.add_right
   proof: by simpa only [add_comm] using hs.add_left z
 
 中文:
-定理 StrictConvex.add_right
-  条件: (hs : StrictConvex 𝕜 s) (z : E)
+定理 严格凸.add_right
+  条件: (hs : 严格凸 𝕜 s) (z : E)
   证明: by simpa only [add_comm] using hs.add_left z
 
 Depends on / 依赖: add_comm, add_left, hs.add_left
@@ -839,9 +839,9 @@ theorem StrictConvex.vadd
   proof: hs.add_left x
 
 中文:
-定理 StrictConvex.vadd
-  条件: (hs : StrictConvex 𝕜 s) (x : E)
-  结论: StrictConvex 𝕜 (x +ᵥ s)
+定理 严格凸.vadd
+  条件: (hs : 严格凸 𝕜 s) (x : E)
+  结论: 严格凸 𝕜 (x +ᵥ s)
   证明: hs.add_left x
 
 Depends on / 依赖: add_left, hs.add_left
@@ -869,9 +869,9 @@ theorem StrictConvex.smul
   · exact hs.linear_image (LinearMap.lsmul _ _ c) (isOpenMap_smul₀ hc)
 
 中文:
-定理 StrictConvex.smul
-  条件: (hs : StrictConvex 𝕜 s) (c : 𝕝)
-  结论: StrictConvex 𝕜 (c • s)
+定理 严格凸.smul
+  条件: (hs : 严格凸 𝕜 s) (c : 𝕝)
+  结论: 严格凸 𝕜 (c • s)
   证明: by
   obtain rfl | hc := eq_or_ne c 0
   · exact (subsingleton_zero_smul_set _).strictConvex
@@ -893,8 +893,8 @@ theorem StrictConvex.affinity
   proof: (hs.smul c).vadd z
 
 中文:
-定理 StrictConvex.affinity
-  条件: [ContinuousAdd E] (hs : StrictConvex 𝕜 s) (z : E) (c : 𝕝)
+定理 严格凸.affinity
+  条件: [连续加法 E] (hs : 严格凸 𝕜 s) (z : E) (c : 𝕝)
   证明: (hs.smul c).vadd z
 
 Depends on / 依赖: hs.smul
@@ -930,8 +930,8 @@ theorem StrictConvex.preimage_smul
     unfold LinearMap.lsmul LinearMap.mk₂ 
 
 中文:
-定理 StrictConvex.preimage_smul
-  条件: (hs : StrictConvex 𝕜 s) (c : 𝕜)
+定理 严格凸.preimage_smul
+  条件: (hs : 严格凸 𝕜 s) (c : 𝕜)
   证明: by
   classical
     obtain rfl | hc := eq_or_ne c 0
@@ -980,7 +980,7 @@ theorem StrictConvex.eq_of_openSegment_subset_frontier
         (hs hx hy hxy ha₀ (sub_pos_of_lt ha₁) <| add_sub_cancel _ _)
 
 中文:
-定理 StrictConvex.eq_of_openSegment_subset_frontier
+定理 严格凸.eq_of_openSegment_subset_frontier
   证明: by
   obtain ⟨a, ha₀, ha₁⟩ := DenselyOrdered.dense (0 : 𝕜) 1 zero_lt_one
   classical
@@ -1015,7 +1015,7 @@ theorem StrictConvex.add_smul_mem
     (sub_pos_of_lt ht₁) ht₀ (sub_add_cancel 1 t)
 
 中文:
-定理 StrictConvex.add_smul_mem
+定理 严格凸.add_smul_mem
   结论: [AddRightStrictMono 𝕜]
   证明: by
   have h : x + t • y = (1 - t) • x + t • (x + y) := by match_scalars <;> simp
@@ -1043,7 +1043,7 @@ theorem StrictConvex.smul_mem_of_zero_mem
   simpa using hs.add_smul_mem zero_mem (by simpa using hx) hx₀ ht₀ ht₁
 
 中文:
-定理 StrictConvex.smul_mem_of_zero_mem
+定理 严格凸.smul_mem_of_zero_mem
   结论: [AddRightStrictMono 𝕜]
   证明: by
   simpa using hs.add_smul_mem zero_mem (by simpa using hx) hx₀ ht₀ ht₁
@@ -1067,7 +1067,7 @@ theorem StrictConvex.add_smul_sub_mem
   exact mem_image_of_mem _ ⟨ht₀, ht₁⟩
 
 中文:
-定理 StrictConvex.add_smul_sub_mem
+定理 严格凸.add_smul_sub_mem
   结论: [AddRightMono 𝕜]
   证明: by
   apply h.openSegment_subset hx hy hxy
@@ -1096,8 +1096,8 @@ theorem StrictConvex.affine_preimage
   exact hs hx hy (hfinj.ne hxy) ha hb hab
 
 中文:
-定理 StrictConvex.affine_preimage
-  结论: {s : Set F} (hs : StrictConvex 𝕜 s) {f : E ->ᵃ[𝕜] F}
+定理 严格凸.affine_preimage
+  结论: {s : 集合 F} (hs : 严格凸 𝕜 s) {f : E ->ᵃ[𝕜] F}
   证明: by
   intro x hx y hy hxy a b ha hb hab
   refine preimage_interior_subset_interior_preimage hf ?_
@@ -1126,8 +1126,8 @@ theorem StrictConvex.affine_image
       ⟨a • x + b • y, ⟨hs hx hy (ne_of_apply_ne _ hxy) ha hb hab, Convex.combo_affine_apply hab⟩⟩
 
 中文:
-定理 StrictConvex.affine_image
-  条件: (hs : StrictConvex 𝕜 s) {f : E ->ᵃ[𝕜] F} (hf : IsOpenMap f)
+定理 严格凸.affine_image
+  条件: (hs : 严格凸 𝕜 s) {f : E ->ᵃ[𝕜] F} (hf : 是开映射 f)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩ hxy a b ha hb hab
   exact
@@ -1155,9 +1155,9 @@ theorem StrictConvex.neg
   proof: hs.is_linear_preimage IsLinearMap.isLinearMap_neg continuous_id.neg neg_injective
 
 中文:
-定理 StrictConvex.neg
-  条件: (hs : StrictConvex 𝕜 s)
-  结论: StrictConvex 𝕜 (-s)
+定理 严格凸.neg
+  条件: (hs : 严格凸 𝕜 s)
+  结论: 严格凸 𝕜 (-s)
   证明: hs.is_linear_preimage IsLinearMap.isLinearMap_neg continuous_id.neg neg_injective
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.isLinearMap_neg, continuous_id, continuous_id.neg, hs.is_linear_preimage, isLinearMap_neg, is_linear_preimage, neg_injective
@@ -1175,9 +1175,9 @@ theorem StrictConvex.sub
   proof: (sub_eq_add_neg s t).symm ▸ hs.add ht.neg
 
 中文:
-定理 StrictConvex.sub
-  条件: (hs : StrictConvex 𝕜 s) (ht : StrictConvex 𝕜 t)
-  结论: StrictConvex 𝕜 (s - t)
+定理 严格凸.sub
+  条件: (hs : 严格凸 𝕜 s) (ht : 严格凸 𝕜 t)
+  结论: 严格凸 𝕜 (s - t)
   证明: (sub_eq_add_neg s t).symm ▸ hs.add ht.neg
 
 Depends on / 依赖: hs.add, ht.neg, sub_eq_add_neg
@@ -1233,8 +1233,8 @@ theorem StrictConvex.mem_smul_of_zero_mem
   exact hs.smul_mem_of_zero_mem zero_mem hx hx₀ (by positivity) (inv_lt_one_of_one_lt₀ ht)
 
 中文:
-定理 StrictConvex.mem_smul_of_zero_mem
-  结论: (hs : StrictConvex 𝕜 s) (zero_mem : (0 : E) in s)
+定理 严格凸.mem_smul_of_zero_mem
+  结论: (hs : 严格凸 𝕜 s) (zero_mem : (0 : E) in s)
   证明: by
   rw [mem_smul_set_iff_inv_smul_mem₀ (by positivity)]
   exact hs.smul_mem_of_zero_mem zero_mem hx hx₀ (by positivity) (inv_lt_one_of_one_lt₀ ht)
@@ -1274,7 +1274,7 @@ theorem strictConvex_iff_convex
 
 中文:
 定理 strictConvex_iff_convex
-  结论: StrictConvex 𝕜 s ↔ Convex 𝕜 s
+  结论: 严格凸 𝕜 s ↔ 凸 𝕜 s
   证明: ⟨StrictConvex.convex, fun hs => hs.ordConnected.strictConvex⟩
 
 Depends on / 依赖: StrictConvex, StrictConvex.convex, convex, hs.ordConnected.strictConvex, ordConnected, strictConvex
@@ -1294,7 +1294,7 @@ alias ⟨StrictConvex.ordConnected, _⟩ := strictConvex_iff_ordConnected
 
 中文:
 定理 strictConvex_iff_ordConnected
-  结论: StrictConvex 𝕜 s ↔ s.OrdConnected
+  结论: 严格凸 𝕜 s ↔ s.序连通
   证明: strictConvex_iff_convex.trans convex_iff_ordConnected
 
 alias ⟨StrictConvex.ordConnected, _⟩ := strictConvex_iff_ordConnected

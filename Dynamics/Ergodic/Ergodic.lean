@@ -49,10 +49,10 @@ structure PreErgodic
     - aeconst_set(⦃s) : Set α⦄ : MeasurableSet s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
 
 中文:
-结构 PreErgodic
-  参数: (f : α -> α) (μ : Measure α := by volume_tac)
+结构 预遍历
+  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
   公理与运算 (1 个):
-    - aeconst_set(⦃s) : Set α⦄ : MeasurableSet s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
+    - aeconst_set(⦃s) : 集合 α⦄ : 可测集 s -> f ⁻¹' s = s -> EventuallyConst s (ae μ)
 
 Depends on / 依赖: EventuallyConst, MeasurableSet, aeconst_set, volume_tac
 -/
@@ -68,8 +68,8 @@ structure Ergodic
   (no additional axioms)
 
 中文:
-结构 Ergodic
-  参数: (f : α -> α) (μ : Measure α := by volume_tac)
+结构 遍历
+  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
   (无附加公理)
 
 Depends on / 依赖: MeasurePreserving, PreErgodic, extends, volume_tac
@@ -86,8 +86,8 @@ structure QuasiErgodic
   (no additional axioms)
 
 中文:
-结构 QuasiErgodic
-  参数: (f : α -> α) (μ : Measure α := by volume_tac)
+结构 拟遍历
+  参数: (f : α -> α) (μ : 测度 α := by volume_tac)
   (无附加公理)
 
 Depends on / 依赖: PreErgodic, QuasiMeasurePreserving, extends, volume_tac
@@ -110,7 +110,7 @@ theorem ae_empty_or_univ
 
 中文:
 定理 ae_empty_or_univ
-  条件: (hf : PreErgodic f μ) (hs : MeasurableSet s) (hfs : f ⁻¹' s = s)
+  条件: (hf : 预遍历 f μ) (hs : 可测集 s) (hfs : f ⁻¹' s = s)
   证明: by
   simpa only [eventuallyConst_set'] using hf.aeconst_set hs hfs
 
@@ -131,7 +131,7 @@ theorem measure_self_or_compl_eq_zero
 
 中文:
 定理 measure_self_or_compl_eq_zero
-  结论: (hf : PreErgodic f μ) (hs : MeasurableSet s)
+  结论: (hf : 预遍历 f μ) (hs : 可测集 s)
   证明: by
   simpa using hf.ae_empty_or_univ hs hs'
 
@@ -151,7 +151,7 @@ theorem ae_mem_or_ae_notMem
 
 中文:
 定理 ae_mem_or_ae_notMem
-  条件: (hf : PreErgodic f μ) (hsm : MeasurableSet s) (hs : f ⁻¹' s = s)
+  条件: (hf : 预遍历 f μ) (hsm : 可测集 s) (hs : f ⁻¹' s = s)
   证明: eventuallyConst_set.1 hf.aeconst_set hsm hs
 
 Depends on / 依赖: aeconst_set, eventuallyConst_set, hf.aeconst_set
@@ -171,7 +171,7 @@ theorem prob_eq_zero_or_one
 
 中文:
 定理 prob_eq_zero_or_one
-  结论: [IsProbabilityMeasure μ] (hf : PreErgodic f μ) (hs : MeasurableSet s)
+  结论: [是概率测度 μ] (hf : 预遍历 f μ) (hs : 可测集 s)
   证明: by
   simpa [hs] using hf.measure_self_or_compl_eq_zero hs hs'
 
@@ -192,8 +192,8 @@ theorem of_iterate
 
 中文:
 定理 of_iterate
-  条件: (n : 自然数) (hf : PreErgodic f^[n] μ)
-  结论: PreErgodic f μ
+  条件: (n : 自然数) (hf : 预遍历 f^[n] μ)
+  结论: 预遍历 f μ
   证明: ⟨fun _ hs hs' => hf.aeconst_set hs IsFixedPt.preimage_iterate hs' n⟩
 
 Depends on / 依赖: IsFixedPt, IsFixedPt.preimage_iterate, aeconst_set, hf.aeconst_set, preimage_iterate
@@ -211,7 +211,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: (hf.aeconst_set hs hfs).anti ae_smul_measure_le _
 
 Depends on / 依赖: ae_smul_measure_le, aeconst_set, hf.aeconst_set
@@ -233,7 +233,7 @@ theorem zero_measure
 中文:
 定理 zero_measure
   条件: (f : α -> α)
-  结论: @PreErgodic α m f 0 where
+  结论: @预遍历 α m f 0 where
   证明: by simp
 -/
 theorem zero_measure (f : α -> α) : @PreErgodic α m f 0 where
@@ -258,7 +258,7 @@ theorem preErgodic_of_preErgodic_semiconj
 
 中文:
 定理 preErgodic_of_preErgodic_semiconj
-  结论: (hg : MeasurePreserving g μ μ') (hf : PreErgodic f μ)
+  结论: (hg : 保测 g μ μ') (hf : 预遍历 f μ)
   证明: by
     rw [← hg.aeconst_preimage hs₀.nullMeasurableSet]
     apply hf.aeconst_set (hg.measurable hs₀)
@@ -284,7 +284,7 @@ theorem ergodic_of_ergodic_semiconj
 
 中文:
 定理 ergodic_of_ergodic_semiconj
-  结论: (hg : MeasurePreserving g μ μ') (hf : Ergodic f μ)
+  结论: (hg : 保测 g μ μ') (hf : 遍历 f μ)
   证明: ⟨hg.of_semiconj hf.toMeasurePreserving h_comm hf',
    hg.preErgodic_of_preErgodic_semiconj hf.toPreErgodic h_comm⟩
 
@@ -309,7 +309,7 @@ theorem preErgodic_conjugate_iff
 
 中文:
 定理 preErgodic_conjugate_iff
-  条件: {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ')
+  条件: {e : α ≃ᵐ β} (h : 保测 e μ μ')
   证明: by
   refine ⟨fun hf => preErgodic_of_preErgodic_semiconj (h.symm e) hf ?_,
       fun hf => preErgodic_of_preErgodic_semiconj h hf ?_⟩
@@ -339,7 +339,7 @@ theorem ergodic_conjugate_iff
 
 中文:
 定理 ergodic_conjugate_iff
-  条件: {e : α ≃ᵐ β} (h : MeasurePreserving e μ μ')
+  条件: {e : α ≃ᵐ β} (h : 保测 e μ μ')
   证明: by
   have : MeasurePreserving (e ∘ f ∘ e.symm) μ' μ' ↔ MeasurePreserving f μ μ := by
     rw [h.comp_left_iff]; rw [(MeasurePreserving.symm e h).comp_right_iff]
@@ -371,7 +371,7 @@ theorem aeconst_set₀
 
 中文:
 定理 aeconst_set₀
-  条件: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s)
+  条件: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ) (hs : f ⁻¹' s =ᵐ[μ] s)
   证明: let ⟨_t, h₀, h₁, h₂⟩ := hf.toQuasiMeasurePreserving.exists_preimage_eq_of_preimage_ae hsm hs
   (hf.aeconst_set h₀ h₂).congr h₁
 
@@ -392,7 +392,7 @@ theorem ae_empty_or_univ₀
 
 中文:
 定理 ae_empty_or_univ₀
-  结论: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
+  结论: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ)
   证明: eventuallyConst_set'.mp hf.aeconst_set₀ hsm hs
 
 Depends on / 依赖: eventuallyConst_set, hf.aeconst_set
@@ -412,7 +412,7 @@ theorem ae_mem_or_ae_notMem₀
 
 中文:
 定理 ae_mem_or_ae_notMem₀
-  结论: (hf : QuasiErgodic f μ) (hsm : NullMeasurableSet s μ)
+  结论: (hf : 拟遍历 f μ) (hsm : NullMeasurableSet s μ)
   证明: eventuallyConst_set.mp hf.aeconst_set₀ hsm hs
 
 Depends on / 依赖: eventuallyConst_set, eventuallyConst_set.mp, hf.aeconst_set
@@ -432,7 +432,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
 
 Depends on / 依赖: smul_measure
@@ -454,8 +454,8 @@ theorem zero_measure
 
 中文:
 定理 zero_measure
-  条件: {f : α -> α} (hf : Measurable f)
-  结论: @QuasiErgodic α m f 0 where
+  条件: {f : α -> α} (hf : 可测 f)
+  结论: @拟遍历 α m f 0 where
   证明: hf
   absolutelyContinuous := by simp
   toPreErgodic := .zero_measure f
@@ -480,8 +480,8 @@ theorem quasiErgodic
 
 中文:
 定理 quasiErgodic
-  条件: (hf : Ergodic f μ)
-  结论: QuasiErgodic f μ
+  条件: (hf : 遍历 f μ)
+  结论: 拟遍历 f μ
   证明: { hf.toPreErgodic, hf.toMeasurePreserving.quasiMeasurePreserving with }
 
 Depends on / 依赖: hf.toMeasurePreserving.quasiMeasurePreserving, hf.toPreErgodic, quasiMeasurePreserving, toMeasurePreserving, toPreErgodic
@@ -502,7 +502,7 @@ theorem ae_empty_or_univ_of_preimage_ae_le'
 
 中文:
 定理 ae_empty_or_univ_of_preimage_ae_le'
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: by
   refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
   refine ae_eq_of_ae_subset_of_measure_ge hs' (hf.measure_preimage hs).ge ?_ h_fin
@@ -529,7 +529,7 @@ theorem ae_empty_or_univ_of_ae_le_preimage'
 
 中文:
 定理 ae_empty_or_univ_of_ae_le_preimage'
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: by
   replace h_fin : μ (f ⁻¹' s) != ∞ := by rwa [hf.measure_preimage hs]
   refine hf.quasiErgodic.ae_empty_or_univ₀ hs ?_
@@ -557,7 +557,7 @@ theorem ae_empty_or_univ_of_image_ae_le'
 
 中文:
 定理 ae_empty_or_univ_of_image_ae_le'
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: by
   replace hs' : s <=ᵐ[μ] f ⁻¹' s :=
     (LE.le.eventuallyLE (subset_preimage_image f s)).trans
@@ -586,8 +586,8 @@ aeconst_set s hsm hs := he.aeconst_set hsm by
 
 中文:
 定理 symm
-  条件: {e : α ≃ᵐ α} (he : Ergodic e μ)
-  结论: Ergodic e.symm μ where
+  条件: {e : α ≃ᵐ α} (he : 遍历 e μ)
+  结论: 遍历 e.symm μ where
   证明: he.toMeasurePreserving.symm
 aeconst_set s hsm hs := he.aeconst_set hsm by
     conv_lhs => rw [← hs, ← e.image_eq_preimage_symm, e.preimage_image]
@@ -611,7 +611,7 @@ theorem symm_iff
 中文:
 定理 symm_iff
   条件: {e : α ≃ᵐ α}
-  结论: Ergodic e.symm μ ↔ Ergodic e μ
+  结论: 遍历 e.symm μ ↔ 遍历 e μ
   证明: ⟨.symm, .symm⟩
 -/
 @[simp] theorem symm_iff {e : α ≃ᵐ α} : Ergodic e.symm μ ↔ Ergodic e μ := ⟨.symm, .symm⟩
@@ -626,7 +626,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ⟨hf.1.smul_measure _, hf.2.smul_measure _⟩
 
 Depends on / 依赖: smul_measure
@@ -648,8 +648,8 @@ theorem zero_measure
 
 中文:
 定理 zero_measure
-  条件: {f : α -> α} (hf : Measurable f)
-  结论: @Ergodic α m f 0 where
+  条件: {f : α -> α} (hf : 可测 f)
+  结论: @遍历 α m f 0 where
   证明: hf
   map_eq := by simp
   toPreErgodic := .zero_measure f
@@ -673,7 +673,7 @@ theorem ae_empty_or_univ_of_preimage_ae_le
 
 中文:
 定理 ae_empty_or_univ_of_preimage_ae_le
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: ae_empty_or_univ_of_preimage_ae_le' hf hs hs' measure_ne_top μ s
 
 Depends on / 依赖: ae_empty_or_univ_of_preimage_ae_le, measure_ne_top
@@ -692,7 +692,7 @@ theorem ae_empty_or_univ_of_ae_le_preimage
 
 中文:
 定理 ae_empty_or_univ_of_ae_le_preimage
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: ae_empty_or_univ_of_ae_le_preimage' hf hs hs' measure_ne_top μ s
 
 Depends on / 依赖: ae_empty_or_univ_of_ae_le_preimage, measure_ne_top
@@ -711,7 +711,7 @@ theorem ae_empty_or_univ_of_image_ae_le
 
 中文:
 定理 ae_empty_or_univ_of_image_ae_le
-  结论: (hf : Ergodic f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 遍历 f μ) (hs : NullMeasurableSet s μ)
   证明: ae_empty_or_univ_of_image_ae_le' hf hs hs' measure_ne_top μ s
 
 Depends on / 依赖: ae_empty_or_univ_of_image_ae_le, measure_ne_top

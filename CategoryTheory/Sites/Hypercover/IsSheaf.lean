@@ -77,10 +77,10 @@ class IsGenerating
     - le({X : C} (S : Sieve X) (hS : S in J X)) : exists (E : J.OneHypercover X) (_ : H E), E.sieve₀ <= S
 
 中文:
-类 IsGenerating
+类 是Generating
   参数: : 命题 where
   公理与运算 (1 个):
-    - le({X : C} (S : Sieve X) (hS : S in J X)) : 存在 (E : J.OneHypercover X) (_ : H E), E.sieve₀ <= S
+    - le({X : C} (S : 筛 X) (hS : S in J X)) : 存在 (E : J.OneHypercover X) (_ : H E), E.sieve₀ <= S
 -/
 class IsGenerating : Prop where
   le {X : C} (S : Sieve X) (hS : S in J X) :
@@ -95,8 +95,8 @@ lemma exists_oneHypercover
   proof: IsGenerating.le _ hS
 
 中文:
-引理 exists_oneHypercover
-  条件: [H.IsGenerating] {X : C} (S : Sieve X) (hS : S in J X)
+引理 存在_oneHypercover
+  条件: [H.是Generating] {X : C} (S : 筛 X) (hS : S in J X)
   证明: IsGenerating.le _ hS
 
 Depends on / 依赖: IsGenerating, IsGenerating.le
@@ -124,7 +124,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: [H.IsGenerating] {X : C} (S : Sieve X) (hS : S in J X) {T : A}
+  结论: [H.是Generating] {X : C} (S : 筛 X) (hS : S in J X) {T : A}
   证明: by
   obtain ⟨E, hE, le⟩ := H.exists_oneHypercover S hS
   exact Multifork.IsLimit.hom_ext (hP E hE).some (fun j => h _ (le _ (Sieve.ofArrows_mk _ _ _)))
@@ -162,7 +162,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : F.pt ⟶ P.obj (Opposite.op X)
+  签名: : F.pt ⟶ P.obj (对偶.op X)
   定义体: Multifork.IsLimit.lift (hP E hE).some
     (fun i => F.ι ⟨_, E.f i, le _ (Sieve.ofArrows_mk _ _ _)⟩)
     (fun ⟨⟨i₁, i₂⟩, j⟩ =>
@@ -222,7 +222,7 @@ lemma fac
 
 中文:
 引理 fac
-  条件: [H.IsGenerating] {Y : C} (f : Y ⟶ X) (hf : S f)
+  条件: [H.是Generating] {Y : C} (f : Y ⟶ X) (hf : S f)
   证明: by
   apply hom_ext H P hP _ (J.pullback_stable f E.mem₀)
   intro Z g
@@ -267,7 +267,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: [H.IsGenerating]
+  签名: [H.是Generating]
   定义体: Multifork.IsLimit.mk _
     (fun F => lift hP hE le F)
     (fun F => by
@@ -314,7 +314,7 @@ lemma isSheaf_iff
 
 中文:
 引理 isSheaf_iff
-  条件: [H.IsGenerating]
+  条件: [H.是Generating]
   证明: by
   constructor
   · intro hP X E _
@@ -370,7 +370,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGeneratedByOneHypercovers.{max u v} J
+  签名: IsGeneratedByOneHypercovers.{最大值 u v} J
   定义体: ⟨Cover.oneHypercover ⟨S, hS⟩, by simp, by simp⟩
 
 Depends on / 依赖: Cover.oneHypercover, oneHypercover

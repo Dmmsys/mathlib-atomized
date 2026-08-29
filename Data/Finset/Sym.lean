@@ -48,7 +48,7 @@ definition sym2
 
 中文:
 定义 sym2
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨s.1.sym2, s.2.sym2⟩
 -/
 protected def sym2 (s : Finset α) : Finset (Sym2 α) := ⟨s.1.sym2, s.2.sym2⟩
@@ -117,8 +117,8 @@ lemma coe_sym2
 
 中文:
 引理 coe_sym2
-  条件: {m : Finset α}
-  结论: (m.sym2 : Set (Sym2 α)) = (m : Set α).sym2
+  条件: {m : 有限集 α}
+  结论: (m.sym2 : 集合 (Sym2 α)) = (m : 集合 α).sym2
   证明: Set.ext fun z => z.ind fun a b => by simp
 -/
 @[simp] lemma coe_sym2 {m : Finset α} : (m.sym2 : Set (Sym2 α)) = (m : Set α).sym2 :=
@@ -134,7 +134,7 @@ theorem sym2_cons
 
 中文:
 定理 sym2_cons
-  条件: (a : α) (s : Finset α) (ha : a ∉ s)
+  条件: (a : α) (s : 有限集 α) (ha : a ∉ s)
   证明: val_injective Multiset.sym2_cons _ _
 
 Depends on / 依赖: Multiset, Multiset.sym2_cons, sym2_cons, val_injective
@@ -158,7 +158,7 @@ theorem sym2_insert
 
 中文:
 定理 sym2_insert
-  条件: [DecidableEq α] (a : α) (s : Finset α)
+  条件: [DecidableEq α] (a : α) (s : 有限集 α)
   证明: by
   obtain ha | ha := Decidable.em (a in s)
   · simp only [insert_eq_of_mem ha, right_eq_union, image_subset_iff]
@@ -185,7 +185,7 @@ theorem sym2_map
 
 中文:
 定理 sym2_map
-  条件: (f : α ↪ β) (s : Finset α)
+  条件: (f : α ↪ β) (s : 有限集 α)
   结论: (s.map f).sym2 = s.sym2.map (.sym2Map f)
   证明: val_injective s.val.sym2_map _
 
@@ -207,7 +207,7 @@ theorem sym2_image
 
 中文:
 定理 sym2_image
-  条件: [DecidableEq β] (f : α -> β) (s : Finset α)
+  条件: [DecidableEq β] (f : α -> β) (s : 有限集 α)
   证明: by
   apply val_injective
   dsimp [Finset.sym2]
@@ -232,7 +232,7 @@ instance _root_.Sym2.instFintype
 
 中文:
 实例 _root_.Sym2.instFintype
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: Finset.univ.sym2
   complete := fun x => by rw [mem_sym2_iff]; exact (fun a _ => mem_univ a)
 
@@ -258,7 +258,7 @@ theorem sym2_univ
 
 中文:
 定理 sym2_univ
-  条件: [Fintype α] (inst : Fintype (Sym2 α) := Sym2.instFintype)
+  条件: [有限类型 α] (inst : 有限类型 (Sym2 α) := Sym2.instFintype)
   证明: by
   ext
   simp only [mem_sym2_iff, mem_univ, implies_true]
@@ -303,7 +303,7 @@ theorem monotone_sym2
 
 中文:
 定理 monotone_sym2
-  结论: Monotone (Finset.sym2 : Finset α -> _)
+  结论: 递增 (有限集.sym2 : 有限集 α -> _)
   证明: fun _ _ => sym2_mono
 
 Depends on / 依赖: sym2_mono
@@ -323,7 +323,7 @@ theorem injective_sym2
 
 中文:
 定理 injective_sym2
-  结论: Function.Injective (Finset.sym2 : Finset α -> _)
+  结论: 函数.单射 (有限集.sym2 : 有限集 α -> _)
   证明: by
   intro s t h
   ext x
@@ -344,7 +344,7 @@ theorem strictMono_sym2
 
 中文:
 定理 strictMono_sym2
-  结论: StrictMono (Finset.sym2 : Finset α -> _)
+  结论: 严格递增 (有限集.sym2 : 有限集 α -> _)
   证明: monotone_sym2.strictMono_of_injective injective_sym2
 
 Depends on / 依赖: injective_sym2, monotone_sym2, monotone_sym2.strictMono_of_injective, strictMono_of_injective
@@ -396,7 +396,7 @@ theorem sym2_empty
 
 中文:
 定理 sym2_empty
-  结论: (∅ : Finset α).sym2 = ∅
+  结论: (∅ : 有限集 α).sym2 = ∅
   证明: rfl
 
 @[simp]
@@ -445,7 +445,7 @@ protected alias ⟨_, Nonempty.sym2⟩ := sym2_nonempty
 
 中文:
 定理 sym2_nonempty
-  结论: s.sym2.Nonempty ↔ s.Nonempty
+  结论: s.sym2.非空 ↔ s.非空
   证明: by
   contrapose!; exact sym2_eq_empty
 
@@ -475,7 +475,7 @@ theorem sym2_singleton
 中文:
 定理 sym2_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).sym2 = {Sym2.diag a}
+  结论: ({a} : 有限集 α).sym2 = {Sym2.diag a}
   证明: rfl
 -/
 theorem sym2_singleton (a : α) : ({a} : Finset α).sym2 = {Sym2.diag a} := rfl
@@ -492,7 +492,7 @@ theorem card_sym2
 
 中文:
 定理 card_sym2
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.sym2.card = 自然数.choose (s.card + 1) 2
   证明: by
   rw [card_def]; rw [sym2_val]; rw [Multiset.card_sym2]; rw [← card_def]
@@ -519,7 +519,7 @@ theorem sym2_eq_image
 中文:
 定理 sym2_eq_image
   条件: [DecidableEq α]
-  结论: s.sym2 = (s ×ˢ s).image Sym2.mk.uncurry
+  结论: s.sym2 = (s ×ˢ s).像 Sym2.mk.uncurry
   证明: by
   ext ⟨a, b⟩; simp; grind
 -/
@@ -651,7 +651,7 @@ theorem sym_empty
 中文:
 定理 sym_empty
   条件: (n : 自然数)
-  结论: (∅ : Finset α).sym (n + 1) = ∅
+  结论: (∅ : 有限集 α).sym (n + 1) = ∅
   证明: rfl
 -/
 theorem sym_empty (n : Nat) : (∅ : Finset α).sym (n + 1) = ∅ := rfl
@@ -689,9 +689,9 @@ theorem Nonempty.sym
 @[simp]
 
 中文:
-定理 Nonempty.sym
-  条件: (h : s.Nonempty) (n : 自然数)
-  结论: (s.sym n).Nonempty
+定理 非空.sym
+  条件: (h : s.非空) (n : 自然数)
+  结论: (s.sym n).非空
   证明: let ⟨_a, ha⟩ := h
   ⟨_, replicate_mem_sym ha n⟩
 
@@ -716,7 +716,7 @@ Sym.eq_replicate_iff.2 fun _b hb => eq_of_mem_singleton mem_sym_iff.1 hs _ hb⟩
 中文:
 定理 sym_singleton
   条件: (a : α) (n : 自然数)
-  结论: ({a} : Finset α).sym n = {Sym.replicate n a}
+  结论: ({a} : 有限集 α).sym n = {Sym.replicate n a}
   证明: eq_singleton_iff_unique_mem.2
     ⟨replicate_mem_sym (mem_singleton.2 rfl) _, fun _s hs =>
 Sym.eq_replicate_iff.2 fun _b hb => eq_of_mem_singleton mem_sym_iff.1 hs _ hb⟩
@@ -805,7 +805,7 @@ theorem sym_nonempty
 
 中文:
 定理 sym_nonempty
-  结论: (s.sym n).Nonempty ↔ n = 0 ∨ s.Nonempty
+  结论: (s.sym n).非空 ↔ n = 0 ∨ s.非空
   证明: by
   contrapose!; exact sym_eq_empty
 
@@ -830,8 +830,8 @@ theorem sym_univ
 
 中文:
 定理 sym_univ
-  条件: [Fintype α] (n : 自然数)
-  结论: (univ : Finset α).sym n = univ
+  条件: [有限类型 α] (n : 自然数)
+  结论: (univ : 有限集 α).sym n = univ
   证明: eq_univ_iff_forall.2 fun _s => mem_sym_iff.2 fun _a _ => mem_univ _
 
 @[simp]
@@ -882,7 +882,7 @@ theorem sym_inter
 
 中文:
 定理 sym_inter
-  条件: (s t : Finset α) (n : 自然数)
+  条件: (s t : 有限集 α) (n : 自然数)
   结论: (s inter t).sym n = s.sym n inter t.sym n
   证明: by
   ext m
@@ -908,7 +908,7 @@ theorem sym_union
 
 中文:
 定理 sym_union
-  条件: (s t : Finset α) (n : 自然数)
+  条件: (s t : 有限集 α) (n : 自然数)
   结论: s.sym n union t.sym n subseteq (s union t).sym n
   证明: union_subset (sym_mono subset_union_left n) (sym_mono subset_union_right n)
 
@@ -928,7 +928,7 @@ mem_insert.2 (Sym.mem_fill_iff.1 hb).imp And.right mem_sym_iff.1 h b
 
 中文:
 定理 sym_fill_mem
-  条件: (a : α) {i : Fin (n + 1)} {m : Sym α (n - i)} (h : m in s.sym (n - i))
+  条件: (a : α) {i : 有限集 (n + 1)} {m : Sym α (n - i)} (h : m in s.sym (n - i))
   证明: mem_sym_iff.2 fun b hb =>
 mem_insert.2 (Sym.mem_fill_iff.1 hb).imp And.right mem_sym_iff.1 h b
 
@@ -1020,7 +1020,7 @@ theorem val_prod_eq_prod_count_pow
 
 中文:
 定理 val_prod_eq_prod_count_pow
-  结论: [CommMonoid α] {n : 自然数} {k : Sym α n}
+  结论: [交换幺半群 α] {n : 自然数} {k : Sym α n}
   证明: by
   rw [Finset.prod_multiset_count_of_subset _ s]
   · apply Finset.prod_congr rfl (by simp)

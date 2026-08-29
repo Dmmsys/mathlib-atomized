@@ -99,7 +99,7 @@ theorem diagramCompIso_hom_ι
 
 中文:
 定理 diagramCompIso_hom_ι
-  条件: (X : C) (W : (J.Cover X)ᵒᵖ) (i : W.unop.Arrow)
+  条件: (X : C) (W : (J.Cover X)ᵒᵖ) (i : W.unop.箭头)
   证明: by
   delta diagramCompIso
   simp
@@ -452,7 +452,7 @@ theorem plusCompIso_inv_eq_plusLift
 
 中文:
 定理 plusCompIso_inv_eq_plusLift
-  条件: (hP : Presheaf.IsSheaf J (J.plusObj P ⋙ F))
+  条件: (hP : 预层.是层 J (J.plusObj P ⋙ F))
   证明: by
   apply J.plusLift_unique
   simp

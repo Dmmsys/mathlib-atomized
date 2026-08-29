@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetRel.IsSymm {(x, y) : X × X | edist x y <= ε}
+  签名: SetRel.是Symm {(x, y) : X × X | edist x y <= ε}
   定义体: by simp [edist_comm]
 
 Depends on / 依赖: edist_comm
@@ -79,7 +79,7 @@ definition IsCover
 
 中文:
 定义 IsCover
-  签名: (ε : 实数>=0) (s N : Set X)
+  签名: (ε : 实数>=0) (s N : 集合 X)
   定义体: SetRel.IsCover {(x, y) | edist x y <= ε} s N
 
 @[simp] protected nonrec lemma IsCover.empty : IsCover ε ∅ N := .empty
@@ -125,7 +125,7 @@ lemma IsCover.refl
 
 中文:
 引理 IsCover.refl
-  条件: (ε : 实数>=0) (s : Set X)
+  条件: (ε : 实数>=0) (s : 集合 X)
   结论: IsCover ε s s
   证明: .rfl
 -/
@@ -145,7 +145,7 @@ nonrec lemma IsCover.anti (hst : s subseteq t) (ht : IsCover ε t N) : IsCover �
 
 中文:
 引理 IsCover.rfl
-  条件: {ε : 实数>=0} {s : Set X}
+  条件: {ε : 实数>=0} {s : 集合 X}
   结论: IsCover ε s s
   证明: refl ε s
 
@@ -193,7 +193,7 @@ lemma IsCover.image_lipschitz
 
 中文:
 引理 IsCover.image_lipschitz
-  结论: {f : X -> Y} {s : Set X} {N : Set X} {ε K₂ : 实数>=0}
+  结论: {f : X -> Y} {s : 集合 X} {N : 集合 X} {ε K₂ : 实数>=0}
   证明: by
   rintro _ ⟨x, hx, rfl⟩
   obtain ⟨x₀, hx₀, hcover⟩ := hs hx
@@ -221,7 +221,7 @@ lemma IsCover.image_lipschitz_of_surjective
 
 中文:
 引理 IsCover.image_lipschitz_of_surjective
-  结论: {f : X -> Y} {s : Set Y} {N : Set X} {ε K₂ : 实数>=0}
+  结论: {f : X -> Y} {s : 集合 Y} {N : 集合 X} {ε K₂ : 实数>=0}
   证明: by
   have : IsCover (K₂ * ε) (f '' s.preimage f) (f '' N) := IsCover.image_lipschitz hs hf
   simp_all only [image_preimage_eq]
@@ -247,8 +247,8 @@ lemma _root_.Isometry.isCover_image_iff
   exact ⟨c', hc', le_of_eq_of_le (hf.edist_eq _ _).symm hc⟩
 
 中文:
-引理 _root_.Isometry.isCover_image_iff
-  条件: {f : X -> Y} (hf : Isometry f) (C : Set X)
+引理 _root_.等距.isCover_image_iff
+  条件: {f : X -> Y} (hf : 等距 f) (C : 集合 X)
   证明: by
   refine ⟨fun h x hx => ?_, fun h => by simpa using h.image_lipschitz hf.lipschitz⟩
   obtain ⟨c, hc_mem, hc⟩ := h (Set.mem_image_of_mem _ hx)
@@ -333,8 +333,8 @@ lemma exists_finite_isCover_of_totallyBounded
     simp only [Set.mem_iUnion, Metric.mem_eball, exists_prop, Metric.mem_cl
 
 中文:
-引理 exists_finite_isCover_of_totallyBounded
-  条件: (hε : ε != 0) (hs : TotallyBounded s)
+引理 存在_finite_isCover_of_totallyBounded
+  条件: (hε : ε != 0) (hs : 全有界 s)
   证明: by
   rw [EMetric.totallyBounded_iff'] at hs
   obtain ⟨N, hNA, hN_finite, hN⟩ := hs ε (by positivity)
@@ -365,8 +365,8 @@ lemma exists_finite_isCover_of_isCompact_closure
   proof: exists_finite_isCover_of_totallyBounded hε (hs.totallyBounded.subset subset_closure)
 
 中文:
-引理 exists_finite_isCover_of_isCompact_closure
-  条件: (hε : ε != 0) (hs : IsCompact (closure s))
+引理 存在_finite_isCover_of_isCompact_closure
+  条件: (hε : ε != 0) (hs : 是紧集 (closure s))
   证明: exists_finite_isCover_of_totallyBounded hε (hs.totallyBounded.subset subset_closure)
 
 Depends on / 依赖: exists_finite_isCover_of_totallyBounded, hs.totallyBounded.subset, subset, subset_closure, totallyBounded
@@ -384,8 +384,8 @@ lemma exists_finite_isCover_of_isCompact
   proof: exists_finite_isCover_of_totallyBounded hε hs.totallyBounded
 
 中文:
-引理 exists_finite_isCover_of_isCompact
-  条件: (hε : ε != 0) (hs : IsCompact s)
+引理 存在_finite_isCover_of_isCompact
+  条件: (hε : ε != 0) (hs : 是紧集 s)
   证明: exists_finite_isCover_of_totallyBounded hε hs.totallyBounded
 
 Depends on / 依赖: exists_finite_isCover_of_totallyBounded, hs.totallyBounded, totallyBounded
@@ -466,7 +466,7 @@ alias ⟨IsCover.subset_cthickening, IsCover.of_subset_cthickening⟩ := isCover
 
 中文:
 引理 isCover_iff_subset_cthickening
-  条件: (hN : IsClosed N)
+  条件: (hN : 是闭集 N)
   结论: IsCover ε s N ↔ s subseteq cthickening ε N
   证明: by
   rw [isCover_iff_subset_iUnion_closedBall]; rw [hN.cthickening_eq_biUnion_closedBall ε.zero_le_coe]
@@ -494,7 +494,7 @@ protected alias ⟨_, IsCover.closure⟩ := isCover_closure
 
 中文:
 引理 isCover_closure
-  条件: (hN : IsClosed N)
+  条件: (hN : 是闭集 N)
   结论: IsCover ε (closure s) N ↔ IsCover ε s N
   证明: by
   simpa [isCover_iff_subset_cthickening hN] using (isClosed_cthickening (E := N)).closure_subset_iff
@@ -544,7 +544,7 @@ lemma IsCover.isCompact
 
 中文:
 引理 IsCover.isCompact
-  条件: (hsN : IsCover ε s N) (hs : IsClosed s) (hN : IsCompact N)
+  条件: (hsN : IsCover ε s N) (hs : 是闭集 s) (hN : 是紧集 N)
   证明: .of_isClosed_subset hN.cthickening hs hsN.subset_cthickening hN.isClosed
 
 Depends on / 依赖: cthickening, hN.cthickening, hN.isClosed, hsN.subset_cthickening, isClosed, of_isClosed_subset, subset_cthickening
@@ -562,7 +562,7 @@ lemma IsCover.isCompact_closure
 
 中文:
 引理 IsCover.isCompact_closure
-  条件: (hsN : IsCover ε s N) (hN : IsCompact N)
+  条件: (hsN : IsCover ε s N) (hN : 是紧集 N)
   证明: (hsN.closure hN.isClosed).isCompact isClosed_closure hN
 
 Depends on / 依赖: closure, hN.isClosed, hsN.closure, isClosed, isClosed_closure, isCompact
@@ -580,7 +580,7 @@ lemma isCompact_closure_iff_exists_finite_isCover
   mpr := fun ⟨_N, _, hN, hsN⟩ => hsN.isCompact_closure hN.isCompact
 
 中文:
-引理 isCompact_closure_iff_exists_finite_isCover
+引理 isCompact_closure_iff_存在_finite_isCover
   条件: (hε : ε != 0)
   证明: exists_finite_isCover_of_isCompact_closure hε
   mpr := fun ⟨_N, _, hN, hsN⟩ => hsN.isCompact_closure hN.isCompact

@@ -179,7 +179,7 @@ theorem nonempty_orbit
 中文:
 定理 nonempty_orbit
   条件: (a : α)
-  结论: Set.Nonempty (orbit M a)
+  结论: 集合.非空 (orbit M a)
   证明: Set.range_nonempty _
 
 @[to_additive]
@@ -204,7 +204,7 @@ theorem mapsTo_smul_orbit
 中文:
 定理 mapsTo_smul_orbit
   条件: (m : M) (a : α)
-  结论: Set.MapsTo (m • ·) (orbit M a) (orbit M a)
+  结论: 集合.映射到 (m • ·) (orbit M a) (orbit M a)
   证明: Set.mapsTo_iff_subset_preimage.mpr Set.range_subset_iff.mpr fun m' => ⟨m * m', mul_smul _ _ _⟩
 
 @[to_additive]
@@ -309,7 +309,7 @@ lemma orbit_submonoid_subset
 
 中文:
 引理 orbit_submonoid_subset
-  条件: (S : Submonoid M) (a : α)
+  条件: (S : 子幺半群 M) (a : α)
   结论: orbit S a subseteq orbit M a
   证明: by
   rintro b ⟨g, rfl⟩
@@ -334,7 +334,7 @@ lemma mem_orbit_of_mem_orbit_submonoid
 
 中文:
 引理 mem_orbit_of_mem_orbit_submonoid
-  条件: {S : Submonoid M} {a b : α} (h : a in orbit S b)
+  条件: {S : 子幺半群 M} {a b : α} (h : a in orbit S b)
   证明: orbit_submonoid_subset S _ h
 
 Depends on / 依赖: orbit_submonoid_subset
@@ -359,7 +359,7 @@ definition fixedPoints
 
 中文:
 定义 fixedPoints
-  签名: : Set α
+  签名: : 集合 α
   定义体: { a : α | forall m : M, m • a = a }
 -/
 def fixedPoints : Set α :=
@@ -399,7 +399,7 @@ theorem fixed_eq_iInter_fixedBy
     ⟨fun hx => Set.mem_iInter.2 fun m => hx m, fun hx m => (Set.mem_iInter.1 hx m :)⟩
 
 中文:
-定理 fixed_eq_iInter_fixedBy
+定理 fixed_eq_i整数er_fixedBy
   结论: fixedPoints M α = ⋂ m : M, fixedBy α m
   证明: Set.ext fun _ =>
     ⟨fun hx => Set.mem_iInter.2 fun m => hx m, fun hx m => (Set.mem_iInter.1 hx m :)⟩
@@ -597,7 +597,7 @@ definition FixedPoints.submonoid
 
 中文:
 定义 FixedPoints.submonoid
-  签名: : Submonoid α where
+  签名: : 子幺半群 α where
   定义体: MulAction.fixedPoints M α
   one_mem' := smul_one
   mul_mem' ha hb _ := by rw [smul_mul', ha, hb]
@@ -642,7 +642,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass M (FixedPoints.submonoid M α) α
+  签名: 标量交换类 M (FixedPoints.submonoid M α) α
   定义体: by simp_rw [Submonoid.smul_def, smul_eq_mul, smul_mul', x.2 g]
 -/
 instance : SMulCommClass M (FixedPoints.submonoid M α) α where
@@ -667,7 +667,7 @@ definition subgroup
 
 中文:
 定义 subgroup
-  签名: : Subgroup α where
+  签名: : 子群 α where
   定义体: submonoid M α
   inv_mem' ha _ := by rw [smul_inv', ha]
 
@@ -712,7 +712,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass M (FixedPoints.subgroup M α) α
+  签名: 标量交换类 M (FixedPoints.subgroup M α) α
   定义体: inferInstanceAs (SMulCommClass M (FixedPoints.submonoid M α) α)
 
 @[simp]
@@ -874,7 +874,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: inferInstanceAs (MulAction H.toSubmonoid α)
 
 @[to_additive]
@@ -898,7 +898,7 @@ lemma subgroup_smul_def
 
 中文:
 引理 subgroup_smul_def
-  条件: {H : Subgroup G} (a : H) (b : α)
+  条件: {H : 子群 G} (a : H) (b : α)
   结论: a • b = (a : G) • b
   证明: rfl
 
@@ -920,7 +920,7 @@ lemma orbit_subgroup_subset
 
 中文:
 引理 orbit_subgroup_subset
-  条件: (H : Subgroup G) (a : α)
+  条件: (H : 子群 G) (a : α)
   结论: orbit H a subseteq orbit G a
   证明: orbit_submonoid_subset H.toSubmonoid a
 
@@ -944,7 +944,7 @@ lemma mem_orbit_of_mem_orbit_subgroup
 
 中文:
 引理 mem_orbit_of_mem_orbit_subgroup
-  条件: {H : Subgroup G} {a b : α} (h : a in orbit H b)
+  条件: {H : 子群 G} {a b : α} (h : a in orbit H b)
   证明: orbit_subgroup_subset H _ h
 
 @[to_additive]
@@ -1001,7 +1001,7 @@ lemma mem_subgroup_orbit_iff
 
 中文:
 引理 mem_subgroup_orbit_iff
-  条件: {H : Subgroup G} {x : α} {a b : orbit G x}
+  条件: {H : 子群 G} {x : α} {a b : orbit G x}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases h with ⟨g, rfl⟩
@@ -1040,7 +1040,7 @@ definition orbitRel
 
 中文:
 定义 orbitRel
-  签名: : Setoid α where
+  签名: : 集合等价关系 α where
   定义体: a in orbit G b
   iseqv := ⟨mem_orbit_self, mem_orbit_symm.mp, by grind [orbit_eq_iff]⟩
 -/
@@ -1095,7 +1095,7 @@ theorem quotient_preimage_image_eq_union_mul
 
 中文:
 定理 quotient_preimage_image_eq_union_mul
-  条件: (U : Set α)
+  条件: (U : 集合 α)
   证明: orbitRel G α
     Quotient.mk' ⁻¹' Quotient.mk' '' U = ⋃ g : G, (g • ·) '' U := by
   let := orbitRel G α
@@ -1146,7 +1146,7 @@ theorem disjoint_image_image_iff
 
 中文:
 定理 disjoint_image_image_iff
-  条件: {U V : Set α}
+  条件: {U V : 集合 α}
   证明: orbitRel G α
     Disjoint (Quotient.mk' '' U) (Quotient.mk' '' V) ↔ forall x in U, forall g : G, g • x ∉ V := by
   let := orbitRel G α
@@ -1185,7 +1185,7 @@ theorem image_inter_image_iff
 
 中文:
 定理 image_inter_image_iff
-  条件: (U V : Set α)
+  条件: (U V : 集合 α)
   证明: orbitRel G α
     Quotient.mk' '' U inter Quotient.mk' '' V = ∅ ↔ forall x in U, forall g : G, g • x ∉ V :=
   Set.disjoint_iff_inter_eq_empty.symm.trans disjoint_image_image_iff
@@ -1211,8 +1211,8 @@ abbreviation orbitRel.Quotient
   body: _root_.Quotient orbitRel G α
 
 中文:
-缩写 orbitRel.Quotient
-  签名: : Type _
+缩写 orbitRel.商
+  签名: : 类型 _
   定义体: _root_.Quotient orbitRel G α
 
 Depends on / 依赖: Quotient, _root_, _root_.Quotient, orbitRel
@@ -1232,7 +1232,7 @@ lemma orbitRel.Quotient.quotient_smul_eq
   proof: Quotient.eq.mpr ⟨g, rfl⟩
 
 中文:
-引理 orbitRel.Quotient.quotient_smul_eq
+引理 orbitRel.商.quotient_smul_eq
   条件: {g : G} {a : α}
   证明: Quotient.eq.mpr ⟨g, rfl⟩
 
@@ -1258,7 +1258,7 @@ theorem orbitRel.Quotient.orbit_mk
 @[to_additive]
 
 中文:
-定理 orbitRel.Quotient.orbit_mk
+定理 orbitRel.商.orbit_mk
   条件: (a : α)
   证明: rfl
 
@@ -1281,8 +1281,8 @@ theorem orbitRel.Quotient.mem_orbit
   rfl
 
 中文:
-定理 orbitRel.Quotient.mem_orbit
-  条件: {a : α} {x : orbitRel.Quotient G α}
+定理 orbitRel.商.mem_orbit
+  条件: {a : α} {x : orbitRel.商 G α}
   证明: by
   induction x using Quotient.inductionOn'
   rw [Quotient.eq'']
@@ -1311,8 +1311,8 @@ theorem orbitRel.Quotient.orbit_eq_orbit_out
 @[to_additive]
 
 中文:
-定理 orbitRel.Quotient.orbit_eq_orbit_out
-  结论: (x : orbitRel.Quotient G α)
+定理 orbitRel.商.orbit_eq_orbit_out
+  结论: (x : orbitRel.商 G α)
   证明: by
   conv_lhs => rw [← hφ x]
   rfl
@@ -1342,7 +1342,7 @@ lemma orbitRel.Quotient.orbit_injective
 @[to_additive (attr := simp)]
 
 中文:
-引理 orbitRel.Quotient.orbit_injective
+引理 orbitRel.商.orbit_injective
   证明: by
   intro x y h
   simp_rw [orbitRel.Quotient.orbit_eq_orbit_out _ Quotient.out_eq', orbit_eq_iff,
@@ -1373,8 +1373,8 @@ lemma orbitRel.Quotient.orbit_inj
 @[to_additive]
 
 中文:
-引理 orbitRel.Quotient.orbit_inj
-  条件: {x y : orbitRel.Quotient G α}
+引理 orbitRel.商.orbit_inj
+  条件: {x y : orbitRel.商 G α}
   结论: x.orbit = y.orbit ↔ x = y
   证明: orbitRel.Quotient.orbit_injective.eq_iff
 
@@ -1400,7 +1400,7 @@ lemma orbitRel.quotient_eq_of_quotient_subgroup_eq
 
 中文:
 引理 orbitRel.quotient_eq_of_quotient_subgroup_eq
-  结论: {H : Subgroup G} {a b : α}
+  结论: {H : 子群 G} {a b : α}
   证明: by
   rw [@Quotient.eq] at h ⊢
   exact mem_orbit_of_mem_orbit_subgroup h
@@ -1434,7 +1434,7 @@ nonrec lemma orbitRel.Quot
 
 中文:
 引理 orbitRel.quotient_eq_of_quotient_subgroup_eq'
-  结论: {H : Subgroup G} {a b : α}
+  结论: {H : 子群 G} {a b : α}
   证明: orbitRel.quotient_eq_of_quotient_subgroup_eq h
 
 @[to_additive]
@@ -1483,8 +1483,8 @@ lemma orbitRel.Quotient.orbit.coe_smul
 @[to_additive (attr := norm_cast, simp)]
 
 中文:
-引理 orbitRel.Quotient.orbit.coe_smul
-  条件: {g : G} {x : orbitRel.Quotient G α} {a : x.orbit}
+引理 orbitRel.商.orbit.coe_smul
+  条件: {g : G} {x : orbitRel.商 G α} {a : x.orbit}
   证明: rfl
 
 @[to_additive (attr := norm_cast, simp)]
@@ -1513,8 +1513,8 @@ lemma orbitRel.Quotient.mem_subgroup_orbit_iff
 @[to_additive]
 
 中文:
-引理 orbitRel.Quotient.mem_subgroup_orbit_iff
-  结论: {H : Subgroup G} {x : orbitRel.Quotient G α}
+引理 orbitRel.商.mem_subgroup_orbit_iff
+  结论: {H : 子群 G} {x : orbitRel.商 G α}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases h with ⟨g, h⟩
@@ -1554,8 +1554,8 @@ lemma orbitRel.Quotient.subgroup_quotient_eq_iff
 @[to_additive]
 
 中文:
-引理 orbitRel.Quotient.subgroup_quotient_eq_iff
-  结论: {H : Subgroup G} {x : orbitRel.Quotient G α}
+引理 orbitRel.商.subgroup_quotient_eq_iff
+  结论: {H : 子群 G} {x : orbitRel.商 G α}
   证明: by
   simp_rw [← @Quotient.mk''_eq_mk, Quotient.eq'']
   exact orbitRel.Quotient.mem_subgroup_orbit_iff.symm
@@ -1587,8 +1587,8 @@ lemma orbitRel.Quotient.mem_subgroup_orbit_iff'
     rw [orbitRel
 
 中文:
-引理 orbitRel.Quotient.mem_subgroup_orbit_iff'
-  结论: {H : Subgroup G} {x : orbitRel.Quotient G α}
+引理 orbitRel.商.mem_subgroup_orbit_iff'
+  结论: {H : 子群 G} {x : orbitRel.商 G α}
   证明: by
   simp_rw [mem_orbit_symm (a₂ := c)]
   convert! Iff.rfl using 2
@@ -1813,7 +1813,7 @@ lemma le_stabilizer_smul_left
 
 中文:
 引理 le_stabilizer_smul_left
-  条件: [SMul α β] [IsScalarTower G α β] (a : α) (b : β)
+  条件: [标量乘法 α β] [标量塔 G α β] (a : α) (b : β)
   证明: by
   simp_rw [SetLike.le_def, mem_stabilizer_iff, ← smul_assoc]; rintro a h; rw [h]
 
@@ -1839,7 +1839,7 @@ lemma le_stabilizer_smul_right
 
 中文:
 引理 le_stabilizer_smul_right
-  结论: {G'} [Group G'] [SMul α β] [MulAction G' β]
+  结论: {G'} [群 G'] [标量乘法 α β] [乘法作用 G' β]
   证明: by
   simp_rw [SetLike.le_def, mem_stabilizer_iff, smul_comm]; rintro a h; rw [h]
 
@@ -1867,7 +1867,7 @@ lemma stabilizer_smul_eq_left
 
 中文:
 引理 stabilizer_smul_eq_left
-  结论: [SMul α β] [IsScalarTower G α β] (a : α) (b : β)
+  结论: [标量乘法 α β] [标量塔 G α β] (a : α) (b : β)
   证明: by
   refine (le_stabilizer_smul_left _ _).antisymm' fun a ha => ?_
   simpa only [mem_stabilizer_iff, ← smul_assoc, h.eq_iff] using ha
@@ -1895,7 +1895,7 @@ lemma stabilizer_smul_eq_right
 
 中文:
 引理 stabilizer_smul_eq_right
-  条件: {α} [Group α] [MulAction α β] [SMulCommClass G α β] (a : α) (b : β)
+  条件: {α} [群 α] [乘法作用 α β] [标量交换类 G α β] (a : α) (b : β)
   证明: (le_stabilizer_smul_right _ _).antisymm' (le_stabilizer_smul_right a⁻¹ _).trans_eq by
     rw [inv_smul_smul]
 
@@ -1921,7 +1921,7 @@ lemma stabilizer_mul_eq_left
 
 中文:
 引理 stabilizer_mul_eq_left
-  条件: [Group α] [IsScalarTower G α α] (a b : α)
+  条件: [群 α] [标量塔 G α α] (a b : α)
   证明: stabilizer_smul_eq_left a _ mul_left_injective _
 
 @[to_additive (attr := simp)]
@@ -1942,7 +1942,7 @@ lemma stabilizer_mul_eq_right
 
 中文:
 引理 stabilizer_mul_eq_right
-  条件: [Group α] [SMulCommClass G α α] (a b : α)
+  条件: [群 α] [标量交换类 G α α] (a b : α)
   证明: stabilizer_smul_eq_right a _
 
 Depends on / 依赖: FiniteDimensional, infer_instance, mk_rep, stabilizer_smul_eq_right, v.mk_rep, v.rep

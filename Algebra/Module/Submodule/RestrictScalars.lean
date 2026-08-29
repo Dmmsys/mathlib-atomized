@@ -44,7 +44,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (V : Submodule R M)
+  签名: (V : 子模 R M)
   定义体: V
   zero_mem' := V.zero_mem
   smul_mem' c _ h := V.smul_of_tower_mem c h
@@ -72,8 +72,8 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: (V : Submodule R M)
-  结论: (V.restrictScalars S : Set M) = V
+  条件: (V : 子模 R M)
+  结论: (V.restrictScalars S : 集合 M) = V
   证明: rfl
 
 @[simp]
@@ -94,7 +94,7 @@ theorem toAddSubmonoid_restrictScalars
 
 中文:
 定理 toAddSubmonoid_restrictScalars
-  条件: (V : Submodule R M)
+  条件: (V : 子模 R M)
   证明: rfl
 
 @[simp]
@@ -117,7 +117,7 @@ theorem restrictScalars_mem
 
 中文:
 定理 restrictScalars_mem
-  条件: (V : Submodule R M) (m : M)
+  条件: (V : 子模 R M) (m : M)
   结论: m in V.restrictScalars S ↔ m in V
   证明: Iff.refl _
 
@@ -140,7 +140,7 @@ theorem restrictScalars_self
 
 中文:
 定理 restrictScalars_self
-  条件: (V : Submodule R M)
+  条件: (V : 子模 R M)
   结论: V.restrictScalars R = V
   证明: SetLike.coe_injective rfl
 
@@ -201,7 +201,7 @@ theorem restrictScalars_inj
 
 中文:
 定理 restrictScalars_inj
-  条件: {V₁ V₂ : Submodule R M}
+  条件: {V₁ V₂ : 子模 R M}
   证明: (restrictScalars_injective S _ _).eq_iff
 
 Depends on / 依赖: eq_iff, restrictScalars_injective
@@ -220,7 +220,7 @@ instance restrictScalars.origModule
 
 中文:
 实例 restrictScalars.origModule
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: inferInstanceAs Module R p
 
 Depends on / 依赖: Module
@@ -238,7 +238,7 @@ instance restrictScalars.isScalarTower
 
 中文:
 实例 restrictScalars.isScalarTower
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: Subtype.ext smul_assoc r s (x : M)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -258,7 +258,7 @@ lemma restrictScalars_le
 
 中文:
 引理 restrictScalars_le
-  条件: {s t : Submodule R M}
+  条件: {s t : 子模 R M}
   证明: Iff.rfl
 -/
 @[gcongr, simp] lemma restrictScalars_le {s t : Submodule R M} :
@@ -276,7 +276,7 @@ lemma restrictScalars_lt
 
 中文:
 引理 restrictScalars_lt
-  条件: {s t : Submodule R M}
+  条件: {s t : 子模 R M}
   证明: Iff.rfl
 -/
 @[gcongr, simp] lemma restrictScalars_lt {s t : Submodule R M} :
@@ -300,7 +300,7 @@ definition restrictScalarsEmbedding
 
 中文:
 定义 restrictScalarsEmbedding
-  签名: : Submodule R M ↪o Submodule S M where
+  签名: : 子模 R M ↪o 子模 S M where
   定义体: restrictScalars S
   inj' := restrictScalars_injective S R M
   map_rel_iff' := restrictScalars_le S
@@ -325,7 +325,7 @@ lemma restrictScalars_monotone
 
 中文:
 引理 restrictScalars_monotone
-  结论: Monotone (restrictScalars S : Submodule R M -> Submodule S M)
+  结论: 递增 (restrictScalars S : 子模 R M -> 子模 S M)
   证明: (restrictScalarsEmbedding S R M).monotone
 
 Depends on / 依赖: monotone, restrictScalarsEmbedding
@@ -344,7 +344,7 @@ lemma restrictScalars_mono
 
 中文:
 引理 restrictScalars_mono
-  条件: {s t : Submodule R M} (hst : s <= t)
+  条件: {s t : 子模 R M} (hst : s <= t)
   证明: restrictScalars_monotone S R M hst
 
 Depends on / 依赖: restrictScalars_monotone
@@ -368,7 +368,7 @@ definition restrictScalarsEquiv
 
 中文:
 定义 restrictScalarsEquiv
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: { AddEquiv.refl p with
     map_smul' := fun _ _ => rfl }
 
@@ -393,7 +393,7 @@ theorem restrictScalars_bot
 
 中文:
 定理 restrictScalars_bot
-  结论: restrictScalars S (⊥ : Submodule R M) = ⊥
+  结论: restrictScalars S (⊥ : 子模 R M) = ⊥
   证明: rfl
 
 @[simp]
@@ -416,7 +416,7 @@ theorem restrictScalars_eq_bot_iff
 
 中文:
 定理 restrictScalars_eq_bot_iff
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   结论: restrictScalars S p = ⊥ ↔ p = ⊥
   证明: by
   simp [SetLike.ext_iff]
@@ -441,7 +441,7 @@ theorem restrictScalars_top
 
 中文:
 定理 restrictScalars_top
-  结论: restrictScalars S (⊤ : Submodule R M) = ⊤
+  结论: restrictScalars S (⊤ : 子模 R M) = ⊤
   证明: rfl
 
 @[simp]
@@ -462,7 +462,7 @@ theorem restrictScalars_eq_top_iff
 
 中文:
 定理 restrictScalars_eq_top_iff
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   结论: restrictScalars S p = ⊤ ↔ p = ⊤
   证明: by
   simp [SetLike.ext_iff]
@@ -486,7 +486,7 @@ lemma restrictScalars_sInf
 
 中文:
 引理 restrictScalars_sInf
-  条件: (s : Set (Submodule R M))
+  条件: (s : 集合 (子模 R M))
   证明: by
   ext; simp
 -/
@@ -507,7 +507,7 @@ lemma restrictScalars_sSup
 
 中文:
 引理 restrictScalars_sSup
-  条件: (s : Set (Submodule R M))
+  条件: (s : 集合 (子模 R M))
   证明: by
   simp [← toAddSubmonoid_inj, toAddSubmonoid_sSup, ← Set.image_comp]
 
@@ -532,7 +532,7 @@ definition restrictScalarsLatticeHom
 
 中文:
 定义 restrictScalarsLatticeHom
-  签名: : CompleteLatticeHom (Submodule R M) (Submodule S M) where
+  签名: : 完备格态射 (子模 R M) (子模 S M) where
   定义体: restrictScalars S
   map_sInf' := restrictScalars_sInf S
   map_sSup' := restrictScalars_sSup S
@@ -560,7 +560,7 @@ lemma restrictScalars_iInf
 
 中文:
 引理 restrictScalars_iInf
-  条件: {ι : Sort*} (s : ι -> Submodule R M)
+  条件: {ι : 类型层*} (s : ι -> 子模 R M)
   证明: by
   ext; simp
 
@@ -583,7 +583,7 @@ lemma restrictScalars_iSup
 
 中文:
 引理 restrictScalars_iSup
-  条件: {ι : Sort*} (s : ι -> Submodule R M)
+  条件: {ι : 类型层*} (s : ι -> 子模 R M)
   证明: map_iSup (restrictScalarsLatticeHom S R M) s
 
 @[simp]
@@ -608,7 +608,7 @@ lemma restrictScalars_inf
 
 中文:
 引理 restrictScalars_inf
-  条件: (s t : Submodule R M)
+  条件: (s t : 子模 R M)
   证明: by
   ext x; simp
 
@@ -632,7 +632,7 @@ lemma restrictScalars_sup
 
 中文:
 引理 restrictScalars_sup
-  条件: (s t : Submodule R M)
+  条件: (s t : 子模 R M)
   证明: by
   simpa [Set.image_insert_eq] using restrictScalars_sSup S (s := {s, t})
 
@@ -656,8 +656,8 @@ lemma toIntSubmodule_toAddSubgroup
 @[simp]
 
 中文:
-引理 toIntSubmodule_toAddSubgroup
-  结论: {R M : 类型} [Ring R] [AddCommGroup M] [Module R M]
+引理 to整数Submodule_toAddSubgroup
+  结论: {R M : 类型} [环 R] [加法交换群 M] [模 R M]
   证明: rfl
 
 @[simp]
@@ -680,7 +680,7 @@ theorem codisjoint_restrictScalars_iff
 
 中文:
 定理 codisjoint_restrictScalars_iff
-  条件: {s t : Submodule R M}
+  条件: {s t : 子模 R M}
   证明: by
   simp [codisjoint_iff, ← restrictScalars_sup]
 
@@ -706,7 +706,7 @@ theorem disjoint_restrictScalars_iff
 
 中文:
 定理 disjoint_restrictScalars_iff
-  条件: {s t : Submodule R M}
+  条件: {s t : 子模 R M}
   证明: by
   simp [disjoint_def]
 
@@ -730,7 +730,7 @@ theorem isCompl_restrictScalars_iff
 
 中文:
 定理 isCompl_restrictScalars_iff
-  条件: {s t : Submodule R M}
+  条件: {s t : 子模 R M}
   证明: by
   simp [isCompl_iff]
 

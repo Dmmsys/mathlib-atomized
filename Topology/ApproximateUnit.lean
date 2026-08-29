@@ -36,11 +36,11 @@ structure Filter.IsApproximateUnit
     - [neBot : NeBot l]
 
 中文:
-结构 Filter.IsApproximateUnit
-  参数: {α : 类型} [TopologicalSpace α] [Mul α]
+结构 滤子.是ApproximateUnit
+  参数: {α : 类型} [拓扑空间 α] [乘法 α]
   公理与运算 (3 个):
-    - tendsto_mul_left(m) : Tendsto (m * ·) l (𝓝 m)
-    - tendsto_mul_right(m) : Tendsto (· * m) l (𝓝 m)
+    - tendsto_mul_left(m) : 收敛 (m * ·) l (𝓝 m)
+    - tendsto_mul_right(m) : 收敛 (· * m) l (𝓝 m)
     - [neBot : NeBot l]
 -/
 structure Filter.IsApproximateUnit {α : Type*} [TopologicalSpace α] [Mul α]
@@ -70,7 +70,7 @@ lemma pure_one
 
 中文:
 引理 pure_one
-  结论: IsApproximateUnit (pure (1 : α)) where
+  结论: 是ApproximateUnit (pure (1 : α)) where
   证明: by simpa using tendsto_pure_nhds (m * ·) (1 : α)
   tendsto_mul_right m := by simpa using tendsto_pure_nhds (· * m) (1 : α)
 
@@ -91,7 +91,7 @@ lemma mono
 
 中文:
 引理 mono
-  条件: {l l' : Filter α} (hl : l.IsApproximateUnit) (hle : l' <= l) [hl' : l'.NeBot]
+  条件: {l l' : 滤子 α} (hl : l.是ApproximateUnit) (hle : l' <= l) [hl' : l'.NeBot]
   证明: hl.tendsto_mul_left m
 .mono_left hle tendsto_mul_right m := hl.tendsto_mul_right m
 
@@ -116,7 +116,7 @@ lemma nhds_one
 中文:
 引理 nhds_one
   条件: [SeparatelyContinuousMul α]
-  结论: IsApproximateUnit (𝓝 (1 : α)) where
+  结论: 是ApproximateUnit (𝓝 (1 : α)) where
   证明: by simpa using tendsto_id (x := 𝓝 1)
 .mul_const m tendsto_mul_right m := by simpa using tendsto_id (x := 𝓝 1)
 
@@ -137,7 +137,7 @@ lemma iff_neBot_and_le_nhds_one
 
 中文:
 引理 iff_neBot_and_le_nhds_one
-  条件: [SeparatelyContinuousMul α] {l : Filter α}
+  条件: [SeparatelyContinuousMul α] {l : 滤子 α}
   证明: ⟨fun hl => ⟨hl.neBot, by simpa using! hl.tendsto_mul_left 1⟩,
 .mono hl⟩ And.elim fun _ hl => nhds_one α
 
@@ -159,7 +159,7 @@ lemma iff_le_nhds_one
 
 中文:
 引理 iff_le_nhds_one
-  条件: [SeparatelyContinuousMul α] {l : Filter α} [l.NeBot]
+  条件: [SeparatelyContinuousMul α] {l : 滤子 α} [l.NeBot]
   证明: by
   simpa [iff_neBot_and_le_nhds_one] using fun _ => ‹_›
 

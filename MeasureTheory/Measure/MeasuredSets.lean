@@ -48,7 +48,7 @@ definition MeasuredSets
 
 中文:
 定义 MeasuredSets
-  签名: (μ : Measure α)
+  签名: (μ : 测度 α)
   定义体: {s : Set α // MeasurableSet s}
 
 Depends on / 依赖: MeasurableSet
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (MeasuredSets μ) α
+  签名: 集合状 (MeasuredSets μ) α
   定义体: s.1
   coe_injective := Subtype.coe_injective
 -/
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEMetricSpace (MeasuredSets μ)
+  签名: PseudoEMetric空间 (MeasuredSets μ)
   定义体: μ ((s : Set α) ∆ t)
   edist_self := by simp
   edist_comm := by grind
@@ -111,7 +111,7 @@ lemma MeasuredSets.edist_def
 中文:
 引理 MeasuredSets.edist_def
   条件: (s t : MeasuredSets μ)
-  结论: edist s t = μ ((s : Set α) ∆ t)
+  结论: edist s t = μ ((s : 集合 α) ∆ t)
   证明: rfl
 -/
 lemma MeasuredSets.edist_def (s t : MeasuredSets μ) : edist s t = μ ((s : Set α) ∆ t) := rfl
@@ -149,7 +149,7 @@ lemma MeasuredSets.continuous_measure
 
 中文:
 引理 MeasuredSets.continuous_measure
-  结论: Continuous (fun (s : MeasuredSets μ) => μ s)
+  结论: 连续 (fun (s : MeasuredSets μ) => μ s)
   证明: by
   refine continuous_of_le_add_edist 1 ENNReal.one_ne_top fun s t => ?_
   rw [one_mul]; rw [← tsub_le_iff_left]
@@ -173,8 +173,8 @@ instance [IsFiniteMeasure
     (fun s t => by simp [Measure.real, MeasuredSets.edist_def])
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ] : PseudoMetricSpace (MeasuredSets μ)
+实例 [是有限测度
+  签名: μ] : 伪度量空间 (MeasuredSets μ)
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun s t => μ.real ((s : Set α) ∆ t)) (fun s t => ENNReal.toReal_nonneg)
     (fun s t => by simp [Measure.real, MeasuredSets.edist_def])
@@ -196,7 +196,7 @@ lemma MeasuredSets.dist_def
 
 中文:
 引理 MeasuredSets.dist_def
-  条件: [IsFiniteMeasure μ] (s t : MeasuredSets μ)
+  条件: [是有限测度 μ] (s t : MeasuredSets μ)
   证明: rfl
 -/
 lemma MeasuredSets.dist_def [IsFiniteMeasure μ] (s t : MeasuredSets μ) :
@@ -214,7 +214,7 @@ lemma MeasuredSets.real_sub_real_le_dist
 
 中文:
 引理 MeasuredSets.real_sub_real_le_dist
-  条件: [IsFiniteMeasure μ] (s t : MeasuredSets μ)
+  条件: [是有限测度 μ] (s t : MeasuredSets μ)
   证明: by
   grw [dist_edist, ← sub_le_edist]
   exacts [ENNReal.le_toReal_sub (measure_ne_top _ _), edist_ne_top _ _]
@@ -235,8 +235,8 @@ lemma MeasuredSets.lipschitzWith_measureReal
   proof: .of_le_add fun s t => sub_le_iff_le_add'.mp real_sub_real_le_dist s t
 
 中文:
-引理 MeasuredSets.lipschitzWith_measureReal
-  条件: [IsFiniteMeasure μ]
+引理 MeasuredSets.lipschitzWith_measure实数
+  条件: [是有限测度 μ]
   证明: .of_le_add fun s t => sub_le_iff_le_add'.mp real_sub_real_le_dist s t
 
 Depends on / 依赖: of_le_add, real_sub_real_le_dist, sub_le_iff_le_add
@@ -258,8 +258,8 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetRing
   apply MeasurableSpace.induction_on_inter (C := fun s hs => forall (ε : R
 
 中文:
-引理 exists_measure_symmDiff_lt_of_generateFrom_isSetRing
-  结论: [IsFiniteMeasure μ]
+引理 存在_measure_symmDiff_lt_of_generateFrom_isSetRing
+  结论: [是有限测度 μ]
   证明: by
   /- We check that the set of sets satisfying the conclusion of the lemma for all positive
   `ε` contains `C` and is stable under complement and disjoint union. It follows that it is
@@ -360,8 +360,8 @@ lemma exists_measure_symmDiff_lt_of_generateFrom_isSetSemiring
     apply generateFrom_le (fun t 
 
 中文:
-引理 exists_measure_symmDiff_lt_of_generateFrom_isSetSemiring
-  结论: [IsFiniteMeasure μ]
+引理 存在_measure_symmDiff_lt_of_generateFrom_isSetSemiring
+  结论: [是有限测度 μ]
   证明: by
   apply exists_measure_symmDiff_lt_of_generateFrom_isSetRing hC.isSetRing_supClosure ?_ ?_ hs hε
   · rcases h'C with ⟨D, D_count, DC, hD⟩
@@ -401,7 +401,7 @@ lemma dense_of_generateFrom_isSetRing
 
 中文:
 引理 dense_of_generateFrom_isSetRing
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   rw [EMetric.dense_iff]
   rintro s ε εpos
@@ -440,7 +440,7 @@ lemma dense_of_generateFrom_isSetSemiring
 
 中文:
 引理 dense_of_generateFrom_isSetSemiring
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   rw [EMetric.dense_iff]
   rintro s ε εpos

@@ -85,11 +85,11 @@ structure IsProperMap
     - clusterPt_of_mapClusterPt : forall ⦃ℱ : Filter X⦄, forall ⦃y : Y⦄, MapClusterPt y ℱ f -> exists x, f x = y ∧ ClusterPt x ℱ
 
 中文:
-结构 IsProperMap
+结构 是真映射
   参数: (f : X -> Y)
-  继承: Continuous f
+  继承: 连续 f
   公理与运算 (1 个):
-    - clusterPt_of_mapClusterPt : 对任意 ⦃ℱ : Filter X⦄, 对任意 ⦃y : Y⦄, MapClusterPt y ℱ f -> 存在 x, f x = y ∧ ClusterPt x ℱ
+    - clusterPt_of_mapClusterPt : 对任意 ⦃ℱ : 滤子 X⦄, 对任意 ⦃y : Y⦄, MapClusterPt y ℱ f -> 存在 x, f x = y ∧ ClusterPt x ℱ
 -/
 structure IsProperMap (f : X -> Y) : Prop extends Continuous f where
   /-- By definition, if `f` is a proper map and `ℱ` is any filter on `X`, then any cluster point of
@@ -113,9 +113,9 @@ lemma IsProperMap.continuous
   proof: h.toContinuous
 
 中文:
-引理 IsProperMap.continuous
-  条件: (h : Is命题erMap f)
-  结论: Continuous f
+引理 是真映射.continuous
+  条件: (h : 是真映射 f)
+  结论: 连续 f
   证明: h.toContinuous
 
 Depends on / 依赖: h.toContinuous, toContinuous
@@ -134,9 +134,9 @@ lemma IsProperMap.isClosedMap
   exact fun s y => h.clusterPt_of_mapClusterPt (ℱ := 𝓟 s) (y := y)
 
 中文:
-引理 IsProperMap.isClosedMap
-  条件: (h : Is命题erMap f)
-  结论: IsClosedMap f
+引理 是真映射.isClosedMap
+  条件: (h : 是真映射 f)
+  结论: 是闭映射 f
   证明: by
   rw [isClosedMap_iff_clusterPt]
   exact fun s y => h.clusterPt_of_mapClusterPt (ℱ := 𝓟 s) (y := y)
@@ -163,7 +163,7 @@ lemma isProperMap_iff_ultrafilter
 
 中文:
 引理 isProperMap_iff_ultrafilter
-  结论: Is命题erMap f ↔ Continuous f ∧
+  结论: 是真映射 f ↔ 连续 f ∧
   证明: by
   -- This is morally trivial since ultrafilters give all the information about cluster points.
   rw [isProperMap_iff_clusterPt]
@@ -200,8 +200,8 @@ lemma isProperMap_iff_ultrafilter_of_t2
 
 中文:
 引理 isProperMap_iff_ultrafilter_of_t2
-  条件: [T2Space Y]
-  结论: Is命题erMap f ↔ Continuous f ∧
+  条件: [T2空间 Y]
+  结论: 是真映射 f ↔ 连续 f ∧
   证明: isProperMap_iff_ultrafilter.trans and_congr_right fun hc => forall₃_congr fun _𝒰 _y hy =>
     exists_congr fun x => and_iff_right_of_imp fun h =>
       tendsto_nhds_unique ((hc.tendsto x).mono_left h) hy
@@ -224,8 +224,8 @@ lemma IsProperMap.ultrafilter_le_nhds_of_tendsto
   proof: (isProperMap_iff_ultrafilter.mp h).2 hy
 
 中文:
-引理 IsProperMap.ultrafilter_le_nhds_of_tendsto
-  条件: (h : Is命题erMap f) ⦃𝒰
+引理 是真映射.ultrafilter_le_nhds_of_tendsto
+  条件: (h : 是真映射 f) ⦃𝒰
   结论: Ultrafilter X⦄ ⦃y : Y⦄
   证明: (isProperMap_iff_ultrafilter.mp h).2 hy
 
@@ -249,8 +249,8 @@ lemma IsProperMap.comp
   use x, rfl
 
 中文:
-引理 IsProperMap.comp
-  条件: (hg : Is命题erMap g) (hf : Is命题erMap f)
+引理 是真映射.comp
+  条件: (hg : 是真映射 g) (hf : 是真映射 f)
   证明: by
   refine ⟨by fun_prop, fun ℱ z h => ?_⟩
   rw [mapClusterPt_comp] at h
@@ -283,7 +283,7 @@ lemma isProperMap_of_comp_of_surj
 
 中文:
 引理 isProperMap_of_comp_of_surj
-  结论: (hf : Continuous f)
+  结论: (hf : 连续 f)
   证明: by
   refine ⟨hg, fun ℱ z h => ?_⟩
   rw [← ℱ.map_comap_of_surjective f_surj]; rw [← mapClusterPt_comp] at h
@@ -314,7 +314,7 @@ lemma isProperMap_of_comp_of_inj
 
 中文:
 引理 isProperMap_of_comp_of_inj
-  结论: {f : X -> Y} {g : Y -> Z} (hf : Continuous f) (hg : Continuous g)
+  结论: {f : X -> Y} {g : Y -> Z} (hf : 连续 f) (hg : 连续 g)
   证明: by
   refine ⟨hf, fun ℱ y h => ?_⟩
   rcases hgf.clusterPt_of_mapClusterPt (h.map hg.continuousAt tendsto_map) with ⟨x, hx1, hx2⟩
@@ -343,7 +343,7 @@ lemma isProperMap_of_comp_of_t2
 
 中文:
 引理 isProperMap_of_comp_of_t2
-  结论: [T2Space Y] (hf : Continuous f) (hg : Continuous g)
+  结论: [T2空间 Y] (hf : 连续 f) (hg : 连续 g)
   证明: by
   rw [isProperMap_iff_ultrafilter_of_t2]
   refine ⟨hf, fun 𝒰 y h => ?_⟩
@@ -378,8 +378,8 @@ lemma IsProperMap.prodMap
   -- That means that `f` tends to `y` along `map
 
 中文:
-引理 IsProperMap.prodMap
-  条件: {g : Z -> W} (hf : Is命题erMap f) (hg : Is命题erMap g)
+引理 是真映射.prodMap
+  条件: {g : Z -> W} (hf : 是真映射 f) (hg : 是真映射 g)
   证明: by
   simp_rw [isProperMap_iff_ultrafilter] at hf hg ⊢
   constructor
@@ -432,8 +432,8 @@ lemma IsProperMap.pi_map
   -- That means
 
 中文:
-引理 IsProperMap.pi_map
-  结论: {X Y : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+引理 是真映射.pi_map
+  结论: {X Y : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   证明: by
   simp_rw [isProperMap_iff_ultrafilter] at h ⊢
   constructor
@@ -482,8 +482,8 @@ lemma IsProperMap.isCompact_preimage
   -- Thus, by compactness of `K`, the ultrafilter `map f 𝒰` tends to
 
 中文:
-引理 IsProperMap.isCompact_preimage
-  条件: (h : Is命题erMap f) {K : Set Y} (hK : IsCompact K)
+引理 是真映射.isCompact_preimage
+  条件: (h : 是真映射 f) {K : 集合 Y} (hK : 是紧集 K)
   证明: by
   rw [isCompact_iff_ultrafilter_le_nhds]
   -- Let `𝒰 ≤ 𝓟 (f ⁻¹' K)` an ultrafilter.
@@ -568,7 +568,7 @@ lemma isProperMap_iff_isClosedMap_of_inj
 
 中文:
 引理 isProperMap_iff_isClosedMap_of_inj
-  条件: (f_cont : Continuous f) (f_inj : f.Injective)
+  条件: (f_cont : 连续 f) (f_inj : f.单射)
   证明: by
   refine ⟨fun h => h.isClosedMap, fun h => ?_⟩
   rw [isProperMap_iff_isClosedMap_and_compact_fibers]
@@ -592,7 +592,7 @@ lemma isProperMap_of_isClosedMap_of_inj
 
 中文:
 引理 isProperMap_of_isClosedMap_of_inj
-  结论: (f_cont : Continuous f) (f_inj : f.Injective)
+  结论: (f_cont : 连续 f) (f_inj : f.单射)
   证明: (isProperMap_iff_isClosedMap_of_inj f_cont f_inj).2 f_closed
 
 Depends on / 依赖: f_closed, f_cont, f_inj, isProperMap_iff_isClosedMap_of_inj
@@ -611,9 +611,9 @@ lemma Homeomorph.isProperMap
   proof: isProperMap_of_isClosedMap_of_inj e.continuous e.injective e.isClosedMap
 
 中文:
-引理 Homeomorph.isProperMap
+引理 同胚.isProperMap
   条件: (e : X ≃ₜ Y)
-  结论: Is命题erMap e
+  结论: 是真映射 e
   证明: isProperMap_of_isClosedMap_of_inj e.continuous e.injective e.isClosedMap
 -/
 @[simp] lemma Homeomorph.isProperMap (e : X ≃ₜ Y) : IsProperMap e :=
@@ -629,9 +629,9 @@ lemma IsHomeomorph.isProperMap
   proof: isProperMap_of_isClosedMap_of_inj hf.continuous hf.injective hf.isClosedMap
 
 中文:
-引理 IsHomeomorph.isProperMap
-  条件: (hf : IsHomeomorph f)
-  结论: Is命题erMap f
+引理 是同胚.isProperMap
+  条件: (hf : 是同胚 f)
+  结论: 是真映射 f
   证明: isProperMap_of_isClosedMap_of_inj hf.continuous hf.injective hf.isClosedMap
 -/
 protected lemma IsHomeomorph.isProperMap (hf : IsHomeomorph f) : IsProperMap f :=
@@ -647,7 +647,7 @@ lemma isProperMap_id
 
 中文:
 引理 isProperMap_id
-  结论: Is命题erMap (id : X -> X)
+  结论: 是真映射 (id : X -> X)
   证明: IsHomeomorph.id.isProperMap
 -/
 @[simp] lemma isProperMap_id : IsProperMap (id : X -> X) := IsHomeomorph.id.isProperMap
@@ -662,9 +662,9 @@ lemma Topology.IsClosedEmbedding.isProperMap
   proof: isProperMap_of_isClosedMap_of_inj hf.continuous hf.injective hf.isClosedMap
 
 中文:
-引理 Topology.IsClosedEmbedding.isProperMap
-  条件: (hf : IsClosedEmbedding f)
-  结论: Is命题erMap f
+引理 拓扑.是闭嵌入.isProperMap
+  条件: (hf : 是闭嵌入 f)
+  结论: 是真映射 f
   证明: isProperMap_of_isClosedMap_of_inj hf.continuous hf.injective hf.isClosedMap
 
 Depends on / 依赖: continuous, hf.continuous, hf.injective, hf.isClosedMap, injective, isClosedMap, isProperMap_of_isClosedMap_of_inj
@@ -682,9 +682,9 @@ lemma IsClosed.isProperMap_subtypeVal
   proof: hC.isClosedEmbedding_subtypeVal.isProperMap
 
 中文:
-引理 IsClosed.isProperMap_subtypeVal
-  条件: {C : Set X} (hC : IsClosed C)
-  结论: Is命题erMap ((↑) : C -> X)
+引理 是闭集.isProperMap_subtypeVal
+  条件: {C : 集合 X} (hC : 是闭集 C)
+  结论: 是真映射 ((↑) : C -> X)
   证明: hC.isClosedEmbedding_subtypeVal.isProperMap
 
 Depends on / 依赖: hC.isClosedEmbedding_subtypeVal.isProperMap, isClosedEmbedding_subtypeVal, isProperMap
@@ -701,8 +701,8 @@ lemma IsProperMap.restrict
   proof: hf.comp hC.isProperMap_subtypeVal
 
 中文:
-引理 IsProperMap.restrict
-  条件: {C : Set X} (hf : Is命题erMap f) (hC : IsClosed C)
+引理 是真映射.restrict
+  条件: {C : 集合 X} (hf : 是真映射 f) (hC : 是闭集 C)
   证明: hf.comp hC.isProperMap_subtypeVal
 
 Depends on / 依赖: hC.isProperMap_subtypeVal, hf.comp, isProperMap_subtypeVal
@@ -720,9 +720,9 @@ lemma IsProperMap.isClosed_range
   proof: hf.isClosedMap.isClosed_range
 
 中文:
-引理 IsProperMap.isClosed_range
-  条件: (hf : Is命题erMap f)
-  结论: IsClosed (range f)
+引理 是真映射.isClosed_range
+  条件: (hf : 是真映射 f)
+  结论: 是闭集 (range f)
   证明: hf.isClosedMap.isClosed_range
 
 Depends on / 依赖: hf.isClosedMap.isClosed_range, isClosedMap, isClosed_range
@@ -745,7 +745,7 @@ lemma isProperMap_iff_isClosedMap_and_tendsto_cofinite
 
 中文:
 引理 isProperMap_iff_isClosedMap_and_tendsto_cofinite
-  条件: [T1Space Y]
+  条件: [T1空间 Y]
   证明: by
   simp_rw [isProperMap_iff_isClosedMap_and_compact_fibers, Tendsto,
     le_cofinite_iff_compl_singleton_mem, mem_map, preimage_compl]
@@ -775,9 +775,9 @@ theorem Continuous.isProperMap
   proof: isProperMap_iff_isClosedMap_and_tendsto_cofinite.2 ⟨hf, hf.isClosedMap, by simp⟩
 
 中文:
-定理 Continuous.isProperMap
-  条件: [CompactSpace X] [T2Space Y] (hf : Continuous f)
-  结论: Is命题erMap f
+定理 连续.isProperMap
+  条件: [紧空间 X] [T2空间 Y] (hf : 连续 f)
+  结论: 是真映射 f
   证明: isProperMap_iff_isClosedMap_and_tendsto_cofinite.2 ⟨hf, hf.isClosedMap, by simp⟩
 
 Depends on / 依赖: hf.isClosedMap, isClosedMap, isProperMap_iff_isClosedMap_and_tendsto_cofinite
@@ -803,7 +803,7 @@ theorem isProperMap_const_iff
 
 中文:
 定理 isProperMap_const_iff
-  条件: [T1Space Y] (y : Y)
+  条件: [T1空间 Y] (y : Y)
   证明: by
   classical
   rw [isProperMap_iff_isClosedMap_and_compact_fibers]
@@ -837,7 +837,7 @@ theorem isProperMap_const
 
 中文:
 定理 isProperMap_const
-  条件: [h : CompactSpace X] [T1Space Y] (y : Y)
+  条件: [h : 紧空间 X] [T1空间 Y] (y : Y)
   证明: .mpr h isProperMap_const_iff y
 
 Depends on / 依赖: isProperMap_const_iff
@@ -856,7 +856,7 @@ theorem isProperMap_fst_of_compactSpace
 
 中文:
 定理 isProperMap_fst_of_compactSpace
-  条件: [CompactSpace Y]
+  条件: [紧空间 Y]
   证明: .isProperMap.comp (isProperMap_id.prodMap (isProperMap_const ())) Homeomorph.prodPUnit X
 
 Depends on / 依赖: Homeomorph, Homeomorph.prodPUnit, isProperMap, isProperMap.comp, isProperMap_const, isProperMap_id, isProperMap_id.prodMap, prodMap, prodPUnit
@@ -875,7 +875,7 @@ theorem isProperMap_snd_of_compactSpace
 
 中文:
 定理 isProperMap_snd_of_compactSpace
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   证明: .isProperMap.comp ((isProperMap_const ()).prodMap isProperMap_id) Homeomorph.punitProd Y
 
 Depends on / 依赖: Homeomorph, Homeomorph.punitProd, isProperMap, isProperMap.comp, isProperMap_const, isProperMap_id, prodMap, punitProd
@@ -894,7 +894,7 @@ theorem isClosedMap_fst_of_compactSpace
 
 中文:
 定理 isClosedMap_fst_of_compactSpace
-  条件: [CompactSpace Y]
+  条件: [紧空间 Y]
   证明: isProperMap_fst_of_compactSpace.isClosedMap
 
 Depends on / 依赖: isClosedMap, isProperMap_fst_of_compactSpace, isProperMap_fst_of_compactSpace.isClosedMap
@@ -913,7 +913,7 @@ theorem isClosedMap_snd_of_compactSpace
 
 中文:
 定理 isClosedMap_snd_of_compactSpace
-  条件: [CompactSpace X]
+  条件: [紧空间 X]
   证明: isProperMap_snd_of_compactSpace.isClosedMap
 
 Depends on / 依赖: isClosedMap, isProperMap_snd_of_compactSpace, isProperMap_snd_of_compactSpace.isClosedMap
@@ -932,8 +932,8 @@ theorem IsProperMap.universally_closed
   (h.prodMap isProperMap_id).isClosedMap
 
 中文:
-定理 IsProperMap.universally_closed
-  条件: (Z) [TopologicalSpace Z] (h : Is命题erMap f)
+定理 是真映射.universally_closed
+  条件: (Z) [拓扑空间 Z] (h : 是真映射 f)
   证明: -- `f × id` is proper as a product of proper maps, hence closed.
   (h.prodMap isProperMap_id).isClosedMap
 -/

@@ -113,7 +113,7 @@ lemma isEquivalence
 
 中文:
 引理 isEquivalence
-  结论: G'.IsEquivalence
+  结论: G'.是等价
   证明: (equivalence L₁ W₁ L₂ W₂ G G' F F' α β).isEquivalence_functor
 
 Depends on / 依赖: equivalence, isEquivalence_functor
@@ -145,7 +145,7 @@ lemma of_equivalence_source
 
 中文:
 引理 of_equivalence_source
-  结论: (L₁ : C₁ ⥤ D) (W₁ : Morphism命题erty C₁)
+  结论: (L₁ : C₁ ⥤ D) (W₁ : MorphismProperty C₁)
   证明: by
   have h : W₁.IsInvertedBy (E.functor ⋙ W₂.Q) := fun _ _ f hf => by
     obtain ⟨_, _, f', hf', ⟨e⟩⟩ := hW₁ f hf
@@ -199,7 +199,7 @@ lemma of_equivalences
 
 中文:
 引理 of_equivalences
-  结论: (L₁ : C₁ ⥤ D₁) (W₁ : Morphism命题erty C₁) [L₁.IsLocalization W₁]
+  结论: (L₁ : C₁ ⥤ D₁) (W₁ : MorphismProperty C₁) [L₁.是Localization W₁]
   证明: by
   have : (E.functor ⋙ L₂).IsLocalization W₁ :=
     of_equivalence_target L₁ W₁ _ E' ((CatCommSq.iso _ _ _ _).symm)

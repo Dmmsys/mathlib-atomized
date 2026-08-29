@@ -125,9 +125,9 @@ lemma log_ofReal
   · rw [ENNReal.toReal_ofReal (not_le.mp h_nonpos).le]
 
 中文:
-引理 log_ofReal
+引理 log_of实数
   条件: (x : 实数)
-  结论: log (ENN实数.of实数 x) = if x <= 0 then ⊥ else ↑(实数.log x)
+  结论: log (广义非负实数.of实数 x) = if x <= 0 then ⊥ else ↑(实数.log x)
   证明: by
   simp only [log, ENNReal.ofReal_ne_top,
     ENNReal.ofReal_eq_zero, if_false]
@@ -155,9 +155,9 @@ lemma log_ofReal_of_pos
   rw [log_ofReal]; rw [if_neg hx.not_ge]
 
 中文:
-引理 log_ofReal_of_pos
+引理 log_of实数_of_pos
   条件: {x : 实数} (hx : 0 < x)
-  结论: log (ENN实数.of实数 x) = 实数.log x
+  结论: log (广义非负实数.of实数 x) = 实数.log x
   证明: by
   rw [log_ofReal]; rw [if_neg hx.not_ge]
 
@@ -237,7 +237,7 @@ theorem log_strictMono
 
 中文:
 定理 log_strictMono
-  结论: StrictMono log
+  结论: 严格递增 log
   证明: by
   intro x y h
   unfold log
@@ -260,7 +260,7 @@ theorem log_monotone
 
 中文:
 定理 log_monotone
-  结论: Monotone log
+  结论: 递增 log
   证明: log_strictMono.monotone
 
 Depends on / 依赖: log_strictMono, log_strictMono.monotone, monotone
@@ -277,7 +277,7 @@ theorem log_injective
 
 中文:
 定理 log_injective
-  结论: Function.Injective log
+  结论: 函数.单射 log
   证明: log_strictMono.injective
 
 Depends on / 依赖: injective, log_strictMono, log_strictMono.injective
@@ -299,7 +299,7 @@ theorem log_surjective
 
 中文:
 定理 log_surjective
-  结论: Function.Surjective log
+  结论: 函数.满射 log
   证明: by
   intro y
   cases y with
@@ -328,7 +328,7 @@ theorem log_bijective
 
 中文:
 定理 log_bijective
-  结论: Function.Bijective log
+  结论: 函数.双射 log
   证明: ⟨log_injective, log_surjective⟩
 
 @[simp]

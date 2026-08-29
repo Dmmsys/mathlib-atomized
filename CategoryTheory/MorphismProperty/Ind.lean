@@ -57,7 +57,7 @@ definition ind
 
 中文:
 定义 ind
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun X Y f => exists (J : Type w) (_ : SmallCategory J) (_ : IsFiltered J)
     (D : J ⥤ C) (t : (Functor.const J).obj X ⟶ D) (s : D ⟶ (Functor.const J).obj Y)
     (_ : IsColimit (Cocone.mk _ s)), forall j, P (t.app j) ∧ t.app j ≫ s.app j = f
@@ -78,8 +78,8 @@ lemma exists_hom_of_isFinitelyPresentable
   proof: hp.exists_hom_of_isColimit_under hc _ s _ h
 
 中文:
-引理 exists_hom_of_isFinitelyPresentable
-  结论: {J : Type w} [SmallCategory J] [IsFiltered J] {D : J ⥤ C}
+引理 存在_hom_of_isFinitelyPresentable
+  结论: {J : 类型 w} [小范畴 J] [是Filtered J] {D : J ⥤ C}
   证明: hp.exists_hom_of_isColimit_under hc _ s _ h
 
 Depends on / 依赖: IsVerdierRightLocalizing, IsVerdierRightLocalizing.fac, Quiver, Quiver.Hom.op_inj, a.unop, b.unop, exists_hom_of_isColimit_under, f.op, hp.exists_hom_of_isColimit_under, op_inj
@@ -260,7 +260,7 @@ lemma ind_underObj_pushout
 
 中文:
 引理 ind_underObj_pushout
-  结论: {X Y : C} (g : X ⟶ Y) [HasPushouts C] [P.IsStableUnderCobaseChange]
+  结论: {X Y : C} (g : X ⟶ Y) [有Pushouts C] [P.是StableUnderCobaseChange]
   证明: by
   obtain ⟨J, _, _, pres, hpres⟩ := hf
   use J, inferInstance, inferInstance, pres.map (Under.pushout g)
@@ -289,8 +289,8 @@ instance [P.IsStableUnderCobaseChange]
   exact ind_underObj_pushout g hf
 
 中文:
-实例 [P.IsStableUnderCobaseChange]
-  签名: [HasPushouts C]
+实例 [P.是StableUnderCobaseChange]
+  签名: [有Pushouts C]
   定义体: by
   refine .mk' fun A B A' f g _ hf => ?_
   rw [ind_iff_ind_underMk] at hf ⊢
@@ -312,8 +312,8 @@ instance [P.ContainsIdentities]
   body: le_ind _ _ (P.id_mem X)
 
 中文:
-实例 [P.ContainsIdentities]
-  签名: : (ind.{w} P).ContainsIdentities where
+实例 [P.余ntainsIdentities]
+  签名: : (ind.{w} P).余ntainsIdentities where
   定义体: le_ind _ _ (P.id_mem X)
 
 Depends on / 依赖: P.id_mem, id_mem, le_ind
@@ -366,7 +366,7 @@ lemma ind_iff_exists
         (
 
 中文:
-引理 ind_iff_exists
+引理 ind_iff_存在
   结论: (H : P <= isFinitelyPresentable.{w} C) {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [ind_iff_ind_underMk]; rw [ObjectProperty.ind_iff_exists]
@@ -406,9 +406,9 @@ class PreIndSpreads
 
 中文:
 类 PreIndSpreads
-  参数: (P : Morphism命题erty C)
+  参数: (P : MorphismProperty C)
   公理与运算 (1 个):
-    - exists_isPushout({J : Type w} [SmallCategory J] [IsFiltered J] {D : J ⥤ C} {c : Cocone D} (_ : IsColimit c) {T : C} (f : c.pt ⟶ T)) : P f -> 存在 (j : J) (T' : C) (f' : D.obj j ⟶ T') (g : T' ⟶ T), IsPushout (c.ι.app j) f' f g ∧ P f'
+    - exists_isPushout({J : 类型 w} [小范畴 J] [是Filtered J] {D : J ⥤ C} {c : 余锥 D} (_ : 是余极限 c) {T : C} (f : c.pt ⟶ T)) : P f -> 存在 (j : J) (T' : C) (f' : D.obj j ⟶ T') (g : T' ⟶ T), 是推出 (c.ι.app j) f' f g ∧ P f'
 
 Depends on / 依赖: PreIndSpreads, PreIndSpreads.exists_isPushout, exists_isPushout
 -/
@@ -440,7 +440,7 @@ lemma IsStableUnderComposition.ind_of_preIndSpreads
     obtain ⟨j₂, q, hcomp, hu⟩ := IsFinitelyPresentable.exists_hom_of_isColimit_unde
 
 中文:
-引理 IsStableUnderComposition.ind_of_preIndSpreads
+引理 是StableUnderComposition.ind_of_preIndSpreads
   证明: by
     rw [ind_iff_exists H]
     intro T p u hp hpu
@@ -495,7 +495,7 @@ lemma IsMultiplicative.ind_of_preIndSpreads
   proof: IsStableUnderComposition.ind_of_preIndSpreads H
 
 中文:
-引理 IsMultiplicative.ind_of_preIndSpreads
+引理 是Multiplicative.ind_of_preIndSpreads
   证明: IsStableUnderComposition.ind_of_preIndSpreads H
 
 Depends on / 依赖: IsStableUnderComposition, IsStableUnderComposition.ind_of_preIndSpreads, ind_of_preIndSpreads

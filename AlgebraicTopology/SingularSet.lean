@@ -53,8 +53,8 @@ definition TopCat.toSSet
   body: Presheaf.restrictedULiftYoneda.{0} SimplexCategory.toTop.{u}
 
 中文:
-定义 TopCat.toSSet
-  签名: : TopCat.{u} ⥤ SSet.{u}
+定义 顶元素范畴.toSSet
+  签名: : 顶元素范畴.{u} ⥤ SSet.{u}
   定义体: Presheaf.restrictedULiftYoneda.{0} SimplexCategory.toTop.{u}
 
 Depends on / 依赖: Presheaf, Presheaf.restrictedULiftYoneda, SimplexCategory, SimplexCategory.toTop, restrictedULiftYoneda
@@ -72,8 +72,8 @@ definition TopCat.toSSetObjEquiv
     (Homeomorph.ulift.continuousMapCongr (.refl _)))
 
 中文:
-定义 TopCat.toSSetObjEquiv
-  签名: (X : TopCat.{u}) (n : SimplexCategoryᵒᵖ)
+定义 顶元素范畴.toSSetObjEquiv
+  签名: (X : 顶元素范畴.{u}) (n : SimplexCategoryᵒᵖ)
   定义体: Equiv.ulift.{0}.trans (ConcreteCategory.homEquiv.trans
     (Homeomorph.ulift.continuousMapCongr (.refl _)))
 
@@ -95,7 +95,7 @@ definition SSet.toTop
 
 中文:
 定义 SSet.toTop
-  签名: : SSet.{u} ⥤ TopCat.{u}
+  签名: : SSet.{u} ⥤ 顶元素范畴.{u}
   定义体: stdSimplex.{u}.leftKanExtension SimplexCategory.toTop
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.toTop, leftKanExtension, stdSimplex
@@ -119,7 +119,7 @@ definition sSetTopAdj
 
 中文:
 定义 sSetTopAdj
-  签名: : SSet.toTop.{u} ⊣ TopCat.toSSet.{u}
+  签名: : SSet.toTop.{u} ⊣ 顶元素范畴.toSSet.{u}
   定义体: Presheaf.uliftYonedaAdjunction
     (SSet.stdSimplex.{u}.leftKanExtension SimplexCategory.toTop)
     (SSet.stdSimplex.{u}.leftKanExtensionUnit SimplexCategory.toTop)
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: SSet.toTop.{u}.IsLeftAdjoint
+  签名: SSet.toTop.{u}.是左伴随
   定义体: sSetTopAdj.isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, sSetTopAdj, sSetTopAdj.isLeftAdjoint
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopCat.toSSet.{u}.IsRightAdjoint
+  签名: 顶元素范畴.toSSet.{u}.是右伴随
   定义体: sSetTopAdj.isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, sSetTopAdj, sSetTopAdj.isRightAdjoint
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: SSet.toTop.{u}.IsLeftKanExtension SSet.toTopSimplex.inv
+  签名: SSet.toTop.{u}.是LeftKanExtension SSet.toTopSimplex.inv
   定义体: inferInstanceAs (Functor.IsLeftKanExtension _
     (SSet.stdSimplex.{u}.leftKanExtensionUnit SimplexCategory.toTop.{u}))
 
@@ -242,8 +242,8 @@ definition TopCat.toSSetIsoConst
 #adaptation_note
 
 中文:
-定义 TopCat.toSSetIsoConst
-  签名: (X : TopCat.{u}) [TotallyDisconnectedSpace X]
+定义 顶元素范畴.toSSetIsoConst
+  签名: (X : 顶元素范畴.{u}) [全不连通空间 X]
   定义体: (NatIso.ofComponents (fun n => Equiv.toIso
     ((TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace _ X).symm.trans
       (X.toSSetObjEquiv n).symm))).symm

@@ -41,7 +41,7 @@ theorem disjointed_add_one
 
 中文:
 定理 disjointed_add_one
-  条件: [NoMaxOrder ι] (f : ι -> α) (i : ι)
+  条件: [NoMax序 ι] (f : ι -> α) (i : ι)
   证明: by
   simpa only [succ_eq_add_one] using disjointed_succ f (not_isMax i)
 
@@ -105,8 +105,8 @@ lemma Monotone.disjointed_add_one_sup
   simpa only [succ_eq_add_one i] using hf.disjointed_succ_sup i
 
 中文:
-引理 Monotone.disjointed_add_one_sup
-  条件: {f : ι -> α} (hf : Monotone f) (i : ι)
+引理 递增.disjointed_add_one_sup
+  条件: {f : ι -> α} (hf : 递增 f) (i : ι)
   证明: by
   simpa only [succ_eq_add_one i] using hf.disjointed_succ_sup i
 -/
@@ -125,8 +125,8 @@ lemma Monotone.disjointed_add_one
   exact not_isMax i
 
 中文:
-引理 Monotone.disjointed_add_one
-  条件: [NoMaxOrder ι] {f : ι -> α} (hf : Monotone f) (i : ι)
+引理 递增.disjointed_add_one
+  条件: [NoMax序 ι] {f : ι -> α} (hf : 递增 f) (i : ι)
   证明: by
   rw [← succ_eq_add_one]; rw [hf.disjointed_succ]
   exact not_isMax i
@@ -148,8 +148,8 @@ definition Nat.disjointedRec
   signature: {f : Nat -> α} {p : α -> Sort*} (hdiff : forall ⦃t i⦄, p t -> p (t \ f i))
 
 中文:
-定义 Nat.disjointedRec
-  签名: {f : 自然数 -> α} {p : α -> Sort*} (hdiff : 对任意 ⦃t i⦄, p t -> p (t \ f i))
+定义 自然数.disjointedRec
+  签名: {f : 自然数 -> α} {p : α -> 类型层*} (hdiff : 对任意 ⦃t i⦄, p t -> p (t \ f i))
 -/
 def Nat.disjointedRec {f : Nat -> α} {p : α -> Sort*} (hdiff : forall ⦃t i⦄, p t -> p (t \ f i)) :
     forall ⦃n⦄, p (f n) -> p (disjointed f n)
@@ -172,7 +172,7 @@ theorem disjointedRec_zero
 
 中文:
 定理 disjointedRec_zero
-  结论: {f : 自然数 -> α} {p : α -> Sort*}
+  结论: {f : 自然数 -> α} {p : α -> 类型层*}
   证明: rfl
 -/
 theorem disjointedRec_zero {f : Nat -> α} {p : α -> Sort*}

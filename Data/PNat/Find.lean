@@ -35,7 +35,7 @@ Subtype.exists.trans by
       simp_rw [mk_coe, @exists_comm (_ < _) (_ = _), exists_prop, exists_eq_left']
 
 中文:
-实例 decidablePredExistsNat
+实例 decidablePredExists自然数
   签名: : DecidablePred fun n' : 自然数 => 存在 (n : 自然数+) (_ : n' = n), p n
   定义体: fun n' =>
 decidable_of_iff' (exists h : 0 < n', p ⟨n', h⟩)
@@ -116,7 +116,7 @@ theorem find_spec
 
 中文:
 定理 find_spec
-  结论: p (P自然数.find h)
+  结论: p (正自然数.find h)
   证明: (PNat.findX h).prop.left
 -/
 protected theorem find_spec : p (PNat.find h) :=
@@ -132,7 +132,7 @@ theorem find_min
 
 中文:
 定理 find_min
-  结论: 对任意 {m : 自然数+}, m < P自然数.find h -> ¬p m
+  结论: 对任意 {m : 自然数+}, m < 正自然数.find h -> ¬p m
   证明: @(PNat.findX h).prop.right
 -/
 protected theorem find_min : forall {m : Nat+}, m < PNat.find h -> ¬p m :=
@@ -150,7 +150,7 @@ theorem find_min'
 中文:
 定理 find_min'
   条件: {m : 自然数+} (hm : p m)
-  结论: P自然数.find h <= m
+  结论: 正自然数.find h <= m
   证明: le_of_not_gt fun l => PNat.find_min h l hm
 -/
 protected theorem find_min' {m : Nat+} (hm : p m) : PNat.find h <= m :=
@@ -175,7 +175,7 @@ theorem find_eq_iff
 
 中文:
 定理 find_eq_iff
-  结论: P自然数.find h = m ↔ p m ∧ 对任意 n < m, ¬p n
+  结论: 正自然数.find h = m ↔ p m ∧ 对任意 n < m, ¬p n
   证明: by
   constructor
   · rintro rfl
@@ -210,7 +210,7 @@ theorem find_lt_iff
 中文:
 定理 find_lt_iff
   条件: (n : 自然数+)
-  结论: P自然数.find h < n ↔ 存在 m < n, p m
+  结论: 正自然数.find h < n ↔ 存在 m < n, p m
   证明: ⟨fun h2 => ⟨PNat.find h, h2, PNat.find_spec h⟩, fun ⟨_, hmn, hm⟩ =>
     (PNat.find_min' h hm).trans_lt hmn⟩
 
@@ -238,7 +238,7 @@ theorem find_le_iff
 中文:
 定理 find_le_iff
   条件: (n : 自然数+)
-  结论: P自然数.find h <= n ↔ 存在 m <= n, p m
+  结论: 正自然数.find h <= n ↔ 存在 m <= n, p m
   证明: by
   simp only [← lt_add_one_iff, find_lt_iff]
 
@@ -265,7 +265,7 @@ theorem le_find_iff
 中文:
 定理 le_find_iff
   条件: (n : 自然数+)
-  结论: n <= P自然数.find h ↔ 对任意 m < n, ¬p m
+  结论: n <= 正自然数.find h ↔ 对任意 m < n, ¬p m
   证明: by
   simp only [← not_lt, find_lt_iff, not_exists, not_and]
 
@@ -292,7 +292,7 @@ theorem lt_find_iff
 中文:
 定理 lt_find_iff
   条件: (n : 自然数+)
-  结论: n < P自然数.find h ↔ 对任意 m <= n, ¬p m
+  结论: n < 正自然数.find h ↔ 对任意 m <= n, ¬p m
   证明: by
   simp only [← add_one_le_iff, le_find_iff, add_le_add_iff_right]
 
@@ -314,7 +314,7 @@ theorem find_eq_one
 
 中文:
 定理 find_eq_one
-  结论: P自然数.find h = 1 ↔ p 1
+  结论: 正自然数.find h = 1 ↔ p 1
   证明: by simp [find_eq_iff]
 
 Depends on / 依赖: find_eq_iff
@@ -331,7 +331,7 @@ theorem one_le_find
 
 中文:
 定理 one_le_find
-  结论: 1 < P自然数.find h ↔ ¬p 1
+  结论: 1 < 正自然数.find h ↔ ¬p 1
   证明: by simp
 -/
 theorem one_le_find : 1 < PNat.find h ↔ ¬p 1 := by simp
@@ -367,7 +367,7 @@ theorem find_le
 中文:
 定理 find_le
   条件: {h : 存在 n, p n} (hn : p n)
-  结论: P自然数.find h <= n
+  结论: 正自然数.find h <= n
   证明: (PNat.find_le_iff _ _).2 ⟨n, le_rfl, hn⟩
 
 Depends on / 依赖: PNat.find_le_iff, find_le_iff, le_rfl

@@ -53,7 +53,7 @@ lemma sub_le_iff_le_add
 
 中文:
 引理 sub_le_iff_le_add
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: [是有限测度 μ] [是有限测度 ν]
   结论: μ - ν <= ξ ↔ μ <= ξ + ν
   证明: by
   refine ⟨fun h => ?_, sub_le_of_le_add⟩
@@ -93,7 +93,7 @@ lemma withDensity_sub_of_le
 
 中文:
 引理 withDensity_sub_of_le
-  结论: {f g : α -> 实数>=0∞} [IsFiniteMeasure (μ.withDensity g)]
+  结论: {f g : α -> 实数>=0∞} [是有限测度 (μ.withDensity g)]
   证明: by
   ext s hs
   rw [sub_apply hs (withDensity_mono hgf)]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]; rw [← lintegral_sub hg _ (ae_restrict_of_ae hgf)]
@@ -125,7 +125,7 @@ lemma withDensity_sub
 
 中文:
 引理 withDensity_sub
-  结论: {f g : α -> 实数>=0∞} [IsFiniteMeasure (μ.withDensity g)]
+  结论: {f g : α -> 实数>=0∞} [是有限测度 (μ.withDensity g)]
   证明: by
   refine le_antisymm ?_ ?_
   · let t := {x | f x <= g x}

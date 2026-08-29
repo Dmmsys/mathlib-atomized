@@ -31,7 +31,7 @@ instance instSuccOrder
 
 中文:
 实例 instSuccOrder
-  签名: : SuccOrder 整数
+  签名: : Succ序 整数
   定义体: { SuccOrder.ofSuccLeIff succ fun {_ _} => Iff.rfl with succ := succ }
 
 Depends on / 依赖: Iff.rfl, SuccOrder, SuccOrder.ofSuccLeIff, ofSuccLeIff
@@ -49,7 +49,7 @@ instance instSuccAddOrder
 
 中文:
 实例 instSuccAddOrder
-  签名: : SuccAddOrder 整数
+  签名: : SuccAdd序 整数
   定义体: ⟨fun _ => rfl⟩
 -/
 instance instSuccAddOrder : SuccAddOrder Int := ⟨fun _ => rfl⟩
@@ -67,7 +67,7 @@ instance instPredOrder
 
 中文:
 实例 instPredOrder
-  签名: : PredOrder 整数 where
+  签名: : Pred序 整数 where
   定义体: pred
   pred_le _ := (sub_one_lt_of_le le_rfl).le
   min_of_le_pred ha := ((sub_one_lt_of_le le_rfl).not_ge ha).elim
@@ -91,7 +91,7 @@ instance instPredSubOrder
 
 中文:
 实例 instPredSubOrder
-  签名: : PredSubOrder 整数
+  签名: : PredSub序 整数
   定义体: ⟨fun _ => rfl⟩
 
 @[simp]
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSuccArchimedean 整数
+  签名: 是SuccArchimedean 整数
   定义体: ⟨fun {a b} h =>
     ⟨(b - a).toNat, by rw [succ_iterate, toNat_sub_of_le h, ← add_sub_assoc, add_sub_cancel_left]⟩⟩
 
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPredArchimedean 整数
+  签名: 是PredArchimedean 整数
   定义体: ⟨fun {a b} h =>
     ⟨(b - a).toNat, by rw [pred_iterate, toNat_sub_of_le h, sub_sub_cancel]⟩⟩
 

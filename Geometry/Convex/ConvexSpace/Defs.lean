@@ -55,12 +55,12 @@ structure StdSimplex
     - total : weights.sum (fun _ r => r) = 1
 
 中文:
-结构 StdSimplex
-  参数: (R : 类型u) [LE R] [AddCommMonoid R] [One R] (M : 类型v)
+结构 标准单纯形
+  参数: (R : 类型u) [LE R] [加法交换幺半群 R] [幺 R] (M : 类型v)
   公理与运算 (3 个):
     - weights : M ->₀ R
     - nonneg : 0 <= weights
-    - total : weights.sum (fun _ r => r) = 1
+    - total : weights.求和 (fun _ r => r) = 1
 -/
 structure StdSimplex (R : Type u) [LE R] [AddCommMonoid R] [One R] (M : Type v) where
   /-- The weights of the `StdSimplex` as a `Finsupp`. -/
@@ -91,7 +91,7 @@ lemma weights_nonneg
 
 中文:
 引理 weights_nonneg
-  条件: {w : StdSimplex R M} (i : M)
+  条件: {w : 标准单纯形 R M} (i : M)
   结论: 0 <= w.weights i
   证明: w.nonneg i
 -/
@@ -109,8 +109,8 @@ lemma weights_ne_zero
 
 中文:
 引理 weights_ne_zero
-  条件: [Nontrivial R]
-  结论: 对任意 w : StdSimplex R M, w.weights != 0
+  条件: [非平凡 R]
+  结论: 对任意 w : 标准单纯形 R M, w.weights != 0
   证明: by
   rintro ⟨_, -, total⟩ rfl; simp at total
 -/
@@ -127,7 +127,7 @@ lemma support_weights_nonempty
 
 中文:
 引理 support_weights_nonempty
-  条件: [Nontrivial R] (w : StdSimplex R M)
+  条件: [非平凡 R] (w : 标准单纯形 R M)
   证明: by simp
 -/
 lemma support_weights_nonempty [Nontrivial R] (w : StdSimplex R M) :
@@ -144,8 +144,8 @@ lemma nonempty
 
 中文:
 引理 nonempty
-  条件: [Nontrivial R] (w : StdSimplex R M)
-  结论: Nonempty M
+  条件: [非平凡 R] (w : 标准单纯形 R M)
+  结论: 非空 M
   证明: w.support_weights_nonempty.to_type
 
 Depends on / 依赖: support_weights_nonempty, to_type, w.support_weights_nonempty.to_type
@@ -167,7 +167,7 @@ lemma weights_inj
 
 中文:
 引理 weights_inj
-  条件: {f g : StdSimplex R M}
+  条件: {f g : 标准单纯形 R M}
   结论: f.weights = g.weights ↔ f = g
   证明: by
   cases f; cases g; simp
@@ -306,7 +306,7 @@ definition map
 
 中文:
 定义 map
-  签名: {M : 类型v} {N : Type w} (g : M -> N) (f : StdSimplex R M)
+  签名: {M : 类型v} {N : 类型 w} (g : M -> N) (f : 标准单纯形 R M)
   定义体: f.weights.mapDomain g
   nonneg := f.weights.mapDomain_nonneg f.nonneg
   total := by simp [sum_mapDomain_index]
@@ -335,7 +335,7 @@ lemma map_const
 
 中文:
 引理 map_const
-  条件: (f : StdSimplex R M) (x : N)
+  条件: (f : 标准单纯形 R M) (x : N)
   结论: f.map (fun _ => x) = .single x
   证明: by
   ext a; by_cases x = a <;> simp [*, mapDomain]
@@ -413,7 +413,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (f : StdSimplex R M)
+  条件: (f : 标准单纯形 R M)
   结论: f.map id = f
   证明: by
   ext; simp
@@ -432,7 +432,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: (f : StdSimplex R M) (g₁ : M -> N) (g₂ : N -> P)
+  条件: (f : 标准单纯形 R M) (g₁ : M -> N) (g₂ : N -> P)
   证明: by
   ext; simp [mapDomain_comp]
 
@@ -452,7 +452,7 @@ lemma map_map
 
 中文:
 引理 map_map
-  条件: (f : StdSimplex R M) (g₁ : M -> N) (g₂ : N -> P)
+  条件: (f : 标准单纯形 R M) (g₁ : M -> N) (g₂ : N -> P)
   证明: (map_comp ..).symm
 
 Depends on / 依赖: map_comp
@@ -480,7 +480,7 @@ definition join
 
 中文:
 定义 join
-  签名: (f : StdSimplex R (StdSimplex R M))
+  签名: (f : 标准单纯形 R (标准单纯形 R M))
   定义体: f.weights.sum (fun d r => r • d.weights)
   nonneg := f.weights.sum_nonneg fun d _ => smul_nonneg (f.nonneg d) d.nonneg
   total := by simp [sum_sum_index, sum_smul_index, ← mul_sum]
@@ -503,7 +503,7 @@ lemma join_join
 
 中文:
 引理 join_join
-  条件: (f : StdSimplex R (StdSimplex R (StdSimplex R M)))
+  条件: (f : 标准单纯形 R (标准单纯形 R (标准单纯形 R M)))
   证明: by
   ext1; simp [mapDomain, add_smul, sum_sum_index, sum_smul_index, smul_sum, mul_smul]
 -/
@@ -522,7 +522,7 @@ lemma map_join
 
 中文:
 引理 map_join
-  条件: (f : StdSimplex R (StdSimplex R M)) (g : M -> N)
+  条件: (f : 标准单纯形 R (标准单纯形 R M)) (g : M -> N)
   证明: by
   ext1; simp [mapDomain, add_smul, sum_sum_index, sum_smul_index, smul_sum]
 -/
@@ -542,7 +542,7 @@ lemma join_single
 
 中文:
 引理 join_single
-  条件: (x : StdSimplex R M)
+  条件: (x : 标准单纯形 R M)
   结论: join (.single x) = x
   证明: by
   ext; simp [join, ← mk_single]
@@ -565,7 +565,7 @@ lemma restrict_nonneg_aux
 
 中文:
 引理 restrict_nonneg_aux
-  条件: {w : StdSimplex K X} {p : X -> 命题} [DecidablePred p]
+  条件: {w : 标准单纯形 K X} {p : X -> 命题} [DecidablePred p]
   证明: sum_nonneg by simp [filter_apply, apply_ite]
 -/
 private lemma restrict_nonneg_aux {w : StdSimplex K X} {p : X -> Prop} [DecidablePred p] :
@@ -582,7 +582,7 @@ lemma restrict_ne_zero_aux
 
 中文:
 引理 restrict_ne_zero_aux
-  结论: {w : StdSimplex K X} {p : X -> 命题} [DecidablePred p]
+  结论: {w : 标准单纯形 K X} {p : X -> 命题} [DecidablePred p]
   证明: (sum_pos (by simp +contextual [lt_iff_le_and_ne, eq_comm]) <| by simpa [ne_iff, filter_apply]).ne'
 -/
 private lemma restrict_ne_zero_aux {w : StdSimplex K X} {p : X -> Prop} [DecidablePred p]
@@ -605,7 +605,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (w : StdSimplex K X) (s : Set X) (hs : 存在 x in s, w.weights x != 0)
+  签名: (w : 标准单纯形 K X) (s : 集合 X) (hs : 存在 x in s, w.weights x != 0)
   定义体: open scoped Classical in
     ((w.weights.filter (· in s)).sum fun x k => k)⁻¹ • w.weights.filter (· in s)
   nonneg := by
@@ -634,7 +634,7 @@ lemma weights_restrict
 
 中文:
 引理 weights_restrict
-  条件: (w : StdSimplex K X) (s : Set X) (hs) [DecidablePred (· in s)]
+  条件: (w : 标准单纯形 K X) (s : 集合 X) (hs) [DecidablePred (· in s)]
   证明: by
   simp [restrict]; congr
 
@@ -663,7 +663,7 @@ lemma support_weights_restrict
 
 中文:
 引理 support_weights_restrict
-  条件: (w : StdSimplex K X) (s : Set X) (hs) [DecidablePred (· in s)]
+  条件: (w : 标准单纯形 K X) (s : 集合 X) (hs) [DecidablePred (· in s)]
   证明: by
   have : (w.weights.filter (· in s)).sum (fun x k => k) != 0 :=
     (sum_pos (by simp +contextual [lt_iff_le_and_ne, eq_comm]) <| by
@@ -697,7 +697,7 @@ lemma restrict_singleton
 
 中文:
 引理 restrict_singleton
-  条件: (w : StdSimplex K X) (x : X) (hx)
+  条件: (w : 标准单纯形 K X) (x : X) (hx)
   证明: by
   classical
   simp only [← support_weights_eq_singleton, support_weights_restrict, Set.mem_singleton_iff]
@@ -731,13 +731,13 @@ class ConvexSpace
     - assoc((f : StdSimplex R (StdSimplex R M))) : sConvexComb (f.map sConvexComb) = sConvexComb f.join
 
 中文:
-类 ConvexSpace
+类 凸空间
   参数: (R : 类型u) (M : 类型v)
   公理与运算 (4 个):
     - mk' : :
-    - sConvexComb([inst₁] [inst₂] [inst₃] (f : StdSimplex R M)) : M
+    - sConvexComb([inst₁] [inst₂] [inst₃] (f : 标准单纯形 R M)) : M
     - sConvexComb_single((x : M)) : sConvexComb (.single x) = x
-    - assoc((f : StdSimplex R (StdSimplex R M))) : sConvexComb (f.map sConvexComb) = sConvexComb f.join
+    - assoc((f : 标准单纯形 R (标准单纯形 R M))) : sConvexComb (f.map sConvexComb) = sConvexComb f.join
 -/
 class ConvexSpace (R : Type u) (M : Type v)
     [inst₁ : PartialOrder R] [inst₂ : Semiring R] [inst₃ : IsStrictOrderedRing R] where
@@ -780,7 +780,7 @@ definition iConvexComb
 
 中文:
 定义 iConvexComb
-  签名: (s : StdSimplex R I) (f : I -> M)
+  签名: (s : 标准单纯形 R I) (f : I -> M)
   定义体: sConvexComb (s.map f)
 
 Depends on / 依赖: s.map, sConvexComb
@@ -829,7 +829,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConvexSpace R (StdSimplex R I)
+  签名: 凸空间 R (标准单纯形 R I)
   定义体: σ.join
   assoc f := by exact (join_join f).symm
   sConvexComb_single := by exact join_single
@@ -849,7 +849,7 @@ lemma weights_sConvexComb
 
 中文:
 引理 weights_sConvexComb
-  条件: (f : StdSimplex R (StdSimplex R I))
+  条件: (f : 标准单纯形 R (标准单纯形 R I))
   证明: StdSimplex.weights_join _
 -/
 @[simp] lemma weights_sConvexComb (f : StdSimplex R (StdSimplex R I)) :
@@ -867,7 +867,7 @@ lemma weights_iConvexComb
 
 中文:
 引理 weights_iConvexComb
-  条件: (w : StdSimplex R I) (f : I -> StdSimplex R I)
+  条件: (w : 标准单纯形 R I) (f : I -> 标准单纯形 R I)
   证明: by
   simp [iConvexComb, sum_mapDomain_index, add_smul]
 -/
@@ -886,7 +886,7 @@ lemma weights_convexCombPair
 
 中文:
 引理 weights_convexCombPair
-  条件: (w w' : StdSimplex R I) (s t : R) (hs ht hst)
+  条件: (w w' : 标准单纯形 R I) (s t : R) (hs ht hst)
   证明: by
   classical simp [convexCombPair, sum_add_index, add_smul]
 -/
@@ -904,7 +904,7 @@ lemma map_sConvexComb
 
 中文:
 引理 map_sConvexComb
-  条件: (s : StdSimplex R (StdSimplex R I)) (f : I -> J)
+  条件: (s : 标准单纯形 R (标准单纯形 R I)) (f : I -> J)
   证明: StdSimplex.map_join s f
 
 Depends on / 依赖: StdSimplex, StdSimplex.map_join, map_join
@@ -928,7 +928,7 @@ lemma convexCombPair_restrict_restrict_compl
 
 中文:
 引理 convexCombPair_restrict_restrict_compl
-  结论: (w : StdSimplex K I) (s : Set I) (hs hs')
+  结论: (w : 标准单纯形 K I) (s : 集合 I) (hs hs')
   证明: by
   ext : 1
   simp only [Set.mem_compl_iff] at hs'
@@ -959,7 +959,7 @@ lemma sConvexComb_sConvexComb
 
 中文:
 引理 sConvexComb_sConvexComb
-  条件: (f : StdSimplex R (StdSimplex R M))
+  条件: (f : 标准单纯形 R (标准单纯形 R M))
   证明: (ConvexSpace.assoc f).symm
 
 Depends on / 依赖: ConvexSpace, ConvexSpace.assoc
@@ -979,7 +979,7 @@ lemma sConvexComb_convexCombPair
 
 中文:
 引理 sConvexComb_convexCombPair
-  条件: (s t : R) (hs ht hst) (w w' : StdSimplex R M)
+  条件: (s t : R) (hs ht hst) (w w' : 标准单纯形 R M)
   证明: by
   simp [convexCombPair, sConvexComb_sConvexComb]
 
@@ -999,8 +999,8 @@ abbreviation ConvexSpace.mk
   body: ⟨sConvexComb, single, assoc⟩
 
 中文:
-缩写 ConvexSpace.mk
-  签名: {M : 类型} (sConvexComb : StdSimplex R M -> M)
+缩写 凸空间.mk
+  签名: {M : 类型} (sConvexComb : 标准单纯形 R M -> M)
   定义体: ⟨sConvexComb, single, assoc⟩
 
 Depends on / 依赖: sConvexComb, single
@@ -1026,10 +1026,10 @@ structure IsAffineMap
     - map_sConvexComb((s : StdSimplex R M)) : f s.sConvexComb = (s.map f).sConvexComb
 
 中文:
-结构 IsAffineMap
+结构 是仿射映射
   参数: (f : M -> N)
   公理与运算 (1 个):
-    - map_sConvexComb((s : StdSimplex R M)) : f s.sConvexComb = (s.map f).sConvexComb
+    - map_sConvexComb((s : 标准单纯形 R M)) : f s.sConvexComb = (s.map f).sConvexComb
 -/
 structure IsAffineMap (f : M -> N) : Prop where
   map_sConvexComb (s : StdSimplex R M) : f s.sConvexComb = (s.map f).sConvexComb
@@ -1046,8 +1046,8 @@ lemma IsAffineMap.id
 @[fun_prop]
 
 中文:
-引理 IsAffineMap.id
-  结论: IsAffineMap R (id : M -> M) where
+引理 是仿射映射.id
+  结论: 是仿射映射 R (id : M -> M) where
   证明: by simp
 
 @[fun_prop]
@@ -1068,8 +1068,8 @@ lemma IsAffineMap.comp
 @[fun_prop]
 
 中文:
-引理 IsAffineMap.comp
-  条件: {g : N -> P} (hg : IsAffineMap R g) {f : M -> N} (hf : IsAffineMap R f)
+引理 是仿射映射.comp
+  条件: {g : N -> P} (hg : 是仿射映射 R g) {f : M -> N} (hf : 是仿射映射 R f)
   证明: by
     simp [StdSimplex.map_comp, hf.map_sConvexComb, hg.map_sConvexComb]
 
@@ -1092,7 +1092,7 @@ lemma IsAffineMap.const
   proof: by simp
 
 中文:
-引理 IsAffineMap.const
+引理 是仿射映射.const
   条件: (x : N)
   证明: by simp
 -/
@@ -1112,9 +1112,9 @@ lemma StdSimplex.isAffineMap_map
   proof: ⟨(map_sConvexComb · f)⟩
 
 中文:
-引理 StdSimplex.isAffineMap_map
+引理 标准单纯形.isAffineMap_map
   条件: (f : I -> J)
-  结论: IsAffineMap R (StdSimplex.map (R := R) f)
+  结论: 是仿射映射 R (标准单纯形.map (R := R) f)
   证明: ⟨(map_sConvexComb · f)⟩
 -/
 lemma StdSimplex.isAffineMap_map (f : I -> J) : IsAffineMap R (StdSimplex.map (R := R) f) :=
@@ -1132,7 +1132,7 @@ lemma sConvexComb_map
 
 中文:
 引理 sConvexComb_map
-  条件: (w : StdSimplex R I) (f : I -> M)
+  条件: (w : 标准单纯形 R I) (f : I -> M)
   证明: rfl
 -/
 lemma sConvexComb_map (w : StdSimplex R I) (f : I -> M) :
@@ -1148,7 +1148,7 @@ lemma iConvexComb_const
 
 中文:
 引理 iConvexComb_const
-  条件: (s : StdSimplex R I) (m : M)
+  条件: (s : 标准单纯形 R I) (m : M)
   证明: by simp [iConvexComb]
 -/
 @[simp] lemma iConvexComb_const (s : StdSimplex R I) (m : M) :
@@ -1182,7 +1182,7 @@ lemma iConvexComb_id
 
 中文:
 引理 iConvexComb_id
-  条件: (w : StdSimplex R M)
+  条件: (w : 标准单纯形 R M)
   结论: w.iConvexComb id = w.sConvexComb
   证明: by
   simp [iConvexComb]
@@ -1202,7 +1202,7 @@ lemma iConvexComb_id'
 
 中文:
 引理 iConvexComb_id'
-  条件: (w : StdSimplex R M)
+  条件: (w : 标准单纯形 R M)
   证明: iConvexComb_id _
 -/
 @[simp] lemma iConvexComb_id' (w : StdSimplex R M) :
@@ -1219,7 +1219,7 @@ lemma iConvexComb_map
 
 中文:
 引理 iConvexComb_map
-  条件: (s : StdSimplex R I) (f : I -> J) (g : J -> M)
+  条件: (s : 标准单纯形 R I) (f : I -> J) (g : J -> M)
   证明: by
   simp only [iConvexComb, map_map]
 -/
@@ -1244,7 +1244,7 @@ lemma iConvexComb_congr
 
 中文:
 引理 iConvexComb_congr
-  结论: {w : StdSimplex R I} {f g : I -> M}
+  结论: {w : 标准单纯形 R I} {f g : I -> M}
   证明: by
   refine congr(sConvexComb $(?_))
   ext i
@@ -1276,7 +1276,7 @@ lemma iConvexComb_reindex
 
 中文:
 引理 iConvexComb_reindex
-  条件: (s : StdSimplex R I) (f : I ≃ J) (g : I -> M)
+  条件: (s : 标准单纯形 R I) (f : I ≃ J) (g : I -> M)
   证明: by
   simp [iConvexComb_map]
 
@@ -1330,7 +1330,7 @@ lemma iConvexComb_assoc'
 
 中文:
 引理 iConvexComb_assoc'
-  结论: {J : 类型} (s : StdSimplex R I) (f : I -> StdSimplex R J)
+  结论: {J : 类型} (s : 标准单纯形 R I) (f : I -> 标准单纯形 R J)
   证明: by
   simp only [iConvexComb]
   rw [← map_map]; rw [← sConvexComb_sConvexComb]
@@ -1361,7 +1361,7 @@ lemma iConvexComb_assoc
 
 中文:
 引理 iConvexComb_assoc
-  结论: {J : 类型} (s : StdSimplex R I) (f : I -> StdSimplex R J)
+  结论: {J : 类型} (s : 标准单纯形 R I) (f : I -> 标准单纯形 R J)
   证明: by
   simp only [iConvexComb]
   rw [← map_map]; rw [← sConvexComb_sConvexComb]
@@ -1395,7 +1395,7 @@ lemma iConvexComb_comm
 
 中文:
 引理 iConvexComb_comm
-  结论: (f : StdSimplex R I) (g : StdSimplex R J)
+  结论: (f : 标准单纯形 R I) (g : 标准单纯形 R J)
   证明: by
   rw [iConvexComb_assoc']; rw [iConvexComb_assoc']; rw [iConvexComb_reindex _ (.prodComm ..)]
   congr
@@ -1429,8 +1429,8 @@ lemma IsAffineMap.map_iConvexComb
   simp [iConvexComb, hf.map_sConvexComb, map_comp]
 
 中文:
-引理 IsAffineMap.map_iConvexComb
-  结论: {f : M -> N} (hf : IsAffineMap R f)
+引理 是仿射映射.map_iConvexComb
+  结论: {f : M -> N} (hf : 是仿射映射 R f)
   证明: by
   simp [iConvexComb, hf.map_sConvexComb, map_comp]
 
@@ -1620,8 +1620,8 @@ lemma IsAffineMap.map_convexCombPair
   simp [hf.map_sConvexComb, convexCombPair]
 
 中文:
-引理 IsAffineMap.map_convexCombPair
-  结论: {f : M -> N} (hf : IsAffineMap R f)
+引理 是仿射映射.map_convexCombPair
+  结论: {f : M -> N} (hf : 是仿射映射 R f)
   证明: by
   simp [hf.map_sConvexComb, convexCombPair]
 
@@ -1718,7 +1718,7 @@ lemma convexCombPair_iConvexComb_left
 
 中文:
 引理 convexCombPair_iConvexComb_left
-  条件: (g : StdSimplex R J) (e : J -> M) (m : M)
+  条件: (g : 标准单纯形 R J) (e : J -> M) (m : M)
   证明: by
   simpa using convexCombPair_iConvexComb_iConvexComb hs ht h g g e (fun _ => m)
 
@@ -1740,7 +1740,7 @@ lemma convexCombPair_iConvexComb_right
 
 中文:
 引理 convexCombPair_iConvexComb_right
-  条件: (m : M) (g : StdSimplex R J) (e : J -> M)
+  条件: (m : M) (g : 标准单纯形 R J) (e : J -> M)
   证明: by
   simpa using convexCombPair_iConvexComb_iConvexComb hs ht h g g (fun _ => m) e
 
@@ -1884,7 +1884,7 @@ lemma iConvexComb_convexCombPair_comm
 
 中文:
 引理 iConvexComb_convexCombPair_comm
-  条件: (f : StdSimplex R I) (e₁ e₂ : I -> M)
+  条件: (f : 标准单纯形 R I) (e₁ e₂ : I -> M)
   证明: by
   simp only [convexCombPair_def]
   convert (iConvexComb_comm (.duple 0 1 hs ht h) f ![e₁, e₂]).symm with i _ j _ j
@@ -1912,7 +1912,7 @@ lemma iConvexComb_convexCombPair_comm_left
 
 中文:
 引理 iConvexComb_convexCombPair_comm_left
-  条件: (f : StdSimplex R I) (m : M) (e : I -> M)
+  条件: (f : 标准单纯形 R I) (m : M) (e : I -> M)
   证明: by
   simpa using iConvexComb_convexCombPair_comm hs ht h f e (fun _ => m)
 
@@ -1934,7 +1934,7 @@ lemma iConvexComb_convexCombPair_comm_right
 
 中文:
 引理 iConvexComb_convexCombPair_comm_right
-  条件: (f : StdSimplex R I) (m : M) (e : I -> M)
+  条件: (f : 标准单纯形 R I) (m : M) (e : I -> M)
   证明: by
   simpa using iConvexComb_convexCombPair_comm hs ht h f (fun _ => m) e
 

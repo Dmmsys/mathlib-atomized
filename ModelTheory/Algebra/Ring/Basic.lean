@@ -61,7 +61,7 @@ inductive ringFunc
 
 中文:
 归纳类型 ringFunc
-  参数: : 自然数 -> Type
+  参数: : 自然数 -> 类型
   构造子 (5 个):
     - add: ringFunc 2
     - mul: ringFunc 2
@@ -124,7 +124,7 @@ abbreviation addFunc
 
 中文:
 缩写 addFunc
-  签名: : Language.ring.Functions 2
+  签名: : Language.ring.函数 2
   定义体: add
 -/
 abbrev addFunc : Language.ring.Functions 2 := add
@@ -139,7 +139,7 @@ abbreviation mulFunc
 
 中文:
 缩写 mulFunc
-  签名: : Language.ring.Functions 2
+  签名: : Language.ring.函数 2
   定义体: mul
 -/
 abbrev mulFunc : Language.ring.Functions 2 := mul
@@ -154,7 +154,7 @@ abbreviation negFunc
 
 中文:
 缩写 negFunc
-  签名: : Language.ring.Functions 1
+  签名: : Language.ring.函数 1
   定义体: neg
 -/
 abbrev negFunc : Language.ring.Functions 1 := neg
@@ -169,7 +169,7 @@ abbreviation zeroFunc
 
 中文:
 缩写 zeroFunc
-  签名: : Language.ring.Functions 0
+  签名: : Language.ring.函数 0
   定义体: zero
 -/
 abbrev zeroFunc : Language.ring.Functions 0 := zero
@@ -184,7 +184,7 @@ abbreviation oneFunc
 
 中文:
 缩写 oneFunc
-  签名: : Language.ring.Functions 0
+  签名: : Language.ring.函数 0
   定义体: one
 -/
 abbrev oneFunc : Language.ring.Functions 0 := one
@@ -204,7 +204,7 @@ theorem zero_def
 中文:
 定理 zero_def
   条件: (α : 类型)
-  结论: (0 : Language.ring.Term α) = Constants.term zeroFunc
+  结论: (0 : Language.ring.项 α) = Constants.term zeroFunc
   证明: rfl
 -/
 theorem zero_def (α : Type*) : (0 : Language.ring.Term α) = Constants.term zeroFunc := rfl
@@ -224,7 +224,7 @@ theorem one_def
 中文:
 定理 one_def
   条件: (α : 类型)
-  结论: (1 : Language.ring.Term α) = Constants.term oneFunc
+  结论: (1 : Language.ring.项 α) = Constants.term oneFunc
   证明: rfl
 -/
 theorem one_def (α : Type*) : (1 : Language.ring.Term α) = Constants.term oneFunc := rfl
@@ -242,7 +242,7 @@ theorem add_def
 
 中文:
 定理 add_def
-  条件: (α : 类型) (t₁ t₂ : Language.ring.Term α)
+  条件: (α : 类型) (t₁ t₂ : Language.ring.项 α)
   证明: rfl
 -/
 theorem add_def (α : Type*) (t₁ t₂ : Language.ring.Term α) :
@@ -261,7 +261,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: (α : 类型) (t₁ t₂ : Language.ring.Term α)
+  条件: (α : 类型) (t₁ t₂ : Language.ring.项 α)
   证明: rfl
 -/
 theorem mul_def (α : Type*) (t₁ t₂ : Language.ring.Term α) :
@@ -280,7 +280,7 @@ theorem neg_def
 
 中文:
 定理 neg_def
-  条件: (α : 类型) (t : Language.ring.Term α)
+  条件: (α : 类型) (t : Language.ring.项 α)
   证明: rfl
 -/
 theorem neg_def (α : Type*) (t : Language.ring.Term α) :
@@ -308,7 +308,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype Language.ring.Symbols
+  签名: 有限类型 Language.ring.Symbols
   定义体: ⟨⟨Multiset.ofList
       [Sum.inl ⟨2, .add⟩,
        Sum.inl ⟨2, .mul⟩,
@@ -385,9 +385,9 @@ class CompatibleRing
     - funMap_one : forall x, funMap (oneFunc : Language.ring.Constants) x = 1
 
 中文:
-类 CompatibleRing
-  参数: (R : 类型) [Add R] [Mul R] [Neg R] [One R] [Zero R]
-  继承: Language.ring.Structure R
+类 余mpatible环
+  参数: (R : 类型) [加法 R] [乘法 R] [取负 R] [幺 R] [零 R]
+  继承: Language.ring.结构 R
   公理与运算 (5 个):
     - funMap_add : 对任意 x, funMap addFunc x = x 0 + x 1
     - funMap_mul : 对任意 x, funMap mulFunc x = x 0 * x 1
@@ -435,7 +435,7 @@ theorem realize_add
 
 中文:
 定理 realize_add
-  条件: (x y : ring.Term α) (v : α -> R)
+  条件: (x y : ring.项 α) (v : α -> R)
   证明: by
   simp [add_def, funMap_add]
 
@@ -461,7 +461,7 @@ theorem realize_mul
 
 中文:
 定理 realize_mul
-  条件: (x y : ring.Term α) (v : α -> R)
+  条件: (x y : ring.项 α) (v : α -> R)
   证明: by
   simp [mul_def, funMap_mul]
 
@@ -487,7 +487,7 @@ theorem realize_neg
 
 中文:
 定理 realize_neg
-  条件: (x : ring.Term α) (v : α -> R)
+  条件: (x : ring.项 α) (v : α -> R)
   证明: by
   simp [neg_def, funMap_neg]
 
@@ -515,7 +515,7 @@ theorem realize_zero
 中文:
 定理 realize_zero
   条件: (v : α -> R)
-  结论: Term.realize v (0 : ring.Term α) = 0
+  结论: 项.realize v (0 : ring.项 α) = 0
   证明: by
   simp [zero_def, funMap_zero, constantMap]
 
@@ -540,7 +540,7 @@ theorem realize_one
 中文:
 定理 realize_one
   条件: (v : α -> R)
-  结论: Term.realize v (1 : ring.Term α) = 1
+  结论: 项.realize v (1 : ring.项 α) = 1
   证明: by
   simp [one_def, funMap_one, constantMap]
 
@@ -586,7 +586,7 @@ definition compatibleRingOfRing
 
 中文:
 定义 compatibleRingOfRing
-  签名: (R : 类型) [Add R] [Mul R] [Neg R] [One R] [Zero R]
+  签名: (R : 类型) [加法 R] [乘法 R] [取负 R] [幺 R] [零 R]
   定义体: { funMap := fun {n} f =>
       match n, f with
       | _, .add => fun x => x 0 + x 1
@@ -684,7 +684,7 @@ abbreviation addOfRingStructure
 
 中文:
 缩写 addOfRingStructure
-  签名: : Add R
+  签名: : 加法 R
   定义体: { add := fun x y => funMap addFunc ![x, y] }
 
 Depends on / 依赖: addFunc, funMap
@@ -702,7 +702,7 @@ abbreviation mulOfRingStructure
 
 中文:
 缩写 mulOfRingStructure
-  签名: : Mul R
+  签名: : 乘法 R
   定义体: { mul := fun x y => funMap mulFunc ![x, y] }
 
 Depends on / 依赖: funMap, mulFunc
@@ -720,7 +720,7 @@ abbreviation negOfRingStructure
 
 中文:
 缩写 negOfRingStructure
-  签名: : Neg R
+  签名: : 取负 R
   定义体: { neg := fun x => funMap negFunc ![x] }
 
 Depends on / 依赖: funMap, negFunc
@@ -738,7 +738,7 @@ abbreviation zeroOfRingStructure
 
 中文:
 缩写 zeroOfRingStructure
-  签名: : Zero R
+  签名: : 零 R
   定义体: { zero := funMap zeroFunc ![] }
 
 Depends on / 依赖: funMap, zeroFunc
@@ -756,7 +756,7 @@ abbreviation oneOfRingStructure
 
 中文:
 缩写 oneOfRingStructure
-  签名: : One R
+  签名: : 幺 R
   定义体: { one := funMap oneFunc ![] }
 
 Depends on / 依赖: funMap, oneFunc
@@ -784,7 +784,7 @@ abbreviation compatibleRingOfRingStructure
 
 中文:
 缩写 compatibleRingOfRingStructure
-  签名: : CompatibleRing R
+  签名: : 余mpatible环 R
   定义体: { funMap_add := by
       simp only [Fin.forall_fin_succ_pi, Fin.cons_zero, Fin.forall_fin_zero_pi]
       intros; rfl

@@ -42,7 +42,7 @@ class EssFiniteType
 类 EssFiniteType
   参数: : 命题 where
   公理与运算 (1 个):
-    - cond : 存在 s : Finset S, IsLocalization ((IsUnit.submonoid S).comap (algebraMap (adjoin R (s : Set S)) S)) S
+    - cond : 存在 s : 有限集 S, 是Localization ((是单位.submonoid S).comap (algebraMap (adjoin R (s : 集合 S)) S)) S
 -/
 class EssFiniteType : Prop where
   cond : exists s : Finset S,
@@ -120,7 +120,7 @@ instance [EssFiniteType
 
 中文:
 实例 [EssFiniteType
-  签名: R S] : Algebra.FiniteType R (EssFiniteType.subalgebra R S)
+  签名: R S] : 代数.有限型 R (EssFiniteType.subalgebra R S)
   定义体: by
   constructor
   rw [Subalgebra.fg_top]; rw [EssFiniteType.subalgebra]
@@ -193,7 +193,7 @@ lemma essFiniteType_cond_iff
 
 中文:
 引理 essFiniteType_cond_iff
-  条件: (σ : Finset S)
+  条件: (σ : 有限集 S)
   证明: by
   constructor <;> intro hσ
   · intro s
@@ -262,7 +262,7 @@ instance EssFiniteType.of_finiteType
 
 中文:
 实例 EssFiniteType.of_finiteType
-  签名: [FiniteType R S]
+  签名: [有限型 R S]
   定义体: by
   obtain ⟨s, hs⟩ := ‹FiniteType R S›
   rw [essFiniteType_iff]
@@ -293,7 +293,7 @@ lemma EssFiniteType.of_isLocalization
 
 中文:
 引理 EssFiniteType.of_isLocalization
-  条件: (M : Submonoid R) [IsLocalization M S]
+  条件: (M : 子幺半群 R) [是Localization M S]
   证明: by
   rw [essFiniteType_iff]
   use ∅
@@ -351,7 +351,7 @@ lemma EssFiniteType.aux
 
 中文:
 引理 EssFiniteType.aux
-  结论: (σ : Subalgebra R S)
+  结论: (σ : 子代数 R S)
   证明: by
   refine Algebra.adjoin_induction ?_ ?_ ?_ ?_ ht
   · intro t ht
@@ -454,7 +454,7 @@ lemma essFiniteType_iff_exists_subalgebra
   exact comp R S₀ S
 
 中文:
-引理 essFiniteType_iff_exists_subalgebra
+引理 essFiniteType_iff_存在_subalgebra
   结论: EssFiniteType R S ↔
   证明: by
   refine ⟨fun h => ⟨subalgebra R S, submonoid R S, inferInstance, inferInstance⟩, ?_⟩
@@ -651,7 +651,7 @@ lemma EssFiniteType.of_surjective
 
 中文:
 引理 EssFiniteType.of_surjective
-  结论: (f : S ->ₐ[R] T) (hf : Function.Surjective f)
+  结论: (f : S ->ₐ[R] T) (hf : 函数.满射 f)
   证明: by
   let := f.toAlgebra
   have : IsScalarTower R S T := .of_algebraMap_eq' f.comp_algebraMap.symm
@@ -737,7 +737,7 @@ instance EssFiniteType.quotient_map
 
 中文:
 实例 EssFiniteType.quotient_map
-  签名: [EssFiniteType R S] (p : Ideal R)
+  签名: [EssFiniteType R S] (p : 理想 R)
   定义体: .of_surjective (Algebra.TensorProduct.quotIdealMapEquivQuotTensor S p).symm.toAlgHom
     (Algebra.TensorProduct.quotIdealMapEquivQuotTensor S p).symm.surjective
 
@@ -789,7 +789,7 @@ lemma essFiniteType_algebraMap
 
 中文:
 引理 essFiniteType_algebraMap
-  结论: {R S : 类型} [CommRing R] [CommRing S]
+  结论: {R S : 类型} [交换环 R] [交换环 S]
   证明: by
   rw [RingHom.EssFiniteType]; rw [toAlgebra_algebraMap]
 
@@ -837,8 +837,8 @@ lemma FiniteType.essFiniteType
   infer_instance
 
 中文:
-引理 FiniteType.essFiniteType
-  条件: (hf : f.FiniteType)
+引理 有限型.essFiniteType
+  条件: (hf : f.有限型)
   结论: f.EssFiniteType
   证明: by
   algebraize [f]

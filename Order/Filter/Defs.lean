@@ -85,11 +85,11 @@ structure Filter
     - inter_sets({x y}) : x in sets -> y in sets -> x inter y in sets
 
 中文:
-结构 Filter
+结构 滤子
   参数: (α : 类型)
   公理与运算 (4 个):
-    - sets : Set (Set α)
-    - univ_sets : Set.univ in sets
+    - sets : 集合 (集合 α)
+    - univ_sets : 集合.univ in sets
     - sets_of_superset({x y}) : x in sets -> x subseteq y -> y in sets
     - inter_sets({x y}) : x in sets -> y in sets -> x inter y in sets
 -/
@@ -116,7 +116,7 @@ theorem filter_eq
 
 中文:
 定理 filter_eq
-  结论: 对任意 {f g : Filter α}, f.sets = g.sets -> f = g
+  结论: 对任意 {f g : 滤子 α}, f.sets = g.sets -> f = g
 -/
 theorem filter_eq : forall {f g : Filter α}, f.sets = g.sets -> f = g
   | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
@@ -133,7 +133,7 @@ instance instMembership
 
 中文:
 实例 instMembership
-  签名: : Membership (Set α) (Filter α)
+  签名: : Membership (集合 α) (滤子 α)
   定义体: ⟨fun F U => U in F.sets⟩
 
 @[ext]
@@ -178,7 +178,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {t : Set (Set α)} {h₁ h₂ h₃}
+  条件: {t : 集合 (集合 α)} {h₁ h₂ h₃}
   结论: s in mk t h₁ h₂ h₃ ↔ s in t
   证明: Iff.rfl
 
@@ -243,7 +243,7 @@ theorem mem_of_superset
 
 中文:
 定理 mem_of_superset
-  条件: {x y : Set α} (hx : x in f) (hxy : x subseteq y)
+  条件: {x y : 集合 α} (hx : x in f) (hxy : x subseteq y)
   结论: y in f
   证明: f.sets_of_superset hx hxy
 
@@ -325,7 +325,7 @@ inter_sets h₁ h₂ := (hmem _).2 inter_mem ((hmem _).1 h₁) ((hmem _).1 h₂)
 
 中文:
 定义 copy
-  签名: (f : Filter α) (S : Set (Set α)) (hmem : 对任意 s, s in S ↔ s in f)
+  签名: (f : 滤子 α) (S : 集合 (集合 α)) (hmem : 对任意 s, s in S ↔ s in f)
   定义体: S
   univ_sets := (hmem _).2 univ_mem
 sets_of_superset h hsub := (hmem _).2 mem_of_superset ((hmem _).1 h) hsub
@@ -369,7 +369,7 @@ definition comk
 
 中文:
 定义 comk
-  签名: (p : Set α -> 命题) (he : p ∅) (hmono : 对任意 t, p t -> 对任意 s subseteq t, p s)
+  签名: (p : 集合 α -> 命题) (he : p ∅) (hmono : 对任意 t, p t -> 对任意 s subseteq t, p s)
   定义体: {t | p tᶜ}
   univ_sets := by simpa
   sets_of_superset := fun ht₁ ht => hmono _ ht₁ _ (compl_subset_compl.2 ht)
@@ -395,7 +395,7 @@ lemma mem_comk
 
 中文:
 引理 mem_comk
-  条件: {p : Set α -> 命题} {he hmono hunion s}
+  条件: {p : 集合 α -> 命题} {he hmono hunion s}
   证明: .rfl
 -/
 lemma mem_comk {p : Set α -> Prop} {he hmono hunion s} :
@@ -418,7 +418,7 @@ scoped notation "𝓟" => Filter.principal
 
 中文:
 定义 principal
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { t | s subseteq t }
   univ_sets := subset_univ s
   sets_of_superset hx := Subset.trans hx
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pure Filter
+  签名: Pure 滤子
   定义体: .copy (𝓟 {x}) {s | x in s} fun _ => by simp
 
 @[simp]
@@ -485,8 +485,8 @@ theorem mem_pure
 
 中文:
 定理 mem_pure
-  条件: {a : α} {s : Set α}
-  结论: s in (pure a : Filter α) ↔ a in s
+  条件: {a : α} {s : 集合 α}
+  结论: s in (pure a : 滤子 α) ↔ a in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -504,7 +504,7 @@ definition ker
 
 中文:
 定义 ker
-  签名: (f : Filter α)
+  签名: (f : 滤子 α)
   定义体: ⋂₀ f.sets
 
 Depends on / 依赖: f.sets
@@ -526,7 +526,7 @@ definition join
 
 中文:
 定义 join
-  签名: (f : Filter (Filter α))
+  签名: (f : 滤子 (滤子 α))
   定义体: { s | { t : Filter α | s in t } in f }
   univ_sets := by simp only [mem_ofPred_eq, univ_mem, ofPred_true]
   sets_of_superset hx xy := mem_of_superset hx fun f h => mem_of_superset h xy
@@ -554,7 +554,7 @@ theorem mem_join
 
 中文:
 定理 mem_join
-  条件: {s : Set α} {f : Filter (Filter α)}
+  条件: {s : 集合 α} {f : 滤子 (滤子 α)}
   结论: s in join f ↔ { t | s in t } in f
   证明: Iff.rfl
 
@@ -576,7 +576,7 @@ le_antisymm a b h₁ h₂ := filter_eq Subset.antisymm h₂ h₁
 
 中文:
 实例 :
-  签名: PartialOrder (Filter α)
+  签名: 偏序 (滤子 α)
   定义体: forall ⦃U : Set α⦄, U in g -> U in f
 le_antisymm a b h₁ h₂ := filter_eq Subset.antisymm h₂ h₁
   le_refl a := Subset.rfl
@@ -616,7 +616,7 @@ instance instSupSet
 
 中文:
 实例 instSupSet
-  签名: : SupSet (Filter α) where
+  签名: : 上确界集 (滤子 α) where
   定义体: join (𝓟 S)
 -/
 instance instSupSet : SupSet (Filter α) where
@@ -633,7 +633,7 @@ theorem mem_sSup
 
 中文:
 定理 mem_sSup
-  条件: {S : Set (Filter α)}
+  条件: {S : 集合 (滤子 α)}
   结论: s in sSup S ↔ 对任意 f in S, s in f
   证明: .rfl
 -/
@@ -653,7 +653,7 @@ definition sInf
 
 中文:
 定义 sInf
-  签名: (s : Set (Filter α))
+  签名: (s : 集合 (滤子 α))
   定义体: sSup (lowerBounds s)
 -/
 protected def sInf (s : Set (Filter α)) : Filter α := sSup (lowerBounds s)
@@ -668,7 +668,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet (Filter α) where
+  签名: : 下确界集 (滤子 α) where
   定义体: Filter.sInf
 
 Depends on / 依赖: Filter, Filter.sInf
@@ -688,7 +688,7 @@ theorem sSup_lowerBounds
 
 中文:
 定理 sSup_lowerBounds
-  条件: (s : Set (Filter α))
+  条件: (s : 集合 (滤子 α))
   结论: sSup (lowerBounds s) = sInf s
   证明: by
   simp [sInf, Filter.sInf]
@@ -706,7 +706,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Filter α)
+  签名: 顶元素 (滤子 α)
   定义体: .copy (sSup (Set.range pure)) {s | forall x, x in s} by simp
 
 Depends on / 依赖: Set.range
@@ -726,9 +726,9 @@ theorem mem_top_iff_forall
 @[simp]
 
 中文:
-定理 mem_top_iff_forall
-  条件: {s : Set α}
-  结论: s in (⊤ : Filter α) ↔ 对任意 x, x in s
+定理 mem_top_iff_对任意
+  条件: {s : 集合 α}
+  结论: s in (⊤ : 滤子 α) ↔ 对任意 x, x in s
   证明: Iff.rfl
 
 @[simp]
@@ -751,8 +751,8 @@ theorem mem_top
 
 中文:
 定理 mem_top
-  条件: {s : Set α}
-  结论: s in (⊤ : Filter α) ↔ s = univ
+  条件: {s : 集合 α}
+  结论: s in (⊤ : 滤子 α) ↔ s = univ
   证明: by
   rw [mem_top_iff_forall]; rw [eq_univ_iff_forall]
 
@@ -773,7 +773,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Filter α)
+  签名: 底元素 (滤子 α)
   定义体: .copy (sSup ∅) univ by simp
 
 @[simp]
@@ -793,8 +793,8 @@ theorem mem_bot
 
 中文:
 定理 mem_bot
-  条件: {s : Set α}
-  结论: s in (⊥ : Filter α)
+  条件: {s : 集合 α}
+  结论: s in (⊥ : 滤子 α)
   证明: trivial
 -/
 theorem mem_bot {s : Set α} : s in (⊥ : Filter α) :=
@@ -816,7 +816,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (Filter α)
+  签名: : 最小值 (滤子 α)
   定义体: ⟨fun f g : Filter α =>
     { sets := { s | exists a in f, exists b in g, s = a inter b }
       univ_sets := ⟨_, univ_mem, _, univ_mem, by simp⟩
@@ -851,7 +851,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (Filter α) where
+  签名: : 最大值 (滤子 α) where
   定义体: .copy (sSup {f, g}) {s | s in f ∧ s in g} by simp
 -/
 instance instSup : Max (Filter α) where
@@ -874,7 +874,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff (Filter α) where
+  签名: : 对称差 (滤子 α) where
   定义体: {
     sets := {s | forall ⦃t⦄, t in g -> s subseteq t -> t in f}
     univ_sets := by simp +contextual
@@ -906,7 +906,7 @@ instance instHNot
 
 中文:
 实例 instHNot
-  签名: : HNot (Filter α) where
+  签名: : HNot (滤子 α) where
   定义体: 𝓟 f.kerᶜ
 
 Depends on / 依赖: f.ker
@@ -956,7 +956,7 @@ class NeBot
 
 中文:
 类 NeBot
-  参数: (f : Filter α)
+  参数: (f : 滤子 α)
   公理与运算 (1 个):
     - ne' : f != ⊥
 -/
@@ -976,7 +976,7 @@ theorem neBot_iff
 
 中文:
 定理 neBot_iff
-  条件: {f : Filter α}
+  条件: {f : 滤子 α}
   结论: NeBot f ↔ f != ⊥
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
@@ -996,7 +996,7 @@ notation3 "forallᶠ "(...)" in "f", "r:(scoped p => Filter.Eventually p f) => r
 
 中文:
 定义 Eventually
-  签名: (p : α -> 命题) (f : Filter α)
+  签名: (p : α -> 命题) (f : 滤子 α)
   定义体: { x | p x } in f
 
 @[inherit_doc Filter.Eventually]
@@ -1021,7 +1021,7 @@ notation3 "existsᶠ "(...)" in "f", "r:(scoped p => Filter.Frequently p f) => r
 
 中文:
 定义 Frequently
-  签名: (p : α -> 命题) (f : Filter α)
+  签名: (p : α -> 命题) (f : 滤子 α)
   定义体: ¬forallᶠ x in f, ¬p x
 
 @[inherit_doc Filter.Frequently]
@@ -1046,7 +1046,7 @@ notation:50 f " =ᶠ[" l:50 "] " g:50 => EventuallyEq l f g
 
 中文:
 定义 EventuallyEq
-  签名: (l : Filter α) (f g : α -> β)
+  签名: (l : 滤子 α) (f g : α -> β)
   定义体: forallᶠ x in l, f x = g x
 
 @[inherit_doc]
@@ -1073,7 +1073,7 @@ notation:50 f " <=ᶠ[" l:50 "] " g:50 => EventuallyLE l f g
 
 中文:
 定义 EventuallyLE
-  签名: [LE β] (l : Filter α) (f g : α -> β)
+  签名: [LE β] (l : 滤子 α) (f g : α -> β)
   定义体: forallᶠ x in l, f x <= g x
 
 @[inherit_doc]
@@ -1098,7 +1098,7 @@ definition map
 
 中文:
 定义 map
-  签名: (m : α -> β) (f : Filter α)
+  签名: (m : α -> β) (f : 滤子 α)
   定义体: preimage m ⁻¹' f.sets
   univ_sets := univ_mem
   sets_of_superset hs st := mem_of_superset hs fun _x hx => st hx
@@ -1121,8 +1121,8 @@ definition Tendsto
   body: l₁.map f <= l₂
 
 中文:
-定义 Tendsto
-  签名: (f : α -> β) (l₁ : Filter α) (l₂ : Filter β)
+定义 收敛
+  签名: (f : α -> β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   定义体: l₁.map f <= l₂
 -/
 def Tendsto (f : α -> β) (l₁ : Filter α) (l₂ : Filter β) :=
@@ -1142,7 +1142,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (m : α -> β) (f : Filter β)
+  签名: (m : α -> β) (f : 滤子 β)
   定义体: { s | exists t in f, m ⁻¹' t subseteq s }
   univ_sets := ⟨univ, univ_mem, subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
@@ -1168,7 +1168,7 @@ definition coprod
 
 中文:
 定义 coprod
-  签名: (f : Filter α) (g : Filter β)
+  签名: (f : 滤子 α) (g : 滤子 β)
   定义体: f.comap Prod.fst ⊔ g.comap Prod.snd
 -/
 protected def coprod (f : Filter α) (g : Filter β) : Filter (α × β) :=
@@ -1184,7 +1184,7 @@ instance instSProd
 
 中文:
 实例 instSProd
-  签名: : SProd (Filter α) (Filter β) (Filter (α × β)) where
+  签名: : SProd (滤子 α) (滤子 β) (滤子 (α × β)) where
   定义体: f.comap Prod.fst ⊓ g.comap Prod.snd
 
 Depends on / 依赖: Prod.fst, Prod.snd, f.comap, g.comap
@@ -1203,8 +1203,8 @@ theorem prod_eq_inf
 
 中文:
 定理 prod_eq_inf
-  条件: (f : Filter α) (g : Filter β)
-  结论: f ×ˢ g = f.comap Prod.fst ⊓ g.comap Prod.snd
+  条件: (f : 滤子 α) (g : 滤子 β)
+  结论: f ×ˢ g = f.comap 积类型.fst ⊓ g.comap 积类型.snd
   证明: rfl
 -/
 theorem prod_eq_inf (f : Filter α) (g : Filter β) : f ×ˢ g = f.comap Prod.fst ⊓ g.comap Prod.snd :=
@@ -1220,7 +1220,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {ι : 类型} {α : ι -> 类型} (f : 对任意 i, Filter (α i))
+  签名: {ι : 类型} {α : ι -> 类型} (f : 对任意 i, 滤子 (α i))
   定义体: ⨅ i, comap (Function.eval i) (f i)
 
 Depends on / 依赖: Function, Function.eval
@@ -1238,7 +1238,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (f : Filter α) (m : α -> Filter β)
+  签名: (f : 滤子 α) (m : α -> 滤子 β)
   定义体: join (map m f)
 -/
 def bind (f : Filter α) (m : α -> Filter β) : Filter β :=
@@ -1258,7 +1258,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: (f : Filter (α -> β)) (g : Filter α)
+  签名: (f : 滤子 (α -> β)) (g : 滤子 α)
   定义体: { s | exists u in f, exists t in g, forall m in u, forall x in t, (m : α -> β) x in s }
   univ_sets := ⟨univ, univ_mem, univ, univ_mem, fun _ _ _ _ => trivial⟩
   sets_of_superset := fun ⟨t₀, t₁, h₀, h₁, h⟩ hst =>
@@ -1284,7 +1284,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: (f : Filter α) (g : Filter β)
+  签名: (f : 滤子 α) (g : 滤子 β)
   定义体: bind f fun a => map (a, ·) g
 -/
 def curry (f : Filter α) (g : Filter β) : Filter (α × β) :=
@@ -1300,7 +1300,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bind Filter
+  签名: Bind 滤子
   定义体: ⟨@Filter.bind⟩
 
 Depends on / 依赖: Filter, Filter.bind
@@ -1318,7 +1318,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor Filter
+  签名: 函子 滤子
   定义体: @Filter.map
 
 Depends on / 依赖: Filter, Filter.map
@@ -1335,7 +1335,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (f : Filter α) (g : Set α -> Filter β)
+  签名: (f : 滤子 α) (g : 集合 α -> 滤子 β)
   定义体: ⨅ s in f, g s
 -/
 protected def lift (f : Filter α) (g : Set α -> Filter β) :=
@@ -1351,7 +1351,7 @@ definition lift'
 
 中文:
 定义 lift'
-  签名: (f : Filter α) (h : Set α -> Set β)
+  签名: (f : 滤子 α) (h : 集合 α -> 集合 β)
   定义体: f.lift (𝓟 ∘ h)
 -/
 protected def lift' (f : Filter α) (h : Set α -> Set β) :=
@@ -1367,7 +1367,7 @@ definition IsBounded
 
 中文:
 定义 IsBounded
-  签名: (r : α -> α -> 命题) (f : Filter α)
+  签名: (r : α -> α -> 命题) (f : 滤子 α)
   定义体: exists b, forallᶠ x in f, r x b
 -/
 def IsBounded (r : α -> α -> Prop) (f : Filter α) :=
@@ -1383,7 +1383,7 @@ definition IsBoundedUnder
 
 中文:
 定义 IsBoundedUnder
-  签名: (r : α -> α -> 命题) (f : Filter β) (u : β -> α)
+  签名: (r : α -> α -> 命题) (f : 滤子 β) (u : β -> α)
   定义体: (map u f).IsBounded r
 
 Depends on / 依赖: IsBounded
@@ -1401,7 +1401,7 @@ definition IsCobounded
 
 中文:
 定义 IsCobounded
-  签名: (r : α -> α -> 命题) (f : Filter α)
+  签名: (r : α -> α -> 命题) (f : 滤子 α)
   定义体: exists b, forall a, (forallᶠ x in f, r x a) -> r b a
 -/
 def IsCobounded (r : α -> α -> Prop) (f : Filter α) :=
@@ -1417,7 +1417,7 @@ definition IsCoboundedUnder
 
 中文:
 定义 IsCoboundedUnder
-  签名: (r : α -> α -> 命题) (f : Filter β) (u : β -> α)
+  签名: (r : α -> α -> 命题) (f : 滤子 β) (u : β -> α)
   定义体: (map u f).IsCobounded r
 
 Depends on / 依赖: IsCobounded

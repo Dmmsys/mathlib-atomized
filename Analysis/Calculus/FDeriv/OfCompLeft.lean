@@ -61,8 +61,8 @@ refine .of_isLittleOTVS ho.trans_isLittleOTVS .triangle (.symm ?_) hh.isLittleOT
 .trans ?_ .symm.isBigOTVS.comp_tendsto htendsto · refine hf.isThetaTVS_sub hf_emb.isIn
 
 中文:
-定理 HasFDerivAtFilter.of_comp_aux
-  结论: (hf_emb : Topology.IsEmbedding f')
+定理 有FDerivAtFilter.of_comp_aux
+  结论: (hf_emb : 拓扑.是嵌入 f')
   证明: by
 refine .of_isLittleOTVS ho.trans_isLittleOTVS .triangle (.symm ?_) hh.isLittleOTVS
 .trans_isBigOTVS ?_ refine (hf.isLittleOTVS.comp_tendsto htendsto).congr' ?_ .rfl
@@ -99,7 +99,7 @@ theorem HasFDerivAtFilter.of_comp_of_leftInverse
     simp [hf'symm _]
 
 中文:
-定理 HasFDerivAtFilter.of_comp_of_leftInverse
+定理 有FDerivAtFilter.of_comp_of_leftInverse
   证明: by
   apply of_comp_aux (f := f) (f' := f') <;> try assumption
   · exact Topology.IsEmbedding.of_leftInverse hf'symm (map_continuous _) (map_continuous _)
@@ -157,7 +157,7 @@ theorem HasFDerivAt.of_comp_of_leftInverse
   · exact hcomp.prodMap hcomp.self_of_nhds
 
 中文:
-定理 HasFDerivAt.of_comp_of_leftInverse
+定理 在点处Fréchet可导.of_comp_of_leftInverse
   证明: by
   refine HasFDerivAtFilter.of_comp_of_leftInverse ?_ hf hh ?_ hf'symm
   · exact hgc.tendsto.prodMap (by simp)
@@ -210,7 +210,7 @@ theorem HasFDerivAtFilter.of_comp_of_isEmbedding
   simp
 
 中文:
-定理 HasFDerivAtFilter.of_comp_of_isEmbedding
+定理 有FDerivAtFilter.of_comp_of_isEmbedding
   证明: by
   apply of_comp_aux (f := f) (f' := f') <;> try assumption
 .symm.isBigOTVS.congr_right ?_ refine f'.isThetaTVS_comp hf'.isInducing
@@ -266,7 +266,7 @@ theorem HasFDerivAt.of_comp_of_isEmbedding
   · exact hcomp.prodMap hcomp.self_of_nhds
 
 中文:
-定理 HasFDerivAt.of_comp_of_isEmbedding
+定理 在点处Fréchet可导.of_comp_of_isEmbedding
   证明: by
   refine HasFDerivAtFilter.of_comp_of_isEmbedding ?_ hf hf' hh ?_
   · exact hg.tendsto.prodMap (by simp)
@@ -322,7 +322,7 @@ theorem HasFDerivAt.of_local_left_inverse
     f'.symm_apply_apply
 
 中文:
-定理 HasFDerivAt.of_local_left_inverse
+定理 在点处Fréchet可导.of_local_left_inverse
   证明: hf.of_comp_of_leftInverse (f'symm := (f'.symm : E ->L[𝕜] F)) hg (hasFDerivAt_id _) hfg
     f'.symm_apply_apply
 

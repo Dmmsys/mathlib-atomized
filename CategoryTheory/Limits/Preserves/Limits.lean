@@ -52,7 +52,7 @@ theorem preserves_lift_mapCone
 
 中文:
 定理 preserves_lift_mapCone
-  条件: (c₁ c₂ : Cone F) (t : IsLimit c₁)
+  条件: (c₁ c₂ : 锥 F) (t : 是极限 c₁)
   证明: ((isLimitOfPreserves G t).uniq (G.mapCone c₂) _ (by simp [← G.map_comp])).symm
 
 Depends on / 依赖: G.mapCone, G.map_comp, isLimitOfPreserves, mapCone, map_comp
@@ -143,7 +143,7 @@ theorem lift_comp_preservesLimitIso_hom
 
 中文:
 定理 lift_comp_preservesLimitIso_hom
-  条件: (t : Cone F)
+  条件: (t : 锥 F)
   证明: by
   ext
   simp [← G.map_comp]
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (limit.post F G)
+  签名: 是同构 (limit.post F G)
   定义体: show IsIso (preservesLimitIso G F).hom from inferInstance
 -/
 instance : IsIso (limit.post F G) :=
@@ -193,8 +193,8 @@ definition preservesLimitNatIso
         preservesLimitIso_hom_π_assoc, ← G.map_comp])
 
 中文:
-定义 preservesLimitNatIso
-  签名: : lim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ lim
+定义 preservesLimit自然数Iso
+  签名: : lim ⋙ G ≅ (函子.whiskeringRight J C D).obj G ⋙ lim
   定义体: NatIso.ofComponents (fun F => preservesLimitIso G F)
     (by
       intro _ _ f
@@ -233,8 +233,8 @@ lemma preservesLimit_of_isIso_post
 
 中文:
 引理 preservesLimit_of_isIso_post
-  条件: [IsIso (limit.post F G)]
-  结论: PreservesLimit F G
+  条件: [是同构 (limit.post F G)]
+  结论: 保持极限 F G
   证明: preservesLimit_of_preserves_limit_cone (limit.isLimit F) (by
     convert! IsLimit.ofPointIso (limit.isLimit (F ⋙ G))
     assumption)
@@ -264,7 +264,7 @@ theorem preserves_desc_mapCocone
 
 中文:
 定理 preserves_desc_mapCocone
-  条件: (c₁ c₂ : Cocone F) (t : IsColimit c₁)
+  条件: (c₁ c₂ : 余锥 F) (t : 是余极限 c₁)
   证明: ((isColimitOfPreserves G t).uniq (G.mapCocone _) _ (by simp [← G.map_comp])).symm
 
 Depends on / 依赖: G.mapCocone, G.map_comp, isColimitOfPreserves, mapCocone, map_comp
@@ -356,7 +356,7 @@ theorem preservesColimitIso_inv_comp_desc
 
 中文:
 定理 preservesColimitIso_inv_comp_desc
-  条件: (t : Cocone F)
+  条件: (t : 余锥 F)
   证明: by
   ext
   simp [← G.map_comp]
@@ -379,7 +379,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (colimit.post F G)
+  签名: 是同构 (colimit.post F G)
   定义体: show IsIso (preservesColimitIso G F).inv from inferInstance
 
 Depends on / 依赖: preservesColimitIso
@@ -409,8 +409,8 @@ definition preservesColimitNatIso
       simp only [ι_preservesColimitIso_inv, Functor.whiskerRight_a
 
 中文:
-定义 preservesColimitNatIso
-  签名: : colim ⋙ G ≅ (Functor.whiskeringRight J C D).obj G ⋙ colim
+定义 preservesColimit自然数Iso
+  签名: : colim ⋙ G ≅ (函子.whiskeringRight J C D).obj G ⋙ colim
   定义体: NatIso.ofComponents (fun F => preservesColimitIso G F)
     (by
       intro _ _ f
@@ -453,8 +453,8 @@ lemma preservesColimit_of_isIso_post
 
 中文:
 引理 preservesColimit_of_isIso_post
-  条件: [IsIso (colimit.post F G)]
-  结论: PreservesColimit F G
+  条件: [是同构 (colimit.post F G)]
+  结论: 保持余极限 F G
   证明: preservesColimit_of_preserves_colimit_cocone (colimit.isColimit F) (by
     convert! IsColimit.ofPointIso (colimit.isColimit (F ⋙ G))
     assumption)

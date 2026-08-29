@@ -30,7 +30,7 @@ class LawfulXor
 
 中文:
 类 LawfulXor
-  参数: (α : 类型) [XorOp α] [Zero α]
+  参数: (α : 类型) [XorOp α] [零 α]
   公理与运算 (4 个):
     - xor_assoc((a b c : α)) : (a ^^^ b) ^^^ c = a ^^^ (b ^^^ c)
     - xor_self((a : α)) : a ^^^ a = 0
@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Commutative (α := α) XorOp.xor
+  签名: Std.交换 (α := α) XorOp.xor
   定义体: xor_comm
 
 Depends on / 依赖: XorOp.xor, xor_comm
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Associative (α := α) XorOp.xor
+  签名: Std.结合 (α := α) XorOp.xor
   定义体: xor_assoc
 
 Depends on / 依赖: XorOp.xor, xor_assoc
@@ -511,7 +511,7 @@ lemma xor_left_involutive
 中文:
 引理 xor_left_involutive
   条件: (a : α)
-  结论: Function.Involutive (· ^^^ a)
+  结论: 函数.对合 (· ^^^ a)
   证明: (xor_cancel_right · a)
 
 Depends on / 依赖: xor_cancel_right
@@ -529,7 +529,7 @@ lemma xor_right_involutive
 中文:
 引理 xor_right_involutive
   条件: (a : α)
-  结论: Function.Involutive (a ^^^ ·)
+  结论: 函数.对合 (a ^^^ ·)
   证明: xor_cancel_left a
 
 Depends on / 依赖: xor_cancel_left
@@ -719,7 +719,7 @@ lemma isFixedPt_xor_left_iff
 中文:
 引理 isFixedPt_xor_left_iff
   条件: {a b : α}
-  结论: Function.IsFixedPt (a ^^^ ·) b ↔ a = 0
+  结论: 函数.IsFixedPt (a ^^^ ·) b ↔ a = 0
   证明: xor_right_eq_self_iff
 -/
 @[simp] lemma isFixedPt_xor_left_iff {a b : α} : Function.IsFixedPt (a ^^^ ·) b ↔ a = 0 :=
@@ -737,7 +737,7 @@ lemma isFixedPt_xor_right_iff
 中文:
 引理 isFixedPt_xor_right_iff
   条件: {a b : α}
-  结论: Function.IsFixedPt (· ^^^ a) b ↔ a = 0
+  结论: 函数.IsFixedPt (· ^^^ a) b ↔ a = 0
   证明: by
   rw [xor_right_eq]; rw [isFixedPt_xor_left_iff]
 -/

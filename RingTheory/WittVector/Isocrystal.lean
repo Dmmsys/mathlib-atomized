@@ -181,9 +181,9 @@ class Isocrystal
     - frob : V ≃ᶠˡ[p, k] V
 
 中文:
-类 Isocrystal
-  参数: (V : 类型) [AddCommGroup V]
-  继承: Module K(p, k) V
+类 是ocrystal
+  参数: (V : 类型) [加法交换群 V]
+  继承: 模 K(p, k) V
   公理与运算 (1 个):
     - frob : V ≃ᶠˡ[p, k] V
 -/
@@ -207,7 +207,7 @@ definition Isocrystal.frobenius
 @[inherit_doc] scoped[Isocrystal] notation "Φ(" p ", " k ")" => WittVector.Isocrystal.frobenius p k
 
 中文:
-定义 Isocrystal.frobenius
+定义 是ocrystal.frobenius
   签名: : V ≃ᶠˡ[p, k] V
   定义体: Isocrystal.frob (p := p) (k := k) (V := V)
 
@@ -232,7 +232,7 @@ structure IsocrystalHom
     - frob_equivariant : forall x : V, Φ(p, k) (toLinearMap x) = toLinearMap (Φ(p, k) x)
 
 中文:
-结构 IsocrystalHom
+结构 是ocrystal态射
   参数: extends V ->ₗ[K(p, k)] V₂
   继承: V ->ₗ[K(p, k)] V₂
   公理与运算 (1 个):
@@ -255,7 +255,7 @@ structure IsocrystalEquiv
     - frob_equivariant : forall x : V, Φ(p, k) (toLinearEquiv x) = toLinearEquiv (Φ(p, k) x)
 
 中文:
-结构 IsocrystalEquiv
+结构 是ocrystal等价
   参数: extends V ≃ₗ[K(p, k)] V₂
   继承: V ≃ₗ[K(p, k)] V₂
   公理与运算 (1 个):
@@ -351,7 +351,7 @@ theorem isocrystal_classification
 
 中文:
 定理 isocrystal_classification
-  结论: (k : 类型) [Field k] [IsAlgClosed k] [CharP k p] (V : 类型)
+  结论: (k : 类型) [域 k] [是代数闭 k] [特征p k p] (V : 类型)
   证明: by
   have : Nontrivial V := Module.nontrivial_of_finrank_eq_succ h_dim
   obtain ⟨x, hx⟩ : exists x : V, x != 0 := exists_ne 0

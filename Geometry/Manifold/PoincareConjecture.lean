@@ -64,7 +64,7 @@ definition ContinuousMap.HomotopyEquiv.NonemptyDiffeomorphSphere
     M ≃ₕ 𝕊ⁿ -> Nonempty (M ≃ₘ⟮𝓡 n, 𝓡 n⟯ 𝕊ⁿ)
 
 中文:
-定义 ContinuousMap.HomotopyEquiv.NonemptyDiffeomorphSphere
+定义 连续映射.同伦等价.NonemptyDiffeomorphSphere
   签名: (n : 自然数)
   定义体: forall (_ : ChartedSpace Realⁿ M) (_ : IsManifold (𝓡 n) ∞ M),
     M ≃ₕ 𝕊ⁿ -> Nonempty (M ≃ₘ⟮𝓡 n, 𝓡 n⟯ 𝕊ⁿ)

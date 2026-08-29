@@ -38,7 +38,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget <| 类型u).Full
+  签名: (forget <| 类型u).满
   定义体: Functor.Full.id
 
 Depends on / 依赖: Functor, Functor.Full.id
@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfSize (forget <| 类型u)
+  签名: 保持LimitsOfSize (forget <| 类型u)
   定义体: id_preservesLimitsOfSize
 
 Depends on / 依赖: id_preservesLimitsOfSize
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize (forget <| 类型u)
+  签名: 保持余limitsOfSize (forget <| 类型u)
   定义体: id_preservesColimitsOfSize
 
 Depends on / 依赖: id_preservesColimitsOfSize
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget <| 类型u).IsEquivalence
+  签名: (forget <| 类型u).是等价
   定义体: Functor.isEquivalence_refl
 
 Depends on / 依赖: Functor, Functor.isEquivalence_refl, isEquivalence_refl
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget <| 类型u).IsCorepresentable
+  签名: (forget <| 类型u).是余representable
   定义体: inferInstanceAs (𝟭 <| Type u).IsCorepresentable
 
 Depends on / 依赖: IsCorepresentable
@@ -230,7 +230,7 @@ theorem isLimit_ext
 
 中文:
 定理 isLimit_ext
-  条件: {D : Cone F} (hD : IsLimit D) (x y : ToType D.pt)
+  条件: {D : 锥 F} (hD : 是极限 D) (x y : ToType D.pt)
   证明: fun h =>
   Concrete.to_product_injective_of_isLimit _ hD (funext h)
 -/
@@ -248,7 +248,7 @@ theorem limit_ext
 
 中文:
 定理 limit_ext
-  条件: [HasLimit F] (x y : ToType (limit F))
+  条件: [有极限 F] (x y : ToType (limit F))
   证明: Concrete.isLimit_ext F (limit.isLimit _) _ _
 
 Depends on / 依赖: Concrete, Concrete.isLimit_ext, isLimit, isLimit_ext, limit.isLimit
@@ -269,7 +269,7 @@ lemma surjective_π_app_zero_of_surjective_map
 
 中文:
 引理 surjective_π_app_zero_of_surjective_map
-  结论: {C : 类型u} [Category.{v} C] {FC : C -> C -> 类型}
+  结论: {C : 类型u} [范畴.{v} C] {FC : C -> C -> 类型}
   证明: Types.surjective_π_app_zero_of_surjective_map (isLimitOfPreserves (forget C) hc) hF
 
 Depends on / 依赖: Types.surjective_, forget, isLimitOfPreserves
@@ -312,7 +312,7 @@ theorem from_union_surjective_of_isColimit
 
 中文:
 定理 from_union_surjective_of_isColimit
-  条件: {D : Cocone F} (hD : IsColimit D)
+  条件: {D : 余锥 F} (hD : 是余极限 D)
   证明: fun a => D.ι.app a.1 a.2
     Function.Surjective ff := by
   intro ff x
@@ -341,8 +341,8 @@ theorem isColimit_exists_rep
   exact ⟨a.1, a.2, rfl⟩
 
 中文:
-定理 isColimit_exists_rep
-  条件: {D : Cocone F} (hD : IsColimit D) (x : ToType D.pt)
+定理 isColimit_存在_rep
+  条件: {D : 余锥 F} (hD : 是余极限 D) (x : ToType D.pt)
   证明: by
   obtain ⟨a, rfl⟩ := Concrete.from_union_surjective_of_isColimit F hD x
   exact ⟨a.1, a.2, rfl⟩
@@ -363,8 +363,8 @@ theorem colimit_exists_rep
   proof: Concrete.isColimit_exists_rep F (colimit.isColimit _) x
 
 中文:
-定理 colimit_exists_rep
-  条件: [HasColimit F] (x : ToType (colimit F))
+定理 colimit_存在_rep
+  条件: [有余极限 F] (x : ToType (colimit F))
   证明: Concrete.isColimit_exists_rep F (colimit.isColimit _) x
 
 Depends on / 依赖: Concrete, Concrete.isColimit_exists_rep, colimit, colimit.isColimit, isColimit, isColimit_exists_rep
@@ -391,8 +391,8 @@ theorem isColimit_rep_eq_of_exists
   rw [← 
 
 中文:
-定理 isColimit_rep_eq_of_exists
-  结论: {D : Cocone F} {i j : J} (x : ToType (F.obj i))
+定理 isColimit_rep_eq_of_存在
+  结论: {D : 余锥 F} {i j : J} (x : ToType (F.obj i))
   证明: by
   let E := (forget C).mapCocone D
   obtain ⟨k, f, g, (hfg : (F ⋙ forget C).map f x = F.map g y)⟩ := h
@@ -424,8 +424,8 @@ theorem colimit_rep_eq_of_exists
   proof: Concrete.isColimit_rep_eq_of_exists F x y h
 
 中文:
-定理 colimit_rep_eq_of_exists
-  结论: [HasColimit F] {i j : J} (x : ToType (F.obj i))
+定理 colimit_rep_eq_of_存在
+  结论: [有余极限 F] {i j : J} (x : ToType (F.obj i))
   证明: Concrete.isColimit_rep_eq_of_exists F x y h
 
 Depends on / 依赖: Concrete, Concrete.isColimit_rep_eq_of_exists, isColimit_rep_eq_of_exists
@@ -456,8 +456,8 @@ theorem isColimit_exists_of_rep_eq
   exact (Types.FilteredColimit.isColimit_eq_iff (F ⋙ forget C) hE).mp h
 
 中文:
-定理 isColimit_exists_of_rep_eq
-  结论: {D : Cocone F} {i j : J} (hD : IsColimit D)
+定理 isColimit_存在_of_rep_eq
+  结论: {D : 余锥 F} {i j : J} (hD : 是余极限 D)
   证明: by
   let E := (forget C).mapCocone D
   let hE : IsColimit E := isColimitOfPreserves _ hD
@@ -482,8 +482,8 @@ theorem isColimit_rep_eq_iff_exists
    Concrete.isColimit_rep_eq_of_exists _ _ _⟩
 
 中文:
-定理 isColimit_rep_eq_iff_exists
-  结论: {D : Cocone F} {i j : J} (hD : IsColimit D)
+定理 isColimit_rep_eq_iff_存在
+  结论: {D : 余锥 F} {i j : J} (hD : 是余极限 D)
   证明: ⟨Concrete.isColimit_exists_of_rep_eq.{s} _ hD _ _,
    Concrete.isColimit_rep_eq_of_exists _ _ _⟩
 
@@ -504,8 +504,8 @@ theorem colimit_exists_of_rep_eq
   proof: Concrete.isColimit_exists_of_rep_eq.{s} F (colimit.isColimit _) x y h
 
 中文:
-定理 colimit_exists_of_rep_eq
-  结论: [HasColimit F] {i j : J} (x : ToType (F.obj i))
+定理 colimit_存在_of_rep_eq
+  结论: [有余极限 F] {i j : J} (x : ToType (F.obj i))
   证明: Concrete.isColimit_exists_of_rep_eq.{s} F (colimit.isColimit _) x y h
 
 Depends on / 依赖: Concrete, Concrete.isColimit_exists_of_rep_eq, colimit, colimit.isColimit, isColimit, isColimit_exists_of_rep_eq
@@ -524,8 +524,8 @@ theorem colimit_rep_eq_iff_exists
   proof: ⟨Concrete.colimit_exists_of_rep_eq.{s} _ _ _, Concrete.colimit_rep_eq_of_exists _ _ _⟩
 
 中文:
-定理 colimit_rep_eq_iff_exists
-  结论: [HasColimit F] {i j : J} (x : ToType (F.obj i))
+定理 colimit_rep_eq_iff_存在
+  结论: [有余极限 F] {i j : J} (x : ToType (F.obj i))
   证明: ⟨Concrete.colimit_exists_of_rep_eq.{s} _ _ _, Concrete.colimit_rep_eq_of_exists _ _ _⟩
 
 Depends on / 依赖: Concrete, Concrete.colimit_exists_of_rep_eq, Concrete.colimit_rep_eq_of_exists, colimit_exists_of_rep_eq, colimit_rep_eq_of_exists
@@ -551,8 +551,8 @@ theorem exists_hom_ι_eq_of_isColimit
   simp
 
 中文:
-定理 exists_hom_ι_eq_of_isColimit
-  结论: [IsFilteredOrEmpty J] {D : Cocone F} (hD : IsColimit D)
+定理 存在_hom_ι_eq_of_isColimit
+  结论: [是FilteredOrEmpty J] {D : 余锥 F} (hD : 是余极限 D)
   证明: by
   obtain ⟨j, y, rfl⟩ := isColimit_exists_rep F hD x
   refine ⟨IsFiltered.max k j, IsFiltered.leftToMax _ _, F.map (IsFiltered.rightToMax _ _) y, ?_⟩

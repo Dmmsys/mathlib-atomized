@@ -32,7 +32,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (WalkingMulticospan J)
+  签名: 有限类型 (WalkingMulticospan J)
   定义体: .ofEquiv _ (proxy_equiv% (WalkingMulticospan J))
 
 Depends on / 依赖: WalkingMulticospan, ofEquiv, proxy_equiv
@@ -49,7 +49,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: J.L] [DecidableEq J.R] : FinCategory (WalkingMulticospan J) where
+  签名: J.L] [DecidableEq J.R] : 有限范畴 (WalkingMulticospan J) where
 -/
 instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMulticospan J) where
   fintypeHom
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (WalkingMultispan J)
+  签名: 有限类型 (WalkingMultispan J)
   定义体: .ofEquiv _ (proxy_equiv% (WalkingMultispan J))
 
 Depends on / 依赖: WalkingMultispan, ofEquiv, proxy_equiv
@@ -103,7 +103,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) where
+  签名: J.L] [DecidableEq J.R] : 有限范畴 (WalkingMultispan J) where
 -/
 instance [DecidableEq J.L] [DecidableEq J.R] : FinCategory (WalkingMultispan J) where
   fintypeHom

@@ -98,7 +98,7 @@ lemma charFun_map_add_prod_eq_mul
 
 中文:
 引理 charFun_map_add_prod_eq_mul
-  结论: {μ ν : Measure E}
+  结论: {μ ν : 测度 E}
   证明: by
   rw [IndepFun.charFun_map_fun_add_eq_mul]; rw [measurePreserving_fst.map_eq]; rw [measurePreserving_snd.map_eq]
   any_goals fun_prop
@@ -124,7 +124,7 @@ lemma indepFun_iff_charFun_prod
 
 中文:
 引理 indepFun_iff_charFun_prod
-  条件: [CompleteSpace E] (hX : AEMeasurable X P) (hY : AEMeasurable Y P)
+  条件: [完备空间 E] (hX : 几乎处处可测 X P) (hY : 几乎处处可测 Y P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map hX hY]; rw [← charFun_eq_prod_iff]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]; rw [Function.comp_def]
 
@@ -199,7 +199,7 @@ lemma charFunDual_map_add_prod_eq_mul
 
 中文:
 引理 charFunDual_map_add_prod_eq_mul
-  结论: {μ ν : Measure E}
+  结论: {μ ν : 测度 E}
   证明: by
   rw [IndepFun.charFunDual_map_fun_add_eq_mul]; rw [measurePreserving_fst.map_eq]; rw [measurePreserving_snd.map_eq]
   any_goals fun_prop
@@ -227,7 +227,7 @@ lemma indepFun_iff_charFunDual_prod
 
 中文:
 引理 indepFun_iff_charFunDual_prod
-  条件: (hX : AEMeasurable X P) (hY : AEMeasurable Y P)
+  条件: (hX : 几乎处处可测 X P) (hY : 几乎处处可测 Y P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map hX hY]; rw [← charFunDual_eq_prod_iff]
 
@@ -250,7 +250,7 @@ lemma indepFun_iff_charFunDual_prod'
 
 中文:
 引理 indepFun_iff_charFunDual_prod'
-  条件: (hX : AEMeasurable X P) (hY : AEMeasurable Y P)
+  条件: (hX : 几乎处处可测 X P) (hY : 几乎处处可测 Y P)
   证明: by
   rw [indepFun_iff_map_prod_eq_prod_map_map hX hY]; rw [← charFunDual_eq_prod_iff' p]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]; rw [Function.comp_def]
 
@@ -296,7 +296,7 @@ lemma iIndepFun.charFunDual_map_finsetSum_eq_prod
 
 中文:
 引理 iIndepFun.charFunDual_map_finsetSum_eq_prod
-  结论: [NormedSpace 实数 E]
+  结论: [赋范空间 实数 E]
   证明: by
   classical
   have := hX.isProbabilityMeasure
@@ -346,7 +346,7 @@ lemma iIndepFun.charFunDual_map_sum_eq_prod
 
 中文:
 引理 iIndepFun.charFunDual_map_sum_eq_prod
-  结论: [Fintype ι] [NormedSpace 实数 E]
+  结论: [有限类型 ι] [赋范空间 实数 E]
   证明: (hX.restrict _).charFunDual_map_finsetSum_eq_prod (by simpa)
 
 Depends on / 依赖: charFunDual_map_finsetSum_eq_prod, hX.restrict, restrict
@@ -372,7 +372,7 @@ alias iIndepFun.charFunDual_map_fun_finset_sum_eq_prod :=
 
 中文:
 引理 iIndepFun.charFunDual_map_fun_finsetSum_eq_prod
-  结论: [NormedSpace 实数 E]
+  结论: [赋范空间 实数 E]
   证明: by
   convert! hX.charFunDual_map_finsetSum_eq_prod mX
   simp
@@ -403,7 +403,7 @@ lemma iIndepFun.charFunDual_map_fun_sum_eq_prod
 
 中文:
 引理 iIndepFun.charFunDual_map_fun_sum_eq_prod
-  结论: [Fintype ι] [NormedSpace 实数 E]
+  结论: [有限类型 ι] [赋范空间 实数 E]
   证明: (hX.restrict _).charFunDual_map_fun_finsetSum_eq_prod (by simpa)
 
 Depends on / 依赖: charFunDual_map_fun_finsetSum_eq_prod, hX.restrict, restrict
@@ -428,7 +428,7 @@ lemma charFunDual_map_sum_pi_eq_prod
 
 中文:
 引理 charFunDual_map_sum_pi_eq_prod
-  结论: [Fintype ι] [NormedSpace 实数 E] {μ : ι -> Measure E}
+  结论: [有限类型 ι] [赋范空间 实数 E] {μ : ι -> 测度 E}
   证明: by
   rw [iIndepFun.charFunDual_map_fun_sum_eq_prod]
   · refine Finset.prod_congr rfl fun i _ => ?_
@@ -462,7 +462,7 @@ alias iIndepFun.charFun_map_finset_sum_eq_prod := iIndepFun.charFun_map_finsetSu
 
 中文:
 引理 iIndepFun.charFun_map_finsetSum_eq_prod
-  结论: [InnerProductSpace 实数 E]
+  结论: [内积空间 实数 E]
   证明: by
   ext
   simp [charFun_eq_charFunDual_toDualMap, hX.charFunDual_map_finsetSum_eq_prod mX]
@@ -491,7 +491,7 @@ lemma iIndepFun.charFun_map_sum_eq_prod
 
 中文:
 引理 iIndepFun.charFun_map_sum_eq_prod
-  结论: [Fintype ι] [InnerProductSpace 实数 E]
+  结论: [有限类型 ι] [内积空间 实数 E]
   证明: (hX.restrict _).charFun_map_finsetSum_eq_prod (by simpa)
 
 Depends on / 依赖: charFun_map_finsetSum_eq_prod, hX.restrict, restrict
@@ -516,7 +516,7 @@ alias iIndepFun.charFun_map_fun_finset_sum_eq_prod := iIndepFun.charFun_map_fun_
 
 中文:
 引理 iIndepFun.charFun_map_fun_finsetSum_eq_prod
-  结论: [InnerProductSpace 实数 E]
+  结论: [内积空间 实数 E]
   证明: by
   convert! hX.charFun_map_finsetSum_eq_prod mX
   simp
@@ -545,7 +545,7 @@ lemma iIndepFun.charFun_map_fun_sum_eq_prod
 
 中文:
 引理 iIndepFun.charFun_map_fun_sum_eq_prod
-  结论: [Fintype ι] [InnerProductSpace 实数 E]
+  结论: [有限类型 ι] [内积空间 实数 E]
   证明: (hX.restrict _).charFun_map_fun_finsetSum_eq_prod (by simpa)
 
 Depends on / 依赖: charFun_map_fun_finsetSum_eq_prod, hX.restrict, restrict
@@ -567,7 +567,7 @@ lemma charFun_map_sum_pi_eq_prod
 
 中文:
 引理 charFun_map_sum_pi_eq_prod
-  结论: [Fintype ι] [InnerProductSpace 实数 E]
+  结论: [有限类型 ι] [内积空间 实数 E]
   证明: by
   ext
   simp [charFun_eq_charFunDual_toDualMap, charFunDual_map_sum_pi_eq_prod]
@@ -601,7 +601,7 @@ lemma iIndepFun_iff_charFun_pi
 
 中文:
 引理 iIndepFun_iff_charFun_pi
-  条件: (hX : 对任意 i, AEMeasurable (X i) P)
+  条件: (hX : 对任意 i, 几乎处处可测 (X i) P)
   证明: by
   rw [iIndepFun_iff_map_fun_eq_pi_map hX]; rw [← charFun_eq_pi_iff]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]; rw [Function.comp_def]
 
@@ -629,7 +629,7 @@ lemma iIndepFun_iff_charFunDual_pi
 
 中文:
 引理 iIndepFun_iff_charFunDual_pi
-  条件: (hX : 对任意 i, AEMeasurable (X i) P)
+  条件: (hX : 对任意 i, 几乎处处可测 (X i) P)
   证明: by
   rw [iIndepFun_iff_map_fun_eq_pi_map hX]; rw [← charFunDual_eq_pi_iff]
 
@@ -651,7 +651,7 @@ lemma iIndepFun_iff_charFunDual_pi'
 
 中文:
 引理 iIndepFun_iff_charFunDual_pi'
-  条件: (hX : 对任意 i, AEMeasurable (X i) P)
+  条件: (hX : 对任意 i, 几乎处处可测 (X i) P)
   证明: by
   rw [iIndepFun_iff_map_fun_eq_pi_map hX]; rw [← charFunDual_eq_pi_iff' p]; rw [AEMeasurable.map_map_of_aemeasurable (by fun_prop) (by fun_prop)]; rw [Function.comp_def]
 

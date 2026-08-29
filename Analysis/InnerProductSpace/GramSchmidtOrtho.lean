@@ -155,7 +155,7 @@ theorem gramSchmidt_bot
 
 中文:
 定理 gramSchmidt_bot
-  结论: {ι : 类型} [LinearOrder ι] [LocallyFiniteOrder ι] [OrderBot ι]
+  结论: {ι : 类型} [线性序 ι] [局部有限序 ι] [有底序 ι]
   证明: by
   rw [gramSchmidt_def]; rw [Iio_eq_Ico]; rw [Finset.Ico_self]; rw [Finset.sum_empty]; rw [sub_zero]
 
@@ -493,7 +493,7 @@ theorem gramSchmidt_of_orthogonal
 
 中文:
 定理 gramSchmidt_of_orthogonal
-  条件: {f : ι -> E} (hf : Pairwise (⟪f ·, f ·⟫ = 0))
+  条件: {f : ι -> E} (hf : 两两 (⟪f ·, f ·⟫ = 0))
   证明: by
   ext i
   rw [gramSchmidt_def]
@@ -612,7 +612,7 @@ theorem gramSchmidt_triangular
 
 中文:
 定理 gramSchmidt_triangular
-  条件: {i j : ι} (hij : i < j) (b : Basis ι 𝕜 E)
+  条件: {i j : ι} (hij : i < j) (b : 基 ι 𝕜 E)
   证明: by
   have : gramSchmidt 𝕜 b i in span 𝕜 (gramSchmidt 𝕜 b '' Set.Iio j) :=
     subset_span ((Set.mem_image _ _ _).2 ⟨i, hij, rfl⟩)
@@ -664,7 +664,7 @@ definition gramSchmidtBasis
 
 中文:
 定义 gramSchmidtBasis
-  签名: (b : Basis ι 𝕜 E)
+  签名: (b : 基 ι 𝕜 E)
   定义体: Basis.mk (gramSchmidt_linearIndependent b.linearIndependent)
     ((span_gramSchmidt 𝕜 b).trans b.span_eq).ge
 
@@ -685,7 +685,7 @@ theorem coe_gramSchmidtBasis
 
 中文:
 定理 coe_gramSchmidtBasis
-  条件: (b : Basis ι 𝕜 E)
+  条件: (b : 基 ι 𝕜 E)
   结论: (gramSchmidtBasis b : ι -> E) = gramSchmidt 𝕜 b
   证明: Basis.coe_mk _ _
 
@@ -871,7 +871,7 @@ theorem span_gramSchmidtNormed
 
 中文:
 定理 span_gramSchmidtNormed
-  条件: (f : ι -> E) (s : Set ι)
+  条件: (f : ι -> E) (s : 集合 ι)
   证明: by
   refine span_eq_span
     (Set.image_subset_iff.2 fun i hi => smul_mem _ _ <| subset_span <| mem_image_of_mem _ hi)
@@ -963,7 +963,7 @@ definition gramSchmidtOrthonormalBasis
 
 中文:
 定义 gramSchmidtOrthonormalBasis
-  签名: : OrthonormalBasis ι 𝕜 E
+  签名: : 正交标准基 ι 𝕜 E
   定义体: ((gramSchmidtNormed_orthonormal' f).exists_orthonormalBasis_extension_of_card_eq
     (v := gramSchmidtNormed 𝕜 f) h).choose
 

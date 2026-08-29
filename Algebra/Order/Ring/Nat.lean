@@ -35,7 +35,7 @@ instance instIsStrictOrderedRing
 
 中文:
 实例 instIsStrictOrderedRing
-  签名: : IsStrictOrderedRing 自然数 where
+  签名: : 是StrictOrdered环 自然数 where
   定义体: Nat.mul_lt_mul_of_pos_left hbc ha
   mul_lt_mul_of_pos_right _a ha _b _c hbc := Nat.mul_lt_mul_of_pos_right hbc ha
 
@@ -57,7 +57,7 @@ instance instLinearOrderedCommMonoidWithZero
 
 中文:
 实例 instLinearOrderedCommMonoidWithZero
-  签名: : LinearOrderedCommMonoidWithZero 自然数 where
+  签名: : 带零LinearOrderedComm幺半群 自然数 where
   定义体: 0
   bot_le := zero_le
   isBot_zero := zero_le
@@ -79,7 +79,7 @@ lemma isCompl_even_odd
 
 中文:
 引理 isCompl_even_odd
-  结论: IsCompl { n : 自然数 | Even n } { n | Odd n }
+  结论: 是补集 { n : 自然数 | Even n } { n | Odd n }
   证明: by
   simp only [← Set.compl_ofPred, isCompl_compl, ← not_even_iff_odd]
 

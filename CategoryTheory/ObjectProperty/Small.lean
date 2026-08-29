@@ -41,7 +41,7 @@ abbreviation Small
 
 中文:
 缩写 Small
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: _root_.Small.{w} (Subtype P)
 -/
 protected abbrev Small (P : ObjectProperty C) : Prop := _root_.Small.{w} (Subtype P)
@@ -60,7 +60,7 @@ lemma Small.of_le
 
 中文:
 引理 Small.of_le
-  条件: {P Q : Object命题erty C} [Object命题erty.Small.{w} Q] (h : P <= Q)
+  条件: {P Q : ObjectProperty C} [ObjectProperty.Small.{w} Q] (h : P <= Q)
   证明: small_of_injective (Subtype.map_injective h Function.injective_id)
 
 Depends on / 依赖: Function, Function.injective_id, Subtype, Subtype.map_injective, injective_id, map_injective, small_of_injective
@@ -121,7 +121,7 @@ lemma small_op_iff
 
 中文:
 引理 small_op_iff
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: small_congr
     { toFun x := ⟨x.1.unop, x.2⟩
       invFun x := ⟨op x.1, x.2⟩}
@@ -148,7 +148,7 @@ lemma small_unop_iff
 
 中文:
 引理 small_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   证明: by
   rw [← small_op_iff]; rw [op_unop]
 
@@ -180,9 +180,9 @@ class EssentiallySmall
 
 中文:
 类 EssentiallySmall
-  参数: (P : Object命题erty C)
+  参数: (P : ObjectProperty C)
   公理与运算 (1 个):
-    - exists_small_le'((P)) : 存在 (Q : Object命题erty C) (_ : Object命题erty.Small.{w} Q), P <= Q.isoClosure
+    - exists_small_le'((P)) : 存在 (Q : ObjectProperty C) (_ : ObjectProperty.Small.{w} Q), P <= Q.isoClosure
 -/
 protected class EssentiallySmall (P : ObjectProperty C) : Prop where
   exists_small_le' (P) : exists (Q : ObjectProperty C) (_ : ObjectProperty.Small.{w} Q),
@@ -203,8 +203,8 @@ lemma EssentiallySmall.exists_small_le
   refine ⟨fun X => X in Set.range (Subtype.va
 
 中文:
-引理 EssentiallySmall.exists_small_le
-  结论: (P : Object命题erty C)
+引理 EssentiallySmall.存在_small_le
+  结论: (P : ObjectProperty C)
   证明: by
   obtain ⟨Q, _, hQ⟩ := exists_small_le' P
   let P' := Q ⊓ P.isoClosure
@@ -256,8 +256,8 @@ lemma EssentiallySmall.exists_small
   exact ⟨Q, inferInstance, le_antisymm hQ₂ (by rwa [isoClosure_le_iff])⟩
 
 中文:
-引理 EssentiallySmall.exists_small
-  结论: (P : Object命题erty C) [P.IsClosedUnderIsomorphisms]
+引理 EssentiallySmall.存在_small
+  结论: (P : ObjectProperty C) [P.在同构下封闭]
   证明: by
   obtain ⟨Q, _, hQ₁, hQ₂⟩ := exists_small_le P
   exact ⟨Q, inferInstance, le_antisymm hQ₂ (by rwa [isoClosure_le_iff])⟩
@@ -282,7 +282,7 @@ lemma EssentiallySmall.of_le
 
 中文:
 引理 EssentiallySmall.of_le
-  结论: {P Q : Object命题erty C}
+  结论: {P Q : ObjectProperty C}
   证明: by
     obtain ⟨R, _, hR⟩ := EssentiallySmall.exists_small_le' Q
     exact ⟨R, inferInstance, h.trans hR⟩
@@ -334,7 +334,7 @@ lemma essentiallySmall_op_iff
 
 中文:
 引理 essentiallySmall_op_iff
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   refine ⟨fun _ => ?_, fun _ => ?_⟩
   · obtain ⟨Q, h₁, _, h₂⟩ := EssentiallySmall.exists_small_le P.op
@@ -365,7 +365,7 @@ lemma essentiallySmall_unop_iff
 
 中文:
 引理 essentiallySmall_unop_iff
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   证明: by
   rw [← essentiallySmall_op_iff]; rw [op_unop]
 
@@ -472,7 +472,7 @@ lemma EssentiallySmall.of_functor
 
 中文:
 引理 EssentiallySmall.of_functor
-  结论: (P : Object命题erty C) (F : C ⥤ D)
+  结论: (P : ObjectProperty C) (F : C ⥤ D)
   证明: by
   choose P₁ hP₁ x hP₁x hx using H₁.1
   choose P₂ hP₂ y hP₂y hy using fun Y => (H₂ Y).1
@@ -508,8 +508,8 @@ lemma exists_equivalence_iff
     rw [← isEquivalence_ιOfLE_iff h₁]
 
 中文:
-引理 exists_equivalence_iff
-  条件: (P : Object命题erty C) [LocallySmall.{w'} C]
+引理 存在_equivalence_iff
+  条件: (P : ObjectProperty C) [LocallySmall.{w'} C]
   证明: by
   refine ⟨fun ⟨J, _, ⟨e⟩⟩ => ?_, fun _ => ?_⟩
   · exact ⟨.ofObj (e.inverse ⋙ P.ι).obj, inferInstance,
@@ -546,7 +546,7 @@ lemma exists_equivalence_iff_of_locallySmall
     fun ⟨J, _, ⟨e⟩⟩ => ⟨J, _, ⟨(ObjectProperty.topEquivalence C).symm.trans e⟩⟩⟩
 
 中文:
-引理 exists_equivalence_iff_of_locallySmall
+引理 存在_equivalence_iff_of_locallySmall
   条件: [LocallySmall.{w'} C]
   证明: by
   rw [← ObjectProperty.exists_equivalence_iff]

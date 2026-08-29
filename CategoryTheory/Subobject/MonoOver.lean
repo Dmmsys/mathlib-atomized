@@ -118,7 +118,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {X A : C} (f : A ⟶ X) [hf : Mono f]
+  签名: {X A : C} (f : A ⟶ X) [hf : 单态射 f]
   定义体: Over.mk f
   property := hf
 
@@ -202,7 +202,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: {X A : C} (f : A ⟶ X) [Mono f]
+  条件: {X A : C} (f : A ⟶ X) [单态射 f]
   结论: (mk f : C) = A
   证明: rfl
 -/
@@ -242,7 +242,7 @@ theorem mk_arrow
 
 中文:
 定理 mk_arrow
-  条件: {X A : C} (f : A ⟶ X) [Mono f]
+  条件: {X A : C} (f : A ⟶ X) [单态射 f]
   结论: (mk f).arrow = f
   证明: rfl
 -/
@@ -633,7 +633,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Over.isMono X).IsClosedUnderLimitsOfShape J
+  签名: (Over.isMono X).是ClosedUnderLimitsOfShape J
   定义体: fun F ⟨p, hp⟩ => ⟨fun g h e => by
     refine (WithTerminal.isLimitEquiv.invFun p.isLimit).hom_ext (fun j => ?_)
     cases j with
@@ -659,7 +659,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: (F : J ⥤ MonoOver X) [HasLimit (F ⋙ (Over.isMono X).ι)]
+  签名: (F : J ⥤ MonoOver X) [有极限 (F ⋙ (Over.isMono X).ι)]
   定义体: hasLimit_of_closedUnderLimits _ _ _
 
 Depends on / 依赖: hasLimit_of_closedUnderLimits
@@ -677,7 +677,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: [HasLimitsOfShape J (Over X)]
+  签名: [有形状极限 J (Over X)]
 -/
 instance hasLimitsOfShape [HasLimitsOfShape J (Over X)] :
     HasLimitsOfShape J (MonoOver X) where
@@ -692,7 +692,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: [HasFiniteLimits (Over X)]
+  签名: [有有限极限 (Over X)]
   定义体: inferInstance
 -/
 instance hasFiniteLimits [HasFiniteLimits (Over X)] : HasFiniteLimits (MonoOver X) where
@@ -707,7 +707,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: [HasLimitsOfSize.{w, w'} (Over X)]
+  签名: [有LimitsOfSize.{w, w'} (Over X)]
 -/
 instance hasLimitsOfSize [HasLimitsOfSize.{w, w'} (Over X)] :
     HasLimitsOfSize.{w, w'} (MonoOver X) where
@@ -775,7 +775,7 @@ lemma commSqOfHasStrongEpiMonoFactorisation
 
 中文:
 引理 commSqOfHasStrongEpiMonoFactorisation
-  条件: (F : J ⥤ MonoOver Y) (c : Cocone F)
+  条件: (F : J ⥤ MonoOver Y) (c : 余锥 F)
 -/
 lemma commSqOfHasStrongEpiMonoFactorisation (F : J ⥤ MonoOver Y) (c : Cocone F) :
     CommSq (Sigma.desc fun i => (c.ι.app i).hom.left) (strongEpiMonoFactorisationSigmaDesc F).e
@@ -793,7 +793,7 @@ definition liftStructOfHasStrongEpiMonoFactorisation
 
 中文:
 定义 liftStructOfHasStrongEpiMonoFactorisation
-  签名: (F : J ⥤ MonoOver Y) (c : Cocone F)
+  签名: (F : J ⥤ MonoOver Y) (c : 余锥 F)
   定义体: Classical.choice
     (((strongEpiMonoFactorisationSigmaDesc F).e_strong_epi.llp _).sq_hasLift
       (commSqOfHasStrongEpiMonoFactorisation F c)).exists_lift
@@ -975,7 +975,7 @@ definition pullbackObjIsoOfIsPullback
 
 中文:
 定义 pullbackObjIsoOfIsPullback
-  签名: [HasPullbacks C] {X Y : C} (f : Y ⟶ X) (S : MonoOver X)
+  签名: [有Pullbacks C] {X Y : C} (f : Y ⟶ X) (S : MonoOver X)
   定义体: isoMk ((IsPullback.isoPullback h).symm)
 
 Depends on / 依赖: IsPullback, IsPullback.isoPullback, isoPullback
@@ -1000,7 +1000,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: lift (Over.map f) fun g => mono_comp g.arrow f
 
 Depends on / 依赖: Over.map, g.arrow, mono_comp
@@ -1018,7 +1018,7 @@ definition mapComp
 
 中文:
 定义 mapComp
-  签名: (f : X ⟶ Y) (g : Y ⟶ Z) [Mono f] [Mono g]
+  签名: (f : X ⟶ Y) (g : Y ⟶ Z) [单态射 f] [单态射 g]
   定义体: liftIso _ _ (Over.mapComp _ _) ≪≫ (liftComp _ _ _ _).symm
 
 Depends on / 依赖: Over.mapComp, liftComp, liftIso, mapComp
@@ -1063,7 +1063,7 @@ theorem map_obj_left
 
 中文:
 定理 map_obj_left
-  条件: (f : X ⟶ Y) [Mono f] (g : MonoOver X)
+  条件: (f : X ⟶ Y) [单态射 f] (g : MonoOver X)
   结论: ((map f).obj g : C) = g.obj.left
   证明: rfl
 
@@ -1084,7 +1084,7 @@ theorem map_obj_arrow
 
 中文:
 定理 map_obj_arrow
-  条件: (f : X ⟶ Y) [Mono f] (g : MonoOver X)
+  条件: (f : X ⟶ Y) [单态射 f] (g : MonoOver X)
   结论: ((map f).obj g).arrow = g.arrow ≫ f
   证明: rfl
 -/
@@ -1105,7 +1105,7 @@ instance full_map
 
 中文:
 实例 full_map
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: by
     refine ⟨homMk e.hom.left ?_, rfl⟩
     · rw [← cancel_mono f, assoc]
@@ -1128,7 +1128,7 @@ instance faithful_map
 
 中文:
 实例 faithful_map
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
 -/
 instance faithful_map (f : X ⟶ Y) [Mono f] : Functor.Faithful (map f) where
 
@@ -1234,7 +1234,7 @@ definition mapPullbackAdj
 
 中文:
 定义 mapPullbackAdj
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: (Over.mapPullbackAdj f).restrictFullyFaithful (fullyFaithfulForget X) (fullyFaithfulForget Y)
     (Iso.refl _) (Iso.refl _)
 
@@ -1254,7 +1254,7 @@ definition pullbackMapSelf
 
 中文:
 定义 pullbackMapSelf
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: (asIso (MonoOver.mapPullbackAdj f).unit).symm
 
 Depends on / 依赖: MonoOver, MonoOver.mapPullbackAdj, mapPullbackAdj
@@ -1282,7 +1282,7 @@ definition imageMonoOver
 
 中文:
 定义 imageMonoOver
-  签名: (f : X ⟶ Y) [HasImage f]
+  签名: (f : X ⟶ Y) [有像 f]
   定义体: MonoOver.mk (image.ι f)
 
 @[simp]
@@ -1304,8 +1304,8 @@ theorem imageMonoOver_arrow
 
 中文:
 定理 imageMonoOver_arrow
-  条件: (f : X ⟶ Y) [HasImage f]
-  结论: (imageMonoOver f).arrow = image.ι f
+  条件: (f : X ⟶ Y) [有像 f]
+  结论: (imageMonoOver f).arrow = 像.ι f
   证明: rfl
 -/
 theorem imageMonoOver_arrow (f : X ⟶ Y) [HasImage f] : (imageMonoOver f).arrow = image.ι f :=
@@ -1338,7 +1338,7 @@ definition image
     · apply image.lift_fac
 
 中文:
-定义 image
+定义 像
   签名: : Over X ⥤ MonoOver X where
   定义体: imageMonoOver f.hom
   map {f g} k := by
@@ -1385,7 +1385,7 @@ definition imageForgetAdj
 
 中文:
 定义 imageForgetAdj
-  签名: : image ⊣ forget X
+  签名: : 像 ⊣ forget X
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun f g =>
         { toFun := fun k => by
@@ -1426,7 +1426,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget X).IsRightAdjoint
+  签名: (forget X).是右伴随
   定义体: ⟨_, ⟨imageForgetAdj⟩⟩
 
 Depends on / 依赖: imageForgetAdj
@@ -1445,7 +1445,7 @@ instance reflective
 
 中文:
 实例 reflective
-  签名: : Reflective (forget X) where
+  签名: : 反射 (forget X) where
   定义体: image
   adj := imageForgetAdj
 -/
@@ -1463,7 +1463,7 @@ definition forgetImage
 
 中文:
 定义 forgetImage
-  签名: : forget X ⋙ image ≅ 𝟭 (MonoOver X)
+  签名: : forget X ⋙ 像 ≅ 𝟭 (MonoOver X)
   定义体: asIso (Adjunction.counit imageForgetAdj)
 
 Depends on / 依赖: Adjunction, Adjunction.counit, counit, imageForgetAdj
@@ -1486,7 +1486,7 @@ definition «exists»
   body: forget _ ⋙ Over.map f ⋙ image
 
 中文:
-定义 «exists»
+定义 «存在»
   签名: (f : X ⟶ Y)
   定义体: forget _ ⋙ Over.map f ⋙ image
 -/
@@ -1501,7 +1501,7 @@ instance faithful_exists
   signature: (f : X ⟶ Y)
 
 中文:
-实例 faithful_exists
+实例 faithful_存在
   签名: (f : X ⟶ Y)
 -/
 instance faithful_exists (f : X ⟶ Y) : Functor.Faithful («exists» f) where
@@ -1522,8 +1522,8 @@ definition existsIsoMap
     · apply imageMonoIsoSource_hom_self)
 
 中文:
-定义 existsIsoMap
-  签名: (f : X ⟶ Y) [Mono f]
+定义 存在IsoMap
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: NatIso.ofComponents (by
     intro Z
     suffices (forget _).obj ((«exists» f).obj Z) ≅ (forget _).obj ((map f).obj Z) by
@@ -1553,8 +1553,8 @@ definition existsPullbackAdj
     (fullyFaithfulForget X) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
 
 中文:
-定义 existsPullbackAdj
-  签名: (f : X ⟶ Y) [HasPullbacks C]
+定义 存在PullbackAdj
+  签名: (f : X ⟶ Y) [有Pullbacks C]
   定义体: ((Over.mapPullbackAdj f).comp imageForgetAdj).restrictFullyFaithful
     (fullyFaithfulForget X) (Functor.FullyFaithful.id _) (Iso.refl _) (Iso.refl _)
 

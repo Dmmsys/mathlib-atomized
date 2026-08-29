@@ -51,7 +51,7 @@ definition orthogonalBilin
 
 中文:
 定义 orthogonalBilin
-  签名: : Submodule R₂ M₂ where
+  签名: : 子模 R₂ M₂ where
   定义体: {y | forall x in S, B x y = 0}
   zero_mem' := by simp
   add_mem' {u v} hu hv x hx := by simp [hu _ hx, hv _ hx]

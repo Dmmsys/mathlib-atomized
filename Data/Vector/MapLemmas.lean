@@ -729,7 +729,7 @@ theorem mapAccumr_eq_map
 
 中文:
 定理 mapAccumr_eq_map
-  结论: {f : α -> σ -> σ × β} {s₀ : σ} (S : Set σ) (h₀ : s₀ in S)
+  结论: {f : α -> σ -> σ × β} {s₀ : σ} (S : 集合 σ) (h₀ : s₀ in S)
   证明: by
   rw [Vector.map_eq_mapAccumr]
   apply mapAccumr_bisim_tail
@@ -780,7 +780,7 @@ theorem mapAccumr₂_eq_map₂
 
 中文:
 定理 mapAccumr₂_eq_map₂
-  结论: {f : α -> β -> σ -> σ × γ} {s₀ : σ} (S : Set σ) (h₀ : s₀ in S)
+  结论: {f : α -> β -> σ -> σ × γ} {s₀ : σ} (S : 集合 σ) (h₀ : s₀ in S)
   证明: by
   rw [Vector.map₂_eq_mapAccumr₂]
   apply mapAccumr₂_bisim_tail

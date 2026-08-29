@@ -208,7 +208,7 @@ theorem dotProduct_self_eq_zero
 
 中文:
 定理 dotProduct_self_eq_zero
-  条件: [Ring R] [LinearOrder R] [IsStrictOrderedRing R] {v : n -> R}
+  条件: [环 R] [线性序 R] [是StrictOrdered环 R] {v : n -> R}
   证明: (Finset.sum_eq_zero_iff_of_nonneg fun i _ => mul_self_nonneg (v i)).trans by
     simp [funext_iff]
 
@@ -337,7 +337,7 @@ lemma conjTranspose_mul_self_eq_zero
 
 中文:
 引理 conjTranspose_mul_self_eq_zero
-  条件: {n} {A : Matrix m n R}
+  条件: {n} {A : 矩阵 m n R}
   结论: Aᴴ * A = 0 ↔ A = 0
   证明: ⟨fun h => Matrix.ext fun i j =>
     (congr_fun <| dotProduct_star_self_eq_zero.1 <| Matrix.ext_iff.2 h j j) i,
@@ -366,7 +366,7 @@ lemma self_mul_conjTranspose_eq_zero
 
 中文:
 引理 self_mul_conjTranspose_eq_zero
-  条件: {m} {A : Matrix m n R}
+  条件: {m} {A : 矩阵 m n R}
   结论: A * Aᴴ = 0 ↔ A = 0
   证明: ⟨fun h => Matrix.ext fun i j =>
     (congr_fun <| dotProduct_self_star_eq_zero.1 <| Matrix.ext_iff.2 h i i) j,
@@ -393,7 +393,7 @@ lemma conjTranspose_mul_self_mul_eq_zero
 
 中文:
 引理 conjTranspose_mul_self_mul_eq_zero
-  条件: {p} (A : Matrix m n R) (B : Matrix n p R)
+  条件: {p} (A : 矩阵 m n R) (B : 矩阵 n p R)
   证明: by
   refine ⟨fun h => ?_, fun h => by simp only [Matrix.mul_assoc, h, Matrix.mul_zero]⟩
   apply_fun (Bᴴ * ·) at h
@@ -420,7 +420,7 @@ lemma self_mul_conjTranspose_mul_eq_zero
 
 中文:
 引理 self_mul_conjTranspose_mul_eq_zero
-  条件: {p} (A : Matrix m n R) (B : Matrix m p R)
+  条件: {p} (A : 矩阵 m n R) (B : 矩阵 m p R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using conjTranspose_mul_self_mul_eq_zero Aᴴ _
 
@@ -441,7 +441,7 @@ lemma mul_self_mul_conjTranspose_eq_zero
 
 中文:
 引理 mul_self_mul_conjTranspose_eq_zero
-  条件: {p} (A : Matrix m n R) (B : Matrix p m R)
+  条件: {p} (A : 矩阵 m n R) (B : 矩阵 p m R)
   证明: by
   rw [← conjTranspose_eq_zero]; rw [conjTranspose_mul]; rw [conjTranspose_mul]; rw [conjTranspose_conjTranspose]; rw [self_mul_conjTranspose_mul_eq_zero]; rw [← conjTranspose_mul]; rw [conjTranspose_eq_zero]
 
@@ -462,7 +462,7 @@ lemma mul_conjTranspose_mul_self_eq_zero
 
 中文:
 引理 mul_conjTranspose_mul_self_eq_zero
-  条件: {p} (A : Matrix m n R) (B : Matrix p n R)
+  条件: {p} (A : 矩阵 m n R) (B : 矩阵 p n R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using mul_self_mul_conjTranspose_eq_zero Aᴴ _
 
@@ -484,7 +484,7 @@ lemma conjTranspose_mul_self_mulVec_eq_zero
 
 中文:
 引理 conjTranspose_mul_self_mulVec_eq_zero
-  条件: (A : Matrix m n R) (v : n -> R)
+  条件: (A : 矩阵 m n R) (v : n -> R)
   证明: by
   simpa only [← Matrix.replicateCol_mulVec, replicateCol_eq_zero] using
     conjTranspose_mul_self_mul_eq_zero A (replicateCol (Fin 1) v)
@@ -507,7 +507,7 @@ lemma self_mul_conjTranspose_mulVec_eq_zero
 
 中文:
 引理 self_mul_conjTranspose_mulVec_eq_zero
-  条件: (A : Matrix m n R) (v : m -> R)
+  条件: (A : 矩阵 m n R) (v : m -> R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using conjTranspose_mul_self_mulVec_eq_zero Aᴴ _
 
@@ -529,7 +529,7 @@ lemma vecMul_conjTranspose_mul_self_eq_zero
 
 中文:
 引理 vecMul_conjTranspose_mul_self_eq_zero
-  条件: (A : Matrix m n R) (v : n -> R)
+  条件: (A : 矩阵 m n R) (v : n -> R)
   证明: by
   simpa only [← Matrix.replicateRow_vecMul, replicateRow_eq_zero] using
     mul_conjTranspose_mul_self_eq_zero A (replicateRow (Fin 1) v)
@@ -552,7 +552,7 @@ lemma vecMul_self_mul_conjTranspose_eq_zero
 
 中文:
 引理 vecMul_self_mul_conjTranspose_eq_zero
-  条件: (A : Matrix m n R) (v : m -> R)
+  条件: (A : 矩阵 m n R) (v : m -> R)
   证明: by
   simpa only [conjTranspose_conjTranspose] using vecMul_conjTranspose_mul_self_eq_zero Aᴴ _
 

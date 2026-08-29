@@ -47,7 +47,7 @@ definition derivedSeries
 
 中文:
 定义 derivedSeries
-  签名: : 自然数 -> Subgroup G
+  签名: : 自然数 -> 子群 G
 -/
 def derivedSeries : Nat -> Subgroup G
   | 0 => ⊤
@@ -109,7 +109,7 @@ theorem derivedSeries_normal
 中文:
 定理 derivedSeries_normal
   条件: (n : 自然数)
-  结论: (derivedSeries G n).Normal
+  结论: (derivedSeries G n).正规
   证明: by
   induction n with
   | zero => exact (⊤ : Subgroup G).normal_of_characteristic
@@ -151,7 +151,7 @@ theorem derivedSeries_antitone
 
 中文:
 定理 derivedSeries_antitone
-  结论: Antitone (derivedSeries G)
+  结论: 递减 (derivedSeries G)
   证明: antitone_nat_of_succ_le fun n => (derivedSeries G n).commutator_le_self
 
 Depends on / 依赖: antitone_nat_of_succ_le, commutator_le_self, derivedSeries
@@ -232,7 +232,7 @@ theorem derivedSeries_le_map_derivedSeries
 
 中文:
 定理 derivedSeries_le_map_derivedSeries
-  条件: (hf : Function.Surjective f) (n : 自然数)
+  条件: (hf : 函数.满射 f) (n : 自然数)
   证明: by
   induction n with
   | zero => exact (map_top_of_surjective f hf).ge
@@ -256,7 +256,7 @@ theorem map_derivedSeries_eq
 
 中文:
 定理 map_derivedSeries_eq
-  条件: (hf : Function.Surjective f) (n : 自然数)
+  条件: (hf : 函数.满射 f) (n : 自然数)
   证明: le_antisymm (map_derivedSeries_le_derivedSeries f n) (derivedSeries_le_map_derivedSeries hf n)
 
 Depends on / 依赖: derivedSeries_le_map_derivedSeries, le_antisymm, map_derivedSeries_le_derivedSeries
@@ -288,7 +288,7 @@ class IsSolvable
     - solvable : exists n : Nat, derivedSeries G n = ⊥
 
 中文:
-类 IsSolvable
+类 是可解
   参数: : 命题 where
   公理与运算 (1 个):
     - solvable : 存在 n : 自然数, derivedSeries G n = ⊥
@@ -322,7 +322,7 @@ alias _root_.isSolvable_of_comm := Group.isSolvable_of_comm
 
 中文:
 定理 isSolvable_of_comm
-  条件: {G : 类型} [hG : Group G] (h : 对任意 a b : G, a * b = b * a)
+  条件: {G : 类型} [hG : 群 G] (h : 对任意 a b : G, a * b = b * a)
   证明: by
   let hG' : CommGroup G := { hG with mul_comm := h }
   cases hG
@@ -356,8 +356,8 @@ alias _root_.isSolvable_of_top_eq_bot := Group.isSolvable_of_top_eq_bot
 
 中文:
 定理 isSolvable_of_top_eq_bot
-  条件: (h : (⊤ : Subgroup G) = ⊥)
-  结论: IsSolvable G
+  条件: (h : (⊤ : 子群 G) = ⊥)
+  结论: 是可解 G
   证明: ⟨⟨0, h⟩⟩
 
 @[deprecated (since := "2026-07-16")]
@@ -392,7 +392,7 @@ theorem isSolvable_of_ker_le_range
 
 中文:
 定理 isSolvable_of_ker_le_range
-  结论: {G' G'' : 类型} [Group G'] [Group G''] (f : G' ->* G)
+  结论: {G' G'' : 类型} [群 G'] [群 G''] (f : G' ->* G)
   证明: by
   obtain ⟨n, hn⟩ := id hG''
   obtain ⟨m, hm⟩ := id hG'
@@ -434,7 +434,7 @@ alias _root_.solvable_of_solvable_injective := isSolvable_of_isSolvable_injectiv
 
 中文:
 定理 isSolvable_of_isSolvable_injective
-  条件: (hf : Function.Injective f) [IsSolvable G']
+  条件: (hf : 函数.单射 f) [是可解 G']
   证明: isSolvable_of_ker_le_range (1 : G' ->* G) f ((f.ker_eq_bot hf).symm ▸ bot_le)
 
 @[deprecated (since := "2026-07-16")]
@@ -466,8 +466,8 @@ alias _root_.solvable_of_surjective := isSolvable_of_surjective
 
 中文:
 定理 isSolvable_of_surjective
-  条件: (hf : Function.Surjective f) [IsSolvable G]
-  结论: IsSolvable G'
+  条件: (hf : 函数.满射 f) [是可解 G]
+  结论: 是可解 G'
   证明: isSolvable_of_ker_le_range f (1 : G' ->* G) (f.range_eq_top_of_surjective hf ▸ le_top)
 
 @[deprecated (since := "2026-07-16")]
@@ -496,7 +496,7 @@ theorem isSolvable_iff_subgroup_quotient
 
 中文:
 定理 isSolvable_iff_subgroup_quotient
-  条件: (H : Subgroup G) [H.Normal]
+  条件: (H : 子群 G) [H.正规]
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ =>
     isSolvable_of_ker_le_range H.subtype (QuotientGroup.mk' H) (by simp)⟩
 
@@ -532,8 +532,8 @@ theorem IsSolvable.commutator_lt_top_of_nontrivial
 alias _root_.IsSolvable.commutator_lt_top_of_nontrivi
 
 中文:
-定理 IsSolvable.commutator_lt_top_of_nontrivial
-  条件: [hG : IsSolvable G] [Nontrivial G]
+定理 是可解.commutator_lt_top_of_nontrivial
+  条件: [hG : 是可解 G] [非平凡 G]
   证明: by
   rw [lt_top_iff_ne_top]
   obtain ⟨n, hn⟩ := hG
@@ -577,8 +577,8 @@ theorem IsSolvable.commutator_lt_of_ne_bot
 alias _root_.IsSolvable.commutator_lt_of_ne_bot := Group.IsSolvable.c
 
 中文:
-定理 IsSolvable.commutator_lt_of_ne_bot
-  条件: [IsSolvable G] {H : Subgroup G} (hH : H != ⊥)
+定理 是可解.commutator_lt_of_ne_bot
+  条件: [是可解 G] {H : 子群 G} (hH : H != ⊥)
   证明: by
   rw [← nontrivial_iff_ne_bot] at hH
   rw [← H.range_subtype]; rw [MonoidHom.range_eq_map]; rw [← map_commutator]; rw [map_subtype_lt_map_subtype]
@@ -613,7 +613,7 @@ theorem isSolvable_iff_commutator_lt
 
 中文:
 定理 isSolvable_iff_commutator_lt
-  条件: [WellFoundedLT (Subgroup G)]
+  条件: [WellFoundedLT (子群 G)]
   证明: by
   refine ⟨fun _ _ => IsSolvable.commutator_lt_of_ne_bot, fun h => ?_⟩
   suffices h : IsSolvable (⊤ : Subgroup G) from
@@ -669,7 +669,7 @@ theorem IsSimpleGroup.derivedSeries_succ
     · rwa [h]
 
 中文:
-定理 IsSimpleGroup.derivedSeries_succ
+定理 是单群.derivedSeries_succ
   条件: {n : 自然数}
   结论: derivedSeries G n.succ = commutator G
   证明: by
@@ -709,8 +709,8 @@ theorem IsSimpleGroup.comm_iff_isSolvable
       rw [← mul_inv_eq_one]; rw [mul_inv_rev]; rw [← mu
 
 中文:
-定理 IsSimpleGroup.comm_iff_isSolvable
-  结论: (对任意 a b : G, a * b = b * a) ↔ Group.IsSolvable G
+定理 是单群.comm_iff_isSolvable
+  结论: (对任意 a b : G, a * b = b * a) ↔ 群.是可解 G
   证明: ⟨Group.isSolvable_of_comm, fun ⟨⟨n, hn⟩⟩ => by
     cases n
     · intro a b
@@ -786,8 +786,8 @@ theorem Equiv.Perm.not_isSolvable_fin_5
   have key : x = z * ⁅x,
 
 中文:
-定理 Equiv.Perm.not_isSolvable_fin_5
-  结论: ¬Group.IsSolvable (Equiv.Perm (Fin 5))
+定理 等价.置换.not_isSolvable_fin_5
+  结论: ¬群.是可解 (等价.置换 (有限集 5))
   证明: by
   let x : Equiv.Perm (Fin 5) := ⟨![1, 2, 0, 3, 4], ![2, 0, 1, 3, 4], by decide, by decide⟩
   let y : Equiv.Perm (Fin 5) := ⟨![3, 4, 2, 0, 1], ![3, 4, 2, 0, 1], by decide, by decide⟩
@@ -828,8 +828,8 @@ theorem Equiv.Perm.not_isSolvable
 @[de
 
 中文:
-定理 Equiv.Perm.not_isSolvable
-  条件: (X : 类型) (hX : 5 <= Cardinal.mk X)
+定理 等价.置换.not_isSolvable
+  条件: (X : 类型) (hX : 5 <= 基数.mk X)
   证明: by
   intro h
   have key : Nonempty (Fin 5 ↪ X) := by

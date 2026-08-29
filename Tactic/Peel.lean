@@ -117,7 +117,7 @@ theorem eventually_imp
 
 中文:
 定理 eventually_imp
-  结论: {α : 类型} {p q : α -> 命题} {f : Filter α}
+  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
   证明: Filter.Eventually.mp hp (Filter.Eventually.of_forall hq)
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.mp, Filter.Eventually.of_forall, of_forall
@@ -136,7 +136,7 @@ theorem frequently_imp
 
 中文:
 定理 frequently_imp
-  结论: {α : 类型} {p q : α -> 命题} {f : Filter α}
+  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
   证明: Filter.Frequently.mp hp (Filter.Eventually.of_forall hq)
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, Filter.Frequently.mp, Frequently, of_forall
@@ -156,7 +156,7 @@ theorem eventually_congr
 
 中文:
 定理 eventually_congr
-  结论: {α : 类型} {p q : α -> 命题} {f : Filter α}
+  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
   证明: by
   congr! 2; exact hq _
 -/
@@ -175,7 +175,7 @@ theorem frequently_congr
 
 中文:
 定理 frequently_congr
-  结论: {α : 类型} {p q : α -> 命题} {f : Filter α}
+  结论: {α : 类型} {p q : α -> 命题} {f : 滤子 α}
   证明: by
   congr! 2; exact hq _
 -/
@@ -193,7 +193,7 @@ definition quantifiers
 
 中文:
 定义 quantifiers
-  签名: : List Name
+  签名: : 列表 Name
   定义体: [``Exists, ``And, ``Filter.Eventually, ``Filter.Frequently]
 
 Depends on / 依赖: Eventually, Exists, Filter, Filter.Eventually, Filter.Frequently, Frequently
@@ -219,7 +219,7 @@ definition whnfQuantifier
 
 中文:
 定义 whnfQuantifier
-  签名: (p : Expr) (unfold : 布尔)
+  签名: (p : Expr) (unfold : 布尔值)
   定义体: do
   if unfold then
     whnfHeadPred p fun e =>
@@ -250,7 +250,7 @@ definition throwPeelError
 
 中文:
 定义 throwPeelError
-  签名: {α : Type} (ty target : Expr)
+  签名: {α : 类型} (ty target : Expr)
   定义体: throwError "Tactic 'peel' could not match quantifiers in{indentD ty}\nand{indentD target}"
 
 Depends on / 依赖: Tactic, indentD, quantifiers, target, throwError
@@ -324,7 +324,7 @@ definition peelCore
 
 中文:
 定义 peelCore
-  签名: (goal : MVarId) (e : Expr) (n? : Option Name) (n' : Name) (unfold : 布尔)
+  签名: (goal : MVarId) (e : Expr) (n? : 选项类型 Name) (n' : Name) (unfold : 布尔值)
   定义体: goal.withContext do
   let ty ← whnfQuantifier (← inferType e) unfold
   let target ← whnfQuantifier (← goal.getType) unfold
@@ -375,7 +375,7 @@ definition peelArgs
 
 中文:
 定义 peelArgs
-  签名: (e : Expr) (num : 自然数) (l : List Name) (n? : Option Name) (unfold : 布尔 := true)
+  签名: (e : Expr) (num : 自然数) (l : 列表 Name) (n? : 选项类型 Name) (unfold : 布尔值 := true)
   定义体: do
   match num with
     | 0 => return
@@ -413,7 +413,7 @@ let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this)
 
 中文:
 定义 peelUnbounded
-  签名: (e : Expr) (n? : Option Name) (unfold : 布尔 := false)
+  签名: (e : Expr) (n? : 选项类型 Name) (unfold : 布尔值 := false)
   定义体: do
 let fvarId? ← observing? liftMetaTacticAux (peelCore · e none (n?.getD `this) unfold)
   if let some fvarId := fvarId? then
@@ -451,7 +451,7 @@ definition peelIffAux
 
 中文:
 定义 peelIffAux
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: do
   evalTactic (← `(tactic| focus
     first | apply forall_congr'
@@ -491,7 +491,7 @@ elab_rules : tactic
 
 中文:
 定义 peelArgsIff
-  签名: (l : List Name)
+  签名: (l : 列表 Name)
   定义体: withMainContext do
   match l with
     | [] => pure ()

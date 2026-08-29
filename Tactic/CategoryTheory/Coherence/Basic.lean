@@ -44,7 +44,7 @@ theorem mk_eq
 
 中文:
 定理 mk_eq
-  条件: {α : Type _} (a b a' b' : α) (ha : a = a') (hb : b = b') (h : a' = b')
+  条件: {α : 类型 _} (a b a' b' : α) (ha : a = a') (hb : b = b') (h : a' = b')
   结论: a = b
   证明: by
   simp [h, ha, hb]
@@ -69,7 +69,7 @@ let e ← instantiateMVars ← mvarId.getType
 
 中文:
 定义 normalForm
-  签名: (ρ : Type) [Context ρ]
+  签名: (ρ : 类型) [余ntext ρ]
   定义体: do
   mvarId.withContext do
 let e ← instantiateMVars ← mvarId.getType
@@ -177,7 +177,7 @@ definition List.splitEvenOdd
     (a::as, b::bs)
 
 中文:
-定义 List.splitEvenOdd
+定义 列表.splitEvenOdd
   签名: {α : 类型u}
   定义体: List.splitEvenOdd xs
     (a::as, b::bs)
@@ -206,7 +206,7 @@ definition main
 
 中文:
 定义 main
-  签名: (ρ : Type) [Context ρ] [MonadMor₁ (CoherenceM ρ)] [MonadMor₂Iso (CoherenceM ρ)]
+  签名: (ρ : 类型) [余ntext ρ] [MonadMor₁ (CoherenceM ρ)] [MonadMor₂Iso (CoherenceM ρ)]
   定义体: mvarId.withContext do
     let mvarIds ← normalForm ρ nm mvarId
     let (mvarIdsCoherence, mvarIdsRefl) := List.splitEvenOdd (← repeat' ofNormalizedEq mvarIds)

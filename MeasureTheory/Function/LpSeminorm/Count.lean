@@ -100,7 +100,7 @@ lemma eLpNorm_count_lt_top_of_lt
 
 中文:
 引理 eLpNorm_count_lt_top_of_lt
-  条件: [Finite α] (h : 对任意 i, ‖f i‖ₑ < ∞)
+  条件: [有限 α] (h : 对任意 i, ‖f i‖ₑ < ∞)
   结论: eLpNorm f p .count < ∞
   证明: by
   have := Fintype.ofFinite α
@@ -126,7 +126,7 @@ lemma eLpNorm_count_lt_top
 
 中文:
 引理 eLpNorm_count_lt_top
-  条件: [Finite α] (hp : p != 0)
+  条件: [有限 α] (hp : p != 0)
   证明: ⟨fun h i => (enorm_le_eLpNorm_count f i hp).trans_lt h, eLpNorm_count_lt_top_of_lt⟩
 
 Depends on / 依赖: eLpNorm_count_lt_top_of_lt, enorm_le_eLpNorm_count, trans_lt

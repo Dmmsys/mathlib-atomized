@@ -56,7 +56,7 @@ definition lcs
 
 中文:
 定义 lcs
-  签名: : LieSubmodule R L M -> LieSubmodule R L M
+  签名: : Lie子模 R L M -> Lie子模 R L M
   定义体: (fun N => ⁅(⊤ : LieIdeal R L), N⁆)^[k]
 
 @[simp]
@@ -80,7 +80,7 @@ theorem lcs_zero
 
 中文:
 定理 lcs_zero
-  条件: (N : LieSubmodule R L M)
+  条件: (N : Lie子模 R L M)
   结论: N.lcs 0 = N
   证明: rfl
 
@@ -126,7 +126,7 @@ lemma lcs_sup
 
 中文:
 引理 lcs_sup
-  条件: {N₁ N₂ : LieSubmodule R L M} {k : 自然数}
+  条件: {N₁ N₂ : Lie子模 R L M} {k : 自然数}
   证明: by
   induction k with
   | zero => simp
@@ -158,7 +158,7 @@ definition lowerCentralSeries
 
 中文:
 定义 lowerCentralSeries
-  签名: : LieSubmodule R L M
+  签名: : Lie子模 R L M
   定义体: (⊤ : LieSubmodule R L M).lcs k
 
 @[simp]
@@ -265,7 +265,7 @@ theorem coe_lowerCentralSeries_eq_int
 
 中文:
 定理 coe_lowerCentralSeries_eq_int
-  条件: [LieModule R L M] (k : 自然数)
+  条件: [Lie模 R L M] (k : 自然数)
   证明: by
   rw [← LieSubmodule.coe_toSubmodule]; rw [← LieSubmodule.coe_toSubmodule]
   induction k with
@@ -453,7 +453,7 @@ theorem antitone_lowerCentralSeries
 
 中文:
 定理 antitone_lowerCentralSeries
-  结论: Antitone lowerCentralSeries R L M
+  结论: 递减 lowerCentralSeries R L M
   证明: by
   intro l k
   induction k generalizing l with
@@ -492,7 +492,7 @@ theorem eventually_iInf_lowerCentralSeries_eq
 
 中文:
 定理 eventually_iInf_lowerCentralSeries_eq
-  条件: [IsArtinian R M]
+  条件: [是Artin R M]
   证明: by
   have h_wf : WellFoundedGT (LieSubmodule R L M)ᵒᵈ :=
     LieSubmodule.wellFoundedLT_of_isArtinian R L M
@@ -529,7 +529,7 @@ theorem trivial_iff_lower_central_eq_bot
 
 中文:
 定理 trivial_iff_lower_central_eq_bot
-  结论: IsTrivial L M ↔ lowerCentralSeries R L M 1 = ⊥
+  结论: 是平凡 L M ↔ lowerCentralSeries R L M 1 = ⊥
   证明: by
   constructor <;> intro h
   · simp
@@ -681,7 +681,7 @@ lemma map_lowerCentralSeries_eq
 
 中文:
 引理 map_lowerCentralSeries_eq
-  条件: {f : M ->ₗ⁅R,L⁆ M₂} (hf : Function.Surjective f)
+  条件: {f : M ->ₗ⁅R,L⁆ M₂} (hf : 函数.满射 f)
   证明: by
   apply le_antisymm (map_lowerCentralSeries_le k f)
   induction k with
@@ -760,7 +760,7 @@ class IsNilpotent
     - nilpotent_int : exists k, lowerCentralSeries Int L M k = ⊥
 
 中文:
-类 IsNilpotent
+类 是幂零
   参数: : 命题 where
   公理与运算 (2 个):
     - mk_int : :
@@ -803,8 +803,8 @@ lemma IsNilpotent.nilpotent
   proof: (isNilpotent_iff R L M).mp ‹_›
 
 中文:
-引理 IsNilpotent.nilpotent
-  条件: [IsNilpotent L M]
+引理 是幂零.nilpotent
+  条件: [是幂零 L M]
   结论: 存在 k, lowerCentralSeries R L M k = ⊥
   证明: (isNilpotent_iff R L M).mp ‹_›
 
@@ -824,9 +824,9 @@ lemma IsNilpotent.mk
   proof: (isNilpotent_iff R L M).mpr ⟨k, h⟩
 
 中文:
-引理 IsNilpotent.mk
+引理 是幂零.mk
   条件: {k : 自然数} (h : lowerCentralSeries R L M k = ⊥)
-  结论: IsNilpotent L M
+  结论: 是幂零 L M
   证明: (isNilpotent_iff R L M).mpr ⟨k, h⟩
 -/
 lemma IsNilpotent.mk {k : Nat} (h : lowerCentralSeries R L M k = ⊥) : IsNilpotent L M :=
@@ -845,7 +845,7 @@ lemma iInf_lowerCentralSeries_eq_bot_of_isNilpotent
 
 中文:
 引理 iInf_lowerCentralSeries_eq_bot_of_isNilpotent
-  条件: [IsNilpotent L M]
+  条件: [是幂零 L M]
   证明: by
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R L M
   rw [eq_bot_iff]; rw [← hk]
@@ -875,8 +875,8 @@ theorem _root_.LieSubmodule.isNilpotent_iff_exists_lcs_eq_bot
   rw [N.lowerCentralSeries_eq_lcs_comap k]; rw [LieSubmodule.comap_incl_eq_bot]; rw [inf_eq_right.mpr (N.lcs_le_self k)]
 
 中文:
-定理 _root_.LieSubmodule.isNilpotent_iff_exists_lcs_eq_bot
-  条件: (N : LieSubmodule R L M)
+定理 _root_.Lie子模.isNilpotent_iff_存在_lcs_eq_bot
+  条件: (N : Lie子模 R L M)
   证明: by
   rw [isNilpotent_iff R L N]
   refine exists_congr fun k => ?_
@@ -910,7 +910,7 @@ instance instIsNilpotentSup
 
 中文:
 实例 instIsNilpotentSup
-  签名: (M₁ M₂ : LieSubmodule R L M) [IsNilpotent L M₁] [IsNilpotent L M₂]
+  签名: (M₁ M₂ : Lie子模 R L M) [是幂零 L M₁] [是幂零 L M₂]
   定义体: by
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R L M₁
   obtain ⟨l, hl⟩ := IsNilpotent.nilpotent R L M₂
@@ -948,8 +948,8 @@ theorem exists_forall_pow_toEnd_eq_zero
   exact iterate_toEnd_mem_lowerCentralSeries R L M x m k
 
 中文:
-定理 exists_forall_pow_toEnd_eq_zero
-  条件: [IsNilpotent L M]
+定理 存在_对任意_pow_toEnd_eq_zero
+  条件: [是幂零 L M]
   证明: by
   obtain ⟨k, hM⟩ := IsNilpotent.nilpotent R L M
   use k
@@ -980,7 +980,7 @@ theorem isNilpotent_toEnd_of_isNilpotent
 
 中文:
 定理 isNilpotent_toEnd_of_isNilpotent
-  条件: [IsNilpotent L M] (x : L)
+  条件: [是幂零 L M] (x : L)
   证明: by
   change exists k, toEnd R L M x ^ k = 0
   have := exists_forall_pow_toEnd_eq_zero R L M
@@ -1010,7 +1010,7 @@ theorem isNilpotent_toEnd_of_isNilpotent₂
 
 中文:
 定理 isNilpotent_toEnd_of_isNilpotent₂
-  条件: [IsNilpotent L M] (x y : L)
+  条件: [是幂零 L M] (x y : L)
   证明: by
   obtain ⟨k, hM⟩ := IsNilpotent.nilpotent R L M
   replace hM : lowerCentralSeries R L M (2 * k) = ⊥ := by
@@ -1046,7 +1046,7 @@ lemma maxGenEigenSpace_toEnd_eq_top
 
 中文:
 引理 maxGenEigenSpace_toEnd_eq_top
-  条件: [IsNilpotent L M] (x : L)
+  条件: [是幂零 L M] (x : L)
   证明: by
   ext m
   simp only [Module.End.mem_maxGenEigenspace, zero_smul, sub_zero, Submodule.mem_top,
@@ -1080,7 +1080,7 @@ theorem nilpotentOfNilpotentQuotient
 
 中文:
 定理 nilpotentOfNilpotentQuotient
-  结论: {N : LieSubmodule R L M} (h₁ : N <= maxTrivSubmodule R L M)
+  结论: {N : Lie子模 R L M} (h₁ : N <= maxTrivSubmodule R L M)
   证明: by
   rw [isNilpotent_iff R L] at h₂ ⊢
   obtain ⟨k, hk⟩ := h₂
@@ -1145,7 +1145,7 @@ theorem iInf_lcs_le_of_isNilpotent_quot
 
 中文:
 定理 iInf_lcs_le_of_isNilpotent_quot
-  条件: (h : IsNilpotent L (M ⧸ N))
+  条件: (h : 是幂零 L (M ⧸ N))
   证明: by
   obtain ⟨k, hk⟩ := (isNilpotent_quotient_iff R L M N).mp h
   exact iInf_le_of_le k hk
@@ -1199,7 +1199,7 @@ theorem nilpotencyLength_eq_zero_iff
 
 中文:
 定理 nilpotencyLength_eq_zero_iff
-  条件: [IsNilpotent L M]
+  条件: [是幂零 L M]
   证明: by
   let s := {k | lowerCentralSeries Int L M k = ⊥}
   have hs : s.Nonempty := by
@@ -1281,7 +1281,7 @@ theorem nilpotencyLength_eq_one_iff
 
 中文:
 定理 nilpotencyLength_eq_one_iff
-  条件: [Nontrivial M]
+  条件: [非平凡 M]
   证明: by
   rw [nilpotencyLength_eq_succ_iff Int]; rw [← trivial_iff_lower_central_eq_bot]
   simp
@@ -1307,7 +1307,7 @@ theorem isTrivial_of_nilpotencyLength_le_one
 
 中文:
 定理 isTrivial_of_nilpotencyLength_le_one
-  条件: [IsNilpotent L M] (h : nilpotencyLength L M <= 1)
+  条件: [是幂零 L M] (h : nilpotencyLength L M <= 1)
   证明: by
   nontriviality M
   rcases Nat.le_one_iff_eq_zero_or_eq_one.mp h with h | h
@@ -1337,7 +1337,7 @@ definition lowerCentralSeriesLast
 
 中文:
 定义 lowerCentralSeriesLast
-  签名: : LieSubmodule R L M
+  签名: : Lie子模 R L M
   定义体: match nilpotencyLength L M with
   | 0 => ⊥
   | k + 1 => lowerCentralSeries R L M k
@@ -1365,7 +1365,7 @@ theorem lowerCentralSeriesLast_le_max_triv
 
 中文:
 定理 lowerCentralSeriesLast_le_max_triv
-  条件: [LieModule R L M]
+  条件: [Lie模 R L M]
   证明: by
   rw [lowerCentralSeriesLast]
   rcases h : nilpotencyLength L M with - | k
@@ -1401,7 +1401,7 @@ theorem nontrivial_lowerCentralSeriesLast
 
 中文:
 定理 nontrivial_lowerCentralSeriesLast
-  条件: [LieModule R L M] [Nontrivial M] [IsNilpotent L M]
+  条件: [Lie模 R L M] [非平凡 M] [是幂零 L M]
   证明: by
   rw [LieSubmodule.nontrivial_iff_ne_bot]; rw [lowerCentralSeriesLast]
   cases h : nilpotencyLength L M
@@ -1439,7 +1439,7 @@ theorem lowerCentralSeriesLast_le_of_not_isTrivial
 
 中文:
 定理 lowerCentralSeriesLast_le_of_not_isTrivial
-  条件: [IsNilpotent L M] (h : ¬ IsTrivial L M)
+  条件: [是幂零 L M] (h : ¬ 是平凡 L M)
   证明: by
   rw [lowerCentralSeriesLast]
   replace h : 1 < nilpotencyLength L M := by
@@ -1482,7 +1482,7 @@ lemma disjoint_lowerCentralSeries_maxTrivSubmodule_iff
 
 中文:
 引理 disjoint_lowerCentralSeries_maxTrivSubmodule_iff
-  条件: [IsNilpotent L M]
+  条件: [是幂零 L M]
   证明: by
   refine ⟨fun h => ?_, fun h => by simp⟩
   nontriviality M
@@ -1519,7 +1519,7 @@ theorem nontrivial_max_triv_of_isNilpotent
 
 中文:
 定理 nontrivial_max_triv_of_isNilpotent
-  条件: [Nontrivial M] [IsNilpotent L M]
+  条件: [非平凡 M] [是幂零 L M]
   证明: Set.nontrivial_mono (lowerCentralSeriesLast_le_max_triv R L M)
     (nontrivial_lowerCentralSeriesLast R L M)
 
@@ -1877,7 +1877,7 @@ theorem ucs_eq_top_iff
 中文:
 定理 ucs_eq_top_iff
   条件: (k : 自然数)
-  结论: N.ucs k = ⊤ ↔ LieModule.lowerCentralSeries R L M k <= N
+  结论: N.ucs k = ⊤ ↔ Lie模.lowerCentralSeries R L M k <= N
   证明: by
   rw [eq_top_iff]; rw [← lcs_le_iff]; rfl
 
@@ -1896,7 +1896,7 @@ theorem _root_.LieModule.isNilpotent_iff_exists_ucs_eq_top
   rw [LieModule.isNilpotent_iff R]; exact exists_congr fun k => by simp [ucs_eq_top_iff]
 
 中文:
-定理 _root_.LieModule.isNilpotent_iff_exists_ucs_eq_top
+定理 _root_.Lie模.isNilpotent_iff_存在_ucs_eq_top
   证明: by
   rw [LieModule.isNilpotent_iff R]; exact exists_congr fun k => by simp [ucs_eq_top_iff]
 
@@ -1942,7 +1942,7 @@ theorem isNilpotent_iff_exists_self_le_ucs
   simp_rw [LieModule.isNilpotent_iff_exists_ucs_eq_top R, ← ucs_comap_incl, comap_incl_eq_top]
 
 中文:
-定理 isNilpotent_iff_exists_self_le_ucs
+定理 isNilpotent_iff_存在_self_le_ucs
   证明: by
   simp_rw [LieModule.isNilpotent_iff_exists_ucs_eq_top R, ← ucs_comap_incl, comap_incl_eq_top]
 
@@ -1963,7 +1963,7 @@ theorem ucs_bot_one
 
 中文:
 定理 ucs_bot_one
-  结论: (⊥ : LieSubmodule R L M).ucs 1 = LieModule.maxTrivSubmodule R L M
+  结论: (⊥ : Lie子模 R L M).ucs 1 = Lie模.maxTrivSubmodule R L M
   证明: by
   simp [LieSubmodule.normalizer_bot_eq_maxTrivSubmodule]
 
@@ -2051,9 +2051,9 @@ theorem Function.Injective.lieModuleIsNilpotent
   simpa [hk] using lieModule_lcs_map_le hfg k
 
 中文:
-定理 Function.Injective.lieModuleIsNilpotent
-  条件: [IsNilpotent L₂ M₂]
-  结论: IsNilpotent L M
+定理 函数.单射.lieModuleIsNilpotent
+  条件: [是幂零 L₂ M₂]
+  结论: 是幂零 L M
   证明: by
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R L₂ M₂
   rw [isNilpotent_iff R]
@@ -2091,7 +2091,7 @@ theorem Function.Surjective.lieModule_lcs_map_eq
         g '' {m | exists (x : L) (n : _), n in lowerCentral
 
 中文:
-定理 Function.Surjective.lieModule_lcs_map_eq
+定理 函数.满射.lieModule_lcs_map_eq
   条件: (k : 自然数)
   证明: by
   refine le_antisymm (lieModule_lcs_map_le hfg k) ?_
@@ -2140,9 +2140,9 @@ theorem Function.Surjective.lieModuleIsNilpotent
   simp [← hf_surj.lieModule_lcs_map_eq hfg hg_surj k, hk]
 
 中文:
-定理 Function.Surjective.lieModuleIsNilpotent
-  条件: [IsNilpotent L M]
-  结论: IsNilpotent L₂ M₂
+定理 函数.满射.lieModuleIsNilpotent
+  条件: [是幂零 L M]
+  结论: 是幂零 L₂ M₂
   证明: by
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R L M
   rw [isNilpotent_iff R]
@@ -2174,7 +2174,7 @@ theorem Equiv.lieModule_isNilpotent_iff
     rw [LinearEquiv.coe
 
 中文:
-定理 Equiv.lieModule_isNilpotent_iff
+定理 等价.lieModule_isNilpotent_iff
   结论: (f : L ≃ₗ⁅R⁆ L₂) (g : M ≃ₗ[R] M₂)
   证明: by
   constructor <;> intro h
@@ -2205,7 +2205,7 @@ theorem LieModule.isNilpotent_of_top_iff
   proof: Equiv.lieModule_isNilpotent_iff LieSubalgebra.topEquiv (1 : M ≃ₗ[R] M) fun _ _ => rfl
 
 中文:
-定理 LieModule.isNilpotent_of_top_iff
+定理 Lie模.isNilpotent_of_top_iff
   证明: Equiv.lieModule_isNilpotent_iff LieSubalgebra.topEquiv (1 : M ≃ₗ[R] M) fun _ _ => rfl
 
 Depends on / 依赖: Equiv.lieModule_isNilpotent_iff, LieSubalgebra, LieSubalgebra.topEquiv, lieModule_isNilpotent_iff, topEquiv
@@ -2222,7 +2222,7 @@ lemma LieModule.isNilpotent_of_top_iff'
   proof: Equiv.lieModule_isNilpotent_iff 1 (LinearEquiv.ofTop ⊤ rfl) fun _ _ => rfl
 
 中文:
-引理 LieModule.isNilpotent_of_top_iff'
+引理 Lie模.isNilpotent_of_top_iff'
   证明: Equiv.lieModule_isNilpotent_iff 1 (LinearEquiv.ofTop ⊤ rfl) fun _ _ => rfl
 -/
 @[simp] lemma LieModule.isNilpotent_of_top_iff' :
@@ -2250,7 +2250,7 @@ theorem isNilpotent_of_le
 
 中文:
 定理 isNilpotent_of_le
-  条件: (M₁ M₂ : LieSubmodule R L M) (h₁ : M₁ <= M₂) [IsNilpotent L M₂]
+  条件: (M₁ M₂ : Lie子模 R L M) (h₁ : M₁ <= M₂) [是幂零 L M₂]
   证明: by
   let f : L ->ₗ⁅R⁆ L := LieHom.id
   let g : M₁ ->ₗ[R] M₂ := Submodule.inclusion h₁
@@ -2297,7 +2297,7 @@ instance instMaxNilpotentSubmoduleIsNilpotent
 
 中文:
 实例 instMaxNilpotentSubmoduleIsNilpotent
-  签名: [IsNoetherian R M]
+  签名: [是Noether R M]
   定义体: by
   have hwf := CompleteLattice.WellFoundedGT.isSupClosedCompact (LieSubmodule R L M) inferInstance
   refine hwf { N : LieSubmodule R L M | IsNilpotent L N } ⟨⊥, ?_⟩ fun N₁ h₁ N₂ h₂ => ?_ <;>
@@ -2321,7 +2321,7 @@ theorem isNilpotent_iff_le_maxNilpotentSubmodule
 
 中文:
 定理 isNilpotent_iff_le_maxNilpotentSubmodule
-  条件: [IsNoetherian R M] (N : LieSubmodule R L M)
+  条件: [是Noether R M] (N : Lie子模 R L M)
   证明: ⟨fun h => le_sSup h, fun h => isNilpotent_of_le R L M N (maxNilpotentSubmodule R L M) h⟩
 
 Depends on / 依赖: isNilpotent_of_le, le_sSup, maxNilpotentSubmodule
@@ -2343,7 +2343,7 @@ lemma maxNilpotentSubmodule_eq_top_of_isNilpotent
 
 中文:
 引理 maxNilpotentSubmodule_eq_top_of_isNilpotent
-  条件: [LieModule.IsNilpotent L M]
+  条件: [Lie模.是幂零 L M]
   证明: by
   rw [eq_top_iff]
   apply le_sSup
@@ -2380,8 +2380,8 @@ abbreviation LieRing.IsNilpotent
   body: LieModule.IsNilpotent L L
 
 中文:
-缩写 LieRing.IsNilpotent
-  签名: (L : 类型v) [LieRing L]
+缩写 Lie环.是幂零
+  签名: (L : 类型v) [Lie环 L]
   定义体: LieModule.IsNilpotent L L
 
 Depends on / 依赖: IsNilpotent, LieModule, LieModule.IsNilpotent
@@ -2400,8 +2400,8 @@ theorem LieAlgebra.nilpotent_ad_of_nilpotent_algebra
   proof: LieModule.exists_forall_pow_toEnd_eq_zero R L L
 
 中文:
-定理 LieAlgebra.nilpotent_ad_of_nilpotent_algebra
-  条件: [IsNilpotent L]
+定理 Lie代数.nilpotent_ad_of_nilpotent_algebra
+  条件: [是幂零 L]
   证明: LieModule.exists_forall_pow_toEnd_eq_zero R L L
 
 Depends on / 依赖: LieModule, LieModule.exists_forall_pow_toEnd_eq_zero, exists_forall_pow_toEnd_eq_zero
@@ -2485,7 +2485,7 @@ theorem LieModule.coe_lowerCentralSeries_ideal_le
     exact ⟨⟨y.val, LieSubmodule.mem_top _⟩, ⟨z, ih hz⟩, rfl⟩
 
 中文:
-定理 LieModule.coe_lowerCentralSeries_ideal_le
+定理 Lie模.coe_lowerCentralSeries_ideal_le
   条件: {I : LieIdeal R L} (k : 自然数)
   证明: by
   induction k with
@@ -2522,7 +2522,7 @@ theorem LieAlgebra.nilpotent_of_nilpotent_quotient
   simp [← LieSubmodule.toSubmodule_inj, coe_lowerCentralSeries_ideal_quot_eq, hk]
 
 中文:
-定理 LieAlgebra.nilpotent_of_nilpotent_quotient
+定理 Lie代数.nilpotent_of_nilpotent_quotient
   结论: {I : LieIdeal R L} (h₁ : I <= center R L)
   证明: by
   suffices LieModule.IsNilpotent L (L ⧸ I) by
@@ -2550,8 +2550,8 @@ theorem LieAlgebra.non_trivial_center_of_isNilpotent
   proof: LieModule.nontrivial_max_triv_of_isNilpotent R L L
 
 中文:
-定理 LieAlgebra.non_trivial_center_of_isNilpotent
-  条件: [Nontrivial L] [IsNilpotent L]
+定理 Lie代数.non_trivial_center_of_isNilpotent
+  条件: [非平凡 L] [是幂零 L]
   证明: LieModule.nontrivial_max_triv_of_isNilpotent R L L
 
 Depends on / 依赖: LieModule, LieModule.nontrivial_max_triv_of_isNilpotent, nontrivial_max_triv_of_isNilpotent
@@ -2609,7 +2609,7 @@ theorem LieIdeal.lowerCentralSeries_map_eq
 
 中文:
 定理 LieIdeal.lowerCentralSeries_map_eq
-  条件: (k : 自然数) {f : L ->ₗ⁅R⁆ L'} (h : Function.Surjective f)
+  条件: (k : 自然数) {f : L ->ₗ⁅R⁆ L'} (h : 函数.满射 f)
   证明: by
   have h' : (⊤ : LieIdeal R L).map f = ⊤ := by
     rw [← f.idealRange_eq_map]
@@ -2642,8 +2642,8 @@ theorem Function.Injective.lieAlgebra_isNilpotent
   apply LieIdeal.map_lowerCentralSeries_le
 
 中文:
-定理 Function.Injective.lieAlgebra_isNilpotent
-  结论: [h₁ : IsNilpotent L'] {f : L ->ₗ⁅R⁆ L'}
+定理 函数.单射.lieAlgebra_isNilpotent
+  结论: [h₁ : 是幂零 L'] {f : L ->ₗ⁅R⁆ L'}
   证明: by
   rw [LieRing.IsNilpotent]; rw [LieModule.isNilpotent_iff R] at h₁ ⊢
   peel h₁ with k hk
@@ -2672,8 +2672,8 @@ theorem Function.Surjective.lieAlgebra_isNilpotent
   simp only [LieIdeal.map_eq_bot_iff, bot_le]
 
 中文:
-定理 Function.Surjective.lieAlgebra_isNilpotent
-  结论: [h₁ : IsNilpotent L] {f : L ->ₗ⁅R⁆ L'}
+定理 函数.满射.lieAlgebra_isNilpotent
+  结论: [h₁ : 是幂零 L] {f : L ->ₗ⁅R⁆ L'}
   证明: by
   rw [LieRing.IsNilpotent]; rw [LieModule.isNilpotent_iff R] at h₁ ⊢
   peel h₁ with k hk
@@ -2701,7 +2701,7 @@ theorem LieEquiv.nilpotent_iff_equiv_nilpotent
   · exact e.injective.lieAlgebra_isNilpotent
 
 中文:
-定理 LieEquiv.nilpotent_iff_equiv_nilpotent
+定理 Lie等价.nilpotent_iff_equiv_nilpotent
   条件: (e : L ≃ₗ⁅R⁆ L')
   证明: by
   constructor <;> intro h
@@ -2726,9 +2726,9 @@ theorem LieHom.isNilpotent_range
   proof: f.surjective_rangeRestrict.lieAlgebra_isNilpotent
 
 中文:
-定理 LieHom.isNilpotent_range
-  条件: [IsNilpotent L] (f : L ->ₗ⁅R⁆ L')
-  结论: IsNilpotent f.range
+定理 Lie态射.isNilpotent_range
+  条件: [是幂零 L] (f : L ->ₗ⁅R⁆ L')
+  结论: 是幂零 f.range
   证明: f.surjective_rangeRestrict.lieAlgebra_isNilpotent
 
 Depends on / 依赖: f.surjective_rangeRestrict.lieAlgebra_isNilpotent, lieAlgebra_isNilpotent, surjective_rangeRestrict
@@ -2759,8 +2759,8 @@ theorem LieAlgebra.isNilpotent_range_ad_iff
     exact (ad R L).isNilpotent_range
 
 中文:
-定理 LieAlgebra.isNilpotent_range_ad_iff
-  结论: IsNilpotent (ad R L).range ↔ IsNilpotent L
+定理 Lie代数.isNilpotent_range_ad_iff
+  结论: 是幂零 (ad R L).range ↔ 是幂零 L
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · have : (ad R L).ker = center R L := by simp
@@ -2791,7 +2791,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : LieRing.IsNilpotent L] : LieRing.IsNilpotent (⊤ : LieSubalgebra R L)
+  签名: : Lie环.是幂零 L] : Lie环.是幂零 (⊤ : Lie子代数 R L)
   定义体: LieSubalgebra.topEquiv.nilpotent_iff_equiv_nilpotent.mpr h
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.topEquiv.nilpotent_iff_equiv_nilpotent.mpr, nilpotent_iff_equiv_nilpotent, topEquiv
@@ -2821,7 +2821,7 @@ definition lcs
 
 中文:
 定义 lcs
-  签名: : LieSubmodule R L M
+  签名: : Lie子模 R L M
   定义体: (fun N => ⁅I, N⁆)^[k] ⊤
 
 @[simp]
@@ -2903,7 +2903,7 @@ theorem coe_lcs_eq
 
 中文:
 定理 coe_lcs_eq
-  条件: [LieModule R L M]
+  条件: [Lie模 R L M]
   证明: by
   induction k with
   | zero => simp
@@ -2937,8 +2937,8 @@ instance [IsNilpotent
   exact Function.injective_id.lieModuleIsNilpotent hfg
 
 中文:
-实例 [IsNilpotent
-  签名: L I] : LieRing.IsNilpotent I
+实例 [是幂零
+  签名: L I] : Lie环.是幂零 I
   定义体: by
   let f : I ->ₗ⁅R⁆ L := I.incl
   let g : I ->ₗ⁅R⁆ I := LieHom.id
@@ -2976,7 +2976,7 @@ lemma LieSubmodule.lowerCentralSeries_tensor_eq_baseChange
   | succ k ih => simp only [lowerCentralSeries_succ, ih, ← baseChange_top, lie_baseChange]
 
 中文:
-引理 LieSubmodule.lowerCentralSeries_tensor_eq_baseChange
+引理 Lie子模.lowerCentralSeries_tensor_eq_baseChange
   条件: (k : 自然数)
   证明: by
   induction k with
@@ -3004,8 +3004,8 @@ instance LieModule.instIsNilpotentTensor
   exact ⟨k, by simp [hk]⟩
 
 中文:
-实例 LieModule.instIsNilpotentTensor
-  签名: [IsNilpotent L M]
+实例 Lie模.instIsNilpotentTensor
+  签名: [是幂零 L M]
   定义体: by
   obtain ⟨k, hk⟩ := IsNilpotent.nilpotent R L M
   rw [isNilpotent_iff A]
@@ -3053,7 +3053,7 @@ instance maxNilpotentIdealIsNilpotent
 
 中文:
 实例 maxNilpotentIdealIsNilpotent
-  签名: [IsNoetherian R L]
+  签名: [是Noether R L]
   定义体: instMaxNilpotentSubmoduleIsNilpotent R L L
 
 Depends on / 依赖: instMaxNilpotentSubmoduleIsNilpotent
@@ -3072,7 +3072,7 @@ theorem LieIdeal.isNilpotent_iff_le_maxNilpotentIdeal
 
 中文:
 定理 LieIdeal.isNilpotent_iff_le_maxNilpotentIdeal
-  条件: [IsNoetherian R L] (I : LieIdeal R L)
+  条件: [是Noether R L] (I : LieIdeal R L)
   证明: isNilpotent_iff_le_maxNilpotentSubmodule R L L I
 
 Depends on / 依赖: isNilpotent_iff_le_maxNilpotentSubmodule
@@ -3127,7 +3127,7 @@ lemma maxNilpotentIdeal_eq_top_of_isNilpotent
 
 中文:
 引理 maxNilpotentIdeal_eq_top_of_isNilpotent
-  条件: [LieRing.IsNilpotent L]
+  条件: [Lie环.是幂零 L]
   证明: maxNilpotentSubmodule_eq_top_of_isNilpotent R L L
 -/
 @[simp] lemma maxNilpotentIdeal_eq_top_of_isNilpotent [LieRing.IsNilpotent L] :

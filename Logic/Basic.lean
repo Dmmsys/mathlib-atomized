@@ -42,7 +42,7 @@ theorem eq_comm_eq
 
 中文:
 定理 eq_comm_eq
-  条件: {α : Sort*} (a b : α)
+  条件: {α : 类型层*} (a b : α)
   结论: (a = b) = (b = a)
   证明: by rw [@eq_comm _ a b]
 
@@ -142,7 +142,7 @@ abbreviation hidden
 
 中文:
 缩写 hidden
-  签名: {α : Sort*} {a : α}
+  签名: {α : 类型层*} {a : α}
   定义体: a
 -/
 abbrev hidden {α : Sort*} {a : α} := a
@@ -161,7 +161,7 @@ instance [Subsingleton
   body: ⟨fun ⟨x, _⟩ ⟨y, _⟩ => by cases Subsingleton.elim x y; rfl⟩
 
 中文:
-实例 [Subsingleton
+实例 [子单例
   签名: α] (p
   定义体: ⟨fun ⟨x, _⟩ ⟨y, _⟩ => by cases Subsingleton.elim x y; rfl⟩
 -/
@@ -179,7 +179,7 @@ theorem congr_heq
 
 中文:
 定理 congr_heq
-  结论: {α β γ : Sort _} {f : α -> γ} {g : β -> γ} {x : α} {y : β}
+  结论: {α β γ : 类型层 _} {f : α -> γ} {g : β -> γ} {x : α} {y : β}
   证明: by
   cases h₂; cases h₁; rfl
 -/
@@ -196,7 +196,7 @@ theorem congr_arg_heq
 
 中文:
 定理 congr_arg_heq
-  条件: {β : α -> Sort*} (f : 对任意 a, β a)
+  条件: {β : α -> 类型层*} (f : 对任意 a, β a)
 -/
 theorem congr_arg_heq {β : α -> Sort*} (f : forall a, β a) :
     forall {a₁ a₂ : α}, a₁ = a₂ -> f a₁ ≍ f a₂
@@ -355,8 +355,8 @@ abbreviation Function.swap₂
   body: f i₁ j₁ i₂ j₂
 
 中文:
-缩写 Function.swap₂
-  签名: {ι₁ ι₂ : Sort*} {κ₁ : ι₁ -> Sort*} {κ₂ : ι₂ -> Sort*}
+缩写 函数.swap₂
+  签名: {ι₁ ι₂ : 类型层*} {κ₁ : ι₁ -> 类型层*} {κ₂ : ι₂ -> 类型层*}
   定义体: f i₁ j₁ i₂ j₂
 -/
 abbrev Function.swap₂ {ι₁ ι₂ : Sort*} {κ₁ : ι₁ -> Sort*} {κ₂ : ι₂ -> Sort*}
@@ -388,7 +388,7 @@ theorem Function.mt
   proof: mt
 
 中文:
-定理 Function.mt
+定理 函数.mt
   条件: {a b : 命题}
   结论: (a -> b) -> ¬b -> ¬a
   证明: mt
@@ -413,7 +413,7 @@ alias em := Classical.em
 
 中文:
 定理 dec_em'
-  条件: (p : 命题) [Decidable p]
+  条件: (p : 命题) [可判定 p]
   结论: ¬p ∨ p
   证明: (dec_em p).symm
 
@@ -469,8 +469,8 @@ theorem Decidable.eq_or_ne
   proof: dec_em x = y
 
 中文:
-定理 Decidable.eq_or_ne
-  条件: {α : Sort*} (x y : α) [Decidable (x = y)]
+定理 可判定.eq_or_ne
+  条件: {α : 类型层*} (x y : α) [可判定 (x = y)]
   结论: x = y ∨ x != y
   证明: dec_em x = y
 
@@ -489,8 +489,8 @@ theorem Decidable.ne_or_eq
   proof: dec_em' x = y
 
 中文:
-定理 Decidable.ne_or_eq
-  条件: {α : Sort*} (x y : α) [Decidable (x = y)]
+定理 可判定.ne_or_eq
+  条件: {α : 类型层*} (x y : α) [可判定 (x = y)]
   结论: x != y ∨ x = y
   证明: dec_em' x = y
 
@@ -510,7 +510,7 @@ theorem eq_or_ne
 
 中文:
 定理 eq_or_ne
-  条件: {α : Sort*} (x y : α)
+  条件: {α : 类型层*} (x y : α)
   结论: x = y ∨ x != y
   证明: em x = y
 -/
@@ -527,7 +527,7 @@ theorem ne_or_eq
 
 中文:
 定理 ne_or_eq
-  条件: {α : Sort*} (x y : α)
+  条件: {α : 类型层*} (x y : α)
   结论: x != y ∨ x = y
   证明: em' x = y
 -/
@@ -545,7 +545,7 @@ theorem by_contradiction
 中文:
 定理 by_contradiction
   条件: {p : 命题}
-  结论: (¬p -> False) -> p
+  结论: (¬p -> 假) -> p
   证明: open scoped Classical in Decidable.byContradiction
 
 Depends on / 依赖: Classical, Decidable, Decidable.byContradiction, byContradiction, scoped
@@ -642,7 +642,7 @@ theorem not_ne_iff
 
 中文:
 定理 not_ne_iff
-  条件: {α : Sort*} {a b : α}
+  条件: {α : 类型层*} {a b : α}
   结论: ¬a != b ↔ a = b
   证明: not_not
 
@@ -682,7 +682,7 @@ theorem Not.imp_symm
   proof: open scoped Classical in Not.decidable_imp_symm
 
 中文:
-定理 Not.imp_symm
+定理 非.imp_symm
   结论: (¬a -> b) -> ¬b -> a
   证明: open scoped Classical in Not.decidable_imp_symm
 
@@ -735,7 +735,7 @@ alias Iff.not := not_congr
 
 中文:
 定理 Imp.swap
-  条件: {a b : Sort*} {c : 命题}
+  条件: {a b : 类型层*} {c : 命题}
   结论: a -> b -> c ↔ b -> a -> c
   证明: ⟨fun h x y => h y x, fun h x y => h y x⟩
 
@@ -756,7 +756,7 @@ theorem Iff.not_left
   proof: h.not.trans not_not
 
 中文:
-定理 Iff.not_left
+定理 当且仅当.not_left
   条件: (h : a ↔ ¬b)
   结论: ¬a ↔ b
   证明: h.not.trans not_not
@@ -775,7 +775,7 @@ theorem Iff.not_right
   proof: not_not.symm.trans h.not
 
 中文:
-定理 Iff.not_right
+定理 当且仅当.not_right
   条件: (h : ¬a ↔ b)
   结论: a ↔ ¬b
   证明: not_not.symm.trans h.not
@@ -794,8 +794,8 @@ lemma Iff.ne
   proof: Iff.not
 
 中文:
-引理 Iff.ne
-  条件: {α β : Sort*} {a b : α} {c d : β}
+引理 当且仅当.ne
+  条件: {α β : 类型层*} {a b : α} {c d : β}
   结论: (a = b ↔ c = d) -> (a != b ↔ c != d)
   证明: Iff.not
 -/
@@ -812,8 +812,8 @@ lemma Iff.ne_left
   proof: Iff.not_left
 
 中文:
-引理 Iff.ne_left
-  条件: {α β : Sort*} {a b : α} {c d : β}
+引理 当且仅当.ne_left
+  条件: {α β : 类型层*} {a b : α} {c d : β}
   结论: (a = b ↔ c != d) -> (a != b ↔ c = d)
   证明: Iff.not_left
 
@@ -832,8 +832,8 @@ lemma Iff.ne_right
   proof: Iff.not_right
 
 中文:
-引理 Iff.ne_right
-  条件: {α β : Sort*} {a b : α} {c d : β}
+引理 当且仅当.ne_right
+  条件: {α β : 类型层*} {a b : α} {c d : β}
   结论: (a != b ↔ c = d) -> (a = b ↔ c != d)
   证明: Iff.not_right
 
@@ -891,8 +891,8 @@ instance [Decidable
   body: inferInstanceAs (Decidable (Or ..))
 
 中文:
-实例 [Decidable
-  签名: a] [Decidable b] : Decidable (Xor a b)
+实例 [可判定
+  签名: a] [可判定 b] : 可判定 (Xor a b)
   定义体: inferInstanceAs (Decidable (Or ..))
 
 Depends on / 依赖: Decidable
@@ -909,7 +909,7 @@ theorem xor_true
 
 中文:
 定理 xor_true
-  结论: Xor True = Not
+  结论: Xor 真 = 非
   证明: by grind
 -/
 @[simp] theorem xor_true : Xor True = Not := by grind
@@ -924,7 +924,7 @@ theorem xor_false
 
 中文:
 定理 xor_false
-  结论: Xor False = id
+  结论: Xor 假 = id
   证明: by grind
 -/
 @[simp] theorem xor_false : Xor False = id := by grind
@@ -956,7 +956,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Commutative Xor
+  签名: Std.交换 Xor
   定义体: ⟨xor_comm⟩
 
 Depends on / 依赖: xor_comm
@@ -975,7 +975,7 @@ theorem xor_self
 中文:
 定理 xor_self
   条件: (a : 命题)
-  结论: Xor a a = False
+  结论: Xor a a = 假
   证明: by grind
 -/
 @[simp] theorem xor_self (a : Prop) : Xor a a = False := by grind
@@ -1067,7 +1067,7 @@ theorem and_symm_right
 
 中文:
 定理 and_symm_right
-  条件: {α : Sort*} (a b : α) (p : 命题)
+  条件: {α : 类型层*} (a b : α) (p : 命题)
   结论: p ∧ a = b ↔ p ∧ b = a
   证明: by simp [eq_comm]
 
@@ -1085,7 +1085,7 @@ theorem and_symm_left
 
 中文:
 定理 and_symm_left
-  条件: {α : Sort*} (a b : α) (p : 命题)
+  条件: {α : 类型层*} (a b : α) (p : 命题)
   结论: a = b ∧ p ↔ b = a ∧ p
   证明: by simp [eq_comm]
 
@@ -1108,7 +1108,7 @@ theorem Or.elim3
   proof: Or.elim h ha fun h₂ => Or.elim h₂ hb hc
 
 中文:
-定理 Or.elim3
+定理 或.elim3
   条件: {c d : 命题} (h : a ∨ b ∨ c) (ha : a -> d) (hb : b -> d) (hc : c -> d)
   结论: d
   证明: Or.elim h ha fun h₂ => Or.elim h₂ hb hc
@@ -1127,7 +1127,7 @@ theorem Or.imp3
   proof: Or.imp had Or.imp hbe hcf
 
 中文:
-定理 Or.imp3
+定理 或.imp3
   条件: {d e c f : 命题} (had : a -> d) (hbe : b -> e) (hcf : c -> f)
   证明: Or.imp had Or.imp hbe hcf
 
@@ -1167,8 +1167,8 @@ theorem Decidable.or_not_of_imp
   proof: dite _ (Or.inl ∘ h) Or.inr
 
 中文:
-定理 Decidable.or_not_of_imp
-  条件: [Decidable a] (h : a -> b)
+定理 可判定.or_not_of_imp
+  条件: [可判定 a] (h : a -> b)
   结论: b ∨ ¬a
   证明: dite _ (Or.inl ∘ h) Or.inr
 -/
@@ -1280,7 +1280,7 @@ theorem Function.mtr
   proof: not_imp_not.mp
 
 中文:
-定理 Function.mtr
+定理 函数.mtr
   结论: (¬a -> ¬b) -> b -> a
   证明: not_imp_not.mp
 -/
@@ -1345,7 +1345,7 @@ theorem iff_mpr_iff_true_intro
 中文:
 定理 iff_mpr_iff_true_intro
   条件: {P : 命题} (h : P)
-  结论: Iff.mpr (iff_true_intro h) True.intro = h
+  结论: 当且仅当.mpr (iff_true_intro h) 真.intro = h
   证明: rfl
 -/
 theorem iff_mpr_iff_true_intro {P : Prop} (h : P) : Iff.mpr (iff_true_intro h) True.intro = h := rfl
@@ -1383,7 +1383,7 @@ theorem imp_or'
 
 中文:
 定理 imp_or'
-  条件: {a : Sort*} {b c : 命题}
+  条件: {a : 类型层*} {b c : 命题}
   结论: a -> b ∨ c ↔ (a -> b) ∨ (a -> c)
   证明: open scoped Classical in Decidable.imp_or'
 
@@ -1703,7 +1703,7 @@ theorem forall_cond_comm
   proof: ⟨fun h a b ha hb => h a ha b hb, fun h a ha b hb => h a b ha hb⟩
 
 中文:
-定理 forall_cond_comm
+定理 对任意_cond_comm
   条件: {α} {s : α -> 命题} {p : α -> α -> 命题}
   证明: ⟨fun h a b ha hb => h a ha b hb, fun h a ha b hb => h a b ha hb⟩
 -/
@@ -1720,7 +1720,7 @@ theorem forall_mem_comm
   proof: forall_cond_comm
 
 中文:
-定理 forall_mem_comm
+定理 对任意_mem_comm
   条件: {α β} [Membership α β] {s : β} {p : α -> α -> 命题}
   证明: forall_cond_comm
 
@@ -1742,7 +1742,7 @@ lemma ne_of_eq_of_ne
 
 中文:
 引理 ne_of_eq_of_ne
-  条件: {α : Sort*} {a b c : α} (h₁ : a = b) (h₂ : b != c)
+  条件: {α : 类型层*} {a b c : α} (h₁ : a = b) (h₂ : b != c)
   结论: a != c
   证明: h₁.symm ▸ h₂
 -/
@@ -1761,7 +1761,7 @@ alias Ne.trans_eq := ne_of_ne_of_eq
 
 中文:
 引理 ne_of_ne_of_eq
-  条件: {α : Sort*} {a b c : α} (h₁ : a != b) (h₂ : b = c)
+  条件: {α : 类型层*} {a b c : α} (h₁ : a != b) (h₂ : b = c)
   结论: a != c
   证明: h₂ ▸ h₁
 
@@ -1784,8 +1784,8 @@ theorem eq_equivalence
 
 中文:
 定理 eq_equivalence
-  条件: {α : Sort*}
-  结论: Equivalence (@Eq α)
+  条件: {α : 类型层*}
+  结论: 等价 (@相等 α)
   证明: ⟨Eq.refl, @Eq.symm _, @Eq.trans _⟩
 
 Depends on / 依赖: Eq.refl, Eq.symm, Eq.trans
@@ -1804,7 +1804,7 @@ theorem congr_refl_left
 
 中文:
 定理 congr_refl_left
-  条件: {α β : Sort*} (f : α -> β) {a b : α} (h : a = b)
+  条件: {α β : 类型层*} (f : α -> β) {a b : α} (h : a = b)
   证明: rfl
 -/
 theorem congr_refl_left {α β : Sort*} (f : α -> β) {a b : α} (h : a = b) :
@@ -1821,7 +1821,7 @@ theorem congr_refl_right
 
 中文:
 定理 congr_refl_right
-  条件: {α β : Sort*} {f g : α -> β} (h : f = g) (a : α)
+  条件: {α β : 类型层*} {f g : α -> β} (h : f = g) (a : α)
   证明: rfl
 -/
 theorem congr_refl_right {α β : Sort*} {f g : α -> β} (h : f = g) (a : α) :
@@ -1838,7 +1838,7 @@ theorem congr_arg_refl
 
 中文:
 定理 congr_arg_refl
-  条件: {α β : Sort*} (f : α -> β) (a : α)
+  条件: {α β : 类型层*} (f : α -> β) (a : α)
   证明: rfl
 -/
 theorem congr_arg_refl {α β : Sort*} (f : α -> β) (a : α) :
@@ -1857,8 +1857,8 @@ theorem congr_fun_rfl
 
 中文:
 定理 congr_fun_rfl
-  条件: {α β : Sort*} (f : α -> β) (a : α)
-  结论: congr_fun (Eq.refl f) a = Eq.refl (f a)
+  条件: {α β : 类型层*} (f : α -> β) (a : α)
+  结论: congr_fun (相等.refl f) a = 相等.refl (f a)
   证明: rfl
 -/
 theorem congr_fun_rfl {α β : Sort*} (f : α -> β) (a : α) : congr_fun (Eq.refl f) a = Eq.refl (f a) :=
@@ -1875,7 +1875,7 @@ theorem congr_fun_congr_arg
 
 中文:
 定理 congr_fun_congr_arg
-  条件: {α β γ : Sort*} (f : α -> β -> γ) {a a' : α} (p : a = a') (b : β)
+  条件: {α β γ : 类型层*} (f : α -> β -> γ) {a a' : α} (p : a = a') (b : β)
   证明: rfl
 -/
 theorem congr_fun_congr_arg {α β γ : Sort*} (f : α -> β -> γ) {a a' : α} (p : a = a') (b : β) :
@@ -1893,7 +1893,7 @@ theorem rec_heq_of_heq
 
 中文:
 定理 rec_heq_of_heq
-  结论: {α β : Sort _} {a b : α} {C : α -> Sort*} {x : C a} {y : β}
+  结论: {α β : 类型层 _} {a b : α} {C : α -> 类型层*} {x : C a} {y : β}
   证明: eqRec_heq_iff.mpr h
 
 @[simp]
@@ -1917,7 +1917,7 @@ theorem cast_heq_iff_heq
 
 中文:
 定理 cast_heq_iff_heq
-  条件: {α β γ : Sort _} (e : α = β) (a : α) (c : γ)
+  条件: {α β γ : 类型层 _} (e : α = β) (a : α) (c : γ)
   证明: by subst e; rfl
 
 @[simp]
@@ -1938,7 +1938,7 @@ universe u
 
 中文:
 定理 heq_cast_iff_heq
-  条件: {α β γ : Sort _} (e : β = γ) (a : α) (b : β)
+  条件: {α β γ : 类型层 _} (e : β = γ) (a : α) (b : β)
   证明: by subst e; rfl
 
 universe u
@@ -1992,7 +1992,7 @@ lemma heq_iff_exists_eq_cast
     by rintro ⟨rfl, h⟩; rw [h, cast_eq]⟩
 
 中文:
-引理 heq_iff_exists_eq_cast
+引理 heq_iff_存在_eq_cast
   证明: ⟨fun h => ⟨type_eq_of_heq h.symm, eq_cast_iff_heq.mpr h⟩,
     by rintro ⟨rfl, h⟩; rw [h, cast_eq]⟩
 
@@ -2012,7 +2012,7 @@ lemma heq_iff_exists_cast_eq
   simp only [heq_comm (a := a), heq_iff_exists_eq_cast, eq_comm]
 
 中文:
-引理 heq_iff_exists_cast_eq
+引理 heq_iff_存在_cast_eq
   证明: by
   simp only [heq_comm (a := a), heq_iff_exists_eq_cast, eq_comm]
 
@@ -2039,7 +2039,7 @@ theorem forall₂_imp
   proof: forall_imp fun i => forall_imp h i
 
 中文:
-定理 forall₂_imp
+定理 对任意₂_imp
   条件: {p q : 对任意 a, β a -> 命题} (h : 对任意 a b, p a b -> q a b)
   证明: forall_imp fun i => forall_imp h i
 
@@ -2058,7 +2058,7 @@ theorem forall₃_imp
   proof: forall_imp fun a => forall₂_imp h a
 
 中文:
-定理 forall₃_imp
+定理 对任意₃_imp
   条件: {p q : 对任意 a b, γ a b -> 命题} (h : 对任意 a b c, p a b c -> q a b c)
   证明: forall_imp fun a => forall₂_imp h a
 
@@ -2122,7 +2122,7 @@ theorem forall₂_comm
 @[deprecated (since := "2026-03-25")] alias forall₂_swap := forall₂_comm
 
 中文:
-定理 forall₂_comm
+定理 对任意₂_comm
   证明: ⟨swap₂, swap₂⟩
 
 @[deprecated (since := "2026-03-25")] alias forall₂_swap := forall₂_comm
@@ -2143,7 +2143,7 @@ theorem imp_forall_iff
   proof: forall_comm
 
 中文:
-定理 imp_forall_iff
+定理 imp_对任意_iff
   条件: {α : 类型} {p : 命题} {q : α -> 命题}
   结论: (p -> 对任意 x, q x) ↔ 对任意 x, p -> q x
   证明: forall_comm
@@ -2166,7 +2166,7 @@ lemma imp_forall_iff_forall
 @[deprecated (since := "2026-03-25")] alias exists_swap := exists_comm
 
 中文:
-引理 imp_forall_iff_forall
+引理 imp_对任意_iff_对任意
   条件: (A : 命题) (B : A -> 命题)
   结论: (A -> 对任意 h : A, B h) ↔ 对任意 h : A, B h
   证明: by
@@ -2188,7 +2188,7 @@ theorem exists_and_exists_comm
   proof: ⟨fun ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ => ⟨a, b, ⟨ha, hb⟩⟩, fun ⟨a, b, ⟨ha, hb⟩⟩ => ⟨⟨a, ha⟩, ⟨b, hb⟩⟩⟩
 
 中文:
-定理 exists_and_exists_comm
+定理 存在_and_存在_comm
   条件: {P : α -> 命题} {Q : β -> 命题}
   证明: ⟨fun ⟨⟨a, ha⟩, ⟨b, hb⟩⟩ => ⟨a, b, ⟨ha, hb⟩⟩, fun ⟨a, b, ⟨ha, hb⟩⟩ => ⟨⟨a, ha⟩, ⟨b, hb⟩⟩⟩
 -/
@@ -2207,7 +2207,7 @@ theorem not_forall_not
   proof: open scoped Classical in Decidable.not_forall_not
 
 中文:
-定理 not_forall_not
+定理 not_对任意_not
   结论: (¬对任意 x, ¬p x) ↔ 存在 x, p x
   证明: open scoped Classical in Decidable.not_forall_not
 
@@ -2229,7 +2229,7 @@ lemma forall_or_exists_not
   rw [← not_forall]; exact em _
 
 中文:
-引理 forall_or_exists_not
+引理 对任意_or_存在_not
   条件: (P : α -> 命题)
   结论: (对任意 a, P a) ∨ 存在 a, ¬P a
   证明: by
@@ -2251,7 +2251,7 @@ lemma exists_or_forall_not
   rw [← not_exists]; exact em _
 
 中文:
-引理 exists_or_forall_not
+引理 存在_or_对任意_not
   条件: (P : α -> 命题)
   结论: (存在 a, P a) ∨ 对任意 a, ¬P a
   证明: by
@@ -2277,8 +2277,8 @@ exact if hb : b then h' a fun _ => hb else hb h fun x => (Classical.not_imp.1 (h
 @[mfld_simps]
 
 中文:
-定理 forall_imp_iff_exists_imp
-  条件: {α : Sort*} {p : α -> 命题} {b : 命题} [ha : Nonempty α]
+定理 对任意_imp_iff_存在_imp
+  条件: {α : 类型层*} {p : α -> 命题} {b : 命题} [ha : 非空 α]
   证明: by
   classical
   let ⟨a⟩ := ha
@@ -2306,8 +2306,8 @@ theorem forall_true_iff
   proof: imp_true_iff _
 
 中文:
-定理 forall_true_iff
-  结论: (α -> True) ↔ True
+定理 对任意_true_iff
+  结论: (α -> 真) ↔ 真
   证明: imp_true_iff _
 
 Depends on / 依赖: imp_true_iff
@@ -2326,9 +2326,9 @@ theorem forall_true_iff'
   proof: iff_true_intro fun _ => of_iff_true (h _)
 
 中文:
-定理 forall_true_iff'
-  条件: (h : 对任意 a, p a ↔ True)
-  结论: (对任意 a, p a) ↔ True
+定理 对任意_true_iff'
+  条件: (h : 对任意 a, p a ↔ 真)
+  结论: (对任意 a, p a) ↔ 真
   证明: iff_true_intro fun _ => of_iff_true (h _)
 
 Depends on / 依赖: iff_true_intro, of_iff_true
@@ -2347,9 +2347,9 @@ theorem forall₂_true_iff
   proof: by simp
 
 中文:
-定理 forall₂_true_iff
-  条件: {β : α -> Sort*}
-  结论: (对任意 a, β a -> True) ↔ True
+定理 对任意₂_true_iff
+  条件: {β : α -> 类型层*}
+  结论: (对任意 a, β a -> 真) ↔ 真
   证明: by simp
 -/
 theorem forall₂_true_iff {β : α -> Sort*} : (forall a, β a -> True) ↔ True := by simp
@@ -2364,8 +2364,8 @@ theorem forall₃_true_iff
   proof: by simp
 
 中文:
-定理 forall₃_true_iff
-  条件: {β : α -> Sort*} {γ : 对任意 a, β a -> Sort*}
+定理 对任意₃_true_iff
+  条件: {β : α -> 类型层*} {γ : 对任意 a, β a -> 类型层*}
   证明: by simp
 -/
 theorem forall₃_true_iff {β : α -> Sort*} {γ : forall a, β a -> Sort*} :
@@ -2381,7 +2381,7 @@ theorem Decidable.and_forall_ne
   simp only [← @forall_eq _ p a, ← forall_and, ← or_imp, Decidable.em, forall_const]
 
 中文:
-定理 Decidable.and_forall_ne
+定理 可判定.and_对任意_ne
   条件: [DecidableEq α] (a : α) {p : α -> 命题}
   证明: by
   simp only [← @forall_eq _ p a, ← forall_and, ← or_imp, Decidable.em, forall_const]
@@ -2402,7 +2402,7 @@ theorem and_forall_ne
   proof: open scoped Classical in Decidable.and_forall_ne a
 
 中文:
-定理 and_forall_ne
+定理 and_对任意_ne
   条件: (a : α)
   结论: (p a ∧ 对任意 b, b != a -> p b) ↔ 对任意 b, p b
   证明: open scoped Classical in Decidable.and_forall_ne a
@@ -2424,7 +2424,7 @@ theorem Ne.ne_or_ne
 @[simp]
 
 中文:
-定理 Ne.ne_or_ne
+定理 不等.ne_or_ne
   条件: {x y : α} (z : α) (h : x != y)
   结论: x != z ∨ y != z
   证明: not_and_or.1 mt (and_imp.2 (· ▸ ·)) h.symm
@@ -2449,7 +2449,7 @@ theorem exists_apply_eq_apply'
 @[simp]
 
 中文:
-定理 exists_apply_eq_apply'
+定理 存在_apply_eq_apply'
   条件: (f : α -> β) (a' : α)
   结论: 存在 a, f a' = f a
   证明: ⟨a', rfl⟩
@@ -2471,7 +2471,7 @@ lemma exists_apply_eq_apply2
 @[simp]
 
 中文:
-引理 exists_apply_eq_apply2
+引理 存在_apply_eq_apply2
   条件: {α β γ} {f : α -> β -> γ} {a : α} {b : β}
   结论: 存在 x y, f x y = f a b
   证明: ⟨a, b, rfl⟩
@@ -2494,7 +2494,7 @@ lemma exists_apply_eq_apply2'
 @[simp]
 
 中文:
-引理 exists_apply_eq_apply2'
+引理 存在_apply_eq_apply2'
   条件: {α β γ} {f : α -> β -> γ} {a : α} {b : β}
   结论: 存在 x y, f a b = f x y
   证明: ⟨a, b, rfl⟩
@@ -2516,7 +2516,7 @@ lemma exists_apply_eq_apply3
 @[simp]
 
 中文:
-引理 exists_apply_eq_apply3
+引理 存在_apply_eq_apply3
   条件: {α β γ δ} {f : α -> β -> γ -> δ} {a : α} {b : β} {c : γ}
   证明: ⟨a, b, c, rfl⟩
 
@@ -2536,7 +2536,7 @@ lemma exists_apply_eq_apply3'
   proof: ⟨a, b, c, rfl⟩
 
 中文:
-引理 exists_apply_eq_apply3'
+引理 存在_apply_eq_apply3'
   条件: {α β γ δ} {f : α -> β -> γ -> δ} {a : α} {b : β} {c : γ}
   证明: ⟨a, b, c, rfl⟩
 -/
@@ -2554,7 +2554,7 @@ theorem exists_apply_eq
   proof: ⟨fun _ => b, rfl⟩
 
 中文:
-定理 exists_apply_eq
+定理 存在_apply_eq
   条件: (a : α) (b : β)
   结论: 存在 f : α -> β, f a = b
   证明: ⟨fun _ => b, rfl⟩
@@ -2570,7 +2570,7 @@ theorem exists_exists_and_eq_and
   proof: ⟨fun ⟨_, ⟨a, ha, hab⟩, hb⟩ => ⟨a, ha, hab.symm ▸ hb⟩, fun ⟨a, hp, hq⟩ => ⟨f a, ⟨a, hp, rfl⟩, hq⟩⟩
 
 中文:
-定理 exists_exists_and_eq_and
+定理 存在_存在_and_eq_and
   条件: {f : α -> β} {p : α -> 命题} {q : β -> 命题}
   证明: ⟨fun ⟨_, ⟨a, ha, hab⟩, hb⟩ => ⟨a, ha, hab.symm ▸ hb⟩, fun ⟨a, hp, hq⟩ => ⟨f a, ⟨a, hp, rfl⟩, hq⟩⟩
 -/
@@ -2587,7 +2587,7 @@ theorem exists_exists_eq_and
   proof: ⟨fun ⟨_, ⟨a, ha⟩, hb⟩ => ⟨a, ha.symm ▸ hb⟩, fun ⟨a, ha⟩ => ⟨f a, ⟨a, rfl⟩, ha⟩⟩
 
 中文:
-定理 exists_exists_eq_and
+定理 存在_存在_eq_and
   条件: {f : α -> β} {p : β -> 命题}
   证明: ⟨fun ⟨_, ⟨a, ha⟩, hb⟩ => ⟨a, ha.symm ▸ hb⟩, fun ⟨a, ha⟩ => ⟨f a, ⟨a, rfl⟩, ha⟩⟩
 -/
@@ -2605,7 +2605,7 @@ theorem exists_exists_and_exists_and_eq_and
     fun ⟨a, ha, b, hb, hab⟩ => ⟨f a b, ⟨a, ha, b, hb, rfl⟩, hab⟩⟩
 
 中文:
-定理 exists_exists_and_exists_and_eq_and
+定理 存在_存在_and_存在_and_eq_and
   结论: {α β γ : 类型}
   证明: ⟨fun ⟨_, ⟨a, ha, b, hb, hab⟩, hc⟩ => ⟨a, ha, b, hb, hab.symm ▸ hc⟩,
     fun ⟨a, ha, b, hb, hab⟩ => ⟨f a b, ⟨a, ha, b, hb, rfl⟩, hab⟩⟩
@@ -2626,7 +2626,7 @@ theorem exists_exists_exists_and_eq
     fun ⟨a, b, hab⟩ => ⟨f a b, ⟨a, b, rfl⟩, hab⟩⟩
 
 中文:
-定理 exists_exists_exists_and_eq
+定理 存在_存在_存在_and_eq
   结论: {α β γ : 类型}
   证明: ⟨fun ⟨_, ⟨a, b, hab⟩, hc⟩ => ⟨a, b, hab.symm ▸ hc⟩,
     fun ⟨a, b, hab⟩ => ⟨f a b, ⟨a, b, rfl⟩, hab⟩⟩
@@ -2646,7 +2646,7 @@ theorem forall_apply_eq_imp_iff'
   proof: by simp
 
 中文:
-定理 forall_apply_eq_imp_iff'
+定理 对任意_apply_eq_imp_iff'
   条件: {f : α -> β} {p : β -> 命题}
   证明: by simp
 -/
@@ -2662,7 +2662,7 @@ theorem forall_eq_apply_imp_iff'
   proof: by simp
 
 中文:
-定理 forall_eq_apply_imp_iff'
+定理 对任意_eq_apply_imp_iff'
   条件: {f : α -> β} {p : β -> 命题}
   证明: by simp
 -/
@@ -2678,7 +2678,7 @@ theorem exists₂_comm
   simp only [@exists_comm (κ₁ _), @exists_comm ι₁]
 
 中文:
-定理 exists₂_comm
+定理 存在₂_comm
   证明: by
   simp only [@exists_comm (κ₁ _), @exists_comm ι₁]
 
@@ -2699,7 +2699,7 @@ theorem And.exists
   proof: ⟨fun ⟨h, H⟩ => ⟨h.1, h.2, H⟩, fun ⟨hp, hq, H⟩ => ⟨⟨hp, hq⟩, H⟩⟩
 
 中文:
-定理 And.exists
+定理 与.存在
   条件: {p q : 命题} {f : p ∧ q -> 命题}
   结论: (存在 h, f h) ↔ 存在 hp hq, f ⟨hp, hq⟩
   证明: ⟨fun ⟨h, H⟩ => ⟨h.1, h.2, H⟩, fun ⟨hp, hq, H⟩ => ⟨⟨hp, hq⟩, H⟩⟩
@@ -2716,8 +2716,8 @@ theorem forall_or_of_or_forall
   proof: h.imp_right fun h₂ => h₂ x
 
 中文:
-定理 forall_or_of_or_forall
-  条件: {α : Sort*} {p : α -> 命题} {b : 命题} (h : b ∨ 对任意 x, p x) (x : α)
+定理 对任意_or_of_or_对任意
+  条件: {α : 类型层*} {p : α -> 命题} {b : 命题} (h : b ∨ 对任意 x, p x) (x : α)
   证明: h.imp_right fun h₂ => h₂ x
 
 Depends on / 依赖: h.imp_right, imp_right
@@ -2737,8 +2737,8 @@ theorem Decidable.forall_or_left
     Or.inr fun x => (h x).resolve_left hq, forall_or_of_or_forall⟩
 
 中文:
-定理 Decidable.forall_or_left
-  条件: {q : 命题} {p : α -> 命题} [Decidable q]
+定理 可判定.对任意_or_left
+  条件: {q : 命题} {p : α -> 命题} [可判定 q]
   证明: ⟨fun h => if hq : q then Or.inl hq else
     Or.inr fun x => (h x).resolve_left hq, forall_or_of_or_forall⟩
 -/
@@ -2757,7 +2757,7 @@ theorem forall_or_left
   proof: open scoped Classical in Decidable.forall_or_left
 
 中文:
-定理 forall_or_left
+定理 对任意_or_left
   条件: {q} {p : α -> 命题}
   结论: (对任意 x, q ∨ p x) ↔ q ∨ 对任意 x, p x
   证明: open scoped Classical in Decidable.forall_or_left
@@ -2777,8 +2777,8 @@ theorem Decidable.forall_or_right
   proof: by simp [or_comm, Decidable.forall_or_left]
 
 中文:
-定理 Decidable.forall_or_right
-  条件: {q} {p : α -> 命题} [Decidable q]
+定理 可判定.对任意_or_right
+  条件: {q} {p : α -> 命题} [可判定 q]
   证明: by simp [or_comm, Decidable.forall_or_left]
 -/
 protected theorem Decidable.forall_or_right {q} {p : α -> Prop} [Decidable q] :
@@ -2796,7 +2796,7 @@ theorem forall_or_right
 @[simp]
 
 中文:
-定理 forall_or_right
+定理 对任意_or_right
   条件: {q} {p : α -> 命题}
   结论: (对任意 x, p x ∨ q) ↔ (对任意 x, p x) ∨ q
   证明: open scoped Classical in Decidable.forall_or_right
@@ -2818,7 +2818,7 @@ theorem forall_and_index
   proof: ⟨fun h hp hq => h ⟨hp, hq⟩, fun h h1 => h h1.1 h1.2⟩
 
 中文:
-定理 forall_and_index
+定理 对任意_and_index
   条件: {p q : 命题} {r : p ∧ q -> 命题}
   证明: ⟨fun h hp hq => h ⟨hp, hq⟩, fun h h1 => h h1.1 h1.2⟩
 -/
@@ -2835,7 +2835,7 @@ theorem forall_and_index'
   proof: (forall_and_index (r := fun h => r h.1 h.2)).symm
 
 中文:
-定理 forall_and_index'
+定理 对任意_and_index'
   条件: {p q : 命题} {r : p -> q -> 命题}
   证明: (forall_and_index (r := fun h => r h.1 h.2)).symm
 
@@ -2854,9 +2854,9 @@ theorem Exists.fst
   statement: Exists p -> b
 
 中文:
-定理 Exists.fst
+定理 存在.fst
   条件: {b : 命题} {p : b -> 命题}
-  结论: Exists p -> b
+  结论: 存在 p -> b
 -/
 theorem Exists.fst {b : Prop} {p : b -> Prop} : Exists p -> b
   | ⟨h, _⟩ => h
@@ -2870,9 +2870,9 @@ theorem Exists.snd
   statement: forall h : Exists p, p h.fst
 
 中文:
-定理 Exists.snd
+定理 存在.snd
   条件: {b : 命题} {p : b -> 命题}
-  结论: 对任意 h : Exists p, p h.fst
+  结论: 对任意 h : 存在 p, p h.fst
 -/
 theorem Exists.snd {b : Prop} {p : b -> Prop} : forall h : Exists p, p h.fst
   | ⟨_, h⟩ => h
@@ -2888,9 +2888,9 @@ theorem Prop.exists_iff
     (fun H => .inl <| by simpa only [H] using h₂), fun h => h.elim (.intro _) (.intro _)⟩
 
 中文:
-定理 Prop.exists_iff
+定理 命题.存在_iff
   条件: {p : 命题 -> 命题}
-  结论: (存在 h, p h) ↔ p False ∨ p True
+  结论: (存在 h, p h) ↔ p 假 ∨ p 真
   证明: ⟨fun ⟨h₁, h₂⟩ => by_cases (fun H : h₁ => .inr <| by simpa only [H] using h₂)
     (fun H => .inl <| by simpa only [H] using h₂), fun h => h.elim (.intro _) (.intro _)⟩
 
@@ -2910,9 +2910,9 @@ theorem Prop.forall_iff
   proof: ⟨fun H => ⟨H _, H _⟩, fun ⟨h₁, h₂⟩ h => by by_cases H : h <;> simpa only [H]⟩
 
 中文:
-定理 Prop.forall_iff
+定理 命题.对任意_iff
   条件: {p : 命题 -> 命题}
-  结论: (对任意 h, p h) ↔ p False ∧ p True
+  结论: (对任意 h, p h) ↔ p 假 ∧ p 真
   证明: ⟨fun H => ⟨H _, H _⟩, fun ⟨h₁, h₂⟩ h => by by_cases H : h <;> simpa only [H]⟩
 -/
 theorem Prop.forall_iff {p : Prop -> Prop} : (forall h, p h) ↔ p False ∧ p True :=
@@ -2928,7 +2928,7 @@ theorem exists_iff_of_forall
   proof: ⟨Exists.fst, fun H => ⟨H, h H⟩⟩
 
 中文:
-定理 exists_iff_of_forall
+定理 存在_iff_of_对任意
   条件: {p : 命题} {q : p -> 命题} (h : 对任意 h, q h)
   结论: (存在 h, q h) ↔ p
   证明: ⟨Exists.fst, fun H => ⟨H, h H⟩⟩
@@ -2948,7 +2948,7 @@ theorem exists_prop_of_false
   proof: mt Exists.fst
 
 中文:
-定理 exists_prop_of_false
+定理 存在_prop_of_false
   条件: {p : 命题} {q : p -> 命题}
   结论: ¬p -> ¬存在 h' : p, q h'
   证明: mt Exists.fst
@@ -2968,7 +2968,7 @@ theorem forall_prop_congr
   proof: ⟨fun h1 h2 => (hq _).1 (h1 (hp.2 h2)), fun h1 h2 => (hq _).2 (h1 (hp.1 h2))⟩
 
 中文:
-定理 forall_prop_congr
+定理 对任意_prop_congr
   条件: {p p' : 命题} {q q' : p -> 命题} (hq : 对任意 h, q h ↔ q' h) (hp : p ↔ p')
   证明: ⟨fun h1 h2 => (hq _).1 (h1 (hp.2 h2)), fun h1 h2 => (hq _).2 (h1 (hp.1 h2))⟩
 -/
@@ -2985,7 +2985,7 @@ theorem forall_prop_congr'
   proof: propext (forall_prop_congr hq hp)
 
 中文:
-定理 forall_prop_congr'
+定理 对任意_prop_congr'
   条件: {p p' : 命题} {q q' : p -> 命题} (hq : 对任意 h, q h ↔ q' h) (hp : p ↔ p')
   证明: propext (forall_prop_congr hq hp)
 
@@ -3047,7 +3047,7 @@ lemma eq_true_intro
 中文:
 引理 eq_true_intro
   条件: {a : 命题} (h : a)
-  结论: a = True
+  结论: a = 真
   证明: propext (iff_true_intro h)
 
 Depends on / 依赖: iff_true_intro, propext
@@ -3066,7 +3066,7 @@ lemma eq_false_intro
 中文:
 引理 eq_false_intro
   条件: {a : 命题} (h : ¬a)
-  结论: a = False
+  结论: a = 假
   证明: propext (iff_false_intro h)
 
 Depends on / 依赖: iff_false_intro, propext
@@ -3109,9 +3109,9 @@ theorem forall_true_left
 @[simp]
 
 中文:
-定理 forall_true_left
-  条件: (p : True -> 命题)
-  结论: (对任意 x, p x) ↔ p True.intro
+定理 对任意_true_left
+  条件: (p : 真 -> 命题)
+  结论: (对任意 x, p x) ↔ p 真.intro
   证明: forall_prop_of_true _
 
 @[simp]
@@ -3132,8 +3132,8 @@ lemma Subsingleton.forall₂_iff
   simp [Subsingleton.elim _ i]
 
 中文:
-引理 Subsingleton.forall₂_iff
-  条件: {ι : Sort*} [Subsingleton ι] (P : ι -> ι -> 命题)
+引理 子单例.对任意₂_iff
+  条件: {ι : 类型层*} [子单例 ι] (P : ι -> ι -> 命题)
   证明: by
   refine forall_congr' fun i => ?_
   have : Nonempty ι := ⟨i⟩
@@ -3225,7 +3225,7 @@ definition decEq
 
 中文:
 定义 decEq
-  签名: (α : Sort*)
+  签名: (α : 类型层*)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -3241,8 +3241,8 @@ definition existsCases
   body: if h : exists a, p a then H (Classical.choose h) (Classical.choose_spec h) else H0
 
 中文:
-定义 existsCases
-  签名: {α C : Sort*} {p : α -> 命题} (H0 : C) (H : 对任意 a, p a -> C)
+定义 存在Cases
+  签名: {α C : 类型层*} {p : α -> 命题} (H0 : C) (H : 对任意 a, p a -> C)
   定义体: if h : exists a, p a then H (Classical.choose h) (Classical.choose_spec h) else H0
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec
@@ -3260,7 +3260,7 @@ theorem some_spec₂
 
 中文:
 定理 some_spec₂
-  结论: {α : Sort*} {p : α -> 命题} {h : 存在 a, p a} (q : α -> 命题)
+  结论: {α : 类型层*} {p : α -> 命题} {h : 存在 a, p a} (q : α -> 命题)
   证明: hpq _ choose_spec _
 
 Depends on / 依赖: choose_spec
@@ -3278,7 +3278,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def byContradiction' {α : Sort*} (H : ¬(α -> False))
+  签名: def byContradiction' {α : 类型层*} (H : ¬(α -> 假))
   定义体: Classical.choice (peirce _ False) fun h => (H fun a => h ⟨a⟩).elim
 -/
 protected noncomputable def byContradiction' {α : Sort*} (H : ¬(α -> False)) : α :=
@@ -3294,7 +3294,7 @@ definition choice_of_byContradiction'
 
 中文:
 定义 choice_of_byContradiction'
-  签名: {α : Sort*} (contra : ¬(α -> False) -> α)
+  签名: {α : 类型层*} (contra : ¬(α -> 假) -> α)
   定义体: fun H => contra H.elim
 
 Depends on / 依赖: H.elim, contra
@@ -3320,7 +3320,7 @@ lemma choose_eq
 中文:
 引理 choose_eq
   条件: (a : α)
-  结论: @Exists.choose _ (· = a) ⟨a, rfl⟩ = a
+  结论: @存在.choose _ (· = a) ⟨a, rfl⟩ = a
   证明: @choose_spec _ (· = a) _
 
 @[simp]
@@ -3344,7 +3344,7 @@ alias by_contradiction := byContradiction -- TODO: remove? rename in core?
 中文:
 引理 choose_eq'
   条件: (a : α)
-  结论: @Exists.choose _ (a = ·) ⟨a, rfl⟩ = a
+  结论: @存在.choose _ (a = ·) ⟨a, rfl⟩ = a
   证明: (@choose_spec _ (a = ·) _).symm
 
 alias axiom_of_choice := axiomOfChoice -- TODO: remove? rename in core?
@@ -3377,8 +3377,8 @@ definition Exists.classicalRecOn
   body: H (Classical.choose h) (Classical.choose_spec h)
 
 中文:
-定义 Exists.classicalRecOn
-  签名: {α : Sort*} {p : α -> 命题} (h : 存在 a, p a)
+定义 存在.classicalRecOn
+  签名: {α : 类型层*} {p : α -> 命题} (h : 存在 a, p a)
   定义体: H (Classical.choose h) (Classical.choose_spec h)
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, choose_spec
@@ -3519,7 +3519,7 @@ theorem exists_mem_of_exists
   statement: (exists x, q x) -> exists (x : _) (_ : p x), q x
 
 中文:
-定理 exists_mem_of_exists
+定理 存在_mem_of_存在
   条件: (H : 对任意 x, p x)
   结论: (存在 x, q x) -> 存在 (x : _) (_ : p x), q x
 -/
@@ -3534,7 +3534,7 @@ theorem exists_of_exists_mem
   statement: (exists (x : _) (_ : p x), q x) -> exists x, q x
 
 中文:
-定理 exists_of_exists_mem
+定理 存在_of_存在_mem
   结论: (存在 (x : _) (_ : p x), q x) -> 存在 x, q x
 -/
 theorem exists_of_exists_mem : (exists (x : _) (_ : p x), q x) -> exists x, q x
@@ -3550,7 +3550,7 @@ theorem not_exists_mem
   proof: exists₂_imp
 
 中文:
-定理 not_exists_mem
+定理 not_存在_mem
   结论: (¬存在 x h, P x h) ↔ 对任意 x h, ¬P x h
   证明: exists₂_imp
 -/
@@ -3564,7 +3564,7 @@ theorem not_forall₂_of_exists₂_not
   statement: (exists x h, ¬P x h) -> ¬forall x h, P x h
 
 中文:
-定理 not_forall₂_of_exists₂_not
+定理 not_对任意₂_of_存在₂_not
   结论: (存在 x h, ¬P x h) -> ¬对任意 x h, P x h
 
 Depends on / 依赖: Not.decidable_imp_symm, decidable_imp_symm, nx.decidable_imp_symm
@@ -3583,8 +3583,8 @@ theorem Decidable.not_forall₂
     fun h' => ⟨x, h, h'⟩, not_forall₂_of_exists₂_not⟩
 
 中文:
-定理 Decidable.not_forall₂
-  条件: [Decidable (存在 x h, ¬P x h)] [对任意 x h, Decidable (P x h)]
+定理 可判定.not_对任意₂
+  条件: [可判定 (存在 x h, ¬P x h)] [对任意 x h, 可判定 (P x h)]
   证明: ⟨Not.decidable_imp_symm fun nx x h => nx.decidable_imp_symm
     fun h' => ⟨x, h, h'⟩, not_forall₂_of_exists₂_not⟩
 -/
@@ -3602,7 +3602,7 @@ theorem not_forall₂
   proof: open scoped Classical in Decidable.not_forall₂
 
 中文:
-定理 not_forall₂
+定理 not_对任意₂
   结论: (¬对任意 x h, P x h) ↔ 存在 x h, ¬P x h
   证明: open scoped Classical in Decidable.not_forall₂
 
@@ -3620,7 +3620,7 @@ theorem forall₂_and
   proof: Iff.trans (forall_congr' fun _ => forall_and) forall_and
 
 中文:
-定理 forall₂_and
+定理 对任意₂_and
   结论: (对任意 x h, P x h ∧ Q x h) ↔ (对任意 x h, P x h) ∧ 对任意 x h, Q x h
   证明: Iff.trans (forall_congr' fun _ => forall_and) forall_and
 
@@ -3638,8 +3638,8 @@ theorem forall_and_left
   proof: by rw [forall_and, forall_const]
 
 中文:
-定理 forall_and_left
-  条件: [Nonempty α] (q : 命题) (p : α -> 命题)
+定理 对任意_and_left
+  条件: [非空 α] (q : 命题) (p : α -> 命题)
   证明: by rw [forall_and, forall_const]
 
 Depends on / 依赖: forall_and, forall_const
@@ -3656,8 +3656,8 @@ theorem forall_and_right
   proof: by rw [forall_and, forall_const]
 
 中文:
-定理 forall_and_right
-  条件: [Nonempty α] (p : α -> 命题) (q : 命题)
+定理 对任意_and_right
+  条件: [非空 α] (p : α -> 命题) (q : 命题)
   证明: by rw [forall_and, forall_const]
 
 Depends on / 依赖: forall_and, forall_const
@@ -3674,7 +3674,7 @@ theorem exists_mem_or
   proof: Iff.trans (exists_congr fun _ => exists_or) exists_or
 
 中文:
-定理 exists_mem_or
+定理 存在_mem_or
   结论: (存在 x h, P x h ∨ Q x h) ↔ (存在 x h, P x h) ∨ 存在 x h, Q x h
   证明: Iff.trans (exists_congr fun _ => exists_or) exists_or
 
@@ -3692,7 +3692,7 @@ theorem forall₂_or_left
   proof: Iff.trans (forall_congr' fun _ => or_imp) forall_and
 
 中文:
-定理 forall₂_or_left
+定理 对任意₂_or_left
   结论: (对任意 x, p x ∨ q x -> r x) ↔ (对任意 x, p x -> r x) ∧ 对任意 x, q x -> r x
   证明: Iff.trans (forall_congr' fun _ => or_imp) forall_and
 
@@ -3711,7 +3711,7 @@ theorem exists_mem_or_left
   exact Iff.trans (exists_congr fun x => or_and_right) exists_or
 
 中文:
-定理 exists_mem_or_left
+定理 存在_mem_or_left
   证明: by
   simp only [exists_prop]
   exact Iff.trans (exists_congr fun x => or_and_right) exists_or
@@ -3908,7 +3908,7 @@ theorem Ne.dite_eq_left_iff
   proof: dite_eq_left_iff.trans ⟨fun H => of_not_not fun h' => h h' (H h').symm, fun h H => (H h).elim⟩
 
 中文:
-定理 Ne.dite_eq_left_iff
+定理 不等.dite_eq_left_iff
   条件: (h : 对任意 h, a != B h)
   结论: dite P (fun _ => a) B = a ↔ P
   证明: dite_eq_left_iff.trans ⟨fun H => of_not_not fun h' => h h' (H h').symm, fun h H => (H h).elim⟩
@@ -3926,7 +3926,7 @@ theorem Ne.dite_eq_right_iff
   proof: dite_eq_right_iff.trans ⟨fun H h' => h h' (H h'), fun h' H => (h' H).elim⟩
 
 中文:
-定理 Ne.dite_eq_right_iff
+定理 不等.dite_eq_right_iff
   条件: (h : 对任意 h, A h != b)
   结论: (dite P A fun _ => b) = b ↔ ¬P
   证明: dite_eq_right_iff.trans ⟨fun H h' => h h' (H h'), fun h' H => (h' H).elim⟩
@@ -3944,7 +3944,7 @@ theorem Ne.ite_eq_left_iff
   proof: Ne.dite_eq_left_iff fun _ => h
 
 中文:
-定理 Ne.ite_eq_left_iff
+定理 不等.ite_eq_left_iff
   条件: (h : a != b)
   结论: ite P a b = a ↔ P
   证明: Ne.dite_eq_left_iff fun _ => h
@@ -3962,7 +3962,7 @@ theorem Ne.ite_eq_right_iff
   proof: Ne.dite_eq_right_iff fun _ => h
 
 中文:
-定理 Ne.ite_eq_right_iff
+定理 不等.ite_eq_right_iff
   条件: (h : a != b)
   结论: ite P a b = b ↔ ¬P
   证明: Ne.dite_eq_right_iff fun _ => h
@@ -3980,7 +3980,7 @@ theorem Ne.dite_ne_left_iff
   proof: dite_ne_left_iff.trans exists_iff_of_forall h
 
 中文:
-定理 Ne.dite_ne_left_iff
+定理 不等.dite_ne_left_iff
   条件: (h : 对任意 h, a != B h)
   结论: dite P (fun _ => a) B != a ↔ ¬P
   证明: dite_ne_left_iff.trans exists_iff_of_forall h
@@ -3998,7 +3998,7 @@ theorem Ne.dite_ne_right_iff
   proof: dite_ne_right_iff.trans exists_iff_of_forall h
 
 中文:
-定理 Ne.dite_ne_right_iff
+定理 不等.dite_ne_right_iff
   条件: (h : 对任意 h, A h != b)
   结论: (dite P A fun _ => b) != b ↔ P
   证明: dite_ne_right_iff.trans exists_iff_of_forall h
@@ -4016,7 +4016,7 @@ theorem Ne.ite_ne_left_iff
   proof: Ne.dite_ne_left_iff fun _ => h
 
 中文:
-定理 Ne.ite_ne_left_iff
+定理 不等.ite_ne_left_iff
   条件: (h : a != b)
   结论: ite P a b != a ↔ ¬P
   证明: Ne.dite_ne_left_iff fun _ => h
@@ -4034,7 +4034,7 @@ theorem Ne.ite_ne_right_iff
   proof: Ne.dite_ne_right_iff fun _ => h
 
 中文:
-定理 Ne.ite_ne_right_iff
+定理 不等.ite_ne_right_iff
   条件: (h : a != b)
   结论: ite P a b != b ↔ P
   证明: Ne.dite_ne_right_iff fun _ => h
@@ -4091,7 +4091,7 @@ theorem apply_dite₂
 
 中文:
 定理 apply_dite₂
-  结论: {α β γ : Sort*} (f : α -> β -> γ) (P : 命题) [Decidable P]
+  结论: {α β γ : 类型层*} (f : α -> β -> γ) (P : 命题) [可判定 P]
   证明: by
   by_cases h : P <;> simp [h]
 -/
@@ -4110,7 +4110,7 @@ theorem apply_ite₂
 
 中文:
 定理 apply_ite₂
-  条件: {α β γ : Sort*} (f : α -> β -> γ) (P : 命题) [Decidable P] (a b : α) (c d : β)
+  条件: {α β γ : 类型层*} (f : α -> β -> γ) (P : 命题) [可判定 P] (a b : α) (c d : β)
   证明: apply_dite₂ f P (fun _ => a) (fun _ => b) (fun _ => c) fun _ => d
 -/
 theorem apply_ite₂ {α β γ : Sort*} (f : α -> β -> γ) (P : Prop) [Decidable P] (a b : α) (c d : β) :
@@ -4163,7 +4163,7 @@ theorem apply_ite_left
 
 中文:
 定理 apply_ite_left
-  结论: {α β γ : Sort*} (f : α -> β -> γ) (P : 命题) [Decidable P]
+  结论: {α β γ : 类型层*} (f : α -> β -> γ) (P : 命题) [可判定 P]
   证明: by grind
 -/
 theorem apply_ite_left {α β γ : Sort*} (f : α -> β -> γ) (P : Prop) [Decidable P]
@@ -4386,8 +4386,8 @@ theorem Function.Injective.ite
   proof: fun x y _ => by rcases em (p x) with (hx | hx) <;> rcases em (p y) with (hy | hy) <;> grind
 
 中文:
-定理 Function.Injective.ite
-  结论: {α β : Sort*} {p : β -> 命题} [DecidablePred p] {g : β -> α}
+定理 函数.单射.ite
+  结论: {α β : 类型层*} {p : β -> 命题} [DecidablePred p] {g : β -> α}
   证明: fun x y _ => by rcases em (p x) with (hx | hx) <;> rcases em (p y) with (hy | hy) <;> grind
 -/
 theorem Function.Injective.ite {α β : Sort*} {p : β -> Prop} [DecidablePred p] {g : β -> α}

@@ -47,7 +47,7 @@ definition equalizer
 
 中文:
 定义 equalizer
-  签名: : Subfunctor F₁ where
+  签名: : 子函子 F₁ where
   定义体: Set.ofPred (fun x => exists (hx : x in A.obj _), f.app _ ⟨x, hx⟩ = g.app _ ⟨x, hx⟩)
   map φ x := by
     rintro ⟨hx, h⟩
@@ -77,7 +77,7 @@ lemma equalizer_le
 
 中文:
 引理 equalizer_le
-  结论: Subfunctor.equalizer f g <= A
+  结论: 子函子.equalizer f g <= A
   证明: fun _ _ h => h.1
 
 @[simp]
@@ -96,7 +96,7 @@ lemma equalizer_self
 
 中文:
 引理 equalizer_self
-  结论: Subfunctor.equalizer f f = A
+  结论: 子函子.equalizer f f = A
   证明: by aesop
 -/
 lemma equalizer_self : Subfunctor.equalizer f f = A := by aesop
@@ -134,7 +134,7 @@ lemma range_le_equalizer_iff
 
 中文:
 引理 range_le_equalizer_iff
-  条件: {G : C ⥤ Type w} (φ : G ⟶ A.toFunctor)
+  条件: {G : C ⥤ 类型 w} (φ : G ⟶ A.toFunctor)
   证明: by
   rw [NatTrans.ext_iff]
   simp [le_def, Set.subset_def, ConcreteCategory.hom_ext_iff, funext_iff]
@@ -196,7 +196,7 @@ definition equalizer.ι
 
 中文:
 定义 equalizer.ι
-  签名: : (Subfunctor.equalizer f g).toFunctor ⟶ A.toFunctor
+  签名: : (子函子.equalizer f g).toFunctor ⟶ A.toFunctor
   定义体: homOfLe (equalizer_le f g)
 -/
 def equalizer.ι : (Subfunctor.equalizer f g).toFunctor ⟶ A.toFunctor :=
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (equalizer.ι f g)
+  签名: 单态射 (equalizer.ι f g)
   定义体: by
   dsimp [equalizer.ι]
   infer_instance
@@ -242,7 +242,7 @@ lemma equalizer.ι_ι
 
 中文:
 引理 equalizer.ι_ι
-  结论: equalizer.ι f g ≫ A.ι = (Subfunctor.equalizer f g).ι
+  结论: equalizer.ι f g ≫ A.ι = (子函子.equalizer f g).ι
   证明: rfl
 
 @[reassoc]
@@ -280,7 +280,7 @@ definition equalizer.lift
 
 中文:
 定义 equalizer.lift
-  签名: {G : C ⥤ Type w} (φ : G ⟶ A.toFunctor)
+  签名: {G : C ⥤ 类型 w} (φ : G ⟶ A.toFunctor)
   定义体: Subfunctor.lift (φ ≫ A.ι) (by simpa only [range_le_equalizer_iff] using w)
 
 @[reassoc (attr := simp)]
@@ -303,7 +303,7 @@ lemma equalizer.lift_ι'
 
 中文:
 引理 equalizer.lift_ι'
-  结论: {G : C ⥤ Type w} (φ : G ⟶ A.toFunctor)
+  结论: {G : C ⥤ 类型 w} (φ : G ⟶ A.toFunctor)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -324,7 +324,7 @@ lemma equalizer.lift_ι
 
 中文:
 引理 equalizer.lift_ι
-  结论: {G : C ⥤ Type w} (φ : G ⟶ A.toFunctor)
+  结论: {G : C ⥤ 类型 w} (φ : G ⟶ A.toFunctor)
   证明: rfl
 -/
 lemma equalizer.lift_ι {G : C ⥤ Type w} (φ : G ⟶ A.toFunctor)
@@ -347,7 +347,7 @@ definition equalizer.fork
 
 中文:
 定义 equalizer.fork
-  签名: : Limits.Fork f g
+  签名: : Limits.叉 f g
   定义体: Limits.Fork.ofι (equalizer.ι f g) (equalizer.condition f g)
 
 @[simp]
@@ -385,7 +385,7 @@ definition equalizer.forkIsLimit
 
 中文:
 定义 equalizer.forkIsLimit
-  签名: : Limits.IsLimit (equalizer.fork f g)
+  签名: : Limits.是极限 (equalizer.fork f g)
   定义体: Limits.Fork.IsLimit.mk _
     (fun s => equalizer.lift _ _ s.ι s.condition)
     (fun s => by dsimp)

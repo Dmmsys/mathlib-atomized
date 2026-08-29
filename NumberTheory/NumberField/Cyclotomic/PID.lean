@@ -46,8 +46,8 @@ theorem three_pid
 
 中文:
 定理 three_pid
-  条件: [IsCyclotomicExtension {3} Rat K]
-  结论: IsPrincipalIdealRing (𝓞 K)
+  条件: [是CyclotomicExtension {3} 有理数 K]
+  结论: 是主理想环 (𝓞 K)
   证明: by
   apply RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt
   rw [discr_prime 3 K]; rw [IsCyclotomicExtension.finrank (n := 3) K
@@ -86,8 +86,8 @@ theorem five_pid
 
 中文:
 定理 five_pid
-  条件: [IsCyclotomicExtension {5} Rat K]
-  结论: IsPrincipalIdealRing (𝓞 K)
+  条件: [是CyclotomicExtension {5} 有理数 K]
+  结论: 是主理想环 (𝓞 K)
   证明: by
   have : Fact (Nat.Prime 5) := ⟨Nat.prime_five⟩
   apply RingOfIntegers.isPrincipalIdealRing_of_abs_discr_lt

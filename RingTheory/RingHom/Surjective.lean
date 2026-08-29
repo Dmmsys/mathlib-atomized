@@ -101,7 +101,7 @@ theorem surjective_isStableUnderBaseChange
 
 中文:
 定理 surjective_isStableUnderBaseChange
-  结论: IsStableUnderBaseChange surjective
+  结论: 是StableUnderBaseChange surjective
   证明: by
   refine IsStableUnderBaseChange.mk surjective_respectsIso ?_
   introv h x
@@ -216,7 +216,7 @@ theorem surjective_localRingHom_of_surjective
 
 中文:
 定理 surjective_localRingHom_of_surjective
-  结论: {R S : 类型u} [CommRing R] [CommRing S]
+  结论: {R S : 类型u} [交换环 R] [交换环 S]
   证明: have : IsLocalization (Submonoid.map f (Ideal.comap f P).primeCompl) (Localization.AtPrime P) :=
     (Submonoid.map_comap_eq_of_surjective h P.primeCompl).symm ▸ Localization.isLocalization
   surjective_localizationPreserves _ _ _ _ h

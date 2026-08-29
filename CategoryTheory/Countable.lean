@@ -34,7 +34,7 @@ instance discreteCountable
 
 中文:
 实例 discreteCountable
-  签名: {α : 类型} [Countable α]
+  签名: {α : 类型} [可数 α]
   定义体: Countable.of_equiv α discreteEquiv.symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, discreteEquiv, discreteEquiv.symm, of_equiv
@@ -53,11 +53,11 @@ class CountableCategory
     - countableHom : forall j j' : J, Countable (j ⟶ j')  [default: by infer_instance]
 
 中文:
-类 CountableCategory
-  参数: (J : 类型) [Category* J]
+类 余untable范畴
+  参数: (J : 类型) [范畴* J]
   公理与运算 (2 个):
-    - countableObj : Countable J  [默认: by infer_instance]
-    - countableHom : 对任意 j j' : J, Countable (j ⟶ j')  [默认: by infer_instance]
+    - countableObj : 可数 J  [默认: by infer_instance]
+    - countableHom : 对任意 j j' : J, 可数 (j ⟶ j')  [默认: by infer_instance]
 
 Depends on / 依赖: Countable, countableHom, infer_instance
 -/
@@ -76,7 +76,7 @@ instance countableCategoryDiscreteOfCountable
 
 中文:
 实例 countableCategoryDiscreteOfCountable
-  签名: (J : 类型) [Countable J]
+  签名: (J : 类型) [可数 J]
 -/
 instance countableCategoryDiscreteOfCountable (J : Type*) [Countable J] :
     CountableCategory (Discrete J) where
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: CountableCategory 自然数
+  签名: 余untable范畴 自然数
 -/
 instance : CountableCategory Nat where
 
@@ -111,7 +111,7 @@ abbreviation ObjAsType
 
 中文:
 缩写 ObjAsType
-  签名: : Type
+  签名: : 类型
   定义体: InducedCategory α (equivShrink.{0} α).symm
 
 Depends on / 依赖: InducedCategory, equivShrink
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (ObjAsType α)
+  签名: 可数 (ObjAsType α)
   定义体: Countable.of_equiv α (equivShrink.{0} α)
 
 Depends on / 依赖: Countable, Countable.of_equiv, equivShrink, of_equiv
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: CountableCategory (ObjAsType α)
+  签名: 余untable范畴 (ObjAsType α)
 -/
 instance : CountableCategory (ObjAsType α) where
 
@@ -211,7 +211,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (HomAsType α)
+  签名: 小范畴 (HomAsType α)
   定义体: inferInstanceAs SmallCategory (ShrinkHoms _)
 
 Depends on / 依赖: ShrinkHoms, SmallCategory
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (HomAsType α)
+  签名: 可数 (HomAsType α)
   定义体: Countable.of_equiv α (equivShrink.{0} α)
 
 Depends on / 依赖: Countable, Countable.of_equiv, equivShrink, of_equiv
@@ -249,7 +249,7 @@ instance :
 
 中文:
 实例 :
-  签名: CountableCategory (HomAsType α)
+  签名: 余untable范畴 (HomAsType α)
 -/
 instance : CountableCategory (HomAsType α) where
 
@@ -288,7 +288,7 @@ instance countableCategoryOpposite
 
 中文:
 实例 countableCategoryOpposite
-  签名: {J : 类型} [Category* J] [CountableCategory J]
+  签名: {J : 类型} [范畴* J] [余untable范畴 J]
   定义体: Countable.of_equiv _ equivToOpposite
   countableHom j j' := Countable.of_equiv _ (opEquiv j j').symm
 
@@ -313,7 +313,7 @@ instance countableCategoryUlift
 
 中文:
 实例 countableCategoryUlift
-  签名: {J : 类型v} [Category.{v} J] [CountableCategory J]
+  签名: {J : 类型v} [范畴.{v} J] [余untable范畴 J]
   定义体: instCountableULift
   countableHom := fun i j =>
     have : Countable ((ULiftHom.objDown i).down ⟶ (ULiftHom.objDown j).down) := inferInstance

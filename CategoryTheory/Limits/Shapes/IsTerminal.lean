@@ -106,7 +106,7 @@ abbreviation IsTerminal
   body: IsLimit (asEmptyCone X)
 
 中文:
-缩写 IsTerminal
+缩写 是终止
   签名: (X : C)
   定义体: IsLimit (asEmptyCone X)
 
@@ -149,7 +149,7 @@ definition isTerminalEquivUnique
 
 中文:
 定义 isTerminalEquivUnique
-  签名: (F : Discrete.{0} PEmpty.{1} ⥤ C) (Y : C)
+  签名: (F : 离散.{0} 命题空.{1} ⥤ C) (Y : C)
   定义体: { default := t.lift ⟨X, ⟨by cat_disch, by simp⟩⟩
       uniq := fun f =>
         t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
@@ -184,8 +184,8 @@ definition IsTerminal.ofUnique
   fac := fun _ ⟨j⟩ => j.elim
 
 中文:
-定义 IsTerminal.ofUnique
-  签名: (Y : C) [h : 对任意 X : C, Unique (X ⟶ Y)]
+定义 是终止.ofUnique
+  签名: (Y : C) [h : 对任意 X : C, 唯一 (X ⟶ Y)]
   定义体: (h s.pt).default
   fac := fun _ ⟨j⟩ => j.elim
 
@@ -205,7 +205,7 @@ definition IsTerminal.ofUniqueHom
   IsTerminal.ofUnique Y
 
 中文:
-定义 IsTerminal.ofUniqueHom
+定义 是终止.ofUniqueHom
   签名: {Y : C} (h : 对任意 X : C, X ⟶ Y) (uniq : 对任意 (X : C) (m : X ⟶ Y), m = h X)
   定义体: have : forall X : C, Unique (X ⟶ Y) := fun X => ⟨⟨h X⟩, uniq X⟩
   IsTerminal.ofUnique Y
@@ -227,7 +227,7 @@ definition isTerminalTop
 
 中文:
 定义 isTerminalTop
-  签名: {α : 类型} [Preorder α] [OrderTop α]
+  签名: {α : 类型} [预序 α] [有顶序 α]
   定义体: IsTerminal.ofUnique _
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
@@ -246,8 +246,8 @@ definition IsTerminal.ofIso
       inv := { hom := i.inv } }
 
 中文:
-定义 IsTerminal.ofIso
-  签名: {Y Z : C} (hY : IsTerminal Y) (i : Y ≅ Z)
+定义 是终止.ofIso
+  签名: {Y Z : C} (hY : 是终止 Y) (i : Y ≅ Z)
   定义体: IsLimit.ofIsoLimit hY
     { hom := { hom := i.hom }
       inv := { hom := i.inv } }
@@ -271,7 +271,7 @@ definition IsTerminal.equivOfIso
   right_inv _ := Subsingleton.elim _ _
 
 中文:
-定义 IsTerminal.equivOfIso
+定义 是终止.equivOfIso
   签名: {X Y : C} (e : X ≅ Y)
   定义体: IsTerminal.ofIso h e
   invFun h := IsTerminal.ofIso h e.symm
@@ -302,7 +302,7 @@ definition isInitialEquivUnique
 
 中文:
 定义 isInitialEquivUnique
-  签名: (F : Discrete.{0} PEmpty.{1} ⥤ C) (X : C)
+  签名: (F : 离散.{0} 命题空.{1} ⥤ C) (X : C)
   定义体: { default := t.desc ⟨X, ⟨by cat_disch, by simp⟩⟩
       uniq := fun f => t.uniq ⟨X, ⟨by cat_disch, by simp⟩⟩ f (by simp) }
   invFun u :=
@@ -334,7 +334,7 @@ definition IsInitial.ofUnique
 
 中文:
 定义 IsInitial.ofUnique
-  签名: (X : C) [h : 对任意 Y : C, Unique (X ⟶ Y)]
+  签名: (X : C) [h : 对任意 Y : C, 唯一 (X ⟶ Y)]
   定义体: (h s.pt).default
   fac := fun _ ⟨j⟩ => j.elim
 
@@ -376,7 +376,7 @@ definition isInitialBot
 
 中文:
 定义 isInitialBot
-  签名: {α : 类型} [Preorder α] [OrderBot α]
+  签名: {α : 类型} [预序 α] [有底序 α]
   定义体: IsInitial.ofUnique _
 
 Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
@@ -445,8 +445,8 @@ definition IsTerminal.from
   body: t.lift (asEmptyCone Y)
 
 中文:
-定义 IsTerminal.from
-  签名: {X : C} (t : IsTerminal X) (Y : C)
+定义 是终止.from
+  签名: {X : C} (t : 是终止 X) (Y : C)
   定义体: t.lift (asEmptyCone Y)
 
 Depends on / 依赖: asEmptyCone, t.lift
@@ -466,8 +466,8 @@ theorem IsTerminal.hom_ext
 @[simp]
 
 中文:
-定理 IsTerminal.hom_ext
-  条件: {X Y : C} (t : IsTerminal X) (f g : Y ⟶ X)
+定理 是终止.hom_ext
+  条件: {X Y : C} (t : 是终止 X) (f g : Y ⟶ X)
   结论: f = g
   证明: IsLimit.hom_ext t (by simp)
 
@@ -490,8 +490,8 @@ theorem IsTerminal.comp_from
 @[simp]
 
 中文:
-定理 IsTerminal.comp_from
-  条件: {Z : C} (t : IsTerminal Z) {X Y : C} (f : X ⟶ Y)
+定理 是终止.comp_from
+  条件: {Z : C} (t : 是终止 Z) {X Y : C} (f : X ⟶ Y)
   证明: t.hom_ext _ _
 
 @[simp]
@@ -513,8 +513,8 @@ theorem IsTerminal.from_self
   proof: t.hom_ext _ _
 
 中文:
-定理 IsTerminal.from_self
-  条件: {X : C} (t : IsTerminal X)
+定理 是终止.from_self
+  条件: {X : C} (t : 是终止 X)
   结论: t.from X = 𝟙 X
   证明: t.hom_ext _ _
 
@@ -621,9 +621,9 @@ theorem IsTerminal.isSplitMono_from
   proof: IsSplitMono.mk' ⟨t.from _, t.hom_ext _ _⟩
 
 中文:
-定理 IsTerminal.isSplitMono_from
-  条件: {X Y : C} (t : IsTerminal X) (f : X ⟶ Y)
-  结论: IsSplitMono f
+定理 是终止.isSplitMono_from
+  条件: {X Y : C} (t : 是终止 X) (f : X ⟶ Y)
+  结论: 是分裂单态射 f
   证明: IsSplitMono.mk' ⟨t.from _, t.hom_ext _ _⟩
 
 Depends on / 依赖: IsSplitMono, IsSplitMono.mk, hom_ext, t.from, t.hom_ext
@@ -643,7 +643,7 @@ theorem IsInitial.isSplitEpi_to
 中文:
 定理 IsInitial.isSplitEpi_to
   条件: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  结论: IsSplitEpi f
+  结论: 是分裂满态射 f
   证明: IsSplitEpi.mk' ⟨t.to _, t.hom_ext _ _⟩
 
 Depends on / 依赖: IsSplitEpi, IsSplitEpi.mk, hom_ext, t.hom_ext, t.to
@@ -662,9 +662,9 @@ theorem IsTerminal.mono_from
   have := t.isSplitMono_from f; infer_instance
 
 中文:
-定理 IsTerminal.mono_from
-  条件: {X Y : C} (t : IsTerminal X) (f : X ⟶ Y)
-  结论: Mono f
+定理 是终止.mono_from
+  条件: {X Y : C} (t : 是终止 X) (f : X ⟶ Y)
+  结论: 单态射 f
   证明: by
   have := t.isSplitMono_from f; infer_instance
 
@@ -686,7 +686,7 @@ theorem IsInitial.epi_to
 中文:
 定理 IsInitial.epi_to
   条件: {X Y : C} (t : IsInitial X) (f : Y ⟶ X)
-  结论: Epi f
+  结论: 满态射 f
   证明: by
   have := t.isSplitEpi_to f; infer_instance
 
@@ -707,8 +707,8 @@ definition IsTerminal.uniqueUpToIso
   inv := hT.from _
 
 中文:
-定义 IsTerminal.uniqueUpToIso
-  签名: {T T' : C} (hT : IsTerminal T) (hT' : IsTerminal T')
+定义 是终止.uniqueUpToIso
+  签名: {T T' : C} (hT : 是终止 T) (hT' : 是终止 T')
   定义体: hT'.from _
   inv := hT.from _
 -/
@@ -760,7 +760,7 @@ definition isLimitChangeEmptyCone
 
 中文:
 定义 isLimitChangeEmptyCone
-  签名: {c₁ : Cone F₁} (hl : IsLimit c₁) (c₂ : Cone F₂) (hi : c₁.pt ≅ c₂.pt)
+  签名: {c₁ : 锥 F₁} (hl : 是极限 c₁) (c₂ : 锥 F₂) (hi : c₁.pt ≅ c₂.pt)
   定义体: hl.lift ⟨c.pt, by cat_disch, by simp⟩ ≫ hi.hom
   uniq c f _ := by
     dsimp
@@ -794,7 +794,7 @@ definition isLimitEmptyConeEquiv
 
 中文:
 定义 isLimitEmptyConeEquiv
-  签名: (c₁ : Cone F₁) (c₂ : Cone F₂) (h : c₁.pt ≅ c₂.pt)
+  签名: (c₁ : 锥 F₁) (c₂ : 锥 F₂) (h : c₁.pt ≅ c₂.pt)
   定义体: isLimitChangeEmptyCone C hl c₂ h
   invFun hl := isLimitChangeEmptyCone C hl c₁ h.symm
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
@@ -826,7 +826,7 @@ definition isLimitEquivIsTerminalOfIsEmpty
 
 中文:
 定义 isLimitEquivIsTerminalOfIsEmpty
-  签名: {J : 类型} [Category* J] [IsEmpty J] {F : J ⥤ C} (c : Cone F)
+  签名: {J : 类型} [范畴* J] [是空 J] {F : J ⥤ C} (c : 锥 F)
   定义体: (IsLimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
     (isLimitEmptyConeEquiv _ _ _ (.refl _))
 
@@ -852,7 +852,7 @@ definition isColimitChangeEmptyCocone
 
 中文:
 定义 isColimitChangeEmptyCocone
-  签名: {c₁ : Cocone F₁} (hl : IsColimit c₁) (c₂ : Cocone F₂)
+  签名: {c₁ : 余锥 F₁} (hl : 是余极限 c₁) (c₂ : 余锥 F₂)
   定义体: hi.inv ≫ hl.desc ⟨c.pt, by cat_disch, by simp⟩
   uniq c f _ := by
     dsimp
@@ -886,7 +886,7 @@ definition isColimitEmptyCoconeEquiv
 
 中文:
 定义 isColimitEmptyCoconeEquiv
-  签名: (c₁ : Cocone F₁) (c₂ : Cocone F₂) (h : c₁.pt ≅ c₂.pt)
+  签名: (c₁ : 余锥 F₁) (c₂ : 余锥 F₂) (h : c₁.pt ≅ c₂.pt)
   定义体: isColimitChangeEmptyCocone C hl c₂ h
   invFun hl := isColimitChangeEmptyCocone C hl c₁ h.symm
   left_inv := by dsimp [Function.LeftInverse]; intro; simp only [eq_iff_true_of_subsingleton]
@@ -919,7 +919,7 @@ definition isColimitEquivIsInitialOfIsEmpty
 
 中文:
 定义 isColimitEquivIsInitialOfIsEmpty
-  签名: {J : 类型} [Category* J] [IsEmpty J]
+  签名: {J : 类型} [范畴* J] [是空 J]
   定义体: (IsColimit.whiskerEquivalenceEquiv (equivalenceOfIsEmpty (Discrete PEmpty.{1}) _)).trans
     (isColimitEmptyCoconeEquiv _ _ _ (.refl _))
 
@@ -989,7 +989,7 @@ definition initialOpOfTerminal
 
 中文:
 定义 initialOpOfTerminal
-  签名: {X : C} (t : IsTerminal X)
+  签名: {X : C} (t : 是终止 X)
   定义体: (t.from s.pt.unop).op
   uniq _ _ _ := Quiver.Hom.unop_inj (t.hom_ext _ _)
 
@@ -1010,7 +1010,7 @@ definition initialUnopOfTerminal
 
 中文:
 定义 initialUnopOfTerminal
-  签名: {X : Cᵒᵖ} (t : IsTerminal X)
+  签名: {X : Cᵒᵖ} (t : 是终止 X)
   定义体: (t.from (Opposite.op s.pt)).unop
   uniq _ _ _ := Quiver.Hom.op_inj (t.hom_ext _ _)
 
@@ -1030,10 +1030,10 @@ class InitialMonoClass
     - isInitial_mono_from : forall {I} (X : C) (hI : IsInitial I), Mono (hI.to X)
 
 中文:
-类 InitialMonoClass
-  参数: (C : 类型u₁) [Category.{v₁} C]
+类 InitialMono类
+  参数: (C : 类型u₁) [范畴.{v₁} C]
   公理与运算 (1 个):
-    - isInitial_mono_from : 对任意 {I} (X : C) (hI : IsInitial I), Mono (hI.to X)
+    - isInitial_mono_from : 对任意 {I} (X : C) (hI : IsInitial I), 单态射 (hI.to X)
 -/
 class InitialMonoClass (C : Type u₁) [Category.{v₁} C] : Prop where
   /-- The map from the (any as stated) initial object to any other object is a
@@ -1052,7 +1052,7 @@ theorem IsInitial.mono_from
 
 中文:
 定理 IsInitial.mono_from
-  条件: [InitialMonoClass C] {I} {X : C} (hI : IsInitial I) (f : I ⟶ X)
+  条件: [InitialMono类 C] {I} {X : C} (hI : IsInitial I) (f : I ⟶ X)
   证明: by
   rw [hI.hom_ext f (hI.to X)]
   apply InitialMonoClass.isInitial_mono_from
@@ -1075,8 +1075,8 @@ theorem InitialMonoClass.of_isInitial
     apply mono_comp
 
 中文:
-定理 InitialMonoClass.of_isInitial
-  条件: {I : C} (hI : IsInitial I) (h : 对任意 X, Mono (hI.to X))
+定理 InitialMono类.of_isInitial
+  条件: {I : C} (hI : IsInitial I) (h : 对任意 X, 单态射 (hI.to X))
   证明: by
     rw [hI'.hom_ext (hI'.to X) ((hI'.uniqueUpToIso hI).hom ≫ hI.to X)]
     apply mono_comp
@@ -1098,8 +1098,8 @@ theorem InitialMonoClass.of_isTerminal
   proof: InitialMonoClass.of_isInitial hI fun X => mono_of_mono_fac (hI.hom_ext (_ ≫ hT.from X) (hI.to T))
 
 中文:
-定理 InitialMonoClass.of_isTerminal
-  结论: {I T : C} (hI : IsInitial I) (hT : IsTerminal T)
+定理 InitialMono类.of_isTerminal
+  结论: {I T : C} (hI : IsInitial I) (hT : 是终止 T)
   证明: InitialMonoClass.of_isInitial hI fun X => mono_of_mono_fac (hI.hom_ext (_ ≫ hT.from X) (hI.to T))
 
 Depends on / 依赖: InitialMonoClass, InitialMonoClass.of_isInitial, hI.hom_ext, hI.to, hT.from, hom_ext, mono_of_mono_fac, of_isInitial
@@ -1193,7 +1193,7 @@ definition coneOfDiagramTerminal
 
 中文:
 定义 coneOfDiagramTerminal
-  签名: {X : J} (hX : IsTerminal X) (F : J ⥤ C)
+  签名: {X : J} (hX : 是终止 X) (F : J ⥤ C)
   定义体: F.obj X
   π :=
     { app := fun _ => inv (F.map (hX.from _))
@@ -1226,7 +1226,7 @@ definition limitOfDiagramTerminal
 
 中文:
 定义 limitOfDiagramTerminal
-  签名: {X : J} (hX : IsTerminal X) (F : J ⥤ C)
+  签名: {X : J} (hX : 是终止 X) (F : J ⥤ C)
   定义体: S.π.app _
 -/
 def limitOfDiagramTerminal {X : J} (hX : IsTerminal X) (F : J ⥤ C)
@@ -1251,7 +1251,7 @@ definition coconeOfDiagramTerminal
 
 中文:
 定义 coconeOfDiagramTerminal
-  签名: {X : J} (tX : IsTerminal X) (F : J ⥤ C)
+  签名: {X : J} (tX : 是终止 X) (F : J ⥤ C)
   定义体: F.obj X
   ι :=
     { app := fun j => F.map (tX.from j)
@@ -1280,7 +1280,7 @@ definition colimitOfDiagramTerminal
 
 中文:
 定义 colimitOfDiagramTerminal
-  签名: {X : J} (tX : IsTerminal X) (F : J ⥤ C)
+  签名: {X : J} (tX : 是终止 X) (F : J ⥤ C)
   定义体: s.ι.app X
   uniq s m w := by simp [← w X]
 -/
@@ -1300,8 +1300,8 @@ lemma IsColimit.isIso_ι_app_of_isTerminal
   infer_instance
 
 中文:
-引理 IsColimit.isIso_ι_app_of_isTerminal
-  结论: {F : J ⥤ C} {c : Cocone F} (hc : IsColimit c)
+引理 是余极限.isIso_ι_app_of_isTerminal
+  结论: {F : J ⥤ C} {c : 余锥 F} (hc : 是余极限 c)
   证明: by
   change IsIso (coconePointUniqueUpToIso (colimitOfDiagramTerminal hX F) hc).hom
   infer_instance
@@ -1386,8 +1386,8 @@ lemma IsLimit.isIso_π_app_of_isInitial
   infer_instance
 
 中文:
-引理 IsLimit.isIso_π_app_of_isInitial
-  结论: {F : J ⥤ C} {c : Cone F} (hc : IsLimit c)
+引理 是极限.isIso_π_app_of_isInitial
+  结论: {F : J ⥤ C} {c : 锥 F} (hc : 是极限 c)
   证明: by
   change IsIso (conePointUniqueUpToIso hc (limitOfDiagramInitial hX F)).hom
   infer_instance
@@ -1413,7 +1413,7 @@ lemma isIso_of_isTerminal
 
 中文:
 引理 isIso_of_isTerminal
-  条件: {X Y : C} (hX : IsTerminal X) (hY : IsTerminal Y) (f : X ⟶ Y)
+  条件: {X Y : C} (hX : 是终止 X) (hY : 是终止 Y) (f : X ⟶ Y)
   证明: by
   refine ⟨⟨IsTerminal.from hX Y, ?_⟩⟩
   simp only [IsTerminal.comp_from, IsTerminal.from_self, true_and]
@@ -1508,8 +1508,8 @@ definition IsTerminal.op
     (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
 
 中文:
-定义 IsTerminal.op
-  签名: {X : C} (hX : IsTerminal X)
+定义 是终止.op
+  签名: {X : C} (hX : 是终止 X)
   定义体: IsInitial.ofUniqueHom (fun _ => (hX.from _).op)
     (fun _ _ => Quiver.Hom.unop_inj (hX.hom_ext _ _))
 
@@ -1529,8 +1529,8 @@ definition IsTerminal.unop
     (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
 
 中文:
-定义 IsTerminal.unop
-  签名: {X : Cᵒᵖ} (hX : IsTerminal X)
+定义 是终止.unop
+  签名: {X : Cᵒᵖ} (hX : 是终止 X)
   定义体: IsInitial.ofUniqueHom (fun _ => (hX.from _).unop)
     (fun _ _ => Quiver.Hom.op_inj (hX.hom_ext _ _))
 
@@ -1558,7 +1558,7 @@ definition isTerminalConst
 
 中文:
 定义 isTerminalConst
-  签名: {X : D} (hX : IsTerminal X)
+  签名: {X : D} (hX : 是终止 X)
   定义体: .ofUniqueHom (fun Y => { app Z := hX.from (Y.obj Z) }) (by intros; ext; apply hX.hom_ext)
 
 @[simp]
@@ -1580,7 +1580,7 @@ lemma isTerminalConst_from_app
 
 中文:
 引理 isTerminalConst_from_app
-  结论: {X : D} (hX : IsTerminal X)
+  结论: {X : D} (hX : 是终止 X)
   证明: rfl
 -/
 lemma isTerminalConst_from_app {X : D} (hX : IsTerminal X)

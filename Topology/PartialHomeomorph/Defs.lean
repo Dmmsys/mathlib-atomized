@@ -62,8 +62,8 @@ structure PartialHomeomorph
 
 中文:
 结构 PartialHomeomorph
-  参数: (X : 类型) (Y : 类型) [TopologicalSpace X]
-  继承: PartialEquiv X Y
+  参数: (X : 类型) (Y : 类型) [拓扑空间 X]
+  继承: 部分等价 X Y
   公理与运算 (2 个):
     - continuousOn_toFun : ContinuousOn toFun source
     - continuousOn_invFun : ContinuousOn invFun target
@@ -234,7 +234,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (e : PartialEquiv X Y) (h₁ h₂)
+  条件: (e : 部分等价 X Y) (h₁ h₂)
   结论: (PartialHomeomorph.mk e h₁ h₂ : X -> Y) = e
   证明: rfl
 
@@ -253,7 +253,7 @@ theorem coe_mk_symm
 
 中文:
 定理 coe_mk_symm
-  条件: (e : PartialEquiv X Y) (h₁ h₂)
+  条件: (e : 部分等价 X Y) (h₁ h₂)
   证明: rfl
 -/
 theorem coe_mk_symm (e : PartialEquiv X Y) (h₁ h₂) :
@@ -506,7 +506,7 @@ theorem mapsTo
 
 中文:
 定理 mapsTo
-  结论: MapsTo e e.source e.target
+  结论: 映射到 e e.source e.target
   证明: fun _ => e.map_source
 -/
 protected theorem mapsTo : MapsTo e e.source e.target := fun _ => e.map_source
@@ -521,7 +521,7 @@ theorem mapsTo_symm
 
 中文:
 定理 mapsTo_symm
-  结论: MapsTo e.symm e.target e.source
+  结论: 映射到 e.symm e.target e.source
   证明: e.symm.mapsTo
 -/
 protected theorem mapsTo_symm : MapsTo e.symm e.target e.source :=
@@ -583,7 +583,7 @@ theorem injOn
 
 中文:
 定理 injOn
-  结论: InjOn e e.source
+  结论: 单射限制 e e.source
   证明: e.leftInvOn.injOn
 -/
 protected theorem injOn : InjOn e e.source :=
@@ -599,7 +599,7 @@ theorem bijOn
 
 中文:
 定理 bijOn
-  结论: BijOn e e.source e.target
+  结论: 双射限制 e e.source e.target
   证明: e.invOn.bijOn e.mapsTo e.mapsTo_symm
 -/
 protected theorem bijOn : BijOn e e.source e.target :=
@@ -615,7 +615,7 @@ theorem surjOn
 
 中文:
 定理 surjOn
-  结论: SurjOn e e.source e.target
+  结论: 满射限制 e e.source e.target
   证明: e.bijOn.surjOn
 -/
 protected theorem surjOn : SurjOn e e.source e.target :=
@@ -638,8 +638,8 @@ definition _root_.Homeomorph.toPartialHomeomorphOfImageEq
   continuousOn_invFun := e.symm.continuous.continuousOn
 
 中文:
-定义 _root_.Homeomorph.toPartialHomeomorphOfImageEq
-  签名: (e : X ≃ₜ Y) (s : Set X)
+定义 _root_.同胚.toPartialHomeomorphOfImageEq
+  签名: (e : X ≃ₜ Y) (s : 集合 X)
   定义体: e.toPartialEquivOfImageEq s t h
   continuousOn_toFun := e.continuous.continuousOn
   continuousOn_invFun := e.symm.continuous.continuousOn
@@ -663,7 +663,7 @@ definition _root_.Homeomorph.toPartialHomeomorph
   body: e.toPartialHomeomorphOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
 
 中文:
-定义 _root_.Homeomorph.toPartialHomeomorph
+定义 _root_.同胚.toPartialHomeomorph
   签名: (e : X ≃ₜ Y)
   定义体: e.toPartialHomeomorphOfImageEq univ univ by rw [image_univ, e.surjective.range_eq]
 
@@ -684,7 +684,7 @@ definition replacePartialEquiv
 
 中文:
 定义 replacePartialEquiv
-  签名: (e : PartialHomeomorph X Y) (e' : PartialEquiv X Y)
+  签名: (e : PartialHomeomorph X Y) (e' : 部分等价 X Y)
   定义体: e'
   continuousOn_toFun := h ▸ e.continuousOn_toFun
   continuousOn_invFun := h ▸ e.continuousOn_invFun
@@ -708,7 +708,7 @@ theorem replacePartialEquiv_eq_self
 
 中文:
 定理 replacePartialEquiv_eq_self
-  结论: (e' : PartialEquiv X Y)
+  结论: (e' : 部分等价 X Y)
   证明: by
   cases e
   subst e'
@@ -821,7 +821,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective
+  结论: 函数.双射
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm

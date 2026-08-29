@@ -40,7 +40,7 @@ structure FGModuleRepr
   参数: : 类型u where
   公理与运算 (2 个):
     - (n : 自然数)
-    - (S : Submodule R (Fin n -> R))
+    - (S : 子模 R (有限集 n -> R))
 -/
 structure FGModuleRepr : Type u where
   /-- The natural number `n` that defines the module as a quotient of `Fin n → R` (i.e. `R^n`). -/
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (FGModuleRepr R)
+  签名: 范畴 (FGModuleRepr R)
   定义体: inferInstanceAs (Category (InducedCategory _
     (fun x : FGModuleRepr R => FGModuleCat.of R x)))
 
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (FGModuleRepr R)
+  签名: 小范畴 (FGModuleRepr R)
 -/
 instance : SmallCategory (FGModuleRepr R) where
 
@@ -176,7 +176,7 @@ definition embed
 
 中文:
 定义 embed
-  签名: : FGModuleRepr.{u} R ⥤ FGModuleCat.{max u v} R
+  签名: : FGModuleRepr.{u} R ⥤ FGModuleCat.{最大值 u v} R
   定义体: inducedFunctor _ ⋙ FGModuleCat.ulift R
 
 Depends on / 依赖: FGModuleCat, FGModuleCat.ulift, inducedFunctor
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: (embed R).IsEquivalence
+  签名: (embed R).是等价
   定义体: (fullyFaithfulInducedFunctor _).faithful.comp _ _
   full := (fullyFaithfulInducedFunctor _).full.comp _ _
   essSurj := ⟨fun M => ⟨ofFinite R M,
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FGModuleCat.ulift.{max u v, w} R).IsEquivalence
+  签名: (FGModuleCat.ulift.{最大值 u v, w} R).是等价
   定义体: ⟨fun M => ⟨(embed R).obj (ofFinite R M),
     ⟨(ULift.moduleEquiv.trans <| ULift.moduleEquiv.trans <| ofFiniteEquiv R M).toFGModuleCatIso⟩⟩⟩
 

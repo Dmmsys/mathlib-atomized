@@ -82,7 +82,7 @@ have (i : ι) : ContinuousSMul G (f i).V := ContinuousSMul.mk by
 
 中文:
 引理 has_decomp_quotients
-  结论: (X : Action FintypeCat G)
+  结论: (X : 作用 FintypeCat G)
   证明: by
   obtain ⟨ι, hf, f, u, hc⟩ := has_decomp_connected_components' X
   let (i : ι) : TopologicalSpace (f i).V := ⊥
@@ -139,7 +139,7 @@ definition fiberIsoQuotientStabilizer
 
 中文:
 定义 fiberIsoQuotientStabilizer
-  签名: (X : C) [IsConnected X] (x : F.obj X)
+  签名: (X : C) [是连通 X] (x : F.obj X)
   定义体: haveI : IsConnected ((functorToAction F).obj X) := PreservesIsConnected.preserves
   letI : Fintype (Aut F ⧸ MulAction.stabilizer (Aut F) x) := fintypeQuotientStabilizer x
   FintypeCat.isoQuotientStabilizerOfIsConnected ((functorToAction F).obj X) x
@@ -218,7 +218,7 @@ definition quotientDiag
 
 中文:
 定义 quotientDiag
-  签名: : SingleObj (V.toSubgroup ⧸ Subgroup.subgroupOf U V) ⥤ C
+  签名: : SingleObj (V.toSubgroup ⧸ 子群.subgroupOf U V) ⥤ C
   定义体: SingleObj.functor (quotientToEndObjectHom V h u)
 -/
 private def quotientDiag : SingleObj (V.toSubgroup ⧸ Subgroup.subgroupOf U V) ⥤ C :=
@@ -387,8 +387,8 @@ lemma exists_lift_of_quotient_openSubgroup
   have hn : Nonempty (F.obj <| (∏ᶜ fun X : I => X)) := nonempty_fiber_p
 
 中文:
-引理 exists_lift_of_quotient_openSubgroup
-  条件: (V : OpenSubgroup (Aut F))
+引理 存在_lift_of_quotient_openSubgroup
+  条件: (V : 开子群 (Aut F))
   证明: by
   obtain ⟨I, hf, hc, hi⟩ := exists_set_ker_evaluation_subset_of_isOpen F (one_mem V) V.isOpen'
   have (X : I) : IsConnected X.val := hc X X.property
@@ -450,8 +450,8 @@ theorem exists_lift_of_continuous
     Sigma.mapIso (fun i => (gu i).some) ≪≫ u⟩⟩
 
 中文:
-定理 exists_lift_of_continuous
-  结论: (X : Action FintypeCat (Aut F))
+定理 存在_lift_of_continuous
+  结论: (X : 作用 FintypeCat (Aut F))
   证明: by
   obtain ⟨ι, hfin, f, ⟨u⟩⟩ := has_decomp_quotients X
   choose g gu using (fun i => exists_lift_of_quotient_openSubgroup (f i))

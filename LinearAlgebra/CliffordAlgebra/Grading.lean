@@ -80,7 +80,7 @@ theorem range_ι_le_evenOdd_one
 
 中文:
 定理 range_ι_le_evenOdd_one
-  结论: LinearMap.range (ι Q) <= evenOdd Q 1
+  结论: 线性映射.range (ι Q) <= evenOdd Q 1
   证明: by
   refine le_trans ?_ (le_iSup _ ⟨1, Nat.cast_one⟩)
   exact (pow_one _).ge
@@ -195,7 +195,7 @@ instance evenOdd.gradedMonoid
 
 中文:
 实例 evenOdd.gradedMonoid
-  签名: : SetLike.GradedMonoid (evenOdd Q) where
+  签名: : 集合状.分次幺半群 (evenOdd Q) where
   定义体: Submodule.one_le.mp (one_le_evenOdd_zero Q)
   mul_mem _i _j _p _q hp hq := Submodule.mul_le.mp (evenOdd_mul_le Q _ _) _ hp _ hq
 
@@ -214,7 +214,7 @@ definition GradedAlgebra.ι
   body: DirectSum.lof R (ZMod 2) (fun i => ↥(evenOdd Q i)) 1 ∘ₗ (ι Q).codRestrict _ (ι_mem_evenOdd_one Q)
 
 中文:
-定义 GradedAlgebra.ι
+定义 分次代数.ι
   签名: : M ->ₗ[R] ⨁ i : ZMod 2, evenOdd Q i
   定义体: DirectSum.lof R (ZMod 2) (fun i => ↥(evenOdd Q i)) 1 ∘ₗ (ι Q).codRestrict _ (ι_mem_evenOdd_one Q)
 -/
@@ -235,7 +235,7 @@ nonrec theorem GradedAlgebra.ι_sq_scalar (m : M) :
   exact DirectSum.of_eq_of_gradedMonoid_eq (Sigma.subtype_ext rfl <| ι_sq_scala
 
 中文:
-定理 GradedAlgebra.ι_apply
+定理 分次代数.ι_apply
   条件: (m : M)
   证明: rfl
 
@@ -271,7 +271,7 @@ theorem GradedAlgebra.lift_ι_eq
     
 
 中文:
-定理 GradedAlgebra.lift_ι_eq
+定理 分次代数.lift_ι_eq
   条件: (i' : ZMod 2) (x' : evenOdd Q i')
   证明: by
   obtain ⟨x', hx'⟩ := x'
@@ -329,7 +329,7 @@ instance gradedAlgebra
 
 中文:
 实例 gradedAlgebra
-  签名: : GradedAlgebra (evenOdd Q)
+  签名: : 分次代数 (evenOdd Q)
   定义体: GradedAlgebra.ofAlgHom (evenOdd Q)
     -- while not necessary, the `by apply` makes this elaborate faster
     (lift Q ⟨by apply GradedAlgebra.ι Q, by apply GradedAlgebra.ι_sq_scalar Q⟩)
@@ -366,7 +366,7 @@ theorem iSup_ι_range_eq_top
 
 中文:
 定理 iSup_ι_range_eq_top
-  结论: ⨆ i : 自然数, LinearMap.range (ι Q) ^ i = ⊤
+  结论: ⨆ i : 自然数, 线性映射.range (ι Q) ^ i = ⊤
   证明: by
   rw [← (DirectSum.Decomposition.isInternal (evenOdd Q)).submodule_iSup_eq_top]; rw [eq_comm]
   calc
@@ -399,7 +399,7 @@ theorem evenOdd_isCompl
 
 中文:
 定理 evenOdd_isCompl
-  结论: IsCompl (evenOdd Q 0) (evenOdd Q 1)
+  结论: 是补集 (evenOdd Q 0) (evenOdd Q 1)
   证明: (DirectSum.Decomposition.isInternal (evenOdd Q)).isCompl zero_ne_one by
     have : (Finset.univ : Finset (ZMod 2)) = {0, 1} := rfl
     simpa using congr_arg ((↑) : Finset (ZMod 2) -> Set (ZMod 2)) this

@@ -37,7 +37,7 @@ lemma hasSum_mellin
 
 中文:
 引理 hasSum_mellin
-  结论: {a : ι -> Complex} {p : ι -> 实数} {F : 实数 -> Complex} {s : Complex}
+  结论: {a : ι -> 复形} {p : ι -> 实数} {F : 实数 -> 复形} {s : 复形}
   证明: by
   simp_rw [mellin, smul_eq_mul, ← setIntegral_congr_fun measurableSet_Ioi
     (fun t ht => congr_arg _ (hF t ht).tsum_eq), ← tsum_mul_left]
@@ -108,7 +108,7 @@ lemma hasSum_mellin_pi_mul
 
 中文:
 引理 hasSum_mellin_pi_mul
-  结论: {a : ι -> Complex} {q : ι -> 实数} {F : 实数 -> Complex} {s : Complex}
+  结论: {a : ι -> 复形} {q : ι -> 实数} {F : 实数 -> 复形} {s : 复形}
   证明: by
   have hp i : a i = 0 ∨ 0 < π * q i := by rcases hq i with h | h <;> simp [h, pi_pos]
   convert! hasSum_mellin hp hs (by simpa using hF) ?_ using 2 with i
@@ -156,7 +156,7 @@ lemma hasSum_mellin_pi_mul₀
 
 中文:
 引理 hasSum_mellin_pi_mul₀
-  结论: {a : ι -> Complex} {p : ι -> 实数} {F : 实数 -> Complex} {s : Complex}
+  结论: {a : ι -> 复形} {p : ι -> 实数} {F : 实数 -> 复形} {s : 复形}
   证明: by
   have hs' : s != 0 := fun h => lt_irrefl _ (zero_re ▸ h ▸ hs)
   let a' i := if p i = 0 then 0 else a i
@@ -211,7 +211,7 @@ lemma hasSum_mellin_pi_mul_sq
 
 中文:
 引理 hasSum_mellin_pi_mul_sq
-  结论: {a : ι -> Complex} {r : ι -> 实数} {F : 实数 -> Complex} {s : Complex} (hs : 0 < s.re)
+  结论: {a : ι -> 复形} {r : ι -> 实数} {F : 实数 -> 复形} {s : 复形} (hs : 0 < s.re)
   证明: by
   have hs' : 0 < (s / 2).re := by rw [div_ofNat_re]; positivity
   simp_rw [← sq_eq_zero_iff (a := r _)] at hF
@@ -252,7 +252,7 @@ lemma hasSum_mellin_pi_mul_sq'
 
 中文:
 引理 hasSum_mellin_pi_mul_sq'
-  结论: {a : ι -> Complex} {r : ι -> 实数} {F : 实数 -> Complex} {s : Complex} (hs : 0 < s.re)
+  结论: {a : ι -> 复形} {r : ι -> 实数} {F : 实数 -> 复形} {s : 复形} (hs : 0 < s.re)
   证明: by
   have hs₁ : s != 0 := fun h => lt_irrefl _ (zero_re ▸ h ▸ hs)
   have hs₂ : 0 < (s + 1).re := by rw [add_re, one_re]; positivity

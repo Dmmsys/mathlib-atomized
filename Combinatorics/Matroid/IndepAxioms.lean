@@ -113,15 +113,15 @@ structure IndepMatroid
     - (subset_ground : forall I, Indep I -> I subseteq E)
 
 中文:
-结构 IndepMatroid
+结构 独立拟阵
   参数: (α : 类型)
   公理与运算 (7 个):
-    - (E : Set α)
-    - (Indep : Set α -> 命题)
+    - (E : 集合 α)
+    - (Indep : 集合 α -> 命题)
     - (indep_empty : Indep ∅)
     - (indep_subset : 对任意 ⦃I J⦄, Indep J -> I subseteq J -> Indep I)
-    - (indep_aug : 对任意 ⦃I B⦄, Indep I -> ¬ Maximal Indep I -> Maximal Indep B -> 存在 x in B \ I, Indep (insert x I))
-    - (indep_maximal : 对任意 X, X subseteq E -> ExistsMaximalSubset命题erty Indep X)
+    - (indep_aug : 对任意 ⦃I B⦄, Indep I -> ¬ 极大 Indep I -> 极大 Indep B -> 存在 x in B \ I, Indep (insert x I))
+    - (indep_maximal : 对任意 X, X subseteq E -> ExistsMaximalSubsetProperty Indep X)
     - (subset_ground : 对任意 I, Indep I -> I subseteq E)
 
 Depends on / 依赖: Quot.lift.decidablePred, decidablePred
@@ -157,7 +157,7 @@ definition matroid
 
 中文:
 定义 matroid
-  签名: (M : IndepMatroid α)
+  签名: (M : 独立拟阵 α)
   定义体: M.E
   IsBase := Maximal M.Indep
   Indep := M.Indep
@@ -206,7 +206,7 @@ theorem matroid_indep_iff
 
 中文:
 定理 matroid_indep_iff
-  条件: {M : IndepMatroid α} {I : Set α}
+  条件: {M : 独立拟阵 α} {I : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -232,7 +232,7 @@ definition ofFinitary
 
 中文:
 定义 ofFinitary
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: E
   Indep := Indep
   indep_empty := indep_empty
@@ -280,7 +280,7 @@ theorem ofFinitary_indep
 
 中文:
 定理 ofFinitary_indep
-  结论: (E : Set α) (Indep : Set α -> 命题)
+  结论: (E : 集合 α) (Indep : 集合 α -> 命题)
   证明: rfl
 -/
 @[simp] theorem ofFinitary_indep (E : Set α) (Indep : Set α -> Prop)
@@ -298,7 +298,7 @@ instance ofFinitary_finitary
 
 中文:
 实例 ofFinitary_finitary
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: ⟨by simpa⟩
 
 Depends on / 依赖: Setoid, Setoid.refl
@@ -327,7 +327,7 @@ definition ofFinitaryCardAugment
 
 中文:
 定义 ofFinitaryCardAugment
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: IndepMatroid.ofFinitary
     (E := E)
     (Indep := Indep)
@@ -415,7 +415,7 @@ theorem ofFinitaryCardAugment_indep
 
 中文:
 定理 ofFinitaryCardAugment_indep
-  结论: (E : Set α) (Indep : Set α -> 命题)
+  结论: (E : 集合 α) (Indep : 集合 α -> 命题)
   证明: rfl
 -/
 @[simp] theorem ofFinitaryCardAugment_indep (E : Set α) (Indep : Set α -> Prop)
@@ -433,7 +433,7 @@ instance ofFinitaryCardAugment_finitary
 
 中文:
 实例 ofFinitaryCardAugment_finitary
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: ⟨by simpa⟩
 
 Depends on / 依赖: Quot.lift.decidablePred, decidablePred
@@ -462,8 +462,8 @@ theorem _root_.Matroid.existsMaximalSubsetProperty_of_bdd
     r
 
 中文:
-定理 _root_.Matroid.existsMaximalSubsetProperty_of_bdd
-  结论: {P : Set α -> 命题}
+定理 _root_.拟阵.存在MaximalSubsetProperty_of_bdd
+  结论: {P : 集合 α -> 命题}
   证明: by
   obtain ⟨n, hP⟩ := hP
   rintro I hI hIX
@@ -511,7 +511,7 @@ definition ofBdd
 
 中文:
 定义 ofBdd
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: E
   Indep := Indep
   indep_empty := indep_empty
@@ -547,7 +547,7 @@ theorem ofBdd_indep
 
 中文:
 定理 ofBdd_indep
-  结论: (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: rfl
 
 Depends on / 依赖: Quotient, Quotient.lift, decidablePred
@@ -582,7 +582,7 @@ definition ofBddAugment
 
 中文:
 定义 ofBddAugment
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: IndepMatroid.ofBdd (E := E) (Indep := Indep)
     (indep_empty := indep_empty)
     (indep_subset := indep_subset)
@@ -628,7 +628,7 @@ theorem ofBddAugment_E
 
 中文:
 定理 ofBddAugment_E
-  结论: (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: rfl
 -/
 @[simp] theorem ofBddAugment_E (E : Set α) Indep indep_empty indep_subset indep_aug
@@ -645,7 +645,7 @@ theorem ofBddAugment_indep
 
 中文:
 定理 ofBddAugment_indep
-  结论: (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: rfl
 -/
 @[simp] theorem ofBddAugment_indep (E : Set α) Indep indep_empty indep_subset indep_aug
@@ -664,7 +664,7 @@ instance ofBddAugment_rankFinite
 
 中文:
 实例 ofBddAugment_rankFinite
-  签名: (E : Set α) Indep indep_empty indep_subset indep_aug
+  签名: (E : 集合 α) Indep indep_empty indep_subset indep_aug
   定义体: by
   rw [IndepMatroid.ofBddAugment]
   infer_instance
@@ -692,7 +692,7 @@ definition ofFinite
 
 中文:
 定义 ofFinite
-  签名: {E : Set α} (hE : E.Finite) (Indep : Set α -> 命题)
+  签名: {E : 集合 α} (hE : E.有限) (Indep : 集合 α -> 命题)
   定义体: IndepMatroid.ofBddAugment (E := E) (Indep := Indep) (indep_empty := indep_empty)
     (indep_subset := indep_subset)
     (indep_aug := by
@@ -727,7 +727,7 @@ theorem ofFinite_E
 
 中文:
 定理 ofFinite_E
-  条件: {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground
+  条件: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug subset_ground
   证明: rfl
 -/
 @[simp] theorem ofFinite_E {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground :
@@ -744,7 +744,7 @@ theorem ofFinite_indep
 
 中文:
 定理 ofFinite_indep
-  结论: {E : Set α} hE Indep indep_empty indep_subset indep_aug
+  结论: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug
   证明: rfl
 -/
 @[simp] theorem ofFinite_indep {E : Set α} hE Indep indep_empty indep_subset indep_aug
@@ -761,7 +761,7 @@ instance ofFinite_finite
 
 中文:
 实例 ofFinite_finite
-  签名: {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground
+  签名: {E : 集合 α} hE Indep indep_empty indep_subset indep_aug subset_ground
   定义体: ⟨hE⟩
 -/
 instance ofFinite_finite {E : Set α} hE Indep indep_empty indep_subset indep_aug subset_ground :
@@ -785,7 +785,7 @@ definition ofFinset
 
 中文:
 定义 ofFinset
-  签名: [DecidableEq α] (E : Set α) (Indep : Finset α -> 命题)
+  签名: [DecidableEq α] (E : 集合 α) (Indep : 有限集 α -> 命题)
   定义体: IndepMatroid.ofFinitaryCardAugment
     (E := E)
     (Indep := (fun I => (forall (J : Finset α), (J : Set α) subseteq I -> Indep J)))
@@ -824,7 +824,7 @@ theorem ofFinset_E
 
 中文:
 定理 ofFinset_E
-  结论: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: rfl
 -/
 @[simp] theorem ofFinset_E [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
@@ -843,7 +843,7 @@ theorem ofFinset_indep
 
 中文:
 定理 ofFinset_indep
-  结论: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: by
   simp only [IndepMatroid.ofFinset]
   exact ⟨fun h => h _ Subset.rfl, fun h J hJI => indep_subset h hJI⟩
@@ -866,7 +866,7 @@ theorem ofFinset_indep'
 
 中文:
 定理 ofFinset_indep'
-  结论: [DecidableEq α] (E : Set α) Indep indep_empty indep_subset indep_aug
+  结论: [DecidableEq α] (E : 集合 α) Indep indep_empty indep_subset indep_aug
   证明: by
   simp only [IndepMatroid.ofFinset, ofFinitaryCardAugment_indep]
 
@@ -899,7 +899,7 @@ definition ofExistsMatroid
 
 中文:
 定义 ofExistsMatroid
-  签名: (E : Set α) (Indep : Set α -> 命题)
+  签名: (E : 集合 α) (Indep : 集合 α -> 命题)
   定义体: IndepMatroid.matroid
   have hex : exists (M : Matroid α), E = M.E ∧ M.Indep = Indep := by
     obtain ⟨M, rfl, h⟩ := hM; refine ⟨_, rfl, funext (by simp [h])⟩
@@ -936,7 +936,7 @@ definition ofBase
 
 中文:
 定义 ofBase
-  签名: (E : Set α) (IsBase : Set α -> 命题) (存在_isBase : 存在 B, IsBase B)
+  签名: (E : 集合 α) (IsBase : 集合 α -> 命题) (存在_isBase : 存在 B, IsBase B)
   定义体: E
   IsBase := IsBase
   Indep I := (exists B, IsBase B ∧ I subseteq B)
@@ -977,7 +977,7 @@ definition ofExistsFiniteIsBase
 
 中文:
 定义 ofExistsFiniteIsBase
-  签名: (E : Set α) (IsBase : Set α -> 命题)
+  签名: (E : 集合 α) (IsBase : 集合 α -> 命题)
   定义体: Matroid.ofBase
   (E := E)
   (IsBase := IsBase)
@@ -1013,7 +1013,7 @@ theorem ofExistsFiniteIsBase_isBase
 
 中文:
 定理 ofExistsFiniteIsBase_isBase
-  结论: (E : Set α) IsBase 存在_finite_base
+  结论: (E : 集合 α) IsBase 存在_finite_base
   证明: rfl
 -/
 @[simp] theorem ofExistsFiniteIsBase_isBase (E : Set α) IsBase exists_finite_base
@@ -1032,7 +1032,7 @@ instance ofExistsFiniteIsBase_rankFinite
 
 中文:
 实例 ofExistsFiniteIsBase_rankFinite
-  签名: (E : Set α) IsBase 存在_finite_base
+  签名: (E : 集合 α) IsBase 存在_finite_base
   定义体: by
   obtain ⟨B, hB, hfin⟩ := exists_finite_base
   exact Matroid.IsBase.rankFinite_of_finite (by simpa) hfin
@@ -1060,7 +1060,7 @@ definition ofIsBaseOfFinite
 
 中文:
 定义 ofIsBaseOfFinite
-  签名: {E : Set α} (hE : E.Finite) (IsBase : Set α -> 命题)
+  签名: {E : 集合 α} (hE : E.有限) (IsBase : 集合 α -> 命题)
   定义体: Matroid.ofExistsFiniteIsBase (E := E) (IsBase := IsBase)
     (exists_finite_base :=
       let ⟨B, hB⟩ := exists_isBase
@@ -1088,7 +1088,7 @@ theorem ofIsBaseOfFinite_E
 
 中文:
 定理 ofIsBaseOfFinite_E
-  结论: {E : Set α} (hE : E.Finite) IsBase 存在_isBase isBase_exchange
+  结论: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase isBase_exchange
   证明: rfl
 -/
 @[simp] theorem ofIsBaseOfFinite_E {E : Set α} (hE : E.Finite) IsBase exists_isBase isBase_exchange
@@ -1105,7 +1105,7 @@ theorem ofIsBaseOfFinite_isBase
 
 中文:
 定理 ofIsBaseOfFinite_isBase
-  结论: {E : Set α} (hE : E.Finite) IsBase 存在_isBase
+  结论: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase
   证明: rfl
 -/
 @[simp] theorem ofIsBaseOfFinite_isBase {E : Set α} (hE : E.Finite) IsBase exists_isBase
@@ -1122,7 +1122,7 @@ instance ofBaseOfFinite_finite
 
 中文:
 实例 ofBaseOfFinite_finite
-  签名: {E : Set α} (hE : E.Finite) IsBase 存在_isBase
+  签名: {E : 集合 α} (hE : E.有限) IsBase 存在_isBase
   定义体: ⟨hE⟩
 -/
 instance ofBaseOfFinite_finite {E : Set α} (hE : E.Finite) IsBase exists_isBase

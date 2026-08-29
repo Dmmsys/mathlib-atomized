@@ -56,7 +56,7 @@ definition finrank
 
 中文:
 定义 finrank
-  签名: (R M : 类型) [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: (R M : 类型) [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: Cardinal.toNat (Module.rank R M)
 
 Depends on / 依赖: Cardinal, Cardinal.toNat, Module, Module.rank
@@ -76,7 +76,7 @@ theorem finrank_subsingleton
 
 中文:
 定理 finrank_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: finrank R M = 1
   证明: by
   rw [finrank]; rw [rank_subsingleton]; rw [map_one]
@@ -96,7 +96,7 @@ theorem finrank_eq_of_rank_eq
 
 中文:
 定理 finrank_eq_of_rank_eq
-  条件: {n : 自然数} (h : Module.rank R M = ↑n)
+  条件: {n : 自然数} (h : 模.rank R M = ↑n)
   结论: finrank R M = n
   证明: by
   simp [finrank, h]
@@ -116,7 +116,7 @@ lemma rank_eq_one_iff_finrank_eq_one
 
 中文:
 引理 rank_eq_one_iff_finrank_eq_one
-  结论: Module.rank R M = 1 ↔ finrank R M = 1
+  结论: 模.rank R M = 1 ↔ finrank R M = 1
   证明: Cardinal.toNat_eq_one.symm
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_eq_one.symm, toNat_eq_one
@@ -133,7 +133,7 @@ lemma rank_eq_ofNat_iff_finrank_eq_ofNat
   proof: Cardinal.toNat_eq_ofNat.symm
 
 中文:
-引理 rank_eq_ofNat_iff_finrank_eq_ofNat
+引理 rank_eq_of自然数_iff_finrank_eq_of自然数
   条件: (n : 自然数) [自然数.AtLeastTwo n]
   证明: Cardinal.toNat_eq_ofNat.symm
 
@@ -157,7 +157,7 @@ theorem finrank_le_of_rank_le
 
 中文:
 定理 finrank_le_of_rank_le
-  条件: {n : 自然数} (h : Module.rank R M <= ↑n)
+  条件: {n : 自然数} (h : 模.rank R M <= ↑n)
   结论: finrank R M <= n
   证明: by
   rwa [← Cardinal.toNat_le_iff_le_of_lt_aleph0, toNat_natCast] at h
@@ -185,7 +185,7 @@ theorem finrank_lt_of_rank_lt
 
 中文:
 定理 finrank_lt_of_rank_lt
-  条件: {n : 自然数} (h : Module.rank R M < ↑n)
+  条件: {n : 自然数} (h : 模.rank R M < ↑n)
   结论: finrank R M < n
   证明: by
   rwa [← Cardinal.toNat_lt_iff_lt_of_lt_aleph0, toNat_natCast] at h
@@ -216,7 +216,7 @@ theorem lt_rank_of_lt_finrank
 中文:
 定理 lt_rank_of_lt_finrank
   条件: {n : 自然数} (h : n < finrank R M)
-  结论: ↑n < Module.rank R M
+  结论: ↑n < 模.rank R M
   证明: by
   rwa [← Cardinal.toNat_lt_iff_lt_of_lt_aleph0, toNat_natCast]
   · exact natCast_lt_aleph0
@@ -246,7 +246,7 @@ theorem one_lt_rank_of_one_lt_finrank
 中文:
 定理 one_lt_rank_of_one_lt_finrank
   条件: (h : 1 < finrank R M)
-  结论: 1 < Module.rank R M
+  结论: 1 < 模.rank R M
   证明: by
   simpa using lt_rank_of_lt_finrank h
 
@@ -289,9 +289,9 @@ theorem CommSemiring.finrank_self
   proof: finrank_eq_of_rank_eq (rank_self R)
 
 中文:
-定理 CommSemiring.finrank_self
-  条件: (R) [CommSemiring R]
-  结论: Module.finrank R R = 1
+定理 交换半环.finrank_self
+  条件: (R) [交换半环 R]
+  结论: 模.finrank R R = 1
   证明: finrank_eq_of_rank_eq (rank_self R)
 
 Depends on / 依赖: finrank_eq_of_rank_eq, rank_self
@@ -338,7 +338,7 @@ theorem finrank_map_eq
 
 中文:
 定理 finrank_map_eq
-  条件: (f : M ≃ₗ[R] N) (p : Submodule R M)
+  条件: (f : M ≃ₗ[R] N) (p : 子模 R M)
   证明: (f.submoduleMap p).finrank_eq.symm
 
 Depends on / 依赖: f.submoduleMap, finrank_eq, finrank_eq.symm, submoduleMap
@@ -360,8 +360,8 @@ theorem LinearMap.finrank_range_of_inj
 @[simp]
 
 中文:
-定理 LinearMap.finrank_range_of_inj
-  条件: {f : M ->ₗ[R] N} (hf : Function.Injective f)
+定理 线性映射.finrank_range_of_inj
+  条件: {f : M ->ₗ[R] N} (hf : 函数.单射 f)
   证明: by rw [(LinearEquiv.ofInjective f hf).finrank_eq]
 
 @[simp]
@@ -381,8 +381,8 @@ theorem Submodule.finrank_map_subtype_eq
   proof: (Submodule.equivSubtypeMap p q).symm.finrank_eq
 
 中文:
-定理 Submodule.finrank_map_subtype_eq
-  条件: (p : Submodule R M) (q : Submodule R p)
+定理 子模.finrank_map_subtype_eq
+  条件: (p : 子模 R M) (q : 子模 R p)
   证明: (Submodule.equivSubtypeMap p q).symm.finrank_eq
 
 Depends on / 依赖: Submodule, Submodule.equivSubtypeMap, equivSubtypeMap, finrank_eq, symm.finrank_eq
@@ -406,7 +406,7 @@ theorem finrank_top
 
 中文:
 定理 finrank_top
-  结论: finrank R (⊤ : Submodule R M) = finrank R M
+  结论: finrank R (⊤ : 子模 R M) = finrank R M
   证明: by
   unfold finrank
   simp
@@ -430,7 +430,7 @@ theorem finrank_eq_of_equiv_equiv
 
 中文:
 定理 finrank_eq_of_equiv_equiv
-  结论: {R₀ S₀ : 类型} [CommSemiring R₀] [Semiring S₀] [Algebra R₀ S₀]
+  结论: {R₀ S₀ : 类型} [交换半环 R₀] [半环 S₀] [代数 R₀ S₀]
   证明: by
   simpa using! (congr_arg Cardinal.toNat (lift_rank_eq_of_equiv_equiv i j hc))
 

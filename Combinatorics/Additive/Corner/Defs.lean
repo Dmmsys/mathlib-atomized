@@ -50,8 +50,8 @@ structure IsCorner
     - add_eq_add : x₁ + y₂ = x₂ + y₁
 
 中文:
-结构 IsCorner
-  参数: (A : Set (G × G)) (x₁ y₁ x₂ y₂ : G)
+结构 是余rner
+  参数: (A : 集合 (G × G)) (x₁ y₁ x₂ y₂ : G)
   公理与运算 (4 个):
     - fst_fst_mem : (x₁, y₁) in A
     - fst_snd_mem : (x₁, y₂) in A
@@ -74,7 +74,7 @@ definition IsCornerFree
 
 中文:
 定义 IsCornerFree
-  签名: (A : Set (G × G))
+  签名: (A : 集合 (G × G))
   定义体: forall ⦃x₁ y₁ x₂ y₂⦄, IsCorner A x₁ y₁ x₂ y₂ -> x₁ = x₂
 
 Depends on / 依赖: IsCorner
@@ -118,9 +118,9 @@ lemma IsCorner.mono
   add_eq_add := hA.add_eq_add
 
 中文:
-引理 IsCorner.mono
-  条件: (hAB : A subseteq B) (hA : IsCorner A x₁ y₁ x₂ y₂)
-  结论: IsCorner B x₁ y₁ x₂ y₂ where
+引理 是余rner.mono
+  条件: (hAB : A subseteq B) (hA : 是余rner A x₁ y₁ x₂ y₂)
+  结论: 是余rner B x₁ y₁ x₂ y₂ where
   证明: hAB hA.fst_fst_mem
   fst_snd_mem := hAB hA.fst_snd_mem
   snd_fst_mem := hAB hA.snd_fst_mem
@@ -164,7 +164,7 @@ lemma not_isCorner_empty
 
 中文:
 引理 not_isCorner_empty
-  结论: ¬ IsCorner ∅ x₁ y₁ x₂ y₂
+  结论: ¬ 是余rner ∅ x₁ y₁ x₂ y₂
   证明: by simp [isCorner_iff]
 -/
 @[simp] lemma not_isCorner_empty : ¬ IsCorner ∅ x₁ y₁ x₂ y₂ := by simp [isCorner_iff]
@@ -179,8 +179,8 @@ lemma Set.Subsingleton.isCornerFree
   proof: fun _x₁ _y₁ _x₂ _y₂ hxyd => by simpa using hA hxyd.fst_fst_mem hxyd.snd_fst_mem
 
 中文:
-引理 Set.Subsingleton.isCornerFree
-  条件: (hA : A.Subsingleton)
+引理 集合.子单例.isCornerFree
+  条件: (hA : A.子单例)
   结论: IsCornerFree A
   证明: fun _x₁ _y₁ _x₂ _y₂ hxyd => by simpa using hA hxyd.fst_fst_mem hxyd.snd_fst_mem
 -/
@@ -197,7 +197,7 @@ lemma isCornerFree_empty
 
 中文:
 引理 isCornerFree_empty
-  结论: IsCornerFree (∅ : Set (G × G))
+  结论: IsCornerFree (∅ : 集合 (G × G))
   证明: subsingleton_empty.isCornerFree
 
 Depends on / 依赖: isCornerFree, subsingleton_empty, subsingleton_empty.isCornerFree
@@ -234,8 +234,8 @@ lemma IsCorner.image
     hf.add_eq_add (hAs hx₁y₁).1 (hAs hx₁y₂).2 (hAs hx₂y₁).1 (hAs hx₁y₁).2 hxy⟩
 
 中文:
-引理 IsCorner.image
-  结论: (hf : IsAddFreimanHom 2 s t f) (hAs : (A : Set (G × G)) subseteq s ×ˢ s)
+引理 是余rner.像
+  结论: (hf : 是加法Freiman态射 2 s t f) (hAs : (A : 集合 (G × G)) subseteq s ×ˢ s)
   证明: by
   obtain ⟨hx₁y₁, hx₁y₂, hx₂y₁, hxy⟩ := hA
   exact ⟨mem_image_of_mem _ hx₁y₁, mem_image_of_mem _ hx₁y₂, mem_image_of_mem _ hx₂y₁,
@@ -260,7 +260,7 @@ hf' (hAs hxy.fst_fst_mem).1 (hAs hxy.snd_fst_mem).1 hA hxy.image hf hAs
 
 中文:
 引理 IsCornerFree.of_image
-  结论: (hf : IsAddFreimanHom 2 s t f) (hf' : s.InjOn f)
+  结论: (hf : 是加法Freiman态射 2 s t f) (hf' : s.单射限制 f)
   证明: fun _x₁ _y₁ _x₂ _y₂ hxy =>
 hf' (hAs hxy.fst_fst_mem).1 (hAs hxy.snd_fst_mem).1 hA hxy.image hf hAs
 
@@ -288,7 +288,7 @@ lemma isCorner_image
 
 中文:
 引理 isCorner_image
-  结论: (hf : IsAddFreimanIso 2 s t f) (hAs : A subseteq s ×ˢ s)
+  结论: (hf : 是加法FreimanIso 2 s t f) (hAs : A subseteq s ×ˢ s)
   证明: by
   have hf' := hf.bijOn.injOn.prodMap hf.bijOn.injOn
   rw [isCorner_iff]; rw [isCorner_iff]
@@ -327,7 +327,7 @@ alias ⟨IsCorner.of_image,
 
 中文:
 引理 isCornerFree_image
-  条件: (hf : IsAddFreimanIso 2 s t f) (hAs : A subseteq s ×ˢ s)
+  条件: (hf : 是加法FreimanIso 2 s t f) (hAs : A subseteq s ×ˢ s)
   证明: by
   have : Prod.map f f '' A subseteq t ×ˢ t :=
     ((hf.bijOn.mapsTo.prodMap hf.bijOn.mapsTo).mono hAs Subset.rfl).image_subset

@@ -199,7 +199,7 @@ theorem ofPred_mem_eq
 
 中文:
 定理 ofPred_mem_eq
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: { x | x in s } = s
   证明: rfl
 
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (Set α)
+  签名: 补集 (集合 α)
   定义体: ⟨fun s => {x | x ∉ s}⟩
 
 @[simp, grind =, push]
@@ -261,7 +261,7 @@ theorem mem_compl_iff
 
 中文:
 定理 mem_compl_iff
-  条件: (s : Set α) (x : α)
+  条件: (s : 集合 α) (x : α)
   结论: x in sᶜ ↔ x ∉ s
   证明: Iff.rfl
 
@@ -284,7 +284,7 @@ theorem sdiff_eq
 
 中文:
 定理 sdiff_eq
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s \ t = s inter tᶜ
   证明: rfl
 
@@ -310,7 +310,7 @@ theorem mem_sdiff
 
 中文:
 定理 mem_sdiff
-  条件: {s t : Set α} (x : α)
+  条件: {s t : 集合 α} (x : α)
   结论: x in s \ t ↔ x in s ∧ x ∉ t
   证明: Iff.rfl
 
@@ -335,7 +335,7 @@ theorem mem_sdiff_of_mem
 
 中文:
 定理 mem_sdiff_of_mem
-  条件: {s t : Set α} {x : α} (h1 : x in s) (h2 : x ∉ t)
+  条件: {s t : 集合 α} {x : α} (h1 : x in s) (h2 : x ∉ t)
   结论: x in s \ t
   证明: ⟨h1, h2⟩
 
@@ -359,8 +359,8 @@ definition preimage
   body: {x | f x in s}
 
 中文:
-定义 preimage
-  签名: (f : α -> β) (s : Set β)
+定义 原像
+  签名: (f : α -> β) (s : 集合 β)
   定义体: {x | f x in s}
 -/
 def preimage (f : α -> β) (s : Set β) : Set α := {x | f x in s}
@@ -380,7 +380,7 @@ theorem mem_preimage
 
 中文:
 定理 mem_preimage
-  条件: {f : α -> β} {s : Set β} {a : α}
+  条件: {f : α -> β} {s : 集合 β} {a : α}
   结论: a in f ⁻¹' s ↔ f a in s
   证明: Iff.rfl
 
@@ -405,7 +405,7 @@ theorem mem_image
 
 中文:
 定理 mem_image
-  条件: (f : α -> β) (s : Set α) (y : β)
+  条件: (f : α -> β) (s : 集合 α) (y : β)
   结论: y in f '' s ↔ 存在 x in s, f x = y
   证明: Iff.rfl
 
@@ -428,7 +428,7 @@ theorem mem_image_of_mem
 
 中文:
 定理 mem_image_of_mem
-  条件: (f : α -> β) {x : α} {a : Set α} (h : x in a)
+  条件: (f : α -> β) {x : α} {a : 集合 α} (h : x in a)
   结论: f x in f '' a
   证明: ⟨_, h, rfl⟩
 -/
@@ -446,7 +446,7 @@ definition imageFactorization
 
 中文:
 定义 imageFactorization
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: fun p =>
   ⟨f p.1, mem_image_of_mem f p.2⟩
 -/
@@ -463,7 +463,7 @@ definition kernImage
 
 中文:
 定义 kernImage
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: {y | forall ⦃x⦄, f x = y -> x in s}
 -/
 def kernImage (f : α -> β) (s : Set α) : Set β := {y | forall ⦃x⦄, f x = y -> x in s}
@@ -480,7 +480,7 @@ lemma subset_kernImage_iff
 
 中文:
 引理 subset_kernImage_iff
-  条件: {s : Set β} {t : Set α} {f : α -> β}
+  条件: {s : 集合 β} {t : 集合 α} {f : α -> β}
   结论: s subseteq kernImage f t ↔ f ⁻¹' s subseteq t
   证明: ⟨fun h _ hx => h hx rfl,
     fun h _ hx y hy => h (show f y in s from hy.symm ▸ hx)⟩
@@ -588,7 +588,7 @@ lemma rangeFactorization_surjective
 
 中文:
 引理 rangeFactorization_surjective
-  结论: (rangeFactorization f).Surjective
+  结论: (rangeFactorization f).满射
   证明: fun ⟨_, i, rfl⟩ => ⟨i, rfl⟩
 
 Depends on / 依赖: IsOpenImmersion, PresheafedSpace, PresheafedSpace.IsOpenImmersion.ofRestrict, X.toPresheafedSpace, ofRestrict, toPresheafedSpace
@@ -623,7 +623,7 @@ lemma rangeFactorization_eq_rangeFactorization_iff
 
 中文:
 引理 rangeFactorization_eq_rangeFactorization_iff
-  结论: {ι : Sort*} {α : 类型} {f : ι -> α}
+  结论: {ι : 类型层*} {α : 类型} {f : ι -> α}
   证明: by
   simp [Set.rangeFactorization]
 -/
@@ -642,7 +642,7 @@ lemma rangeFactorization_eq_iff
 
 中文:
 引理 rangeFactorization_eq_iff
-  条件: {ι : Sort*} {α : 类型} {f : ι -> α} (a : ι) (b : Set.range f)
+  条件: {ι : 类型层*} {α : 类型} {f : ι -> α} (a : ι) (b : 集合.range f)
   证明: by
   rw [Set.rangeFactorization]; rw [← b.coe_eta b.2]; rw [Subtype.ext_iff]
 
@@ -710,7 +710,7 @@ theorem comp_rangeSplitting
 中文:
 定理 comp_rangeSplitting
   条件: (f : α -> β)
-  结论: f ∘ rangeSplitting f = Subtype.val
+  结论: f ∘ rangeSplitting f = 子类型.val
   证明: by
   ext
   simp only [Function.comp_apply]
@@ -733,7 +733,7 @@ lemma Subtype.range_coind
   simp [Set.ext_iff, Subtype.ext_iff]
 
 中文:
-引理 Subtype.range_coind
+引理 子类型.range_coind
   条件: (f : α -> β) {p : β -> 命题} (h : 对任意 (a : α), p (f a))
   证明: by
   simp [Set.ext_iff, Subtype.ext_iff]
@@ -790,7 +790,7 @@ theorem prod_image_left
 
 中文:
 定理 prod_image_left
-  条件: (f : α -> γ) (s : Set α) (t : Set β)
+  条件: (f : α -> γ) (s : 集合 α) (t : 集合 β)
   证明: by
   aesop
 -/
@@ -809,7 +809,7 @@ theorem prod_image_right
 
 中文:
 定理 prod_image_right
-  条件: (f : α -> γ) (s : Set α) (t : Set β)
+  条件: (f : α -> γ) (s : 集合 α) (t : 集合 β)
   证明: by
   aesop
 -/
@@ -882,7 +882,7 @@ definition offDiag
 
 中文:
 定义 offDiag
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {x | x.1 in s ∧ x.2 in s ∧ x.1 != x.2}
 
 @[simp, grind =, push]
@@ -901,7 +901,7 @@ theorem mem_offDiag
 
 中文:
 定理 mem_offDiag
-  条件: {x : α × α} {s : Set α}
+  条件: {x : α × α} {s : 集合 α}
   结论: x in s.offDiag ↔ x.1 in s ∧ x.2 in s ∧ x.1 != x.2
   证明: Iff.rfl
 
@@ -926,7 +926,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (s : Set ι) (t : 对任意 i, Set (α i))
+  签名: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
   定义体: {f | forall i in s, f i in t i}
 -/
 def pi (s : Set ι) (t : forall i, Set (α i)) : Set (forall i, α i) := {f | forall i in s, f i in t i}
@@ -975,7 +975,7 @@ definition EqOn
 
 中文:
 定义 EqOn
-  签名: (f₁ f₂ : α -> β) (s : Set α)
+  签名: (f₁ f₂ : α -> β) (s : 集合 α)
   定义体: forall ⦃x⦄, x in s -> f₁ x = f₂ x
 -/
 def EqOn (f₁ f₂ : α -> β) (s : Set α) : Prop := forall ⦃x⦄, x in s -> f₁ x = f₂ x
@@ -989,8 +989,8 @@ definition MapsTo
   body: forall ⦃x⦄, x in s -> f x in t
 
 中文:
-定义 MapsTo
-  签名: (f : α -> β) (s : Set α) (t : Set β)
+定义 映射到
+  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
   定义体: forall ⦃x⦄, x in s -> f x in t
 -/
 def MapsTo (f : α -> β) (s : Set α) (t : Set β) : Prop := forall ⦃x⦄, x in s -> f x in t
@@ -1006,8 +1006,8 @@ theorem mapsTo_image
 
 中文:
 定理 mapsTo_image
-  条件: (f : α -> β) (s : Set α)
-  结论: MapsTo f s (f '' s)
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 映射到 f s (f '' s)
   证明: fun _ => mem_image_of_mem f
 
 Depends on / 依赖: mem_image_of_mem
@@ -1025,8 +1025,8 @@ theorem mapsTo_preimage
 
 中文:
 定理 mapsTo_preimage
-  条件: (f : α -> β) (t : Set β)
-  结论: MapsTo f (f ⁻¹' t) t
+  条件: (f : α -> β) (t : 集合 β)
+  结论: 映射到 f (f ⁻¹' t) t
   证明: fun _ => id
 -/
 theorem mapsTo_preimage (f : α -> β) (t : Set β) : MapsTo f (f ⁻¹' t) t := fun _ => id
@@ -1040,8 +1040,8 @@ definition MapsTo.restrict
   body: Subtype.map f h
 
 中文:
-定义 MapsTo.restrict
-  签名: (f : α -> β) (s : Set α) (t : Set β) (h : MapsTo f s t)
+定义 映射到.restrict
+  签名: (f : α -> β) (s : 集合 α) (t : 集合 β) (h : 映射到 f s t)
   定义体: Subtype.map f h
 
 Depends on / 依赖: Subtype, Subtype.map
@@ -1061,7 +1061,7 @@ definition restrictPreimage
 
 中文:
 定义 restrictPreimage
-  签名: (t : Set β) (f : α -> β)
+  签名: (t : 集合 β) (f : α -> β)
   定义体: (Set.mapsTo_preimage f t).restrict _ _ _
 
 Depends on / 依赖: Set.mapsTo_preimage, mapsTo_preimage, restrict
@@ -1078,8 +1078,8 @@ definition InjOn
   body: forall ⦃x₁ : α⦄, x₁ in s -> forall ⦃x₂ : α⦄, x₂ in s -> f x₁ = f x₂ -> x₁ = x₂
 
 中文:
-定义 InjOn
-  签名: (f : α -> β) (s : Set α)
+定义 单射限制
+  签名: (f : α -> β) (s : 集合 α)
   定义体: forall ⦃x₁ : α⦄, x₁ in s -> forall ⦃x₂ : α⦄, x₂ in s -> f x₁ = f x₂ -> x₁ = x₂
 -/
 def InjOn (f : α -> β) (s : Set α) : Prop :=
@@ -1095,7 +1095,7 @@ definition graphOn
 
 中文:
 定义 graphOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: (fun x => (x, f x)) '' s
 -/
 def graphOn (f : α -> β) (s : Set α) : Set (α × β) := (fun x => (x, f x)) '' s
@@ -1109,8 +1109,8 @@ definition SurjOn
   body: t subseteq f '' s
 
 中文:
-定义 SurjOn
-  签名: (f : α -> β) (s : Set α) (t : Set β)
+定义 满射限制
+  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
   定义体: t subseteq f '' s
 
 Depends on / 依赖: subseteq
@@ -1126,8 +1126,8 @@ definition BijOn
   body: MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
 
 中文:
-定义 BijOn
-  签名: (f : α -> β) (s : Set α) (t : Set β)
+定义 双射限制
+  签名: (f : α -> β) (s : 集合 α) (t : 集合 β)
   定义体: MapsTo f s t ∧ InjOn f s ∧ SurjOn f s t
 
 Depends on / 依赖: MapsTo, SurjOn
@@ -1144,7 +1144,7 @@ definition LeftInvOn
 
 中文:
 定义 LeftInvOn
-  签名: (g : β -> α) (f : α -> β) (s : Set α)
+  签名: (g : β -> α) (f : α -> β) (s : 集合 α)
   定义体: forall ⦃x⦄, x in s -> g (f x) = x
 
 Depends on / 依赖: infer_instance, invApp
@@ -1161,7 +1161,7 @@ abbreviation RightInvOn
 
 中文:
 缩写 RightInvOn
-  签名: (g : β -> α) (f : α -> β) (t : Set β)
+  签名: (g : β -> α) (f : α -> β) (t : 集合 β)
   定义体: LeftInvOn f g t
 
 Depends on / 依赖: LeftInvOn
@@ -1178,7 +1178,7 @@ definition InvOn
 
 中文:
 定义 InvOn
-  签名: (g : β -> α) (f : α -> β) (s : Set α) (t : Set β)
+  签名: (g : β -> α) (f : α -> β) (s : 集合 α) (t : 集合 β)
   定义体: LeftInvOn g f s ∧ RightInvOn g f t
 
 Depends on / 依赖: LeftInvOn, RightInvOn
@@ -1198,7 +1198,7 @@ definition image2
 
 中文:
 定义 image2
-  签名: (f : α -> β -> γ) (s : Set α) (t : Set β)
+  签名: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β)
   定义体: {c | exists a in s, exists b in t, f a b = c}
 -/
 def image2 (f : α -> β -> γ) (s : Set α) (t : Set β) : Set γ := {c | exists a in s, exists b in t, f a b = c}
@@ -1252,7 +1252,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: (s : Set (α -> β)) (t : Set α)
+  签名: (s : 集合 (α -> β)) (t : 集合 α)
   定义体: image2 (fun f => f) s t
 
 @[simp, grind =]
@@ -1272,7 +1272,7 @@ theorem mem_seq_iff
 
 中文:
 定理 mem_seq_iff
-  条件: {s : Set (α -> β)} {t : Set α} {b : β}
+  条件: {s : 集合 (α -> β)} {t : 集合 α} {b : β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1292,7 +1292,7 @@ lemma seq_eq_image2
 
 中文:
 引理 seq_eq_image2
-  条件: (s : Set (α -> β)) (t : Set α)
+  条件: (s : 集合 (α -> β)) (t : 集合 α)
   结论: seq s t = image2 (fun f a => f a) s t
   证明: rfl
 -/

@@ -65,12 +65,12 @@ inductive IsAdmissible
     - cons_cons: {m a b L'} (hab : a < b) (hbL : IsAdmissible (m + 1) (b :: L')) (ha : a <= m) : IsAdmissible m (a :: b :: L')
 
 中文:
-归纳类型 IsAdmissible
-  参数: : (m : 自然数) -> (L : List 自然数) -> 命题
+归纳类型 是Admissible
+  参数: : (m : 自然数) -> (L : 列表 自然数) -> 命题
   构造子 (3 个):
-    - nil: (m : 自然数) : IsAdmissible m []
-    - singleton: {m a} (ha : a <= m) : IsAdmissible m [a]
-    - cons_cons: {m a b L'} (hab : a < b) (hbL : IsAdmissible (m + 1) (b :: L')) (ha : a <= m) : IsAdmissible m (a :: b :: L')
+    - nil: (m : 自然数) : 是Admissible m []
+    - singleton: {m a} (ha : a <= m) : 是Admissible m [a]
+    - cons_cons: {m a b L'} (hab : a < b) (hbL : 是Admissible (m + 1) (b :: L')) (ha : a <= m) : 是Admissible m (a :: b :: L')
 -/
 inductive IsAdmissible : (m : Nat) -> (L : List Nat) -> Prop
   | nil (m : Nat) : IsAdmissible m []
@@ -98,7 +98,7 @@ theorem isAdmissible_singleton_iff
 
 中文:
 定理 isAdmissible_singleton_iff
-  结论: IsAdmissible m [a] ↔ a <= m
+  结论: 是Admissible m [a] ↔ a <= m
   证明: ⟨fun | .singleton h => h, .singleton⟩
 
 @[simp, grind =]
@@ -119,7 +119,7 @@ theorem isAdmissible_cons_cons_iff
 
 中文:
 定理 isAdmissible_cons_cons_iff
-  结论: IsAdmissible m (a :: b :: L) ↔
+  结论: 是Admissible m (a :: b :: L) ↔
   证明: ⟨fun | .cons_cons hab hbL ha => ⟨hab, hbL, ha⟩, by grind⟩
 
 Depends on / 依赖: cons_cons
@@ -139,7 +139,7 @@ theorem isAdmissible_cons_iff
 
 中文:
 定理 isAdmissible_cons_iff
-  结论: IsAdmissible m (a :: L) ↔
+  结论: 是Admissible m (a :: L) ↔
   证明: by
   cases L <;> grind
 -/
@@ -164,7 +164,7 @@ theorem isAdmissible_iff_isChain_and_le
 
 中文:
 定理 isAdmissible_iff_isChain_and_le
-  结论: IsAdmissible m L ↔
+  结论: 是Admissible m L ↔
   证明: by
   induction L using List.twoStepInduction generalizing m with
   | nil => grind
@@ -198,7 +198,7 @@ theorem isAdmissible_iff_pairwise_and_le
 
 中文:
 定理 isAdmissible_iff_pairwise_and_le
-  结论: IsAdmissible m L ↔
+  结论: 是Admissible m L ↔
   证明: by
   rw [isAdmissible_iff_isChain_and_le]; rw [List.isChain_iff_pairwise]
 
@@ -217,7 +217,7 @@ theorem isAdmissible_of_isChain_of_forall_getElem_le
   proof: isAdmissible_iff_isChain_and_le.mpr ⟨hL, hL₂⟩
 
 中文:
-定理 isAdmissible_of_isChain_of_forall_getElem_le
+定理 isAdmissible_of_isChain_of_对任意_getElem_le
   结论: {m L} (hL : L.IsChain (· < ·))
   证明: isAdmissible_iff_isChain_and_le.mpr ⟨hL, hL₂⟩
 
@@ -239,7 +239,7 @@ theorem isChain
 
 中文:
 定理 isChain
-  条件: {m L} (hL : IsAdmissible m L)
+  条件: {m L} (hL : 是Admissible m L)
   证明: (isAdmissible_iff_isChain_and_le.mp hL).1
 -/
 @[grind ->] theorem isChain {m L} (hL : IsAdmissible m L) :
@@ -256,7 +256,7 @@ theorem le
 
 中文:
 定理 le
-  条件: {m} {L : List 自然数} (hL : IsAdmissible m L)
+  条件: {m} {L : 列表 自然数} (hL : 是Admissible m L)
   结论: 对任意 k (h : k < L.length),
   证明: (isAdmissible_iff_isChain_and_le.mp hL).2
 -/
@@ -273,7 +273,7 @@ lemma of_cons
 
 中文:
 引理 of_cons
-  条件: {m a L} (h : IsAdmissible m (a :: L))
+  条件: {m a L} (h : 是Admissible m (a :: L))
   证明: by cases L <;> grind
 -/
 @[grind ->] lemma of_cons {m a L} (h : IsAdmissible m (a :: L)) :
@@ -289,7 +289,7 @@ lemma cons
 
 中文:
 引理 cons
-  结论: {m a L} (hL : IsAdmissible (m + 1) L) (ha : a <= m)
+  结论: {m a L} (hL : 是Admissible (m + 1) L) (ha : a <= m)
   证明: by cases L <;> grind
 -/
 lemma cons {m a L} (hL : IsAdmissible (m + 1) L) (ha : a <= m)
@@ -306,7 +306,7 @@ theorem sortedLT
 
 中文:
 定理 sortedLT
-  条件: {m L} (hL : IsAdmissible m L)
+  条件: {m L} (hL : 是Admissible m L)
   结论: L.SortedLT
   证明: hL.isChain.sortedLT
 
@@ -327,7 +327,7 @@ lemma head_lt
 
 中文:
 引理 head_lt
-  条件: {m a L} (hL : IsAdmissible m (a :: L))
+  条件: {m a L} (hL : 是Admissible m (a :: L))
   证明: fun _ => L.rel_of_pairwise_cons hL.sortedLT.pairwise
 
 Depends on / 依赖: L.rel_of_pairwise_cons, hL.sortedLT.pairwise, pairwise, rel_of_pairwise_cons, sortedLT
@@ -346,7 +346,7 @@ lemma getElem_lt
 
 中文:
 引理 getElem_lt
-  结论: {m L} (hL : IsAdmissible m L)
+  结论: {m L} (hL : 是Admissible m L)
   证明: by
   grw [hL.le, hk]
 -/
@@ -366,7 +366,7 @@ definition getElemAsFin
 
 中文:
 定义 getElemAsFin
-  签名: {m L} (hl : IsAdmissible m L) (k : 自然数)
+  签名: {m L} (hl : 是Admissible m L) (k : 自然数)
   定义体: Fin.mk L[k] Nat.le_iff_lt_add_one.mp (by grind)
 
 Depends on / 依赖: Fin.mk, Nat.le_iff_lt_add_one.mp, le_iff_lt_add_one
@@ -387,7 +387,7 @@ definition head
 
 中文:
 定义 head
-  签名: {m a L} (hl : IsAdmissible m (a :: L))
+  签名: {m a L} (hl : 是Admissible m (a :: L))
   定义体: hl.getElemAsFin 0 (by grind)
 
 Depends on / 依赖: getElemAsFin, hl.getElemAsFin
@@ -406,8 +406,8 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {n} (hmn : m <= n) (hL : IsAdmissible m L)
-  结论: IsAdmissible n L
+  条件: {n} (hmn : m <= n) (hL : 是Admissible m L)
+  结论: 是Admissible n L
   证明: isAdmissible_of_isChain_of_forall_getElem_le (by grind) (by grind)
 
 Depends on / 依赖: isAdmissible_of_isChain_of_forall_getElem_le
@@ -454,7 +454,7 @@ lemma simplicialInsert_length
 
 中文:
 引理 simplicialInsert_length
-  条件: (a : 自然数) (L : List 自然数)
+  条件: (a : 自然数) (L : 列表 自然数)
   证明: by
   induction L generalizing a <;> grind
 
@@ -477,7 +477,7 @@ theorem simplicialInsert_isAdmissible
 
 中文:
 定理 simplicialInsert_isAdmissible
-  结论: (L : List 自然数) (hL : IsAdmissible (m + 1) L) (j : 自然数)
+  结论: (L : 列表 自然数) (hL : 是Admissible (m + 1) L) (j : 自然数)
   证明: by
   induction L generalizing j m with
   | nil => exact IsAdmissible.singleton hj
@@ -514,7 +514,7 @@ definition standardσ
 
 中文:
 定义 standardσ
-  签名: (L : List 自然数) {m₁ m₂ : 自然数} (h : m₂ + L.length = m₁)
+  签名: (L : 列表 自然数) {m₁ m₂ : 自然数} (h : m₂ + L.length = m₁)
   定义体: match L with
   | .nil => eqToHom (by grind)
   | .cons a t => standardσ t (by grind) ≫ σ (Fin.ofNat _ a)
@@ -563,7 +563,7 @@ lemma standardσ_cons
 
 中文:
 引理 standardσ_cons
-  条件: (L : List 自然数) (a : 自然数) {m₁ m₂ : 自然数} (h : m₂ + (a :: L).length = m₁)
+  条件: (L : 列表 自然数) (a : 自然数) {m₁ m₂ : 自然数} (h : m₂ + (a :: L).length = m₁)
   证明: rfl
 
 @[reassoc]
@@ -591,7 +591,7 @@ lemma standardσ_comp_standardσ
 
 中文:
 引理 standardσ_comp_standardσ
-  结论: (L₁ L₂ : List 自然数) {m₁ m₂ m₃ : 自然数}
+  结论: (L₁ L₂ : 列表 自然数) {m₁ m₂ m₃ : 自然数}
   证明: by
   induction L₂ generalizing L₁ m₁ m₂ m₃ with
   | nil =>
@@ -641,7 +641,7 @@ definition simplicialEvalσ
 
 中文:
 定义 simplicialEvalσ
-  签名: (L : List 自然数)
+  签名: (L : 列表 自然数)
   定义体: fun j => match L with
   | [] => j
   | a :: L => if a < simplicialEvalσ L j then simplicialEvalσ L j - 1 else simplicialEvalσ L j
@@ -688,8 +688,8 @@ lemma simplicialEvalσ_monotone
 
 中文:
 引理 simplicialEvalσ_monotone
-  条件: (L : List 自然数)
-  结论: Monotone (simplicialEvalσ L)
+  条件: (L : 列表 自然数)
+  结论: 递增 (simplicialEvalσ L)
   证明: by
   induction L <;> grind [Monotone]
 
@@ -780,7 +780,7 @@ lemma standardσ_simplicialInsert
 
 中文:
 引理 standardσ_simplicialInsert
-  结论: (hL : IsAdmissible (m + 1) L) (j : 自然数) (hj : j < m + 1)
+  结论: (hL : 是Admissible (m + 1) L) (j : 自然数) (hj : j < m + 1)
   证明: by
   induction L generalizing m j with
   | nil => simp [standardσ, simplicialInsert]
@@ -831,7 +831,7 @@ theorem exists_normal_form_P_σ
     cases hg' with | @σ m
 
 中文:
-定理 exists_normal_form_P_σ
+定理 存在_normal_form_P_σ
   条件: {x y : SimplexCategoryGenRel} (f : x ⟶ y) (hf : P_σ f)
   证明: by
   induction hf with
@@ -886,8 +886,8 @@ local grind_pattern IsAdmissible.simplicialEvalσ_succ_getElem =>
   IsAdmissible m L, simplicialEvalσ L L[k]
 
 中文:
-引理 IsAdmissible.simplicialEvalσ_succ_getElem
-  结论: (hL : IsAdmissible m L)
+引理 是Admissible.simplicialEvalσ_succ_getElem
+  结论: (hL : 是Admissible m L)
   证明: by
   induction L generalizing m k <;> grind [-> IsAdmissible.singleton]
 
@@ -918,7 +918,7 @@ lemma mem_isAdmissible_of_lt_and_eval_eq_eval_add_one
 
 中文:
 引理 mem_isAdmissible_of_lt_and_eval_eq_eval_add_one
-  结论: (hL : IsAdmissible m L)
+  结论: (hL : 是Admissible m L)
   证明: by
   induction L generalizing m with
   | nil => grind
@@ -948,7 +948,7 @@ lemma lt_and_eval_eq_eval_add_one_of_mem_isAdmissible
 
 中文:
 引理 lt_and_eval_eq_eval_add_one_of_mem_isAdmissible
-  条件: (hL : IsAdmissible m L) (j : 自然数) (hj : j in L)
+  条件: (hL : 是Admissible m L) (j : 自然数) (hj : j in L)
   证明: by
   grind [List.mem_iff_getElem]
 
@@ -970,7 +970,7 @@ lemma mem_isAdmissible_iff
 
 中文:
 引理 mem_isAdmissible_iff
-  条件: (hL : IsAdmissible m L) (j : 自然数)
+  条件: (hL : 是Admissible m L) (j : 自然数)
   证明: by
   grind [lt_and_eval_eq_eval_add_one_of_mem_isAdmissible,
     mem_isAdmissible_of_lt_and_eval_eq_eval_add_one]

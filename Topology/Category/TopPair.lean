@@ -57,7 +57,7 @@ abbreviation fst
 
 中文:
 缩写 fst
-  签名: : TopCat.{u}
+  签名: : 顶元素范畴.{u}
   定义体: X.right
 
 Depends on / 依赖: X.right
@@ -74,7 +74,7 @@ abbreviation snd
 
 中文:
 缩写 snd
-  签名: : TopCat.{u}
+  签名: : 顶元素范畴.{u}
   定义体: X.left
 
 Depends on / 依赖: X.left
@@ -110,7 +110,7 @@ lemma isEmbedding_map
 中文:
 引理 isEmbedding_map
   条件: (X : TopPair.{u})
-  结论: Topology.IsEmbedding X.map
+  结论: 拓扑.是嵌入 X.map
   证明: X.prop
 
 Depends on / 依赖: X.prop
@@ -127,7 +127,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: {A X : TopCat.{u}} (f : A ⟶ X) (h : Topology.IsEmbedding f)
+  签名: {A X : 顶元素范畴.{u}} (f : A ⟶ X) (h : 拓扑.是嵌入 f)
   定义体: MorphismProperty.Arrow.mk (P := TopCat.isEmbedding) f h
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Arrow.mk, TopCat, TopCat.isEmbedding, isEmbedding
@@ -146,7 +146,7 @@ abbreviation ofSubset
 
 中文:
 缩写 ofSubset
-  签名: {X : TopCat.{u}} (A : Set X)
+  签名: {X : 顶元素范畴.{u}} (A : 集合 X)
   定义体: TopPair.of (A := (TopCat.of A))
   (X := X) (TopCat.ofHom { toFun := Subtype.val }) Topology.IsEmbedding.subtypeVal
 
@@ -165,7 +165,7 @@ abbreviation ofTopCat
 
 中文:
 缩写 ofTopCat
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: TopPair.of (TopCat.isInitialPEmpty.to X) (Topology.IsOpenEmbedding.of_isEmpty _).1
 
 Depends on / 依赖: IsOpenEmbedding, TopCat, TopCat.isInitialPEmpty.to, TopPair, TopPair.of, Topology, Topology.IsOpenEmbedding.of_isEmpty, isInitialPEmpty, of_isEmpty
@@ -202,7 +202,7 @@ abbreviation Hom.fst
   body: f.hom.right
 
 中文:
-缩写 Hom.fst
+缩写 态射.fst
   签名: (f : X ⟶ Y)
   定义体: f.hom.right
 -/
@@ -219,7 +219,7 @@ abbreviation Hom.snd
 @[reassoc, elementwise]
 
 中文:
-缩写 Hom.snd
+缩写 态射.snd
   签名: (f : X ⟶ Y)
   定义体: f.hom.left
 
@@ -237,7 +237,7 @@ lemma Hom.w
   proof: f.hom.w
 
 中文:
-引理 Hom.w
+引理 态射.w
   条件: {X Y : TopPair.{u}} (f : X ⟶ Y)
   证明: f.hom.w
 -/
@@ -257,7 +257,7 @@ abbreviation proj₁
 
 中文:
 缩写 proj₁
-  签名: : TopPair.{u} ⥤ TopCat.{u}
+  签名: : TopPair.{u} ⥤ 顶元素范畴.{u}
   定义体: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.rightFunc
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Arrow.rightFunc, MorphismProperty, MorphismProperty.Arrow.forget, forget, rightFunc
@@ -275,7 +275,7 @@ abbreviation proj₂
 
 中文:
 缩写 proj₂
-  签名: : TopPair.{u} ⥤ TopCat.{u}
+  签名: : TopPair.{u} ⥤ 顶元素范畴.{u}
   定义体: MorphismProperty.Arrow.forget _ _ _ ⋙ CategoryTheory.Arrow.leftFunc
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Arrow.leftFunc, MorphismProperty, MorphismProperty.Arrow.forget, forget, leftFunc
@@ -297,7 +297,7 @@ map f := TopPair.ofHom f (𝟙 _) by ext x; induction x
 
 中文:
 定义 incl
-  签名: : TopCat.{u} ⥤ TopPair.{u} where
+  签名: : 顶元素范畴.{u} ⥤ TopPair.{u} where
   定义体: ofTopCat X
 map f := TopPair.ofHom f (𝟙 _) by ext x; induction x
 
@@ -318,7 +318,7 @@ abbreviation diag
 
 中文:
 缩写 diag
-  签名: : TopCat.{u} ⥤ TopPair.{u} where
+  签名: : 顶元素范畴.{u} ⥤ TopPair.{u} where
   定义体: TopPair.of (𝟙 X) Topology.IsEmbedding.id
   map f := TopPair.ofHom f f
 
@@ -411,11 +411,11 @@ structure Homotopy
     - w : X.map ▷ _ ≫ fst.h = snd.h ≫ Y.map  [default: by cat_disch]
 
 中文:
-结构 Homotopy
+结构 同伦
   参数: (f g : X ⟶ Y)
   公理与运算 (3 个):
-    - fst : TopCat.Homotopy (Hom.fst f) (Hom.fst g)
-    - snd : TopCat.Homotopy (Hom.snd f) (Hom.snd g)
+    - fst : 顶元素范畴.同伦 (态射.fst f) (态射.fst g)
+    - snd : 顶元素范畴.同伦 (态射.snd f) (态射.snd g)
     - w : X.map ▷ _ ≫ fst.h = snd.h ≫ Y.map  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
@@ -449,7 +449,7 @@ lemma w_apply'
 
 中文:
 引理 w_apply'
-  条件: {f g : X ⟶ Y} (H : Homotopy f g) (x : TopPair.snd) (t : unit整数erval)
+  条件: {f g : X ⟶ Y} (H : 同伦 f g) (x : TopPair.snd) (t : unit整数erval)
   证明: by
   have := w_apply H (x, I.homeomorph.symm t)
   cat_disch
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Homotopy (𝟙 X) (𝟙 X))
+  签名: 可居 (同伦 (𝟙 X) (𝟙 X))
   定义体: ⟨Homotopy.refl _⟩
 
 Depends on / 依赖: Homotopy, Homotopy.refl
@@ -522,7 +522,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁)
+  签名: {f₀ f₁ : X ⟶ Y} (F : 同伦 f₀ f₁)
   定义体: F.fst.symm
   snd := F.snd.symm
 
@@ -547,7 +547,7 @@ theorem symm_symm
 
 中文:
 定理 symm_symm
-  条件: {f₀ f₁ : X ⟶ Y} (F : Homotopy f₀ f₁)
+  条件: {f₀ f₁ : X ⟶ Y} (F : 同伦 f₀ f₁)
   结论: F.symm.symm = F
   证明: by
   cat_disch
@@ -597,7 +597,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
+  签名: {f₀ f₁ f₂ : X ⟶ Y} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
   定义体: F.fst.trans G.fst
   snd := F.snd.trans G.snd
   w := by
@@ -627,7 +627,7 @@ theorem symm_trans
 
 中文:
 定理 symm_trans
-  条件: {f₀ f₁ f₂ : X ⟶ Y} (F : Homotopy f₀ f₁) (G : Homotopy f₁ f₂)
+  条件: {f₀ f₁ f₂ : X ⟶ Y} (F : 同伦 f₀ f₁) (G : 同伦 f₁ f₂)
   证明: by
       ext : 1 <;> exact ContinuousMap.Homotopy.symm_trans _ _
 
@@ -653,7 +653,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
+  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
   定义体: G.fst.comp F.fst
   snd := G.snd.comp F.snd
 
@@ -675,7 +675,7 @@ definition Homotopic
   body: Nonempty (Homotopy f g)
 
 中文:
-定义 Homotopic
+定义 同伦
   签名: (f g : X ⟶ Y)
   定义体: Nonempty (Homotopy f g)
 
@@ -695,7 +695,7 @@ theorem equivalence
 
 中文:
 定理 equivalence
-  结论: Equivalence (Homotopic (X := X) (Y := Y))
+  结论: 等价 (同伦 (X := X) (Y := Y))
   证明: ⟨fun f => ⟨Homotopy.refl f⟩, fun h => h.map Homotopy.symm, fun h₀ h₁ => h₀.map2 Homotopy.trans h₁⟩
 -/
 theorem equivalence : Equivalence (Homotopic (X := X) (Y := Y)) :=

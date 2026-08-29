@@ -48,7 +48,7 @@ theorem isUpperSet_empty
 
 中文:
 定理 isUpperSet_empty
-  结论: IsUpperSet (∅ : Set α)
+  结论: 是上集 (∅ : 集合 α)
   证明: fun _ _ _ => id
 
 @[to_dual]
@@ -68,7 +68,7 @@ theorem isUpperSet_univ
 
 中文:
 定理 isUpperSet_univ
-  结论: IsUpperSet (univ : Set α)
+  结论: 是上集 (univ : 集合 α)
   证明: fun _ _ _ => id
 
 @[to_dual]
@@ -88,9 +88,9 @@ theorem IsUpperSet.compl
 @[to_dual (attr := simp)]
 
 中文:
-定理 IsUpperSet.compl
-  条件: (hs : IsUpperSet s)
-  结论: IsLowerSet sᶜ
+定理 是上集.compl
+  条件: (hs : 是上集 s)
+  结论: 是下集 sᶜ
   证明: fun _a _b h hb ha => hb hs h ha
 
 @[to_dual (attr := simp)]
@@ -112,7 +112,7 @@ theorem isUpperSet_compl
 
 中文:
 定理 isUpperSet_compl
-  结论: IsUpperSet sᶜ ↔ IsLowerSet s
+  结论: 是上集 sᶜ ↔ 是下集 s
   证明: ⟨fun h => by
     convert! h.compl
     rw [compl_compl], IsLowerSet.compl⟩
@@ -139,9 +139,9 @@ theorem IsUpperSet.union
 @[to_dual]
 
 中文:
-定理 IsUpperSet.union
-  条件: (hs : IsUpperSet s) (ht : IsUpperSet t)
-  结论: IsUpperSet (s union t)
+定理 是上集.union
+  条件: (hs : 是上集 s) (ht : 是上集 t)
+  结论: 是上集 (s union t)
   证明: fun _ _ h => Or.imp (hs h) (ht h)
 
 @[to_dual]
@@ -164,9 +164,9 @@ theorem IsUpperSet.inter
 @[to_dual]
 
 中文:
-定理 IsUpperSet.inter
-  条件: (hs : IsUpperSet s) (ht : IsUpperSet t)
-  结论: IsUpperSet (s inter t)
+定理 是上集.inter
+  条件: (hs : 是上集 s) (ht : 是上集 t)
+  结论: 是上集 (s inter t)
   证明: fun _ _ h => And.imp (hs h) (ht h)
 
 @[to_dual]
@@ -190,8 +190,8 @@ theorem isUpperSet_sUnion
 
 中文:
 定理 isUpperSet_sUnion
-  条件: {S : Set (Set α)} (hf : 对任意 s in S, IsUpperSet s)
-  结论: IsUpperSet (⋃₀ S)
+  条件: {S : 集合 (集合 α)} (hf : 对任意 s in S, 是上集 s)
+  结论: 是上集 (⋃₀ S)
   证明: fun _ _ h => Exists.imp fun _ hs => ⟨hs.1, hf _ hs.1 h hs.2⟩
 
 @[to_dual]
@@ -215,8 +215,8 @@ theorem isUpperSet_iUnion
 
 中文:
 定理 isUpperSet_iUnion
-  条件: {f : ι -> Set α} (hf : 对任意 i, IsUpperSet (f i))
-  结论: IsUpperSet (⋃ i, f i)
+  条件: {f : ι -> 集合 α} (hf : 对任意 i, 是上集 (f i))
+  结论: 是上集 (⋃ i, f i)
   证明: isUpperSet_sUnion forall_mem_range.2 hf
 
 @[to_dual]
@@ -239,7 +239,7 @@ theorem isUpperSet_iUnion₂
 
 中文:
 定理 isUpperSet_iUnion₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsUpperSet (f i j))
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, 是上集 (f i j))
   证明: isUpperSet_iUnion fun i => isUpperSet_iUnion hf i
 
 @[to_dual]
@@ -263,9 +263,9 @@ theorem isUpperSet_sInter
 @[to_dual]
 
 中文:
-定理 isUpperSet_sInter
-  条件: {S : Set (Set α)} (hf : 对任意 s in S, IsUpperSet s)
-  结论: IsUpperSet (⋂₀ S)
+定理 isUpperSet_s整数er
+  条件: {S : 集合 (集合 α)} (hf : 对任意 s in S, 是上集 s)
+  结论: 是上集 (⋂₀ S)
   证明: fun _ _ h => forall₂_imp fun s hs => hf s hs h
 
 @[to_dual]
@@ -286,9 +286,9 @@ theorem isUpperSet_iInter
 @[to_dual]
 
 中文:
-定理 isUpperSet_iInter
-  条件: {f : ι -> Set α} (hf : 对任意 i, IsUpperSet (f i))
-  结论: IsUpperSet (⋂ i, f i)
+定理 isUpperSet_i整数er
+  条件: {f : ι -> 集合 α} (hf : 对任意 i, 是上集 (f i))
+  结论: 是上集 (⋂ i, f i)
   证明: isUpperSet_sInter forall_mem_range.2 hf
 
 @[to_dual]
@@ -310,8 +310,8 @@ theorem isUpperSet_iInter₂
 @[to_dual (attr := simp)]
 
 中文:
-定理 isUpperSet_iInter₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsUpperSet (f i j))
+定理 isUpperSet_i整数er₂
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, 是上集 (f i j))
   证明: isUpperSet_iInter fun i => isUpperSet_iInter hf i
 
 @[to_dual (attr := simp)]
@@ -335,7 +335,7 @@ theorem isUpperSet_preimage_ofDual_iff
 
 中文:
 定理 isUpperSet_preimage_ofDual_iff
-  结论: IsUpperSet (ofDual ⁻¹' s) ↔ IsLowerSet s
+  结论: 是上集 (ofDual ⁻¹' s) ↔ 是下集 s
   证明: Iff.rfl
 
 @[to_dual (attr := simp)]
@@ -362,8 +362,8 @@ theorem isUpperSet_preimage_toDual_iff
 
 中文:
 定理 isUpperSet_preimage_toDual_iff
-  条件: {s : Set αᵒᵈ}
-  结论: IsUpperSet (toDual ⁻¹' s) ↔ IsLowerSet s
+  条件: {s : 集合 αᵒᵈ}
+  结论: 是上集 (toDual ⁻¹' s) ↔ 是下集 s
   证明: Iff.rfl
 
 @[to_dual] alias ⟨_, IsUpperSet.toDual⟩ := isLowerSet_preimage_ofDual_iff
@@ -391,8 +391,8 @@ lemma IsUpperSet.isLowerSet_preimage_coe
 @[to_dual]
 
 中文:
-引理 IsUpperSet.isLowerSet_preimage_coe
-  条件: (hs : IsUpperSet s)
+引理 是上集.isLowerSet_preimage_coe
+  条件: (hs : 是上集 s)
   证明: by aesop
 
 @[to_dual]
@@ -412,8 +412,8 @@ lemma IsUpperSet.sdiff
 @[to_dual]
 
 中文:
-引理 IsUpperSet.sdiff
-  条件: (hs : IsUpperSet s) (ht : 对任意 b in s, 对任意 c in t, b <= c -> b in t)
+引理 是上集.sdiff
+  条件: (hs : 是上集 s) (ht : 对任意 b in s, 对任意 c in t, b <= c -> b in t)
   证明: fun _b _c hbc hb => ⟨hs hbc hb.1, fun hc => hb.2 ht _ hb.1 _ hc hbc⟩
 
 @[to_dual]
@@ -435,9 +435,9 @@ lemma IsUpperSet.sdiff_of_isLowerSet
 @[to_dual]
 
 中文:
-引理 IsUpperSet.sdiff_of_isLowerSet
-  条件: (hs : IsUpperSet s) (ht : IsLowerSet t)
-  结论: IsUpperSet (s \ t)
+引理 是上集.sdiff_of_isLowerSet
+  条件: (hs : 是上集 s) (ht : 是下集 t)
+  结论: 是上集 (s \ t)
   证明: hs.sdiff by aesop
 
 @[to_dual]
@@ -458,9 +458,9 @@ lemma IsUpperSet.erase
   proof: hs.sdiff by simpa using has
 
 中文:
-引理 IsUpperSet.erase
-  条件: (hs : IsUpperSet s) (has : 对任意 b in s, b <= a -> b = a)
-  结论: IsUpperSet (s \ {a})
+引理 是上集.erase
+  条件: (hs : 是上集 s) (has : 对任意 b in s, b <= a -> b = a)
+  结论: 是上集 (s \ {a})
   证明: hs.sdiff by simpa using has
 
 Depends on / 依赖: hs.sdiff
@@ -484,7 +484,7 @@ theorem isUpperSet_Ici
 
 中文:
 定理 isUpperSet_Ici
-  结论: IsUpperSet (Ici a)
+  结论: 是上集 (左闭右无界区间 a)
   证明: fun _ _ => ge_trans
 -/
 @[to_dual] theorem isUpperSet_Ici : IsUpperSet (Ici a) := fun _ _ => ge_trans
@@ -500,7 +500,7 @@ theorem isUpperSet_Ioi
 
 中文:
 定理 isUpperSet_Ioi
-  结论: IsUpperSet (Ioi a)
+  结论: 是上集 (左开右无界区间 a)
   证明: fun _ _ => flip lt_of_lt_of_le
 
 @[to_dual]
@@ -523,7 +523,7 @@ theorem isUpperSet_iff_Ici_subset
 
 中文:
 定理 isUpperSet_iff_Ici_subset
-  结论: IsUpperSet s ↔ 对任意 ⦃a⦄, a in s -> Ici a subseteq s
+  结论: 是上集 s ↔ 对任意 ⦃a⦄, a in s -> 左闭右无界区间 a subseteq s
   证明: by
   simp [IsUpperSet, subset_def, @forall_comm (_ in s)]
 
@@ -549,9 +549,9 @@ theorem IsUpperSet.Ioi_subset
   proof: Ioi_subset_Ici_self.trans h.Ici_subset ha
 
 中文:
-定理 IsUpperSet.Ioi_subset
-  条件: (h : IsUpperSet s) ⦃a⦄ (ha : a in s)
-  结论: Ioi a subseteq s
+定理 是上集.Ioi_subset
+  条件: (h : 是上集 s) ⦃a⦄ (ha : a in s)
+  结论: 左开右无界区间 a subseteq s
   证明: Ioi_subset_Ici_self.trans h.Ici_subset ha
 
 Depends on / 依赖: Ici_subset, Ioi_subset_Ici_self, Ioi_subset_Ici_self.trans, h.Ici_subset
@@ -569,9 +569,9 @@ theorem IsUpperSet.ordConnected
   proof: ⟨fun _ ha _ _ => Icc_subset_Ici_self.trans h.Ici_subset ha⟩
 
 中文:
-定理 IsUpperSet.ordConnected
-  条件: (h : IsUpperSet s)
-  结论: s.OrdConnected
+定理 是上集.ordConnected
+  条件: (h : 是上集 s)
+  结论: s.序连通
   证明: ⟨fun _ ha _ _ => Icc_subset_Ici_self.trans h.Ici_subset ha⟩
 
 Depends on / 依赖: Icc_subset_Ici_self, Icc_subset_Ici_self.trans, Ici_subset, h.Ici_subset
@@ -593,9 +593,9 @@ theorem IsLowerSet.ordConnected
 @[to_dual]
 
 中文:
-定理 IsLowerSet.ordConnected
-  条件: (h : IsLowerSet s)
-  结论: s.OrdConnected
+定理 是下集.ordConnected
+  条件: (h : 是下集 s)
+  结论: s.序连通
   证明: ⟨fun _ _ _ hb => Icc_subset_Iic_self.trans h.Iic_subset hb⟩
 
 @[to_dual]
@@ -617,8 +617,8 @@ theorem IsUpperSet.preimage
 @[to_dual]
 
 中文:
-定理 IsUpperSet.preimage
-  条件: (hs : IsUpperSet s) {f : β -> α} (hf : Monotone f)
+定理 是上集.原像
+  条件: (hs : 是上集 s) {f : β -> α} (hf : 递增 f)
   证明: fun _ _ h => hs hf h
 
 @[to_dual]
@@ -642,9 +642,9 @@ theorem IsUpperSet.image
 @[to_dual]
 
 中文:
-定理 IsUpperSet.image
-  条件: (hs : IsUpperSet s) (f : α ≃o β)
-  结论: IsUpperSet (f '' s : Set β)
+定理 是上集.像
+  条件: (hs : 是上集 s) (f : α ≃o β)
+  结论: 是上集 (f '' s : 集合 β)
   证明: by
   change IsUpperSet ((f : α ≃ β) '' s)
   rw [Equiv.image_eq_preimage_symm]
@@ -673,7 +673,7 @@ theorem OrderEmbedding.image_Ici
 
 中文:
 定理 OrderEmbedding.image_Ici
-  条件: (e : α ↪o β) (he : IsUpperSet (range e)) (a : α)
+  条件: (e : α ↪o β) (he : 是上集 (range e)) (a : α)
   证明: by
   rw [← e.preimage_Ici]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 he.Ici_subset (mem_range_self _)]
 
@@ -699,7 +699,7 @@ theorem OrderEmbedding.image_Ioi
 
 中文:
 定理 OrderEmbedding.image_Ioi
-  条件: (e : α ↪o β) (he : IsUpperSet (range e)) (a : α)
+  条件: (e : α ↪o β) (he : 是上集 (range e)) (a : α)
   证明: by
   rw [← e.preimage_Ioi]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 he.Ioi_subset (mem_range_self _)]
 
@@ -723,8 +723,8 @@ theorem Set.monotone_mem
 @[simp]
 
 中文:
-定理 Set.monotone_mem
-  结论: Monotone (· in s) ↔ IsUpperSet s
+定理 集合.monotone_mem
+  结论: 递增 (· in s) ↔ 是上集 s
   证明: Iff.rfl
 
 @[simp]
@@ -746,8 +746,8 @@ theorem Set.antitone_mem
 @[simp]
 
 中文:
-定理 Set.antitone_mem
-  结论: Antitone (· in s) ↔ IsLowerSet s
+定理 集合.antitone_mem
+  结论: 递减 (· in s) ↔ 是下集 s
   证明: forall_comm
 
 @[simp]
@@ -772,7 +772,7 @@ theorem isUpperSet_setOfPred
 
 中文:
 定理 isUpperSet_setOfPred
-  结论: IsUpperSet { a | p a } ↔ Monotone p
+  结论: 是上集 { a | p a } ↔ 递增 p
   证明: Iff.rfl
 
 @[deprecated (since := "2026-07-09")] alias isUpperSet_setOf := isUpperSet_setOfPred
@@ -801,7 +801,7 @@ theorem isLowerSet_setOfPred
 
 中文:
 定理 isLowerSet_setOfPred
-  结论: IsLowerSet { a | p a } ↔ Antitone p
+  结论: 是下集 { a | p a } ↔ 递减 p
   证明: forall_comm
 
 @[deprecated (since := "2026-07-09")] alias isLowerSet_setOf := isLowerSet_setOfPred
@@ -826,9 +826,9 @@ lemma IsUpperSet.upperBounds_subset
   proof: fun ⟨_a, ha⟩ _b hb => hs (hb ha) ha
 
 中文:
-引理 IsUpperSet.upperBounds_subset
-  条件: (hs : IsUpperSet s)
-  结论: s.Nonempty -> upperBounds s subseteq s
+引理 是上集.upperBounds_subset
+  条件: (hs : 是上集 s)
+  结论: s.非空 -> upperBounds s subseteq s
   证明: fun ⟨_a, ha⟩ _b hb => hs (hb ha) ha
 -/
 lemma IsUpperSet.upperBounds_subset (hs : IsUpperSet s) : s.Nonempty -> upperBounds s subseteq s :=
@@ -851,8 +851,8 @@ theorem IsLowerSet.top_mem
 @[to_dual]
 
 中文:
-定理 IsLowerSet.top_mem
-  条件: (hs : IsLowerSet s)
+定理 是下集.top_mem
+  条件: (hs : 是下集 s)
   结论: ⊤ in s ↔ s = univ
   证明: ⟨fun h => eq_univ_of_forall fun _ => hs le_top h, fun h => h.symm ▸ mem_univ _⟩
 
@@ -876,9 +876,9 @@ theorem IsUpperSet.top_mem
 @[to_dual]
 
 中文:
-定理 IsUpperSet.top_mem
-  条件: (hs : IsUpperSet s)
-  结论: ⊤ in s ↔ s.Nonempty
+定理 是上集.top_mem
+  条件: (hs : 是上集 s)
+  结论: ⊤ in s ↔ s.非空
   证明: ⟨fun h => ⟨_, h⟩, fun ⟨_a, ha⟩ => hs le_top ha⟩
 
 @[to_dual]
@@ -899,8 +899,8 @@ theorem IsUpperSet.top_notMem
   proof: hs.top_mem.not.trans not_nonempty_iff_eq_empty
 
 中文:
-定理 IsUpperSet.top_notMem
-  条件: (hs : IsUpperSet s)
+定理 是上集.top_notMem
+  条件: (hs : 是上集 s)
   结论: ⊤ ∉ s ↔ s = ∅
   证明: hs.top_mem.not.trans not_nonempty_iff_eq_empty
 
@@ -931,9 +931,9 @@ theorem IsUpperSet.not_bddAbove
 @[to_dual]
 
 中文:
-定理 IsUpperSet.not_bddAbove
-  条件: (hs : IsUpperSet s)
-  结论: s.Nonempty -> ¬BddAbove s
+定理 是上集.not_bddAbove
+  条件: (hs : 是上集 s)
+  结论: s.非空 -> ¬BddAbove s
   证明: by
   rintro ⟨a, ha⟩ ⟨b, hb⟩
   obtain ⟨c, hc⟩ := exists_gt b
@@ -961,7 +961,7 @@ theorem not_bddAbove_Ici
 
 中文:
 定理 not_bddAbove_Ici
-  结论: ¬BddAbove (Ici a)
+  结论: ¬BddAbove (左闭右无界区间 a)
   证明: (isUpperSet_Ici _).not_bddAbove nonempty_Ici
 
 @[to_dual]
@@ -982,7 +982,7 @@ theorem not_bddAbove_Ioi
 
 中文:
 定理 not_bddAbove_Ioi
-  结论: ¬BddAbove (Ioi a)
+  结论: ¬BddAbove (左开右无界区间 a)
   证明: (isUpperSet_Ioi _).not_bddAbove nonempty_Ioi
 
 Depends on / 依赖: isUpperSet_Ioi, nonempty_Ioi, not_bddAbove
@@ -1010,8 +1010,8 @@ theorem isUpperSet_iff_forall_lt
 @[to_dual]
 
 中文:
-定理 isUpperSet_iff_forall_lt
-  结论: IsUpperSet s ↔ 对任意 ⦃a b : α⦄, a < b -> a in s -> b in s
+定理 isUpperSet_iff_对任意_lt
+  结论: 是上集 s ↔ 对任意 ⦃a b : α⦄, a < b -> a in s -> b in s
   证明: forall_congr' fun a => by simp [le_iff_eq_or_lt, or_imp, forall_and]
 
 @[to_dual]
@@ -1033,7 +1033,7 @@ theorem isUpperSet_iff_Ioi_subset
 
 中文:
 定理 isUpperSet_iff_Ioi_subset
-  结论: IsUpperSet s ↔ 对任意 ⦃a⦄, a in s -> Ioi a subseteq s
+  结论: 是上集 s ↔ 对任意 ⦃a⦄, a in s -> 左开右无界区间 a subseteq s
   证明: by
   simp [isUpperSet_iff_forall_lt, subset_def, @forall_comm (_ in s)]
 
@@ -1062,8 +1062,8 @@ theorem IsUpperSet.total
 @[to_dual]
 
 中文:
-定理 IsUpperSet.total
-  条件: (hs : IsUpperSet s) (ht : IsUpperSet t)
+定理 是上集.total
+  条件: (hs : 是上集 s) (ht : 是上集 t)
   结论: s subseteq t ∨ t subseteq s
   证明: by
   grind [isUpperSet_iff_forall_lt]
@@ -1090,8 +1090,8 @@ theorem IsUpperSet.eq_empty_or_Ici
 @[to_dual]
 
 中文:
-定理 IsUpperSet.eq_empty_or_Ici
-  条件: [WellFoundedLT α] (h : IsUpperSet s)
+定理 是上集.eq_empty_or_Ici
+  条件: [WellFoundedLT α] (h : 是上集 s)
   证明: by
   refine or_iff_not_imp_left.2 fun ha => ?_
   obtain ⟨a, ha⟩ := Set.nonempty_iff_ne_empty.2 ha
@@ -1119,8 +1119,8 @@ theorem IsLowerSet.eq_univ_or_Iio
   simpa using h.compl.eq_empty_or_Ici
 
 中文:
-定理 IsLowerSet.eq_univ_or_Iio
-  条件: [WellFoundedLT α] (h : IsLowerSet s)
+定理 是下集.eq_univ_or_Iio
+  条件: [WellFoundedLT α] (h : 是下集 s)
   证明: by
   simp_rw [← @compl_inj_iff _ s]
   simpa using h.compl.eq_empty_or_Ici

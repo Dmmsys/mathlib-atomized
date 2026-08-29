@@ -38,7 +38,7 @@ theorem tendsto_atTop_mul_left_of_le'
 
 中文:
 定理 tendsto_atTop_mul_left_of_le'
-  条件: (C : G) (hf : 对任意ᶠ x in l, C <= f x) (hg : Tendsto g l atTop)
+  条件: (C : G) (hf : 对任意ᶠ x in l, C <= f x) (hg : 收敛 g l atTop)
   证明: .atTop_of_isBoundedUnder_le_mul (f := f⁻¹) ⟨C⁻¹, by simpa⟩ (by simpa)
 
 @[to_additive]
@@ -62,7 +62,7 @@ theorem tendsto_atBot_mul_left_of_ge'
 
 中文:
 定理 tendsto_atBot_mul_left_of_ge'
-  条件: (C : G) (hf : 对任意ᶠ x in l, f x <= C) (hg : Tendsto g l atBot)
+  条件: (C : G) (hf : 对任意ᶠ x in l, f x <= C) (hg : 收敛 g l atBot)
   证明: tendsto_atTop_mul_left_of_le' (G := Gᵒᵈ) _ C hf hg
 
 @[to_additive]
@@ -86,7 +86,7 @@ theorem tendsto_atTop_mul_left_of_le
 
 中文:
 定理 tendsto_atTop_mul_left_of_le
-  条件: (C : G) (hf : 对任意 x, C <= f x) (hg : Tendsto g l atTop)
+  条件: (C : G) (hf : 对任意 x, C <= f x) (hg : 收敛 g l atTop)
   证明: tendsto_atTop_mul_left_of_le' l C (univ_mem' hf) hg
 
 @[to_additive]
@@ -110,7 +110,7 @@ theorem tendsto_atBot_mul_left_of_ge
 
 中文:
 定理 tendsto_atBot_mul_left_of_ge
-  条件: (C : G) (hf : 对任意 x, f x <= C) (hg : Tendsto g l atBot)
+  条件: (C : G) (hf : 对任意 x, f x <= C) (hg : 收敛 g l atBot)
   证明: tendsto_atTop_mul_left_of_le (G := Gᵒᵈ) _ C hf hg
 
 @[to_additive]
@@ -134,7 +134,7 @@ theorem tendsto_atTop_mul_right_of_le'
 
 中文:
 定理 tendsto_atTop_mul_right_of_le'
-  条件: (C : G) (hf : Tendsto f l atTop) (hg : 对任意ᶠ x in l, C <= g x)
+  条件: (C : G) (hf : 收敛 f l atTop) (hg : 对任意ᶠ x in l, C <= g x)
   证明: .atTop_of_mul_isBoundedUnder_le (g := g⁻¹) ⟨C⁻¹, by simpa⟩ (by simpa)
 
 @[to_additive]
@@ -158,7 +158,7 @@ theorem tendsto_atBot_mul_right_of_ge'
 
 中文:
 定理 tendsto_atBot_mul_right_of_ge'
-  条件: (C : G) (hf : Tendsto f l atBot) (hg : 对任意ᶠ x in l, g x <= C)
+  条件: (C : G) (hf : 收敛 f l atBot) (hg : 对任意ᶠ x in l, g x <= C)
   证明: tendsto_atTop_mul_right_of_le' (G := Gᵒᵈ) _ C hf hg
 
 @[to_additive]
@@ -182,7 +182,7 @@ theorem tendsto_atTop_mul_right_of_le
 
 中文:
 定理 tendsto_atTop_mul_right_of_le
-  条件: (C : G) (hf : Tendsto f l atTop) (hg : 对任意 x, C <= g x)
+  条件: (C : G) (hf : 收敛 f l atTop) (hg : 对任意 x, C <= g x)
   证明: tendsto_atTop_mul_right_of_le' l C hf (univ_mem' hg)
 
 @[to_additive]
@@ -206,7 +206,7 @@ theorem tendsto_atBot_mul_right_of_ge
 
 中文:
 定理 tendsto_atBot_mul_right_of_ge
-  条件: (C : G) (hf : Tendsto f l atBot) (hg : 对任意 x, g x <= C)
+  条件: (C : G) (hf : 收敛 f l atBot) (hg : 对任意 x, g x <= C)
   证明: tendsto_atTop_mul_right_of_le (G := Gᵒᵈ) _ C hf hg
 
 @[to_additive]
@@ -230,7 +230,7 @@ theorem tendsto_atTop_mul_const_left
 
 中文:
 定理 tendsto_atTop_mul_const_left
-  条件: (C : G) (hf : Tendsto f l atTop)
+  条件: (C : G) (hf : 收敛 f l atTop)
   证明: tendsto_atTop_mul_left_of_le' l C (univ_mem' fun _ => le_refl C) hf
 
 @[to_additive]
@@ -254,7 +254,7 @@ theorem tendsto_atBot_mul_const_left
 
 中文:
 定理 tendsto_atBot_mul_const_left
-  条件: (C : G) (hf : Tendsto f l atBot)
+  条件: (C : G) (hf : 收敛 f l atBot)
   证明: tendsto_atTop_mul_const_left (G := Gᵒᵈ) _ C hf
 
 @[to_additive]
@@ -278,7 +278,7 @@ theorem tendsto_atTop_mul_const_right
 
 中文:
 定理 tendsto_atTop_mul_const_right
-  条件: (C : G) (hf : Tendsto f l atTop)
+  条件: (C : G) (hf : 收敛 f l atTop)
   证明: tendsto_atTop_mul_right_of_le' l C hf (univ_mem' fun _ => le_refl C)
 
 @[to_additive]
@@ -302,7 +302,7 @@ theorem tendsto_atBot_mul_const_right
 
 中文:
 定理 tendsto_atBot_mul_const_right
-  条件: (C : G) (hf : Tendsto f l atBot)
+  条件: (C : G) (hf : 收敛 f l atBot)
   证明: tendsto_atTop_mul_const_right (G := Gᵒᵈ) _ C hf
 
 @[to_additive]
@@ -326,7 +326,7 @@ theorem map_inv_atBot
 
 中文:
 定理 map_inv_atBot
-  结论: map (Inv.inv : G -> G) atBot = atTop
+  结论: map (取逆.inv : G -> G) atBot = atTop
   证明: (OrderIso.inv G).map_atBot
 
 @[to_additive]
@@ -349,7 +349,7 @@ theorem map_inv_atTop
 
 中文:
 定理 map_inv_atTop
-  结论: map (Inv.inv : G -> G) atTop = atBot
+  结论: map (取逆.inv : G -> G) atTop = atBot
   证明: (OrderIso.inv G).map_atTop
 
 @[to_additive]
@@ -372,7 +372,7 @@ theorem comap_inv_atBot
 
 中文:
 定理 comap_inv_atBot
-  结论: comap (Inv.inv : G -> G) atBot = atTop
+  结论: comap (取逆.inv : G -> G) atBot = atTop
   证明: (OrderIso.inv G).comap_atTop
 
 @[to_additive]
@@ -395,7 +395,7 @@ theorem comap_inv_atTop
 
 中文:
 定理 comap_inv_atTop
-  结论: comap (Inv.inv : G -> G) atTop = atBot
+  结论: comap (取逆.inv : G -> G) atTop = atBot
   证明: (OrderIso.inv G).comap_atBot
 
 @[to_additive]
@@ -418,7 +418,7 @@ theorem tendsto_inv_atTop_atBot
 
 中文:
 定理 tendsto_inv_atTop_atBot
-  结论: Tendsto (Inv.inv : G -> G) atTop atBot
+  结论: 收敛 (取逆.inv : G -> G) atTop atBot
   证明: (OrderIso.inv G).tendsto_atTop
 
 @[to_additive]
@@ -439,7 +439,7 @@ theorem tendsto_inv_atBot_atTop
 
 中文:
 定理 tendsto_inv_atBot_atTop
-  结论: Tendsto (Inv.inv : G -> G) atBot atTop
+  结论: 收敛 (取逆.inv : G -> G) atBot atTop
   证明: tendsto_inv_atTop_atBot (G := Gᵒᵈ)
 
 Depends on / 依赖: tendsto_inv_atTop_atBot
@@ -462,7 +462,7 @@ theorem tendsto_inv_atTop_iff
 
 中文:
 定理 tendsto_inv_atTop_iff
-  结论: Tendsto (fun x => (f x)⁻¹) l atTop ↔ Tendsto f l atBot
+  结论: 收敛 (fun x => (f x)⁻¹) l atTop ↔ 收敛 f l atBot
   证明: (OrderIso.inv G).tendsto_atBot_iff
 
 @[to_additive (attr := simp)]
@@ -485,7 +485,7 @@ theorem tendsto_inv_atBot_iff
 
 中文:
 定理 tendsto_inv_atBot_iff
-  结论: Tendsto (fun x => (f x)⁻¹) l atBot ↔ Tendsto f l atTop
+  结论: 收敛 (fun x => (f x)⁻¹) l atBot ↔ 收敛 f l atTop
   证明: (OrderIso.inv G).tendsto_atTop_iff
 
 @[to_additive (attr := simp)]
@@ -561,7 +561,7 @@ theorem tendsto_mabs_atTop_atTop
 
 中文:
 定理 tendsto_mabs_atTop_atTop
-  结论: Tendsto (mabs : G -> G) atTop atTop
+  结论: 收敛 (mabs : G -> G) atTop atTop
   证明: tendsto_atTop_mono le_mabs_self tendsto_id
 
 Depends on / 依赖: le_mabs_self, tendsto_atTop_mono, tendsto_id
@@ -584,8 +584,8 @@ theorem tendsto_mabs_atBot_atTop
 
 中文:
 定理 tendsto_mabs_atBot_atTop
-  条件: [IsOrderedMonoid G]
-  结论: Tendsto (mabs : G -> G) atBot atTop
+  条件: [是Ordered幺半群 G]
+  结论: 收敛 (mabs : G -> G) atBot atTop
   证明: tendsto_atTop_mono inv_le_mabs tendsto_inv_atBot_atTop
 
 @[to_additive (attr := simp)]
@@ -613,7 +613,7 @@ theorem comap_mabs_atTop
 
 中文:
 定理 comap_mabs_atTop
-  条件: [IsOrderedMonoid G]
+  条件: [是Ordered幺半群 G]
   结论: comap (mabs : G -> G) atTop = atBot ⊔ atTop
   证明: by
   refine

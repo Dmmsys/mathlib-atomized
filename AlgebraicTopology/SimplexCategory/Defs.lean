@@ -59,8 +59,8 @@ structure SimplexCategory
     - len : Nat
 
 中文:
-结构 SimplexCategory
-  参数: : Type where
+结构 单纯形范畴
+  参数: : 类型 where
   公理与运算 (2 个):
     - mk : :
     - len : 自然数
@@ -111,7 +111,7 @@ theorem mk_len
 
 中文:
 定理 mk_len
-  条件: (n : SimplexCategory)
+  条件: (n : 单纯形范畴)
   结论: ⦋n.len⦌ = n
   证明: rfl
 -/
@@ -127,8 +127,8 @@ definition Hom
   body: Fin (a.len + 1) ->o Fin (b.len + 1)
 
 中文:
-定义 Hom
-  签名: (a b : SimplexCategory)
+定义 态射
+  签名: (a b : 单纯形范畴)
   定义体: Fin (a.len + 1) ->o Fin (b.len + 1)
 -/
 protected def Hom (a b : SimplexCategory) :=
@@ -146,7 +146,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1))
+  签名: {a b : 单纯形范畴} (f : 有限集 (a.len + 1) ->o 有限集 (b.len + 1))
   定义体: f
 -/
 def mk {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1)) : SimplexCategory.Hom a b :=
@@ -162,7 +162,7 @@ definition toOrderHom
 
 中文:
 定义 toOrderHom
-  签名: {a b : SimplexCategory} (f : SimplexCategory.Hom a b)
+  签名: {a b : 单纯形范畴} (f : 单纯形范畴.态射 a b)
   定义体: f
 -/
 def toOrderHom {a b : SimplexCategory} (f : SimplexCategory.Hom a b) :
@@ -181,7 +181,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  条件: {a b : SimplexCategory} (f g : SimplexCategory.Hom a b)
+  条件: {a b : 单纯形范畴} (f g : 单纯形范畴.态射 a b)
   证明: id
 
 @[simp]
@@ -204,7 +204,7 @@ theorem mk_toOrderHom
 
 中文:
 定理 mk_toOrderHom
-  条件: {a b : SimplexCategory} (f : SimplexCategory.Hom a b)
+  条件: {a b : 单纯形范畴} (f : 单纯形范畴.态射 a b)
   结论: mk f.toOrderHom = f
   证明: rfl
 
@@ -224,7 +224,7 @@ theorem toOrderHom_mk
 
 中文:
 定理 toOrderHom_mk
-  条件: {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1))
+  条件: {a b : 单纯形范畴} (f : 有限集 (a.len + 1) ->o 有限集 (b.len + 1))
   证明: rfl
 -/
 theorem toOrderHom_mk {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1)) :
@@ -241,7 +241,7 @@ theorem mk_toOrderHom_apply
 
 中文:
 定理 mk_toOrderHom_apply
-  结论: {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1))
+  结论: {a b : 单纯形范畴} (f : 有限集 (a.len + 1) ->o 有限集 (b.len + 1))
   证明: rfl
 -/
 theorem mk_toOrderHom_apply {a b : SimplexCategory} (f : Fin (a.len + 1) ->o Fin (b.len + 1))
@@ -260,7 +260,7 @@ definition id
 
 中文:
 定义 id
-  签名: (a : SimplexCategory)
+  签名: (a : 单纯形范畴)
   定义体: mk OrderHom.id
 
 Depends on / 依赖: OrderHom, OrderHom.id
@@ -280,7 +280,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {a b c : SimplexCategory} (f : SimplexCategory.Hom b c) (g : SimplexCategory.Hom a b)
+  签名: {a b c : 单纯形范畴} (f : 单纯形范畴.态射 b c) (g : 单纯形范畴.态射 a b)
   定义体: mk f.toOrderHom.comp g.toOrderHom
 
 Depends on / 依赖: f.toOrderHom.comp, g.toOrderHom, toOrderHom
@@ -307,7 +307,7 @@ instance smallCategory
 
 中文:
 实例 smallCategory
-  签名: : SmallCategory.{0} SimplexCategory where
+  签名: : 小范畴.{0} 单纯形范畴 where
   定义体: SimplexCategory.Hom n m
   id _ := SimplexCategory.Hom.id _
   comp f g := SimplexCategory.Hom.comp g f
@@ -334,7 +334,7 @@ lemma id_toOrderHom
 
 中文:
 引理 id_toOrderHom
-  条件: (a : SimplexCategory)
+  条件: (a : 单纯形范畴)
   证明: rfl
 
 @[simp]
@@ -355,7 +355,7 @@ lemma comp_toOrderHom
 
 中文:
 引理 comp_toOrderHom
-  条件: {a b c : SimplexCategory} (f : a ⟶ b) (g : b ⟶ c)
+  条件: {a b c : 单纯形范畴} (f : a ⟶ b) (g : b ⟶ c)
   证明: rfl
 
 @[ext]
@@ -373,8 +373,8 @@ theorem Hom.ext
   proof: Hom.ext' _ _
 
 中文:
-定理 Hom.ext
-  条件: {a b : SimplexCategory} (f g : a ⟶ b)
+定理 态射.ext
+  条件: {a b : 单纯形范畴} (f g : a ⟶ b)
   证明: Hom.ext' _ _
 
 Depends on / 依赖: Hom.ext
@@ -394,7 +394,7 @@ definition homEquivOrderHom
 
 中文:
 定义 homEquivOrderHom
-  签名: {a b : SimplexCategory}
+  签名: {a b : 单纯形范畴}
   定义体: Hom.toOrderHom
   invFun := Hom.mk
 
@@ -415,7 +415,7 @@ definition homEquivFunctor
 
 中文:
 定义 homEquivFunctor
-  签名: {a b : SimplexCategory}
+  签名: {a b : 单纯形范畴}
   定义体: SimplexCategory.homEquivOrderHom.trans OrderHom.equivFunctor
 
 Depends on / 依赖: OrderHom, OrderHom.equivFunctor, SimplexCategory, SimplexCategory.homEquivOrderHom.trans, equivFunctor, homEquivOrderHom
@@ -498,7 +498,7 @@ theorem Hom.ext
   proof: ObjectProperty.hom_ext _ (SimplexCategory.Hom.ext _ _ h)
 
 中文:
-定理 Hom.ext
+定理 态射.ext
   结论: {n} {a b : Truncated n} (f g : a ⟶ b)
   证明: ObjectProperty.hom_ext _ (SimplexCategory.Hom.ext _ _ h)
 -/
@@ -534,8 +534,8 @@ abbreviation Hom.tr
 @[simp]
 
 中文:
-缩写 Hom.tr
-  签名: {n : 自然数} {a b : SimplexCategory} (f : a ⟶ b)
+缩写 态射.tr
+  签名: {n : 自然数} {a b : 单纯形范畴} (f : a ⟶ b)
   定义体: ObjectProperty.homMk f
 
 @[simp]
@@ -559,8 +559,8 @@ lemma Hom.tr_id
 @[reassoc]
 
 中文:
-引理 Hom.tr_id
-  条件: {n : 自然数} (a : SimplexCategory) (ha : a.len <= n := by trunc)
+引理 态射.tr_id
+  条件: {n : 自然数} (a : 单纯形范畴) (ha : a.len <= n := by trunc)
   证明: rfl
 
 @[reassoc]
@@ -582,8 +582,8 @@ lemma Hom.tr_comp
 @[reassoc]
 
 中文:
-引理 Hom.tr_comp
-  结论: {n : 自然数} {a b c : SimplexCategory} (f : a ⟶ b) (g : b ⟶ c)
+引理 态射.tr_comp
+  结论: {n : 自然数} {a b c : 单纯形范畴} (f : a ⟶ b) (g : b ⟶ c)
   证明: rfl
 
 @[reassoc]
@@ -606,8 +606,8 @@ lemma Hom.tr_comp'
   proof: rfl
 
 中文:
-引理 Hom.tr_comp'
-  结论: {n : 自然数} {a b c : SimplexCategory} (f : a ⟶ b) {hb : b.len <= n}
+引理 态射.tr_comp'
+  结论: {n : 自然数} {a b c : 单纯形范畴} (f : a ⟶ b) {hb : b.len <= n}
   证明: rfl
 
 Depends on / 依赖: g.hom

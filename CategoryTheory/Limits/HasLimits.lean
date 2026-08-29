@@ -81,11 +81,11 @@ structure LimitCone
     - isLimit : IsLimit cone
 
 中文:
-结构 LimitCone
+结构 极限锥
   参数: (F : J ⥤ C)
   公理与运算 (2 个):
-    - cone : Cone F
-    - isLimit : IsLimit cone
+    - cone : 锥 F
+    - isLimit : 是极限 cone
 -/
 structure LimitCone (F : J ⥤ C) where
   /-- The cone itself -/
@@ -107,11 +107,11 @@ structure ColimitCocone
     - isColimit : IsColimit cocone
 
 中文:
-结构 ColimitCocone
+结构 余极限余锥
   参数: (F : J ⥤ C)
   公理与运算 (2 个):
-    - cocone : Cocone F
-    - isColimit : IsColimit cocone
+    - cocone : 余锥 F
+    - isColimit : 是余极限 cocone
 -/
 structure ColimitCocone (F : J ⥤ C) where
   /-- The cocone itself -/
@@ -128,7 +128,7 @@ class HasLimit
   (no additional axioms)
 
 中文:
-类 HasLimit
+类 有极限
   参数: (F : J ⥤ C)
   (无附加公理)
 -/
@@ -147,7 +147,7 @@ class HasColimit
   (no additional axioms)
 
 中文:
-类 HasColimit
+类 有余极限
   参数: (F : J ⥤ C)
   (无附加公理)
 -/
@@ -166,9 +166,9 @@ theorem HasLimit.mk
   proof: ⟨Nonempty.intro d⟩
 
 中文:
-定理 HasLimit.mk
-  条件: {F : J ⥤ C} (d : LimitCone F)
-  结论: HasLimit F
+定理 有极限.mk
+  条件: {F : J ⥤ C} (d : 极限锥 F)
+  结论: 有极限 F
   证明: ⟨Nonempty.intro d⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -189,7 +189,7 @@ definition getLimitCone
 
 中文:
 定义 getLimitCone
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: Classical.choice HasLimit.exists_limit
 
 Depends on / 依赖: Classical, Classical.choice, HasLimit, HasLimit.exists_limit, choice, exists_limit
@@ -209,10 +209,10 @@ class HasLimitsOfShape
     - has_limit : forall F : J ⥤ C, HasLimit F  [default: by infer_instance]
 
 中文:
-类 HasLimitsOfShape
+类 有形状极限
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_limit : 对任意 F : J ⥤ C, HasLimit F  [默认: by infer_instance]
+    - has_limit : 对任意 F : J ⥤ C, 有极限 F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -232,10 +232,10 @@ class HasColimitsOfShape
     - has_colimit : forall F : J ⥤ C, HasColimit F  [default: by infer_instance]
 
 中文:
-类 HasColimitsOfShape
+类 有形状余极限
   参数: : 命题 where
   公理与运算 (1 个):
-    - has_colimit : 对任意 F : J ⥤ C, HasColimit F  [默认: by infer_instance]
+    - has_colimit : 对任意 F : J ⥤ C, 有余极限 F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -260,10 +260,10 @@ class HasLimitsOfSize
     - has_limits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasLimitsOfShape J C  [default: by infer_instance]
 
 中文:
-类 HasLimitsOfSize
-  参数: (C : 类型u) [Category.{v} C]
+类 有LimitsOfSize
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - has_limits_of_shape : 对任意 (J : 类型u₁) [Category.{v₁} J], HasLimitsOfShape J C  [默认: by infer_instance]
+    - has_limits_of_shape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有形状极限 J C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -289,10 +289,10 @@ class HasColimitsOfSize
     - has_colimits_of_shape : forall (J : Type u₁) [Category.{v₁} J], HasColimitsOfShape J C  [default: by infer_instance]
 
 中文:
-类 HasColimitsOfSize
-  参数: (C : 类型u) [Category.{v} C]
+类 有余limitsOfSize
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - has_colimits_of_shape : 对任意 (J : 类型u₁) [Category.{v₁} J], HasColimitsOfShape J C  [默认: by infer_instance]
+    - has_colimits_of_shape : 对任意 (J : 类型u₁) [范畴.{v₁} J], 有形状余极限 J C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -316,8 +316,8 @@ abbreviation HasLimits
 @[to_dual]
 
 中文:
-缩写 HasLimits
-  签名: (C : 类型u) [Category.{v} C]
+缩写 有极限
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: HasLimitsOfSize.{v, v} C
 
 @[to_dual]
@@ -337,8 +337,8 @@ theorem HasLimits.has_limits_of_shape
   proof: HasLimitsOfSize.has_limits_of_shape J
 
 中文:
-定理 HasLimits.has_limits_of_shape
-  结论: {C : 类型u} [Category.{v} C] [HasLimits C] (J : 类型v)
+定理 有极限.has_limits_of_shape
+  结论: {C : 类型u} [范畴.{v} C] [有极限 C] (J : 类型v)
   证明: HasLimitsOfSize.has_limits_of_shape J
 
 Depends on / 依赖: HasLimitsOfSize, HasLimitsOfSize.has_limits_of_shape, has_limits_of_shape
@@ -374,7 +374,7 @@ definition limit.cone
 
 中文:
 定义 limit.cone
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: (getLimitCone F).cone
 
 Depends on / 依赖: getLimitCone
@@ -394,7 +394,7 @@ definition limit
 
 中文:
 定义 limit
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: (limit.cone F).pt
 
 Depends on / 依赖: limit.cone
@@ -415,7 +415,7 @@ definition limit.π
 
 中文:
 定义 limit.π
-  签名: (F : J ⥤ C) [HasLimit F] (j : J)
+  签名: (F : J ⥤ C) [有极限 F] (j : J)
   定义体: (limit.cone F).π.app j
 
 Depends on / 依赖: limit.cone
@@ -437,7 +437,7 @@ theorem limit.π_comp_eqToHom
 
 中文:
 定理 limit.π_comp_eqToHom
-  条件: (F : J ⥤ C) [HasLimit F] {j j' : J} (hj : j = j')
+  条件: (F : J ⥤ C) [有极限 F] {j j' : J} (hj : j = j')
   证明: by
   subst hj
   simp
@@ -464,7 +464,7 @@ theorem colimit.eqToHom_comp_ι
 
 中文:
 定理 colimit.eqToHom_comp_ι
-  条件: (F : J ⥤ C) [HasColimit F] {j j' : J} (hj : j = j')
+  条件: (F : J ⥤ C) [有余极限 F] {j j' : J} (hj : j = j')
   证明: by
   subst hj
   simp
@@ -490,7 +490,7 @@ theorem limit.cone_x
 
 中文:
 定理 limit.cone_x
-  条件: {F : J ⥤ C} [HasLimit F]
+  条件: {F : J ⥤ C} [有极限 F]
   结论: (limit.cone F).pt = limit F
   证明: rfl
 
@@ -513,7 +513,7 @@ theorem limit.cone_π
 
 中文:
 定理 limit.cone_π
-  条件: {F : J ⥤ C} [HasLimit F]
+  条件: {F : J ⥤ C} [有极限 F]
   结论: (limit.cone F).π.app = limit.π _
   证明: rfl
 
@@ -533,7 +533,7 @@ theorem limit.w
 
 中文:
 定理 limit.w
-  条件: (F : J ⥤ C) [HasLimit F] {j j' : J} (f : j ⟶ j')
+  条件: (F : J ⥤ C) [有极限 F] {j j' : J} (f : j ⟶ j')
   证明: (limit.cone F).w f
 
 Depends on / 依赖: limit.cone
@@ -555,7 +555,7 @@ definition limit.isLimit
 
 中文:
 定义 limit.isLimit
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: (getLimitCone F).isLimit
 
 Depends on / 依赖: getLimitCone, isLimit
@@ -578,7 +578,7 @@ definition limit.lift
 
 中文:
 定义 limit.lift
-  签名: (F : J ⥤ C) [HasLimit F] (c : Cone F)
+  签名: (F : J ⥤ C) [有极限 F] (c : 锥 F)
   定义体: (limit.isLimit F).lift c
 
 @[to_dual (attr := simp)]
@@ -601,7 +601,7 @@ theorem limit.isLimit_lift
 
 中文:
 定理 limit.isLimit_lift
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F)
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F)
   证明: rfl
 
 @[to_dual (attr := reassoc (attr := simp)) ι_desc]
@@ -621,7 +621,7 @@ theorem limit.lift_π
 
 中文:
 定理 limit.lift_π
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J)
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) (j : J)
   证明: IsLimit.fac _ c j
 
 Depends on / 依赖: IsLimit, IsLimit.fac
@@ -655,7 +655,7 @@ definition limMap
 
 中文:
 定义 limMap
-  签名: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G)
+  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G)
   定义体: IsLimit.map _ (limit.isLimit G) α
 
 @[to_dual (attr := reassoc (attr := simp)) ι_colimMap]
@@ -676,7 +676,7 @@ theorem limMap_π
 
 中文:
 定理 limMap_π
-  条件: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) (j : J)
+  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) (j : J)
   证明: limit.lift_π _ j
 
 Depends on / 依赖: limit.lift_
@@ -699,7 +699,7 @@ definition limit.coneMorphism
 
 中文:
 定义 limit.coneMorphism
-  签名: {F : J ⥤ C} [HasLimit F] (c : Cone F)
+  签名: {F : J ⥤ C} [有极限 F] (c : 锥 F)
   定义体: (limit.isLimit F).liftConeMorphism c
 
 @[to_dual (attr := simp)]
@@ -722,7 +722,7 @@ theorem limit.coneMorphism_hom
 
 中文:
 定理 limit.coneMorphism_hom
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F)
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F)
   证明: rfl
 
 @[to_dual ι_coconeMorphism]
@@ -744,7 +744,7 @@ theorem limit.coneMorphism_π
 
 中文:
 定理 limit.coneMorphism_π
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F) (j : J)
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) (j : J)
   证明: by simp
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_inv]
@@ -765,7 +765,7 @@ theorem limit.conePointUniqueUpToIso_hom_comp
 
 中文:
 定理 limit.conePointUniqueUpToIso_hom_comp
-  结论: {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
+  结论: {F : J ⥤ C} [有极限 F] {c : 锥 F} (hc : 是极限 c)
   证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
 @[to_dual (attr := reassoc (attr := simp)) comp_coconePointUniqueUpToIso_hom]
@@ -789,7 +789,7 @@ theorem limit.conePointUniqueUpToIso_inv_comp
 
 中文:
 定理 limit.conePointUniqueUpToIso_inv_comp
-  结论: {F : J ⥤ C} [HasLimit F] {c : Cone F} (hc : IsLimit c)
+  结论: {F : J ⥤ C} [有极限 F] {c : 锥 F} (hc : 是极限 c)
   证明: IsLimit.conePointUniqueUpToIso_inv_comp _ _ _
 
 @[to_dual]
@@ -810,8 +810,8 @@ theorem limit.existsUnique
   proof: (limit.isLimit F).existsUnique _
 
 中文:
-定理 limit.existsUnique
-  条件: {F : J ⥤ C} [HasLimit F] (t : Cone F)
+定理 limit.存在Unique
+  条件: {F : J ⥤ C} [有极限 F] (t : 锥 F)
   证明: (limit.isLimit F).existsUnique _
 
 Depends on / 依赖: existsUnique, inverseImage_eq, isLimit, limit.isLimit
@@ -836,7 +836,7 @@ definition limit.isoLimitCone
 
 中文:
 定义 limit.isoLimitCone
-  签名: {F : J ⥤ C} [HasLimit F] (t : LimitCone F)
+  签名: {F : J ⥤ C} [有极限 F] (t : 极限锥 F)
   定义体: IsLimit.conePointUniqueUpToIso (limit.isLimit F) t.isLimit
 
 @[to_dual (attr := reassoc (attr := simp)) isoColimitCocone_ι_inv]
@@ -861,7 +861,7 @@ theorem limit.isoLimitCone_hom_π
 
 中文:
 定理 limit.isoLimitCone_hom_π
-  条件: {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J)
+  条件: {F : J ⥤ C} [有极限 F] (t : 极限锥 F) (j : J)
   证明: by
   dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
   simp
@@ -890,7 +890,7 @@ theorem limit.isoLimitCone_inv_π
 
 中文:
 定理 limit.isoLimitCone_inv_π
-  条件: {F : J ⥤ C} [HasLimit F] (t : LimitCone F) (j : J)
+  条件: {F : J ⥤ C} [有极限 F] (t : 极限锥 F) (j : J)
   证明: by
   dsimp [limit.isoLimitCone, IsLimit.conePointUniqueUpToIso]
   simp
@@ -917,7 +917,7 @@ theorem limit.hom_ext
 
 中文:
 定理 limit.hom_ext
-  结论: {F : J ⥤ C} [HasLimit F] {X : C} {f f' : X ⟶ limit F}
+  结论: {F : J ⥤ C} [有极限 F] {X : C} {f f' : X ⟶ limit F}
   证明: (limit.isLimit F).hom_ext w
 
 @[to_dual]
@@ -941,7 +941,7 @@ instance isIso_limMap
 
 中文:
 实例 isIso_limMap
-  签名: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [IsIso α]
+  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) [是同构 α]
   定义体: ⟨limMap (inv α), by cat_disch , by cat_disch⟩
 
 @[to_dual (attr := reassoc (attr := simp)) map_desc]
@@ -968,7 +968,7 @@ theorem limit.lift_map
 
 中文:
 定理 limit.lift_map
-  条件: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (c : Cone F) (α : F ⟶ G)
+  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (c : 锥 F) (α : F ⟶ G)
   证明: by
   ext
   rw [assoc]; rw [limMap_π]; rw [limit.lift_π_assoc]; rw [limit.lift_π]
@@ -996,7 +996,7 @@ theorem limit.lift_cone
 
 中文:
 定理 limit.lift_cone
-  条件: {F : J ⥤ C} [HasLimit F]
+  条件: {F : J ⥤ C} [有极限 F]
   结论: limit.lift F (limit.cone F) = 𝟙 (limit F)
   证明: (limit.isLimit _).lift_self
 
@@ -1018,7 +1018,7 @@ definition limit.homIso
 
 中文:
 定义 limit.homIso
-  签名: (F : J ⥤ C) [HasLimit F] (W : C)
+  签名: (F : J ⥤ C) [有极限 F] (W : C)
   定义体: (limit.isLimit F).homIso W
 
 @[simp]
@@ -1040,7 +1040,7 @@ theorem limit.homIso_hom
 
 中文:
 定理 limit.homIso_hom
-  条件: (F : J ⥤ C) [HasLimit F] {W : C}
+  条件: (F : J ⥤ C) [有极限 F] {W : C}
   证明: (limit.isLimit F).homIso_hom
 
 Depends on / 依赖: homIso_hom, isLimit, limit.isLimit
@@ -1061,7 +1061,7 @@ definition limit.homIso'
 
 中文:
 定义 limit.homIso'
-  签名: (F : J ⥤ C) [HasLimit F] (W : C)
+  签名: (F : J ⥤ C) [有极限 F] (W : C)
   定义体: (limit.isLimit F).homIso' W
 
 @[to_dual]
@@ -1084,7 +1084,7 @@ theorem limit.lift_extend
 
 中文:
 定理 limit.lift_extend
-  条件: {F : J ⥤ C} [HasLimit F] (c : Cone F) {X : C} (f : X ⟶ c.pt)
+  条件: {F : J ⥤ C} [有极限 F] (c : 锥 F) {X : C} (f : X ⟶ c.pt)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -1109,8 +1109,8 @@ theorem hasLimit_of_iso
 
 中文:
 定理 hasLimit_of_iso
-  条件: {F G : J ⥤ C} [HasLimit F] (α : F ≅ G)
-  结论: HasLimit G
+  条件: {F G : J ⥤ C} [有极限 F] (α : F ≅ G)
+  结论: 有极限 G
   证明: HasLimit.mk
     { cone := (Cone.postcompose α.hom).obj (limit.cone F)
       isLimit := (IsLimit.postcomposeHomEquiv _ _).symm (limit.isLimit F) }
@@ -1137,7 +1137,7 @@ theorem hasLimit_iff_of_iso
 中文:
 定理 hasLimit_iff_of_iso
   条件: {F G : J ⥤ C} (α : F ≅ G)
-  结论: HasLimit F ↔ HasLimit G
+  结论: 有极限 F ↔ 有极限 G
   证明: ⟨fun _ => hasLimit_of_iso α, fun _ => hasLimit_of_iso α.symm⟩
 
 Depends on / 依赖: hasLimit_of_iso
@@ -1156,8 +1156,8 @@ theorem HasLimit.ofConesIso
   proof: HasLimit.mk ⟨_, IsLimit.ofRepresentableBy ((limit.isLimit F).representableBy.ofIso h)⟩
 
 中文:
-定理 HasLimit.ofConesIso
-  结论: {J K : 类型u₁} [Category.{v₁} J] [Category.{v₂} K] (F : J ⥤ C)
+定理 有极限.ofConesIso
+  结论: {J K : 类型u₁} [范畴.{v₁} J] [范畴.{v₂} K] (F : J ⥤ C)
   证明: HasLimit.mk ⟨_, IsLimit.ofRepresentableBy ((limit.isLimit F).representableBy.ofIso h)⟩
 
 Depends on / 依赖: HasLimit, HasLimit.mk, IsLimit, IsLimit.ofRepresentableBy, isLimit, limit.isLimit, ofRepresentableBy, representableBy, representableBy.ofIso
@@ -1184,8 +1184,8 @@ definition HasLimit.isoOfNatIso
 @[reassoc (attr := simp)]
 
 中文:
-定义 HasLimit.isoOfNatIso
-  签名: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G)
+定义 有极限.isoOf自然数Iso
+  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G)
   定义体: IsLimit.conePointsIsoOfNatIso (limit.isLimit F) (limit.isLimit G) w
 
 @[reassoc (attr := simp)]
@@ -1207,8 +1207,8 @@ theorem HasLimit.isoOfNatIso_hom_π
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasLimit.isoOfNatIso_hom_π
-  条件: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J)
+定理 有极限.isoOf自然数Iso_hom_π
+  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G) (j : J)
   证明: IsLimit.conePointsIsoOfNatIso_hom_comp _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -1231,8 +1231,8 @@ theorem HasLimit.isoOfNatIso_inv_π
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasLimit.isoOfNatIso_inv_π
-  条件: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (w : F ≅ G) (j : J)
+定理 有极限.isoOf自然数Iso_inv_π
+  条件: {F G : J ⥤ C} [有极限 F] [有极限 G] (w : F ≅ G) (j : J)
   证明: IsLimit.conePointsIsoOfNatIso_inv_comp _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -1255,8 +1255,8 @@ theorem HasLimit.lift_isoOfNatIso_hom
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasLimit.lift_isoOfNatIso_hom
-  结论: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone F)
+定理 有极限.lift_isoOf自然数Iso_hom
+  结论: {F G : J ⥤ C} [有极限 F] [有极限 G] (t : 锥 F)
   证明: IsLimit.lift_comp_conePointsIsoOfNatIso_hom _ _ _
 
 @[reassoc (attr := simp)]
@@ -1279,8 +1279,8 @@ theorem HasLimit.lift_isoOfNatIso_inv
   proof: IsLimit.lift_comp_conePointsIsoOfNatIso_inv _ _ _
 
 中文:
-定理 HasLimit.lift_isoOfNatIso_inv
-  结论: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (t : Cone G)
+定理 有极限.lift_isoOf自然数Iso_inv
+  结论: {F G : J ⥤ C} [有极限 F] [有极限 G] (t : 锥 G)
   证明: IsLimit.lift_comp_conePointsIsoOfNatIso_inv _ _ _
 
 Depends on / 依赖: IsLimit, IsLimit.lift_comp_conePointsIsoOfNatIso_inv, lift_comp_conePointsIsoOfNatIso_inv
@@ -1300,8 +1300,8 @@ definition HasLimit.isoOfEquivalence
   body: IsLimit.conePointsIsoOfEquivalence (limit.isLimit F) (limit.isLimit G) e w
 
 中文:
-定义 HasLimit.isoOfEquivalence
-  签名: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G] (e : J ≌ K)
+定义 有极限.isoOfEquivalence
+  签名: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G] (e : J ≌ K)
   定义体: IsLimit.conePointsIsoOfEquivalence (limit.isLimit F) (limit.isLimit G) e w
 
 Depends on / 依赖: CatCommSq, Discrete, E.functor, Functor, Functor.associator, Functor.pi, Functor.rightUnitor, IsLimit, IsLimit.conePointsIsoOfEquivalence, Iso.refl, associator, conePointsIsoOfEquivalence, counitIso, counitIso.symm, functor, isLimit, isoWhiskerLeft, isoWhiskerRight, limit.isLimit, piEquivalenceFunctorDiscrete
@@ -1323,8 +1323,8 @@ theorem HasLimit.isoOfEquivalence_hom_π
   simp
 
 中文:
-定理 HasLimit.isoOfEquivalence_hom_π
-  结论: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
+定理 有极限.isoOfEquivalence_hom_π
+  结论: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G]
   证明: by
   simp only [HasLimit.isoOfEquivalence, IsLimit.conePointsIsoOfEquivalence_hom]
   simp
@@ -1351,8 +1351,8 @@ theorem HasLimit.isoOfEquivalence_inv_π
   simp
 
 中文:
-定理 HasLimit.isoOfEquivalence_inv_π
-  结论: {F : J ⥤ C} [HasLimit F] {G : K ⥤ C} [HasLimit G]
+定理 有极限.isoOfEquivalence_inv_π
+  结论: {F : J ⥤ C} [有极限 F] {G : K ⥤ C} [有极限 G]
   证明: by
   simp only [HasLimit.isoOfEquivalence]
   simp
@@ -1431,7 +1431,7 @@ theorem limit.lift_pre
 
 中文:
 定理 limit.lift_pre
-  条件: (c : Cone F)
+  条件: (c : 锥 F)
   证明: by ext; simp
 -/
 theorem limit.lift_pre (c : Cone F) :
@@ -1455,8 +1455,8 @@ theorem limit.pre_pre
 
 中文:
 定理 limit.pre_pre
-  条件: [h : HasLimit (D ⋙ E ⋙ F)]
-  结论: haveI : HasLimit ((D ⋙ E) ⋙ F)
+  条件: [h : 有极限 (D ⋙ E ⋙ F)]
+  结论: haveI : 有极限 ((D ⋙ E) ⋙ F)
   证明: h
     limit.pre F E ≫ limit.pre (E ⋙ F) D = limit.pre F (D ⋙ E) := by
   have : HasLimit ((D ⋙ E) ⋙ F) := h
@@ -1479,7 +1479,7 @@ theorem limit.pre_eq
 
 中文:
 定理 limit.pre_eq
-  条件: (s : LimitCone (E ⋙ F)) (t : LimitCone F)
+  条件: (s : 极限锥 (E ⋙ F)) (t : 极限锥 F)
   证明: by cat_disch
 
 Depends on / 依赖: Construction, Functor, Functor.assoc, Functor.comp_id, IsEquivalence, IsEquivalence.mk, Localization, Localization.Construction.fac, Localization.Construction.uniq, Q_inverts, W.Q_inverts, cat_disch, comp_id, eqToIso, inverts, isEquivalence
@@ -1560,7 +1560,7 @@ theorem limit.lift_post
 
 中文:
 定理 limit.lift_post
-  条件: (c : Cone F)
+  条件: (c : 锥 F)
   证明: by
   ext
   rw [assoc]; rw [limit.post_π]; rw [← G.map_comp]; rw [limit.lift_π]; rw [limit.lift_π]
@@ -1590,7 +1590,7 @@ theorem limit.post_post
 
 中文:
 定理 limit.post_post
-  条件: {E : 类型u''} [Category.{v''} E] (H : D ⥤ E) [h : HasLimit ((F ⋙ G) ⋙ H)]
+  条件: {E : 类型u''} [范畴.{v''} E] (H : D ⥤ E) [h : 有极限 ((F ⋙ G) ⋙ H)]
   证明: h
     H.map (limit.post F G) ≫ limit.post (F ⋙ G) H = limit.post F (G ⋙ H) := by
   have : HasLimit (F ⋙ G ⋙ H) := h
@@ -1619,7 +1619,7 @@ theorem limit.pre_post
 
 中文:
 定理 limit.pre_post
-  结论: {D : 类型u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
+  结论: {D : 类型u'} [范畴.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
   证明: h
     G.map (limit.pre F E) ≫ limit.post (E ⋙ F) G = limit.post F G ≫ limit.pre (F ⋙ G) E := by
   have : HasLimit (E ⋙ F ⋙ G) := h
@@ -1648,7 +1648,7 @@ instance hasLimit_equivalence_comp
 
 中文:
 实例 hasLimit_equivalence_comp
-  签名: (e : K ≌ J) [HasLimit F]
+  签名: (e : K ≌ J) [有极限 F]
   定义体: HasLimit.mk
     { cone := Cone.whisker e.functor (limit.cone F)
       isLimit := IsLimit.whiskerEquivalence (limit.isLimit F) e }
@@ -1674,8 +1674,8 @@ theorem hasLimit_of_equivalence_comp
 
 中文:
 定理 hasLimit_of_equivalence_comp
-  条件: (e : K ≌ J) [HasLimit (e.functor ⋙ F)]
-  结论: HasLimit F
+  条件: (e : K ≌ J) [有极限 (e.functor ⋙ F)]
+  结论: 有极限 F
   证明: by
   have : HasLimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasLimit_equivalence_comp e.symm
   apply hasLimit_of_iso (e.invFunIdAssoc F)
@@ -1698,7 +1698,7 @@ lemma hasLimit_equivalence_comp_iff
 中文:
 引理 hasLimit_equivalence_comp_iff
   条件: (e : K ≌ J)
-  结论: HasLimit (e.functor ⋙ F) ↔ HasLimit F
+  结论: 有极限 (e.functor ⋙ F) ↔ 有极限 F
   证明: ⟨fun _ => hasLimit_of_equivalence_comp e, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasLimit_of_equivalence_comp
@@ -1718,7 +1718,7 @@ lemma hasLimit_inverse_equivalence_comp_iff
 中文:
 引理 hasLimit_inverse_equivalence_comp_iff
   条件: (e : J ≌ K)
-  结论: HasLimit (e.inverse ⋙ F) ↔ HasLimit F
+  结论: 有极限 (e.inverse ⋙ F) ↔ 有极限 F
   证明: hasLimit_equivalence_comp_iff e.symm
 
 Depends on / 依赖: e.symm, hasLimit_equivalence_comp_iff
@@ -1822,7 +1822,7 @@ theorem limit.map_pre
 
 中文:
 定理 limit.map_pre
-  条件: [HasLimitsOfShape K C] (E : K ⥤ J)
+  条件: [有形状极限 K C] (E : K ⥤ J)
   证明: by
   ext
   simp
@@ -1843,7 +1843,7 @@ theorem limit.map_pre'
 
 中文:
 定理 limit.map_pre'
-  条件: [HasLimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
+  条件: [有形状极限 K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
   证明: by
   ext1; simp
 -/
@@ -1864,7 +1864,7 @@ theorem limit.id_pre
 中文:
 定理 limit.id_pre
   条件: (F : J ⥤ C)
-  结论: limit.pre F (𝟭 _) = lim.map (Functor.leftUnitor F).inv
+  结论: limit.pre F (𝟭 _) = lim.map (函子.leftUnitor F).inv
   证明: by
   cat_disch
 
@@ -1885,7 +1885,7 @@ theorem limit.map_post
 
 中文:
 定理 limit.map_post
-  条件: {D : 类型u'} [Category.{v'} D] [HasLimitsOfShape J D] (H : C ⥤ D)
+  条件: {D : 类型u'} [范畴.{v'} D] [有形状极限 J D] (H : C ⥤ D)
   证明: by
   ext
   simp only [whiskerRight_app, limMap_π, assoc, limit.post_π_assoc, limit.post_π, ← H.map_comp]
@@ -1971,7 +1971,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRightAdjoint (lim : (J ⥤ C) ⥤ C)
+  签名: 是右伴随 (lim : (J ⥤ C) ⥤ C)
   定义体: ⟨_, ⟨constLimAdj⟩⟩
 
 Depends on / 依赖: constLimAdj
@@ -1991,7 +1991,7 @@ instance limMap_mono'
 
 中文:
 实例 limMap_mono'
-  签名: {F G : J ⥤ C} [HasLimitsOfShape J C] (α : F ⟶ G) [Mono α]
+  签名: {F G : J ⥤ C} [有形状极限 J C] (α : F ⟶ G) [单态射 α]
   定义体: (lim : (J ⥤ C) ⥤ C).map_mono α
 
 Depends on / 依赖: map_mono
@@ -2010,7 +2010,7 @@ limit.hom_ext fun j => (cancel_mono (α.app j)).1 by simpa using h =≫ limit.π
 
 中文:
 实例 limMap_mono
-  签名: {F G : J ⥤ C} [HasLimit F] [HasLimit G] (α : F ⟶ G) [对任意 j, Mono (α.app j)]
+  签名: {F G : J ⥤ C} [有极限 F] [有极限 G] (α : F ⟶ G) [对任意 j, 单态射 (α.app j)]
   定义体: ⟨fun {Z} u v h =>
 limit.hom_ext fun j => (cancel_mono (α.app j)).1 by simpa using h =≫ limit.π _ j⟩
 
@@ -2110,7 +2110,7 @@ theorem hasLimitsOfShape_of_equivalence
 
 中文:
 定理 hasLimitsOfShape_of_equivalence
-  结论: {J' : 类型u₂} [Category.{v₂} J'] (e : J ≌ J')
+  结论: {J' : 类型u₂} [范畴.{v₂} J'] (e : J ≌ J')
   证明: by
   constructor
   intro F
@@ -2137,7 +2137,7 @@ lemma HasLimitsOfShape.of_small
     ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
 
 中文:
-引理 HasLimitsOfShape.of_small
+引理 有形状极限.of_small
   证明: by
   have := HasLimitsOfSize.has_limits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
   exact hasLimitsOfShape_of_equivalence
@@ -2163,7 +2163,7 @@ lemma HasLimitsOfShape.of_essentiallySmall
   exact hasLimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
 
 中文:
-引理 HasLimitsOfShape.of_essentiallySmall
+引理 有形状极限.of_essentiallySmall
   证明: by
   have := HasLimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
   exact hasLimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
@@ -2209,7 +2209,7 @@ theorem hasLimitsOfSizeShrink
 
 中文:
 定理 hasLimitsOfSizeShrink
-  条件: [HasLimitsOfSize.{max v₁ v₂, max u₁ u₂} C]
+  条件: [有LimitsOfSize.{最大值 v₁ v₂, 最大值 u₁ u₂} C]
   证明: hasLimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
 
 Depends on / 依赖: hasLimitsOfSizeOfUnivLE
@@ -2236,7 +2236,7 @@ definition colimit.homIso
 
 中文:
 定义 colimit.homIso
-  签名: (F : J ⥤ C) [HasColimit F] (W : C)
+  签名: (F : J ⥤ C) [有余极限 F] (W : C)
   定义体: (colimit.isColimit F).homIso W
 
 @[simp]
@@ -2258,7 +2258,7 @@ theorem colimit.homIso_hom
 
 中文:
 定理 colimit.homIso_hom
-  条件: (F : J ⥤ C) [HasColimit F] {W : C}
+  条件: (F : J ⥤ C) [有余极限 F] {W : C}
   证明: (colimit.isColimit F).homIso_hom
 
 Depends on / 依赖: colimit, colimit.isColimit, homIso_hom, isColimit
@@ -2278,7 +2278,7 @@ definition colimit.homIso'
 
 中文:
 定义 colimit.homIso'
-  签名: (F : J ⥤ C) [HasColimit F] (W : C)
+  签名: (F : J ⥤ C) [有余极限 F] (W : C)
   定义体: (colimit.isColimit F).homIso' W
 
 Depends on / 依赖: colimit, colimit.isColimit, homIso, isColimit
@@ -2305,8 +2305,8 @@ theorem hasColimit_of_iso
 
 中文:
 定理 hasColimit_of_iso
-  条件: {F G : J ⥤ C} [HasColimit F] (α : G ≅ F)
-  结论: HasColimit G
+  条件: {F G : J ⥤ C} [有余极限 F] (α : G ≅ F)
+  结论: 有余极限 G
   证明: HasColimit.mk
     { cocone := (Cocone.precompose α.hom).obj (colimit.cocone F)
       isColimit := (IsColimit.precomposeHomEquiv _ _).symm (colimit.isColimit F) }
@@ -2329,8 +2329,8 @@ theorem HasColimit.ofCoconesIso
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasColimit.ofCoconesIso
-  结论: {K : 类型u₁} [Category.{v₂} K] (F : J ⥤ C) (G : K ⥤ C)
+定理 有余极限.ofCoconesIso
+  结论: {K : 类型u₁} [范畴.{v₂} K] (F : J ⥤ C) (G : K ⥤ C)
   证明: HasColimit.mk ⟨_, IsColimit.ofCorepresentableBy ((colimit.isColimit F).corepresentableBy.ofIso h)⟩
 
 @[reassoc (attr := simp)]
@@ -2353,8 +2353,8 @@ theorem HasColimit.isoOfNatIso_ι_hom
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasColimit.isoOfNatIso_ι_hom
-  结论: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
+定理 有余极限.isoOf自然数Iso_ι_hom
+  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (w : F ≅ G)
   证明: IsColimit.comp_coconePointsIsoOfNatIso_hom _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -2377,8 +2377,8 @@ theorem HasColimit.isoOfNatIso_ι_inv
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasColimit.isoOfNatIso_ι_inv
-  结论: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (w : F ≅ G)
+定理 有余极限.isoOf自然数Iso_ι_inv
+  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (w : F ≅ G)
   证明: IsColimit.comp_coconePointsIsoOfNatIso_inv _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -2401,8 +2401,8 @@ theorem HasColimit.isoOfNatIso_hom_desc
 @[reassoc (attr := simp)]
 
 中文:
-定理 HasColimit.isoOfNatIso_hom_desc
-  结论: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone G)
+定理 有余极限.isoOf自然数Iso_hom_desc
+  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (t : 余锥 G)
   证明: IsColimit.coconePointsIsoOfNatIso_hom_desc _ _ _
 
 @[reassoc (attr := simp)]
@@ -2425,8 +2425,8 @@ theorem HasColimit.isoOfNatIso_inv_desc
   proof: IsColimit.coconePointsIsoOfNatIso_inv_desc _ _ _
 
 中文:
-定理 HasColimit.isoOfNatIso_inv_desc
-  结论: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (t : Cocone F)
+定理 有余极限.isoOf自然数Iso_inv_desc
+  结论: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (t : 余锥 F)
   证明: IsColimit.coconePointsIsoOfNatIso_inv_desc _ _ _
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointsIsoOfNatIso_inv_desc, coconePointsIsoOfNatIso_inv_desc
@@ -2446,8 +2446,8 @@ definition HasColimit.isoOfEquivalence
   body: IsColimit.coconePointsIsoOfEquivalence (colimit.isColimit F) (colimit.isColimit G) e w
 
 中文:
-定义 HasColimit.isoOfEquivalence
-  签名: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G] (e : J ≌ K)
+定义 有余极限.isoOfEquivalence
+  签名: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G] (e : J ≌ K)
   定义体: IsColimit.coconePointsIsoOfEquivalence (colimit.isColimit F) (colimit.isColimit G) e w
 
 Depends on / 依赖: IsColimit, IsColimit.coconePointsIsoOfEquivalence, coconePointsIsoOfEquivalence, colimit, colimit.isColimit, isColimit
@@ -2468,8 +2468,8 @@ theorem HasColimit.ι_isoOfEquivalence_hom
   simp [HasColimit.isoOfEquivalence]
 
 中文:
-定理 HasColimit.ι_isoOfEquivalence_hom
-  结论: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
+定理 有余极限.ι_isoOfEquivalence_hom
+  结论: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G]
   证明: by
   simp [HasColimit.isoOfEquivalence]
 
@@ -2499,8 +2499,8 @@ alias HasColimit.isoOfEquivalence_hom_π := HasColimit.ι_isoOfEquivalence_hom
 alias HasColimit.isoOfEquivalence_inv_π := HasColimit.ι_isoOf
 
 中文:
-定理 HasColimit.ι_isoOfEquivalence_inv
-  结论: {F : J ⥤ C} [HasColimit F] {G : K ⥤ C} [HasColimit G]
+定理 有余极限.ι_isoOfEquivalence_inv
+  结论: {F : J ⥤ C} [有余极限 F] {G : K ⥤ C} [有余极限 G]
   证明: by
   simp [HasColimit.isoOfEquivalence, IsColimit.coconePointsIsoOfEquivalence_inv]
 
@@ -2592,7 +2592,7 @@ theorem colimit.ι_inv_pre
 
 中文:
 定理 colimit.ι_inv_pre
-  条件: [IsIso (pre F E)] (k : K)
+  条件: [是同构 (pre F E)] (k : K)
   证明: by
   simp [IsIso.comp_inv_eq]
 
@@ -2617,7 +2617,7 @@ theorem colimit.pre_desc
 
 中文:
 定理 colimit.pre_desc
-  条件: (c : Cocone F)
+  条件: (c : 余锥 F)
   证明: by
   ext
   simp
@@ -2646,7 +2646,7 @@ theorem colimit.pre_pre
 
 中文:
 定理 colimit.pre_pre
-  条件: [h : HasColimit (D ⋙ E ⋙ F)]
+  条件: [h : 有余极限 (D ⋙ E ⋙ F)]
   证明: h
     colimit.pre (E ⋙ F) D ≫ colimit.pre F E = colimit.pre F (D ⋙ E) := by
   ext j
@@ -2675,7 +2675,7 @@ theorem colimit.pre_eq
 
 中文:
 定理 colimit.pre_eq
-  条件: (s : ColimitCocone (E ⋙ F)) (t : ColimitCocone F)
+  条件: (s : 余极限余锥 (E ⋙ F)) (t : 余极限余锥 F)
   证明: by
   cat_disch
 
@@ -2759,7 +2759,7 @@ theorem colimit.post_desc
 
 中文:
 定理 colimit.post_desc
-  条件: (c : Cocone F)
+  条件: (c : 余锥 F)
   证明: by
   ext
   rw [← assoc]; rw [colimit.ι_post]; rw [← G.map_comp]; rw [colimit.ι_desc]; rw [colimit.ι_desc]
@@ -2791,7 +2791,7 @@ theorem colimit.post_post
 
 中文:
 定理 colimit.post_post
-  结论: {E : 类型u''} [Category.{v''} E] (H : D ⥤ E)
+  结论: {E : 类型u''} [范畴.{v''} E] (H : D ⥤ E)
   证明: h
     colimit.post (F ⋙ G) H ≫ H.map (colimit.post F G) = colimit.post F (G ⋙ H) := by
   ext j
@@ -2827,7 +2827,7 @@ theorem colimit.pre_post
 
 中文:
 定理 colimit.pre_post
-  结论: {D : 类型u'} [Category.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
+  结论: {D : 类型u'} [范畴.{v'} D] (E : K ⥤ J) (F : J ⥤ C) (G : C ⥤ D)
   证明: h
     colimit.post (E ⋙ F) G ≫ G.map (colimit.pre F E) =
       colimit.pre (F ⋙ G) E ≫ colimit.post F G := by
@@ -2862,7 +2862,7 @@ instance hasColimit_equivalence_comp
 
 中文:
 实例 hasColimit_equivalence_comp
-  签名: (e : K ≌ J) [HasColimit F]
+  签名: (e : K ≌ J) [有余极限 F]
   定义体: HasColimit.mk
     { cocone := Cocone.whisker e.functor (colimit.cocone F)
       isColimit := IsColimit.whiskerEquivalence (colimit.isColimit F) e }
@@ -2887,8 +2887,8 @@ theorem hasColimit_of_equivalence_comp
 
 中文:
 定理 hasColimit_of_equivalence_comp
-  条件: (e : K ≌ J) [HasColimit (e.functor ⋙ F)]
-  结论: HasColimit F
+  条件: (e : K ≌ J) [有余极限 (e.functor ⋙ F)]
+  结论: 有余极限 F
   证明: by
   have : HasColimit (e.inverse ⋙ e.functor ⋙ F) := Limits.hasColimit_equivalence_comp e.symm
   apply hasColimit_of_iso (e.invFunIdAssoc F).symm
@@ -2911,7 +2911,7 @@ lemma hasColimit_equivalence_comp_iff
 中文:
 引理 hasColimit_equivalence_comp_iff
   条件: (e : K ≌ J)
-  结论: HasColimit (e.functor ⋙ F) ↔ HasColimit F
+  结论: 有余极限 (e.functor ⋙ F) ↔ 有余极限 F
   证明: ⟨fun _ => hasColimit_of_equivalence_comp e, fun _ => inferInstance⟩
 
 Depends on / 依赖: hasColimit_of_equivalence_comp
@@ -3041,7 +3041,7 @@ theorem colimit.pre_map
 
 中文:
 定理 colimit.pre_map
-  条件: [HasColimitsOfShape K C] (E : K ⥤ J)
+  条件: [有形状余极限 K C] (E : K ⥤ J)
   证明: by
   ext
   rw [← assoc]; rw [colimit.ι_pre]; rw [colimit.ι_map]; rw [← assoc]; rw [colimit.ι_map]; rw [assoc]; rw [colimit.ι_pre]
@@ -3067,7 +3067,7 @@ theorem colimit.pre_map'
 
 中文:
 定理 colimit.pre_map'
-  条件: [HasColimitsOfShape K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
+  条件: [有形状余极限 K C] (F : J ⥤ C) {E₁ E₂ : K ⥤ J} (α : E₁ ⟶ E₂)
   证明: by
   ext1
   simp
@@ -3109,7 +3109,7 @@ theorem colimit.map_post
 
 中文:
 定理 colimit.map_post
-  结论: {D : 类型u'} [Category.{v'} D] [HasColimitsOfShape J D]
+  结论: {D : 类型u'} [范畴.{v'} D] [有形状余极限 J D]
   证明: by
   ext
   rw [← assoc]; rw [colimit.ι_post]; rw [← H.map_comp]; rw [colimit.ι_map]; rw [H.map_comp]
@@ -3201,7 +3201,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLeftAdjoint (colim : (J ⥤ C) ⥤ C)
+  签名: 是左伴随 (colim : (J ⥤ C) ⥤ C)
   定义体: ⟨_, ⟨colimConstAdj⟩⟩
 
 Depends on / 依赖: colimConstAdj
@@ -3221,7 +3221,7 @@ instance colimMap_epi'
 
 中文:
 实例 colimMap_epi'
-  签名: {F G : J ⥤ C} [HasColimitsOfShape J C] (α : F ⟶ G) [Epi α]
+  签名: {F G : J ⥤ C} [有形状余极限 J C] (α : F ⟶ G) [满态射 α]
   定义体: (colim : (J ⥤ C) ⥤ C).map_epi α
 
 Depends on / 依赖: map_epi
@@ -3241,7 +3241,7 @@ colimit.hom_ext fun j => (cancel_epi (α.app j)).1 by simpa using colimit.ι _ j
 
 中文:
 实例 colimMap_epi
-  签名: {F G : J ⥤ C} [HasColimit F] [HasColimit G] (α : F ⟶ G) [对任意 j, Epi (α.app j)]
+  签名: {F G : J ⥤ C} [有余极限 F] [有余极限 G] (α : F ⟶ G) [对任意 j, 满态射 (α.app j)]
   定义体: ⟨fun {Z} u v h =>
 colimit.hom_ext fun j => (cancel_epi (α.app j)).1 by simpa using colimit.ι _ j ≫= h⟩
 
@@ -3265,7 +3265,7 @@ theorem hasColimitsOfShape_of_equivalence
 
 中文:
 定理 hasColimitsOfShape_of_equivalence
-  结论: {J' : 类型u₂} [Category.{v₂} J'] (e : J ≌ J')
+  结论: {J' : 类型u₂} [范畴.{v₂} J'] (e : J ≌ J')
   证明: by
   constructor
   intro F
@@ -3292,7 +3292,7 @@ lemma HasColimitsOfShape.of_small
     ((ShrinkHoms.equivalence _).symm.trans (Shrink.equivalence _).symm)
 
 中文:
-引理 HasColimitsOfShape.of_small
+引理 有形状余极限.of_small
   证明: by
   have := HasColimitsOfSize.has_colimits_of_shape (C := C) (ShrinkHoms (Shrink.{u₁} J))
   exact hasColimitsOfShape_of_equivalence
@@ -3318,7 +3318,7 @@ lemma HasColimitsOfShape.of_essentiallySmall
   exact hasColimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
 
 中文:
-引理 HasColimitsOfShape.of_essentiallySmall
+引理 有形状余极限.of_essentiallySmall
   证明: by
   have := HasColimitsOfShape.of_small.{v₁, u₁} C (SmallModel.{u₁} J)
   exact hasColimitsOfShape_of_equivalence (equivSmallModel.{u₁} J).symm
@@ -3364,7 +3364,7 @@ theorem hasColimitsOfSizeShrink
 
 中文:
 定理 hasColimitsOfSizeShrink
-  条件: [HasColimitsOfSize.{max v₁ v₂, max u₁ u₂} C]
+  条件: [有余limitsOfSize.{最大值 v₁ v₂, 最大值 u₁ u₂} C]
   证明: hasColimitsOfSizeOfUnivLE.{max v₁ v₂, max u₁ u₂} C
 
 Depends on / 依赖: hasColimitsOfSizeOfUnivLE
@@ -3399,8 +3399,8 @@ definition IsLimit.op
       rfl
 
 中文:
-定义 IsLimit.op
-  签名: {t : Cone F} (P : IsLimit t)
+定义 是极限.op
+  签名: {t : 锥 F} (P : 是极限 t)
   定义体: (P.lift s.unop).op
   fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
   uniq s m w := by
@@ -3445,8 +3445,8 @@ definition IsColimit.op
       rfl
 
 中文:
-定义 IsColimit.op
-  签名: {t : Cocone F} (P : IsColimit t)
+定义 是余极限.op
+  签名: {t : 余锥 F} (P : 是余极限 t)
   定义体: (P.desc s.unop).op
   fac s j := congrArg Quiver.Hom.op (P.fac s.unop (unop j))
   uniq s m w := by
@@ -3491,8 +3491,8 @@ definition IsLimit.unop
       rfl
 
 中文:
-定义 IsLimit.unop
-  签名: {t : Cone F.op} (P : IsLimit t)
+定义 是极限.unop
+  签名: {t : 锥 F.op} (P : 是极限 t)
   定义体: (P.lift s.op).unop
   fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
   uniq s m w := by
@@ -3537,8 +3537,8 @@ definition IsColimit.unop
       rfl
 
 中文:
-定义 IsColimit.unop
-  签名: {t : Cocone F.op} (P : IsColimit t)
+定义 是余极限.unop
+  签名: {t : 余锥 F.op} (P : 是余极限 t)
   定义体: (P.desc s.op).unop
   fac s j := congrArg Quiver.Hom.unop (P.fac s.op (.op j))
   uniq s m w := by
@@ -3574,7 +3574,7 @@ definition isLimitOfOp
 
 中文:
 定义 isLimitOfOp
-  签名: {t : Cone F} (P : IsColimit t.op)
+  签名: {t : 锥 F} (P : 是余极限 t.op)
   定义体: P.unop
 
 Depends on / 依赖: P.unop
@@ -3592,7 +3592,7 @@ definition isColimitOfOp
 
 中文:
 定义 isColimitOfOp
-  签名: {t : Cocone F} (P : IsLimit t.op)
+  签名: {t : 余锥 F} (P : 是极限 t.op)
   定义体: P.unop
 
 Depends on / 依赖: P.unop
@@ -3610,7 +3610,7 @@ definition isLimitOfUnop
 
 中文:
 定义 isLimitOfUnop
-  签名: {t : Cone F.op} (P : IsColimit t.unop)
+  签名: {t : 锥 F.op} (P : 是余极限 t.unop)
   定义体: P.op
 
 Depends on / 依赖: P.op
@@ -3628,7 +3628,7 @@ definition isColimitOfUnop
 
 中文:
 定义 isColimitOfUnop
-  签名: {t : Cocone F.op} (P : IsLimit t.unop)
+  签名: {t : 余锥 F.op} (P : 是极限 t.unop)
   定义体: P.op
 
 Depends on / 依赖: P.op
@@ -3646,7 +3646,7 @@ definition isLimitEquivIsColimitOp
 
 中文:
 定义 isLimitEquivIsColimitOp
-  签名: {t : Cone F}
+  签名: {t : 锥 F}
   定义体: equivOfSubsingletonOfSubsingleton IsLimit.op isLimitOfOp
 
 Depends on / 依赖: IsLimit, IsLimit.op, equivOfSubsingletonOfSubsingleton, isLimitOfOp
@@ -3664,7 +3664,7 @@ definition isColimitEquivIsLimitOp
 
 中文:
 定义 isColimitEquivIsLimitOp
-  签名: {t : Cocone F}
+  签名: {t : 余锥 F}
   定义体: equivOfSubsingletonOfSubsingleton IsColimit.op isColimitOfOp
 
 Depends on / 依赖: IsColimit, IsColimit.op, equivOfSubsingletonOfSubsingleton, isColimitOfOp

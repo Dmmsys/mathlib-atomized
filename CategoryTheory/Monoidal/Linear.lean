@@ -39,8 +39,8 @@ class MonoidalLinear
     - smul_whiskerRight : forall (r : R) {Y Z : C} (f : Y ⟶ Z) (X : C), (r • f) ▷ X = r • (f ▷ X)  [default: by cat_disch]
 
 中文:
-类 MonoidalLinear
-  参数: [MonoidalPreadditive C]
+类 幺半群线性
+  参数: [幺半群预加性 C]
   公理与运算 (2 个):
     - whiskerLeft_smul : 对任意 (X : C) {Y Z : C} (r : R) (f : Y ⟶ Z), X ◁ (r • f) = r • (X ◁ f)  [默认: by cat_disch]
     - smul_whiskerRight : 对任意 (r : R) {Y Z : C} (f : Y ⟶ Z) (X : C), (r • f) ▷ X = r • (f ▷ X)  [默认: by cat_disch]
@@ -128,8 +128,8 @@ theorem MonoidalLinear.ofFaithful
       simp }
 
 中文:
-定理 MonoidalLinear.ofFaithful
-  结论: {D : 类型} [Category* D] [Preadditive D] [Linear R D]
+定理 幺半群线性.ofFaithful
+  结论: {D : 类型} [范畴* D] [预加性 D] [线性 R D]
   证明: { whiskerLeft_smul := by
       intro X Y Z r f
       apply F.map_injective

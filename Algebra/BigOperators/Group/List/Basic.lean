@@ -74,7 +74,7 @@ theorem prod_hom_nonempty
 
 中文:
 定理 prod_hom_nonempty
-  结论: {l : List M} {F : 类型} [FunLike F M N] [MulHomClass F M N] (f : F)
+  结论: {l : 列表 M} {F : 类型} [函数状 F M N] [乘法态射类 F M N] (f : F)
   证明: match l, hl with | x :: xs, hl => by induction xs generalizing x <;> simp_all
 
 @[to_additive]
@@ -100,7 +100,7 @@ theorem prod_hom
 
 中文:
 定理 prod_hom
-  条件: (l : List M) {F : 类型} [FunLike F M N] [MonoidHomClass F M N] (f : F)
+  条件: (l : 列表 M) {F : 类型} [函数状 F M N] [幺半群态射类 F M N] (f : F)
   证明: by
   simp only [prod, foldr_map, ← map_one f]
   exact l.foldr_hom f (fun x y => (map_mul f x y).symm)
@@ -128,7 +128,7 @@ theorem prod_hom₂_nonempty
 
 中文:
 定理 prod_hom₂_nonempty
-  结论: {l : List ι} (f : M -> N -> P)
+  结论: {l : 列表 ι} (f : M -> N -> P)
   证明: by
   match l, hl with | x :: xs, hl => induction xs generalizing x <;> simp_all
 
@@ -156,7 +156,7 @@ theorem prod_hom₂
 
 中文:
 定理 prod_hom₂
-  结论: (l : List ι) (f : M -> N -> P) (hf : 对任意 a b c d, f (a * b) (c * d) = f a c * f b d)
+  结论: (l : 列表 ι) (f : M -> N -> P) (hf : 对任意 a b c d, f (a * b) (c * d) = f a c * f b d)
   证明: by
   simp only [prod_eq_foldr, foldr_map]
   rw [← foldr_hom₂ l f _ _ ((fun x y => f (f₁ x) (f₂ x) * y)) _ _ (by simp [hf]), hf']
@@ -184,7 +184,7 @@ theorem prod_map_mul
 
 中文:
 定理 prod_map_mul
-  条件: {M : 类型} [CommMonoid M] {l : List ι} {f g : ι -> M}
+  条件: {M : 类型} [交换幺半群 M] {l : 列表 ι} {f g : ι -> M}
   证明: l.prod_hom₂ (· * ·) mul_mul_mul_comm (mul_one _) _ _
 
 @[to_additive]
@@ -208,7 +208,7 @@ theorem prod_map_hom
 
 中文:
 定理 prod_map_hom
-  结论: (L : List ι) (f : ι -> M) {G : 类型} [FunLike G M N] [MonoidHomClass G M N]
+  结论: (L : 列表 ι) (f : ι -> M) {G : 类型} [函数状 G M N] [幺半群态射类 G M N]
   证明: by rw [← prod_hom, map_map]
 
 @[to_additive (attr := simp)]
@@ -233,7 +233,7 @@ theorem prod_take_mul_prod_drop
 
 中文:
 定理 prod_take_mul_prod_drop
-  条件: (L : List M) (i : 自然数)
+  条件: (L : 列表 M) (i : 自然数)
   证明: by
   simp [← prod_append]
 
@@ -258,7 +258,7 @@ theorem prod_take_succ
 
 中文:
 定理 prod_take_succ
-  条件: (L : List M) (i : 自然数) (p : i < L.length)
+  条件: (L : 列表 M) (i : 自然数) (p : i < L.length)
   证明: by
   rw [← take_concat_get' _ _ p]; rw [prod_append]
   simp
@@ -286,7 +286,7 @@ theorem length_pos_of_prod_ne_one
 
 中文:
 定理 length_pos_of_prod_ne_one
-  条件: (L : List M) (h : L.prod != 1)
+  条件: (L : 列表 M) (h : L.乘积 != 1)
   结论: 0 < L.length
   证明: by
   cases L
@@ -311,7 +311,7 @@ theorem length_pos_of_one_lt_prod
 
 中文:
 定理 length_pos_of_one_lt_prod
-  条件: [Preorder M] (L : List M) (h : 1 < L.prod)
+  条件: [预序 M] (L : 列表 M) (h : 1 < L.乘积)
   结论: 0 < L.length
   证明: length_pos_of_prod_ne_one L h.ne'
 
@@ -335,7 +335,7 @@ theorem length_pos_of_prod_lt_one
 
 中文:
 定理 length_pos_of_prod_lt_one
-  条件: [Preorder M] (L : List M) (h : L.prod < 1)
+  条件: [预序 M] (L : 列表 M) (h : L.乘积 < 1)
   结论: 0 < L.length
   证明: length_pos_of_prod_ne_one L h.ne
 
@@ -383,8 +383,8 @@ theorem getElem?_zero_mul_tail_prod
 
 中文:
 定理 getElem?_zero_mul_tail_prod
-  条件: (l : List M)
-  结论: l[0]?.getD 1 * l.tail.prod = l.prod
+  条件: (l : 列表 M)
+  结论: l[0]?.getD 1 * l.tail.乘积 = l.乘积
   证明: by
   cases l <;> simp
 -/
@@ -407,7 +407,7 @@ theorem headI_mul_tail_prod_of_ne_nil
 
 中文:
 定理 headI_mul_tail_prod_of_ne_nil
-  条件: [Inhabited M] (l : List M) (h : l != [])
+  条件: [可居 M] (l : 列表 M) (h : l != [])
   证明: by cases l <;> [contradiction; simp]
 
 @[to_additive]
@@ -434,7 +434,7 @@ theorem _root_.Commute.list_prod_right
 
 中文:
 定理 _root_.Commute.list_prod_right
-  条件: (l : List M) (y : M) (h : 对任意 x in l, Commute y x)
+  条件: (l : 列表 M) (y : M) (h : 对任意 x in l, Commute y x)
   证明: by
   induction l with
   | nil => simp
@@ -467,7 +467,7 @@ theorem _root_.Commute.list_prod_left
 
 中文:
 定理 _root_.Commute.list_prod_left
-  条件: (l : List M) (y : M) (h : 对任意 x in l, Commute x y)
+  条件: (l : 列表 M) (y : M) (h : 对任意 x in l, Commute x y)
   证明: ((Commute.list_prod_right _ _) fun _ hx => (h _ hx).symm).symm
 
 Depends on / 依赖: Commute, Commute.list_prod_right, list_prod_right
@@ -539,7 +539,7 @@ lemma prod_eq_one
 中文:
 引理 prod_eq_one
   条件: (hl : 对任意 x in l, x = 1)
-  结论: l.prod = 1
+  结论: l.乘积 = 1
   证明: by
   induction l with
   | nil => rfl
@@ -563,8 +563,8 @@ lemma exists_mem_ne_one_of_prod_ne_one
 @[to_additive]
 
 中文:
-引理 exists_mem_ne_one_of_prod_ne_one
-  条件: (h : l.prod != 1)
+引理 存在_mem_ne_one_of_prod_ne_one
+  条件: (h : l.乘积 != 1)
   证明: by simpa only [not_forall, exists_prop] using mt prod_eq_one h
 
 @[to_additive]
@@ -627,7 +627,7 @@ lemma prod_map_eq_pow_single
 
 中文:
 引理 prod_map_eq_pow_single
-  结论: [DecidableEq α] {l : List α} (a : α) (f : α -> M)
+  结论: [DecidableEq α] {l : 列表 α} (a : α) (f : α -> M)
   证明: by
   induction l generalizing a with
   | nil => rw [map_nil, prod_nil, count_nil, _root_.pow_zero]
@@ -759,7 +759,7 @@ theorem prod_filter_bne_one
 
 中文:
 定理 prod_filter_bne_one
-  条件: [BEq M] [LawfulBEq M] (l : List M)
+  条件: [BEq M] [LawfulBEq M] (l : 列表 M)
   证明: by
   classical induction l <;> grind
 
@@ -787,9 +787,9 @@ theorem CommMonoid.prod_insertIdx
 @[to_additive (attr := simp)]
 
 中文:
-定理 CommMonoid.prod_insertIdx
+定理 交换幺半群.prod_insertIdx
   条件: {i} (h : i <= l.length)
-  结论: (l.insertIdx i a).prod = a * l.prod
+  结论: (l.insertIdx i a).乘积 = a * l.乘积
   证明: List.prod_insertIdx h (fun a' _ => Commute.all a a')
 
 @[to_additive (attr := simp)]
@@ -812,9 +812,9 @@ theorem CommMonoid.mul_prod_eraseIdx
 @[to_additive (attr := simp)]
 
 中文:
-定理 CommMonoid.mul_prod_eraseIdx
+定理 交换幺半群.mul_prod_eraseIdx
   条件: {i} (h : i < l.length)
-  结论: l[i] * (l.eraseIdx i).prod = l.prod
+  结论: l[i] * (l.eraseIdx i).乘积 = l.乘积
   证明: List.mul_prod_eraseIdx h (fun a' _ => Commute.all l[i] a')
 
 @[to_additive (attr := simp)]
@@ -839,7 +839,7 @@ lemma prod_erase
 中文:
 引理 prod_erase
   条件: [DecidableEq M] (ha : a in l)
-  结论: a * (l.erase a).prod = l.prod
+  结论: a * (l.erase a).乘积 = l.乘积
   证明: prod_erase_of_comm ha fun x _ y _ => mul_comm x y
 
 @[to_additive (attr := simp)]
@@ -889,9 +889,9 @@ lemma Perm.prod_eq
   proof: h.foldr_op_eq
 
 中文:
-引理 Perm.prod_eq
-  条件: (h : Perm l₁ l₂)
-  结论: prod l₁ = prod l₂
+引理 置换.prod_eq
+  条件: (h : 置换 l₁ l₂)
+  结论: 乘积 l₁ = 乘积 l₂
   证明: h.foldr_op_eq
 -/
 @[to_additive] lemma Perm.prod_eq (h : Perm l₁ l₂) : prod l₁ = prod l₂ := h.foldr_op_eq
@@ -936,7 +936,7 @@ lemma prod_mul_prod_eq_prod_zipWith_of_length_eq
 
 中文:
 引理 prod_mul_prod_eq_prod_zipWith_of_length_eq
-  条件: (l l' : List M) (h : l.length = l'.length)
+  条件: (l l' : 列表 M) (h : l.length = l'.length)
   证明: by
   apply (prod_mul_prod_eq_prod_zipWith_mul_prod_drop l l').trans
   rw [← h]; rw [drop_length]; rw [h]; rw [drop_length]; rw [prod_nil]; rw [mul_one]; rw [mul_one]
@@ -970,7 +970,7 @@ lemma prod_map_ite
 
 中文:
 引理 prod_map_ite
-  条件: (p : α -> 命题) [DecidablePred p] (f g : α -> M) (l : List α)
+  条件: (p : α -> 命题) [DecidablePred p] (f g : α -> M) (l : 列表 α)
   证明: by
   induction l with
   | nil => simp
@@ -1042,7 +1042,7 @@ lemma eq_of_prod_take_eq
 
 中文:
 引理 eq_of_prod_take_eq
-  结论: [LeftCancelMonoid M] {L L' : List M} (h : L.length = L'.length)
+  结论: [左消去幺半群 M] {L L' : 列表 M} (h : L.length = L'.length)
   证明: by
   refine ext_get h fun i h₁ h₂ => ?_
   have : (L.take (i + 1)).prod = (L'.take (i + 1)).prod := h' _ (Nat.succ_le_of_lt h₁)
@@ -1073,7 +1073,7 @@ theorem prod_inv_reverse
 
 中文:
 定理 prod_inv_reverse
-  结论: 对任意 L : List G, L.prod⁻¹ = (L.map fun x => x⁻¹).reverse.prod
+  结论: 对任意 L : 列表 G, L.乘积⁻¹ = (L.map fun x => x⁻¹).reverse.乘积
 -/
 theorem prod_inv_reverse : forall L : List G, L.prod⁻¹ = (L.map fun x => x⁻¹).reverse.prod
   | [] => by simp
@@ -1092,7 +1092,7 @@ theorem prod_reverse_noncomm
 
 中文:
 定理 prod_reverse_noncomm
-  结论: 对任意 L : List G, L.reverse.prod = (L.map fun x => x⁻¹).prod⁻¹
+  结论: 对任意 L : 列表 G, L.reverse.乘积 = (L.map fun x => x⁻¹).乘积⁻¹
   证明: by
   simp [prod_inv_reverse]
 
@@ -1165,7 +1165,7 @@ theorem prod_inv
 
 中文:
 定理 prod_inv
-  条件: {K : 类型} [DivisionCommMonoid K]
+  条件: {K : 类型} [DivisionComm幺半群 K]
 -/
 theorem prod_inv {K : Type*} [DivisionCommMonoid K] :
     forall L : List K, L.prod⁻¹ = (L.map fun x => x⁻¹).prod
@@ -1217,7 +1217,7 @@ theorem prod_set'
 
 中文:
 定理 prod_set'
-  条件: (L : List G) (n : 自然数) (a : G)
+  条件: (L : 列表 G) (n : 自然数) (a : G)
   证明: by
   refine (prod_set L n a).trans ?_
   split_ifs with hn
@@ -1257,7 +1257,7 @@ lemma prod_map_ite_eq
 
 中文:
 引理 prod_map_ite_eq
-  条件: {A : 类型} [DecidableEq A] (l : List A) (f g : A -> G) (a : A)
+  条件: {A : 类型} [DecidableEq A] (l : 列表 A) (f g : A -> G) (a : A)
   证明: by
   induction l with
   | nil => simp
@@ -1299,7 +1299,7 @@ theorem sum_const_nat
 中文:
 定理 sum_const_nat
   条件: (m n : 自然数)
-  结论: sum (replicate m n) = m * n
+  结论: 求和 (replicate m n) = m * n
   证明: sum_replicate m n
 
 Depends on / 依赖: sum_replicate
@@ -1325,8 +1325,8 @@ theorem headI_add_tail_sum
 
 中文:
 定理 headI_add_tail_sum
-  条件: (L : List 自然数)
-  结论: L.headI + L.tail.sum = L.sum
+  条件: (L : 列表 自然数)
+  结论: L.headI + L.tail.求和 = L.求和
   证明: by
   cases L <;> simp
 -/
@@ -1344,8 +1344,8 @@ theorem headI_le_sum
 
 中文:
 定理 headI_le_sum
-  条件: (L : List 自然数)
-  结论: L.headI <= L.sum
+  条件: (L : 列表 自然数)
+  结论: L.headI <= L.求和
   证明: Nat.le.intro (headI_add_tail_sum L)
 
 Depends on / 依赖: Nat.le.intro, headI_add_tail_sum
@@ -1365,8 +1365,8 @@ theorem tail_sum
 
 中文:
 定理 tail_sum
-  条件: (L : List 自然数)
-  结论: L.tail.sum = L.sum - L.headI
+  条件: (L : 列表 自然数)
+  结论: L.tail.求和 = L.求和 - L.headI
   证明: by
   rw [← headI_add_tail_sum L]; rw [add_comm]; rw [Nat.add_sub_cancel_right]
 
@@ -1394,7 +1394,7 @@ theorem alternatingProd_nil
 
 中文:
 定理 alternatingProd_nil
-  结论: alternatingProd ([] : List G) = 1
+  结论: alternatingProd ([] : 列表 G) = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1436,7 +1436,7 @@ theorem alternatingProd_cons_cons'
 
 中文:
 定理 alternatingProd_cons_cons'
-  条件: (a b : G) (l : List G)
+  条件: (a b : G) (l : 列表 G)
   证明: rfl
 -/
 theorem alternatingProd_cons_cons' (a b : G) (l : List G) :
@@ -1457,7 +1457,7 @@ theorem alternatingProd_cons_cons
 
 中文:
 定理 alternatingProd_cons_cons
-  条件: [DivInvMonoid G] (a b : G) (l : List G)
+  条件: [除逆幺半群 G] (a b : G) (l : 列表 G)
   证明: by
   rw [div_eq_mul_inv]; rw [alternatingProd_cons_cons']
 
@@ -1497,7 +1497,7 @@ theorem alternatingProd_cons
 
 中文:
 定理 alternatingProd_cons
-  条件: (a : G) (l : List G)
+  条件: (a : G) (l : 列表 G)
   证明: by
   rw [div_eq_mul_inv]; rw [alternatingProd_cons']
 
@@ -1524,8 +1524,8 @@ lemma sum_nat_mod
 
 中文:
 引理 sum_nat_mod
-  条件: (l : List 自然数) (n : 自然数)
-  结论: l.sum % n = (l.map (· % n)).sum % n
+  条件: (l : 列表 自然数) (n : 自然数)
+  结论: l.求和 % n = (l.map (· % n)).求和 % n
   证明: by
   induction l with
   | nil => simp only [map_nil]
@@ -1555,8 +1555,8 @@ lemma prod_nat_mod
 
 中文:
 引理 prod_nat_mod
-  条件: (l : List 自然数) (n : 自然数)
-  结论: l.prod % n = (l.map (· % n)).prod % n
+  条件: (l : 列表 自然数) (n : 自然数)
+  结论: l.乘积 % n = (l.map (· % n)).乘积 % n
   证明: by
   induction l with
   | nil => simp only [map_nil]
@@ -1583,8 +1583,8 @@ lemma sum_int_mod
 
 中文:
 引理 sum_int_mod
-  条件: (l : List 整数) (n : 整数)
-  结论: l.sum % n = (l.map (· % n)).sum % n
+  条件: (l : 列表 整数) (n : 整数)
+  结论: l.求和 % n = (l.map (· % n)).求和 % n
   证明: by
   induction l <;> simp [Int.add_emod, *]
 
@@ -1605,8 +1605,8 @@ lemma prod_int_mod
 
 中文:
 引理 prod_int_mod
-  条件: (l : List 整数) (n : 整数)
-  结论: l.prod % n = (l.map (· % n)).prod % n
+  条件: (l : 列表 整数) (n : 整数)
+  结论: l.乘积 % n = (l.map (· % n)).乘积 % n
   证明: by
   induction l <;> simp [Int.mul_emod, *]
 
@@ -1632,7 +1632,7 @@ theorem map_list_prod
 
 中文:
 定理 map_list_prod
-  条件: {F : 类型} [FunLike F M N] [MonoidHomClass F M N] (f : F) (l : List M)
+  条件: {F : 类型} [函数状 F M N] [幺半群态射类 F M N] (f : F) (l : 列表 M)
   证明: (l.prod_hom f).symm
 
 Depends on / 依赖: l.prod_hom, prod_hom
@@ -1655,8 +1655,8 @@ theorem map_list_prod
 
 中文:
 定理 map_list_prod
-  条件: (f : M ->* N) (l : List M)
-  结论: f l.prod = (l.map f).prod
+  条件: (f : M ->* N) (l : 列表 M)
+  结论: f l.乘积 = (l.map f).乘积
   证明: map_list_prod f l
 -/
 protected theorem map_list_prod (f : M ->* N) (l : List M) : f l.prod = (l.map f).prod :=
@@ -1679,7 +1679,7 @@ theorem prod_zpow
 
 中文:
 定理 prod_zpow
-  条件: {β : 类型} [DivisionCommMonoid β] {r : 整数} {l : List β}
+  条件: {β : 类型} [DivisionComm幺半群 β] {r : 整数} {l : 列表 β}
   证明: let fr : β ->* β := ⟨⟨fun b => b ^ r, one_zpow r⟩, (mul_zpow · · r)⟩
   map_list_prod fr l
 
@@ -1703,7 +1703,7 @@ lemma take_sum_flatten
 
 中文:
 引理 take_sum_flatten
-  条件: (L : List (List α)) (i : 自然数)
+  条件: (L : 列表 (列表 α)) (i : 自然数)
   证明: by
   induction L generalizing i
   · simp
@@ -1730,7 +1730,7 @@ lemma drop_sum_flatten
 
 中文:
 引理 drop_sum_flatten
-  条件: (L : List (List α)) (i : 自然数)
+  条件: (L : 列表 (列表 α)) (i : 自然数)
   证明: by
   induction L generalizing i
   · simp
@@ -1765,8 +1765,8 @@ theorem length_le_sum_of_one_le
 
 中文:
 定理 length_le_sum_of_one_le
-  条件: (L : List 自然数) (h : 对任意 i in L, 1 <= i)
-  结论: L.length <= L.sum
+  条件: (L : 列表 自然数) (h : 对任意 i in L, 1 <= i)
+  结论: L.length <= L.求和
   证明: by
   induction L with
   | nil => simp

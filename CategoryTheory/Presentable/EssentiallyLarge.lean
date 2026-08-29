@@ -93,7 +93,7 @@ lemma HasCardinalFilteredGenerator.exists_equivalence
   exact hP.essentiallyLarge_top
 
 中文:
-引理 HasCardinalFilteredGenerator.exists_equivalence
+引理 有CardinalFilteredGenerator.存在_equivalence
   证明: by
   rw [exists_equivalence_iff_of_locallySmall]
   obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_generator C κ

@@ -69,8 +69,8 @@ class IsLeftCancelMul
     - mul_left_cancel((a : G)) : IsLeftRegular a
 
 中文:
-类 IsLeftCancelMul
-  参数: (G : 类型u) [Mul G]
+类 左乘消去
+  参数: (G : 类型u) [乘法 G]
   公理与运算 (1 个):
     - mul_left_cancel((a : G)) : IsLeftRegular a
 -/
@@ -87,8 +87,8 @@ class IsRightCancelMul
     - mul_right_cancel((a : G)) : IsRightRegular a
 
 中文:
-类 IsRightCancelMul
-  参数: (G : 类型u) [Mul G]
+类 右乘消去
+  参数: (G : 类型u) [乘法 G]
   公理与运算 (1 个):
     - mul_right_cancel((a : G)) : IsRightRegular a
 -/
@@ -107,9 +107,9 @@ class IsCancelMul
   (no additional axioms)
 
 中文:
-类 IsCancelMul
-  参数: (G : 类型u) [Mul G]
-  继承: IsLeftCancelMul G, IsRightCancelMul G
+类 是消去乘法
+  参数: (G : 类型u) [乘法 G]
+  继承: 左乘消去 G, 右乘消去 G
   (无附加公理)
 -/
 class IsCancelMul (G : Type u) [Mul G] : Prop extends IsLeftCancelMul G, IsRightCancelMul G
@@ -124,8 +124,8 @@ class IsLeftCancelAdd
     - add_left_cancel((a : G)) : IsAddLeftRegular a
 
 中文:
-类 IsLeftCancelAdd
-  参数: (G : 类型u) [Add G]
+类 是左消去加法
+  参数: (G : 类型u) [加法 G]
   公理与运算 (1 个):
     - add_left_cancel((a : G)) : IsAddLeftRegular a
 -/
@@ -146,8 +146,8 @@ class IsRightCancelAdd
     - add_right_cancel((a : G)) : IsAddRightRegular a
 
 中文:
-类 IsRightCancelAdd
-  参数: (G : 类型u) [Add G]
+类 是右消去加法
+  参数: (G : 类型u) [加法 G]
   公理与运算 (1 个):
     - add_right_cancel((a : G)) : IsAddRightRegular a
 -/
@@ -170,9 +170,9 @@ class IsCancelAdd
   (no additional axioms)
 
 中文:
-类 IsCancelAdd
-  参数: (G : 类型u) [Add G]
-  继承: IsLeftCancelAdd G, IsRightCancelAdd G
+类 是消去加法
+  参数: (G : 类型u) [加法 G]
+  继承: 是左消去加法 G, 是右消去加法 G
   (无附加公理)
 -/
 class IsCancelAdd (G : Type u) [Add G] : Prop extends IsLeftCancelAdd G, IsRightCancelAdd G
@@ -195,8 +195,8 @@ theorem isCancelMul_iff_forall_isRegular
   exact forall_congr' fun _ => isRegular_iff.symm
 
 中文:
-定理 isCancelMul_iff_forall_isRegular
-  条件: [Mul R]
+定理 isCancelMul_iff_对任意_isRegular
+  条件: [乘法 R]
   证明: by
   rw [isCancelMul_iff]; rw [isLeftCancelMul_iff]; rw [isRightCancelMul_iff]; rw [← forall_and]
   exact forall_congr' fun _ => isRegular_iff.symm
@@ -219,7 +219,7 @@ theorem IsLeftRegular.all
 
 中文:
 定理 IsLeftRegular.all
-  条件: [Mul R] [IsLeftCancelMul R] (g : R)
+  条件: [乘法 R] [左乘消去 R] (g : R)
   结论: IsLeftRegular g
   证明: (isLeftCancelMul_iff R).mp ‹_› _
 
@@ -241,7 +241,7 @@ theorem IsRightRegular.all
 
 中文:
 定理 IsRightRegular.all
-  条件: [Mul R] [IsRightCancelMul R] (g : R)
+  条件: [乘法 R] [右乘消去 R] (g : R)
   结论: IsRightRegular g
   证明: (isRightCancelMul_iff R).mp ‹_› _
 
@@ -262,9 +262,9 @@ theorem IsRegular.all
   proof: ⟨.all g, .all g⟩
 
 中文:
-定理 IsRegular.all
-  条件: [Mul R] [IsCancelMul R] (g : R)
-  结论: IsRegular g
+定理 是正则.all
+  条件: [乘法 R] [是消去乘法 R] (g : R)
+  结论: 是正则 g
   证明: ⟨.all g, .all g⟩
 -/
 theorem IsRegular.all [Mul R] [IsCancelMul R] (g : R) : IsRegular g := ⟨.all g, .all g⟩
@@ -336,7 +336,7 @@ theorem mul_right_injective
 中文:
 定理 mul_right_injective
   条件: (a : G)
-  结论: Injective (a * ·)
+  结论: 单射 (a * ·)
   证明: fun _ _ => mul_left_cancel
 
 @[to_additive (attr := simp)]
@@ -458,7 +458,7 @@ theorem mul_left_injective
 中文:
 定理 mul_left_injective
   条件: (a : G)
-  结论: Function.Injective (· * a)
+  结论: 函数.单射 (· * a)
   证明: fun _ _ => mul_right_cancel
 
 @[to_additive (attr := simp)]
@@ -530,9 +530,9 @@ class Semigroup
     - mul_assoc : forall a b c : G, a * b * c = a * (b * c)
 
 中文:
-类 Semigroup
+类 半群
   参数: (G : 类型u)
-  继承: Mul G
+  继承: 乘法 G
   公理与运算 (1 个):
     - mul_assoc : 对任意 a b c : G, a * b * c = a * (b * c)
 -/
@@ -553,9 +553,9 @@ class AddSemigroup
     - add_assoc : forall a b c : G, a + b + c = a + (b + c)
 
 中文:
-类 AddSemigroup
+类 加法半群
   参数: (G : 类型u)
-  继承: Add G
+  继承: 加法 G
   公理与运算 (1 个):
     - add_assoc : 对任意 a b c : G, a + b + c = a + (b + c)
 -/
@@ -602,10 +602,10 @@ class IsAddCommutative
     - is_comm : Std.Commutative (α := M) (· + ·)
 
 中文:
-类 IsAddCommutative
-  参数: (M : 类型) [Add M]
+类 是加法交换
+  参数: (M : 类型) [加法 M]
   公理与运算 (1 个):
-    - is_comm : Std.Commutative (α := M) (· + ·)
+    - is_comm : Std.交换 (α := M) (· + ·)
 -/
 class IsAddCommutative (M : Type*) [Add M] : Prop where
   is_comm : Std.Commutative (α := M) (· + ·)
@@ -622,10 +622,10 @@ class IsMulCommutative
     - is_comm : Std.Commutative (α := M) (· * ·)
 
 中文:
-类 IsMulCommutative
-  参数: (M : 类型) [Mul M]
+类 是MulCommutative
+  参数: (M : 类型) [乘法 M]
   公理与运算 (1 个):
-    - is_comm : Std.Commutative (α := M) (· * ·)
+    - is_comm : Std.交换 (α := M) (· * ·)
 -/
 class IsMulCommutative (M : Type*) [Mul M] : Prop where
   is_comm : Std.Commutative (α := M) (· * ·)
@@ -649,8 +649,8 @@ alias ⟨_, IsMulCommutative.of_comm⟩ := isMulCommutative_iff
 
 中文:
 引理 isMulCommutative_iff
-  条件: {M : 类型} [Mul M]
-  结论: IsMulCommutative M ↔ 对任意 a b : M, a * b = b * a
+  条件: {M : 类型} [乘法 M]
+  结论: 是MulCommutative M ↔ 对任意 a b : M, a * b = b * a
   证明: by
   grind [IsMulCommutative, Std.Commutative]
 
@@ -683,7 +683,7 @@ lemma mul_comm'
 
 中文:
 引理 mul_comm'
-  条件: {M : 类型} [Mul M] [IsMulCommutative M] (a b : M)
+  条件: {M : 类型} [乘法 M] [是MulCommutative M] (a b : M)
   结论: a * b = b * a
   证明: IsMulCommutative.is_comm.comm ..
 
@@ -707,9 +707,9 @@ class AddCommMagma
     - add_comm : forall a b : G, a + b = b + a
 
 中文:
-类 AddCommMagma
+类 加法交换原群
   参数: (G : 类型u)
-  继承: Add G
+  继承: 加法 G
   公理与运算 (1 个):
     - add_comm : 对任意 a b : G, a + b = b + a
 -/
@@ -730,9 +730,9 @@ class CommMagma
     - mul_comm : forall a b : G, a * b = b * a
 
 中文:
-类 CommMagma
+类 交换原群
   参数: (G : 类型u)
-  继承: Mul G
+  继承: 乘法 G
   公理与运算 (1 个):
     - mul_comm : 对任意 a b : G, a * b = b * a
 -/
@@ -754,9 +754,9 @@ class CommSemigroup
   (no additional axioms)
 
 中文:
-类 CommSemigroup
+类 交换半群
   参数: (G : 类型u)
-  继承: Semigroup G, CommMagma G
+  继承: 半群 G, 交换原群 G
   (无附加公理)
 -/
 class CommSemigroup (G : Type u) extends Semigroup G, CommMagma G where
@@ -773,9 +773,9 @@ class AddCommSemigroup
   (no additional axioms)
 
 中文:
-类 AddCommSemigroup
+类 加法交换半群
   参数: (G : 类型u)
-  继承: AddSemigroup G, AddCommMagma G
+  继承: 加法半群 G, 加法交换原群 G
   (无附加公理)
 -/
 class AddCommSemigroup (G : Type u) extends AddSemigroup G, AddCommMagma G where
@@ -820,8 +820,8 @@ instance CommMagma.to_isCommutative
 @[to_additive (attr := simp)]
 
 中文:
-实例 CommMagma.to_isCommutative
-  签名: : IsMulCommutative G
+实例 交换原群.to_isCommutative
+  签名: : 是MulCommutative G
   定义体: ⟨⟨mul_comm⟩⟩
 
 @[to_additive (attr := simp)]
@@ -844,7 +844,7 @@ lemma isLeftRegular_iff_isRegular
 
 中文:
 引理 isLeftRegular_iff_isRegular
-  结论: IsLeftRegular a ↔ IsRegular a
+  结论: IsLeftRegular a ↔ 是正则 a
   证明: by
   simp [isRegular_iff, IsLeftRegular, IsRightRegular, mul_comm]
 
@@ -867,7 +867,7 @@ lemma isRightRegular_iff_isRegular
 
 中文:
 引理 isRightRegular_iff_isRegular
-  结论: IsRightRegular a ↔ IsRegular a
+  结论: IsRightRegular a ↔ 是正则 a
   证明: by
   simp [isRegular_iff, IsLeftRegular, IsRightRegular, mul_comm]
 
@@ -888,8 +888,8 @@ lemma CommMagma.IsRightCancelMul.toIsLeftCancelMul
   proof: ⟨fun _ _ _ h => mul_right_cancel (mul_comm _ _).trans (h.trans (mul_comm _ _))⟩
 
 中文:
-引理 CommMagma.IsRightCancelMul.toIsLeftCancelMul
-  条件: (G : 类型u) [CommMagma G] [IsRightCancelMul G]
+引理 交换原群.右乘消去.toIsLeftCancelMul
+  条件: (G : 类型u) [交换原群 G] [右乘消去 G]
   证明: ⟨fun _ _ _ h => mul_right_cancel (mul_comm _ _).trans (h.trans (mul_comm _ _))⟩
 
 Depends on / 依赖: IsCentralScalar, IsScalarTower, IsScalarTower.op_left, h.trans, mul_comm, mul_right_cancel, op_left
@@ -910,8 +910,8 @@ lemma CommMagma.IsLeftCancelMul.toIsRightCancelMul
   proof: ⟨fun _ _ _ h => mul_left_cancel (mul_comm _ _).trans (h.trans (mul_comm _ _))⟩
 
 中文:
-引理 CommMagma.IsLeftCancelMul.toIsRightCancelMul
-  条件: (G : 类型u) [CommMagma G] [IsLeftCancelMul G]
+引理 交换原群.左乘消去.toIsRightCancelMul
+  条件: (G : 类型u) [交换原群 G] [左乘消去 G]
   证明: ⟨fun _ _ _ h => mul_left_cancel (mul_comm _ _).trans (h.trans (mul_comm _ _))⟩
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.op_right, h.trans, mul_comm, mul_left_cancel, op_right
@@ -932,8 +932,8 @@ lemma CommMagma.IsLeftCancelMul.toIsCancelMul
   proof: { CommMagma.IsLeftCancelMul.toIsRightCancelMul G with }
 
 中文:
-引理 CommMagma.IsLeftCancelMul.toIsCancelMul
-  条件: (G : 类型u) [CommMagma G] [IsLeftCancelMul G]
+引理 交换原群.左乘消去.toIsCancelMul
+  条件: (G : 类型u) [交换原群 G] [左乘消去 G]
   证明: { CommMagma.IsLeftCancelMul.toIsRightCancelMul G with }
 
 Depends on / 依赖: CommMagma, CommMagma.IsLeftCancelMul.toIsRightCancelMul, IsLeftCancelMul, toIsRightCancelMul
@@ -953,8 +953,8 @@ lemma CommMagma.IsRightCancelMul.toIsCancelMul
   proof: { CommMagma.IsRightCancelMul.toIsLeftCancelMul G with }
 
 中文:
-引理 CommMagma.IsRightCancelMul.toIsCancelMul
-  条件: (G : 类型u) [CommMagma G] [IsRightCancelMul G]
+引理 交换原群.右乘消去.toIsCancelMul
+  条件: (G : 类型u) [交换原群 G] [右乘消去 G]
   证明: { CommMagma.IsRightCancelMul.toIsLeftCancelMul G with }
 
 Depends on / 依赖: CommMagma, CommMagma.IsRightCancelMul.toIsLeftCancelMul, IsRightCancelMul, toIsLeftCancelMul
@@ -976,9 +976,9 @@ class LeftCancelSemigroup
   (no additional axioms)
 
 中文:
-类 LeftCancelSemigroup
+类 左消去半群
   参数: (G : 类型u)
-  继承: Semigroup G, IsLeftCancelMul G
+  继承: 半群 G, 左乘消去 G
   (无附加公理)
 -/
 class LeftCancelSemigroup (G : Type u) extends Semigroup G, IsLeftCancelMul G
@@ -1004,9 +1004,9 @@ class AddLeftCancelSemigroup
   (no additional axioms)
 
 中文:
-类 AddLeftCancelSemigroup
+类 加法左消去半群
   参数: (G : 类型u)
-  继承: AddSemigroup G, IsLeftCancelAdd G
+  继承: 加法半群 G, 是左消去加法 G
   (无附加公理)
 -/
 class AddLeftCancelSemigroup (G : Type u) extends AddSemigroup G, IsLeftCancelAdd G
@@ -1033,9 +1033,9 @@ class RightCancelSemigroup
   (no additional axioms)
 
 中文:
-类 RightCancelSemigroup
+类 右消去半群
   参数: (G : 类型u)
-  继承: Semigroup G, IsRightCancelMul G
+  继承: 半群 G, 右乘消去 G
   (无附加公理)
 -/
 class RightCancelSemigroup (G : Type u) extends Semigroup G, IsRightCancelMul G
@@ -1055,9 +1055,9 @@ class AddRightCancelSemigroup
   (no additional axioms)
 
 中文:
-类 AddRightCancelSemigroup
+类 加法右消去半群
   参数: (G : 类型u)
-  继承: AddSemigroup G, IsRightCancelAdd G
+  继承: 加法半群 G, 是右消去加法 G
   (无附加公理)
 -/
 class AddRightCancelSemigroup (G : Type u) extends AddSemigroup G, IsRightCancelAdd G
@@ -1082,9 +1082,9 @@ class AddZero
   (no additional axioms)
 
 中文:
-类 AddZero
+类 加法零
   参数: (M : 类型)
-  继承: Zero M, Add M
+  继承: 零 M, 加法 M
   (无附加公理)
 -/
 class AddZero (M : Type*) extends Zero M, Add M
@@ -1104,7 +1104,7 @@ class MulOne
 中文:
 类 MulOne
   参数: (M : 类型)
-  继承: One M, Mul M
+  继承: 幺 M, 乘法 M
   (无附加公理)
 -/
 class MulOne (M : Type*) extends One M, Mul M
@@ -1119,8 +1119,8 @@ class IsDedekindFiniteAddMonoid
     - add_eq_zero_symm({a b : M}) : a + b = 0 -> b + a = 0
 
 中文:
-类 IsDedekindFiniteAddMonoid
-  参数: (M : 类型) [AddZero M]
+类 是DedekindFiniteAdd幺半群
+  参数: (M : 类型) [加法零 M]
   公理与运算 (1 个):
     - add_eq_zero_symm({a b : M}) : a + b = 0 -> b + a = 0
 -/
@@ -1137,7 +1137,7 @@ class IsDedekindFiniteMonoid
     - mul_eq_one_symm({a b : M}) : a * b = 1 -> b * a = 1
 
 中文:
-类 IsDedekindFiniteMonoid
+类 是DedekindFinite幺半群
   参数: (M : 类型) [MulOne M]
   公理与运算 (1 个):
     - mul_eq_one_symm({a b : M}) : a * b = 1 -> b * a = 1
@@ -1160,7 +1160,7 @@ theorem mul_eq_one_comm
 
 中文:
 定理 mul_eq_one_comm
-  条件: {M} [MulOne M] [IsDedekindFiniteMonoid M] {a b : M}
+  条件: {M} [MulOne M] [是DedekindFinite幺半群 M] {a b : M}
   证明: mul_eq_one_symm
   mpr := mul_eq_one_symm
 -/
@@ -1185,9 +1185,9 @@ class AddZeroClass
     - add_zero : forall a : M, a + 0 = a
 
 中文:
-类 AddZeroClass
+类 加法零类
   参数: (M : 类型u)
-  继承: AddZero M
+  继承: 加法零 M
   公理与运算 (2 个):
     - zero_add : 对任意 a : M, 0 + a = a
     - add_zero : 对任意 a : M, a + 0 = a
@@ -1213,7 +1213,7 @@ class MulOneClass
     - mul_one : forall a : M, a * 1 = a
 
 中文:
-类 MulOneClass
+类 MulOne类
   参数: (M : 类型u)
   继承: MulOne M
   公理与运算 (2 个):
@@ -1242,9 +1242,9 @@ theorem MulOneClass.ext
   exact (one_mul₂ one₁).symm.trans (mul_one₁ one₂)
 
 中文:
-定理 MulOneClass.ext
+定理 MulOne类.ext
   条件: {M : 类型u}
-  结论: 对任意 ⦃m₁ m₂ : MulOneClass M⦄, m₁.mul = m₂.mul -> m₁ = m₂
+  结论: 对任意 ⦃m₁ m₂ : MulOne类 M⦄, m₁.mul = m₂.mul -> m₁ = m₂
   证明: by
   rintro @⟨@⟨⟨one₁⟩, ⟨mul₁⟩⟩, one_mul₁, mul_one₁⟩ @⟨@⟨⟨one₂⟩, ⟨mul₂⟩⟩, one_mul₂, mul_one₂⟩ ⟨rfl⟩
   -- FIXME (See https://github.com/leanprover/lean4/issues/1711)
@@ -1478,7 +1478,7 @@ definition npowBinRec
 
 中文:
 定义 npowBinRec
-  签名: {M : 类型} [One M] [Mul M] (k : 自然数)
+  签名: {M : 类型} [幺 M] [乘法 M] (k : 自然数)
   定义体: npowBinRec.go k 1
 
 Depends on / 依赖: Monoid, Monoid.toMulAction, MulAction, npowBinRec, npowBinRec.go, toMulAction
@@ -1500,7 +1500,7 @@ definition npowRec'
 
 中文:
 定义 npowRec'
-  签名: {M : 类型} [One M] [Mul M]
+  签名: {M : 类型} [幺 M] [乘法 M]
 -/
 def npowRec' {M : Type*} [One M] [Mul M] : Nat -> M -> M
   | 0, _ => 1
@@ -1516,7 +1516,7 @@ definition nsmulRec'
 
 中文:
 定义 nsmulRec'
-  签名: {M : 类型} [Zero M] [Add M]
+  签名: {M : 类型} [零 M] [加法 M]
 
 Depends on / 依赖: one_smul, smul_assoc, smul_comm
 -/
@@ -1541,7 +1541,7 @@ theorem npowRec'_succ
 
 中文:
 定理 npowRec'_succ
-  条件: {M : 类型} [Mul M] [One M] {k : 自然数} (_ : k != 0) (m : M)
+  条件: {M : 类型} [乘法 M] [幺 M] {k : 自然数} (_ : k != 0) (m : M)
   证明: match k with
   | _ + 1 => rfl
 
@@ -1572,7 +1572,7 @@ theorem npowRec'_two_mul
 
 中文:
 定理 npowRec'_two_mul
-  条件: {M : 类型} [Semigroup M] [One M] (k : 自然数) (m : M)
+  条件: {M : 类型} [半群 M] [幺 M] (k : 自然数) (m : M)
   证明: by
   induction k using Nat.strongRecOn with
   | ind k' ih =>
@@ -1612,7 +1612,7 @@ theorem npowRec'_mul_comm
 
 中文:
 定理 npowRec'_mul_comm
-  条件: {M : 类型} [Semigroup M] [One M] {k : 自然数} (k0 : k != 0) (m : M)
+  条件: {M : 类型} [半群 M] [幺 M] {k : 自然数} (k0 : k != 0) (m : M)
   证明: by
   induction k using Nat.strongRecOn with
   | ind k' ih =>
@@ -1651,7 +1651,7 @@ theorem npowRec_eq
 
 中文:
 定理 npowRec_eq
-  条件: {M : 类型} [Semigroup M] [One M] (k : 自然数) (m : M)
+  条件: {M : 类型} [半群 M] [幺 M] (k : 自然数) (m : M)
   证明: by
   induction k using Nat.strongRecOn with
   | ind k' ih =>
@@ -1697,7 +1697,7 @@ theorem npowBinRec.go_spec
 
 中文:
 定理 npowBinRec.go_spec
-  条件: {M : 类型} [Semigroup M] [One M] (k : 自然数) (m n : M)
+  条件: {M : 类型} [半群 M] [幺 M] (k : 自然数) (m n : M)
   证明: by
   unfold go
   generalize hk : k + 1 = k'
@@ -1743,7 +1743,7 @@ abbreviation npowRecAuto
 
 中文:
 缩写 npowRecAuto
-  签名: {M : 类型} [Semigroup M] [One M] (k : 自然数) (m : M)
+  签名: {M : 类型} [半群 M] [幺 M] (k : 自然数) (m : M)
   定义体: npowRec k m
 
 Depends on / 依赖: npowRec
@@ -1771,7 +1771,7 @@ abbreviation npowBinRecAuto
 
 中文:
 缩写 npowBinRecAuto
-  签名: {M : 类型} [Semigroup M] [One M] (k : 自然数) (m : M)
+  签名: {M : 类型} [半群 M] [幺 M] (k : 自然数) (m : M)
   定义体: npowBinRec k m
 
 @[to_additive (attr := csimp)]
@@ -1824,7 +1824,7 @@ theorem npowBinRec_zero
 
 中文:
 定理 npowBinRec_zero
-  条件: {M : 类型} [Mul M] [One M] (m : M)
+  条件: {M : 类型} [乘法 M] [幺 M] (m : M)
   证明: rfl
 -/
 @[to_additive] theorem npowBinRec_zero {M : Type*} [Mul M] [One M] (m : M) :
@@ -1842,7 +1842,7 @@ theorem npowBinRec_succ
 
 中文:
 定理 npowBinRec_succ
-  条件: {M : 类型} [Semigroup M] [One M] (n : 自然数) (m : M)
+  条件: {M : 类型} [半群 M] [幺 M] (n : 自然数) (m : M)
   证明: by
   iterate 2 rw [← npowBinRecAuto, ← npowRec_eq_npowBinRec]
   rfl
@@ -1885,7 +1885,7 @@ class NPow
     - npow : Nat -> M -> M
 
 中文:
-类 NPow
+类 自然数幂
   参数: (M : 类型u)
   公理与运算 (1 个):
     - npow : 自然数 -> M -> M
@@ -1906,8 +1906,8 @@ instance NPow.toPow
 @[to_additive ofSMul]
 
 中文:
-实例 NPow.toPow
-  签名: {M : 类型} [NPow M]
+实例 自然数幂.toPow
+  签名: {M : 类型} [自然数幂 M]
   定义体: ⟨fun x n => NPow.npow n x⟩
 
 @[to_additive ofSMul]
@@ -1927,8 +1927,8 @@ instance NPow.ofPow
   body: ⟨fun n x => Pow.pow x n⟩
 
 中文:
-实例 NPow.ofPow
-  签名: {M : 类型} [Pow M 自然数]
+实例 自然数幂.ofPow
+  签名: {M : 类型} [幂 M 自然数]
   定义体: ⟨fun n x => Pow.pow x n⟩
 
 Depends on / 依赖: Pow.pow
@@ -1947,9 +1947,9 @@ class AddMonoid
     - nsmul_succ((n : Nat) (x : M)) : (n + 1) • x = n • x + x  [default: by intros; rfl]
 
 中文:
-类 AddMonoid
+类 加法幺半群
   参数: (M : 类型u)
-  继承: AddSemigroup M, AddZeroClass M, NSMul M
+  继承: 加法半群 M, 加法零类 M, NSMul M
   公理与运算 (2 个):
     - nsmul_zero((x : M)) : 0 • x = 0  [默认: by intros; rfl]
     - nsmul_succ((n : 自然数) (x : M)) : (n + 1) • x = n • x + x  [默认: by intros; rfl]
@@ -1980,9 +1980,9 @@ class Monoid
     - npow_succ((n : Nat) (x : M)) : x ^ (n + 1) = x ^ n * x  [default: by intros; rfl]
 
 中文:
-类 Monoid
+类 幺半群
   参数: (M : 类型u)
-  继承: Semigroup M, MulOneClass M, NPow M
+  继承: 半群 M, MulOne类 M, 自然数幂 M
   公理与运算 (3 个):
     - npow : = npowRecAuto
     - npow_zero((x : M)) : x ^ 0 = 1  [默认: by intros; rfl]
@@ -2013,7 +2013,7 @@ theorem npow_eq_pow
 中文:
 定理 npow_eq_pow
   条件: (n : 自然数) (x : M)
-  结论: NPow.npow n x = x ^ n
+  结论: 自然数幂.npow n x = x ^ n
   证明: rfl
 -/
 theorem npow_eq_pow (n : Nat) (x : M) : NPow.npow n x = x ^ n :=
@@ -2403,8 +2403,8 @@ instance [IsLeftCancelMul
   body: (IsLeftCancelMul.mul_left_cancel _).mul_eq_one_symm
 
 中文:
-实例 [IsLeftCancelMul
-  签名: M] : IsDedekindFiniteMonoid M where
+实例 [左乘消去
+  签名: M] : 是DedekindFinite幺半群 M where
   定义体: (IsLeftCancelMul.mul_left_cancel _).mul_eq_one_symm
 -/
 @[to_additive] instance [IsLeftCancelMul M] : IsDedekindFiniteMonoid M where
@@ -2419,8 +2419,8 @@ instance [IsRightCancelMul
   body: (IsRightCancelMul.mul_right_cancel _).mul_eq_one_symm
 
 中文:
-实例 [IsRightCancelMul
-  签名: M] : IsDedekindFiniteMonoid M where
+实例 [右乘消去
+  签名: M] : 是DedekindFinite幺半群 M where
   定义体: (IsRightCancelMul.mul_right_cancel _).mul_eq_one_symm
 -/
 @[to_additive] instance [IsRightCancelMul M] : IsDedekindFiniteMonoid M where
@@ -2439,7 +2439,7 @@ lemma of_exists_self_mul_eq_one
     rwa [show x = z by simpa [← mul_assoc, h] using congr_arg (x * ·) hz.symm]
 
 中文:
-引理 of_exists_self_mul_eq_one
+引理 of_存在_self_mul_eq_one
   条件: (ex : 对任意 x y : M, x * y = 1 -> 存在 z, y * z = 1)
   证明: by
     have ⟨z, hz⟩ := ex x y h
@@ -2462,7 +2462,7 @@ lemma of_exists_mul_self_eq_one
     rwa [show y = z by simpa [mul_assoc, h] using congr_arg (· * y) hz.symm]
 
 中文:
-引理 of_exists_mul_self_eq_one
+引理 of_存在_mul_self_eq_one
   条件: (ex : 对任意 x y : M, x * y = 1 -> 存在 z, z * x = 1)
   证明: by
     have ⟨z, hz⟩ := ex x y h
@@ -2491,10 +2491,10 @@ class IsAddTorsionFree
     - nsmul_right_injective(⦃n) : Nat⦄ (hn : n != 0) : Injective fun a : M => n • a
 
 中文:
-类 IsAddTorsionFree
-  参数: (M : 类型) [AddMonoid M]
+类 是加法无挠
+  参数: (M : 类型) [加法幺半群 M]
   公理与运算 (1 个):
-    - nsmul_right_injective(⦃n) : 自然数⦄ (hn : n != 0) : Injective fun a : M => n • a
+    - nsmul_right_injective(⦃n) : 自然数⦄ (hn : n != 0) : 单射 fun a : M => n • a
 -/
 class IsAddTorsionFree (M : Type*) [AddMonoid M] where
   protected nsmul_right_injective ⦃n : Nat⦄ (hn : n != 0) : Injective fun a : M => n • a
@@ -2511,10 +2511,10 @@ class IsMulTorsionFree
     - pow_left_injective(⦃n) : Nat⦄ (hn : n != 0) : Injective fun a : M => a ^ n
 
 中文:
-类 IsMulTorsionFree
-  参数: (M : 类型) [Monoid M]
+类 是MulTorsionFree
+  参数: (M : 类型) [幺半群 M]
   公理与运算 (1 个):
-    - pow_left_injective(⦃n) : 自然数⦄ (hn : n != 0) : Injective fun a : M => a ^ n
+    - pow_left_injective(⦃n) : 自然数⦄ (hn : n != 0) : 单射 fun a : M => a ^ n
 -/
 class IsMulTorsionFree (M : Type*) [Monoid M] where
   protected pow_left_injective ⦃n : Nat⦄ (hn : n != 0) : Injective fun a : M => a ^ n
@@ -2531,9 +2531,9 @@ class AddCommMonoid
   (no additional axioms)
 
 中文:
-类 AddCommMonoid
+类 加法交换幺半群
   参数: (M : 类型u)
-  继承: AddMonoid M, AddCommSemigroup M
+  继承: 加法幺半群 M, 加法交换半群 M
   (无附加公理)
 -/
 class AddCommMonoid (M : Type u) extends AddMonoid M, AddCommSemigroup M
@@ -2550,9 +2550,9 @@ class CommMonoid
   (no additional axioms)
 
 中文:
-类 CommMonoid
+类 交换幺半群
   参数: (M : 类型u)
-  继承: Monoid M, CommSemigroup M
+  继承: 幺半群 M, 交换半群 M
   (无附加公理)
 -/
 class CommMonoid (M : Type u) extends Monoid M, CommSemigroup M
@@ -2576,9 +2576,9 @@ class AddLeftCancelMonoid
   (no additional axioms)
 
 中文:
-类 AddLeftCancelMonoid
+类 加法左消去幺半群
   参数: (M : 类型u)
-  继承: AddMonoid M, AddLeftCancelSemigroup M
+  继承: 加法幺半群 M, 加法左消去半群 M
   (无附加公理)
 -/
 class AddLeftCancelMonoid (M : Type u) extends AddMonoid M, AddLeftCancelSemigroup M
@@ -2597,9 +2597,9 @@ class LeftCancelMonoid
   (no additional axioms)
 
 中文:
-类 LeftCancelMonoid
+类 左消去幺半群
   参数: (M : 类型u)
-  继承: Monoid M, LeftCancelSemigroup M
+  继承: 幺半群 M, 左消去半群 M
   (无附加公理)
 -/
 class LeftCancelMonoid (M : Type u) extends Monoid M, LeftCancelSemigroup M
@@ -2620,9 +2620,9 @@ class AddRightCancelMonoid
   (no additional axioms)
 
 中文:
-类 AddRightCancelMonoid
+类 加法右消去幺半群
   参数: (M : 类型u)
-  继承: AddMonoid M, AddRightCancelSemigroup M
+  继承: 加法幺半群 M, 加法右消去半群 M
   (无附加公理)
 -/
 class AddRightCancelMonoid (M : Type u) extends AddMonoid M, AddRightCancelSemigroup M
@@ -2641,9 +2641,9 @@ class RightCancelMonoid
   (no additional axioms)
 
 中文:
-类 RightCancelMonoid
+类 右消去幺半群
   参数: (M : 类型u)
-  继承: Monoid M, RightCancelSemigroup M
+  继承: 幺半群 M, 右消去半群 M
   (无附加公理)
 -/
 class RightCancelMonoid (M : Type u) extends Monoid M, RightCancelSemigroup M
@@ -2664,9 +2664,9 @@ class AddCancelMonoid
   (no additional axioms)
 
 中文:
-类 AddCancelMonoid
+类 加法消去幺半群
   参数: (M : 类型u)
-  继承: AddLeftCancelMonoid M, AddRightCancelMonoid M
+  继承: 加法左消去幺半群 M, 加法右消去幺半群 M
   (无附加公理)
 -/
 class AddCancelMonoid (M : Type u) extends AddLeftCancelMonoid M, AddRightCancelMonoid M
@@ -2683,9 +2683,9 @@ class CancelMonoid
   (no additional axioms)
 
 中文:
-类 CancelMonoid
+类 消去幺半群
   参数: (M : 类型u)
-  继承: LeftCancelMonoid M, RightCancelMonoid M
+  继承: 左消去幺半群 M, 右消去幺半群 M
   (无附加公理)
 -/
 class CancelMonoid (M : Type u) extends LeftCancelMonoid M, RightCancelMonoid M
@@ -2700,9 +2700,9 @@ class AddCancelCommMonoid
   (no additional axioms)
 
 中文:
-类 AddCancelCommMonoid
+类 加法消去交换幺半群
   参数: (M : 类型u)
-  继承: AddCommMonoid M, AddLeftCancelMonoid M
+  继承: 加法交换幺半群 M, 加法左消去幺半群 M
   (无附加公理)
 -/
 class AddCancelCommMonoid (M : Type u) extends AddCommMonoid M, AddLeftCancelMonoid M
@@ -2721,9 +2721,9 @@ class CancelCommMonoid
   (no additional axioms)
 
 中文:
-类 CancelCommMonoid
+类 消去交换幺半群
   参数: (M : 类型u)
-  继承: CommMonoid M, LeftCancelMonoid M
+  继承: 交换幺半群 M, 左消去幺半群 M
   (无附加公理)
 -/
 class CancelCommMonoid (M : Type u) extends CommMonoid M, LeftCancelMonoid M
@@ -2752,7 +2752,7 @@ definition zpowRec
 
 中文:
 定义 zpowRec
-  签名: [One G] [Mul G] [Inv G] (npow : 自然数 -> G -> G := npowRec)
+  签名: [幺 G] [乘法 G] [取逆 G] (npow : 自然数 -> G -> G := npowRec)
 
 Depends on / 依赖: npowRec
 -/
@@ -2769,7 +2769,7 @@ definition zsmulRec
 
 中文:
 定义 zsmulRec
-  签名: [Zero G] [Add G] [Neg G] (nsmul : 自然数 -> G -> G := nsmulRec)
+  签名: [零 G] [加法 G] [取负 G] (nsmul : 自然数 -> G -> G := nsmulRec)
 
 Depends on / 依赖: nsmulRec
 -/
@@ -2794,7 +2794,7 @@ class InvolutiveNeg
 中文:
 类 InvolutiveNeg
   参数: (A : 类型)
-  继承: Neg A
+  继承: 取负 A
   公理与运算 (1 个):
     - neg_neg : 对任意 x : A, - -x = x
 -/
@@ -2816,7 +2816,7 @@ class InvolutiveInv
 中文:
 类 InvolutiveInv
   参数: (G : 类型)
-  继承: Inv G
+  继承: 取逆 G
   公理与运算 (1 个):
     - inv_inv : 对任意 x : G, x⁻¹⁻¹ = x
 -/
@@ -2889,8 +2889,8 @@ definition DivInvMonoid.div'
   body: a * b⁻¹
 
 中文:
-定义 DivInvMonoid.div'
-  签名: {G : 类型u} [Monoid G] [Inv G] (a b : G)
+定义 除逆幺半群.div'
+  签名: {G : 类型u} [幺半群 G] [取逆 G] (a b : G)
   定义体: a * b⁻¹
 -/
 def DivInvMonoid.div' {G : Type u} [Monoid G] [Inv G] (a b : G) : G := a * b⁻¹
@@ -2928,7 +2928,7 @@ class ZPow
     - zpow : Int -> G -> G
 
 中文:
-类 ZPow
+类 整数幂
   参数: (G : 类型u)
   公理与运算 (1 个):
     - zpow : 整数 -> G -> G
@@ -2949,8 +2949,8 @@ instance ZPow.toPow
 @[to_additive ofSMul]
 
 中文:
-实例 ZPow.toPow
-  签名: {M : 类型} [ZPow M]
+实例 整数幂.toPow
+  签名: {M : 类型} [整数幂 M]
   定义体: ⟨fun x n => ZPow.zpow n x⟩
 
 @[to_additive ofSMul]
@@ -2970,8 +2970,8 @@ instance ZPow.ofPow
   body: ⟨fun n x => Pow.pow x n⟩
 
 中文:
-实例 ZPow.ofPow
-  签名: {M : 类型} [Pow M 整数]
+实例 整数幂.ofPow
+  签名: {M : 类型} [幂 M 整数]
   定义体: ⟨fun n x => Pow.pow x n⟩
 
 Depends on / 依赖: Pow.pow
@@ -2994,11 +2994,11 @@ class DivInvMonoid
     - zpow_neg'((n : Nat) (a : G)) : a ^ Int.negSucc n = (a ^ (n.succ : Int))⁻¹  [default: by intros; rfl]
 
 中文:
-类 DivInvMonoid
+类 除逆幺半群
   参数: (G : 类型u)
-  继承: Monoid G, Inv G, Div G, ZPow G
+  继承: 幺半群 G, 取逆 G, 除法 G, 整数幂 G
   公理与运算 (6 个):
-    - div : = DivInvMonoid.div'
+    - div : = 除逆幺半群.div'
     - div_eq_mul_inv : 对任意 a b : G, a / b = a * b⁻¹  [默认: by intros; rfl]
     - zpow : = zpowRec npowRec
     - zpow_zero'((a : G)) : a ^ (0 : 整数) = 1  [默认: by intros; rfl]
@@ -3029,8 +3029,8 @@ definition SubNegMonoid.sub'
   body: a + -b
 
 中文:
-定义 SubNegMonoid.sub'
-  签名: {G : 类型u} [AddMonoid G] [Neg G] (a b : G)
+定义 SubNeg幺半群.sub'
+  签名: {G : 类型u} [加法幺半群 G] [取负 G] (a b : G)
   定义体: a + -b
 -/
 def SubNegMonoid.sub' {G : Type u} [AddMonoid G] [Neg G] (a b : G) : G := a + -b
@@ -3052,11 +3052,11 @@ class SubNegMonoid
     - zsmul_neg'((n : Nat) (a : G)) : (Int.negSucc n) • a = -((n.succ : Int) • a)  [default: by intros; rfl]
 
 中文:
-类 SubNegMonoid
+类 SubNeg幺半群
   参数: (G : 类型u)
-  继承: AddMonoid G, Neg G, Sub G, ZSMul G
+  继承: 加法幺半群 G, 取负 G, 减法 G, ZSMul G
   公理与运算 (5 个):
-    - sub : = SubNegMonoid.sub'
+    - sub : = SubNeg幺半群.sub'
     - sub_eq_add_neg : 对任意 a b : G, a - b = a + -b  [默认: by intros; rfl]
     - zsmul_zero'((a : G)) : (0 : 整数) • a = 0  [默认: by intros; rfl]
     - zsmul_succ'((n : 自然数) (a : G)) : (n.succ : 整数) • a = (n : 整数) • a + a  [默认: by intros; rfl]
@@ -3086,10 +3086,10 @@ class IsAddCyclic
     - exists_zsmul_surjective : exists g : G, Function.Surjective (· • g : Int -> G)
 
 中文:
-类 IsAddCyclic
-  参数: (G : 类型u) [SMul 整数 G]
+类 是加法循环
+  参数: (G : 类型u) [标量乘法 整数 G]
   公理与运算 (1 个):
-    - exists_zsmul_surjective : 存在 g : G, Function.Surjective (· • g : 整数 -> G)
+    - exists_zsmul_surjective : 存在 g : G, 函数.满射 (· • g : 整数 -> G)
 -/
 class IsAddCyclic (G : Type u) [SMul Int G] : Prop where
   protected exists_zsmul_surjective : exists g : G, Function.Surjective (· • g : Int -> G)
@@ -3106,10 +3106,10 @@ class IsCyclic
     - exists_zpow_surjective : exists g : G, Function.Surjective (g ^ · : Int -> G)
 
 中文:
-类 IsCyclic
-  参数: (G : 类型u) [Pow G 整数]
+类 是循环
+  参数: (G : 类型u) [幂 G 整数]
   公理与运算 (1 个):
-    - exists_zpow_surjective : 存在 g : G, Function.Surjective (g ^ · : 整数 -> G)
+    - exists_zpow_surjective : 存在 g : G, 函数.满射 (g ^ · : 整数 -> G)
 -/
 class IsCyclic (G : Type u) [Pow G Int] : Prop where
   protected exists_zpow_surjective : exists g : G, Function.Surjective (g ^ · : Int -> G)
@@ -3124,8 +3124,8 @@ theorem exists_zpow_surjective
   proof: IsCyclic.exists_zpow_surjective
 
 中文:
-定理 exists_zpow_surjective
-  条件: (G : 类型) [Pow G 整数] [IsCyclic G]
+定理 存在_zpow_surjective
+  条件: (G : 类型) [幂 G 整数] [是循环 G]
   证明: IsCyclic.exists_zpow_surjective
 
 Depends on / 依赖: IsCyclic, IsCyclic.exists_zpow_surjective, exists_zpow_surjective
@@ -3220,7 +3220,7 @@ lemma zpow_ofNat
   proof: zpow_natCast ..
 
 中文:
-引理 zpow_ofNat
+引理 zpow_of自然数
   条件: (a : G) (n : 自然数)
   结论: a ^ (of自然数(n) : 整数) = a ^ Of自然数.of自然数 n
   证明: zpow_natCast ..
@@ -3267,7 +3267,7 @@ theorem negSucc_zsmul
 
 中文:
 定理 negSucc_zsmul
-  条件: {G} [SubNegMonoid G] (a : G) (n : 自然数)
+  条件: {G} [SubNeg幺半群 G] (a : G) (n : 自然数)
   证明: by
   rw [← natCast_zsmul]
   exact SubNegMonoid.zsmul_neg' n a
@@ -3495,9 +3495,9 @@ class NegZeroClass
     - neg_zero : -(0 : G) = 0
 
 中文:
-类 NegZeroClass
+类 NegZero类
   参数: (G : 类型)
-  继承: Zero G, Neg G
+  继承: 零 G, 取负 G
   公理与运算 (1 个):
     - neg_zero : -(0 : G) = 0
 -/
@@ -3514,9 +3514,9 @@ class SubNegZeroMonoid
   (no additional axioms)
 
 中文:
-类 SubNegZeroMonoid
+类 SubNegZero幺半群
   参数: (G : 类型)
-  继承: SubNegMonoid G, NegZeroClass G
+  继承: SubNeg幺半群 G, NegZero类 G
   (无附加公理)
 -/
 class SubNegZeroMonoid (G : Type*) extends SubNegMonoid G, NegZeroClass G
@@ -3534,9 +3534,9 @@ class InvOneClass
     - inv_one : (1 : G)⁻¹ = 1
 
 中文:
-类 InvOneClass
+类 InvOne类
   参数: (G : 类型)
-  继承: One G, Inv G
+  继承: 幺 G, 取逆 G
   公理与运算 (1 个):
     - inv_one : (1 : G)⁻¹ = 1
 -/
@@ -3555,9 +3555,9 @@ class DivInvOneMonoid
   (no additional axioms)
 
 中文:
-类 DivInvOneMonoid
+类 DivInvOne幺半群
   参数: (G : 类型)
-  继承: DivInvMonoid G, InvOneClass G
+  继承: 除逆幺半群 G, InvOne类 G
   (无附加公理)
 -/
 class DivInvOneMonoid (G : Type*) extends DivInvMonoid G, InvOneClass G
@@ -3597,9 +3597,9 @@ class SubtractionMonoid
     - neg_eq_of_add((a b : G)) : a + b = 0 -> -a = b
 
 中文:
-类 SubtractionMonoid
+类 Subtraction幺半群
   参数: (G : 类型u)
-  继承: SubNegMonoid G, InvolutiveNeg G
+  继承: SubNeg幺半群 G, InvolutiveNeg G
   公理与运算 (2 个):
     - neg_add_rev((a b : G)) : -(a + b) = -b + -a
     - neg_eq_of_add((a b : G)) : a + b = 0 -> -a = b
@@ -3627,9 +3627,9 @@ class DivisionMonoid
     - inv_eq_of_mul((a b : G)) : a * b = 1 -> a⁻¹ = b
 
 中文:
-类 DivisionMonoid
+类 Division幺半群
   参数: (G : 类型u)
-  继承: DivInvMonoid G, InvolutiveInv G
+  继承: 除逆幺半群 G, InvolutiveInv G
   公理与运算 (2 个):
     - mul_inv_rev((a b : G)) : (a * b)⁻¹ = b⁻¹ * a⁻¹
     - inv_eq_of_mul((a b : G)) : a * b = 1 -> a⁻¹ = b
@@ -3752,9 +3752,9 @@ class SubtractionCommMonoid
   (no additional axioms)
 
 中文:
-类 SubtractionCommMonoid
+类 SubtractionComm幺半群
   参数: (G : 类型u)
-  继承: SubtractionMonoid G, AddCommMonoid G
+  继承: Subtraction幺半群 G, 加法交换幺半群 G
   (无附加公理)
 -/
 class SubtractionCommMonoid (G : Type u) extends SubtractionMonoid G, AddCommMonoid G
@@ -3773,9 +3773,9 @@ class DivisionCommMonoid
   (no additional axioms)
 
 中文:
-类 DivisionCommMonoid
+类 DivisionComm幺半群
   参数: (G : 类型u)
-  继承: DivisionMonoid G, CommMonoid G
+  继承: Division幺半群 G, 交换幺半群 G
   (无附加公理)
 -/
 class DivisionCommMonoid (G : Type u) extends DivisionMonoid G, CommMonoid G
@@ -3791,9 +3791,9 @@ class Group
     - inv_mul_cancel : forall a : G, a⁻¹ * a = 1
 
 中文:
-类 Group
+类 群
   参数: (G : 类型u)
-  继承: DivInvMonoid G
+  继承: 除逆幺半群 G
   公理与运算 (1 个):
     - inv_mul_cancel : 对任意 a : G, a⁻¹ * a = 1
 -/
@@ -3811,9 +3811,9 @@ class AddGroup
     - neg_add_cancel : forall a : A, -a + a = 0
 
 中文:
-类 AddGroup
+类 加法群
   参数: (A : 类型u)
-  继承: SubNegMonoid A
+  继承: SubNeg幺半群 A
   公理与运算 (1 个):
     - neg_add_cancel : 对任意 a : A, -a + a = 0
 
@@ -4117,9 +4117,9 @@ class AddCommGroup
   (no additional axioms)
 
 中文:
-类 AddCommGroup
+类 加法交换群
   参数: (G : 类型u)
-  继承: AddGroup G, AddCommMonoid G
+  继承: 加法群 G, 加法交换幺半群 G
   (无附加公理)
 -/
 class AddCommGroup (G : Type u) extends AddGroup G, AddCommMonoid G
@@ -4137,9 +4137,9 @@ class CommGroup
   (no additional axioms)
 
 中文:
-类 CommGroup
+类 交换群
   参数: (G : 类型u)
-  继承: Group G, CommMonoid G
+  继承: 群 G, 交换幺半群 G
   (无附加公理)
 -/
 class CommGroup (G : Type u) extends Group G, CommMonoid G

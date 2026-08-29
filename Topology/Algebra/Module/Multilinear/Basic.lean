@@ -55,11 +55,11 @@ structure ContinuousMultilinearMap
     - cont : Continuous toFun
 
 中文:
-结构 ContinuousMultilinearMap
-  参数: (R : 类型u) {ι : 类型v} (M₁ : ι -> Type w₁) (M₂ : Type w₂)
-  继承: MultilinearMap R M₁ M₂
+结构 连续多重线性映射
+  参数: (R : 类型u) {ι : 类型v} (M₁ : ι -> 类型 w₁) (M₂ : 类型 w₂)
+  继承: 多重线性映射 R M₁ M₂
   公理与运算 (1 个):
-    - cont : Continuous toFun
+    - cont : 连续 toFun
 -/
 structure ContinuousMultilinearMap (R : Type u) {ι : Type v} (M₁ : ι -> Type w₁) (M₂ : Type w₂)
   [Semiring R] [forall i, AddCommMonoid (M₁ i)] [AddCommMonoid M₂] [forall i, Module R (M₁ i)] [Module R M₂]
@@ -108,7 +108,7 @@ coe_injective _ _ h := toMultilinearMap_injective MultilinearMap.coe_injective h
 
 中文:
 实例 funLike
-  签名: : FunLike (ContinuousMultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂ where
+  签名: : 函数状 (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂ where
   定义体: f.toFun
 coe_injective _ _ h := toMultilinearMap_injective MultilinearMap.coe_injective h
 
@@ -152,7 +152,7 @@ initialize_simps_projections ContinuousMultilinearMap (-toMultilinearMap,
 
 中文:
 定义 Simps.apply
-  签名: (L₁ : ContinuousMultilinearMap R M₁ M₂) (v : 对任意 i, M₁ i)
+  签名: (L₁ : 连续多重线性映射 R M₁ M₂) (v : 对任意 i, M₁ i)
   定义体: L₁ v
 
 initialize_simps_projections ContinuousMultilinearMap (-toMultilinearMap,
@@ -179,7 +179,7 @@ theorem coe_continuous
 
 中文:
 定理 coe_continuous
-  结论: Continuous (f : (对任意 i, M₁ i) -> M₂)
+  结论: 连续 (f : (对任意 i, M₁ i) -> M₂)
   证明: f.cont
 
 @[simp]
@@ -224,7 +224,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f f' : ContinuousMultilinearMap R M₁ M₂} (H : 对任意 x, f x = f' x)
+  条件: {f f' : 连续多重线性映射 R M₁ M₂} (H : 对任意 x, f x = f' x)
   结论: f = f'
   证明: DFunLike.ext _ _ H
 
@@ -315,7 +315,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: f 0 = 0
   证明: f.toMultilinearMap.map_zero
 
@@ -334,7 +334,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ContinuousMultilinearMap R M₁ M₂)
+  签名: 零 (连续多重线性映射 R M₁ M₂)
   定义体: ⟨{ (0 : MultilinearMap R M₁ M₂) with cont := continuous_const }⟩
 
 Depends on / 依赖: MultilinearMap, continuous_const
@@ -352,7 +352,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ContinuousMultilinearMap R M₁ M₂)
+  签名: 可居 (连续多重线性映射 R M₁ M₂)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (ContinuousMultilinearMap R M₁ M₂) :=
@@ -372,7 +372,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (ContinuousMultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是ZeroApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
@@ -395,7 +395,7 @@ theorem toMultilinearMap_zero
 
 中文:
 定理 toMultilinearMap_zero
-  结论: (0 : ContinuousMultilinearMap R M₁ M₂).toMultilinearMap = 0
+  结论: (0 : 连续多重线性映射 R M₁ M₂).toMultilinearMap = 0
   证明: rfl
 -/
 theorem toMultilinearMap_zero : (0 : ContinuousMultilinearMap R M₁ M₂).toMultilinearMap = 0 :=
@@ -417,7 +417,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R' (ContinuousMultilinearMap A M₁ M₂)
+  签名: 标量乘法 R' (连续多重线性映射 A M₁ M₂)
   定义体: ⟨fun c f => { c • f.toMultilinearMap with cont := f.cont.const_smul c }⟩
 
 Depends on / 依赖: const_smul, f.cont.const_smul, f.toMultilinearMap, toMultilinearMap
@@ -439,7 +439,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R' (ContinuousMultilinearMap A M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是SMulApply R' (连续多重线性映射 A M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
@@ -462,7 +462,7 @@ theorem toMultilinearMap_smul
 
 中文:
 定理 toMultilinearMap_smul
-  条件: (c : R') (f : ContinuousMultilinearMap A M₁ M₂)
+  条件: (c : R') (f : 连续多重线性映射 A M₁ M₂)
   证明: rfl
 -/
 theorem toMultilinearMap_smul (c : R') (f : ContinuousMultilinearMap A M₁ M₂) :
@@ -478,8 +478,8 @@ instance [SMulCommClass
   body: FunLike.smulCommClass
 
 中文:
-实例 [SMulCommClass
-  签名: R' R'' M₂] : SMulCommClass R' R'' (ContinuousMultilinearMap A M₁ M₂)
+实例 [标量交换类
+  签名: R' R'' M₂] : 标量交换类 R' R'' (连续多重线性映射 A M₁ M₂)
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -496,8 +496,8 @@ instance [SMul
   body: FunLike.isScalarTower
 
 中文:
-实例 [SMul
-  签名: R' R''] [IsScalarTower R' R'' M₂] :
+实例 [标量乘法
+  签名: R' R''] [标量塔 R' R'' M₂] :
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -514,8 +514,8 @@ instance [DistribSMul
   body: FunLike.isCentralScalar
 
 中文:
-实例 [DistribSMul
-  签名: R'ᵐᵒᵖ M₂] [IsCentralScalar R' M₂] :
+实例 [分配标量乘法
+  签名: R'ᵐᵒᵖ M₂] [中心标量 R' M₂] :
   定义体: FunLike.isCentralScalar
 
 Depends on / 依赖: FunLike, FunLike.isCentralScalar, isCentralScalar
@@ -541,7 +541,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction R' (ContinuousMultilinearMap A M₁ M₂)
+  签名: 乘法作用 R' (连续多重线性映射 A M₁ M₂)
   定义体: fast_instance%
   Function.Injective.mulAction toMultilinearMap toMultilinearMap_injective fun _ _ => rfl
 
@@ -566,7 +566,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (ContinuousMultilinearMap R M₁ M₂)
+  签名: 加法 (连续多重线性映射 R M₁ M₂)
   定义体: ⟨fun f f' => ⟨f.toMultilinearMap + f'.toMultilinearMap, f.cont.add f'.cont⟩⟩
 
 Depends on / 依赖: f.cont.add, f.toMultilinearMap, toMultilinearMap
@@ -588,7 +588,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (ContinuousMultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是加法Apply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
@@ -611,7 +611,7 @@ theorem toMultilinearMap_add
 
 中文:
 定理 toMultilinearMap_add
-  条件: (f g : ContinuousMultilinearMap R M₁ M₂)
+  条件: (f g : 连续多重线性映射 R M₁ M₂)
   证明: rfl
 -/
 theorem toMultilinearMap_add (f g : ContinuousMultilinearMap R M₁ M₂) :
@@ -630,7 +630,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (ContinuousMultilinearMap R M₁ M₂)
+  签名: 加法幺半群 (连续多重线性映射 R M₁ M₂)
   定义体: fast_instance%
   toMultilinearMap_injective.addMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -650,7 +650,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (ContinuousMultilinearMap R M₁ M₂)
+  签名: : 加法交换幺半群 (连续多重线性映射 R M₁ M₂)
   定义体: fast_instance%
   toMultilinearMap_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -717,8 +717,8 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
-  签名: (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
+定义 乘积
+  签名: (f : 连续多重线性映射 R M₁ M₂) (g : 连续多重线性映射 R M₁ M₃)
   定义体: { f.toMultilinearMap.prod g.toMultilinearMap with cont := f.cont.prodMk g.cont }
 
 @[simp]
@@ -740,7 +740,7 @@ theorem prod_apply
 
 中文:
 定理 prod_apply
-  结论: (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
+  结论: (f : 连续多重线性映射 R M₁ M₂) (g : 连续多重线性映射 R M₁ M₃)
   证明: rfl
 -/
 theorem prod_apply (f : ContinuousMultilinearMap R M₁ M₂) (g : ContinuousMultilinearMap R M₁ M₃)
@@ -760,7 +760,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)] [对任意 i, TopologicalSpace (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)] [对任意 i, 拓扑空间 (M' i)]
   定义体: continuous_pi fun i => (f i).coe_continuous
   toMultilinearMap := MultilinearMap.pi fun i => (f i).toMultilinearMap
 
@@ -785,7 +785,7 @@ theorem coe_pi
 
 中文:
 定理 coe_pi
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   证明: rfl
 -/
 theorem coe_pi {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
@@ -803,7 +803,7 @@ theorem pi_apply
 
 中文:
 定理 pi_apply
-  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  结论: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   证明: rfl
 -/
 theorem pi_apply {ι' : Type*} {M' : ι' -> Type*} [forall i, AddCommMonoid (M' i)]
@@ -823,7 +823,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : ContinuousMultilinearMap R M₁ M₂) (p : Submodule R M₂) (h : 对任意 v, f v in p)
+  签名: (f : 连续多重线性映射 R M₁ M₂) (p : 子模 R M₂) (h : 对任意 v, f v in p)
   定义体: ⟨f.1.codRestrict p h, f.cont.subtype_mk _⟩
 
 Depends on / 依赖: codRestrict, f.cont.subtype_mk, subtype_mk
@@ -854,7 +854,7 @@ right_inv f := toMultilinearMap_injective
 
 中文:
 定义 ofSubsingleton
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: ⟨MultilinearMap.ofSubsingleton R M₂ M₃ i f,
     (map_continuous f).comp (continuous_apply i)⟩
   invFun f := ⟨(MultilinearMap.ofSubsingleton R M₂ M₃ i).symm f.toMultilinearMap,
@@ -888,7 +888,7 @@ definition constOfIsEmpty
 
 中文:
 定义 constOfIsEmpty
-  签名: [IsEmpty ι] (m : M₂)
+  签名: [是空 ι] (m : M₂)
   定义体: MultilinearMap.constOfIsEmpty R _ m
   cont := continuous_const
 
@@ -913,7 +913,7 @@ cont := g.cont.comp continuous_pi fun j => (f j).cont.comp continuous_apply _ }
 
 中文:
 定义 compContinuousLinearMap
-  签名: (g : ContinuousMultilinearMap R M₁' M₄)
+  签名: (g : 连续多重线性映射 R M₁' M₄)
   定义体: { g.toMultilinearMap.compLinearMap fun i => (f i).toLinearMap with
 cont := g.cont.comp continuous_pi fun j => (f j).cont.comp continuous_apply _ }
 
@@ -937,7 +937,7 @@ theorem compContinuousLinearMap_apply
 
 中文:
 定理 compContinuousLinearMap_apply
-  结论: (g : ContinuousMultilinearMap R M₁' M₄)
+  结论: (g : 连续多重线性映射 R M₁' M₄)
   证明: rfl
 -/
 theorem compContinuousLinearMap_apply (g : ContinuousMultilinearMap R M₁' M₄)
@@ -956,7 +956,7 @@ definition _root_.ContinuousLinearMap.compContinuousMultilinearMap
 @[simp]
 
 中文:
-定义 _root_.ContinuousLinearMap.compContinuousMultilinearMap
+定义 _root_.连续线性映射.compContinuousMultilinearMap
   签名: (g : M₂ ->L[R] M₃)
   定义体: { g.toLinearMap.compMultilinearMap f.toMultilinearMap with cont := g.cont.comp f.cont }
 
@@ -980,7 +980,7 @@ theorem _root_.ContinuousLinearMap.compContinuousMultilinearMap_coe
   rfl
 
 中文:
-定理 _root_.ContinuousLinearMap.compContinuousMultilinearMap_coe
+定理 _root_.连续线性映射.compContinuousMultilinearMap_coe
   结论: (g : M₂ ->L[R] M₃)
   证明: by
   ext m
@@ -1032,7 +1032,7 @@ theorem prod_ext_iff
 
 中文:
 定理 prod_ext_iff
-  条件: {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
+  条件: {f g : 连续多重线性映射 R M₁ (M₂ × M₃)}
   证明: by
   rw [← Prod.mk_inj]; rw [← prodEquiv_symm_apply]; rw [← prodEquiv_symm_apply]; rw [Equiv.apply_eq_iff_eq]
 
@@ -1058,7 +1058,7 @@ theorem prod_ext
 
 中文:
 定理 prod_ext
-  结论: {f g : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
+  结论: {f g : 连续多重线性映射 R M₁ (M₂ × M₃)}
   证明: prod_ext_iff.mpr ⟨h₁, h₂⟩
 
 Depends on / 依赖: prod_ext_iff, prod_ext_iff.mpr
@@ -1080,7 +1080,7 @@ theorem eq_prod_iff
 
 中文:
 定理 eq_prod_iff
-  结论: {f : ContinuousMultilinearMap R M₁ (M₂ × M₃)}
+  结论: {f : 连续多重线性映射 R M₁ (M₂ × M₃)}
   证明: prod_ext_iff
 
 Depends on / 依赖: prod_ext_iff
@@ -1101,7 +1101,7 @@ theorem add_prod_add
 
 中文:
 定理 add_prod_add
-  结论: [ContinuousAdd M₂] [ContinuousAdd M₃]
+  结论: [连续加法 M₂] [连续加法 M₃]
   证明: rfl
 -/
 theorem add_prod_add [ContinuousAdd M₂] [ContinuousAdd M₃]
@@ -1121,7 +1121,7 @@ theorem smul_prod_smul
 
 中文:
 定理 smul_prod_smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S M₂] [DistribMulAction S M₃]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S M₂] [分配乘法作用 S M₃]
   证明: rfl
 
 @[simp]
@@ -1162,7 +1162,7 @@ definition piEquiv
 
 中文:
 定义 piEquiv
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   定义体: ContinuousMultilinearMap.pi
   invFun f i := (ContinuousLinearMap.proj i : _ ->L[R] M' i).compContinuousMultilinearMap f
 
@@ -1253,7 +1253,7 @@ lemma linearDeriv_apply
 
 中文:
 引理 linearDeriv_apply
-  结论: f.linearDeriv x y = ∑ i, f (Function.update x i (y i))
+  结论: f.linearDeriv x y = ∑ i, f (函数.update x i (y i))
   证明: by
   simp [linearDeriv, toContinuousLinearMap]
 
@@ -1274,7 +1274,7 @@ theorem cons_add
 
 中文:
 定理 cons_add
-  条件: (f : ContinuousMultilinearMap R M M₂) (m : 对任意 i : Fin n, M i.succ) (x y : M 0)
+  条件: (f : 连续多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (x y : M 0)
   证明: f.toMultilinearMap.cons_add m x y
 
 Depends on / 依赖: cons_add, f.toMultilinearMap.cons_add, toMultilinearMap
@@ -1293,7 +1293,7 @@ theorem cons_smul
 
 中文:
 定理 cons_smul
-  结论: (f : ContinuousMultilinearMap R M M₂) (m : 对任意 i : Fin n, M i.succ) (c : R)
+  结论: (f : 连续多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (c : R)
   证明: f.toMultilinearMap.cons_smul m c x
 
 Depends on / 依赖: cons_smul, f.toMultilinearMap.cons_smul, toMultilinearMap
@@ -1312,7 +1312,7 @@ theorem map_piecewise_add
 
 中文:
 定理 map_piecewise_add
-  条件: [DecidableEq ι] (m m' : 对任意 i, M₁ i) (t : Finset ι)
+  条件: [DecidableEq ι] (m m' : 对任意 i, M₁ i) (t : 有限集 ι)
   证明: f.toMultilinearMap.map_piecewise_add _ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_piecewise_add, map_piecewise_add, toMultilinearMap
@@ -1331,7 +1331,7 @@ theorem map_add_univ
 
 中文:
 定理 map_add_univ
-  条件: [DecidableEq ι] [Fintype ι] (m m' : 对任意 i, M₁ i)
+  条件: [DecidableEq ι] [有限类型 ι] (m m' : 对任意 i, M₁ i)
   证明: f.toMultilinearMap.map_add_univ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_add_univ, map_add_univ, toMultilinearMap
@@ -1375,7 +1375,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: [DecidableEq ι] [对任意 i, Fintype (α i)]
+  条件: [DecidableEq ι] [对任意 i, 有限类型 (α i)]
   证明: f.toMultilinearMap.map_sum _
 
 Depends on / 依赖: f.toMultilinearMap.map_sum, map_sum, toMultilinearMap
@@ -1405,7 +1405,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (f : ContinuousMultilinearMap A M₁ M₂)
+  签名: (f : 连续多重线性映射 A M₁ M₂)
   定义体: f.toMultilinearMap.restrictScalars R
   cont := f.cont
 
@@ -1429,7 +1429,7 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: (f : ContinuousMultilinearMap A M₁ M₂)
+  条件: (f : 连续多重线性映射 A M₁ M₂)
   结论: ⇑(f.restrictScalars R) = f
   证明: rfl
 -/
@@ -1479,7 +1479,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (ContinuousMultilinearMap R M₁ M₂)
+  签名: 取负 (连续多重线性映射 R M₁ M₂)
   定义体: ⟨fun f => { -f.toMultilinearMap with cont := f.cont.neg }⟩
 
 Depends on / 依赖: f.cont.neg, f.toMultilinearMap, toMultilinearMap
@@ -1499,7 +1499,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (ContinuousMultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是NegApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
@@ -1519,7 +1519,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (ContinuousMultilinearMap R M₁ M₂)
+  签名: 减法 (连续多重线性映射 R M₁ M₂)
   定义体: ⟨fun f g => { f.toMultilinearMap - g.toMultilinearMap with cont := f.cont.sub g.cont }⟩
 
 Depends on / 依赖: f.cont.sub, f.toMultilinearMap, g.cont, g.toMultilinearMap, toMultilinearMap
@@ -1539,7 +1539,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (ContinuousMultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是SubApply (连续多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
@@ -1561,7 +1561,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (ContinuousMultilinearMap R M₁ M₂)
+  签名: 加法交换群 (连续多重线性映射 R M₁ M₂)
   定义体: fast_instance%
   toMultilinearMap_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1582,7 +1582,7 @@ theorem neg_prod_neg
 
 中文:
 定理 neg_prod_neg
-  结论: [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
+  结论: [加法交换群 M₃] [模 R M₃] [拓扑空间 M₃]
   证明: rfl
 -/
 theorem neg_prod_neg [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
@@ -1600,7 +1600,7 @@ theorem sub_prod_sub
 
 中文:
 定理 sub_prod_sub
-  结论: [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
+  结论: [加法交换群 M₃] [模 R M₃] [拓扑空间 M₃]
   证明: rfl
 -/
 theorem sub_prod_sub [AddCommGroup M₃] [Module R M₃] [TopologicalSpace M₃]
@@ -1629,7 +1629,7 @@ theorem map_piecewise_smul
 
 中文:
 定理 map_piecewise_smul
-  条件: [DecidableEq ι] (c : ι -> R) (m : 对任意 i, M₁ i) (s : Finset ι)
+  条件: [DecidableEq ι] (c : ι -> R) (m : 对任意 i, M₁ i) (s : 有限集 ι)
   证明: f.toMultilinearMap.map_piecewise_smul _ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_piecewise_smul, map_piecewise_smul, toMultilinearMap
@@ -1648,7 +1648,7 @@ theorem map_smul_univ
 
 中文:
 定理 map_smul_univ
-  条件: [Fintype ι] (c : ι -> R) (m : 对任意 i, M₁ i)
+  条件: [有限类型 ι] (c : ι -> R) (m : 对任意 i, M₁ i)
   证明: f.toMultilinearMap.map_smul_univ _ _
 
 Depends on / 依赖: f.toMultilinearMap.map_smul_univ, map_smul_univ, toMultilinearMap
@@ -1671,7 +1671,7 @@ theorem ext_ring
 
 中文:
 定理 ext_ring
-  结论: [Finite ι] [TopologicalSpace R]
+  结论: [有限 ι] [拓扑空间 R]
   证明: toMultilinearMap_injective MultilinearMap.ext_ring h
 
 Depends on / 依赖: MultilinearMap, MultilinearMap.ext_ring, ext_ring, toMultilinearMap_injective
@@ -1705,8 +1705,8 @@ instance [ContinuousAdd
     fun _ _ => rfl
 
 中文:
-实例 [ContinuousAdd
-  签名: M₂] : DistribMulAction R' (ContinuousMultilinearMap A M₁ M₂)
+实例 [连续加法
+  签名: M₂] : 分配乘法作用 R' (连续多重线性映射 A M₁ M₂)
   定义体: fast_instance%
   Function.Injective.distribMulAction
     { toFun := toMultilinearMap,
@@ -1749,7 +1749,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R' (ContinuousMultilinearMap A M₁ M₂)
+  签名: 模 R' (连续多重线性映射 A M₁ M₂)
   定义体: fast_instance%
   Function.Injective.module _
     { toFun := toMultilinearMap,
@@ -1781,7 +1781,7 @@ definition toMultilinearMapLinear
 
 中文:
 定义 toMultilinearMapLinear
-  签名: : ContinuousMultilinearMap A M₁ M₂ ->ₗ[R'] MultilinearMap A M₁ M₂ where
+  签名: : 连续多重线性映射 A M₁ M₂ ->ₗ[R'] 多重线性映射 A M₁ M₂ where
   定义体: toMultilinearMap
   map_add' := toMultilinearMap_add
   map_smul' := toMultilinearMap_smul
@@ -1807,7 +1807,7 @@ definition piLinearEquiv
 
 中文:
 定义 piLinearEquiv
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)]
   定义体: { piEquiv with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -1871,7 +1871,7 @@ theorem mkPiAlgebraFin_apply
 
 中文:
 定理 mkPiAlgebraFin_apply
-  条件: (m : Fin n -> A)
+  条件: (m : 有限集 n -> A)
   证明: rfl
 -/
 theorem mkPiAlgebraFin_apply (m : Fin n -> A) :
@@ -1898,7 +1898,7 @@ definition mkPiAlgebra
 
 中文:
 定义 mkPiAlgebra
-  签名: : ContinuousMultilinearMap R (fun _ : ι => A) A where
+  签名: : 连续多重线性映射 R (fun _ : ι => A) A where
   定义体: continuous_finsetProd _ fun _ _ => continuous_apply _
   toMultilinearMap := MultilinearMap.mkPiAlgebra R ι A
 
@@ -1921,7 +1921,7 @@ theorem mkPiAlgebra_apply
 中文:
 定理 mkPiAlgebra_apply
   条件: (m : ι -> A)
-  结论: ContinuousMultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i
+  结论: 连续多重线性映射.mkPiAlgebra R ι A m = ∏ i, m i
   证明: rfl
 -/
 theorem mkPiAlgebra_apply (m : ι -> A) : ContinuousMultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i :=
@@ -1941,7 +1941,7 @@ theorem mkPiAlgebra_eq_mkPiAlgebraFin
 中文:
 定理 mkPiAlgebra_eq_mkPiAlgebraFin
   条件: {n : 自然数}
-  结论: ContinuousMultilinearMap.mkPiAlgebra R (Fin n) A
+  结论: 连续多重线性映射.mkPiAlgebra R (有限集 n) A
   证明: by
   ext
   simp [List.prod_ofFn]
@@ -1975,7 +1975,7 @@ definition smulRight
 
 中文:
 定义 smulRight
-  签名: : ContinuousMultilinearMap R M₁ M₂ where
+  签名: : 连续多重线性映射 R M₁ M₂ where
   定义体: f.toMultilinearMap.smulRight z
   cont := f.cont.smul continuous_const
 
@@ -2045,7 +2045,7 @@ theorem mkPiRing_apply_one_eq_self
 
 中文:
 定理 mkPiRing_apply_one_eq_self
-  条件: (f : ContinuousMultilinearMap R (fun _ : ι => R) M)
+  条件: (f : 连续多重线性映射 R (fun _ : ι => R) M)
   证明: toMultilinearMap_injective f.toMultilinearMap.mkPiRing_apply_one_eq_self
 
 Depends on / 依赖: f.toMultilinearMap.mkPiRing_apply_one_eq_self, mkPiRing_apply_one_eq_self, toMultilinearMap, toMultilinearMap_injective
@@ -2090,7 +2090,7 @@ theorem mkPiRing_zero
 
 中文:
 定理 mkPiRing_zero
-  结论: ContinuousMultilinearMap.mkPiRing R ι (0 : M) = 0
+  结论: 连续多重线性映射.mkPiRing R ι (0 : M) = 0
   证明: by
   ext; rw [mkPiRing_apply, smul_zero, zero_apply]
 
@@ -2112,7 +2112,7 @@ theorem mkPiRing_eq_zero_iff
 中文:
 定理 mkPiRing_eq_zero_iff
   条件: (z : M)
-  结论: ContinuousMultilinearMap.mkPiRing R ι z = 0 ↔ z = 0
+  结论: 连续多重线性映射.mkPiRing R ι z = 0 ↔ z = 0
   证明: by
   rw [← mkPiRing_zero]; rw [mkPiRing_eq_iff]
 

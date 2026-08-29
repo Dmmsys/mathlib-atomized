@@ -158,7 +158,7 @@ lemma sq
 
 中文:
 引理 sq
-  条件: [SuccOrder J]
+  条件: [Succ序 J]
   证明: by simp
 -/
 lemma sq [SuccOrder J] :
@@ -210,7 +210,7 @@ definition sqFunctor
 
 中文:
 定义 sqFunctor
-  签名: : Jᵒᵖ ⥤ Type _ where
+  签名: : Jᵒᵖ ⥤ 类型 _ where
   定义体: SqStruct c p f g j.unop
   map α := ↾fun sq' => sq'.map α.unop
 
@@ -312,7 +312,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (sqFunctor c p f g).obj (Opposite.op j) where
+  签名: : (sqFunctor c p f g).obj (对偶.op j) where
   定义体: liftHom hj s
   w₁ := by
     have h : ⊥ < j := Ne.bot_lt' (by
@@ -449,7 +449,7 @@ lemma hasLift
 
 中文:
 引理 hasLift
-  结论: sq.HasLift
+  结论: sq.有Lift
   证明: by
   obtain ⟨s, hs⟩ := (wellOrderInductionData c f g hF).surjective { w₂ := sq.w, .. }
   replace hs := congr_arg SqStruct.f' hs
@@ -485,7 +485,7 @@ lemma hasLiftingPropertyFixedBot_ι_app_bot
 
 中文:
 引理 hasLiftingPropertyFixedBot_ι_app_bot
-  结论: HasLifting命题ertyFixedBot (c.ι.app ⊥) p g
+  结论: HasLiftingPropertyFixedBot (c.ι.app ⊥) p g
   证明: fun _ sq => hasLift hc hF sq
 
 Depends on / 依赖: hasLift
@@ -509,7 +509,7 @@ lemma hasLiftingProperty_ι_app_bot
 
 中文:
 引理 hasLiftingProperty_ι_app_bot
-  结论: HasLifting命题erty (c.ι.app ⊥) p where
+  结论: 有LiftingProperty (c.ι.app ⊥) p where
   证明: hasLift hc (fun j hj _ _ => by have := hF j hj; infer_instance) sq
 
 Depends on / 依赖: hasLift, infer_instance
@@ -573,7 +573,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderTransfiniteComposition.{w} W.llp
+  签名: MorphismProperty.是StableUnderTransfiniteComposition.{w} W.llp
 -/
 instance : MorphismProperty.IsStableUnderTransfiniteComposition.{w} W.llp where
 

@@ -67,8 +67,8 @@ theorem IsOfFiniteCharacter.exists_maximal
   refine (hF (sUnion c)).mpr fun s sc sfin => ?
 
 中文:
-定理 IsOfFiniteCharacter.exists_maximal
-  结论: {F} (hF : IsOfFiniteCharacter F) {x : Set α}
+定理 IsOfFiniteCharacter.存在_maximal
+  结论: {F} (hF : IsOfFiniteCharacter F) {x : 集合 α}
   证明: by
   /- Apply Zorn's lemma. Take the union of the elements of a chain as its upper bound. -/
   refine zorn_subset_nonempty F (fun c cF cch cne =>

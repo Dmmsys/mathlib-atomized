@@ -34,7 +34,7 @@ theorem fg_bot_toSubmodule
 
 中文:
 定理 fg_bot_toSubmodule
-  结论: (⊥ : Subalgebra R A).toSubmodule.FG
+  结论: (⊥ : 子代数 R A).toSubmodule.FG
   证明: ⟨{1}, by simp [Algebra.toSubmodule_bot, one_eq_span]⟩
 
 Depends on / 依赖: Algebra, Algebra.toSubmodule_bot, one_eq_span, toSubmodule_bot
@@ -52,7 +52,7 @@ instance finite_bot
 
 中文:
 实例 finite_bot
-  签名: : Module.Finite R (⊥ : Subalgebra R A)
+  签名: : 模.有限 R (⊥ : 子代数 R A)
   定义体: Module.Finite.range (Algebra.linearMap R A)
 
 Depends on / 依赖: Algebra, Algebra.linearMap, Finite, Module, Module.Finite.range, linearMap
@@ -79,7 +79,7 @@ theorem fg_unit
 
 中文:
 定理 fg_unit
-  条件: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A] (I : (Submodule R A)ˣ)
+  条件: {R A : 类型} [交换半环 R] [半环 A] [代数 R A] (I : (子模 R A)ˣ)
   证明: by
   obtain ⟨T, T', hT, hT', one_mem⟩ := mem_span_mul_finite_of_mem_mul (I.mul_inv ▸ one_le.mp le_rfl)
   refine ⟨T, span_eq_of_le _ hT ?_⟩
@@ -107,7 +107,7 @@ theorem fg_of_isUnit
 
 中文:
 定理 fg_of_isUnit
-  结论: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A] {I : Submodule R A}
+  结论: {R A : 类型} [交换半环 R] [半环 A] [代数 R A] {I : 子模 R A}
   证明: fg_unit hI.unit
 
 Depends on / 依赖: fg_unit, hI.unit

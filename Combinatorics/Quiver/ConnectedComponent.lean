@@ -48,7 +48,7 @@ definition zigzagSetoid
 
 中文:
 定义 zigzagSetoid
-  签名: : Setoid V
+  签名: : 集合等价关系 V
   定义体: ⟨fun a b => Nonempty (@Path (Symmetrify V) _ a b), fun _ => ⟨Path.nil⟩, fun ⟨p⟩ =>
     ⟨p.reverse⟩, fun ⟨p⟩ ⟨q⟩ => ⟨p.comp q⟩⟩
 
@@ -68,7 +68,7 @@ definition WeaklyConnectedComponent
 
 中文:
 定义 WeaklyConnectedComponent
-  签名: : Type _
+  签名: : 类型 _
   定义体: Quotient (zigzagSetoid V)
 
 Depends on / 依赖: Quotient, zigzagSetoid
@@ -123,8 +123,8 @@ instance [Inhabited
   body: ⟨show V from default⟩
 
 中文:
-实例 [Inhabited
-  签名: V] : Inhabited (WeaklyConnectedComponent V)
+实例 [可居
+  签名: V] : 可居 (WeaklyConnectedComponent V)
   定义体: ⟨show V from default⟩
 -/
 instance [Inhabited V] : Inhabited (WeaklyConnectedComponent V) :=
@@ -264,7 +264,7 @@ lemma IsSStronglyConnected.exists_pos_path
   proof: h i j
 
 中文:
-引理 IsSStronglyConnected.exists_pos_path
+引理 IsSStronglyConnected.存在_pos_path
   证明: h i j
 -/
 lemma IsSStronglyConnected.exists_pos_path
@@ -278,7 +278,7 @@ lemma IsSStronglyConnected.exists_pos_cycle
   proof: h i i
 
 中文:
-引理 IsSStronglyConnected.exists_pos_cycle
+引理 IsSStronglyConnected.存在_pos_cycle
   证明: h i i
 -/
 lemma IsSStronglyConnected.exists_pos_cycle
@@ -315,7 +315,7 @@ definition stronglyConnectedSetoid
 
 中文:
 定义 stronglyConnectedSetoid
-  签名: : Setoid V
+  签名: : 集合等价关系 V
   定义体: ⟨fun a b => (Nonempty (Path a b)) ∧ (Nonempty (Path b a)),
    fun _ => ⟨⟨Path.nil⟩, ⟨Path.nil⟩⟩, fun ⟨hab, hba⟩ => ⟨hba, hab⟩, fun ⟨hab, hba⟩ ⟨hbc, hcb⟩ =>
      ⟨⟨hab.some.comp hbc.some⟩, ⟨hcb.some.comp hba.some⟩⟩⟩
@@ -337,7 +337,7 @@ definition StronglyConnectedComponent
 
 中文:
 定义 StronglyConnectedComponent
-  签名: : Type _
+  签名: : 类型 _
   定义体: Quotient (stronglyConnectedSetoid V)
 
 Depends on / 依赖: Quotient, stronglyConnectedSetoid
@@ -392,8 +392,8 @@ instance [Inhabited
   body: ⟨(default : V)⟩
 
 中文:
-实例 [Inhabited
-  签名: V] : Inhabited (StronglyConnectedComponent V)
+实例 [可居
+  签名: V] : 可居 (StronglyConnectedComponent V)
   定义体: ⟨(default : V)⟩
 -/
 instance [Inhabited V] : Inhabited (StronglyConnectedComponent V) :=
@@ -483,7 +483,7 @@ lemma exists_path_of_stronglyConnectedComponent_eq
   proof: (StronglyConnectedComponent.eq (a := a) (b := b)).1 h
 
 中文:
-引理 exists_path_of_stronglyConnectedComponent_eq
+引理 存在_path_of_stronglyConnectedComponent_eq
   结论: {a b : V}
   证明: (StronglyConnectedComponent.eq (a := a) (b := b)).1 h
 

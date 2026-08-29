@@ -60,7 +60,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation K 实数>=0 where
+  签名: : 赋值 K 实数>=0 where
   定义体: nnnorm
   map_zero' := nnnorm_zero
   map_one' := nnnorm_one
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: RankLeOne (valuation (K := K))
+  签名: 秩不超过一 (valuation (K := K))
   定义体: embedding
   strictMono' := embedding_strictMono
 -/
@@ -138,7 +138,7 @@ definition toValued
 
 中文:
 定义 toValued
-  签名: : Valued K 实数>=0
+  签名: : 赋值 K 实数>=0
   定义体: { hK.toUniformSpace,
     (inferInstance : IsUniformAddGroup K) with
     v := valuation
@@ -271,7 +271,7 @@ theorem norm_add_le
 中文:
 定理 norm_add_le
   条件: (x y : L)
-  结论: v.norm (x + y) <= max (v.norm x) (v.norm y)
+  结论: v.norm (x + y) <= 最大值 (v.norm x) (v.norm y)
   证明: by
   simp only [norm, NNReal.coe_le_coe, le_max_iff, StrictMono.le_iff_le hv.strictMono]
   exact le_max_iff.mp (Valuation.map_add_le_max' v.restrict _ _)
@@ -355,7 +355,7 @@ definition toNormedField
 
 中文:
 定义 toNormedField
-  签名: : NormedField L
+  签名: : 赋范域 L
   定义体: { (inferInstance : Field L) with
     norm := val.v.norm
     dist := fun x y => val.v.norm (x - y)
@@ -453,7 +453,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUltrametricDist L
+  签名: 是UltrametricDist L
   定义体: ⟨fun x y z => by
     refine (Valuation.norm_add_le _ (x - y) (y - z)).trans_eq' ?_
     simp only [sub_add_sub_cancel]
@@ -500,7 +500,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  结论: ‖x‖ = hv.hom _ (Valued.v.restrict x)
+  结论: ‖x‖ = hv.hom _ (赋值.v.restrict x)
   证明: rfl
 
 @[simp]

@@ -38,7 +38,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: (H : Subgroup G)
+  签名: (H : 子群 G)
   定义体: Submonoid.smul ..
 -/
 @[to_additive] instance instSMul (H : Subgroup G) : SMul H.op G := Submonoid.smul ..
@@ -58,7 +58,7 @@ theorem op_bot
 
 中文:
 定理 op_bot
-  结论: (⊥ : Subgroup G).op = ⊥
+  结论: (⊥ : 子群 G).op = ⊥
   证明: opEquiv.map_bot
 
 @[to_additive (attr := simp)]
@@ -81,7 +81,7 @@ theorem op_eq_bot
 
 中文:
 定理 op_eq_bot
-  条件: {S : Subgroup G}
+  条件: {S : 子群 G}
   结论: S.op = ⊥ ↔ S = ⊥
   证明: op_injective.eq_iff' op_bot
 
@@ -104,7 +104,7 @@ theorem unop_bot
 
 中文:
 定理 unop_bot
-  结论: (⊥ : Subgroup Gᵐᵒᵖ).unop = ⊥
+  结论: (⊥ : 子群 Gᵐᵒᵖ).unop = ⊥
   证明: opEquiv.symm.map_bot
 
 @[to_additive (attr := simp)]
@@ -127,7 +127,7 @@ theorem unop_eq_bot
 
 中文:
 定理 unop_eq_bot
-  条件: {S : Subgroup Gᵐᵒᵖ}
+  条件: {S : 子群 Gᵐᵒᵖ}
   结论: S.unop = ⊥ ↔ S = ⊥
   证明: unop_injective.eq_iff' unop_bot
 
@@ -150,7 +150,7 @@ theorem op_top
 
 中文:
 定理 op_top
-  结论: (⊤ : Subgroup G).op = ⊤
+  结论: (⊤ : 子群 G).op = ⊤
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -171,7 +171,7 @@ theorem op_eq_top
 
 中文:
 定理 op_eq_top
-  条件: {S : Subgroup G}
+  条件: {S : 子群 G}
   结论: S.op = ⊤ ↔ S = ⊤
   证明: op_injective.eq_iff' op_top
 
@@ -194,7 +194,7 @@ theorem unop_top
 
 中文:
 定理 unop_top
-  结论: (⊤ : Subgroup Gᵐᵒᵖ).unop = ⊤
+  结论: (⊤ : 子群 Gᵐᵒᵖ).unop = ⊤
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -215,7 +215,7 @@ theorem unop_eq_top
 
 中文:
 定理 unop_eq_top
-  条件: {S : Subgroup Gᵐᵒᵖ}
+  条件: {S : 子群 Gᵐᵒᵖ}
   结论: S.unop = ⊤ ↔ S = ⊤
   证明: unop_injective.eq_iff' unop_top
 
@@ -239,7 +239,7 @@ theorem op_sup
 
 中文:
 定理 op_sup
-  条件: (S₁ S₂ : Subgroup G)
+  条件: (S₁ S₂ : 子群 G)
   结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
   证明: opEquiv.map_sup _ _
 
@@ -264,7 +264,7 @@ theorem unop_sup
 
 中文:
 定理 unop_sup
-  条件: (S₁ S₂ : Subgroup Gᵐᵒᵖ)
+  条件: (S₁ S₂ : 子群 Gᵐᵒᵖ)
   结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
   证明: opEquiv.symm.map_sup _ _
 
@@ -289,7 +289,7 @@ theorem op_inf
 
 中文:
 定理 op_inf
-  条件: (S₁ S₂ : Subgroup G)
+  条件: (S₁ S₂ : 子群 G)
   结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
   证明: rfl
 
@@ -311,7 +311,7 @@ theorem unop_inf
 
 中文:
 定理 unop_inf
-  条件: (S₁ S₂ : Subgroup Gᵐᵒᵖ)
+  条件: (S₁ S₂ : 子群 Gᵐᵒᵖ)
   结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
   证明: rfl
 
@@ -333,7 +333,7 @@ theorem op_sSup
 
 中文:
 定理 op_sSup
-  条件: (S : Set (Subgroup G))
+  条件: (S : 集合 (子群 G))
   结论: (sSup S).op = sSup (.unop ⁻¹' S)
   证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
 
@@ -358,7 +358,7 @@ theorem unop_sSup
 
 中文:
 定理 unop_sSup
-  条件: (S : Set (Subgroup Gᵐᵒᵖ))
+  条件: (S : 集合 (子群 Gᵐᵒᵖ))
   结论: (sSup S).unop = sSup (.op ⁻¹' S)
   证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
 
@@ -383,7 +383,7 @@ theorem op_sInf
 
 中文:
 定理 op_sInf
-  条件: (S : Set (Subgroup G))
+  条件: (S : 集合 (子群 G))
   结论: (sInf S).op = sInf (.unop ⁻¹' S)
   证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
 
@@ -408,7 +408,7 @@ theorem unop_sInf
 
 中文:
 定理 unop_sInf
-  条件: (S : Set (Subgroup Gᵐᵒᵖ))
+  条件: (S : 集合 (子群 Gᵐᵒᵖ))
   结论: (sInf S).unop = sInf (.op ⁻¹' S)
   证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
 
@@ -433,7 +433,7 @@ theorem op_iSup
 
 中文:
 定理 op_iSup
-  条件: (S : ι -> Subgroup G)
+  条件: (S : ι -> 子群 G)
   结论: (iSup S).op = ⨆ i, (S i).op
   证明: opEquiv.map_iSup _
 
@@ -457,7 +457,7 @@ theorem unop_iSup
 
 中文:
 定理 unop_iSup
-  条件: (S : ι -> Subgroup Gᵐᵒᵖ)
+  条件: (S : ι -> 子群 Gᵐᵒᵖ)
   结论: (iSup S).unop = ⨆ i, (S i).unop
   证明: opEquiv.symm.map_iSup _
 
@@ -482,7 +482,7 @@ theorem op_iInf
 
 中文:
 定理 op_iInf
-  条件: (S : ι -> Subgroup G)
+  条件: (S : ι -> 子群 G)
   结论: (iInf S).op = ⨅ i, (S i).op
   证明: opEquiv.map_iInf _
 
@@ -506,7 +506,7 @@ theorem unop_iInf
 
 中文:
 定理 unop_iInf
-  条件: (S : ι -> Subgroup Gᵐᵒᵖ)
+  条件: (S : ι -> 子群 Gᵐᵒᵖ)
   结论: (iInf S).unop = ⨅ i, (S i).unop
   证明: opEquiv.symm.map_iInf _
 
@@ -534,7 +534,7 @@ theorem op_closure
 
 中文:
 定理 op_closure
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
   证明: by
   simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, Subgroup.coe_unop]
@@ -566,7 +566,7 @@ theorem unop_closure
 
 中文:
 定理 unop_closure
-  条件: (s : Set Gᵐᵒᵖ)
+  条件: (s : 集合 Gᵐᵒᵖ)
   结论: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
   证明: by
   rw [← op_inj]; rw [op_unop]; rw [op_closure]
@@ -601,7 +601,7 @@ theorem smul_opposite_mul
 
 中文:
 定理 smul_opposite_mul
-  条件: {H : Subgroup G} (x g : G) (h : H.op)
+  条件: {H : 子群 G} (x g : G) (h : H.op)
   证明: mul_assoc _ _ _
 
 @[to_additive (attr := simp)]
@@ -629,8 +629,8 @@ theorem normal_op
 
 中文:
 定理 normal_op
-  条件: {H : Subgroup G}
-  结论: H.op.Normal ↔ H.Normal
+  条件: {H : 子群 G}
+  结论: H.op.正规 ↔ H.正规
   证明: by
   simp only [← normalizer_eq_top_iff, ← op_normalizer, op_eq_top]
 
@@ -658,7 +658,7 @@ instance op.instNormal
 
 中文:
 实例 op.instNormal
-  签名: {H : Subgroup G} [H.Normal]
+  签名: {H : 子群 G} [H.正规]
   定义体: .op ‹_›
 
 @[to_additive (attr := simp)]
@@ -682,8 +682,8 @@ theorem normal_unop
 
 中文:
 定理 normal_unop
-  条件: {H : Subgroup Gᵐᵒᵖ}
-  结论: H.unop.Normal ↔ H.Normal
+  条件: {H : 子群 Gᵐᵒᵖ}
+  结论: H.unop.正规 ↔ H.正规
   证明: by
   rw [← normal_op]; rw [op_unop]
 
@@ -709,7 +709,7 @@ instance unop.instNormal
 
 中文:
 实例 unop.instNormal
-  签名: {H : Subgroup Gᵐᵒᵖ} [H.Normal]
+  签名: {H : 子群 Gᵐᵒᵖ} [H.正规]
   定义体: .unop ‹_›
 -/
 instance unop.instNormal {H : Subgroup Gᵐᵒᵖ} [H.Normal] : H.unop.Normal := .unop ‹_›

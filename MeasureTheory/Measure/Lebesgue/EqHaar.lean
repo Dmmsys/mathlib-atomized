@@ -62,7 +62,7 @@ definition TopologicalSpace.PositiveCompacts.Icc01
 universe u
 
 中文:
-定义 TopologicalSpace.PositiveCompacts.Icc01
+定义 拓扑空间.PositiveCompacts.Icc01
   签名: : PositiveCompacts 实数 where
   定义体: Icc 0 1
   isCompact' := isCompact_Icc
@@ -90,8 +90,8 @@ definition TopologicalSpace.PositiveCompacts.piIcc01
       imp_true_iff, zero_lt_one]
 
 中文:
-定义 TopologicalSpace.PositiveCompacts.piIcc01
-  签名: (ι : 类型) [Finite ι]
+定义 拓扑空间.PositiveCompacts.piIcc01
+  签名: (ι : 类型) [有限 ι]
   定义体: pi univ fun _ => Icc 0 1
   isCompact' := isCompact_univ_pi fun _ => isCompact_Icc
   interior_nonempty' := by
@@ -121,7 +121,7 @@ theorem parallelepiped_basisFun
 
 中文:
 定理 parallelepiped_basisFun
-  条件: (ι : 类型) [Fintype ι]
+  条件: (ι : 类型) [有限类型 ι]
   证明: SetLike.coe_injective by
     refine Eq.trans ?_ ((uIcc_of_le ?_).trans (Set.pi_univ_Icc _ _).symm)
     · classical convert! parallelepiped_single (ι := ι) 1
@@ -150,7 +150,7 @@ theorem parallelepiped_eq_map
 
 中文:
 定理 parallelepiped_eq_map
-  结论: {ι E : 类型} [Fintype ι] [NormedAddCommGroup E]
+  结论: {ι E : 类型} [有限类型 ι] [赋范交换加群 E]
   证明: by
   classical
   rw [← Basis.parallelepiped_basisFun]; rw [← Basis.parallelepiped_map]
@@ -183,7 +183,7 @@ theorem map_addHaar
 
 中文:
 定理 map_addHaar
-  结论: {ι E F : 类型} [Fintype ι] [NormedAddCommGroup E] [NormedAddCommGroup F]
+  结论: {ι E F : 类型} [有限类型 ι] [赋范交换加群 E] [赋范交换加群 F]
   证明: by
   rw [eq_comm]; rw [Basis.addHaar_eq_iff]; rw [Measure.map_apply f.continuous.measurable
     (PositiveCompacts.isCompact _).measurableSet]; rw [Basis.coe_parallelepiped]; rw [Basis.coe_map]; rw [← addHaar_self b]; rw [← f.toEquiv.preimage_image (_root_.parallelepiped ⇑b)]
@@ -244,7 +244,7 @@ theorem addHaarMeasure_eq_volume_pi
 
 中文:
 定理 addHaarMeasure_eq_volume_pi
-  条件: (ι : 类型) [Fintype ι]
+  条件: (ι : 类型) [有限类型 ι]
   证明: by
   convert! (addHaarMeasure_unique volume (piIcc01 ι)).symm
   simp only [piIcc01, volume_pi_pi fun _ => Icc (0 : Real) 1, PositiveCompacts.coe_mk,
@@ -268,7 +268,7 @@ theorem isAddHaarMeasure_volume_pi
 
 中文:
 定理 isAddHaarMeasure_volume_pi
-  条件: (ι : 类型) [Fintype ι]
+  条件: (ι : 类型) [有限类型 ι]
   证明: inferInstance
 -/
 theorem isAddHaarMeasure_volume_pi (ι : Type*) [Fintype ι] :
@@ -300,7 +300,7 @@ _ = μ (⋃ n, {u n} + s) := Eq.symm measure_iUnion hs fun
 
 中文:
 定理 addHaar_eq_zero_of_disjoint_translates_aux
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   by_contra h
   apply lt_irrefl ∞
@@ -345,7 +345,7 @@ theorem addHaar_eq_zero_of_disjoint_translates
 
 中文:
 定理 addHaar_eq_zero_of_disjoint_translates
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   suffices H : forall R, μ (s inter closedBall 0 R) = 0 by
     rw [← nonpos_iff_eq_zero]
@@ -390,7 +390,7 @@ theorem addHaar_submodule
 
 中文:
 定理 addHaar_submodule
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] [MeasurableSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] [可测空间 E]
   证明: by
   obtain ⟨x, hx⟩ : exists x, x ∉ s := by
     simpa only [Submodule.eq_top_iff', not_exists, Ne, not_forall] using hs
@@ -441,7 +441,7 @@ theorem addHaar_affineSubspace
 
 中文:
 定理 addHaar_affineSubspace
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rcases s.eq_bot_or_nonempty with (rfl | hne)
   · rw [AffineSubspace.bot_coe, measure_empty]
@@ -477,7 +477,7 @@ theorem map_linearMap_addHaar_pi_eq_smul_addHaar
 
 中文:
 定理 map_linearMap_addHaar_pi_eq_smul_addHaar
-  结论: {ι : 类型} [Finite ι] {f : (ι -> 实数) ->ₗ[实数] ι -> 实数}
+  结论: {ι : 类型} [有限 ι] {f : (ι -> 实数) ->ₗ[实数] ι -> 实数}
   证明: by
   cases nonempty_fintype ι
   /- We have already proved the result for the Lebesgue product measure, using matrices.
@@ -514,7 +514,7 @@ theorem map_linearMap_addHaar_eq_smul_addHaar
 
 中文:
 定理 map_linearMap_addHaar_eq_smul_addHaar
-  条件: {f : E ->ₗ[实数] E} (hf : LinearMap.det f != 0)
+  条件: {f : E ->ₗ[实数] E} (hf : 线性映射.det f != 0)
   证明: by
   -- we reduce to the case of `E = ι → ℝ`, for which we have already proved the result using
   -- matrices in `map_linearMap_addHaar_pi_eq_smul_addHaar`.
@@ -566,7 +566,7 @@ theorem addHaar_preimage_linearMap
 
 中文:
 定理 addHaar_preimage_linearMap
-  条件: {f : E ->ₗ[实数] E} (hf : LinearMap.det f != 0) (s : Set E)
+  条件: {f : E ->ₗ[实数] E} (hf : 线性映射.det f != 0) (s : 集合 E)
   证明: calc
     μ (f ⁻¹' s) = Measure.map f μ s :=
       ((f.equivOfDetNeZero hf).toContinuousLinearEquiv.toHomeomorph.toMeasurableEquiv.map_apply
@@ -624,7 +624,7 @@ theorem addHaar_preimage_linearEquiv
 
 中文:
 定理 addHaar_preimage_linearEquiv
-  条件: (f : E ≃ₗ[实数] E) (s : Set E)
+  条件: (f : E ≃ₗ[实数] E) (s : 集合 E)
   证明: by
   have A : LinearMap.det (f : E ->ₗ[Real] E) != 0 := (LinearEquiv.isUnit_det' f).ne_zero
   convert! addHaar_preimage_linearMap μ A s
@@ -651,7 +651,7 @@ theorem addHaar_preimage_continuousLinearEquiv
 
 中文:
 定理 addHaar_preimage_continuousLinearEquiv
-  条件: (f : E ≃L[实数] E) (s : Set E)
+  条件: (f : E ≃L[实数] E) (s : 集合 E)
   证明: addHaar_preimage_linearEquiv μ _ s
 
 Depends on / 依赖: addHaar_preimage_linearEquiv
@@ -679,7 +679,7 @@ theorem addHaar_image_linearMap
 
 中文:
 定理 addHaar_image_linearMap
-  条件: (f : E ->ₗ[实数] E) (s : Set E)
+  条件: (f : E ->ₗ[实数] E) (s : 集合 E)
   证明: by
   rcases ne_or_eq (LinearMap.det f) 0 with (hf | hf)
   · let g := (f.equivOfDetNeZero hf).toContinuousLinearEquiv
@@ -713,7 +713,7 @@ theorem addHaar_image_continuousLinearMap
 
 中文:
 定理 addHaar_image_continuousLinearMap
-  条件: (f : E ->L[实数] E) (s : Set E)
+  条件: (f : E ->L[实数] E) (s : 集合 E)
   证明: addHaar_image_linearMap μ _ s
 
 Depends on / 依赖: addHaar_image_linearMap
@@ -735,7 +735,7 @@ theorem addHaar_image_continuousLinearEquiv
 
 中文:
 定理 addHaar_image_continuousLinearEquiv
-  条件: (f : E ≃L[实数] E) (s : Set E)
+  条件: (f : E ≃L[实数] E) (s : 集合 E)
   证明: μ.addHaar_image_linearMap (f : E ->ₗ[Real] E) s
 
 Depends on / 依赖: addHaar_image_linearMap
@@ -756,8 +756,8 @@ theorem LinearMap.quasiMeasurePreserving
   exact smul_absolutelyContinuous
 
 中文:
-定理 LinearMap.quasiMeasurePreserving
-  条件: (f : E ->ₗ[实数] E) (hf : LinearMap.det f != 0)
+定理 线性映射.quasiMeasurePreserving
+  条件: (f : E ->ₗ[实数] E) (hf : 线性映射.det f != 0)
   证明: by
   refine ⟨f.continuous_of_finiteDimensional.measurable, ?_⟩
   rw [map_linearMap_addHaar_eq_smul_addHaar μ hf]
@@ -780,7 +780,7 @@ theorem ContinuousLinearMap.quasiMeasurePreserving
   proof: LinearMap.quasiMeasurePreserving μ (f : E ->ₗ[Real] E) hf
 
 中文:
-定理 ContinuousLinearMap.quasiMeasurePreserving
+定理 连续线性映射.quasiMeasurePreserving
   条件: (f : E ->L[实数] E) (hf : f.det != 0)
   证明: LinearMap.quasiMeasurePreserving μ (f : E ->ₗ[Real] E) hf
 
@@ -874,7 +874,7 @@ theorem addHaar_preimage_smul
 
 中文:
 定理 addHaar_preimage_smul
-  条件: {r : 实数} (hr : r != 0) (s : Set E)
+  条件: {r : 实数} (hr : r != 0) (s : 集合 E)
   证明: calc
     μ ((r • ·) ⁻¹' s) = Measure.map (r • ·) μ s :=
       ((Homeomorph.smul (isUnit_iff_ne_zero.2 hr).unit).toMeasurableEquiv.map_apply s).symm
@@ -909,7 +909,7 @@ theorem addHaar_smul
 
 中文:
 定理 addHaar_smul
-  条件: (r : 实数) (s : Set E)
+  条件: (r : 实数) (s : 集合 E)
   证明: by
   rcases ne_or_eq r 0 with (h | rfl)
   · rw [← preimage_smul_inv₀ h, addHaar_preimage_smul μ (inv_ne_zero h), inv_pow, inv_inv]
@@ -948,7 +948,7 @@ theorem addHaar_smul_of_nonneg
 
 中文:
 定理 addHaar_smul_of_nonneg
-  条件: {r : 实数} (hr : 0 <= r) (s : Set E)
+  条件: {r : 实数} (hr : 0 <= r) (s : 集合 E)
   证明: by
   rw [addHaar_smul]; rw [abs_pow]; rw [abs_of_nonneg hr]
 
@@ -972,7 +972,7 @@ theorem addHaar_nnreal_smul
 
 中文:
 定理 addHaar_nnreal_smul
-  条件: (r : 实数>=0) (s : Set E)
+  条件: (r : 实数>=0) (s : 集合 E)
   证明: by
   simp [NNReal.smul_def]
 
@@ -1045,7 +1045,7 @@ theorem addHaar_image_homothety
 
 中文:
 定理 addHaar_image_homothety
-  条件: (x : E) (r : 实数) (s : Set E)
+  条件: (x : E) (r : 实数) (s : 集合 E)
   证明: calc
     μ (AffineMap.homothety x r '' s) = μ ((fun y => y + x) '' (r • (fun y => y + -x) '' s)) := by
       simp only [← image_smul, image_image, ← sub_eq_add_neg]; rfl
@@ -1079,7 +1079,7 @@ theorem addHaar_ball_center
 
 中文:
 定理 addHaar_ball_center
-  结论: {E : 类型} [NormedAddCommGroup E] [MeasurableSpace E] [BorelSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [可测空间 E] [Borel空间 E]
   证明: by
   have : ball (0 : E) r = (x + ·) ⁻¹' ball x r := by simp [preimage_add_ball]
   rw [this]; rw [measure_preimage_add]
@@ -1102,7 +1102,7 @@ theorem addHaar_real_ball_center
 
 中文:
 定理 addHaar_real_ball_center
-  结论: {E : 类型} [NormedAddCommGroup E] [MeasurableSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [可测空间 E]
   证明: by
   simp [measureReal_def, addHaar_ball_center]
 
@@ -1125,7 +1125,7 @@ theorem addHaar_closedBall_center
 
 中文:
 定理 addHaar_closedBall_center
-  结论: {E : 类型} [NormedAddCommGroup E] [MeasurableSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [可测空间 E]
   证明: by
   have : closedBall (0 : E) r = (x + ·) ⁻¹' closedBall x r := by simp [preimage_add_closedBall]
   rw [this]; rw [measure_preimage_add]
@@ -1149,7 +1149,7 @@ theorem addHaar_real_closedBall_center
 
 中文:
 定理 addHaar_real_closedBall_center
-  结论: {E : 类型} [NormedAddCommGroup E] [MeasurableSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [可测空间 E]
   证明: by
   simp [measureReal_def, addHaar_closedBall_center]
 
@@ -1222,7 +1222,7 @@ theorem addHaar_ball_mul
 
 中文:
 定理 addHaar_ball_mul
-  条件: [Nontrivial E] (x : E) {r : 实数} (hr : 0 <= r) (s : 实数)
+  条件: [非平凡 E] (x : E) {r : 实数} (hr : 0 <= r) (s : 实数)
   证明: by
   rcases hr.eq_or_lt with (rfl | h)
   · simp only [zero_pow (finrank_pos (R := Real) (M := E)).ne', measure_empty, zero_mul,
@@ -1249,7 +1249,7 @@ theorem addHaar_ball
 
 中文:
 定理 addHaar_ball
-  条件: [Nontrivial E] (x : E) {r : 实数} (hr : 0 <= r)
+  条件: [非平凡 E] (x : E) {r : 实数} (hr : 0 <= r)
   证明: by
   rw [← addHaar_ball_mul μ x hr]; rw [mul_one]
 
@@ -1459,7 +1459,7 @@ theorem addHaar_closedBall_eq_addHaar_ball
 
 中文:
 定理 addHaar_closedBall_eq_addHaar_ball
-  条件: [Nontrivial E] (x : E) (r : 实数)
+  条件: [非平凡 E] (x : E) (r : 实数)
   证明: by
   by_cases! h : r < 0
   · rw [Metric.closedBall_eq_empty.mpr h, Metric.ball_eq_empty.mpr h.le]
@@ -1484,7 +1484,7 @@ theorem addHaar_real_closedBall_eq_addHaar_real_ball
 
 中文:
 定理 addHaar_real_closedBall_eq_addHaar_real_ball
-  条件: [Nontrivial E] (x : E) (r : 实数)
+  条件: [非平凡 E] (x : E) (r : 实数)
   证明: by
   simp [measureReal_def, addHaar_closedBall_eq_addHaar_ball μ x r]
 
@@ -1545,7 +1545,7 @@ theorem addHaar_sphere
 
 中文:
 定理 addHaar_sphere
-  条件: [Nontrivial E] (x : E) (r : 实数)
+  条件: [非平凡 E] (x : E) (r : 实数)
   结论: μ (sphere x r) = 0
   证明: by
   rcases eq_or_ne r 0 with (rfl | h)
@@ -1633,7 +1633,7 @@ exact congr_arg _ funext fun i => (b.constr_basis Nat v i).symm
 
 中文:
 定理 addHaar_parallelepiped
-  条件: (b : Basis ι 实数 G) (v : ι -> G)
+  条件: (b : 基 ι 实数 G) (v : ι -> G)
   证明: by
   have : FiniteDimensional Real G := b.finiteDimensional_of_finite
   have A : parallelepiped v = b.constr Nat v '' parallelepiped b := by
@@ -1673,8 +1673,8 @@ theorem _root_.AlternatingMap.measure_parallelepiped
     ← Real.enorm_eq_ofReal_abs, enorm]
 
 中文:
-定理 _root_.AlternatingMap.measure_parallelepiped
-  结论: (ω : G [⋀^Fin n]->ₗ[实数] 实数)
+定理 _root_.交错映射.measure_parallelepiped
+  结论: (ω : G [⋀^有限集 n]->ₗ[实数] 实数)
   证明: by
   conv_rhs => rw [ω.eq_smul_basis_det (finBasisOfFinrankEq Real G _i.out)]
   simp only [addHaar_parallelepiped, AlternatingMap.measure, coe_nnreal_smul_apply,
@@ -1715,7 +1715,7 @@ theorem tendsto_addHaar_inter_smul_zero_of_density_zero_aux1
 
 中文:
 定理 tendsto_addHaar_inter_smul_zero_of_density_zero_aux1
-  结论: (s : Set E) (x : E)
+  结论: (s : 集合 E) (x : E)
   证明: by
   have A : Tendsto (fun r : Real => μ (s inter ({x} + r • t)) / μ (closedBall x r)) (𝓝[>] 0) (𝓝 0) := by
     apply
@@ -1780,7 +1780,7 @@ theorem tendsto_addHaar_inter_smul_zero_of_density_zero_aux2
 
 中文:
 定理 tendsto_addHaar_inter_smul_zero_of_density_zero_aux2
-  结论: (s : Set E) (x : E)
+  结论: (s : 集合 E) (x : E)
   证明: by
   set t' := R⁻¹ • t with ht'
   set u' := R⁻¹ • u with hu'
@@ -1836,7 +1836,7 @@ theorem tendsto_addHaar_inter_smul_zero_of_density_zero
 
 中文:
 定理 tendsto_addHaar_inter_smul_zero_of_density_zero
-  结论: (s : Set E) (x : E)
+  结论: (s : 集合 E) (x : E)
   证明: by
   refine tendsto_order.2 ⟨fun a' ha' => (ENNReal.not_lt_zero ha').elim, fun ε (εpos : 0 < ε) => ?_⟩
   rcases eq_or_ne (μ t) 0 with (h't | h't)
@@ -1922,7 +1922,7 @@ theorem tendsto_addHaar_inter_smul_one_of_density_one_aux
 
 中文:
 定理 tendsto_addHaar_inter_smul_one_of_density_one_aux
-  结论: (s : Set E) (hs : MeasurableSet s)
+  结论: (s : 集合 E) (hs : 可测集 s)
   证明: by
   have I : forall u v, μ u != 0 -> μ u != ∞ -> MeasurableSet v ->
     μ u / μ u - μ (vᶜ inter u) / μ u = μ (v inter u) / μ u := by
@@ -1998,7 +1998,7 @@ theorem tendsto_addHaar_inter_smul_one_of_density_one
 
 中文:
 定理 tendsto_addHaar_inter_smul_one_of_density_one
-  结论: (s : Set E) (x : E)
+  结论: (s : 集合 E) (x : E)
   证明: by
   have : Tendsto (fun r : Real => μ (toMeasurable μ s inter ({x} + r • t)) / μ ({x} + r • t))
     (𝓝[>] 0) (𝓝 1) := by
@@ -2048,7 +2048,7 @@ theorem eventually_nonempty_inter_smul_of_density_one
 
 中文:
 定理 eventually_nonempty_inter_smul_of_density_one
-  结论: (s : Set E) (x : E)
+  结论: (s : 集合 E) (x : E)
   证明: by
   obtain ⟨t', t'_meas, t't, t'pos, t'top⟩ : exists t', MeasurableSet t' ∧ t' subseteq t ∧ 0 < μ t' ∧ μ t' < ⊤ :=
     exists_subset_measure_lt_top ht h't.bot_lt

@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WType fun _ : Unit => Empty)
+  签名: 可居 (WType fun _ : 单元 => 空)
   定义体: ⟨WType.mk Unit.unit Empty.elim⟩
 
 Depends on / 依赖: Empty.elim, Unit.unit, WType.mk
@@ -211,7 +211,7 @@ instance [hα
 
 中文:
 实例 [hα
-  签名: : IsEmpty α] : IsEmpty (WType β)
+  签名: : 是空 α] : 是空 (WType β)
   定义体: ⟨fun w => WType.recOn w (IsEmpty.elim hα)⟩
 
 Depends on / 依赖: IsEmpty, IsEmpty.elim, WType.recOn
@@ -238,7 +238,7 @@ theorem infinite_of_nonempty_of_isEmpty
 
 中文:
 定理 infinite_of_nonempty_of_isEmpty
-  条件: (a b : α) [ha : Nonempty (β a)] [he : IsEmpty (β b)]
+  条件: (a b : α) [ha : 非空 (β a)] [he : 是空 (β b)]
   证明: ⟨by
     intro hf
     have hba : b != a := fun h => ha.elim (IsEmpty.elim' (show IsEmpty (β a) from h ▸ he))
@@ -343,7 +343,7 @@ abbreviation WType'
 
 中文:
 缩写 WType'
-  签名: {α : 类型} (β : α -> 类型) [对任意 a : α, Fintype (β a)] (n : 自然数)
+  签名: {α : 类型} (β : α -> 类型) [对任意 a : α, 有限类型 (β a)] (n : 自然数)
   定义体: { t : WType β // t.depth <= n }
 -/
 private abbrev WType' {α : Type*} (β : α -> Type*) [forall a : α, Fintype (β a)] (n : Nat) :=
@@ -368,7 +368,7 @@ have : forall x, finv (f x) = x := fun ⟨_, h⟩ => False.elim not_lt_of_ge h (
 
 中文:
 定义 encodable_zero
-  签名: : Encodable (WType' β 0)
+  签名: : 可编码 (WType' β 0)
   定义体: let f : WType' β 0 -> Empty := fun ⟨_, h⟩ => False.elim not_lt_of_ge h (WType.depth_pos _)
   let finv : Empty -> WType' β 0 := by
     intro x
@@ -450,7 +450,7 @@ definition encodable_succ
 
 中文:
 定义 encodable_succ
-  签名: (n : 自然数) (_ : Encodable (WType' β n))
+  签名: (n : 自然数) (_ : 可编码 (WType' β n))
   定义体: Encodable.ofLeftInverse (f n) (finv n)
     (by
       rintro ⟨⟨_, _⟩, _⟩
@@ -479,7 +479,7 @@ instance :
 
 中文:
 实例 :
-  签名: Encodable (WType β)
+  签名: 可编码 (WType β)
   定义体: by
   haveI h' : forall n, Encodable (WType' β n) := fun n => Nat.rec encodable_zero encodable_succ n
   let f : WType β -> Σ n, WType' β n := fun t => ⟨t.depth, ⟨t, le_rfl⟩⟩

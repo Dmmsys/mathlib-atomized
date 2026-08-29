@@ -124,7 +124,7 @@ theorem forall_mem_map_iff
   proof: Quotient.inductionOn' s fun _L => List.forall_mem_map
 
 中文:
-定理 forall_mem_map_iff
+定理 对任意_mem_map_iff
   条件: {f : α -> β} {p : β -> 命题} {s : Multiset α}
   证明: Quotient.inductionOn' s fun _L => List.forall_mem_map
 
@@ -147,7 +147,7 @@ lemma map_coe
 
 中文:
 引理 map_coe
-  条件: (f : α -> β) (l : List α)
+  条件: (f : α -> β) (l : 列表 α)
   结论: map f l = l.map f
   证明: rfl
 
@@ -551,7 +551,7 @@ theorem mem_map_of_injective
 
 中文:
 定理 mem_map_of_injective
-  条件: {f : α -> β} (H : Function.Injective f) {a : α} {s : Multiset α}
+  条件: {f : α -> β} (H : 函数.单射 f) {a : α} {s : Multiset α}
   证明: Quot.inductionOn s fun _l => List.mem_map_of_injective H
 
 @[simp]
@@ -679,7 +679,7 @@ theorem eq_of_mem_map_const
 
 中文:
 定理 eq_of_mem_map_const
-  条件: {b₁ b₂ : β} {l : List α} (h : b₁ in map (Function.const α b₂) l)
+  条件: {b₁ b₂ : β} {l : 列表 α} (h : b₁ in map (函数.const α b₂) l)
   证明: eq_of_mem_replicate (n := card (l : Multiset α)) by rwa [map_const] at h
 
 @[simp, gcongr]
@@ -763,7 +763,7 @@ theorem map_mono
 中文:
 定理 map_mono
   条件: (f : α -> β)
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: fun _ _ => map_le_map
 
 @[gcongr]
@@ -787,7 +787,7 @@ theorem map_strictMono
 中文:
 定理 map_strictMono
   条件: (f : α -> β)
-  结论: StrictMono (map f)
+  结论: 严格递增 (map f)
   证明: fun _ _ => map_lt_map
 
 @[simp, gcongr]
@@ -835,7 +835,7 @@ theorem map_erase
 
 中文:
 定理 map_erase
-  结论: [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : Function.Injective f) (x : α)
+  结论: [DecidableEq α] [DecidableEq β] (f : α -> β) (hf : 函数.单射 f) (x : α)
   证明: by
   induction s using Multiset.induction_on with | empty => simp | cons y s ih => ?_
   by_cases hxy : y = x
@@ -903,7 +903,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  条件: {f : α -> β} (hf : Function.Surjective f)
+  条件: {f : α -> β} (hf : 函数.满射 f)
   证明: by
   intro s
   induction s using Multiset.induction_on with
@@ -940,7 +940,7 @@ definition foldl
 
 中文:
 定义 foldl
-  签名: (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α)
+  签名: (f : β -> α -> β) [右交换 f] (b : β) (s : Multiset α)
   定义体: Quot.liftOn s (fun l => List.foldl f b l) fun _l₁ _l₂ p => p.foldl_eq b
 
 Depends on / 依赖: List.foldl, Quot.liftOn, foldl_eq, liftOn, p.foldl_eq
@@ -1033,7 +1033,7 @@ definition foldr
 
 中文:
 定义 foldr
-  签名: (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α)
+  签名: (f : α -> β -> β) [左交换 f] (b : β) (s : Multiset α)
   定义体: Quot.liftOn s (fun l => List.foldr f b l) fun _l₁ _l₂ p => p.foldr_eq b
 
 Depends on / 依赖: List.foldr, Quot.liftOn, foldr_eq, liftOn, p.foldr_eq
@@ -1150,7 +1150,7 @@ theorem coe_foldr
 
 中文:
 定理 coe_foldr
-  条件: (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α)
+  条件: (f : α -> β -> β) [左交换 f] (b : β) (l : 列表 α)
   证明: rfl
 
 @[simp]
@@ -1170,7 +1170,7 @@ theorem coe_foldl
 
 中文:
 定理 coe_foldl
-  条件: (f : β -> α -> β) [RightCommutative f] (b : β) (l : List α)
+  条件: (f : β -> α -> β) [右交换 f] (b : β) (l : 列表 α)
   证明: rfl
 -/
 theorem coe_foldl (f : β -> α -> β) [RightCommutative f] (b : β) (l : List α) :
@@ -1187,7 +1187,7 @@ theorem coe_foldr_swap
 
 中文:
 定理 coe_foldr_swap
-  条件: (f : α -> β -> β) [LeftCommutative f] (b : β) (l : List α)
+  条件: (f : α -> β -> β) [左交换 f] (b : β) (l : 列表 α)
   证明: (congr_arg (foldr f b) (coe_reverse l)).symm.trans foldr_reverse
 
 Depends on / 依赖: coe_reverse, congr_arg, foldr_reverse, symm.trans
@@ -1206,7 +1206,7 @@ theorem foldr_swap
 
 中文:
 定理 foldr_swap
-  条件: (f : α -> β -> β) [LeftCommutative f] (b : β) (s : Multiset α)
+  条件: (f : α -> β -> β) [左交换 f] (b : β) (s : Multiset α)
   证明: Quot.inductionOn s fun _l => coe_foldr_swap _ _ _
 
 Depends on / 依赖: Quot.inductionOn, coe_foldr_swap, inductionOn
@@ -1225,7 +1225,7 @@ theorem foldl_swap
 
 中文:
 定理 foldl_swap
-  条件: (f : β -> α -> β) [RightCommutative f] (b : β) (s : Multiset α)
+  条件: (f : β -> α -> β) [右交换 f] (b : β) (s : Multiset α)
   证明: (foldr_swap _ _ _).symm
 
 Depends on / 依赖: foldr_swap
@@ -1249,7 +1249,7 @@ theorem foldr_induction'
 
 中文:
 定理 foldr_induction'
-  结论: (f : α -> β -> β) [LeftCommutative f] (x : β) (q : α -> 命题)
+  结论: (f : α -> β -> β) [左交换 f] (x : β) (q : α -> 命题)
   证明: by
   induction s using Multiset.induction with
   | empty => simpa
@@ -1278,7 +1278,7 @@ theorem foldr_induction
 
 中文:
 定理 foldr_induction
-  结论: (f : α -> α -> α) [LeftCommutative f] (x : α) (p : α -> 命题)
+  结论: (f : α -> α -> α) [左交换 f] (x : α) (p : α -> 命题)
   证明: foldr_induction' f x p p s p_f px p_s
 
 Depends on / 依赖: foldr_induction
@@ -1300,7 +1300,7 @@ theorem foldl_induction'
 
 中文:
 定理 foldl_induction'
-  结论: (f : β -> α -> β) [RightCommutative f] (x : β) (q : α -> 命题)
+  结论: (f : β -> α -> β) [右交换 f] (x : β) (q : α -> 命题)
   证明: by
   rw [foldl_swap]
   exact foldr_induction' (fun x y => f y x) x q p s hpqf px q_s
@@ -1323,7 +1323,7 @@ theorem foldl_induction
 
 中文:
 定理 foldl_induction
-  结论: (f : α -> α -> α) [RightCommutative f] (x : α) (p : α -> 命题)
+  结论: (f : α -> α -> α) [右交换 f] (x : α) (p : α -> 命题)
   证明: foldl_induction' f x p p s p_f px p_s
 
 Depends on / 依赖: foldl_induction
@@ -1433,7 +1433,7 @@ theorem attach_map_val
 中文:
 定理 attach_map_val
   条件: (s : Multiset α)
-  结论: s.attach.map Subtype.val = s
+  结论: s.attach.map 子类型.val = s
   证明: (attach_map_val' _ _).trans s.map_id
 
 Depends on / 依赖: attach_map_val, map_id, s.map_id
@@ -1643,7 +1643,7 @@ theorem map_eq_map
 
 中文:
 定理 map_eq_map
-  条件: {f : α -> β} (hf : Function.Injective f) {s t : Multiset α}
+  条件: {f : α -> β} (hf : 函数.单射 f) {s t : Multiset α}
   证明: by
   rw [← rel_eq]; rw [← rel_eq]; rw [rel_map]
   simp only [hf.eq_iff]
@@ -1665,7 +1665,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (hf : Function.Injective f)
+  条件: {f : α -> β} (hf : 函数.单射 f)
   证明: fun _x _y => (map_eq_map hf).1
 
 Depends on / 依赖: map_eq_map
@@ -1687,7 +1687,7 @@ theorem map_mk_eq_map_mk_of_rel
 
 中文:
 定理 map_mk_eq_map_mk_of_rel
-  条件: {r : α -> α -> 命题} {s t : Multiset α} (hst : s.Rel r t)
+  条件: {r : α -> α -> 命题} {s t : Multiset α} (hst : s.关系 r t)
   证明: Rel.recOn hst rfl fun hab _hst ih => by simp [ih, Quot.sound hab]
 
 Depends on / 依赖: Quot.sound, Rel.recOn, _hst
@@ -1706,8 +1706,8 @@ theorem exists_multiset_eq_map_quot_mk
     Quot.inductionOn a fun a => ht.symm ▸ ⟨a ::ₘ t, (map_cons _ _ _).symm⟩
 
 中文:
-定理 exists_multiset_eq_map_quot_mk
-  条件: {r : α -> α -> 命题} (s : Multiset (Quot r))
+定理 存在_multiset_eq_map_quot_mk
+  条件: {r : α -> α -> 命题} (s : Multiset (商 r))
   证明: Multiset.induction_on s ⟨0, rfl⟩ fun a _s ⟨t, ht⟩ =>
     Quot.inductionOn a fun a => ht.symm ▸ ⟨a ::ₘ t, (map_cons _ _ _).symm⟩
 
@@ -1729,7 +1729,7 @@ theorem induction_on_multiset_quot
 
 中文:
 定理 induction_on_multiset_quot
-  结论: {r : α -> α -> 命题} {p : Multiset (Quot r) -> 命题}
+  结论: {r : α -> α -> 命题} {p : Multiset (商 r) -> 命题}
   证明: match s, exists_multiset_eq_map_quot_mk s with
   | _, ⟨_t, rfl⟩ => fun h => h _
 
@@ -1792,7 +1792,7 @@ theorem Nodup.map
 
 中文:
 定理 Nodup.map
-  条件: {f : α -> β} {s : Multiset α} (hf : Injective f)
+  条件: {f : α -> β} {s : Multiset α} (hf : 单射 f)
   结论: Nodup s -> Nodup (map f s)
   证明: Nodup.map_on fun _ _ _ _ h => hf h
 
@@ -1830,7 +1830,7 @@ theorem nodup_map_iff_of_injective
 
 中文:
 定理 nodup_map_iff_of_injective
-  条件: {f : α -> β} (d : Function.Injective f)
+  条件: {f : α -> β} (d : 函数.单射 f)
   证明: ⟨Nodup.of_map _, fun h => h.map d⟩
 
 Depends on / 依赖: Nodup.of_map, h.map, of_map

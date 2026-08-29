@@ -55,8 +55,8 @@ definition Module.support
   body: { p | Nontrivial (LocalizedModule p.asIdeal.primeCompl M) }
 
 中文:
-定义 Module.support
-  签名: : Set (PrimeSpectrum R)
+定义 模.support
+  签名: : 集合 (素谱 R)
   定义体: { p | Nontrivial (LocalizedModule p.asIdeal.primeCompl M) }
 
 Depends on / 依赖: LocalizedModule, Nontrivial, asIdeal, p.asIdeal.primeCompl, primeCompl
@@ -72,7 +72,7 @@ lemma Module.mem_support_iff
   proof: Iff.rfl
 
 中文:
-引理 Module.mem_support_iff
+引理 模.mem_support_iff
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -88,7 +88,7 @@ lemma Module.notMem_support_iff
   proof: not_nontrivial_iff_subsingleton
 
 中文:
-引理 Module.notMem_support_iff
+引理 模.notMem_support_iff
   证明: not_nontrivial_iff_subsingleton
 
 Depends on / 依赖: not_nontrivial_iff_subsingleton
@@ -108,7 +108,7 @@ lemma Module.notMem_support_iff'
     Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_compl_iff, SetLike.mem_coe]
 
 中文:
-引理 Module.notMem_support_iff'
+引理 模.notMem_support_iff'
   证明: by
   simp only [notMem_support_iff, Ideal.primeCompl, LocalizedModule.subsingleton_iff,
     Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_compl_iff, SetLike.mem_coe]
@@ -131,7 +131,7 @@ lemma Module.mem_support_iff'
   rfl
 
 中文:
-引理 Module.mem_support_iff'
+引理 模.mem_support_iff'
   证明: by
   rw [← @not_not (_ in _)]; rw [notMem_support_iff']
   push Not
@@ -155,7 +155,7 @@ lemma Module.mem_support_iff_exists_annihilator
   simp_rw [not_imp_not, SetLike.le_def, Submodule.mem_annihilator_span_singleton]
 
 中文:
-引理 Module.mem_support_iff_exists_annihilator
+引理 模.mem_support_iff_存在_annihilator
   证明: by
   rw [Module.mem_support_iff']
   simp_rw [not_imp_not, SetLike.le_def, Submodule.mem_annihilator_span_singleton]
@@ -178,8 +178,8 @@ lemma Module.mem_support_mono
   exact ⟨_, hp.choose_spec.trans H⟩
 
 中文:
-引理 Module.mem_support_mono
-  条件: {p q : PrimeSpectrum R} (H : p <= q) (hp : p in Module.support R M)
+引理 模.mem_support_mono
+  条件: {p q : 素谱 R} (H : p <= q) (hp : p in 模.support R M)
   证明: by
   rw [Module.mem_support_iff_exists_annihilator] at hp ⊢
   exact ⟨_, hp.choose_spec.trans H⟩
@@ -205,8 +205,8 @@ lemma Module.mem_support_iff_of_span_eq_top
       LocalizedModule.mem_k
 
 中文:
-引理 Module.mem_support_iff_of_span_eq_top
-  条件: {s : Set M} (hs : Submodule.span R s = ⊤)
+引理 模.mem_support_iff_of_span_eq_top
+  条件: {s : 集合 M} (hs : 子模.span R s = ⊤)
   证明: by
   constructor
   · contrapose
@@ -240,8 +240,8 @@ lemma Module.annihilator_le_of_mem_support
   exact le_trans ((Submodule.subtype _).annihilator_le_of_injective Subtype.val_injective) hm
 
 中文:
-引理 Module.annihilator_le_of_mem_support
-  条件: (hp : p in Module.support R M)
+引理 模.annihilator_le_of_mem_support
+  条件: (hp : p in 模.support R M)
   证明: by
   obtain ⟨m, hm⟩ := mem_support_iff_exists_annihilator.mp hp
   exact le_trans ((Submodule.subtype _).annihilator_le_of_injective Subtype.val_injective) hm
@@ -312,7 +312,7 @@ lemma Module.support_eq_empty_iff
   simp only [Submonoid.powers_one, Submonoid.mem_bot, exists_eq_left, one_smul]
 
 中文:
-引理 Module.support_eq_empty_iff
+引理 模.support_eq_empty_iff
   证明: by
   rw [← Set.subset_empty_iff]; rw [← PrimeSpectrum.zeroLocus_singleton_one]; rw [← LocalizedModule.subsingleton_iff_support_subset]; rw [LocalizedModule.subsingleton_iff]; rw [subsingleton_iff_forall_eq 0]
   simp only [Submonoid.powers_one, Submonoid.mem_bot, exists_eq_left, one_smul]
@@ -333,7 +333,7 @@ lemma Module.nonempty_support_iff
   rw [Set.nonempty_iff_ne_empty]; rw [ne_eq]; rw [Module.support_eq_empty_iff]; rw [← not_subsingleton_iff_nontrivial]
 
 中文:
-引理 Module.nonempty_support_iff
+引理 模.nonempty_support_iff
   证明: by
   rw [Set.nonempty_iff_ne_empty]; rw [ne_eq]; rw [Module.support_eq_empty_iff]; rw [← not_subsingleton_iff_nontrivial]
 
@@ -353,9 +353,9 @@ lemma Module.nonempty_support_of_nontrivial
   proof: Module.nonempty_support_iff.mpr ‹_›
 
 中文:
-引理 Module.nonempty_support_of_nontrivial
-  条件: [Nontrivial M]
-  结论: (Module.support R M).Nonempty
+引理 模.nonempty_support_of_nontrivial
+  条件: [非平凡 M]
+  结论: (模.support R M).非空
   证明: Module.nonempty_support_iff.mpr ‹_›
 
 Depends on / 依赖: Module, Module.nonempty_support_iff.mpr, nonempty_support_iff
@@ -372,8 +372,8 @@ lemma Module.support_eq_empty
   proof: Module.support_eq_empty_iff.mpr ‹_›
 
 中文:
-引理 Module.support_eq_empty
-  条件: [Subsingleton M]
+引理 模.support_eq_empty
+  条件: [子单例 M]
   证明: Module.support_eq_empty_iff.mpr ‹_›
 
 Depends on / 依赖: Module, Module.support_eq_empty_iff.mpr, support_eq_empty_iff
@@ -396,8 +396,8 @@ lemma Module.support_of_algebra
   · exact hr (H ((Algebra.algebraMap_eq_smul
 
 中文:
-引理 Module.support_of_algebra
-  条件: {A : 类型} [Ring A] [Algebra R A]
+引理 模.support_of_algebra
+  条件: {A : 类型} [环 A] [代数 R A]
   证明: by
   ext p
   simp only [mem_support_iff', ne_eq, PrimeSpectrum.mem_zeroLocus, SetLike.coe_subset_coe]
@@ -427,8 +427,8 @@ lemma Module.support_of_noZeroSMulDivisors
   exact fun p => ⟨x, fun r hr => ⟨fun e => hr (e ▸ p.asIdeal.zero_mem), hx⟩⟩
 
 中文:
-引理 Module.support_of_noZeroSMulDivisors
-  条件: [IsDomain R] [IsTorsionFree R M] [Nontrivial M]
+引理 模.support_of_noZeroSMulDivisors
+  条件: [是整环 R] [是无挠 R M] [非平凡 M]
   证明: by
   simp only [Set.eq_univ_iff_forall, mem_support_iff', ne_eq, smul_eq_zero, not_or]
   obtain ⟨x, hx⟩ := exists_ne (0 : M)
@@ -460,8 +460,8 @@ lemma Module.support_subset_of_injective
 @[stacks 00L3 "(3)"]
 
 中文:
-引理 Module.support_subset_of_injective
-  条件: (hf : Function.Injective f)
+引理 模.support_subset_of_injective
+  条件: (hf : 函数.单射 f)
   证明: by
   simp_rw [Set.subset_def, mem_support_iff']
   rintro x ⟨m, hm⟩
@@ -491,8 +491,8 @@ lemma Module.support_subset_of_surjective
   exact ⟨m, fun r hr e => hm r hr (by simpa using congr(f $e))⟩
 
 中文:
-引理 Module.support_subset_of_surjective
-  条件: (hf : Function.Surjective f)
+引理 模.support_subset_of_surjective
+  条件: (hf : 函数.满射 f)
   证明: by
   simp_rw [Set.subset_def, mem_support_iff']
   rintro x ⟨m, hm⟩
@@ -528,8 +528,8 @@ lemma Module.support_of_exact
   rw [← map_smul]; rw [
 
 中文:
-引理 Module.support_of_exact
-  结论: (h : Function.Exact f g)
+引理 模.support_of_exact
+  结论: (h : 函数.正合 f g)
   证明: by
   refine subset_antisymm ?_ (Set.union_subset (Module.support_subset_of_injective f hf)
     (Module.support_subset_of_surjective g hg))
@@ -567,7 +567,7 @@ lemma LinearEquiv.support_eq
     (Module.support_subset_of_surjective e.toLinearMap e.surjective)
 
 中文:
-引理 LinearEquiv.support_eq
+引理 线性等价.support_eq
   条件: (e : M ≃ₗ[R] N)
   证明: (Module.support_subset_of_injective e.toLinearMap e.injective).antisymm
     (Module.support_subset_of_surjective e.toLinearMap e.surjective)
@@ -599,7 +599,7 @@ lemma Module.mem_support_iff_of_finite
   refine ⟨s.attach.prod 
 
 中文:
-引理 Module.mem_support_iff_of_finite
+引理 模.mem_support_iff_of_finite
   证明: by
   obtain ⟨s, hs⟩ := ‹Module.Finite R M›
   refine ⟨annihilator_le_of_mem_support, fun H => (mem_support_iff_of_span_eq_top hs).mpr ?_⟩
@@ -634,7 +634,7 @@ lemma Module.support_eq_zeroLocus
   proof: Set.ext fun _ => mem_support_iff_of_finite
 
 中文:
-引理 Module.support_eq_zeroLocus
+引理 模.support_eq_zeroLocus
   证明: Set.ext fun _ => mem_support_iff_of_finite
 
 Depends on / 依赖: Set.ext, mem_support_iff_of_finite
@@ -656,8 +656,8 @@ lemma LocalizedModule.exists_subsingleton_away
   obtai
 
 中文:
-引理 LocalizedModule.exists_subsingleton_away
-  结论: (p : Ideal R) [p.IsPrime]
+引理 LocalizedModule.存在_subsingleton_away
+  结论: (p : 理想 R) [p.是素]
   证明: by
   have : ⟨p, inferInstance⟩ in (Module.support R M)ᶜ := by
     simpa [Module.notMem_support_iff]
@@ -688,8 +688,8 @@ lemma IsLocalizedModule.exists_subsingleton_away
   exact LocalizedModule.exists_subsingleton_away p
 
 中文:
-引理 IsLocalizedModule.exists_subsingleton_away
-  结论: {M' : 类型} [AddCommMonoid M'] [Module R M']
+引理 是Localized模.存在_subsingleton_away
+  结论: {M' : 类型} [加法交换幺半群 M'] [模 R M']
   证明: by
   let e := IsLocalizedModule.iso p.primeCompl l
   have : Subsingleton (LocalizedModule p.primeCompl M) := e.subsingleton
@@ -716,8 +716,8 @@ lemma Module.exists_localizedMap_away_surjective_of_localizedMap_atPrime_surject
   exact LocalizedModule.exists_subsingleton_away p
 
 中文:
-引理 Module.exists_localizedMap_away_surjective_of_localizedMap_atPrime_surjective
-  结论: (p : Ideal R)
+引理 模.存在_localizedMap_away_surjective_of_localizedMap_atPrime_surjective
+  结论: (p : 理想 R)
   证明: by
   simp_rw [φ.localizedMap_surjective_iff_subsingleton_localized_coker] at hφ ⊢
   exact LocalizedModule.exists_subsingleton_away p
@@ -748,8 +748,8 @@ theorem Module.support_quotient
       exact fun x hx => Submodule.
 
 中文:
-定理 Module.support_quotient
-  条件: (I : Ideal R)
+定理 模.support_quotient
+  条件: (I : 理想 R)
   证明: by
   apply subset_antisymm
   · refine Set.subset_inter ?_ ?_
@@ -800,7 +800,7 @@ theorem Module.support_quotSMulTop
 (support_quotient _).trans by rw [zeroLocus_span]
 
 中文:
-定理 Module.support_quotSMulTop
+定理 模.support_quotSMulTop
   条件: (x : R)
   证明: (x • (⊤ : Submodule R M)).quotEquivOfEq (Ideal.span {x} • ⊤)
 .support_eq.trans ((⊤ : Submodule R M).ideal_span_singleton_smul x).symm

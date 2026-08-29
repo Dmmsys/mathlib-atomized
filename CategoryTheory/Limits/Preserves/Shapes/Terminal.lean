@@ -65,8 +65,8 @@ definition IsTerminal.isTerminalObj
   body: isLimitMapConeEmptyConeEquiv G X (isLimitOfPreserves G l)
 
 中文:
-定义 IsTerminal.isTerminalObj
-  签名: [PreservesLimit (Functor.empty.{0} C) G] (l : IsTerminal X)
+定义 是终止.isTerminalObj
+  签名: [保持极限 (函子.empty.{0} C) G] (l : 是终止 X)
   定义体: isLimitMapConeEmptyConeEquiv G X (isLimitOfPreserves G l)
 
 Depends on / 依赖: isLimitMapConeEmptyConeEquiv, isLimitOfPreserves
@@ -84,8 +84,8 @@ definition IsTerminal.isTerminalOfObj
   body: isLimitOfReflects G ((isLimitMapConeEmptyConeEquiv G X).symm l)
 
 中文:
-定义 IsTerminal.isTerminalOfObj
-  签名: [ReflectsLimit (Functor.empty.{0} C) G] (l : IsTerminal (G.obj X))
+定义 是终止.isTerminalOfObj
+  签名: [反映极限 (函子.empty.{0} C) G] (l : 是终止 (G.obj X))
   定义体: isLimitOfReflects G ((isLimitMapConeEmptyConeEquiv G X).symm l)
 
 Depends on / 依赖: isLimitMapConeEmptyConeEquiv, isLimitOfReflects
@@ -106,8 +106,8 @@ definition IsTerminal.isTerminalIffObj
   right_inv := by cat_disch
 
 中文:
-定义 IsTerminal.isTerminalIffObj
-  签名: [PreservesLimit (Functor.empty.{0} C) G]
+定义 是终止.isTerminalIffObj
+  签名: [保持极限 (函子.empty.{0} C) G]
   定义体: IsTerminal.isTerminalObj G X
   invFun := IsTerminal.isTerminalOfObj G X
   left_inv := by cat_disch
@@ -133,7 +133,7 @@ lemma preservesLimitsOfShape_pempty_of_preservesTerminal
 
 中文:
 引理 preservesLimitsOfShape_pempty_of_preservesTerminal
-  条件: [PreservesLimit (Functor.empty.{0} C) G]
+  条件: [保持极限 (函子.empty.{0} C) G]
   证明: preservesLimit_of_iso_diagram G (Functor.emptyExt (Functor.empty.{0} C) _)
 
 Depends on / 依赖: Functor, Functor.empty, Functor.emptyExt, emptyExt, preservesLimit_of_iso_diagram
@@ -154,7 +154,7 @@ definition isLimitOfHasTerminalOfPreservesLimit
 
 中文:
 定义 isLimitOfHasTerminalOfPreservesLimit
-  签名: [PreservesLimit (Functor.empty.{0} C) G]
+  签名: [保持极限 (函子.empty.{0} C) G]
   定义体: terminalIsTerminal.isTerminalObj G (⊤_ C)
 
 Depends on / 依赖: isTerminalObj, terminalIsTerminal, terminalIsTerminal.isTerminalObj
@@ -175,7 +175,7 @@ theorem hasTerminal_of_hasTerminal_of_preservesLimit
 
 中文:
 定理 hasTerminal_of_hasTerminal_of_preservesLimit
-  条件: [PreservesLimit (Functor.empty.{0} C) G]
+  条件: [保持极限 (函子.empty.{0} C) G]
   证明: ⟨fun F => by
   have := HasLimit.mk ⟨_, isLimitOfHasTerminalOfPreservesLimit G⟩
   apply hasLimit_of_iso F.uniqueFromEmpty.symm⟩
@@ -202,7 +202,7 @@ lemma PreservesTerminal.of_iso_comparison
 
 中文:
 引理 PreservesTerminal.of_iso_comparison
-  条件: [i : IsIso (terminalComparison G)]
+  条件: [i : 是同构 (terminalComparison G)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone terminalIsTerminal
   apply (isLimitMapConeEmptyConeEquiv _ _).symm _
@@ -228,7 +228,7 @@ lemma preservesTerminal_of_isIso
 
 中文:
 引理 preservesTerminal_of_isIso
-  条件: (f : G.obj (⊤_ C) ⟶ ⊤_ D) [i : IsIso f]
+  条件: (f : G.obj (⊤_ C) ⟶ ⊤_ D) [i : 是同构 f]
   证明: by
   rw [Subsingleton.elim f (terminalComparison G)] at i
   exact PreservesTerminal.of_iso_comparison G
@@ -252,7 +252,7 @@ lemma preservesTerminal_of_iso
 中文:
 引理 preservesTerminal_of_iso
   条件: (f : G.obj (⊤_ C) ≅ ⊤_ D)
-  结论: PreservesLimit (Functor.empty.{0} C) G
+  结论: 保持极限 (函子.empty.{0} C) G
   证明: preservesTerminal_of_isIso G f.hom
 
 Depends on / 依赖: f.hom, preservesTerminal_of_isIso
@@ -313,7 +313,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (terminalComparison G)
+  签名: 是同构 (terminalComparison G)
   定义体: by
   rw [← PreservesTerminal.iso_hom]
   infer_instance
@@ -357,7 +357,7 @@ definition IsInitial.isInitialObj
 
 中文:
 定义 IsInitial.isInitialObj
-  签名: [PreservesColimit (Functor.empty.{0} C) G] (l : IsInitial X)
+  签名: [保持余极限 (函子.empty.{0} C) G] (l : IsInitial X)
   定义体: isColimitMapCoconeEmptyCoconeEquiv G X (isColimitOfPreserves G l)
 
 Depends on / 依赖: isColimitMapCoconeEmptyCoconeEquiv, isColimitOfPreserves
@@ -376,7 +376,7 @@ definition IsInitial.isInitialOfObj
 
 中文:
 定义 IsInitial.isInitialOfObj
-  签名: [ReflectsColimit (Functor.empty.{0} C) G] (l : IsInitial (G.obj X))
+  签名: [反映余极限 (函子.empty.{0} C) G] (l : IsInitial (G.obj X))
   定义体: isColimitOfReflects G ((isColimitMapCoconeEmptyCoconeEquiv G X).symm l)
 
 Depends on / 依赖: isColimitMapCoconeEmptyCoconeEquiv, isColimitOfReflects
@@ -398,7 +398,7 @@ definition IsInitial.isInitialIffObj
 
 中文:
 定义 IsInitial.isInitialIffObj
-  签名: [PreservesColimit (Functor.empty.{0} C) G]
+  签名: [保持余极限 (函子.empty.{0} C) G]
   定义体: IsInitial.isInitialObj G X
   invFun := IsInitial.isInitialOfObj G X
   left_inv := by cat_disch
@@ -445,7 +445,7 @@ definition isColimitOfHasInitialOfPreservesColimit
 
 中文:
 定义 isColimitOfHasInitialOfPreservesColimit
-  签名: [PreservesColimit (Functor.empty.{0} C) G]
+  签名: [保持余极限 (函子.empty.{0} C) G]
   定义体: initialIsInitial.isInitialObj G (⊥_ C)
 
 Depends on / 依赖: initialIsInitial, initialIsInitial.isInitialObj, isInitialObj
@@ -466,7 +466,7 @@ theorem hasInitial_of_hasInitial_of_preservesColimit
 
 中文:
 定理 hasInitial_of_hasInitial_of_preservesColimit
-  条件: [PreservesColimit (Functor.empty.{0} C) G]
+  条件: [保持余极限 (函子.empty.{0} C) G]
   证明: ⟨fun F => by
     have := HasColimit.mk ⟨_, isColimitOfHasInitialOfPreservesColimit G⟩
     apply hasColimit_of_iso F.uniqueFromEmpty⟩
@@ -494,7 +494,7 @@ lemma PreservesInitial.of_iso_comparison
 
 中文:
 引理 PreservesInitial.of_iso_comparison
-  条件: [i : IsIso (initialComparison G)]
+  条件: [i : 是同构 (initialComparison G)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone initialIsInitial
   apply (isColimitMapCoconeEmptyCoconeEquiv _ _).symm _
@@ -520,7 +520,7 @@ lemma preservesInitial_of_isIso
 
 中文:
 引理 preservesInitial_of_isIso
-  条件: (f : ⊥_ D ⟶ G.obj (⊥_ C)) [i : IsIso f]
+  条件: (f : ⊥_ D ⟶ G.obj (⊥_ C)) [i : 是同构 f]
   证明: by
   rw [Subsingleton.elim f (initialComparison G)] at i
   exact PreservesInitial.of_iso_comparison G
@@ -604,7 +604,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (initialComparison G)
+  签名: 是同构 (initialComparison G)
   定义体: by
   rw [← PreservesInitial.iso_hom]
   infer_instance

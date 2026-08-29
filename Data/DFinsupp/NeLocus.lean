@@ -172,7 +172,7 @@ theorem nonempty_neLocus_iff
 中文:
 定理 nonempty_neLocus_iff
   条件: {f g : Π₀ a, N a}
-  结论: (f.neLocus g).Nonempty ↔ f != g
+  结论: (f.neLocus g).非空 ↔ f != g
   证明: Finset.nonempty_iff_ne_empty.trans neLocus_eq_empty.not
 
 Depends on / 依赖: Finset, Finset.nonempty_iff_ne_empty.trans, neLocus_eq_empty, neLocus_eq_empty.not, nonempty_iff_ne_empty
@@ -373,7 +373,7 @@ theorem neLocus_add_left
 
 中文:
 定理 neLocus_add_left
-  条件: [对任意 a, AddLeftCancelMonoid (N a)] (f g h : Π₀ a, N a)
+  条件: [对任意 a, 加法左消去幺半群 (N a)] (f g h : Π₀ a, N a)
   证明: zipWith_neLocus_eq_left _ _ _ _ fun _a => add_right_injective
 
 @[simp]
@@ -395,7 +395,7 @@ theorem neLocus_add_right
 
 中文:
 定理 neLocus_add_right
-  条件: [对任意 a, AddRightCancelMonoid (N a)] (f g h : Π₀ a, N a)
+  条件: [对任意 a, 加法右消去幺半群 (N a)] (f g h : Π₀ a, N a)
   证明: zipWith_neLocus_eq_right _ _ _ _ fun _a => add_left_injective
 
 Depends on / 依赖: add_left_injective, zipWith_neLocus_eq_right

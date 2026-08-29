@@ -76,7 +76,7 @@ definition vars
 
 中文:
 定义 vars
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: letI := Classical.decEq σ
   p.degrees.toFinset
 
@@ -101,7 +101,7 @@ theorem vars_def
 
 中文:
 定理 vars_def
-  条件: [DecidableEq σ] (p : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p : 多元多项式 σ R)
   结论: p.vars = p.degrees.toFinset
   证明: by
   rw [vars]
@@ -129,7 +129,7 @@ theorem vars_0
 
 中文:
 定理 vars_0
-  结论: (0 : MvPolynomial σ R).vars = ∅
+  结论: (0 : 多元多项式 σ R).vars = ∅
   证明: by
   classical rw [vars_def, degrees_zero, Multiset.toFinset_zero]
 
@@ -181,7 +181,7 @@ theorem vars_C
 
 中文:
 定理 vars_C
-  结论: (C r : MvPolynomial σ R).vars = ∅
+  结论: (C r : 多元多项式 σ R).vars = ∅
   证明: by
   classical rw [vars_def, degrees_C, Multiset.toFinset_zero]
 
@@ -205,8 +205,8 @@ theorem vars_X
 
 中文:
 定理 vars_X
-  条件: [Nontrivial R]
-  结论: (X n : MvPolynomial σ R).vars = {n}
+  条件: [非平凡 R]
+  结论: (X n : 多元多项式 σ R).vars = {n}
   证明: by
   rw [X]; rw [vars_monomial (one_ne_zero' R)]; rw [Finsupp.support_single _ (one_ne_zero' Nat)]
 
@@ -277,7 +277,7 @@ theorem mem_support_notMem_vars_zero
 
 中文:
 定理 mem_support_notMem_vars_zero
-  结论: {f : MvPolynomial σ R} {x : σ ->₀ 自然数} (H : x in f.support)
+  结论: {f : 多元多项式 σ R} {x : σ ->₀ 自然数} (H : x in f.support)
   证明: by
   contrapose! h
   exact (mem_vars_iff_mem_support v).mpr ⟨x, H, Finsupp.mem_support_iff.mpr h⟩
@@ -358,7 +358,7 @@ theorem vars_add_subset
 
 中文:
 定理 vars_add_subset
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R)
   证明: by
   intro x hx
   simp only [vars_def, Finset.mem_union, Multiset.mem_toFinset] at hx ⊢
@@ -416,7 +416,7 @@ theorem vars_mul
 
 中文:
 定理 vars_mul
-  条件: [DecidableEq σ] (φ ψ : MvPolynomial σ R)
+  条件: [DecidableEq σ] (φ ψ : 多元多项式 σ R)
   结论: (φ * ψ).vars subseteq φ.vars union ψ.vars
   证明: by
   simp_rw [vars_def, ← Multiset.toFinset_add, Multiset.toFinset_subset]
@@ -441,7 +441,7 @@ theorem vars_one
 
 中文:
 定理 vars_one
-  结论: (1 : MvPolynomial σ R).vars = ∅
+  结论: (1 : 多元多项式 σ R).vars = ∅
   证明: vars_C
 
 Depends on / 依赖: vars_C
@@ -467,7 +467,7 @@ theorem vars_pow
 
 中文:
 定理 vars_pow
-  条件: (φ : MvPolynomial σ R) (n : 自然数)
+  条件: (φ : 多元多项式 σ R) (n : 自然数)
   结论: (φ ^ n).vars subseteq φ.vars
   证明: by
   classical
@@ -506,7 +506,7 @@ theorem vars_prod
 
 中文:
 定理 vars_prod
-  条件: {ι : 类型} [DecidableEq σ] {s : Finset ι} (f : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} [DecidableEq σ] {s : 有限集 ι} (f : ι -> 多元多项式 σ R)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -547,7 +547,7 @@ theorem vars_C_mul
 
 中文:
 定理 vars_C_mul
-  条件: (a : A) (ha : a != 0) (φ : MvPolynomial σ A)
+  条件: (a : A) (ha : a != 0) (φ : 多元多项式 σ A)
   证明: by
   ext1 i
   simp only [mem_vars_iff_mem_support, mem_support_iff]
@@ -633,7 +633,7 @@ theorem vars_sum_of_disjoint
 
 中文:
 定理 vars_sum_of_disjoint
-  条件: [DecidableEq σ] (h : Pairwise <| (Disjoint on fun i => (φ i).vars))
+  条件: [DecidableEq σ] (h : 两两 <| (Disjoint on fun i => (φ i).vars))
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -698,7 +698,7 @@ theorem vars_map_of_injective
 
 中文:
 定理 vars_map_of_injective
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: (map f p).vars = p.vars
   证明: by
   simp [vars, degrees_map_of_injective _ hf]
@@ -785,7 +785,7 @@ theorem eval₂Hom_eq_constantCoeff_of_vars
 
 中文:
 定理 eval₂Hom_eq_constantCoeff_of_vars
-  结论: (f : R ->+* S) {g : σ -> S} {p : MvPolynomial σ R}
+  结论: (f : R ->+* S) {g : σ -> S} {p : 多元多项式 σ R}
   证明: by
   conv_lhs => rw [p.as_sum]
   simp only [map_sum, eval₂Hom_monomial]
@@ -838,7 +838,7 @@ theorem aeval_eq_constantCoeff_of_vars
 
 中文:
 定理 aeval_eq_constantCoeff_of_vars
-  结论: [Algebra R S] {g : σ -> S} {p : MvPolynomial σ R}
+  结论: [代数 R S] {g : σ -> S} {p : 多元多项式 σ R}
   证明: eval₂Hom_eq_constantCoeff_of_vars _ hp
 -/
 theorem aeval_eq_constantCoeff_of_vars [Algebra R S] {g : σ -> S} {p : MvPolynomial σ R}
@@ -868,7 +868,7 @@ theorem eval₂Hom_congr'
 
 中文:
 定理 eval₂Hom_congr'
-  条件: {f₁ f₂ : R ->+* S} {g₁ g₂ : σ -> S} {p₁ p₂ : MvPolynomial σ R}
+  条件: {f₁ f₂ : R ->+* S} {g₁ g₂ : σ -> S} {p₁ p₂ : 多元多项式 σ R}
   证明: by
   rintro rfl h rfl
   rw [p₁.as_sum]
@@ -917,7 +917,7 @@ theorem hom_congr_vars
 
 中文:
 定理 hom_congr_vars
-  结论: {f₁ f₂ : MvPolynomial σ R ->+* S} {p₁ p₂ : MvPolynomial σ R}
+  结论: {f₁ f₂ : 多元多项式 σ R ->+* S} {p₁ p₂ : 多元多项式 σ R}
   证明: calc
     f₁ p₁ = eval₂Hom (f₁.comp C) (f₁ ∘ X) p₁ := RingHom.congr_fun (by ext <;> simp) _
     _ = eval₂Hom (f₂.comp C) (f₂ ∘ X) p₂ := eval₂Hom_congr' hC hv hp
@@ -951,8 +951,8 @@ theorem exists_rename_eq_of_vars_subset_range
  
 
 中文:
-定理 exists_rename_eq_of_vars_subset_range
-  结论: (p : MvPolynomial σ R) (f : τ -> σ) (hfi : Injective f)
+定理 存在_rename_eq_of_vars_subset_range
+  结论: (p : 多元多项式 σ R) (f : τ -> σ) (hfi : 单射 f)
   证明: ⟨aeval (fun i : σ => Option.elim' 0 X <| partialInv f i) p,
     by
       change (rename f).toRingHom.comp _ p = RingHom.id _ p
@@ -993,7 +993,7 @@ theorem vars_rename
 
 中文:
 定理 vars_rename
-  条件: [DecidableEq τ] (f : σ -> τ) (φ : MvPolynomial σ R)
+  条件: [DecidableEq τ] (f : σ -> τ) (φ : 多元多项式 σ R)
   证明: by
   classical
   intro i hi
@@ -1021,7 +1021,7 @@ theorem mem_vars_rename
 
 中文:
 定理 mem_vars_rename
-  条件: (f : σ -> τ) (φ : MvPolynomial σ R) {j : τ} (h : j in (rename f φ).vars)
+  条件: (f : σ -> τ) (φ : 多元多项式 σ R) {j : τ} (h : j in (rename f φ).vars)
   证明: by
   classical
   simpa only [exists_prop, Finset.mem_image] using vars_rename f φ h
@@ -1048,7 +1048,7 @@ lemma aeval_ite_mem_eq_self
 
 中文:
 引理 aeval_ite_mem_eq_self
-  结论: (q : MvPolynomial σ R) {s : Set σ} (hs : (q.vars : Set σ) subseteq s)
+  结论: (q : 多元多项式 σ R) {s : 集合 σ} (hs : (q.vars : 集合 σ) subseteq s)
   证明: by
   rw [MvPolynomial.as_sum q]; rw [MvPolynomial.aeval_sum]
   refine Finset.sum_congr rfl fun u hu => ?_

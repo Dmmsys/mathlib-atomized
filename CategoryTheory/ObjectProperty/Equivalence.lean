@@ -41,7 +41,7 @@ lemma essSurj_ιOfLE_iff
 
 中文:
 引理 essSurj_ιOfLE_iff
-  结论: (ιOfLE h).EssSurj ↔ Q <= P.isoClosure
+  结论: (ιOfLE h).本质满射 ↔ Q <= P.isoClosure
   证明: by
   refine ⟨fun _ X hX => ?_, fun hPQ => ⟨fun ⟨Y, hY⟩ => ?_⟩⟩
   · exact ⟨_, ((ιOfLE h).objPreimage ⟨X, hX⟩).2,
@@ -70,7 +70,7 @@ lemma isEquivalence_ιOfLE_iff
 
 中文:
 引理 isEquivalence_ιOfLE_iff
-  结论: (ιOfLE h).IsEquivalence ↔ Q <= P.isoClosure
+  结论: (ιOfLE h).是等价 ↔ Q <= P.isoClosure
   证明: by
   rw [← essSurj_ιOfLE_iff h]
   exact ⟨fun _ => inferInstance, fun _ => { }⟩
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ιOfLE P.le_isoClosure).IsEquivalence
+  签名: (ιOfLE P.le_isoClosure).是等价
   定义体: by rw [isEquivalence_ιOfLE_iff]
 
 Depends on / 依赖: IsZero, IsZero.of_iso, infer_instance, isLE_iff_isZero_truncGE_obj, of_iso, t.isIso, t.isLE_iff_isZero_truncGE_obj, t.triangleLTGE_distinguished, t.truncGE, triangleLTGE_distinguished, truncGE
@@ -116,7 +116,7 @@ definition topEquivalence
 
 中文:
 定义 topEquivalence
-  签名: : Object命题erty.FullSubcategory (C := C) ⊤ ≌ C where
+  签名: : ObjectProperty.满子范畴 (C := C) ⊤ ≌ C where
   定义体: ObjectProperty.ι _
   inverse := ObjectProperty.lift _ (𝟭 _) (by simp)
   unitIso := Iso.refl _
@@ -159,7 +159,7 @@ definition congrFullSubcategory
 
 中文:
 定义 congrFullSubcategory
-  签名: [Q.IsClosedUnderIsomorphisms] (h : Q.inverseImage e.functor = P)
+  签名: [Q.在同构下封闭] (h : Q.inverseImage e.functor = P)
   定义体: Q.lift (P.ι ⋙ e.functor) (fun ⟨X, hX⟩ => by rwa [← h] at hX)
   inverse := P.lift (Q.ι ⋙ e.inverse) (fun ⟨Y, hY⟩ => by
     rw [← h]

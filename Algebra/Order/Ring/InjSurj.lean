@@ -33,7 +33,7 @@ lemma isOrderedRing
 
 中文:
 引理 isOrderedRing
-  结论: [IsOrderedRing R] [Semiring S] [PartialOrder S]
+  结论: [是Ordered环 R] [半环 S] [偏序 S]
   证明: Function.Injective.isOrderedAddMonoid f add le
   zero_le_one := by simp only [← le, zero, one, zero_le_one]
   mul_le_mul_of_nonneg_left a ha b c hbc := by
@@ -67,7 +67,7 @@ lemma isStrictOrderedRing
 
 中文:
 引理 isStrictOrderedRing
-  结论: [IsStrictOrderedRing R] [Semiring S] [PartialOrder S]
+  结论: [是StrictOrdered环 R] [半环 S] [偏序 S]
   证明: Function.Injective.isOrderedCancelAddMonoid f add le
   __ := domain_nontrivial f zero one
   __ := Function.Injective.isOrderedRing f zero one add mul le

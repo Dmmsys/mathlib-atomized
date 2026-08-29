@@ -68,8 +68,8 @@ definition Functor.rightDerivedToHomotopyCategory
   body: injectiveResolutions C ⋙ F.mapHomotopyCategory _
 
 中文:
-定义 Functor.rightDerivedToHomotopyCategory
-  签名: (F : C ⥤ D) [F.Additive]
+定义 函子.rightDerivedToHomotopyCategory
+  签名: (F : C ⥤ D) [F.加性]
   定义体: injectiveResolutions C ⋙ F.mapHomotopyCategory _
 
 Depends on / 依赖: F.mapHomotopyCategory, injectiveResolutions, mapHomotopyCategory
@@ -88,7 +88,7 @@ definition InjectiveResolution.isoRightDerivedToHomotopyCategoryObj
     (F.mapHomotopyCategoryFactors _).app I.cocomplex
 
 中文:
-定义 InjectiveResolution.isoRightDerivedToHomotopyCategoryObj
+定义 单射消解.isoRightDerivedToHomotopyCategoryObj
   签名: {X : C}
   定义体: (F.mapHomotopyCategory _).mapIso I.iso ≪≫
     (F.mapHomotopyCategoryFactors _).app I.cocomplex
@@ -117,7 +117,7 @@ lemma InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality
   rfl
 
 中文:
-引理 InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality
+引理 单射消解.isoRightDerivedToHomotopyCategoryObj_hom_naturality
   证明: by
   dsimp [Functor.rightDerivedToHomotopyCategory, isoRightDerivedToHomotopyCategoryObj]
   rw [← Functor.map_comp_assoc]; rw [iso_hom_naturality f I J φ comm]; rw [Functor.map_comp]; rw [assoc]; rw [assoc]
@@ -151,7 +151,7 @@ lemma InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_inv_naturality
     rw [← isoRightDerivedToHomotopyCategoryObj_hom_naturality_assoc f I J φ comm F]; rw [Iso.hom_inv_id]; rw [comp_id]
 
 中文:
-引理 InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_inv_naturality
+引理 单射消解.isoRightDerivedToHomotopyCategoryObj_inv_naturality
   证明: by
     rw [← cancel_epi (I.isoRightDerivedToHomotopyCategoryObj F).hom]; rw [Iso.hom_inv_id_assoc]
     dsimp
@@ -179,8 +179,8 @@ definition Functor.rightDerived
   body: F.rightDerivedToHomotopyCategory ⋙ HomotopyCategory.homologyFunctor D _ n
 
 中文:
-定义 Functor.rightDerived
-  签名: (F : C ⥤ D) [F.Additive] (n : 自然数)
+定义 函子.rightDerived
+  签名: (F : C ⥤ D) [F.加性] (n : 自然数)
   定义体: F.rightDerivedToHomotopyCategory ⋙ HomotopyCategory.homologyFunctor D _ n
 
 Depends on / 依赖: F.rightDerivedToHomotopyCategory, HomotopyCategory, HomotopyCategory.homologyFunctor, homologyFunctor, rightDerivedToHomotopyCategory
@@ -199,8 +199,8 @@ definition InjectiveResolution.isoRightDerivedObj
     (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).app _
 
 中文:
-定义 InjectiveResolution.isoRightDerivedObj
-  签名: {X : C} (I : InjectiveResolution X)
+定义 单射消解.isoRightDerivedObj
+  签名: {X : C} (I : 单射消解 X)
   定义体: (HomotopyCategory.homologyFunctor D _ n).mapIso
     (I.isoRightDerivedToHomotopyCategoryObj F) ≪≫
     (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n).app _
@@ -230,7 +230,7 @@ lemma InjectiveResolution.isoRightDerivedObj_hom_naturality
   erw [(HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) n)
 
 中文:
-引理 InjectiveResolution.isoRightDerivedObj_hom_naturality
+引理 单射消解.isoRightDerivedObj_hom_naturality
   证明: by
   dsimp [isoRightDerivedObj, Functor.rightDerived]
   rw [assoc]; rw [← Functor.map_comp_assoc]; rw [InjectiveResolution.isoRightDerivedToHomotopyCategoryObj_hom_naturality f I J φ comm F]; rw [Functor.map_comp]; rw [assoc]
@@ -260,7 +260,7 @@ lemma InjectiveResolution.isoRightDerivedObj_inv_naturality
   rw [← cancel_mono (J.isoRightDerivedObj F n).hom]; rw [assoc]; rw [assoc]; rw [InjectiveResolution.isoRightDerivedObj_hom_naturality f I J φ comm F n]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
 
 中文:
-引理 InjectiveResolution.isoRightDerivedObj_inv_naturality
+引理 单射消解.isoRightDerivedObj_inv_naturality
   证明: by
   rw [← cancel_mono (J.isoRightDerivedObj F n).hom]; rw [assoc]; rw [assoc]; rw [InjectiveResolution.isoRightDerivedObj_hom_naturality f I J φ comm F n]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
 
@@ -286,7 +286,7 @@ lemma Functor.isZero_rightDerived_obj_injective_succ
   exact ShortComplex.exact_of_isZero_X₂ _ (F.map_isZero (by apply isZero_zero))
 
 中文:
-引理 Functor.isZero_rightDerived_obj_injective_succ
+引理 函子.isZero_rightDerived_obj_injective_succ
   证明: by
   refine IsZero.of_iso ?_ ((InjectiveResolution.self X).isoRightDerivedObj F (n + 1))
   erw [← HomologicalComplex.exactAt_iff_isZero_homology]
@@ -313,8 +313,8 @@ theorem Functor.rightDerived_map_eq
   rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zer
 
 中文:
-定理 Functor.rightDerived_map_eq
-  结论: (F : C ⥤ D) [F.Additive] (n : 自然数) {X Y : C} (f : X ⟶ Y)
+定理 函子.rightDerived_map_eq
+  结论: (F : C ⥤ D) [F.加性] (n : 自然数) {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← cancel_mono (Q.isoRightDerivedObj F n).hom]; rw [InjectiveResolution.isoRightDerivedObj_hom_naturality f P Q g _ F n]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
   rw [← HomologicalComplex.comp_f]; rw [w]; rw [HomologicalComplex.comp_f]; rw [CochainComplex.single₀_map_f_zer
@@ -339,7 +339,7 @@ definition NatTrans.rightDerivedToHomotopyCategory
   body: Functor.whiskerLeft _ (NatTrans.mapHomotopyCategory α (ComplexShape.up Nat))
 
 中文:
-定义 NatTrans.rightDerivedToHomotopyCategory
+定义 自然变换.rightDerivedToHomotopyCategory
   定义体: Functor.whiskerLeft _ (NatTrans.mapHomotopyCategory α (ComplexShape.up Nat))
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, Functor, Functor.whiskerLeft, NatTrans, NatTrans.mapHomotopyCategory, mapHomotopyCategory, whiskerLeft
@@ -365,7 +365,7 @@ lemma InjectiveResolution.rightDerivedToHomotopyCategory_app_eq
   ob
 
 中文:
-引理 InjectiveResolution.rightDerivedToHomotopyCategory_app_eq
+引理 单射消解.rightDerivedToHomotopyCategory_app_eq
   证明: by
   rw [← cancel_mono (P.isoRightDerivedToHomotopyCategoryObj G).hom]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
   dsimp [isoRightDerivedToHomotopyCategoryObj, Functor.mapHomotopyCategoryFactors,
@@ -406,8 +406,8 @@ lemma NatTrans.rightDerivedToHomotopyCategory_id
 @[simp, reassoc]
 
 中文:
-引理 NatTrans.rightDerivedToHomotopyCategory_id
-  条件: (F : C ⥤ D) [F.Additive]
+引理 自然变换.rightDerivedToHomotopyCategory_id
+  条件: (F : C ⥤ D) [F.加性]
   证明: rfl
 
 @[simp, reassoc]
@@ -425,7 +425,7 @@ lemma NatTrans.rightDerivedToHomotopyCategory_comp
   proof: rfl
 
 中文:
-引理 NatTrans.rightDerivedToHomotopyCategory_comp
+引理 自然变换.rightDerivedToHomotopyCategory_comp
   结论: {F G H : C ⥤ D} (α : F ⟶ G) (β : G ⟶ H)
   证明: rfl
 -/
@@ -445,7 +445,7 @@ definition NatTrans.rightDerived
 @[simp]
 
 中文:
-定义 NatTrans.rightDerived
+定义 自然变换.rightDerived
   定义体: Functor.whiskerRight (NatTrans.rightDerivedToHomotopyCategory α) _
 
 @[simp]
@@ -470,8 +470,8 @@ theorem NatTrans.rightDerived_id
   rfl
 
 中文:
-定理 NatTrans.rightDerived_id
-  条件: (F : C ⥤ D) [F.Additive] (n : 自然数)
+定理 自然变换.rightDerived_id
+  条件: (F : C ⥤ D) [F.加性] (n : 自然数)
   证明: by
   dsimp only [rightDerived]
   simp only [rightDerivedToHomotopyCategory_id, Functor.whiskerRight_id']
@@ -497,8 +497,8 @@ theorem NatTrans.rightDerived_comp
   simp [NatTrans.rightDerived]
 
 中文:
-定理 NatTrans.rightDerived_comp
-  结论: {F G H : C ⥤ D} [F.Additive] [G.Additive] [H.Additive]
+定理 自然变换.rightDerived_comp
+  结论: {F G H : C ⥤ D} [F.加性] [G.加性] [H.加性]
   证明: by
   simp [NatTrans.rightDerived]
 
@@ -588,7 +588,7 @@ lemma toRightDerivedZero'_comp_iCycles
 
 中文:
 引理 toRightDerivedZero'_comp_iCycles
-  结论: {C} [Category* C] [Abelian C] {X : C}
+  结论: {C} [范畴* C] [交换 C] {X : C}
   证明: by
   simp [toRightDerivedZero']
 -/
@@ -615,7 +615,7 @@ lemma toRightDerivedZero'_naturality
 
 中文:
 引理 toRightDerivedZero'_naturality
-  结论: {C} [Category* C] [Abelian C] {X Y : C} (f : X ⟶ Y)
+  结论: {C} [范畴* C] [交换 C] {X Y : C} (f : X ⟶ Y)
   证明: by
   simp only [← cancel_mono (HomologicalComplex.iCycles _ _), assoc,
     toRightDerivedZero'_comp_iCycles,
@@ -666,8 +666,8 @@ definition Functor.toRightDerivedZero
     rw [assoc]; rw [assoc]; rw [InjectiveResolution.toRightDerivedZero'_n
 
 中文:
-定义 Functor.toRightDerivedZero
-  签名: (F : C ⥤ D) [F.Additive]
+定义 函子.toRightDerivedZero
+  签名: (F : C ⥤ D) [F.加性]
   定义体: (injectiveResolution X).toRightDerivedZero' F ≫
     (CochainComplex.isoHomologyπ₀ _).hom ≫
       (HomotopyCategory.homologyFunctorFactors D (ComplexShape.up Nat) 0).inv.app _
@@ -706,7 +706,7 @@ lemma InjectiveResolution.toRightDerivedZero_eq
     (F
 
 中文:
-引理 InjectiveResolution.toRightDerivedZero_eq
+引理 单射消解.toRightDerivedZero_eq
   证明: by
   dsimp [Functor.toRightDerivedZero, isoRightDerivedObj]
   have h₁ := InjectiveResolution.toRightDerivedZero'_naturality
@@ -765,7 +765,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso F.toRightDerivedZero
+  签名: 是同构 F.toRightDerivedZero
   定义体: NatIso.isIso_of_isIso_app _
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, isIso_of_isIso_app

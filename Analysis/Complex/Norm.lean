@@ -33,7 +33,7 @@ instance instNorm
 
 中文:
 实例 instNorm
-  签名: : Norm Complex where
+  签名: : 范数 复形 where
   定义体: √(normSq z)
 
 Depends on / 依赖: normSq
@@ -52,7 +52,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ = √(normSq z)
   证明: (rfl)
 -/
@@ -69,7 +69,7 @@ theorem norm_mul_self_eq_normSq
 
 中文:
 定理 norm_mul_self_eq_normSq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ * ‖z‖ = normSq z
   证明: Real.mul_self_sqrt (normSq_nonneg _)
 
@@ -91,7 +91,7 @@ theorem norm_nonneg
 
 中文:
 定理 norm_nonneg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: 0 <= ‖z‖
   证明: Real.sqrt_nonneg _
 
@@ -114,7 +114,7 @@ theorem abs_re_le_norm
 
 中文:
 定理 abs_re_le_norm
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: |z.re| <= ‖z‖
   证明: by
   rw [mul_self_le_mul_self_iff (abs_nonneg z.re) (Complex.norm_nonneg _)]; rw [abs_mul_abs_self]; rw [norm_mul_self_eq_normSq]
@@ -137,7 +137,7 @@ theorem re_le_norm
 
 中文:
 定理 re_le_norm
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z.re <= ‖z‖
   证明: (abs_le.1 (abs_re_le_norm _)).2
 
@@ -159,7 +159,7 @@ theorem norm_add_le'
 
 中文:
 定理 norm_add_le'
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ‖z + w‖ <= ‖z‖ + ‖w‖
   证明: (mul_self_le_mul_self_iff (Complex.norm_nonneg (z + w)) (add_nonneg (Complex.norm_nonneg z)
     (Complex.norm_nonneg w))).2 <| by
@@ -183,7 +183,7 @@ theorem norm_eq_zero_iff
 
 中文:
 定理 norm_eq_zero_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: ‖z‖ = 0 ↔ z = 0
   证明: (Real.sqrt_eq_zero <| normSq_nonneg _).trans normSq_eq_zero
 -/
@@ -200,7 +200,7 @@ theorem norm_map_zero'
 
 中文:
 定理 norm_map_zero'
-  结论: ‖(0 : Complex)‖ = 0
+  结论: ‖(0 : 复形)‖ = 0
   证明: Complex.norm_eq_zero_iff.mpr rfl
 -/
 protected theorem norm_map_zero' : ‖(0 : Complex)‖ = 0 :=
@@ -218,7 +218,7 @@ theorem norm_neg'
 
 中文:
 定理 norm_neg'
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖-z‖ = ‖z‖
   证明: by
   rw [Complex.norm_def]; rw [norm_def]; rw [normSq_neg]
@@ -243,7 +243,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: : NormedAddCommGroup Complex
+  签名: : 赋范交换加群 复形
   定义体: AddGroupNorm.toNormedAddCommGroup
   { toFun := norm
     map_zero' := Complex.norm_map_zero'
@@ -278,7 +278,7 @@ theorem norm_mul
 
 中文:
 定理 norm_mul
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ‖z * w‖ = ‖z‖ * ‖w‖
   证明: by
   rw [norm_def]; rw [norm_def]; rw [norm_def]; rw [normSq_mul]; rw [Real.sqrt_mul (normSq_nonneg _)]
@@ -301,7 +301,7 @@ theorem norm_div
 
 中文:
 定理 norm_div
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ‖z / w‖ = ‖z‖ / ‖w‖
   证明: by
   rw [norm_def]; rw [norm_def]; rw [norm_def]; rw [normSq_div]; rw [Real.sqrt_div (normSq_nonneg _)]
@@ -322,7 +322,7 @@ instance isAbsoluteValueNorm
 
 中文:
 实例 isAbsoluteValueNorm
-  签名: : IsAbsoluteValue (‖·‖ : Complex -> 实数) where
+  签名: : 是绝对值 (‖·‖ : 复形 -> 实数) where
   定义体: norm_nonneg
   abv_eq_zero' := Complex.norm_eq_zero_iff
   abv_add' := norm_add_le
@@ -347,7 +347,7 @@ theorem norm_pow
 
 中文:
 定理 norm_pow
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   结论: ‖z ^ n‖ = ‖z‖ ^ n
   证明: map_pow isAbsoluteValueNorm.abvHom _ _
 -/
@@ -365,7 +365,7 @@ theorem norm_zpow
 
 中文:
 定理 norm_zpow
-  条件: (z : Complex) (n : 整数)
+  条件: (z : 复形) (n : 整数)
   结论: ‖z ^ n‖ = ‖z‖ ^ n
   证明: map_zpow₀ isAbsoluteValueNorm.abvHom _ _
 -/
@@ -382,7 +382,7 @@ theorem norm_prod
 
 中文:
 定理 norm_prod
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Complex)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 复形)
   证明: map_prod isAbsoluteValueNorm.abvHom _ _
 -/
 protected theorem norm_prod {ι : Type*} (s : Finset ι) (f : ι -> Complex) :
@@ -400,7 +400,7 @@ theorem norm_conj
 
 中文:
 定理 norm_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖conj z‖ = ‖z‖
   证明: by simp [norm_def]
 
@@ -456,7 +456,7 @@ lemma norm_real
 中文:
 引理 norm_real
   条件: (r : 实数)
-  结论: ‖(r : Complex)‖ = ‖r‖
+  结论: ‖(r : 复形)‖ = ‖r‖
   证明: by
   simp [norm_def, Real.sqrt_mul_self_eq_abs]
 
@@ -479,7 +479,7 @@ theorem norm_of_nonneg
 中文:
 定理 norm_of_nonneg
   条件: {r : 实数} (h : 0 <= r)
-  结论: ‖(r : Complex)‖ = r
+  结论: ‖(r : 复形)‖ = r
   证明: (norm_real _).trans (abs_of_nonneg h)
 
 @[simp, norm_cast]
@@ -502,7 +502,7 @@ lemma nnnorm_real
 中文:
 引理 nnnorm_real
   条件: (r : 实数)
-  结论: ‖(r : Complex)‖₊ = ‖r‖₊
+  结论: ‖(r : 复形)‖₊ = ‖r‖₊
   证明: by ext; exact norm_real _
 
 @[norm_cast]
@@ -526,7 +526,7 @@ lemma norm_natCast
 中文:
 引理 norm_natCast
   条件: (n : 自然数)
-  结论: ‖(n : Complex)‖ = n
+  结论: ‖(n : 复形)‖ = n
   证明: Complex.norm_of_nonneg n.cast_nonneg
 
 @[simp 1100]
@@ -545,7 +545,7 @@ lemma norm_ofNat
   proof: norm_natCast n
 
 中文:
-引理 norm_ofNat
+引理 norm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: norm_natCast n
 
@@ -566,7 +566,7 @@ lemma norm_two
 
 中文:
 引理 norm_two
-  结论: ‖(2 : Complex)‖ = 2
+  结论: ‖(2 : 复形)‖ = 2
   证明: norm_ofNat 2
 
 @[simp 1100, norm_cast]
@@ -588,7 +588,7 @@ lemma nnnorm_natCast
 中文:
 引理 nnnorm_natCast
   条件: (n : 自然数)
-  结论: ‖(n : Complex)‖₊ = n
+  结论: ‖(n : 复形)‖₊ = n
   证明: Subtype.ext by simp [norm_natCast]
 
 @[simp 1100]
@@ -609,7 +609,7 @@ lemma nnnorm_ofNat
 @[simp 1100, norm_cast]
 
 中文:
-引理 nnnorm_ofNat
+引理 nnnorm_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: nnnorm_natCast n
 
@@ -634,7 +634,7 @@ lemma norm_intCast
 中文:
 引理 norm_intCast
   条件: (n : 整数)
-  结论: ‖(n : Complex)‖ = |(n : 实数)|
+  结论: ‖(n : 复形)‖ = |(n : 实数)|
   证明: by
   rw [← ofReal_intCast]; rw [norm_real]; rw [Real.norm_eq_abs]
 
@@ -658,7 +658,7 @@ theorem norm_int_of_nonneg
 中文:
 定理 norm_int_of_nonneg
   条件: {n : 整数} (hn : 0 <= n)
-  结论: ‖(n : Complex)‖ = n
+  结论: ‖(n : 复形)‖ = n
   证明: by
   rw [norm_intCast]; rw [← Int.cast_abs]; rw [abs_of_nonneg hn]
 
@@ -683,8 +683,8 @@ lemma norm_ratCast
 
 中文:
 引理 norm_ratCast
-  条件: (q : Rat)
-  结论: ‖(q : Complex)‖ = |(q : 实数)|
+  条件: (q : 有理数)
+  结论: ‖(q : 复形)‖ = |(q : 实数)|
   证明: norm_real _
 
 @[simp 1100, norm_cast]
@@ -707,8 +707,8 @@ lemma norm_nnratCast
 
 中文:
 引理 norm_nnratCast
-  条件: (q : Rat>=0)
-  结论: ‖(q : Complex)‖ = q
+  条件: (q : 有理数>=0)
+  结论: ‖(q : 复形)‖ = q
   证明: Complex.norm_of_nonneg q.cast_nonneg
 
 @[simp 1100, norm_cast]
@@ -731,8 +731,8 @@ lemma nnnorm_ratCast
 
 中文:
 引理 nnnorm_ratCast
-  条件: (q : Rat)
-  结论: ‖(q : Complex)‖₊ = ‖(q : 实数)‖₊
+  条件: (q : 有理数)
+  结论: ‖(q : 复形)‖₊ = ‖(q : 实数)‖₊
   证明: nnnorm_real q
 
 @[simp 1100, norm_cast]
@@ -753,8 +753,8 @@ lemma nnnorm_nnratCast
 
 中文:
 引理 nnnorm_nnratCast
-  条件: (q : Rat>=0)
-  结论: ‖(q : Complex)‖₊ = q
+  条件: (q : 有理数>=0)
+  结论: ‖(q : 复形)‖₊ = q
   证明: by simp [nnnorm]; rfl
 
 Depends on / 依赖: nnnorm
@@ -773,7 +773,7 @@ lemma normSq_eq_norm_sq
 
 中文:
 引理 normSq_eq_norm_sq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: normSq z = ‖z‖ ^ 2
   证明: by
   simp [norm_def, sq, Real.mul_self_sqrt (normSq_nonneg _)]
@@ -794,7 +794,7 @@ theorem sq_norm
 
 中文:
 定理 sq_norm
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ ^ 2 = normSq z
   证明: (normSq_eq_norm_sq z).symm
 -/
@@ -812,7 +812,7 @@ lemma one_lt_normSq_iff
 
 中文:
 引理 one_lt_normSq_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: 1 < normSq x ↔ 1 < ‖x‖
   证明: by
   rw [← one_lt_sq_iff₀ (norm_nonneg _)]; rw [normSq_eq_norm_sq]
@@ -836,7 +836,7 @@ lemma one_le_normSq_iff
 
 中文:
 引理 one_le_normSq_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: 1 <= normSq x ↔ 1 <= ‖x‖
   证明: by
   rw [← one_le_sq_iff₀ (norm_nonneg _)]; rw [normSq_eq_norm_sq]
@@ -863,7 +863,7 @@ theorem sq_norm_sub_sq_re
 
 中文:
 定理 sq_norm_sub_sq_re
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ ^ 2 - z.re ^ 2 = z.im ^ 2
   证明: by
   rw [Complex.sq_norm]; rw [normSq_apply]; rw [← sq]; rw [← sq]; rw [add_sub_cancel_left]
@@ -888,7 +888,7 @@ theorem sq_norm_sub_sq_im
 
 中文:
 定理 sq_norm_sub_sq_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ ^ 2 - z.im ^ 2 = z.re ^ 2
   证明: by
   rw [← sq_norm_sub_sq_re]; rw [sub_sub_cancel]
@@ -934,7 +934,7 @@ lemma norm_eq_sqrt_sq_add_sq
 
 中文:
 引理 norm_eq_sqrt_sq_add_sq
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ = √(z.re ^ 2 + z.im ^ 2)
   证明: by
   rw [norm_def]; rw [normSq_apply]; rw [sq]; rw [sq]
@@ -959,7 +959,7 @@ theorem range_norm
 
 中文:
 定理 range_norm
-  结论: range (‖·‖ : Complex -> 实数) = Set.Ici 0
+  结论: range (‖·‖ : 复形 -> 实数) = 集合.左闭右无界区间 0
   证明: Subset.antisymm (range_subset_iff.2 norm_nonneg) fun x hx => ⟨x, Complex.norm_of_nonneg hx⟩
 
 @[simp]
@@ -979,7 +979,7 @@ theorem range_normSq
 
 中文:
 定理 range_normSq
-  结论: range normSq = Ici 0
+  结论: range normSq = 左闭右无界区间 0
   证明: Subset.antisymm (range_subset_iff.2 normSq_nonneg) fun x hx =>
     ⟨√x, by rw [normSq_ofReal, Real.mul_self_sqrt hx]⟩
 
@@ -1003,7 +1003,7 @@ theorem norm_le_abs_re_add_abs_im
 
 中文:
 定理 norm_le_abs_re_add_abs_im
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ <= |z.re| + |z.im|
   证明: by
     simpa [re_add_im] using norm_add_le (z.re : Complex) (z.im * I)
@@ -1029,7 +1029,7 @@ theorem abs_im_le_norm
 
 中文:
 定理 abs_im_le_norm
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: |z.im| <= ‖z‖
   证明: Real.abs_le_sqrt by
     rw [normSq_apply]; rw [← sq]; rw [← sq]
@@ -1055,7 +1055,7 @@ theorem im_le_norm
 
 中文:
 定理 im_le_norm
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: z.im <= ‖z‖
   证明: (abs_le.1 (abs_im_le_norm _)).2
 
@@ -1081,7 +1081,7 @@ theorem abs_re_lt_norm
 
 中文:
 定理 abs_re_lt_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |z.re| < ‖z‖ ↔ z.im != 0
   证明: by
   rw [norm_def]; rw [Real.lt_sqrt (abs_nonneg _)]; rw [normSq_apply]; rw [sq_abs]; rw [← sq]; rw [lt_add_iff_pos_right]; rw [mul_self_pos]
@@ -1108,7 +1108,7 @@ theorem abs_im_lt_norm
 
 中文:
 定理 abs_im_lt_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |z.im| < ‖z‖ ↔ z.re != 0
   证明: by
   simpa using @abs_re_lt_norm (z * I)
@@ -1134,7 +1134,7 @@ lemma abs_re_eq_norm
 
 中文:
 引理 abs_re_eq_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |z.re| = ‖z‖ ↔ z.im = 0
   证明: not_iff_not.1 (abs_re_le_norm z).lt_iff_ne.symm.trans abs_re_lt_norm
 
@@ -1157,7 +1157,7 @@ lemma abs_im_eq_norm
 
 中文:
 引理 abs_im_eq_norm
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |z.im| = ‖z‖ ↔ z.re = 0
   证明: not_iff_not.1 (abs_im_le_norm z).lt_iff_ne.symm.trans abs_im_lt_norm
 
@@ -1186,8 +1186,8 @@ theorem norm_le_sqrt_two_mul_max
 
 中文:
 定理 norm_le_sqrt_two_mul_max
-  条件: (z : Complex)
-  结论: ‖z‖ <= √2 * max |z.re| |z.im|
+  条件: (z : 复形)
+  结论: ‖z‖ <= √2 * 最大值 |z.re| |z.im|
   证明: by
   obtain ⟨x, y⟩ := z
   simp only [norm_def, normSq_mk, norm_def, ← sq]
@@ -1226,7 +1226,7 @@ theorem abs_re_div_norm_le_one
 
 中文:
 定理 abs_re_div_norm_le_one
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: |z.re / ‖z‖| <= 1
   证明: if hz : z = 0 then by simp [hz, zero_le_one]
   else by
@@ -1252,7 +1252,7 @@ theorem abs_im_div_norm_le_one
 
 中文:
 定理 abs_im_div_norm_le_one
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: |z.im / ‖z‖| <= 1
   证明: if hz : z = 0 then by simp [hz, zero_le_one]
   else by
@@ -1276,7 +1276,7 @@ theorem dist_eq
 
 中文:
 定理 dist_eq
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: dist z w = ‖z - w‖
   证明: dist_eq_norm _ _
 
@@ -1299,7 +1299,7 @@ theorem dist_eq_re_im
 
 中文:
 定理 dist_eq_re_im
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: dist z w = √((z.re - w.re) ^ 2 + (z.im - w.im) ^ 2)
   证明: by
   rw [sq]; rw [sq]; rw [dist_eq]
@@ -1345,7 +1345,7 @@ theorem dist_of_re_eq
 
 中文:
 定理 dist_of_re_eq
-  条件: {z w : Complex} (h : z.re = w.re)
+  条件: {z w : 复形} (h : z.re = w.re)
   结论: dist z w = dist z.im w.im
   证明: by
   rw [dist_eq_re_im]; rw [h]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [zero_add]; rw [Real.sqrt_sq_eq_abs]; rw [Real.dist_eq]
@@ -1366,7 +1366,7 @@ theorem nndist_of_re_eq
 
 中文:
 定理 nndist_of_re_eq
-  条件: {z w : Complex} (h : z.re = w.re)
+  条件: {z w : 复形} (h : z.re = w.re)
   结论: nndist z w = nndist z.im w.im
   证明: NNReal.eq dist_of_re_eq h
 
@@ -1387,7 +1387,7 @@ theorem edist_of_re_eq
 
 中文:
 定理 edist_of_re_eq
-  条件: {z w : Complex} (h : z.re = w.re)
+  条件: {z w : 复形} (h : z.re = w.re)
   结论: edist z w = edist z.im w.im
   证明: by
   rw [edist_nndist]; rw [edist_nndist]; rw [nndist_of_re_eq h]
@@ -1409,7 +1409,7 @@ theorem dist_of_im_eq
 
 中文:
 定理 dist_of_im_eq
-  条件: {z w : Complex} (h : z.im = w.im)
+  条件: {z w : 复形} (h : z.im = w.im)
   结论: dist z w = dist z.re w.re
   证明: by
   rw [dist_eq_re_im]; rw [h]; rw [sub_self]; rw [zero_pow two_ne_zero]; rw [add_zero]; rw [Real.sqrt_sq_eq_abs]; rw [Real.dist_eq]
@@ -1430,7 +1430,7 @@ theorem nndist_of_im_eq
 
 中文:
 定理 nndist_of_im_eq
-  条件: {z w : Complex} (h : z.im = w.im)
+  条件: {z w : 复形} (h : z.im = w.im)
   结论: nndist z w = nndist z.re w.re
   证明: NNReal.eq dist_of_im_eq h
 
@@ -1451,7 +1451,7 @@ theorem edist_of_im_eq
 
 中文:
 定理 edist_of_im_eq
-  条件: {z w : Complex} (h : z.im = w.im)
+  条件: {z w : 复形} (h : z.im = w.im)
   结论: edist z w = edist z.re w.re
   证明: by
   rw [edist_nndist]; rw [edist_nndist]; rw [nndist_of_im_eq h]
@@ -1473,7 +1473,7 @@ theorem dist_conj_self
 
 中文:
 定理 dist_conj_self
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: dist (conj z) z = 2 * |z.im|
   证明: by
   rw [dist_of_re_eq (conj_re z)]; rw [conj_im]; rw [dist_comm]; rw [Real.dist_eq]; rw [sub_neg_eq_add]; rw [← two_mul]; rw [_root_.abs_mul]; rw [abs_of_pos (zero_lt_two' Real)]
@@ -1494,7 +1494,7 @@ theorem nndist_conj_self
 
 中文:
 定理 nndist_conj_self
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: nndist (conj z) z = 2 * 实数.nnabs z.im
   证明: NNReal.eq by rw [← dist_nndist, NNReal.coe_mul, NNReal.coe_two, Real.coe_nnabs, dist_conj_self]
 
@@ -1514,7 +1514,7 @@ theorem dist_self_conj
 
 中文:
 定理 dist_self_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: dist z (conj z) = 2 * |z.im|
   证明: by rw [dist_comm, dist_conj_self]
 
@@ -1534,7 +1534,7 @@ theorem nndist_self_conj
 
 中文:
 定理 nndist_self_conj
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: nndist z (conj z) = 2 * 实数.nnabs z.im
   证明: by
   rw [nndist_comm]; rw [nndist_conj_self]
@@ -1558,7 +1558,7 @@ theorem isCauSeq_re
 
 中文:
 定理 isCauSeq_re
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: IsCauSeq abs fun n => (f n).re
   证明: fun _ ε0 =>
   (f.cauchy ε0).imp fun i H j ij =>
@@ -1581,7 +1581,7 @@ simpa only [← ofReal_sub, norm_real, sub_re, sub_im] using (abs_im_le_norm _).
 
 中文:
 定理 isCauSeq_im
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: IsCauSeq abs fun n => (f n).im
   证明: fun ε ε0 =>
   (f.cauchy ε0).imp fun i H j ij => by
@@ -1601,7 +1601,7 @@ definition cauSeqRe
 
 中文:
 定义 cauSeqRe
-  签名: (f : CauSeq Complex (‖·‖))
+  签名: (f : CauSeq 复形 (‖·‖))
   定义体: ⟨_, isCauSeq_re f⟩
 
 Depends on / 依赖: isCauSeq_re
@@ -1619,7 +1619,7 @@ definition cauSeqIm
 
 中文:
 定义 cauSeqIm
-  签名: (f : CauSeq Complex (‖·‖))
+  签名: (f : CauSeq 复形 (‖·‖))
   定义体: ⟨_, isCauSeq_im f⟩
 
 Depends on / 依赖: isCauSeq_im
@@ -1639,7 +1639,7 @@ theorem isCauSeq_norm
 
 中文:
 定理 isCauSeq_norm
-  条件: {f : 自然数 -> Complex} (hf : IsCauSeq (‖·‖) f)
+  条件: {f : 自然数 -> 复形} (hf : IsCauSeq (‖·‖) f)
   证明: fun ε ε0 =>
   let ⟨i, hi⟩ := hf ε ε0
   ⟨i, fun j hj => lt_of_le_of_lt (abs_norm_sub_norm_le _ _) (hi j hj)⟩
@@ -1659,7 +1659,7 @@ definition limAux
 
 中文:
 定义 limAux
-  签名: (f : CauSeq Complex (‖·‖))
+  签名: (f : CauSeq 复形 (‖·‖))
   定义体: ⟨CauSeq.lim (cauSeqRe f), CauSeq.lim (cauSeqIm f)⟩
 
 Depends on / 依赖: CauSeq, CauSeq.lim, cauSeqIm, cauSeqRe
@@ -1684,7 +1684,7 @@ theorem equiv_limAux
 
 中文:
 定理 equiv_limAux
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   证明: fun ε ε0 =>
   (exists_forall_ge_and
   (CauSeq.equiv_lim ⟨_, isCauSeq_re f⟩ _ (half_pos ε0))
@@ -1714,7 +1714,7 @@ instance instIsComplete
 
 中文:
 实例 instIsComplete
-  签名: : CauSeq.IsComplete Complex (‖·‖)
+  签名: : CauSeq.是完备 复形 (‖·‖)
   定义体: ⟨fun f => ⟨limAux f, equiv_limAux f⟩⟩
 
 Depends on / 依赖: equiv_limAux, limAux
@@ -1740,7 +1740,7 @@ theorem lim_eq_lim_im_add_lim_re
 
 中文:
 定理 lim_eq_lim_im_add_lim_re
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   证明: lim_eq_of_equiv_const
     letI : IsAbsoluteValue (‖·‖ : Complex -> Real) := inferInstance
     calc
@@ -1773,7 +1773,7 @@ theorem lim_re
 
 中文:
 定理 lim_re
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: lim (cauSeqRe f) = (lim f).re
   证明: by
   rw [lim_eq_lim_im_add_lim_re]; simp [ofReal]
@@ -1795,7 +1795,7 @@ theorem lim_im
 
 中文:
 定理 lim_im
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: lim (cauSeqIm f) = (lim f).im
   证明: by
   rw [lim_eq_lim_im_add_lim_re]; simp [ofReal]
@@ -1818,7 +1818,7 @@ theorem isCauSeq_conj
 
 中文:
 定理 isCauSeq_conj
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   证明: fun ε ε0 =>
   let ⟨i, hi⟩ := f.2 ε ε0
   ⟨i, fun j hj => by
@@ -1840,7 +1840,7 @@ definition cauSeqConj
 
 中文:
 定义 cauSeqConj
-  签名: (f : CauSeq Complex (‖·‖))
+  签名: (f : CauSeq 复形 (‖·‖))
   定义体: ⟨_, isCauSeq_conj f⟩
 
 Depends on / 依赖: isCauSeq_conj
@@ -1861,7 +1861,7 @@ theorem lim_conj
 
 中文:
 定理 lim_conj
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: lim (cauSeqConj f) = conj (lim f)
   证明: Complex.ext (by simp [cauSeqConj, (lim_re _).symm, cauSeqRe])
     (by simp [cauSeqConj, (lim_im _).symm, cauSeqIm, (lim_neg _).symm]; rfl)
@@ -1882,7 +1882,7 @@ definition cauSeqNorm
 
 中文:
 定义 cauSeqNorm
-  签名: (f : CauSeq Complex (‖·‖))
+  签名: (f : CauSeq 复形 (‖·‖))
   定义体: ⟨_, isCauSeq_norm f.2⟩
 
 Depends on / 依赖: isCauSeq_norm
@@ -1903,7 +1903,7 @@ theorem lim_norm
 
 中文:
 定理 lim_norm
-  条件: (f : CauSeq Complex (‖·‖))
+  条件: (f : CauSeq 复形 (‖·‖))
   结论: lim (cauSeqNorm f) = ‖lim f‖
   证明: lim_eq_of_equiv_const fun ε ε0 =>
     let ⟨i, hi⟩ := equiv_lim f ε ε0
@@ -1927,7 +1927,7 @@ lemma ne_zero_of_re_pos
 
 中文:
 引理 ne_zero_of_re_pos
-  条件: {s : Complex} (hs : 0 < s.re)
+  条件: {s : 复形} (hs : 0 < s.re)
   结论: s != 0
   证明: fun h => (zero_re ▸ h ▸ hs).false
 
@@ -1947,7 +1947,7 @@ lemma ne_zero_of_one_lt_re
 
 中文:
 引理 ne_zero_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: s != 0
   证明: ne_zero_of_re_pos zero_lt_one.trans hs
 
@@ -1967,7 +1967,7 @@ lemma re_neg_ne_zero_of_re_pos
 
 中文:
 引理 re_neg_ne_zero_of_re_pos
-  条件: {s : Complex} (hs : 0 < s.re)
+  条件: {s : 复形} (hs : 0 < s.re)
   结论: (-s).re != 0
   证明: ne_iff_lt_or_gt.mpr Or.inl neg_re s ▸ (neg_lt_zero.mpr hs)
 
@@ -1987,7 +1987,7 @@ lemma re_neg_ne_zero_of_one_lt_re
 
 中文:
 引理 re_neg_ne_zero_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: (-s).re != 0
   证明: re_neg_ne_zero_of_re_pos zero_lt_one.trans hs
 
@@ -2012,7 +2012,7 @@ lemma norm_sub_one_sq_eq_of_norm_eq_one
 
 中文:
 引理 norm_sub_one_sq_eq_of_norm_eq_one
-  条件: {z : Complex} (hz : ‖z‖ = 1)
+  条件: {z : 复形} (hz : ‖z‖ = 1)
   证明: by
   have : z.im * z.im = 1 - z.re * z.re := by
     replace hz := sq_eq_one_iff.mpr (.inl hz)
@@ -2060,7 +2060,7 @@ lemma normSq_ofReal_add_I_mul_sqrt_one_sub
     Real.sq_sqrt (x := 1 - x ^ 2) (by nlinarith [abs_le.mp hx])]
 
 中文:
-引理 normSq_ofReal_add_I_mul_sqrt_one_sub
+引理 normSq_of实数_add_I_mul_sqrt_one_sub
   条件: {x : 实数} (hx : ‖x‖ <= 1)
   证明: by
   simp [mul_comm I, normSq_add_mul_I,
@@ -2084,7 +2084,7 @@ lemma normSq_ofReal_sub_I_mul_sqrt_one_sub
   simpa using normSq_ofReal_add_I_mul_sqrt_one_sub (x := -x) (by simpa)
 
 中文:
-引理 normSq_ofReal_sub_I_mul_sqrt_one_sub
+引理 normSq_of实数_sub_I_mul_sqrt_one_sub
   条件: {x : 实数} (hx : ‖x‖ <= 1)
   证明: by
   rw [← normSq_neg]; rw [neg_sub']; rw [sub_neg_eq_add]

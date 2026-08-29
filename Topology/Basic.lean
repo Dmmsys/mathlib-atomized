@@ -54,8 +54,8 @@ definition TopologicalSpace.ofClosed
     exact sInter_mem (compl '' s) fun z ⟨y, hy, hz⟩ => hz ▸ hs y hy
 
 中文:
-定义 TopologicalSpace.ofClosed
-  签名: {X : 类型u} (T : Set (Set X)) (empty_mem : ∅ in T)
+定义 拓扑空间.ofClosed
+  签名: {X : 类型u} (T : 集合 (集合 X)) (empty_mem : ∅ in T)
   定义体: Xᶜ in T
   isOpen_univ := by simp [empty_mem]
   isOpen_inter s t hs ht := by simpa only [compl_inter] using union_mem sᶜ hs tᶜ ht
@@ -91,7 +91,7 @@ lemma isOpen_mk
 中文:
 引理 isOpen_mk
   条件: {p h₁ h₂ h₃}
-  结论: IsOpen[⟨p, h₁, h₂, h₃⟩] s ↔ p s
+  结论: 是开集[⟨p, h₁, h₂, h₃⟩] s ↔ p s
   证明: Iff.rfl
 
 @[ext (iff := false)]
@@ -108,7 +108,7 @@ English:
 theorem TopologicalSpace.ext
 
 中文:
-定理 TopologicalSpace.ext
+定理 拓扑空间.ext
 -/
 protected theorem TopologicalSpace.ext :
     forall {f g : TopologicalSpace X}, IsOpen[f] = IsOpen[g] -> f = g
@@ -123,8 +123,8 @@ theorem TopologicalSpace.ext_iff
   proof: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
 
 中文:
-定理 TopologicalSpace.ext_iff
-  条件: {t t' : TopologicalSpace X}
+定理 拓扑空间.ext_iff
+  条件: {t t' : 拓扑空间 X}
   证明: ⟨fun h _ => h ▸ Iff.rfl, fun h => by ext; exact h _⟩
 -/
 protected theorem TopologicalSpace.ext_iff {t t' : TopologicalSpace X} :
@@ -142,8 +142,8 @@ theorem isOpen_fold
 
 中文:
 定理 isOpen_fold
-  条件: {t : TopologicalSpace X}
-  结论: t.IsOpen s = IsOpen[t] s
+  条件: {t : 拓扑空间 X}
+  结论: t.是开集 s = 是开集[t] s
   证明: rfl
 -/
 theorem isOpen_fold {t : TopologicalSpace X} : t.IsOpen s = IsOpen[t] s :=
@@ -162,8 +162,8 @@ theorem isOpen_iUnion
 
 中文:
 定理 isOpen_iUnion
-  条件: {f : ι -> Set X} (h : 对任意 i, IsOpen (f i))
-  结论: IsOpen (⋃ i, f i)
+  条件: {f : ι -> 集合 X} (h : 对任意 i, 是开集 (f i))
+  结论: 是开集 (⋃ i, f i)
   证明: isOpen_sUnion (forall_mem_range.2 h)
 
 Depends on / 依赖: forall_mem_range, isOpen_sUnion
@@ -181,7 +181,7 @@ theorem isOpen_biUnion
 
 中文:
 定理 isOpen_biUnion
-  条件: {s : Set α} {f : α -> Set X} (h : 对任意 i in s, IsOpen (f i))
+  条件: {s : 集合 α} {f : α -> 集合 X} (h : 对任意 i in s, 是开集 (f i))
   证明: isOpen_iUnion fun i => isOpen_iUnion fun hi => h i hi
 
 Depends on / 依赖: isOpen_iUnion
@@ -201,9 +201,9 @@ theorem IsOpen.union
   rw [union_eq_iUnion]; exact isOpen_iUnion (Bool.forall_bool.2 ⟨h₂, h₁⟩)
 
 中文:
-定理 IsOpen.union
-  条件: (h₁ : IsOpen s₁) (h₂ : IsOpen s₂)
-  结论: IsOpen (s₁ union s₂)
+定理 是开集.union
+  条件: (h₁ : 是开集 s₁) (h₂ : 是开集 s₂)
+  结论: 是开集 (s₁ union s₂)
   证明: by
   rw [union_eq_iUnion]; exact isOpen_iUnion (Bool.forall_bool.2 ⟨h₂, h₁⟩)
 
@@ -225,7 +225,7 @@ lemma isOpen_iff_of_cover
 
 中文:
 引理 isOpen_iff_of_cover
-  条件: {f : α -> Set X} (ho : 对任意 i, IsOpen (f i)) (hU : (⋃ i, f i) = univ)
+  条件: {f : α -> 集合 X} (ho : 对任意 i, 是开集 (f i)) (hU : (⋃ i, f i) = univ)
   证明: by
   refine ⟨fun h i => (ho i).inter h, fun h => ?_⟩
   rw [← s.inter_univ]; rw [inter_comm]; rw [← hU]; rw [iUnion_inter]
@@ -250,7 +250,7 @@ theorem isOpen_empty
 
 中文:
 定理 isOpen_empty
-  结论: IsOpen (∅ : Set X)
+  结论: 是开集 (∅ : 集合 X)
   证明: by
   rw [← sUnion_empty]; exact isOpen_sUnion fun a => False.elim
 -/
@@ -271,8 +271,8 @@ theorem Set.Finite.isOpen_sInter
     exact h.1.inter (ih h.2)
 
 中文:
-定理 Set.Finite.isOpen_sInter
-  条件: {s : Set (Set X)} (hs : s.Finite) (h : 对任意 t in s, IsOpen t)
+定理 集合.有限.isOpen_s整数er
+  条件: {s : 集合 (集合 X)} (hs : s.有限) (h : 对任意 t in s, 是开集 t)
   证明: by
   induction s, hs using Set.Finite.induction_on with
   | empty => rw [sInter_empty]; exact isOpen_univ
@@ -299,8 +299,8 @@ theorem Set.Finite.isOpen_biInter
   proof: sInter_image f s ▸ (hs.image _).isOpen_sInter (forall_mem_image.2 h)
 
 中文:
-定理 Set.Finite.isOpen_biInter
-  结论: {s : Set α} {f : α -> Set X} (hs : s.Finite)
+定理 集合.有限.isOpen_bi整数er
+  结论: {s : 集合 α} {f : α -> 集合 X} (hs : s.有限)
   证明: sInter_image f s ▸ (hs.image _).isOpen_sInter (forall_mem_image.2 h)
 
 Depends on / 依赖: forall_mem_image, hs.image, isOpen_sInter, sInter_image
@@ -319,8 +319,8 @@ theorem isOpen_iInter_of_finite
   proof: (finite_range _).isOpen_sInter (forall_mem_range.2 h)
 
 中文:
-定理 isOpen_iInter_of_finite
-  条件: [Finite ι] {s : ι -> Set X} (h : 对任意 i, IsOpen (s i))
+定理 isOpen_i整数er_of_finite
+  条件: [有限 ι] {s : ι -> 集合 X} (h : 对任意 i, 是开集 (s i))
   证明: (finite_range _).isOpen_sInter (forall_mem_range.2 h)
 
 Depends on / 依赖: finite_range, forall_mem_range, isOpen_sInter
@@ -340,8 +340,8 @@ theorem isOpen_biInter_finset
 @[simp]
 
 中文:
-定理 isOpen_biInter_finset
-  条件: {s : Finset α} {f : α -> Set X} (h : 对任意 i in s, IsOpen (f i))
+定理 isOpen_bi整数er_finset
+  条件: {s : 有限集 α} {f : α -> 集合 X} (h : 对任意 i in s, 是开集 (f i))
   证明: s.finite_toSet.isOpen_biInter h
 
 @[simp]
@@ -365,7 +365,7 @@ theorem isOpen_const
 中文:
 定理 isOpen_const
   条件: {p : 命题}
-  结论: IsOpen { _x : X | p }
+  结论: 是开集 { _x : X | p }
   证明: by by_cases p <;> simp [*]
 -/
 theorem isOpen_const {p : Prop} : IsOpen { _x : X | p } := by by_cases p <;> simp [*]
@@ -379,8 +379,8 @@ theorem IsOpen.and
   proof: IsOpen.inter
 
 中文:
-定理 IsOpen.and
-  结论: IsOpen { x | p₁ x } -> IsOpen { x | p₂ x } -> IsOpen { x | p₁ x ∧ p₂ x }
+定理 是开集.and
+  结论: 是开集 { x | p₁ x } -> 是开集 { x | p₂ x } -> 是开集 { x | p₁ x ∧ p₂ x }
   证明: IsOpen.inter
 
 Depends on / 依赖: IsOpen, IsOpen.inter
@@ -398,7 +398,7 @@ theorem isOpen_compl_iff
 
 中文:
 定理 isOpen_compl_iff
-  结论: IsOpen sᶜ ↔ IsClosed s
+  结论: 是开集 sᶜ ↔ 是闭集 s
   证明: ⟨fun h => ⟨h⟩, fun h => h.isOpen_compl⟩
 -/
 @[simp] theorem isOpen_compl_iff : IsOpen sᶜ ↔ IsClosed s :=
@@ -417,8 +417,8 @@ theorem TopologicalSpace.ext_iff_isClosed
 alias ⟨_, TopologicalSpace.ext_isClosed⟩ := TopologicalSpace.ext_iff_isClosed
 
 中文:
-定理 TopologicalSpace.ext_iff_isClosed
-  条件: {X} {t₁ t₂ : TopologicalSpace X}
+定理 拓扑空间.ext_iff_isClosed
+  条件: {X} {t₁ t₂ : 拓扑空间 X}
   证明: by
   rw [TopologicalSpace.ext_iff]; rw [compl_surjective.forall]
   simp only [@isOpen_compl_iff _ _ t₁, @isOpen_compl_iff _ _ t₂]
@@ -448,7 +448,7 @@ theorem isClosed_const
 中文:
 定理 isClosed_const
   条件: {p : 命题}
-  结论: IsClosed { _x : X | p }
+  结论: 是闭集 { _x : X | p }
   证明: ⟨isOpen_const (p := ¬p)⟩
 
 @[simp, closedness ., grind .]
@@ -470,7 +470,7 @@ theorem isClosed_empty
 
 中文:
 定理 isClosed_empty
-  结论: IsClosed (∅ : Set X)
+  结论: 是闭集 (∅ : 集合 X)
   证明: isClosed_const
 
 @[simp, closedness ., grind .]
@@ -492,7 +492,7 @@ theorem isClosed_univ
 
 中文:
 定理 isClosed_univ
-  结论: IsClosed (univ : Set X)
+  结论: 是闭集 (univ : 集合 X)
   证明: isClosed_const
 
 @[closedness .]
@@ -514,8 +514,8 @@ lemma IsOpen.isLocallyClosed
 @[closedness .]
 
 中文:
-引理 IsOpen.isLocallyClosed
-  条件: (hs : IsOpen s)
+引理 是开集.isLocallyClosed
+  条件: (hs : 是开集 s)
   结论: IsLocallyClosed s
   证明: ⟨_, _, hs, isClosed_univ, (inter_univ _).symm⟩
 
@@ -539,8 +539,8 @@ lemma IsClosed.isLocallyClosed
 @[closedness .]
 
 中文:
-引理 IsClosed.isLocallyClosed
-  条件: (hs : IsClosed s)
+引理 是闭集.isLocallyClosed
+  条件: (hs : 是闭集 s)
   结论: IsLocallyClosed s
   证明: ⟨_, _, isOpen_univ, hs, (univ_inter _).symm⟩
 
@@ -564,8 +564,8 @@ theorem IsClosed.union
 @[closedness .]
 
 中文:
-定理 IsClosed.union
-  结论: IsClosed s₁ -> IsClosed s₂ -> IsClosed (s₁ union s₂)
+定理 是闭集.union
+  结论: 是闭集 s₁ -> 是闭集 s₂ -> 是闭集 (s₁ union s₂)
   证明: by
   simpa only [← isOpen_compl_iff, compl_union] using IsOpen.inter
 
@@ -590,9 +590,9 @@ theorem isClosed_sInter
 @[closedness .]
 
 中文:
-定理 isClosed_sInter
-  条件: {s : Set (Set X)}
-  结论: (对任意 t in s, IsClosed t) -> IsClosed (⋂₀ s)
+定理 isClosed_s整数er
+  条件: {s : 集合 (集合 X)}
+  结论: (对任意 t in s, 是闭集 t) -> 是闭集 (⋂₀ s)
   证明: by
   simpa only [← isOpen_compl_iff, compl_sInter, sUnion_image] using isOpen_biUnion
 
@@ -614,9 +614,9 @@ theorem isClosed_iInter
   proof: isClosed_sInter forall_mem_range.2 h
 
 中文:
-定理 isClosed_iInter
-  条件: {f : ι -> Set X} (h : 对任意 i, IsClosed (f i))
-  结论: IsClosed (⋂ i, f i)
+定理 isClosed_i整数er
+  条件: {f : ι -> 集合 X} (h : 对任意 i, 是闭集 (f i))
+  结论: 是闭集 (⋂ i, f i)
   证明: isClosed_sInter forall_mem_range.2 h
 
 Depends on / 依赖: forall_mem_range, isClosed_sInter
@@ -635,8 +635,8 @@ theorem isClosed_biInter
 @[simp]
 
 中文:
-定理 isClosed_biInter
-  条件: {s : Set α} {f : α -> Set X} (h : 对任意 i in s, IsClosed (f i))
+定理 isClosed_bi整数er
+  条件: {s : 集合 α} {f : α -> 集合 X} (h : 对任意 i in s, 是闭集 (f i))
   证明: isClosed_iInter fun i => isClosed_iInter h i
 
 @[simp]
@@ -662,8 +662,8 @@ alias ⟨_, IsOpen.isClosed_compl⟩ := isClosed_compl_iff
 
 中文:
 定理 isClosed_compl_iff
-  条件: {s : Set X}
-  结论: IsClosed sᶜ ↔ IsOpen s
+  条件: {s : 集合 X}
+  结论: 是闭集 sᶜ ↔ 是开集 s
   证明: by
   rw [← isOpen_compl_iff]; rw [compl_compl]
 
@@ -688,9 +688,9 @@ theorem IsOpen.sdiff
 @[closedness .]
 
 中文:
-定理 IsOpen.sdiff
-  条件: (h₁ : IsOpen s) (h₂ : IsClosed t)
-  结论: IsOpen (s \ t)
+定理 是开集.sdiff
+  条件: (h₁ : 是开集 s) (h₂ : 是闭集 t)
+  结论: 是开集 (s \ t)
   证明: IsOpen.inter h₁ h₂.isOpen_compl
 
 @[closedness .]
@@ -716,9 +716,9 @@ theorem IsClosed.inter
 @[closedness .]
 
 中文:
-定理 IsClosed.inter
-  条件: (h₁ : IsClosed s₁) (h₂ : IsClosed s₂)
-  结论: IsClosed (s₁ inter s₂)
+定理 是闭集.inter
+  条件: (h₁ : 是闭集 s₁) (h₂ : 是闭集 s₂)
+  结论: 是闭集 (s₁ inter s₂)
   证明: by
   rw [← isOpen_compl_iff] at *
   rw [compl_inter]
@@ -744,9 +744,9 @@ theorem IsClosed.sdiff
   proof: IsClosed.inter h₁ (isClosed_compl_iff.mpr h₂)
 
 中文:
-定理 IsClosed.sdiff
-  条件: (h₁ : IsClosed s) (h₂ : IsOpen t)
-  结论: IsClosed (s \ t)
+定理 是闭集.sdiff
+  条件: (h₁ : 是闭集 s) (h₂ : 是开集 t)
+  结论: 是闭集 (s \ t)
   证明: IsClosed.inter h₁ (isClosed_compl_iff.mpr h₂)
 
 Depends on / 依赖: IsClosed, IsClosed.inter, isClosed_compl_iff, isClosed_compl_iff.mpr
@@ -765,8 +765,8 @@ theorem Set.Finite.isClosed_biUnion
   exact hs.isOpen_biInter h
 
 中文:
-定理 Set.Finite.isClosed_biUnion
-  结论: {s : Set α} {f : α -> Set X} (hs : s.Finite)
+定理 集合.有限.isClosed_biUnion
+  结论: {s : 集合 α} {f : α -> 集合 X} (hs : s.有限)
   证明: by
   simp only [← isOpen_compl_iff, compl_iUnion] at *
   exact hs.isOpen_biInter h
@@ -791,7 +791,7 @@ lemma isClosed_biUnion_finset
 
 中文:
 引理 isClosed_biUnion_finset
-  条件: {s : Finset α} {f : α -> Set X} (h : 对任意 i in s, IsClosed (f i))
+  条件: {s : 有限集 α} {f : α -> 集合 X} (h : 对任意 i in s, 是闭集 (f i))
   证明: s.finite_toSet.isClosed_biUnion h
 
 @[closedness .]
@@ -817,7 +817,7 @@ theorem isClosed_iUnion_of_finite
 
 中文:
 定理 isClosed_iUnion_of_finite
-  条件: [Finite ι] {s : ι -> Set X} (h : 对任意 i, IsClosed (s i))
+  条件: [有限 ι] {s : ι -> 集合 X} (h : 对任意 i, 是闭集 (s i))
   证明: by
   simp only [← isOpen_compl_iff, compl_iUnion] at *
   exact isOpen_iInter_of_finite h
@@ -843,7 +843,7 @@ theorem isClosed_imp
 
 中文:
 定理 isClosed_imp
-  条件: {p q : X -> 命题} (hp : IsOpen { x | p x }) (hq : IsClosed { x | q x })
+  条件: {p q : X -> 命题} (hp : 是开集 { x | p x }) (hq : 是闭集 { x | q x })
   证明: by
   simpa only [imp_iff_not_or] using! hp.isClosed_compl.union hq
 
@@ -864,8 +864,8 @@ theorem IsClosed.not
 @[closedness .]
 
 中文:
-定理 IsClosed.not
-  结论: IsClosed { a | p a } -> IsOpen { a | ¬p a }
+定理 是闭集.not
+  结论: 是闭集 { a | p a } -> 是开集 { a | ¬p a }
   证明: isOpen_compl_iff.mpr
 
 @[closedness .]
@@ -884,7 +884,7 @@ theorem IsClosed.and
   proof: IsClosed.inter
 
 中文:
-定理 IsClosed.and
+定理 是闭集.and
   证明: IsClosed.inter
 
 Depends on / 依赖: IsClosed, IsClosed.inter
@@ -916,7 +916,7 @@ theorem le_nhds_lim
 
 中文:
 定理 le_nhds_lim
-  条件: {f : Filter X} (h : 存在 x, f <= 𝓝 x)
+  条件: {f : 滤子 X} (h : 存在 x, f <= 𝓝 x)
   结论: f <= 𝓝 (@lim _ _ h.nonempty f)
   证明: Classical.epsilon_spec h
 
@@ -935,7 +935,7 @@ theorem tendsto_nhds_limUnder
 
 中文:
 定理 tendsto_nhds_limUnder
-  条件: {f : Filter α} {g : α -> X} (h : 存在 x, Tendsto g f (𝓝 x))
+  条件: {f : 滤子 α} {g : α -> X} (h : 存在 x, 收敛 g f (𝓝 x))
   证明: le_nhds_lim h
 
 Depends on / 依赖: le_nhds_lim
@@ -956,7 +956,7 @@ theorem limUnder_of_not_tendsto
 
 中文:
 定理 limUnder_of_not_tendsto
-  结论: [hX : Nonempty X] {f : Filter α} {g : α -> X}
+  结论: [hX : 非空 X] {f : 滤子 α} {g : α -> X}
   证明: by
   simp_rw [Tendsto] at h
   simp_rw [limUnder, lim, Classical.epsilon, Classical.strongIndefiniteDescription, dif_neg h]

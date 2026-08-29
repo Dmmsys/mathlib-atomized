@@ -93,7 +93,7 @@ definition toStonean
 
 中文:
 定义 toStonean
-  签名: (X : CompHaus.{u}) [Projective X]
+  签名: (X : CompHaus.{u}) [投射 X]
   定义体: X.toTop
   prop := inferInstance
 
@@ -136,7 +136,7 @@ abbreviation fullyFaithfulToCompHaus
 
 中文:
 缩写 fullyFaithfulToCompHaus
-  签名: : toCompHaus.FullyFaithful
+  签名: : toCompHaus.满忠实
   定义体: CompHausLike.fullyFaithfulToCompHausLike _
 
 Depends on / 依赖: CompHausLike, CompHausLike.fullyFaithfulToCompHausLike, fullyFaithfulToCompHausLike
@@ -160,7 +160,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [TopologicalSpace X] [CompactSpace X] [T2Space X]
+  签名: (X : 类型) [拓扑空间 X] [紧空间 X] [T2空间 X]
   定义体: CompHausLike.of _ X
 
 Depends on / 依赖: CompHausLike, CompHausLike.of
@@ -203,7 +203,7 @@ definition mkFinite
 
 中文:
 定义 mkFinite
-  签名: (X : 类型) [Finite X] [TopologicalSpace X] [DiscreteTopology X]
+  签名: (X : 类型) [有限 X] [拓扑空间 X] [离散拓扑 X]
   定义体: (CompHaus.of X).toTop
   prop := by
     dsimp
@@ -464,7 +464,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f]
+  签名: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [满态射 f]
   定义体: Projective.factorThru e f
 
 @[simp, reassoc]
@@ -486,7 +486,7 @@ lemma lift_lifts
 
 中文:
 引理 lift_lifts
-  条件: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f]
+  条件: {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [满态射 f]
   证明: by simp [lift]
 -/
 lemma lift_lifts {X Y : CompHaus} {Z : Stonean} (e : Z.compHaus ⟶ Y) (f : X ⟶ Y) [Epi f] :
@@ -635,7 +635,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y) [Epi f]
+  签名: {X Y : Profinite} {Z : Stonean} (e : Stonean.toProfinite.obj Z ⟶ Y) (f : X ⟶ Y) [满态射 f]
   定义体: Projective.factorThru e f
 
 @[simp, reassoc]

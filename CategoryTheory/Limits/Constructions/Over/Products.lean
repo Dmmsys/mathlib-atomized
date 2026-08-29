@@ -113,8 +113,8 @@ definition IsLimit.pullbackConeEquivBinaryFanFunctor
   
 
 中文:
-定义 IsLimit.pullbackConeEquivBinaryFanFunctor
-  签名: {c : PullbackCone f g} (hc : IsLimit c)
+定义 是极限.pullbackConeEquivBinaryFanFunctor
+  签名: {c : PullbackCone f g} (hc : 是极限 c)
   定义体: BinaryFan.isLimitMk
     -- TODO: Drop `BinaryFan.IsLimit.lift'`. Instead provide the lemmas it bundles separately.
     -- TODO: Define `abbrev BinaryFan.IsLimit (c : BinaryFan X Y) := IsLimit c` for dot notation?
@@ -154,8 +154,8 @@ definition IsLimit.pullbackConeEquivBinaryFanInverse
       change PullbackC
 
 中文:
-定义 IsLimit.pullbackConeEquivBinaryFanInverse
-  签名: {c : BinaryFan (Over.mk f) (.mk g)} (hc : IsLimit c)
+定义 是极限.pullbackConeEquivBinaryFanInverse
+  签名: {c : BinaryFan (Over.mk f) (.mk g)} (hc : 是极限 c)
   定义体: PullbackCone.IsLimit.mk
     (c.fst.w.trans c.snd.w.symm)
     (fun s => (hc.lift <| pullbackConeEquivBinaryFan.functor.obj s).left)
@@ -247,8 +247,8 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanFunctor
 
 
 中文:
-定义 IsColimit.pushoutCoconeEquivBinaryCofanFunctor
-  签名: {c : PushoutCocone f g} (hc : IsColimit c)
+定义 是余极限.pushoutCoconeEquivBinaryCofanFunctor
+  签名: {c : PushoutCocone f g} (hc : 是余极限 c)
   定义体: BinaryCofan.isColimitMk
     (fun s => Under.homMk
 (hc.desc (PushoutCocone.mk s.inl.right s.inr.right (s.inl.w.trans s.inr.w.symm))) by
@@ -291,7 +291,7 @@ definition IsColimit.pushoutCoconeEquivBinaryCofanInverse
       change 
 
 中文:
-定义 IsColimit.pushoutCoconeEquivBinaryCofanInverse
+定义 是余极限.pushoutCoconeEquivBinaryCofanInverse
   签名: {c : BinaryCofan (Under.mk f) (.mk g)}
   定义体: PushoutCocone.IsColimit.mk
     (c.inl.w.trans c.inr.w.symm)
@@ -337,7 +337,7 @@ lemma isPullback_of_binaryFan_isLimit
 
 中文:
 引理 isPullback_of_binaryFan_isLimit
-  条件: (c : BinaryFan Y Z) (hc : IsLimit c)
+  条件: (c : BinaryFan Y Z) (hc : 是极限 c)
   证明: ⟨by simp, ⟨hc.pullbackConeEquivBinaryFanInverse⟩⟩
 
 Depends on / 依赖: hc.pullbackConeEquivBinaryFanInverse, pullbackConeEquivBinaryFanInverse
@@ -463,7 +463,7 @@ abbreviation widePullbackDiagramOfDiagramOver
 
 中文:
 缩写 widePullbackDiagramOfDiagramOver
-  签名: (B : C) {J : Type w} (F : Discrete J ⥤ Over B)
+  签名: (B : C) {J : 类型 w} (F : 离散 J ⥤ Over B)
   定义体: WidePullbackShape.wideCospan B (fun j => (F.obj ⟨j⟩).left) fun j => (F.obj ⟨j⟩).hom
 
 Depends on / 依赖: F.obj, WidePullbackShape, WidePullbackShape.wideCospan, wideCospan
@@ -491,7 +491,7 @@ definition conesEquivInverseObj
 
 中文:
 定义 conesEquivInverseObj
-  签名: (B : C) {J : Type w} (F : Discrete J ⥤ Over B) (c : Cone F)
+  签名: (B : C) {J : 类型 w} (F : 离散 J ⥤ Over B) (c : 锥 F)
   定义体: c.pt.left
   π :=
     { app := fun X => Option.casesOn X c.pt.hom fun j : J => (c.π.app ⟨j⟩).left
@@ -535,7 +535,7 @@ definition conesEquivInverse
 
 中文:
 定义 conesEquivInverse
-  签名: (B : C) {J : Type w} (F : Discrete J ⥤ Over B)
+  签名: (B : C) {J : 类型 w} (F : 离散 J ⥤ Over B)
   定义体: conesEquivInverseObj B F
   map f :=
     { hom := f.hom.left
@@ -581,7 +581,7 @@ definition conesEquivFunctor
 
 中文:
 定义 conesEquivFunctor
-  签名: (B : C) {J : Type w} (F : Discrete J ⥤ Over B)
+  签名: (B : C) {J : 类型 w} (F : 离散 J ⥤ Over B)
   定义体: { pt := Over.mk (c.π.app none)
       π :=
         { app := fun ⟨j⟩ => Over.homMk (c.π.app (some j)) (c.w (WidePullbackShape.Hom.term j))
@@ -623,7 +623,7 @@ definition conesEquivUnitIso
 
 中文:
 定义 conesEquivUnitIso
-  签名: (B : C) (F : Discrete J ⥤ Over B)
+  签名: (B : C) (F : 离散 J ⥤ Over B)
   定义体: NatIso.ofComponents fun _ => Cone.ext
     { hom := 𝟙 _
       inv := 𝟙 _ }
@@ -657,7 +657,7 @@ definition conesEquivCounitIso
 
 中文:
 定义 conesEquivCounitIso
-  签名: (B : C) (F : Discrete J ⥤ Over B)
+  签名: (B : C) (F : 离散 J ⥤ Over B)
   定义体: NatIso.ofComponents fun _ => Cone.ext
     { hom := Over.homMk (𝟙 _)
       inv := Over.homMk (𝟙 _) }
@@ -688,7 +688,7 @@ definition conesEquiv
 
 中文:
 定义 conesEquiv
-  签名: (B : C) (F : Discrete J ⥤ Over B)
+  签名: (B : C) (F : 离散 J ⥤ Over B)
   定义体: conesEquivFunctor B F
   inverse := conesEquivInverse B F
   unitIso := conesEquivUnitIso B F
@@ -716,7 +716,7 @@ theorem has_over_limit_discrete_of_widePullback_limit
 
 中文:
 定理 has_over_limit_discrete_of_widePullback_limit
-  结论: {B : C} (F : Discrete J ⥤ Over B)
+  结论: {B : C} (F : 离散 J ⥤ Over B)
   证明: HasLimit.mk
     { cone := _
       isLimit := IsLimit.ofRightAdjoint (conesEquiv B F).symm.toAdjunction
@@ -741,7 +741,7 @@ theorem over_product_of_widePullback
 
 中文:
 定理 over_product_of_widePullback
-  条件: [HasLimitsOfShape (WidePullbackShape J) C] {B : C}
+  条件: [有形状极限 (WidePullbackShape J) C] {B : C}
   证明: { has_limit := fun F => has_over_limit_discrete_of_widePullback_limit F }
 
 Depends on / 依赖: has_limit, has_over_limit_discrete_of_widePullback_limit
@@ -761,7 +761,7 @@ theorem over_binaryProduct_of_pullback
 
 中文:
 定理 over_binaryProduct_of_pullback
-  条件: [HasPullbacks C] {B : C}
+  条件: [有Pullbacks C] {B : C}
   结论: HasBinaryProducts (Over B)
   证明: over_product_of_widePullback
 
@@ -799,7 +799,7 @@ theorem over_finiteProducts_of_finiteWidePullbacks
 
 中文:
 定理 over_finiteProducts_of_finiteWidePullbacks
-  条件: [HasFiniteWidePullbacks C] {B : C}
+  条件: [有FiniteWidePullbacks C] {B : C}
   证明: ⟨fun _ => over_product_of_widePullback⟩
 
 Depends on / 依赖: over_product_of_widePullback
@@ -832,7 +832,7 @@ theorem over_hasTerminal
 中文:
 定理 over_hasTerminal
   条件: (B : C)
-  结论: HasTerminal (Over B) where
+  结论: 有终止 (Over B) where
   证明: HasLimit.mk
     { cone :=
         { pt := Over.mk (𝟙 _)

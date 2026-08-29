@@ -45,7 +45,7 @@ lemma toAddSubgroup_index_eq_pow_mul_prod
 
 中文:
 引理 toAddSubgroup_index_eq_pow_mul_prod
-  结论: [Module R M] {N : Submodule R M}
+  结论: [模 R M] {N : 子模 R M}
   证明: by
   classical
   rcases snf with ⟨bM, bN, f, a, snf⟩
@@ -187,7 +187,7 @@ lemma toAddSubgroup_index_eq_ite
 
 中文:
 引理 toAddSubgroup_index_eq_ite
-  结论: [Infinite R] [Module R M] {N : Submodule R M}
+  结论: [无限 R] [模 R M] {N : 子模 R M}
   证明: by
   rw [snf.toAddSubgroup_index_eq_pow_mul_prod]
   split_ifs with h
@@ -228,7 +228,7 @@ lemma toAddSubgroup_index_ne_zero_iff
 
 中文:
 引理 toAddSubgroup_index_ne_zero_iff
-  条件: {N : Submodule 整数 M} (snf : Basis.SmithNormalForm N ι n)
+  条件: {N : 子模 整数 M} (snf : 基.SmithNormalForm N ι n)
   证明: by
   rw [snf.toAddSubgroup_index_eq_ite]
   rcases snf with ⟨bM, bN, f, a, snf⟩
@@ -281,7 +281,7 @@ obtain ⟨n, snf⟩ := N.smithNormalForm .ofEquivFun .refl ..
 
 中文:
 引理 submodule_toAddSubgroup_index_ne_zero_iff
-  条件: {N : Submodule 整数 (ι -> 整数)}
+  条件: {N : 子模 整数 (ι -> 整数)}
   证明: by
 obtain ⟨n, snf⟩ := N.smithNormalForm .ofEquivFun .refl ..
   have := Fintype.ofFinite ι
@@ -318,7 +318,7 @@ lemma addSubgroup_index_ne_zero_iff
 
 中文:
 引理 addSubgroup_index_ne_zero_iff
-  条件: {H : AddSubgroup (ι -> 整数)}
+  条件: {H : 加法子群 (ι -> 整数)}
   证明: by
   convert! submodule_toAddSubgroup_index_ne_zero_iff (N := AddSubgroup.toIntSubmodule H) using 1
   exact ⟨fun ⟨e⟩ => ⟨e.toIntLinearEquiv⟩, fun ⟨e⟩ => ⟨e.toAddEquiv⟩⟩
@@ -346,7 +346,7 @@ lemma subgroup_index_ne_zero_iff
 
 中文:
 引理 subgroup_index_ne_zero_iff
-  条件: {H : Subgroup (ι -> Multiplicative 整数)}
+  条件: {H : 子群 (ι -> Multiplicative 整数)}
   证明: by
   let em : Multiplicative (ι -> Int) ≃* (ι -> Multiplicative Int) :=
     MulEquiv.funMultiplicative _ _

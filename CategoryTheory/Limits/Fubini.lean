@@ -64,8 +64,8 @@ structure DiagramOfCones
 结构 DiagramOfCones
   参数: where
   公理与运算 (4 个):
-    - obj : 对任意 j : J, Cone (F.obj j)
-    - map : 对任意 {j j' : J} (f : j ⟶ j'), (Cone.postcompose (F.map f)).obj (obj j) ⟶ obj j'
+    - obj : 对任意 j : J, 锥 (F.obj j)
+    - map : 对任意 {j j' : J} (f : j ⟶ j'), (锥.postcompose (F.map f)).obj (obj j) ⟶ obj j'
     - id : 对任意 j : J, (map (𝟙 j)).hom = 𝟙 _  [默认: by cat_disch]
     - comp : 对任意 {j₁ j₂ j₃ : J} (f : j₁ ⟶ j₂) (g : j₂ ⟶ j₃), (map (f ≫ g)).hom = (map f).hom ≫ (map g).hom  [默认: by cat_disch]
 
@@ -96,8 +96,8 @@ structure DiagramOfCocones
 结构 DiagramOfCocones
   参数: where
   公理与运算 (4 个):
-    - obj : 对任意 j : J, Cocone (F.obj j)
-    - map : 对任意 {j j' : J} (f : j ⟶ j'), (obj j) ⟶ (Cocone.precompose (F.map f)).obj (obj j')
+    - obj : 对任意 j : J, 余锥 (F.obj j)
+    - map : 对任意 {j j' : J} (f : j ⟶ j'), (obj j) ⟶ (余锥.precompose (F.map f)).obj (obj j')
     - id : 对任意 j : J, (map (𝟙 j)).hom = 𝟙 _  [默认: by cat_disch]
     - comp : 对任意 {j₁ j₂ j₃ : J} (f : j₁ ⟶ j₂) (g : j₂ ⟶ j₃), (map (f ≫ g)).hom = (map f).hom ≫ (map g).hom  [默认: by cat_disch]
 
@@ -200,7 +200,7 @@ definition coneOfConeUncurry
 
 中文:
 定义 coneOfConeUncurry
-  签名: {D : DiagramOfCones F} (Q : 对任意 j, IsLimit (D.obj j))
+  签名: {D : DiagramOfCones F} (Q : 对任意 j, 是极限 (D.obj j))
   定义体: c.pt
   π :=
     { app := fun j =>
@@ -250,7 +250,7 @@ definition coneOfConeCurry
 
 中文:
 定义 coneOfConeCurry
-  签名: {D : DiagramOfCones (curry.obj G)} (Q : 对任意 j, IsLimit (D.obj j))
+  签名: {D : DiagramOfCones (curry.obj G)} (Q : 对任意 j, 是极限 (D.obj j))
   定义体: c.pt
   π :=
     { app j := (Q j).lift
@@ -296,7 +296,7 @@ definition coconeOfCoconeUncurry
 
 中文:
 定义 coconeOfCoconeUncurry
-  签名: {D : DiagramOfCocones F} (Q : 对任意 j, IsColimit (D.obj j))
+  签名: {D : DiagramOfCocones F} (Q : 对任意 j, 是余极限 (D.obj j))
   定义体: c.pt
   ι :=
     { app := fun j =>
@@ -361,7 +361,7 @@ definition coconeOfCoconeCurry
 
 中文:
 定义 coconeOfCoconeCurry
-  签名: {D : DiagramOfCocones (curry.obj G)} (Q : 对任意 j, IsColimit (D.obj j))
+  签名: {D : DiagramOfCocones (curry.obj G)} (Q : 对任意 j, 是余极限 (D.obj j))
   定义体: c.pt
   ι :=
     { app j := (Q j).desc
@@ -400,7 +400,7 @@ definition coneOfConeUncurryIsLimit
 
 中文:
 定义 coneOfConeUncurryIsLimit
-  签名: {D : DiagramOfCones F} (Q : 对任意 j, IsLimit (D.obj j))
+  签名: {D : DiagramOfCones F} (Q : 对任意 j, 是极限 (D.obj j))
   定义体: P.lift
       { pt := s.pt
         π :=
@@ -467,8 +467,8 @@ definition IsLimit.ofConeOfConeUncurry
         { app j
 
 中文:
-定义 IsLimit.ofConeOfConeUncurry
-  签名: {D : DiagramOfCones F} (Q : 对任意 j, IsLimit (D.obj j))
+定义 是极限.ofConeOfConeUncurry
+  签名: {D : DiagramOfCones F} (Q : 对任意 j, 是极限 (D.obj j))
   定义体: -- These constructions are used in various fields of the proof so we abstract them here.
   letI E (j : J) : Prod.sectR j K ⋙ uncurry.obj F ≅ F.obj j :=
     NatIso.ofComponents (fun _ => Iso.refl _)
@@ -528,7 +528,7 @@ definition coconeOfCoconeUncurryIsColimit
 
 中文:
 定义 coconeOfCoconeUncurryIsColimit
-  签名: {D : DiagramOfCocones F} (Q : 对任意 j, IsColimit (D.obj j))
+  签名: {D : DiagramOfCocones F} (Q : 对任意 j, 是余极限 (D.obj j))
   定义体: P.desc
       { pt := s.pt
         ι :=
@@ -594,7 +594,7 @@ definition IsColimit.ofCoconeUncurry
        
 
 中文:
-定义 IsColimit.ofCoconeUncurry
+定义 是余极限.ofCoconeUncurry
   签名: {D : DiagramOfCocones F}
   定义体: -- These constructions are used in various fields of the proof so we abstract them here.
   letI E (j : J) : (Prod.sectR j K ⋙ uncurry.obj F ≅ F.obj j) :=
@@ -681,7 +681,7 @@ instance diagramOfConesInhabited
 
 中文:
 实例 diagramOfConesInhabited
-  签名: : Inhabited (DiagramOfCones F)
+  签名: : 可居 (DiagramOfCones F)
   定义体: ⟨DiagramOfCones.mkOfHasLimits F⟩
 
 @[simp]
@@ -730,7 +730,7 @@ definition coneOfHasLimitCurryCompLim
 
 中文:
 定义 coneOfHasLimitCurryCompLim
-  签名: : Cone G
+  签名: : 锥 G
   定义体: let Q : DiagramOfCones (curry.obj G) := .mkOfHasLimits _
   { pt := limit (curry.obj G ⋙ lim),
     π :=
@@ -772,7 +772,7 @@ definition isLimitConeOfHasLimitCurryCompLim
 
 中文:
 定义 isLimitConeOfHasLimitCurryCompLim
-  签名: : IsLimit (coneOfHasLimitCurryCompLim G)
+  签名: : 是极限 (coneOfHasLimitCurryCompLim G)
   定义体: let Q : DiagramOfCones (curry.obj G) := .mkOfHasLimits _
   let Q' : forall j, IsLimit (Q.obj j) := fun j => limit.isLimit _
   { lift c' := limit.lift (F := curry.obj G ⋙ lim) (coneOfConeCurry G Q' c')
@@ -803,7 +803,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimit G
+  签名: 有极限 G
   定义体: ⟨ { cone := coneOfHasLimitCurryCompLim G
         isLimit := isLimitConeOfHasLimitCurryCompLim G }⟩
 
@@ -956,7 +956,7 @@ instance diagramOfCoconesInhabited
 
 中文:
 实例 diagramOfCoconesInhabited
-  签名: : Inhabited (DiagramOfCocones F)
+  签名: : 可居 (DiagramOfCocones F)
   定义体: ⟨DiagramOfCocones.mkOfHasColimits F⟩
 
 @[simp]
@@ -1005,7 +1005,7 @@ definition coconeOfHasColimitCurryCompColim
 
 中文:
 定义 coconeOfHasColimitCurryCompColim
-  签名: : Cocone G
+  签名: : 余锥 G
   定义体: let Q : DiagramOfCocones (curry.obj G) := .mkOfHasColimits _
   { pt := colimit (curry.obj G ⋙ colim),
     ι :=
@@ -1077,7 +1077,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit G
+  签名: 有余极限 G
   定义体: ⟨ { cocone := coconeOfHasColimitCurryCompColim G
         isColimit := isColimitCoconeOfHasColimitCurryCompColim G }⟩
 

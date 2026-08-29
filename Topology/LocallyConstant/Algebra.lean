@@ -36,8 +36,8 @@ instance [One
 @[to_additive (attr := simp)]
 
 中文:
-实例 [One
-  签名: Y] : One (LocallyConstant X Y) where one
+实例 [幺
+  签名: Y] : 幺 (局部常数 X Y) where one
   定义体: const X 1
 
 @[to_additive (attr := simp)]
@@ -58,8 +58,8 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: [One Y]
-  结论: ⇑(1 : LocallyConstant X Y) = (1 : X -> Y)
+  条件: [幺 Y]
+  结论: ⇑(1 : 局部常数 X Y) = (1 : X -> Y)
   证明: rfl
 
 @[to_additive]
@@ -81,8 +81,8 @@ theorem one_apply
 
 中文:
 定理 one_apply
-  条件: [One Y] (x : X)
-  结论: (1 : LocallyConstant X Y) x = 1
+  条件: [幺 Y] (x : X)
+  结论: (1 : 局部常数 X Y) x = 1
   证明: rfl
 
 @[to_additive]
@@ -102,8 +102,8 @@ instance [Inv
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Inv
-  签名: Y] : Inv (LocallyConstant X Y) where inv f
+实例 [取逆
+  签名: Y] : 取逆 (局部常数 X Y) where inv f
   定义体: ⟨f⁻¹, f.isLocallyConstant.inv⟩
 
 @[to_additive (attr := simp)]
@@ -126,8 +126,8 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv Y] (f : LocallyConstant X Y)
-  结论: ⇑(f⁻¹ : LocallyConstant X Y) = (f : X -> Y)⁻¹
+  条件: [取逆 Y] (f : 局部常数 X Y)
+  结论: ⇑(f⁻¹ : 局部常数 X Y) = (f : X -> Y)⁻¹
   证明: rfl
 
 @[to_additive]
@@ -149,7 +149,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: [Inv Y] (f : LocallyConstant X Y) (x : X)
+  条件: [取逆 Y] (f : 局部常数 X Y) (x : X)
   结论: f⁻¹ x = (f x)⁻¹
   证明: rfl
 
@@ -170,8 +170,8 @@ instance [Mul
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Mul
-  签名: Y] : Mul (LocallyConstant X Y) where
+实例 [乘法
+  签名: Y] : 乘法 (局部常数 X Y) where
   定义体: ⟨f * g, f.isLocallyConstant.mul g.isLocallyConstant⟩
 
 @[to_additive (attr := simp)]
@@ -195,7 +195,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul Y] (f g : LocallyConstant X Y)
+  条件: [乘法 Y] (f g : 局部常数 X Y)
   结论: ⇑(f * g) = f * g
   证明: rfl
 
@@ -218,7 +218,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [Mul Y] (f g : LocallyConstant X Y) (x : X)
+  条件: [乘法 Y] (f g : 局部常数 X Y) (x : X)
   结论: (f * g) x = f x * g x
   证明: rfl
 
@@ -237,8 +237,8 @@ instance [MulOneClass
   body: Function.Injective.mulOneClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 中文:
-实例 [MulOneClass
-  签名: Y] : MulOneClass (LocallyConstant X Y)
+实例 [MulOne类
+  签名: Y] : MulOne类 (局部常数 X Y)
   定义体: Function.Injective.mulOneClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulOneClass, Injective, coe_injective, mulOneClass
@@ -260,7 +260,7 @@ definition coeFnMonoidHom
 
 中文:
 定义 coeFnMonoidHom
-  签名: [MulOneClass Y]
+  签名: [MulOne类 Y]
   定义体: DFunLike.coe
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -286,7 +286,7 @@ definition constMonoidHom
 
 中文:
 定义 constMonoidHom
-  签名: [MulOneClass Y]
+  签名: [MulOne类 Y]
   定义体: const X
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -305,8 +305,8 @@ instance [MulZeroClass
   body: Function.Injective.mulZeroClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 中文:
-实例 [MulZeroClass
-  签名: Y] : MulZeroClass (LocallyConstant X Y)
+实例 [乘零类
+  签名: Y] : 乘零类 (局部常数 X Y)
   定义体: Function.Injective.mulZeroClass DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulZeroClass, Injective, coe_injective, mulZeroClass
@@ -323,8 +323,8 @@ instance [MulZeroOneClass
   body: Function.Injective.mulZeroOneClass DFunLike.coe DFunLike.coe_injective rfl rfl fun _ _ => rfl
 
 中文:
-实例 [MulZeroOneClass
-  签名: Y] : MulZeroOneClass (LocallyConstant X Y)
+实例 [乘零幺类
+  签名: Y] : 乘零幺类 (局部常数 X Y)
   定义体: Function.Injective.mulZeroOneClass DFunLike.coe DFunLike.coe_injective rfl rfl fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.mulZeroOneClass, Injective, coe_injective, mulZeroOneClass
@@ -366,7 +366,7 @@ theorem coe_charFn
 中文:
 定理 coe_charFn
   条件: (hU : IsClopen U)
-  结论: (charFn Y hU : X -> Y) = Set.indicator U 1
+  结论: (charFn Y hU : X -> Y) = 集合.indicator U 1
   证明: rfl
 -/
 theorem coe_charFn (hU : IsClopen U) : (charFn Y hU : X -> Y) = Set.indicator U 1 :=
@@ -383,7 +383,7 @@ theorem charFn_eq_one
 
 中文:
 定理 charFn_eq_one
-  条件: [Nontrivial Y] (x : X) (hU : IsClopen U)
+  条件: [非平凡 Y] (x : X) (hU : IsClopen U)
   结论: charFn Y hU x = (1 : Y) ↔ x in U
   证明: Set.indicator_eq_one_iff_mem _
 
@@ -403,7 +403,7 @@ theorem charFn_eq_zero
 
 中文:
 定理 charFn_eq_zero
-  条件: [Nontrivial Y] (x : X) (hU : IsClopen U)
+  条件: [非平凡 Y] (x : X) (hU : IsClopen U)
   结论: charFn Y hU x = (0 : Y) ↔ x ∉ U
   证明: Set.indicator_eq_zero_iff_notMem _
 
@@ -422,7 +422,7 @@ theorem charFn_inj
 
 中文:
 定理 charFn_inj
-  结论: [Nontrivial Y] (hU : IsClopen U) (hV : IsClopen V)
+  结论: [非平凡 Y] (hU : IsClopen U) (hV : IsClopen V)
   证明: Set.indicator_one_inj Y coe_inj.mpr h
 
 Depends on / 依赖: Set.indicator_one_inj, coe_inj, coe_inj.mpr, indicator_one_inj
@@ -445,8 +445,8 @@ instance [Div
 @[to_additive]
 
 中文:
-实例 [Div
-  签名: Y] : Div (LocallyConstant X Y) where
+实例 [除法
+  签名: Y] : 除法 (局部常数 X Y) where
   定义体: ⟨f / g, f.isLocallyConstant.div g.isLocallyConstant⟩
 
 @[to_additive]
@@ -470,7 +470,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: [Div Y] (f g : LocallyConstant X Y)
+  条件: [除法 Y] (f g : 局部常数 X Y)
   结论: ⇑(f / g) = f / g
   证明: rfl
 
@@ -493,7 +493,7 @@ theorem div_apply
 
 中文:
 定理 div_apply
-  条件: [Div Y] (f g : LocallyConstant X Y) (x : X)
+  条件: [除法 Y] (f g : 局部常数 X Y) (x : X)
   结论: (f / g) x = f x / g x
   证明: rfl
 
@@ -512,8 +512,8 @@ instance [Semigroup
   body: Function.Injective.semigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
 
 中文:
-实例 [Semigroup
-  签名: Y] : Semigroup (LocallyConstant X Y)
+实例 [半群
+  签名: Y] : 半群 (局部常数 X Y)
   定义体: Function.Injective.semigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.semigroup, Injective, coe_injective, semigroup
@@ -532,8 +532,8 @@ instance [SemigroupWithZero
 @[to_additive]
 
 中文:
-实例 [SemigroupWithZero
-  签名: Y] : SemigroupWithZero (LocallyConstant X Y)
+实例 [带零半群
+  签名: Y] : 带零半群 (局部常数 X Y)
   定义体: Function.Injective.semigroupWithZero DFunLike.coe DFunLike.coe_injective rfl fun _ _ => rfl
 
 @[to_additive]
@@ -553,8 +553,8 @@ instance [CommSemigroup
   body: Function.Injective.commSemigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
 
 中文:
-实例 [CommSemigroup
-  签名: Y] : CommSemigroup (LocallyConstant X Y)
+实例 [交换半群
+  签名: Y] : 交换半群 (局部常数 X Y)
   定义体: Function.Injective.commSemigroup DFunLike.coe DFunLike.coe_injective fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.commSemigroup, Injective, coe_injective, commSemigroup
@@ -577,7 +577,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul α Y]
+  签名: [标量乘法 α Y]
   定义体: f.map (n • ·)
 
 @[to_additive (attr := simp)]
@@ -601,7 +601,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul R Y] (r : R) (f : LocallyConstant X Y)
+  条件: [标量乘法 R Y] (r : R) (f : 局部常数 X Y)
   结论: ⇑(r • f) = r • (f : X -> Y)
   证明: rfl
 
@@ -624,7 +624,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul R Y] (r : R) (f : LocallyConstant X Y) (x : X)
+  条件: [标量乘法 R Y] (r : R) (f : 局部常数 X Y) (x : X)
   结论: (r • f) x = r • f x
   证明: rfl
 
@@ -645,8 +645,8 @@ instance [Pow
 @[to_additive]
 
 中文:
-实例 [Pow
-  签名: Y α] : Pow (LocallyConstant X Y) α where
+实例 [幂
+  签名: Y α] : 幂 (局部常数 X Y) α where
   定义体: f.map (· ^ n)
 
 @[to_additive]
@@ -666,8 +666,8 @@ instance [Monoid
   body: Function.Injective.monoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: Y] : Monoid (LocallyConstant X Y)
+实例 [幺半群
+  签名: Y] : 幺半群 (局部常数 X Y)
   定义体: Function.Injective.monoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.monoid, Injective, coe_injective, monoid
@@ -684,8 +684,8 @@ instance [NatCast
   body: const X n
 
 中文:
-实例 [NatCast
-  签名: Y] : 自然数Cast (LocallyConstant X Y) where
+实例 [自然数嵌入
+  签名: Y] : 自然数嵌入 (局部常数 X Y) where
   定义体: const X n
 -/
 instance [NatCast Y] : NatCast (LocallyConstant X Y) where
@@ -700,8 +700,8 @@ instance [IntCast
   body: const X n
 
 中文:
-实例 [IntCast
-  签名: Y] : 整数Cast (LocallyConstant X Y) where
+实例 [整数嵌入
+  签名: Y] : 整数嵌入 (局部常数 X Y) where
   定义体: const X n
 -/
 instance [IntCast Y] : IntCast (LocallyConstant X Y) where
@@ -719,8 +719,8 @@ instance [AddMonoidWithOne
 @[to_additive]
 
 中文:
-实例 [AddMonoidWithOne
-  签名: Y] : AddMonoidWithOne (LocallyConstant X Y)
+实例 [加法带幺幺半群
+  签名: Y] : 加法带幺幺半群 (局部常数 X Y)
   定义体: Function.Injective.addMonoidWithOne DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ => rfl
 
@@ -745,8 +745,8 @@ instance [CommMonoid
 @[to_additive]
 
 中文:
-实例 [CommMonoid
-  签名: Y] : CommMonoid (LocallyConstant X Y)
+实例 [交换幺半群
+  签名: Y] : 交换幺半群 (局部常数 X Y)
   定义体: Function.Injective.commMonoid DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     fun _ _ => rfl
 
@@ -771,8 +771,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: Y] : Group (LocallyConstant X Y)
+实例 [群
+  签名: Y] : 群 (局部常数 X Y)
   定义体: Function.Injective.group DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -795,8 +795,8 @@ instance [CommGroup
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [CommGroup
-  签名: Y] : CommGroup (LocallyConstant X Y)
+实例 [交换群
+  签名: Y] : 交换群 (局部常数 X Y)
   定义体: Function.Injective.commGroup DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -816,7 +816,7 @@ instance [Distrib
 
 中文:
 实例 [Distrib
-  签名: Y] : Distrib (LocallyConstant X Y)
+  签名: Y] : Distrib (局部常数 X Y)
   定义体: Function.Injective.distrib DFunLike.coe DFunLike.coe_injective (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, DFunLike.coe_injective, Function, Function.Injective.distrib, Injective, coe_injective, distrib
@@ -834,8 +834,8 @@ instance [NonUnitalNonAssocSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: Y] : NonUnitalNonAssocSemiring (LocallyConstant X Y)
+实例 [非幺非结合半环
+  签名: Y] : 非幺非结合半环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalNonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -855,8 +855,8 @@ instance [NonUnitalSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalSemiring
-  签名: Y] : NonUnitalSemiring (LocallyConstant X Y)
+实例 [非幺半环
+  签名: Y] : 非幺半环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -876,8 +876,8 @@ instance [NonAssocSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [NonAssocSemiring
-  签名: Y] : NonAssocSemiring (LocallyConstant X Y)
+实例 [非结合半环
+  签名: Y] : 非结合半环 (局部常数 X Y)
   定义体: Function.Injective.nonAssocSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
@@ -899,7 +899,7 @@ definition constRingHom
 
 中文:
 定义 constRingHom
-  签名: [NonAssocSemiring Y]
+  签名: [非结合半环 Y]
   定义体: { constMonoidHom, constAddMonoidHom with toFun := const X }
 
 Depends on / 依赖: constAddMonoidHom, constMonoidHom
@@ -917,8 +917,8 @@ instance [Semiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [Semiring
-  签名: Y] : Semiring (LocallyConstant X Y)
+实例 [半环
+  签名: Y] : 半环 (局部常数 X Y)
   定义体: Function.Injective.semiring DFunLike.coe DFunLike.coe_injective rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
@@ -938,8 +938,8 @@ instance [NonUnitalCommSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: Y] : NonUnitalCommSemiring (LocallyConstant X Y)
+实例 [非幺交换半环
+  签名: Y] : 非幺交换半环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalCommSemiring DFunLike.coe DFunLike.coe_injective rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -959,8 +959,8 @@ instance [CommSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [CommSemiring
-  签名: Y] : CommSemiring (LocallyConstant X Y)
+实例 [交换半环
+  签名: Y] : 交换半环 (局部常数 X Y)
   定义体: Function.Injective.commSemiring DFunLike.coe DFunLike.coe_injective rfl rfl
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
@@ -980,8 +980,8 @@ instance [NonUnitalNonAssocRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: Y] : NonUnitalNonAssocRing (LocallyConstant X Y)
+实例 [非幺非结合环
+  签名: Y] : 非幺非结合环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalNonAssocRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1001,8 +1001,8 @@ instance [NonUnitalRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalRing
-  签名: Y] : NonUnitalRing (LocallyConstant X Y)
+实例 [非幺环
+  签名: Y] : 非幺环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1023,8 +1023,8 @@ instance [NonAssocRing
     (fun _ => rfl) (fun _ => rfl)
 
 中文:
-实例 [NonAssocRing
-  签名: Y] : NonAssocRing (LocallyConstant X Y)
+实例 [非结合环
+  签名: Y] : 非结合环 (局部常数 X Y)
   定义体: Function.Injective.nonAssocRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ => rfl) (fun _ => rfl)
@@ -1047,8 +1047,8 @@ instance [Ring
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [Ring
-  签名: Y] : Ring (LocallyConstant X Y)
+实例 [环
+  签名: Y] : 环 (局部常数 X Y)
   定义体: Function.Injective.ring DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
@@ -1070,8 +1070,8 @@ instance [NonUnitalCommRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 [NonUnitalCommRing
-  签名: Y] : NonUnitalCommRing (LocallyConstant X Y)
+实例 [非幺交换环
+  签名: Y] : 非幺交换环 (局部常数 X Y)
   定义体: Function.Injective.nonUnitalCommRing DFunLike.coe DFunLike.coe_injective rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -1092,8 +1092,8 @@ instance [CommRing
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [CommRing
-  签名: Y] : CommRing (LocallyConstant X Y)
+实例 [交换环
+  签名: Y] : 交换环 (局部常数 X Y)
   定义体: Function.Injective.commRing DFunLike.coe DFunLike.coe_injective rfl rfl (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
@@ -1116,8 +1116,8 @@ instance [Monoid
   body: Function.Injective.mulAction _ coe_injective fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: R] [MulAction R Y] : MulAction R (LocallyConstant X Y)
+实例 [幺半群
+  签名: R] [乘法作用 R Y] : 乘法作用 R (局部常数 X Y)
   定义体: Function.Injective.mulAction _ coe_injective fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.Injective.mulAction, Injective, coe_injective, mulAction
@@ -1134,8 +1134,8 @@ instance [Monoid
   body: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective fun _ _ => rfl
 
 中文:
-实例 [Monoid
-  签名: R] [AddMonoid Y] [DistribMulAction R Y] :
+实例 [幺半群
+  签名: R] [加法幺半群 Y] [分配乘法作用 R Y] :
   定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, distribMulAction
@@ -1153,8 +1153,8 @@ instance [Semiring
   body: Function.Injective.module R coeFnAddMonoidHom coe_injective fun _ _ => rfl
 
 中文:
-实例 [Semiring
-  签名: R] [AddCommMonoid Y] [Module R Y] : Module R (LocallyConstant X Y)
+实例 [半环
+  签名: R] [加法交换幺半群 Y] [模 R Y] : 模 R (局部常数 X Y)
   定义体: Function.Injective.module R coeFnAddMonoidHom coe_injective fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, module
@@ -1186,7 +1186,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (LocallyConstant X Y)
+  签名: 代数 R (局部常数 X Y)
   定义体: constRingHom.comp algebraMap R Y
   commutes' := by
     intros
@@ -1225,7 +1225,7 @@ theorem coe_algebraMap
 中文:
 定理 coe_algebraMap
   条件: (r : R)
-  结论: ⇑(algebraMap R (LocallyConstant X Y) r) = algebraMap R (X -> Y) r
+  结论: ⇑(algebraMap R (局部常数 X Y) r) = algebraMap R (X -> Y) r
   证明: rfl
 -/
 theorem coe_algebraMap (r : R) : ⇑(algebraMap R (LocallyConstant X Y) r) = algebraMap R (X -> Y) r :=
@@ -1246,7 +1246,7 @@ definition coeFnRingHom
 
 中文:
 定义 coeFnRingHom
-  签名: [Semiring Y]
+  签名: [半环 Y]
   定义体: coeFnMonoidHom
   __ := coeFnAddMonoidHom
 -/
@@ -1265,7 +1265,7 @@ definition coeFnₗ
 
 中文:
 定义 coeFnₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y]
   定义体: coeFnAddMonoidHom.toAddHom
   map_smul' _ _ := rfl
 -/
@@ -1285,7 +1285,7 @@ definition coeFnAlgHom
 
 中文:
 定义 coeFnAlgHom
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y]
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y]
   定义体: coeFnRingHom
   commutes' _ := rfl
 -/
@@ -1310,7 +1310,7 @@ definition evalMonoidHom
 
 中文:
 定义 evalMonoidHom
-  签名: [MulOneClass Y] (x : X)
+  签名: [MulOne类 Y] (x : X)
   定义体: (Pi.evalMonoidHom _ x).comp coeFnMonoidHom
 
 Depends on / 依赖: Pi.evalMonoidHom, coeFnMonoidHom, evalMonoidHom
@@ -1328,7 +1328,7 @@ definition evalₗ
 
 中文:
 定义 evalₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y]
   定义体: (LinearMap.proj x).comp (coeFnₗ R)
 -/
 @[simps!] def evalₗ (R : Type*) [Semiring R] [AddCommMonoid Y]
@@ -1345,7 +1345,7 @@ definition evalRingHom
 
 中文:
 定义 evalRingHom
-  签名: [Semiring Y] (x : X)
+  签名: [半环 Y] (x : X)
   定义体: (Pi.evalRingHom _ x).comp coeFnRingHom
 -/
 @[simps!] def evalRingHom [Semiring Y] (x : X) : LocallyConstant X Y ->+* Y :=
@@ -1363,7 +1363,7 @@ definition evalₐ
 
 中文:
 定义 evalₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y] (x : X)
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] (x : X)
   定义体: (Pi.evalAlgHom _ _ x).comp (coeFnAlgHom R)
 
 Depends on / 依赖: Pi.evalAlgHom, coeFnAlgHom, evalAlgHom
@@ -1392,7 +1392,7 @@ definition comapMonoidHom
 
 中文:
 定义 comapMonoidHom
-  签名: [MulOneClass Z] (f : C(X, Y))
+  签名: [MulOne类 Z] (f : C(X, Y))
   定义体: comap f
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -1417,7 +1417,7 @@ definition comapₗ
 
 中文:
 定义 comapₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y))
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Z] [模 R Z] (f : C(X, Y))
   定义体: comap f
   map_add' := map_add (comapAddMonoidHom f)
   map_smul' _ _ := rfl
@@ -1441,7 +1441,7 @@ definition comapRingHom
 
 中文:
 定义 comapRingHom
-  签名: [Semiring Z] (f : C(X, Y))
+  签名: [半环 Z] (f : C(X, Y))
   定义体: comapMonoidHom f
   __ := (comapAddMonoidHom f)
 
@@ -1465,7 +1465,7 @@ definition comapₐ
 
 中文:
 定义 comapₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Z] [Algebra R Z]
+  签名: (R : 类型) [交换半环 R] [半环 Z] [代数 R Z]
   定义体: comapRingHom f
   commutes' _ := rfl
 
@@ -1486,7 +1486,7 @@ lemma ker_comapₗ
 
 中文:
 引理 ker_comapₗ
-  结论: [Semiring R] [AddCommMonoid Z] [Module R Z] (f : C(X, Y))
+  结论: [半环 R] [加法交换幺半群 Z] [模 R Z] (f : C(X, Y))
   证明: LinearMap.ker_eq_bot_of_injective comap_injective _ hfs
 
 Depends on / 依赖: LinearMap, LinearMap.ker_eq_bot_of_injective, comap_injective, ker_eq_bot_of_injective
@@ -1509,7 +1509,7 @@ definition congrLeftₗ
 
 中文:
 定义 congrLeftₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Z] [Module R Z] (e : X ≃ₜ Y)
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Z] [模 R Z] (e : X ≃ₜ Y)
   定义体: comapₗ R ⟨_, e.symm.continuous⟩
   __ := congrLeft e
 
@@ -1534,7 +1534,7 @@ definition congrLeftRingEquiv
 
 中文:
 定义 congrLeftRingEquiv
-  签名: [Semiring Z] (e : X ≃ₜ Y)
+  签名: [半环 Z] (e : X ≃ₜ Y)
   定义体: congrLeft e
   __ := comapMonoidHom ⟨_, e.symm.continuous⟩
   __ := comapAddMonoidHom ⟨_, e.symm.continuous⟩
@@ -1560,7 +1560,7 @@ definition congrLeftₐ
 
 中文:
 定义 congrLeftₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Z] [Algebra R Z] (e : X ≃ₜ Y)
+  签名: (R : 类型) [交换半环 R] [半环 Z] [代数 R Z] (e : X ≃ₜ Y)
   定义体: congrLeft e
   __ := comapₐ R ⟨_, e.symm.continuous⟩
 
@@ -1591,7 +1591,7 @@ definition mapMonoidHom
 
 中文:
 定义 mapMonoidHom
-  签名: [MulOneClass Y] [MulOneClass Z] (f : Y ->* Z)
+  签名: [MulOne类 Y] [MulOne类 Z] (f : Y ->* Z)
   定义体: map f
   map_one' := by aesop
   map_mul' := by aesop
@@ -1616,7 +1616,7 @@ definition mapₗ
 
 中文:
 定义 mapₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y] [Module R Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
   定义体: map f
   map_add' := by aesop
   map_smul' := by aesop
@@ -1641,7 +1641,7 @@ definition mapRingHom
 
 中文:
 定义 mapRingHom
-  签名: [Semiring Y] [Semiring Z] (f : Y ->+* Z)
+  签名: [半环 Y] [半环 Z] (f : Y ->+* Z)
   定义体: mapMonoidHom f
   __ := (mapAddMonoidHom f.toAddMonoidHom)
 
@@ -1665,7 +1665,7 @@ definition mapₐ
 
 中文:
 定义 mapₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] [半环 Z] [代数 R Z]
   定义体: mapRingHom f
   commutes' _ := by aesop
 
@@ -1689,7 +1689,7 @@ definition congrRightₗ
 
 中文:
 定义 congrRightₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y] [Module R Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
   定义体: mapₗ R e
   __ := congrRight e.toEquiv
 -/
@@ -1713,7 +1713,7 @@ definition congrRightRingEquiv
 
 中文:
 定义 congrRightRingEquiv
-  签名: [Semiring Y] [Semiring Z] (e : Y ≃+* Z)
+  签名: [半环 Y] [半环 Z] (e : Y ≃+* Z)
   定义体: congrRight e
   __ := mapMonoidHom e.toMonoidHom
   __ := mapAddMonoidHom e.toAddMonoidHom
@@ -1739,7 +1739,7 @@ definition congrRightₐ
 
 中文:
 定义 congrRightₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y] [Semiring Z] [Algebra R Z]
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y] [半环 Z] [代数 R Z]
   定义体: congrRight e
   __ := mapₐ R e.toAlgHom
 
@@ -1768,7 +1768,7 @@ definition constₗ
 
 中文:
 定义 constₗ
-  签名: (R : 类型) [Semiring R] [AddCommMonoid Y] [Module R Y]
+  签名: (R : 类型) [半环 R] [加法交换幺半群 Y] [模 R Y]
   定义体: const X
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1792,7 +1792,7 @@ definition constₐ
 
 中文:
 定义 constₐ
-  签名: (R : 类型) [CommSemiring R] [Semiring Y] [Algebra R Y]
+  签名: (R : 类型) [交换半环 R] [半环 Y] [代数 R Y]
   定义体: constRingHom
   commutes' _ := rfl
 

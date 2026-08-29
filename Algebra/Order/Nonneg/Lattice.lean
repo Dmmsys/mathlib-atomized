@@ -33,7 +33,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [Preorder α] {a : α}
+  签名: [预序 α] {a : α}
   定义体: inferInstanceAs OrderBot (Ici a)
 
 Depends on / 依赖: OrderBot
@@ -52,7 +52,7 @@ theorem bot_eq
 
 中文:
 定理 bot_eq
-  条件: [Preorder α] {a : α}
+  条件: [预序 α] {a : α}
   结论: (⊥ : { x : α // a <= x }) = ⟨a, le_rfl⟩
   证明: rfl
 -/
@@ -69,7 +69,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [PartialOrder α] [NoMaxOrder α] {a : α}
+  签名: [偏序 α] [NoMax序 α] {a : α}
   定义体: inferInstanceAs NoMaxOrder (Ici a)
 
 Depends on / 依赖: NoMaxOrder
@@ -123,7 +123,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: [DistribLattice α] {a : α}
+  签名: [Distrib格 α] {a : α}
   定义体: inferInstanceAs DistribLattice (Ici a)
 
 Depends on / 依赖: DistribLattice
@@ -141,7 +141,7 @@ instance instDenselyOrdered
 
 中文:
 实例 instDenselyOrdered
-  签名: [Preorder α] [DenselyOrdered α] {a : α}
+  签名: [预序 α] [稠密序 α] {a : α}
   定义体: inferInstanceAs DenselyOrdered (Ici a)
 
 Depends on / 依赖: DenselyOrdered
@@ -162,7 +162,7 @@ inferInstanceAs ConditionallyCompleteLinearOrder (Ici a)
 
 中文:
 缩写 noncomputable
-  签名: abbrev conditionallyCompleteLinearOrder [ConditionallyCompleteLinearOrder α]
+  签名: abbrev conditionallyCompleteLinearOrder [条件完备线性序 α]
   定义体: -- TODO: missing `Inhabited (Ici a)` instance
   haveI : Inhabited (Ici a) := ⟨a, le_rfl⟩
 inferInstanceAs ConditionallyCompleteLinearOrder (Ici a)

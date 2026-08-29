@@ -46,7 +46,7 @@ definition LinearMap.toContinuousBilinearMap
 @[simp]
 
 中文:
-定义 LinearMap.toContinuousBilinearMap
+定义 线性映射.toContinuousBilinearMap
   签名: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G)
   定义体: IsLinearMap.mk' (fun x : E => f x |>.toContinuousLinearMap)
 .toContinuousLinearMap (by constructor <;> (intros; simp))
@@ -69,7 +69,7 @@ lemma LinearMap.toContinuousBilinearMap_apply
   proof: rfl
 
 中文:
-引理 LinearMap.toContinuousBilinearMap_apply
+引理 线性映射.toContinuousBilinearMap_apply
   条件: (f : E ->ₗ[𝕜] F ->ₗ[𝕜] G) (x : E) (y : F)
   证明: rfl
 -/
@@ -86,7 +86,7 @@ definition IsBilinearMap.toContinuousBilinearMap
 @[simp]
 
 中文:
-定义 IsBilinearMap.toContinuousBilinearMap
+定义 是双线性映射.toContinuousBilinearMap
   定义体: h.toLinearMap.toContinuousBilinearMap
 
 @[simp]
@@ -107,8 +107,8 @@ lemma IsBilinearMap.toContinuousBilinearMap_apply
   proof: rfl
 
 中文:
-引理 IsBilinearMap.toContinuousBilinearMap_apply
-  结论: {f : E -> F -> G} (h : IsBilinearMap 𝕜 f)
+引理 是双线性映射.toContinuousBilinearMap_apply
+  结论: {f : E -> F -> G} (h : 是双线性映射 𝕜 f)
   证明: rfl
 -/
 lemma IsBilinearMap.toContinuousBilinearMap_apply {f : E -> F -> G} (h : IsBilinearMap 𝕜 f)
@@ -127,7 +127,7 @@ definition ContinuousLinearMap.evalL
 @[simp]
 
 中文:
-定义 ContinuousLinearMap.evalL
+定义 连续线性映射.evalL
   签名: : E ->L[𝕜] (E ->L[𝕜] F) ->L[𝕜] F
   定义体: .toContinuousBilinearMap .flip LinearMap.toContinuousLinearMap.symm.toLinearMap
 
@@ -149,7 +149,7 @@ lemma ContinuousLinearMap.evalL_apply
   proof: rfl
 
 中文:
-引理 ContinuousLinearMap.evalL_apply
+引理 连续线性映射.evalL_apply
   条件: (x : E) (φ : E ->L[𝕜] F)
   结论: φ.evalL 𝕜 E F x = φ x
   证明: rfl

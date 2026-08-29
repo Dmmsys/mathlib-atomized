@@ -52,10 +52,10 @@ class IsLocallyFreeData
     - isIso : forall i, IsIso (q.generators i).π  [default: by infer_instance]
 
 中文:
-类 IsLocallyFreeData
-  参数: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
+类 是LocallyFreeData
+  参数: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
   公理与运算 (1 个):
-    - isIso : 对任意 i, IsIso (q.generators i).π  [默认: by infer_instance]
+    - isIso : 对任意 i, 是同构 (q.generators i).π  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -73,8 +73,8 @@ instance IsLocallyFreeData.shrink
   body: inferInstanceAs (IsIso (q.generators i.2.choose).π)
 
 中文:
-实例 IsLocallyFreeData.shrink
-  签名: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
+实例 是LocallyFreeData.shrink
+  签名: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
   定义体: inferInstanceAs (IsIso (q.generators i.2.choose).π)
 
 Depends on / 依赖: generators, q.generators
@@ -98,10 +98,10 @@ class IsLocallyFree
     - exists_isLocallyFreeData : exists q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
 
 中文:
-类 IsLocallyFree
-  参数: (M : SheafOfModules.{u} R)
+类 是LocallyFree
+  参数: (M : 模层.{u} R)
   公理与运算 (1 个):
-    - exists_isLocallyFreeData : 存在 q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
+    - exists_isLocallyFreeData : 存在 q : LocalGeneratorsData.{u₁} M, q.是LocallyFreeData
 -/
 class IsLocallyFree (M : SheafOfModules.{u} R) : Prop where
   exists_isLocallyFreeData : exists q : LocalGeneratorsData.{u₁} M, q.IsLocallyFreeData
@@ -116,7 +116,7 @@ theorem LocalGeneratorsData.isLocallyFree
 
 中文:
 定理 LocalGeneratorsData.isLocallyFree
-  结论: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData)
+  结论: {M : 模层.{u} R} (q : M.LocalGeneratorsData)
   证明: ⟨q.shrink, inferInstance⟩
 
 Depends on / 依赖: q.shrink, shrink
@@ -233,7 +233,7 @@ definition quasiCoherentData
 
 中文:
 定义 quasiCoherentData
-  签名: {M : SheafOfModules.{u} R} (q : M.LocalGeneratorsData) [q.IsLocallyFreeData]
+  签名: {M : 模层.{u} R} (q : M.LocalGeneratorsData) [q.是LocallyFreeData]
   定义体: q.I
   X := q.X
   coversTop := q.coversTop
@@ -267,7 +267,7 @@ lemma quasiCoherentData_localGeneratorsData
 
 中文:
 引理 quasiCoherentData_localGeneratorsData
-  结论: {M : SheafOfModules.{u} R}
+  结论: {M : 模层.{u} R}
   证明: rfl
 -/
 lemma quasiCoherentData_localGeneratorsData {M : SheafOfModules.{u} R}

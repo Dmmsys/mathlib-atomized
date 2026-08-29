@@ -121,8 +121,8 @@ definition Homotopy.prod
   map_one_left x := by simp only [prod_eval, Homotopy.apply_one]
 
 中文:
-定义 Homotopy.prod
-  签名: (F : Homotopy f₀ f₁) (G : Homotopy g₀ g₁)
+定义 同伦.乘积
+  签名: (F : 同伦 f₀ f₁) (G : 同伦 g₀ g₁)
   定义体: (F t, G t)
   map_zero_left x := by simp only [prod_eval, Homotopy.apply_zero]
   map_one_left x := by simp only [prod_eval, Homotopy.apply_one]
@@ -146,7 +146,7 @@ definition HomotopyRel.prod
   prop' t x hx := Prod.ext (F.prop' t x hx) (G.prop' t x hx)
 
 中文:
-定义 HomotopyRel.prod
+定义 HomotopyRel.乘积
   签名: (F : HomotopyRel f₀ f₁ S) (G : HomotopyRel g₀ g₁ S)
   定义体: Homotopy.prod F.toHomotopy G.toHomotopy
   prop' t x hx := Prod.ext (F.prop' t x hx) (G.prop' t x hx)
@@ -180,7 +180,7 @@ definition piHomotopy
 
 中文:
 定义 piHomotopy
-  签名: (γ₀ γ₁ : 对任意 i, Path (as i) (bs i)) (H : 对任意 i, Path.Homotopy (γ₀ i) (γ₁ i))
+  签名: (γ₀ γ₁ : 对任意 i, 道路 (as i) (bs i)) (H : 对任意 i, 道路.同伦 (γ₀ i) (γ₁ i))
   定义体: ContinuousMap.HomotopyRel.pi H
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.pi, HomotopyRel
@@ -200,7 +200,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (γ : 对任意 i, Path.Homotopic.Quotient (as i) (bs i))
+  签名: (γ : 对任意 i, 道路.同伦.商 (as i) (bs i))
   定义体: (_root_.Quotient.map Path.pi fun x y hxy =>
     Nonempty.map (piHomotopy x y) (Classical.nonempty_pi.mpr hxy)) (Quotient.choice γ)
 
@@ -222,7 +222,7 @@ theorem pi_lift
 
 中文:
 定理 pi_lift
-  条件: (γ : 对任意 i, Path (as i) (bs i))
+  条件: (γ : 对任意 i, 道路 (as i) (bs i))
   证明: by
   simp_rw [← Quotient.mk'_eq_mk, Quotient.mk', pi, Quotient.choice_eq, Quotient.map_mk]
 
@@ -247,7 +247,7 @@ theorem comp_pi_eq_pi_comp
 
 中文:
 定理 comp_pi_eq_pi_comp
-  结论: (γ₀ : 对任意 i, Path.Homotopic.Quotient (as i) (bs i))
+  结论: (γ₀ : 对任意 i, 道路.同伦.商 (as i) (bs i))
   证明: by
   induction γ₁ using Quotient.induction_on_pi with | _ a =>
   induction γ₀ using Quotient.induction_on_pi
@@ -275,7 +275,7 @@ abbreviation proj
 
 中文:
 缩写 proj
-  签名: (i : ι) (p : Path.Homotopic.Quotient as bs)
+  签名: (i : ι) (p : 道路.同伦.商 as bs)
   定义体: p.map ⟨_, continuous_apply i⟩
 
 Depends on / 依赖: continuous_apply, p.map
@@ -301,7 +301,7 @@ theorem proj_pi
 
 中文:
 定理 proj_pi
-  条件: (i : ι) (paths : 对任意 i, Path.Homotopic.Quotient (as i) (bs i))
+  条件: (i : ι) (paths : 对任意 i, 道路.同伦.商 (as i) (bs i))
   证明: by
   induction paths using Quotient.induction_on_pi
   simp only [Quotient.mk''_eq_mk]
@@ -334,7 +334,7 @@ theorem pi_proj
 
 中文:
 定理 pi_proj
-  条件: (p : Path.Homotopic.Quotient as bs)
+  条件: (p : 道路.同伦.商 as bs)
   结论: (pi fun i => proj i p) = p
   证明: by
   induction p using Quotient.inductionOn
@@ -366,7 +366,7 @@ definition prodHomotopy
 
 中文:
 定义 prodHomotopy
-  签名: (h₁ : Path.Homotopy p₁ p₁') (h₂ : Path.Homotopy p₂ p₂')
+  签名: (h₁ : 道路.同伦 p₁ p₁') (h₂ : 道路.同伦 p₂ p₂')
   定义体: ContinuousMap.HomotopyRel.prod h₁ h₂
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.HomotopyRel.prod, HomotopyRel
@@ -384,8 +384,8 @@ definition prod
   body: Quotient.map₂ Path.prod (fun _ _ h₁ _ _ h₂ => Nonempty.map2 prodHomotopy h₁ h₂) q₁ q₂
 
 中文:
-定义 prod
-  签名: (q₁ : Path.Homotopic.Quotient a₁ a₂) (q₂ : Path.Homotopic.Quotient b₁ b₂)
+定义 乘积
+  签名: (q₁ : 道路.同伦.商 a₁ a₂) (q₂ : 道路.同伦.商 b₁ b₂)
   定义体: Quotient.map₂ Path.prod (fun _ _ h₁ _ _ h₂ => Nonempty.map2 prodHomotopy h₁ h₂) q₁ q₂
 
 Depends on / 依赖: Nonempty, Nonempty.map2, Path.prod, Quotient, Quotient.map, prodHomotopy
@@ -406,7 +406,7 @@ theorem prod_lift
 
 中文:
 定理 prod_lift
-  结论: prod (Quotient.mk p₁) (Quotient.mk p₂) = Quotient.mk (p₁.prod p₂)
+  结论: 乘积 (商.mk p₁) (商.mk p₂) = 商.mk (p₁.乘积 p₂)
   证明: rfl
 -/
 theorem prod_lift : prod (Quotient.mk p₁) (Quotient.mk p₂) = Quotient.mk (p₁.prod p₂) :=
@@ -427,7 +427,7 @@ theorem comp_prod_eq_prod_comp
 
 中文:
 定理 comp_prod_eq_prod_comp
-  结论: prod q₁ q₂ ⬝ prod r₁ r₂ = prod (q₁ ⬝ r₁) (q₂ ⬝ r₂)
+  结论: 乘积 q₁ q₂ ⬝ 乘积 r₁ r₂ = 乘积 (q₁ ⬝ r₁) (q₂ ⬝ r₂)
   证明: by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
   induction r₁, r₂ using Path.Homotopic.Quotient.ind₂
@@ -452,7 +452,7 @@ abbreviation projLeft
 
 中文:
 缩写 projLeft
-  签名: (p : Path.Homotopic.Quotient c₁ c₂)
+  签名: (p : 道路.同伦.商 c₁ c₂)
   定义体: p.map ⟨_, continuous_fst⟩
 
 Depends on / 依赖: continuous_fst, p.map
@@ -470,7 +470,7 @@ abbreviation projRight
 
 中文:
 缩写 projRight
-  签名: (p : Path.Homotopic.Quotient c₁ c₂)
+  签名: (p : 道路.同伦.商 c₁ c₂)
   定义体: p.map ⟨_, continuous_snd⟩
 
 Depends on / 依赖: continuous_snd, p.map
@@ -495,7 +495,7 @@ theorem projLeft_prod
 
 中文:
 定理 projLeft_prod
-  结论: projLeft (prod q₁ q₂) = q₁
+  结论: projLeft (乘积 q₁ q₂) = q₁
   证明: by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
   rw [projLeft]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
@@ -526,7 +526,7 @@ theorem projRight_prod
 
 中文:
 定理 projRight_prod
-  结论: projRight (prod q₁ q₂) = q₂
+  结论: projRight (乘积 q₁ q₂) = q₂
   证明: by
   induction q₁, q₂ using Path.Homotopic.Quotient.ind₂
   rw [projRight]; rw [prod_lift]; rw [← Path.Homotopic.Quotient.mk_map]
@@ -555,7 +555,7 @@ theorem prod_projLeft_projRight
 
 中文:
 定理 prod_projLeft_projRight
-  条件: (p : Path.Homotopic.Quotient (a₁, b₁) (a₂, b₂))
+  条件: (p : 道路.同伦.商 (a₁, b₁) (a₂, b₂))
   证明: by
   induction p using Path.Homotopic.Quotient.ind
   simp only [projLeft, projRight, ← Path.Homotopic.Quotient.mk_map]

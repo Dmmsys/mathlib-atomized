@@ -43,16 +43,16 @@ structure TopRep
 
 中文:
 结构 TopRep
-  参数: (k : 类型u) (G : 类型v) [Ring k] [TopologicalSpace k] [Monoid G]
+  参数: (k : 类型u) (G : 类型v) [环 k] [拓扑空间 k] [幺半群 G]
   公理与运算 (8 个):
     - private(mk) : :
-    - V : Type w
-    - [hV1 : AddCommGroup V]
-    - [hV2 : Module k V]
-    - [hV3 : TopologicalSpace V]
-    - [hV4 : IsTopologicalAddGroup V]
-    - [hV5 : ContinuousSMul k V]
-    - ρ : ContRepresentation k G V
+    - V : 类型 w
+    - [hV1 : 加法交换群 V]
+    - [hV2 : 模 k V]
+    - [hV3 : 拓扑空间 V]
+    - [hV4 : 是拓扑加群 V]
+    - [hV5 : 连续标量乘法 k V]
+    - ρ : 余ntRepresentation k G V
 -/
 structure TopRep (k : Type u) (G : Type v) [Ring k] [TopologicalSpace k] [Monoid G] where
   private mk ::
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (TopRep k G) (Type w)
+  签名: CoeSort (TopRep k G) (类型 w)
   定义体: ⟨TopRep.V⟩
 
 Depends on / 依赖: TopRep, TopRep.V
@@ -166,7 +166,7 @@ structure Hom
     - hom' : A.ρ ->ⁱL B.ρ
 
 中文:
-结构 Hom
+结构 态射
   参数: (A B : TopRep k G)
   公理与运算 (2 个):
     - private(mk) : :
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (TopRep.{w} k G)
+  签名: 范畴 (TopRep.{w} k G)
   定义体: Hom A B
   id A := ⟨.id (π₁ := A.ρ)⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (TopRep.{w} k G) (fun A B => A.ρ ->ⁱL B.ρ)
+  签名: 余ncrete范畴 (TopRep.{w} k G) (fun A B => A.ρ ->ⁱL B.ρ)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -236,8 +236,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := TopRep k G) f
 
 中文:
-缩写 Hom.hom
-  签名: (f : Hom A B)
+缩写 态射.hom
+  签名: (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := TopRep k G) f
 -/
 abbrev Hom.hom (f : Hom A B) := ConcreteCategory.hom (C := TopRep k G) f
@@ -305,8 +305,8 @@ abbreviation Hom.toTopModuleCatHom
   body: TopModuleCat.ofHom f.hom.toContinuousLinearMap
 
 中文:
-缩写 Hom.toTopModuleCatHom
-  签名: (f : Hom A B)
+缩写 态射.toTopModuleCatHom
+  签名: (f : 态射 A B)
   定义体: TopModuleCat.ofHom f.hom.toContinuousLinearMap
 
 Depends on / 依赖: TopModuleCat, TopModuleCat.ofHom, f.hom.toContinuousLinearMap, toContinuousLinearMap
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (A ⟶ B)
+  签名: 加法交换群 (A ⟶ B)
   定义体: fast_instance% ConcreteCategory.homEquiv.addCommGroup
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.homEquiv.addCommGroup, addCommGroup, fast_instance, homEquiv
@@ -580,7 +580,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (TopRep k G)
+  签名: 预加性 (TopRep k G)
   定义体: inferInstance
   add_comp := TopRep.add_comp'
   comp_add := TopRep.comp_add'
@@ -608,7 +608,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module k (A ⟶ B)
+  签名: 模 k (A ⟶ B)
   定义体: fast_instance% ConcreteCategory.homEquiv.module k
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.homEquiv.module, fast_instance, homEquiv, module
@@ -707,7 +707,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryTheory.Linear k (TopRep k G)
+  签名: 范畴论.线性 k (TopRep k G)
   定义体: inferInstance
   smul_comp := smul_comp'
   comp_smul := comp_smul'
@@ -733,7 +733,7 @@ definition toActionTopModFunc
 
 中文:
 定义 toActionTopModFunc
-  签名: : TopRep k G ⥤ Action (TopModuleCat k) G where
+  签名: : TopRep k G ⥤ 作用 (顶元素模范畴 k) G where
   定义体: ⟨.of k X.V, (TopModuleCat.endRingEquiv (.of k X.V)).symm.toMonoidHom.comp X.ρ⟩
   map f := ⟨f.toTopModuleCatHom, fun g => by ext1; simp [TopModuleCat.endRingEquiv, f.hom.2 g]⟩
 
@@ -755,7 +755,7 @@ definition fromActionTopModFunc
 
 中文:
 定义 fromActionTopModFunc
-  签名: : Action (TopModuleCat.{w} k) G ⥤ TopRep k G where
+  签名: : 作用 (顶元素模范畴.{w} k) G ⥤ TopRep k G where
   定义体: .of .ofMonoidHom (TopModuleCat.endRingEquiv X.V).toMonoidHom.comp X.ρ
   map {X Y} f := ofHom ⟨f.hom.hom, fun g => by
     simpa [← toMonoidHom_apply] using congr(TopModuleCat.Hom.hom $(f.comm g))⟩
@@ -800,7 +800,7 @@ definition fromActionToAction
 
 中文:
 定义 fromActionToAction
-  签名: (X : Action (TopModuleCat.{w} k) G)
+  签名: (X : 作用 (顶元素模范畴.{w} k) G)
   定义体: ⟨𝟙 _, fun _ => rfl⟩
   inv := ⟨𝟙 _, fun _ => rfl⟩
 -/
@@ -822,7 +822,7 @@ definition TopRepEquivActionTop
 
 中文:
 定义 TopRepEquivActionTop
-  签名: : TopRep.{w} k G ≌ Action (TopModuleCat.{w} k) G where
+  签名: : TopRep.{w} k G ≌ 作用 (顶元素模范畴.{w} k) G where
   定义体: toActionTopModFunc
   inverse := fromActionTopModFunc
   unitIso := NatIso.ofComponents toActionFromAction
@@ -846,7 +846,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toActionTopModFunc (k := k) (G := G)).IsEquivalence
+  签名: (toActionTopModFunc (k := k) (G := G)).是等价
   定义体: TopRepEquivActionTop (k := k) (G := G).isEquivalence_functor
 
 Depends on / 依赖: IsEquivalence
@@ -864,7 +864,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromActionTopModFunc (k := k) (G := G)).IsEquivalence
+  签名: (fromActionTopModFunc (k := k) (G := G)).是等价
   定义体: TopRepEquivActionTop (k := k) (G := G).isEquivalence_inverse
 
 Depends on / 依赖: IsEquivalence
@@ -905,7 +905,7 @@ abbreviation invariantsFunctor
 
 中文:
 缩写 invariantsFunctor
-  签名: : TopRep k G ⥤ TopModuleCat k where
+  签名: : TopRep k G ⥤ 顶元素模范畴 k where
   定义体: .of k A.ρ.invariants
   map f := TopModuleCat.ofHom f.hom.mapInvariants
 
@@ -924,7 +924,7 @@ instance :
 
 中文:
 实例 :
-  签名: (invariantsFunctor k G).Additive
+  签名: (invariantsFunctor k G).加性
 -/
 instance : (invariantsFunctor k G).Additive where
 
@@ -976,7 +976,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopRep.coind₁Functor k G).Additive
+  签名: (TopRep.coind₁Functor k G).加性
 -/
 instance : (TopRep.coind₁Functor k G).Additive where
 
@@ -1010,7 +1010,7 @@ abbreviation res
 
 中文:
 缩写 res
-  签名: {H : 类型} [Monoid H] (φ : H ->* G) (A : TopRep k G)
+  签名: {H : 类型} [幺半群 H] (φ : H ->* G) (A : TopRep k G)
   定义体: of (A.ρ.restrict φ)
 
 Depends on / 依赖: restrict
@@ -1028,7 +1028,7 @@ map f := ofHom f.hom.restrict φ
 
 中文:
 缩写 resFunctor
-  签名: {H : 类型} [Monoid H] (φ : H ->* G)
+  签名: {H : 类型} [幺半群 H] (φ : H ->* G)
   定义体: res φ
 map f := ofHom f.hom.restrict φ
 -/
@@ -1052,7 +1052,7 @@ lemma resFunctor_map_hom
 
 中文:
 引理 resFunctor_map_hom
-  条件: [Monoid H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B)
+  条件: [幺半群 H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B)
   证明: rfl
 -/
 lemma resFunctor_map_hom [Monoid H] (φ : H ->* G) {A B : TopRep k G} (f : A ⟶ B) :

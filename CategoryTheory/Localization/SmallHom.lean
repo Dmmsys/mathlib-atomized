@@ -57,7 +57,7 @@ class HasSmallLocalizedHom
     - small : Small.{w} (W.Q.obj X ⟶ W.Q.obj Y)
 
 中文:
-类 HasSmallLocalizedHom
+类 有SmallLocalized态射
   参数: : 命题 where
   公理与运算 (1 个):
     - small : Small.{w} (W.Q.obj X ⟶ W.Q.obj Y)
@@ -139,7 +139,7 @@ lemma small_of_hasSmallLocalizedHom
 
 中文:
 引理 small_of_hasSmallLocalizedHom
-  条件: [HasSmallLocalizedHom.{w} W X Y]
+  条件: [有SmallLocalized态射.{w} W X Y]
   证明: by
   rwa [← hasSmallLocalizedHom_iff W]
 
@@ -256,7 +256,7 @@ definition SmallHom
 
 中文:
 定义 SmallHom
-  签名: (X Y : C) [HasSmallLocalizedHom.{w} W X Y]
+  签名: (X Y : C) [有SmallLocalized态射.{w} W X Y]
   定义体: Shrink.{w} (W.Q.obj X ⟶ W.Q.obj Y)
 
 Depends on / 依赖: Shrink, W.Q.obj
@@ -277,7 +277,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
+  签名: (L : C ⥤ D) [L.是Localization W] {X Y : C}
   定义体: letI := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
   (equivShrink _).symm.trans (homEquiv W W.Q L)
 
@@ -303,7 +303,7 @@ lemma equiv_equiv_symm
 
 中文:
 引理 equiv_equiv_symm
-  结论: (L : C ⥤ D) [L.IsLocalization W]
+  结论: (L : C ⥤ D) [L.是Localization W]
   证明: by
   dsimp [equiv]
   rw [Equiv.symm_apply_apply]; rw [homEquiv_trans]
@@ -331,7 +331,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {X Y : C} [HasSmallLocalizedHom.{w} W X Y] (f : X ⟶ Y)
+  签名: {X Y : C} [有SmallLocalized态射.{w} W X Y] (f : X ⟶ Y)
   定义体: (equiv.{w} W W.Q).symm (W.Q.map f)
 
 Depends on / 依赖: W.Q.map
@@ -353,7 +353,7 @@ lemma equiv_mk
 
 中文:
 引理 equiv_mk
-  结论: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
+  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C}
   证明: by
   simp [equiv, mk]
 -/
@@ -374,7 +374,7 @@ definition mkInv
 
 中文:
 定义 mkInv
-  签名: {X Y : C} (f : Y ⟶ X) (hf : W f) [HasSmallLocalizedHom.{w} W X Y]
+  签名: {X Y : C} (f : Y ⟶ X) (hf : W f) [有SmallLocalized态射.{w} W X Y]
   定义体: (equiv.{w} W W.Q).symm (Localization.isoOfHom W.Q W f hf).inv
 
 Depends on / 依赖: Localization, Localization.isoOfHom, isoOfHom
@@ -397,7 +397,7 @@ lemma equiv_mkInv
 
 中文:
 引理 equiv_mkInv
-  结论: (L : C ⥤ D) [L.IsLocalization W] {X Y : C} (f : Y ⟶ X) (hf : W f)
+  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C} (f : Y ⟶ X) (hf : W f)
   证明: by
   simp only [equiv, mkInv, Equiv.symm_trans_apply, Equiv.symm_symm, homEquiv_symm_apply,
     Equiv.trans_apply, Equiv.symm_apply_apply, homEquiv_isoOfHom_inv]
@@ -420,7 +420,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
+  签名: {X Y Z : C} [有SmallLocalized态射.{w} W X Y]
   定义体: (equiv W W.Q).symm (equiv W W.Q α ≫ equiv W W.Q β)
 -/
 noncomputable def comp {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
@@ -447,7 +447,7 @@ lemma equiv_comp
 
 中文:
 引理 equiv_comp
-  结论: (L : C ⥤ D) [L.IsLocalization W] {X Y Z : C} [HasSmallLocalizedHom.{w} W X Y]
+  结论: (L : C ⥤ D) [L.是Localization W] {X Y Z : C} [有SmallLocalized态射.{w} W X Y]
   证明: by
   let := small_of_hasSmallLocalizedHom.{w} W W.Q X Y
   let := small_of_hasSmallLocalizedHom.{w} W W.Q Y Z
@@ -487,7 +487,7 @@ lemma mk_comp_mk
 
 中文:
 引理 mk_comp_mk
-  结论: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Z]
+  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y Z]
   证明: (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
@@ -512,7 +512,7 @@ lemma comp_mk_id
 
 中文:
 引理 comp_mk_id
-  结论: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y Y]
+  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y Y]
   证明: (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
@@ -537,7 +537,7 @@ lemma mk_id_comp
 
 中文:
 引理 mk_id_comp
-  结论: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X X]
+  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W X X]
   证明: (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
@@ -564,7 +564,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W X Z]
+  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W X Z]
   证明: by
   apply (equiv W W.Q).injective
   simp only [equiv_comp, assoc]
@@ -594,7 +594,7 @@ lemma mk_comp_mkInv
 
 中文:
 引理 mk_comp_mkInv
-  结论: [HasSmallLocalizedHom.{w} W X Y] [HasSmallLocalizedHom.{w} W Y X]
+  结论: [有SmallLocalized态射.{w} W X Y] [有SmallLocalized态射.{w} W Y X]
   证明: (equiv W W.Q).injective (by simp [equiv_comp])
 
 @[simp]
@@ -617,7 +617,7 @@ lemma mkInv_comp_mk
 
 中文:
 引理 mkInv_comp_mk
-  结论: [HasSmallLocalizedHom.{w} W X X] [HasSmallLocalizedHom.{w} W X Y]
+  结论: [有SmallLocalized态射.{w} W X X] [有SmallLocalized态射.{w} W X Y]
   证明: (equiv W W.Q).injective (by simp [equiv_comp])
 
 Depends on / 依赖: equiv_comp, injective
@@ -663,7 +663,7 @@ lemma equiv_chgUniv
 
 中文:
 引理 equiv_chgUniv
-  结论: (L : C ⥤ D) [L.IsLocalization W] {X Y : C}
+  结论: (L : C ⥤ D) [L.是Localization W] {X Y : C}
   证明: by
   obtain ⟨f, rfl⟩ := (equiv W W.Q).symm.surjective e
   dsimp [chgUniv]

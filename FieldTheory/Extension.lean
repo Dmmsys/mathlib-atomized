@@ -45,7 +45,7 @@ structure Lifts
 结构 Lifts
   参数: where
   公理与运算 (2 个):
-    - carrier : 整数ermediateField F E
+    - carrier : 中间域 F E
     - emb : carrier ->ₐ[F] K
 -/
 structure Lifts where
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Lifts F E K)
+  签名: 偏序 (Lifts F E K)
   定义体: exists h : L₁.carrier <= L₂.carrier, forall x, L₂.emb (inclusion h x) = L₁.emb x
   le_refl L := ⟨le_rfl, by simp⟩
   le_trans L₁ L₂ L₃ := by
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Lifts F E K)
+  签名: 有底序 (Lifts F E K)
   定义体: ⟨⊥, (Algebra.ofId F K).comp (botEquiv F E)⟩
   bot_le L := ⟨bot_le, fun x => by
     obtain ⟨x, rfl⟩ := (botEquiv F E).symm.surjective x
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Lifts F E K)
+  签名: 可居 (Lifts F E K)
   定义体: ⟨⊥⟩
 -/
 noncomputable instance : Inhabited (Lifts F E K) :=
@@ -406,8 +406,8 @@ theorem exists_upper_bound
   proof: ⟨_, le_union c hc⟩
 
 中文:
-定理 exists_upper_bound
-  条件: (c : Set (Lifts F E K)) (hc : IsChain (· <= ·) c)
+定理 存在_upper_bound
+  条件: (c : 集合 (Lifts F E K)) (hc : IsChain (· <= ·) c)
   证明: ⟨_, le_union c hc⟩
 
 Depends on / 依赖: le_union
@@ -430,7 +430,7 @@ theorem union_isExtendible
 
 中文:
 定理 union_isExtendible
-  结论: [alg : Algebra.IsAlgebraic F E]
+  结论: [alg : 代数.是代数 F E]
   证明: fun S => by
   let Ω := adjoin F (S : Set E) ->ₐ[F] K
   have ⟨ω, hω⟩ : exists ω : Ω, forall π : c, exists θ >= π.1, ⟨_, ω⟩ <= θ ∧ θ.carrier = π.1.1 ⊔ adjoin F S := by
@@ -492,7 +492,7 @@ theorem nonempty_algHom_of_exist_lifts_finset
 
 中文:
 定理 nonempty_algHom_of_exist_lifts_finset
-  结论: [alg : Algebra.IsAlgebraic F E]
+  结论: [alg : 代数.是代数 F E]
   证明: by
   have : (⊥ : Lifts F E K).IsExtendible := fun S => have ⟨σ, hσ⟩ := h S; ⟨σ, bot_le, hσ⟩
   have ⟨ϕ, hϕ⟩ := zorn_le₀ {ϕ : Lifts F E K | ϕ.IsExtendible}
@@ -544,8 +544,8 @@ theorem exists_lift_of_splits'
   let φ : carrier ->ₐ[x.carrier] K := ((algHomAdjoinIntegralEquiv x.carrier h1).sym
 
 中文:
-定理 exists_lift_of_splits'
-  结论: (x : Lifts F E K) {s : E} (h1 : Is整数egral x.carrier s)
+定理 存在_lift_of_splits'
+  结论: (x : Lifts F E K) {s : E} (h1 : 是整 x.carrier s)
   证明: have I2 := (minpoly.degree_pos h1).ne'
   letI : Algebra x.carrier K := x.emb.toRingHom.toAlgebra
   let carrier := x.carrier⟮s⟯.restrictScalars F
@@ -579,8 +579,8 @@ theorem exists_lift_of_splits
     rwa [← x.emb.comp_algebraMap] at h2
 
 中文:
-定理 exists_lift_of_splits
-  结论: (x : Lifts F E K) {s : E} (h1 : Is整数egral F s)
+定理 存在_lift_of_splits
+  结论: (x : Lifts F E K) {s : E} (h1 : 是整 F s)
   证明: exists_lift_of_splits' x h1.tower_top h1.minpoly_splits_tower_top' by
     rwa [← x.emb.comp_algebraMap] at h2
 
@@ -610,8 +610,8 @@ theorem exists_algHom_adjoin_of_splits''
   l
 
 中文:
-定理 exists_algHom_adjoin_of_splits''
-  结论: {L : 整数ermediateField F E}
+定理 存在_algHom_adjoin_of_splits''
+  结论: {L : 中间域 F E}
   证明: by
   obtain ⟨φ, hfφ, hφ⟩ := zorn_le_nonempty_Ici₀ _
     (fun c _ hc _ _ => Lifts.exists_upper_bound c hc) ⟨L, f⟩ le_rfl
@@ -653,7 +653,7 @@ theorem exists_algHom_adjoin_of_splits'
       inclusion (?_ : (adjoin L S).restrictScalars F <=
 
 中文:
-定理 exists_algHom_adjoin_of_splits'
+定理 存在_algHom_adjoin_of_splits'
   证明: by
   let L' := (IsScalarTower.toAlgHom F L E).fieldRange
   let f' : L' ->ₐ[F] K := f.comp (AlgEquiv.ofInjectiveField _).symm.toAlgHom
@@ -697,7 +697,7 @@ theorem exists_algHom_of_adjoin_splits'
   ⟨φ.comp (((equivOfEq hS).trans topEquiv).symm.toAlgHom.restrictScalars F), hφ⟩
 
 中文:
-定理 exists_algHom_of_adjoin_splits'
+定理 存在_algHom_of_adjoin_splits'
   条件: (hS : adjoin L S = ⊤)
   证明: have ⟨φ, hφ⟩ := exists_algHom_adjoin_of_splits' f hK
   ⟨φ.comp (((equivOfEq hS).trans topEquiv).symm.toAlgHom.restrictScalars F), hφ⟩
@@ -717,7 +717,7 @@ theorem exists_algHom_of_splits'
   proof: exists_algHom_of_adjoin_splits' f (fun x _ => hK x) (adjoin_univ L E)
 
 中文:
-定理 exists_algHom_of_splits'
+定理 存在_algHom_of_splits'
   证明: exists_algHom_of_adjoin_splits' f (fun x _ => hK x) (adjoin_univ L E)
 
 Depends on / 依赖: adjoin_univ, exists_algHom_of_adjoin_splits
@@ -751,7 +751,7 @@ theorem exists_algHom_adjoin_of_splits
   · ext
 
 中文:
-定理 exists_algHom_adjoin_of_splits
+定理 存在_algHom_adjoin_of_splits
   结论: 存在 φ : adjoin F S ->ₐ[F] K, φ.comp (inclusion hL) = f
   证明: by
   obtain ⟨φ, hfφ, hφ⟩ := zorn_le_nonempty_Ici₀ _
@@ -781,7 +781,7 @@ theorem nonempty_algHom_adjoin_of_splits
 
 中文:
 定理 nonempty_algHom_adjoin_of_splits
-  结论: Nonempty (adjoin F S ->ₐ[F] K)
+  结论: 非空 (adjoin F S ->ₐ[F] K)
   证明: have ⟨φ, _⟩ := exists_algHom_adjoin_of_splits hK (⊥ : Lifts F E K).emb bot_le; ⟨φ⟩
 
 Depends on / 依赖: bot_le, exists_algHom_adjoin_of_splits
@@ -804,7 +804,7 @@ theorem exists_algHom_of_adjoin_splits
 include hS in
 
 中文:
-定理 exists_algHom_of_adjoin_splits
+定理 存在_algHom_of_adjoin_splits
   结论: 存在 φ : E ->ₐ[F] K, φ.comp L.val = f
   证明: have ⟨φ, hφ⟩ := exists_algHom_adjoin_of_splits hK f (hS.symm ▸ le_top)
   ⟨φ.comp ((equivOfEq hS).trans topEquiv).symm.toAlgHom, hφ⟩
@@ -828,7 +828,7 @@ theorem nonempty_algHom_of_adjoin_splits
 
 中文:
 定理 nonempty_algHom_of_adjoin_splits
-  结论: Nonempty (E ->ₐ[F] K)
+  结论: 非空 (E ->ₐ[F] K)
   证明: have ⟨φ, _⟩ := exists_algHom_of_adjoin_splits hK (⊥ : Lifts F E K).emb hS; ⟨φ⟩
 
 Depends on / 依赖: exists_algHom_of_adjoin_splits
@@ -853,7 +853,7 @@ theorem exists_algHom_adjoin_of_splits_of_aeval
   
 
 中文:
-定理 exists_algHom_adjoin_of_splits_of_aeval
+定理 存在_algHom_adjoin_of_splits_of_aeval
   结论: 存在 φ : adjoin F S ->ₐ[F] K, φ ⟨x, hx⟩ = y
   证明: by
   have := isAlgebraic_adjoin (fun s hs => (hK s hs).1)
@@ -887,7 +887,7 @@ theorem exists_algHom_of_adjoin_splits_of_aeval
 include hK'
 
 中文:
-定理 exists_algHom_of_adjoin_splits_of_aeval
+定理 存在_algHom_of_adjoin_splits_of_aeval
   结论: 存在 φ : E ->ₐ[F] K, φ x = y
   证明: have ⟨φ, hφ⟩ := exists_algHom_adjoin_of_splits_of_aeval hK (hS ▸ mem_top) hy
   ⟨φ.comp ((equivOfEq hS).trans topEquiv).symm.toAlgHom, hφ⟩
@@ -918,7 +918,7 @@ theorem exists_algHom_of_splits
   proof: exists_algHom_of_adjoin_splits (fun x _ => hK' x) f (adjoin_univ F E)
 
 中文:
-定理 exists_algHom_of_splits
+定理 存在_algHom_of_splits
   结论: 存在 φ : E ->ₐ[F] K, φ.comp L.val = f
   证明: exists_algHom_of_adjoin_splits (fun x _ => hK' x) f (adjoin_univ F E)
 
@@ -937,7 +937,7 @@ theorem nonempty_algHom_of_splits
 
 中文:
 定理 nonempty_algHom_of_splits
-  结论: Nonempty (E ->ₐ[F] K)
+  结论: 非空 (E ->ₐ[F] K)
   证明: nonempty_algHom_of_adjoin_splits (fun x _ => hK' x) (adjoin_univ F E)
 
 Depends on / 依赖: adjoin_univ, nonempty_algHom_of_adjoin_splits
@@ -954,7 +954,7 @@ theorem exists_algHom_of_splits_of_aeval
   proof: exists_algHom_of_adjoin_splits_of_aeval (fun x _ => hK' x) (adjoin_univ F E) hy
 
 中文:
-定理 exists_algHom_of_splits_of_aeval
+定理 存在_algHom_of_splits_of_aeval
   条件: (hy : aeval y (minpoly F x) = 0)
   证明: exists_algHom_of_adjoin_splits_of_aeval (fun x _ => hK' x) (adjoin_univ F E) hy
 
@@ -984,7 +984,7 @@ theorem Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly_of_splits
   rw [← hψ]; rw [Polynomial.aeval_algHom_apply ψ x]; rw [minpol
 
 中文:
-定理 Algebra.IsAlgebraic.range_eval_eq_rootSet_minpoly_of_splits
+定理 代数.是代数.range_eval_eq_rootSet_minpoly_of_splits
   结论: {F K : 类型} (L : 类型)
   证明: by
   ext a

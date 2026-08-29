@@ -39,7 +39,7 @@ definition fromRows
 
 中文:
 定义 fromRows
-  签名: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  签名: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   定义体: of (Sum.elim A₁ A₂)
 
 Depends on / 依赖: Sum.elim
@@ -57,7 +57,7 @@ definition fromCols
 
 中文:
 定义 fromCols
-  签名: (B₁ : Matrix m n₁ R) (B₂ : Matrix m n₂ R)
+  签名: (B₁ : 矩阵 m n₁ R) (B₂ : 矩阵 m n₂ R)
   定义体: of fun i => Sum.elim (B₁ i) (B₂ i)
 
 Depends on / 依赖: Sum.elim
@@ -75,7 +75,7 @@ definition toCols₁
 
 中文:
 定义 toCols₁
-  签名: (A : Matrix m (n₁ oplus n₂) R)
+  签名: (A : 矩阵 m (n₁ oplus n₂) R)
   定义体: of fun i j => (A i (Sum.inl j))
 
 Depends on / 依赖: Sum.inl
@@ -92,7 +92,7 @@ definition toCols₂
 
 中文:
 定义 toCols₂
-  签名: (A : Matrix m (n₁ oplus n₂) R)
+  签名: (A : 矩阵 m (n₁ oplus n₂) R)
   定义体: of fun i j => (A i (Sum.inr j))
 
 Depends on / 依赖: Sum.inr
@@ -109,7 +109,7 @@ definition toRows₁
 
 中文:
 定义 toRows₁
-  签名: (A : Matrix (m₁ oplus m₂) n R)
+  签名: (A : 矩阵 (m₁ oplus m₂) n R)
   定义体: of fun i j => (A (Sum.inl i) j)
 
 Depends on / 依赖: Sum.inl
@@ -128,7 +128,7 @@ definition toRows₂
 
 中文:
 定义 toRows₂
-  签名: (A : Matrix (m₁ oplus m₂) n R)
+  签名: (A : 矩阵 (m₁ oplus m₂) n R)
   定义体: of fun i j => (A (Sum.inr i) j)
 
 @[simp]
@@ -150,7 +150,7 @@ lemma fromRows_apply_inl
 
 中文:
 引理 fromRows_apply_inl
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) (i : m₁) (j : n)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) (i : m₁) (j : n)
   证明: rfl
 
 @[simp]
@@ -171,7 +171,7 @@ lemma fromRows_apply_inr
 
 中文:
 引理 fromRows_apply_inr
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) (i : m₂) (j : n)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) (i : m₂) (j : n)
   证明: rfl
 
 @[simp]
@@ -192,7 +192,7 @@ lemma fromCols_apply_inl
 
 中文:
 引理 fromCols_apply_inl
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R) (i : m) (j : n₁)
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R) (i : m) (j : n₁)
   证明: rfl
 
 @[simp]
@@ -213,7 +213,7 @@ lemma fromCols_apply_inr
 
 中文:
 引理 fromCols_apply_inr
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R) (i : m) (j : n₂)
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R) (i : m) (j : n₂)
   证明: rfl
 
 @[simp]
@@ -234,7 +234,7 @@ lemma toRows₁_apply
 
 中文:
 引理 toRows₁_apply
-  条件: (A : Matrix (m₁ oplus m₂) n R) (i : m₁) (j : n)
+  条件: (A : 矩阵 (m₁ oplus m₂) n R) (i : m₁) (j : n)
   证明: rfl
 
 @[simp]
@@ -255,7 +255,7 @@ lemma toRows₂_apply
 
 中文:
 引理 toRows₂_apply
-  条件: (A : Matrix (m₁ oplus m₂) n R) (i : m₂) (j : n)
+  条件: (A : 矩阵 (m₁ oplus m₂) n R) (i : m₂) (j : n)
   证明: rfl
 
 @[simp]
@@ -276,7 +276,7 @@ lemma toRows₁_fromRows
 
 中文:
 引理 toRows₁_fromRows
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   证明: rfl
 
 @[simp]
@@ -297,7 +297,7 @@ lemma toRows₂_fromRows
 
 中文:
 引理 toRows₂_fromRows
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   证明: rfl
 
 @[simp]
@@ -318,7 +318,7 @@ lemma toCols₁_apply
 
 中文:
 引理 toCols₁_apply
-  条件: (A : Matrix m (n₁ oplus n₂) R) (i : m) (j : n₁)
+  条件: (A : 矩阵 m (n₁ oplus n₂) R) (i : m) (j : n₁)
   证明: rfl
 
 @[simp]
@@ -339,7 +339,7 @@ lemma toCols₂_apply
 
 中文:
 引理 toCols₂_apply
-  条件: (A : Matrix m (n₁ oplus n₂) R) (i : m) (j : n₂)
+  条件: (A : 矩阵 m (n₁ oplus n₂) R) (i : m) (j : n₂)
   证明: rfl
 
 @[simp]
@@ -360,7 +360,7 @@ lemma toCols₁_fromCols
 
 中文:
 引理 toCols₁_fromCols
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R)
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R)
   证明: rfl
 
 @[simp]
@@ -381,7 +381,7 @@ lemma toCols₂_fromCols
 
 中文:
 引理 toCols₂_fromCols
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R)
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R)
   证明: rfl
 
 @[simp]
@@ -403,7 +403,7 @@ lemma fromCols_toCols
 
 中文:
 引理 fromCols_toCols
-  条件: (A : Matrix m (n₁ oplus n₂) R)
+  条件: (A : 矩阵 m (n₁ oplus n₂) R)
   证明: by
   ext i (j | j) <;> simp
 
@@ -426,7 +426,7 @@ lemma fromRows_toRows
 
 中文:
 引理 fromRows_toRows
-  条件: (A : Matrix (m₁ oplus m₂) n R)
+  条件: (A : 矩阵 (m₁ oplus m₂) n R)
   结论: fromRows A.toRows₁ A.toRows₂ = A
   证明: by
   ext (i | i) j <;> simp
@@ -446,7 +446,7 @@ lemma fromRows_inj
 
 中文:
 引理 fromRows_inj
-  结论: Function.Injective2 (@fromRows R m₁ m₂ n)
+  结论: 函数.Injective2 (@fromRows R m₁ m₂ n)
   证明: by
   intro x1 x2 y1 y2
   simp [← Matrix.ext_iff]
@@ -470,7 +470,7 @@ lemma fromCols_inj
 
 中文:
 引理 fromCols_inj
-  结论: Function.Injective2 (@fromCols R m n₁ n₂)
+  结论: 函数.Injective2 (@fromCols R m n₁ n₂)
   证明: by
   intro x1 x2 y1 y2
   simp only [← Matrix.ext_iff]
@@ -493,7 +493,7 @@ lemma fromCols_ext_iff
 
 中文:
 引理 fromCols_ext_iff
-  结论: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R) (B₁ : Matrix m n₁ R)
+  结论: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R) (B₁ : 矩阵 m n₁ R)
   证明: fromCols_inj.eq_iff
 
 Depends on / 依赖: eq_iff, fromCols_inj, fromCols_inj.eq_iff
@@ -512,7 +512,7 @@ lemma fromRows_ext_iff
 
 中文:
 引理 fromRows_ext_iff
-  结论: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) (B₁ : Matrix m₁ n R)
+  结论: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) (B₁ : 矩阵 m₁ n R)
   证明: fromRows_inj.eq_iff
 
 Depends on / 依赖: eq_iff, fromRows_inj, fromRows_inj.eq_iff
@@ -532,7 +532,7 @@ lemma transpose_fromCols
 
 中文:
 引理 transpose_fromCols
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R)
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R)
   证明: by
   ext (i | i) j <;> simp
 -/
@@ -551,7 +551,7 @@ lemma transpose_fromRows
 
 中文:
 引理 transpose_fromRows
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   证明: by
   ext i (j | j) <;> simp
 -/
@@ -570,7 +570,7 @@ lemma fromRows_map
 
 中文:
 引理 fromRows_map
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) {R' : 类型} (f : R -> R')
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) {R' : 类型} (f : R -> R')
   证明: by
   ext (_ | _) <;> rfl
 -/
@@ -589,7 +589,7 @@ lemma fromCols_map
 
 中文:
 引理 fromCols_map
-  条件: (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R) {R' : 类型} (f : R -> R')
+  条件: (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R) {R' : 类型} (f : R -> R')
   证明: by
   ext _ (_ | _) <;> rfl
 -/
@@ -614,7 +614,7 @@ lemma fromRows_neg
 
 中文:
 引理 fromRows_neg
-  条件: (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  条件: (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   证明: by
   ext (i | i) j <;> simp
 -/
@@ -635,7 +635,7 @@ lemma fromCols_neg
 
 中文:
 引理 fromCols_neg
-  条件: (A₁ : Matrix n m₁ R) (A₂ : Matrix n m₂ R)
+  条件: (A₁ : 矩阵 n m₁ R) (A₂ : 矩阵 n m₂ R)
   证明: by
   ext i (j | j) <;> simp
 -/
@@ -659,7 +659,7 @@ lemma fromCols_fromRows_eq_fromBlocks
 
 中文:
 引理 fromCols_fromRows_eq_fromBlocks
-  结论: (B₁₁ : Matrix m₁ n₁ R) (B₁₂ : Matrix m₁ n₂ R)
+  结论: (B₁₁ : 矩阵 m₁ n₁ R) (B₁₂ : 矩阵 m₁ n₂ R)
   证明: by
   ext (_ | _) (_ | _) <;> simp
 
@@ -682,7 +682,7 @@ lemma fromRows_fromCols_eq_fromBlocks
 
 中文:
 引理 fromRows_fromCols_eq_fromBlocks
-  结论: (B₁₁ : Matrix m₁ n₁ R) (B₁₂ : Matrix m₁ n₂ R)
+  结论: (B₁₁ : 矩阵 m₁ n₁ R) (B₁₂ : 矩阵 m₁ n₂ R)
   证明: by
   ext (_ | _) (_ | _) <;> simp
 -/
@@ -709,7 +709,7 @@ lemma fromRows_mulVec
 
 中文:
 引理 fromRows_mulVec
-  条件: [Fintype n] (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) (v : n -> R)
+  条件: [有限类型 n] (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) (v : n -> R)
   证明: by
   ext (_ | _) <;> rfl
 
@@ -731,7 +731,7 @@ lemma vecMul_fromCols
 
 中文:
 引理 vecMul_fromCols
-  条件: [Fintype m] (B₁ : Matrix m n₁ R) (B₂ : Matrix m n₂ R) (v : m -> R)
+  条件: [有限类型 m] (B₁ : 矩阵 m n₁ R) (B₂ : 矩阵 m n₂ R) (v : m -> R)
   证明: by
   ext (_ | _) <;> rfl
 -/
@@ -754,7 +754,7 @@ lemma sumElim_vecMul_fromRows
 
 中文:
 引理 sumElim_vecMul_fromRows
-  结论: [Fintype m₁] [Fintype m₂] (B₁ : Matrix m₁ n R) (B₂ : Matrix m₂ n R)
+  结论: [有限类型 m₁] [有限类型 m₂] (B₁ : 矩阵 m₁ n R) (B₂ : 矩阵 m₂ n R)
   证明: by
   ext
   simp [Matrix.vecMul, fromRows, dotProduct]
@@ -781,7 +781,7 @@ lemma vecMul_fromRows
 
 中文:
 引理 vecMul_fromRows
-  结论: [Fintype m₁] [Fintype m₂]
+  结论: [有限类型 m₁] [有限类型 m₂]
   证明: by
   simp [← sumElim_vecMul_fromRows]
 
@@ -806,7 +806,7 @@ lemma fromCols_mulVec_sumElim
 
 中文:
 引理 fromCols_mulVec_sumElim
-  结论: [Fintype n₁] [Fintype n₂]
+  结论: [有限类型 n₁] [有限类型 n₂]
   证明: by
   ext
   simp [Matrix.mulVec, fromCols]
@@ -835,7 +835,7 @@ lemma fromCols_mulVec
 
 中文:
 引理 fromCols_mulVec
-  结论: [Fintype n₁] [Fintype n₂]
+  结论: [有限类型 n₁] [有限类型 n₂]
   证明: by
   simp [← fromCols_mulVec_sumElim]
 
@@ -862,7 +862,7 @@ lemma fromRows_mul
 
 中文:
 引理 fromRows_mul
-  条件: [Fintype n] (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R) (B : Matrix n m R)
+  条件: [有限类型 n] (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R) (B : 矩阵 n m R)
   证明: by
   ext (_ | _) _ <;> simp [mul_apply]
 
@@ -888,7 +888,7 @@ lemma mul_fromCols
 
 中文:
 引理 mul_fromCols
-  条件: [Fintype n] (A : Matrix m n R) (B₁ : Matrix n n₁ R) (B₂ : Matrix n n₂ R)
+  条件: [有限类型 n] (A : 矩阵 m n R) (B₁ : 矩阵 n n₁ R) (B₂ : 矩阵 n n₂ R)
   证明: by
   ext _ (_ | _) <;> simp [mul_apply]
 
@@ -914,7 +914,7 @@ lemma fromRows_zero
 
 中文:
 引理 fromRows_zero
-  结论: fromRows (0 : Matrix m₁ n R) (0 : Matrix m₂ n R) = 0
+  结论: fromRows (0 : 矩阵 m₁ n R) (0 : 矩阵 m₂ n R) = 0
   证明: by
   ext (_ | _) _ <;> simp
 
@@ -935,7 +935,7 @@ lemma fromCols_zero
 
 中文:
 引理 fromCols_zero
-  结论: fromCols (0 : Matrix m n₁ R) (0 : Matrix m n₂ R) = 0
+  结论: fromCols (0 : 矩阵 m n₁ R) (0 : 矩阵 m n₂ R) = 0
   证明: by
   ext _ (_ | _) <;> simp
 -/
@@ -953,7 +953,7 @@ lemma fromRows_mul_fromCols
 
 中文:
 引理 fromRows_mul_fromCols
-  结论: [Fintype n] (A₁ : Matrix m₁ n R) (A₂ : Matrix m₂ n R)
+  结论: [有限类型 n] (A₁ : 矩阵 m₁ n R) (A₂ : 矩阵 m₂ n R)
   证明: by
   ext (_ | _) (_ | _) <;> simp
 -/
@@ -975,7 +975,7 @@ lemma fromCols_mul_fromRows
 
 中文:
 引理 fromCols_mul_fromRows
-  结论: [Fintype n₁] [Fintype n₂] (A₁ : Matrix m n₁ R) (A₂ : Matrix m n₂ R)
+  结论: [有限类型 n₁] [有限类型 n₂] (A₁ : 矩阵 m n₁ R) (A₂ : 矩阵 m n₂ R)
   证明: by
   ext
   simp [mul_apply]
@@ -999,7 +999,7 @@ lemma fromCols_mul_fromBlocks
 
 中文:
 引理 fromCols_mul_fromBlocks
-  结论: [Fintype m₁] [Fintype m₂] (A₁ : Matrix m m₁ R) (A₂ : Matrix m m₂ R)
+  结论: [有限类型 m₁] [有限类型 m₂] (A₁ : 矩阵 m m₁ R) (A₂ : 矩阵 m m₂ R)
   证明: by
   ext _ (_ | _) <;> simp [mul_apply]
 
@@ -1022,7 +1022,7 @@ lemma fromBlocks_mul_fromRows
 
 中文:
 引理 fromBlocks_mul_fromRows
-  结论: [Fintype n₁] [Fintype n₂] (A₁ : Matrix n₁ n R) (A₂ : Matrix n₂ n R)
+  结论: [有限类型 n₁] [有限类型 n₂] (A₁ : 矩阵 n₁ n R) (A₂ : 矩阵 n₂ n R)
   证明: by
   ext (_ | _) _ <;> simp [mul_apply]
 
@@ -1096,7 +1096,7 @@ lemma conjTranspose_fromCols_eq_fromRows_conjTranspose
 
 中文:
 引理 conjTranspose_fromCols_eq_fromRows_conjTranspose
-  结论: (A₁ : Matrix m n₁ R)
+  结论: (A₁ : 矩阵 m n₁ R)
   证明: by
   ext (_ | _) _ <;> simp
 -/
@@ -1116,7 +1116,7 @@ lemma conjTranspose_fromRows_eq_fromCols_conjTranspose
 
 中文:
 引理 conjTranspose_fromRows_eq_fromCols_conjTranspose
-  结论: (A₁ : Matrix m₁ n R)
+  结论: (A₁ : 矩阵 m₁ n R)
   证明: by
   ext _ (_ | _) <;> simp
 -/

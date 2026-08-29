@@ -54,7 +54,7 @@ abbreviation Away
 
 中文:
 缩写 Away
-  签名: (S : 类型) [CommSemiring S] [Algebra R S]
+  签名: (S : 类型) [交换半环 S] [代数 R S]
   定义体: IsLocalization (Submonoid.powers x) S
 
 Depends on / 依赖: IsLocalization, Submonoid, Submonoid.powers, powers
@@ -151,7 +151,7 @@ lemma sec_spec
 中文:
 引理 sec_spec
   条件: (s : S)
-  结论: s * (algebraMap R S) (x ^ (IsLocalization.Away.sec x s).2) =
+  结论: s * (algebraMap R S) (x ^ (是Localization.Away.sec x s).2) =
   证明: by
   simp only [IsLocalization.Away.sec, ← IsLocalization.sec_spec]
   congr
@@ -177,7 +177,7 @@ lemma algebraMap_pow_isUnit
 中文:
 引理 algebraMap_pow_isUnit
   条件: (n : 自然数)
-  结论: IsUnit (algebraMap R S x ^ n)
+  结论: 是单位 (algebraMap R S x ^ n)
   证明: IsUnit.pow _ IsLocalization.map_units _ (⟨x, 1, by simp⟩ : Submonoid.powers x)
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_units, IsUnit, IsUnit.pow, Submonoid, Submonoid.powers, map_units, powers
@@ -195,7 +195,7 @@ lemma algebraMap_isUnit
 
 中文:
 引理 algebraMap_isUnit
-  结论: IsUnit (algebraMap R S x)
+  结论: 是单位 (algebraMap R S x)
   证明: IsLocalization.map_units _ (⟨x, 1, by simp⟩ : Submonoid.powers x)
 
 Depends on / 依赖: IsLocalization, IsLocalization.map_units, Submonoid, Submonoid.powers, map_units, powers
@@ -239,7 +239,7 @@ lemma algebraMap_isUnit_iff
 中文:
 引理 algebraMap_isUnit_iff
   条件: {y : R}
-  结论: IsUnit (algebraMap R S y) ↔ 存在 n, y ∣ x ^ n
+  结论: 是单位 (algebraMap R S y) ↔ 存在 n, y ∣ x ^ n
   证明: (IsLocalization.algebraMap_isUnit_iff <| .powers x).trans by simp [Submonoid.mem_powers_iff]
 
 Depends on / 依赖: IsLocalization, IsLocalization.algebraMap_isUnit_iff, Submonoid, Submonoid.mem_powers_iff, algebraMap_isUnit_iff, mem_powers_iff, powers
@@ -286,7 +286,7 @@ lemma exists_of_eq
   use n
 
 中文:
-引理 exists_of_eq
+引理 存在_of_eq
   条件: {a b : R} (h : algebraMap R S a = algebraMap R S b)
   证明: by
   obtain ⟨⟨-, n, rfl⟩, hx⟩ := IsLocalization.exists_of_eq (M := Submonoid.powers x) h
@@ -319,7 +319,7 @@ lemma mk
 
 中文:
 引理 mk
-  结论: (r : R) (map_unit : IsUnit (algebraMap R S r))
+  结论: (r : R) (map_unit : 是单位 (algebraMap R S r))
   证明: by
     rintro ⟨-, n, rfl⟩
     simp only [map_pow]
@@ -369,7 +369,7 @@ lemma of_associated
 
 中文:
 引理 of_associated
-  条件: {r r' : R} (h : Associated r r') [IsLocalization.Away r S]
+  条件: {r r' : R} (h : Associated r r') [是Localization.Away r S]
   证明: by
   obtain ⟨u, rfl⟩ := h
   refine mk _ ?_ (fun s => ?_) (fun a b hab => ?_)
@@ -426,7 +426,7 @@ lemma isUnit_of_dvd
 中文:
 引理 isUnit_of_dvd
   条件: {r : R} (h : r ∣ x)
-  结论: IsUnit (algebraMap R S r)
+  结论: 是单位 (algebraMap R S r)
   证明: isUnit_of_dvd_unit (map_dvd _ h) (algebraMap_isUnit x)
 
 Depends on / 依赖: algebraMap_isUnit, isUnit_of_dvd_unit, map_dvd
@@ -452,7 +452,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (hg : IsUnit (g x))
+  签名: (hg : 是单位 (g x))
   定义体: IsLocalization.lift fun y : Submonoid.powers x =>
     show IsUnit (g y.1) by
       obtain ⟨n, hn⟩ := y.2
@@ -484,7 +484,7 @@ theorem lift_eq
 
 中文:
 定理 lift_eq
-  条件: (hg : IsUnit (g x)) (a : R)
+  条件: (hg : 是单位 (g x)) (a : R)
   结论: lift x hg (algebraMap R S a) = g a
   证明: IsLocalization.lift_eq _ _
 
@@ -507,7 +507,7 @@ theorem lift_comp
 
 中文:
 定理 lift_comp
-  条件: (hg : IsUnit (g x))
+  条件: (hg : 是单位 (g x))
   结论: (lift x hg).comp (algebraMap R S) = g
   证明: IsLocalization.lift_comp _
 
@@ -605,7 +605,7 @@ definition awayToAwayLeft
 
 中文:
 定义 awayToAwayLeft
-  签名: (y : R) [Algebra R P] [IsLocalization.Away (y * x) P]
+  签名: (y : R) [代数 R P] [是Localization.Away (y * x) P]
   定义体: lift x isUnit_of_dvd (y * x) (dvd_mul_left _ _)
 
 Depends on / 依赖: dvd_mul_left, isUnit_of_dvd
@@ -623,7 +623,7 @@ definition awayToAwayRight
 
 中文:
 定义 awayToAwayRight
-  签名: (y : R) [Algebra R P] [IsLocalization.Away (x * y) P]
+  签名: (y : R) [代数 R P] [是Localization.Away (x * y) P]
   定义体: lift x isUnit_of_dvd (x * y) (dvd_mul_right _ _)
 
 Depends on / 依赖: dvd_mul_right, isUnit_of_dvd
@@ -641,7 +641,7 @@ theorem awayToAwayLeft_eq
 
 中文:
 定理 awayToAwayLeft_eq
-  条件: (y : R) [Algebra R P] [IsLocalization.Away (y * x) P] (a : R)
+  条件: (y : R) [代数 R P] [是Localization.Away (y * x) P] (a : R)
   证明: lift_eq _ _ _
 
 Depends on / 依赖: lift_eq
@@ -660,7 +660,7 @@ theorem awayToAwayRight_eq
 
 中文:
 定理 awayToAwayRight_eq
-  条件: (y : R) [Algebra R P] [IsLocalization.Away (x * y) P] (a : R)
+  条件: (y : R) [代数 R P] [是Localization.Away (x * y) P] (a : R)
   证明: lift_eq _ _ _
 
 Depends on / 依赖: lift_eq
@@ -685,7 +685,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : R ->+* P) (r : R) [IsLocalization.Away r S]
+  签名: (f : R ->+* P) (r : R) [是Localization.Away r S]
   定义体: IsLocalization.map Q f
     (show Submonoid.powers r <= (Submonoid.powers (f r)).comap f by
       rintro x ⟨n, rfl⟩
@@ -717,7 +717,7 @@ lemma map_injective_iff
 
 中文:
 引理 map_injective_iff
-  结论: {S : 类型} [CommRing S] [Algebra R S]
+  结论: {S : 类型} [交换环 S] [代数 R S]
   证明: by
   rw [injective_iff_map_eq_zero]
   trans forall a n, f r ^ n * f a = 0 -> exists m, r ^ m * a = 0
@@ -753,7 +753,7 @@ lemma map_surjective_iff
 
 中文:
 引理 map_surjective_iff
-  结论: (f : R ->+* P) (r : R) [IsLocalization.Away r S]
+  结论: (f : R ->+* P) (r : R) [是Localization.Away r S]
   证明: by
   trans forall a n, exists b m k, f (r ^ (k + n) * b) = f r ^ (k + m) * a
   · simp [Function.Surjective, (IsLocalization.mk'_surjective (.powers (f r))).forall, ← map_pow,
@@ -905,7 +905,7 @@ lemma mul
 
 中文:
 引理 mul
-  结论: (T : 类型) [CommSemiring T] [Algebra S T]
+  结论: (T : 类型) [交换半环 T] [代数 S T]
   证明: by
   refine mk _ ?_ (fun z => ?_) (fun a b h => ?_)
   · simp only [map_mul, IsUnit.mul_iff, IsScalarTower.algebraMap_apply R S T]
@@ -949,7 +949,7 @@ lemma mul'
 
 中文:
 引理 mul'
-  结论: (T : 类型) [CommSemiring T] [Algebra S T] [Algebra R T] [IsScalarTower R S T] (x y : R)
+  结论: (T : 类型) [交换半环 T] [代数 S T] [代数 R T] [标量塔 R S T] (x y : R)
   证明: mul_comm x y ▸ mul S T x y
 
 Depends on / 依赖: mul_comm
@@ -984,7 +984,7 @@ lemma commutes
 
 中文:
 引理 commutes
-  结论: {R : 类型} [CommSemiring R] (S₁ S₂ T : 类型) [CommSemiring S₁]
+  结论: {R : 类型} [交换半环 R] (S₁ S₂ T : 类型) [交换半环 S₁]
   证明: by
   convert! IsLocalization.commutes S₁ S₂ T (Submonoid.powers x) (Submonoid.powers y)
   ext x
@@ -1014,8 +1014,8 @@ theorem isDomain
 
 中文:
 定理 isDomain
-  条件: [IsDomain R] {x : R} (hx : x != 0) [IsLocalization.Away x S]
-  结论: IsDomain S
+  条件: [是整环 R] {x : R} (hx : x != 0) [是Localization.Away x S]
+  结论: 是整环 S
   证明: IsLocalization.isDomain_of_le_nonZeroDivisors S
     (powers_le_nonZeroDivisors_of_noZeroDivisors hx)
 
@@ -1046,7 +1046,7 @@ definition atUnit
 
 中文:
 定义 atUnit
-  签名: (x : R) (e : IsUnit x) [IsLocalization.Away x S]
+  签名: (x : R) (e : 是单位 x) [是Localization.Away x S]
   定义体: atUnits R (Submonoid.powers x)
     (by rwa [Submonoid.powers_eq_closure, Submonoid.closure_le, Set.singleton_subset_iff])
 
@@ -1066,7 +1066,7 @@ definition atOne
 
 中文:
 定义 atOne
-  签名: [IsLocalization.Away (1 : R) S]
+  签名: [是Localization.Away (1 : R) S]
   定义体: @atUnit R _ S _ _ (1 : R) isUnit_one _
 
 Depends on / 依赖: atUnit, isUnit_one
@@ -1084,7 +1084,7 @@ theorem away_of_isUnit_of_bijective
 
 中文:
 定理 away_of_isUnit_of_bijective
-  结论: {R : 类型} (S : 类型) [CommSemiring R] [CommSemiring S]
+  结论: {R : 类型} (S : 类型) [交换半环 R] [交换半环 S]
   证明: .of_le_isUnit_of_bijective (by simpa [Submonoid.powers_le] using! hr.map (algebraMap R S)) H
 
 Depends on / 依赖: Submonoid, Submonoid.powers_le, algebraMap, hr.map, of_le_isUnit_of_bijective, powers_le
@@ -1107,7 +1107,7 @@ lemma Away.mul_of_isUnit
 
 中文:
 引理 Away.mul_of_isUnit
-  条件: (x y : R) [IsLocalization.Away x S] (h : IsUnit (algebraMap R S y))
+  条件: (x y : R) [是Localization.Away x S] (h : 是单位 (algebraMap R S y))
   证明: have : Away (algebraMap R S y) S := away_of_isUnit_of_bijective _ h Function.bijective_id
   .mul' S _ _ _
 
@@ -1129,7 +1129,7 @@ lemma Away.mul_of_isUnit'
 
 中文:
 引理 Away.mul_of_isUnit'
-  条件: (x y : R) [IsLocalization.Away y S] (h : IsUnit (algebraMap R S x))
+  条件: (x y : R) [是Localization.Away y S] (h : 是单位 (algebraMap R S x))
   证明: have : Away (algebraMap R S x) S := away_of_isUnit_of_bijective _ h Function.bijective_id
   .mul S _ _ _
 
@@ -1152,7 +1152,7 @@ lemma Away.mul_of_associated
 
 中文:
 引理 Away.mul_of_associated
-  结论: (x z : R) (y : S) [IsLocalization.Away x S]
+  结论: (x z : R) (y : S) [是Localization.Away x S]
   证明: by
   have : Away (algebraMap R S z) T := by rwa [iff_of_associated h]
   exact .mul' S _ _ _
@@ -1258,7 +1258,7 @@ lemma away_of_isIdempotentElem
 
 中文:
 引理 away_of_isIdempotentElem
-  结论: {R S} [CommRing R] [CommRing S] [Algebra R S]
+  结论: {R S} [交换环 R] [交换环 S] [代数 R S]
   证明: away_of_isIdempotentElem_of_mul he (fun x y => by
     rw [← sub_eq_zero]; rw [← map_sub]; rw [← RingHom.mem_ker]; rw [H]; rw [← he.ker_toSpanSingleton_eq_span]; rw [LinearMap.mem_ker]; rw [LinearMap.toSpanSingleton_apply]; rw [sub_smul]; rw [sub_eq_zero]
     simp_rw [mul_comm e, smul_eq_mul]) H'
@@ -1288,7 +1288,7 @@ instance away_fst
 
 中文:
 实例 away_fst
-  签名: {R S} [CommSemiring R] [CommSemiring S]
+  签名: {R S} [交换半环 R] [交换半环 S]
   定义体: (RingHom.fst R S).toAlgebra
     IsLocalization.Away (R := R × S) (1, 0) R :=
   letI := (RingHom.fst R S).toAlgebra
@@ -1318,7 +1318,7 @@ instance away_snd
 
 中文:
 实例 away_snd
-  签名: {R S} [CommSemiring R] [CommSemiring S]
+  签名: {R S} [交换半环 R] [交换半环 S]
   定义体: (RingHom.snd R S).toAlgebra
     IsLocalization.Away (R := R × S) (0, 1) S :=
   letI := (RingHom.snd R S).toAlgebra
@@ -1356,7 +1356,7 @@ lemma Away.of_surjective
 
 中文:
 引理 Away.of_surjective
-  结论: (h₁ : Function.Surjective (algebraMap S T))
+  结论: (h₁ : 函数.满射 (algebraMap S T))
   证明: by
   refine .mk _ hr (fun t => ?_) fun x y h => ⟨n, ?_⟩
   · obtain ⟨s, rfl⟩ := h₁ t
@@ -1435,7 +1435,7 @@ abbreviation awayLift
 
 中文:
 缩写 awayLift
-  签名: (f : R ->+* P) (r : R) (hr : IsUnit (f r))
+  签名: (f : R ->+* P) (r : R) (hr : 是单位 (f r))
   定义体: IsLocalization.Away.lift r hr
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.lift
@@ -1456,7 +1456,7 @@ lemma awayLift_mk
 
 中文:
 引理 awayLift_mk
-  结论: {A : 类型} [CommSemiring A] (f : R ->+* A) (r : R)
+  结论: {A : 类型} [交换半环 A] (f : R ->+* A) (r : R)
   证明: by
   simp [Localization.mk_eq_mk', awayLift, Away.lift, IsLocalization.lift_mk',
     Units.mul_inv_eq_iff_eq_mul, IsUnit.liftRight, mul_assoc, ← mul_pow, (mul_comm _ _).trans hv]
@@ -1501,7 +1501,7 @@ omit [Algebra R S] in
 
 中文:
 引理 awayMap_injective_iff
-  条件: {R : 类型} [CommRing R] {f : R ->+* S} {r : R}
+  条件: {R : 类型} [交换环 R] {f : R ->+* S} {r : R}
   证明: IsLocalization.Away.map_injective_iff _ _ _
 
 omit [Algebra R S] in
@@ -1549,7 +1549,7 @@ omit [Algebra R S] in
 
 中文:
 引理 awayMap_injective_of_dvd
-  结论: {R : 类型} [CommRing R] (f : R ->+* S)
+  结论: {R : 类型} [交换环 R] (f : R ->+* S)
   证明: by
   simp only [awayMap_injective_iff] at H ⊢
   obtain ⟨b, rfl⟩ := h
@@ -1617,7 +1617,7 @@ omit [Algebra R S] in
 
 中文:
 引理 awayMap_bijective_of_dvd
-  结论: {R : 类型} [CommRing R] (f : R ->+* S)
+  结论: {R : 类型} [交换环 R] (f : R ->+* S)
   证明: ⟨awayMap_injective_of_dvd f h H.1, awayMap_surjective_of_dvd f h H.2⟩
 
 omit [Algebra R S] in
@@ -1707,7 +1707,7 @@ theorem algebraMap_injective_of_span_eq_top
 
 中文:
 定理 algebraMap_injective_of_span_eq_top
-  条件: (s : Set R) (span_eq : Ideal.span s = ⊤)
+  条件: (s : 集合 R) (span_eq : 理想.span s = ⊤)
   证明: fun x y eq => by
   suffices Module.eqIdeal R x y = ⊤ by simpa [Module.eqIdeal] using (Ideal.eq_top_iff_one _).mp this
   by_contra ne
@@ -1740,8 +1740,8 @@ theorem existsUnique_algebraMap_eq_of_span_eq_top
       (fun a b => h ⟨a, hts a.2⟩ ⟨b, hts b.2
 
 中文:
-定理 existsUnique_algebraMap_eq_of_span_eq_top
-  结论: (s : Set R) (span_eq : Ideal.span s = ⊤)
+定理 存在Unique_algebraMap_eq_of_span_eq_top
+  结论: (s : 集合 R) (span_eq : 理想.span s = ⊤)
   证明: by
   have mem := (Ideal.eq_top_iff_one _).mp span_eq; clear span_eq
   wlog finset_eq : exists t : Finset R, t = s generalizing s
@@ -1809,8 +1809,8 @@ theorem Away.isDomain
 
 中文:
 定理 Away.isDomain
-  条件: [IsDomain R] {x : R} (hx : x != 0)
-  结论: IsDomain (Localization.Away x)
+  条件: [是整环 R] {x : R} (hx : x != 0)
+  结论: 是整环 (Localization.Away x)
   证明: IsLocalization.Away.isDomain (Localization.Away x) hx
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.isDomain, Localization, Localization.Away, isDomain
@@ -1985,7 +1985,7 @@ theorem selfZPow_neg_natCast
 中文:
 定理 selfZPow_neg_natCast
   条件: (d : 自然数)
-  结论: selfZPow x B (-d) = mk' _ (1 : R) (Submonoid.pow x d)
+  结论: selfZPow x B (-d) = mk' _ (1 : R) (子幺半群.pow x d)
   证明: by
   simp [selfZPow_of_nonpos _ _ (neg_nonpos.mpr (Int.natCast_nonneg d))]
 
@@ -2196,8 +2196,8 @@ theorem exists_reduced_fraction'
     apply ((in
 
 中文:
-定理 exists_reduced_fraction'
-  条件: {b : B} (hb : b != 0) (hx : Irreducible x)
+定理 存在_reduced_fraction'
+  条件: {b : B} (hb : b != 0) (hx : 不可约 x)
   证明: by
   obtain ⟨⟨a₀, y⟩, H⟩ := surj (Submonoid.powers x) b
   obtain ⟨d, hy⟩ := (Submonoid.mem_powers_iff y.1 x).mp y.2

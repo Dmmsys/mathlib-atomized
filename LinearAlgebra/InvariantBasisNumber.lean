@@ -131,7 +131,7 @@ class StrongRankCondition
 类 StrongRankCondition
   参数: : 命题 where
   公理与运算 (1 个):
-    - le_of_fin_injective : 对任意 {n m : 自然数} (f : (Fin n -> R) ->ₗ[R] Fin m -> R), Injective f -> n <= m
+    - le_of_fin_injective : 对任意 {n m : 自然数} (f : (有限集 n -> R) ->ₗ[R] 有限集 m -> R), 单射 f -> n <= m
 -/
 class StrongRankCondition : Prop where
   /-- Any injective linear map from `Rⁿ` to `Rᵐ` guarantees `n ≤ m`. -/
@@ -147,7 +147,7 @@ theorem le_of_fin_injective
 
 中文:
 定理 le_of_fin_injective
-  条件: [StrongRankCondition R] {n m : 自然数} (f : (Fin n -> R) ->ₗ[R] Fin m -> R)
+  条件: [StrongRankCondition R] {n m : 自然数} (f : (有限集 n -> R) ->ₗ[R] 有限集 m -> R)
   证明: StrongRankCondition.le_of_fin_injective f
 
 Depends on / 依赖: StrongRankCondition, StrongRankCondition.le_of_fin_injective, le_of_fin_injective
@@ -215,7 +215,7 @@ theorem card_le_of_injective
 
 中文:
 定理 card_le_of_injective
-  结论: [StrongRankCondition R] {α β : 类型} [Fintype α] [Fintype β]
+  结论: [StrongRankCondition R] {α β : 类型} [有限类型 α] [有限类型 β]
   证明: by
   let P := LinearEquiv.funCongrLeft R R (Fintype.equivFin α)
   let Q := LinearEquiv.funCongrLeft R R (Fintype.equivFin β)
@@ -244,7 +244,7 @@ theorem card_le_of_injective'
 
 中文:
 定理 card_le_of_injective'
-  结论: [StrongRankCondition R] {α β : 类型} [Fintype α] [Fintype β]
+  结论: [StrongRankCondition R] {α β : 类型} [有限类型 α] [有限类型 β]
   证明: by
   let P := Finsupp.linearEquivFunOnFinite R R β
   let Q := (Finsupp.linearEquivFunOnFinite R R α).symm
@@ -271,7 +271,7 @@ class RankCondition
 类 RankCondition
   参数: : 命题 where
   公理与运算 (1 个):
-    - le_of_fin_surjective : 对任意 {n m : 自然数} (f : (Fin n -> R) ->ₗ[R] Fin m -> R), Surjective f -> m <= n
+    - le_of_fin_surjective : 对任意 {n m : 自然数} (f : (有限集 n -> R) ->ₗ[R] 有限集 m -> R), 满射 f -> m <= n
 -/
 @[mk_iff] class RankCondition : Prop where
   /-- Any surjective linear map from `Rⁿ` to `Rᵐ` guarantees `m ≤ n`. -/
@@ -287,7 +287,7 @@ theorem le_of_fin_surjective
 
 中文:
 定理 le_of_fin_surjective
-  条件: [RankCondition R] {n m : 自然数} (f : (Fin n -> R) ->ₗ[R] Fin m -> R)
+  条件: [RankCondition R] {n m : 自然数} (f : (有限集 n -> R) ->ₗ[R] 有限集 m -> R)
   证明: RankCondition.le_of_fin_surjective f
 
 Depends on / 依赖: RankCondition, RankCondition.le_of_fin_surjective, le_of_fin_surjective
@@ -310,7 +310,7 @@ theorem card_le_of_surjective
 
 中文:
 定理 card_le_of_surjective
-  结论: [RankCondition R] {α β : 类型} [Fintype α] [Fintype β]
+  结论: [RankCondition R] {α β : 类型} [有限类型 α] [有限类型 β]
   证明: by
   let P := LinearEquiv.funCongrLeft R R (Fintype.equivFin α)
   let Q := LinearEquiv.funCongrLeft R R (Fintype.equivFin β)
@@ -339,7 +339,7 @@ theorem card_le_of_surjective'
 
 中文:
 定理 card_le_of_surjective'
-  结论: [RankCondition R] {α β : 类型} [Fintype α] [Fintype β]
+  结论: [RankCondition R] {α β : 类型} [有限类型 α] [有限类型 β]
   证明: by
   let P := Finsupp.linearEquivFunOnFinite R R β
   let Q := (Finsupp.linearEquivFunOnFinite R R α).symm
@@ -363,8 +363,8 @@ theorem Module.Finite.exists_nat_not_surjective
   ⟨n + 1, fun g hg => by simpa using le_of_fin_surjective R (g ∘ₗ f) (hg.comp hf)⟩
 
 中文:
-定理 Module.Finite.exists_nat_not_surjective
-  结论: [RankCondition R] (M) [AddCommMonoid M] [Module R M]
+定理 模.有限.存在_nat_not_surjective
+  结论: [RankCondition R] (M) [加法交换幺半群 M] [模 R M]
   证明: have ⟨n, f, hf⟩ := Module.Finite.exists_fin' R M
   ⟨n + 1, fun g hg => by simpa using le_of_fin_surjective R (g ∘ₗ f) (hg.comp hf)⟩
 
@@ -394,10 +394,10 @@ class InvariantBasisNumber
     - eq_of_fin_equiv : forall {n m : Nat}, ((Fin n -> R) ≃ₗ[R] Fin m -> R) -> n = m
 
 中文:
-类 InvariantBasisNumber
+类 不变基数
   参数: : 命题 where
   公理与运算 (1 个):
-    - eq_of_fin_equiv : 对任意 {n m : 自然数}, ((Fin n -> R) ≃ₗ[R] Fin m -> R) -> n = m
+    - eq_of_fin_equiv : 对任意 {n m : 自然数}, ((有限集 n -> R) ≃ₗ[R] 有限集 m -> R) -> n = m
 -/
 @[mk_iff] class InvariantBasisNumber : Prop where
   /-- Any linear equiv between `Rⁿ` and `Rᵐ` guarantees `m = n`. -/
@@ -421,7 +421,7 @@ theorem strongRankCondition_iff_forall_not_injective
 inj.comp by simpa using
 
 中文:
-定理 strongRankCondition_iff_forall_not_injective
+定理 strongRankCondition_iff_对任意_not_injective
   证明: by
   rw [strongRankCondition_iff_succ]; rw [← not_iff_not]; push Not
   constructor <;> refine fun ⟨n, f, inj⟩ => ⟨n, ?_⟩
@@ -457,7 +457,7 @@ theorem eq_of_fin_equiv
 中文:
 定理 eq_of_fin_equiv
   条件: {n m : 自然数}
-  结论: ((Fin n -> R) ≃ₗ[R] Fin m -> R) -> n = m
+  结论: ((有限集 n -> R) ≃ₗ[R] 有限集 m -> R) -> n = m
   证明: InvariantBasisNumber.eq_of_fin_equiv
 
 Depends on / 依赖: InvariantBasisNumber, InvariantBasisNumber.eq_of_fin_equiv, eq_of_fin_equiv
@@ -477,7 +477,7 @@ theorem card_eq_of_linearEquiv
 
 中文:
 定理 card_eq_of_linearEquiv
-  条件: {α β : 类型} [Fintype α] [Fintype β] (f : (α -> R) ≃ₗ[R] β -> R)
+  条件: {α β : 类型} [有限类型 α] [有限类型 β] (f : (α -> R) ≃ₗ[R] β -> R)
   证明: eq_of_fin_equiv R
     (.funCongrLeft R R (Fintype.equivFin α) ≪≫ₗ f ≪≫ₗ
       .symm (.funCongrLeft R R (Fintype.equivFin β)))
@@ -502,7 +502,7 @@ theorem nontrivial_of_invariantBasisNumber
 
 中文:
 定理 nontrivial_of_invariantBasisNumber
-  结论: Nontrivial R
+  结论: 非平凡 R
   证明: by
   by_contra! h
   exact zero_ne_one (eq_of_fin_equiv R <| .ofSubsingleton ..)
@@ -560,7 +560,7 @@ definition induced_map
 
 中文:
 定义 induced_map
-  签名: (I : Ideal R) (e : (ι -> R) ->ₗ[R] ι' -> R)
+  签名: (I : 理想 R) (e : (ι -> R) ->ₗ[R] ι' -> R)
   定义体: fun x =>
   Quotient.liftOn' x (fun y => Ideal.Quotient.mk _ (e y))
     fun a b hab => Ideal.Quotient.eq.2 fun h => by
@@ -591,7 +591,7 @@ definition inducedEquiv
 
 中文:
 定义 inducedEquiv
-  签名: [Fintype ι'] (I : Ideal R) (e : (ι -> R) ≃ₗ[R] ι' -> R)
+  签名: [有限类型 ι'] (I : 理想 R) (e : (ι -> R) ≃ₗ[R] ι' -> R)
   定义体: induced_map I e
   invFun := induced_map I e.symm
   map_add' := by rintro ⟨a⟩ ⟨b⟩; exact congr_arg _ (map_add ..)

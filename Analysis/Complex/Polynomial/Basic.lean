@@ -47,9 +47,9 @@ theorem exists_root
 (f.differentiable.inv hf').apply_eq_of_t
 
 中文:
-定理 exists_root
-  条件: {f : Complex[X]} (hf : 0 < degree f)
-  结论: 存在 z : Complex, IsRoot f z
+定理 存在_root
+  条件: {f : 复形[X]} (hf : 0 < degree f)
+  结论: 存在 z : 复形, IsRoot f z
   证明: by
   by_contra! hf'
   /- Since `f` has no roots, `f⁻¹` is differentiable. And since `f` is a polynomial, it tends to
@@ -82,7 +82,7 @@ instance isAlgClosed
 
 中文:
 实例 isAlgClosed
-  签名: : IsAlgClosed Complex
+  签名: : 是代数闭 复形
   定义体: IsAlgClosed.of_exists_root _ fun _p _ hp => Complex.exists_root degree_pos_of_irreducible hp
 
 Depends on / 依赖: Complex.exists_root, IsAlgClosed, IsAlgClosed.of_exists_root, degree_pos_of_irreducible, exists_root, of_exists_root
@@ -101,8 +101,8 @@ theorem Real.nonempty_algEquiv_or
   proof: IsAlgClosed.nonempty_algEquiv_or_of_finrank_eq_two F Complex.finrank_real_complex
 
 中文:
-定理 Real.nonempty_algEquiv_or
-  条件: (F : 类型) [Field F] [Algebra 实数 F] [Algebra.IsAlgebraic 实数 F]
+定理 实数.nonempty_algEquiv_or
+  条件: (F : 类型) [域 F] [代数 实数 F] [代数.是代数 实数 F]
   证明: IsAlgClosed.nonempty_algEquiv_or_of_finrank_eq_two F Complex.finrank_real_complex
 
 Depends on / 依赖: Complex.finrank_real_complex, IsAlgClosed, IsAlgClosed.nonempty_algEquiv_or_of_finrank_eq_two, finrank_real_complex, nonempty_algEquiv_or_of_finrank_eq_two
@@ -126,8 +126,8 @@ theorem splits_Rat_Complex
 
 中文:
 定理 splits_Rat_Complex
-  条件: {p : Rat[X]}
-  结论: Fact ((p.map (algebraMap Rat Complex)).Splits)
+  条件: {p : 有理数[X]}
+  结论: Fact ((p.map (algebraMap 有理数 复形)).Splits)
   证明: ⟨IsAlgClosed.splits _⟩
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, splits
@@ -153,7 +153,7 @@ theorem card_complex_roots_eq_card_real_add_card_not_gal_inv
 
 中文:
 定理 card_complex_roots_eq_card_real_add_card_not_gal_inv
-  条件: (p : Rat[X])
+  条件: (p : 有理数[X])
   证明: by
   by_cases hp : p = 0
   · have : IsEmpty (p.rootSet Complex) := by rw [hp, rootSet_zero]; infer_instance
@@ -231,7 +231,7 @@ theorem galActionHom_bijective_of_prime_degree
 
 中文:
 定理 galActionHom_bijective_of_prime_degree
-  结论: {p : Rat[X]} (p_irr : Irreducible p)
+  结论: {p : 有理数[X]} (p_irr : 不可约 p)
   证明: by
   have h1 : Fintype.card (p.rootSet Complex) = p.natDegree := by
     simp_rw [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe]
@@ -283,7 +283,7 @@ theorem galActionHom_bijective_of_prime_degree'
 
 中文:
 定理 galActionHom_bijective_of_prime_degree'
-  结论: {p : Rat[X]} (p_irr : Irreducible p)
+  结论: {p : 有理数[X]} (p_irr : 不可约 p)
   证明: by
   apply galActionHom_bijective_of_prime_degree p_irr p_deg
   let n := (galActionHom p Complex (restrict p Complex (Complex.conjAe.restrictScalars Rat))).support.card
@@ -327,8 +327,8 @@ lemma Polynomial.mul_star_dvd_of_aeval_eq_zero_im_ne_zero
   · simpa [dvd_iff_isRoot]
 
 中文:
-引理 Polynomial.mul_star_dvd_of_aeval_eq_zero_im_ne_zero
-  结论: (p : 实数[X]) {z : Complex} (h0 : aeval z p = 0)
+引理 多项式.mul_star_dvd_of_aeval_eq_zero_im_ne_zero
+  结论: (p : 实数[X]) {z : 复形} (h0 : aeval z p = 0)
   证明: by
   apply IsCoprime.mul_dvd
 · exact isCoprime_X_sub_C_of_isUnit_sub .mk0 _ sub_ne_zero.2 mt conj_eq_iff_im.1 hz
@@ -359,8 +359,8 @@ lemma Polynomial.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
     _ = (X - C (conj z)) *
 
 中文:
-引理 Polynomial.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
-  结论: (p : 实数[X]) {z : Complex} (h0 : aeval z p = 0)
+引理 多项式.quadratic_dvd_of_aeval_eq_zero_im_ne_zero
+  结论: (p : 实数[X]) {z : 复形} (h0 : aeval z p = 0)
   证明: by
   rw [← map_dvd_map' (algebraMap Real Complex)]
   convert! p.mul_star_dvd_of_aeval_eq_zero_im_ne_zero h0 hz
@@ -397,8 +397,8 @@ lemma Irreducible.natDegree_le_two
   rw [← minpoly.eq_of_irreducible hp
 
 中文:
-引理 Irreducible.natDegree_le_two
-  条件: {p : 实数[X]} (hp : Irreducible p)
+引理 不可约.natDegree_le_two
+  条件: {p : 实数[X]} (hp : 不可约 p)
   结论: natDegree p <= 2
   证明: by
   obtain ⟨z, hz⟩ : exists z : Complex, aeval z p = 0 :=
@@ -426,8 +426,8 @@ lemma Irreducible.degree_le_two
   proof: natDegree_le_iff_degree_le.1 hp.natDegree_le_two
 
 中文:
-引理 Irreducible.degree_le_two
-  条件: {p : 实数[X]} (hp : Irreducible p)
+引理 不可约.degree_le_two
+  条件: {p : 实数[X]} (hp : 不可约 p)
   结论: degree p <= 2
   证明: natDegree_le_iff_degree_le.1 hp.natDegree_le_two
 

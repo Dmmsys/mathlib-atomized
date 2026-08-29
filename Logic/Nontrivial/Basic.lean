@@ -35,8 +35,8 @@ theorem nontrivial_of_lt
 
 中文:
 定理 nontrivial_of_lt
-  条件: [Preorder α] (x y : α) (h : x < y)
-  结论: Nontrivial α
+  条件: [预序 α] (x y : α) (h : x < y)
+  结论: 非平凡 α
   证明: ⟨⟨x, y, ne_of_lt h⟩⟩
 
 Depends on / 依赖: ne_of_lt
@@ -56,8 +56,8 @@ theorem exists_pair_lt
   cases lt_or_gt_of_ne hxy <;> exact ⟨_, _, ‹_›⟩
 
 中文:
-定理 exists_pair_lt
-  条件: (α : 类型) [Nontrivial α] [LinearOrder α]
+定理 存在_pair_lt
+  条件: (α : 类型) [非平凡 α] [线性序 α]
   结论: 存在 x y : α, x < y
   证明: by
   rcases exists_pair_ne α with ⟨x, y, hxy⟩
@@ -80,8 +80,8 @@ theorem nontrivial_iff_lt
 
 中文:
 定理 nontrivial_iff_lt
-  条件: [LinearOrder α]
-  结论: Nontrivial α ↔ 存在 x y : α, x < y
+  条件: [线性序 α]
+  结论: 非平凡 α ↔ 存在 x y : α, x < y
   证明: ⟨fun h => @exists_pair_lt α h _, fun ⟨x, y, h⟩ => nontrivial_of_lt x y h⟩
 
 Depends on / 依赖: exists_pair_lt, nontrivial_of_lt
@@ -99,8 +99,8 @@ theorem Subtype.nontrivial_iff_exists_ne
   simp only [_root_.nontrivial_iff_exists_ne x, Subtype.exists, Ne, Subtype.ext_iff]
 
 中文:
-定理 Subtype.nontrivial_iff_exists_ne
-  条件: (p : α -> 命题) (x : Subtype p)
+定理 子类型.nontrivial_iff_存在_ne
+  条件: (p : α -> 命题) (x : 子类型 p)
   证明: by
   simp only [_root_.nontrivial_iff_exists_ne x, Subtype.exists, Ne, Subtype.ext_iff]
 
@@ -127,7 +127,7 @@ definition nontrivialPSumUnique
 
 中文:
 定义 nontrivialPSumUnique
-  签名: (α : 类型) [Inhabited α]
+  签名: (α : 类型) [可居 α]
   定义体: if h : Nontrivial α then PSum.inl h
   else
     PSum.inr
@@ -159,8 +159,8 @@ instance Option.nontrivial
   exact ⟨none, some default, nofun⟩
 
 中文:
-实例 Option.nontrivial
-  签名: [Nonempty α]
+实例 选项类型.nontrivial
+  签名: [非空 α]
   定义体: by
   inhabit α
   exact ⟨none, some default, nofun⟩
@@ -181,7 +181,7 @@ instance nontrivial_prod_right
 
 中文:
 实例 nontrivial_prod_right
-  签名: [Nonempty α] [Nontrivial β]
+  签名: [非空 α] [非平凡 β]
   定义体: Prod.snd_surjective.nontrivial
 
 Depends on / 依赖: Prod.snd_surjective.nontrivial, nontrivial, snd_surjective
@@ -199,7 +199,7 @@ instance nontrivial_prod_left
 
 中文:
 实例 nontrivial_prod_left
-  签名: [Nontrivial α] [Nonempty β]
+  签名: [非平凡 α] [非空 β]
   定义体: Prod.fst_surjective.nontrivial
 
 Depends on / 依赖: Prod.fst_surjective.nontrivial, fst_surjective, nontrivial
@@ -224,7 +224,7 @@ theorem nontrivial_at
 
 中文:
 定理 nontrivial_at
-  条件: (i' : I) [inst : 对任意 i, Nonempty (f i)] [Nontrivial (f i')]
+  条件: (i' : I) [inst : 对任意 i, 非空 (f i)] [非平凡 (f i')]
   证明: by
   classical
   let := Classical.decEq (forall i : I, f i)
@@ -248,7 +248,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Inhabited I] [对任意 i, Nonempty (f i)] [Nontrivial (f default)]
+  签名: [可居 I] [对任意 i, 非空 (f i)] [非平凡 (f default)]
   定义体: nontrivial_at default
 
 Depends on / 依赖: nontrivial_at
@@ -270,8 +270,8 @@ instance Function.nontrivial
 @[nontriviality]
 
 中文:
-实例 Function.nontrivial
-  签名: [h : Nonempty α] [Nontrivial β]
+实例 函数.nontrivial
+  签名: [h : 非空 α] [非平凡 β]
   定义体: h.elim fun a => Pi.nontrivial_at a
 
 @[nontriviality]
@@ -292,8 +292,8 @@ theorem Subsingleton.le
   proof: le_of_eq (Subsingleton.elim x y)
 
 中文:
-定理 Subsingleton.le
-  条件: [Preorder α] [Subsingleton α] (x y : α)
+定理 子单例.le
+  条件: [预序 α] [子单例 α] (x y : α)
   结论: x <= y
   证明: le_of_eq (Subsingleton.elim x y)
 -/

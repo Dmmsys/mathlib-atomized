@@ -387,7 +387,7 @@ theorem inversion_involutive
 中文:
 定理 inversion_involutive
   条件: (c : P) {R : 实数} (hR : R != 0)
-  结论: Involutive (inversion c R)
+  结论: 对合 (inversion c R)
   证明: inversion_inversion c hR
 
 Depends on / 依赖: inversion_inversion
@@ -407,7 +407,7 @@ theorem inversion_surjective
 中文:
 定理 inversion_surjective
   条件: (c : P) {R : 实数} (hR : R != 0)
-  结论: Surjective (inversion c R)
+  结论: 满射 (inversion c R)
   证明: (inversion_involutive c hR).surjective
 
 Depends on / 依赖: inversion_involutive, surjective
@@ -427,7 +427,7 @@ theorem inversion_injective
 中文:
 定理 inversion_injective
   条件: (c : P) {R : 实数} (hR : R != 0)
-  结论: Injective (inversion c R)
+  结论: 单射 (inversion c R)
   证明: (inversion_involutive c hR).injective
 
 Depends on / 依赖: injective, inversion_involutive
@@ -447,7 +447,7 @@ theorem inversion_bijective
 中文:
 定理 inversion_bijective
   条件: (c : P) {R : 实数} (hR : R != 0)
-  结论: Bijective (inversion c R)
+  结论: 双射 (inversion c R)
   证明: (inversion_involutive c hR).bijective
 
 Depends on / 依赖: bijective, inversion_involutive
@@ -681,8 +681,8 @@ theorem Filter.Tendsto.inversion
   proof: (((hR.div (hx.dist hc) <| dist_ne_zero.2 hne).pow 2).smul (hx.vsub hc)).vadd hc
 
 中文:
-定理 Filter.Tendsto.inversion
-  结论: {α : 类型} {x c : P} {R : 实数} {l : Filter α}
+定理 滤子.收敛.inversion
+  结论: {α : 类型} {x c : P} {R : 实数} {l : 滤子 α}
   证明: (((hR.div (hx.dist hc) <| dist_ne_zero.2 hne).pow 2).smul (hx.vsub hc)).vadd hc
 -/
 protected theorem Filter.Tendsto.inversion {α : Type*} {x c : P} {R : Real} {l : Filter α}
@@ -733,8 +733,8 @@ theorem Continuous.inversion
     hc.continuousAt.inversion hR.continuousAt hx.continuousAt (hne _)
 
 中文:
-定理 Continuous.inversion
-  结论: (hc : Continuous c) (hR : Continuous R) (hx : Continuous x)
+定理 连续.inversion
+  结论: (hc : 连续 c) (hR : 连续 R) (hx : 连续 x)
   证明: continuous_iff_continuousAt.2 fun _ =>
     hc.continuousAt.inversion hR.continuousAt hx.continuousAt (hne _)
 -/

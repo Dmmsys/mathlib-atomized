@@ -140,7 +140,7 @@ lemma Cover.toPresieveOver_le_arrows_iff
 
 中文:
 引理 Cover.toPresieveOver_le_arrows_iff
-  结论: {X : Over S} (R : Sieve X)
+  结论: {X : Over S} (R : 筛 X)
   证明: by
   simp_rw [← Sieve.giGenerate.gc.le_iff_le, ← (Sieve.overEquiv X).map_rel_iff]
   rw [overEquiv_generate_toPresieveOver_eq_ofArrows]
@@ -211,7 +211,7 @@ abbreviation overGrothendieckTopology
 
 中文:
 缩写 overGrothendieckTopology
-  签名: : GrothendieckTopology (Over S)
+  签名: : Grothendieck拓扑 (Over S)
   定义体: (Scheme.grothendieckTopology P).over S
 
 Depends on / 依赖: Scheme, Scheme.grothendieckTopology, grothendieckTopology
@@ -287,7 +287,7 @@ lemma mem_overGrothendieckTopology
 
 中文:
 引理 mem_overGrothendieckTopology
-  条件: (X : Over S) (R : Sieve X)
+  条件: (X : Over S) (R : 筛 X)
   证明: by
   rw [overGrothendieckTopology_eq_toGrothendieck_overPretopology]
   constructor
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Morphism命题erty.Over.forget P ⊤ S).LocallyCoverDense (overGrothendieckTopology P S)
+  签名: (MorphismProperty.Over.forget P ⊤ S).LocallyCoverDense (overGrothendieckTopology P S)
   定义体: locallyCoverDense_of_le S le_rfl
 
 Depends on / 依赖: le_rfl, locallyCoverDense_of_le
@@ -390,7 +390,7 @@ alias smallGrothendieckTopologyOfLE := smallGrothendieckTopology
 
 中文:
 缩写 smallGrothendieckTopology
-  签名: : GrothendieckTopology (Q.Over ⊤ S)
+  签名: : Grothendieck拓扑 (Q.Over ⊤ S)
   定义体: (MorphismProperty.Over.forget Q ⊤ S).restrictedTopology (S.overGrothendieckTopology P)
 
 @[deprecated (since := "2026-05-28")]
@@ -536,7 +536,7 @@ lemma mem_toGrothendieck_smallPretopology
 
 中文:
 引理 mem_toGrothendieck_smallPretopology
-  条件: (X : Q.Over ⊤ S) (R : Sieve X)
+  条件: (X : Q.Over ⊤ S) (R : 筛 X)
   证明: by
   rw [Pretopology.mem_toGrothendieck]
   refine ⟨?_, fun h => ?_⟩
@@ -595,7 +595,7 @@ lemma mem_smallGrothendieckTopology
 
 中文:
 引理 mem_smallGrothendieckTopology
-  条件: [P.HasOfPostcomp命题erty P] (X : P.Over ⊤ S) (R : Sieve X)
+  条件: [P.有OfPostcompProperty P] (X : P.Over ⊤ S) (R : 筛 X)
   证明: by
   rw [smallGrothendieckTopology_eq_toGrothendieck_smallPretopology _ le_rfl]
   constructor

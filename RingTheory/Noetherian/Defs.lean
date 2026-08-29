@@ -66,10 +66,10 @@ class IsNoetherian
     - noetherian : forall s : Submodule R M, s.FG
 
 中文:
-类 IsNoetherian
-  参数: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
+类 是Noether
+  参数: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
   公理与运算 (1 个):
-    - noetherian : 对任意 s : Submodule R M, s.FG
+    - noetherian : 对任意 s : 子模 R M, s.FG
 -/
 class IsNoetherian (R M) [Semiring R] [AddCommMonoid M] [Module R M] : Prop where
   noetherian : forall s : Submodule R M, s.FG
@@ -94,7 +94,7 @@ theorem isNoetherian_def
 
 中文:
 定理 isNoetherian_def
-  结论: IsNoetherian R M ↔ 对任意 s : Submodule R M, s.FG
+  结论: 是Noether R M ↔ 对任意 s : 子模 R M, s.FG
   证明: ⟨fun h => h.noetherian, IsNoetherian.mk⟩
 
 Depends on / 依赖: IsNoetherian, IsNoetherian.mk, h.noetherian, noetherian
@@ -118,7 +118,7 @@ theorem isNoetherian_submodule
 
 中文:
 定理 isNoetherian_submodule
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: by
   refine ⟨fun ⟨hn⟩ => fun s hs =>
     have : s <= LinearMap.range N.subtype := N.range_subtype.symm ▸ hs
@@ -148,7 +148,7 @@ theorem isNoetherian_submodule_left
 
 中文:
 定理 isNoetherian_submodule_left
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: isNoetherian_submodule.trans ⟨fun H _ => H _ inf_le_left, fun H _ hs => inf_of_le_right hs ▸ H _⟩
 
 Depends on / 依赖: inf_le_left, inf_of_le_right, isNoetherian_submodule, isNoetherian_submodule.trans
@@ -167,7 +167,7 @@ theorem isNoetherian_submodule_right
 
 中文:
 定理 isNoetherian_submodule_right
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: isNoetherian_submodule.trans ⟨fun H _ => H _ inf_le_right, fun H _ hs => inf_of_le_left hs ▸ H _⟩
 
 Depends on / 依赖: inf_le_right, inf_of_le_left, isNoetherian_submodule, isNoetherian_submodule.trans
@@ -186,7 +186,7 @@ instance isNoetherian_submodule'
 
 中文:
 实例 isNoetherian_submodule'
-  签名: [IsNoetherian R M] (N : Submodule R M)
+  签名: [是Noether R M] (N : 子模 R M)
   定义体: isNoetherian_submodule.2 fun _ _ => IsNoetherian.noetherian _
 
 Depends on / 依赖: IsNoetherian, IsNoetherian.noetherian, isNoetherian_submodule, noetherian
@@ -204,7 +204,7 @@ theorem isNoetherian_of_le
 
 中文:
 定理 isNoetherian_of_le
-  条件: {s t : Submodule R M} [ht : IsNoetherian R t] (h : s <= t)
+  条件: {s t : 子模 R M} [ht : 是Noether R t] (h : s <= t)
   证明: isNoetherian_submodule.mpr fun _ hs' => isNoetherian_submodule.mp ht _ (le_trans hs' h)
 
 Depends on / 依赖: isNoetherian_submodule, isNoetherian_submodule.mp, isNoetherian_submodule.mpr, le_trans
@@ -238,7 +238,7 @@ theorem isNoetherian_iff'
 
 中文:
 定理 isNoetherian_iff'
-  结论: IsNoetherian R M ↔ WellFoundedGT (Submodule R M)
+  结论: 是Noether R M ↔ WellFoundedGT (子模 R M)
   证明: by
   refine .trans ?_ ((CompleteLattice.wellFoundedGT_characterisations <| Submodule R M).out 0 3).symm
   exact
@@ -294,7 +294,7 @@ instance wellFoundedGT
 
 中文:
 实例 wellFoundedGT
-  签名: [h : IsNoetherian R M]
+  签名: [h : 是Noether R M]
   定义体: h.wellFoundedGT
 
 Depends on / 依赖: h.wellFoundedGT, wellFoundedGT
@@ -413,7 +413,7 @@ theorem Module.End.eventually_disjoint_ker_pow_range_pow
   
 
 中文:
-定理 Module.End.eventually_disjoint_ker_pow_range_pow
+定理 模.End.eventually_disjoint_ker_pow_range_pow
   条件: (f : End R M)
   证明: by
   obtain ⟨n, hn : forall m, n <= m -> LinearMap.ker (f ^ n) = LinearMap.ker (f ^ m)⟩ :=
@@ -451,7 +451,7 @@ lemma LinearMap.eventually_iSup_ker_pow_eq
   rcases le_or_gt m l
 
 中文:
-引理 LinearMap.eventually_iSup_ker_pow_eq
+引理 线性映射.eventually_iSup_ker_pow_eq
   条件: (f : M ->ₗ[R] M)
   证明: by
   obtain ⟨n, hn : forall m, n <= m -> ker (f ^ n) = ker (f ^ m)⟩ :=
@@ -486,8 +486,8 @@ abbreviation IsNoetherianRing
   body: IsNoetherian R R
 
 中文:
-缩写 IsNoetherianRing
-  签名: (R) [Semiring R]
+缩写 是Noether环
+  签名: (R) [半环 R]
   定义体: IsNoetherian R R
 
 Depends on / 依赖: IsNoetherian
@@ -506,8 +506,8 @@ theorem isNoetherianRing_iff
 
 中文:
 定理 isNoetherianRing_iff
-  条件: {R} [Semiring R]
-  结论: IsNoetherianRing R ↔ IsNoetherian R R
+  条件: {R} [半环 R]
+  结论: 是Noether环 R ↔ 是Noether R R
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -525,7 +525,7 @@ theorem isNoetherianRing_iff_ideal_fg
 
 中文:
 定理 isNoetherianRing_iff_ideal_fg
-  条件: (R : 类型) [Semiring R]
+  条件: (R : 类型) [半环 R]
   证明: isNoetherianRing_iff.trans isNoetherian_def
 
 Depends on / 依赖: isNoetherianRing_iff, isNoetherianRing_iff.trans, isNoetherian_def
@@ -545,8 +545,8 @@ lemma Ideal.fg_of_isNoetherianRing
 alias Ideal.FG.of_isNoetherianRing := Ideal.fg_of_isNoetherianRing
 
 中文:
-引理 Ideal.fg_of_isNoetherianRing
-  条件: {R : 类型} [Semiring R] [IsNoetherianRing R] (I : Ideal R)
+引理 理想.fg_of_isNoetherianRing
+  条件: {R : 类型} [半环 R] [是Noether环 R] (I : 理想 R)
   证明: IsNoetherian.noetherian _
 
 alias Ideal.FG.of_isNoetherianRing := Ideal.fg_of_isNoetherianRing

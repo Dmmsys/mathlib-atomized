@@ -99,8 +99,8 @@ theorem _root_.Set.Subsingleton.isEquipartition
   proof: Set.Subsingleton.equitableOn h _
 
 中文:
-定理 _root_.Set.Subsingleton.isEquipartition
-  条件: (h : (P.parts : Set (Finset α)).Subsingleton)
+定理 _root_.集合.子单例.isEquipartition
+  条件: (h : (P.parts : 集合 (有限集 α)).子单例)
   证明: Set.Subsingleton.equitableOn h _
 
 Depends on / 依赖: Set.Subsingleton.equitableOn, Subsingleton, equitableOn
@@ -297,7 +297,7 @@ theorem IsEquipartition.exists_partsEquiv
       {x // x in P.parts ∧ ¬#x = #s / #P.parts + 1} 
 
 中文:
-定理 IsEquipartition.exists_partsEquiv
+定理 IsEquipartition.存在_partsEquiv
   条件: (hP : P.IsEquipartition)
   证明: by
   let el := {p in P.parts | #p = #s / #P.parts + 1}.equivFin
@@ -348,9 +348,9 @@ theorem IsEquipartition.exists_partPreservingEquiv
         _ 
 
 中文:
-定理 IsEquipartition.exists_partPreservingEquiv
+定理 IsEquipartition.存在_partPreservingEquiv
   条件: (hP : P.IsEquipartition)
-  结论: 存在 f : s ≃ Fin #s,
+  结论: 存在 f : s ≃ 有限集 #s,
   证明: by
   obtain ⟨f, hf⟩ := P.exists_enumeration
   obtain ⟨g, hg⟩ := hP.exists_partsEquiv
@@ -407,7 +407,7 @@ theorem bot_isEquipartition
 
 中文:
 定理 bot_isEquipartition
-  结论: (⊥ : Finpartition s).IsEquipartition
+  结论: (⊥ : 有限分拆 s).IsEquipartition
   证明: Set.equitableOn_iff_exists_eq_eq_add_one.2 ⟨1, by simp⟩
 
 Depends on / 依赖: Set.equitableOn_iff_exists_eq_eq_add_one, equitableOn_iff_exists_eq_eq_add_one
@@ -426,8 +426,8 @@ theorem top_isEquipartition
 
 中文:
 定理 top_isEquipartition
-  条件: [Decidable (s = ∅)]
-  结论: (⊤ : Finpartition s).IsEquipartition
+  条件: [可判定 (s = ∅)]
+  结论: (⊤ : 有限分拆 s).IsEquipartition
   证明: Set.Subsingleton.isEquipartition (parts_top_subsingleton _)
 
 Depends on / 依赖: Set.Subsingleton.isEquipartition, Subsingleton, isEquipartition, parts_top_subsingleton

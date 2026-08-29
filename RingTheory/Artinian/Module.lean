@@ -75,8 +75,8 @@ theorem LinearMap.isArtinian_iff_of_bijective
   ⟨fun _ => e.symm.strictMono.wellFoundedLT, fun _ => e.strictMono.wellFoundedLT⟩
 
 中文:
-定理 LinearMap.isArtinian_iff_of_bijective
-  结论: {S P} [Semiring S] [AddCommMonoid P] [Module S P]
+定理 线性映射.isArtinian_iff_of_bijective
+  结论: {S P} [半环 S] [加法交换幺半群 P] [模 S P]
   证明: let e := Submodule.orderIsoMapComapOfBijective l hl
   ⟨fun _ => e.symm.strictMono.wellFoundedLT, fun _ => e.strictMono.wellFoundedLT⟩
 
@@ -100,7 +100,7 @@ theorem isArtinian_of_injective
 
 中文:
 定理 isArtinian_of_injective
-  条件: (f : M ->ₗ[R] P) (h : Function.Injective f) [IsArtinian R P]
+  条件: (f : M ->ₗ[R] P) (h : 函数.单射 f) [是Artin R P]
   证明: ⟨Subrelation.wf
     (fun {A B} hAB => show A.map f < B.map f from Submodule.map_strictMono_of_injective h hAB)
     (InvImage.wf (Submodule.map f) IsWellFounded.wf)⟩
@@ -123,7 +123,7 @@ instance isArtinian_submodule'
 
 中文:
 实例 isArtinian_submodule'
-  签名: [IsArtinian R M] (N : Submodule R M)
+  签名: [是Artin R M] (N : 子模 R M)
   定义体: isArtinian_of_injective N.subtype Subtype.val_injective
 
 Depends on / 依赖: N.subtype, Subtype, Subtype.val_injective, isArtinian_of_injective, subtype, val_injective
@@ -142,8 +142,8 @@ theorem isArtinian_of_le
 
 中文:
 定理 isArtinian_of_le
-  条件: {s t : Submodule R M} [IsArtinian R t] (h : s <= t)
-  结论: IsArtinian R s
+  条件: {s t : 子模 R M} [是Artin R t] (h : s <= t)
+  结论: 是Artin R s
   证明: isArtinian_of_injective (Submodule.inclusion h) (Submodule.inclusion_injective h)
 
 Depends on / 依赖: Submodule, Submodule.inclusion, Submodule.inclusion_injective, inclusion, inclusion_injective, isArtinian_of_injective
@@ -165,7 +165,7 @@ theorem isArtinian_of_surjective
 
 中文:
 定理 isArtinian_of_surjective
-  条件: (f : M ->ₗ[R] P) (hf : Function.Surjective f) [IsArtinian R M]
+  条件: (f : M ->ₗ[R] P) (hf : 函数.满射 f) [是Artin R M]
   证明: ⟨Subrelation.wf
     (fun {A B} hAB =>
       show A.comap f < B.comap f from Submodule.comap_strictMono_of_surjective hf hAB)
@@ -198,7 +198,7 @@ theorem isArtinian_of_surjective_algebraMap
 
 中文:
 定理 isArtinian_of_surjective_algebraMap
-  结论: {S : 类型} [CommSemiring S] [Algebra S R]
+  结论: {S : 类型} [交换半环 S] [代数 S R]
   证明: by
   apply (OrderEmbedding.wellFoundedLT (β := Submodule R M))
   refine ⟨⟨?_, ?_⟩, ?_⟩
@@ -237,7 +237,7 @@ instance isArtinian_range
 
 中文:
 实例 isArtinian_range
-  签名: (f : M ->ₗ[R] P) [IsArtinian R M]
+  签名: (f : M ->ₗ[R] P) [是Artin R M]
   定义体: isArtinian_of_surjective _ _ f.surjective_rangeRestrict
 
 Depends on / 依赖: f.surjective_rangeRestrict, isArtinian_of_surjective, surjective_rangeRestrict
@@ -256,8 +256,8 @@ theorem isArtinian_of_linearEquiv
 
 中文:
 定理 isArtinian_of_linearEquiv
-  条件: (f : M ≃ₗ[R] P) [IsArtinian R M]
-  结论: IsArtinian R P
+  条件: (f : M ≃ₗ[R] P) [是Artin R M]
+  结论: 是Artin R P
   证明: isArtinian_of_surjective _ f.toLinearMap f.toEquiv.surjective
 
 Depends on / 依赖: f.toEquiv.surjective, f.toLinearMap, isArtinian_of_surjective, surjective, toEquiv, toLinearMap
@@ -275,9 +275,9 @@ theorem LinearEquiv.isArtinian_iff
   proof: ⟨fun _ => isArtinian_of_linearEquiv f, fun _ => isArtinian_of_linearEquiv f.symm⟩
 
 中文:
-定理 LinearEquiv.isArtinian_iff
+定理 线性等价.isArtinian_iff
   条件: (f : M ≃ₗ[R] P)
-  结论: IsArtinian R M ↔ IsArtinian R P
+  结论: 是Artin R M ↔ 是Artin R P
   证明: ⟨fun _ => isArtinian_of_linearEquiv f, fun _ => isArtinian_of_linearEquiv f.symm⟩
 
 Depends on / 依赖: f.symm, isArtinian_of_linearEquiv
@@ -298,8 +298,8 @@ lemma isArtinian_of_finite
 
 中文:
 引理 isArtinian_of_finite
-  条件: [Finite M]
-  结论: IsArtinian R M
+  条件: [有限 M]
+  结论: 是Artin R M
   证明: ⟨Finite.wellFounded_of_trans_of_irrefl _⟩
 
 Depends on / 依赖: Finite, Finite.wellFounded_of_trans_of_irrefl, wellFounded_of_trans_of_irrefl
@@ -318,8 +318,8 @@ theorem IsArtinian.finite_of_linearIndependent
   proof: WellFoundedLT.finite_of_iSupIndep hs.iSupIndep_span_singleton fun i _ => hs.ne_zero i (by simp_all)
 
 中文:
-定理 IsArtinian.finite_of_linearIndependent
-  结论: [Nontrivial R] [h : IsArtinian R M] {s : Set M}
+定理 是Artin.finite_of_linearIndependent
+  结论: [非平凡 R] [h : 是Artin R M] {s : 集合 M}
   证明: WellFoundedLT.finite_of_iSupIndep hs.iSupIndep_span_singleton fun i _ => hs.ne_zero i (by simp_all)
 
 Depends on / 依赖: WellFoundedLT, WellFoundedLT.finite_of_iSupIndep, finite_of_iSupIndep, hs.iSupIndep_span_singleton, hs.ne_zero, iSupIndep_span_singleton, ne_zero
@@ -356,8 +356,8 @@ theorem IsArtinian.set_has_minimal
   proof: set_has_minimal_iff_artinian.mpr ‹_› a ha
 
 中文:
-定理 IsArtinian.set_has_minimal
-  条件: [IsArtinian R M] (a : Set <| Submodule R M) (ha : a.Nonempty)
+定理 是Artin.set_has_minimal
+  条件: [是Artin R M] (a : 集合 <| 子模 R M) (ha : a.非空)
   证明: set_has_minimal_iff_artinian.mpr ‹_› a ha
 
 Depends on / 依赖: set_has_minimal_iff_artinian, set_has_minimal_iff_artinian.mpr
@@ -398,7 +398,7 @@ theorem monotone_stabilizes
 
 中文:
 定理 monotone_stabilizes
-  条件: (f : 自然数 ->o (Submodule R M)ᵒᵈ)
+  条件: (f : 自然数 ->o (子模 R M)ᵒᵈ)
   结论: 存在 n, 对任意 m, n <= m -> f n = f m
   证明: monotone_stabilizes_iff_artinian.mpr ‹_› f
 
@@ -419,7 +419,7 @@ theorem eventuallyConst_of_isArtinian
 
 中文:
 定理 eventuallyConst_of_isArtinian
-  条件: (f : 自然数 ->o (Submodule R M)ᵒᵈ)
+  条件: (f : 自然数 ->o (子模 R M)ᵒᵈ)
   证明: by
   simp_rw [eventuallyConst_atTop, eq_comm]
   exact monotone_stabilizes f
@@ -450,8 +450,8 @@ theorem surjective_of_injective_endomorphism
 
 中文:
 定理 surjective_of_injective_endomorphism
-  条件: (f : M ->ₗ[R] M) (s : Injective f)
-  结论: Surjective f
+  条件: (f : M ->ₗ[R] M) (s : 单射 f)
+  结论: 满射 f
   证明: by
   have h := ‹IsArtinian R M›; contrapose h
   rw [IsArtinian]; rw [WellFoundedLT]; rw [isWellFounded_iff]
@@ -482,8 +482,8 @@ theorem bijective_of_injective_endomorphism
 
 中文:
 定理 bijective_of_injective_endomorphism
-  条件: (f : M ->ₗ[R] M) (s : Injective f)
-  结论: Bijective f
+  条件: (f : M ->ₗ[R] M) (s : 单射 f)
+  结论: 双射 f
   证明: ⟨s, surjective_of_injective_endomorphism f s⟩
 
 Depends on / 依赖: surjective_of_injective_endomorphism
@@ -509,7 +509,7 @@ theorem disjoint_partial_infs_eventually_top
 
 中文:
 定理 disjoint_partial_infs_eventually_top
-  结论: (f : 自然数 -> Submodule R M)
+  结论: (f : 自然数 -> 子模 R M)
   证明: by
   -- A little off-by-one cleanup first:
   rsuffices ⟨n, w⟩ : exists n : Nat, forall m, n <= m -> OrderDual.toDual f (m + 1) = ⊤
@@ -548,8 +548,8 @@ lemma IsArtinian.subsingleton_of_injective
     congr($(inj eq).1).symm
 
 中文:
-引理 IsArtinian.subsingleton_of_injective
-  结论: [IsArtinian R N] {f : P × N ->ₗ[R] N}
+引理 是Artin.subsingleton_of_injective
+  结论: [是Artin R N] {f : P × N ->ₗ[R] N}
   证明: subsingleton_of_forall_eq 0 fun p =>
     have ⟨_, eq⟩ := IsArtinian.surjective_of_injective_endomorphism (f ∘ₗ .inr ..)
       (inj.comp (Prod.mk_right_injective _)) (f (p, 0))
@@ -583,7 +583,7 @@ lemma eventually_iInf_range_pow_eq
 
 中文:
 引理 eventually_iInf_range_pow_eq
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   证明: by
   obtain ⟨n, hn : forall m, n <= m -> LinearMap.range (f ^ n) = LinearMap.range (f ^ m)⟩ :=
     IsArtinian.monotone_stabilizes f.iterateRange
@@ -643,7 +643,7 @@ theorem isArtinian_of_range_eq_ker
 
 中文:
 定理 isArtinian_of_range_eq_ker
-  结论: [IsArtinian R M] [IsArtinian R P] (f : M ->ₗ[R] N) (g : N ->ₗ[R] P)
+  结论: [是Artin R M] [是Artin R P] (f : M ->ₗ[R] N) (g : N ->ₗ[R] P)
   证明: wellFounded_lt_exact_sequence (LinearMap.range f)
     (Submodule.map ((LinearMap.ker f).liftQ f le_rfl))
     (Submodule.comap ((LinearMap.ker f).liftQ f le_rfl))
@@ -676,7 +676,7 @@ theorem isArtinian_iff_submodule_quotient
 
 中文:
 定理 isArtinian_iff_submodule_quotient
-  条件: (S : Submodule R P)
+  条件: (S : 子模 R P)
   证明: by
   refine ⟨fun h => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => ?_⟩
   apply isArtinian_of_range_eq_ker S.subtype S.mkQ
@@ -700,7 +700,7 @@ instance isArtinian_prod
 
 中文:
 实例 isArtinian_prod
-  签名: [IsArtinian R M] [IsArtinian R P]
+  签名: [是Artin R M] [是Artin R P]
   定义体: isArtinian_of_range_eq_ker (LinearMap.inl R M P) (LinearMap.snd R M P) (LinearMap.range_inl R M P)
 
 Depends on / 依赖: LinearMap, LinearMap.inl, LinearMap.range_inl, LinearMap.snd, isArtinian_of_range_eq_ker, range_inl
@@ -720,7 +720,7 @@ instance isArtinian_sup
 
 中文:
 实例 isArtinian_sup
-  签名: (M₁ M₂ : Submodule R P) [IsArtinian R M₁] [IsArtinian R M₂]
+  签名: (M₁ M₂ : 子模 R P) [是Artin R M₁] [是Artin R M₂]
   定义体: by
   have := isArtinian_range (M₁.subtype.coprod M₂.subtype)
   rwa [LinearMap.range_coprod, Submodule.range_subtype, Submodule.range_subtype] at this
@@ -775,7 +775,7 @@ instance isArtinian_pi'
 
 中文:
 实例 isArtinian_pi'
-  签名: [IsArtinian R M]
+  签名: [是Artin R M]
   定义体: isArtinian_pi
 
 Depends on / 依赖: isArtinian_pi
@@ -793,7 +793,7 @@ instance isArtinian_finsupp
 
 中文:
 实例 isArtinian_finsupp
-  签名: [IsArtinian R M]
+  签名: [是Artin R M]
   定义体: isArtinian_of_linearEquiv (Finsupp.linearEquivFunOnFinite _ _ _).symm
 
 Depends on / 依赖: Finsupp, Finsupp.linearEquivFunOnFinite, isArtinian_of_linearEquiv, linearEquivFunOnFinite
@@ -844,8 +844,8 @@ theorem IsArtinian.isSemisimpleModule_iff_jacobson
     let f : M ->ₗ[R] forall m : s, M ⧸ m.1.1 := Line
 
 中文:
-定理 IsArtinian.isSemisimpleModule_iff_jacobson
-  条件: [IsArtinian R M]
+定理 是Artin.isSemisimpleModule_iff_jacobson
+  条件: [是Artin R M]
   证明: ⟨fun _ => IsSemisimpleModule.jacobson_eq_bot R M, fun h =>
     have ⟨s, hs⟩ := Finset.exists_inf_le (Subtype.val (p := fun m : Submodule R M => IsCoatom m))
     have _ (m : s) : IsSimpleModule R (M ⧸ m.1.1) := isSimpleModule_iff_isCoatom.mpr m.1.2
@@ -886,7 +886,7 @@ theorem eventually_codisjoint_ker_pow_range_pow
 
 中文:
 定理 eventually_codisjoint_ker_pow_range_pow
-  条件: (f : Module.End R M)
+  条件: (f : 模.End R M)
   证明: by
   obtain ⟨n, hn : forall m, n <= m -> LinearMap.range (f ^ n) = LinearMap.range (f ^ m)⟩ :=
     IsArtinian.monotone_stabilizes f.iterateRange
@@ -924,7 +924,7 @@ theorem eventually_isCompl_ker_pow_range_pow
 
 中文:
 定理 eventually_isCompl_ker_pow_range_pow
-  条件: [IsNoetherian R M] (f : Module.End R M)
+  条件: [是Noether R M] (f : 模.End R M)
   证明: by
   filter_upwards [f.eventually_disjoint_ker_pow_range_pow.and
     f.eventually_codisjoint_ker_pow_range_pow] with n hn
@@ -952,7 +952,7 @@ obtain ⟨k, hk⟩ := eventually_atTop.mp f.eventually_isCompl_ker_pow_range_pow
 
 中文:
 定理 isCompl_iSup_ker_pow_iInf_range_pow
-  条件: [IsNoetherian R M] (f : M ->ₗ[R] M)
+  条件: [是Noether R M] (f : M ->ₗ[R] M)
   证明: by
 obtain ⟨k, hk⟩ := eventually_atTop.mp f.eventually_isCompl_ker_pow_range_pow.and
     f.eventually_iInf_range_pow_eq.and f.eventually_iSup_ker_pow_eq
@@ -1025,7 +1025,7 @@ theorem exists_pow_succ_smul_dvd
   exact ⟨n, by simpa using hn n.succ n.le_succ (r ^ n • x)⟩
 
 中文:
-定理 exists_pow_succ_smul_dvd
+定理 存在_pow_succ_smul_dvd
   条件: (r : R) (x : M)
   证明: by
   obtain ⟨n, hn⟩ := IsArtinian.range_smul_pow_stabilizes M r
@@ -1054,7 +1054,7 @@ theorem isArtinian_of_submodule_of_artinian
 
 中文:
 定理 isArtinian_of_submodule_of_artinian
-  结论: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
   证明: inferInstance
 -/
 theorem isArtinian_of_submodule_of_artinian (R M) [Semiring R] [AddCommMonoid M] [Module R M]
@@ -1070,7 +1070,7 @@ theorem isArtinian_of_tower
 
 中文:
 定理 isArtinian_of_tower
-  结论: (R) {S M} [Semiring R] [Semiring S] [AddCommMonoid M] [SMul R S]
+  结论: (R) {S M} [半环 R] [半环 S] [加法交换幺半群 M] [标量乘法 R S]
   证明: ⟨(Submodule.restrictScalarsEmbedding R S M).wellFounded h.wf⟩
 
 Depends on / 依赖: Submodule, Submodule.restrictScalarsEmbedding, h.wf, restrictScalarsEmbedding, wellFounded
@@ -1088,8 +1088,8 @@ instance DivisionSemiring.instIsArtinianRing
   body: ⟨Finite.wellFounded_of_trans_of_irrefl _⟩
 
 中文:
-实例 DivisionSemiring.instIsArtinianRing
-  签名: {K : 类型} [DivisionSemiring K]
+实例 除半环.instIsArtinianRing
+  签名: {K : 类型} [除半环 K]
   定义体: ⟨Finite.wellFounded_of_trans_of_irrefl _⟩
 
 Depends on / 依赖: Finite, Finite.wellFounded_of_trans_of_irrefl, wellFounded_of_trans_of_irrefl
@@ -1106,8 +1106,8 @@ instance DivisionRing.instIsArtinianRing
   body: inferInstance
 
 中文:
-实例 DivisionRing.instIsArtinianRing
-  签名: {K : 类型} [DivisionRing K]
+实例 除环.instIsArtinianRing
+  签名: {K : 类型} [除环 K]
   定义体: inferInstance
 -/
 instance DivisionRing.instIsArtinianRing {K : Type*} [DivisionRing K] : IsArtinianRing K :=
@@ -1124,9 +1124,9 @@ theorem Ring.isArtinian_of_zero_eq_one
   inferInstance
 
 中文:
-定理 Ring.isArtinian_of_zero_eq_one
-  条件: {R} [Semiring R] (h01 : (0 : R) = 1)
-  结论: IsArtinianRing R
+定理 环.isArtinian_of_zero_eq_one
+  条件: {R} [半环 R] (h01 : (0 : R) = 1)
+  结论: 是Artin环 R
   证明: have := subsingleton_of_zero_eq_one h01
   inferInstance
 
@@ -1158,7 +1158,7 @@ instance isArtinian_of_fg_of_artinian'
 
 中文:
 实例 isArtinian_of_fg_of_artinian'
-  签名: {R M} [Ring R] [AddCommGroup M] [Module R M]
+  签名: {R M} [环 R] [加法交换群 M] [模 R M]
   定义体: have ⟨_, _, h⟩ := Module.Finite.exists_fin' R M
   isArtinian_of_surjective _ _ h
 
@@ -1180,7 +1180,7 @@ theorem isArtinian_of_fg_of_artinian
 
 中文:
 定理 isArtinian_of_fg_of_artinian
-  结论: {R M} [Ring R] [AddCommGroup M] [Module R M]
+  结论: {R M} [环 R] [加法交换群 M] [模 R M]
   证明: by
   rw [← Module.Finite.iff_fg] at hN; infer_instance
 
@@ -1199,8 +1199,8 @@ theorem IsArtinianRing.of_finite
   proof: isArtinian_of_tower R isArtinian_of_fg_of_artinian'
 
 中文:
-定理 IsArtinianRing.of_finite
-  结论: (R S) [Ring R] [Ring S] [Module R S] [IsScalarTower R S S]
+定理 是Artin环.of_finite
+  结论: (R S) [环 R] [环 S] [模 R S] [标量塔 R S S]
   证明: isArtinian_of_tower R isArtinian_of_fg_of_artinian'
 
 Depends on / 依赖: isArtinian_of_fg_of_artinian, isArtinian_of_tower
@@ -1225,7 +1225,7 @@ theorem isArtinian_span_of_finite
 
 中文:
 定理 isArtinian_span_of_finite
-  结论: (R) {M} [Ring R] [AddCommGroup M] [Module R M] [IsArtinianRing R]
+  结论: (R) {M} [环 R] [加法交换群 M] [模 R M] [是Artin环 R]
   证明: isArtinian_of_fg_of_artinian _ (Submodule.fg_def.mpr ⟨A, hA, rfl⟩)
 
 Depends on / 依赖: Submodule, Submodule.fg_def.mpr, fg_def, isArtinian_of_fg_of_artinian
@@ -1245,8 +1245,8 @@ theorem Function.Surjective.isArtinianRing
   exact ⟨(Ideal.orderEmbeddingOfSurjective f hf).wellFounded H.wf⟩
 
 中文:
-定理 Function.Surjective.isArtinianRing
-  结论: {R} [Semiring R] {S} [Semiring S] {F}
+定理 函数.满射.isArtinianRing
+  结论: {R} [半环 R] {S} [半环 S] {F}
   证明: by
   rw [isArtinianRing_iff] at H ⊢
   exact ⟨(Ideal.orderEmbeddingOfSurjective f hf).wellFounded H.wf⟩
@@ -1269,7 +1269,7 @@ instance isArtinianRing_rangeS
 
 中文:
 实例 isArtinianRing_rangeS
-  签名: {R} [Semiring R] {S} [Semiring S] (f : R ->+* S) [IsArtinianRing R]
+  签名: {R} [半环 R] {S} [半环 S] (f : R ->+* S) [是Artin环 R]
   定义体: f.rangeSRestrict_surjective.isArtinianRing
 
 Depends on / 依赖: f.rangeSRestrict_surjective.isArtinianRing, isArtinianRing, rangeSRestrict_surjective
@@ -1288,7 +1288,7 @@ instance isArtinianRing_range
 
 中文:
 实例 isArtinianRing_range
-  签名: {R} [Ring R] {S} [Ring S] (f : R ->+* S) [IsArtinianRing R]
+  签名: {R} [环 R] {S} [环 S] (f : R ->+* S) [是Artin环 R]
   定义体: isArtinianRing_rangeS f
 
 Depends on / 依赖: isArtinianRing_rangeS
@@ -1306,8 +1306,8 @@ theorem RingEquiv.isArtinianRing
   proof: f.surjective.isArtinianRing
 
 中文:
-定理 RingEquiv.isArtinianRing
-  结论: {R S} [Semiring R] [Semiring S] (f : R ≃+* S)
+定理 环等价.isArtinianRing
+  结论: {R S} [半环 R] [半环 S] (f : R ≃+* S)
   证明: f.surjective.isArtinianRing
 
 Depends on / 依赖: f.surjective.isArtinianRing, isArtinianRing, surjective
@@ -1346,8 +1346,8 @@ theorem isUnit_iff_isRightRegular
 
 中文:
 定理 isUnit_iff_isRightRegular
-  条件: [IsArtinianRing R] {x : R}
-  结论: IsUnit x ↔ IsRightRegular x
+  条件: [是Artin环 R] {x : R}
+  结论: 是单位 x ↔ IsRightRegular x
   证明: by
   rw [IsRightRegular]; rw [IsUnit.isUnit_iff_mulRight_bijective]; rw [Bijective]; rw [and_iff_left_of_imp]
   exact IsArtinian.surjective_of_injective_endomorphism (.toSpanSingleton R R x)
@@ -1370,8 +1370,8 @@ theorem isUnit_iff_isRegular
 
 中文:
 定理 isUnit_iff_isRegular
-  条件: [IsArtinianRing R] {x : R}
-  结论: IsUnit x ↔ IsRegular x
+  条件: [是Artin环 R] {x : R}
+  结论: 是单位 x ↔ 是正则 x
   证明: by
   rw [isRegular_iff]; rw [← isUnit_iff_isRightRegular]; rw [and_iff_right_of_imp (·.isRegular.1)]
 
@@ -1392,8 +1392,8 @@ theorem isUnit_iff_isLeftRegular
 
 中文:
 定理 isUnit_iff_isLeftRegular
-  条件: [IsArtinianRing Rᵐᵒᵖ] {x : R}
-  结论: IsUnit x ↔ IsLeftRegular x
+  条件: [是Artin环 Rᵐᵒᵖ] {x : R}
+  结论: 是单位 x ↔ IsLeftRegular x
   证明: by
   rw [← isRightRegular_op]; rw [← isUnit_op]; rw [isUnit_iff_isRightRegular]
 
@@ -1413,7 +1413,7 @@ theorem isUnit_iff_isRegular_of_mulOpposite
 
 中文:
 定理 isUnit_iff_isRegular_of_mulOpposite
-  条件: [IsArtinianRing Rᵐᵒᵖ] {x : R}
+  条件: [是Artin环 Rᵐᵒᵖ] {x : R}
   证明: by
   rw [isRegular_iff]; rw [← isUnit_iff_isLeftRegular]; rw [and_iff_left_of_imp (·.isRegular.2)]
 
@@ -1443,8 +1443,8 @@ theorem isUnit_of_mem_nonZeroDivisors
 
 中文:
 定理 isUnit_of_mem_nonZeroDivisors
-  条件: [IsArtinianRing R] {a : R} (ha : a in R⁰)
-  结论: IsUnit a
+  条件: [是Artin环 R] {a : R} (ha : a in R⁰)
+  结论: 是单位 a
   证明: by
   rwa [isUnit_iff_isRegular, isRegular_iff_mem_nonZeroDivisors]
 
@@ -1464,7 +1464,7 @@ theorem isUnit_of_mem_nonZeroDivisors_of_mulOpposite
 
 中文:
 定理 isUnit_of_mem_nonZeroDivisors_of_mulOpposite
-  结论: [IsArtinianRing Rᵐᵒᵖ] {a : R}
+  结论: [是Artin环 Rᵐᵒᵖ] {a : R}
   证明: by
   rwa [isUnit_iff_isRegular_of_mulOpposite, isRegular_iff_mem_nonZeroDivisors]
 
@@ -1486,8 +1486,8 @@ theorem isUnit_iff_mem_nonZeroDivisors
 
 中文:
 定理 isUnit_iff_mem_nonZeroDivisors
-  条件: [IsArtinianRing R] {a : R}
-  结论: IsUnit a ↔ a in R⁰
+  条件: [是Artin环 R] {a : R}
+  结论: 是单位 a ↔ a in R⁰
   证明: by
   rw [isUnit_iff_isRegular]; rw [isRegular_iff_mem_nonZeroDivisors]
 
@@ -1507,7 +1507,7 @@ theorem isUnit_iff_mem_nonZeroDivisors_of_mulOpposite
 
 中文:
 定理 isUnit_iff_mem_nonZeroDivisors_of_mulOpposite
-  条件: [IsArtinianRing Rᵐᵒᵖ] {a : R}
+  条件: [是Artin环 Rᵐᵒᵖ] {a : R}
   证明: by
   rw [isUnit_iff_isRegular_of_mulOpposite]; rw [isRegular_iff_mem_nonZeroDivisors]
 
@@ -1531,8 +1531,8 @@ theorem isUnitSubmonoid_eq
 
 中文:
 定理 isUnitSubmonoid_eq
-  条件: [IsArtinianRing R]
-  结论: IsUnit.submonoid R = R⁰
+  条件: [是Artin环 R]
+  结论: 是单位.submonoid R = R⁰
   证明: by
   ext; simp [IsUnit.mem_submonoid_iff, isUnit_iff_mem_nonZeroDivisors]
 
@@ -1552,7 +1552,7 @@ theorem isUnitSubmonoid_eq_of_mulOpposite
 
 中文:
 定理 isUnitSubmonoid_eq_of_mulOpposite
-  条件: [IsArtinianRing Rᵐᵒᵖ]
+  条件: [是Artin环 Rᵐᵒᵖ]
   证明: by
   ext; simp [IsUnit.mem_submonoid_iff, isUnit_iff_mem_nonZeroDivisors_of_mulOpposite]
 
@@ -1573,7 +1573,7 @@ theorem isUnitSubmonoid_eq_nonZeroDivisorsRight
 
 中文:
 定理 isUnitSubmonoid_eq_nonZeroDivisorsRight
-  条件: [IsArtinianRing R]
+  条件: [是Artin环 R]
   证明: by
   ext; rw [← isRightRegular_iff_mem_nonZeroDivisorsRight]; exact isUnit_iff_isRightRegular
 
@@ -1594,7 +1594,7 @@ theorem nonZeroDivisorsLeft_eq_isUnitSubmonoid
 
 中文:
 定理 nonZeroDivisorsLeft_eq_isUnitSubmonoid
-  条件: [IsArtinianRing Rᵐᵒᵖ]
+  条件: [是Artin环 Rᵐᵒᵖ]
   证明: by
   ext; rw [← isLeftRegular_iff_mem_nonZeroDivisorsLeft]; exact isUnit_iff_isLeftRegular
 
@@ -1627,7 +1627,7 @@ lemma setOfPred_isMaximal_finite
 
 中文:
 引理 setOfPred_isMaximal_finite
-  结论: {I : Ideal R | I.IsMaximal}.Finite
+  结论: {I : 理想 R | I.是极大}.有限
   证明: by
   have ⟨s, H⟩ := Finset.exists_inf_le (Subtype.val (p := fun I : Ideal R => I.IsMaximal))
   refine Set.finite_def.2 ⟨s, fun p => ?_⟩
@@ -1657,7 +1657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (MaximalSpectrum R)
+  签名: 有限 (极大谱 R)
   定义体: haveI : Finite {I : Ideal R // I.IsMaximal} := (setOfPred_isMaximal_finite R).to_subtype
   .of_equiv _ (MaximalSpectrum.equivSubtype _).symm
 
@@ -1692,8 +1692,8 @@ lemma isField_of_isDomain
 
 中文:
 引理 isField_of_isDomain
-  条件: [IsDomain R]
-  结论: IsField R
+  条件: [是整环 R]
+  结论: 是域 R
   证明: by
   refine ⟨Nontrivial.exists_pair_ne, mul_comm, fun {x} hx => ?_⟩
   obtain ⟨n, y, hy⟩ := IsArtinian.exists_pow_succ_smul_dvd x (1 : R)
@@ -1727,7 +1727,7 @@ instance isMaximal_of_isPrime
 
 中文:
 实例 isMaximal_of_isPrime
-  签名: {R : 类型} [CommRing R] (p : Ideal R) [p.IsPrime]
+  签名: {R : 类型} [交换环 R] (p : 理想 R) [p.是素]
   定义体: Ideal.Quotient.maximal_of_isField _ (isField_of_isDomain _)
 
 Depends on / 依赖: Ideal.Quotient.maximal_of_isField, Quotient, isField_of_isDomain, maximal_of_isField
@@ -1747,8 +1747,8 @@ lemma isPrime_iff_isMaximal
 
 中文:
 引理 isPrime_iff_isMaximal
-  条件: (p : Ideal R)
-  结论: p.IsPrime ↔ p.IsMaximal
+  条件: (p : 理想 R)
+  结论: p.是素 ↔ p.是极大
   证明: ⟨fun _ => isMaximal_of_isPrime p, fun h => h.isPrime⟩
 
 Depends on / 依赖: h.isPrime, isMaximal_of_isPrime, isPrime
@@ -1767,7 +1767,7 @@ theorem mem_minimalPrimes
 
 中文:
 定理 mem_minimalPrimes
-  条件: {I p : Ideal R} [hp : p.IsPrime] (hIp : I <= p)
+  条件: {I p : 理想 R} [hp : p.是素] (hIp : I <= p)
   结论: p in I.minimalPrimes
   证明: ⟨⟨hp, hIp⟩, fun q ⟨_, _⟩ hqp => ((isMaximal_of_isPrime q).eq_of_le hp.ne_top hqp).ge⟩
 
@@ -1789,7 +1789,7 @@ definition primeSpectrumEquivMaximalSpectrum
 
 中文:
 定义 primeSpectrumEquivMaximalSpectrum
-  签名: : PrimeSpectrum R ≃ MaximalSpectrum R where
+  签名: : 素谱 R ≃ 极大谱 R where
   定义体: ⟨I.asIdeal, isPrime_iff_isMaximal I.asIdeal
 .mpr I.isMaximal⟩ invFun I := ⟨I.asIdeal, isPrime_iff_isMaximal I.asIdeal
 
@@ -1895,7 +1895,7 @@ theorem nilradical_eq_iInf
 
 中文:
 定理 nilradical_eq_iInf
-  结论: nilradical R = iInf MaximalSpectrum.asIdeal
+  结论: nilradical R = iInf 极大谱.asIdeal
   证明: by
   simpa using nilradical_pow_eq_iInf R 1
 
@@ -1917,7 +1917,7 @@ lemma setOfPred_isPrime_finite
 
 中文:
 引理 setOfPred_isPrime_finite
-  结论: {I : Ideal R | I.IsPrime}.Finite
+  结论: {I : 理想 R | I.是素}.有限
   证明: by
   simpa only [isPrime_iff_isMaximal] using setOfPred_isMaximal_finite R
 
@@ -1941,7 +1941,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (PrimeSpectrum R)
+  签名: 有限 (素谱 R)
   定义体: haveI : Finite {I : Ideal R // I.IsPrime} := (setOfPred_isPrime_finite R).to_subtype
   .of_equiv _ (PrimeSpectrum.equivSubtype _).symm.toEquiv
 
@@ -2049,7 +2049,7 @@ definition equivPi
 
 中文:
 定义 equivPi
-  签名: [IsReduced R]
+  签名: [是既约 R]
   定义体: .trans (.symm <| .quotientBot R R) .trans
     (Ideal.quotientEquivAlgOfEq R (nilradical_eq_zero R).symm) (quotNilradicalEquivPi R)
 
@@ -2073,7 +2073,7 @@ lemma equivPi_apply
 
 中文:
 引理 equivPi_apply
-  条件: [IsReduced R] (x : R) (m : MaximalSpectrum R)
+  条件: [是既约 R] (x : R) (m : 极大谱 R)
   结论: equivPi R x m = x
   证明: rfl
 -/
@@ -2091,7 +2091,7 @@ theorem isSemisimpleRing_of_isReduced
 
 中文:
 定理 isSemisimpleRing_of_isReduced
-  条件: [IsReduced R]
+  条件: [是既约 R]
   结论: IsSemisimpleRing R
   证明: (equivPi R).symm.isSemisimpleRing
 
@@ -2116,7 +2116,7 @@ theorem isSemisimpleRing_iff_jacobson
 
 中文:
 定理 isSemisimpleRing_iff_jacobson
-  结论: IsSemisimpleRing R ↔ Ring.jacobson R = ⊥
+  结论: IsSemisimpleRing R ↔ 环.jacobson R = ⊥
   证明: IsArtinian.isSemisimpleModule_iff_jacobson R R
 
 Depends on / 依赖: IsArtinian, IsArtinian.isSemisimpleModule_iff_jacobson, isSemisimpleModule_iff_jacobson
@@ -2139,7 +2139,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSemiprimaryRing R
+  签名: 是Semiprimary环 R
   定义体: IsArtinianRing.isSemisimpleRing_iff_jacobson.mpr (Ring.jacobson_quotient_jacobson R)
   isNilpotent := by
     let Jac := Ring.jacobson R

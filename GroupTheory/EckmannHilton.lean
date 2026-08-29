@@ -44,7 +44,7 @@ structure IsUnital
   (no additional axioms)
 
 中文:
-结构 IsUnital
+结构 是Unital
   参数: (m : X -> X -> X) (e : X)
   继承: Std.LawfulIdentity m e
   (无附加公理)
@@ -63,9 +63,9 @@ theorem MulOneClass.isUnital
                 right_id := MulOneClass.mul_one }
 
 中文:
-定理 MulOneClass.isUnital
-  条件: [_G : MulOneClass X]
-  结论: IsUnital (· * ·) (1 : X)
+定理 MulOne类.isUnital
+  条件: [_G : MulOne类 X]
+  结论: 是Unital (· * ·) (1 : X)
   证明: IsUnital.mk { left_id := MulOneClass.one_mul,
                 right_id := MulOneClass.mul_one }
 
@@ -143,7 +143,7 @@ theorem mul_comm
 
 中文:
 定理 mul_comm
-  结论: Std.Commutative m₂
+  结论: Std.交换 m₂
   证明: ⟨fun a b => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib e₂ a b e₂⟩
 
 Depends on / 依赖: distrib, left_id, right_id
@@ -161,7 +161,7 @@ theorem mul_assoc
 
 中文:
 定理 mul_assoc
-  结论: Std.Associative m₂
+  结论: Std.结合 m₂
   证明: ⟨fun a b c => by simpa [mul h₁ h₂ distrib, h₂.left_id, h₂.right_id] using distrib a b e₂ c⟩
 
 Depends on / 依赖: distrib, left_id, right_id
@@ -186,7 +186,7 @@ abbreviation commMonoid
 
 中文:
 缩写 commMonoid
-  签名: [h : MulOneClass X]
+  签名: [h : MulOne类 X]
   定义体: { h with
       mul_comm := (mul_comm h₁ MulOneClass.isUnital distrib).comm,
       mul_assoc := (mul_assoc h₁ MulOneClass.isUnital distrib).assoc }
@@ -214,7 +214,7 @@ abbreviation commGroup
 
 中文:
 缩写 commGroup
-  签名: [G : Group X]
+  签名: [G : 群 X]
   定义体: { G, EckmannHilton.commMonoid h₁ distrib with .. }
 
 Depends on / 依赖: EckmannHilton, EckmannHilton.commMonoid, commMonoid, distrib

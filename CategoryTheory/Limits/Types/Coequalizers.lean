@@ -45,7 +45,7 @@ definition coequalizerColimit
 
 中文:
 定义 coequalizerColimit
-  签名: : Limits.ColimitCocone (parallelPair f g) where
+  签名: : Limits.余极限余锥 (parallelPair f g) where
   定义体: Cofork.ofπ (↾(Function.Coequalizer.mk f g))
       (by ext x; exact Function.Coequalizer.condition f g x)
   isColimit :=
@@ -138,7 +138,7 @@ definition coequalizerIso
 
 中文:
 定义 coequalizerIso
-  签名: : coequalizer f g ≅ (Function.Coequalizer f g)
+  签名: : coequalizer f g ≅ (函数.Coequalizer f g)
   定义体: colimit.isoColimitCocone (coequalizerColimit f g)
 
 @[elementwise (attr := simp)]

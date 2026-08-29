@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: (sheafification.{v} α).IsLocalization (J.W.inverseImage (toPresheaf R₀))
+  签名: (sheafification.{v} α).是Localization (J.W.inverseImage (toPresheaf R₀))
   定义体: by
   rw [inverseImage_W_toPresheaf_eq_inverseImage_isomorphisms α]
   exact (sheafificationAdjunction.{v} α).isLocalization

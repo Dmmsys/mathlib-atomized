@@ -45,7 +45,7 @@ lemma isIntegral_coeff_prod
     exact IsIntegral.sum _ fun i hi => .mul (H _ (by simp) _) (IH (fun _ _ => H _
 
 中文:
-引理 isIntegral_coeff_prod
+引理 is整数egral_coeff_prod
   证明: by
   classical
   induction s using Finset.induction generalizing j with
@@ -81,7 +81,7 @@ lemma isIntegral_coeff_of_factors
     rw [IsRoot]; rw [hm]; rw [eval_mul]; rw [eval_multiset_pro
 
 中文:
-引理 isIntegral_coeff_of_factors
+引理 is整数egral_coeff_of_factors
   结论: (p : S[X])
   证明: by
   classical
@@ -127,7 +127,7 @@ lemma isIntegral_coeff_of_dvd
  
 
 中文:
-引理 isIntegral_coeff_of_dvd
+引理 is整数egral_coeff_of_dvd
   结论: (p : R[X]) (q : S[X]) (hp : p.Monic) (hq : q.Monic)
   证明: by
   nontriviality S
@@ -178,8 +178,8 @@ lemma IsAlmostIntegral.coeff
     by_cases 
 
 中文:
-引理 IsAlmostIntegral.coeff
-  结论: [IsDomain R] [FaithfulSMul R S]
+引理 IsAlmost整数egral.coeff
+  结论: [是整环 R] [忠实标量乘法 R S]
   证明: by
   have H {q : S[X]} (hq : IsAlmostIntegral R[X] q) : IsAlmostIntegral R q.leadingCoeff := by
     obtain ⟨p, hp, hp'⟩ := hq
@@ -241,7 +241,7 @@ lemma IsIntegral.coeff
     · exact (Fin
 
 中文:
-引理 IsIntegral.coeff
+引理 是整.coeff
   证明: by
   nontriviality R
   nontriviality S
@@ -307,7 +307,7 @@ theorem Polynomial.isIntegral_iff_isIntegral_coeff
   exact .sum _ fun i _ => ((H i).map (CAlgHom (R := R))).tower_top.mul (.pow isIntegral_algebraMap _)
 
 中文:
-定理 Polynomial.isIntegral_iff_isIntegral_coeff
+定理 多项式.is整数egral_iff_is整数egral_coeff
   条件: {f : S[X]}
   证明: by
   refine ⟨IsIntegral.coeff, fun H => ?_⟩
@@ -340,8 +340,8 @@ lemma IsIntegral.of_aeval_monic_of_isIntegral_coeff
 @[
 
 中文:
-引理 IsIntegral.of_aeval_monic_of_isIntegral_coeff
-  结论: {R A : 类型} [CommRing R] [CommRing A]
+引理 是整.of_aeval_monic_of_is整数egral_coeff
+  结论: {R A : 类型} [交换环 R] [交换环 A]
   证明: by
   obtain ⟨q, hqp, hdeg, hq⟩ :=
     lifts_and_natDegree_eq_and_monic (p := p) (f := algebraMap (integralClosure R A) _)
@@ -392,8 +392,8 @@ theorem MvPolynomial.isIntegral_iff_isIntegral_coeff.{w}
     convert! isIntegral_algebraMap (x := MvPolynomial.
 
 中文:
-定理 MvPolynomial.isIntegral_iff_isIntegral_coeff.{w}
-  条件: {σ : Type w} {f : MvPolynomial σ S}
+定理 多元多项式.is整数egral_iff_is整数egral_coeff.{w}
+  条件: {σ : 类型 w} {f : 多元多项式 σ S}
   证明: by
   refine ⟨fun H n => ?mp, fun H => ?mpr⟩
   case mpr =>

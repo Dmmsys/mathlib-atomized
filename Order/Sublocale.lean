@@ -43,10 +43,10 @@ structure Sublocale
     - himp_mem' : forall a b, b in carrier -> a ⇨ b in carrier
 
 中文:
-结构 Sublocale
-  参数: (X : 类型) [Order.Frame X]
+结构 子景
+  参数: (X : 类型) [Order.框架 X]
   公理与运算 (3 个):
-    - carrier : Set X
+    - carrier : 集合 X
     - sInf_mem' : 对任意 s subseteq carrier, sInf s in carrier
     - himp_mem' : 对任意 a b, b in carrier -> a ⇨ b in carrier
 -/
@@ -77,7 +77,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (Sublocale X) X where
+  签名: : 集合状 (子景 X) X where
   定义体: x.carrier
   coe_injective s1 s2 h := by cases s1; congr
 
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Sublocale X)
+  签名: 偏序 (子景 X)
   定义体: .ofSetLike (Sublocale X) X
 
 Depends on / 依赖: Sublocale, ofSetLike
@@ -131,7 +131,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: (carrier : Set X) (sInf_mem' himp_mem')
+  条件: (carrier : 集合 X) (sInf_mem' himp_mem')
   证明: .rfl
 
 @[simp, gcongr]
@@ -152,7 +152,7 @@ initialize_simps_projections Sublocale (carrier -> coe, as_prefix coe)
 
 中文:
 引理 mk_le_mk
-  条件: (carrier₁ carrier₂ : Set X) (sInf_mem'₁ sInf_mem'₂ himp_mem'₁ himp_mem'₂)
+  条件: (carrier₁ carrier₂ : 集合 X) (sInf_mem'₁ sInf_mem'₂ himp_mem'₁ himp_mem'₂)
   证明: .rfl
 
 initialize_simps_projections Sublocale (carrier -> coe, as_prefix coe)
@@ -228,7 +228,7 @@ lemma infClosed
 
 中文:
 引理 infClosed
-  结论: InfClosed (S : Set X)
+  结论: InfClosed (S : 集合 X)
   证明: by
   rintro a ha b hb; rw [← sInf_pair]; exact S.sInf_mem (pair_subset ha hb)
 
@@ -319,7 +319,7 @@ instance carrier.instOrderTop
 
 中文:
 实例 carrier.instOrderTop
-  签名: : OrderTop S
+  签名: : 有顶序 S
   定义体: Subtype.orderTop top_mem
 
 Depends on / 依赖: Subtype, Subtype.orderTop, orderTop, top_mem
@@ -354,7 +354,7 @@ instance carrier.instInfSet
 
 中文:
 实例 carrier.instInfSet
-  签名: : InfSet S where
+  签名: : 下确界集 S where
   定义体: ⟨sInf (Subtype.val '' x), S.sInf_mem' _
     (by simp_rw [image_subset_iff, subset_def]; simp)⟩
 
@@ -391,8 +391,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (s : Set S)
-  结论: (sInf s).val = sInf (Subtype.val '' s)
+  条件: (s : 集合 S)
+  结论: (sInf s).val = sInf (子类型.val '' s)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sInf (s : Set S) : (sInf s).val = sInf (Subtype.val '' s) := rfl
@@ -428,7 +428,7 @@ __ := completeLatticeOfInf S by simp [isGLB_iff_le_iff, lowerBounds, ← Subtype
 
 中文:
 实例 carrier.instCompleteLattice
-  签名: : CompleteLattice S where
+  签名: : 完备格 S where
   定义体: instSemilatticeInf
   __ := instOrderTop
 __ := completeLatticeOfInf S by simp [isGLB_iff_le_iff, lowerBounds, ← Subtype.coe_le_coe]
@@ -469,7 +469,7 @@ instance carrier.instHeytingAlgebra
 
 中文:
 实例 carrier.instHeytingAlgebra
-  签名: : HeytingAlgebra S where
+  签名: : Heyting代数 S where
   定义体: by simp [← Subtype.coe_le_coe, ← @Sublocale.coe_inf, himp]
   compl a := a ⇨ ⊥
   himp_bot _ := rfl
@@ -492,7 +492,7 @@ instance carrier.instFrame
 
 中文:
 实例 carrier.instFrame
-  签名: : Order.Frame S where
+  签名: : Order.框架 S where
   定义体: carrier.instHeytingAlgebra
   __ := carrier.instCompleteLattice
 
@@ -513,7 +513,7 @@ definition restrictAux
 
 中文:
 定义 restrictAux
-  签名: (S : Sublocale X) (a : X)
+  签名: (S : 子景 X) (a : X)
   定义体: sInf {s : S | a <= s}
 -/
 private def restrictAux (S : Sublocale X) (a : X) : S := sInf {s : S | a <= s}
@@ -553,7 +553,7 @@ exact S.sInf_mem by simp +contextual [Set.subset_def]⟩
 
 中文:
 定义 giAux
-  签名: (S : Sublocale X)
+  签名: (S : 子景 X)
   定义体: ⟨x, by
     rw [le_antisymm le_restrictAux hx]
 exact S.sInf_mem by simp +contextual [Set.subset_def]⟩
@@ -591,7 +591,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (S : Sublocale X)
+  签名: (S : 子景 X)
   定义体: sInf {s : S | x <= s}
   map_inf' a b := by
     change Sublocale.restrictAux S (a ⊓ b) = Sublocale.restrictAux S a ⊓ Sublocale.restrictAux S b
@@ -635,7 +635,7 @@ definition giRestrict
 
 中文:
 定义 giRestrict
-  签名: (S : Sublocale X)
+  签名: (S : 子景 X)
   定义体: S.giAux
 
 Depends on / 依赖: S.giAux
@@ -674,7 +674,7 @@ definition toNucleus
 
 中文:
 定义 toNucleus
-  签名: (S : Sublocale X)
+  签名: (S : 子景 X)
   定义体: S.restrict x
   map_inf' _ _ := by simp [S.giRestrict.gc.u_inf]
   idempotent' _ := by rw [S.giRestrict.gc.l_u_l_eq_l]
@@ -761,7 +761,7 @@ definition toSublocale
 
 中文:
 定义 toSublocale
-  签名: (n : Nucleus X)
+  签名: (n : 核 X)
   定义体: range n
   sInf_mem' a h := by
     rw [mem_range]
@@ -795,7 +795,7 @@ lemma mem_toSublocale
 
 中文:
 引理 mem_toSublocale
-  条件: {n : Nucleus X} {x : X}
+  条件: {n : 核 X} {x : X}
   结论: x in n.toSublocale ↔ 存在 y, n y = x
   证明: .rfl
 -/
@@ -811,7 +811,7 @@ lemma toSublocale_le_toSublocale
 
 中文:
 引理 toSublocale_le_toSublocale
-  条件: {m n : Nucleus X}
+  条件: {m n : 核 X}
   证明: by simp [← SetLike.coe_subset_coe]
 -/
 @[simp, gcongr] lemma toSublocale_le_toSublocale {m n : Nucleus X} :
@@ -830,7 +830,7 @@ lemma restrict_toSublocale
 
 中文:
 引理 restrict_toSublocale
-  条件: (n : Nucleus X) (x : X)
+  条件: (n : 核 X) (x : X)
   证明: by
   ext
   simpa [Sublocale.restrict, sInf_image, le_antisymm_iff (a := iInf _)] using
@@ -859,7 +859,7 @@ definition nucleusIsoSublocale
 
 中文:
 定义 nucleusIsoSublocale
-  签名: : (Nucleus X)ᵒᵈ ≃o Sublocale X where
+  签名: : (核 X)ᵒᵈ ≃o 子景 X where
   定义体: n.ofDual.toSublocale
   invFun s := .toDual s.toNucleus
   left_inv := by simp [Function.LeftInverse, Nucleus.ext_iff]
@@ -885,7 +885,7 @@ lemma nucleusIsoSublocale.eq_toSublocale
 
 中文:
 引理 nucleusIsoSublocale.eq_toSublocale
-  结论: Nucleus.toSublocale = @nucleusIsoSublocale X _
+  结论: 核.toSublocale = @nucleusIsoSublocale X _
   证明: rfl
 -/
 lemma nucleusIsoSublocale.eq_toSublocale : Nucleus.toSublocale = @nucleusIsoSublocale X _ := rfl
@@ -912,8 +912,8 @@ instance Sublocale.instCompleteLattice
   body: nucleusIsoSublocale.toGaloisInsertion.liftCompleteLattice
 
 中文:
-实例 Sublocale.instCompleteLattice
-  签名: : CompleteLattice (Sublocale X)
+实例 子景.instCompleteLattice
+  签名: : 完备格 (子景 X)
   定义体: nucleusIsoSublocale.toGaloisInsertion.liftCompleteLattice
 
 Depends on / 依赖: liftCompleteLattice, nucleusIsoSublocale, nucleusIsoSublocale.toGaloisInsertion.liftCompleteLattice, toGaloisInsertion
@@ -934,8 +934,8 @@ instance Sublocale.instCoframe
     nucleusIsoSublocale.symm.map_sInf, sup_iInf_eq, nucleusIsoSublocale.symm.map_iInf] }
 
 中文:
-实例 Sublocale.instCoframe
-  签名: : Order.Coframe (Sublocale X)
+实例 子景.instCoframe
+  签名: : Order.余frame (子景 X)
   定义体: .ofMinimalAxioms {
   iInf_sup_le_sup_sInf a s := by simp [← toNucleus_le_toNucleus,
     nucleusIsoSublocale.symm_eq_toNucleus, nucleusIsoSublocale.symm.map_sup,

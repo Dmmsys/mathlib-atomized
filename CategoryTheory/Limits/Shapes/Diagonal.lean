@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (diagonal f)
+  签名: 是分裂单态射 (diagonal f)
   定义体: ⟨⟨⟨pullback.fst _ _, diagonal_fst f⟩⟩⟩
 
 Depends on / 依赖: diagonal_fst, pullback, pullback.fst
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (pullback.fst f f)
+  签名: 是分裂满态射 (pullback.fst f f)
   定义体: ⟨⟨⟨diagonal f, diagonal_fst f⟩⟩⟩
 
 Depends on / 依赖: diagonal, diagonal_fst
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (pullback.snd f f)
+  签名: 是分裂满态射 (pullback.snd f f)
   定义体: ⟨⟨⟨diagonal f, diagonal_snd f⟩⟩⟩
 
 Depends on / 依赖: diagonal, diagonal_snd
@@ -181,8 +181,8 @@ instance [Mono
   infer_instance
 
 中文:
-实例 [Mono
-  签名: f] : IsIso (diagonal f)
+实例 [单态射
+  签名: f] : 是同构 (diagonal f)
   定义体: by
   rw [(IsIso.inv_eq_of_inv_hom_id (diagonal_fst f)).symm]
   infer_instance
@@ -204,7 +204,7 @@ lemma isIso_diagonal_iff
 
 中文:
 引理 isIso_diagonal_iff
-  结论: IsIso (diagonal f) ↔ Mono f
+  结论: 是同构 (diagonal f) ↔ 单态射 f
   证明: ⟨fun H => ⟨fun _ _ e => by rw [← lift_fst _ _ e, (cancel_epi (g := fst f f) (h := snd f f)
     (diagonal f)).mp (by simp), lift_snd]⟩, fun _ => inferInstance⟩
 
@@ -1409,7 +1409,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi (codiagonal f)
+  签名: 是分裂满态射 (codiagonal f)
   定义体: ⟨⟨⟨pushout.inl _ _, inl_codiagonal f⟩⟩⟩
 
 Depends on / 依赖: inl_codiagonal, pushout, pushout.inl
@@ -1427,7 +1427,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (pushout.inl f f)
+  签名: 是分裂单态射 (pushout.inl f f)
   定义体: ⟨⟨⟨codiagonal f, inl_codiagonal f⟩⟩⟩
 
 Depends on / 依赖: codiagonal, inl_codiagonal
@@ -1445,7 +1445,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitMono (pushout.inr f f)
+  签名: 是分裂单态射 (pushout.inr f f)
   定义体: ⟨⟨⟨codiagonal f, inr_codiagonal f⟩⟩⟩
 
 Depends on / 依赖: codiagonal, inr_codiagonal
@@ -1464,8 +1464,8 @@ instance [Epi
   infer_instance
 
 中文:
-实例 [Epi
-  签名: f] : IsIso (codiagonal f)
+实例 [满态射
+  签名: f] : 是同构 (codiagonal f)
   定义体: by
   rw [(IsIso.inv_eq_of_hom_inv_id (inl_codiagonal f)).symm]
   infer_instance
@@ -1487,7 +1487,7 @@ lemma isIso_codiagonal_iff
 
 中文:
 引理 isIso_codiagonal_iff
-  结论: IsIso (codiagonal f) ↔ Epi f
+  结论: 是同构 (codiagonal f) ↔ 满态射 f
   证明: ⟨fun H => ⟨fun _ _ e => by rw [← inl_desc _ _ e, (cancel_mono (g := inl f f) (h := inr f f)
     (codiagonal f)).mp (by simp), inr_desc]⟩, fun _ => inferInstance⟩
 

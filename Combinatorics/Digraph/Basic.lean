@@ -55,7 +55,7 @@ structure Digraph
     - Adj : V -> V -> Prop
 
 中文:
-结构 Digraph
+结构 有向图
   参数: (V : 类型)
   公理与运算 (1 个):
     - Adj : V -> V -> 命题
@@ -84,7 +84,7 @@ definition Digraph.mk'
     simpa only [eq_iff_iff, Bool.coe_iff_coe] using congr($h v w)
 
 中文:
-定义 Digraph.mk'
+定义 有向图.mk'
   签名: {V : 类型}
   定义体: ⟨fun v w => x v w⟩
   inj' adj adj' := by
@@ -181,7 +181,7 @@ theorem adj_injective
 
 中文:
 定理 adj_injective
-  结论: Injective (Adj : Digraph V -> V -> V -> 命题)
+  结论: 单射 (伴随 : 有向图 V -> V -> V -> 命题)
   证明: fun _ _ => Digraph.ext
 
 Depends on / 依赖: Digraph, Digraph.ext
@@ -199,8 +199,8 @@ theorem adj_inj
 
 中文:
 定理 adj_inj
-  条件: {G H : Digraph V}
-  结论: G.Adj = H.Adj ↔ G = H
+  条件: {G H : 有向图 V}
+  结论: G.伴随 = H.伴随 ↔ G = H
   证明: Digraph.ext_iff.symm
 -/
 @[simp] theorem adj_inj {G H : Digraph V} : G.Adj = H.Adj ↔ G = H := Digraph.ext_iff.symm
@@ -216,8 +216,8 @@ definition IsSubgraph
   body: forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 
 中文:
-定义 IsSubgraph
-  签名: (x y : Digraph V)
+定义 是子图
+  签名: (x y : 有向图 V)
   定义体: forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 -/
 protected def IsSubgraph (x y : Digraph V) : Prop :=
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Digraph V)
+  签名: LE (有向图 V)
   定义体: ⟨Digraph.IsSubgraph⟩
 
 @[simp]
@@ -255,7 +255,7 @@ theorem isSubgraph_eq_le
 
 中文:
 定理 isSubgraph_eq_le
-  结论: (Digraph.IsSubgraph : Digraph V -> Digraph V -> 命题) = (· <= ·)
+  结论: (有向图.是子图 : 有向图 V -> 有向图 V -> 命题) = (· <= ·)
   证明: rfl
 -/
 theorem isSubgraph_eq_le : (Digraph.IsSubgraph : Digraph V -> Digraph V -> Prop) = (· <= ·) := rfl
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Digraph V)
+  签名: 最大值 (有向图 V)
   定义体: { Adj := x.Adj ⊔ y.Adj }
 
 @[simp]
@@ -294,8 +294,8 @@ theorem sup_adj
 
 中文:
 定理 sup_adj
-  条件: (x y : Digraph V) (v w : V)
-  结论: (x ⊔ y).Adj v w ↔ x.Adj v w ∨ y.Adj v w
+  条件: (x y : 有向图 V) (v w : V)
+  结论: (x ⊔ y).伴随 v w ↔ x.伴随 v w ∨ y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -314,7 +314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Digraph V)
+  签名: 最小值 (有向图 V)
   定义体: { Adj := x.Adj ⊓ y.Adj }
 
 @[simp]
@@ -336,8 +336,8 @@ theorem inf_adj
 
 中文:
 定理 inf_adj
-  条件: (x y : Digraph V) (v w : V)
-  结论: (x ⊓ y).Adj v w ↔ x.Adj v w ∧ y.Adj v w
+  条件: (x y : 有向图 V) (v w : V)
+  结论: (x ⊓ y).伴随 v w ↔ x.伴随 v w ∧ y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (Digraph V)
+  签名: 补集 (有向图 V)
   定义体: { Adj := fun v w => ¬G.Adj v w }
 
 Depends on / 依赖: G.Adj
@@ -373,8 +373,8 @@ theorem compl_adj
 
 中文:
 定理 compl_adj
-  条件: (G : Digraph V) (v w : V)
-  结论: Gᶜ.Adj v w ↔ ¬G.Adj v w
+  条件: (G : 有向图 V) (v w : V)
+  结论: Gᶜ.伴随 v w ↔ ¬G.伴随 v w
   证明: Iff.rfl
 -/
 @[simp] theorem compl_adj (G : Digraph V) (v w : V) : Gᶜ.Adj v w ↔ ¬G.Adj v w := Iff.rfl
@@ -391,7 +391,7 @@ instance sdiff
 
 中文:
 实例 sdiff
-  签名: : SDiff (Digraph V) where
+  签名: : 对称差 (有向图 V) where
   定义体: { Adj := x.Adj \ y.Adj }
 
 @[simp]
@@ -413,8 +413,8 @@ theorem sdiff_adj
 
 中文:
 定理 sdiff_adj
-  条件: (x y : Digraph V) (v w : V)
-  结论: (x \ y).Adj v w ↔ x.Adj v w ∧ ¬y.Adj v w
+  条件: (x y : 有向图 V) (v w : V)
+  结论: (x \ y).伴随 v w ↔ x.伴随 v w ∧ ¬y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -431,7 +431,7 @@ instance supSet
 
 中文:
 实例 supSet
-  签名: : SupSet (Digraph V) where
+  签名: : 上确界集 (有向图 V) where
   定义体: { Adj := fun a b => exists G in s, Adj G a b }
 -/
 instance supSet : SupSet (Digraph V) where
@@ -449,7 +449,7 @@ instance infSet
 
 中文:
 实例 infSet
-  签名: : InfSet (Digraph V) where
+  签名: : 下确界集 (有向图 V) where
   定义体: { Adj := fun a b => (forall ⦃G⦄, G in s -> Adj G a b) }
 
 @[simp]
@@ -471,8 +471,8 @@ theorem sSup_adj
 
 中文:
 定理 sSup_adj
-  条件: {s : Set (Digraph V)}
-  结论: (sSup s).Adj a b ↔ 存在 G in s, Adj G a b
+  条件: {s : 集合 (有向图 V)}
+  结论: (sSup s).伴随 a b ↔ 存在 G in s, 伴随 G a b
   证明: Iff.rfl
 
 @[simp]
@@ -495,8 +495,8 @@ theorem sInf_adj
 
 中文:
 定理 sInf_adj
-  条件: {s : Set (Digraph V)}
-  结论: (sInf s).Adj a b ↔ 对任意 G in s, Adj G a b
+  条件: {s : 集合 (有向图 V)}
+  结论: (sInf s).伴随 a b ↔ 对任意 G in s, 伴随 G a b
   证明: Iff.rfl
 
 @[simp]
@@ -519,8 +519,8 @@ theorem iSup_adj
 
 中文:
 定理 iSup_adj
-  条件: {f : ι -> Digraph V}
-  结论: (⨆ i, f i).Adj a b ↔ 存在 i, (f i).Adj a b
+  条件: {f : ι -> 有向图 V}
+  结论: (⨆ i, f i).伴随 a b ↔ 存在 i, (f i).伴随 a b
   证明: by simp [iSup]
 
 @[simp]
@@ -539,8 +539,8 @@ theorem iInf_adj
 
 中文:
 定理 iInf_adj
-  条件: {f : ι -> Digraph V}
-  结论: (⨅ i, f i).Adj a b ↔ (对任意 i, (f i).Adj a b)
+  条件: {f : ι -> 有向图 V}
+  结论: (⨅ i, f i).伴随 a b ↔ (对任意 i, (f i).伴随 a b)
   证明: by simp [iInf]
 -/
 theorem iInf_adj {f : ι -> Digraph V} : (⨅ i, f i).Adj a b ↔ (forall i, (f i).Adj a b) := by simp [iInf]
@@ -555,7 +555,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Digraph V)
+  签名: 偏序 (有向图 V)
   定义体: fast_instance% PartialOrder.lift _ adj_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, adj_injective, fast_instance
@@ -573,7 +573,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: : DistribLattice (Digraph V)
+  签名: : Distrib格 (有向图 V)
   定义体: fast_instance%
   adj_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -598,8 +598,8 @@ instance completeAtomicBooleanAlgebra
   isGLB_sI
 
 中文:
-实例 completeAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra (Digraph V) where
+实例 completeAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 (有向图 V) where
   定义体: Digraph.completeDigraph V
   bot := Digraph.emptyDigraph V
   le_top _ _ _ _ := trivial
@@ -634,7 +634,7 @@ theorem top_adj
 中文:
 定理 top_adj
   条件: (v w : V)
-  结论: (⊤ : Digraph V).Adj v w
+  结论: (⊤ : 有向图 V).伴随 v w
   证明: trivial
 -/
 @[simp] theorem top_adj (v w : V) : (⊤ : Digraph V).Adj v w := trivial
@@ -651,7 +651,7 @@ theorem bot_adj
 中文:
 定理 bot_adj
   条件: (v w : V)
-  结论: (⊥ : Digraph V).Adj v w ↔ False
+  结论: (⊥ : 有向图 V).伴随 v w ↔ 假
   证明: Iff.rfl
 -/
 @[simp] theorem bot_adj (v w : V) : (⊥ : Digraph V).Adj v w ↔ False := Iff.rfl
@@ -668,7 +668,7 @@ theorem completeDigraph_eq_top
 中文:
 定理 completeDigraph_eq_top
   条件: (V : 类型)
-  结论: Digraph.completeDigraph V = ⊤
+  结论: 有向图.completeDigraph V = ⊤
   证明: rfl
 -/
 @[simp] theorem completeDigraph_eq_top (V : Type*) : Digraph.completeDigraph V = ⊤ := rfl
@@ -685,7 +685,7 @@ theorem emptyDigraph_eq_bot
 中文:
 定理 emptyDigraph_eq_bot
   条件: (V : 类型)
-  结论: Digraph.emptyDigraph V = ⊥
+  结论: 有向图.emptyDigraph V = ⊥
   证明: rfl
 -/
 @[simp] theorem emptyDigraph_eq_bot (V : Type*) : Digraph.emptyDigraph V = ⊥ := rfl
@@ -702,8 +702,8 @@ instance [IsEmpty
   uniq G := by ext1; congr!
 
 中文:
-实例 [IsEmpty
-  签名: V] : Unique (Digraph V) where
+实例 [是空
+  签名: V] : 唯一 (有向图 V) where
   定义体: ⊥
   uniq G := by ext1; congr!
 -/
@@ -723,8 +723,8 @@ instance [Nonempty
   exact ne_of_apply_ne (·.Adj v v) (by simp)
 
 中文:
-实例 [Nonempty
-  签名: V] : Nontrivial (Digraph V)
+实例 [非空
+  签名: V] : 非平凡 (有向图 V)
   定义体: by
   use ⊥, ⊤
   have v := Classical.arbitrary V
@@ -750,8 +750,8 @@ instance Bot.adjDecidable
   body: inferInstanceAs DecidableRel fun _ _ => False
 
 中文:
-实例 Bot.adjDecidable
-  签名: : DecidableRel (⊥ : Digraph V).Adj
+实例 底元素.adjDecidable
+  签名: : DecidableRel (⊥ : 有向图 V).伴随
   定义体: inferInstanceAs DecidableRel fun _ _ => False
 
 Depends on / 依赖: DecidableRel
@@ -768,8 +768,8 @@ instance Sup.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => G.Adj v w ∨ H.Adj v w
 
 中文:
-实例 Sup.adjDecidable
-  签名: : DecidableRel (G ⊔ H).Adj
+实例 上确界.adjDecidable
+  签名: : DecidableRel (G ⊔ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∨ H.Adj v w
 
 Depends on / 依赖: DecidableRel, G.Adj, H.Adj
@@ -786,8 +786,8 @@ instance Inf.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ H.Adj v w
 
 中文:
-实例 Inf.adjDecidable
-  签名: : DecidableRel (G ⊓ H).Adj
+实例 下确界.adjDecidable
+  签名: : DecidableRel (G ⊓ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ H.Adj v w
 
 Depends on / 依赖: DecidableRel, G.Adj, H.Adj
@@ -804,8 +804,8 @@ instance SDiff.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ ¬H.Adj v w
 
 中文:
-实例 SDiff.adjDecidable
-  签名: : DecidableRel (G \ H).Adj
+实例 对称差.adjDecidable
+  签名: : DecidableRel (G \ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ ¬H.Adj v w
 
 Depends on / 依赖: DecidableRel, G.Adj, H.Adj
@@ -822,8 +822,8 @@ instance Top.adjDecidable
   body: inferInstanceAs DecidableRel fun _ _ => True
 
 中文:
-实例 Top.adjDecidable
-  签名: : DecidableRel (⊤ : Digraph V).Adj
+实例 顶元素.adjDecidable
+  签名: : DecidableRel (⊤ : 有向图 V).伴随
   定义体: inferInstanceAs DecidableRel fun _ _ => True
 
 Depends on / 依赖: DecidableRel
@@ -840,8 +840,8 @@ instance Compl.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => ¬G.Adj v w
 
 中文:
-实例 Compl.adjDecidable
-  签名: : DecidableRel (Gᶜ.Adj)
+实例 补集.adjDecidable
+  签名: : DecidableRel (Gᶜ.伴随)
   定义体: inferInstanceAs DecidableRel fun v w => ¬G.Adj v w
 
 Depends on / 依赖: DecidableRel, G.Adj

@@ -100,13 +100,13 @@ structure WeakFEPair
   公理与运算 (11 个):
     - (f(g) : 实数 -> E)
     - (k : 实数)
-    - (ε : Complex)
+    - (ε : 复形)
     - (f₀(g₀) : E)
-    - (hf_int : Locally整数egrableOn f (Ioi 0))
-    - (hg_int : Locally整数egrableOn g (Ioi 0))
+    - (hf_int : Locally整数egrableOn f (左开右无界区间 0))
+    - (hg_int : Locally整数egrableOn g (左开右无界区间 0))
     - (hk : 0 < k)
     - (hε : ε != 0)
-    - (h_feq : 对任意 x in Ioi 0, f (1 / x) = (ε * ↑(x ^ k)) • g x)
+    - (h_feq : 对任意 x in 左开右无界区间 0, f (1 / x) = (ε * ↑(x ^ k)) • g x)
     - (hf_top((r : 实数)) : (f · - f₀) =O[atTop] (· ^ r))
     - (hg_top((r : 实数)) : (g · - g₀) =O[atTop] (· ^ r))
 -/
@@ -140,7 +140,7 @@ structure IsStrongFEPair
     - hg₀ : P.g₀ = 0
 
 中文:
-结构 IsStrongFEPair
+结构 是StrongFEPair
   参数: (P : WeakFEPair E)
   公理与运算 (2 个):
     - hf₀ : P.f₀ = 0
@@ -265,8 +265,8 @@ lemma IsStrongFEPair.symm
   proof: isStrongFEPair_symm.2 hP
 
 中文:
-引理 IsStrongFEPair.symm
-  条件: {P : WeakFEPair E} (hP : IsStrongFEPair P)
+引理 是StrongFEPair.symm
+  条件: {P : WeakFEPair E} (hP : 是StrongFEPair P)
   证明: isStrongFEPair_symm.2 hP
 
 Depends on / 依赖: isStrongFEPair_symm
@@ -386,7 +386,7 @@ theorem functional_equation_aux
 
 中文:
 定理 functional_equation_aux
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   -- substitute `t ↦ t⁻¹` in `mellin P.g s`
   have step1 := mellin_comp_rpow P.g (-s) (-1)
@@ -480,7 +480,7 @@ theorem mellinConvergent
 
 中文:
 定理 mellinConvergent
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: MellinConvergent P.f s
   证明: let ⟨_, ht⟩ := exists_gt s.re
   let ⟨_, hu⟩ := exists_lt s.re
@@ -504,7 +504,7 @@ theorem differentiable_mellin
 
 中文:
 定理 differentiable_mellin
-  结论: Differentiable Complex (mellin P.f)
+  结论: 可微 复形 (mellin P.f)
   证明: fun s =>
   let ⟨_, ht⟩ := exists_gt s.re
   let ⟨_, hu⟩ := exists_lt s.re
@@ -731,7 +731,7 @@ lemma isStrongFEPair_toStrongFEPair
 
 中文:
 引理 isStrongFEPair_toStrongFEPair
-  结论: IsStrongFEPair P.toStrongFEPair where
+  结论: 是StrongFEPair P.toStrongFEPair where
   证明: rfl
   hg₀ := rfl
 -/
@@ -798,7 +798,7 @@ lemma f_modif_aux2
 
 中文:
 引理 f_modif_aux2
-  条件: [CompleteSpace E] {s : Complex} (hs : P.k < re s)
+  条件: [完备空间 E] {s : 复形} (hs : P.k < re s)
   证明: by
   have h_re1 : -1 < re (s - 1) := by simpa using P.hk.trans hs
   have h_re2 : -1 < re (s - P.k - 1) := by simpa using hs
@@ -858,7 +858,7 @@ definition Λ₀
 
 中文:
 定义 Λ₀
-  签名: : Complex -> E
+  签名: : 复形 -> E
   定义体: mellin P.f_modif
 
 Depends on / 依赖: P.f_modif, f_modif, mellin
@@ -875,7 +875,7 @@ definition Λ
 
 中文:
 定义 Λ
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: P.Λ₀ s - (1 / s) • P.f₀ - (P.ε / (P.k - s)) • P.g₀
 -/
 def Λ (s : Complex) : E := P.Λ₀ s - (1 / s) • P.f₀ - (P.ε / (P.k - s)) • P.g₀
@@ -893,7 +893,7 @@ lemma Λ₀_eq
 
 中文:
 引理 Λ₀_eq
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: P.Λ₀ s = P.Λ s + (1 / s) • P.f₀ + (P.ε / (P.k - s)) • P.g₀
   证明: by
   unfold Λ Λ₀
@@ -914,7 +914,7 @@ lemma symm_Λ₀_eq
 
 中文:
 引理 symm_Λ₀_eq
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   simp [P.symm.Λ₀_eq]
 
@@ -934,7 +934,7 @@ theorem differentiable_Λ₀
 
 中文:
 定理 differentiable_Λ₀
-  结论: Differentiable Complex P.Λ₀
+  结论: 可微 复形 P.Λ₀
   证明: P.isStrongFEPair_toStrongFEPair.differentiable_mellin
 
 Depends on / 依赖: P.isStrongFEPair_toStrongFEPair.differentiable_mellin, differentiable_mellin, isStrongFEPair_toStrongFEPair
@@ -959,7 +959,7 @@ theorem differentiableAt_Λ
 
 中文:
 定理 differentiableAt_Λ
-  条件: {s : Complex} (hs : s != 0 ∨ P.f₀ = 0) (hs' : s != P.k ∨ P.g₀ = 0)
+  条件: {s : 复形} (hs : s != 0 ∨ P.f₀ = 0) (hs' : s != P.k ∨ P.g₀ = 0)
   证明: by
   refine ((P.differentiable_Λ₀ s).sub ?_).sub ?_
   · rcases hs with hs | hs
@@ -998,7 +998,7 @@ theorem hasMellin
 
 中文:
 定理 hasMellin
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   have hc1 : MellinConvergent (P.f · - P.f₀) s :=
     let ⟨_, ht⟩ := exists_gt s.re
@@ -1036,7 +1036,7 @@ theorem functional_equation₀
 
 中文:
 定理 functional_equation₀
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: P.Λ₀ (P.k - s) = P.ε • P.symm.Λ₀ s
   证明: P.toStrongFEPair.functional_equation_aux s
 
@@ -1057,7 +1057,7 @@ theorem functional_equation
 
 中文:
 定理 functional_equation
-  条件: (s : Complex)
+  条件: (s : 复形)
   证明: by
   linear_combination (norm := module) P.functional_equation₀ s - P.Λ₀_eq (P.k - s)
     + congr(P.ε • $(P.symm_Λ₀_eq s)) + congr(($(mul_inv_cancel₀ P.hε) / (P.k - s)) • P.f₀)
@@ -1121,7 +1121,7 @@ theorem Λ_residue_zero
 
 中文:
 定理 Λ_residue_zero
-  结论: Tendsto (fun s => s • P.Λ s) (𝓝[!=] 0) (𝓝 (-P.f₀))
+  结论: 收敛 (fun s => s • P.Λ s) (𝓝[!=] 0) (𝓝 (-P.f₀))
   证明: by
   simp_rw [Λ, smul_sub, (by simp : 𝓝 (-P.f₀) = 𝓝 (((0 : Complex) • P.Λ₀ 0) - P.f₀ - 0))]
   refine ((Tendsto.mono_left ?_ nhdsWithin_le_nhds).sub ?_).sub ?_
@@ -1218,7 +1218,7 @@ theorem hasMellin
 
 中文:
 定理 hasMellin
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: HasMellin P.f s (P.Λ s)
   证明: ⟨hP.mellinConvergent s, congr_fun hP.Λ_eq.symm s⟩
 
@@ -1237,7 +1237,7 @@ theorem differentiable_Λ
 
 中文:
 定理 differentiable_Λ
-  结论: Differentiable Complex P.Λ
+  结论: 可微 复形 P.Λ
   证明: hP.Λ_eq ▸ hP.differentiable_mellin
 
 Depends on / 依赖: differentiable_mellin, hP.differentiable_mellin

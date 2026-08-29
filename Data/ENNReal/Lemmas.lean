@@ -36,7 +36,7 @@ theorem coe_indicator
 
 中文:
 定理 coe_indicator
-  条件: {α} (s : Set α) (f : α -> 实数>=0) (a : α)
+  条件: {α} (s : 集合 α) (f : α -> 实数>=0) (a : α)
   证明: map_indicator ofNNRealHom _ _ _
 
 Depends on / 依赖: map_indicator, ofNNRealHom
@@ -59,8 +59,8 @@ theorem coe_finset_sup
 
 中文:
 定理 coe_finset_sup
-  条件: {s : Finset α} {f : α -> 实数>=0}
-  结论: ↑(s.sup f) = s.sup fun x => (f x : 实数>=0∞)
+  条件: {s : 有限集 α} {f : α -> 实数>=0}
+  结论: ↑(s.上确界 f) = s.上确界 fun x => (f x : 实数>=0∞)
   证明: Finset.apply_sup_eq_sup_comp_of_linearOrder _ coe_mono rfl
 
 Depends on / 依赖: Finset, Finset.apply_sup_eq_sup_comp_of_linearOrder, apply_sup_eq_sup_comp_of_linearOrder, coe_mono

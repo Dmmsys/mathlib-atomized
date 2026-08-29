@@ -78,7 +78,7 @@ definition IsPullback
   body: IsPullback sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄
 
 中文:
-定义 IsPullback
+定义 是拉回
   签名: : 命题
   定义体: IsPullback sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄
 -/
@@ -94,7 +94,7 @@ definition IsPushout
   body: IsPushout sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄
 
 中文:
-定义 IsPushout
+定义 是推出
   签名: : 命题
   定义体: IsPushout sq.f₁₂ sq.f₁₃ sq.f₂₄ sq.f₃₄
 -/
@@ -145,9 +145,9 @@ lemma IsPullback.mk
   proof: sq.isPullback_iff.2 ⟨h⟩
 
 中文:
-引理 IsPullback.mk
-  条件: (h : IsLimit sq.pullbackCone)
-  结论: sq.IsPullback
+引理 是拉回.mk
+  条件: (h : 是极限 sq.pullbackCone)
+  结论: sq.是拉回
   证明: sq.isPullback_iff.2 ⟨h⟩
 
 Depends on / 依赖: isPullback_iff, sq.isPullback_iff
@@ -165,9 +165,9 @@ lemma IsPushout.mk
   proof: sq.isPushout_iff.2 ⟨h⟩
 
 中文:
-引理 IsPushout.mk
-  条件: (h : IsColimit sq.pushoutCocone)
-  结论: sq.IsPushout
+引理 是推出.mk
+  条件: (h : 是余极限 sq.pushoutCocone)
+  结论: sq.是推出
   证明: sq.isPushout_iff.2 ⟨h⟩
 
 Depends on / 依赖: isPushout_iff, sq.isPushout_iff
@@ -186,8 +186,8 @@ definition IsPullback.isLimit
   body: CategoryTheory.IsPullback.isLimit h
 
 中文:
-定义 IsPullback.isLimit
-  签名: (h : sq.IsPullback)
+定义 是拉回.isLimit
+  签名: (h : sq.是拉回)
   定义体: CategoryTheory.IsPullback.isLimit h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.isLimit, IsPullback, isLimit
@@ -205,8 +205,8 @@ definition IsPushout.isColimit
   body: CategoryTheory.IsPushout.isColimit h
 
 中文:
-定义 IsPushout.isColimit
-  签名: (h : sq.IsPushout)
+定义 是推出.isColimit
+  签名: (h : sq.是推出)
   定义体: CategoryTheory.IsPushout.isColimit h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPushout.isColimit, IsPushout, isColimit
@@ -228,8 +228,8 @@ lemma IsPullback.of_iso
   all_goals simp
 
 中文:
-引理 IsPullback.of_iso
-  结论: {sq₁ sq₂ : Square C} (h : sq₁.IsPullback)
+引理 是拉回.of_iso
+  结论: {sq₁ sq₂ : Square C} (h : sq₁.是拉回)
   证明: by
   refine CategoryTheory.IsPullback.of_iso h
     (evaluation₁.mapIso e) (evaluation₂.mapIso e)
@@ -254,7 +254,7 @@ lemma IsPullback.iff_of_iso
   proof: ⟨fun h => h.of_iso e, fun h => h.of_iso e.symm⟩
 
 中文:
-引理 IsPullback.iff_of_iso
+引理 是拉回.iff_of_iso
   条件: {sq₁ sq₂ : Square C} (e : sq₁ ≅ sq₂)
   证明: ⟨fun h => h.of_iso e, fun h => h.of_iso e.symm⟩
 
@@ -277,8 +277,8 @@ lemma IsPushout.of_iso
   all_goals simp
 
 中文:
-引理 IsPushout.of_iso
-  结论: {sq₁ sq₂ : Square C} (h : sq₁.IsPushout)
+引理 是推出.of_iso
+  结论: {sq₁ sq₂ : Square C} (h : sq₁.是推出)
   证明: by
   refine CategoryTheory.IsPushout.of_iso h
     (evaluation₁.mapIso e) (evaluation₂.mapIso e)
@@ -303,7 +303,7 @@ lemma IsPushout.iff_of_iso
   proof: ⟨fun h => h.of_iso e, fun h => h.of_iso e.symm⟩
 
 中文:
-引理 IsPushout.iff_of_iso
+引理 是推出.iff_of_iso
   条件: {sq₁ sq₂ : Square C} (e : sq₁ ≅ sq₂)
   证明: ⟨fun h => h.of_iso e, fun h => h.of_iso e.symm⟩
 
@@ -323,9 +323,9 @@ lemma IsPushout.op
   proof: CategoryTheory.IsPushout.op h.flip
 
 中文:
-引理 IsPushout.op
-  条件: {sq : Square C} (h : sq.IsPushout)
-  结论: sq.op.IsPullback
+引理 是推出.op
+  条件: {sq : Square C} (h : sq.是推出)
+  结论: sq.op.是拉回
   证明: CategoryTheory.IsPushout.op h.flip
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPushout.op, IsPushout, h.flip
@@ -343,9 +343,9 @@ lemma IsPushout.unop
   proof: CategoryTheory.IsPushout.unop h.flip
 
 中文:
-引理 IsPushout.unop
-  条件: {sq : Square Cᵒᵖ} (h : sq.IsPushout)
-  结论: sq.unop.IsPullback
+引理 是推出.unop
+  条件: {sq : Square Cᵒᵖ} (h : sq.是推出)
+  结论: sq.unop.是拉回
   证明: CategoryTheory.IsPushout.unop h.flip
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPushout.unop, IsPushout, h.flip
@@ -363,9 +363,9 @@ lemma IsPullback.op
   proof: CategoryTheory.IsPullback.op h.flip
 
 中文:
-引理 IsPullback.op
-  条件: {sq : Square C} (h : sq.IsPullback)
-  结论: sq.op.IsPushout
+引理 是拉回.op
+  条件: {sq : Square C} (h : sq.是拉回)
+  结论: sq.op.是推出
   证明: CategoryTheory.IsPullback.op h.flip
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.op, IsPullback, h.flip
@@ -383,9 +383,9 @@ lemma IsPullback.unop
   proof: CategoryTheory.IsPullback.unop h.flip
 
 中文:
-引理 IsPullback.unop
-  条件: {sq : Square Cᵒᵖ} (h : sq.IsPullback)
-  结论: sq.unop.IsPushout
+引理 是拉回.unop
+  条件: {sq : Square Cᵒᵖ} (h : sq.是拉回)
+  结论: sq.unop.是推出
   证明: CategoryTheory.IsPullback.unop h.flip
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.unop, IsPullback, h.flip
@@ -409,7 +409,7 @@ lemma flip
 
 中文:
 引理 flip
-  结论: sq.flip.IsPullback
+  结论: sq.flip.是拉回
   证明: CategoryTheory.IsPullback.flip h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPullback.flip, F.map, IsPullback, P.prop_of_mono, prop_of_mono
@@ -427,8 +427,8 @@ lemma mono_f₁₃
 
 中文:
 引理 mono_f₁₃
-  条件: [Mono sq.f₂₄]
-  结论: Mono sq.f₁₃
+  条件: [单态射 sq.f₂₄]
+  结论: 单态射 sq.f₁₃
   证明: (MorphismProperty.monomorphisms C).of_isPullback h (by assumption)
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.monomorphisms, monomorphisms, of_isPullback
@@ -450,8 +450,8 @@ lemma mono_f₁₂
 
 中文:
 引理 mono_f₁₂
-  条件: [Mono sq.f₃₄]
-  结论: Mono sq.f₁₂
+  条件: [单态射 sq.f₃₄]
+  结论: 单态射 sq.f₁₂
   证明: by
   have : Mono sq.flip.f₂₄ := by dsimp; infer_instance
   exact h.flip.mono_f₁₃
@@ -480,7 +480,7 @@ lemma flip
 
 中文:
 引理 flip
-  结论: sq.flip.IsPushout
+  结论: sq.flip.是推出
   证明: CategoryTheory.IsPushout.flip h
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.IsPushout.flip, IsPushout
@@ -498,8 +498,8 @@ lemma epi_f₂₄
 
 中文:
 引理 epi_f₂₄
-  条件: [Epi sq.f₁₃]
-  结论: Epi sq.f₂₄
+  条件: [满态射 sq.f₁₃]
+  结论: 满态射 sq.f₂₄
   证明: (MorphismProperty.epimorphisms C).of_isPushout h (by assumption)
 
 Depends on / 依赖: F.map, MorphismProperty, MorphismProperty.epimorphisms, P.prop_of_epi, epimorphisms, of_isPushout, prop_of_epi
@@ -521,8 +521,8 @@ lemma epi_f₃₄
 
 中文:
 引理 epi_f₃₄
-  条件: [Epi sq.f₁₂]
-  结论: Epi sq.f₃₄
+  条件: [满态射 sq.f₁₂]
+  结论: 满态射 sq.f₃₄
   证明: by
   have : Epi sq.flip.f₁₃ := by dsimp; infer_instance
   exact h.flip.epi_f₂₄

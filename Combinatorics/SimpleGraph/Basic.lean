@@ -104,12 +104,12 @@ structure SimpleGraph
     - loopless : Std.Irrefl Adj  [default: by aesop_graph]
 
 中文:
-结构 SimpleGraph
+结构 简单图
   参数: (V : 类型u)
   公理与运算 (3 个):
     - Adj : V -> V -> 命题
-    - symm : Std.Symm Adj  [默认: by aesop_graph]
-    - loopless : Std.Irrefl Adj  [默认: by aesop_graph]
+    - symm : Std.Symm 伴随  [默认: by aesop_graph]
+    - loopless : Std.Irrefl 伴随  [默认: by aesop_graph]
 
 Depends on / 依赖: Irrefl, Std.Irrefl, aesop_graph, loopless
 -/
@@ -139,7 +139,7 @@ definition SimpleGraph.mk'
     simpa [Bool.coe_iff_coe] using congr_fun₂ h v w
 
 中文:
-定义 SimpleGraph.mk'
+定义 简单图.mk'
   签名: {V : 类型u}
   定义体: ⟨fun v w => x.1 v w, ⟨fun v w => by simp [x.2.1]⟩, ⟨fun v => by simp [x.2.2]⟩⟩
   inj' := by
@@ -182,8 +182,8 @@ instance SimpleGraph.instFinite
   body: .of_injective SimpleGraph.Adj fun _ _ => SimpleGraph.ext
 
 中文:
-实例 SimpleGraph.instFinite
-  签名: {V : 类型u} [Finite V]
+实例 简单图.instFinite
+  签名: {V : 类型u} [有限 V]
   定义体: .of_injective SimpleGraph.Adj fun _ _ => SimpleGraph.ext
 
 Depends on / 依赖: SimpleGraph, SimpleGraph.Adj, SimpleGraph.ext, of_injective
@@ -202,7 +202,7 @@ definition SimpleGraph.fromRel
 @[simp]
 
 中文:
-定义 SimpleGraph.fromRel
+定义 简单图.fromRel
   签名: {V : 类型u} (r : V -> V -> 命题)
   定义体: a != b ∧ (r a b ∨ r b a)
 
@@ -221,7 +221,7 @@ theorem SimpleGraph.fromRel_adj
   proof: Iff.rfl
 
 中文:
-定理 SimpleGraph.fromRel_adj
+定理 简单图.fromRel_adj
   条件: {V : 类型u} (r : V -> V -> 命题) (v w : V)
   证明: Iff.rfl
 
@@ -277,7 +277,7 @@ theorem irrefl
 中文:
 定理 irrefl
   条件: {v : V}
-  结论: ¬G.Adj v v
+  结论: ¬G.伴随 v v
   证明: G.loopless.irrefl v
 -/
 protected theorem irrefl {v : V} : ¬G.Adj v v :=
@@ -297,7 +297,7 @@ theorem adj_comm
 中文:
 定理 adj_comm
   条件: (u v : V)
-  结论: G.Adj u v ↔ G.Adj v u
+  结论: G.伴随 u v ↔ G.伴随 v u
   证明: G.symm.iff u v
 
 @[symm]
@@ -319,8 +319,8 @@ theorem adj_symm
 
 中文:
 定理 adj_symm
-  条件: (h : G.Adj u v)
-  结论: G.Adj v u
+  条件: (h : G.伴随 u v)
+  结论: G.伴随 v u
   证明: G.symm.symm u v h
 
 Depends on / 依赖: G.symm.symm
@@ -338,9 +338,9 @@ theorem Adj.symm
   proof: G.adj_symm h
 
 中文:
-定理 Adj.symm
-  条件: {G : SimpleGraph V} {u v : V} (h : G.Adj u v)
-  结论: G.Adj v u
+定理 伴随.symm
+  条件: {G : 简单图 V} {u v : V} (h : G.伴随 u v)
+  结论: G.伴随 v u
   证明: G.adj_symm h
 -/
 theorem Adj.symm {G : SimpleGraph V} {u v : V} (h : G.Adj u v) : G.Adj v u :=
@@ -359,7 +359,7 @@ theorem ne_of_adj
 
 中文:
 定理 ne_of_adj
-  条件: (h : G.Adj a b)
+  条件: (h : G.伴随 a b)
   结论: a != b
   证明: by
   rintro rfl
@@ -381,8 +381,8 @@ theorem Adj.ne
   proof: G.ne_of_adj h
 
 中文:
-定理 Adj.ne
-  条件: {G : SimpleGraph V} {a b : V} (h : G.Adj a b)
+定理 伴随.ne
+  条件: {G : 简单图 V} {a b : V} (h : G.伴随 a b)
   结论: a != b
   证明: G.ne_of_adj h
 -/
@@ -399,8 +399,8 @@ theorem Adj.ne'
   proof: h.ne.symm
 
 中文:
-定理 Adj.ne'
-  条件: {G : SimpleGraph V} {a b : V} (h : G.Adj a b)
+定理 伴随.ne'
+  条件: {G : 简单图 V} {a b : V} (h : G.伴随 a b)
   结论: b != a
   证明: h.ne.symm
 -/
@@ -419,7 +419,7 @@ theorem ne_of_adj_of_not_adj
 
 中文:
 定理 ne_of_adj_of_not_adj
-  条件: {v w x : V} (h : G.Adj v x) (hn : ¬G.Adj w x)
+  条件: {v w x : V} (h : G.伴随 v x) (hn : ¬G.伴随 w x)
   结论: v != w
   证明: fun h' =>
   hn (h' ▸ h)
@@ -439,7 +439,7 @@ theorem adj_injective
 
 中文:
 定理 adj_injective
-  结论: Injective (Adj : SimpleGraph V -> V -> V -> 命题)
+  结论: 单射 (伴随 : 简单图 V -> V -> V -> 命题)
   证明: fun _ _ => SimpleGraph.ext
 
 @[simp]
@@ -461,8 +461,8 @@ theorem adj_inj
 
 中文:
 定理 adj_inj
-  条件: {G H : SimpleGraph V}
-  结论: G.Adj = H.Adj ↔ G = H
+  条件: {G H : 简单图 V}
+  结论: G.伴随 = H.伴随 ↔ G = H
   证明: adj_injective.eq_iff
 
 Depends on / 依赖: adj_injective, adj_injective.eq_iff, eq_iff
@@ -486,7 +486,7 @@ theorem adj_congr_of_sym2
 中文:
 定理 adj_congr_of_sym2
   条件: {u v w x : V} (h : s(u, v) = s(w, x))
-  结论: G.Adj u v ↔ G.Adj w x
+  结论: G.伴随 u v ↔ G.伴随 w x
   证明: by
   simp only [Sym2.eq, Sym2.rel_iff', Prod.mk.injEq, Prod.swap_prod_mk] at h
   rcases h with hl | hr
@@ -530,8 +530,8 @@ definition IsSubgraph
   body: forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 
 中文:
-定义 IsSubgraph
-  签名: (x y : SimpleGraph V)
+定义 是子图
+  签名: (x y : 简单图 V)
   定义体: forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 
 Depends on / 依赖: x.Adj, y.Adj
@@ -549,7 +549,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (SimpleGraph V)
+  签名: LE (简单图 V)
   定义体: forall ⦃v w : V⦄, x.Adj v w -> y.Adj v w
 
 Depends on / 依赖: x.Adj, y.Adj
@@ -568,8 +568,8 @@ lemma le_iff_adj
 
 中文:
 引理 le_iff_adj
-  条件: {G H : SimpleGraph V}
-  结论: G <= H ↔ 对任意 v w, G.Adj v w -> H.Adj v w
+  条件: {G H : 简单图 V}
+  结论: G <= H ↔ 对任意 v w, G.伴随 v w -> H.伴随 v w
   证明: .rfl
 -/
 lemma le_iff_adj {G H : SimpleGraph V} : G <= H ↔ forall v w, G.Adj v w -> H.Adj v w := .rfl
@@ -587,7 +587,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (SimpleGraph V)
+  签名: 最大值 (简单图 V)
   定义体: { Adj := x.Adj ⊔ y.Adj
       symm.symm v w h := by rwa [Pi.sup_apply, Pi.sup_apply, x.adj_comm, y.adj_comm] }
 
@@ -612,8 +612,8 @@ theorem sup_adj
 
 中文:
 定理 sup_adj
-  条件: (x y : SimpleGraph V) (v w : V)
-  结论: (x ⊔ y).Adj v w ↔ x.Adj v w ∨ y.Adj v w
+  条件: (x y : 简单图 V) (v w : V)
+  结论: (x ⊔ y).伴随 v w ↔ x.伴随 v w ∨ y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (SimpleGraph V)
+  签名: 最小值 (简单图 V)
   定义体: { Adj := x.Adj ⊓ y.Adj
       symm.symm v w h := by rwa [Pi.inf_apply, Pi.inf_apply, x.adj_comm, y.adj_comm] }
 
@@ -659,8 +659,8 @@ theorem inf_adj
 
 中文:
 定理 inf_adj
-  条件: (x y : SimpleGraph V) (v w : V)
-  结论: (x ⊓ y).Adj v w ↔ x.Adj v w ∧ y.Adj v w
+  条件: (x y : 简单图 V) (v w : V)
+  结论: (x ⊓ y).伴随 v w ↔ x.伴随 v w ∧ y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -681,7 +681,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (SimpleGraph V)
+  签名: 补集 (简单图 V)
   定义体: { Adj v w := v != w ∧ ¬G.Adj v w
       symm.symm v w := fun ⟨hne, _⟩ => ⟨hne.symm, by rwa [adj_comm]⟩ }
 
@@ -706,8 +706,8 @@ theorem compl_adj
 
 中文:
 定理 compl_adj
-  条件: (G : SimpleGraph V) (v w : V)
-  结论: Gᶜ.Adj v w ↔ v != w ∧ ¬G.Adj v w
+  条件: (G : 简单图 V) (v w : V)
+  结论: Gᶜ.伴随 v w ↔ v != w ∧ ¬G.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -728,7 +728,7 @@ instance sdiff
 
 中文:
 实例 sdiff
-  签名: : SDiff (SimpleGraph V) where
+  签名: : 对称差 (简单图 V) where
   定义体: { Adj := x.Adj \ y.Adj
       symm.symm v w h := by change x.Adj w v ∧ ¬y.Adj w v; rwa [x.adj_comm, y.adj_comm] }
 
@@ -753,8 +753,8 @@ theorem sdiff_adj
 
 中文:
 定理 sdiff_adj
-  条件: (x y : SimpleGraph V) (v w : V)
-  结论: (x \ y).Adj v w ↔ x.Adj v w ∧ ¬y.Adj v w
+  条件: (x y : 简单图 V) (v w : V)
+  结论: (x \ y).伴随 v w ↔ x.伴随 v w ∧ ¬y.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -773,7 +773,7 @@ instance supSet
 
 中文:
 实例 supSet
-  签名: : SupSet (SimpleGraph V) where
+  签名: : 上确界集 (简单图 V) where
   定义体: { Adj a b := exists G in s, Adj G a b
       symm.symm _ _ := Exists.imp fun _ => And.imp_right Adj.symm }
 
@@ -797,7 +797,7 @@ instance infSet
 
 中文:
 实例 infSet
-  签名: : InfSet (SimpleGraph V) where
+  签名: : 下确界集 (简单图 V) where
   定义体: { Adj a b := (forall ⦃G⦄, G in s -> Adj G a b) ∧ a != b
       symm.symm _ _ := And.imp (forall₂_imp fun _ _ => Adj.symm) Ne.symm }
 
@@ -824,8 +824,8 @@ theorem sSup_adj
 
 中文:
 定理 sSup_adj
-  条件: {s : Set (SimpleGraph V)} {a b : V}
-  结论: (sSup s).Adj a b ↔ 存在 G in s, Adj G a b
+  条件: {s : 集合 (简单图 V)} {a b : V}
+  结论: (sSup s).伴随 a b ↔ 存在 G in s, 伴随 G a b
   证明: Iff.rfl
 
 @[simp]
@@ -849,8 +849,8 @@ theorem sInf_adj
 
 中文:
 定理 sInf_adj
-  条件: {s : Set (SimpleGraph V)}
-  结论: (sInf s).Adj a b ↔ (对任意 G in s, Adj G a b) ∧ a != b
+  条件: {s : 集合 (简单图 V)}
+  结论: (sInf s).伴随 a b ↔ (对任意 G in s, 伴随 G a b) ∧ a != b
   证明: Iff.rfl
 
 @[simp]
@@ -874,8 +874,8 @@ theorem iSup_adj
 
 中文:
 定理 iSup_adj
-  条件: {f : ι -> SimpleGraph V}
-  结论: (⨆ i, f i).Adj a b ↔ 存在 i, (f i).Adj a b
+  条件: {f : ι -> 简单图 V}
+  结论: (⨆ i, f i).伴随 a b ↔ 存在 i, (f i).伴随 a b
   证明: by simp [iSup]
 
 @[simp]
@@ -895,8 +895,8 @@ theorem iInf_adj
 
 中文:
 定理 iInf_adj
-  条件: {f : ι -> SimpleGraph V}
-  结论: (⨅ i, f i).Adj a b ↔ (对任意 i, (f i).Adj a b) ∧ a != b
+  条件: {f : ι -> 简单图 V}
+  结论: (⨅ i, f i).伴随 a b ↔ (对任意 i, (f i).伴随 a b) ∧ a != b
   证明: by
   simp [iInf]
 -/
@@ -916,7 +916,7 @@ and_iff_left_of_imp by
 
 中文:
 定理 sInf_adj_of_nonempty
-  条件: {s : Set (SimpleGraph V)} (hs : s.Nonempty)
+  条件: {s : 集合 (简单图 V)} (hs : s.非空)
   证明: sInf_adj.trans
 and_iff_left_of_imp by
       obtain ⟨G, hG⟩ := hs
@@ -942,7 +942,7 @@ theorem iInf_adj_of_nonempty
 
 中文:
 定理 iInf_adj_of_nonempty
-  条件: [Nonempty ι] {f : ι -> SimpleGraph V}
+  条件: [非空 ι] {f : ι -> 简单图 V}
   证明: by
   rw [iInf]; rw [sInf_adj_of_nonempty (Set.range_nonempty _)]; rw [Set.forall_mem_range]
 
@@ -962,7 +962,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SimpleGraph V)
+  签名: 偏序 (简单图 V)
   定义体: fast_instance% PartialOrder.lift _ adj_injective
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, adj_injective, fast_instance
@@ -980,7 +980,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: : DistribLattice (SimpleGraph V)
+  签名: : Distrib格 (简单图 V)
   定义体: adj_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: adj_injective, adj_injective.distribLattice, distribLattice
@@ -1007,8 +1007,8 @@ inf_compl_le_bot _ _ _ h := False.elim h.2.2 h.1
   top_le_sup_compl G v w hvw :=
 
 中文:
-实例 completeAtomicBooleanAlgebra
-  签名: : CompleteAtomic布尔eanAlgebra (SimpleGraph V) where
+实例 completeAtomic布尔eanAlgebra
+  签名: : 余mpleteAtomic布尔ean代数 (简单图 V) where
   定义体: Ne
   bot.Adj _ _ := False
   le_top x _ _ h := x.ne_of_adj h
@@ -1091,7 +1091,7 @@ theorem top_adj
 中文:
 定理 top_adj
   条件: (v w : V)
-  结论: (⊤ : SimpleGraph V).Adj v w ↔ v != w
+  结论: (⊤ : 简单图 V).伴随 v w ↔ v != w
   证明: Iff.rfl
 
 @[simp]
@@ -1116,7 +1116,7 @@ theorem bot_adj
 中文:
 定理 bot_adj
   条件: (v w : V)
-  结论: (⊥ : SimpleGraph V).Adj v w ↔ False
+  结论: (⊥ : 简单图 V).伴随 v w ↔ 假
   证明: Iff.rfl
 
 @[simp]
@@ -1180,8 +1180,8 @@ theorem eq_bot_iff_forall_not_adj
   simp [← le_bot_iff, le_iff_adj]
 
 中文:
-定理 eq_bot_iff_forall_not_adj
-  结论: G = ⊥ ↔ 对任意 a b : V, ¬G.Adj a b
+定理 eq_bot_iff_对任意_not_adj
+  结论: G = ⊥ ↔ 对任意 a b : V, ¬G.伴随 a b
   证明: by
   simp [← le_bot_iff, le_iff_adj]
 
@@ -1200,8 +1200,8 @@ theorem ne_bot_iff_exists_adj
   simp [eq_bot_iff_forall_not_adj]
 
 中文:
-定理 ne_bot_iff_exists_adj
-  结论: G != ⊥ ↔ 存在 a b : V, G.Adj a b
+定理 ne_bot_iff_存在_adj
+  结论: G != ⊥ ↔ 存在 a b : V, G.伴随 a b
   证明: by
   simp [eq_bot_iff_forall_not_adj]
 
@@ -1220,8 +1220,8 @@ theorem eq_top_iff_forall_ne_adj
   simp [← top_le_iff, le_iff_adj]
 
 中文:
-定理 eq_top_iff_forall_ne_adj
-  结论: G = ⊤ ↔ 对任意 a b : V, a != b -> G.Adj a b
+定理 eq_top_iff_对任意_ne_adj
+  结论: G = ⊤ ↔ 对任意 a b : V, a != b -> G.伴随 a b
   证明: by
   simp [← top_le_iff, le_iff_adj]
 
@@ -1240,8 +1240,8 @@ theorem ne_top_iff_exists_not_adj
   simp [eq_top_iff_forall_ne_adj]
 
 中文:
-定理 ne_top_iff_exists_not_adj
-  结论: G != ⊤ ↔ 存在 a b : V, a != b ∧ ¬G.Adj a b
+定理 ne_top_iff_存在_not_adj
+  结论: G != ⊤ ↔ 存在 a b : V, a != b ∧ ¬G.伴随 a b
   证明: by
   simp [eq_top_iff_forall_ne_adj]
 
@@ -1267,7 +1267,7 @@ instance uniqueOfSubsingleton
 
 中文:
 实例 uniqueOfSubsingleton
-  签名: [Subsingleton V]
+  签名: [子单例 V]
   定义体: ⊥
   uniq G := by ext a b; have := Subsingleton.elim a b; simp [this]
 -/
@@ -1285,8 +1285,8 @@ instance [Nontrivial
     top_adj, ne_eq, eq_iff_iff, false_iff, not_not] using h⟩⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: V] : Nontrivial (SimpleGraph V)
+实例 [非平凡
+  签名: V] : 非平凡 (简单图 V)
   定义体: ⟨⟨⊥, ⊤, fun h => not_subsingleton V ⟨by simpa only [← adj_inj, funext_iff, bot_adj,
     top_adj, ne_eq, eq_iff_iff, false_iff, not_not] using h⟩⟩⟩
 
@@ -1309,8 +1309,8 @@ instance Bot.adjDecidable
   body: inferInstanceAs DecidableRel fun _ _ => False
 
 中文:
-实例 Bot.adjDecidable
-  签名: : DecidableRel (⊥ : SimpleGraph V).Adj
+实例 底元素.adjDecidable
+  签名: : DecidableRel (⊥ : 简单图 V).伴随
   定义体: inferInstanceAs DecidableRel fun _ _ => False
 -/
 instance Bot.adjDecidable : DecidableRel (⊥ : SimpleGraph V).Adj :=
@@ -1325,8 +1325,8 @@ instance Sup.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => G.Adj v w ∨ H.Adj v w
 
 中文:
-实例 Sup.adjDecidable
-  签名: : DecidableRel (G ⊔ H).Adj
+实例 上确界.adjDecidable
+  签名: : DecidableRel (G ⊔ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∨ H.Adj v w
 -/
 instance Sup.adjDecidable : DecidableRel (G ⊔ H).Adj :=
@@ -1341,8 +1341,8 @@ instance Inf.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ H.Adj v w
 
 中文:
-实例 Inf.adjDecidable
-  签名: : DecidableRel (G ⊓ H).Adj
+实例 下确界.adjDecidable
+  签名: : DecidableRel (G ⊓ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ H.Adj v w
 -/
 instance Inf.adjDecidable : DecidableRel (G ⊓ H).Adj :=
@@ -1358,7 +1358,7 @@ instance Sdiff.adjDecidable
 
 中文:
 实例 Sdiff.adjDecidable
-  签名: : DecidableRel (G \ H).Adj
+  签名: : DecidableRel (G \ H).伴随
   定义体: inferInstanceAs DecidableRel fun v w => G.Adj v w ∧ ¬H.Adj v w
 
 Depends on / 依赖: DecidableRel, G.Adj, H.Adj
@@ -1377,8 +1377,8 @@ instance Top.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => v != w
 
 中文:
-实例 Top.adjDecidable
-  签名: : DecidableRel (⊤ : SimpleGraph V).Adj
+实例 顶元素.adjDecidable
+  签名: : DecidableRel (⊤ : 简单图 V).伴随
   定义体: inferInstanceAs DecidableRel fun v w => v != w
 -/
 instance Top.adjDecidable : DecidableRel (⊤ : SimpleGraph V).Adj :=
@@ -1393,8 +1393,8 @@ instance Compl.adjDecidable
   body: inferInstanceAs DecidableRel fun v w => v != w ∧ ¬G.Adj v w
 
 中文:
-实例 Compl.adjDecidable
-  签名: : DecidableRel (Gᶜ.Adj)
+实例 补集.adjDecidable
+  签名: : DecidableRel (Gᶜ.伴随)
   定义体: inferInstanceAs DecidableRel fun v w => v != w ∧ ¬G.Adj v w
 -/
 instance Compl.adjDecidable : DecidableRel (Gᶜ.Adj) :=
@@ -1414,7 +1414,7 @@ definition support
 
 中文:
 定义 support
-  签名: : Set V
+  签名: : 集合 V
   定义体: SetRel.dom {(u, v) : V × V | G.Adj u v}
 
 Depends on / 依赖: G.Adj, SetRel, SetRel.dom
@@ -1434,7 +1434,7 @@ theorem mem_support
 中文:
 定理 mem_support
   条件: {v : V}
-  结论: v in G.support ↔ 存在 w, G.Adj v w
+  结论: v in G.support ↔ 存在 w, G.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1453,8 +1453,8 @@ theorem Adj.mem_support_left
   proof: G.mem_support.mpr ⟨v, hadj⟩
 
 中文:
-定理 Adj.mem_support_left
-  条件: (hadj : G.Adj u v)
+定理 伴随.mem_support_left
+  条件: (hadj : G.伴随 u v)
   结论: u in G.support
   证明: G.mem_support.mpr ⟨v, hadj⟩
 
@@ -1476,8 +1476,8 @@ theorem Adj.mem_support_right
 @[gcongr]
 
 中文:
-定理 Adj.mem_support_right
-  条件: (hadj : G.Adj u v)
+定理 伴随.mem_support_right
+  条件: (hadj : G.伴随 u v)
   结论: v in G.support
   证明: hadj.symm.mem_support_left
 
@@ -1500,7 +1500,7 @@ theorem support_mono
 
 中文:
 定理 support_mono
-  条件: {G G' : SimpleGraph V} (h : G <= G')
+  条件: {G G' : 简单图 V} (h : G <= G')
   结论: G.support subseteq G'.support
   证明: SetRel.dom_mono fun _uv huv => h huv
 
@@ -1519,8 +1519,8 @@ theorem Adj.left_mem_support
   proof: ⟨v, hadj⟩
 
 中文:
-定理 Adj.left_mem_support
-  条件: (hadj : G.Adj u v)
+定理 伴随.left_mem_support
+  条件: (hadj : G.伴随 u v)
   结论: u in G.support
   证明: ⟨v, hadj⟩
 -/
@@ -1537,8 +1537,8 @@ theorem Adj.right_mem_support
   proof: hadj.symm.left_mem_support
 
 中文:
-定理 Adj.right_mem_support
-  条件: (hadj : G.Adj u v)
+定理 伴随.right_mem_support
+  条件: (hadj : G.伴随 u v)
   结论: v in G.support
   证明: hadj.symm.left_mem_support
 
@@ -1558,8 +1558,8 @@ theorem support_top_of_nontrivial
 
 中文:
 定理 support_top_of_nontrivial
-  条件: [Nontrivial V]
-  结论: (⊤ : SimpleGraph V).support = Set.univ
+  条件: [非平凡 V]
+  结论: (⊤ : 简单图 V).support = 集合.univ
   证明: .imp fun _v₂ h => h.symm Set.eq_univ_of_forall fun v₁ => exists_ne v₁
 
 Depends on / 依赖: Set.eq_univ_of_forall, eq_univ_of_forall, exists_ne, h.symm
@@ -1579,7 +1579,7 @@ theorem support_bot
 
 中文:
 定理 support_bot
-  结论: (⊥ : SimpleGraph V).support = ∅
+  结论: (⊥ : 简单图 V).support = ∅
   证明: SetRel.dom_eq_empty_iff.mpr Set.empty_def.symm
 
 Depends on / 依赖: Set.empty_def.symm, SetRel, SetRel.dom_eq_empty_iff.mpr, dom_eq_empty_iff, empty_def
@@ -1626,7 +1626,7 @@ theorem support_of_subsingleton
 
 中文:
 定理 support_of_subsingleton
-  条件: [Subsingleton V]
+  条件: [子单例 V]
   结论: G.support = ∅
   证明: uniqueOfSubsingleton.uniq G ▸ support_bot
 
@@ -1662,7 +1662,7 @@ instance neighborSet.memDecidable
 
 中文:
 实例 neighborSet.memDecidable
-  签名: (v : V) [DecidableRel G.Adj]
+  签名: (v : V) [DecidableRel G.伴随]
   定义体: inferInstanceAs DecidablePred (Adj G v)
 
 Depends on / 依赖: DecidablePred
@@ -1729,7 +1729,7 @@ abbreviation edgeSet
 
 中文:
 缩写 edgeSet
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: edgeSetEmbedding V G
 
 @[simp]
@@ -1749,7 +1749,7 @@ theorem mem_edgeSet
 
 中文:
 定理 mem_edgeSet
-  结论: s(v, w) in G.edgeSet ↔ G.Adj v w
+  结论: s(v, w) in G.edgeSet ↔ G.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1858,7 +1858,7 @@ theorem edgeSet_injective
 
 中文:
 定理 edgeSet_injective
-  结论: Injective (edgeSet : SimpleGraph V -> Set (Sym2 V))
+  结论: 单射 (edgeSet : 简单图 V -> 集合 (Sym2 V))
   证明: (edgeSetEmbedding V).injective
 
 @[gcongr] alias ⟨_, edgeSet_mono⟩ := edgeSet_subset_edgeSet
@@ -1891,7 +1891,7 @@ theorem edgeSet_bot
 
 中文:
 定理 edgeSet_bot
-  结论: (⊥ : SimpleGraph V).edgeSet = ∅
+  结论: (⊥ : 简单图 V).edgeSet = ∅
   证明: Sym2.fromRel_bot
 
 @[simp]
@@ -1914,7 +1914,7 @@ theorem edgeSet_top
 
 中文:
 定理 edgeSet_top
-  结论: (⊤ : SimpleGraph V).edgeSet = Sym2.diagSetᶜ
+  结论: (⊤ : 简单图 V).edgeSet = Sym2.diagSetᶜ
   证明: Sym2.diagSet_compl_eq_fromRel_ne.symm
 
 @[simp]
@@ -2010,7 +2010,7 @@ theorem edgeSet_sSup
 
 中文:
 定理 edgeSet_sSup
-  条件: {s : Set (SimpleGraph V)}
+  条件: {s : 集合 (简单图 V)}
   结论: (sSup s).edgeSet = ⋃₀ (edgeSet '' s)
   证明: by
   ext ⟨x, y⟩
@@ -2033,7 +2033,7 @@ theorem edgeSet_sInf
 
 中文:
 定理 edgeSet_sInf
-  条件: {s : Set (SimpleGraph V)} (h : s.Nonempty)
+  条件: {s : 集合 (简单图 V)} (h : s.非空)
   证明: by
   ext ⟨x, y⟩
   have ⟨G, hG⟩ := h
@@ -2057,7 +2057,7 @@ theorem edgeSet_iSup
 
 中文:
 定理 edgeSet_iSup
-  条件: {ι : Sort*} {f : ι -> SimpleGraph V}
+  条件: {ι : 类型层*} {f : ι -> 简单图 V}
   证明: by
   ext ⟨x, y⟩
   simp
@@ -2082,7 +2082,7 @@ theorem edgeSet_iInf
 
 中文:
 定理 edgeSet_iInf
-  条件: {ι : Sort*} [Nonempty ι] {f : ι -> SimpleGraph V}
+  条件: {ι : 类型层*} [非空 ι] {f : ι -> 简单图 V}
   证明: by
   ext ⟨x, y⟩
   have ⟨i⟩ := ‹Nonempty ι›
@@ -2194,7 +2194,7 @@ lemma edgeSet_nonempty
 
 中文:
 引理 edgeSet_nonempty
-  结论: G.edgeSet.Nonempty ↔ G != ⊥
+  结论: G.edgeSet.非空 ↔ G != ⊥
   证明: by
   rw [Set.nonempty_iff_ne_empty]; rw [edgeSet_eq_empty.ne]
 -/
@@ -2215,7 +2215,7 @@ theorem edgeSet_sdiff_sdiff_isDiag
 
 中文:
 定理 edgeSet_sdiff_sdiff_isDiag
-  条件: (G : SimpleGraph V) (s : Set (Sym2 V))
+  条件: (G : 简单图 V) (s : 集合 (Sym2 V))
   证明: by
   grind [Sym2.mem_diagSet, not_isDiag_of_mem_edgeSet]
 
@@ -2240,9 +2240,9 @@ theorem adj_iff_exists_edge
   rwa [mem_edgeSet] at he
 
 中文:
-定理 adj_iff_exists_edge
+定理 adj_iff_存在_edge
   条件: {v w : V}
-  结论: G.Adj v w ↔ v != w ∧ 存在 e in G.edgeSet, v in e ∧ w in e
+  结论: G.伴随 v w ↔ v != w ∧ 存在 e in G.edgeSet, v in e ∧ w in e
   证明: by
   refine ⟨fun _ => ⟨G.ne_of_adj ‹_›, s(v, w), by simpa⟩, ?_⟩
   rintro ⟨hne, e, he, hv⟩
@@ -2271,8 +2271,8 @@ theorem adj_iff_exists_edge_coe
 @[simp]
 
 中文:
-定理 adj_iff_exists_edge_coe
-  结论: G.Adj a b ↔ 存在 e : G.edgeSet, e.val = s(a, b)
+定理 adj_iff_存在_edge_coe
+  结论: G.伴随 a b ↔ 存在 e : G.edgeSet, e.val = s(a, b)
   证明: by
   simp only [mem_edgeSet, exists_prop, SetCoe.exists, exists_eq_right]
 
@@ -2299,7 +2299,7 @@ theorem edgeSet_subset_sym2_iff
 
 中文:
 定理 edgeSet_subset_sym2_iff
-  条件: {s : Set V}
+  条件: {s : 集合 V}
   证明: by
   refine ⟨fun h u hu => ?_, fun h e hadj => ?_⟩
   · have ⟨v, huv⟩ := hu
@@ -2353,7 +2353,7 @@ instance decidableMemEdgeSet
 
 中文:
 实例 decidableMemEdgeSet
-  签名: [DecidableRel G.Adj]
+  签名: [DecidableRel G.伴随]
   定义体: Sym2.fromRel.decidablePred G.symm
 
 Depends on / 依赖: G.symm, Sym2.fromRel.decidablePred, decidablePred, fromRel
@@ -2371,7 +2371,7 @@ instance fintypeEdgeSet
 
 中文:
 实例 fintypeEdgeSet
-  签名: [Fintype (Sym2 V)] [DecidableRel G.Adj]
+  签名: [有限类型 (Sym2 V)] [DecidableRel G.伴随]
   定义体: Subtype.fintype _
 
 Depends on / 依赖: Subtype, Subtype.fintype, fintype
@@ -2391,7 +2391,7 @@ instance fintypeEdgeSetBot
 
 中文:
 实例 fintypeEdgeSetBot
-  签名: : Fintype (⊥ : SimpleGraph V).edgeSet
+  签名: : 有限类型 (⊥ : 简单图 V).edgeSet
   定义体: by
   rw [edgeSet_bot]
   infer_instance
@@ -2414,7 +2414,7 @@ instance fintypeEdgeSetSup
 
 中文:
 实例 fintypeEdgeSetSup
-  签名: [DecidableEq V] [Fintype G₁.edgeSet] [Fintype G₂.edgeSet]
+  签名: [DecidableEq V] [有限类型 G₁.edgeSet] [有限类型 G₂.edgeSet]
   定义体: by
   rw [edgeSet_sup]
   infer_instance
@@ -2438,7 +2438,7 @@ instance fintypeEdgeSetInf
 
 中文:
 实例 fintypeEdgeSetInf
-  签名: [DecidableEq V] [Fintype G₁.edgeSet] [Fintype G₂.edgeSet]
+  签名: [DecidableEq V] [有限类型 G₁.edgeSet] [有限类型 G₂.edgeSet]
   定义体: by
   rw [edgeSet_inf]
   exact Set.fintypeInter _ _
@@ -2462,7 +2462,7 @@ instance fintypeEdgeSetSdiff
 
 中文:
 实例 fintypeEdgeSetSdiff
-  签名: [DecidableEq V] [Fintype G₁.edgeSet] [Fintype G₂.edgeSet]
+  签名: [DecidableEq V] [有限类型 G₁.edgeSet] [有限类型 G₂.edgeSet]
   定义体: by
   rw [edgeSet_sdiff]
   exact Set.fintypeDiff _ _
@@ -2491,7 +2491,7 @@ definition fromEdgeSet
 
 中文:
 定义 fromEdgeSet
-  签名: : SimpleGraph V where
+  签名: : 简单图 V where
   定义体: Sym2.ToRel s ⊓ Ne
 .symm u v h.left, h.right.symm⟩ symm.symm u v h := ⟨Sym2.toRel_symm s
 
@@ -2513,7 +2513,7 @@ instance [DecidablePred
 
 中文:
 实例 [DecidablePred
-  签名: (· in s)] [DecidableEq V] : DecidableRel (fromEdgeSet s).Adj
+  签名: (· in s)] [DecidableEq V] : DecidableRel (fromEdgeSet s).伴随
   定义体: inferInstanceAs DecidableRel fun v w => s(v, w) in s ∧ v != w
 
 @[simp]
@@ -2534,7 +2534,7 @@ theorem fromEdgeSet_adj
 
 中文:
 定理 fromEdgeSet_adj
-  结论: (fromEdgeSet s).Adj v w ↔ s(v, w) in s ∧ v != w
+  结论: (fromEdgeSet s).伴随 v w ↔ s(v, w) in s ∧ v != w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2624,7 +2624,7 @@ lemma fromEdgeSet_le
 
 中文:
 引理 fromEdgeSet_le
-  条件: {s : Set (Sym2 V)}
+  条件: {s : 集合 (Sym2 V)}
   证明: by simp [← edgeSet_subset_edgeSet]
 -/
 @[simp] lemma fromEdgeSet_le {s : Set (Sym2 V)} :
@@ -2668,7 +2668,7 @@ theorem fromEdgeSet_empty
 
 中文:
 定理 fromEdgeSet_empty
-  结论: fromEdgeSet (∅ : Set (Sym2 V)) = ⊥
+  结论: fromEdgeSet (∅ : 集合 (Sym2 V)) = ⊥
   证明: by
   ext v w
   simp only [fromEdgeSet_adj, Set.mem_empty_iff_false, false_and, bot_adj]
@@ -2713,7 +2713,7 @@ theorem fromEdgeSet_univ
 
 中文:
 定理 fromEdgeSet_univ
-  结论: fromEdgeSet (Set.univ : Set (Sym2 V)) = ⊤
+  结论: fromEdgeSet (集合.univ : 集合 (Sym2 V)) = ⊤
   证明: by
   ext v w
   simp only [fromEdgeSet_adj, Set.mem_univ, true_and, top_adj]
@@ -2742,7 +2742,7 @@ theorem fromEdgeSet_inter
 
 中文:
 定理 fromEdgeSet_inter
-  条件: (s t : Set (Sym2 V))
+  条件: (s t : 集合 (Sym2 V))
   证明: by
   ext v w
   simp only [fromEdgeSet_adj, Set.mem_inter_iff, Ne, inf_adj]
@@ -2771,7 +2771,7 @@ theorem fromEdgeSet_union
 
 中文:
 定理 fromEdgeSet_union
-  条件: (s t : Set (Sym2 V))
+  条件: (s t : 集合 (Sym2 V))
   证明: by
   ext v w
   simp [Set.mem_union, or_and_right]
@@ -2796,7 +2796,7 @@ theorem fromEdgeSet_sUnion
 
 中文:
 定理 fromEdgeSet_sUnion
-  条件: {s : Set (Set (Sym2 V))}
+  条件: {s : 集合 (集合 (Sym2 V))}
   证明: by
   ext u v
   simp
@@ -2820,7 +2820,7 @@ theorem fromEdgeSet_iUnion
 
 中文:
 定理 fromEdgeSet_iUnion
-  条件: {ι : Sort*} {f : ι -> Set (Sym2 V)}
+  条件: {ι : 类型层*} {f : ι -> 集合 (Sym2 V)}
   证明: by
   ext u v
   simp
@@ -2841,8 +2841,8 @@ theorem fromEdgeSet_sInter
   simp_all
 
 中文:
-定理 fromEdgeSet_sInter
-  条件: {s : Set (Set (Sym2 V))}
+定理 fromEdgeSet_s整数er
+  条件: {s : 集合 (集合 (Sym2 V))}
   证明: by
   ext u v
   simp_all
@@ -2865,8 +2865,8 @@ theorem fromEdgeSet_iInter
 @[simp]
 
 中文:
-定理 fromEdgeSet_iInter
-  条件: {ι : Sort*} {f : ι -> Set (Sym2 V)}
+定理 fromEdgeSet_i整数er
+  条件: {ι : 类型层*} {f : ι -> 集合 (Sym2 V)}
   证明: by
   ext u v
   simp_all
@@ -2893,7 +2893,7 @@ theorem fromEdgeSet_sdiff
 
 中文:
 定理 fromEdgeSet_sdiff
-  条件: (s t : Set (Sym2 V))
+  条件: (s t : 集合 (Sym2 V))
   证明: by
   ext v w
   constructor <;> simp +contextual
@@ -2920,7 +2920,7 @@ theorem fromEdgeSet_mono
 
 中文:
 定理 fromEdgeSet_mono
-  条件: {s t : Set (Sym2 V)} (h : s subseteq t)
+  条件: {s t : 集合 (Sym2 V)} (h : s subseteq t)
   结论: fromEdgeSet s <= fromEdgeSet t
   证明: by
   simp only [le_fromEdgeSet_iff, edgeSet_fromEdgeSet]; grw [h]; exact sdiff_le
@@ -2984,7 +2984,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: V] [Fintype s] : Fintype (fromEdgeSet s).edgeSet
+  签名: V] [有限类型 s] : 有限类型 (fromEdgeSet s).edgeSet
   定义体: by
   rw [edgeSet_fromEdgeSet s]
   infer_instance
@@ -3009,8 +3009,8 @@ theorem disjoint_left
 
 中文:
 定理 disjoint_left
-  条件: {G H : SimpleGraph V}
-  结论: Disjoint G H ↔ 对任意 x y, G.Adj x y -> ¬H.Adj x y
+  条件: {G H : 简单图 V}
+  结论: Disjoint G H ↔ 对任意 x y, G.伴随 x y -> ¬H.伴随 x y
   证明: by
   simp [← disjoint_edgeSet, Set.disjoint_left, Sym2.forall]
 
@@ -3067,7 +3067,7 @@ theorem mk'_mem_incidenceSet_iff
 
 中文:
 定理 mk'_mem_incidenceSet_iff
-  结论: s(b, c) in G.incidenceSet a ↔ G.Adj b c ∧ (a = b ∨ a = c)
+  结论: s(b, c) in G.incidenceSet a ↔ G.伴随 b c ∧ (a = b ∨ a = c)
   证明: and_congr_right' Sym2.mem_iff
 -/
 theorem mk'_mem_incidenceSet_iff : s(b, c) in G.incidenceSet a ↔ G.Adj b c ∧ (a = b ∨ a = c) :=
@@ -3083,7 +3083,7 @@ theorem mk'_mem_incidenceSet_left_iff
 
 中文:
 定理 mk'_mem_incidenceSet_left_iff
-  结论: s(a, b) in G.incidenceSet a ↔ G.Adj a b
+  结论: s(a, b) in G.incidenceSet a ↔ G.伴随 a b
   证明: and_iff_left Sym2.mem_mk_left _ _
 -/
 theorem mk'_mem_incidenceSet_left_iff : s(a, b) in G.incidenceSet a ↔ G.Adj a b :=
@@ -3099,7 +3099,7 @@ theorem mk'_mem_incidenceSet_right_iff
 
 中文:
 定理 mk'_mem_incidenceSet_right_iff
-  结论: s(a, b) in G.incidenceSet b ↔ G.Adj a b
+  结论: s(a, b) in G.incidenceSet b ↔ G.伴随 a b
   证明: and_iff_left Sym2.mem_mk_right _ _
 -/
 theorem mk'_mem_incidenceSet_right_iff : s(a, b) in G.incidenceSet b ↔ G.Adj a b :=
@@ -3206,7 +3206,7 @@ theorem incidenceSet_inter_incidenceSet_of_adj
 
 中文:
 定理 incidenceSet_inter_incidenceSet_of_adj
-  条件: (h : G.Adj a b)
+  条件: (h : G.伴随 a b)
   证明: by
   refine (G.incidenceSet_inter_incidenceSet_subset <| h.ne).antisymm ?_
   rintro _ (rfl : _ = s(a, b))
@@ -3257,7 +3257,7 @@ theorem incidenceSet_inter_incidenceSet_of_not_adj
 
 中文:
 定理 incidenceSet_inter_incidenceSet_of_not_adj
-  条件: (h : ¬G.Adj a b) (hn : a != b)
+  条件: (h : ¬G.伴随 a b) (hn : a != b)
   证明: by
   simp_rw [Set.eq_empty_iff_forall_notMem, Set.mem_inter_iff, not_and]
   intro u ha hb
@@ -3283,7 +3283,7 @@ instance decidableMemIncidenceSet
 
 中文:
 实例 decidableMemIncidenceSet
-  签名: [DecidableEq V] [DecidableRel G.Adj] (v : V)
+  签名: [DecidableEq V] [DecidableRel G.伴随] (v : V)
   定义体: inferInstanceAs DecidablePred fun e => e in G.edgeSet ∧ v in e
 
 @[simp]
@@ -3307,7 +3307,7 @@ theorem mem_neighborSet
 中文:
 定理 mem_neighborSet
   条件: (v w : V)
-  结论: w in G.neighborSet v ↔ G.Adj v w
+  结论: w in G.neighborSet v ↔ G.伴随 v w
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3341,7 +3341,7 @@ theorem nonempty_neighborSet
 
 中文:
 定理 nonempty_neighborSet
-  结论: (G.neighborSet v).Nonempty ↔ 存在 u, G.Adj v u
+  结论: (G.neighborSet v).非空 ↔ 存在 u, G.伴随 v u
   证明: .rfl
 -/
 theorem nonempty_neighborSet : (G.neighborSet v).Nonempty ↔ exists u, G.Adj v u :=
@@ -3422,7 +3422,7 @@ theorem neighborSet_sup
 
 中文:
 定理 neighborSet_sup
-  条件: {G₁ G₂ : SimpleGraph V} (v : V)
+  条件: {G₁ G₂ : 简单图 V} (v : V)
   证明: rfl
 
 @[simp]
@@ -3444,7 +3444,7 @@ theorem neighborSet_inf
 
 中文:
 定理 neighborSet_inf
-  条件: {G₁ G₂ : SimpleGraph V} (v : V)
+  条件: {G₁ G₂ : 简单图 V} (v : V)
   证明: rfl
 
 @[simp]
@@ -3466,7 +3466,7 @@ theorem neighborSet_sdiff
 
 中文:
 定理 neighborSet_sdiff
-  条件: {G₁ G₂ : SimpleGraph V} (v : V)
+  条件: {G₁ G₂ : 简单图 V} (v : V)
   证明: rfl
 
 @[simp]
@@ -3489,7 +3489,7 @@ theorem neighborSet_iSup
 
 中文:
 定理 neighborSet_iSup
-  条件: {s : ι -> SimpleGraph V} (v : V)
+  条件: {s : ι -> 简单图 V} (v : V)
   证明: by
   ext; simp
 
@@ -3514,7 +3514,7 @@ theorem neighborSet_iInf
 
 中文:
 定理 neighborSet_iInf
-  条件: [Nonempty ι] {s : ι -> SimpleGraph V} (v : V)
+  条件: [非空 ι] {s : ι -> 简单图 V} (v : V)
   证明: by
   ext
   simp_rw [Set.mem_iInter, mem_neighborSet, iInf_adj_of_nonempty]
@@ -3542,7 +3542,7 @@ theorem mem_incidenceSet
 中文:
 定理 mem_incidenceSet
   条件: (v w : V)
-  结论: s(v, w) in G.incidenceSet v ↔ G.Adj v w
+  结论: s(v, w) in G.incidenceSet v ↔ G.伴随 v w
   证明: by
   simp [incidenceSet]
 
@@ -3625,7 +3625,7 @@ theorem compl_neighborSet_disjoint
 
 中文:
 定理 compl_neighborSet_disjoint
-  条件: (G : SimpleGraph V) (v : V)
+  条件: (G : 简单图 V) (v : V)
   证明: by
   rw [Set.disjoint_iff]
   rintro w ⟨h, h'⟩
@@ -3655,7 +3655,7 @@ theorem neighborSet_union_compl_neighborSet_eq
 
 中文:
 定理 neighborSet_union_compl_neighborSet_eq
-  条件: (G : SimpleGraph V) (v : V)
+  条件: (G : 简单图 V) (v : V)
   证明: by
   ext w
   have h := @ne_of_adj _ G
@@ -3683,7 +3683,7 @@ theorem card_neighborSet_union_compl_neighborSet
 
 中文:
 定理 card_neighborSet_union_compl_neighborSet
-  结论: [Fintype V] (G : SimpleGraph V) (v : V)
+  结论: [有限类型 V] (G : 简单图 V) (v : V)
   证明: by
   classical simp_rw [neighborSet_union_compl_neighborSet_eq, Set.toFinset_compl,
       Finset.card_compl, Set.toFinset_card, Set.card_singleton]
@@ -3708,7 +3708,7 @@ theorem neighborSet_compl
 
 中文:
 定理 neighborSet_compl
-  条件: (G : SimpleGraph V) (v : V)
+  条件: (G : 简单图 V) (v : V)
   证明: by
   ext w
   simp [and_comm, eq_comm]
@@ -3734,7 +3734,7 @@ theorem neighborSet_mono
 
 中文:
 定理 neighborSet_mono
-  条件: {G' : SimpleGraph V} (hle : G <= G') (v : V)
+  条件: {G' : 简单图 V} (hle : G <= G') (v : V)
   证明: fun _ hadj => hle hadj
 
 @[simp]
@@ -3795,9 +3795,9 @@ theorem Adj.nontrivial
   proof: ⟨u, v, hadj.ne⟩
 
 中文:
-定理 Adj.nontrivial
-  条件: (hadj : G.Adj u v)
-  结论: Nontrivial V
+定理 伴随.nontrivial
+  条件: (hadj : G.伴随 u v)
+  结论: 非平凡 V
   证明: ⟨u, v, hadj.ne⟩
 
 Depends on / 依赖: hadj.ne
@@ -3853,7 +3853,7 @@ theorem mem_commonNeighbors
 中文:
 定理 mem_commonNeighbors
   条件: {u v w : V}
-  结论: u in G.commonNeighbors v w ↔ G.Adj v u ∧ G.Adj w u
+  结论: u in G.commonNeighbors v w ↔ G.伴随 v u ∧ G.伴随 w u
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3969,7 +3969,7 @@ instance decidableMemCommonNeighbors
 
 中文:
 实例 decidableMemCommonNeighbors
-  签名: [DecidableRel G.Adj] (v w : V)
+  签名: [DecidableRel G.伴随] (v w : V)
   定义体: inferInstanceAs DecidablePred fun u => u in G.neighborSet v ∧ u in G.neighborSet w
 
 Depends on / 依赖: DecidablePred, G.neighborSet, neighborSet
@@ -4196,7 +4196,7 @@ definition IsCompleteBetween
 
 中文:
 定义 IsCompleteBetween
-  签名: (G : SimpleGraph V) (s t : Set V)
+  签名: (G : 简单图 V) (s t : 集合 V)
   定义体: forall ⦃v₁⦄, v₁ in s -> forall ⦃v₂⦄, v₂ in t -> G.Adj v₁ v₂
 
 Depends on / 依赖: G.Adj
@@ -4266,7 +4266,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (SimpleGraph V) ↔ Subsingleton V
+  结论: 子单例 (简单图 V) ↔ 子单例 V
   证明: by
   refine ⟨fun h => ?_, fun _ => Unique.instSubsingleton⟩
   contrapose! h
@@ -4290,7 +4290,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (SimpleGraph V) ↔ Nontrivial V
+  结论: 非平凡 (简单图 V) ↔ 非平凡 V
   证明: by
   refine ⟨fun h => ?_, fun _ => instNontrivial⟩
   contrapose! h
@@ -4313,7 +4313,7 @@ definition IsIsolated
 
 中文:
 定义 IsIsolated
-  签名: (G : SimpleGraph V) (v : V)
+  签名: (G : 简单图 V) (v : V)
   定义体: forall w, ¬ G.Adj v w
 
 Depends on / 依赖: G.Adj
@@ -4352,7 +4352,7 @@ protected alias ⟨IsIsolated.of_neighborSet_eq_empty, IsIsolated.neighborSet_eq
 
 中文:
 引理 neighborSet_nonempty
-  结论: (G.neighborSet v).Nonempty ↔ ¬ G.IsIsolated v
+  结论: (G.neighborSet v).非空 ↔ ¬ G.IsIsolated v
   证明: by
   simp [Set.nonempty_iff_ne_empty]
 
@@ -4425,8 +4425,8 @@ theorem exists_adj_iff_not_isIsolated
 @[simp]
 
 中文:
-定理 exists_adj_iff_not_isIsolated
-  结论: (存在 u, G.Adj v u) ↔ ¬G.IsIsolated v
+定理 存在_adj_iff_not_isIsolated
+  结论: (存在 u, G.伴随 v u) ↔ ¬G.IsIsolated v
   证明: by
   simp [IsIsolated]
 
@@ -4448,7 +4448,7 @@ theorem IsIsolated.of_subsingleton
 
 中文:
 定理 IsIsolated.of_subsingleton
-  条件: [Subsingleton V] (G : SimpleGraph V) (v : V)
+  条件: [子单例 V] (G : 简单图 V) (v : V)
   证明: fun _ hadj => not_nontrivial V hadj.nontrivial
 
 Depends on / 依赖: hadj.nontrivial, nontrivial, not_nontrivial
@@ -4470,7 +4470,7 @@ theorem nontrivial_of_not_isIsolated
 中文:
 定理 nontrivial_of_not_isIsolated
   条件: (h : ¬G.IsIsolated v)
-  结论: Nontrivial V
+  结论: 非平凡 V
   证明: .elim fun _ => Adj.nontrivial exists_adj_iff_not_isIsolated.mpr h
 
 Depends on / 依赖: Adj.nontrivial, exists_adj_iff_not_isIsolated, exists_adj_iff_not_isIsolated.mpr, nontrivial
@@ -4489,8 +4489,8 @@ theorem Adj.not_isIsolated_left
   proof: exists_adj_iff_not_isIsolated.mp ⟨_, h⟩
 
 中文:
-定理 Adj.not_isIsolated_left
-  条件: (h : G.Adj u v)
+定理 伴随.not_isIsolated_left
+  条件: (h : G.伴随 u v)
   结论: ¬G.IsIsolated u
   证明: exists_adj_iff_not_isIsolated.mp ⟨_, h⟩
 
@@ -4512,8 +4512,8 @@ theorem Adj.not_isIsolated_right
 @[simp]
 
 中文:
-定理 Adj.not_isIsolated_right
-  条件: (h : G.Adj u v)
+定理 伴随.not_isIsolated_right
+  条件: (h : G.伴随 u v)
   结论: ¬G.IsIsolated v
   证明: h.symm.not_isIsolated_left
 
@@ -4583,8 +4583,8 @@ definition IsUniversal
   body: forall ⦃w⦄, v != w -> G.Adj v w
 
 中文:
-定义 IsUniversal
-  签名: (G : SimpleGraph V) (v : V)
+定义 是泛
+  签名: (G : 简单图 V) (v : V)
   定义体: forall ⦃w⦄, v != w -> G.Adj v w
 
 Depends on / 依赖: G.Adj
@@ -4627,7 +4627,7 @@ protected alias ⟨IsUniversal.of_neighborSet_eq, IsUniversal.neighborSet_eq⟩ 
 
 中文:
 引理 neighborSet_eq_compl_singleton
-  结论: G.neighborSet v = {v}ᶜ ↔ G.IsUniversal v
+  结论: G.neighborSet v = {v}ᶜ ↔ G.是泛 v
   证明: by
   grind [insert_neighborSet_eq_univ, notMem_neighborSet_self]
 
@@ -4653,9 +4653,9 @@ theorem IsUniversal.of_subsingleton
   proof: fun _ hne => False.elim hne (Subsingleton.elim ..)
 
 中文:
-定理 IsUniversal.of_subsingleton
-  条件: [Subsingleton V]
-  结论: G.IsUniversal v
+定理 是泛.of_subsingleton
+  条件: [子单例 V]
+  结论: G.是泛 v
   证明: fun _ hne => False.elim hne (Subsingleton.elim ..)
 
 Depends on / 依赖: False.elim, Subsingleton, Subsingleton.elim
@@ -4676,8 +4676,8 @@ theorem IsUniversal.not_isIsolated
   · exact Adj.not_isIsolated_right (h h')
 
 中文:
-定理 IsUniversal.not_isIsolated
-  条件: [Nontrivial V] (h : G.IsUniversal v) (w : V)
+定理 是泛.not_isIsolated
+  条件: [非平凡 V] (h : G.是泛 v) (w : V)
   证明: by
   by_cases h' : v = w
   · obtain ⟨u, hu⟩ := exists_ne v
@@ -4707,7 +4707,7 @@ theorem IsIsolated.not_isUniversal
 
 中文:
 定理 IsIsolated.not_isUniversal
-  条件: [Nontrivial V] (h : G.IsIsolated v) (w : V)
+  条件: [非平凡 V] (h : G.IsIsolated v) (w : V)
   证明: by
   contrapose! h
   exact h.not_isIsolated v
@@ -4739,7 +4739,7 @@ alias ⟨IsIsolated.of_isUniversal_compl, _⟩ := isUniversal_compl_iff_isIsolat
 
 中文:
 定理 isUniversal_compl_iff_isIsolated
-  结论: Gᶜ.IsUniversal v ↔ G.IsIsolated v
+  结论: Gᶜ.是泛 v ↔ G.IsIsolated v
   证明: by
   refine ⟨fun h x hx => ?_, fun h x hx => ?_⟩
   · simpa [hx] using h hx.ne
@@ -4774,7 +4774,7 @@ alias ⟨IsUniversal.of_isIsolated_compl, _⟩ := isIsolated_compl_iff_isUnivers
 
 中文:
 定理 isIsolated_compl_iff_isUniversal
-  结论: Gᶜ.IsIsolated v ↔ G.IsUniversal v
+  结论: Gᶜ.IsIsolated v ↔ G.是泛 v
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · simpa using isUniversal_compl_iff_isIsolated.mpr h
@@ -4803,8 +4803,8 @@ theorem eq_top_iff_forall_isUniversal
 @[simp]
 
 中文:
-定理 eq_top_iff_forall_isUniversal
-  结论: G = ⊤ ↔ 对任意 v, G.IsUniversal v
+定理 eq_top_iff_对任意_isUniversal
+  结论: G = ⊤ ↔ 对任意 v, G.是泛 v
   证明: by
   simp [eq_top_iff_forall_ne_adj, IsUniversal]
 
@@ -4825,8 +4825,8 @@ theorem IsUniversal.top
   proof: eq_top_iff_forall_isUniversal.mp rfl v
 
 中文:
-定理 IsUniversal.top
-  结论: IsUniversal ⊤ v
+定理 是泛.top
+  结论: 是泛 ⊤ v
   证明: eq_top_iff_forall_isUniversal.mp rfl v
 -/
 protected theorem IsUniversal.top : IsUniversal ⊤ v :=

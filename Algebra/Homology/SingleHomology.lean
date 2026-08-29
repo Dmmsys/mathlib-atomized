@@ -558,7 +558,7 @@ definition homologyFunctorSingleIso
 
 中文:
 定义 homologyFunctorSingleIso
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: NatIso.ofComponents (fun A => (singleObjHomologySelfIso c j A))
     (fun f => singleObjHomologySelfIso_hom_naturality c j f)
 
@@ -582,7 +582,7 @@ lemma ChainComplex.exactAt_succ_single_obj
   proof: exactAt_single_obj _ _ _ _ (by simp)
 
 中文:
-引理 ChainComplex.exactAt_succ_single_obj
+引理 链复形.exactAt_succ_single_obj
   条件: (A : C) (n : 自然数)
   证明: exactAt_single_obj _ _ _ _ (by simp)
 
@@ -601,7 +601,7 @@ lemma CochainComplex.exactAt_succ_single_obj
   proof: exactAt_single_obj _ _ _ _ (by simp)
 
 中文:
-引理 CochainComplex.exactAt_succ_single_obj
+引理 上链复形.exactAt_succ_single_obj
   条件: (A : C) (n : 自然数)
   证明: exactAt_single_obj _ _ _ _ (by simp)
 

@@ -170,7 +170,7 @@ lemma isSeparating
 
 中文:
 引理 isSeparating
-  条件: {ι : Type w} {S : ι -> A} (hS : Object命题erty.IsSeparating (.ofObj S))
+  条件: {ι : 类型 w} {S : ι -> A} (hS : ObjectProperty.IsSeparating (.ofObj S))
   证明: by
   intro F G f g h
   ext ⟨X⟩
@@ -202,7 +202,7 @@ lemma isSeparator
 
 中文:
 引理 isSeparator
-  结论: {ι : Type w} {S : ι -> A} (hS : Object命题erty.IsSeparating (.ofObj S))
+  结论: {ι : 类型 w} {S : ι -> A} (hS : ObjectProperty.IsSeparating (.ofObj S))
   证明: (isSeparating C hS).isSeparator_coproduct
 
 Depends on / 依赖: InitialMonoClass, initial_mono_of_strict_initial_objects, isSeparating, isSeparator_coproduct
@@ -225,7 +225,7 @@ instance hasSeparator
 
 中文:
 实例 hasSeparator
-  签名: [HasSeparator A] [HasZeroMorphisms A] [HasCoproducts.{u} A]
+  签名: [有Separator A] [有ZeroMorphisms A] [HasCoproducts.{u} A]
   定义体: ⟨_, isSeparator C (S := fun (_ : Unit) => separator A)
       (by simpa using! isSeparator_separator A)⟩
 

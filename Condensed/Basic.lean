@@ -48,7 +48,7 @@ abbreviation Condensed
 
 中文:
 缩写 Condensed
-  签名: (C : Type w) [Category.{v} C]
+  签名: (C : 类型 w) [范畴.{v} C]
   定义体: Sheaf (coherentTopology CompHaus.{u}) C
 
 Depends on / 依赖: CompHaus, coherentTopology

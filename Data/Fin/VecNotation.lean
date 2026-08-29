@@ -57,7 +57,7 @@ definition vecEmpty
 
 中文:
 定义 vecEmpty
-  签名: : Fin 0 -> α
+  签名: : 有限集 0 -> α
   定义体: Fin.elim0
 
 Depends on / 依赖: Fin.elim0
@@ -75,7 +75,7 @@ definition vecCons
 
 中文:
 定义 vecCons
-  签名: {n : 自然数} (h : α) (t : Fin n -> α)
+  签名: {n : 自然数} (h : α) (t : 有限集 n -> α)
   定义体: Fin.cons h t
 
 Depends on / 依赖: Fin.cons
@@ -122,7 +122,7 @@ definition vecHead
 
 中文:
 定义 vecHead
-  签名: {n : 自然数} (v : Fin n.succ -> α)
+  签名: {n : 自然数} (v : 有限集 n.succ -> α)
   定义体: v 0
 -/
 def vecHead {n : Nat} (v : Fin n.succ -> α) : α :=
@@ -138,7 +138,7 @@ definition vecTail
 
 中文:
 定义 vecTail
-  签名: {n : 自然数} (v : Fin n.succ -> α)
+  签名: {n : 自然数} (v : 有限集 n.succ -> α)
   定义体: v ∘ Fin.succ
 
 Depends on / 依赖: Fin.succ
@@ -185,7 +185,7 @@ theorem empty_eq
 
 中文:
 定理 empty_eq
-  条件: (v : Fin 0 -> α)
+  条件: (v : 有限集 0 -> α)
   结论: v = ![]
   证明: Subsingleton.elim _ _
 
@@ -211,7 +211,7 @@ theorem head_fin_const
 中文:
 定理 head_fin_const
   条件: (a : α)
-  结论: (vecHead fun _ : Fin (n + 1) => a) = a
+  结论: (vecHead fun _ : 有限集 (n + 1) => a) = a
   证明: rfl
 
 @[simp]
@@ -231,7 +231,7 @@ theorem cons_val_zero
 
 中文:
 定理 cons_val_zero
-  条件: (x : α) (u : Fin m -> α)
+  条件: (x : α) (u : 有限集 m -> α)
   结论: vecCons x u 0 = x
   证明: rfl
 -/
@@ -251,7 +251,7 @@ theorem cons_val_zero'
 
 中文:
 定理 cons_val_zero'
-  条件: (h : 0 < m.succ) (x : α) (u : Fin m -> α)
+  条件: (h : 0 < m.succ) (x : α) (u : 有限集 m -> α)
   结论: vecCons x u ⟨0, h⟩ = x
   证明: rfl
 
@@ -275,7 +275,7 @@ theorem cons_val_succ
 
 中文:
 定理 cons_val_succ
-  条件: (x : α) (u : Fin m -> α) (i : Fin m)
+  条件: (x : α) (u : 有限集 m -> α) (i : 有限集 m)
   结论: vecCons x u i.succ = u i
   证明: by
   simp [vecCons]
@@ -299,7 +299,7 @@ theorem cons_val_succ'
 
 中文:
 定理 cons_val_succ'
-  条件: {i : 自然数} (h : i.succ < m.succ) (x : α) (u : Fin m -> α)
+  条件: {i : 自然数} (h : i.succ < m.succ) (x : α) (u : 有限集 m -> α)
   证明: by
   simp only [vecCons, Fin.cons, Fin.cases_succ']
 
@@ -323,9 +323,9 @@ lemma Fin.cons_vecEmpty
   proof: by rfl
 
 中文:
-引理 Fin.cons_vecEmpty
+引理 有限集.cons_vecEmpty
   条件: {α : 类型} (x : α)
-  结论: Fin.cons x ![] = ![x]
+  结论: 有限集.cons x ![] = ![x]
   证明: by rfl
 -/
 lemma Fin.cons_vecEmpty {α : Type*} (x : α) : Fin.cons x ![] = ![x] := by rfl
@@ -345,9 +345,9 @@ lemma Fin.snoc_vecEmpty
   rfl
 
 中文:
-引理 Fin.snoc_vecEmpty
+引理 有限集.snoc_vecEmpty
   条件: {α : 类型} (x : α)
-  结论: Fin.snoc ![] x = ![x]
+  结论: 有限集.snoc ![] x = ![x]
   证明: by
   ext i
   cases Fin.fin_one_eq_zero i
@@ -374,8 +374,8 @@ lemma Fin.cons_vecCons
   proof: by rfl
 
 中文:
-引理 Fin.cons_vecCons
-  条件: {α : 类型} (x y : α) (p : Fin n -> α)
+引理 有限集.cons_vecCons
+  条件: {α : 类型} (x y : α) (p : 有限集 n -> α)
   证明: by rfl
 -/
 lemma Fin.cons_vecCons {α : Type*} (x y : α) (p : Fin n -> α) :
@@ -393,8 +393,8 @@ lemma Fin.snoc_vecCons
   proof: .symm Fin.cons_snoc_eq_snoc_cons ..
 
 中文:
-引理 Fin.snoc_vecCons
-  条件: {α : 类型} (x y : α) (p : Fin n -> α)
+引理 有限集.snoc_vecCons
+  条件: {α : 类型} (x y : α) (p : 有限集 n -> α)
   证明: .symm Fin.cons_snoc_eq_snoc_cons ..
 
 Depends on / 依赖: Fin.cons_snoc_eq_snoc_cons, cons_snoc_eq_snoc_cons
@@ -469,7 +469,7 @@ theorem head_cons
 
 中文:
 定理 head_cons
-  条件: (x : α) (u : Fin m -> α)
+  条件: (x : α) (u : 有限集 m -> α)
   结论: vecHead (vecCons x u) = x
   证明: rfl
 
@@ -494,7 +494,7 @@ theorem tail_cons
 
 中文:
 定理 tail_cons
-  条件: (x : α) (u : Fin m -> α)
+  条件: (x : α) (u : 有限集 m -> α)
   结论: vecTail (vecCons x u) = u
   证明: by
   ext
@@ -519,9 +519,9 @@ theorem _root_.Fin.tail_vecCons
   proof: rfl
 
 中文:
-定理 _root_.Fin.tail_vecCons
-  条件: (x : α) (t : Fin n -> α)
-  结论: Fin.tail (Matrix.vecCons x t) = t
+定理 _root_.有限集.tail_vecCons
+  条件: (x : α) (t : 有限集 n -> α)
+  结论: 有限集.tail (矩阵.vecCons x t) = t
   证明: rfl
 -/
 theorem _root_.Fin.tail_vecCons (x : α) (t : Fin n -> α) : Fin.tail (Matrix.vecCons x t) = t :=
@@ -541,7 +541,7 @@ theorem empty_val'
 中文:
 定理 empty_val'
   条件: {n' : 类型} (j : n')
-  结论: (fun i => (![] : Fin 0 -> n' -> α) i j) = ![]
+  结论: (fun i => (![] : 有限集 0 -> n' -> α) i j) = ![]
   证明: empty_eq _
 
 @[simp]
@@ -565,7 +565,7 @@ theorem cons_head_tail
 
 中文:
 定理 cons_head_tail
-  条件: (u : Fin m.succ -> α)
+  条件: (u : 有限集 m.succ -> α)
   结论: vecCons (vecHead u) (vecTail u) = u
   证明: Fin.cons_self_tail _
 
@@ -590,8 +590,8 @@ theorem range_cons
 
 中文:
 定理 range_cons
-  条件: (x : α) (u : Fin n -> α)
-  结论: Set.range (vecCons x u) = {x} union Set.range u
+  条件: (x : α) (u : 有限集 n -> α)
+  结论: 集合.range (vecCons x u) = {x} union 集合.range u
   证明: Set.ext fun y => by simp [Fin.exists_fin_succ, eq_comm]
 
 @[simp]
@@ -613,8 +613,8 @@ theorem range_empty
 
 中文:
 定理 range_empty
-  条件: (u : Fin 0 -> α)
-  结论: Set.range u = ∅
+  条件: (u : 有限集 0 -> α)
+  结论: 集合.range u = ∅
   证明: Set.range_eq_empty _
 
 Depends on / 依赖: Set.range_eq_empty, range_eq_empty
@@ -634,8 +634,8 @@ theorem range_cons_empty
 
 中文:
 定理 range_cons_empty
-  条件: (x : α) (u : Fin 0 -> α)
-  结论: Set.range (Matrix.vecCons x u) = {x}
+  条件: (x : α) (u : 有限集 0 -> α)
+  结论: 集合.range (矩阵.vecCons x u) = {x}
   证明: by
   rw [range_cons]; rw [range_empty]; rw [Set.union_empty]
 
@@ -656,7 +656,7 @@ theorem range_cons_cons_empty
 
 中文:
 定理 range_cons_cons_empty
-  条件: (x y : α) (u : Fin 0 -> α)
+  条件: (x y : α) (u : 有限集 0 -> α)
   证明: by
   rw [range_cons]; rw [range_cons_empty]; rw [Set.singleton_union]
 
@@ -678,7 +678,7 @@ theorem vecCons_const
 中文:
 定理 vecCons_const
   条件: (a : α)
-  结论: (vecCons a fun _ : Fin n => a) = fun _ => a
+  结论: (vecCons a fun _ : 有限集 n => a) = fun _ => a
   证明: funext Fin.forall_iff_succ.2 ⟨rfl, cons_val_succ _ _⟩
 
 Depends on / 依赖: Fin.forall_iff_succ, cons_val_succ, forall_iff_succ
@@ -723,7 +723,7 @@ theorem cons_val_one
 
 中文:
 定理 cons_val_one
-  条件: (x : α) (u : Fin m.succ -> α)
+  条件: (x : α) (u : 有限集 m.succ -> α)
   结论: vecCons x u 1 = u 0
   证明: rfl
 -/
@@ -741,7 +741,7 @@ theorem cons_val_two
 
 中文:
 定理 cons_val_two
-  条件: (x : α) (u : Fin m.succ.succ -> α)
+  条件: (x : α) (u : 有限集 m.succ.succ -> α)
   结论: vecCons x u 2 = vecHead (vecTail u)
   证明: rfl
 -/
@@ -757,7 +757,7 @@ lemma cons_val_three
 
 中文:
 引理 cons_val_three
-  条件: (x : α) (u : Fin m.succ.succ.succ -> α)
+  条件: (x : α) (u : 有限集 m.succ.succ.succ -> α)
   证明: rfl
 -/
 lemma cons_val_three (x : α) (u : Fin m.succ.succ.succ -> α) :
@@ -776,7 +776,7 @@ lemma cons_val_four
 
 中文:
 引理 cons_val_four
-  条件: (x : α) (u : Fin m.succ.succ.succ.succ -> α)
+  条件: (x : α) (u : 有限集 m.succ.succ.succ.succ -> α)
   证明: rfl
 
 @[simp]
@@ -799,8 +799,8 @@ theorem cons_val_fin_one
 
 中文:
 定理 cons_val_fin_one
-  条件: (x : α) (u : Fin 0 -> α)
-  结论: 对任意 (i : Fin 1), vecCons x u i = x
+  条件: (x : α) (u : 有限集 0 -> α)
+  结论: 对任意 (i : 有限集 1), vecCons x u i = x
   证明: by
   rw [Fin.forall_fin_one]
   rfl
@@ -824,7 +824,7 @@ theorem cons_fin_one
 
 中文:
 定理 cons_fin_one
-  条件: (x : α) (u : Fin 0 -> α)
+  条件: (x : α) (u : 有限集 0 -> α)
   结论: vecCons x u = fun _ => x
   证明: funext (cons_val_fin_one x u)
 
@@ -847,7 +847,7 @@ theorem vecCons_inj
 
 中文:
 定理 vecCons_inj
-  条件: {x y : α} {u v : Fin n -> α}
+  条件: {x y : α} {u v : 有限集 n -> α}
   结论: vecCons x u = vecCons y v ↔ x = y ∧ u = v
   证明: Fin.cons_inj
 
@@ -899,7 +899,7 @@ definition vecAppend
 
 中文:
 定义 vecAppend
-  签名: {α : 类型} {o : 自然数} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α)
+  签名: {α : 类型} {o : 自然数} (ho : o = m + n) (u : 有限集 m -> α) (v : 有限集 n -> α)
   定义体: Fin.append u v ∘ Fin.cast ho
 
 Depends on / 依赖: Fin.append, Fin.cast, append
@@ -924,7 +924,7 @@ theorem vecAppend_eq_ite
 
 中文:
 定理 vecAppend_eq_ite
-  条件: {α : 类型} {o : 自然数} (ho : o = m + n) (u : Fin m -> α) (v : Fin n -> α)
+  条件: {α : 类型} {o : 自然数} (ho : o = m + n) (u : 有限集 m -> α) (v : 有限集 n -> α)
   证明: by
   ext i
   rw [vecAppend]; rw [Fin.append]; rw [Function.comp_apply]; rw [Fin.addCases]
@@ -958,7 +958,7 @@ theorem vecAppend_apply_zero
 
 中文:
 定理 vecAppend_apply_zero
-  结论: {α : 类型} {o : 自然数} (ho : o + 1 = m + 1 + n) (u : Fin (m + 1) -> α)
+  结论: {α : 类型} {o : 自然数} (ho : o + 1 = m + 1 + n) (u : 有限集 (m + 1) -> α)
   证明: rfl
 
 @[simp]
@@ -983,7 +983,7 @@ theorem empty_vecAppend
 
 中文:
 定理 empty_vecAppend
-  条件: (v : Fin n -> α)
+  条件: (v : 有限集 n -> α)
   结论: vecAppend n.zero_add.symm ![] v = v
   证明: by
   ext
@@ -1013,7 +1013,7 @@ theorem vecAppend_empty
 
 中文:
 定理 vecAppend_empty
-  条件: (v : Fin n -> α)
+  条件: (v : 有限集 n -> α)
   结论: vecAppend rfl v ![] = v
   证明: by
   ext
@@ -1049,7 +1049,7 @@ theorem cons_vecAppend
 
 中文:
 定理 cons_vecAppend
-  条件: (ho : o + 1 = m + 1 + n) (x : α) (u : Fin m -> α) (v : Fin n -> α)
+  条件: (ho : o + 1 = m + 1 + n) (x : α) (u : 有限集 m -> α) (v : 有限集 n -> α)
   证明: by
   ext i
   simp_rw [vecAppend_eq_ite]
@@ -1089,7 +1089,7 @@ definition vecAlt0
 
 中文:
 定义 vecAlt0
-  签名: (hm : m = n + n) (v : Fin m -> α) (k : Fin n)
+  签名: (hm : m = n + n) (v : 有限集 m -> α) (k : 有限集 n)
   定义体: v ⟨(k : Nat) + k, by lia⟩
 
 Depends on / 依赖: nodup_cons
@@ -1106,7 +1106,7 @@ definition vecAlt1
 
 中文:
 定义 vecAlt1
-  签名: (hm : m = n + n) (v : Fin m -> α) (k : Fin n)
+  签名: (hm : m = n + n) (v : 有限集 m -> α) (k : 有限集 n)
   定义体: v ⟨(k : Nat) + k + 1, hm.symm ▸ Nat.add_succ_lt_add k.2 k.2⟩
 
 Depends on / 依赖: Nat.add_succ_lt_add, add_succ_lt_add, hm.symm
@@ -1135,7 +1135,7 @@ theorem vecAlt0_vecAppend
 
 中文:
 定理 vecAlt0_vecAppend
-  条件: (v : Fin n -> α)
+  条件: (v : 有限集 n -> α)
   证明: by
   ext i
   simp_rw [Function.comp, vecAlt0, vecAppend_eq_ite]
@@ -1182,7 +1182,7 @@ theorem vecAlt1_vecAppend
 
 中文:
 定理 vecAlt1_vecAppend
-  条件: (v : Fin (n + 1) -> α)
+  条件: (v : 有限集 (n + 1) -> α)
   证明: by
   ext i
   simp_rw [Function.comp, vecAlt1, vecAppend_eq_ite]
@@ -1228,7 +1228,7 @@ theorem vecHead_vecAlt0
 
 中文:
 定理 vecHead_vecAlt0
-  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α)
+  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : 有限集 (m + 2) -> α)
   证明: rfl
 
 @[simp]
@@ -1248,7 +1248,7 @@ theorem vecHead_vecAlt1
 
 中文:
 定理 vecHead_vecAlt1
-  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : Fin (m + 2) -> α)
+  条件: (hm : m + 2 = n + 1 + (n + 1)) (v : 有限集 (m + 2) -> α)
   证明: by simp [vecHead, vecAlt1]
 
 Depends on / 依赖: vecAlt1, vecHead
@@ -1267,7 +1267,7 @@ theorem cons_vec_bit0_eq_alt0
 
 中文:
 定理 cons_vec_bit0_eq_alt0
-  条件: (x : α) (u : Fin n -> α) (i : Fin (n + 1))
+  条件: (x : α) (u : 有限集 n -> α) (i : 有限集 (n + 1))
   证明: by
   rw [vecAlt0_vecAppend]; rfl
 
@@ -1288,7 +1288,7 @@ theorem cons_vec_bit1_eq_alt1
 
 中文:
 定理 cons_vec_bit1_eq_alt1
-  条件: (x : α) (u : Fin n -> α) (i : Fin (n + 1))
+  条件: (x : α) (u : 有限集 n -> α) (i : 有限集 (n + 1))
   证明: by
   rw [vecAlt1_vecAppend]; rfl
 
@@ -1319,7 +1319,7 @@ theorem cons_vecAlt0
 
 中文:
 定理 cons_vecAlt0
-  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α)
+  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : 有限集 m -> α)
   证明: by
   ext i
   simp_rw [vecAlt0]
@@ -1357,7 +1357,7 @@ theorem empty_vecAlt0
 中文:
 定理 empty_vecAlt0
   条件: (α) {h}
-  结论: vecAlt0 h (![] : Fin 0 -> α) = ![]
+  结论: vecAlt0 h (![] : 有限集 0 -> α) = ![]
   证明: by
   simp [eq_iff_true_of_subsingleton]
 
@@ -1386,7 +1386,7 @@ theorem cons_vecAlt1
 
 中文:
 定理 cons_vecAlt1
-  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : Fin m -> α)
+  条件: (h : m + 1 + 1 = n + 1 + (n + 1)) (x y : α) (u : 有限集 m -> α)
   证明: by
   ext i
   simp_rw [vecAlt1]
@@ -1420,7 +1420,7 @@ theorem empty_vecAlt1
 中文:
 定理 empty_vecAlt1
   条件: (α) {h}
-  结论: vecAlt1 h (![] : Fin 0 -> α) = ![]
+  结论: vecAlt1 h (![] : 有限集 0 -> α) = ![]
   证明: by
   simp [eq_iff_true_of_subsingleton]
 
@@ -1443,7 +1443,7 @@ lemma const_fin1_eq
 中文:
 引理 const_fin1_eq
   条件: (x : α)
-  结论: (fun _ : Fin 1 => x) = ![x]
+  结论: (fun _ : 有限集 1 => x) = ![x]
   证明: (cons_fin_one x _).symm
 
 Depends on / 依赖: cons_fin_one
@@ -1476,7 +1476,7 @@ lemma cons_cons_comp_swap_zero_one
 
 中文:
 引理 cons_cons_comp_swap_zero_one
-  条件: (a b : α) (x : Fin n -> α)
+  条件: (a b : α) (x : 有限集 n -> α)
   证明: by
   ext j : 1
   match j with
@@ -1519,7 +1519,7 @@ lemma cons_swap
 
 中文:
 引理 cons_swap
-  条件: (a : α) (x : Fin n -> α) (i j : Fin n)
+  条件: (a : α) (x : 有限集 n -> α) (i j : 有限集 n)
   证明: by
   ext k : 1
   rcases eq_or_ne k 0 with rfl | hk₀

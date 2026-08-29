@@ -92,7 +92,7 @@ leftUnitor_eq X := ModuleCat.hom_ext TensorProduct.ext by ext; rfl
 r
 
 中文:
-定义 MonoidalCategory.inducingFunctorData
+定义 幺半群范畴.inducingFunctorData
   签名: :
   定义体: Iso.refl _
   whiskerLeft_eq X Y Z f := by ext; rfl
@@ -124,7 +124,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (CoalgCat R)
+  签名: : 幺半群范畴 (余alg范畴 R)
   定义体: Monoidal.induced (forget₂ _ (ModuleCat R)) (MonoidalCategory.inducingFunctorData R)
 
 Depends on / 依赖: ModuleCat, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.inducingFunctorData, induced, inducingFunctorData

@@ -39,7 +39,7 @@ let const lhsFun _ ← (getAppFn ∘ cleanupAnnotations) < > instantiateMVars (�
 
 中文:
 定义 Lean.Elab.Tactic.applyCongr
-  签名: (q : Option Expr)
+  签名: (q : 选项类型 Expr)
   定义体: do
 let const lhsFun _ ← (getAppFn ∘ cleanupAnnotations) < > instantiateMVars (← getLhs) |
     throwError "Left-hand side must be an application of a constant."

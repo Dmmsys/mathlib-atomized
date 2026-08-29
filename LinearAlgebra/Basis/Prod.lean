@@ -46,8 +46,8 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
-  签名: : Basis (ι oplus ι') R (M × M')
+定义 乘积
+  签名: : 基 (ι oplus ι') R (M × M')
   定义体: ofRepr ((b.repr.prodCongr b'.repr).trans (Finsupp.sumFinsuppLEquivProdFinsupp R).symm)
 
 @[simp]
@@ -70,7 +70,7 @@ theorem prod_repr_inl
 中文:
 定理 prod_repr_inl
   条件: (x) (i)
-  结论: (b.prod b').repr x (Sum.inl i) = b.repr x.1 i
+  结论: (b.乘积 b').repr x (和.inl i) = b.repr x.1 i
   证明: rfl
 
 @[simp]
@@ -91,7 +91,7 @@ theorem prod_repr_inr
 中文:
 定理 prod_repr_inr
   条件: (x) (i)
-  结论: (b.prod b').repr x (Sum.inr i) = b'.repr x.2 i
+  结论: (b.乘积 b').repr x (和.inr i) = b'.repr x.2 i
   证明: rfl
 -/
 theorem prod_repr_inr (x) (i) : (b.prod b').repr x (Sum.inr i) = b'.repr x.2 i :=
@@ -114,7 +114,7 @@ theorem prod_apply_inl_fst
 中文:
 定理 prod_apply_inl_fst
   条件: (i)
-  结论: (b.prod b' (Sum.inl i)).1 = b i
+  结论: (b.乘积 b' (和.inl i)).1 = b i
   证明: b.repr.injective by
     ext j
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
@@ -150,7 +150,7 @@ theorem prod_apply_inr_fst
 中文:
 定理 prod_apply_inr_fst
   条件: (i)
-  结论: (b.prod b' (Sum.inr i)).1 = 0
+  结论: (b.乘积 b' (和.inr i)).1 = 0
   证明: b.repr.injective by
     ext i
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
@@ -187,7 +187,7 @@ theorem prod_apply_inl_snd
 中文:
 定理 prod_apply_inl_snd
   条件: (i)
-  结论: (b.prod b' (Sum.inl i)).2 = 0
+  结论: (b.乘积 b' (和.inl i)).2 = 0
   证明: b'.repr.injective by
     ext j
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
@@ -223,7 +223,7 @@ theorem prod_apply_inr_snd
 中文:
 定理 prod_apply_inr_snd
   条件: (i)
-  结论: (b.prod b' (Sum.inr i)).2 = b' i
+  结论: (b.乘积 b' (和.inr i)).2 = b' i
   证明: b'.repr.injective by
     ext i
     simp only [Basis.prod, Basis.coe_ofRepr, LinearEquiv.symm_trans_apply,
@@ -285,8 +285,8 @@ instance prod
   body: .of_basis (Module.Free.chooseBasis R M).prod (Module.Free.chooseBasis R N)
 
 中文:
-实例 prod
-  签名: [Module.Free R M] [Module.Free R N]
+实例 乘积
+  签名: [模.自由 R M] [模.自由 R N]
   定义体: .of_basis (Module.Free.chooseBasis R M).prod (Module.Free.chooseBasis R N)
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, of_basis

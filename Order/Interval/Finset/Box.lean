@@ -41,7 +41,7 @@ lemma Icc_neg_mono
 
 中文:
 引理 Icc_neg_mono
-  结论: Monotone fun n : 自然数 => Icc (-n : α) n
+  结论: 递增 fun n : 自然数 => 闭区间 (-n : α) n
   证明: by
   refine fun m n hmn => by apply Icc_subset_Icc <;> simpa using Nat.mono_cast hmn
 -/
@@ -62,7 +62,7 @@ omit [IsOrderedRing α] in
 
 中文:
 定义 box
-  签名: : 自然数 -> Finset α
+  签名: : 自然数 -> 有限集 α
   定义体: disjointed fun n => Icc (-n : α) n
 
 omit [IsOrderedRing α] in
@@ -82,7 +82,7 @@ lemma box_zero
 
 中文:
 引理 box_zero
-  结论: (box 0 : Finset α) = {0}
+  结论: (box 0 : 有限集 α) = {0}
   证明: by simp [box]
 -/
 @[simp] lemma box_zero : (box 0 : Finset α) = {0} := by simp [box]
@@ -124,7 +124,7 @@ lemma disjoint_box_succ_prod
 中文:
 引理 disjoint_box_succ_prod
   条件: (n : 自然数)
-  结论: Disjoint (box (n + 1)) (Icc (-n : α) n)
+  结论: Disjoint (box (n + 1)) (闭区间 (-n : α) n)
   证明: by
   rw [box_succ_eq_sdiff]; exact disjoint_sdiff_self_left
 
@@ -260,7 +260,7 @@ lemma card_box
 
 中文:
 引理 card_box
-  结论: 对任意 {n}, n != 0 -> #(box n : Finset (整数 × 整数)) = 8 * n
+  结论: 对任意 {n}, n != 0 -> #(box n : 有限集 (整数 × 整数)) = 8 * n
 -/
 lemma card_box : forall {n}, n != 0 -> #(box n : Finset (Int × Int)) = 8 * n
   | n + 1, _ => by
@@ -279,7 +279,7 @@ lemma mem_box
 
 中文:
 引理 mem_box
-  结论: 对任意 {n}, x in box n ↔ max x.1.natAbs x.2.natAbs = n
+  结论: 对任意 {n}, x in box n ↔ 最大值 x.1.natAbs x.2.natAbs = n
 -/
 @[simp] lemma mem_box : forall {n}, x in box n ↔ max x.1.natAbs x.2.natAbs = n
   | 0 => by simp [Prod.ext_iff]
@@ -299,7 +299,7 @@ lemma existsUnique_mem_box
   use max x.1.natAbs x.2.natAbs; simp only [mem_box, and_self_iff, forall_eq']
 
 中文:
-引理 existsUnique_mem_box
+引理 存在Unique_mem_box
   条件: (x : 整数 × 整数)
   结论: 存在! n : 自然数, x in box n
   证明: by

@@ -68,7 +68,7 @@ definition IsCountablyCompact
 
 中文:
 定义 IsCountablyCompact
-  签名: (A : Set E)
+  签名: (A : 集合 E)
   定义体: forall ⦃f⦄ [NeBot f] [f.IsCountablyGenerated], f <= 𝓟 A -> exists a in A, ClusterPt a f
 
 Depends on / 依赖: ClusterPt, IsCountablyGenerated, f.IsCountablyGenerated
@@ -86,10 +86,10 @@ class CountablyCompactSpace
     - isCountablyCompact_univ : IsCountablyCompact (Set.univ : Set E)
 
 中文:
-类 CountablyCompactSpace
-  参数: (E : 类型) [TopologicalSpace E]
+类 余untablyCompact空间
+  参数: (E : 类型) [拓扑空间 E]
   公理与运算 (1 个):
-    - isCountablyCompact_univ : IsCountablyCompact (Set.univ : Set E)
+    - isCountablyCompact_univ : IsCountablyCompact (集合.univ : 集合 E)
 -/
 class CountablyCompactSpace (E : Type*) [TopologicalSpace E] : Prop where
   isCountablyCompact_univ : IsCountablyCompact (Set.univ : Set E)
@@ -104,7 +104,7 @@ theorem isCountablyCompact_empty
 
 中文:
 定理 isCountablyCompact_empty
-  结论: IsCountablyCompact (∅ : Set E)
+  结论: IsCountablyCompact (∅ : 集合 E)
   证明: fun _f _ _ hle => absurd (empty_mem_iff_bot.mp (le_principal_iff.mp hle)) NeBot.ne'
 
 Depends on / 依赖: NeBot.ne, absurd, empty_mem_iff_bot, empty_mem_iff_bot.mp, le_principal_iff, le_principal_iff.mp
@@ -125,7 +125,7 @@ theorem isCountablyCompact_singleton
 中文:
 定理 isCountablyCompact_singleton
   条件: {x : E}
-  结论: IsCountablyCompact ({x} : Set E)
+  结论: IsCountablyCompact ({x} : 集合 E)
   证明: fun _ _ _ hle =>
 ⟨x, rfl, ClusterPt.of_le_nhds hle.trans (principal_singleton x ▸ pure_le_nhds x)⟩
 -/
@@ -144,7 +144,7 @@ theorem IsCountablyCompact.of_isClosed_subset
 
 中文:
 定理 IsCountablyCompact.of_isClosed_subset
-  结论: (hA : IsCountablyCompact A) (hB : IsClosed B)
+  结论: (hA : IsCountablyCompact A) (hB : 是闭集 B)
   证明: fun _f _ _ hle =>
   let ⟨a, _, hac⟩ := hA (hle.trans (principal_mono.mpr hBA))
   ⟨a, isClosed_iff_clusterPt.mp hB a (hac.mono hle), hac⟩
@@ -163,8 +163,8 @@ theorem IsClosed.isCountablyCompact
   proof: CountablyCompactSpace.isCountablyCompact_univ.of_isClosed_subset hA (subset_univ _)
 
 中文:
-定理 IsClosed.isCountablyCompact
-  条件: [CountablyCompactSpace E] (hA : IsClosed A)
+定理 是闭集.isCountablyCompact
+  条件: [余untablyCompact空间 E] (hA : 是闭集 A)
   证明: CountablyCompactSpace.isCountablyCompact_univ.of_isClosed_subset hA (subset_univ _)
 
 Depends on / 依赖: CountablyCompactSpace, CountablyCompactSpace.isCountablyCompact_univ.of_isClosed_subset, isCountablyCompact_univ, of_isClosed_subset, subset_univ
@@ -228,7 +228,7 @@ principal_mono.mpr sdiff_subset_sdiff_right hj⟩
 
 中文:
 定理 IsCountablyCompact.elim_directed_cover
-  结论: [Countable ι] [Nonempty ι]
+  结论: [可数 ι] [非空 ι]
   证明: by
   by_contra! h
   have hdir : Directed (· >= ·) fun i => 𝓟 (A \ U i) :=
@@ -267,7 +267,7 @@ theorem IsCountablyCompact.elim_finite_subcover
 
 中文:
 定理 IsCountablyCompact.elim_finite_subcover
-  结论: (hA : IsCountablyCompact A) [Countable ι]
+  结论: (hA : IsCountablyCompact A) [可数 ι]
   证明: hA.elim_directed_cover _ (fun _ => isOpen_biUnion fun i _ => hUo i)
     (iUnion_eq_iUnion_finset U ▸ hAU)
     (directed_of_isDirected_le fun _ _ h => biUnion_subset_biUnion_left h)
@@ -394,8 +394,8 @@ theorem IsCompact.isCountablyCompact
   proof: fun _ _ _ hle => hA hle
 
 中文:
-定理 IsCompact.isCountablyCompact
-  条件: (hA : IsCompact A)
+定理 是紧集.isCountablyCompact
+  条件: (hA : 是紧集 A)
   结论: IsCountablyCompact A
   证明: fun _ _ _ hle => hA hle
 -/
@@ -458,7 +458,7 @@ theorem IsCountablyCompact.image
   exact ⟨f x, mem_image_of_mem f hxA, (hf.continu
 
 中文:
-定理 IsCountablyCompact.image
+定理 IsCountablyCompact.像
   结论: (hA : IsCountablyCompact A)
   证明: by
   intro l hl_nebot hl_count hle
@@ -492,8 +492,8 @@ theorem Topology.IsInducing.isCountablyCompact_iff
   exact ⟨x, x_in, hf.mapClusterPt_iff.1 hx⟩
 
 中文:
-定理 Topology.IsInducing.isCountablyCompact_iff
-  条件: {f : E -> F} (hf : IsInducing f)
+定理 拓扑.是Inducing.isCountablyCompact_iff
+  条件: {f : E -> F} (hf : 是Inducing f)
   证明: by
   refine ⟨fun hs => hs.image hf.continuous, fun hs F F_ne_bot Fc F_le => ?_⟩
   obtain ⟨_, ⟨x, x_in : x in A, rfl⟩, hx : ClusterPt (f x) (map f F)⟩ :=
@@ -518,8 +518,8 @@ theorem Topology.IsEmbedding.isCountablyCompact_iff
   proof: hf.isInducing.isCountablyCompact_iff
 
 中文:
-定理 Topology.IsEmbedding.isCountablyCompact_iff
-  条件: {f : E -> F} (hf : IsEmbedding f)
+定理 拓扑.是嵌入.isCountablyCompact_iff
+  条件: {f : E -> F} (hf : 是嵌入 f)
   证明: hf.isInducing.isCountablyCompact_iff
 
 Depends on / 依赖: hf.isInducing.isCountablyCompact_iff, isCountablyCompact_iff, isInducing
@@ -537,8 +537,8 @@ theorem Subtype.isCountablyCompact_iff
   proof: IsEmbedding.subtypeVal.isCountablyCompact_iff
 
 中文:
-定理 Subtype.isCountablyCompact_iff
-  条件: {p : E -> 命题} {A : Set { x // p x }}
+定理 子类型.isCountablyCompact_iff
+  条件: {p : E -> 命题} {A : 集合 { x // p x }}
   证明: IsEmbedding.subtypeVal.isCountablyCompact_iff
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isCountablyCompact_iff, isCountablyCompact_iff, subtypeVal
@@ -576,7 +576,7 @@ theorem isCountablyCompact_univ_iff
 
 中文:
 定理 isCountablyCompact_univ_iff
-  结论: IsCountablyCompact (univ : Set E) ↔ CountablyCompactSpace E
+  结论: IsCountablyCompact (univ : 集合 E) ↔ 余untablyCompact空间 E
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 -/
 theorem isCountablyCompact_univ_iff : IsCountablyCompact (univ : Set E) ↔ CountablyCompactSpace E :=
@@ -653,8 +653,8 @@ theorem Topology.IsInducing.isSeqCompact_iff
     obtain ⟨fa, hfa, ⟨φ, hφ⟩⟩ := hA (fun n => mem_image_
 
 中文:
-定理 Topology.IsInducing.isSeqCompact_iff
-  条件: {f : E -> F} (hf : IsInducing f)
+定理 拓扑.是Inducing.isSeqCompact_iff
+  条件: {f : E -> F} (hf : 是Inducing f)
   证明: by
     choose y hy using hx
     obtain ⟨a, ha, ⟨φ, hφ⟩⟩ := hA (fun n => (hy n).1)
@@ -688,8 +688,8 @@ theorem Subtype.isSeqCompact_iff
   proof: IsEmbedding.subtypeVal.isSeqCompact_iff
 
 中文:
-定理 Subtype.isSeqCompact_iff
-  条件: {p : E -> 命题} {A : Set { x // p x }}
+定理 子类型.isSeqCompact_iff
+  条件: {p : E -> 命题} {A : 集合 { x // p x }}
   证明: IsEmbedding.subtypeVal.isSeqCompact_iff
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isSeqCompact_iff, isSeqCompact_iff, subtypeVal
@@ -709,7 +709,7 @@ theorem isSeqCompact_iff_isSeqCompact_univ
 
 中文:
 定理 isSeqCompact_iff_isSeqCompact_univ
-  结论: IsSeqCompact A ↔ IsSeqCompact (univ : Set A)
+  结论: IsSeqCompact A ↔ IsSeqCompact (univ : 集合 A)
   证明: by
   rw [Subtype.isSeqCompact_iff]; rw [image_univ]; rw [Subtype.range_coe]
 
@@ -728,7 +728,7 @@ theorem isSeqCompact_univ_iff
 
 中文:
 定理 isSeqCompact_univ_iff
-  结论: IsSeqCompact (univ : Set E) ↔ SeqCompactSpace E
+  结论: IsSeqCompact (univ : 集合 E) ↔ SeqCompact空间 E
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 -/
 theorem isSeqCompact_univ_iff : IsSeqCompact (univ : Set E) ↔ SeqCompactSpace E :=
@@ -744,7 +744,7 @@ theorem isSeqCompact_iff_seqCompactSpace
 
 中文:
 定理 isSeqCompact_iff_seqCompactSpace
-  结论: IsSeqCompact A ↔ SeqCompactSpace A
+  结论: IsSeqCompact A ↔ SeqCompact空间 A
   证明: isSeqCompact_iff_isSeqCompact_univ.trans isSeqCompact_univ_iff
 
 Depends on / 依赖: isSeqCompact_iff_isSeqCompact_univ, isSeqCompact_iff_isSeqCompact_univ.trans, isSeqCompact_univ_iff
@@ -780,7 +780,7 @@ theorem IsCountablyCompact.isSeqCompact
 
 中文:
 定理 IsCountablyCompact.isSeqCompact
-  结论: [FirstCountableTopology E]
+  结论: [第一可数拓扑 E]
   证明: have : CountablyCompactSpace A := isCountablyCompact_iff_countablyCompactSpace.1 hA
   isSeqCompact_iff_seqCompactSpace.2 inferInstance
 
@@ -801,7 +801,7 @@ instance instCountablyCompactSpaceSeqCompactSpace
 
 中文:
 实例 instCountablyCompactSpaceSeqCompactSpace
-  签名: {X : 类型} [TopologicalSpace X]
+  签名: {X : 类型} [拓扑空间 X]
   定义体: CountablyCompactSpace.isCountablyCompact_univ.isSeqCompact
 
 Depends on / 依赖: CountablyCompactSpace, CountablyCompactSpace.isCountablyCompact_univ.isSeqCompact, isCountablyCompact_univ, isSeqCompact
@@ -820,7 +820,7 @@ theorem isCountablyCompact_iff_isSeqCompact
 
 中文:
 定理 isCountablyCompact_iff_isSeqCompact
-  条件: [FirstCountableTopology E]
+  条件: [第一可数拓扑 E]
   证明: ⟨fun h => h.isSeqCompact, fun h => h.isCountablyCompact⟩
 
 Depends on / 依赖: h.isCountablyCompact, h.isSeqCompact, isCountablyCompact, isSeqCompact
@@ -843,7 +843,7 @@ theorem IsCountablyCompact.exists_accPt_of_infinite
 refine ⟨a, haA, accPt_iff_clusterPt.2 ClusterPt
 
 中文:
-定理 IsCountablyCompact.exists_accPt_of_infinite
+定理 IsCountablyCompact.存在_accPt_of_infinite
   证明: by
   let f := hB.natEmbedding
   let x : Nat -> E := (↑) ∘ f
@@ -883,7 +883,7 @@ theorem isCountablyCompact_iff_infinite_subset_has_accPt
 
 中文:
 定理 isCountablyCompact_iff_infinite_subset_has_accPt
-  条件: [T1Space E] {A : Set E}
+  条件: [T1空间 E] {A : 集合 E}
   证明: hA.exists_accPt_of_infinite hBA hB
   mpr h := by
     refine IsCountablyCompact.of_seq_clusterPt fun x hx => ?_
@@ -965,8 +965,8 @@ theorem LindelofSpace.compactSpace
 alias LindelofSpace.CompactSpace := LindelofSpace.compactSpace
 
 中文:
-定理 LindelofSpace.compactSpace
-  结论: {X : 类型} [TopologicalSpace X]
+定理 Lindelof空间.compactSpace
+  结论: {X : 类型} [拓扑空间 X]
   证明: isLindelof_univ.isCompact h.isCountablyCompact_univ
 
 @[deprecated (since := "2026-05-19")]
@@ -991,7 +991,7 @@ theorem IsCountablyCompact.isCompact
 
 中文:
 定理 IsCountablyCompact.isCompact
-  结论: [HereditarilyLindelofSpace E]
+  结论: [HereditarilyLindelof空间 E]
   证明: (HereditarilyLindelofSpace.isLindelof A).isCompact hA
 
 Depends on / 依赖: HereditarilyLindelofSpace, HereditarilyLindelofSpace.isLindelof, isCompact, isLindelof
@@ -1050,8 +1050,8 @@ theorem Finset.isCountablyCompact_biUnion
 (hf a (Finset.mem_insert_self a s)).union ih (fun i hi => hf i (Finset.mem_insert_of_mem hi))
 
 中文:
-定理 Finset.isCountablyCompact_biUnion
-  结论: (s : Finset ι) {f : ι -> Set E}
+定理 有限集.isCountablyCompact_biUnion
+  结论: (s : 有限集 ι) {f : ι -> 集合 E}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1082,8 +1082,8 @@ theorem Set.Finite.isCountablyCompact_biUnion
   exact h1 ▸ Finset.isCountablyCompact_biUnion s' (fun i hi => hf i ((hs.mem_toFinset).mp hi))
 
 中文:
-定理 Set.Finite.isCountablyCompact_biUnion
-  结论: {s : Set ι} {f : ι -> Set E} (hs : s.Finite)
+定理 集合.有限.isCountablyCompact_biUnion
+  结论: {s : 集合 ι} {f : ι -> 集合 E} (hs : s.有限)
   证明: by
   let s' : Finset ι := hs.toFinset
   have h1 : (⋃ i in s, f i) = (⋃ i in s', f i) := by simp [s']
@@ -1107,8 +1107,8 @@ theorem Set.Finite.isCountablyCompact_sUnion
   rw [sUnion_eq_biUnion]; exact hf.isCountablyCompact_biUnion hc
 
 中文:
-定理 Set.Finite.isCountablyCompact_sUnion
-  结论: {S : Set (Set E)} (hf : S.Finite)
+定理 集合.有限.isCountablyCompact_sUnion
+  结论: {S : 集合 (集合 E)} (hf : S.有限)
   证明: by
   rw [sUnion_eq_biUnion]; exact hf.isCountablyCompact_biUnion hc
 
@@ -1129,7 +1129,7 @@ theorem isCountablyCompact_iUnion
 
 中文:
 定理 isCountablyCompact_iUnion
-  结论: {ι : Sort*} {f : ι -> Set E} [Finite ι]
+  结论: {ι : 类型层*} {f : ι -> 集合 E} [有限 ι]
   证明: (finite_range f).isCountablyCompact_sUnion forall_mem_range.2 h
 
 Depends on / 依赖: finite_range, forall_mem_range, isCountablyCompact_sUnion

@@ -41,7 +41,7 @@ definition Hom.cast
   body: Eq.ndrec (motive := (· ⟶ v')) (Eq.ndrec e hv) hu
 
 中文:
-定义 Hom.cast
+定义 态射.cast
   签名: {u v u' v' : U} (hu : u = u') (hv : v = v') (e : u ⟶ v)
   定义体: Eq.ndrec (motive := (· ⟶ v')) (Eq.ndrec e hv) hu
 
@@ -63,7 +63,7 @@ theorem Hom.cast_eq_cast
 @[simp]
 
 中文:
-定理 Hom.cast_eq_cast
+定理 态射.cast_eq_cast
   条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (e : u ⟶ v)
   证明: by
   subst_vars
@@ -89,7 +89,7 @@ theorem Hom.cast_rfl_rfl
 @[simp]
 
 中文:
-定理 Hom.cast_rfl_rfl
+定理 态射.cast_rfl_rfl
   条件: {u v : U} (e : u ⟶ v)
   结论: e.cast rfl rfl = e
   证明: rfl
@@ -111,7 +111,7 @@ theorem Hom.cast_cast
   rfl
 
 中文:
-定理 Hom.cast_cast
+定理 态射.cast_cast
   结论: {u v u' v' u'' v'' : U} (e : u ⟶ v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
@@ -134,7 +134,7 @@ theorem Hom.cast_heq
   rfl
 
 中文:
-定理 Hom.cast_heq
+定理 态射.cast_heq
   条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (e : u ⟶ v)
   证明: by
   subst_vars
@@ -156,7 +156,7 @@ theorem Hom.cast_eq_iff_heq
   exact _root_.cast_eq_iff_heq
 
 中文:
-定理 Hom.cast_eq_iff_heq
+定理 态射.cast_eq_iff_heq
   条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (e : u ⟶ v) (e' : u' ⟶ v')
   证明: by
   rw [Hom.cast_eq_cast]
@@ -180,7 +180,7 @@ theorem Hom.eq_cast_iff_heq
   exact ⟨HEq.symm, HEq.symm⟩
 
 中文:
-定理 Hom.eq_cast_iff_heq
+定理 态射.eq_cast_iff_heq
   条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (e : u ⟶ v) (e' : u' ⟶ v')
   证明: by
   rw [eq_comm]; rw [Hom.cast_eq_iff_heq]
@@ -209,8 +209,8 @@ definition Path.cast
   body: Eq.ndrec (motive := (Path · v')) (Eq.ndrec p hv) hu
 
 中文:
-定义 Path.cast
-  签名: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v)
+定义 道路.cast
+  签名: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : 道路 u v)
   定义体: Eq.ndrec (motive := (Path · v')) (Eq.ndrec p hv) hu
 
 Depends on / 依赖: Eq.ndrec, motive
@@ -231,8 +231,8 @@ theorem Path.cast_eq_cast
 @[simp]
 
 中文:
-定理 Path.cast_eq_cast
-  条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v)
+定理 道路.cast_eq_cast
+  条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : 道路 u v)
   证明: by
   subst_vars
   rfl
@@ -257,8 +257,8 @@ theorem Path.cast_rfl_rfl
 @[simp]
 
 中文:
-定理 Path.cast_rfl_rfl
-  条件: {u v : U} (p : Path u v)
+定理 道路.cast_rfl_rfl
+  条件: {u v : U} (p : 道路 u v)
   结论: p.cast rfl rfl = p
   证明: rfl
 
@@ -281,8 +281,8 @@ theorem Path.cast_cast
 @[simp]
 
 中文:
-定理 Path.cast_cast
-  结论: {u v u' v' u'' v'' : U} (p : Path u v) (hu : u = u') (hv : v = v')
+定理 道路.cast_cast
+  结论: {u v u' v' u'' v'' : U} (p : 道路 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -308,9 +308,9 @@ theorem Path.cast_nil
   rfl
 
 中文:
-定理 Path.cast_nil
+定理 道路.cast_nil
   条件: {u u' : U} (hu : u = u')
-  结论: (Path.nil : Path u u).cast hu hu = Path.nil
+  结论: (道路.nil : 道路 u u).cast hu hu = 道路.nil
   证明: by
   subst_vars
   rfl
@@ -330,8 +330,8 @@ theorem Path.cast_heq
   exact _root_.cast_heq _ _
 
 中文:
-定理 Path.cast_heq
-  条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v)
+定理 道路.cast_heq
+  条件: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : 道路 u v)
   证明: by
   rw [Path.cast_eq_cast]
   exact _root_.cast_heq _ _
@@ -354,8 +354,8 @@ theorem Path.cast_eq_iff_heq
   exact _root_.cast_eq_iff_heq
 
 中文:
-定理 Path.cast_eq_iff_heq
-  结论: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v)
+定理 道路.cast_eq_iff_heq
+  结论: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : 道路 u v)
   证明: by
   rw [Path.cast_eq_cast]
   exact _root_.cast_eq_iff_heq
@@ -377,8 +377,8 @@ theorem Path.eq_cast_iff_heq
     ((p.cast_eq_iff_heq hu hv p').2 h.symm).symm⟩
 
 中文:
-定理 Path.eq_cast_iff_heq
-  结论: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : Path u v)
+定理 道路.eq_cast_iff_heq
+  结论: {u v u' v' : U} (hu : u = u') (hv : v = v') (p : 道路 u v)
   证明: ⟨fun h => ((p.cast_eq_iff_heq hu hv p').1 h.symm).symm, fun h =>
     ((p.cast_eq_iff_heq hu hv p').2 h.symm).symm⟩
 
@@ -400,8 +400,8 @@ theorem Path.cast_cons
   rfl
 
 中文:
-定理 Path.cast_cons
-  条件: {u v w u' w' : U} (p : Path u v) (e : v ⟶ w) (hu : u = u') (hw : w = w')
+定理 道路.cast_cons
+  条件: {u v w u' w' : U} (p : 道路 u v) (e : v ⟶ w) (hu : u = u') (hw : w = w')
   证明: by
   subst_vars
   rfl
@@ -423,7 +423,7 @@ theorem cast_eq_of_cons_eq_cons
 
 中文:
 定理 cast_eq_of_cons_eq_cons
-  结论: {u v v' w : U} {p : Path u v} {p' : Path u v'} {e : v ⟶ w}
+  结论: {u v v' w : U} {p : 道路 u v} {p' : 道路 u v'} {e : v ⟶ w}
   证明: by
   rw [Path.cast_eq_iff_heq]
   exact heq_of_cons_eq_cons h
@@ -447,7 +447,7 @@ theorem hom_cast_eq_of_cons_eq_cons
 
 中文:
 定理 hom_cast_eq_of_cons_eq_cons
-  结论: {u v v' w : U} {p : Path u v} {p' : Path u v'} {e : v ⟶ w}
+  结论: {u v v' w : U} {p : 道路 u v} {p' : 道路 u v'} {e : v ⟶ w}
   证明: by
   rw [Hom.cast_eq_iff_heq]
   exact hom_heq_of_cons_eq_cons h
@@ -472,7 +472,7 @@ theorem eq_nil_of_length_zero
 
 中文:
 定理 eq_nil_of_length_zero
-  条件: {u v : U} (p : Path u v) (hzero : p.length = 0)
+  条件: {u v : U} (p : 道路 u v) (hzero : p.length = 0)
   证明: by
   cases p
   · rfl

@@ -43,8 +43,8 @@ instance [Nonempty
 @[to_additive]
 
 中文:
-实例 [Nonempty
-  签名: α] : Infinite (FreeMonoid α)
+实例 [非空
+  签名: α] : 无限 (自由幺半群 α)
   定义体: inferInstanceAs Infinite (List α)
 
 @[to_additive]
@@ -65,8 +65,8 @@ instance [Nonempty
   exact Infinite.of_surjective FreeGroup.norm FreeGroup.norm_surjective
 
 中文:
-实例 [Nonempty
-  签名: α] : Infinite (FreeGroup α)
+实例 [非空
+  签名: α] : 无限 (自由群 α)
   定义体: by
   classical
   exact Infinite.of_surjective FreeGroup.norm FreeGroup.norm_surjective
@@ -88,8 +88,8 @@ instance [Nonempty
 deriving instance Infinite for FreeRing, FreeCommRing
 
 中文:
-实例 [Nonempty
-  签名: α] : Infinite (FreeAbelianGroup α)
+实例 [非空
+  签名: α] : 无限 (自由交换群 α)
   定义体: (FreeAbelianGroup.equivFinsupp α).toEquiv.infinite_iff.2 inferInstance
 
 deriving instance Infinite for FreeRing, FreeCommRing
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (FreeMonoid α)
+  签名: 可数 (自由幺半群 α)
   定义体: inferInstanceAs Countable (List α)
 
 @[to_additive]
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (FreeGroup α)
+  签名: 可数 (自由群 α)
   定义体: inferInstanceAs Countable (Quot _)
 
 Depends on / 依赖: Countable
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (FreeAbelianGroup α)
+  签名: 可数 (自由交换群 α)
   定义体: inferInstanceAs Countable (Quot _)
 
 Depends on / 依赖: Countable
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (FreeRing α)
+  签名: 可数 (FreeRing α)
   定义体: inferInstanceAs Countable (Quot _)
 
 Depends on / 依赖: Countable
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable (FreeCommRing α)
+  签名: 可数 (FreeCommRing α)
   定义体: inferInstanceAs Countable (FreeAbelianGroup (Multiset α))
 
 Depends on / 依赖: Countable, FreeAbelianGroup, Multiset
@@ -215,7 +215,7 @@ theorem mk_abelianization_le
 
 中文:
 定理 mk_abelianization_le
-  条件: (G : 类型u) [Group G]
+  条件: (G : 类型u) [群 G]
   证明: Cardinal.mk_le_of_surjective Quotient.mk_surjective
 
 @[to_additive (attr := simp)]
@@ -239,8 +239,8 @@ theorem mk_freeMonoid
 
 中文:
 定理 mk_freeMonoid
-  条件: [Nonempty α]
-  结论: #(FreeMonoid α) = max #α ℵ₀
+  条件: [非空 α]
+  结论: #(自由幺半群 α) = 最大值 #α ℵ₀
   证明: Cardinal.mk_list_eq_max_mk_aleph0 _
 
 @[to_additive (attr := simp)]
@@ -269,8 +269,8 @@ theorem mk_freeGroup
 
 中文:
 定理 mk_freeGroup
-  条件: [Nonempty α]
-  结论: #(FreeGroup α) = max #α ℵ₀
+  条件: [非空 α]
+  结论: #(自由群 α) = 最大值 #α ℵ₀
   证明: by
   classical
   apply le_antisymm
@@ -314,8 +314,8 @@ theorem mk_freeAbelianGroup
 
 中文:
 定理 mk_freeAbelianGroup
-  条件: [Nonempty α]
-  结论: #(FreeAbelianGroup α) = max #α ℵ₀
+  条件: [非空 α]
+  结论: #(自由交换群 α) = 最大值 #α ℵ₀
   证明: by
   rw [Cardinal.mk_congr (FreeAbelianGroup.equivFinsupp α).toEquiv]
   simp
@@ -342,7 +342,7 @@ theorem mk_freeRing
 
 中文:
 定理 mk_freeRing
-  结论: #(FreeRing α) = max #α ℵ₀
+  结论: #(FreeRing α) = 最大值 #α ℵ₀
   证明: by
   cases isEmpty_or_nonempty α <;> simp [FreeRing]
 
@@ -365,7 +365,7 @@ theorem mk_freeCommRing
 
 中文:
 定理 mk_freeCommRing
-  结论: #(FreeCommRing α) = max #α ℵ₀
+  结论: #(FreeCommRing α) = 最大值 #α ℵ₀
   证明: by
   cases isEmpty_or_nonempty α <;> simp [FreeCommRing]
 
@@ -395,7 +395,7 @@ instance nonempty_commRing
 
 中文:
 实例 nonempty_commRing
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: by
   obtain hR | hR := finite_or_infinite α
   · obtain ⟨x⟩ := nonempty_fintype α
@@ -430,7 +430,7 @@ theorem nonempty_commRing_iff
 
 中文:
 定理 nonempty_commRing_iff
-  结论: Nonempty (CommRing α) ↔ Nonempty α
+  结论: 非空 (交换环 α) ↔ 非空 α
   证明: ⟨Nonempty.map (·.zero), fun _ => nonempty_commRing _⟩
 
 @[simp]
@@ -453,7 +453,7 @@ theorem nonempty_ring_iff
 
 中文:
 定理 nonempty_ring_iff
-  结论: Nonempty (Ring α) ↔ Nonempty α
+  结论: 非空 (环 α) ↔ 非空 α
   证明: ⟨Nonempty.map (·.zero), fun _ => (nonempty_commRing _).map (·.toRing)⟩
 
 @[simp]
@@ -476,7 +476,7 @@ theorem nonempty_commSemiring_iff
 
 中文:
 定理 nonempty_commSemiring_iff
-  结论: Nonempty (CommSemiring α) ↔ Nonempty α
+  结论: 非空 (交换半环 α) ↔ 非空 α
   证明: ⟨Nonempty.map (·.zero), fun _ => (nonempty_commRing _).map (·.toCommSemiring)⟩
 
 @[simp]
@@ -497,7 +497,7 @@ theorem nonempty_semiring_iff
 
 中文:
 定理 nonempty_semiring_iff
-  结论: Nonempty (Semiring α) ↔ Nonempty α
+  结论: 非空 (半环 α) ↔ 非空 α
   证明: ⟨Nonempty.map (·.zero), fun _ => (nonempty_commRing _).map (·.toSemiring)⟩
 
 Depends on / 依赖: Nonempty, Nonempty.map, nonempty_commRing, toSemiring

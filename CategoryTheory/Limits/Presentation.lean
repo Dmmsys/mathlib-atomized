@@ -49,12 +49,12 @@ structure ColimitPresentation
     - isColimit : IsColimit (Cocone.mk _ ι)
 
 中文:
-结构 ColimitPresentation
-  参数: (J : Type w) [Category.{t} J] (X : C)
+结构 余limitPresentation
+  参数: (J : 类型 w) [范畴.{t} J] (X : C)
   公理与运算 (3 个):
     - diag : J ⥤ C
-    - ι : diag ⟶ (Functor.const J).obj X
-    - isColimit : IsColimit (Cocone.mk _ ι)
+    - ι : diag ⟶ (函子.const J).obj X
+    - isColimit : 是余极限 (余锥.mk _ ι)
 -/
 structure ColimitPresentation (J : Type w) [Category.{t} J] (X : C) where
   /-- The diagram `{Dᵢ}`. -/
@@ -84,7 +84,7 @@ lemma w
 
 中文:
 引理 w
-  条件: (pres : ColimitPresentation J X) {i j : J} (f : i ⟶ j)
+  条件: (pres : 余limitPresentation J X) {i j : J} (f : i ⟶ j)
   证明: by
   simp
 -/
@@ -102,7 +102,7 @@ abbreviation cocone
 
 中文:
 缩写 cocone
-  签名: (pres : ColimitPresentation J X)
+  签名: (pres : 余limitPresentation J X)
   定义体: Cocone.mk _ pres.ι
 
 Depends on / 依赖: Cocone, Cocone.mk
@@ -121,8 +121,8 @@ lemma hasColimit
 
 中文:
 引理 hasColimit
-  条件: (pres : ColimitPresentation J X)
-  结论: HasColimit pres.diag
+  条件: (pres : 余limitPresentation J X)
+  结论: 有余极限 pres.diag
   证明: ⟨_, pres.isColimit⟩
 
 Depends on / 依赖: isColimit, pres.isColimit
@@ -169,7 +169,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: (F : J ⥤ C) [HasColimit F]
+  签名: (F : J ⥤ C) [有余极限 F]
   定义体: F
   ι := _
   isColimit := colimit.isColimit _
@@ -197,7 +197,7 @@ definition map
 
 中文:
 定义 map
-  签名: (P : ColimitPresentation J X) {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: (P : 余limitPresentation J X) {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: P.diag ⋙ F
   ι := Functor.whiskerRight P.ι F ≫ (F.constComp _ _).hom
   isColimit := (isColimitOfPreserves F P.isColimit).ofIsoColimit (Cocone.ext (.refl _) (by simp))
@@ -225,7 +225,7 @@ definition changeDiag
 
 中文:
 定义 changeDiag
-  签名: (P : ColimitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
+  签名: (P : 余limitPresentation J X) {F : J ⥤ C} (e : F ≅ P.diag)
   定义体: F
   ι := e.hom ≫ P.ι
   isColimit := (IsColimit.precomposeHomEquiv e _).2 P.isColimit
@@ -250,7 +250,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: (P : ColimitPresentation J X) {Y : C} (e : X ≅ Y)
+  签名: (P : 余limitPresentation J X) {Y : C} (e : X ≅ Y)
   定义体: P.diag
   ι := P.ι ≫ (Functor.const J).map e.hom
   isColimit := P.isColimit.ofIsoColimit (Cocone.ext e fun _ => rfl)
@@ -277,7 +277,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : ColimitPresentation J X) {J' : 类型} [Category* J'] (F : J' ⥤ J) [F.Final]
+  签名: (P : 余limitPresentation J X) {J' : 类型} [范畴* J'] (F : J' ⥤ J) [F.终]
   定义体: F ⋙ P.diag
   ι := F.whiskerLeft P.ι
   isColimit := (Functor.Final.isColimitWhiskerEquiv F _).symm P.isColimit
@@ -305,11 +305,11 @@ structure LimitPresentation
 
 中文:
 结构 LimitPresentation
-  参数: (J : Type w) [Category.{t} J] (X : C)
+  参数: (J : 类型 w) [范畴.{t} J] (X : C)
   公理与运算 (3 个):
     - diag : J ⥤ C
-    - π : (Functor.const J).obj X ⟶ diag
-    - isLimit : IsLimit (Cone.mk _ π)
+    - π : (函子.const J).obj X ⟶ diag
+    - isLimit : 是极限 (锥.mk _ π)
 -/
 structure LimitPresentation (J : Type w) [Category.{t} J] (X : C) where
   /-- The diagram `{Dᵢ}`. -/
@@ -378,7 +378,7 @@ lemma hasLimit
 中文:
 引理 hasLimit
   条件: (pres : LimitPresentation J X)
-  结论: HasLimit pres.diag
+  结论: 有极限 pres.diag
   证明: ⟨_, pres.isLimit⟩
 
 Depends on / 依赖: isLimit, pres.isLimit
@@ -425,7 +425,7 @@ definition limit
 
 中文:
 定义 limit
-  签名: (F : J ⥤ C) [HasLimit F]
+  签名: (F : J ⥤ C) [有极限 F]
   定义体: F
   π := _
   isLimit := limit.isLimit _
@@ -453,7 +453,7 @@ definition map
 
 中文:
 定义 map
-  签名: (P : LimitPresentation J X) {D : 类型} [Category* D] (F : C ⥤ D)
+  签名: (P : LimitPresentation J X) {D : 类型} [范畴* D] (F : C ⥤ D)
   定义体: P.diag ⋙ F
   π := (F.constComp _ _).inv ≫ Functor.whiskerRight P.π F
   isLimit := (isLimitOfPreserves F P.isLimit).ofIsoLimit (Cone.ext (.refl _) (by simp))
@@ -534,7 +534,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : LimitPresentation J X) {J' : 类型} [Category* J'] (F : J' ⥤ J) [F.Initial]
+  签名: (P : LimitPresentation J X) {J' : 类型} [范畴* J'] (F : J' ⥤ J) [F.初始]
   定义体: F ⋙ P.diag
   π := F.whiskerLeft P.π
   isLimit := (Functor.Initial.isLimitWhiskerEquiv F _).symm P.isLimit

@@ -49,7 +49,7 @@ theorem hasStrictDerivAt_sin
 
 中文:
 定理 hasStrictDerivAt_sin
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: HasStrictDerivAt sin (cos x) x
   证明: by
   simp only [cos, div_eq_mul_inv]
@@ -84,8 +84,8 @@ theorem hasDerivAt_sin
 
 中文:
 定理 hasDerivAt_sin
-  条件: (x : Complex)
-  结论: HasDerivAt sin (cos x) x
+  条件: (x : 复形)
+  结论: 在点处可导 sin (cos x) x
   证明: (hasStrictDerivAt_sin x).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sin
@@ -130,7 +130,7 @@ theorem contDiff_sin
 中文:
 定理 contDiff_sin
   条件: {n}
-  结论: ContDiff Complex n sin
+  结论: 连续可微 复形 n sin
   证明: (((contDiff_neg.mul contDiff_const).cexp.sub (contDiff_id.mul contDiff_const).cexp).mul
     contDiff_const).div_const _
 
@@ -155,7 +155,7 @@ theorem differentiable_sin
 
 中文:
 定理 differentiable_sin
-  结论: Differentiable Complex sin
+  结论: 可微 复形 sin
   证明: fun x => (hasDerivAt_sin x).differentiableAt
 
 @[simp]
@@ -176,8 +176,8 @@ theorem differentiableAt_sin
 
 中文:
 定理 differentiableAt_sin
-  条件: {x : Complex}
-  结论: DifferentiableAt Complex sin x
+  条件: {x : 复形}
+  结论: DifferentiableAt 复形 sin x
   证明: differentiable_sin x
 
 Depends on / 依赖: differentiable_sin
@@ -198,8 +198,8 @@ lemma analyticAt_sin
 
 中文:
 引理 analyticAt_sin
-  条件: {x : Complex}
-  结论: AnalyticAt Complex sin x
+  条件: {x : 复形}
+  结论: AnalyticAt 复形 sin x
   证明: contDiff_sin.contDiffAt.analyticAt
 
 Depends on / 依赖: analyticAt, contDiffAt, contDiff_sin, contDiff_sin.contDiffAt.analyticAt
@@ -218,8 +218,8 @@ lemma analyticWithinAt_sin
 
 中文:
 引理 analyticWithinAt_sin
-  条件: {x : Complex} {s : Set Complex}
-  结论: AnalyticWithinAt Complex sin s x
+  条件: {x : 复形} {s : 集合 复形}
+  结论: AnalyticWithinAt 复形 sin s x
   证明: contDiff_sin.contDiffWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_sin, contDiff_sin.contDiffWithinAt.analyticWithinAt
@@ -238,8 +238,8 @@ theorem analyticOnNhd_sin
 
 中文:
 定理 analyticOnNhd_sin
-  条件: {s : Set Complex}
-  结论: AnalyticOnNhd Complex sin s
+  条件: {s : 集合 复形}
+  结论: AnalyticOnNhd 复形 sin s
   证明: fun _ _ => analyticAt_sin
 
 Depends on / 依赖: analyticAt_sin
@@ -260,8 +260,8 @@ lemma analyticOn_sin
 
 中文:
 引理 analyticOn_sin
-  条件: {s : Set Complex}
-  结论: AnalyticOn Complex sin s
+  条件: {s : 集合 复形}
+  结论: AnalyticOn 复形 sin s
   证明: contDiff_sin.contDiffOn.analyticOn
 
 @[simp]
@@ -308,7 +308,7 @@ theorem hasStrictDerivAt_cos
 
 中文:
 定理 hasStrictDerivAt_cos
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: HasStrictDerivAt cos (-sin x) x
   证明: by
   simp only [sin, div_eq_mul_inv, neg_mul_eq_neg_mul]
@@ -343,8 +343,8 @@ theorem hasDerivAt_cos
 
 中文:
 定理 hasDerivAt_cos
-  条件: (x : Complex)
-  结论: HasDerivAt cos (-sin x) x
+  条件: (x : 复形)
+  结论: 在点处可导 cos (-sin x) x
   证明: (hasStrictDerivAt_cos x).hasDerivAt
 
 @[fun_prop]
@@ -369,7 +369,7 @@ theorem contDiff_cos
 中文:
 定理 contDiff_cos
   条件: {n}
-  结论: ContDiff Complex n cos
+  结论: 连续可微 复形 n cos
   证明: ((contDiff_id.mul contDiff_const).cexp.add (contDiff_neg.mul contDiff_const).cexp).div_const _
 
 @[simp]
@@ -392,7 +392,7 @@ theorem differentiable_cos
 
 中文:
 定理 differentiable_cos
-  结论: Differentiable Complex cos
+  结论: 可微 复形 cos
   证明: fun x => (hasDerivAt_cos x).differentiableAt
 
 @[simp]
@@ -413,8 +413,8 @@ theorem differentiableAt_cos
 
 中文:
 定理 differentiableAt_cos
-  条件: {x : Complex}
-  结论: DifferentiableAt Complex cos x
+  条件: {x : 复形}
+  结论: DifferentiableAt 复形 cos x
   证明: differentiable_cos x
 
 Depends on / 依赖: differentiable_cos
@@ -435,8 +435,8 @@ lemma analyticAt_cos
 
 中文:
 引理 analyticAt_cos
-  条件: {x : Complex}
-  结论: AnalyticAt Complex cos x
+  条件: {x : 复形}
+  结论: AnalyticAt 复形 cos x
   证明: contDiff_cos.contDiffAt.analyticAt
 
 Depends on / 依赖: analyticAt, contDiffAt, contDiff_cos, contDiff_cos.contDiffAt.analyticAt
@@ -455,8 +455,8 @@ lemma analyticWithinAt_cos
 
 中文:
 引理 analyticWithinAt_cos
-  条件: {x : Complex} {s : Set Complex}
-  结论: AnalyticWithinAt Complex cos s x
+  条件: {x : 复形} {s : 集合 复形}
+  结论: AnalyticWithinAt 复形 cos s x
   证明: contDiff_cos.contDiffWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, contDiffWithinAt, contDiff_cos, contDiff_cos.contDiffWithinAt.analyticWithinAt
@@ -475,8 +475,8 @@ theorem analyticOnNhd_cos
 
 中文:
 定理 analyticOnNhd_cos
-  条件: {s : Set Complex}
-  结论: AnalyticOnNhd Complex cos s
+  条件: {s : 集合 复形}
+  结论: AnalyticOnNhd 复形 cos s
   证明: fun _ _ => analyticAt_cos
 
 Depends on / 依赖: analyticAt_cos
@@ -495,8 +495,8 @@ lemma analyticOn_cos
 
 中文:
 引理 analyticOn_cos
-  条件: {s : Set Complex}
-  结论: AnalyticOn Complex cos s
+  条件: {s : 集合 复形}
+  结论: AnalyticOn 复形 cos s
   证明: contDiff_cos.contDiffOn.analyticOn
 
 Depends on / 依赖: analyticOn, contDiffOn, contDiff_cos, contDiff_cos.contDiffOn.analyticOn
@@ -517,7 +517,7 @@ theorem deriv_cos
 
 中文:
 定理 deriv_cos
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: deriv cos x = -sin x
   证明: (hasDerivAt_cos x).deriv
 
@@ -586,8 +586,8 @@ theorem HasDerivAt.ccos
   proof: (Complex.hasDerivAt_cos (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.ccos
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.ccos
+  条件: (hf : 在点处可导 f f' x)
   证明: (Complex.hasDerivAt_cos (f x)).comp x hf
 
 Depends on / 依赖: Complex.hasDerivAt_cos, hasDerivAt_cos
@@ -627,7 +627,7 @@ theorem derivWithin_ccos
 
 中文:
 定理 derivWithin_ccos
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasDerivWithinAt.ccos.derivWithin hxs
 
 @[simp]
@@ -649,7 +649,7 @@ theorem deriv_ccos
 
 中文:
 定理 deriv_ccos
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasDerivAt.ccos.deriv
 
 Depends on / 依赖: hasDerivAt, hc.hasDerivAt.ccos.deriv
@@ -688,8 +688,8 @@ theorem HasDerivAt.csin
   proof: (Complex.hasDerivAt_sin (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.csin
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.csin
+  条件: (hf : 在点处可导 f f' x)
   证明: (Complex.hasDerivAt_sin (f x)).comp x hf
 
 Depends on / 依赖: Complex.hasDerivAt_sin, hasDerivAt_sin
@@ -729,7 +729,7 @@ theorem derivWithin_csin
 
 中文:
 定理 derivWithin_csin
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasDerivWithinAt.csin.derivWithin hxs
 
 @[simp]
@@ -751,7 +751,7 @@ theorem deriv_csin
 
 中文:
 定理 deriv_csin
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasDerivAt.csin.deriv
 
 Depends on / 依赖: hasDerivAt, hc.hasDerivAt.csin.deriv
@@ -800,8 +800,8 @@ theorem HasFDerivAt.ccos
   proof: (Complex.hasDerivAt_cos (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.ccos
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.ccos
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Complex.hasDerivAt_cos (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Complex.hasDerivAt_cos, comp_hasFDerivAt, hasDerivAt_cos
@@ -841,7 +841,7 @@ theorem DifferentiableWithinAt.ccos
 
 中文:
 定理 DifferentiableWithinAt.ccos
-  条件: (hf : DifferentiableWithinAt Complex f s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x)
   证明: hf.hasFDerivWithinAt.ccos.differentiableWithinAt
 
 @[simp, fun_prop]
@@ -863,7 +863,7 @@ theorem DifferentiableAt.ccos
 
 中文:
 定理 DifferentiableAt.ccos
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.ccos.differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.ccos.differentiableAt
@@ -884,7 +884,7 @@ theorem DifferentiableOn.ccos
 
 中文:
 定理 DifferentiableOn.ccos
-  条件: (hc : DifferentiableOn Complex f s)
+  条件: (hc : DifferentiableOn 复形 f s)
   证明: fun x h => (hc x h).ccos
 
 @[simp, fun_prop]
@@ -902,8 +902,8 @@ theorem Differentiable.ccos
   proof: fun x => (hc x).ccos
 
 中文:
-定理 Differentiable.ccos
-  条件: (hc : Differentiable Complex f)
+定理 可微.ccos
+  条件: (hc : 可微 复形 f)
   证明: fun x => (hc x).ccos
 -/
 theorem Differentiable.ccos (hc : Differentiable Complex f) :
@@ -921,7 +921,7 @@ theorem fderivWithin_ccos
 
 中文:
 定理 fderivWithin_ccos
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasFDerivWithinAt.ccos.fderivWithin hxs
 
 @[simp]
@@ -943,7 +943,7 @@ theorem fderiv_ccos
 
 中文:
 定理 fderiv_ccos
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.ccos.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.ccos.fderiv
@@ -962,9 +962,9 @@ theorem ContDiff.ccos
   proof: Complex.contDiff_cos.comp h
 
 中文:
-定理 ContDiff.ccos
-  条件: {n} (h : ContDiff Complex n f)
-  结论: ContDiff Complex n fun x => Complex.cos (f x)
+定理 连续可微.ccos
+  条件: {n} (h : 连续可微 复形 n f)
+  结论: 连续可微 复形 n fun x => 复形.cos (f x)
   证明: Complex.contDiff_cos.comp h
 
 Depends on / 依赖: Complex.contDiff_cos.comp, contDiff_cos
@@ -982,7 +982,7 @@ theorem ContDiffAt.ccos
 
 中文:
 定理 ContDiffAt.ccos
-  条件: {n} (hf : ContDiffAt Complex n f x)
+  条件: {n} (hf : ContDiffAt 复形 n f x)
   证明: Complex.contDiff_cos.contDiffAt.comp x hf
 
 Depends on / 依赖: Complex.contDiff_cos.contDiffAt.comp, contDiffAt, contDiff_cos
@@ -1001,7 +1001,7 @@ theorem ContDiffOn.ccos
 
 中文:
 定理 ContDiffOn.ccos
-  条件: {n} (hf : ContDiffOn Complex n f s)
+  条件: {n} (hf : ContDiffOn 复形 n f s)
   证明: Complex.contDiff_cos.comp_contDiffOn hf
 
 Depends on / 依赖: Complex.contDiff_cos.comp_contDiffOn, comp_contDiffOn, contDiff_cos
@@ -1020,7 +1020,7 @@ theorem ContDiffWithinAt.ccos
 
 中文:
 定理 ContDiffWithinAt.ccos
-  条件: {n} (hf : ContDiffWithinAt Complex n f s x)
+  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
   证明: Complex.contDiff_cos.contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: Complex.contDiff_cos.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_cos
@@ -1059,8 +1059,8 @@ theorem HasFDerivAt.csin
   proof: (Complex.hasDerivAt_sin (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.csin
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.csin
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Complex.hasDerivAt_sin (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Complex.hasDerivAt_sin, comp_hasFDerivAt, hasDerivAt_sin
@@ -1100,7 +1100,7 @@ theorem DifferentiableWithinAt.csin
 
 中文:
 定理 DifferentiableWithinAt.csin
-  条件: (hf : DifferentiableWithinAt Complex f s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x)
   证明: hf.hasFDerivWithinAt.csin.differentiableWithinAt
 
 @[simp, fun_prop]
@@ -1122,7 +1122,7 @@ theorem DifferentiableAt.csin
 
 中文:
 定理 DifferentiableAt.csin
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.csin.differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt, hc.hasFDerivAt.csin.differentiableAt
@@ -1143,7 +1143,7 @@ theorem DifferentiableOn.csin
 
 中文:
 定理 DifferentiableOn.csin
-  条件: (hc : DifferentiableOn Complex f s)
+  条件: (hc : DifferentiableOn 复形 f s)
   证明: fun x h => (hc x h).csin
 
 @[simp, fun_prop]
@@ -1161,8 +1161,8 @@ theorem Differentiable.csin
   proof: fun x => (hc x).csin
 
 中文:
-定理 Differentiable.csin
-  条件: (hc : Differentiable Complex f)
+定理 可微.csin
+  条件: (hc : 可微 复形 f)
   证明: fun x => (hc x).csin
 -/
 theorem Differentiable.csin (hc : Differentiable Complex f) :
@@ -1180,7 +1180,7 @@ theorem fderivWithin_csin
 
 中文:
 定理 fderivWithin_csin
-  条件: (hf : DifferentiableWithinAt Complex f s x) (hxs : UniqueDiffWithinAt Complex s x)
+  条件: (hf : DifferentiableWithinAt 复形 f s x) (hxs : UniqueDiffWithinAt 复形 s x)
   证明: hf.hasFDerivWithinAt.csin.fderivWithin hxs
 
 @[simp]
@@ -1202,7 +1202,7 @@ theorem fderiv_csin
 
 中文:
 定理 fderiv_csin
-  条件: (hc : DifferentiableAt Complex f x)
+  条件: (hc : DifferentiableAt 复形 f x)
   证明: hc.hasFDerivAt.csin.fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt, hc.hasFDerivAt.csin.fderiv
@@ -1221,9 +1221,9 @@ theorem ContDiff.csin
   proof: Complex.contDiff_sin.comp h
 
 中文:
-定理 ContDiff.csin
-  条件: {n} (h : ContDiff Complex n f)
-  结论: ContDiff Complex n fun x => Complex.sin (f x)
+定理 连续可微.csin
+  条件: {n} (h : 连续可微 复形 n f)
+  结论: 连续可微 复形 n fun x => 复形.sin (f x)
   证明: Complex.contDiff_sin.comp h
 
 Depends on / 依赖: Complex.contDiff_sin.comp, contDiff_sin
@@ -1241,7 +1241,7 @@ theorem ContDiffAt.csin
 
 中文:
 定理 ContDiffAt.csin
-  条件: {n} (hf : ContDiffAt Complex n f x)
+  条件: {n} (hf : ContDiffAt 复形 n f x)
   证明: Complex.contDiff_sin.contDiffAt.comp x hf
 
 Depends on / 依赖: Complex.contDiff_sin.contDiffAt.comp, contDiffAt, contDiff_sin
@@ -1260,7 +1260,7 @@ theorem ContDiffOn.csin
 
 中文:
 定理 ContDiffOn.csin
-  条件: {n} (hf : ContDiffOn Complex n f s)
+  条件: {n} (hf : ContDiffOn 复形 n f s)
   证明: Complex.contDiff_sin.comp_contDiffOn hf
 
 Depends on / 依赖: Complex.contDiff_sin.comp_contDiffOn, comp_contDiffOn, contDiff_sin
@@ -1279,7 +1279,7 @@ theorem ContDiffWithinAt.csin
 
 中文:
 定理 ContDiffWithinAt.csin
-  条件: {n} (hf : ContDiffWithinAt Complex n f s x)
+  条件: {n} (hf : ContDiffWithinAt 复形 n f s x)
   证明: Complex.contDiff_sin.contDiffAt.comp_contDiffWithinAt x hf
 
 Depends on / 依赖: Complex.contDiff_sin.contDiffAt.comp_contDiffWithinAt, comp_contDiffWithinAt, contDiffAt, contDiff_sin
@@ -1326,7 +1326,7 @@ theorem hasDerivAt_sin
 中文:
 定理 hasDerivAt_sin
   条件: (x : 实数)
-  结论: HasDerivAt sin (cos x) x
+  结论: 在点处可导 sin (cos x) x
   证明: (hasStrictDerivAt_sin x).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sin
@@ -1370,7 +1370,7 @@ theorem contDiff_sin
 中文:
 定理 contDiff_sin
   条件: {n}
-  结论: ContDiff 实数 n sin
+  结论: 连续可微 实数 n sin
   证明: Complex.contDiff_sin.real_of_complex
 
 @[simp]
@@ -1393,7 +1393,7 @@ theorem differentiable_sin
 
 中文:
 定理 differentiable_sin
-  结论: Differentiable 实数 sin
+  结论: 可微 实数 sin
   证明: fun x => (hasDerivAt_sin x).differentiableAt
 
 @[simp]
@@ -1452,7 +1452,7 @@ lemma analyticWithinAt_sin
 
 中文:
 引理 analyticWithinAt_sin
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 sin s x
   证明: contDiff_sin.contDiffWithinAt.analyticWithinAt
 
@@ -1472,7 +1472,7 @@ theorem analyticOnNhd_sin
 
 中文:
 定理 analyticOnNhd_sin
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOnNhd 实数 sin s
   证明: fun _ _ => analyticAt_sin
 
@@ -1494,7 +1494,7 @@ lemma analyticOn_sin
 
 中文:
 引理 analyticOn_sin
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOn 实数 sin s
   证明: contDiff_sin.contDiffOn.analyticOn
 
@@ -1558,7 +1558,7 @@ theorem hasDerivAt_cos
 中文:
 定理 hasDerivAt_cos
   条件: (x : 实数)
-  结论: HasDerivAt cos (-sin x) x
+  结论: 在点处可导 cos (-sin x) x
   证明: (Complex.hasDerivAt_cos x).real_of_complex
 
 @[fun_prop]
@@ -1583,7 +1583,7 @@ theorem contDiff_cos
 中文:
 定理 contDiff_cos
   条件: {n}
-  结论: ContDiff 实数 n cos
+  结论: 连续可微 实数 n cos
   证明: Complex.contDiff_cos.real_of_complex
 
 @[simp]
@@ -1606,7 +1606,7 @@ theorem differentiable_cos
 
 中文:
 定理 differentiable_cos
-  结论: Differentiable 实数 cos
+  结论: 可微 实数 cos
   证明: fun x => (hasDerivAt_cos x).differentiableAt
 
 @[simp]
@@ -1665,7 +1665,7 @@ lemma analyticWithinAt_cos
 
 中文:
 引理 analyticWithinAt_cos
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 cos s x
   证明: contDiff_cos.contDiffWithinAt.analyticWithinAt
 
@@ -1685,7 +1685,7 @@ theorem analyticOnNhd_cos
 
 中文:
 定理 analyticOnNhd_cos
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOnNhd 实数 cos s
   证明: fun _ _ => analyticAt_cos
 
@@ -1705,7 +1705,7 @@ lemma analyticOn_cos
 
 中文:
 引理 analyticOn_cos
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOn 实数 cos s
   证明: contDiff_cos.contDiffOn.analyticOn
 
@@ -2292,7 +2292,7 @@ theorem iteratedDerivWithin_sin_Icc
 
 中文:
 定理 iteratedDerivWithin_sin_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in Icc a b)
+  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_sin.contDiffAt hx
 
 @[simp]
@@ -2316,7 +2316,7 @@ theorem iteratedDerivWithin_cos_Icc
 
 中文:
 定理 iteratedDerivWithin_cos_Icc
-  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in Icc a b)
+  条件: (n : 自然数) {a b : 实数} (h : a < b) {x : 实数} (hx : x in 闭区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Icc h) contDiff_cos.contDiffAt hx
 
 @[simp]
@@ -2340,7 +2340,7 @@ theorem iteratedDerivWithin_sin_Ioo
 
 中文:
 定理 iteratedDerivWithin_sin_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in Ioo a b)
+  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_sin.contDiffAt hx
 
 @[simp]
@@ -2362,7 +2362,7 @@ theorem iteratedDerivWithin_cos_Ioo
 
 中文:
 定理 iteratedDerivWithin_cos_Ioo
-  条件: (n : 自然数) {a b x : 实数} (hx : x in Ioo a b)
+  条件: (n : 自然数) {a b x : 实数} (hx : x in 开区间 a b)
   证明: iteratedDerivWithin_eq_iteratedDeriv (uniqueDiffOn_Ioo a b) contDiff_cos.contDiffAt hx
 
 Depends on / 依赖: contDiffAt, contDiff_cos, contDiff_cos.contDiffAt, iteratedDerivWithin_eq_iteratedDeriv, uniqueDiffOn_Ioo
@@ -2412,8 +2412,8 @@ theorem HasDerivAt.cos
   proof: (Real.hasDerivAt_cos (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.cos
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.cos
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_cos (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_cos, hasDerivAt_cos
@@ -2514,8 +2514,8 @@ theorem HasDerivAt.sin
   proof: (Real.hasDerivAt_sin (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.sin
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.sin
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_sin (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_sin, hasDerivAt_sin
@@ -2626,8 +2626,8 @@ theorem HasFDerivAt.cos
   proof: (Real.hasDerivAt_cos (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.cos
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.cos
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Real.hasDerivAt_cos (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Real.hasDerivAt_cos, comp_hasFDerivAt, hasDerivAt_cos
@@ -2729,9 +2729,9 @@ theorem Differentiable.cos
   proof: fun x => (hc x).cos
 
 中文:
-定理 Differentiable.cos
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => 实数.cos (f x)
+定理 可微.cos
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => 实数.cos (f x)
   证明: fun x => (hc x).cos
 -/
 theorem Differentiable.cos (hc : Differentiable Real f) : Differentiable Real fun x => Real.cos (f x) :=
@@ -2790,9 +2790,9 @@ theorem ContDiff.cos
   proof: Real.contDiff_cos.comp h
 
 中文:
-定理 ContDiff.cos
-  条件: {n} (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => 实数.cos (f x)
+定理 连续可微.cos
+  条件: {n} (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => 实数.cos (f x)
   证明: Real.contDiff_cos.comp h
 
 Depends on / 依赖: Real.contDiff_cos.comp, contDiff_cos
@@ -2889,8 +2889,8 @@ theorem HasFDerivAt.sin
   proof: (Real.hasDerivAt_sin (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.sin
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.sin
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (Real.hasDerivAt_sin (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: Real.hasDerivAt_sin, comp_hasFDerivAt, hasDerivAt_sin
@@ -2992,9 +2992,9 @@ theorem Differentiable.sin
   proof: fun x => (hc x).sin
 
 中文:
-定理 Differentiable.sin
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => 实数.sin (f x)
+定理 可微.sin
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => 实数.sin (f x)
   证明: fun x => (hc x).sin
 -/
 theorem Differentiable.sin (hc : Differentiable Real f) : Differentiable Real fun x => Real.sin (f x) :=
@@ -3053,9 +3053,9 @@ theorem ContDiff.sin
   proof: Real.contDiff_sin.comp h
 
 中文:
-定理 ContDiff.sin
-  条件: {n} (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => 实数.sin (f x)
+定理 连续可微.sin
+  条件: {n} (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => 实数.sin (f x)
   证明: Real.contDiff_sin.comp h
 
 Depends on / 依赖: Real.contDiff_sin.comp, contDiff_sin
@@ -3138,8 +3138,8 @@ theorem Complex.logDeriv_sin
 @[simp]
 
 中文:
-定理 Complex.logDeriv_sin
-  结论: logDeriv (Complex.sin) = Complex.cot
+定理 复形.logDeriv_sin
+  结论: logDeriv (复形.sin) = 复形.cot
   证明: by
   ext
   rw [logDeriv]; rw [Complex.deriv_sin]; rw [Pi.div_apply]; rw [Complex.cot]
@@ -3166,7 +3166,7 @@ theorem Real.logDeriv_sin
 @[simp]
 
 中文:
-定理 Real.logDeriv_sin
+定理 实数.logDeriv_sin
   结论: logDeriv (实数.sin) = 实数.cot
   证明: by
   ext
@@ -3194,8 +3194,8 @@ theorem Complex.logDeriv_cos
 @[simp]
 
 中文:
-定理 Complex.logDeriv_cos
-  结论: logDeriv (Complex.cos) = -Complex.tan
+定理 复形.logDeriv_cos
+  结论: logDeriv (复形.cos) = -复形.tan
   证明: by
   ext
   rw [logDeriv]; rw [Complex.deriv_cos']; rw [Pi.div_apply]; rw [Pi.neg_apply]; rw [Complex.tan]; rw [neg_div]
@@ -3222,7 +3222,7 @@ theorem Real.logDeriv_cos
 @[simp]
 
 中文:
-定理 Real.logDeriv_cos
+定理 实数.logDeriv_cos
   结论: logDeriv (实数.cos) = -实数.tan
   证明: by
   ext
@@ -3252,8 +3252,8 @@ theorem Complex.logDeriv_exp
 @[simp]
 
 中文:
-定理 Complex.logDeriv_exp
-  结论: logDeriv (Complex.exp) = 1
+定理 复形.logDeriv_exp
+  结论: logDeriv (复形.exp) = 1
   证明: by
   ext
   rw [logDeriv]; rw [Complex.deriv_exp]; rw [Pi.div_apply]; rw [← exp_sub]; rw [sub_self]; rw [exp_zero]; rw [Pi.one_apply]
@@ -3284,7 +3284,7 @@ theorem Real.logDeriv_exp
 @[deprecated (since := "2026-02-05")] alias Real.LogDeriv_exp := Real.logDeriv_exp
 
 中文:
-定理 Real.logDeriv_exp
+定理 实数.logDeriv_exp
   结论: logDeriv (实数.exp) = 1
   证明: by
   ext

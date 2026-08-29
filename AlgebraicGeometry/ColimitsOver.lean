@@ -52,11 +52,11 @@ structure ColimitGluingData
     - prop_trans({i j : 𝒰.I₀} (hij : i ⟶ j)) : P (𝒰.trans hij)
 
 中文:
-结构 ColimitGluingData
+结构 余limitGluingData
   参数: (D : J ⥤ P.Over ⊤ S) (𝒰 : S.OpenCover)
   公理与运算 (3 个):
-    - cocone((i : 𝒰.I₀)) : Cocone (D ⋙ Morphism命题erty.Over.pullback P ⊤ (𝒰.f i))
-    - isColimit((i : 𝒰.I₀)) : IsColimit (cocone i)
+    - cocone((i : 𝒰.I₀)) : 余锥 (D ⋙ MorphismProperty.Over.pullback P ⊤ (𝒰.f i))
+    - isColimit((i : 𝒰.I₀)) : 是余极限 (cocone i)
     - prop_trans({i j : 𝒰.I₀} (hij : i ⟶ j)) : P (𝒰.trans hij)
 -/
 structure ColimitGluingData (D : J ⥤ P.Over ⊤ S) (𝒰 : S.OpenCover)
@@ -249,7 +249,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : 𝒰.I₀ ⥤ Scheme where
+  签名: : 𝒰.I₀ ⥤ 概形 where
   定义体: (d.cocone i).pt.left
   map {i j} hij := (d.transitionMap hij).left
 
@@ -469,7 +469,7 @@ definition gluedCocone
 
 中文:
 定义 gluedCocone
-  签名: : Cocone D
+  签名: : 余锥 D
   定义体: by
   letI 𝒱 (a : J) : (D.obj a).left.OpenCover := 𝒰.pullback₁ (D.obj a).hom
   refine { pt := d.glued, ι.app a := ?_, ι.naturality {a b} f := ?_ }
@@ -555,7 +555,7 @@ definition isColimitGluedCocone
 
 中文:
 定义 isColimitGluedCocone
-  签名: : IsColimit d.gluedCocone
+  签名: : 是余极限 d.gluedCocone
   定义体: by
   letI 𝒱 : d.glued.left.OpenCover := d.relativeGluingData.cover
   refine { desc s := ?_, fac := ?_, uniq := ?_ }

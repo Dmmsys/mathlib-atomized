@@ -67,7 +67,7 @@ theorem cosZeta_two_mul_nat
 
 中文:
 定理 cosZeta_two_mul_nat
-  条件: (hk : k != 0) (hx : x in Icc 0 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 0 1)
   证明: by
   rw [← (hasSum_nat_cosZeta x (?_ : 1 < re (2 * k))).tsum_eq]
 · refine Eq.trans ?_
@@ -121,7 +121,7 @@ theorem sinZeta_two_mul_nat_add_one
 
 中文:
 定理 sinZeta_two_mul_nat_add_one
-  条件: (hk : k != 0) (hx : x in Icc 0 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 0 1)
   证明: by
   rw [← (hasSum_nat_sinZeta x (?_ : 1 < re (2 * k + 1))).tsum_eq]
 · refine Eq.trans ?_
@@ -169,7 +169,7 @@ theorem cosZeta_two_mul_nat'
 
 中文:
 定理 cosZeta_two_mul_nat'
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   rw [cosZeta_two_mul_nat hk hx]
   congr 1
@@ -203,7 +203,7 @@ theorem sinZeta_two_mul_nat_add_one'
 
 中文:
 定理 sinZeta_two_mul_nat_add_one'
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   rw [sinZeta_two_mul_nat_add_one hk hx]
   congr 1
@@ -236,7 +236,7 @@ theorem hurwitzZetaEven_one_sub_two_mul_nat
 
 中文:
 定理 hurwitzZetaEven_one_sub_two_mul_nat
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   have h1 (n : Nat) : (2 * k : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
@@ -272,7 +272,7 @@ theorem hurwitzZetaOdd_neg_two_mul_nat
 
 中文:
 定理 hurwitzZetaOdd_neg_two_mul_nat
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   have h1 (n : Nat) : (2 * k + 1 : Complex) != -n := by
     rw [← Int.cast_ofNat]; rw [← Int.cast_natCast]; rw [← Int.cast_mul]; rw [← Int.cast_natCast n]; rw [← Int.cast_neg]; rw [← Int.cast_one]; rw [← Int.cast_add]; rw [Ne]; rw [Int.cast_inj]; rw [← Ne]
@@ -309,7 +309,7 @@ lemma hurwitzZeta_one_sub_two_mul_nat
 
 中文:
 引理 hurwitzZeta_one_sub_two_mul_nat
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   suffices hurwitzZetaOdd x (1 - 2 * k) = 0 by
     rw [hurwitzZeta]; rw [this]; rw [add_zero]; rw [hurwitzZetaEven_one_sub_two_mul_nat hk hx]
@@ -339,7 +339,7 @@ lemma hurwitzZeta_neg_two_mul_nat
 
 中文:
 引理 hurwitzZeta_neg_two_mul_nat
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   suffices hurwitzZetaEven x (-(2 * k)) = 0 by
     rw [hurwitzZeta]; rw [this]; rw [zero_add]; rw [hurwitzZetaOdd_neg_two_mul_nat hk hx]
@@ -367,7 +367,7 @@ theorem hurwitzZeta_neg_nat
 
 中文:
 定理 hurwitzZeta_neg_nat
-  条件: (hk : k != 0) (hx : x in Icc (0 : 实数) 1)
+  条件: (hk : k != 0) (hx : x in 闭区间 (0 : 实数) 1)
   证明: by
   rcases Nat.even_or_odd' k with ⟨n, (rfl | rfl)⟩
   · exact_mod_cast hurwitzZeta_neg_two_mul_nat (by lia : n != 0) hx
@@ -465,7 +465,7 @@ theorem riemannZeta_two
 
 中文:
 定理 riemannZeta_two
-  结论: riemannZeta 2 = (π : Complex) ^ 2 / 6
+  结论: riemannZeta 2 = (π : 复形) ^ 2 / 6
   证明: by
   convert! congr_arg ((↑) : Real -> Complex) hasSum_zeta_two.tsum_eq
   · rw [← Nat.cast_two, zeta_nat_eq_tsum_of_gt_one one_lt_two]

@@ -85,7 +85,7 @@ definition sectionsSubalgebra
 
 中文:
 定义 sectionsSubalgebra
-  签名: : Subalgebra R (对任意 j, F.obj j)
+  签名: : 子代数 R (对任意 j, F.obj j)
   定义体: { SemiRingCat.sectionsSubsemiring
       (F ⋙ forget₂ (AlgCat R) RingCat.{w} ⋙ forget₂ RingCat SemiRingCat.{w}) with
     algebraMap_mem' := fun r _ _ f => (F.map f).hom.commutes r }
@@ -223,7 +223,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: AlgCat.of R (Types.Small.limitCone (F ⋙ forget _)).pt
   π :=
     { app := fun j => ofHom <| limitπAlgHom F j
@@ -263,7 +263,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone.{v, w} F)
+  签名: : 是极限 (limitCone.{v, w} F)
   定义体: by
   refine
     IsLimit.ofFaithful (forget (AlgCat R)) (Types.Small.limitConeIsLimit.{v, w} _)
@@ -326,7 +326,7 @@ lemma hasLimitsOfSize
 中文:
 引理 hasLimitsOfSize
   条件: [UnivLE.{v, w}]
-  结论: HasLimitsOfSize.{t, v} (AlgCat.{w} R)
+  结论: 有LimitsOfSize.{t, v} (Alg范畴.{w} R)
   证明: { has_limits_of_shape := fun _ _ =>
     { has_limit := fun F => HasLimit.mk
         { cone := limitCone F
@@ -350,7 +350,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits (AlgCat.{w} R)
+  签名: : 有极限 (Alg范畴.{w} R)
   定义体: AlgCat.hasLimitsOfSize.{w, w, u}
 
 Depends on / 依赖: AlgCat, AlgCat.hasLimitsOfSize, hasLimitsOfSize
@@ -397,7 +397,7 @@ instance forget₂Ring_preservesLimits
 
 中文:
 实例 forget₂Ring_preservesLimits
-  签名: : PreservesLimits (forget₂ (AlgCat R) RingCat.{w})
+  签名: : PreservesLimits (forget₂ (Alg范畴 R) 环范畴.{w})
   定义体: AlgCat.forget₂Ring_preservesLimitsOfSize.{w, w}
 
 Depends on / 依赖: AlgCat, AlgCat.forget
@@ -489,7 +489,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget (AlgCat.{w} R))
+  签名: : PreservesLimits (forget (Alg范畴.{w} R))
   定义体: AlgCat.forget_preservesLimitsOfSize.{w, w}
 
 Depends on / 依赖: AlgCat, AlgCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize

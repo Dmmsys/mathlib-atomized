@@ -189,7 +189,7 @@ theorem continuous_mulExpNegMulSq
 
 中文:
 定理 continuous_mulExpNegMulSq
-  结论: Continuous (fun x => mulExpNegMulSq ε x)
+  结论: 连续 (fun x => mulExpNegMulSq ε x)
   证明: Continuous.mul continuous_id (by fun_prop)
 
 @[continuity, fun_prop]
@@ -209,8 +209,8 @@ theorem _root_.Continuous.mulExpNegMulSq
   proof: continuous_mulExpNegMulSq.comp hf
 
 中文:
-定理 _root_.Continuous.mulExpNegMulSq
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> 实数}
+定理 _root_.连续.mulExpNegMulSq
+  结论: {α : 类型} [拓扑空间 α] {f : α -> 实数}
   证明: continuous_mulExpNegMulSq.comp hf
 
 Depends on / 依赖: continuous_mulExpNegMulSq, continuous_mulExpNegMulSq.comp
@@ -248,7 +248,7 @@ theorem differentiable_mulExpNegMulSq
 
 中文:
 定理 differentiable_mulExpNegMulSq
-  结论: Differentiable 实数 (mulExpNegMulSq ε)
+  结论: 可微 实数 (mulExpNegMulSq ε)
   证明: fun _ => differentiableAt_mulExpNegMulSq _
 -/
 @[fun_prop] theorem differentiable_mulExpNegMulSq : Differentiable Real (mulExpNegMulSq ε) :=
@@ -545,7 +545,7 @@ theorem abs_mulExpNegMulSq_comp_le_norm
 
 中文:
 定理 abs_mulExpNegMulSq_comp_le_norm
-  结论: {E : 类型} [TopologicalSpace E] {x : E}
+  结论: {E : 类型} [拓扑空间 E] {x : E}
   证明: by
   simp only [Function.comp_apply, mulExpNegMulSq, abs_mul, abs_exp]
   apply le_trans (mul_le_of_le_one_right (abs_nonneg (g x)) _) (g.norm_coe_le_norm x)

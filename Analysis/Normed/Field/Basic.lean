@@ -47,9 +47,9 @@ class NormedDivisionRing
     - norm_mul : forall a b, norm (a * b) = norm a * norm b
 
 中文:
-类 NormedDivisionRing
+类 NormedDivision环
   参数: (α : 类型)
-  继承: Norm α, DivisionRing α, MetricSpace α
+  继承: 范数 α, 除环 α, 度量空间 α
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul : 对任意 a b, norm (a * b) = norm a * norm b
@@ -427,7 +427,7 @@ lemma unitClosedBall_eq_univ_of_discrete
 
 中文:
 引理 unitClosedBall_eq_univ_of_discrete
-  结论: (Metric.closedBall 0 1 : Set 𝕜) = Set.univ
+  结论: (Metric.closedBall 0 1 : 集合 𝕜) = 集合.univ
   证明: by
   ext
   simp
@@ -454,9 +454,9 @@ class NormedField
     - norm_mul : forall a b, norm (a * b) = norm a * norm b
 
 中文:
-类 NormedField
+类 赋范域
   参数: (α : 类型)
-  继承: Norm α, Field α, MetricSpace α
+  继承: 范数 α, 域 α, 度量空间 α
   公理与运算 (2 个):
     - dist_eq : 对任意 x y, dist x y = norm (-x + y)
     - norm_mul : 对任意 a b, norm (a * b) = norm a * norm b
@@ -483,7 +483,7 @@ class NontriviallyNormedField
 中文:
 类 NontriviallyNormedField
   参数: (α : 类型)
-  继承: NormedField α
+  继承: 赋范域 α
   公理与运算 (1 个):
     - non_trivial : 存在 x : α, 1 < ‖x‖
 -/
@@ -504,7 +504,7 @@ class DenselyNormedField
 中文:
 类 DenselyNormedField
   参数: (α : 类型)
-  继承: NormedField α
+  继承: 赋范域 α
   公理与运算 (1 个):
     - lt_norm_lt : 对任意 x y : 实数, 0 <= x -> x < y -> 存在 a : α, x < ‖a‖ ∧ ‖a‖ < y
 -/
@@ -549,7 +549,7 @@ theorem exists_one_lt_norm
   proof: ‹NontriviallyNormedField α›.non_trivial
 
 中文:
-定理 exists_one_lt_norm
+定理 存在_one_lt_norm
   结论: 存在 x : α, 1 < ‖x‖
   证明: ‹NontriviallyNormedField α›.non_trivial
 
@@ -567,7 +567,7 @@ theorem exists_one_lt_nnnorm
   proof: exists_one_lt_norm α
 
 中文:
-定理 exists_one_lt_nnnorm
+定理 存在_one_lt_nnnorm
   结论: 存在 x : α, 1 < ‖x‖₊
   证明: exists_one_lt_norm α
 
@@ -584,7 +584,7 @@ theorem exists_one_lt_enorm
   proof: .imp fun _ => ENNReal.coe_lt_coe.mpr exists_one_lt_nnnorm α
 
 中文:
-定理 exists_one_lt_enorm
+定理 存在_one_lt_enorm
   结论: 存在 x : α, 1 < ‖x‖ₑ
   证明: .imp fun _ => ENNReal.coe_lt_coe.mpr exists_one_lt_nnnorm α
 
@@ -605,7 +605,7 @@ theorem exists_lt_norm
   ⟨w ^ n, by rwa [norm_pow]⟩
 
 中文:
-定理 exists_lt_norm
+定理 存在_lt_norm
   条件: (r : 实数)
   结论: 存在 x : α, r < ‖x‖
   证明: let ⟨w, hw⟩ := exists_one_lt_norm α
@@ -629,7 +629,7 @@ theorem exists_lt_nnnorm
   proof: exists_lt_norm α r
 
 中文:
-定理 exists_lt_nnnorm
+定理 存在_lt_nnnorm
   条件: (r : 实数>=0)
   结论: 存在 x : α, r < ‖x‖₊
   证明: exists_lt_norm α r
@@ -650,7 +650,7 @@ theorem exists_lt_enorm
   exact mod_cast exists_lt_nnnorm α r
 
 中文:
-定理 exists_lt_enorm
+定理 存在_lt_enorm
   条件: {r : 实数>=0∞} (hr : r != ∞)
   结论: 存在 x : α, r < ‖x‖ₑ
   证明: by
@@ -674,7 +674,7 @@ theorem exists_norm_lt
   ⟨w⁻¹, by rwa [← Set.mem_Ioo, norm_inv, ← Set.mem_inv, Set.inv_Ioo_0_left hr]⟩
 
 中文:
-定理 exists_norm_lt
+定理 存在_norm_lt
   条件: {r : 实数} (hr : 0 < r)
   结论: 存在 x : α, 0 < ‖x‖ ∧ ‖x‖ < r
   证明: let ⟨w, hw⟩ := exists_lt_norm α r⁻¹
@@ -696,7 +696,7 @@ theorem exists_nnnorm_lt
   proof: exists_norm_lt α hr
 
 中文:
-定理 exists_nnnorm_lt
+定理 存在_nnnorm_lt
   条件: {r : 实数>=0} (hr : 0 < r)
   结论: 存在 x : α, 0 < ‖x‖₊ ∧ ‖x‖₊ < r
   证明: exists_norm_lt α hr
@@ -719,7 +719,7 @@ theorem exists_enorm_lt
     And.imp ENNReal.coe_pos.mpr ENNReal.coe_lt_coe.mpr
 
 中文:
-定理 exists_enorm_lt
+定理 存在_enorm_lt
   条件: {r : 实数>=0∞} (hr : 0 < r)
   结论: 存在 x : α, 0 < ‖x‖ₑ ∧ ‖x‖ₑ < r
   证明: match r with
@@ -744,7 +744,7 @@ theorem exists_norm_lt_one
   proof: exists_norm_lt α one_pos
 
 中文:
-定理 exists_norm_lt_one
+定理 存在_norm_lt_one
   结论: 存在 x : α, 0 < ‖x‖ ∧ ‖x‖ < 1
   证明: exists_norm_lt α one_pos
 
@@ -762,7 +762,7 @@ theorem exists_nnnorm_lt_one
   proof: exists_norm_lt_one _
 
 中文:
-定理 exists_nnnorm_lt_one
+定理 存在_nnnorm_lt_one
   结论: 存在 x : α, 0 < ‖x‖₊ ∧ ‖x‖₊ < 1
   证明: exists_norm_lt_one _
 
@@ -779,7 +779,7 @@ theorem exists_enorm_lt_one
   proof: exists_enorm_lt _ one_pos
 
 中文:
-定理 exists_enorm_lt_one
+定理 存在_enorm_lt_one
   结论: 存在 x : α, 0 < ‖x‖ₑ ∧ ‖x‖ₑ < 1
   证明: exists_enorm_lt _ one_pos
 
@@ -840,7 +840,7 @@ theorem nhdsWithin_isUnit_neBot
 
 中文:
 定理 nhdsWithin_isUnit_neBot
-  结论: NeBot (𝓝[{ x : α | IsUnit x }] 0)
+  结论: NeBot (𝓝[{ x : α | 是单位 x }] 0)
   证明: by
   simpa only [isUnit_iff_ne_zero] using! nhdsNE_neBot (0 : α)
 
@@ -865,7 +865,7 @@ theorem exists_lt_norm_lt
   proof: DenselyNormedField.lt_norm_lt r₁ r₂ h₀ h
 
 中文:
-定理 exists_lt_norm_lt
+定理 存在_lt_norm_lt
   条件: {r₁ r₂ : 实数} (h₀ : 0 <= r₁) (h : r₁ < r₂)
   结论: 存在 x : α, r₁ < ‖x‖ ∧ ‖x‖ < r₂
   证明: DenselyNormedField.lt_norm_lt r₁ r₂ h₀ h
@@ -885,7 +885,7 @@ theorem exists_lt_nnnorm_lt
   proof: mod_cast exists_lt_norm_lt α r₁.prop h
 
 中文:
-定理 exists_lt_nnnorm_lt
+定理 存在_lt_nnnorm_lt
   条件: {r₁ r₂ : 实数>=0} (h : r₁ < r₂)
   结论: 存在 x : α, r₁ < ‖x‖₊ ∧ ‖x‖₊ < r₂
   证明: mod_cast exists_lt_norm_lt α r₁.prop h
@@ -908,7 +908,7 @@ instance denselyOrdered_range_norm
 
 中文:
 实例 denselyOrdered_range_norm
-  签名: : DenselyOrdered (Set.range (norm : α -> 实数)) where
+  签名: : 稠密序 (集合.range (norm : α -> 实数)) where
   定义体: by
     rintro ⟨-, x, rfl⟩ ⟨-, y, rfl⟩ hxy
     let ⟨z, h⟩ := exists_lt_norm_lt α (norm_nonneg _) hxy
@@ -935,7 +935,7 @@ instance denselyOrdered_range_nnnorm
 
 中文:
 实例 denselyOrdered_range_nnnorm
-  签名: : DenselyOrdered (Set.range (nnnorm : α -> 实数>=0)) where
+  签名: : 稠密序 (集合.range (nnnorm : α -> 实数>=0)) where
   定义体: by
     rintro ⟨-, x, rfl⟩ ⟨-, y, rfl⟩ hxy
     let ⟨z, h⟩ := exists_lt_nnnorm_lt α hxy
@@ -973,7 +973,7 @@ definition NontriviallyNormedField.ofNormNeOne
 
 中文:
 定义 NontriviallyNormedField.ofNormNeOne
-  签名: {𝕜 : 类型} [h' : NormedField 𝕜]
+  签名: {𝕜 : 类型} [h' : 赋范域 𝕜]
   定义体: h'
   non_trivial := by
     rcases h with ⟨x, hx, hx1⟩
@@ -1004,8 +1004,8 @@ instance Real.normedField
     norm_mul := abs_mul }
 
 中文:
-实例 Real.normedField
-  签名: : NormedField 实数
+实例 实数.normedField
+  签名: : 赋范域 实数
   定义体: { Real.normedAddCommGroup, Real.instField with
     norm_mul := abs_mul }
 
@@ -1025,7 +1025,7 @@ instance Real.denselyNormedField
     ⟨x, by rwa [Real.norm_eq_abs, abs_of_nonneg (h₀.trans h.1.le)]⟩
 
 中文:
-实例 Real.denselyNormedField
+实例 实数.denselyNormedField
   签名: : DenselyNormedField 实数 where
   定义体: let ⟨x, h⟩ := exists_between hr
     ⟨x, by rwa [Real.norm_eq_abs, abs_of_nonneg (h₀.trans h.1.le)]⟩
@@ -1052,7 +1052,7 @@ theorem toNNReal_mul_nnnorm
     NNReal.coe_mk]
 
 中文:
-定理 toNNReal_mul_nnnorm
+定理 toNN实数_mul_nnnorm
   条件: {x : 实数} (y : 实数) (hx : 0 <= x)
   结论: x.toNN实数 * ‖y‖₊ = ‖x * y‖₊
   证明: by
@@ -1078,7 +1078,7 @@ theorem nnnorm_mul_toNNReal
   rw [mul_comm]; rw [mul_comm x]; rw [toNNReal_mul_nnnorm x hy]
 
 中文:
-定理 nnnorm_mul_toNNReal
+定理 nnnorm_mul_toNN实数
   条件: (x : 实数) {y : 实数} (hy : 0 <= y)
   结论: ‖x‖₊ * y.toNN实数 = ‖x * y‖₊
   证明: by
@@ -1107,8 +1107,8 @@ abbreviation NormedDivisionRing.induced
     norm_mul x y := show ‖f _‖ = _ from (map_mul f x y).symm ▸ norm_mul (f x) (f y) }
 
 中文:
-缩写 NormedDivisionRing.induced
-  签名: [DivisionRing R] [NormedDivisionRing S]
+缩写 NormedDivision环.induced
+  签名: [除环 R] [NormedDivision环 S]
   定义体: fast_instance% { NormedAddCommGroup.induced R S f hf, ‹DivisionRing R› with
     norm_mul x y := show ‖f _‖ = _ from (map_mul f x y).symm ▸ norm_mul (f x) (f y) }
 
@@ -1129,8 +1129,8 @@ abbreviation NormedField.induced
     mul_comm := mul_comm }
 
 中文:
-缩写 NormedField.induced
-  签名: [Field R] [NormedField S] [NonUnitalRingHomClass F R S] (f : F)
+缩写 赋范域.induced
+  签名: [域 R] [赋范域 S] [非幺环态射类 F R S] (f : F)
   定义体: fast_instance% { NormedDivisionRing.induced R S f hf with
     mul_comm := mul_comm }
 
@@ -1157,7 +1157,7 @@ instance toNormedField
 
 中文:
 实例 toNormedField
-  签名: [NormedField F] [SubfieldClass S F] (s : S)
+  签名: [赋范域 F] [子域类 S F] (s : S)
   定义体: fast_instance% NormedField.induced s F (SubringClass.subtype s) Subtype.val_injective
 
 Depends on / 依赖: NormedField, NormedField.induced, SubringClass, SubringClass.subtype, Subtype, Subtype.val_injective, fast_instance, induced, subtype, val_injective
@@ -1183,7 +1183,7 @@ definition toNormedField
 
 中文:
 定义 toNormedField
-  签名: {K : 类型} [Field K] (v : AbsoluteValue K 实数)
+  签名: {K : 类型} [域 K] (v : 绝对值 K 实数)
   定义体: inferInstanceAs (Field K)
   __ := v.toNormedRing
   norm_mul := v.map_mul

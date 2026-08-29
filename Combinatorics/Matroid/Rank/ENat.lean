@@ -79,7 +79,7 @@ definition eRank
 
 中文:
 定义 eRank
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: ⨆ B : {B // M.IsBase B}, B.1.encard
 
 Depends on / 依赖: IsBase, M.IsBase, encard
@@ -96,7 +96,7 @@ definition eRk
 
 中文:
 定义 eRk
-  签名: (M : Matroid α) (X : Set α)
+  签名: (M : 拟阵 α) (X : 集合 α)
   定义体: (M ↾ X).eRank
 -/
 noncomputable def eRk (M : Matroid α) (X : Set α) : Nat∞ := (M ↾ X).eRank
@@ -115,7 +115,7 @@ lemma eRank_def
 
 中文:
 引理 eRank_def
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRank = M.eRk M.E
   证明: by
   rw [eRk]; rw [restrict_ground_eq_self]
@@ -141,7 +141,7 @@ lemma eRk_ground
 
 中文:
 引理 eRk_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRk M.E = M.eRank
   证明: M.eRank_def.symm
 
@@ -164,7 +164,7 @@ lemma eRank_restrict
 
 中文:
 引理 eRank_restrict
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: (M ↾ X).eRank = M.eRk X
   证明: rfl
 -/
@@ -205,8 +205,8 @@ lemma IsBasis'.encard_eq_eRk
   proof: hI.isBase_restrict.encard_eq_eRank
 
 中文:
-引理 IsBasis'.encard_eq_eRk
-  条件: (hI : M.IsBasis' I X)
+引理 是基'.encard_eq_eRk
+  条件: (hI : M.是基' I X)
   结论: I.encard = M.eRk X
   证明: hI.isBase_restrict.encard_eq_eRank
 -/
@@ -223,8 +223,8 @@ lemma IsBasis.encard_eq_eRk
   proof: hI.isBasis'.encard_eq_eRk
 
 中文:
-引理 IsBasis.encard_eq_eRk
-  条件: (hI : M.IsBasis I X)
+引理 是基.encard_eq_eRk
+  条件: (hI : M.是基 I X)
   结论: I.encard = M.eRk X
   证明: hI.isBasis'.encard_eq_eRk
 
@@ -286,8 +286,8 @@ lemma IsBasis'.eRk_eq_eRk
   rw [← hIX.encard_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
 
 中文:
-引理 IsBasis'.eRk_eq_eRk
-  条件: (hIX : M.IsBasis' I X)
+引理 是基'.eRk_eq_eRk
+  条件: (hIX : M.是基' I X)
   结论: M.eRk I = M.eRk X
   证明: by
   rw [← hIX.encard_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
@@ -306,8 +306,8 @@ lemma IsBasis.eRk_eq_eRk
   rw [← hIX.encard_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
 
 中文:
-引理 IsBasis.eRk_eq_eRk
-  条件: (hIX : M.IsBasis I X)
+引理 是基.eRk_eq_eRk
+  条件: (hIX : M.是基 I X)
   结论: M.eRk I = M.eRk X
   证明: by
   rw [← hIX.encard_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
@@ -328,8 +328,8 @@ lemma IsBasis'.eRk_eq_encard
   rw [← hIX.eRk_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
 
 中文:
-引理 IsBasis'.eRk_eq_encard
-  条件: (hIX : M.IsBasis' I X)
+引理 是基'.eRk_eq_encard
+  条件: (hIX : M.是基' I X)
   结论: M.eRk X = I.encard
   证明: by
   rw [← hIX.eRk_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
@@ -348,8 +348,8 @@ lemma IsBasis.eRk_eq_encard
   rw [← hIX.eRk_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
 
 中文:
-引理 IsBasis.eRk_eq_encard
-  条件: (hIX : M.IsBasis I X)
+引理 是基.eRk_eq_encard
+  条件: (hIX : M.是基 I X)
   结论: M.eRk X = I.encard
   证明: by
   rw [← hIX.eRk_eq_eRk]; rw [hIX.indep.eRk_eq_encard]
@@ -401,7 +401,7 @@ lemma eRk_inter_ground
 
 中文:
 引理 eRk_inter_ground
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk (X inter M.E) = M.eRk X
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
@@ -430,7 +430,7 @@ lemma eRk_ground_inter
 
 中文:
 引理 eRk_ground_inter
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk (M.E inter X) = M.eRk X
   证明: by
   rw [inter_comm]; rw [eRk_inter_ground]
@@ -457,7 +457,7 @@ lemma eRk_union_ground
 
 中文:
 引理 eRk_union_ground
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk (X union M.E) = M.eRank
   证明: by
   rw [← eRk_inter_ground]; rw [inter_eq_self_of_subset_right subset_union_right]; rw [eRank_def]
@@ -482,7 +482,7 @@ lemma eRk_ground_union
 
 中文:
 引理 eRk_ground_union
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk (M.E union X) = M.eRank
   证明: by
   rw [union_comm]; rw [eRk_union_ground]
@@ -504,7 +504,7 @@ lemma eRk_insert_of_notMem_ground
 
 中文:
 引理 eRk_insert_of_notMem_ground
-  条件: (X : Set α) (he : e ∉ M.E)
+  条件: (X : 集合 α) (he : e ∉ M.E)
   结论: M.eRk (insert e X) = M.eRk X
   证明: by
   rw [← eRk_inter_ground]; rw [insert_inter_of_notMem he]; rw [eRk_inter_ground]
@@ -548,7 +548,7 @@ lemma eRk_compl_union_of_disjoint
 
 中文:
 引理 eRk_compl_union_of_disjoint
-  条件: (M : Matroid α) (hXY : Disjoint X Y)
+  条件: (M : 拟阵 α) (hXY : Disjoint X Y)
   证明: by
   rw [← eRk_inter_ground]; rw [union_inter_distrib_right]; rw [inter_eq_self_of_subset_left sdiff_subset]; rw [union_eq_self_of_subset_right
       (subset_sdiff.2 ⟨inter_subset_right]; rw [hXY.symm.mono_left inter_subset_left⟩)]
@@ -576,7 +576,7 @@ lemma one_le_eRank
 
 中文:
 引理 one_le_eRank
-  条件: (M : Matroid α) [RankPos M]
+  条件: (M : 拟阵 α) [RankPos M]
   结论: 1 <= M.eRank
   证明: by
   obtain ⟨B, hB⟩ := M.exists_isBase
@@ -607,7 +607,7 @@ lemma eRk_univ_eq
 
 中文:
 引理 eRk_univ_eq
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRk univ = M.eRank
   证明: by
   rw [← eRk_inter_ground]; rw [univ_inter]; rw [eRank_def]
@@ -634,7 +634,7 @@ lemma eRk_empty
 
 中文:
 引理 eRk_empty
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRk ∅ = 0
   证明: by
   rw [← M.empty_indep.isBasis_self.encard_eq_eRk]; rw [encard_empty]
@@ -662,7 +662,7 @@ lemma eRk_closure_eq
 
 中文:
 引理 eRk_closure_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk (M.closure X) = M.eRk X
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
@@ -690,7 +690,7 @@ lemma eRk_union_closure_right_eq
 
 中文:
 引理 eRk_union_closure_right_eq
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [← eRk_closure_eq]; rw [closure_union_closure_right_eq]; rw [eRk_closure_eq]
 
@@ -716,7 +716,7 @@ lemma eRk_union_closure_left_eq
 
 中文:
 引理 eRk_union_closure_left_eq
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [← eRk_closure_eq]; rw [closure_union_closure_left_eq]; rw [eRk_closure_eq]
 
@@ -740,7 +740,7 @@ lemma eRk_insert_closure_eq
 
 中文:
 引理 eRk_insert_closure_eq
-  条件: (M : Matroid α) (e : α) (X : Set α)
+  条件: (M : 拟阵 α) (e : α) (X : 集合 α)
   证明: by
   rw [← union_singleton]; rw [eRk_union_closure_left_eq]; rw [union_singleton]
 
@@ -767,7 +767,7 @@ lemma restrict_eRk_eq'
 
 中文:
 引理 restrict_eRk_eq'
-  条件: (M : Matroid α) (R X : Set α)
+  条件: (M : 拟阵 α) (R X : 集合 α)
   结论: (M ↾ R).eRk X = M.eRk (X inter R)
   证明: by
   obtain ⟨I, hI⟩ := (M ↾ R).exists_isBasis' X
@@ -795,7 +795,7 @@ lemma restrict_eRk_eq
 
 中文:
 引理 restrict_eRk_eq
-  条件: (M : Matroid α) {R : Set α} (h : X subseteq R)
+  条件: (M : 拟阵 α) {R : 集合 α} (h : X subseteq R)
   结论: (M ↾ R).eRk X = M.eRk X
   证明: by
   rw [restrict_eRk_eq']; rw [inter_eq_self_of_subset_left h]
@@ -815,8 +815,8 @@ lemma IsBasis'.eRk_eq_eRk_union
   rw [← eRk_union_closure_left_eq]; rw [hIX.closure_eq_closure]; rw [eRk_union_closure_left_eq]
 
 中文:
-引理 IsBasis'.eRk_eq_eRk_union
-  条件: (hIX : M.IsBasis' I X) (Y : Set α)
+引理 是基'.eRk_eq_eRk_union
+  条件: (hIX : M.是基' I X) (Y : 集合 α)
   证明: by
   rw [← eRk_union_closure_left_eq]; rw [hIX.closure_eq_closure]; rw [eRk_union_closure_left_eq]
 -/
@@ -834,8 +834,8 @@ lemma IsBasis'.eRk_eq_eRk_insert
   rw [← union_singleton]; rw [hIX.eRk_eq_eRk_union]; rw [union_singleton]
 
 中文:
-引理 IsBasis'.eRk_eq_eRk_insert
-  条件: (hIX : M.IsBasis' I X) (e : α)
+引理 是基'.eRk_eq_eRk_insert
+  条件: (hIX : M.是基' I X) (e : α)
   证明: by
   rw [← union_singleton]; rw [hIX.eRk_eq_eRk_union]; rw [union_singleton]
 -/
@@ -853,8 +853,8 @@ lemma IsBasis.eRk_eq_eRk_union
   proof: hIX.isBasis'.eRk_eq_eRk_union Y
 
 中文:
-引理 IsBasis.eRk_eq_eRk_union
-  条件: (hIX : M.IsBasis I X) (Y : Set α)
+引理 是基.eRk_eq_eRk_union
+  条件: (hIX : M.是基 I X) (Y : 集合 α)
   结论: M.eRk (I union Y) = M.eRk (X union Y)
   证明: hIX.isBasis'.eRk_eq_eRk_union Y
 
@@ -873,8 +873,8 @@ lemma IsBasis.eRk_eq_eRk_insert
   rw [← union_singleton]; rw [hIX.eRk_eq_eRk_union]; rw [union_singleton]
 
 中文:
-引理 IsBasis.eRk_eq_eRk_insert
-  条件: (hIX : M.IsBasis I X) (e : α)
+引理 是基.eRk_eq_eRk_insert
+  条件: (hIX : M.是基 I X) (e : α)
   证明: by
   rw [← union_singleton]; rw [hIX.eRk_eq_eRk_union]; rw [union_singleton]
 
@@ -898,7 +898,7 @@ lemma eRk_le_encard
 
 中文:
 引理 eRk_le_encard
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk X <= X.encard
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
@@ -923,7 +923,7 @@ lemma eRank_le_encard_ground
 
 中文:
 引理 eRank_le_encard_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRank <= M.E.encard
   证明: M.eRank_def.trans_le M.eRk_le_encard M.E
 
@@ -948,8 +948,8 @@ lemma eRk_mono
 
 中文:
 引理 eRk_mono
-  条件: (M : Matroid α)
-  结论: Monotone M.eRk
+  条件: (M : 拟阵 α)
+  结论: 递增 M.eRk
   证明: by
   rintro X Y (hXY : X subseteq Y)
   obtain ⟨I, hI⟩ := M.exists_isBasis' X
@@ -978,7 +978,7 @@ lemma eRk_le_eRank
 
 中文:
 引理 eRk_le_eRank
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   结论: M.eRk X <= M.eRank
   证明: by
   rw [eRank_def]; rw [← eRk_inter_ground]; exact M.eRk_mono inter_subset_right
@@ -1219,7 +1219,7 @@ lemma eRk_inter_add_eRk_union_le
 
 中文:
 引理 eRk_inter_add_eRk_union_le
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   obtain ⟨Ii, hIi⟩ := M.exists_isBasis' (X inter Y)
   obtain ⟨IX, hIX, hIX'⟩ :=
@@ -1254,7 +1254,7 @@ lemma eRk_insert_inter_add_eRk_insert_union_le
 
 中文:
 引理 eRk_insert_inter_add_eRk_insert_union_le
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [insert_inter_distrib]; rw [insert_union_distrib]
   apply M.eRk_submod
@@ -1279,7 +1279,7 @@ lemma eRk_compl_union_add_eRk_compl_inter_le
 
 中文:
 引理 eRk_compl_union_add_eRk_compl_inter_le
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [← sdiff_inter_sdiff]; rw [sdiff_inter]
   apply M.eRk_submod
@@ -1303,7 +1303,7 @@ lemma eRk_compl_insert_union_add_eRk_compl_insert_inter_le
 
 中文:
 引理 eRk_compl_insert_union_add_eRk_compl_insert_inter_le
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   rw [insert_union_distrib]; rw [insert_inter_distrib]
   exact M.eRk_compl_union_add_eRk_compl_inter_le (insert e X) (insert e Y)
@@ -1327,7 +1327,7 @@ lemma eRk_union_le_eRk_add_eRk
 
 中文:
 引理 eRk_union_le_eRk_add_eRk
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   结论: M.eRk (X union Y) <= M.eRk X + M.eRk Y
   证明: le_add_self.trans (M.eRk_submod X Y)
 
@@ -1348,7 +1348,7 @@ lemma eRk_eq_eRk_union_eRk_le_zero
 
 中文:
 引理 eRk_eq_eRk_union_eRk_le_zero
-  条件: (X : Set α) (hY : M.eRk Y <= 0)
+  条件: (X : 集合 α) (hY : M.eRk Y <= 0)
   结论: M.eRk (X union Y) = M.eRk X
   证明: (((M.eRk_union_le_eRk_add_eRk X Y).trans (by gcongr)).trans_eq (add_zero _)).antisymm
     (M.eRk_mono subset_union_left)
@@ -1374,7 +1374,7 @@ alias eRk_eq_eRk_diff_eRk_le_zero := eRk_eq_eRk_sdiff_eRk_le_zero
 
 中文:
 引理 eRk_eq_eRk_sdiff_eRk_le_zero
-  条件: (X : Set α) (hY : M.eRk Y <= 0)
+  条件: (X : 集合 α) (hY : M.eRk Y <= 0)
   结论: M.eRk (X \ Y) = M.eRk X
   证明: by
   rw [← eRk_eq_eRk_union_eRk_le_zero (X \ Y) hY]; rw [sdiff_union_self]; rw [eRk_eq_eRk_union_eRk_le_zero _ hY]
@@ -1404,7 +1404,7 @@ alias eRk_le_eRk_inter_add_eRk_diff := eRk_le_eRk_inter_add_eRk_sdiff
 
 中文:
 引理 eRk_le_eRk_inter_add_eRk_sdiff
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: by
   nth_rw 1 [← inter_union_sdiff X Y]; apply eRk_union_le_eRk_add_eRk
 
@@ -1433,7 +1433,7 @@ lemma eRk_le_eRk_add_eRk_sdiff
 
 中文:
 引理 eRk_le_eRk_add_eRk_sdiff
-  条件: (M : Matroid α) (h : Y subseteq X)
+  条件: (M : 拟阵 α) (h : Y subseteq X)
   证明: by
   nth_rw 1 [← union_sdiff_cancel h]; apply eRk_union_le_eRk_add_eRk
 
@@ -1457,7 +1457,7 @@ lemma eRk_union_le_encard_add_eRk
 
 中文:
 引理 eRk_union_le_encard_add_eRk
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: (M.eRk_union_le_eRk_add_eRk X Y).trans by grw [M.eRk_le_encard]
 
 Depends on / 依赖: M.eRk_le_encard, M.eRk_union_le_eRk_add_eRk, eRk_le_encard, eRk_union_le_eRk_add_eRk
@@ -1476,7 +1476,7 @@ lemma eRk_union_le_eRk_add_encard
 
 中文:
 引理 eRk_union_le_eRk_add_encard
-  条件: (M : Matroid α) (X Y : Set α)
+  条件: (M : 拟阵 α) (X Y : 集合 α)
   证明: (M.eRk_union_le_eRk_add_eRk X Y).trans by grw [← M.eRk_le_encard]
 
 Depends on / 依赖: M.eRk_le_encard, M.eRk_union_le_eRk_add_eRk, eRk_le_encard, eRk_union_le_eRk_add_eRk
@@ -1496,7 +1496,7 @@ lemma eRank_le_encard_add_eRk_compl
 
 中文:
 引理 eRank_le_encard_add_eRk_compl
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: le_trans (by rw [← eRk_inter_ground, eRank_def, union_sdiff_self,
     union_inter_cancel_right]) (M.eRk_union_le_encard_add_eRk X (M.E \ X))
 
@@ -1526,7 +1526,7 @@ lemma eRank_ne_top_iff
 
 中文:
 引理 eRank_ne_top_iff
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRank != ⊤ ↔ M.RankFinite
   证明: by
   obtain ⟨B, hB⟩ := M.exists_isBase
@@ -1557,7 +1557,7 @@ lemma eRank_eq_top_iff
 
 中文:
 引理 eRank_eq_top_iff
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRank = ⊤ ↔ M.RankInfinite
   证明: by
   rw [← not_rankFinite_iff]; rw [← eRank_ne_top_iff]; rw [not_not]
@@ -1784,7 +1784,7 @@ lemma eRk_insert_le_add_one
 
 中文:
 引理 eRk_insert_le_add_one
-  条件: (M : Matroid α) (e : α) (X : Set α)
+  条件: (M : 拟阵 α) (e : α) (X : 集合 α)
   证明: union_singleton ▸ (M.eRk_union_le_eRk_add_eRk _ _).trans by
     gcongr; simpa using M.eRk_le_encard {e}
 
@@ -1837,7 +1837,7 @@ lemma exists_eRk_insert_eq_add_one_of_lt
   refine ⟨e, ⟨heZ, fun heX' => heX (mem_closure_of_mem' _ heX')⟩, eRk_insert_eq_add_one ⟨heE, heX⟩⟩
 
 中文:
-引理 exists_eRk_insert_eq_add_one_of_lt
+引理 存在_eRk_insert_eq_add_one_of_lt
   条件: (h : M.eRk X < M.eRk Y)
   证明: by
   have hz : ¬ Y inter M.E subseteq M.closure X := by
@@ -1868,7 +1868,7 @@ refine hX.closure_eq_closure_of_subset_of_eRk_ge_eRk hXY not_lt.1 fun hlt => ?_
   simpa [hr, ENat.add_one_le_iff hX.eRk_lt_top.ne] using hY z hz
 
 中文:
-引理 IsRkFinite.closure_eq_closure_of_subset_of_forall_insert
+引理 IsRkFinite.closure_eq_closure_of_subset_of_对任意_insert
   结论: (hX : M.IsRkFinite X) (hXY : X subseteq Y)
   证明: by
 refine hX.closure_eq_closure_of_subset_of_eRk_ge_eRk hXY not_lt.1 fun hlt => ?_
@@ -1895,7 +1895,7 @@ lemma eRk_eq_of_eRk_insert_le_forall
   rw [eRk_eq_top_iff.2 hX]; rw [eRk_eq_top_iff.2 (mt (fun h => h.subset hXY) hX)]
 
 中文:
-引理 eRk_eq_of_eRk_insert_le_forall
+引理 eRk_eq_of_eRk_insert_le_对任意
   结论: (hXY : X subseteq Y)
   证明: by
   by_cases hX : M.IsRkFinite X
@@ -1927,7 +1927,7 @@ lemma indep_iff_eRk_eq_encard_of_finite
 
 中文:
 引理 indep_iff_eRk_eq_encard_of_finite
-  条件: (hI : I.Finite)
+  条件: (hI : I.有限)
   结论: M.Indep I ↔ M.eRk I = I.encard
   证明: by
   refine ⟨fun h => by rw [h.eRk_eq_encard], fun h => ?_⟩
@@ -2018,7 +2018,7 @@ lemma eRk_lt_encard_of_dep_of_finite
 
 中文:
 引理 eRk_lt_encard_of_dep_of_finite
-  条件: (h : X.Finite) (hX : M.Dep X)
+  条件: (h : X.有限) (hX : M.Dep X)
   结论: M.eRk X < X.encard
   证明: lt_of_le_of_ne (M.eRk_le_encard X) fun h' =>
     ((indep_iff_eRk_eq_encard_of_finite h).mpr h').not_dep hX
@@ -2042,7 +2042,7 @@ lemma eRk_lt_encard_iff_dep_of_finite
 
 中文:
 引理 eRk_lt_encard_iff_dep_of_finite
-  条件: (hX : X.Finite) (hXE : X subseteq M.E := by aesop_mat)
+  条件: (hX : X.有限) (hXE : X subseteq M.E := by aesop_mat)
   证明: by
   refine ⟨fun h => ?_, fun h => eRk_lt_encard_of_dep_of_finite hX h⟩
   rw [← not_indep_iff]; rw [indep_iff_eRk_eq_encard_of_finite hX]
@@ -2112,8 +2112,8 @@ lemma Indep.exists_insert_of_encard_lt
   proof: augment hI hJ hcard
 
 中文:
-引理 Indep.exists_insert_of_encard_lt
-  结论: {I J : Set α} (hI : M.Indep I) (hJ : M.Indep J)
+引理 Indep.存在_insert_of_encard_lt
+  结论: {I J : 集合 α} (hI : M.Indep I) (hJ : M.Indep J)
   证明: augment hI hJ hcard
 
 Depends on / 依赖: augment
@@ -2135,7 +2135,7 @@ lemma isBasis'_iff_indep_encard_eq_of_finite
 
 中文:
 引理 isBasis'_iff_indep_encard_eq_of_finite
-  条件: (hIfin : I.Finite)
+  条件: (hIfin : I.有限)
   证明: by
   refine ⟨fun h => ⟨h.subset,h.indep, h.eRk_eq_encard.symm⟩, fun ⟨hIX, hI, hcard⟩ => ?_⟩
   obtain ⟨J, hJ, hIJ⟩ := hI.subset_isBasis'_of_subset hIX
@@ -2158,7 +2158,7 @@ lemma isBasis_iff_indep_encard_eq_of_finite
 
 中文:
 引理 isBasis_iff_indep_encard_eq_of_finite
-  条件: (hIfin : I.Finite) (hX : X subseteq M.E := by aesop_mat)
+  条件: (hIfin : I.有限) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   rw [← isBasis'_iff_isBasis]; rw [isBasis'_iff_indep_encard_eq_of_finite hIfin]
 
@@ -2179,7 +2179,7 @@ lemma Indep.isBasis'_of_eRk_ge
 
 中文:
 引理 Indep.isBasis'_of_eRk_ge
-  结论: (hI : M.Indep I) (hIfin : I.Finite) (hIX : I subseteq X)
+  结论: (hI : M.Indep I) (hIfin : I.有限) (hIX : I subseteq X)
   证明: (isBasis'_iff_indep_encard_eq_of_finite hIfin).2
     ⟨hIX, hI, by rw [h.antisymm (M.eRk_mono hIX), hI.eRk_eq_encard]⟩
 
@@ -2200,7 +2200,7 @@ lemma Indep.isBasis_of_eRk_ge
 
 中文:
 引理 Indep.isBasis_of_eRk_ge
-  结论: (hI : M.Indep I) (hIfin : I.Finite) (hIX : I subseteq X)
+  结论: (hI : M.Indep I) (hIfin : I.有限) (hIX : I subseteq X)
   证明: (hI.isBasis'_of_eRk_ge hIfin hIX h).isBasis
 
 Depends on / 依赖: IsBasis, M.IsBasis, _of_eRk_ge, aesop_mat, hI.isBasis, isBasis
@@ -2220,7 +2220,7 @@ lemma Indep.isBase_of_eRk_ge
 
 中文:
 引理 Indep.isBase_of_eRk_ge
-  条件: (hI : M.Indep I) (hIfin : I.Finite) (h : M.eRank <= M.eRk I)
+  条件: (hI : M.Indep I) (hIfin : I.有限) (h : M.eRank <= M.eRk I)
   证明: by
   simpa using hI.isBasis_of_eRk_ge hIfin hI.subset_ground (M.eRk_ground.trans_le h)
 
@@ -2243,8 +2243,8 @@ lemma IsCircuit.eRk_add_one_eq
   rw [hI.eRk_eq_encard]; rw [encard_insert_of_notMem heI]
 
 中文:
-引理 IsCircuit.eRk_add_one_eq
-  条件: {C : Set α} (hC : M.IsCircuit C)
+引理 是Circuit.eRk_add_one_eq
+  条件: {C : 集合 α} (hC : M.是Circuit C)
   结论: M.eRk C + 1 = C.encard
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis C
@@ -2292,8 +2292,8 @@ lemma IsNonloop.eRk_eq
   rw [← he.indep.isBasis_self.encard_eq_eRk]; rw [encard_singleton]
 
 中文:
-引理 IsNonloop.eRk_eq
-  条件: (he : M.IsNonloop e)
+引理 是Nonloop.eRk_eq
+  条件: (he : M.是Nonloop e)
   结论: M.eRk {e} = 1
   证明: by
   rw [← he.indep.isBasis_self.encard_eq_eRk]; rw [encard_singleton]
@@ -2315,7 +2315,7 @@ lemma eRk_singleton_eq
 
 中文:
 引理 eRk_singleton_eq
-  条件: [Loopless M] (he : e in M.E := by aesop_mat)
+  条件: [无环 M] (he : e in M.E := by aesop_mat)
   证明: (M.isNonloop_of_loopless he).eRk_eq
 
 @[simp]
@@ -2340,7 +2340,7 @@ lemma eRk_singleton_le
 
 中文:
 引理 eRk_singleton_le
-  条件: (M : Matroid α) (e : α)
+  条件: (M : 拟阵 α) (e : α)
   结论: M.eRk {e} <= 1
   证明: (M.eRk_le_encard {e}).trans_eq encard_singleton e
 
@@ -2366,7 +2366,7 @@ lemma eRk_singleton_eq_one_iff
 中文:
 引理 eRk_singleton_eq_one_iff
   条件: {e : α}
-  结论: M.eRk {e} = 1 ↔ M.IsNonloop e
+  结论: M.eRk {e} = 1 ↔ M.是Nonloop e
   证明: by
   refine ⟨fun h => ?_, fun h => h.eRk_eq⟩
   rwa [← indep_singleton, indep_iff_eRk_eq_encard_of_finite (by simp), encard_singleton]
@@ -2433,7 +2433,7 @@ lemma eRk_le_one_iff
 
 中文:
 引理 eRk_le_one_iff
-  条件: [M.Nonempty] (hX : X subseteq M.E := by aesop_mat)
+  条件: [M.非空] (hX : X subseteq M.E := by aesop_mat)
   证明: by
   refine ⟨fun h => ?_, fun ⟨e, _, he⟩ => ?_⟩
   · obtain ⟨I, hI⟩ := M.exists_isBasis X
@@ -2471,8 +2471,8 @@ exact (M.eRk_le_eRank X).antisymm by
     rw [← hB.encard_eq_eRk]; rw [← (hB.isBase_of_spanning hX).encard_eq_eRank]
 
 中文:
-引理 Spanning.eRk_eq
-  条件: (hX : M.Spanning X)
+引理 生成.eRk_eq
+  条件: (hX : M.生成 X)
   结论: M.eRk X = M.eRank
   证明: by
   obtain ⟨B, hB⟩ := M.exists_isBasis X
@@ -2502,7 +2502,7 @@ lemma spanning_iff_eRk_le'
 中文:
 引理 spanning_iff_eRk_le'
   条件: [RankFinite M]
-  结论: M.Spanning X ↔ M.eRank <= M.eRk X ∧ X subseteq M.E
+  结论: M.生成 X ↔ M.eRank <= M.eRk X ∧ X subseteq M.E
   证明: by
   refine ⟨fun h => ⟨h.eRk_eq.symm.le, h.subset_ground⟩, fun ⟨h, hX⟩ => ?_⟩
   obtain ⟨I, hI⟩ := M.exists_isBasis X
@@ -2549,8 +2549,8 @@ lemma Spanning.eRank_restrict
   rw [eRank_def]; rw [restrict_ground_eq]; rw [restrict_eRk_eq _ rfl.subset]; rw [hX.eRk_eq]
 
 中文:
-引理 Spanning.eRank_restrict
-  条件: (hX : M.Spanning X)
+引理 生成.eRank_restrict
+  条件: (hX : M.生成 X)
   结论: (M ↾ X).eRank = M.eRank
   证明: by
   rw [eRank_def]; rw [restrict_ground_eq]; rw [restrict_eRk_eq _ rfl.subset]; rw [hX.eRk_eq]
@@ -2577,7 +2577,7 @@ lemma eRank_map
 
 中文:
 引理 eRank_map
-  条件: {β : 类型} {f : α -> β} (M : Matroid α) (hf : InjOn f M.E)
+  条件: {β : 类型} {f : α -> β} (M : 拟阵 α) (hf : 单射限制 f M.E)
   证明: by
   obtain ⟨B, hB⟩ := M.exists_isBase
   rw [← (hB.map hf).encard_eq_eRank]; rw [← hB.encard_eq_eRank]; rw [(hf.mono hB.subset_ground).encard_image]
@@ -2606,7 +2606,7 @@ lemma eRk_map
 
 中文:
 引理 eRk_map
-  结论: {β : 类型} {f : α -> β} (M : Matroid α) (hf : InjOn f M.E)
+  结论: {β : 类型} {f : α -> β} (M : 拟阵 α) (hf : 单射限制 f M.E)
   证明: by
   obtain ⟨I, hI⟩ := M.exists_isBasis X
   rw [hI.eRk_eq_encard]; rw [(hI.map hf).eRk_eq_encard]; rw [(hf.mono hI.indep.subset_ground).encard_image]
@@ -2636,7 +2636,7 @@ lemma eRk_comap
 
 中文:
 引理 eRk_comap
-  条件: {β : 类型} {f : α -> β} (M : Matroid β) (X : Set α)
+  条件: {β : 类型} {f : α -> β} (M : 拟阵 β) (X : 集合 α)
   证明: by
   obtain ⟨I, hI⟩ := (M.comap f).exists_isBasis' X
   obtain ⟨hI', hinj, -⟩ := comap_isBasis'_iff.1 hI
@@ -2668,7 +2668,7 @@ lemma eRk_loopyOn
 
 中文:
 引理 eRk_loopyOn
-  条件: (X Y : Set α)
+  条件: (X Y : 集合 α)
   结论: (loopyOn Y).eRk X = 0
   证明: by
   obtain ⟨I, hI⟩ := (loopyOn Y).exists_isBasis' X
@@ -2695,7 +2695,7 @@ lemma eRank_loopyOn
 
 中文:
 引理 eRank_loopyOn
-  条件: (X : Set α)
+  条件: (X : 集合 α)
   结论: (loopyOn X).eRank = 0
   证明: by
   rw [eRank_def]; rw [eRk_loopyOn]
@@ -2746,7 +2746,7 @@ lemma exists_of_eRank_eq_zero
 @[simp]
 
 中文:
-引理 exists_of_eRank_eq_zero
+引理 存在_of_eRank_eq_zero
   条件: (h : M.eRank = 0)
   结论: 存在 X, M = loopyOn X
   证明: ⟨M.E, by simpa [eRank_eq_zero_iff] using h⟩
@@ -2816,7 +2816,7 @@ lemma eRank_freeOn
 
 中文:
 引理 eRank_freeOn
-  条件: (X : Set α)
+  条件: (X : 集合 α)
   结论: (freeOn X).eRank = X.encard
   证明: by
   rw [eRank_def]; rw [freeOn_ground]; rw [(freeOn_indep_iff.2 rfl.subset).eRk_eq_encard]
@@ -2888,7 +2888,7 @@ lemma eRk_dual_add_eRank
 
 中文:
 引理 eRk_dual_add_eRank
-  条件: (M : Matroid α) (X : Set α) (hX : X subseteq M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (X : 集合 α) (hX : X subseteq M.E := by aesop_mat)
   证明: by
   obtain ⟨I, hI⟩ := M✶.exists_isBasis X
   obtain ⟨B, hB, rfl⟩ := hI.exists_isBasis_inter_eq_of_superset hX
@@ -2922,7 +2922,7 @@ lemma eRk_dual_add_eRank'
 
 中文:
 引理 eRk_dual_add_eRank'
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   rw [← sdiff_inter_self_eq_sdiff]; rw [← eRk_dual_add_eRank ..]; rw [← dual_ground]; rw [eRk_inter_ground]
 
@@ -2948,7 +2948,7 @@ lemma eRank_add_eRank_dual
 
 中文:
 引理 eRank_add_eRank_dual
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.eRank + M✶.eRank = M.E.encard
   证明: by
   obtain ⟨B, hB⟩ := M.exists_isBase

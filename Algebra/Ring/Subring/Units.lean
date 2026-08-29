@@ -34,8 +34,8 @@ definition Units.posSubgroup
 @[simp]
 
 中文:
-定义 Units.posSubgroup
-  签名: (R : 类型) [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+定义 单位群.posSubgroup
+  签名: (R : 类型) [半环 R] [线性序 R] [是StrictOrdered环 R]
   定义体: { (Submonoid.pos R).comap (Units.coeHom R) with
     carrier := { x | (0 : R) < x }
     inv_mem' := Units.inv_pos.mpr }
@@ -60,8 +60,8 @@ theorem Units.mem_posSubgroup
   proof: Iff.rfl
 
 中文:
-定理 Units.mem_posSubgroup
-  结论: {R : 类型} [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+定理 单位群.mem_posSubgroup
+  结论: {R : 类型} [半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -84,7 +84,7 @@ theorem isUnit_eqLocusS_mk_iff
 
 中文:
 定理 isUnit_eqLocusS_mk_iff
-  条件: [Semiring R] (f g : R ->+* T) {r : R} (hr : f r = g r)
+  条件: [半环 R] (f g : R ->+* T) {r : R} (hr : f r = g r)
   证明: MonoidHom.isUnit_eqLocusM_mk_iff ..
 
 Depends on / 依赖: MonoidHom, MonoidHom.isUnit_eqLocusM_mk_iff, isUnit_eqLocusM_mk_iff
@@ -103,7 +103,7 @@ theorem isUnit_eqLocus_mk_iff
 
 中文:
 定理 isUnit_eqLocus_mk_iff
-  条件: [Ring R] (f g : R ->+* T) {r : R} (hr : f r = g r)
+  条件: [环 R] (f g : R ->+* T) {r : R} (hr : f r = g r)
   证明: MonoidHom.isUnit_eqLocusM_mk_iff ..
 
 Depends on / 依赖: MonoidHom, MonoidHom.isUnit_eqLocusM_mk_iff, isUnit_eqLocusM_mk_iff
@@ -121,7 +121,7 @@ instance [Semiring
   body: f.isUnit_eqLocusS_mk_iff g r.prop
 
 中文:
-实例 [Semiring
+实例 [半环
   签名: R] (f g
   定义体: f.isUnit_eqLocusS_mk_iff g r.prop
 
@@ -139,7 +139,7 @@ instance [Ring
   body: f.isUnit_eqLocus_mk_iff g r.prop
 
 中文:
-实例 [Ring
+实例 [环
   签名: R] (f g
   定义体: f.isUnit_eqLocus_mk_iff g r.prop
 

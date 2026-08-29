@@ -389,7 +389,7 @@ theorem IsMinFilter.tendsto_principal_Ici
 中文:
 定理 IsMinFilter.tendsto_principal_Ici
   条件: (h : IsMinFilter f l a)
-  结论: Tendsto f l (𝓟 <| Ici (f a))
+  结论: 收敛 f l (𝓟 <| 左闭右无界区间 (f a))
   证明: tendsto_principal.2 h
 
 Depends on / 依赖: tendsto_principal
@@ -409,7 +409,7 @@ theorem IsMaxFilter.tendsto_principal_Iic
 中文:
 定理 IsMaxFilter.tendsto_principal_Iic
   条件: (h : IsMaxFilter f l a)
-  结论: Tendsto f l (𝓟 <| Iic (f a))
+  结论: 收敛 f l (𝓟 <| 左无界右闭区间 (f a))
   证明: tendsto_principal.2 h
 
 Depends on / 依赖: tendsto_principal
@@ -628,7 +628,7 @@ lemma eventuallyEq_of_isMinFilter_of_isMaxFilter
 
 中文:
 引理 eventuallyEq_of_isMinFilter_of_isMaxFilter
-  结论: {β : 类型} [PartialOrder β] {f : α -> β}
+  结论: {β : 类型} [偏序 β] {f : α -> β}
   证明: by
   filter_upwards [h₁, h₂] using by grind
 
@@ -1037,7 +1037,7 @@ theorem IsMinFilter.comp_mono
 
 中文:
 定理 IsMinFilter.comp_mono
-  条件: (hf : IsMinFilter f l a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsMinFilter f l a) {g : β -> γ} (hg : 递增 g)
   证明: mem_of_superset hf fun _x hx => hg hx
 
 Depends on / 依赖: mem_of_superset
@@ -1056,7 +1056,7 @@ theorem IsMaxFilter.comp_mono
 
 中文:
 定理 IsMaxFilter.comp_mono
-  条件: (hf : IsMaxFilter f l a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsMaxFilter f l a) {g : β -> γ} (hg : 递增 g)
   证明: mem_of_superset hf fun _x hx => hg hx
 
 Depends on / 依赖: mem_of_superset
@@ -1075,7 +1075,7 @@ theorem IsExtrFilter.comp_mono
 
 中文:
 定理 IsExtrFilter.comp_mono
-  条件: (hf : IsExtrFilter f l a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsExtrFilter f l a) {g : β -> γ} (hg : 递增 g)
   证明: hf.elim (fun hf => (hf.comp_mono hg).isExtr) fun hf => (hf.comp_mono hg).isExtr
 
 Depends on / 依赖: comp_mono, hf.comp_mono, hf.elim, isExtr
@@ -1094,7 +1094,7 @@ theorem IsMinFilter.comp_antitone
 
 中文:
 定理 IsMinFilter.comp_antitone
-  条件: (hf : IsMinFilter f l a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsMinFilter f l a) {g : β -> γ} (hg : 递减 g)
   证明: hf.dual.comp_mono fun _ _ h => hg h
 
 Depends on / 依赖: comp_mono, hf.dual.comp_mono
@@ -1113,7 +1113,7 @@ theorem IsMaxFilter.comp_antitone
 
 中文:
 定理 IsMaxFilter.comp_antitone
-  条件: (hf : IsMaxFilter f l a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsMaxFilter f l a) {g : β -> γ} (hg : 递减 g)
   证明: hf.dual.comp_mono fun _ _ h => hg h
 
 Depends on / 依赖: comp_mono, hf.dual.comp_mono
@@ -1132,7 +1132,7 @@ theorem IsExtrFilter.comp_antitone
 
 中文:
 定理 IsExtrFilter.comp_antitone
-  条件: (hf : IsExtrFilter f l a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsExtrFilter f l a) {g : β -> γ} (hg : 递减 g)
   证明: hf.dual.comp_mono fun _ _ h => hg h
 
 Depends on / 依赖: comp_mono, hf.dual.comp_mono
@@ -1151,7 +1151,7 @@ theorem IsMinOn.comp_mono
 
 中文:
 定理 IsMinOn.comp_mono
-  条件: (hf : IsMinOn f s a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsMinOn f s a) {g : β -> γ} (hg : 递增 g)
   证明: IsMinFilter.comp_mono hf hg
 
 Depends on / 依赖: IsMinFilter, IsMinFilter.comp_mono, comp_mono
@@ -1170,7 +1170,7 @@ theorem IsMaxOn.comp_mono
 
 中文:
 定理 IsMaxOn.comp_mono
-  条件: (hf : IsMaxOn f s a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsMaxOn f s a) {g : β -> γ} (hg : 递增 g)
   证明: IsMaxFilter.comp_mono hf hg
 
 Depends on / 依赖: IsMaxFilter, IsMaxFilter.comp_mono, comp_mono
@@ -1189,7 +1189,7 @@ theorem IsExtrOn.comp_mono
 
 中文:
 定理 IsExtrOn.comp_mono
-  条件: (hf : IsExtrOn f s a) {g : β -> γ} (hg : Monotone g)
+  条件: (hf : IsExtrOn f s a) {g : β -> γ} (hg : 递增 g)
   证明: IsExtrFilter.comp_mono hf hg
 
 Depends on / 依赖: IsExtrFilter, IsExtrFilter.comp_mono, comp_mono
@@ -1208,7 +1208,7 @@ theorem IsMinOn.comp_antitone
 
 中文:
 定理 IsMinOn.comp_antitone
-  条件: (hf : IsMinOn f s a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsMinOn f s a) {g : β -> γ} (hg : 递减 g)
   证明: IsMinFilter.comp_antitone hf hg
 
 Depends on / 依赖: IsMinFilter, IsMinFilter.comp_antitone, comp_antitone
@@ -1227,7 +1227,7 @@ theorem IsMaxOn.comp_antitone
 
 中文:
 定理 IsMaxOn.comp_antitone
-  条件: (hf : IsMaxOn f s a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsMaxOn f s a) {g : β -> γ} (hg : 递减 g)
   证明: IsMaxFilter.comp_antitone hf hg
 
 Depends on / 依赖: IsMaxFilter, IsMaxFilter.comp_antitone, comp_antitone
@@ -1246,7 +1246,7 @@ theorem IsExtrOn.comp_antitone
 
 中文:
 定理 IsExtrOn.comp_antitone
-  条件: (hf : IsExtrOn f s a) {g : β -> γ} (hg : Antitone g)
+  条件: (hf : IsExtrOn f s a) {g : β -> γ} (hg : 递减 g)
   证明: IsExtrFilter.comp_antitone hf hg
 
 Depends on / 依赖: IsExtrFilter, IsExtrFilter.comp_antitone, comp_antitone
@@ -1265,7 +1265,7 @@ theorem IsMinFilter.bicomp_mono
 
 中文:
 定理 IsMinFilter.bicomp_mono
-  结论: [Preorder δ] {op : β -> γ -> δ}
+  结论: [预序 δ] {op : β -> γ -> δ}
   证明: mem_of_superset (inter_mem hf hg) fun _x ⟨hfx, hgx⟩ => hop hfx hgx
 
 Depends on / 依赖: inter_mem, mem_of_superset
@@ -1285,7 +1285,7 @@ theorem IsMaxFilter.bicomp_mono
 
 中文:
 定理 IsMaxFilter.bicomp_mono
-  结论: [Preorder δ] {op : β -> γ -> δ}
+  结论: [预序 δ] {op : β -> γ -> δ}
   证明: mem_of_superset (inter_mem hf hg) fun _x ⟨hfx, hgx⟩ => hop hfx hgx
 
 Depends on / 依赖: inter_mem, mem_of_superset
@@ -1306,7 +1306,7 @@ theorem IsMinOn.bicomp_mono
 
 中文:
 定理 IsMinOn.bicomp_mono
-  结论: [Preorder δ] {op : β -> γ -> δ}
+  结论: [预序 δ] {op : β -> γ -> δ}
   证明: IsMinFilter.bicomp_mono hop hf hg
 
 Depends on / 依赖: IsMinFilter, IsMinFilter.bicomp_mono, bicomp_mono
@@ -1326,7 +1326,7 @@ theorem IsMaxOn.bicomp_mono
 
 中文:
 定理 IsMaxOn.bicomp_mono
-  结论: [Preorder δ] {op : β -> γ -> δ}
+  结论: [预序 δ] {op : β -> γ -> δ}
   证明: IsMaxFilter.bicomp_mono hop hf hg
 
 Depends on / 依赖: IsMaxFilter, IsMaxFilter.bicomp_mono, bicomp_mono
@@ -1348,7 +1348,7 @@ theorem IsMinFilter.comp_tendsto
 
 中文:
 定理 IsMinFilter.comp_tendsto
-  结论: {g : δ -> α} {l' : Filter δ} {b : δ} (hf : IsMinFilter f l (g b))
+  结论: {g : δ -> α} {l' : 滤子 δ} {b : δ} (hf : IsMinFilter f l (g b))
   证明: hg hf
 -/
 theorem IsMinFilter.comp_tendsto {g : δ -> α} {l' : Filter δ} {b : δ} (hf : IsMinFilter f l (g b))
@@ -1365,7 +1365,7 @@ theorem IsMaxFilter.comp_tendsto
 
 中文:
 定理 IsMaxFilter.comp_tendsto
-  结论: {g : δ -> α} {l' : Filter δ} {b : δ} (hf : IsMaxFilter f l (g b))
+  结论: {g : δ -> α} {l' : 滤子 δ} {b : δ} (hf : IsMaxFilter f l (g b))
   证明: hg hf
 -/
 theorem IsMaxFilter.comp_tendsto {g : δ -> α} {l' : Filter δ} {b : δ} (hf : IsMaxFilter f l (g b))
@@ -1382,7 +1382,7 @@ theorem IsExtrFilter.comp_tendsto
 
 中文:
 定理 IsExtrFilter.comp_tendsto
-  结论: {g : δ -> α} {l' : Filter δ} {b : δ} (hf : IsExtrFilter f l (g b))
+  结论: {g : δ -> α} {l' : 滤子 δ} {b : δ} (hf : IsExtrFilter f l (g b))
   证明: hf.elim (fun hf => (hf.comp_tendsto hg).isExtr) fun hf => (hf.comp_tendsto hg).isExtr
 
 Depends on / 依赖: comp_tendsto, hf.comp_tendsto, hf.elim, isExtr
@@ -1459,7 +1459,7 @@ theorem IsMinOn.comp_mapsTo
 
 中文:
 定理 IsMinOn.comp_mapsTo
-  结论: {t : Set δ} {g : δ -> α} {b : δ} (hf : IsMinOn f s a) (hg : MapsTo g t s)
+  结论: {t : 集合 δ} {g : δ -> α} {b : δ} (hf : IsMinOn f s a) (hg : 映射到 g t s)
   证明: fun y hy => by
   simpa only [ha, (· ∘ ·)] using! hf (hg hy)
 -/
@@ -1477,7 +1477,7 @@ theorem IsMaxOn.comp_mapsTo
 
 中文:
 定理 IsMaxOn.comp_mapsTo
-  结论: {t : Set δ} {g : δ -> α} {b : δ} (hf : IsMaxOn f s a) (hg : MapsTo g t s)
+  结论: {t : 集合 δ} {g : δ -> α} {b : δ} (hf : IsMaxOn f s a) (hg : 映射到 g t s)
   证明: hf.dual.comp_mapsTo hg ha
 
 Depends on / 依赖: comp_mapsTo, hf.dual.comp_mapsTo
@@ -1496,7 +1496,7 @@ theorem IsExtrOn.comp_mapsTo
 
 中文:
 定理 IsExtrOn.comp_mapsTo
-  结论: {t : Set δ} {g : δ -> α} {b : δ} (hf : IsExtrOn f s a)
+  结论: {t : 集合 δ} {g : δ -> α} {b : δ} (hf : IsExtrOn f s a)
   证明: hf.elim (fun h => Or.inl <| h.comp_mapsTo hg ha) fun h => Or.inr h.comp_mapsTo hg ha
 
 Depends on / 依赖: Or.inl, Or.inr, comp_mapsTo, h.comp_mapsTo, hf.elim
@@ -1826,7 +1826,7 @@ theorem IsMinFilter.sup
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => sup_le_sup hx hy) hg
 
 中文:
-定理 IsMinFilter.sup
+定理 IsMinFilter.上确界
   条件: (hf : IsMinFilter f l a) (hg : IsMinFilter g l a)
   证明: show IsMinFilter (fun x => f x ⊔ g x) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => sup_le_sup hx hy) hg
@@ -1848,7 +1848,7 @@ theorem IsMaxFilter.sup
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => sup_le_sup hx hy) hg
 
 中文:
-定理 IsMaxFilter.sup
+定理 IsMaxFilter.上确界
   条件: (hf : IsMaxFilter f l a) (hg : IsMaxFilter g l a)
   证明: show IsMaxFilter (fun x => f x ⊔ g x) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => sup_le_sup hx hy) hg
@@ -1870,7 +1870,7 @@ theorem IsMinOn.sup
   proof: IsMinFilter.sup hf hg
 
 中文:
-定理 IsMinOn.sup
+定理 IsMinOn.上确界
   条件: (hf : IsMinOn f s a) (hg : IsMinOn g s a)
   结论: IsMinOn (fun x => f x ⊔ g x) s a
   证明: IsMinFilter.sup hf hg
@@ -1890,7 +1890,7 @@ theorem IsMaxOn.sup
   proof: IsMaxFilter.sup hf hg
 
 中文:
-定理 IsMaxOn.sup
+定理 IsMaxOn.上确界
   条件: (hf : IsMaxOn f s a) (hg : IsMaxOn g s a)
   结论: IsMaxOn (fun x => f x ⊔ g x) s a
   证明: IsMaxFilter.sup hf hg
@@ -1916,7 +1916,7 @@ theorem IsMinFilter.inf
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => inf_le_inf hx hy) hg
 
 中文:
-定理 IsMinFilter.inf
+定理 IsMinFilter.下确界
   条件: (hf : IsMinFilter f l a) (hg : IsMinFilter g l a)
   证明: show IsMinFilter (fun x => f x ⊓ g x) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => inf_le_inf hx hy) hg
@@ -1938,7 +1938,7 @@ theorem IsMaxFilter.inf
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => inf_le_inf hx hy) hg
 
 中文:
-定理 IsMaxFilter.inf
+定理 IsMaxFilter.下确界
   条件: (hf : IsMaxFilter f l a) (hg : IsMaxFilter g l a)
   证明: show IsMaxFilter (fun x => f x ⊓ g x) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => inf_le_inf hx hy) hg
@@ -1960,7 +1960,7 @@ theorem IsMinOn.inf
   proof: IsMinFilter.inf hf hg
 
 中文:
-定理 IsMinOn.inf
+定理 IsMinOn.下确界
   条件: (hf : IsMinOn f s a) (hg : IsMinOn g s a)
   结论: IsMinOn (fun x => f x ⊓ g x) s a
   证明: IsMinFilter.inf hf hg
@@ -1980,7 +1980,7 @@ theorem IsMaxOn.inf
   proof: IsMaxFilter.inf hf hg
 
 中文:
-定理 IsMaxOn.inf
+定理 IsMaxOn.下确界
   条件: (hf : IsMaxOn f s a) (hg : IsMaxOn g s a)
   结论: IsMaxOn (fun x => f x ⊓ g x) s a
   证明: IsMaxFilter.inf hf hg
@@ -2009,7 +2009,7 @@ theorem IsMinFilter.min
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => min_le_min hx hy) hg
 
 中文:
-定理 IsMinFilter.min
+定理 IsMinFilter.最小值
   条件: (hf : IsMinFilter f l a) (hg : IsMinFilter g l a)
   证明: show IsMinFilter (fun x => Min.min (f x) (g x)) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => min_le_min hx hy) hg
@@ -2031,7 +2031,7 @@ theorem IsMaxFilter.min
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => min_le_min hx hy) hg
 
 中文:
-定理 IsMaxFilter.min
+定理 IsMaxFilter.最小值
   条件: (hf : IsMaxFilter f l a) (hg : IsMaxFilter g l a)
   证明: show IsMaxFilter (fun x => Min.min (f x) (g x)) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => min_le_min hx hy) hg
@@ -2052,7 +2052,7 @@ theorem IsMinOn.min
   proof: IsMinFilter.min hf hg
 
 中文:
-定理 IsMinOn.min
+定理 IsMinOn.最小值
   条件: (hf : IsMinOn f s a) (hg : IsMinOn g s a)
   证明: IsMinFilter.min hf hg
 
@@ -2071,7 +2071,7 @@ theorem IsMaxOn.min
   proof: IsMaxFilter.min hf hg
 
 中文:
-定理 IsMaxOn.min
+定理 IsMaxOn.最小值
   条件: (hf : IsMaxOn f s a) (hg : IsMaxOn g s a)
   证明: IsMaxFilter.min hf hg
 
@@ -2091,7 +2091,7 @@ theorem IsMinFilter.max
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => max_le_max hx hy) hg
 
 中文:
-定理 IsMinFilter.max
+定理 IsMinFilter.最大值
   条件: (hf : IsMinFilter f l a) (hg : IsMinFilter g l a)
   证明: show IsMinFilter (fun x => Max.max (f x) (g x)) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => max_le_max hx hy) hg
@@ -2113,7 +2113,7 @@ theorem IsMaxFilter.max
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => max_le_max hx hy) hg
 
 中文:
-定理 IsMaxFilter.max
+定理 IsMaxFilter.最大值
   条件: (hf : IsMaxFilter f l a) (hg : IsMaxFilter g l a)
   证明: show IsMaxFilter (fun x => Max.max (f x) (g x)) l a from
     hf.bicomp_mono (fun _x _x' hx _y _y' hy => max_le_max hx hy) hg
@@ -2134,7 +2134,7 @@ theorem IsMinOn.max
   proof: IsMinFilter.max hf hg
 
 中文:
-定理 IsMinOn.max
+定理 IsMinOn.最大值
   条件: (hf : IsMinOn f s a) (hg : IsMinOn g s a)
   证明: IsMinFilter.max hf hg
 
@@ -2153,7 +2153,7 @@ theorem IsMaxOn.max
   proof: IsMaxFilter.max hf hg
 
 中文:
-定理 IsMaxOn.max
+定理 IsMaxOn.最大值
   条件: (hf : IsMaxOn f s a) (hg : IsMaxOn g s a)
   证明: IsMaxFilter.max hf hg
 
@@ -2181,7 +2181,7 @@ lemma isMaxOn_Ioo_of_mono_anti
 
 中文:
 引理 isMaxOn_Ioo_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Ioc a b)) (h₁ : AntitoneOn f (Ico b c))
+  条件: (h₀ : MonotoneOn f (左开右闭区间 a b)) (h₁ : AntitoneOn f (左闭右开区间 b c))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2207,7 +2207,7 @@ lemma isMinOn_Ioo_of_anti_mono
 
 中文:
 引理 isMinOn_Ioo_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Ioc a b)) (h₁ : MonotoneOn f (Ico b c))
+  条件: (h₀ : AntitoneOn f (左开右闭区间 a b)) (h₁ : MonotoneOn f (左闭右开区间 b c))
   证明: isMaxOn_Ioo_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Ioo_of_mono_anti
@@ -2230,7 +2230,7 @@ lemma isMaxOn_Ico_of_mono_anti
 
 中文:
 引理 isMaxOn_Ico_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Icc a b)) (h₁ : AntitoneOn f (Ico b c))
+  条件: (h₀ : MonotoneOn f (闭区间 a b)) (h₁ : AntitoneOn f (左闭右开区间 b c))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2256,7 +2256,7 @@ lemma isMinOn_Ico_of_anti_mono
 
 中文:
 引理 isMinOn_Ico_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Icc a b)) (h₁ : MonotoneOn f (Ico b c))
+  条件: (h₀ : AntitoneOn f (闭区间 a b)) (h₁ : MonotoneOn f (左闭右开区间 b c))
   证明: isMaxOn_Ico_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Ico_of_mono_anti
@@ -2279,7 +2279,7 @@ lemma isMaxOn_Ioc_of_mono_anti
 
 中文:
 引理 isMaxOn_Ioc_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Ioc a b)) (h₁ : AntitoneOn f (Icc b c))
+  条件: (h₀ : MonotoneOn f (左开右闭区间 a b)) (h₁ : AntitoneOn f (闭区间 b c))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2305,7 +2305,7 @@ lemma isMinOn_Ioc_of_anti_mono
 
 中文:
 引理 isMinOn_Ioc_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Ioc a b)) (h₁ : MonotoneOn f (Icc b c))
+  条件: (h₀ : AntitoneOn f (左开右闭区间 a b)) (h₁ : MonotoneOn f (闭区间 b c))
   证明: isMaxOn_Ioc_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Ioc_of_mono_anti
@@ -2328,7 +2328,7 @@ lemma isMaxOn_Icc_of_mono_anti
 
 中文:
 引理 isMaxOn_Icc_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Icc a b)) (h₁ : AntitoneOn f (Icc b c))
+  条件: (h₀ : MonotoneOn f (闭区间 a b)) (h₁ : AntitoneOn f (闭区间 b c))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2354,7 +2354,7 @@ lemma isMinOn_Icc_of_anti_mono
 
 中文:
 引理 isMinOn_Icc_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Icc a b)) (h₁ : MonotoneOn f (Icc b c))
+  条件: (h₀ : AntitoneOn f (闭区间 a b)) (h₁ : MonotoneOn f (闭区间 b c))
   证明: isMaxOn_Icc_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Icc_of_mono_anti
@@ -2377,7 +2377,7 @@ lemma isMaxOn_Ioi_of_mono_anti
 
 中文:
 引理 isMaxOn_Ioi_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Ioc a b)) (h₁ : AntitoneOn f (Ici b))
+  条件: (h₀ : MonotoneOn f (左开右闭区间 a b)) (h₁ : AntitoneOn f (左闭右无界区间 b))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2403,7 +2403,7 @@ lemma isMinOn_Ioi_of_anti_mono
 
 中文:
 引理 isMinOn_Ioi_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Ioc a b)) (h₁ : MonotoneOn f (Ici b))
+  条件: (h₀ : AntitoneOn f (左开右闭区间 a b)) (h₁ : MonotoneOn f (左闭右无界区间 b))
   证明: isMaxOn_Ioi_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Ioi_of_mono_anti
@@ -2426,7 +2426,7 @@ lemma isMaxOn_Ici_of_mono_anti
 
 中文:
 引理 isMaxOn_Ici_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Icc a b)) (h₁ : AntitoneOn f (Ici b))
+  条件: (h₀ : MonotoneOn f (闭区间 a b)) (h₁ : AntitoneOn f (左闭右无界区间 b))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2452,7 +2452,7 @@ lemma isMinOn_Ici_of_anti_mono
 
 中文:
 引理 isMinOn_Ici_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Icc a b)) (h₁ : MonotoneOn f (Ici b))
+  条件: (h₀ : AntitoneOn f (闭区间 a b)) (h₁ : MonotoneOn f (左闭右无界区间 b))
   证明: isMaxOn_Ici_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Ici_of_mono_anti
@@ -2475,7 +2475,7 @@ lemma isMaxOn_Iio_of_mono_anti
 
 中文:
 引理 isMaxOn_Iio_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Iic b)) (h₁ : AntitoneOn f (Ico b a))
+  条件: (h₀ : MonotoneOn f (左无界右闭区间 b)) (h₁ : AntitoneOn f (左闭右开区间 b a))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2501,7 +2501,7 @@ lemma isMinOn_Iio_of_anti_mono
 
 中文:
 引理 isMinOn_Iio_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Iic b)) (h₁ : MonotoneOn f (Ico b a))
+  条件: (h₀ : AntitoneOn f (左无界右闭区间 b)) (h₁ : MonotoneOn f (左闭右开区间 b a))
   证明: isMaxOn_Iio_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Iio_of_mono_anti
@@ -2524,7 +2524,7 @@ lemma isMaxOn_Iic_of_mono_anti
 
 中文:
 引理 isMaxOn_Iic_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Iic b)) (h₁ : AntitoneOn f (Icc b a))
+  条件: (h₀ : MonotoneOn f (左无界右闭区间 b)) (h₁ : AntitoneOn f (闭区间 b a))
   证明: by
   intro x hx
   by_cases! g₀ : x <= b
@@ -2550,7 +2550,7 @@ lemma isMinOn_Iic_of_anti_mono
 
 中文:
 引理 isMinOn_Iic_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Iic b)) (h₁ : MonotoneOn f (Icc b a))
+  条件: (h₀ : AntitoneOn f (左无界右闭区间 b)) (h₁ : MonotoneOn f (闭区间 b a))
   证明: isMaxOn_Iic_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_Iic_of_mono_anti
@@ -2569,7 +2569,7 @@ lemma isMaxOn_univ_of_mono_anti
 
 中文:
 引理 isMaxOn_univ_of_mono_anti
-  条件: (h₀ : MonotoneOn f (Iic b)) (h₁ : AntitoneOn f (Ici b))
+  条件: (h₀ : MonotoneOn f (左无界右闭区间 b)) (h₁ : AntitoneOn f (左闭右无界区间 b))
   证明: fun x _ => by rcases le_total x b <;> aesop
 
 Depends on / 依赖: le_total
@@ -2588,7 +2588,7 @@ lemma isMinOn_univ_of_anti_mono
 
 中文:
 引理 isMinOn_univ_of_anti_mono
-  条件: (h₀ : AntitoneOn f (Iic b)) (h₁ : MonotoneOn f (Ici b))
+  条件: (h₀ : AntitoneOn f (左无界右闭区间 b)) (h₁ : MonotoneOn f (左闭右无界区间 b))
   证明: isMaxOn_univ_of_mono_anti (β := βᵒᵈ) h₀ h₁
 
 Depends on / 依赖: isMaxOn_univ_of_mono_anti
@@ -2615,8 +2615,8 @@ theorem Filter.EventuallyLE.isMaxFilter
   exact le_trans hgf hf
 
 中文:
-定理 Filter.EventuallyLE.isMaxFilter
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α}
+定理 滤子.EventuallyLE.isMaxFilter
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α}
   证明: by
   refine hle.mp (h.mono fun x hf hgf => ?_)
   rw [← hfga]
@@ -2641,7 +2641,7 @@ theorem IsMaxFilter.congr
 
 中文:
 定理 IsMaxFilter.congr
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α} {l : Filter α}
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α} {l : 滤子 α}
   证明: heq.symm.le.isMaxFilter hfga h
 
 Depends on / 依赖: heq.symm.le.isMaxFilter, isMaxFilter
@@ -2659,8 +2659,8 @@ theorem Filter.EventuallyEq.isMaxFilter_iff
   proof: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 中文:
-定理 Filter.EventuallyEq.isMaxFilter_iff
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α}
+定理 滤子.EventuallyEq.isMaxFilter_iff
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α}
   证明: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 Depends on / 依赖: h.congr, heq.symm, hfga.symm
@@ -2678,8 +2678,8 @@ theorem Filter.EventuallyLE.isMinFilter
   proof: @Filter.EventuallyLE.isMaxFilter _ βᵒᵈ _ _ _ _ _ hle hfga h
 
 中文:
-定理 Filter.EventuallyLE.isMinFilter
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α}
+定理 滤子.EventuallyLE.isMinFilter
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α}
   证明: @Filter.EventuallyLE.isMaxFilter _ βᵒᵈ _ _ _ _ _ hle hfga h
 
 Depends on / 依赖: EventuallyLE, Filter, Filter.EventuallyLE.isMaxFilter, isMaxFilter
@@ -2699,7 +2699,7 @@ theorem IsMinFilter.congr
 
 中文:
 定理 IsMinFilter.congr
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α} {l : Filter α}
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α} {l : 滤子 α}
   证明: heq.le.isMinFilter hfga h
 
 Depends on / 依赖: heq.le.isMinFilter, isMinFilter
@@ -2717,8 +2717,8 @@ theorem Filter.EventuallyEq.isMinFilter_iff
   proof: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 中文:
-定理 Filter.EventuallyEq.isMinFilter_iff
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α}
+定理 滤子.EventuallyEq.isMinFilter_iff
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α}
   证明: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 Depends on / 依赖: h.congr, heq.symm, hfga.symm
@@ -2739,7 +2739,7 @@ theorem IsExtrFilter.congr
 
 中文:
 定理 IsExtrFilter.congr
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α} {l : Filter α}
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α} {l : 滤子 α}
   证明: by
   rw [IsExtrFilter] at *
   rwa [← heq.isMaxFilter_iff hfga, ← heq.isMinFilter_iff hfga]
@@ -2760,8 +2760,8 @@ theorem Filter.EventuallyEq.isExtrFilter_iff
   proof: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 中文:
-定理 Filter.EventuallyEq.isExtrFilter_iff
-  结论: {α β : 类型} [Preorder β] {f g : α -> β} {a : α}
+定理 滤子.EventuallyEq.isExtrFilter_iff
+  结论: {α β : 类型} [预序 β] {f g : α -> β} {a : α}
   证明: ⟨fun h => h.congr heq hfga, fun h => h.congr heq.symm hfga.symm⟩
 
 Depends on / 依赖: h.congr, heq.symm, hfga.symm
@@ -2842,7 +2842,7 @@ theorem sup_eq_of_isMaxOn
 中文:
 定理 sup_eq_of_isMaxOn
   条件: {a : α} (hmem : a in s) (hmax : IsMaxOn D s a)
-  结论: s.sup D = D a
+  结论: s.上确界 D = D a
   证明: (Finset.sup_le hmax).antisymm (Finset.le_sup hmem)
 
 Depends on / 依赖: Finset, Finset.le_sup, Finset.sup_le, antisymm, le_sup, sup_le
@@ -2864,7 +2864,7 @@ theorem sup_eq_of_max
 
 中文:
 定理 sup_eq_of_max
-  结论: [Nonempty α] {b : β} (hb : b in Set.range D) (hmem : D.invFun b in s)
+  结论: [非空 α] {b : β} (hb : b in 集合.range D) (hmem : D.invFun b in s)
   证明: by
   obtain ⟨a, rfl⟩ := hb
   rw [← Function.apply_invFun_apply (f := D)]
@@ -2898,7 +2898,7 @@ theorem inf_eq_of_isMinOn
 中文:
 定理 inf_eq_of_isMinOn
   条件: {a : α} (hmem : a in s) (hmax : IsMinOn D s a)
-  结论: s.inf D = D a
+  结论: s.下确界 D = D a
   证明: sup_eq_of_isMaxOn (α := αᵒᵈ) (β := βᵒᵈ) hmem hmax.dual
 
 Depends on / 依赖: hmax.dual, sup_eq_of_isMaxOn
@@ -2916,7 +2916,7 @@ theorem inf_eq_of_min
 
 中文:
 定理 inf_eq_of_min
-  结论: [Nonempty α] {b : β} (hb : b in Set.range D) (hmem : D.invFun b in s)
+  结论: [非空 α] {b : β} (hb : b in 集合.range D) (hmem : D.invFun b in s)
   证明: sup_eq_of_max (α := αᵒᵈ) (β := βᵒᵈ) hb hmem hmin
 
 Depends on / 依赖: sup_eq_of_max

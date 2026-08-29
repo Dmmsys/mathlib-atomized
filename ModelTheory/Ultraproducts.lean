@@ -62,7 +62,7 @@ instance setoidPrestructure
 
 中文:
 实例 setoidPrestructure
-  签名: : L.Prestructure ((u : Filter α).productSetoid M)
+  签名: : L.Prestructure ((u : 滤子 α).productSetoid M)
   定义体: { (u : Filter α).productSetoid M with
     toStructure :=
       { funMap := fun {_} f x a => funMap f fun i => x i a
@@ -108,7 +108,7 @@ instance «structure»
 
 中文:
 实例 «structure»
-  签名: : L.Structure ((u : Filter α).Product M)
+  签名: : L.结构 ((u : 滤子 α).积 M)
   定义体: inferInstanceAs L.Structure (Quotient _)
 
 Depends on / 依赖: L.Structure, Quotient, Structure
@@ -127,7 +127,7 @@ theorem funMap_cast
 
 中文:
 定理 funMap_cast
-  条件: {n : 自然数} (f : L.Functions n) (x : Fin n -> 对任意 a, M a)
+  条件: {n : 自然数} (f : L.函数 n) (x : 有限集 n -> 对任意 a, M a)
   证明: by
   apply funMap_quotient_mk'
 
@@ -155,7 +155,7 @@ theorem term_realize_cast
 
 中文:
 定理 term_realize_cast
-  条件: {β : 类型} (x : β -> 对任意 a, M a) (t : L.Term β)
+  条件: {β : 类型} (x : β -> 对任意 a, M a) (t : L.项 β)
   证明: by
   convert!
     @Term.realize_quotient_mk' L _ ((u : Filter α).productSetoid M)
@@ -270,7 +270,7 @@ theorem realize_formula_cast
 
 中文:
 定理 realize_formula_cast
-  条件: {β : 类型} (φ : L.Formula β) (x : β -> 对任意 a, M a)
+  条件: {β : 类型} (φ : L.公式 β) (x : β -> 对任意 a, M a)
   证明: by
   simp_rw [Formula.Realize, ← boundedFormula_realize_cast φ x, iff_eq_eq]
   exact congr rfl (Subsingleton.elim _ _)

@@ -48,8 +48,8 @@ instance Monad.algebraPreadditive
           h := by rw [Functor
 
 中文:
-实例 Monad.algebraPreadditive
-  签名: : Preadditive (Monad.Algebra T) where
+实例 单子.algebraPreadditive
+  签名: : 预加性 (单子.代数 T) where
   定义体: { add α β :=
         { f := α.f + β.f
           h := by simp only [Functor.map_add, add_comp, Monad.Algebra.Hom.h, comp_add] }
@@ -104,8 +104,8 @@ instance Monad.forget_additive
   signature: : (Monad.forget T).Additive where
 
 中文:
-实例 Monad.forget_additive
-  签名: : (Monad.forget T).Additive where
+实例 单子.forget_additive
+  签名: : (单子.forget T).加性 where
 -/
 instance Monad.forget_additive : (Monad.forget T).Additive where
 
@@ -130,8 +130,8 @@ instance Comonad.coalgebraPreadditive
           h := by rw [Fun
 
 中文:
-实例 Comonad.coalgebraPreadditive
-  签名: : Preadditive (Comonad.Coalgebra U) where
+实例 余单子.coalgebraPreadditive
+  签名: : 预加性 (余单子.余algebra U) where
   定义体: { add α β :=
         { f := α.f + β.f
           h := by simp only [Functor.map_add, comp_add, Comonad.Coalgebra.Hom.h, add_comp] }
@@ -186,8 +186,8 @@ instance Comonad.forget_additive
   signature: : (Comonad.forget U).Additive where
 
 中文:
-实例 Comonad.forget_additive
-  签名: : (Comonad.forget U).Additive where
+实例 余单子.forget_additive
+  签名: : (余单子.forget U).加性 where
 -/
 instance Comonad.forget_additive : (Comonad.forget U).Additive where
 

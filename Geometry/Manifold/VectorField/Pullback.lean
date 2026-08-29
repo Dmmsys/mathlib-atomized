@@ -80,7 +80,7 @@ instance [IsManifold
   body: IsManifold.of_le (n := minSmoothness 𝕜 1) le_minSmoothness
 
 中文:
-实例 [IsManifold
+实例 [是流形
   签名: I (minSmoothness 𝕜 1) M] :
   定义体: IsManifold.of_le (n := minSmoothness 𝕜 1) le_minSmoothness
 
@@ -99,7 +99,7 @@ instance [IsManifold
   body: IsManifold.of_le (n := minSmoothness 𝕜 3) (minSmoothness_monotone (by norm_cast))
 
 中文:
-实例 [IsManifold
+实例 [是流形
   签名: I (minSmoothness 𝕜 3) M] :
   定义体: IsManifold.of_le (n := minSmoothness 𝕜 3) (minSmoothness_monotone (by norm_cast))
 
@@ -118,7 +118,7 @@ instance [IsManifold
   body: IsManifold.of_le (n := minSmoothness 𝕜 2) (minSmoothness_monotone (by norm_cast))
 
 中文:
-实例 [IsManifold
+实例 [是流形
   签名: I (minSmoothness 𝕜 2) M] :
   定义体: IsManifold.of_le (n := minSmoothness 𝕜 2) (minSmoothness_monotone (by norm_cast))
 
@@ -150,7 +150,7 @@ definition mpullbackWithin
 
 中文:
 定义 mpullbackWithin
-  签名: (f : M -> M') (V : Π (x : M'), TangentSpace I' x) (s : Set M) (x : M)
+  签名: (f : M -> M') (V : Π (x : M'), TangentSpace I' x) (s : 集合 M) (x : M)
   定义体: (mfderiv[s] f x).inverse (V (f x))
 
 Depends on / 依赖: inverse, mfderiv
@@ -648,7 +648,7 @@ lemma mpullbackWithin_eq_pullbackWithin
 
 中文:
 引理 mpullbackWithin_eq_pullbackWithin
-  条件: {f : E -> E'} {V : E' -> E'} {s : Set E}
+  条件: {f : E -> E'} {V : E' -> E'} {s : 集合 E}
   证明: by
   ext x
   simp only [mpullbackWithin, mfderivWithin_eq_fderivWithin, pullbackWithin]
@@ -1231,7 +1231,7 @@ lemma _root_.ContMDiffWithinAt.mpullbackWithin_vectorField'
 
 中文:
 引理 _root_.ContMDiffWithinAt.mpullbackWithin_vectorField'
-  结论: {u : Set M}
+  结论: {u : 集合 M}
   证明: by
   have hn : 1 <= n := le_trans (by simp) hmn
   have hh : (mfderiv[s] f x₀).IsInvertible := by
@@ -1271,7 +1271,7 @@ lemma _root_.ContMDiffWithinAt.mpullbackWithin_vectorField_of_eq'
 
 中文:
 引理 _root_.ContMDiffWithinAt.mpullbackWithin_vectorField_of_eq'
-  结论: {u : Set M}
+  结论: {u : 集合 M}
   证明: by
   subst hy₀
   exact ContMDiffWithinAt.mpullbackWithin_vectorField' hV hf hf' hx₀ hs hmn hst hu

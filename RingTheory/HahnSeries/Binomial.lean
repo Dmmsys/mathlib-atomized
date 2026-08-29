@@ -239,7 +239,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (orderTopSubOnePos Γ R) R
+  签名: 幂 (orderTopSubOnePos Γ R) R
   定义体: toOrderTopSubOnePos (orderTop_hsum_binomialFamily_pos x.2 r)
 
 @[simp]

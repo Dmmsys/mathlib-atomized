@@ -36,7 +36,7 @@ instance mulZeroOneClass
 
 中文:
 实例 mulZeroOneClass
-  签名: [MulZeroOneClass α]
+  签名: [乘零幺类 α]
   定义体: Equiv.ulift.injective.mulZeroOneClass _ rfl rfl (by intros; rfl)
 
 Depends on / 依赖: Equiv.ulift.injective.mulZeroOneClass, injective, intros, mulZeroOneClass
@@ -54,7 +54,7 @@ instance monoidWithZero
 
 中文:
 实例 monoidWithZero
-  签名: [MonoidWithZero α]
+  签名: [带零幺半群 α]
   定义体: Equiv.ulift.injective.monoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Equiv.ulift.injective.monoidWithZero, injective, monoidWithZero
@@ -72,7 +72,7 @@ instance commMonoidWithZero
 
 中文:
 实例 commMonoidWithZero
-  签名: [CommMonoidWithZero α]
+  签名: [带零交换幺半群 α]
   定义体: Equiv.ulift.injective.commMonoidWithZero _ rfl rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Equiv.ulift.injective.commMonoidWithZero, commMonoidWithZero, injective
@@ -91,7 +91,7 @@ instance groupWithZero
 
 中文:
 实例 groupWithZero
-  签名: [GroupWithZero α]
+  签名: [带零群 α]
   定义体: Equiv.ulift.injective.groupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -112,7 +112,7 @@ instance commGroupWithZero
 
 中文:
 实例 commGroupWithZero
-  签名: [CommGroupWithZero α]
+  签名: [带零交换群 α]
   定义体: Equiv.ulift.injective.commGroupWithZero _ rfl rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 

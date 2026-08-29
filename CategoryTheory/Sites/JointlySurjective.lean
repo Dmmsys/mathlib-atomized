@@ -146,7 +146,7 @@ instance :
 
 中文:
 实例 :
-  签名: jointlySurjectivePrecoverage.HasIsos
+  签名: jointlySurjectivePrecoverage.有是os
   定义体: by
     use S, f, ⟨⟩
     exact surjective_of_epi f x
@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: jointlySurjectivePrecoverage.IsStableUnderComposition
+  签名: jointlySurjectivePrecoverage.是StableUnderComposition
   定义体: by
     simp_rw [ofArrows_mem_jointlySurjectivePrecoverage_iff] at hf hg ⊢
     intro x
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: jointlySurjectivePrecoverage.IsStableUnderSup
+  签名: jointlySurjectivePrecoverage.是StableUnderSup
   定义体: by
     obtain ⟨Y, f, hf, hx⟩ := hR x
     use Y, f, .inl hf
@@ -366,7 +366,7 @@ instance :
 
 中文:
 实例 :
-  签名: Types.jointlySurjectivePrecoverage.IsStableUnderBaseChange
+  签名: Types.jointlySurjectivePrecoverage.是StableUnderBaseChange
   定义体: by
   rw [← Precoverage.comap_id Types.jointlySurjectivePrecoverage]
   apply isStableUnderBaseChange_comap_jointlySurjectivePrecoverage

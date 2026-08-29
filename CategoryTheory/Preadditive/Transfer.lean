@@ -44,7 +44,7 @@ definition ofFullyFaithful
 
 中文:
 定义 ofFullyFaithful
-  签名: : Preadditive C where
+  签名: : 预加性 C where
   定义体: hF.homEquiv.addCommGroup
   add_comp P Q R f f' g := hF.map_injective (by simp [Equiv.add_def])
   comp_add P Q R f g g' := hF.map_injective (by simp [Equiv.add_def])

@@ -471,7 +471,7 @@ theorem lift_apply_mk'
 
 中文:
 定理 lift_apply_mk'
-  条件: (f : c.Quotient ->+* P)
+  条件: (f : c.商 ->+* P)
   证明: by
   ext x; rcases x with ⟨⟩; rfl
 -/
@@ -492,8 +492,8 @@ theorem Quotient.hom_ext
   proof: DFunLike.ext _ _ c.mk'_surjective.forall.mpr fun x => by exact congr($h x)
 
 中文:
-定理 Quotient.hom_ext
-  条件: {f g : c.Quotient ->+* P} (h : f.comp c.mk' = g.comp c.mk')
+定理 商.hom_ext
+  条件: {f g : c.商 ->+* P} (h : f.comp c.mk' = g.comp c.mk')
   结论: f = g
   证明: DFunLike.ext _ _ c.mk'_surjective.forall.mpr fun x => by exact congr($h x)
 
@@ -512,7 +512,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (H : c <= ker f) (g : c.Quotient ->+* P) (Hg : g.comp c.mk' = f)
+  条件: (H : c <= ker f) (g : c.商 ->+* P) (Hg : g.comp c.mk' = f)
   证明: Quotient.hom_ext (by aesop)
 
 Depends on / 依赖: Quotient, Quotient.hom_ext, hom_ext
@@ -555,7 +555,7 @@ theorem lift_surjective_of_surjective
 
 中文:
 定理 lift_surjective_of_surjective
-  条件: (h : c <= ker f) (hf : Surjective f)
+  条件: (h : c <= ker f) (hf : 满射 f)
   证明: lift_surjective_iff.mpr hf
 
 Depends on / 依赖: lift_surjective_iff, lift_surjective_iff.mpr
@@ -626,7 +626,7 @@ theorem ker_eq_lift_of_injective
 
 中文:
 定理 ker_eq_lift_of_injective
-  条件: (H : c <= ker f) (h : Injective (c.lift f H))
+  条件: (H : c <= ker f) (h : 单射 (c.lift f H))
   结论: ker f = c
   证明: (lift_injective_iff.mp h).symm
 
@@ -647,7 +647,7 @@ definition kerLift
 
 中文:
 定义 kerLift
-  签名: : (ker f).Quotient ->+* P
+  签名: : (ker f).商 ->+* P
   定义体: (ker f).lift f fun _ _ => id
 -/
 def kerLift : (ker f).Quotient ->+* P :=
@@ -685,7 +685,7 @@ theorem kerLift_injective
 中文:
 定理 kerLift_injective
   条件: (f : M ->+* P)
-  结论: Injective (kerLift f)
+  结论: 单射 (kerLift f)
   证明: AddCon.kerLift_injective (f : M ->+ P)
 
 Depends on / 依赖: AddCon, AddCon.kerLift_injective, kerLift_injective
@@ -746,7 +746,7 @@ theorem rangeS_mk'
 
 中文:
 定理 rangeS_mk'
-  结论: RingHom.rangeS c.mk' = ⊤
+  结论: 环态射.rangeS c.mk' = ⊤
   证明: RingHom.rangeS_eq_top.mpr (mk'_surjective _)
 -/
 @[simp] theorem rangeS_mk' : RingHom.rangeS c.mk' = ⊤ :=
@@ -837,7 +837,7 @@ definition quotientKerEquivOfRightInverse
 
 中文:
 定义 quotientKerEquivOfRightInverse
-  签名: (f : M ->+* P) (g : P -> M) (hf : Function.RightInverse g f)
+  签名: (f : M ->+* P) (g : P -> M) (hf : 函数.右逆 g f)
   定义体: kerLift f
   __ := Setoid.quotientKerEquivOfRightInverse _ _ hf
 
@@ -874,7 +874,7 @@ definition quotientKerEquivOfSurjective
 
 中文:
 定义 quotientKerEquivOfSurjective
-  签名: (f : M ->+* P) (hf : Surjective f)
+  签名: (f : M ->+* P) (hf : 满射 f)
   定义体: quotientKerEquivOfRightInverse _ _ hf.hasRightInverse.choose_spec
 
 Depends on / 依赖: choose_spec, hasRightInverse, hf.hasRightInverse.choose_spec, quotientKerEquivOfRightInverse
@@ -893,7 +893,7 @@ theorem quotientKerEquivOfSurjective_mk
 
 中文:
 定理 quotientKerEquivOfSurjective_mk
-  条件: (f : M ->+* P) (hf : Surjective f) (x : M)
+  条件: (f : M ->+* P) (hf : 满射 f) (x : M)
   证明: rfl
 -/
 @[simp] theorem quotientKerEquivOfSurjective_mk (f : M ->+* P) (hf : Surjective f) (x : M) :
@@ -1154,7 +1154,7 @@ theorem range_mk'
 
 中文:
 定理 range_mk'
-  结论: RingHom.range c.mk' = ⊤
+  结论: 环态射.range c.mk' = ⊤
   证明: RingHom.range_eq_top.mpr (mk'_surjective _)
 
 Depends on / 依赖: RingHom, RingHom.range_eq_top.mpr, _surjective, range_eq_top
@@ -1370,7 +1370,7 @@ theorem range_mkₐ
 
 中文:
 定理 range_mkₐ
-  结论: AlgHom.range (mkₐ R c) = ⊤
+  结论: 代数态射.range (mkₐ R c) = ⊤
   证明: (AlgHom.range_eq_top _).mpr (mkₐ_surjective _)
 
 Depends on / 依赖: AlgHom, AlgHom.range_eq_top, range_eq_top
@@ -1484,8 +1484,8 @@ theorem Quotient.hom_extₐ
   proof: DFunLike.ext _ _ c.mk'_surjective.forall.mpr fun x => by exact congr($h x)
 
 中文:
-定理 Quotient.hom_extₐ
-  结论: {f g : c.Quotient ->ₐ[R] P}
+定理 商.hom_extₐ
+  结论: {f g : c.商 ->ₐ[R] P}
   证明: DFunLike.ext _ _ c.mk'_surjective.forall.mpr fun x => by exact congr($h x)
 
 Depends on / 依赖: DFunLike, DFunLike.ext, _surjective, _surjective.forall.mpr, c.mk
@@ -1527,7 +1527,7 @@ definition kerLiftₐ
 
 中文:
 定义 kerLiftₐ
-  签名: : (ker f.toRingHom).Quotient ->ₐ[R] P
+  签名: : (ker f.toRingHom).商 ->ₐ[R] P
   定义体: liftₐ (ker f.toRingHom) f (le_refl _)
 
 Depends on / 依赖: f.toRingHom, le_refl, toRingHom

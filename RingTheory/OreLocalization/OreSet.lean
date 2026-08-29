@@ -45,7 +45,7 @@ definition oreSetOfIsCancelMulZero
 
 中文:
 定义 oreSetOfIsCancelMulZero
-  签名: {R : 类型} [MonoidWithZero R] [IsCancelMulZero R]
+  签名: {R : 类型} [带零幺半群 R] [是乘零消去 R]
   定义体: { ore_right_cancel := fun _ _ s h => ⟨s, mul_eq_mul_left_iff.mpr (mul_eq_mul_right_iff.mp h)⟩
     oreNum
     oreDenom
@@ -79,7 +79,7 @@ definition oreSetOfNoZeroDivisors
 
 中文:
 定义 oreSetOfNoZeroDivisors
-  签名: {R : 类型} [Ring R] [NoZeroDivisors R] {S : Submonoid R}
+  签名: {R : 类型} [环 R] [无零因子 R] {S : 子幺半群 R}
   定义体: letI : IsCancelMulZero R := NoZeroDivisors.toIsCancelMulZero
   oreSetOfIsCancelMulZero oreNum oreDenom ore_eq
 
@@ -106,7 +106,7 @@ lemma nonempty_oreSet_iff
 
 中文:
 引理 nonempty_oreSet_iff
-  条件: {R : 类型} [Monoid R] {S : Submonoid R}
+  条件: {R : 类型} [幺半群 R] {S : 子幺半群 R}
   证明: by
   constructor
   · exact fun ⟨_⟩ => ⟨ore_right_cancel, fun r s => ⟨oreNum r s, oreDenom r s, ore_eq r s⟩⟩
@@ -140,7 +140,7 @@ lemma nonempty_oreSet_iff_of_noZeroDivisors
 
 中文:
 引理 nonempty_oreSet_iff_of_noZeroDivisors
-  结论: {R : 类型} [Ring R] [NoZeroDivisors R]
+  结论: {R : 类型} [环 R] [无零因子 R]
   证明: by
   constructor
   · exact fun ⟨_⟩ => fun r s => ⟨oreNum r s, oreDenom r s, ore_eq r s⟩

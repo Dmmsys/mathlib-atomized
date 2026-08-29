@@ -252,7 +252,7 @@ abbreviation foldlM
 
 中文:
 缩写 foldlM
-  签名: (m : 类型u -> 类型u) [Monad m] (α : 类型u)
+  签名: (m : 类型u -> 类型u) [单子 m] (α : 类型u)
   定义体: MulOpposite End KleisliCat.mk m α
 
 Depends on / 依赖: KleisliCat, KleisliCat.mk, MulOpposite
@@ -313,7 +313,7 @@ definition foldlM.ofFreeMonoid
 
 中文:
 定义 foldlM.ofFreeMonoid
-  签名: [LawfulMonad m] (f : β -> α -> m β)
+  签名: [合法单子 m] (f : β -> α -> m β)
   定义体: op flip (List.foldlM f) (FreeMonoid.toList xs)
   map_one' := rfl
   map_mul' := by
@@ -343,7 +343,7 @@ abbreviation foldrM
 
 中文:
 缩写 foldrM
-  签名: (m : 类型u -> 类型u) [Monad m] (α : 类型u)
+  签名: (m : 类型u -> 类型u) [单子 m] (α : 类型u)
   定义体: End KleisliCat.mk m α
 
 Depends on / 依赖: KleisliCat, KleisliCat.mk
@@ -400,7 +400,7 @@ definition foldrM.ofFreeMonoid
 
 中文:
 定义 foldrM.ofFreeMonoid
-  签名: [LawfulMonad m] (f : α -> β -> m β)
+  签名: [合法单子 m] (f : α -> β -> m β)
   定义体: flip (List.foldrM f) (FreeMonoid.toList xs)
   map_one' := rfl
   map_mul' := by intros; funext; apply List.foldrM_append
@@ -432,7 +432,7 @@ definition foldMap
 
 中文:
 定义 foldMap
-  签名: {α ω} [One ω] [Mul ω] (f : α -> ω)
+  签名: {α ω} [幺 ω] [乘法 ω] (f : α -> ω)
   定义体: traverse (Const.mk' ∘ f)
 
 Depends on / 依赖: Const.mk, traverse
@@ -486,7 +486,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : t α -> List α
+  签名: : t α -> 列表 α
   定义体: List.reverse ∘ foldl (flip List.cons) []
 
 Depends on / 依赖: List.cons, List.reverse, reverse
@@ -571,7 +571,7 @@ definition mapFold
 
 中文:
 定义 mapFold
-  签名: [Monoid α] [Monoid β] (f : α ->* β)
+  签名: [幺半群 α] [幺半群 β] (f : α ->* β)
   定义体: f
   preserves_seq' := by intros; simp only [Seq.seq, map_mul]
   preserves_pure' := by intros; simp only [map_one, pure]
@@ -590,8 +590,8 @@ theorem Free.map_eq_map
   proof: rfl
 
 中文:
-定理 Free.map_eq_map
-  条件: (f : α -> β) (xs : List α)
+定理 自由.map_eq_map
+  条件: (f : α -> β) (xs : 列表 α)
   证明: rfl
 -/
 theorem Free.map_eq_map (f : α -> β) (xs : List α) :
@@ -608,7 +608,7 @@ theorem foldl.unop_ofFreeMonoid
 
 中文:
 定理 foldl.unop_ofFreeMonoid
-  条件: (f : β -> α -> β) (xs : FreeMonoid α) (a : β)
+  条件: (f : β -> α -> β) (xs : 自由幺半群 α) (a : β)
   证明: rfl
 -/
 theorem foldl.unop_ofFreeMonoid (f : β -> α -> β) (xs : FreeMonoid α) (a : β) :
@@ -635,7 +635,7 @@ theorem foldMap_hom
 
 中文:
 定理 foldMap_hom
-  条件: [Monoid α] [Monoid β] (f : α ->* β) (g : γ -> α) (x : t γ)
+  条件: [幺半群 α] [幺半群 β] (f : α ->* β) (g : γ -> α) (x : t γ)
   证明: calc
     f (foldMap g x) = f (traverse (Const.mk' ∘ g) x) := rfl
     _ = (mapFold f).app _ (traverse (Const.mk' ∘ g) x) := rfl
@@ -662,7 +662,7 @@ theorem foldMap_hom_free
 
 中文:
 定理 foldMap_hom_free
-  条件: [Monoid β] (f : FreeMonoid α ->* β) (x : t α)
+  条件: [幺半群 β] (f : 自由幺半群 α ->* β) (x : t α)
   证明: foldMap_hom f _ x
 
 Depends on / 依赖: foldMap_hom
@@ -739,7 +739,7 @@ theorem foldlm.ofFreeMonoid_comp_of
 
 中文:
 定理 foldlm.ofFreeMonoid_comp_of
-  条件: {m} [Monad m] [LawfulMonad m] (f : α -> β -> m α)
+  条件: {m} [单子 m] [合法单子 m] (f : α -> β -> m α)
   证明: by
   ext1 x
   simp only [foldlM.ofFreeMonoid, Function.flip_def, MonoidHom.coe_mk, OneHom.coe_mk,
@@ -771,7 +771,7 @@ theorem foldrm.ofFreeMonoid_comp_of
 
 中文:
 定理 foldrm.ofFreeMonoid_comp_of
-  条件: {m} [Monad m] [LawfulMonad m] (f : β -> α -> m α)
+  条件: {m} [单子 m] [合法单子 m] (f : β -> α -> m α)
   证明: by
   ext
   simp [(· ∘ ·), foldrM.ofFreeMonoid, foldrM.mk, Function.flip_def]
@@ -802,7 +802,7 @@ theorem toList_spec
 中文:
 定理 toList_spec
   条件: (xs : t α)
-  结论: toList xs = FreeMonoid.toList (foldMap FreeMonoid.of xs)
+  结论: toList xs = 自由幺半群.toList (foldMap 自由幺半群.of xs)
   证明: Eq.symm
     calc
       FreeMonoid.toList (foldMap FreeMonoid.of xs) =
@@ -840,7 +840,7 @@ theorem foldMap_map
 
 中文:
 定理 foldMap_map
-  条件: [Monoid γ] (f : α -> β) (g : β -> γ) (xs : t α)
+  条件: [幺半群 γ] (f : α -> β) (g : β -> γ) (xs : t α)
   证明: by
   simp only [foldMap, traverse_map, Function.comp_def]
 
@@ -998,7 +998,7 @@ theorem toList_eq_self
 
 中文:
 定理 toList_eq_self
-  条件: {xs : List α}
+  条件: {xs : 列表 α}
   结论: toList xs = xs
   证明: by
   simp only [toList_spec, foldMap, traverse]
@@ -1034,7 +1034,7 @@ theorem length_toList
 中文:
 定理 length_toList
   条件: {xs : t α}
-  结论: length xs = List.length (toList xs)
+  结论: length xs = 列表.length (toList xs)
   证明: by
   unfold length
   rw [foldl_toList]

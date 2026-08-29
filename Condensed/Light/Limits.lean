@@ -30,6 +30,6 @@ instance :
 
 中文:
 实例 :
-  签名: HasCountableLimits (LightCondMod.{u} R)
+  签名: 有余untableLimits (LightCondMod.{u} R)
 -/
 instance : HasCountableLimits (LightCondMod.{u} R) where

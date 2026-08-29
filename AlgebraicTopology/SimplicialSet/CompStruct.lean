@@ -47,7 +47,7 @@ definition Edge
   body: ((truncation 2).obj X).Edge x₀ x₁
 
 中文:
-定义 Edge
+定义 边
   定义体: ((truncation 2).obj X).Edge x₀ x₁
 
 Depends on / 依赖: truncation
@@ -66,7 +66,7 @@ definition ofTruncated
 
 中文:
 定义 ofTruncated
-  签名: (e : ((truncation 2).obj X).Edge x₀ x₁)
+  签名: (e : ((truncation 2).obj X).边 x₀ x₁)
   定义体: e
 -/
 def ofTruncated (e : ((truncation 2).obj X).Edge x₀ x₁) :
@@ -82,7 +82,7 @@ definition toTruncated
 
 中文:
 定义 toTruncated
-  签名: (e : Edge x₀ x₁)
+  签名: (e : 边 x₀ x₁)
   定义体: e
 -/
 def toTruncated (e : Edge x₀ x₁) :
@@ -101,7 +101,7 @@ definition edge
 
 中文:
 定义 edge
-  签名: (e : Edge x₀ x₁)
+  签名: (e : 边 x₀ x₁)
   定义体: e.toTruncated.edge
 
 @[simp]
@@ -123,7 +123,7 @@ lemma ofTruncated_edge
 
 中文:
 引理 ofTruncated_edge
-  条件: (e : ((truncation 2).obj X).Edge x₀ x₁)
+  条件: (e : ((truncation 2).obj X).边 x₀ x₁)
   证明: rfl
 
 @[simp]
@@ -144,7 +144,7 @@ lemma toTruncated_edge
 
 中文:
 引理 toTruncated_edge
-  条件: (e : Edge x₀ x₁)
+  条件: (e : 边 x₀ x₁)
   证明: rfl
 
 @[simp]
@@ -166,7 +166,7 @@ lemma src_eq
 
 中文:
 引理 src_eq
-  条件: (e : Edge x₀ x₁)
+  条件: (e : 边 x₀ x₁)
   结论: X.δ 1 e.edge = x₀
   证明: Truncated.Edge.src_eq e
 
@@ -190,7 +190,7 @@ lemma tgt_eq
 
 中文:
 引理 tgt_eq
-  条件: (e : Edge x₀ x₁)
+  条件: (e : 边 x₀ x₁)
   结论: X.δ 0 e.edge = x₁
   证明: Truncated.Edge.tgt_eq e
 
@@ -211,7 +211,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {e e' : Edge x₀ x₁} (h : e.edge = e'.edge)
+  条件: {e e' : 边 x₀ x₁} (h : e.edge = e'.edge)
   证明: Truncated.Edge.ext h
 
 Depends on / 依赖: Truncated, Truncated.Edge.ext
@@ -235,7 +235,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : Edge x₀ x₁
+  签名: : 边 x₀ x₁
   定义体: ofTruncated { edge := edge }
 
 Depends on / 依赖: ofTruncated
@@ -272,7 +272,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Edge x₀ x₀
+  签名: : 边 x₀ x₀
   定义体: ofTruncated (.id _)
 
 Depends on / 依赖: ofTruncated
@@ -326,7 +326,7 @@ definition map
 
 中文:
 定义 map
-  签名: (e : Edge x₀ x₁) (f : X ⟶ Y)
+  签名: (e : 边 x₀ x₁) (f : X ⟶ Y)
   定义体: ofTruncated (e.toTruncated.map ((truncation 2).map f))
 
 @[simp]
@@ -347,7 +347,7 @@ lemma map_edge
 
 中文:
 引理 map_edge
-  条件: (e : Edge x₀ x₁) (f : X ⟶ Y)
+  条件: (e : 边 x₀ x₁) (f : X ⟶ Y)
   证明: rfl
 -/
 lemma map_edge (e : Edge x₀ x₁) (f : X ⟶ Y) :
@@ -420,7 +420,7 @@ lemma exists_of_simplex
   proof: ⟨_, _, mk' s, rfl⟩
 
 中文:
-引理 exists_of_simplex
+引理 存在_of_simplex
   条件: (s : X _⦋1⦌)
   证明: ⟨_, _, mk' s, rfl⟩
 -/
@@ -443,7 +443,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {y₀ y₁ : X _⦋0⦌} (e : Edge x₀ x₁) (h₀ : x₀ = y₀) (h₁ : x₁ = y₁)
+  签名: {y₀ y₁ : X _⦋0⦌} (e : 边 x₀ x₁) (h₀ : x₀ = y₀) (h₁ : x₁ = y₁)
   定义体: e.edge
   src_eq := e.src_eq.trans h₀
   tgt_eq := e.tgt_eq.trans h₁
@@ -465,8 +465,8 @@ definition CompStruct
   body: Truncated.Edge.CompStruct e₀₁.toTruncated e₁₂.toTruncated e₀₂.toTruncated
 
 中文:
-定义 CompStruct
-  签名: (e₀₁ : Edge x₀ x₁) (e₁₂ : Edge x₁ x₂) (e₀₂ : Edge x₀ x₂)
+定义 余mpStruct
+  签名: (e₀₁ : 边 x₀ x₁) (e₁₂ : 边 x₁ x₂) (e₀₂ : 边 x₀ x₂)
   定义体: Truncated.Edge.CompStruct e₀₁.toTruncated e₁₂.toTruncated e₀₂.toTruncated
 
 Depends on / 依赖: CompStruct, Truncated, Truncated.Edge.CompStruct, toTruncated
@@ -488,7 +488,7 @@ definition ofTruncated
 
 中文:
 定义 ofTruncated
-  签名: (h : Truncated.Edge.CompStruct e₀₁.toTruncated e₁₂.toTruncated e₀₂.toTruncated)
+  签名: (h : Truncated.边.余mpStruct e₀₁.toTruncated e₁₂.toTruncated e₀₂.toTruncated)
   定义体: h
 -/
 def ofTruncated (h : Truncated.Edge.CompStruct e₀₁.toTruncated e₁₂.toTruncated e₀₂.toTruncated) :
@@ -504,7 +504,7 @@ definition toTruncated
 
 中文:
 定义 toTruncated
-  签名: (h : CompStruct e₀₁ e₁₂ e₀₂)
+  签名: (h : 余mpStruct e₀₁ e₁₂ e₀₂)
   定义体: h
 -/
 def toTruncated (h : CompStruct e₀₁ e₁₂ e₀₂) :
@@ -618,7 +618,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : CompStruct e₀₁ e₁₂ e₀₂ where
+  签名: : 余mpStruct e₀₁ e₁₂ e₀₂ where
   定义体: simplex
 
 Depends on / 依赖: simplex
@@ -656,7 +656,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {h h' : CompStruct e₀₁ e₁₂ e₀₂} (eq : h.simplex = h'.simplex)
+  条件: {h h' : 余mpStruct e₀₁ e₁₂ e₀₂} (eq : h.simplex = h'.simplex)
   证明: Truncated.Edge.CompStruct.ext eq
 
 Depends on / 依赖: CompStruct, Truncated, Truncated.Edge.CompStruct.ext
@@ -674,7 +674,7 @@ lemma exists_of_simplex
   proof: Truncated.Edge.CompStruct.exists_of_simplex (X := (truncation 2).obj X) s
 
 中文:
-引理 exists_of_simplex
+引理 存在_of_simplex
   条件: (s : X _⦋2⦌)
   证明: Truncated.Edge.CompStruct.exists_of_simplex (X := (truncation 2).obj X) s
 
@@ -697,7 +697,7 @@ definition idComp
 
 中文:
 定义 idComp
-  签名: (e : Edge x₀ x₁)
+  签名: (e : 边 x₀ x₁)
   定义体: ofTruncated (.idComp _)
 
 @[simp]
@@ -719,7 +719,7 @@ lemma idComp_simplex
 
 中文:
 引理 idComp_simplex
-  条件: (e : Edge x₀ x₁)
+  条件: (e : 边 x₀ x₁)
   结论: (idComp e).simplex = X.σ 0 e.edge
   证明: rfl
 -/
@@ -737,7 +737,7 @@ definition compId
 
 中文:
 定义 compId
-  签名: (e : Edge x₀ x₁)
+  签名: (e : 边 x₀ x₁)
   定义体: ofTruncated (.compId _)
 
 @[simp]
@@ -759,7 +759,7 @@ lemma compId_simplex
 
 中文:
 引理 compId_simplex
-  条件: (e : Edge x₀ x₁)
+  条件: (e : 边 x₀ x₁)
   结论: (compId e).simplex = X.σ 1 e.edge
   证明: rfl
 -/
@@ -820,7 +820,7 @@ definition map
 
 中文:
 定义 map
-  签名: (h : CompStruct e₀₁ e₁₂ e₀₂) (f : X ⟶ Y)
+  签名: (h : 余mpStruct e₀₁ e₁₂ e₀₂) (f : X ⟶ Y)
   定义体: .ofTruncated (h.toTruncated.map ((truncation 2).map f))
 
 @[simp]
@@ -842,7 +842,7 @@ lemma map_simplex
 
 中文:
 引理 map_simplex
-  条件: (h : CompStruct e₀₁ e₁₂ e₀₂) (f : X ⟶ Y)
+  条件: (h : 余mpStruct e₀₁ e₁₂ e₀₂) (f : X ⟶ Y)
   证明: rfl
 -/
 lemma map_simplex (h : CompStruct e₀₁ e₁₂ e₀₂) (f : X ⟶ Y) :
@@ -905,11 +905,11 @@ structure InvStruct
 
 中文:
 结构 InvStruct
-  参数: (hom : Edge x₀ x₁)
+  参数: (hom : 边 x₀ x₁)
   公理与运算 (3 个):
-    - inv : Edge x₁ x₀
-    - homInvId : CompStruct hom inv (id x₀)
-    - invHomId : CompStruct inv hom (id x₁)
+    - inv : 边 x₁ x₀
+    - homInvId : 余mpStruct hom inv (id x₀)
+    - invHomId : 余mpStruct inv hom (id x₁)
 -/
 structure InvStruct (hom : Edge x₀ x₁) where
   /-- The backwards edge -/
@@ -959,7 +959,7 @@ definition invStructInv
 
 中文:
 定义 invStructInv
-  签名: {hom : Edge x₀ x₁} (I : InvStruct hom)
+  签名: {hom : 边 x₀ x₁} (I : InvStruct hom)
   定义体: hom
   homInvId := I.invHomId
   invHomId := I.homInvId
@@ -983,7 +983,7 @@ definition map
 
 中文:
 定义 map
-  签名: {hom : Edge x₀ x₁} (I : InvStruct hom) (f : X ⟶ Y)
+  签名: {hom : 边 x₀ x₁} (I : InvStruct hom) (f : X ⟶ Y)
   定义体: I.inv.map f
   homInvId := (I.homInvId.map f).ofEq rfl rfl (Edge.ext_iff.mp (map_id _ _))
   invHomId := (I.invHomId.map f).ofEq rfl rfl (Edge.ext_iff.mp (map_id _ _))
@@ -1012,7 +1012,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {y₀ y₁ : X _⦋0⦌} {hom : Edge x₀ x₁} {hom' : Edge y₀ y₁}
+  签名: {y₀ y₁ : X _⦋0⦌} {hom : 边 x₀ x₁} {hom' : 边 y₀ y₁}
   定义体: I.inv.ofEq
     (by rw [← hom.tgt_eq, hhom, hom'.tgt_eq])
     (by rw [← hom.src_eq, hhom, hom'.src_eq])

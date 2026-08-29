@@ -90,13 +90,13 @@ class AdmissibleAbsValues
 
 中文:
 类 AdmissibleAbsValues
-  参数: (K : 类型) [Field K]
+  参数: (K : 类型) [域 K]
   公理与运算 (5 个):
-    - archAbsVal : Multiset (AbsoluteValue K 实数)
-    - nonarchAbsVal : Set (AbsoluteValue K 实数)
+    - archAbsVal : Multiset (绝对值 K 实数)
+    - nonarchAbsVal : 集合 (绝对值 K 实数)
     - isNonarchimedean : 对任意 v in nonarchAbsVal, IsNonarchimedean v
     - hasFiniteMulSupport({x : K} (_ : x != 0)) : (fun v : nonarchAbsVal => v.val x).HasFiniteMulSupport
-    - product_formula({x : K} (_ : x != 0)) : (archAbsVal.map (· x)).prod * ∏ᶠ v : nonarchAbsVal, v.val x = 1
+    - product_formula({x : K} (_ : x != 0)) : (archAbsVal.map (· x)).乘积 * ∏ᶠ v : nonarchAbsVal, v.val x = 1
 -/
 class AdmissibleAbsValues (K : Type*) [Field K] where
   /-- The archimedean absolute values as a multiset of `ℝ`-valued absolute values on `K`. -/
@@ -804,7 +804,7 @@ definition _root_.Finsupp.mulHeight
   body: Height.mulHeight fun i : x.support => x i
 
 中文:
-定义 _root_.Finsupp.mulHeight
+定义 _root_.有限支撑.mulHeight
   签名: (x : α ->₀ K)
   定义体: Height.mulHeight fun i : x.support => x i
 
@@ -822,7 +822,7 @@ definition _root_.Finsupp.logHeight
   body: log (mulHeight x)
 
 中文:
-定义 _root_.Finsupp.logHeight
+定义 _root_.有限支撑.logHeight
   签名: (x : α ->₀ K)
   定义体: log (mulHeight x)
 
@@ -839,7 +839,7 @@ lemma _root_.Finsupp.logHeight_eq_log_mulHeight
   proof: rfl
 
 中文:
-引理 _root_.Finsupp.logHeight_eq_log_mulHeight
+引理 _root_.有限支撑.logHeight_eq_log_mulHeight
   条件: (x : α ->₀ K)
   证明: rfl
 -/
@@ -857,7 +857,7 @@ lemma max_eq_iSup
 
 中文:
 引理 max_eq_iSup
-  条件: {α : 类型} [ConditionallyCompleteLattice α] (a b : α)
+  条件: {α : 类型} [条件完备格 α] (a b : α)
   证明: eq_of_forall_ge_iff by simp [ciSup_le_iff, Fin.forall_fin_two]
 -/
 private lemma max_eq_iSup {α : Type*} [ConditionallyCompleteLattice α] (a b : α) :
@@ -1298,7 +1298,7 @@ lemma mulHeight_eq_one_of_subsingleton
 
 中文:
 引理 mulHeight_eq_one_of_subsingleton
-  条件: {ι : 类型} [Subsingleton ι] (x : ι -> K)
+  条件: {ι : 类型} [子单例 ι] (x : ι -> K)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp
@@ -1336,7 +1336,7 @@ lemma logHeight_eq_zero_of_subsingleton
 
 中文:
 引理 logHeight_eq_zero_of_subsingleton
-  条件: {ι : 类型} [Subsingleton ι] (x : ι -> K)
+  条件: {ι : 类型} [子单例 ι] (x : ι -> K)
   证明: by
   simp [logHeight_eq_log_mulHeight]
 
@@ -1413,7 +1413,7 @@ lemma logHeight_cons_zero
 
 中文:
 引理 logHeight_cons_zero
-  结论: logHeight (Matrix.vecCons 0 x) = logHeight x
+  结论: logHeight (矩阵.vecCons 0 x) = logHeight x
   证明: by
   simp [logHeight_eq_log_mulHeight]
 
@@ -2316,7 +2316,7 @@ lemma mulHeight₁_prod_le
 
 中文:
 引理 mulHeight₁_prod_le
-  条件: (s : Finset ι) (x : ι -> K)
+  条件: (s : 有限集 ι) (x : ι -> K)
   证明: by
   classical
   induction s using Finset.induction with
@@ -2352,7 +2352,7 @@ exact log_le_log (by positivity) mulHeight₁_prod_le ..
 
 中文:
 引理 logHeight₁_prod_le
-  条件: (s : Finset ι) (x : ι -> K)
+  条件: (s : 有限集 ι) (x : ι -> K)
   证明: by
   simp only [logHeight₁_eq_log_mulHeight₁]
   rw [← log_prod (fun _ _ => by positivity)]
@@ -2398,7 +2398,7 @@ lemma max_abv_sum_one_le
 
 中文:
 引理 max_abv_sum_one_le
-  结论: [CharZero S] (v : AbsoluteValue R S) {ι : 类型} {s : Finset ι}
+  结论: [特征零 S] (v : 绝对值 R S) {ι : 类型} {s : 有限集 ι}
   证明: by
   refine sup_le ?_ ?_
   · rw [← nsmul_eq_mul, ← sum_const]
@@ -2440,7 +2440,7 @@ refine sup_le ?_ s.one_le_prod fun _ _ => le_max_right ..
 
 中文:
 引理 max_abv_sum_one_le_of_isNonarchimedean
-  结论: {v : AbsoluteValue R S} (hv : IsNonarchimedean v)
+  结论: {v : 绝对值 R S} (hv : IsNonarchimedean v)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · simp
@@ -2483,7 +2483,7 @@ lemma mulHeight₁_sum_le
 
 中文:
 引理 mulHeight₁_sum_le
-  条件: {α : 类型} {s : Finset α} (hs : s.Nonempty) (x : α -> K)
+  条件: {α : 类型} {s : 有限集 α} (hs : s.非空) (x : α -> K)
   证明: by
   simp only [mulHeight₁_eq, totalWeight]
   rw [prod_mul_distrib]; rw [← prod_replicate]; rw [← map_const]; rw [← finprod_prod_comm _ _ (by fun_prop)]; rw [← prod_map_prod]; rw [← mul_assoc]; rw [← prod_map_mul]
@@ -2523,7 +2523,7 @@ exac
 
 中文:
 引理 logHeight₁_sum_le
-  条件: {α : 类型} (s : Finset α) (x : α -> K)
+  条件: {α : 类型} (s : 有限集 α) (x : α -> K)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · simp

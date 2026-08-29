@@ -77,7 +77,7 @@ obtain ⟨b, hb⟩ : x / i₂ a in Set.range g₁ := (hg₁ _).mp by
 
 中文:
 引理 surjective_of_surjective_of_surjective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: by
   intro x
   obtain ⟨y, hy⟩ := hi₃ (g₂ x)
@@ -123,7 +123,7 @@ lemma surjective_of_surjective_of_injective_of_left_exact
 
 中文:
 引理 surjective_of_surjective_of_injective_of_left_exact
-  结论: (hi₂ : Function.Surjective i₂)
+  结论: (hi₂ : 函数.满射 i₂)
   证明: by
   refine surjective_of_surjective_of_surjective_of_injective (1 : Unit ->* M₁) f₁ f₂ (1 : Unit ->* N₁)
     g₁ g₂ 1 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁ (fun | .unit => ⟨0, rfl⟩) hi₂ hi₃
@@ -161,7 +161,7 @@ obtain ⟨y, hy⟩ := (hg₁ _).mp by
 
 中文:
 引理 injective_of_surjective_of_injective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: by
   rw [injective_iff_map_eq_one]
   intro m hm
@@ -210,7 +210,7 @@ include hf₁ hf₂ hf₃ hg₁ hg₂ hg₃ hc₁ hc₂ hc₃ hc₄ in
 
 中文:
 引理 injective_of_surjective_of_injective_of_right_exact
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: injective_of_surjective_of_injective_of_injective f₁ f₂ (1 : M₃ ->* Unit) g₁ g₂ (1 : N₃ ->* Unit)
     i₁ i₂ i₃ 1 hc₁ hc₂ (by simp) hf₁ (fun y => by simpa using hf₂ y) hg₁ hi₁ hi₂
     (fun | .unit => by simp)
@@ -245,7 +245,7 @@ include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 bijective_of_surjective_of_bijective_of_bijective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: ⟨injective_of_surjective_of_injective_of_injective f₁ f₂ f₃ g₁ g₂ g₃ i₁ i₂ i₃ i₄
       hc₁ hc₂ hc₃ hf₁ hf₂ hg₁ hi₁ hi₂.1 hi₄.1,
     surjective_of_surjective_of_surjective_of_injective f₂ f₃ f₄ g₂ g₃ g₄ i₂ i₃ i₄ i₅
@@ -282,7 +282,7 @@ include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 bijective_of_bijective_of_injective_of_left_exact
-  结论: (hi₂ : Function.Bijective i₂)
+  结论: (hi₂ : 函数.双射 i₂)
   证明: ⟨fun {x y} h => (hf₀ (hi₂.1 (congr($hc₁ x).symm.trans (congr(g₁ $h).trans congr($hc₁ y))))),
     surjective_of_surjective_of_injective_of_left_exact f₁ f₂ g₁ g₂ i₁ i₂ i₃
       hc₁ hc₂ hf₁ hg₁ hi₂.2 hi₃ hg₀⟩
@@ -318,7 +318,7 @@ lemma bijective_of_surjective_of_bijective_of_right_exact
 
 中文:
 引理 bijective_of_surjective_of_bijective_of_right_exact
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: by
   refine ⟨injective_of_surjective_of_injective_of_right_exact f₁ f₂ g₁ g₂ i₁ i₂ i₃
     hc₁ hc₂ hf₁ hg₁ hi₁ hi₂.1 hf₂, fun y => ?_⟩
@@ -370,7 +370,7 @@ lemma surjective_of_surjective_of_surjective_of_injective
 
 中文:
 引理 surjective_of_surjective_of_surjective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: AddMonoidHom.surjective_of_surjective_of_surjective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
@@ -404,7 +404,7 @@ lemma surjective_of_surjective_of_injective_of_left_exact
 
 中文:
 引理 surjective_of_surjective_of_injective_of_left_exact
-  结论: (hi₂ : Function.Surjective i₂)
+  结论: (hi₂ : 函数.满射 i₂)
   证明: by
   refine surjective_of_surjective_of_surjective_of_injective (0 : Unit ->ₗ[R] M₁) f₁ f₂
     (0 : Unit ->ₗ[R] N₁) g₁ g₂ 0 i₁ i₂ i₃ (by simp) hc₁ hc₂ hf₁ (fun y => ?_) hg₁
@@ -436,7 +436,7 @@ lemma injective_of_surjective_of_injective_of_injective
 
 中文:
 引理 injective_of_surjective_of_injective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: AddMonoidHom.injective_of_surjective_of_injective_of_injective
     f₁.toAddMonoidHom f₂.toAddMonoidHom f₃.toAddMonoidHom g₁.toAddMonoidHom g₂.toAddMonoidHom
     g₃.toAddMonoidHom i₁.toAddMonoidHom i₂.toAddMonoidHom i₃.toAddMonoidHom i₄.toAddMonoidHom
@@ -469,7 +469,7 @@ include hf₁ hf₂ hf₃ hg₁ hg₂ hg₃ hc₁ hc₂ hc₃ hc₄ in
 
 中文:
 引理 injective_of_surjective_of_injective_of_right_exact
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: injective_of_surjective_of_injective_of_injective f₁ f₂ (0 : M₃ ->ₗ[R] Unit) g₁ g₂
     (0 : N₃ ->ₗ[R] Unit) i₁ i₂ i₃ 0 hc₁ hc₂ (by simp) hf₁ (fun y => by simpa using hf₂ y) hg₁ hi₁ hi₂
       (fun | .unit => by simp)
@@ -500,7 +500,7 @@ include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 bijective_of_surjective_of_bijective_of_bijective_of_injective
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: ⟨injective_of_surjective_of_injective_of_injective f₁ f₂ f₃ g₁ g₂ g₃ i₁ i₂ i₃ i₄
       hc₁ hc₂ hc₃ hf₁ hf₂ hg₁ hi₁ hi₂.1 hi₄.1,
     surjective_of_surjective_of_surjective_of_injective f₂ f₃ f₄ g₂ g₃ g₄ i₂ i₃ i₄ i₅
@@ -533,7 +533,7 @@ include hf₁ hg₁ hc₁ hc₂ in
 
 中文:
 引理 bijective_of_bijective_of_injective_of_left_exact
-  结论: (hi₂ : Function.Bijective i₂)
+  结论: (hi₂ : 函数.双射 i₂)
   证明: ⟨fun {x y} h => (hf₀ (hi₂.1 (congr($hc₁ x).symm.trans (congr(g₁ $h).trans congr($hc₁ y))))),
     surjective_of_surjective_of_injective_of_left_exact f₁ f₂ g₁ g₂ i₁ i₂ i₃
       hc₁ hc₂ hf₁ hg₁ hi₂.2 hi₃ hg₀⟩
@@ -565,7 +565,7 @@ lemma bijective_of_surjective_of_bijective_of_right_exact
 
 中文:
 引理 bijective_of_surjective_of_bijective_of_right_exact
-  结论: (hi₁ : Function.Surjective i₁)
+  结论: (hi₁ : 函数.满射 i₁)
   证明: by
   refine ⟨injective_of_surjective_of_injective_of_right_exact f₁ f₂ g₁ g₂ i₁ i₂ i₃
     hc₁ hc₂ hf₁ hg₁ hi₁ hi₂.1 hf₂, fun y => ?_⟩

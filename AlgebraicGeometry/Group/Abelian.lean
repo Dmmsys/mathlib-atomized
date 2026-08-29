@@ -52,8 +52,8 @@ theorem isCommMonObj_of_isProper_of_isIntegral_tensorObj_of_isAlgClosed
   have : JacobsonSpace (G otimes G).left := LocallyOfFiniteType
 
 中文:
-定理 isCommMonObj_of_isProper_of_isIntegral_tensorObj_of_isAlgClosed
-  结论: [IsAlgClosed K]
+定理 isCommMonObj_of_isProper_of_is整数egral_tensorObj_of_isAlgClosed
+  结论: [是代数闭 K]
   证明: by
   let S := Spec (.of K)
   let point : S := IsLocalRing.closedPoint K
@@ -167,7 +167,7 @@ theorem isCommMonObj_of_isProper_of_geometricallyIntegral
   have := isCo
 
 中文:
-定理 isCommMonObj_of_isProper_of_geometricallyIntegral
+定理 isCommMonObj_of_isProper_of_geometrically整数egral
   证明: by
   let f := Spec.map (CommRingCat.ofHom <| algebraMap K (AlgebraicClosure K))
   let G' := (Over.pullback f).obj G

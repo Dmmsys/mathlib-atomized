@@ -49,7 +49,7 @@ definition DilationEquiv.mulLeft
   toEquiv := Equiv.mulLeft₀ a ha
 
 中文:
-定义 DilationEquiv.mulLeft
+定义 Dilation等价.mulLeft
   签名: (a : α) (ha : a != 0)
   定义体: Dilation.mulLeft a ha
   toEquiv := Equiv.mulLeft₀ a ha
@@ -73,7 +73,7 @@ definition DilationEquiv.mulRight
   toEquiv := Equiv.mulRight₀ a ha
 
 中文:
-定义 DilationEquiv.mulRight
+定义 Dilation等价.mulRight
   签名: (a : α) (ha : a != 0)
   定义体: Dilation.mulRight a ha
   toEquiv := Equiv.mulRight₀ a ha
@@ -231,7 +231,7 @@ lemma tendsto_inv₀_cobounded'
 
 中文:
 引理 tendsto_inv₀_cobounded'
-  结论: Tendsto Inv.inv (cobounded α) (𝓝[!=] 0)
+  结论: 收敛 取逆.inv (cobounded α) (𝓝[!=] 0)
   证明: inv_cobounded₀.le
 -/
 lemma tendsto_inv₀_cobounded' : Tendsto Inv.inv (cobounded α) (𝓝[!=] 0) :=
@@ -247,7 +247,7 @@ theorem tendsto_inv₀_cobounded
 
 中文:
 定理 tendsto_inv₀_cobounded
-  结论: Tendsto Inv.inv (cobounded α) (𝓝 0)
+  结论: 收敛 取逆.inv (cobounded α) (𝓝 0)
   证明: tendsto_inv₀_cobounded'.mono_right inf_le_left
 
 Depends on / 依赖: inf_le_left, mono_right
@@ -265,7 +265,7 @@ lemma tendsto_inv₀_nhdsNE_zero
 
 中文:
 引理 tendsto_inv₀_nhdsNE_zero
-  结论: Tendsto Inv.inv (𝓝[!=] 0) (cobounded α)
+  结论: 收敛 取逆.inv (𝓝[!=] 0) (cobounded α)
   证明: inv_nhdsNE_zero.le
 
 Depends on / 依赖: inv_nhdsNE_zero, inv_nhdsNE_zero.le
@@ -291,7 +291,7 @@ have hs₀ : forall x in s, x != 0 := fun x hx => norm_pos_iff.mp hr₀.trans_le
 
 中文:
 定理 uniformContinuousOn_inv₀
-  条件: {s : Set α} (hs : sᶜ in 𝓝 0)
+  条件: {s : 集合 α} (hs : sᶜ in 𝓝 0)
   证明: by
   rw [Metric.uniformContinuousOn_iff_le]
   intro ε hε
@@ -331,7 +331,7 @@ theorem UniformContinuousOn.inv₀
 
 中文:
 定理 UniformContinuousOn.inv₀
-  结论: {X : 类型} [UniformSpace X] {f : X -> α} {s : Set X}
+  结论: {X : 类型} [一致空间 X] {f : X -> α} {s : 集合 X}
   证明: .comp hf (Set.mapsTo_image f s) uniformContinuousOn_inv₀ hf₀
 
 @[to_fun]
@@ -357,8 +357,8 @@ theorem UniformContinuous.inv₀
 @[to_fun]
 
 中文:
-定理 UniformContinuous.inv₀
-  结论: {X : 类型} [UniformSpace X] {f : X -> α}
+定理 一致连续.inv₀
+  结论: {X : 类型} [一致空间 X] {f : X -> α}
   证明: by
   simp only [← uniformContinuousOn_univ, ← Set.image_univ] at *
   exact hf.inv₀ hf₀
@@ -390,7 +390,7 @@ theorem TendstoLocallyUniformlyOn.inv₀_of_disjoint
 
 中文:
 定理 TendstoLocallyUniformlyOn.inv₀_of_disjoint
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at *
   intro x hx
@@ -434,7 +434,7 @@ theorem TendstoLocallyUniformly.inv₀_of_disjoint
 
 中文:
 定理 TendstoLocallyUniformly.inv₀_of_disjoint
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   rw [← tendstoLocallyUniformlyOn_univ] at *
   apply hF.inv₀_of_disjoint
@@ -465,7 +465,7 @@ theorem TendstoLocallyUniformlyOn.inv₀
 
 中文:
 定理 TendstoLocallyUniformlyOn.inv₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: .mono_left (hf x hx) hF.inv₀_of_disjoint fun x hx => disjoint_nhds_nhds.2 (hf₀ x hx)
 
 @[to_fun]
@@ -489,7 +489,7 @@ theorem TendstoLocallyUniformly.inv₀
 
 中文:
 定理 TendstoLocallyUniformly.inv₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: .mono_left (hf.tendsto x) hF.inv₀_of_disjoint fun x => disjoint_nhds_nhds.2 (hf₀ x)
 
 Depends on / 依赖: disjoint_nhds_nhds, hF.inv, hf.tendsto, mono_left, tendsto
@@ -525,7 +525,7 @@ exact hF.mul₀ (hG.inv₀ hg hg₀) hf hg.inv₀ hg₀
 
 中文:
 定理 TendstoLocallyUniformlyOn.div₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   simp only [div_eq_mul_inv]
 exact hF.mul₀ (hG.inv₀ hg hg₀) hf hg.inv₀ hg₀
@@ -555,7 +555,7 @@ exact hF.mul₀ (hG.inv₀ hg hg₀) hf hg.inv₀ hg₀
 
 中文:
 定理 TendstoLocallyUniformly.div₀
-  结论: {X ι : 类型} [TopologicalSpace X]
+  结论: {X ι : 类型} [拓扑空间 X]
   证明: by
   simp only [div_eq_mul_inv]
 exact hF.mul₀ (hG.inv₀ hg hg₀) hf hg.inv₀ hg₀
@@ -585,7 +585,7 @@ lemma tendsto_norm_inv_nhdsNE_zero_atTop
 
 中文:
 引理 tendsto_norm_inv_nhdsNE_zero_atTop
-  结论: Tendsto (fun x : α => ‖x⁻¹‖) (𝓝[!=] 0) atTop
+  结论: 收敛 (fun x : α => ‖x⁻¹‖) (𝓝[!=] 0) atTop
   证明: tendsto_norm_cobounded_atTop.comp tendsto_inv₀_nhdsNE_zero
 
 Depends on / 依赖: tendsto_norm_cobounded_atTop, tendsto_norm_cobounded_atTop.comp
@@ -644,7 +644,7 @@ lemma discreteTopology_or_nontriviallyNormedField
 
 中文:
 引理 discreteTopology_or_nontriviallyNormedField
-  条件: (𝕜 : 类型) [h : NormedField 𝕜]
+  条件: (𝕜 : 类型) [h : 赋范域 𝕜]
   证明: by
   by_cases H : exists x : 𝕜, x != 0 ∧ ‖x‖ != 1
   · exact Or.inr ⟨(⟨NontriviallyNormedField.ofNormNeOne H, rfl⟩)⟩
@@ -683,7 +683,7 @@ lemma discreteTopology_of_bddAbove_range_norm
 
 中文:
 引理 discreteTopology_of_bddAbove_range_norm
-  结论: {𝕜 : 类型} [NormedField 𝕜]
+  结论: {𝕜 : 类型} [赋范域 𝕜]
   证明: by
   refine (NormedField.discreteTopology_or_nontriviallyNormedField _).resolve_right ?_
   rintro ⟨_, rfl⟩
@@ -782,7 +782,7 @@ lemma continuousAt_inv
 
 中文:
 引理 continuousAt_inv
-  结论: ContinuousAt Inv.inv x ↔ x != 0
+  结论: ContinuousAt 取逆.inv x ↔ x != 0
   证明: by
   simpa using NormedField.continuousAt_zpow (n := -1) (x := x)
 -/
@@ -803,8 +803,8 @@ instance Rat.instNormedField
   norm_mul a b := by simp only [norm, Rat.cast_mul, abs_mul]
 
 中文:
-实例 Rat.instNormedField
-  签名: : NormedField Rat where
+实例 有理数.instNormedField
+  签名: : 赋范域 有理数 where
   定义体: instField
   __ := instNormedAddCommGroup
   norm_mul a b := by simp only [norm, Rat.cast_mul, abs_mul]
@@ -826,8 +826,8 @@ instance Rat.instDenselyNormedField
     ⟨q, by rwa [← Rat.norm_cast_real, Real.norm_eq_abs, abs_of_pos (h₀.trans_lt h.1)]⟩
 
 中文:
-实例 Rat.instDenselyNormedField
-  签名: : DenselyNormedField Rat where
+实例 有理数.instDenselyNormedField
+  签名: : DenselyNormedField 有理数 where
   定义体: let ⟨q, h⟩ := exists_rat_btwn hr
     ⟨q, by rwa [← Rat.norm_cast_real, Real.norm_eq_abs, abs_of_pos (h₀.trans_lt h.1)]⟩
 
@@ -855,8 +855,8 @@ lemma NormedField.completeSpace_iff_isComplete_closedBall
   refine Metric.complete_of_
 
 中文:
-引理 NormedField.completeSpace_iff_isComplete_closedBall
-  条件: {K : 类型} [NormedField K]
+引理 赋范域.completeSpace_iff_isComplete_closedBall
+  条件: {K : 类型} [赋范域 K]
   证明: by
   constructor <;> intro h
   · exact Metric.isClosed_closedBall.isComplete

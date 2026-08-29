@@ -88,7 +88,7 @@ theorem compProd_of_not_isSFiniteKernel_left
 
 中文:
 定理 compProd_of_not_isSFiniteKernel_left
-  结论: (κ : Kernel α β) (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) (η : 核 (α × β) γ)
   证明: by
   simp [compProd, h]
 
@@ -113,7 +113,7 @@ theorem compProd_of_not_isSFiniteKernel_right
 
 中文:
 定理 compProd_of_not_isSFiniteKernel_right
-  结论: (κ : Kernel α β) (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) (η : 核 (α × β) γ)
   证明: by
   simp [compProd, h]
 
@@ -138,7 +138,7 @@ theorem compProd_apply
 
 中文:
 定理 compProd_apply
-  结论: (hs : MeasurableSet s) (κ : Kernel α β) [IsSFiniteKernel κ]
+  结论: (hs : 可测集 s) (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [compProd]; rw [comp_apply]; rw [copy_apply]; rw [Measure.dirac_bind (by fun_prop)]; rw [comp_apply]; rw [parallelComp_apply]; rw [Kernel.id_apply]; rw [Measure.bind_apply hs (by fun_prop)]; rw [lintegral_prod _ (Kernel.measurable_coe _ hs).aemeasurable]; rw [lintegral_dirac']
   swap
@@ -186,7 +186,7 @@ theorem le_compProd_apply
 
 中文:
 定理 le_compProd_apply
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: calc
     ∫⁻ b, η (a, b) {c | (b, c) in s} ∂κ a <=
         ∫⁻ b, η (a, b) {c | (b, c) in toMeasurable ((κ otimesₖ η) a) s} ∂κ a :=
@@ -220,7 +220,7 @@ lemma compProd_apply_univ
 
 中文:
 引理 compProd_apply_univ
-  结论: {κ : Kernel α β} {η : Kernel (α × β) γ}
+  结论: {κ : 核 α β} {η : 核 (α × β) γ}
   证明: by
   rw [compProd_apply MeasurableSet.univ]
   simp
@@ -246,7 +246,7 @@ lemma compProd_apply_prod
 
 中文:
 引理 compProd_apply_prod
-  结论: {κ : Kernel α β} {η : Kernel (α × β) γ}
+  结论: {κ : 核 α β} {η : 核 (α × β) γ}
   证明: by
   rw [compProd_apply (hs.prod ht)]; rw [← lintegral_indicator hs]
   congr with a
@@ -280,7 +280,7 @@ lemma compProd_congr
 
 中文:
 引理 compProd_congr
-  结论: {κ : Kernel α β} {η η' : Kernel (α × β) γ}
+  结论: {κ : 核 α β} {η η' : 核 (α × β) γ}
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp_rw [compProd_of_not_isSFiniteKernel_left _ _ hκ]
@@ -321,7 +321,7 @@ lemma compProd_zero_left
 
 中文:
 引理 compProd_zero_left
-  条件: (κ : Kernel (α × β) γ)
+  条件: (κ : 核 (α × β) γ)
   证明: by
   by_cases h : IsSFiniteKernel κ
   · ext a s hs
@@ -357,7 +357,7 @@ lemma compProd_zero_right
 
 中文:
 引理 compProd_zero_right
-  条件: (κ : Kernel α β) (γ : 类型) {mγ : MeasurableSpace γ}
+  条件: (κ : 核 α β) (γ : 类型) {mγ : 可测空间 γ}
   证明: by
   by_cases h : IsSFiniteKernel κ
   · ext a s hs
@@ -392,7 +392,7 @@ lemma compProd_eq_zero_iff
 
 中文:
 引理 compProd_eq_zero_iff
-  结论: {κ : Kernel α β} {η : Kernel (α × β) γ}
+  结论: {κ : 核 α β} {η : 核 (α × β) γ}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · simp_rw [← Measure.measure_univ_eq_zero]
@@ -433,7 +433,7 @@ lemma compProd_preimage_fst
 
 中文:
 引理 compProd_preimage_fst
-  结论: {s : Set β} (hs : MeasurableSet s) (κ : Kernel α β)
+  结论: {s : 集合 β} (hs : 可测集 s) (κ : 核 α β)
   证明: by
   simp_rw [compProd_apply (measurable_fst hs), ← Set.preimage_comp, Prod.fst_comp_mk, Set.preimage,
     Function.const_apply]
@@ -473,7 +473,7 @@ lemma compProd_deterministic_apply
 
 中文:
 引理 compProd_deterministic_apply
-  结论: [MeasurableSingletonClass γ] {f : α × β -> γ} (hf : Measurable f)
+  结论: [MeasurableSingleton类 γ] {f : α × β -> γ} (hf : 可测 f)
   证明: by
   classical
   simp only [deterministic_apply, Measure.dirac_apply,
@@ -563,7 +563,7 @@ theorem compProd_null
 
 中文:
 定理 compProd_null
-  条件: (a : α) (hs : MeasurableSet s)
+  条件: (a : α) (hs : 可测集 s)
   证明: by
   rw [Kernel.compProd_apply hs]; rw [lintegral_eq_zero_iff]
   exact Kernel.measurable_kernel_prodMk_left' hs a
@@ -651,7 +651,7 @@ lemma ae_compProd_of_ae_ae
 
 中文:
 引理 ae_compProd_of_ae_ae
-  结论: {κ : Kernel α β} {η : Kernel (α × β) γ}
+  结论: {κ : 核 α β} {η : 核 (α × β) γ}
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp [compProd_of_not_isSFiniteKernel_left _ _ hκ]
@@ -687,7 +687,7 @@ lemma ae_compProd_iff
 
 中文:
 引理 ae_compProd_iff
-  条件: {p : β × γ -> 命题} (hp : MeasurableSet {x | p x})
+  条件: {p : β × γ -> 命题} (hp : 可测集 {x | p x})
   证明: ⟨fun h => ae_ae_of_ae_compProd h, fun h => ae_compProd_of_ae_ae hp h⟩
 
 Depends on / 依赖: ae_ae_of_ae_compProd, ae_compProd_of_ae_ae
@@ -718,7 +718,7 @@ theorem compProd_restrict
 
 中文:
 定理 compProd_restrict
-  条件: {s : Set β} {t : Set γ} (hs : MeasurableSet s) (ht : MeasurableSet t)
+  条件: {s : 集合 β} {t : 集合 γ} (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   ext a u hu
   rw [compProd_apply hu]; rw [restrict_apply' _ _ _ hu]; rw [compProd_apply (hu.inter (hs.prod ht))]
@@ -757,7 +757,7 @@ theorem compProd_restrict_left
 
 中文:
 定理 compProd_restrict_left
-  条件: {s : Set β} (hs : MeasurableSet s)
+  条件: {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [← compProd_restrict hs MeasurableSet.univ]
   congr; exact Kernel.restrict_univ.symm
@@ -781,7 +781,7 @@ theorem compProd_restrict_right
 
 中文:
 定理 compProd_restrict_right
-  条件: {t : Set γ} (ht : MeasurableSet t)
+  条件: {t : 集合 γ} (ht : 可测集 t)
   证明: by
   rw [← compProd_restrict MeasurableSet.univ ht]
   congr; exact Kernel.restrict_univ.symm
@@ -815,7 +815,7 @@ theorem lintegral_compProd'
 
 中文:
 定理 lintegral_compProd'
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   let F : Nat -> SimpleFunc (β × γ) Real>=0∞ := SimpleFunc.eapprox (Function.uncurry f)
   have h : forall a, ⨆ n, F n a = Function.uncurry f a := SimpleFunc.iSup_eapprox_apply hf
@@ -895,7 +895,7 @@ theorem lintegral_compProd
 
 中文:
 定理 lintegral_compProd
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   let g := Function.curry f
   change ∫⁻ bc, f bc ∂(κ otimesₖ η) a = ∫⁻ b, ∫⁻ c, g b c ∂η (a, b) ∂κ a
@@ -928,7 +928,7 @@ theorem lintegral_compProd₀
 
 中文:
 定理 lintegral_compProd₀
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   have A : ∫⁻ z, f z ∂(κ otimesₖ η) a = ∫⁻ z, hf.mk f z ∂(κ otimesₖ η) a := lintegral_congr_ae hf.ae_eq_mk
   have B : ∫⁻ x, ∫⁻ y, f (x, y) ∂η (a, x) ∂κ a = ∫⁻ x, ∫⁻ y, hf.mk f (x, y) ∂η (a, x) ∂κ a := by
@@ -958,8 +958,8 @@ theorem setLIntegral_compProd
     lintegral_compProd _ _ _ hf, Kernel.restrict_apply]
 
 中文:
-定理 setLIntegral_compProd
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+定理 setL整数egral_compProd
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   simp_rw [← Kernel.restrict_apply (κ otimesₖ η) (hs.prod ht), ← compProd_restrict hs ht,
     lintegral_compProd _ _ _ hf, Kernel.restrict_apply]
@@ -983,8 +983,8 @@ theorem setLIntegral_compProd_univ_right
   simp_rw [setLIntegral_compProd κ η a hf hs MeasurableSet.univ, Measure.restrict_univ]
 
 中文:
-定理 setLIntegral_compProd_univ_right
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ]
+定理 setL整数egral_compProd_univ_right
+  结论: (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   simp_rw [setLIntegral_compProd κ η a hf hs MeasurableSet.univ, Measure.restrict_univ]
 
@@ -1006,8 +1006,8 @@ theorem setLIntegral_compProd_univ_left
   simp_rw [setLIntegral_compProd κ η a hf MeasurableSet.univ ht, Measure.restrict_univ]
 
 中文:
-定理 setLIntegral_compProd_univ_left
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+定理 setL整数egral_compProd_univ_left
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   simp_rw [setLIntegral_compProd κ η a hf MeasurableSet.univ ht, Measure.restrict_univ]
 
@@ -1033,7 +1033,7 @@ theorem compProd_eq_sum_compProd_left
 
 中文:
 定理 compProd_eq_sum_compProd_left
-  条件: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  条件: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   simp_rw [compProd_def]
   rw [← comp_sum_left]; rw [← comp_sum_right]; rw [← parallelComp_sum_right]; rw [kernel_sum_seq]
@@ -1057,7 +1057,7 @@ theorem compProd_eq_sum_compProd_right
 
 中文:
 定理 compProd_eq_sum_compProd_right
-  结论: (κ : Kernel α β) (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) (η : 核 (α × β) γ)
   证明: by
   simp_rw [compProd_def]
   rw [← comp_sum_left]; rw [← comp_sum_left]; rw [← comp_sum_left]; rw [← comp_sum_left]; rw [← comp_sum_right]; rw [← parallelComp_sum_left]; rw [kernel_sum_seq]
@@ -1080,7 +1080,7 @@ theorem compProd_eq_sum_compProd
 
 中文:
 定理 compProd_eq_sum_compProd
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   simp_rw [← compProd_eq_sum_compProd_right, ← compProd_eq_sum_compProd_left]
 
@@ -1102,7 +1102,7 @@ theorem compProd_eq_tsum_compProd
 
 中文:
 定理 compProd_eq_tsum_compProd
-  结论: (κ : Kernel α β) [IsSFiniteKernel κ] (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) [是SFiniteKernel κ] (η : 核 (α × β) γ)
   证明: by
   rw [compProd_eq_sum_compProd]
   simp_rw [sum_apply' _ _ hs]
@@ -1124,8 +1124,8 @@ instance IsMarkovKernel.compProd
   body: ⟨by simp [compProd_apply]⟩
 
 中文:
-实例 IsMarkovKernel.compProd
-  签名: (κ : Kernel α β) [IsMarkovKernel κ] (η : Kernel (α × β) γ)
+实例 是MarkovKernel.compProd
+  签名: (κ : 核 α β) [是MarkovKernel κ] (η : 核 (α × β) γ)
   定义体: ⟨by simp [compProd_apply]⟩
 
 Depends on / 依赖: compProd_apply
@@ -1145,8 +1145,8 @@ instance IsZeroOrMarkovKernel.compProd
   infer_instance
 
 中文:
-实例 IsZeroOrMarkovKernel.compProd
-  签名: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
+实例 是ZeroOrMarkovKernel.compProd
+  签名: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
   定义体: by
   rw [compProd_def]
   infer_instance
@@ -1178,7 +1178,7 @@ theorem compProd_apply_univ_le
 
 中文:
 定理 compProd_apply_univ_le
-  条件: (κ : Kernel α β) (η : Kernel (α × β) γ) [IsFiniteKernel η] (a : α)
+  条件: (κ : 核 α β) (η : 核 (α × β) γ) [是FiniteKernel η] (a : α)
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap
@@ -1218,8 +1218,8 @@ instance IsFiniteKernel.compProd
   infer_instance
 
 中文:
-实例 IsFiniteKernel.compProd
-  签名: (κ : Kernel α β) [IsFiniteKernel κ] (η : Kernel (α × β) γ)
+实例 是FiniteKernel.compProd
+  签名: (κ : 核 α β) [是FiniteKernel κ] (η : 核 (α × β) γ)
   定义体: by
   rw [compProd_def]
   infer_instance
@@ -1242,8 +1242,8 @@ instance IsSFiniteKernel.compProd
   infer_instance
 
 中文:
-实例 IsSFiniteKernel.compProd
-  签名: (κ : Kernel α β) (η : Kernel (α × β) γ)
+实例 是SFiniteKernel.compProd
+  签名: (κ : 核 α β) (η : 核 (α × β) γ)
   定义体: by
   rw [compProd_def]
   infer_instance
@@ -1275,7 +1275,7 @@ lemma compProd_assoc
 
 中文:
 引理 compProd_assoc
-  结论: {δ : 类型} {mδ : MeasurableSpace δ}
+  结论: {δ : 类型} {mδ : 可测空间 δ}
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp [hκ]
@@ -1332,7 +1332,7 @@ lemma compProd_add_left
 
 中文:
 引理 compProd_add_left
-  结论: (μ κ : Kernel α β) (η : Kernel (α × β) γ)
+  结论: (μ κ : 核 α β) (η : 核 (α × β) γ)
   证明: by
   by_cases hη : IsSFiniteKernel η
   · ext _ _ hs
@@ -1365,7 +1365,7 @@ lemma compProd_add_right
 
 中文:
 引理 compProd_add_right
-  结论: (μ : Kernel α β) (κ η : Kernel (α × β) γ)
+  结论: (μ : 核 α β) (κ η : 核 (α × β) γ)
   证明: by
   by_cases hμ : IsSFiniteKernel μ
   swap; · simp [hμ]
@@ -1401,7 +1401,7 @@ lemma compProd_sum_left
 
 中文:
 引理 compProd_sum_left
-  结论: {ι : 类型} [Countable ι]
+  结论: {ι : 类型} [可数 ι]
   证明: by
   by_cases hη : IsSFiniteKernel η
   · ext a s hs
@@ -1439,7 +1439,7 @@ lemma compProd_sum_right
 
 中文:
 引理 compProd_sum_right
-  结论: {ι : 类型} [Countable ι]
+  结论: {ι : 类型} [可数 ι]
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp [hκ]
@@ -1484,7 +1484,7 @@ lemma comapRight_compProd_id_prod
 
 中文:
 引理 comapRight_compProd_id_prod
-  结论: {δ : 类型} {mδ : MeasurableSpace δ}
+  结论: {δ : 类型} {mδ : 可测空间 δ}
   证明: by
   ext a t ht
   rw [comapRight_apply' _ _ _ ht]; rw [compProd_apply]; rw [compProd_apply ht]
@@ -1535,7 +1535,7 @@ lemma fst_compProd_apply
 
 中文:
 引理 fst_compProd_apply
-  结论: (κ : Kernel α β) (η : Kernel (α × β) γ)
+  结论: (κ : 核 α β) (η : 核 (α × β) γ)
   证明: by
   rw [Kernel.fst_apply' _ _ hs]; rw [Kernel.compProd_apply]
   swap; · exact measurable_fst hs
@@ -1568,7 +1568,7 @@ lemma fst_compProd
 
 中文:
 引理 fst_compProd
-  条件: (κ : Kernel α β) (η : Kernel (α × β) γ) [IsSFiniteKernel κ] [IsMarkovKernel η]
+  条件: (κ : 核 α β) (η : 核 (α × β) γ) [是SFiniteKernel κ] [是MarkovKernel η]
   证明: by
   ext x s hs; simp [fst_compProd_apply, hs]
 

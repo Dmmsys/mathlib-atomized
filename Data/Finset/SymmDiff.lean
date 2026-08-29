@@ -74,7 +74,7 @@ theorem symmDiff_def
 
 中文:
 定理 symmDiff_def
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s ∆ t = s \ t union t \ s
   证明: rfl
 
@@ -93,7 +93,7 @@ theorem coe_symmDiff
 
 中文:
 定理 coe_symmDiff
-  结论: (↑(s ∆ t) : Set α) = (s : Set α) ∆ t
+  结论: (↑(s ∆ t) : 集合 α) = (s : 集合 α) ∆ t
   证明: Set.ext fun x => by simp [mem_symmDiff, Set.mem_symmDiff]
 
 Depends on / 依赖: Set.ext, Set.mem_symmDiff, mem_symmDiff
@@ -125,7 +125,7 @@ lemma symmDiff_nonempty
 
 中文:
 引理 symmDiff_nonempty
-  结论: (s ∆ t).Nonempty ↔ s != t
+  结论: (s ∆ t).非空 ↔ s != t
   证明: nonempty_iff_ne_empty.trans symmDiff_eq_empty.not
 -/
 @[simp] lemma symmDiff_nonempty : (s ∆ t).Nonempty ↔ s != t :=
@@ -141,7 +141,7 @@ theorem image_symmDiff
 
 中文:
 定理 image_symmDiff
-  条件: [DecidableEq β] {f : α -> β} (s t : Finset α) (hf : Injective f)
+  条件: [DecidableEq β] {f : α -> β} (s t : 有限集 α) (hf : 单射 f)
   证明: mod_cast Set.image_symmDiff hf s t
 
 Depends on / 依赖: Set.image_symmDiff, image_symmDiff, mod_cast
@@ -212,7 +212,7 @@ lemma symmDiff_eq_union_iff
 
 中文:
 引理 symmDiff_eq_union_iff
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s ∆ t = s union t ↔ Disjoint s t
   证明: symmDiff_eq_sup s t
 

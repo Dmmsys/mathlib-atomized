@@ -48,8 +48,8 @@ definition Finset.centerMass
   body: (∑ i in t, w i)⁻¹ • ∑ i in t, w i • z i
 
 中文:
-定义 Finset.centerMass
-  签名: (t : Finset ι) (w : ι -> R) (z : ι -> E)
+定义 有限集.centerMass
+  签名: (t : 有限集 ι) (w : ι -> R) (z : ι -> E)
   定义体: (∑ i in t, w i)⁻¹ • ∑ i in t, w i • z i
 -/
 def Finset.centerMass (t : Finset ι) (w : ι -> R) (z : ι -> E) : E :=
@@ -69,8 +69,8 @@ theorem Finset.centerMass_empty
   simp only [centerMass, sum_empty, smul_zero]
 
 中文:
-定理 Finset.centerMass_empty
-  结论: (∅ : Finset ι).centerMass w z = 0
+定理 有限集.centerMass_empty
+  结论: (∅ : 有限集 ι).centerMass w z = 0
   证明: by
   simp only [centerMass, sum_empty, smul_zero]
 
@@ -90,7 +90,7 @@ theorem Finset.centerMass_pair
   module
 
 中文:
-定理 Finset.centerMass_pair
+定理 有限集.centerMass_pair
   条件: [DecidableEq ι] (hne : i != j)
   证明: by
   simp only [centerMass, sum_pair hne]
@@ -117,7 +117,7 @@ theorem Finset.centerMass_insert
   rw [div_mul_eq_mul_div]; rw [mul_inv_cancel₀ hw]; rw [one_div]
 
 中文:
-定理 Finset.centerMass_insert
+定理 有限集.centerMass_insert
   条件: [DecidableEq ι] (ha : i ∉ t) (hw : ∑ j in t, w j != 0)
   证明: by
   simp only [centerMass, sum_insert ha, smul_add, (mul_smul _ _ _).symm, ← div_eq_inv_mul]
@@ -147,9 +147,9 @@ theorem Finset.centerMass_singleton
   field
 
 中文:
-定理 Finset.centerMass_singleton
+定理 有限集.centerMass_singleton
   条件: (hw : w i != 0)
-  结论: ({i} : Finset ι).centerMass w z = z i
+  结论: ({i} : 有限集 ι).centerMass w z = z i
   证明: by
   rw [centerMass]; rw [sum_singleton]; rw [sum_singleton]
   match_scalars
@@ -172,7 +172,7 @@ lemma Finset.centerMass_neg_left
   simp [centerMass, inv_neg]
 
 中文:
-引理 Finset.centerMass_neg_left
+引理 有限集.centerMass_neg_left
   结论: t.centerMass (-w) z = t.centerMass w z
   证明: by
   simp [centerMass, inv_neg]
@@ -190,8 +190,8 @@ lemma Finset.centerMass_smul_left
   simp [centerMass, -smul_assoc, smul_assoc c, ← smul_sum, smul_inv₀, smul_smul_smul_comm, hc]
 
 中文:
-引理 Finset.centerMass_smul_left
-  结论: {c : R'} [Module R' R] [Module R' E] [SMulCommClass R' R R]
+引理 有限集.centerMass_smul_left
+  结论: {c : R'} [模 R' R] [模 R' E] [标量交换类 R' R R]
   证明: by
   simp [centerMass, -smul_assoc, smul_assoc c, ← smul_sum, smul_inv₀, smul_smul_smul_comm, hc]
 
@@ -212,7 +212,7 @@ theorem Finset.centerMass_eq_of_sum_1
   simp only [Finset.centerMass, hw, inv_one, one_smul]
 
 中文:
-定理 Finset.centerMass_eq_of_sum_1
+定理 有限集.centerMass_eq_of_sum_1
   条件: (hw : ∑ i in t, w i = 1)
   证明: by
   simp only [Finset.centerMass, hw, inv_one, one_smul]
@@ -233,7 +233,7 @@ theorem Finset.centerMass_smul
   simp only [Finset.centerMass, Finset.smul_sum, (mul_smul _ _ _).symm, mul_comm c, mul_assoc]
 
 中文:
-定理 Finset.centerMass_smul
+定理 有限集.centerMass_smul
   结论: (t.centerMass w fun i => c • z i) = c • t.centerMass w z
   证明: by
   simp only [Finset.centerMass, Finset.smul_sum, (mul_smul _ _ _).symm, mul_comm c, mul_assoc]
@@ -256,8 +256,8 @@ theorem Finset.centerMass_segment'
   · rw [sum_sumElim, ← mul_sum, ← mul_sum, hws, hwt, m
 
 中文:
-定理 Finset.centerMass_segment'
-  结论: (s : Finset ι) (t : Finset ι') (ws : ι -> R) (zs : ι -> E)
+定理 有限集.centerMass_segment'
+  结论: (s : 有限集 ι) (t : 有限集 ι') (ws : ι -> R) (zs : ι -> E)
   证明: by
   rw [s.centerMass_eq_of_sum_1 _ hws]; rw [t.centerMass_eq_of_sum_1 _ hwt]; rw [smul_sum]; rw [smul_sum]; rw [←
     Finset.sum_sumElim]; rw [Finset.centerMass_eq_of_sum_1]
@@ -287,8 +287,8 @@ theorem Finset.centerMass_segment
   simp only [Finset.centerMass_eq_of_sum_1, smul_sum, sum_add_distrib, add_smul, mul_smul, *]
 
 中文:
-定理 Finset.centerMass_segment
-  结论: (s : Finset ι) (w₁ w₂ : ι -> R) (z : ι -> E)
+定理 有限集.centerMass_segment
+  结论: (s : 有限集 ι) (w₁ w₂ : ι -> R) (z : ι -> E)
   证明: by
   have hw : (∑ i in s, (a * w₁ i + b * w₂ i)) = 1 := by
     simp only [← mul_sum, sum_add_distrib, mul_one, *]
@@ -320,7 +320,7 @@ theorem Finset.centerMass_ite_eq
   · rw [sum_ite_eq, if_pos hi]
 
 中文:
-定理 Finset.centerMass_ite_eq
+定理 有限集.centerMass_ite_eq
   条件: [DecidableEq ι] (hi : i in t)
   证明: by
   rw [Finset.centerMass_eq_of_sum_1]
@@ -358,8 +358,8 @@ theorem Finset.centerMass_subset
   rw [h i hit' hit]; rw [zero_smul]; rw [smul_zero]
 
 中文:
-定理 Finset.centerMass_subset
-  条件: {t' : Finset ι} (ht : t subseteq t') (h : 对任意 i in t', i ∉ t -> w i = 0)
+定理 有限集.centerMass_subset
+  条件: {t' : 有限集 ι} (ht : t subseteq t') (h : 对任意 i in t', i ∉ t -> w i = 0)
   证明: by
   rw [centerMass]; rw [sum_subset ht h]; rw [smul_sum]; rw [centerMass]; rw [smul_sum]
   apply sum_subset ht
@@ -385,8 +385,8 @@ theorem Finset.centerMass_filter_ne_zero
     simpa only [hit, mem_filter, true_and, Ne, Classical.not_not] using hit'
 
 中文:
-定理 Finset.centerMass_filter_ne_zero
-  条件: [对任意 i, Decidable (w i != 0)]
+定理 有限集.centerMass_filter_ne_zero
+  条件: [对任意 i, 可判定 (w i != 0)]
   证明: Finset.centerMass_subset z (filter_subset _ _) fun i hit hit' => by
     simpa only [hit, mem_filter, true_and, Ne, Classical.not_not] using hit'
 
@@ -413,7 +413,7 @@ exact sum_le_sum fun i hi => smul_le_smul_of_nonneg_left (le_sup' _ hi) hw₀ i 
 
 中文:
 定理 centerMass_le_sup
-  结论: {s : Finset ι} {f : ι -> α} {w : ι -> R} (hw₀ : 对任意 i in s, 0 <= w i)
+  结论: {s : 有限集 ι} {f : ι -> α} {w : ι -> R} (hw₀ : 对任意 i in s, 0 <= w i)
   证明: by
   rw [centerMass]; rw [inv_smul_le_iff_of_pos hw₁]; rw [sum_smul]
 exact sum_le_sum fun i hi => smul_le_smul_of_nonneg_left (le_sup' _ hi) hw₀ i hi
@@ -436,7 +436,7 @@ theorem inf_le_centerMass
 
 中文:
 定理 inf_le_centerMass
-  结论: {s : Finset ι} {f : ι -> α} {w : ι -> R} (hw₀ : 对任意 i in s, 0 <= w i)
+  结论: {s : 有限集 ι} {f : ι -> α} {w : ι -> R} (hw₀ : 对任意 i in s, 0 <= w i)
   证明: centerMass_le_sup (α := αᵒᵈ) hw₀ hw₁
 
 Depends on / 依赖: centerMass_le_sup
@@ -460,7 +460,7 @@ lemma Finset.centerMass_const
   simp [centerMass, ← sum_smul, hw]
 
 中文:
-引理 Finset.centerMass_const
+引理 有限集.centerMass_const
   条件: (hw : ∑ j in t, w j != 0) (c : E)
   证明: by
   simp [centerMass, ← sum_smul, hw]
@@ -486,8 +486,8 @@ lemma Finset.centerMass_congr
   · exact sum_congr (by grind) (by grind)
 
 中文:
-引理 Finset.centerMass_congr
-  结论: [DecidableEq ι] {t' : Finset ι} {w' : ι -> R} {z' : ι -> E}
+引理 有限集.centerMass_congr
+  结论: [DecidableEq ι] {t' : 有限集 ι} {w' : ι -> R} {z' : ι -> E}
   证明: by
   classical
   rw [← centerMass_filter_ne_zero]; rw [centerMass]; rw [← centerMass_filter_ne_zero]; rw [centerMass]
@@ -517,8 +517,8 @@ lemma Finset.centerMass_congr_finset
   proof: centerMass_congr (by grind)
 
 中文:
-引理 Finset.centerMass_congr_finset
-  结论: [DecidableEq ι] {t' : Finset ι}
+引理 有限集.centerMass_congr_finset
+  结论: [DecidableEq ι] {t' : 有限集 ι}
   证明: centerMass_congr (by grind)
 
 Depends on / 依赖: centerMass_congr
@@ -538,7 +538,7 @@ lemma Finset.centerMass_congr_weights
   exact centerMass_congr (by grind)
 
 中文:
-引理 Finset.centerMass_congr_weights
+引理 有限集.centerMass_congr_weights
   条件: {w' : ι -> R} (h : 对任意 i in t, w i = w' i)
   证明: by
   classical
@@ -562,7 +562,7 @@ lemma Finset.centerMass_congr_fun
   exact centerMass_congr (by grind)
 
 中文:
-引理 Finset.centerMass_congr_fun
+引理 有限集.centerMass_congr_fun
   条件: {z' : ι -> E} (h : 对任意 i in t, w i != 0 -> z i = z' i)
   证明: by
   classical
@@ -585,8 +585,8 @@ lemma Finset.centerMass_of_sum_add_sum_eq_zero
   simp [centerMass, eq_neg_of_add_eq_zero_right hw, eq_neg_of_add_eq_zero_left hz]
 
 中文:
-引理 Finset.centerMass_of_sum_add_sum_eq_zero
-  结论: {s t : Finset ι}
+引理 有限集.centerMass_of_sum_add_sum_eq_zero
+  结论: {s t : 有限集 ι}
   证明: by
   simp [centerMass, eq_neg_of_add_eq_zero_right hw, eq_neg_of_add_eq_zero_left hz]
 
@@ -617,8 +617,8 @@ have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     by_cases hsu
 
 中文:
-定理 Convex.centerMass_mem
-  条件: (hs : Convex R s)
+定理 凸.centerMass_mem
+  条件: (hs : 凸 R s)
   证明: by
   classical
   induction t using Finset.induction with
@@ -667,8 +667,8 @@ theorem Convex.sum_mem
     hs.centerMass_mem h₀ (h₁.symm ▸ zero_lt_one) hz
 
 中文:
-定理 Convex.sum_mem
-  结论: (hs : Convex R s) (h₀ : 对任意 i in t, 0 <= w i) (h₁ : ∑ i in t, w i = 1)
+定理 凸.sum_mem
+  结论: (hs : 凸 R s) (h₀ : 对任意 i in t, 0 <= w i) (h₁ : ∑ i in t, w i = 1)
   证明: by
   simpa only [h₁, centerMass, inv_one, one_smul] using
     hs.centerMass_mem h₀ (h₁.symm ▸ zero_lt_one) hz
@@ -696,8 +696,8 @@ theorem Convex.finsum_mem
   rw [finsum
 
 中文:
-定理 Convex.finsum_mem
-  结论: {ι : Sort*} {w : ι -> R} {z : ι -> E} {s : Set E} (hs : Convex R s)
+定理 凸.finsum_mem
+  结论: {ι : 类型层*} {w : ι -> R} {z : ι -> E} {s : 集合 E} (hs : 凸 R s)
   证明: by
   have hfin_w : HasFiniteSupport (w ∘ PLift.down) := by
     by_contra H
@@ -741,7 +741,7 @@ theorem convex_iff_sum_mem
 
 中文:
 定理 convex_iff_sum_mem
-  结论: Convex R s ↔ 对任意 (t : Finset E) (w : E -> R),
+  结论: 凸 R s ↔ 对任意 (t : 有限集 E) (w : E -> R),
   证明: by
   classical
   refine ⟨fun hs t w hw₀ hw₁ hts => hs.sum_mem hw₀ hw₁ hts, ?_⟩
@@ -779,8 +779,8 @@ theorem Finset.centerMass_mem_convexHull
   proof: (convex_convexHull R s).centerMass_mem hw₀ hws fun i hi => subset_convexHull R s hz i hi
 
 中文:
-定理 Finset.centerMass_mem_convexHull
-  结论: (t : Finset ι) {w : ι -> R} (hw₀ : 对任意 i in t, 0 <= w i)
+定理 有限集.centerMass_mem_convexHull
+  结论: (t : 有限集 ι) {w : ι -> R} (hw₀ : 对任意 i in t, 0 <= w i)
   证明: (convex_convexHull R s).centerMass_mem hw₀ hws fun i hi => subset_convexHull R s hz i hi
 
 Depends on / 依赖: centerMass_mem, convex_convexHull, subset_convexHull
@@ -801,8 +801,8 @@ lemma Finset.centerMass_mem_convexHull_of_nonpos
   exact Finset.centerMass_mem_convexHull _ (fun _i hi => neg_nonneg.2 <| hw₀ _ hi) (by simpa) hz
 
 中文:
-引理 Finset.centerMass_mem_convexHull_of_nonpos
-  结论: (t : Finset ι) (hw₀ : 对任意 i in t, w i <= 0)
+引理 有限集.centerMass_mem_convexHull_of_nonpos
+  结论: (t : 有限集 ι) (hw₀ : 对任意 i in t, w i <= 0)
   证明: by
   rw [← centerMass_neg_left]
   exact Finset.centerMass_mem_convexHull _ (fun _i hi => neg_nonneg.2 <| hw₀ _ hi) (by simpa) hz
@@ -823,8 +823,8 @@ theorem Finset.centerMass_id_mem_convexHull
   proof: t.centerMass_mem_convexHull hw₀ hws fun _ => mem_coe.2
 
 中文:
-定理 Finset.centerMass_id_mem_convexHull
-  结论: (t : Finset E) {w : E -> R} (hw₀ : 对任意 i in t, 0 <= w i)
+定理 有限集.centerMass_id_mem_convexHull
+  结论: (t : 有限集 E) {w : E -> R} (hw₀ : 对任意 i in t, 0 <= w i)
   证明: t.centerMass_mem_convexHull hw₀ hws fun _ => mem_coe.2
 
 Depends on / 依赖: centerMass_mem_convexHull, mem_coe, t.centerMass_mem_convexHull
@@ -844,8 +844,8 @@ lemma Finset.centerMass_id_mem_convexHull_of_nonpos
 omit [LinearOrder R] [IsStrictOrderedRing R] in
 
 中文:
-引理 Finset.centerMass_id_mem_convexHull_of_nonpos
-  结论: (t : Finset E) {w : E -> R}
+引理 有限集.centerMass_id_mem_convexHull_of_nonpos
+  结论: (t : 有限集 E) {w : E -> R}
   证明: t.centerMass_mem_convexHull_of_nonpos hw₀ hws fun _ => mem_coe.2
 
 omit [LinearOrder R] [IsStrictOrderedRing R] in
@@ -870,7 +870,7 @@ theorem affineCombination_eq_centerMass
 
 中文:
 定理 affineCombination_eq_centerMass
-  结论: {ι : 类型} {t : Finset ι} {p : ι -> E} {w : ι -> R}
+  结论: {ι : 类型} {t : 有限集 ι} {p : ι -> E} {w : ι -> R}
   证明: by
   rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ w _ hw₂ (0 : E)]; rw [Finset.weightedVSubOfPoint_apply]; rw [vadd_eq_add]; rw [add_zero]; rw [t.centerMass_eq_of_sum_1 _ hw₂]
   simp_rw [vsub_eq_sub, sub_zero]
@@ -896,7 +896,7 @@ theorem affineCombination_mem_convexHull
 
 中文:
 定理 affineCombination_mem_convexHull
-  结论: {s : Finset ι} {v : ι -> E} {w : ι -> R}
+  结论: {s : 有限集 ι} {v : ι -> E} {w : ι -> R}
   证明: by
   rw [affineCombination_eq_centerMass hw₁]
   apply s.centerMass_mem_convexHull hw₀
@@ -924,8 +924,8 @@ theorem Finset.centroid_eq_centerMass
   proof: affineCombination_eq_centerMass (s.sum_centroidWeights_eq_one_of_nonempty R hs)
 
 中文:
-定理 Finset.centroid_eq_centerMass
-  条件: (s : Finset ι) (hs : s.Nonempty) (p : ι -> E)
+定理 有限集.centroid_eq_centerMass
+  条件: (s : 有限集 ι) (hs : s.非空) (p : ι -> E)
   证明: affineCombination_eq_centerMass (s.sum_centroidWeights_eq_one_of_nonempty R hs)
 
 Depends on / 依赖: affineCombination_eq_centerMass, s.sum_centroidWeights_eq_one_of_nonempty, sum_centroidWeights_eq_one_of_nonempty
@@ -948,8 +948,8 @@ theorem Finset.centroid_mem_convexHull
     simp only [hs_card, Finset.sum_const, nsmul_eq_mul
 
 中文:
-定理 Finset.centroid_mem_convexHull
-  条件: (s : Finset E) (hs : s.Nonempty)
+定理 有限集.centroid_mem_convexHull
+  条件: (s : 有限集 E) (hs : s.非空)
   证明: by
   rw [s.centroid_eq_centerMass hs]
   apply s.centerMass_id_mem_convexHull
@@ -985,7 +985,7 @@ theorem convexHull_range_eq_exists_affineCombination
     let W : ι -> R := fun 
 
 中文:
-定理 convexHull_range_eq_exists_affineCombination
+定理 convexHull_range_eq_存在_affineCombination
   条件: (v : ι -> E)
   结论: convexHull R (range v) =
   证明: by
@@ -1044,7 +1044,7 @@ theorem convexHull_eq
 
 中文:
 定理 convexHull_eq
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: convexHull R s =
   证明: by
   refine Subset.antisymm (convexHull_min ?_ ?_) ?_
@@ -1090,8 +1090,8 @@ lemma mem_convexHull_of_exists_fintype
   exact centerMass_mem_convexHull _ (by simpa using hw₀) (by simp [hw₁]) (by simpa using hz)
 
 中文:
-引理 mem_convexHull_of_exists_fintype
-  结论: {s : Set E} {x : E} [Fintype ι] (w : ι -> R) (z : ι -> E)
+引理 mem_convexHull_of_存在_fintype
+  结论: {s : 集合 E} {x : E} [有限类型 ι] (w : ι -> R) (z : ι -> E)
   证明: by
   rw [← hx]; rw [← centerMass_eq_of_sum_1 _ _ hw₁]
   exact centerMass_mem_convexHull _ (by simpa using hw₀) (by simp [hw₁]) (by simpa using hz)
@@ -1120,8 +1120,8 @@ lemma mem_convexHull_iff_exists_fintype
     exact mem_convexHull_of_exists_fintype w z h
 
 中文:
-引理 mem_convexHull_iff_exists_fintype
-  条件: {s : Set E} {x : E}
+引理 mem_convexHull_iff_存在_fintype
+  条件: {s : 集合 E} {x : E}
   证明: by
   constructor
   · simp only [convexHull_eq, mem_ofPred_eq]
@@ -1164,8 +1164,8 @@ theorem Finset.convexHull_eq
   · rintro x ⟨wx, hw
 
 中文:
-定理 Finset.convexHull_eq
-  条件: (s : Finset E)
+定理 有限集.convexHull_eq
+  条件: (s : 有限集 E)
   结论: convexHull R ↑s =
   证明: by
   classical
@@ -1213,9 +1213,9 @@ theorem Finset.mem_convexHull
   rw [Finset.convexHull_eq]; rw [Set.mem_ofPred_eq]
 
 中文:
-定理 Finset.mem_convexHull
-  条件: {s : Finset E} {x : E}
-  结论: x in convexHull R (s : Set E) ↔
+定理 有限集.mem_convexHull
+  条件: {s : 有限集 E} {x : E}
+  结论: x in convexHull R (s : 集合 E) ↔
   证明: by
   rw [Finset.convexHull_eq]; rw [Set.mem_ofPred_eq]
 
@@ -1237,8 +1237,8 @@ refine exists_congr fun w => and_congr_right' and_congr_right fun hw => ?_
   simp_rw [centerMass_eq_of_sum_1 _ _ hw, id_eq]
 
 中文:
-引理 Finset.mem_convexHull'
-  条件: {s : Finset E} {x : E}
+引理 有限集.mem_convexHull'
+  条件: {s : 有限集 E} {x : E}
   证明: by
   rw [mem_convexHull]
 refine exists_congr fun w => and_congr_right' and_congr_right fun hw => ?_
@@ -1265,8 +1265,8 @@ theorem Set.Finite.convexHull_eq
     hs.toFinset.convexHull_eq
 
 中文:
-定理 Set.Finite.convexHull_eq
-  条件: {s : Set E} (hs : s.Finite)
+定理 集合.有限.convexHull_eq
+  条件: {s : 集合 E} (hs : s.有限)
   结论: convexHull R s =
   证明: by
   simpa only [Set.Finite.coe_toFinset, Set.Finite.mem_toFinset, exists_prop] using
@@ -1300,7 +1300,7 @@ theorem convexHull_eq_union_convexHull_finite_subsets
 
 中文:
 定理 convexHull_eq_union_convexHull_finite_subsets
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   证明: by
   classical
   refine Subset.antisymm ?_ ?_
@@ -1367,7 +1367,7 @@ theorem mk_mem_convexHull_prod
 
 中文:
 定理 mk_mem_convexHull_prod
-  结论: {t : Set F} {x : E} {y : F} (hx : x in convexHull R s)
+  结论: {t : 集合 F} {x : E} {y : F} (hx : x in convexHull R s)
   证明: by
   rw [mem_convexHull_iff_exists_fintype] at hx hy ⊢
   obtain ⟨ι, _, w, f, hw₀, hw₁, hfs, hf⟩ := hx
@@ -1407,7 +1407,7 @@ theorem convexHull_prod
 
 中文:
 定理 convexHull_prod
-  条件: (s : Set E) (t : Set F)
+  条件: (s : 集合 E) (t : 集合 F)
   证明: Subset.antisymm
       (convexHull_min (prod_mono (subset_convexHull _ _) <| subset_convexHull _ _) <|
 (convex_convexHull _ _).prod convex_convexHull _ _) <|
@@ -1434,7 +1434,7 @@ theorem convexHull_add
 
 中文:
 定理 convexHull_add
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: convexHull R (s + t) = convexHull R s + convexHull R t
   证明: by
   simp_rw [← add_image_prod, ← IsLinearMap.isLinearMap_add.image_convexHull, convexHull_prod]
@@ -1460,7 +1460,7 @@ definition convexHullAddMonoidHom
 
 中文:
 定义 convexHullAddMonoidHom
-  签名: : Set E ->+ Set E where
+  签名: : 集合 E ->+ 集合 E where
   定义体: convexHull R
   map_add' := convexHull_add
   map_zero' := convexHull_zero
@@ -1486,7 +1486,7 @@ theorem convexHull_sub
 
 中文:
 定理 convexHull_sub
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   结论: convexHull R (s - t) = convexHull R s - convexHull R t
   证明: by
   simp_rw [sub_eq_add_neg, convexHull_add, ← convexHull_neg]
@@ -1507,8 +1507,8 @@ theorem convexHull_list_sum
 
 中文:
 定理 convexHull_list_sum
-  条件: (l : List (Set E))
-  结论: convexHull R l.sum = (l.map <| convexHull R).sum
+  条件: (l : 列表 (集合 E))
+  结论: convexHull R l.求和 = (l.map <| convexHull R).求和
   证明: map_list_sum (convexHullAddMonoidHom R E) l
 
 Depends on / 依赖: convexHullAddMonoidHom, map_list_sum
@@ -1526,7 +1526,7 @@ theorem convexHull_multiset_sum
 
 中文:
 定理 convexHull_multiset_sum
-  条件: (s : Multiset (Set E))
+  条件: (s : Multiset (集合 E))
   证明: map_multiset_sum (convexHullAddMonoidHom R E) s
 
 Depends on / 依赖: convexHullAddMonoidHom, map_multiset_sum
@@ -1545,7 +1545,7 @@ theorem convexHull_sum
 
 中文:
 定理 convexHull_sum
-  条件: {ι} (s : Finset ι) (t : ι -> Set E)
+  条件: {ι} (s : 有限集 ι) (t : ι -> 集合 E)
   证明: map_sum (convexHullAddMonoidHom R E) _ _
 
 Depends on / 依赖: convexHullAddMonoidHom, map_sum
@@ -1572,8 +1572,8 @@ theorem AffineBasis.convexHull_eq_nonneg_coord
   · have hx' : x in aff
 
 中文:
-定理 AffineBasis.convexHull_eq_nonneg_coord
-  条件: {ι : 类型} (b : AffineBasis ι R E)
+定理 仿射基.convexHull_eq_nonneg_coord
+  条件: {ι : 类型} (b : 仿射基 ι R E)
   证明: by
   rw [convexHull_range_eq_exists_affineCombination]
   ext x
@@ -1777,7 +1777,7 @@ lemma convexHull_pi
 
 中文:
 引理 convexHull_pi
-  条件: (s : Set ι) (t : Π i, Set (E i))
+  条件: (s : 集合 ι) (t : Π i, 集合 (E i))
   证明: Set.Subset.antisymm (convexHull_min (Set.pi_mono fun _ _ => subset_convexHull _ _) <| convex_pi <|
     fun _ _ => convex_convexHull _ _) fun _ => mem_convexHull_pi
 -/
@@ -1808,8 +1808,8 @@ theorem convexHull_eq_closedInterior
     have hw1' : 
 
 中文:
-定理 convexHull_eq_closedInterior
-  结论: {𝕜 V : 类型} [Field 𝕜] [LinearOrder 𝕜]
+定理 convexHull_eq_closed整数erior
+  结论: {𝕜 V : 类型} [域 𝕜] [线性序 𝕜]
   证明: by
   ext p
   rw [convexHull_range_eq_exists_affineCombination]; rw [Set.mem_ofPred]

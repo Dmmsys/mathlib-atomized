@@ -52,10 +52,10 @@ class LocallyOfFinitePresentation
     - finitePresentation_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FinitePresentation
 
 中文:
-类 LocallyOfFinitePresentation
+类 局部有限呈现
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - finitePresentation_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.FinitePresentation
+    - finitePresentation_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.有限呈现
 
 Depends on / 依赖: LocallyOfFinitePresentation, LocallyOfFinitePresentation.finitePresentation_appLE, finitePresentation_appLE
 -/
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @LocallyOfFinitePresentation RingHom.FinitePresentation
+  签名: 有RingHomProperty @局部有限呈现 环态射.有限呈现
   定义体: RingHom.finitePresentation_isLocal
   eq_affineLocally' := by
     ext X Y f
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderComposition @LocallyOfFinitePresentation
+  签名: MorphismProperty.是StableUnderComposition @局部有限呈现
   定义体: HasRingHomProperty.stableUnderComposition RingHom.finitePresentation_stableUnderComposition
 
 @[simp]
@@ -134,8 +134,8 @@ lemma LocallyOfFinitePresentation.SpecMap_iff
   proof: HasRingHomProperty.Spec_iff
 
 中文:
-引理 LocallyOfFinitePresentation.SpecMap_iff
-  条件: {R S : CommRingCat.{u}} (f : R ⟶ S)
+引理 局部有限呈现.SpecMap_iff
+  条件: {R S : 交换环范畴.{u}} (f : R ⟶ S)
   证明: HasRingHomProperty.Spec_iff
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.Spec_iff, Spec_iff
@@ -153,8 +153,8 @@ lemma Scheme.Hom.finitePresentation_appTop
   proof: HasRingHomProperty.appTop (P := @LocallyOfFinitePresentation) _ inferInstance
 
 中文:
-引理 Scheme.Hom.finitePresentation_appTop
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [IsAffine X] [IsAffine Y]
+引理 概形.态射.finitePresentation_appTop
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [是仿射 X] [是仿射 Y]
   证明: HasRingHomProperty.appTop (P := @LocallyOfFinitePresentation) _ inferInstance
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.appTop, LocallyOfFinitePresentation, appTop
@@ -174,7 +174,7 @@ instance locallyOfFinitePresentation_comp
 
 中文:
 实例 locallyOfFinitePresentation_comp
-  签名: {X Y Z : Scheme.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
+  签名: {X Y Z : 概形.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: MorphismProperty.comp_mem _ f g hf hg
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -287,7 +287,7 @@ lemma Scheme.Hom.isConstructible_image
 @[stacks 054I]
 
 中文:
-引理 Scheme.Hom.isConstructible_image
+引理 概形.态射.isConstructible_image
   结论: (f : X ⟶ Y)
   证明: (f.isLocallyConstructible_image hs.isLocallyConstructible).isConstructible
 
@@ -315,8 +315,8 @@ lemma Scheme.Hom.isConstructible_preimage
     (quasiCompact_iff_isSpectralMap.mpr (IsRetrocompact_iff_isSpectralM
 
 中文:
-引理 Scheme.Hom.isConstructible_preimage
-  条件: (f : X ⟶ Y) {s : Set Y} (hs : IsConstructible s)
+引理 概形.态射.isConstructible_preimage
+  条件: (f : X ⟶ Y) {s : 集合 Y} (hs : IsConstructible s)
   证明: hs.preimage f.continuous fun t ht ht' => IsRetrocompact_iff_isSpectralMap_subtypeVal.mpr
     (quasiCompact_iff_isSpectralMap.mp
     (MorphismProperty.of_isPullback (P := @QuasiCompact)

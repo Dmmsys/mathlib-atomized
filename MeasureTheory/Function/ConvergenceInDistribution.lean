@@ -71,11 +71,11 @@ structure TendstoInDistribution
 
 中文:
 结构 TendstoInDistribution
-  参数: [OpensMeasurableSpace E] (X : (i : ι) -> Ω i -> E) (l : Filter ι)
+  参数: [OpensMeasurable空间 E] (X : (i : ι) -> Ω i -> E) (l : 滤子 ι)
   公理与运算 (3 个):
-    - forall_aemeasurable : 对任意 i, AEMeasurable (X i) (μ i)
-    - aemeasurable_limit : AEMeasurable Z μ'  [默认: by fun_prop]
-    - tendsto : Tendsto (β := ProbabilityMeasure E) (fun n => ⟨(μ n).map (X n), Measure.isProbabilityMeasure_map (对任意_aemeasurable n)⟩) l (𝓝 ⟨μ'.map Z, Measure.isProbabilityMeasure_map aemeasurable_limit⟩)
+    - forall_aemeasurable : 对任意 i, 几乎处处可测 (X i) (μ i)
+    - aemeasurable_limit : 几乎处处可测 Z μ'  [默认: by fun_prop]
+    - tendsto : 收敛 (β := 概率测度 E) (fun n => ⟨(μ n).map (X n), 测度.isProbabilityMeasure_map (对任意_aemeasurable n)⟩) l (𝓝 ⟨μ'.map Z, 测度.isProbabilityMeasure_map aemeasurable_limit⟩)
 
 Depends on / 依赖: AEMeasurable, IsProbabilityMeasure, Measure, Measure.isProbabilityMeasure_map, ProbabilityMeasure, Tendsto, aemeasurable_limit, forall_aemeasurable, fun_prop, isProbabilityMeasure_map, tendsto, volume_tac
 -/
@@ -99,7 +99,7 @@ lemma tendstoInDistribution_const
 
 中文:
 引理 tendstoInDistribution_const
-  条件: [OpensMeasurableSpace E] (hZ : AEMeasurable Z μ')
+  条件: [OpensMeasurable空间 E] (hZ : 几乎处处可测 Z μ')
   证明: fun _ => by fun_prop
   tendsto := tendsto_const_nhds
 
@@ -125,7 +125,7 @@ lemma tendstoInDistribution_of_identDistrib
 
 中文:
 引理 tendstoInDistribution_of_identDistrib
-  结论: [OpensMeasurableSpace E] (i : ι)
+  结论: [OpensMeasurable空间 E] (i : ι)
   证明: (hX j).aemeasurable_snd
   aemeasurable_limit := hZ.aemeasurable_snd
   tendsto := by
@@ -162,7 +162,7 @@ lemma TendstoInDistribution.congr
 
 中文:
 引理 TendstoInDistribution.congr
-  结论: [OpensMeasurableSpace E] {T : Ω' -> E}
+  结论: [OpensMeasurable空间 E] {T : Ω' -> E}
   证明: (h.forall_aemeasurable i).congr (hXY i)
   aemeasurable_limit := h.aemeasurable_limit.congr hZT
   tendsto := by
@@ -199,7 +199,7 @@ lemma tendstoInDistribution_of_isEmpty
 
 中文:
 引理 tendstoInDistribution_of_isEmpty
-  条件: [IsEmpty E]
+  条件: [是空 E]
   证明: fun _ => (measurable_of_subsingleton_codomain _).aemeasurable
   aemeasurable_limit := (measurable_of_subsingleton_codomain _).aemeasurable
   tendsto := by
@@ -230,7 +230,7 @@ lemma tendstoInDistribution_unique
 
 中文:
 引理 tendstoInDistribution_unique
-  结论: [HasOuterApproxClosed E] [BorelSpace E]
+  结论: [有OuterApproxClosed E] [Borel空间 E]
   证明: by
   have h_eq := tendsto_nhds_unique h1.tendsto h2.tendsto
   rw [Subtype.ext_iff] at h_eq
@@ -261,7 +261,7 @@ theorem TendstoInDistribution.continuous_comp
 
 中文:
 定理 TendstoInDistribution.continuous_comp
-  结论: {F : 类型} [OpensMeasurableSpace E]
+  结论: {F : 类型} [OpensMeasurable空间 E]
   证明: fun n => hg.measurable.comp_aemeasurable (h.forall_aemeasurable n)
   aemeasurable_limit := hg.measurable.comp_aemeasurable h.aemeasurable_limit
   tendsto := by
@@ -302,7 +302,7 @@ theorem tendstoInDistribution_of_ae_tendsto
 
 中文:
 定理 tendstoInDistribution_of_ae_tendsto
-  结论: [l.IsCountablyGenerated]
+  结论: [l.是余untablyGenerated]
   证明: hX₁
   aemeasurable_limit := hZ
   tendsto := by
@@ -349,7 +349,7 @@ theorem TendstoInMeasure.tendstoInDistribution
 
 中文:
 定理 TendstoInMeasure.tendstoInDistribution
-  结论: [PseudoEMetricSpace E] [BorelSpace E]
+  结论: [PseudoEMetric空间 E] [Borel空间 E]
   证明: by
   have hZ := h.aemeasurable hX
   refine ⟨hX, hZ, ?_⟩
@@ -525,7 +525,7 @@ lemma TendstoInMeasure.tendstoInDistribution_of_aemeasurable
 
 中文:
 引理 TendstoInMeasure.tendstoInDistribution_of_aemeasurable
-  结论: [l.IsCountablyGenerated]
+  结论: [l.是余untablyGenerated]
   证明: tendstoInDistribution_of_tendstoInMeasure_sub X Z (tendstoInDistribution_const hZ)
     (by simpa [tendstoInMeasure_iff_norm] using h) hX
 

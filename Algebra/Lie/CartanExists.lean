@@ -92,7 +92,7 @@ definition lieCharpoly
 
 中文:
 定义 lieCharpoly
-  签名: : Polynomial R[X]
+  签名: : 多项式 R[X]
   定义体: letI bL := chooseBasis R L
 (polyCharpoly (LieHom.toLinearMap φ) bL).map RingHomClass.toRingHom
     MvPolynomial.aeval fun i => C (bL.repr y i) * X + C (bL.repr x i)
@@ -138,7 +138,7 @@ lemma lieCharpoly_natDegree
 
 中文:
 引理 lieCharpoly_natDegree
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (lieCharpoly R M x y).natDegree = finrank R M
   证明: by
   rw [lieCharpoly]; rw [(polyCharpoly_monic _ _).natDegree_map]; rw [polyCharpoly_natDegree]
@@ -205,7 +205,7 @@ lemma lieCharpoly_coeff_natDegree
 
 中文:
 引理 lieCharpoly_coeff_natDegree
-  条件: [Nontrivial R] (i j : 自然数) (hij : i + j = finrank R M)
+  条件: [非平凡 R] (i j : 自然数) (hij : i + j = finrank R M)
   证明: by
   rw [← mul_one j]; rw [lieCharpoly]; rw [coeff_map]
   apply MvPolynomial.aeval_natDegree_le
@@ -251,7 +251,7 @@ lemma engel_isBot_of_isMin
 
 中文:
 引理 engel_isBot_of_isMin
-  结论: (hLK : finrank K L <= #K) (U : LieSubalgebra K L)
+  结论: (hLK : finrank K L <= #K) (U : Lie子代数 K L)
   证明: by
   rcases E with ⟨_, x, hxU, rfl⟩
   rintro ⟨_, y, hyU, rfl⟩
@@ -493,7 +493,7 @@ lemma exists_isCartanSubalgebra_engel_of_finrank_le_card
  
 
 中文:
-引理 exists_isCartanSubalgebra_engel_of_finrank_le_card
+引理 存在_isCartanSubalgebra_engel_of_finrank_le_card
   条件: (h : finrank K L <= #K)
   证明: by
   obtain ⟨x, hx⟩ := exists_isRegular_of_finrank_le_card K L h
@@ -536,8 +536,8 @@ lemma exists_isCartanSubalgebra_engel
 exact natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite K›
 
 中文:
-引理 exists_isCartanSubalgebra_engel
-  条件: [Infinite K]
+引理 存在_isCartanSubalgebra_engel
+  条件: [无限 K]
   证明: by
   apply exists_isCartanSubalgebra_engel_of_finrank_le_card
 exact natCast_le_aleph0.trans Cardinal.infinite_iff.mp ‹Infinite K›

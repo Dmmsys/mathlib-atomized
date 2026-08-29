@@ -316,7 +316,7 @@ lemma geo_series
 
 中文:
 引理 geo_series
-  条件: [Nontrivial β] (x : β) (hx1 : abv x < 1)
+  条件: [非平凡 β] (x : β) (hx1 : abv x < 1)
   证明: by
   have hx1' : abv x != 1 := fun h => by simp [h] at hx1
   refine of_abv ?_

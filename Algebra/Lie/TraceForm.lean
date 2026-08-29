@@ -59,7 +59,7 @@ definition traceForm
 
 中文:
 定义 traceForm
-  签名: : LinearMap.BilinForm R L
+  签名: : 线性映射.BilinForm R L
   定义体: ((LinearMap.mul _ _).compl₁₂ (φ).toLinearMap (φ).toLinearMap).compr₂ (trace R M)
 
 Depends on / 依赖: LinearMap, LinearMap.mul, _mul_mk, _of_map_mul, f.toLinearMap, map_mul, toLinearMap
@@ -116,7 +116,7 @@ lemma traceForm_isSymm
 
 中文:
 引理 traceForm_isSymm
-  结论: LinearMap.IsSymm (traceForm R L M)
+  结论: 线性映射.是Symm (traceForm R L M)
   证明: ⟨LieModule.traceForm_comm R L M⟩
 
 Depends on / 依赖: LieModule, LieModule.traceForm_comm, _eq_mk, _iff, _zero, eq_comm, one_smul, simp_rw, smul_zero, traceForm_comm
@@ -133,7 +133,7 @@ lemma traceForm_flip
 
 中文:
 引理 traceForm_flip
-  结论: LinearMap.flip (traceForm R L M) = traceForm R L M
+  结论: 线性映射.flip (traceForm R L M) = traceForm R L M
   证明: Eq.symm LinearMap.ext₂ traceForm_comm R L M
 -/
 @[simp] lemma traceForm_flip : LinearMap.flip (traceForm R L M) = traceForm R L M :=
@@ -263,7 +263,7 @@ lemma traceForm_eq_zero_of_isNilpotent
 
 中文:
 引理 traceForm_eq_zero_of_isNilpotent
-  条件: [IsReduced R] [IsNilpotent L M]
+  条件: [是既约 R] [是幂零 L M]
   证明: by
   ext x y
   simp only [traceForm_apply_apply, LinearMap.zero_apply, ← isNilpotent_iff_eq_zero]
@@ -289,7 +289,7 @@ lemma traceForm_baseChange
 
 中文:
 引理 traceForm_baseChange
-  结论: [Module.Free R M] [Module.Finite R M]
+  结论: [模.自由 R M] [模.有限 R M]
   证明: by
   ext; simp [traceForm_apply_apply, ← LinearMap.baseChange_comp, Algebra.algebraMap_eq_smul_one]
 -/
@@ -358,7 +358,7 @@ lemma traceForm_genWeightSpace_eq
 
 中文:
 引理 traceForm_genWeightSpace_eq
-  结论: [Module.Free R M]
+  结论: [模.自由 R M]
   证明: by
   set d := finrank R (genWeightSpace M χ)
   have h₁ : χ y • d • χ x - χ y • χ x • (d : R) = 0 := by simp [mul_comm (χ x)]
@@ -480,7 +480,7 @@ lemma traceForm_eq_zero_of_isTrivial
 
 中文:
 引理 traceForm_eq_zero_of_isTrivial
-  条件: [IsTrivial L M]
+  条件: [是平凡 L M]
   证明: by
   ext x y
   suffices φ x ∘ₗ φ y = 0 by simp [traceForm_apply_apply, this]
@@ -514,7 +514,7 @@ lemma eq_zero_of_mem_genWeightSpace_mem_posFitting
 
 中文:
 引理 eq_zero_of_mem_genWeightSpace_mem_posFitting
-  结论: [LieRing.IsNilpotent L]
+  结论: [Lie环.是幂零 L]
   证明: by
   replace hB : forall x (k : Nat) m n, B m ((φ x ^ k) n) = (-1 : R) ^ k • B ((φ x ^ k) m) n := by
     intro x k
@@ -599,7 +599,7 @@ lemma traceForm_lieSubalgebra_mk_left
 
 中文:
 引理 traceForm_lieSubalgebra_mk_left
-  条件: (L' : LieSubalgebra R L) {x : L} (hx : x in L') (y : L')
+  条件: (L' : Lie子代数 R L) {x : L} (hx : x in L') (y : L')
   证明: rfl
 
 @[simp]
@@ -619,7 +619,7 @@ lemma traceForm_lieSubalgebra_mk_right
 
 中文:
 引理 traceForm_lieSubalgebra_mk_right
-  条件: (L' : LieSubalgebra R L) {x : L'} {y : L} (hy : y in L')
+  条件: (L' : Lie子代数 R L) {x : L'} {y : L} (hy : y in L')
   证明: rfl
 -/
 lemma traceForm_lieSubalgebra_mk_right (L' : LieSubalgebra R L) {x : L'} {y : L} (hy : y in L') :
@@ -646,7 +646,7 @@ fun χ m hm => LieSubmodule.lie_mem _ LieSubmodule.lie_mem _ hm
 
 中文:
 引理 traceForm_eq_sum_genWeightSpaceOf
-  结论: [IsPrincipalIdealRing R]
+  结论: [是主理想环 R]
   证明: by
   ext x y
   have hxy : forall χ : R, MapsTo ((toEnd R L M x).comp (toEnd R L M y))
@@ -696,7 +696,7 @@ lemma lowerCentralSeries_one_inf_center_le_ker_traceForm
 
 中文:
 引理 lowerCentralSeries_one_inf_center_le_ker_traceForm
-  条件: [Module.Free R M] [Module.Finite R M]
+  条件: [模.自由 R M] [模.有限 R M]
   证明: by
   /- Sketch of proof (due to Zassenhaus):
 
@@ -765,7 +765,7 @@ lemma isLieAbelian_of_ker_traceForm_eq_bot
 
 中文:
 引理 isLieAbelian_of_ker_traceForm_eq_bot
-  结论: [Module.Free R M] [Module.Finite R M]
+  结论: [模.自由 R M] [模.有限 R M]
   证明: by
   simpa only [← disjoint_lowerCentralSeries_maxTrivSubmodule_iff R L L, disjoint_iff_inf_le,
     LieIdeal.toLieSubalgebra_toSubmodule, LieSubmodule.toSubmodule_eq_bot, h]
@@ -876,7 +876,7 @@ lemma traceForm_eq_zero_of_isTrivial
 
 中文:
 引理 traceForm_eq_zero_of_isTrivial
-  条件: [LieModule.IsTrivial I N]
+  条件: [Lie模.是平凡 I N]
   证明: by
   let hy' : forall m in N, (φ x ∘ₗ φ y) m in N := fun m _ => N.lie_mem (N.mem_idealizer.mp (h hy) m)
   suffices (φ x ∘ₗ φ y).restrict hy' = 0 by
@@ -910,7 +910,7 @@ abbreviation killingForm
 
 中文:
 缩写 killingForm
-  签名: : LinearMap.BilinForm R L
+  签名: : 线性映射.BilinForm R L
   定义体: LieModule.traceForm R L L
 
 Depends on / 依赖: LieModule, LieModule.traceForm, traceForm

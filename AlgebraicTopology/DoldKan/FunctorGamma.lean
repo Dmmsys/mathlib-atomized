@@ -58,7 +58,7 @@ definition Isδ₀
 
 中文:
 定义 Isδ₀
-  签名: {Δ Δ' : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i]
+  签名: {Δ Δ' : 单纯形范畴} (i : Δ' ⟶ Δ) [单态射 i]
   定义体: Δ.len = Δ'.len + 1 ∧ i.toOrderHom 0 != 0
 
 Depends on / 依赖: i.toOrderHom, toOrderHom
@@ -85,8 +85,8 @@ theorem iff
 
 中文:
 定理 iff
-  条件: {j : 自然数} {i : Fin (j + 2)}
-  结论: Isδ₀ (SimplexCategory.δ i) ↔ i = 0
+  条件: {j : 自然数} {i : 有限集 (j + 2)}
+  结论: Isδ₀ (单纯形范畴.δ i) ↔ i = 0
   证明: by
   constructor
   · rintro ⟨_, h₂⟩
@@ -118,7 +118,7 @@ theorem eq_δ₀
 
 中文:
 定理 eq_δ₀
-  条件: {n : 自然数} {i : ⦋n⦌ ⟶ ⦋n + 1⦌} [Mono i] (hi : Isδ₀ i)
+  条件: {n : 自然数} {i : ⦋n⦌ ⟶ ⦋n + 1⦌} [单态射 i] (hi : Isδ₀ i)
   证明: by
   obtain ⟨j, rfl⟩ := SimplexCategory.eq_δ_of_mono i
   rw [iff] at hi
@@ -166,7 +166,7 @@ definition obj₂
 
 中文:
 定义 obj₂
-  签名: (K : ChainComplex C 自然数) (Δ : SimplexCategoryᵒᵖ) [HasFiniteCoproducts C]
+  签名: (K : 链复形 C 自然数) (Δ : SimplexCategoryᵒᵖ) [有FiniteCoproducts C]
   定义体: ∐ fun A : Splitting.IndexSet Δ => summand K Δ A
 
 Depends on / 依赖: IndexSet, Splitting, Splitting.IndexSet, summand
@@ -191,7 +191,7 @@ definition mapMono
 
 中文:
 定义 mapMono
-  签名: (K : ChainComplex C 自然数) {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i]
+  签名: (K : 链复形 C 自然数) {Δ' Δ : 单纯形范畴} (i : Δ' ⟶ Δ) [单态射 i]
   定义体: by
   by_cases Δ = Δ'
   · exact eqToHom (by congr)
@@ -251,7 +251,7 @@ theorem mapMono_δ₀'
 
 中文:
 定理 mapMono_δ₀'
-  条件: (i : Δ' ⟶ Δ) [Mono i] (hi : Isδ₀ i)
+  条件: (i : Δ' ⟶ Δ) [单态射 i] (hi : Isδ₀ i)
   结论: mapMono K i = K.d Δ.len Δ'.len
   证明: by
   unfold mapMono
@@ -284,7 +284,7 @@ theorem mapMono_δ₀
 中文:
 定理 mapMono_δ₀
   条件: {n : 自然数}
-  结论: mapMono K (δ (0 : Fin (n + 2))) = K.d (n + 1) n
+  结论: mapMono K (δ (0 : 有限集 (n + 2))) = K.d (n + 1) n
   证明: mapMono_δ₀' K _ (by rw [Isδ₀.iff])
 -/
 theorem mapMono_δ₀ {n : Nat} : mapMono K (δ (0 : Fin (n + 2))) = K.d (n + 1) n :=
@@ -305,7 +305,7 @@ theorem mapMono_eq_zero
 
 中文:
 定理 mapMono_eq_zero
-  条件: (i : Δ' ⟶ Δ) [Mono i] (h₁ : Δ != Δ') (h₂ : ¬Isδ₀ i)
+  条件: (i : Δ' ⟶ Δ) [单态射 i] (h₁ : Δ != Δ') (h₂ : ¬Isδ₀ i)
   结论: mapMono K i = 0
   证明: by
   unfold mapMono
@@ -340,7 +340,7 @@ theorem mapMono_naturality
 
 中文:
 定理 mapMono_naturality
-  条件: (i : Δ ⟶ Δ') [Mono i]
+  条件: (i : Δ ⟶ Δ') [单态射 i]
   证明: by
   unfold mapMono
   split_ifs with h
@@ -381,7 +381,7 @@ theorem mapMono_comp
 
 中文:
 定理 mapMono_comp
-  条件: (i' : Δ'' ⟶ Δ') (i : Δ' ⟶ Δ) [Mono i'] [Mono i]
+  条件: (i' : Δ'' ⟶ Δ') (i : Δ' ⟶ Δ) [单态射 i'] [单态射 i]
   证明: by
   -- case where i : Δ' ⟶ Δ is the identity
   by_cases h₁ : Δ = Δ'
@@ -434,7 +434,7 @@ definition map
 
 中文:
 定义 map
-  签名: (K : ChainComplex C 自然数) {Δ' Δ : SimplexCategoryᵒᵖ} (θ : Δ ⟶ Δ')
+  签名: (K : 链复形 C 自然数) {Δ' Δ : SimplexCategoryᵒᵖ} (θ : Δ ⟶ Δ')
   定义体: Sigma.desc fun A =>
     Termwise.mapMono K (image.ι (θ.unop ≫ A.e)) ≫ Sigma.ι (summand K Δ') (A.pull θ)
 
@@ -534,7 +534,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: (K : ChainComplex C 自然数)
+  签名: (K : 链复形 C 自然数)
   定义体: Obj.obj₂ K Δ
   map θ := Obj.map K θ
   map_id Δ := colimit.hom_ext (fun ⟨A⟩ => by
@@ -581,7 +581,7 @@ definition splitting
 
 中文:
 定义 splitting
-  签名: (K : ChainComplex C 自然数)
+  签名: (K : 链复形 C 自然数)
   定义体: K.X n
   ι n := Sigma.ι (Γ₀.Obj.summand K (op ⦋n⦌)) (Splitting.IndexSet.id (op ⦋n⦌))
   isColimit' Δ := IsColimit.ofIsoColimit (colimit.isColimit _) (Cofan.ext (Iso.refl _) (by
@@ -688,7 +688,7 @@ theorem Obj.mapMono_on_summand_id
 
 中文:
 定理 Obj.mapMono_on_summand_id
-  条件: {Δ Δ' : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i]
+  条件: {Δ Δ' : 单纯形范畴} (i : Δ' ⟶ Δ) [单态射 i]
   证明: Obj.map_on_summand K (Splitting.IndexSet.id (op Δ)) i.op (rfl : 𝟙 _ ≫ i = i ≫ 𝟙 _)
 
 Depends on / 依赖: IndexSet, Obj.map_on_summand, Splitting, Splitting.IndexSet.id, i.op, map_on_summand
@@ -713,7 +713,7 @@ theorem Obj.map_epi_on_summand_id
 
 中文:
 定理 Obj.map_epi_on_summand_id
-  条件: {Δ Δ' : SimplexCategory} (e : Δ' ⟶ Δ) [Epi e]
+  条件: {Δ Δ' : 单纯形范畴} (e : Δ' ⟶ Δ) [满态射 e]
   证明: by
   simpa only [Γ₀.Obj.map_on_summand K (Splitting.IndexSet.id (op Δ)) e.op
       (rfl : e ≫ 𝟙 Δ = e ≫ 𝟙 Δ),
@@ -747,7 +747,7 @@ definition map
 
 中文:
 定义 map
-  签名: {K K' : ChainComplex C 自然数} (f : K ⟶ K')
+  签名: {K K' : 链复形 C 自然数} (f : K ⟶ K')
   定义体: (Γ₀.splitting K).desc Δ fun A => f.f A.1.unop.len ≫
     ((Γ₀.splitting K').cofan _).inj A
   naturality {Δ' Δ} θ := by
@@ -796,7 +796,7 @@ definition Γ₀'
 
 中文:
 定义 Γ₀'
-  签名: : ChainComplex C 自然数 ⥤ SimplicialObject.Split C where
+  签名: : 链复形 C 自然数 ⥤ SimplicialObject.分裂 C where
   定义体: SimplicialObject.Split.mk' (Γ₀.splitting K)
   map {K K'} f :=
     { F := Γ₀.map f
@@ -832,7 +832,7 @@ definition Γ₀
 
 中文:
 定义 Γ₀
-  签名: : ChainComplex C 自然数 ⥤ SimplicialObject C
+  签名: : 链复形 C 自然数 ⥤ SimplicialObject C
   定义体: Γ₀' ⋙ Split.forget _
 
 Depends on / 依赖: Split.forget, forget
@@ -854,7 +854,7 @@ definition Γ₂
 
 中文:
 定义 Γ₂
-  签名: : Karoubi (ChainComplex C 自然数) ⥤ Karoubi (SimplicialObject C)
+  签名: : Karoubi (链复形 C 自然数) ⥤ Karoubi (SimplicialObject C)
   定义体: (CategoryTheory.Idempotents.functorExtension₂ _ _).obj Γ₀
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Idempotents.functorExtension, Idempotents
@@ -879,7 +879,7 @@ theorem HigherFacesVanish.on_Γ₀_summand_id
 
 中文:
 定理 HigherFacesVanish.on_Γ₀_summand_id
-  条件: (K : ChainComplex C 自然数) (n : 自然数)
+  条件: (K : 链复形 C 自然数) (n : 自然数)
   证明: by
   intro j _
   have eq := Γ₀.Obj.mapMono_on_summand_id K (SimplexCategory.δ j.succ)
@@ -916,7 +916,7 @@ theorem PInfty_on_Γ₀_splitting_summand_eq_self
 
 中文:
 定理 PInfty_on_Γ₀_splitting_summand_eq_self
-  条件: (K : ChainComplex C 自然数) {n : 自然数}
+  条件: (K : 链复形 C 自然数) {n : 自然数}
   证明: by
   rw [PInfty_f]
   rcases n with _ | n

@@ -37,7 +37,7 @@ structure MonoidalOpposite
   (no additional axioms)
 
 中文:
-结构 MonoidalOpposite
+结构 幺半群对偶
   参数: (C : 类型u₁)
   (无附加公理)
 -/
@@ -60,7 +60,7 @@ theorem mop_injective
 
 中文:
 定理 mop_injective
-  结论: Function.Injective (mop : C -> Cᴹᵒᵖ)
+  结论: 函数.单射 (mop : C -> Cᴹᵒᵖ)
   证明: @mop.inj C
 
 Depends on / 依赖: mop.inj
@@ -77,7 +77,7 @@ theorem unmop_injective
 
 中文:
 定理 unmop_injective
-  结论: Function.Injective (unmop : Cᴹᵒᵖ -> C)
+  结论: 函数.单射 (unmop : Cᴹᵒᵖ -> C)
   证明: fun _ _ h => congrArg mop h
 -/
 theorem unmop_injective : Function.Injective (unmop : Cᴹᵒᵖ -> C) :=
@@ -178,7 +178,7 @@ instance monoidalOppositeCategory
 
 中文:
 实例 monoidalOppositeCategory
-  签名: [Category.{v₁} C]
+  签名: [范畴.{v₁} C]
   定义体: (unmop X ⟶ unmop Y)ᴹᵒᵖ
   id X := mop (𝟙 (unmop X))
   comp f g := mop (unmop f ≫ unmop g)
@@ -207,7 +207,7 @@ definition Quiver.Hom.mop
   body: MonoidalOpposite.mop f
 
 中文:
-定义 Quiver.Hom.mop
+定义 箭图.态射.mop
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: MonoidalOpposite.mop f
 
@@ -224,7 +224,7 @@ definition Quiver.Hom.unmop
   body: MonoidalOpposite.unmop f
 
 中文:
-定义 Quiver.Hom.unmop
+定义 箭图.态射.unmop
   签名: {X Y : Cᴹᵒᵖ} (f : X ⟶ Y)
   定义体: MonoidalOpposite.unmop f
 
@@ -460,7 +460,7 @@ lemma MonoidalOpposite.hom_ext
   proof: Quiver.Hom.unmop_inj h
 
 中文:
-引理 MonoidalOpposite.hom_ext
+引理 幺半群对偶.hom_ext
   条件: {x y : Cᴹᵒᵖ} {f g : x ⟶ y} (h : f.unmop = g.unmop)
   证明: Quiver.Hom.unmop_inj h
 
@@ -579,7 +579,7 @@ tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unop_inj by simp
 
 中文:
 实例 monoidalCategoryOp
-  签名: : MonoidalCategory Cᵒᵖ where
+  签名: : 幺半群范畴 Cᵒᵖ where
   定义体: op (unop X otimes unop Y)
   whiskerLeft X _ _ f := (X.unop ◁ f.unop).op
   whiskerRight f X := (f.unop ▷ X.unop).op
@@ -1107,7 +1107,7 @@ tensorHom_comp_tensorHom _ _ _ _ := Quiver.Hom.unmop_inj by si
 
 中文:
 实例 monoidalCategoryMop
-  签名: : MonoidalCategory Cᴹᵒᵖ where
+  签名: : 幺半群范畴 Cᴹᵒᵖ where
   定义体: mop (unmop Y otimes unmop X)
   whiskerLeft X _ _ f := (f.unmop ▷ X.unmop).mop
   whiskerRight f X := (X.unmop ◁ f.unmop).mop
@@ -1631,7 +1631,7 @@ definition MonoidalOpposite.mopEquiv
   counitIso := Iso.refl _
 
 中文:
-定义 MonoidalOpposite.mopEquiv
+定义 幺半群对偶.mopEquiv
   签名: : C ≌ Cᴹᵒᵖ where
   定义体: mopFunctor C
   inverse := unmopFunctor C
@@ -1655,7 +1655,7 @@ definition MonoidalOpposite.unmopEquiv
 #adaptation_note
 
 中文:
-定义 MonoidalOpposite.unmopEquiv
+定义 幺半群对偶.unmopEquiv
   签名: : Cᴹᵒᵖ ≌ C
   定义体: (mopEquiv C).symm
 
@@ -1675,7 +1675,7 @@ definition MonoidalOpposite.mopMopEquivalence
   body: .trans (MonoidalOpposite.unmopEquiv Cᴹᵒᵖ) (MonoidalOpposite.unmopEquiv C)
 
 中文:
-定义 MonoidalOpposite.mopMopEquivalence
+定义 幺半群对偶.mopMopEquivalence
   签名: : Cᴹᵒᵖᴹᵒᵖ ≌ C
   定义体: .trans (MonoidalOpposite.unmopEquiv Cᴹᵒᵖ) (MonoidalOpposite.unmopEquiv C)
 -/
@@ -1700,7 +1700,7 @@ instance MonoidalOpposite.mopMopEquivalenceFunctorMonoidal
   δ_μ X Y := Category.comp_id _
 
 中文:
-实例 MonoidalOpposite.mopMopEquivalenceFunctorMonoidal
+实例 幺半群对偶.mopMopEquivalenceFunctorMonoidal
   签名: :
   定义体: 𝟙 _
   δ X Y := 𝟙 _
@@ -1740,7 +1740,7 @@ instance MonoidalOpposite.mopMopEquivalenceInverseMonoidal
   δ_μ X Y := Category.comp_id _
 
 中文:
-实例 MonoidalOpposite.mopMopEquivalenceInverseMonoidal
+实例 幺半群对偶.mopMopEquivalenceInverseMonoidal
   签名: :
   定义体: 𝟙 _
   δ X Y := 𝟙 _
@@ -1776,7 +1776,7 @@ instance :
 
 中文:
 实例 :
-  签名: (mopMopEquivalence C).IsMonoidal
+  签名: (mopMopEquivalence C).是幺半群
   定义体: by
     simp [ε, η, mopMopEquivalence, Equivalence.trans, unmopEquiv, ε]
   leftAdjoint_μ X Y := by
@@ -1802,7 +1802,7 @@ definition MonoidalOpposite.tensorIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorIso
+定义 幺半群对偶.tensorIso
   签名: :
   定义体: Iso.refl _
 
@@ -1827,7 +1827,7 @@ definition MonoidalOpposite.tensorLeftIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorLeftIso
+定义 幺半群对偶.tensorLeftIso
   签名: (X : Cᴹᵒᵖ)
   定义体: Iso.refl _
 
@@ -1849,7 +1849,7 @@ definition MonoidalOpposite.tensorLeftMopIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorLeftMopIso
+定义 幺半群对偶.tensorLeftMopIso
   签名: (X : C)
   定义体: Iso.refl _
 
@@ -1871,7 +1871,7 @@ definition MonoidalOpposite.tensorLeftUnmopIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorLeftUnmopIso
+定义 幺半群对偶.tensorLeftUnmopIso
   签名: (X : Cᴹᵒᵖ)
   定义体: Iso.refl _
 
@@ -1893,7 +1893,7 @@ definition MonoidalOpposite.tensorRightIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorRightIso
+定义 幺半群对偶.tensorRightIso
   签名: (X : Cᴹᵒᵖ)
   定义体: Iso.refl _
 
@@ -1915,7 +1915,7 @@ definition MonoidalOpposite.tensorRightMopIso
   body: Iso.refl _
 
 中文:
-定义 MonoidalOpposite.tensorRightMopIso
+定义 幺半群对偶.tensorRightMopIso
   签名: (X : C)
   定义体: Iso.refl _
 
@@ -1939,7 +1939,7 @@ definition MonoidalOpposite.tensorRightUnmopIso
 @[simps]
 
 中文:
-定义 MonoidalOpposite.tensorRightUnmopIso
+定义 幺半群对偶.tensorRightUnmopIso
   签名: (X : Cᴹᵒᵖ)
   定义体: Iso.refl _
 
@@ -1971,7 +1971,7 @@ instance monoidalOpOp
 
 中文:
 实例 monoidalOpOp
-  签名: : (opOp C).Monoidal where
+  签名: : (opOp C).幺半群 where
   定义体: 𝟙 _
   η := 𝟙 _
   μ X Y := 𝟙 _
@@ -2011,7 +2011,7 @@ instance monoidalUnopUnop
 
 中文:
 实例 monoidalUnopUnop
-  签名: : (unopUnop C).Monoidal where
+  签名: : (unopUnop C).幺半群 where
   定义体: 𝟙 _
   η := 𝟙 _
   μ X Y := 𝟙 _
@@ -2041,7 +2041,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).functor.Monoidal
+  签名: (opOpEquivalence C).functor.幺半群
   定义体: monoidalUnopUnop
 
 Depends on / 依赖: monoidalUnopUnop
@@ -2057,7 +2057,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).inverse.Monoidal
+  签名: (opOpEquivalence C).inverse.幺半群
   定义体: monoidalOpOp
 
 Depends on / 依赖: choose_spec, exists_simple_subobject, monoidalOpOp
@@ -2076,7 +2076,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOpEquivalence C).IsMonoidal
+  签名: (opOpEquivalence C).是幺半群
   定义体: by simp [opOpEquivalence]
   leftAdjoint_μ := by simp [opOpEquivalence]
 

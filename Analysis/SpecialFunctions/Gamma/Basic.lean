@@ -106,7 +106,7 @@ theorem GammaIntegral_convergent
       ((intervalIntegrable_rpow' (by linarith)).continuousOn_mul continuousOn_
 
 中文:
-定理 GammaIntegral_convergent
+定理 Gamma整数egral_convergent
   条件: {s : 实数} (h : 0 < s)
   证明: by
   rw [← Ioc_union_Ioi_eq_Ioi (@zero_le_one Real _ _ _ _)]; rw [integrableOn_union]
@@ -151,8 +151,8 @@ theorem GammaIntegral_convergent
 continuousAt_cpow_con
 
 中文:
-定理 GammaIntegral_convergent
-  条件: {s : Complex} (hs : 0 < s.re)
+定理 Gamma整数egral_convergent
+  条件: {s : 复形} (hs : 0 < s.re)
   证明: by
   constructor
   · refine ContinuousOn.aestronglyMeasurable ?_ measurableSet_Ioi
@@ -190,8 +190,8 @@ definition GammaIntegral
   body: ∫ x in Ioi (0 : Real), ↑(-x).exp * ↑x ^ (s - 1)
 
 中文:
-定义 GammaIntegral
-  签名: (s : Complex)
+定义 Gamma整数egral
+  签名: (s : 复形)
   定义体: ∫ x in Ioi (0 : Real), ↑(-x).exp * ↑x ^ (s - 1)
 -/
 @[expose] def GammaIntegral (s : Complex) : Complex :=
@@ -210,8 +210,8 @@ theorem GammaIntegral_conj
   rw [map_mul]; rw [conj_ofReal]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [cpow_def_of_ne_zero (ofReal_ne_zero.mpr (ne_of_gt hx))]; rw [← exp_conj
 
 中文:
-定理 GammaIntegral_conj
-  条件: (s : Complex)
+定理 Gamma整数egral_conj
+  条件: (s : 复形)
   结论: Gamma整数egral (conj s) = conj (Gamma整数egral s)
   证明: by
   rw [GammaIntegral]; rw [GammaIntegral]; rw [← integral_conj]
@@ -241,7 +241,7 @@ theorem GammaIntegral_ofReal
   rw [ofReal_mul]; rw [ofReal_cpow 
 
 中文:
-定理 GammaIntegral_ofReal
+定理 Gamma整数egral_of实数
   条件: (s : 实数)
   证明: by
   have : forall r : Real, Complex.ofReal r = @RCLike.ofReal Complex _ r := fun r => rfl
@@ -277,7 +277,7 @@ theorem GammaIntegral_one
     mul_one] using integral_exp_neg_Ioi_zero
 
 中文:
-定理 GammaIntegral_one
+定理 Gamma整数egral_one
   结论: Gamma整数egral 1 = 1
   证明: by
   simpa only [← ofReal_one, GammaIntegral_ofReal, ofReal_inj, sub_self, rpow_zero,
@@ -308,7 +308,7 @@ definition partialGamma
 
 中文:
 定义 partialGamma
-  签名: (s : Complex) (X : 实数)
+  签名: (s : 复形) (X : 实数)
   定义体: ∫ x in 0..X, (-x).exp * x ^ (s - 1)
 -/
 @[expose] def partialGamma (s : Complex) (X : Real) : Complex :=
@@ -324,7 +324,7 @@ theorem tendsto_partialGamma
 
 中文:
 定理 tendsto_partialGamma
-  条件: {s : Complex} (hs : 0 < s.re)
+  条件: {s : 复形} (hs : 0 < s.re)
   证明: intervalIntegral_tendsto_integral_Ioi 0 (GammaIntegral_convergent hs) tendsto_id
 
 Depends on / 依赖: GammaIntegral_convergent, intervalIntegral_tendsto_integral_Ioi, tendsto_id
@@ -344,8 +344,8 @@ theorem Gamma_integrand_intervalIntegrable
   exact IntegrableOn.mono_set (GammaIntegral_convergent hs) Ioc_subset_Ioi_self
 
 中文:
-定理 Gamma_integrand_intervalIntegrable
-  条件: (s : Complex) {X : 实数} (hs : 0 < s.re) (hX : 0 <= X)
+定理 Gamma_integrand_interval整数egrable
+  条件: (s : 复形) {X : 实数} (hs : 0 < s.re) (hX : 0 <= X)
   证明: by
   rw [intervalIntegrable_iff_integrableOn_Ioc_of_le hX]
   exact IntegrableOn.mono_set (GammaIntegral_convergent hs) Ioc_subset_Ioi_self
@@ -368,7 +368,7 @@ theorem Gamma_integrand_deriv_integrable_A
 
 中文:
 定理 Gamma_integrand_deriv_integrable_A
-  条件: {s : Complex} (hs : 0 < s.re) {X : 实数} (hX : 0 <= X)
+  条件: {s : 复形} (hs : 0 < s.re) {X : 实数} (hX : 0 <= X)
   证明: by
   convert! (Gamma_integrand_intervalIntegrable (s + 1) _ hX).neg
   · simp only [ofReal_exp, ofReal_neg, add_sub_cancel_right]; rfl
@@ -395,7 +395,7 @@ theorem Gamma_integrand_deriv_integrable_B
 
 中文:
 定理 Gamma_integrand_deriv_integrable_B
-  条件: {s : Complex} (hs : 0 < s.re) {Y : 实数} (hY : 0 <= Y)
+  条件: {s : 复形} (hs : 0 < s.re) {Y : 实数} (hY : 0 <= Y)
   证明: by
   have : (fun x => (-x).exp * (s * x ^ (s - 1)) : Real -> Complex) =
       (fun x => s * ((-x).exp * x ^ (s - 1)) : Real -> Complex) := by ext1; ring
@@ -440,7 +440,7 @@ theorem partialGamma_add_one
 
 中文:
 定理 partialGamma_add_one
-  条件: {s : Complex} (hs : 0 < s.re) {X : 实数} (hX : 0 <= X)
+  条件: {s : 复形} (hs : 0 < s.re) {X : 实数} (hX : 0 <= X)
   证明: by
   rw [partialGamma]; rw [partialGamma]; rw [add_sub_cancel_right]
   have F_der_I : forall x : Real, x in Ioo 0 X -> HasDerivAt (fun x => (-x).exp * x ^ s : Real -> Complex)
@@ -493,8 +493,8 @@ theorem GammaIntegral_add_one
     apply 
 
 中文:
-定理 GammaIntegral_add_one
-  条件: {s : Complex} (hs : 0 < s.re)
+定理 Gamma整数egral_add_one
+  条件: {s : 复形} (hs : 0 < s.re)
   证明: by
   suffices Tendsto (s + 1).partialGamma atTop (𝓝 <| s * GammaIntegral s) by
     refine tendsto_nhds_unique ?_ this
@@ -568,7 +568,7 @@ theorem GammaAux_recurrence1
 
 中文:
 定理 GammaAux_recurrence1
-  条件: (s : Complex) (n : 自然数) (h1 : -s.re < ↑n)
+  条件: (s : 复形) (n : 自然数) (h1 : -s.re < ↑n)
   证明: by
   induction n generalizing s with
   | zero =>
@@ -616,7 +616,7 @@ theorem GammaAux_recurrence2
 
 中文:
 定理 GammaAux_recurrence2
-  条件: (s : Complex) (n : 自然数) (h1 : -s.re < ↑n)
+  条件: (s : 复形) (n : 自然数) (h1 : -s.re < ↑n)
   证明: by
   rcases n with - | n
   · simp only [CharP.cast_eq_zero, Left.neg_neg_iff] at h1
@@ -657,7 +657,7 @@ definition Gamma
 
 中文:
 定义 Gamma
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: GammaAux ⌊1 - s.re⌋₊ s
 -/
 @[irreducible, pp_nodot] def Gamma (s : Complex) : Complex :=
@@ -682,7 +682,7 @@ theorem Gamma_eq_GammaAux
 
 中文:
 定理 Gamma_eq_GammaAux
-  条件: (s : Complex) (n : 自然数) (h1 : -s.re < ↑n)
+  条件: (s : 复形) (n : 自然数) (h1 : -s.re < ↑n)
   结论: Gamma s = GammaAux n s
   证明: by
   have u : forall k : Nat, GammaAux (⌊1 - s.re⌋₊ + k) s = Gamma s := fun k => by
@@ -732,7 +732,7 @@ theorem Gamma_add_one
 
 中文:
 定理 Gamma_add_one
-  条件: (s : Complex) (h2 : s != 0)
+  条件: (s : 复形) (h2 : s != 0)
   结论: Gamma (s + 1) = s * Gamma s
   证明: by
   let n := ⌊1 - s.re⌋₊
@@ -763,7 +763,7 @@ theorem Gamma_eq_integral
 
 中文:
 定理 Gamma_eq_integral
-  条件: {s : Complex} (hs : 0 < s.re)
+  条件: {s : 复形} (hs : 0 < s.re)
   结论: Gamma s = Gamma整数egral s
   证明: Gamma_eq_GammaAux s 0 (by norm_cast; linarith)
 
@@ -843,7 +843,7 @@ theorem Gamma_ofNat_eq_factorial
   proof: mod_cast Gamma_nat_eq_factorial (n : Nat)
 
 中文:
-定理 Gamma_ofNat_eq_factorial
+定理 Gamma_of自然数_eq_factorial
   条件: (n : 自然数) [(n + 1).AtLeastTwo]
   证明: mod_cast Gamma_nat_eq_factorial (n : Nat)
 
@@ -941,7 +941,7 @@ theorem Gamma_conj
 
 中文:
 定理 Gamma_conj
-  条件: (s : Complex)
+  条件: (s : 复形)
   结论: Gamma (conj s) = conj (Gamma s)
   证明: by
   suffices forall (n : Nat) (s : Complex), GammaAux n (conj s) = conj (GammaAux n s) by
@@ -986,7 +986,7 @@ lemma integral_cpow_mul_exp_neg_mul_Ioi
 
 中文:
 引理 integral_cpow_mul_exp_neg_mul_Ioi
-  条件: {a : Complex} {r : 实数} (ha : 0 < a.re) (hr : 0 < r)
+  条件: {a : 复形} {r : 实数} (ha : 0 < a.re) (hr : 0 < r)
   证明: by
   have aux : (1 / r : Complex) ^ a = 1 / r * (1 / r) ^ (a - 1) := by
     nth_rewrite 2 [← cpow_one (1 / r : Complex)]
@@ -1123,9 +1123,9 @@ theorem _root_.Complex.Gamma_ofReal
   rw [Gamma]; rw [eq_comm]; rw [← Complex.conj_eq_iff_re]; rw [← Complex.Gamma_conj]; rw [Complex.conj_ofReal]
 
 中文:
-定理 _root_.Complex.Gamma_ofReal
+定理 _root_.复形.Gamma_of实数
   条件: (s : 实数)
-  结论: Complex.Gamma (s : Complex) = Gamma s
+  结论: 复形.Gamma (s : 复形) = Gamma s
   证明: by
   rw [Gamma]; rw [eq_comm]; rw [← Complex.conj_eq_iff_re]; rw [← Complex.Gamma_conj]; rw [Complex.conj_ofReal]
 
@@ -1170,7 +1170,7 @@ theorem Gamma_ofNat_eq_factorial
   proof: mod_cast Gamma_nat_eq_factorial (n : Nat)
 
 中文:
-定理 Gamma_ofNat_eq_factorial
+定理 Gamma_of自然数_eq_factorial
   条件: (n : 自然数) [(n + 1).AtLeastTwo]
   证明: mod_cast Gamma_nat_eq_factorial (n : Nat)
 

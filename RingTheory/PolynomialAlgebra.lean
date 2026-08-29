@@ -159,7 +159,7 @@ theorem toFunLinear_mul_tmul_mul_aux_1
 
 中文:
 定理 toFunLinear_mul_tmul_mul_aux_1
-  条件: (p : R[X]) (k : 自然数) (h : Decidable ¬p.coeff k = 0) (a : A)
+  条件: (p : R[X]) (k : 自然数) (h : 可判定 ¬p.coeff k = 0) (a : A)
   证明: by split_ifs <;> simp [*]
 
 Depends on / 依赖: split_ifs
@@ -636,8 +636,8 @@ definition Polynomial.algebra
     ext; rw [coeff_mul, ← Finset.Nat.sum_antidiagonal_swap, coeff_mul]; simp [Algebra.commutes]
 
 中文:
-定义 Polynomial.algebra
-  签名: : Algebra R[X] A[X]
+定义 多项式.algebra
+  签名: : 代数 R[X] A[X]
   定义体: (mapRingHom (algebraMap R A)).toAlgebra' fun _ _ => by
     ext; rw [coeff_mul, ← Finset.Nat.sum_antidiagonal_swap, coeff_mul]; simp [Algebra.commutes]
 -/
@@ -657,7 +657,7 @@ theorem Polynomial.algebraMap_def
   proof: rfl
 
 中文:
-定理 Polynomial.algebraMap_def
+定理 多项式.algebraMap_def
   结论: algebraMap R[X] A[X] = mapRingHom (algebraMap R A)
   证明: rfl
 -/
@@ -674,7 +674,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R S[X] A[X]
+  签名: 标量塔 R S[X] A[X]
   定义体: have : IsScalarTower S S[X] A[X] := .of_algebraMap_eq' (mapRingHom_comp_C _).symm
   .to₁₃₄ _ S _ _
 
@@ -695,7 +695,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R[X] S[X] A[X]
+  签名: 标量塔 R[X] S[X] A[X]
   定义体: .of_algebraMap_eq'
   congr(mapRingHom $(IsScalarTower.algebraMap_eq R S A)).trans (mapRingHom_comp ..).symm
 
@@ -714,8 +714,8 @@ instance [FaithfulSMul
     (map_injective _ <| FaithfulSMul.algebraMap_injective ..)
 
 中文:
-实例 [FaithfulSMul
-  签名: R A] : FaithfulSMul R[X] A[X]
+实例 [忠实标量乘法
+  签名: R A] : 忠实标量乘法 R[X] A[X]
   定义体: (faithfulSMul_iff_algebraMap_injective ..).mpr
     (map_injective _ <| FaithfulSMul.algebraMap_injective ..)
 
@@ -738,7 +738,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R S R[X] S[X]
+  签名: 代数.是推出 R S R[X] S[X]
   定义体: .of_equiv (polyEquivTensor' R S).symm fun _ =>
 (polyEquivTensor_symm_apply_tmul_eq_smul ..).trans one_smul ..
 
@@ -758,7 +758,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R R[X] S S[X]
+  签名: 代数.是推出 R R[X] S S[X]
   定义体: .symm inferInstance
 -/
 instance : Algebra.IsPushout R R[X] S S[X] := .symm inferInstance

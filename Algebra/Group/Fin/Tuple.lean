@@ -31,7 +31,7 @@ lemma insertNth_one_right
 
 中文:
 引理 insertNth_one_right
-  条件: [对任意 j, One (α j)] (i : Fin (n + 1)) (x : α i)
+  条件: [对任意 j, 幺 (α j)] (i : 有限集 (n + 1)) (x : α i)
   证明: insertNth_eq_iff.2 by unfold removeNth; simp [succAbove_ne, Pi.one_def]
 
 @[to_additive (attr := simp)]
@@ -55,7 +55,7 @@ lemma insertNth_mul
 
 中文:
 引理 insertNth_mul
-  条件: [对任意 j, Mul (α j)] (i : Fin (n + 1)) (x y : α i) (p q : 对任意 j, α (i.succAbove j))
+  条件: [对任意 j, 乘法 (α j)] (i : 有限集 (n + 1)) (x y : α i) (p q : 对任意 j, α (i.succAbove j))
   证明: insertNth_binop (fun _ => (· * ·)) i x y p q
 
 @[to_additive (attr := simp)]
@@ -79,7 +79,7 @@ lemma insertNth_div
 
 中文:
 引理 insertNth_div
-  条件: [对任意 j, Div (α j)] (i : Fin (n + 1)) (x y : α i) (p q : 对任意 j, α (i.succAbove j))
+  条件: [对任意 j, 除法 (α j)] (i : 有限集 (n + 1)) (x y : α i) (p q : 对任意 j, α (i.succAbove j))
   证明: insertNth_binop (fun _ => (· / ·)) i x y p q
 
 @[to_additive (attr := simp)]
@@ -102,7 +102,7 @@ lemma insertNth_div_same
 
 中文:
 引理 insertNth_div_same
-  结论: [对任意 j, Group (α j)] (i : Fin (n + 1)) (x y : α i)
+  结论: [对任意 j, 群 (α j)] (i : 有限集 (n + 1)) (x y : α i)
   证明: by
   simp_rw [← insertNth_div, ← insertNth_one_right, Pi.div_def, div_self', Pi.one_def]
 
@@ -132,7 +132,7 @@ lemma smul_empty
 
 中文:
 引理 smul_empty
-  条件: (x : M) (v : Fin 0 -> α)
+  条件: (x : M) (v : 有限集 0 -> α)
   结论: x • v = ![]
   证明: empty_eq _
 -/
@@ -148,7 +148,7 @@ lemma smul_cons
 
 中文:
 引理 smul_cons
-  条件: (x : M) (y : α) (v : Fin n -> α)
+  条件: (x : M) (y : α) (v : 有限集 n -> α)
   证明: by ext i; refine i.cases ?_ ?_ <;> simp
 -/
 @[simp] lemma smul_cons (x : M) (y : α) (v : Fin n -> α) :
@@ -170,7 +170,7 @@ lemma empty_add_empty
 
 中文:
 引理 empty_add_empty
-  条件: (v w : Fin 0 -> α)
+  条件: (v w : 有限集 0 -> α)
   结论: v + w = ![]
   证明: empty_eq _
 -/
@@ -187,7 +187,7 @@ lemma cons_add
 
 中文:
 引理 cons_add
-  条件: (x : α) (v : Fin n -> α) (w : Fin n.succ -> α)
+  条件: (x : α) (v : 有限集 n -> α) (w : 有限集 n.succ -> α)
   证明: by
   ext i; refine i.cases ?_ ?_ <;> simp [vecHead, vecTail]
 -/
@@ -206,7 +206,7 @@ lemma add_cons
 
 中文:
 引理 add_cons
-  条件: (v : Fin n.succ -> α) (y : α) (w : Fin n -> α)
+  条件: (v : 有限集 n.succ -> α) (y : α) (w : 有限集 n -> α)
   证明: by
   ext i; refine i.cases ?_ ?_ <;> simp [vecHead, vecTail]
 -/
@@ -224,7 +224,7 @@ lemma cons_add_cons
 
 中文:
 引理 cons_add_cons
-  条件: (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α)
+  条件: (x : α) (v : 有限集 n -> α) (y : α) (w : 有限集 n -> α)
   证明: by simp
 -/
 lemma cons_add_cons (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α) :
@@ -241,7 +241,7 @@ lemma head_add
 
 中文:
 引理 head_add
-  条件: (a b : Fin n.succ -> α)
+  条件: (a b : 有限集 n.succ -> α)
   结论: vecHead (a + b) = vecHead a + vecHead b
   证明: rfl
 -/
@@ -258,7 +258,7 @@ lemma tail_add
 
 中文:
 引理 tail_add
-  条件: (a b : Fin n.succ -> α)
+  条件: (a b : 有限集 n.succ -> α)
   结论: vecTail (a + b) = vecTail a + vecTail b
   证明: rfl
 -/
@@ -280,7 +280,7 @@ lemma empty_sub_empty
 
 中文:
 引理 empty_sub_empty
-  条件: (v w : Fin 0 -> α)
+  条件: (v w : 有限集 0 -> α)
   结论: v - w = ![]
   证明: empty_eq _
 -/
@@ -297,7 +297,7 @@ lemma cons_sub
 
 中文:
 引理 cons_sub
-  条件: (x : α) (v : Fin n -> α) (w : Fin n.succ -> α)
+  条件: (x : α) (v : 有限集 n -> α) (w : 有限集 n.succ -> α)
   证明: by
   ext i; refine i.cases ?_ ?_ <;> simp [vecHead, vecTail]
 -/
@@ -316,7 +316,7 @@ lemma sub_cons
 
 中文:
 引理 sub_cons
-  条件: (v : Fin n.succ -> α) (y : α) (w : Fin n -> α)
+  条件: (v : 有限集 n.succ -> α) (y : α) (w : 有限集 n -> α)
   证明: by
   ext i; refine i.cases ?_ ?_ <;> simp [vecHead, vecTail]
 -/
@@ -334,7 +334,7 @@ lemma cons_sub_cons
 
 中文:
 引理 cons_sub_cons
-  条件: (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α)
+  条件: (x : α) (v : 有限集 n -> α) (y : α) (w : 有限集 n -> α)
   证明: by simp
 -/
 lemma cons_sub_cons (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α) :
@@ -351,7 +351,7 @@ lemma head_sub
 
 中文:
 引理 head_sub
-  条件: (a b : Fin n.succ -> α)
+  条件: (a b : 有限集 n.succ -> α)
   结论: vecHead (a - b) = vecHead a - vecHead b
   证明: rfl
 -/
@@ -368,7 +368,7 @@ lemma tail_sub
 
 中文:
 引理 tail_sub
-  条件: (a b : Fin n.succ -> α)
+  条件: (a b : 有限集 n.succ -> α)
   结论: vecTail (a - b) = vecTail a - vecTail b
   证明: rfl
 -/
@@ -389,7 +389,7 @@ lemma zero_empty
 
 中文:
 引理 zero_empty
-  结论: (0 : Fin 0 -> α) = ![]
+  结论: (0 : 有限集 0 -> α) = ![]
   证明: empty_eq _
 -/
 @[simp] lemma zero_empty : (0 : Fin 0 -> α) = ![] := empty_eq _
@@ -423,7 +423,7 @@ lemma cons_zero_zero
 
 中文:
 引理 cons_zero_zero
-  结论: vecCons (0 : α) (0 : Fin n -> α) = 0
+  结论: vecCons (0 : α) (0 : 有限集 n -> α) = 0
   证明: by
   ext i; exact i.cases rfl (by simp)
 -/
@@ -440,7 +440,7 @@ lemma head_zero
 
 中文:
 引理 head_zero
-  结论: vecHead (0 : Fin n.succ -> α) = 0
+  结论: vecHead (0 : 有限集 n.succ -> α) = 0
   证明: rfl
 -/
 @[simp] lemma head_zero : vecHead (0 : Fin n.succ -> α) = 0 := rfl
@@ -455,7 +455,7 @@ lemma tail_zero
 
 中文:
 引理 tail_zero
-  结论: vecTail (0 : Fin n.succ -> α) = 0
+  结论: vecTail (0 : 有限集 n.succ -> α) = 0
   证明: rfl
 -/
 @[simp] lemma tail_zero : vecTail (0 : Fin n.succ -> α) = 0 := rfl
@@ -472,7 +472,7 @@ lemma cons_eq_zero_iff
 
 中文:
 引理 cons_eq_zero_iff
-  条件: {v : Fin n -> α} {x : α}
+  条件: {v : 有限集 n -> α} {x : α}
   结论: vecCons x v = 0 ↔ x = 0 ∧ v = 0 where
   证明: ⟨congr_fun h 0, by convert! congr_arg vecTail h⟩
   mpr := fun ⟨hx, hv⟩ => by simp [hx, hv]
@@ -493,7 +493,7 @@ lemma cons_nonzero_iff
 
 中文:
 引理 cons_nonzero_iff
-  条件: {v : Fin n -> α} {x : α}
+  条件: {v : 有限集 n -> α} {x : α}
   结论: vecCons x v != 0 ↔ x != 0 ∨ v != 0 where
   证明: not_and_or.mp (h ∘ cons_eq_zero_iff.mpr)
   mpr h := mt cons_eq_zero_iff.mp (not_and_or.mpr h)
@@ -520,7 +520,7 @@ lemma neg_empty
 
 中文:
 引理 neg_empty
-  条件: (v : Fin 0 -> α)
+  条件: (v : 有限集 0 -> α)
   结论: -v = ![]
   证明: empty_eq _
 -/
@@ -538,7 +538,7 @@ lemma neg_cons
 
 中文:
 引理 neg_cons
-  条件: (x : α) (v : Fin n -> α)
+  条件: (x : α) (v : 有限集 n -> α)
   结论: -vecCons x v = vecCons (-x) (-v)
   证明: by
   ext i; refine i.cases ?_ ?_ <;> simp
@@ -557,7 +557,7 @@ lemma head_neg
 
 中文:
 引理 head_neg
-  条件: (a : Fin n.succ -> α)
+  条件: (a : 有限集 n.succ -> α)
   结论: vecHead (-a) = -vecHead a
   证明: rfl
 -/
@@ -574,7 +574,7 @@ lemma tail_neg
 
 中文:
 引理 tail_neg
-  条件: (a : Fin n.succ -> α)
+  条件: (a : 有限集 n.succ -> α)
   结论: vecTail (-a) = -vecTail a
   证明: rfl
 -/

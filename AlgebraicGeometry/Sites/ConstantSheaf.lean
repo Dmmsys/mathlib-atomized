@@ -52,7 +52,7 @@ definition continuousMapPresheaf
 
 中文:
 定义 continuousMapPresheaf
-  签名: (T : 类型v) [TopologicalSpace T]
+  签名: (T : 类型v) [拓扑空间 T]
   定义体: C(U.unop, T)
   map {U V} f := ↾fun g => ContinuousMap.comp g f.unop.base.hom
 
@@ -185,7 +185,7 @@ definition continuousMapPresheafEquivOfTotallyDisconnectedSpace
 
 中文:
 定义 continuousMapPresheafEquivOfTotallyDisconnectedSpace
-  签名: [TotallyDisconnectedSpace T]
+  签名: [全不连通空间 T]
   定义体: ⟨f.continuous.connectedComponentsLift, f.continuous.connectedComponentsLift_continuous⟩
   invFun f := .comp f ⟨ConnectedComponents.mk, ConnectedComponents.continuous_coe⟩
   right_inv f := by
@@ -216,7 +216,7 @@ definition continuousMapPresheafAb
 
 中文:
 定义 continuousMapPresheafAb
-  签名: (A : 类型v) [TopologicalSpace A] [AddCommGroup A]
+  签名: (A : 类型v) [拓扑空间 A] [加法交换群 A]
   定义体: AddCommGrpCat.of C(U.unop, A)
   map {U V} f := AddCommGrpCat.ofHom (ContinuousMap.compAddMonoidHom' f.unop.base.hom)
 

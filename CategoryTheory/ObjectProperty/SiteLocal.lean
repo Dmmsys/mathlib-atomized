@@ -44,9 +44,9 @@ class IsLocal
     - of_presieve({X : C} {R : Presieve X} (hR : R in K X) (H : forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> P Y)) : P X
 
 中文:
-类 IsLocal
-  参数: (P : Object命题erty C) (K : Precoverage C)
-  继承: IsClosedUnderIsomorphisms P
+类 是Local
+  参数: (P : ObjectProperty C) (K : Precoverage C)
+  继承: 在同构下封闭 P
   公理与运算 (2 个):
     - component({X : C} {R : Presieve X} (hR : R in K X) {Y : C} (f : Y ⟶ X) (hf : R f)) : P X -> P Y
     - of_presieve({X : C} {R : Presieve X} (hR : R in K X) (H : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, R f -> P Y)) : P X
@@ -69,7 +69,7 @@ lemma iff_of_presieve
 
 中文:
 引理 iff_of_presieve
-  条件: [P.IsLocal K] {X : C} {R : Presieve X} (hR : R in K X)
+  条件: [P.是Local K] {X : C} {R : Presieve X} (hR : R in K X)
   证明: ⟨fun h _ _ hf => IsLocal.component hR _ hf h, fun h => of_presieve hR h⟩
 
 Depends on / 依赖: IsLocal, IsLocal.component, component, of_presieve
@@ -100,7 +100,7 @@ lemma mk_of_zeroHypercover
 
 中文:
 引理 mk_of_zeroHypercover
-  结论: [P.IsClosedUnderIsomorphisms]
+  结论: [P.在同构下封闭]
   证明: by
     rw [CategoryTheory.Precoverage.mem_iff_exists_zeroHypercover] at hR
     obtain ⟨𝒰, rfl⟩ := hR
@@ -144,8 +144,8 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: [IsLocal P L] (hle : K <= L)
-  结论: IsLocal P K where
+  条件: [是Local P L] (hle : K <= L)
+  结论: 是Local P K where
   证明: component (hle _ hR) f hf hX
   of_presieve hR H := of_presieve (hle _ hR) H
 
@@ -166,7 +166,7 @@ instance top
 
 中文:
 实例 top
-  签名: : IsLocal (⊤ : Object命题erty C) K where
+  签名: : 是Local (⊤ : ObjectProperty C) K where
   定义体: by simp
   of_presieve := by simp
 
@@ -186,8 +186,8 @@ instance inf
   of_presieve hR h := ⟨of_presieve hR fun _ _ hf => (h hf).1, of_presieve hR fun _ _ hf => (h hf).2⟩
 
 中文:
-实例 inf
-  签名: (P Q : Object命题erty C) [IsLocal P K] [IsLocal Q K]
+实例 下确界
+  签名: (P Q : ObjectProperty C) [是Local P K] [是Local Q K]
   定义体: ⟨component hR _ hf h.1, component hR _ hf h.2⟩
   of_presieve hR h := ⟨of_presieve hR fun _ _ hf => (h hf).1, of_presieve hR fun _ _ hf => (h hf).2⟩
 
@@ -211,7 +211,7 @@ lemma of_zeroHypercover
 
 中文:
 引理 of_zeroHypercover
-  条件: [P.IsLocal K] {X : C} (𝒰 : K.ZeroHypercover X) (h : 对任意 i, P (𝒰.X i))
+  条件: [P.是Local K] {X : C} (𝒰 : K.ZeroHypercover X) (h : 对任意 i, P (𝒰.X i))
   结论: P X
   证明: P.of_presieve 𝒰.mem₀ fun _ f ⟨i⟩ => h i
 
@@ -230,7 +230,7 @@ lemma iff_of_zeroHypercover
 
 中文:
 引理 iff_of_zeroHypercover
-  条件: [P.IsLocal K] {X : C} (𝒰 : K.ZeroHypercover X)
+  条件: [P.是Local K] {X : C} (𝒰 : K.ZeroHypercover X)
   证明: ⟨fun h i => IsLocal.component 𝒰.mem₀ _ ⟨i⟩ h, fun h => of_zeroHypercover 𝒰 h⟩
 
 Depends on / 依赖: IsLocal, IsLocal.component, component, of_zeroHypercover

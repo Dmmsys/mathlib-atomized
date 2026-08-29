@@ -43,7 +43,7 @@ abbreviation Comonad
   body: ComonObj t
 
 中文:
-缩写 Comonad
+缩写 余单子
   签名: {a : B} (t : a ⟶ a)
   定义体: ComonObj t
 
@@ -60,8 +60,8 @@ abbreviation Comonad.counit
   body: ComonObj.counit
 
 中文:
-缩写 Comonad.counit
-  签名: {a : B} {t : a ⟶ a} [Comonad t]
+缩写 余单子.counit
+  签名: {a : B} {t : a ⟶ a} [余单子 t]
   定义体: ComonObj.counit
 
 Depends on / 依赖: ComonObj, ComonObj.counit, counit
@@ -82,8 +82,8 @@ abbreviation Comonad.comul
 @[inherit_doc] scoped notation "Δ[" x "]" => Comonad.comul (t := x)
 
 中文:
-缩写 Comonad.comul
-  签名: {a : B} {t : a ⟶ a} [Comonad t]
+缩写 余单子.comul
+  签名: {a : B} {t : a ⟶ a} [余单子 t]
   定义体: ComonObj.comul
 
 @[inherit_doc] scoped notation "ε" => Comonad.counit
@@ -216,7 +216,7 @@ definition ofOplaxFromUnit
 
 中文:
 定义 ofOplaxFromUnit
-  签名: (F : LocallyDiscrete (Discrete Unit) ⥤ᵒᵖᴸ B)
+  签名: (F : LocallyDiscrete (离散 单元) ⥤ᵒᵖᴸ B)
   定义体: F.map₂ (ρ_ _).inv ≫ F.mapComp _ _
   counit := F.mapId _
   comul_assoc := by
@@ -260,7 +260,7 @@ definition toOplax
 
 中文:
 定义 toOplax
-  签名: {a : B} (t : a ⟶ a) [Comonad t]
+  签名: {a : B} (t : a ⟶ a) [余单子 t]
   定义体: a
   map _ := t
   map₂ _ := 𝟙 _
@@ -298,7 +298,7 @@ definition ComonadBicat
 
 中文:
 定义 ComonadBicat
-  签名: (B : 类型u) [Bicategory.{w, v} B]
+  签名: (B : 类型u) [双范畴.{w, v} B]
   定义体: LocallyDiscrete (Discrete Unit) ⥤ᵒᵖᴸ B
 
 Depends on / 依赖: Discrete, LocallyDiscrete
@@ -378,7 +378,7 @@ definition mkOfComonad
 
 中文:
 定义 mkOfComonad
-  签名: {a : B} (t : a ⟶ a) [Comonad t]
+  签名: {a : B} (t : a ⟶ a) [余单子 t]
   定义体: Comonad.toOplax t
 
 Depends on / 依赖: Comonad, Comonad.toOplax, toOplax

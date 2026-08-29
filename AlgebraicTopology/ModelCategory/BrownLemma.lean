@@ -51,12 +51,12 @@ structure CofibrantBrownFactorization
     - cofibration_s : Cofibration s  [default: by infer_instance]
 
 中文:
-结构 CofibrantBrownFactorization
+结构 余fibrantBrownFactorization
   参数: extends
   公理与运算 (3 个):
     - s : Y ⟶ Z
     - s_p : s ≫ p = 𝟙 Y  [默认: by cat_disch]
-    - cofibration_s : Cofibration s  [默认: by infer_instance]
+    - cofibration_s : 余纤维化 s  [默认: by infer_instance]
 
 Depends on / 依赖: Cofibration, cat_disch, cofibration_s, infer_instance
 -/
@@ -83,8 +83,8 @@ instance [WeakEquivalence
   body: weakEquivalence_of_postcomp_of_fac h.fac
 
 中文:
-实例 [WeakEquivalence
-  签名: f] : WeakEquivalence h.i
+实例 [弱等价
+  签名: f] : 弱等价 h.i
   定义体: weakEquivalence_of_postcomp_of_fac h.fac
 
 Depends on / 依赖: h.fac, weakEquivalence_of_postcomp_of_fac
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence h.s
+  签名: 弱等价 h.s
   定义体: weakEquivalence_of_postcomp_of_fac h.s_p
 
 Depends on / 依赖: h.s_p, weakEquivalence_of_postcomp_of_fac
@@ -188,7 +188,7 @@ structure FibrantBrownFactorization
   公理与运算 (3 个):
     - r : Z ⟶ X
     - i_r : i ≫ r = 𝟙 X  [默认: by cat_disch]
-    - fibration_r : Fibration r  [默认: by infer_instance]
+    - fibration_r : 纤维化 r  [默认: by infer_instance]
 
 Depends on / 依赖: Fibration, cat_disch, fibration_r, infer_instance
 -/
@@ -215,8 +215,8 @@ instance [WeakEquivalence
   body: weakEquivalence_of_precomp_of_fac h.fac
 
 中文:
-实例 [WeakEquivalence
-  签名: f] : WeakEquivalence h.p
+实例 [弱等价
+  签名: f] : 弱等价 h.p
   定义体: weakEquivalence_of_precomp_of_fac h.fac
 
 Depends on / 依赖: h.fac, weakEquivalence_of_precomp_of_fac
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: WeakEquivalence h.r
+  签名: 弱等价 h.r
   定义体: weakEquivalence_of_precomp_of_fac h.i_r
 
 Depends on / 依赖: h.i_r, weakEquivalence_of_precomp_of_fac

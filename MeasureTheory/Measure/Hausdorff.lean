@@ -142,7 +142,7 @@ definition IsMetric
 
 中文:
 定义 IsMetric
-  签名: (μ : OuterMeasure X)
+  签名: (μ : 外测度 X)
   定义体: forall s t : Set X, Metric.AreSeparated s t -> μ (s union t) = μ s + μ t
 
 Depends on / 依赖: AreSeparated, Metric, Metric.AreSeparated
@@ -172,7 +172,7 @@ theorem finset_iUnion_of_pairwise_separated
 
 中文:
 定理 finset_iUnion_of_pairwise_separated
-  结论: (hm : IsMetric μ) {I : Finset ι} {s : ι -> Set X}
+  结论: (hm : IsMetric μ) {I : 有限集 ι} {s : ι -> 集合 X}
   证明: by
   classical
   induction I using Finset.induction_on with
@@ -305,7 +305,7 @@ theorem le_caratheodory
 
 中文:
 定理 le_caratheodory
-  条件: [MeasurableSpace X] [BorelSpace X] (hm : IsMetric μ)
+  条件: [可测空间 X] [Borel空间 X] (hm : IsMetric μ)
   证明: by
   rw [BorelSpace.measurable_eq (α := X)]
   exact hm.borel_le_caratheodory
@@ -338,7 +338,7 @@ definition mkMetric'.pre
 
 中文:
 定义 mkMetric'.pre
-  签名: (m : Set X -> 实数>=0∞) (r : 实数>=0∞)
+  签名: (m : 集合 X -> 实数>=0∞) (r : 实数>=0∞)
   定义体: boundedBy extend fun s (_ : ediam s <= r) => m s
 
 Depends on / 依赖: boundedBy, extend
@@ -356,7 +356,7 @@ definition mkMetric'
 
 中文:
 定义 mkMetric'
-  签名: (m : Set X -> 实数>=0∞)
+  签名: (m : 集合 X -> 实数>=0∞)
   定义体: ⨆ r > 0, mkMetric'.pre m r
 -/
 def mkMetric' (m : Set X -> Real>=0∞) : OuterMeasure X :=
@@ -395,7 +395,7 @@ theorem le_pre
 
 中文:
 定理 le_pre
-  结论: μ <= pre m r ↔ 对任意 s : Set X, ediam s <= r -> μ s <= m s
+  结论: μ <= pre m r ↔ 对任意 s : 集合 X, ediam s <= r -> μ s <= m s
   证明: by
   simp only [pre, le_boundedBy, extend, le_iInf_iff]
 
@@ -435,7 +435,7 @@ theorem mono_pre
 
 中文:
 定理 mono_pre
-  条件: (m : Set X -> 实数>=0∞) {r r' : 实数>=0∞} (h : r <= r')
+  条件: (m : 集合 X -> 实数>=0∞) {r r' : 实数>=0∞} (h : r <= r')
   结论: pre m r' <= pre m r
   证明: le_pre.2 fun _ hs => pre_le (hs.trans h)
 
@@ -455,8 +455,8 @@ theorem mono_pre_nat
 
 中文:
 定理 mono_pre_nat
-  条件: (m : Set X -> 实数>=0∞)
-  结论: Monotone fun k : 自然数 => pre m k⁻¹
+  条件: (m : 集合 X -> 实数>=0∞)
+  结论: 递增 fun k : 自然数 => pre m k⁻¹
   证明: fun k l h => le_pre.2 fun _ hs => pre_le (hs.trans <| by simpa)
 
 Depends on / 依赖: hs.trans, le_pre, pre_le
@@ -477,7 +477,7 @@ theorem tendsto_pre
 
 中文:
 定理 tendsto_pre
-  条件: (m : Set X -> 实数>=0∞) (s : Set X)
+  条件: (m : 集合 X -> 实数>=0∞) (s : 集合 X)
   证明: by
   rw [← tendsto_comp_coe_Ioi_atBot]
   simp only [mkMetric', OuterMeasure.iSup_apply, iSup_subtype']
@@ -504,7 +504,7 @@ theorem tendsto_pre_nat
 
 中文:
 定理 tendsto_pre_nat
-  条件: (m : Set X -> 实数>=0∞) (s : Set X)
+  条件: (m : 集合 X -> 实数>=0∞) (s : 集合 X)
   证明: by
   refine (tendsto_pre m s).comp (tendsto_inf.2 ⟨ENNReal.tendsto_inv_nat_nhds_zero, ?_⟩)
   refine tendsto_principal.2 (Eventually.of_forall fun n => ?_)
@@ -533,7 +533,7 @@ theorem eq_iSup_nat
 
 中文:
 定理 eq_iSup_nat
-  条件: (m : Set X -> 实数>=0∞)
+  条件: (m : 集合 X -> 实数>=0∞)
   结论: mkMetric' m = ⨆ n : 自然数, mkMetric'.pre m n⁻¹
   证明: by
   ext1 s
@@ -564,7 +564,7 @@ refine iInf_le_of_le (closure s) iInf_le_of_le subset_closure
 
 中文:
 定理 trim_pre
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X] (m : Set X -> 实数>=0∞)
+  结论: [可测空间 X] [OpensMeasurable空间 X] (m : 集合 X -> 实数>=0∞)
   证明: by
   refine le_antisymm (le_pre.2 fun s hs => ?_) (le_trim _)
   rw [trim_eq_iInf]
@@ -602,7 +602,7 @@ theorem mkMetric'_isMetric
 
 中文:
 定理 mkMetric'_isMetric
-  条件: (m : Set X -> 实数>=0∞)
+  条件: (m : 集合 X -> 实数>=0∞)
   结论: (mkMetric' m).IsMetric
   证明: by
   rintro s t ⟨r, r0, hr⟩
@@ -682,7 +682,7 @@ theorem mkMetric_top
 
 中文:
 定理 mkMetric_top
-  结论: (mkMetric (fun _ => ∞ : 实数>=0∞ -> 实数>=0∞) : OuterMeasure X) = ⊤
+  结论: (mkMetric (fun _ => ∞ : 实数>=0∞ -> 实数>=0∞) : 外测度 X) = ⊤
   证明: by
   simp_rw [mkMetric, mkMetric', mkMetric'.pre, extend_top, boundedBy_top, eq_top_iff]
   rw [le_iSup_iff]
@@ -735,7 +735,7 @@ theorem isometry_comap_mkMetric
 
 中文:
 定理 isometry_comap_mkMetric
-  结论: (m : 实数>=0∞ -> 实数>=0∞) {f : X -> Y} (hf : Isometry f)
+  结论: (m : 实数>=0∞ -> 实数>=0∞) {f : X -> Y} (hf : 等距 f)
   证明: by
   simp only [mkMetric, mkMetric', mkMetric'.pre, comap_iSup]
   refine surjective_id.iSup_congr id fun ε => surjective_id.iSup_congr id fun hε => ?_
@@ -816,7 +816,7 @@ theorem isometry_map_mkMetric
 
 中文:
 定理 isometry_map_mkMetric
-  结论: (m : 实数>=0∞ -> 实数>=0∞) {f : X -> Y} (hf : Isometry f)
+  结论: (m : 实数>=0∞ -> 实数>=0∞) {f : X -> Y} (hf : 等距 f)
   证明: by
   rw [← isometry_comap_mkMetric _ hf H]; rw [map_comap]
 
@@ -880,7 +880,7 @@ theorem trim_mkMetric
 
 中文:
 定理 trim_mkMetric
-  条件: [MeasurableSpace X] [BorelSpace X] (m : 实数>=0∞ -> 实数>=0∞)
+  条件: [可测空间 X] [Borel空间 X] (m : 实数>=0∞ -> 实数>=0∞)
   证明: by
   simp only [mkMetric, mkMetric'.eq_iSup_nat, trim_iSup]
   congr 1 with n : 1
@@ -906,7 +906,7 @@ theorem le_mkMetric
 
 中文:
 定理 le_mkMetric
-  结论: (m : 实数>=0∞ -> 实数>=0∞) (μ : OuterMeasure X) (r : 实数>=0∞) (h0 : 0 < r)
+  结论: (m : 实数>=0∞ -> 实数>=0∞) (μ : 外测度 X) (r : 实数>=0∞) (h0 : 0 < r)
   证明: le_iSup₂_of_le r h0 mkMetric'.le_pre.2 fun _ hs => hr _ hs
 
 Depends on / 依赖: le_pre, mkMetric
@@ -941,7 +941,7 @@ definition mkMetric'
 
 中文:
 定义 mkMetric'
-  签名: (m : Set X -> 实数>=0∞)
+  签名: (m : 集合 X -> 实数>=0∞)
   定义体: (OuterMeasure.mkMetric' m).toMeasure (OuterMeasure.mkMetric'_isMetric _).le_caratheodory
 
 Depends on / 依赖: OuterMeasure, OuterMeasure.mkMetric, _isMetric, le_caratheodory, mkMetric, toMeasure
@@ -984,7 +984,7 @@ theorem mkMetric'_toOuterMeasure
 
 中文:
 定理 mkMetric'_toOuterMeasure
-  条件: (m : Set X -> 实数>=0∞)
+  条件: (m : 集合 X -> 实数>=0∞)
   证明: rfl
 
 @[simp]
@@ -1025,8 +1025,8 @@ theorem OuterMeasure.coe_mkMetric
   rw [← Measure.mkMetric_toOuterMeasure]; rw [Measure.coe_toOuterMeasure]
 
 中文:
-定理 OuterMeasure.coe_mkMetric
-  条件: [MeasurableSpace X] [BorelSpace X] (m : 实数>=0∞ -> 实数>=0∞)
+定理 外测度.coe_mkMetric
+  条件: [可测空间 X] [Borel空间 X] (m : 实数>=0∞ -> 实数>=0∞)
   证明: by
   rw [← Measure.mkMetric_toOuterMeasure]; rw [Measure.coe_toOuterMeasure]
 
@@ -1081,7 +1081,7 @@ theorem mkMetric_top
 
 中文:
 定理 mkMetric_top
-  结论: (mkMetric (fun _ => ∞ : 实数>=0∞ -> 实数>=0∞) : Measure X) = ⊤
+  结论: (mkMetric (fun _ => ∞ : 实数>=0∞ -> 实数>=0∞) : 测度 X) = ⊤
   证明: by
   apply toOuterMeasure_injective
   rw [mkMetric_toOuterMeasure]; rw [OuterMeasure.mkMetric_top]; rw [toOuterMeasure_top]
@@ -1129,7 +1129,7 @@ theorem mkMetric_apply
 
 中文:
 定理 mkMetric_apply
-  条件: (m : 实数>=0∞ -> 实数>=0∞) (s : Set X)
+  条件: (m : 实数>=0∞ -> 实数>=0∞) (s : 集合 X)
   证明: by
   classical
   -- We mostly unfold the definitions but we need to switch the order of `∑'` and `⨅`
@@ -1178,7 +1178,7 @@ theorem le_mkMetric
 
 中文:
 定理 le_mkMetric
-  结论: (m : 实数>=0∞ -> 实数>=0∞) (μ : Measure X) (ε : 实数>=0∞) (h₀ : 0 < ε)
+  结论: (m : 实数>=0∞ -> 实数>=0∞) (μ : 测度 X) (ε : 实数>=0∞) (h₀ : 0 < ε)
   证明: by
   rw [← toOuterMeasure_le]; rw [mkMetric_toOuterMeasure]
   exact OuterMeasure.le_mkMetric m μ.toOuterMeasure ε h₀ h
@@ -1206,7 +1206,7 @@ theorem mkMetric_le_liminf_tsum
 
 中文:
 定理 mkMetric_le_liminf_tsum
-  结论: {β : 类型} {ι : β -> 类型} [对任意 n, Countable (ι n)] (s : Set X)
+  结论: {β : 类型} {ι : β -> 类型} [对任意 n, 可数 (ι n)] (s : 集合 X)
   证明: by
   have : forall n, Encodable (ι n) := fun n => Encodable.ofCountable _
   simp only [mkMetric_apply]
@@ -1250,7 +1250,7 @@ theorem mkMetric_le_liminf_sum
 
 中文:
 定理 mkMetric_le_liminf_sum
-  结论: {β : 类型} {ι : β -> 类型} [hι : 对任意 n, Fintype (ι n)] (s : Set X)
+  结论: {β : 类型} {ι : β -> 类型} [hι : 对任意 n, 有限类型 (ι n)] (s : 集合 X)
   证明: by
   simpa only [tsum_fintype] using mkMetric_le_liminf_tsum s r hr t ht hst m
 
@@ -1304,7 +1304,7 @@ theorem le_hausdorffMeasure
 
 中文:
 定理 le_hausdorffMeasure
-  结论: (d : 实数) (μ : Measure X) (ε : 实数>=0∞) (h₀ : 0 < ε)
+  结论: (d : 实数) (μ : 测度 X) (ε : 实数>=0∞) (h₀ : 0 < ε)
   证明: le_mkMetric _ μ ε h₀ h
 
 Depends on / 依赖: le_mkMetric
@@ -1323,7 +1323,7 @@ theorem hausdorffMeasure_apply
 
 中文:
 定理 hausdorffMeasure_apply
-  条件: (d : 实数) (s : Set X)
+  条件: (d : 实数) (s : 集合 X)
   证明: mkMetric_apply _ _
 
 Depends on / 依赖: mkMetric_apply
@@ -1345,7 +1345,7 @@ theorem hausdorffMeasure_le_liminf_tsum
 
 中文:
 定理 hausdorffMeasure_le_liminf_tsum
-  结论: {β : 类型} {ι : β -> 类型} [对任意 n, Countable (ι n)]
+  结论: {β : 类型} {ι : β -> 类型} [对任意 n, 可数 (ι n)]
   证明: mkMetric_le_liminf_tsum s r hr t ht hst _
 
 Depends on / 依赖: mkMetric_le_liminf_tsum
@@ -1366,7 +1366,7 @@ theorem hausdorffMeasure_le_liminf_sum
 
 中文:
 定理 hausdorffMeasure_le_liminf_sum
-  结论: {β : 类型} {ι : β -> 类型} [对任意 n, Fintype (ι n)]
+  结论: {β : 类型} {ι : β -> 类型} [对任意 n, 有限类型 (ι n)]
   证明: mkMetric_le_liminf_sum s r hr t ht hst _
 
 Depends on / 依赖: mkMetric_le_liminf_sum
@@ -1393,7 +1393,7 @@ theorem hausdorffMeasure_zero_or_top
 
 中文:
 定理 hausdorffMeasure_zero_or_top
-  条件: {d₁ d₂ : 实数} (h : d₁ < d₂) (s : Set X)
+  条件: {d₁ d₂ : 实数} (h : d₁ < d₂) (s : 集合 X)
   证明: by
   by_contra! H
   suffices forall c : Real>=0, c != 0 -> μH[d₂] s <= c * μH[d₁] s by
@@ -1442,7 +1442,7 @@ theorem hausdorffMeasure_mono
 
 中文:
 定理 hausdorffMeasure_mono
-  条件: {d₁ d₂ : 实数} (h : d₁ <= d₂) (s : Set X)
+  条件: {d₁ d₂ : 实数} (h : d₁ <= d₂) (s : 集合 X)
   结论: μH[d₂] s <= μH[d₁] s
   证明: by
   rcases h.eq_or_lt with (rfl | h); · exact le_rfl
@@ -1517,7 +1517,7 @@ theorem hausdorffMeasure_zero_singleton
 中文:
 定理 hausdorffMeasure_zero_singleton
   条件: (x : X)
-  结论: μH[0] ({x} : Set X) = 1
+  结论: μH[0] ({x} : 集合 X) = 1
   证明: by
   apply le_antisymm
   · let r : Nat -> Real>=0∞ := fun _ => 0
@@ -1567,7 +1567,7 @@ theorem one_le_hausdorffMeasure_zero_of_nonempty
 
 中文:
 定理 one_le_hausdorffMeasure_zero_of_nonempty
-  条件: {s : Set X} (h : s.Nonempty)
+  条件: {s : 集合 X} (h : s.非空)
   结论: 1 <= μH[0] s
   证明: by
   rcases h with ⟨x, hx⟩
@@ -1600,7 +1600,7 @@ theorem hausdorffMeasure_le_one_of_subsingleton
 
 中文:
 定理 hausdorffMeasure_le_one_of_subsingleton
-  结论: {s : Set X} (hs : s.Subsingleton) {d : 实数}
+  结论: {s : 集合 X} (hs : s.子单例) {d : 实数}
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | ⟨x, hx⟩)
   · simp only [measure_empty, zero_le]
@@ -1749,7 +1749,7 @@ theorem hausdorffMeasure_image_le
 
 中文:
 定理 hausdorffMeasure_image_le
-  条件: (h : LipschitzWith K f) {d : 实数} (hd : 0 <= d) (s : Set X)
+  条件: (h : LipschitzWith K f) {d : 实数} (hd : 0 <= d) (s : 集合 X)
   证明: h.lipschitzOnWith.hausdorffMeasure_image_le hd
 
 Depends on / 依赖: h.lipschitzOnWith.hausdorffMeasure_image_le, hausdorffMeasure_image_le, lipschitzOnWith
@@ -1778,8 +1778,8 @@ theorem MeasureTheory.Measure.hausdorffMeasure_smul₀
     rw [← NNReal.inv_rpow]; rw [← nnnorm_i
 
 中文:
-定理 MeasureTheory.Measure.hausdorffMeasure_smul₀
-  结论: {𝕜 E : 类型} [NormedAddCommGroup E]
+定理 测度论.测度.hausdorffMeasure_smul₀
+  结论: {𝕜 E : 类型} [赋范交换加群 E]
   证明: by
   have {r : 𝕜} (s : Set E) : μH[d] (r • s) <= ‖r‖₊ ^ d • μH[d] s := by
     simpa [ENNReal.coe_rpow_of_nonneg, hd]
@@ -1830,7 +1830,7 @@ theorem hausdorffMeasure_preimage_le
 
 中文:
 定理 hausdorffMeasure_preimage_le
-  条件: (hf : AntilipschitzWith K f) (hd : 0 <= d) (s : Set Y)
+  条件: (hf : AntilipschitzWith K f) (hd : 0 <= d) (s : 集合 Y)
   证明: by
   rcases eq_or_ne K 0 with (rfl | h0)
   · rcases eq_empty_or_nonempty (f ⁻¹' s) with (hs | ⟨x, hx⟩)
@@ -1884,7 +1884,7 @@ theorem le_hausdorffMeasure_image
 
 中文:
 定理 le_hausdorffMeasure_image
-  条件: (hf : AntilipschitzWith K f) (hd : 0 <= d) (s : Set X)
+  条件: (hf : AntilipschitzWith K f) (hd : 0 <= d) (s : 集合 X)
   证明: calc
     μH[d] s <= μH[d] (f ⁻¹' f '' s) := measure_mono (subset_preimage_image _ _)
     _ <= (K : Real>=0∞) ^ d * μH[d] (f '' s) := hf.hausdorffMeasure_preimage_le hd (f '' s)
@@ -1921,7 +1921,7 @@ theorem hausdorffMeasure_image
 
 中文:
 定理 hausdorffMeasure_image
-  条件: (hf : Isometry f) (hd : 0 <= d ∨ Surjective f) (s : Set X)
+  条件: (hf : 等距 f) (hd : 0 <= d ∨ 满射 f) (s : 集合 X)
   证明: by
   simp only [hausdorffMeasure, ← OuterMeasure.coe_mkMetric, ← OuterMeasure.comap_apply]
   rw [OuterMeasure.isometry_comap_mkMetric _ hf (hd.imp_left _)]
@@ -1946,7 +1946,7 @@ theorem hausdorffMeasure_preimage
 
 中文:
 定理 hausdorffMeasure_preimage
-  条件: (hf : Isometry f) (hd : 0 <= d ∨ Surjective f) (s : Set Y)
+  条件: (hf : 等距 f) (hd : 0 <= d ∨ 满射 f) (s : 集合 Y)
   证明: by
   rw [← hf.hausdorffMeasure_image hd]; rw [image_preimage_eq_inter_range]
 
@@ -1968,7 +1968,7 @@ theorem map_hausdorffMeasure
 
 中文:
 定理 map_hausdorffMeasure
-  条件: (hf : Isometry f) (hd : 0 <= d ∨ Surjective f)
+  条件: (hf : 等距 f) (hd : 0 <= d ∨ 满射 f)
   证明: by
   ext1 s hs
   rw [map_apply hf.continuous.measurable hs]; rw [Measure.restrict_apply hs]; rw [hf.hausdorffMeasure_preimage hd]
@@ -1998,7 +1998,7 @@ theorem hausdorffMeasure_image
 
 中文:
 定理 hausdorffMeasure_image
-  条件: (e : X ≃ᵢ Y) (d : 实数) (s : Set X)
+  条件: (e : X ≃ᵢ Y) (d : 实数) (s : 集合 X)
   结论: μH[d] (e '' s) = μH[d] s
   证明: e.isometry.hausdorffMeasure_image (Or.inr e.surjective) s
 
@@ -2024,7 +2024,7 @@ theorem hausdorffMeasure_preimage
 
 中文:
 定理 hausdorffMeasure_preimage
-  条件: (e : X ≃ᵢ Y) (d : 实数) (s : Set Y)
+  条件: (e : X ≃ᵢ Y) (d : 实数) (s : 集合 Y)
   结论: μH[d] (e ⁻¹' s) = μH[d] s
   证明: by
   rw [← e.image_symm]; rw [e.symm.hausdorffMeasure_image]
@@ -2050,7 +2050,7 @@ theorem map_hausdorffMeasure
 中文:
 定理 map_hausdorffMeasure
   条件: (e : X ≃ᵢ Y) (d : 实数)
-  结论: Measure.map e μH[d] = μH[d]
+  结论: 测度.map e μH[d] = μH[d]
   证明: by
   rw [e.isometry.map_hausdorffMeasure (Or.inr e.surjective)]; rw [e.surjective.range_eq]; rw [restrict_univ]
 
@@ -2071,7 +2071,7 @@ theorem measurePreserving_hausdorffMeasure
 中文:
 定理 measurePreserving_hausdorffMeasure
   条件: (e : X ≃ᵢ Y) (d : 实数)
-  结论: MeasurePreserving e μH[d] μH[d]
+  结论: 保测 e μH[d] μH[d]
   证明: ⟨e.continuous.measurable, map_hausdorffMeasure _ _⟩
 
 Depends on / 依赖: continuous, e.continuous.measurable, map_hausdorffMeasure, measurable
@@ -2096,7 +2096,7 @@ theorem hausdorffMeasure_smul
 
 中文:
 定理 hausdorffMeasure_smul
-  结论: {α : 类型} [SMul α X] [IsIsometricSMul α X] {d : 实数} (c : α)
+  结论: {α : 类型} [标量乘法 α X] [是是ometricSMul α X] {d : 实数} (c : α)
   证明: (isometry_smul X c).hausdorffMeasure_image h _
 
 @[to_additive]
@@ -2142,7 +2142,7 @@ theorem hausdorffMeasure_pi_real
 
 中文:
 定理 hausdorffMeasure_pi_real
-  条件: {ι : 类型} [Fintype ι]
+  条件: {ι : 类型} [有限类型 ι]
   证明: by
   classical
   -- it suffices to check that the two measures coincide on products of rational intervals
@@ -2305,7 +2305,7 @@ theorem hausdorffMeasure_measurePreserving_funUnique
 
 中文:
 定理 hausdorffMeasure_measurePreserving_funUnique
-  条件: [Unique ι] (d : 实数)
+  条件: [唯一 ι] (d : 实数)
   证明: (IsometryEquiv.funUnique ι X).measurePreserving_hausdorffMeasure _
 
 Depends on / 依赖: IsometryEquiv, IsometryEquiv.funUnique, funUnique, measurePreserving_hausdorffMeasure
@@ -2324,7 +2324,7 @@ theorem hausdorffMeasure_measurePreserving_piFinTwo
 
 中文:
 定理 hausdorffMeasure_measurePreserving_piFinTwo
-  结论: (α : Fin 2 -> 类型)
+  结论: (α : 有限集 2 -> 类型)
   证明: (IsometryEquiv.piFinTwo α).measurePreserving_hausdorffMeasure _
 
 Depends on / 依赖: IsometryEquiv, IsometryEquiv.piFinTwo, measurePreserving_hausdorffMeasure, piFinTwo
@@ -2348,7 +2348,7 @@ theorem hausdorffMeasure_real
 
 中文:
 定理 hausdorffMeasure_real
-  结论: (μH[1] : Measure 实数) = volume
+  结论: (μH[1] : 测度 实数) = volume
   证明: by
   rw [← (volume_preserving_funUnique Unit Real).map_eq]; rw [← (hausdorffMeasure_measurePreserving_funUnique Unit Real 1).map_eq]; rw [← hausdorffMeasure_pi_real]; rw [Fintype.card_unit]; rw [Nat.cast_one]
 
@@ -2370,7 +2370,7 @@ theorem hausdorffMeasure_prod_real
 
 中文:
 定理 hausdorffMeasure_prod_real
-  结论: (μH[2] : Measure (实数 × 实数)) = volume
+  结论: (μH[2] : 测度 (实数 × 实数)) = volume
   证明: by
   rw [← (volume_preserving_piFinTwo fun _ => Real).map_eq]; rw [← (hausdorffMeasure_measurePreserving_piFinTwo (fun _ => Real) _).map_eq]; rw [← hausdorffMeasure_pi_real]; rw [Fintype.card_fin]; rw [Nat.cast_two]
 
@@ -2404,7 +2404,7 @@ theorem hausdorffMeasure_smul_right_image
 
 中文:
 定理 hausdorffMeasure_smul_right_image
-  结论: [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   obtain rfl | hv := eq_or_ne v 0
   · have := nullSingletonClass_hausdorff E one_pos
@@ -2548,7 +2548,7 @@ theorem hausdorffMeasure_lineMap_image
 
 中文:
 定理 hausdorffMeasure_lineMap_image
-  条件: (x y : P) (s : Set 实数)
+  条件: (x y : P) (s : 集合 实数)
   证明: by
   suffices μH[1] (IsometryEquiv.vaddConst x '' (· • (y -ᵥ x)) '' s) = nndist x y • μH[1] s by
     simpa only [Set.image_image]
@@ -2607,7 +2607,7 @@ theorem hausdorffMeasure_segment
 
 中文:
 定理 hausdorffMeasure_segment
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← affineSegment_eq_segment]; rw [hausdorffMeasure_affineSegment]
 

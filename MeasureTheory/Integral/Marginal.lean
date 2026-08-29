@@ -81,7 +81,7 @@ definition lmarginal
 
 中文:
 定义 lmarginal
-  签名: (μ : 对任意 i, Measure (X i)) (s : Finset δ) (f : (对任意 i, X i) -> 实数>=0∞)
+  签名: (μ : 对任意 i, 测度 (X i)) (s : 有限集 δ) (f : (对任意 i, X i) -> 实数>=0∞)
   定义体: ∫⁻ y : forall i : s, X i, f (updateFinset x s y) ∂Measure.pi fun i : s => μ i
 
 Depends on / 依赖: Measure, Measure.pi, updateFinset
@@ -108,8 +108,8 @@ theorem _root_.Measurable.lmarginal
   proof: Measurable.lintegral_prod_right (hf.comp measurable_updateFinset')
 
 中文:
-定理 _root_.Measurable.lmarginal
-  条件: [对任意 i, SigmaFinite (μ i)] (hf : Measurable f)
+定理 _root_.可测.lmarginal
+  条件: [对任意 i, σ有限 (μ i)] (hf : 可测 f)
   证明: Measurable.lintegral_prod_right (hf.comp measurable_updateFinset')
 
 Depends on / 依赖: Measurable, Measurable.lintegral_prod_right, hf.comp, lintegral_prod_right, measurable_updateFinset
@@ -273,7 +273,7 @@ theorem lmarginal_union
 
 中文:
 定理 lmarginal_union
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f)
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f)
   证明: by
   ext1 x
   let e := MeasurableEquiv.piFinsetUnion X hst
@@ -314,7 +314,7 @@ theorem lmarginal_union'
 
 中文:
 定理 lmarginal_union'
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f) {s t : Finset δ}
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f) {s t : 有限集 δ}
   证明: by
   rw [Finset.union_comm]; rw [lmarginal_union μ f hf hst.symm]
 
@@ -337,7 +337,7 @@ theorem lmarginal_insert
 
 中文:
 定理 lmarginal_insert
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f) {i : δ}
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f) {i : δ}
   证明: by
   rw [Finset.insert_eq]; rw [lmarginal_union μ f hf (Finset.disjoint_singleton_left.mpr hi)]; rw [lmarginal_singleton]
 
@@ -359,7 +359,7 @@ theorem lmarginal_erase
 
 中文:
 定理 lmarginal_erase
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f) {i : δ}
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f) {i : δ}
   证明: by
   simpa [insert_erase hi] using lmarginal_insert _ hf (notMem_erase i s) x
 
@@ -381,7 +381,7 @@ theorem lmarginal_insert'
 
 中文:
 定理 lmarginal_insert'
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f) {i : δ}
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f) {i : δ}
   证明: by
   rw [Finset.insert_eq]; rw [Finset.union_comm]; rw [lmarginal_union (s := s) μ f hf (Finset.disjoint_singleton_right.mpr hi)]; rw [lmarginal_singleton]
 
@@ -403,7 +403,7 @@ theorem lmarginal_erase'
 
 中文:
 定理 lmarginal_erase'
-  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : Measurable f) {i : δ}
+  结论: (f : (对任意 i, X i) -> 实数>=0∞) (hf : 可测 f) {i : δ}
   证明: by
   simpa [insert_erase hi] using lmarginal_insert' _ hf (notMem_erase i s)
 
@@ -429,7 +429,7 @@ theorem lmarginal_univ
 
 中文:
 定理 lmarginal_univ
-  条件: [Fintype δ] {f : (对任意 i, X i) -> 实数>=0∞}
+  条件: [有限类型 δ] {f : (对任意 i, X i) -> 实数>=0∞}
   证明: by
   let e : { j // j in Finset.univ } ≃ δ := Equiv.subtypeUnivEquiv mem_univ
   ext1 x
@@ -455,7 +455,7 @@ theorem lintegral_eq_lmarginal_univ
 
 中文:
 定理 lintegral_eq_lmarginal_univ
-  条件: [Fintype δ] {f : (对任意 i, X i) -> 实数>=0∞} (x : 对任意 i, X i)
+  条件: [有限类型 δ] {f : (对任意 i, X i) -> 实数>=0∞} (x : 对任意 i, X i)
   证明: by simp
 -/
 theorem lintegral_eq_lmarginal_univ [Fintype δ] {f : (forall i, X i) -> Real>=0∞} (x : forall i, X i) :
@@ -477,7 +477,7 @@ measurable_pi_iff.mpr fun i => measurable_pi_apply (e i)
 
 中文:
 定理 lmarginal_image
-  结论: [DecidableEq δ'] {e : δ' -> δ} (he : Injective e) (s : Finset δ')
+  结论: [DecidableEq δ'] {e : δ' -> δ} (he : 单射 e) (s : 有限集 δ')
   证明: by
   have h : Measurable ((· ∘' e) : (forall i, X i) -> _) :=
 measurable_pi_iff.mpr fun i => measurable_pi_apply (e i)
@@ -596,7 +596,7 @@ theorem lintegral_eq_of_lmarginal_eq
 
 中文:
 定理 lintegral_eq_of_lmarginal_eq
-  结论: [Fintype δ] (s : Finset δ) {f g : (对任意 i, X i) -> 实数>=0∞}
+  结论: [有限类型 δ] (s : 有限集 δ) {f g : (对任意 i, X i) -> 实数>=0∞}
   证明: by
   rcases isEmpty_or_nonempty (forall i, X i) with h | ⟨⟨x⟩⟩
   · simp_rw [lintegral_of_isEmpty]
@@ -624,7 +624,7 @@ theorem lintegral_le_of_lmarginal_le
 
 中文:
 定理 lintegral_le_of_lmarginal_le
-  结论: [Fintype δ] (s : Finset δ) {f g : (对任意 i, X i) -> 实数>=0∞}
+  结论: [有限类型 δ] (s : 有限集 δ) {f g : (对任意 i, X i) -> 实数>=0∞}
   证明: by
   rcases isEmpty_or_nonempty (forall i, X i) with h | ⟨⟨x⟩⟩
   · simp_rw [lintegral_of_isEmpty, le_rfl]

@@ -57,7 +57,7 @@ theorem totallyBounded_univ
 
 中文:
 定理 totallyBounded_univ
-  结论: TotallyBounded (Set.univ : Set 整数_[p])
+  结论: 全有界 (集合.univ : 集合 整数_[p])
   证明: by
   refine Metric.totallyBounded_iff.mpr (fun ε hε => ?_)
   obtain ⟨k, hk⟩ := exists_pow_neg_lt p hε
@@ -89,7 +89,7 @@ instance compactSpace
 
 中文:
 实例 compactSpace
-  签名: : CompactSpace 整数_[p]
+  签名: : 紧空间 整数_[p]
   定义体: by
   rw [← isCompact_univ_iff]; rw [isCompact_iff_totallyBounded_isComplete]
   exact ⟨totallyBounded_univ p, isComplete_univ⟩
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace Rat_[p]
+  签名: 真空间 Rat_[p]
   定义体: by
   suffices LocallyCompactSpace Rat_[p] from .of_nontriviallyNormedField_of_weaklyLocallyCompactSpace _
   have : closedBall 0 1 in 𝓝 (0 : Rat_[p]) := closedBall_mem_nhds _ zero_lt_one

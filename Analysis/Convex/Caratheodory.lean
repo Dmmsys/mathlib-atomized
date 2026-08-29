@@ -67,7 +67,7 @@ theorem mem_convexHull_erase
 
 中文:
 定理 mem_convexHull_erase
-  结论: [DecidableEq E] {t : Finset E} (h : ¬AffineIndependent 𝕜 ((↑) : t -> E))
+  结论: [DecidableEq E] {t : 有限集 E} (h : ¬AffineIndependent 𝕜 ((↑) : t -> E))
   证明: by
   simp only [Finset.convexHull_eq, mem_ofPred_eq] at m ⊢
   obtain ⟨f, fpos, fsum, rfl⟩ := m
@@ -199,7 +199,7 @@ theorem minCardFinsetOfMemConvexHull_nonempty
 
 中文:
 定理 minCardFinsetOfMemConvexHull_nonempty
-  结论: (minCardFinsetOfMemConvexHull hx).Nonempty
+  结论: (minCardFinsetOfMemConvexHull hx).非空
   证明: by
   rw [← Finset.coe_nonempty]; rw [← @convexHull_nonempty_iff 𝕜]
   exact ⟨x, mem_minCardFinsetOfMemConvexHull hx⟩
@@ -220,7 +220,7 @@ theorem minCardFinsetOfMemConvexHull_card_le_card
 
 中文:
 定理 minCardFinsetOfMemConvexHull_card_le_card
-  结论: {t : Finset E} (ht₁ : ↑t subseteq s)
+  结论: {t : 有限集 E} (ht₁ : ↑t subseteq s)
   证明: Function.argminOn_le _ _ (by exact ⟨ht₁, ht₂⟩)
 
 Depends on / 依赖: Function, Function.argminOn_le, argminOn_le

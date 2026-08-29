@@ -51,7 +51,7 @@ definition M
 
 中文:
 定义 M
-  签名: : AddCommGrpCat
+  签名: : 加法交换群范畴
   定义体: AddCommGrpCat.FilteredColimits.colimit.{v, u}
     (F ⋙ forget₂ (ModuleCat R) AddCommGrpCat.{max v u})
 
@@ -210,7 +210,7 @@ instance colimitHasSMul
 
 中文:
 实例 colimitHasSMul
-  签名: : SMul R (M F) where
+  签名: : 标量乘法 R (M F) where
   定义体: by
     refine Quot.lift (colimitSMulAux F r) ?_ x
     intro x y h
@@ -331,7 +331,7 @@ instance colimitMulAction
 
 中文:
 实例 colimitMulAction
-  签名: : MulAction R (M F) where
+  签名: : 乘法作用 R (M F) where
   定义体: by
     obtain ⟨j, x, rfl⟩ := M.mk_surjective F x
     simp
@@ -364,7 +364,7 @@ instance colimitSMulWithZero
 
 中文:
 实例 colimitSMulWithZero
-  签名: : SMulWithZero R (M F)
+  签名: : 带零标量乘法 R (M F)
   定义体: { colimitMulAction F with
   smul_zero := fun r => by
     rw [colimit_zero_eq _ (IsFiltered.nonempty.some : J)]; rw [colimit_smul_mk_eq]; rw [smul_zero]
@@ -397,7 +397,7 @@ instance colimitModule
 
 中文:
 实例 colimitModule
-  签名: : Module R (M F)
+  签名: : 模 R (M F)
   定义体: { colimitMulAction F,
   colimitSMulWithZero F with
   smul_add := fun r x y => by
@@ -430,7 +430,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : ModuleCat.{max v u, u} R
+  签名: : 模范畴.{最大值 v u, u} R
   定义体: ModuleCat.of R (M F)
 
 Depends on / 依赖: ModuleCat, ModuleCat.of
@@ -483,7 +483,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit F
   ι :=
     { app := coconeMorphism F
@@ -517,7 +517,7 @@ definition colimitDesc
 
 中文:
 定义 colimitDesc
-  签名: (t : Cocone F)
+  签名: (t : 余锥 F)
   定义体: let h := (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ _ _))
   let f : colimit F ->+ t.pt := (h.desc ((forget₂ _ _).mapCocone t)).hom
   have hf {j : J} (x : F.obj j) : f (M.mk _ ⟨j, x⟩) = t.ι.app j x :=
@@ -549,7 +549,7 @@ lemma ι_colimitDesc
 
 中文:
 引理 ι_colimitDesc
-  条件: (t : Cocone F) (j : J)
+  条件: (t : 余锥 F) (j : J)
   证明: (forget₂ _ AddCommGrpCat).map_injective
     ((AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ _ _)).fac _ _)
 
@@ -575,7 +575,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit (colimitCocone F) where
+  签名: : 是余极限 (colimitCocone F) where
   定义体: colimitDesc F
   fac t j := by simp
   uniq t _ h := by
@@ -633,7 +633,7 @@ instance forget_preservesFilteredColimits
 
 中文:
 实例 forget_preservesFilteredColimits
-  签名: : PreservesFilteredColimits (forget (ModuleCat.{u} R))
+  签名: : PreservesFilteredColimits (forget (模范畴.{u} R))
   定义体: Limits.comp_preservesFilteredColimits (forget₂ (ModuleCat R) AddCommGrpCat)
     (forget AddCommGrpCat)
 
@@ -653,7 +653,7 @@ instance forget_reflectsFilteredColimits
 
 中文:
 实例 forget_reflectsFilteredColimits
-  签名: : ReflectsFilteredColimits (forget (ModuleCat.{u} R)) where
+  签名: : ReflectsFilteredColimits (forget (模范畴.{u} R)) where
   定义体: { reflectsColimit := reflectsColimit_of_reflectsIsomorphisms _ _ }
 
 Depends on / 依赖: reflectsColimit, reflectsColimit_of_reflectsIsomorphisms

@@ -85,7 +85,7 @@ theorem preimage_congr
 
 中文:
 定理 preimage_congr
-  条件: {f g : α -> β} {s : Set β} (h : 对任意 x : α, f x = g x)
+  条件: {f g : α -> β} {s : 集合 β} (h : 对任意 x : α, f x = g x)
   结论: f ⁻¹' s = g ⁻¹' s
   证明: by
   congr with x
@@ -111,7 +111,7 @@ theorem preimage_mono
 
 中文:
 定理 preimage_mono
-  条件: {s t : Set β} (h : s subseteq t)
+  条件: {s t : 集合 β} (h : s subseteq t)
   结论: f ⁻¹' s subseteq f ⁻¹' t
   证明: fun _ hx => h hx
 
@@ -149,7 +149,7 @@ theorem subset_preimage_univ
 
 中文:
 定理 subset_preimage_univ
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s subseteq f ⁻¹' univ
   证明: subset_univ _
 
@@ -174,7 +174,7 @@ theorem preimage_inter
 
 中文:
 定理 preimage_inter
-  条件: {s t : Set β}
+  条件: {s t : 集合 β}
   结论: f ⁻¹' (s inter t) = f ⁻¹' s inter f ⁻¹' t
   证明: rfl
 
@@ -197,7 +197,7 @@ theorem preimage_union
 
 中文:
 定理 preimage_union
-  条件: {s t : Set β}
+  条件: {s t : 集合 β}
   结论: f ⁻¹' (s union t) = f ⁻¹' s union f ⁻¹' t
   证明: rfl
 
@@ -220,7 +220,7 @@ theorem preimage_compl
 
 中文:
 定理 preimage_compl
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: f ⁻¹' sᶜ = (f ⁻¹' s)ᶜ
   证明: rfl
 
@@ -243,7 +243,7 @@ theorem preimage_sdiff
 
 中文:
 定理 preimage_sdiff
-  条件: (f : α -> β) (s t : Set β)
+  条件: (f : α -> β) (s t : 集合 β)
   结论: f ⁻¹' (s \ t) = f ⁻¹' s \ f ⁻¹' t
   证明: rfl
 
@@ -269,7 +269,7 @@ lemma preimage_symmDiff
 
 中文:
 引理 preimage_symmDiff
-  条件: {f : α -> β} (s t : Set β)
+  条件: {f : α -> β} (s t : 集合 β)
   结论: f ⁻¹' (s ∆ t) = (f ⁻¹' s) ∆ (f ⁻¹' t)
   证明: rfl
 
@@ -291,7 +291,7 @@ theorem preimage_ite
 
 中文:
 定理 preimage_ite
-  条件: (f : α -> β) (s t₁ t₂ : Set β)
+  条件: (f : α -> β) (s t₁ t₂ : 集合 β)
   证明: rfl
 
 @[simp]
@@ -342,7 +342,7 @@ theorem preimage_id_eq
 
 中文:
 定理 preimage_id_eq
-  结论: preimage (id : α -> α) = id
+  结论: 原像 (id : α -> α) = id
   证明: rfl
 
 @[mfld_simps]
@@ -364,7 +364,7 @@ theorem preimage_id
 
 中文:
 定理 preimage_id
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: id ⁻¹' s = s
   证明: rfl
 
@@ -387,7 +387,7 @@ theorem preimage_id'
 
 中文:
 定理 preimage_id'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: (fun x => x) ⁻¹' s = s
   证明: rfl
 
@@ -410,7 +410,7 @@ theorem preimage_const_of_mem
 
 中文:
 定理 preimage_const_of_mem
-  条件: {b : β} {s : Set β} (h : b in s)
+  条件: {b : β} {s : 集合 β} (h : b in s)
   结论: (fun _ : α => b) ⁻¹' s = univ
   证明: eq_univ_of_forall fun _ => h
 
@@ -433,7 +433,7 @@ theorem preimage_const_of_notMem
 
 中文:
 定理 preimage_const_of_notMem
-  条件: {b : β} {s : Set β} (h : b ∉ s)
+  条件: {b : β} {s : 集合 β} (h : b ∉ s)
   结论: (fun _ : α => b) ⁻¹' s = ∅
   证明: eq_empty_of_subset_empty fun _ hx => h hx
 
@@ -452,7 +452,7 @@ theorem preimage_const
 
 中文:
 定理 preimage_const
-  条件: (b : β) (s : Set β) [Decidable (b in s)]
+  条件: (b : β) (s : 集合 β) [可判定 (b in s)]
   证明: by grind
 -/
 theorem preimage_const (b : β) (s : Set β) [Decidable (b in s)] :
@@ -472,8 +472,8 @@ lemma exists_eq_const_of_preimage_singleton
     exact ⟨Classical.arbitrary β, funext fun x => absu
 
 中文:
-引理 exists_eq_const_of_preimage_singleton
-  结论: [Nonempty β] {f : α -> β}
+引理 存在_eq_const_of_preimage_singleton
+  结论: [非空 β] {f : α -> β}
   证明: by
   rcases em (exists b, f ⁻¹' {b} = univ) with ⟨b, hb⟩ | hf'
   · exact ⟨b, funext fun x => eq_univ_iff_forall.1 hb x⟩
@@ -502,7 +502,7 @@ theorem preimage_comp
 
 中文:
 定理 preimage_comp
-  条件: {s : Set γ}
+  条件: {s : 集合 γ}
   结论: g ∘ f ⁻¹' s = f ⁻¹' g ⁻¹' s
   证明: rfl
 -/
@@ -519,7 +519,7 @@ theorem preimage_comp_eq
 
 中文:
 定理 preimage_comp_eq
-  结论: preimage (g ∘ f) = preimage f ∘ preimage g
+  结论: 原像 (g ∘ f) = 原像 f ∘ 原像 g
   证明: rfl
 -/
 theorem preimage_comp_eq : preimage (g ∘ f) = preimage f ∘ preimage g :=
@@ -540,7 +540,7 @@ theorem preimage_iterate_eq
 中文:
 定理 preimage_iterate_eq
   条件: {f : α -> α} {n : 自然数}
-  结论: Set.preimage f^[n] = (Set.preimage f)^[n]
+  结论: 集合.原像 f^[n] = (集合.原像 f)^[n]
   证明: by
   induction n with
   | zero => simp
@@ -563,7 +563,7 @@ theorem preimage_preimage
 
 中文:
 定理 preimage_preimage
-  条件: {g : β -> γ} {f : α -> β} {s : Set γ}
+  条件: {g : β -> γ} {f : α -> β} {s : 集合 γ}
   证明: preimage_comp.symm
 
 Depends on / 依赖: preimage_comp, preimage_comp.symm
@@ -582,7 +582,7 @@ theorem eq_preimage_subtype_val_iff
 
 中文:
 定理 eq_preimage_subtype_val_iff
-  条件: {p : α -> 命题} {s : Set (Subtype p)} {t : Set α}
+  条件: {p : α -> 命题} {s : 集合 (子类型 p)} {t : 集合 α}
   证明: by grind
 -/
 theorem eq_preimage_subtype_val_iff {p : α -> Prop} {s : Set (Subtype p)} {t : Set α} :
@@ -599,7 +599,7 @@ theorem nonempty_of_nonempty_preimage
 
 中文:
 定理 nonempty_of_nonempty_preimage
-  条件: {s : Set β} {f : α -> β} (hf : (f ⁻¹' s).Nonempty)
+  条件: {s : 集合 β} {f : α -> β} (hf : (f ⁻¹' s).非空)
   证明: let ⟨x, hx⟩ := hf
   ⟨f x, hx⟩
 -/
@@ -619,7 +619,7 @@ theorem nonempty_preimage_iff
 
 中文:
 定理 nonempty_preimage_iff
-  条件: {s : Set β} {f : α -> β}
+  条件: {s : 集合 β} {f : α -> β}
   证明: by
   simp [Set.Nonempty]
 
@@ -641,7 +641,7 @@ theorem preimage_singleton_true
 中文:
 定理 preimage_singleton_true
   条件: (p : α -> 命题)
-  结论: p ⁻¹' {True} = {a | p a}
+  结论: p ⁻¹' {真} = {a | p a}
   证明: by ext; simp
 -/
 @[simp] theorem preimage_singleton_true (p : α -> Prop) : p ⁻¹' {True} = {a | p a} := by ext; simp
@@ -658,7 +658,7 @@ theorem preimage_singleton_false
 中文:
 定理 preimage_singleton_false
   条件: (p : α -> 命题)
-  结论: p ⁻¹' {False} = {a | ¬p a}
+  结论: p ⁻¹' {假} = {a | ¬p a}
   证明: by ext; simp
 -/
 @[simp] theorem preimage_singleton_false (p : α -> Prop) : p ⁻¹' {False} = {a | ¬p a} := by ext; simp
@@ -678,7 +678,7 @@ theorem preimage_subtype_coe_eq_compl
 
 中文:
 定理 preimage_subtype_coe_eq_compl
-  结论: {s u v : Set α} (hsuv : s subseteq u union v)
+  结论: {s u v : 集合 α} (hsuv : s subseteq u union v)
   证明: by
   ext ⟨x, x_in_s⟩
   constructor
@@ -711,7 +711,7 @@ lemma preimage_subset
 
 中文:
 引理 preimage_subset
-  条件: {s t} (hs : s subseteq f '' t) (hf : Set.InjOn f (f ⁻¹' s))
+  条件: {s t} (hs : s subseteq f '' t) (hf : 集合.单射限制 f (f ⁻¹' s))
   结论: f ⁻¹' s subseteq t
   证明: by
   rintro a ha
@@ -763,8 +763,8 @@ theorem _root_.Function.Injective.mem_set_image
   proof: ⟨fun ⟨_, hb, Eq⟩ => hf Eq ▸ hb, by grind⟩
 
 中文:
-定理 _root_.Function.Injective.mem_set_image
-  条件: {f : α -> β} (hf : Injective f) {s : Set α} {a : α}
+定理 _root_.函数.单射.mem_set_image
+  条件: {f : α -> β} (hf : 单射 f) {s : 集合 α} {a : α}
   证明: ⟨fun ⟨_, hb, Eq⟩ => hf Eq ▸ hb, by grind⟩
 -/
 theorem _root_.Function.Injective.mem_set_image {f : α -> β} (hf : Injective f) {s : Set α} {a : α} :
@@ -782,7 +782,7 @@ hf.mem_set_image.1 h hx
 
 中文:
 引理 preimage_subset_of_surjOn
-  条件: {t : Set β} (hf : Injective f) (h : SurjOn f s t)
+  条件: {t : 集合 β} (hf : 单射 f) (h : 满射限制 f s t)
   证明: fun _ hx =>
 hf.mem_set_image.1 h hx
 -/
@@ -799,8 +799,8 @@ theorem forall_mem_image
   proof: by simp
 
 中文:
-定理 forall_mem_image
-  条件: {f : α -> β} {s : Set α} {p : β -> 命题}
+定理 对任意_mem_image
+  条件: {f : α -> β} {s : 集合 α} {p : β -> 命题}
   证明: by simp
 -/
 theorem forall_mem_image {f : α -> β} {s : Set α} {p : β -> Prop} :
@@ -817,8 +817,8 @@ theorem exists_mem_image
 @[congr]
 
 中文:
-定理 exists_mem_image
-  条件: {f : α -> β} {s : Set α} {p : β -> 命题}
+定理 存在_mem_image
+  条件: {f : α -> β} {s : 集合 α} {p : β -> 命题}
   证明: by simp
 
 @[congr]
@@ -839,7 +839,7 @@ theorem image_congr
 
 中文:
 定理 image_congr
-  条件: {f g : α -> β} {s : Set α} (h : 对任意 a in s, f a = g a)
+  条件: {f g : α -> β} {s : 集合 α} (h : 对任意 a in s, f a = g a)
   结论: f '' s = g '' s
   证明: by
   aesop
@@ -861,7 +861,7 @@ theorem image_congr'
 
 中文:
 定理 image_congr'
-  条件: {f g : α -> β} {s : Set α} (h : 对任意 x : α, f x = g x)
+  条件: {f g : α -> β} {s : 集合 α} (h : 对任意 x : α, f x = g x)
   结论: f '' s = g '' s
   证明: by
   grind
@@ -899,7 +899,7 @@ lemma monotone_image
 
 中文:
 引理 monotone_image
-  结论: Monotone (image f)
+  结论: 递增 (像 f)
   证明: fun _ _ => image_mono
 
 Depends on / 依赖: image_mono
@@ -917,7 +917,7 @@ theorem image_comp
 
 中文:
 定理 image_comp
-  条件: (f : β -> γ) (g : α -> β) (a : Set α)
+  条件: (f : β -> γ) (g : α -> β) (a : 集合 α)
   结论: f ∘ g '' a = f '' g '' a
   证明: by aesop
 -/
@@ -935,7 +935,7 @@ theorem image_comp_eq
 中文:
 定理 image_comp_eq
   条件: {g : β -> γ}
-  结论: image (g ∘ f) = image g ∘ image f
+  结论: 像 (g ∘ f) = 像 g ∘ 像 f
   证明: by grind
 -/
 theorem image_comp_eq {g : β -> γ} : image (g ∘ f) = image g ∘ image f := by grind
@@ -952,7 +952,7 @@ theorem image_comp_image
 中文:
 定理 image_comp_image
   条件: {g : β -> γ}
-  结论: image g ∘ image f = image (g ∘ f)
+  结论: 像 g ∘ 像 f = 像 (g ∘ f)
   证明: by grind
 -/
 theorem image_comp_image {g : β -> γ} : image g ∘ image f = image (g ∘ f) := by grind
@@ -970,7 +970,7 @@ theorem image_image
 
 中文:
 定理 image_image
-  条件: (g : β -> γ) (f : α -> β) (s : Set α)
+  条件: (g : β -> γ) (f : α -> β) (s : 集合 α)
   结论: g '' f '' s = (fun x => g (f x)) '' s
   证明: (image_comp g f s).symm
 
@@ -1005,7 +1005,7 @@ theorem _root_.Function.Semiconj.set_image
   image_comm h
 
 中文:
-定理 _root_.Function.Semiconj.set_image
+定理 _root_.函数.Semiconj.set_image
   结论: {f : α -> β} {ga : α -> α} {gb : β -> β}
   证明: fun _ =>
   image_comm h
@@ -1023,8 +1023,8 @@ theorem _root_.Function.Commute.set_image
   proof: Function.Semiconj.set_image h
 
 中文:
-定理 _root_.Function.Commute.set_image
-  条件: {f g : α -> α} (h : Function.Commute f g)
+定理 _root_.函数.Commute.set_image
+  条件: {f g : α -> α} (h : 函数.Commute f g)
   证明: Function.Semiconj.set_image h
 
 Depends on / 依赖: Function, Function.Semiconj.set_image, Semiconj, set_image
@@ -1046,7 +1046,7 @@ theorem image_union
 
 中文:
 定理 image_union
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   结论: f '' (s union t) = f '' s union f '' t
   证明: by grind
 
@@ -1083,7 +1083,7 @@ theorem image_inter_subset
 
 中文:
 定理 image_inter_subset
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   结论: f '' (s inter t) subseteq f '' s inter f '' t
   证明: subset_inter (image_mono inter_subset_left) (image_mono inter_subset_right)
 
@@ -1105,7 +1105,7 @@ theorem image_sdiff_subset
 
 中文:
 定理 image_sdiff_subset
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   结论: f '' (s \ t) subseteq f '' s inter f '' tᶜ
   证明: image_inter_subset f s tᶜ
 
@@ -1131,7 +1131,7 @@ theorem image_inter_on
 
 中文:
 定理 image_inter_on
-  条件: {f : α -> β} {s t : Set α} (h : 对任意 x in t, 对任意 y in s, f x = f y -> x = y)
+  条件: {f : α -> β} {s t : 集合 α} (h : 对任意 x in t, 对任意 y in s, f x = f y -> x = y)
   证明: (image_inter_subset _ _ _).antisymm
     fun b ⟨⟨a₁, ha₁, h₁⟩, ⟨a₂, ha₂, h₂⟩⟩ =>
       have : a₂ = a₁ := h _ ha₂ _ ha₁ (by simp [*])
@@ -1157,7 +1157,7 @@ theorem image_inter
 
 中文:
 定理 image_inter
-  条件: {f : α -> β} {s t : Set α} (H : Injective f)
+  条件: {f : α -> β} {s t : 集合 α} (H : 单射 f)
   结论: f '' (s inter t) = f '' s inter f '' t
   证明: image_inter_on fun _ _ _ _ h => H h
 
@@ -1179,7 +1179,7 @@ theorem image_univ_of_surjective
 
 中文:
 定理 image_univ_of_surjective
-  条件: {ι : 类型} {f : ι -> β} (H : Surjective f)
+  条件: {ι : 类型} {f : ι -> β} (H : 满射 f)
   结论: f '' univ = univ
   证明: eq_univ_of_forall by simpa [image]
 
@@ -1227,8 +1227,8 @@ theorem Nonempty.image_const
 @[simp, mfld_simps]
 
 中文:
-定理 Nonempty.image_const
-  条件: {s : Set α} (hs : s.Nonempty) (a : β)
+定理 非空.image_const
+  条件: {s : 集合 α} (hs : s.非空) (a : β)
   结论: (fun _ => a) '' s = {a}
   证明: ext fun _ =>
     ⟨fun ⟨_, _, h⟩ => h ▸ mem_singleton _, fun h =>
@@ -1259,7 +1259,7 @@ theorem image_eq_empty
 
 中文:
 定理 image_eq_empty
-  条件: {α β} {f : α -> β} {s : Set α}
+  条件: {α β} {f : α -> β} {s : 集合 α}
   结论: f '' s = ∅ ↔ s = ∅
   证明: by
   simp only [eq_empty_iff_forall_notMem]
@@ -1286,7 +1286,7 @@ theorem empty_eq_image
 
 中文:
 定理 empty_eq_image
-  条件: {α β} {f : α -> β} {s : Set α}
+  条件: {α β} {f : α -> β} {s : 集合 α}
   结论: ∅ = f '' s ↔ s = ∅
   证明: by
   rw [eq_comm]; rw [image_eq_empty]
@@ -1308,7 +1308,7 @@ theorem preimage_compl_eq_image_compl
 
 中文:
 定理 preimage_compl_eq_image_compl
-  条件: [布尔eanAlgebra α] (s : Set α)
+  条件: [布尔代数 α] (s : 集合 α)
   证明: Set.ext fun x =>
     ⟨fun h => ⟨xᶜ, h, compl_compl x⟩, fun h =>
       Exists.elim h fun _ hy => (compl_eq_comm.mp hy.2).symm.subst hy.1⟩
@@ -1334,7 +1334,7 @@ theorem mem_compl_image
 
 中文:
 定理 mem_compl_image
-  条件: [布尔eanAlgebra α] (t : α) (s : Set α)
+  条件: [布尔代数 α] (t : α) (s : 集合 α)
   证明: by
   simp [← preimage_compl_eq_image_compl]
 
@@ -1357,7 +1357,7 @@ theorem image_id_eq
 
 中文:
 定理 image_id_eq
-  结论: image (id : α -> α) = id
+  结论: 像 (id : α -> α) = id
   证明: by ext; simp
 -/
 theorem image_id_eq : image (id : α -> α) = id := by ext; simp
@@ -1377,7 +1377,7 @@ theorem image_id'
 
 中文:
 定理 image_id'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: (fun x => x) '' s = s
   证明: by
   ext
@@ -1398,7 +1398,7 @@ theorem image_id
 
 中文:
 定理 image_id
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: id '' s = s
   证明: by simp
 -/
@@ -1419,7 +1419,7 @@ lemma image_iterate_eq
 中文:
 引理 image_iterate_eq
   条件: {f : α -> α} {n : 自然数}
-  结论: image (f^[n]) = (image f)^[n]
+  结论: 像 (f^[n]) = (像 f)^[n]
   证明: by
   induction n with
   | zero => simp
@@ -1443,7 +1443,7 @@ theorem compl_compl_image
 
 中文:
 定理 compl_compl_image
-  条件: [布尔eanAlgebra α] (s : Set α)
+  条件: [布尔代数 α] (s : 集合 α)
   证明: by
   rw [← image_comp]; rw [compl_comp_compl]; rw [image_id]
 
@@ -1463,7 +1463,7 @@ theorem image_insert_eq
 
 中文:
 定理 image_insert_eq
-  条件: {f : α -> β} {a : α} {s : Set α}
+  条件: {f : α -> β} {a : α} {s : 集合 α}
   证明: by grind
 -/
 theorem image_insert_eq {f : α -> β} {a : α} {s : Set α} :
@@ -1496,8 +1496,8 @@ theorem _root_.Function.LeftInverse.mem_preimage_iff
   rw [Set.mem_preimage]; rw [hfg x]
 
 中文:
-定理 _root_.Function.LeftInverse.mem_preimage_iff
-  结论: {f : α -> β} {g : β -> α} (hfg : LeftInverse g f)
+定理 _root_.函数.左逆.mem_preimage_iff
+  结论: {f : α -> β} {g : β -> α} (hfg : 左逆 g f)
   证明: by
   rw [Set.mem_preimage]; rw [hfg x]
 
@@ -1517,7 +1517,7 @@ theorem image_subset_preimage_of_inverse
 
 中文:
 定理 image_subset_preimage_of_inverse
-  条件: {f : α -> β} {g : β -> α} (I : LeftInverse g f) (s : Set α)
+  条件: {f : α -> β} {g : β -> α} (I : 左逆 g f) (s : 集合 α)
   证明: fun _ ⟨_, h, e⟩ => e ▸ I.mem_preimage_iff.mpr h
 
 Depends on / 依赖: I.mem_preimage_iff.mpr, mem_preimage_iff
@@ -1535,7 +1535,7 @@ theorem preimage_subset_image_of_inverse
 
 中文:
 定理 preimage_subset_image_of_inverse
-  条件: {f : α -> β} {g : β -> α} (I : LeftInverse g f) (s : Set β)
+  条件: {f : α -> β} {g : β -> α} (I : 左逆 g f) (s : 集合 β)
   证明: fun b h => ⟨f b, h, I b⟩
 -/
 theorem preimage_subset_image_of_inverse {f : α -> β} {g : β -> α} (I : LeftInverse g f) (s : Set β) :
@@ -1559,7 +1559,7 @@ theorem range_inter_ssubset_iff_preimage_ssubset
 
 中文:
 定理 range_inter_ssubset_iff_preimage_ssubset
-  条件: {f : α -> β} {s s' : Set β}
+  条件: {f : α -> β} {s s' : 集合 β}
   证明: by
   simp only [Set.ssubset_iff_exists]
   apply and_congr ?_ (by aesop)
@@ -1594,7 +1594,7 @@ theorem image_eq_preimage_of_inverse
 
 中文:
 定理 image_eq_preimage_of_inverse
-  结论: {f : α -> β} {g : β -> α} (h₁ : LeftInverse g f)
+  结论: {f : α -> β} {g : β -> α} (h₁ : 左逆 g f)
   证明: funext fun s =>
     Subset.antisymm (image_subset_preimage_of_inverse h₁ s) (preimage_subset_image_of_inverse h₂ s)
 
@@ -1614,8 +1614,8 @@ theorem _root_.Function.Involutive.image_eq_preimage_symm
   proof: image_eq_preimage_of_inverse hf.leftInverse hf.rightInverse
 
 中文:
-定理 _root_.Function.Involutive.image_eq_preimage_symm
-  条件: {f : α -> α} (hf : f.Involutive)
+定理 _root_.函数.对合.image_eq_preimage_symm
+  条件: {f : α -> α} (hf : f.对合)
   证明: image_eq_preimage_of_inverse hf.leftInverse hf.rightInverse
 
 Depends on / 依赖: hf.leftInverse, hf.rightInverse, image_eq_preimage_of_inverse, leftInverse, rightInverse
@@ -1635,7 +1635,7 @@ theorem mem_image_iff_of_inverse
 
 中文:
 定理 mem_image_iff_of_inverse
-  结论: {f : α -> β} {g : β -> α} {b : β} {s : Set α} (h₁ : LeftInverse g f)
+  结论: {f : α -> β} {g : β -> α} {b : β} {s : 集合 α} (h₁ : 左逆 g f)
   证明: by
   rw [image_eq_preimage_of_inverse h₁ h₂]; rw [mem_preimage]
 
@@ -1656,7 +1656,7 @@ theorem image_compl_subset
 
 中文:
 定理 image_compl_subset
-  条件: {f : α -> β} {s : Set α} (H : Injective f)
+  条件: {f : α -> β} {s : 集合 α} (H : 单射 f)
   结论: f '' sᶜ subseteq (f '' s)ᶜ
   证明: Disjoint.subset_compl_left by simp [disjoint_iff_inf_le, ← image_inter H]
 
@@ -1678,7 +1678,7 @@ theorem subset_image_compl
 
 中文:
 定理 subset_image_compl
-  条件: {f : α -> β} {s : Set α} (H : Surjective f)
+  条件: {f : α -> β} {s : 集合 α} (H : 满射 f)
   结论: (f '' s)ᶜ subseteq f '' sᶜ
   证明: compl_subset_iff_union.2 by
     rw [← image_union]
@@ -1702,7 +1702,7 @@ theorem image_compl_eq
 
 中文:
 定理 image_compl_eq
-  条件: {f : α -> β} {s : Set α} (H : Bijective f)
+  条件: {f : α -> β} {s : 集合 α} (H : 双射 f)
   结论: f '' sᶜ = (f '' s)ᶜ
   证明: Subset.antisymm (image_compl_subset H.1) (subset_image_compl H.2)
 
@@ -1724,7 +1724,7 @@ theorem subset_image_sdiff
 
 中文:
 定理 subset_image_sdiff
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   结论: f '' s \ f '' t subseteq f '' (s \ t)
   证明: by
   rw [sdiff_subset_iff]; rw [← image_union]; rw [union_sdiff_self]
@@ -1750,7 +1750,7 @@ theorem image_sdiff
 
 中文:
 定理 image_sdiff
-  条件: {f : α -> β} (hf : Injective f) (s t : Set α)
+  条件: {f : α -> β} (hf : 单射 f) (s t : 集合 α)
   结论: f '' (s \ t) = f '' s \ f '' t
   证明: Subset.antisymm
     (Subset.trans (image_sdiff_subset f s t) <| inter_subset_inter_right _ <| image_compl_subset hf)
@@ -1782,7 +1782,7 @@ theorem image_symmDiff
 
 中文:
 定理 image_symmDiff
-  条件: (hf : Injective f) (s t : Set α)
+  条件: (hf : 单射 f) (s t : 集合 α)
   结论: f '' s ∆ t = (f '' s) ∆ (f '' t)
   证明: by
   simp_rw [Set.symmDiff_def, image_union, image_sdiff hf]
@@ -1801,9 +1801,9 @@ theorem Nonempty.image
   statement: s.Nonempty -> (f '' s).Nonempty
 
 中文:
-定理 Nonempty.image
-  条件: (f : α -> β) {s : Set α}
-  结论: s.Nonempty -> (f '' s).Nonempty
+定理 非空.像
+  条件: (f : α -> β) {s : 集合 α}
+  结论: s.非空 -> (f '' s).非空
 -/
 theorem Nonempty.image (f : α -> β) {s : Set α} : s.Nonempty -> (f '' s).Nonempty
   | ⟨x, hx⟩ => ⟨f x, mem_image_of_mem f hx⟩
@@ -1817,9 +1817,9 @@ theorem Nonempty.of_image
   statement: (f '' s).Nonempty -> s.Nonempty
 
 中文:
-定理 Nonempty.of_image
-  条件: {f : α -> β} {s : Set α}
-  结论: (f '' s).Nonempty -> s.Nonempty
+定理 非空.of_image
+  条件: {f : α -> β} {s : 集合 α}
+  结论: (f '' s).非空 -> s.非空
 -/
 theorem Nonempty.of_image {f : α -> β} {s : Set α} : (f '' s).Nonempty -> s.Nonempty
   | ⟨_, x, hx, _⟩ => ⟨x, hx⟩
@@ -1836,8 +1836,8 @@ theorem image_nonempty
 
 中文:
 定理 image_nonempty
-  条件: {f : α -> β} {s : Set α}
-  结论: (f '' s).Nonempty ↔ s.Nonempty
+  条件: {f : α -> β} {s : 集合 α}
+  结论: (f '' s).非空 ↔ s.非空
   证明: ⟨Nonempty.of_image, fun h => h.image f⟩
 
 Depends on / 依赖: Nonempty, Nonempty.of_image, h.image, of_image
@@ -1856,8 +1856,8 @@ theorem Nonempty.preimage
   ⟨x, by grind⟩
 
 中文:
-定理 Nonempty.preimage
-  条件: {s : Set β} (hs : s.Nonempty) {f : α -> β} (hf : Surjective f)
+定理 非空.原像
+  条件: {s : 集合 β} (hs : s.非空) {f : α -> β} (hf : 满射 f)
   证明: let ⟨y, hy⟩ := hs
   let ⟨x, hx⟩ := hf y
   ⟨x, by grind⟩
@@ -1884,7 +1884,7 @@ theorem image_subset_iff
 
 中文:
 定理 image_subset_iff
-  条件: {s : Set α} {t : Set β} {f : α -> β}
+  条件: {s : 集合 α} {t : 集合 β} {f : α -> β}
   结论: f '' s subseteq t ↔ s subseteq f ⁻¹' t
   证明: forall_mem_image
 
@@ -1904,7 +1904,7 @@ theorem image_preimage_subset
 
 中文:
 定理 image_preimage_subset
-  条件: (f : α -> β) (s : Set β)
+  条件: (f : α -> β) (s : 集合 β)
   结论: f '' f ⁻¹' s subseteq s
   证明: image_subset_iff.2 Subset.rfl
 
@@ -1925,7 +1925,7 @@ theorem subset_preimage_image
 
 中文:
 定理 subset_preimage_image
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: s subseteq f ⁻¹' f '' s
   证明: fun _ =>
   mem_image_of_mem f
@@ -1971,7 +1971,7 @@ theorem preimage_image_eq
 
 中文:
 定理 preimage_image_eq
-  条件: {f : α -> β} (s : Set α) (h : Injective f)
+  条件: {f : α -> β} (s : 集合 α) (h : 单射 f)
   结论: f ⁻¹' f '' s = s
   证明: Subset.antisymm (fun _ ⟨_, hy, e⟩ => h e ▸ hy) (subset_preimage_image f s)
 
@@ -1998,7 +1998,7 @@ theorem image_preimage_eq
 
 中文:
 定理 image_preimage_eq
-  条件: {f : α -> β} (s : Set β) (h : Surjective f)
+  条件: {f : α -> β} (s : 集合 β) (h : 满射 f)
   结论: f '' f ⁻¹' s = s
   证明: Subset.antisymm (image_preimage_subset f s) fun x hx =>
     let ⟨y, e⟩ := h x
@@ -2026,8 +2026,8 @@ theorem Nonempty.subset_preimage_const
 @[simp]
 
 中文:
-定理 Nonempty.subset_preimage_const
-  条件: {s : Set α} (hs : Set.Nonempty s) (t : Set β) (a : β)
+定理 非空.subset_preimage_const
+  条件: {s : 集合 α} (hs : 集合.非空 s) (t : 集合 β) (a : β)
   证明: by
   rw [← image_subset_iff]; rw [hs.image_const]; rw [singleton_subset_iff]
 
@@ -2054,7 +2054,7 @@ theorem preimage_injective
 
 中文:
 定理 preimage_injective
-  结论: Injective (preimage f) ↔ Surjective f
+  结论: 单射 (原像 f) ↔ 满射 f
   证明: by
   rw [← Injective.of_comp_iff Set.mem_injective]; rw [← Injective.of_comp_iff' _ Set.ofPred_bijective]
   exact injective_comp_right_iff_surjective
@@ -2082,7 +2082,7 @@ theorem preimage_surjective
 
 中文:
 定理 preimage_surjective
-  结论: Surjective (preimage f) ↔ Injective f
+  结论: 满射 (原像 f) ↔ 单射 f
   证明: by
   rw [← Surjective.of_comp_iff _ Set.ofPred_bijective.surjective]; rw [← Surjective.of_comp_iff' Set.mem_bijective]
   exact surjective_comp_right_iff_injective
@@ -2107,7 +2107,7 @@ theorem preimage_eq_preimage
 
 中文:
 定理 preimage_eq_preimage
-  条件: {f : β -> α} (hf : Surjective f)
+  条件: {f : β -> α} (hf : 满射 f)
   结论: f ⁻¹' s = f ⁻¹' t ↔ s = t
   证明: (preimage_injective.mpr hf).eq_iff
 
@@ -2126,7 +2126,7 @@ theorem image_inter_preimage
 
 中文:
 定理 image_inter_preimage
-  条件: (f : α -> β) (s : Set α) (t : Set β)
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β)
   证明: by grind
 -/
 theorem image_inter_preimage (f : α -> β) (s : Set α) (t : Set β) :
@@ -2144,7 +2144,7 @@ theorem image_preimage_inter
 
 中文:
 定理 image_preimage_inter
-  条件: (f : α -> β) (s : Set α) (t : Set β)
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β)
   证明: by simp only [inter_comm, image_inter_preimage]
 
 @[simp]
@@ -2166,7 +2166,7 @@ theorem image_inter_nonempty_iff
 
 中文:
 定理 image_inter_nonempty_iff
-  条件: {f : α -> β} {s : Set α} {t : Set β}
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β}
   证明: by
   rw [← image_inter_preimage]; rw [image_nonempty]
 
@@ -2187,7 +2187,7 @@ theorem disjoint_image_left
 
 中文:
 定理 disjoint_image_left
-  条件: {f : α -> β} {s : Set α} {t : Set β}
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β}
   证明: by
   simp_rw [disjoint_iff_inter_eq_empty, ← not_nonempty_iff_eq_empty, image_inter_nonempty_iff]
 
@@ -2208,7 +2208,7 @@ theorem disjoint_image_right
 
 中文:
 定理 disjoint_image_right
-  条件: {f : α -> β} {s : Set α} {t : Set β}
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β}
   证明: by
   rw [disjoint_comm]; rw [disjoint_comm (b := s)]; rw [disjoint_image_left]
 
@@ -2230,7 +2230,7 @@ theorem image_sdiff_preimage
 
 中文:
 定理 image_sdiff_preimage
-  条件: {f : α -> β} {s : Set α} {t : Set β}
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β}
   证明: by simp_rw [sdiff_eq, ← preimage_compl, image_inter_preimage]
 
 @[deprecated (since := "2026-06-03")] alias image_diff_preimage := image_sdiff_preimage
@@ -2252,7 +2252,7 @@ theorem compl_image
 
 中文:
 定理 compl_image
-  结论: image (compl : Set α -> Set α) = preimage compl
+  结论: 像 (compl : 集合 α -> 集合 α) = 原像 compl
   证明: image_eq_preimage_of_inverse compl_compl compl_compl
 
 Depends on / 依赖: compl_compl, image_eq_preimage_of_inverse
@@ -2273,7 +2273,7 @@ theorem compl_image_ofPred
 
 中文:
 定理 compl_image_ofPred
-  条件: {p : Set α -> 命题}
+  条件: {p : 集合 α -> 命题}
   结论: compl '' { s | p s } = { s | p sᶜ }
   证明: congr_fun compl_image {x | p x}
 
@@ -2296,7 +2296,7 @@ theorem inter_preimage_subset
 
 中文:
 定理 inter_preimage_subset
-  条件: (s : Set α) (t : Set β) (f : α -> β)
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> β)
   证明: fun _ h => ⟨mem_image_of_mem _ h.left, h.right⟩
 
 Depends on / 依赖: h.left, h.right, mem_image_of_mem
@@ -2315,7 +2315,7 @@ theorem union_preimage_subset
 
 中文:
 定理 union_preimage_subset
-  条件: (s : Set α) (t : Set β) (f : α -> β)
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> β)
   证明: fun _ h =>
   Or.elim h (fun l => Or.inl <| mem_image_of_mem _ l) fun r => Or.inr r
 -/
@@ -2334,7 +2334,7 @@ theorem subset_image_union
 
 中文:
 定理 subset_image_union
-  条件: (f : α -> β) (s : Set α) (t : Set β)
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β)
   结论: f '' (s union f ⁻¹' t) subseteq f '' s union t
   证明: image_subset_iff.2 (union_preimage_subset _ _ _)
 
@@ -2353,7 +2353,7 @@ theorem preimage_subset_iff
 
 中文:
 定理 preimage_subset_iff
-  条件: {A : Set α} {B : Set β} {f : α -> β}
+  条件: {A : 集合 α} {B : 集合 β} {f : α -> β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2375,7 +2375,7 @@ theorem image_eq_image
 
 中文:
 定理 image_eq_image
-  条件: {f : α -> β} (hf : Injective f)
+  条件: {f : α -> β} (hf : 单射 f)
   结论: f '' s = f '' t ↔ s = t
   证明: Iff.symm
     (Iff.intro fun eq => eq ▸ rfl) fun eq => by
@@ -2403,7 +2403,7 @@ theorem subset_image_iff
 
 中文:
 定理 subset_image_iff
-  条件: {t : Set β}
+  条件: {t : 集合 β}
   证明: by
   refine ⟨fun h => ⟨f ⁻¹' t inter s, inter_subset_right, ?_⟩,
     fun ⟨u, hu, hu'⟩ => hu'.symm ▸ image_mono hu⟩
@@ -2433,8 +2433,8 @@ lemma exists_subset_image_iff
 @[simp]
 
 中文:
-引理 exists_subset_image_iff
-  条件: {p : Set β -> 命题}
+引理 存在_subset_image_iff
+  条件: {p : 集合 β -> 命题}
   结论: (存在 t subseteq f '' s, p t) ↔ 存在 t subseteq s, p (f '' t)
   证明: by
   simp [subset_image_iff]
@@ -2458,8 +2458,8 @@ lemma forall_subset_image_iff
   simp [subset_image_iff]
 
 中文:
-引理 forall_subset_image_iff
-  条件: {p : Set β -> 命题}
+引理 对任意_subset_image_iff
+  条件: {p : 集合 β -> 命题}
   结论: (对任意 t subseteq f '' s, p t) ↔ 对任意 t subseteq s, p (f '' t)
   证明: by
   simp [subset_image_iff]
@@ -2481,7 +2481,7 @@ theorem image_subset_image_iff
 
 中文:
 定理 image_subset_image_iff
-  条件: {f : α -> β} (hf : Injective f)
+  条件: {f : α -> β} (hf : 单射 f)
   结论: f '' s subseteq f '' t ↔ s subseteq t
   证明: by
   grind [Set.image_subset_iff, Set.preimage_image_eq]
@@ -2506,7 +2506,7 @@ theorem prod_quotient_preimage_eq_image
 
 中文:
 定理 prod_quotient_preimage_eq_image
-  结论: [s : Setoid α] (g : Quotient s -> β) {h : α -> β}
+  结论: [s : 集合等价关系 α] (g : 商 s -> β) {h : α -> β}
   证明: Hh.symm ▸
     Set.ext fun ⟨a₁, a₂⟩ =>
       ⟨Quot.induction_on₂ a₁ a₂ fun a₁ a₂ h => ⟨(a₁, a₂), h, rfl⟩, fun ⟨⟨b₁, b₂⟩, h₁, h₂⟩ =>
@@ -2537,8 +2537,8 @@ theorem exists_image_iff
     ⟨⟨_, _, a.prop, rfl⟩, h⟩⟩
 
 中文:
-定理 exists_image_iff
-  条件: (f : α -> β) (x : Set α) (P : β -> 命题)
+定理 存在_image_iff
+  条件: (f : α -> β) (x : 集合 α) (P : β -> 命题)
   证明: ⟨fun ⟨a, h⟩ => ⟨⟨_, a.prop.choose_spec.1⟩, a.prop.choose_spec.2.symm ▸ h⟩, fun ⟨a, h⟩ =>
     ⟨⟨_, _, a.prop, rfl⟩, h⟩⟩
 
@@ -2559,7 +2559,7 @@ theorem imageFactorization_eq
 
 中文:
 定理 imageFactorization_eq
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   证明: funext fun _ => rfl
 -/
 theorem imageFactorization_eq {f : α -> β} {s : Set α} :
@@ -2576,7 +2576,7 @@ theorem imageFactorization_surjective
 
 中文:
 定理 imageFactorization_surjective
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   证明: fun ⟨_, ⟨a, ha, rfl⟩⟩ => ⟨⟨a, ha⟩, rfl⟩
 -/
 theorem imageFactorization_surjective {f : α -> β} {s : Set α} :
@@ -2601,7 +2601,7 @@ theorem image_perm
 
 中文:
 定理 image_perm
-  条件: {s : Set α} {σ : Equiv.Perm α} (hs : { a : α | σ a != a } subseteq s)
+  条件: {s : 集合 α} {σ : 等价.置换 α} (hs : { a : α | σ a != a } subseteq s)
   结论: σ '' s = s
   证明: by
   ext i
@@ -2646,7 +2646,7 @@ theorem powerset_insert
 
 中文:
 定理 powerset_insert
-  条件: (s : Set α) (a : α)
+  条件: (s : 集合 α) (a : α)
   结论: 𝒫 insert a s = 𝒫 s union insert a '' 𝒫 s
   证明: by
   ext t
@@ -2679,7 +2679,7 @@ theorem disjoint_powerset_insert
 
 中文:
 定理 disjoint_powerset_insert
-  条件: {s : Set α} {a : α} (h : a ∉ s)
+  条件: {s : 集合 α} {a : α} (h : a ∉ s)
   证明: by
   grind
 -/
@@ -2698,7 +2698,7 @@ theorem powerset_insert_injOn
 
 中文:
 定理 powerset_insert_injOn
-  条件: {s : Set α} {a : α} (h : a ∉ s)
+  条件: {s : 集合 α} {a : α} (h : a ∉ s)
   证明: fun u u_mem v v_mem eq => by
   grind
 
@@ -2725,7 +2725,7 @@ theorem forall_mem_range
   proof: by simp
 
 中文:
-定理 forall_mem_range
+定理 对任意_mem_range
   条件: {p : α -> 命题}
   结论: (对任意 a in range f, p a) ↔ 对任意 i, p (f i)
   证明: by simp
@@ -2741,7 +2741,7 @@ theorem forall_subtype_range_iff
   proof: by grind
 
 中文:
-定理 forall_subtype_range_iff
+定理 对任意_subtype_range_iff
   条件: {p : range f -> 命题}
   证明: by grind
 -/
@@ -2758,7 +2758,7 @@ theorem exists_range_iff
   proof: by simp
 
 中文:
-定理 exists_range_iff
+定理 存在_range_iff
   条件: {p : α -> 命题}
   结论: (存在 a in range f, p a) ↔ 存在 i, p (f i)
   证明: by simp
@@ -2774,7 +2774,7 @@ theorem exists_subtype_range_iff
   proof: by grind
 
 中文:
-定理 exists_subtype_range_iff
+定理 存在_subtype_range_iff
   条件: {p : range f -> 命题}
   证明: by grind
 -/
@@ -2795,7 +2795,7 @@ alias ⟨_, _root_.Function.Surjective.range_eq⟩ := range_eq_univ
 
 中文:
 定理 range_eq_univ
-  结论: range f = univ ↔ Surjective f
+  结论: range f = univ ↔ 满射 f
   证明: eq_univ_iff_forall
 
 alias ⟨_, _root_.Function.Surjective.range_eq⟩ := range_eq_univ
@@ -2822,7 +2822,7 @@ theorem subset_range_of_surjective
 
 中文:
 定理 subset_range_of_surjective
-  条件: {f : α -> β} (h : Surjective f) (s : Set β)
+  条件: {f : α -> β} (h : 满射 f) (s : 集合 β)
   证明: Surjective.range_eq h ▸ subset_univ s
 
 @[simp]
@@ -2863,7 +2863,7 @@ alias image_compl_eq_range_diff_image := image_compl_eq_range_sdiff_image
 
 中文:
 引理 image_compl_eq_range_sdiff_image
-  条件: {f : α -> β} (hf : Injective f) (s : Set α)
+  条件: {f : α -> β} (hf : 单射 f) (s : 集合 α)
   证明: by rw [← image_univ, ← image_sdiff hf, compl_eq_univ_sdiff]
 
 @[deprecated (since := "2026-06-03")]
@@ -2892,7 +2892,7 @@ lemma range_sdiff_image
 
 中文:
 引理 range_sdiff_image
-  条件: {f : α -> β} (hf : Injective f) (s : Set α)
+  条件: {f : α -> β} (hf : 单射 f) (s : 集合 α)
   证明: by
   rw [image_compl_eq_range_sdiff_image hf]
 
@@ -2983,7 +2983,7 @@ theorem _root_.Nat.mem_range_succ
   proof: ⟨by grind, fun h => ⟨_, Nat.succ_pred_eq_of_pos h⟩⟩
 
 中文:
-定理 _root_.Nat.mem_range_succ
+定理 _root_.自然数.mem_range_succ
   条件: (i : 自然数)
   结论: i in range 自然数.succ ↔ 0 < i
   证明: ⟨by grind, fun h => ⟨_, Nat.succ_pred_eq_of_pos h⟩⟩
@@ -3004,8 +3004,8 @@ theorem Nonempty.preimage'
   ⟨x, by grind⟩
 
 中文:
-定理 Nonempty.preimage'
-  条件: {s : Set β} (hs : s.Nonempty) {f : α -> β} (hf : s subseteq range f)
+定理 非空.原像'
+  条件: {s : 集合 β} (hs : s.非空) {f : α -> β} (hf : s subseteq range f)
   证明: let ⟨_, hy⟩ := hs
   let ⟨x, hx⟩ := hf hy
   ⟨x, by grind⟩
@@ -3081,7 +3081,7 @@ theorem range_subset_range_iff_exists_comp
   simp only [range_subset_iff, mem_range, Classical.skolem, funext_iff, (· ∘ ·), eq_comm]
 
 中文:
-定理 range_subset_range_iff_exists_comp
+定理 range_subset_range_iff_存在_comp
   条件: {f : α -> γ} {g : β -> γ}
   证明: by
   simp only [range_subset_iff, mem_range, Classical.skolem, funext_iff, (· ∘ ·), eq_comm]
@@ -3102,7 +3102,7 @@ theorem range_eq_iff
 
 中文:
 定理 range_eq_iff
-  条件: (f : α -> β) (s : Set β)
+  条件: (f : α -> β) (s : 集合 β)
   证明: by grind
 -/
 theorem range_eq_iff (f : α -> β) (s : Set β) :
@@ -3135,7 +3135,7 @@ theorem range_nonempty_iff_nonempty
 
 中文:
 定理 range_nonempty_iff_nonempty
-  结论: (range f).Nonempty ↔ Nonempty ι
+  结论: (range f).非空 ↔ 非空 ι
   证明: ⟨fun ⟨_, x, _⟩ => ⟨x⟩, fun ⟨x⟩ => ⟨f x, mem_range_self x⟩⟩
 
 Depends on / 依赖: mem_range_self
@@ -3156,8 +3156,8 @@ theorem range_nonempty
 
 中文:
 定理 range_nonempty
-  条件: [h : Nonempty ι] (f : ι -> α)
-  结论: (range f).Nonempty
+  条件: [h : 非空 ι] (f : ι -> α)
+  结论: (range f).非空
   证明: range_nonempty_iff_nonempty.2 h
 
 @[simp]
@@ -3181,7 +3181,7 @@ theorem range_eq_empty_iff
 中文:
 定理 range_eq_empty_iff
   条件: {f : ι -> α}
-  结论: range f = ∅ ↔ IsEmpty ι
+  结论: range f = ∅ ↔ 是空 ι
   证明: by
   rw [← not_nonempty_iff]; rw [← range_nonempty_iff_nonempty]; rw [not_nonempty_iff_eq_empty]
 
@@ -3203,7 +3203,7 @@ theorem range_eq_empty
 
 中文:
 定理 range_eq_empty
-  条件: [IsEmpty ι] (f : ι -> α)
+  条件: [是空 ι] (f : ι -> α)
   结论: range f = ∅
   证明: range_eq_empty_iff.2 ‹_›
 
@@ -3228,7 +3228,7 @@ theorem range_eq_singleton_iff
 
 中文:
 定理 range_eq_singleton_iff
-  条件: [Nonempty ι] {y}
+  条件: [非空 ι] {y}
   证明: by
   simp_rw [Set.ext_iff, Set.mem_range, Set.mem_singleton_iff]
   exact ⟨fun h _ => by simp_rw [← h, exists_apply_eq_apply],
@@ -3252,7 +3252,7 @@ theorem range_eq_singleton
 
 中文:
 定理 range_eq_singleton
-  条件: [Nonempty ι] {y} (hy : 对任意 (x : ι), f x = y)
+  条件: [非空 ι] {y} (hy : 对任意 (x : ι), f x = y)
   证明: range_eq_singleton_iff.mpr hy
 
 Depends on / 依赖: range_eq_singleton_iff, range_eq_singleton_iff.mpr
@@ -3272,7 +3272,7 @@ instance instNonemptyRange
 
 中文:
 实例 instNonemptyRange
-  签名: [Nonempty ι] (f : ι -> α)
+  签名: [非空 ι] (f : ι -> α)
   定义体: (range_nonempty f).to_subtype
 
 @[simp]
@@ -3332,7 +3332,7 @@ theorem image_preimage_eq_range_inter
 
 中文:
 定理 image_preimage_eq_range_inter
-  条件: {f : α -> β} {t : Set β}
+  条件: {f : α -> β} {t : 集合 β}
   结论: f '' f ⁻¹' t = range f inter t
   证明: by
   grind
@@ -3352,7 +3352,7 @@ theorem image_preimage_eq_inter_range
 
 中文:
 定理 image_preimage_eq_inter_range
-  条件: {f : α -> β} {t : Set β}
+  条件: {f : α -> β} {t : 集合 β}
   结论: f '' f ⁻¹' t = t inter range f
   证明: by
   grind
@@ -3370,7 +3370,7 @@ theorem image_preimage_eq_of_subset
 
 中文:
 定理 image_preimage_eq_of_subset
-  条件: {f : α -> β} {s : Set β} (hs : s subseteq range f)
+  条件: {f : α -> β} {s : 集合 β} (hs : s subseteq range f)
   证明: by grind
 -/
 theorem image_preimage_eq_of_subset {f : α -> β} {s : Set β} (hs : s subseteq range f) :
@@ -3387,7 +3387,7 @@ theorem image_preimage_eq_iff
 
 中文:
 定理 image_preimage_eq_iff
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: f '' f ⁻¹' s = s ↔ s subseteq range f
   证明: by grind
 -/
@@ -3403,8 +3403,8 @@ theorem subset_range_iff_exists_image_eq
   proof: ⟨fun h => ⟨_, image_preimage_eq_iff.2 h⟩, fun ⟨_, ht⟩ => ht ▸ image_subset_range _ _⟩
 
 中文:
-定理 subset_range_iff_exists_image_eq
-  条件: {f : α -> β} {s : Set β}
+定理 subset_range_iff_存在_image_eq
+  条件: {f : α -> β} {s : 集合 β}
   结论: s subseteq range f ↔ 存在 t, f '' t = s
   证明: ⟨fun h => ⟨_, image_preimage_eq_iff.2 h⟩, fun ⟨_, ht⟩ => ht ▸ image_subset_range _ _⟩
 
@@ -3427,7 +3427,7 @@ theorem range_image
 中文:
 定理 range_image
   条件: (f : α -> β)
-  结论: range (image f) = 𝒫 range f
+  结论: range (像 f) = 𝒫 range f
   证明: ext fun _ => subset_range_iff_exists_image_eq.symm
 
 @[simp]
@@ -3450,8 +3450,8 @@ theorem exists_subset_range_and_iff
 @[simp]
 
 中文:
-定理 exists_subset_range_and_iff
-  条件: {f : α -> β} {p : Set β -> 命题}
+定理 存在_subset_range_and_iff
+  条件: {f : α -> β} {p : 集合 β -> 命题}
   证明: by
   rw [← exists_range_iff]; rw [range_image]; rfl
 
@@ -3476,8 +3476,8 @@ theorem forall_subset_range_iff
 @[simp]
 
 中文:
-定理 forall_subset_range_iff
-  条件: {f : α -> β} {p : Set β -> 命题}
+定理 对任意_subset_range_iff
+  条件: {f : α -> β} {p : 集合 β -> 命题}
   证明: by
   rw [← forall_mem_range]; rw [range_image]; simp only [mem_powerset_iff]
 
@@ -3505,7 +3505,7 @@ theorem preimage_subset_preimage_iff
 
 中文:
 定理 preimage_subset_preimage_iff
-  条件: {s t : Set α} {f : β -> α} (hs : s subseteq range f)
+  条件: {s t : 集合 α} {f : β -> α} (hs : s subseteq range f)
   证明: by
   constructor
   · intro h x hx
@@ -3537,7 +3537,7 @@ theorem preimage_eq_preimage'
 
 中文:
 定理 preimage_eq_preimage'
-  条件: {s t : Set α} {f : β -> α} (hs : s subseteq range f) (ht : t subseteq range f)
+  条件: {s t : 集合 α} {f : β -> α} (hs : s subseteq range f) (ht : t subseteq range f)
   证明: by
   constructor
   · intro h
@@ -3569,7 +3569,7 @@ theorem preimage_inter_range
 
 中文:
 定理 preimage_inter_range
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: f ⁻¹' (s inter range f) = f ⁻¹' s
   证明: Set.ext fun x => and_iff_left ⟨x, rfl⟩
 
@@ -3591,7 +3591,7 @@ theorem preimage_range_inter
 
 中文:
 定理 preimage_range_inter
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: f ⁻¹' (range f inter s) = f ⁻¹' s
   证明: by
   rw [inter_comm]; rw [preimage_inter_range]
@@ -3615,7 +3615,7 @@ theorem preimage_image_preimage
 
 中文:
 定理 preimage_image_preimage
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: f ⁻¹' f '' f ⁻¹' s = f ⁻¹' s
   证明: by
   rw [image_preimage_eq_range_inter]; rw [preimage_range_inter]
@@ -3686,9 +3686,9 @@ theorem _root_.Prod.range_fst
 @[simp]
 
 中文:
-定理 _root_.Prod.range_fst
-  条件: [Nonempty β]
-  结论: range (Prod.fst : α × β -> α) = univ
+定理 _root_.积类型.range_fst
+  条件: [非空 β]
+  结论: range (积类型.fst : α × β -> α) = univ
   证明: Prod.fst_surjective.range_eq
 
 @[simp]
@@ -3711,9 +3711,9 @@ theorem _root_.Prod.range_snd
 @[simp]
 
 中文:
-定理 _root_.Prod.range_snd
-  条件: [Nonempty α]
-  结论: range (Prod.snd : α × β -> β) = univ
+定理 _root_.积类型.range_snd
+  条件: [非空 α]
+  结论: range (积类型.snd : α × β -> β) = univ
   证明: Prod.snd_surjective.range_eq
 
 @[simp]
@@ -3734,7 +3734,7 @@ theorem range_eval
 
 中文:
 定理 range_eval
-  条件: {α : ι -> Sort _} [对任意 i, Nonempty (α i)] (i : ι)
+  条件: {α : ι -> 类型层 _} [对任意 i, 非空 (α i)] (i : ι)
   证明: (surjective_eval i).range_eq
 
 Depends on / 依赖: range_eq, surjective_eval
@@ -3753,7 +3753,7 @@ theorem range_inl
 
 中文:
 定理 range_inl
-  结论: range (@Sum.inl α β) = {x | Sum.isLeft x}
+  结论: range (@和.inl α β) = {x | 和.isLeft x}
   证明: by ext (_ | _) <;> simp
 -/
 theorem range_inl : range (@Sum.inl α β) = {x | Sum.isLeft x} := by ext (_ | _) <;> simp
@@ -3767,7 +3767,7 @@ theorem range_inr
 
 中文:
 定理 range_inr
-  结论: range (@Sum.inr α β) = {x | Sum.isRight x}
+  结论: range (@和.inr α β) = {x | 和.isRight x}
   证明: by ext (_ | _) <;> simp
 -/
 theorem range_inr : range (@Sum.inr α β) = {x | Sum.isRight x} := by ext (_ | _) <;> simp
@@ -3788,7 +3788,7 @@ theorem isCompl_range_inl_range_inr
 
 中文:
 定理 isCompl_range_inl_range_inr
-  结论: IsCompl (range <| @Sum.inl α β) (range Sum.inr)
+  结论: 是补集 (range <| @和.inl α β) (range 和.inr)
   证明: IsCompl.of_le
     (by
       rintro y ⟨⟨x₁, rfl⟩, ⟨x₂, h⟩⟩
@@ -3819,7 +3819,7 @@ theorem range_inl_union_range_inr
 
 中文:
 定理 range_inl_union_range_inr
-  结论: range (Sum.inl : α -> α oplus β) union range Sum.inr = univ
+  结论: range (和.inl : α -> α oplus β) union range 和.inr = univ
   证明: isCompl_range_inl_range_inr.sup_eq_top
 
 @[simp]
@@ -3842,7 +3842,7 @@ theorem range_inl_inter_range_inr
 
 中文:
 定理 range_inl_inter_range_inr
-  结论: range (Sum.inl : α -> α oplus β) inter range Sum.inr = ∅
+  结论: range (和.inl : α -> α oplus β) inter range 和.inr = ∅
   证明: isCompl_range_inl_range_inr.inf_eq_bot
 
 @[simp]
@@ -3865,7 +3865,7 @@ theorem range_inr_union_range_inl
 
 中文:
 定理 range_inr_union_range_inl
-  结论: range (Sum.inr : β -> α oplus β) union range Sum.inl = univ
+  结论: range (和.inr : β -> α oplus β) union range 和.inl = univ
   证明: isCompl_range_inl_range_inr.symm.sup_eq_top
 
 @[simp]
@@ -3888,7 +3888,7 @@ theorem range_inr_inter_range_inl
 
 中文:
 定理 range_inr_inter_range_inl
-  结论: range (Sum.inr : β -> α oplus β) inter range Sum.inl = ∅
+  结论: range (和.inr : β -> α oplus β) inter range 和.inl = ∅
   证明: isCompl_range_inl_range_inr.symm.inf_eq_bot
 
 @[simp]
@@ -3914,8 +3914,8 @@ theorem preimage_inl_image_inr
 
 中文:
 定理 preimage_inl_image_inr
-  条件: (s : Set β)
-  结论: Sum.inl ⁻¹' @Sum.inr α β '' s = ∅
+  条件: (s : 集合 β)
+  结论: 和.inl ⁻¹' @和.inr α β '' s = ∅
   证明: by
   ext
   simp
@@ -3942,8 +3942,8 @@ theorem preimage_inr_image_inl
 
 中文:
 定理 preimage_inr_image_inl
-  条件: (s : Set α)
-  结论: Sum.inr ⁻¹' @Sum.inl α β '' s = ∅
+  条件: (s : 集合 α)
+  结论: 和.inr ⁻¹' @和.inl α β '' s = ∅
   证明: by
   ext
   simp
@@ -3968,7 +3968,7 @@ theorem preimage_inl_range_inr
 
 中文:
 定理 preimage_inl_range_inr
-  结论: Sum.inl ⁻¹' range (Sum.inr : β -> α oplus β) = ∅
+  结论: 和.inl ⁻¹' range (和.inr : β -> α oplus β) = ∅
   证明: by
   rw [← image_univ]; rw [preimage_inl_image_inr]
 
@@ -3993,7 +3993,7 @@ theorem preimage_inr_range_inl
 
 中文:
 定理 preimage_inr_range_inl
-  结论: Sum.inr ⁻¹' range (Sum.inl : α -> α oplus β) = ∅
+  结论: 和.inr ⁻¹' range (和.inl : α -> α oplus β) = ∅
   证明: by
   rw [← image_univ]; rw [preimage_inr_image_inl]
 
@@ -4017,7 +4017,7 @@ theorem compl_range_inl
 
 中文:
 定理 compl_range_inl
-  结论: (range (Sum.inl : α -> α oplus β))ᶜ = range (Sum.inr : β -> α oplus β)
+  结论: (range (和.inl : α -> α oplus β))ᶜ = range (和.inr : β -> α oplus β)
   证明: IsCompl.compl_eq isCompl_range_inl_range_inr
 
 @[simp]
@@ -4038,7 +4038,7 @@ theorem compl_range_inr
 
 中文:
 定理 compl_range_inr
-  结论: (range (Sum.inr : β -> α oplus β))ᶜ = range (Sum.inl : α -> α oplus β)
+  结论: (range (和.inr : β -> α oplus β))ᶜ = range (和.inl : α -> α oplus β)
   证明: IsCompl.compl_eq isCompl_range_inl_range_inr.symm
 
 Depends on / 依赖: IsCompl, IsCompl.compl_eq, compl_eq, isCompl_range_inl_range_inr, isCompl_range_inl_range_inr.symm
@@ -4057,7 +4057,7 @@ theorem preimage_sumElim
 
 中文:
 定理 preimage_sumElim
-  条件: (s : Set γ) (f : α -> γ) (g : β -> γ)
+  条件: (s : 集合 γ) (f : α -> γ) (g : β -> γ)
   证明: by
   ext (_ | _) <;> simp
 -/
@@ -4076,7 +4076,7 @@ theorem image_preimage_inl_union_image_preimage_inr
 
 中文:
 定理 image_preimage_inl_union_image_preimage_inr
-  条件: (s : Set (α oplus β))
+  条件: (s : 集合 (α oplus β))
   证明: by
   rw [← preimage_sumElim]; rw [Sum.elim_inl_inr]; rw [preimage_id]
 
@@ -4099,7 +4099,7 @@ theorem image_sumElim
 
 中文:
 定理 image_sumElim
-  条件: (s : Set (α oplus β)) (f : α -> γ) (g : β -> γ)
+  条件: (s : 集合 (α oplus β)) (f : α -> γ) (g : β -> γ)
   证明: by
   grind
 
@@ -4124,7 +4124,7 @@ theorem range_quot_mk
 中文:
 定理 range_quot_mk
   条件: (r : α -> α -> 命题)
-  结论: range (Quot.mk r) = univ
+  结论: range (商.mk r) = univ
   证明: Quot.mk_surjective.range_eq
 
 @[simp]
@@ -4172,8 +4172,8 @@ theorem range_quotient_mk
 
 中文:
 定理 range_quotient_mk
-  条件: {s : Setoid α}
-  结论: range (Quotient.mk s) = univ
+  条件: {s : 集合等价关系 α}
+  结论: range (商.mk s) = univ
   证明: range_quot_mk _
 
 @[simp]
@@ -4196,7 +4196,7 @@ theorem range_quotient_lift
 
 中文:
 定理 range_quotient_lift
-  条件: [s : Setoid ι] (hf)
+  条件: [s : 集合等价关系 ι] (hf)
   证明: range_quot_lift _
 
 @[simp]
@@ -4219,8 +4219,8 @@ theorem range_quotient_mk'
 
 中文:
 定理 range_quotient_mk'
-  条件: {s : Setoid α}
-  结论: range (Quotient.mk' : α -> Quotient s) = univ
+  条件: {s : 集合等价关系 α}
+  结论: range (商.mk' : α -> 商 s) = univ
   证明: range_quot_mk _
 
 Depends on / 依赖: range_quot_mk
@@ -4240,9 +4240,9 @@ lemma Quotient.range_mk''
 @[simp]
 
 中文:
-引理 Quotient.range_mk''
-  条件: {sa : Setoid α}
-  结论: range (Quotient.mk'' (s₁ := sa)) = univ
+引理 商.range_mk''
+  条件: {sa : 集合等价关系 α}
+  结论: range (商.mk'' (s₁ := sa)) = univ
   证明: range_quotient_mk
 
 @[simp]
@@ -4261,7 +4261,7 @@ theorem range_quotient_lift_on'
 
 中文:
 定理 range_quotient_lift_on'
-  条件: {s : Setoid ι} (hf)
+  条件: {s : 集合等价关系 ι} (hf)
   证明: range_quot_lift _
 
 Depends on / 依赖: range_quot_lift
@@ -4324,7 +4324,7 @@ theorem range_const
 
 中文:
 定理 range_const
-  结论: 对任意 [Nonempty ι] {c : α}, (range fun _ : ι => c) = {c}
+  结论: 对任意 [非空 ι] {c : α}, (range fun _ : ι => c) = {c}
   证明: range_eq_singleton (fun _ => rfl)
 
 Depends on / 依赖: range_eq_singleton
@@ -4369,7 +4369,7 @@ theorem image_swap_eq_preimage_swap
 
 中文:
 定理 image_swap_eq_preimage_swap
-  结论: image (@Prod.swap α β) = preimage Prod.swap
+  结论: 像 (@积类型.swap α β) = 原像 积类型.swap
   证明: image_eq_preimage_of_inverse Prod.swap_leftInverse Prod.swap_rightInverse
 
 Depends on / 依赖: Prod.swap_leftInverse, Prod.swap_rightInverse, image_eq_preimage_of_inverse, swap_leftInverse, swap_rightInverse
@@ -4389,7 +4389,7 @@ theorem preimage_singleton_nonempty
 中文:
 定理 preimage_singleton_nonempty
   条件: {f : α -> β} {y : β}
-  结论: (f ⁻¹' {y}).Nonempty ↔ y in range f
+  结论: (f ⁻¹' {y}).非空 ↔ y in range f
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4451,7 +4451,7 @@ theorem image_compl_preimage
 
 中文:
 定理 image_compl_preimage
-  条件: {f : α -> β} {s : Set β}
+  条件: {f : α -> β} {s : 集合 β}
   结论: f '' (f ⁻¹' s)ᶜ = range f \ s
   证明: by
   rw [compl_eq_univ_sdiff]; rw [image_sdiff_preimage]; rw [image_univ]
@@ -4475,7 +4475,7 @@ theorem rangeFactorization_eq
 中文:
 定理 rangeFactorization_eq
   条件: {f : ι -> β}
-  结论: Subtype.val ∘ rangeFactorization f = f
+  结论: 子类型.val ∘ rangeFactorization f = f
   证明: funext fun _ => rfl
 
 @[simp]
@@ -4541,7 +4541,7 @@ theorem image_eq_range
 
 中文:
 定理 image_eq_range
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: f '' s = range fun x : s => f x
   证明: by
   ext
@@ -4570,7 +4570,7 @@ theorem _root_.Sum.range_eq
 @[simp]
 
 中文:
-定理 _root_.Sum.range_eq
+定理 _root_.和.range_eq
   条件: (f : α oplus β -> γ)
   证明: ext fun _ => Sum.exists
 
@@ -4593,9 +4593,9 @@ theorem Sum.elim_range
   proof: Sum.range_eq _
 
 中文:
-定理 Sum.elim_range
+定理 和.elim_range
   条件: (f : α -> γ) (g : β -> γ)
-  结论: range (Sum.elim f g) = range f union range g
+  结论: range (和.elim f g) = range f union range g
   证明: Sum.range_eq _
 
 Depends on / 依赖: Sum.range_eq, range_eq
@@ -4613,7 +4613,7 @@ theorem range_ite_subset'
 
 中文:
 定理 range_ite_subset'
-  条件: {p : 命题} [Decidable p] {f g : α -> β}
+  条件: {p : 命题} [可判定 p] {f g : α -> β}
   证明: by grind
 -/
 theorem range_ite_subset' {p : Prop} [Decidable p] {f g : α -> β} :
@@ -4674,7 +4674,7 @@ theorem range_unique
 
 中文:
 定理 range_unique
-  条件: [Unique ι]
+  条件: [唯一 ι]
   结论: range f = {f default}
   证明: by
   aesop (add simp [Unique.eq_default])
@@ -4700,7 +4700,7 @@ theorem range_singleton
 
 中文:
 定理 range_singleton
-  条件: {x : α} (f : ({x} : Set α) -> β)
+  条件: {x : α} (f : ({x} : 集合 α) -> β)
   结论: range f = {f ⟨x, mem_singleton x⟩}
   证明: range_unique
 
@@ -4723,7 +4723,7 @@ theorem range_insert
 
 中文:
 定理 range_insert
-  条件: {x : α} {s : Set α} (f : ((insert x s) : Set α) -> β)
+  条件: {x : α} {s : 集合 α} (f : ((insert x s) : 集合 α) -> β)
   证明: by
   aesop
 -/
@@ -4747,7 +4747,7 @@ theorem range_sdiff_image_subset
 
 中文:
 定理 range_sdiff_image_subset
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: range f \ f '' s subseteq f '' sᶜ
   证明: fun _ ⟨⟨x, h₁⟩, h₂⟩ => ⟨x, fun h => h₂ ⟨x, h, h₁⟩, h₁⟩
 
@@ -4824,7 +4824,7 @@ theorem rangeSplitting_injective
 中文:
 定理 rangeSplitting_injective
   条件: (f : α -> β)
-  结论: Injective (rangeSplitting f)
+  结论: 单射 (rangeSplitting f)
   证明: (leftInverse_rangeSplitting f).injective
 
 Depends on / 依赖: injective, leftInverse_rangeSplitting
@@ -4845,7 +4845,7 @@ h Subtype.ext_iff.1 hxy
 
 中文:
 定理 rightInverse_rangeSplitting
-  条件: {f : α -> β} (h : Injective f)
+  条件: {f : α -> β} (h : 单射 f)
   证明: (leftInverse_rangeSplitting f).rightInverse_of_injective fun _ _ hxy =>
 h Subtype.ext_iff.1 hxy
 
@@ -4892,7 +4892,7 @@ theorem preimage_rangeSplitting
 
 中文:
 定理 preimage_rangeSplitting
-  条件: {f : α -> β} (hf : Injective f)
+  条件: {f : α -> β} (hf : 单射 f)
   证明: (image_eq_preimage_of_inverse (rightInverse_rangeSplitting hf)
       (leftInverse_rangeSplitting f)).symm
 
@@ -4915,7 +4915,7 @@ theorem rangeSplitting_strictMono
 
 中文:
 定理 rangeSplitting_strictMono
-  条件: [LinearOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+  条件: [线性序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: by
   refine fun x y h => hf.reflect_lt ?_
   simpa [apply_rangeSplitting f]
@@ -4942,7 +4942,7 @@ fun x _ => Option.casesOn x (Or.inr rfl) fun _ => Or.inl mem_range_self _
 中文:
 定理 isCompl_range_some_none
   条件: (α : 类型)
-  结论: IsCompl (range (some : α -> Option α)) {none}
+  结论: 是补集 (range (some : α -> 选项类型 α)) {none}
   证明: IsCompl.of_le (fun _ ⟨⟨_, ha⟩, (hn : _ = none)⟩ => Option.some_ne_none _ (ha.trans hn))
 fun x _ => Option.casesOn x (Or.inr rfl) fun _ => Or.inl mem_range_self _
 
@@ -4969,7 +4969,7 @@ theorem compl_range_some
 中文:
 定理 compl_range_some
   条件: (α : 类型)
-  结论: (range (some : α -> Option α))ᶜ = {none}
+  结论: (range (some : α -> 选项类型 α))ᶜ = {none}
   证明: (isCompl_range_some_none α).compl_eq
 
 @[simp]
@@ -4992,7 +4992,7 @@ theorem range_some_inter_none
 中文:
 定理 range_some_inter_none
   条件: (α : 类型)
-  结论: range (some : α -> Option α) inter {none} = ∅
+  结论: range (some : α -> 选项类型 α) inter {none} = ∅
   证明: (isCompl_range_some_none α).inf_eq_bot
 
 Depends on / 依赖: inf_eq_bot, isCompl_range_some_none
@@ -5015,7 +5015,7 @@ theorem range_some_union_none
 中文:
 定理 range_some_union_none
   条件: (α : 类型)
-  结论: range (some : α -> Option α) union {none} = univ
+  结论: range (some : α -> 选项类型 α) union {none} = univ
   证明: (isCompl_range_some_none α).sup_eq_top
 
 @[simp]
@@ -5038,7 +5038,7 @@ theorem insert_none_range_some
 中文:
 定理 insert_none_range_some
   条件: (α : 类型)
-  结论: insert none (range (some : α -> Option α)) = univ
+  结论: insert none (range (some : α -> 选项类型 α)) = univ
   证明: (isCompl_range_some_none α).symm.sup_eq_top
 
 Depends on / 依赖: isCompl_range_some_none, sup_eq_top, symm.sup_eq_top
@@ -5085,9 +5085,9 @@ theorem Subsingleton.image
   proof: fun _ ⟨_, hx, Hx⟩ _ ⟨_, hy, Hy⟩ => Hx ▸ Hy ▸ congr_arg f (hs hx hy)
 
 中文:
-定理 Subsingleton.image
-  条件: (hs : s.Subsingleton) (f : α -> β)
-  结论: (f '' s).Subsingleton
+定理 子单例.像
+  条件: (hs : s.子单例) (f : α -> β)
+  结论: (f '' s).子单例
   证明: fun _ ⟨_, hx, Hx⟩ _ ⟨_, hy, Hy⟩ => Hx ▸ Hy ▸ congr_arg f (hs hx hy)
 
 Depends on / 依赖: congr_arg
@@ -5104,8 +5104,8 @@ theorem Subsingleton.preimage
   proof: fun _ ha _ hb => hf hs ha hb
 
 中文:
-定理 Subsingleton.preimage
-  结论: {s : Set β} (hs : s.Subsingleton)
+定理 子单例.原像
+  结论: {s : 集合 β} (hs : s.子单例)
   证明: fun _ ha _ hb => hf hs ha hb
 -/
 theorem Subsingleton.preimage {s : Set β} (hs : s.Subsingleton)
@@ -5121,7 +5121,7 @@ theorem subsingleton_of_image
 
 中文:
 定理 subsingleton_of_image
-  结论: (hf : Function.Injective f) (s : Set α)
+  结论: (hf : 函数.单射 f) (s : 集合 α)
   证明: (hs.preimage hf).anti subset_preimage_image _ _
 
 Depends on / 依赖: hs.preimage, preimage, subset_preimage_image
@@ -5142,7 +5142,7 @@ theorem subsingleton_of_preimage
 
 中文:
 定理 subsingleton_of_preimage
-  结论: (hf : Function.Surjective f) (s : Set β)
+  结论: (hf : 函数.满射 f) (s : 集合 β)
   证明: fun fx hx fy hy => by
   rcases hf fx, hf fy with ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩
   exact congr_arg f (hs hx hy)
@@ -5165,8 +5165,8 @@ theorem subsingleton_range
 
 中文:
 定理 subsingleton_range
-  条件: {α : Sort*} [Subsingleton α] (f : α -> β)
-  结论: (range f).Subsingleton
+  条件: {α : 类型层*} [子单例 α] (f : α -> β)
+  结论: (range f).子单例
   证明: forall_mem_range.2 fun x => forall_mem_range.2 fun y => congr_arg f (Subsingleton.elim x y)
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, congr_arg, forall_mem_range
@@ -5186,8 +5186,8 @@ theorem Nontrivial.preimage
   exact ⟨x, hx, y, hy, mt (congr_arg f) hxy⟩
 
 中文:
-定理 Nontrivial.preimage
-  结论: {s : Set β} (hs : s.Nontrivial)
+定理 非平凡.原像
+  结论: {s : 集合 β} (hs : s.非平凡)
   证明: by
   rcases hs with ⟨fx, hx, fy, hy, hxy⟩
   rcases hf fx, hf fy with ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩
@@ -5211,8 +5211,8 @@ theorem Nontrivial.image
   ⟨f x, mem_image_of_mem f hx, f y, mem_image_of_mem f hy, hf.ne hxy⟩
 
 中文:
-定理 Nontrivial.image
-  条件: (hs : s.Nontrivial) (hf : Function.Injective f)
+定理 非平凡.像
+  条件: (hs : s.非平凡) (hf : 函数.单射 f)
   证明: let ⟨x, hx, y, hy, hxy⟩ := hs
   ⟨f x, mem_image_of_mem f hx, f y, mem_image_of_mem f hy, hf.ne hxy⟩
 
@@ -5234,8 +5234,8 @@ theorem Nontrivial.image_of_injOn
   exact ⟨f x, mem_image_of_mem _ hx, f y, mem_image_of_mem _ hy, (hxy <| hf hx hy ·)⟩
 
 中文:
-定理 Nontrivial.image_of_injOn
-  条件: (hs : s.Nontrivial) (hf : s.InjOn f)
+定理 非平凡.image_of_injOn
+  条件: (hs : s.非平凡) (hf : s.单射限制 f)
   证明: by
   obtain ⟨x, hx, y, hy, hxy⟩ := hs
   exact ⟨f x, mem_image_of_mem _ hx, f y, mem_image_of_mem _ hy, (hxy <| hf hx hy ·)⟩
@@ -5261,8 +5261,8 @@ theorem nontrivial_of_image
 
 中文:
 定理 nontrivial_of_image
-  条件: (f : α -> β) (s : Set α) (hs : (f '' s).Nontrivial)
-  结论: s.Nontrivial
+  条件: (f : α -> β) (s : 集合 α) (hs : (f '' s).非平凡)
+  结论: s.非平凡
   证明: let ⟨_, ⟨x, hx, rfl⟩, _, ⟨y, hy, rfl⟩, hxy⟩ := hs
   ⟨x, hx, y, hy, mt (congr_arg f) hxy⟩
 
@@ -5288,8 +5288,8 @@ theorem image_nontrivial
 
 中文:
 定理 image_nontrivial
-  条件: (hf : f.Injective)
-  结论: (f '' s).Nontrivial ↔ s.Nontrivial
+  条件: (hf : f.单射)
+  结论: (f '' s).非平凡 ↔ s.非平凡
   证明: ⟨nontrivial_of_image f s, fun h => h.image hf⟩
 
 @[simp]
@@ -5309,8 +5309,8 @@ theorem InjOn.image_nontrivial_iff
   proof: ⟨nontrivial_of_image f s, fun h => h.image_of_injOn hf⟩
 
 中文:
-定理 InjOn.image_nontrivial_iff
-  条件: (hf : s.InjOn f)
+定理 单射限制.image_nontrivial_iff
+  条件: (hf : s.单射限制 f)
   证明: ⟨nontrivial_of_image f s, fun h => h.image_of_injOn hf⟩
 
 Depends on / 依赖: h.image_of_injOn, image_of_injOn, nontrivial_of_image
@@ -5329,7 +5329,7 @@ theorem nontrivial_of_preimage
 
 中文:
 定理 nontrivial_of_preimage
-  结论: (hf : Function.Injective f) (s : Set β)
+  结论: (hf : 函数.单射 f) (s : 集合 β)
   证明: (hs.image hf).mono image_preimage_subset _ _
 
 Depends on / 依赖: hs.image, image_preimage_subset
@@ -5359,9 +5359,9 @@ theorem Surjective.preimage_injective
   (preimage_eq_preimage hf).1
 
 中文:
-定理 Surjective.preimage_injective
-  条件: (hf : Surjective f)
-  结论: Injective (preimage f)
+定理 满射.preimage_injective
+  条件: (hf : 满射 f)
+  结论: 单射 (原像 f)
   证明: fun _ _ =>
   (preimage_eq_preimage hf).1
 -/
@@ -5378,8 +5378,8 @@ theorem Injective.preimage_image
   proof: preimage_image_eq s hf
 
 中文:
-定理 Injective.preimage_image
-  条件: (hf : Injective f) (s : Set α)
+定理 单射.preimage_image
+  条件: (hf : 单射 f) (s : 集合 α)
   结论: f ⁻¹' f '' s = s
   证明: preimage_image_eq s hf
 
@@ -5398,9 +5398,9 @@ theorem Injective.preimage_surjective
   proof: Set.preimage_surjective.mpr hf
 
 中文:
-定理 Injective.preimage_surjective
-  条件: (hf : Injective f)
-  结论: Surjective (preimage f)
+定理 单射.preimage_surjective
+  条件: (hf : 单射 f)
+  结论: 满射 (原像 f)
   证明: Set.preimage_surjective.mpr hf
 
 Depends on / 依赖: Set.preimage_surjective.mpr, preimage_surjective
@@ -5417,8 +5417,8 @@ theorem Injective.subsingleton_image_iff
   proof: ⟨subsingleton_of_image hf s, fun h => h.image f⟩
 
 中文:
-定理 Injective.subsingleton_image_iff
-  条件: (hf : Injective f) {s : Set α}
+定理 单射.subsingleton_image_iff
+  条件: (hf : 单射 f) {s : 集合 α}
   证明: ⟨subsingleton_of_image hf s, fun h => h.image f⟩
 
 Depends on / 依赖: h.image, subsingleton_of_image
@@ -5437,8 +5437,8 @@ theorem Surjective.image_preimage
   proof: image_preimage_eq s hf
 
 中文:
-定理 Surjective.image_preimage
-  条件: (hf : Surjective f) (s : Set β)
+定理 满射.image_preimage
+  条件: (hf : 满射 f) (s : 集合 β)
   结论: f '' f ⁻¹' s = s
   证明: image_preimage_eq s hf
 
@@ -5462,9 +5462,9 @@ theorem Surjective.image_surjective
 @[simp]
 
 中文:
-定理 Surjective.image_surjective
-  条件: (hf : Surjective f)
-  结论: Surjective (image f)
+定理 满射.image_surjective
+  条件: (hf : 满射 f)
+  结论: 满射 (像 f)
   证明: by
   intro s
   use f ⁻¹' s
@@ -5489,8 +5489,8 @@ theorem Surjective.nonempty_preimage
   proof: by rw [← image_nonempty, hf.image_preimage]
 
 中文:
-定理 Surjective.nonempty_preimage
-  条件: (hf : Surjective f) {s : Set β}
+定理 满射.nonempty_preimage
+  条件: (hf : 满射 f) {s : 集合 β}
   证明: by rw [← image_nonempty, hf.image_preimage]
 
 Depends on / 依赖: hf.image_preimage, image_nonempty, image_preimage
@@ -5510,9 +5510,9 @@ theorem Injective.image_injective
   rw [← preimage_image_eq s hf]; rw [← preimage_image_eq t hf]; rw [h]
 
 中文:
-定理 Injective.image_injective
-  条件: (hf : Injective f)
-  结论: Injective (image f)
+定理 单射.image_injective
+  条件: (hf : 单射 f)
+  结论: 单射 (像 f)
   证明: by
   intro s t h
   rw [← preimage_image_eq s hf]; rw [← preimage_image_eq t hf]; rw [h]
@@ -5533,9 +5533,9 @@ lemma Injective.image_strictMono
   proof: monotone_image.strictMono_of_injective inj.image_injective
 
 中文:
-引理 Injective.image_strictMono
-  条件: (inj : Function.Injective f)
-  结论: StrictMono (image f)
+引理 单射.image_strictMono
+  条件: (inj : 函数.单射 f)
+  结论: 严格递增 (像 f)
   证明: monotone_image.strictMono_of_injective inj.image_injective
 
 Depends on / 依赖: image_injective, inj.image_injective, monotone_image, monotone_image.strictMono_of_injective, strictMono_of_injective
@@ -5555,8 +5555,8 @@ theorem Surjective.preimage_subset_preimage_iff
   apply subset_univ
 
 中文:
-定理 Surjective.preimage_subset_preimage_iff
-  条件: {s t : Set β} (hf : Surjective f)
+定理 满射.preimage_subset_preimage_iff
+  条件: {s t : 集合 β} (hf : 满射 f)
   证明: by
   apply Set.preimage_subset_preimage_iff
   rw [hf.range_eq]
@@ -5579,8 +5579,8 @@ theorem Surjective.range_comp
   proof: ext fun y => (@Surjective.exists _ _ _ hf fun x => g x = y).symm
 
 中文:
-定理 Surjective.range_comp
-  条件: {ι' : Sort*} {f : ι -> ι'} (hf : Surjective f) (g : ι' -> α)
+定理 满射.range_comp
+  条件: {ι' : 类型层*} {f : ι -> ι'} (hf : 满射 f) (g : ι' -> α)
   证明: ext fun y => (@Surjective.exists _ _ _ hf fun x => g x = y).symm
 
 Depends on / 依赖: Surjective, Surjective.exists
@@ -5600,8 +5600,8 @@ theorem Injective.mem_range_iff_existsUnique
 alias ⟨Injective.existsUnique_of_mem_range, _⟩ := Injective.mem_range_iff_existsUnique
 
 中文:
-定理 Injective.mem_range_iff_existsUnique
-  条件: (hf : Injective f) {b : β}
+定理 单射.mem_range_iff_存在Unique
+  条件: (hf : 单射 f) {b : β}
   证明: ⟨fun ⟨a, h⟩ => ⟨a, h, fun _ ha => hf (ha.trans h.symm)⟩, ExistsUnique.exists⟩
 
 alias ⟨Injective.existsUnique_of_mem_range, _⟩ := Injective.mem_range_iff_existsUnique
@@ -5624,8 +5624,8 @@ theorem Injective.compl_image_eq
   grind
 
 中文:
-定理 Injective.compl_image_eq
-  条件: (hf : Injective f) (s : Set α)
+定理 单射.compl_image_eq
+  条件: (hf : 单射 f) (s : 集合 α)
   证明: by
   grind
 -/
@@ -5642,8 +5642,8 @@ theorem LeftInverse.image_image
   proof: by rw [← image_comp, h.comp_eq_id, image_id]
 
 中文:
-定理 LeftInverse.image_image
-  条件: {g : β -> α} (h : LeftInverse g f) (s : Set α)
+定理 左逆.image_image
+  条件: {g : β -> α} (h : 左逆 g f) (s : 集合 α)
   证明: by rw [← image_comp, h.comp_eq_id, image_id]
 
 Depends on / 依赖: comp_eq_id, h.comp_eq_id, image_comp, image_id
@@ -5660,8 +5660,8 @@ theorem LeftInverse.preimage_preimage
   proof: by rw [← preimage_comp, h.comp_eq_id, preimage_id]
 
 中文:
-定理 LeftInverse.preimage_preimage
-  条件: {g : β -> α} (h : LeftInverse g f) (s : Set α)
+定理 左逆.preimage_preimage
+  条件: {g : β -> α} (h : 左逆 g f) (s : 集合 α)
   证明: by rw [← preimage_comp, h.comp_eq_id, preimage_id]
 
 Depends on / 依赖: comp_eq_id, h.comp_eq_id, preimage_comp, preimage_id
@@ -5679,9 +5679,9 @@ theorem Involutive.preimage
   proof: hf.rightInverse.preimage_preimage
 
 中文:
-定理 Involutive.preimage
-  条件: {f : α -> α} (hf : Involutive f)
-  结论: Involutive (preimage f)
+定理 对合.原像
+  条件: {f : α -> α} (hf : 对合 f)
+  结论: 对合 (原像 f)
   证明: hf.rightInverse.preimage_preimage
 -/
 protected theorem Involutive.preimage {f : α -> α} (hf : Involutive f) : Involutive (preimage f) :=
@@ -5697,8 +5697,8 @@ theorem LeftInverse.image_eq
   rw [← image_preimage_eq_range_inter]; rw [hfg.preimage_preimage]
 
 中文:
-定理 LeftInverse.image_eq
-  条件: {f : α -> β} {g : β -> α} (hfg : LeftInverse g f) (s : Set α)
+定理 左逆.image_eq
+  条件: {f : α -> β} {g : β -> α} (hfg : 左逆 g f) (s : 集合 α)
   证明: by
   rw [← image_preimage_eq_range_inter]; rw [hfg.preimage_preimage]
 
@@ -5754,7 +5754,7 @@ theorem coe_image
 
 中文:
 定理 coe_image
-  条件: {p : α -> 命题} {s : Set (Subtype p)}
+  条件: {p : α -> 命题} {s : 集合 (子类型 p)}
   证明: Set.ext fun a =>
     ⟨fun ⟨⟨_, ha'⟩, in_s, h_eq⟩ => h_eq ▸ ⟨ha', in_s⟩, fun ⟨ha, in_s⟩ => ⟨⟨a, ha⟩, in_s, rfl⟩⟩
 
@@ -5782,7 +5782,7 @@ theorem coe_image_of_subset
 
 中文:
 定理 coe_image_of_subset
-  条件: {s t : Set α} (h : t subseteq s)
+  条件: {s t : 集合 α} (h : t subseteq s)
   结论: (↑) '' { x : ↥s | ↑x in t } = t
   证明: by
   ext x
@@ -5809,7 +5809,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: range ((↑) : s -> α) = s
   证明: by
   rw [← image_univ]
@@ -5832,8 +5832,8 @@ theorem range_val
 
 中文:
 定理 range_val
-  条件: {s : Set α}
-  结论: range (Subtype.val : s -> α) = s
+  条件: {s : 集合 α}
+  结论: range (子类型.val : s -> α) = s
   证明: range_coe
 
 Depends on / 依赖: range_coe
@@ -5859,7 +5859,7 @@ theorem range_coe_subtype
 中文:
 定理 range_coe_subtype
   条件: {p : α -> 命题}
-  结论: range ((↑) : Subtype p -> α) = { x | p x }
+  结论: range ((↑) : 子类型 p -> α) = { x | p x }
   证明: range_coe
 
 @[simp]
@@ -5882,7 +5882,7 @@ theorem coe_preimage_self
 
 中文:
 定理 coe_preimage_self
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ((↑) : s -> α) ⁻¹' s = univ
   证明: by
   rw [← preimage_range]; rw [range_coe]
@@ -5904,7 +5904,7 @@ theorem range_val_subtype
 中文:
 定理 range_val_subtype
   条件: {p : α -> 命题}
-  结论: range (Subtype.val : Subtype p -> α) = { x | p x }
+  结论: range (子类型.val : 子类型 p -> α) = { x | p x }
   证明: range_coe
 
 Depends on / 依赖: range_coe
@@ -5924,7 +5924,7 @@ theorem coe_image_subset
 
 中文:
 定理 coe_image_subset
-  条件: (s : Set α) (t : Set s)
+  条件: (s : 集合 α) (t : 集合 s)
   结论: ((↑) : s -> α) '' t subseteq s
   证明: fun x ⟨y, _, yvaleq⟩ => by
   rw [← yvaleq]; exact y.property
@@ -5948,8 +5948,8 @@ theorem coe_image_univ
 
 中文:
 定理 coe_image_univ
-  条件: (s : Set α)
-  结论: ((↑) : s -> α) '' Set.univ = s
+  条件: (s : 集合 α)
+  结论: ((↑) : s -> α) '' 集合.univ = s
   证明: image_univ.trans range_coe
 
 @[simp]
@@ -5971,7 +5971,7 @@ theorem image_preimage_coe
 
 中文:
 定理 image_preimage_coe
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: ((↑) : s -> α) '' ((↑) : s -> α) ⁻¹' t = s inter t
   证明: image_preimage_eq_range_inter.trans congr_arg (· inter t) range_coe
 
@@ -5991,8 +5991,8 @@ theorem image_preimage_val
 
 中文:
 定理 image_preimage_val
-  条件: (s t : Set α)
-  结论: (Subtype.val : s -> α) '' Subtype.val ⁻¹' t = s inter t
+  条件: (s t : 集合 α)
+  结论: (子类型.val : s -> α) '' 子类型.val ⁻¹' t = s inter t
   证明: image_preimage_coe s t
 
 Depends on / 依赖: image_preimage_coe
@@ -6011,7 +6011,7 @@ theorem preimage_coe_eq_preimage_coe_iff
 
 中文:
 定理 preimage_coe_eq_preimage_coe_iff
-  条件: {s t u : Set α}
+  条件: {s t u : 集合 α}
   证明: by
   rw [← image_preimage_coe]; rw [← image_preimage_coe]; rw [coe_injective.image_injective.eq_iff]
 
@@ -6032,7 +6032,7 @@ theorem preimage_coe_self_inter
 
 中文:
 定理 preimage_coe_self_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [preimage_coe_eq_preimage_coe_iff]; rw [← inter_assoc]; rw [inter_self]
 
@@ -6054,7 +6054,7 @@ theorem preimage_coe_inter_self
 
 中文:
 定理 preimage_coe_inter_self
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [inter_comm]; rw [preimage_coe_self_inter]
 
@@ -6074,7 +6074,7 @@ theorem preimage_val_eq_preimage_val_iff
 
 中文:
 定理 preimage_val_eq_preimage_val_iff
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   证明: preimage_coe_eq_preimage_coe_iff
 
 Depends on / 依赖: preimage_coe_eq_preimage_coe_iff
@@ -6098,7 +6098,7 @@ lemma preimage_val_subset_preimage_val_iff
 
 中文:
 引理 preimage_val_subset_preimage_val_iff
-  条件: (s t u : Set α)
+  条件: (s t u : 集合 α)
   证明: by
   constructor
   · rw [← image_preimage_coe, ← image_preimage_coe]
@@ -6126,8 +6126,8 @@ theorem exists_set_subtype
   rw [← exists_subset_range_and_iff]; rw [range_coe]
 
 中文:
-定理 exists_set_subtype
-  条件: {t : Set α} (p : Set α -> 命题)
+定理 存在_set_subtype
+  条件: {t : 集合 α} (p : 集合 α -> 命题)
   证明: by
   rw [← exists_subset_range_and_iff]; rw [range_coe]
 
@@ -6147,8 +6147,8 @@ theorem forall_set_subtype
   rw [← forall_subset_range_iff]; rw [range_coe]
 
 中文:
-定理 forall_set_subtype
-  条件: {t : Set α} (p : Set α -> 命题)
+定理 对任意_set_subtype
+  条件: {t : 集合 α} (p : 集合 α -> 命题)
   证明: by
   rw [← forall_subset_range_iff]; rw [range_coe]
 
@@ -6169,7 +6169,7 @@ theorem preimage_coe_nonempty
 
 中文:
 定理 preimage_coe_nonempty
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: by
   rw [← image_preimage_coe]; rw [image_nonempty]
 
@@ -6191,7 +6191,7 @@ theorem preimage_coe_eq_empty
 
 中文:
 定理 preimage_coe_eq_empty
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: ((↑) : s -> α) ⁻¹' t = ∅ ↔ s inter t = ∅
   证明: by
   simp [← not_nonempty_iff_eq_empty, preimage_coe_nonempty]
@@ -6215,7 +6215,7 @@ theorem preimage_coe_compl
 
 中文:
 定理 preimage_coe_compl
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ((↑) : s -> α) ⁻¹' sᶜ = ∅
   证明: preimage_coe_eq_empty.2 (inter_compl_self s)
 
@@ -6237,7 +6237,7 @@ theorem preimage_coe_compl'
 
 中文:
 定理 preimage_coe_compl'
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: preimage_coe_eq_empty.2 (compl_inter_self s)
 
 Depends on / 依赖: compl_inter_self, preimage_coe_eq_empty
@@ -6268,7 +6268,7 @@ theorem injective_iff
 
 中文:
 定理 injective_iff
-  条件: {α β} {f : Option α -> β}
+  条件: {α β} {f : 选项类型 α -> β}
   证明: by
   simp only [mem_range, not_exists, (· ∘ ·)]
   refine
@@ -6297,7 +6297,7 @@ theorem range_eq
 
 中文:
 定理 range_eq
-  条件: {α β} (f : Option α -> β)
+  条件: {α β} (f : 选项类型 α -> β)
   结论: range f = insert (f none) (range (f ∘ some))
   证明: Set.ext fun _ => Option.exists.trans eq_comm.or Iff.rfl
 
@@ -6382,7 +6382,7 @@ theorem image_surjective
 
 中文:
 定理 image_surjective
-  结论: Surjective (image f) ↔ Surjective f
+  结论: 满射 (像 f) ↔ 满射 f
   证明: by
   refine ⟨fun h y => ?_, Surjective.image_surjective⟩
   rcases h {y} with ⟨s, hs⟩
@@ -6413,7 +6413,7 @@ theorem image_injective
 
 中文:
 定理 image_injective
-  结论: Injective (image f) ↔ Injective f
+  结论: 单射 (像 f) ↔ 单射 f
   证明: by
   refine ⟨fun h x x' hx => ?_, Injective.image_injective⟩
   rw [← singleton_eq_singleton_iff]; apply h
@@ -6436,7 +6436,7 @@ theorem preimage_eq_iff_eq_image
 
 中文:
 定理 preimage_eq_iff_eq_image
-  条件: {f : α -> β} (hf : Bijective f) {s t}
+  条件: {f : α -> β} (hf : 双射 f) {s t}
   证明: by rw [← image_eq_image hf.1, hf.2.image_preimage]
 
 Depends on / 依赖: image_eq_image, image_preimage
@@ -6454,7 +6454,7 @@ theorem eq_preimage_iff_image_eq
 
 中文:
 定理 eq_preimage_iff_image_eq
-  条件: {f : α -> β} (hf : Bijective f) {s t}
+  条件: {f : α -> β} (hf : 双射 f) {s t}
   证明: by rw [← image_eq_image hf.1, hf.2.image_preimage]
 
 Depends on / 依赖: image_eq_image, image_preimage
@@ -6480,8 +6480,8 @@ theorem Disjoint.preimage
   proof: disjoint_iff_inf_le.mpr fun _ hx => h.le_bot hx
 
 中文:
-定理 Disjoint.preimage
-  条件: (f : α -> β) {s t : Set β} (h : Disjoint s t)
+定理 Disjoint.原像
+  条件: (f : α -> β) {s t : 集合 β} (h : Disjoint s t)
   证明: disjoint_iff_inf_le.mpr fun _ hx => h.le_bot hx
 
 Depends on / 依赖: disjoint_iff_inf_le, disjoint_iff_inf_le.mpr, h.le_bot, le_bot
@@ -6501,8 +6501,8 @@ lemma Codisjoint.preimage
   rw [h]; rfl
 
 中文:
-引理 Codisjoint.preimage
-  条件: (f : α -> β) {s t : Set β} (h : Codisjoint s t)
+引理 Codisjoint.原像
+  条件: (f : α -> β) {s t : 集合 β} (h : Codisjoint s t)
   证明: by
   simp only [codisjoint_iff_le_sup, Set.sup_eq_union, top_le_iff, ← Set.preimage_union] at h ⊢
   rw [h]; rfl
@@ -6523,8 +6523,8 @@ lemma IsCompl.preimage
   proof: ⟨h.1.preimage f, h.2.preimage f⟩
 
 中文:
-引理 IsCompl.preimage
-  条件: (f : α -> β) {s t : Set β} (h : IsCompl s t)
+引理 是补集.原像
+  条件: (f : α -> β) {s t : 集合 β} (h : 是补集 s t)
   证明: ⟨h.1.preimage f, h.2.preimage f⟩
 
 Depends on / 依赖: preimage
@@ -6545,7 +6545,7 @@ theorem disjoint_image_image
 
 中文:
 定理 disjoint_image_image
-  结论: {f : β -> α} {g : γ -> α} {s : Set β} {t : Set γ}
+  结论: {f : β -> α} {g : γ -> α} {s : 集合 β} {t : 集合 γ}
   证明: disjoint_iff_inf_le.mpr by rintro a ⟨⟨b, hb, eq⟩, c, hc, rfl⟩; exact h b hb c hc eq
 
 Depends on / 依赖: disjoint_iff_inf_le, disjoint_iff_inf_le.mpr
@@ -6564,7 +6564,7 @@ theorem disjoint_image_of_injective
 
 中文:
 定理 disjoint_image_of_injective
-  条件: (hf : Injective f) {s t : Set α} (hd : Disjoint s t)
+  条件: (hf : 单射 f) {s t : 集合 α} (hd : Disjoint s t)
   证明: disjoint_image_image fun _ hx _ hy => hf.ne fun H => Set.disjoint_iff.1 hd ⟨hx, H.symm ▸ hy⟩
 
 Depends on / 依赖: H.symm, Set.disjoint_iff, disjoint_iff, disjoint_image_image, hf.ne
@@ -6612,7 +6612,7 @@ theorem disjoint_image_iff
 
 中文:
 定理 disjoint_image_iff
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: Disjoint (f '' s) (f '' t) ↔ Disjoint s t
   证明: ⟨Disjoint.of_image, disjoint_image_of_injective hf⟩
 
@@ -6634,7 +6634,7 @@ theorem _root_.Disjoint.of_preimage
 
 中文:
 定理 _root_.Disjoint.of_preimage
-  结论: (hf : Surjective f) {s t : Set β}
+  结论: (hf : 满射 f) {s t : 集合 β}
   证明: by
   rw [disjoint_iff_inter_eq_empty]; rw [← image_preimage_eq (_ inter _) hf]; rw [preimage_inter]; rw [h.inter_eq]; rw [image_empty]
 
@@ -6657,7 +6657,7 @@ theorem disjoint_preimage_iff
 
 中文:
 定理 disjoint_preimage_iff
-  条件: (hf : Surjective f) {s t : Set β}
+  条件: (hf : 满射 f) {s t : 集合 β}
   证明: ⟨Disjoint.of_preimage hf, Disjoint.preimage _⟩
 
 Depends on / 依赖: Disjoint, Disjoint.of_preimage, Disjoint.preimage, of_preimage, preimage
@@ -6677,7 +6677,7 @@ theorem preimage_eq_empty
 
 中文:
 定理 preimage_eq_empty
-  条件: {s : Set β} (h : Disjoint s (range f))
+  条件: {s : 集合 β} (h : Disjoint s (range f))
   证明: by
   simpa using h.preimage f
 
@@ -6703,7 +6703,7 @@ theorem preimage_eq_empty_iff
 
 中文:
 定理 preimage_eq_empty_iff
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: f ⁻¹' s = ∅ ↔ Disjoint s (range f)
   证明: ⟨fun h => by
     simp only [eq_empty_iff_forall_notMem, mem_preimage] at h ⊢
@@ -6733,7 +6733,7 @@ theorem disjoint_image_inl_image_inr
 
 中文:
 定理 disjoint_image_inl_image_inr
-  条件: {u : Set α} {v : Set β}
+  条件: {u : 集合 α} {v : 集合 β}
   证明: disjoint_image_image by simp
 
 @[simp]
@@ -6758,7 +6758,7 @@ theorem disjoint_range_inl_image_inr
 
 中文:
 定理 disjoint_range_inl_image_inr
-  条件: {v : Set β}
+  条件: {v : 集合 β}
   证明: by
   grind
 
@@ -6782,7 +6782,7 @@ theorem disjoint_image_inl_range_inr
 
 中文:
 定理 disjoint_image_inl_range_inr
-  条件: {u : Set α}
+  条件: {u : 集合 α}
   证明: by
   grind
 
@@ -6813,7 +6813,7 @@ lemma sigma_mk_preimage_image'
 中文:
 引理 sigma_mk_preimage_image'
   条件: (h : i != j)
-  结论: Sigma.mk j ⁻¹' Sigma.mk i '' s = ∅
+  结论: 依赖和类型.mk j ⁻¹' 依赖和类型.mk i '' s = ∅
   证明: by
   simp [image, h]
 -/
@@ -6831,7 +6831,7 @@ lemma sigma_mk_preimage_image_eq_self
 
 中文:
 引理 sigma_mk_preimage_image_eq_self
-  结论: Sigma.mk i ⁻¹' Sigma.mk i '' s = s
+  结论: 依赖和类型.mk i ⁻¹' 依赖和类型.mk i '' s = s
   证明: by
   simp [image]
 -/

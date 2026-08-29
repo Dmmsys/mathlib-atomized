@@ -33,8 +33,8 @@ instance [TopologicalSpace
   body: Preorder.topology _
 
 中文:
-实例 [TopologicalSpace
-  签名: ι] [OrderTopology ι] : TopologicalSpace (WithTop ι)
+实例 [拓扑空间
+  签名: ι] [Order拓扑 ι] : 拓扑空间 (WithTop ι)
   定义体: Preorder.topology _
 
 Depends on / 依赖: Preorder, Preorder.topology, topology
@@ -54,8 +54,8 @@ instance [TopologicalSpace
   body: ⟨rfl⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: ι] [OrderTopology ι] : OrderTopology (WithTop ι)
+实例 [拓扑空间
+  签名: ι] [Order拓扑 ι] : Order拓扑 (WithTop ι)
   定义体: ⟨rfl⟩
 -/
 instance [TopologicalSpace ι] [OrderTopology ι] : OrderTopology (WithTop ι) := ⟨rfl⟩
@@ -76,7 +76,7 @@ instance [ts
 
 中文:
 实例 [ts
-  签名: : TopologicalSpace ι] [ht : OrderTopology ι] [SecondCountableTopology ι] :
+  签名: : 拓扑空间 ι] [ht : Order拓扑 ι] [第二可数拓扑 ι] :
   定义体: by
   classical
   rcases isEmpty_or_nonempty ι with hι | ⟨⟨x₀⟩⟩
@@ -259,7 +259,7 @@ lemma isEmbedding_coe
 
 中文:
 引理 isEmbedding_coe
-  结论: Topology.IsEmbedding ((↑) : ι -> WithTop ι)
+  结论: 拓扑.是嵌入 ((↑) : ι -> WithTop ι)
   证明: by
   refine WithTop.coe_strictMono.isEmbedding_of_ordConnected (α := ι) ?_
   rw [WithTop.range_coe]
@@ -287,7 +287,7 @@ lemma isOpenEmbedding_coe
 
 中文:
 引理 isOpenEmbedding_coe
-  结论: Topology.IsOpenEmbedding ((↑) : ι -> WithTop ι)
+  结论: 拓扑.是开嵌入 ((↑) : ι -> WithTop ι)
   证明: ⟨isEmbedding_coe, by rw [WithTop.range_coe]; exact isOpen_Iio⟩
 
 @[to_dual]
@@ -333,7 +333,7 @@ lemma continuous_coe
 
 中文:
 引理 continuous_coe
-  结论: Continuous ((↑) : ι -> WithTop ι)
+  结论: 连续 ((↑) : ι -> WithTop ι)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -414,7 +414,7 @@ lemma tendsto_untopA
 
 中文:
 引理 tendsto_untopA
-  条件: [Nonempty ι] {a : WithTop ι} (ha : a != ⊤)
+  条件: [非空 ι] {a : WithTop ι} (ha : a != ⊤)
   证明: tendsto_untopD _ ha
 
 @[to_dual]
@@ -436,7 +436,7 @@ lemma continuousOn_untopA
 
 中文:
 引理 continuousOn_untopA
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: ContinuousOn untopA { a : WithTop ι | a != ⊤ }
   证明: continuousOn_untopD _
 
@@ -489,7 +489,7 @@ lemma continuous_untop
 
 中文:
 引理 continuous_untop
-  结论: Continuous (fun x : {a : WithTop ι | a != ⊤} => untop x.1 x.2)
+  结论: 连续 (fun x : {a : WithTop ι | a != ⊤} => untop x.1 x.2)
   证明: continuous_iff_continuousAt.mpr tendsto_untop
 
 Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, tendsto_untop
@@ -549,7 +549,7 @@ definition sumHomeomorph
 
 中文:
 定义 sumHomeomorph
-  签名: [OrderTop ι]
+  签名: [有顶序 ι]
   定义体: if h : x = ⊤ then Sum.inr () else Sum.inl x.untopA
   invFun x := match x with
     | Sum.inl i => (i : WithTop ι)
@@ -597,7 +597,7 @@ lemma tendsto_nhds_top_iff
 
 中文:
 引理 tendsto_nhds_top_iff
-  条件: {α : 类型} {f : Filter α} (x : α -> WithTop ι)
+  条件: {α : 类型} {f : 滤子 α} (x : α -> WithTop ι)
   证明: by
   obtain (h | h) := isEmpty_or_nonempty ι
   · simpa using .of_forall fun _ => Subsingleton.elim ..
@@ -631,7 +631,7 @@ lemma tendsto_coe_atTop
 
 中文:
 引理 tendsto_coe_atTop
-  条件: [NoMaxOrder ι]
+  条件: [NoMax序 ι]
   证明: by
   obtain (h | h) := isEmpty_or_nonempty ι
   · simpa using Subsingleton.elim ..

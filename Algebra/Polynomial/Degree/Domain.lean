@@ -81,7 +81,7 @@ lemma natDegree_smul
 
 中文:
 引理 natDegree_smul
-  结论: {S : 类型} [Semiring S] [IsDomain S] [Module S R] [Module.IsTorsionFree S R]
+  结论: {S : 类型} [半环 S] [是整环 S] [模 S R] [模.是无挠 S R]
   证明: by
   by_cases hp : p = 0
   · simp only [hp, smul_zero]

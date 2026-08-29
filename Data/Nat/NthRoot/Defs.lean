@@ -26,7 +26,7 @@ definition Nat.nthRoot
         if next < guess then go n a fuel next else guess
 
 中文:
-定义 Nat.nthRoot
+定义 自然数.nthRoot
   签名: : 自然数 -> 自然数 -> 自然数
   定义体: (a / guess ^ (n + 1) + (n + 1) * guess) / (n + 2)
         if next < guess then go n a fuel next else guess

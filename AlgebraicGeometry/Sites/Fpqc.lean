@@ -46,7 +46,7 @@ definition fppfPrecoverage
 
 中文:
 定义 fppfPrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: precoverage (@Flat ⊓ @LocallyOfFinitePresentation)
   deriving Precoverage.IsStableUnderBaseChange, Precoverage.IsStableUnderComposition
 
@@ -102,7 +102,7 @@ abbreviation fppfTopology
 
 中文:
 缩写 fppfTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: fppfPrecoverage.toGrothendieck
 
 Depends on / 依赖: fppfPrecoverage, fppfPrecoverage.toGrothendieck, toGrothendieck
@@ -123,7 +123,7 @@ definition fpqcPrecoverage
 
 中文:
 定义 fpqcPrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: propQCPrecoverage @Flat
   deriving Precoverage.HasIsos, Precoverage.IsStableUnderBaseChange,
     Precoverage.IsStableUnderComposition
@@ -190,7 +190,7 @@ abbreviation fpqcTopology
 
 中文:
 缩写 fpqcTopology
-  签名: : GrothendieckTopology Scheme.{u}
+  签名: : Grothendieck拓扑 概形.{u}
   定义体: fpqcPrecoverage.toGrothendieck
 
 Depends on / 依赖: fpqcPrecoverage, fpqcPrecoverage.toGrothendieck, toGrothendieck
@@ -208,7 +208,7 @@ lemma fpqcTopology_eq_propQCTopology
 
 中文:
 引理 fpqcTopology_eq_propQCTopology
-  结论: fpqcTopology = Scheme.propQCTopology @Flat
+  结论: fpqcTopology = 概形.propQCTopology @平坦
   证明: rfl
 -/
 lemma fpqcTopology_eq_propQCTopology : fpqcTopology = Scheme.propQCTopology @Flat := rfl
@@ -266,7 +266,7 @@ instance :
 
 中文:
 实例 :
-  签名: fpqcTopology.Subcanonical
+  签名: fpqcTopology.子典范
   定义体: by
   refine GrothendieckTopology.Subcanonical.of_isSheaf_yoneda_obj _ fun X => ?_
   rw [fpqcTopology_eq_propQCTopology]; rw [isSheaf_type_propQCTopology_iff]
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: fppfTopology.Subcanonical
+  签名: fppfTopology.子典范
   定义体: .of_le fppfTopology_le_fpqcTopology
 
 @[simp]
@@ -323,8 +323,8 @@ lemma Hom.singleton_mem_fppfPrecoverage
 @[simp]
 
 中文:
-引理 Hom.singleton_mem_fppfPrecoverage
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Flat f] [Surjective f]
+引理 态射.singleton_mem_fppfPrecoverage
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [平坦 f] [满射 f]
   证明: by
   rw [← Presieve.ofArrows_pUnit.{0}]
   exact (f.cover (P := @Flat ⊓ @LocallyOfFinitePresentation) ⟨‹_›, ‹_›⟩).mem₀
@@ -349,8 +349,8 @@ lemma Hom.singleton_mem_fpqcPrecoverage
   proof: Hom.singleton_mem_propQCPrecoverage ‹_›
 
 中文:
-引理 Hom.singleton_mem_fpqcPrecoverage
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Flat f] [Surjective f]
+引理 态射.singleton_mem_fpqcPrecoverage
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [平坦 f] [满射 f]
   证明: Hom.singleton_mem_propQCPrecoverage ‹_›
 
 Depends on / 依赖: Hom.singleton_mem_propQCPrecoverage, singleton_mem_propQCPrecoverage

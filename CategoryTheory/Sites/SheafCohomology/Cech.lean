@@ -75,7 +75,7 @@ definition cochainComplexFunctor
 
 中文:
 定义 cochainComplexFunctor
-  签名: : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A 自然数
+  签名: : (Cᵒᵖ ⥤ A) ⥤ 上链复形 A 自然数
   定义体: cosimplicialObjectFunctor E ⋙ AlgebraicTopology.alternatingCofaceMapComplex A
 
 Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.alternatingCofaceMapComplex, alternatingCofaceMapComplex, cosimplicialObjectFunctor
@@ -97,7 +97,7 @@ definition cechComplexFunctor
 
 中文:
 定义 cechComplexFunctor
-  签名: : (Cᵒᵖ ⥤ A) ⥤ CochainComplex A 自然数
+  签名: : (Cᵒᵖ ⥤ A) ⥤ 上链复形 A 自然数
   定义体: FormalCoproduct.cochainComplexFunctor (FormalCoproduct.mk _ U).cech
 
 Depends on / 依赖: FormalCoproduct, FormalCoproduct.cochainComplexFunctor, FormalCoproduct.mk, cochainComplexFunctor

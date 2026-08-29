@@ -37,7 +37,7 @@ lemma MemLp.comp_fst
 
 中文:
 引理 MemLp.comp_fst
-  条件: {f : α -> ε} (hf : MemLp f p μ) (ν : Measure β) [IsFiniteMeasure ν]
+  条件: {f : α -> ε} (hf : MemLp f p μ) (ν : 测度 β) [是有限测度 ν]
   证明: by
   have hf' : MemLp f p (ν .univ • μ) := hf.smul_measure (by simp)
   change MemLp (f ∘ Prod.fst) p (μ.prod ν)
@@ -70,7 +70,7 @@ lemma MemLp.comp_snd
 
 中文:
 引理 MemLp.comp_snd
-  结论: {f : β -> ε} (hf : MemLp f p ν) (μ : Measure α) [IsFiniteMeasure μ]
+  结论: {f : β -> ε} (hf : MemLp f p ν) (μ : 测度 α) [是有限测度 μ]
   证明: by
   have hf' : MemLp f p (μ .univ • ν) := hf.smul_measure (by simp)
   change MemLp (f ∘ Prod.snd) p (μ.prod ν)

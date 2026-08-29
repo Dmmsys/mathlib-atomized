@@ -104,7 +104,7 @@ theorem measurable_apply₂
 
 中文:
 定理 measurable_apply₂
-  结论: [MeasurableSpace E] [OpensMeasurableSpace E]
+  结论: [可测空间 E] [OpensMeasurable空间 E]
   证明: isBoundedBilinearMap_apply.continuous.measurable
 
 Depends on / 依赖: continuous, isBoundedBilinearMap_apply, isBoundedBilinearMap_apply.continuous.measurable, measurable
@@ -151,7 +151,7 @@ definition B
 
 中文:
 定义 B
-  签名: (f : E -> F) (K : Set (E ->L[𝕜] F)) (r s ε : 实数)
+  签名: (f : E -> F) (K : 集合 (E ->L[𝕜] F)) (r s ε : 实数)
   定义体: ⋃ L in K, A f L r ε inter A f L s ε
 -/
 def B (f : E -> F) (K : Set (E ->L[𝕜] F)) (r s ε : Real) : Set E :=
@@ -167,7 +167,7 @@ definition D
 
 中文:
 定义 D
-  签名: (f : E -> F) (K : Set (E ->L[𝕜] F))
+  签名: (f : E -> F) (K : 集合 (E ->L[𝕜] F))
   定义体: ⋂ e : Nat, ⋃ n : Nat, ⋂ (p >= n) (q >= n), B f K ((1 / 2) ^ p) ((1 / 2) ^ q) ((1 / 2) ^ e)
 -/
 def D (f : E -> F) (K : Set (E ->L[𝕜] F)) : Set E :=
@@ -191,7 +191,7 @@ theorem isOpen_A
 中文:
 定理 isOpen_A
   条件: (L : E ->L[𝕜] F) (r ε : 实数)
-  结论: IsOpen (A f L r ε)
+  结论: 是开集 (A f L r ε)
   证明: by
   rw [Metric.isOpen_iff]
   rintro x ⟨r', r'_mem, hr'⟩
@@ -224,8 +224,8 @@ theorem isOpen_B
 
 中文:
 定理 isOpen_B
-  条件: {K : Set (E ->L[𝕜] F)} {r s ε : 实数}
-  结论: IsOpen (B f K r s ε)
+  条件: {K : 集合 (E ->L[𝕜] F)} {r s ε : 实数}
+  结论: 是开集 (B f K r s ε)
   证明: by
   simp [B, isOpen_biUnion, IsOpen.inter, isOpen_A]
 
@@ -447,7 +447,7 @@ theorem D_subset_differentiable_set
 
 中文:
 定理 D_subset_differentiable_set
-  条件: {K : Set (E ->L[𝕜] F)} (hK : IsComplete K)
+  条件: {K : 集合 (E ->L[𝕜] F)} (hK : 是完备 K)
   证明: by
   have P : forall {n : Nat}, (0 : Real) < (1 / 2) ^ n := fun {n} => pow_pos (by norm_num) n
   rcases NormedField.exists_one_lt_norm 𝕜 with ⟨c, hc⟩
@@ -604,7 +604,7 @@ theorem differentiable_set_eq_D
 
 中文:
 定理 differentiable_set_eq_D
-  条件: (hK : IsComplete K)
+  条件: (hK : 是完备 K)
   证明: Subset.antisymm (differentiable_set_subset_D _) (D_subset_differentiable_set hK)
 
 Depends on / 依赖: D_subset_differentiable_set, Subset, Subset.antisymm, antisymm, differentiable_set_subset_D
@@ -634,7 +634,7 @@ theorem measurableSet_of_differentiableAt_of_isComplete
 
 中文:
 定理 measurableSet_of_differentiableAt_of_isComplete
-  条件: {K : Set (E ->L[𝕜] F)} (hK : IsComplete K)
+  条件: {K : 集合 (E ->L[𝕜] F)} (hK : 是完备 K)
   证明: by
   simp only [D, differentiable_set_eq_D K hK]
   aesop
@@ -667,7 +667,7 @@ theorem measurableSet_of_differentiableAt
 
 中文:
 定理 measurableSet_of_differentiableAt
-  结论: MeasurableSet { x | DifferentiableAt 𝕜 f x }
+  结论: 可测集 { x | DifferentiableAt 𝕜 f x }
   证明: by
   have : IsComplete (univ : Set (E ->L[𝕜] F)) := isComplete_univ
   convert! measurableSet_of_differentiableAt_of_isComplete 𝕜 f this
@@ -702,7 +702,7 @@ theorem measurable_fderiv
 
 中文:
 定理 measurable_fderiv
-  结论: Measurable (fderiv 𝕜 f)
+  结论: 可测 (fderiv 𝕜 f)
   证明: by
   refine measurable_of_isClosed fun s hs => ?_
   have :
@@ -739,7 +739,7 @@ theorem measurable_fderiv_apply_const
 
 中文:
 定理 measurable_fderiv_apply_const
-  条件: [MeasurableSpace F] [BorelSpace F] (y : E)
+  条件: [可测空间 F] [Borel空间 F] (y : E)
   证明: (ContinuousLinearMap.measurable_apply y).comp (measurable_fderiv 𝕜 f)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.measurable_apply, measurable_apply, measurable_fderiv
@@ -762,7 +762,7 @@ theorem measurable_deriv
 
 中文:
 定理 measurable_deriv
-  结论: [MeasurableSpace 𝕜] [OpensMeasurableSpace 𝕜] [MeasurableSpace F]
+  结论: [可测空间 𝕜] [OpensMeasurable空间 𝕜] [可测空间 F]
   证明: by
   simpa only [fderiv_apply_one_eq_deriv] using measurable_fderiv_apply_const 𝕜 f 1
 
@@ -787,7 +787,7 @@ theorem stronglyMeasurable_deriv
 
 中文:
 定理 stronglyMeasurable_deriv
-  结论: [MeasurableSpace 𝕜] [OpensMeasurableSpace 𝕜]
+  结论: [可测空间 𝕜] [OpensMeasurable空间 𝕜]
   证明: by
   borelize F
   rcases h.out with h𝕜 | hF
@@ -815,7 +815,7 @@ theorem aemeasurable_deriv
 
 中文:
 定理 aemeasurable_deriv
-  结论: [MeasurableSpace 𝕜] [OpensMeasurableSpace 𝕜] [MeasurableSpace F]
+  结论: [可测空间 𝕜] [OpensMeasurable空间 𝕜] [可测空间 F]
   证明: (measurable_deriv f).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_deriv
@@ -834,7 +834,7 @@ theorem aestronglyMeasurable_deriv
 
 中文:
 定理 aestronglyMeasurable_deriv
-  结论: [MeasurableSpace 𝕜] [OpensMeasurableSpace 𝕜]
+  结论: [可测空间 𝕜] [OpensMeasurable空间 𝕜]
   证明: (stronglyMeasurable_deriv f).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, stronglyMeasurable_deriv
@@ -882,7 +882,7 @@ definition B
 
 中文:
 定义 B
-  签名: (f : 实数 -> F) (K : Set F) (r s ε : 实数)
+  签名: (f : 实数 -> F) (K : 集合 F) (r s ε : 实数)
   定义体: ⋃ L in K, A f L r ε inter A f L s ε
 -/
 def B (f : Real -> F) (K : Set F) (r s ε : Real) : Set Real :=
@@ -898,7 +898,7 @@ definition D
 
 中文:
 定义 D
-  签名: (f : 实数 -> F) (K : Set F)
+  签名: (f : 实数 -> F) (K : 集合 F)
   定义体: ⋂ e : Nat, ⋃ n : Nat, ⋂ (p >= n) (q >= n), B f K ((1 / 2) ^ p) ((1 / 2) ^ q) ((1 / 2) ^ e)
 -/
 def D (f : Real -> F) (K : Set F) : Set Real :=
@@ -960,7 +960,7 @@ theorem B_mem_nhdsGT
 
 中文:
 定理 B_mem_nhdsGT
-  条件: {K : Set F} {r s ε x : 实数} (hx : x in B f K r s ε)
+  条件: {K : 集合 F} {r s ε x : 实数} (hx : x in B f K r s ε)
   证明: by
   obtain ⟨L, LK, hL₁, hL₂⟩ : exists L : F, L in K ∧ x in A f L r ε ∧ x in A f L s ε := by
     simpa only [B, mem_iUnion, mem_inter_iff, exists_prop] using hx
@@ -989,8 +989,8 @@ theorem measurableSet_B
 
 中文:
 定理 measurableSet_B
-  条件: {K : Set F} {r s ε : 实数}
-  结论: MeasurableSet (B f K r s ε)
+  条件: {K : 集合 F} {r s ε : 实数}
+  结论: 可测集 (B f K r s ε)
   证明: .of_mem_nhdsGT fun _ hx => B_mem_nhdsGT hx
 
 Depends on / 依赖: B_mem_nhdsGT, of_mem_nhdsGT
@@ -1210,7 +1210,7 @@ theorem D_subset_differentiable_set
 
 中文:
 定理 D_subset_differentiable_set
-  条件: {K : Set F} (hK : IsComplete K)
+  条件: {K : 集合 F} (hK : 是完备 K)
   证明: by
   have P : forall {n : Nat}, (0 : Real) < (1 / 2) ^ n := fun {n} => pow_pos (by norm_num) n
   intro x hx
@@ -1363,7 +1363,7 @@ theorem differentiable_set_eq_D
 
 中文:
 定理 differentiable_set_eq_D
-  条件: (hK : IsComplete K)
+  条件: (hK : 是完备 K)
   证明: Subset.antisymm (differentiable_set_subset_D _) (D_subset_differentiable_set hK)
 
 Depends on / 依赖: D_subset_differentiable_set, Subset, Subset.antisymm, antisymm, differentiable_set_subset_D
@@ -1393,7 +1393,7 @@ theorem measurableSet_of_differentiableWithinAt_Ici_of_isComplete
 
 中文:
 定理 measurableSet_of_differentiableWithinAt_Ici_of_isComplete
-  条件: {K : Set F} (hK : IsComplete K)
+  条件: {K : 集合 F} (hK : 是完备 K)
   证明: by
   -- simp [differentiable_set_eq_d K hK, D, measurableSet_b, MeasurableSet.iInter,
   -- MeasurableSet.iUnion]
@@ -1457,7 +1457,7 @@ theorem measurable_derivWithin_Ici
 
 中文:
 定理 measurable_derivWithin_Ici
-  条件: [MeasurableSpace F] [BorelSpace F]
+  条件: [可测空间 F] [Borel空间 F]
   证明: by
   refine measurable_of_isClosed fun s hs => ?_
   have :
@@ -1532,7 +1532,7 @@ theorem aemeasurable_derivWithin_Ici
 
 中文:
 定理 aemeasurable_derivWithin_Ici
-  条件: [MeasurableSpace F] [BorelSpace F] (μ : Measure 实数)
+  条件: [可测空间 F] [Borel空间 F] (μ : 测度 实数)
   证明: (measurable_derivWithin_Ici f).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_derivWithin_Ici
@@ -1551,7 +1551,7 @@ theorem aestronglyMeasurable_derivWithin_Ici
 
 中文:
 定理 aestronglyMeasurable_derivWithin_Ici
-  条件: (μ : Measure 实数)
+  条件: (μ : 测度 实数)
   证明: (stronglyMeasurable_derivWithin_Ici f).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, stronglyMeasurable_derivWithin_Ici
@@ -1595,7 +1595,7 @@ theorem measurable_derivWithin_Ioi
 
 中文:
 定理 measurable_derivWithin_Ioi
-  条件: [MeasurableSpace F] [BorelSpace F]
+  条件: [可测空间 F] [Borel空间 F]
   证明: by
   simpa [derivWithin_Ioi_eq_Ici] using measurable_derivWithin_Ici f
 
@@ -1634,7 +1634,7 @@ theorem aemeasurable_derivWithin_Ioi
 
 中文:
 定理 aemeasurable_derivWithin_Ioi
-  条件: [MeasurableSpace F] [BorelSpace F] (μ : Measure 实数)
+  条件: [可测空间 F] [Borel空间 F] (μ : 测度 实数)
   证明: (measurable_derivWithin_Ioi f).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_derivWithin_Ioi
@@ -1653,7 +1653,7 @@ theorem aestronglyMeasurable_derivWithin_Ioi
 
 中文:
 定理 aestronglyMeasurable_derivWithin_Ioi
-  条件: (μ : Measure 实数)
+  条件: (μ : 测度 实数)
   证明: (stronglyMeasurable_derivWithin_Ioi f).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, stronglyMeasurable_derivWithin_Ioi
@@ -1700,7 +1700,7 @@ lemma isOpen_A_with_param
 
 中文:
 引理 isOpen_A_with_param
-  条件: {r s : 实数} (hf : Continuous f.uncurry) (L : E ->L[𝕜] F)
+  条件: {r s : 实数} (hf : 连续 f.uncurry) (L : E ->L[𝕜] F)
   证明: by
   have : ProperSpace E := .of_locallyCompactSpace 𝕜
   simp only [A, mem_Ioc, mem_ball, map_sub, mem_ofPred_eq]
@@ -1792,7 +1792,7 @@ lemma isOpen_B_with_param
 
 中文:
 引理 isOpen_B_with_param
-  条件: {r s t : 实数} (hf : Continuous f.uncurry) (K : Set (E ->L[𝕜] F))
+  条件: {r s t : 实数} (hf : 连续 f.uncurry) (K : 集合 (E ->L[𝕜] F))
   证明: by
   suffices H : IsOpen (⋃ L in K,
       {p : α × E | p.2 in A (f p.1) L r t ∧ p.2 in A (f p.1) L s t}) by
@@ -1874,7 +1874,7 @@ theorem measurableSet_of_differentiableAt_with_param
 
 中文:
 定理 measurableSet_of_differentiableAt_with_param
-  条件: (hf : Continuous f.uncurry)
+  条件: (hf : 连续 f.uncurry)
   证明: by
   have : IsComplete (univ : Set (E ->L[𝕜] F)) := isComplete_univ
   convert! measurableSet_of_differentiableAt_of_isComplete_with_param hf this
@@ -1904,7 +1904,7 @@ theorem measurable_fderiv_with_param
 
 中文:
 定理 measurable_fderiv_with_param
-  条件: (hf : Continuous f.uncurry)
+  条件: (hf : 连续 f.uncurry)
   证明: by
   refine measurable_of_isClosed (fun s hs => ?_)
   have :
@@ -1938,7 +1938,7 @@ theorem measurable_fderiv_apply_const_with_param
 
 中文:
 定理 measurable_fderiv_apply_const_with_param
-  结论: [MeasurableSpace F] [BorelSpace F]
+  结论: [可测空间 F] [Borel空间 F]
   证明: (ContinuousLinearMap.measurable_apply y).comp (measurable_fderiv_with_param 𝕜 hf)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.measurable_apply, measurable_apply, measurable_fderiv_with_param
@@ -1961,7 +1961,7 @@ theorem measurable_deriv_with_param
 
 中文:
 定理 measurable_deriv_with_param
-  结论: [LocallyCompactSpace 𝕜] [MeasurableSpace 𝕜]
+  结论: [局部紧空间 𝕜] [可测空间 𝕜]
   证明: by
   simpa only [fderiv_apply_one_eq_deriv] using measurable_fderiv_apply_const_with_param 𝕜 hf 1
 
@@ -1989,7 +1989,7 @@ theorem stronglyMeasurable_deriv_with_param
 
 中文:
 定理 stronglyMeasurable_deriv_with_param
-  结论: [LocallyCompactSpace 𝕜] [MeasurableSpace 𝕜]
+  结论: [局部紧空间 𝕜] [可测空间 𝕜]
   证明: by
   borelize F
   rcases h.out with hα | hF
@@ -2031,7 +2031,7 @@ theorem aemeasurable_deriv_with_param
 
 中文:
 定理 aemeasurable_deriv_with_param
-  结论: [LocallyCompactSpace 𝕜] [MeasurableSpace 𝕜]
+  结论: [局部紧空间 𝕜] [可测空间 𝕜]
   证明: (measurable_deriv_with_param hf).aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable_deriv_with_param
@@ -2052,7 +2052,7 @@ theorem aestronglyMeasurable_deriv_with_param
 
 中文:
 定理 aestronglyMeasurable_deriv_with_param
-  结论: [LocallyCompactSpace 𝕜] [MeasurableSpace 𝕜]
+  结论: [局部紧空间 𝕜] [可测空间 𝕜]
   证明: (stronglyMeasurable_deriv_with_param hf).aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, stronglyMeasurable_deriv_with_param

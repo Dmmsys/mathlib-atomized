@@ -54,7 +54,7 @@ lemma tendsto_measure_of_ae_tendsto_indicator
 
 中文:
 引理 tendsto_measure_of_ae_tendsto_indicator
-  结论: {μ : Measure α} (A_mble : MeasurableSet A)
+  结论: {μ : 测度 α} (A_mble : 可测集 A)
   证明: by
   simp_rw [← MeasureTheory.lintegral_indicator_one A_mble,
            ← MeasureTheory.lintegral_indicator_one (As_mble _)]
@@ -116,7 +116,7 @@ lemma tendsto_measure_of_tendsto_indicator
 
 中文:
 引理 tendsto_measure_of_tendsto_indicator
-  结论: {μ : Measure α}
+  结论: {μ : 测度 α}
   证明: by
   rcases L.eq_or_neBot with rfl | _
   · exact tendsto_bot

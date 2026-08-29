@@ -131,7 +131,7 @@ theorem existsUnique_of_exists_of_unique
   proof: Exists.elim hex (fun x px => ExistsUnique.intro x px (fun y (h : p y) => hunique y x h px))
 
 中文:
-定理 existsUnique_of_exists_of_unique
+定理 存在Unique_of_存在_of_unique
   结论: {p : α -> 命题}
   证明: Exists.elim hex (fun x px => ExistsUnique.intro x px (fun y (h : p y) => hunique y x h px))
 
@@ -150,7 +150,7 @@ theorem ExistsUnique.exists
   statement: (exists! x, p x) -> exists x, p x | ⟨x, h, _⟩ => ⟨x, h⟩
 
 中文:
-定理 ExistsUnique.exists
+定理 ExistsUnique.存在
   条件: {p : α -> 命题}
   结论: (存在! x, p x) -> 存在 x, p x | ⟨x, h, _⟩ => ⟨x, h⟩
 -/
@@ -207,7 +207,7 @@ theorem existsUnique_congr
   proof: exists_congr fun _ => and_congr (h _) forall_congr' fun _ => imp_congr_left (h _)
 
 中文:
-定理 existsUnique_congr
+定理 存在Unique_congr
   条件: {p q : α -> 命题} (h : 对任意 a, p a ↔ q a)
   结论: (存在! a, p a) ↔ 存在! a, q a
   证明: exists_congr fun _ => and_congr (h _) forall_congr' fun _ => imp_congr_left (h _)
@@ -226,8 +226,8 @@ theorem existsUnique_iff_exists
   proof: ⟨fun h => h.exists, Exists.imp fun x hx => ⟨hx, fun y _ => Subsingleton.elim y x⟩⟩
 
 中文:
-定理 existsUnique_iff_exists
-  条件: [Subsingleton α] {p : α -> 命题}
+定理 存在Unique_iff_存在
+  条件: [子单例 α] {p : α -> 命题}
   证明: ⟨fun h => h.exists, Exists.imp fun x hx => ⟨hx, fun y _ => Subsingleton.elim y x⟩⟩
 -/
 @[simp] theorem existsUnique_iff_exists [Subsingleton α] {p : α -> Prop} :
@@ -243,8 +243,8 @@ theorem existsUnique_const
   proof: by simp
 
 中文:
-定理 existsUnique_const
-  条件: {b : 命题} (α : Sort*) [i : Nonempty α] [Subsingleton α]
+定理 存在Unique_const
+  条件: {b : 命题} (α : 类型层*) [i : 非空 α] [子单例 α]
   证明: by simp
 -/
 theorem existsUnique_const {b : Prop} (α : Sort*) [i : Nonempty α] [Subsingleton α] :
@@ -261,7 +261,7 @@ theorem existsUnique_eq
   simp only [eq_comm, ExistsUnique, and_self, forall_eq', exists_eq']
 
 中文:
-定理 existsUnique_eq
+定理 存在Unique_eq
   条件: {a' : α}
   结论: 存在! a, a = a'
   证明: by
@@ -281,7 +281,7 @@ theorem existsUnique_eq'
   simp only [ExistsUnique, and_self, forall_eq', exists_eq']
 
 中文:
-定理 existsUnique_eq'
+定理 存在Unique_eq'
   条件: {a' : α}
   结论: 存在! a, a' = a
   证明: by
@@ -300,7 +300,7 @@ theorem existsUnique_prop
   proof: by simp
 
 中文:
-定理 existsUnique_prop
+定理 存在Unique_prop
   条件: {p q : 命题}
   结论: (存在! _ : p, q) ↔ p ∧ q
   证明: by simp
@@ -316,8 +316,8 @@ theorem existsUnique_false
   proof: fun ⟨_, h, _⟩ => h
 
 中文:
-定理 existsUnique_false
-  结论: ¬存在! _ : α, False
+定理 存在Unique_false
+  结论: ¬存在! _ : α, 假
   证明: fun ⟨_, h, _⟩ => h
 -/
 @[simp] theorem existsUnique_false : ¬exists! _ : α, False := fun ⟨_, h, _⟩ => h
@@ -332,7 +332,7 @@ theorem existsUnique_prop_of_true
   proof: @existsUnique_const (q h) p ⟨h⟩ _
 
 中文:
-定理 existsUnique_prop_of_true
+定理 存在Unique_prop_of_true
   条件: {p : 命题} {q : p -> 命题} (h : p)
   结论: (存在! h' : p, q h') ↔ q h
   证明: @existsUnique_const (q h) p ⟨h⟩ _
@@ -355,7 +355,7 @@ theorem ExistsUnique.elim₂
 
 中文:
 定理 ExistsUnique.elim₂
-  结论: {p : α -> Sort*} [对任意 x, Subsingleton (p x)]
+  结论: {p : α -> 类型层*} [对任意 x, 子单例 (p x)]
   证明: by
   simp only [existsUnique_iff_exists] at h₂
   apply h₂.elim
@@ -382,7 +382,7 @@ theorem ExistsUnique.intro₂
 
 中文:
 定理 ExistsUnique.intro₂
-  结论: {p : α -> Sort*} [对任意 x, Subsingleton (p x)]
+  结论: {p : α -> 类型层*} [对任意 x, 子单例 (p x)]
   证明: by
   simp only [existsUnique_iff_exists]
   exact ExistsUnique.intro w ⟨hp, hq⟩ fun y ⟨hyp, hyq⟩ => H y hyp hyq
@@ -404,8 +404,8 @@ theorem ExistsUnique.exists₂
   proof: h.exists.imp fun _ hx => hx.exists
 
 中文:
-定理 ExistsUnique.exists₂
-  结论: {p : α -> Sort*} {q : 对任意 (x : α) (_ : p x), 命题}
+定理 ExistsUnique.存在₂
+  结论: {p : α -> 类型层*} {q : 对任意 (x : α) (_ : p x), 命题}
   证明: h.exists.imp fun _ hx => hx.exists
 
 Depends on / 依赖: h.exists.imp, hx.exists
@@ -426,7 +426,7 @@ theorem ExistsUnique.unique₂
 
 中文:
 定理 ExistsUnique.unique₂
-  结论: {p : α -> Sort*} [对任意 x, Subsingleton (p x)]
+  结论: {p : α -> 类型层*} [对任意 x, 子单例 (p x)]
   证明: by
   simp only [existsUnique_iff_exists] at h
   exact h.unique ⟨hpy₁, hqy₁⟩ ⟨hpy₂, hqy₂⟩
@@ -449,7 +449,7 @@ instance List.decidableBExistsUnique
       decidable_of_iff (exists! x, x in xs ∧ p x) (by grind)
 
 中文:
-实例 List.decidableBExistsUnique
+实例 列表.decidableBExistsUnique
   签名: {α : 类型} [DecidableEq α] (p : α -> 命题) [DecidablePred p]
   定义体: List.decidableBExistsUnique p xs
       decidable_of_iff (exists! x, x in xs ∧ p x) (by grind)

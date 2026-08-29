@@ -49,7 +49,7 @@ class HasFirstPageComputation
     - hi₂₃((pq : κ)) : data.i₂ pq = data.i₃ r₀ pq
 
 中文:
-类 HasFirstPageComputation
+类 有FirstPageComputation
   参数: : 命题 where
   公理与运算 (2 个):
     - hi₀₁((pq : κ)) : data.i₀ r₀ pq = data.i₁ pq
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: coreE₂Cohomological.HasFirstPageComputation
+  签名: coreE₂Cohomological.有FirstPageComputation
   定义体: by dsimp; lia
   hi₂₃ pq := by dsimp; lia
 -/
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: coreE₂Cohomological自然数.HasFirstPageComputation
+  签名: coreE₂Cohomological自然数.有FirstPageComputation
   定义体: by dsimp; lia
   hi₂₃ pq := by dsimp; lia
 -/
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: coreE₂Homological自然数.HasFirstPageComputation
+  签名: coreE₂Homological自然数.有FirstPageComputation
   定义体: by dsimp; lia
   hi₂₃ pq := by dsimp; lia
 -/

@@ -564,7 +564,7 @@ theorem integralNormalization_aeval_eq_zero
 
 中文:
 定理 integralNormalization_aeval_eq_zero
-  结论: [Algebra S A] {f : S[X]} {z : A} (hz : aeval z f = 0)
+  结论: [代数 S A] {f : S[X]} {z : A} (hz : aeval z f = 0)
   证明: integralNormalization_eval₂_eq_zero_of_commute (algebraMap S A) hz
     (Algebra.commute_algebraMap_left _ _) (.map (.all _ _) _) inj
 

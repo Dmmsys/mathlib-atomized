@@ -87,8 +87,8 @@ definition IsPushout.isColimitCokernelCofork
   body: h.isColimitEquivIsColimitCokernelCofork h.isColimit
 
 中文:
-定义 IsPushout.isColimitCokernelCofork
-  签名: (h : sq.IsPushout)
+定义 是推出.isColimitCokernelCofork
+  签名: (h : sq.是推出)
   定义体: h.isColimitEquivIsColimitCokernelCofork h.isColimit
 -/
 noncomputable def IsPushout.isColimitCokernelCofork (h : sq.IsPushout) :
@@ -155,8 +155,8 @@ definition IsPullback.isLimitKernelFork
   body: h.isLimitEquivIsLimitKernelFork h.isLimit
 
 中文:
-定义 IsPullback.isLimitKernelFork
-  签名: (h : sq.IsPullback)
+定义 是拉回.isLimitKernelFork
+  签名: (h : sq.是拉回)
   定义体: h.isLimitEquivIsLimitKernelFork h.isLimit
 -/
 noncomputable def IsPullback.isLimitKernelFork (h : sq.IsPullback) :

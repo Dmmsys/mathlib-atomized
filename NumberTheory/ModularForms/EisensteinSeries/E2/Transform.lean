@@ -86,7 +86,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: (x : Fin 2 -> 整数)
+  签名: (x : 有限集 2 -> 整数)
   定义体: if x = ![0, 0] then 1 else if x = ![0, -1] then 2 else 0
 
 @[simp]
@@ -162,7 +162,7 @@ abbreviation G2Term
 
 中文:
 缩写 G2Term
-  签名: (z : ℍ) (m : Fin 2 -> 整数)
+  签名: (z : ℍ) (m : 有限集 2 -> 整数)
   定义体: (((m 0 : Complex) * z + m 1) ^ 2 * (m 0 * z + m 1 + 1))⁻¹ + δ m
 -/
 abbrev G2Term (z : ℍ) (m : Fin 2 -> Int) : Complex :=
@@ -248,7 +248,7 @@ lemma aux_identity
 中文:
 引理 aux_identity
   条件: (z : ℍ) (b n : 整数)
-  结论: ((b : Complex) * z + n + 1)⁻¹ * (((b : Complex) * z + n) ^ 2)⁻¹ +
+  结论: ((b : 复形) * z + n + 1)⁻¹ * (((b : 复形) * z + n) ^ 2)⁻¹ +
   证明: by
   by_cases h : b = 0 ∧ n = 0
   · simp [h.1, h.2]
@@ -344,7 +344,7 @@ lemma G2_S_action_eq_tsum_G2Term
 中文:
 引理 G2_S_action_eq_tsum_G2Term
   条件: (z : ℍ)
-  结论: ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
+  结论: ((z : 复形) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z =
   证明: by
   rw [← tsum_symmetricIco_tsum_sub_eq z]; rw [← tsum_symmetricIco_tsum_eq_S_act z]; rw [← tsum_eq_of_summable_unconditional (L := symmetricIco Int)]; rw [← Summable.tsum_sub]
   · apply tsum_congr (fun N => ?_)
@@ -392,7 +392,7 @@ lemma tsum_G2Term_eq_tsum
 中文:
 引理 tsum_G2Term_eq_tsum
   条件: (z : ℍ)
-  结论: ∑' (m : Fin 2 -> 整数), G2Term z m =
+  结论: ∑' (m : 有限集 2 -> 整数), G2Term z m =
   证明: by
   rw [← (finTwoArrowEquiv _).symm.tsum_eq]
   exact Summable.tsum_prod' (G2Term_prod_summable z) ((G2Term_prod_summable z).prod_factor)
@@ -425,7 +425,7 @@ lemma tsum_G2Term_eq_tsum'
 中文:
 引理 tsum_G2Term_eq_tsum'
   条件: (z : ℍ)
-  结论: ∑' (m : Fin 2 -> 整数), G2Term z m =
+  结论: ∑' (m : 有限集 2 -> 整数), G2Term z m =
   证明: by
   rw [Summable.tsum_comm']; rw [tsum_G2Term_eq_tsum]
   · exact G2Term_prod_summable z
@@ -466,7 +466,7 @@ lemma G2_S_transform
 中文:
 引理 G2_S_transform
   条件: (z : ℍ)
-  结论: G2 z = ((z : Complex) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z
+  结论: G2 z = ((z : 复形) ^ 2)⁻¹ * G2 (S • z) - -2 * π * I / z
   证明: by
   rw [G2_S_action_eq_tsum_G2Term]; rw [G2_eq_tsum_G2Term z]; rw [← tsum_G2Term_eq_tsum']; rw [tsum_G2Term_eq_tsum]
 

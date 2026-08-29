@@ -42,7 +42,7 @@ definition paretoPDFReal
   body: if t <= x then r * t ^ r * x ^ (-(r + 1)) else 0
 
 中文:
-定义 paretoPDFReal
+定义 paretoPDF实数
   签名: (t r x : 实数)
   定义体: if t <= x then r * t ^ r * x ^ (-(r + 1)) else 0
 -/
@@ -171,9 +171,9 @@ lemma measurable_paretoPDFReal
   proof: Measurable.ite measurableSet_Ici ((measurable_id.pow_const _).const_mul _) measurable_const
 
 中文:
-引理 measurable_paretoPDFReal
+引理 measurable_paretoPDF实数
   条件: (t r : 实数)
-  结论: Measurable (paretoPDF实数 t r)
+  结论: 可测 (paretoPDF实数 t r)
   证明: Measurable.ite measurableSet_Ici ((measurable_id.pow_const _).const_mul _) measurable_const
 
 Depends on / 依赖: Measurable, Measurable.ite, const_mul, measurableSet_Ici, measurable_const, measurable_id, measurable_id.pow_const, pow_const
@@ -192,7 +192,7 @@ lemma stronglyMeasurable_paretoPDFReal
   proof: (measurable_paretoPDFReal t r).stronglyMeasurable
 
 中文:
-引理 stronglyMeasurable_paretoPDFReal
+引理 stronglyMeasurable_paretoPDF实数
   条件: (t r : 实数)
   证明: (measurable_paretoPDFReal t r).stronglyMeasurable
 
@@ -214,7 +214,7 @@ lemma paretoPDFReal_pos
   positivity
 
 中文:
-引理 paretoPDFReal_pos
+引理 paretoPDF实数_pos
   条件: (ht : 0 < t) (hr : 0 < r) (hx : t <= x)
   证明: by
   rw [paretoPDFReal]; rw [if_pos hx]
@@ -247,7 +247,7 @@ lemma paretoPDFReal_nonneg
   · positivity
 
 中文:
-引理 paretoPDFReal_nonneg
+引理 paretoPDF实数_nonneg
   条件: (ht : 0 <= t) (hr : 0 <= r) (x : 实数)
   证明: by
   unfold paretoPDFReal

@@ -40,7 +40,7 @@ theorem addCommute_iff_eq_mul_natCast
 
 中文:
 定理 addCommute_iff_eq_mul_natCast
-  条件: {o₁ o₂ : Ordinal}
+  条件: {o₁ o₂ : 序数}
   证明: by
   refine ⟨fun hcomm => ?_, ?_⟩
   · induction h : o₁ + o₂ using WellFoundedLT.induction generalizing o₁ o₂ with | ind o ih

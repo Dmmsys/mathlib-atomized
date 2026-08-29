@@ -46,8 +46,8 @@ lemma Module.Finite.exists_free_surjective
       (f : S' ->ₐ[R] S), (s : Set S) sub
 
 中文:
-引理 Module.Finite.exists_free_surjective
-  条件: [Module.Finite R S]
+引理 模.有限.存在_free_surjective
+  条件: [模.有限 R S]
   证明: by
   classical
   obtain ⟨s, hs⟩ : (⊤ : Submodule R S).FG := Module.finite_def.mp inferInstance
@@ -101,7 +101,7 @@ instance Algebra.FinitePresentation.of_finitePresentation
   exact Module.FinitePresentation.fg_ker f.toLinearMap hf
 
 中文:
-实例 Algebra.FinitePresentation.of_finitePresentation
+实例 代数.有限呈现.of_finitePresentation
   定义体: by
   obtain ⟨S', _, _, _, _, _, f, hf⟩ := Module.Finite.exists_free_surjective R S
   refine .of_surjective hf ?_
@@ -134,7 +134,7 @@ lemma Module.FinitePresentation.of_finite_of_finitePresentation
   have : Module.Fin
 
 中文:
-引理 Module.FinitePresentation.of_finite_of_finitePresentation
+引理 模.有限呈现.of_finite_of_finitePresentation
   证明: by
   obtain ⟨R', _, _, _, _, _, f, hf⟩ := Module.Finite.exists_free_surjective R S
   let := f.toRingHom.toAlgebra
@@ -167,8 +167,8 @@ lemma Module.FinitePresentation.iff_finitePresentation_of_finite
   proof: ⟨fun _ => .of_finitePresentation R S, fun _ => .of_finite_of_finitePresentation R S⟩
 
 中文:
-引理 Module.FinitePresentation.iff_finitePresentation_of_finite
-  条件: [Module.Finite R S]
+引理 模.有限呈现.iff_finitePresentation_of_finite
+  条件: [模.有限 R S]
   证明: ⟨fun _ => .of_finitePresentation R S, fun _ => .of_finite_of_finitePresentation R S⟩
 
 Depends on / 依赖: of_finitePresentation, of_finite_of_finitePresentation

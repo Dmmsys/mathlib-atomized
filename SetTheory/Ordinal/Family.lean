@@ -40,7 +40,7 @@ definition bfamilyOfFamily'
 
 中文:
 定义 bfamilyOfFamily'
-  签名: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] (f : ι -> α)
+  签名: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
   定义体: fun a ha => f (enum r ⟨a, ha⟩)
 -/
 def bfamilyOfFamily' {ι : Type u} (r : ι -> ι -> Prop) [IsWellOrder ι r] (f : ι -> α) :
@@ -84,7 +84,7 @@ definition familyOfBFamily'
 
 中文:
 定义 familyOfBFamily'
-  签名: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] {o} (ho : type r = o)
+  签名: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o} (ho : type r = o)
   定义体: fun i =>
   f (typein r i)
     (by
@@ -113,7 +113,7 @@ definition familyOfBFamily
 
 中文:
 定义 familyOfBFamily
-  签名: (o : Ordinal) (f : 对任意 a < o, α)
+  签名: (o : 序数) (f : 对任意 a < o, α)
   定义体: familyOfBFamily' (· < ·) (type_toType o) f
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
@@ -137,7 +137,7 @@ theorem bfamilyOfFamily'_typein
 
 中文:
 定理 bfamilyOfFamily'_typein
-  条件: {ι} (r : ι -> ι -> 命题) [IsWellOrder ι r] (f : ι -> α) (i)
+  条件: {ι} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α) (i)
   证明: by
   simp only [bfamilyOfFamily', enum_typein]
 
@@ -182,7 +182,7 @@ theorem familyOfBFamily'_enum
 
 中文:
 定理 familyOfBFamily'_enum
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] {o}
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
   证明: by
   simp only [familyOfBFamily', typein_enum]
 
@@ -204,7 +204,7 @@ theorem familyOfBFamily_enum
 
 中文:
 定理 familyOfBFamily_enum
-  条件: (o : Ordinal) (f : 对任意 a < o, α) (i hi)
+  条件: (o : 序数) (f : 对任意 a < o, α) (i hi)
   证明: familyOfBFamily'_enum _ (type_toType o) f _ _
 
 Depends on / 依赖: ToType, hi.trans_eq, o.ToType, trans_eq, type_toType
@@ -228,7 +228,7 @@ definition brange
 
 中文:
 定义 brange
-  签名: (o : Ordinal) (f : 对任意 a < o, α)
+  签名: (o : 序数) (f : 对任意 a < o, α)
   定义体: { a | exists i hi, f i hi = a }
 
 @[deprecated mem_range (since := "2026-04-06")]
@@ -250,7 +250,7 @@ theorem mem_brange
 
 中文:
 定理 mem_brange
-  条件: {o : Ordinal} {f : 对任意 a < o, α} {a}
+  条件: {o : 序数} {f : 对任意 a < o, α} {a}
   结论: a in brange o f ↔ 存在 i hi, f i hi = a
   证明: Iff.rfl
 
@@ -302,7 +302,7 @@ theorem range_familyOfBFamily'
 
 中文:
 定理 range_familyOfBFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] {o}
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
   证明: by
   refine Set.ext fun a => ⟨?_, ?_⟩
   · rintro ⟨b, rfl⟩
@@ -365,7 +365,7 @@ theorem brange_bfamilyOfFamily'
 
 中文:
 定理 brange_bfamilyOfFamily'
-  条件: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] (f : ι -> α)
+  条件: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
   证明: by
   refine Set.ext fun a => ⟨?_, ?_⟩
   · rintro ⟨i, hi, rfl⟩
@@ -426,7 +426,7 @@ theorem brange_const
 
 中文:
 定理 brange_const
-  条件: {o : Ordinal} (ho : o != 0) {c : α}
+  条件: {o : 序数} (ho : o != 0) {c : α}
   结论: (brange o fun _ _ => c) = {c}
   证明: by
   rw [← range_familyOfBFamily]
@@ -453,7 +453,7 @@ theorem comp_bfamilyOfFamily'
 
 中文:
 定理 comp_bfamilyOfFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] (f : ι -> α)
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> α)
   证明: rfl
 
 @[deprecated "bfamilyOfFamily is deprecated" (since := "2026-04-06")]
@@ -497,7 +497,7 @@ theorem comp_familyOfBFamily'
 
 中文:
 定理 comp_familyOfBFamily'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] {o}
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o}
   证明: rfl
 
 @[deprecated "familyOfBFamily is deprecated" (since := "2026-04-06")]
@@ -542,7 +542,7 @@ theorem bddAbove_of_small
 
 中文:
 定理 bddAbove_of_small
-  条件: {s : Set Ordinal.{u}} [Small.{u} s]
+  条件: {s : 集合 序数.{u}} [Small.{u} s]
   结论: BddAbove s
   证明: by
   obtain ⟨a, ha⟩ := Cardinal.bddAbove_of_small (s := (succ ∘ card) '' s)
@@ -570,8 +570,8 @@ theorem bddAbove_range
 
 中文:
 定理 bddAbove_range
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
-  结论: BddAbove (Set.range f)
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
+  结论: BddAbove (集合.range f)
   证明: bddAbove_of_small
 
 Depends on / 依赖: bddAbove_of_small
@@ -590,7 +590,7 @@ theorem bddAbove_iff_small
 
 中文:
 定理 bddAbove_iff_small
-  条件: {s : Set Ordinal.{u}}
+  条件: {s : 集合 序数.{u}}
   结论: BddAbove s ↔ Small.{u} s
   证明: ⟨fun ⟨a, h⟩ => small_subset (s := Iic a) fun _ hx => h hx, fun _ => bddAbove_of_small⟩
 
@@ -611,7 +611,7 @@ theorem bddAbove_image
 
 中文:
 定理 bddAbove_image
-  结论: {s : Set Ordinal.{u}} (hf : BddAbove s)
+  结论: {s : 集合 序数.{u}} (hf : BddAbove s)
   证明: by
   rw [bddAbove_iff_small] at hf ⊢
   exact small_lift _
@@ -635,7 +635,7 @@ theorem bddAbove_range_comp
 
 中文:
 定理 bddAbove_range_comp
-  结论: {ι : 类型u} {f : ι -> Ordinal.{v}} (hf : BddAbove (range f))
+  结论: {ι : 类型u} {f : ι -> 序数.{v}} (hf : BddAbove (range f))
   证明: by
   rw [range_comp]
   exact bddAbove_image hf g
@@ -658,7 +658,7 @@ theorem le_iSup
 
 中文:
 定理 le_iSup
-  条件: {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι]
+  条件: {ι} (f : ι -> 序数.{u}) [Small.{u} ι]
   结论: 对任意 i, f i <= ⨆ i, f i
   证明: le_ciSup bddAbove_of_small
 -/
@@ -677,7 +677,7 @@ theorem iSup_le_iff
 
 中文:
 定理 iSup_le_iff
-  条件: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
+  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
   证明: ciSup_le_iff' bddAbove_of_small
 -/
 protected theorem iSup_le_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
@@ -695,7 +695,7 @@ theorem iSup_le
 
 中文:
 定理 iSup_le
-  条件: {ι} {f : ι -> Ordinal} {a}
+  条件: {ι} {f : ι -> 序数} {a}
   结论: (对任意 i, f i <= a) -> ⨆ i, f i <= a
   证明: ciSup_le'
 -/
@@ -714,7 +714,7 @@ theorem lt_iSup_iff
 
 中文:
 定理 lt_iSup_iff
-  条件: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
+  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
   证明: lt_ciSup_iff' bddAbove_of_small
 -/
 protected theorem lt_iSup_iff {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι] :
@@ -734,7 +734,7 @@ theorem lt_iSup_add_one
 
 中文:
 定理 lt_iSup_add_one
-  条件: {ι} (f : ι -> Ordinal.{u}) [Small.{u} ι] (i)
+  条件: {ι} (f : ι -> 序数.{u}) [Small.{u} ι] (i)
   结论: f i < ⨆ i, f i + 1
   证明: by
   rw [← add_one_le_iff]
@@ -757,7 +757,7 @@ theorem iSup_add_one_le_iff
 
 中文:
 定理 iSup_add_one_le_iff
-  条件: {ι} {f : ι -> Ordinal.{u}} {a : Ordinal.{u}} [Small.{u} ι]
+  条件: {ι} {f : ι -> 序数.{u}} {a : 序数.{u}} [Small.{u} ι]
   证明: by
   simp
 -/
@@ -776,7 +776,7 @@ theorem iSup_add_one_le
 
 中文:
 定理 iSup_add_one_le
-  条件: {ι} {f : ι -> Ordinal.{u}} {a} (h : 对任意 i, f i < a)
+  条件: {ι} {f : ι -> 序数.{u}} {a} (h : 对任意 i, f i < a)
   结论: ⨆ i, f i + 1 <= a
   证明: ciSup_le' (by simpa)
 
@@ -796,7 +796,7 @@ theorem lt_iSup_add_one_iff
 
 中文:
 定理 lt_iSup_add_one_iff
-  条件: {ι} {f : ι -> Ordinal.{u}} {a} [Small.{u} ι]
+  条件: {ι} {f : ι -> 序数.{u}} {a} [Small.{u} ι]
   证明: by
   simp
 -/
@@ -818,7 +818,7 @@ theorem succ_lt_iSup_of_ne_iSup
 
 中文:
 定理 succ_lt_iSup_of_ne_iSup
-  结论: {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι]
+  结论: {ι} {f : ι -> 序数.{u}} [Small.{u} ι]
   证明: by
   by_contra! hoa
   exact hao.not_ge (Ordinal.iSup_le fun i => le_of_lt_succ <|
@@ -850,7 +850,7 @@ theorem iSup_eq_zero_iff
 
 中文:
 定理 iSup_eq_zero_iff
-  条件: {ι} {f : ι -> Ordinal.{u}} [Small.{u} ι]
+  条件: {ι} {f : ι -> 序数.{u}} [Small.{u} ι]
   证明: by
   refine
     ⟨fun h i => ?_, fun h =>
@@ -881,7 +881,7 @@ theorem iSup_eq_of_range_eq
 
 中文:
 定理 iSup_eq_of_range_eq
-  结论: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
+  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
   证明: congr_arg _ h
 
 Depends on / 依赖: congr_arg
@@ -908,7 +908,7 @@ theorem iSup_sum
 
 中文:
 定理 iSup_sum
-  条件: {α β} (f : α oplus β -> Ordinal.{u}) [Small.{u} α] [Small.{u} β]
+  条件: {α β} (f : α oplus β -> 序数.{u}) [Small.{u} α] [Small.{u} β]
   证明: by
   apply (Ordinal.iSup_le _).antisymm (max_le _ _)
   · rintro (i | i)
@@ -944,7 +944,7 @@ h.not_gt lt_of_le_of_lt
 
 中文:
 定理 unbounded_range_of_le_iSup
-  结论: {α β : 类型u} (r : α -> α -> 命题) [IsWellOrder α r] (f : β -> α)
+  结论: {α β : 类型u} (r : α -> α -> 命题) [是良序 α r] (f : β -> α)
   证明: (not_bounded_iff _).1 fun ⟨x, hx⟩ =>
 h.not_gt lt_of_le_of_lt
       (Ordinal.iSup_le fun y => ((typein_lt_typein r).2 <| hx _ <| mem_range_self y).le)
@@ -976,7 +976,7 @@ theorem sSup_ord
 
 中文:
 定理 sSup_ord
-  条件: (s : Set Cardinal)
+  条件: (s : 集合 基数)
   结论: (sSup s).ord = sSup (ord '' s)
   证明: by
   obtain rfl | hn := s.eq_empty_or_nonempty
@@ -1008,7 +1008,7 @@ theorem iSup_ord
 
 中文:
 定理 iSup_ord
-  条件: {ι} (f : ι -> Cardinal)
+  条件: {ι} (f : ι -> 基数)
   结论: (⨆ i, f i).ord = ⨆ i, (f i).ord
   证明: by
   rw [iSup]; rw [iSup]; rw [sSup_ord]; rw [range_comp']
@@ -1032,7 +1032,7 @@ theorem lift_card_sInf_compl_le
 
 中文:
 定理 lift_card_sInf_compl_le
-  条件: (s : Set Ordinal.{u})
+  条件: (s : 集合 序数.{u})
   证明: by
   rw [← Cardinal.mk_Iio_ordinal]
   refine mk_le_mk_of_subset fun x (hx : x < _) => ?_
@@ -1062,7 +1062,7 @@ theorem card_sInf_range_compl_le_lift
 
 中文:
 定理 card_sInf_range_compl_le_lift
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
   证明: by
   rw [← Cardinal.lift_le.{max u v + 1}]; rw [Cardinal.lift_lift]
   apply (lift_card_sInf_compl_le _).trans
@@ -1088,7 +1088,7 @@ theorem card_sInf_range_compl_le
 
 中文:
 定理 card_sInf_range_compl_le
-  条件: {ι : 类型u} (f : ι -> Ordinal.{u})
+  条件: {ι : 类型u} (f : ι -> 序数.{u})
   证明: Cardinal.lift_id #ι ▸ card_sInf_range_compl_le_lift f
 
 Depends on / 依赖: Cardinal, Cardinal.lift_id, card_sInf_range_compl_le_lift, lift_id
@@ -1109,7 +1109,7 @@ theorem sInf_compl_lt_lift_ord_succ
 
 中文:
 定理 sInf_compl_lt_lift_ord_succ
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
   证明: by
   rw [lift_ord]; rw [Cardinal.lift_succ]; rw [← card_le_iff]
   exact card_sInf_range_compl_le_lift f
@@ -1131,7 +1131,7 @@ theorem sInf_compl_lt_ord_succ
 
 中文:
 定理 sInf_compl_lt_ord_succ
-  条件: {ι : 类型u} (f : ι -> Ordinal.{u})
+  条件: {ι : 类型u} (f : ι -> 序数.{u})
   证明: lift_id (succ #ι).ord ▸ sInf_compl_lt_lift_ord_succ f
 
 Depends on / 依赖: lift_id, sInf_compl_lt_lift_ord_succ
@@ -1154,7 +1154,7 @@ theorem bddAbove_add_one_image_iff
 
 中文:
 定理 bddAbove_add_one_image_iff
-  条件: {s : Set Ordinal}
+  条件: {s : 集合 序数}
   证明: by
   constructor <;> rintro ⟨a, ha⟩
   · exact ⟨a, fun b hb => (lt_add_one _).le.trans (ha (mem_image_of_mem _ hb))⟩
@@ -1181,7 +1181,7 @@ theorem bddAbove_range_add_one_iff
 
 中文:
 定理 bddAbove_range_add_one_iff
-  条件: {f : β -> Ordinal.{u}}
+  条件: {f : β -> 序数.{u}}
   证明: by
   rw [range_comp' (· + 1)]; rw [bddAbove_add_one_image_iff]
 
@@ -1208,7 +1208,7 @@ theorem sSup_le_sSup_add_one
 
 中文:
 定理 sSup_le_sSup_add_one
-  条件: (s : Set Ordinal)
+  条件: (s : 集合 序数)
   结论: sSup s <= sSup ((· + 1) '' s)
   证明: by
   by_cases hs : BddAbove s
@@ -1241,7 +1241,7 @@ theorem iSup_le_iSup_add_one
 
 中文:
 定理 iSup_le_iSup_add_one
-  条件: (f : β -> Ordinal)
+  条件: (f : β -> 序数)
   结论: ⨆ i, f i <= ⨆ i, f i + 1
   证明: by
   rw [iSup]; rw [iSup]; rw [range_comp' (· + 1)]
@@ -1272,7 +1272,7 @@ theorem iSup_add_one
 
 中文:
 定理 iSup_add_one
-  结论: {β : 类型} [LinearOrder β] [NoMaxOrder β]
+  结论: {β : 类型} [线性序 β] [NoMax序 β]
   证明: by
   apply (iSup_le_iSup_add_one f).antisymm'
   by_cases hf' : BddAbove (range f)
@@ -1311,7 +1311,7 @@ theorem iSup_Iio_add_one
 
 中文:
 定理 iSup_Iio_add_one
-  结论: {a : Ordinal.{u}} {f : Iio a -> Ordinal.{u}}
+  结论: {a : 序数.{u}} {f : 左无界右开区间 a -> 序数.{u}}
   证明: by
   have := ha.noMaxOrder_Iio
   exact iSup_add_one hf
@@ -1336,7 +1336,7 @@ theorem iSup_eq_iSup
 
 中文:
 定理 iSup_eq_iSup
-  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [IsWellOrder ι r]
+  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [是良序 ι r]
   证明: congrArg sSup (by simp_rw [range_familyOfBFamily'])
 
 Depends on / 依赖: range_familyOfBFamily, simp_rw
@@ -1362,7 +1362,7 @@ definition bsup
 
 中文:
 定义 bsup
-  签名: (o : Ordinal.{u}) (f : 对任意 a < o, Ordinal.{max u v})
+  签名: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
   定义体: iSup (familyOfBFamily o f)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1385,7 +1385,7 @@ theorem iSup_eq_bsup
 
 中文:
 定理 iSup_eq_bsup
-  条件: {o : Ordinal} (f : 对任意 a < o, Ordinal)
+  条件: {o : 序数} (f : 对任意 a < o, 序数)
   证明: rfl
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1407,7 +1407,7 @@ theorem iSup'_eq_bsup
 
 中文:
 定理 iSup'_eq_bsup
-  结论: {o : Ordinal} {ι} (r : ι -> ι -> 命题) [IsWellOrder ι r] (ho : type r = o)
+  结论: {o : 序数} {ι} (r : ι -> ι -> 命题) [是良序 ι r] (ho : type r = o)
   证明: iSup_eq_iSup r _ ho _ f
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1434,7 +1434,7 @@ theorem sSup_eq_bsup
 
 中文:
 定理 sSup_eq_bsup
-  条件: {o : Ordinal} (f : 对任意 a < o, Ordinal)
+  条件: {o : 序数} (f : 对任意 a < o, 序数)
   结论: sSup (brange o f) = bsup o f
   证明: by
   congr
@@ -1462,7 +1462,7 @@ theorem bsup'_eq_iSup
 
 中文:
 定理 bsup'_eq_iSup
-  条件: {ι} (r : ι -> ι -> 命题) [IsWellOrder ι r] (f : ι -> Ordinal)
+  条件: {ι} (r : ι -> ι -> 命题) [是良序 ι r] (f : ι -> 序数)
   证明: by
   simp +unfoldPartialApp only [← iSup'_eq_bsup r, enum_typein, familyOfBFamily', bfamilyOfFamily']
 
@@ -1488,7 +1488,7 @@ theorem bsup_eq_iSup
 
 中文:
 定理 bsup_eq_iSup
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   结论: bsup _ (bfamilyOfFamily f) = iSup f
   证明: bsup'_eq_iSup _ f
 
@@ -1513,7 +1513,7 @@ theorem bsup_eq_bsup
 
 中文:
 定理 bsup_eq_bsup
-  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [IsWellOrder ι r] [IsWellOrder ι r']
+  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [是良序 ι r] [是良序 ι r']
   证明: by
   rw [bsup'_eq_iSup]; rw [bsup'_eq_iSup]
 
@@ -1541,7 +1541,7 @@ theorem bsup_congr
 
 中文:
 定理 bsup_congr
-  条件: {o₁ o₂ : Ordinal.{u}} (f : 对任意 a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂)
+  条件: {o₁ o₂ : 序数.{u}} (f : 对任意 a < o₁, 序数.{最大值 u v}) (ho : o₁ = o₂)
   证明: by
   subst ho
   rfl
@@ -1600,7 +1600,7 @@ theorem bsup_le
 
 中文:
 定理 bsup_le
-  条件: {o : Ordinal} {f : 对任意 b < o, Ordinal} {a}
+  条件: {o : 序数} {f : 对任意 b < o, 序数} {a}
   证明: bsup_le_iff.2
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1625,7 +1625,7 @@ theorem le_bsup
 
 中文:
 定理 le_bsup
-  条件: {o} (f : 对任意 a < o, Ordinal) (i h)
+  条件: {o} (f : 对任意 a < o, 序数) (i h)
   结论: f i h <= bsup o f
   证明: bsup_le_iff.1 le_rfl _ _
 
@@ -1650,7 +1650,7 @@ theorem lt_bsup
 
 中文:
 定理 lt_bsup
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v}) {a}
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v}) {a}
   证明: by
   simpa only [not_forall, not_le] using not_congr (@bsup_le_iff.{_, v} _ f a)
 
@@ -1677,8 +1677,8 @@ theorem IsNormal.bsup
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
 
 中文:
-定理 IsNormal.bsup
-  条件: {f : Ordinal -> Ordinal} (H : IsNormal f) {o : Ordinal}
+定理 是正规.bsup
+  条件: {f : 序数 -> 序数} (H : 是正规 f) {o : 序数}
   证明: inductionOn o fun α r _ g h => by
     have := type_ne_zero_iff_nonempty.1 h
     rw [← iSup'_eq_bsup r]; rw [Order.IsNormal.map_iSup H bddAbove_of_small]; rw [← iSup'_eq_bsup r] <;>
@@ -1708,7 +1708,7 @@ theorem lt_bsup_of_ne_bsup
 
 中文:
 定理 lt_bsup_of_ne_bsup
-  条件: {o : Ordinal.{u}} {f : 对任意 a < o, Ordinal.{max u v}}
+  条件: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}}
   证明: ⟨fun hf _ _ => lt_of_le_of_ne (le_bsup _ _ _) (hf _ _), fun hf _ _ => ne_of_lt (hf _ _)⟩
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1734,7 +1734,7 @@ theorem bsup_not_succ_of_ne_bsup
 
 中文:
 定理 bsup_not_succ_of_ne_bsup
-  结论: {o : Ordinal.{u}} {f : 对任意 a < o, Ordinal.{max u v}}
+  结论: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}}
   证明: by
   rw [← iSup_eq_bsup] at *
   exact succ_lt_iSup_of_ne_iSup fun i => hf _
@@ -1768,7 +1768,7 @@ theorem bsup_eq_zero_iff
 
 中文:
 定理 bsup_eq_zero_iff
-  条件: {o} {f : 对任意 a < o, Ordinal}
+  条件: {o} {f : 对任意 a < o, 序数}
   结论: bsup o f = 0 ↔ 对任意 i hi, f i hi = 0
   证明: by
   refine
@@ -1801,7 +1801,7 @@ theorem lt_bsup_of_limit
 
 中文:
 定理 lt_bsup_of_limit
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal}
+  结论: {o : 序数} {f : 对任意 a < o, 序数}
   证明: (hf _ _ <| lt_succ i).trans_le (le_bsup f (succ i) <| ho _ h)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1826,7 +1826,7 @@ theorem bsup_succ_of_mono
 
 中文:
 定理 bsup_succ_of_mono
-  结论: {o : Ordinal} {f : 对任意 a < succ o, Ordinal}
+  结论: {o : 序数} {f : 对任意 a < succ o, 序数}
   证明: le_antisymm (bsup_le fun _i hi => hf _ _ <| le_of_lt_succ hi) (le_bsup _ _ _)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1851,7 +1851,7 @@ theorem bsup_zero
 
 中文:
 定理 bsup_zero
-  条件: (f : 对任意 a < (0 : Ordinal), Ordinal)
+  条件: (f : 对任意 a < (0 : 序数), 序数)
   结论: bsup 0 f = 0
   证明: bsup_eq_zero_iff.2 fun _i hi => (not_lt_zero hi).elim
 
@@ -1875,7 +1875,7 @@ theorem bsup_const
 
 中文:
 定理 bsup_const
-  条件: {o : Ordinal.{u}} (ho : o != 0) (a : Ordinal.{max u v})
+  条件: {o : 序数.{u}} (ho : o != 0) (a : 序数.{最大值 u v})
   证明: le_antisymm (bsup_le fun _ _ => le_rfl) (le_bsup _ 0 (pos_iff_ne_zero.2 ho))
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1901,7 +1901,7 @@ theorem bsup_one
 
 中文:
 定理 bsup_one
-  条件: (f : 对任意 a < (1 : Ordinal), Ordinal)
+  条件: (f : 对任意 a < (1 : 序数), 序数)
   结论: bsup 1 f = f 0 zero_lt_one
   证明: by
   simp_rw [← iSup_eq_bsup, ciSup_unique, familyOfBFamily, familyOfBFamily', typein_one_toType]
@@ -1929,7 +1929,7 @@ theorem bsup_le_of_brange_subset
 
 中文:
 定理 bsup_le_of_brange_subset
-  结论: {o o'} {f : 对任意 a < o, Ordinal} {g : 对任意 a < o', Ordinal}
+  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
   证明: bsup_le fun i hi => by
     obtain ⟨j, hj, hj'⟩ := h ⟨i, hi, rfl⟩
     rw [← hj']
@@ -1959,7 +1959,7 @@ theorem bsup_eq_of_brange_eq
 
 中文:
 定理 bsup_eq_of_brange_eq
-  结论: {o o'} {f : 对任意 a < o, Ordinal} {g : 对任意 a < o', Ordinal}
+  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
   证明: (bsup_le_of_brange_subset.{u, v, w} h.le).antisymm (bsup_le_of_brange_subset.{v, u, w} h.ge)
 
 @[deprecated "bsup is deprecated" (since := "2026-04-05")]
@@ -1983,8 +1983,8 @@ theorem iSup_Iio_eq_bsup
 
 中文:
 定理 iSup_Iio_eq_bsup
-  条件: {o} {f : 对任意 a < o, Ordinal}
-  结论: ⨆ a : Iio o, f a.1 a.2 = bsup o f
+  条件: {o} {f : 对任意 a < o, 序数}
+  结论: ⨆ a : 左无界右开区间 o, f a.1 a.2 = bsup o f
   证明: by
   simp_rw [Iio, bsup, iSup, range_familyOfBFamily, brange, range, Subtype.exists, mem_ofPred]
 
@@ -2011,7 +2011,7 @@ definition lsub
 
 中文:
 定义 lsub
-  签名: {ι : 类型u} (f : ι -> Ordinal.{max u v})
+  签名: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
   定义体: iSup (succ ∘ f)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2033,7 +2033,7 @@ theorem iSup_eq_lsub
 
 中文:
 定理 iSup_eq_lsub
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   结论: iSup (succ ∘ f) = lsub f
   证明: rfl
 
@@ -2056,7 +2056,7 @@ theorem lsub_le_iff
 
 中文:
 定理 lsub_le_iff
-  条件: {ι} {f : ι -> Ordinal} {a}
+  条件: {ι} {f : ι -> 序数} {a}
   结论: lsub f <= a ↔ 对任意 i, f i < a
   证明: Ordinal.iSup_add_one_le_iff
 
@@ -2081,7 +2081,7 @@ theorem lsub_le
 
 中文:
 定理 lsub_le
-  条件: {ι} {f : ι -> Ordinal} {a}
+  条件: {ι} {f : ι -> 序数} {a}
   结论: (对任意 i, f i < a) -> lsub f <= a
   证明: lsub_le_iff.2
 
@@ -2106,7 +2106,7 @@ theorem lt_lsub
 
 中文:
 定理 lt_lsub
-  条件: {ι} (f : ι -> Ordinal) (i)
+  条件: {ι} (f : ι -> 序数) (i)
   结论: f i < lsub f
   证明: Ordinal.lt_iSup_add_one f i
 
@@ -2132,7 +2132,7 @@ theorem lt_lsub_iff
 
 中文:
 定理 lt_lsub_iff
-  条件: {ι} {f : ι -> Ordinal} {a}
+  条件: {ι} {f : ι -> 序数} {a}
   结论: a < lsub f ↔ 存在 i, a <= f i
   证明: by
   simpa only [not_forall, not_lt, not_le] using not_congr lsub_le_iff
@@ -2158,7 +2158,7 @@ theorem iSup_le_lsub
 
 中文:
 定理 iSup_le_lsub
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   结论: iSup f <= lsub f
   证明: Ordinal.iSup_le fun i => (lt_lsub f i).le
 
@@ -2183,7 +2183,7 @@ theorem lsub_le_succ_iSup
 
 中文:
 定理 lsub_le_succ_iSup
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   结论: lsub f <= succ (iSup f)
   证明: lsub_le fun i => lt_succ_iff.2 (Ordinal.le_iSup f i)
 
@@ -2210,7 +2210,7 @@ theorem iSup_eq_lsub_or_succ_iSup_eq_lsub
 
 中文:
 定理 iSup_eq_lsub_or_succ_iSup_eq_lsub
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: by
   rcases eq_or_lt_of_le (iSup_le_lsub f) with h | h
   · exact Or.inl h
@@ -2246,7 +2246,7 @@ theorem succ_iSup_le_lsub_iff
 
 中文:
 定理 succ_iSup_le_lsub_iff
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · by_contra! hf
@@ -2283,7 +2283,7 @@ theorem succ_iSup_eq_lsub_iff
 
 中文:
 定理 succ_iSup_eq_lsub_iff
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: (lsub_le_succ_iSup f).ge_iff_eq'.symm.trans (succ_iSup_le_lsub_iff f)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2311,7 +2311,7 @@ theorem iSup_eq_lsub_iff
 
 中文:
 定理 iSup_eq_lsub_iff
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: by
   refine ⟨fun h => ?_, fun hf => le_antisymm (iSup_le_lsub f) (lsub_le fun i => ?_)⟩
   · rw [← h]
@@ -2352,7 +2352,7 @@ theorem iSup_eq_lsub_iff_lt_iSup
 
 中文:
 定理 iSup_eq_lsub_iff_lt_iSup
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: ⟨fun h i => by
     rw [h]
     apply lt_lsub, fun h => le_antisymm (iSup_le_lsub f) (lsub_le h)⟩
@@ -2383,7 +2383,7 @@ theorem lsub_empty
 
 中文:
 定理 lsub_empty
-  条件: {ι} [h : IsEmpty ι] (f : ι -> Ordinal)
+  条件: {ι} [h : 是空 ι] (f : ι -> 序数)
   结论: lsub f = 0
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [lsub_le_iff]
@@ -2411,7 +2411,7 @@ theorem lsub_pos
 
 中文:
 定理 lsub_pos
-  条件: {ι} [h : Nonempty ι] (f : ι -> Ordinal)
+  条件: {ι} [h : 非空 ι] (f : ι -> 序数)
   结论: 0 < lsub f
   证明: h.elim fun i => (lt_lsub f i).pos
 
@@ -2439,7 +2439,7 @@ theorem lsub_eq_zero_iff
 
 中文:
 定理 lsub_eq_zero_iff
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: by
   refine ⟨fun h => ⟨fun i => ?_⟩, fun h => @lsub_empty _ h _⟩
   have := @lsub_pos.{_, v} _ ⟨i⟩ f
@@ -2471,7 +2471,7 @@ theorem lsub_const
 
 中文:
 定理 lsub_const
-  条件: {ι} [Nonempty ι] (o : Ordinal)
+  条件: {ι} [非空 ι] (o : 序数)
   结论: (lsub fun _ : ι => o) = succ o
   证明: ciSup_const
 
@@ -2496,7 +2496,7 @@ theorem lsub_unique
 
 中文:
 定理 lsub_unique
-  条件: {ι} [Unique ι] (f : ι -> Ordinal)
+  条件: {ι} [唯一 ι] (f : ι -> 序数)
   结论: lsub f = succ (f default)
   证明: ciSup_unique
 
@@ -2520,7 +2520,7 @@ theorem lsub_le_of_range_subset
 
 中文:
 定理 lsub_le_of_range_subset
-  结论: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
+  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
   证明: csSup_le_csSup' bddAbove_of_small (by convert! Set.image_mono h <;> apply Set.range_comp)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2544,7 +2544,7 @@ theorem lsub_eq_of_range_eq
 
 中文:
 定理 lsub_eq_of_range_eq
-  结论: {ι ι'} {f : ι -> Ordinal} {g : ι' -> Ordinal}
+  结论: {ι ι'} {f : ι -> 序数} {g : ι' -> 序数}
   证明: (lsub_le_of_range_subset.{u, v, w} h.le).antisymm (lsub_le_of_range_subset.{v, u, w} h.ge)
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2568,7 +2568,7 @@ theorem lsub_sum
 
 中文:
 定理 lsub_sum
-  条件: {α : 类型u} {β : 类型v} (f : α oplus β -> Ordinal)
+  条件: {α : 类型u} {β : 类型v} (f : α oplus β -> 序数)
   证明: iSup_sum _
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2594,7 +2594,7 @@ theorem lsub_notMem_range
 
 中文:
 定理 lsub_notMem_range
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: fun ⟨i, h⟩ =>
   h.not_lt (lt_lsub f i)
 
@@ -2618,8 +2618,8 @@ theorem nonempty_compl_range
 
 中文:
 定理 nonempty_compl_range
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
-  结论: (Set.range f)ᶜ.Nonempty
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
+  结论: (集合.range f)ᶜ.非空
   证明: ⟨_, lsub_notMem_range f⟩
 
 @[deprecated "lsub is deprecated" (since := "2026-03-27")]
@@ -2647,7 +2647,7 @@ theorem lsub_typein
 
 中文:
 定理 lsub_typein
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: lsub.{u, u} (typein (α := o.ToType) (· < ·)) = o
   证明: (lsub_le.{u, u} typein_lt_self).antisymm
     (by
@@ -2682,7 +2682,7 @@ theorem iSup_typein_limit
 
 中文:
 定理 iSup_typein_limit
-  条件: {o : Ordinal.{u}} (ho : 对任意 a, a < o -> succ a < o)
+  条件: {o : 序数.{u}} (ho : 对任意 a, a < o -> succ a < o)
   证明: by
   replace ho : IsSuccPrelimit o := by rwa [isSuccPrelimit_iff_succ_lt]
   rw [iSup]; rw [PrincipalSeg.range_eq]
@@ -2712,7 +2712,7 @@ theorem iSup_typein_succ
 
 中文:
 定理 iSup_typein_succ
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   证明: by
   rw [← csSup_Iic (a := o)]; rw [iSup]; rw [PrincipalSeg.range_eq]
   congr
@@ -2745,7 +2745,7 @@ definition blsub
 
 中文:
 定义 blsub
-  签名: (o : Ordinal.{u}) (f : 对任意 a < o, Ordinal.{max u v})
+  签名: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
   定义体: bsup.{_, v} o fun a ha => succ (f a ha)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2766,7 +2766,7 @@ theorem bsup_eq_blsub
 
 中文:
 定理 bsup_eq_blsub
-  条件: (o : Ordinal.{u}) (f : 对任意 a < o, Ordinal.{max u v})
+  条件: (o : 序数.{u}) (f : 对任意 a < o, 序数.{最大值 u v})
   证明: rfl
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2788,7 +2788,7 @@ theorem lsub_eq_blsub'
 
 中文:
 定理 lsub_eq_blsub'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r] {o} (ho : type r = o)
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r] {o} (ho : type r = o)
   证明: iSup'_eq_bsup r ho fun a ha => succ (f a ha)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2813,7 +2813,7 @@ theorem lsub_eq_lsub
 
 中文:
 定理 lsub_eq_lsub
-  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [IsWellOrder ι r]
+  结论: {ι ι' : 类型u} (r : ι -> ι -> 命题) (r' : ι' -> ι' -> 命题) [是良序 ι r]
   证明: by
   rw [lsub_eq_blsub']; rw [lsub_eq_blsub']
 
@@ -2840,7 +2840,7 @@ theorem lsub_eq_blsub
 
 中文:
 定理 lsub_eq_blsub
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: lsub_eq_blsub' _ _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2864,7 +2864,7 @@ theorem blsub_eq_lsub'
 
 中文:
 定理 blsub_eq_lsub'
-  结论: {ι : 类型u} (r : ι -> ι -> 命题) [IsWellOrder ι r]
+  结论: {ι : 类型u} (r : ι -> ι -> 命题) [是良序 ι r]
   证明: bsup'_eq_iSup r (succ ∘ f)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2889,7 +2889,7 @@ theorem blsub_eq_blsub
 
 中文:
 定理 blsub_eq_blsub
-  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [IsWellOrder ι r] [IsWellOrder ι r']
+  结论: {ι : 类型u} (r r' : ι -> ι -> 命题) [是良序 ι r] [是良序 ι r']
   证明: by
   rw [blsub_eq_lsub']; rw [blsub_eq_lsub']
 
@@ -2915,7 +2915,7 @@ theorem blsub_eq_lsub
 
 中文:
 定理 blsub_eq_lsub
-  条件: {ι : 类型u} (f : ι -> Ordinal.{max u v})
+  条件: {ι : 类型u} (f : ι -> 序数.{最大值 u v})
   证明: blsub_eq_lsub' _ _
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -2941,7 +2941,7 @@ theorem blsub_congr
 
 中文:
 定理 blsub_congr
-  条件: {o₁ o₂ : Ordinal.{u}} (f : 对任意 a < o₁, Ordinal.{max u v}) (ho : o₁ = o₂)
+  条件: {o₁ o₂ : 序数.{u}} (f : 对任意 a < o₁, 序数.{最大值 u v}) (ho : o₁ = o₂)
   证明: by
   subst ho
   rfl
@@ -2968,7 +2968,7 @@ theorem blsub_le_iff
 
 中文:
 定理 blsub_le_iff
-  条件: {o : Ordinal.{u}} {f : 对任意 a < o, Ordinal.{max u v}} {a}
+  条件: {o : 序数.{u}} {f : 对任意 a < o, 序数.{最大值 u v}} {a}
   证明: by
   convert! bsup_le_iff.{_, v} (f := fun a ha => succ (f a ha)) (a := a) using 2
   simp_rw [succ_le_iff]
@@ -2996,7 +2996,7 @@ theorem blsub_le
 
 中文:
 定理 blsub_le
-  条件: {o : Ordinal} {f : 对任意 b < o, Ordinal} {a}
+  条件: {o : 序数} {f : 对任意 b < o, 序数} {a}
   结论: (对任意 i h, f i h < a) -> blsub o f <= a
   证明: blsub_le_iff.2
 
@@ -3021,7 +3021,7 @@ theorem lt_blsub
 
 中文:
 定理 lt_blsub
-  条件: {o} (f : 对任意 a < o, Ordinal) (i h)
+  条件: {o} (f : 对任意 a < o, 序数) (i h)
   结论: f i h < blsub o f
   证明: blsub_le_iff.1 le_rfl _ _
 
@@ -3046,7 +3046,7 @@ theorem lt_blsub_iff
 
 中文:
 定理 lt_blsub_iff
-  条件: {o : Ordinal.{u}} {f : 对任意 b < o, Ordinal.{max u v}} {a}
+  条件: {o : 序数.{u}} {f : 对任意 b < o, 序数.{最大值 u v}} {a}
   证明: by
   simpa only [not_forall, not_lt, not_le] using not_congr (@blsub_le_iff.{_, v} _ f a)
 
@@ -3071,7 +3071,7 @@ theorem bsup_le_blsub
 
 中文:
 定理 bsup_le_blsub
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: bsup_le fun i h => (lt_blsub f i h).le
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3095,7 +3095,7 @@ theorem blsub_le_bsup_succ
 
 中文:
 定理 blsub_le_bsup_succ
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: blsub_le fun i h => lt_succ_iff.2 (le_bsup f i h)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3121,7 +3121,7 @@ theorem bsup_eq_blsub_or_succ_bsup_eq_blsub
 
 中文:
 定理 bsup_eq_blsub_or_succ_bsup_eq_blsub
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: by
   rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
   exact iSup_eq_lsub_or_succ_iSup_eq_lsub _
@@ -3156,7 +3156,7 @@ theorem bsup_succ_le_blsub
 
 中文:
 定理 bsup_succ_le_blsub
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · by_contra! hf
@@ -3195,7 +3195,7 @@ theorem bsup_succ_eq_blsub
 
 中文:
 定理 bsup_succ_eq_blsub
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: (blsub_le_bsup_succ f).ge_iff_eq'.symm.trans (bsup_succ_le_blsub f)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3221,7 +3221,7 @@ theorem bsup_eq_blsub_iff_succ
 
 中文:
 定理 bsup_eq_blsub_iff_succ
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: by
   rw [← iSup_eq_bsup]; rw [← lsub_eq_blsub]
   apply iSup_eq_lsub_iff
@@ -3250,7 +3250,7 @@ theorem bsup_eq_blsub_iff_lt_bsup
 
 中文:
 定理 bsup_eq_blsub_iff_lt_bsup
-  条件: {o : Ordinal.{u}} (f : 对任意 a < o, Ordinal.{max u v})
+  条件: {o : 序数.{u}} (f : 对任意 a < o, 序数.{最大值 u v})
   证明: ⟨fun h i => by
     rw [h]
     apply lt_blsub, fun h => le_antisymm (bsup_le_blsub f) (blsub_le h)⟩
@@ -3280,7 +3280,7 @@ theorem bsup_eq_blsub_of_lt_succ_limit
 
 中文:
 定理 bsup_eq_blsub_of_lt_succ_limit
-  结论: {o : Ordinal.{u}} (ho : IsSuccLimit o)
+  结论: {o : 序数.{u}} (ho : 是SuccLimit o)
   证明: by
   rw [bsup_eq_blsub_iff_lt_bsup]
   exact fun i hi => (hf i hi).trans_le (le_bsup f _ _)
@@ -3308,7 +3308,7 @@ theorem blsub_succ_of_mono
 
 中文:
 定理 blsub_succ_of_mono
-  结论: {o : Ordinal.{u}} {f : 对任意 a < succ o, Ordinal.{max u v}}
+  结论: {o : 序数.{u}} {f : 对任意 a < succ o, 序数.{最大值 u v}}
   证明: bsup_succ_of_mono fun {_ _} hi hj h => succ_le_succ (hf hi hj h)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3335,7 +3335,7 @@ theorem blsub_eq_zero_iff
 
 中文:
 定理 blsub_eq_zero_iff
-  条件: {o} {f : 对任意 a < o, Ordinal}
+  条件: {o} {f : 对任意 a < o, 序数}
   结论: blsub o f = 0 ↔ o = 0
   证明: by
   rw [← lsub_eq_blsub]; rw [lsub_eq_zero_iff]
@@ -3363,7 +3363,7 @@ theorem blsub_zero
 
 中文:
 定理 blsub_zero
-  条件: (f : 对任意 a < (0 : Ordinal), Ordinal)
+  条件: (f : 对任意 a < (0 : 序数), 序数)
   结论: blsub 0 f = 0
   证明: by rw [blsub_eq_zero_iff]
 
@@ -3387,7 +3387,7 @@ theorem blsub_pos
 
 中文:
 定理 blsub_pos
-  条件: {o : Ordinal} (ho : 0 < o) (f : 对任意 a < o, Ordinal)
+  条件: {o : 序数} (ho : 0 < o) (f : 对任意 a < o, 序数)
   结论: 0 < blsub o f
   证明: (lt_blsub f 0 ho).pos
 
@@ -3413,7 +3413,7 @@ theorem blsub_type
 
 中文:
 定理 blsub_type
-  结论: {α : 类型u} (r : α -> α -> 命题) [IsWellOrder α r]
+  结论: {α : 类型u} (r : α -> α -> 命题) [是良序 α r]
   证明: eq_of_forall_ge_iff fun o => by
     rw [blsub_le_iff]; rw [lsub_le_iff]
     exact ⟨fun H b => H _ _, fun H i h => by simpa only [typein_enum] using H (enum r ⟨i, h⟩)⟩
@@ -3442,7 +3442,7 @@ theorem blsub_const
 
 中文:
 定理 blsub_const
-  条件: {o : Ordinal} (ho : o != 0) (a : Ordinal)
+  条件: {o : 序数} (ho : o != 0) (a : 序数)
   证明: bsup_const.{u, v} ho (succ a)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3467,7 +3467,7 @@ theorem blsub_one
 
 中文:
 定理 blsub_one
-  条件: (f : 对任意 a < (1 : Ordinal), Ordinal)
+  条件: (f : 对任意 a < (1 : 序数), 序数)
   结论: blsub 1 f = succ (f 0 zero_lt_one)
   证明: bsup_one _
 
@@ -3515,7 +3515,7 @@ theorem bsup_id_limit
 
 中文:
 定理 bsup_id_limit
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: (对任意 a < o, succ a < o) -> (bsup.{u, u} o fun x _ => x) = o
   证明: iSup_typein_limit
 
@@ -3592,7 +3592,7 @@ theorem blsub_le_of_brange_subset
 
 中文:
 定理 blsub_le_of_brange_subset
-  结论: {o o'} {f : 对任意 a < o, Ordinal} {g : 对任意 a < o', Ordinal}
+  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
   证明: bsup_le_of_brange_subset.{u, v, w} fun a ⟨b, hb, hb'⟩ => by
     obtain ⟨c, hc, hc'⟩ := h ⟨b, hb, rfl⟩
     simp_rw [← hc'] at hb'
@@ -3622,7 +3622,7 @@ theorem blsub_eq_of_brange_eq
 
 中文:
 定理 blsub_eq_of_brange_eq
-  结论: {o o'} {f : 对任意 a < o, Ordinal} {g : 对任意 a < o', Ordinal}
+  结论: {o o'} {f : 对任意 a < o, 序数} {g : 对任意 a < o', 序数}
   证明: (blsub_le_of_brange_subset.{u, v, w} h.le).antisymm (blsub_le_of_brange_subset.{v, u, w} h.ge)
 
 @[deprecated "blsub is deprecated" (since := "2026-03-23")]
@@ -3652,7 +3652,7 @@ theorem bsup_comp
 
 中文:
 定理 bsup_comp
-  结论: {o o' : Ordinal.{max u v}} {f : 对任意 a < o, Ordinal.{max u v w}}
+  结论: {o o' : 序数.{最大值 u v}} {f : 对任意 a < o, 序数.{最大值 u v w}}
   证明: by
   apply le_antisymm <;> refine bsup_le fun i hi => ?_
   · apply le_bsup
@@ -3688,7 +3688,7 @@ theorem blsub_comp
 
 中文:
 定理 blsub_comp
-  结论: {o o' : Ordinal.{max u v}} {f : 对任意 a < o, Ordinal.{max u v w}}
+  结论: {o o' : 序数.{最大值 u v}} {f : 对任意 a < o, 序数.{最大值 u v w}}
   证明: @bsup_comp.{u, v, w} o _ (fun a ha => succ (f a ha))
     (fun {_ _} _ _ h => succ_le_succ_iff.2 (hf _ _ h)) g hg
 
@@ -3716,8 +3716,8 @@ theorem IsNormal.bsup_eq
 @[deprecated IsNormal.apply_of_isSuccLimit (since := "2026-03-23")]
 
 中文:
-定理 IsNormal.bsup_eq
-  结论: {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
+定理 是正规.bsup_eq
+  结论: {f : 序数.{u} -> 序数.{最大值 u v}} (H : 是正规 f) {o : 序数.{u}}
   证明: by
   rw [← IsNormal.bsup.{u]; rw [u]; rw [v} H (fun x _ => x) h.ne_bot]; rw [bsup_id_limit fun _ => h.succ_lt]
 
@@ -3743,8 +3743,8 @@ theorem IsNormal.blsub_eq
 @[deprecated isNormal_iff (since := "2026-03-23")]
 
 中文:
-定理 IsNormal.blsub_eq
-  结论: {f : Ordinal.{u} -> Ordinal.{max u v}} (H : IsNormal f) {o : Ordinal.{u}}
+定理 是正规.blsub_eq
+  结论: {f : 序数.{u} -> 序数.{最大值 u v}} (H : 是正规 f) {o : 序数.{u}}
   证明: by
   rw [← IsNormal.bsup_eq.{u]; rw [v} H h]; rw [bsup_eq_blsub_of_lt_succ_limit h]
   exact fun a _ => H.strictMono (lt_succ a)
@@ -3774,7 +3774,7 @@ theorem isNormal_iff_lt_succ_and_bsup_eq
 
 中文:
 定理 isNormal_iff_lt_succ_and_bsup_eq
-  条件: {f : Ordinal.{u} -> Ordinal.{max u v}}
+  条件: {f : 序数.{u} -> 序数.{最大值 u v}}
   证明: ⟨fun h => ⟨fun a => h.strictMono (lt_succ a), @IsNormal.bsup_eq f h⟩, fun ⟨h₁, h₂⟩ =>
     .of_succ_lt h₁ fun ho => by
       rw [← h₂ _ ho]
@@ -3807,7 +3807,7 @@ theorem isNormal_iff_lt_succ_and_blsub_eq
 
 中文:
 定理 isNormal_iff_lt_succ_and_blsub_eq
-  条件: {f : Ordinal.{u} -> Ordinal.{max u v}}
+  条件: {f : 序数.{u} -> 序数.{最大值 u v}}
   证明: by
   rw [isNormal_iff_lt_succ_and_bsup_eq.{u]; rw [v}]; rw [and_congr_right_iff]
   intro h
@@ -3845,7 +3845,7 @@ theorem not_surjective_of_ordinal
 
 中文:
 定理 not_surjective_of_ordinal
-  条件: {α : 类型} [Small.{u} α] (f : α -> Ordinal.{u})
+  条件: {α : 类型} [Small.{u} α] (f : α -> 序数.{u})
   证明: by
   intro h
   obtain ⟨a, ha⟩ := h (⨆ i, succ (f i))
@@ -3873,7 +3873,7 @@ theorem not_injective_of_ordinal
 
 中文:
 定理 not_injective_of_ordinal
-  条件: {α : 类型} [Small.{u} α] (f : Ordinal.{u} -> α)
+  条件: {α : 类型} [Small.{u} α] (f : 序数.{u} -> α)
   证明: fun h => not_surjective_of_ordinal _ (invFun_surjective h)
 
 Depends on / 依赖: invFun_surjective, not_surjective_of_ordinal
@@ -3892,7 +3892,7 @@ theorem not_small_ordinal
 
 中文:
 定理 not_small_ordinal
-  结论: ¬Small.{u} Ordinal.{max u v}
+  结论: ¬Small.{u} 序数.{最大值 u v}
   证明: fun h =>
   @not_injective_of_ordinal _ h _ fun _a _b => Ordinal.lift_inj.{v, u}.1
 -/
@@ -3908,8 +3908,8 @@ instance Ordinal.uncountable
   body: Uncountable.of_not_small not_small_ordinal.{u}
 
 中文:
-实例 Ordinal.uncountable
-  签名: : Uncountable Ordinal.{u}
+实例 序数.uncountable
+  签名: : 不可数 序数.{u}
   定义体: Uncountable.of_not_small not_small_ordinal.{u}
 
 Depends on / 依赖: Uncountable, Uncountable.of_not_small, not_small_ordinal, of_not_small
@@ -3931,8 +3931,8 @@ theorem Ordinal.not_bddAbove_compl_of_small
   exact not_small_ordinal this
 
 中文:
-定理 Ordinal.not_bddAbove_compl_of_small
-  条件: (s : Set Ordinal.{u}) [hs : Small.{u} s]
+定理 序数.not_bddAbove_compl_of_small
+  条件: (s : 集合 序数.{u}) [hs : Small.{u} s]
   证明: by
   rw [bddAbove_iff_small]
   intro h
@@ -3986,7 +3986,7 @@ theorem apply_omega0_of_isNormal
 
 中文:
 定理 apply_omega0_of_isNormal
-  条件: {f : Ordinal.{u} -> Ordinal.{v}} (hf : IsNormal f)
+  条件: {f : 序数.{u} -> 序数.{v}} (hf : 是正规 f)
   证明: by
   rw [← iSup_natCast]; rw [hf.map_iSup bddAbove_of_small]
 
@@ -4011,7 +4011,7 @@ theorem add_iSup
 
 中文:
 定理 add_iSup
-  条件: (o : Ordinal.{u}) {ι} [Small.{u} ι] [Nonempty ι] (f : ι -> Ordinal)
+  条件: (o : 序数.{u}) {ι} [Small.{u} ι] [非空 ι] (f : ι -> 序数)
   证明: (isNormal_add_right o).map_iSup bddAbove_of_small
 
 @[simp]
@@ -4035,7 +4035,7 @@ theorem add_sSup
 
 中文:
 定理 add_sSup
-  条件: (o : Ordinal.{u}) {s : Set Ordinal} [Small.{u} s] (hs : s.Nonempty)
+  条件: (o : 序数.{u}) {s : 集合 序数} [Small.{u} s] (hs : s.非空)
   证明: (isNormal_add_right o).map_sSup hs bddAbove_of_small
 
 @[simp]
@@ -4067,7 +4067,7 @@ lemma mul_sSup
 
 中文:
 引理 mul_sSup
-  条件: (o : Ordinal) (s : Set Ordinal)
+  条件: (o : 序数) (s : 集合 序数)
   结论: o * sSup s = sSup ((o * ·) '' s)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hs)
@@ -4108,7 +4108,7 @@ lemma mul_iSup
 
 中文:
 引理 mul_iSup
-  条件: (o : Ordinal) {ι} (f : ι -> Ordinal)
+  条件: (o : 序数) {ι} (f : ι -> 序数)
   结论: o * ⨆ i, f i = ⨆ i, o * f i
   证明: by
   rw [← sSup_range]; rw [mul_sSup]; rw [← Set.range_comp']; rw [sSup_range]
@@ -4135,7 +4135,7 @@ theorem iSup_add_natCast
 
 中文:
 定理 iSup_add_natCast
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ⨆ n : 自然数, o + n = o + ω
   证明: by
   rw [← iSup_natCast]; rw [Ordinal.add_iSup]
@@ -4160,7 +4160,7 @@ theorem iSup_mul_natCast
 
 中文:
 定理 iSup_mul_natCast
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ⨆ n : 自然数, o * n = o * ω
   证明: by
   rw [← iSup_natCast]; rw [Ordinal.mul_iSup]

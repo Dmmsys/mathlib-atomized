@@ -193,7 +193,7 @@ definition fiberEquivQuotient
 
 中文:
 定义 fiberEquivQuotient
-  签名: (f : R[X] ->ₐ[R] S) (hf : Function.Surjective f) (p : Ideal R) [p.IsPrime]
+  签名: (f : R[X] ->ₐ[R] S) (hf : 函数.满射 f) (p : 理想 R) [p.是素]
   定义体: by
   refine .ofAlgHom (Algebra.TensorProduct.lift (Algebra.ofId _ _) (AlgHom.liftOfSurjective _ hf
     ((Ideal.Quotient.mkₐ _ _).comp (mapAlgHom (Algebra.ofId _ _))) ?_) fun _ _ => .all _ _)
@@ -257,7 +257,7 @@ theorem _root_.Ideal.exists_mem_span_singleton_map_residueField_eq
   have : p in (I.map (mapRingHom (algebraMap 
 
 中文:
-定理 _root_.Ideal.exists_mem_span_singleton_map_residueField_eq
+定理 _root_.理想.存在_mem_span_singleton_map_residueField_eq
   证明: by
   obtain ⟨p, hp : _ = Ideal.span _⟩ := (inferInstance :
     (I.map (mapRingHom (algebraMap R P.ResidueField))).IsPrincipal)

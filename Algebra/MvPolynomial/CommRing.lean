@@ -69,7 +69,7 @@ theorem C_sub
 
 中文:
 定理 C_sub
-  结论: (C (a - a') : MvPolynomial σ R) = C a - C a'
+  结论: (C (a - a') : 多元多项式 σ R) = C a - C a'
   证明: map_sub _ _ _
 
 @[simp]
@@ -92,7 +92,7 @@ theorem C_neg
 
 中文:
 定理 C_neg
-  结论: (C (-a) : MvPolynomial σ R) = -C a
+  结论: (C (-a) : 多元多项式 σ R) = -C a
   证明: map_neg _ _
 
 @[simp]
@@ -116,7 +116,7 @@ theorem coeff_neg
 
 中文:
 定理 coeff_neg
-  条件: (m : σ ->₀ 自然数) (p : MvPolynomial σ R)
+  条件: (m : σ ->₀ 自然数) (p : 多元多项式 σ R)
   结论: coeff m (-p) = -coeff m p
   证明: Finsupp.neg_apply _ _
 
@@ -139,7 +139,7 @@ theorem coeff_sub
 
 中文:
 定理 coeff_sub
-  条件: (m : σ ->₀ 自然数) (p q : MvPolynomial σ R)
+  条件: (m : σ ->₀ 自然数) (p q : 多元多项式 σ R)
   结论: coeff m (p - q) = coeff m p - coeff m q
   证明: Finsupp.sub_apply _ _ _
 
@@ -173,7 +173,7 @@ theorem support_sub
 
 中文:
 定理 support_sub
-  条件: [DecidableEq σ] (p q : MvPolynomial σ R)
+  条件: [DecidableEq σ] (p q : 多元多项式 σ R)
   证明: Finsupp.support_sub
 
 Depends on / 依赖: Finsupp, Finsupp.support_sub, support_sub
@@ -273,7 +273,7 @@ theorem degrees_neg
 
 中文:
 定理 degrees_neg
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: (-p).degrees = p.degrees
   证明: by
   rw [degrees]; rw [support_neg]; rfl
@@ -295,7 +295,7 @@ theorem degrees_sub_le
 
 中文:
 定理 degrees_sub_le
-  条件: [DecidableEq σ] {p q : MvPolynomial σ R}
+  条件: [DecidableEq σ] {p q : 多元多项式 σ R}
   证明: by
   simpa [degrees_def] using! AddMonoidAlgebra.supDegree_sub_le
 
@@ -322,7 +322,7 @@ theorem degreeOf_neg
 
 中文:
 定理 degreeOf_neg
-  条件: (i : σ) (p : MvPolynomial σ R)
+  条件: (i : σ) (p : 多元多项式 σ R)
   结论: degreeOf i (-p) = degreeOf i p
   证明: by
   rw [degreeOf]; rw [degreeOf]; rw [degrees_neg]
@@ -343,7 +343,7 @@ theorem degreeOf_sub_le
 
 中文:
 定理 degreeOf_sub_le
-  条件: (i : σ) (p q : MvPolynomial σ R)
+  条件: (i : σ) (p q : 多元多项式 σ R)
   证明: by
   simpa only [sub_eq_add_neg, degreeOf_neg] using degreeOf_add_le i p (-q)
 
@@ -522,7 +522,7 @@ theorem hom_C
 
 中文:
 定理 hom_C
-  条件: (f : MvPolynomial σ 整数 ->+* S) (n : 整数)
+  条件: (f : 多元多项式 σ 整数 ->+* S) (n : 整数)
   结论: f (C n) = (n : S)
   证明: eq_intCast (f.comp C) n
 
@@ -554,7 +554,7 @@ theorem eval₂Hom_X
 
 中文:
 定理 eval₂Hom_X
-  条件: {R : 类型u} (c : 整数 ->+* S) (f : MvPolynomial R 整数 ->+* S) (x : MvPolynomial R 整数)
+  条件: {R : 类型u} (c : 整数 ->+* S) (f : 多元多项式 R 整数 ->+* S) (x : 多元多项式 R 整数)
   证明: by
   apply MvPolynomial.induction_on x
     (fun n => by
@@ -595,7 +595,7 @@ left_inv _ := RingHom.ext eval₂Hom_X _ _
 
 中文:
 定义 homEquiv
-  签名: : (MvPolynomial σ 整数 ->+* S) ≃ (σ -> S) where
+  签名: : (多元多项式 σ 整数 ->+* S) ≃ (σ -> S) where
   定义体: f ∘ X
   invFun f := eval₂Hom (Int.castRingHom S) f
 left_inv _ := RingHom.ext eval₂Hom_X _ _
@@ -623,7 +623,7 @@ theorem degreeOf_sub_lt
 
 中文:
 定理 degreeOf_sub_lt
-  结论: {x : σ} {f g : MvPolynomial σ R} {k : 自然数} (h : 0 < k)
+  结论: {x : σ} {f g : 多元多项式 σ R} {k : 自然数} (h : 0 < k)
   证明: by
   rw [degreeOf_lt_iff h]
   grind [degreeOf_lt_iff]
@@ -654,7 +654,7 @@ theorem totalDegree_neg
 
 中文:
 定理 totalDegree_neg
-  条件: (a : MvPolynomial σ R)
+  条件: (a : 多元多项式 σ R)
   结论: (-a).totalDegree = a.totalDegree
   证明: by
   simp only [totalDegree, support_neg]
@@ -677,7 +677,7 @@ theorem totalDegree_sub
 
 中文:
 定理 totalDegree_sub
-  条件: (a b : MvPolynomial σ R)
+  条件: (a b : 多元多项式 σ R)
   证明: calc
     (a - b).totalDegree = (a + -b).totalDegree := by rw [sub_eq_add_neg]
     _ <= max a.totalDegree (-b).totalDegree := totalDegree_add a (-b)
@@ -702,7 +702,7 @@ theorem totalDegree_sub_C_le
 
 中文:
 定理 totalDegree_sub_C_le
-  条件: (p : MvPolynomial σ R) (r : R)
+  条件: (p : 多元多项式 σ R) (r : R)
   证明: (totalDegree_sub _ _).trans_eq by rw [totalDegree_C, Nat.max_zero]
 
 Depends on / 依赖: Nat.max_zero, max_zero, totalDegree_C, totalDegree_sub, trans_eq

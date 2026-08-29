@@ -50,7 +50,7 @@ theorem finiteSubcoproductsCocone_ι_app_eq_sum
 
 中文:
 定理 finiteSubcoproductsCocone_ι_app_eq_sum
-  结论: {α : Type w} [DecidableEq α] (f : α -> C)
+  结论: {α : 类型 w} [DecidableEq α] (f : α -> C)
   证明: by
   dsimp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
     Functor.const_obj_obj, finiteSubcoproductsCocone_ι_app]
@@ -100,7 +100,7 @@ theorem finiteSubproductsCocone_π_app_eq_sum
 
 中文:
 定理 finiteSubproductsCocone_π_app_eq_sum
-  结论: {α : Type w} [DecidableEq α] (f : α -> C) [HasProduct f]
+  结论: {α : 类型 w} [DecidableEq α] (f : α -> C) [HasProduct f]
   证明: by
   dsimp only [finiteSubproductsCone_pt, Functor.const_obj_obj, liftToFinsetObj_obj,
     Discrete.functor_obj_eq_as, finiteSubproductsCone_π_app]

@@ -38,7 +38,7 @@ definition kaplanskySet
 
 中文:
 定义 kaplanskySet
-  签名: [Semiring R] (S : Subsemigroup R)
+  签名: [半环 R] (S : 子半群 R)
   定义体: {I : Ideal R | Disjoint (I : Set R) S}
 
 Depends on / 依赖: Disjoint
@@ -59,7 +59,7 @@ theorem mem_kaplanskySet_iff
 
 中文:
 定理 mem_kaplanskySet_iff
-  结论: P in kaplanskySet S ↔ (P : Set R) inter S = ∅
+  结论: P in kaplanskySet S ↔ (P : 集合 R) inter S = ∅
   证明: disjoint_iff_inter_eq_empty
 
 Depends on / 依赖: disjoint_iff_inter_eq_empty
@@ -82,8 +82,8 @@ theorem exists_mem_kaplanskySet_le
     rcases (Submodule.mem_sSup_of_directed ⟨_
 
 中文:
-定理 exists_mem_kaplanskySet_le
-  结论: {C : Set (Ideal R)} (hS : 0 ∉ S) (hC : C subseteq kaplanskySet S)
+定理 存在_mem_kaplanskySet_le
+  结论: {C : 集合 (理想 R)} (hS : 0 ∉ S) (hC : C subseteq kaplanskySet S)
   证明: by
   rcases C.eq_empty_or_nonempty with rfl | ⟨_, hI⟩
   · exact ⟨⊥, by simpa [mem_kaplanskySet_iff, eq_empty_iff_forall_notMem]⟩
@@ -116,7 +116,7 @@ theorem exists_mem_kaplanskySet_eq_of_le
   exact ⟨P, hP.1, fun _ hI H => le_antisymm (hP.2 hI H) H⟩
 
 中文:
-定理 exists_mem_kaplanskySet_eq_of_le
+定理 存在_mem_kaplanskySet_eq_of_le
   条件: (hS : 0 ∉ S)
   证明: by
   obtain ⟨P, hP⟩ := zorn_le₀ (kaplanskySet S) (fun _ => exists_mem_kaplanskySet_le hS)
@@ -191,7 +191,7 @@ theorem of_exists_prime_mem_of_isPrime
   have hsu
 
 中文:
-定理 of_exists_prime_mem_of_isPrime
+定理 of_存在_prime_mem_of_isPrime
   证明: by
   refine UniqueFactorizationMonoid.of_exists_prime_factors fun a ha => ?_
   have ha₂ := span_notMem_kaplanskySet ha H

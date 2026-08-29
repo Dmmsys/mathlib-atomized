@@ -105,7 +105,7 @@ theorem expand_eq_sum
 中文:
 定理 expand_eq_sum
   条件: {f : R[X]}
-  结论: expand R p f = f.sum fun e a => C a * (X ^ p) ^ e
+  结论: expand R p f = f.求和 fun e a => C a * (X ^ p) ^ e
   证明: by
   simp [expand, eval₂_eq_sum]
 
@@ -317,7 +317,7 @@ theorem derivative_expand
 中文:
 定理 derivative_expand
   条件: (f : R[X])
-  结论: Polynomial.derivative (expand R p f) =
+  结论: 多项式.derivative (expand R p f) =
   证明: by
   rw [coe_expand]; rw [derivative_eval₂_C]; rw [derivative_pow]; rw [C_eq_natCast]; rw [derivative_X]; rw [mul_one]
 
@@ -437,7 +437,7 @@ theorem expand_injective
 中文:
 定理 expand_injective
   条件: {n : 自然数} (hn : 0 < n)
-  结论: Function.Injective (expand R n)
+  结论: 函数.单射 (expand R n)
   证明: fun g g' H =>
   ext fun k => by rw [← coeff_expand_mul hn, H, coeff_expand_mul hn]
 -/
@@ -704,7 +704,7 @@ theorem expand_aeval
 
 中文:
 定理 expand_aeval
-  条件: {A : 类型} [Semiring A] [Algebra R A] (p : 自然数) (P : R[X]) (r : A)
+  条件: {A : 类型} [半环 A] [代数 R A] (p : 自然数) (P : R[X]) (r : A)
   证明: by
   refine Polynomial.induction_on P (fun a => by simp) (fun f g hf hg => ?_) fun n a _ => by simp
   rw [map_add]; rw [aeval_add]; rw [aeval_add]; rw [hf]; rw [hg]
@@ -964,7 +964,7 @@ theorem expand_contract
 
 中文:
 定理 expand_contract
-  结论: [CharP R p] [NoZeroDivisors R] {f : R[X]} (hf : Polynomial.derivative f = 0)
+  结论: [特征p R p] [无零因子 R] {f : R[X]} (hf : 多项式.derivative f = 0)
   证明: by
   ext n
   rw [coeff_expand hp.bot_lt]; rw [coeff_contract hp]
@@ -1010,7 +1010,7 @@ theorem expand_contract'
 
 中文:
 定理 expand_contract'
-  条件: [NoZeroDivisors R] {f : R[X]} (hf : Polynomial.derivative f = 0)
+  条件: [无零因子 R] {f : R[X]} (hf : 多项式.derivative f = 0)
   证明: by
   obtain _ | @⟨_, hprime, hchar⟩ := ‹ExpChar R p›
   · rw [expand_one, contract_one]
@@ -1176,7 +1176,7 @@ theorem isLocalHom_expand
 中文:
 定理 isLocalHom_expand
   条件: {p : 自然数} (hp : 0 < p)
-  结论: IsLocalHom (expand R p)
+  结论: 是Local态射 (expand R p)
   证明: by
   refine ⟨fun f hf1 => ?_⟩
   have hf2 := eq_C_of_degree_eq_zero (degree_eq_zero_of_isUnit hf1)
@@ -1204,7 +1204,7 @@ theorem of_irreducible_expand
 
 中文:
 定理 of_irreducible_expand
-  条件: {p : 自然数} (hp : p != 0) {f : R[X]} (hf : Irreducible (expand R p f))
+  条件: {p : 自然数} (hp : p != 0) {f : R[X]} (hf : 不可约 (expand R p f))
   证明: let _ := isLocalHom_expand R hp.bot_lt
   hf.of_map
 

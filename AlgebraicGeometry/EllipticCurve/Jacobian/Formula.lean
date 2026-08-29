@@ -94,7 +94,7 @@ definition negY
 
 中文:
 定义 negY
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: -P y - W'.a₁ * P x * P z - W'.a₃ * P z ^ 3
 -/
 def negY (P : Fin 3 -> R) : R :=
@@ -131,7 +131,7 @@ lemma negY_smul
 
 中文:
 引理 negY_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.negY (u • P) = u ^ 3 * W'.negY P
   证明: by
   simp only [negY, smul_fin3_ext]
@@ -155,7 +155,7 @@ lemma negY_of_Z_eq_zero
 
 中文:
 引理 negY_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   结论: W'.negY P = -P y
   证明: by
   rw [negY]; rw [hPz]; rw [mul_zero]; rw [sub_zero]; rw [zero_pow three_ne_zero]; rw [mul_zero]; rw [sub_zero]
@@ -177,7 +177,7 @@ lemma negY_of_Z_ne_zero
 
 中文:
 引理 negY_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   linear_combination (norm := (rw [negY, Affine.negY]; ring1))
     -W.a₁ * P x / P z ^ 2 * div_self hPz - W.a₃ * div_self (pow_ne_zero 3 hPz)
@@ -203,7 +203,7 @@ lemma Y_sub_Y_mul_Y_sub_negY
 
 中文:
 引理 Y_sub_Y_mul_Y_sub_negY
-  结论: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: by
   linear_combination (norm := (rw [negY]; ring1)) Q z ^ 6 * (equation_iff P).mp hP
     - P z ^ 6 * (equation_iff Q).mp hQ + (P x ^ 2 * Q z ^ 4 + P x * Q x * P z ^ 2 * Q z ^ 2
@@ -231,7 +231,7 @@ lemma Y_eq_of_Y_ne
 
 中文:
 引理 Y_eq_of_Y_ne
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: sub_eq_zero.mp (mul_eq_zero.mp <| Y_sub_Y_mul_Y_sub_negY hP hQ hx).resolve_left
     sub_ne_zero.mpr hy
 
@@ -254,7 +254,7 @@ lemma Y_eq_of_Y_ne'
 
 中文:
 引理 Y_eq_of_Y_ne'
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: sub_eq_zero.mp (mul_eq_zero.mp <| Y_sub_Y_mul_Y_sub_negY hP hQ hx).resolve_right
     sub_ne_zero.mpr hy
 
@@ -276,7 +276,7 @@ lemma Y_eq_iff'
 
 中文:
 引理 Y_eq_iff'
-  条件: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: negY_of_Z_ne_zero hQz ▸ (div_eq_div_iff (pow_ne_zero 3 hPz) (pow_ne_zero 3 hQz)).symm
 
 Depends on / 依赖: div_eq_div_iff, negY_of_Z_ne_zero, pow_ne_zero
@@ -297,7 +297,7 @@ lemma Y_sub_Y_add_Y_sub_negY
 
 中文:
 引理 Y_sub_Y_add_Y_sub_negY
-  条件: {P Q : Fin 3 -> R} (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
+  条件: {P Q : 有限集 3 -> R} (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
   证明: by
   linear_combination (norm := (rw [negY, negY]; ring1)) -W'.a₁ * P z * Q z * hx
 
@@ -322,7 +322,7 @@ lemma Y_ne_negY_of_Y_ne
 
 中文:
 引理 Y_ne_negY_of_Y_ne
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P)
   证明: by
   have hy' : P y * Q z ^ 3 - W'.negY Q * P z ^ 3 = 0 :=
 (mul_eq_zero.mp <| Y_sub_Y_mul_Y_sub_negY hP hQ hx).resolve_left sub_ne_zero_of_ne hy
@@ -353,7 +353,7 @@ lemma Y_ne_negY_of_Y_ne'
 
 中文:
 引理 Y_ne_negY_of_Y_ne'
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P)
   证明: by
   have hy' : P y * Q z ^ 3 - Q y * P z ^ 3 = 0 :=
 (mul_eq_zero.mp <| Y_sub_Y_mul_Y_sub_negY hP hQ hx).resolve_right sub_ne_zero_of_ne hy
@@ -381,7 +381,7 @@ lemma Y_eq_negY_of_Y_eq
 
 中文:
 引理 Y_eq_negY_of_Y_eq
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: mul_left_injective₀ (pow_ne_zero 3 hQz) by
     linear_combination (norm := ring1) -Y_sub_Y_add_Y_sub_negY hx + hy + hy'
 
@@ -405,7 +405,7 @@ lemma nonsingular_iff_of_Y_eq_negY
 
 中文:
 引理 nonsingular_iff_of_Y_eq_negY
-  条件: {P : Fin 3 -> F} (hPz : P z != 0) (hy : P y = W.negY P)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0) (hy : P y = W.negY P)
   证明: by
   have hy' : eval P W.polynomialY = P y - W.negY P := by rw [negY, eval_polynomialY]; ring1
   rw [nonsingular_iff_of_Z_ne_zero hPz]; rw [hy']; rw [hy]; rw [sub_self]; rw [ne_self_iff_false]; rw [or_false]
@@ -430,7 +430,7 @@ definition dblU
 
 中文:
 定义 dblU
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: eval P W'.polynomialX
 
 Depends on / 依赖: polynomialX
@@ -450,7 +450,7 @@ lemma dblU_eq
 
 中文:
 引理 dblU_eq
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.dblU P =
   证明: by
   rw [dblU]; rw [eval_polynomialX]
@@ -474,7 +474,7 @@ lemma dblU_smul
 
 中文:
 引理 dblU_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.dblU (u • P) = u ^ 4 * W'.dblU P
   证明: by
   simp only [dblU_eq, smul_fin3_ext]
@@ -499,7 +499,7 @@ lemma dblU_of_Z_eq_zero
 
 中文:
 引理 dblU_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   结论: W'.dblU P = -3 * P x ^ 2
   证明: by
   rw [dblU_eq]; rw [hPz]
@@ -521,7 +521,7 @@ lemma dblU_ne_zero_of_Y_eq
 
 中文:
 引理 dblU_ne_zero_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0) (hQz : Q z != 0)
   证明: ((nonsingular_iff_of_Y_eq_negY hPz <| Y_eq_negY_of_Y_eq hQz hx hy hy').mp hP).right
 
 Depends on / 依赖: Y_eq_negY_of_Y_eq, nonsingular_iff_of_Y_eq_negY
@@ -541,7 +541,7 @@ lemma isUnit_dblU_of_Y_eq
 
 中文:
 引理 isUnit_dblU_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0) (hQz : Q z != 0)
   证明: (dblU_ne_zero_of_Y_eq hP hPz hQz hx hy hy').isUnit
 
 Depends on / 依赖: dblU_ne_zero_of_Y_eq, isUnit
@@ -562,7 +562,7 @@ definition dblZ
 
 中文:
 定义 dblZ
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: P z * (P y - W'.negY P)
 -/
 def dblZ (P : Fin 3 -> R) : R :=
@@ -581,7 +581,7 @@ lemma dblZ_smul
 
 中文:
 引理 dblZ_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.dblZ (u • P) = u ^ 4 * W'.dblZ P
   证明: by
   simp only [dblZ, negY_smul, smul_fin3_ext]
@@ -605,7 +605,7 @@ lemma dblZ_of_Z_eq_zero
 
 中文:
 引理 dblZ_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   结论: W'.dblZ P = 0
   证明: by
   rw [dblZ]; rw [hPz]; rw [zero_mul]
@@ -626,7 +626,7 @@ lemma dblZ_of_Y_eq
 
 中文:
 引理 dblZ_of_Y_eq
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: by
   rw [dblZ]; rw [Y_eq_negY_of_Y_eq hQz hx hy hy']; rw [sub_self]; rw [mul_zero]
 
@@ -647,7 +647,7 @@ lemma dblZ_ne_zero_of_Y_ne
 
 中文:
 引理 dblZ_ne_zero_of_Y_ne
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P)
   证明: mul_ne_zero hPz sub_ne_zero.mpr Y_ne_negY_of_Y_ne hP hQ hx hy
 
 Depends on / 依赖: Y_ne_negY_of_Y_ne, mul_ne_zero, sub_ne_zero, sub_ne_zero.mpr
@@ -667,7 +667,7 @@ lemma isUnit_dblZ_of_Y_ne
 
 中文:
 引理 isUnit_dblZ_of_Y_ne
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: (dblZ_ne_zero_of_Y_ne hP hQ hPz hx hy).isUnit
 
 Depends on / 依赖: dblZ_ne_zero_of_Y_ne, isUnit
@@ -686,7 +686,7 @@ lemma dblZ_ne_zero_of_Y_ne'
 
 中文:
 引理 dblZ_ne_zero_of_Y_ne'
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hP : W'.Equation P)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hP : W'.方程 P)
   证明: mul_ne_zero hPz sub_ne_zero.mpr Y_ne_negY_of_Y_ne' hP hQ hx hy
 
 Depends on / 依赖: Y_ne_negY_of_Y_ne, mul_ne_zero, sub_ne_zero, sub_ne_zero.mpr
@@ -706,7 +706,7 @@ lemma isUnit_dblZ_of_Y_ne'
 
 中文:
 引理 isUnit_dblZ_of_Y_ne'
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: (dblZ_ne_zero_of_Y_ne' hP hQ hPz hx hy).isUnit
 
 Depends on / 依赖: dblZ_ne_zero_of_Y_ne, isUnit
@@ -729,7 +729,7 @@ lemma toAffine_slope_of_eq
 
 中文:
 引理 toAffine_slope_of_eq
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   simp only [X_eq_iff hPz hQz, ne_eq, Y_eq_iff' hPz hQz] at hx hy
   rw [Affine.slope_of_Y_ne hx <| negY_of_Z_ne_zero hQz ▸ hy]; rw [← negY_of_Z_ne_zero hPz]; rw [dblU_eq]; rw [dblZ]
@@ -756,7 +756,7 @@ definition dblX
 
 中文:
 定义 dblX
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: W'.dblU P ^ 2 - W'.a₁ * W'.dblU P * P z * (P y - W'.negY P)
     - W'.a₂ * P z ^ 2 * (P y - W'.negY P) ^ 2 - 2 * P x * (P y - W'.negY P) ^ 2
 -/
@@ -777,7 +777,7 @@ lemma dblX_smul
 
 中文:
 引理 dblX_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.dblX (u • P) = (u ^ 4) ^ 2 * W'.dblX P
   证明: by
   simp only [dblX, dblU_smul, negY_smul, smul_fin3_ext]
@@ -801,7 +801,7 @@ lemma dblX_of_Z_eq_zero
 
 中文:
 引理 dblX_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   linear_combination (norm := (rw [dblX, dblU_of_Z_eq_zero hPz, negY_of_Z_eq_zero hPz, hPz]; ring1))
     -8 * P x * (equation_of_Z_eq_zero hPz).mp hP
@@ -825,7 +825,7 @@ lemma dblX_of_Y_eq
 
 中文:
 引理 dblX_of_Y_eq
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: by
   rw [dblX]; rw [Y_eq_negY_of_Y_eq hQz hx hy hy']
   ring1
@@ -850,7 +850,7 @@ lemma toAffine_addX_of_eq
 
 中文:
 引理 toAffine_addX_of_eq
-  条件: {P : Fin 3 -> F} (hPz : P z != 0) {n d : F} (hd : d != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0) {n d : F} (hd : d != 0)
   证明: by
   simp [field]
   ring1
@@ -896,7 +896,7 @@ definition negDblY
 
 中文:
 定义 negDblY
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: -W'.dblU P * (W'.dblX P - P x * (P y - W'.negY P) ^ 2) + P y * (P y - W'.negY P) ^ 3
 -/
 noncomputable def negDblY (P : Fin 3 -> R) : R :=
@@ -915,7 +915,7 @@ lemma negDblY_smul
 
 中文:
 引理 negDblY_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.negDblY (u • P) = (u ^ 4) ^ 3 * W'.negDblY P
   证明: by
   simp only [negDblY, dblU_smul, dblX_smul, negY_smul, smul_fin3_ext]
@@ -940,7 +940,7 @@ lemma negDblY_of_Z_eq_zero
 
 中文:
 引理 negDblY_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   linear_combination (norm :=
       (rw [negDblY, dblU_of_Z_eq_zero hPz, dblX_of_Z_eq_zero hP hPz, negY_of_Z_eq_zero hPz]; ring1))
@@ -966,7 +966,7 @@ lemma negDblY_of_Y_eq
 
 中文:
 引理 negDblY_of_Y_eq
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: by
   rw [negDblY]; rw [dblX_of_Y_eq hQz hx hy hy']; rw [Y_eq_negY_of_Y_eq hQz hx hy hy']
   ring1
@@ -991,7 +991,7 @@ lemma toAffine_negAddY_of_eq
 
 中文:
 引理 toAffine_negAddY_of_eq
-  条件: {P : Fin 3 -> F} (hPz : P z != 0) {n d : F} (hd : d != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0) {n d : F} (hd : d != 0)
   证明: by
   rw [Affine.negAddY]; rw [toAffine_addX_of_eq hPz hd]
   simp [field]
@@ -1014,7 +1014,7 @@ lemma negDblY_of_Z_ne_zero
 
 中文:
 引理 negDblY_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
   证明: by
   rw [negDblY]; rw [dblX]; rw [toAffine_slope_of_eq hPz hQz hx hy]; rw [dblZ]; rw [← (X_eq_iff hPz hQz).mp hx]; rw [toAffine_negAddY_of_eq hPz sub_ne_zero.mpr Y_ne_negY_of_Y_ne' hP hQ hx hy]
 
@@ -1038,7 +1038,7 @@ definition dblY
 
 中文:
 定义 dblY
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: W'.negY ![W'.dblX P, W'.negDblY P, W'.dblZ P]
 
 Depends on / 依赖: negDblY
@@ -1059,7 +1059,7 @@ lemma dblY_smul
 
 中文:
 引理 dblY_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.dblY (u • P) = (u ^ 4) ^ 3 * W'.dblY P
   证明: by
   simp only [dblY, negY_eq, negDblY_smul, dblX_smul, dblZ_smul]
@@ -1083,7 +1083,7 @@ lemma dblY_of_Z_eq_zero
 
 中文:
 引理 dblY_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   rw [dblY]; rw [negY_eq]; rw [negDblY_of_Z_eq_zero hP hPz]; rw [dblZ_of_Z_eq_zero hPz]
   ring1
@@ -1107,7 +1107,7 @@ lemma dblY_of_Y_eq
 
 中文:
 引理 dblY_of_Y_eq
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: by
   rw [dblY]; rw [negY_eq]; rw [negDblY_of_Y_eq hQz hx hy hy']; rw [dblZ_of_Y_eq hQz hx hy hy']
   ring1
@@ -1132,7 +1132,7 @@ lemma dblY_of_Z_ne_zero
 
 中文:
 引理 dblY_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   erw [dblY, negY_of_Z_ne_zero <| dblZ_ne_zero_of_Y_ne' hP hQ hPz hx hy,
     dblX_of_Z_ne_zero hP hQ hPz hQz hx hy, negDblY_of_Z_ne_zero hP hQ hPz hQz hx hy, Affine.addY]
@@ -1158,7 +1158,7 @@ definition dblXYZ
 
 中文:
 定义 dblXYZ
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: ![W'.dblX P, W'.dblY P, W'.dblZ P]
 -/
 noncomputable def dblXYZ (P : Fin 3 -> R) : Fin 3 -> R :=
@@ -1175,7 +1175,7 @@ lemma dblXYZ_X
 
 中文:
 引理 dblXYZ_X
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.dblXYZ P x = W'.dblX P
   证明: rfl
 -/
@@ -1193,7 +1193,7 @@ lemma dblXYZ_Y
 
 中文:
 引理 dblXYZ_Y
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.dblXYZ P y = W'.dblY P
   证明: rfl
 -/
@@ -1211,7 +1211,7 @@ lemma dblXYZ_Z
 
 中文:
 引理 dblXYZ_Z
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.dblXYZ P z = W'.dblZ P
   证明: rfl
 -/
@@ -1230,7 +1230,7 @@ lemma dblXYZ_smul
 
 中文:
 引理 dblXYZ_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.dblXYZ (u • P) = u ^ 4 • W'.dblXYZ P
   证明: by
   rw [dblXYZ]; rw [dblX_smul]; rw [dblY_smul]; rw [dblZ_smul]; rw [smul_fin3]; rw [dblXYZ_X]; rw [dblXYZ_Y]; rw [dblXYZ_Z]
@@ -1252,7 +1252,7 @@ lemma dblXYZ_of_Z_eq_zero
 
 中文:
 引理 dblXYZ_of_Z_eq_zero
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   simp [dblXYZ, dblX_of_Z_eq_zero hP hPz, dblY_of_Z_eq_zero hP hPz, dblZ_of_Z_eq_zero hPz,
     smul_fin3]
@@ -1275,7 +1275,7 @@ lemma dblXYZ_of_Y_eq'
 
 中文:
 引理 dblXYZ_of_Y_eq'
-  结论: [NoZeroDivisors R] {P Q : Fin 3 -> R} (hQz : Q z != 0)
+  结论: [无零因子 R] {P Q : 有限集 3 -> R} (hQz : Q z != 0)
   证明: by
   rw [dblXYZ]; rw [dblX_of_Y_eq hQz hx hy hy']; rw [dblY_of_Y_eq hQz hx hy hy']; rw [dblZ_of_Y_eq hQz hx hy hy']
 
@@ -1298,7 +1298,7 @@ lemma dblXYZ_of_Y_eq
 
 中文:
 引理 dblXYZ_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hQz : Q z != 0) (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
+  结论: {P Q : 有限集 3 -> F} (hQz : Q z != 0) (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
   证明: by
   simp [dblXYZ_of_Y_eq' hQz hx hy hy', smul_fin3]
 
@@ -1322,7 +1322,7 @@ have hZ {n : Nat} : IsUnit W.dblZ P ^ n := (isUnit_dblZ_of_Y_ne' hP hQ hPz hx hy
 
 中文:
 引理 dblXYZ_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
 have hZ {n : Nat} : IsUnit W.dblZ P ^ n := (isUnit_dblZ_of_Y_ne' hP hQ hPz hx hy).pow n
   erw [dblXYZ, smul_fin3, ← dblX_of_Z_ne_zero hP hQ hPz hQz hx hy, hZ.mul_div_cancel,
@@ -1355,7 +1355,7 @@ definition addU
 
 中文:
 定义 addU
-  签名: (P Q : Fin 3 -> F)
+  签名: (P Q : 有限集 3 -> F)
   定义体: -((P y * Q z ^ 3 - Q y * P z ^ 3) / (P z * Q z))
 -/
 def addU (P Q : Fin 3 -> F) : F :=
@@ -1372,7 +1372,7 @@ lemma addU_smul
 
 中文:
 引理 addU_smul
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {u v : F} (hu : u != 0)
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {u v : F} (hu : u != 0)
   证明: by
   simp [field, addU, smul_fin3_ext]
 
@@ -1394,7 +1394,7 @@ lemma addU_of_Z_eq_zero_left
 
 中文:
 引理 addU_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> F} (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> F} (hPz : P z = 0)
   结论: addU P Q = 0
   证明: by
   rw [addU]; rw [hPz]; rw [zero_mul]; rw [div_zero]; rw [neg_zero]
@@ -1416,7 +1416,7 @@ lemma addU_of_Z_eq_zero_right
 
 中文:
 引理 addU_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> F} (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> F} (hQz : Q z = 0)
   结论: addU P Q = 0
   证明: by
   rw [addU]; rw [hQz]; rw [mul_zero]; rw [div_zero]; rw [neg_zero]
@@ -1436,7 +1436,7 @@ lemma addU_ne_zero_of_Y_ne
 
 中文:
 引理 addU_ne_zero_of_Y_ne
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: neg_ne_zero.mpr div_ne_zero (sub_ne_zero.mpr hy) mul_ne_zero hPz hQz
 
 Depends on / 依赖: div_ne_zero, mul_ne_zero, neg_ne_zero, neg_ne_zero.mpr, sub_ne_zero, sub_ne_zero.mpr
@@ -1455,7 +1455,7 @@ lemma isUnit_addU_of_Y_ne
 
 中文:
 引理 isUnit_addU_of_Y_ne
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: (addU_ne_zero_of_Y_ne hPz hQz hy).isUnit
 
 Depends on / 依赖: addU_ne_zero_of_Y_ne, isUnit
@@ -1474,7 +1474,7 @@ definition addZ
 
 中文:
 定义 addZ
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: P x * Q z ^ 2 - Q x * P z ^ 2
 -/
 def addZ (P Q : Fin 3 -> R) : R :=
@@ -1493,7 +1493,7 @@ lemma addZ_smul
 
 中文:
 引理 addZ_smul
-  条件: (P Q : Fin 3 -> R) (u v : R)
+  条件: (P Q : 有限集 3 -> R) (u v : R)
   结论: addZ (u • P) (v • Q) = (u * v) ^ 2 * addZ P Q
   证明: by
   simp only [addZ, smul_fin3_ext]
@@ -1516,7 +1516,7 @@ lemma addZ_self
 
 中文:
 引理 addZ_self
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: addZ P P = 0
   证明: sub_self P x * P z ^ 2
 
@@ -1538,7 +1538,7 @@ lemma addZ_of_Z_eq_zero_left
 
 中文:
 引理 addZ_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> R} (hPz : P z = 0)
   结论: addZ P Q = P x * Q z * Q z
   证明: by
   rw [addZ]; rw [hPz]
@@ -1560,7 +1560,7 @@ lemma addZ_of_Z_eq_zero_right
 
 中文:
 引理 addZ_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hQz : Q z = 0)
   证明: by
   rw [addZ]; rw [hQz]
   ring1
@@ -1582,7 +1582,7 @@ lemma addZ_of_X_eq
 
 中文:
 引理 addZ_of_X_eq
-  条件: {P Q : Fin 3 -> R} (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
+  条件: {P Q : 有限集 3 -> R} (hx : P x * Q z ^ 2 = Q x * P z ^ 2)
   结论: addZ P Q = 0
   证明: by
   rw [addZ]; rw [hx]; rw [sub_self]
@@ -1603,7 +1603,7 @@ lemma addZ_ne_zero_of_X_ne
 
 中文:
 引理 addZ_ne_zero_of_X_ne
-  条件: {P Q : Fin 3 -> R} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
+  条件: {P Q : 有限集 3 -> R} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
   结论: addZ P Q != 0
   证明: sub_ne_zero.mpr hx
 
@@ -1622,7 +1622,7 @@ lemma isUnit_addZ_of_X_ne
 
 中文:
 引理 isUnit_addZ_of_X_ne
-  条件: {P Q : Fin 3 -> F} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
+  条件: {P Q : 有限集 3 -> F} (hx : P x * Q z ^ 2 != Q x * P z ^ 2)
   证明: (addZ_ne_zero_of_X_ne hx).isUnit
 
 Depends on / 依赖: addZ_ne_zero_of_X_ne, isUnit
@@ -1644,7 +1644,7 @@ div_sub_div _ _ (pow_ne_zero 2 hPz) (pow_ne_zero 2 hQz), mul_comm _ ^ 2, addZ]
 
 中文:
 引理 toAffine_slope_of_ne
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: by
   rw [Affine.slope_of_X_ne <| by rwa [ne_eq]; rw [← X_eq_iff hPz hQz],
 div_sub_div _ _ (pow_ne_zero 2 hPz) (pow_ne_zero 2 hQz), mul_comm _ ^ 2, addZ]
@@ -1673,7 +1673,7 @@ definition addX
 
 中文:
 定义 addX
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: P x * Q x ^ 2 * P z ^ 2 - 2 * P y * Q y * P z * Q z + P x ^ 2 * Q x * Q z ^ 2
     - W'.a₁ * P x * Q y * P z ^ 2 * Q z - W'.a₁ * P y * Q x * P z * Q z ^ 2
     + 2 * W'.a₂ * P x * Q x * P z ^ 2 * Q z ^ 2 - W'.a₃ * Q y * P z ^ 4 * Q z
@@ -1699,7 +1699,7 @@ lemma addX_eq'
 
 中文:
 引理 addX_eq'
-  条件: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  条件: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: by
   linear_combination (norm := (rw [addX, addZ]; ring1)) -Q z ^ 6 * (equation_iff P).mp hP
     - P z ^ 6 * (equation_iff Q).mp hQ
@@ -1726,7 +1726,7 @@ lemma addX_eq
 
 中文:
 引理 addX_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   rw [← addX_eq' hP hQ]; rw [mul_div_cancel_right₀ _ <| pow_ne_zero 2 <| mul_ne_zero hPz hQz]
 
@@ -1752,7 +1752,7 @@ lemma addX_smul
 
 中文:
 引理 addX_smul
-  条件: (P Q : Fin 3 -> R) (u v : R)
+  条件: (P Q : 有限集 3 -> R) (u v : R)
   证明: by
   simp only [addX, smul_fin3_ext]
   ring1
@@ -1776,7 +1776,7 @@ lemma addX_self
 
 中文:
 引理 addX_self
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   结论: W'.addX P P = 0
   证明: by
   linear_combination (norm := (rw [addX]; ring1)) -2 * P z ^ 2 * (equation_iff _).mp hP
@@ -1798,7 +1798,7 @@ lemma addX_of_Z_eq_zero_left
 
 中文:
 引理 addX_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> R} (hPz : P z = 0)
   证明: by
   rw [addX]; rw [hPz]
   ring1
@@ -1820,7 +1820,7 @@ lemma addX_of_Z_eq_zero_right
 
 中文:
 引理 addX_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hQz : Q z = 0)
   证明: by
   rw [addX]; rw [hQz]
   ring1
@@ -1842,7 +1842,7 @@ lemma addX_of_X_eq'
 
 中文:
 引理 addX_of_X_eq'
-  结论: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: by
   rw [addX_eq' hP hQ]; rw [addZ_of_X_eq hx]
   ring1
@@ -1866,7 +1866,7 @@ lemma addX_of_X_eq
 
 中文:
 引理 addX_of_X_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   rw [addU]; rw [neg_sq]; rw [div_pow]; rw [← addX_of_X_eq' hP hQ hx]; rw [mul_div_cancel_right₀ _ pow_ne_zero 2 mul_ne_zero hPz hQz]
 
@@ -1887,7 +1887,7 @@ lemma toAffine_addX_of_ne
 
 中文:
 引理 toAffine_addX_of_ne
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {n d : F}
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {n d : F}
   证明: by
   simp [field]
 -/
@@ -1908,7 +1908,7 @@ lemma addX_of_Z_ne_zero
 
 中文:
 引理 addX_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   rw [addX_eq hP hQ hPz hQz]; rw [toAffine_slope_of_ne hPz hQz hx]; rw [toAffine_addX_of_ne hPz hQz addZ_ne_zero_of_X_ne hx]
 
@@ -1935,7 +1935,7 @@ definition negAddY
 
 中文:
 定义 negAddY
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: -P y * Q x ^ 3 * P z ^ 3 + 2 * P y * Q y ^ 2 * P z ^ 3 - 3 * P x ^ 2 * Q x * Q y * P z ^ 2 * Q z
     + 3 * P x * P y * Q x ^ 2 * P z * Q z ^ 2 + P x ^ 3 * Q y * Q z ^ 3
     - 2 * P y ^ 2 * Q y * Q z ^ 3 + W'.a₁ * P x * Q y ^ 2 * P z ^ 4
@@ -1966,7 +1966,7 @@ lemma negAddY_eq'
 
 中文:
 引理 negAddY_eq'
-  条件: (P Q : Fin 3 -> R)
+  条件: (P Q : 有限集 3 -> R)
   结论: W'.negAddY P Q * (P z * Q z) ^ 3 =
   证明: by
   rw [negAddY]; rw [addX]; rw [addZ]
@@ -1992,7 +1992,7 @@ lemma negAddY_eq
 
 中文:
 引理 negAddY_eq
-  条件: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   结论: W.negAddY P Q =
   证明: by
   rw [← negAddY_eq']; rw [mul_div_cancel_right₀ _ <| pow_ne_zero 3 <| mul_ne_zero hPz hQz]
@@ -2016,7 +2016,7 @@ lemma negAddY_smul
 
 中文:
 引理 negAddY_smul
-  条件: (P Q : Fin 3 -> R) (u v : R)
+  条件: (P Q : 有限集 3 -> R) (u v : R)
   证明: by
   simp only [negAddY, smul_fin3_ext]
   ring1
@@ -2041,7 +2041,7 @@ lemma negAddY_self
 
 中文:
 引理 negAddY_self
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.negAddY P P = 0
   证明: by
   rw [negAddY]
@@ -2065,7 +2065,7 @@ lemma negAddY_of_Z_eq_zero_left
 
 中文:
 引理 negAddY_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   linear_combination (norm := (rw [negAddY, negY, hPz]; ring1))
     (W'.negY Q - Q y) * Q z ^ 3 * (equation_of_Z_eq_zero hPz).mp hP
@@ -2089,7 +2089,7 @@ lemma negAddY_of_Z_eq_zero_right
 
 中文:
 引理 negAddY_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hQ : W'.方程 Q) (hQz : Q z = 0)
   证明: by
   linear_combination (norm := (rw [negAddY, negY, hQz]; ring1))
     (P y - W'.negY P) * P z ^ 3 * (equation_of_Z_eq_zero hQz).mp hQ
@@ -2113,7 +2113,7 @@ lemma negAddY_of_X_eq'
 
 中文:
 引理 negAddY_of_X_eq'
-  结论: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: by
   rw [negAddY_eq']; rw [addX_eq' hP hQ]; rw [addZ_of_X_eq hx]
   ring1
@@ -2137,7 +2137,7 @@ lemma negAddY_of_X_eq
 
 中文:
 引理 negAddY_of_X_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   rw [addU]; rw [neg_neg]; rw [div_pow]; rw [← negAddY_of_X_eq' hP hQ hx]; rw [mul_div_cancel_right₀ _ pow_ne_zero 3 mul_ne_zero hPz hQz]
 
@@ -2159,7 +2159,7 @@ lemma toAffine_negAddY_of_ne
 
 中文:
 引理 toAffine_negAddY_of_ne
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {n d : F}
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0) {n d : F}
   证明: by
   rw [Affine.negAddY]; rw [toAffine_addX_of_ne hPz hQz hd]
   simp [field]
@@ -2184,7 +2184,7 @@ lemma negAddY_of_Z_ne_zero
 
 中文:
 引理 negAddY_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
   证明: by
   rw [negAddY_eq hPz hQz]; rw [addX_eq' hP hQ]; rw [toAffine_slope_of_ne hPz hQz hx]; rw [toAffine_negAddY_of_ne hPz hQz addZ_ne_zero_of_X_ne hx]
 
@@ -2208,7 +2208,7 @@ definition addY
 
 中文:
 定义 addY
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: W'.negY ![W'.addX P Q, W'.negAddY P Q, addZ P Q]
 
 Depends on / 依赖: negAddY
@@ -2228,7 +2228,7 @@ lemma addY_smul
 
 中文:
 引理 addY_smul
-  条件: (P Q : Fin 3 -> R) (u v : R)
+  条件: (P Q : 有限集 3 -> R) (u v : R)
   证明: by
   simp only [addY, negY_eq, negAddY_smul, addX_smul, addZ_smul]
   ring1
@@ -2253,7 +2253,7 @@ lemma addY_self
 
 中文:
 引理 addY_self
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   结论: W'.addY P P = 0
   证明: by
   rw [addY]; rw [negY_eq]; rw [addX_self hP]; rw [negAddY_self]; rw [addZ_self]
@@ -2277,7 +2277,7 @@ lemma addY_of_Z_eq_zero_left
 
 中文:
 引理 addY_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   rw [addY]; rw [negY_eq]; rw [negAddY_of_Z_eq_zero_left hP hPz]; rw [negY]; rw [addX_of_Z_eq_zero_left hPz]; rw [addZ_of_Z_eq_zero_left hPz]
   ring1
@@ -2301,7 +2301,7 @@ lemma addY_of_Z_eq_zero_right
 
 中文:
 引理 addY_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hQ : W'.方程 Q) (hQz : Q z = 0)
   证明: by
   rw [addY]; rw [negY_eq]; rw [negAddY_of_Z_eq_zero_right hQ hQz]; rw [negY]; rw [addX_of_Z_eq_zero_right hQz]; rw [addZ_of_Z_eq_zero_right hQz]
   ring1
@@ -2325,7 +2325,7 @@ lemma addY_of_X_eq'
 
 中文:
 引理 addY_of_X_eq'
-  结论: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hQ : W'.Equation Q)
+  结论: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hQ : W'.方程 Q)
   证明: by
   linear_combination (norm := (rw [addY, negY_eq, addZ_of_X_eq hx]; ring1))
     -negAddY_of_X_eq' hP hQ hx
@@ -2349,7 +2349,7 @@ lemma addY_of_X_eq
 
 中文:
 引理 addY_of_X_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   rw [addU]; rw [← neg_div]; rw [div_pow]; rw [← addY_of_X_eq' hP hQ hx]; rw [mul_div_cancel_right₀ _ pow_ne_zero 3 mul_ne_zero hPz hQz]
 
@@ -2371,7 +2371,7 @@ lemma addY_of_Z_ne_zero
 
 中文:
 引理 addY_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
   证明: by
   erw [addY, negY_of_Z_ne_zero <| addZ_ne_zero_of_X_ne hx, addX_of_Z_ne_zero hP hQ hPz hQz hx,
     negAddY_of_Z_ne_zero hP hQ hPz hQz hx, Affine.addY]
@@ -2396,7 +2396,7 @@ definition addXYZ
 
 中文:
 定义 addXYZ
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: ![W'.addX P Q, W'.addY P Q, addZ P Q]
 -/
 noncomputable def addXYZ (P Q : Fin 3 -> R) : Fin 3 -> R :=
@@ -2413,7 +2413,7 @@ lemma addXYZ_X
 
 中文:
 引理 addXYZ_X
-  条件: (P Q : Fin 3 -> R)
+  条件: (P Q : 有限集 3 -> R)
   结论: W'.addXYZ P Q x = W'.addX P Q
   证明: rfl
 -/
@@ -2431,7 +2431,7 @@ lemma addXYZ_Y
 
 中文:
 引理 addXYZ_Y
-  条件: (P Q : Fin 3 -> R)
+  条件: (P Q : 有限集 3 -> R)
   结论: W'.addXYZ P Q y = W'.addY P Q
   证明: rfl
 -/
@@ -2449,7 +2449,7 @@ lemma addXYZ_Z
 
 中文:
 引理 addXYZ_Z
-  条件: (P Q : Fin 3 -> R)
+  条件: (P Q : 有限集 3 -> R)
   结论: W'.addXYZ P Q z = addZ P Q
   证明: rfl
 -/
@@ -2467,7 +2467,7 @@ lemma addXYZ_smul
 
 中文:
 引理 addXYZ_smul
-  条件: (P Q : Fin 3 -> R) (u v : R)
+  条件: (P Q : 有限集 3 -> R) (u v : R)
   证明: by
   rw [addXYZ]; rw [addX_smul]; rw [addY_smul]; rw [addZ_smul]; rw [smul_fin3]; rw [addXYZ_X]; rw [addXYZ_Y]; rw [addXYZ_Z]
 
@@ -2489,7 +2489,7 @@ lemma addXYZ_self
 
 中文:
 引理 addXYZ_self
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   结论: W'.addXYZ P P = ![0, 0, 0]
   证明: by
   rw [addXYZ]; rw [addX_self hP]; rw [addY_self hP]; rw [addZ_self]
@@ -2510,7 +2510,7 @@ lemma addXYZ_of_Z_eq_zero_left
 
 中文:
 引理 addXYZ_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0)
+  条件: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0)
   证明: by
   rw [addXYZ]; rw [addX_of_Z_eq_zero_left hPz]; rw [addY_of_Z_eq_zero_left hP hPz]; rw [addZ_of_Z_eq_zero_left hPz]; rw [smul_fin3]
 
@@ -2531,7 +2531,7 @@ lemma addXYZ_of_Z_eq_zero_right
 
 中文:
 引理 addXYZ_of_Z_eq_zero_right
-  条件: {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hQz : Q z = 0)
+  条件: {P Q : 有限集 3 -> R} (hQ : W'.方程 Q) (hQz : Q z = 0)
   证明: by
   rw [addXYZ]; rw [addX_of_Z_eq_zero_right hQz]; rw [addY_of_Z_eq_zero_right hQ hQz]; rw [addZ_of_Z_eq_zero_right hQz]; rw [smul_fin3]
 
@@ -2553,7 +2553,7 @@ lemma addXYZ_of_X_eq
 
 中文:
 引理 addXYZ_of_X_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   simp [addXYZ, addX_of_X_eq hP hQ hPz hQz hx, addY_of_X_eq hP hQ hPz hQz hx, addZ_of_X_eq hx,
     smul_fin3]
@@ -2579,7 +2579,7 @@ have hZ {n : Nat} : IsUnit addZ P Q ^ n := (isUnit_addZ_of_X_ne hx).pow n
 
 中文:
 引理 addXYZ_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
   证明: by
 have hZ {n : Nat} : IsUnit addZ P Q ^ n := (isUnit_addZ_of_X_ne hx).pow n
   erw [addXYZ, smul_fin3, ← addX_of_Z_ne_zero hP hQ hPz hQz hx, hZ.mul_div_cancel,
@@ -2811,7 +2811,7 @@ lemma map_addU
 
 中文:
 引理 map_addU
-  条件: (f : F ->+* K) (P Q : Fin 3 -> F)
+  条件: (f : F ->+* K) (P Q : 有限集 3 -> F)
   结论: addU (f ∘ P) (f ∘ Q) = f (addU P Q)
   证明: by
   simp only [addU]

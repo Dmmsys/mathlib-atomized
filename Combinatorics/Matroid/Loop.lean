@@ -74,7 +74,7 @@ definition loops
 
 中文:
 定义 loops
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: M.closure ∅
 
 @[aesop unsafe 20% (rule_sets := [Matroid])]
@@ -95,7 +95,7 @@ lemma loops_subset_ground
 
 中文:
 引理 loops_subset_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.loops subseteq M.E
   证明: M.closure_subset_ground ∅
 
@@ -114,7 +114,7 @@ definition IsLoop
 
 中文:
 定义 IsLoop
-  签名: (M : Matroid α) (e : α)
+  签名: (M : 拟阵 α) (e : α)
   定义体: e in M.loops
 
 Depends on / 依赖: M.loops
@@ -151,7 +151,7 @@ lemma closure_empty
 
 中文:
 引理 closure_empty
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.closure ∅ = M.loops
   证明: rfl
 
@@ -196,8 +196,8 @@ lemma isLoop_tfae
 
 中文:
 引理 isLoop_tfae
-  条件: (M : Matroid α) (e : α)
-  结论: List.TFAE [
+  条件: (M : 拟阵 α) (e : α)
+  结论: 列表.TFAE [
   证明: by
   tfae_have 1 ↔ 2 := Iff.rfl
   tfae_have 2 ↔ 3 := by simp [M.empty_indep.mem_closure_iff_of_notMem (notMem_empty e),
@@ -289,7 +289,7 @@ alias ⟨_, IsLoop.isCircuit⟩ := singleton_isCircuit
 
 中文:
 引理 singleton_isCircuit
-  结论: M.IsCircuit {e} ↔ M.IsLoop e
+  结论: M.是Circuit {e} ↔ M.IsLoop e
   证明: (M.isLoop_tfae e).out 2 0
 
 alias ⟨_, IsLoop.isCircuit⟩ := singleton_isCircuit
@@ -310,7 +310,7 @@ lemma isLoop_iff_forall_mem_compl_isBase
   proof: (M.isLoop_tfae e).out 0 4
 
 中文:
-引理 isLoop_iff_forall_mem_compl_isBase
+引理 isLoop_iff_对任意_mem_compl_isBase
   结论: M.IsLoop e ↔ 对任意 B, M.IsBase B -> e in M.E \ B
   证明: (M.isLoop_tfae e).out 0 4
 
@@ -329,7 +329,7 @@ lemma isLoop_iff_forall_notMem_isBase
   simp_rw [isLoop_iff_forall_mem_compl_isBase, mem_sdiff, and_iff_right he]
 
 中文:
-引理 isLoop_iff_forall_notMem_isBase
+引理 isLoop_iff_对任意_notMem_isBase
   条件: (he : e in M.E := by aesop_mat)
   证明: by
   simp_rw [isLoop_iff_forall_mem_compl_isBase, mem_sdiff, and_iff_right he]
@@ -351,7 +351,7 @@ lemma IsLoop.mem_closure
 
 中文:
 引理 IsLoop.mem_closure
-  条件: (he : M.IsLoop e) (X : Set α)
+  条件: (he : M.IsLoop e) (X : 集合 α)
   结论: e in M.closure X
   证明: M.closure_mono (empty_subset _) he
 
@@ -371,7 +371,7 @@ lemma IsLoop.mem_of_isFlat
 
 中文:
 引理 IsLoop.mem_of_isFlat
-  条件: (he : M.IsLoop e) {F : Set α} (hF : M.IsFlat F)
+  条件: (he : M.IsLoop e) {F : 集合 α} (hF : M.是平坦 F)
   结论: e in F
   证明: hF.closure ▸ he.mem_closure F
 
@@ -390,8 +390,8 @@ lemma IsFlat.loops_subset
   proof: fun _ he => IsLoop.mem_of_isFlat he hF
 
 中文:
-引理 IsFlat.loops_subset
-  条件: (hF : M.IsFlat F)
+引理 是平坦.loops_subset
+  条件: (hF : M.是平坦 F)
   结论: M.loops subseteq F
   证明: fun _ he => IsLoop.mem_of_isFlat he hF
 
@@ -472,7 +472,7 @@ lemma IsLoop.eq_of_isCircuit_mem
 
 中文:
 引理 IsLoop.eq_of_isCircuit_mem
-  条件: (he : M.IsLoop e) (hC : M.IsCircuit C) (h : e in C)
+  条件: (he : M.IsLoop e) (hC : M.是Circuit C) (h : e in C)
   结论: C = {e}
   证明: by
   rw [he.isCircuit.eq_of_subset_isCircuit hC (singleton_subset_iff.mpr h)]
@@ -544,7 +544,7 @@ lemma isBasis_loops_iff
 
 中文:
 引理 isBasis_loops_iff
-  结论: M.IsBasis I M.loops ↔ I = ∅
+  结论: M.是基 I M.loops ↔ I = ∅
   证明: ⟨fun h => h.indep.eq_empty_of_subset_loops h.subset,
     by simp +contextual [closure_empty]⟩
 
@@ -589,7 +589,7 @@ lemma isBasis_iff_empty_of_subset_loops
 中文:
 引理 isBasis_iff_empty_of_subset_loops
   条件: (hX : X subseteq M.loops)
-  结论: M.IsBasis I X ↔ I = ∅
+  结论: M.是基 I X ↔ I = ∅
   证明: by
   refine ⟨fun h => ?_, by rintro rfl; simpa⟩
   have := (closure_eq_loops_of_subset hX) ▸ h.isBasis_closure_right
@@ -684,7 +684,7 @@ lemma closure_loops
 
 中文:
 引理 closure_loops
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.closure M.loops = M.loops
   证明: M.closure_closure ∅
 
@@ -709,7 +709,7 @@ lemma closure_union_loops_eq
 
 中文:
 引理 closure_union_loops_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   rw [← closure_empty]; rw [closure_union_closure_right_eq]; rw [union_empty]
 
@@ -733,7 +733,7 @@ lemma closure_loops_union_eq
 
 中文:
 引理 closure_loops_union_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   simp [union_comm]
 
@@ -756,7 +756,7 @@ lemma closure_sdiff_loops_eq
 
 中文:
 引理 closure_sdiff_loops_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   rw [← M.closure_union_loops_eq (X \ M.loops)]; rw [sdiff_union_self]; rw [← closure_empty]; rw [closure_union_closure_right_eq]; rw [union_empty]
 
@@ -781,7 +781,7 @@ lemma restrict_loops_eq'
 
 中文:
 引理 restrict_loops_eq'
-  条件: (M : Matroid α) (R : Set α)
+  条件: (M : 拟阵 α) (R : 集合 α)
   证明: by
   rw [← closure_empty]; rw [← closure_empty]; rw [restrict_closure_eq']; rw [empty_inter]
 
@@ -805,7 +805,7 @@ lemma restrict_loops_eq
 
 中文:
 引理 restrict_loops_eq
-  条件: {R : Set α} (hR : R subseteq M.E)
+  条件: {R : 集合 α} (hR : R subseteq M.E)
   结论: (M ↾ R).loops = M.loops inter R
   证明: by
   rw [restrict_loops_eq']; rw [sdiff_eq_empty.2 hR]; rw [union_empty]
@@ -832,7 +832,7 @@ lemma restrict_isLoop_iff
 
 中文:
 引理 restrict_isLoop_iff
-  条件: {R : Set α}
+  条件: {R : 集合 α}
   结论: (M ↾ R).IsLoop e ↔ e in R ∧ (M.IsLoop e ∨ e ∉ M.E)
   证明: by
   simp only [isLoop_iff, restrict_closure_eq', empty_inter, mem_union, mem_inter_iff, mem_sdiff,
@@ -933,7 +933,7 @@ lemma map_loops
 
 中文:
 引理 map_loops
-  条件: {f : α -> β} {hf : InjOn f M.E}
+  条件: {f : α -> β} {hf : 单射限制 f M.E}
   结论: (M.map f hf).loops = f '' M.loops
   证明: by
   simp [loops]
@@ -957,7 +957,7 @@ lemma map_isLoop_iff
 
 中文:
 引理 map_isLoop_iff
-  条件: {f : α -> β} {hf : InjOn f M.E} (he : e in M.E := by aesop_mat)
+  条件: {f : α -> β} {hf : 单射限制 f M.E} (he : e in M.E := by aesop_mat)
   证明: by
   rw [isLoop_iff]; rw [map_loops]; rw [hf.mem_image_iff M.loops_subset_ground he]; rw [isLoop_iff]
 
@@ -1011,7 +1011,7 @@ lemma comap_loops
 
 中文:
 引理 comap_loops
-  条件: {M : Matroid β} {f : α -> β}
+  条件: {M : 拟阵 β} {f : α -> β}
   结论: (M.comap f).loops = f ⁻¹' M.loops
   证明: by
   rw [loops]; rw [comap_closure_eq]; rw [image_empty]; rw [loops]
@@ -1038,7 +1038,7 @@ lemma comap_isLoop_iff
 
 中文:
 引理 comap_isLoop_iff
-  条件: {M : Matroid β} {f : α -> β}
+  条件: {M : 拟阵 β} {f : α -> β}
   结论: (M.comap f).IsLoop e ↔ M.IsLoop (f e)
   证明: by
   simp [isLoop_iff]
@@ -1063,7 +1063,7 @@ lemma loopyOn_isLoop_iff
 
 中文:
 引理 loopyOn_isLoop_iff
-  条件: {E : Set α}
+  条件: {E : 集合 α}
   结论: (loopyOn E).IsLoop e ↔ e in E
   证明: by
   simp [isLoop_iff, loops]
@@ -1085,7 +1085,7 @@ lemma eq_loopyOn_iff_loops
 
 中文:
 引理 eq_loopyOn_iff_loops
-  条件: {E : Set α}
+  条件: {E : 集合 α}
   结论: M = loopyOn E ↔ M.loops = E ∧ M.E = E where
   证明: by rw [h, loops]; simp
   mpr | ⟨h, h'⟩ => by rw [← h', ← closure_empty_eq_ground_iff, ← loops, h, h']
@@ -1137,7 +1137,7 @@ lemma freeOn_not_isLoop
 
 中文:
 引理 freeOn_not_isLoop
-  条件: (E : Set α) (e : α)
+  条件: (E : 集合 α) (e : α)
   结论: ¬ (freeOn E).IsLoop e
   证明: by
   simp [isLoop_iff, loops]
@@ -1162,7 +1162,7 @@ lemma uniqueBaseOn_isLoop_iff
 
 中文:
 引理 uniqueBaseOn_isLoop_iff
-  条件: {I E : Set α}
+  条件: {I E : 集合 α}
   结论: (uniqueBaseOn I E).IsLoop e ↔ e in E \ I
   证明: by
   simp [isLoop_iff, loops]
@@ -1184,7 +1184,7 @@ lemma eq_loopyOn_iff_loops_eq
 
 中文:
 引理 eq_loopyOn_iff_loops_eq
-  条件: {E : Set α}
+  条件: {E : 集合 α}
   结论: M = loopyOn E ↔ M.loops = E ∧ M.E = E
   证明: ⟨fun h => by simp [h, loops],
   fun ⟨h, h'⟩ => by rw [← h', ← closure_empty_eq_ground_iff, ← loops, h, h']⟩
@@ -1210,8 +1210,8 @@ structure IsNonloop
     - mem_ground : e in M.E
 
 中文:
-结构 IsNonloop
-  参数: (M : Matroid α) (e : α)
+结构 是Nonloop
+  参数: (M : 拟阵 α) (e : α)
   公理与运算 (2 个):
     - not_isLoop : ¬ M.IsLoop e
     - mem_ground : e in M.E
@@ -1236,7 +1236,7 @@ lemma IsLoop.not_isNonloop
 中文:
 引理 IsLoop.not_isNonloop
   条件: (he : M.IsLoop e)
-  结论: ¬M.IsNonloop e
+  结论: ¬M.是Nonloop e
   证明: fun h => h.not_isLoop he
 
 Depends on / 依赖: h.not_isLoop, not_isLoop
@@ -1256,8 +1256,8 @@ lemma compl_loops_eq
 
 中文:
 引理 compl_loops_eq
-  条件: (M : Matroid α)
-  结论: M.E \ M.loops = {e | M.IsNonloop e}
+  条件: (M : 拟阵 α)
+  结论: M.E \ M.loops = {e | M.是Nonloop e}
   证明: by
   simp [Set.ext_iff, isNonloop_iff, and_comm, isLoop_iff]
 
@@ -1278,7 +1278,7 @@ lemma isNonloop_of_not_isLoop
 中文:
 引理 isNonloop_of_not_isLoop
   条件: (he : e in M.E := by aesop_mat) (h : ¬ M.IsLoop e)
-  结论: M.IsNonloop e
+  结论: M.是Nonloop e
   证明: ⟨h,he⟩
 
 Depends on / 依赖: IsLoop, IsNonloop, M.IsLoop, M.IsNonloop, aesop_mat
@@ -1299,7 +1299,7 @@ lemma isLoop_of_not_isNonloop
 
 中文:
 引理 isLoop_of_not_isNonloop
-  条件: (he : e in M.E := by aesop_mat) (h : ¬ M.IsNonloop e)
+  条件: (he : e in M.E := by aesop_mat) (h : ¬ M.是Nonloop e)
   证明: by
   rwa [isNonloop_iff, and_iff_left he, not_not] at h
 
@@ -1326,7 +1326,7 @@ lemma not_isLoop_iff
 中文:
 引理 not_isLoop_iff
   条件: (he : e in M.E := by aesop_mat)
-  结论: ¬M.IsLoop e ↔ M.IsNonloop e
+  结论: ¬M.IsLoop e ↔ M.是Nonloop e
   证明: ⟨fun h => ⟨h, he⟩, IsNonloop.not_isLoop⟩
 
 @[simp]
@@ -1350,7 +1350,7 @@ lemma not_isNonloop_iff
 中文:
 引理 not_isNonloop_iff
   条件: (he : e in M.E := by aesop_mat)
-  结论: ¬M.IsNonloop e ↔ M.IsLoop e
+  结论: ¬M.是Nonloop e ↔ M.IsLoop e
   证明: by
   rw [← not_isLoop_iff]; rw [not_not]
 
@@ -1370,7 +1370,7 @@ lemma isNonloop_iff_mem_compl_loops
 
 中文:
 引理 isNonloop_iff_mem_compl_loops
-  结论: M.IsNonloop e ↔ e in M.E \ M.loops
+  结论: M.是Nonloop e ↔ e in M.E \ M.loops
   证明: by
   rw [isNonloop_iff]; rw [IsLoop]; rw [and_comm]; rw [mem_sdiff]
 
@@ -1393,8 +1393,8 @@ alias setOf_isNonloop_eq := setOfPred_isNonloop_eq
 
 中文:
 引理 setOfPred_isNonloop_eq
-  条件: (M : Matroid α)
-  结论: {e | M.IsNonloop e} = M.E \ M.loops
+  条件: (M : 拟阵 α)
+  结论: {e | M.是Nonloop e} = M.E \ M.loops
   证明: Set.ext (fun _ => isNonloop_iff_mem_compl_loops)
 
 @[deprecated (since := "2026-07-09")]
@@ -1422,7 +1422,7 @@ lemma not_isNonloop_iff_closure
 
 中文:
 引理 not_isNonloop_iff_closure
-  结论: ¬ M.IsNonloop e ↔ M.closure {e} = M.loops
+  结论: ¬ M.是Nonloop e ↔ M.closure {e} = M.loops
   证明: by
   by_cases he : e in M.E
   · simp [isLoop_iff_closure_eq_loops_and_mem_ground, he]
@@ -1450,7 +1450,7 @@ lemma isLoop_or_isNonloop
 
 中文:
 引理 isLoop_or_isNonloop
-  条件: (M : Matroid α) (e : α) (he : e in M.E := by aesop_mat)
+  条件: (M : 拟阵 α) (e : α) (he : e in M.E := by aesop_mat)
   证明: by
   rw [isNonloop_iff]; rw [and_iff_left he]; apply em
 
@@ -1477,7 +1477,7 @@ alias ⟨Indep.isNonloop, IsNonloop.indep⟩ := indep_singleton
 
 中文:
 引理 indep_singleton
-  结论: M.Indep {e} ↔ M.IsNonloop e
+  结论: M.Indep {e} ↔ M.是Nonloop e
   证明: by
   rw [isNonloop_iff]; rw [← singleton_dep]; rw [dep_iff]; rw [not_and]; rw [not_imp_not]; rw [singleton_subset_iff]
   exact ⟨fun h => ⟨fun _ => h, singleton_subset_iff.mp h.subset_ground⟩, fun h => h.1 h.2⟩
@@ -1505,7 +1505,7 @@ lemma Indep.isNonloop_of_mem
 中文:
 引理 Indep.isNonloop_of_mem
   条件: (hI : M.Indep I) (h : e in I)
-  结论: M.IsNonloop e
+  结论: M.是Nonloop e
   证明: by
   rw [← not_isLoop_iff (hI.subset_ground h)]; exact fun he => (he.notMem_of_indep hI) h
 
@@ -1525,8 +1525,8 @@ lemma IsNonloop.exists_mem_isBase
   simpa using (indep_singleton.2 he).exists_isBase_superset
 
 中文:
-引理 IsNonloop.exists_mem_isBase
-  条件: (he : M.IsNonloop e)
+引理 是Nonloop.存在_mem_isBase
+  条件: (he : M.是Nonloop e)
   结论: 存在 B, M.IsBase B ∧ e in B
   证明: by
   simpa using (indep_singleton.2 he).exists_isBase_superset
@@ -1550,7 +1550,7 @@ lemma IsCocircuit.isNonloop_of_mem
 
 中文:
 引理 IsCocircuit.isNonloop_of_mem
-  条件: {K : Set α} (hK : M.IsCocircuit K) (he : e in K)
+  条件: {K : 集合 α} (hK : M.IsCocircuit K) (he : e in K)
   证明: by
   rw [← not_isLoop_iff (hK.subset_ground he)]; rw [← singleton_isCircuit]
   intro he'
@@ -1576,8 +1576,8 @@ lemma IsCircuit.isNonloop_of_mem
     (fun hL => by simp [hL.eq_of_isCircuit_mem hC he] at hC')
 
 中文:
-引理 IsCircuit.isNonloop_of_mem
-  条件: (hC : M.IsCircuit C) (hC' : C.Nontrivial) (he : e in C)
+引理 是Circuit.isNonloop_of_mem
+  条件: (hC : M.是Circuit C) (hC' : C.非平凡) (he : e in C)
   证明: isNonloop_of_not_isLoop (hC.subset_ground he)
     (fun hL => by simp [hL.eq_of_isCircuit_mem hC he] at hC')
 
@@ -1600,8 +1600,8 @@ lemma IsCircuit.isNonloop_of_mem_of_one_lt_card
   exact h.ne rfl
 
 中文:
-引理 IsCircuit.isNonloop_of_mem_of_one_lt_card
-  结论: (hC : M.IsCircuit C) (h : 1 < C.encard)
+引理 是Circuit.isNonloop_of_mem_of_one_lt_card
+  结论: (hC : M.是Circuit C) (h : 1 < C.encard)
   证明: by
   refine isNonloop_of_not_isLoop (hC.subset_ground he) (fun hlp => ?_)
   rw [hlp.eq_of_isCircuit_mem hC he]; rw [encard_singleton] at h
@@ -1667,8 +1667,8 @@ lemma IsNonloop.mem_closure_singleton
     ⟨hef, (isNonloop_iff_notMem_loops he.mem_ground).1 he⟩).1
 
 中文:
-引理 IsNonloop.mem_closure_singleton
-  条件: (he : M.IsNonloop e) (hef : e in M.closure {f})
+引理 是Nonloop.mem_closure_singleton
+  条件: (he : M.是Nonloop e) (hef : e in M.closure {f})
   证明: by
   rw [← union_empty {_}]; rw [singleton_union] at *
   exact (M.closure_exchange (X := ∅)
@@ -1691,8 +1691,8 @@ lemma IsNonloop.mem_closure_comm
   proof: ⟨hf.mem_closure_singleton, he.mem_closure_singleton⟩
 
 中文:
-引理 IsNonloop.mem_closure_comm
-  条件: (he : M.IsNonloop e) (hf : M.IsNonloop f)
+引理 是Nonloop.mem_closure_comm
+  条件: (he : M.是Nonloop e) (hf : M.是Nonloop f)
   证明: ⟨hf.mem_closure_singleton, he.mem_closure_singleton⟩
 
 Depends on / 依赖: he.mem_closure_singleton, hf.mem_closure_singleton, mem_closure_singleton
@@ -1717,8 +1717,8 @@ lemma IsNonloop.isNonloop_of_mem_closure
   rw [eq_comm]; rw [← clo
 
 中文:
-引理 IsNonloop.isNonloop_of_mem_closure
-  条件: (he : M.IsNonloop e) (hef : e in M.closure {f})
+引理 是Nonloop.isNonloop_of_mem_closure
+  条件: (he : M.是Nonloop e) (hef : e in M.closure {f})
   证明: by
   rw [isNonloop_iff]; rw [and_comm]
   by_contra! h; apply he.not_isLoop
@@ -1750,8 +1750,8 @@ lemma IsNonloop.closure_eq_of_mem_closure
   rw [← closure_closure _ {f}]; rw [← insert_eq_of_mem hef]; rw [closure_insert_closure_eq_closure_insert]; rw [← closure_closure _ {e}]; rw [← insert_eq_of_mem (he.mem_closure_singleton hef)]; rw [closure_insert_closure_eq_closure_insert]; rw [pair_comm]
 
 中文:
-引理 IsNonloop.closure_eq_of_mem_closure
-  条件: (he : M.IsNonloop e) (hef : e in M.closure {f})
+引理 是Nonloop.closure_eq_of_mem_closure
+  条件: (he : M.是Nonloop e) (hef : e in M.closure {f})
   证明: by
   rw [← closure_closure _ {f}]; rw [← insert_eq_of_mem hef]; rw [closure_insert_closure_eq_closure_insert]; rw [← closure_closure _ {e}]; rw [← insert_eq_of_mem (he.mem_closure_singleton hef)]; rw [closure_insert_closure_eq_closure_insert]; rw [pair_comm]
 
@@ -1773,8 +1773,8 @@ lemma IsNonloop.closure_eq_closure_iff_isCircuit_of_ne
     rw [isCircuit_iff_dep_forall_sdiff_singleton_indep]; rw [dep_iff]; rw [insert_subset_iff]; rw [and_iff_right he.mem_ground]; rw [singleton_subset_iff]; rw [and_iff_left hf.
 
 中文:
-引理 IsNonloop.closure_eq_closure_iff_isCircuit_of_ne
-  条件: (he : M.IsNonloop e) (hef : e != f)
+引理 是Nonloop.closure_eq_closure_iff_isCircuit_of_ne
+  条件: (he : M.是Nonloop e) (hef : e != f)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · have hf := he.isNonloop_of_mem_closure (by rw [← h]; exact M.mem_closure_self e)
@@ -1808,8 +1808,8 @@ lemma IsNonloop.closure_eq_closure_iff_eq_or_dep
     singleton_subset_iff, and_iff_left hf.mem_ground, and_iff_lef
 
 中文:
-引理 IsNonloop.closure_eq_closure_iff_eq_or_dep
-  条件: (he : M.IsNonloop e) (hf : M.IsNonloop f)
+引理 是Nonloop.closure_eq_closure_iff_eq_or_dep
+  条件: (he : M.是Nonloop e) (hf : M.是Nonloop f)
   证明: by
   obtain (rfl | hne) := eq_or_ne e f
   · exact iff_of_true rfl (Or.inl rfl)
@@ -1842,9 +1842,9 @@ lemma exists_isNonloop
   ⟨_, hB.indep.isNonloop_of_mem hB.nonempty.some_mem⟩
 
 中文:
-引理 exists_isNonloop
-  条件: (M : Matroid α) [RankPos M]
-  结论: 存在 e, M.IsNonloop e
+引理 存在_isNonloop
+  条件: (M : 拟阵 α) [RankPos M]
+  结论: 存在 e, M.是Nonloop e
   证明: let ⟨_, hB⟩ := M.exists_isBase
   ⟨_, hB.indep.isNonloop_of_mem hB.nonempty.some_mem⟩
 
@@ -1866,8 +1866,8 @@ lemma IsNonloop.rankPos
 @[simp]
 
 中文:
-引理 IsNonloop.rankPos
-  条件: (h : M.IsNonloop e)
+引理 是Nonloop.rankPos
+  条件: (h : M.是Nonloop e)
   结论: M.RankPos
   证明: h.indep.rankPos_of_nonempty (singleton_nonempty e)
 
@@ -1891,8 +1891,8 @@ lemma restrict_isNonloop_iff
 
 中文:
 引理 restrict_isNonloop_iff
-  条件: {R : Set α}
-  结论: (M ↾ R).IsNonloop e ↔ M.IsNonloop e ∧ e in R
+  条件: {R : 集合 α}
+  结论: (M ↾ R).是Nonloop e ↔ M.是Nonloop e ∧ e in R
   证明: by
   rw [← indep_singleton]; rw [restrict_indep_iff]; rw [singleton_subset_iff]; rw [indep_singleton]
 
@@ -1911,9 +1911,9 @@ lemma IsNonloop.of_restrict
   proof: (restrict_isNonloop_iff.1 h).1
 
 中文:
-引理 IsNonloop.of_restrict
-  条件: {R : Set α} (h : (M ↾ R).IsNonloop e)
-  结论: M.IsNonloop e
+引理 是Nonloop.of_restrict
+  条件: {R : 集合 α} (h : (M ↾ R).是Nonloop e)
+  结论: M.是Nonloop e
   证明: (restrict_isNonloop_iff.1 h).1
 
 Depends on / 依赖: restrict_isNonloop_iff
@@ -1932,9 +1932,9 @@ lemma IsNonloop.of_isRestriction
   obtain ⟨R, -, rfl⟩ := hNM; exact h.of_restrict
 
 中文:
-引理 IsNonloop.of_isRestriction
-  条件: (h : N.IsNonloop e) (hNM : N <=r M)
-  结论: M.IsNonloop e
+引理 是Nonloop.of_isRestriction
+  条件: (h : N.是Nonloop e) (hNM : N <=r M)
+  结论: M.是Nonloop e
   证明: by
   obtain ⟨R, -, rfl⟩ := hNM; exact h.of_restrict
 
@@ -1955,7 +1955,7 @@ lemma isNonloop_iff_restrict_of_mem
 
 中文:
 引理 isNonloop_iff_restrict_of_mem
-  条件: {R : Set α} (he : e in R)
+  条件: {R : 集合 α} (he : e in R)
   证明: ⟨fun h => restrict_isNonloop_iff.2 ⟨h, he⟩, fun h => h.of_restrict⟩
 
 @[simp]
@@ -1980,7 +1980,7 @@ lemma comap_isNonloop_iff
 
 中文:
 引理 comap_isNonloop_iff
-  条件: {M : Matroid β} {f : α -> β}
+  条件: {M : 拟阵 β} {f : α -> β}
   证明: by
   rw [← indep_singleton]; rw [comap_indep_iff]; rw [image_singleton]; rw [indep_singleton]; rw [and_iff_left (injOn_singleton _ _)]
 
@@ -2007,8 +2007,8 @@ lemma freeOn_isNonloop_iff
 
 中文:
 引理 freeOn_isNonloop_iff
-  条件: {E : Set α}
-  结论: (freeOn E).IsNonloop e ↔ e in E
+  条件: {E : 集合 α}
+  结论: (freeOn E).是Nonloop e ↔ e in E
   证明: by
   rw [← indep_singleton]; rw [freeOn_indep_iff]; rw [singleton_subset_iff]
 
@@ -2031,7 +2031,7 @@ lemma uniqueBaseOn_isNonloop_iff
 
 中文:
 引理 uniqueBaseOn_isNonloop_iff
-  条件: {I E : Set α}
+  条件: {I E : 集合 α}
   证明: by
   rw [← indep_singleton]; rw [uniqueBaseOn_indep_iff']; rw [singleton_subset_iff]
 
@@ -2055,8 +2055,8 @@ lemma IsNonloop.exists_mem_isCocircuit
 @[simp]
 
 中文:
-引理 IsNonloop.exists_mem_isCocircuit
-  条件: (he : M.IsNonloop e)
+引理 是Nonloop.存在_mem_isCocircuit
+  条件: (he : M.是Nonloop e)
   结论: 存在 K, M.IsCocircuit K ∧ e in K
   证明: by
   obtain ⟨B, hB, heB⟩ := he.exists_mem_isBase
@@ -2085,7 +2085,7 @@ alias closure_inter_setOf_isNonloop_eq := closure_inter_setOfPred_isNonloop_eq
 
 中文:
 引理 closure_inter_setOfPred_isNonloop_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   rw [setOfPred_isNonloop_eq]; rw [← inter_sdiff_assoc]; rw [closure_sdiff_loops_eq]; rw [closure_inter_ground]
 
@@ -2117,7 +2117,7 @@ definition IsColoop
 
 中文:
 定义 IsColoop
-  签名: (M : Matroid α) (e : α)
+  签名: (M : 拟阵 α) (e : α)
   定义体: M✶.IsLoop e
 
 Depends on / 依赖: IsLoop
@@ -2136,7 +2136,7 @@ definition coloops
 
 中文:
 定义 coloops
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: M✶.loops
 
 @[aesop unsafe 20% (rule_sets := [Matroid])]
@@ -2180,7 +2180,7 @@ lemma coloops_subset_ground
 
 中文:
 引理 coloops_subset_ground
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.coloops subseteq M.E
   证明: fun _ => IsColoop.mem_ground
 
@@ -2389,8 +2389,8 @@ lemma isColoop_tfae
 
 中文:
 引理 isColoop_tfae
-  条件: (M : Matroid α) (e : α)
-  结论: List.TFAE [
+  条件: (M : 拟阵 α) (e : α)
+  结论: 列表.TFAE [
   证明: by
   tfae_have 1 ↔ 2 := Iff.rfl
   tfae_have 1 ↔ 3 := singleton_isCocircuit.symm
@@ -2444,7 +2444,7 @@ lemma isColoop_iff_forall_mem_isBase
   proof: (M.isColoop_tfae e).out 0 3
 
 中文:
-引理 isColoop_iff_forall_mem_isBase
+引理 isColoop_iff_对任意_mem_isBase
   结论: M.IsColoop e ↔ 对任意 ⦃B⦄, M.IsBase B -> e in B
   证明: (M.isColoop_tfae e).out 0 3
 
@@ -2526,7 +2526,7 @@ lemma IsColoop.isNonloop
 中文:
 引理 IsColoop.isNonloop
   条件: (h : M.IsColoop e)
-  结论: M.IsNonloop e
+  结论: M.是Nonloop e
   证明: let ⟨_, hB⟩ := M.exists_isBase
   hB.indep.isNonloop_of_mem ((isColoop_iff_forall_mem_isBase.mp h) hB)
 
@@ -2572,7 +2572,7 @@ lemma IsColoop.notMem_isCircuit
 
 中文:
 引理 IsColoop.notMem_isCircuit
-  条件: (he : M.IsColoop e) (hC : M.IsCircuit C)
+  条件: (he : M.IsColoop e) (hC : M.是Circuit C)
   结论: e ∉ C
   证明: fun h => (hC.isCocircuit.isNonloop_of_mem h).not_isLoop he
 
@@ -2591,8 +2591,8 @@ lemma IsCircuit.disjoint_coloops
   proof: disjoint_right.2 fun _ he => IsColoop.notMem_isCircuit he hC
 
 中文:
-引理 IsCircuit.disjoint_coloops
-  条件: (hC : M.IsCircuit C)
+引理 是Circuit.disjoint_coloops
+  条件: (hC : M.是Circuit C)
   结论: Disjoint C M.coloops
   证明: disjoint_right.2 fun _ he => IsColoop.notMem_isCircuit he hC
 
@@ -2611,7 +2611,7 @@ lemma isColoop_iff_forall_notMem_isCircuit
   simp_rw [(M.isColoop_tfae e).out 0 4, and_iff_left he]
 
 中文:
-引理 isColoop_iff_forall_notMem_isCircuit
+引理 isColoop_iff_对任意_notMem_isCircuit
   条件: (he : e in M.E := by aesop_mat)
   证明: by
   simp_rw [(M.isColoop_tfae e).out 0 4, and_iff_left he]
@@ -2635,7 +2635,7 @@ lemma isColoop_iff_forall_mem_compl_isCircuit
   exact iff_of_false (fun h => he h.mem_ground) fun h => he (h C hC).1
 
 中文:
-引理 isColoop_iff_forall_mem_compl_isCircuit
+引理 isColoop_iff_对任意_mem_compl_isCircuit
   条件: [RankPos M✶]
   证明: by
   by_cases he : e in M.E
@@ -2662,8 +2662,8 @@ lemma IsCircuit.not_isColoop_of_mem
   proof: fun h => h.notMem_isCircuit hC heC
 
 中文:
-引理 IsCircuit.not_isColoop_of_mem
-  条件: (hC : M.IsCircuit C) (heC : e in C)
+引理 是Circuit.not_isColoop_of_mem
+  条件: (hC : M.是Circuit C) (heC : e in C)
   结论: ¬ M.IsColoop e
   证明: fun h => h.notMem_isCircuit hC heC
 
@@ -2681,7 +2681,7 @@ lemma isColoop_iff_forall_mem_closure_iff_mem
   proof: (M.isColoop_tfae e).out 0 5
 
 中文:
-引理 isColoop_iff_forall_mem_closure_iff_mem
+引理 isColoop_iff_对任意_mem_closure_iff_mem
   结论: M.IsColoop e ↔ (对任意 X, e in M.closure X ↔ e in X)
   证明: (M.isColoop_tfae e).out 0 5
 
@@ -2701,7 +2701,7 @@ lemma isColoop_iff_forall_mem_closure_iff_mem'
   rw [← closure_inter_ground]; rw [h _ inter_subset_right]; rw [mem_inter_iff]; rw [and_iff_left he]
 
 中文:
-引理 isColoop_iff_forall_mem_closure_iff_mem'
+引理 isColoop_iff_对任意_mem_closure_iff_mem'
   证明: by
   refine ⟨fun h => ⟨fun X _ => isColoop_iff_forall_mem_closure_iff_mem.1 h X, h.mem_ground⟩,
     fun ⟨h, he⟩ => isColoop_iff_forall_mem_closure_iff_mem.2 fun X => ?_⟩
@@ -2770,7 +2770,7 @@ alias ⟨IsColoop.sdiff_not_spanning, _⟩ := isColoop_iff_sdiff_not_spanning
 
 中文:
 引理 isColoop_iff_sdiff_not_spanning
-  结论: M.IsColoop e ↔ ¬ M.Spanning (M.E \ {e})
+  结论: M.IsColoop e ↔ ¬ M.生成 (M.E \ {e})
   证明: (M.isColoop_tfae e).out 0 6
 
 @[deprecated (since := "2026-06-03")]
@@ -2862,7 +2862,7 @@ lemma IsBase.isColoop_iff_forall_notMem_fundCircuit
     · exact M.subset_closure (B \ {e}) (sdiff_subset.trans hB.
 
 中文:
-引理 IsBase.isColoop_iff_forall_notMem_fundCircuit
+引理 IsBase.isColoop_iff_对任意_notMem_fundCircuit
   条件: (hB : M.IsBase B) (he : e in B)
   证明: by
   refine ⟨fun h x hx heC => (h.notMem_isCircuit <| hB.fundCircuit_isCircuit hx.1 hx.2) heC,
@@ -2904,8 +2904,8 @@ lemma IsBasis'.inter_coloops_subset
     heI.mem_closure_iff_mem]
 
 中文:
-引理 IsBasis'.inter_coloops_subset
-  条件: (hIX : M.IsBasis' I X)
+引理 是基'.inter_coloops_subset
+  条件: (hIX : M.是基' I X)
   结论: X inter M.coloops subseteq I
   证明: by
   intro e ⟨heX, (heI : M.IsColoop e)⟩
@@ -2927,8 +2927,8 @@ lemma IsBasis.inter_coloops_subset
   proof: hIX.isBasis'.inter_coloops_subset
 
 中文:
-引理 IsBasis.inter_coloops_subset
-  条件: (hIX : M.IsBasis I X)
+引理 是基.inter_coloops_subset
+  条件: (hIX : M.是基 I X)
   结论: X inter M.coloops subseteq I
   证明: hIX.isBasis'.inter_coloops_subset
 
@@ -2951,7 +2951,7 @@ lemma exists_mem_isCircuit_of_not_isColoop
 @[simp]
 
 中文:
-引理 exists_mem_isCircuit_of_not_isColoop
+引理 存在_mem_isCircuit_of_not_isColoop
   条件: (heE : e in M.E) (he : ¬ M.IsColoop e)
   证明: by
   simp only [isColoop_iff_forall_mem_isBase, not_forall, exists_prop] at he
@@ -2982,7 +2982,7 @@ lemma closure_inter_coloops_eq
 
 中文:
 引理 closure_inter_coloops_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: by
   simp_rw [Set.ext_iff, mem_inter_iff, ← isColoop_iff_mem_coloops, and_congr_left_iff]
   intro e he
@@ -3008,7 +3008,7 @@ lemma closure_inter_eq_of_subset_coloops
 
 中文:
 引理 closure_inter_eq_of_subset_coloops
-  条件: (X : Set α) (hK : K subseteq M.coloops)
+  条件: (X : 集合 α) (hK : K subseteq M.coloops)
   证明: by
   nth_rw 1 [← inter_eq_self_of_subset_right hK]
   rw [← inter_assoc]; rw [closure_inter_coloops_eq]; rw [inter_assoc]; rw [inter_eq_self_of_subset_right hK]
@@ -3034,7 +3034,7 @@ lemma closure_union_eq_of_subset_coloops
 
 中文:
 引理 closure_union_eq_of_subset_coloops
-  条件: (X : Set α) (hK : K subseteq M.coloops)
+  条件: (X : 集合 α) (hK : K subseteq M.coloops)
   证明: by
   rw [← closure_union_closure_left_eq]; rw [subset_antisymm_iff]; rw [and_iff_left (M.subset_closure _)]; rw [← sdiff_eq_empty]; rw [eq_empty_iff_forall_notMem]
   refine fun e ⟨hecl, he⟩ => he (.inl ?_)
@@ -3063,7 +3063,7 @@ lemma closure_insert_isColoop_eq
 
 中文:
 引理 closure_insert_isColoop_eq
-  条件: (X : Set α) (he : M.IsColoop e)
+  条件: (X : 集合 α) (he : M.IsColoop e)
   证明: by
   rw [← union_singleton]; rw [closure_union_eq_of_subset_coloops _ (by simpa)]; rw [union_singleton]
 
@@ -3108,7 +3108,7 @@ lemma closure_sdiff_eq_of_subset_coloops
 
 中文:
 引理 closure_sdiff_eq_of_subset_coloops
-  条件: (X : Set α) (hK : K subseteq M.coloops)
+  条件: (X : 集合 α) (hK : K subseteq M.coloops)
   证明: by
   nth_rw 2 [← inter_union_sdiff X K]
   rw [union_comm]; rw [closure_union_eq_of_subset_coloops _ (inter_subset_right.trans hK)]; rw [union_sdiff_distrib]; rw [sdiff_eq_empty.mpr inter_subset_right]; rw [union_empty]; rw [eq_comm]; rw [sdiff_eq_self_iff_disjoint]; rw [disjoint_iff_forall_ne]
@@ -3180,7 +3180,7 @@ lemma closure_union_coloops_eq
 
 中文:
 引理 closure_union_coloops_eq
-  条件: (M : Matroid α) (X : Set α)
+  条件: (M : 拟阵 α) (X : 集合 α)
   证明: closure_union_eq_of_subset_coloops _ Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, closure_union_eq_of_subset_coloops
@@ -3358,7 +3358,7 @@ lemma coloops_indep
 
 中文:
 引理 coloops_indep
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.Indep M.coloops
   证明: by
   rw [← empty_union M.coloops]; rw [union_coloops_indep_iff]
@@ -3385,7 +3385,7 @@ lemma restrict_isColoop_iff
 
 中文:
 引理 restrict_isColoop_iff
-  条件: {R : Set α} (hRE : R subseteq M.E)
+  条件: {R : 集合 α} (hRE : R subseteq M.E)
   证明: by
   wlog heR : e in R
   · exact iff_of_false (fun h => heR h.mem_ground) fun h => heR h.2
@@ -3419,7 +3419,7 @@ lemma ext_indep_disjoint_loops_coloops
 
 中文:
 引理 ext_indep_disjoint_loops_coloops
-  结论: {M₁ M₂ : Matroid α} (hE : M₁.E = M₂.E)
+  结论: {M₁ M₂ : 拟阵 α} (hE : M₁.E = M₂.E)
   证明: by
   refine ext_indep hE fun I hI => ?_
   rw [← sdiff_coloops_indep_iff]; rw [← @sdiff_coloops_indep_iff _ M₂]; rw [← hc]
@@ -3462,8 +3462,8 @@ class Loopless
     - loops_eq_empty : M.loops = ∅
 
 中文:
-类 Loopless
-  参数: (M : Matroid α)
+类 无环
+  参数: (M : 拟阵 α)
   公理与运算 (1 个):
     - loops_eq_empty : M.loops = ∅
 -/
@@ -3482,7 +3482,7 @@ lemma loops_eq_empty
 
 中文:
 引理 loops_eq_empty
-  条件: (M : Matroid α) [Loopless M]
+  条件: (M : 拟阵 α) [无环 M]
   结论: M.loops = ∅
   证明: ‹Loopless M›.loops_eq_empty
 
@@ -3503,7 +3503,7 @@ lemma isNonloop_of_loopless
 
 中文:
 引理 isNonloop_of_loopless
-  条件: [Loopless M] (he : e in M.E := by aesop_mat)
+  条件: [无环 M] (he : e in M.E := by aesop_mat)
   证明: by
   rw [← not_isLoop_iff]; rw [isLoop_iff]; rw [loops_eq_empty]
   exact notMem_empty _
@@ -3528,7 +3528,7 @@ lemma subsingleton_indep
 
 中文:
 引理 subsingleton_indep
-  条件: [M.Loopless] (hI : I.Subsingleton) (hIE : I subseteq M.E := by aesop_mat)
+  条件: [M.无环] (hI : I.子单例) (hIE : I subseteq M.E := by aesop_mat)
   证明: by
   obtain rfl | ⟨x, rfl⟩ := hI.eq_empty_or_singleton
   · simp
@@ -3553,7 +3553,7 @@ lemma not_isLoop
 
 中文:
 引理 not_isLoop
-  条件: (M : Matroid α) [Loopless M] (e : α)
+  条件: (M : 拟阵 α) [无环 M] (e : α)
   结论: ¬ M.IsLoop e
   证明: fun h => (isNonloop_of_loopless (e := e)).not_isLoop h
 
@@ -3572,8 +3572,8 @@ lemma loopless_iff_forall_isNonloop
     fun h => ⟨subset_empty_iff.1 (fun e (he : M.IsLoop e) => (h e he.mem_ground).not_isLoop he)⟩⟩
 
 中文:
-引理 loopless_iff_forall_isNonloop
-  结论: M.Loopless ↔ 对任意 e in M.E, M.IsNonloop e
+引理 loopless_iff_对任意_isNonloop
+  结论: M.无环 ↔ 对任意 e in M.E, M.是Nonloop e
   证明: ⟨fun _ _ he => isNonloop_of_loopless he,
     fun h => ⟨subset_empty_iff.1 (fun e (he : M.IsLoop e) => (h e he.mem_ground).not_isLoop he)⟩⟩
 
@@ -3593,8 +3593,8 @@ lemma loopless_iff_forall_not_isLoop
     fun h => loopless_iff_forall_isNonloop.2 fun e he => (not_isLoop_iff he).1 (h e he)⟩
 
 中文:
-引理 loopless_iff_forall_not_isLoop
-  结论: M.Loopless ↔ 对任意 e in M.E, ¬ M.IsLoop e
+引理 loopless_iff_对任意_not_isLoop
+  结论: M.无环 ↔ 对任意 e in M.E, ¬ M.IsLoop e
   证明: ⟨fun _ e _ => M.not_isLoop e,
     fun h => loopless_iff_forall_isNonloop.2 fun e he => (not_isLoop_iff he).1 (h e he)⟩
 
@@ -3620,8 +3620,8 @@ lemma loopless_iff_forall_isCircuit
   
 
 中文:
-引理 loopless_iff_forall_isCircuit
-  结论: M.Loopless ↔ 对任意 C, M.IsCircuit C -> C.Nontrivial
+引理 loopless_iff_对任意_isCircuit
+  结论: M.无环 ↔ 对任意 C, M.是Circuit C -> C.非平凡
   证明: by
   suffices (exists x in M.E, M.IsLoop x) ↔ exists x, M.IsCircuit x ∧ x.Subsingleton by
     rw [loopless_iff_forall_not_isLoop]
@@ -3653,9 +3653,9 @@ lemma Loopless.ground_eq
   proof: Set.ext fun _ => ⟨fun he => isNonloop_of_loopless he, IsNonloop.mem_ground⟩
 
 中文:
-引理 Loopless.ground_eq
-  条件: (M : Matroid α) [Loopless M]
-  结论: M.E = {e | M.IsNonloop e}
+引理 无环.ground_eq
+  条件: (M : 拟阵 α) [无环 M]
+  结论: M.E = {e | M.是Nonloop e}
   证明: Set.ext fun _ => ⟨fun he => isNonloop_of_loopless he, IsNonloop.mem_ground⟩
 
 Depends on / 依赖: IsNonloop, IsNonloop.mem_ground, Set.ext, isNonloop_of_loopless, mem_ground
@@ -3676,8 +3676,8 @@ lemma IsRestriction.loopless
 
 中文:
 引理 IsRestriction.loopless
-  条件: [M.Loopless] (hR : N <=r M)
-  结论: N.Loopless
+  条件: [M.无环] (hR : N <=r M)
+  结论: N.无环
   证明: by
   obtain ⟨R, hR, rfl⟩ := hR
   rw [loopless_iff]; rw [restrict_loops_eq hR]; rw [M.loops_eq_empty]; rw [empty_inter]
@@ -3703,8 +3703,8 @@ lemma loopyOn_isLoopless_iff
 
 中文:
 引理 loopyOn_isLoopless_iff
-  条件: {E : Set α}
-  结论: Loopless (loopyOn E) ↔ E = ∅
+  条件: {E : 集合 α}
+  结论: 无环 (loopyOn E) ↔ E = ∅
   证明: by
   simp [loopless_iff_forall_not_isLoop, eq_empty_iff_forall_notMem]
 -/
@@ -3721,7 +3721,7 @@ definition removeLoops
 
 中文:
 定义 removeLoops
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: M ↾ {e | M.IsNonloop e}
 
 Depends on / 依赖: IsNonloop, M.IsNonloop
@@ -3739,8 +3739,8 @@ lemma removeLoops_eq_restrict
 
 中文:
 引理 removeLoops_eq_restrict
-  条件: (M : Matroid α)
-  结论: M.removeLoops = M ↾ {e | M.IsNonloop e}
+  条件: (M : 拟阵 α)
+  结论: M.removeLoops = M ↾ {e | M.是Nonloop e}
   证明: rfl
 -/
 lemma removeLoops_eq_restrict (M : Matroid α) : M.removeLoops = M ↾ {e | M.IsNonloop e} := rfl
@@ -3756,8 +3756,8 @@ lemma removeLoops_ground_eq
 
 中文:
 引理 removeLoops_ground_eq
-  条件: (M : Matroid α)
-  结论: M.removeLoops.E = {e | M.IsNonloop e}
+  条件: (M : 拟阵 α)
+  结论: M.removeLoops.E = {e | M.是Nonloop e}
   证明: rfl
 -/
 lemma removeLoops_ground_eq (M : Matroid α) : M.removeLoops.E = {e | M.IsNonloop e} := rfl
@@ -3775,7 +3775,7 @@ instance removeLoops_loopless
 
 中文:
 实例 removeLoops_loopless
-  签名: (M : Matroid α)
+  签名: (M : 拟阵 α)
   定义体: by
   simp [loopless_iff_forall_isNonloop, removeLoops]
 
@@ -3799,7 +3799,7 @@ lemma removeLoops_eq_self
 
 中文:
 引理 removeLoops_eq_self
-  条件: (M : Matroid α) [Loopless M]
+  条件: (M : 拟阵 α) [无环 M]
   结论: M.removeLoops = M
   证明: by
   rw [removeLoops]; rw [← Loopless.ground_eq]; rw [restrict_ground_eq_self]
@@ -3822,7 +3822,7 @@ lemma removeLoops_eq_self_iff
 
 中文:
 引理 removeLoops_eq_self_iff
-  结论: M.removeLoops = M ↔ M.Loopless
+  结论: M.removeLoops = M ↔ M.无环
   证明: by
   refine ⟨fun h => ?_, fun h => M.removeLoops_eq_self⟩
   rw [← h]
@@ -3846,7 +3846,7 @@ lemma removeLoops_isRestriction
 
 中文:
 引理 removeLoops_isRestriction
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.removeLoops <=r M
   证明: restrict_isRestriction _ _ (fun _ h => IsNonloop.mem_ground h)
 
@@ -3871,7 +3871,7 @@ lemma eq_restrict_removeLoops
 
 中文:
 引理 eq_restrict_removeLoops
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.removeLoops ↾ M.E = M
   证明: by
   rw [removeLoops]; rw [ext_iff_indep]
@@ -3931,7 +3931,7 @@ lemma removeLoops_isBasis'_eq
 
 中文:
 引理 removeLoops_isBasis'_eq
-  结论: M.removeLoops.IsBasis' = M.IsBasis'
+  结论: M.removeLoops.是基' = M.是基'
   证明: by
   ext
   simp [IsBasis']
@@ -3980,7 +3980,7 @@ lemma removeLoops_isNonloop_eq
 
 中文:
 引理 removeLoops_isNonloop_eq
-  结论: M.removeLoops.IsNonloop = M.IsNonloop
+  结论: M.removeLoops.是Nonloop = M.是Nonloop
   证明: by
   ext e
   rw [removeLoops_eq_restrict]; rw [restrict_isNonloop_iff]; rw [mem_ofPred]; rw [and_self]
@@ -4002,9 +4002,9 @@ lemma IsNonloop.removeLoops_isNonloop
   simpa
 
 中文:
-引理 IsNonloop.removeLoops_isNonloop
-  条件: (he : M.IsNonloop e)
-  结论: M.removeLoops.IsNonloop e
+引理 是Nonloop.removeLoops_isNonloop
+  条件: (he : M.是Nonloop e)
+  结论: M.removeLoops.是Nonloop e
   证明: by
   simpa
 -/
@@ -4023,7 +4023,7 @@ lemma removeLoops_idem
 
 中文:
 引理 removeLoops_idem
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M.removeLoops.removeLoops = M.removeLoops
   证明: by
   simp
@@ -4044,7 +4044,7 @@ lemma removeLoops_restrict_eq_restrict
 
 中文:
 引理 removeLoops_restrict_eq_restrict
-  条件: (hX : X subseteq {e | M.IsNonloop e})
+  条件: (hX : X subseteq {e | M.是Nonloop e})
   证明: by
   rwa [removeLoops_eq_restrict, restrict_restrict_eq]
 
@@ -4093,7 +4093,7 @@ lemma IsRestriction.isRestriction_removeLoops
 
 中文:
 引理 IsRestriction.isRestriction_removeLoops
-  条件: (hNM : N <=r M) [N.Loopless]
+  条件: (hNM : N <=r M) [N.无环]
   结论: N <=r M.removeLoops
   证明: by
   obtain ⟨R, hR, rfl⟩ := hNM.exists_eq_restrict

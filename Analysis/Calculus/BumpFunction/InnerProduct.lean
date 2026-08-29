@@ -43,8 +43,8 @@ definition ContDiffBumpBase.ofInnerProductSpace
     rcases eq_or_ne x 0 with rfl |
 
 中文:
-定义 ContDiffBumpBase.ofInnerProductSpace
-  签名: : ContDiffBumpBase E where
+定义 余ntDiffBumpBase.ofInnerProductSpace
+  签名: : 余ntDiffBumpBase E where
   定义体: smoothTransition ((R - ‖x‖) / (R - 1))
   mem_Icc _ _ := ⟨smoothTransition.nonneg _, smoothTransition.le_one _⟩
   symmetric _ _ := by simp only [norm_neg]

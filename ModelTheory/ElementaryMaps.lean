@@ -51,11 +51,11 @@ structure ElementaryEmbedding
     - map_formula' : forall ⦃n⦄ (φ : L.Formula (Fin n)) (x : Fin n -> M), φ.Realize (toFun ∘ x) ↔ φ.Realize x  [default: by aesop]
 
 中文:
-结构 ElementaryEmbedding
+结构 Elementary嵌入
   参数: where
   公理与运算 (2 个):
     - toFun : M -> N
-    - map_formula' : 对任意 ⦃n⦄ (φ : L.Formula (Fin n)) (x : Fin n -> M), φ.实数ize (toFun ∘ x) ↔ φ.实数ize x  [默认: by aesop]
+    - map_formula' : 对任意 ⦃n⦄ (φ : L.公式 (有限集 n)) (x : 有限集 n -> M), φ.实数ize (toFun ∘ x) ↔ φ.实数ize x  [默认: by aesop]
 -/
 structure ElementaryEmbedding where
   /-- The underlying embedding -/
@@ -94,7 +94,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (M ↪ₑ[L] N) M N where
+  签名: : 函数状 (M ↪ₑ[L] N) M N where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -164,7 +164,7 @@ theorem map_formula
 
 中文:
 定理 map_formula
-  条件: (f : M ↪ₑ[L] N) {α : 类型} (φ : L.Formula α) (x : α -> M)
+  条件: (f : M ↪ₑ[L] N) {α : 类型} (φ : L.公式 α) (x : α -> M)
   证明: by
   rw [Formula.Realize]; rw [Formula.Realize]; rw [← f.map_boundedFormula]; rw [Unique.eq_default (f ∘ default)]
 
@@ -257,7 +257,7 @@ theorem injective
 中文:
 定理 injective
   条件: (φ : M ↪ₑ[L] N)
-  结论: Function.Injective φ
+  结论: 函数.单射 φ
   证明: by
   intro x y
   exact (φ.map_formula ((var 0).equal (var 1)) fun i => if i = 0 then x else y).1
@@ -306,7 +306,7 @@ theorem map_fun
 
 中文:
 定理 map_fun
-  条件: (φ : M ↪ₑ[L] N) {n : 自然数} (f : L.Functions n) (x : Fin n -> M)
+  条件: (φ : M ↪ₑ[L] N) {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
   证明: by
   have h := φ.map_formula (Formula.graph f) (Fin.cons (funMap f x) x)
   rw [Formula.realize_graph]; rw [Fin.comp_cons]; rw [Formula.realize_graph] at h
@@ -334,7 +334,7 @@ theorem map_rel
 
 中文:
 定理 map_rel
-  条件: (φ : M ↪ₑ[L] N) {n : 自然数} (r : L.Relations n) (x : Fin n -> M)
+  条件: (φ : M ↪ₑ[L] N) {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
   证明: haveI h := φ.map_formula (r.formula var) x
   h
 
@@ -358,7 +358,7 @@ instance strongHomClass
 
 中文:
 实例 strongHomClass
-  签名: : StrongHomClass L (M ↪ₑ[L] N) M N where
+  签名: : Strong态射类 L (M ↪ₑ[L] N) M N where
   定义体: map_fun
   map_rel := map_rel
 
@@ -519,7 +519,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (M ↪ₑ[L] N) (M -> N) (↑)
+  结论: @函数.单射 (M ↪ₑ[L] N) (M -> N) (↑)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -583,7 +583,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ↪ₑ[L] M)
+  签名: 可居 (M ↪ₑ[L] M)
   定义体: ⟨refl L M⟩
 
 @[simp]
@@ -689,7 +689,7 @@ definition liftWithConstants
 
 中文:
 定义 liftWithConstants
-  签名: (f : M ↪ₑ[L] N) (A : Set M)
+  签名: (f : M ↪ₑ[L] N) (A : 集合 M)
   定义体: by
   refine ⟨f, ?_⟩
   intro n φ x
@@ -758,8 +758,8 @@ definition ElementaryEmbedding.ofModelsElementaryDiagram
     · simp_rw [Se
 
 中文:
-定义 ElementaryEmbedding.ofModelsElementaryDiagram
-  签名: (N : 类型) [L.Structure N] [L[[M]].Structure N]
+定义 Elementary嵌入.ofModelsElementaryDiagram
+  签名: (N : 类型) [L.结构 N] [L[[M]].结构 N]
   定义体: ⟨((↑) : L[[M]].Constants -> N) ∘ Sum.inr, fun n φ x => by
     refine
       _root_.trans ?_
@@ -805,7 +805,7 @@ theorem isElementary_of_exists
   refine fun n φ => φ.recOn ?_ ?_ ?_ ?
 
 中文:
-定理 isElementary_of_exists
+定理 isElementary_of_存在
   结论: (f : M ↪[L] N)
   证明: by
   suffices h : forall (n : Nat) (φ : L.BoundedFormula Empty n) (xs : Fin n -> M),
@@ -953,7 +953,7 @@ theorem realize_term_substructure
 
 中文:
 定理 realize_term_substructure
-  条件: {α : 类型} {S : L.Substructure M} (v : α -> S) (t : L.Term α)
+  条件: {α : 类型} {S : L.子结构 M} (v : α -> S) (t : L.项 α)
   证明: HomClass.realize_term S.subtype
 
 Depends on / 依赖: HomClass, HomClass.realize_term, S.subtype, realize_term, subtype

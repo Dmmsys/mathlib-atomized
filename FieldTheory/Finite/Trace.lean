@@ -48,7 +48,7 @@ theorem trace_to_zmod_nondegenerate
 
 中文:
 定理 trace_to_zmod_nondegenerate
-  结论: (F : 类型) [Field F] [Finite F]
+  结论: (F : 类型) [域 F] [有限 F]
   证明: by
   have : Fact (ringChar F).Prime := ⟨CharP.char_is_prime F _⟩
   have htr := (traceForm_nondegenerate (ZMod (ringChar F)) F).1 a

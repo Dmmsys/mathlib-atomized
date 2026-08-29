@@ -68,8 +68,8 @@ class MulMemClass
     - mul_mem : forall {s : S} {a b : M}, a in s -> b in s -> a * b in s
 
 中文:
-类 MulMemClass
-  参数: (S : 类型) (M : outParam 类型) [Mul M] [SetLike S M]
+类 MulMem类
+  参数: (S : 类型) (M : outParam 类型) [乘法 M] [集合状 S M]
   公理与运算 (1 个):
     - mul_mem : 对任意 {s : S} {a b : M}, a in s -> b in s -> a * b in s
 -/
@@ -89,8 +89,8 @@ class AddMemClass
     - add_mem : forall {s : S} {a b : M}, a in s -> b in s -> a + b in s
 
 中文:
-类 AddMemClass
-  参数: (S : 类型) (M : outParam 类型) [Add M] [SetLike S M]
+类 加法Mem类
+  参数: (S : 类型) (M : outParam 类型) [加法 M] [集合状 S M]
   公理与运算 (1 个):
     - add_mem : 对任意 {s : S} {a b : M}, a in s -> b in s -> a + b in s
 
@@ -117,10 +117,10 @@ structure Subsemigroup
     - mul_mem'({a b}) : a in carrier -> b in carrier -> a * b in carrier
 
 中文:
-结构 Subsemigroup
-  参数: (M : 类型) [Mul M]
+结构 子半群
+  参数: (M : 类型) [乘法 M]
   公理与运算 (2 个):
-    - carrier : Set M
+    - carrier : 集合 M
     - mul_mem'({a b}) : a in carrier -> b in carrier -> a * b in carrier
 -/
 structure Subsemigroup (M : Type*) [Mul M] where
@@ -140,10 +140,10 @@ structure AddSubsemigroup
     - add_mem'({a b}) : a in carrier -> b in carrier -> a + b in carrier
 
 中文:
-结构 AddSubsemigroup
-  参数: (M : 类型) [Add M]
+结构 加法子半群
+  参数: (M : 类型) [加法 M]
   公理与运算 (2 个):
-    - carrier : Set M
+    - carrier : 集合 M
     - add_mem'({a b}) : a in carrier -> b in carrier -> a + b in carrier
 -/
 structure AddSubsemigroup (M : Type*) [Add M] where
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subsemigroup M) M
+  签名: 集合状 (子半群 M) M
   定义体: ⟨Subsemigroup.carrier, fun p q h => by cases p; cases q; congr⟩
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.carrier, carrier
@@ -188,7 +188,7 @@ initialize_simps_projections AddSubsemigroup (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subsemigroup M)
+  签名: 偏序 (子半群 M)
   定义体: .ofSetLike (Subsemigroup M) M
 
 initialize_simps_projections Subsemigroup (carrier -> coe, as_prefix coe)
@@ -214,7 +214,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S M : 类型} [Mul M] [SetLike S M] [MulMemClass S M] (s : S)
+  签名: {S M : 类型} [乘法 M] [集合状 S M] [MulMem类 S M] (s : S)
   定义体: ⟨s, MulMemClass.mul_mem⟩
 
 @[to_additive]
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulMemClass (Subsemigroup M) M
+  签名: MulMem类 (子半群 M) M
   定义体: fun {_ _ _} => Subsemigroup.mul_mem' _
 
 @[to_additive (attr := simp)]
@@ -265,7 +265,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subsemigroup M} {x : M}
+  条件: {s : 子半群 M} {x : M}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -290,7 +290,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {s : Set M} {x : M} (h_mul)
+  条件: {s : 集合 M} {x : M} (h_mul)
   结论: x in mk s h_mul ↔ x in s
   证明: Iff.rfl
 
@@ -315,8 +315,8 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (s : Set M) (h_mul)
-  结论: (mk s h_mul : Set M) = s
+  条件: (s : 集合 M) (h_mul)
+  结论: (mk s h_mul : 集合 M) = s
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -336,7 +336,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {s t : Set M} (h_mul) (h_mul')
+  条件: {s t : 集合 M} (h_mul) (h_mul')
   结论: mk s h_mul <= mk t h_mul' ↔ s subseteq t
   证明: Iff.rfl
 
@@ -358,7 +358,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Subsemigroup M} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 子半群 M} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -381,7 +381,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Subsemigroup M) (s : Set M) (hs : s = S)
+  签名: (S : 子半群 M) (s : 集合 M) (hs : s = S)
   定义体: s
   mul_mem' := hs.symm ▸ S.mul_mem'
 -/
@@ -406,8 +406,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: {s : Set M} (hs : s = S)
-  结论: (S.copy s hs : Set M) = s
+  条件: {s : 集合 M} (hs : s = S)
+  结论: (S.copy s hs : 集合 M) = s
   证明: rfl
 
 @[to_additive]
@@ -427,7 +427,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: {s : Set M} (hs : s = S)
+  条件: {s : 集合 M} (hs : s = S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -471,7 +471,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Subsemigroup M)
+  签名: 顶元素 (子半群 M)
   定义体: ⟨{ carrier := Set.univ
       mul_mem' := fun _ _ => Set.mem_univ _ }⟩
 
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Subsemigroup M)
+  签名: 底元素 (子半群 M)
   定义体: ⟨{ carrier := ∅
       mul_mem' := False.elim }⟩
 
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subsemigroup M)
+  签名: 可居 (子半群 M)
   定义体: ⟨⊥⟩
 
 @[to_additive]
@@ -544,7 +544,7 @@ theorem notMem_bot
 中文:
 定理 notMem_bot
   条件: {x : M}
-  结论: x ∉ (⊥ : Subsemigroup M)
+  结论: x ∉ (⊥ : 子半群 M)
   证明: Set.notMem_empty x
 
 @[to_additive (attr := simp)]
@@ -569,7 +569,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : M)
-  结论: x in (⊤ : Subsemigroup M)
+  结论: x in (⊤ : 子半群 M)
   证明: Set.mem_univ x
 
 @[to_additive (attr := simp, norm_cast)]
@@ -592,7 +592,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Subsemigroup M) : Set M) = Set.univ
+  结论: ((⊤ : 子半群 M) : 集合 M) = 集合.univ
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -613,7 +613,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Subsemigroup M) : Set M) = ∅
+  结论: ((⊥ : 子半群 M) : 集合 M) = ∅
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -636,7 +636,7 @@ lemma mk_eq_top
 
 中文:
 引理 mk_eq_top
-  条件: (carrier : Set M) (mul_mem')
+  条件: (carrier : 集合 M) (mul_mem')
   结论: mk carrier mul_mem' = ⊤ ↔ carrier = .univ
   证明: by
   simp [← SetLike.coe_set_eq]
@@ -661,7 +661,7 @@ lemma mk_eq_bot
 
 中文:
 引理 mk_eq_bot
-  条件: (carrier : Set M) (mul_mem')
+  条件: (carrier : 集合 M) (mul_mem')
   结论: mk carrier mul_mem' = ⊥ ↔ carrier = ∅
   证明: by
   simp [← SetLike.coe_set_eq]
@@ -687,7 +687,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Subsemigroup M)
+  签名: 最小值 (子半群 M)
   定义体: ⟨fun S₁ S₂ =>
     { carrier := S₁ inter S₂
       mul_mem' := fun ⟨hx, hx'⟩ ⟨hy, hy'⟩ => ⟨S₁.mul_mem hx hy, S₂.mul_mem hx' hy'⟩ }⟩
@@ -715,8 +715,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : Subsemigroup M)
-  结论: ((p ⊓ p' : Subsemigroup M) : Set M) = (p : Set M) inter p'
+  条件: (p p' : 子半群 M)
+  结论: ((p ⊓ p' : 子半群 M) : 集合 M) = (p : 集合 M) inter p'
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -738,7 +738,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : Subsemigroup M} {x : M}
+  条件: {p p' : 子半群 M} {x : M}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -766,8 +766,8 @@ theorem subsingleton_of_subsingleton
 
 中文:
 定理 subsingleton_of_subsingleton
-  条件: [Subsingleton (Subsemigroup M)]
-  结论: Subsingleton M
+  条件: [子单例 (子半群 M)]
+  结论: 子单例 M
   证明: by
   constructor; intro x y
   have : forall a : M, a in (⊥ : Subsemigroup M) := by simp [Subsingleton.elim (⊥ : Subsemigroup M) ⊤]
@@ -796,7 +796,7 @@ instance [hn
 
 中文:
 实例 [hn
-  签名: : Nonempty M] : Nontrivial (Subsemigroup M)
+  签名: : 非空 M] : 非平凡 (子半群 M)
   定义体: ⟨⟨⊥, ⊤, fun h => by
       obtain ⟨x⟩ := id hn
       refine absurd (?_ : x in ⊥) notMem_bot
@@ -879,7 +879,7 @@ theorem eq_of_eqOn_top
 
 中文:
 定理 eq_of_eqOn_top
-  条件: {f g : M ->ₙ* N} (h : Set.EqOn f g (⊤ : Subsemigroup M))
+  条件: {f g : M ->ₙ* N} (h : 集合.EqOn f g (⊤ : 子半群 M))
   结论: f = g
   证明: ext fun _ => h trivial
 -/
@@ -980,7 +980,7 @@ instance toSemigroup
 
 中文:
 实例 toSemigroup
-  签名: {M : 类型} [Semigroup M] {A : 类型} [SetLike A M] [MulMemClass A M]
+  签名: {M : 类型} [半群 M] {A : 类型} [集合状 A M] [MulMem类 A M]
   定义体: fast_instance%
   Subtype.coe_injective.semigroup Subtype.val fun _ _ => rfl
 
@@ -1003,7 +1003,7 @@ instance toCommSemigroup
 
 中文:
 实例 toCommSemigroup
-  签名: {M} [CommSemigroup M] {A : 类型} [SetLike A M] [MulMemClass A M]
+  签名: {M} [交换半群 M] {A : 类型} [集合状 A M] [MulMem类 A M]
   定义体: fast_instance%
   Subtype.coe_injective.commSemigroup Subtype.val fun _ _ => rfl
 
@@ -1026,7 +1026,7 @@ instance isLeftCancelMul
 
 中文:
 实例 isLeftCancelMul
-  签名: [IsLeftCancelMul M] (S : A)
+  签名: [左乘消去 M] (S : A)
   定义体: Subtype.coe_injective.isLeftCancelMul Subtype.val fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.isLeftCancelMul, Subtype.val, coe_injective, isLeftCancelMul
@@ -1047,7 +1047,7 @@ instance isRightCancelMul
 
 中文:
 实例 isRightCancelMul
-  签名: [IsRightCancelMul M] (S : A)
+  签名: [右乘消去 M] (S : A)
   定义体: Subtype.coe_injective.isRightCancelMul Subtype.val fun _ _ => rfl
 
 Depends on / 依赖: DivisionMonoid, GroupWithZero, GroupWithZero.toDivisionMonoid, Subtype, Subtype.coe_injective.isRightCancelMul, Subtype.val, coe_injective, isRightCancelMul, toDivisionMonoid
@@ -1066,7 +1066,7 @@ instance isCancelMul
 
 中文:
 实例 isCancelMul
-  签名: [IsCancelMul M] (S : A)
+  签名: [是消去乘法 M] (S : A)
 
 Depends on / 依赖: IsCancelMulZero
 -/
@@ -1148,7 +1148,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (MulMemClass.subtype S' : S' -> M) = Subtype.val
+  结论: (MulMem类.subtype S' : S' -> M) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (MulMemClass.subtype S' : S' -> M) = Subtype.val :=
@@ -1171,7 +1171,7 @@ alias ⟨_, IsMulCommutative.of_setLike_mul_comm⟩ := isMulCommutative_iff_of_s
 
 中文:
 引理 isMulCommutative_iff_of_setLike
-  结论: {S M : 类型} [SetLike S M] [Mul M] [MulMemClass S M]
+  结论: {S M : 类型} [集合状 S M] [乘法 M] [MulMem类 S M]
   证明: by
   simp [isMulCommutative_iff]
 
@@ -1199,7 +1199,7 @@ lemma setLike_mul_comm
 
 中文:
 引理 setLike_mul_comm
-  结论: {S M : 类型} [SetLike S M] [Mul M] [MulMemClass S M]
+  结论: {S M : 类型} [集合状 S M] [乘法 M] [MulMem类 S M]
   证明: isMulCommutative_iff_of_setLike.mp ‹_› a ha b hb
 
 Depends on / 依赖: isMulCommutative_iff_of_setLike, isMulCommutative_iff_of_setLike.mp

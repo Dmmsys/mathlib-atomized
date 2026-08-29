@@ -51,7 +51,7 @@ lemma cast_mono
 
 中文:
 引理 cast_mono
-  结论: Monotone (整数.cast : 整数 -> R)
+  结论: 递增 (整数.cast : 整数 -> R)
   证明: by
   intro m n h
   rw [← sub_nonneg] at h
@@ -132,7 +132,7 @@ lemma cast_strictMono
 
 中文:
 引理 cast_strictMono
-  结论: StrictMono (fun x : 整数 => (x : R))
+  结论: 严格递增 (fun x : 整数 => (x : R))
   证明: strictMono_of_le_iff_le fun _ _ => cast_le.symm
 
 Depends on / 依赖: cast_le, cast_le.symm, strictMono_of_le_iff_le
@@ -218,7 +218,7 @@ lemma cast_min
 
 中文:
 引理 cast_min
-  结论: ↑(min a b) = (min a b : R)
+  结论: ↑(最小值 a b) = (最小值 a b : R)
   证明: Monotone.map_min cast_mono
 
 @[simp, norm_cast]
@@ -240,7 +240,7 @@ lemma cast_max
 
 中文:
 引理 cast_max
-  结论: (↑(max a b) : R) = max (a : R) (b : R)
+  结论: (↑(最大值 a b) : R) = 最大值 (a : R) (b : R)
   证明: Monotone.map_max cast_mono
 
 @[simp, norm_cast]

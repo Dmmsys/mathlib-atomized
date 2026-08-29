@@ -32,8 +32,8 @@ lemma Module.finite_of_isSemisimpleRing
   .equiv ((IsArtinianRing.equivPi A).restrictScalars R).toLinearEquiv.symm
 
 中文:
-引理 Module.finite_of_isSemisimpleRing
-  条件: [IsJacobsonRing R] [IsSemisimpleRing A]
+引理 模.finite_of_isSemisimpleRing
+  条件: [是Jacobson环 R] [IsSemisimpleRing A]
   证明: have (I : MaximalSpectrum A) := finite_of_finite_type_of_isJacobsonRing R (A ⧸ I.asIdeal)
   .equiv ((IsArtinianRing.equivPi A).restrictScalars R).toLinearEquiv.symm
 
@@ -56,8 +56,8 @@ lemma Module.finite_of_isArtinianRing
   IsSemiprimaryRing.finite_of_isArtinian R A A
 
 中文:
-引理 Module.finite_of_isArtinianRing
-  条件: [IsJacobsonRing R] [IsArtinianRing A]
+引理 模.finite_of_isArtinianRing
+  条件: [是Jacobson环 R] [是Artin环 A]
   证明: have := finite_of_isSemisimpleRing R (A ⧸ Ring.jacobson A)
   IsSemiprimaryRing.finite_of_isArtinian R A A
 
@@ -78,8 +78,8 @@ lemma Module.finite_iff_isArtinianRing
     fun _ => finite_of_isArtinianRing R A⟩
 
 中文:
-引理 Module.finite_iff_isArtinianRing
-  条件: [IsArtinianRing R]
+引理 模.finite_iff_isArtinianRing
+  条件: [是Artin环 R]
   证明: ⟨isArtinian_of_tower _ ∘ ((IsArtinianRing.tfae R A).out 0 2).mp,
     fun _ => finite_of_isArtinianRing R A⟩
 
@@ -101,8 +101,8 @@ lemma Module.finite_iff_krullDimLE_zero
   rw [finite_iff_isArtinianRing]; rw [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero]; rw [and_iff_right this]
 
 中文:
-引理 Module.finite_iff_krullDimLE_zero
-  条件: [IsArtinianRing R]
+引理 模.finite_iff_krullDimLE_zero
+  条件: [是Artin环 R]
   证明: by
   have : IsNoetherianRing A := Algebra.FiniteType.isNoetherianRing R A
   rw [finite_iff_isArtinianRing]; rw [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero]; rw [and_iff_right this]

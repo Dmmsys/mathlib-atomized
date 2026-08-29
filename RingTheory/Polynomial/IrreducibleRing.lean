@@ -47,7 +47,7 @@ theorem Polynomial.Monic.irreducible_of_irreducible_map_of_isPrime_nilradical
 .irreducible_of_irreducible_map _ _ hi replace hi :
 
 中文:
-定理 Polynomial.Monic.irreducible_of_irreducible_map_of_isPrime_nilradical
+定理 多项式.Monic.irreducible_of_irreducible_map_of_isPrime_nilradical
   证明: by
   let R' := R ⧸ nilradical R
   let ψ : R' ->+* S := Ideal.Quotient.lift (nilradical R) φ

@@ -65,10 +65,10 @@ class ParacompactSpace
     - locallyFinite_refinement : forall (α : Type v) (s : α -> Set X), (forall a, IsOpen (s a)) -> (⋃ a, s a = univ) -> exists (β : Type v) (t : β -> Set X), (forall b, IsOpen (t b)) ∧ (⋃ b, t b = univ) ∧ LocallyFinite t ∧ forall b, exists a, t b subseteq s a
 
 中文:
-类 ParacompactSpace
-  参数: (X : 类型v) [TopologicalSpace X]
+类 仿紧空间
+  参数: (X : 类型v) [拓扑空间 X]
   公理与运算 (1 个):
-    - locallyFinite_refinement : 对任意 (α : 类型v) (s : α -> Set X), (对任意 a, IsOpen (s a)) -> (⋃ a, s a = univ) -> 存在 (β : 类型v) (t : β -> Set X), (对任意 b, IsOpen (t b)) ∧ (⋃ b, t b = univ) ∧ LocallyFinite t ∧ 对任意 b, 存在 a, t b subseteq s a
+    - locallyFinite_refinement : 对任意 (α : 类型v) (s : α -> 集合 X), (对任意 a, 是开集 (s a)) -> (⋃ a, s a = univ) -> 存在 (β : 类型v) (t : β -> 集合 X), (对任意 b, 是开集 (t b)) ∧ (⋃ b, t b = univ) ∧ 局部有限 t ∧ 对任意 b, 存在 a, t b subseteq s a
 -/
 class ParacompactSpace (X : Type v) [TopologicalSpace X] : Prop where
   /-- Every open cover of a paracompact space assumes a locally finite refinement. -/
@@ -93,7 +93,7 @@ theorem precise_refinement
 
 中文:
 定理 precise_refinement
-  结论: [ParacompactSpace X] (u : ι -> Set X) (uo : 对任意 a, IsOpen (u a))
+  结论: [仿紧空间 X] (u : ι -> 集合 X) (uo : 对任意 a, 是开集 (u a))
   证明: by
   -- Apply definition to `range u`, then turn existence quantifiers into functions using `choose`
   have := ParacompactSpace.locallyFinite_refinement (range u) (fun r => (r : Set X))
@@ -138,7 +138,7 @@ theorem precise_refinement_set
 
 中文:
 定理 precise_refinement_set
-  结论: [ParacompactSpace X] {s : Set X} (hs : IsClosed s) (u : ι -> Set X)
+  结论: [仿紧空间 X] {s : 集合 X} (hs : 是闭集 s) (u : ι -> 集合 X)
   证明: by
   have uc : (iUnion fun i => Option.elim' sᶜ u i) = univ := by
     apply Subset.antisymm (subset_univ _)
@@ -176,8 +176,8 @@ theorem ParacompactSpace.of_hasBasis
       forall_subtype_range_
 
 中文:
-定理 ParacompactSpace.of_hasBasis
-  结论: {ι : X -> Sort*} {p : 对任意 x, ι x -> 命题} {s : 对任意 x, ι x -> Set X}
+定理 仿紧空间.of_hasBasis
+  结论: {ι : X -> 类型层*} {p : 对任意 x, ι x -> 命题} {s : 对任意 x, ι x -> 集合 X}
   证明: by
     have := fun x => (iUnion_eq_univ_iff.1 hu x).imp fun a ha => (hb _).mem_iff.1 ((ho a).mem_nhds ha)
     choose a f hp hsub using this
@@ -216,8 +216,8 @@ theorem Topology.IsClosedEmbedding.paracompactSpace
     rcases precise_refinement_set he.isClosed_range U hUo heU with ⟨V, hVo, heV, hVf,
 
 中文:
-定理 Topology.IsClosedEmbedding.paracompactSpace
-  结论: [ParacompactSpace Y] {e : X -> Y}
+定理 拓扑.是闭嵌入.paracompactSpace
+  结论: [仿紧空间 Y] {e : X -> Y}
   证明: by
     choose U hUo hU using fun a => he.isOpen_iff.1 (ho a)
     simp only [← hU] at hu ⊢
@@ -249,9 +249,9 @@ theorem Homeomorph.paracompactSpace_iff
   proof: ⟨fun _ => e.symm.isClosedEmbedding.paracompactSpace, fun _ => e.isClosedEmbedding.paracompactSpace⟩
 
 中文:
-定理 Homeomorph.paracompactSpace_iff
+定理 同胚.paracompactSpace_iff
   条件: (e : X ≃ₜ Y)
-  结论: ParacompactSpace X ↔ ParacompactSpace Y
+  结论: 仿紧空间 X ↔ 仿紧空间 Y
   证明: ⟨fun _ => e.symm.isClosedEmbedding.paracompactSpace, fun _ => e.isClosedEmbedding.paracompactSpace⟩
 
 Depends on / 依赖: e.isClosedEmbedding.paracompactSpace, e.symm.isClosedEmbedding.paracompactSpace, isClosedEmbedding, paracompactSpace
@@ -319,7 +319,7 @@ theorem refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set
 
 中文:
 定理 refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set
-  结论: [WeaklyLocallyCompactSpace X]
+  结论: [WeaklyLocallyCompact空间 X]
   证明: by
   -- For technical reasons we prepend two empty sets to the sequence `CompactExhaustion.choice X`
   set K' : CompactExhaustion X := CompactExhaustion.choice X
@@ -386,7 +386,7 @@ theorem refinement_of_locallyCompact_sigmaCompact_of_nhds_basis
 
 中文:
 定理 refinement_of_locallyCompact_sigmaCompact_of_nhds_basis
-  结论: [WeaklyLocallyCompactSpace X]
+  结论: [WeaklyLocallyCompact空间 X]
   证明: let ⟨α, c, r, hp, hU, hfin⟩ :=
     refinement_of_locallyCompact_sigmaCompact_of_nhds_basis_set isClosed_univ fun x _ => hB x
   ⟨α, c, r, fun a => (hp a).2, univ_subset_iff.1 hU, hfin⟩

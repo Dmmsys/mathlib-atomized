@@ -76,7 +76,7 @@ definition dotProduct
 
 中文:
 定义 dotProduct
-  签名: [Mul α] [AddCommMonoid α] (v w : m -> α)
+  签名: [乘法 α] [加法交换幺半群 α] (v w : m -> α)
   定义体: ∑ i, v i * w i
 -/
 def dotProduct [Mul α] [AddCommMonoid α] (v w : m -> α) : α :=
@@ -98,7 +98,7 @@ theorem dotProduct_assoc
 
 中文:
 定理 dotProduct_assoc
-  条件: [NonUnitalSemiring α] (u : m -> α) (w : n -> α) (v : Matrix m n α)
+  条件: [非幺半环 α] (u : m -> α) (w : n -> α) (v : 矩阵 m n α)
   证明: by
   simpa [dotProduct, Finset.mul_sum, Finset.sum_mul, mul_assoc] using Finset.sum_comm
 
@@ -122,7 +122,7 @@ theorem dotProduct_comm
 
 中文:
 定理 dotProduct_comm
-  条件: [AddCommMonoid α] [CommMagma α] (v w : m -> α)
+  条件: [加法交换幺半群 α] [交换原群 α] (v w : m -> α)
   结论: v ⬝ᵥ w = w ⬝ᵥ v
   证明: by
   simp_rw [dotProduct, mul_comm]
@@ -147,7 +147,7 @@ theorem dotProduct_pUnit
 
 中文:
 定理 dotProduct_pUnit
-  条件: [AddCommMonoid α] [Mul α] (v w : PUnit -> α)
+  条件: [加法交换幺半群 α] [乘法 α] (v w : 命题单元 -> α)
   结论: v ⬝ᵥ w = v ⟨⟩ * w ⟨⟩
   证明: by
   simp [dotProduct]
@@ -353,7 +353,7 @@ theorem sumElim_dotProduct_sumElim
 
 中文:
 定理 sumElim_dotProduct_sumElim
-  结论: Sum.elim u x ⬝ᵥ Sum.elim v y = u ⬝ᵥ v + x ⬝ᵥ y
+  结论: 和.elim u x ⬝ᵥ 和.elim v y = u ⬝ᵥ v + x ⬝ᵥ y
   证明: by
   simp [dotProduct]
 
@@ -447,7 +447,7 @@ theorem dotProduct_sum
 
 中文:
 定理 dotProduct_sum
-  条件: {ι : 类型} (u : m -> α) (s : Finset ι) (v : ι -> (m -> α))
+  条件: {ι : 类型} (u : m -> α) (s : 有限集 ι) (v : ι -> (m -> α))
   证明: by
   simp only [dotProduct, Finset.sum_apply, Finset.mul_sum]
   rw [Finset.sum_comm]
@@ -471,7 +471,7 @@ theorem sum_dotProduct
 
 中文:
 定理 sum_dotProduct
-  条件: {ι : 类型} (s : Finset ι) (u : ι -> (m -> α)) (v : m -> α)
+  条件: {ι : 类型} (s : 有限集 ι) (u : ι -> (m -> α)) (v : m -> α)
   证明: by
   simp only [dotProduct, Finset.sum_apply, Finset.sum_mul]
   rw [Finset.sum_comm]
@@ -604,7 +604,7 @@ theorem single_dotProduct
 中文:
 定理 single_dotProduct
   条件: (x : α) (i : m)
-  结论: Pi.single i x ⬝ᵥ v = x * v i
+  结论: 依赖函数类型.single i x ⬝ᵥ v = x * v i
   证明: by
 -/
 theorem single_dotProduct (x : α) (i : m) : Pi.single i x ⬝ᵥ v = x * v i := by
@@ -626,7 +626,7 @@ theorem dotProduct_single
 中文:
 定理 dotProduct_single
   条件: (x : α) (i : m)
-  结论: v ⬝ᵥ Pi.single i x = v i * x
+  结论: v ⬝ᵥ 依赖函数类型.single i x = v i * x
   证明: by
 -/
 theorem dotProduct_single (x : α) (i : m) : v ⬝ᵥ Pi.single i x = v i * x := by
@@ -653,7 +653,7 @@ theorem one_dotProduct_one
 
 中文:
 定理 one_dotProduct_one
-  结论: (1 : n -> α) ⬝ᵥ 1 = Fintype.card n
+  结论: (1 : n -> α) ⬝ᵥ 1 = 有限类型.card n
   证明: by
   simp [dotProduct]
 
@@ -833,7 +833,7 @@ theorem smul_dotProduct
 
 中文:
 定理 smul_dotProduct
-  条件: [IsScalarTower R α α] (x : R) (v w : m -> α)
+  条件: [标量塔 R α α] (x : R) (v w : m -> α)
   证明: by simp [dotProduct, Finset.smul_sum, smul_mul_assoc]
 
 @[simp]
@@ -854,7 +854,7 @@ theorem dotProduct_smul
 
 中文:
 定理 dotProduct_smul
-  条件: [SMulCommClass R α α] (x : R) (v w : m -> α)
+  条件: [标量交换类 R α α] (x : R) (v w : m -> α)
   证明: by simp [dotProduct, Finset.smul_sum, mul_smul_comm]
 
 Depends on / 依赖: Finset, Finset.smul_sum, dotProduct, mul_smul_comm, smul_sum
@@ -885,7 +885,7 @@ theorem exists_ne_zero_dotProduct_eq_zero
   · refine ⟨Function.ne_if
 
 中文:
-定理 exists_ne_zero_dotProduct_eq_zero
+定理 存在_ne_zero_dotProduct_eq_zero
   条件: (a : m -> α)
   结论: 存在 b != 0, b ⬝ᵥ a = 0
   证明: by
@@ -988,8 +988,8 @@ instance [Fintype
   body: fun i k => (fun j => M i j) ⬝ᵥ fun j => N j k
 
 中文:
-实例 [Fintype
-  签名: m] [Mul α] [AddCommMonoid α] :
+实例 [有限类型
+  签名: m] [乘法 α] [加法交换幺半群 α] :
   定义体: fun i k => (fun j => M i j) ⬝ᵥ fun j => N j k
 -/
 instance [Fintype m] [Mul α] [AddCommMonoid α] :
@@ -1006,7 +1006,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  结论: [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
+  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α] {M : 矩阵 l m α} {N : 矩阵 m n α}
   证明: rfl
 -/
 theorem mul_apply [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
@@ -1022,8 +1022,8 @@ instance [Fintype
   body: M * N
 
 中文:
-实例 [Fintype
-  签名: n] [Mul α] [AddCommMonoid α] : Mul (Matrix n n α) where
+实例 [有限类型
+  签名: n] [乘法 α] [加法交换幺半群 α] : 乘法 (矩阵 n n α) where
   定义体: M * N
 -/
 instance [Fintype n] [Mul α] [AddCommMonoid α] : Mul (Matrix n n α) where
@@ -1037,8 +1037,8 @@ instance [Fintype
   signature: n] [DecidableEq n] [MulOne α] [AddCommMonoid α] : MulOne (Matrix n n α) where
 
 中文:
-实例 [Fintype
-  签名: n] [DecidableEq n] [MulOne α] [AddCommMonoid α] : MulOne (Matrix n n α) where
+实例 [有限类型
+  签名: n] [DecidableEq n] [MulOne α] [加法交换幺半群 α] : MulOne (矩阵 n n α) where
 -/
 instance [Fintype n] [DecidableEq n] [MulOne α] [AddCommMonoid α] : MulOne (Matrix n n α) where
 
@@ -1052,7 +1052,7 @@ theorem mul_apply'
 
 中文:
 定理 mul_apply'
-  结论: [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
+  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α] {M : 矩阵 l m α} {N : 矩阵 m n α}
   证明: rfl
 -/
 theorem mul_apply' [Fintype m] [Mul α] [AddCommMonoid α] {M : Matrix l m α} {N : Matrix m n α}
@@ -1072,7 +1072,7 @@ theorem two_mul_expl
 
 中文:
 定理 two_mul_expl
-  条件: {R : 类型} [NonUnitalNonAssocSemiring R] (A B : Matrix (Fin 2) (Fin 2) R)
+  条件: {R : 类型} [非幺非结合半环 R] (A B : 矩阵 (有限集 2) (有限集 2) R)
   证明: by
   refine ⟨?_, ?_, ?_, ?_⟩ <;>
   · rw [Matrix.mul_apply, Finset.sum_fin_eq_sum_range, Finset.sum_range_succ, Finset.sum_range_succ]
@@ -1108,7 +1108,7 @@ theorem smul_mul
 
 中文:
 定理 smul_mul
-  结论: [Fintype n] [Monoid R] [DistribMulAction R α] [IsScalarTower R α α] (a : R)
+  结论: [有限类型 n] [幺半群 R] [分配乘法作用 R α] [标量塔 R α α] (a : R)
   证明: by
   ext
   apply smul_dotProduct a
@@ -1135,7 +1135,7 @@ theorem mul_smul
 
 中文:
 定理 mul_smul
-  结论: [Fintype n] [Monoid R] [DistribMulAction R α] [SMulCommClass R α α]
+  结论: [有限类型 n] [幺半群 R] [分配乘法作用 R α] [标量交换类 R α α]
   证明: by
   ext
   apply dotProduct_smul
@@ -1167,8 +1167,8 @@ theorem mul_zero
 
 中文:
 定理 mul_zero
-  条件: [Fintype n] (M : Matrix m n α)
-  结论: M * (0 : Matrix n o α) = 0
+  条件: [有限类型 n] (M : 矩阵 m n α)
+  结论: M * (0 : 矩阵 n o α) = 0
   证明: by
   ext
   apply dotProduct_zero
@@ -1193,8 +1193,8 @@ theorem zero_mul
 
 中文:
 定理 zero_mul
-  条件: [Fintype m] (M : Matrix m n α)
-  结论: (0 : Matrix l m α) * M = 0
+  条件: [有限类型 m] (M : 矩阵 m n α)
+  结论: (0 : 矩阵 l m α) * M = 0
   证明: by
   ext
   apply zero_dotProduct
@@ -1215,7 +1215,7 @@ theorem mul_add
 
 中文:
 定理 mul_add
-  条件: [Fintype n] (L : Matrix m n α) (M N : Matrix n o α)
+  条件: [有限类型 n] (L : 矩阵 m n α) (M N : 矩阵 n o α)
   证明: by
   ext
   apply dotProduct_add
@@ -1237,7 +1237,7 @@ theorem add_mul
 
 中文:
 定理 add_mul
-  条件: [Fintype m] (L M : Matrix l m α) (N : Matrix m n α)
+  条件: [有限类型 m] (L M : 矩阵 l m α) (N : 矩阵 m n α)
   证明: by
   ext
   apply add_dotProduct
@@ -1263,7 +1263,7 @@ instance nonUnitalNonAssocSemiring
 
 中文:
 实例 nonUnitalNonAssocSemiring
-  签名: [Fintype n]
+  签名: [有限类型 n]
   定义体: { Matrix.addCommMonoid with
     mul_zero := Matrix.mul_zero
     zero_mul := Matrix.zero_mul
@@ -1294,7 +1294,7 @@ theorem diagonal_mul
 
 中文:
 定理 diagonal_mul
-  条件: [Fintype m] [DecidableEq m] (d : m -> α) (M : Matrix m n α) (i j)
+  条件: [有限类型 m] [DecidableEq m] (d : m -> α) (M : 矩阵 m n α) (i j)
   证明: diagonal_dotProduct _ _ _
 
 @[simp]
@@ -1320,7 +1320,7 @@ theorem mul_diagonal
 
 中文:
 定理 mul_diagonal
-  条件: [Fintype n] [DecidableEq n] (d : n -> α) (M : Matrix m n α) (i j)
+  条件: [有限类型 n] [DecidableEq n] (d : n -> α) (M : 矩阵 m n α) (i j)
   证明: by
   rw [← diagonal_transpose]
   apply dotProduct_diagonal
@@ -1348,7 +1348,7 @@ theorem diagonal_mul_diagonal
 
 中文:
 定理 diagonal_mul_diagonal
-  条件: [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α)
+  条件: [有限类型 n] [DecidableEq n] (d₁ d₂ : n -> α)
   证明: by
   ext i j
   by_cases h : i = j <;>
@@ -1370,7 +1370,7 @@ theorem diagonal_mul_diagonal'
 
 中文:
 定理 diagonal_mul_diagonal'
-  条件: [Fintype n] [DecidableEq n] (d₁ d₂ : n -> α)
+  条件: [有限类型 n] [DecidableEq n] (d₁ d₂ : n -> α)
   证明: diagonal_mul_diagonal _ _
 
 Depends on / 依赖: diagonal_mul_diagonal
@@ -1390,7 +1390,7 @@ theorem commute_diagonal
 
 中文:
 定理 commute_diagonal
-  结论: {α : 类型} [NonUnitalNonAssocCommSemiring α]
+  结论: {α : 类型} [非幺非结合交换半环 α]
   证明: by
   simp_rw [commute_iff_eq, diagonal_mul_diagonal, mul_comm]
 
@@ -1413,7 +1413,7 @@ theorem smul_eq_diagonal_mul
 
 中文:
 定理 smul_eq_diagonal_mul
-  条件: [Fintype m] [DecidableEq m] (M : Matrix m n α) (a : α)
+  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 m n α) (a : α)
   证明: by
   ext
   simp
@@ -1435,7 +1435,7 @@ theorem op_smul_eq_mul_diagonal
 
 中文:
 定理 op_smul_eq_mul_diagonal
-  条件: [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α)
+  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α) (a : α)
   证明: by
   ext
   simp
@@ -1459,7 +1459,7 @@ definition addMonoidHomMulLeft
 
 中文:
 定义 addMonoidHomMulLeft
-  签名: [Fintype m] (M : Matrix l m α)
+  签名: [有限类型 m] (M : 矩阵 l m α)
   定义体: M * x
   map_zero' := Matrix.mul_zero _
   map_add' := Matrix.mul_add _
@@ -1483,7 +1483,7 @@ definition addMonoidHomMulRight
 
 中文:
 定义 addMonoidHomMulRight
-  签名: [Fintype m] (M : Matrix m n α)
+  签名: [有限类型 m] (M : 矩阵 m n α)
   定义体: x * M
   map_zero' := Matrix.zero_mul _
   map_add' _ _ := Matrix.add_mul _ _ _
@@ -1503,7 +1503,7 @@ theorem sum_mul
 
 中文:
 定理 sum_mul
-  条件: [Fintype m] (s : Finset β) (f : β -> Matrix l m α) (M : Matrix m n α)
+  条件: [有限类型 m] (s : 有限集 β) (f : β -> 矩阵 l m α) (M : 矩阵 m n α)
   证明: map_sum (addMonoidHomMulRight M) f s
 -/
 protected theorem sum_mul [Fintype m] (s : Finset β) (f : β -> Matrix l m α) (M : Matrix m n α) :
@@ -1520,7 +1520,7 @@ theorem mul_sum
 
 中文:
 定理 mul_sum
-  条件: [Fintype m] (s : Finset β) (f : β -> Matrix m n α) (M : Matrix l m α)
+  条件: [有限类型 m] (s : 有限集 β) (f : β -> 矩阵 m n α) (M : 矩阵 l m α)
   证明: map_sum (addMonoidHomMulLeft M) f s
 -/
 protected theorem mul_sum [Fintype m] (s : Finset β) (f : β -> Matrix m n α) (M : Matrix l m α) :
@@ -1536,8 +1536,8 @@ instance Semiring.isScalarTower
   body: ⟨fun r m n => Matrix.smul_mul r m n⟩
 
 中文:
-实例 Semiring.isScalarTower
-  签名: [Fintype n] [Monoid R] [DistribMulAction R α]
+实例 半环.isScalarTower
+  签名: [有限类型 n] [幺半群 R] [分配乘法作用 R α]
   定义体: ⟨fun r m n => Matrix.smul_mul r m n⟩
 
 Depends on / 依赖: Matrix, Matrix.smul_mul, smul_mul
@@ -1557,8 +1557,8 @@ instance Semiring.smulCommClass
 @[simp]
 
 中文:
-实例 Semiring.smulCommClass
-  签名: [Fintype n] [Monoid R] [DistribMulAction R α]
+实例 半环.smulCommClass
+  签名: [有限类型 n] [幺半群 R] [分配乘法作用 R α]
   定义体: ⟨fun r m n => (Matrix.mul_smul m r n).symm⟩
 
 @[simp]
@@ -1582,7 +1582,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  结论: [Fintype n] {L : Matrix m n α} {M : Matrix n o α}
+  结论: [有限类型 n] {L : 矩阵 m n α} {M : 矩阵 n o α}
   证明: by
   ext
   simp [mul_apply, map_sum]
@@ -1614,7 +1614,7 @@ theorem one_mul
 
 中文:
 定理 one_mul
-  条件: [Fintype m] [DecidableEq m] (M : Matrix m n α)
+  条件: [有限类型 m] [DecidableEq m] (M : 矩阵 m n α)
   证明: by
   ext
   rw [← diagonal_one]; rw [diagonal_mul]; rw [one_mul]
@@ -1639,7 +1639,7 @@ theorem mul_one
 
 中文:
 定理 mul_one
-  条件: [Fintype n] [DecidableEq n] (M : Matrix m n α)
+  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α)
   证明: by
   ext
   rw [← diagonal_one]; rw [mul_diagonal]; rw [mul_one]
@@ -1661,7 +1661,7 @@ instance nonAssocSemiring
 
 中文:
 实例 nonAssocSemiring
-  签名: [Fintype n] [DecidableEq n]
+  签名: [有限类型 n] [DecidableEq n]
   定义体: { Matrix.nonUnitalNonAssocSemiring, Matrix.instAddCommMonoidWithOne with
     one_mul := Matrix.one_mul
     mul_one := Matrix.mul_one }
@@ -1733,7 +1733,7 @@ theorem mul_assoc
 
 中文:
 定理 mul_assoc
-  条件: (L : Matrix l m α) (M : Matrix m n α) (N : Matrix n o α)
+  条件: (L : 矩阵 l m α) (M : 矩阵 m n α) (N : 矩阵 n o α)
   证明: by
   ext
   apply dotProduct_assoc
@@ -1753,7 +1753,7 @@ instance nonUnitalSemiring
 
 中文:
 实例 nonUnitalSemiring
-  签名: : NonUnitalSemiring (Matrix n n α)
+  签名: : 非幺半环 (矩阵 n n α)
   定义体: { Matrix.nonUnitalNonAssocSemiring with mul_assoc := Matrix.mul_assoc }
 
 Depends on / 依赖: Matrix, Matrix.mul_assoc, Matrix.nonUnitalNonAssocSemiring, mul_assoc, nonUnitalNonAssocSemiring
@@ -1777,7 +1777,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: [Fintype n] [DecidableEq n]
+  签名: [有限类型 n] [DecidableEq n]
   定义体: { Matrix.nonUnitalSemiring, Matrix.nonAssocSemiring with }
 
 Depends on / 依赖: Matrix, Matrix.nonAssocSemiring, Matrix.nonUnitalSemiring, nonAssocSemiring, nonUnitalSemiring
@@ -1807,7 +1807,7 @@ theorem neg_mul
 
 中文:
 定理 neg_mul
-  条件: (M : Matrix m n α) (N : Matrix n o α)
+  条件: (M : 矩阵 m n α) (N : 矩阵 n o α)
   结论: (-M) * N = -(M * N)
   证明: by
   ext
@@ -1833,7 +1833,7 @@ theorem mul_neg
 
 中文:
 定理 mul_neg
-  条件: (M : Matrix m n α) (N : Matrix n o α)
+  条件: (M : 矩阵 m n α) (N : 矩阵 n o α)
   结论: M * (-N) = -(M * N)
   证明: by
   ext
@@ -1854,7 +1854,7 @@ theorem sub_mul
 
 中文:
 定理 sub_mul
-  条件: (M M' : Matrix m n α) (N : Matrix n o α)
+  条件: (M M' : 矩阵 m n α) (N : 矩阵 n o α)
   证明: by
   rw [sub_eq_add_neg]; rw [Matrix.add_mul]; rw [Matrix.neg_mul]; rw [sub_eq_add_neg]
 -/
@@ -1873,7 +1873,7 @@ theorem mul_sub
 
 中文:
 定理 mul_sub
-  条件: (M : Matrix m n α) (N N' : Matrix n o α)
+  条件: (M : 矩阵 m n α) (N N' : 矩阵 n o α)
   证明: by
   rw [sub_eq_add_neg]; rw [Matrix.mul_add]; rw [Matrix.mul_neg]; rw [sub_eq_add_neg]
 -/
@@ -1891,7 +1891,7 @@ instance nonUnitalNonAssocRing
 
 中文:
 实例 nonUnitalNonAssocRing
-  签名: : NonUnitalNonAssocRing (Matrix n n α)
+  签名: : 非幺非结合环 (矩阵 n n α)
   定义体: { Matrix.nonUnitalNonAssocSemiring, Matrix.addCommGroup with }
 
 Depends on / 依赖: Matrix, Matrix.addCommGroup, Matrix.nonUnitalNonAssocSemiring, addCommGroup, nonUnitalNonAssocSemiring
@@ -1911,7 +1911,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [Fintype n] [NonUnitalRing α]
+  签名: [有限类型 n] [非幺环 α]
   定义体: { Matrix.nonUnitalSemiring, Matrix.addCommGroup with }
 
 Depends on / 依赖: Matrix, Matrix.addCommGroup, Matrix.nonUnitalSemiring, addCommGroup, nonUnitalSemiring
@@ -1929,7 +1929,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [Fintype n] [DecidableEq n] [NonAssocRing α]
+  签名: [有限类型 n] [DecidableEq n] [非结合环 α]
   定义体: { Matrix.nonAssocSemiring, Matrix.instAddCommGroupWithOne with }
 
 Depends on / 依赖: Matrix, Matrix.instAddCommGroupWithOne, Matrix.nonAssocSemiring, instAddCommGroupWithOne, nonAssocSemiring
@@ -1948,7 +1948,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Fintype n] [DecidableEq n] [Ring α]
+  签名: [有限类型 n] [DecidableEq n] [环 α]
   定义体: { Matrix.semiring, Matrix.instAddCommGroupWithOne with }
 
 Depends on / 依赖: Matrix, Matrix.instAddCommGroupWithOne, Matrix.semiring, instAddCommGroupWithOne, semiring
@@ -1971,7 +1971,7 @@ theorem mul_mul_left
 
 中文:
 定理 mul_mul_left
-  条件: [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α)
+  条件: [有限类型 n] (M : 矩阵 m n α) (N : 矩阵 n o α) (a : α)
   证明: smul_mul a M N
 
 Depends on / 依赖: smul_mul
@@ -1995,7 +1995,7 @@ lemma pow_apply_nonneg
 
 中文:
 引理 pow_apply_nonneg
-  结论: [Fintype n] [DecidableEq n] [PartialOrder α] [IsOrderedRing α]
+  结论: [有限类型 n] [DecidableEq n] [偏序 α] [是Ordered环 α]
   证明: by
   induction k with
   | zero => aesop (add simp one_apply)
@@ -2033,7 +2033,7 @@ theorem smul_eq_mul_diagonal
 
 中文:
 定理 smul_eq_mul_diagonal
-  条件: [Fintype n] [DecidableEq n] (M : Matrix m n α) (a : α)
+  条件: [有限类型 n] [DecidableEq n] (M : 矩阵 m n α) (a : α)
   证明: by
   ext
   simp [mul_comm]
@@ -2058,7 +2058,7 @@ theorem mul_mul_right
 
 中文:
 定理 mul_mul_right
-  条件: [Fintype n] (M : Matrix m n α) (N : Matrix n o α) (a : α)
+  条件: [有限类型 n] (M : 矩阵 m n α) (N : 矩阵 n o α) (a : α)
   证明: Matrix.mul_smul M a N
 
 Depends on / 依赖: Matrix, Matrix.mul_smul, mul_smul
@@ -2083,10 +2083,10 @@ class IsStablyFiniteRing
     - isDedekindFiniteMonoid((n : Nat)) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
 
 中文:
-类 IsStablyFiniteRing
-  参数: (R) [MulOne R] [AddCommMonoid R]
+类 是StablyFinite环
+  参数: (R) [MulOne R] [加法交换幺半群 R]
   公理与运算 (1 个):
-    - isDedekindFiniteMonoid((n : 自然数)) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
+    - isDedekindFiniteMonoid((n : 自然数)) : 是DedekindFinite幺半群 (矩阵 (有限集 n) (有限集 n) R)
 -/
 @[mk_iff] class IsStablyFiniteRing (R) [MulOne R] [AddCommMonoid R] : Prop where
   isDedekindFiniteMonoid (n : Nat) : IsDedekindFiniteMonoid (Matrix (Fin n) (Fin n) R)
@@ -2112,8 +2112,8 @@ theorem IsStablyFiniteRing.of_injective
 .of_injective f Matrix.map_injective hf
 
 中文:
-定理 IsStablyFiniteRing.of_injective
-  结论: [FunLike F R S] [RingHomClass F R S] (f : F)
+定理 是StablyFinite环.of_injective
+  结论: [函数状 F R S] [环态射类 F R S] (f : F)
   证明: let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) R => M.map f,
     Matrix.map_one _ (map_zero f) (map_one f)⟩ fun _ _ => Matrix.map_mul
 .of_injective f Matrix.map_injective hf
@@ -2137,8 +2137,8 @@ theorem RingEquiv.isStablyFiniteRing_iff
   mpr _ := .of_injective f (EquivLike.injective f)
 
 中文:
-定理 RingEquiv.isStablyFiniteRing_iff
-  条件: [EquivLike F R S] [RingEquivClass F R S] (f : F)
+定理 环等价.isStablyFiniteRing_iff
+  条件: [等价状 F R S] [环等价类 F R S] (f : F)
   证明: .of_injective _ (RingEquivClass.toRingEquiv f).symm.injective
   mpr _ := .of_injective f (EquivLike.injective f)
 
@@ -2169,7 +2169,7 @@ definition vecMulVec
 
 中文:
 定义 vecMulVec
-  签名: [Mul α] (w : m -> α) (v : n -> α)
+  签名: [乘法 α] (w : m -> α) (v : n -> α)
   定义体: of fun x y => w x * v y
 -/
 def vecMulVec [Mul α] (w : m -> α) (v : n -> α) : Matrix m n α :=
@@ -2187,7 +2187,7 @@ theorem vecMulVec_apply
 
 中文:
 定理 vecMulVec_apply
-  条件: [Mul α] (w : m -> α) (v : n -> α) (i j)
+  条件: [乘法 α] (w : m -> α) (v : n -> α) (i j)
   结论: vecMulVec w v i j = w i * v j
   证明: rfl
 -/
@@ -2204,7 +2204,7 @@ lemma row_vecMulVec
 
 中文:
 引理 row_vecMulVec
-  条件: [Mul α] (w : m -> α) (v : n -> α) (i : m)
+  条件: [乘法 α] (w : m -> α) (v : n -> α) (i : m)
   证明: rfl
 -/
 lemma row_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (i : m) :
@@ -2220,7 +2220,7 @@ lemma col_vecMulVec
 
 中文:
 引理 col_vecMulVec
-  条件: [Mul α] (w : m -> α) (v : n -> α) (j : n)
+  条件: [乘法 α] (w : m -> α) (v : n -> α) (j : n)
   证明: rfl
 -/
 lemma col_vecMulVec [Mul α] (w : m -> α) (v : n -> α) (j : n) :
@@ -2237,7 +2237,7 @@ theorem zero_vecMulVec
 
 中文:
 定理 zero_vecMulVec
-  条件: [MulZeroClass α] (v : n -> α)
+  条件: [乘零类 α] (v : n -> α)
   结论: vecMulVec (0 : m -> α) v = 0
   证明: ext fun _ _ => zero_mul _
 -/
@@ -2255,7 +2255,7 @@ theorem vecMulVec_zero
 
 中文:
 定理 vecMulVec_zero
-  条件: [MulZeroClass α] (w : m -> α)
+  条件: [乘零类 α] (w : m -> α)
   结论: vecMulVec w (0 : m -> α) = 0
   证明: ext fun _ _ => mul_zero _
 -/
@@ -2276,7 +2276,7 @@ theorem vecMulVec_ne_zero
 
 中文:
 定理 vecMulVec_ne_zero
-  结论: [Mul α] [Zero α] [NoZeroDivisors α] {a b : n -> α}
+  结论: [乘法 α] [零 α] [无零因子 α] {a b : n -> α}
   证明: by
   intro h
   obtain ⟨i, ha⟩ := Function.ne_iff.mp ha
@@ -2304,7 +2304,7 @@ theorem vecMulVec_eq_zero
 
 中文:
 定理 vecMulVec_eq_zero
-  条件: [MulZeroClass α] [NoZeroDivisors α] {a b : n -> α}
+  条件: [乘零类 α] [无零因子 α] {a b : n -> α}
   证明: by
   simp only [← ext_iff, vecMulVec_apply, zero_apply, mul_eq_zero, funext_iff, Pi.zero_apply,
     forall_or_left, forall_or_right]
@@ -2324,7 +2324,7 @@ theorem add_vecMulVec
 
 中文:
 定理 add_vecMulVec
-  条件: [Mul α] [Add α] [RightDistribClass α] (w₁ w₂ : m -> α) (v : n -> α)
+  条件: [乘法 α] [加法 α] [RightDistrib类 α] (w₁ w₂ : m -> α) (v : n -> α)
   证明: ext fun _ _ => add_mul _ _ _
 
 Depends on / 依赖: add_mul
@@ -2345,7 +2345,7 @@ theorem vecMulVec_add
 
 中文:
 定理 vecMulVec_add
-  条件: [Mul α] [Add α] [LeftDistribClass α] (w : m -> α) (v₁ v₂ : n -> α)
+  条件: [乘法 α] [加法 α] [LeftDistrib类 α] (w : m -> α) (v₁ v₂ : n -> α)
   证明: ext fun _ _ => mul_add _ _ _
 
 @[simp]
@@ -2369,7 +2369,7 @@ theorem neg_vecMulVec
 
 中文:
 定理 neg_vecMulVec
-  条件: [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [有DistribNeg α] (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => neg_mul _ _
 
 @[simp]
@@ -2393,7 +2393,7 @@ theorem vecMulVec_neg
 
 中文:
 定理 vecMulVec_neg
-  条件: [Mul α] [HasDistribNeg α] (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [有DistribNeg α] (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => mul_neg _ _
 
 @[simp]
@@ -2417,7 +2417,7 @@ theorem smul_vecMulVec
 
 中文:
 定理 smul_vecMulVec
-  条件: [Mul α] [SMul R α] [IsScalarTower R α α] (r : R) (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [标量乘法 R α] [标量塔 R α α] (r : R) (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => smul_mul_assoc _ _ _
 
 @[simp]
@@ -2439,7 +2439,7 @@ theorem vecMulVec_smul
 
 中文:
 定理 vecMulVec_smul
-  条件: [Mul α] [SMul R α] [SMulCommClass R α α] (r : R) (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [标量乘法 R α] [标量交换类 R α α] (r : R) (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => mul_smul_comm _ _ _
 
 Depends on / 依赖: mul_smul_comm
@@ -2460,7 +2460,7 @@ theorem vecMulVec_smul'
 
 中文:
 定理 vecMulVec_smul'
-  条件: [Semigroup α] (w : m -> α) (r : α) (v : n -> α)
+  条件: [半群 α] (w : m -> α) (r : α) (v : n -> α)
   证明: .symm ext fun _ _ => mul_assoc _ _ _
 
 @[simp]
@@ -2484,7 +2484,7 @@ theorem transpose_vecMulVec
 
 中文:
 定理 transpose_vecMulVec
-  条件: [CommMagma α] (w : m -> α) (v : n -> α)
+  条件: [交换原群 α] (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => mul_comm _ _
 
 @[simp]
@@ -2507,7 +2507,7 @@ theorem diag_vecMulVec
 
 中文:
 定理 diag_vecMulVec
-  条件: [Mul α] (u v : n -> α)
+  条件: [乘法 α] (u v : n -> α)
   结论: diag (vecMulVec u v) = u * v
   证明: rfl
 -/
@@ -2526,7 +2526,7 @@ definition mulVec
 
 中文:
 定义 mulVec
-  签名: [Fintype n] (M : Matrix m n α) (v : n -> α)
+  签名: [有限类型 n] (M : 矩阵 m n α) (v : n -> α)
 -/
 def mulVec [Fintype n] (M : Matrix m n α) (v : n -> α) : m -> α
   | i => (fun j => M i j) ⬝ᵥ v
@@ -2544,7 +2544,7 @@ lemma mulVec_apply
 
 中文:
 引理 mulVec_apply
-  条件: [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m)
+  条件: [有限类型 n] (M : 矩阵 m n α) (v : n -> α) (i : m)
   证明: rfl
 -/
 lemma mulVec_apply [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) :
@@ -2560,7 +2560,7 @@ lemma mulVec_apply_eq_sum
 
 中文:
 引理 mulVec_apply_eq_sum
-  条件: [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m)
+  条件: [有限类型 n] (M : 矩阵 m n α) (v : n -> α) (i : m)
   证明: rfl
 -/
 lemma mulVec_apply_eq_sum [Fintype n] (M : Matrix m n α) (v : n -> α) (i : m) :
@@ -2575,7 +2575,7 @@ definition vecMul
 
 中文:
 定义 vecMul
-  签名: [Fintype m] (v : m -> α) (M : Matrix m n α)
+  签名: [有限类型 m] (v : m -> α) (M : 矩阵 m n α)
 -/
 def vecMul [Fintype m] (v : m -> α) (M : Matrix m n α) : n -> α
   | j => v ⬝ᵥ fun i => M i j
@@ -2593,7 +2593,7 @@ lemma vecMul_apply
 
 中文:
 引理 vecMul_apply
-  条件: [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n)
+  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (i : n)
   证明: rfl
 -/
 lemma vecMul_apply [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) :
@@ -2609,7 +2609,7 @@ lemma vecMul_apply_eq_sum
 
 中文:
 引理 vecMul_apply_eq_sum
-  条件: [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n)
+  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (i : n)
   证明: rfl
 -/
 lemma vecMul_apply_eq_sum [Fintype m] (v : m -> α) (M : Matrix m n α) (i : n) :
@@ -2633,7 +2633,7 @@ definition mulVec.addMonoidHomLeft
 
 中文:
 定义 mulVec.addMonoidHomLeft
-  签名: [Fintype n] (v : n -> α)
+  签名: [有限类型 n] (v : n -> α)
   定义体: M *ᵥ v
   map_zero' := by
     ext
@@ -2661,7 +2661,7 @@ theorem mul_apply_eq_vecMul
 
 中文:
 定理 mul_apply_eq_vecMul
-  条件: [Fintype n] (A : Matrix m n α) (B : Matrix n o α) (i : m)
+  条件: [有限类型 n] (A : 矩阵 m n α) (B : 矩阵 n o α) (i : m)
   证明: rfl
 -/
 theorem mul_apply_eq_vecMul [Fintype n] (A : Matrix m n α) (B : Matrix n o α) (i : m) :
@@ -2679,7 +2679,7 @@ theorem vecMul_eq_sum
 
 中文:
 定理 vecMul_eq_sum
-  条件: [Fintype m] (v : m -> α) (M : Matrix m n α)
+  条件: [有限类型 m] (v : m -> α) (M : 矩阵 m n α)
   结论: v ᵥ* M = ∑ i, v i • M i
   证明: (Finset.sum_fn ..).symm
 
@@ -2698,7 +2698,7 @@ theorem mulVec_eq_sum
 
 中文:
 定理 mulVec_eq_sum
-  条件: [Fintype n] (v : n -> α) (M : Matrix m n α)
+  条件: [有限类型 n] (v : n -> α) (M : 矩阵 m n α)
   证明: (Finset.sum_fn ..).symm
 
 Depends on / 依赖: Finset, Finset.sum_fn, sum_fn
@@ -2717,7 +2717,7 @@ theorem mulVec_diagonal
 
 中文:
 定理 mulVec_diagonal
-  条件: [Fintype m] [DecidableEq m] (v w : m -> α) (x : m)
+  条件: [有限类型 m] [DecidableEq m] (v w : m -> α) (x : m)
   证明: diagonal_dotProduct v w x
 
 Depends on / 依赖: diagonal_dotProduct
@@ -2736,7 +2736,7 @@ theorem vecMul_diagonal
 
 中文:
 定理 vecMul_diagonal
-  条件: [Fintype m] [DecidableEq m] (v w : m -> α) (x : m)
+  条件: [有限类型 m] [DecidableEq m] (v w : m -> α) (x : m)
   证明: dotProduct_diagonal' v w x
 
 Depends on / 依赖: dotProduct_diagonal
@@ -2757,7 +2757,7 @@ theorem dotProduct_mulVec
 
 中文:
 定理 dotProduct_mulVec
-  结论: [Fintype n] [Fintype m] [NonUnitalSemiring R] (v : m -> R)
+  结论: [有限类型 n] [有限类型 m] [非幺半环 R] (v : m -> R)
   证明: by
   simp only [dotProduct, vecMul, mulVec, Finset.mul_sum, Finset.sum_mul, mul_assoc]
   exact Finset.sum_comm
@@ -2783,7 +2783,7 @@ lemma dot_mulVec_eq_sum_sum
 
 中文:
 引理 dot_mulVec_eq_sum_sum
-  结论: [Fintype n] [Fintype m] [NonUnitalSemiring R]
+  结论: [有限类型 n] [有限类型 m] [非幺半环 R]
   证明: by
   simp_rw [dotProduct_mulVec, dotProduct, vecMul_eq_sum, Finset.sum_apply, Pi.smul_apply,
     smul_eq_mul, Finset.sum_mul]
@@ -2814,7 +2814,7 @@ theorem mulVec_zero
 
 中文:
 定理 mulVec_zero
-  条件: [Fintype n] (A : Matrix m n α)
+  条件: [有限类型 n] (A : 矩阵 m n α)
   结论: A *ᵥ 0 = 0
   证明: by
   ext
@@ -2844,7 +2844,7 @@ theorem zero_vecMul
 
 中文:
 定理 zero_vecMul
-  条件: [Fintype m] (A : Matrix m n α)
+  条件: [有限类型 m] (A : 矩阵 m n α)
   结论: 0 ᵥ* A = 0
   证明: by
   ext
@@ -2874,8 +2874,8 @@ theorem zero_mulVec
 
 中文:
 定理 zero_mulVec
-  条件: [Fintype n] (v : n -> α)
-  结论: (0 : Matrix m n α) *ᵥ v = 0
+  条件: [有限类型 n] (v : n -> α)
+  结论: (0 : 矩阵 m n α) *ᵥ v = 0
   证明: by
   ext
   simp [mulVec]
@@ -2902,8 +2902,8 @@ theorem vecMul_zero
 
 中文:
 定理 vecMul_zero
-  条件: [Fintype m] (v : m -> α)
-  结论: v ᵥ* (0 : Matrix m n α) = 0
+  条件: [有限类型 m] (v : m -> α)
+  结论: v ᵥ* (0 : 矩阵 m n α) = 0
   证明: by
   ext
   simp [vecMul]
@@ -2926,7 +2926,7 @@ theorem mulVec_add
 
 中文:
 定理 mulVec_add
-  条件: [Fintype n] (A : Matrix m n α) (x y : n -> α)
+  条件: [有限类型 n] (A : 矩阵 m n α) (x y : n -> α)
   证明: by
   ext
   apply dotProduct_add
@@ -2950,7 +2950,7 @@ theorem add_mulVec
 
 中文:
 定理 add_mulVec
-  条件: [Fintype n] (A B : Matrix m n α) (x : n -> α)
+  条件: [有限类型 n] (A B : 矩阵 m n α) (x : n -> α)
   证明: by
   ext
   apply add_dotProduct
@@ -2974,7 +2974,7 @@ theorem vecMul_add
 
 中文:
 定理 vecMul_add
-  条件: [Fintype m] (A B : Matrix m n α) (x : m -> α)
+  条件: [有限类型 m] (A B : 矩阵 m n α) (x : m -> α)
   证明: by
   ext
   apply dotProduct_add
@@ -2998,7 +2998,7 @@ theorem add_vecMul
 
 中文:
 定理 add_vecMul
-  条件: [Fintype m] (A : Matrix m n α) (x y : m -> α)
+  条件: [有限类型 m] (A : 矩阵 m n α) (x y : m -> α)
   证明: by
   ext
   apply add_dotProduct
@@ -3022,7 +3022,7 @@ theorem mulVec_smul
 
 中文:
 定理 mulVec_smul
-  结论: [Fintype n] [DistribSMul R α] [SMulCommClass R α α]
+  结论: [有限类型 n] [分配标量乘法 R α] [标量交换类 R α α]
   证明: by
   ext
   exact dotProduct_smul _ _ _
@@ -3047,7 +3047,7 @@ theorem smul_mulVec
 
 中文:
 定理 smul_mulVec
-  结论: [Fintype n] [DistribSMul R α] [IsScalarTower R α α]
+  结论: [有限类型 n] [分配标量乘法 R α] [标量塔 R α α]
   证明: by
   ext
   exact smul_dotProduct _ _ _
@@ -3072,7 +3072,7 @@ theorem smul_vecMul
 
 中文:
 定理 smul_vecMul
-  结论: [Fintype m] [DistribSMul R α] [IsScalarTower R α α]
+  结论: [有限类型 m] [分配标量乘法 R α] [标量塔 R α α]
   证明: by
   ext
   exact smul_dotProduct _ _ _
@@ -3099,7 +3099,7 @@ theorem vecMul_smul
 
 中文:
 定理 vecMul_smul
-  结论: [Fintype m] [DistribSMul R α] [SMulCommClass R α α]
+  结论: [有限类型 m] [分配标量乘法 R α] [标量交换类 R α α]
   证明: by
   ext
   exact dotProduct_smul _ _ _
@@ -3127,7 +3127,7 @@ theorem mulVec_single
 
 中文:
 定理 mulVec_single
-  结论: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
+  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (M : 矩阵 m n R)
   证明: funext fun _ => dotProduct_single _ _ _
 
 @[simp]
@@ -3149,7 +3149,7 @@ theorem single_vecMul
 
 中文:
 定理 single_vecMul
-  结论: [Fintype m] [DecidableEq m] [NonUnitalNonAssocSemiring R] (M : Matrix m n R)
+  结论: [有限类型 m] [DecidableEq m] [非幺非结合半环 R] (M : 矩阵 m n R)
   证明: funext fun _ => single_dotProduct _ _ _
 
 Depends on / 依赖: single_dotProduct
@@ -3168,7 +3168,7 @@ theorem mulVec_single_one
 
 中文:
 定理 mulVec_single_one
-  结论: [Fintype n] [DecidableEq n] [NonAssocSemiring R]
+  结论: [有限类型 n] [DecidableEq n] [非结合半环 R]
   证明: by ext; simp
 -/
 theorem mulVec_single_one [Fintype n] [DecidableEq n] [NonAssocSemiring R]
@@ -3185,7 +3185,7 @@ theorem single_one_vecMul
 
 中文:
 定理 single_one_vecMul
-  结论: [Fintype m] [DecidableEq m] [NonAssocSemiring R]
+  结论: [有限类型 m] [DecidableEq m] [非结合半环 R]
   证明: by ext; simp
 -/
 theorem single_one_vecMul [Fintype m] [DecidableEq m] [NonAssocSemiring R]
@@ -3205,7 +3205,7 @@ theorem diagonal_mulVec_single
 
 中文:
 定理 diagonal_mulVec_single
-  结论: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
+  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (v : n -> R)
   证明: by
   ext i
   rw [mulVec_diagonal]
@@ -3232,7 +3232,7 @@ theorem single_vecMul_diagonal
 
 中文:
 定理 single_vecMul_diagonal
-  结论: [Fintype n] [DecidableEq n] [NonUnitalNonAssocSemiring R] (v : n -> R)
+  结论: [有限类型 n] [DecidableEq n] [非幺非结合半环 R] (v : n -> R)
   证明: by
   ext i
   rw [vecMul_diagonal]
@@ -3267,7 +3267,7 @@ theorem vecMul_vecMul
 
 中文:
 定理 vecMul_vecMul
-  条件: [Fintype n] [Fintype m] (v : m -> α) (M : Matrix m n α) (N : Matrix n o α)
+  条件: [有限类型 n] [有限类型 m] (v : m -> α) (M : 矩阵 m n α) (N : 矩阵 n o α)
   证明: by
   ext
   apply dotProduct_assoc
@@ -3295,7 +3295,7 @@ theorem mulVec_mulVec
 
 中文:
 定理 mulVec_mulVec
-  条件: [Fintype n] [Fintype o] (v : o -> α) (M : Matrix m n α) (N : Matrix n o α)
+  条件: [有限类型 n] [有限类型 o] (v : o -> α) (M : 矩阵 m n α) (N : 矩阵 n o α)
   证明: by
   ext
   symm
@@ -3321,7 +3321,7 @@ theorem mul_mul_apply
 
 中文:
 定理 mul_mul_apply
-  条件: [Fintype n] (A B C : Matrix n n α) (i j : n)
+  条件: [有限类型 n] (A B C : 矩阵 n n α) (i j : n)
   证明: by
   rw [Matrix.mul_assoc]
   simp [mul_apply, dotProduct, mulVec]
@@ -3345,7 +3345,7 @@ theorem vecMul_vecMulVec
 
 中文:
 定理 vecMul_vecMulVec
-  条件: [Fintype m] (u v : m -> α) (w : n -> α)
+  条件: [有限类型 m] (u v : m -> α) (w : n -> α)
   证明: by
   ext i
   simp [vecMul, dotProduct, vecMulVec, Finset.sum_mul, mul_assoc]
@@ -3369,7 +3369,7 @@ theorem vecMulVec_mulVec
 
 中文:
 定理 vecMulVec_mulVec
-  条件: [Fintype n] (u : m -> α) (v w : n -> α)
+  条件: [有限类型 n] (u : m -> α) (v w : n -> α)
   证明: by
   ext i
   simp [mulVec, dotProduct, vecMulVec, Finset.mul_sum, mul_assoc]
@@ -3393,7 +3393,7 @@ theorem mul_vecMulVec
 
 中文:
 定理 mul_vecMulVec
-  条件: [Fintype m] (M : Matrix l m α) (x : m -> α) (y : n -> α)
+  条件: [有限类型 m] (M : 矩阵 l m α) (x : m -> α) (y : n -> α)
   证明: by
   ext
   simp_rw [mul_apply, vecMulVec_apply, mulVec, dotProduct, Finset.sum_mul, mul_assoc]
@@ -3417,7 +3417,7 @@ theorem vecMulVec_mul
 
 中文:
 定理 vecMulVec_mul
-  条件: [Fintype m] (x : l -> α) (y : m -> α) (M : Matrix m n α)
+  条件: [有限类型 m] (x : l -> α) (y : m -> α) (M : 矩阵 m n α)
   证明: by
   ext
   simp_rw [mul_apply, vecMulVec_apply, vecMul, dotProduct, Finset.mul_sum, mul_assoc]
@@ -3440,7 +3440,7 @@ theorem vecMulVec_mul_vecMulVec
 
 中文:
 定理 vecMulVec_mul_vecMulVec
-  条件: [Fintype m] (u : l -> α) (v w : m -> α) (x : n -> α)
+  条件: [有限类型 m] (u : l -> α) (v w : m -> α) (x : n -> α)
   证明: by
   rw [vecMulVec_mul]; rw [vecMul_vecMulVec]
 
@@ -3466,7 +3466,7 @@ exact ha ext fun _ _ => congrFun hvw _
 
 中文:
 引理 mul_right_injective_iff_mulVec_injective
-  条件: [Fintype m] [Nonempty n] {A : Matrix l m α}
+  条件: [有限类型 m] [非空 n] {A : 矩阵 l m α}
   证明: by
   refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_col fun j => ha congr(($hBC).col j)⟩
   inhabit n
@@ -3502,7 +3502,7 @@ exact ha ext fun _ _ => congrFun hvw _
 
 中文:
 引理 mul_left_injective_iff_vecMul_injective
-  条件: [Nonempty l] [Fintype m] {A : Matrix m n α}
+  条件: [非空 l] [有限类型 m] {A : 矩阵 m n α}
   证明: by
   refine ⟨fun ha v w hvw => ?_, fun ha B C hBC => ext_row fun i => ha congr(($hBC).row i)⟩
   inhabit l
@@ -3535,7 +3535,7 @@ lemma isLeftRegular_iff_mulVec_injective
 
 中文:
 引理 isLeftRegular_iff_mulVec_injective
-  条件: [Fintype m] {A : Matrix m m α}
+  条件: [有限类型 m] {A : 矩阵 m m α}
   证明: by
   cases isEmpty_or_nonempty m
   · simp [IsLeftRegular, Function.injective_of_subsingleton]
@@ -3562,7 +3562,7 @@ lemma isRightRegular_iff_vecMul_injective
 
 中文:
 引理 isRightRegular_iff_vecMul_injective
-  条件: [Fintype m] {A : Matrix m m α}
+  条件: [有限类型 m] {A : 矩阵 m m α}
   证明: by
   cases isEmpty_or_nonempty m
   · simp [IsRightRegular, Function.injective_of_subsingleton]
@@ -3595,7 +3595,7 @@ theorem mulVec_one
 
 中文:
 定理 mulVec_one
-  条件: [Fintype n] (A : Matrix m n α)
+  条件: [有限类型 n] (A : 矩阵 m n α)
   结论: A *ᵥ 1 = ∑ j, Aᵀ j
   证明: by
   ext; simp [mulVec, dotProduct]
@@ -3618,7 +3618,7 @@ theorem one_vecMul
 
 中文:
 定理 one_vecMul
-  条件: [Fintype m] (A : Matrix m n α)
+  条件: [有限类型 m] (A : 矩阵 m n α)
   结论: 1 ᵥ* A = ∑ i, A i
   证明: by
   ext; simp [vecMul, dotProduct]
@@ -3641,7 +3641,7 @@ lemma ext_of_mulVec_single
 
 中文:
 引理 ext_of_mulVec_single
-  结论: [DecidableEq n] [Fintype n] {M N : Matrix m n α}
+  结论: [DecidableEq n] [有限类型 n] {M N : 矩阵 m n α}
   证明: by
   ext i j
   simp_rw [mulVec_single_one] at h
@@ -3669,7 +3669,7 @@ lemma ext_of_single_vecMul
 
 中文:
 引理 ext_of_single_vecMul
-  结论: [DecidableEq m] [Fintype m] {M N : Matrix m n α}
+  结论: [DecidableEq m] [有限类型 m] {M N : 矩阵 m n α}
   证明: by
   ext i j
   simp_rw [single_one_vecMul] at h
@@ -3699,8 +3699,8 @@ theorem mulVec_injective
 
 中文:
 定理 mulVec_injective
-  条件: [Fintype n]
-  结论: (mulVec : Matrix m n α -> _).Injective
+  条件: [有限类型 n]
+  结论: (mulVec : 矩阵 m n α -> _).单射
   证明: by
   intro A B h
   ext i j
@@ -3726,7 +3726,7 @@ theorem ext_iff_mulVec
 
 中文:
 定理 ext_iff_mulVec
-  条件: [Fintype n] {A B : Matrix m n α}
+  条件: [有限类型 n] {A B : 矩阵 m n α}
   结论: A = B ↔ 对任意 v, A *ᵥ v = B *ᵥ v
   证明: mulVec_injective.eq_iff.symm.trans funext_iff
 
@@ -3750,8 +3750,8 @@ theorem vecMul_injective
 
 中文:
 定理 vecMul_injective
-  条件: [Fintype m]
-  结论: (·.vecMul : Matrix m n α -> _).Injective
+  条件: [有限类型 m]
+  结论: (·.vecMul : 矩阵 m n α -> _).单射
   证明: by
   intro A B h
   ext i j
@@ -3777,7 +3777,7 @@ theorem ext_iff_vecMul
 
 中文:
 定理 ext_iff_vecMul
-  条件: [Fintype m] {A B : Matrix m n α}
+  条件: [有限类型 m] {A B : 矩阵 m n α}
   结论: A = B ↔ 对任意 v, v ᵥ* A = v ᵥ* B
   证明: vecMul_injective.eq_iff.symm.trans funext_iff
 
@@ -3965,7 +3965,7 @@ theorem ofNat_mulVec
 @[simp]
 
 中文:
-定理 ofNat_mulVec
+定理 of自然数_mulVec
   条件: (x : 自然数) [x.AtLeastTwo] (v : m -> α)
   证明: natCast_mulVec _ _
 
@@ -3987,7 +3987,7 @@ theorem vecMul_ofNat
   proof: vecMul_natCast _ _
 
 中文:
-定理 vecMul_ofNat
+定理 vecMul_of自然数
   条件: (x : 自然数) [x.AtLeastTwo] (v : m -> α)
   证明: vecMul_natCast _ _
 
@@ -4016,7 +4016,7 @@ theorem neg_vecMul
 
 中文:
 定理 neg_vecMul
-  条件: [Fintype m] (v : m -> α) (A : Matrix m n α)
+  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
   结论: (-v) ᵥ* A = -(v ᵥ* A)
   证明: by
   ext
@@ -4041,7 +4041,7 @@ theorem vecMul_neg
 
 中文:
 定理 vecMul_neg
-  条件: [Fintype m] (v : m -> α) (A : Matrix m n α)
+  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
   结论: v ᵥ* (-A) = -(v ᵥ* A)
   证明: by
   ext
@@ -4065,7 +4065,7 @@ lemma neg_vecMul_neg
 
 中文:
 引理 neg_vecMul_neg
-  条件: [Fintype m] (v : m -> α) (A : Matrix m n α)
+  条件: [有限类型 m] (v : m -> α) (A : 矩阵 m n α)
   结论: (-v) ᵥ* (-A) = v ᵥ* A
   证明: by
   rw [vecMul_neg]; rw [neg_vecMul]; rw [neg_neg]
@@ -4088,7 +4088,7 @@ theorem neg_mulVec
 
 中文:
 定理 neg_mulVec
-  条件: [Fintype n] (v : n -> α) (A : Matrix m n α)
+  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
   结论: (-A) *ᵥ v = -(A *ᵥ v)
   证明: by
   ext
@@ -4113,7 +4113,7 @@ theorem mulVec_neg
 
 中文:
 定理 mulVec_neg
-  条件: [Fintype n] (v : n -> α) (A : Matrix m n α)
+  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
   结论: A *ᵥ (-v) = -(A *ᵥ v)
   证明: by
   ext
@@ -4137,7 +4137,7 @@ lemma neg_mulVec_neg
 
 中文:
 引理 neg_mulVec_neg
-  条件: [Fintype n] (v : n -> α) (A : Matrix m n α)
+  条件: [有限类型 n] (v : n -> α) (A : 矩阵 m n α)
   结论: (-A) *ᵥ (-v) = A *ᵥ v
   证明: by
   rw [mulVec_neg]; rw [neg_mulVec]; rw [neg_neg]
@@ -4159,7 +4159,7 @@ theorem mulVec_sub
 
 中文:
 定理 mulVec_sub
-  条件: [Fintype n] (A : Matrix m n α) (x y : n -> α)
+  条件: [有限类型 n] (A : 矩阵 m n α) (x y : n -> α)
   证明: by
   ext
   apply dotProduct_sub
@@ -4181,7 +4181,7 @@ theorem sub_mulVec
 
 中文:
 定理 sub_mulVec
-  条件: [Fintype n] (A B : Matrix m n α) (x : n -> α)
+  条件: [有限类型 n] (A B : 矩阵 m n α) (x : n -> α)
   证明: by simp [sub_eq_add_neg, add_mulVec, neg_mulVec]
 
 Depends on / 依赖: add_mulVec, neg_mulVec, sub_eq_add_neg
@@ -4199,7 +4199,7 @@ theorem vecMul_sub
 
 中文:
 定理 vecMul_sub
-  条件: [Fintype m] (A B : Matrix m n α) (x : m -> α)
+  条件: [有限类型 m] (A B : 矩阵 m n α) (x : m -> α)
   证明: by simp [sub_eq_add_neg, vecMul_add, vecMul_neg]
 
 Depends on / 依赖: sub_eq_add_neg, vecMul_add, vecMul_neg
@@ -4219,7 +4219,7 @@ theorem sub_vecMul
 
 中文:
 定理 sub_vecMul
-  条件: [Fintype m] (A : Matrix m n α) (x y : m -> α)
+  条件: [有限类型 m] (A : 矩阵 m n α) (x y : m -> α)
   证明: by
   ext
   apply sub_dotProduct
@@ -4288,7 +4288,7 @@ theorem mulVec_transpose
 
 中文:
 定理 mulVec_transpose
-  条件: [Fintype m] (A : Matrix m n α) (x : m -> α)
+  条件: [有限类型 m] (A : 矩阵 m n α) (x : m -> α)
   结论: Aᵀ *ᵥ x = x ᵥ* A
   证明: by
   ext
@@ -4313,7 +4313,7 @@ theorem vecMul_transpose
 
 中文:
 定理 vecMul_transpose
-  条件: [Fintype n] (A : Matrix m n α) (x : n -> α)
+  条件: [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
   结论: x ᵥ* Aᵀ = A *ᵥ x
   证明: by
   ext
@@ -4336,7 +4336,7 @@ theorem dotProduct_transpose_mulVec
 
 中文:
 定理 dotProduct_transpose_mulVec
-  结论: [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
+  结论: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
   证明: by
   rw [dotProduct_mulVec]; rw [dotProduct_comm]; rw [vecMul_transpose]
 
@@ -4357,7 +4357,7 @@ theorem dotProduct_vecMul_transpose
 
 中文:
 定理 dotProduct_vecMul_transpose
-  结论: [Fintype m] [Fintype n] (A : Matrix m n α) (x : n -> α)
+  结论: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (x : n -> α)
   证明: by
   simpa [dotProduct_mulVec] using dotProduct_transpose_mulVec (A := A) (x := x) (y := y)
 
@@ -4377,7 +4377,7 @@ theorem mulVec_vecMul
 
 中文:
 定理 mulVec_vecMul
-  条件: [Fintype n] [Fintype o] (A : Matrix m n α) (B : Matrix o n α) (x : o -> α)
+  条件: [有限类型 n] [有限类型 o] (A : 矩阵 m n α) (B : 矩阵 o n α) (x : o -> α)
   证明: by rw [← mulVec_mulVec, mulVec_transpose]
 
 Depends on / 依赖: mulVec_mulVec, mulVec_transpose
@@ -4395,7 +4395,7 @@ theorem vecMul_mulVec
 
 中文:
 定理 vecMul_mulVec
-  条件: [Fintype m] [Fintype n] (A : Matrix m n α) (B : Matrix m o α) (x : n -> α)
+  条件: [有限类型 m] [有限类型 n] (A : 矩阵 m n α) (B : 矩阵 m o α) (x : n -> α)
   证明: by rw [← vecMul_vecMul, vecMul_transpose]
 
 Depends on / 依赖: vecMul_transpose, vecMul_vecMul
@@ -4419,7 +4419,7 @@ lemma mulVec_injective_of_isUnit
 
 中文:
 引理 mulVec_injective_of_isUnit
-  结论: [Fintype m] [DecidableEq m] {A : Matrix m m R}
+  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m R}
   证明: isLeftRegular_iff_mulVec_injective.1 ha.isRegular.left
 
 Depends on / 依赖: ha.isRegular.left, isLeftRegular_iff_mulVec_injective, isRegular
@@ -4438,7 +4438,7 @@ lemma vecMul_injective_of_isUnit
 
 中文:
 引理 vecMul_injective_of_isUnit
-  结论: [Fintype m] [DecidableEq m] {A : Matrix m m R}
+  结论: [有限类型 m] [DecidableEq m] {A : 矩阵 m m R}
   证明: isRightRegular_iff_vecMul_injective.1 ha.isRegular.right
 
 Depends on / 依赖: ha.isRegular.right, isRegular, isRightRegular_iff_vecMul_injective
@@ -4460,7 +4460,7 @@ lemma pow_row_eq_zero_of_le
 
 中文:
 引理 pow_row_eq_zero_of_le
-  结论: [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : 自然数} {i : n}
+  结论: [有限类型 n] [DecidableEq n] {M : 矩阵 n n R} {k l : 自然数} {i : n}
   证明: by
   replace h' : l = k + (l - k) := by lia
   rw [← single_one_vecMul] at h ⊢
@@ -4488,7 +4488,7 @@ lemma pow_col_eq_zero_of_le
 
 中文:
 引理 pow_col_eq_zero_of_le
-  结论: [Fintype n] [DecidableEq n] {M : Matrix n n R} {k l : 自然数} {i : n}
+  结论: [有限类型 n] [DecidableEq n] {M : 矩阵 n n R} {k l : 自然数} {i : n}
   证明: by
   replace h' : l = (l - k) + k := by lia
   rw [← mulVec_single_one] at h ⊢
@@ -4576,7 +4576,7 @@ theorem transpose_mul
 
 中文:
 定理 transpose_mul
-  结论: [AddCommMonoid α] [CommMagma α] [Fintype n] (M : Matrix m n α)
+  结论: [加法交换幺半群 α] [交换原群 α] [有限类型 n] (M : 矩阵 m n α)
   证明: by
   ext
   apply dotProduct_comm
@@ -4600,7 +4600,7 @@ theorem submatrix_mul
 
 中文:
 定理 submatrix_mul
-  结论: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p q : 类型}
+  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p q : 类型}
   证明: ext fun _ _ => (he₂.sum_comp _).symm
 
 Depends on / 依赖: sum_comp
@@ -4625,7 +4625,7 @@ theorem submatrix_mul_equiv
 
 中文:
 定理 submatrix_mul_equiv
-  结论: [Fintype n] [Fintype o] [AddCommMonoid α] [Mul α] {p q : 类型}
+  结论: [有限类型 n] [有限类型 o] [加法交换幺半群 α] [乘法 α] {p q : 类型}
   证明: (submatrix_mul M N e₁ e₂ e₃ e₂.bijective).symm
 
 Depends on / 依赖: bijective, submatrix_mul
@@ -4647,7 +4647,7 @@ theorem submatrix_mulVec_equiv
 
 中文:
 定理 submatrix_mulVec_equiv
-  结论: [Fintype n] [Fintype o] [NonUnitalNonAssocSemiring α]
+  结论: [有限类型 n] [有限类型 o] [非幺非结合半环 α]
   证明: funext fun _ => Eq.symm (dotProduct_comp_equiv_symm _ _ _)
 
 @[simp]
@@ -4673,7 +4673,7 @@ theorem submatrix_id_mul_left
 
 中文:
 定理 submatrix_id_mul_left
-  结论: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : 类型}
+  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p : 类型}
   证明: by
   ext; simp [mul_apply, ← e₂.bijective.sum_comp]
 
@@ -4698,7 +4698,7 @@ theorem submatrix_id_mul_right
 
 中文:
 定理 submatrix_id_mul_right
-  结论: [Fintype n] [Fintype o] [Mul α] [AddCommMonoid α] {p : 类型}
+  结论: [有限类型 n] [有限类型 o] [乘法 α] [加法交换幺半群 α] {p : 类型}
   证明: by
   ext; simp [mul_apply, ← e₂.bijective.sum_comp]
 
@@ -4719,7 +4719,7 @@ theorem submatrix_vecMul_equiv
 
 中文:
 定理 submatrix_vecMul_equiv
-  结论: [Fintype l] [Fintype m] [NonUnitalNonAssocSemiring α]
+  结论: [有限类型 l] [有限类型 m] [非幺非结合半环 α]
   证明: funext fun _ => Eq.symm (comp_equiv_symm_dotProduct _ _ _)
 
 Depends on / 依赖: Eq.symm, comp_equiv_symm_dotProduct
@@ -4745,7 +4745,7 @@ theorem mul_submatrix_one
 
 中文:
 定理 mul_submatrix_one
-  结论: [Fintype n] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : n ≃ o)
+  结论: [有限类型 n] [有限 o] [非结合半环 α] [DecidableEq o] (e₁ : n ≃ o)
   证明: by
   cases nonempty_fintype o
   let A := M.submatrix id e₁.symm
@@ -4783,7 +4783,7 @@ theorem one_submatrix_mul
 
 中文:
 定理 one_submatrix_mul
-  结论: [Fintype m] [Finite o] [NonAssocSemiring α] [DecidableEq o] (e₁ : l -> o)
+  结论: [有限类型 m] [有限 o] [非结合半环 α] [DecidableEq o] (e₁ : l -> o)
   证明: by
   cases nonempty_fintype o
   let A := M.submatrix e₂.symm id
@@ -4816,7 +4816,7 @@ theorem submatrix_mul_transpose_submatrix
 
 中文:
 定理 submatrix_mul_transpose_submatrix
-  结论: [Fintype m] [Fintype n] [AddCommMonoid α] [Mul α]
+  结论: [有限类型 m] [有限类型 n] [加法交换幺半群 α] [乘法 α]
   证明: by
   rw [submatrix_mul_equiv]; rw [submatrix_id_id]
 
@@ -4841,8 +4841,8 @@ instance [IsStablyFiniteRing
   .of_injective f (reindex e e).injective
 
 中文:
-实例 [IsStablyFiniteRing
-  签名: R] : IsDedekindFiniteMonoid (Matrix n n R)
+实例 [是StablyFinite环
+  签名: R] : 是DedekindFinite幺半群 (矩阵 n n R)
   定义体: let e := Fintype.equivFin n
   let f := MonoidHom.mk ⟨reindex (α := R) e e, submatrix_one_equiv _⟩
     fun _ _ => (submatrix_mul_equiv ..).symm
@@ -4868,7 +4868,7 @@ theorem mul_eq_one_comm_of_equiv
 
 中文:
 定理 mul_eq_one_comm_of_equiv
-  结论: [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
+  结论: [是StablyFinite环 R] {A : 矩阵 m n R} {B : 矩阵 n m R}
   证明: (reindex e e).injective.eq_iff.symm.trans by
     rw [reindex_apply]; rw [reindex_apply]; rw [submatrix_one_equiv]; rw [← submatrix_mul_equiv _ _ _ (.refl _)]; rw [mul_eq_one_comm]; rw [submatrix_mul_equiv]; rw [Equiv.coe_refl]; rw [submatrix_id_id]
 
@@ -4889,7 +4889,7 @@ theorem mul_eq_one_comm_of_card_eq
 
 中文:
 定理 mul_eq_one_comm_of_card_eq
-  结论: [IsStablyFiniteRing R] {A : Matrix m n R} {B : Matrix n m R}
+  结论: [是StablyFinite环 R] {A : 矩阵 m n R} {B : 矩阵 n m R}
   证明: mul_eq_one_comm_of_equiv (Fintype.card_eq.mp eq).some
 
 Depends on / 依赖: Fintype, Fintype.card_eq.mp, card_eq, mul_eq_one_comm_of_equiv
@@ -4915,7 +4915,7 @@ theorem map_matrix_mul
 
 中文:
 定理 map_matrix_mul
-  条件: (M : Matrix m n α) (N : Matrix n o α) (i : m) (j : o) (f : α ->+* β)
+  条件: (M : 矩阵 m n α) (N : 矩阵 n o α) (i : m) (j : o) (f : α ->+* β)
   证明: by
   simp [Matrix.mul_apply, map_sum]
 
@@ -4936,7 +4936,7 @@ theorem map_dotProduct
 
 中文:
 定理 map_dotProduct
-  条件: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (v w : n -> R)
+  条件: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (v w : n -> R)
   证明: by
   simp only [dotProduct, map_sum f, f.map_mul, Function.comp]
 
@@ -4957,7 +4957,7 @@ theorem map_vecMul
 
 中文:
 定理 map_vecMul
-  结论: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix n m R)
+  结论: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (M : 矩阵 n m R)
   证明: by
   simp only [Matrix.vecMul, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
 
@@ -4978,7 +4978,7 @@ theorem map_mulVec
 
 中文:
 定理 map_mulVec
-  结论: [NonAssocSemiring R] [NonAssocSemiring S] (f : R ->+* S) (M : Matrix m n R)
+  结论: [非结合半环 R] [非结合半环 S] (f : R ->+* S) (M : 矩阵 m n R)
   证明: by
   simp only [Matrix.mulVec, Matrix.map_apply, RingHom.map_dotProduct, Function.comp_def]
 

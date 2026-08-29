@@ -239,7 +239,7 @@ definition induced
 
 中文:
 定义 induced
-  签名: : HasShift D A
+  签名: : 有Shift D A
   定义体: hasShiftMk D A
     { F := s
       zero := Induced.zero F s i
@@ -507,7 +507,7 @@ definition Functor.CommShift.ofInduced
           ← F.map_comp_assoc, I
 
 中文:
-定义 Functor.CommShift.ofInduced
+定义 函子.交换Shift.ofInduced
   签名: :
   定义体: HasShift.induced F A s i
     F.CommShift A := by
@@ -553,7 +553,7 @@ lemma Functor.commShiftIso_eq_ofInduced
     F.commShiftIso a = (i a).symm := rfl
 
 中文:
-引理 Functor.commShiftIso_eq_ofInduced
+引理 函子.commShiftIso_eq_ofInduced
   条件: (a : A)
   证明: HasShift.induced F A s i
     letI := Functor.CommShift.ofInduced F A s i

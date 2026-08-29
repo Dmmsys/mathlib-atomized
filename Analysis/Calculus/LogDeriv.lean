@@ -134,7 +134,7 @@ theorem logDeriv_congr_codiscreteWithin
 
 中文:
 定理 logDeriv_congr_codiscreteWithin
-  结论: {f g : 𝕜 -> 𝕜'} {U : Set 𝕜} (hU : IsOpen U)
+  结论: {f g : 𝕜 -> 𝕜'} {U : 集合 𝕜} (hU : 是开集 U)
   证明: by
   refine mem_codiscreteWithin_iff_forall_mem_nhdsNE.2 fun x hx => ?_
   refine mem_of_superset (logDeriv_congr_nhdsNE ?_) Set.subset_union_left
@@ -351,7 +351,7 @@ theorem logDeriv_prod
 
 中文:
 定理 logDeriv_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜'} {x : 𝕜} (hf : 对任意 i in s, f i x != 0)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜'} {x : 𝕜} (hf : 对任意 i in s, f i x != 0)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -547,7 +547,7 @@ lemma logDeriv_eqOn_iff
 
 中文:
 引理 logDeriv_eqOn_iff
-  结论: [IsRCLikeNormedField 𝕜] {f g : 𝕜 -> 𝕜'} {s : Set 𝕜}
+  结论: [是RCLikeNormedField 𝕜] {f g : 𝕜 -> 𝕜'} {s : 集合 𝕜}
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | ⟨t, ht⟩
   · simpa using ⟨1, one_ne_zero⟩
@@ -602,7 +602,7 @@ theorem AnalyticAt.tendsto_mul_logDeriv_simple_zero
 
 中文:
 定理 AnalyticAt.tendsto_mul_logDeriv_simple_zero
-  结论: [CompleteSpace 𝕜]
+  结论: [完备空间 𝕜]
   证明: by
   have h_slope := hasDerivAt_iff_tendsto_slope.mp hf.differentiableAt.hasDerivAt
   rw [← div_self hf']

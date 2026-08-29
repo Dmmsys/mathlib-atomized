@@ -35,7 +35,7 @@ abbreviation ObjAsType
 
 中文:
 缩写 ObjAsType
-  签名: : Type
+  签名: : 类型
   定义体: InducedCategory α (Fintype.equivFin α).symm
 
 Depends on / 依赖: Fintype, Fintype.equivFin, InducedCategory, equivFin
@@ -75,7 +75,7 @@ abbreviation AsType
 
 中文:
 缩写 AsType
-  签名: : Type
+  签名: : 类型
   定义体: Fin (Fintype.card α)
 
 Depends on / 依赖: Fintype, Fintype.card
@@ -97,7 +97,7 @@ instance categoryAsType
 
 中文:
 实例 categoryAsType
-  签名: : SmallCategory (AsType α) where
+  签名: : 小范畴 (AsType α) where
   定义体: Fin (Fintype.card (@Quiver.Hom (ObjAsType α) _ i j))
   id _ := Fintype.equivFin _ (𝟙 _)
   comp f g := Fintype.equivFin _ ((Fintype.equivFin _).symm f ≫ (Fintype.equivFin _).symm g)
@@ -194,7 +194,7 @@ instance asTypeFinCategory
 
 中文:
 实例 asTypeFinCategory
-  签名: : FinCategory (AsType α) where
+  签名: : 有限范畴 (AsType α) where
   定义体: fun _ _ => show Fintype (Fin _) from inferInstance
 
 Depends on / 依赖: Fintype

@@ -36,10 +36,10 @@ class CategoryWithFibrations
     - fibrations : MorphismProperty C
 
 中文:
-类 CategoryWithFibrations
+类 带纤维化范畴
   参数: where
   公理与运算 (1 个):
-    - fibrations : Morphism命题erty C
+    - fibrations : MorphismProperty C
 -/
 class CategoryWithFibrations where
   /-- the class of fibrations -/
@@ -55,10 +55,10 @@ class CategoryWithCofibrations
     - cofibrations : MorphismProperty C
 
 中文:
-类 CategoryWithCofibrations
+类 带余纤维化范畴
   参数: where
   公理与运算 (1 个):
-    - cofibrations : Morphism命题erty C
+    - cofibrations : MorphismProperty C
 -/
 class CategoryWithCofibrations where
   /-- the class of cofibrations -/
@@ -74,10 +74,10 @@ class CategoryWithWeakEquivalences
     - weakEquivalences : MorphismProperty C
 
 中文:
-类 CategoryWithWeakEquivalences
+类 带弱等价范畴
   参数: where
   公理与运算 (1 个):
-    - weakEquivalences : Morphism命题erty C
+    - weakEquivalences : MorphismProperty C
 -/
 class CategoryWithWeakEquivalences where
   /-- the class of weak equivalences -/
@@ -99,7 +99,7 @@ definition fibrations
 
 中文:
 定义 fibrations
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: CategoryWithFibrations.fibrations
 
 Depends on / 依赖: CategoryWithFibrations, CategoryWithFibrations.fibrations, fibrations
@@ -120,7 +120,7 @@ class Fibration
     - mem : fibrations C f
 
 中文:
-类 Fibration
+类 纤维化
   参数: : 命题 where
   公理与运算 (1 个):
     - mem : fibrations C f
@@ -139,7 +139,7 @@ lemma mem_fibrations
 
 中文:
 引理 mem_fibrations
-  条件: [Fibration f]
+  条件: [纤维化 f]
   结论: fibrations C f
   证明: Fibration.mem
 
@@ -163,7 +163,7 @@ definition cofibrations
 
 中文:
 定义 cofibrations
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: CategoryWithCofibrations.cofibrations
 
 Depends on / 依赖: CategoryWithCofibrations, CategoryWithCofibrations.cofibrations, cofibrations
@@ -184,7 +184,7 @@ class Cofibration
     - mem : cofibrations C f
 
 中文:
-类 Cofibration
+类 余纤维化
   参数: : 命题 where
   公理与运算 (1 个):
     - mem : cofibrations C f
@@ -203,7 +203,7 @@ lemma mem_cofibrations
 
 中文:
 引理 mem_cofibrations
-  条件: [Cofibration f]
+  条件: [余纤维化 f]
   结论: cofibrations C f
   证明: Cofibration.mem
 
@@ -227,7 +227,7 @@ definition weakEquivalences
 
 中文:
 定义 weakEquivalences
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: CategoryWithWeakEquivalences.weakEquivalences
 
 Depends on / 依赖: CategoryWithWeakEquivalences, CategoryWithWeakEquivalences.weakEquivalences, weakEquivalences
@@ -248,7 +248,7 @@ class WeakEquivalence
     - mem : weakEquivalences C f
 
 中文:
-类 WeakEquivalence
+类 弱等价
   参数: : 命题 where
   公理与运算 (1 个):
     - mem : weakEquivalences C f
@@ -267,7 +267,7 @@ lemma mem_weakEquivalences
 
 中文:
 引理 mem_weakEquivalences
-  条件: [WeakEquivalence f]
+  条件: [弱等价 f]
   结论: weakEquivalences C f
   证明: WeakEquivalence.mem
 
@@ -291,7 +291,7 @@ definition trivialFibrations
 
 中文:
 定义 trivialFibrations
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fibrations C ⊓ weakEquivalences C
 
 Depends on / 依赖: fibrations, weakEquivalences
@@ -342,7 +342,7 @@ lemma mem_trivialFibrations
 
 中文:
 引理 mem_trivialFibrations
-  条件: [Fibration f] [WeakEquivalence f]
+  条件: [纤维化 f] [弱等价 f]
   证明: ⟨mem_fibrations f, mem_weakEquivalences f⟩
 
 Depends on / 依赖: mem_fibrations, mem_weakEquivalences
@@ -389,7 +389,7 @@ definition trivialCofibrations
 
 中文:
 定义 trivialCofibrations
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: cofibrations C ⊓ weakEquivalences C
 
 Depends on / 依赖: cofibrations, weakEquivalences
@@ -441,7 +441,7 @@ lemma mem_trivialCofibrations
 
 中文:
 引理 mem_trivialCofibrations
-  条件: [Cofibration f] [WeakEquivalence f]
+  条件: [余纤维化 f] [弱等价 f]
   证明: ⟨mem_cofibrations f, mem_weakEquivalences f⟩
 
 Depends on / 依赖: mem_cofibrations, mem_weakEquivalences
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithFibrations Cᵒᵖ
+  签名: 带纤维化范畴 Cᵒᵖ
   定义体: (cofibrations C).op
 
 Depends on / 依赖: cofibrations
@@ -538,7 +538,7 @@ lemma fibration_op_iff
 
 中文:
 引理 fibration_op_iff
-  结论: Fibration f.op ↔ Cofibration f
+  结论: 纤维化 f.op ↔ 余纤维化 f
   证明: by
   simp [cofibration_iff, fibration_iff, cofibrations_eq_unop]
 
@@ -578,8 +578,8 @@ instance [Cofibration
   rwa [fibration_op_iff]
 
 中文:
-实例 [Cofibration
-  签名: f] : Fibration f.op
+实例 [余纤维化
+  签名: f] : 纤维化 f.op
   定义体: by
   rwa [fibration_op_iff]
 
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithCofibrations Cᵒᵖ
+  签名: 带余纤维化范畴 Cᵒᵖ
   定义体: (fibrations C).op
 
 Depends on / 依赖: fibrations
@@ -657,7 +657,7 @@ lemma cofibration_op_iff
 
 中文:
 引理 cofibration_op_iff
-  结论: Cofibration f.op ↔ Fibration f
+  结论: 余纤维化 f.op ↔ 纤维化 f
   证明: by
   simp [cofibration_iff, fibration_iff, fibrations_eq_unop]
 
@@ -697,8 +697,8 @@ instance [Fibration
   rwa [cofibration_op_iff]
 
 中文:
-实例 [Fibration
-  签名: f] : Cofibration f.op
+实例 [纤维化
+  签名: f] : 余纤维化 f.op
   定义体: by
   rwa [cofibration_op_iff]
 
@@ -726,7 +726,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithWeakEquivalences Cᵒᵖ
+  签名: 带弱等价范畴 Cᵒᵖ
   定义体: (weakEquivalences C).op
 
 Depends on / 依赖: weakEquivalences
@@ -776,7 +776,7 @@ lemma weakEquivalences_op_iff
 
 中文:
 引理 weakEquivalences_op_iff
-  结论: WeakEquivalence f.op ↔ WeakEquivalence f
+  结论: 弱等价 f.op ↔ 弱等价 f
   证明: by
   simp [weakEquivalence_iff, weakEquivalences_op]
 
@@ -814,8 +814,8 @@ instance [WeakEquivalence
   rwa [weakEquivalences_op_iff]
 
 中文:
-实例 [WeakEquivalence
-  签名: f] : WeakEquivalence f.op
+实例 [弱等价
+  签名: f] : 弱等价 f.op
   定义体: by
   rwa [weakEquivalences_op_iff]
 
@@ -913,7 +913,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithWeakEquivalences P.FullSubcategory
+  签名: 带弱等价范畴 P.满子范畴
   定义体: (weakEquivalences C).inverseImage P.ι
 
 Depends on / 依赖: inverseImage, weakEquivalences
@@ -931,7 +931,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).HasTwoOutOfThree命题erty] :
+  签名: C).有TwoOutOfThreeProperty] :
   定义体: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).HasTwoOutOfThreeProperty
 
 Depends on / 依赖: HasTwoOutOfThreeProperty, inverseImage, weakEquivalences
@@ -950,7 +950,7 @@ instance [(weakEquivalences
 
 中文:
 实例 [(weakEquivalences
-  签名: C).IsMultiplicative] :
+  签名: C).是Multiplicative] :
   定义体: inferInstanceAs ((weakEquivalences C).inverseImage P.ι).IsMultiplicative
 
 Depends on / 依赖: IsMultiplicative, inverseImage, weakEquivalences

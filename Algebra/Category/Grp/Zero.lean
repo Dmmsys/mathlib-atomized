@@ -43,8 +43,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (G : GrpCat) [Subsingleton G]
-  结论: IsZero G
+  条件: (G : 群范畴) [子单例 G]
+  结论: 是零 G
   证明: by
   refine ⟨fun X => ⟨⟨⟨1⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨1⟩, fun f => ?_⟩⟩⟩
   · ext x
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject GrpCat
+  签名: 有ZeroObject 群范畴
   定义体: ⟨⟨of PUnit, isZero_of_subsingleton _⟩⟩
 
 @[to_additive]
@@ -101,7 +101,7 @@ lemma subsingleton_of_isZero
 
 中文:
 引理 subsingleton_of_isZero
-  条件: {G : GrpCat} (h : Limits.IsZero G)
+  条件: {G : 群范畴} (h : Limits.是零 G)
   证明: (h.iso (isZero_of_subsingleton <| .of PUnit)).groupIsoToMulEquiv.subsingleton
 
 @[to_additive]
@@ -126,8 +126,8 @@ lemma isZero_iff_subsingleton
 
 中文:
 引理 isZero_iff_subsingleton
-  条件: {G : GrpCat}
-  结论: Limits.IsZero G ↔ Subsingleton G
+  条件: {G : 群范畴}
+  结论: Limits.是零 G ↔ 子单例 G
   证明: ⟨fun h => subsingleton_of_isZero h, fun _ => isZero_of_subsingleton G⟩
 
 @[to_additive]
@@ -148,7 +148,7 @@ lemma isZero_of_iff_subsingleton
 
 中文:
 引理 isZero_of_iff_subsingleton
-  条件: {G : 类型} [Group G]
+  条件: {G : 类型} [群 G]
   证明: isZero_iff_subsingleton
 
 Depends on / 依赖: isZero_iff_subsingleton
@@ -181,8 +181,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (G : CommGrpCat) [Subsingleton G]
-  结论: IsZero G
+  条件: (G : 交换群范畴) [子单例 G]
+  结论: 是零 G
   证明: by
   refine ⟨fun X => ⟨⟨⟨1⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨1⟩, fun f => ?_⟩⟩⟩
   · ext x
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject CommGrpCat
+  签名: 有ZeroObject 交换群范畴
   定义体: ⟨⟨of PUnit, isZero_of_subsingleton _⟩⟩
 
 @[to_additive]
@@ -239,7 +239,7 @@ lemma subsingleton_of_isZero
 
 中文:
 引理 subsingleton_of_isZero
-  条件: {G : CommGrpCat} (h : Limits.IsZero G)
+  条件: {G : 交换群范畴} (h : Limits.是零 G)
   证明: (h.iso (isZero_of_subsingleton <| .of PUnit)).commGroupIsoToMulEquiv.subsingleton
 
 @[to_additive]
@@ -264,8 +264,8 @@ lemma isZero_iff_subsingleton
 
 中文:
 引理 isZero_iff_subsingleton
-  条件: {G : CommGrpCat}
-  结论: Limits.IsZero G ↔ Subsingleton G
+  条件: {G : 交换群范畴}
+  结论: Limits.是零 G ↔ 子单例 G
   证明: ⟨fun h => subsingleton_of_isZero h, fun _ => isZero_of_subsingleton G⟩
 
 @[to_additive]
@@ -286,7 +286,7 @@ lemma isZero_of_iff_subsingleton
 
 中文:
 引理 isZero_of_iff_subsingleton
-  条件: {G : 类型} [CommGroup G]
+  条件: {G : 类型} [交换群 G]
   证明: isZero_iff_subsingleton
 
 Depends on / 依赖: isZero_iff_subsingleton

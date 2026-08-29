@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited H.QuotientDiff
+  签名: 可居 H.QuotientDiff
   定义体: inferInstanceAs (Inhabited <| Quotient _)
 
 Depends on / 依赖: Inhabited, Quotient
@@ -97,7 +97,7 @@ theorem smul_diff_smul'
 
 中文:
 定理 smul_diff_smul'
-  条件: [hH : Normal H] (g : Gᵐᵒᵖ)
+  条件: [hH : 正规 H] (g : Gᵐᵒᵖ)
   证明: by
   let := H.fintypeQuotientOfFiniteIndex
   let ϕ : H ->* H :=
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G H.QuotientDiff
+  签名: 乘法作用 G H.QuotientDiff
   定义体: Quotient.map' (fun α => op g⁻¹ • α) fun α β h =>
       Subtype.ext
         (by
@@ -252,7 +252,7 @@ theorem exists_smul_eq
               ((smul_diff' β α ((powCoprime hH).symm (diff (MonoidH
 
 中文:
-定理 exists_smul_eq
+定理 存在_smul_eq
   条件: (hH : 自然数.Coprime (自然数.card H) H.index) (α β : H.QuotientDiff)
   证明: Quotient.inductionOn' α
     (Quotient.inductionOn' β fun β α =>
@@ -302,7 +302,7 @@ theorem exists_right_complement'_of_coprime_aux
   ne.elim fun α => ⟨stabilizer G α, isComplement'_stabilizer_of_coprime hH⟩
 
 中文:
-定理 exists_right_complement'_of_coprime_aux
+定理 存在_right_complement'_of_coprime_aux
   条件: (hH : 自然数.Coprime (自然数.card H) H.index)
   证明: have ne : Nonempty (QuotientDiff H) := inferInstance
   ne.elim fun α => ⟨stabilizer G α, isComplement'_stabilizer_of_coprime hH⟩
@@ -388,7 +388,7 @@ theorem step1
 
 中文:
 定理 step1
-  条件: (K : Subgroup G) (hK : K ⊔ N = ⊤)
+  条件: (K : 子群 G) (hK : K ⊔ N = ⊤)
   结论: K = ⊤
   证明: by
   contrapose! h3
@@ -439,7 +439,7 @@ theorem step2
 
 中文:
 定理 step2
-  条件: (K : Subgroup G) [K.Normal] (hK : K <= N)
+  条件: (K : 子群 G) [K.正规] (hK : K <= N)
   结论: K = ⊥ ∨ K = N
   证明: by
   have : Function.Surjective (QuotientGroup.mk' K) := Quotient.mk''_surjective
@@ -497,7 +497,7 @@ theorem step3
 
 中文:
 定理 step3
-  条件: (K : Subgroup N) [(K.map N.subtype).Normal]
+  条件: (K : 子群 N) [(K.map N.subtype).正规]
   结论: K = ⊥ ∨ K = ⊤
   证明: by
   have key := step2 h1 h2 h3 (K.map N.subtype) (map_subtype_le K)
@@ -527,7 +527,7 @@ theorem step4
 
 中文:
 定理 step4
-  结论: (自然数.card N).minFac.Prime
+  结论: (自然数.card N).minFac.素
   证明: Nat.minFac_prime (N.one_lt_card_iff_ne_bot.mpr (step0 h1 h3)).ne'
 -/
 private theorem step4 : (Nat.card N).minFac.Prime :=
@@ -580,7 +580,7 @@ theorem step6
 
 中文:
 定理 step6
-  结论: IsPGroup (自然数.card N).minFac N
+  结论: 是p群 (自然数.card N).minFac N
   证明: by
   have : Fact (Nat.card N).minFac.Prime := ⟨step4 h1 h3⟩
   refine Sylow.nonempty.elim fun P => P.2.of_surjective P.1.subtype ?_
@@ -613,7 +613,7 @@ theorem step7
 
 中文:
 定理 step7
-  结论: IsMulCommutative N
+  结论: 是MulCommutative N
   证明: by
   have := N.bot_or_nontrivial.resolve_left (step0 h1 h3)
   have : Fact (Nat.card N).minFac.Prime := ⟨step4 h1 h3⟩
@@ -649,8 +649,8 @@ theorem exists_right_complement'_of_coprime_aux'
   exact not_exists_of_forall_not h3 (exists_right_complement'_of_coprime
 
 中文:
-定理 exists_right_complement'_of_coprime_aux'
-  结论: [Finite G] (hG : 自然数.card G = n)
+定理 存在_right_complement'_of_coprime_aux'
+  结论: [有限 G] (hG : 自然数.card G = n)
   证明: by
   revert G
   induction n using Nat.strongRecOn with | ind n ih => ?_
@@ -687,8 +687,8 @@ theorem exists_right_complement'_of_coprime
     exact
 
 中文:
-定理 exists_right_complement'_of_coprime
-  结论: {N : Subgroup G} [N.Normal]
+定理 存在_right_complement'_of_coprime
+  结论: {N : 子群 G} [N.正规]
   证明: by
   by_cases hN1 : Nat.card N = 0
   · rw [hN1, Nat.coprime_zero_left, index_eq_one] at hN
@@ -728,8 +728,8 @@ theorem exists_left_complement'_of_coprime
   proof: Exists.imp (fun _ => IsComplement'.symm) (exists_right_complement'_of_coprime hN)
 
 中文:
-定理 exists_left_complement'_of_coprime
-  结论: {N : Subgroup G} [N.Normal]
+定理 存在_left_complement'_of_coprime
+  结论: {N : 子群 G} [N.正规]
   证明: Exists.imp (fun _ => IsComplement'.symm) (exists_right_complement'_of_coprime hN)
 
 Depends on / 依赖: Exists, Exists.imp, IsComplement, _of_coprime, exists_right_complement

@@ -41,7 +41,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def f₁ (s : Finset ι) (_a : ι -> ZMod p)
+  签名: def f₁ (s : 有限集 ι) (_a : ι -> ZMod p)
   定义体: ∑ i, X i ^ (p - 1)
 -/
 private noncomputable def f₁ (s : Finset ι) (_a : ι -> ZMod p) : MvPolynomial s (ZMod p) :=
@@ -57,7 +57,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def f₂ (s : Finset ι) (a : ι -> ZMod p)
+  签名: def f₂ (s : 有限集 ι) (a : ι -> ZMod p)
   定义体: ∑ i : s, a i • X i ^ (p - 1)
 -/
 private noncomputable def f₂ (s : Finset ι) (a : ι -> ZMod p) : MvPolynomial s (ZMod p) :=
@@ -169,7 +169,7 @@ theorem Int.erdos_ginzburg_ziv_prime
     using ZMod.erdos_ginzburg_ziv_prime (Int.cast ∘ a) hs
 
 中文:
-定理 Int.erdos_ginzburg_ziv_prime
+定理 整数.erdos_ginzburg_ziv_prime
   条件: (a : ι -> 整数) (hs : #s = 2 * p - 1)
   证明: by
   simpa [← Int.cast_sum, ZMod.intCast_zmod_eq_zero_iff_dvd]
@@ -200,7 +200,7 @@ theorem Int.erdos_ginzburg_ziv
   | zero => exact ⟨
 
 中文:
-定理 Int.erdos_ginzburg_ziv
+定理 整数.erdos_ginzburg_ziv
   条件: (a : ι -> 整数) (hs : 2 * n - 1 <= #s)
   证明: by
   classical
@@ -313,7 +313,7 @@ theorem Int.erdos_ginzburg_ziv_multiset
   exact ⟨t.1.map Prod.fst, Multiset.map_fst_le_of_subset_toEnumFinset hts, by simpa using ht⟩
 
 中文:
-定理 Int.erdos_ginzburg_ziv_multiset
+定理 整数.erdos_ginzburg_ziv_multiset
   条件: (s : Multiset 整数) (hs : 2 * n - 1 <= Multiset.card s)
   证明: by
   obtain ⟨t, hts, ht⟩ := Int.erdos_ginzburg_ziv (s := s.toEnumFinset) Prod.fst (by simpa using hs)

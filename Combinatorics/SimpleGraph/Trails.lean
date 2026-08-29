@@ -54,8 +54,8 @@ abbreviation IsTrail.edgesFinset
   body: ⟨p.edges, h.edges_nodup⟩
 
 中文:
-缩写 IsTrail.edgesFinset
-  签名: {u v : V} {p : G.Walk u v} (h : p.IsTrail)
+缩写 是Trail.edgesFinset
+  签名: {u v : V} {p : G.途径 u v} (h : p.是Trail)
   定义体: ⟨p.edges, h.edges_nodup⟩
 
 Depends on / 依赖: edges_nodup, h.edges_nodup, p.edges
@@ -85,8 +85,8 @@ theorem IsTrail.even_countP_edges_iff
         
 
 中文:
-定理 IsTrail.even_countP_edges_iff
-  条件: {u v : V} {p : G.Walk u v} (ht : p.IsTrail) (x : V)
+定理 是Trail.even_countP_edges_iff
+  条件: {u v : V} {p : G.途径 u v} (ht : p.是Trail) (x : V)
   证明: by
   induction p with
   | nil => simp
@@ -132,7 +132,7 @@ definition IsEulerian
 
 中文:
 定义 IsEulerian
-  签名: {u v : V} (p : G.Walk u v)
+  签名: {u v : V} (p : G.途径 u v)
   定义体: forall e, e in G.edgeSet -> p.edges.count e = 1
 
 Depends on / 依赖: G.edgeSet, edgeSet, p.edges.count
@@ -156,8 +156,8 @@ theorem IsEulerian.isTrail
 
 中文:
 定理 IsEulerian.isTrail
-  条件: {u v : V} {p : G.Walk u v} (h : p.IsEulerian)
-  结论: p.IsTrail
+  条件: {u v : V} {p : G.途径 u v} (h : p.IsEulerian)
+  结论: p.是Trail
   证明: by
   rw [isTrail_def]; rw [List.nodup_iff_count_le_one]
   intro e
@@ -185,7 +185,7 @@ theorem IsEulerian.mem_edges_iff
 
 中文:
 定理 IsEulerian.mem_edges_iff
-  条件: {u v : V} {p : G.Walk u v} (h : p.IsEulerian) {e : Sym2 V}
+  条件: {u v : V} {p : G.途径 u v} (h : p.IsEulerian) {e : Sym2 V}
   证明: ⟨fun h => p.edges_subset_edgeSet h,
    fun he => by simpa [Nat.succ_le_iff] using (h e he).ge⟩
 
@@ -210,7 +210,7 @@ definition IsEulerian.fintypeEdgeSet
 
 中文:
 定义 IsEulerian.fintypeEdgeSet
-  签名: {u v : V} {p : G.Walk u v} (h : p.IsEulerian)
+  签名: {u v : V} {p : G.途径 u v} (h : p.IsEulerian)
   定义体: Fintype.ofFinset h.isTrail.edgesFinset fun e => by
     simp only [Finset.mem_mk, Multiset.mem_coe, h.mem_edges_iff]
 
@@ -231,8 +231,8 @@ theorem IsTrail.isEulerian_of_forall_mem
   List.count_eq_one_of_mem h.edges_nodup (hc e he)
 
 中文:
-定理 IsTrail.isEulerian_of_forall_mem
-  结论: {u v : V} {p : G.Walk u v} (h : p.IsTrail)
+定理 是Trail.isEulerian_of_对任意_mem
+  结论: {u v : V} {p : G.途径 u v} (h : p.是Trail)
   证明: fun e he =>
   List.count_eq_one_of_mem h.edges_nodup (hc e he)
 -/
@@ -255,7 +255,7 @@ theorem isEulerian_iff
 
 中文:
 定理 isEulerian_iff
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   constructor
   · intro h
@@ -283,8 +283,8 @@ theorem IsTrail.isEulerian_iff
    fun h => p.isEulerian_iff.mpr ⟨hp, by simp [← h]⟩⟩
 
 中文:
-定理 IsTrail.isEulerian_iff
-  条件: {u v : V} {p : G.Walk u v} (hp : p.IsTrail)
+定理 是Trail.isEulerian_iff
+  条件: {u v : V} {p : G.途径 u v} (hp : p.是Trail)
   证明: ⟨fun h => Set.Subset.antisymm p.edges_subset_edgeSet (p.isEulerian_iff.mp h).2,
    fun h => p.isEulerian_iff.mpr ⟨hp, by simp [← h]⟩⟩
 
@@ -306,7 +306,7 @@ theorem IsEulerian.edgeSet_eq
 
 中文:
 定理 IsEulerian.edgeSet_eq
-  条件: {u v : V} {p : G.Walk u v} (h : p.IsEulerian)
+  条件: {u v : V} {p : G.途径 u v} (h : p.IsEulerian)
   证明: by
   rwa [← h.isTrail.isEulerian_iff]
 
@@ -329,7 +329,7 @@ theorem IsEulerian.edgesFinset_eq
 
 中文:
 定理 IsEulerian.edgesFinset_eq
-  结论: [Fintype G.edgeSet] {u v : V} {p : G.Walk u v}
+  结论: [有限类型 G.edgeSet] {u v : V} {p : G.途径 u v}
   证明: by
   ext e
   simp [h.mem_edges_iff]
@@ -357,7 +357,7 @@ theorem IsEulerian.even_degree_iff
 
 中文:
 定理 IsEulerian.even_degree_iff
-  结论: {x u v : V} {p : G.Walk u v} (ht : p.IsEulerian) [Fintype V]
+  结论: {x u v : V} {p : G.途径 u v} (ht : p.IsEulerian) [有限类型 V]
   证明: by
   convert! ht.isTrail.even_countP_edges_iff x
   rw [← Multiset.coe_countP]; rw [Multiset.countP_eq_card_filter]; rw [← card_incidenceFinset_eq_degree]
@@ -398,7 +398,7 @@ theorem IsEulerian.card_filter_odd_degree
 
 中文:
 定理 IsEulerian.card_filter_odd_degree
-  结论: [Fintype V] [DecidableRel G.Adj] {u v : V}
+  结论: [有限类型 V] [DecidableRel G.伴随] {u v : V}
   证明: by
   subst s
   simp only [← Nat.not_even_iff_odd, Finset.card_eq_zero]
@@ -442,7 +442,7 @@ theorem IsEulerian.card_odd_degree
 
 中文:
 定理 IsEulerian.card_odd_degree
-  结论: [Fintype V] [DecidableRel G.Adj] {u v : V} {p : G.Walk u v}
+  结论: [有限类型 V] [DecidableRel G.伴随] {u v : V} {p : G.途径 u v}
   证明: by
   rw [← Set.toFinset_card]
   apply IsEulerian.card_filter_odd_degree ht

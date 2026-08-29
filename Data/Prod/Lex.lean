@@ -250,7 +250,7 @@ instance [LT
 
 中文:
 实例 [LT
-  签名: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : WellFoundedRelation (α ×ₗ β)
+  签名: α] [LT β] [WellFoundedLT α] [WellFoundedLT β] : 良基关系 (α ×ₗ β)
   定义体: ⟨(· < ·), wellFounded_lt⟩
 
 Depends on / 依赖: wellFounded_lt
@@ -270,7 +270,7 @@ le_trans _ _ _ := trans_of Prod.Lex _ _
 
 中文:
 实例 instPreorder
-  签名: (α β : 类型) [Preorder α] [Preorder β]
+  签名: (α β : 类型) [预序 α] [预序 β]
   定义体: refl_of Prod.Lex _ _
 le_trans _ _ _ := trans_of Prod.Lex _ _
   lt_iff_le_not_ge x₁ x₂ := by grind [le_iff, lt_iff, lt_iff_le_not_ge]
@@ -295,7 +295,7 @@ theorem monotone_fst
 
 中文:
 定理 monotone_fst
-  条件: [Preorder α] [LE β] (t c : α ×ₗ β) (h : t <= c)
+  条件: [预序 α] [LE β] (t c : α ×ₗ β) (h : t <= c)
   证明: by
   cases toLex_le_toLex.mp h with
   | inl h' => exact h'.le
@@ -325,7 +325,7 @@ theorem monotone_fst_ofLex
 
 中文:
 定理 monotone_fst_ofLex
-  结论: Monotone fun x : α ×ₗ β => (ofLex x).1
+  结论: 递增 fun x : α ×ₗ β => (ofLex x).1
   证明: monotone_fst
 
 @[to_dual self]
@@ -523,7 +523,7 @@ theorem toLex_mono
 
 中文:
 定理 toLex_mono
-  结论: Monotone (toLex : α × β -> α ×ₗ β)
+  结论: 递增 (toLex : α × β -> α ×ₗ β)
   证明: fun _x _y hxy => toLex_le_toLex'.2 ⟨hxy.1, fun _ => hxy.2⟩
 
 Depends on / 依赖: toLex_le_toLex
@@ -545,7 +545,7 @@ theorem toLex_strictMono
 
 中文:
 定理 toLex_strictMono
-  结论: StrictMono (toLex : α × β -> α ×ₗ β)
+  结论: 严格递增 (toLex : α × β -> α ×ₗ β)
   证明: by
   rintro ⟨a₁, b₁⟩ ⟨a₂, b₂⟩ h
   obtain rfl | ha : a₁ = a₂ ∨ _ := h.le.1.eq_or_lt
@@ -572,7 +572,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: (α β : 类型) [PartialOrder α] [PartialOrder β]
+  签名: (α β : 类型) [偏序 α] [偏序 β]
   定义体: antisymm_of (Prod.Lex _ _)
 
 Depends on / 依赖: Prod.Lex, antisymm_of
@@ -591,7 +591,7 @@ instance instOrdLexProd
 
 中文:
 实例 instOrdLexProd
-  签名: [Ord α] [Ord β]
+  签名: [序 α] [序 β]
   定义体: fast_instance% lexOrd
 
 Depends on / 依赖: fast_instance, lexOrd
@@ -609,7 +609,7 @@ theorem compare_def
 
 中文:
 定理 compare_def
-  条件: [Ord α] [Ord β]
+  条件: [序 α] [序 β]
   结论: @compare (α ×ₗ β) _ =
   证明: rfl
 -/
@@ -627,7 +627,7 @@ theorem _root_.lexOrd_eq
 
 中文:
 定理 _root_.lexOrd_eq
-  条件: [Ord α] [Ord β]
+  条件: [序 α] [序 β]
   结论: @lexOrd α β _ _ = instOrdLexProd
   证明: rfl
 -/
@@ -643,9 +643,9 @@ theorem _root_.Ord.lex_eq
   proof: rfl
 
 中文:
-定理 _root_.Ord.lex_eq
-  条件: [oα : Ord α] [oβ : Ord β]
-  结论: Ord.lex oα oβ = instOrdLexProd
+定理 _root_.序.lex_eq
+  条件: [oα : 序 α] [oβ : 序 β]
+  结论: 序.lex oα oβ = instOrdLexProd
   证明: rfl
 -/
 theorem _root_.Ord.lex_eq [oα : Ord α] [oβ : Ord β] : Ord.lex oα oβ = instOrdLexProd := rfl
@@ -659,8 +659,8 @@ instance [Ord
   body: inferInstanceAs (@Std.OrientedCmp (α × β) (compareLex _ _))
 
 中文:
-实例 [Ord
-  签名: α] [Ord β] [Std.OrientedOrd α] [Std.OrientedOrd β] : Std.OrientedOrd (α ×ₗ β)
+实例 [序
+  签名: α] [序 β] [Std.OrientedOrd α] [Std.OrientedOrd β] : Std.OrientedOrd (α ×ₗ β)
   定义体: inferInstanceAs (@Std.OrientedCmp (α × β) (compareLex _ _))
 
 Depends on / 依赖: OrientedCmp, Std.OrientedCmp, compareLex
@@ -677,8 +677,8 @@ instance [Ord
   body: inferInstanceAs (@Std.TransCmp (α × β) (compareLex _ _))
 
 中文:
-实例 [Ord
-  签名: α] [Ord β] [Std.TransOrd α] [Std.TransOrd β] : Std.TransOrd (α ×ₗ β)
+实例 [序
+  签名: α] [序 β] [Std.TransOrd α] [Std.TransOrd β] : Std.TransOrd (α ×ₗ β)
   定义体: inferInstanceAs (@Std.TransCmp (α × β) (compareLex _ _))
 
 Depends on / 依赖: Std.TransCmp, TransCmp, compareLex
@@ -703,7 +703,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: (α β : 类型) [LinearOrder α] [LinearOrder β]
+  签名: (α β : 类型) [线性序 α] [线性序 β]
   定义体: total_of (Prod.Lex _ _)
   toDecidableLE := Prod.Lex.decidable _ _
   toDecidableLT := Prod.Lex.decidable _ _
@@ -741,7 +741,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [PartialOrder α] [Preorder β] [OrderBot α] [OrderBot β]
+  签名: [偏序 α] [预序 β] [有底序 α] [有底序 β]
   定义体: toLex ⊥
   bot_le _ := toLex_mono bot_le
 -/
@@ -758,7 +758,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [PartialOrder α] [Preorder β] [BoundedOrder α] [BoundedOrder β]
+  签名: [偏序 α] [预序 β] [有界序 α] [有界序 β]
 -/
 instance boundedOrder [PartialOrder α] [Preorder β] [BoundedOrder α] [BoundedOrder β] :
     BoundedOrder (α ×ₗ β) where
@@ -777,8 +777,8 @@ instance [Preorder
       exact ⟨(a, c), right _ h₁, right _ h₂⟩
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [DenselyOrdered α] [DenselyOrdered β] :
+实例 [预序
+  签名: α] [预序 β] [稠密序 α] [稠密序 β] :
   定义体: by
     rintro _ _ (@⟨a₁, b₁, a₂, b₂, h⟩ | @⟨a, b₁, b₂, h⟩)
     · obtain ⟨c, h₁, h₂⟩ := exists_between h
@@ -815,8 +815,8 @@ instance [Preorder
       use 
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [NoMinOrder β] [DenselyOrdered β] :
+实例 [预序
+  签名: α] [预序 β] [NoMin序 β] [稠密序 β] :
   定义体: by
     cases x with | h x
     cases y with | h y
@@ -863,8 +863,8 @@ instance [Preorder
       use 
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [NoMaxOrder β] [DenselyOrdered β] :
+实例 [预序
+  签名: α] [预序 β] [NoMax序 β] [稠密序 β] :
   定义体: by
     cases x with | h x
     cases y with | h y
@@ -910,7 +910,7 @@ instance noMaxOrder_of_left
 
 中文:
 实例 noMaxOrder_of_left
-  签名: [Preorder α] [Preorder β] [NoMaxOrder α]
+  签名: [预序 α] [预序 β] [NoMax序 α]
   定义体: by
     rw [Lex.forall]; rw [Prod.forall]
     intro a b
@@ -946,7 +946,7 @@ instance noMaxOrder_of_right
 
 中文:
 实例 noMaxOrder_of_right
-  签名: [Preorder α] [Preorder β] [NoMaxOrder β]
+  签名: [预序 α] [预序 β] [NoMax序 β]
   定义体: by
     rw [Lex.forall]; rw [Prod.forall]
     intro a b

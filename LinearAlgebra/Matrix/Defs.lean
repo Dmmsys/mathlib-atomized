@@ -63,7 +63,7 @@ definition Matrix
   body: m -> n -> α
 
 中文:
-定义 Matrix
+定义 矩阵
   签名: (m : 类型u) (n : 类型u') (α : 类型v)
   定义体: m -> n -> α
 -/
@@ -132,7 +132,7 @@ definition of
 
 中文:
 定义 of
-  签名: : (m -> n -> α) ≃ Matrix m n α
+  签名: : (m -> n -> α) ≃ 矩阵 m n α
   定义体: Equiv.refl _
 
 @[simp]
@@ -177,7 +177,7 @@ theorem of_symm_apply
 
 中文:
 定理 of_symm_apply
-  条件: (f : Matrix m n α) (i j)
+  条件: (f : 矩阵 m n α) (i j)
   结论: of.symm f i j = f i j
   证明: rfl
 -/
@@ -196,7 +196,7 @@ definition ofArray
 
 中文:
 定义 ofArray
-  签名: {m n : 自然数} (A : Array R) (hA : A.size = m * n)
+  签名: {m n : 自然数} (A : 数组 R) (hA : A.size = m * n)
   定义体: fun i j => A[Fin.mkDivMod i j]
 
 @[simp]
@@ -217,7 +217,7 @@ theorem ofArray_apply
 
 中文:
 定理 ofArray_apply
-  条件: {m n : 自然数} (A : Array R) (hA : A.size = m * n) (i : Fin m) (j : Fin n)
+  条件: {m n : 自然数} (A : 数组 R) (hA : A.size = m * n) (i : 有限集 m) (j : 有限集 n)
   证明: rfl
 -/
 theorem ofArray_apply {m n : Nat} (A : Array R) (hA : A.size = m * n) (i : Fin m) (j : Fin n) :
@@ -237,7 +237,7 @@ theorem ofArray_ofFn
 
 中文:
 定理 ofArray_ofFn
-  条件: {m n : 自然数} (A : Matrix (Fin m) (Fin n) R)
+  条件: {m n : 自然数} (A : 矩阵 (有限集 m) (有限集 n) R)
   证明: by
   ext i j
   rw [ofArray_apply]; rw [Fin.getElem_fin]; rw [Array.getElem_ofFn]; rw [Fin.divNat_mkDivMod]; rw [Fin.modNat_mkDivMod]
@@ -262,7 +262,7 @@ lemma ofArray_eq_of_getD
 
 中文:
 引理 ofArray_eq_of_getD
-  条件: [Zero R] {m n : 自然数} (A : Array R) (hA : A.size = m * n)
+  条件: [零 R] {m n : 自然数} (A : 数组 R) (hA : A.size = m * n)
   证明: by
   ext i j
   have : n * i.val + j.val < m * n := (Fin.mkDivMod i j).isLt
@@ -288,7 +288,7 @@ definition map
 
 中文:
 定义 map
-  签名: (M : Matrix m n α) (f : α -> β)
+  签名: (M : 矩阵 m n α) (f : α -> β)
   定义体: of fun i j => f (M i j)
 
 @[simp]
@@ -310,7 +310,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: {M : Matrix m n α} {f : α -> β} {i : m} {j : n}
+  条件: {M : 矩阵 m n α} {f : α -> β} {i : m} {j : n}
   结论: M.map f i j = f (M i j)
   证明: rfl
 
@@ -335,7 +335,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (M : Matrix m n α)
+  条件: (M : 矩阵 m n α)
   结论: M.map id = M
   证明: by
   ext
@@ -361,7 +361,7 @@ theorem map_id'
 
 中文:
 定理 map_id'
-  条件: (M : Matrix m n α)
+  条件: (M : 矩阵 m n α)
   结论: M.map (·) = M
   证明: map_id M
 
@@ -384,7 +384,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: {M : Matrix m n α} {β γ : 类型} {f : α -> β} {g : β -> γ}
+  条件: {M : 矩阵 m n α} {β γ : 类型} {f : α -> β} {g : β -> γ}
   证明: by
   ext
   rfl
@@ -405,7 +405,7 @@ ext fun i j => hf ext_iff.mpr h i j
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (hf : Function.Injective f)
+  条件: {f : α -> β} (hf : 函数.单射 f)
   证明: fun _ _ h =>
 ext fun i j => hf ext_iff.mpr h i j
 -/
@@ -423,7 +423,7 @@ theorem map_involutive
 
 中文:
 定理 map_involutive
-  条件: {f : α -> α} (hf : Function.Involutive f)
+  条件: {f : α -> α} (hf : 函数.对合 f)
   证明: by intro; simp [hf]
 -/
 theorem map_involutive {f : α -> α} (hf : Function.Involutive f) :
@@ -439,7 +439,7 @@ definition transpose
 
 中文:
 定义 transpose
-  签名: (M : Matrix m n α)
+  签名: (M : 矩阵 m n α)
   定义体: of fun x y => M y x
 -/
 def transpose (M : Matrix m n α) : Matrix n m α :=
@@ -461,7 +461,7 @@ scoped postfix:1024 "ᵀ" => Matrix.transpose
 
 中文:
 定理 transpose_apply
-  条件: (M : Matrix m n α) (i j)
+  条件: (M : 矩阵 m n α) (i j)
   结论: transpose M i j = M j i
   证明: rfl
 
@@ -484,7 +484,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Inhabited α]
+  签名: [可居 α]
   定义体: inferInstanceAs Inhabited (m -> n -> α)
 
 Depends on / 依赖: Inhabited
@@ -502,7 +502,7 @@ instance add
 
 中文:
 实例 add
-  签名: [Add α]
+  签名: [加法 α]
   定义体: inferInstanceAs Add (m -> n -> α)
 -/
 instance add [Add α] : Add (Matrix m n α) :=
@@ -518,7 +518,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul R α]
+  签名: [标量乘法 R α]
   定义体: fun i => a • b i
 -/
 instance smul [SMul R α] : SMul R (Matrix m n α) where
@@ -534,7 +534,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: [AddSemigroup α]
+  签名: [加法半群 α]
   定义体: inferInstanceAs AddSemigroup (m -> n -> α)
 
 Depends on / 依赖: AddSemigroup
@@ -552,7 +552,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: inferInstanceAs AddCommSemigroup (m -> n -> α)
 
 Depends on / 依赖: AddCommSemigroup
@@ -570,7 +570,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: [Zero α]
+  签名: [零 α]
   定义体: inferInstanceAs Zero (m -> n -> α)
 -/
 instance zero [Zero α] : Zero (Matrix m n α) :=
@@ -586,7 +586,7 @@ instance addZeroClass
 
 中文:
 实例 addZeroClass
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: inferInstanceAs AddZeroClass (m -> n -> α)
 
 Depends on / 依赖: AddZeroClass
@@ -604,7 +604,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: [AddMonoid α]
+  签名: [加法幺半群 α]
   定义体: inferInstanceAs AddMonoid (m -> n -> α)
 
 Depends on / 依赖: AddMonoid
@@ -622,7 +622,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: inferInstanceAs AddCommMonoid (m -> n -> α)
 
 Depends on / 依赖: AddCommMonoid
@@ -640,7 +640,7 @@ instance neg
 
 中文:
 实例 neg
-  签名: [Neg α]
+  签名: [取负 α]
   定义体: inferInstanceAs Neg (m -> n -> α)
 -/
 instance neg [Neg α] : Neg (Matrix m n α) :=
@@ -674,7 +674,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: [Sub α]
+  签名: [减法 α]
   定义体: inferInstanceAs Sub (m -> n -> α)
 -/
 instance sub [Sub α] : Sub (Matrix m n α) :=
@@ -690,7 +690,7 @@ instance addGroup
 
 中文:
 实例 addGroup
-  签名: [AddGroup α]
+  签名: [加法群 α]
   定义体: inferInstanceAs AddGroup (m -> n -> α)
 
 Depends on / 依赖: AddGroup
@@ -708,7 +708,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: [AddCommGroup α]
+  签名: [加法交换群 α]
   定义体: inferInstanceAs AddCommGroup (m -> n -> α)
 
 Depends on / 依赖: AddCommGroup
@@ -726,7 +726,7 @@ instance unique
 
 中文:
 实例 unique
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: inferInstanceAs Unique (m -> n -> α)
 
 Depends on / 依赖: Unique
@@ -744,7 +744,7 @@ instance subsingleton
 
 中文:
 实例 subsingleton
-  签名: [Subsingleton α]
+  签名: [子单例 α]
   定义体: inferInstanceAs Subsingleton m -> n -> α
 
 Depends on / 依赖: Subsingleton
@@ -762,7 +762,7 @@ instance nonempty
 
 中文:
 实例 nonempty
-  签名: [Nonempty m] [Nonempty n] [Nontrivial α]
+  签名: [非空 m] [非空 n] [非平凡 α]
   定义体: Function.nontrivial
 
 Depends on / 依赖: Function, Function.nontrivial, nontrivial
@@ -780,7 +780,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul R α] [SMul S α] [SMulCommClass R S α]
+  签名: [标量乘法 R α] [标量乘法 S α] [标量交换类 R S α]
   定义体: Pi.smulCommClass
 
 Depends on / 依赖: Pi.smulCommClass, smulCommClass
@@ -799,7 +799,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R S] [SMul R α] [SMul S α] [IsScalarTower R S α]
+  签名: [标量乘法 R S] [标量乘法 R α] [标量乘法 S α] [标量塔 R S α]
   定义体: Pi.isScalarTower
 
 Depends on / 依赖: Pi.isScalarTower, isScalarTower
@@ -818,7 +818,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul R α] [SMul Rᵐᵒᵖ α] [IsCentralScalar R α]
+  签名: [标量乘法 R α] [标量乘法 Rᵐᵒᵖ α] [中心标量 R α]
   定义体: Pi.isCentralScalar
 
 Depends on / 依赖: Pi.isCentralScalar, isCentralScalar
@@ -837,7 +837,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [Monoid R] [MulAction R α]
+  签名: [幺半群 R] [乘法作用 R α]
   定义体: inferInstanceAs MulAction R (m -> n -> α)
 
 Depends on / 依赖: MulAction
@@ -855,7 +855,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid R] [AddMonoid α] [DistribMulAction R α]
+  签名: [幺半群 R] [加法幺半群 α] [分配乘法作用 R α]
   定义体: inferInstanceAs DistribMulAction R (m -> n -> α)
 
 Depends on / 依赖: DistribMulAction
@@ -874,7 +874,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring R] [AddCommMonoid α] [Module R α]
+  签名: [半环 R] [加法交换幺半群 α] [模 R α]
   定义体: inferInstanceAs Module R (m -> n -> α)
 
 Depends on / 依赖: Module
@@ -891,8 +891,8 @@ instance [Add
   body: inferInstanceAs IsAddCommutative m -> n -> α
 
 中文:
-实例 [Add
-  签名: α] [IsAddCommutative α] : IsAddCommutative Matrix m n α
+实例 [加法
+  签名: α] [是加法交换 α] : 是加法交换 矩阵 m n α
   定义体: inferInstanceAs IsAddCommutative m -> n -> α
 
 Depends on / 依赖: IsAddCommutative
@@ -909,8 +909,8 @@ instance [AddCommMagma
   body: inferInstanceAs AddCommMagma m -> n -> α
 
 中文:
-实例 [AddCommMagma
-  签名: α] : AddCommMagma Matrix m n α
+实例 [加法交换原群
+  签名: α] : 加法交换原群 矩阵 m n α
   定义体: inferInstanceAs AddCommMagma m -> n -> α
 
 Depends on / 依赖: AddCommMagma
@@ -927,8 +927,8 @@ instance [Add
   body: inferInstanceAs IsLeftCancelAdd m -> n -> α
 
 中文:
-实例 [Add
-  签名: α] [IsLeftCancelAdd α] : IsLeftCancelAdd Matrix m n α
+实例 [加法
+  签名: α] [是左消去加法 α] : 是左消去加法 矩阵 m n α
   定义体: inferInstanceAs IsLeftCancelAdd m -> n -> α
 
 Depends on / 依赖: IsLeftCancelAdd
@@ -945,8 +945,8 @@ instance [Add
   body: inferInstanceAs IsRightCancelAdd m -> n -> α
 
 中文:
-实例 [Add
-  签名: α] [IsRightCancelAdd α] : IsRightCancelAdd Matrix m n α
+实例 [加法
+  签名: α] [是右消去加法 α] : 是右消去加法 矩阵 m n α
   定义体: inferInstanceAs IsRightCancelAdd m -> n -> α
 
 Depends on / 依赖: IsRightCancelAdd
@@ -963,8 +963,8 @@ instance [Add
   body: inferInstanceAs IsCancelAdd m -> n -> α
 
 中文:
-实例 [Add
-  签名: α] [IsCancelAdd α] : IsCancelAdd Matrix m n α
+实例 [加法
+  签名: α] [是消去加法 α] : 是消去加法 矩阵 m n α
   定义体: inferInstanceAs IsCancelAdd m -> n -> α
 
 Depends on / 依赖: IsCancelAdd
@@ -981,8 +981,8 @@ instance [AddLeftCancelSemigroup
   body: inferInstanceAs AddLeftCancelSemigroup m -> n -> α
 
 中文:
-实例 [AddLeftCancelSemigroup
-  签名: α] : AddLeftCancelSemigroup Matrix m n α
+实例 [加法左消去半群
+  签名: α] : 加法左消去半群 矩阵 m n α
   定义体: inferInstanceAs AddLeftCancelSemigroup m -> n -> α
 
 Depends on / 依赖: AddLeftCancelSemigroup
@@ -999,8 +999,8 @@ instance [AddRightCancelSemigroup
   body: inferInstanceAs AddRightCancelSemigroup m -> n -> α
 
 中文:
-实例 [AddRightCancelSemigroup
-  签名: α] : AddRightCancelSemigroup Matrix m n α
+实例 [加法右消去半群
+  签名: α] : 加法右消去半群 矩阵 m n α
   定义体: inferInstanceAs AddRightCancelSemigroup m -> n -> α
 
 Depends on / 依赖: AddRightCancelSemigroup
@@ -1017,8 +1017,8 @@ instance [AddLeftCancelMonoid
   body: inferInstanceAs AddLeftCancelMonoid m -> n -> α
 
 中文:
-实例 [AddLeftCancelMonoid
-  签名: α] : AddLeftCancelMonoid Matrix m n α
+实例 [加法左消去幺半群
+  签名: α] : 加法左消去幺半群 矩阵 m n α
   定义体: inferInstanceAs AddLeftCancelMonoid m -> n -> α
 
 Depends on / 依赖: AddLeftCancelMonoid
@@ -1035,8 +1035,8 @@ instance [AddRightCancelMonoid
   body: inferInstanceAs AddRightCancelMonoid m -> n -> α
 
 中文:
-实例 [AddRightCancelMonoid
-  签名: α] : AddRightCancelMonoid Matrix m n α
+实例 [加法右消去幺半群
+  签名: α] : 加法右消去幺半群 矩阵 m n α
   定义体: inferInstanceAs AddRightCancelMonoid m -> n -> α
 
 Depends on / 依赖: AddRightCancelMonoid
@@ -1053,8 +1053,8 @@ instance [AddCancelMonoid
   body: inferInstanceAs AddCancelMonoid m -> n -> α
 
 中文:
-实例 [AddCancelMonoid
-  签名: α] : AddCancelMonoid Matrix m n α
+实例 [加法消去幺半群
+  签名: α] : 加法消去幺半群 矩阵 m n α
   定义体: inferInstanceAs AddCancelMonoid m -> n -> α
 
 Depends on / 依赖: AddCancelMonoid
@@ -1071,8 +1071,8 @@ instance [AddCancelCommMonoid
   body: inferInstanceAs AddCancelCommMonoid m -> n -> α
 
 中文:
-实例 [AddCancelCommMonoid
-  签名: α] : AddCancelCommMonoid Matrix m n α
+实例 [加法消去交换幺半群
+  签名: α] : 加法消去交换幺半群 矩阵 m n α
   定义体: inferInstanceAs AddCancelCommMonoid m -> n -> α
 
 Depends on / 依赖: AddCancelCommMonoid
@@ -1096,8 +1096,8 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [Zero α] (i : m) (j : n)
-  结论: (0 : Matrix m n α) i j = 0
+  条件: [零 α] (i : m) (j : n)
+  结论: (0 : 矩阵 m n α) i j = 0
   证明: rfl
 
 @[simp]
@@ -1118,8 +1118,8 @@ theorem of_symm_zero
 
 中文:
 定理 of_symm_zero
-  条件: [Zero α]
-  结论: of.symm (0 : Matrix m n α) = (0 : m -> n -> α)
+  条件: [零 α]
+  结论: of.symm (0 : 矩阵 m n α) = (0 : m -> n -> α)
   证明: rfl
 
 @[simp]
@@ -1139,7 +1139,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [Add α] (A B : Matrix m n α) (i : m) (j : n)
+  条件: [加法 α] (A B : 矩阵 m n α) (i : m) (j : n)
   证明: rfl
 
 @[simp]
@@ -1160,7 +1160,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul β α] (r : β) (A : Matrix m n α) (i : m) (j : n)
+  条件: [标量乘法 β α] (r : β) (A : 矩阵 m n α) (i : m) (j : n)
   证明: rfl
 
 @[simp]
@@ -1181,7 +1181,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: [Sub α] (A B : Matrix m n α) (i : m) (j : n)
+  条件: [减法 α] (A B : 矩阵 m n α) (i : m) (j : n)
   证明: rfl
 
 @[simp]
@@ -1200,7 +1200,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [Neg α] (A : Matrix m n α) (i : m) (j : n)
+  条件: [取负 α] (A : 矩阵 m n α) (i : m) (j : n)
   证明: rfl
 -/
 theorem neg_apply [Neg α] (A : Matrix m n α) (i : m) (j : n) :
@@ -1217,7 +1217,7 @@ theorem dite_apply
 
 中文:
 定理 dite_apply
-  结论: (P : 命题) [Decidable P]
+  结论: (P : 命题) [可判定 P]
   证明: by
   by_cases h : P <;> simp [h]
 -/
@@ -1236,7 +1236,7 @@ theorem ite_apply
 
 中文:
 定理 ite_apply
-  结论: (P : 命题) [Decidable P]
+  结论: (P : 命题) [可判定 P]
   证明: Matrix.dite_apply _ _ _ _ _
 -/
 protected theorem ite_apply (P : Prop) [Decidable P]
@@ -1262,7 +1262,7 @@ theorem of_zero
 
 中文:
 定理 of_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: of (0 : m -> n -> α) = 0
   证明: rfl
 
@@ -1285,7 +1285,7 @@ theorem of_add_of
 
 中文:
 定理 of_add_of
-  条件: [Add α] (f g : m -> n -> α)
+  条件: [加法 α] (f g : m -> n -> α)
   结论: of f + of g = of (f + g)
   证明: rfl
 
@@ -1308,7 +1308,7 @@ theorem of_sub_of
 
 中文:
 定理 of_sub_of
-  条件: [Sub α] (f g : m -> n -> α)
+  条件: [减法 α] (f g : m -> n -> α)
   结论: of f - of g = of (f - g)
   证明: rfl
 
@@ -1331,7 +1331,7 @@ theorem neg_of
 
 中文:
 定理 neg_of
-  条件: [Neg α] (f : m -> n -> α)
+  条件: [取负 α] (f : m -> n -> α)
   结论: -of f = of (-f)
   证明: rfl
 
@@ -1354,7 +1354,7 @@ theorem smul_of
 
 中文:
 定理 smul_of
-  条件: [SMul R α] (r : R) (f : m -> n -> α)
+  条件: [标量乘法 R α] (r : R) (f : m -> n -> α)
   结论: r • of f = of (r • f)
   证明: rfl
 
@@ -1376,7 +1376,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: [Zero α] [Zero β] (f : α -> β) (h : f 0 = 0)
+  条件: [零 α] [零 β] (f : α -> β) (h : f 0 = 0)
   证明: by
   ext
   simp [h]
@@ -1396,7 +1396,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: [Add α] [Add β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
+  结论: [加法 α] [加法 β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
   证明: ext fun _ _ => hf _ _
 -/
 protected theorem map_add [Add α] [Add β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ + a₂) = f a₁ + f a₂)
@@ -1413,7 +1413,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  结论: [Neg α] [Neg β] (f : α -> β) (hf : 对任意 a, f (-a) = -f a)
+  结论: [取负 α] [取负 β] (f : α -> β) (hf : 对任意 a, f (-a) = -f a)
   证明: ext fun _ _ => hf _
 -/
 protected theorem map_neg [Neg α] [Neg β] (f : α -> β) (hf : forall a, f (-a) = -f a)
@@ -1430,7 +1430,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  结论: [Sub α] [Sub β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
+  结论: [减法 α] [减法 β] (f : α -> β) (hf : 对任意 a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
   证明: ext fun _ _ => hf _ _
 -/
 protected theorem map_sub [Sub α] [Sub β] (f : α -> β) (hf : forall a₁ a₂, f (a₁ - a₂) = f a₁ - f a₂)
@@ -1447,7 +1447,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  结论: [SMul R α] [SMul R β] (f : α -> β) (r : R) (hf : 对任意 a, f (r • a) = r • f a)
+  结论: [标量乘法 R α] [标量乘法 R β] (f : α -> β) (r : R) (hf : 对任意 a, f (r • a) = r • f a)
   证明: ext fun _ _ => hf _
 -/
 protected theorem map_smul [SMul R α] [SMul R β] (f : α -> β) (r : R) (hf : forall a, f (r • a) = r • f a)
@@ -1464,7 +1464,7 @@ theorem map_smulₛₗ
 
 中文:
 定理 map_smulₛₗ
-  结论: [SMul R α] [SMul S β] (f : α -> β) (σ : R -> S) (r : R)
+  结论: [标量乘法 R α] [标量乘法 S β] (f : α -> β) (σ : R -> S) (r : R)
   证明: ext fun _ _ => hf _
 -/
 protected theorem map_smulₛₗ [SMul R α] [SMul S β] (f : α -> β) (σ : R -> S) (r : R)
@@ -1482,7 +1482,7 @@ theorem map_smul'
 
 中文:
 定理 map_smul'
-  结论: [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
+  结论: [乘法 α] [乘法 β] (f : α -> β) (r : α) (A : 矩阵 n n α)
   证明: ext fun _ _ => hf _ _
 -/
 theorem map_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
@@ -1499,7 +1499,7 @@ theorem map_op_smul'
 
 中文:
 定理 map_op_smul'
-  结论: [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
+  结论: [乘法 α] [乘法 β] (f : α -> β) (r : α) (A : 矩阵 n n α)
   证明: ext fun _ _ => hf _ _
 -/
 theorem map_op_smul' [Mul α] [Mul β] (f : α -> β) (r : α) (A : Matrix n n α)
@@ -1517,7 +1517,7 @@ theorem _root_.IsSMulRegular.matrix
 
 中文:
 定理 _root_.IsSMulRegular.matrix
-  条件: [SMul R S] {k : R} (hk : IsSMulRegular S k)
+  条件: [标量乘法 R S] {k : R} (hk : IsSMulRegular S k)
   证明: IsSMulRegular.pi fun _ => IsSMulRegular.pi fun _ => hk
 
 Depends on / 依赖: IsSMulRegular, IsSMulRegular.pi
@@ -1536,7 +1536,7 @@ theorem _root_.IsLeftRegular.matrix
 
 中文:
 定理 _root_.IsLeftRegular.matrix
-  条件: [Mul α] {k : α} (hk : IsLeftRegular k)
+  条件: [乘法 α] {k : α} (hk : IsLeftRegular k)
   证明: hk.isSMulRegular.matrix
 
 Depends on / 依赖: hk.isSMulRegular.matrix, isSMulRegular, matrix
@@ -1557,7 +1557,7 @@ instance subsingleton_of_empty_left
 
 中文:
 实例 subsingleton_of_empty_left
-  签名: [IsEmpty m]
+  签名: [是空 m]
   定义体: ⟨fun M N => by
     ext i
     exact isEmptyElim i⟩
@@ -1581,7 +1581,7 @@ instance subsingleton_of_empty_right
 
 中文:
 实例 subsingleton_of_empty_right
-  签名: [IsEmpty n]
+  签名: [是空 n]
   定义体: ⟨fun M N => by
     ext i j
     exact isEmptyElim j⟩
@@ -1604,7 +1604,7 @@ definition ofAddEquiv
 
 中文:
 定义 ofAddEquiv
-  签名: [Add α]
+  签名: [加法 α]
   定义体: of
   map_add' _ _ := rfl
 -/
@@ -1622,7 +1622,7 @@ lemma coe_ofAddEquiv
 
 中文:
 引理 coe_ofAddEquiv
-  条件: [Add α]
+  条件: [加法 α]
   证明: rfl
 -/
 @[simp] lemma coe_ofAddEquiv [Add α] :
@@ -1637,7 +1637,7 @@ lemma coe_ofAddEquiv_symm
 
 中文:
 引理 coe_ofAddEquiv_symm
-  条件: [Add α]
+  条件: [加法 α]
   证明: rfl
 -/
 @[simp] lemma coe_ofAddEquiv_symm [Add α] :
@@ -1656,7 +1656,7 @@ lemma isAddUnit_iff
 
 中文:
 引理 isAddUnit_iff
-  条件: [AddMonoid α] {A : Matrix m n α}
+  条件: [加法幺半群 α] {A : 矩阵 m n α}
   证明: by
   simp_rw [isAddUnit_iff_exists, Classical.skolem, forall_and,
     ← Matrix.ext_iff, add_apply, zero_apply]
@@ -1690,7 +1690,7 @@ theorem transpose_transpose
 
 中文:
 定理 transpose_transpose
-  条件: (M : Matrix m n α)
+  条件: (M : 矩阵 m n α)
   结论: Mᵀᵀ = M
   证明: by
   ext
@@ -1711,7 +1711,7 @@ theorem transpose_involutive
 
 中文:
 定理 transpose_involutive
-  结论: (transpose : Matrix n n α -> Matrix n n α).Involutive
+  结论: (transpose : 矩阵 n n α -> 矩阵 n n α).对合
   证明: transpose_transpose
 
 Depends on / 依赖: transpose_transpose
@@ -1729,7 +1729,7 @@ theorem transpose_injective
 
 中文:
 定理 transpose_injective
-  结论: Function.Injective (transpose : Matrix m n α -> Matrix n m α)
+  结论: 函数.单射 (transpose : 矩阵 m n α -> 矩阵 n m α)
   证明: fun _ _ h => ext fun i j => ext_iff.2 h j i
 
 Depends on / 依赖: ext_iff
@@ -1750,7 +1750,7 @@ theorem transpose_inj
 
 中文:
 定理 transpose_inj
-  条件: {A B : Matrix m n α}
+  条件: {A B : 矩阵 m n α}
   结论: Aᵀ = Bᵀ ↔ A = B
   证明: transpose_injective.eq_iff
 
@@ -1772,8 +1772,8 @@ theorem transpose_zero
 
 中文:
 定理 transpose_zero
-  条件: [Zero α]
-  结论: (0 : Matrix m n α)ᵀ = 0
+  条件: [零 α]
+  结论: (0 : 矩阵 m n α)ᵀ = 0
   证明: rfl
 
 @[simp]
@@ -1794,7 +1794,7 @@ theorem transpose_eq_zero
 
 中文:
 定理 transpose_eq_zero
-  条件: [Zero α] {M : Matrix m n α}
+  条件: [零 α] {M : 矩阵 m n α}
   结论: Mᵀ = 0 ↔ M = 0
   证明: transpose_inj
 
@@ -1820,7 +1820,7 @@ theorem transpose_add
 
 中文:
 定理 transpose_add
-  条件: [Add α] (M : Matrix m n α) (N : Matrix m n α)
+  条件: [加法 α] (M : 矩阵 m n α) (N : 矩阵 m n α)
   结论: (M + N)ᵀ = Mᵀ + Nᵀ
   证明: by
   ext
@@ -1848,7 +1848,7 @@ theorem transpose_sub
 
 中文:
 定理 transpose_sub
-  条件: [Sub α] (M : Matrix m n α) (N : Matrix m n α)
+  条件: [减法 α] (M : 矩阵 m n α) (N : 矩阵 m n α)
   结论: (M - N)ᵀ = Mᵀ - Nᵀ
   证明: by
   ext
@@ -1874,7 +1874,7 @@ theorem transpose_smul
 
 中文:
 定理 transpose_smul
-  条件: {R : 类型} [SMul R α] (c : R) (M : Matrix m n α)
+  条件: {R : 类型} [标量乘法 R α] (c : R) (M : 矩阵 m n α)
   结论: (c • M)ᵀ = c • Mᵀ
   证明: rfl
 
@@ -1895,7 +1895,7 @@ theorem transpose_neg
 
 中文:
 定理 transpose_neg
-  条件: [Neg α] (M : Matrix m n α)
+  条件: [取负 α] (M : 矩阵 m n α)
   结论: (-M)ᵀ = -Mᵀ
   证明: rfl
 -/
@@ -1913,7 +1913,7 @@ theorem transpose_map
 
 中文:
 定理 transpose_map
-  条件: {f : α -> β} {M : Matrix m n α}
+  条件: {f : α -> β} {M : 矩阵 m n α}
   结论: Mᵀ.map f = (M.map f)ᵀ
   证明: rfl
 -/
@@ -1934,7 +1934,7 @@ definition submatrix
 
 中文:
 定义 submatrix
-  签名: (A : Matrix m n α) (r : l -> m) (c : o -> n)
+  签名: (A : 矩阵 m n α) (r : l -> m) (c : o -> n)
   定义体: of fun i j => A (r i) (c j)
 
 @[simp]
@@ -1955,7 +1955,7 @@ theorem submatrix_apply
 
 中文:
 定理 submatrix_apply
-  条件: (A : Matrix m n α) (r : l -> m) (c : o -> n) (i j)
+  条件: (A : 矩阵 m n α) (r : l -> m) (c : o -> n) (i j)
   证明: rfl
 
 @[simp]
@@ -1978,7 +1978,7 @@ theorem submatrix_id_id
 
 中文:
 定理 submatrix_id_id
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: A.submatrix id id = A
   证明: ext fun _ _ => rfl
 
@@ -2000,7 +2000,7 @@ theorem submatrix_submatrix
 
 中文:
 定理 submatrix_submatrix
-  结论: {l₂ o₂ : 类型} (A : Matrix m n α) (r₁ : l -> m) (c₁ : o -> n)
+  结论: {l₂ o₂ : 类型} (A : 矩阵 m n α) (r₁ : l -> m) (c₁ : o -> n)
   证明: ext fun _ _ => rfl
 
 @[simp]
@@ -2021,7 +2021,7 @@ theorem transpose_submatrix
 
 中文:
 定理 transpose_submatrix
-  条件: (A : Matrix m n α) (r : l -> m) (c : o -> n)
+  条件: (A : 矩阵 m n α) (r : l -> m) (c : o -> n)
   证明: ext fun _ _ => rfl
 -/
 theorem transpose_submatrix (A : Matrix m n α) (r : l -> m) (c : o -> n) :
@@ -2038,7 +2038,7 @@ theorem submatrix_add
 
 中文:
 定理 submatrix_add
-  条件: [Add α] (A B : Matrix m n α)
+  条件: [加法 α] (A B : 矩阵 m n α)
   证明: rfl
 -/
 theorem submatrix_add [Add α] (A B : Matrix m n α) :
@@ -2055,7 +2055,7 @@ theorem submatrix_neg
 
 中文:
 定理 submatrix_neg
-  条件: [Neg α] (A : Matrix m n α)
+  条件: [取负 α] (A : 矩阵 m n α)
   证明: rfl
 -/
 theorem submatrix_neg [Neg α] (A : Matrix m n α) :
@@ -2074,7 +2074,7 @@ theorem submatrix_sub
 
 中文:
 定理 submatrix_sub
-  条件: [Sub α] (A B : Matrix m n α)
+  条件: [减法 α] (A B : 矩阵 m n α)
   证明: rfl
 
 @[simp]
@@ -2094,7 +2094,7 @@ theorem submatrix_zero
 
 中文:
 定理 submatrix_zero
-  条件: [Zero α]
+  条件: [零 α]
   证明: rfl
 -/
 theorem submatrix_zero [Zero α] :
@@ -2111,7 +2111,7 @@ theorem submatrix_smul
 
 中文:
 定理 submatrix_smul
-  条件: {R : 类型} [SMul R α] (r : R) (A : Matrix m n α)
+  条件: {R : 类型} [标量乘法 R α] (r : R) (A : 矩阵 m n α)
   证明: rfl
 -/
 theorem submatrix_smul {R : Type*} [SMul R α] (r : R) (A : Matrix m n α) :
@@ -2128,7 +2128,7 @@ theorem submatrix_map
 
 中文:
 定理 submatrix_map
-  条件: (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : Matrix m n α)
+  条件: (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : 矩阵 m n α)
   证明: rfl
 -/
 theorem submatrix_map (f : α -> β) (e₁ : l -> m) (e₂ : o -> n) (A : Matrix m n α) :
@@ -2177,7 +2177,7 @@ theorem reindex_apply
 
 中文:
 定理 reindex_apply
-  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α)
+  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem reindex_apply (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) :
@@ -2197,8 +2197,8 @@ theorem reindex_refl_refl
 
 中文:
 定理 reindex_refl_refl
-  条件: (A : Matrix m n α)
-  结论: reindex (Equiv.refl _) (Equiv.refl _) A = A
+  条件: (A : 矩阵 m n α)
+  结论: reindex (等价.refl _) (等价.refl _) A = A
   证明: A.submatrix_id_id
 
 @[simp]
@@ -2261,7 +2261,7 @@ theorem transpose_reindex
 
 中文:
 定理 transpose_reindex
-  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α)
+  条件: (eₘ : m ≃ l) (eₙ : n ≃ o) (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem transpose_reindex (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) :
@@ -2278,7 +2278,7 @@ abbreviation subLeft
 
 中文:
 缩写 subLeft
-  签名: {m l r : 自然数} (A : Matrix (Fin m) (Fin (l + r)) α)
+  签名: {m l r : 自然数} (A : 矩阵 (有限集 m) (有限集 (l + r)) α)
   定义体: submatrix A id (Fin.castAdd r)
 
 Depends on / 依赖: Fin.castAdd, castAdd, submatrix
@@ -2296,7 +2296,7 @@ abbreviation subRight
 
 中文:
 缩写 subRight
-  签名: {m l r : 自然数} (A : Matrix (Fin m) (Fin (l + r)) α)
+  签名: {m l r : 自然数} (A : 矩阵 (有限集 m) (有限集 (l + r)) α)
   定义体: submatrix A id (Fin.natAdd l)
 
 Depends on / 依赖: Fin.natAdd, natAdd, submatrix
@@ -2314,7 +2314,7 @@ abbreviation subUp
 
 中文:
 缩写 subUp
-  签名: {d u n : 自然数} (A : Matrix (Fin (u + d)) (Fin n) α)
+  签名: {d u n : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 n) α)
   定义体: submatrix A (Fin.castAdd d) id
 
 Depends on / 依赖: Fin.castAdd, castAdd, submatrix
@@ -2332,7 +2332,7 @@ abbreviation subDown
 
 中文:
 缩写 subDown
-  签名: {d u n : 自然数} (A : Matrix (Fin (u + d)) (Fin n) α)
+  签名: {d u n : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 n) α)
   定义体: submatrix A (Fin.natAdd u) id
 
 Depends on / 依赖: Fin.natAdd, natAdd, submatrix
@@ -2350,7 +2350,7 @@ abbreviation subUpRight
 
 中文:
 缩写 subUpRight
-  签名: {d u l r : 自然数} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
+  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
   定义体: subUp (subRight A)
 
 Depends on / 依赖: subRight
@@ -2369,7 +2369,7 @@ abbreviation subDownRight
 
 中文:
 缩写 subDownRight
-  签名: {d u l r : 自然数} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
+  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
   定义体: subDown (subRight A)
 
 Depends on / 依赖: subDown, subRight
@@ -2388,7 +2388,7 @@ abbreviation subUpLeft
 
 中文:
 缩写 subUpLeft
-  签名: {d u l r : 自然数} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
+  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
   定义体: subUp (subLeft A)
 
 Depends on / 依赖: subLeft
@@ -2407,7 +2407,7 @@ abbreviation subDownLeft
 
 中文:
 缩写 subDownLeft
-  签名: {d u l r : 自然数} (A : Matrix (Fin (u + d)) (Fin (l + r)) α)
+  签名: {d u l r : 自然数} (A : 矩阵 (有限集 (u + d)) (有限集 (l + r)) α)
   定义体: subDown (subLeft A)
 
 Depends on / 依赖: subDown, subLeft
@@ -2428,7 +2428,7 @@ definition row
 
 中文:
 定义 row
-  签名: (A : Matrix m n α)
+  签名: (A : 矩阵 m n α)
   定义体: A
 -/
 def row (A : Matrix m n α) : m -> n -> α := A
@@ -2443,7 +2443,7 @@ definition col
 
 中文:
 定义 col
-  签名: (A : Matrix m n α)
+  签名: (A : 矩阵 m n α)
   定义体: Aᵀ
 -/
 def col (A : Matrix m n α) : n -> m -> α := Aᵀ
@@ -2459,7 +2459,7 @@ lemma row_eq_self
 
 中文:
 引理 row_eq_self
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: A.row = of.symm A
   证明: rfl
 -/
@@ -2478,7 +2478,7 @@ lemma col_eq_transpose
 
 中文:
 引理 col_eq_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: A.col = of.symm Aᵀ
   证明: rfl
 
@@ -2501,7 +2501,7 @@ lemma of_row
 中文:
 引理 of_row
   条件: (f : m -> n -> α)
-  结论: (Matrix.of f).row = f
+  结论: (矩阵.of f).row = f
   证明: rfl
 
 @[simp]
@@ -2521,7 +2521,7 @@ lemma of_col
 中文:
 引理 of_col
   条件: (f : m -> n -> α)
-  结论: (Matrix.of f)ᵀ.col = f
+  结论: (矩阵.of f)ᵀ.col = f
   证明: rfl
 -/
 lemma of_col (f : m -> n -> α) : (Matrix.of f)ᵀ.col = f := rfl
@@ -2537,7 +2537,7 @@ lemma row_def
 
 中文:
 引理 row_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: A.row = fun i => A i
   证明: rfl
 -/
@@ -2556,7 +2556,7 @@ lemma col_def
 
 中文:
 引理 col_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: A.col = fun j => Aᵀ j
   证明: rfl
 
@@ -2576,7 +2576,7 @@ lemma row_apply
 
 中文:
 引理 row_apply
-  条件: (A : Matrix m n α) (i : m) (j : n)
+  条件: (A : 矩阵 m n α) (i : m) (j : n)
   结论: A.row i j = A i j
   证明: rfl
 -/
@@ -2595,7 +2595,7 @@ lemma row_apply'
 
 中文:
 引理 row_apply'
-  条件: (A : Matrix m n α) (i : m)
+  条件: (A : 矩阵 m n α) (i : m)
   结论: A.row i = A i
   证明: rfl
 
@@ -2615,7 +2615,7 @@ lemma col_apply
 
 中文:
 引理 col_apply
-  条件: (A : Matrix m n α) (i : n) (j : m)
+  条件: (A : 矩阵 m n α) (i : n) (j : m)
   结论: A.col i j = A j i
   证明: rfl
 -/
@@ -2632,7 +2632,7 @@ lemma col_apply'
 
 中文:
 引理 col_apply'
-  条件: (A : Matrix m n α) (i : n)
+  条件: (A : 矩阵 m n α) (i : n)
   结论: A.col i = fun j => A j i
   证明: rfl
 -/
@@ -2653,7 +2653,7 @@ lemma ext_row
 
 中文:
 引理 ext_row
-  条件: {A B : Matrix m n α} (h : 对任意 i, A.row i = B.row i)
+  条件: {A B : 矩阵 m n α} (h : 对任意 i, A.row i = B.row i)
   结论: A = B
   证明: ext fun i j => congr_fun (h i) j
 
@@ -2675,7 +2675,7 @@ lemma ext_col
 
 中文:
 引理 ext_col
-  条件: {A B : Matrix m n α} (h : 对任意 j, A.col j = B.col j)
+  条件: {A B : 矩阵 m n α} (h : 对任意 j, A.col j = B.col j)
   结论: A = B
   证明: ext fun i j => congr_fun (h j) i
 
@@ -2696,7 +2696,7 @@ lemma row_submatrix
 
 中文:
 引理 row_submatrix
-  条件: {m₀ n₀ : 类型} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
+  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
   证明: rfl
 -/
 lemma row_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀) :
@@ -2712,7 +2712,7 @@ lemma row_submatrix_eq_comp
 
 中文:
 引理 row_submatrix_eq_comp
-  条件: {m₀ n₀ : 类型} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
+  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀)
   证明: rfl
 -/
 lemma row_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (i : m₀) :
@@ -2728,7 +2728,7 @@ lemma col_submatrix
 
 中文:
 引理 col_submatrix
-  条件: {m₀ n₀ : 类型} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
+  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
   证明: rfl
 -/
 lemma col_submatrix {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀) :
@@ -2744,7 +2744,7 @@ lemma col_submatrix_eq_comp
 
 中文:
 引理 col_submatrix_eq_comp
-  条件: {m₀ n₀ : 类型} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
+  条件: {m₀ n₀ : 类型} (A : 矩阵 m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀)
   证明: rfl
 -/
 lemma col_submatrix_eq_comp {m₀ n₀ : Type*} (A : Matrix m n α) (r : m₀ -> m) (c : n₀ -> n) (j : n₀) :
@@ -2761,7 +2761,7 @@ lemma row_map
 
 中文:
 引理 row_map
-  条件: (A : Matrix m n α) (f : α -> β) (i : m)
+  条件: (A : 矩阵 m n α) (f : α -> β) (i : m)
   结论: (A.map f).row i = f ∘ A.row i
   证明: rfl
 -/
@@ -2780,7 +2780,7 @@ lemma col_map
 
 中文:
 引理 col_map
-  条件: (A : Matrix m n α) (f : α -> β) (j : n)
+  条件: (A : 矩阵 m n α) (f : α -> β) (j : n)
   结论: (A.map f).col j = f ∘ A.col j
   证明: rfl
 
@@ -2802,7 +2802,7 @@ lemma row_transpose
 
 中文:
 引理 row_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: Aᵀ.row = A.col
   证明: rfl
 
@@ -2822,7 +2822,7 @@ lemma col_transpose
 
 中文:
 引理 col_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: Aᵀ.col = A.row
   证明: rfl
 -/
@@ -2844,7 +2844,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : Set α)
+  签名: (S : 集合 α)
   定义体: {M | forall i j, M i j in S}
 -/
 def matrix (S : Set α) : Set (Matrix m n α) := {M | forall i j, M i j in S}
@@ -2859,7 +2859,7 @@ theorem mem_matrix
 
 中文:
 定理 mem_matrix
-  条件: {S : Set α} {M : Matrix m n α}
+  条件: {S : 集合 α} {M : 矩阵 m n α}
   证明: .rfl
 -/
 theorem mem_matrix {S : Set α} {M : Matrix m n α} :
@@ -2877,7 +2877,7 @@ theorem matrix_eq_pi
 
 中文:
 定理 matrix_eq_pi
-  条件: {S : Set α}
+  条件: {S : 集合 α}
   证明: by
   ext
   simp [Set.mem_matrix]
@@ -2906,7 +2906,7 @@ theorem transpose_mem_matrix_iff
 
 中文:
 定理 transpose_mem_matrix_iff
-  条件: {M : Matrix m n α}
+  条件: {M : 矩阵 m n α}
   证明: forall_comm
 
 Depends on / 依赖: forall_comm
@@ -2924,7 +2924,7 @@ theorem submatrix_mem_matrix
 
 中文:
 定理 submatrix_mem_matrix
-  条件: {M : Matrix m n α} {r : l -> m} {c : o -> n} (hM : M in S.matrix)
+  条件: {M : 矩阵 m n α} {r : l -> m} {c : o -> n} (hM : M in S.matrix)
   证明: by simp_all [Set.mem_matrix]
 
 Depends on / 依赖: Set.mem_matrix, mem_matrix
@@ -2942,7 +2942,7 @@ theorem submatrix_mem_matrix_iff
 
 中文:
 定理 submatrix_mem_matrix_iff
-  结论: {M : Matrix m n α} {r : l -> m} {c : o -> n}
+  结论: {M : 矩阵 m n α} {r : l -> m} {c : o -> n}
   证明: ⟨(hr.forall.mpr fun _ => hc.forall.mpr fun _ => · _ _), submatrix_mem_matrix⟩
 
 Depends on / 依赖: hc.forall.mpr, hr.forall.mpr, submatrix_mem_matrix

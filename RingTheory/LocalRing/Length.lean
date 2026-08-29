@@ -48,7 +48,7 @@ theorem CovBy.length_restrictScalars
 
 中文:
 定理 CovBy.length_restrictScalars
-  条件: {p q : Submodule B M} (h : p ⋖ q)
+  条件: {p q : 子模 B M} (h : p ⋖ q)
   证明: by
   let f : p ->ₗ[B] q := inclusion h.le
   have key : IsSimpleModule B (q ⧸ f.range) := by
@@ -89,7 +89,7 @@ theorem IsLocalRing.length_restrictScalars
       rw [← Fin.val_last s.length
 
 中文:
-定理 IsLocalRing.length_restrictScalars
+定理 是局部环.length_restrictScalars
   证明: by
   by_cases h : IsFiniteLength B M
   · obtain ⟨s, hs_bot, hs_top⟩ := isFiniteLength_iff_exists_compositionSeries.mp h
@@ -142,7 +142,7 @@ theorem CovBy.length_baseChange
 
 中文:
 定理 CovBy.length_baseChange
-  条件: {p q : Submodule A M} (h : p ⋖ q)
+  条件: {p q : 子模 A M} (h : p ⋖ q)
   证明: by
   -- Reduce the statement to ℓ_B(B ⊗[A] p) = ℓ_B(B ⊗[A] q) + ℓ_B(B ⧸ m_A B)
   rw [← (toBaseChange.toLinearEquiv B p).length_eq]; rw [← (toBaseChange.toLinearEquiv B q).length_eq]
@@ -184,7 +184,7 @@ theorem IsLocalRing.length_baseChange
      
 
 中文:
-定理 IsLocalRing.length_baseChange
+定理 是局部环.length_baseChange
   证明: by
   by_cases h : IsFiniteLength A M
   · obtain ⟨s, hs_bot, hs_top⟩ := isFiniteLength_iff_exists_compositionSeries.mp h

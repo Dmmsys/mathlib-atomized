@@ -46,7 +46,7 @@ definition prim
 
 中文:
 定义 prim
-  签名: : Primcodable (List β)
+  签名: : Primcodable (列表 β)
   定义体: ⟨H⟩
 -/
 private def prim : Primcodable (List β) := ⟨H⟩
@@ -67,7 +67,7 @@ to₂
 
 中文:
 定理 list_casesOn'
-  结论: {f : α -> List β} {g : α -> σ} {h : α -> β × List β -> σ}
+  结论: {f : α -> 列表 β} {g : α -> σ} {h : α -> β × 列表 β -> σ}
   证明: letI := prim H
   have :
     @Primrec _ (Option σ) _ _ fun a =>
@@ -107,7 +107,7 @@ to₂
 
 中文:
 定理 list_foldl'
-  结论: {f : α -> List β} {g : α -> σ} {h : α -> σ × β -> σ}
+  结论: {f : α -> 列表 β} {g : α -> σ} {h : α -> σ × β -> σ}
   证明: by
   let := prim H
   let G (a : α) (IH : σ × List β) : σ × List β := List.casesOn IH.2 IH fun b l => (h a (IH.1, b), l)
@@ -156,7 +156,7 @@ theorem list_cons'
 
 中文:
 定理 list_cons'
-  结论: (haveI := prim H; Primrec₂ (@List.cons β))
+  结论: (haveI := prim H; Primrec₂ (@列表.cons β))
   证明: letI := prim H
   encode_iff.1 (succ.comp <| Primrec₂.natPair.comp (encode_iff.2 fst) (encode_iff.2 snd))
 -/
@@ -225,7 +225,7 @@ option_map snd (list_cons' H).comp ((@Primrec.encode α _).comp (fst.comp fst)) 
 
 中文:
 实例 list
-  签名: : Primcodable (List α)
+  签名: : Primcodable (列表 α)
   定义体: ⟨letI H := Primcodable.prim (List Nat)
     have : Primrec₂ fun (a : α) (o : Option (List Nat)) => o.map (List.cons (encode a)) :=
 option_map snd (list_cons' H).comp ((@Primrec.encode α _).comp (fst.comp fst)) snd
@@ -279,7 +279,7 @@ theorem list_cons
 
 中文:
 定理 list_cons
-  结论: Primrec₂ (@List.cons α)
+  结论: Primrec₂ (@列表.cons α)
   证明: list_cons' (Primcodable.prim _)
 
 Depends on / 依赖: Primcodable, Primcodable.prim, list_cons
@@ -297,7 +297,7 @@ theorem list_casesOn
 
 中文:
 定理 list_casesOn
-  条件: {f : α -> List β} {g : α -> σ} {h : α -> β × List β -> σ}
+  条件: {f : α -> 列表 β} {g : α -> σ} {h : α -> β × 列表 β -> σ}
   证明: list_casesOn' (Primcodable.prim _)
 
 Depends on / 依赖: Primcodable, Primcodable.prim, list_casesOn
@@ -318,7 +318,7 @@ theorem list_foldl
 
 中文:
 定理 list_foldl
-  条件: {f : α -> List β} {g : α -> σ} {h : α -> σ × β -> σ}
+  条件: {f : α -> 列表 β} {g : α -> σ} {h : α -> σ × β -> σ}
   证明: list_foldl' (Primcodable.prim _)
 
 Depends on / 依赖: Primcodable, Primcodable.prim, list_foldl
@@ -338,7 +338,7 @@ theorem list_reverse
 
 中文:
 定理 list_reverse
-  结论: Primrec (@List.reverse α)
+  结论: Primrec (@列表.reverse α)
   证明: list_reverse' (Primcodable.prim _)
 
 Depends on / 依赖: Primcodable, Primcodable.prim, list_reverse
@@ -357,7 +357,7 @@ theorem list_foldr
 
 中文:
 定理 list_foldr
-  结论: {f : α -> List β} {g : α -> σ} {h : α -> β × σ -> σ} (hf : Primrec f)
+  结论: {f : α -> 列表 β} {g : α -> σ} {h : α -> β × σ -> σ} (hf : Primrec f)
   证明: (list_foldl (list_reverse.comp hf) hg <| to₂ <| hh.comp fst <| (pair snd fst).comp snd).of_eq
     fun a => by simp [List.foldl_reverse]
 
@@ -380,7 +380,7 @@ theorem list_head?
 
 中文:
 定理 list_head?
-  结论: Primrec (@List.head? α)
+  结论: Primrec (@列表.head? α)
   证明: (list_casesOn .id (const none) (option_some_iff.2 <| fst.comp snd).to₂).of_eq fun l => by
     cases l <;> rfl
 
@@ -401,8 +401,8 @@ theorem list_headI
 
 中文:
 定理 list_headI
-  条件: [Inhabited α]
-  结论: Primrec (@List.headI α _)
+  条件: [可居 α]
+  结论: Primrec (@列表.headI α _)
   证明: (option_getD_default.comp list_head?).of_eq fun l => l.head!_eq_head?_getD.symm
 
 Depends on / 依赖: _eq_head, _getD, _getD.symm, l.head, list_head, of_eq, option_getD_default, option_getD_default.comp
@@ -420,7 +420,7 @@ theorem list_tail
 
 中文:
 定理 list_tail
-  结论: Primrec (@List.tail α)
+  结论: Primrec (@列表.tail α)
   证明: (list_casesOn .id (const []) (snd.comp snd).to₂).of_eq fun l => by cases l <;> rfl
 
 Depends on / 依赖: list_casesOn, of_eq, snd.comp
@@ -443,7 +443,7 @@ to₂ pair ((list_cons.comp fst (fst.comp snd)).comp snd) hh
 
 中文:
 定理 list_rec
-  结论: {f : α -> List β} {g : α -> σ} {h : α -> β × List β × σ -> σ} (hf : Primrec f)
+  结论: {f : α -> 列表 β} {g : α -> σ} {h : α -> β × 列表 β × σ -> σ} (hf : Primrec f)
   证明: let F (a : α) := (f a).foldr (fun (b : β) (s : List β × σ) => (b :: s.1, h a (b, s))) ([], g a)
   have : Primrec F :=
 list_foldr hf (pair (const []) hg)
@@ -482,7 +482,7 @@ theorem list_getElem?
 
 中文:
 定理 list_getElem?
-  结论: Primrec₂ ((·[·]? : List α -> 自然数 -> Option α))
+  结论: Primrec₂ ((·[·]? : 列表 α -> 自然数 -> 选项类型 α))
   证明: let F (l : List α) (n : Nat) :=
     l.foldl
       (fun (s : Nat oplus α) (a : α) =>
@@ -533,7 +533,7 @@ theorem list_getD
 中文:
 定理 list_getD
   条件: (d : α)
-  结论: Primrec₂ fun l n => List.getD l n d
+  结论: Primrec₂ fun l n => 列表.getD l n d
   证明: by
   simp only [List.getD_eq_getElem?_getD]
   exact option_getD.comp₂ list_getElem? (const _)
@@ -555,8 +555,8 @@ theorem list_getI
 
 中文:
 定理 list_getI
-  条件: [Inhabited α]
-  结论: Primrec₂ (@List.getI α _)
+  条件: [可居 α]
+  结论: Primrec₂ (@列表.getI α _)
   证明: list_getD _
 
 Depends on / 依赖: list_getD
@@ -575,7 +575,7 @@ theorem list_append
 
 中文:
 定理 list_append
-  结论: Primrec₂ ((· ++ ·) : List α -> List α -> List α)
+  结论: Primrec₂ ((· ++ ·) : 列表 α -> 列表 α -> 列表 α)
   证明: (list_foldr fst snd <| to₂ <| comp (@list_cons α _) snd).to₂.of_eq fun l₁ l₂ => by
     induction l₁ <;> simp [*]
 
@@ -615,7 +615,7 @@ to₂ list_cons.comp (hg.comp fst (fst.comp snd)) (snd.comp snd)).of_eq
 
 中文:
 定理 list_map
-  条件: {f : α -> List β} {g : α -> β -> σ} (hf : Primrec f) (hg : Primrec₂ g)
+  条件: {f : α -> 列表 β} {g : α -> β -> σ} (hf : Primrec f) (hg : Primrec₂ g)
   证明: (list_foldr hf (const []) <|
 to₂ list_cons.comp (hg.comp fst (fst.comp snd)) (snd.comp snd)).of_eq
     fun a => by induction f a <;> simp [*]
@@ -639,7 +639,7 @@ theorem list_range
 
 中文:
 定理 list_range
-  结论: Primrec List.range
+  结论: Primrec 列表.range
   证明: (nat_rec' .id (const []) ((list_concat.comp snd fst).comp snd).to₂).of_eq fun n => by
     simp; induction n <;> simp [*, List.range_succ]
 
@@ -660,7 +660,7 @@ theorem list_flatten
 
 中文:
 定理 list_flatten
-  结论: Primrec (@List.flatten α)
+  结论: Primrec (@列表.flatten α)
   证明: (list_foldr .id (const []) <| to₂ <| comp (@list_append α _) snd).of_eq fun l => by
     dsimp; induction l <;> simp [*]
 
@@ -680,7 +680,7 @@ theorem list_flatMap
 
 中文:
 定理 list_flatMap
-  条件: {f : α -> List β} {g : α -> β -> List σ} (hf : Primrec f) (hg : Primrec₂ g)
+  条件: {f : α -> 列表 β} {g : α -> β -> 列表 σ} (hf : Primrec f) (hg : Primrec₂ g)
   证明: list_flatten.comp (list_map hf hg)
 
 Depends on / 依赖: list_flatten, list_flatten.comp, list_map
@@ -700,7 +700,7 @@ theorem optionToList
 
 中文:
 定理 optionToList
-  结论: Primrec (Option.toList : Option α -> List α)
+  结论: Primrec (选项类型.toList : 选项类型 α -> 列表 α)
   证明: (option_casesOn Primrec.id (const [])
     ((list_cons.comp Primrec.id (const [])).comp₂ Primrec₂.right)).of_eq
   (fun o => by rcases o <;> simp)
@@ -723,7 +723,7 @@ fun _ => Eq.symm List.filterMap_eq_flatMap_toList _ _
 
 中文:
 定理 listFilterMap
-  结论: {f : α -> List β} {g : α -> β -> Option σ}
+  结论: {f : α -> 列表 β} {g : α -> β -> 选项类型 σ}
   证明: (list_flatMap hf (comp₂ optionToList hg)).of_eq
 fun _ => Eq.symm List.filterMap_eq_flatMap_toList _ _
 
@@ -747,7 +747,7 @@ theorem list_length
 
 中文:
 定理 list_length
-  结论: Primrec (@List.length α)
+  结论: Primrec (@列表.length α)
   证明: (list_foldr (@Primrec.id (List α) _) (const 0) <| to₂ <| (succ.comp <| snd.comp snd).to₂).of_eq
     fun l => by dsimp; induction l <;> simp [*]
 
@@ -773,7 +773,7 @@ theorem listFilter
 中文:
 定理 listFilter
   条件: (hf : PrimrecPred p)
-  结论: Primrec fun L => List.filter (p ·) L
+  结论: Primrec fun L => 列表.filter (p ·) L
   证明: by
   rw [← List.filterMap_eq_filter]
   apply listFilterMap .id
@@ -800,7 +800,7 @@ to₂ cond (hp.comp fst <| fst.comp snd) (const 0) (succ.comp <| snd.comp snd)).
 
 中文:
 定理 list_findIdx
-  结论: {f : α -> List β} {p : α -> β -> 布尔}
+  结论: {f : α -> 列表 β} {p : α -> β -> 布尔值}
   证明: (list_foldr hf (const 0) <|
 to₂ cond (hp.comp fst <| fst.comp snd) (const 0) (succ.comp <| snd.comp snd)).of_eq
     fun a => by dsimp; induction f a <;> simp [List.findIdx_cons, *]
@@ -825,7 +825,7 @@ theorem list_idxOf
 中文:
 定理 list_idxOf
   条件: [DecidableEq α]
-  结论: Primrec₂ (@List.idxOf α _)
+  结论: Primrec₂ (@列表.idxOf α _)
   证明: to₂ list_findIdx snd Primrec.beq.comp₂ snd.to₂ (fst.comp fst).to₂
 
 Depends on / 依赖: Primrec, Primrec.beq.comp, fst.comp, list_findIdx, snd.to
@@ -852,7 +852,7 @@ to₂
 
 中文:
 定理 nat_strong_rec
-  结论: (f : α -> 自然数 -> σ) {g : α -> List σ -> Option σ} (hg : Primrec₂ g)
+  结论: (f : α -> 自然数 -> σ) {g : α -> 列表 σ -> 选项类型 σ} (hg : Primrec₂ g)
   证明: suffices Primrec₂ fun a n => (List.range n).map (f a) from
 Primrec₂.option_some_iff.1
       (list_getElem?.comp (this.comp fst (succ.comp snd)) snd).to₂.of_eq fun a n => by
@@ -904,7 +904,7 @@ to₂
 中文:
 定理 listLookup
   条件: [DecidableEq α]
-  结论: Primrec₂ (List.lookup : α -> List (α × β) -> Option β)
+  结论: Primrec₂ (列表.lookup : α -> 列表 (α × β) -> 选项类型 β)
   证明: (to₂ <| list_rec snd (const none) <|
 to₂
       cond (Primrec.beq.comp (fst.comp fst) (fst.comp <| fst.comp snd))
@@ -941,7 +941,7 @@ theorem nat_omega_rec'
 
 中文:
 定理 nat_omega_rec'
-  结论: (f : β -> σ) {m : β -> 自然数} {l : β -> List β} {g : β -> List σ -> Option σ}
+  结论: (f : β -> σ) {m : β -> 自然数} {l : β -> 列表 β} {g : β -> 列表 σ -> 选项类型 σ}
   证明: by
   have : DecidableEq β := Encodable.decidableEqOfEncodable β
   let mapGraph (M : List (β × σ)) (bs : List β) : List σ := bs.flatMap (Option.toList <| M.lookup ·)
@@ -1056,7 +1056,7 @@ theorem list_drop
 
 中文:
 定理 list_drop
-  结论: Primrec₂ (List.drop : 自然数 -> List α -> List α)
+  结论: Primrec₂ (列表.drop : 自然数 -> 列表 α -> 列表 α)
   证明: (nat_iterate fst snd (list_tail.comp₂ .right)).to₂.of_eq fun n l => l.tail_iterate n
 
 Depends on / 依赖: l.tail_iterate, list_tail, list_tail.comp, nat_iterate, of_eq, tail_iterate
@@ -1076,7 +1076,7 @@ theorem list_take
 
 中文:
 定理 list_take
-  结论: Primrec₂ (List.take : 自然数 -> List α -> List α)
+  结论: Primrec₂ (列表.take : 自然数 -> 列表 α -> 列表 α)
   证明: (list_reverse.comp (list_drop.comp (nat_sub.comp (list_length.comp snd) fst)
     (list_reverse.comp snd))).of_eq fun ⟨n, l⟩ => by
     rw [← List.reverse_reverse (l.take n)]; rw [List.reverse_take]
@@ -1100,8 +1100,8 @@ theorem list_takeWhile
 
 中文:
 定理 list_takeWhile
-  条件: {p : α -> 布尔} (hp : Primrec p)
-  结论: Primrec (List.takeWhile p)
+  条件: {p : α -> 布尔值} (hp : Primrec p)
+  结论: Primrec (列表.takeWhile p)
   证明: (list_take.comp (list_findIdx Primrec.id (Primrec.not.comp (hp.comp snd)).to₂)
     Primrec.id).of_eq fun _ => List.takeWhile_eq_take_findIdx_not.symm
 
@@ -1123,8 +1123,8 @@ theorem list_dropWhile
 
 中文:
 定理 list_dropWhile
-  条件: {p : α -> 布尔} (hp : Primrec p)
-  结论: Primrec (List.dropWhile p)
+  条件: {p : α -> 布尔值} (hp : Primrec p)
+  结论: Primrec (列表.dropWhile p)
   证明: (list_drop.comp (list_findIdx Primrec.id (Primrec.not.comp (hp.comp snd)).to₂)
     Primrec.id).of_eq fun _ => List.dropWhile_eq_drop_findIdx_not.symm
 
@@ -1171,7 +1171,7 @@ theorem list_modifyHead
 中文:
 定理 list_modifyHead
   条件: {f : α -> α} (hf : Primrec f)
-  结论: Primrec (List.modifyHead f)
+  结论: Primrec (列表.modifyHead f)
   证明: (list_modifyHead' (hf.comp snd).to₂).comp Primrec.id (const ())
 
 Depends on / 依赖: Primrec, Primrec.id, hf.comp, list_modifyHead
@@ -1237,7 +1237,7 @@ theorem list_set
 
 中文:
 定理 list_set
-  结论: Primrec₂ fun (l : List α) (p : 自然数 × α) => l.set p.1 p.2
+  结论: Primrec₂ fun (l : 列表 α) (p : 自然数 × α) => l.set p.1 p.2
   证明: (list_modify' fst.to₂).of_eq fun l ⟨n, v⟩ => (List.set_eq_modify v n l).symm
 
 Depends on / 依赖: List.set_eq_modify, fst.to, list_modify, of_eq, set_eq_modify
@@ -1263,8 +1263,8 @@ theorem exists_mem_list
   statement: (hf : PrimrecPred p) -> PrimrecPred fun L : List α => exists a in L, p a
 
 中文:
-定理 exists_mem_list
-  结论: (hf : PrimrecPred p) -> PrimrecPred fun L : List α => 存在 a in L, p a
+定理 存在_mem_list
+  结论: (hf : PrimrecPred p) -> PrimrecPred fun L : 列表 α => 存在 a in L, p a
 -/
 theorem exists_mem_list : (hf : PrimrecPred p) -> PrimrecPred fun L : List α => exists a in L, p a
   | ⟨_, hf⟩ => .of_eq
@@ -1278,8 +1278,8 @@ theorem forall_mem_list
   statement: (hf : PrimrecPred p) -> PrimrecPred fun L : List α => forall a in L, p a
 
 中文:
-定理 forall_mem_list
-  结论: (hf : PrimrecPred p) -> PrimrecPred fun L : List α => 对任意 a in L, p a
+定理 对任意_mem_list
+  结论: (hf : PrimrecPred p) -> PrimrecPred fun L : 列表 α => 对任意 a in L, p a
 -/
 theorem forall_mem_list : (hf : PrimrecPred p) -> PrimrecPred fun L : List α => forall a in L, p a
   | ⟨_, hf⟩ => .of_eq
@@ -1297,7 +1297,7 @@ theorem exists_lt
   proof: of_eq (hf.exists_mem_list.comp list_range) (by simp)
 
 中文:
-定理 exists_lt
+定理 存在_lt
   条件: (hf : PrimrecPred p)
   结论: PrimrecPred fun n => 存在 x < n, p x
   证明: of_eq (hf.exists_mem_list.comp list_range) (by simp)
@@ -1317,7 +1317,7 @@ theorem forall_lt
   proof: of_eq (hf.forall_mem_list.comp list_range) (by simp)
 
 中文:
-定理 forall_lt
+定理 对任意_lt
   条件: (hf : PrimrecPred p)
   结论: PrimrecPred fun n => 对任意 x < n, p x
   证明: of_eq (hf.forall_mem_list.comp list_range) (by simp)
@@ -1411,9 +1411,9 @@ theorem exists_mem_list
   exact Primrec.eq.comp (list_length.comp hf.listFilter) (const 0)
 
 中文:
-定理 exists_mem_list
+定理 存在_mem_list
   条件: (hf : PrimrecRel R)
-  结论: PrimrecRel fun (L : List α) b => 存在 a in L, R a b
+  结论: PrimrecRel fun (L : 列表 α) b => 存在 a in L, R a b
   证明: by
   classical
   have h (L) (b) : (List.filter (R · b) L).length != 0 ↔ exists a in L, R a b := by simp
@@ -1442,9 +1442,9 @@ theorem forall_mem_list
   exact (Primrec.eq.comp (list_length.comp <| PrimrecRel.listFilter hf) (.comp list_length fst))
 
 中文:
-定理 forall_mem_list
+定理 对任意_mem_list
   条件: (hf : PrimrecRel R)
-  结论: PrimrecRel fun (L : List α) b => 对任意 a in L, R a b
+  结论: PrimrecRel fun (L : 列表 α) b => 对任意 a in L, R a b
   证明: by
   classical
   have h (L) (b) : (List.filter (R · b) L).length = L.length ↔ forall a in L, R a b := by simp
@@ -1471,7 +1471,7 @@ theorem exists_lt
   proof: (hf.exists_mem_list.comp (list_range.comp fst) snd).of_eq (by simp)
 
 中文:
-定理 exists_lt
+定理 存在_lt
   条件: (hf : PrimrecRel R)
   结论: PrimrecRel fun n y => 存在 x < n, R x y
   证明: (hf.exists_mem_list.comp (list_range.comp fst) snd).of_eq (by simp)
@@ -1491,7 +1491,7 @@ theorem forall_lt
   proof: (hf.forall_mem_list.comp (list_range.comp fst) snd).of_eq (by simp)
 
 中文:
-定理 forall_lt
+定理 对任意_lt
   条件: (hf : PrimrecRel R)
   结论: PrimrecRel fun n y => 对任意 x < n, R x y
   证明: (hf.forall_mem_list.comp (list_range.comp fst) snd).of_eq (by simp)
@@ -1564,7 +1564,7 @@ theorem vector_toList
 中文:
 定理 vector_toList
   条件: {n}
-  结论: Primrec (@List.Vector.toList α n)
+  结论: Primrec (@列表.Vector.toList α n)
   证明: subtype_val (hp := (@Primrec.eq Nat _).comp list_length (const _))
 
 Depends on / 依赖: Primrec, Primrec.eq, list_length, subtype_val
@@ -1582,7 +1582,7 @@ theorem vector_toList_iff
 
 中文:
 定理 vector_toList_iff
-  条件: {n} {f : α -> List.Vector β n}
+  条件: {n} {f : α -> 列表.Vector β n}
   证明: subtype_val_iff (hp := (@Primrec.eq Nat _).comp list_length (const _))
 
 Depends on / 依赖: Primrec, Primrec.eq, list_length, subtype_val_iff
@@ -1603,7 +1603,7 @@ theorem vector_cons
 中文:
 定理 vector_cons
   条件: {n}
-  结论: Primrec₂ (@List.Vector.cons α n)
+  结论: Primrec₂ (@列表.Vector.cons α n)
   证明: vector_toList_iff.1 by simpa using list_cons.comp fst (vector_toList_iff.2 snd)
 
 Depends on / 依赖: list_cons, list_cons.comp, vector_toList_iff
@@ -1623,7 +1623,7 @@ theorem vector_length
 中文:
 定理 vector_length
   条件: {n}
-  结论: Primrec (@List.Vector.length α n)
+  结论: Primrec (@列表.Vector.length α n)
   证明: const _
 -/
 theorem vector_length {n} : Primrec (@List.Vector.length α n) :=
@@ -1641,7 +1641,7 @@ theorem vector_head
 中文:
 定理 vector_head
   条件: {n}
-  结论: Primrec (@List.Vector.head α n)
+  结论: Primrec (@列表.Vector.head α n)
   证明: option_some_iff.1 (list_head?.comp vector_toList).of_eq fun ⟨_ :: _, _⟩ => rfl
 
 Depends on / 依赖: list_head, of_eq, option_some_iff, vector_toList
@@ -1661,7 +1661,7 @@ theorem vector_tail
 中文:
 定理 vector_tail
   条件: {n}
-  结论: Primrec (@List.Vector.tail α n)
+  结论: Primrec (@列表.Vector.tail α n)
   证明: vector_toList_iff.1 (list_tail.comp vector_toList).of_eq fun ⟨l, h⟩ => by cases l <;> rfl
 
 Depends on / 依赖: list_tail, list_tail.comp, of_eq, vector_toList, vector_toList_iff
@@ -1683,7 +1683,7 @@ theorem vector_get
 中文:
 定理 vector_get
   条件: {n}
-  结论: Primrec₂ (@List.Vector.get α n)
+  结论: Primrec₂ (@列表.Vector.get α n)
   证明: option_some_iff.1
     (list_getElem?.comp (vector_toList.comp fst) (fin_val.comp snd)).of_eq fun a => by
       simp [Vector.get_eq_get_toList]
@@ -1720,7 +1720,7 @@ theorem vector_ofFn
 
 中文:
 定理 vector_ofFn
-  条件: {n} {f : Fin n -> α -> σ} (hf : 对任意 i, Primrec (f i))
+  条件: {n} {f : 有限集 n -> α -> σ} (hf : 对任意 i, Primrec (f i))
   证明: vector_toList_iff.1 by simp [list_ofFn hf]
 
 Depends on / 依赖: list_ofFn, vector_toList_iff
@@ -1741,7 +1741,7 @@ theorem vector_get'
 中文:
 定理 vector_get'
   条件: {n}
-  结论: Primrec (@List.Vector.get α n)
+  结论: Primrec (@列表.Vector.get α n)
   证明: of_equiv_symm
 
 Depends on / 依赖: of_equiv_symm
@@ -1761,7 +1761,7 @@ theorem vector_ofFn'
 中文:
 定理 vector_ofFn'
   条件: {n}
-  结论: Primrec (@List.Vector.ofFn α n)
+  结论: Primrec (@列表.Vector.ofFn α n)
   证明: of_equiv
 
 Depends on / 依赖: of_equiv
@@ -1781,7 +1781,7 @@ theorem fin_app
 中文:
 定理 fin_app
   条件: {n}
-  结论: Primrec₂ (@id (Fin n -> σ))
+  结论: Primrec₂ (@id (有限集 n -> σ))
   证明: (vector_get.comp (vector_ofFn'.comp fst) snd).of_eq fun ⟨v, i⟩ => by simp
 
 Depends on / 依赖: of_eq, vector_get, vector_get.comp, vector_ofFn
@@ -1801,7 +1801,7 @@ theorem fin_curry₁
 
 中文:
 定理 fin_curry₁
-  条件: {n} {f : Fin n -> α -> σ}
+  条件: {n} {f : 有限集 n -> α -> σ}
   结论: Primrec₂ f ↔ 对任意 i, Primrec (f i)
   证明: ⟨fun h i => h.comp (const i) .id, fun h =>
     (vector_get.comp ((vector_ofFn h).comp snd) fst).of_eq fun a => by simp⟩
@@ -1826,7 +1826,7 @@ theorem fin_curry
 
 中文:
 定理 fin_curry
-  条件: {n} {f : α -> Fin n -> σ}
+  条件: {n} {f : α -> 有限集 n -> σ}
   结论: Primrec f ↔ Primrec₂ f
   证明: ⟨fun h => fin_app.comp (h.comp fst) snd, fun h =>
     (vector_get'.comp
@@ -1862,13 +1862,13 @@ inductive Primrec'
 
 中文:
 归纳类型 Primrec'
-  参数: : 对任意 {n}, (List.Vector 自然数 n -> 自然数) -> 命题
+  参数: : 对任意 {n}, (列表.Vector 自然数 n -> 自然数) -> 命题
   构造子 (5 个):
     - zero: @Primrec' 0 fun _ => 0
     - succ: @Primrec' 1 fun v => succ v.head
-    - get: {n} (i : Fin n) : Primrec' fun v => v.get i
-    - comp: {m n f} (g : Fin n -> List.Vector 自然数 m -> 自然数) : Primrec' f -> (对任意 i, Primrec' (g i)) -> Primrec' fun a => f (List.Vector.ofFn fun i => g i a)
-    - prec: {n f g} : @Primrec' n f -> @Primrec' (n + 2) g -> Primrec' fun v : List.Vector 自然数 (n + 1) => v.head.rec (f v.tail) fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)
+    - get: {n} (i : 有限集 n) : Primrec' fun v => v.get i
+    - comp: {m n f} (g : 有限集 n -> 列表.Vector 自然数 m -> 自然数) : Primrec' f -> (对任意 i, Primrec' (g i)) -> Primrec' fun a => f (列表.Vector.ofFn fun i => g i a)
+    - prec: {n f g} : @Primrec' n f -> @Primrec' (n + 2) g -> Primrec' fun v : 列表.Vector 自然数 (n + 1) => v.head.rec (f v.tail) fun y IH => g (y ::ᵥ IH ::ᵥ v.tail)
 -/
 inductive Primrec' : forall {n}, (List.Vector Nat n -> Nat) -> Prop
   | zero : @Primrec' 0 fun _ => 0
@@ -1945,7 +1945,7 @@ theorem of_eq
 
 中文:
 定理 of_eq
-  条件: {n} {f g : List.Vector 自然数 n -> 自然数} (hf : Primrec' f) (H : 对任意 i, f i = g i)
+  条件: {n} {f g : 列表.Vector 自然数 n -> 自然数} (hf : Primrec' f) (H : 对任意 i, f i = g i)
   证明: (funext H : f = g) ▸ hf
 -/
 theorem of_eq {n} {f g : List.Vector Nat n -> Nat} (hf : Primrec' f) (H : forall i, f i = g i) :
@@ -2023,7 +2023,7 @@ definition Vec
 
 中文:
 定义 Vec
-  签名: {n m} (f : List.Vector 自然数 n -> List.Vector 自然数 m)
+  签名: {n m} (f : 列表.Vector 自然数 n -> 列表.Vector 自然数 m)
   定义体: forall i, Primrec' fun v => (f v).get i
 
 Depends on / 依赖: Primrec

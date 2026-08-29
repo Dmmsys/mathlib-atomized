@@ -45,8 +45,8 @@ class Loopless
     - not_isLoopAt : forall e x, ¬ G.IsLoopAt e x
 
 中文:
-类 Loopless
-  参数: (G : Graph α β)
+类 无环
+  参数: (G : 图 α β)
   公理与运算 (1 个):
     - not_isLoopAt : 对任意 e x, ¬ G.IsLoopAt e x
 
@@ -67,7 +67,7 @@ lemma not_isLoopAt
 
 中文:
 引理 not_isLoopAt
-  条件: (G : Graph α β) [G.Loopless] (e : β) (x : α)
+  条件: (G : 图 α β) [G.无环] (e : β) (x : α)
   结论: ¬ G.IsLoopAt e x
   证明: Loopless.not_isLoopAt e x
 
@@ -87,8 +87,8 @@ lemma not_adj_self
 
 中文:
 引理 not_adj_self
-  条件: (G : Graph α β) [G.Loopless] (x : α)
-  结论: ¬ G.Adj x x
+  条件: (G : 图 α β) [G.无环] (x : α)
+  结论: ¬ G.伴随 x x
   证明: fun ⟨e, he⟩ => Loopless.not_isLoopAt e x he
 
 Depends on / 依赖: Loopless, Loopless.not_isLoopAt, not_isLoopAt
@@ -106,8 +106,8 @@ lemma Adj.ne
   proof: fun h => G.not_adj_self u h ▸ hxy
 
 中文:
-引理 Adj.ne
-  条件: [G.Loopless] (hxy : G.Adj u v)
+引理 伴随.ne
+  条件: [G.无环] (hxy : G.伴随 u v)
   结论: u != v
   证明: fun h => G.not_adj_self u h ▸ hxy
 
@@ -126,7 +126,7 @@ lemma IsLink.ne
 
 中文:
 引理 IsLink.ne
-  条件: [G.Loopless] (he : G.IsLink e u v)
+  条件: [G.无环] (he : G.IsLink e u v)
   结论: u != v
   证明: Adj.ne ⟨e, he⟩
 
@@ -143,8 +143,8 @@ lemma loopless_iff_forall_ne_of_adj
   proof: ⟨fun _ _ _ h => h.ne, fun h => ⟨fun _ x hex => h x x hex.adj rfl⟩⟩
 
 中文:
-引理 loopless_iff_forall_ne_of_adj
-  结论: G.Loopless ↔ 对任意 u v, G.Adj u v -> u != v
+引理 loopless_iff_对任意_ne_of_adj
+  结论: G.无环 ↔ 对任意 u v, G.伴随 u v -> u != v
   证明: ⟨fun _ _ _ h => h.ne, fun h => ⟨fun _ x hex => h x x hex.adj rfl⟩⟩
 
 Depends on / 依赖: h.ne, hex.adj
@@ -165,7 +165,7 @@ lemma vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless
 
 中文:
 引理 vertexSet_nontrivial_of_edgeSet_nonempty_of_loopless
-  条件: [G.Loopless] (hE : E(G).Nonempty)
+  条件: [G.无环] (hE : E(G).非空)
   证明: by
   obtain ⟨e, he⟩ := hE
   obtain ⟨x, y, hxy⟩ := exists_isLink_of_mem_edgeSet he
@@ -193,9 +193,9 @@ exact fun x y hxy => hG x y hxy.mono hle
 @[simp]
 
 中文:
-引理 Loopless.anti
-  条件: [hG : G.Loopless] (hle : H <= G)
-  结论: H.Loopless
+引理 无环.anti
+  条件: [hG : G.无环] (hle : H <= G)
+  结论: H.无环
   证明: by
   rw [loopless_iff_forall_ne_of_adj] at hG ⊢
 exact fun x y hxy => hG x y hxy.mono hle
@@ -220,7 +220,7 @@ lemma Inc.isNonloopAt
 
 中文:
 引理 Inc.isNonloopAt
-  条件: [G.Loopless] (h : G.Inc e u)
+  条件: [G.无环] (h : G.Inc e u)
   结论: G.IsNonloopAt e u
   证明: h.isLoopAt_or_isNonloopAt.resolve_left (Loopless.not_isLoopAt _ _)
 
@@ -247,9 +247,9 @@ class Simple
     - eq_of_isLink : forall ⦃e f x y⦄, G.IsLink e x y -> G.IsLink f x y -> e = f
 
 中文:
-类 Simple
-  参数: (G : Graph α β)
-  继承: G.Loopless
+类 单
+  参数: (G : 图 α β)
+  继承: G.无环
   公理与运算 (1 个):
     - eq_of_isLink : 对任意 ⦃e f x y⦄, G.IsLink e x y -> G.IsLink f x y -> e = f
 -/
@@ -289,9 +289,9 @@ lemma Simple.anti
   eq_of_isLink e f x y he hf := (he.mono hle).eq (hf.mono hle)
 
 中文:
-引理 Simple.anti
+引理 单.anti
   条件: (hle : H <= G)
-  结论: H.Simple where
+  结论: H.单 where
   证明: by simp [toLoopless.anti hle]
   eq_of_isLink e f x y he hf := (he.mono hle).eq (hf.mono hle)
 
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊥ : Graph α β).Simple
+  签名: (⊥ : 图 α β).单
   定义体: inferInstanceAs (Graph.noEdge _ β).Simple
 
 Depends on / 依赖: Graph.noEdge, Simple, noEdge
@@ -339,7 +339,7 @@ definition toSimpleGraph
 
 中文:
 定义 toSimpleGraph
-  签名: (G : Graph α β)
+  签名: (G : 图 α β)
   定义体: u != v ∧ G.Adj u v
   symm := ⟨fun u v => by grind [adj_comm]⟩
 
@@ -361,8 +361,8 @@ lemma toSimpleGraph_adj_iff
 
 中文:
 引理 toSimpleGraph_adj_iff
-  条件: [G.Loopless] (u v : V(G))
-  结论: G.toSimpleGraph.Adj u v ↔ G.Adj u v
+  条件: [G.无环] (u v : V(G))
+  结论: G.toSimpleGraph.伴随 u v ↔ G.伴随 u v
   证明: by
   grind [Adj.ne]
 
@@ -433,7 +433,7 @@ definition ofSimpleGraph
 
 中文:
 定义 ofSimpleGraph
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: Set.univ
   edgeSet := G.edgeSet
   IsLink e x y := e = s(x, y) ∧ e in G.edgeSet
@@ -464,7 +464,7 @@ lemma ofSimpleGraph_adj_iff
 
 中文:
 引理 ofSimpleGraph_adj_iff
-  条件: {G : SimpleGraph α} (u v : α)
+  条件: {G : 简单图 α} (u v : α)
   证明: by simp [Adj]
 -/
 lemma ofSimpleGraph_adj_iff {G : SimpleGraph α} (u v : α) :
@@ -483,7 +483,7 @@ definition toSimpleGraphOfSimpleGraphIso
 
 中文:
 定义 toSimpleGraphOfSimpleGraphIso
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: by
   use Equiv.Set.univ α
   refine ⟨fun h => ⟨fun h' => h.ne (congrArg Subtype.val h'), ?_⟩, fun ⟨_, h⟩ => ?_⟩ <;>

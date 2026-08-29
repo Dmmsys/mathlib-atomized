@@ -498,7 +498,7 @@ theorem tangentMap_tangentBundle_pure
 
 中文:
 定理 tangentMap_tangentBundle_pure
-  结论: [Is : IsManifold I 1 M]
+  结论: [Is : 是流形 I 1 M]
   证明: by
   rcases p with ⟨x, v⟩
   have N : I.symm ⁻¹' (chartAt H x).target in 𝓝 (I ((chartAt H x) x)) := by

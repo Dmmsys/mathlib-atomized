@@ -46,7 +46,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: (α) {n : 对任意 i, Zero <| f i} [对任意 i, SMulZeroClass α <| f i]
+  签名: (α) {n : 对任意 i, 零 <| f i} [对任意 i, SMulZero类 α <| f i]
   定义体: funext fun _ => smul_zero _
 
 Depends on / 依赖: smul_zero
@@ -65,7 +65,7 @@ instance smulZeroClass'
 
 中文:
 实例 smulZeroClass'
-  签名: {g : I -> 类型} {n : 对任意 i, Zero <| g i} [对任意 i, SMulZeroClass (f i) (g i)]
+  签名: {g : I -> 类型} {n : 对任意 i, 零 <| g i} [对任意 i, SMulZero类 (f i) (g i)]
   定义体: by intros; ext x; exact smul_zero _
 
 Depends on / 依赖: intros, smul_zero
@@ -85,7 +85,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: (α) {n : 对任意 i, AddZeroClass <| f i} [对任意 i, DistribSMul α <| f i]
+  签名: (α) {n : 对任意 i, 加法零类 <| f i} [对任意 i, 分配标量乘法 α <| f i]
   定义体: funext fun _ => smul_zero _
   smul_add _ _ _ := funext fun _ => smul_add _ _ _
 
@@ -107,7 +107,7 @@ instance distribSMul'
 
 中文:
 实例 distribSMul'
-  签名: {g : I -> 类型} {n : 对任意 i, AddZeroClass <| g i}
+  签名: {g : I -> 类型} {n : 对任意 i, 加法零类 <| g i}
   定义体: by intros; ext x; exact smul_zero _
   smul_add := by intros; ext x; exact smul_add _ _ _
 
@@ -129,7 +129,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: (α) {m : Monoid α} {n : 对任意 i, AddMonoid <| f i}
+  签名: (α) {m : 幺半群 α} {n : 对任意 i, 加法幺半群 <| f i}
   定义体: { Pi.mulAction _, Pi.distribSMul _ with }
 
 Depends on / 依赖: Pi.distribSMul, Pi.mulAction, distribSMul, mulAction
@@ -148,7 +148,7 @@ instance distribMulAction'
 
 中文:
 实例 distribMulAction'
-  签名: {g : I -> 类型} {m : 对任意 i, Monoid (f i)} {n : 对任意 i, AddMonoid <| g i}
+  签名: {g : I -> 类型} {m : 对任意 i, 幺半群 (f i)} {n : 对任意 i, 加法幺半群 <| g i}
   定义体: { Pi.mulAction', Pi.distribSMul' with }
 
 Depends on / 依赖: Pi.distribSMul, Pi.mulAction, distribSMul, mulAction
@@ -170,7 +170,7 @@ instance smulWithZero
 
 中文:
 实例 smulWithZero
-  签名: (α) [Zero α] [对任意 i, Zero (f i)] [对任意 i, SMulWithZero α (f i)]
+  签名: (α) [零 α] [对任意 i, 零 (f i)] [对任意 i, 带零标量乘法 α (f i)]
   定义体: { Pi.instSMul with
     smul_zero := fun _ => funext fun _ => smul_zero _
     zero_smul := fun _ => funext fun _ => zero_smul _ _ }
@@ -195,7 +195,7 @@ instance smulWithZero'
 
 中文:
 实例 smulWithZero'
-  签名: {g : I -> 类型} [对任意 i, Zero (g i)] [对任意 i, Zero (f i)]
+  签名: {g : I -> 类型} [对任意 i, 零 (g i)] [对任意 i, 零 (f i)]
   定义体: { Pi.smul' with
     smul_zero := fun _ => funext fun _ => smul_zero _
     zero_smul := fun _ => funext fun _ => zero_smul _ _ }
@@ -218,7 +218,7 @@ instance mulActionWithZero
 
 中文:
 实例 mulActionWithZero
-  签名: (α) [MonoidWithZero α] [对任意 i, Zero (f i)]
+  签名: (α) [带零幺半群 α] [对任意 i, 零 (f i)]
   定义体: { Pi.mulAction _, Pi.smulWithZero _ with }
 
 Depends on / 依赖: Pi.mulAction, Pi.smulWithZero, mulAction, smulWithZero
@@ -237,7 +237,7 @@ instance mulActionWithZero'
 
 中文:
 实例 mulActionWithZero'
-  签名: {g : I -> 类型} [对任意 i, MonoidWithZero (g i)] [对任意 i, Zero (f i)]
+  签名: {g : I -> 类型} [对任意 i, 带零幺半群 (g i)] [对任意 i, 零 (f i)]
   定义体: { Pi.mulAction', Pi.smulWithZero' with }
 
 Depends on / 依赖: Pi.mulAction, Pi.smulWithZero, mulAction, smulWithZero
@@ -256,7 +256,7 @@ theorem single_smul
 
 中文:
 定理 single_smul
-  结论: {α} [Monoid α] [对任意 i, AddMonoid <| f i] [对任意 i, DistribMulAction α <| f i]
+  结论: {α} [幺半群 α] [对任意 i, 加法幺半群 <| f i] [对任意 i, 分配乘法作用 α <| f i]
   证明: single_op (fun i : I => (r • · : f i -> f i)) (fun _ => smul_zero _) _ _
 
 Depends on / 依赖: single_op, smul_zero
@@ -275,7 +275,7 @@ theorem single_smul'
 
 中文:
 定理 single_smul'
-  结论: {α β} [Monoid α] [AddMonoid β] [DistribMulAction α β] [DecidableEq I] (i : I)
+  结论: {α β} [幺半群 α] [加法幺半群 β] [分配乘法作用 α β] [DecidableEq I] (i : I)
   证明: single_smul (f := fun _ => β) i r x
 
 Depends on / 依赖: single
@@ -294,7 +294,7 @@ theorem single_smul₀
 
 中文:
 定理 single_smul₀
-  结论: {g : I -> 类型} [对任意 i, MonoidWithZero (f i)] [对任意 i, AddMonoid (g i)]
+  结论: {g : I -> 类型} [对任意 i, 带零幺半群 (f i)] [对任意 i, 加法幺半群 (g i)]
   证明: single_op₂ (fun i : I => ((· • ·) : f i -> g i -> g i)) (fun _ => smul_zero _) _ _ _
 
 Depends on / 依赖: smul_zero
@@ -316,7 +316,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: (α) {m : Monoid α} {n : 对任意 i, Monoid <| f i}
+  签名: (α) {m : 幺半群 α} {n : 对任意 i, 幺半群 <| f i}
   定义体: { Pi.mulAction _ with
     smul_one := fun _ => funext fun _ => smul_one _
     smul_mul := fun _ _ _ => funext fun _ => smul_mul' _ _ _ }
@@ -347,7 +347,7 @@ instance mulDistribMulAction'
 
 中文:
 实例 mulDistribMulAction'
-  签名: {g : I -> 类型} {m : 对任意 i, Monoid (f i)} {n : 对任意 i, Monoid <| g i}
+  签名: {g : I -> 类型} {m : 对任意 i, 幺半群 (f i)} {n : 对任意 i, 幺半群 <| g i}
   定义体: by
     intros
     ext x

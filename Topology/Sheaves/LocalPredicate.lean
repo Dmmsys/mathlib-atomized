@@ -94,7 +94,7 @@ definition continuousPrelocal
 
 中文:
 定义 continuousPrelocal
-  签名: (T) [TopologicalSpace T]
+  签名: (T) [拓扑空间 T]
   定义体: Continuous f
   res {_ _} i _ h := Continuous.comp h (Opens.isOpenEmbedding_of_le i.le).continuous
 
@@ -114,7 +114,7 @@ instance inhabitedPrelocalPredicate
 
 中文:
 实例 inhabitedPrelocalPredicate
-  签名: (T) [TopologicalSpace T]
+  签名: (T) [拓扑空间 T]
   定义体: ⟨continuousPrelocal X T⟩
 
 Depends on / 依赖: continuousPrelocal
@@ -169,7 +169,7 @@ definition continuousLocal
 
 中文:
 定义 continuousLocal
-  签名: (T) [TopologicalSpace T]
+  签名: (T) [拓扑空间 T]
   定义体: { continuousPrelocal X T with
     locality := fun {U} f w => by
       apply continuous_iff_continuousAt.2
@@ -205,7 +205,7 @@ instance inhabitedLocalPredicate
 
 中文:
 实例 inhabitedLocalPredicate
-  签名: (T) [TopologicalSpace T]
+  签名: (T) [拓扑空间 T]
   定义体: ⟨continuousLocal X T⟩
 
 Depends on / 依赖: continuousLocal
@@ -364,7 +364,7 @@ theorem sheafify_inductionOn
 
 中文:
 定理 sheafify_inductionOn
-  结论: {X : TopCat} {T : X -> 类型} (P : PrelocalPredicate T)
+  结论: {X : 顶元素范畴} {T : X -> 类型} (P : PrelocalPredicate T)
   证明: by
   intro x
   rcases ha x with ⟨Va, ma, ia, ha⟩
@@ -392,7 +392,7 @@ theorem sheafify_inductionOn'
 
 中文:
 定理 sheafify_inductionOn'
-  结论: {X : TopCat} {T : X -> 类型} (P : PrelocalPredicate T)
+  结论: {X : 顶元素范畴} {T : X -> 类型} (P : PrelocalPredicate T)
   证明: P.sheafify_inductionOn op (fun ha p => ⟨_, 𝟙 _, p.2, hop ha⟩) ha
 
 Depends on / 依赖: P.sheafify_inductionOn, sheafify_inductionOn
@@ -419,7 +419,7 @@ theorem sheafify_inductionOn₂
 
 中文:
 定理 sheafify_inductionOn₂
-  结论: {X : TopCat} {T₁ T₂ T₃ : X -> 类型}
+  结论: {X : 顶元素范畴} {T₁ T₂ T₃ : X -> 类型}
   证明: by
   intro x
   rcases ha x with ⟨Va, ma, ia, ha⟩
@@ -453,7 +453,7 @@ theorem sheafify_inductionOn₂'
 
 中文:
 定理 sheafify_inductionOn₂'
-  结论: {X : TopCat} {T₁ T₂ T₃ : X -> 类型}
+  结论: {X : 顶元素范畴} {T₁ T₂ T₃ : X -> 类型}
   证明: P₁.sheafify_inductionOn₂ P₂ P₃ op
     (fun ha hb p => ⟨_, Opens.infLELeft _ _, Opens.infLERight _ _, p.2, hop ha hb⟩) ha hb
 
@@ -533,7 +533,7 @@ theorem isSheaf
 中文:
 定理 isSheaf
   条件: (P : LocalPredicate T)
-  结论: (subpresheafToTypes P.toPrelocalPredicate).IsSheaf
+  结论: (subpresheafToTypes P.toPrelocalPredicate).是层
   证明: Presheaf.isSheaf_of_isSheafUniqueGluing_types _ fun ι U sf sf_comp => by
     -- We show the sheaf condition in terms of unique gluing.
     -- First we obtain a family of sections for the underlying sheaf of functions,
@@ -785,7 +785,7 @@ definition subpresheafContinuousPrelocalIsoPresheafToTop
 
 中文:
 定义 subpresheafContinuousPrelocalIsoPresheafToTop
-  签名: {X : TopCat.{u}} (T : TopCat.{u})
+  签名: {X : 顶元素范畴.{u}} (T : 顶元素范畴.{u})
   定义体: NatIso.ofComponents fun X =>
     { hom := ↾fun f => ofHom ⟨f.1, f.2⟩
       inv := ↾fun f => ⟨f.1, f.1.2⟩ }
@@ -810,7 +810,7 @@ definition sheafToTop
 
 中文:
 定义 sheafToTop
-  签名: (T : TopCat)
+  签名: (T : 顶元素范畴)
   定义体: ⟨presheafToTop X T,
     Presheaf.isSheaf_of_iso (subpresheafContinuousPrelocalIsoPresheafToTop T)
       (subpresheafToTypes.isSheaf (continuousLocal X T))⟩

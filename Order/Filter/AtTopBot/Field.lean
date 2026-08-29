@@ -104,7 +104,7 @@ theorem tendsto_const_mul_atTop_iff_pos
 
 中文:
 定理 tendsto_const_mul_atTop_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   refine ⟨fun hrf => not_le.mp fun hr => ?_, fun hr => (tendsto_const_mul_atTop_of_pos hr).mpr h⟩
   rcases ((h.eventually_ge_atTop 0).and (hrf.eventually_gt_atTop 0)).exists with ⟨x, hx, hrx⟩
@@ -129,7 +129,7 @@ theorem tendsto_mul_const_atTop_iff_pos
 
 中文:
 定理 tendsto_mul_const_atTop_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   simp only [mul_comm _ r, tendsto_const_mul_atTop_iff_pos h]
 
@@ -150,7 +150,7 @@ lemma tendsto_div_const_atTop_iff_pos
 
 中文:
 引理 tendsto_div_const_atTop_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   simp only [div_eq_mul_inv, tendsto_mul_const_atTop_iff_pos h, inv_pos]
 
@@ -169,8 +169,8 @@ theorem Tendsto.const_mul_atTop
   proof: (tendsto_const_mul_atTop_of_pos hr).2 hf
 
 中文:
-定理 Tendsto.const_mul_atTop
-  条件: (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.const_mul_atTop
+  条件: (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: (tendsto_const_mul_atTop_of_pos hr).2 hf
 
 Depends on / 依赖: tendsto_const_mul_atTop_of_pos
@@ -188,8 +188,8 @@ theorem Tendsto.atTop_mul_const
   proof: (tendsto_mul_const_atTop_of_pos hr).2 hf
 
 中文:
-定理 Tendsto.atTop_mul_const
-  条件: (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.atTop_mul_const
+  条件: (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: (tendsto_mul_const_atTop_of_pos hr).2 hf
 
 Depends on / 依赖: tendsto_mul_const_atTop_of_pos
@@ -208,8 +208,8 @@ theorem Tendsto.atTop_div_const
   simpa only [div_eq_mul_inv] using hf.atTop_mul_const (inv_pos.2 hr)
 
 中文:
-定理 Tendsto.atTop_div_const
-  条件: (hr : 0 < r) (hf : Tendsto f l atTop)
+定理 收敛.atTop_div_const
+  条件: (hr : 0 < r) (hf : 收敛 f l atTop)
   证明: by
   simpa only [div_eq_mul_inv] using hf.atTop_mul_const (inv_pos.2 hr)
 
@@ -282,7 +282,7 @@ lemma tendsto_zpow_atTop_atTop
 中文:
 引理 tendsto_zpow_atTop_atTop
   条件: {n : 整数} (hn : 0 < n)
-  结论: Tendsto (fun x : α => x ^ n) atTop atTop
+  结论: 收敛 (fun x : α => x ^ n) atTop atTop
   证明: by
   lift n to Nat using hn.le; simp [(Int.natCast_pos.mp hn).ne']
 
@@ -660,7 +660,7 @@ theorem tendsto_const_mul_atTop_iff_neg
 
 中文:
 定理 tendsto_const_mul_atTop_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp [tendsto_const_mul_atTop_iff, h, h.not_tendsto disjoint_atBot_atTop]
 
@@ -681,7 +681,7 @@ theorem tendsto_mul_const_atTop_iff_neg
 
 中文:
 定理 tendsto_mul_const_atTop_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp only [mul_comm _ r, tendsto_const_mul_atTop_iff_neg h]
 
@@ -702,7 +702,7 @@ lemma tendsto_div_const_atTop_iff_neg
 
 中文:
 引理 tendsto_div_const_atTop_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp [div_eq_mul_inv, tendsto_mul_const_atTop_iff_neg h]
 
@@ -723,7 +723,7 @@ theorem tendsto_const_mul_atBot_iff_pos
 
 中文:
 定理 tendsto_const_mul_atBot_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp [tendsto_const_mul_atBot_iff, h, h.not_tendsto disjoint_atBot_atTop]
 
@@ -744,7 +744,7 @@ theorem tendsto_mul_const_atBot_iff_pos
 
 中文:
 定理 tendsto_mul_const_atBot_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp only [mul_comm _ r, tendsto_const_mul_atBot_iff_pos h]
 
@@ -765,7 +765,7 @@ lemma tendsto_div_const_atBot_iff_pos
 
 中文:
 引理 tendsto_div_const_atBot_iff_pos
-  条件: [NeBot l] (h : Tendsto f l atBot)
+  条件: [NeBot l] (h : 收敛 f l atBot)
   证明: by
   simp [div_eq_mul_inv, tendsto_mul_const_atBot_iff_pos h]
 
@@ -786,7 +786,7 @@ theorem tendsto_const_mul_atBot_iff_neg
 
 中文:
 定理 tendsto_const_mul_atBot_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   simp [tendsto_const_mul_atBot_iff, h, h.not_tendsto disjoint_atTop_atBot]
 
@@ -807,7 +807,7 @@ theorem tendsto_mul_const_atBot_iff_neg
 
 中文:
 定理 tendsto_mul_const_atBot_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   simp only [mul_comm _ r, tendsto_const_mul_atBot_iff_neg h]
 
@@ -828,7 +828,7 @@ lemma tendsto_div_const_atBot_iff_neg
 
 中文:
 引理 tendsto_div_const_atBot_iff_neg
-  条件: [NeBot l] (h : Tendsto f l atTop)
+  条件: [NeBot l] (h : 收敛 f l atTop)
   证明: by
   simp [div_eq_mul_inv, tendsto_mul_const_atBot_iff_neg h]
 
@@ -847,8 +847,8 @@ theorem Tendsto.const_mul_atTop_of_neg
   proof: (tendsto_const_mul_atBot_of_neg hr).2 hf
 
 中文:
-定理 Tendsto.const_mul_atTop_of_neg
-  条件: (hr : r < 0) (hf : Tendsto f l atTop)
+定理 收敛.const_mul_atTop_of_neg
+  条件: (hr : r < 0) (hf : 收敛 f l atTop)
   证明: (tendsto_const_mul_atBot_of_neg hr).2 hf
 
 Depends on / 依赖: tendsto_const_mul_atBot_of_neg
@@ -866,8 +866,8 @@ theorem Tendsto.atTop_mul_const_of_neg
   proof: (tendsto_mul_const_atBot_of_neg hr).2 hf
 
 中文:
-定理 Tendsto.atTop_mul_const_of_neg
-  条件: (hr : r < 0) (hf : Tendsto f l atTop)
+定理 收敛.atTop_mul_const_of_neg
+  条件: (hr : r < 0) (hf : 收敛 f l atTop)
   证明: (tendsto_mul_const_atBot_of_neg hr).2 hf
 
 Depends on / 依赖: tendsto_mul_const_atBot_of_neg
@@ -885,8 +885,8 @@ lemma Tendsto.atTop_div_const_of_neg
   proof: (tendsto_div_const_atBot_of_neg hr).2 hf
 
 中文:
-引理 Tendsto.atTop_div_const_of_neg
-  条件: (hr : r < 0) (hf : Tendsto f l atTop)
+引理 收敛.atTop_div_const_of_neg
+  条件: (hr : r < 0) (hf : 收敛 f l atTop)
   证明: (tendsto_div_const_atBot_of_neg hr).2 hf
 
 Depends on / 依赖: tendsto_div_const_atBot_of_neg
@@ -903,8 +903,8 @@ theorem Tendsto.const_mul_atBot
   proof: (tendsto_const_mul_atBot_of_pos hr).2 hf
 
 中文:
-定理 Tendsto.const_mul_atBot
-  条件: (hr : 0 < r) (hf : Tendsto f l atBot)
+定理 收敛.const_mul_atBot
+  条件: (hr : 0 < r) (hf : 收敛 f l atBot)
   证明: (tendsto_const_mul_atBot_of_pos hr).2 hf
 
 Depends on / 依赖: tendsto_const_mul_atBot_of_pos
@@ -922,8 +922,8 @@ theorem Tendsto.atBot_mul_const
   proof: (tendsto_mul_const_atBot_of_pos hr).2 hf
 
 中文:
-定理 Tendsto.atBot_mul_const
-  条件: (hr : 0 < r) (hf : Tendsto f l atBot)
+定理 收敛.atBot_mul_const
+  条件: (hr : 0 < r) (hf : 收敛 f l atBot)
   证明: (tendsto_mul_const_atBot_of_pos hr).2 hf
 
 Depends on / 依赖: tendsto_mul_const_atBot_of_pos
@@ -941,8 +941,8 @@ theorem Tendsto.atBot_div_const
   proof: (tendsto_div_const_atBot_of_pos hr).2 hf
 
 中文:
-定理 Tendsto.atBot_div_const
-  条件: (hr : 0 < r) (hf : Tendsto f l atBot)
+定理 收敛.atBot_div_const
+  条件: (hr : 0 < r) (hf : 收敛 f l atBot)
   证明: (tendsto_div_const_atBot_of_pos hr).2 hf
 
 Depends on / 依赖: tendsto_div_const_atBot_of_pos
@@ -959,8 +959,8 @@ theorem Tendsto.const_mul_atBot_of_neg
   proof: (tendsto_const_mul_atTop_of_neg hr).2 hf
 
 中文:
-定理 Tendsto.const_mul_atBot_of_neg
-  条件: (hr : r < 0) (hf : Tendsto f l atBot)
+定理 收敛.const_mul_atBot_of_neg
+  条件: (hr : r < 0) (hf : 收敛 f l atBot)
   证明: (tendsto_const_mul_atTop_of_neg hr).2 hf
 
 Depends on / 依赖: tendsto_const_mul_atTop_of_neg
@@ -978,8 +978,8 @@ theorem Tendsto.atBot_mul_const_of_neg
   proof: (tendsto_mul_const_atTop_of_neg hr).2 hf
 
 中文:
-定理 Tendsto.atBot_mul_const_of_neg
-  条件: (hr : r < 0) (hf : Tendsto f l atBot)
+定理 收敛.atBot_mul_const_of_neg
+  条件: (hr : r < 0) (hf : 收敛 f l atBot)
   证明: (tendsto_mul_const_atTop_of_neg hr).2 hf
 
 Depends on / 依赖: tendsto_mul_const_atTop_of_neg

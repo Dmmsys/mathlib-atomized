@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord GCongrKey
+  签名: 序 GCongrKey
   定义体: a.1.quickCmp b.1
 
 Depends on / 依赖: quickCmp
@@ -211,8 +211,8 @@ structure GCongrHyp
     - lhsIdx : 自然数
     - rhsIdx : 自然数
     - hypIdx : 自然数
-    - hypsPos : List (Option 自然数)
-    - isContra : 布尔
+    - hypsPos : 列表 (选项类型 自然数)
+    - isContra : 布尔值
 
 Depends on / 依赖: T0Space
 -/
@@ -248,13 +248,13 @@ structure GCongrLemma
 结构 GCongrLemma
   参数: where
   公理与运算 (7 个):
-    - keys : List GCongrKey
+    - keys : 列表 GCongrKey
     - declName : Name
-    - mainSubgoals : Array GCongrHyp
+    - mainSubgoals : 数组 GCongrHyp
     - numHyps : 自然数
     - prio : 自然数
     - numVarying : 自然数
-    - forGrw : 布尔
+    - forGrw : 布尔值
 -/
 structure GCongrLemma where
   /-- The keys under which the lemma is stored. This is usually one key,
@@ -392,7 +392,7 @@ definition findGCongrLemmas?'
 
 中文:
 定义 findGCongrLemmas?'
-  签名: (relName head : Name) (forward : 布尔) (arity : 自然数)
+  签名: (relName head : Name) (forward : 布尔值) (arity : 自然数)
   定义体: do
   let lemmas := gcongrExt.getState (← getEnv)
   let some lemmas := lemmas.get? { relName, head, arity } | return []
@@ -502,7 +502,7 @@ definition updateRel
 
 中文:
 定义 updateRel
-  签名: (r e : Expr) (isLhs : 布尔)
+  签名: (r e : Expr) (isLhs : 布尔值)
   定义体: match r with
   | .forallE _ d b _ => if isLhs then r.updateForallE! e b else r.updateForallE! d e
   | .app (.app rel lhs) rhs => if isLhs then mkApp2 rel e rhs else mkApp2 rel lhs e
@@ -531,7 +531,7 @@ definition makeGCongrLemma
 
 中文:
 定义 makeGCongrLemma
-  签名: (hyps : Array Expr) (target : Expr) (declName : Name) (prio : 自然数)
+  签名: (hyps : 数组 Expr) (target : Expr) (declName : Name) (prio : 自然数)
   定义体: do
   let fail {α} (m : MessageData) : MetaM α := throwError "\
     @[gcongr] attribute only applies to lemmas proving f x₁ ... xₙ ∼ f x₁' ... xₙ'.\n \
@@ -927,7 +927,7 @@ definition _root_.Lean.MVarId.gcongrForward
 
 中文:
 定义 _root_.Lean.MVarId.gcongrForward
-  签名: (hs : Array Expr) (g : MVarId)
+  签名: (hs : 数组 Expr) (g : MVarId)
   定义体: withReducible do
   withTraceNode `Meta.gcongr (fun _ => return m!"gcongr_forward: ⊢ {← g.getType}") do
   -- Iterate over a list of terms
@@ -1071,7 +1071,7 @@ definition elabCHoleExpand
 
 中文:
 定义 elabCHoleExpand
-  签名: : Term.TermElab
+  签名: : 项.TermElab
   定义体: fun stx expectedType? => do
   match stx with
   | `(gcongrHole% $e) => return mkHoleAnnotation (← Term.elabTerm e expectedType?)
@@ -1162,8 +1162,8 @@ structure State
 结构 State
   参数: where
   公理与运算 (2 个):
-    - newGoals : Array MVarId  [默认: #[]]
-    - patterns : List (TSyntax `rintroPat)
+    - newGoals : 数组 MVarId  [默认: #[]]
+    - patterns : 列表 (TSyntax `rintroPat)
 -/
 structure State where
   /-- The new goals produced by `gcongr`. This includes side-goals and main goals.
@@ -1184,11 +1184,11 @@ structure Context
     - sideGoalDischarger : MVarId -> MetaM Unit
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (2 个):
-    - mainGoalDischarger : MVarId -> MetaM 布尔
-    - sideGoalDischarger : MVarId -> MetaM Unit
+    - mainGoalDischarger : MVarId -> MetaM 布尔值
+    - sideGoalDischarger : MVarId -> MetaM 单元
 -/
 structure Context where
   /-- The discharger for main goals. -/
@@ -1223,7 +1223,7 @@ definition GCongrM.run
 
 中文:
 定义 GCongrM.run
-  签名: {α} (x : GCongrM α) (patterns : List (TSyntax `rintroPat) := [])
+  签名: {α} (x : GCongrM α) (patterns : 列表 (TSyntax `rintroPat) := [])
   定义体: do
   let (a, s) ← (x { mainGoalDischarger, sideGoalDischarger }).run { patterns }
   return (a, s.newGoals)

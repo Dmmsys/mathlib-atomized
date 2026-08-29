@@ -38,7 +38,7 @@ class InheritedFromSource
 
 中文:
 类 InheritedFromSource
-  参数: (P : Object命题erty C) (Q : Morphism命题erty C)
+  参数: (P : ObjectProperty C) (Q : MorphismProperty C)
   公理与运算 (1 个):
     - of_hom_of_source({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P X -> P Y
 -/
@@ -56,7 +56,7 @@ class InheritedFromTarget
 
 中文:
 类 InheritedFromTarget
-  参数: (P : Object命题erty C) (Q : Morphism命题erty C)
+  参数: (P : ObjectProperty C) (Q : MorphismProperty C)
   公理与运算 (1 个):
     - of_hom_of_target({X Y : C} (f : X ⟶ Y) (hf : Q f)) : P Y -> P X
 -/
@@ -77,7 +77,7 @@ instance [P.IsClosedUnderIsomorphisms]
   body: P.prop_of_iso (asIso f) h
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
+实例 [P.在同构下封闭]
   签名: :
   定义体: P.prop_of_iso (asIso f) h
 
@@ -157,7 +157,7 @@ instance [P.IsClosedUnderIsomorphisms]
   body: P.prop_of_iso (asIso f).symm h
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
+实例 [P.在同构下封闭]
   签名: :
   定义体: P.prop_of_iso (asIso f).symm h
 
@@ -235,7 +235,7 @@ lemma IsClosedUnderIsomorphisms.of_inheritedFromSource
   proof: P.of_hom_of_source e.hom (Q.of_isIso e.hom) h
 
 中文:
-引理 IsClosedUnderIsomorphisms.of_inheritedFromSource
+引理 在同构下封闭.of_inheritedFromSource
   结论: [P.InheritedFromSource Q] [Q.RespectsIso]
   证明: P.of_hom_of_source e.hom (Q.of_isIso e.hom) h
 
@@ -254,7 +254,7 @@ lemma IsClosedUnderIsomorphisms.of_inheritedFromTarget
   proof: P.of_hom_of_target e.inv (Q.of_isIso e.inv) h
 
 中文:
-引理 IsClosedUnderIsomorphisms.of_inheritedFromTarget
+引理 在同构下封闭.of_inheritedFromTarget
   结论: [P.InheritedFromTarget Q] [Q.RespectsIso]
   证明: P.of_hom_of_target e.inv (Q.of_isIso e.inv) h
 

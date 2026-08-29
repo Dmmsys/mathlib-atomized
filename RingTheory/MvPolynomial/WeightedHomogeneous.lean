@@ -81,7 +81,7 @@ definition weightedTotalDegree'
 
 中文:
 定义 weightedTotalDegree'
-  签名: (w : σ -> M) (p : MvPolynomial σ R)
+  签名: (w : σ -> M) (p : 多元多项式 σ R)
   定义体: p.support.sup fun s => weight w s
 
 Depends on / 依赖: p.support.sup, support, weight
@@ -102,7 +102,7 @@ theorem weightedTotalDegree'_eq_bot_iff
 
 中文:
 定理 weightedTotalDegree'_eq_bot_iff
-  条件: (w : σ -> M) (p : MvPolynomial σ R)
+  条件: (w : σ -> M) (p : 多元多项式 σ R)
   证明: by
   simp only [weightedTotalDegree', Finset.sup_eq_bot_iff, mem_support_iff, WithBot.coe_ne_bot,
     MvPolynomial.eq_zero_iff]
@@ -147,7 +147,7 @@ definition weightedTotalDegree
 
 中文:
 定义 weightedTotalDegree
-  签名: (w : σ -> M) (p : MvPolynomial σ R)
+  签名: (w : σ -> M) (p : 多元多项式 σ R)
   定义体: p.support.sup fun s => weight w s
 
 Depends on / 依赖: p.support.sup, support, weight
@@ -172,7 +172,7 @@ theorem weightedTotalDegree_coe
 
 中文:
 定理 weightedTotalDegree_coe
-  条件: (w : σ -> M) (p : MvPolynomial σ R) (hp : p != 0)
+  条件: (w : σ -> M) (p : 多元多项式 σ R) (hp : p != 0)
   证明: by
   rw [Ne]; rw [← weightedTotalDegree'_eq_bot_iff w p]; rw [← Ne]; rw [WithBot.ne_bot_iff_exists] at hp
   obtain ⟨m, hm⟩ := hp
@@ -228,7 +228,7 @@ theorem le_weightedTotalDegree
 
 中文:
 定理 le_weightedTotalDegree
-  结论: (w : σ -> M) {φ : MvPolynomial σ R} {d : σ ->₀ 自然数}
+  结论: (w : σ -> M) {φ : 多元多项式 σ R} {d : σ ->₀ 自然数}
   证明: le_sup hd
 
 Depends on / 依赖: le_sup
@@ -251,7 +251,7 @@ definition IsWeightedHomogeneous
 
 中文:
 定义 IsWeightedHomogeneous
-  签名: (w : σ -> M) (φ : MvPolynomial σ R) (m : M)
+  签名: (w : σ -> M) (φ : 多元多项式 σ R) (m : M)
   定义体: forall ⦃d⦄, coeff d φ != 0 -> weight w d = m
 
 Depends on / 依赖: weight
@@ -316,7 +316,7 @@ theorem mem_weightedHomogeneousSubmodule
 
 中文:
 定理 mem_weightedHomogeneousSubmodule
-  条件: (w : σ -> M) (m : M) (p : MvPolynomial σ R)
+  条件: (w : σ -> M) (m : M) (p : 多元多项式 σ R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -366,7 +366,7 @@ lemma weightedHomogeneousSubmodule_fg
 
 中文:
 引理 weightedHomogeneousSubmodule_fg
-  条件: [Finite σ] (w : σ -> 自然数) (hw : 对任意 (x : σ), w x != 0) (n : 自然数)
+  条件: [有限 σ] (w : σ -> 自然数) (hw : 对任意 (x : σ), w x != 0) (n : 自然数)
   证明: by
   rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [← Module.Finite.iff_fg]
   have := (Finsupp.finite_of_nat_weight_eq w hw n).to_subtype
@@ -484,7 +484,7 @@ theorem isWeightedHomogeneous_of_total_degree_zero
 
 中文:
 定理 isWeightedHomogeneous_of_total_degree_zero
-  结论: [SemilatticeSup M] [OrderBot M] (w : σ -> M)
+  结论: [SemilatticeSup M] [有底序 M] (w : σ -> M)
   证明: by
   intro d hd
   have h := weightedTotalDegree_coe w p (MvPolynomial.ne_zero_iff.mpr ⟨d, hd⟩)
@@ -555,7 +555,7 @@ theorem isWeightedHomogeneous_one
 中文:
 定理 isWeightedHomogeneous_one
   条件: (w : σ -> M)
-  结论: IsWeightedHomogeneous w (1 : MvPolynomial σ R) 0
+  结论: IsWeightedHomogeneous w (1 : 多元多项式 σ R) 0
   证明: isWeightedHomogeneous_C _ _
 
 Depends on / 依赖: isWeightedHomogeneous_C
@@ -575,7 +575,7 @@ lemma isWeightedHomogeneous_of_isEmpty
 
 中文:
 引理 isWeightedHomogeneous_of_isEmpty
-  条件: [IsEmpty σ] (w : σ -> M) (f : MvPolynomial σ R)
+  条件: [是空 σ] (w : σ -> M) (f : 多元多项式 σ R)
   证明: by
   rw [eq_C_of_isEmpty f]
   exact isWeightedHomogeneous_C _ _
@@ -779,8 +779,8 @@ theorem sum
   proof: (weightedHomogeneousSubmodule R w n).sum_mem h
 
 中文:
-定理 sum
-  结论: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R) (n : M) {w : σ -> M}
+定理 求和
+  结论: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R) (n : M) {w : σ -> M}
   证明: (weightedHomogeneousSubmodule R w n).sum_mem h
 
 Depends on / 依赖: sum_mem, weightedHomogeneousSubmodule
@@ -877,8 +877,8 @@ theorem prod
     in
 
 中文:
-定理 prod
-  条件: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R) (n : ι -> M) {w : σ -> M}
+定理 乘积
+  条件: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R) (n : ι -> M) {w : σ -> M}
   证明: by
   classical
   refine Finset.induction_on s ?_ ?_
@@ -1141,7 +1141,7 @@ theorem weightedHomogeneousComponent_mem
 
 中文:
 定理 weightedHomogeneousComponent_mem
-  条件: (w : σ -> M) (φ : MvPolynomial σ R) (m : M)
+  条件: (w : σ -> M) (φ : 多元多项式 σ R) (m : M)
   证明: by
   rw [mem_weightedHomogeneousSubmodule]
   exact weightedHomogeneousComponent_isWeightedHomogeneous m φ
@@ -1224,7 +1224,7 @@ theorem weightedHomogeneousComponent_eq_zero
 
 中文:
 定理 weightedHomogeneousComponent_eq_zero
-  结论: [SemilatticeSup M] [OrderBot M]
+  结论: [SemilatticeSup M] [有底序 M]
   证明: by
   classical
   rw [weightedHomogeneousComponent_apply]; rw [sum_eq_zero]
@@ -1373,7 +1373,7 @@ theorem IsWeightedHomogeneous.weightedHomogeneousComponent_same
 
 中文:
 定理 IsWeightedHomogeneous.weightedHomogeneousComponent_same
-  结论: {m : M} {p : MvPolynomial σ R}
+  结论: {m : M} {p : 多元多项式 σ R}
   证明: by
   classical
   ext x
@@ -1505,7 +1505,7 @@ lemma weightedHomogeneousComponent_eq_self
 
 中文:
 引理 weightedHomogeneousComponent_eq_self
-  结论: {n : M} {p : MvPolynomial σ R}
+  结论: {n : M} {p : 多元多项式 σ R}
   证明: by
   classical simp [weightedHomogeneousComponent_of_mem hp]
 
@@ -1527,7 +1527,7 @@ lemma support_weightedHomogeneousComponent
 
 中文:
 引理 support_weightedHomogeneousComponent
-  条件: [DecidableEq M] (n : M) (p : MvPolynomial σ R)
+  条件: [DecidableEq M] (n : M) (p : 多元多项式 σ R)
   证明: by
   ext c
   simp [coeff_weightedHomogeneousComponent, And.comm]
@@ -1553,7 +1553,7 @@ theorem DirectSum.coeLinearMap_eq_dfinsuppSum
   rw [_root_.DirectSum.coeLinearMap_eq_dfinsuppSum]
 
 中文:
-定理 DirectSum.coeLinearMap_eq_dfinsuppSum
+定理 直和.coeLinearMap_eq_dfinsuppSum
   结论: [DecidableEq σ] [DecidableEq R] [DecidableEq M]
   证明: by
   rw [_root_.DirectSum.coeLinearMap_eq_dfinsuppSum]
@@ -1573,7 +1573,7 @@ theorem DirectSum.coeAddMonoidHom_eq_support_sum
   proof: DirectSum.coeLinearMap_eq_dfinsuppSum R w x
 
 中文:
-定理 DirectSum.coeAddMonoidHom_eq_support_sum
+定理 直和.coeAddMonoidHom_eq_support_sum
   结论: [DecidableEq σ] [DecidableEq R] [DecidableEq M]
   证明: DirectSum.coeLinearMap_eq_dfinsuppSum R w x
 
@@ -1598,7 +1598,7 @@ theorem DirectSum.coeLinearMap_eq_finsum
   apply DirectSum.support_subset
 
 中文:
-定理 DirectSum.coeLinearMap_eq_finsum
+定理 直和.coeLinearMap_eq_finsum
   结论: [DecidableEq M]
   证明: by
   classical
@@ -1684,7 +1684,7 @@ theorem weightedHomogeneousComponent_zero
 
 中文:
 定理 weightedHomogeneousComponent_zero
-  结论: [CanonicallyOrderedAdd M] [IsAddTorsionFree M]
+  结论: [典范有序加法 M] [是加法无挠 M]
   证明: by
   classical
   ext1 d
@@ -1741,7 +1741,7 @@ theorem nonTorsionWeight_of
 
 中文:
 定理 nonTorsionWeight_of
-  条件: [IsAddTorsionFree M] (hw : 对任意 i : σ, w i != 0)
+  条件: [是加法无挠 M] (hw : 对任意 i : σ, w i != 0)
   证明: fun _ x hnx => (smul_eq_zero_iff_left (hw x)).mp hnx
 
 Depends on / 依赖: smul_eq_zero_iff_left
@@ -1769,7 +1769,7 @@ theorem weightedDegree_eq_zero_iff
 
 中文:
 定理 weightedDegree_eq_zero_iff
-  结论: [CanonicallyOrderedAdd M]
+  结论: [典范有序加法 M]
   证明: by
   simp only [weight, Finsupp.linearCombination, LinearMap.toAddMonoidHom_coe, coe_lsum,
     LinearMap.coe_smulRight, LinearMap.id_coe, id_eq]
@@ -1819,7 +1819,7 @@ theorem isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero
 
 中文:
 定理 isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   证明: by
   rw [weightedTotalDegree]; rw [← bot_eq_zero]; rw [Finset.sup_eq_bot_iff]; rw [bot_eq_zero]; rw [IsWeightedHomogeneous]
   apply forall_congr'
@@ -1852,7 +1852,7 @@ theorem weightedTotalDegree_eq_zero_iff
 
 中文:
 定理 weightedTotalDegree_eq_zero_iff
-  条件: (hw : NonTorsionWeight w) (p : MvPolynomial σ R)
+  条件: (hw : NonTorsionWeight w) (p : 多元多项式 σ R)
   证明: by
   rw [← isWeightedHomogeneous_zero_iff_weightedTotalDegree_eq_zero]; rw [IsWeightedHomogeneous]
   apply forall_congr'
@@ -1953,7 +1953,7 @@ theorem decompose'_apply
 
 中文:
 定理 decompose'_apply
-  条件: [DecidableEq M] (φ : MvPolynomial σ R) (m : M)
+  条件: [DecidableEq M] (φ : 多元多项式 σ R) (m : M)
   证明: by
   rw [decompose']
   by_cases hm : m in Finset.image (weight w) φ.support
@@ -2103,7 +2103,7 @@ lemma mem_iff_weightedHomogeneousComponent_mem
 
 中文:
 引理 mem_iff_weightedHomogeneousComponent_mem
-  结论: [DecidableEq M] {I : Ideal (MvPolynomial σ R)}
+  结论: [DecidableEq M] {I : 理想 (多元多项式 σ R)}
   证明: by
   simp_rw [← weightedDecomposition.decompose'_apply]
   exact h.mem_iff
@@ -2126,7 +2126,7 @@ lemma weightedHomogeneousComponent_mem_of_mem
 
 中文:
 引理 weightedHomogeneousComponent_mem_of_mem
-  结论: [DecidableEq M] {I : Ideal (MvPolynomial σ R)}
+  结论: [DecidableEq M] {I : 理想 (多元多项式 σ R)}
   证明: (mem_iff_weightedHomogeneousComponent_mem R w h p).mp hp m
 
 Depends on / 依赖: mem_iff_weightedHomogeneousComponent_mem

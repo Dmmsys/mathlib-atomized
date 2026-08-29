@@ -113,7 +113,7 @@ theorem isCompl_of_proj
 中文:
 定理 isCompl_of_proj
   条件: {f : E ->ₗ[R] p} (hf : 对任意 x : p, f x = x)
-  结论: IsCompl p (ker f)
+  结论: 是补集 p (ker f)
   证明: by
   constructor
   · rw [disjoint_iff_inf_le]
@@ -163,7 +163,7 @@ definition prodEquivOfIsCompl
 
 中文:
 定义 prodEquivOfIsCompl
-  签名: (h : IsCompl p q)
+  签名: (h : 是补集 p q)
   定义体: by
   apply LinearEquiv.ofBijective (p.subtype.coprod q.subtype)
   constructor
@@ -197,7 +197,7 @@ theorem coe_prodEquivOfIsCompl
 
 中文:
 定理 coe_prodEquivOfIsCompl
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: rfl
 
 @[simp]
@@ -216,7 +216,7 @@ theorem coe_prodEquivOfIsCompl'
 
 中文:
 定理 coe_prodEquivOfIsCompl'
-  条件: (h : IsCompl p q) (x : p × q)
+  条件: (h : 是补集 p q) (x : p × q)
   证明: rfl
 -/
 theorem coe_prodEquivOfIsCompl' (h : IsCompl p q) (x : p × q) :
@@ -232,7 +232,7 @@ theorem prodEquivOfIsCompl_symm_apply_left
 
 中文:
 定理 prodEquivOfIsCompl_symm_apply_left
-  条件: (h : IsCompl p q) (x : p)
+  条件: (h : 是补集 p q) (x : p)
   证明: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
 
 Depends on / 依赖: prodEquivOfIsCompl, symm_apply_eq
@@ -251,7 +251,7 @@ theorem prodEquivOfIsCompl_symm_apply_right
 
 中文:
 定理 prodEquivOfIsCompl_symm_apply_right
-  条件: (h : IsCompl p q) (x : q)
+  条件: (h : 是补集 p q) (x : q)
   证明: (prodEquivOfIsCompl p q h).symm_apply_eq.2 by simp
 
 Depends on / 依赖: prodEquivOfIsCompl, symm_apply_eq
@@ -272,7 +272,7 @@ theorem prodEquivOfIsCompl_symm_apply_fst_eq_zero
 
 中文:
 定理 prodEquivOfIsCompl_symm_apply_fst_eq_zero
-  条件: (h : IsCompl p q) {x : E}
+  条件: (h : 是补集 p q) {x : E}
   证明: by
   conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
   rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_left _ (Submodule.coe_mem _)]; rw [mem_right_iff_eq_zero_of_disjoint h.disjoint]
@@ -298,7 +298,7 @@ theorem prodEquivOfIsCompl_symm_apply_snd_eq_zero
 
 中文:
 定理 prodEquivOfIsCompl_symm_apply_snd_eq_zero
-  条件: (h : IsCompl p q) {x : E}
+  条件: (h : 是补集 p q) {x : E}
   证明: by
   conv_rhs => rw [← (prodEquivOfIsCompl p q h).apply_symm_apply x]
   rw [coe_prodEquivOfIsCompl']; rw [Submodule.add_mem_iff_right _ (Submodule.coe_mem _)]; rw [mem_left_iff_eq_zero_of_disjoint h.disjoint]
@@ -323,7 +323,7 @@ theorem prodComm_trans_prodEquivOfIsCompl
 
 中文:
 定理 prodComm_trans_prodEquivOfIsCompl
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: LinearEquiv.ext fun _ => add_comm _ _
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ext, add_comm
@@ -342,7 +342,7 @@ definition projectionOnto
 
 中文:
 定义 projectionOnto
-  签名: (h : IsCompl p q)
+  签名: (h : 是补集 p q)
   定义体: LinearMap.fst R p q ∘ₗ ↑(prodEquivOfIsCompl p q h).symm
 
 Depends on / 依赖: LinearMap, LinearMap.fst, prodEquivOfIsCompl
@@ -360,7 +360,7 @@ definition projection
 
 中文:
 定义 projection
-  签名: (hpq : IsCompl p q)
+  签名: (hpq : 是补集 p q)
   定义体: p.subtype ∘ₗ p.projectionOnto q hpq
 
 Depends on / 依赖: p.projectionOnto, p.subtype, projectionOnto, subtype
@@ -384,7 +384,7 @@ theorem projection_apply
 
 中文:
 定理 projection_apply
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: rfl
 
 @[simp]
@@ -406,7 +406,7 @@ theorem coe_projectionOnto_apply
 
 中文:
 定理 coe_projectionOnto_apply
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: rfl
 
 @[simp]
@@ -428,7 +428,7 @@ theorem projection_apply_mem
 
 中文:
 定理 projection_apply_mem
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: SetLike.coe_mem _
 
 @[simp]
@@ -453,7 +453,7 @@ theorem projectionOnto_apply_left
 
 中文:
 定理 projectionOnto_apply_left
-  条件: (h : IsCompl p q) (x : p)
+  条件: (h : 是补集 p q) (x : p)
   证明: by
   simp [projectionOnto, prodEquivOfIsCompl_symm_apply_left]
 
@@ -476,7 +476,7 @@ theorem projection_apply_left
 
 中文:
 定理 projection_apply_left
-  条件: (hpq : IsCompl p q) (x : p)
+  条件: (hpq : 是补集 p q) (x : p)
   证明: by simp [projection]
 
 Depends on / 依赖: projection
@@ -494,7 +494,7 @@ lemma projectionOnto_apply_of_mem_left
 
 中文:
 引理 projectionOnto_apply_of_mem_left
-  条件: (hpq : IsCompl p q) {x : E} (hx : x in p)
+  条件: (hpq : 是补集 p q) {x : E} (hx : x in p)
   证明: projectionOnto_apply_left hpq ⟨x, hx⟩
 
 Depends on / 依赖: projectionOnto_apply_left
@@ -514,7 +514,7 @@ lemma projection_apply_of_mem_left
 
 中文:
 引理 projection_apply_of_mem_left
-  条件: (hpq : IsCompl p q) {x : E} (hx : x in p)
+  条件: (hpq : 是补集 p q) {x : E} (hx : x in p)
   证明: projection_apply_left hpq ⟨x, hx⟩
 
 @[simp]
@@ -538,7 +538,7 @@ theorem range_projectionOnto
 
 中文:
 定理 range_projectionOnto
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   结论: range (projectionOnto p q h) = ⊤
   证明: range_eq_of_proj (projectionOnto_apply_left h)
 
@@ -562,7 +562,7 @@ theorem range_projection
 
 中文:
 定理 range_projection
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   结论: range (p.projection q hpq) = p
   证明: by
   simp [projection, range_comp]
@@ -584,7 +584,7 @@ theorem projectionOnto_surjective
 
 中文:
 定理 projectionOnto_surjective
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: range_eq_top.mp (range_projectionOnto h)
 
 @[simp]
@@ -609,7 +609,7 @@ theorem projectionOnto_apply_eq_zero_iff
 
 中文:
 定理 projectionOnto_apply_eq_zero_iff
-  条件: (h : IsCompl p q) {x : E}
+  条件: (h : 是补集 p q) {x : E}
   证明: by
   simp [projectionOnto, prodEquivOfIsCompl_symm_apply_fst_eq_zero]
 
@@ -641,7 +641,7 @@ alias ⟨_, projection_apply_of_mem_right⟩ :=
 
 中文:
 定理 projection_apply_eq_zero_iff
-  条件: (hpq : IsCompl p q) {x : E}
+  条件: (hpq : 是补集 p q) {x : E}
   证明: by
   simp [projection, -coe_projectionOnto_apply]
 
@@ -678,7 +678,7 @@ theorem projectionOnto_apply_right
 
 中文:
 定理 projectionOnto_apply_right
-  条件: (h : IsCompl p q) (x : q)
+  条件: (h : 是补集 p q) (x : q)
   证明: projectionOnto_apply_of_mem_right h x.2
 
 @[simp]
@@ -702,7 +702,7 @@ theorem projection_apply_right
 
 中文:
 定理 projection_apply_right
-  条件: (h : IsCompl p q) (x : q)
+  条件: (h : 是补集 p q) (x : q)
   证明: projection_apply_of_mem_right h x.2
 
 @[simp]
@@ -727,7 +727,7 @@ theorem ker_projectionOnto
 
 中文:
 定理 ker_projectionOnto
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   结论: ker (projectionOnto p q h) = q
   证明: ext fun _ => mem_ker.trans (projectionOnto_apply_eq_zero_iff h)
 
@@ -750,7 +750,7 @@ theorem ker_projection
 
 中文:
 定理 ker_projection
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: by
   simp [projection, ker_comp]
 
@@ -770,7 +770,7 @@ theorem projectionOnto_comp_subtype
 
 中文:
 定理 projectionOnto_comp_subtype
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: LinearMap.ext projectionOnto_apply_left h
 
 Depends on / 依赖: LinearMap, LinearMap.ext, projectionOnto_apply_left
@@ -789,7 +789,7 @@ theorem projectionOnto_projection
 
 中文:
 定理 projectionOnto_projection
-  条件: (h : IsCompl p q) (x : E)
+  条件: (h : 是补集 p q) (x : E)
   证明: projectionOnto_apply_left h _
 
 Depends on / 依赖: projectionOnto_apply_left
@@ -810,7 +810,7 @@ theorem isIdempotentElem_projection
 
 中文:
 定理 isIdempotentElem_projection
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: LinearMap.ext fun _ => congr($(projectionOnto_projection hpq _))
 
 Depends on / 依赖: LinearMap, LinearMap.ext, projectionOnto_projection
@@ -828,8 +828,8 @@ theorem existsUnique_add_of_isCompl_prod
   proof: (prodEquivOfIsCompl _ _ hc).toEquiv.bijective.existsUnique _
 
 中文:
-定理 existsUnique_add_of_isCompl_prod
-  条件: (hc : IsCompl p q) (x : E)
+定理 存在Unique_add_of_isCompl_prod
+  条件: (hc : 是补集 p q) (x : E)
   证明: (prodEquivOfIsCompl _ _ hc).toEquiv.bijective.existsUnique _
 
 Depends on / 依赖: bijective, existsUnique, prodEquivOfIsCompl, toEquiv, toEquiv.bijective.existsUnique
@@ -848,8 +848,8 @@ theorem existsUnique_add_of_isCompl
   ⟨u.1, u.2, hu₁, fun r s hrs => Prod.eq_iff_fst_eq_snd_eq.1 (hu₂ ⟨r, s⟩ hrs)⟩
 
 中文:
-定理 existsUnique_add_of_isCompl
-  条件: (hc : IsCompl p q) (x : E)
+定理 存在Unique_add_of_isCompl
+  条件: (hc : 是补集 p q) (x : E)
   证明: let ⟨u, hu₁, hu₂⟩ := existsUnique_add_of_isCompl_prod hc x
   ⟨u.1, u.2, hu₁, fun r s hrs => Prod.eq_iff_fst_eq_snd_eq.1 (hu₂ ⟨r, s⟩ hrs)⟩
 
@@ -873,7 +873,7 @@ theorem projection_add_projection_eq_self
 
 中文:
 定理 projection_add_projection_eq_self
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: by
   dsimp only [projection, projectionOnto]
   rw [← prodComm_trans_prodEquivOfIsCompl _ _ hpq]
@@ -897,7 +897,7 @@ theorem projection_add_projection_eq_id
 
 中文:
 定理 projection_add_projection_eq_id
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: LinearMap.ext (projection_add_projection_eq_self hpq)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, projection_add_projection_eq_self
@@ -917,7 +917,7 @@ lemma projection_eq_self_sub_projection
 
 中文:
 引理 projection_eq_self_sub_projection
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: by
   rw [eq_sub_iff_add_eq]; rw [projection_add_projection_eq_self]
 
@@ -937,7 +937,7 @@ lemma projection_eq_id_sub_projection
 
 中文:
 引理 projection_eq_id_sub_projection
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: LinearMap.ext (projection_eq_self_sub_projection hpq)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, projection_eq_self_sub_projection
@@ -959,7 +959,7 @@ lemma projection_eq_self_iff
 
 中文:
 引理 projection_eq_self_iff
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: by
   rw [eq_comm]; rw [← sub_eq_zero]; rw [← projection_eq_self_sub_projection]; rw [projection_apply_eq_zero_iff]
 
@@ -982,7 +982,7 @@ theorem prodEquivOfIsCompl_symm_apply
 
 中文:
 定理 prodEquivOfIsCompl_symm_apply
-  条件: (hpq : IsCompl p q) (x : E)
+  条件: (hpq : 是补集 p q) (x : E)
   证明: Prod.ext rfl congr(($(prodComm_trans_prodEquivOfIsCompl p q hpq).symm x).1)
 
 @[simp]
@@ -1005,7 +1005,7 @@ theorem toLinearMap_prodEquivOfIsCompl_symm
 
 中文:
 定理 toLinearMap_prodEquivOfIsCompl_symm
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: LinearMap.ext by simp
 
 Depends on / 依赖: LinearMap, LinearMap.ext
@@ -1028,7 +1028,7 @@ theorem sub_projection_mem
 
 中文:
 定理 sub_projection_mem
-  条件: (h : IsCompl p q) (x : E)
+  条件: (h : 是补集 p q) (x : E)
   结论: x - p.projection q h x in q
   证明: by
   rw [← projection_eq_self_sub_projection h]
@@ -1059,7 +1059,7 @@ definition quotientEquivOfIsCompl
 
 中文:
 定义 quotientEquivOfIsCompl
-  签名: (h : IsCompl p q)
+  签名: (h : 是补集 p q)
   定义体: .ofLinearMap
     (p.liftQ (q.projectionOnto p h.symm) (by simp))
     (p.mkQ ∘ₗ q.subtype)
@@ -1087,7 +1087,7 @@ theorem quotientEquivOfIsCompl_comp_mkQ
 
 中文:
 定理 quotientEquivOfIsCompl_comp_mkQ
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: rfl
 
 @[simp]
@@ -1107,7 +1107,7 @@ theorem quotientEquivOfIsCompl_apply_mk
 
 中文:
 定理 quotientEquivOfIsCompl_apply_mk
-  条件: (h : IsCompl p q) (x : E)
+  条件: (h : 是补集 p q) (x : E)
   证明: rfl
 -/
 theorem quotientEquivOfIsCompl_apply_mk (h : IsCompl p q) (x : E) :
@@ -1129,7 +1129,7 @@ alias quotientEquivOfIsCompl_apply_mk_coe := quotientEquivOfIsCompl_apply_mk_rig
 
 中文:
 定理 quotientEquivOfIsCompl_apply_mk_right
-  条件: (h : IsCompl p q) (x : q)
+  条件: (h : 是补集 p q) (x : q)
   证明: (quotientEquivOfIsCompl p q h).apply_symm_apply x
 
 @[deprecated (since := "2026-05-06")]
@@ -1159,7 +1159,7 @@ theorem mk_quotientEquivOfIsCompl_apply
 
 中文:
 定理 mk_quotientEquivOfIsCompl_apply
-  条件: (h : IsCompl p q) (x : E ⧸ p)
+  条件: (h : 是补集 p q) (x : E ⧸ p)
   证明: (quotientEquivOfIsCompl p q h).symm_apply_apply x
 
 @[simp]
@@ -1183,7 +1183,7 @@ lemma toLinearMap_quotientEquivOfIsCompl
 
 中文:
 引理 toLinearMap_quotientEquivOfIsCompl
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: rfl
 
 @[simp]
@@ -1203,7 +1203,7 @@ lemma toLinearMap_symm_quotientEquivOfIsCompl
 
 中文:
 引理 toLinearMap_symm_quotientEquivOfIsCompl
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   证明: rfl
 -/
 lemma toLinearMap_symm_quotientEquivOfIsCompl (h : IsCompl p q) :
@@ -1228,7 +1228,7 @@ definition linearProjOfIsCompl
 
 中文:
 定义 linearProjOfIsCompl
-  签名: {F : 类型} [AddCommGroup F] [Module R F]
+  签名: {F : 类型} [加法交换群 F] [模 R F]
   定义体: (LinearEquiv.ofInjective i hi).symm ∘ₗ (LinearMap.range i).projectionOnto q h
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.range, ofInjective, projectionOnto
@@ -1352,7 +1352,7 @@ definition ofIsCompl
 
 中文:
 定义 ofIsCompl
-  签名: {p q : Submodule R E} (h : IsCompl p q) (φ : p ->ₗ[R] F) (ψ : q ->ₗ[R] F)
+  签名: {p q : 子模 R E} (h : 是补集 p q) (φ : p ->ₗ[R] F) (ψ : q ->ₗ[R] F)
   定义体: LinearMap.coprod φ ψ ∘ₗ ↑(Submodule.prodEquivOfIsCompl _ _ h).symm
 
 Depends on / 依赖: LinearMap, LinearMap.coprod, Submodule, Submodule.prodEquivOfIsCompl, coprod, prodEquivOfIsCompl
@@ -1375,7 +1375,7 @@ theorem ofIsCompl_apply_left
 
 中文:
 定理 ofIsCompl_apply_left
-  条件: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p)
+  条件: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (u : p)
   证明: by simp [ofIsCompl]
 
 @[simp]
@@ -1396,7 +1396,7 @@ theorem ofIsCompl_apply_right
 
 中文:
 定理 ofIsCompl_apply_right
-  条件: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q)
+  条件: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} (v : q)
   证明: by simp [ofIsCompl]
 
 Depends on / 依赖: ofIsCompl
@@ -1417,7 +1417,7 @@ theorem ofIsCompl_eq
 
 中文:
 定理 ofIsCompl_eq
-  结论: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
+  结论: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
   证明: by
   ext x
   obtain ⟨_, _, rfl, _⟩ := existsUnique_add_of_isCompl h x
@@ -1441,7 +1441,7 @@ theorem ofIsCompl_eq'
 
 中文:
 定理 ofIsCompl_eq'
-  结论: (h : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
+  结论: (h : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F} {χ : E ->ₗ[R] F}
   证明: ofIsCompl_eq h (fun _ => hφ.symm ▸ rfl) fun _ => hψ.symm ▸ rfl
 
 Depends on / 依赖: ofIsCompl_eq
@@ -1465,7 +1465,7 @@ theorem ofIsCompl_eq_add
 
 中文:
 定理 ofIsCompl_eq_add
-  条件: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
+  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
   证明: by
   ext x
   obtain ⟨a, b, rfl, _⟩ := existsUnique_add_of_isCompl hpq x
@@ -1495,7 +1495,7 @@ theorem ofIsCompl_zero
 
 中文:
 定理 ofIsCompl_zero
-  条件: (h : IsCompl p q)
+  条件: (h : 是补集 p q)
   结论: (ofIsCompl h 0 0 : E ->ₗ[R] F) = 0
   证明: ofIsCompl_eq _ (fun _ => rfl) fun _ => rfl
 
@@ -1519,7 +1519,7 @@ theorem ofIsCompl_add
 
 中文:
 定理 ofIsCompl_add
-  条件: (h : IsCompl p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F}
+  条件: (h : 是补集 p q) {φ₁ φ₂ : p ->ₗ[R] F} {ψ₁ ψ₂ : q ->ₗ[R] F}
   证明: ofIsCompl_eq _ (by simp) (by simp)
 
 @[simp]
@@ -1541,7 +1541,7 @@ theorem ofIsCompl_smul
 
 中文:
 定理 ofIsCompl_smul
-  结论: {R : 类型} [CommRing R] {E : 类型} [AddCommGroup E] [Module R E]
+  结论: {R : 类型} [交换环 R] {E : 类型} [加法交换群 E] [模 R E]
   证明: ofIsCompl_eq _ (by simp) (by simp)
 
 Depends on / 依赖: ofIsCompl_eq
@@ -1561,7 +1561,7 @@ theorem surjective_comp_projectionOnto
 
 中文:
 定理 surjective_comp_projectionOnto
-  条件: (h : IsCompl p q) [Module R M]
+  条件: (h : 是补集 p q) [模 R M]
   证明: fun f => ⟨p.subtype ∘ₗ f, by ext; simp⟩
 
 Depends on / 依赖: p.subtype, subtype
@@ -1582,7 +1582,7 @@ theorem surjective_comp_subtype_of_isComplemented
 
 中文:
 定理 surjective_comp_subtype_of_isComplemented
-  条件: (h : IsComplemented p) [Module R M]
+  条件: (h : IsComplemented p) [模 R M]
   证明: have ⟨q, h⟩ := h; fun f => ⟨f ∘ₗ p.projectionOnto q h, by ext; simp⟩
 
 @[simp]
@@ -1611,7 +1611,7 @@ theorem range_ofIsCompl
 
 中文:
 定理 range_ofIsCompl
-  条件: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
+  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
   证明: by
   rw [ofIsCompl_eq_add]
   apply le_antisymm
@@ -1644,7 +1644,7 @@ theorem ofIsCompl_subtype_zero_eq
 
 中文:
 定理 ofIsCompl_subtype_zero_eq
-  条件: (hpq : IsCompl p q)
+  条件: (hpq : 是补集 p q)
   证明: by
   simp [ofIsCompl_eq_add, projection]
 
@@ -1665,7 +1665,7 @@ theorem ofIsCompl_symm
 
 中文:
 定理 ofIsCompl_symm
-  条件: (hpq : IsCompl p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
+  条件: (hpq : 是补集 p q) {φ : p ->ₗ[R] F} {ψ : q ->ₗ[R] F}
   证明: by
   simp [ofIsCompl_eq_add, add_comm]
 
@@ -1693,7 +1693,7 @@ definition ofIsComplProd
 
 中文:
 定义 ofIsComplProd
-  签名: {p q : Submodule R₁ E} (h : IsCompl p q)
+  签名: {p q : 子模 R₁ E} (h : 是补集 p q)
   定义体: ofIsCompl h φ.1 φ.2
   map_add' := by intro φ ψ; rw [Prod.snd_add, Prod.fst_add, ofIsCompl_add]
   map_smul' := by intro c φ; simp [Prod.smul_snd, Prod.smul_fst, ofIsCompl_smul]
@@ -1719,7 +1719,7 @@ theorem ofIsComplProd_apply
 
 中文:
 定理 ofIsComplProd_apply
-  结论: {p q : Submodule R₁ E} (h : IsCompl p q)
+  结论: {p q : 子模 R₁ E} (h : 是补集 p q)
   证明: rfl
 -/
 theorem ofIsComplProd_apply {p q : Submodule R₁ E} (h : IsCompl p q)
@@ -1744,7 +1744,7 @@ definition ofIsComplProdEquiv
 
 中文:
 定义 ofIsComplProdEquiv
-  签名: {p q : Submodule R₁ E} (h : IsCompl p q)
+  签名: {p q : 子模 R₁ E} (h : 是补集 p q)
   定义体: { ofIsComplProd h with
     invFun := fun φ => ⟨φ.domRestrict p, φ.domRestrict q⟩
     left_inv := fun φ => by
@@ -1896,7 +1896,7 @@ right_inv := fun ⟨f, hf⟩ => Subtype.ext f.projectionOnto_of_proj hf
 
 中文:
 定义 isComplEquivProj
-  签名: : { q // IsCompl p q } ≃ { f : E ->ₗ[R] p // 对任意 x : p, f x = x } where
+  签名: : { q // 是补集 p q } ≃ { f : E ->ₗ[R] p // 对任意 x : p, f x = x } where
   定义体: ⟨projectionOnto p q q.2, projectionOnto_apply_left q.2⟩
   invFun f := ⟨ker (f : E ->ₗ[R] p), isCompl_of_proj f.2⟩
   left_inv := fun ⟨q, hq⟩ => by simp only [ker_projectionOnto]
@@ -1925,7 +1925,7 @@ theorem coe_isComplEquivProj_apply
 
 中文:
 定理 coe_isComplEquivProj_apply
-  条件: (q : { q // IsCompl p q })
+  条件: (q : { q // 是补集 p q })
   证明: rfl
 
 @[simp]
@@ -2001,8 +2001,8 @@ structure IsProj
     - map_id : forall x in m, f x = x
 
 中文:
-结构 IsProj
-  参数: {F : 类型} [FunLike F M M] (f : F)
+结构 是Proj
+  参数: {F : 类型} [函数状 F M M] (f : F)
   公理与运算 (2 个):
     - map_mem : 对任意 x, f x in m
     - map_id : 对任意 x in m, f x = x
@@ -2089,7 +2089,7 @@ theorem isIdempotentElem
 
 中文:
 定理 isIdempotentElem
-  条件: {f : M ->ₗ[S] M} (h : IsProj m f)
+  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
   结论: IsIdempotentElem f
   证明: f.isProj_iff_isIdempotentElem.mp ⟨m, h⟩
 
@@ -2108,7 +2108,7 @@ theorem mem_iff_map_id
 
 中文:
 定理 mem_iff_map_id
-  条件: {f : M ->ₗ[S] M} (hf : IsProj m f) {x : M}
+  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f) {x : M}
   证明: ⟨hf.map_id x, fun h => h ▸ hf.map_mem x⟩
 
 Depends on / 依赖: hf.map_id, hf.map_mem, map_id, map_mem
@@ -2129,7 +2129,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: {f : M ->ₗ[S] M} (h : IsProj m f)
+  签名: {f : M ->ₗ[S] M} (h : 是Proj m f)
   定义体: f.codRestrict m h.map_mem
 
 @[simp]
@@ -2153,7 +2153,7 @@ theorem codRestrict_apply
 
 中文:
 定理 codRestrict_apply
-  条件: {f : M ->ₗ[S] M} (h : IsProj m f) (x : M)
+  条件: {f : M ->ₗ[S] M} (h : 是Proj m f) (x : M)
   结论: ↑(h.codRestrict x) = f x
   证明: f.codRestrict_apply m x
 
@@ -2179,7 +2179,7 @@ theorem codRestrict_apply_cod
 
 中文:
 定理 codRestrict_apply_cod
-  条件: {f : M ->ₗ[S] M} (h : IsProj m f) (x : m)
+  条件: {f : M ->ₗ[S] M} (h : 是Proj m f) (x : m)
   结论: h.codRestrict x = x
   证明: by
   ext
@@ -2204,7 +2204,7 @@ theorem codRestrict_ker
 
 中文:
 定理 codRestrict_ker
-  条件: {f : M ->ₗ[S] M} (h : IsProj m f)
+  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
   结论: ker h.codRestrict = ker f
   证明: f.ker_codRestrict m _
 
@@ -2226,8 +2226,8 @@ theorem isCompl
 
 中文:
 定理 isCompl
-  条件: {f : E ->ₗ[R] E} (h : IsProj p f)
-  结论: IsCompl p (ker f)
+  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
+  结论: 是补集 p (ker f)
   证明: by
   rw [← codRestrict_ker h]
   exact isCompl_of_proj h.codRestrict_apply_cod
@@ -2253,7 +2253,7 @@ theorem eq_conj_prod_map'
 
 中文:
 定理 eq_conj_prod_map'
-  条件: {f : E ->ₗ[R] E} (h : IsProj p f)
+  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
   证明: by
   rw [← LinearMap.comp_assoc]; rw [LinearEquiv.eq_comp_toLinearMap_symm]
   ext x
@@ -2284,7 +2284,7 @@ theorem submodule_unique
 
 中文:
 定理 submodule_unique
-  结论: {f : M ->ₗ[S] M} {m₁ m₂ : Submodule S M}
+  结论: {f : M ->ₗ[S] M} {m₁ m₂ : 子模 S M}
   证明: by
   ext; simp [hf₁.mem_iff_map_id, hf₂.mem_iff_map_id]
 
@@ -2306,7 +2306,7 @@ theorem range
 
 中文:
 定理 range
-  条件: {f : M ->ₗ[S] M} (h : IsProj m f)
+  条件: {f : M ->ₗ[S] M} (h : 是Proj m f)
   结论: range f = m
   证明: h.isIdempotentElem.isProj_range.submodule_unique h
 -/
@@ -2324,7 +2324,7 @@ theorem bot
 
 中文:
 定理 bot
-  结论: IsProj (⊥ : Submodule S M) (0 : M ->ₗ[S] M)
+  结论: 是Proj (⊥ : 子模 S M) (0 : M ->ₗ[S] M)
   证明: ⟨congrFun rfl, by simp only [mem_bot, zero_apply, forall_eq]⟩
 -/
 protected theorem bot : IsProj (⊥ : Submodule S M) (0 : M ->ₗ[S] M) :=
@@ -2341,7 +2341,7 @@ theorem top
 
 中文:
 定理 top
-  结论: IsProj (⊤ : Submodule S M) (id (R := S))
+  结论: 是Proj (⊤ : 子模 S M) (id (R := S))
   证明: ⟨fun _ => trivial, fun _ => congrFun rfl⟩
 -/
 protected theorem top : IsProj (⊤ : Submodule S M) (id (R := S)) :=
@@ -2357,7 +2357,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: {U : Submodule S M} {f : M ->ₗ[S] M} (hf : IsProj U f)
+  条件: {U : 子模 S M} {f : M ->ₗ[S] M} (hf : 是Proj U f)
   证明: rfl
 -/
 theorem subtype_comp_codRestrict {U : Submodule S M} {f : M ->ₗ[S] M} (hf : IsProj U f) :
@@ -2377,7 +2377,7 @@ theorem submodule_eq_top_iff
 
 中文:
 定理 submodule_eq_top_iff
-  条件: {f : M ->ₗ[S] M} (hf : IsProj m f)
+  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f)
   证明: by
   constructor <;> rintro rfl
   · ext
@@ -2407,7 +2407,7 @@ theorem submodule_eq_bot_iff
 
 中文:
 定理 submodule_eq_bot_iff
-  条件: {f : M ->ₗ[S] M} (hf : IsProj m f)
+  条件: {f : M ->ₗ[S] M} (hf : 是Proj m f)
   证明: by
   constructor <;> rintro rfl
   · ext
@@ -2590,7 +2590,7 @@ theorem IsIdempotentElem.range_eq_ker
 
 中文:
 定理 IsIdempotentElem.range_eq_ker
-  结论: {E : 类型} [AddCommGroup E] [Module S E]
+  结论: {E : 类型} [加法交换群 E] [模 S E]
   证明: le_antisymm
     (LinearMap.range_le_ker_iff.mpr hp.one_sub_mul_self)
     fun x hx => ⟨x, by simpa [sub_eq_zero, eq_comm (a := x)] using hx⟩
@@ -2613,7 +2613,7 @@ theorem IsIdempotentElem.range_eq_ker_one_sub
 
 中文:
 定理 IsIdempotentElem.range_eq_ker_one_sub
-  结论: {E : 类型} [AddCommGroup E] [Module S E]
+  结论: {E : 类型} [加法交换群 E] [模 S E]
   证明: range_eq_ker hp
 
 Depends on / 依赖: range_eq_ker
@@ -2634,7 +2634,7 @@ theorem IsIdempotentElem.ker_eq_range
 
 中文:
 定理 IsIdempotentElem.ker_eq_range
-  结论: {E : 类型} [AddCommGroup E] [Module S E]
+  结论: {E : 类型} [加法交换群 E] [模 S E]
   证明: by
   simpa using! hp.one_sub.range_eq_ker_one_sub.symm
 
@@ -2654,7 +2654,7 @@ theorem IsIdempotentElem.ker_eq_range_one_sub
 
 中文:
 定理 IsIdempotentElem.ker_eq_range_one_sub
-  结论: {E : 类型} [AddCommGroup E] [Module S E]
+  结论: {E : 类型} [加法交换群 E] [模 S E]
   证明: ker_eq_range hp
 
 Depends on / 依赖: ker_eq_range
@@ -2675,7 +2675,7 @@ theorem IsIdempotentElem.comp_eq_left_iff
 
 中文:
 定理 IsIdempotentElem.comp_eq_left_iff
-  结论: {M : 类型} [AddCommGroup M] [Module S M] {q : M ->ₗ[S] M}
+  结论: {M : 类型} [加法交换群 M] [模 S M] {q : M ->ₗ[S] M}
   证明: by
   simp [hq.ker_eq_range, range_le_ker_iff, comp_sub, sub_eq_zero, eq_comm]
 
@@ -2707,8 +2707,8 @@ theorem IsProj.eq_conj_prodMap
   exact h.eq_conj_prod_map'
 
 中文:
-定理 IsProj.eq_conj_prodMap
-  条件: {f : E ->ₗ[R] E} (h : IsProj p f)
+定理 是Proj.eq_conj_prodMap
+  条件: {f : E ->ₗ[R] E} (h : 是Proj p f)
   证明: by
   rw [LinearEquiv.conj_apply]
   exact h.eq_conj_prod_map'
@@ -2766,8 +2766,8 @@ lemma _root_.LinearMap.IsProj.mem_invtSubmodule_iff
   proof: hf.range ▸ hf.isIdempotentElem.range_mem_invtSubmodule_iff
 
 中文:
-引理 _root_.LinearMap.IsProj.mem_invtSubmodule_iff
-  结论: {U : Submodule R E}
+引理 _root_.线性映射.是Proj.mem_invtSubmodule_iff
+  结论: {U : 子模 R E}
   证明: hf.range ▸ hf.isIdempotentElem.range_mem_invtSubmodule_iff
 
 Depends on / 依赖: hf.isIdempotentElem.range_mem_invtSubmodule_iff, hf.range, isIdempotentElem, range_mem_invtSubmodule_iff
@@ -2843,7 +2843,7 @@ theorem commute_iff_of_isUnit
 
 中文:
 定理 commute_iff_of_isUnit
-  条件: (hT : IsUnit T) (hf : IsIdempotentElem f)
+  条件: (hT : 是单位 T) (hf : IsIdempotentElem f)
   证明: by
   lift T to GeneralLinearGroup R E using hT
   simp_rw [← GeneralLinearGroup.generalLinearEquiv_to_linearMap, le_antisymm_iff,

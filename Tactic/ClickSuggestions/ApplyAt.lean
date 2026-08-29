@@ -58,7 +58,7 @@ structure ApplyAtKey
     - nameLength : 自然数
     - replacementSize : 自然数
     - name : String
-    - newGoals : Array AbstractMVarsResult
+    - newGoals : 数组 AbstractMVarsResult
 -/
 structure ApplyAtKey where
   /-- How many new goals are generated. -/
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord ApplyAtKey
+  签名: 序 ApplyAtKey
   定义体: (compare a.1 b.1).then
 (compare a.2 b.2).then
 (compare a.3 b.3).then

@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (S₁ ⟶ S₂)
+  签名: 加法 (S₁ ⟶ S₂)
   定义体: { τ₁ := φ.τ₁ + φ'.τ₁
       τ₂ := φ.τ₂ + φ'.τ₂
       τ₃ := φ.τ₃ + φ'.τ₃ }
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (S₁ ⟶ S₂)
+  签名: 减法 (S₁ ⟶ S₂)
   定义体: { τ₁ := φ.τ₁ - φ'.τ₁
       τ₂ := φ.τ₂ - φ'.τ₂
       τ₃ := φ.τ₃ - φ'.τ₃ }
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (S₁ ⟶ S₂)
+  签名: 取负 (S₁ ⟶ S₂)
   定义体: { τ₁ := -φ.τ₁
       τ₂ := -φ.τ₂
       τ₃ := -φ.τ₃ }
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (S₁ ⟶ S₂)
+  签名: 加法交换群 (S₁ ⟶ S₂)
   定义体: fun a b c => by ext <;> apply add_assoc
   add_zero := fun a => by ext <;> apply add_zero
   zero_add := fun a => by ext <;> apply zero_add
@@ -293,7 +293,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (ShortComplex C)
+  签名: 预加性 (短复形 C)
 -/
 instance : Preadditive (ShortComplex C) where
 
@@ -660,7 +660,7 @@ instance leftHomologyFunctor_additive
 
 中文:
 实例 leftHomologyFunctor_additive
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance leftHomologyFunctor_additive [HasKernels C] [HasCokernels C] :
     (leftHomologyFunctor C).Additive where
@@ -674,7 +674,7 @@ instance cyclesFunctor_additive
 
 中文:
 实例 cyclesFunctor_additive
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance cyclesFunctor_additive [HasKernels C] [HasCokernels C] : (cyclesFunctor C).Additive where
 
@@ -1042,7 +1042,7 @@ instance rightHomologyFunctor_additive
 
 中文:
 实例 rightHomologyFunctor_additive
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance rightHomologyFunctor_additive [HasKernels C] [HasCokernels C] :
     (rightHomologyFunctor C).Additive where
@@ -1056,7 +1056,7 @@ instance opcyclesFunctor_additive
 
 中文:
 实例 opcyclesFunctor_additive
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance opcyclesFunctor_additive [HasKernels C] [HasCokernels C] :
     (opcyclesFunctor C).Additive where
@@ -1085,7 +1085,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: : HomologyMapData (-φ) h₁ h₂ where
+  签名: : 同调映射数据 (-φ) h₁ h₂ where
   定义体: γ.left.neg
   right := γ.right.neg
 
@@ -1109,7 +1109,7 @@ definition add
 
 中文:
 定义 add
-  签名: : HomologyMapData (φ + φ') h₁ h₂ where
+  签名: : 同调映射数据 (φ + φ') h₁ h₂ where
   定义体: γ.left.add γ'.left
   right := γ.right.add γ'.right
 
@@ -1261,7 +1261,7 @@ instance homologyFunctor_additive
 
 中文:
 实例 homologyFunctor_additive
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
 -/
 instance homologyFunctor_additive [CategoryWithHomology C] : (homologyFunctor C).Additive where
 
@@ -1293,7 +1293,7 @@ structure Homotopy
     - comm₃ : φ₁.τ₃ = h₃ + h₂ ≫ S₂.g + φ₂.τ₃  [default: by cat_disch]
 
 中文:
-结构 Homotopy
+结构 同伦
   参数: where
   公理与运算 (9 个):
     - h₀ : S₁.X₁ ⟶ S₂.X₁
@@ -1422,7 +1422,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (h : Homotopy φ₁ φ₂)
+  签名: (h : 同伦 φ₁ φ₂)
   定义体: -h.h₀
   h₁ := -h.h₁
   h₂ := -h.h₂
@@ -1458,7 +1458,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: (h : Homotopy φ₁ φ₂)
+  签名: (h : 同伦 φ₁ φ₂)
   定义体: -h.h₀
   h₁ := -h.h₁
   h₂ := -h.h₂
@@ -1494,7 +1494,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (h₁₂ : Homotopy φ₁ φ₂) (h₂₃ : Homotopy φ₂ φ₃)
+  签名: (h₁₂ : 同伦 φ₁ φ₂) (h₂₃ : 同伦 φ₂ φ₃)
   定义体: h₁₂.h₀ + h₂₃.h₀
   h₁ := h₁₂.h₁ + h₂₃.h₁
   h₂ := h₁₂.h₂ + h₂₃.h₂
@@ -1530,7 +1530,7 @@ definition add
 
 中文:
 定义 add
-  签名: (h : Homotopy φ₁ φ₂) (h' : Homotopy φ₃ φ₄)
+  签名: (h : 同伦 φ₁ φ₂) (h' : 同伦 φ₃ φ₄)
   定义体: h.h₀ + h'.h₀
   h₁ := h.h₁ + h'.h₁
   h₂ := h.h₂ + h'.h₂
@@ -1566,7 +1566,7 @@ definition sub
 
 中文:
 定义 sub
-  签名: (h : Homotopy φ₁ φ₂) (h' : Homotopy φ₃ φ₄)
+  签名: (h : 同伦 φ₁ φ₂) (h' : 同伦 φ₃ φ₄)
   定义体: h.h₀ - h'.h₀
   h₁ := h.h₁ - h'.h₁
   h₂ := h.h₂ - h'.h₂
@@ -1602,7 +1602,7 @@ definition compLeft
 
 中文:
 定义 compLeft
-  签名: (h : Homotopy φ₁ φ₂) (ψ : S₃ ⟶ S₁)
+  签名: (h : 同伦 φ₁ φ₂) (ψ : S₃ ⟶ S₁)
   定义体: ψ.τ₁ ≫ h.h₀
   h₁ := ψ.τ₂ ≫ h.h₁
   h₂ := ψ.τ₃ ≫ h.h₂
@@ -1639,7 +1639,7 @@ definition compRight
 
 中文:
 定义 compRight
-  签名: (h : Homotopy φ₁ φ₂) (ψ : S₂ ⟶ S₃)
+  签名: (h : 同伦 φ₁ φ₂) (ψ : S₂ ⟶ S₃)
   定义体: h.h₀ ≫ ψ.τ₁
   h₁ := h.h₁ ≫ ψ.τ₁
   h₂ := h.h₂ ≫ ψ.τ₂
@@ -1669,7 +1669,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (h : Homotopy φ₁ φ₂) {ψ₁ ψ₂ : S₂ ⟶ S₃} (h' : Homotopy ψ₁ ψ₂)
+  签名: (h : 同伦 φ₁ φ₂) {ψ₁ ψ₂ : S₂ ⟶ S₃} (h' : 同伦 ψ₁ ψ₂)
   定义体: (h.compRight ψ₁).trans (h'.compLeft φ₂)
 
 Depends on / 依赖: compLeft, compRight, h.compRight
@@ -1701,7 +1701,7 @@ definition op
 
 中文:
 定义 op
-  签名: (h : Homotopy φ₁ φ₂)
+  签名: (h : 同伦 φ₁ φ₂)
   定义体: h.h₃.op
   h₁ := h.h₂.op
   h₂ := h.h₁.op
@@ -1746,7 +1746,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {S₁ S₂ : ShortComplex Cᵒᵖ} {φ₁ φ₂ : S₁ ⟶ S₂} (h : Homotopy φ₁ φ₂)
+  签名: {S₁ S₂ : 短复形 Cᵒᵖ} {φ₁ φ₂ : S₁ ⟶ S₂} (h : 同伦 φ₁ φ₂)
   定义体: h.h₃.unop
   h₁ := h.h₂.unop
   h₂ := h.h₁.unop
@@ -1788,7 +1788,7 @@ definition equivSubZero
 
 中文:
 定义 equivSubZero
-  签名: : Homotopy φ₁ φ₂ ≃ Homotopy (φ₁ - φ₂) 0 where
+  签名: : 同伦 φ₁ φ₂ ≃ 同伦 (φ₁ - φ₂) 0 where
   定义体: (h.sub (refl φ₂)).trans (ofEq (sub_self φ₂))
   invFun h := ((ofEq (sub_add_cancel φ₁ φ₂).symm).trans
     (h.add (refl φ₂))).trans (ofEq (zero_add φ₂))
@@ -1821,7 +1821,7 @@ lemma eq_add_nullHomotopic
 
 中文:
 引理 eq_add_nullHomotopic
-  条件: (h : Homotopy φ₁ φ₂)
+  条件: (h : 同伦 φ₁ φ₂)
   证明: by
   ext
   · dsimp; rw [h.comm₁]; abel
@@ -2032,7 +2032,7 @@ lemma leftHomologyMap_nullHomotopic
 
 中文:
 引理 leftHomologyMap_nullHomotopic
-  结论: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  结论: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   apply leftHomologyMap'_nullHomotopic
 
@@ -2060,7 +2060,7 @@ lemma rightHomologyMap_nullHomotopic
 
 中文:
 引理 rightHomologyMap_nullHomotopic
-  结论: [S₁.HasRightHomology] [S₂.HasRightHomology]
+  结论: [S₁.有RightHomology] [S₂.有RightHomology]
   证明: by
   apply rightHomologyMap'_nullHomotopic
 
@@ -2086,7 +2086,7 @@ lemma homologyMap_nullHomotopic
 
 中文:
 引理 homologyMap_nullHomotopic
-  结论: [S₁.HasHomology] [S₂.HasHomology]
+  结论: [S₁.有同调] [S₂.有同调]
   证明: by
   apply homologyMap'_nullHomotopic
 
@@ -2113,7 +2113,7 @@ lemma leftHomologyMap'_congr
 
 中文:
 引理 leftHomologyMap'_congr
-  结论: (h : Homotopy φ₁ φ₂) (h₁ : S₁.LeftHomologyData)
+  结论: (h : 同伦 φ₁ φ₂) (h₁ : S₁.LeftHomologyData)
   证明: by
   rw [h.eq_add_nullHomotopic]; rw [leftHomologyMap'_add]; rw [leftHomologyMap'_nullHomotopic]; rw [add_zero]
 
@@ -2134,7 +2134,7 @@ lemma rightHomologyMap'_congr
 
 中文:
 引理 rightHomologyMap'_congr
-  结论: (h : Homotopy φ₁ φ₂) (h₁ : S₁.RightHomologyData)
+  结论: (h : 同伦 φ₁ φ₂) (h₁ : S₁.RightHomologyData)
   证明: by
   rw [h.eq_add_nullHomotopic]; rw [rightHomologyMap'_add]; rw [rightHomologyMap'_nullHomotopic]; rw [add_zero]
 
@@ -2155,7 +2155,7 @@ lemma homologyMap'_congr
 
 中文:
 引理 homologyMap'_congr
-  结论: (h : Homotopy φ₁ φ₂) (h₁ : S₁.HomologyData)
+  结论: (h : 同伦 φ₁ φ₂) (h₁ : S₁.同调数据)
   证明: by
   rw [h.eq_add_nullHomotopic]; rw [homologyMap'_add]; rw [homologyMap'_nullHomotopic]; rw [add_zero]
 
@@ -2175,7 +2175,7 @@ lemma leftHomologyMap_congr
 
 中文:
 引理 leftHomologyMap_congr
-  条件: (h : Homotopy φ₁ φ₂) [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  条件: (h : 同伦 φ₁ φ₂) [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: h.leftHomologyMap'_congr _ _
 
 Depends on / 依赖: _congr, h.leftHomologyMap, leftHomologyMap
@@ -2194,7 +2194,7 @@ lemma rightHomologyMap_congr
 
 中文:
 引理 rightHomologyMap_congr
-  条件: (h : Homotopy φ₁ φ₂) [S₁.HasRightHomology] [S₂.HasRightHomology]
+  条件: (h : 同伦 φ₁ φ₂) [S₁.有RightHomology] [S₂.有RightHomology]
   证明: h.rightHomologyMap'_congr _ _
 
 Depends on / 依赖: _congr, h.rightHomologyMap, rightHomologyMap
@@ -2213,7 +2213,7 @@ lemma homologyMap_congr
 
 中文:
 引理 homologyMap_congr
-  条件: (h : Homotopy φ₁ φ₂) [S₁.HasHomology] [S₂.HasHomology]
+  条件: (h : 同伦 φ₁ φ₂) [S₁.有同调] [S₂.有同调]
   证明: h.homologyMap'_congr _ _
 
 Depends on / 依赖: _congr, h.homologyMap, homologyMap
@@ -2241,13 +2241,13 @@ structure HomotopyEquiv
     - homotopyInvHomId : Homotopy (inv ≫ hom) (𝟙 S₂)
 
 中文:
-结构 HomotopyEquiv
+结构 同伦等价
   参数: where
   公理与运算 (4 个):
     - hom : S₁ ⟶ S₂
     - inv : S₂ ⟶ S₁
-    - homotopyHomInvId : Homotopy (hom ≫ inv) (𝟙 S₁)
-    - homotopyInvHomId : Homotopy (inv ≫ hom) (𝟙 S₂)
+    - homotopyHomInvId : 同伦 (hom ≫ inv) (𝟙 S₁)
+    - homotopyInvHomId : 同伦 (inv ≫ hom) (𝟙 S₂)
 -/
 structure HomotopyEquiv where
   /-- the forward direction of a homotopy equivalence. -/
@@ -2281,7 +2281,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (S : ShortComplex C)
+  签名: (S : 短复形 C)
   定义体: 𝟙 S
   inv := 𝟙 S
   homotopyHomInvId := Homotopy.ofEq (by simp)
@@ -2308,7 +2308,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (e : HomotopyEquiv S₁ S₂)
+  签名: (e : 同伦等价 S₁ S₂)
   定义体: e.inv
   inv := e.hom
   homotopyHomInvId := e.homotopyInvHomId
@@ -2340,7 +2340,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (e : HomotopyEquiv S₁ S₂) (e' : HomotopyEquiv S₂ S₃)
+  签名: (e : 同伦等价 S₁ S₂) (e' : 同伦等价 S₂ S₃)
   定义体: e.hom ≫ e'.hom
   inv := e'.inv ≫ e.inv
   homotopyHomInvId := (Homotopy.ofEq (by simp)).trans

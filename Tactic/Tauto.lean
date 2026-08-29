@@ -125,7 +125,7 @@ structure DistribNotState
 结构 DistribNotState
   参数: where
   公理与运算 (2 个):
-    - fvars : List Expr
+    - fvars : 列表 Expr
     - currentGoal : MVarId
 
 Depends on / 依赖: currentGoal, distribNotAt, distribNotOnceAt, fvarId, fvs.map, mkFVar, mvarId, nIters, newFVars, result, result.fvarId, result.mvarId, result.subst.apply, state.currentGoal, state.fvars
@@ -189,7 +189,7 @@ definition distribNotAux
 
 中文:
 定义 distribNotAux
-  签名: (fvars : List Expr) (g : MVarId)
+  签名: (fvars : 列表 Expr) (g : MVarId)
   定义体: match fvars with
   | [] => pure g
   | _ => do
@@ -218,7 +218,7 @@ definition distribNot
 
 中文:
 定义 distribNot
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: withMainContext do
   let mut fvars := []
   for h in ← getLCtx do
@@ -243,7 +243,7 @@ structure Config
   (no additional axioms)
 
 中文:
-结构 Config
+结构 余nfig
   (无附加公理)
 -/
 structure Config
@@ -339,7 +339,7 @@ definition tautoCore
 
 中文:
 定义 tautoCore
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: do
   _ ← tryTactic (evalTactic (← `(tactic| contradiction)))
   _ ← tryTactic (evalTactic (← `(tactic| assumption)))
@@ -421,7 +421,7 @@ evalTactic (← `(tactic| solve_by_elim)) >
 
 中文:
 定义 tautology
-  签名: : TacticM Unit
+  签名: : TacticM 单元
   定义体: focus do
   classical do
     let g ← getMainGoal

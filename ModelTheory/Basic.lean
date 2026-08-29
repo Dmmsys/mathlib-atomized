@@ -106,7 +106,7 @@ abbreviation IsAlgebraic
   body: forall n, IsEmpty (L.Relations n)
 
 中文:
-缩写 IsAlgebraic
+缩写 是代数
   签名: : 命题
   定义体: forall n, IsEmpty (L.Relations n)
 
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Language
+  签名: 可居 Language
   定义体: ⟨Language.empty⟩
 
 Depends on / 依赖: Language, Language.empty
@@ -159,7 +159,7 @@ definition sum
   body: ⟨fun n => L.Functions n oplus L'.Functions n, fun n => L.Relations n oplus L'.Relations n⟩
 
 中文:
-定义 sum
+定义 求和
   签名: (L' : Language.{u', v'})
   定义体: ⟨fun n => L.Functions n oplus L'.Functions n, fun n => L.Relations n oplus L'.Relations n⟩
 -/
@@ -206,7 +206,7 @@ definition card
 
 中文:
 定义 card
-  签名: : Cardinal
+  签名: : 基数
   定义体: #L.Symbols
 
 Depends on / 依赖: L.Symbols, Symbols
@@ -267,7 +267,7 @@ instance isAlgebraic_sum
 
 中文:
 实例 isAlgebraic_sum
-  签名: [L.IsAlgebraic] [L'.IsAlgebraic]
+  签名: [L.是代数] [L'.是代数]
   定义体: fun _ => instIsEmptySum
 
 @[simp]
@@ -310,7 +310,7 @@ instance isEmpty_empty
 
 中文:
 实例 isEmpty_empty
-  签名: : IsEmpty Language.empty.Symbols
+  签名: : 是空 Language.empty.Symbols
   定义体: by
   simp only [Language.Symbols, isEmpty_sum, isEmpty_sigma]
   exact ⟨fun _ => inferInstance, fun _ => inferInstance⟩
@@ -332,8 +332,8 @@ instance Countable.countable_functions
 @[simp]
 
 中文:
-实例 Countable.countable_functions
-  签名: [h : Countable L.Symbols]
+实例 可数.countable_functions
+  签名: [h : 可数 L.Symbols]
   定义体: @Function.Injective.countable _ _ h _ Sum.inl_injective
 
 @[simp]
@@ -468,11 +468,11 @@ class Structure
     - RelMap : forall {n}, L.Relations n -> (Fin n -> M) -> Prop  [default: by exact fun {n} => isEmptyElim]
 
 中文:
-类 Structure
+类 结构
   参数: where
   公理与运算 (2 个):
-    - funMap : 对任意 {n}, L.Functions n -> (Fin n -> M) -> M  [默认: by exact fun {n} => isEmptyElim]
-    - RelMap : 对任意 {n}, L.Relations n -> (Fin n -> M) -> 命题  [默认: by exact fun {n} => isEmptyElim]
+    - funMap : 对任意 {n}, L.函数 n -> (有限集 n -> M) -> M  [默认: by exact fun {n} => isEmptyElim]
+    - RelMap : 对任意 {n}, L.关系 n -> (有限集 n -> M) -> 命题  [默认: by exact fun {n} => isEmptyElim]
 
 Depends on / 依赖: isEmptyElim
 -/
@@ -499,8 +499,8 @@ definition Inhabited.trivialStructure
   body: ⟨default, default⟩
 
 中文:
-定义 Inhabited.trivialStructure
-  签名: {α : 类型} [Inhabited α]
+定义 可居.trivialStructure
+  签名: {α : 类型} [可居 α]
   定义体: ⟨default, default⟩
 -/
 def Inhabited.trivialStructure {α : Type*} [Inhabited α] : L.Structure α :=
@@ -521,12 +521,12 @@ structure Hom
     - map_rel' : forall {n} (r : L.Relations n) (x), RelMap r x -> RelMap r (toFun ∘ x)  [default: by intros; trivial]
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (3 个):
     - toFun : M -> N
-    - map_fun' : 对任意 {n} (f : L.Functions n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
-    - map_rel' : 对任意 {n} (r : L.Relations n) (x), RelMap r x -> RelMap r (toFun ∘ x)  [默认: by intros; trivial]
+    - map_fun' : 对任意 {n} (f : L.函数 n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
+    - map_rel' : 对任意 {n} (r : L.关系 n) (x), RelMap r x -> RelMap r (toFun ∘ x)  [默认: by intros; trivial]
 
 Depends on / 依赖: intros
 -/
@@ -561,12 +561,12 @@ structure Embedding
     - map_rel' : forall {n} (r : L.Relations n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [default: by intros; trivial]
 
 中文:
-结构 Embedding
+结构 嵌入
   参数: extends M ↪ N
   继承: M ↪ N
   公理与运算 (2 个):
-    - map_fun' : 对任意 {n} (f : L.Functions n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
-    - map_rel' : 对任意 {n} (r : L.Relations n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [默认: by intros; trivial]
+    - map_fun' : 对任意 {n} (f : L.函数 n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
+    - map_rel' : 对任意 {n} (r : L.关系 n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [默认: by intros; trivial]
 -/
 structure Embedding extends M ↪ N where
   map_fun' : forall {n} (f : L.Functions n) (x), toFun (funMap f x) = funMap f (toFun ∘ x) := by
@@ -591,12 +591,12 @@ structure Equiv
     - map_rel' : forall {n} (r : L.Relations n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [default: by intros; trivial]
 
 中文:
-结构 Equiv
+结构 等价
   参数: extends M ≃ N
   继承: M ≃ N
   公理与运算 (2 个):
-    - map_fun' : 对任意 {n} (f : L.Functions n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
-    - map_rel' : 对任意 {n} (r : L.Relations n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [默认: by intros; trivial]
+    - map_fun' : 对任意 {n} (f : L.函数 n) (x), toFun (funMap f x) = funMap f (toFun ∘ x)  [默认: by intros; trivial]
+    - map_rel' : 对任意 {n} (r : L.关系 n) (x), RelMap r (toFun ∘ x) ↔ RelMap r x  [默认: by intros; trivial]
 -/
 structure Equiv extends M ≃ N where
   map_fun' : forall {n} (f : L.Functions n) (x), toFun (funMap f x) = funMap f (toFun ∘ x) := by
@@ -659,7 +659,7 @@ theorem funMap_eq_coe_constants
 
 中文:
 定理 funMap_eq_coe_constants
-  条件: {c : L.Constants} {x : Fin 0 -> M}
+  条件: {c : L.Constants} {x : 有限集 0 -> M}
   结论: funMap c x = c
   证明: congr rfl (funext finZeroElim)
 
@@ -680,8 +680,8 @@ theorem nonempty_of_nonempty_constants
 
 中文:
 定理 nonempty_of_nonempty_constants
-  条件: [h : Nonempty L.Constants]
-  结论: Nonempty M
+  条件: [h : 非空 L.Constants]
+  结论: 非空 M
   证明: h.map (↑)
 
 Depends on / 依赖: h.map
@@ -700,11 +700,11 @@ class HomClass
     - map_rel : forall (φ : F) {n} (r : L.Relations n) (x), RelMap r x -> RelMap r (φ ∘ x)
 
 中文:
-类 HomClass
+类 态射类
   参数: (L : outParam Language) (F : 类型) (M N : outParam 类型)
   公理与运算 (2 个):
-    - map_fun : 对任意 (φ : F) {n} (f : L.Functions n) (x), φ (funMap f x) = funMap f (φ ∘ x)
-    - map_rel : 对任意 (φ : F) {n} (r : L.Relations n) (x), RelMap r x -> RelMap r (φ ∘ x)
+    - map_fun : 对任意 (φ : F) {n} (f : L.函数 n) (x), φ (funMap f x) = funMap f (φ ∘ x)
+    - map_rel : 对任意 (φ : F) {n} (r : L.关系 n) (x), RelMap r x -> RelMap r (φ ∘ x)
 -/
 class HomClass (L : outParam Language) (F : Type*) (M N : outParam Type*)
   [FunLike F M N] [L.Structure M] [L.Structure N] : Prop where
@@ -722,11 +722,11 @@ class StrongHomClass
     - map_rel : forall (φ : F) {n} (r : L.Relations n) (x), RelMap r (φ ∘ x) ↔ RelMap r x
 
 中文:
-类 StrongHomClass
+类 Strong态射类
   参数: (L : outParam Language) (F : 类型) (M N : outParam 类型)
   公理与运算 (2 个):
-    - map_fun : 对任意 (φ : F) {n} (f : L.Functions n) (x), φ (funMap f x) = funMap f (φ ∘ x)
-    - map_rel : 对任意 (φ : F) {n} (r : L.Relations n) (x), RelMap r (φ ∘ x) ↔ RelMap r x
+    - map_fun : 对任意 (φ : F) {n} (f : L.函数 n) (x), φ (funMap f x) = funMap f (φ ∘ x)
+    - map_rel : 对任意 (φ : F) {n} (r : L.关系 n) (x), RelMap r (φ ∘ x) ↔ RelMap r x
 -/
 class StrongHomClass (L : outParam Language) (F : Type*) (M N : outParam Type*)
   [FunLike F M N] [L.Structure M] [L.Structure N] : Prop where
@@ -748,8 +748,8 @@ theorem HomClass.strongHomClassOfIsAlgebraic
   map_rel _ _ := isEmptyElim
 
 中文:
-定理 HomClass.strongHomClassOfIsAlgebraic
-  结论: [L.IsAlgebraic] {F M N} [L.Structure M] [L.Structure N]
+定理 态射类.strongHomClassOfIsAlgebraic
+  结论: [L.是代数] {F M N} [L.结构 M] [L.结构 N]
   证明: HomClass.map_fun
   map_rel _ _ := isEmptyElim
 
@@ -769,8 +769,8 @@ theorem HomClass.map_constants
   proof: (HomClass.map_fun φ c default).trans (congr rfl (funext default))
 
 中文:
-定理 HomClass.map_constants
-  结论: {F M N} [L.Structure M] [L.Structure N] [FunLike F M N]
+定理 态射类.map_constants
+  结论: {F M N} [L.结构 M] [L.结构 N] [函数状 F M N]
   证明: (HomClass.map_fun φ c default).trans (congr rfl (funext default))
 
 Depends on / 依赖: HomClass, HomClass.map_fun, map_fun
@@ -800,7 +800,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (M ->[L] N) M N where
+  签名: : 函数状 (M ->[L] N) M N where
   定义体: Hom.toFun
   coe_injective f g h := by cases f; cases g; cases h; rfl
 
@@ -821,7 +821,7 @@ instance homClass
 
 中文:
 实例 homClass
-  签名: : HomClass L (M ->[L] N) M N where
+  签名: : 态射类 L (M ->[L] N) M N where
   定义体: map_fun'
   map_rel := map_rel'
 
@@ -842,8 +842,8 @@ instance [L.IsAlgebraic]
 @[simp]
 
 中文:
-实例 [L.IsAlgebraic]
-  签名: : StrongHomClass L (M ->[L] N) M N
+实例 [L.是代数]
+  签名: : Strong态射类 L (M ->[L] N) M N
   定义体: HomClass.strongHomClassOfIsAlgebraic
 
 @[simp]
@@ -914,7 +914,7 @@ theorem map_fun
 
 中文:
 定理 map_fun
-  条件: (φ : M ->[L] N) {n : 自然数} (f : L.Functions n) (x : Fin n -> M)
+  条件: (φ : M ->[L] N) {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
   证明: HomClass.map_fun φ f x
 
 @[simp]
@@ -961,7 +961,7 @@ theorem map_rel
 
 中文:
 定理 map_rel
-  条件: (φ : M ->[L] N) {n : 自然数} (r : L.Relations n) (x : Fin n -> M)
+  条件: (φ : M ->[L] N) {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
   证明: HomClass.map_rel φ r x
 
 Depends on / 依赖: HomClass, HomClass.map_rel, map_rel
@@ -1004,7 +1004,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ->[L] M)
+  签名: 可居 (M ->[L] M)
   定义体: ⟨id L M⟩
 
 @[simp]
@@ -1159,8 +1159,8 @@ definition HomClass.toHom
   ⟨φ, HomClass.map_fun φ, HomClass.map_rel φ⟩
 
 中文:
-定义 HomClass.toHom
-  签名: {F M N} [L.Structure M] [L.Structure N] [FunLike F M N]
+定义 态射类.toHom
+  签名: {F M N} [L.结构 M] [L.结构 N] [函数状 F M N]
   定义体: fun φ =>
   ⟨φ, HomClass.map_fun φ, HomClass.map_rel φ⟩
 -/
@@ -1186,7 +1186,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (M ↪[L] N) M N where
+  签名: : 函数状 (M ↪[L] N) M N where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -1237,7 +1237,7 @@ instance strongHomClass
 
 中文:
 实例 strongHomClass
-  签名: : StrongHomClass L (M ↪[L] N) M N where
+  签名: : Strong态射类 L (M ↪[L] N) M N where
   定义体: map_fun'
   map_rel := map_rel'
 
@@ -1262,7 +1262,7 @@ theorem map_fun
 
 中文:
 定理 map_fun
-  条件: (φ : M ↪[L] N) {n : 自然数} (f : L.Functions n) (x : Fin n -> M)
+  条件: (φ : M ↪[L] N) {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
   证明: HomClass.map_fun φ f x
 
 @[simp]
@@ -1309,7 +1309,7 @@ theorem map_rel
 
 中文:
 定理 map_rel
-  条件: (φ : M ↪[L] N) {n : 自然数} (r : L.Relations n) (x : Fin n -> M)
+  条件: (φ : M ↪[L] N) {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
   证明: StrongHomClass.map_rel φ r x
 
 Depends on / 依赖: StrongHomClass, StrongHomClass.map_rel, map_rel
@@ -1368,7 +1368,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (M ↪[L] N) (M -> N) (↑)
+  结论: @函数.单射 (M ↪[L] N) (M -> N) (↑)
 -/
 theorem coe_injective : @Function.Injective (M ↪[L] N) (M -> N) (↑)
   | _, _, h => DFunLike.ext'_iff.mpr h
@@ -1409,7 +1409,7 @@ theorem toHom_injective
 
 中文:
 定理 toHom_injective
-  结论: @Function.Injective (M ↪[L] N) (M ->[L] N) (·.toHom)
+  结论: @函数.单射 (M ↪[L] N) (M ->[L] N) (·.toHom)
   证明: by
   intro f f' h
   ext
@@ -1457,7 +1457,7 @@ theorem injective
 中文:
 定理 injective
   条件: (f : M ↪[L] N)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: f.toEmbedding.injective
 
 Depends on / 依赖: f.toEmbedding.injective, injective, toEmbedding
@@ -1481,7 +1481,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: [L.IsAlgebraic] {f : M ->[L] N} (hf : Function.Injective f)
+  签名: [L.是代数] {f : M ->[L] N} (hf : 函数.单射 f)
   定义体: { f with
     inj' := hf
     map_rel' := fun {_} r x => StrongHomClass.map_rel f r x }
@@ -1508,7 +1508,7 @@ theorem coeFn_ofInjective
 
 中文:
 定理 coeFn_ofInjective
-  条件: [L.IsAlgebraic] {f : M ->[L] N} (hf : Function.Injective f)
+  条件: [L.是代数] {f : M ->[L] N} (hf : 函数.单射 f)
   证明: rfl
 
 @[simp]
@@ -1529,7 +1529,7 @@ theorem ofInjective_toHom
 
 中文:
 定理 ofInjective_toHom
-  条件: [L.IsAlgebraic] {f : M ->[L] N} (hf : Function.Injective f)
+  条件: [L.是代数] {f : M ->[L] N} (hf : 函数.单射 f)
   证明: by
   ext; simp
 -/
@@ -1572,7 +1572,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ↪[L] M)
+  签名: 可居 (M ↪[L] M)
   定义体: ⟨refl L M⟩
 
 @[simp]
@@ -1855,7 +1855,7 @@ theorem refl_toHom
 
 中文:
 定理 refl_toHom
-  结论: (refl L M).toHom = Hom.id L M
+  结论: (refl L M).toHom = 态射.id L M
   证明: rfl
 -/
 theorem refl_toHom : (refl L M).toHom = Hom.id L M :=
@@ -1873,8 +1873,8 @@ definition StrongHomClass.toEmbedding
   ⟨⟨φ, EmbeddingLike.injective φ⟩, StrongHomClass.map_fun φ, StrongHomClass.map_rel φ⟩
 
 中文:
-定义 StrongHomClass.toEmbedding
-  签名: {F M N} [L.Structure M] [L.Structure N] [FunLike F M N]
+定义 Strong态射类.toEmbedding
+  签名: {F M N} [L.结构 M] [L.结构 N] [函数状 F M N]
   定义体: fun φ =>
   ⟨⟨φ, EmbeddingLike.injective φ⟩, StrongHomClass.map_fun φ, StrongHomClass.map_rel φ⟩
 -/
@@ -1903,7 +1903,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (M ≃[L] N) M N
+  签名: 等价状 (M ≃[L] N) M N
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -1940,7 +1940,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongHomClass L (M ≃[L] N) M N
+  签名: Strong态射类 L (M ≃[L] N) M N
   定义体: map_fun'
   map_rel := map_rel'
 
@@ -2021,7 +2021,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (M ≃[L] N) -> _)
+  结论: 函数.双射 (symm : (M ≃[L] N) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2094,7 +2094,7 @@ theorem map_fun
 
 中文:
 定理 map_fun
-  条件: (φ : M ≃[L] N) {n : 自然数} (f : L.Functions n) (x : Fin n -> M)
+  条件: (φ : M ≃[L] N) {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
   证明: HomClass.map_fun φ f x
 
 @[simp]
@@ -2141,7 +2141,7 @@ theorem map_rel
 
 中文:
 定理 map_rel
-  条件: (φ : M ≃[L] N) {n : 自然数} (r : L.Relations n) (x : Fin n -> M)
+  条件: (φ : M ≃[L] N) {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
   证明: StrongHomClass.map_rel φ r x
 
 Depends on / 依赖: StrongHomClass, StrongHomClass.map_rel, map_rel
@@ -2266,7 +2266,7 @@ theorem injective_toEmbedding
 
 中文:
 定理 injective_toEmbedding
-  结论: Function.Injective (toEmbedding : (M ≃[L] N) -> M ↪[L] N)
+  结论: 函数.单射 (toEmbedding : (M ≃[L] N) -> M ↪[L] N)
   证明: by
   intro _ _ h; apply DFunLike.coe_injective; exact congr_arg (DFunLike.coe ∘ Embedding.toHom) h
 
@@ -2287,7 +2287,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (M ≃[L] N) (M -> N) (↑)
+  结论: @函数.单射 (M ≃[L] N) (M -> N) (↑)
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -2330,7 +2330,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (f : M ≃[L] N)
-  结论: Function.Bijective f
+  结论: 函数.双射 f
   证明: EquivLike.bijective f
 
 Depends on / 依赖: EquivLike, EquivLike.bijective, bijective
@@ -2350,7 +2350,7 @@ theorem injective
 中文:
 定理 injective
   条件: (f : M ≃[L] N)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: EquivLike.injective f
 
 Depends on / 依赖: EquivLike, EquivLike.injective, injective
@@ -2370,7 +2370,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (f : M ≃[L] N)
-  结论: Function.Surjective f
+  结论: 函数.满射 f
   证明: EquivLike.surjective f
 
 Depends on / 依赖: EquivLike, EquivLike.surjective, surjective
@@ -2413,7 +2413,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ≃[L] M)
+  签名: 可居 (M ≃[L] M)
   定义体: ⟨refl L M⟩
 
 @[simp]
@@ -2556,7 +2556,7 @@ theorem refl_toEmbedding
 
 中文:
 定理 refl_toEmbedding
-  结论: (refl L M).toEmbedding = Embedding.refl L M
+  结论: (refl L M).toEmbedding = 嵌入.refl L M
   证明: rfl
 
 @[simp]
@@ -2575,7 +2575,7 @@ theorem refl_toHom
 
 中文:
 定理 refl_toHom
-  结论: (refl L M).toHom = Hom.id L M
+  结论: (refl L M).toHom = 态射.id L M
   证明: rfl
 -/
 theorem refl_toHom : (refl L M).toHom = Hom.id L M :=
@@ -2912,8 +2912,8 @@ definition StrongHomClass.toEquiv
     StrongHomClass.map_rel φ⟩
 
 中文:
-定义 StrongHomClass.toEquiv
-  签名: {F M N} [L.Structure M] [L.Structure N] [EquivLike F M N]
+定义 Strong态射类.toEquiv
+  签名: {F M N} [L.结构 M] [L.结构 N] [等价状 F M N]
   定义体: fun φ =>
   ⟨⟨φ, EquivLike.inv φ, EquivLike.left_inv φ, EquivLike.right_inv φ⟩, StrongHomClass.map_fun φ,
     StrongHomClass.map_rel φ⟩
@@ -2938,7 +2938,7 @@ instance sumStructure
 
 中文:
 实例 sumStructure
-  签名: : (L₁.sum L₂).Structure S where
+  签名: : (L₁.求和 L₂).结构 S where
   定义体: Sum.elim funMap funMap
   RelMap := Sum.elim RelMap RelMap
 
@@ -2963,7 +2963,7 @@ theorem funMap_sumInl
 
 中文:
 定理 funMap_sumInl
-  条件: {n : 自然数} (f : L₁.Functions n)
+  条件: {n : 自然数} (f : L₁.函数 n)
   证明: rfl
 
 @[simp]
@@ -2985,7 +2985,7 @@ theorem funMap_sumInr
 
 中文:
 定理 funMap_sumInr
-  条件: {n : 自然数} (f : L₂.Functions n)
+  条件: {n : 自然数} (f : L₂.函数 n)
   证明: rfl
 
 @[simp]
@@ -3007,7 +3007,7 @@ theorem relMap_sumInl
 
 中文:
 定理 relMap_sumInl
-  条件: {n : 自然数} (R : L₁.Relations n)
+  条件: {n : 自然数} (R : L₁.关系 n)
   证明: rfl
 
 @[simp]
@@ -3029,7 +3029,7 @@ theorem relMap_sumInr
 
 中文:
 定理 relMap_sumInr
-  条件: {n : 自然数} (R : L₂.Relations n)
+  条件: {n : 自然数} (R : L₂.关系 n)
   证明: rfl
 
 Depends on / 依赖: lift_mono, principal_mono, principal_mono.mpr
@@ -3054,7 +3054,7 @@ definition emptyStructure
 
 中文:
 定义 emptyStructure
-  签名: : Language.empty.Structure M where
+  签名: : Language.empty.结构 M where
 
 Depends on / 依赖: principal_mono, principal_mono.mpr
 -/
@@ -3071,7 +3071,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Language.empty.Structure M)
+  签名: 唯一 (Language.empty.结构 M)
   定义体: ⟨⟨Language.emptyStructure⟩, fun a => by
     ext _ f <;> exact Empty.elim f⟩
 
@@ -3146,7 +3146,7 @@ definition _root_.Function.emptyHom
   body: f
 
 中文:
-定义 _root_.Function.emptyHom
+定义 _root_.函数.emptyHom
   签名: (f : M -> N)
   定义体: f
 

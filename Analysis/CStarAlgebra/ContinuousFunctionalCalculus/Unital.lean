@@ -160,13 +160,13 @@ class ContinuousFunctionalCalculus
     - exists_cfc_of_predicate : forall a, p a -> exists φ : C(spectrum R a, R) ->⋆ₐ[R] A, Continuous φ ∧ Function.Injective φ ∧ φ ((ContinuousMap.id R).restrict <| spectrum R a) = a ∧ (forall f, spectrum R (φ f) = Set.range f) ∧ forall f, p (φ f)
 
 中文:
-类 ContinuousFunctionalCalculus
+类 余ntinuousFunctionalCalculus
   参数: (R A : 类型) (p : outParam (A -> 命题))
   公理与运算 (4 个):
     - predicate_zero : p 0
-    - [compactSpace_spectrum((a : A)) : CompactSpace (spectrum R a)]
-    - spectrum_nonempty([Nontrivial A] (a : A) (ha : p a)) : (spectrum R a).Nonempty
-    - exists_cfc_of_predicate : 对任意 a, p a -> 存在 φ : C(spectrum R a, R) ->⋆ₐ[R] A, Continuous φ ∧ Function.Injective φ ∧ φ ((ContinuousMap.id R).restrict <| spectrum R a) = a ∧ (对任意 f, spectrum R (φ f) = Set.range f) ∧ 对任意 f, p (φ f)
+    - [compactSpace_spectrum((a : A)) : 紧空间 (spectrum R a)]
+    - spectrum_nonempty([非平凡 A] (a : A) (ha : p a)) : (spectrum R a).非空
+    - exists_cfc_of_predicate : 对任意 a, p a -> 存在 φ : C(spectrum R a, R) ->⋆ₐ[R] A, 连续 φ ∧ 函数.单射 φ ∧ φ ((连续映射.id R).restrict <| spectrum R a) = a ∧ (对任意 f, spectrum R (φ f) = 集合.range f) ∧ 对任意 f, p (φ f)
 -/
 class ContinuousFunctionalCalculus (R A : Type*) (p : outParam (A -> Prop))
     [CommSemiring R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R] [ContinuousStar R]
@@ -193,10 +193,10 @@ class ContinuousMap.UniqueHom
     - eq_of_continuous_of_map_id((s : Set R) [CompactSpace s] (φ ψ : C(s, R) ->⋆ₐ[R] A) (hφ : Continuous φ) (hψ : Continuous ψ) (h : φ (.restrict s <| .id R) = ψ (.restrict s <| .id R))) : φ = ψ
 
 中文:
-类 ContinuousMap.UniqueHom
-  参数: (R A : 类型) [CommSemiring R] [StarRing R]
+类 连续映射.唯一态射
+  参数: (R A : 类型) [交换半环 R] [对合环 R]
   公理与运算 (1 个):
-    - eq_of_continuous_of_map_id((s : Set R) [CompactSpace s] (φ ψ : C(s, R) ->⋆ₐ[R] A) (hφ : Continuous φ) (hψ : Continuous ψ) (h : φ (.restrict s <| .id R) = ψ (.restrict s <| .id R))) : φ = ψ
+    - eq_of_continuous_of_map_id((s : 集合 R) [紧空间 s] (φ ψ : C(s, R) ->⋆ₐ[R] A) (hφ : 连续 φ) (hψ : 连续 ψ) (h : φ (.restrict s <| .id R) = ψ (.restrict s <| .id R))) : φ = ψ
 -/
 class ContinuousMap.UniqueHom (R A : Type*) [CommSemiring R] [StarRing R]
     [MetricSpace R] [IsTopologicalSemiring R] [ContinuousStar R] [Ring A] [StarRing A]
@@ -220,7 +220,7 @@ lemma ContinuousFunctionalCalculus.isCompact_spectrum
   proof: isCompact_iff_compactSpace.mpr inferInstance
 
 中文:
-引理 ContinuousFunctionalCalculus.isCompact_spectrum
+引理 余ntinuousFunctionalCalculus.isCompact_spectrum
   条件: (a : A)
   证明: isCompact_iff_compactSpace.mpr inferInstance
 
@@ -239,8 +239,8 @@ lemma StarAlgHom.ext_continuousMap
   proof: UniqueHom.eq_of_continuous_of_map_id (spectrum R a) φ ψ hφ hψ h
 
 中文:
-引理 StarAlgHom.ext_continuousMap
-  结论: [UniqueHom R A]
+引理 StarAlg态射.ext_continuousMap
+  结论: [唯一态射 R A]
   证明: UniqueHom.eq_of_continuous_of_map_id (spectrum R a) φ ψ hφ hψ h
 
 Depends on / 依赖: UniqueHom, UniqueHom.eq_of_continuous_of_map_id, eq_of_continuous_of_map_id, spectrum
@@ -292,7 +292,7 @@ lemma cfcHom_continuous
 
 中文:
 引理 cfcHom_continuous
-  结论: Continuous (cfcHom ha : C(spectrum R a, R) ->⋆ₐ[R] A)
+  结论: 连续 (cfcHom ha : C(spectrum R a, R) ->⋆ₐ[R] A)
   证明: (ContinuousFunctionalCalculus.exists_cfc_of_predicate a ha).choose_spec.1
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.exists_cfc_of_predicate, choose_spec, exists_cfc_of_predicate
@@ -310,7 +310,7 @@ lemma cfcHom_injective
 
 中文:
 引理 cfcHom_injective
-  结论: Function.Injective (cfcHom ha : C(spectrum R a, R) ->⋆ₐ[R] A)
+  结论: 函数.单射 (cfcHom ha : C(spectrum R a, R) ->⋆ₐ[R] A)
   证明: (ContinuousFunctionalCalculus.exists_cfc_of_predicate a ha).choose_spec.2.1
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.exists_cfc_of_predicate, choose_spec, exists_cfc_of_predicate
@@ -385,7 +385,7 @@ lemma cfcHom_eq_of_continuous_of_map_id
 
 中文:
 引理 cfcHom_eq_of_continuous_of_map_id
-  结论: [UniqueHom R A]
+  结论: [唯一态射 R A]
   证明: (cfcHom ha).ext_continuousMap a φ (cfcHom_continuous ha) hφ₁ by
     rw [cfcHom_id ha]; rw [hφ₂]
 
@@ -412,7 +412,7 @@ theorem cfcHom_comp
 
 中文:
 定理 cfcHom_comp
-  结论: [UniqueHom R A] (f : C(spectrum R a, R))
+  结论: [唯一态射 R A] (f : C(spectrum R a, R))
   证明: by
   let φ : C(spectrum R (cfcHom ha f), R) ->⋆ₐ[R] A :=
 (cfcHom ha).comp ContinuousMap.compStarAlgHom' R R f'
@@ -1278,7 +1278,7 @@ lemma cfc_sum
 
 中文:
 引理 cfc_sum
-  结论: {ι : 类型} (f : ι -> R -> R) (a : A) (s : Finset ι)
+  结论: {ι : 类型} (f : ι -> R -> R) (a : A) (s : 有限集 ι)
   证明: by
   by_cases ha : p a
   · have hsum : s.sum f = fun z => ∑ i in s, f i z := by ext; simp
@@ -1316,7 +1316,7 @@ lemma cfc_sum_univ
 
 中文:
 引理 cfc_sum_univ
-  结论: {ι : 类型} [Fintype ι] (f : ι -> R -> R) (a : A)
+  结论: {ι : 类型} [有限类型 ι] (f : ι -> R -> R) (a : A)
   证明: cfc_sum f a _ fun i _ => hf i
 
 Depends on / 依赖: cfc_cont_tac, cfc_sum
@@ -1342,7 +1342,7 @@ lemma cfc_smul
 
 中文:
 引理 cfc_smul
-  结论: {S : 类型} [SMul S R] [ContinuousConstSMul S R]
+  结论: {S : 类型} [标量乘法 S R] [连续常数标量乘法 S R]
   证明: by
   by_cases ha : p a
   · rw [cfc_apply f a, cfc_apply _ a]
@@ -1458,7 +1458,7 @@ lemma cfc_smul_id
 
 中文:
 引理 cfc_smul_id
-  结论: {S : 类型} [SMul S R] [ContinuousConstSMul S R]
+  结论: {S : 类型} [标量乘法 S R] [连续常数标量乘法 S R]
   证明: by
   rw [cfc_smul ..]; rw [cfc_id' ..]
 
@@ -1527,7 +1527,7 @@ theorem range_cfc_eq_range_cfcHom
 
 中文:
 定理 range_cfc_eq_range_cfcHom
-  条件: [StarModule R A] {a : A} (ha : p a)
+  条件: [对合模 R A] {a : A} (ha : p a)
   证明: by
   ext
   constructor
@@ -1754,7 +1754,7 @@ lemma cfc_comp_smul
 
 中文:
 引理 cfc_comp_smul
-  结论: {S : 类型} [SMul S R] [ContinuousConstSMul S R] [SMulZeroClass S A]
+  结论: {S : 类型} [标量乘法 S R] [连续常数标量乘法 S R] [SMulZero类 S A]
   证明: by
   rw [cfc_comp' ..]; rw [cfc_smul_id ..]
 
@@ -1954,7 +1954,7 @@ include instCFC in
 
 中文:
 引理 CFC.spectrum_algebraMap_eq
-  条件: [Nontrivial A] (r : R)
+  条件: [非平凡 A] (r : R)
   证明: by
   have hp : p 0 := cfc_predicate_zero R
   rw [← cfc_const r 0 hp]; rw [cfc_map_spectrum (fun _ => r) 0 hp]
@@ -1985,7 +1985,7 @@ include instCFC in
 
 中文:
 引理 CFC.spectrum_zero_eq
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   证明: by
   have : (0 : A) = algebraMap R A 0 := Eq.symm (map_zero (algebraMap R A))
   rw [this]; rw [spectrum_algebraMap_eq]
@@ -2014,7 +2014,7 @@ lemma CFC.spectrum_one_eq
 
 中文:
 引理 CFC.spectrum_one_eq
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   证明: by
   have : (1 : A) = algebraMap R A 1 := Eq.symm (map_one (algebraMap R A))
   rw [this]; rw [spectrum_algebraMap_eq]
@@ -2125,7 +2125,7 @@ instance IsStarNormal.cfc_map
     · simp [cfc_apply_of_not_continuousOn a h]
 
 中文:
-实例 IsStarNormal.cfc_map
+实例 是StarNormal.cfc_map
   签名: (f : R -> R) (a : A)
   定义体: by
     rw [Commute]; rw [SemiconjBy]
@@ -2160,7 +2160,7 @@ lemma IsSelfAdjoint.cfc
 
 中文:
 引理 IsSelfAdjoint.cfc
-  结论: [ContinuousFunctionalCalculus R A IsSelfAdjoint]
+  结论: [余ntinuousFunctionalCalculus R A IsSelfAdjoint]
   证明: cfc_predicate _ _
 
 @[simp]
@@ -2204,7 +2204,7 @@ lemma CFC.spectrum_nonempty
 
 中文:
 引理 CFC.spectrum_nonempty
-  条件: [Nontrivial A] (a : A) (ha : p a := by cfc_tac)
+  条件: [非平凡 A] (a : A) (ha : p a := by cfc_tac)
   证明: ContinuousFunctionalCalculus.spectrum_nonempty a ha
 
 Depends on / 依赖: ContinuousFunctionalCalculus, ContinuousFunctionalCalculus.spectrum_nonempty, Nonempty, cfc_tac, spectrum, spectrum_nonempty
@@ -2396,7 +2396,7 @@ lemma cfc_ringInverse_id
 
 中文:
 引理 cfc_ringInverse_id
-  条件: (ha_unit : IsUnit a) (ha : p a := by cfc_tac)
+  条件: (ha_unit : 是单位 a) (ha : p a := by cfc_tac)
   证明: by
   rw [Ring.inverse_of_isUnit ha_unit]
   change cfc (fun x => x⁻¹ : R -> R) (ha_unit.unit : A) = ha_unit.unit⁻¹
@@ -2456,7 +2456,7 @@ lemma Units.continuousOn_inv₀_spectrum
 @[fun_prop]
 
 中文:
-引理 Units.continuousOn_inv₀_spectrum
+引理 单位群.continuousOn_inv₀_spectrum
   条件: (a : Aˣ)
   结论: ContinuousOn (· ⁻¹) (spectrum R (a : A))
   证明: continuousOn_inv₀.mono by
@@ -2481,8 +2481,8 @@ lemma Units.continuousOn_zpow₀_spectrum
     simpa only [Set.subset_compl_singleton_iff] using spectrum.zero_notMem R a.isUnit
 
 中文:
-引理 Units.continuousOn_zpow₀_spectrum
-  条件: [ContinuousMul R] (a : Aˣ) (n : 整数)
+引理 单位群.continuousOn_zpow₀_spectrum
+  条件: [连续乘法 R] (a : Aˣ) (n : 整数)
   证明: (continuousOn_zpow₀ n).mono by
     simpa only [Set.subset_compl_singleton_iff] using spectrum.zero_notMem R a.isUnit
 
@@ -2803,7 +2803,7 @@ lemma cfcHom_nonneg_iff
 
 中文:
 引理 cfcHom_nonneg_iff
-  条件: [NonnegSpectrumClass R A] {a : A} (ha : p a) {f : C(spectrum R a, R)}
+  条件: [NonnegSpectrum类 R A] {a : A} (ha : p a) {f : C(spectrum R a, R)}
   证明: by
   constructor
   · exact fun hf x => (cfcHom_map_spectrum ha (R := R) _ ▸ spectrum_nonneg_of_nonneg hf) ⟨x, rfl⟩
@@ -2831,7 +2831,7 @@ refine ⟨fun hf x => hf.spectrum_pos cfcHom_map_spectrum (R := R) ha _ ▸ Set.
 
 中文:
 引理 cfcHom_isStrictlyPositive_iff
-  结论: [NonnegSpectrumClass R A] {a : A} (ha : p a)
+  结论: [NonnegSpectrum类 R A] {a : A} (ha : p a)
   证明: by
 refine ⟨fun hf x => hf.spectrum_pos cfcHom_map_spectrum (R := R) ha _ ▸ Set.mem_range_self x,
 .mpr fun x => le_of_lt (h x), ?_⟩⟩ fun h => ⟨cfcHom_nonneg_iff _
@@ -2891,7 +2891,7 @@ lemma cfc_nonneg_iff
 
 中文:
 引理 cfc_nonneg_iff
-  结论: [NonnegSpectrumClass R A] (f : R -> R) (a : A)
+  结论: [NonnegSpectrum类 R A] (f : R -> R) (a : A)
   证明: by
   rw [cfc_apply ..]; rw [cfcHom_nonneg_iff]; rw [ContinuousMap.le_def]
   simp
@@ -2915,8 +2915,8 @@ lemma StarOrderedRing.nonneg_iff_spectrum_nonneg
   simpa [cfc_id _ a ha] using this
 
 中文:
-引理 StarOrderedRing.nonneg_iff_spectrum_nonneg
-  结论: [NonnegSpectrumClass R A] (a : A)
+引理 StarOrdered环.nonneg_iff_spectrum_nonneg
+  结论: [NonnegSpectrum类 R A] (a : A)
   证明: by
   have := cfc_nonneg_iff (id : R -> R) a (by fun_prop) ha
   simpa [cfc_id _ a ha] using this
@@ -2940,7 +2940,7 @@ lemma cfc_isStrictlyPositive_iff
 
 中文:
 引理 cfc_isStrictlyPositive_iff
-  结论: [NonnegSpectrumClass R A] (f : R -> R) (a : A)
+  结论: [NonnegSpectrum类 R A] (f : R -> R) (a : A)
   证明: by
   rw [cfc_apply ..]; rw [cfcHom_isStrictlyPositive_iff]
   simp
@@ -2964,8 +2964,8 @@ lemma StarOrderedRing.isStrictlyPositive_iff_spectrum_pos
   simpa [cfc_id _ a ha] using this
 
 中文:
-引理 StarOrderedRing.isStrictlyPositive_iff_spectrum_pos
-  结论: [NonnegSpectrumClass R A] (a : A)
+引理 StarOrdered环.isStrictlyPositive_iff_spectrum_pos
+  结论: [NonnegSpectrum类 R A] (a : A)
   证明: by
   have := cfc_isStrictlyPositive_iff (id : R -> R) a (by fun_prop) ha
   simpa [cfc_id _ a ha] using this
@@ -3550,7 +3550,7 @@ definition cfcHomSuperset
 
 中文:
 定义 cfcHomSuperset
-  签名: {a : A} (ha : p a) {s : Set R} (hs : spectrum R a subseteq s)
+  签名: {a : A} (ha : p a) {s : 集合 R} (hs : spectrum R a subseteq s)
   定义体: .comp ContinuousMap.compStarAlgHom' R R ⟨_, continuous_id.subtype_map hs⟩ cfcHom ha
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compStarAlgHom, cfcHom, compStarAlgHom, continuous_id, continuous_id.subtype_map, subtype_map
@@ -3569,7 +3569,7 @@ lemma cfcHomSuperset_continuous
 
 中文:
 引理 cfcHomSuperset_continuous
-  条件: {a : A} (ha : p a) {s : Set R} (hs : spectrum R a subseteq s)
+  条件: {a : A} (ha : p a) {s : 集合 R} (hs : spectrum R a subseteq s)
   证明: (cfcHom_continuous ha).comp ContinuousMap.continuous_precomp _
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.continuous_precomp, cfcHom_continuous, continuous_precomp
@@ -3588,7 +3588,7 @@ lemma cfcHomSuperset_id
 
 中文:
 引理 cfcHomSuperset_id
-  条件: {a : A} (ha : p a) {s : Set R} (hs : spectrum R a subseteq s)
+  条件: {a : A} (ha : p a) {s : 集合 R} (hs : spectrum R a subseteq s)
   证明: cfcHom_id ha
 
 Depends on / 依赖: cfcHom_id
@@ -3614,7 +3614,7 @@ class ClosedEmbeddingContinuousFunctionalCalculus
 类 ClosedEmbeddingContinuousFunctionalCalculus
   参数: (R A : 类型) (p : outParam (A -> 命题))
   公理与运算 (1 个):
-    - isClosedEmbedding((a : A) (ha : p a)) : Topology.IsClosedEmbedding (cfcHom (R := R) ha)
+    - isClosedEmbedding((a : A) (ha : p a)) : 拓扑.是闭嵌入 (cfcHom (R := R) ha)
 -/
 class ClosedEmbeddingContinuousFunctionalCalculus (R A : Type*) (p : outParam (A -> Prop))
     [CommSemiring R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R] [ContinuousStar R]
@@ -3632,7 +3632,7 @@ lemma cfcHom_isClosedEmbedding
 
 中文:
 引理 cfcHom_isClosedEmbedding
-  结论: {R A : 类型} {p : A -> 命题} [CommSemiring R] [StarRing R]
+  结论: {R A : 类型} {p : A -> 命题} [交换半环 R] [对合环 R]
   证明: ClosedEmbeddingContinuousFunctionalCalculus.isClosedEmbedding a ha
 
 Depends on / 依赖: ClosedEmbeddingContinuousFunctionalCalculus, ClosedEmbeddingContinuousFunctionalCalculus.isClosedEmbedding, isClosedEmbedding

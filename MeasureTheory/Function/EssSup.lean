@@ -51,7 +51,7 @@ definition essSup
 
 中文:
 定义 essSup
-  签名: {_ : MeasurableSpace α} (f : α -> β) (μ : Measure α)
+  签名: {_ : 可测空间 α} (f : α -> β) (μ : 测度 α)
   定义体: (ae μ).limsup f
 
 Depends on / 依赖: limsup
@@ -69,7 +69,7 @@ definition essInf
 
 中文:
 定义 essInf
-  签名: {_ : MeasurableSpace α} (f : α -> β) (μ : Measure α)
+  签名: {_ : 可测空间 α} (f : α -> β) (μ : 测度 α)
   定义体: (ae μ).liminf f
 
 Depends on / 依赖: liminf
@@ -350,7 +350,7 @@ theorem OrderIso.essSup_apply
 
 中文:
 定理 OrderIso.essSup_apply
-  结论: {_ : MeasurableSpace α} {γ} [ConditionallyCompleteLattice γ]
+  结论: {_ : 可测空间 α} {γ} [条件完备格 γ]
   证明: OrderIso.limsup_apply g hf hf_co hgf hgf_co
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, OrderIso, OrderIso.limsup_apply, essSup, hf_co, hgf_co, isBoundedDefault, limsup_apply
@@ -375,7 +375,7 @@ theorem OrderIso.essInf_apply
 
 中文:
 定理 OrderIso.essInf_apply
-  结论: {_ : MeasurableSpace α} {γ} [ConditionallyCompleteLattice γ]
+  结论: {_ : 可测空间 α} {γ} [条件完备格 γ]
   证明: OrderIso.liminf_apply g hf hf_co hgf hgf_co
 
 Depends on / 依赖: IsBoundedUnder, IsCoboundedUnder, OrderIso, OrderIso.liminf_apply, essInf, hf_co, hgf_co, isBoundedDefault, liminf_apply
@@ -470,7 +470,7 @@ theorem essSup_comp_le_essSup_map_measure
 
 中文:
 定理 essSup_comp_le_essSup_map_measure
-  结论: (hf : AEMeasurable f μ)
+  结论: (hf : 几乎处处可测 f μ)
   证明: by
   refine limsSup_le_limsSup_of_le ?_ hgf hg
   rw [← map_map]
@@ -499,8 +499,8 @@ theorem MeasurableEmbedding.essSup_map_measure
   exact hf.ae_map_iff.mpr h_le
 
 中文:
-定理 MeasurableEmbedding.essSup_map_measure
-  结论: (hf : MeasurableEmbedding f)
+定理 可测嵌入.essSup_map_measure
+  结论: (hf : 可测嵌入 f)
   证明: by
   refine le_antisymm ?_ (essSup_comp_le_essSup_map_measure hf.measurable.aemeasurable hgf_co hg)
   refine limsSup_le_limsSup hg_co hgf (fun c h_le => ?_)
@@ -538,7 +538,7 @@ theorem essSup_map_measure_of_measurable
 
 中文:
 定理 essSup_map_measure_of_measurable
-  结论: (hg : Measurable g) (hf : AEMeasurable f μ)
+  结论: (hg : 可测 g) (hf : 几乎处处可测 f μ)
   证明: by
   refine le_antisymm ?_ (essSup_comp_le_essSup_map_measure hf hgf_co hg_bdd)
   refine limsSup_le_limsSup hg_co hgf (fun c h_le => ?_)
@@ -575,7 +575,7 @@ theorem essSup_map_measure
 
 中文:
 定理 essSup_map_measure
-  结论: (hg : AEMeasurable g (Measure.map f μ)) (hf : AEMeasurable f μ)
+  结论: (hg : 几乎处处可测 g (测度.map f μ)) (hf : 几乎处处可测 f μ)
   证明: by
   have hg_mk_co : IsCoboundedUnder (· <= ·) (ae (Measure.map f μ)) (hg.mk g) := by
     simpa [IsCoboundedUnder, ← map_congr hg.ae_eq_mk]
@@ -617,7 +617,7 @@ lemma essSup_eq_ciSup
 
 中文:
 引理 essSup_eq_ciSup
-  条件: (hμ : 对任意 a, μ {a} != 0) (hf : BddAbove (Set.range f))
+  条件: (hμ : 对任意 a, μ {a} != 0) (hf : BddAbove (集合.range f))
   证明: by rw [essSup, ae_eq_top.2 hμ, limsup_top_eq_ciSup hf]
 
 Depends on / 依赖: ae_eq_top, essSup, limsup_top_eq_ciSup
@@ -635,7 +635,7 @@ lemma essInf_eq_ciInf
 
 中文:
 引理 essInf_eq_ciInf
-  条件: (hμ : 对任意 a, μ {a} != 0) (hf : BddBelow (Set.range f))
+  条件: (hμ : 对任意 a, μ {a} != 0) (hf : BddBelow (集合.range f))
   证明: by rw [essInf, ae_eq_top.2 hμ, liminf_top_eq_ciInf hf]
 
 Depends on / 依赖: ae_eq_top, essInf, liminf_top_eq_ciInf
@@ -655,7 +655,7 @@ lemma essSup_count_eq_ciSup
 
 中文:
 引理 essSup_count_eq_ciSup
-  条件: (hf : BddAbove (Set.range f))
+  条件: (hf : BddAbove (集合.range f))
   证明: essSup_eq_ciSup (by simp) hf
 -/
 @[simp] lemma essSup_count_eq_ciSup (hf : BddAbove (Set.range f)) :
@@ -671,7 +671,7 @@ lemma essInf_count_eq_ciInf
 
 中文:
 引理 essInf_count_eq_ciInf
-  条件: (hf : BddBelow (Set.range f))
+  条件: (hf : BddBelow (集合.range f))
   证明: essInf_eq_ciInf (by simp) hf
 -/
 @[simp] lemma essInf_count_eq_ciInf (hf : BddBelow (Set.range f)) :
@@ -687,7 +687,7 @@ lemma essSup_uniformOn_eq_ciSup
 
 中文:
 引理 essSup_uniformOn_eq_ciSup
-  条件: [Finite α] (hf : BddAbove (Set.range f))
+  条件: [有限 α] (hf : BddAbove (集合.range f))
   证明: essSup_eq_ciSup (by simpa [uniformOn, cond_apply]) hf
 -/
 @[simp] lemma essSup_uniformOn_eq_ciSup [Finite α] (hf : BddAbove (Set.range f)) :
@@ -704,7 +704,7 @@ lemma essInf_cond_count_eq_ciInf
 
 中文:
 引理 essInf_cond_count_eq_ciInf
-  条件: [Finite α] (hf : BddBelow (Set.range f))
+  条件: [有限 α] (hf : BddBelow (集合.range f))
   证明: essInf_eq_ciInf (by simpa [uniformOn, cond_apply]) hf
 -/
 @[simp] lemma essInf_cond_count_eq_ciInf [Finite α] (hf : BddBelow (Set.range f)) :
@@ -729,7 +729,7 @@ theorem essSup_eq_sInf
 
 中文:
 定理 essSup_eq_sInf
-  条件: {m : MeasurableSpace α} (μ : Measure α) (f : α -> β)
+  条件: {m : 可测空间 α} (μ : 测度 α) (f : α -> β)
   证明: by
   dsimp [essSup, limsup, limsSup]
   simp only [eventually_map, ae_iff, not_le]
@@ -753,7 +753,7 @@ theorem essInf_eq_sSup
 
 中文:
 定理 essInf_eq_sSup
-  条件: {m : MeasurableSpace α} (μ : Measure α) (f : α -> β)
+  条件: {m : 可测空间 α} (μ : 测度 α) (f : α -> β)
   证明: by
   dsimp [essInf, liminf, limsInf]
   simp only [eventually_map, ae_iff, not_le]
@@ -909,8 +909,8 @@ theorem essSup_measure_zero
 
 中文:
 定理 essSup_measure_zero
-  条件: {m : MeasurableSpace α} {f : α -> β}
-  结论: essSup f (0 : Measure α) = ⊥
+  条件: {m : 可测空间 α} {f : α -> β}
+  结论: essSup f (0 : 测度 α) = ⊥
   证明: le_bot_iff.mp (sInf_le (by simp))
 
 @[simp]
@@ -932,8 +932,8 @@ theorem essInf_measure_zero
 
 中文:
 定理 essInf_measure_zero
-  条件: {_ : MeasurableSpace α} {f : α -> β}
-  结论: essInf f (0 : Measure α) = ⊤
+  条件: {_ : 可测空间 α} {f : α -> β}
+  结论: essInf f (0 : 测度 α) = ⊤
   证明: @essSup_measure_zero α βᵒᵈ _ _ _
 
 Depends on / 依赖: essSup_measure_zero
@@ -1052,7 +1052,7 @@ lemma essSup_count
 
 中文:
 引理 essSup_count
-  条件: [MeasurableSingletonClass α] (f : α -> β)
+  条件: [MeasurableSingleton类 α] (f : α -> β)
   结论: essSup f .count = ⨆ i, f i
   证明: essSup_eq_iSup (by simp) _
 
@@ -1072,7 +1072,7 @@ lemma essInf_count
 
 中文:
 引理 essInf_count
-  条件: [MeasurableSingletonClass α] (f : α -> β)
+  条件: [MeasurableSingleton类 α] (f : α -> β)
   结论: essInf f .count = ⨅ i, f i
   证明: essInf_eq_iInf (by simp) _
 -/
@@ -1138,7 +1138,7 @@ lemma essSup_piecewise
 
 中文:
 引理 essSup_piecewise
-  条件: {s : Set α} [DecidablePred (· in s)] {g} (hs : MeasurableSet s)
+  条件: {s : 集合 α} [DecidablePred (· in s)] {g} (hs : 可测集 s)
   证明: by
   simp only [essSup, limsup_piecewise, blimsup_eq_limsup, ae_restrict_eq, hs, hs.compl]; rfl
 
@@ -1161,7 +1161,7 @@ theorem essSup_indicator_eq_essSup_restrict
 
 中文:
 定理 essSup_indicator_eq_essSup_restrict
-  条件: {s : Set α} {f : α -> 实数>=0∞} (hs : MeasurableSet s)
+  条件: {s : 集合 α} {f : α -> 实数>=0∞} (hs : 可测集 s)
   证明: by
   classical
   simp only [← piecewise_eq_indicator, essSup_piecewise hs, max_eq_left_iff]
@@ -1290,7 +1290,7 @@ theorem essSup_liminf_le
 
 中文:
 定理 essSup_liminf_le
-  条件: {ι} [Countable ι] [Preorder ι] (f : ι -> α -> 实数>=0∞)
+  条件: {ι} [可数 ι] [预序 ι] (f : ι -> α -> 实数>=0∞)
   证明: by
   simp_rw [essSup]
   exact ENNReal.limsup_liminf_le_liminf_limsup fun a b => f b a
@@ -1337,7 +1337,7 @@ lemma ofReal_essSup
   proof: ENNReal.ofReal_limsup
 
 中文:
-引理 ofReal_essSup
+引理 of实数_essSup
   结论: {f : α -> 实数} (h₁ : IsCoboundedUnder (· <= ·) (ae μ) f)
   证明: ENNReal.ofReal_limsup
 
@@ -1359,7 +1359,7 @@ lemma toReal_essSup
   · exact ENNReal.toReal_limsup h₁
 
 中文:
-引理 toReal_essSup
+引理 to实数_essSup
   结论: {f : α -> 实数>=0∞} (h₁ : 对任意ᵐ a ∂μ, f a != ⊤)
   证明: by
   obtain rfl | hμ := eq_zero_or_neZero μ
@@ -1392,7 +1392,7 @@ lemma essSup_restrict_eq_of_support_subset
 
 中文:
 引理 essSup_restrict_eq_of_support_subset
-  条件: {s : Set α} {f : α -> 实数>=0∞} (hsf : f.support subseteq s)
+  条件: {s : 集合 α} {f : α -> 实数>=0∞} (hsf : f.support subseteq s)
   证明: by
   apply le_antisymm (essSup_mono_measure' Measure.restrict_le_self)
   apply le_of_forall_lt (fun c hc => ?_)

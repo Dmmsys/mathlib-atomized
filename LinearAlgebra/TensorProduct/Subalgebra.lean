@@ -68,7 +68,7 @@ definition lTensorBot
 
 中文:
 定义 lTensorBot
-  签名: : (⊥ : Subalgebra R S) otimes[R] A ≃ₐ[R] A
+  签名: : (⊥ : 子代数 R S) otimes[R] A ≃ₐ[R] A
   定义体: by
   refine Algebra.TensorProduct.algEquivOfLinearEquivTensorProduct (toSubmodule A).lTensorOne ?_ ?_
   · rintro x y a b
@@ -176,7 +176,7 @@ definition rTensorBot
 
 中文:
 定义 rTensorBot
-  签名: : A otimes[R] (⊥ : Subalgebra R S) ≃ₐ[R] A
+  签名: : A otimes[R] (⊥ : 子代数 R S) ≃ₐ[R] A
   定义体: by
   refine Algebra.TensorProduct.algEquivOfLinearEquivTensorProduct (toSubmodule A).rTensorOne ?_ ?_
   · rintro a b x y
@@ -530,7 +530,7 @@ definition Subalgebra.mulMap
   body: Algebra.TensorProduct.productMap A.val B.val
 
 中文:
-定义 Subalgebra.mulMap
+定义 子代数.mulMap
   签名: : A otimes[R] B ->ₐ[R] S
   定义体: Algebra.TensorProduct.productMap A.val B.val
 
@@ -547,7 +547,7 @@ theorem Algebra.TensorProduct.algEquivIncludeRange_symm_toAlgHom
   proof: rfl
 
 中文:
-定理 Algebra.TensorProduct.algEquivIncludeRange_symm_toAlgHom
+定理 代数.张量积.algEquivIncludeRange_symm_toAlgHom
   证明: rfl
 -/
 theorem Algebra.TensorProduct.algEquivIncludeRange_symm_toAlgHom :
@@ -622,7 +622,7 @@ theorem mulMap_comm
 
 中文:
 定理 mulMap_comm
-  结论: mulMap B A = (mulMap A B).comp (Algebra.TensorProduct.comm R B A)
+  结论: mulMap B A = (mulMap A B).comp (代数.张量积.comm R B A)
   证明: by
   ext <;> simp
 -/
@@ -734,7 +734,7 @@ theorem mulMap'_surjective
 
 中文:
 定理 mulMap'_surjective
-  结论: Function.Surjective (mulMap' A B)
+  结论: 函数.满射 (mulMap' A B)
   证明: by
   simp_rw [mulMap', AlgHom.coe_comp, AlgEquiv.coe_toAlgHom,
     EquivLike.comp_surjective, AlgHom.rangeRestrict_surjective]

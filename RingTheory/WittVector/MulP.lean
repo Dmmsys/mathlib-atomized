@@ -48,7 +48,7 @@ definition wittMulN
 
 中文:
 定义 wittMulN
-  签名: : 自然数 -> 自然数 -> MvPolynomial 自然数 整数
+  签名: : 自然数 -> 自然数 -> 多元多项式 自然数 整数
 -/
 noncomputable def wittMulN : Nat -> Nat -> MvPolynomial Nat Int
   | 0 => 0
@@ -109,7 +109,7 @@ theorem mulN_isPoly
 中文:
 定理 mulN_isPoly
   条件: (n : 自然数)
-  结论: IsPoly p fun _ _Rcr x => x * n
+  结论: 是Poly p fun _ _Rcr x => x * n
   证明: ⟨⟨wittMulN p n, fun R _Rcr x => by funext k; exact mulN_coeff n x k⟩⟩
 
 @[simp]

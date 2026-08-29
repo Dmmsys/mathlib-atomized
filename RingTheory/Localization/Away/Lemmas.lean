@@ -31,7 +31,7 @@ definition mulNumerator
 
 中文:
 定义 mulNumerator
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: x.1 * (IsLocalization.Away.sec x.1.1 x.2.1).1
 
 Depends on / 依赖: IsLocalization, IsLocalization.Away.sec
@@ -58,7 +58,7 @@ inferInstanceAs IsLocalization.Away (⟨a, ha⟩ : s).val (Rₜ ⟨a, ha⟩)
 
 中文:
 引理 span_range_mulNumerator_eq_top
-  结论: {s : Set R}
+  结论: {s : 集合 R}
   证明: by
   rw [← Ideal.radical_eq_top]; rw [eq_top_iff]; rw [← hsone]; rw [Ideal.span_le]
   intro a ha
@@ -142,7 +142,7 @@ lemma Ideal.le_of_map_algebraMap_le
   | zero => simpa using h
 
 中文:
-引理 Ideal.le_of_map_algebraMap_le
+引理 理想.le_of_map_algebraMap_le
   结论: (hle : I.map (algebraMap R S) <= J.map (algebraMap R S))
   证明: by
   intro y hy
@@ -177,7 +177,7 @@ lemma Ideal.eq_of_map_algebraMap_le
   proof: le_antisymm (le_of_map_algebraMap_le S x heq.le hxJ) (le_of_map_algebraMap_le S x heq.ge hxI)
 
 中文:
-引理 Ideal.eq_of_map_algebraMap_le
+引理 理想.eq_of_map_algebraMap_le
   结论: (heq : I.map (algebraMap R S) = J.map (algebraMap R S))
   证明: le_antisymm (le_of_map_algebraMap_le S x heq.le hxJ) (le_of_map_algebraMap_le S x heq.ge hxI)
 

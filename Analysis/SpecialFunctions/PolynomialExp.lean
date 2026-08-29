@@ -43,7 +43,7 @@ theorem tendsto_div_exp_atTop
 中文:
 定理 tendsto_div_exp_atTop
   条件: (p : 实数[X])
-  结论: Tendsto (fun x => p.eval x / exp x) atTop (𝓝 0)
+  结论: 收敛 (fun x => p.eval x / exp x) atTop (𝓝 0)
   证明: by
   induction p using Polynomial.induction_on' with
   | monomial n c => simpa [exp_neg, div_eq_mul_inv, mul_assoc]

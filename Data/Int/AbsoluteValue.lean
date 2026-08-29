@@ -36,8 +36,8 @@ theorem AbsoluteValue.map_units_int
 @[simp]
 
 中文:
-定理 AbsoluteValue.map_units_int
-  条件: (abv : AbsoluteValue 整数 S) (x : 整数ˣ)
+定理 绝对值.map_units_int
+  条件: (abv : 绝对值 整数 S) (x : 整数ˣ)
   结论: abv x = 1
   证明: by
   rcases Int.units_eq_one_or x with (rfl | rfl) <;> simp
@@ -61,8 +61,8 @@ theorem AbsoluteValue.map_units_intCast
 @[simp]
 
 中文:
-定理 AbsoluteValue.map_units_intCast
-  条件: [Nontrivial R] (abv : AbsoluteValue R S) (x : 整数ˣ)
+定理 绝对值.map_units_intCast
+  条件: [非平凡 R] (abv : 绝对值 R S) (x : 整数ˣ)
   证明: by rcases Int.units_eq_one_or x with (rfl | rfl) <;> simp
 
 @[simp]
@@ -82,8 +82,8 @@ theorem AbsoluteValue.map_units_int_smul
   proof: by rcases Int.units_eq_one_or x with (rfl | rfl) <;> simp
 
 中文:
-定理 AbsoluteValue.map_units_int_smul
-  条件: (abv : AbsoluteValue R S) (x : 整数ˣ) (y : R)
+定理 绝对值.map_units_int_smul
+  条件: (abv : 绝对值 R S) (x : 整数ˣ) (y : R)
   证明: by rcases Int.units_eq_one_or x with (rfl | rfl) <;> simp
 
 Depends on / 依赖: Int.units_eq_one_or, units_eq_one_or

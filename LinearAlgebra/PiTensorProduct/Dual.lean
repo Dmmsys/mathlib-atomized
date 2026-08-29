@@ -50,7 +50,7 @@ definition dualDistrib
 
 中文:
 定义 dualDistrib
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: haveI := Fintype.ofFinite ι
   (LinearMap.compRight _ (constantBaseRingEquiv ι R).toLinearMap) ∘ₗ piTensorHomMap
 
@@ -75,7 +75,7 @@ theorem dualDistrib_apply
 
 中文:
 定理 dualDistrib_apply
-  条件: [Fintype ι] (f : Π i, Dual R (M i)) (m : Π i, M i)
+  条件: [有限类型 ι] (f : Π i, 对偶 R (M i)) (m : Π i, M i)
   证明: by
   rw [dualDistrib]; rw [Subsingleton.elim (Fintype.ofFinite ι) ‹_›]
   simp
@@ -108,7 +108,7 @@ definition dualDistribInvOfBasis
 
 中文:
 定义 dualDistribInvOfBasis
-  签名: [Finite ι] [对任意 i, Finite (κ i)]
+  签名: [有限 ι] [对任意 i, 有限 (κ i)]
   定义体: haveI := Fintype.ofFinite ι
   haveI := fun i => Fintype.ofFinite (κ i)
   ∑ p : (Π i, κ i), (ringLmapEquivSelf R Nat _).symm (⨂ₜ[R] i, (b i).dualBasis (p i)) ∘ₗ
@@ -140,7 +140,7 @@ theorem dualDistribInvOfBasis_apply
 
 中文:
 定理 dualDistribInvOfBasis_apply
-  结论: [Fintype ι] [对任意 i, Fintype (κ i)] (b : Π i, Basis (κ i) R (M i))
+  结论: [有限类型 ι] [对任意 i, 有限类型 (κ i)] (b : Π i, 基 (κ i) R (M i))
   证明: by
   simp only [dualDistribInvOfBasis, Basis.coe_dualBasis, ringLmapEquivSelf_symm_apply, coe_sum,
     coe_comp, coe_smulRight, End.one_apply, Finset.sum_apply, Function.comp_apply,
@@ -173,7 +173,7 @@ theorem dualDistrib_dualDistribInvOfBasis_left_inverse
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_left_inverse
-  结论: [Finite ι] [对任意 i, Finite (κ i)]
+  结论: [有限 ι] [对任意 i, 有限 (κ i)]
   证明: by
   have := Fintype.ofFinite ι
   have := fun i => Fintype.ofFinite (κ i)
@@ -210,7 +210,7 @@ theorem dualDistrib_dualDistribInvOfBasis_right_inverse
 
 中文:
 定理 dualDistrib_dualDistribInvOfBasis_right_inverse
-  结论: [Finite ι] [对任意 i, Finite (κ i)]
+  结论: [有限 ι] [对任意 i, 有限 (κ i)]
   证明: by
   have := Fintype.ofFinite ι
   have := fun i => Fintype.ofFinite (κ i)
@@ -248,7 +248,7 @@ definition dualDistribEquivOfBasis
 
 中文:
 定义 dualDistribEquivOfBasis
-  签名: [Finite ι] [对任意 i, Finite (κ i)]
+  签名: [有限 ι] [对任意 i, 有限 (κ i)]
   定义体: LinearEquiv.ofLinearMap dualDistrib (dualDistribInvOfBasis b)
     (dualDistrib_dualDistribInvOfBasis_left_inverse _)
     (dualDistrib_dualDistribInvOfBasis_right_inverse _)
@@ -278,7 +278,7 @@ definition dualDistribEquiv
 
 中文:
 定义 dualDistribEquiv
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: dualDistribEquivOfBasis (fun i => Module.Free.chooseBasis R (M i))
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, dualDistribEquivOfBasis

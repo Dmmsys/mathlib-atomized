@@ -64,7 +64,7 @@ theorem charmatrix_apply_natDegree
 
 中文:
 定理 charmatrix_apply_natDegree
-  条件: [Nontrivial R] (i j : n)
+  条件: [非平凡 R] (i j : n)
   证明: by
   by_cases h : i = j <;> simp [h]
 -/
@@ -150,7 +150,7 @@ theorem charpoly_coeff_eq_prod_coeff_of_le
 
 中文:
 定理 charpoly_coeff_eq_prod_coeff_of_le
-  条件: {k : 自然数} (h : Fintype.card n - 1 <= k)
+  条件: {k : 自然数} (h : 有限类型.card n - 1 <= k)
   证明: by
   apply eq_of_sub_eq_zero; rw [← coeff_sub]
   apply Polynomial.coeff_eq_zero_of_degree_lt
@@ -188,7 +188,7 @@ theorem charpoly_degree_eq_dim
 
 中文:
 定理 charpoly_degree_eq_dim
-  条件: [Nontrivial R] (M : Matrix n n R)
+  条件: [非平凡 R] (M : 矩阵 n n R)
   证明: by
   by_cases h : Fintype.card n = 0
   · rw [h]
@@ -235,7 +235,7 @@ theorem charpoly_natDegree_eq_dim
 
 中文:
 定理 charpoly_natDegree_eq_dim
-  条件: [Nontrivial R] (M : Matrix n n R)
+  条件: [非平凡 R] (M : 矩阵 n n R)
   证明: natDegree_eq_of_degree_eq_some (charpoly_degree_eq_dim M)
 -/
 @[simp] theorem charpoly_natDegree_eq_dim [Nontrivial R] (M : Matrix n n R) :
@@ -261,7 +261,7 @@ theorem charpoly_monic
 
 中文:
 定理 charpoly_monic
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: M.charpoly.Monic
   证明: by
   nontriviality R
@@ -305,7 +305,7 @@ theorem trace_eq_neg_charpoly_coeff
 
 中文:
 定理 trace_eq_neg_charpoly_coeff
-  条件: [Nonempty n] (M : Matrix n n R)
+  条件: [非空 n] (M : 矩阵 n n R)
   证明: by
   rw [charpoly_coeff_eq_prod_coeff_of_le _ le_rfl]; rw [Fintype.card]; rw [prod_X_sub_C_coeff_card_pred univ (fun i : n => M i i) Fintype.card_pos]; rw [neg_neg]; rw [trace]
   simp_rw [diag_apply]
@@ -332,7 +332,7 @@ theorem trace_eq_neg_charpoly_nextCoeff
 
 中文:
 定理 trace_eq_neg_charpoly_nextCoeff
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: M.trace = -M.charpoly.nextCoeff
   证明: by
   cases isEmpty_or_nonempty n
@@ -360,7 +360,7 @@ theorem det_eq_sign_charpoly_coeff
 
 中文:
 定理 det_eq_sign_charpoly_coeff
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   rw [coeff_zero_eq_eval_zero]; rw [charpoly]; rw [eval_det]; rw [matPolyEquiv_charmatrix]; rw [← det_smul]
   simp
@@ -389,7 +389,7 @@ lemma derivative_det_one_add_X_smul_aux
 
 中文:
 引理 derivative_det_one_add_X_smul_aux
-  条件: {n} (M : Matrix (Fin n) (Fin n) R)
+  条件: {n} (M : 矩阵 (有限集 n) (有限集 n) R)
   证明: by
   induction n with
   | zero => simp
@@ -444,7 +444,7 @@ lemma derivative_det_one_add_X_smul
 
 中文:
 引理 derivative_det_one_add_X_smul
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   let e := Matrix.reindexLinearEquiv R R (Fintype.equivFin n) (Fintype.equivFin n)
   rw [← Matrix.det_reindexLinearEquiv_self R[X] (Fintype.equivFin n)]
@@ -478,7 +478,7 @@ lemma coeff_det_one_add_X_smul_one
 
 中文:
 引理 coeff_det_one_add_X_smul_one
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   simp only [← derivative_det_one_add_X_smul, ← coeff_zero_eq_eval_zero,
     coeff_derivative, zero_add, Nat.cast_zero, mul_one]
@@ -503,7 +503,7 @@ lemma det_one_add_X_smul
 
 中文:
 引理 det_one_add_X_smul
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   rw [Algebra.smul_def (trace M)]; rw [← C_eq_algebraMap]; rw [pow_two]; rw [← mul_assoc]; rw [add_assoc]; rw [← add_mul]; rw [← coeff_det_one_add_X_smul_one]; rw [← coeff_divX]; rw [add_comm (C _)]; rw [divX_mul_X_add]; rw [add_comm (1 : R[X]), ← C.map_one]
   convert! (divX_mul_X_add _).symm
@@ -529,7 +529,7 @@ lemma det_one_add_smul
 
 中文:
 引理 det_one_add_smul
-  条件: (r : R) (M : Matrix n n R)
+  条件: (r : R) (M : 矩阵 n n R)
   证明: by
   simpa [eval_det, ← smul_eq_mul_diagonal] using congr_arg (eval r) (Matrix.det_one_add_X_smul M)
 
@@ -558,7 +558,7 @@ lemma charpoly_of_card_eq_two
 
 中文:
 引理 charpoly_of_card_eq_two
-  条件: [Nontrivial R] (hn : Fintype.card n = 2)
+  条件: [非平凡 R] (hn : 有限类型.card n = 2)
   证明: by
   have : Nonempty n := by rw [← Fintype.card_pos_iff]; lia
   ext i
@@ -597,7 +597,7 @@ lemma charpoly_fin_two
 
 中文:
 引理 charpoly_fin_two
-  条件: [Nontrivial R] (M : Matrix (Fin 2) (Fin 2) R)
+  条件: [非平凡 R] (M : 矩阵 (有限集 2) (有限集 2) R)
   证明: M.charpoly_of_card_eq_two Fintype.card_fin _
 
 Depends on / 依赖: Fintype, Fintype.card_fin, M.charpoly_of_card_eq_two, card_fin, charpoly_of_card_eq_two
@@ -623,7 +623,7 @@ theorem matPolyEquiv_eq_X_pow_sub_C
 
 中文:
 定理 matPolyEquiv_eq_X_pow_sub_C
-  条件: {K : 类型} (k : 自然数) [CommRing K] (M : Matrix n n K)
+  条件: {K : 类型} (k : 自然数) [交换环 K] (M : 矩阵 n n K)
   证明: by
   ext m i j
   rw [coeff_sub]; rw [coeff_C]; rw [matPolyEquiv_coeff_apply]; rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [AlgHom.coe_toRingHom]; rw [coeff_X_pow]
@@ -656,7 +656,7 @@ theorem aeval_eq_aeval_mod_charpoly
 
 中文:
 定理 aeval_eq_aeval_mod_charpoly
-  条件: (M : Matrix n n R) (p : R[X])
+  条件: (M : 矩阵 n n R) (p : R[X])
   证明: (aeval_modByMonic_eq_self_of_root M.aeval_self_charpoly).symm
 
 Depends on / 依赖: M.aeval_self_charpoly, aeval_modByMonic_eq_self_of_root, aeval_self_charpoly
@@ -675,7 +675,7 @@ theorem pow_eq_aeval_mod_charpoly
 
 中文:
 定理 pow_eq_aeval_mod_charpoly
-  条件: (M : Matrix n n R) (k : 自然数)
+  条件: (M : 矩阵 n n R) (k : 自然数)
   证明: by rw [← aeval_eq_aeval_mod_charpoly, map_pow, aeval_X]
 
 Depends on / 依赖: aeval_X, aeval_eq_aeval_mod_charpoly, map_pow
@@ -705,7 +705,7 @@ theorem coeff_charpoly_mem_ideal_pow
 
 中文:
 定理 coeff_charpoly_mem_ideal_pow
-  条件: {I : Ideal R} (h : 对任意 i j, M i j in I) (k : 自然数)
+  条件: {I : 理想 R} (h : 对任意 i j, M i j in I) (k : 自然数)
   证明: by
   delta charpoly
   rw [Matrix.det_apply]; rw [finsetSum_coeff]
@@ -752,7 +752,7 @@ definition charpolyRev
 
 中文:
 定义 charpolyRev
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: det (1 - (X : R[X]) • M.map C)
 
 Depends on / 依赖: M.map
@@ -776,7 +776,7 @@ lemma reverse_charpoly
 
 中文:
 引理 reverse_charpoly
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   nontriviality R
   let t : R[T;T⁻¹] := T 1
@@ -824,7 +824,7 @@ theorem charpoly_inv
 
 中文:
 定理 charpoly_inv
-  条件: (A : Matrix n n R) (h : IsUnit A)
+  条件: (A : 矩阵 n n R) (h : 是单位 A)
   证明: by
   have : Invertible A := h.invertible
   calc
@@ -889,7 +889,7 @@ lemma coeff_charpolyRev_eq_neg_trace
 
 中文:
 引理 coeff_charpolyRev_eq_neg_trace
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   证明: by
   nontriviality R
   cases isEmpty_or_nonempty n
@@ -919,7 +919,7 @@ lemma isUnit_charpolyRev_of_isNilpotent
 
 中文:
 引理 isUnit_charpolyRev_of_isNilpotent
-  条件: (hM : IsNilpotent M)
+  条件: (hM : 是幂零 M)
   证明: by
   obtain ⟨k, hk⟩ := hM
   replace hk : 1 - (X : R[X]) • M.map C ∣ 1 := by
@@ -955,7 +955,7 @@ lemma isNilpotent_trace_of_isNilpotent
 
 中文:
 引理 isNilpotent_trace_of_isNilpotent
-  条件: (hM : IsNilpotent M)
+  条件: (hM : 是幂零 M)
   证明: by
   cases isEmpty_or_nonempty n
   · simp
@@ -991,7 +991,7 @@ lemma isNilpotent_charpoly_sub_pow_of_isNilpotent
 
 中文:
 引理 isNilpotent_charpoly_sub_pow_of_isNilpotent
-  条件: (hM : IsNilpotent M)
+  条件: (hM : 是幂零 M)
   证明: by
   nontriviality R
   let p : R[X] := M.charpolyRev

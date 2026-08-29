@@ -142,7 +142,7 @@ definition ContDiffWithinAt
 
 中文:
 定义 ContDiffWithinAt
-  签名: (n : 自然数∞ω) (f : E -> F) (s : Set E) (x : E)
+  签名: (n : 自然数∞ω) (f : E -> F) (s : 集合 E) (x : E)
   定义体: match n with
   | ω => exists u in 𝓝[insert x s] x, exists p : E -> FormalMultilinearSeries 𝕜 E F,
       HasFTaylorSeriesUpToOn ω f p u ∧ forall i, AnalyticOn 𝕜 (fun x => p x i) u
@@ -170,7 +170,7 @@ lemma HasFTaylorSeriesUpToOn.analyticOn
   exact this.congr (fun y hy => (hf.zero_eq _ hy).symm)
 
 中文:
-引理 HasFTaylorSeriesUpToOn.analyticOn
+引理 有FTaylorSeriesUpToOn.analyticOn
   证明: by
   have : AnalyticOn 𝕜 (fun x => (continuousMultilinearCurryFin0 𝕜 E F) (p x 0)) s :=
     (LinearIsometryEquiv.analyticOnNhd _ _).comp_analyticOn
@@ -251,7 +251,7 @@ theorem contDiffWithinAt_omega_iff_analyticWithinAt
 
 中文:
 定理 contDiffWithinAt_omega_iff_analyticWithinAt
-  条件: [CompleteSpace F]
+  条件: [完备空间 F]
   证明: by
   refine ⟨fun h => h.analyticWithinAt, fun h => ?_⟩
   obtain ⟨u, hu, p, hp, h'p⟩ := h.exists_hasFTaylorSeriesUpToOn ω
@@ -380,7 +380,7 @@ theorem AnalyticWithinAt.contDiffWithinAt
 
 中文:
 定理 AnalyticWithinAt.contDiffWithinAt
-  条件: [CompleteSpace F] (h : AnalyticWithinAt 𝕜 f s x)
+  条件: [完备空间 F] (h : AnalyticWithinAt 𝕜 f s x)
   证明: (contDiffWithinAt_omega_iff_analyticWithinAt.2 h).of_le le_top
 
 Depends on / 依赖: contDiffWithinAt_omega_iff_analyticWithinAt, le_top, of_le
@@ -398,7 +398,7 @@ theorem contDiffWithinAt_iff_forall_nat_le
   proof: ⟨fun H _ hm => H.of_le (mod_cast hm), fun H m hm => H m hm _ le_rfl⟩
 
 中文:
-定理 contDiffWithinAt_iff_forall_nat_le
+定理 contDiffWithinAt_iff_对任意_nat_le
   条件: {n : 自然数∞}
   证明: ⟨fun H _ hm => H.of_le (mod_cast hm), fun H m hm => H m hm _ le_rfl⟩
 
@@ -517,7 +517,7 @@ theorem Filter.EventuallyEq.congr_contDiffWithinAt
   proof: ⟨fun H => H.congr_of_eventuallyEq h₁.symm hx.symm, fun H => H.congr_of_eventuallyEq h₁ hx⟩
 
 中文:
-定理 Filter.EventuallyEq.congr_contDiffWithinAt
+定理 滤子.EventuallyEq.congr_contDiffWithinAt
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: ⟨fun H => H.congr_of_eventuallyEq h₁.symm hx.symm, fun H => H.congr_of_eventuallyEq h₁ hx⟩
 
@@ -558,7 +558,7 @@ theorem Filter.EventuallyEq.congr_contDiffWithinAt_of_insert
   proof: ⟨fun H => H.congr_of_eventuallyEq_insert h₁.symm, fun H => H.congr_of_eventuallyEq_insert h₁⟩
 
 中文:
-定理 Filter.EventuallyEq.congr_contDiffWithinAt_of_insert
+定理 滤子.EventuallyEq.congr_contDiffWithinAt_of_insert
   条件: (h₁ : f₁ =ᶠ[𝓝[insert x s] x] f)
   证明: ⟨fun H => H.congr_of_eventuallyEq_insert h₁.symm, fun H => H.congr_of_eventuallyEq_insert h₁⟩
 
@@ -596,7 +596,7 @@ theorem Filter.EventuallyEq.congr_contDiffWithinAt_of_mem
   proof: ⟨fun H => H.congr_of_eventuallyEq_of_mem h₁.symm hx, fun H => H.congr_of_eventuallyEq_of_mem h₁ hx⟩
 
 中文:
-定理 Filter.EventuallyEq.congr_contDiffWithinAt_of_mem
+定理 滤子.EventuallyEq.congr_contDiffWithinAt_of_mem
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : x in s)
   证明: ⟨fun H => H.congr_of_eventuallyEq_of_mem h₁.symm hx, fun H => H.congr_of_eventuallyEq_of_mem h₁ hx⟩
 
@@ -758,7 +758,7 @@ theorem ContDiffWithinAt.mono_of_mem_nhdsWithin
 
 中文:
 定理 ContDiffWithinAt.mono_of_mem_nhdsWithin
-  结论: (h : ContDiffWithinAt 𝕜 n f s x) {t : Set E}
+  结论: (h : ContDiffWithinAt 𝕜 n f s x) {t : 集合 E}
   证明: by
   match n with
   | ω =>
@@ -792,7 +792,7 @@ theorem ContDiffWithinAt.mono
 
 中文:
 定理 ContDiffWithinAt.mono
-  条件: (h : ContDiffWithinAt 𝕜 n f s x) {t : Set E} (hst : t subseteq s)
+  条件: (h : ContDiffWithinAt 𝕜 n f s x) {t : 集合 E} (hst : t subseteq s)
   证明: h.mono_of_mem_nhdsWithin Filter.mem_of_superset self_mem_nhdsWithin hst
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, h.mono_of_mem_nhdsWithin, mem_of_superset, mono_of_mem_nhdsWithin, self_mem_nhdsWithin
@@ -831,7 +831,7 @@ apply h.mono_of_mem_nhdsWithin hst ▸ self_mem_nhdsWithin
 
 中文:
 定理 ContDiffWithinAt.congr_set
-  结论: (h : ContDiffWithinAt 𝕜 n f s x) {t : Set E}
+  结论: (h : ContDiffWithinAt 𝕜 n f s x) {t : 集合 E}
   证明: by
   rw [← nhdsWithin_eq_iff_eventuallyEq] at hst
 apply h.mono_of_mem_nhdsWithin hst ▸ self_mem_nhdsWithin
@@ -853,7 +853,7 @@ theorem contDiffWithinAt_congr_set
 
 中文:
 定理 contDiffWithinAt_congr_set
-  条件: {t : Set E} (hst : s =ᶠ[𝓝 x] t)
+  条件: {t : 集合 E} (hst : s =ᶠ[𝓝 x] t)
   证明: ⟨fun h => h.congr_set hst, fun h => h.congr_set hst.symm⟩
 
 Depends on / 依赖: congr_set, h.congr_set, hst.symm
@@ -1235,7 +1235,7 @@ definition ContDiffOn
 
 中文:
 定义 ContDiffOn
-  签名: (n : 自然数∞ω) (f : E -> F) (s : Set E)
+  签名: (n : 自然数∞ω) (f : E -> F) (s : 集合 E)
   定义体: forall x in s, ContDiffWithinAt 𝕜 n f s x
 
 Depends on / 依赖: ContDiffWithinAt
@@ -1256,7 +1256,7 @@ theorem HasFTaylorSeriesUpToOn.contDiffOn
   exact ⟨f', hf.of_le (mod_cast hm)⟩
 
 中文:
-定理 HasFTaylorSeriesUpToOn.contDiffOn
+定理 有FTaylorSeriesUpToOn.contDiffOn
   结论: {n : 自然数∞} {f' : E -> FormalMultilinearSeries 𝕜 E F}
   证明: by
   intro x hx m hm
@@ -1528,7 +1528,7 @@ theorem contDiffOn_iff_forall_nat_le
   proof: ⟨fun H _ hm => H.of_le (mod_cast hm), fun H x hx m hm => H m hm x hx m le_rfl⟩
 
 中文:
-定理 contDiffOn_iff_forall_nat_le
+定理 contDiffOn_iff_对任意_nat_le
   条件: {n : 自然数∞}
   证明: ⟨fun H _ hm => H.of_le (mod_cast hm), fun H x hx m hm => H m hm x hx m le_rfl⟩
 
@@ -1673,7 +1673,7 @@ theorem ContDiffOn.mono
 
 中文:
 定理 ContDiffOn.mono
-  条件: (h : ContDiffOn 𝕜 n f s) {t : Set E} (hst : t subseteq s)
+  条件: (h : ContDiffOn 𝕜 n f s) {t : 集合 E} (hst : t subseteq s)
   结论: ContDiffOn 𝕜 n f t
   证明: fun x hx => (h x (hst hx)).mono hst
 -/
@@ -2012,7 +2012,7 @@ exact inter_mem_nhdsWithin _ hUo.mem_nhds haU
 
 中文:
 定理 ContDiffWithinAt.eventually_hasFTaylorSeriesUpToOn
-  结论: {f : E -> F} {s : Set E} {a : E}
+  结论: {f : E -> F} {s : 集合 E} {a : E}
   证明: by
   rcases h.contDiffOn' hm (by simp) with ⟨U, hUo, haU, hfU⟩
   have : forallᶠ t in (𝓝[s] a).smallSets, t subseteq s inter U := by
@@ -2100,7 +2100,7 @@ theorem AnalyticOn.contDiffOn_of_completeSpace
 
 中文:
 定理 AnalyticOn.contDiffOn_of_completeSpace
-  条件: [CompleteSpace F] (h : AnalyticOn 𝕜 f s)
+  条件: [完备空间 F] (h : AnalyticOn 𝕜 f s)
   证明: fun x hx => (h x hx).contDiffWithinAt
 
 Depends on / 依赖: contDiffWithinAt
@@ -2119,7 +2119,7 @@ theorem AnalyticOnNhd.contDiffOn_of_completeSpace
 
 中文:
 定理 AnalyticOnNhd.contDiffOn_of_completeSpace
-  条件: [CompleteSpace F] (h : AnalyticOnNhd 𝕜 f s)
+  条件: [完备空间 F] (h : AnalyticOnNhd 𝕜 f s)
   证明: h.analyticOn.contDiffOn_of_completeSpace
 
 Depends on / 依赖: analyticOn, contDiffOn_of_completeSpace, h.analyticOn.contDiffOn_of_completeSpace
@@ -2609,7 +2609,7 @@ theorem contDiffOn_succ_iff_fderiv_of_isOpen
 
 中文:
 定理 contDiffOn_succ_iff_fderiv_of_isOpen
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   rw [contDiffOn_succ_iff_fderivWithin hs.uniqueDiffOn]; rw [contDiffOn_congr fun x hx => fderivWithin_of_isOpen hs hx]
 
@@ -2633,7 +2633,7 @@ theorem contDiffOn_infty_iff_fderiv_of_isOpen
 
 中文:
 定理 contDiffOn_infty_iff_fderiv_of_isOpen
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   rw [← ENat.coe_top_add_one]; rw [contDiffOn_succ_iff_fderiv_of_isOpen hs]
   simp
@@ -2672,7 +2672,7 @@ theorem ContDiffOn.fderiv_of_isOpen
 
 中文:
 定理 ContDiffOn.fderiv_of_isOpen
-  条件: (hf : ContDiffOn 𝕜 n f s) (hs : IsOpen s) (hmn : m + 1 <= n)
+  条件: (hf : ContDiffOn 𝕜 n f s) (hs : 是开集 s) (hmn : m + 1 <= n)
   证明: (hf.fderivWithin hs.uniqueDiffOn hmn).congr fun _ hx => (fderivWithin_of_isOpen hs hx).symm
 
 Depends on / 依赖: fderivWithin, fderivWithin_of_isOpen, hf.fderivWithin, hs.uniqueDiffOn, uniqueDiffOn
@@ -2714,7 +2714,7 @@ theorem ContDiffOn.continuousOn_fderiv_of_isOpen
 
 中文:
 定理 ContDiffOn.continuousOn_fderiv_of_isOpen
-  结论: (h : ContDiffOn 𝕜 n f s) (hs : IsOpen s)
+  结论: (h : ContDiffOn 𝕜 n f s) (hs : 是开集 s)
   证明: ((contDiffOn_succ_iff_fderiv_of_isOpen hs).1
     (h.of_le (show 0 + (1 : Nat∞ω) <= n from hn))).2.2.continuousOn
 
@@ -2876,8 +2876,8 @@ theorem IsOpen.contDiffOn_iff
 @[fun_prop]
 
 中文:
-定理 IsOpen.contDiffOn_iff
-  条件: (hs : IsOpen s)
+定理 是开集.contDiffOn_iff
+  条件: (hs : 是开集 s)
   证明: forall₂_congr fun _ => contDiffWithinAt_iff_contDiffAt ∘ hs.mem_nhds
 
 @[fun_prop]
@@ -3017,7 +3017,7 @@ theorem AnalyticAt.contDiffAt
 
 中文:
 定理 AnalyticAt.contDiffAt
-  条件: [CompleteSpace F] (h : AnalyticAt 𝕜 f x)
+  条件: [完备空间 F] (h : AnalyticAt 𝕜 f x)
   证明: by
   rw [← contDiffWithinAt_univ]
   rw [← analyticWithinAt_univ] at h
@@ -3265,7 +3265,7 @@ definition ContDiff
   | (n : Nat∞) => exists p : E -> FormalMultilinearSeries 𝕜 E F, HasFTaylorSeriesUpTo n f p
 
 中文:
-定义 ContDiff
+定义 连续可微
   签名: (n : 自然数∞ω) (f : E -> F)
   定义体: match n with
   | ω => exists p : E -> FormalMultilinearSeries 𝕜 E F, HasFTaylorSeriesUpTo ⊤ f p
@@ -3289,7 +3289,7 @@ theorem HasFTaylorSeriesUpTo.contDiff
   proof: ⟨f', hf⟩
 
 中文:
-定理 HasFTaylorSeriesUpTo.contDiff
+定理 有FTaylorSeriesUpTo.contDiff
   结论: {n : 自然数∞} {f' : E -> FormalMultilinearSeries 𝕜 E F}
   证明: ⟨f', hf⟩
 -/
@@ -3331,7 +3331,7 @@ theorem contDiffOn_univ
 
 中文:
 定理 contDiffOn_univ
-  结论: ContDiffOn 𝕜 n f univ ↔ ContDiff 𝕜 n f
+  结论: ContDiffOn 𝕜 n f univ ↔ 连续可微 𝕜 n f
   证明: by
   match n with
   | ω =>
@@ -3381,7 +3381,7 @@ theorem contDiff_iff_contDiffAt
 
 中文:
 定理 contDiff_iff_contDiffAt
-  结论: ContDiff 𝕜 n f ↔ 对任意 x, ContDiffAt 𝕜 n f x
+  结论: 连续可微 𝕜 n f ↔ 对任意 x, ContDiffAt 𝕜 n f x
   证明: by
   simp [← contDiffOn_univ, ContDiffOn, ContDiffAt]
 
@@ -3405,8 +3405,8 @@ theorem ContDiff.contDiffAt
 @[fun_prop]
 
 中文:
-定理 ContDiff.contDiffAt
-  条件: (h : ContDiff 𝕜 n f)
+定理 连续可微.contDiffAt
+  条件: (h : 连续可微 𝕜 n f)
   结论: ContDiffAt 𝕜 n f x
   证明: contDiff_iff_contDiffAt.1 h x
 
@@ -3428,8 +3428,8 @@ theorem ContDiff.contDiffWithinAt
   proof: h.contDiffAt.contDiffWithinAt
 
 中文:
-定理 ContDiff.contDiffWithinAt
-  条件: (h : ContDiff 𝕜 n f)
+定理 连续可微.contDiffWithinAt
+  条件: (h : 连续可微 𝕜 n f)
   结论: ContDiffWithinAt 𝕜 n f s x
   证明: h.contDiffAt.contDiffWithinAt
 
@@ -3449,7 +3449,7 @@ theorem contDiff_infty
 
 中文:
 定理 contDiff_infty
-  结论: ContDiff 𝕜 ∞ f ↔ 对任意 n : 自然数, ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 ∞ f ↔ 对任意 n : 自然数, 连续可微 𝕜 n f
   证明: by
   simp [contDiffOn_univ.symm, contDiffOn_infty]
 
@@ -3471,7 +3471,7 @@ theorem contDiff_all_iff_nat
 
 中文:
 定理 contDiff_all_iff_nat
-  结论: (对任意 n : 自然数∞, ContDiff 𝕜 n f) ↔ 对任意 n : 自然数, ContDiff 𝕜 n f
+  结论: (对任意 n : 自然数∞, 连续可微 𝕜 n f) ↔ 对任意 n : 自然数, 连续可微 𝕜 n f
   证明: by
   simp only [← contDiffOn_univ, contDiffOn_all_iff_nat]
 
@@ -3495,8 +3495,8 @@ theorem ContDiff.contDiffOn
 @[simp]
 
 中文:
-定理 ContDiff.contDiffOn
-  条件: (h : ContDiff 𝕜 n f)
+定理 连续可微.contDiffOn
+  条件: (h : 连续可微 𝕜 n f)
   结论: ContDiffOn 𝕜 n f s
   证明: (contDiffOn_univ.2 h).mono (subset_univ _)
 
@@ -3520,7 +3520,7 @@ theorem contDiff_zero
 
 中文:
 定理 contDiff_zero
-  结论: ContDiff 𝕜 0 f ↔ Continuous f
+  结论: 连续可微 𝕜 0 f ↔ 连续 f
   证明: by
   rw [← contDiffOn_univ]; rw [← continuousOn_univ]
   exact contDiffOn_zero
@@ -3592,9 +3592,9 @@ theorem ContDiff.of_le
   proof: contDiffOn_univ.1 (contDiffOn_univ.2 h).of_le hmn
 
 中文:
-定理 ContDiff.of_le
-  条件: (h : ContDiff 𝕜 n f) (hmn : m <= n)
-  结论: ContDiff 𝕜 m f
+定理 连续可微.of_le
+  条件: (h : 连续可微 𝕜 n f) (hmn : m <= n)
+  结论: 连续可微 𝕜 m f
   证明: contDiffOn_univ.1 (contDiffOn_univ.2 h).of_le hmn
 
 Depends on / 依赖: contDiffOn_univ, of_le
@@ -3612,9 +3612,9 @@ theorem ContDiff.of_succ
   proof: h.of_le le_self_add
 
 中文:
-定理 ContDiff.of_succ
-  条件: (h : ContDiff 𝕜 (n + 1) f)
-  结论: ContDiff 𝕜 n f
+定理 连续可微.of_succ
+  条件: (h : 连续可微 𝕜 (n + 1) f)
+  结论: 连续可微 𝕜 n f
   证明: h.of_le le_self_add
 
 Depends on / 依赖: h.of_le, le_self_add, of_le
@@ -3635,9 +3635,9 @@ theorem ContDiff.one_of_succ
 @[fun_prop]
 
 中文:
-定理 ContDiff.one_of_succ
-  条件: (h : ContDiff 𝕜 (n + 1) f)
-  结论: ContDiff 𝕜 1 f
+定理 连续可微.one_of_succ
+  条件: (h : 连续可微 𝕜 (n + 1) f)
+  结论: 连续可微 𝕜 1 f
   证明: by
   apply h.of_le le_add_self
 
@@ -3661,9 +3661,9 @@ theorem ContDiff.continuous
 @[fun_prop]
 
 中文:
-定理 ContDiff.continuous
-  条件: (h : ContDiff 𝕜 n f)
-  结论: Continuous f
+定理 连续可微.continuous
+  条件: (h : 连续可微 𝕜 n f)
+  结论: 连续 f
   证明: contDiff_zero.1 (h.of_le bot_le)
 
 @[fun_prop]
@@ -3684,9 +3684,9 @@ theorem ContDiff.continuous_zero
   proof: contDiff_zero.1 (h.of_le bot_le)
 
 中文:
-定理 ContDiff.continuous_zero
-  条件: (h : ContDiff 𝕜 0 f)
-  结论: Continuous f
+定理 连续可微.continuous_zero
+  条件: (h : 连续可微 𝕜 0 f)
+  结论: 连续 f
   证明: contDiff_zero.1 (h.of_le bot_le)
 
 Depends on / 依赖: bot_le, contDiff_zero, h.of_le, of_le
@@ -3708,9 +3708,9 @@ theorem ContDiff.differentiable
 @[fun_prop]
 
 中文:
-定理 ContDiff.differentiable
-  条件: (h : ContDiff 𝕜 n f) (hn : n != 0)
-  结论: Differentiable 𝕜 f
+定理 连续可微.differentiable
+  条件: (h : 连续可微 𝕜 n f) (hn : n != 0)
+  结论: 可微 𝕜 f
   证明: differentiableOn_univ.1 (contDiffOn_univ.2 h).differentiableOn hn
 
 @[fun_prop]
@@ -3731,9 +3731,9 @@ theorem ContDiff.differentiable_one
   proof: differentiableOn_univ.1 (contDiffOn_univ.2 h).differentiableOn one_ne_zero
 
 中文:
-定理 ContDiff.differentiable_one
-  条件: (h : ContDiff 𝕜 1 f)
-  结论: Differentiable 𝕜 f
+定理 连续可微.differentiable_one
+  条件: (h : 连续可微 𝕜 1 f)
+  结论: 可微 𝕜 f
   证明: differentiableOn_univ.1 (contDiffOn_univ.2 h).differentiableOn one_ne_zero
 
 Depends on / 依赖: contDiffOn_univ, differentiableOn, differentiableOn_univ, one_ne_zero
@@ -3751,7 +3751,7 @@ theorem contDiff_iff_forall_nat_le
   simp_rw [← contDiffOn_univ]; exact contDiffOn_iff_forall_nat_le
 
 中文:
-定理 contDiff_iff_forall_nat_le
+定理 contDiff_iff_对任意_nat_le
   条件: {n : 自然数∞}
   证明: by
   simp_rw [← contDiffOn_univ]; exact contDiffOn_iff_forall_nat_le
@@ -3801,7 +3801,7 @@ theorem contDiff_one_iff_hasFDerivAt
 
 中文:
 定理 contDiff_one_iff_hasFDerivAt
-  结论: ContDiff 𝕜 1 f ↔
+  结论: 连续可微 𝕜 1 f ↔
   证明: by
   convert! contDiff_succ_iff_hasFDerivAt using 4; simp
 
@@ -3825,7 +3825,7 @@ theorem AnalyticOn.contDiff
 中文:
 定理 AnalyticOn.contDiff
   条件: (hf : AnalyticOn 𝕜 f univ)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: by
   rw [← contDiffOn_univ]
   exact hf.contDiffOn (n := n) uniqueDiffOn_univ
@@ -3848,7 +3848,7 @@ theorem AnalyticOnNhd.contDiff
 中文:
 定理 AnalyticOnNhd.contDiff
   条件: (hf : AnalyticOnNhd 𝕜 f univ)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: hf.analyticOn.contDiff
 
 Depends on / 依赖: analyticOn, contDiff, hf.analyticOn.contDiff
@@ -3870,8 +3870,8 @@ theorem ContDiff.analyticOnNhd
   exact this.mono (subset_univ _)
 
 中文:
-定理 ContDiff.analyticOnNhd
-  条件: (h : ContDiff 𝕜 ω f)
+定理 连续可微.analyticOnNhd
+  条件: (h : 连续可微 𝕜 ω f)
   结论: AnalyticOnNhd 𝕜 f s
   证明: by
   rw [← contDiffOn_univ] at h
@@ -3918,8 +3918,8 @@ theorem ContDiff.ftaylorSeries
   exact ContDiffOn.ftaylorSeriesWithin hf uniqueDiffOn_univ
 
 中文:
-定理 ContDiff.ftaylorSeries
-  条件: (hf : ContDiff 𝕜 n f)
+定理 连续可微.ftaylorSeries
+  条件: (hf : 连续可微 𝕜 n f)
   证明: by
   simp only [← contDiffOn_univ, ← hasFTaylorSeriesUpToOn_univ_iff, ← ftaylorSeriesWithin_univ]
     at hf ⊢
@@ -4026,8 +4026,8 @@ theorem ContDiff.continuous_iteratedFDeriv
 @[fun_prop]
 
 中文:
-定理 ContDiff.continuous_iteratedFDeriv
-  条件: {m : 自然数} (hm : m <= n) (hf : ContDiff 𝕜 n f)
+定理 连续可微.continuous_iteratedFDeriv
+  条件: {m : 自然数} (hm : m <= n) (hf : 连续可微 𝕜 n f)
   证明: (contDiff_iff_continuous_differentiable.mp (hf.of_le hm)).1 m le_rfl
 
 @[fun_prop]
@@ -4048,8 +4048,8 @@ theorem ContDiff.continuous_iteratedFDeriv'
   proof: (contDiff_iff_continuous_differentiable.mp hf).1 m le_rfl
 
 中文:
-定理 ContDiff.continuous_iteratedFDeriv'
-  条件: {m : 自然数} (hf : ContDiff 𝕜 m f)
+定理 连续可微.continuous_iteratedFDeriv'
+  条件: {m : 自然数} (hf : 连续可微 𝕜 m f)
   证明: (contDiff_iff_continuous_differentiable.mp hf).1 m le_rfl
 
 Depends on / 依赖: contDiff_iff_continuous_differentiable, contDiff_iff_continuous_differentiable.mp, le_rfl
@@ -4068,8 +4068,8 @@ theorem ContDiff.differentiable_iteratedFDeriv
     (hf.of_le (ENat.add_one_natCast_le_withTop_of_lt hm))).2 m (mod_cast lt_add_one m)
 
 中文:
-定理 ContDiff.differentiable_iteratedFDeriv
-  条件: {m : 自然数} (hm : m < n) (hf : ContDiff 𝕜 n f)
+定理 连续可微.differentiable_iteratedFDeriv
+  条件: {m : 自然数} (hm : m < n) (hf : 连续可微 𝕜 n f)
   证明: (contDiff_iff_continuous_differentiable.mp
     (hf.of_le (ENat.add_one_natCast_le_withTop_of_lt hm))).2 m (mod_cast lt_add_one m)
 
@@ -4178,8 +4178,8 @@ theorem ContDiff.continuous_fderiv
   proof: (contDiff_one_iff_fderiv.1 (h.of_le <| ENat.one_le_iff_ne_zero_withTop.mpr hn)).2
 
 中文:
-定理 ContDiff.continuous_fderiv
-  条件: (h : ContDiff 𝕜 n f) (hn : n != 0)
+定理 连续可微.continuous_fderiv
+  条件: (h : 连续可微 𝕜 n f) (hn : n != 0)
   证明: (contDiff_one_iff_fderiv.1 (h.of_le <| ENat.one_le_iff_ne_zero_withTop.mpr hn)).2
 
 Depends on / 依赖: ENat.one_le_iff_ne_zero_withTop.mpr, contDiff_one_iff_fderiv, h.of_le, of_le, one_le_iff_ne_zero_withTop
@@ -4200,8 +4200,8 @@ theorem ContDiff.continuous_fderiv_apply
   A.comp B
 
 中文:
-定理 ContDiff.continuous_fderiv_apply
-  条件: (h : ContDiff 𝕜 n f) (hn : n != 0)
+定理 连续可微.continuous_fderiv_apply
+  条件: (h : 连续可微 𝕜 n f) (hn : n != 0)
   证明: have A : Continuous fun q : (E ->L[𝕜] F) × E => q.1 q.2 := isBoundedBilinearMap_apply.continuous
   have B : Continuous fun p : E × E => (fderiv 𝕜 f p.1, p.2) :=
     ((h.continuous_fderiv hn).comp continuous_fst).prodMk continuous_snd

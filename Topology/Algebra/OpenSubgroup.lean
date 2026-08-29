@@ -49,11 +49,11 @@ structure OpenAddSubgroup
     - isOpen' : IsOpen carrier
 
 中文:
-结构 OpenAddSubgroup
-  参数: (G : 类型) [AddGroup G] [TopologicalSpace G]
-  继承: AddSubgroup G
+结构 OpenAdd子群
+  参数: (G : 类型) [加法群 G] [拓扑空间 G]
+  继承: 加法子群 G
   公理与运算 (1 个):
-    - isOpen' : IsOpen carrier
+    - isOpen' : 是开集 carrier
 -/
 structure OpenAddSubgroup (G : Type*) [AddGroup G] [TopologicalSpace G] extends AddSubgroup G where
   isOpen' : IsOpen carrier
@@ -71,11 +71,11 @@ structure OpenSubgroup
     - isOpen' : IsOpen carrier
 
 中文:
-结构 OpenSubgroup
-  参数: (G : 类型) [Group G] [TopologicalSpace G]
-  继承: Subgroup G
+结构 开子群
+  参数: (G : 类型) [群 G] [拓扑空间 G]
+  继承: 子群 G
   公理与运算 (1 个):
-    - isOpen' : IsOpen carrier
+    - isOpen' : 是开集 carrier
 -/
 structure OpenSubgroup (G : Type*) [Group G] [TopologicalSpace G] extends Subgroup G where
   isOpen' : IsOpen carrier
@@ -106,7 +106,7 @@ instance hasCoeSubgroup
 
 中文:
 实例 hasCoeSubgroup
-  签名: : CoeTC (OpenSubgroup G) (Subgroup G)
+  签名: : CoeTC (开子群 G) (子群 G)
   定义体: ⟨toSubgroup⟩
 
 @[to_additive]
@@ -126,7 +126,7 @@ theorem toSubgroup_injective
 
 中文:
 定理 toSubgroup_injective
-  结论: Injective ((↑) : OpenSubgroup G -> Subgroup G)
+  结论: 单射 ((↑) : 开子群 G -> 子群 G)
 -/
 theorem toSubgroup_injective : Injective ((↑) : OpenSubgroup G -> Subgroup G)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -143,7 +143,7 @@ coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 
 中文:
 实例 :
-  签名: SetLike (OpenSubgroup G) G
+  签名: 集合状 (开子群 G) G
   定义体: U.1
 coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 -/
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (OpenSubgroup G)
+  签名: 偏序 (开子群 G)
   定义体: .ofSetLike (OpenSubgroup G) G
 
 @[to_additive]
@@ -183,7 +183,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (OpenSubgroup G) G
+  签名: 子群类 (开子群 G) G
   定义体: Subsemigroup.mul_mem' _
   one_mem U := U.one_mem'
   inv_mem := Subgroup.inv_mem' _
@@ -209,7 +209,7 @@ definition toOpens
 
 中文:
 定义 toOpens
-  签名: (U : OpenSubgroup G)
+  签名: (U : 开子群 G)
   定义体: ⟨U, U.isOpen'⟩
 
 @[to_additive]
@@ -231,7 +231,7 @@ instance hasCoeOpens
 
 中文:
 实例 hasCoeOpens
-  签名: : CoeTC (OpenSubgroup G) (Opens G)
+  签名: : CoeTC (开子群 G) (Opens G)
   定义体: ⟨toOpens⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -253,7 +253,7 @@ theorem coe_toOpens
 
 中文:
 定理 coe_toOpens
-  结论: ((U : Opens G) : Set G) = U
+  结论: ((U : Opens G) : 集合 G) = U
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -274,7 +274,7 @@ theorem coe_toSubgroup
 
 中文:
 定理 coe_toSubgroup
-  结论: ((U : Subgroup G) : Set G) = U
+  结论: ((U : 子群 G) : 集合 G) = U
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -316,7 +316,7 @@ theorem mem_toSubgroup
 
 中文:
 定理 mem_toSubgroup
-  结论: g in (U : Subgroup G) ↔ g in U
+  结论: g in (U : 子群 G) ↔ g in U
   证明: Iff.rfl
 
 @[to_additive (attr := ext)]
@@ -361,7 +361,7 @@ theorem isOpen
 
 中文:
 定理 isOpen
-  结论: IsOpen (U : Set G)
+  结论: 是开集 (U : 集合 G)
   证明: U.isOpen'
 
 @[to_additive]
@@ -380,7 +380,7 @@ theorem mem_nhds_one
 
 中文:
 定理 mem_nhds_one
-  结论: (U : Set G) in 𝓝 (1 : G)
+  结论: (U : 集合 G) in 𝓝 (1 : G)
   证明: U.isOpen.mem_nhds U.one_mem
 
 Depends on / 依赖: U.isOpen.mem_nhds, U.one_mem, isOpen, mem_nhds, one_mem
@@ -402,7 +402,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (OpenSubgroup G)
+  签名: 顶元素 (开子群 G)
   定义体: ⟨⟨⊤, isOpen_univ⟩⟩
 
 @[to_additive (attr := simp)]
@@ -424,7 +424,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : G)
-  结论: x in (⊤ : OpenSubgroup G)
+  结论: x in (⊤ : 开子群 G)
   证明: trivial
 
 @[to_additive (attr := simp, norm_cast)]
@@ -445,7 +445,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : OpenSubgroup G) : Set G) = Set.univ
+  结论: ((⊤ : 开子群 G) : 集合 G) = 集合.univ
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -466,7 +466,7 @@ theorem toSubgroup_top
 
 中文:
 定理 toSubgroup_top
-  结论: ((⊤ : OpenSubgroup G) : Subgroup G) = ⊤
+  结论: ((⊤ : 开子群 G) : 子群 G) = ⊤
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -487,7 +487,7 @@ theorem toOpens_top
 
 中文:
 定理 toOpens_top
-  结论: ((⊤ : OpenSubgroup G) : Opens G) = ⊤
+  结论: ((⊤ : 开子群 G) : Opens G) = ⊤
   证明: rfl
 
 @[to_additive]
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OpenSubgroup G)
+  签名: 可居 (开子群 G)
   定义体: ⟨⊤⟩
 
 @[to_additive]
@@ -532,8 +532,8 @@ theorem isClosed
 
 中文:
 定理 isClosed
-  条件: [SeparatelyContinuousMul G] (U : OpenSubgroup G)
-  结论: IsClosed (U : Set G)
+  条件: [SeparatelyContinuousMul G] (U : 开子群 G)
+  结论: 是闭集 (U : 集合 G)
   证明: by
   have := QuotientGroup.discreteTopology U.isOpen
   exact QuotientGroup.t1Space_iff.mp inferInstance
@@ -558,8 +558,8 @@ theorem isClopen
 
 中文:
 定理 isClopen
-  条件: [SeparatelyContinuousMul G] (U : OpenSubgroup G)
-  结论: IsClopen (U : Set G)
+  条件: [SeparatelyContinuousMul G] (U : 开子群 G)
+  结论: IsClopen (U : 集合 G)
   证明: ⟨U.isClosed, U.isOpen⟩
 
 Depends on / 依赖: U.isClosed, U.isOpen, isClosed, isOpen
@@ -585,8 +585,8 @@ definition prod
 @[to_additive (attr := simp, norm_cast) coe_prod]
 
 中文:
-定义 prod
-  签名: (U : OpenSubgroup G) (V : OpenSubgroup H)
+定义 乘积
+  签名: (U : 开子群 G) (V : 开子群 H)
   定义体: ⟨.prod U V, U.isOpen.prod V.isOpen⟩
 
 @[to_additive (attr := simp, norm_cast) coe_prod]
@@ -609,7 +609,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (U : OpenSubgroup G) (V : OpenSubgroup H)
+  条件: (U : 开子群 G) (V : 开子群 H)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast) toAddSubgroup_prod]
@@ -629,7 +629,7 @@ theorem toSubgroup_prod
 
 中文:
 定理 toSubgroup_prod
-  条件: (U : OpenSubgroup G) (V : OpenSubgroup H)
+  条件: (U : 开子群 G) (V : 开子群 H)
   证明: rfl
 -/
 theorem toSubgroup_prod (U : OpenSubgroup G) (V : OpenSubgroup H) :
@@ -651,7 +651,7 @@ instance instInfOpenSubgroup
 
 中文:
 实例 instInfOpenSubgroup
-  签名: : Min (OpenSubgroup G)
+  签名: : 最小值 (开子群 G)
   定义体: ⟨fun U V => ⟨U ⊓ V, U.isOpen.inter V.isOpen⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -674,7 +674,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  结论: (↑(U ⊓ V) : Set G) = (U : Set G) inter V
+  结论: (↑(U ⊓ V) : 集合 G) = (U : 集合 G) inter V
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -695,7 +695,7 @@ theorem toSubgroup_inf
 
 中文:
 定理 toSubgroup_inf
-  结论: (↑(U ⊓ V) : Subgroup G) = ↑U ⊓ ↑V
+  结论: (↑(U ⊓ V) : 子群 G) = ↑U ⊓ ↑V
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -760,7 +760,7 @@ instance instPartialOrderOpenSubgroup
 
 中文:
 实例 instPartialOrderOpenSubgroup
-  签名: : PartialOrder (OpenSubgroup G)
+  签名: : 偏序 (开子群 G)
   定义体: inferInstance
 -/
 instance instPartialOrderOpenSubgroup : PartialOrder (OpenSubgroup G) := inferInstance
@@ -779,7 +779,7 @@ instance instSemilatticeInfOpenSubgroup
 
 中文:
 实例 instSemilatticeInfOpenSubgroup
-  签名: : SemilatticeInf (OpenSubgroup G)
+  签名: : SemilatticeInf (开子群 G)
   定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 @[to_additive]
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (OpenSubgroup G)
+  签名: 有顶序 (开子群 G)
   定义体: Set.subset_univ _
 
 @[to_additive (attr := simp, norm_cast)]
@@ -823,7 +823,7 @@ theorem toSubgroup_le
 
 中文:
 定理 toSubgroup_le
-  结论: (U : Subgroup G) <= (V : Subgroup G) ↔ U <= V
+  结论: (U : 子群 G) <= (V : 子群 G) ↔ U <= V
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -849,7 +849,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : G ->* N) (hf : Continuous f) (H : OpenSubgroup N)
+  签名: (f : G ->* N) (hf : 连续 f) (H : 开子群 N)
   定义体: ⟨.comap f H, H.isOpen.preimage hf⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -872,7 +872,7 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f)
+  条件: (H : 开子群 N) (f : G ->* N) (hf : 连续 f)
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -894,7 +894,7 @@ theorem toSubgroup_comap
 
 中文:
 定理 toSubgroup_comap
-  条件: (H : OpenSubgroup N) (f : G ->* N) (hf : Continuous f)
+  条件: (H : 开子群 N) (f : G ->* N) (hf : 连续 f)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -916,7 +916,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {H : OpenSubgroup N} {f : G ->* N} {hf : Continuous f} {x : G}
+  条件: {H : 开子群 N} {f : G ->* N} {hf : 连续 f} {x : G}
   证明: Iff.rfl
 
 @[to_additive]
@@ -938,7 +938,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  结论: {P : 类型} [Group P] [TopologicalSpace P] (K : OpenSubgroup P) (f₂ : N ->* P)
+  结论: {P : 类型} [群 P] [拓扑空间 P] (K : 开子群 P) (f₂ : N ->* P)
   证明: rfl
 -/
 theorem comap_comap {P : Type*} [Group P] [TopologicalSpace P] (K : OpenSubgroup P) (f₂ : N ->* P)
@@ -968,7 +968,7 @@ theorem isOpen_of_mem_nhds
 
 中文:
 定理 isOpen_of_mem_nhds
-  结论: [SeparatelyContinuousMul G] (H : Subgroup G) {g : G}
+  结论: [SeparatelyContinuousMul G] (H : 子群 G) {g : G}
   证明: by
   refine isOpen_iff_mem_nhds.2 fun x hx => ?_
   have hg' : g in H := SetLike.mem_coe.1 (mem_of_mem_nhds hg)
@@ -1001,7 +1001,7 @@ theorem isOpen_mono
 
 中文:
 定理 isOpen_mono
-  结论: [SeparatelyContinuousMul G] {H₁ H₂ : Subgroup G} (h : H₁ <= H₂)
+  结论: [SeparatelyContinuousMul G] {H₁ H₂ : 子群 G} (h : H₁ <= H₂)
   证明: isOpen_of_mem_nhds _ Filter.mem_of_superset (h₁.mem_nhds <| one_mem H₁) h
 
 @[to_additive]
@@ -1046,7 +1046,7 @@ theorem isOpen_of_one_mem_interior
 
 中文:
 定理 isOpen_of_one_mem_interior
-  结论: [SeparatelyContinuousMul G] (H : Subgroup G)
+  结论: [SeparatelyContinuousMul G] (H : 子群 G)
   证明: isOpen_of_mem_nhds H mem_interior_iff_mem_nhds.1 h_1_int
 
 @[to_additive]
@@ -1070,7 +1070,7 @@ lemma isClosed_of_isOpen
 
 中文:
 引理 isClosed_of_isOpen
-  条件: [SeparatelyContinuousMul G] (U : Subgroup G) (h : IsOpen (U : Set G))
+  条件: [SeparatelyContinuousMul G] (U : 子群 G) (h : 是开集 (U : 集合 G))
   证明: OpenSubgroup.isClosed ⟨U, h⟩
 
 @[to_additive]
@@ -1094,7 +1094,7 @@ lemma subgroupOf_isOpen
 
 中文:
 引理 subgroupOf_isOpen
-  条件: (U K : Subgroup G) (h : IsOpen (K : Set G))
+  条件: (U K : 子群 G) (h : 是开集 (K : 集合 G))
   证明: Continuous.isOpen_preimage (continuous_iff_le_induced.mpr fun _ => id) _ h
 
 @[to_additive]
@@ -1142,7 +1142,7 @@ lemma quotient_finite_of_isOpen
 
 中文:
 引理 quotient_finite_of_isOpen
-  结论: [SeparatelyContinuousMul G] [CompactSpace G] (U : Subgroup G)
+  结论: [SeparatelyContinuousMul G] [紧空间 G] (U : 子群 G)
   证明: have : DiscreteTopology (G ⧸ U) := QuotientGroup.discreteTopology h
   finite_of_compact_of_discrete
 
@@ -1168,7 +1168,7 @@ instance [SeparatelyContinuousMul
 
 中文:
 实例 [SeparatelyContinuousMul
-  签名: G] [CompactSpace G] (U
+  签名: G] [紧空间 G] (U
   定义体: quotient_finite_of_isOpen U.toSubgroup U.isOpen
 
 @[to_additive]
@@ -1194,7 +1194,7 @@ lemma quotient_finite_of_isOpen'
 
 中文:
 引理 quotient_finite_of_isOpen'
-  结论: [IsTopologicalGroup G] [CompactSpace G] (U : Subgroup G)
+  结论: [是拓扑群 G] [紧空间 G] (U : 子群 G)
   证明: have : CompactSpace U := isCompact_iff_compactSpace.mp IsClosed.isCompact
     U.isClosed_of_isOpen hUopen
   K.quotient_finite_of_isOpen hKopen
@@ -1220,8 +1220,8 @@ instance [IsTopologicalGroup
   body: quotient_finite_of_isOpen' U.toSubgroup K.toSubgroup U.isOpen K.isOpen
 
 中文:
-实例 [IsTopologicalGroup
-  签名: G] [CompactSpace G] (U
+实例 [是拓扑群
+  签名: G] [紧空间 G] (U
   定义体: quotient_finite_of_isOpen' U.toSubgroup K.toSubgroup U.isOpen K.isOpen
 
 Depends on / 依赖: K.isOpen, K.toSubgroup, U.isOpen, U.toSubgroup, isOpen, quotient_finite_of_isOpen, toSubgroup
@@ -1249,7 +1249,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (OpenSubgroup G)
+  签名: 最大值 (开子群 G)
   定义体: ⟨fun U V => ⟨U ⊔ V, Subgroup.isOpen_mono (le_sup_left : U.1 <= U.1 ⊔ V.1) U.isOpen⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1273,8 +1273,8 @@ theorem toSubgroup_sup
 
 中文:
 定理 toSubgroup_sup
-  条件: (U V : OpenSubgroup G)
-  结论: (↑(U ⊔ V) : Subgroup G) = ↑U ⊔ ↑V
+  条件: (U V : 开子群 G)
+  结论: (↑(U ⊔ V) : 子群 G) = ↑U ⊔ ↑V
   证明: rfl
 
 @[to_additive]
@@ -1293,7 +1293,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (OpenSubgroup G)
+  签名: 格 (开子群 G)
   定义体: toSubgroup_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
   __ := instSemilatticeInfOpenSubgroup
 
@@ -1322,7 +1322,7 @@ theorem isOpen_mono
 
 中文:
 定理 isOpen_mono
-  条件: {U P : Submodule R M} (h : U <= P) (hU : IsOpen (U : Set M))
+  条件: {U P : 子模 R M} (h : U <= P) (hU : 是开集 (U : 集合 M))
   证明: @AddSubgroup.isOpen_mono M _ _ _ U.toAddSubgroup P.toAddSubgroup h hU
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.isOpen_mono, P.toAddSubgroup, U.toAddSubgroup, isOpen_mono, toAddSubgroup
@@ -1348,7 +1348,7 @@ theorem isOpen_of_isOpen_subideal
 
 中文:
 定理 isOpen_of_isOpen_subideal
-  条件: {U I : Ideal R} (h : U <= I) (hU : IsOpen (U : Set R))
+  条件: {U I : 理想 R} (h : U <= I) (hU : 是开集 (U : 集合 R))
   证明: @Submodule.isOpen_mono R R _ _ _ _ Semiring.toModule _ _ h hU
 
 Depends on / 依赖: Semiring, Semiring.toModule, Submodule, Submodule.isOpen_mono, isOpen_mono, toModule
@@ -1384,11 +1384,11 @@ structure OpenNormalSubgroup
     - isNormal' : toSubgroup.Normal  [default: by infer_instance]
 
 中文:
-结构 OpenNormalSubgroup
-  参数: (G : 类型u) [Group G] [TopologicalSpace G]
-  继承: OpenSubgroup G
+结构 OpenNormal子群
+  参数: (G : 类型u) [群 G] [拓扑空间 G]
+  继承: 开子群 G
   公理与运算 (1 个):
-    - isNormal' : toSubgroup.Normal  [默认: by infer_instance]
+    - isNormal' : toSubgroup.正规  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1409,11 +1409,11 @@ structure OpenNormalAddSubgroup
     - isNormal' : toAddSubgroup.Normal  [default: by infer_instance]
 
 中文:
-结构 OpenNormalAddSubgroup
-  参数: (G : 类型u) [AddGroup G] [TopologicalSpace G]
-  继承: OpenAddSubgroup G
+结构 OpenNormalAdd子群
+  参数: (G : 类型u) [加法群 G] [拓扑空间 G]
+  继承: OpenAdd子群 G
   公理与运算 (1 个):
-    - isNormal' : toAddSubgroup.Normal  [默认: by infer_instance]
+    - isNormal' : toAddSubgroup.正规  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1446,7 +1446,7 @@ theorem toSubgroup_injective
 
 中文:
 定理 toSubgroup_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun A B h => by
   ext
   dsimp at h
@@ -1473,7 +1473,7 @@ coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 
 中文:
 实例 :
-  签名: SetLike (OpenNormalSubgroup G) G
+  签名: 集合状 (OpenNormal子群 G) G
   定义体: U.1
 coe_injective _ _ h := toSubgroup_injective SetLike.ext' h
 -/
@@ -1493,7 +1493,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (OpenNormalSubgroup G)
+  签名: 偏序 (OpenNormal子群 G)
   定义体: .ofSetLike (OpenNormalSubgroup G) G
 
 @[to_additive]
@@ -1515,7 +1515,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (OpenNormalSubgroup G) G
+  签名: 子群类 (OpenNormal子群 G) G
   定义体: Subsemigroup.mul_mem' _
   one_mem U := U.one_mem'
   inv_mem := Subgroup.inv_mem' _
@@ -1542,7 +1542,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (OpenNormalSubgroup G) (Subgroup G)
+  签名: Coe (OpenNormal子群 G) (子群 G)
   定义体: H.toOpenSubgroup.toSubgroup
 
 @[to_additive]
@@ -1565,7 +1565,7 @@ instance instPartialOrderOpenNormalSubgroup
 
 中文:
 实例 instPartialOrderOpenNormalSubgroup
-  签名: : PartialOrder (OpenNormalSubgroup G)
+  签名: : 偏序 (OpenNormal子群 G)
   定义体: inferInstance
 
 @[to_additive]
@@ -1586,7 +1586,7 @@ instance instInfOpenNormalSubgroup
 
 中文:
 实例 instInfOpenNormalSubgroup
-  签名: : Min (OpenNormalSubgroup G)
+  签名: : 最小值 (OpenNormal子群 G)
   定义体: ⟨fun U V => ⟨U.toOpenSubgroup ⊓ V.toOpenSubgroup,
     Subgroup.normal_inf_normal U.toSubgroup V.toSubgroup⟩⟩
 
@@ -1611,7 +1611,7 @@ instance instSemilatticeInfOpenNormalSubgroup
 
 中文:
 实例 instSemilatticeInfOpenNormalSubgroup
-  签名: : SemilatticeInf (OpenNormalSubgroup G)
+  签名: : SemilatticeInf (OpenNormal子群 G)
   定义体: SetLike.coe_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 @[to_additive]
@@ -1635,7 +1635,7 @@ instance [SeparatelyContinuousMul
 
 中文:
 实例 [SeparatelyContinuousMul
-  签名: G] : Max (OpenNormalSubgroup G)
+  签名: G] : 最大值 (OpenNormal子群 G)
   定义体: ⟨fun U V => ⟨U.toOpenSubgroup ⊔ V.toOpenSubgroup,
     Subgroup.sup_normal U.toOpenSubgroup.1 V.toOpenSubgroup.1⟩⟩
 
@@ -1681,7 +1681,7 @@ instance [SeparatelyContinuousMul
 
 中文:
 实例 [SeparatelyContinuousMul
-  签名: G] : Lattice (OpenNormalSubgroup G) where
+  签名: G] : 格 (OpenNormal子群 G) where
 -/
 instance [SeparatelyContinuousMul G] : Lattice (OpenNormalSubgroup G) where
 
@@ -1714,12 +1714,12 @@ structure IsTopologicalAddGroup.addNegClosureNhd
     - add : W + T subseteq W
 
 中文:
-结构 IsTopologicalAddGroup.addNegClosureNhd
-  参数: (T W : Set G) [AddGroup G]
+结构 是拓扑加群.addNegClosureNhd
+  参数: (T W : 集合 G) [加法群 G]
   公理与运算 (4 个):
     - nhds : T in 𝓝 0
     - neg : -T = T
-    - isOpen : IsOpen T
+    - isOpen : 是开集 T
     - add : W + T subseteq W
 -/
 structure IsTopologicalAddGroup.addNegClosureNhd (T W : Set G) [AddGroup G] : Prop where
@@ -1744,12 +1744,12 @@ structure IsTopologicalGroup.mulInvClosureNhd
     - mul : W * T subseteq W
 
 中文:
-结构 IsTopologicalGroup.mulInvClosureNhd
-  参数: (T W : Set G) [Group G]
+结构 是拓扑群.mulInvClosureNhd
+  参数: (T W : 集合 G) [群 G]
   公理与运算 (4 个):
     - nhds : T in 𝓝 1
     - inv : T⁻¹ = T
-    - isOpen : IsOpen T
+    - isOpen : 是开集 T
     - mul : W * T subseteq W
 -/
 structure IsTopologicalGroup.mulInvClosureNhd (T W : Set G) [Group G] : Prop where
@@ -1780,7 +1780,7 @@ lemma exist_mul_closure_nhds
 
 中文:
 引理 exist_mul_closure_nhds
-  条件: {W : Set G} (WClopen : IsClopen W)
+  条件: {W : 集合 G} (WClopen : IsClopen W)
   结论: 存在 T in 𝓝 (1 : G), W * T subseteq W
   证明: by
   apply WClopen.isClosed.isCompact.induction_on (p := fun S => exists T in 𝓝 (1 : G), S * T subseteq W)
@@ -1824,8 +1824,8 @@ lemma exists_mulInvClosureNhd
   · exact fun a ha => mu
 
 中文:
-引理 exists_mulInvClosureNhd
-  条件: {W : Set G} (WClopen : IsClopen W)
+引理 存在_mulInvClosureNhd
+  条件: {W : 集合 G} (WClopen : IsClopen W)
   证明: by
   rcases exist_mul_closure_nhds WClopen with ⟨S, Smemnhds, mulclose⟩
   rcases mem_nhds_iff.mp Smemnhds with ⟨U, UsubS, Uopen, onememU⟩
@@ -1869,7 +1869,7 @@ theorem exist_openSubgroup_sub_clopen_nhds_of_one
 
 中文:
 定理 exist_openSubgroup_sub_clopen_nhds_of_one
-  结论: {G : 类型} [Group G] [TopologicalSpace G]
+  结论: {G : 类型} [群 G] [拓扑空间 G]
   证明: by
   rcases exists_mulInvClosureNhd WClopen with ⟨V, hV⟩
   let S : Subgroup G := {

@@ -162,7 +162,7 @@ definition rfind
 
 中文:
 定义 rfind
-  签名: (p : 自然数 ->. 布尔)
+  签名: (p : 自然数 ->. 布尔值)
   定义体: ⟨_, fun h => (rfindX p h).1⟩
 
 Depends on / 依赖: rfindX
@@ -181,7 +181,7 @@ theorem rfind_spec
 
 中文:
 定理 rfind_spec
-  条件: {p : 自然数 ->. 布尔} {n : 自然数} (h : n in rfind p)
+  条件: {p : 自然数 ->. 布尔值} {n : 自然数} (h : n in rfind p)
   结论: true in p n
   证明: h.snd ▸ (rfindX p h.fst).2.1
 
@@ -203,7 +203,7 @@ theorem rfind_min
 
 中文:
 定理 rfind_min
-  条件: {p : 自然数 ->. 布尔} {n : 自然数} (h : n in rfind p)
+  条件: {p : 自然数 ->. 布尔值} {n : 自然数} (h : n in rfind p)
   结论: 对任意 {m : 自然数}, m < n -> false in p m
   证明: @(h.snd ▸ @((rfindX p h.fst).2.2))
 
@@ -225,7 +225,7 @@ theorem rfind_dom
 
 中文:
 定理 rfind_dom
-  条件: {p : 自然数 ->. 布尔}
+  条件: {p : 自然数 ->. 布尔值}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -249,7 +249,7 @@ theorem rfind_dom'
 
 中文:
 定理 rfind_dom'
-  条件: {p : 自然数 ->. 布尔}
+  条件: {p : 自然数 ->. 布尔值}
   证明: exists_congr fun _ =>
     and_congr_right fun pn =>
       ⟨fun H _ h => (Decidable.eq_or_lt_of_le h).elim (fun e => e.symm ▸ pn.fst) (H _), fun H _ h =>
@@ -282,7 +282,7 @@ let ⟨m, hm⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨_, h₁, fun {m} mn => (h�
 
 中文:
 定理 mem_rfind
-  条件: {p : 自然数 ->. 布尔} {n : 自然数}
+  条件: {p : 自然数 ->. 布尔值} {n : 自然数}
   证明: ⟨fun h => ⟨rfind_spec h, @rfind_min _ _ h⟩, fun ⟨h₁, h₂⟩ => by
 let ⟨m, hm⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨_, h₁, fun {m} mn => (h₂ mn).fst⟩
     rcases lt_trichotomy m n with (h | h | h)
@@ -314,7 +314,7 @@ let ⟨n, hn⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨m, this, fun {_} _ => ⟨�
 
 中文:
 定理 rfind_min'
-  条件: {p : 自然数 -> 布尔} {m : 自然数} (pm : p m)
+  条件: {p : 自然数 -> 布尔值} {m : 自然数} (pm : p m)
   结论: 存在 n in rfind p, n <= m
   证明: have : true in (p : Nat ->. Bool) m := ⟨trivial, pm⟩
 let ⟨n, hn⟩ := dom_iff_mem.1 (@rfind_dom p).2 ⟨m, this, fun {_} _ => ⟨⟩⟩
@@ -340,7 +340,7 @@ theorem rfind_zero_none
 
 中文:
 定理 rfind_zero_none
-  条件: (p : 自然数 ->. 布尔) (p0 : p 0 = Part.none)
+  条件: (p : 自然数 ->. 布尔值) (p0 : p 0 = Part.none)
   结论: rfind p = Part.none
   证明: eq_none_iff.2 fun _ h =>
     let ⟨_, _, h₂⟩ := rfind_dom'.1 h.fst
@@ -363,7 +363,7 @@ definition rfindOpt
 
 中文:
 定义 rfindOpt
-  签名: {α} (f : 自然数 -> Option α)
+  签名: {α} (f : 自然数 -> 选项类型 α)
   定义体: (rfind fun n => (f n).isSome).bind fun n => f n
 
 Depends on / 依赖: isSome
@@ -383,7 +383,7 @@ theorem rfindOpt_spec
 
 中文:
 定理 rfindOpt_spec
-  条件: {α} {f : 自然数 -> Option α} {a} (h : a in rfindOpt f)
+  条件: {α} {f : 自然数 -> 选项类型 α} {a} (h : a in rfindOpt f)
   结论: 存在 n, a in f n
   证明: let ⟨n, _, h₂⟩ := mem_bind_iff.1 h
   ⟨n, mem_coe.1 h₂⟩
@@ -410,7 +410,7 @@ theorem rfindOpt_dom
 
 中文:
 定理 rfindOpt_dom
-  条件: {α} {f : 自然数 -> Option α}
+  条件: {α} {f : 自然数 -> 选项类型 α}
   结论: (rfindOpt f).Dom ↔ 存在 n a, a in f n
   证明: ⟨fun h => (rfindOpt_spec ⟨h, rfl⟩).imp fun _ h => ⟨_, h⟩, fun h => by
     have h' : exists n, (f n).isSome := h.imp fun n => Option.isSome_iff_exists.2
@@ -445,7 +445,7 @@ theorem rfindOpt_mono
 
 中文:
 定理 rfindOpt_mono
-  条件: {α} {f : 自然数 -> Option α} (H : 对任意 {a m n}, m <= n -> a in f m -> a in f n) {a}
+  条件: {α} {f : 自然数 -> 选项类型 α} (H : 对任意 {a m n}, m <= n -> a in f m -> a in f n) {a}
   证明: ⟨rfindOpt_spec, fun ⟨n, h⟩ => by
     have h' := rfindOpt_dom.2 ⟨_, _, h⟩
     obtain ⟨k, hk⟩ := rfindOpt_spec ⟨h', rfl⟩
@@ -744,7 +744,7 @@ definition Computable
   body: Partrec (f : α ->. σ)
 
 中文:
-定义 Computable
+定义 可计算
   签名: {α σ} [Primcodable α] [Primcodable σ] (f : α -> σ)
   定义体: Partrec (f : α ->. σ)
 
@@ -814,7 +814,7 @@ theorem Computable.partrec
   proof: hf
 
 中文:
-定理 Computable.partrec
+定理 可计算.partrec
   结论: {α σ} [Primcodable α] [Primcodable σ] {f : α -> σ}
   证明: hf
 -/
@@ -855,8 +855,8 @@ theorem of_eq
 
 中文:
 定理 of_eq
-  条件: {f g : α -> σ} (hf : Computable f) (H : 对任意 n, f n = g n)
-  结论: Computable g
+  条件: {f g : α -> σ} (hf : 可计算 f) (H : 对任意 n, f n = g n)
+  结论: 可计算 g
   证明: (funext H : f = g) ▸ hf
 -/
 theorem of_eq {f g : α -> σ} (hf : Computable f) (H : forall n, f n = g n) : Computable g :=
@@ -874,7 +874,7 @@ theorem const
 中文:
 定理 const
   条件: (s : σ)
-  结论: Computable fun _ : α => s
+  结论: 可计算 fun _ : α => s
   证明: (Primrec.const _).to_comp
 
 Depends on / 依赖: Primrec, Primrec.const, to_comp
@@ -895,7 +895,7 @@ theorem ofOption
 
 中文:
 定理 ofOption
-  条件: {f : α -> Option β} (hf : Computable f)
+  条件: {f : α -> 选项类型 β} (hf : 可计算 f)
   结论: Partrec fun a => (f a : Part β)
   证明: (Nat.Partrec.ppred.comp hf).of_eq fun n => by
     rcases decode (α := α) n with - | a <;> simp
@@ -919,7 +919,7 @@ theorem to₂
 
 中文:
 定理 to₂
-  条件: {f : α × β -> σ} (hf : Computable f)
+  条件: {f : α × β -> σ} (hf : 可计算 f)
   结论: Computable₂ fun a b => f (a, b)
   证明: hf.of_eq fun ⟨_, _⟩ => rfl
 
@@ -938,7 +938,7 @@ theorem id
 
 中文:
 定理 id
-  结论: Computable (@id α)
+  结论: 可计算 (@id α)
   证明: Primrec.id.to_comp
 -/
 protected theorem id : Computable (@id α) :=
@@ -954,7 +954,7 @@ theorem fst
 
 中文:
 定理 fst
-  结论: Computable (@Prod.fst α β)
+  结论: 可计算 (@积类型.fst α β)
   证明: Primrec.fst.to_comp
 
 Depends on / 依赖: Primrec, Primrec.fst.to_comp, to_comp
@@ -976,7 +976,7 @@ nonrec theorem pair {f : α -> β} {g : α -> γ} (hf : Computable f) (hg : Comp
 
 中文:
 定理 snd
-  结论: Computable (@Prod.snd α β)
+  结论: 可计算 (@积类型.snd α β)
   证明: Primrec.snd.to_comp
 
 nonrec theorem pair {f : α -> β} {g : α -> γ} (hf : Computable f) (hg : Computable g) :
@@ -1002,7 +1002,7 @@ theorem unpair
 
 中文:
 定理 unpair
-  结论: Computable 自然数.unpair
+  结论: 可计算 自然数.unpair
   证明: Primrec.unpair.to_comp
 
 Depends on / 依赖: Primrec, Primrec.unpair.to_comp, to_comp, unpair
@@ -1020,7 +1020,7 @@ theorem succ
 
 中文:
 定理 succ
-  结论: Computable 自然数.succ
+  结论: 可计算 自然数.succ
   证明: Primrec.succ.to_comp
 
 Depends on / 依赖: Primrec, Primrec.succ.to_comp, to_comp
@@ -1038,7 +1038,7 @@ theorem pred
 
 中文:
 定理 pred
-  结论: Computable 自然数.pred
+  结论: 可计算 自然数.pred
   证明: Primrec.pred.to_comp
 
 Depends on / 依赖: Primrec, Primrec.pred.to_comp, to_comp
@@ -1056,7 +1056,7 @@ theorem nat_bodd
 
 中文:
 定理 nat_bodd
-  结论: Computable 自然数.bodd
+  结论: 可计算 自然数.bodd
   证明: Primrec.nat_bodd.to_comp
 
 Depends on / 依赖: Primrec, Primrec.nat_bodd.to_comp, nat_bodd, to_comp
@@ -1074,7 +1074,7 @@ theorem nat_div2
 
 中文:
 定理 nat_div2
-  结论: Computable 自然数.div2
+  结论: 可计算 自然数.div2
   证明: Primrec.nat_div2.to_comp
 
 Depends on / 依赖: Primrec, Primrec.nat_div2.to_comp, nat_div2, to_comp
@@ -1092,7 +1092,7 @@ theorem sumInl
 
 中文:
 定理 sumInl
-  结论: Computable (@Sum.inl α β)
+  结论: 可计算 (@和.inl α β)
   证明: Primrec.sumInl.to_comp
 
 Depends on / 依赖: Primrec, Primrec.sumInl.to_comp, sumInl, to_comp
@@ -1110,7 +1110,7 @@ theorem sumInr
 
 中文:
 定理 sumInr
-  结论: Computable (@Sum.inr α β)
+  结论: 可计算 (@和.inr α β)
   证明: Primrec.sumInr.to_comp
 
 Depends on / 依赖: Primrec, Primrec.sumInr.to_comp, sumInr, to_comp
@@ -1128,7 +1128,7 @@ theorem list_cons
 
 中文:
 定理 list_cons
-  结论: Computable₂ (@List.cons α)
+  结论: Computable₂ (@列表.cons α)
   证明: Primrec.list_cons.to_comp
 
 Depends on / 依赖: Primrec, Primrec.list_cons.to_comp, list_cons, to_comp
@@ -1146,7 +1146,7 @@ theorem list_reverse
 
 中文:
 定理 list_reverse
-  结论: Computable (@List.reverse α)
+  结论: 可计算 (@列表.reverse α)
   证明: Primrec.list_reverse.to_comp
 
 Depends on / 依赖: Primrec, Primrec.list_reverse.to_comp, list_reverse, to_comp
@@ -1164,7 +1164,7 @@ theorem list_getElem?
 
 中文:
 定理 list_getElem?
-  结论: Computable₂ ((·[·]? : List α -> 自然数 -> Option α))
+  结论: Computable₂ ((·[·]? : 列表 α -> 自然数 -> 选项类型 α))
   证明: Primrec.list_getElem?.to_comp
 
 Depends on / 依赖: Primrec, Primrec.list_getElem, list_getElem, to_comp
@@ -1182,7 +1182,7 @@ theorem list_append
 
 中文:
 定理 list_append
-  结论: Computable₂ ((· ++ ·) : List α -> List α -> List α)
+  结论: Computable₂ ((· ++ ·) : 列表 α -> 列表 α -> 列表 α)
   证明: Primrec.list_append.to_comp
 
 Depends on / 依赖: Primrec, Primrec.list_append.to_comp, list_append, to_comp
@@ -1218,7 +1218,7 @@ theorem list_length
 
 中文:
 定理 list_length
-  结论: Computable (@List.length α)
+  结论: 可计算 (@列表.length α)
   证明: Primrec.list_length.to_comp
 
 Depends on / 依赖: Primrec, Primrec.list_length.to_comp, list_length, to_comp
@@ -1238,7 +1238,7 @@ theorem vector_cons
 中文:
 定理 vector_cons
   条件: {n}
-  结论: Computable₂ (@List.Vector.cons α n)
+  结论: Computable₂ (@列表.Vector.cons α n)
   证明: Primrec.vector_cons.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_cons.to_comp, to_comp, vector_cons
@@ -1258,7 +1258,7 @@ theorem vector_toList
 中文:
 定理 vector_toList
   条件: {n}
-  结论: Computable (@List.Vector.toList α n)
+  结论: 可计算 (@列表.Vector.toList α n)
   证明: Primrec.vector_toList.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_toList.to_comp, to_comp, vector_toList
@@ -1278,7 +1278,7 @@ theorem vector_length
 中文:
 定理 vector_length
   条件: {n}
-  结论: Computable (@List.Vector.length α n)
+  结论: 可计算 (@列表.Vector.length α n)
   证明: Primrec.vector_length.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_length.to_comp, to_comp, vector_length
@@ -1298,7 +1298,7 @@ theorem vector_head
 中文:
 定理 vector_head
   条件: {n}
-  结论: Computable (@List.Vector.head α n)
+  结论: 可计算 (@列表.Vector.head α n)
   证明: Primrec.vector_head.to_comp
 
 Depends on / 依赖: DecidableEq, Encodable, Encodable.decidableEqOfEncodable, Primrec, Primrec.vector_head.to_comp, decidableEqOfEncodable, finsuppEquivDFinsupp, ofEquiv, to_comp, vector_head
@@ -1318,7 +1318,7 @@ theorem vector_tail
 中文:
 定理 vector_tail
   条件: {n}
-  结论: Computable (@List.Vector.tail α n)
+  结论: 可计算 (@列表.Vector.tail α n)
   证明: Primrec.vector_tail.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_tail.to_comp, classical, finsuppEquivDFinsupp, finsuppEquivDFinsupp.symm, of_equiv, to_comp, vector_tail
@@ -1338,7 +1338,7 @@ theorem vector_get
 中文:
 定理 vector_get
   条件: {n}
-  结论: Computable₂ (@List.Vector.get α n)
+  结论: Computable₂ (@列表.Vector.get α n)
   证明: Primrec.vector_get.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_get.to_comp, to_comp, vector_get
@@ -1358,7 +1358,7 @@ theorem vector_ofFn'
 中文:
 定理 vector_ofFn'
   条件: {n}
-  结论: Computable (@List.Vector.ofFn α n)
+  结论: 可计算 (@列表.Vector.ofFn α n)
   证明: Primrec.vector_ofFn'.to_comp
 
 Depends on / 依赖: Primrec, Primrec.vector_ofFn, to_comp, vector_ofFn
@@ -1378,7 +1378,7 @@ theorem fin_app
 中文:
 定理 fin_app
   条件: {n}
-  结论: Computable₂ (@id (Fin n -> σ))
+  结论: Computable₂ (@id (有限集 n -> σ))
   证明: Primrec.fin_app.to_comp
 
 Depends on / 依赖: Primrec, Primrec.fin_app.to_comp, fin_app, to_comp
@@ -1396,7 +1396,7 @@ theorem encode
 
 中文:
 定理 encode
-  结论: Computable (@encode α _)
+  结论: 可计算 (@encode α _)
   证明: Primrec.encode.to_comp
 -/
 protected theorem encode : Computable (@encode α _) :=
@@ -1412,7 +1412,7 @@ theorem decode
 
 中文:
 定理 decode
-  结论: Computable (decode (α := α))
+  结论: 可计算 (decode (α := α))
   证明: Primrec.decode.to_comp
 -/
 protected theorem decode : Computable (decode (α := α)) :=
@@ -1428,9 +1428,9 @@ theorem ofNat
   proof: (Primrec.ofNat _).to_comp
 
 中文:
-定理 ofNat
-  条件: (α) [Denumerable α]
-  结论: Computable (of自然数 α)
+定理 of自然数
+  条件: (α) [可枚举 α]
+  结论: 可计算 (of自然数 α)
   证明: (Primrec.ofNat _).to_comp
 -/
 protected theorem ofNat (α) [Denumerable α] : Computable (ofNat α) :=
@@ -1448,7 +1448,7 @@ theorem encode_iff
 中文:
 定理 encode_iff
   条件: {f : α -> σ}
-  结论: (Computable fun a => encode (f a)) ↔ Computable f
+  结论: (可计算 fun a => encode (f a)) ↔ 可计算 f
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1466,7 +1466,7 @@ theorem option_some
 
 中文:
 定理 option_some
-  结论: Computable (@Option.some α)
+  结论: 可计算 (@选项类型.some α)
   证明: Primrec.option_some.to_comp
 
 Depends on / 依赖: Primrec, Primrec.option_some.to_comp, option_some, to_comp
@@ -1512,7 +1512,7 @@ theorem of_eq_tot
 中文:
 定理 of_eq_tot
   条件: {f : α ->. σ} {g : α -> σ} (hf : Partrec f) (H : 对任意 n, g n in f n)
-  结论: Computable g
+  结论: 可计算 g
   证明: hf.of_eq fun a => eq_some_iff.2 (H a)
 
 Depends on / 依赖: eq_some_iff, hf.of_eq, of_eq
@@ -1564,8 +1564,8 @@ theorem _root_.Decidable.Partrec.const'
   proof: (Computable.ofOption (const (toOption s))).of_eq fun _ => of_toOption s
 
 中文:
-定理 _root_.Decidable.Partrec.const'
-  条件: (s : Part σ) [Decidable s.Dom]
+定理 _root_.可判定.Partrec.const'
+  条件: (s : Part σ) [可判定 s.Dom]
   结论: Partrec fun _ : α => s
   证明: (Computable.ofOption (const (toOption s))).of_eq fun _ => of_toOption s
 
@@ -1676,7 +1676,7 @@ nonrec theorem comp {f : β ->. σ} {g : α -> β} (hf : Partrec f) (hg : Comput
 
 中文:
 定理 nat_rec
-  结论: {f : α -> 自然数} {g : α ->. σ} {h : α -> 自然数 × σ ->. σ} (hf : Computable f) (hg : Partrec g)
+  结论: {f : α -> 自然数} {g : α ->. σ} {h : α -> 自然数 × σ ->. σ} (hf : 可计算 f) (hg : Partrec g)
   证明: (Nat.Partrec.prec' hf hg hh).of_eq fun n => by
     rcases e : decode (α := α) n with - | a
     · simp
@@ -1843,7 +1843,7 @@ theorem comp₂
 
 中文:
 定理 comp₂
-  条件: {f : γ -> σ} {g : α -> β -> γ} (hf : Computable f) (hg : Computable₂ g)
+  条件: {f : γ -> σ} {g : α -> β -> γ} (hf : 可计算 f) (hg : Computable₂ g)
   证明: hf.comp hg
 
 Depends on / 依赖: hf.comp
@@ -1874,7 +1874,7 @@ nonrec theorem comp {f : β -> γ -> σ} {g : α -> β} {h : α -> γ} (hf : Com
 
 中文:
 定理 mk
-  条件: {f : α -> β -> σ} (hf : Computable fun p : α × β => f p.1 p.2)
+  条件: {f : α -> β -> σ} (hf : 可计算 fun p : α × β => f p.1 p.2)
   结论: Computable₂ f
   证明: hf
 
@@ -1930,7 +1930,7 @@ theorem rfind
 
 中文:
 定理 rfind
-  条件: {p : α -> 自然数 ->. 布尔} (hp : Partrec₂ p)
+  条件: {p : α -> 自然数 ->. 布尔值} (hp : Partrec₂ p)
   结论: Partrec fun a => 自然数.rfind (p a)
   证明: (Nat.Partrec.rfind <|
         hp.map ((Primrec.dom_bool fun b => cond b 0 1).comp Primrec.snd).to₂.to_comp).of_eq
@@ -1955,7 +1955,7 @@ theorem rfindOpt
 
 中文:
 定理 rfindOpt
-  条件: {f : α -> 自然数 -> Option σ} (hf : Computable₂ f)
+  条件: {f : α -> 自然数 -> 选项类型 σ} (hf : Computable₂ f)
   证明: (rfind (Primrec.option_isSome.to_comp.comp hf).partrec.to₂).bind (ofOption hf)
 
 Depends on / 依赖: Primrec, Primrec.option_isSome.to_comp.comp, ofOption, option_isSome, partrec, partrec.to, to_comp
@@ -1981,7 +1981,7 @@ theorem nat_casesOn_right
 
 中文:
 定理 nat_casesOn_right
-  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 ->. σ} (hf : Computable f)
+  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 ->. σ} (hf : 可计算 f)
   证明: (nat_rec hf hg (hh.comp fst (pred.comp <| hf.comp fst)).to₂).of_eq fun a => by
     simp only [PFun.coe_val, Nat.pred_eq_sub_one]
     rcases f a with - | n
@@ -2102,7 +2102,7 @@ theorem option_some_iff
 中文:
 定理 option_some_iff
   条件: {f : α -> σ}
-  结论: (Computable fun a => Option.some (f a)) ↔ Computable f
+  结论: (可计算 fun a => 选项类型.some (f a)) ↔ 可计算 f
   证明: ⟨fun h => encode_iff.1 Primrec.pred.to_comp.comp encode_iff.2 h, option_some.comp⟩
 
 Depends on / 依赖: Primrec, Primrec.pred.to_comp.comp, encode_iff, option_some, option_some.comp, to_comp
@@ -2128,7 +2128,7 @@ theorem bind_decode_iff
 
 中文:
 定理 bind_decode_iff
-  条件: {f : α -> β -> Option σ}
+  条件: {f : α -> β -> 选项类型 σ}
   证明: ⟨fun hf =>
     Nat.Partrec.of_eq
       (((Partrec.nat_iff.2
@@ -2197,7 +2197,7 @@ theorem nat_rec
 
 中文:
 定理 nat_rec
-  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 × σ -> σ} (hf : Computable f) (hg : Computable g)
+  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 × σ -> σ} (hf : 可计算 f) (hg : 可计算 g)
   证明: (Partrec.nat_rec hf hg hh.partrec₂).of_eq fun a => by simp; induction f a <;> simp [*]
 -/
 theorem nat_rec {f : α -> Nat} {g : α -> σ} {h : α -> Nat × σ -> σ} (hf : Computable f) (hg : Computable g)
@@ -2215,7 +2215,7 @@ theorem nat_casesOn
 
 中文:
 定理 nat_casesOn
-  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 -> σ} (hf : Computable f) (hg : Computable g)
+  结论: {f : α -> 自然数} {g : α -> σ} {h : α -> 自然数 -> σ} (hf : 可计算 f) (hg : 可计算 g)
   证明: nat_rec hf hg (hh.comp fst <| fst.comp snd).to₂
 -/
 theorem nat_casesOn {f : α -> Nat} {g : α -> σ} {h : α -> Nat -> σ} (hf : Computable f) (hg : Computable g)
@@ -2233,7 +2233,7 @@ theorem cond
 
 中文:
 定理 cond
-  结论: {c : α -> 布尔} {f : α -> σ} {g : α -> σ} (hc : Computable c) (hf : Computable f)
+  结论: {c : α -> 布尔值} {f : α -> σ} {g : α -> σ} (hc : 可计算 c) (hf : 可计算 f)
   证明: (nat_casesOn (encode_iff.2 hc) hg (hf.comp fst).to₂).of_eq fun a => by cases c a <;> rfl
 
 Depends on / 依赖: encode_iff, hf.comp, nat_casesOn, of_eq
@@ -2254,7 +2254,7 @@ theorem option_casesOn
 
 中文:
 定理 option_casesOn
-  结论: {o : α -> Option β} {f : α -> σ} {g : α -> β -> σ} (ho : Computable o)
+  结论: {o : α -> 选项类型 β} {f : α -> σ} {g : α -> β -> σ} (ho : 可计算 o)
   证明: option_some_iff.1
     (nat_casesOn (encode_iff.2 ho) (option_some_iff.2 hf) (map_decode_iff.2 hg)).of_eq fun a => by
       cases o a <;> simp [encodek]
@@ -2278,7 +2278,7 @@ theorem option_bind
 
 中文:
 定理 option_bind
-  结论: {f : α -> Option β} {g : α -> β -> Option σ} (hf : Computable f)
+  结论: {f : α -> 选项类型 β} {g : α -> β -> 选项类型 σ} (hf : 可计算 f)
   证明: (option_casesOn hf (const Option.none) hg).of_eq fun a => by cases f a <;> rfl
 
 Depends on / 依赖: Option.none, of_eq, option_casesOn
@@ -2299,7 +2299,7 @@ theorem option_map
 
 中文:
 定理 option_map
-  条件: {f : α -> Option β} {g : α -> β -> σ} (hf : Computable f) (hg : Computable₂ g)
+  条件: {f : α -> 选项类型 β} {g : α -> β -> σ} (hf : 可计算 f) (hg : Computable₂ g)
   证明: by
   convert! option_bind hf (option_some.comp₂ hg)
   apply Option.map_eq_bind
@@ -2322,7 +2322,7 @@ theorem option_getD
 
 中文:
 定理 option_getD
-  条件: {f : α -> Option β} {g : α -> β} (hf : Computable f) (hg : Computable g)
+  条件: {f : α -> 选项类型 β} {g : α -> β} (hf : 可计算 f) (hg : 可计算 g)
   证明: (Computable.option_casesOn hf hg (show Computable₂ fun _ b => b from Computable.snd)).of_eq
     fun a => by cases f a <;> rfl
 
@@ -2366,7 +2366,7 @@ theorem sumCasesOn
 
 中文:
 定理 sumCasesOn
-  结论: {f : α -> β oplus γ} {g : α -> β -> σ} {h : α -> γ -> σ} (hf : Computable f)
+  结论: {f : α -> β oplus γ} {g : α -> β -> σ} {h : α -> γ -> σ} (hf : 可计算 f)
   证明: option_some_iff.1
     (cond (nat_bodd.comp <| encode_iff.2 hf)
           (option_map (Computable.decode.comp <| nat_div2.comp <| encode_iff.2 hf) hh)
@@ -2405,7 +2405,7 @@ to₂
 
 中文:
 定理 nat_strong_rec
-  结论: (f : α -> 自然数 -> σ) {g : α -> List σ -> Option σ} (hg : Computable₂ g)
+  结论: (f : α -> 自然数 -> σ) {g : α -> 列表 σ -> 选项类型 σ} (hg : Computable₂ g)
   证明: suffices Computable₂ fun a n => (List.range n).map (f a) from
 option_some_iff.1
       (list_getElem?.comp (this.comp fst (succ.comp snd)) snd).to₂.of_eq fun a => by
@@ -2466,7 +2466,7 @@ theorem vector_ofFn
 
 中文:
 定理 vector_ofFn
-  条件: {n} {f : Fin n -> α -> σ} (hf : 对任意 i, Computable (f i))
+  条件: {n} {f : 有限集 n -> α -> σ} (hf : 对任意 i, 可计算 (f i))
   证明: (Partrec.vector_mOfFn hf).of_eq fun a => by simp
 
 Depends on / 依赖: Partrec, Partrec.vector_mOfFn, of_eq, vector_mOfFn
@@ -2497,7 +2497,7 @@ theorem option_some_iff
 中文:
 定理 option_some_iff
   条件: {f : α ->. σ}
-  结论: (Partrec fun a => (f a).map Option.some) ↔ Partrec f
+  结论: (Partrec fun a => (f a).map 选项类型.some) ↔ Partrec f
   证明: ⟨fun h => (Nat.Partrec.ppred.comp h).of_eq fun n => by simp [Part.bind_assoc, bind_some_eq_map],
     fun hf => hf.map (option_some.comp snd).to₂⟩
 
@@ -2523,7 +2523,7 @@ theorem optionCasesOn_right
 
 中文:
 定理 optionCasesOn_right
-  结论: {o : α -> Option β} {f : α -> σ} {g : α -> β ->. σ} (ho : Computable o)
+  结论: {o : α -> 选项类型 β} {f : α -> σ} {g : α -> β ->. σ} (ho : 可计算 o)
   证明: have :
     Partrec fun a : α =>
       Nat.casesOn (encode (o a)) (Part.some (f a)) (fun n => Part.bind (decode (α := β) n) (g a)) :=
@@ -2560,7 +2560,7 @@ theorem sumCasesOn_right
 
 中文:
 定理 sumCasesOn_right
-  结论: {f : α -> β oplus γ} {g : α -> β -> σ} {h : α -> γ ->. σ} (hf : Computable f)
+  结论: {f : α -> β oplus γ} {g : α -> β -> σ} {h : α -> γ ->. σ} (hf : 可计算 f)
   证明: have :
     Partrec fun a =>
       (Option.casesOn (Sum.casesOn (f a) (fun _ => Option.none) Option.some : Option γ)
@@ -2598,7 +2598,7 @@ theorem sumCasesOn_left
 
 中文:
 定理 sumCasesOn_left
-  结论: {f : α -> β oplus γ} {g : α -> β ->. σ} {h : α -> γ -> σ} (hf : Computable f)
+  结论: {f : α -> β oplus γ} {g : α -> β ->. σ} {h : α -> γ -> σ} (hf : 可计算 f)
   证明: (sumCasesOn_right (sumCasesOn hf (sumInr.comp snd).to₂ (sumInl.comp snd).to₂) hh hg).of_eq
     fun a => by cases f a <;> simp
 

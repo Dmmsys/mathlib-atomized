@@ -31,7 +31,7 @@ lemma listProd
 
 中文:
 引理 listProd
-  结论: {ι S : 类型} [Add S] [Monoid S]
+  结论: {ι S : 类型} [加法 S] [幺半群 S]
   证明: t.toCon.list_prod h
 
 @[simp, norm_cast]
@@ -52,7 +52,7 @@ lemma coe_listProd
 
 中文:
 引理 coe_listProd
-  结论: {ι S : 类型} [Add S] [Monoid S] (t : RingCon S)
+  结论: {ι S : 类型} [加法 S] [幺半群 S] (t : RingCon S)
   证明: t.toCon.coe_listProd l f
 -/
 protected lemma coe_listProd {ι S : Type*} [Add S] [Monoid S] (t : RingCon S)
@@ -72,7 +72,7 @@ lemma listSum
 
 中文:
 引理 listSum
-  结论: {ι S : 类型} [AddMonoid S] [Mul S]
+  结论: {ι S : 类型} [加法幺半群 S] [乘法 S]
   证明: t.toAddCon.list_sum h
 
 @[simp, norm_cast]
@@ -93,7 +93,7 @@ lemma coe_listSum
 
 中文:
 引理 coe_listSum
-  结论: {ι S : 类型} [AddMonoid S] [Mul S] (t : RingCon S)
+  结论: {ι S : 类型} [加法幺半群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.coe_listSum l f
 -/
 protected lemma coe_listSum {ι S : Type*} [AddMonoid S] [Mul S] (t : RingCon S)
@@ -113,7 +113,7 @@ lemma multisetProd
 
 中文:
 引理 multisetProd
-  结论: {ι S : 类型} [Add S] [CommMonoid S] (t : RingCon S)
+  结论: {ι S : 类型} [加法 S] [交换幺半群 S] (t : RingCon S)
   证明: t.toCon.multiset_prod h
 
 @[simp, norm_cast]
@@ -134,7 +134,7 @@ lemma coe_multisetProd
 
 中文:
 引理 coe_multisetProd
-  结论: {ι S : 类型} [Add S] [CommMonoid S] (t : RingCon S)
+  结论: {ι S : 类型} [加法 S] [交换幺半群 S] (t : RingCon S)
   证明: t.toCon.coe_multisetProd s f
 -/
 protected lemma coe_multisetProd {ι S : Type*} [Add S] [CommMonoid S] (t : RingCon S)
@@ -154,7 +154,7 @@ lemma multisetSum
 
 中文:
 引理 multisetSum
-  结论: {ι S : 类型} [AddCommMonoid S] [Mul S] (t : RingCon S)
+  结论: {ι S : 类型} [加法交换幺半群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.multiset_sum h
 
 @[simp, norm_cast]
@@ -175,7 +175,7 @@ lemma coe_multisetSum
 
 中文:
 引理 coe_multisetSum
-  结论: {ι S : 类型} [AddCommMonoid S] [Mul S] (t : RingCon S)
+  结论: {ι S : 类型} [加法交换幺半群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.coe_multisetSum s f
 -/
 protected lemma coe_multisetSum {ι S : Type*} [AddCommMonoid S] [Mul S] (t : RingCon S)
@@ -195,7 +195,7 @@ lemma finsetProd
 
 中文:
 引理 finsetProd
-  结论: {ι S : 类型} [Add S] [CommMonoid S] (t : RingCon S) (s : Finset ι)
+  结论: {ι S : 类型} [加法 S] [交换幺半群 S] (t : RingCon S) (s : 有限集 ι)
   证明: t.toCon.finsetProd s h
 
 @[simp, norm_cast]
@@ -216,7 +216,7 @@ lemma coe_finsetProd
 
 中文:
 引理 coe_finsetProd
-  结论: {ι S : 类型} [Add S] [CommMonoid S] (t : RingCon S) (s : Finset ι)
+  结论: {ι S : 类型} [加法 S] [交换幺半群 S] (t : RingCon S) (s : 有限集 ι)
   证明: t.toCon.coe_finsetProd s f
 -/
 protected lemma coe_finsetProd {ι S : Type*} [Add S] [CommMonoid S] (t : RingCon S) (s : Finset ι)
@@ -236,7 +236,7 @@ lemma finsetSum
 
 中文:
 引理 finsetSum
-  结论: {ι S : 类型} [AddCommMonoid S] [Mul S] (t : RingCon S) (s : Finset ι)
+  结论: {ι S : 类型} [加法交换幺半群 S] [乘法 S] (t : RingCon S) (s : 有限集 ι)
   证明: t.toAddCon.finsetSum s h
 
 @[simp, norm_cast]
@@ -257,7 +257,7 @@ lemma coe_finsetSum
 
 中文:
 引理 coe_finsetSum
-  结论: {ι S : 类型} [AddCommMonoid S] [Mul S] (t : RingCon S) (s : Finset ι)
+  结论: {ι S : 类型} [加法交换幺半群 S] [乘法 S] (t : RingCon S) (s : 有限集 ι)
   证明: t.toAddCon.coe_finsetSum s f
 -/
 protected lemma coe_finsetSum {ι S : Type*} [AddCommMonoid S] [Mul S] (t : RingCon S) (s : Finset ι)

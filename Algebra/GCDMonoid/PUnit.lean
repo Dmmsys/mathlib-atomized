@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongNormalizedGCDMonoid PUnit
+  签名: StrongNormalizedGCD幺半群 命题单元
   定义体: unit
   lcm _ _ := unit
   normUnit _ := 1
@@ -79,7 +79,7 @@ instance normalizedGCDMonoid
 
 中文:
 实例 normalizedGCDMonoid
-  签名: : NormalizedGCDMonoid PUnit
+  签名: : 正规化最大公约数幺半群 命题单元
   定义体: inferInstance
 
 @[simp]
@@ -100,8 +100,8 @@ theorem gcd_eq
 
 中文:
 定理 gcd_eq
-  条件: {x y : PUnit}
-  结论: gcd x y = unit
+  条件: {x y : 命题单元}
+  结论: 最大公约数 x y = unit
   证明: rfl
 
 @[simp]
@@ -123,8 +123,8 @@ theorem lcm_eq
 
 中文:
 定理 lcm_eq
-  条件: {x y : PUnit}
-  结论: lcm x y = unit
+  条件: {x y : 命题单元}
+  结论: 最小公倍数 x y = unit
   证明: rfl
 
 @[simp]
@@ -144,7 +144,7 @@ theorem norm_unit_eq
 
 中文:
 定理 norm_unit_eq
-  条件: {x : PUnit}
+  条件: {x : 命题单元}
   结论: normUnit x = 1
   证明: rfl
 -/

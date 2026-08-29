@@ -63,7 +63,7 @@ theorem exists_eq_forall_mem_Icc_hasDerivWithinAt
     α.continuous_compProj.continuousOn (fun _ ht' => α.compProj_mem_closedBall
 
 中文:
-定理 exists_eq_forall_mem_Icc_hasDerivWithinAt
+定理 存在_eq_对任意_mem_Icc_hasDerivWithinAt
   证明: by
   obtain ⟨α, hα⟩ := FunSpace.exists_isFixedPt_next hf hx
   refine ⟨α.compProj, by rw [FunSpace.compProj_val, ← hα, FunSpace.next_apply₀], fun t ht => ?_⟩
@@ -93,7 +93,7 @@ theorem exists_eq_forall_mem_Icc_hasDerivWithinAt₀
   proof: exists_eq_forall_mem_Icc_hasDerivWithinAt hf (mem_closedBall_self le_rfl)
 
 中文:
-定理 exists_eq_forall_mem_Icc_hasDerivWithinAt₀
+定理 存在_eq_对任意_mem_Icc_hasDerivWithinAt₀
   证明: exists_eq_forall_mem_Icc_hasDerivWithinAt hf (mem_closedBall_self le_rfl)
 
 Depends on / 依赖: exists_eq_forall_mem_Icc_hasDerivWithinAt, le_rfl, mem_closedBall_self
@@ -121,7 +121,7 @@ theorem exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
     rw
 
 中文:
-定理 exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
+定理 存在_对任意_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
   证明: by
   classical
   have (x) (hx : x in closedBall x₀ r) := FunSpace.exists_isFixedPt_next hf hx
@@ -179,7 +179,7 @@ theorem exists_forall_mem_closedBall_eq_hasDerivWithinAt_continuousOn
   exact fun x hx => HasDerivWithinAt.continuousOn (hα1 x hx).2
 
 中文:
-定理 exists_forall_mem_closedBall_eq_hasDerivWithinAt_continuousOn
+定理 存在_对任意_mem_closedBall_eq_hasDerivWithinAt_continuousOn
   证明: by
   obtain ⟨α, hα1, L', hα2⟩ := hf.exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith
   refine ⟨uncurry α, hα1, ?_⟩
@@ -207,7 +207,7 @@ theorem exists_forall_mem_closedBall_eq_forall_mem_Icc_hasDerivWithinAt
   ⟨α, hα.1⟩
 
 中文:
-定理 exists_forall_mem_closedBall_eq_forall_mem_Icc_hasDerivWithinAt
+定理 存在_对任意_mem_closedBall_eq_对任意_mem_Icc_hasDerivWithinAt
   证明: have ⟨α, hα⟩ := exists_forall_mem_closedBall_eq_hasDerivWithinAt_lipschitzOnWith hf
   ⟨α, hα.1⟩
 
@@ -242,7 +242,7 @@ theorem exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt
 .hasDerivAt (Icc_mem_nhds ht.1 ht.2) exact hα2 t (Ioo_subset_Icc_sel
 
 中文:
-定理 exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt
+定理 存在_对任意_mem_closedBall_存在_eq_对任意_mem_Ioo_hasDerivAt
   证明: by
   have ⟨ε, hε, a, r, _, _, hr, hpl⟩ := IsPicardLindelof.of_contDiffAt_one hf
   refine ⟨r, hr, ε, hε, fun x hx => ?_⟩
@@ -272,7 +272,7 @@ theorem exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt₀
   ⟨α, hα1, ε, hε, hα2⟩
 
 中文:
-定理 exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt₀
+定理 存在_对任意_mem_closedBall_存在_eq_对任意_mem_Ioo_hasDerivAt₀
   证明: have ⟨_, hr, ε, hε, H⟩ := exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt hf t₀
   have ⟨α, hα1, hα2⟩ := H x₀ (mem_closedBall_self (le_of_lt hr))
   ⟨α, hα1, ε, hε, hα2⟩
@@ -301,7 +301,7 @@ theorem exists_eventually_eq_hasDerivAt
   refine ⟨closedBall x₀ r ×ˢ Ioo (t₀ - ε) (t
 
 中文:
-定理 exists_eventually_eq_hasDerivAt
+定理 存在_eventually_eq_hasDerivAt
   证明: by
   classical
   obtain ⟨r, hr, ε, hε, H⟩ := exists_forall_mem_closedBall_exists_eq_forall_mem_Ioo_hasDerivAt hf t₀

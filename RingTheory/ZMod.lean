@@ -62,7 +62,7 @@ theorem ZMod.ringHom_eq_of_ker_eq
 
 中文:
 定理 ZMod.ringHom_eq_of_ker_eq
-  结论: {n : 自然数} {R : 类型} [Ring R] (f g : R ->+* ZMod n)
+  结论: {n : 自然数} {R : 类型} [环 R] (f g : R ->+* ZMod n)
   证明: by
   have := f.liftOfRightInverse_comp _ (ZMod.ringHom_rightInverse f) ⟨g, le_of_eq h⟩
   rw [Subtype.coe_mk] at this
@@ -92,7 +92,7 @@ theorem isReduced_zmod
 中文:
 定理 isReduced_zmod
   条件: {n : 自然数}
-  结论: IsReduced (ZMod n) ↔ Squarefree n ∨ n = 0
+  结论: 是既约 (ZMod n) ↔ Squarefree n ∨ n = 0
   证明: by
   rw [← RingHom.ker_isRadical_iff_reduced_of_surjective
       (ZMod.ringHom_surjective <| Int.castRingHom <| ZMod n)]; rw [ZMod.ker_intCastRingHom]; rw [← isRadical_iff_span_singleton]; rw [isRadical_iff_squarefree_or_zero]; rw [Int.squarefree_natCast]; rw [Nat.cast_eq_zero]

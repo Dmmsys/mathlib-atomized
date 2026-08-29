@@ -96,7 +96,7 @@ lemma triangleOfSESδ_naturality
 
 中文:
 引理 triangleOfSESδ_naturality
-  结论: {S₁ S₂ : ShortComplex (CochainComplex C 整数)}
+  结论: {S₁ S₂ : 短复形 (上链复形 C 整数)}
   证明: by
   simp only [triangleOfSESδ, Category.assoc,
     IsIso.inv_comp_eq]
@@ -129,7 +129,7 @@ definition triangleOfSES
 
 中文:
 定义 triangleOfSES
-  签名: : Triangle (DerivedCategory C)
+  签名: : Triangle (导出范畴 C)
   定义体: Triangle.mk (Q.map S.f) (Q.map S.g) (triangleOfSESδ hS)
 
 Depends on / 依赖: Q.map, Triangle, Triangle.mk

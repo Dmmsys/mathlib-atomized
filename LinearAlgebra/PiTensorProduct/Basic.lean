@@ -131,7 +131,7 @@ definition PiTensorProduct
 
 中文:
 定义 PiTensorProduct
-  签名: : Type _
+  签名: : 类型 _
   定义体: (addConGen (PiTensorProduct.Eqv R s)).Quotient
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.Eqv, Quotient, addConGen
@@ -164,7 +164,7 @@ Quotient.sound' AddConGen.Rel.of _ _ Eqv.add_comm _ _ }
 
 中文:
 实例 :
-  签名: AddCommMonoid (⨂[R] i, s i)
+  签名: 加法交换幺半群 (⨂[R] i, s i)
   定义体: { (addConGen (PiTensorProduct.Eqv R s)).addMonoid with
     add_comm := fun x y =>
       AddCon.induction_on₂ x y fun _ _ =>
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (⨂[R] i, s i)
+  签名: 可居 (⨂[R] i, s i)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (⨂[R] i, s i) := ⟨0⟩
@@ -327,7 +327,7 @@ theorem smul_tprodCoeff
 
 中文:
 定理 smul_tprodCoeff
-  结论: [DecidableEq ι] (z : R) (f : Π i, s i) (i : ι) (r : R₁) [SMul R₁ R]
+  结论: [DecidableEq ι] (z : R) (f : Π i, s i) (i : ι) (r : R₁) [标量乘法 R₁ R]
   证明: by
   have h₁ : r • z = r • (1 : R) * z := by rw [smul_mul_assoc, one_mul]
   have h₂ : r • f i = (r • (1 : R)) • f i := (smul_one_smul _ _ _).symm
@@ -458,7 +458,7 @@ instance hasSMul'
 
 中文:
 实例 hasSMul'
-  签名: : SMul R₁ (⨂[R] i, s i)
+  签名: : 标量乘法 R₁ (⨂[R] i, s i)
   定义体: ⟨fun r =>
     liftAddHom (fun f : R × Π i, s i => tprodCoeff R (r • f.1) f.2)
       (fun r' f i hf => by simp_rw [zero_tprodCoeff' _ f i hf])
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (⨂[R] i, s i)
+  签名: 标量乘法 R (⨂[R] i, s i)
   定义体: PiTensorProduct.hasSMul'
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.hasSMul, hasSMul
@@ -542,7 +542,7 @@ instance distribMulAction'
 
 中文:
 实例 distribMulAction'
-  签名: : DistribMulAction R₁ (⨂[R] i, s i) where
+  签名: : 分配乘法作用 R₁ (⨂[R] i, s i) where
   定义体: map_add _ _ _
   mul_smul r r' x :=
     PiTensorProduct.induction_on' x (fun {r'' f} => by simp [smul_tprodCoeff', smul_smul])
@@ -574,7 +574,7 @@ instance smulCommClass'
 
 中文:
 实例 smulCommClass'
-  签名: [SMulCommClass R₁ R₂ R]
+  签名: [标量交换类 R₁ R₂ R]
   定义体: ⟨fun {r' r''} x =>
     PiTensorProduct.induction_on' x (fun {xr xf} => by simp only [smul_tprodCoeff', smul_comm])
       fun {z y} ihz ihy => by simp_rw [PiTensorProduct.smul_add, ihz, ihy]⟩
@@ -598,7 +598,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: [SMul R₁ R₂] [IsScalarTower R₁ R₂ R]
+  签名: [标量乘法 R₁ R₂] [标量塔 R₁ R₂ R]
   定义体: ⟨fun {r' r''} x =>
     PiTensorProduct.induction_on' x (fun {xr xf} => by simp only [smul_tprodCoeff', smul_assoc])
       fun {z y} ihz ihy => by simp_rw [PiTensorProduct.smul_add, ihz, ihy]⟩
@@ -630,7 +630,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: [Semiring R₁] [Module R₁ R] [SMulCommClass R₁ R R]
+  签名: [半环 R₁] [模 R₁ R] [标量交换类 R₁ R R]
   定义体: { PiTensorProduct.distribMulAction' with
     add_smul := fun r r' x =>
       PiTensorProduct.induction_on' x
@@ -662,7 +662,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (⨂[R] i, s i)
+  签名: 模 R (⨂[R] i, s i)
   定义体: PiTensorProduct.module'
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.module, module
@@ -680,7 +680,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass R R (⨂[R] i, s i)
+  签名: 标量交换类 R R (⨂[R] i, s i)
   定义体: PiTensorProduct.smulCommClass'
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.smulCommClass, smulCommClass
@@ -698,7 +698,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R R (⨂[R] i, s i)
+  签名: 标量塔 R R (⨂[R] i, s i)
   定义体: PiTensorProduct.isScalarTower'
 
 Depends on / 依赖: PiTensorProduct, PiTensorProduct.isScalarTower, isScalarTower
@@ -723,7 +723,7 @@ notation3:100 "⨂ₜ["R"] "(...)", "r:(scoped f => tprod R f
 
 中文:
 定义 tprod
-  签名: : MultilinearMap R s (⨂[R] i, s i) where
+  签名: : 多重线性映射 R s (⨂[R] i, s i) where
   定义体: tprodCoeff R 1
   map_update_add' {_ f} i x y := (add_tprodCoeff (1 : R) f i x y).symm
   map_update_smul' {_ f} i r x := by
@@ -879,7 +879,7 @@ lemma nonempty_lifts
 中文:
 引理 nonempty_lifts
   条件: (x : ⨂[R] i, s i)
-  结论: Set.Nonempty (lifts x)
+  结论: 集合.非空 (lifts x)
   证明: by
   existsi Quot.out x
   simp [lifts, ← AddCon.quot_mk_eq_coe]
@@ -1085,7 +1085,7 @@ definition liftAux
 
 中文:
 定义 liftAux
-  签名: (φ : MultilinearMap R s E)
+  签名: (φ : 多重线性映射 R s E)
   定义体: liftAddHom (fun p : R × Π i, s i => p.1 • φ p.2)
     (fun z f i hf => by simp_rw [map_coord_zero φ i hf, smul_zero])
     (fun f => by simp_rw [zero_smul])
@@ -1118,7 +1118,7 @@ theorem liftAux_tprod
 
 中文:
 定理 liftAux_tprod
-  条件: (φ : MultilinearMap R s E) (f : Π i, s i)
+  条件: (φ : 多重线性映射 R s E) (f : Π i, s i)
   结论: liftAux φ (tprod R f) = φ f
   证明: by
   simp only [liftAux, liftAddHom, tprod_eq_tprodCoeff_one, tprodCoeff, AddCon.coe_mk']
@@ -1148,7 +1148,7 @@ theorem liftAux_tprodCoeff
 
 中文:
 定理 liftAux_tprodCoeff
-  条件: (φ : MultilinearMap R s E) (z : R) (f : Π i, s i)
+  条件: (φ : 多重线性映射 R s E) (z : R) (f : Π i, s i)
   证明: rfl
 -/
 theorem liftAux_tprodCoeff (φ : MultilinearMap R s E) (z : R) (f : Π i, s i) :
@@ -1169,7 +1169,7 @@ theorem liftAux.smul
 
 中文:
 定理 liftAux.smul
-  条件: {φ : MultilinearMap R s E} (r : R) (x : ⨂[R] i, s i)
+  条件: {φ : 多重线性映射 R s E} (r : R) (x : ⨂[R] i, s i)
   证明: by
   refine PiTensorProduct.induction_on' x ?_ ?_
   · intro z f
@@ -1208,7 +1208,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : MultilinearMap R s E ≃ₗ[R] (⨂[R] i, s i) ->ₗ[R] E where
+  签名: : 多重线性映射 R s E ≃ₗ[R] (⨂[R] i, s i) ->ₗ[R] E where
   定义体: { liftAux φ with map_smul' := liftAux.smul }
   invFun φ' := φ'.compMultilinearMap (tprod R)
   left_inv φ := by
@@ -1339,7 +1339,7 @@ theorem lift_tprod
 
 中文:
 定理 lift_tprod
-  结论: lift (tprod R : MultilinearMap R s _) = LinearMap.id
+  结论: lift (tprod R : 多重线性映射 R s _) = 线性映射.id
   证明: Eq.symm lift.unique' rfl
 
 Depends on / 依赖: Eq.symm, lift.unique, unique
@@ -1433,7 +1433,7 @@ definition mapIncl
 
 中文:
 定义 mapIncl
-  签名: (p : Π i, Submodule R (s i))
+  签名: (p : Π i, 子模 R (s i))
   定义体: map fun (i : ι) => (p i).subtype
 
 Depends on / 依赖: subtype
@@ -1477,7 +1477,7 @@ theorem lift_comp_map
 
 中文:
 定理 lift_comp_map
-  条件: (h : MultilinearMap R t E)
+  条件: (h : 多重线性映射 R t E)
   证明: by
   ext
   simp only [LinearMap.compMultilinearMap_apply, LinearMap.coe_comp, Function.comp_apply,
@@ -1508,7 +1508,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (fun i => (LinearMap.id : s i ->ₗ[R] s i)) = .id
+  结论: map (fun i => (线性映射.id : s i ->ₗ[R] s i)) = .id
   证明: by
   ext
   simp only [LinearMap.compMultilinearMap_apply, map_tprod, LinearMap.id_coe, id_eq]
@@ -2095,7 +2095,7 @@ theorem lift_comp_reindex
 
 中文:
 定理 lift_comp_reindex
-  条件: (e : ι ≃ ι₂) (φ : MultilinearMap R (fun i => s (e.symm i)) E)
+  条件: (e : ι ≃ ι₂) (φ : 多重线性映射 R (fun i => s (e.symm i)) E)
   证明: by
   ext; simp [reindex]
 
@@ -2119,7 +2119,7 @@ theorem lift_comp_reindex_symm
 
 中文:
 定理 lift_comp_reindex_symm
-  条件: (e : ι ≃ ι₂) (φ : MultilinearMap R s E)
+  条件: (e : ι ≃ ι₂) (φ : 多重线性映射 R s E)
   证明: by
   ext; simp [reindex]
 
@@ -2267,7 +2267,7 @@ theorem reindex_refl
 
 中文:
 定理 reindex_refl
-  结论: reindex R s (Equiv.refl ι) = LinearEquiv.refl R _
+  结论: reindex R s (等价.refl ι) = 线性等价.refl R _
   证明: by
   ext
   simp [reindex, domDomCongrLinearEquiv']
@@ -2400,7 +2400,7 @@ definition isEmptyEquiv
 
 中文:
 定义 isEmptyEquiv
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: lift (constOfIsEmpty R _ 1)
   invFun r := r • tprod R (@isEmptyElim _ _ _)
   left_inv x := by
@@ -2442,7 +2442,7 @@ theorem isEmptyEquiv_apply_tprod
 
 中文:
 定理 isEmptyEquiv_apply_tprod
-  条件: [IsEmpty ι] (f : Π i, s i)
+  条件: [是空 ι] (f : Π i, s i)
   证明: lift.tprod _
 
 Depends on / 依赖: lift.tprod
@@ -2771,7 +2771,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (⨂[R] i, s i)
+  签名: 加法交换群 (⨂[R] i, s i)
   定义体: Module.addCommMonoidToAddCommGroup R
 
 Depends on / 依赖: Module, Module.addCommMonoidToAddCommGroup, addCommMonoidToAddCommGroup

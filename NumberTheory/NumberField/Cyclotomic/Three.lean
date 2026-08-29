@@ -64,7 +64,7 @@ lemma _root_.IsPrimitiveRoot.toInteger_cube_eq_one
   proof: hζ.toInteger_isPrimitiveRoot.pow_eq_one
 
 中文:
-引理 _root_.IsPrimitiveRoot.toInteger_cube_eq_one
+引理 _root_.是PrimitiveRoot.to整数eger_cube_eq_one
   结论: hζ.to整数eger ^ 3 = 1
   证明: hζ.toInteger_isPrimitiveRoot.pow_eq_one
 
@@ -90,8 +90,8 @@ theorem Units.mem
   replace hx
 
 中文:
-定理 Units.mem
-  条件: [NumberField K] [IsCyclotomicExtension {3} Rat K]
+定理 单位群.mem
+  条件: [数域 K] [是CyclotomicExtension {3} 有理数 K]
   证明: by
   have hrank : rank K = 0 := by
     dsimp only [rank]
@@ -263,7 +263,7 @@ lemma lambda_dvd_or_dvd_sub_one_or_dvd_add_one
 
 中文:
 引理 lambda_dvd_or_dvd_sub_one_or_dvd_add_one
-  条件: [NumberField K] [IsCyclotomicExtension {3} Rat K]
+  条件: [数域 K] [是CyclotomicExtension {3} 有理数 K]
   证明: by
   classical
   have := hζ.finite_quotient_toInteger_sub_one (by decide)

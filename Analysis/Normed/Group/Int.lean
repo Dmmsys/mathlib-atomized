@@ -32,7 +32,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: : NormedAddCommGroup 整数 where
+  签名: : 赋范交换加群 整数 where
   定义体: ‖(n : Real)‖
   dist_eq m n := by
     simp only [dist_eq, norm, cast_add, cast_neg]
@@ -116,7 +116,7 @@ theorem _root_.NNReal.natCast_natAbs
       _ = ‖n‖ := (norm_eq_abs n).symm
 
 中文:
-定理 _root_.NNReal.natCast_natAbs
+定理 _root_.非负实数.natCast_natAbs
   条件: (n : 整数)
   结论: (n.natAbs : 实数>=0) = ‖n‖₊
   证明: NNReal.eq

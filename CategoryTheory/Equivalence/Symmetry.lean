@@ -262,7 +262,7 @@ conjugateEquiv e.unop.toAdjunction f.unop.toAdjunction asNatTrans
 
 中文:
 定义 congrLeftFunctor
-  签名: (E : 类型) [Category* E]
+  签名: (E : 类型) [范畴* E]
   定义体: Functor.rightOp
     { obj f := f.unop.congrLeft
 map {e f} α := mkHom (whiskeringLeft _ _ _).map

@@ -91,8 +91,8 @@ theorem _root_.AffineIsometry.angle_map
 @[simp, norm_cast]
 
 中文:
-定理 _root_.AffineIsometry.angle_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂]
+定理 _root_.仿射等距.angle_map
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂]
   证明: by
   simp_rw [angle, ← AffineIsometry.map_vsub, LinearIsometry.angle_map]
 
@@ -118,8 +118,8 @@ theorem _root_.AffineSubspace.angle_coe
   s.subtypeₐᵢ.angle_map p₁ p₂ p₃
 
 中文:
-定理 _root_.AffineSubspace.angle_coe
-  条件: {s : AffineSubspace 实数 P} (p₁ p₂ p₃ : s)
+定理 _root_.仿射子空间.angle_coe
+  条件: {s : 仿射子空间 实数 P} (p₁ p₂ p₃ : s)
   证明: ⟨p₁⟩
     ∠ (p₁ : P) (p₂ : P) (p₃ : P) = ∠ p₁ p₂ p₃ :=
   haveI : Nonempty s := ⟨p₁⟩
@@ -1475,7 +1475,7 @@ theorem angle_ne_zero_of_not_collinear
 
 中文:
 定理 angle_ne_zero_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: mt collinear_of_angle_eq_zero h
 
 Depends on / 依赖: collinear_of_angle_eq_zero
@@ -1494,7 +1494,7 @@ theorem angle_ne_pi_of_not_collinear
 
 中文:
 定理 angle_ne_pi_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: mt collinear_of_angle_eq_pi h
 
 Depends on / 依赖: collinear_of_angle_eq_pi
@@ -1513,7 +1513,7 @@ theorem angle_pos_of_not_collinear
 
 中文:
 定理 angle_pos_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: (angle_nonneg _ _ _).lt_of_ne (angle_ne_zero_of_not_collinear h).symm
 
 Depends on / 依赖: angle_ne_zero_of_not_collinear, angle_nonneg, lt_of_ne
@@ -1532,7 +1532,7 @@ theorem angle_lt_pi_of_not_collinear
 
 中文:
 定理 angle_lt_pi_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: (angle_le_pi _ _ _).lt_of_ne angle_ne_pi_of_not_collinear h
 
 Depends on / 依赖: angle_le_pi, angle_ne_pi_of_not_collinear, lt_of_ne
@@ -1597,7 +1597,7 @@ theorem sin_pos_of_not_collinear
 
 中文:
 定理 sin_pos_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: Real.sin_pos_of_pos_of_lt_pi (angle_pos_of_not_collinear h) (angle_lt_pi_of_not_collinear h)
 
 Depends on / 依赖: Real.sin_pos_of_pos_of_lt_pi, angle_lt_pi_of_not_collinear, angle_pos_of_not_collinear, sin_pos_of_pos_of_lt_pi
@@ -1616,7 +1616,7 @@ theorem sin_ne_zero_of_not_collinear
 
 中文:
 定理 sin_ne_zero_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear 实数 ({p₁, p₂, p₃} : 集合 P))
   证明: ne_of_gt (sin_pos_of_not_collinear h)
 
 Depends on / 依赖: ne_of_gt, sin_pos_of_not_collinear

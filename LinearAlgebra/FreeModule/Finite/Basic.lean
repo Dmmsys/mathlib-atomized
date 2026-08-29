@@ -39,7 +39,7 @@ instance Module.Free.ChooseBasisIndex.fintype
   · exact Module.Finite.finite_basis (chooseBasis _ _)
 
 中文:
-实例 Module.Free.ChooseBasisIndex.fintype
+实例 模.自由.ChooseBasisIndex.fintype
   签名: (R : 类型u) (M : 类型v)
   定义体: by
   refine @Fintype.ofFinite _ ?_
@@ -74,8 +74,8 @@ theorem Module.Finite.of_basis
     simp only [Set.image_univ, Finset.coe_univ, Finset.coe_image, Basis.span_eq]
 
 中文:
-定理 Module.Finite.of_basis
-  结论: {R M ι : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+定理 模.有限.of_basis
+  结论: {R M ι : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: by
   cases nonempty_fintype ι
   classical
@@ -106,7 +106,7 @@ example {ι₁ ι₂ R : Type*} [Semiring R] [Finite ι₁] [Finite ι₂] :
     Module.Finite R (Matrix ι₁ ι₂ R) := inferInstance
 
 中文:
-实例 Module.Finite.matrix
+实例 模.有限.matrix
   签名: {R ι₁ ι₂ M : 类型}
   定义体: by
   cases nonempty_fintype ι₁

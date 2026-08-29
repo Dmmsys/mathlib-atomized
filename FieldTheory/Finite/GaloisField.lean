@@ -54,7 +54,7 @@ instance FiniteField.isSplittingField_sub
 
 中文:
 实例 FiniteField.isSplittingField_sub
-  签名: (K F : 类型) [Field K] [Fintype K]
+  签名: (K F : 类型) [域 K] [有限类型 K]
   定义体: by
     have h : (X ^ Fintype.card K - X : K[X]).natDegree = Fintype.card K :=
       FiniteField.X_pow_card_sub_X_natDegree_eq K Fintype.one_lt_card
@@ -88,7 +88,7 @@ theorem galois_poly_separable
 
 中文:
 定理 galois_poly_separable
-  条件: {K : 类型} [CommRing K] (p q : 自然数) [CharP K p] (h : p ∣ q)
+  条件: {K : 类型} [交换环 K] (p q : 自然数) [特征p K p] (h : p ∣ q)
   证明: by
   use 1, X ^ q - X - 1
   rw [← CharP.cast_eq_zero_iff K[X] p] at h
@@ -155,7 +155,7 @@ theorem finrank
 中文:
 定理 finrank
   条件: {n} (h : n != 0)
-  结论: Module.finrank (ZMod p) (GaloisField p n) = n
+  结论: 模.finrank (ZMod p) (GaloisField p n) = n
   证明: by
   have : Fintype (GaloisField p n) := Fintype.ofFinite (GaloisField p n)
   set g_poly := (X ^ p ^ n - X : (ZMod p)[X])
@@ -335,7 +335,7 @@ theorem _root_.FiniteField.isSplittingField_of_card_eq
 
 中文:
 定理 _root_.FiniteField.isSplittingField_of_card_eq
-  条件: (h : Fintype.card K = p ^ n)
+  条件: (h : 有限类型.card K = p ^ n)
   证明: h ▸ FiniteField.isSplittingField_sub K (ZMod p)
 
 Depends on / 依赖: FiniteField, FiniteField.isSplittingField_sub, isSplittingField_sub
@@ -355,7 +355,7 @@ definition algEquivGaloisFieldOfFintype
 
 中文:
 定义 algEquivGaloisFieldOfFintype
-  签名: (h : Fintype.card K = p ^ n)
+  签名: (h : 有限类型.card K = p ^ n)
   定义体: haveI := FiniteField.isSplittingField_of_card_eq _ _ h
   IsSplittingField.algEquiv _ _
 
@@ -384,7 +384,7 @@ theorem _root_.FiniteField.splits_X_pow_nat_card_sub_X
 
 中文:
 定理 _root_.FiniteField.splits_X_pow_nat_card_sub_X
-  条件: [Finite K]
+  条件: [有限 K]
   证明: by
   have : Fintype K := Fintype.ofFinite K
   rw [Nat.card_eq_fintype_card]
@@ -441,7 +441,7 @@ theorem _root_.Polynomial.splits_X_pow_nat_card_sub_X
     simpa [Nat.card_eq_zero_of_infinite, pow_zero, neg_sub] using Splits.X_sub_
 
 中文:
-定理 _root_.Polynomial.splits_X_pow_nat_card_sub_X
+定理 _root_.多项式.splits_X_pow_nat_card_sub_X
   证明: by
   cases fintypeOrInfinite K
   · have := (IsSplittingField.splits (L := K) (X ^ (Fintype.card K) - X : K[X]))
@@ -560,7 +560,7 @@ IsCyclic.card_pow_eq_one_le (α := K'ˣ)
 
 中文:
 定理 unitsMap_norm_surjective
-  结论: Function.Surjective (Units.map <| Algebra.norm K (S := K'))
+  结论: 函数.满射 (单位群.map <| 代数.norm K (S := K'))
   证明: have := Finite.of_injective_finite_range (algebraMap K K').injective
 MonoidHom.surjective_of_card_ker_le_div _ by
     simp_rw [Nat.card_units]
@@ -600,7 +600,7 @@ theorem norm_surjective
 
 中文:
 定理 norm_surjective
-  结论: Function.Surjective (Algebra.norm K (S := K'))
+  结论: 函数.满射 (代数.norm K (S := K'))
   证明: fun k => by
   obtain rfl | ne := eq_or_ne k 0
   · exact ⟨0, Algebra.norm_zero ..⟩
@@ -635,7 +635,7 @@ definition algEquivOfCardEq
 
 中文:
 定义 algEquivOfCardEq
-  签名: (p : 自然数) [h_prime : Fact p.Prime] [Algebra (ZMod p) K] [Algebra (ZMod p) K']
+  签名: (p : 自然数) [h_prime : Fact p.素] [代数 (ZMod p) K] [代数 (ZMod p) K']
   定义体: by
   have : CharP K p := by rw [← Algebra.charP_iff (ZMod p) K p]; exact ZMod.charP p
   have : CharP K' p := by rw [← Algebra.charP_iff (ZMod p) K' p]; exact ZMod.charP p
@@ -675,7 +675,7 @@ definition ringEquivOfCardEq
 
 中文:
 定义 ringEquivOfCardEq
-  签名: (hKK' : Fintype.card K = Fintype.card K')
+  签名: (hKK' : 有限类型.card K = 有限类型.card K')
   定义体: by
   choose p _char_p_K using CharP.exists K
   choose p' _char_p'_K' using CharP.exists K'
@@ -712,7 +712,7 @@ theorem pow_finrank_eq_natCard
 
 中文:
 定理 pow_finrank_eq_natCard
-  结论: (p : 自然数) [Fact p.Prime]
+  结论: (p : 自然数) [Fact p.素]
   证明: by
   rw [Module.natCard_eq_pow_finrank (K := ZMod p)]; rw [Nat.card_zmod]
 
@@ -734,7 +734,7 @@ theorem pow_finrank_eq_card
 
 中文:
 定理 pow_finrank_eq_card
-  结论: (p : 自然数) [Fact p.Prime]
+  结论: (p : 自然数) [Fact p.素]
   证明: by
   rw [pow_finrank_eq_natCard]; rw [Fintype.card_eq_nat_card]
 
@@ -765,7 +765,7 @@ theorem nonempty_algHom_of_finrank_dvd
 
 中文:
 定理 nonempty_algHom_of_finrank_dvd
-  条件: (h : Module.finrank F K ∣ Module.finrank F L)
+  条件: (h : 模.finrank F K ∣ 模.finrank F L)
   证明: by
   have := Finite.of_injective _ (algebraMap F L).injective
   have := Fintype.ofFinite F
@@ -805,7 +805,7 @@ theorem natCard_algHom_of_finrank_dvd
 
 中文:
 定理 natCard_algHom_of_finrank_dvd
-  条件: (h : Module.finrank F K ∣ Module.finrank F L)
+  条件: (h : 模.finrank F K ∣ 模.finrank F L)
   证明: by
   obtain ⟨f⟩ := nonempty_algHom_of_finrank_dvd h
   algebraize [f.toRingHom]
@@ -832,7 +832,7 @@ theorem card_algHom_of_finrank_dvd
 
 中文:
 定理 card_algHom_of_finrank_dvd
-  结论: [Finite K]
+  结论: [有限 K]
   证明: by
   rw [Fintype.card_eq_nat_card]; rw [natCard_algHom_of_finrank_dvd h]
 

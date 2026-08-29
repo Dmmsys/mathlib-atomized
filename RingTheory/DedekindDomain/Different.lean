@@ -64,8 +64,8 @@ definition Submodule.traceDual
     exact hx _ (Submodule.smul_mem _ c ha)
 
 中文:
-定义 Submodule.traceDual
-  签名: (I : Submodule B L)
+定义 子模.traceDual
+  签名: (I : 子模 B L)
   定义体: (traceForm K L).dualSubmodule (I.restrictScalars A)
   smul_mem' c x hx a ha := by
     rw [traceForm_apply]; rw [smul_mul_assoc]; rw [mul_comm]; rw [← smul_mul_assoc]; rw [mul_comm]
@@ -95,7 +95,7 @@ lemma mem_traceDual
 
 中文:
 引理 mem_traceDual
-  条件: {I : Submodule B L} {x}
+  条件: {I : 子模 B L} {x}
   证明: forall₂_congr fun _ _ => mem_one
 
 Depends on / 依赖: mem_one
@@ -116,7 +116,7 @@ lemma le_traceDual_iff_map_le_one
 
 中文:
 引理 le_traceDual_iff_map_le_one
-  条件: {I J : Submodule B L}
+  条件: {I J : 子模 B L}
   证明: by
   rw [Submodule.map_le_iff_le_comap]; rw [Submodule.restrictScalars_mul]; rw [Submodule.mul_le]
   simp [SetLike.le_def, mem_traceDual]
@@ -140,7 +140,7 @@ lemma le_traceDual_mul_iff
 
 中文:
 引理 le_traceDual_mul_iff
-  条件: {I J J' : Submodule B L}
+  条件: {I J J' : 子模 B L}
   证明: by
   simp_rw [le_traceDual_iff_map_le_one, mul_assoc]
 
@@ -161,7 +161,7 @@ lemma le_traceDual
 
 中文:
 引理 le_traceDual
-  条件: {I J : Submodule B L}
+  条件: {I J : 子模 B L}
   证明: by
   rw [← le_traceDual_mul_iff]; rw [mul_one]
 
@@ -181,7 +181,7 @@ lemma le_traceDual_comm
 
 中文:
 引理 le_traceDual_comm
-  条件: {I J : Submodule B L}
+  条件: {I J : 子模 B L}
   证明: by rw [le_traceDual, mul_comm, ← le_traceDual]
 
 Depends on / 依赖: le_traceDual, mul_comm
@@ -201,7 +201,7 @@ lemma le_traceDual_traceDual
 
 中文:
 引理 le_traceDual_traceDual
-  条件: {I : Submodule B L}
+  条件: {I : 子模 B L}
   证明: le_traceDual_comm.mpr le_rfl
 
 @[simp]
@@ -222,7 +222,7 @@ lemma restrictScalars_traceDual
 
 中文:
 引理 restrictScalars_traceDual
-  条件: {I : Submodule B L}
+  条件: {I : 子模 B L}
   证明: rfl
 -/
 lemma restrictScalars_traceDual {I : Submodule B L} :
@@ -243,7 +243,7 @@ theorem traceDual_span_of_basis
 
 中文:
 定理 traceDual_span_of_basis
-  结论: [FiniteDimensional K L] [Algebra.IsSeparable K L]
+  结论: [有限维 K L] [代数.是可分 K L]
   证明: by
   rw [restrictScalars_traceDual]; rw [hb]
   exact (traceForm K L).dualSubmodule_span_of_basis (traceForm_nondegenerate K L) b
@@ -334,7 +334,7 @@ lemma traceDual_top
 
 中文:
 引理 traceDual_top
-  条件: [Decidable (IsField A)]
+  条件: [可判定 (是域 A)]
   证明: by
   convert! traceDual_top'
   rw [← IsFractionRing.surjective_iff_isField (R := A) (K := K)]; rw [LinearMap.range_eq_top.mpr (Algebra.trace_surjective K L)]; rw [← RingHom.range_eq_top]; rw [_root_.eq_top_iff]
@@ -371,7 +371,7 @@ lemma map_equiv_traceDual
 
 中文:
 引理 map_equiv_traceDual
-  结论: [IsDomain A] [IsFractionRing B L] [IsDomain B]
+  结论: [是整环 A] [IsFractionRing B L] [是整环 B]
   证明: by
   change Submodule.map (FractionRing.algEquiv B L).toLinearEquiv.toLinearMap _ =
     traceDual A K (I.map (FractionRing.algEquiv B L).toLinearEquiv.toLinearMap)
@@ -415,8 +415,8 @@ lemma Submodule.mem_traceDual_iff_isIntegral
   proof: forall₂_congr fun _ _ => mem_one.trans IsIntegrallyClosed.isIntegral_iff.symm
 
 中文:
-引理 Submodule.mem_traceDual_iff_isIntegral
-  条件: {I : Submodule B L} {x}
+引理 子模.mem_traceDual_iff_is整数egral
+  条件: {I : 子模 B L} {x}
   证明: forall₂_congr fun _ _ => mem_one.trans IsIntegrallyClosed.isIntegral_iff.symm
 
 Depends on / 依赖: IsIntegrallyClosed, IsIntegrallyClosed.isIntegral_iff.symm, isIntegral_iff, mem_one, mem_one.trans
@@ -442,7 +442,7 @@ lemma Submodule.one_le_traceDual_one
   exact ⟨_, rfl⟩
 
 中文:
-引理 Submodule.one_le_traceDual_one
+引理 子模.one_le_traceDual_one
   证明: by
   rw [le_traceDual_iff_map_le_one]; rw [mul_one]; rw [one_eq_range]
   rintro _ ⟨x, ⟨x, rfl⟩, rfl⟩
@@ -479,7 +479,7 @@ lemma isIntegral_discr_mul_of_mem_traceDual
     rwa [mulVec_injective_iff_isUnit, isUnit_iff_isUnit_
 
 中文:
-引理 isIntegral_discr_mul_of_mem_traceDual
+引理 is整数egral_discr_mul_of_mem_traceDual
   证明: by
   have hinv : IsUnit (traceMatrix K b).det := by
     simpa [← discr_def] using discr_isUnit_of_basis _ b
@@ -1264,7 +1264,7 @@ definition differentIdeal
 
 中文:
 定义 differentIdeal
-  签名: : Ideal B
+  签名: : 理想 B
   定义体: (1 / Submodule.traceDual A (FractionRing A) 1 : Submodule B (FractionRing B)).comap
     (Algebra.linearMap B (FractionRing B))
 
@@ -1288,7 +1288,7 @@ lemma coeSubmodule_differentIdeal_fractionRing
 
 中文:
 引理 coeSubmodule_differentIdeal_fractionRing
-  结论: [Algebra.Is整数egral A B]
+  结论: [代数.是整 A B]
   证明: by
   rw [coeSubmodule]; rw [differentIdeal]; rw [Submodule.map_comap_eq]; rw [inf_eq_right]
   have := FractionalIdeal.dual_inv_le (A := A) (K := FractionRing A)
@@ -1415,7 +1415,7 @@ theorem differentIdeal_ne_bot
 
 中文:
 定理 differentIdeal_ne_bot
-  结论: [Module.Finite A B]
+  结论: [模.有限 A B]
   证明: by
   let K := FractionRing A
   let L := FractionRing B
@@ -1470,7 +1470,7 @@ lemma differentialIdeal_le_iff
 
 中文:
 引理 differentialIdeal_le_iff
-  条件: {I : Ideal B} (hI : I != ⊥)
+  条件: {I : 理想 B} (hI : I != ⊥)
   证明: (FractionalIdeal.coeIdeal_le_coeIdeal _).symm.trans
     (differentialIdeal_le_fractionalIdeal_iff (I := (I : FractionalIdeal B⁰ L)) (by simpa))
 
@@ -1502,7 +1502,7 @@ theorem differentIdeal_eq_differentIdeal_mul_differentIdeal
 
 中文:
 定理 differentIdeal_eq_differentIdeal_mul_differentIdeal
-  结论: (C : 类型) [IsDomain B] [CommRing C]
+  结论: (C : 类型) [是整环 B] [交换环 C]
   证明: by
   have : Algebra.IsSeparable (FractionRing B) (FractionRing C) :=
     isSeparable_tower_top_of_isSeparable (FractionRing A) _ _
@@ -1785,7 +1785,7 @@ lemma pow_sub_one_dvd_differentIdeal
 
 中文:
 引理 pow_sub_one_dvd_differentIdeal
-  结论: [Algebra.IsSeparable (FractionRing A) (FractionRing B)]
+  结论: [代数.是可分 (FractionRing A) (FractionRing B)]
   证明: by
   have : IsLocalization (algebraMapSubmonoid B A⁰) (FractionRing B) :=
     IsIntegralClosure.isLocalization _ (FractionRing A) _ _

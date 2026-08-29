@@ -33,7 +33,7 @@ definition FixedPoints.addSubmonoid
 
 中文:
 定义 FixedPoints.addSubmonoid
-  签名: : AddSubmonoid α where
+  签名: : 加法子幺半群 α where
   定义体: MulAction.fixedPoints M α
   zero_mem' := smul_zero
   add_mem' ha hb _ := by rw [smul_add, ha, hb]
@@ -86,7 +86,7 @@ definition FixedPoints.addSubgroup
 
 中文:
 定义 FixedPoints.addSubgroup
-  签名: : AddSubgroup α where
+  签名: : 加法子群 α where
   定义体: addSubmonoid M α
   neg_mem' ha _ := by rw [smul_neg, ha]
 

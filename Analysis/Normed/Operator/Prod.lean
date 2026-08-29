@@ -89,7 +89,7 @@ theorem opNorm_prod
 中文:
 定理 opNorm_prod
   条件: (f : E ->L[𝕜] F) (g : E ->L[𝕜] G)
-  结论: ‖f.prod g‖ = ‖(f, g)‖
+  结论: ‖f.乘积 g‖ = ‖(f, g)‖
   证明: le_antisymm
       (opNorm_le_bound _ (norm_nonneg _) fun x => by
         simpa only [prod_apply, Prod.norm_def, max_mul_of_nonneg, norm_nonneg] using
@@ -125,7 +125,7 @@ theorem opNNNorm_prod
 中文:
 定理 opNNNorm_prod
   条件: (f : E ->L[𝕜] F) (g : E ->L[𝕜] G)
-  结论: ‖f.prod g‖₊ = ‖(f, g)‖₊
+  结论: ‖f.乘积 g‖₊ = ‖(f, g)‖₊
   证明: Subtype.ext opNorm_prod f g
 
 Depends on / 依赖: Subtype, Subtype.ext, opNorm_prod
@@ -242,8 +242,8 @@ theorem _root_.Continuous.prod_mapL
   proof: (prodMapL 𝕜 M₁ M₂ M₃ M₄).continuous.comp (hf.prodMk hg)
 
 中文:
-定理 _root_.Continuous.prod_mapL
-  结论: {f : X -> M₁ ->L[𝕜] M₂} {g : X -> M₃ ->L[𝕜] M₄} (hf : Continuous f)
+定理 _root_.连续.prod_mapL
+  结论: {f : X -> M₁ ->L[𝕜] M₂} {g : X -> M₃ ->L[𝕜] M₄} (hf : 连续 f)
   证明: (prodMapL 𝕜 M₁ M₂ M₃ M₄).continuous.comp (hf.prodMk hg)
 
 Depends on / 依赖: continuous, continuous.comp, hf.prodMk, prodMapL, prodMk
@@ -261,7 +261,7 @@ theorem _root_.Continuous.prod_map_equivL
   proof: (prodMapL 𝕜 M₁ M₂ M₃ M₄).continuous.comp (hf.prodMk hg)
 
 中文:
-定理 _root_.Continuous.prod_map_equivL
+定理 _root_.连续.prod_map_equivL
   结论: {f : X -> M₁ ≃L[𝕜] M₂} {g : X -> M₃ ≃L[𝕜] M₄}
   证明: (prodMapL 𝕜 M₁ M₂ M₃ M₄).continuous.comp (hf.prodMk hg)
 
@@ -282,7 +282,7 @@ theorem _root_.ContinuousOn.prod_mapL
 
 中文:
 定理 _root_.ContinuousOn.prod_mapL
-  结论: {f : X -> M₁ ->L[𝕜] M₂} {g : X -> M₃ ->L[𝕜] M₄} {s : Set X}
+  结论: {f : X -> M₁ ->L[𝕜] M₂} {g : X -> M₃ ->L[𝕜] M₄} {s : 集合 X}
   证明: ((prodMapL 𝕜 M₁ M₂ M₃ M₄).continuous.comp_continuousOn (hf.prodMk hg) :)
 
 Depends on / 依赖: comp_continuousOn, continuous, continuous.comp_continuousOn, hf.prodMk, prodMapL, prodMk
@@ -302,7 +302,7 @@ theorem _root_.ContinuousOn.prod_map_equivL
 
 中文:
 定理 _root_.ContinuousOn.prod_map_equivL
-  结论: {f : X -> M₁ ≃L[𝕜] M₂} {g : X -> M₃ ≃L[𝕜] M₄} {s : Set X}
+  结论: {f : X -> M₁ ≃L[𝕜] M₂} {g : X -> M₃ ≃L[𝕜] M₄} {s : 集合 X}
   证明: hf.prod_mapL _ hg
 
 Depends on / 依赖: hf.prod_mapL, prod_mapL
@@ -342,7 +342,7 @@ lemma norm_fst
 
 中文:
 引理 norm_fst
-  结论: [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+  结论: [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: by
   refine le_antisymm (norm_fst_le ..) ?_
   let ⟨e, he⟩ := exists_ne (0 : E)
@@ -374,7 +374,7 @@ lemma norm_snd
 
 中文:
 引理 norm_snd
-  结论: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+  结论: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: by
   refine le_antisymm (norm_snd_le ..) ?_
   let ⟨f, hf⟩ := exists_ne (0 : F)

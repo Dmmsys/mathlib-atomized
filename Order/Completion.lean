@@ -50,7 +50,7 @@ abbreviation DedekindCut
 
 中文:
 缩写 DedekindCut
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: Concept α α (· <= ·)
 
 Depends on / 依赖: Concept
@@ -194,7 +194,7 @@ exact hf rel_extent_intent hx hy
 
 中文:
 定理 image_left_subset_lowerBounds
-  结论: {f : α -> β} (hf : Monotone f)
+  结论: {f : α -> β} (hf : 递增 f)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩
 exact hf rel_extent_intent hx hy
@@ -218,7 +218,7 @@ exact hf rel_extent_intent hy hx
 
 中文:
 定理 image_right_subset_upperBounds
-  结论: {f : α -> β} (hf : Monotone f)
+  结论: {f : α -> β} (hf : 递增 f)
   证明: by
   rintro _ ⟨x, hx, rfl⟩ _ ⟨y, hy, rfl⟩
 exact hf rel_extent_intent hy hx
@@ -266,7 +266,7 @@ theorem left_principal
 中文:
 定理 left_principal
   条件: (a : α)
-  结论: (principal a).left = Iic a
+  结论: (principal a).left = 左无界右闭区间 a
   证明: rfl
 -/
 @[simp] theorem left_principal (a : α) : (principal a).left = Iic a := rfl
@@ -282,7 +282,7 @@ theorem right_principal
 中文:
 定理 right_principal
   条件: (a : α)
-  结论: (principal a).right = Ici a
+  结论: (principal a).right = 左闭右无界区间 a
   证明: rfl
 -/
 @[simp] theorem right_principal (a : α) : (principal a).right = Ici a := rfl
@@ -759,7 +759,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Total (DedekindCut α) (· <= ·)
+  签名: @Std.全 (DedekindCut α) (· <= ·)
   定义体: le_total (α := LowerSet α) ⟨_, isLowerSet_extent_le x⟩ ⟨_, isLowerSet_extent_le y⟩
 
 Depends on / 依赖: LowerSet, isLowerSet_extent_le, le_total
@@ -780,7 +780,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (DedekindCut α)
+  签名: 线性序 (DedekindCut α)
   定义体: congrFun₂ inf_eq_minDefault x y
   max_def x y := congrFun₂ sup_eq_maxDefault x y
   le_total := total_of _
@@ -806,7 +806,7 @@ theorem lt_iff_exists
   simpa [← not_le, principal_le_iff, and_comm] using h.2
 
 中文:
-定理 lt_iff_exists
+定理 lt_iff_存在
   条件: {a b : DedekindCut α}
   证明: by
   refine ⟨fun h => ?_, fun ⟨c, hca, hcb⟩ => hca.trans_le hcb⟩
@@ -833,7 +833,7 @@ theorem lt_iff_exists'
   simpa [← not_le, le_principal_iff] using h.2
 
 中文:
-定理 lt_iff_exists'
+定理 lt_iff_存在'
   条件: {a b : DedekindCut α}
   证明: by
   refine ⟨fun h => ?_, fun ⟨c, hca, hcb⟩ => lt_of_le_of_lt hca hcb⟩
@@ -860,7 +860,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder (DedekindCut α)
+  签名: 完备线性序 (DedekindCut α)
   定义体: (inferInstance : LinearOrder _)
   __ := (inferInstance : CompleteLattice _)
   __ := LinearOrder.toBiheytingAlgebra _
@@ -886,8 +886,8 @@ instance [DenselyOrdered
     exact ⟨principal u, had.trans_lt (by simpa), hcb.trans_lt' (by simpa)⟩
 
 中文:
-实例 [DenselyOrdered
-  签名: α] : DenselyOrdered (DedekindCut α) where
+实例 [稠密序
+  签名: α] : 稠密序 (DedekindCut α) where
   定义体: by
     obtain ⟨c, hac, hcb⟩ := lt_iff_exists.mp h
     obtain ⟨d, had, hdc⟩ := lt_iff_exists'.mp hac

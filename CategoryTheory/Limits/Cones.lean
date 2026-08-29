@@ -74,7 +74,7 @@ definition cones
 
 中文:
 定义 cones
-  签名: : Cᵒᵖ ⥤ Type (max u₁ v₃)
+  签名: : Cᵒᵖ ⥤ 类型 (最大值 u₁ v₃)
   定义体: (const J).op ⋙ yoneda.obj F
 
 Depends on / 依赖: yoneda, yoneda.obj
@@ -97,7 +97,7 @@ definition cocones
 
 中文:
 定义 cocones
-  签名: : C ⥤ Type (max u₁ v₃)
+  签名: : C ⥤ 类型 (最大值 u₁ v₃)
   定义体: const J ⋙ coyoneda.obj (op F)
 
 Depends on / 依赖: coyoneda, coyoneda.obj
@@ -126,7 +126,7 @@ definition cones
 
 中文:
 定义 cones
-  签名: : (J ⥤ C) ⥤ Cᵒᵖ ⥤ Type (max u₁ v₃) where
+  签名: : (J ⥤ C) ⥤ Cᵒᵖ ⥤ 类型 (最大值 u₁ v₃) where
   定义体: Functor.cones
   map f := whiskerLeft (const J).op (yoneda.map f)
 
@@ -151,7 +151,7 @@ definition cocones
 
 中文:
 定义 cocones
-  签名: : (J ⥤ C)ᵒᵖ ⥤ C ⥤ Type (max u₁ v₃) where
+  签名: : (J ⥤ C)ᵒᵖ ⥤ C ⥤ 类型 (最大值 u₁ v₃) where
   定义体: Functor.cocones (unop F)
   map f := whiskerLeft (const J) (coyoneda.map f)
 
@@ -178,7 +178,7 @@ structure Cone
     - π : (const J).obj pt ⟶ F
 
 中文:
-结构 Cone
+结构 锥
   参数: (F : J ⥤ C)
   公理与运算 (2 个):
     - pt : C
@@ -212,7 +212,7 @@ structure Cocone
     - ι : F ⟶ (const J).obj pt
 
 中文:
-结构 Cocone
+结构 余锥
   参数: (F : J ⥤ C)
   公理与运算 (2 个):
     - pt : C
@@ -245,7 +245,7 @@ instance inhabitedCone
 
 中文:
 实例 inhabitedCone
-  签名: (F : Discrete PUnit ⥤ C)
+  签名: (F : 离散 命题单元 ⥤ C)
   定义体: ⟨{ pt := F.obj ⟨⟨⟩⟩
       π := { app := fun ⟨⟨⟩⟩ => 𝟙 _
              naturality := by
@@ -282,8 +282,8 @@ theorem Cone.w
   simpa using (c.π.naturality f).symm
 
 中文:
-定理 Cone.w
-  条件: {F : J ⥤ C} (c : Cone F) {j j' : J} (f : j ⟶ j')
+定理 锥.w
+  条件: {F : J ⥤ C} (c : 锥 F) {j j' : J} (f : j ⟶ j')
   证明: by
   simpa using (c.π.naturality f).symm
 
@@ -307,9 +307,9 @@ theorem Cocone.w_apply.{uF,
   simp
 
 中文:
-定理 Cocone.w_apply.{uF,
+定理 余锥.w_apply.{uF,
   条件: w} {F
-  结论: J ⥤ C} (c : Cocone F) {j j' : J} (f : j' ⟶ j)
+  结论: J ⥤ C} (c : 余锥 F) {j j' : J} (f : j' ⟶ j)
   证明: by
   simp
 -/
@@ -392,7 +392,7 @@ definition extensions
 
 中文:
 定义 extensions
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: ↾fun f => (const J).map f.down ≫ c.π
 
 Depends on / 依赖: f.down
@@ -414,7 +414,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (c : Cone F) {X : C} (f : X ⟶ c.pt)
+  签名: (c : 锥 F) {X : C} (f : X ⟶ c.pt)
   定义体: X
   π := (const J).map f ≫ c.π
 -/
@@ -438,7 +438,7 @@ definition whisker
 
 中文:
 定义 whisker
-  签名: (E : K ⥤ J) (c : Cone F)
+  签名: (E : K ⥤ J) (c : 锥 F)
   定义体: c.pt
   π := whiskerLeft E c.π
 
@@ -515,7 +515,7 @@ definition extensions
 
 中文:
 定义 extensions
-  签名: (c : Cocone F)
+  签名: (c : 余锥 F)
   定义体: ↾fun f => c.ι ≫ (const J).map f.down
 
 Depends on / 依赖: f.down
@@ -536,8 +536,8 @@ structure ConeMorphism
     - w((j : J)) : hom ≫ B.π.app j = A.π.app j  [default: by cat_disch]
 
 中文:
-结构 ConeMorphism
-  参数: (A B : Cone F)
+结构 余ne态射
+  参数: (A B : 锥 F)
   公理与运算 (2 个):
     - hom : A.pt ⟶ B.pt
     - w((j : J)) : hom ≫ B.π.app j = A.π.app j  [默认: by cat_disch]
@@ -564,8 +564,8 @@ structure CoconeMorphism
     - w((j : J)) : dsimp% A.ι.app j ≫ hom = B.ι.app j  [default: by cat_disch]
 
 中文:
-结构 CoconeMorphism
-  参数: (A B : Cocone F)
+结构 余cone态射
+  参数: (A B : 余锥 F)
   公理与运算 (2 个):
     - hom : A.pt ⟶ B.pt
     - w((j : J)) : dsimp% A.ι.app j ≫ hom = B.ι.app j  [默认: by cat_disch]
@@ -592,7 +592,7 @@ instance inhabitedConeMorphism
 
 中文:
 实例 inhabitedConeMorphism
-  签名: (A : Cone F)
+  签名: (A : 锥 F)
   定义体: ⟨{ hom := 𝟙 _ }⟩
 -/
 instance inhabitedConeMorphism (A : Cone F) : Inhabited (ConeMorphism A A) :=
@@ -613,8 +613,8 @@ instance Cone.category
 @[to_dual (attr := ext)
 
 中文:
-实例 Cone.category
-  签名: : Category (Cone F) where
+实例 锥.category
+  签名: : 范畴 (锥 F) where
   定义体: ConeMorphism A B
   comp f g := { hom := f.hom ≫ g.hom }
   id B := { hom := 𝟙 B.pt }
@@ -647,8 +647,8 @@ theorem ConeMorphism.ext
 @[to_dual (attr := reassoc (attr := simp))]
 
 中文:
-定理 ConeMorphism.ext
-  条件: {c c' : Cone F} (f g : c ⟶ c') (w : f.hom = g.hom)
+定理 余ne态射.ext
+  条件: {c c' : 锥 F} (f g : c ⟶ c') (w : f.hom = g.hom)
   结论: f = g
   证明: by
   cases f
@@ -676,8 +676,8 @@ lemma ConeMorphism.hom_inv_id
 @[to_dual (attr := reassoc (attr := simp))]
 
 中文:
-引理 ConeMorphism.hom_inv_id
-  条件: {c d : Cone F} (f : c ≅ d)
+引理 余ne态射.hom_inv_id
+  条件: {c d : 锥 F} (f : c ≅ d)
   结论: f.hom.hom ≫ f.inv.hom = 𝟙 _
   证明: by
   simp [← Cone.category_comp_hom]
@@ -703,8 +703,8 @@ lemma ConeMorphism.inv_hom_id
 @[to_dual]
 
 中文:
-引理 ConeMorphism.inv_hom_id
-  条件: {c d : Cone F} (f : c ≅ d)
+引理 余ne态射.inv_hom_id
+  条件: {c d : 锥 F} (f : c ≅ d)
   结论: f.inv.hom ≫ f.hom.hom = 𝟙 _
   证明: by
   simp [← Cone.category_comp_hom]
@@ -733,8 +733,8 @@ lemma ConeMorphism.map_w
   simp [← map_comp]
 
 中文:
-引理 ConeMorphism.map_w
-  条件: {c c' : Cone F} (f : c ⟶ c') (G : C ⥤ D) (j : J)
+引理 余ne态射.map_w
+  条件: {c c' : 锥 F} (f : c ⟶ c') (G : C ⥤ D) (j : J)
   证明: by
   simp [← map_comp]
 
@@ -765,7 +765,7 @@ definition ext
 
 中文:
 定义 ext
-  签名: {c c' : Cone F} (φ : c.pt ≅ c'.pt)
+  签名: {c c' : 锥 F} (φ : c.pt ≅ c'.pt)
   定义体: { hom := φ.hom }
   inv :=
     { hom := φ.inv
@@ -799,7 +799,7 @@ definition extInv
 
 中文:
 定义 extInv
-  签名: {c c' : Cone F} (φ : c.pt ≅ c'.pt)
+  签名: {c c' : 锥 F} (φ : c.pt ≅ c'.pt)
   定义体: ext φ fun j => (Iso.inv_comp_eq φ).mp (w j)
 
 Depends on / 依赖: Iso.inv_comp_eq, cat_disch, inv_comp_eq
@@ -826,7 +826,7 @@ definition eta
 
 中文:
 定义 eta
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: ext (Iso.refl _)
 
 Depends on / 依赖: Iso.refl
@@ -856,8 +856,8 @@ theorem cone_iso_of_hom_iso
 
 中文:
 定理 cone_iso_of_hom_iso
-  条件: {K : J ⥤ C} {c d : Cone K} (f : c ⟶ d) [i : IsIso f.hom]
-  结论: IsIso f
+  条件: {K : J ⥤ C} {c d : 锥 K} (f : c ⟶ d) [i : 是同构 f.hom]
+  结论: 是同构 f
   证明: ⟨⟨{ hom := inv f.hom
         w := fun j => (asIso f.hom).inv_comp_eq.2 (f.w j).symm }, by cat_disch⟩⟩
 
@@ -879,7 +879,7 @@ definition extendHom
 
 中文:
 定义 extendHom
-  签名: (s : Cone F) {X : C} (f : X ⟶ s.pt)
+  签名: (s : 锥 F) {X : C} (f : X ⟶ s.pt)
   定义体: f
 -/
 def extendHom (s : Cone F) {X : C} (f : X ⟶ s.pt) : s.extend f ⟶ s where
@@ -898,7 +898,7 @@ definition extendId
 
 中文:
 定义 extendId
-  签名: (s : Cone F)
+  签名: (s : 锥 F)
   定义体: ext (Iso.refl _)
 
 Depends on / 依赖: Iso.refl
@@ -923,7 +923,7 @@ definition extendComp
 
 中文:
 定义 extendComp
-  签名: (s : Cone F) {X Y : C} (f : X ⟶ Y) (g : Y ⟶ s.pt)
+  签名: (s : 锥 F) {X Y : C} (f : X ⟶ Y) (g : Y ⟶ s.pt)
   定义体: ext (Iso.refl _)
 
 Depends on / 依赖: Iso.refl
@@ -950,7 +950,7 @@ definition extendIso
 
 中文:
 定义 extendIso
-  签名: (s : Cone F) {X : C} (f : s.pt ≅ X)
+  签名: (s : 锥 F) {X : C} (f : s.pt ≅ X)
   定义体: { hom := f.hom }
   inv := { hom := f.inv }
 
@@ -1040,7 +1040,7 @@ definition postcomposeId
 
 中文:
 定义 postcomposeId
-  签名: : postcompose (𝟙 F) ≅ 𝟭 (Cone F)
+  签名: : postcompose (𝟙 F) ≅ 𝟭 (锥 F)
   定义体: NatIso.ofComponents fun s => ext (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -1203,7 +1203,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Cone F ⥤ C where
+  签名: : 锥 F ⥤ C where
   定义体: t.pt
   map f := f.hom
 
@@ -1234,7 +1234,7 @@ definition functoriality
 
 中文:
 定义 functoriality
-  签名: : Cone F ⥤ Cone (F ⋙ G) where
+  签名: : 锥 F ⥤ 锥 (F ⋙ G) where
   定义体: { pt := G.obj A.pt
       π :=
         { app := fun j => G.map (A.π.app j)
@@ -1294,7 +1294,7 @@ instance functoriality_full
 
 中文:
 实例 functoriality_full
-  签名: [G.Full] [G.Faithful]
+  签名: [G.满] [G.忠实]
   定义体: ⟨{ hom := G.preimage t.hom
        w := fun j => G.map_injective (by simpa using t.w j) }, by cat_disch⟩
 
@@ -1318,7 +1318,7 @@ instance functoriality_faithful
 
 中文:
 实例 functoriality_faithful
-  签名: [G.Faithful]
+  签名: [G.忠实]
   定义体: ConeMorphism.ext f g G.map_injective congr_arg ConeMorphism.hom h
 
 Depends on / 依赖: ConeMorphism, ConeMorphism.ext, ConeMorphism.hom, G.map_injective, congr_arg, map_injective
@@ -1389,7 +1389,7 @@ instance reflects_cone_isomorphism
 
 中文:
 实例 reflects_cone_isomorphism
-  签名: (F : C ⥤ D) [F.ReflectsIsomorphisms] (K : J ⥤ C)
+  签名: (F : C ⥤ D) [F.反映同构] (K : J ⥤ C)
   定义体: by
   constructor
   intro A B f _
@@ -1493,7 +1493,7 @@ definition mapCone
 
 中文:
 定义 mapCone
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: (Cone.functoriality F H).obj c
 
 Depends on / 依赖: Cone.functoriality, functoriality
@@ -1515,7 +1515,7 @@ definition mapConeMapCone
 
 中文:
 定义 mapConeMapCone
-  签名: {F : J ⥤ C} {H : C ⥤ D} {H' : D ⥤ E} (c : Cone F)
+  签名: {F : J ⥤ C} {H : C ⥤ D} {H' : D ⥤ E} (c : 锥 F)
   定义体: Cone.ext (Iso.refl _)
 
 Depends on / 依赖: Cone.ext, Iso.refl
@@ -1540,7 +1540,7 @@ definition mapConeMorphism
 
 中文:
 定义 mapConeMorphism
-  签名: {c c' : Cone F} (f : c ⟶ c')
+  签名: {c c' : 锥 F} (f : c ⟶ c')
   定义体: (Cone.functoriality F H).map f
 
 Depends on / 依赖: Cone.functoriality, functoriality
@@ -1563,7 +1563,7 @@ definition mapConeInv
 
 中文:
 定义 mapConeInv
-  签名: [IsEquivalence H] (c : Cone (F ⋙ H))
+  签名: [是等价 H] (c : 锥 (F ⋙ H))
   定义体: (Limits.Cone.functorialityEquivalence F (asEquivalence H)).inverse.obj c
 
 Depends on / 依赖: Limits, Limits.Cone.functorialityEquivalence, asEquivalence, functorialityEquivalence, inverse, inverse.obj
@@ -1583,7 +1583,7 @@ definition mapConeMapConeInv
 
 中文:
 定义 mapConeMapConeInv
-  签名: {F : J ⥤ D} (H : D ⥤ C) [IsEquivalence H]
+  签名: {F : J ⥤ D} (H : D ⥤ C) [是等价 H]
   定义体: (Limits.Cone.functorialityEquivalence F (asEquivalence H)).counitIso.app c
 
 Depends on / 依赖: Limits, Limits.Cone.functorialityEquivalence, asEquivalence, counitIso, counitIso.app, functorialityEquivalence
@@ -1605,7 +1605,7 @@ definition mapConeInvMapCone
 
 中文:
 定义 mapConeInvMapCone
-  签名: {F : J ⥤ D} (H : D ⥤ C) [IsEquivalence H] (c : Cone F)
+  签名: {F : J ⥤ D} (H : D ⥤ C) [是等价 H] (c : 锥 F)
   定义体: (Limits.Cone.functorialityEquivalence F (asEquivalence H)).unitIso.symm.app c
 
 Depends on / 依赖: Limits, Limits.Cone.functorialityEquivalence, asEquivalence, functorialityEquivalence, unitIso, unitIso.symm.app
@@ -1663,7 +1663,7 @@ definition postcomposeWhiskerLeftMapCone
 
 中文:
 定义 postcomposeWhiskerLeftMapCone
-  签名: {H H' : C ⥤ D} (α : H ≅ H') (c : Cone F)
+  签名: {H H' : C ⥤ D} (α : H ≅ H') (c : 锥 F)
   定义体: (functorialityCompPostcompose α).app c
 
 Depends on / 依赖: functorialityCompPostcompose
@@ -1752,7 +1752,7 @@ definition mapConeWhisker
 
 中文:
 定义 mapConeWhisker
-  签名: {E : K ⥤ J} {c : Cone F}
+  签名: {E : K ⥤ J} {c : 锥 F}
   定义体: Cone.ext (Iso.refl _)
 
 Depends on / 依赖: Cone.ext, Iso.refl
@@ -1783,8 +1783,8 @@ definition Cone.op
   ι := NatTrans.op c.π
 
 中文:
-定义 Cone.op
-  签名: (c : Cone F)
+定义 锥.op
+  签名: (c : 锥 F)
   定义体: Opposite.op c.pt
   ι := NatTrans.op c.π
 
@@ -1806,8 +1806,8 @@ definition Cone.unop
   ι := NatTrans.removeOp c.π
 
 中文:
-定义 Cone.unop
-  签名: (c : Cone F.op)
+定义 锥.unop
+  签名: (c : 锥 F.op)
   定义体: Opposite.unop c.pt
   ι := NatTrans.removeOp c.π
 
@@ -1846,7 +1846,7 @@ definition coconeEquivalenceOpConeOp
 
 中文:
 定义 coconeEquivalenceOpConeOp
-  签名: : Cocone F ≌ (Cone F.op)ᵒᵖ where
+  签名: : 余锥 F ≌ (锥 F.op)ᵒᵖ where
   定义体: { obj := fun c => op (Cocone.op c)
       map := fun {X} {Y} f =>
         Quiver.Hom.op
@@ -1938,7 +1938,7 @@ definition coneOfCoconeLeftOp
 
 中文:
 定义 coneOfCoconeLeftOp
-  签名: (c : Cocone F.leftOp)
+  签名: (c : 余锥 F.leftOp)
   定义体: op c.pt
   π := NatTrans.removeLeftOp c.ι
 
@@ -1962,7 +1962,7 @@ definition coconeLeftOpOfCone
 
 中文:
 定义 coconeLeftOpOfCone
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: unop c.pt
   ι := NatTrans.leftOp c.π
 
@@ -2028,7 +2028,7 @@ definition coneOfCoconeRightOp
 
 中文:
 定义 coneOfCoconeRightOp
-  签名: (c : Cocone F.rightOp)
+  签名: (c : 余锥 F.rightOp)
   定义体: unop c.pt
   π := NatTrans.removeRightOp c.ι
 
@@ -2052,7 +2052,7 @@ definition coconeRightOpOfCone
 
 中文:
 定义 coconeRightOpOfCone
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: op c.pt
   ι := NatTrans.rightOp c.π
 
@@ -2118,7 +2118,7 @@ definition coneOfCoconeUnop
 
 中文:
 定义 coneOfCoconeUnop
-  签名: (c : Cocone F.unop)
+  签名: (c : 余锥 F.unop)
   定义体: op c.pt
   π := NatTrans.removeUnop c.ι
 
@@ -2142,7 +2142,7 @@ definition coconeUnopOfCone
 
 中文:
 定义 coconeUnopOfCone
-  签名: (c : Cone F)
+  签名: (c : 锥 F)
   定义体: unop c.pt
   ι := NatTrans.unop c.π
 
@@ -2212,7 +2212,7 @@ definition mapConeOp
 
 中文:
 定义 mapConeOp
-  签名: (t : Cone F)
+  签名: (t : 锥 F)
   定义体: Cocone.ext (Iso.refl _)
 
 Depends on / 依赖: Cocone, Cocone.ext, Iso.refl

@@ -41,7 +41,7 @@ inductive Triplewise
   参数: (p : α -> α -> α -> 命题)
   构造子 (2 个):
     - nil: [].Triplewise p
-    - cons: {a : α} {l : List α} : l.Pairwise (p a) -> l.Triplewise p -> (a :: l).Triplewise p
+    - cons: {a : α} {l : 列表 α} : l.两两 (p a) -> l.Triplewise p -> (a :: l).Triplewise p
 -/
 inductive Triplewise (p : α -> α -> α -> Prop) : List α -> Prop
   | nil : [].Triplewise p
@@ -63,7 +63,7 @@ lemma triplewise_cons
 
 中文:
 引理 triplewise_cons
-  结论: (a :: l).Triplewise p ↔ l.Pairwise (p a) ∧ l.Triplewise p
+  结论: (a :: l).Triplewise p ↔ l.两两 (p a) ∧ l.Triplewise p
   证明: by
   grind [triplewise_iff]
 

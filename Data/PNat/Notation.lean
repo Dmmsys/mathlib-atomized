@@ -22,7 +22,7 @@ definition PNat
 notation "Nat+" => PNat
 
 中文:
-定义 PNat
+定义 正自然数
   定义体: { n : Nat // 0 < n } deriving DecidableEq
 
 @[inherit_doc]
@@ -46,7 +46,7 @@ definition PNat.val
   body: Subtype.val
 
 中文:
-定义 PNat.val
+定义 正自然数.val
   签名: : 自然数+ -> 自然数
   定义体: Subtype.val
 
@@ -63,7 +63,7 @@ instance coePNatNat
   body: ⟨PNat.val⟩
 
 中文:
-实例 coePNatNat
+实例 coeP自然数自然数
   签名: : Coe 自然数+ 自然数
   定义体: ⟨PNat.val⟩
 

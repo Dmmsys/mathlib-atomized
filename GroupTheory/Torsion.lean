@@ -132,7 +132,7 @@ definition IsMulTorsion.group
 
 中文:
 定义 IsMulTorsion.group
-  签名: [Monoid G] (tG : IsMulTorsion G)
+  签名: [幺半群 G] (tG : IsMulTorsion G)
   定义体: { ‹Monoid G› with
     inv g := g ^ (orderOf g - 1)
     inv_mul_cancel g := by
@@ -175,7 +175,7 @@ Submonoid.isOfFinOrder_coe.1 tG h
 
 中文:
 定理 IsMulTorsion.subgroup
-  条件: (tG : IsMulTorsion G) (H : Subgroup G)
+  条件: (tG : IsMulTorsion G) (H : 子群 G)
   结论: IsMulTorsion H
   证明: fun h =>
 Submonoid.isOfFinOrder_coe.1 tG h
@@ -207,7 +207,7 @@ theorem IsMulTorsion.of_surjective
 
 中文:
 定理 IsMulTorsion.of_surjective
-  条件: {f : G ->* H} (hf : Function.Surjective f) (tG : IsMulTorsion G)
+  条件: {f : G ->* H} (hf : 函数.满射 f) (tG : IsMulTorsion G)
   证明: fun h => by
   obtain ⟨g, rfl⟩ := hf h
   exact f.isOfFinOrder (tG g)
@@ -283,7 +283,7 @@ theorem IsMulTorsion.quotient_iff
 
 中文:
 定理 IsMulTorsion.quotient_iff
-  结论: {f : G ->* H} (hf : Function.Surjective f) (hN : N = f.ker)
+  结论: {f : G ->* H} (hf : 函数.满射 f) (hN : N = f.ker)
   证明: ⟨fun tH => IsMulTorsion.extension_closed hN tH tN, fun tG => IsMulTorsion.of_surjective hf tG⟩
 
 @[deprecated (since := "2026-06-30")] alias IsTorsion.quotient_iff := IsMulTorsion.quotient_iff
@@ -385,7 +385,7 @@ theorem isMulTorsion_of_finite
 
 中文:
 定理 isMulTorsion_of_finite
-  条件: [Finite G]
+  条件: [有限 G]
   结论: IsMulTorsion G
   证明: ExponentExists.isMulTorsion .of_finite
 
@@ -422,7 +422,7 @@ lemma not_isMulTorsionFree_of_isMulTorsion
 
 中文:
 引理 not_isMulTorsionFree_of_isMulTorsion
-  条件: [Nontrivial G] (hG : IsMulTorsion G)
+  条件: [非平凡 G] (hG : IsMulTorsion G)
   证明: not_isMulTorsionFree_iff_isOfFinOrder.2 let ⟨x, hx⟩ := exists_ne (1 : G); ⟨x, hx, hG x⟩
 
 @[deprecated (since := "2026-07-01")] alias not_isMulTorsionFree_of_isTorsion :=
@@ -459,7 +459,7 @@ lemma not_isMulTorsion_of_isMulTorsionFree
 
 中文:
 引理 not_isMulTorsion_of_isMulTorsionFree
-  条件: [Nontrivial G] [IsMulTorsionFree G]
+  条件: [非平凡 G] [是MulTorsionFree G]
   结论: ¬ IsMulTorsion G
   证明: (not_isMulTorsionFree_of_isMulTorsion · ‹_›)
 
@@ -500,7 +500,7 @@ theorem IsAddTorsion.module_of_torsion
 
 中文:
 定理 IsAddTorsion.module_of_torsion
-  条件: [Semiring R] [Module R M] (tR : IsAddTorsion R)
+  条件: [半环 R] [模 R M] (tR : IsAddTorsion R)
   证明: fun f => isOfFinAddOrder_iff_nsmul_eq_zero.mpr by
     obtain ⟨n, npos, hn⟩ := (tR 1).exists_nsmul_eq_zero
     exact ⟨n, npos, by simp only [← Nat.cast_smul_eq_nsmul R _ f, ← nsmul_one, hn, zero_smul]⟩
@@ -533,7 +533,7 @@ theorem IsAddTorsion.module_of_finite
 
 中文:
 定理 IsAddTorsion.module_of_finite
-  条件: [Ring R] [Finite R] [Module R M]
+  条件: [环 R] [有限 R] [模 R M]
   结论: IsAddTorsion M
   证明: (isAddTorsion_of_finite : IsAddTorsion R).module_of_torsion _ _
 
@@ -575,7 +575,7 @@ definition torsion
 
 中文:
 定义 torsion
-  签名: : Submonoid G where
+  签名: : 子幺半群 G where
   定义体: { x | IsOfFinOrder x }
   one_mem' := IsOfFinOrder.one
   mul_mem' hx hy := hx.mul hy
@@ -625,7 +625,7 @@ lemma torsion_prod
 
 中文:
 引理 torsion_prod
-  结论: torsion (G × H) = (torsion G).prod (torsion H)
+  结论: torsion (G × H) = (torsion G).乘积 (torsion H)
   证明: by
   simp [Submonoid.ext_iff, Submonoid.mem_prod, mem_torsion, IsOfFinOrder.prod_iff]
 
@@ -701,7 +701,7 @@ definition primaryComponent
 
 中文:
 定义 primaryComponent
-  签名: : Submonoid G where
+  签名: : 子幺半群 G where
   定义体: { g | exists k : Nat, g ^ p ^ k = 1 }
   one_mem' := ⟨0, by simp⟩
   mul_mem' := fun {a b} ⟨m, hm⟩ ⟨n, hn⟩ => ⟨m + n, by
@@ -750,7 +750,7 @@ theorem mem_primaryComponent_iff_orderOf
 
 中文:
 定理 mem_primaryComponent_iff_orderOf
-  条件: [Fact p.Prime] {g : G}
+  条件: [Fact p.素] {g : G}
   证明: exists_orderOf_eq_prime_pow_iff.symm
 
 Depends on / 依赖: exists_orderOf_eq_prime_pow_iff, exists_orderOf_eq_prime_pow_iff.symm
@@ -775,8 +775,8 @@ theorem primaryComponent.exists_orderOf_eq_prime_pow
   exact g.property
 
 中文:
-定理 primaryComponent.exists_orderOf_eq_prime_pow
-  条件: (g : CommMonoid.primaryComponent G p)
+定理 primaryComponent.存在_orderOf_eq_prime_pow
+  条件: (g : 交换幺半群.primaryComponent G p)
   证明: by
   rw [← orderOf_submonoid]; rw [← mem_primaryComponent_iff_orderOf]
   exact g.property
@@ -805,7 +805,7 @@ theorem primaryComponent.disjoint
 
 中文:
 定理 primaryComponent.disjoint
-  条件: {p' : 自然数} [hp' : Fact p'.Prime] (hne : p != p')
+  条件: {p' : 自然数} [hp' : Fact p'.素] (hne : p != p')
   证明: Submonoid.disjoint_def.mpr fun {g} hg hg' => by
     rw [mem_primaryComponent_iff_orderOf] at hg hg'
     obtain ⟨_ | n, hn⟩ := hg
@@ -910,7 +910,7 @@ definition CommMonoid.Torsion.ofTorsion
 @[deprecated (since := "2026-07-01")] alias Torsion.ofTorsion := CommMonoid.Torsion.ofTorsion
 
 中文:
-定义 CommMonoid.Torsion.ofTorsion
+定义 交换幺半群.挠.ofTorsion
   签名: : torsion (torsion G) ≃* torsion G
   定义体: IsMulTorsion.torsionMulEquiv CommMonoid.torsion.isMulTorsion
 
@@ -943,7 +943,7 @@ definition torsion
 
 中文:
 定义 torsion
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: { CommMonoid.torsion G with inv_mem' := fun hx => IsOfFinOrder.inv hx }
 
 Depends on / 依赖: CommMonoid, CommMonoid.torsion, IsOfFinOrder, IsOfFinOrder.inv, inv_mem, torsion
@@ -969,7 +969,7 @@ theorem torsion_eq_torsion_submonoid
 
 中文:
 定理 torsion_eq_torsion_submonoid
-  结论: CommMonoid.torsion G = (torsion G).toSubmonoid
+  结论: 交换幺半群.torsion G = (torsion G).toSubmonoid
   证明: rfl
 
 @[deprecated (since := "2026-07-01")] alias
@@ -1047,7 +1047,7 @@ lemma isMulTorsionFree_iff_torsion_eq_bot
 
 中文:
 引理 isMulTorsionFree_iff_torsion_eq_bot
-  结论: IsMulTorsionFree G ↔ CommGroup.torsion G = ⊥
+  结论: 是MulTorsionFree G ↔ 交换群.torsion G = ⊥
   证明: by
   rw [isMulTorsionFree_iff_not_isOfFinOrder]; rw [eq_bot_iff]; rw [SetLike.le_def]
   simp [not_imp_not, CommGroup.mem_torsion]
@@ -1130,7 +1130,7 @@ lemma comap_torsion_of_injective
 
 中文:
 引理 comap_torsion_of_injective
-  条件: {f : G ->* H} (hf : Function.Injective f)
+  条件: {f : G ->* H} (hf : 函数.单射 f)
   证明: by
   ext x
   exact hf.isOfFinOrder_iff
@@ -1157,7 +1157,7 @@ lemma _root_.MulEquiv.comap_torsion
 @[to_additive]
 
 中文:
-引理 _root_.MulEquiv.comap_torsion
+引理 _root_.乘法等价.comap_torsion
   条件: (e : G ≃* H)
   结论: (torsion H).comap e = torsion G
   证明: comap_torsion_of_injective e.injective
@@ -1183,7 +1183,7 @@ lemma _root_.MulEquiv.map_torsion
 @[to_additive]
 
 中文:
-引理 _root_.MulEquiv.map_torsion
+引理 _root_.乘法等价.map_torsion
   条件: (e : G ≃* H)
   结论: (torsion G).map e = torsion H
   证明: by
@@ -1208,7 +1208,7 @@ lemma torsion_prod
 
 中文:
 引理 torsion_prod
-  结论: torsion (G × H) = (torsion G).prod (torsion H)
+  结论: torsion (G × H) = (torsion G).乘积 (torsion H)
   证明: by
   simp [Subgroup.ext_iff, Subgroup.mem_prod, mem_torsion, IsOfFinOrder.prod_iff]
 
@@ -1281,7 +1281,7 @@ definition primaryComponent
 
 中文:
 定义 primaryComponent
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: { CommMonoid.primaryComponent G p with
     inv_mem' := fun {g} ⟨k, hk⟩ => ⟨k, by rw [inv_pow, hk, inv_one]⟩ }
 
@@ -1328,7 +1328,7 @@ theorem mem_primaryComponent_iff_orderOf
 
 中文:
 定理 mem_primaryComponent_iff_orderOf
-  条件: [Fact p.Prime] {g : G}
+  条件: [Fact p.素] {g : G}
   证明: exists_orderOf_eq_prime_pow_iff.symm
 
 Depends on / 依赖: exists_orderOf_eq_prime_pow_iff, exists_orderOf_eq_prime_pow_iff.symm
@@ -1348,7 +1348,7 @@ g.property.imp fun _ hk => Subtype.ext by simpa using hk
 
 中文:
 定理 primaryComponent.isPGroup
-  结论: IsPGroup p (primaryComponent G p)
+  结论: 是p群 p (primaryComponent G p)
   证明: fun g =>
 g.property.imp fun _ hk => Subtype.ext by simpa using hk
 -/
@@ -1372,7 +1372,7 @@ definition freeRank
 
 中文:
 定义 freeRank
-  签名: [Group.FG G]
+  签名: [群.FG G]
   定义体: Group.rank (G ⧸ torsion G)
 
 @[to_additive]
@@ -1393,8 +1393,8 @@ theorem freeRank_def
 
 中文:
 定理 freeRank_def
-  条件: [Group.FG G]
-  结论: freeRank G = Group.rank (G ⧸ torsion G)
+  条件: [群.FG G]
+  结论: freeRank G = 群.rank (G ⧸ torsion G)
   证明: rfl
 -/
 theorem freeRank_def [Group.FG G] : freeRank G = Group.rank (G ⧸ torsion G) := rfl
@@ -1416,7 +1416,7 @@ theorem freeRank_eq_zero_iff
 
 中文:
 定理 freeRank_eq_zero_iff
-  条件: [Group.FG G]
+  条件: [群.FG G]
   结论: freeRank G = 0 ↔ IsMulTorsion G
   证明: by
   rw [freeRank]; rw [Group.rank_eq_zero_iff]; rw [QuotientGroup.subsingleton_iff]; rw [torsion_eq_top_iff]
@@ -1442,7 +1442,7 @@ theorem freeRank_eq_zero
 
 中文:
 定理 freeRank_eq_zero
-  条件: (hG : IsMulTorsion G) [Group.FG G]
+  条件: (hG : IsMulTorsion G) [群.FG G]
   结论: freeRank G = 0
   证明: freeRank_eq_zero_iff.mpr hG
 
@@ -1467,7 +1467,7 @@ theorem freeRank_eq_zero_of_finite
 
 中文:
 定理 freeRank_eq_zero_of_finite
-  条件: [Finite G]
+  条件: [有限 G]
   结论: freeRank G = 0
   证明: freeRank_eq_zero isMulTorsion_of_finite
 
@@ -1490,7 +1490,7 @@ theorem freeRank_congr
 
 中文:
 定理 freeRank_congr
-  条件: [Group.FG G] [Group.FG H] (e : G ≃* H)
+  条件: [群.FG G] [群.FG H] (e : G ≃* H)
   结论: freeRank G = freeRank H
   证明: Group.rank_congr (QuotientGroup.congr (torsion G) (torsion H) e e.map_torsion)
 
@@ -1513,7 +1513,7 @@ theorem freeRank_ge_of_surjective
 
 中文:
 定理 freeRank_ge_of_surjective
-  结论: [Group.FG G] [Group.FG H] (e : G ->* H)
+  结论: [群.FG G] [群.FG H] (e : G ->* H)
   证明: Group.rank_le_of_surjective _ QuotientGroup.map_surjective_of_surjective
     (torsion G) (torsion H) e (QuotientGroup.mk_surjective.comp he) (le_comap_torsion e)
 
@@ -1547,8 +1547,8 @@ instance _root_.QuotientGroup.instIsMulTorsionFree
     (isOfFinOrder_iff_pow_eq_one.mpr ⟨m * n, mul_pos 
 
 中文:
-实例 _root_.QuotientGroup.instIsMulTorsionFree
-  签名: : IsMulTorsionFree G ⧸ torsion G
+实例 _root_.商群.instIsMulTorsionFree
+  签名: : 是MulTorsionFree G ⧸ torsion G
   定义体: by
   refine .of_not_isOfFinOrder fun g hne hfin => hne ?_
   obtain ⟨g⟩ := g
@@ -1601,7 +1601,7 @@ theorem neg_one_mem_torsion
 
 中文:
 定理 neg_one_mem_torsion
-  结论: -1 in CommMonoid.torsion M
+  结论: -1 in 交换幺半群.torsion M
   证明: ⟨2, zero_lt_two, (isPeriodicPt_mul_iff_pow_eq_one _).mpr (by simp)⟩
 
 Depends on / 依赖: isPeriodicPt_mul_iff_pow_eq_one, zero_lt_two

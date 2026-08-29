@@ -40,8 +40,8 @@ theorem Perm.bagInter_right
   induction h generalizing t with grind
 
 中文:
-定理 Perm.bagInter_right
-  条件: {l₁ l₂ : List α} (t : List α) (h : l₁ ~ l₂)
+定理 置换.bag整数er_right
+  条件: {l₁ l₂ : 列表 α} (t : 列表 α) (h : l₁ ~ l₂)
   证明: by
   induction h generalizing t with grind
 
@@ -64,8 +64,8 @@ theorem Perm.bagInter_left
   · simp [h, mt p.mem_iff.2 h, IH p]
 
 中文:
-定理 Perm.bagInter_left
-  条件: (l : List α) {t₁ t₂ : List α} (p : t₁ ~ t₂)
+定理 置换.bag整数er_left
+  条件: (l : 列表 α) {t₁ t₂ : 列表 α} (p : t₁ ~ t₂)
   证明: by
   induction l generalizing t₁ t₂ p with | nil => simp | cons a l IH => ?_
   by_cases h : a in t₁
@@ -90,8 +90,8 @@ theorem Perm.bagInter
   proof: ht.bagInter_left l₂ ▸ hl.bagInter_right _
 
 中文:
-定理 Perm.bagInter
-  条件: {l₁ l₂ t₁ t₂ : List α} (hl : l₁ ~ l₂) (ht : t₁ ~ t₂)
+定理 置换.bag整数er
+  条件: {l₁ l₂ t₁ t₂ : 列表 α} (hl : l₁ ~ l₂) (ht : t₁ ~ t₂)
   证明: ht.bagInter_left l₂ ▸ hl.bagInter_right _
 
 Depends on / 依赖: bagInter_left, bagInter_right, hl.bagInter_right, ht.bagInter_left
@@ -110,9 +110,9 @@ theorem Perm.bagInter_symm
   proof: perm_iff_count.mpr fun _ => (by simp [List.count_bagInter, Nat.min_comm])
 
 中文:
-定理 Perm.bagInter_symm
-  条件: (l₁ l₂ : List α)
-  结论: (l₁.bag整数er l₂).Perm (l₂.bag整数er l₁)
+定理 置换.bag整数er_symm
+  条件: (l₁ l₂ : 列表 α)
+  结论: (l₁.bag整数er l₂).置换 (l₂.bag整数er l₁)
   证明: perm_iff_count.mpr fun _ => (by simp [List.count_bagInter, Nat.min_comm])
 
 Depends on / 依赖: List.count_bagInter, Nat.min_comm, count_bagInter, min_comm, perm_iff_count, perm_iff_count.mpr
@@ -139,8 +139,8 @@ theorem Perm.inter_append
       exact perm_cons_append_cons _ 
 
 中文:
-定理 Perm.inter_append
-  条件: {l t₁ t₂ : List α} (h : Disjoint t₁ t₂)
+定理 置换.inter_append
+  条件: {l t₁ t₂ : 列表 α} (h : Disjoint t₁ t₂)
   证明: by
   induction l with
   | nil => simp
@@ -181,8 +181,8 @@ theorem Perm.take_inter
   _ ~ ys inter (xs.take n) := Perm.filter _ h
 
 中文:
-定理 Perm.take_inter
-  结论: {xs ys : List α} (n : 自然数) (h : xs ~ ys)
+定理 置换.take_inter
+  结论: {xs ys : 列表 α} (n : 自然数) (h : xs ~ ys)
   证明: calc
   xs.take n ~ xs.filter (xs.take n).elem := by
     conv_lhs => rw [Nodup.take_eq_filter_mem ((Perm.nodup_iff h).2 h')]
@@ -211,8 +211,8 @@ theorem Perm.drop_inter
     rw [inter_
 
 中文:
-定理 Perm.drop_inter
-  条件: {xs ys : List α} (n : 自然数) (h : xs ~ ys) (h' : ys.Nodup)
+定理 置换.drop_inter
+  条件: {xs ys : 列表 α} (n : 自然数) (h : xs ~ ys) (h' : ys.Nodup)
   证明: by
   by_cases h'' : n <= xs.length
   · let n' := xs.length - n
@@ -254,8 +254,8 @@ theorem Perm.dropSlice_inter
   · exact disjoint_take_drop h₂ this
 
 中文:
-定理 Perm.dropSlice_inter
-  结论: {xs ys : List α} (n m : 自然数) (h : xs ~ ys)
+定理 置换.dropSlice_inter
+  结论: {xs ys : 列表 α} (n m : 自然数) (h : xs ~ ys)
   证明: by
   simp only [dropSlice_eq]
   have : n <= n + m := Nat.le_add_right _ _

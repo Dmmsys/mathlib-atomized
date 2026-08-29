@@ -61,7 +61,7 @@ definition SolutionSetCondition
 
 中文:
 定义 SolutionSetCondition
-  签名: {D : 类型u₁} [Category.{v₁} D] (G : D ⥤ C)
+  签名: {D : 类型u₁} [范畴.{v₁} D] (G : D ⥤ C)
   定义体: forall A : C,
     exists (ι : Type w) (B : ι -> D) (f : forall i : ι, A ⟶ G.obj (B i)),
       forall (X) (h : A ⟶ G.obj X), exists (i : ι) (g : B i ⟶ X), f i ≫ G.map g = h
@@ -95,7 +95,7 @@ theorem solutionSetCondition_of_isRightAdjoint
 
 中文:
 定理 solutionSetCondition_of_isRightAdjoint
-  条件: [G.IsRightAdjoint]
+  条件: [G.是右伴随]
   结论: SolutionSetCondition.{w} G
   证明: by
   intro A
@@ -133,7 +133,7 @@ lemma isRightAdjoint_of_preservesLimits_of_solutionSetCondition
 
 中文:
 引理 isRightAdjoint_of_preservesLimits_of_solutionSetCondition
-  结论: [HasLimits D]
+  结论: [有极限 D]
   证明: by
   refine @isRightAdjointOfStructuredArrowInitials _ _ _ _ G ?_
   intro A
@@ -179,7 +179,7 @@ lemma isRightAdjoint_of_preservesLimits_of_isCoseparating
 
 中文:
 引理 isRightAdjoint_of_preservesLimits_of_isCoseparating
-  结论: [HasLimits D] [WellPowered.{v} D]
+  结论: [有极限 D] [良幂.{v} D]
   证明: by
   have : forall A, HasInitial (StructuredArrow A G) := fun A =>
     hasInitial_of_isCoseparating.{v} (StructuredArrow.isCoseparating_inverseImage_proj A G hP)
@@ -207,7 +207,7 @@ lemma isLeftAdjoint_of_preservesColimits_of_isSeparating
 
 中文:
 引理 isLeftAdjoint_of_preservesColimits_of_isSeparating
-  结论: [HasColimits C] [WellPowered.{v} Cᵒᵖ]
+  结论: [有余极限 C] [良幂.{v} Cᵒᵖ]
   证明: have : forall A, HasTerminal (CostructuredArrow F A) := fun A =>
     hasTerminal_of_isSeparating.{v} (CostructuredArrow.isSeparating_inverseImage_proj F A h𝒢)
   isLeftAdjoint_of_costructuredArrowTerminals _
@@ -238,7 +238,7 @@ theorem hasColimits_of_hasLimits_of_isCoseparating
 
 中文:
 定理 hasColimits_of_hasLimits_of_isCoseparating
-  结论: [HasLimits C] [WellPowered.{v} C]
+  结论: [有极限 C] [良幂.{v} C]
   证明: { has_colimits_of_shape := fun _ _ =>
       hasColimitsOfShape_iff_isRightAdjoint_const.2
         (isRightAdjoint_of_preservesLimits_of_isCoseparating hP _) }
@@ -263,7 +263,7 @@ theorem hasLimits_of_hasColimits_of_isSeparating
 
 中文:
 定理 hasLimits_of_hasColimits_of_isSeparating
-  结论: [HasColimits C] [WellPowered.{v} Cᵒᵖ]
+  结论: [有余极限 C] [良幂.{v} Cᵒᵖ]
   证明: { has_limits_of_shape := fun _ _ =>
       hasLimitsOfShape_iff_isLeftAdjoint_const.2
         (isLeftAdjoint_of_preservesColimits_of_isSeparating hP _) }
@@ -286,7 +286,7 @@ theorem hasLimits_of_hasColimits_of_hasSeparator
 
 中文:
 定理 hasLimits_of_hasColimits_of_hasSeparator
-  结论: [HasColimits C] [HasSeparator C]
+  结论: [有余极限 C] [有Separator C]
   证明: hasLimits_of_hasColimits_of_isSeparating isSeparator_separator C
 
 Depends on / 依赖: hasLimits_of_hasColimits_of_isSeparating, isSeparator_separator
@@ -305,7 +305,7 @@ theorem hasColimits_of_hasLimits_of_hasCoseparator
 
 中文:
 定理 hasColimits_of_hasLimits_of_hasCoseparator
-  结论: [HasLimits C] [HasCoseparator C]
+  结论: [有极限 C] [有余separator C]
   证明: hasColimits_of_hasLimits_of_isCoseparating isCoseparator_coseparator C
 
 Depends on / 依赖: hasColimits_of_hasLimits_of_isCoseparating, isCoseparator_coseparator

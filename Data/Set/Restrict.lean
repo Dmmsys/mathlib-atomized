@@ -37,7 +37,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (s : Set α) (f : 对任意 a : α, π a)
+  签名: (s : 集合 α) (f : 对任意 a : α, π a)
   定义体: fun x => f x
 -/
 def domRestrict (s : Set α) (f : forall a : α, π a) : forall a : s, π a := fun x => f x
@@ -53,7 +53,7 @@ theorem domRestrict_def
 
 中文:
 定理 domRestrict_def
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s.domRestrict (π := π) = fun f x => f x
   证明: rfl
 -/
@@ -70,8 +70,8 @@ theorem domRestrict_eq
 
 中文:
 定理 domRestrict_eq
-  条件: (f : α -> β) (s : Set α)
-  结论: s.domRestrict f = f ∘ Subtype.val
+  条件: (f : α -> β) (s : 集合 α)
+  结论: s.domRestrict f = f ∘ 子类型.val
   证明: rfl
 -/
 theorem domRestrict_eq (f : α -> β) (s : Set α) : s.domRestrict f = f ∘ Subtype.val :=
@@ -90,8 +90,8 @@ lemma domRestrict_id
 
 中文:
 引理 domRestrict_id
-  条件: (s : Set α)
-  结论: domRestrict s id = Subtype.val
+  条件: (s : 集合 α)
+  结论: domRestrict s id = 子类型.val
   证明: rfl
 
 @[simp, grind =]
@@ -110,7 +110,7 @@ theorem domRestrict_apply
 
 中文:
 定理 domRestrict_apply
-  条件: (f : (a : α) -> π a) (s : Set α) (x : s)
+  条件: (f : (a : α) -> π a) (s : 集合 α) (x : s)
   结论: s.domRestrict f x = f x
   证明: rfl
 -/
@@ -127,7 +127,7 @@ theorem domRestrict_eq_iff
 
 中文:
 定理 domRestrict_eq_iff
-  条件: {f : 对任意 a, π a} {s : Set α} {g : 对任意 a : s, π a}
+  条件: {f : 对任意 a, π a} {s : 集合 α} {g : 对任意 a : s, π a}
   证明: funext_iff.trans Subtype.forall
 
 Depends on / 依赖: Subtype, Subtype.forall, funext_iff, funext_iff.trans
@@ -148,7 +148,7 @@ theorem eq_domRestrict_iff
 
 中文:
 定理 eq_domRestrict_iff
-  条件: {s : Set α} {f : 对任意 a : s, π a} {g : 对任意 a, π a}
+  条件: {s : 集合 α} {f : 对任意 a : s, π a} {g : 对任意 a, π a}
   证明: funext_iff.trans Subtype.forall
 
 @[simp]
@@ -171,8 +171,8 @@ theorem range_domRestrict
 
 中文:
 定理 range_domRestrict
-  条件: (f : α -> β) (s : Set α)
-  结论: Set.range (s.domRestrict f) = f '' s
+  条件: (f : α -> β) (s : 集合 α)
+  结论: 集合.range (s.domRestrict f) = f '' s
   证明: (range_comp _ _).trans congr_arg (f '' ·) Subtype.range_coe
 
 Depends on / 依赖: Subtype, Subtype.range_coe, congr_arg, range_coe, range_comp
@@ -193,7 +193,7 @@ theorem image_domRestrict
 
 中文:
 定理 image_domRestrict
-  条件: (f : α -> β) (s t : Set α)
+  条件: (f : α -> β) (s t : 集合 α)
   证明: by
   rw [domRestrict_eq]; rw [image_comp]; rw [image_preimage_eq_inter_range]; rw [Subtype.range_coe]
 
@@ -218,7 +218,7 @@ theorem domRestrict_dite
 
 中文:
 定理 domRestrict_dite
-  结论: {s : Set α} [对任意 x, Decidable (x in s)] (f : 对任意 a in s, β)
+  结论: {s : 集合 α} [对任意 x, 可判定 (x in s)] (f : 对任意 a in s, β)
   证明: funext fun a => dif_pos a.2
 
 @[simp]
@@ -243,7 +243,7 @@ theorem domRestrict_dite_compl
 
 中文:
 定理 domRestrict_dite_compl
-  结论: {s : Set α} [对任意 x, Decidable (x in s)] (f : 对任意 a in s, β)
+  结论: {s : 集合 α} [对任意 x, 可判定 (x in s)] (f : 对任意 a in s, β)
   证明: funext fun a => dif_neg a.2
 
 @[simp]
@@ -269,7 +269,7 @@ theorem domRestrict_ite
 
 中文:
 定理 domRestrict_ite
-  条件: (f g : α -> β) (s : Set α) [对任意 x, Decidable (x in s)]
+  条件: (f g : α -> β) (s : 集合 α) [对任意 x, 可判定 (x in s)]
   证明: domRestrict_dite _ _
 
 @[simp]
@@ -292,7 +292,7 @@ theorem domRestrict_ite_compl
 
 中文:
 定理 domRestrict_ite_compl
-  条件: (f g : α -> β) (s : Set α) [对任意 x, Decidable (x in s)]
+  条件: (f g : α -> β) (s : 集合 α) [对任意 x, 可判定 (x in s)]
   证明: domRestrict_dite_compl _ _
 
 @[simp]
@@ -316,7 +316,7 @@ theorem domRestrict_piecewise
 
 中文:
 定理 domRestrict_piecewise
-  条件: (f g : α -> β) (s : Set α) [对任意 x, Decidable (x in s)]
+  条件: (f g : α -> β) (s : 集合 α) [对任意 x, 可判定 (x in s)]
   证明: domRestrict_ite _ _ _
 
 @[simp]
@@ -337,7 +337,7 @@ theorem domRestrict_piecewise_compl
 
 中文:
 定理 domRestrict_piecewise_compl
-  条件: (f g : α -> β) (s : Set α) [对任意 x, Decidable (x in s)]
+  条件: (f g : α -> β) (s : 集合 α) [对任意 x, 可判定 (x in s)]
   证明: domRestrict_ite_compl _ _ _
 
 Depends on / 依赖: domRestrict_ite_compl
@@ -410,7 +410,7 @@ definition domRestrict₂
 
 中文:
 定义 domRestrict₂
-  签名: {s t : Set α} (hst : s subseteq t) (f : 对任意 a : t, π a)
+  签名: {s t : 集合 α} (hst : s subseteq t) (f : 对任意 a : t, π a)
   定义体: fun x => f ⟨x.1, hst x.2⟩
 -/
 def domRestrict₂ {s t : Set α} (hst : s subseteq t) (f : forall a : t, π a) : forall a : s, π a :=
@@ -426,7 +426,7 @@ theorem domRestrict₂_def
 
 中文:
 定理 domRestrict₂_def
-  条件: {s t : Set α} (hst : s subseteq t)
+  条件: {s t : 集合 α} (hst : s subseteq t)
   证明: rfl
 -/
 theorem domRestrict₂_def {s t : Set α} (hst : s subseteq t) :
@@ -442,7 +442,7 @@ theorem domRestrict₂_comp_domRestrict
 
 中文:
 定理 domRestrict₂_comp_domRestrict
-  条件: {s t : Set α} (hst : s subseteq t)
+  条件: {s t : 集合 α} (hst : s subseteq t)
   证明: rfl
 
 Depends on / 依赖: domRestrict, s.domRestrict, t.domRestrict
@@ -460,7 +460,7 @@ theorem domRestrict₂_comp_domRestrict₂
 
 中文:
 定理 domRestrict₂_comp_domRestrict₂
-  条件: {s t u : Set α} (hst : s subseteq t) (htu : t subseteq u)
+  条件: {s t u : 集合 α} (hst : s subseteq t) (htu : t subseteq u)
   证明: rfl
 
 Depends on / 依赖: hst.trans
@@ -514,7 +514,7 @@ theorem range_extend
 
 中文:
 定理 range_extend
-  条件: {f : α -> β} (hf : Injective f) (g : α -> γ) (g' : β -> γ)
+  条件: {f : α -> β} (hf : 单射 f) (g : α -> γ) (g' : β -> γ)
   证明: by
   refine (range_extend_subset _ _ _).antisymm ?_
   rintro z (⟨x, rfl⟩ | ⟨y, hy, rfl⟩)
@@ -540,7 +540,7 @@ lemma _root_.Function.FactorsThrough.extend_injOn
   rw [hg heq]
 
 中文:
-引理 _root_.Function.FactorsThrough.extend_injOn
+引理 _root_.函数.FactorsThrough.extend_injOn
   结论: {f : α -> β} {g : α -> γ} {j : β -> γ}
   证明: by
   rintro _ ⟨x, rfl⟩ _ ⟨y, rfl⟩ heq
@@ -565,7 +565,7 @@ lemma _root_.Function.Injective.extend_injOn
   proof: (hf.factorsThrough g).extend_injOn hg
 
 中文:
-引理 _root_.Function.Injective.extend_injOn
+引理 _root_.函数.单射.extend_injOn
   结论: {f : α -> β} {g : α -> γ} {j : β -> γ}
   证明: (hf.factorsThrough g).extend_injOn hg
 
@@ -588,7 +588,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : ι -> α) (s : Set α) (h : 对任意 x, f x in s)
+  签名: (f : ι -> α) (s : 集合 α) (h : 对任意 x, f x in s)
   定义体: fun x => ⟨f x, h x⟩
 
 @[simp]
@@ -608,7 +608,7 @@ theorem val_codRestrict_apply
 
 中文:
 定理 val_codRestrict_apply
-  条件: (f : ι -> α) (s : Set α) (h : 对任意 x, f x in s) (x : ι)
+  条件: (f : ι -> α) (s : 集合 α) (h : 对任意 x, f x in s) (x : ι)
   证明: rfl
 
 @[simp]
@@ -630,7 +630,7 @@ theorem domRestrict_comp_codRestrict
 
 中文:
 定理 domRestrict_comp_codRestrict
-  结论: {f : ι -> α} {g : α -> β} {b : Set α}
+  结论: {f : ι -> α} {g : α -> β} {b : 集合 α}
   证明: rfl
 
 @[simp]
@@ -653,7 +653,7 @@ alias ⟨_, _root_.Function.Injective.codRestrict⟩ := injective_codRestrict
 
 中文:
 定理 injective_codRestrict
-  条件: {f : ι -> α} {s : Set α} (h : 对任意 x, f x in s)
+  条件: {f : ι -> α} {s : 集合 α} (h : 对任意 x, f x in s)
   证明: by
   simp only [Injective, Subtype.ext_iff, val_codRestrict_apply]
 
@@ -678,7 +678,7 @@ theorem range_codRestrict
 
 中文:
 定理 range_codRestrict
-  条件: {f : ι -> α} {s : Set α} (h : 对任意 x, f x in s)
+  条件: {f : ι -> α} {s : 集合 α} (h : 对任意 x, f x in s)
   证明: by
   ext; simp [Subtype.ext_iff]
 -/
@@ -697,7 +697,7 @@ theorem surjective_codRestrict
 
 中文:
 定理 surjective_codRestrict
-  条件: {f : ι -> α} {s : Set α} (h : 对任意 x, f x in s)
+  条件: {f : ι -> α} {s : 集合 α} (h : 对任意 x, f x in s)
   证明: by
   simp [← range_eq_univ, Subset.antisymm_iff (a := range f), range_subset_iff, h]
 
@@ -804,8 +804,8 @@ theorem MapsTo.restrict_commutes
 @[simp]
 
 中文:
-定理 MapsTo.restrict_commutes
-  条件: (f : α -> β) (s : Set α) (t : Set β) (h : MapsTo f s t)
+定理 映射到.restrict_commutes
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β) (h : 映射到 f s t)
   证明: rfl
 
 @[simp]
@@ -825,8 +825,8 @@ theorem MapsTo.val_restrict_apply
   proof: rfl
 
 中文:
-定理 MapsTo.val_restrict_apply
-  条件: (h : MapsTo f s t) (x : s)
+定理 映射到.val_restrict_apply
+  条件: (h : 映射到 f s t) (x : s)
   结论: (h.restrict f s t x : β) = f x
   证明: rfl
 -/
@@ -845,8 +845,8 @@ theorem MapsTo.coe_iterate_restrict
   | succ k ih => simp only [iterate_succ', comp_apply, val_restrict_apply, ih]
 
 中文:
-定理 MapsTo.coe_iterate_restrict
-  条件: {f : α -> α} (h : MapsTo f s s) (x : s) (k : 自然数)
+定理 映射到.coe_iterate_restrict
+  条件: {f : α -> α} (h : 映射到 f s s) (x : s) (k : 自然数)
   证明: by
   induction k with
   | zero => simp
@@ -894,8 +894,8 @@ theorem MapsTo.restrict_eq_codRestrict
   proof: rfl
 
 中文:
-定理 MapsTo.restrict_eq_codRestrict
-  条件: (h : MapsTo f s t)
+定理 映射到.restrict_eq_codRestrict
+  条件: (h : 映射到 f s t)
   证明: rfl
 -/
 theorem MapsTo.restrict_eq_codRestrict (h : MapsTo f s t) :
@@ -911,8 +911,8 @@ theorem MapsTo.coe_restrict
   proof: rfl
 
 中文:
-定理 MapsTo.coe_restrict
-  条件: (h : Set.MapsTo f s t)
+定理 映射到.coe_restrict
+  条件: (h : 集合.映射到 f s t)
   证明: rfl
 -/
 theorem MapsTo.coe_restrict (h : Set.MapsTo f s t) :
@@ -928,8 +928,8 @@ theorem MapsTo.range_restrict
   proof: Set.range_subtype_map f h
 
 中文:
-定理 MapsTo.range_restrict
-  条件: (f : α -> β) (s : Set α) (t : Set β) (h : MapsTo f s t)
+定理 映射到.range_restrict
+  条件: (f : α -> β) (s : 集合 α) (t : 集合 β) (h : 映射到 f s t)
   证明: Set.range_subtype_map f h
 
 Depends on / 依赖: Set.range_subtype_map, range_subtype_map
@@ -949,8 +949,8 @@ theorem mapsTo_iff_exists_map_subtype
     apply Subtype.coe_prop⟩
 
 中文:
-定理 mapsTo_iff_exists_map_subtype
-  结论: MapsTo f s t ↔ 存在 g : s -> t, 对任意 x : s, f x = g x
+定理 mapsTo_iff_存在_map_subtype
+  结论: 映射到 f s t ↔ 存在 g : s -> t, 对任意 x : s, f x = g x
   证明: ⟨fun h => ⟨h.restrict f s t, fun _ => rfl⟩, fun ⟨g, hg⟩ x hx => by
     rw [hg ⟨x]; rw [hx⟩]
     apply Subtype.coe_prop⟩
@@ -973,7 +973,7 @@ theorem surjective_mapsTo_image_restrict
 
 中文:
 定理 surjective_mapsTo_image_restrict
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   证明: fun ⟨_, x, hs, hxy⟩ =>
   ⟨⟨x, hs⟩, Subtype.ext hxy⟩
 -/
@@ -1025,7 +1025,7 @@ theorem range_restrictPreimage
 
 中文:
 定理 range_restrictPreimage
-  结论: range (t.restrictPreimage f) = Subtype.val ⁻¹' range f
+  结论: range (t.restrictPreimage f) = 子类型.val ⁻¹' range f
   证明: by
   simp only [← image_univ, ← image_restrictPreimage, preimage_univ]
 
@@ -1066,7 +1066,7 @@ theorem image_val_preimage_restrictPreimage
 
 中文:
 定理 image_val_preimage_restrictPreimage
-  条件: {u : Set t}
+  条件: {u : 集合 t}
   证明: by
   ext
   simp
@@ -1087,7 +1087,7 @@ theorem preimage_restrictPreimage
 
 中文:
 定理 preimage_restrictPreimage
-  条件: {u : Set t}
+  条件: {u : 集合 t}
   证明: by
   rw [← preimage_preimage (g := f) (f := Subtype.val)]; rw [← image_val_preimage_restrictPreimage]; rw [preimage_image_eq _ Subtype.val_injective]
 
@@ -1108,8 +1108,8 @@ lemma restrictPreimage_injective
 
 中文:
 引理 restrictPreimage_injective
-  条件: (hf : Injective f)
-  结论: Injective (t.restrictPreimage f)
+  条件: (hf : 单射 f)
+  结论: 单射 (t.restrictPreimage f)
   证明: fun _ _ e => Subtype.coe_injective hf Subtype.mk.inj e
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, Subtype.mk.inj, coe_injective
@@ -1128,8 +1128,8 @@ lemma restrictPreimage_surjective
 
 中文:
 引理 restrictPreimage_surjective
-  条件: (hf : Surjective f)
-  结论: Surjective (t.restrictPreimage f)
+  条件: (hf : 满射 f)
+  结论: 满射 (t.restrictPreimage f)
   证明: fun x => ⟨⟨_, ((hf x).choose_spec.symm ▸ x.2 : _ in t)⟩, Subtype.ext (hf x).choose_spec⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, choose_spec, choose_spec.symm
@@ -1152,8 +1152,8 @@ alias _root_.Function.Bijective.restrictPreimage := Set.res
 
 中文:
 引理 restrictPreimage_bijective
-  条件: (hf : Bijective f)
-  结论: Bijective (t.restrictPreimage f)
+  条件: (hf : 双射 f)
+  结论: 双射 (t.restrictPreimage f)
   证明: ⟨t.restrictPreimage_injective hf.1, t.restrictPreimage_surjective hf.2⟩
 
 alias _root_.Function.Injective.restrictPreimage := Set.restrictPreimage_injective
@@ -1187,7 +1187,7 @@ alias ⟨InjOn.injective, _⟩ := Set.injOn_iff_injective
 
 中文:
 定理 injOn_iff_injective
-  结论: InjOn f s ↔ Injective (s.domRestrict f)
+  结论: 单射限制 f s ↔ 单射 (s.domRestrict f)
   证明: ⟨fun H a b h => Subtype.ext H a.2 b.2 h, fun H a as b bs h =>
 congr_arg Subtype.val @H ⟨a, as⟩ ⟨b, bs⟩ h⟩
 
@@ -1213,9 +1213,9 @@ theorem MapsTo.restrict_inj
   rw [h.restrict_eq_codRestrict]; rw [injective_codRestrict]; rw [injOn_iff_injective]
 
 中文:
-定理 MapsTo.restrict_inj
-  条件: (h : MapsTo f s t)
-  结论: Injective (h.restrict f s t) ↔ InjOn f s
+定理 映射到.restrict_inj
+  条件: (h : 映射到 f s t)
+  结论: 单射 (h.restrict f s t) ↔ 单射限制 f s
   证明: by
   rw [h.restrict_eq_codRestrict]; rw [injective_codRestrict]; rw [injOn_iff_injective]
 
@@ -1246,7 +1246,7 @@ theorem surjOn_iff_surjective
 
 中文:
 定理 surjOn_iff_surjective
-  结论: SurjOn f s univ ↔ Surjective (s.domRestrict f)
+  结论: 满射限制 f s univ ↔ 满射 (s.domRestrict f)
   证明: ⟨fun H b =>
     let ⟨a, as, e⟩ := @H b trivial
     ⟨⟨a, as⟩, e⟩,
@@ -1281,8 +1281,8 @@ theorem MapsTo.restrict_surjective_iff
     exact ⟨⟨a, ha⟩, rfl⟩
 
 中文:
-定理 MapsTo.restrict_surjective_iff
-  条件: (h : MapsTo f s t)
+定理 映射到.restrict_surjective_iff
+  条件: (h : 映射到 f s t)
   证明: by
   refine ⟨fun h' b hb => ?_, fun h' ⟨b, hb⟩ => ?_⟩
   · obtain ⟨⟨a, ha⟩, ha'⟩ := h' ⟨b, hb⟩

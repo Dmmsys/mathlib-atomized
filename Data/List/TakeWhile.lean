@@ -36,7 +36,7 @@ theorem dropWhile_get_zero_not
 
 中文:
 定理 dropWhile_get_zero_not
-  条件: (l : List α) (hl : 0 < (l.dropWhile p).length)
+  条件: (l : 列表 α) (hl : 0 < (l.dropWhile p).length)
   证明: by
   induction l with
   | nil => cases hl
@@ -80,7 +80,7 @@ theorem length_dropWhile_le
 
 中文:
 定理 length_dropWhile_le
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (dropWhile p l).length <= l.length
   证明: by
   induction l with
@@ -304,7 +304,7 @@ theorem takeWhile_takeWhile
 
 中文:
 定理 takeWhile_takeWhile
-  条件: (p q : α -> 布尔) (l : List α)
+  条件: (p q : α -> 布尔值) (l : 列表 α)
   证明: by
   induction l with
   | nil => simp

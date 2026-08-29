@@ -102,7 +102,7 @@ example : True :=
 
 中文:
 定义 adaptationNoteTermElab
-  签名: : Elab.Term.TermElab
+  签名: : Elab.项.TermElab
   定义体: by
   #adaptation_note /-- This is a test -/
   trivial

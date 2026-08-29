@@ -45,7 +45,7 @@ theorem map_isUnit_of_le
 中文:
 定理 map_isUnit_of_le
   条件: (hS : S <= A⁰) (s : S)
-  结论: IsUnit (algebraMap A K s)
+  结论: 是单位 (algebraMap A K s)
   证明: by
   apply IsLocalization.map_units K (⟨s.1, hS s.2⟩ : A⁰)
 
@@ -66,7 +66,7 @@ definition mapToFractionRing
 
 中文:
 定义 mapToFractionRing
-  签名: (B : 类型) [CommRing B] [Algebra A B] [IsLocalization S B]
+  签名: (B : 类型) [交换环 B] [代数 A B] [是Localization S B]
   定义体: { IsLocalization.lift (map_isUnit_of_le K S hS) with commutes' := fun a => by simp }
 
 @[simp]
@@ -88,7 +88,7 @@ theorem mapToFractionRing_apply
 
 中文:
 定理 mapToFractionRing_apply
-  结论: {B : 类型} [CommRing B] [Algebra A B] [IsLocalization S B]
+  结论: {B : 类型} [交换环 B] [代数 A B] [是Localization S B]
   证明: rfl
 -/
 theorem mapToFractionRing_apply {B : Type*} [CommRing B] [Algebra A B] [IsLocalization S B]
@@ -113,7 +113,7 @@ theorem mem_range_mapToFractionRing_iff
 
 中文:
 定理 mem_range_mapToFractionRing_iff
-  结论: (B : 类型) [CommRing B] [Algebra A B] [IsLocalization S B]
+  结论: (B : 类型) [交换环 B] [代数 A B] [是Localization S B]
   证明: ⟨by
     rintro ⟨x, rfl⟩
     obtain ⟨a, s, rfl⟩ := IsLocalization.exists_mk'_eq S x
@@ -152,7 +152,7 @@ instance isLocalization_range_mapToFractionRing
 
 中文:
 实例 isLocalization_range_mapToFractionRing
-  签名: (B : 类型) [CommRing B] [Algebra A B]
+  签名: (B : 类型) [交换环 B] [代数 A B]
   定义体: IsLocalization.isLocalization_of_algEquiv S
     show B ≃ₐ[A] _ from AlgEquiv.ofBijective (mapToFractionRing K S B hS).rangeRestrict (by
       refine ⟨fun a b h => ?_, Set.rangeFactorization_surjective⟩
@@ -180,7 +180,7 @@ instance isFractionRing_range_mapToFractionRing
 
 中文:
 实例 isFractionRing_range_mapToFractionRing
-  签名: (B : 类型) [CommRing B] [Algebra A B]
+  签名: (B : 类型) [交换环 B] [代数 A B]
   定义体: IsFractionRing.isFractionRing_of_isLocalization S _ _ hS
 
 Depends on / 依赖: IsFractionRing, IsFractionRing.isFractionRing_of_isLocalization, isFractionRing_of_isLocalization
@@ -234,7 +234,7 @@ instance isLocalization_subalgebra
 
 中文:
 实例 isLocalization_subalgebra
-  签名: : IsLocalization S (subalgebra K S hS)
+  签名: : 是Localization S (subalgebra K S hS)
   定义体: by
   dsimp +instances only [Localization.subalgebra]
   rw [Subalgebra.copy_eq]
@@ -290,7 +290,7 @@ theorem mem_range_mapToFractionRing_iff_ofField
 
 中文:
 定理 mem_range_mapToFractionRing_iff_ofField
-  结论: (B : 类型) [CommRing B] [Algebra A B]
+  结论: (B : 类型) [交换环 B] [代数 A B]
   证明: by
   rw [mem_range_mapToFractionRing_iff]
   convert! Iff.rfl
@@ -324,7 +324,7 @@ definition ofField
 
 中文:
 定义 ofField
-  签名: : Subalgebra A K
+  签名: : 子代数 A K
   定义体: (mapToFractionRing K S (Localization S) hS).range.copy
 { x | exists (a s : A) (_ : s in S), x = algebraMap A K a * (algebraMap A K s)⁻¹ } by
     ext
@@ -372,7 +372,7 @@ instance isLocalization_ofField
 
 中文:
 实例 isLocalization_ofField
-  签名: : IsLocalization S (ofField K S hS)
+  签名: : 是Localization S (ofField K S hS)
   定义体: by
   rw [ofField_eq]
   exact isLocalization_subalgebra K S hS

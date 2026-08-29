@@ -34,7 +34,7 @@ definition LSeries.abscissaOfAbsConv
 
 中文:
 定义 LSeries.abscissaOfAbsConv
-  签名: (f : 自然数 -> Complex)
+  签名: (f : 自然数 -> 复形)
   定义体: sInf Real.toEReal '' {x : Real | LSeriesSummable f x}
 
 Depends on / 依赖: LSeriesSummable, Real.toEReal, toEReal
@@ -52,7 +52,7 @@ lemma LSeries.abscissaOfAbsConv_congr
 
 中文:
 引理 LSeries.abscissaOfAbsConv_congr
-  条件: {f g : 自然数 -> Complex} (h : 对任意 {n}, n != 0 -> f n = g n)
+  条件: {f g : 自然数 -> 复形} (h : 对任意 {n}, n != 0 -> f n = g n)
   证明: congr_arg sInf congr_arg _ Set.ext fun x => LSeriesSummable_congr x h
 
 Depends on / 依赖: LSeriesSummable_congr, Set.ext, congr_arg
@@ -72,7 +72,7 @@ lemma LSeries.abscissaOfAbsConv_congr'
 
 中文:
 引理 LSeries.abscissaOfAbsConv_congr'
-  条件: {f g : 自然数 -> Complex} (h : f =ᶠ[atTop] g)
+  条件: {f g : 自然数 -> 复形} (h : f =ᶠ[atTop] g)
   证明: congr_arg sInf congr_arg _ Set.ext fun x => LSeriesSummable_congr' x h
 
 Depends on / 依赖: LSeriesSummable_congr, Set.ext, congr_arg
@@ -96,7 +96,7 @@ exact hy.of_re_le_re ofReal_re y ▸ hys.le
 
 中文:
 引理 LSeriesSummable_of_abscissaOfAbsConv_lt_re
-  结论: {f : 自然数 -> Complex} {s : Complex}
+  结论: {f : 自然数 -> 复形} {s : 复形}
   证明: by
   obtain ⟨y, hy, hys⟩ : exists a : Real, LSeriesSummable f a ∧ a < s.re := by
     simpa [abscissaOfAbsConv, sInf_lt_iff] using hs
@@ -122,7 +122,7 @@ lemma LSeriesSummable_lt_re_of_abscissaOfAbsConv_lt_re
 
 中文:
 引理 LSeriesSummable_lt_re_of_abscissaOfAbsConv_lt_re
-  结论: {f : 自然数 -> Complex} {s : Complex}
+  结论: {f : 自然数 -> 复形} {s : 复形}
   证明: by
   obtain ⟨x, hx₁, hx₂⟩ := EReal.exists_between_coe_real hs
   exact ⟨x, by simpa using hx₂, LSeriesSummable_of_abscissaOfAbsConv_lt_re hx₁⟩
@@ -145,7 +145,7 @@ lemma LSeriesSummable.abscissaOfAbsConv_le
 
 中文:
 引理 LSeriesSummable.abscissaOfAbsConv_le
-  条件: {f : 自然数 -> Complex} {s : Complex} (h : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} {s : 复形} (h : LSeriesSummable f s)
   证明: sInf_le by simpa using h.of_re_le_re (by simp)
 
 Depends on / 依赖: h.of_re_le_re, of_re_le_re, sInf_le
@@ -169,8 +169,8 @@ lemma LSeries.abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable
   | top => simp
 
 中文:
-引理 LSeries.abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable
-  结论: {f : 自然数 -> Complex} {x : 实数}
+引理 LSeries.abscissaOfAbsConv_le_of_对任意_lt_LSeriesSummable
+  结论: {f : 自然数 -> 复形} {x : 实数}
   证明: by
   refine sInf_le_iff.mpr fun y hy => le_of_forall_gt_imp_ge_of_dense fun a => ?_
   replace hy : forall (a : Real), LSeriesSummable f a -> y <= a := by simpa [mem_lowerBounds] using hy
@@ -209,8 +209,8 @@ refine le_of_eq sInf_eq_bot.mpr fun y hy => ?_
 | top
 
 中文:
-引理 LSeries.abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable'
-  结论: {f : 自然数 -> Complex} {x : E实数}
+引理 LSeries.abscissaOfAbsConv_le_of_对任意_lt_LSeriesSummable'
+  结论: {f : 自然数 -> 复形} {x : E实数}
   证明: by
   cases x with
 | coe => exact abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable mod_cast h
@@ -252,7 +252,7 @@ lemma LSeries.abscissaOfAbsConv_le_of_le_const_mul_rpow
 
 中文:
 引理 LSeries.abscissaOfAbsConv_le_of_le_const_mul_rpow
-  结论: {f : 自然数 -> Complex} {x : 实数}
+  结论: {f : 自然数 -> 复形} {x : 实数}
   证明: by
   rw [show x = x + 1 - 1 by ring] at h
   by_contra! H
@@ -286,7 +286,7 @@ lemma LSeries.abscissaOfAbsConv_le_of_isBigO_rpow
 
 中文:
 引理 LSeries.abscissaOfAbsConv_le_of_isBigO_rpow
-  结论: {f : 自然数 -> Complex} {x : 实数}
+  结论: {f : 自然数 -> 复形} {x : 实数}
   证明: by
   rw [show x = x + 1 - 1 by ring] at h
   by_contra! H
@@ -316,7 +316,7 @@ lemma LSeries.abscissaOfAbsConv_le_of_le_const
 
 中文:
 引理 LSeries.abscissaOfAbsConv_le_of_le_const
-  条件: {f : 自然数 -> Complex} (h : 存在 C, 对任意 n != 0, ‖f n‖ <= C)
+  条件: {f : 自然数 -> 复形} (h : 存在 C, 对任意 n != 0, ‖f n‖ <= C)
   证明: by
   simpa using abscissaOfAbsConv_le_of_le_const_mul_rpow (x := 0) (by simpa using h)
 
@@ -338,7 +338,7 @@ lemma LSeries.abscissaOfAbsConv_le_one_of_isBigO_one
 
 中文:
 引理 LSeries.abscissaOfAbsConv_le_one_of_isBigO_one
-  条件: {f : 自然数 -> Complex} (h : f =O[atTop] fun _ => (1 : 实数))
+  条件: {f : 自然数 -> 复形} (h : f =O[atTop] fun _ => (1 : 实数))
   证明: by
   simpa using abscissaOfAbsConv_le_of_isBigO_rpow (x := 0) (by simpa using h)
 
@@ -400,7 +400,7 @@ lemma LSeries.abscissaOfAbsConv_binop_le
 
 中文:
 引理 LSeries.abscissaOfAbsConv_binop_le
-  结论: {F : (自然数 -> Complex) -> (自然数 -> Complex) -> (自然数 -> Complex)}
+  结论: {F : (自然数 -> 复形) -> (自然数 -> 复形) -> (自然数 -> 复形)}
   证明: by
   refine abscissaOfAbsConv_le_of_forall_lt_LSeriesSummable' fun x hx => hF ?_ ?_
 · exact LSeriesSummable_of_abscissaOfAbsConv_lt_re

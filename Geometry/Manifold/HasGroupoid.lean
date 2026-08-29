@@ -37,8 +37,8 @@ class HasGroupoid
     - compatible : forall {e e' : OpenPartialHomeomorph M H}, e in atlas H M -> e' in atlas H M -> e.symm ≫ₕ e' in G
 
 中文:
-类 HasGroupoid
-  参数: {H : 类型} [TopologicalSpace H] (M : 类型) [TopologicalSpace M]
+类 有群胚
+  参数: {H : 类型} [拓扑空间 H] (M : 类型) [拓扑空间 M]
   公理与运算 (1 个):
     - compatible : 对任意 {e e' : OpenPartialHomeomorph M H}, e in atlas H M -> e' in atlas H M -> e.symm ≫ₕ e' in G
 -/
@@ -57,7 +57,7 @@ theorem StructureGroupoid.compatible
 
 中文:
 定理 StructureGroupoid.compatible
-  结论: {H : 类型} [TopologicalSpace H] (G : StructureGroupoid H)
+  结论: {H : 类型} [拓扑空间 H] (G : StructureGroupoid H)
   证明: HasGroupoid.compatible he he'
 
 Depends on / 依赖: HasGroupoid, HasGroupoid.compatible, compatible
@@ -78,7 +78,7 @@ theorem hasGroupoid_of_le
 
 中文:
 定理 hasGroupoid_of_le
-  条件: {G₁ G₂ : StructureGroupoid H} (h : HasGroupoid M G₁) (hle : G₁ <= G₂)
+  条件: {G₁ G₂ : StructureGroupoid H} (h : 有群胚 M G₁) (hle : G₁ <= G₂)
   证明: ⟨fun he he' => hle (h.compatible he he')⟩
 
 Depends on / 依赖: compatible, h.compatible
@@ -100,7 +100,7 @@ theorem hasGroupoid_inf_iff
 中文:
 定理 hasGroupoid_inf_iff
   条件: {G₁ G₂ : StructureGroupoid H}
-  结论: HasGroupoid M (G₁ ⊓ G₂) ↔
+  结论: 有群胚 M (G₁ ⊓ G₂) ↔
   证明: ⟨(fun h => ⟨hasGroupoid_of_le h inf_le_left, hasGroupoid_of_le h inf_le_right⟩),
   fun ⟨h1, h2⟩ => { compatible := fun he he' => ⟨h1.compatible he he', h2.compatible he he'⟩ }⟩
 
@@ -143,7 +143,7 @@ instance hasGroupoid_model_space
 
 中文:
 实例 hasGroupoid_model_space
-  签名: (H : 类型) [TopologicalSpace H] (G : StructureGroupoid H)
+  签名: (H : 类型) [拓扑空间 H] (G : StructureGroupoid H)
   定义体: by
     rw [chartedSpaceSelf_atlas] at he he'
     simp [he, he', StructureGroupoid.id_mem]
@@ -169,7 +169,7 @@ instance hasGroupoid_continuousGroupoid
 
 中文:
 实例 hasGroupoid_continuousGroupoid
-  签名: : HasGroupoid M (continuousGroupoid H)
+  签名: : 有群胚 M (continuousGroupoid H)
   定义体: by
   refine ⟨fun _ _ => ?_⟩
   rw [continuousGroupoid]; rw [mem_groupoid_of_pregroupoid]
@@ -221,7 +221,7 @@ definition StructureGroupoid.maximalAtlas
 
 中文:
 定义 StructureGroupoid.maximalAtlas
-  签名: : Set (OpenPartialHomeomorph M H)
+  签名: : 集合 (OpenPartialHomeomorph M H)
   定义体: { e | forall e' in atlas H M, e.symm ≫ₕ e' in G ∧ e'.symm ≫ₕ e in G }
 
 Depends on / 依赖: e.symm
@@ -240,7 +240,7 @@ theorem StructureGroupoid.subset_maximalAtlas
 
 中文:
 定理 StructureGroupoid.subset_maximalAtlas
-  条件: [HasGroupoid M G]
+  条件: [有群胚 M G]
   结论: atlas H M subseteq G.maximalAtlas M
   证明: fun _ he _ he' => ⟨G.compatible he he', G.compatible he' he⟩
 
@@ -259,7 +259,7 @@ theorem StructureGroupoid.chart_mem_maximalAtlas
 
 中文:
 定理 StructureGroupoid.chart_mem_maximalAtlas
-  条件: [HasGroupoid M G] (x : M)
+  条件: [有群胚 M G] (x : M)
   证明: G.subset_maximalAtlas (chart_mem_atlas H x)
 
 Depends on / 依赖: G.subset_maximalAtlas, chart_mem_atlas, subset_maximalAtlas
@@ -596,7 +596,7 @@ definition singletonChartedSpace
 
 中文:
 定义 singletonChartedSpace
-  签名: (h : e.source = Set.univ)
+  签名: (h : e.source = 集合.univ)
   定义体: {e}
   chartAt _ := e
   mem_chart_source _ := by rw [h]; apply mem_univ
@@ -621,7 +621,7 @@ theorem singletonChartedSpace_chartAt_eq
 
 中文:
 定理 singletonChartedSpace_chartAt_eq
-  条件: (h : e.source = Set.univ) {x : α}
+  条件: (h : e.source = 集合.univ) {x : α}
   证明: rfl
 -/
 theorem singletonChartedSpace_chartAt_eq (h : e.source = Set.univ) {x : α} :
@@ -638,7 +638,7 @@ theorem singletonChartedSpace_chartAt_source
 
 中文:
 定理 singletonChartedSpace_chartAt_source
-  条件: (h : e.source = Set.univ) {x : α}
+  条件: (h : e.source = 集合.univ) {x : α}
   证明: h
 -/
 theorem singletonChartedSpace_chartAt_source (h : e.source = Set.univ) {x : α} :
@@ -655,7 +655,7 @@ theorem singletonChartedSpace_mem_atlas_eq
 
 中文:
 定理 singletonChartedSpace_mem_atlas_eq
-  结论: (h : e.source = Set.univ)
+  结论: (h : e.source = 集合.univ)
   证明: h'
 -/
 theorem singletonChartedSpace_mem_atlas_eq (h : e.source = Set.univ)
@@ -677,7 +677,7 @@ theorem singleton_hasGroupoid
 
 中文:
 定理 singleton_hasGroupoid
-  结论: (h : e.source = Set.univ) (G : StructureGroupoid H)
+  结论: (h : e.source = 集合.univ) (G : StructureGroupoid H)
   证明: { __ := e.singletonChartedSpace h
     compatible := by
       intro e' e'' he' he''
@@ -716,7 +716,7 @@ definition singletonChartedSpace
 
 中文:
 定义 singletonChartedSpace
-  签名: {f : α -> H} (h : IsOpenEmbedding f)
+  签名: {f : α -> H} (h : 是开嵌入 f)
   定义体: (h.toOpenPartialHomeomorph f).singletonChartedSpace (toOpenPartialHomeomorph_source _ _)
 
 Depends on / 依赖: h.toOpenPartialHomeomorph, singletonChartedSpace, toOpenPartialHomeomorph, toOpenPartialHomeomorph_source
@@ -734,7 +734,7 @@ theorem singletonChartedSpace_chartAt_eq
 
 中文:
 定理 singletonChartedSpace_chartAt_eq
-  条件: {f : α -> H} (h : IsOpenEmbedding f) {x : α}
+  条件: {f : α -> H} (h : 是开嵌入 f) {x : α}
   证明: rfl
 -/
 theorem singletonChartedSpace_chartAt_eq {f : α -> H} (h : IsOpenEmbedding f) {x : α} :
@@ -751,7 +751,7 @@ theorem singleton_hasGroupoid
 
 中文:
 定理 singleton_hasGroupoid
-  结论: {f : α -> H} (h : IsOpenEmbedding f) (G : StructureGroupoid H)
+  结论: {f : α -> H} (h : 是开嵌入 f) (G : StructureGroupoid H)
   证明: (h.toOpenPartialHomeomorph f).singleton_hasGroupoid (toOpenPartialHomeomorph_source _ _) G
 
 Depends on / 依赖: h.toOpenPartialHomeomorph, singleton_hasGroupoid, toOpenPartialHomeomorph, toOpenPartialHomeomorph_source
@@ -786,7 +786,7 @@ instance instChartedSpace
 
 中文:
 实例 instChartedSpace
-  签名: : ChartedSpace H s where
+  签名: : Charted空间 H s where
   定义体: ⋃ x : s, {(chartAt H x.1).subtypeRestr ⟨x⟩}
   chartAt x := (chartAt H x.1).subtypeRestr ⟨x⟩
   mem_chart_source x := ⟨trivial, mem_chart_source H x.1⟩
@@ -831,7 +831,7 @@ lemma chart_eq
 
 中文:
 引理 chart_eq
-  结论: {s : Opens M} (hs : Nonempty s) {e : OpenPartialHomeomorph s H}
+  结论: {s : Opens M} (hs : 非空 s) {e : OpenPartialHomeomorph s H}
   证明: by
   rcases he with ⟨xset, ⟨x, hx⟩, he⟩
   exact ⟨x, mem_singleton_iff.mp (by convert! he)⟩
@@ -854,7 +854,7 @@ lemma chart_eq'
 
 中文:
 引理 chart_eq'
-  结论: {t : Opens H} (ht : Nonempty t) {e' : OpenPartialHomeomorph t H}
+  结论: {t : Opens H} (ht : 非空 t) {e' : OpenPartialHomeomorph t H}
   证明: chart_eq ht he'
 
 Depends on / 依赖: chart_eq
@@ -1025,8 +1025,8 @@ structure Structomorph
 
 中文:
 结构 Structomorph
-  参数: (G : StructureGroupoid H) (M : 类型) (M' : 类型) [TopologicalSpace M]
-  继承: Homeomorph M M'
+  参数: (G : StructureGroupoid H) (M : 类型) (M' : 类型) [拓扑空间 M]
+  继承: 同胚 M M'
   公理与运算 (1 个):
     - mem_groupoid : 对任意 c : OpenPartialHomeomorph M H, 对任意 c' : OpenPartialHomeomorph M' H, c in atlas H M -> c' in atlas H M' -> c.symm ≫ₕ toHomeomorph.toOpenPartialHomeomorph ≫ₕ c' in G
 -/
@@ -1052,7 +1052,7 @@ definition Structomorph.refl
 
 中文:
 定义 Structomorph.refl
-  签名: (M : 类型) [TopologicalSpace M] [ChartedSpace H M] [HasGroupoid M G]
+  签名: (M : 类型) [拓扑空间 M] [Charted空间 H M] [有群胚 M G]
   定义体: { Homeomorph.refl M with
     mem_groupoid := fun c c' hc hc' => by
       change OpenPartialHomeomorph.symm c ≫ₕ OpenPartialHomeomorph.refl M ≫ₕ c' in G

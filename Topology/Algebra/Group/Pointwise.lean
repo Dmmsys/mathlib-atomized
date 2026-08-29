@@ -92,8 +92,8 @@ theorem IsClosed.smul_left_of_isCompact
       (smul_subset_iff.mpr fun g hg 
 
 中文:
-定理 IsClosed.smul_left_of_isCompact
-  条件: (ht : IsClosed t) (hs : IsCompact s)
+定理 是闭集.smul_left_of_isCompact
+  条件: (ht : 是闭集 t) (hs : 是紧集 s)
   证明: by
   let Φ : s × β ≃ₜ s × β :=
   { toFun := fun gx => (gx.1, (gx.1 : α) • gx.2)
@@ -137,8 +137,8 @@ theorem MulAction.isClosedMap_quotient
   rw [← biUnion_univ]; rw [← iUnion_
 
 中文:
-定理 MulAction.isClosedMap_quotient
-  条件: [CompactSpace α]
+定理 乘法作用.isClosedMap_quotient
+  条件: [紧空间 α]
   证明: orbitRel α β
     IsClosedMap (Quotient.mk' : β -> Quotient (orbitRel α β)) := by
   intro t ht
@@ -175,8 +175,8 @@ theorem IsOpen.mul_left
 @[to_additive]
 
 中文:
-定理 IsOpen.mul_left
-  结论: IsOpen t -> IsOpen (s * t)
+定理 是开集.mul_left
+  结论: 是开集 t -> 是开集 (s * t)
   证明: IsOpen.smul_left
 
 @[to_additive]
@@ -303,9 +303,9 @@ theorem IsOpen.mul_right
 @[to_additive]
 
 中文:
-定理 IsOpen.mul_right
-  条件: (hs : IsOpen s)
-  结论: IsOpen (s * t)
+定理 是开集.mul_right
+  条件: (hs : 是开集 s)
+  结论: 是开集 (s * t)
   证明: by
   rw [← image_op_smul]
   exact hs.smul_left
@@ -441,7 +441,7 @@ theorem closure_subset_mul_left_of_mem_nhds_one_of_inv
 
 中文:
 定理 closure_subset_mul_left_of_mem_nhds_one_of_inv
-  结论: {s : Set G} (s' : Set G)
+  结论: {s : 集合 G} (s' : 集合 G)
   证明: by
   intro y hy
   obtain ⟨_, ⟨b, hb, rfl⟩, hc⟩ :=
@@ -480,7 +480,7 @@ theorem closure_subset_mul_right_of_mem_nhds_one_of_inv
 
 中文:
 定理 closure_subset_mul_right_of_mem_nhds_one_of_inv
-  结论: (s : Set G) {s' : Set G}
+  结论: (s : 集合 G) {s' : 集合 G}
   证明: by
   intro y hy
   obtain ⟨_, ⟨b, hb, rfl⟩, hc⟩ :=
@@ -514,7 +514,7 @@ theorem closure_subset_of_mem_nhds_one_of_inv_mul_left_subset
 
 中文:
 定理 closure_subset_of_mem_nhds_one_of_inv_mul_left_subset
-  结论: {s s' t : Set G}
+  结论: {s s' t : 集合 G}
   证明: .trans hs closure_subset_mul_left_of_mem_nhds_one_of_inv s' hs₀ h_symm
 
 @[to_additive]
@@ -537,7 +537,7 @@ theorem closure_subset_of_mem_nhds_one_of_inv_mul_right_subset
 
 中文:
 定理 closure_subset_of_mem_nhds_one_of_inv_mul_right_subset
-  结论: {s s' t : Set G}
+  结论: {s s' t : 集合 G}
   证明: .trans hs closure_subset_mul_right_of_mem_nhds_one_of_inv s hs'₀ h_symm
 
 Depends on / 依赖: closure_subset_mul_right_of_mem_nhds_one_of_inv, h_symm
@@ -568,9 +568,9 @@ theorem IsOpen.div_left
 @[to_additive]
 
 中文:
-定理 IsOpen.div_left
-  条件: (ht : IsOpen t)
-  结论: IsOpen (s / t)
+定理 是开集.div_left
+  条件: (ht : 是开集 t)
+  结论: 是开集 (s / t)
   证明: by
   rw [← iUnion_div_left_image]
   exact isOpen_biUnion fun a _ => isOpenMap_div_left a t ht
@@ -598,9 +598,9 @@ theorem IsOpen.div_right
 @[to_additive]
 
 中文:
-定理 IsOpen.div_right
-  条件: (hs : IsOpen s)
-  结论: IsOpen (s / t)
+定理 是开集.div_right
+  条件: (hs : 是开集 s)
+  结论: 是开集 (s / t)
   证明: by
   rw [← iUnion_div_right_image]
   exact isOpen_biUnion fun a _ => isOpenMap_div_right a s hs
@@ -697,8 +697,8 @@ theorem IsOpen.mul_closure
   obtain ⟨_, ⟨c, hc, d, rfl : d = _, rfl⟩, hcs⟩ := hb _ hs.inv.mul_right h
 
 中文:
-定理 IsOpen.mul_closure
-  条件: (hs : IsOpen s) (t : Set G)
+定理 是开集.mul_closure
+  条件: (hs : 是开集 s) (t : 集合 G)
   结论: s * closure t = s * t
   证明: by
   refine (mul_subset_iff.2 fun a ha b hb => ?_).antisymm (mul_subset_mul_left subset_closure)
@@ -729,8 +729,8 @@ theorem IsOpen.closure_mul
 @[to_additive]
 
 中文:
-定理 IsOpen.closure_mul
-  条件: (ht : IsOpen t) (s : Set G)
+定理 是开集.closure_mul
+  条件: (ht : 是开集 t) (s : 集合 G)
   结论: closure s * t = s * t
   证明: by
   rw [← inv_inv (closure s * t)]; rw [mul_inv_rev]; rw [inv_closure]; rw [ht.inv.mul_closure]; rw [mul_inv_rev]; rw [inv_inv]; rw [inv_inv]
@@ -756,8 +756,8 @@ theorem IsOpen.div_closure
 @[to_additive]
 
 中文:
-定理 IsOpen.div_closure
-  条件: (hs : IsOpen s) (t : Set G)
+定理 是开集.div_closure
+  条件: (hs : 是开集 s) (t : 集合 G)
   结论: s / closure t = s / t
   证明: by
   simp_rw [div_eq_mul_inv, inv_closure, hs.mul_closure]
@@ -783,8 +783,8 @@ theorem IsOpen.closure_div
 @[to_additive]
 
 中文:
-定理 IsOpen.closure_div
-  条件: (ht : IsOpen t) (s : Set G)
+定理 是开集.closure_div
+  条件: (ht : 是开集 t) (s : 集合 G)
   结论: closure s / t = s / t
   证明: by
   simp_rw [div_eq_mul_inv, ht.inv.closure_mul]
@@ -809,9 +809,9 @@ theorem IsClosed.mul_left_of_isCompact
 @[to_additive]
 
 中文:
-定理 IsClosed.mul_left_of_isCompact
-  条件: (ht : IsClosed t) (hs : IsCompact s)
-  结论: IsClosed (s * t)
+定理 是闭集.mul_left_of_isCompact
+  条件: (ht : 是闭集 t) (hs : 是紧集 s)
+  结论: 是闭集 (s * t)
   证明: ht.smul_left_of_isCompact hs
 
 @[to_additive]
@@ -835,8 +835,8 @@ theorem IsClosed.mul_right_of_isCompact
 @[to_additive]
 
 中文:
-定理 IsClosed.mul_right_of_isCompact
-  条件: (ht : IsClosed t) (hs : IsCompact s)
+定理 是闭集.mul_right_of_isCompact
+  条件: (ht : 是闭集 t) (hs : 是紧集 s)
   证明: by
   rw [← image_op_smul]
   exact IsClosed.smul_left_of_isCompact ht (hs.image continuous_op)
@@ -865,7 +865,7 @@ lemma subset_mul_closure_one
 
 中文:
 引理 subset_mul_closure_one
-  条件: {G} [MulOneClass G] [TopologicalSpace G] (s : Set G)
+  条件: {G} [MulOne类 G] [拓扑空间 G] (s : 集合 G)
   证明: by
   have : s subseteq s * ({1} : Set G) := by simp
   exact this.trans (smul_subset_smul_left subset_closure)
@@ -896,8 +896,8 @@ lemma IsCompact.mul_closure_one_eq_closure
   · have : IsClosed (K * (closure {
 
 中文:
-引理 IsCompact.mul_closure_one_eq_closure
-  条件: {K : Set G} (hK : IsCompact K)
+引理 是紧集.mul_closure_one_eq_closure
+  条件: {K : 集合 G} (hK : 是紧集 K)
   证明: by
   apply Subset.antisymm ?_ ?_
   · calc
@@ -939,8 +939,8 @@ lemma IsClosed.mul_closure_one_eq
 @[to_additive]
 
 中文:
-引理 IsClosed.mul_closure_one_eq
-  条件: {F : Set G} (hF : IsClosed F)
+引理 是闭集.mul_closure_one_eq
+  条件: {F : 集合 G} (hF : 是闭集 F)
   证明: by
   refine Subset.antisymm ?_ (subset_mul_closure_one F)
   calc
@@ -978,7 +978,7 @@ lemma compl_mul_closure_one_eq
 
 中文:
 引理 compl_mul_closure_one_eq
-  条件: {t : Set G} (ht : t * (closure {1} : Set G) = t)
+  条件: {t : 集合 G} (ht : t * (closure {1} : 集合 G) = t)
   证明: by
   refine Subset.antisymm ?_ (subset_mul_closure_one tᶜ)
   rintro - ⟨x, hx, g, hg, rfl⟩
@@ -1015,7 +1015,7 @@ lemma compl_mul_closure_one_eq_iff
 
 中文:
 引理 compl_mul_closure_one_eq_iff
-  条件: {t : Set G}
+  条件: {t : 集合 G}
   证明: ⟨fun h => by simpa using compl_mul_closure_one_eq h, fun h => compl_mul_closure_one_eq h⟩
 
 @[to_additive]
@@ -1038,8 +1038,8 @@ lemma IsOpen.mul_closure_one_eq
 @[to_additive]
 
 中文:
-引理 IsOpen.mul_closure_one_eq
-  条件: {U : Set G} (hU : IsOpen U)
+引理 是开集.mul_closure_one_eq
+  条件: {U : 集合 G} (hU : 是开集 U)
   证明: compl_mul_closure_one_eq_iff.1 (hU.isClosed_compl.mul_closure_one_eq)
 
 @[to_additive]
@@ -1067,7 +1067,7 @@ theorem closure_subset_mul_self_of_mem_nhds_one
 
 中文:
 定理 closure_subset_mul_self_of_mem_nhds_one
-  条件: {U : Set G} (hU : U in 𝓝 1)
+  条件: {U : 集合 G} (hU : U in 𝓝 1)
   证明: by
   intro x hx
   rw [mem_closure_iff_nhds] at hx
@@ -1128,7 +1128,7 @@ theorem group_inseparable_iff
 中文:
 定理 group_inseparable_iff
   条件: {x y : G}
-  结论: Inseparable x y ↔ x / y in closure (1 : Set G)
+  结论: 不可分 x y ↔ x / y in closure (1 : 集合 G)
   证明: by
   rw [← singleton_one]; rw [← specializes_iff_mem_closure]; rw [specializes_comm]; rw [specializes_iff_inseparable]; rw [← (Homeomorph.mulRight y⁻¹).isEmbedding.inseparable_iff]
   simp [div_eq_mul_inv]
@@ -1154,8 +1154,8 @@ theorem IsTopologicalGroup.t2Space_iff_one_closed
 @[to_additive]
 
 中文:
-定理 IsTopologicalGroup.t2Space_iff_one_closed
-  结论: T2Space G ↔ IsClosed ({1} : Set G)
+定理 是拓扑群.t2Space_iff_one_closed
+  结论: T2空间 G ↔ 是闭集 ({1} : 集合 G)
   证明: ⟨fun _ => isClosed_singleton, fun h =>
     have := IsTopologicalGroup.t1Space G h; inferInstance⟩
 
@@ -1181,7 +1181,7 @@ theorem IsTopologicalGroup.t2Space_of_one_sep
 exact hU mem_of_mem_nhds hspec.map (continuous_mul_const y⁻¹) (by rwa [mul_inv_cancel])
 
 中文:
-定理 IsTopologicalGroup.t2Space_of_one_sep
+定理 是拓扑群.t2Space_of_one_sep
   条件: (H : 对任意 x : G, x != 1 -> 存在 U in 𝓝 (1 : G), x ∉ U)
   证明: by
   suffices T1Space G from inferInstance
@@ -1215,8 +1215,8 @@ theorem exists_closed_nhds_one_inv_eq_mul_subset
     by simp [inter_comm], ?
 
 中文:
-定理 exists_closed_nhds_one_inv_eq_mul_subset
-  条件: {U : Set G} (hU : U in 𝓝 1)
+定理 存在_closed_nhds_one_inv_eq_mul_subset
+  条件: {U : 集合 G} (hU : U in 𝓝 1)
   证明: by
   rcases exists_open_nhds_one_mul_subset hU with ⟨V, V_open, V_mem, hV⟩
   rcases exists_mem_nhds_isClosed_subset (V_open.mem_nhds V_mem) with ⟨W, W_mem, W_closed, hW⟩
@@ -1252,7 +1252,7 @@ lemma IsDiscrete.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
   exact ⟨_, hg
 
 中文:
-引理 IsDiscrete.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
+引理 是离散.存在_nhds_eq_one_of_image_mulLeft_inter_nonempty
   证明: by
   obtain ⟨V, hV⟩ := nhds_inter_eq_singleton_of_mem_discrete hS S.one_mem
   obtain ⟨U, hU, -, hUinv, hUV⟩ := exists_closed_nhds_one_inv_eq_mul_subset hV.1
@@ -1284,7 +1284,7 @@ lemma IsDiscrete.exists_nhds_eq_one_of_image_mulRight_inter_nonempty
   rwa [Set.nonempty_image_mulLeft_inv_inter_iff, hUinv]
 
 中文:
-引理 IsDiscrete.exists_nhds_eq_one_of_image_mulRight_inter_nonempty
+引理 是离散.存在_nhds_eq_one_of_image_mulRight_inter_nonempty
   证明: by
   have ⟨U, hU, hUinv, h⟩ := hS.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
   refine ⟨U, hU, hUinv, fun g hgS hgU => inv_eq_one.mp (h _ (S.inv_mem hgS) ?_)⟩
@@ -1320,8 +1320,8 @@ theorem IsCompact.locallyCompactSpace_of_mem_nhds_of_group
     exact (continuous_const_smul _).continuousAt.preimage_mem_nhds (by simpa using h)
 
 中文:
-定理 IsCompact.locallyCompactSpace_of_mem_nhds_of_group
-  结论: {K : Set G} (hK : IsCompact K) {x : G}
+定理 是紧集.locallyCompactSpace_of_mem_nhds_of_group
+  结论: {K : 集合 G} (hK : 是紧集 K) {x : G}
   证明: by
   suffices WeaklyLocallyCompactSpace G from inferInstance
   refine ⟨fun y => ⟨(y * x⁻¹) • K, ?_, ?_⟩⟩

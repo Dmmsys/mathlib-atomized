@@ -61,7 +61,7 @@ structure NatTrans
     - naturality(⦃X Y) : C⦄ (f : X ⟶ Y) : F.map f ≫ app Y = app X ≫ G.map f  [default: by cat_disch]
 
 中文:
-结构 NatTrans
+结构 自然变换
   参数: (F G : C ⥤ D)
   公理与运算 (2 个):
     - app((X : C)) : F.obj X ⟶ G.obj X
@@ -86,8 +86,8 @@ lemma NatTrans.naturality'
   proof: (self.naturality f).symm
 
 中文:
-引理 NatTrans.naturality'
-  条件: {F G : C ⥤ D} (self : 自然数Trans G F) ⦃X Y
+引理 自然变换.naturality'
+  条件: {F G : C ⥤ D} (self : 自然变换 G F) ⦃X Y
   结论: C⦄ (f : Y ⟶ X) :
   证明: (self.naturality f).symm
 
@@ -107,7 +107,7 @@ abbreviation NatTrans.mk'
   signature: {F G : C ⥤ D} (app : (X : C) -> G.obj X ⟶ F.obj X)
 
 中文:
-缩写 NatTrans.mk'
+缩写 自然变换.mk'
   签名: {F G : C ⥤ D} (app : (X : C) -> G.obj X ⟶ F.obj X)
 
 Depends on / 依赖: NatTrans, NatTrans.naturality, naturality
@@ -135,7 +135,7 @@ theorem congr_app
 
 中文:
 定理 congr_app
-  条件: {F G : C ⥤ D} {α β : 自然数Trans F G} (h : α = β) (X : C)
+  条件: {F G : C ⥤ D} {α β : 自然变换 F G} (h : α = β) (X : C)
   结论: α.app X = β.app X
   证明: by
   cat_disch
@@ -181,7 +181,7 @@ theorem id_app'
 中文:
 定理 id_app'
   条件: (F : C ⥤ D) (X : C)
-  结论: (自然数Trans.id F).app X = 𝟙 (F.obj X)
+  结论: (自然变换.id F).app X = 𝟙 (F.obj X)
   证明: rfl
 -/
 theorem id_app' (F : C ⥤ D) (X : C) : (NatTrans.id F).app X = 𝟙 (F.obj X) := rfl
@@ -208,7 +208,7 @@ definition vcomp
 
 中文:
 定义 vcomp
-  签名: (α : 自然数Trans F G) (β : 自然数Trans G H)
+  签名: (α : 自然变换 F G) (β : 自然变换 G H)
   定义体: α.app X ≫ β.app X
 -/
 def vcomp (α : NatTrans F G) (β : NatTrans G H) : NatTrans F H where
@@ -227,7 +227,7 @@ theorem vcomp_app
 
 中文:
 定理 vcomp_app
-  条件: (α : 自然数Trans F G) (β : 自然数Trans G H) (X : C)
+  条件: (α : 自然变换 F G) (β : 自然变换 G H) (X : C)
   证明: rfl
 -/
 theorem vcomp_app (α : NatTrans F G) (β : NatTrans G H) (X : C) :

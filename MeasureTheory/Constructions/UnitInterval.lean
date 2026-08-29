@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasureSpace I
+  签名: 测度空间 I
   定义体: Measure.Subtype.measureSpace
 
 Depends on / 依赖: Measure, Measure.Subtype.measureSpace, Subtype, measureSpace
@@ -50,7 +50,7 @@ theorem volume_def
 
 中文:
 定理 volume_def
-  结论: (volume : Measure I) = volume.comap Subtype.val
+  结论: (volume : 测度 I) = volume.comap 子类型.val
   证明: rfl
 -/
 theorem volume_def : (volume : Measure I) = volume.comap Subtype.val := rfl
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure (volume : Measure I)
+  签名: 是概率测度 (volume : 测度 I)
   定义体: by
     rw [Measure.Subtype.volume_univ nullMeasurableSet_Icc]; rw [Real.volume_Icc]; rw [sub_zero]; rw [ENNReal.ofReal_one]
 
@@ -88,7 +88,7 @@ lemma measurableEmbedding_coe
 
 中文:
 引理 measurableEmbedding_coe
-  结论: MeasurableEmbedding ((↑) : I -> 实数) where
+  结论: 可测嵌入 ((↑) : I -> 实数) where
   证明: Subtype.val_injective
   measurable := measurable_subtype_coe
   measurableSet_image' _ := measurableSet_Icc.subtype_image
@@ -111,8 +111,8 @@ lemma volume_apply
 
 中文:
 引理 volume_apply
-  条件: {s : Set I}
-  结论: volume s = volume (Subtype.val '' s)
+  条件: {s : 集合 I}
+  结论: volume s = volume (子类型.val '' s)
   证明: measurableEmbedding_coe.comap_apply ..
 
 Depends on / 依赖: comap_apply, measurableEmbedding_coe, measurableEmbedding_coe.comap_apply
@@ -130,7 +130,7 @@ lemma measurePreserving_coe
 
 中文:
 引理 measurePreserving_coe
-  结论: MeasurePreserving ((↑) : I -> 实数) volume (volume.restrict I)
+  结论: 保测 ((↑) : I -> 实数) volume (volume.restrict I)
   证明: measurePreserving_subtype_coe measurableSet_Icc
 
 Depends on / 依赖: measurableSet_Icc, measurePreserving_subtype_coe
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: NullSingletonClass (volume : Measure I)
+  签名: NullSingleton类 (volume : 测度 I)
   定义体: by simp [volume_apply]
 
 @[fun_prop]
@@ -171,7 +171,7 @@ theorem measurable_symm
 
 中文:
 定理 measurable_symm
-  结论: Measurable σ
+  结论: 可测 σ
   证明: continuous_symm.measurable
 
 Depends on / 依赖: continuous_symm, continuous_symm.measurable, measurable
@@ -257,7 +257,7 @@ lemma measurePreserving_symm
 
 中文:
 引理 measurePreserving_symm
-  结论: MeasurePreserving symm volume volume where
+  结论: 保测 symm volume volume where
   证明: measurable_symm
   map_eq := by
     ext s hs
@@ -295,7 +295,7 @@ lemma volume_Iic
 
 中文:
 引理 volume_Iic
-  结论: volume (Iic x) = .of实数 x
+  结论: volume (左无界右闭区间 x) = .of实数 x
   证明: by
   simp only [volume_apply, image_subtype_val_Icc_Iic, Real.volume_Icc, sub_zero]
 
@@ -321,7 +321,7 @@ lemma volume_Iio
 
 中文:
 引理 volume_Iio
-  结论: volume (Iio x) = .of实数 x
+  结论: volume (左无界右开区间 x) = .of实数 x
   证明: by
   simp only [← volume_image_subtype_coe measurableSet_Icc, image_subtype_val_Icc_Iio,
     Real.volume_Ico, sub_zero]
@@ -348,7 +348,7 @@ lemma volume_Ici
 
 中文:
 引理 volume_Ici
-  结论: volume (Ici x) = .of实数 (1 - x)
+  结论: volume (左闭右无界区间 x) = .of实数 (1 - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Icc_Ici, Real.volume_Icc]
 
@@ -371,7 +371,7 @@ lemma volume_Ioi
 
 中文:
 引理 volume_Ioi
-  结论: volume (Ioi x) = .of实数 (1 - x)
+  结论: volume (左开右无界区间 x) = .of实数 (1 - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Icc_Ioi, Real.volume_Ioc]
 
@@ -396,7 +396,7 @@ lemma volume_Icc
 
 中文:
 引理 volume_Icc
-  结论: volume (Icc x y) = .of实数 (y - x)
+  结论: volume (闭区间 x y) = .of实数 (y - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Icc, Real.volume_Icc]
 
@@ -449,7 +449,7 @@ lemma volume_Ico
 
 中文:
 引理 volume_Ico
-  结论: volume (Ico x y) = .of实数 (y - x)
+  结论: volume (左闭右开区间 x y) = .of实数 (y - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Ico, Real.volume_Ico]
 
@@ -474,7 +474,7 @@ lemma volume_Ioc
 
 中文:
 引理 volume_Ioc
-  结论: volume (Ioc x y) = .of实数 (y - x)
+  结论: volume (左开右闭区间 x y) = .of实数 (y - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Ioc, Real.volume_Ioc]
 
@@ -530,7 +530,7 @@ lemma volume_Ioo
 
 中文:
 引理 volume_Ioo
-  结论: volume (Ioo x y) = .of实数 (y - x)
+  结论: volume (开区间 x y) = .of实数 (y - x)
   证明: by
   simp only [volume_apply, image_subtype_val_Ioo, Real.volume_Ioo]
 

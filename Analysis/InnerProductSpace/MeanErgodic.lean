@@ -42,8 +42,8 @@ theorem LinearMap.tendsto_birkhoffAverage_of_ker_subset_closure
   so it s
 
 中文:
-定理 LinearMap.tendsto_birkhoffAverage_of_ker_subset_closure
-  结论: [NormedSpace 𝕜 E]
+定理 线性映射.tendsto_birkhoffAverage_of_ker_subset_closure
+  结论: [赋范空间 𝕜 E]
   证明: by
   /- Any point can be represented as a sum of `y ∈ LinearMap.ker g` and a fixed point `z`. -/
   obtain ⟨y, hy, z, hz, rfl⟩ : exists y, g y = 0 ∧ exists z, IsFixedPt f z ∧ x = y + z :=
@@ -100,7 +100,7 @@ theorem ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection
   · exact (f.eqLocus (1 : E ->L[𝕜]
 
 中文:
-定理 ContinuousLinearMap.tendsto_birkhoffAverage_orthogonalProjection
+定理 连续线性映射.tendsto_birkhoffAverage_orthogonalProjection
   结论: (f : E ->L[𝕜] E)
   证明: by
   /- Due to the previous theorem, it suffices to verify

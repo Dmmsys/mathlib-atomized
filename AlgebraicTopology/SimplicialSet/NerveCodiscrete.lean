@@ -41,7 +41,7 @@ definition equivFun
 
 中文:
 定义 equivFun
-  签名: : nerve (Codiscrete X) _⦋n⦌ ≃ (Fin (n + 1) -> X) where
+  签名: : nerve (余discrete X) _⦋n⦌ ≃ (有限集 (n + 1) -> X) where
   定义体: (f.obj k).as
   invFun f := .mk (fun k => .mk (f k)) (fun _ => iso _ _|>.hom) (fun _ => rfl) (fun _ _ => rfl)
 
@@ -61,7 +61,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: X] : DecidableEq (nerve (Codiscrete X) _⦋n⦌)
+  签名: X] : DecidableEq (nerve (余discrete X) _⦋n⦌)
   定义体: fun _ _ => decidable_of_iff _ (Equiv.apply_eq_iff_eq equivFun)
 
 Depends on / 依赖: Equiv.apply_eq_iff_eq, apply_eq_iff_eq, decidable_of_iff, equivFun

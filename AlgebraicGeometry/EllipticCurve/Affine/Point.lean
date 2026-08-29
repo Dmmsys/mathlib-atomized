@@ -96,7 +96,7 @@ abbreviation CoordinateRing
 
 中文:
 缩写 CoordinateRing
-  签名: : Type r
+  签名: : 类型 r
   定义体: AdjoinRoot W'.polynomial
 
 Depends on / 依赖: AdjoinRoot, polynomial
@@ -115,7 +115,7 @@ abbreviation FunctionField
 
 中文:
 缩写 FunctionField
-  签名: : Type r
+  签名: : 类型 r
   定义体: FractionRing W'.CoordinateRing
 
 Depends on / 依赖: CoordinateRing, FractionRing
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R W'.CoordinateRing
+  签名: 代数 R W'.CoordinateRing
   定义体: inferInstance
 -/
 noncomputable instance : Algebra R W'.CoordinateRing := inferInstance
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R[X] W'.CoordinateRing
+  签名: 代数 R[X] W'.CoordinateRing
   定义体: inferInstance
 -/
 noncomputable instance : Algebra R[X] W'.CoordinateRing := inferInstance
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R R[X] W'.CoordinateRing
+  签名: 标量塔 R R[X] W'.CoordinateRing
   定义体: inferInstance
 -/
 instance : IsScalarTower R R[X] W'.CoordinateRing := inferInstance
@@ -179,8 +179,8 @@ instance [Subsingleton
   body: Module.subsingleton R[X] _
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton W'.CoordinateRing
+实例 [子单例
+  签名: R] : 子单例 W'.CoordinateRing
   定义体: Module.subsingleton R[X] _
 
 Depends on / 依赖: Module, Module.subsingleton, subsingleton
@@ -244,7 +244,7 @@ lemma basis_apply
 
 中文:
 引理 basis_apply
-  条件: (n : Fin 2)
+  条件: (n : 有限集 2)
   证明: by
   classical
   nontriviality R
@@ -319,7 +319,7 @@ lemma coe_basis
 
 中文:
 引理 coe_basis
-  结论: (CoordinateRing.basis W' : Fin 2 -> W'.CoordinateRing) = ![1, mk W' Y]
+  结论: (CoordinateRing.basis W' : 有限集 2 -> W'.CoordinateRing) = ![1, mk W' Y]
   证明: by
   ext n
   fin_cases n
@@ -342,7 +342,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R[X] W'.CoordinateRing
+  签名: 模.自由 R[X] W'.CoordinateRing
   定义体: .of_basis (CoordinateRing.basis W')
 
 Depends on / 依赖: CoordinateRing, CoordinateRing.basis, of_basis
@@ -359,7 +359,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R W'.CoordinateRing
+  签名: 模.自由 R W'.CoordinateRing
   定义体: .trans (S := R[X])
 -/
 instance : Module.Free R W'.CoordinateRing := .trans (S := R[X])
@@ -373,8 +373,8 @@ instance [Nontrivial
   body: ⟨_, _, (CoordinateRing.basis W').ne_zero 0⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial W'.CoordinateRing
+实例 [非平凡
+  签名: R] : 非平凡 W'.CoordinateRing
   定义体: ⟨_, _, (CoordinateRing.basis W').ne_zero 0⟩
 
 Depends on / 依赖: CoordinateRing, CoordinateRing.basis, ne_zero
@@ -392,7 +392,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul R[X] W'.CoordinateRing
+  签名: 忠实标量乘法 R[X] W'.CoordinateRing
   定义体: by nontriviality R; infer_instance
 
 Depends on / 依赖: infer_instance, nontriviality
@@ -409,7 +409,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul R W'.CoordinateRing
+  签名: 忠实标量乘法 R W'.CoordinateRing
   定义体: .trans R R[X] _
 -/
 instance : FaithfulSMul R W'.CoordinateRing := .trans R R[X] _
@@ -473,7 +473,7 @@ lemma exists_smul_basis_eq
   exact ⟨_, _, h⟩
 
 中文:
-引理 exists_smul_basis_eq
+引理 存在_smul_basis_eq
   条件: (x : W'.CoordinateRing)
   证明: by
   have h := (CoordinateRing.basis W').sum_equivFun x
@@ -630,8 +630,8 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: {f : R ->+* S} (hf : Function.Injective f)
-  结论: Function.Injective map W' f
+  条件: {f : R ->+* S} (hf : 函数.单射 f)
+  结论: 函数.单射 map W' f
   证明: (injective_iff_map_eq_zero _).mpr fun y hy => by
     obtain ⟨p, q, rfl⟩ := exists_smul_basis_eq y
     simp_rw [map_add, CoordinateRing.map_smul, map_one, map_mk, map_X] at hy
@@ -660,8 +660,8 @@ instance [IsDomain
   (map_injective <| IsFractionRing.injective R <| FractionRing R).isDomain
 
 中文:
-实例 [IsDomain
-  签名: R] : IsDomain W'.CoordinateRing
+实例 [是整环
+  签名: R] : 是整环 W'.CoordinateRing
   定义体: have : IsDomain (W'.map <| algebraMap R <| FractionRing R).CoordinateRing :=
     AdjoinRoot.isDomain_of_prime irreducible_polynomial.prime
   (map_injective <| IsFractionRing.injective R <| FractionRing R).isDomain
@@ -704,7 +704,7 @@ lemma XClass_ne_zero
 
 中文:
 引理 XClass_ne_zero
-  条件: [Nontrivial R] (x : R)
+  条件: [非平凡 R] (x : R)
   结论: XClass W' x != 0
   证明: AdjoinRoot.mk_ne_zero_of_natDegree_lt monic_polynomial (C_ne_zero.mpr <| X_sub_C_ne_zero x)
     by rw [natDegree_polynomial, natDegree_C]; norm_num1
@@ -744,7 +744,7 @@ lemma YClass_ne_zero
 
 中文:
 引理 YClass_ne_zero
-  条件: [Nontrivial R] (y : R[X])
+  条件: [非平凡 R] (y : R[X])
   结论: YClass W' y != 0
   证明: AdjoinRoot.mk_ne_zero_of_natDegree_lt monic_polynomial (X_sub_C_ne_zero y)
     by rw [natDegree_polynomial, natDegree_X_sub_C]; norm_num1
@@ -976,7 +976,7 @@ lemma XYIdeal_eq₂
 
 中文:
 引理 XYIdeal_eq₂
-  结论: [DecidableEq F] {x₁ x₂ y₁ y₂ : F} (h₁ : W.Equation x₁ y₁) (h₂ : W.Equation x₂ y₂)
+  结论: [DecidableEq F] {x₁ x₂ y₁ y₂ : F} (h₁ : W.方程 x₁ y₁) (h₂ : W.方程 x₂ y₂)
   证明: by
   have hy₂ : y₂ = (linePolynomial x₁ y₁ <| W.slope x₁ x₂ y₁ y₂).eval x₂ := by
     by_cases hx : x₁ = x₂
@@ -1020,7 +1020,7 @@ lemma XYIdeal_neg_mul
 
 中文:
 引理 XYIdeal_neg_mul
-  条件: {x y : F} (h : W.Nonsingular x y)
+  条件: {x y : F} (h : W.非奇异 x y)
   证明: by
   have Y_rw : (Y - C (C y)) * (Y - C (C <| W.negY x y)) -
       C (X - C x) * (C (X ^ 2 + C (x + W.a₂) * X + C (x ^ 2 + W.a₂ * x + W.a₄)) - C (C W.a₁) * Y) =
@@ -1132,7 +1132,7 @@ definition XYIdeal'
 
 中文:
 定义 XYIdeal'
-  签名: {x y : F} (h : W.Nonsingular x y)
+  签名: {x y : F} (h : W.非奇异 x y)
   定义体: Units.mkOfMulEqOne (XYIdeal W x (C y)) (XYIdeal W x (C <| W.negY x y) *
       (XIdeal W x : FractionalIdeal W.CoordinateRing⁰ W.FunctionField)⁻¹) <| by
     rw [← mul_assoc]; rw [← coeIdeal_mul]; rw [mul_comm <| XYIdeal W ..]; rw [XYIdeal_neg_mul h]; rw [XIdeal]; rw [FractionalIdeal.coe_ideal_span_si
@@ -1155,7 +1155,7 @@ lemma XYIdeal'_eq
 
 中文:
 引理 XYIdeal'_eq
-  条件: {x y : F} (h : W.Nonsingular x y)
+  条件: {x y : F} (h : W.非奇异 x y)
   证明: rfl
 -/
 lemma XYIdeal'_eq {x y : F} (h : W.Nonsingular x y) :
@@ -1175,7 +1175,7 @@ FractionalIdeal.coeIdeal_inj.mpr XYIdeal_neg_mul h).mpr ⟨_, XClass_ne_zero x, 
 
 中文:
 引理 mk_XYIdeal'_neg_mul
-  条件: {x y : F} (h : W.Nonsingular x y)
+  条件: {x y : F} (h : W.非奇异 x y)
   证明: by
   rw [← map_mul]
   exact (ClassGroup.mk_eq_one_of_coe_ideal <| (coeIdeal_mul ..).symm.trans <|
@@ -1203,7 +1203,7 @@ lemma mk_XYIdeal'_mul_mk_XYIdeal'
 
 中文:
 引理 mk_XYIdeal'_mul_mk_XYIdeal'
-  结论: [DecidableEq F] {x₁ x₂ y₁ y₂ : F} (h₁ : W.Nonsingular x₁ y₁)
+  结论: [DecidableEq F] {x₁ x₂ y₁ y₂ : F} (h₁ : W.非奇异 x₁ y₁)
   证明: by
   rw [← map_mul]
   exact (ClassGroup.mk_eq_mk_of_coe_ideal (coeIdeal_mul ..).symm <| XYIdeal'_eq _).mpr
@@ -1235,7 +1235,7 @@ lemma norm_smul_basis
 中文:
 引理 norm_smul_basis
   条件: (p q : R[X])
-  结论: Algebra.norm R[X] (p • (1 : W'.CoordinateRing) + q • mk W' Y) =
+  结论: 代数.norm R[X] (p • (1 : W'.CoordinateRing) + q • mk W' Y) =
   证明: by
   simp_rw [Algebra.norm_eq_matrix_det <| CoordinateRing.basis W', Matrix.det_fin_two,
     Algebra.leftMulMatrix_eq_repr_mul, basis_zero, mul_one, basis_one, smul_basis_mul_Y, map_add,
@@ -1265,7 +1265,7 @@ lemma coe_norm_smul_basis
 中文:
 引理 coe_norm_smul_basis
   条件: (p q : R[X])
-  结论: Algebra.norm R[X] (p • 1 + q • mk W' Y) =
+  结论: 代数.norm R[X] (p • 1 + q • mk W' Y) =
   证明: AdjoinRoot.mk_eq_mk.mpr ⟨C q ^ 2, by simp only [norm_smul_basis, polynomial]; C_simp; ring1⟩
 
 Depends on / 依赖: AdjoinRoot, AdjoinRoot.mk_eq_mk.mpr, C_simp, mk_eq_mk, norm_smul_basis, polynomial
@@ -1289,7 +1289,7 @@ lemma degree_norm_smul_basis
 
 中文:
 引理 degree_norm_smul_basis
-  条件: [IsDomain R] (p q : R[X])
+  条件: [是整环 R] (p q : R[X])
   证明: by
   have hdp : (p ^ 2).degree = 2 • p.degree := degree_pow p 2
   have hdpq : (p * q * (C W'.a₁ * X + C W'.a₃)).degree <= p.degree + q.degree + 1 := by
@@ -1352,7 +1352,7 @@ lemma degree_norm_ne_one
 
 中文:
 引理 degree_norm_ne_one
-  条件: [IsDomain R] (x : W'.CoordinateRing)
+  条件: [是整环 R] (x : W'.CoordinateRing)
   证明: by
   rcases exists_smul_basis_eq x with ⟨p, q, rfl⟩
   rw [degree_norm_smul_basis]
@@ -1380,7 +1380,7 @@ lemma natDegree_norm_ne_one
 
 中文:
 引理 natDegree_norm_ne_one
-  条件: [IsDomain R] (x : W'.CoordinateRing)
+  条件: [是整环 R] (x : W'.CoordinateRing)
   证明: degree_norm_ne_one x ∘ (degree_eq_iff_natDegree_eq_of_pos zero_lt_one).mpr
 
 Depends on / 依赖: degree_eq_iff_natDegree_eq_of_pos, degree_norm_ne_one, zero_lt_one
@@ -1407,7 +1407,7 @@ inductive Point
 归纳类型 Point
   构造子 (2 个):
     - zero: 
-    - some: (x y : R) (h : W'.Nonsingular x y)
+    - some: (x y : R) (h : W'.非奇异 x y)
 -/
 inductive Point
   | zero
@@ -1481,7 +1481,7 @@ lemma nonsingularPointEquivSubtype_some
 
 中文:
 引理 nonsingularPointEquivSubtype_some
-  结论: {x y : R} {h : W'.Nonsingular x y} {p : W'.Point -> 命题}
+  结论: {x y : R} {h : W'.非奇异 x y} {p : W'.Point -> 命题}
   证明: rfl
 
 @[simp]
@@ -1524,7 +1524,7 @@ lemma nonsingularPointEquivSubtype_symm_some
 
 中文:
 引理 nonsingularPointEquivSubtype_symm_some
-  结论: {x y : R} {h : W'.Nonsingular x y}
+  结论: {x y : R} {h : W'.非奇异 x y}
   证明: rfl
 -/
 lemma nonsingularPointEquivSubtype_symm_some {x y : R} {h : W'.Nonsingular x y}
@@ -1546,7 +1546,7 @@ definition nonsingularPointEquiv
 
 中文:
 定义 nonsingularPointEquiv
-  签名: : W'.Point ≃ WithZero {xy : R × R // W'.Nonsingular xy.fst xy.snd}
+  签名: : W'.Point ≃ WithZero {xy : R × R // W'.非奇异 xy.fst xy.snd}
   定义体: (Equiv.Set.univ W'.Point).symm.trans (nonsingularPointEquivSubtype trivial).trans
     (Equiv.subtypeEquivProp <| by simp).optionCongr
 
@@ -1593,7 +1593,7 @@ lemma nonsingularPointEquiv_some
 
 中文:
 引理 nonsingularPointEquiv_some
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   证明: by
   rfl
 
@@ -1635,7 +1635,7 @@ lemma nonsingularPointEquiv_symm_some
 
 中文:
 引理 nonsingularPointEquiv_symm_some
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   证明: rfl
 -/
 lemma nonsingularPointEquiv_symm_some {x y : R} (h : W'.Nonsingular x y) :
@@ -1656,7 +1656,7 @@ definition Point.mk
 
 中文:
 定义 Point.mk
-  签名: {x y : R} (h : W'.Equation x y)
+  签名: {x y : R} (h : W'.方程 x y)
   定义体: .some _ _ equation_iff_nonsingular.mp h
 
 Depends on / 依赖: equation_iff_nonsingular, equation_iff_nonsingular.mp
@@ -1725,7 +1725,7 @@ lemma pointEquivSubtype_some
 
 中文:
 引理 pointEquivSubtype_some
-  结论: {x y : R} {h : W'.Equation x y} {p : W'.Point -> 命题} (p0 : p .zero)
+  结论: {x y : R} {h : W'.方程 x y} {p : W'.Point -> 命题} (p0 : p .zero)
   证明: rfl
 
 @[simp]
@@ -1767,7 +1767,7 @@ lemma pointEquivSubtype_symm_some
 
 中文:
 引理 pointEquivSubtype_symm_some
-  结论: {x y : R} {h : W'.Equation x y} {p : W'.Point -> 命题}
+  结论: {x y : R} {h : W'.方程 x y} {p : W'.Point -> 命题}
   证明: rfl
 -/
 lemma pointEquivSubtype_symm_some {x y : R} {h : W'.Equation x y} {p : W'.Point -> Prop}
@@ -1789,7 +1789,7 @@ definition pointEquiv
 
 中文:
 定义 pointEquiv
-  签名: : W'.Point ≃ WithZero {xy : R × R // W'.Equation xy.fst xy.snd}
+  签名: : W'.Point ≃ WithZero {xy : R × R // W'.方程 xy.fst xy.snd}
   定义体: (Equiv.Set.univ W'.Point).symm.trans (pointEquivSubtype trivial).trans
     (Equiv.subtypeEquivProp <| by simp).optionCongr
 
@@ -1836,7 +1836,7 @@ lemma pointEquiv_some
 
 中文:
 引理 pointEquiv_some
-  条件: {x y : R} (h : W'.Equation x y)
+  条件: {x y : R} (h : W'.方程 x y)
   证明: by
   rfl
 
@@ -1878,7 +1878,7 @@ lemma pointEquiv_symm_some
 
 中文:
 引理 pointEquiv_symm_some
-  条件: {x y : R} (h : W'.Equation x y)
+  条件: {x y : R} (h : W'.方程 x y)
   证明: rfl
 -/
 lemma pointEquiv_symm_some {x y : R} (h : W'.Equation x y) :
@@ -1900,7 +1900,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited W'.Point
+  签名: 可居 W'.Point
   定义体: ⟨zero⟩
 -/
 instance : Inhabited W'.Point :=
@@ -1916,7 +1916,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero W'.Point
+  签名: 零 W'.Point
   定义体: ⟨zero⟩
 -/
 instance : Zero W'.Point :=
@@ -1950,7 +1950,7 @@ lemma some_ne_zero
 
 中文:
 引理 some_ne_zero
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   结论: some _ _ h != 0
   证明: by
   rintro (_ | _)
@@ -1983,7 +1983,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg W'.Point
+  签名: 取负 W'.Point
   定义体: ⟨neg⟩
 -/
 instance : Neg W'.Point :=
@@ -2043,7 +2043,7 @@ lemma neg_some
 
 中文:
 引理 neg_some
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   证明: rfl
 -/
 lemma neg_some {x y : R} (h : W'.Nonsingular x y) :
@@ -2090,7 +2090,7 @@ lemma X_eq_iff
 
 中文:
 引理 X_eq_iff
-  条件: {x₁ y₁ x₂ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  条件: {x₁ y₁ x₂ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: by
   refine ⟨fun H => ?_, fun H => by grind [neg_some]⟩
   simp_rw [neg_some, some.injEq, ← and_or_left]
@@ -2133,7 +2133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add W.Point
+  签名: 加法 W.Point
   定义体: ⟨add⟩
 -/
 instance : Add W.Point :=
@@ -2150,7 +2150,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddZeroClass W.Point
+  签名: 加法零类 W.Point
   定义体: by rintro (_ | _) <;> rfl
   add_zero := by rintro (_ | _) <;> rfl
 
@@ -2191,7 +2191,7 @@ lemma add_some
 
 中文:
 引理 add_some
-  结论: {x₁ x₂ y₁ y₂ : F} (hxy : ¬(x₁ = x₂ ∧ y₁ = W.negY x₂ y₂)) {h₁ : W.Nonsingular x₁ y₁}
+  结论: {x₁ x₂ y₁ y₂ : F} (hxy : ¬(x₁ = x₂ ∧ y₁ = W.negY x₂ y₂)) {h₁ : W.非奇异 x₁ y₁}
   证明: by
   simp only [add_def, add, dif_neg hxy]
 
@@ -2216,7 +2216,7 @@ lemma add_of_Y_eq
 
 中文:
 引理 add_of_Y_eq
-  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: by
   simpa only [add_def, add] using dif_pos ⟨hx, hy⟩
 
@@ -2237,7 +2237,7 @@ lemma add_self_of_Y_eq
 
 中文:
 引理 add_self_of_Y_eq
-  条件: {x₁ y₁ : F} {h₁ : W.Nonsingular x₁ y₁} (hy : y₁ = W.negY x₁ y₁)
+  条件: {x₁ y₁ : F} {h₁ : W.非奇异 x₁ y₁} (hy : y₁ = W.negY x₁ y₁)
   证明: add_of_Y_eq rfl hy
 
 Depends on / 依赖: add_of_Y_eq
@@ -2257,7 +2257,7 @@ lemma add_of_Y_ne
 
 中文:
 引理 add_of_Y_ne
-  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: add_some fun hxy => hy hxy.right
 
 Depends on / 依赖: add_some, hxy.right
@@ -2277,7 +2277,7 @@ lemma add_of_Y_ne'
 
 中文:
 引理 add_of_Y_ne'
-  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: add_of_Y_ne hy
 
 Depends on / 依赖: add_of_Y_ne
@@ -2298,7 +2298,7 @@ lemma add_self_of_Y_ne
 
 中文:
 引理 add_self_of_Y_ne
-  条件: {x₁ y₁ : F} {h₁ : W.Nonsingular x₁ y₁} (hy : y₁ != W.negY x₁ y₁)
+  条件: {x₁ y₁ : F} {h₁ : W.非奇异 x₁ y₁} (hy : y₁ != W.negY x₁ y₁)
   证明: add_of_Y_ne hy
 
 Depends on / 依赖: add_of_Y_ne
@@ -2319,7 +2319,7 @@ lemma add_self_of_Y_ne'
 
 中文:
 引理 add_self_of_Y_ne'
-  条件: {x₁ y₁ : F} {h₁ : W.Nonsingular x₁ y₁} (hy : y₁ != W.negY x₁ y₁)
+  条件: {x₁ y₁ : F} {h₁ : W.非奇异 x₁ y₁} (hy : y₁ != W.negY x₁ y₁)
   证明: add_of_Y_ne hy
 
 @[simp]
@@ -2341,7 +2341,7 @@ lemma add_of_X_ne
 
 中文:
 引理 add_of_X_ne
-  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: add_some fun hxy => hx hxy.left
 
 Depends on / 依赖: add_some, hxy.left
@@ -2361,7 +2361,7 @@ lemma add_of_X_ne'
 
 中文:
 引理 add_of_X_ne'
-  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.Nonsingular x₁ y₁} {h₂ : W.Nonsingular x₂ y₂}
+  结论: {x₁ x₂ y₁ y₂ : F} {h₁ : W.非奇异 x₁ y₁} {h₂ : W.非奇异 x₂ y₂}
   证明: add_of_X_ne hx
 
 Depends on / 依赖: add_of_X_ne
@@ -2393,7 +2393,7 @@ definition toClass
 
 中文:
 定义 toClass
-  签名: : W.Point ->+ Additive (ClassGroup W.CoordinateRing) where
+  签名: : W.Point ->+ 加性 (ClassGroup W.CoordinateRing) where
   定义体: match P with
     | 0 => 0
 | some _ _ h => ClassGroup.mk W.FunctionField CoordinateRing.XYIdeal' h
@@ -2446,7 +2446,7 @@ lemma toClass_some
 
 中文:
 引理 toClass_some
-  条件: {x y : F} (h : W.Nonsingular x y)
+  条件: {x y : F} (h : W.非奇异 x y)
   证明: rfl
 -/
 lemma toClass_some {x y : F} (h : W.Nonsingular x y) :
@@ -2549,7 +2549,7 @@ lemma toClass_injective
 
 中文:
 引理 toClass_injective
-  结论: Function.Injective toClass (W := W)
+  结论: 函数.单射 toClass (W := W)
   证明: by
   rintro (_ | ⟨_, _, h⟩) _ hP
   all_goals rw [← neg_inj, ← add_eq_zero, ← toClass_eq_zero, map_add, ← hP]
@@ -2575,7 +2575,7 @@ add_assoc _ _ _ := toClass_injective by simp only [map_add, add_assoc]
 
 中文:
 实例 :
-  签名: AddCommSemigroup W.Point
+  签名: 加法交换半群 W.Point
   定义体: toClass_injective by simp only [map_add, add_comm]
 add_assoc _ _ _ := toClass_injective by simp only [map_add, add_assoc]
 
@@ -2601,7 +2601,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup W.Point
+  签名: 加法交换群 W.Point
   定义体: nsmulBinRec
   nsmul_succ := nsmulBinRec_succ
   zsmul := zsmulRec nsmulBinRec
@@ -2698,7 +2698,7 @@ lemma map_some
 
 中文:
 引理 map_some
-  条件: {x y : F} (h : (W'⁄F).Nonsingular x y)
+  条件: {x y : F} (h : (W'⁄F).非奇异 x y)
   证明: rfl
 -/
 lemma map_some {x y : F} (h : (W'⁄F).Nonsingular x y) :
@@ -2718,7 +2718,7 @@ lemma map_id
 中文:
 引理 map_id
   条件: (P : (W'⁄F).Point)
-  结论: map (Algebra.ofId F F) P = P
+  结论: map (代数.ofId F F) P = P
   证明: by
   cases P <;> rfl
 -/
@@ -2759,7 +2759,7 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  结论: Function.Injective map (W' := W') f
+  结论: 函数.单射 map (W' := W') f
   证明: by
   rintro (_ | _) (_ | _) h
   any_goals contradiction
@@ -2785,7 +2785,7 @@ abbreviation baseChange
 
 中文:
 缩写 baseChange
-  签名: [Algebra F K] [IsScalarTower R F K]
+  签名: [代数 F K] [标量塔 R F K]
   定义体: map Algebra.ofId F K
 
 Depends on / 依赖: Algebra, Algebra.ofId
@@ -2806,7 +2806,7 @@ lemma map_baseChange
 
 中文:
 引理 map_baseChange
-  结论: [Algebra F K] [IsScalarTower R F K] [Algebra F L] [IsScalarTower R F L]
+  结论: [代数 F K] [标量塔 R F K] [代数 F L] [标量塔 R F L]
   证明: by
   have : Subsingleton (F ->ₐ[F] L) := inferInstance
   convert! map_map (Algebra.ofId F K) f P
@@ -2838,7 +2838,7 @@ definition xRep
 
 中文:
 定义 xRep
-  签名: : W'.Point -> Fin 2 -> R
+  签名: : W'.Point -> 有限集 2 -> R
 -/
 noncomputable def xRep : W'.Point -> Fin 2 -> R
   | 0 => ![1, 0]
@@ -2877,7 +2877,7 @@ lemma xRep_some
 
 中文:
 引理 xRep_some
-  条件: {x y : R} (h : W'.Nonsingular x y)
+  条件: {x y : R} (h : W'.非奇异 x y)
   结论: (some x y h).xRep = ![x, 1]
   证明: rfl
 -/
@@ -2898,7 +2898,7 @@ lemma xRep_ne_zero
 
 中文:
 引理 xRep_ne_zero
-  条件: [Nontrivial R] (P : W'.Point)
+  条件: [非平凡 R] (P : W'.Point)
   结论: P.xRep != 0
   证明: by
   cases P <;> simp [xRep]

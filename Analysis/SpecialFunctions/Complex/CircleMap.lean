@@ -38,7 +38,7 @@ definition circleMap
 
 中文:
 定义 circleMap
-  签名: (c : Complex) (R : 实数)
+  签名: (c : 复形) (R : 实数)
   定义体: fun θ => c + R * exp (θ * I)
 
 @[simp]
@@ -58,7 +58,7 @@ theorem circleMap_sub_center
 
 中文:
 定理 circleMap_sub_center
-  条件: (c : Complex) (R : 实数) (θ : 实数)
+  条件: (c : 复形) (R : 实数) (θ : 实数)
   结论: circleMap c R θ - c = circleMap 0 R θ
   证明: by
   simp [circleMap]
@@ -123,7 +123,7 @@ theorem circleMap_notMem_ball
 
 中文:
 定理 circleMap_notMem_ball
-  条件: (c : Complex) (R : 实数) (θ : 实数)
+  条件: (c : 复形) (R : 实数) (θ : 实数)
   结论: circleMap c R θ ∉ ball c R
   证明: by
   simp [Complex.dist_eq, le_abs_self]
@@ -143,7 +143,7 @@ theorem circleMap_ne_mem_ball
 
 中文:
 定理 circleMap_ne_mem_ball
-  条件: {c : Complex} {R : 实数} {w : Complex} (hw : w in ball c R) (θ : 实数)
+  条件: {c : 复形} {R : 实数} {w : 复形} (hw : w in ball c R) (θ : 实数)
   证明: (ne_of_mem_of_not_mem hw (circleMap_notMem_ball _ _ _)).symm
 
 Depends on / 依赖: circleMap_notMem_ball, ne_of_mem_of_not_mem
@@ -163,7 +163,7 @@ theorem circleMap_mem_sphere'
 
 中文:
 定理 circleMap_mem_sphere'
-  条件: (c : Complex) (R : 实数) (θ : 实数)
+  条件: (c : 复形) (R : 实数) (θ : 实数)
   结论: circleMap c R θ in sphere c |R|
   证明: by simp
 -/
@@ -180,7 +180,7 @@ theorem circleMap_mem_sphere
 
 中文:
 定理 circleMap_mem_sphere
-  条件: (c : Complex) {R : 实数} (hR : 0 <= R) (θ : 实数)
+  条件: (c : 复形) {R : 实数} (hR : 0 <= R) (θ : 实数)
   证明: by
   simpa only [abs_of_nonneg hR] using circleMap_mem_sphere' c R θ
 
@@ -202,7 +202,7 @@ theorem circleMap_mem_closedBall
 
 中文:
 定理 circleMap_mem_closedBall
-  条件: (c : Complex) {R : 实数} (hR : 0 <= R) (θ : 实数)
+  条件: (c : 复形) {R : 实数} (hR : 0 <= R) (θ : 实数)
   证明: sphere_subset_closedBall (circleMap_mem_sphere c hR θ)
 
 @[simp]
@@ -228,7 +228,7 @@ theorem circleMap_eq_center_iff
 
 中文:
 定理 circleMap_eq_center_iff
-  条件: {c : Complex} {R : 实数} {θ : 实数}
+  条件: {c : 复形} {R : 实数} {θ : 实数}
   结论: circleMap c R θ = c ↔ R = 0
   证明: by
   simp [circleMap, Complex.exp_ne_zero]
@@ -252,7 +252,7 @@ theorem circleMap_zero_radius
 
 中文:
 定理 circleMap_zero_radius
-  条件: (c : Complex)
+  条件: (c : 复形)
   结论: circleMap c 0 = const 实数 c
   证明: funext fun _ => circleMap_eq_center_iff.2 rfl
 
@@ -272,7 +272,7 @@ theorem circleMap_ne_center
 
 中文:
 定理 circleMap_ne_center
-  条件: {c : Complex} {R : 实数} (hR : R != 0) {θ : 实数}
+  条件: {c : 复形} {R : 实数} (hR : R != 0) {θ : 实数}
   结论: circleMap c R θ != c
   证明: mt circleMap_eq_center_iff.1 hR
 
@@ -424,7 +424,7 @@ lemma conj_circleMap
 
 中文:
 引理 conj_circleMap
-  条件: (c : Complex) (r θ : 实数)
+  条件: (c : 复形) (r θ : 实数)
   证明: sub_left_injective (b := conj c) by simp [← map_sub, conj_circleMap_zero]
 
 Depends on / 依赖: conj_circleMap_zero, map_sub, sub_left_injective
@@ -489,7 +489,7 @@ lemma circleMap_pi_div_two
 
 中文:
 引理 circleMap_pi_div_two
-  条件: (c : Complex) (R : 实数)
+  条件: (c : 复形) (R : 实数)
   结论: circleMap c R (π / 2) = c + R * I
   证明: by
   simp only [circleMap, ofReal_div, ofReal_ofNat, exp_pi_div_two_mul_I]
@@ -512,7 +512,7 @@ lemma circleMap_neg_pi_div_two
 
 中文:
 引理 circleMap_neg_pi_div_two
-  条件: (c : Complex) (R : 实数)
+  条件: (c : 复形) (R : 实数)
   结论: circleMap c R (-π / 2) = c - R * I
   证明: by
   simp only [circleMap, ofReal_div, ofReal_neg, ofReal_ofNat, exp_neg_pi_div_two_mul_I, mul_neg,
@@ -536,8 +536,8 @@ theorem periodic_circleMap
 
 中文:
 定理 periodic_circleMap
-  条件: (c : Complex) (R : 实数)
-  结论: Periodic (circleMap c R) (2 * π)
+  条件: (c : 复形) (R : 实数)
+  结论: 周期 (circleMap c R) (2 * π)
   证明: fun θ => by
   simp [circleMap, add_mul, exp_periodic _]
 
@@ -559,8 +559,8 @@ mul_right_injective₀ ofReal_ne_zero.2 hR).preimage_cexp.preimage <|
         mul_left_injective₀ I_ne_zero).preimage ofReal_injective
 
 中文:
-定理 Set.Countable.preimage_circleMap
-  结论: {s : Set Complex} (hs : s.Countable) (c : Complex) {R : 实数}
+定理 集合.可数.preimage_circleMap
+  结论: {s : 集合 复形} (hs : s.可数) (c : 复形) {R : 实数}
   证明: show (((↑) : Real -> Complex) ⁻¹' ((· * I) ⁻¹'
       (exp ⁻¹' ((R * ·) ⁻¹' ((c + ·) ⁻¹' s))))).Countable from
     (((hs.preimage (add_right_injective _)).preimage <|
@@ -590,7 +590,7 @@ lemma circleMap_eq_circleMap_iff
 
 中文:
 引理 circleMap_eq_circleMap_iff
-  条件: {a b R : 实数} (c : Complex) (h_R : R != 0)
+  条件: {a b R : 实数} (c : 复形) (h_R : R != 0)
   证明: by
   have : circleMap c R a = circleMap c R b ↔ (exp (a * I)).arg = (exp (b * I)).arg := by
     simp [circleMap, ext_norm_arg_iff, h_R]
@@ -620,7 +620,7 @@ lemma eq_of_circleMap_eq
 
 中文:
 引理 eq_of_circleMap_eq
-  结论: {a b R : 实数} {c : Complex} (h_R : R != 0) (h_dist : |a - b| < 2 * π)
+  结论: {a b R : 实数} {c : 复形} (h_R : R != 0) (h_dist : |a - b| < 2 * π)
   证明: by
   rw [circleMap_eq_circleMap_iff c h_R] at h
   obtain ⟨n, hn⟩ := h
@@ -659,7 +659,7 @@ theorem injOn_circleMap_of_abs_sub_le
 
 中文:
 定理 injOn_circleMap_of_abs_sub_le
-  条件: {a b R : 实数} {c : Complex} (h_R : R != 0) (_ : |a - b| <= 2 * π)
+  条件: {a b R : 实数} {c : 复形} (h_R : R != 0) (_ : |a - b| <= 2 * π)
   证明: by
   rintro _ ⟨_, _⟩ _ ⟨_, _⟩ h
   apply eq_of_circleMap_eq h_R _ h
@@ -689,7 +689,7 @@ theorem injOn_circleMap_of_abs_sub_le'
 
 中文:
 定理 injOn_circleMap_of_abs_sub_le'
-  条件: {a b R : 实数} {c : Complex} (h_R : R != 0) (_ : b - a <= 2 * π)
+  条件: {a b R : 实数} {c : 复形} (h_R : R != 0) (_ : b - a <= 2 * π)
   证明: by
   rintro _ ⟨_, _⟩ _ ⟨_, _⟩ h
   apply eq_of_circleMap_eq h_R _ h

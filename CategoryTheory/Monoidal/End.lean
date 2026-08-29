@@ -59,7 +59,7 @@ definition endofunctorMonoidalCategory
 
 中文:
 定义 endofunctorMonoidalCategory
-  签名: : MonoidalCategory (C ⥤ C) where
+  签名: : 幺半群范畴 (C ⥤ C) where
   定义体: F ⋙ G
   whiskerLeft X _ _ F := Functor.whiskerLeft X F
   whiskerRight F X := Functor.whiskerRight F X
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tensoringRight C).Monoidal
+  签名: (tensoringRight C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := (rightUnitorNatIso C).symm
       μIso := fun X Y => (Functor.isoWhiskerRight (curriedAssociatorNatIso C)
@@ -403,7 +403,7 @@ theorem μ_δ_app
 
 中文:
 定理 μ_δ_app
-  条件: (i j : M) (X : C) [F.Monoidal]
+  条件: (i j : M) (X : C) [F.幺半群]
   证明: (μIso F i j).hom_inv_id_app X
 
 @[reassoc (attr := simp)]
@@ -427,7 +427,7 @@ theorem δ_μ_app
 
 中文:
 定理 δ_μ_app
-  条件: (i j : M) (X : C) [F.Monoidal]
+  条件: (i j : M) (X : C) [F.幺半群]
   证明: (μIso F i j).inv_hom_id_app X
 
 @[reassoc (attr := simp)]
@@ -452,7 +452,7 @@ theorem ε_η_app
 
 中文:
 定理 ε_η_app
-  条件: (X : C) [F.Monoidal]
+  条件: (X : C) [F.幺半群]
   结论: (ε F).app X ≫ (η F).app X = 𝟙 _
   证明: (εIso F).hom_inv_id_app X
 
@@ -477,7 +477,7 @@ theorem η_ε_app
 
 中文:
 定理 η_ε_app
-  条件: (X : C) [F.Monoidal]
+  条件: (X : C) [F.幺半群]
   结论: (η F).app X ≫ (ε F).app X = 𝟙 _
   证明: (εIso F).inv_hom_id_app X
 
@@ -501,7 +501,7 @@ theorem ε_naturality
 
 中文:
 定理 ε_naturality
-  条件: {X Y : C} (f : X ⟶ Y) [F.LaxMonoidal]
+  条件: {X Y : C} (f : X ⟶ Y) [F.松弛幺半群]
   证明: ((ε F).naturality f).symm
 
 @[reassoc (attr := simp)]
@@ -526,7 +526,7 @@ theorem η_naturality
 
 中文:
 定理 η_naturality
-  条件: {X Y : C} (f : X ⟶ Y) [F.OplaxMonoidal]
+  条件: {X Y : C} (f : X ⟶ Y) [F.反松弛幺半群]
   证明: by
   simp
 
@@ -547,7 +547,7 @@ theorem μ_naturality
 
 中文:
 定理 μ_naturality
-  条件: {m n : M} {X Y : C} (f : X ⟶ Y) [F.LaxMonoidal]
+  条件: {m n : M} {X Y : C} (f : X ⟶ Y) [F.松弛幺半群]
   证明: (μ F m n).naturality f
 
 Depends on / 依赖: naturality
@@ -568,7 +568,7 @@ theorem δ_naturality
 
 中文:
 定理 δ_naturality
-  条件: {m n : M} {X Y : C} (f : X ⟶ Y) [F.OplaxMonoidal]
+  条件: {m n : M} {X Y : C} (f : X ⟶ Y) [F.反松弛幺半群]
   证明: by simp
 -/
 theorem δ_naturality {m n : M} {X Y : C} (f : X ⟶ Y) [F.OplaxMonoidal] :
@@ -592,7 +592,7 @@ theorem μ_naturality₂
 
 中文:
 定理 μ_naturality₂
-  条件: {m n m' n' : M} (f : m ⟶ m') (g : n ⟶ n') (X : C) [F.LaxMonoidal]
+  条件: {m n m' n' : M} (f : m ⟶ m') (g : n ⟶ n') (X : C) [F.松弛幺半群]
   证明: by
   have := congr_app (μ_natural F f g) X
   dsimp at this
@@ -624,7 +624,7 @@ theorem μ_naturalityₗ
 
 中文:
 定理 μ_naturalityₗ
-  条件: {m n m' : M} (f : m ⟶ m') (X : C) [F.LaxMonoidal]
+  条件: {m n m' : M} (f : m ⟶ m') (X : C) [F.松弛幺半群]
   证明: by
   rw [← tensorHom_id]; rw [← μ_naturality₂ F f (𝟙 n) X]
   simp
@@ -654,7 +654,7 @@ theorem μ_naturalityᵣ
 
 中文:
 定理 μ_naturalityᵣ
-  条件: {m n n' : M} (g : n ⟶ n') (X : C) [F.LaxMonoidal]
+  条件: {m n n' : M} (g : n ⟶ n') (X : C) [F.松弛幺半群]
   证明: by
   rw [← id_tensorHom]; rw [← μ_naturality₂ F (𝟙 m) g X]
   simp
@@ -682,7 +682,7 @@ theorem δ_naturalityₗ
 
 中文:
 定理 δ_naturalityₗ
-  条件: {m n m' : M} (f : m ⟶ m') (X : C) [F.OplaxMonoidal]
+  条件: {m n m' : M} (f : m ⟶ m') (X : C) [F.反松弛幺半群]
   证明: congr_app (δ_natural_left F f n) X
 
 @[reassoc (attr := simp)]
@@ -707,7 +707,7 @@ theorem δ_naturalityᵣ
 
 中文:
 定理 δ_naturalityᵣ
-  条件: {m n n' : M} (g : n ⟶ n') (X : C) [F.OplaxMonoidal]
+  条件: {m n n' : M} (g : n ⟶ n') (X : C) [F.反松弛幺半群]
   证明: congr_app (δ_natural_right F m g) X
 
 @[reassoc]
@@ -732,7 +732,7 @@ theorem left_unitality_app
 
 中文:
 定理 left_unitality_app
-  条件: (n : M) (X : C) [F.LaxMonoidal]
+  条件: (n : M) (X : C) [F.松弛幺半群]
   证明: congr_app (left_unitality F n).symm X
 
 @[simp, reassoc]
@@ -760,7 +760,7 @@ theorem obj_ε_app
 
 中文:
 定理 obj_ε_app
-  条件: (n : M) (X : C) [F.Monoidal]
+  条件: (n : M) (X : C) [F.幺半群]
   证明: by
   rw [map_leftUnitor_inv]
   dsimp
@@ -793,7 +793,7 @@ theorem obj_η_app
 
 中文:
 定理 obj_η_app
-  条件: (n : M) (X : C) [F.Monoidal]
+  条件: (n : M) (X : C) [F.幺半群]
   证明: by
   rw [← cancel_mono ((F.obj n).map ((ε F).app X))]; rw [← Functor.map_comp]
   simp
@@ -820,7 +820,7 @@ theorem right_unitality_app
 
 中文:
 定理 right_unitality_app
-  条件: (n : M) (X : C) [F.Monoidal]
+  条件: (n : M) (X : C) [F.幺半群]
   证明: congr_app (Functor.LaxMonoidal.right_unitality F n).symm X
 
 @[simp]
@@ -848,7 +848,7 @@ theorem ε_app_obj
 
 中文:
 定理 ε_app_obj
-  条件: (n : M) (X : C) [F.Monoidal]
+  条件: (n : M) (X : C) [F.幺半群]
   证明: by
   rw [map_rightUnitor_inv]
   dsimp
@@ -880,7 +880,7 @@ theorem η_app_obj
 
 中文:
 定理 η_app_obj
-  条件: (n : M) (X : C) [F.Monoidal]
+  条件: (n : M) (X : C) [F.幺半群]
   证明: by
   rw [map_rightUnitor]
   dsimp
@@ -911,7 +911,7 @@ theorem associativity_app
 
 中文:
 定理 associativity_app
-  条件: (m₁ m₂ m₃ : M) (X : C) [F.LaxMonoidal]
+  条件: (m₁ m₂ m₃ : M) (X : C) [F.松弛幺半群]
   证明: by
   have := congr_app (associativity F m₁ m₂ m₃) X
   dsimp at this
@@ -944,7 +944,7 @@ theorem obj_μ_app
 
 中文:
 定理 obj_μ_app
-  条件: (m₁ m₂ m₃ : M) (X : C) [F.Monoidal]
+  条件: (m₁ m₂ m₃ : M) (X : C) [F.幺半群]
   证明: by
   rw [← associativity_app_assoc]
   simp
@@ -978,7 +978,7 @@ theorem obj_μ_inv_app
 
 中文:
 定理 obj_μ_inv_app
-  条件: (m₁ m₂ m₃ : M) (X : C) [F.Monoidal]
+  条件: (m₁ m₂ m₃ : M) (X : C) [F.幺半群]
   证明: by
   rw [map_associator]
   dsimp
@@ -1014,7 +1014,7 @@ theorem obj_zero_map_μ_app
 
 中文:
 定理 obj_zero_map_μ_app
-  条件: {m : M} {X Y : C} (f : X ⟶ (F.obj m).obj Y) [F.Monoidal]
+  条件: {m : M} {X Y : C} (f : X ⟶ (F.obj m).obj Y) [F.幺半群]
   证明: by
   rw [← cancel_epi ((ε F).app _)]; rw [← cancel_mono ((δ F _ _).app _)]
   simp
@@ -1042,7 +1042,7 @@ theorem obj_μ_zero_app
 
 中文:
 定理 obj_μ_zero_app
-  条件: (m₁ m₂ : M) (X : C) [F.Monoidal]
+  条件: (m₁ m₂ : M) (X : C) [F.幺半群]
   证明: by
   rw [← obj_η_app_assoc]; rw [← Functor.map_comp]
   simp
@@ -1069,7 +1069,7 @@ definition unitOfTensorIsoUnit
 
 中文:
 定义 unitOfTensorIsoUnit
-  签名: (m n : M) (h : m otimes n ≅ 𝟙_ M) [F.Monoidal]
+  签名: (m n : M) (h : m otimes n ≅ 𝟙_ M) [F.幺半群]
   定义体: μIso F m n ≪≫ F.mapIso h ≪≫ (εIso F).symm
 
 Depends on / 依赖: F.mapIso, mapIso

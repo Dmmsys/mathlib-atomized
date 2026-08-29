@@ -46,7 +46,7 @@ instance topDualPairing_isContPerfPair
 
 中文:
 实例 topDualPairing_isContPerfPair
-  签名: : (topDualPairing 𝕜 E).IsContPerfPair where
+  签名: : (topDualPairing 𝕜 E).是余ntPerfPair where
   定义体: by
     have : IsModuleTopology 𝕜 E := isModuleTopologyOfFiniteDimensional
     have : IsModuleTopology 𝕜 (E ->L[𝕜] 𝕜) := isModuleTopologyOfFiniteDimensional

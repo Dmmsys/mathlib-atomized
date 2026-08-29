@@ -39,10 +39,10 @@ class PseudoMetrizableSpace
     - exists_countably_generated : exists u : UniformSpace X, u.toTopologicalSpace = t ∧ (uniformity X).IsCountablyGenerated
 
 中文:
-类 PseudoMetrizableSpace
-  参数: (X : 类型) [t : TopologicalSpace X]
+类 PseudoMetrizable空间
+  参数: (X : 类型) [t : 拓扑空间 X]
   公理与运算 (1 个):
-    - exists_countably_generated : 存在 u : UniformSpace X, u.toTopologicalSpace = t ∧ (uniformity X).IsCountablyGenerated
+    - exists_countably_generated : 存在 u : 一致空间 X, u.toTopologicalSpace = t ∧ (uniformity X).是余untablyGenerated
 -/
 class PseudoMetrizableSpace (X : Type*) [t : TopologicalSpace X] : Prop where
   exists_countably_generated :
@@ -69,7 +69,7 @@ example {X : Type*} [t : TopologicalSpace X] [PseudoMetrizableSpace X] :
 
 中文:
 缩写 pseudoMetrizableSpaceUniformity
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: h.exists_countably_generated.choose.replaceTopology
     h.exists_countably_generated.choose_spec.1.symm
 
@@ -121,7 +121,7 @@ instance pseudoMetrizableSpace_prod
 
 中文:
 实例 pseudoMetrizableSpace_prod
-  签名: [PseudoMetrizableSpace X] [PseudoMetrizableSpace Y]
+  签名: [PseudoMetrizable空间 X] [PseudoMetrizable空间 Y]
   定义体: let : UniformSpace X := pseudoMetrizableSpaceUniformity X
   have : (uniformity X).IsCountablyGenerated :=
     pseudoMetrizableSpaceUniformity_countably_generated X
@@ -154,8 +154,8 @@ theorem _root_.Topology.IsInducing.pseudoMetrizableSpace
     Filter.comap.isCountablyGenerated (uniformity Y) (Prod.map f f
 
 中文:
-定理 _root_.Topology.IsInducing.pseudoMetrizableSpace
-  结论: [PseudoMetrizableSpace Y] {f : X -> Y}
+定理 _root_.拓扑.是Inducing.pseudoMetrizableSpace
+  结论: [PseudoMetrizable空间 Y] {f : X -> Y}
   证明: let u : UniformSpace Y := pseudoMetrizableSpaceUniformity Y
   have : (uniformity Y).IsCountablyGenerated :=
     pseudoMetrizableSpaceUniformity_countably_generated Y
@@ -189,8 +189,8 @@ instance PseudoMetrizableSpace.subtype
   body: IsInducing.subtypeVal.pseudoMetrizableSpace
 
 中文:
-实例 PseudoMetrizableSpace.subtype
-  签名: [PseudoMetrizableSpace X] (s : Set X)
+实例 PseudoMetrizable空间.subtype
+  签名: [PseudoMetrizable空间 X] (s : 集合 X)
   定义体: IsInducing.subtypeVal.pseudoMetrizableSpace
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.pseudoMetrizableSpace, pseudoMetrizableSpace, subtypeVal
@@ -211,7 +211,7 @@ instance pseudoMetrizableSpace_pi
 
 中文:
 实例 pseudoMetrizableSpace_pi
-  签名: [对任意 i, PseudoMetrizableSpace (A i)]
+  签名: [对任意 i, PseudoMetrizable空间 (A i)]
   定义体: let := fun i => pseudoMetrizableSpaceUniformity (A i)
   have := fun i => pseudoMetrizableSpaceUniformity_countably_generated (A i)
   inferInstance
@@ -234,8 +234,8 @@ instance PseudoMetrizableSpace.regularSpace
   inferInstance
 
 中文:
-实例 PseudoMetrizableSpace.regularSpace
-  签名: [PseudoMetrizableSpace X]
+实例 PseudoMetrizable空间.regularSpace
+  签名: [PseudoMetrizable空间 X]
   定义体: let := pseudoMetrizableSpaceUniformity X
   inferInstance
 
@@ -259,8 +259,8 @@ class MetrizableSpace
   (no additional axioms)
 
 中文:
-类 MetrizableSpace
-  参数: (X : 类型) [t : TopologicalSpace X]
+类 Metrizable空间
+  参数: (X : 类型) [t : 拓扑空间 X]
   (无附加公理)
 -/
 class MetrizableSpace (X : Type*) [t : TopologicalSpace X] : Prop extends
@@ -286,7 +286,7 @@ instance metrizableSpace_prod
 
 中文:
 实例 metrizableSpace_prod
-  签名: [MetrizableSpace X] [MetrizableSpace Y]
+  签名: [Metrizable空间 X] [Metrizable空间 Y]
 -/
 instance metrizableSpace_prod [MetrizableSpace X] [MetrizableSpace Y] :
     MetrizableSpace (X × Y) where
@@ -301,8 +301,8 @@ theorem _root_.Topology.IsEmbedding.metrizableSpace
   toT0Space := hf.t0Space
 
 中文:
-定理 _root_.Topology.IsEmbedding.metrizableSpace
-  结论: [MetrizableSpace Y] {f : X -> Y}
+定理 _root_.拓扑.是嵌入.metrizableSpace
+  结论: [Metrizable空间 Y] {f : X -> Y}
   证明: hf.toIsInducing.pseudoMetrizableSpace
   toT0Space := hf.t0Space
 
@@ -322,8 +322,8 @@ instance MetrizableSpace.subtype
   body: IsEmbedding.subtypeVal.metrizableSpace
 
 中文:
-实例 MetrizableSpace.subtype
-  签名: [MetrizableSpace X] (s : Set X)
+实例 Metrizable空间.subtype
+  签名: [Metrizable空间 X] (s : 集合 X)
   定义体: IsEmbedding.subtypeVal.metrizableSpace
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.metrizableSpace, metrizableSpace, subtypeVal
@@ -340,7 +340,7 @@ instance metrizableSpace_pi
 
 中文:
 实例 metrizableSpace_pi
-  签名: [对任意 i, MetrizableSpace (A i)]
+  签名: [对任意 i, Metrizable空间 (A i)]
 -/
 instance metrizableSpace_pi [forall i, MetrizableSpace (A i)] : MetrizableSpace (forall i, A i) where
 
@@ -358,8 +358,8 @@ Subtype.dense_iff.2 by rw [← Set.range_comp, Set.val_comp_inclusion, Subtype.r
   let := pseudoMetrizableSpaceU
 
 中文:
-定理 IsSeparable.secondCountableTopology
-  结论: [PseudoMetrizableSpace X] {s : Set X}
+定理 是可分.secondCountableTopology
+  结论: [PseudoMetrizable空间 X] {s : 集合 X}
   证明: let ⟨u, hu, hs⟩ := hs
   have := hu.to_subtype
   have : SeparableSpace (closure u) :=
@@ -413,8 +413,8 @@ theorem IsSeparable.exists_countable_dense_subset
   obtain ⟨y, hyx, hyt⟩ := mem_closure_iff_ball.1 (hst hx) (sy
 
 中文:
-定理 IsSeparable.exists_countable_dense_subset
-  结论: [PseudoMetrizableSpace X]
+定理 是可分.存在_countable_dense_subset
+  结论: [PseudoMetrizable空间 X]
   证明: by
   let := pseudoMetrizableSpaceUniformity X
   have := pseudoMetrizableSpaceUniformity_countably_generated X
@@ -450,8 +450,8 @@ theorem IsSeparable.separableSpace
   rwa [IsInducing.subtypeVal.dense_iff, Subtype.forall]
 
 中文:
-定理 IsSeparable.separableSpace
-  条件: [PseudoMetrizableSpace X] {s : Set X} (hs : IsSeparable s)
+定理 是可分.separableSpace
+  条件: [PseudoMetrizable空间 X] {s : 集合 X} (hs : 是可分 s)
   证明: by
   rcases hs.exists_countable_dense_subset with ⟨t, hts, htc, hst⟩
   lift t to Set s using hts

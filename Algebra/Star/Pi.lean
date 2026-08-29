@@ -38,8 +38,8 @@ instance [forall
   body: funext fun _ => star_trivial _
 
 中文:
-实例 [forall
-  签名: i, Star (f i)] [对任意 i, TrivialStar (f i)] : TrivialStar (对任意 i, f i) where
+实例 [对任意
+  签名: i, 对合 (f i)] [对任意 i, TrivialStar (f i)] : TrivialStar (对任意 i, f i) where
   定义体: funext fun _ => star_trivial _
 
 Depends on / 依赖: star_trivial
@@ -56,7 +56,7 @@ instance [forall
   body: funext fun _ => star_star _
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, InvolutiveStar (f i)] : InvolutiveStar (对任意 i, f i) where
   定义体: funext fun _ => star_star _
 
@@ -74,8 +74,8 @@ instance [forall
   body: funext fun _ => star_mul _ _
 
 中文:
-实例 [forall
-  签名: i, Mul (f i)] [对任意 i, StarMul (f i)] : StarMul (对任意 i, f i) where
+实例 [对任意
+  签名: i, 乘法 (f i)] [对任意 i, StarMul (f i)] : StarMul (对任意 i, f i) where
   定义体: funext fun _ => star_mul _ _
 
 Depends on / 依赖: star_mul
@@ -92,8 +92,8 @@ instance [forall
   body: funext fun _ => star_add _ _
 
 中文:
-实例 [forall
-  签名: i, AddMonoid (f i)] [对任意 i, StarAddMonoid (f i)] : StarAddMonoid (对任意 i, f i) where
+实例 [对任意
+  签名: i, 加法幺半群 (f i)] [对任意 i, StarAdd幺半群 (f i)] : StarAdd幺半群 (对任意 i, f i) where
   定义体: funext fun _ => star_add _ _
 
 Depends on / 依赖: star_add
@@ -110,8 +110,8 @@ instance [forall
   body: funext fun _ => star_add _ _
 
 中文:
-实例 [forall
-  签名: i, NonUnitalSemiring (f i)] [对任意 i, StarRing (f i)] : StarRing (对任意 i, f i)
+实例 [对任意
+  签名: i, 非幺半环 (f i)] [对任意 i, 对合环 (f i)] : 对合环 (对任意 i, f i)
   定义体: funext fun _ => star_add _ _
 
 Depends on / 依赖: star_add
@@ -133,7 +133,7 @@ theorem single_star
 
 中文:
 定理 single_star
-  结论: [对任意 i, AddMonoid (f i)] [对任意 i, StarAddMonoid (f i)] [DecidableEq I] (i : I)
+  结论: [对任意 i, 加法幺半群 (f i)] [对任意 i, StarAdd幺半群 (f i)] [DecidableEq I] (i : I)
   证明: single_op (fun i => @star (f i) _) (fun _ => star_zero _) i a
 
 Depends on / 依赖: single_op, star_zero
@@ -155,7 +155,7 @@ lemma conj_apply
 
 中文:
 引理 conj_apply
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, CommSemiring (α i)] [对任意 i, StarRing (α i)]
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 交换半环 (α i)] [对任意 i, 对合环 (α i)]
   证明: rfl
 -/
 lemma conj_apply {ι : Type*} {α : ι -> Type*} [forall i, CommSemiring (α i)] [forall i, StarRing (α i)]
@@ -175,7 +175,7 @@ theorem update_star
 
 中文:
 定理 update_star
-  条件: [对任意 i, Star (f i)] [DecidableEq I] (h : 对任意 i : I, f i) (i : I) (a : f i)
+  条件: [对任意 i, 对合 (f i)] [DecidableEq I] (h : 对任意 i : I, f i) (i : I) (a : f i)
   证明: funext fun j => (apply_update (fun _ => star) h i a j).symm
 
 Depends on / 依赖: apply_update
@@ -195,7 +195,7 @@ theorem star_sumElim
 
 中文:
 定理 star_sumElim
-  条件: {I J α : 类型} (x : I -> α) (y : J -> α) [Star α]
+  条件: {I J α : 类型} (x : I -> α) (y : J -> α) [对合 α]
   证明: by
   ext x; cases x <;> simp only [Pi.star_apply, Sum.elim_inl, Sum.elim_inr]
 

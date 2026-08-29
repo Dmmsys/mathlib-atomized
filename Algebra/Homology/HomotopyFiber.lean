@@ -44,10 +44,10 @@ class HasHomotopyFiber
     - hasBinaryBiproduct((φ) (i j : α) (hij : c.Rel i j)) : HasBinaryBiproduct (G.X i) (F.X j)
 
 中文:
-类 HasHomotopyFiber
+类 有HomotopyFiber
   参数: (φ : F ⟶ G)
   公理与运算 (1 个):
-    - hasBinaryBiproduct((φ) (i j : α) (hij : c.Rel i j)) : HasBinaryBiproduct (G.X i) (F.X j)
+    - hasBinaryBiproduct((φ) (i j : α) (hij : c.关系 i j)) : 有BinaryBiproduct (G.X i) (F.X j)
 -/
 class HasHomotopyFiber (φ : F ⟶ G) : Prop where
   hasBinaryBiproduct (φ) (i j : α) (hij : c.Rel i j) : HasBinaryBiproduct (G.X i) (F.X j)
@@ -61,8 +61,8 @@ instance [HasBinaryBiproducts
   body: inferInstance
 
 中文:
-实例 [HasBinaryBiproducts
-  签名: C] : HasHomotopyFiber φ where
+实例 [有BinaryBiproducts
+  签名: C] : 有HomotopyFiber φ where
   定义体: inferInstance
 -/
 instance [HasBinaryBiproducts C] : HasHomotopyFiber φ where
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasHomotopyCofiber ((opFunctor C c).map φ.op)
+  签名: 有HomotopyCofiber ((opFunctor C c).map φ.op)
   定义体: by
     have := HasHomotopyFiber.hasBinaryBiproduct φ j i hij
     dsimp
@@ -108,7 +108,7 @@ definition homotopyFiber
 
 中文:
 定义 homotopyFiber
-  签名: : HomologicalComplex C c
+  签名: : 同调复形 C c
   定义体: (unopFunctor C c.symm).obj (op (homotopyCofiber ((opFunctor C c).map φ.op)))
 
 Depends on / 依赖: c.symm, homotopyCofiber, opFunctor, unopFunctor
@@ -211,7 +211,7 @@ lemma isZero_X
 
 中文:
 引理 isZero_X
-  条件: (i : α) (h₁ : IsZero (K.X i)) (h₂ : 对任意 (j : α), c.Rel j i -> IsZero (K.X j))
+  条件: (i : α) (h₁ : 是零 (K.X i)) (h₂ : 对任意 (j : α), c.关系 j i -> 是零 (K.X j))
   证明: by
   apply IsZero.unop
   dsimp [pathObject]
@@ -347,7 +347,7 @@ definition π₀CompιHomotopy
 
 中文:
 定义 π₀CompιHomotopy
-  签名: (hc : 对任意 (i : α), 存在 j, c.Rel i j)
+  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
   定义体: (cylinder.πCompι₀Homotopy K.op hc).unop
 
 Depends on / 依赖: K.op, cylinder
@@ -371,7 +371,7 @@ definition homotopyEquiv
 
 中文:
 定义 homotopyEquiv
-  签名: (hc : 对任意 (i : α), 存在 j, c.Rel i j)
+  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
   定义体: ι K
   inv := π₀ K
   homotopyHomInvId := Homotopy.ofEq (by simp)
@@ -396,7 +396,7 @@ definition homotopy₀₁
 
 中文:
 定义 homotopy₀₁
-  签名: (hc : 对任意 (i : α), 存在 j, c.Rel i j)
+  签名: (hc : 对任意 (i : α), 存在 j, c.关系 i j)
   定义体: (cylinder.homotopy₀₁ K.op hc).unop
 
 Depends on / 依赖: K.op, cylinder, cylinder.homotopy

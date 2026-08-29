@@ -485,8 +485,8 @@ lemma isTriangulated_of_op
 
 中文:
 引理 isTriangulated_of_op
-  条件: [F.op.IsTriangulated]
-  结论: F.IsTriangulated where
+  条件: [F.op.是三角]
+  结论: F.是三角 where
   证明: by
     have := distinguished_iff_of_iso ((triangleOpEquivalence D).unitIso.app
       (Opposite.op (F.mapTriangle.obj T))).unop
@@ -515,7 +515,7 @@ lemma op_isTriangulated_iff
 
 中文:
 引理 op_isTriangulated_iff
-  结论: F.op.IsTriangulated ↔ F.IsTriangulated
+  结论: F.op.是三角 ↔ F.是三角
   证明: ⟨fun _ => F.isTriangulated_of_op, fun _ => inferInstance⟩
 
 Depends on / 依赖: F.isTriangulated_of_op, isTriangulated_of_op

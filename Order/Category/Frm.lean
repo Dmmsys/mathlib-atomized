@@ -38,12 +38,12 @@ structure Frm
     - [str : Frame carrier]
 
 中文:
-结构 Frm
+结构 框架
   参数: where
   公理与运算 (3 个):
     - of : :
     - (carrier : 类型)
-    - [str : Frame carrier]
+    - [str : 框架 carrier]
 -/
 structure Frm where
   /-- Construct a bundled `Frm` from the underlying type and typeclass. -/
@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Frm (Type _)
+  签名: CoeSort 框架 (类型 _)
   定义体: ⟨Frm.carrier⟩
 
 Depends on / 依赖: Frm.carrier, carrier
@@ -91,11 +91,11 @@ structure Hom
     - hom' : FrameHom X Y
 
 中文:
-结构 Hom
-  参数: (X Y : Frm.{u})
+结构 态射
+  参数: (X Y : 框架.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : FrameHom X Y
+    - hom' : 框架态射 X Y
 -/
 structure Hom (X Y : Frm.{u}) where
   private mk ::
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category Frm.{u}
+  签名: 范畴 框架.{u}
   定义体: Hom X Y
   id X := ⟨FrameHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory Frm (FrameHom · ·)
+  签名: 余ncrete范畴 框架 (框架态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -158,8 +158,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := Frm) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : Frm.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 框架.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := Frm) f
 -/
 abbrev Hom.hom {X Y : Frm.{u}} (f : Hom X Y) :=
@@ -175,7 +175,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Frame X] [Frame Y] (f : FrameHom X Y)
+  签名: {X Y : 类型u} [框架 X] [框架 Y] (f : 框架态射 X Y)
   定义体: ConcreteCategory.ofHom (C := Frm) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -195,8 +195,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : Frm.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 框架.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -226,7 +226,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : Frm}
+  条件: {X : 框架}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -248,7 +248,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : Frm} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 框架} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -269,7 +269,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : Frm} (f : X ⟶ Y)
+  条件: {X Y : 框架} (f : X ⟶ Y)
   证明: rfl
 
 @[ext]
@@ -291,7 +291,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : Frm} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 框架} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -314,8 +314,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [Frame X]
-  结论: (Frm.of X : 类型u) = X
+  条件: (X : 类型u) [框架 X]
+  结论: (框架.of X : 类型u) = X
   证明: rfl
 
 @[simp]
@@ -334,8 +334,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : Frm}
-  结论: (𝟙 X : X ⟶ X).hom = FrameHom.id _
+  条件: {X : 框架}
+  结论: (𝟙 X : X ⟶ X).hom = 框架态射.id _
   证明: rfl
 -/
 lemma hom_id {X : Frm} : (𝟙 X : X ⟶ X).hom = FrameHom.id _ := rfl
@@ -352,7 +352,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (X : Frm) (x : X)
+  条件: (X : 框架) (x : X)
   证明: by simp
 
 @[simp]
@@ -371,7 +371,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : Frm} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 框架} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma hom_comp {X Y Z : Frm} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -389,7 +389,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {X Y Z : Frm} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
+  条件: {X Y Z : 框架} (f : X ⟶ Y) (g : Y ⟶ Z) (x : X)
   证明: by simp
 
 @[ext]
@@ -411,7 +411,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {X Y : Frm} {f g : X ⟶ Y} (hf : f.hom = g.hom)
+  条件: {X Y : 框架} {f g : X ⟶ Y} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -436,7 +436,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {X Y : 类型u} [Frame X] [Frame Y] (f : FrameHom X Y)
+  条件: {X Y : 类型u} [框架 X] [框架 Y] (f : 框架态射 X Y)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -457,7 +457,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : Frm} (f : X ⟶ Y)
+  条件: {X Y : 框架} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -479,8 +479,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [Frame X]
-  结论: ofHom (FrameHom.id _) = 𝟙 (of X)
+  条件: {X : 类型u} [框架 X]
+  结论: ofHom (框架态射.id _) = 𝟙 (of X)
   证明: rfl
 
 @[simp]
@@ -498,7 +498,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [Frame X] [Frame Y] [Frame Z]
+  结论: {X Y Z : 类型u} [框架 X] [框架 Y] [框架 Z]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [Frame X] [Frame Y] [Frame Z]
@@ -516,7 +516,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Frame X] [Frame Y] (f : FrameHom X Y) (x : X)
+  条件: {X Y : 类型u} [框架 X] [框架 Y] (f : 框架态射 X Y) (x : X)
   证明: rfl
 
 Depends on / 依赖: PreservesProjectiveObjects, S.subtype, subtype
@@ -536,7 +536,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {X Y : Frm} (e : X ≅ Y) (x : X)
+  条件: {X Y : 框架} (e : X ≅ Y) (x : X)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -556,7 +556,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {X Y : Frm} (e : X ≅ Y) (s : Y)
+  条件: {X Y : 框架} (e : X ≅ Y) (s : Y)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Frm
+  签名: 可居 框架
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited Frm :=
@@ -591,7 +591,7 @@ instance hasForgetToLat
 
 中文:
 实例 hasForgetToLat
-  签名: : HasForget₂ Frm Lat where
+  签名: : 有Forget₂ 框架 格 where
   定义体: .of X
   forget₂.map f := Lat.ofHom f.hom
 -/
@@ -611,8 +611,8 @@ definition Iso.mk
   inv := ofHom e.symm
 
 中文:
-定义 Iso.mk
-  签名: {α β : Frm.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : 框架.{u}} (e : α ≃o β)
   定义体: ofHom e
   inv := ofHom e.symm
 -/

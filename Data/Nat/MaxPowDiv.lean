@@ -85,7 +85,7 @@ definition _root_.padicValNat
   body: (maxPowDvdDiv p n).fst
 
 中文:
-定义 _root_.padicValNat
+定义 _root_.padicVal自然数
   签名: (p n : 自然数)
   定义体: (maxPowDvdDiv p n).fst
 
@@ -221,7 +221,7 @@ theorem _root_.padicValNat_zero_left
 @[simp]
 
 中文:
-定理 _root_.padicValNat_zero_left
+定理 _root_.padicVal自然数_zero_left
   条件: (n : 自然数)
   结论: padicVal自然数 0 n = 0
   证明: by simp [padicValNat]
@@ -294,7 +294,7 @@ theorem _root_.padicValNat_one_left
 @[simp]
 
 中文:
-定理 _root_.padicValNat_one_left
+定理 _root_.padicVal自然数_one_left
   条件: (n : 自然数)
   结论: padicVal自然数 1 n = 0
   证明: by simp [padicValNat]
@@ -366,7 +366,7 @@ theorem _root_.padicValNat_zero_right
 @[simp]
 
 中文:
-定理 _root_.padicValNat_zero_right
+定理 _root_.padicVal自然数_zero_right
   条件: (p : 自然数)
   结论: padicVal自然数 p 0 = 0
   证明: by simp [padicValNat]
@@ -469,7 +469,7 @@ theorem _root_.padicValNat_one_right
 @[simp]
 
 中文:
-定理 _root_.padicValNat_one_right
+定理 _root_.padicVal自然数_one_right
   条件: (p : 自然数)
   结论: padicVal自然数 p 1 = 0
   证明: by simp [padicValNat]
@@ -518,7 +518,7 @@ theorem divMaxPow_mul_pow_padicValNat
 @[simp]
 
 中文:
-定理 divMaxPow_mul_pow_padicValNat
+定理 divMaxPow_mul_pow_padicVal自然数
   条件: (p n : 自然数)
   结论: divMaxPow n p * p ^ padicVal自然数 p n = n
   证明: by
@@ -549,7 +549,7 @@ theorem pow_padicValNat_mul_divMaxPow
   rw [Nat.mul_comm]; rw [divMaxPow_mul_pow_padicValNat]
 
 中文:
-定理 pow_padicValNat_mul_divMaxPow
+定理 pow_padicVal自然数_mul_divMaxPow
   条件: (p n : 自然数)
   结论: p ^ padicVal自然数 p n * divMaxPow n p = n
   证明: by
@@ -570,7 +570,7 @@ theorem _root_.pow_padicValNat_dvd
   proof: ⟨divMaxPow n p, by simp⟩
 
 中文:
-定理 _root_.pow_padicValNat_dvd
+定理 _root_.pow_padicVal自然数_dvd
   条件: {p n : 自然数}
   结论: p ^ padicVal自然数 p n ∣ n
   证明: ⟨divMaxPow n p, by simp⟩
@@ -596,7 +596,7 @@ apply Nat.lt_of_le_of_lt ?_ Nat.lt_pow_self by lia
     exact le_of_dvd (Nat.pos_of_ne_zero hn) pow_padicValNat_dvd
 
 中文:
-定理 padicValNat_lt_self
+定理 padicVal自然数_lt_self
   条件: {p n : 自然数} (hn : n != 0)
   结论: padicVal自然数 p n < n
   证明: by
@@ -630,7 +630,7 @@ theorem padicValNat_le_self
 · exact Nat.le_of_lt padicValNat_lt_self hn
 
 中文:
-定理 padicValNat_le_self
+定理 padicVal自然数_le_self
   条件: {p : 自然数} (n : 自然数)
   结论: padicVal自然数 p n <= n
   证明: by
@@ -720,7 +720,7 @@ theorem pow_dvd_iff_le_padicValNat
       (not_dvd_divMaxPow hp₁ hn)
 
 中文:
-定理 pow_dvd_iff_le_padicValNat
+定理 pow_dvd_iff_le_padicVal自然数
   条件: {p k n : 自然数} (hp : p != 1) (hn : n != 0)
   证明: by
   obtain rfl | hp₁ : p = 0 ∨ 1 < p := by grind
@@ -830,7 +830,7 @@ theorem _root_.padicValNat_base_pow_mul
 @[simp]
 
 中文:
-定理 _root_.padicValNat_base_pow_mul
+定理 _root_.padicVal自然数_base_pow_mul
   条件: {p n : 自然数} (hp : 1 < p) (hn : n != 0) (k : 自然数)
   证明: by
   simp [padicValNat, *]
@@ -914,7 +914,7 @@ theorem _root_.padicValNat_base_mul
 @[simp]
 
 中文:
-定理 _root_.padicValNat_base_mul
+定理 _root_.padicVal自然数_base_mul
   条件: {p n : 自然数} (hp : 1 < p) (hn : n != 0)
   证明: by
   simp [padicValNat, *]
@@ -994,7 +994,7 @@ theorem _root_.padicValNat_base_pow
 @[simp]
 
 中文:
-定理 _root_.padicValNat_base_pow
+定理 _root_.padicVal自然数_base_pow
   条件: {p : 自然数} (hp : 1 < p) (k : 自然数)
   结论: padicVal自然数 p (p ^ k) = k
   证明: by
@@ -1075,7 +1075,7 @@ theorem _root_.padicValNat_base
 @[simp]
 
 中文:
-定理 _root_.padicValNat_base
+定理 _root_.padicVal自然数_base
   条件: {p : 自然数} (hp : 1 < p)
   结论: padicVal自然数 p p = 1
   证明: by

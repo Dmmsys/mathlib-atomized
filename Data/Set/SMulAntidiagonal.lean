@@ -46,7 +46,7 @@ definition smulAntidiagonal
 
 中文:
 定义 smulAntidiagonal
-  签名: (s : Set G) (t : Set P) (a : P)
+  签名: (s : 集合 G) (t : 集合 P) (a : P)
   定义体: { x | x.1 in s ∧ x.2 in t ∧ x.1 • x.2 = a }
 
 @[to_additive (attr := simp)]
@@ -150,7 +150,7 @@ theorem fst_eq_fst_iff_snd_eq_snd
 
 中文:
 定理 fst_eq_fst_iff_snd_eq_snd
-  条件: [IsCancelSMul G P]
+  条件: [是消去标量乘法 G P]
   证明: ⟨fun h =>
     IsCancelSMul.left_cancel _ _ _
       (y.2.2.2.trans <| by
@@ -194,7 +194,7 @@ theorem eq_of_fst_eq_fst
 
 中文:
 定理 eq_of_fst_eq_fst
-  条件: [IsLeftCancelSMul G P] (h : (x : G × P).fst = (y : G × P).fst)
+  条件: [是左消去标量乘法 G P] (h : (x : G × P).fst = (y : G × P).fst)
   结论: x = y
   证明: Subtype.ext Prod.ext h IsLeftCancelSMul.left_cancel _ _ _
     (y.2.2.2.trans <| by rw [← h]; exact x.2.2.2.symm).symm
@@ -221,7 +221,7 @@ theorem finite_of_finite_fst
 
 中文:
 定理 finite_of_finite_fst
-  条件: [IsLeftCancelSMul G P] (hs : s.Finite) (t) (p : P)
+  条件: [是左消去标量乘法 G P] (hs : s.有限) (t) (p : P)
   证明: hs.of_injOn (fun _ ⟨h, _⟩ => h) fun _ _ _ _ _ => by
     grind only [mem_smulAntidiagonal, IsLeftCancelSMul.left_cancel]
 
@@ -246,7 +246,7 @@ theorem eq_of_snd_eq_snd
 
 中文:
 定理 eq_of_snd_eq_snd
-  条件: [IsCancelSMul G P] (h : (x : G × P).snd = (y : G × P).snd)
+  条件: [是消去标量乘法 G P] (h : (x : G × P).snd = (y : G × P).snd)
   结论: x = y
   证明: Subtype.ext Prod.ext (fst_eq_fst_iff_snd_eq_snd.2 h) h
 
@@ -311,7 +311,7 @@ theorem finite_of_isPWO
 中文:
 定理 finite_of_isPWO
   条件: (hs : s.IsPWO) (ht : t.IsPWO) (a)
-  结论: (smulAntidiagonal s t a).Finite
+  结论: (smulAntidiagonal s t a).有限
   证明: by
   by_contra! h
   have h1 : (smulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=

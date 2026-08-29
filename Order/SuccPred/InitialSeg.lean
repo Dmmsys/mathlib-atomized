@@ -80,7 +80,7 @@ theorem map_succ
 
 中文:
 定理 map_succ
-  条件: [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <=i β) (a : α)
+  条件: [Succ序 α] [NoMax序 α] [Succ序 β] (f : α <=i β) (a : α)
   证明: (f.apply_covBy_apply_iff.2 (covBy_succ a)).succ_eq.symm
 
 Depends on / 依赖: apply_covBy_apply_iff, covBy_succ, f.apply_covBy_apply_iff, succ_eq, succ_eq.symm
@@ -101,7 +101,7 @@ theorem map_pred
 
 中文:
 定理 map_pred
-  条件: [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α)
+  条件: [Pred序 α] [NoMin序 α] [Pred序 β] (f : α <=i β) (a : α)
   证明: (f.apply_covBy_apply_iff.2 (pred_covBy a)).pred_eq.symm
 
 @[simp]
@@ -171,7 +171,7 @@ alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
 中文:
 定理 isSuccLimit_apply_iff
   条件: (f : α <=i β)
-  结论: IsSuccLimit (f a) ↔ IsSuccLimit a
+  结论: 是SuccLimit (f a) ↔ 是SuccLimit a
   证明: by
   simp [isSuccLimit_iff]
 
@@ -246,7 +246,7 @@ theorem map_succ
 
 中文:
 定理 map_succ
-  条件: [SuccOrder α] [NoMaxOrder α] [SuccOrder β] (f : α <i β) (a : α)
+  条件: [Succ序 α] [NoMax序 α] [Succ序 β] (f : α <i β) (a : α)
   证明: (f : α <=i β).map_succ a
 
 Depends on / 依赖: map_succ
@@ -267,7 +267,7 @@ theorem map_pred
 
 中文:
 定理 map_pred
-  条件: [PredOrder α] [NoMinOrder α] [PredOrder β] (f : α <=i β) (a : α)
+  条件: [Pred序 α] [NoMin序 α] [Pred序 β] (f : α <=i β) (a : α)
   证明: (f : α <=i β).map_pred a
 
 @[simp]
@@ -319,7 +319,7 @@ alias ⟨_, map_isSuccLimit⟩ := isSuccLimit_apply_iff
 中文:
 定理 isSuccLimit_apply_iff
   条件: (f : α <i β)
-  结论: IsSuccLimit (f a) ↔ IsSuccLimit a
+  结论: 是SuccLimit (f a) ↔ 是SuccLimit a
   证明: (f : α <=i β).isSuccLimit_apply_iff
 
 alias ⟨_, map_isSuccPrelimit⟩ := isSuccPrelimit_apply_iff

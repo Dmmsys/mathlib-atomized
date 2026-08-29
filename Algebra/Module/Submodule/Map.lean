@@ -66,7 +66,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   定义体: { p.toAddSubmonoid.map f with
     carrier := f '' p
     smul_mem' := by
@@ -98,8 +98,8 @@ theorem map_coe
 
 中文:
 定理 map_coe
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
-  结论: (map f p : Set M₂) = f '' p
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
+  结论: (map f p : 集合 M₂) = f '' p
   证明: rfl
 -/
 theorem map_coe (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M) : (map f p : Set M₂) = f '' p :=
@@ -115,7 +115,7 @@ theorem map_toAddSubmonoid
 
 中文:
 定理 map_toAddSubmonoid
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   证明: SetLike.coe_injective rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -136,7 +136,7 @@ theorem map_toAddSubmonoid'
 
 中文:
 定理 map_toAddSubmonoid'
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -159,8 +159,8 @@ theorem _root_.AddMonoidHom.coe_toIntLinearMap_map
 @[simp]
 
 中文:
-定理 _root_.AddMonoidHom.coe_toIntLinearMap_map
-  结论: {A A₂ : 类型} [AddCommGroup A] [AddCommGroup A₂]
+定理 _root_.加法幺半群态射.coe_to整数LinearMap_map
+  结论: {A A₂ : 类型} [加法交换群 A] [加法交换群 A₂]
   证明: rfl
 
 @[simp]
@@ -182,8 +182,8 @@ theorem _root_.MonoidHom.coe_toAdditive_map
 @[simp]
 
 中文:
-定理 _root_.MonoidHom.coe_toAdditive_map
-  结论: {G G₂ : 类型} [Group G] [Group G₂] (f : G ->* G₂)
+定理 _root_.幺半群态射.coe_toAdditive_map
+  结论: {G G₂ : 类型} [群 G] [群 G₂] (f : G ->* G₂)
   证明: rfl
 
 @[simp]
@@ -204,8 +204,8 @@ theorem _root_.AddMonoidHom.coe_toMultiplicative_map
 @[simp]
 
 中文:
-定理 _root_.AddMonoidHom.coe_toMultiplicative_map
-  结论: {G G₂ : 类型} [AddGroup G] [AddGroup G₂]
+定理 _root_.加法幺半群态射.coe_toMultiplicative_map
+  结论: {G G₂ : 类型} [加法群 G] [加法群 G₂]
   证明: rfl
 
 @[simp]
@@ -225,7 +225,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {x : M₂}
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {x : M₂}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -245,7 +245,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {r} (h : r in p)
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {r} (h : r in p)
   结论: f r in map f p
   证明: Set.mem_image_of_mem _ h
 
@@ -267,7 +267,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M} (r : p)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p : 子模 R M} (r : p)
   结论: f r in map f p
   证明: mem_map_of_mem r.prop
 
@@ -289,7 +289,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (LinearMap.id : M ->ₗ[R] M) p = p
+  结论: map (线性映射.id : M ->ₗ[R] M) p = p
   证明: Submodule.ext fun a => by simp
 
 Depends on / 依赖: Submodule, Submodule.ext
@@ -334,7 +334,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p p' : Submodule R M}
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p p' : 子模 R M}
   结论: p <= p' -> map f p <= map f p'
   证明: image_mono
 
@@ -400,7 +400,7 @@ theorem map_inf_le
 
 中文:
 定理 map_inf_le
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p q : Submodule R M}
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p q : 子模 R M}
   证明: image_inter_subset f p q
 
 Depends on / 依赖: image_inter_subset
@@ -419,7 +419,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p q : Submodule R M} (hf : Injective f)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) {p q : 子模 R M} (hf : 单射 f)
   证明: SetLike.coe_injective Set.image_inter hf
 
 Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_injective, coe_injective, image_inter
@@ -438,7 +438,7 @@ lemma map_iInf
 
 中文:
 引理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] {p : ι -> Submodule R M} (f : M ->ₛₗ[σ₁₂] M₂)
+  结论: {ι : 类型层*} [非空 ι] {p : ι -> 子模 R M} (f : M ->ₛₗ[σ₁₂] M₂)
   证明: SetLike.coe_injective by simpa only [map_coe, coe_iInf] using hf.injOn.image_iInter_eq
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_iInf, coe_injective, hf.injOn.image_iInter_eq, image_iInter_eq, map_coe
@@ -457,7 +457,7 @@ theorem range_map_nonempty
 
 中文:
 定理 range_map_nonempty
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   证明: ⟨_, Set.mem_range.mpr ⟨0, rfl⟩⟩
 
 Depends on / 依赖: Set.mem_range.mpr, mem_range
@@ -490,7 +490,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (i : Injective f) (p : Submodule R M)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (i : 单射 f) (p : 子模 R M)
   定义体: { Equiv.Set.image f p i with
     map_add' := by
       intros
@@ -529,7 +529,7 @@ theorem coe_equivMapOfInjective_apply
 
 中文:
 定理 coe_equivMapOfInjective_apply
-  结论: (f : M ->ₛₗ[σ₁₂] M₂) (i : Injective f) (p : Submodule R M)
+  结论: (f : M ->ₛₗ[σ₁₂] M₂) (i : 单射 f) (p : 子模 R M)
   证明: rfl
 
 @[simp]
@@ -550,7 +550,7 @@ theorem map_equivMapOfInjective_symm_apply
 
 中文:
 定理 map_equivMapOfInjective_symm_apply
-  结论: (f : M ->ₛₗ[σ₁₂] M₂) (i : Injective f) (p : Submodule R M)
+  结论: (f : M ->ₛₗ[σ₁₂] M₂) (i : 单射 f) (p : 子模 R M)
   证明: by
   rw [← LinearEquiv.apply_symm_apply (equivMapOfInjective f i p) x]; rw [coe_equivMapOfInjective_apply]; rw [i.eq_iff]; rw [LinearEquiv.apply_symm_apply]
 
@@ -577,7 +577,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R₂ M₂)
   定义体: { p.toAddSubmonoid.comap f with
     carrier := f ⁻¹' p
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 added `map_smulₛₗ _`
@@ -607,8 +607,8 @@ theorem comap_coe
 
 中文:
 定理 comap_coe
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂)
-  结论: (comap f p : Set M) = f ⁻¹' p
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R₂ M₂)
+  结论: (comap f p : 集合 M) = f ⁻¹' p
   证明: rfl
 
 @[simp]
@@ -628,8 +628,8 @@ theorem AddMonoidHom.coe_toIntLinearMap_comap
 @[simp]
 
 中文:
-定理 AddMonoidHom.coe_toIntLinearMap_comap
-  结论: {A A₂ : 类型} [AddCommGroup A] [AddCommGroup A₂]
+定理 加法幺半群态射.coe_to整数LinearMap_comap
+  结论: {A A₂ : 类型} [加法交换群 A] [加法交换群 A₂]
   证明: rfl
 
 @[simp]
@@ -653,7 +653,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R₂ M₂}
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R₂ M₂}
   结论: x in comap f p ↔ f x in p
   证明: Iff.rfl
 
@@ -675,7 +675,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: comap (LinearMap.id : M ->ₗ[R] M) p = p
+  结论: comap (线性映射.id : M ->ₗ[R] M) p = p
   证明: SetLike.coe_injective rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -695,7 +695,7 @@ theorem comap_comp
 
 中文:
 定理 comap_comp
-  条件: (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : Submodule R₃ M₃)
+  条件: (f : M ->ₛₗ[σ₁₂] M₂) (g : M₂ ->ₛₗ[σ₂₃] M₃) (p : 子模 R₃ M₃)
   证明: rfl
 
 @[gcongr]
@@ -716,7 +716,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {q q' : Submodule R₂ M₂}
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {q q' : 子模 R₂ M₂}
   结论: q <= q' -> comap f q <= comap f q'
   证明: preimage_mono
 
@@ -738,7 +738,7 @@ theorem le_comap_pow_of_le_comap
 
 中文:
 定理 le_comap_pow_of_le_comap
-  结论: (p : Submodule R M) {f : M ->ₗ[R] M}
+  结论: (p : 子模 R M) {f : M ->ₗ[R] M}
   证明: by
   induction k with
   | zero => simp [Module.End.one_eq_id]
@@ -766,7 +766,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M} {q : Submodule R₂ M₂}
+  条件: {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: image_subset_iff
 
 Depends on / 依赖: image_subset_iff
@@ -852,7 +852,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : M ->ₛₗ[σ₁₂] M₂) (p : ι -> Submodule R M)
+  条件: {ι : 类型层*} (f : M ->ₛₗ[σ₁₂] M₂) (p : ι -> 子模 R M)
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).l_iSup
 
 Depends on / 依赖: GaloisConnection, gc_map_comap, l_iSup
@@ -872,7 +872,7 @@ lemma disjoint_map
 
 中文:
 引理 disjoint_map
-  结论: {f : M ->ₛₗ[σ₁₂] M₂} (hf : Function.Injective f) {p q : Submodule R M}
+  结论: {f : M ->ₛₗ[σ₁₂] M₂} (hf : 函数.单射 f) {p q : 子模 R M}
   证明: by
   rw [disjoint_iff]; rw [← map_inf f hf]; rw [disjoint_iff.mp hpq]; rw [map_bot]
 
@@ -945,7 +945,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  结论: {ι : Sort*} (f : M ->ₛₗ[σ₁₂] M₂)
+  结论: {ι : 类型层*} (f : M ->ₛₗ[σ₁₂] M₂)
   证明: by
   ext
   simp
@@ -1010,7 +1010,7 @@ theorem map_comap_le
 
 中文:
 定理 map_comap_le
-  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (q : Submodule R₂ M₂)
+  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (q : 子模 R₂ M₂)
   证明: (gc_map_comap f).l_u_le _
 
 Depends on / 依赖: gc_map_comap, l_u_le
@@ -1029,7 +1029,7 @@ theorem le_comap_map
 
 中文:
 定理 le_comap_map
-  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   证明: (gc_map_comap f).le_u_l _
 
 Depends on / 依赖: gc_map_comap, le_u_l
@@ -1050,7 +1050,7 @@ definition submoduleOf
 
 中文:
 定义 submoduleOf
-  签名: (p q : Submodule R M)
+  签名: (p q : 子模 R M)
   定义体: Submodule.comap q.subtype p
 
 Depends on / 依赖: Submodule, Submodule.comap, q.subtype, subtype
@@ -1071,7 +1071,7 @@ definition submoduleOfEquivOfLe
 
 中文:
 定义 submoduleOfEquivOfLe
-  签名: {p q : Submodule R M} (h : p <= q)
+  签名: {p q : 子模 R M} (h : p <= q)
   定义体: ⟨m.1, m.2⟩
   invFun m := ⟨⟨m.1, h m.2⟩, m.2⟩
   map_add' _ _ := rfl
@@ -1102,7 +1102,7 @@ definition giMapComap
 
 中文:
 定义 giMapComap
-  签名: (hf : Surjective f)
+  签名: (hf : 满射 f)
   定义体: (gc_map_comap f).toGaloisInsertion fun S x hx => by
     rcases hf x with ⟨y, rfl⟩
     simp only [mem_map, mem_comap]
@@ -1130,7 +1130,7 @@ theorem map_comap_eq_of_surjective
 
 中文:
 定理 map_comap_eq_of_surjective
-  条件: (p : Submodule R₂ M₂)
+  条件: (p : 子模 R₂ M₂)
   结论: (p.comap f).map f = p
   证明: (giMapComap hf).l_u_eq _
 
@@ -1149,7 +1149,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  结论: Function.Surjective (map f)
+  结论: 函数.满射 (map f)
   证明: (giMapComap hf).l_surjective
 
 Depends on / 依赖: giMapComap, l_surjective
@@ -1167,7 +1167,7 @@ theorem comap_injective_of_surjective
 
 中文:
 定理 comap_injective_of_surjective
-  结论: Function.Injective (comap f)
+  结论: 函数.单射 (comap f)
   证明: (giMapComap hf).u_injective
 
 Depends on / 依赖: giMapComap, u_injective
@@ -1185,7 +1185,7 @@ theorem map_sup_comap_of_surjective
 
 中文:
 定理 map_sup_comap_of_surjective
-  条件: (p q : Submodule R₂ M₂)
+  条件: (p q : 子模 R₂ M₂)
   证明: (giMapComap hf).l_sup_u _ _
 
 Depends on / 依赖: giMapComap, l_sup_u
@@ -1204,7 +1204,7 @@ theorem map_iSup_comap_of_surjective
 
 中文:
 定理 map_iSup_comap_of_surjective
-  条件: {ι : Sort*} (S : ι -> Submodule R₂ M₂)
+  条件: {ι : 类型层*} (S : ι -> 子模 R₂ M₂)
   证明: (giMapComap hf).l_iSup_u _
 
 Depends on / 依赖: giMapComap, l_iSup_u
@@ -1223,7 +1223,7 @@ theorem map_inf_comap_of_surjective
 
 中文:
 定理 map_inf_comap_of_surjective
-  条件: (p q : Submodule R₂ M₂)
+  条件: (p q : 子模 R₂ M₂)
   证明: (giMapComap hf).l_inf_u _ _
 
 Depends on / 依赖: giMapComap, l_inf_u
@@ -1242,7 +1242,7 @@ theorem map_iInf_comap_of_surjective
 
 中文:
 定理 map_iInf_comap_of_surjective
-  条件: {ι : Sort*} (S : ι -> Submodule R₂ M₂)
+  条件: {ι : 类型层*} (S : ι -> 子模 R₂ M₂)
   证明: (giMapComap hf).l_iInf_u _
 
 Depends on / 依赖: giMapComap, l_iInf_u
@@ -1262,7 +1262,7 @@ theorem comap_le_comap_iff_of_surjective
 
 中文:
 定理 comap_le_comap_iff_of_surjective
-  条件: {p q : Submodule R₂ M₂}
+  条件: {p q : 子模 R₂ M₂}
   结论: p.comap f <= q.comap f ↔ p <= q
   证明: (giMapComap hf).u_le_u_iff
 
@@ -1283,7 +1283,7 @@ lemma comap_lt_comap_iff_of_surjective
 
 中文:
 引理 comap_lt_comap_iff_of_surjective
-  条件: {p q : Submodule R₂ M₂}
+  条件: {p q : 子模 R₂ M₂}
   结论: p.comap f < q.comap f ↔ p < q
   证明: by
   apply lt_iff_lt_of_le_iff_le' <;> exact comap_le_comap_iff_of_surjective hf
@@ -1303,7 +1303,7 @@ theorem comap_strictMono_of_surjective
 
 中文:
 定理 comap_strictMono_of_surjective
-  结论: StrictMono (comap f)
+  结论: 严格递增 (comap f)
   证明: (giMapComap hf).strictMono_u
 
 Depends on / 依赖: giMapComap, strictMono_u
@@ -1378,7 +1378,7 @@ definition gciMapComap
 
 中文:
 定义 gciMapComap
-  签名: (hf : Injective f)
+  签名: (hf : 单射 f)
   定义体: (gc_map_comap f).toGaloisCoinsertion fun S x => by
     simp only [mem_comap, mem_map, forall_exists_index, and_imp]
     intro y hy hxy
@@ -1408,7 +1408,7 @@ theorem comap_map_eq_of_injective
 
 中文:
 定理 comap_map_eq_of_injective
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: (p.map f).comap f = p
   证明: (gciMapComap hf).u_l_eq _
 
@@ -1427,7 +1427,7 @@ theorem comap_surjective_of_injective
 
 中文:
 定理 comap_surjective_of_injective
-  结论: Function.Surjective (comap f)
+  结论: 函数.满射 (comap f)
   证明: (gciMapComap hf).u_surjective
 
 Depends on / 依赖: gciMapComap, u_surjective
@@ -1445,7 +1445,7 @@ theorem map_injective_of_injective
 
 中文:
 定理 map_injective_of_injective
-  结论: Function.Injective (map f)
+  结论: 函数.单射 (map f)
   证明: (gciMapComap hf).l_injective
 
 Depends on / 依赖: gciMapComap, l_injective
@@ -1464,7 +1464,7 @@ theorem comap_inf_map_of_injective
 
 中文:
 定理 comap_inf_map_of_injective
-  条件: (p q : Submodule R M)
+  条件: (p q : 子模 R M)
   结论: (p.map f ⊓ q.map f).comap f = p ⊓ q
   证明: (gciMapComap hf).u_inf_l _ _
 
@@ -1483,7 +1483,7 @@ theorem comap_iInf_map_of_injective
 
 中文:
 定理 comap_iInf_map_of_injective
-  条件: {ι : Sort*} (S : ι -> Submodule R M)
+  条件: {ι : 类型层*} (S : ι -> 子模 R M)
   证明: (gciMapComap hf).u_iInf_l _
 
 Depends on / 依赖: gciMapComap, u_iInf_l
@@ -1503,7 +1503,7 @@ theorem comap_sup_map_of_injective
 
 中文:
 定理 comap_sup_map_of_injective
-  条件: (p q : Submodule R M)
+  条件: (p q : 子模 R M)
   结论: (p.map f ⊔ q.map f).comap f = p ⊔ q
   证明: (gciMapComap hf).u_sup_l _ _
 
@@ -1522,7 +1522,7 @@ theorem comap_iSup_map_of_injective
 
 中文:
 定理 comap_iSup_map_of_injective
-  条件: {ι : Sort*} (S : ι -> Submodule R M)
+  条件: {ι : 类型层*} (S : ι -> 子模 R M)
   证明: (gciMapComap hf).u_iSup_l _
 
 Depends on / 依赖: algebra_map, gciMapComap, u_iSup_l
@@ -1542,7 +1542,7 @@ theorem map_le_map_iff_of_injective
 
 中文:
 定理 map_le_map_iff_of_injective
-  条件: (p q : Submodule R M)
+  条件: (p q : 子模 R M)
   结论: p.map f <= q.map f ↔ p <= q
   证明: (gciMapComap hf).l_le_l_iff
 
@@ -1561,7 +1561,7 @@ theorem map_strictMono_of_injective
 
 中文:
 定理 map_strictMono_of_injective
-  结论: StrictMono (map f)
+  结论: 严格递增 (map f)
   证明: (gciMapComap hf).strictMono_l
 
 Depends on / 依赖: gciMapComap, strictMono_l
@@ -1580,7 +1580,7 @@ lemma map_lt_map_iff_of_injective
 
 中文:
 引理 map_lt_map_iff_of_injective
-  条件: {p q : Submodule R M}
+  条件: {p q : 子模 R M}
   证明: by
   rw [lt_iff_le_and_ne]; rw [lt_iff_le_and_ne]; rw [map_le_map_iff_of_injective hf]; rw [(map_injective_of_injective hf).ne_iff]
 
@@ -1602,7 +1602,7 @@ lemma comap_lt_of_lt_map_of_injective
 
 中文:
 引理 comap_lt_of_lt_map_of_injective
-  结论: {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: by
   rw [← map_lt_map_iff_of_injective hf]
   exact (map_comap_le _ _).trans_lt h
@@ -1630,7 +1630,7 @@ lemma map_covBy_of_injective
 
 中文:
 引理 map_covBy_of_injective
-  条件: {p q : Submodule R M} (h : p ⋖ q)
+  条件: {p q : 子模 R M} (h : p ⋖ q)
   证明: by
   refine ⟨lt_of_le_of_ne (map_mono h.1.le) ((map_injective_of_injective hf).ne h.1.ne), ?_⟩
   intro P h₁ h₂
@@ -1674,7 +1674,7 @@ definition orderIsoMapComapOfBijective
 
 中文:
 定义 orderIsoMapComapOfBijective
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (hf : Bijective f)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (hf : 双射 f)
   定义体: map f
   invFun := comap f
   left_inv := comap_map_eq_of_injective hf.injective
@@ -1726,7 +1726,7 @@ lemma orderIsoMapComap_symm_apply
 
 中文:
 引理 orderIsoMapComap_symm_apply
-  条件: (f : M ≃ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂)
+  条件: (f : M ≃ₛₗ[σ₁₂] M₂) (p : 子模 R₂ M₂)
   证明: rfl
 -/
 lemma orderIsoMapComap_symm_apply (f : M ≃ₛₗ[σ₁₂] M₂) (p : Submodule R₂ M₂) :
@@ -1813,7 +1813,7 @@ theorem map_inf_eq_map_inf_comap
 
 中文:
 定理 map_inf_eq_map_inf_comap
-  结论: [RingHomSurjective σ₁₂] {f : M ->ₛₗ[σ₁₂] M₂} {p : Submodule R M}
+  结论: [RingHomSurjective σ₁₂] {f : M ->ₛₗ[σ₁₂] M₂} {p : 子模 R M}
   证明: .symm SetLike.coe_injective image_inter_preimage _ _ _
 
 @[simp]
@@ -1850,7 +1850,7 @@ theorem eq_zero_of_bot_submodule
 
 中文:
 定理 eq_zero_of_bot_submodule
-  结论: 对任意 b : (⊥ : Submodule R M), b = 0
+  结论: 对任意 b : (⊥ : 子模 R M), b = 0
 -/
 theorem eq_zero_of_bot_submodule : forall b : (⊥ : Submodule R M), b = 0
 | ⟨b', hb⟩ => Subtype.ext show b' = 0 from (mem_bot R).1 hb
@@ -1866,8 +1866,8 @@ theorem _root_.LinearMap.iInf_invariant
   exact fun v a i => hf i v (a i)
 
 中文:
-定理 _root_.LinearMap.iInf_invariant
-  结论: {σ : R ->+* R} {ι : Sort*}
+定理 _root_.线性映射.iInf_invariant
+  结论: {σ : R ->+* R} {ι : 类型层*}
   证明: by
   simp only [mem_iInf]
   exact fun v a i => hf i v (a i)
@@ -1892,7 +1892,7 @@ theorem disjoint_iff_comap_eq_bot
 
 中文:
 定理 disjoint_iff_comap_eq_bot
-  条件: {p q : Submodule R M}
+  条件: {p q : 子模 R M}
   结论: Disjoint p q ↔ comap p.subtype q = ⊥
   证明: by
   rw [← (map_injective_of_injective (show Injective p.subtype from Subtype.coe_injective)).eq_iff]; rw [map_comap_subtype]; rw [map_bot]; rw [disjoint_iff]
@@ -1950,7 +1950,7 @@ lemma comap_neg
 
 中文:
 引理 comap_neg
-  条件: {f : M ->ₗ[R] M₂} {p : Submodule R M₂}
+  条件: {f : M ->ₗ[R] M₂} {p : 子模 R M₂}
   证明: by
   ext; simp
 -/
@@ -1968,7 +1968,7 @@ lemma map_toAddSubgroup
 
 中文:
 引理 map_toAddSubgroup
-  条件: (f : M ->ₗ[R] M₂) (p : Submodule R M)
+  条件: (f : M ->ₗ[R] M₂) (p : 子模 R M)
   证明: rfl
 -/
 lemma map_toAddSubgroup (f : M ->ₗ[R] M₂) (p : Submodule R M) :
@@ -1997,7 +1997,7 @@ theorem comap_smul
 
 中文:
 定理 comap_smul
-  条件: (f : V ->ₗ[K] V₂) (p : Submodule K V₂) (a : K) (h : a != 0)
+  条件: (f : V ->ₗ[K] V₂) (p : 子模 K V₂) (a : K) (h : a != 0)
   证明: by
   ext b; simp only [Submodule.mem_comap, p.smul_mem_iff h, LinearMap.smul_apply]
 
@@ -2018,7 +2018,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: (f : V ->ₗ[K] V₂) (p : Submodule K V) (a : K) (h : a != 0)
+  条件: (f : V ->ₗ[K] V₂) (p : 子模 K V) (a : K) (h : a != 0)
   证明: le_antisymm (by rw [map_le_iff_le_comap, comap_smul f _ a h, ← map_le_iff_le_comap])
     (by rw [map_le_iff_le_comap, ← comap_smul f _ a h, ← map_le_iff_le_comap])
 -/
@@ -2038,7 +2038,7 @@ theorem comap_smul'
 
 中文:
 定理 comap_smul'
-  条件: (f : V ->ₗ[K] V₂) (p : Submodule K V₂) (a : K)
+  条件: (f : V ->ₗ[K] V₂) (p : 子模 K V₂) (a : K)
   证明: by
   by_cases h : a = 0 <;> simp [h, comap_smul]
 
@@ -2059,7 +2059,7 @@ theorem map_smul'
 
 中文:
 定理 map_smul'
-  条件: (f : V ->ₗ[K] V₂) (p : Submodule K V) (a : K)
+  条件: (f : V ->ₗ[K] V₂) (p : 子模 K V) (a : K)
   证明: by
   by_cases h : a = 0 <;> simp [h, Submodule.map_smul]
 
@@ -2095,7 +2095,7 @@ definition comapSubtypeEquivOfLe
 
 中文:
 定义 comapSubtypeEquivOfLe
-  签名: {p q : Submodule R M} (hpq : p <= q)
+  签名: {p q : 子模 R M} (hpq : p <= q)
   定义体: ⟨x, x.2⟩
   invFun x := ⟨⟨x, hpq x.2⟩, x.2⟩
   left_inv x := by simp
@@ -2167,7 +2167,7 @@ theorem map_equiv_eq_comap_symm
 
 中文:
 定理 map_equiv_eq_comap_symm
-  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (K : Submodule R M)
+  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (K : 子模 R M)
   证明: Submodule.ext fun _ => by rw [mem_map_equiv, mem_comap, LinearEquiv.coe_coe]
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_coe, Submodule, Submodule.ext, coe_coe, mem_comap, mem_map_equiv
@@ -2186,7 +2186,7 @@ theorem comap_equiv_eq_map_symm
 
 中文:
 定理 comap_equiv_eq_map_symm
-  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (K : Submodule R₂ M₂)
+  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (K : 子模 R₂ M₂)
   证明: (map_equiv_eq_comap_symm e.symm K).symm
 
 Depends on / 依赖: e.symm, map_equiv_eq_comap_symm
@@ -2209,7 +2209,7 @@ theorem map_symm_eq_iff
 
 中文:
 定理 map_symm_eq_iff
-  条件: (e : M ≃ₛₗ[τ₁₂] M₂) {K : Submodule R₂ M₂}
+  条件: (e : M ≃ₛₗ[τ₁₂] M₂) {K : 子模 R₂ M₂}
   证明: by
   rw [map_equiv_eq_comap_symm]
   exact (orderIsoMapComap e).symm_apply_eq.trans eq_comm
@@ -2231,7 +2231,7 @@ theorem orderIsoMapComap_apply'
 
 中文:
 定理 orderIsoMapComap_apply'
-  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (p : Submodule R M)
+  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (p : 子模 R M)
   证明: p.map_equiv_eq_comap_symm _
 
 Depends on / 依赖: map_equiv_eq_comap_symm, p.map_equiv_eq_comap_symm
@@ -2250,7 +2250,7 @@ theorem orderIsoMapComap_symm_apply'
 
 中文:
 定理 orderIsoMapComap_symm_apply'
-  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (p : Submodule R₂ M₂)
+  条件: (e : M ≃ₛₗ[τ₁₂] M₂) (p : 子模 R₂ M₂)
   证明: p.comap_equiv_eq_map_symm _
 
 Depends on / 依赖: comap_equiv_eq_map_symm, p.comap_equiv_eq_map_symm
@@ -2293,7 +2293,7 @@ lemma surjOn_iff_le_map
 
 中文:
 引理 surjOn_iff_le_map
-  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : Submodule R M}
+  结论: [RingHomSurjective τ₁₂] {f : M ->ₛₗ[τ₁₂] M₂} {p : 子模 R M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2378,7 +2378,7 @@ definition compatibleMaps
 
 中文:
 定义 compatibleMaps
-  签名: : Submodule S (N ->ₗ[S] N₂) where
+  签名: : 子模 S (N ->ₗ[S] N₂) where
   定义体: { fₗ | pₗ <= comap fₗ qₗ }
   zero_mem' := by simp
   add_mem' {f₁ f₂} h₁ h₂ := by
@@ -2423,7 +2423,7 @@ definition submoduleComap
 
 中文:
 定义 submoduleComap
-  签名: (f : M ->ₛₗ[σ₁₂] M₂) (q : Submodule R₂ M₂)
+  签名: (f : M ->ₛₗ[σ₁₂] M₂) (q : 子模 R₂ M₂)
   定义体: f.restrict fun _ => Submodule.mem_comap.1
 
 Depends on / 依赖: Submodule, Submodule.mem_comap, f.restrict, mem_comap, restrict
@@ -2445,7 +2445,7 @@ theorem submoduleComap_surjective_of_surjective
 
 中文:
 定理 submoduleComap_surjective_of_surjective
-  结论: (f : M ->ₛₗ[σ₁₂] M₂) (q : Submodule R₂ M₂)
+  结论: (f : M ->ₛₗ[σ₁₂] M₂) (q : 子模 R₂ M₂)
   证明: fun y => by
   obtain ⟨x, hx⟩ := hf y
   use ⟨x, Submodule.mem_comap.mpr (hx ▸ y.2)⟩
@@ -2473,7 +2473,7 @@ definition submoduleMap
 
 中文:
 定义 submoduleMap
-  签名: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  签名: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   定义体: f.restrict fun x hx => Submodule.mem_map.mpr ⟨x, hx, rfl⟩
 
 @[simp]
@@ -2495,7 +2495,7 @@ theorem submoduleMap_coe_apply
 
 中文:
 定理 submoduleMap_coe_apply
-  结论: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M}
+  结论: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) {p : 子模 R M}
   证明: rfl
 -/
 theorem submoduleMap_coe_apply [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) {p : Submodule R M}
@@ -2513,7 +2513,7 @@ theorem submoduleMap_surjective
 
 中文:
 定理 submoduleMap_surjective
-  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : Submodule R M)
+  条件: [RingHomSurjective σ₁₂] (f : M ->ₛₗ[σ₁₂] M₂) (p : 子模 R M)
   证明: f.toAddMonoidHom.addSubmonoidMap_surjective _
 
 @[grind inj]
@@ -2534,7 +2534,7 @@ theorem submoduleMap_injective
 
 中文:
 定理 submoduleMap_injective
-  结论: [RingHomSurjective σ₁₂] {f : M ->ₛₗ[σ₁₂] M₂} (hf : Injective f)
+  结论: [RingHomSurjective σ₁₂] {f : M ->ₛₗ[σ₁₂] M₂} (hf : 单射 f)
   证明: f.toAddMonoidHom.addSubmonoidMap_injective hf _
 
 Depends on / 依赖: addSubmonoidMap_injective, f.toAddMonoidHom.addSubmonoidMap_injective, toAddMonoidHom
@@ -2583,7 +2583,7 @@ theorem map_codRestrict
 
 中文:
 定理 map_codRestrict
-  条件: [RingHomSurjective σ₂₁] (p : Submodule R M) (f : M₂ ->ₛₗ[σ₂₁] M) (h p')
+  条件: [RingHomSurjective σ₂₁] (p : 子模 R M) (f : M₂ ->ₛₗ[σ₂₁] M) (h p')
   证明: Submodule.ext fun ⟨x, hx⟩ => by simp [Subtype.ext_iff]
 
 Depends on / 依赖: Submodule, Submodule.ext, Subtype, Subtype.ext_iff, ext_iff
@@ -2602,7 +2602,7 @@ theorem comap_codRestrict
 
 中文:
 定理 comap_codRestrict
-  条件: (p : Submodule R M) (f : M₂ ->ₛₗ[σ₂₁] M) (hf p')
+  条件: (p : 子模 R M) (f : M₂ ->ₛₗ[σ₂₁] M) (hf p')
   证明: Submodule.ext fun x => ⟨fun h => ⟨⟨_, hf x⟩, h, rfl⟩, by rintro ⟨⟨_, _⟩, h, ⟨⟩⟩; exact h⟩
 
 Depends on / 依赖: Submodule, Submodule.ext
@@ -2621,7 +2621,7 @@ theorem map_domRestrict
 
 中文:
 定理 map_domRestrict
-  条件: [RingHomSurjective σ₂₁] (p : Submodule R₂ M₂) (f : M₂ ->ₛₗ[σ₂₁] M) (p')
+  条件: [RingHomSurjective σ₂₁] (p : 子模 R₂ M₂) (f : M₂ ->ₛₗ[σ₂₁] M) (p')
   证明: map_comp p.subtype f p'
 
 Depends on / 依赖: map_comp, p.subtype, subtype
@@ -2640,7 +2640,7 @@ theorem comap_domRestrict
 
 中文:
 定理 comap_domRestrict
-  条件: (p : Submodule R₂ M₂) (f : M₂ ->ₛₗ[σ₂₁] M) (p')
+  条件: (p : 子模 R₂ M₂) (f : M₂ ->ₛₗ[σ₂₁] M) (p')
   证明: comap_comp p.subtype f p'
 
 Depends on / 依赖: comap_comp, p.subtype, subtype
@@ -2661,7 +2661,7 @@ theorem map_restrict
 
 中文:
 定理 map_restrict
-  结论: [RingHomSurjective σ₂₁] {p : Submodule R₂ M₂} {q : Submodule R M}
+  结论: [RingHomSurjective σ₂₁] {p : 子模 R₂ M₂} {q : 子模 R M}
   证明: by
   rw [restrict_eq_codRestrict_domRestrict]; rw [map_codRestrict]; rw [map_domRestrict]
 
@@ -2684,7 +2684,7 @@ theorem comap_restrict
 
 中文:
 定理 comap_restrict
-  结论: {p : Submodule R₂ M₂} {q : Submodule R M} {f : M₂ ->ₛₗ[σ₂₁] M}
+  结论: {p : 子模 R₂ M₂} {q : 子模 R M} {f : M₂ ->ₛₗ[σ₂₁] M}
   证明: by
   rw [restrict_eq_codRestrict_domRestrict]; rw [comap_codRestrict]; rw [comap_domRestrict]
 
@@ -2729,7 +2729,7 @@ definition submoduleMap
 
 中文:
 定义 submoduleMap
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: { ((e : M ->ₛₗ[σ₁₂] M₂).domRestrict p).codRestrict (p.map (e : M ->ₛₗ[σ₁₂] M₂)) fun x =>
       ⟨x, by
         simp only [LinearMap.domRestrict_apply, and_true, SetLike.coe_mem,
@@ -2774,7 +2774,7 @@ theorem submoduleMap_apply
 
 中文:
 定理 submoduleMap_apply
-  条件: (p : Submodule R M) (x : p)
+  条件: (p : 子模 R M) (x : p)
   结论: ↑(e.submoduleMap p x) = e x
   证明: rfl
 
@@ -2794,7 +2794,7 @@ theorem submoduleMap_symm_apply
 
 中文:
 定理 submoduleMap_symm_apply
-  结论: (p : Submodule R M)
+  结论: (p : 子模 R M)
   证明: rfl
 -/
 theorem submoduleMap_symm_apply (p : Submodule R M)

@@ -60,8 +60,8 @@ lemma Module.FaithfullyFlat.of_comap_surjective
 fun
 
 中文:
-引理 Module.FaithfullyFlat.of_comap_surjective
-  结论: [Flat A B]
+引理 模.忠实平坦.of_comap_surjective
+  结论: [平坦 A B]
   证明: by
   refine ⟨fun m hm => ?_⟩
   obtain ⟨m', hm'⟩ := h ⟨m, hm.isPrime⟩
@@ -99,8 +99,8 @@ lemma Module.FaithfullyFlat.of_flat_of_isLocalHom
     ((IsLocalRing.local_h
 
 中文:
-引理 Module.FaithfullyFlat.of_flat_of_isLocalHom
-  结论: [IsLocalRing A] [IsLocalRing B] [Flat A B]
+引理 模.忠实平坦.of_flat_of_isLocalHom
+  结论: [是局部环 A] [是局部环 B] [平坦 A B]
   证明: by
   refine ⟨fun m hm => ?_⟩
   rw [Ideal.smul_top_eq_map]; rw [IsLocalRing.eq_maximalIdeal hm]
@@ -135,8 +135,8 @@ instance Module.FaithfullyFlat.of_isIntegral_of_isDomain
   exact ⟨⟨P, hP₁⟩, PrimeSpectrum.ext_iff.mp
 
 中文:
-实例 Module.FaithfullyFlat.of_isIntegral_of_isDomain
-  签名: [IsDomain B] [Module.Flat A B]
+实例 模.忠实平坦.of_is整数egral_of_isDomain
+  签名: [是整环 B] [模.平坦 A B]
   定义体: by
   refine Module.FaithfullyFlat.of_comap_surjective fun P => ?_
   obtain ⟨P, hP₁, hP₂⟩ := Ideal.exists_ideal_over_prime_of_isIntegral_of_isDomain P.1 (S := B)
@@ -171,8 +171,8 @@ lemma Module.FaithfullyFlat.tensorProduct_mk_injective
   rw [this]; rw [coe_comp]; rw 
 
 中文:
-引理 Module.FaithfullyFlat.tensorProduct_mk_injective
-  条件: (M : 类型) [AddCommGroup M] [Module A M]
+引理 模.忠实平坦.tensorProduct_mk_injective
+  条件: (M : 类型) [加法交换群 M] [模 A M]
   证明: by
   rw [← Module.FaithfullyFlat.lTensor_injective_iff_injective A B]
   have : (lTensor B <| TensorProduct.mk A B M 1) =
@@ -210,8 +210,8 @@ instance Module.FaithfullyFlat.faithfulSMul
   simp only [← smul_eq_mul, ← TensorProduct.smul_tmul, ha (1 : B)]
 
 中文:
-实例 Module.FaithfullyFlat.faithfulSMul
-  签名: : FaithfulSMul A B
+实例 模.忠实平坦.faithfulSMul
+  签名: : 忠实标量乘法 A B
   定义体: by
   constructor
   intro a₁ a₂ ha
@@ -246,8 +246,8 @@ lemma Ideal.comap_map_eq_self_of_faithfullyFlat
 
 
 中文:
-引理 Ideal.comap_map_eq_self_of_faithfullyFlat
-  条件: (I : Ideal A)
+引理 理想.comap_map_eq_self_of_faithfullyFlat
+  条件: (I : 理想 A)
   证明: by
   refine le_antisymm ?_ le_comap_map
   have inj : Function.Injective
@@ -284,7 +284,7 @@ lemma Ideal.comap_surjective_of_faithfullyFlat
   proof: fun I => ⟨I.map (algebraMap A B), comap_map_eq_self_of_faithfullyFlat I⟩
 
 中文:
-引理 Ideal.comap_surjective_of_faithfullyFlat
+引理 理想.comap_surjective_of_faithfullyFlat
   证明: fun I => ⟨I.map (algebraMap A B), comap_map_eq_self_of_faithfullyFlat I⟩
 
 Depends on / 依赖: I.map, algebraMap, comap_map_eq_self_of_faithfullyFlat
@@ -302,7 +302,7 @@ lemma Ideal.map_injective_of_faithfullyFlat
     using congr_arg (Ideal.comap (algebraMap A B) ·) h
 
 中文:
-引理 Ideal.map_injective_of_faithfullyFlat
+引理 理想.map_injective_of_faithfullyFlat
   证明: fun _ _ h => by simpa [comap_map_eq_self_of_faithfullyFlat]
     using congr_arg (Ideal.comap (algebraMap A B) ·) h
 
@@ -325,8 +325,8 @@ obtain ⟨P, _, hP⟩ := (Ideal.comap_map_eq_self_iff_of_isPrime p).mp
   exact ⟨P, inferInstance, ⟨hP.symm⟩⟩
 
 中文:
-引理 Ideal.exists_isPrime_liesOver_of_faithfullyFlat
-  条件: (p : Ideal A) [p.IsPrime]
+引理 理想.存在_isPrime_liesOver_of_faithfullyFlat
+  条件: (p : 理想 A) [p.是素]
   证明: by
 obtain ⟨P, _, hP⟩ := (Ideal.comap_map_eq_self_iff_of_isPrime p).mp
     p.comap_map_eq_self_of_faithfullyFlat (B := B)
@@ -350,7 +350,7 @@ lemma PrimeSpectrum.comap_surjective_of_faithfullyFlat
     I.asIdeal.comap_map_eq_self_of_faithfullyFlat
 
 中文:
-引理 PrimeSpectrum.comap_surjective_of_faithfullyFlat
+引理 素谱.comap_surjective_of_faithfullyFlat
   证明: fun I =>
   (PrimeSpectrum.mem_range_comap_iff (algebraMap A B)).mpr
     I.asIdeal.comap_map_eq_self_of_faithfullyFlat
@@ -373,8 +373,8 @@ instance Module.FaithfullyFlat.isLocalHom
   body: IsLocalHom.of_comap_surjective (algebraMap A B) PrimeSpectrum.comap_surjective_of_faithfullyFlat
 
 中文:
-实例 Module.FaithfullyFlat.isLocalHom
-  签名: : IsLocalHom (algebraMap A B)
+实例 模.忠实平坦.isLocalHom
+  签名: : 是Local态射 (algebraMap A B)
   定义体: IsLocalHom.of_comap_surjective (algebraMap A B) PrimeSpectrum.comap_surjective_of_faithfullyFlat
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.of_comap_surjective, PrimeSpectrum, PrimeSpectrum.comap_surjective_of_faithfullyFlat, algebraMap, comap_surjective_of_faithfullyFlat, of_comap_surjective
@@ -392,9 +392,9 @@ theorem Module.FaithfullyFlat.isLocalRing
   proof: (algebraMap A B).domain_isLocalRing
 
 中文:
-定理 Module.FaithfullyFlat.isLocalRing
-  条件: [IsLocalRing B]
-  结论: IsLocalRing A
+定理 模.忠实平坦.isLocalRing
+  条件: [是局部环 B]
+  结论: 是局部环 A
   证明: (algebraMap A B).domain_isLocalRing
 
 Depends on / 依赖: algebraMap, domain_isLocalRing

@@ -42,7 +42,7 @@ definition Lean.Elab.Tactic.withNondepPropLocation
 
 中文:
 定义 Lean.Elab.Tactic.withNondepPropLocation
-  签名: (loc : Location) (atLocal : FVarId -> TacticM Unit)
+  签名: (loc : Location) (atLocal : FVarId -> TacticM 单元)
   定义体: do
   match loc with
   | Location.targets hyps target => do
@@ -116,7 +116,7 @@ definition transformAtTarget
 
 中文:
 定义 transformAtTarget
-  签名: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
   定义体: do
   let tgt ← instantiateMVars (← goal.getType)
   let r ← m tgt
@@ -165,7 +165,7 @@ ctx.setSimpTheorems ctx.simpTheorems.eraseTheo
 
 中文:
 定义 transformAtLocalDecl
-  签名: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
   定义体: do
   let ldecl ← fvarId.getDecl
   if ldecl.isImplementationDetail then
@@ -206,7 +206,7 @@ definition transformAtLocation
 
 中文:
 定义 transformAtLocation
-  签名: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result) (proc : String)
+  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result) (proc : String)
   定义体: withLocation loc
     (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
     (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))
@@ -237,7 +237,7 @@ definition transformAtNondepPropLocation
 
 中文:
 定义 transformAtNondepPropLocation
-  签名: (m : Expr -> ReaderT Simp.Context MetaM Simp.Result)
+  签名: (m : Expr -> ReaderT Simp.余ntext MetaM Simp.Result)
   定义体: withNondepPropLocation loc
     (liftMetaTactic1 ∘ (transformAtLocalDecl m proc ifUnchanged mayCloseGoalFromHyp · · ctx))
     (liftMetaTactic1 (transformAtTarget m proc ifUnchanged · ctx))

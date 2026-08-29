@@ -88,8 +88,8 @@ class NormalizationMonoid
     - normUnit_mul_units({a : α} (u : αˣ)) : a != 0 -> normUnit (a * u) = u⁻¹ * normUnit a
 
 中文:
-类 NormalizationMonoid
-  参数: (α : 类型) [MonoidWithZero α]
+类 Normalization幺半群
+  参数: (α : 类型) [带零幺半群 α]
   公理与运算 (4 个):
     - normUnit : α -> αˣ
     - normUnit_zero : normUnit 0 = 1
@@ -118,8 +118,8 @@ abbreviation NormalizationMonoid.ofRightInverse
       nontriviality α; rw [← Units.val_inj]; convert ← (assoc 1).choose_spec <;> simp [
 
 中文:
-缩写 NormalizationMonoid.ofRightInverse
-  签名: {α : 类型} [MonoidWithZero α]
+缩写 Normalization幺半群.ofRightInverse
+  签名: {α : 类型} [带零幺半群 α]
   定义体: have assoc a := (Associates.mk_eq_mk_iff_associated.mp <| mk_out (.mk a)).symm
   let := Classical.dec
   { normUnit a := if a = 0 then 1 else (assoc a).choose
@@ -164,9 +164,9 @@ class StrongNormalizationMonoid
     - normUnit_mul_units({a} u ha) : = (by nontriviality α; simp [normUnit_mul, ha, normUnit_coe_units, mul_comm])
 
 中文:
-类 StrongNormalizationMonoid
-  参数: (α) [CommMonoidWithZero α]
-  继承: NormalizationMonoid α
+类 StrongNormalization幺半群
+  参数: (α) [带零交换幺半群 α]
+  继承: Normalization幺半群 α
   公理与运算 (4 个):
     - normUnit_mul : 对任意 {a b}, a != 0 -> b != 0 -> normUnit (a * b) = normUnit a * normUnit b
     - normUnit_coe_units : 对任意 u : αˣ, normUnit u = u⁻¹
@@ -438,7 +438,7 @@ theorem normalize_eq_one
 中文:
 定理 normalize_eq_one
   条件: {x : α}
-  结论: normalize x = 1 ↔ IsUnit x where
+  结论: normalize x = 1 ↔ 是单位 x where
   证明: Units.eq_inv_of_mul_eq_one_right hx ▸ Units.isUnit _
   mpr := fun ⟨u, hu⟩ => hu ▸ normalize_coe_units u
 
@@ -832,7 +832,7 @@ theorem out_injective
 
 中文:
 定理 out_injective
-  结论: Function.Injective (Associates.out : _ -> α)
+  结论: 函数.单射 (Associates.out : _ -> α)
   证明: Function.LeftInverse.injective mk_out
 
 @[simp]
@@ -1075,18 +1075,18 @@ class GCDMonoid
     - lcm_zero_right : forall a, lcm a 0 = 0
 
 中文:
-类 GCDMonoid
-  参数: (α : 类型) [CommMonoidWithZero α]
-  继承: IsCancelMulZero α
+类 最大公约数幺半群
+  参数: (α : 类型) [带零交换幺半群 α]
+  继承: 是乘零消去 α
   公理与运算 (8 个):
     - gcd : α -> α -> α
     - lcm : α -> α -> α
-    - gcd_dvd_left : 对任意 a b, gcd a b ∣ a
-    - gcd_dvd_right : 对任意 a b, gcd a b ∣ b
-    - dvd_gcd : 对任意 {a b c}, a ∣ c -> a ∣ b -> a ∣ gcd c b
-    - gcd_mul_lcm : 对任意 a b, Associated (gcd a b * lcm a b) (a * b)
-    - lcm_zero_left : 对任意 a, lcm 0 a = 0
-    - lcm_zero_right : 对任意 a, lcm a 0 = 0
+    - gcd_dvd_left : 对任意 a b, 最大公约数 a b ∣ a
+    - gcd_dvd_right : 对任意 a b, 最大公约数 a b ∣ b
+    - dvd_gcd : 对任意 {a b c}, a ∣ c -> a ∣ b -> a ∣ 最大公约数 c b
+    - gcd_mul_lcm : 对任意 a b, Associated (最大公约数 a b * 最小公倍数 a b) (a * b)
+    - lcm_zero_left : 对任意 a, 最小公倍数 0 a = 0
+    - lcm_zero_right : 对任意 a, 最小公倍数 a 0 = 0
 -/
 class GCDMonoid (α : Type*) [CommMonoidWithZero α] extends IsCancelMulZero α where
   /-- The greatest common divisor between two elements. -/
@@ -1116,7 +1116,7 @@ class inductive
 
 中文:
 类 inductive
-  参数: IsGCDMonoid (α : 类型) [CommMonoidWithZero α]
+  参数: IsGCDMonoid (α : 类型) [带零交换幺半群 α]
   (无附加公理)
 -/
 class inductive IsGCDMonoid (α : Type*) [CommMonoidWithZero α] : Prop
@@ -1136,12 +1136,12 @@ class NormalizedGCDMonoid
     - normalize_lcm : forall a b, normalize (lcm a b) = lcm a b
 
 中文:
-类 NormalizedGCDMonoid
-  参数: (α : 类型) [CommMonoidWithZero α]
-  继承: NormalizationMonoid α, 
+类 正规化最大公约数幺半群
+  参数: (α : 类型) [带零交换幺半群 α]
+  继承: Normalization幺半群 α, 
   公理与运算 (2 个):
-    - normalize_gcd : 对任意 a b, normalize (gcd a b) = gcd a b
-    - normalize_lcm : 对任意 a b, normalize (lcm a b) = lcm a b
+    - normalize_gcd : 对任意 a b, normalize (最大公约数 a b) = 最大公约数 a b
+    - normalize_lcm : 对任意 a b, normalize (最小公倍数 a b) = 最小公倍数 a b
 -/
 class NormalizedGCDMonoid (α : Type*) [CommMonoidWithZero α] extends NormalizationMonoid α,
   GCDMonoid α where
@@ -1161,11 +1161,11 @@ class StrongNormalizedGCDMonoid
     - normalize_lcm : forall a b, normalize (lcm a b) = lcm a b
 
 中文:
-类 StrongNormalizedGCDMonoid
-  参数: (α : 类型) [CommMonoidWithZero α]
+类 StrongNormalizedGCD幺半群
+  参数: (α : 类型) [带零交换幺半群 α]
   公理与运算 (2 个):
-    - normalize_gcd : 对任意 a b, normalize (gcd a b) = gcd a b
-    - normalize_lcm : 对任意 a b, normalize (lcm a b) = lcm a b
+    - normalize_gcd : 对任意 a b, normalize (最大公约数 a b) = 最大公约数 a b
+    - normalize_lcm : 对任意 a b, normalize (最小公倍数 a b) = 最小公倍数 a b
 -/
 class StrongNormalizedGCDMonoid (α : Type*) [CommMonoidWithZero α] extends
   StrongNormalizationMonoid α, GCDMonoid α where
@@ -1196,8 +1196,8 @@ instance [NormalizationMonoid
   body: ⟨‹_›⟩
 
 中文:
-实例 [NormalizationMonoid
-  签名: α] : Nonempty (NormalizationMonoid α)
+实例 [Normalization幺半群
+  签名: α] : 非空 (Normalization幺半群 α)
   定义体: ⟨‹_›⟩
 -/
 instance [NormalizationMonoid α] : Nonempty (NormalizationMonoid α) := ⟨‹_›⟩
@@ -1210,8 +1210,8 @@ instance [StrongNormalizationMonoid
   body: ⟨‹_›⟩
 
 中文:
-实例 [StrongNormalizationMonoid
-  签名: α] : Nonempty (StrongNormalizationMonoid α)
+实例 [StrongNormalization幺半群
+  签名: α] : 非空 (StrongNormalization幺半群 α)
   定义体: ⟨‹_›⟩
 -/
 instance [StrongNormalizationMonoid α] : Nonempty (StrongNormalizationMonoid α) := ⟨‹_›⟩
@@ -1232,7 +1232,7 @@ theorem IsGCDMonoid.isCancelMulZero
 中文:
 定理 IsGCDMonoid.isCancelMulZero
   条件: [h : IsGCDMonoid α]
-  结论: IsCancelMulZero α
+  结论: 是乘零消去 α
   证明: h.rec fun _ => inferInstance
 
 Depends on / 依赖: h.rec
@@ -1252,7 +1252,7 @@ theorem gcd_isUnit_iff_isRelPrime
 
 中文:
 定理 gcd_isUnit_iff_isRelPrime
-  条件: [GCDMonoid α] {a b : α}
+  条件: [最大公约数幺半群 α] {a b : α}
   证明: ⟨fun h _ ha hb => isUnit_of_dvd_unit (dvd_gcd ha hb) h, (· (gcd_dvd_left a b) (gcd_dvd_right a b))⟩
 
 @[simp]
@@ -1275,8 +1275,8 @@ theorem normalize_gcd
 
 中文:
 定理 normalize_gcd
-  条件: [NormalizedGCDMonoid α]
-  结论: 对任意 a b : α, normalize (gcd a b) = gcd a b
+  条件: [正规化最大公约数幺半群 α]
+  结论: 对任意 a b : α, normalize (最大公约数 a b) = 最大公约数 a b
   证明: NormalizedGCDMonoid.normalize_gcd
 
 Depends on / 依赖: NormalizedGCDMonoid, NormalizedGCDMonoid.normalize_gcd, normalize_gcd
@@ -1298,8 +1298,8 @@ theorem dvd_gcd_iff
 
 中文:
 定理 dvd_gcd_iff
-  条件: [GCDMonoid α] (a b c : α)
-  结论: a ∣ gcd b c ↔ a ∣ b ∧ a ∣ c
+  条件: [最大公约数幺半群 α] (a b c : α)
+  结论: a ∣ 最大公约数 b c ↔ a ∣ b ∧ a ∣ c
   证明: Iff.intro (fun h => ⟨h.trans (gcd_dvd_left _ _), h.trans (gcd_dvd_right _ _)⟩) fun ⟨hab, hac⟩ =>
     dvd_gcd hab hac
 
@@ -1322,8 +1322,8 @@ theorem gcd_comm
 
 中文:
 定理 gcd_comm
-  条件: [NormalizedGCDMonoid α] (a b : α)
-  结论: gcd a b = gcd b a
+  条件: [正规化最大公约数幺半群 α] (a b : α)
+  结论: 最大公约数 a b = 最大公约数 b a
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) (normalize_gcd _ _)
     (dvd_gcd (gcd_dvd_right _ _) (gcd_dvd_left _ _))
     (dvd_gcd (gcd_dvd_right _ _) (gcd_dvd_left _ _))
@@ -1347,8 +1347,8 @@ theorem gcd_comm'
 
 中文:
 定理 gcd_comm'
-  条件: [GCDMonoid α] (a b : α)
-  结论: Associated (gcd a b) (gcd b a)
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: Associated (最大公约数 a b) (最大公约数 b a)
   证明: associated_of_dvd_dvd (dvd_gcd (gcd_dvd_right _ _) (gcd_dvd_left _ _))
     (dvd_gcd (gcd_dvd_right _ _) (gcd_dvd_left _ _))
 
@@ -1373,8 +1373,8 @@ theorem gcd_assoc
 
 中文:
 定理 gcd_assoc
-  条件: [NormalizedGCDMonoid α] (m n k : α)
-  结论: gcd (gcd m n) k = gcd m (gcd n k)
+  条件: [正规化最大公约数幺半群 α] (m n k : α)
+  结论: 最大公约数 (最大公约数 m n) k = 最大公约数 m (最大公约数 n k)
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) (normalize_gcd _ _)
     (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_left m n))
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
@@ -1407,8 +1407,8 @@ theorem gcd_assoc'
 
 中文:
 定理 gcd_assoc'
-  条件: [GCDMonoid α] (m n k : α)
-  结论: Associated (gcd (gcd m n) k) (gcd m (gcd n k))
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: Associated (最大公约数 (最大公约数 m n) k) (最大公约数 m (最大公约数 n k))
   证明: associated_of_dvd_dvd
     (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_left m n))
       (dvd_gcd ((gcd_dvd_left (gcd m n) k).trans (gcd_dvd_right m n)) (gcd_dvd_right (gcd m n) k)))
@@ -1435,8 +1435,8 @@ instance [NormalizedGCDMonoid
   body: gcd_comm
 
 中文:
-实例 [NormalizedGCDMonoid
-  签名: α] : Std.Commutative (α
+实例 [正规化最大公约数幺半群
+  签名: α] : Std.交换 (α
   定义体: gcd_comm
 -/
 instance [NormalizedGCDMonoid α] : Std.Commutative (α := α) gcd where
@@ -1451,8 +1451,8 @@ instance [NormalizedGCDMonoid
   body: gcd_assoc
 
 中文:
-实例 [NormalizedGCDMonoid
-  签名: α] : Std.Associative (α
+实例 [正规化最大公约数幺半群
+  签名: α] : Std.结合 (α
   定义体: gcd_assoc
 -/
 instance [NormalizedGCDMonoid α] : Std.Associative (α := α) gcd where
@@ -1470,7 +1470,7 @@ theorem gcd_eq_normalize
 
 中文:
 定理 gcd_eq_normalize
-  结论: [NormalizedGCDMonoid α] {a b c : α} (habc : gcd a b ∣ c)
+  结论: [正规化最大公约数幺半群 α] {a b c : α} (habc : 最大公约数 a b ∣ c)
   证明: normalize_gcd a b ▸ normalize_eq_normalize habc hcab
 
 @[simp]
@@ -1493,8 +1493,8 @@ theorem gcd_zero_left
 
 中文:
 定理 gcd_zero_left
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: gcd 0 a = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最大公约数 0 a = normalize a
   证明: gcd_eq_normalize (gcd_dvd_right 0 a) (dvd_gcd (dvd_zero _) (dvd_refl a))
 
 Depends on / 依赖: dvd_gcd, dvd_refl, dvd_zero, gcd_dvd_right, gcd_eq_normalize
@@ -1515,8 +1515,8 @@ theorem gcd_zero_left'
 
 中文:
 定理 gcd_zero_left'
-  条件: [GCDMonoid α] (a : α)
-  结论: Associated (gcd 0 a) a
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: Associated (最大公约数 0 a) a
   证明: associated_of_dvd_dvd (gcd_dvd_right 0 a) (dvd_gcd (dvd_zero _) (dvd_refl a))
 
 @[simp]
@@ -1538,8 +1538,8 @@ theorem gcd_zero_right
 
 中文:
 定理 gcd_zero_right
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: gcd a 0 = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最大公约数 a 0 = normalize a
   证明: gcd_eq_normalize (gcd_dvd_left a 0) (dvd_gcd (dvd_refl a) (dvd_zero _))
 
 Depends on / 依赖: dvd_gcd, dvd_refl, dvd_zero, gcd_dvd_left, gcd_eq_normalize
@@ -1560,8 +1560,8 @@ theorem gcd_zero_right'
 
 中文:
 定理 gcd_zero_right'
-  条件: [GCDMonoid α] (a : α)
-  结论: Associated (gcd a 0) a
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: Associated (最大公约数 a 0) a
   证明: associated_of_dvd_dvd (gcd_dvd_left a 0) (dvd_gcd (dvd_refl a) (dvd_zero _))
 
 @[simp]
@@ -1591,8 +1591,8 @@ theorem gcd_eq_zero_iff
 
 中文:
 定理 gcd_eq_zero_iff
-  条件: [GCDMonoid α] (a b : α)
-  结论: gcd a b = 0 ↔ a = 0 ∧ b = 0
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: 最大公约数 a b = 0 ↔ a = 0 ∧ b = 0
   证明: Iff.intro
     (fun h => by
       let ⟨ca, ha⟩ := gcd_dvd_left a b
@@ -1628,8 +1628,8 @@ theorem gcd_ne_zero_of_left
 
 中文:
 定理 gcd_ne_zero_of_left
-  条件: [GCDMonoid α] {a b : α} (ha : a != 0)
-  结论: gcd a b != 0
+  条件: [最大公约数幺半群 α] {a b : α} (ha : a != 0)
+  结论: 最大公约数 a b != 0
   证明: by
   simp_all
 -/
@@ -1650,8 +1650,8 @@ theorem gcd_ne_zero_of_right
 
 中文:
 定理 gcd_ne_zero_of_right
-  条件: [GCDMonoid α] {a b : α} (hb : b != 0)
-  结论: gcd a b != 0
+  条件: [最大公约数幺半群 α] {a b : α} (hb : b != 0)
+  结论: 最大公约数 a b != 0
   证明: by
   simp_all
 
@@ -1674,8 +1674,8 @@ theorem gcd_one_left
 
 中文:
 定理 gcd_one_left
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: gcd 1 a = 1
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最大公约数 1 a = 1
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) normalize_one (gcd_dvd_left _ _) (one_dvd _)
 
 @[simp]
@@ -1697,8 +1697,8 @@ theorem isUnit_gcd_one_left
 
 中文:
 定理 isUnit_gcd_one_left
-  条件: [GCDMonoid α] (a : α)
-  结论: IsUnit (gcd 1 a)
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: 是单位 (最大公约数 1 a)
   证明: isUnit_of_dvd_one (gcd_dvd_left _ _)
 
 Depends on / 依赖: gcd_dvd_left, isUnit_of_dvd_one
@@ -1719,8 +1719,8 @@ theorem gcd_one_left'
 
 中文:
 定理 gcd_one_left'
-  条件: [GCDMonoid α] (a : α)
-  结论: Associated (gcd 1 a) 1
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: Associated (最大公约数 1 a) 1
   证明: by simp
 
 @[simp]
@@ -1741,8 +1741,8 @@ theorem gcd_one_right
 
 中文:
 定理 gcd_one_right
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: gcd a 1 = 1
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最大公约数 a 1 = 1
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) normalize_one (gcd_dvd_right _ _) (one_dvd _)
 
 @[simp]
@@ -1764,8 +1764,8 @@ theorem isUnit_gcd_one_right
 
 中文:
 定理 isUnit_gcd_one_right
-  条件: [GCDMonoid α] (a : α)
-  结论: IsUnit (gcd a 1)
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: 是单位 (最大公约数 a 1)
   证明: isUnit_of_dvd_one (gcd_dvd_right _ _)
 
 Depends on / 依赖: gcd_dvd_right, isUnit_of_dvd_one
@@ -1786,8 +1786,8 @@ theorem gcd_one_right'
 
 中文:
 定理 gcd_one_right'
-  条件: [GCDMonoid α] (a : α)
-  结论: Associated (gcd a 1) 1
+  条件: [最大公约数幺半群 α] (a : α)
+  结论: Associated (最大公约数 a 1) 1
   证明: by simp
 
 @[gcongr]
@@ -1806,8 +1806,8 @@ theorem gcd_dvd_gcd
 
 中文:
 定理 gcd_dvd_gcd
-  条件: [GCDMonoid α] {a b c d : α} (hab : a ∣ b) (hcd : c ∣ d)
-  结论: gcd a c ∣ gcd b d
+  条件: [最大公约数幺半群 α] {a b c d : α} (hab : a ∣ b) (hcd : c ∣ d)
+  结论: 最大公约数 a c ∣ 最大公约数 b d
   证明: dvd_gcd ((gcd_dvd_left _ _).trans hab) ((gcd_dvd_right _ _).trans hcd)
 
 Depends on / 依赖: dvd_gcd, gcd_dvd_left, gcd_dvd_right
@@ -1826,8 +1826,8 @@ theorem Associated.gcd
 @[simp]
 
 中文:
-定理 Associated.gcd
-  结论: [GCDMonoid α]
+定理 Associated.最大公约数
+  结论: [最大公约数幺半群 α]
   证明: associated_of_dvd_dvd (gcd_dvd_gcd ha.dvd hb.dvd) (gcd_dvd_gcd ha.dvd' hb.dvd')
 
 @[simp]
@@ -1851,8 +1851,8 @@ theorem gcd_same
 
 中文:
 定理 gcd_same
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: gcd a a = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最大公约数 a a = normalize a
   证明: gcd_eq_normalize (gcd_dvd_left _ _) (dvd_gcd (dvd_refl a) (dvd_refl a))
 
 @[simp]
@@ -1880,7 +1880,7 @@ theorem gcd_mul_left
 
 中文:
 定理 gcd_mul_left
-  条件: [StrongNormalizedGCDMonoid α] (a b c : α)
+  条件: [StrongNormalizedGCD幺半群 α] (a b c : α)
   证明: (by_cases (by rintro rfl; simp))
     fun ha : a != 0 =>
     suffices gcd (a * b) (a * c) = normalize (a * gcd b c) by simpa
@@ -1924,7 +1924,7 @@ theorem gcd_mul_left'
 
 中文:
 定理 gcd_mul_left'
-  条件: [GCDMonoid α] (a b c : α)
+  条件: [最大公约数幺半群 α] (a b c : α)
   证明: by
   obtain rfl | ha := eq_or_ne a 0
   · simp only [zero_mul, gcd_zero_left']
@@ -1964,7 +1964,7 @@ theorem gcd_mul_right
 
 中文:
 定理 gcd_mul_right
-  条件: [StrongNormalizedGCDMonoid α] (a b c : α)
+  条件: [StrongNormalizedGCD幺半群 α] (a b c : α)
   证明: by simp only [mul_comm, gcd_mul_left]
 
 @[simp]
@@ -1986,7 +1986,7 @@ theorem gcd_mul_right'
 
 中文:
 定理 gcd_mul_right'
-  条件: [GCDMonoid α] (a b c : α)
+  条件: [最大公约数幺半群 α] (a b c : α)
   证明: by
   simp only [mul_comm, gcd_mul_left']
 
@@ -2007,7 +2007,7 @@ theorem gcd_eq_left_iff
 
 中文:
 定理 gcd_eq_left_iff
-  条件: [NormalizedGCDMonoid α] (a b : α) (h : normalize a = a)
+  条件: [正规化最大公约数幺半群 α] (a b : α) (h : normalize a = a)
   证明: (Iff.intro fun eq => eq ▸ gcd_dvd_right _ _) fun hab =>
     dvd_antisymm_of_normalize_eq (normalize_gcd _ _) h (gcd_dvd_left _ _) (dvd_gcd (dvd_refl a) hab)
 
@@ -2028,7 +2028,7 @@ theorem gcd_eq_right_iff
 
 中文:
 定理 gcd_eq_right_iff
-  条件: [NormalizedGCDMonoid α] (a b : α) (h : normalize b = b)
+  条件: [正规化最大公约数幺半群 α] (a b : α) (h : normalize b = b)
   证明: by simpa only [gcd_comm a b] using gcd_eq_left_iff b a h
 
 Depends on / 依赖: gcd_comm, gcd_eq_left_iff
@@ -2048,8 +2048,8 @@ theorem gcd_dvd_gcd_mul_left
 
 中文:
 定理 gcd_dvd_gcd_mul_left
-  条件: [GCDMonoid α] (m n k : α)
-  结论: gcd m n ∣ gcd (k * m) n
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最大公约数 m n ∣ 最大公约数 (k * m) n
   证明: by
   grw [← dvd_mul_left]
 
@@ -2070,8 +2070,8 @@ theorem gcd_dvd_gcd_mul_right
 
 中文:
 定理 gcd_dvd_gcd_mul_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: gcd m n ∣ gcd (m * k) n
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最大公约数 m n ∣ 最大公约数 (m * k) n
   证明: by
   grw [← dvd_mul_right]
 
@@ -2092,8 +2092,8 @@ theorem gcd_dvd_gcd_mul_left_right
 
 中文:
 定理 gcd_dvd_gcd_mul_left_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: gcd m n ∣ gcd m (k * n)
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最大公约数 m n ∣ 最大公约数 m (k * n)
   证明: by
   grw [← dvd_mul_left]
 
@@ -2114,8 +2114,8 @@ theorem gcd_dvd_gcd_mul_right_right
 
 中文:
 定理 gcd_dvd_gcd_mul_right_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: gcd m n ∣ gcd m (n * k)
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最大公约数 m n ∣ 最大公约数 m (n * k)
   证明: by
   grw [← dvd_mul_right]
 
@@ -2135,7 +2135,7 @@ theorem Associated.gcd_eq_left
 
 中文:
 定理 Associated.gcd_eq_left
-  条件: [NormalizedGCDMonoid α] {m n : α} (h : Associated m n) (k : α)
+  条件: [正规化最大公约数幺半群 α] {m n : α} (h : Associated m n) (k : α)
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) (normalize_gcd _ _) (gcd_dvd_gcd h.dvd dvd_rfl)
     (gcd_dvd_gcd h.symm.dvd dvd_rfl)
 
@@ -2157,7 +2157,7 @@ theorem Associated.gcd_eq_right
 
 中文:
 定理 Associated.gcd_eq_right
-  条件: [NormalizedGCDMonoid α] {m n : α} (h : Associated m n) (k : α)
+  条件: [正规化最大公约数幺半群 α] {m n : α} (h : Associated m n) (k : α)
   证明: dvd_antisymm_of_normalize_eq (normalize_gcd _ _) (normalize_gcd _ _) (gcd_dvd_gcd dvd_rfl h.dvd)
     (gcd_dvd_gcd dvd_rfl h.symm.dvd)
 
@@ -2179,8 +2179,8 @@ theorem dvd_gcd_mul_of_dvd_mul
 
 中文:
 定理 dvd_gcd_mul_of_dvd_mul
-  条件: [GCDMonoid α] {m n k : α} (H : k ∣ m * n)
-  结论: k ∣ gcd k m * n
+  条件: [最大公约数幺半群 α] {m n k : α} (H : k ∣ m * n)
+  结论: k ∣ 最大公约数 k m * n
   证明: (dvd_gcd (dvd_mul_right _ n) H).trans (gcd_mul_right' n k m).dvd
 
 Depends on / 依赖: dvd_gcd, dvd_mul_right, gcd_mul_right
@@ -2199,8 +2199,8 @@ theorem dvd_gcd_mul_iff_dvd_mul
 
 中文:
 定理 dvd_gcd_mul_iff_dvd_mul
-  条件: [GCDMonoid α] {m n k : α}
-  结论: k ∣ gcd k m * n ↔ k ∣ m * n
+  条件: [最大公约数幺半群 α] {m n k : α}
+  结论: k ∣ 最大公约数 k m * n ↔ k ∣ m * n
   证明: ⟨fun h => h.trans (mul_dvd_mul (gcd_dvd_right k m) dvd_rfl), dvd_gcd_mul_of_dvd_mul⟩
 
 Depends on / 依赖: dvd_gcd_mul_of_dvd_mul, dvd_rfl, gcd_dvd_right, h.trans, mul_dvd_mul
@@ -2221,8 +2221,8 @@ theorem dvd_mul_gcd_of_dvd_mul
 
 中文:
 定理 dvd_mul_gcd_of_dvd_mul
-  条件: [GCDMonoid α] {m n k : α} (H : k ∣ m * n)
-  结论: k ∣ m * gcd k n
+  条件: [最大公约数幺半群 α] {m n k : α} (H : k ∣ m * n)
+  结论: k ∣ m * 最大公约数 k n
   证明: by
   rw [mul_comm] at H ⊢
   exact dvd_gcd_mul_of_dvd_mul H
@@ -2244,8 +2244,8 @@ theorem dvd_mul_gcd_iff_dvd_mul
 
 中文:
 定理 dvd_mul_gcd_iff_dvd_mul
-  条件: [GCDMonoid α] {m n k : α}
-  结论: k ∣ m * gcd k n ↔ k ∣ m * n
+  条件: [最大公约数幺半群 α] {m n k : α}
+  结论: k ∣ m * 最大公约数 k n ↔ k ∣ m * n
   证明: ⟨fun h => h.trans (mul_dvd_mul dvd_rfl (gcd_dvd_right k n)), dvd_mul_gcd_of_dvd_mul⟩
 
 Depends on / 依赖: dvd_mul_gcd_of_dvd_mul, dvd_rfl, gcd_dvd_right, h.trans, mul_dvd_mul
@@ -2271,7 +2271,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : IsGCDMonoid α] : DecompositionMonoid α where
+  签名: : IsGCDMonoid α] : 分解幺半群 α where
   定义体: by
     cases h
     by_cases h0 : gcd k m = 0
@@ -2314,8 +2314,8 @@ theorem gcd_mul_dvd_mul_gcd
 
 中文:
 定理 gcd_mul_dvd_mul_gcd
-  条件: [GCDMonoid α] (k m n : α)
-  结论: gcd k (m * n) ∣ gcd k m * gcd k n
+  条件: [最大公约数幺半群 α] (k m n : α)
+  结论: 最大公约数 k (m * n) ∣ 最大公约数 k m * 最大公约数 k n
   证明: by
   obtain ⟨m', n', hm', hn', h⟩ := exists_dvd_and_dvd_of_dvd_mul (gcd_dvd_right k (m * n))
   replace h : gcd k (m * n) = m' * n' := h
@@ -2356,7 +2356,7 @@ theorem gcd_pow_right_dvd_pow_gcd
 
 中文:
 定理 gcd_pow_right_dvd_pow_gcd
-  条件: [GCDMonoid α] {a b : α} {k : 自然数}
+  条件: [最大公约数幺半群 α] {a b : α} {k : 自然数}
   证明: by
   by_cases hg : gcd a b = 0
   · rw [gcd_eq_zero_iff] at hg
@@ -2399,8 +2399,8 @@ theorem gcd_pow_left_dvd_pow_gcd
 
 中文:
 定理 gcd_pow_left_dvd_pow_gcd
-  条件: [GCDMonoid α] {a b : α} {k : 自然数}
-  结论: gcd (a ^ k) b ∣ gcd a b ^ k
+  条件: [最大公约数幺半群 α] {a b : α} {k : 自然数}
+  结论: 最大公约数 (a ^ k) b ∣ 最大公约数 a b ^ k
   证明: calc
     gcd (a ^ k) b ∣ gcd b (a ^ k) := (gcd_comm' _ _).dvd
     _ ∣ gcd b a ^ k := gcd_pow_right_dvd_pow_gcd
@@ -2435,7 +2435,7 @@ theorem pow_dvd_of_mul_eq_pow
 
 中文:
 定理 pow_dvd_of_mul_eq_pow
-  结论: [GCDMonoid α] {a b c d₁ d₂ : α} (ha : a != 0) (hab : IsUnit (gcd a b))
+  结论: [最大公约数幺半群 α] {a b c d₁ d₂ : α} (ha : a != 0) (hab : 是单位 (最大公约数 a b))
   证明: by
   have h1 : IsUnit (gcd (d₁ ^ k) b) := by
     apply isUnit_of_dvd_one
@@ -2496,8 +2496,8 @@ theorem exists_associated_pow_of_mul_eq_pow
     apply (associated_one_iff_isUnit.mpr hab).sy
 
 中文:
-定理 exists_associated_pow_of_mul_eq_pow
-  结论: [GCDMonoid α] {a b c : α} (hab : IsUnit (gcd a b))
+定理 存在_associated_pow_of_mul_eq_pow
+  结论: [最大公约数幺半群 α] {a b c : α} (hab : 是单位 (最大公约数 a b))
   证明: by
   cases subsingleton_or_nontrivial α
   · use 0
@@ -2564,8 +2564,8 @@ theorem exists_eq_pow_of_mul_eq_pow
   ⟨d, (associated_iff_eq.mp hd).symm⟩
 
 中文:
-定理 exists_eq_pow_of_mul_eq_pow
-  结论: [GCDMonoid α] [Subsingleton αˣ]
+定理 存在_eq_pow_of_mul_eq_pow
+  结论: [最大公约数幺半群 α] [子单例 αˣ]
   证明: let ⟨d, hd⟩ := exists_associated_pow_of_mul_eq_pow hab h
   ⟨d, (associated_iff_eq.mp hd).symm⟩
 
@@ -2587,7 +2587,7 @@ theorem gcd_greatest
 
 中文:
 定理 gcd_greatest
-  结论: {α : 类型} [CommMonoidWithZero α] [NormalizedGCDMonoid α] {a b d : α}
+  结论: {α : 类型} [带零交换幺半群 α] [正规化最大公约数幺半群 α] {a b d : α}
   证明: haveI h := hd _ (gcd_dvd_left a b) (gcd_dvd_right a b)
   gcd_eq_normalize h (GCDMonoid.dvd_gcd hda hdb)
 
@@ -2610,7 +2610,7 @@ theorem gcd_greatest_associated
 
 中文:
 定理 gcd_greatest_associated
-  结论: {α : 类型} [CommMonoidWithZero α] [GCDMonoid α] {a b d : α}
+  结论: {α : 类型} [带零交换幺半群 α] [最大公约数幺半群 α] {a b d : α}
   证明: haveI h := hd _ (gcd_dvd_left a b) (gcd_dvd_right a b)
   associated_of_dvd_dvd (GCDMonoid.dvd_gcd hda hdb) h
 
@@ -2636,7 +2636,7 @@ theorem isUnit_gcd_of_eq_mul_gcd
 
 中文:
 定理 isUnit_gcd_of_eq_mul_gcd
-  结论: {α : 类型} [CommMonoidWithZero α] [GCDMonoid α]
+  结论: {α : 类型} [带零交换幺半群 α] [最大公约数幺半群 α]
   证明: by
   rw [← associated_one_iff_isUnit]
   refine Associated.of_mul_left ?_ (Associated.refl <| gcd x y) h
@@ -2670,7 +2670,7 @@ theorem extract_gcd
 
 中文:
 定理 extract_gcd
-  条件: {α : 类型} [CommMonoidWithZero α] [GCDMonoid α] (x y : α)
+  条件: {α : 类型} [带零交换幺半群 α] [最大公约数幺半群 α] (x y : α)
   证明: by
   by_cases h : gcd x y = 0
   · obtain ⟨rfl, rfl⟩ := (gcd_eq_zero_iff x y).1 h
@@ -2704,8 +2704,8 @@ theorem associated_gcd_left_iff
 
 中文:
 定理 associated_gcd_left_iff
-  条件: [GCDMonoid α] {x y : α}
-  结论: Associated x (gcd x y) ↔ x ∣ y
+  条件: [最大公约数幺半群 α] {x y : α}
+  结论: Associated x (最大公约数 x y) ↔ x ∣ y
   证明: ⟨fun hx => hx.dvd.trans (gcd_dvd_right x y),
     fun hxy => associated_of_dvd_dvd (dvd_gcd dvd_rfl hxy) (gcd_dvd_left x y)⟩
 
@@ -2727,8 +2727,8 @@ theorem associated_gcd_right_iff
 
 中文:
 定理 associated_gcd_right_iff
-  条件: [GCDMonoid α] {x y : α}
-  结论: Associated y (gcd x y) ↔ y ∣ x
+  条件: [最大公约数幺半群 α] {x y : α}
+  结论: Associated y (最大公约数 x y) ↔ y ∣ x
   证明: ⟨fun hx => hx.dvd.trans (gcd_dvd_left x y),
     fun hxy => associated_of_dvd_dvd (dvd_gcd hxy dvd_rfl) (gcd_dvd_right x y)⟩
 
@@ -2748,8 +2748,8 @@ theorem Irreducible.isUnit_gcd_iff
   rw [hx.isUnit_iff_not_associated_of_dvd (gcd_dvd_left x y)]; rw [not_iff_not]; rw [associated_gcd_left_iff]
 
 中文:
-定理 Irreducible.isUnit_gcd_iff
-  条件: [GCDMonoid α] {x y : α} (hx : Irreducible x)
+定理 不可约.isUnit_gcd_iff
+  条件: [最大公约数幺半群 α] {x y : α} (hx : 不可约 x)
   证明: by
   rw [hx.isUnit_iff_not_associated_of_dvd (gcd_dvd_left x y)]; rw [not_iff_not]; rw [associated_gcd_left_iff]
 
@@ -2769,8 +2769,8 @@ theorem Irreducible.gcd_eq_one_iff
   rw [← hx.isUnit_gcd_iff]; rw [← normalize_eq_one]; rw [NormalizedGCDMonoid.normalize_gcd]
 
 中文:
-定理 Irreducible.gcd_eq_one_iff
-  条件: [NormalizedGCDMonoid α] {x y : α} (hx : Irreducible x)
+定理 不可约.gcd_eq_one_iff
+  条件: [正规化最大公约数幺半群 α] {x y : α} (hx : 不可约 x)
   证明: by
   rw [← hx.isUnit_gcd_iff]; rw [← normalize_eq_one]; rw [NormalizedGCDMonoid.normalize_gcd]
 
@@ -2795,8 +2795,8 @@ lemma gcd_neg'
 
 中文:
 引理 gcd_neg'
-  条件: [GCDMonoid α] {a b : α}
-  结论: Associated (gcd a (-b)) (gcd a b)
+  条件: [最大公约数幺半群 α] {a b : α}
+  结论: Associated (最大公约数 a (-b)) (最大公约数 a b)
   证明: Associated.gcd .rfl (.neg_left .rfl)
 
 Depends on / 依赖: Associated, Associated.gcd, neg_left
@@ -2815,8 +2815,8 @@ lemma gcd_neg
 
 中文:
 引理 gcd_neg
-  条件: [NormalizedGCDMonoid α] {a b : α}
-  结论: gcd a (-b) = gcd a b
+  条件: [正规化最大公约数幺半群 α] {a b : α}
+  结论: 最大公约数 a (-b) = 最大公约数 a b
   证明: gcd_neg'.eq_of_normalized (normalize_gcd _ _) (normalize_gcd _ _)
 
 Depends on / 依赖: eq_of_normalized, gcd_neg, normalize_gcd
@@ -2835,8 +2835,8 @@ lemma neg_gcd'
 
 中文:
 引理 neg_gcd'
-  条件: [GCDMonoid α] {a b : α}
-  结论: Associated (gcd (-a) b) (gcd a b)
+  条件: [最大公约数幺半群 α] {a b : α}
+  结论: Associated (最大公约数 (-a) b) (最大公约数 a b)
   证明: Associated.gcd (.neg_left .rfl) .rfl
 
 Depends on / 依赖: Associated, Associated.gcd, neg_left
@@ -2855,8 +2855,8 @@ lemma neg_gcd
 
 中文:
 引理 neg_gcd
-  条件: [NormalizedGCDMonoid α] {a b : α}
-  结论: gcd (-a) b = gcd a b
+  条件: [正规化最大公约数幺半群 α] {a b : α}
+  结论: 最大公约数 (-a) b = 最大公约数 a b
   证明: neg_gcd'.eq_of_normalized (normalize_gcd _ _) (normalize_gcd _ _)
 
 Depends on / 依赖: eq_of_normalized, neg_gcd, normalize_gcd
@@ -2888,8 +2888,8 @@ theorem lcm_dvd_iff
 
 中文:
 定理 lcm_dvd_iff
-  条件: [GCDMonoid α] {a b c : α}
-  结论: lcm a b ∣ c ↔ a ∣ c ∧ b ∣ c
+  条件: [最大公约数幺半群 α] {a b c : α}
+  结论: 最小公倍数 a b ∣ c ↔ a ∣ c ∧ b ∣ c
   证明: by
   by_cases h : a = 0 ∨ b = 0
   · rcases h with (rfl | rfl) <;>
@@ -2922,8 +2922,8 @@ theorem dvd_lcm_left
 
 中文:
 定理 dvd_lcm_left
-  条件: [GCDMonoid α] (a b : α)
-  结论: a ∣ lcm a b
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: a ∣ 最小公倍数 a b
   证明: (lcm_dvd_iff.1 (dvd_refl (lcm a b))).1
 
 Depends on / 依赖: dvd_refl, lcm_dvd_iff
@@ -2942,8 +2942,8 @@ theorem dvd_lcm_right
 
 中文:
 定理 dvd_lcm_right
-  条件: [GCDMonoid α] (a b : α)
-  结论: b ∣ lcm a b
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: b ∣ 最小公倍数 a b
   证明: (lcm_dvd_iff.1 (dvd_refl (lcm a b))).2
 
 Depends on / 依赖: dvd_refl, lcm_dvd_iff
@@ -2964,8 +2964,8 @@ theorem lcm_dvd
 
 中文:
 定理 lcm_dvd
-  条件: [GCDMonoid α] {a b c : α} (hab : a ∣ b) (hcb : c ∣ b)
-  结论: lcm a c ∣ b
+  条件: [最大公约数幺半群 α] {a b c : α} (hab : a ∣ b) (hcb : c ∣ b)
+  结论: 最小公倍数 a c ∣ b
   证明: lcm_dvd_iff.2 ⟨hab, hcb⟩
 
 @[simp]
@@ -2991,8 +2991,8 @@ have : Associated (a * b) 0 := (gcd_mul_lcm a b).symm.trans by rw [h, mul_zero]
 
 中文:
 定理 lcm_eq_zero_iff
-  条件: [GCDMonoid α] (a b : α)
-  结论: lcm a b = 0 ↔ a = 0 ∨ b = 0
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: 最小公倍数 a b = 0 ↔ a = 0 ∨ b = 0
   证明: Iff.intro
     (fun h : lcm a b = 0 => by
 have : Associated (a * b) 0 := (gcd_mul_lcm a b).symm.trans by rw [h, mul_zero]
@@ -3022,8 +3022,8 @@ theorem lcm_ne_zero_iff
 
 中文:
 定理 lcm_ne_zero_iff
-  条件: [GCDMonoid α] {a b : α}
-  结论: lcm a b != 0 ↔ a != 0 ∧ b != 0
+  条件: [最大公约数幺半群 α] {a b : α}
+  结论: 最小公倍数 a b != 0 ↔ a != 0 ∧ b != 0
   证明: by
   simp
 
@@ -3044,8 +3044,8 @@ theorem normalize_lcm
 
 中文:
 定理 normalize_lcm
-  条件: [NormalizedGCDMonoid α] (a b : α)
-  结论: normalize (lcm a b) = lcm a b
+  条件: [正规化最大公约数幺半群 α] (a b : α)
+  结论: normalize (最小公倍数 a b) = 最小公倍数 a b
   证明: NormalizedGCDMonoid.normalize_lcm a b
 
 Depends on / 依赖: NormalizedGCDMonoid, NormalizedGCDMonoid.normalize_lcm, normalize_lcm
@@ -3066,8 +3066,8 @@ theorem lcm_comm
 
 中文:
 定理 lcm_comm
-  条件: [NormalizedGCDMonoid α] (a b : α)
-  结论: lcm a b = lcm b a
+  条件: [正规化最大公约数幺半群 α] (a b : α)
+  结论: 最小公倍数 a b = 最小公倍数 b a
   证明: dvd_antisymm_of_normalize_eq (normalize_lcm _ _) (normalize_lcm _ _)
     (lcm_dvd (dvd_lcm_right _ _) (dvd_lcm_left _ _))
     (lcm_dvd (dvd_lcm_right _ _) (dvd_lcm_left _ _))
@@ -3091,8 +3091,8 @@ theorem lcm_comm'
 
 中文:
 定理 lcm_comm'
-  条件: [GCDMonoid α] (a b : α)
-  结论: Associated (lcm a b) (lcm b a)
+  条件: [最大公约数幺半群 α] (a b : α)
+  结论: Associated (最小公倍数 a b) (最小公倍数 b a)
   证明: associated_of_dvd_dvd (lcm_dvd (dvd_lcm_right _ _) (dvd_lcm_left _ _))
     (lcm_dvd (dvd_lcm_right _ _) (dvd_lcm_left _ _))
 
@@ -3117,8 +3117,8 @@ theorem lcm_assoc
 
 中文:
 定理 lcm_assoc
-  条件: [NormalizedGCDMonoid α] (m n k : α)
-  结论: lcm (lcm m n) k = lcm m (lcm n k)
+  条件: [正规化最大公约数幺半群 α] (m n k : α)
+  结论: 最小公倍数 (最小公倍数 m n) k = 最小公倍数 m (最小公倍数 n k)
   证明: dvd_antisymm_of_normalize_eq (normalize_lcm _ _) (normalize_lcm _ _)
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
@@ -3149,8 +3149,8 @@ theorem lcm_assoc'
 
 中文:
 定理 lcm_assoc'
-  条件: [GCDMonoid α] (m n k : α)
-  结论: Associated (lcm (lcm m n) k) (lcm m (lcm n k))
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: Associated (最小公倍数 (最小公倍数 m n) k) (最小公倍数 m (最小公倍数 n k))
   证明: associated_of_dvd_dvd
     (lcm_dvd (lcm_dvd (dvd_lcm_left _ _) ((dvd_lcm_left _ _).trans (dvd_lcm_right _ _)))
       ((dvd_lcm_right _ _).trans (dvd_lcm_right _ _)))
@@ -3175,8 +3175,8 @@ instance [NormalizedGCDMonoid
   body: lcm_comm
 
 中文:
-实例 [NormalizedGCDMonoid
-  签名: α] : Std.Commutative (α
+实例 [正规化最大公约数幺半群
+  签名: α] : Std.交换 (α
   定义体: lcm_comm
 -/
 instance [NormalizedGCDMonoid α] : Std.Commutative (α := α) lcm where
@@ -3191,8 +3191,8 @@ instance [NormalizedGCDMonoid
   body: lcm_assoc
 
 中文:
-实例 [NormalizedGCDMonoid
-  签名: α] : Std.Associative (α
+实例 [正规化最大公约数幺半群
+  签名: α] : Std.结合 (α
   定义体: lcm_assoc
 -/
 instance [NormalizedGCDMonoid α] : Std.Associative (α := α) lcm where
@@ -3208,7 +3208,7 @@ theorem lcm_eq_normalize
 
 中文:
 定理 lcm_eq_normalize
-  结论: [NormalizedGCDMonoid α] {a b c : α} (habc : lcm a b ∣ c)
+  结论: [正规化最大公约数幺半群 α] {a b c : α} (habc : 最小公倍数 a b ∣ c)
   证明: normalize_lcm a b ▸ normalize_eq_normalize habc hcab
 
 Depends on / 依赖: normalize_eq_normalize, normalize_lcm
@@ -3228,8 +3228,8 @@ theorem lcm_dvd_lcm
 
 中文:
 定理 lcm_dvd_lcm
-  条件: [GCDMonoid α] {a b c d : α} (hab : a ∣ b) (hcd : c ∣ d)
-  结论: lcm a c ∣ lcm b d
+  条件: [最大公约数幺半群 α] {a b c d : α} (hab : a ∣ b) (hcd : c ∣ d)
+  结论: 最小公倍数 a c ∣ 最小公倍数 b d
   证明: lcm_dvd (hab.trans (dvd_lcm_left _ _)) (hcd.trans (dvd_lcm_right _ _))
 
 Depends on / 依赖: dvd_lcm_left, dvd_lcm_right, hab.trans, hcd.trans, lcm_dvd
@@ -3248,8 +3248,8 @@ theorem Associated.lcm
 @[simp]
 
 中文:
-定理 Associated.lcm
-  结论: [GCDMonoid α]
+定理 Associated.最小公倍数
+  结论: [最大公约数幺半群 α]
   证明: associated_of_dvd_dvd (lcm_dvd_lcm ha.dvd hb.dvd) (lcm_dvd_lcm ha.dvd' hb.dvd')
 
 @[simp]
@@ -3273,8 +3273,8 @@ theorem lcm_units_coe_left
 
 中文:
 定理 lcm_units_coe_left
-  条件: [NormalizedGCDMonoid α] (u : αˣ) (a : α)
-  结论: lcm (↑u) a = normalize a
+  条件: [正规化最大公约数幺半群 α] (u : αˣ) (a : α)
+  结论: 最小公倍数 (↑u) a = normalize a
   证明: lcm_eq_normalize (lcm_dvd Units.coe_dvd dvd_rfl) (dvd_lcm_right _ _)
 
 @[simp]
@@ -3298,8 +3298,8 @@ theorem lcm_units_coe_right
 
 中文:
 定理 lcm_units_coe_right
-  条件: [NormalizedGCDMonoid α] (a : α) (u : αˣ)
-  结论: lcm a ↑u = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α) (u : αˣ)
+  结论: 最小公倍数 a ↑u = normalize a
   证明: (lcm_comm a u).trans lcm_units_coe_left _ _
 
 @[simp]
@@ -3323,8 +3323,8 @@ theorem lcm_one_left
 
 中文:
 定理 lcm_one_left
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: lcm 1 a = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最小公倍数 1 a = normalize a
   证明: lcm_units_coe_left 1 a
 
 @[simp]
@@ -3348,8 +3348,8 @@ theorem lcm_one_right
 
 中文:
 定理 lcm_one_right
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: lcm a 1 = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最小公倍数 a 1 = normalize a
   证明: lcm_units_coe_right a 1
 
 @[simp]
@@ -3373,8 +3373,8 @@ theorem lcm_same
 
 中文:
 定理 lcm_same
-  条件: [NormalizedGCDMonoid α] (a : α)
-  结论: lcm a a = normalize a
+  条件: [正规化最大公约数幺半群 α] (a : α)
+  结论: 最小公倍数 a a = normalize a
   证明: lcm_eq_normalize (lcm_dvd dvd_rfl dvd_rfl) (dvd_lcm_left _ _)
 
 @[simp]
@@ -3400,8 +3400,8 @@ theorem lcm_eq_one_iff
 
 中文:
 定理 lcm_eq_one_iff
-  条件: [NormalizedGCDMonoid α] (a b : α)
-  结论: lcm a b = 1 ↔ a ∣ 1 ∧ b ∣ 1
+  条件: [正规化最大公约数幺半群 α] (a b : α)
+  结论: 最小公倍数 a b = 1 ↔ a ∣ 1 ∧ b ∣ 1
   证明: Iff.intro (fun eq => eq ▸ ⟨dvd_lcm_left _ _, dvd_lcm_right _ _⟩) fun ⟨⟨c, hc⟩, ⟨d, hd⟩⟩ =>
     show lcm (Units.mkOfMulEqOne a c hc.symm : α) (Units.mkOfMulEqOne b d hd.symm) = 1 by
       rw [lcm_units_coe_left]; rw [normalize_coe_units]
@@ -3432,7 +3432,7 @@ theorem lcm_mul_left
 
 中文:
 定理 lcm_mul_left
-  条件: [StrongNormalizedGCDMonoid α] (a b c : α)
+  条件: [StrongNormalizedGCD幺半群 α] (a b c : α)
   证明: (by_cases (by rintro rfl; simp))
     fun ha : a != 0 =>
     suffices lcm (a * b) (a * c) = normalize (a * lcm b c) by simpa
@@ -3468,7 +3468,7 @@ theorem lcm_mul_right
 
 中文:
 定理 lcm_mul_right
-  条件: [StrongNormalizedGCDMonoid α] (a b c : α)
+  条件: [StrongNormalizedGCD幺半群 α] (a b c : α)
   证明: by simp only [mul_comm, lcm_mul_left]
 
 Depends on / 依赖: lcm_mul_left, mul_comm
@@ -3487,7 +3487,7 @@ theorem lcm_eq_left_iff
 
 中文:
 定理 lcm_eq_left_iff
-  条件: [NormalizedGCDMonoid α] (a b : α) (h : normalize a = a)
+  条件: [正规化最大公约数幺半群 α] (a b : α) (h : normalize a = a)
   证明: (Iff.intro fun eq => eq ▸ dvd_lcm_right _ _) fun hab =>
     dvd_antisymm_of_normalize_eq (normalize_lcm _ _) h (lcm_dvd (dvd_refl a) hab) (dvd_lcm_left _ _)
 
@@ -3508,7 +3508,7 @@ theorem lcm_eq_right_iff
 
 中文:
 定理 lcm_eq_right_iff
-  条件: [NormalizedGCDMonoid α] (a b : α) (h : normalize b = b)
+  条件: [正规化最大公约数幺半群 α] (a b : α) (h : normalize b = b)
   证明: by simpa only [lcm_comm b a] using lcm_eq_left_iff b a h
 
 Depends on / 依赖: lcm_comm, lcm_eq_left_iff
@@ -3527,8 +3527,8 @@ theorem lcm_dvd_lcm_mul_left
 
 中文:
 定理 lcm_dvd_lcm_mul_left
-  条件: [GCDMonoid α] (m n k : α)
-  结论: lcm m n ∣ lcm (k * m) n
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最小公倍数 m n ∣ 最小公倍数 (k * m) n
   证明: lcm_dvd_lcm (dvd_mul_left _ _) dvd_rfl
 
 Depends on / 依赖: dvd_mul_left, dvd_rfl, lcm_dvd_lcm
@@ -3547,8 +3547,8 @@ theorem lcm_dvd_lcm_mul_right
 
 中文:
 定理 lcm_dvd_lcm_mul_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: lcm m n ∣ lcm (m * k) n
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最小公倍数 m n ∣ 最小公倍数 (m * k) n
   证明: lcm_dvd_lcm (dvd_mul_right _ _) dvd_rfl
 
 Depends on / 依赖: dvd_mul_right, dvd_rfl, lcm_dvd_lcm
@@ -3567,8 +3567,8 @@ theorem lcm_dvd_lcm_mul_left_right
 
 中文:
 定理 lcm_dvd_lcm_mul_left_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: lcm m n ∣ lcm m (k * n)
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最小公倍数 m n ∣ 最小公倍数 m (k * n)
   证明: lcm_dvd_lcm dvd_rfl (dvd_mul_left _ _)
 
 Depends on / 依赖: dvd_mul_left, dvd_rfl, lcm_dvd_lcm
@@ -3587,8 +3587,8 @@ theorem lcm_dvd_lcm_mul_right_right
 
 中文:
 定理 lcm_dvd_lcm_mul_right_right
-  条件: [GCDMonoid α] (m n k : α)
-  结论: lcm m n ∣ lcm m (n * k)
+  条件: [最大公约数幺半群 α] (m n k : α)
+  结论: 最小公倍数 m n ∣ 最小公倍数 m (n * k)
   证明: lcm_dvd_lcm dvd_rfl (dvd_mul_right _ _)
 
 Depends on / 依赖: dvd_mul_right, dvd_rfl, lcm_dvd_lcm
@@ -3607,7 +3607,7 @@ theorem lcm_eq_of_associated_left
 
 中文:
 定理 lcm_eq_of_associated_left
-  条件: [NormalizedGCDMonoid α] {m n : α} (h : Associated m n) (k : α)
+  条件: [正规化最大公约数幺半群 α] {m n : α} (h : Associated m n) (k : α)
   证明: dvd_antisymm_of_normalize_eq (normalize_lcm _ _) (normalize_lcm _ _) (lcm_dvd_lcm h.dvd dvd_rfl)
     (lcm_dvd_lcm h.symm.dvd dvd_rfl)
 
@@ -3629,7 +3629,7 @@ theorem lcm_eq_of_associated_right
 
 中文:
 定理 lcm_eq_of_associated_right
-  条件: [NormalizedGCDMonoid α] {m n : α} (h : Associated m n) (k : α)
+  条件: [正规化最大公约数幺半群 α] {m n : α} (h : Associated m n) (k : α)
   证明: dvd_antisymm_of_normalize_eq (normalize_lcm _ _) (normalize_lcm _ _) (lcm_dvd_lcm dvd_rfl h.dvd)
     (lcm_dvd_lcm dvd_rfl h.symm.dvd)
 
@@ -3655,7 +3655,7 @@ theorem lcm_dvd_mul
 
 中文:
 定理 lcm_dvd_mul
-  结论: lcm m n ∣ m * n
+  结论: 最小公倍数 m n ∣ m * n
   证明: lcm_dvd (by simp) (by simp)
 -/
 @[simp] theorem lcm_dvd_mul : lcm m n ∣ m * n :=
@@ -3675,7 +3675,7 @@ alias Dvd.dvd.lcm_right := dvd_lcm_of_dvd_left
 中文:
 定理 dvd_lcm_of_dvd_left
   条件: (h : a ∣ b) (c : α)
-  结论: a ∣ lcm b c
+  结论: a ∣ 最小公倍数 b c
   证明: h.trans (dvd_lcm_left b c)
 
 alias Dvd.dvd.lcm_right := dvd_lcm_of_dvd_left
@@ -3698,7 +3698,7 @@ theorem dvd_of_lcm_right_dvd
 
 中文:
 定理 dvd_of_lcm_right_dvd
-  条件: (h : lcm a b ∣ c)
+  条件: (h : 最小公倍数 a b ∣ c)
   结论: a ∣ c
   证明: (dvd_lcm_left a b).trans h
 
@@ -3721,7 +3721,7 @@ alias Dvd.dvd.lcm_left := dvd_lcm_of_dvd_right
 中文:
 定理 dvd_lcm_of_dvd_right
   条件: (h : a ∣ b) (c : α)
-  结论: a ∣ lcm c b
+  结论: a ∣ 最小公倍数 c b
   证明: h.trans (dvd_lcm_right c b)
 
 alias Dvd.dvd.lcm_left := dvd_lcm_of_dvd_right
@@ -3744,7 +3744,7 @@ theorem dvd_of_lcm_left_dvd
 
 中文:
 定理 dvd_of_lcm_left_dvd
-  条件: (h : lcm a b ∣ c)
+  条件: (h : 最小公倍数 a b ∣ c)
   结论: b ∣ c
   证明: (dvd_lcm_right a b).trans h
 
@@ -3769,7 +3769,7 @@ theorem dvd_or_dvd_of_dvd_lcm
 
 中文:
 定理 dvd_or_dvd_of_dvd_lcm
-  条件: (h : p ∣ lcm a b)
+  条件: (h : p ∣ 最小公倍数 a b)
   结论: p ∣ a ∨ p ∣ b
   证明: dvd_or_dvd hp (h.trans (lcm_dvd_mul a b))
 
@@ -3788,7 +3788,7 @@ theorem dvd_lcm
 
 中文:
 定理 dvd_lcm
-  结论: p ∣ lcm a b ↔ p ∣ a ∨ p ∣ b
+  结论: p ∣ 最小公倍数 a b ↔ p ∣ a ∨ p ∣ b
   证明: ⟨hp.dvd_or_dvd_of_dvd_lcm, (Or.elim · (dvd_lcm_of_dvd_left · _) (dvd_lcm_of_dvd_right · _))⟩
 
 Depends on / 依赖: Or.elim, dvd_lcm_of_dvd_left, dvd_lcm_of_dvd_right, dvd_or_dvd_of_dvd_lcm, hp.dvd_or_dvd_of_dvd_lcm
@@ -3808,7 +3808,7 @@ theorem not_dvd_lcm
 中文:
 定理 not_dvd_lcm
   条件: (ha : ¬ p ∣ a) (hb : ¬ p ∣ b)
-  结论: ¬ p ∣ lcm a b
+  结论: ¬ p ∣ 最小公倍数 a b
   证明: hp.dvd_lcm.not.mpr not_or.mpr ⟨ha, hb⟩
 
 Depends on / 依赖: GCDMonoid, GCDMonoid.toIsIntegrallyClosed, dvd_lcm, hp.dvd_lcm.not.mpr, not_or, not_or.mpr, toIsIntegrallyClosed
@@ -3849,7 +3849,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (NormalizationMonoid α)
+  签名: 唯一 (Normalization幺半群 α)
   定义体: inferInstance
   uniq := by rintro ⟨⟩; congr; apply Subsingleton.elim
 -/
@@ -3868,7 +3868,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (StrongNormalizationMonoid α)
+  签名: 唯一 (StrongNormalization幺半群 α)
   定义体: inferInstance
   uniq := by rintro ⟨⟩; congr; apply Subsingleton.elim
 -/
@@ -3893,7 +3893,7 @@ instance subsingleton_gcdMonoid_of_unique_units
 
 中文:
 实例 subsingleton_gcdMonoid_of_unique_units
-  签名: : Subsingleton (GCDMonoid α)
+  签名: : 子单例 (最大公约数幺半群 α)
   定义体: ⟨fun g₁ g₂ => by
     have hgcd : g₁.gcd = g₂.gcd := by
       ext a b
@@ -3934,7 +3934,7 @@ instance subsingleton_normalizedGCDMonoid_of_unique_units
 
 中文:
 实例 subsingleton_normalizedGCDMonoid_of_unique_units
-  签名: : Subsingleton (NormalizedGCDMonoid α)
+  签名: : 子单例 (正规化最大公约数幺半群 α)
   定义体: ⟨by
     rintro @⟨a_norm, a_gcd, _⟩ @⟨b_norm, b_gcd, _⟩
     cases Subsingleton.elim a_gcd b_gcd
@@ -3966,7 +3966,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (StrongNormalizedGCDMonoid α)
+  签名: 子单例 (StrongNormalizedGCD幺半群 α)
   定义体: by
     rintro @⟨a_norm, a_gcd, _⟩ @⟨b_norm, b_gcd, _⟩
     cases Subsingleton.elim a_gcd b_gcd
@@ -4086,7 +4086,7 @@ theorem gcd_eq_of_dvd_sub_right
 中文:
 定理 gcd_eq_of_dvd_sub_right
   条件: {a b c : α} (h : a ∣ b - c)
-  结论: gcd a b = gcd a c
+  结论: 最大公约数 a b = 最大公约数 a c
   证明: by
   apply dvd_antisymm_of_normalize_eq (normalize_gcd _ _) (normalize_gcd _ _) <;>
     rw [dvd_gcd_iff] <;>
@@ -4127,7 +4127,7 @@ theorem gcd_eq_of_dvd_sub_left
 中文:
 定理 gcd_eq_of_dvd_sub_left
   条件: {a b c : α} (h : a ∣ b - c)
-  结论: gcd b a = gcd c a
+  结论: 最大公约数 b a = 最大公约数 c a
   证明: by
   rw [gcd_comm _ a]; rw [gcd_comm _ a]; rw [gcd_eq_of_dvd_sub_right h]
 
@@ -4238,7 +4238,7 @@ definition gcdMonoidOfGCD
 
 中文:
 定义 gcdMonoidOfGCD
-  签名: [DecidableEq α] (gcd : α -> α -> α)
+  签名: [DecidableEq α] (最大公约数 : α -> α -> α)
   定义体: { gcd
     gcd_dvd_left
     gcd_dvd_right
@@ -4300,7 +4300,7 @@ definition normalizedGCDMonoidOfGCD
 
 中文:
 定义 normalizedGCDMonoidOfGCD
-  签名: [NormalizationMonoid α] [DecidableEq α] (gcd : α -> α -> α)
+  签名: [Normalization幺半群 α] [DecidableEq α] (最大公约数 : α -> α -> α)
   定义体: { (inferInstance : NormalizationMonoid α) with
     gcd
     gcd_dvd_left
@@ -4359,7 +4359,7 @@ definition gcdMonoidOfLCM
 
 中文:
 定义 gcdMonoidOfLCM
-  签名: [DecidableEq α] (lcm : α -> α -> α)
+  签名: [DecidableEq α] (最小公倍数 : α -> α -> α)
   定义体: let exists_gcd a b := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
   { lcm
     gcd := fun a b => if a = 0 then b else if b = 0 then a else Classical.choose (exists_gcd a b)
@@ -4450,7 +4450,7 @@ gcd a b := normalize
 
 中文:
 定义 normalizedGCDMonoidOfLCM
-  签名: [NormalizationMonoid α] [DecidableEq α] (lcm : α -> α -> α)
+  签名: [Normalization幺半群 α] [DecidableEq α] (最小公倍数 : α -> α -> α)
   定义体: let exists_gcd a b := lcm_dvd (Dvd.intro b rfl) (Dvd.intro_left a rfl)
   let := gcdMonoidOfLCM lcm dvd_lcm_left dvd_lcm_right lcm_dvd
   { (inferInstance : NormalizationMonoid α) with
@@ -4560,7 +4560,7 @@ definition normalizedGCDMonoidOfExistsGCD
 
 中文:
 定义 normalizedGCDMonoidOfExistsGCD
-  签名: [NormalizationMonoid α] [DecidableEq α]
+  签名: [Normalization幺半群 α] [DecidableEq α]
   定义体: normalizedGCDMonoidOfGCD (fun a b => normalize (Classical.choose (h a b)))
     (fun a b =>
       normalize_dvd_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
@@ -4590,7 +4590,7 @@ abbreviation strongNormalizedGCDMonoidOfExistsGCD
 
 中文:
 缩写 strongNormalizedGCDMonoidOfExistsGCD
-  签名: [StrongNormalizationMonoid α] [DecidableEq α]
+  签名: [StrongNormalization幺半群 α] [DecidableEq α]
   定义体: normalizedGCDMonoidOfExistsGCD h
   __ := ‹StrongNormalizationMonoid α›
 
@@ -4614,7 +4614,7 @@ theorem nonempty_normalizedGCDMonoid_iff_isGCDMonoid
 
 中文:
 定理 nonempty_normalizedGCDMonoid_iff_isGCDMonoid
-  条件: {α} [CommMonoidWithZero α]
+  条件: {α} [带零交换幺半群 α]
   证明: fun ⟨_⟩ => inferInstance
   mpr := fun ⟨_⟩ => by
     have := Classical.arbitrary (NormalizationMonoid α)
@@ -4641,7 +4641,7 @@ theorem nonempty_strongNormalizedGCDMonoid_iff
 
 中文:
 定理 nonempty_strongNormalizedGCDMonoid_iff
-  条件: {α} [CommMonoidWithZero α]
+  条件: {α} [带零交换幺半群 α]
   证明: ⟨fun ⟨_⟩ => ⟨inferInstance, inferInstance⟩, fun ⟨⟨_⟩, ⟨_⟩⟩ => by classical exact
     ⟨strongNormalizedGCDMonoidOfExistsGCD fun _ _ => ⟨_, fun _ => (dvd_gcd_iff ..).symm⟩⟩⟩
 
@@ -4699,7 +4699,7 @@ definition normalizedGCDMonoidOfExistsLCM
 
 中文:
 定义 normalizedGCDMonoidOfExistsLCM
-  签名: [NormalizationMonoid α] [DecidableEq α]
+  签名: [Normalization幺半群 α] [DecidableEq α]
   定义体: normalizedGCDMonoidOfLCM (fun a b => normalize (Classical.choose (h a b)))
     (fun a b =>
       dvd_normalize_iff.2 ((Classical.choose_spec (h a b) (Classical.choose (h a b))).2 dvd_rfl).1)
@@ -4729,7 +4729,7 @@ abbreviation strongNormalizedGCDMonoidOfExistsLCM
 
 中文:
 缩写 strongNormalizedGCDMonoidOfExistsLCM
-  签名: [StrongNormalizationMonoid α] [DecidableEq α]
+  签名: [StrongNormalization幺半群 α] [DecidableEq α]
   定义体: normalizedGCDMonoidOfExistsLCM h
   __ := ‹StrongNormalizationMonoid α›
 
@@ -4750,8 +4750,8 @@ theorem isGCDMonoid_iff_exists_gcd
   mpr := fun ⟨_, h⟩ => by classical exact ⟨gcdMonoidOfExistsGCD h⟩
 
 中文:
-定理 isGCDMonoid_iff_exists_gcd
-  条件: {α} [CommMonoidWithZero α]
+定理 isGCDMonoid_iff_存在_gcd
+  条件: {α} [带零交换幺半群 α]
   证明: fun ⟨_⟩ => ⟨inferInstance, fun _ _ => ⟨_, fun _ => (dvd_gcd_iff ..).symm⟩⟩
   mpr := fun ⟨_, h⟩ => by classical exact ⟨gcdMonoidOfExistsGCD h⟩
 
@@ -4772,8 +4772,8 @@ theorem isGCDMonoid_iff_exists_lcm
   mpr := fun ⟨_, h⟩ => by classical exact ⟨gcdMonoidOfExistsLCM h⟩
 
 中文:
-定理 isGCDMonoid_iff_exists_lcm
-  条件: {α} [CommMonoidWithZero α]
+定理 isGCDMonoid_iff_存在_lcm
+  条件: {α} [带零交换幺半群 α]
   证明: fun ⟨_⟩ => ⟨inferInstance, fun _ _ => ⟨_, fun _ => (lcm_dvd_iff ..).symm⟩⟩
   mpr := fun ⟨_, h⟩ => by classical exact ⟨gcdMonoidOfExistsLCM h⟩
 
@@ -4870,7 +4870,7 @@ instance instGCDMonoid
 
 中文:
 实例 instGCDMonoid
-  签名: : GCDMonoid (Associates α) where
+  签名: : 最大公约数幺半群 (Associates α) where
   定义体: Quotient.map₂ gcd fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.gcd hb
   lcm := Quotient.map₂ lcm fun _ _ (ha : Associated _ _) _ _ (hb : Associated _ _) => ha.lcm hb
   gcd_dvd_left := by rintro ⟨a⟩ ⟨b⟩; exact mk_le_mk_of_dvd (gcd_dvd_left _ _)
@@ -4905,7 +4905,7 @@ theorem gcd_mk_mk
 中文:
 定理 gcd_mk_mk
   条件: {a b : α}
-  结论: gcd (Associates.mk a) (Associates.mk b) = Associates.mk (gcd a b)
+  结论: 最大公约数 (Associates.mk a) (Associates.mk b) = Associates.mk (最大公约数 a b)
   证明: rfl
 -/
 theorem gcd_mk_mk {a b : α} : gcd (Associates.mk a) (Associates.mk b) = Associates.mk (gcd a b) :=
@@ -4922,7 +4922,7 @@ theorem lcm_mk_mk
 中文:
 定理 lcm_mk_mk
   条件: {a b : α}
-  结论: lcm (Associates.mk a) (Associates.mk b) = Associates.mk (lcm a b)
+  结论: 最小公倍数 (Associates.mk a) (Associates.mk b) = Associates.mk (最小公倍数 a b)
   证明: rfl
 -/
 theorem lcm_mk_mk {a b : α} : lcm (Associates.mk a) (Associates.mk b) = Associates.mk (lcm a b) :=

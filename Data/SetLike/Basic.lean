@@ -62,7 +62,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (p : MySubobject X) (s : Set X) (hs : s = ↑p)
+  签名: (p : MySubobject X) (s : 集合 X) (hs : s = ↑p)
   定义体: { carrier := s
     op_mem' := hs.symm ▸ p.op_mem' }
 -/
@@ -80,7 +80,7 @@ lemma coe_copy
 
 中文:
 引理 coe_copy
-  条件: (p : MySubobject X) (s : Set X) (hs : s = ↑p)
+  条件: (p : MySubobject X) (s : 集合 X) (hs : s = ↑p)
   证明: rfl
 -/
 @[simp] lemma coe_copy (p : MySubobject X) (s : Set X) (hs : s = ↑p) :
@@ -97,7 +97,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: (p : MySubobject X) (s : Set X) (hs : s = ↑p)
+  条件: (p : MySubobject X) (s : 集合 X) (hs : s = ↑p)
   结论: p.copy s hs = p
   证明: SetLike.coe_injective hs
 
@@ -174,11 +174,11 @@ class SetLike
     - coe_injective : Function.Injective coe
 
 中文:
-类 SetLike
+类 集合状
   参数: (A : 类型) (B : outParam 类型)
   公理与运算 (2 个):
-    - coe : A -> Set B
-    - coe_injective : Function.Injective coe
+    - coe : A -> 集合 B
+    - coe_injective : 函数.单射 coe
 -/
 class SetLike (A : Type*) (B : outParam Type*) where
   /-- The coercion from a term of a `SetLike` to its corresponding `Set`. -/
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC A (Set B)
+  签名: CoeTC A (集合 B)
   定义体: SetLike.coe
 
 Depends on / 依赖: SetLike, SetLike.coe
@@ -247,7 +247,7 @@ theorem coe_sort_coe
 
 中文:
 定理 coe_sort_coe
-  结论: ((p : Set B) : Type _) = p
+  结论: ((p : 集合 B) : 类型 _) = p
   证明: rfl
 -/
 theorem coe_sort_coe : ((p : Set B) : Type _) = p :=
@@ -265,7 +265,7 @@ theorem «exists»
   proof: SetCoe.exists
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {q : p -> 命题}
   结论: (存在 x, q x) ↔ 存在 (x : B) (h : x in p), q ⟨x, ‹_›⟩
   证明: SetCoe.exists
@@ -285,7 +285,7 @@ theorem «forall»
 @[simp, norm_cast]
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {q : p -> 命题}
   结论: (对任意 x, q x) ↔ 对任意 (x : B) (h : x in p), q ⟨x, ‹_›⟩
   证明: SetCoe.forall
@@ -306,7 +306,7 @@ theorem coe_set_eq
 
 中文:
 定理 coe_set_eq
-  结论: (p : Set B) = q ↔ p = q
+  结论: (p : 集合 B) = q ↔ p = q
   证明: coe_injective.eq_iff
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, eq_iff
@@ -324,7 +324,7 @@ lemma coe_ne_coe
 
 中文:
 引理 coe_ne_coe
-  结论: (p : Set B) != q ↔ p != q
+  结论: (p : 集合 B) != q ↔ p != q
   证明: coe_injective.ne_iff
 -/
 @[norm_cast] lemma coe_ne_coe : (p : Set B) != q ↔ p != q := coe_injective.ne_iff
@@ -340,7 +340,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  条件: (h : (p : Set B) = q)
+  条件: (h : (p : 集合 B) = q)
   结论: p = q
   证明: coe_injective h
 
@@ -359,7 +359,7 @@ theorem ext'_iff
 
 中文:
 定理 ext'_iff
-  结论: p = q ↔ (p : Set B) = q
+  结论: p = q ↔ (p : 集合 B) = q
   证明: coe_set_eq.symm
 -/
 theorem ext'_iff : p = q ↔ (p : Set B) = q :=
@@ -422,7 +422,7 @@ theorem mem_coe
 中文:
 定理 mem_coe
   条件: {x : B}
-  结论: x in (p : Set B) ↔ x in p
+  结论: x in (p : 集合 B) ↔ x in p
   证明: Iff.rfl
 
 @[simp, norm_cast]
@@ -494,7 +494,7 @@ lemma mem_of_subset
 
 中文:
 引理 mem_of_subset
-  条件: {s : Set B} (hp : s subseteq p) {x : B} (hx : x in s)
+  条件: {s : 集合 B} (hp : s subseteq p) {x : B} (hx : x in s)
   结论: x in p
   证明: hp hx
 
@@ -561,7 +561,7 @@ lemma mem_of_subsingleton
 
 中文:
 引理 mem_of_subsingleton
-  条件: [Subsingleton B] (S : A) [h : Nonempty S] {b : B}
+  条件: [子单例 B] (S : A) [h : 非空 S] {b : B}
   结论: b in S
   证明: by
   obtain ⟨s, hs⟩ := nonempty_subtype.mp h
@@ -583,8 +583,8 @@ lemma exists_not_mem_of_ne_top
   simpa [-SetLike.coe_set_eq, SetLike.ext'_iff, h_top, Set.ne_univ_iff_exists_notMem] using hs
 
 中文:
-引理 exists_not_mem_of_ne_top
-  结论: [LE A] [OrderTop A] (s : A) (hs : s != ⊤)
+引理 存在_not_mem_of_ne_top
+  结论: [LE A] [有顶序 A] (s : A) (hs : s != ⊤)
   证明: by
   simpa [-SetLike.coe_set_eq, SetLike.ext'_iff, h_top, Set.ne_univ_iff_exists_notMem] using hs
 
@@ -607,10 +607,10 @@ class IsConcreteLE
     - coe_subset_coe'({S T : A}) : SetLike.coe S subseteq SetLike.coe T ↔ S <= T
 
 中文:
-类 IsConcreteLE
-  参数: (A : 类型) (B : outParam 类型) [SetLike A B] [LE A]
+类 是余ncreteLE
+  参数: (A : 类型) (B : outParam 类型) [集合状 A B] [LE A]
   公理与运算 (1 个):
-    - coe_subset_coe'({S T : A}) : SetLike.coe S subseteq SetLike.coe T ↔ S <= T
+    - coe_subset_coe'({S T : A}) : 集合状.coe S subseteq 集合状.coe T ↔ S <= T
 -/
 class IsConcreteLE (A : Type*) (B : outParam Type*) [SetLike A B] [LE A] where
   /-- The coercion from a `SetLike` type preserves the ordering. -/
@@ -667,8 +667,8 @@ definition PartialOrder.ofSetLike
   __ := PartialOrder.lift (SetLike.coe : A -> Set B) SetLike.coe_injective
 
 中文:
-定义 PartialOrder.ofSetLike
-  签名: : PartialOrder A where
+定义 偏序.ofSetLike
+  签名: : 偏序 A where
   定义体: LE.ofSetLike A B
   lt s t := letI := LE.ofSetLike A B; s <= t ∧ ¬t <= s
   __ := PartialOrder.lift (SetLike.coe : A -> Set B) SetLike.coe_injective
@@ -700,7 +700,7 @@ lemma coe_subset_coe
 中文:
 引理 coe_subset_coe
   条件: {S T : A}
-  结论: (S : Set B) subseteq T ↔ S <= T
+  结论: (S : 集合 B) subseteq T ↔ S <= T
   证明: IsConcreteLE.coe_subset_coe'
 -/
 @[simp, norm_cast, gcongr] lemma coe_subset_coe {S T : A} : (S : Set B) subseteq T ↔ S <= T :=
@@ -753,7 +753,7 @@ theorem not_le_iff_exists
   simpa [← coe_subset_coe] using! Set.not_subset
 
 中文:
-定理 not_le_iff_exists
+定理 not_le_iff_存在
   结论: ¬p <= q ↔ 存在 x in p, x ∉ q
   证明: by
   simpa [← coe_subset_coe] using! Set.not_subset
@@ -780,7 +780,7 @@ theorem coe_mono
 
 中文:
 定理 coe_mono
-  结论: Monotone (SetLike.coe : A -> Set B)
+  结论: 递增 (集合状.coe : A -> 集合 B)
   证明: fun _ _ => coe_subset_coe.mpr
 
 Depends on / 依赖: coe_subset_coe, coe_subset_coe.mpr
@@ -808,7 +808,7 @@ lemma coe_ssubset_coe
 中文:
 引理 coe_ssubset_coe
   条件: {S T : A}
-  结论: (S : Set B) ⊂ T ↔ S < T
+  结论: (S : 集合 B) ⊂ T ↔ S < T
   证明: by
   rw [ssubset_iff_subset_ne]; rw [lt_iff_le_and_ne]; rw [coe_subset_coe]; rw [SetLike.coe_ne_coe]
 
@@ -828,7 +828,7 @@ theorem coe_strictMono
 
 中文:
 定理 coe_strictMono
-  结论: StrictMono (SetLike.coe : A -> Set B)
+  结论: 严格递增 (集合状.coe : A -> 集合 B)
   证明: fun _ _ => coe_ssubset_coe.mpr
 
 Depends on / 依赖: coe_ssubset_coe, coe_ssubset_coe.mpr
@@ -845,7 +845,7 @@ theorem exists_of_lt
   simpa [← coe_ssubset_coe] using! Set.exists_of_ssubset
 
 中文:
-定理 exists_of_lt
+定理 存在_of_lt
   结论: p < q -> 存在 x in q, x ∉ p
   证明: by
   simpa [← coe_ssubset_coe] using! Set.exists_of_ssubset
@@ -865,7 +865,7 @@ theorem lt_iff_le_and_exists
   rw [lt_iff_le_not_ge]; rw [not_le_iff_exists]
 
 中文:
-定理 lt_iff_le_and_exists
+定理 lt_iff_le_and_存在
   结论: p < q ↔ p <= q ∧ 存在 x in q, x ∉ p
   证明: by
   rw [lt_iff_le_not_ge]; rw [not_le_iff_exists]
@@ -886,7 +886,7 @@ abbreviation instSubtypeSet
 
 中文:
 缩写 instSubtypeSet
-  签名: {X} {p : Set X -> 命题}
+  签名: {X} {p : 集合 X -> 命题}
   定义体: (↑)
   coe_injective := Subtype.val_injective
 -/
@@ -905,7 +905,7 @@ abbreviation instSubtype
 
 中文:
 缩写 instSubtype
-  签名: {X S} [SetLike S X] {p : S -> 命题}
+  签名: {X S} [集合状 S X] {p : S -> 命题}
   定义体: (↑)
   coe_injective := SetLike.coe_injective.comp Subtype.val_injective
 -/
@@ -927,7 +927,7 @@ lemma mem_mk_set
 
 中文:
 引理 mem_mk_set
-  条件: {X} {p : Set X -> 命题} {U : Set X} {h : p U} {x : X}
+  条件: {X} {p : 集合 X -> 命题} {U : 集合 X} {h : p U} {x : X}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_mk_set {X} {p : Set X -> Prop} {U : Set X} {h : p U} {x : X} :
@@ -943,7 +943,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {X S} [SetLike S X] {p : S -> 命题} {U : S} {h : p U} {x : X}
+  条件: {X S} [集合状 S X] {p : S -> 命题} {U : S} {h : p U} {x : X}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_mk {X S} [SetLike S X] {p : S -> Prop} {U : S} {h : p U} {x : X} :

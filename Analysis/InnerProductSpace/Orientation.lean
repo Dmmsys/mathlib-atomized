@@ -209,7 +209,7 @@ definition adjustToOrientation
 
 中文:
 定义 adjustToOrientation
-  签名: : OrthonormalBasis ι 实数 E
+  签名: : 正交标准基 ι 实数 E
   定义体: (e.toBasis.adjustToOrientation x).toOrthonormalBasis (e.orthonormal_adjustToOrientation x)
 
 Depends on / 依赖: adjustToOrientation, e.orthonormal_adjustToOrientation, e.toBasis.adjustToOrientation, orthonormal_adjustToOrientation, toBasis, toOrthonormalBasis
@@ -347,7 +347,7 @@ haveI : FiniteDimensional Real E := .of_finrank_pos h.symm ▸ hn
 
 中文:
 定义 finOrthonormalBasis
-  签名: (hn : 0 < n) (h : finrank 实数 E = n) (x : Orientation 实数 E (Fin n))
+  签名: (hn : 0 < n) (h : finrank 实数 E = n) (x : 定向 实数 E (有限集 n))
   定义体: by
   haveI := Fin.pos_iff_nonempty.1 hn
 haveI : FiniteDimensional Real E := .of_finrank_pos h.symm ▸ hn
@@ -487,7 +487,7 @@ theorem volumeForm_robust
 
 中文:
 定理 volumeForm_robust
-  条件: (b : OrthonormalBasis (Fin n) 实数 E) (hb : b.toBasis.orientation = o)
+  条件: (b : 正交标准基 (有限集 n) 实数 E) (hb : b.toBasis.orientation = o)
   证明: by
   cases n
   · classical
@@ -524,7 +524,7 @@ theorem volumeForm_robust_neg
 
 中文:
 定理 volumeForm_robust_neg
-  条件: (b : OrthonormalBasis (Fin n) 实数 E) (hb : b.toBasis.orientation != o)
+  条件: (b : 正交标准基 (有限集 n) 实数 E) (hb : b.toBasis.orientation != o)
   证明: by
   rcases n with - | n
   · classical
@@ -600,7 +600,7 @@ theorem volumeForm_robust'
 
 中文:
 定理 volumeForm_robust'
-  条件: (b : OrthonormalBasis (Fin n) 实数 E) (v : Fin n -> E)
+  条件: (b : 正交标准基 (有限集 n) 实数 E) (v : 有限集 n -> E)
   证明: by
   cases n
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
@@ -632,8 +632,8 @@ theorem abs_volumeForm_apply_le
 
 中文:
 定理 abs_volumeForm_apply_le
-  条件: (v : Fin n -> E)
-  结论: |o.volumeForm v| <= ∏ i : Fin n, ‖v i‖
+  条件: (v : 有限集 n -> E)
+  结论: |o.volumeForm v| <= ∏ i : 有限集 n, ‖v i‖
   证明: by
   rcases n with - | n
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
@@ -669,8 +669,8 @@ theorem volumeForm_apply_le
 
 中文:
 定理 volumeForm_apply_le
-  条件: (v : Fin n -> E)
-  结论: o.volumeForm v <= ∏ i : Fin n, ‖v i‖
+  条件: (v : 有限集 n -> E)
+  结论: o.volumeForm v <= ∏ i : 有限集 n, ‖v i‖
   证明: (le_abs_self _).trans (o.abs_volumeForm_apply_le v)
 
 Depends on / 依赖: abs_volumeForm_apply_le, le_abs_self, o.abs_volumeForm_apply_le
@@ -693,7 +693,7 @@ theorem abs_volumeForm_apply_of_pairwise_orthogonal
 
 中文:
 定理 abs_volumeForm_apply_of_pairwise_orthogonal
-  结论: {v : Fin n -> E}
+  结论: {v : 有限集 n -> E}
   证明: by
   rcases n with - | n
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp
@@ -735,7 +735,7 @@ theorem abs_volumeForm_apply_of_orthonormal
 
 中文:
 定理 abs_volumeForm_apply_of_orthonormal
-  条件: (v : OrthonormalBasis (Fin n) 实数 E)
+  条件: (v : 正交标准基 (有限集 n) 实数 E)
   证明: by
   simpa [o.volumeForm_robust' v v] using congr_arg abs v.toBasis.det_self
 
@@ -761,7 +761,7 @@ theorem volumeForm_map
 
 中文:
 定理 volumeForm_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: by
   rcases n with - | n
   · refine o.eq_or_eq_neg_of_isEmpty.elim ?_ ?_ <;> rintro rfl <;> simp

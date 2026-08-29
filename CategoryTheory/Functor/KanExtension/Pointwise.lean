@@ -925,7 +925,7 @@ definition isPointwiseLeftKanExtensionAt
 
 中文:
 定义 isPointwiseLeftKanExtensionAt
-  签名: : Object命题erty D
+  签名: : ObjectProperty D
   定义体: fun Y => Nonempty (E.IsPointwiseLeftKanExtensionAt Y)
 
 Depends on / 依赖: E.IsPointwiseLeftKanExtensionAt, IsPointwiseLeftKanExtensionAt, Nonempty
@@ -943,7 +943,7 @@ instance :
 
 中文:
 实例 :
-  签名: E.isPointwiseLeftKanExtensionAt.IsClosedUnderIsomorphisms
+  签名: E.isPointwiseLeftKanExtensionAt.在同构下封闭
   定义体: ⟨E.isPointwiseLeftKanExtensionAtOfIso' h.some e⟩
 
 Depends on / 依赖: E.isPointwiseLeftKanExtensionAtOfIso, h.some, isPointwiseLeftKanExtensionAtOfIso
@@ -1128,7 +1128,7 @@ definition IsPointwiseLeftKanExtension.isUniversal
 
 中文:
 定义 IsPointwiseLeftKanExtension.isUniversal
-  签名: : E.IsUniversal
+  签名: : E.是泛
   定义体: IsInitial.ofUniqueHom h.homFrom (fun _ _ => h.hom_ext)
 
 Depends on / 依赖: IsInitial, IsInitial.ofUniqueHom, h.homFrom, h.hom_ext, homFrom, hom_ext, ofUniqueHom
@@ -1184,7 +1184,7 @@ lemma IsPointwiseLeftKanExtension.isIso_hom
 
 中文:
 引理 IsPointwiseLeftKanExtension.isIso_hom
-  条件: [L.Full] [L.Faithful]
+  条件: [L.满] [L.忠实]
   证明: have := fun X => (h (L.obj X)).isIso_hom_app
   NatIso.isIso_of_isIso_app ..
 
@@ -1452,7 +1452,7 @@ lemma isoLimit_hom_π
 
 中文:
 引理 isoLimit_hom_π
-  条件: (g : StructuredArrow Y L)
+  条件: (g : 结构化箭头 Y L)
   证明: IsLimit.conePointUniqueUpToIso_hom_comp _ _ _
 
 @[reassoc (attr := simp)]
@@ -1475,7 +1475,7 @@ lemma isoLimit_inv_π
 
 中文:
 引理 isoLimit_inv_π
-  条件: (g : StructuredArrow Y L)
+  条件: (g : 结构化箭头 Y L)
   证明: by
   simpa using! h.conePointUniqueUpToIso_inv_comp (limit.isLimit _) g
 
@@ -1498,7 +1498,7 @@ definition isPointwiseRightKanExtensionAt
 
 中文:
 定义 isPointwiseRightKanExtensionAt
-  签名: : Object命题erty D
+  签名: : ObjectProperty D
   定义体: fun Y => Nonempty (E.IsPointwiseRightKanExtensionAt Y)
 
 Depends on / 依赖: E.IsPointwiseRightKanExtensionAt, IsPointwiseRightKanExtensionAt, Nonempty
@@ -1516,7 +1516,7 @@ instance :
 
 中文:
 实例 :
-  签名: E.isPointwiseRightKanExtensionAt.IsClosedUnderIsomorphisms
+  签名: E.isPointwiseRightKanExtensionAt.在同构下封闭
   定义体: ⟨E.isPointwiseRightKanExtensionAtOfIso' h.some e⟩
 
 Depends on / 依赖: E.isPointwiseRightKanExtensionAtOfIso, h.some, isPointwiseRightKanExtensionAtOfIso
@@ -1695,7 +1695,7 @@ definition IsPointwiseRightKanExtension.isUniversal
 
 中文:
 定义 IsPointwiseRightKanExtension.isUniversal
-  签名: : E.IsUniversal
+  签名: : E.是泛
   定义体: IsTerminal.ofUniqueHom h.homTo (fun _ _ => h.hom_ext)
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUniqueHom, h.homTo, h.hom_ext, hom_ext, ofUniqueHom
@@ -1751,7 +1751,7 @@ lemma IsPointwiseRightKanExtension.isIso_hom
 
 中文:
 引理 IsPointwiseRightKanExtension.isIso_hom
-  条件: [L.Full] [L.Faithful]
+  条件: [L.满] [L.忠实]
   证明: have := fun X => (h (L.obj X)).isIso_hom_app
   NatIso.isIso_of_isIso_app ..
 
@@ -1924,7 +1924,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pointwiseLeftKanExtension L F).IsLeftKanExtension
+  签名: (pointwiseLeftKanExtension L F).是LeftKanExtension
   定义体: ⟨pointwiseLeftKanExtensionIsUniversal L F⟩
 
 Depends on / 依赖: pointwiseLeftKanExtensionIsUniversal
@@ -1943,7 +1943,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLeftKanExtension L F
+  签名: 有LeftKanExtension L F
   定义体: HasLeftKanExtension.mk _ (pointwiseLeftKanExtensionUnit L F)
 
 Depends on / 依赖: HasLeftKanExtension, HasLeftKanExtension.mk, pointwiseLeftKanExtensionUnit
@@ -2213,7 +2213,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pointwiseRightKanExtension L F).IsRightKanExtension
+  签名: (pointwiseRightKanExtension L F).是RightKanExtension
   定义体: ⟨pointwiseRightKanExtensionIsUniversal L F⟩
 
 Depends on / 依赖: pointwiseRightKanExtensionIsUniversal

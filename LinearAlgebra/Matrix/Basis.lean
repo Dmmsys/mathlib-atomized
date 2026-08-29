@@ -56,7 +56,7 @@ definition toMatrix
 
 中文:
 定义 toMatrix
-  签名: (e : Basis ι R M) (v : ι' -> M)
+  签名: (e : 基 ι R M) (v : ι' -> M)
   定义体: fun i j => e.repr (v j) i
 
 Depends on / 依赖: e.repr
@@ -109,7 +109,7 @@ theorem toMatrix_eq_toMatrix_constr
 
 中文:
 定理 toMatrix_eq_toMatrix_constr
-  条件: [Fintype ι] [DecidableEq ι] (v : ι -> M)
+  条件: [有限类型 ι] [DecidableEq ι] (v : ι -> M)
   证明: by
   ext
   rw [Basis.toMatrix_apply]; rw [LinearMap.toMatrix_apply]; rw [Basis.constr_basis]
@@ -136,7 +136,7 @@ theorem coePiBasisFun.toMatrix_eq_transpose
 
 中文:
 定理 coePiBasisFun.toMatrix_eq_transpose
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: by
   ext M i j
   rfl
@@ -226,7 +226,7 @@ theorem toMatrix_unitsSMul
 
 中文:
 定理 toMatrix_unitsSMul
-  条件: [DecidableEq ι] (e : Basis ι R₂ M₂) (w : ι -> R₂ˣ)
+  条件: [DecidableEq ι] (e : 基 ι R₂ M₂) (w : ι -> R₂ˣ)
   证明: by
   ext i j
   by_cases h : i = j <;>
@@ -252,7 +252,7 @@ theorem toMatrix_isUnitSMul
 
 中文:
 定理 toMatrix_isUnitSMul
-  结论: [DecidableEq ι] (e : Basis ι R₂ M₂) {w : ι -> R₂}
+  结论: [DecidableEq ι] (e : 基 ι R₂ M₂) {w : ι -> R₂}
   证明: e.toMatrix_unitsSMul _
 
 Depends on / 依赖: e.toMatrix_unitsSMul, toMatrix_unitsSMul
@@ -273,7 +273,7 @@ theorem toMatrix_smul_left
 
 中文:
 定理 toMatrix_smul_left
-  条件: {G} [Group G] [DistribMulAction G M] [SMulCommClass G R M] (g : G)
+  条件: {G} [群 G] [分配乘法作用 G M] [标量交换类 G R M] (g : G)
   证明: rfl
 
 @[simp]
@@ -294,7 +294,7 @@ theorem sum_toMatrix_smul_self
 
 中文:
 定理 sum_toMatrix_smul_self
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   结论: ∑ i : ι, e.toMatrix v i j • e i = v j
   证明: by
   simp_rw [e.toMatrix_apply, e.sum_repr]
@@ -317,7 +317,7 @@ theorem toMatrix_smul
 
 中文:
 定理 toMatrix_smul
-  结论: {R₁ S : 类型} [CommSemiring R₁] [Semiring S] [Algebra R₁ S] [Fintype ι]
+  结论: {R₁ S : 类型} [交换半环 R₁] [半环 S] [代数 R₁ S] [有限类型 ι]
   证明: by
   ext
   rw [Basis.toMatrix_apply]; rw [Pi.smul_apply]; rw [smul_eq_mul]; rw [← Algebra.leftMulMatrix_mulVec_repr]
@@ -347,7 +347,7 @@ theorem toMatrix_map_vecMul
 
 中文:
 定理 toMatrix_map_vecMul
-  结论: {S : 类型} [Semiring S] [Algebra R S] [Fintype ι] (b : Basis ι R S)
+  结论: {S : 类型} [半环 S] [代数 R S] [有限类型 ι] (b : 基 ι R S)
   证明: by
   ext i
   simp_rw [vecMul, dotProduct, Matrix.map_apply, ← Algebra.commutes, ← Algebra.smul_def,
@@ -374,7 +374,7 @@ theorem toLin_toMatrix
 
 中文:
 定理 toLin_toMatrix
-  条件: [Finite ι] [Fintype ι'] [DecidableEq ι'] (v : Basis ι' R M)
+  条件: [有限 ι] [有限类型 ι'] [DecidableEq ι'] (v : 基 ι' R M)
   证明: v.ext fun i => by cases nonempty_fintype ι; rw [toLin_self, id_apply, e.sum_toMatrix_smul_self]
 
 Depends on / 依赖: e.sum_toMatrix_smul_self, id_apply, nonempty_fintype, sum_toMatrix_smul_self, toLin_self, v.ext
@@ -405,7 +405,7 @@ definition toMatrixEquiv
 
 中文:
 定义 toMatrixEquiv
-  签名: [Fintype ι] (e : Basis ι R M)
+  签名: [有限类型 ι] (e : 基 ι R M)
   定义体: e.toMatrix
   map_add' v w := by
     ext i j
@@ -457,7 +457,7 @@ theorem restrictScalars_toMatrix
 
 中文:
 定理 restrictScalars_toMatrix
-  结论: [Fintype ι] [DecidableEq ι] {S : 类型} [CommRing S] [Nontrivial S]
+  结论: [有限类型 ι] [DecidableEq ι] {S : 类型} [交换环 S] [非平凡 S]
   证明: by
   ext
   rw [RingHom.mapMatrix_apply]; rw [Matrix.map_apply]; rw [Basis.toMatrix_apply]; rw [Basis.restrictScalars_repr_apply]; rw [Basis.toMatrix_apply]
@@ -497,8 +497,8 @@ theorem LinearMap.toMatrix_id_eq_basis_toMatrix
   apply LinearMap.toMatrix_apply
 
 中文:
-定理 LinearMap.toMatrix_id_eq_basis_toMatrix
-  条件: [Fintype ι] [DecidableEq ι] [Finite ι']
+定理 线性映射.toMatrix_id_eq_basis_toMatrix
+  条件: [有限类型 ι] [DecidableEq ι] [有限 ι']
   证明: by
   ext i
   apply LinearMap.toMatrix_apply
@@ -525,7 +525,7 @@ theorem basis_toMatrix_mul_linearMap_toMatrix
 
 中文:
 定理 basis_toMatrix_mul_linearMap_toMatrix
-  条件: [Finite κ] [Fintype κ'] [DecidableEq ι']
+  条件: [有限 κ] [有限类型 κ'] [DecidableEq ι']
   证明: (Matrix.toLin b' c).injective by
     have := Classical.decEq κ'
     rw [toLin_toMatrix]; rw [toLin_mul b' c' c]; rw [toLin_toMatrix]; rw [c.toLin_toMatrix]; rw [LinearMap.id_comp]
@@ -550,7 +550,7 @@ theorem basis_toMatrix_mul
 
 中文:
 定理 basis_toMatrix_mul
-  结论: [Fintype κ] [Finite ι] [DecidableEq κ]
+  结论: [有限类型 κ] [有限 ι] [DecidableEq κ]
   证明: by
   have := basis_toMatrix_mul_linearMap_toMatrix b₃ b₁ b₂ (Matrix.toLin b₃ b₂ A)
   rwa [LinearMap.toMatrix_toLin] at this
@@ -577,7 +577,7 @@ theorem linearMap_toMatrix_mul_basis_toMatrix
 
 中文:
 定理 linearMap_toMatrix_mul_basis_toMatrix
-  条件: [Finite κ'] [DecidableEq ι] [DecidableEq ι']
+  条件: [有限 κ'] [DecidableEq ι] [DecidableEq ι']
   证明: (Matrix.toLin b c').injective by
     rw [toLin_toMatrix]; rw [toLin_mul b b' c']; rw [toLin_toMatrix]; rw [b'.toLin_toMatrix]; rw [LinearMap.comp_id]
 
@@ -624,7 +624,7 @@ theorem mul_basis_toMatrix
 
 中文:
 定理 mul_basis_toMatrix
-  结论: [DecidableEq ι] [DecidableEq ι'] (b₁ : Basis ι R M) (b₂ : Basis ι' R M)
+  结论: [DecidableEq ι] [DecidableEq ι'] (b₁ : 基 ι R M) (b₂ : 基 ι' R M)
   证明: by
   cases nonempty_fintype κ
   have := linearMap_toMatrix_mul_basis_toMatrix b₂ b₁ b₃ (Matrix.toLin b₁ b₃ A)
@@ -653,7 +653,7 @@ theorem basis_toMatrix_basisFun_mul
 
 中文:
 定理 basis_toMatrix_basisFun_mul
-  条件: (b : Basis ι R (ι -> R)) (A : Matrix ι ι R)
+  条件: (b : 基 ι R (ι -> R)) (A : 矩阵 ι ι R)
   证明: by
   classical
   simp only [basis_toMatrix_mul _ _ (Pi.basisFun R ι), Matrix.toLin_eq_toLin']
@@ -686,7 +686,7 @@ omit [Fintype ι'] in
 
 中文:
 定理 toMatrix_reindex'
-  结论: [DecidableEq ι] [DecidableEq ι'] (b : Basis ι R M) (v : ι' -> M)
+  结论: [DecidableEq ι] [DecidableEq ι'] (b : 基 ι R M) (v : ι' -> M)
   证明: by
   ext
   simp [Basis.toMatrix_apply]
@@ -718,7 +718,7 @@ lemma toMatrix_mulVec_repr
 
 中文:
 引理 toMatrix_mulVec_repr
-  条件: [Finite ι'] (m : M)
+  条件: [有限 ι'] (m : M)
   结论: b'.toMatrix b *ᵥ b.repr m = b'.repr m
   证明: by
   classical
@@ -754,7 +754,7 @@ theorem toMatrix_mul_toMatrix
 
 中文:
 定理 toMatrix_mul_toMatrix
-  条件: {ι'' : 类型} [Fintype ι'] (b'' : ι'' -> M)
+  条件: {ι'' : 类型} [有限类型 ι'] (b'' : ι'' -> M)
   证明: by
   have := Classical.decEq ι
   have := Classical.decEq ι'
@@ -782,7 +782,7 @@ theorem toMatrix_mul_toMatrix_flip
 
 中文:
 定理 toMatrix_mul_toMatrix_flip
-  条件: [DecidableEq ι] [Fintype ι']
+  条件: [DecidableEq ι] [有限类型 ι']
   证明: by rw [toMatrix_mul_toMatrix, toMatrix_self]
 
 Depends on / 依赖: toMatrix_mul_toMatrix, toMatrix_self
@@ -804,7 +804,7 @@ definition invertibleToMatrix
 
 中文:
 定义 invertibleToMatrix
-  签名: [DecidableEq ι] [Fintype ι] (b b' : Basis ι R₂ M₂)
+  签名: [DecidableEq ι] [有限类型 ι] (b b' : 基 ι R₂ M₂)
   定义体: ⟨b'.toMatrix b, toMatrix_mul_toMatrix_flip _ _, toMatrix_mul_toMatrix_flip _ _⟩
 
 @[simp]
@@ -831,7 +831,7 @@ theorem toMatrix_reindex
 
 中文:
 定理 toMatrix_reindex
-  条件: (b : Basis ι R M) (v : ι' -> M) (e : ι ≃ ι')
+  条件: (b : 基 ι R M) (v : ι' -> M) (e : ι ≃ ι')
   证明: by
   ext
   simp only [toMatrix_apply, repr_reindex, Matrix.submatrix_apply, _root_.id,
@@ -860,7 +860,7 @@ theorem toMatrix_map
 
 中文:
 定理 toMatrix_map
-  条件: (b : Basis ι R M) (f : M ≃ₗ[R] N) (v : ι -> N)
+  条件: (b : 基 ι R M) (f : M ≃ₗ[R] N) (v : ι -> N)
   证明: by
   ext
   simp only [toMatrix_apply, Basis.map, LinearEquiv.trans_apply, (· ∘ ·)]
@@ -881,8 +881,8 @@ lemma _root_.LinearMap.toMatrix_eq_basisToMatrix
   proof: by ext; simp [LinearMap.toMatrix_apply, toMatrix_apply]
 
 中文:
-引理 _root_.LinearMap.toMatrix_eq_basisToMatrix
-  条件: [Fintype ι] [DecidableEq ι] [Finite κ]
+引理 _root_.线性映射.toMatrix_eq_basisToMatrix
+  条件: [有限类型 ι] [DecidableEq ι] [有限 κ]
   证明: by ext; simp [LinearMap.toMatrix_apply, toMatrix_apply]
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix_apply, toMatrix_apply

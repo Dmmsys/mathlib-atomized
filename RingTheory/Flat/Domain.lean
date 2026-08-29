@@ -40,7 +40,7 @@ lemma TensorProduct.map_injective_of_flat_flat_of_isDomain
   have H
 
 中文:
-引理 TensorProduct.map_injective_of_flat_flat_of_isDomain
+引理 张量积.map_injective_of_flat_flat_of_isDomain
   证明: by
   let K := FractionRing R
   refine .of_comp (f := TensorProduct.mk R K _ 1) ?_

@@ -47,7 +47,7 @@ structure PreZeroHypercover
 结构 PreZeroHypercover
   参数: (S : C)
   公理与运算 (3 个):
-    - I₀ : Type w
+    - I₀ : 类型 w
     - X((i : I₀)) : C
     - f((i : I₀)) : X i ⟶ S
 -/
@@ -71,7 +71,7 @@ abbreviation HasPullbacks
   body: forall (i₁ i₂ : E.I₀), HasPullback (E.f i₁) (E.f i₂)
 
 中文:
-缩写 HasPullbacks
+缩写 有Pullbacks
   定义体: forall (i₁ i₂ : E.I₀), HasPullback (E.f i₁) (E.f i₂)
 
 Depends on / 依赖: HasPullback
@@ -133,7 +133,7 @@ abbreviation sieve₀
 
 中文:
 缩写 sieve₀
-  签名: : Sieve S
+  签名: : 筛 S
   定义体: .ofArrows _ E.f
 
 Depends on / 依赖: ofArrows
@@ -256,7 +256,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (empty S).I₀
+  签名: 是空 (empty S).I₀
   定义体: inferInstanceAs IsEmpty PEmpty
 
 @[simp]
@@ -467,7 +467,7 @@ definition restrictIndex
 
 中文:
 定义 restrictIndex
-  签名: (E : PreZeroHypercover.{w} T) {ι : Type w'} (f : ι -> E.I₀)
+  签名: (E : PreZeroHypercover.{w} T) {ι : 类型 w'} (f : ι -> E.I₀)
   定义体: ι
   X := E.X ∘ f
   f i := E.f (f i)
@@ -498,7 +498,7 @@ lemma presieve₀_restrictIndex_equiv
 
 中文:
 引理 presieve₀_restrictIndex_equiv
-  条件: {ι : Type w'} (e : ι ≃ E.I₀)
+  条件: {ι : 类型 w'} (e : ι ≃ E.I₀)
   证明: by
   refine le_antisymm (fun Y g ⟨i⟩ => ⟨e i⟩) fun Y g ⟨i⟩ => ?_
   obtain ⟨i, rfl⟩ := e.surjective i
@@ -556,7 +556,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (E : PreZeroHypercover.{w} T) {ι : Type w'} (e : ι ≃ E.I₀)
+  签名: (E : PreZeroHypercover.{w} T) {ι : 类型 w'} (e : ι ≃ E.I₀)
   定义体: E.restrictIndex e
 
 @[simp]
@@ -582,7 +582,7 @@ lemma presieve₀_reindex
 
 中文:
 引理 presieve₀_reindex
-  条件: {ι : Type w'} (e : ι ≃ E.I₀)
+  条件: {ι : 类型 w'} (e : ι ≃ E.I₀)
   结论: (E.reindex e).presieve₀ = E.presieve₀
   证明: by
   simp [reindex]
@@ -652,7 +652,7 @@ definition sum
     | .inr i => F.f i
 
 中文:
-定义 sum
+定义 求和
   签名: {X : C} (E : PreZeroHypercover.{w} X) (F : PreZeroHypercover.{w'} X)
   定义体: E.I₀ oplus F.I₀
   X := Sum.elim E.X F.X
@@ -680,7 +680,7 @@ lemma sum_X_inl
 中文:
 引理 sum_X_inl
   条件: (i : E.I₀)
-  结论: (E.sum F).X (.inl i) = E.X i
+  结论: (E.求和 F).X (.inl i) = E.X i
   证明: rfl
 -/
 @[simp] lemma sum_X_inl (i : E.I₀) : (E.sum F).X (.inl i) = E.X i := rfl
@@ -697,7 +697,7 @@ lemma sum_X_inr
 中文:
 引理 sum_X_inr
   条件: (i : F.I₀)
-  结论: (E.sum F).X (.inr i) = F.X i
+  结论: (E.求和 F).X (.inr i) = F.X i
   证明: rfl
 -/
 @[simp] lemma sum_X_inr (i : F.I₀) : (E.sum F).X (.inr i) = F.X i := rfl
@@ -714,7 +714,7 @@ lemma sum_f_inl
 中文:
 引理 sum_f_inl
   条件: (i : E.I₀)
-  结论: (E.sum F).f (.inl i) = E.f i
+  结论: (E.求和 F).f (.inl i) = E.f i
   证明: rfl
 -/
 @[simp] lemma sum_f_inl (i : E.I₀) : (E.sum F).f (.inl i) = E.f i := rfl
@@ -733,7 +733,7 @@ lemma sum_f_inr
 中文:
 引理 sum_f_inr
   条件: (i : F.I₀)
-  结论: (E.sum F).f (.inr i) = F.f i
+  结论: (E.求和 F).f (.inr i) = F.f i
   证明: rfl
 
 @[simp]
@@ -760,7 +760,7 @@ lemma presieve₀_sum
 
 中文:
 引理 presieve₀_sum
-  结论: (E.sum F).presieve₀ = E.presieve₀ ⊔ F.presieve₀
+  结论: (E.求和 F).presieve₀ = E.presieve₀ ⊔ F.presieve₀
   证明: by
   rw [presieve₀]; rw [presieve₀]; rw [presieve₀]
   apply le_antisymm
@@ -909,7 +909,7 @@ definition sigmaOfIsColimit
 
 中文:
 定义 sigmaOfIsColimit
-  签名: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : IsColimit c)
+  签名: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : 是余极限 c)
   定义体: PUnit
   X _ := c.pt
   f _ := Cofan.IsColimit.desc hc E.f
@@ -936,7 +936,7 @@ lemma inj_sigmaOfIsColimit_f
 
 中文:
 引理 inj_sigmaOfIsColimit_f
-  结论: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : IsColimit c)
+  结论: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : 是余极限 c)
   证明: by
   simp [PreZeroHypercover.sigmaOfIsColimit]
 
@@ -960,7 +960,7 @@ lemma presieve₀_sigmaOfIsColimit
 
 中文:
 引理 presieve₀_sigmaOfIsColimit
-  条件: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : IsColimit c)
+  条件: (E : PreZeroHypercover.{w} S) {c : Cofan E.X} (hc : 是余极限 c)
   证明: Presieve.ofArrows_pUnit _
 
 Depends on / 依赖: Presieve, Presieve.ofArrows_pUnit, ofArrows_pUnit
@@ -988,7 +988,7 @@ structure Hom
     - w₀((i : E.I₀)) : h₀ i ≫ F.f (s₀ i) = E.f i  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (E : PreZeroHypercover.{w} S) (F : PreZeroHypercover.{w'} S)
   公理与运算 (3 个):
     - s₀((i : E.I₀)) : F.I₀
@@ -1018,7 +1018,7 @@ definition Hom.id
   h₀ _ := 𝟙 _
 
 中文:
-定义 Hom.id
+定义 态射.id
   签名: (E : PreZeroHypercover S)
   定义体: _root_.id
   h₀ _ := 𝟙 _
@@ -1041,8 +1041,8 @@ definition Hom.comp
   h₀ i := f.h₀ i ≫ g.h₀ _
 
 中文:
-定义 Hom.comp
-  签名: (f : E.Hom F) (g : F.Hom G)
+定义 态射.comp
+  签名: (f : E.态射 F) (g : F.态射 G)
   定义体: g.s₀ ∘ f.s₀
   h₀ i := f.h₀ i ≫ g.h₀ _
 -/
@@ -1065,7 +1065,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (PreZeroHypercover S)
+  签名: 范畴 (PreZeroHypercover S)
   定义体: Hom
   id E := Hom.id E
   comp f g := f.comp g
@@ -1088,7 +1088,7 @@ lemma Hom.ext'
   cat_disch
 
 中文:
-引理 Hom.ext'
+引理 态射.ext'
   结论: {E : PreZeroHypercover.{w} S} {F : PreZeroHypercover.{w'} S}
   证明: by
   cases f
@@ -1113,7 +1113,7 @@ lemma Hom.ext'_iff
   proof: ⟨fun h => h ▸ by simp, fun ⟨hs, hh⟩ => Hom.ext' hs hh⟩
 
 中文:
-引理 Hom.ext'_iff
+引理 态射.ext'_iff
   结论: {E : PreZeroHypercover.{w} S} {F : PreZeroHypercover.{w'} S}
   证明: ⟨fun h => h ▸ by simp, fun ⟨hs, hh⟩ => Hom.ext' hs hh⟩
 -/
@@ -1332,8 +1332,8 @@ lemma Hom.sieve₀_le_sieve₀
   exact Sieve.le_generate _ _ _ ⟨f.s₀ i⟩
 
 中文:
-引理 Hom.sieve₀_le_sieve₀
-  条件: {E F : PreZeroHypercover S} (f : E.Hom F)
+引理 态射.sieve₀_le_sieve₀
+  条件: {E F : PreZeroHypercover S} (f : E.态射 F)
   结论: E.sieve₀ <= F.sieve₀
   证明: by
   rw [Sieve.generate_le_iff]; rw [Presieve.ofArrows_le_iff]
@@ -1418,7 +1418,7 @@ lemma mem_of_iso
 
 中文:
 引理 mem_of_iso
-  结论: {K : Precoverage C} [K.IsStableUnderComposition] [K.HasIsos] {X : C}
+  结论: {K : Precoverage C} [K.是StableUnderComposition] [K.有是os] {X : C}
   证明: by
   have : F.presieve₀ =
       Presieve.ofArrows (fun (i : Σ (_ : F.I₀), Unit) => _) (fun i => e.inv.h₀ i.1 ≫ E.f _) := by
@@ -1459,7 +1459,7 @@ lemma mem_iff_of_iso
 
 中文:
 引理 mem_iff_of_iso
-  结论: {K : Precoverage C} [K.IsStableUnderComposition] [K.HasIsos] {X : C}
+  结论: {K : Precoverage C} [K.是StableUnderComposition] [K.有是os] {X : C}
   证明: ⟨fun h => PreZeroHypercover.mem_of_iso e h, fun h => PreZeroHypercover.mem_of_iso e.symm h⟩
 
 Depends on / 依赖: PreZeroHypercover, PreZeroHypercover.mem_of_iso, e.symm, mem_of_iso
@@ -1684,7 +1684,7 @@ definition sumInl
 
 中文:
 定义 sumInl
-  签名: : E.Hom (E.sum F) where
+  签名: : E.态射 (E.求和 F) where
   定义体: Sum.inl
   h₀ _ := 𝟙 _
 
@@ -1707,7 +1707,7 @@ definition sumInr
 
 中文:
 定义 sumInr
-  签名: : F.Hom (E.sum F) where
+  签名: : F.态射 (E.求和 F) where
   定义体: Sum.inr
   h₀ _ := 𝟙 _
 
@@ -1734,7 +1734,7 @@ definition sumLift
 
 中文:
 定义 sumLift
-  签名: (f : E.Hom G) (g : F.Hom G)
+  签名: (f : E.态射 G) (g : F.态射 G)
   定义体: Sum.elim f.s₀ g.s₀
   h₀
     | .inl i => f.h₀ i
@@ -1765,7 +1765,7 @@ definition interFst
 
 中文:
 定义 interFst
-  签名: : Hom (inter E F) E where
+  签名: : 态射 (inter E F) E where
   定义体: i.1
   h₀ _ := pullback.fst _ _
 -/
@@ -1790,7 +1790,7 @@ definition interSnd
 
 中文:
 定义 interSnd
-  签名: : Hom (inter E F) F where
+  签名: : 态射 (inter E F) F where
   定义体: i.2
   h₀ _ := pullback.snd _ _
   w₀ i := by simp [← pullback.condition]
@@ -1817,7 +1817,7 @@ definition interLift
 
 中文:
 定义 interLift
-  签名: (f : G.Hom E) (g : G.Hom F)
+  签名: (f : G.态射 E) (g : G.态射 F)
   定义体: ⟨f.s₀ i, g.s₀ i⟩
   h₀ i := pullback.lift (f.h₀ i) (g.h₀ i) (by simp)
 -/
@@ -1841,7 +1841,7 @@ definition restrictIndexHom
 
 中文:
 定义 restrictIndexHom
-  签名: {ι : Type w'} (f : ι -> E.I₀)
+  签名: {ι : 类型 w'} (f : ι -> E.I₀)
   定义体: f
   h₀ _ := 𝟙 _
 -/
@@ -1987,7 +1987,7 @@ lemma Presieve.exists_eq_preZeroHypercover
   proof: ⟨R.preZeroHypercover, by simp⟩
 
 中文:
-引理 Presieve.exists_eq_preZeroHypercover
+引理 Presieve.存在_eq_preZeroHypercover
   条件: {S : C} (R : Presieve S)
   证明: ⟨R.preZeroHypercover, by simp⟩
 
@@ -2150,7 +2150,7 @@ class Precoverage.RespectsIso
 类 Precoverage.RespectsIso
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - of_iso({S : C} {E F : PreZeroHypercover.{max u v} S} (e : E ≅ F)) : E.presieve₀ in J S -> F.presieve₀ in J S
+    - of_iso({S : C} {E F : PreZeroHypercover.{最大值 u v} S} (e : E ≅ F)) : E.presieve₀ in J S -> F.presieve₀ in J S
 -/
 class Precoverage.RespectsIso (J : Precoverage C) : Prop where
   of_iso {S : C} {E F : PreZeroHypercover.{max u v} S} (e : E ≅ F) :
@@ -2176,7 +2176,7 @@ lemma Precoverage.RespectsIso.of_forall_exists_iso
         | .inr i => by exact (eT _ i.2).
 
 中文:
-引理 Precoverage.RespectsIso.of_forall_exists_iso
+引理 Precoverage.RespectsIso.of_对任意_存在_iso
   结论: [J.RespectsIso] {S : C} {R T : Presieve S}
   证明: by
   choose YR eR hTeg using hRT
@@ -2367,7 +2367,7 @@ definition pullback₁
 
 中文:
 定义 pullback₁
-  签名: [J.IsStableUnderBaseChange] (f : S ⟶ T) (E : ZeroHypercover.{w} J T)
+  签名: [J.是StableUnderBaseChange] (f : S ⟶ T) (E : ZeroHypercover.{w} J T)
   定义体: E.toPreZeroHypercover.pullback₁ f
   mem₀ := J.mem_coverings_of_isPullback E.f E.mem₀ f _
     (fun _ => pullback.snd _ _) fun i => IsPullback.of_hasPullback f (E.f i)
@@ -2395,7 +2395,7 @@ definition pullback₂
 
 中文:
 定义 pullback₂
-  签名: [J.IsStableUnderBaseChange] (f : S ⟶ T) (E : ZeroHypercover.{w} J T)
+  签名: [J.是StableUnderBaseChange] (f : S ⟶ T) (E : ZeroHypercover.{w} J T)
   定义体: E.toPreZeroHypercover.pullback₂ f
   mem₀ := J.mem_coverings_of_isPullback E.f E.mem₀ f _
     (fun _ => pullback.fst _ _) fun i => (IsPullback.of_hasPullback (E.f i) f).flip
@@ -2422,7 +2422,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: [J.IsStableUnderComposition] (E : ZeroHypercover.{w} J T)
+  签名: [J.是StableUnderComposition] (E : ZeroHypercover.{w} J T)
   定义体: E.toPreZeroHypercover.bind (fun i => (F i).toPreZeroHypercover)
   mem₀ :=
     comp_mem_coverings (f := E.f) (g := fun i j => (F i).f j) E.mem₀ (fun i => (F i).mem₀)
@@ -2453,7 +2453,7 @@ definition inter
 
 中文:
 定义 inter
-  签名: [J.IsStableUnderBaseChange] [J.IsStableUnderComposition] (E : ZeroHypercover.{w} J T)
+  签名: [J.是StableUnderBaseChange] [J.是StableUnderComposition] (E : ZeroHypercover.{w} J T)
   定义体: E.toPreZeroHypercover.inter F.toPreZeroHypercover
   mem₀ := by
     rw [PreZeroHypercover.inter_def]; rw [PreZeroHypercover.presieve₀_reindex]
@@ -2482,7 +2482,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (E : ZeroHypercover.{w} J T) {ι : Type w'} (e : ι ≃ E.I₀)
+  签名: (E : ZeroHypercover.{w} J T) {ι : 类型 w'} (e : ι ≃ E.I₀)
   定义体: E.toPreZeroHypercover.reindex e
   mem₀ := by simp [E.mem₀]
 
@@ -2507,8 +2507,8 @@ definition sum
     exact J.sup_mem_coverings E.mem₀ F.mem₀
 
 中文:
-定义 sum
-  签名: [J.IsStableUnderSup] (E : ZeroHypercover.{w} J S) (F : ZeroHypercover.{w'} J S)
+定义 求和
+  签名: [J.是StableUnderSup] (E : ZeroHypercover.{w} J S) (F : ZeroHypercover.{w'} J S)
   定义体: E.toPreZeroHypercover.sum F.toPreZeroHypercover
   mem₀ := by
     rw [PreZeroHypercover.presieve₀_sum]
@@ -2586,7 +2586,7 @@ definition pushforward
 
 中文:
 定义 pushforward
-  签名: [J.IsStableUnderComposition] [J.HasIsos] {X Y : C} (f : X ⟶ Y)
+  签名: [J.是StableUnderComposition] [J.有是os] {X Y : C} (f : X ⟶ Y)
   定义体: E.toPreZeroHypercover.pushforward f
   mem₀ := by
     rw [PreZeroHypercover.mem_iff_of_iso (E.pushforwardIsoBind _)]
@@ -2624,7 +2624,7 @@ abbreviation Hom
   body: E.toPreZeroHypercover.Hom F.toPreZeroHypercover
 
 中文:
-缩写 Hom
+缩写 态射
   签名: (E : ZeroHypercover.{w} J S) (F : ZeroHypercover.{w'} J S)
   定义体: E.toPreZeroHypercover.Hom F.toPreZeroHypercover
 
@@ -2648,7 +2648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (ZeroHypercover.{w} J S)
+  签名: 范畴 (ZeroHypercover.{w} J S)
   定义体: Hom J
   id _ := PreZeroHypercover.Hom.id _
   comp := PreZeroHypercover.Hom.comp
@@ -2758,7 +2758,7 @@ class Small
 类 Small
   参数: (E : ZeroHypercover.{w} J S)
   公理与运算 (1 个):
-    - exists_restrictIndex_mem((E)) : 存在 (ι : Type w') (f : ι -> E.I₀), (E.restrictIndex f).presieve₀ in J S
+    - exists_restrictIndex_mem((E)) : 存在 (ι : 类型 w') (f : ι -> E.I₀), (E.restrictIndex f).presieve₀ in J S
 -/
 protected class Small (E : ZeroHypercover.{w} J S) where
   exists_restrictIndex_mem (E) : exists (ι : Type w') (f : ι -> E.I₀), (E.restrictIndex f).presieve₀ in J S
@@ -2883,7 +2883,7 @@ lemma mem_iff_exists_zeroHypercover
   use ⟨⟨ι, Y, f⟩, hR⟩
 
 中文:
-引理 mem_iff_exists_zeroHypercover
+引理 mem_iff_存在_zeroHypercover
   条件: {X : C} {R : Presieve X}
   证明: by
   refine ⟨fun hR => ?_, fun ⟨𝒰, hR⟩ => hR ▸ 𝒰.mem₀⟩
@@ -2939,7 +2939,7 @@ class Small
 类 Small
   参数: (J : Precoverage C)
   公理与运算 (1 个):
-    - zeroHypercoverSmall : 对任意 {S : C} (E : ZeroHypercover.{max u v} J S), ZeroHypercover.Small.{w'} E
+    - zeroHypercoverSmall : 对任意 {S : C} (E : ZeroHypercover.{最大值 u v} J S), ZeroHypercover.Small.{w'} E
 -/
 class Small (J : Precoverage C) : Prop where
   zeroHypercoverSmall : forall {S : C} (E : ZeroHypercover.{max u v} J S), ZeroHypercover.Small.{w'} E
@@ -2976,7 +2976,7 @@ lemma Small.inf
     · exact of_le (by simp) E.mem₀.2
 
 中文:
-引理 Small.inf
+引理 Small.下确界
   结论: {J K : Precoverage C} [Small.{w} J]
   证明: by
     refine ⟨(E.weaken (inf_le_left)).restrictIndexOfSmall.I₀,
@@ -3010,7 +3010,7 @@ instance [IsStableUnderBaseChange
       exact CategoryTheory.IsPullback.of_vert_isIso (by sim
 
 中文:
-实例 [IsStableUnderBaseChange
+实例 [是StableUnderBaseChange
   签名: J] : RespectsIso J where
   定义体: by
     refine J.mem_coverings_of_isPullback (fun i => E.f (e.inv.s₀ i)) ?_ (𝟙 S) _ (fun i => ?_) ?_

@@ -360,8 +360,8 @@ definition CommGroup.toDistribLattice
     · rw [inv_mul_le_iff_le_mul, ← inf_mu
 
 中文:
-定义 CommGroup.toDistribLattice
-  签名: (α : 类型) [Lattice α] [CommGroup α]
+定义 交换群.toDistribLattice
+  签名: (α : 类型) [格 α] [交换群 α]
   定义体: by
     rw [← mul_le_mul_iff_left (x ⊓ (y ⊓ z))]; rw [inf_mul_sup x (y ⊓ z)]; rw [← inv_mul_le_iff_le_mul]; rw [le_inf_iff]
     constructor

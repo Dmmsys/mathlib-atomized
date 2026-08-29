@@ -86,7 +86,7 @@ theorem revAtFun_inj
 中文:
 定理 revAtFun_inj
   条件: {N : 自然数}
-  结论: Function.Injective (revAtFun N)
+  结论: 函数.单射 (revAtFun N)
   证明: by
   intro a b hab
   rw [← @revAtFun_invol N a]; rw [hab]; rw [revAtFun_invol]
@@ -563,7 +563,7 @@ lemma reflect_map
 
 中文:
 引理 reflect_map
-  条件: {S : 类型} [Semiring S] (f : R ->+* S) (p : R[X]) (n : 自然数)
+  条件: {S : 类型} [半环 S] (f : R ->+* S) (p : R[X]) (n : 自然数)
   证明: by
   ext; simp
 
@@ -587,7 +587,7 @@ lemma reflect_one
 中文:
 引理 reflect_one
   条件: (n : 自然数)
-  结论: (1 : R[X]).reflect n = Polynomial.X ^ n
+  结论: (1 : R[X]).reflect n = 多项式.X ^ n
   证明: by
   rw [← C.map_one]; rw [reflect_C]; rw [map_one]; rw [one_mul]
 
@@ -722,7 +722,7 @@ theorem eval₂_reflect_mul_pow
 
 中文:
 定理 eval₂_reflect_mul_pow
-  结论: (i : R ->+* S) (x : S) [Invertible x] (N : 自然数) (f : R[X])
+  结论: (i : R ->+* S) (x : S) [可逆 x] (N : 自然数) (f : R[X])
   证明: by
   refine
     induction_with_natDegree_le (fun f => eval₂ i (⅟x) (reflect N f) * x ^ N = eval₂ i x f) _ ?_ ?_
@@ -764,7 +764,7 @@ theorem eval₂_reflect_eq_zero_iff
 
 中文:
 定理 eval₂_reflect_eq_zero_iff
-  结论: (i : R ->+* S) (x : S) [Invertible x] (N : 自然数) (f : R[X])
+  结论: (i : R ->+* S) (x : S) [可逆 x] (N : 自然数) (f : R[X])
   证明: by
   conv_rhs => rw [← eval₂_reflect_mul_pow i x N f hf]
   constructor
@@ -1106,7 +1106,7 @@ theorem reverse_mul_of_domain
 
 中文:
 定理 reverse_mul_of_domain
-  条件: {R : 类型} [Semiring R] [NoZeroDivisors R] (f g : R[X])
+  条件: {R : 类型} [半环 R] [无零因子 R] (f g : R[X])
   证明: by
   by_cases f0 : f = 0
   · simp only [f0, zero_mul, reverse_zero]
@@ -1137,7 +1137,7 @@ theorem trailingCoeff_mul
 
 中文:
 定理 trailingCoeff_mul
-  条件: {R : 类型} [Semiring R] [NoZeroDivisors R] (p q : R[X])
+  条件: {R : 类型} [半环 R] [无零因子 R] (p q : R[X])
   证明: by
   rw [← reverse_leadingCoeff]; rw [reverse_mul_of_domain]; rw [leadingCoeff_mul]; rw [reverse_leadingCoeff]; rw [reverse_leadingCoeff]
 
@@ -1355,7 +1355,7 @@ theorem eval₂_reverse_mul_pow
 
 中文:
 定理 eval₂_reverse_mul_pow
-  条件: (i : R ->+* S) (x : S) [Invertible x] (f : R[X])
+  条件: (i : R ->+* S) (x : S) [可逆 x] (f : R[X])
   证明: eval₂_reflect_mul_pow i _ _ f le_rfl
 
 @[simp]
@@ -1377,7 +1377,7 @@ theorem eval₂_reverse_eq_zero_iff
 
 中文:
 定理 eval₂_reverse_eq_zero_iff
-  条件: (i : R ->+* S) (x : S) [Invertible x] (f : R[X])
+  条件: (i : R ->+* S) (x : S) [可逆 x] (f : R[X])
   证明: eval₂_reflect_eq_zero_iff i x _ _ le_rfl
 
 Depends on / 依赖: le_rfl

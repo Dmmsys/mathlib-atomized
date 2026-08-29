@@ -39,7 +39,7 @@ definition getGoalLocations
 
 中文:
 定义 getGoalLocations
-  签名: (locations : Array GoalsLocation)
+  签名: (locations : 数组 GoalsLocation)
   定义体: Id.run do
   let mut res := #[]
   for location in locations do
@@ -123,9 +123,9 @@ structure SelectInsertParams
   参数: where
   公理与运算 (4 个):
     - pos : Lsp.Position
-    - goals : Array Widget.整数eractiveGoal
-    - selectedLocations : Array SubExpr.GoalsLocation
-    - replaceRange : Lsp.Range
+    - goals : 数组 Widget.整数eractiveGoal
+    - selectedLocations : 数组 SubExpr.GoalsLocation
+    - replaceRange : Lsp.值域
 -/
 structure SelectInsertParams where
   /-- Cursor position in the file at which the widget is being displayed. -/
@@ -155,7 +155,7 @@ definition mkSelectionPanelRPC
 
 中文:
 定义 mkSelectionPanelRPC
-  签名: {Params : Type} [SelectInsertParamsClass Params]
+  签名: {Params : 类型} [SelectInsertParams类 Params]
   定义体: fun params => RequestM.asTask do
   let doc ← RequestM.readDoc
   if h : 0 < (goals params).size then

@@ -35,7 +35,7 @@ class DiscreteUniformity
 
 中文:
 类 DiscreteUniformity
-  参数: (X : 类型) [u : UniformSpace X]
+  参数: (X : 类型) [u : 一致空间 X]
   公理与运算 (1 个):
     - eq_bot : u = ⊥
 -/
@@ -61,7 +61,7 @@ theorem _root_.discreteUniformity_iff_eq_principal_setRelId
 
 中文:
 定理 _root_.discreteUniformity_iff_eq_principal_setRelId
-  条件: {X : 类型} [UniformSpace X]
+  条件: {X : 类型} [一致空间 X]
   证明: by
   rw [discreteUniformity_iff_eq_bot]; rw [UniformSpace.ext_iff]; rw [Filter.ext_iff]; rw [bot_uniformity]
 
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology X
+  签名: 离散拓扑 X
   定义体: by
     rw [DiscreteUniformity.eq_bot (X := X)]; rw [UniformSpace.toTopologicalSpace_bot]
 
@@ -121,7 +121,7 @@ theorem _root_.discreteUniformity_iff_setRelId_mem_uniformity
 
 中文:
 定理 _root_.discreteUniformity_iff_setRelId_mem_uniformity
-  条件: {X : 类型} [UniformSpace X]
+  条件: {X : 类型} [一致空间 X]
   证明: by
   rw [← uniformSpace_eq_bot]; rw [discreteUniformity_iff_eq_bot]
 
@@ -177,7 +177,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  条件: {Y : 类型} [UniformSpace Y] (f : X -> Y)
+  条件: {Y : 类型} [一致空间 Y] (f : X -> Y)
   证明: by
   simp only [uniformContinuous_iff_le_comap, DiscreteUniformity.eq_bot, bot_le]
 

@@ -36,7 +36,7 @@ lemma LSeries.term_add
 
 中文:
 引理 LSeries.term_add
-  条件: (f g : 自然数 -> Complex) (s : Complex)
+  条件: (f g : 自然数 -> 复形) (s : 复形)
   结论: term (f + g) s = term f s + term g s
   证明: by
   ext ⟨- | n⟩ <;>
@@ -59,7 +59,7 @@ lemma LSeries.term_add_apply
 
 中文:
 引理 LSeries.term_add_apply
-  条件: (f g : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f g : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: by
   simp [term_add]
 
@@ -80,7 +80,7 @@ lemma LSeriesHasSum.add
 
 中文:
 引理 LSeriesHasSum.add
-  结论: {f g : 自然数 -> Complex} {s a b : Complex} (hf : LSeriesHasSum f s a)
+  结论: {f g : 自然数 -> 复形} {s a b : 复形} (hf : LSeriesHasSum f s a)
   证明: by
   simpa [LSeriesHasSum, term_add] using! HasSum.add hf hg
 
@@ -104,7 +104,7 @@ lemma LSeriesSummable.add
 
 中文:
 引理 LSeriesSummable.add
-  结论: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s)
+  结论: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s)
   证明: by
   simpa [LSeriesSummable, ← term_add_apply] using Summable.add hf hg
 
@@ -129,7 +129,7 @@ lemma LSeries_add
 
 中文:
 引理 LSeries_add
-  条件: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s) (hg : LSeriesSummable g s)
+  条件: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s) (hg : LSeriesSummable g s)
   证明: by
   simpa [LSeries, term_add] using hf.tsum_add hg
 
@@ -153,7 +153,7 @@ lemma LSeries.term_neg
 
 中文:
 引理 LSeries.term_neg
-  条件: (f : 自然数 -> Complex) (s : Complex)
+  条件: (f : 自然数 -> 复形) (s : 复形)
   结论: term (-f) s = -term f s
   证明: by
   ext ⟨- | n⟩ <;>
@@ -177,7 +177,7 @@ lemma LSeries.term_neg_apply
 
 中文:
 引理 LSeries.term_neg_apply
-  条件: (f : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f : 自然数 -> 复形) (s : 复形) (n : 自然数)
   结论: term (-f) s n = -term f s n
   证明: by
   simp [term_neg]
@@ -198,7 +198,7 @@ lemma LSeriesHasSum.neg
 
 中文:
 引理 LSeriesHasSum.neg
-  条件: {f : 自然数 -> Complex} {s a : Complex} (hf : LSeriesHasSum f s a)
+  条件: {f : 自然数 -> 复形} {s a : 复形} (hf : LSeriesHasSum f s a)
   证明: by
   simpa [LSeriesHasSum, term_neg] using! HasSum.neg hf
 
@@ -221,7 +221,7 @@ lemma LSeriesSummable.neg
 
 中文:
 引理 LSeriesSummable.neg
-  条件: {f : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s)
   证明: by
   simpa [LSeriesSummable, term_neg] using! Summable.neg hf
 
@@ -246,7 +246,7 @@ lemma LSeriesSummable.neg_iff
 
 中文:
 引理 LSeriesSummable.neg_iff
-  条件: {f : 自然数 -> Complex} {s : Complex}
+  条件: {f : 自然数 -> 复形} {s : 复形}
   证明: ⟨fun H => neg_neg f ▸ H.neg, .neg⟩
 
 @[simp]
@@ -270,7 +270,7 @@ lemma LSeries_neg
 
 中文:
 引理 LSeries_neg
-  条件: (f : 自然数 -> Complex) (s : Complex)
+  条件: (f : 自然数 -> 复形) (s : 复形)
   结论: LSeries (-f) s = -LSeries f s
   证明: by
   simp [LSeries, term_neg_apply, tsum_neg]
@@ -293,7 +293,7 @@ lemma LSeries.term_sub
 
 中文:
 引理 LSeries.term_sub
-  条件: (f g : 自然数 -> Complex) (s : Complex)
+  条件: (f g : 自然数 -> 复形) (s : 复形)
   结论: term (f - g) s = term f s - term g s
   证明: by
   simp_rw [sub_eq_add_neg, term_add, term_neg]
@@ -314,7 +314,7 @@ lemma LSeries.term_sub_apply
 
 中文:
 引理 LSeries.term_sub_apply
-  条件: (f g : 自然数 -> Complex) (s : Complex) (n : 自然数)
+  条件: (f g : 自然数 -> 复形) (s : 复形) (n : 自然数)
   证明: by
   rw [term_sub]; rw [Pi.sub_apply]
 
@@ -335,7 +335,7 @@ lemma LSeriesHasSum.sub
 
 中文:
 引理 LSeriesHasSum.sub
-  结论: {f g : 自然数 -> Complex} {s a b : Complex} (hf : LSeriesHasSum f s a)
+  结论: {f g : 自然数 -> 复形} {s a b : 复形} (hf : LSeriesHasSum f s a)
   证明: by
   simpa [LSeriesHasSum, term_sub] using! HasSum.sub hf hg
 
@@ -359,7 +359,7 @@ lemma LSeriesSummable.sub
 
 中文:
 引理 LSeriesSummable.sub
-  结论: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s)
+  结论: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s)
   证明: by
   simpa [LSeriesSummable, ← term_sub_apply] using Summable.sub hf hg
 
@@ -384,7 +384,7 @@ lemma LSeries_sub
 
 中文:
 引理 LSeries_sub
-  条件: {f g : 自然数 -> Complex} {s : Complex} (hf : LSeriesSummable f s) (hg : LSeriesSummable g s)
+  条件: {f g : 自然数 -> 复形} {s : 复形} (hf : LSeriesSummable f s) (hg : LSeriesSummable g s)
   证明: by
   simpa [LSeries, term_sub] using hf.tsum_sub hg
 
@@ -408,7 +408,7 @@ lemma LSeries.term_smul
 
 中文:
 引理 LSeries.term_smul
-  条件: (f : 自然数 -> Complex) (c s : Complex)
+  条件: (f : 自然数 -> 复形) (c s : 复形)
   结论: term (c • f) s = c • term f s
   证明: by
   ext ⟨- | n⟩ <;>
@@ -431,7 +431,7 @@ lemma LSeries.term_smul_apply
 
 中文:
 引理 LSeries.term_smul_apply
-  条件: (f : 自然数 -> Complex) (c s : Complex) (n : 自然数)
+  条件: (f : 自然数 -> 复形) (c s : 复形) (n : 自然数)
   证明: by
   simp [term_smul]
 
@@ -452,7 +452,7 @@ lemma LSeriesHasSum.smul
 
 中文:
 引理 LSeriesHasSum.smul
-  条件: {f : 自然数 -> Complex} (c : Complex) {s a : Complex} (hf : LSeriesHasSum f s a)
+  条件: {f : 自然数 -> 复形} (c : 复形) {s a : 复形} (hf : LSeriesHasSum f s a)
   证明: by
   simpa [LSeriesHasSum, term_smul] using! hf.const_smul c
 
@@ -473,7 +473,7 @@ lemma LSeriesSummable.smul
 
 中文:
 引理 LSeriesSummable.smul
-  条件: {f : 自然数 -> Complex} (c : Complex) {s : Complex} (hf : LSeriesSummable f s)
+  条件: {f : 自然数 -> 复形} (c : 复形) {s : 复形} (hf : LSeriesSummable f s)
   证明: by
   simpa [LSeriesSummable, term_smul] using! hf.const_smul c
 
@@ -494,7 +494,7 @@ lemma LSeriesSummable.of_smul
 
 中文:
 引理 LSeriesSummable.of_smul
-  条件: {f : 自然数 -> Complex} {c s : Complex} (hc : c != 0) (hf : LSeriesSummable (c • f) s)
+  条件: {f : 自然数 -> 复形} {c s : 复形} (hc : c != 0) (hf : LSeriesSummable (c • f) s)
   证明: by
   simpa [hc] using hf.smul (c⁻¹)
 
@@ -516,7 +516,7 @@ lemma LSeriesSummable.smul_iff
 
 中文:
 引理 LSeriesSummable.smul_iff
-  条件: {f : 自然数 -> Complex} {c s : Complex} (hc : c != 0)
+  条件: {f : 自然数 -> 复形} {c s : 复形} (hc : c != 0)
   证明: ⟨of_smul hc, smul c⟩
 
 @[simp]
@@ -540,7 +540,7 @@ lemma LSeries_smul
 
 中文:
 引理 LSeries_smul
-  条件: (f : 自然数 -> Complex) (c s : Complex)
+  条件: (f : 自然数 -> 复形) (c s : 复形)
   结论: LSeries (c • f) s = c * LSeries f s
   证明: by
   simp [LSeries, term_smul_apply, tsum_mul_left]
@@ -611,8 +611,8 @@ lemma LSeriesHasSum.sum
   simpa [LSeriesHasSum, term_sum, Finset.sum_fn S fun i => term (f i) s] using hasSum_sum hf
 
 中文:
-引理 LSeriesHasSum.sum
-  条件: {a : ι -> Complex} (hf : 对任意 i in S, LSeriesHasSum (f i) s (a i))
+引理 LSeriesHasSum.求和
+  条件: {a : ι -> 复形} (hf : 对任意 i in S, LSeriesHasSum (f i) s (a i))
   证明: by
   simpa [LSeriesHasSum, term_sum, Finset.sum_fn S fun i => term (f i) s] using hasSum_sum hf
 
@@ -634,7 +634,7 @@ lemma LSeriesSummable.sum
 @[simp]
 
 中文:
-引理 LSeriesSummable.sum
+引理 LSeriesSummable.求和
   条件: (hf : 对任意 i in S, LSeriesSummable (f i) s)
   证明: by
   simpa [LSeriesSummable, ← term_sum_apply] using summable_sum hf

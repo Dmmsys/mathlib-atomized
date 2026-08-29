@@ -46,7 +46,7 @@ scoped[Pointwise] attribute [instance] Set.hasDistribNeg
 
 中文:
 定义 noncomputable
-  签名: def hasDistribNeg [Mul α] [HasDistribNeg α]
+  签名: def hasDistribNeg [乘法 α] [有DistribNeg α]
   定义体: Set.involutiveNeg
   neg_mul _ _ := by simp_rw [← image_neg_eq_neg]; exact image2_image_left_comm neg_mul
   mul_neg _ _ := by simp_rw [← image_neg_eq_neg]; exact image_image2_right_comm mul_neg

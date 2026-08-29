@@ -33,7 +33,7 @@ definition discr
 
 中文:
 定义 discr
-  签名: (A : Matrix n n R)
+  签名: (A : 矩阵 n n R)
   定义体: A.charpoly.discr
 
 @[simp]
@@ -57,7 +57,7 @@ lemma discr_conj
 
 中文:
 引理 discr_conj
-  条件: (g : GL n R) (m : Matrix n n R)
+  条件: (g : GL n R) (m : 矩阵 n n R)
   结论: (g.val * m * g.val⁻¹).discr = m.discr
   证明: by
   simp [discr]
@@ -80,7 +80,7 @@ lemma discr_conj'
 
 中文:
 引理 discr_conj'
-  条件: (g : GL n R) (m : Matrix n n R)
+  条件: (g : GL n R) (m : 矩阵 n n R)
   结论: (g.val⁻¹ * m * g.val).discr = m.discr
   证明: by
   simp [discr]
@@ -101,7 +101,7 @@ lemma discr_of_card_eq_two
 
 中文:
 引理 discr_of_card_eq_two
-  条件: (A : Matrix n n R) (hn : Fintype.card n = 2)
+  条件: (A : 矩阵 n n R) (hn : 有限类型.card n = 2)
   证明: by
   nontriviality R
   rw [discr]; rw [Polynomial.discr_of_degree_eq_two (by simp; norm_cast)]
@@ -125,7 +125,7 @@ lemma discr_fin_two
 
 中文:
 引理 discr_fin_two
-  条件: (A : Matrix (Fin 2) (Fin 2) R)
+  条件: (A : 矩阵 (有限集 2) (有限集 2) R)
   证明: A.discr_of_card_eq_two Fintype.card_fin _
 
 Depends on / 依赖: A.discr_of_card_eq_two, Fintype, Fintype.card_fin, card_fin, discr_of_card_eq_two

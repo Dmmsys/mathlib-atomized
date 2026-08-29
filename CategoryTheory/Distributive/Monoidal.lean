@@ -77,10 +77,10 @@ class IsMonoidalLeftDistrib
     - preservesBinaryCoproducts_tensorLeft((X : C)) : PreservesColimitsOfShape (Discrete WalkingPair) (tensorLeft X)  [default: by infer_instance]
 
 中文:
-类 IsMonoidalLeftDistrib
-  参数: (C : 类型u) [Category.{v} C]
+类 是MonoidalLeftDistrib
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - preservesBinaryCoproducts_tensorLeft((X : C)) : PreservesColimitsOfShape (Discrete WalkingPair) (tensorLeft X)  [默认: by infer_instance]
+    - preservesBinaryCoproducts_tensorLeft((X : C)) : 保持形状余极限 (离散 WalkingPair) (tensorLeft X)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -99,10 +99,10 @@ class IsMonoidalRightDistrib
     - preservesBinaryCoproducts_tensorRight((X : C)) : PreservesColimitsOfShape (Discrete WalkingPair) (tensorRight X)  [default: by infer_instance]
 
 中文:
-类 IsMonoidalRightDistrib
-  参数: (C : 类型u) [Category.{v} C]
+类 是MonoidalRightDistrib
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - preservesBinaryCoproducts_tensorRight((X : C)) : PreservesColimitsOfShape (Discrete WalkingPair) (tensorRight X)  [默认: by infer_instance]
+    - preservesBinaryCoproducts_tensorRight((X : C)) : 保持形状余极限 (离散 WalkingPair) (tensorRight X)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -120,8 +120,8 @@ class IsMonoidalDistrib
   (no additional axioms)
 
 中文:
-类 IsMonoidalDistrib
-  参数: (C : 类型u) [Category.{v} C]
+类 是MonoidalDistrib
+  参数: (C : 类型u) [范畴.{v} C]
   (无附加公理)
 -/
 class IsMonoidalDistrib (C : Type u) [Category.{v} C]
@@ -144,7 +144,7 @@ definition leftDistrib
 
 中文:
 定义 leftDistrib
-  签名: [IsMonoidalLeftDistrib C] (X Y Z : C)
+  签名: [是MonoidalLeftDistrib C] (X Y Z : C)
   定义体: PreservesColimitPair.iso (tensorLeft X) Y Z
 
 Depends on / 依赖: PreservesColimitPair, PreservesColimitPair.iso, tensorLeft
@@ -172,7 +172,7 @@ lemma IsMonoidalLeftDistrib.of_isIso_coprodComparisonTensorLeft
   proof: preservesBinaryCoproducts_of_isIso_coprodComparison (tensorLeft X)
 
 中文:
-引理 IsMonoidalLeftDistrib.of_isIso_coprodComparisonTensorLeft
+引理 是MonoidalLeftDistrib.of_isIso_coprodComparisonTensorLeft
   证明: preservesBinaryCoproducts_of_isIso_coprodComparison (tensorLeft X)
 
 Depends on / 依赖: preservesBinaryCoproducts_of_isIso_coprodComparison, tensorLeft
@@ -194,7 +194,7 @@ lemma leftDistrib_hom
 
 中文:
 引理 leftDistrib_hom
-  条件: [IsMonoidalLeftDistrib C] {X Y Z : C}
+  条件: [是MonoidalLeftDistrib C] {X Y Z : C}
   证明: by rfl
 
 @[reassoc (attr := simp)]
@@ -216,7 +216,7 @@ lemma coprod_inl_leftDistrib_hom
 
 中文:
 引理 coprod_inl_leftDistrib_hom
-  条件: [IsMonoidalLeftDistrib C] {X Y Z : C}
+  条件: [是MonoidalLeftDistrib C] {X Y Z : C}
   证明: by
   rw [leftDistrib_hom]; rw [coprod.inl_desc]
 
@@ -240,7 +240,7 @@ lemma coprod_inr_leftDistrib_hom
 
 中文:
 引理 coprod_inr_leftDistrib_hom
-  条件: [IsMonoidalLeftDistrib C] {X Y Z : C}
+  条件: [是MonoidalLeftDistrib C] {X Y Z : C}
   证明: by
   rw [leftDistrib_hom]; rw [coprod.inr_desc]
 
@@ -266,7 +266,7 @@ lemma whiskerLeft_coprod_inl_leftDistrib_inv
 
 中文:
 引理 whiskerLeft_coprod_inl_leftDistrib_inv
-  条件: [IsMonoidalLeftDistrib C] {X Y Z : C}
+  条件: [是MonoidalLeftDistrib C] {X Y Z : C}
   证明: by
   apply (cancel_iso_hom_right _ _ (∂L X Y Z)).mp
   rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [coprod_inl_leftDistrib_hom]
@@ -294,7 +294,7 @@ lemma whiskerLeft_coprod_inr_leftDistrib_inv
 
 中文:
 引理 whiskerLeft_coprod_inr_leftDistrib_inv
-  条件: [IsMonoidalLeftDistrib C] {X Y Z : C}
+  条件: [是MonoidalLeftDistrib C] {X Y Z : C}
   证明: by
   apply (cancel_iso_hom_right _ _ (∂L X Y Z)).mp
   rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [coprod_inr_leftDistrib_hom]
@@ -320,7 +320,7 @@ definition rightDistrib
 
 中文:
 定义 rightDistrib
-  签名: [IsMonoidalRightDistrib C] (X Y Z : C)
+  签名: [是MonoidalRightDistrib C] (X Y Z : C)
   定义体: PreservesColimitPair.iso (tensorRight X) Y Z
 
 Depends on / 依赖: PreservesColimitPair, PreservesColimitPair.iso, tensorRight
@@ -345,7 +345,7 @@ lemma IsMonoidalRightDistrib.of_isIso_coprodComparisonTensorRight
   proof: .preservesColimit⟩ ⟨preservesBinaryCoproducts_of_isIso_coprodComparison _
 
 中文:
-引理 IsMonoidalRightDistrib.of_isIso_coprodComparisonTensorRight
+引理 是MonoidalRightDistrib.of_isIso_coprodComparisonTensorRight
   证明: .preservesColimit⟩ ⟨preservesBinaryCoproducts_of_isIso_coprodComparison _
 
 Depends on / 依赖: preservesBinaryCoproducts_of_isIso_coprodComparison, preservesColimit
@@ -368,7 +368,7 @@ lemma rightDistrib_hom
 
 中文:
 引理 rightDistrib_hom
-  条件: [IsMonoidalRightDistrib C] {X Y Z : C}
+  条件: [是MonoidalRightDistrib C] {X Y Z : C}
   证明: by rfl
 
 @[reassoc (attr := simp)]
@@ -390,7 +390,7 @@ lemma coprod_inl_rightDistrib_hom
 
 中文:
 引理 coprod_inl_rightDistrib_hom
-  条件: [IsMonoidalRightDistrib C] {X Y Z : C}
+  条件: [是MonoidalRightDistrib C] {X Y Z : C}
   证明: by
   rw [rightDistrib_hom]; rw [coprod.inl_desc]
 
@@ -414,7 +414,7 @@ lemma coprod_inr_rightDistrib_hom
 
 中文:
 引理 coprod_inr_rightDistrib_hom
-  条件: [IsMonoidalRightDistrib C] {X Y Z : C}
+  条件: [是MonoidalRightDistrib C] {X Y Z : C}
   证明: by
   rw [rightDistrib_hom]; rw [coprod.inr_desc]
 
@@ -440,7 +440,7 @@ lemma whiskerRight_coprod_inl_rightDistrib_inv
 
 中文:
 引理 whiskerRight_coprod_inl_rightDistrib_inv
-  条件: [IsMonoidalRightDistrib C] {X Y Z : C}
+  条件: [是MonoidalRightDistrib C] {X Y Z : C}
   证明: by
   apply (cancel_iso_hom_right _ _ (∂R X Y Z)).mp
   rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [coprod_inl_rightDistrib_hom]
@@ -468,7 +468,7 @@ lemma whiskerRight_coprod_inr_rightDistrib_inv
 
 中文:
 引理 whiskerRight_coprod_inr_rightDistrib_inv
-  条件: [IsMonoidalRightDistrib C] {X Y Z : C}
+  条件: [是MonoidalRightDistrib C] {X Y Z : C}
   证明: by
   apply (cancel_iso_hom_right _ _ (∂R X Y Z)).mp
   rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [coprod_inr_rightDistrib_hom]
@@ -495,7 +495,7 @@ lemma coprodComparison_tensorLeft_braiding_hom
 
 中文:
 引理 coprodComparison_tensorLeft_braiding_hom
-  条件: [BraidedCategory C] {X Y Z : C}
+  条件: [辫范畴 C] {X Y Z : C}
   证明: by
   simp [coprodComparison]
 
@@ -522,7 +522,7 @@ lemma coprodComparison_tensorRight_braiding_hom
 
 中文:
 引理 coprodComparison_tensorRight_braiding_hom
-  条件: [SymmetricCategory C] {X Y Z : C}
+  条件: [对称范畴 C] {X Y Z : C}
   证明: by
   simp [coprodComparison]
 
@@ -541,7 +541,7 @@ lemma SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
   proof: preservesColimitsOfShape_of_natIso (BraidedCategory.tensorLeftIsoTensorRight X)
 
 中文:
-引理 SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
+引理 对称范畴.isMonoidalDistrib_of_isMonoidalLeftDistrib
   证明: preservesColimitsOfShape_of_natIso (BraidedCategory.tensorLeftIsoTensorRight X)
 
 Depends on / 依赖: BraidedCategory, BraidedCategory.tensorLeftIsoTensorRight, CreatesLimitsOfSize0, CreatesLimitsOfSize0.createsFiniteLimits, createsFiniteLimits, preservesColimitsOfShape_of_natIso, tensorLeftIsoTensorRight
@@ -563,7 +563,7 @@ lemma SymmetricCategory.rightDistrib_of_leftDistrib
   ext <;> simp [leftDistrib_hom, rightDistrib_hom]
 
 中文:
-引理 SymmetricCategory.rightDistrib_of_leftDistrib
+引理 对称范畴.rightDistrib_of_leftDistrib
   证明: by
   ext <;> simp [leftDistrib_hom, rightDistrib_hom]
 
@@ -584,8 +584,8 @@ instance MonoidalClosed.isMonoidalLeftDistrib
     infer_instance
 
 中文:
-实例 MonoidalClosed.isMonoidalLeftDistrib
-  签名: [MonoidalClosed C]
+实例 幺半群闭.isMonoidalLeftDistrib
+  签名: [幺半群闭 C]
   定义体: by
     infer_instance
 
@@ -607,7 +607,7 @@ instance isMonoidalDistrib.of_symmetric_monoidal_closed
 
 中文:
 实例 isMonoidalDistrib.of_symmetric_monoidal_closed
-  签名: [SymmetricCategory C] [MonoidalClosed C]
+  签名: [对称范畴 C] [幺半群闭 C]
   定义体: by
   apply SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib
 
@@ -629,8 +629,8 @@ lemma MonoidalClosed.leftDistrib_inv
   ext <;> simp [← curry_natural_left]
 
 中文:
-引理 MonoidalClosed.leftDistrib_inv
-  条件: [MonoidalClosed C] {X Y Z : C}
+引理 幺半群闭.leftDistrib_inv
+  条件: [幺半群闭 C] {X Y Z : C}
   证明: by
   rw [← curry_eq_iff]
   ext <;> simp [← curry_natural_left]
@@ -657,7 +657,7 @@ instance isMonoidalLeftDistrib.of_endofunctors
 
 中文:
 实例 isMonoidalLeftDistrib.of_endofunctors
-  签名: : IsMonoidalLeftDistrib (C ⥤ C) where
+  签名: : 是MonoidalLeftDistrib (C ⥤ C) where
   定义体: inferInstanceAs (PreservesColimitsOfShape _ ((Functor.whiskeringLeft C C C).obj F))
 
 Depends on / 依赖: Functor, Functor.whiskeringLeft, PreservesColimitsOfShape, whiskeringLeft
@@ -681,8 +681,8 @@ instance IsMonoidalDistrib.of_MonoidalPreadditive_with_binary_coproducts
   signature: [Preadditive C]
 
 中文:
-实例 IsMonoidalDistrib.of_MonoidalPreadditive_with_binary_coproducts
-  签名: [Preadditive C]
+实例 是MonoidalDistrib.of_MonoidalPreadditive_with_binary_coproducts
+  签名: [预加性 C]
 
 Depends on / 依赖: preservesFiniteLimits_of_createsFiniteLimits_and_hasFiniteLimits
 -/

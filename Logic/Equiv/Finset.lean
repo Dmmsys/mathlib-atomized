@@ -30,8 +30,8 @@ instance Finset.encodable
       invFun := fun ⟨a, b⟩ => ⟨a, b⟩ }
 
 中文:
-实例 Finset.encodable
-  签名: [Encodable α]
+实例 有限集.encodable
+  签名: [可编码 α]
   定义体: haveI := decidableEqOfEncodable α
   ofEquiv { s : Multiset α // s.Nodup }
     { toFun := fun ⟨a, b⟩ => ⟨a, b⟩
@@ -59,7 +59,7 @@ definition sortedUniv
 
 中文:
 定义 sortedUniv
-  签名: (α) [Fintype α] [Encodable α]
+  签名: (α) [有限类型 α] [可编码 α]
   定义体: Finset.univ.sort (Encodable.encode' α ⁻¹'o (· <= ·))
 
 @[simp]
@@ -83,7 +83,7 @@ theorem mem_sortedUniv
 
 中文:
 定理 mem_sortedUniv
-  条件: {α} [Fintype α] [Encodable α] (x : α)
+  条件: {α} [有限类型 α] [可编码 α] (x : α)
   结论: x in sortedUniv α
   证明: (Finset.mem_sort _).2 (Finset.mem_univ _)
 
@@ -108,8 +108,8 @@ theorem length_sortedUniv
 
 中文:
 定理 length_sortedUniv
-  条件: (α) [Fintype α] [Encodable α]
-  结论: (sortedUniv α).length = Fintype.card α
+  条件: (α) [有限类型 α] [可编码 α]
+  结论: (sortedUniv α).length = 有限类型.card α
   证明: Finset.length_sort _
 
 @[simp]
@@ -133,7 +133,7 @@ theorem sortedUniv_nodup
 
 中文:
 定理 sortedUniv_nodup
-  条件: (α) [Fintype α] [Encodable α]
+  条件: (α) [有限类型 α] [可编码 α]
   结论: (sortedUniv α).Nodup
   证明: Finset.sort_nodup _ _
 
@@ -155,7 +155,7 @@ theorem sortedUniv_toFinset
 
 中文:
 定理 sortedUniv_toFinset
-  条件: (α) [Fintype α] [Encodable α] [DecidableEq α]
+  条件: (α) [有限类型 α] [可编码 α] [DecidableEq α]
   证明: Finset.sort_toFinset _ _
 
 Depends on / 依赖: Finset, Finset.sort_toFinset, sort_toFinset
@@ -176,7 +176,7 @@ definition fintypeEquivFin
 
 中文:
 定义 fintypeEquivFin
-  签名: {α} [Fintype α] [Encodable α]
+  签名: {α} [有限类型 α] [可编码 α]
   定义体: haveI : DecidableEq α := Encodable.decidableEqOfEncodable _
 ((sortedUniv_nodup α).getEquivOfForallMemList _ mem_sortedUniv).symm.trans
     Equiv.cast (congr_arg _ (length_sortedUniv α))
@@ -203,7 +203,7 @@ definition lower'
 
 中文:
 定义 lower'
-  签名: : List 自然数 -> 自然数 -> List 自然数
+  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
 -/
 def lower' : List Nat -> Nat -> List Nat
   | [], _ => []
@@ -218,7 +218,7 @@ definition raise'
 
 中文:
 定义 raise'
-  签名: : List 自然数 -> 自然数 -> List 自然数
+  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
 -/
 def raise' : List Nat -> Nat -> List Nat
   | [], _ => []
@@ -252,7 +252,7 @@ theorem raise_lower'
 
 中文:
 定理 raise_lower'
-  结论: 对任意 {l n}, (对任意 m in l, n <= m) -> List.SortedLT l -> raise' (lower' l n) n = l
+  结论: 对任意 {l n}, (对任意 m in l, n <= m) -> 列表.SortedLT l -> raise' (lower' l n) n = l
   证明: h₁ _ List.mem_cons_self
     simp [raise', lower', Nat.sub_add_cancel this,
       raise_lower' (fun _ => List.rel_of_pairwise_cons h₂.pairwise : forall a in l, m < a)
@@ -277,7 +277,7 @@ theorem isChain_raise'
 
 中文:
 定理 isChain_raise'
-  结论: 对任意 (l) (n), List.IsChain (· < ·) (raise' l n)
+  结论: 对任意 (l) (n), 列表.IsChain (· < ·) (raise' l n)
 -/
 theorem isChain_raise' : forall (l) (n), List.IsChain (· < ·) (raise' l n)
   | [], _ => .nil
@@ -296,7 +296,7 @@ theorem isChain_cons_raise'
 中文:
 定理 isChain_cons_raise'
   条件: (l m)
-  结论: List.IsChain (· < ·) (m :: raise' l (m + 1))
+  结论: 列表.IsChain (· < ·) (m :: raise' l (m + 1))
   证明: isChain_raise' (m :: l) 0
 
 Depends on / 依赖: isChain_raise
@@ -335,7 +335,7 @@ theorem raise'_sorted
 中文:
 定理 raise'_sorted
   条件: (l n)
-  结论: List.SortedLT (raise' l n)
+  结论: 列表.SortedLT (raise' l n)
   证明: (isChain_raise' _ _).sortedLT
 
 Depends on / 依赖: isChain_raise, sortedLT
@@ -351,8 +351,8 @@ definition raise'Finset
   body: ⟨raise' l n, (raise'_sorted _ _).nodup⟩
 
 中文:
-定义 raise'Finset
-  签名: (l : List 自然数) (n : 自然数)
+定义 raise'有限集
+  签名: (l : 列表 自然数) (n : 自然数)
   定义体: ⟨raise' l n, (raise'_sorted _ _).nodup⟩
 -/
 def raise'Finset (l : List Nat) (n : Nat) : Finset Nat :=
@@ -373,7 +373,7 @@ Finset.eq_of_veq by
 
 中文:
 实例 finset
-  签名: : Denumerable (Finset α)
+  签名: : 可枚举 (有限集 α)
   定义体: mk'
 ⟨fun s : Finset α => encode lower' (s.map (eqv α).toEmbedding).sort 0, fun n =>
       Finset.map (eqv α).symm.toEmbedding (raise'Finset (ofNat (List Nat) n) 0), fun s =>

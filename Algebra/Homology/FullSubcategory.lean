@@ -33,7 +33,7 @@ definition liftObjectProperty
 
 中文:
 定义 liftObjectProperty
-  签名: {ι : 类型} {c : ComplexShape ι}
+  签名: {ι : 类型} {c : 余mplexShape ι}
   定义体: ⟨_, hK n⟩
   d i j := ObjectProperty.homMk (K.d i j)
 -/
@@ -61,7 +61,7 @@ definition liftFunctorObjectProperty
 
 中文:
 定义 liftFunctorObjectProperty
-  签名: {D : 类型} [Category* D] {ι : 类型} {c : ComplexShape ι}
+  签名: {D : 类型} [范畴* D] {ι : 类型} {c : 余mplexShape ι}
   定义体: liftObjectProperty _ (F.obj X) (hF X)
   map f := { f n := ObjectProperty.homMk ((F.map f).f n) }
 

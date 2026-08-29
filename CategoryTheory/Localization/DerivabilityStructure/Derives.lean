@@ -109,7 +109,7 @@ lemma isIso_of_isRightDerivedFunctor
 
 中文:
 引理 isIso_of_isRightDerivedFunctor
-  条件: (X₁ : C₁) [RF.IsRightDerivedFunctor α W₂]
+  条件: (X₁ : C₁) [RF.是右导出函子 α W₂]
   证明: by
   let G : W₁.Localization ⥤ H := Localization.lift (Φ.functor ⋙ F) h W₁.Q
   let eG := Localization.Lifting.iso W₁.Q W₁ (Φ.functor ⋙ F) G
@@ -146,7 +146,7 @@ lemma isRightDerivedFunctor_of_isIso
 
 中文:
 引理 isRightDerivedFunctor_of_isIso
-  条件: (hα : 对任意 (X₁ : C₁), IsIso (α.app (Φ.functor.obj X₁)))
+  条件: (hα : 对任意 (X₁ : C₁), 是同构 (α.app (Φ.functor.obj X₁)))
   证明: by
   have := h.hasPointwiseRightDerivedFunctor
   have := h.isIso_of_isRightDerivedFunctor (F.totalRightDerivedUnit L₂ W₂)

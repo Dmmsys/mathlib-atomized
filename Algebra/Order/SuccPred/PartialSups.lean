@@ -33,7 +33,7 @@ lemma partialSups_add_one
 
 中文:
 引理 partialSups_add_one
-  结论: [Add ι] [One ι] [LocallyFiniteOrderBot ι] [SuccAddOrder ι]
+  结论: [加法 ι] [幺 ι] [LocallyFiniteOrderBot ι] [SuccAdd序 ι]
   证明: Order.succ_eq_add_one i ▸ partialSups_succ f i
 
 Depends on / 依赖: Order.succ_eq_add_one, partialSups_succ, succ_eq_add_one
@@ -56,7 +56,7 @@ lemma partialSups_succ'
 
 中文:
 引理 partialSups_succ'
-  结论: {α : 类型} [SemilatticeSup α] [LocallyFiniteOrder ι]
+  结论: {α : 类型} [SemilatticeSup α] [局部有限序 ι]
   证明: by
   refine Succ.rec (by simp) (fun j _ h => ?_) (bot_le (a := i))
   have : (partialSups (f ∘ Order.succ)) (Order.succ j) =
@@ -84,7 +84,7 @@ lemma partialSups_add_one'
 
 中文:
 引理 partialSups_add_one'
-  结论: [Add ι] [One ι] [OrderBot ι] [LocallyFiniteOrder ι]
+  结论: [加法 ι] [幺 ι] [有底序 ι] [局部有限序 ι]
   证明: by
   simpa [← Order.succ_eq_add_one] using partialSups_succ' f i
 

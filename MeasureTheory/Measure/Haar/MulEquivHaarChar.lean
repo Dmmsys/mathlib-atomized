@@ -105,7 +105,7 @@ lemma mulEquivHaarChar_eq
 
 中文:
 引理 mulEquivHaarChar_eq
-  结论: (μ : Measure G) [IsHaarMeasure μ]
+  结论: (μ : 测度 G) [是Haar测度 μ]
   证明: by
   have smul := isMulLeftInvariant_eq_smul_of_regular haar μ
   unfold mulEquivHaarChar
@@ -150,7 +150,7 @@ lemma mulEquivHaarChar_smul_map
 
 中文:
 引理 mulEquivHaarChar_smul_map
-  结论: (μ : Measure G)
+  结论: (μ : 测度 G)
   证明: by
   rw [mulEquivHaarChar_eq μ φ]
   have : Regular (map φ μ) := Regular.map φ.toHomeomorph
@@ -185,7 +185,7 @@ lemma mulEquivHaarChar_smul_eq_comap
 
 中文:
 引理 mulEquivHaarChar_smul_eq_comap
-  结论: (μ : Measure G)
+  结论: (μ : 测度 G)
   证明: by
   let e := φ.toHomeomorph.toMeasurableEquiv
   rw [show ⇑φ = ⇑e from rfl]; rw [← e.map_symm]; rw [show ⇑e.symm = ⇑φ.symm from rfl]
@@ -223,7 +223,7 @@ lemma mulEquivHaarChar_smul_integral_map
 
 中文:
 引理 mulEquivHaarChar_smul_integral_map
-  结论: (μ : Measure G)
+  结论: (μ : 测度 G)
   证明: by
   nth_rw 2 [← mulEquivHaarChar_smul_map μ φ]
   simp
@@ -254,7 +254,7 @@ lemma integral_comap_eq_mulEquivHaarChar_smul
 
 中文:
 引理 integral_comap_eq_mulEquivHaarChar_smul
-  结论: (μ : Measure G)
+  结论: (μ : 测度 G)
   证明: by
   let e := φ.toHomeomorph.toMeasurableEquiv
   change ∫ a, f a ∂(comap e μ) = mulEquivHaarChar φ • ∫ a, f a ∂μ
@@ -414,7 +414,7 @@ lemma mulEquivHaarChar_eq_one_of_compactSpace
 
 中文:
 引理 mulEquivHaarChar_eq_one_of_compactSpace
-  条件: [CompactSpace G] (φ : G ≃ₜ* G)
+  条件: [紧空间 G] (φ : G ≃ₜ* G)
   证明: by
   set μ := haarMeasure (⟨⟨univ, isCompact_univ⟩, by simp⟩ : PositiveCompacts G)
   have hμ : μ univ = 1 := haarMeasure_self

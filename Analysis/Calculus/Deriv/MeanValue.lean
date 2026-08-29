@@ -92,7 +92,7 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope
     ((hff' x hx).const_mul (g b - g a)).sub ((hgg' x hx).const_mul (f b 
 
 中文:
-定理 exists_ratio_hasDerivAt_eq_ratio_slope
+定理 存在_ratio_hasDerivAt_eq_ratio_slope
   证明: by
   let h x := (g b - g a) * f x - (f b - f a) * g x
   have hI : h a = h b := by simp only [h]; ring
@@ -130,7 +130,7 @@ theorem exists_ratio_hasDerivAt_eq_ratio_slope'
     rin
 
 中文:
-定理 exists_ratio_hasDerivAt_eq_ratio_slope'
+定理 存在_ratio_hasDerivAt_eq_ratio_slope'
   结论: {lfa lga lfb lgb : 实数}
   证明: by
   let h x := (lgb - lga) * f x - (lfb - lfa) * g x
@@ -182,8 +182,8 @@ theorem exists_hasDerivAt_eq_slope
 include hab hfc
 
 中文:
-定理 exists_hasDerivAt_eq_slope
-  结论: 存在 c in Ioo a b, f' c = (f b - f a) / (b - a)
+定理 存在_hasDerivAt_eq_slope
+  结论: 存在 c in 开区间 a b, f' c = (f b - f a) / (b - a)
   证明: by
   obtain ⟨c, cmem, hc⟩ : exists c in Ioo a b, (b - a) * f' c = (f b - f a) * 1 :=
     exists_ratio_hasDerivAt_eq_ratio_slope f f' hab hfc hff' id 1 continuousOn_id
@@ -218,7 +218,7 @@ theorem exists_ratio_deriv_eq_ratio_slope
 include hab in
 
 中文:
-定理 exists_ratio_deriv_eq_ratio_slope
+定理 存在_ratio_deriv_eq_ratio_slope
   证明: exists_ratio_hasDerivAt_eq_ratio_slope f (deriv f) hab hfc
     (fun x hx => ((hfd x hx).differentiableAt <| IsOpen.mem_nhds isOpen_Ioo hx).hasDerivAt) g
     (deriv g) hgc fun x hx =>
@@ -249,7 +249,7 @@ theorem exists_ratio_deriv_eq_ratio_slope'
 include hab hfc hfd in
 
 中文:
-定理 exists_ratio_deriv_eq_ratio_slope'
+定理 存在_ratio_deriv_eq_ratio_slope'
   结论: {lfa lga lfb lgb : 实数}
   证明: exists_ratio_hasDerivAt_eq_ratio_slope' _ _ hab _ _
     (fun x hx => ((hdf x hx).differentiableAt <| Ioo_mem_nhds hx.1 hx.2).hasDerivAt)
@@ -281,8 +281,8 @@ theorem exists_deriv_eq_slope
 include hab hfc hfd in
 
 中文:
-定理 exists_deriv_eq_slope
-  结论: 存在 c in Ioo a b, deriv f c = (f b - f a) / (b - a)
+定理 存在_deriv_eq_slope
+  结论: 存在 c in 开区间 a b, deriv f c = (f b - f a) / (b - a)
   证明: exists_hasDerivAt_eq_slope f (deriv f) hab hfc fun x hx =>
     ((hfd x hx).differentiableAt <| IsOpen.mem_nhds isOpen_Ioo hx).hasDerivAt
 
@@ -306,8 +306,8 @@ theorem exists_deriv_eq_slope'
   exact exists_deriv_eq_slope f hab hfc hfd
 
 中文:
-定理 exists_deriv_eq_slope'
-  结论: 存在 c in Ioo a b, deriv f c = slope f a b
+定理 存在_deriv_eq_slope'
+  结论: 存在 c in 开区间 a b, deriv f c = slope f a b
   证明: by
   rw [slope_def_field]
   exact exists_deriv_eq_slope f hab hfc hfd
@@ -549,8 +549,8 @@ theorem Convex.mul_sub_lt_image_sub_of_lt_deriv
     exists_de
 
 中文:
-定理 Convex.mul_sub_lt_image_sub_of_lt_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+定理 凸.mul_sub_lt_image_sub_of_lt_deriv
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: by
   intro x hx y hy hxy
   have hxyD : Icc x y subseteq D := hD.ordConnected.out hx hy
@@ -585,7 +585,7 @@ theorem mul_sub_lt_image_sub_of_lt_deriv
 
 中文:
 定理 mul_sub_lt_image_sub_of_lt_deriv
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f) {C}
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f) {C}
   证明: convex_univ.mul_sub_lt_image_sub_of_lt_deriv hf.continuous.continuousOn hf.differentiableOn
     (fun x _ => hf'_gt x) x trivial y trivial hxy
 
@@ -612,8 +612,8 @@ theorem Convex.mul_sub_le_image_sub_of_le_deriv
   obtain
 
 中文:
-定理 Convex.mul_sub_le_image_sub_of_le_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+定理 凸.mul_sub_le_image_sub_of_le_deriv
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: by
   intro x hx y hy hxy
   rcases eq_or_lt_of_le hxy with hxy' | hxy'
@@ -651,7 +651,7 @@ theorem mul_sub_le_image_sub_of_le_deriv
 
 中文:
 定理 mul_sub_le_image_sub_of_le_deriv
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f) {C}
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f) {C}
   证明: convex_univ.mul_sub_le_image_sub_of_le_deriv hf.continuous.continuousOn hf.differentiableOn
     (fun x _ => hf'_ge x) x trivial y trivial hxy
 
@@ -675,8 +675,8 @@ theorem Convex.image_sub_lt_mul_sub_of_deriv_lt
   linarith [hD.mul_sub_lt_image_sub_of_lt_deriv hf.fun_neg hf'.neg hf'_gt x hx y hy hxy]
 
 中文:
-定理 Convex.image_sub_lt_mul_sub_of_deriv_lt
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+定理 凸.image_sub_lt_mul_sub_of_deriv_lt
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: by
   have hf'_gt : forall x in interior D, -C < deriv (fun y => -f y) x := fun x hx => by
     rw [deriv.fun_neg]; rw [neg_lt_neg_iff]
@@ -705,7 +705,7 @@ theorem image_sub_lt_mul_sub_of_deriv_lt
 
 中文:
 定理 image_sub_lt_mul_sub_of_deriv_lt
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f) {C}
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f) {C}
   证明: convex_univ.image_sub_lt_mul_sub_of_deriv_lt hf.continuous.continuousOn hf.differentiableOn
     (fun x _ => lt_hf' x) x trivial y trivial hxy
 
@@ -729,8 +729,8 @@ theorem Convex.image_sub_le_mul_sub_of_deriv_le
   linarith [hD.mul_sub_le_image_sub_of_le_deriv hf.fun_neg hf'.neg hf'_ge x hx y hy hxy]
 
 中文:
-定理 Convex.image_sub_le_mul_sub_of_deriv_le
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+定理 凸.image_sub_le_mul_sub_of_deriv_le
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: by
   have hf'_ge : forall x in interior D, -C <= deriv (fun y => -f y) x := fun x hx => by
     rw [deriv.fun_neg]; rw [neg_le_neg_iff]
@@ -759,7 +759,7 @@ theorem image_sub_le_mul_sub_of_deriv_le
 
 中文:
 定理 image_sub_le_mul_sub_of_deriv_le
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f) {C}
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f) {C}
   证明: convex_univ.image_sub_le_mul_sub_of_deriv_le hf.continuous.continuousOn hf.differentiableOn
     (fun x _ => le_hf' x) x trivial y trivial hxy
 
@@ -785,7 +785,7 @@ theorem strictMonoOn_of_deriv_pos
 
 中文:
 定理 strictMonoOn_of_deriv_pos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: by
   intro x hx y hy
   have : DifferentiableOn Real f (interior D) := fun z hz =>
@@ -817,7 +817,7 @@ theorem strictMono_of_deriv_pos
 中文:
 定理 strictMono_of_deriv_pos
   条件: {f : 实数 -> 实数} (hf' : 对任意 x, 0 < deriv f x)
-  结论: StrictMono f
+  结论: 严格递增 f
   证明: strictMonoOn_univ.1 strictMonoOn_of_deriv_pos convex_univ (fun z _ =>
     (differentiableAt_of_deriv_ne_zero (hf' z).ne').differentiableWithinAt.continuousWithinAt)
     fun x _ => hf' x
@@ -840,7 +840,7 @@ lemma strictMonoOn_of_hasDerivWithinAt_pos
 
 中文:
 引理 strictMonoOn_of_hasDerivWithinAt_pos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' : 实数 -> 实数}
   证明: strictMonoOn_of_deriv_pos hD hf fun x hx => by
     rw [deriv_eqOn isOpen_interior hf' hx]; exact hf'₀ _ hx
 
@@ -862,7 +862,7 @@ lemma strictMono_of_hasDerivAt_pos
 
 中文:
 引理 strictMono_of_hasDerivAt_pos
-  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, HasDerivAt f (f' x) x)
+  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, 在点处可导 f (f' x) x)
   证明: strictMono_of_deriv_pos fun x => by rw [(hf _).deriv]; exact hf' _
 
 Depends on / 依赖: strictMono_of_deriv_pos
@@ -883,7 +883,7 @@ theorem monotoneOn_of_deriv_nonneg
 
 中文:
 定理 monotoneOn_of_deriv_nonneg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: fun x hx y hy hxy => by
   simpa only [zero_mul, sub_nonneg] using
     hD.mul_sub_le_image_sub_of_le_deriv hf hf' hf'_nonneg x hx y hy hxy
@@ -908,7 +908,7 @@ theorem monotone_of_deriv_nonneg
 
 中文:
 定理 monotone_of_deriv_nonneg
-  条件: {f : 实数 -> 实数} (hf : Differentiable 实数 f) (hf' : 对任意 x, 0 <= deriv f x)
+  条件: {f : 实数 -> 实数} (hf : 可微 实数 f) (hf' : 对任意 x, 0 <= deriv f x)
   证明: monotoneOn_univ.1
     monotoneOn_of_deriv_nonneg convex_univ hf.continuous.continuousOn hf.differentiableOn fun x _ =>
       hf' x
@@ -932,7 +932,7 @@ lemma monotoneOn_of_hasDerivWithinAt_nonneg
 
 中文:
 引理 monotoneOn_of_hasDerivWithinAt_nonneg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' : 实数 -> 实数}
   证明: monotoneOn_of_deriv_nonneg hD hf (fun _ hx => (hf' _ hx).differentiableWithinAt) fun x hx => by
     rw [deriv_eqOn isOpen_interior hf' hx]; exact hf'₀ _ hx
 
@@ -955,7 +955,7 @@ lemma monotone_of_hasDerivAt_nonneg
 
 中文:
 引理 monotone_of_hasDerivAt_nonneg
-  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, HasDerivAt f (f' x) x)
+  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, 在点处可导 f (f' x) x)
   证明: monotone_of_deriv_nonneg (fun _ => (hf _).differentiableAt) fun x => by
     rw [(hf _).deriv]; exact hf' _
 
@@ -980,7 +980,7 @@ theorem strictAntiOn_of_deriv_neg
 
 中文:
 定理 strictAntiOn_of_deriv_neg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: fun x hx y => by
   simpa only [zero_mul, sub_lt_zero] using
     hD.image_sub_lt_mul_sub_of_deriv_lt hf
@@ -1012,7 +1012,7 @@ theorem strictAnti_of_deriv_neg
 中文:
 定理 strictAnti_of_deriv_neg
   条件: {f : 实数 -> 实数} (hf' : 对任意 x, deriv f x < 0)
-  结论: StrictAnti f
+  结论: 严格递减 f
   证明: strictAntiOn_univ.1 strictAntiOn_of_deriv_neg convex_univ
       (fun z _ =>
         (differentiableAt_of_deriv_ne_zero (hf' z).ne).differentiableWithinAt.continuousWithinAt)
@@ -1037,7 +1037,7 @@ lemma strictAntiOn_of_hasDerivWithinAt_neg
 
 中文:
 引理 strictAntiOn_of_hasDerivWithinAt_neg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' : 实数 -> 实数}
   证明: strictAntiOn_of_deriv_neg hD hf fun x hx => by
     rw [deriv_eqOn isOpen_interior hf' hx]; exact hf'₀ _ hx
 
@@ -1059,7 +1059,7 @@ lemma strictAnti_of_hasDerivAt_neg
 
 中文:
 引理 strictAnti_of_hasDerivAt_neg
-  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, HasDerivAt f (f' x) x)
+  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, 在点处可导 f (f' x) x)
   证明: strictAnti_of_deriv_neg fun x => by rw [(hf _).deriv]; exact hf' _
 
 Depends on / 依赖: strictAnti_of_deriv_neg
@@ -1080,7 +1080,7 @@ theorem antitoneOn_of_deriv_nonpos
 
 中文:
 定理 antitoneOn_of_deriv_nonpos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: fun x hx y hy hxy => by
   simpa only [zero_mul, sub_nonpos] using
     hD.image_sub_le_mul_sub_of_deriv_le hf hf' hf'_nonpos x hx y hy hxy
@@ -1105,7 +1105,7 @@ theorem antitone_of_deriv_nonpos
 
 中文:
 定理 antitone_of_deriv_nonpos
-  条件: {f : 实数 -> 实数} (hf : Differentiable 实数 f) (hf' : 对任意 x, deriv f x <= 0)
+  条件: {f : 实数 -> 实数} (hf : 可微 实数 f) (hf' : 对任意 x, deriv f x <= 0)
   证明: antitoneOn_univ.1
     antitoneOn_of_deriv_nonpos convex_univ hf.continuous.continuousOn hf.differentiableOn fun x _ =>
       hf' x
@@ -1129,7 +1129,7 @@ lemma antitoneOn_of_hasDerivWithinAt_nonpos
 
 中文:
 引理 antitoneOn_of_hasDerivWithinAt_nonpos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' : 实数 -> 实数}
   证明: antitoneOn_of_deriv_nonpos hD hf (fun _ hx => (hf' _ hx).differentiableWithinAt) fun x hx => by
     rw [deriv_eqOn isOpen_interior hf' hx]; exact hf'₀ _ hx
 
@@ -1152,7 +1152,7 @@ lemma antitone_of_hasDerivAt_nonpos
 
 中文:
 引理 antitone_of_hasDerivAt_nonpos
-  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, HasDerivAt f (f' x) x)
+  结论: {f f' : 实数 -> 实数} (hf : 对任意 x, 在点处可导 f (f' x) x)
   证明: antitone_of_deriv_nonpos (fun _ => (hf _).differentiableAt) fun x => by
     rw [(hf _).deriv]; exact hf' _
 
@@ -1184,7 +1184,7 @@ theorem domain_mvt
 
 中文:
 定理 domain_mvt
-  结论: {f : E -> 实数} {s : Set E} {x y : E} {f' : E -> StrongDual 实数 E}
+  结论: {f : E -> 实数} {s : 集合 E} {x y : E} {f' : E -> StrongDual 实数 E}
   证明: by
   -- Use `g = AffineMap.lineMap x y` to parametrize the segment
   set g : Real -> E := fun t => AffineMap.lineMap x y t

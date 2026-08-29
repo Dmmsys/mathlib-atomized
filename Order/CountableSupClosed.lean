@@ -50,10 +50,10 @@ structure CountableSupClosed
     - isLUB_mem : forall t subseteq s, t.Nonempty -> t.Countable -> forall x, IsLUB t x -> x in s
 
 中文:
-结构 CountableSupClosed
-  参数: [LE α] (s : Set α)
+结构 余untableSupClosed
+  参数: [LE α] (s : 集合 α)
   公理与运算 (1 个):
-    - isLUB_mem : 对任意 t subseteq s, t.Nonempty -> t.Countable -> 对任意 x, IsLUB t x -> x in s
+    - isLUB_mem : 对任意 t subseteq s, t.非空 -> t.可数 -> 对任意 x, IsLUB t x -> x in s
 -/
 structure CountableSupClosed [LE α] (s : Set α) : Prop where
   isLUB_mem : forall t subseteq s, t.Nonempty -> t.Countable -> forall x, IsLUB t x -> x in s
@@ -71,10 +71,10 @@ structure CountableInfClosed
     - isGLB_mem : forall t subseteq s, t.Nonempty -> t.Countable -> forall x, IsGLB t x -> x in s
 
 中文:
-结构 CountableInfClosed
-  参数: [LE α] (s : Set α)
+结构 余untableInfClosed
+  参数: [LE α] (s : 集合 α)
   公理与运算 (1 个):
-    - isGLB_mem : 对任意 t subseteq s, t.Nonempty -> t.Countable -> 对任意 x, IsGLB t x -> x in s
+    - isGLB_mem : 对任意 t subseteq s, t.非空 -> t.可数 -> 对任意 x, IsGLB t x -> x in s
 -/
 structure CountableInfClosed [LE α] (s : Set α) : Prop where
   isGLB_mem : forall t subseteq s, t.Nonempty -> t.Countable -> forall x, IsGLB t x -> x in s
@@ -94,8 +94,8 @@ lemma CountableSupClosed.iSup_mem
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.iSup_mem
-  结论: [CompleteLattice α] [Countable ι] [Nonempty ι]
+引理 余untableSupClosed.iSup_mem
+  结论: [完备格 α] [可数 ι] [非空 ι]
   证明: by
   let i₀ := Nonempty.some (α := ι) inferInstance
   exact hs.isLUB_mem (range A) (by simp [range]; grind) ⟨A i₀, by simp⟩ (countable_range A) _
@@ -127,8 +127,8 @@ lemma CountableSupClosed.of_iSup_mem
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.of_iSup_mem
-  结论: [CompleteLattice α]
+引理 余untableSupClosed.of_iSup_mem
+  结论: [完备格 α]
   证明: by
     obtain ⟨f, rfl⟩ := hAc.exists_eq_range hA_ne
     rw [(IsLUB.unique hx isLUB_iSup : x = ⨆ n]; rw [f n)]
@@ -162,8 +162,8 @@ lemma CountableSupClosed.sSup_mem
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.sSup_mem
-  结论: [CompleteLattice α] (hs : CountableSupClosed s)
+引理 余untableSupClosed.sSup_mem
+  结论: [完备格 α] (hs : 余untableSupClosed s)
   证明: by
   rw [sSup_eq_iSup']
   have : Countable A := hA_c
@@ -194,8 +194,8 @@ lemma CountableSupClosed.supClosed
 @[to_dual (attr := simp)]
 
 中文:
-引理 CountableSupClosed.supClosed
-  条件: [SemilatticeSup α] (hs : CountableSupClosed s)
+引理 余untableSupClosed.supClosed
+  条件: [SemilatticeSup α] (hs : 余untableSupClosed s)
   证明: fun a ha b hb => hs.isLUB_mem {a, b} (by grind) (by simp) (by simp) _ isLUB_pair
 
 @[to_dual (attr := simp)]
@@ -221,8 +221,8 @@ lemma CountableSupClosed.singleton
     simp_all only [subset_refl, singleton_nonempty, countable_singleton, mem_si
 
 中文:
-引理 CountableSupClosed.singleton
-  条件: [PartialOrder α] {x : α}
+引理 余untableSupClosed.singleton
+  条件: [偏序 α] {x : α}
   证明: by
     have h_eq : s = {x} := by
       ext y
@@ -258,7 +258,7 @@ lemma CountableSupClosed.univ
 @[to_dual (attr := simp)]
 
 中文:
-引理 CountableSupClosed.univ
+引理 余untableSupClosed.univ
   条件: [LE α]
   证明: by simp
 
@@ -280,7 +280,7 @@ lemma CountableSupClosed.empty
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.empty
+引理 余untableSupClosed.empty
   条件: [LE α]
   证明: by simp_all
 
@@ -303,7 +303,7 @@ lemma CountableSupClosed.inter
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.inter
+引理 余untableSupClosed.inter
   结论: [LE α]
   证明: ⟨hs.isLUB_mem A (hAst.trans Set.inter_subset_left) hA_ne hAc x hx,
       ht.isLUB_mem A (hAst.trans Set.inter_subset_right) hA_ne hAc x hx⟩
@@ -331,8 +331,8 @@ lemma CountableSupClosed.sInter
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.sInter
-  条件: [LE α] (hS : 对任意 s in S, CountableSupClosed s)
+引理 余untableSupClosed.集合交集
+  条件: [LE α] (hS : 对任意 s in S, 余untableSupClosed s)
   证明: by
     simp only [subset_sInter_iff, mem_sInter] at hAS ⊢
     exact fun s hs => (hS s hs).isLUB_mem A (hAS s hs) hA_ne hAc x hx
@@ -357,7 +357,7 @@ lemma CountableSupClosed.iInter
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.iInter
+引理 余untableSupClosed.i整数er
   结论: [LE α]
   证明: .sInter forall_mem_range.2 hf
 
@@ -380,8 +380,8 @@ lemma CountableSupClosed.directedOn
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.directedOn
-  条件: [SemilatticeSup α] (hs : CountableSupClosed s)
+引理 余untableSupClosed.directedOn
+  条件: [SemilatticeSup α] (hs : 余untableSupClosed s)
   证明: hs.supClosed.directedOn
 
 @[to_dual]
@@ -403,8 +403,8 @@ lemma CountableSupClosed.prod
       ht.isLUB_mem (Prod.snd '' A) (by grind) (by simpa) (hAc.image Prod.snd) _ hxy.2⟩
 
 中文:
-引理 CountableSupClosed.prod
-  结论: [Preorder α] [Preorder β]
+引理 余untableSupClosed.乘积
+  结论: [预序 α] [预序 β]
   证明: by
     intro (x, y) hxy
     rw [isLUB_prod] at hxy
@@ -437,7 +437,7 @@ lemma CountableSupClosed.finsetSup'_mem
 @[to_dual]
 
 中文:
-引理 CountableSupClosed.finsetSup'_mem
+引理 余untableSupClosed.finsetSup'_mem
   结论: [SemilatticeSup α]
   证明: hs.supClosed.finsetSup'_mem ht
 
@@ -460,8 +460,8 @@ lemma CountableSupClosed.finsetSup_mem
   proof: Finset.sup'_eq_sup ht f ▸ hs.finsetSup'_mem ht
 
 中文:
-引理 CountableSupClosed.finsetSup_mem
-  结论: [SemilatticeSup α] [OrderBot α]
+引理 余untableSupClosed.finsetSup_mem
+  结论: [SemilatticeSup α] [有底序 α]
   证明: Finset.sup'_eq_sup ht f ▸ hs.finsetSup'_mem ht
 
 Depends on / 依赖: Finset, Finset.sup, _eq_sup, _mem, finsetSup, hs.finsetSup
@@ -485,7 +485,7 @@ lemma countableSupClosed_preimage_toDual
 
 中文:
 引理 countableSupClosed_preimage_toDual
-  条件: [LE α] {s : Set αᵒᵈ}
+  条件: [LE α] {s : 集合 αᵒᵈ}
   证明: ⟨fun h => ⟨h.isLUB_mem⟩, fun h => ⟨h.isGLB_mem⟩⟩
 -/
 @[to_dual (attr := simp)] lemma countableSupClosed_preimage_toDual [LE α] {s : Set αᵒᵈ} :
@@ -504,7 +504,7 @@ lemma countableSupClosed_preimage_ofDual
 
 中文:
 引理 countableSupClosed_preimage_ofDual
-  条件: [LE α] {s : Set α}
+  条件: [LE α] {s : 集合 α}
   证明: ⟨fun h => ⟨h.isLUB_mem⟩, fun h => ⟨h.isGLB_mem⟩⟩
 
 @[to_dual] alias ⟨_, CountableSupClosed.dual⟩ := countableInfClosed_preimage_ofDual
@@ -540,7 +540,7 @@ definition countableSupClosure
 
 中文:
 定义 countableSupClosure
-  签名: : ClosureOperator (Set α)
+  签名: : 闭包算子 (集合 α)
   定义体: .ofPred
   (fun s => {a | exists (A : Set α) (_ : A subseteq s) (_ : A.Nonempty) (_ : A.Countable), IsLUB A a})
   CountableSupClosed
@@ -601,7 +601,7 @@ lemma countableSupClosure_min
 
 中文:
 引理 countableSupClosure_min
-  条件: (hst : s subseteq t) (ht : CountableSupClosed t)
+  条件: (hst : s subseteq t) (ht : 余untableSupClosed t)
   证明: countableSupClosure.closure_min hst ht
 
 Depends on / 依赖: closure_min, countableSupClosure, countableSupClosure.closure_min
@@ -638,7 +638,7 @@ lemma countableSupClosure_mono
 
 中文:
 引理 countableSupClosure_mono
-  结论: Monotone (countableSupClosure : Set α -> Set α)
+  结论: 递增 (countableSupClosure : 集合 α -> 集合 α)
   证明: countableSupClosure.mono
 
 Depends on / 依赖: countableSupClosure, countableSupClosure.mono
@@ -686,7 +686,7 @@ lemma countableSupClosure_idem
 
 中文:
 引理 countableSupClosure_idem
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: countableSupClosure.idempotent _
 
 @[to_dual]
@@ -713,8 +713,8 @@ lemma countableSupClosure_eq_sInter
   refine le_anti
 
 中文:
-引理 countableSupClosure_eq_sInter
-  条件: (s : Set α)
+引理 countableSupClosure_eq_s整数er
+  条件: (s : 集合 α)
   证明: by
   have : CountableSupClosed (⋂₀ {t | s subseteq t ∧ CountableSupClosed t}) := by
     constructor
@@ -794,7 +794,7 @@ lemma upperBounds_countableSupClosure
 
 中文:
 引理 upperBounds_countableSupClosure
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: (upperBounds_mono_set subset_countableSupClosure).antisymm by
     intro a ha b hb
     rw [mem_countableSupClosure_iff] at hb
@@ -840,7 +840,7 @@ lemma countableSupClosure_prod
 
 中文:
 引理 countableSupClosure_prod
-  结论: [Preorder β]
+  结论: [预序 β]
   证明: le_antisymm (countableSupClosure_min
 (Set.prod_mono subset_countableSupClosure subset_countableSupClosure)
     countableSupClosed_countableSupClosure.prod countableSupClosed_countableSupClosure) <| by
@@ -879,7 +879,7 @@ lemma mem_countableSupClosure_iff_iSup
 
 中文:
 引理 mem_countableSupClosure_iff_iSup
-  条件: [CompleteLattice α]
+  条件: [完备格 α]
   证明: by
   suffices countableSupClosure s = {a | exists (t : Nat -> α), (forall n, t n in s) ∧ ⨆ n, t n = a} by simp [this]
   have h_csc : CountableSupClosed {a | exists (t : Nat -> α), (forall n, t n in s) ∧ ⨆ n, t n = a} := by
@@ -931,7 +931,7 @@ lemma countableSupClosure_singleton
 
 中文:
 引理 countableSupClosure_singleton
-  条件: [PartialOrder α] {x : α}
+  条件: [偏序 α] {x : α}
   证明: by simp
 
 @[to_dual]
@@ -976,7 +976,7 @@ lemma iSup_mem_countableSupClosure
 
 中文:
 引理 iSup_mem_countableSupClosure
-  结论: [CompleteLattice α] [Countable ι] [Nonempty ι] {A : ι -> α}
+  结论: [完备格 α] [可数 ι] [非空 ι] {A : ι -> α}
   证明: countableSupClosed_countableSupClosure.iSup_mem (fun n => subset_countableSupClosure (hA n))
 
 @[to_dual]
@@ -1032,7 +1032,7 @@ lemma SupClosed.countableInfClosure
 
 中文:
 引理 SupClosed.countableInfClosure
-  条件: [Order.Coframe α] (hs : SupClosed s)
+  条件: [Order.余frame α] (hs : SupClosed s)
   证明: by
   rintro a ha b hb
   rw [mem_countableInfClosure_iff_iInf] at ha hb ⊢

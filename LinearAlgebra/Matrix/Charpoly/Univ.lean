@@ -59,7 +59,7 @@ abbreviation univ
 
 中文:
 缩写 univ
-  签名: : Polynomial (MvPolynomial (n × n) R)
+  签名: : 多项式 (多元多项式 (n × n) R)
   定义体: charpoly mvPolynomialX n n R
 
 Depends on / 依赖: charpoly, mvPolynomialX
@@ -171,8 +171,8 @@ lemma univ_natDegree
 
 中文:
 引理 univ_natDegree
-  条件: [Nontrivial R]
-  结论: (univ R n).natDegree = Fintype.card n
+  条件: [非平凡 R]
+  结论: (univ R n).natDegree = 有限类型.card n
   证明: charpoly_natDegree_eq_dim (mvPolynomialX n n R)
 
 @[simp]
@@ -197,7 +197,7 @@ lemma univ_coeff_card
 
 中文:
 引理 univ_coeff_card
-  结论: (univ R n).coeff (Fintype.card n) = 1
+  结论: (univ R n).coeff (有限类型.card n) = 1
   证明: by
   suffices Polynomial.coeff (univ Int n) (Fintype.card n) = 1 by
     rw [← univ_map_map n (Int.castRingHom R)]; rw [Polynomial.coeff_map]; rw [this]; rw [map_one]
@@ -261,7 +261,7 @@ lemma univ_coeff_isHomogeneous
 
 中文:
 引理 univ_coeff_isHomogeneous
-  条件: (i j : 自然数) (h : i + j = Fintype.card n)
+  条件: (i j : 自然数) (h : i + j = 有限类型.card n)
   证明: (optionEquivLeft_symm_univ_isHomogeneous R n).coeff_isHomogeneous_of_optionEquivLeft_symm _ _ h
 
 Depends on / 依赖: coeff_isHomogeneous_of_optionEquivLeft_symm, optionEquivLeft_symm_univ_isHomogeneous

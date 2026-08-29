@@ -42,8 +42,8 @@ structure BialgHom
   (no additional axioms)
 
 中文:
-结构 BialgHom
-  参数: (R A B : 类型) [CommSemiring R]
+结构 Bialg态射
+  参数: (R A B : 类型) [交换半环 R]
   继承: A ->ₗc[R] B, A ->* B
   (无附加公理)
 -/
@@ -70,9 +70,9 @@ class BialgHomClass
   (no additional axioms)
 
 中文:
-类 BialgHomClass
+类 Bialg态射类
   参数: (F : 类型) (R A B : outParam 类型)
-  继承: CoalgHomClass F R A B, MonoidHomClass F A B
+  继承: 余alg态射类 F R A B, 幺半群态射类 F A B
   (无附加公理)
 -/
 class BialgHomClass (F : Type*) (R A B : outParam Type*)
@@ -218,7 +218,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (A ->ₐc[R] B) A B where
+  签名: : 函数状 (A ->ₐc[R] B) A B where
   定义体: f.toFun
   coe_injective f g h := by
     rcases f with ⟨_, _⟩
@@ -249,7 +249,7 @@ instance bialgHomClass
 
 中文:
 实例 bialgHomClass
-  签名: : BialgHomClass (A ->ₐc[R] B) R A B where
+  签名: : Bialg态射类 (A ->ₐc[R] B) R A B where
   定义体: fun f => f.map_add'
   map_smulₛₗ := fun f => f.map_smul'
   counit_comp := fun f => f.counit_comp
@@ -281,7 +281,7 @@ initialize_simps_projections BialgHom (toFun -> apply, as_prefix toCoalgHom)
 
 中文:
 定义 Simps.apply
-  签名: {R α β : 类型} [CommSemiring R]
+  签名: {R α β : 类型} [交换半环 R]
   定义体: f
 
 initialize_simps_projections BialgHom (toFun -> apply, as_prefix toCoalgHom)
@@ -308,7 +308,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: {F : 类型} [FunLike F A B] [BialgHomClass F R A B] (f : F)
+  条件: {F : 类型} [函数状 F A B] [Bialg态射类 F R A B] (f : F)
   证明: rfl
 
 @[simp]
@@ -543,7 +543,7 @@ theorem coe_fn_injective
 
 中文:
 定理 coe_fn_injective
-  结论: @Function.Injective (A ->ₐc[R] B) (A -> B) (↑)
+  结论: @函数.单射 (A ->ₐc[R] B) (A -> B) (↑)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -582,7 +582,7 @@ theorem coe_coalgHom_injective
 
 中文:
 定理 coe_coalgHom_injective
-  结论: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
+  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₗc[R] B)
   证明: fun φ₁ φ₂ H => coe_fn_injective
     show ((φ₁ : A ->ₗc[R] B) : A -> B) = ((φ₂ : A ->ₗc[R] B) : A -> B) from congr_arg _ H
 
@@ -605,7 +605,7 @@ theorem coe_toAlgHom_injective
 
 中文:
 定理 coe_toAlgHom_injective
-  结论: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
+  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₐ[R] B)
   证明: fun φ₁ φ₂ H => coe_fn_injective
     show ((φ₁ : A ->ₐ[R] B) : A -> B) = ((φ₂ : A ->ₐ[R] B) : A -> B) from congr_arg _ H
 
@@ -629,7 +629,7 @@ theorem coe_linearMap_injective
 
 中文:
 定理 coe_linearMap_injective
-  结论: Function.Injective ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B)
+  结论: 函数.单射 ((↑) : (A ->ₐc[R] B) -> A ->ₗ[R] B)
   证明: CoalgHom.coe_linearMap_injective.comp coe_coalgHom_injective
 
 Depends on / 依赖: CoalgHom, CoalgHom.coe_linearMap_injective.comp, coe_coalgHom_injective, coe_linearMap_injective
@@ -845,7 +845,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(BialgHom.id R A) = id
+  结论: ⇑(Bialg态射.id R A) = id
   证明: rfl
 
 @[simp]
@@ -866,7 +866,7 @@ theorem id_toCoalgHom
 
 中文:
 定理 id_toCoalgHom
-  结论: BialgHom.id R A = CoalgHom.id R A
+  结论: Bialg态射.id R A = 余alg态射.id R A
   证明: rfl
 
 @[simp]
@@ -885,7 +885,7 @@ theorem id_toAlgHom
 
 中文:
 定理 id_toAlgHom
-  结论: BialgHom.id R A = AlgHom.id R A
+  结论: Bialg态射.id R A = 代数态射.id R A
   证明: rfl
 -/
 theorem id_toAlgHom : BialgHom.id R A = AlgHom.id R A :=
@@ -993,7 +993,7 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  结论: φ.comp (BialgHom.id R A) = φ
+  结论: φ.comp (Bialg态射.id R A) = φ
   证明: ext fun _x => rfl
 
 @[simp]
@@ -1012,7 +1012,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  结论: (BialgHom.id R B).comp φ = φ
+  结论: (Bialg态射.id R B).comp φ = φ
   证明: ext fun _x => rfl
 -/
 theorem id_comp : (BialgHom.id R B).comp φ = φ :=
@@ -1047,7 +1047,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {R'} [SMul R' A] [SMul R' B] [LinearMap.CompatibleSMul A B R' R] (r : R')
+  结论: {R'} [标量乘法 R' A] [标量乘法 R' B] [线性映射.余mpatibleSMul A B R' R] (r : R')
   证明: φ.toLinearMap.map_smul_of_tower r x
 
 @[simps -isSimp toSemigroup_toMul_mul toOne_one]
@@ -1075,7 +1075,7 @@ instance End
 
 中文:
 实例 End
-  签名: : Monoid (A ->ₐc[R] A) where
+  签名: : 幺半群 (A ->ₐc[R] A) where
   定义体: comp
   mul_assoc _ _ _ := rfl
   one := BialgHom.id R A
@@ -1325,7 +1325,7 @@ instance subsingleton_to_ring
 
 中文:
 实例 subsingleton_to_ring
-  签名: : Subsingleton (A ->ₐc[R] R)
+  签名: : 子单例 (A ->ₐc[R] R)
   定义体: ⟨fun _ _ => BialgHom.coe_coalgHom_injective (Subsingleton.elim _ _)⟩
 
 @[ext high]

@@ -102,7 +102,7 @@ theorem homCongr_refl
 中文:
 定理 homCongr_refl
   条件: {X Y : C} (f : X ⟶ Y)
-  结论: (Iso.refl X).homCongr (Iso.refl Y) f = f
+  结论: (同构.refl X).homCongr (同构.refl Y) f = f
   证明: by simp
 -/
 theorem homCongr_refl {X Y : C} (f : X ⟶ Y) : (Iso.refl X).homCongr (Iso.refl Y) f = f := by simp

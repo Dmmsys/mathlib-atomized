@@ -45,10 +45,10 @@ class ContinuousNeg
     - continuous_neg : Continuous fun a : G => -a
 
 中文:
-类 ContinuousNeg
-  参数: (G : 类型u) [TopologicalSpace G] [Neg G]
+类 连续取负
+  参数: (G : 类型u) [拓扑空间 G] [取负 G]
   公理与运算 (1 个):
-    - continuous_neg : Continuous fun a : G => -a
+    - continuous_neg : 连续 fun a : G => -a
 -/
 class ContinuousNeg (G : Type u) [TopologicalSpace G] [Neg G] : Prop where
   continuous_neg : Continuous fun a : G => -a
@@ -69,10 +69,10 @@ class ContinuousInv
     - continuous_inv : Continuous fun a : G => a⁻¹
 
 中文:
-类 ContinuousInv
-  参数: (G : 类型u) [TopologicalSpace G] [Inv G]
+类 连续取逆
+  参数: (G : 类型u) [拓扑空间 G] [取逆 G]
   公理与运算 (1 个):
-    - continuous_inv : Continuous fun a : G => a⁻¹
+    - continuous_inv : 连续 fun a : G => a⁻¹
 -/
 class ContinuousInv (G : Type u) [TopologicalSpace G] [Inv G] : Prop where
   continuous_inv : Continuous fun a : G => a⁻¹
@@ -102,8 +102,8 @@ theorem Filter.Tendsto.inv
   proof: (continuous_inv.tendsto y).comp h
 
 中文:
-定理 Filter.Tendsto.inv
-  条件: {f : α -> G} {l : Filter α} {y : G} (h : Tendsto f l (𝓝 y))
+定理 滤子.收敛.inv
+  条件: {f : α -> G} {l : 滤子 α} {y : G} (h : 收敛 f l (𝓝 y))
   证明: (continuous_inv.tendsto y).comp h
 
 Depends on / 依赖: continuous_inv, continuous_inv.tendsto, tendsto
@@ -133,9 +133,9 @@ nonrec theorem ContinuousWithinAt.inv (hf : ContinuousWithinAt f s x) :
 nonrec theorem ContinuousAt.inv (hf : ContinuousAt f x) : 
 
 中文:
-定理 Continuous.inv
-  条件: (hf : Continuous f)
-  结论: Continuous f⁻¹
+定理 连续.inv
+  条件: (hf : 连续 f)
+  结论: 连续 f⁻¹
   证明: continuous_inv.comp hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -193,9 +193,9 @@ class IsTopologicalAddGroup
   (no additional axioms)
 
 中文:
-类 IsTopologicalAddGroup
-  参数: (G : 类型u) [TopologicalSpace G] [AddGroup G]
-  继承: ContinuousAdd G, ContinuousNeg G
+类 是拓扑加群
+  参数: (G : 类型u) [拓扑空间 G] [加法群 G]
+  继承: 连续加法 G, 连续取负 G
   (无附加公理)
 -/
 class IsTopologicalAddGroup (G : Type u) [TopologicalSpace G] [AddGroup G] : Prop
@@ -218,9 +218,9 @@ class IsTopologicalGroup
   (no additional axioms)
 
 中文:
-类 IsTopologicalGroup
-  参数: (G : 类型) [TopologicalSpace G] [Group G]
-  继承: ContinuousMul G, ContinuousInv G
+类 是拓扑群
+  参数: (G : 类型) [拓扑空间 G] [群 G]
+  继承: 连续乘法 G, 连续取逆 G
   (无附加公理)
 -/
 class IsTopologicalGroup (G : Type*) [TopologicalSpace G] [Group G] : Prop
@@ -236,10 +236,10 @@ class ContinuousSub
     - continuous_sub : Continuous fun p : G × G => p.1 - p.2
 
 中文:
-类 ContinuousSub
-  参数: (G : 类型) [TopologicalSpace G] [Sub G]
+类 余ntinuousSub
+  参数: (G : 类型) [拓扑空间 G] [减法 G]
   公理与运算 (1 个):
-    - continuous_sub : Continuous fun p : G × G => p.1 - p.2
+    - continuous_sub : 连续 fun p : G × G => p.1 - p.2
 -/
 class ContinuousSub (G : Type*) [TopologicalSpace G] [Sub G] : Prop where
   continuous_sub : Continuous fun p : G × G => p.1 - p.2
@@ -258,10 +258,10 @@ class ContinuousDiv
     - continuous_div' : Continuous fun p : G × G => p.1 / p.2
 
 中文:
-类 ContinuousDiv
-  参数: (G : 类型) [TopologicalSpace G] [Div G]
+类 余ntinuousDiv
+  参数: (G : 类型) [拓扑空间 G] [除法 G]
   公理与运算 (1 个):
-    - continuous_div' : Continuous fun p : G × G => p.1 / p.2
+    - continuous_div' : 连续 fun p : G × G => p.1 / p.2
 -/
 class ContinuousDiv (G : Type*) [TopologicalSpace G] [Div G] : Prop where
   continuous_div' : Continuous fun p : G × G => p.1 / p.2
@@ -291,8 +291,8 @@ theorem Filter.Tendsto.div'
   proof: (continuous_div'.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.div'
-  结论: {f g : α -> G} {l : Filter α} {a b : G} (hf : Tendsto f l (𝓝 a))
+定理 滤子.收敛.div'
+  结论: {f g : α -> G} {l : 滤子 α} {a b : G} (hf : 收敛 f l (𝓝 a))
   证明: (continuous_div'.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuous_div, hf.prodMk_nhds, prodMk_nhds, tendsto
@@ -364,9 +364,9 @@ theorem Continuous.div'
   proof: continuous_div'.comp₂ hf hg
 
 中文:
-定理 Continuous.div'
-  条件: (hf : Continuous f) (hg : Continuous g)
-  结论: Continuous (f / g)
+定理 连续.div'
+  条件: (hf : 连续 f) (hg : 连续 g)
+  结论: 连续 (f / g)
   证明: continuous_div'.comp₂ hf hg
 
 Depends on / 依赖: continuous_div

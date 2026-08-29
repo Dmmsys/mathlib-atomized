@@ -97,7 +97,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: : List α -> Multiset α
+  签名: : 列表 α -> Multiset α
   定义体: Quot.mk _
 
 Depends on / 依赖: Quot.mk
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (List α) (Multiset α)
+  签名: Coe (列表 α) (Multiset α)
   定义体: ⟨ofList⟩
 
 @[simp]
@@ -141,8 +141,8 @@ theorem quot_mk_to_coe
 
 中文:
 定理 quot_mk_to_coe
-  条件: (l : List α)
-  结论: @Eq (Multiset α) ⟦l⟧ l
+  条件: (l : 列表 α)
+  结论: @相等 (Multiset α) ⟦l⟧ l
   证明: rfl
 
 @[simp]
@@ -164,8 +164,8 @@ theorem quot_mk_to_coe'
 
 中文:
 定理 quot_mk_to_coe'
-  条件: (l : List α)
-  结论: @Eq (Multiset α) (Quot.mk (· ≈ ·) l) l
+  条件: (l : 列表 α)
+  结论: @相等 (Multiset α) (商.mk (· ≈ ·) l) l
   证明: rfl
 
 @[simp]
@@ -187,8 +187,8 @@ theorem quot_mk_to_coe''
 
 中文:
 定理 quot_mk_to_coe''
-  条件: (l : List α)
-  结论: @Eq (Multiset α) (Quot.mk Setoid.r l) l
+  条件: (l : 列表 α)
+  结论: @相等 (Multiset α) (商.mk 集合等价关系.r l) l
   证明: rfl
 
 @[simp]
@@ -209,7 +209,7 @@ theorem lift_coe
 
 中文:
 定理 lift_coe
-  结论: {α β : 类型} (x : List α) (f : List α -> β)
+  结论: {α β : 类型} (x : 列表 α) (f : 列表 α -> β)
   证明: Quotient.lift_mk _ _ _
 
 @[simp]
@@ -232,7 +232,7 @@ theorem coe_eq_coe
 
 中文:
 定理 coe_eq_coe
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: (l₁ : Multiset α) = l₂ ↔ l₁ ~ l₂
   证明: Quotient.eq
 
@@ -345,7 +345,7 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   结论: a in (l : Multiset α) ↔ a in l
   证明: Iff.rfl
 
@@ -389,7 +389,7 @@ definition Subset
   body: forall ⦃a : α⦄, a in s -> a in t
 
 中文:
-定义 Subset
+定义 子集
   签名: (s t : Multiset α)
   定义体: forall ⦃a : α⦄, a in s -> a in t
 -/
@@ -444,7 +444,7 @@ instance instIsNonstrictStrictOrder
 
 中文:
 实例 instIsNonstrictStrictOrder
-  签名: : IsNonstrictStrictOrder (Multiset α) (· subseteq ·) (· ⊂ ·) where
+  签名: : 是NonstrictStrict序 (Multiset α) (· subseteq ·) (· ⊂ ·) where
   定义体: Iff.rfl
 
 @[simp]
@@ -468,7 +468,7 @@ theorem coe_subset
 
 中文:
 定理 coe_subset
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: (l₁ : Multiset α) subseteq l₂ ↔ l₁ subseteq l₂
   证明: Iff.rfl
 
@@ -490,7 +490,7 @@ theorem Subset.refl
   proof: fun _ h => h
 
 中文:
-定理 Subset.refl
+定理 子集.refl
   条件: (s : Multiset α)
   结论: s subseteq s
   证明: fun _ h => h
@@ -507,7 +507,7 @@ theorem Subset.trans
   proof: fun h₁ h₂ _ m => h₂ (h₁ m)
 
 中文:
-定理 Subset.trans
+定理 子集.trans
   条件: {s t u : Multiset α}
   结论: s subseteq t -> t subseteq u -> s subseteq u
   证明: fun h₁ h₂ _ m => h₂ (h₁ m)
@@ -594,7 +594,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Multiset α)
+  签名: 偏序 (Multiset α)
   定义体: Multiset.Le
   le_refl := by rintro ⟨l⟩; exact Subperm.refl _
   le_trans := by rintro ⟨l₁⟩ ⟨l₂⟩ ⟨l₃⟩; exact @Subperm.trans _ _ _ _
@@ -710,7 +710,7 @@ theorem coe_le
 
 中文:
 定理 coe_le
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   结论: (l₁ : Multiset α) <= l₂ ↔ l₁ <+~ l₂
   证明: Iff.rfl
 
@@ -779,7 +779,7 @@ theorem coe_card
 
 中文:
 定理 coe_card
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: card (l : Multiset α) = length l
   证明: rfl
 -/
@@ -863,7 +863,7 @@ theorem card_mono
 
 中文:
 定理 card_mono
-  结论: Monotone (@card α)
+  结论: 递增 (@card α)
   证明: fun _a _b => card_le_card
 
 @[gcongr]
@@ -883,7 +883,7 @@ lemma card_strictMono
 
 中文:
 引理 card_strictMono
-  结论: StrictMono (@card α)
+  结论: 严格递增 (@card α)
   证明: fun _ _ => card_lt_card
 
 Depends on / 依赖: card_lt_card
@@ -924,7 +924,7 @@ theorem coe_reverse
 
 中文:
 定理 coe_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (reverse l : Multiset α) = l
   证明: Quot.sound reverse_perm _
 
@@ -957,7 +957,7 @@ theorem coe_pmap
 
 中文:
 定理 coe_pmap
-  条件: {p : α -> 命题} (f : 对任意 a, p a -> β) (l : List α) (H : 对任意 a in l, p a)
+  条件: {p : α -> 命题} (f : 对任意 a, p a -> β) (l : 列表 α) (H : 对任意 a in l, p a)
   证明: rfl
 -/
 theorem coe_pmap {p : α -> Prop} (f : forall a, p a -> β) (l : List α) (H : forall a in l, p a) :
@@ -1068,8 +1068,8 @@ theorem coe_attach
 
 中文:
 定理 coe_attach
-  条件: (l : List α)
-  结论: @Eq (Multiset { x // x in l }) (@attach α l) l.attach
+  条件: (l : 列表 α)
+  结论: @相等 (Multiset { x // x in l }) (@attach α l) l.attach
   证明: rfl
 
 @[simp]
@@ -1137,7 +1137,7 @@ definition decidableForallMultiset
 
 中文:
 定义 decidableForallMultiset
-  签名: {p : α -> 命题} [对任意 a, Decidable (p a)]
+  签名: {p : α -> 命题} [对任意 a, 可判定 (p a)]
   定义体: Quotient.recOnSubsingleton m fun l => decidable_of_iff (forall a in l, p a) by simp
 -/
 protected def decidableForallMultiset {p : α -> Prop} [forall a, Decidable (p a)] :
@@ -1155,8 +1155,8 @@ instance decidableDforallMultiset
     (@Multiset.decidableForallMultiset _ m.attach (fun a => p a.1 a.2) _)
 
 中文:
-实例 decidableDforallMultiset
-  签名: {p : 对任意 a in m, 命题} [_hp : 对任意 (a) (h : a in m), Decidable (p a h)]
+实例 decidableD对任意Multiset
+  签名: {p : 对任意 a in m, 命题} [_hp : 对任意 (a) (h : a in m), 可判定 (p a h)]
   定义体: @decidable_of_iff _ _
     (Iff.intro (fun h a ha => h ⟨a, ha⟩ (mem_attach _ _)) fun h ⟨_a, _ha⟩ _ => h _ _)
     (@Multiset.decidableForallMultiset _ m.attach (fun a => p a.1 a.2) _)
@@ -1216,8 +1216,8 @@ instance decidableDexistsMultiset
     (@Multiset.decidableExistsMultiset { a // a in m } m.attach (fun a => p a.1 a.2) _)
 
 中文:
-实例 decidableDexistsMultiset
-  签名: {p : 对任意 a in m, 命题} [_hp : 对任意 (a) (h : a in m), Decidable (p a h)]
+实例 decidableD存在Multiset
+  签名: {p : 对任意 a in m, 命题} [_hp : 对任意 (a) (h : a in m), 可判定 (p a h)]
   定义体: @decidable_of_iff _ _
     (Iff.intro (fun ⟨⟨a, ha₁⟩, _, ha₂⟩ => ⟨a, ha₁, ha₂⟩) fun ⟨a, ha₁, ha₂⟩ =>
       ⟨⟨a, ha₁⟩, mem_attach _ _, ha₂⟩)
@@ -1243,7 +1243,7 @@ definition Pairwise
   body: exists l : List α, m = l ∧ l.Pairwise r
 
 中文:
-定义 Pairwise
+定义 两两
   签名: (r : α -> α -> 命题) (m : Multiset α)
   定义体: exists l : List α, m = l ∧ l.Pairwise r
 
@@ -1262,7 +1262,7 @@ theorem pairwise_coe_iff
 
 中文:
 定理 pairwise_coe_iff
-  条件: {r : α -> α -> 命题} {l : List α}
+  条件: {r : α -> α -> 命题} {l : 列表 α}
   证明: exists_congr by simp
 
 Depends on / 依赖: exists_congr
@@ -1281,7 +1281,7 @@ theorem pairwise_coe_iff_pairwise
 
 中文:
 定理 pairwise_coe_iff_pairwise
-  条件: {r : α -> α -> 命题} [Std.Symm r] {l : List α}
+  条件: {r : α -> α -> 命题} [Std.Symm r] {l : 列表 α}
   证明: .mpr h, fun h => ⟨l, rfl, h⟩⟩ .pairwise_iff symm ⟨fun ⟨_l', Eq, h⟩ => Quotient.exact Eq
 
 Depends on / 依赖: Quotient, Quotient.exact, pairwise_iff
@@ -1326,7 +1326,7 @@ theorem coe_nodup
 
 中文:
 定理 coe_nodup
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: @Nodup α l ↔ l.Nodup
   证明: Iff.rfl
 

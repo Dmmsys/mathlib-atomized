@@ -80,8 +80,8 @@ lemma nhdsKer_def
 
 中文:
 引理 nhdsKer_def
-  条件: (s : Set X)
-  结论: nhdsKer s = ⋂₀ {t : Set X | IsOpen t ∧ s subseteq t}
+  条件: (s : 集合 X)
+  结论: nhdsKer s = ⋂₀ {t : 集合 X | 是开集 t ∧ s subseteq t}
   证明: (hasBasis_nhdsSet _).ker.trans sInter_eq_biInter.symm
 
 Depends on / 依赖: hasBasis_nhdsSet, ker.trans, sInter_eq_biInter, sInter_eq_biInter.symm
@@ -99,7 +99,7 @@ lemma mem_nhdsKer
 
 中文:
 引理 mem_nhdsKer
-  结论: x in nhdsKer s ↔ 对任意 U, IsOpen U -> s subseteq U -> x in U
+  结论: x in nhdsKer s ↔ 对任意 U, 是开集 U -> s subseteq U -> x in U
   证明: by simp [nhdsKer_def]
 
 Depends on / 依赖: nhdsKer_def
@@ -117,7 +117,7 @@ lemma subset_nhdsKer_iff
 
 中文:
 引理 subset_nhdsKer_iff
-  结论: s subseteq nhdsKer t ↔ 对任意 U, IsOpen U -> t subseteq U -> s subseteq U
+  结论: s subseteq nhdsKer t ↔ 对任意 U, 是开集 U -> t subseteq U -> s subseteq U
   证明: by
   simp [nhdsKer_def]
 
@@ -155,7 +155,7 @@ lemma nhdsKer_minimal
 
 中文:
 引理 nhdsKer_minimal
-  条件: (h₁ : s subseteq t) (h₂ : IsOpen t)
+  条件: (h₁ : s subseteq t) (h₂ : 是开集 t)
   结论: nhdsKer s subseteq t
   证明: by
   rw [nhdsKer_def]; exact sInter_subset_of_mem ⟨h₂, h₁⟩
@@ -175,8 +175,8 @@ lemma IsOpen.nhdsKer_eq
   proof: (nhdsKer_minimal Subset.rfl h).antisymm subset_nhdsKer
 
 中文:
-引理 IsOpen.nhdsKer_eq
-  条件: (h : IsOpen s)
+引理 是开集.nhdsKer_eq
+  条件: (h : 是开集 s)
   结论: nhdsKer s = s
   证明: (nhdsKer_minimal Subset.rfl h).antisymm subset_nhdsKer
 
@@ -197,8 +197,8 @@ lemma IsOpen.nhdsKer_subset
 @[simp]
 
 中文:
-引理 IsOpen.nhdsKer_subset
-  条件: (ht : IsOpen t)
+引理 是开集.nhdsKer_subset
+  条件: (ht : 是开集 t)
   结论: nhdsKer s subseteq t ↔ s subseteq t
   证明: ⟨subset_nhdsKer.trans, fun h => nhdsKer_minimal h ht⟩
 
@@ -222,7 +222,7 @@ theorem nhdsKer_iUnion
 
 中文:
 定理 nhdsKer_iUnion
-  条件: (s : ι -> Set X)
+  条件: (s : ι -> 集合 X)
   结论: nhdsKer (⋃ i, s i) = ⋃ i, nhdsKer (s i)
   证明: by
   simp only [nhdsKer, nhdsSet_iUnion, ker_iSup]
@@ -245,7 +245,7 @@ theorem nhdsKer_biUnion
 
 中文:
 定理 nhdsKer_biUnion
-  条件: {ι : 类型} (s : Set ι) (t : ι -> Set X)
+  条件: {ι : 类型} (s : 集合 ι) (t : ι -> 集合 X)
   证明: by
   simp only [nhdsKer_iUnion]
 
@@ -272,7 +272,7 @@ theorem nhdsKer_union
 
 中文:
 定理 nhdsKer_union
-  条件: (s t : Set X)
+  条件: (s t : 集合 X)
   结论: nhdsKer (s union t) = nhdsKer s union nhdsKer t
   证明: by
   simp only [nhdsKer, nhdsSet_union, ker_sup]
@@ -297,7 +297,7 @@ theorem nhdsKer_sUnion
 
 中文:
 定理 nhdsKer_sUnion
-  条件: (S : Set (Set X))
+  条件: (S : 集合 (集合 X))
   结论: nhdsKer (⋃₀ S) = ⋃ s in S, nhdsKer s
   证明: by
   simp only [sUnion_eq_biUnion, nhdsKer_iUnion]
@@ -341,7 +341,7 @@ lemma nhdsKer_mono
 
 中文:
 引理 nhdsKer_mono
-  结论: Monotone (nhdsKer : Set X -> Set X)
+  结论: 递增 (nhdsKer : 集合 X -> 集合 X)
   证明: fun _s _t h => ker_mono nhdsSet_mono h
 -/
 @[gcongr, mono] lemma nhdsKer_mono : Monotone (nhdsKer : Set X -> Set X) :=
@@ -435,8 +435,8 @@ theorem nhdsKer_iInter_subset
   proof: nhdsKer_mono.map_iInf_le
 
 中文:
-定理 nhdsKer_iInter_subset
-  条件: {s : ι -> Set X}
+定理 nhdsKer_i整数er_subset
+  条件: {s : ι -> 集合 X}
   结论: nhdsKer (⋂ i, s i) subseteq ⋂ i, nhdsKer (s i)
   证明: nhdsKer_mono.map_iInf_le
 
@@ -456,7 +456,7 @@ theorem nhdsKer_inter_subset
 
 中文:
 定理 nhdsKer_inter_subset
-  条件: {s t : Set X}
+  条件: {s t : 集合 X}
   结论: nhdsKer (s inter t) subseteq nhdsKer s inter nhdsKer t
   证明: nhdsKer_mono.map_inf_le _ _
 
@@ -475,8 +475,8 @@ theorem nhdsKer_sInter_subset
   proof: nhdsKer_mono.map_sInf_le
 
 中文:
-定理 nhdsKer_sInter_subset
-  条件: {s : Set (Set X)}
+定理 nhdsKer_s整数er_subset
+  条件: {s : 集合 (集合 X)}
   结论: nhdsKer (⋂₀ s) subseteq ⋂ x in s, nhdsKer x
   证明: nhdsKer_mono.map_sInf_le
 
@@ -495,7 +495,7 @@ lemma nhdsKer_empty
 
 中文:
 引理 nhdsKer_empty
-  结论: nhdsKer (∅ : Set X) = ∅
+  结论: nhdsKer (∅ : 集合 X) = ∅
   证明: isOpen_empty.nhdsKer_eq
 -/
 @[simp] lemma nhdsKer_empty : nhdsKer (∅ : Set X) = ∅ := isOpen_empty.nhdsKer_eq
@@ -510,7 +510,7 @@ lemma nhdsKer_univ
 
 中文:
 引理 nhdsKer_univ
-  结论: nhdsKer (univ : Set X) = univ
+  结论: nhdsKer (univ : 集合 X) = univ
   证明: isOpen_univ.nhdsKer_eq
 -/
 @[simp] lemma nhdsKer_univ : nhdsKer (univ : Set X) = univ := isOpen_univ.nhdsKer_eq
@@ -544,7 +544,7 @@ exact fun U ⟨hUo, hsU⟩ => hUo.mem_nhdsSet.2 hUo.nhdsKer_subset.2 hsU
 
 中文:
 引理 nhdsSet_nhdsKer
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: 𝓝ˢ (nhdsKer s) = 𝓝ˢ s
   证明: by
   refine le_antisymm ((hasBasis_nhdsSet _).ge_iff.2 ?_) (nhdsSet_mono subset_nhdsKer)
@@ -566,7 +566,7 @@ lemma nhdsKer_nhdsKer
 
 中文:
 引理 nhdsKer_nhdsKer
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: nhdsKer (nhdsKer s) = nhdsKer s
   证明: by
   simp only [nhdsKer_eq_nhdsKer_iff_nhdsSet, nhdsSet_nhdsKer]
@@ -585,7 +585,7 @@ lemma nhdsKer_pair
 
 中文:
 引理 nhdsKer_pair
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
   simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_prod_eq, ker_prod]
 
@@ -611,7 +611,7 @@ lemma nhdsKer_prod
 
 中文:
 引理 nhdsKer_prod
-  条件: {Y : 类型} [TopologicalSpace Y] (s : Set X) (t : Set Y)
+  条件: {Y : 类型} [拓扑空间 Y] (s : 集合 X) (t : 集合 Y)
   证明: calc
   _ = ⋃ (p in s ×ˢ t), nhdsKer {p} := by
     conv_lhs => rw [← biUnion_of_singleton (s ×ˢ t), nhdsKer_biUnion]
@@ -642,7 +642,7 @@ lemma nhdsKer_singleton_pi
 
 中文:
 引理 nhdsKer_singleton_pi
-  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), 拓扑空间 (X i)]
   证明: by
   simp_rw [nhdsKer_singleton_eq_ker_nhds, nhds_pi, ker_pi]
 
@@ -668,7 +668,7 @@ lemma nhdsKer_pi
 
 中文:
 引理 nhdsKer_pi
-  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), TopologicalSpace (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [Π (i : ι), 拓扑空间 (X i)]
   证明: calc
   _ = ⋃ (p in univ.pi s), nhdsKer {p} := by
     conv_lhs => rw [← biUnion_of_singleton (univ.pi s), nhdsKer_biUnion]

@@ -53,7 +53,7 @@ definition singularChainComplexFunctorObjMap
 
 中文:
 定义 singularChainComplexFunctorObjMap
-  签名: (H : TopCat.Homotopy f g) (R : C)
+  签名: (H : 顶元素范畴.同伦 f g) (R : C)
   定义体: H.toSSet.chainComplexMap R
 
 Depends on / 依赖: H.toSSet.chainComplexMap, chainComplexMap, toSSet
@@ -74,7 +74,7 @@ lemma congr_homologyMap_singularChainComplexFunctor
 
 中文:
 引理 congr_homologyMap_singularChainComplexFunctor
-  结论: [CategoryWithHomology C]
+  结论: [带同调范畴 C]
   证明: (H.singularChainComplexFunctorObjMap R).homologyMap_eq n
 
 Depends on / 依赖: H.singularChainComplexFunctorObjMap, homologyMap_eq, singularChainComplexFunctorObjMap

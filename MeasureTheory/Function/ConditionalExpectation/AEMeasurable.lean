@@ -55,7 +55,7 @@ theorem ae_eq_trim_iff_of_aestronglyMeasurable
 
 中文:
 定理 ae_eq_trim_iff_of_aestronglyMeasurable
-  结论: {α β} [TopologicalSpace β] [MetrizableSpace β]
+  结论: {α β} [拓扑空间 β] [Metrizable空间 β]
   证明: (hfm.stronglyMeasurable_mk.ae_eq_trim_iff hm hgm.stronglyMeasurable_mk).trans
     ⟨fun h => hfm.ae_eq_mk.trans (h.trans hgm.ae_eq_mk.symm), fun h =>
       hfm.ae_eq_mk.symm.trans (h.trans hgm.ae_eq_mk)⟩
@@ -81,7 +81,7 @@ theorem AEStronglyMeasurable.comp_ae_measurable'
 
 中文:
 定理 AEStronglyMeasurable.comp_ae_measurable'
-  结论: {α β γ : 类型} [TopologicalSpace β]
+  结论: {α β γ : 类型} [拓扑空间 β]
   证明: ⟨hf.mk f ∘ g, hf.stronglyMeasurable_mk.comp_measurable (measurable_iff_comap_le.mpr le_rfl),
     ae_eq_comp hg hf.ae_eq_mk⟩
 
@@ -119,7 +119,7 @@ definition lpMeasSubgroup
 
 中文:
 定义 lpMeasSubgroup
-  签名: (m : MeasurableSpace α) [MeasurableSpace α] (p : 实数>=0∞) (μ : Measure α)
+  签名: (m : 可测空间 α) [可测空间 α] (p : 实数>=0∞) (μ : 测度 α)
   定义体: {f : Lp F p μ | AEStronglyMeasurable[m] f μ}
   zero_mem' := ⟨(0 : α -> F), @stronglyMeasurable_zero _ _ m _ _, Lp.coeFn_zero _ _ _⟩
   add_mem' {f g} hf hg := (hf.add hg).congr (Lp.coeFn_add f g).symm
@@ -149,7 +149,7 @@ definition lpMeas
 
 中文:
 定义 lpMeas
-  签名: (m : MeasurableSpace α) [MeasurableSpace α] (p : 实数>=0∞) (μ : Measure α)
+  签名: (m : 可测空间 α) [可测空间 α] (p : 实数>=0∞) (μ : 测度 α)
   定义体: {f : Lp F p μ | AEStronglyMeasurable[m] f μ}
   zero_mem' := ⟨(0 : α -> F), @stronglyMeasurable_zero _ _ m _ _, Lp.coeFn_zero _ _ _⟩
   add_mem' {f g} hf hg := (hf.add hg).congr (Lp.coeFn_add f g).symm
@@ -177,7 +177,7 @@ theorem mem_lpMeasSubgroup_iff_aestronglyMeasurable
 
 中文:
 定理 mem_lpMeasSubgroup_iff_aestronglyMeasurable
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α}
+  结论: {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   rw [← AddSubgroup.mem_carrier]; rw [lpMeasSubgroup]; rw [Set.mem_ofPred_eq]
 
@@ -198,7 +198,7 @@ theorem mem_lpMeas_iff_aestronglyMeasurable
 
 中文:
 定理 mem_lpMeas_iff_aestronglyMeasurable
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α}
+  结论: {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   rw [← SetLike.mem_coe]; rw [← Submodule.mem_carrier]; rw [lpMeas]; rw [Set.mem_ofPred_eq]
 
@@ -218,7 +218,7 @@ theorem lpMeas.aestronglyMeasurable
 
 中文:
 定理 lpMeas.aestronglyMeasurable
-  结论: {m _ : MeasurableSpace α} {μ : Measure α}
+  结论: {m _ : 可测空间 α} {μ : 测度 α}
   证明: mem_lpMeas_iff_aestronglyMeasurable.mp f.mem
 
 Depends on / 依赖: Subgroup, Subgroup.hasDetPlusMinusOne_adjoinNegOne_iff, f.mem, hasDetPlusMinusOne_adjoinNegOne_iff, mem_lpMeas_iff_aestronglyMeasurable, mem_lpMeas_iff_aestronglyMeasurable.mp
@@ -237,7 +237,7 @@ theorem mem_lpMeas_self
 
 中文:
 定理 mem_lpMeas_self
-  条件: {m0 : MeasurableSpace α} (μ : Measure α) (f : Lp F p μ)
+  条件: {m0 : 可测空间 α} (μ : 测度 α) (f : Lp F p μ)
   证明: mem_lpMeas_iff_aestronglyMeasurable.mpr (Lp.aestronglyMeasurable f)
 
 Depends on / 依赖: Fact.out, Lp.aestronglyMeasurable, Subgroup, Subgroup.hasDetOne_adjoinNegOne_iff, aestronglyMeasurable, hasDetOne_adjoinNegOne_iff, mem_lpMeas_iff_aestronglyMeasurable, mem_lpMeas_iff_aestronglyMeasurable.mpr
@@ -257,7 +257,7 @@ theorem mem_lpMeas_indicatorConstLp
 
 中文:
 定理 mem_lpMeas_indicatorConstLp
-  结论: {m m0 : MeasurableSpace α} (hm : m <= m0) {μ : Measure α}
+  结论: {m m0 : 可测空间 α} (hm : m <= m0) {μ : 测度 α}
   证明: ⟨s.indicator fun _ : α => c, (@stronglyMeasurable_const _ _ m _ _).indicator hs,
     indicatorConstLp_coeFn⟩
 
@@ -865,7 +865,7 @@ instance [hm
 
 中文:
 实例 [hm
-  签名: : Fact (m <= m0)] [CompleteSpace F] [hp : Fact (1 <= p)] :
+  签名: : Fact (m <= m0)] [完备空间 F] [hp : Fact (1 <= p)] :
   定义体: by
   rw [(lpMeasSubgroupToLpTrimIso F p μ hm.elim).completeSpace_iff]; infer_instance
 
@@ -886,7 +886,7 @@ instance [hm
 
 中文:
 实例 [hm
-  签名: : Fact (m <= m0)] [CompleteSpace F] [hp : Fact (1 <= p)] :
+  签名: : Fact (m <= m0)] [完备空间 F] [hp : Fact (1 <= p)] :
   定义体: by
   rw [(lpMeasSubgroupToLpMeasIso F 𝕜 p μ).symm.completeSpace_iff]; infer_instance
 
@@ -910,7 +910,7 @@ theorem isComplete_aestronglyMeasurable
 
 中文:
 定理 isComplete_aestronglyMeasurable
-  条件: [hp : Fact (1 <= p)] [CompleteSpace F] (hm : m <= m0)
+  条件: [hp : Fact (1 <= p)] [完备空间 F] (hm : m <= m0)
   证明: by
   rw [← completeSpace_coe_iff_isComplete]
   have : Fact (m <= m0) := ⟨hm⟩
@@ -936,7 +936,7 @@ theorem isClosed_aestronglyMeasurable
 
 中文:
 定理 isClosed_aestronglyMeasurable
-  条件: [Fact (1 <= p)] [CompleteSpace F] (hm : m <= m0)
+  条件: [Fact (1 <= p)] [完备空间 F] (hm : m <= m0)
   证明: IsComplete.isClosed (isComplete_aestronglyMeasurable hm)
 
 Depends on / 依赖: IsComplete, IsComplete.isClosed, isClosed, isComplete_aestronglyMeasurable
@@ -989,7 +989,7 @@ theorem lpMeasToLpTrimLie_symm_indicator
 
 中文:
 定理 lpMeasToLpTrimLie_symm_indicator
-  结论: [one_le_p : Fact (1 <= p)] [NormedSpace 实数 F] {hm : m <= m0}
+  结论: [one_le_p : Fact (1 <= p)] [赋范空间 实数 F] {hm : m <= m0}
   证明: by
   ext1
   change
@@ -1022,7 +1022,7 @@ theorem lpMeasToLpTrimLie_symm_toLp
 
 中文:
 定理 lpMeasToLpTrimLie_symm_toLp
-  结论: [one_le_p : Fact (1 <= p)] [NormedSpace 实数 F] (hm : m <= m0)
+  结论: [one_le_p : Fact (1 <= p)] [赋范空间 实数 F] (hm : m <= m0)
   证明: by
   ext1
   change lpTrimToLpMeas F Real p μ hm (MemLp.toLp f hf) =ᵐ[μ] (MemLp.toLp f _ : α -> F)

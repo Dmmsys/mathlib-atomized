@@ -38,7 +38,7 @@ definition DList.listEquivDList
 
 中文:
 定义 DList.listEquivDList
-  签名: : List α ≃ DList α where
+  签名: : 列表 α ≃ DList α where
   定义体: DList.ofList
   invFun := DList.toList
   left_inv _ := DList.toList_ofList _
@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable DList
+  签名: 可遍历 DList
   定义体: Equiv.traversable DList.listEquivDList
 
 Depends on / 依赖: DList.listEquivDList, Equiv.traversable, listEquivDList, traversable
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable DList
+  签名: 合法可遍历 DList
   定义体: Equiv.isLawfulTraversable DList.listEquivDList
 
 Depends on / 依赖: DList.listEquivDList, Equiv.isLawfulTraversable, isLawfulTraversable, listEquivDList

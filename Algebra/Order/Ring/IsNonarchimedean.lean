@@ -39,7 +39,7 @@ theorem add_le
 
 中文:
 定理 add_le
-  结论: [IsStrictOrderedRing R] {α : 类型} [Add α] {f : α -> R} (hf : 对任意 x : α, 0 <= f x)
+  结论: [是StrictOrdered环 R] {α : 类型} [加法 α] {f : α -> R} (hf : 对任意 x : α, 0 <= f x)
   证明: by
   apply le_trans (hna _ _)
   rw [max_le_iff]; rw [le_add_iff_nonneg_right]; rw [le_add_iff_nonneg_left]
@@ -69,7 +69,7 @@ apply le_trans hna (n • a) (1 • a)
 
 中文:
 定理 nsmul_le
-  结论: {F α : 类型} [AddMonoid α] [FunLike F α R] [ZeroHomClass F α R]
+  结论: {F α : 类型} [加法幺半群 α] [函数状 F α R] [保零态射类 F α R]
   证明: by
   induction n with
   | zero => simp
@@ -102,7 +102,7 @@ theorem nmul_le
 
 中文:
 定理 nmul_le
-  结论: {F α : 类型} [NonAssocSemiring α] [FunLike F α R] [ZeroHomClass F α R]
+  结论: {F α : 类型} [非结合半环 α] [函数状 F α R] [保零态射类 F α R]
   证明: by
   rw [← nsmul_eq_mul]
   exact nsmul_le hna
@@ -130,7 +130,7 @@ alias apply_natCast_le_one_of_isNonarchimedean := apply_natCast_le_one
 
 中文:
 引理 apply_natCast_le_one
-  结论: {F α : 类型} [AddMonoidWithOne α] [FunLike F α R]
+  结论: {F α : 类型} [加法带幺幺半群 α] [函数状 F α R]
   证明: by
   rw [← nsmul_one n]; rw [← map_one f]
   exact nsmul_le hna
@@ -164,7 +164,7 @@ alias apply_intCast_le_one_of_isNonarchimedean := apply_intCast_le_one
 
 中文:
 定理 apply_intCast_le_one
-  结论: [IsStrictOrderedRing R]
+  结论: [是StrictOrdered环 R]
   证明: by
   obtain ⟨a, rfl | rfl⟩ := Int.eq_nat_or_neg n <;>
   simp [apply_natCast_le_one hna]
@@ -204,7 +204,7 @@ exact max_l
 
 中文:
 引理 add_eq_right_of_lt
-  结论: {F α : 类型} [AddGroup α] [FunLike F α R]
+  结论: {F α : 类型} [加法群 α] [函数状 F α R]
   证明: by
   by_contra! h
   have h1 : f (x + y) <= f y := (hna x y).trans_eq (max_eq_right_of_lt h_lt)
@@ -252,7 +252,7 @@ lemma add_eq_left_of_lt
 
 中文:
 引理 add_eq_left_of_lt
-  结论: {F α : 类型} [AddGroup α] [FunLike F α R]
+  结论: {F α : 类型} [加法群 α] [函数状 F α R]
   证明: by
   by_contra! h
   have h1 : f (x + y) <= f x := (hna x y).trans_eq (max_eq_left_of_lt h_lt)
@@ -295,7 +295,7 @@ theorem add_eq_max_of_ne
 
 中文:
 定理 add_eq_max_of_ne
-  结论: {F α : 类型} [AddGroup α] [FunLike F α R]
+  结论: {F α : 类型} [加法群 α] [函数状 F α R]
   证明: by
   rcases hne.lt_or_gt with h_lt | h_lt
   · rw [add_eq_right_of_lt hna h_lt]
@@ -331,7 +331,7 @@ lemma add_eq_max_of_ne'
 
 中文:
 引理 add_eq_max_of_ne'
-  结论: {α S : 类型} [LinearOrder S] [AddCommGroup α]
+  结论: {α S : 类型} [线性序 S] [加法交换群 α]
   证明: by
   wlog hab : f a > f b generalizing a b with H
   · simpa [add_comm, max_comm] using (H hne.symm ((not_lt.mp hab).lt_of_ne hne))
@@ -372,7 +372,7 @@ rcases le_max_iff.mp nonarch (l i) (∑ i in s, l i) with h₁ | h₂
 
 中文:
 引理 apply_sum_le_sup
-  结论: {α β : 类型} [AddCommMonoid α] {f : α -> R}
+  结论: {α β : 类型} [加法交换幺半群 α] {f : α -> R}
   证明: by
   induction hnonempty using Nonempty.cons_induction with
   | singleton i => simp
@@ -419,7 +419,7 @@ rcases le_max_iff.mp hna (g a) (Multiset.m
 
 中文:
 定理 multiset_image_add_of_nonempty
-  结论: {α β : 类型} [AddCommMonoid α] [Nonempty β] {f : α -> R}
+  结论: {α β : 类型} [加法交换幺半群 α] [非空 β] {f : α -> R}
   证明: by
   induction s using Multiset.induction_on with
   | empty => contradiction
@@ -458,7 +458,7 @@ theorem finset_image_add_of_nonempty
 
 中文:
 定理 finset_image_add_of_nonempty
-  结论: {α β : 类型} [AddCommMonoid α] {f : α -> R}
+  结论: {α β : 类型} [加法交换幺半群 α] {f : α -> R}
   证明: by
   simpa [Finset.le_sup'_iff] using IsNonarchimedean.apply_sum_le_sup hna ht
 
@@ -485,7 +485,7 @@ theorem multiset_image_add
 
 中文:
 定理 multiset_image_add
-  结论: {F α β : 类型} [AddCommMonoid α] [FunLike F α R] [ZeroHomClass F α R]
+  结论: {F α β : 类型} [加法交换幺半群 α] [函数状 F α R] [保零态射类 F α R]
   证明: by
   induction s using Multiset.induction_on with
   | empty => simp
@@ -520,7 +520,7 @@ lemma finset_image_add
 
 中文:
 引理 finset_image_add
-  结论: {α β : 类型} [AddCommMonoid α] [Nonempty β] {f : α -> R} (f_zero : f 0 = 0)
+  结论: {α β : 类型} [加法交换幺半群 α] [非空 β] {f : α -> R} (f_zero : f 0 = 0)
   证明: by
   rcases t.eq_empty_or_nonempty with rfl | ht
   · simp [f_zero, f_nonneg]
@@ -554,7 +554,7 @@ theorem multiset_powerset_image_add
 
 中文:
 定理 multiset_powerset_image_add
-  结论: [IsStrictOrderedRing R]
+  结论: [是StrictOrdered环 R]
   证明: by
   set g := fun t : Multiset α => t.prod
   obtain ⟨b, hb_in, hb_le⟩ := hf_na.multiset_image_add g (powersetCard (card s - m) s)
@@ -595,7 +595,7 @@ omit [Semiring R] in
 
 中文:
 定理 finset_powerset_image_add
-  结论: [IsStrictOrderedRing R]
+  结论: [是StrictOrdered环 R]
   证明: by
   set g := fun t : Finset β => t.prod fun i : β => - b i
   obtain ⟨b, hb_in, hb⟩ := hf_na.finset_image_add (by grind) (apply_nonneg f)
@@ -636,7 +636,7 @@ lemma apply_sum_eq_of_lt
 
 中文:
 引理 apply_sum_eq_of_lt
-  结论: {α β : 类型} [AddCommGroup α] {f : α -> R} (fna : IsNonarchimedean f)
+  结论: {α β : 类型} [加法交换群 α] {f : α -> R} (fna : IsNonarchimedean f)
   证明: by
   by_cases hcard : s.card = 1
   · grind [Finset.card_eq_one.mp hcard]
@@ -677,7 +677,7 @@ theorem add_pow_le
 
 中文:
 定理 add_pow_le
-  结论: {F α : 类型} [CommRing α] [FunLike F α R] [ZeroHomClass F α R]
+  结论: {F α : 类型} [交换环 α] [函数状 F α R] [保零态射类 F α R]
   证明: by
   obtain ⟨m, hm_lt, hM⟩ := finset_image_add (by aesop) (by aesop) hna
     (fun m => a ^ m * b ^ (n - m) * ↑(n.choose m)) (Finset.range (n + 1))

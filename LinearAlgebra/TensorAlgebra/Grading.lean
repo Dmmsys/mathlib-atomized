@@ -40,7 +40,7 @@ theorem GradedAlgebra.ι_apply
   proof: rfl
 
 中文:
-定理 GradedAlgebra.ι_apply
+定理 分次代数.ι_apply
   条件: (m : M)
   证明: rfl
 -/

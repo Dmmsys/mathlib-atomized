@@ -41,7 +41,7 @@ abbreviation AlgHom.mulLeftRightMatrix_inv
   map_smul' r f := by simp [mul_smul, Finset.smul_sum]
 
 中文:
-缩写 AlgHom.mulLeftRightMatrix_inv
+缩写 代数态射.mulLeftRightMatrix_inv
   签名: :
   定义体: ∑ ⟨⟨i, j⟩, k, l⟩ : (n × n) × n × n,
     f (single j k 1) i l • (single i j 1) otimesₜ[R] op (single k l 1)
@@ -66,7 +66,7 @@ lemma AlgHom.mulLeftRightMatrix.inv_comp
       mulLeftRight_apply, single, Matrix.mul_apply]
 
 中文:
-引理 AlgHom.mulLeftRightMatrix.inv_comp
+引理 代数态射.mulLeftRightMatrix.inv_comp
   证明: ((Matrix.stdBasis _ _ _).tensorProduct ((Matrix.stdBasis _ _ _).map (opLinearEquiv ..))).ext
   fun ⟨⟨i0, j0⟩, k0, l0⟩ => by
     simp [stdBasis_eq_single, ite_and, Fintype.sum_prod_type,
@@ -98,7 +98,7 @@ lemma AlgHom.mulLeftRightMatrix.comp_inv
   simp
 
 中文:
-引理 AlgHom.mulLeftRightMatrix.comp_inv
+引理 代数态射.mulLeftRightMatrix.comp_inv
   证明: by
   ext f : 1
   apply (Matrix.stdBasis _ _ _).ext
@@ -140,8 +140,8 @@ theorem matrix
 
 中文:
 定理 matrix
-  条件: [Nonempty n]
-  结论: IsAzumaya R (Matrix n n R) where
+  条件: [非空 n]
+  结论: 是Azumaya R (矩阵 n n R) where
   证明: by nontriviality R; exact eq_of_smul_eq_smul
   bij := Function.bijective_iff_has_inverse.mpr
     ⟨AlgHom.mulLeftRightMatrix_inv R n,

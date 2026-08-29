@@ -56,12 +56,12 @@ class Decomposition
     - right_inv : Function.RightInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
 
 中文:
-类 Decomposition
+类 分解
   参数: where
   公理与运算 (3 个):
     - decompose' : M -> ⨁ i, ℳ i
-    - left_inv : Function.LeftInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
-    - right_inv : Function.RightInverse (DirectSum.coeAddMonoidHom ℳ) decompose'
+    - left_inv : 函数.左逆 (直和.coeAddMonoidHom ℳ) decompose'
+    - right_inv : 函数.右逆 (直和.coeAddMonoidHom ℳ) decompose'
 -/
 class Decomposition where
   decompose' : M -> ⨁ i, ℳ i
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (Decomposition ℳ)
+  签名: 子单例 (分解 ℳ)
   定义体: ⟨fun x y => by
     obtain ⟨_, _, xr⟩ := x
     obtain ⟨_, yl, _⟩ := y
@@ -109,7 +109,7 @@ abbreviation Decomposition.ofAddHom
   right_inv := DFunLike.congr_fun h_right_inv
 
 中文:
-缩写 Decomposition.ofAddHom
+缩写 分解.ofAddHom
   签名: (decompose : M ->+ ⨁ i, ℳ i)
   定义体: decompose
   left_inv := DFunLike.congr_fun h_left_inv
@@ -137,7 +137,7 @@ definition IsInternal.chooseDecomposition
   right_inv := (Equiv.ofBijective _ h).left_inv
 
 中文:
-定义 IsInternal.chooseDecomposition
+定义 Is整数ernal.chooseDecomposition
   签名: (h : Is整数ernal ℳ)
   定义体: (Equiv.ofBijective _ h).symm
   left_inv := (Equiv.ofBijective _ h).right_inv
@@ -162,8 +162,8 @@ theorem Decomposition.isInternal
   proof: ⟨Decomposition.right_inv.injective, Decomposition.left_inv.surjective⟩
 
 中文:
-定理 Decomposition.isInternal
-  结论: DirectSum.Is整数ernal ℳ
+定理 分解.is整数ernal
+  结论: 直和.Is整数ernal ℳ
   证明: ⟨Decomposition.right_inv.injective, Decomposition.left_inv.surjective⟩
 -/
 protected theorem Decomposition.isInternal : DirectSum.IsInternal ℳ :=
@@ -212,8 +212,8 @@ definition SetLike.IsHomogeneous
 @[elab_as_elim]
 
 中文:
-定义 SetLike.IsHomogeneous
-  签名: {P : 类型} [SetLike P M] (p : P)
+定义 集合状.IsHomogeneous
+  签名: {P : 类型} [集合状 P M] (p : P)
   定义体: forall (i : ι) ⦃m : M⦄, m in p -> (DirectSum.decompose ℳ m i : M) in p
 
 @[elab_as_elim]
@@ -239,7 +239,7 @@ theorem Decomposition.inductionOn
       right_inv := fun _ 
 
 中文:
-定理 Decomposition.inductionOn
+定理 分解.inductionOn
   结论: {motive : M -> 命题} (zero : motive 0)
   证明: by
   let ℳ' : ι -> AddSubmonoid M := fun i =>
@@ -278,8 +278,8 @@ theorem Decomposition.decompose'_eq
 @[simp]
 
 中文:
-定理 Decomposition.decompose'_eq
-  结论: Decomposition.decompose' = decompose ℳ
+定理 分解.decompose'_eq
+  结论: 分解.decompose' = decompose ℳ
   证明: rfl
 
 @[simp]
@@ -301,7 +301,7 @@ theorem decompose_symm_of
 中文:
 定理 decompose_symm_of
   条件: {i : ι} (x : ℳ i)
-  结论: (decompose ℳ).symm (DirectSum.of _ i x) = x
+  结论: (decompose ℳ).symm (直和.of _ i x) = x
   证明: DirectSum.coeAddMonoidHom_of ℳ _ _
 
 @[simp]
@@ -325,7 +325,7 @@ theorem decompose_coe
 中文:
 定理 decompose_coe
   条件: {i : ι} (x : ℳ i)
-  结论: decompose ℳ (x : M) = DirectSum.of _ i x
+  结论: decompose ℳ (x : M) = 直和.of _ i x
   证明: by
   rw [← decompose_symm_of _]; rw [Equiv.apply_symm_apply]
 
@@ -564,7 +564,7 @@ theorem decompose_sum
 
 中文:
 定理 decompose_sum
-  条件: {ι'} (s : Finset ι') (f : ι' -> M)
+  条件: {ι'} (s : 有限集 ι') (f : ι' -> M)
   证明: map_sum (decomposeAddEquiv ℳ) f s
 
 @[simp]
@@ -586,7 +586,7 @@ theorem decompose_symm_sum
 
 中文:
 定理 decompose_symm_sum
-  条件: {ι'} (s : Finset ι') (f : ι' -> ⨁ i, ℳ i)
+  条件: {ι'} (s : 有限集 ι') (f : ι' -> ⨁ i, ℳ i)
   证明: map_sum (decomposeAddEquiv ℳ).symm f s
 
 Depends on / 依赖: decomposeAddEquiv, map_sum
@@ -609,7 +609,7 @@ theorem sum_support_decompose
 
 中文:
 定理 sum_support_decompose
-  条件: [对任意 (i) (x : ℳ i), Decidable (x != 0)] (r : M)
+  条件: [对任意 (i) (x : ℳ i), 可判定 (x != 0)] (r : M)
   证明: by
   conv_rhs =>
     rw [← (decompose ℳ).symm_apply_apply r]; rw [← sum_support_of (decompose ℳ r)]
@@ -637,7 +637,7 @@ theorem AddSubmonoidClass.IsHomogeneous.mem_iff
   exact sum_mem (fun i _ => hx i)
 
 中文:
-定理 AddSubmonoidClass.IsHomogeneous.mem_iff
+定理 加法子幺半群类.IsHomogeneous.mem_iff
   证明: by
   classical
   refine ⟨fun hx i => hp i hx, fun hx => ?_⟩
@@ -666,7 +666,7 @@ theorem AddSubmonoidClass.IsHomogeneous.ext
   exact forall_congr' fun i => hpq i _ (decompose ℳ _ i).2
 
 中文:
-定理 AddSubmonoidClass.IsHomogeneous.ext
+定理 加法子幺半群类.IsHomogeneous.ext
   证明: by
   refine SetLike.ext fun m => ?_
   rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ p hp]; rw [AddSubmonoidClass.IsHomogeneous.mem_iff ℳ q hq]
@@ -804,7 +804,7 @@ abbreviation Decomposition.ofLinearMap
   right_inv := DFunLike.congr_fun h_right_inv
 
 中文:
-缩写 Decomposition.ofLinearMap
+缩写 分解.ofLinearMap
   签名: (decompose : M ->ₗ[R] ⨁ i, ℳ i)
   定义体: decompose
   left_inv := DFunLike.congr_fun h_left_inv
@@ -966,7 +966,7 @@ theorem decompose_lhom_ext
 
 中文:
 定理 decompose_lhom_ext
-  条件: {N} [AddCommMonoid N] [Module R N] ⦃f g
+  条件: {N} [加法交换幺半群 N] [模 R N] ⦃f g
   结论: M ->ₗ[R] N⦄
   证明: LinearMap.ext (decomposeLinearEquiv ℳ).symm.surjective.forall.mpr
     suffices f ∘ₗ (decomposeLinearEquiv ℳ).symm

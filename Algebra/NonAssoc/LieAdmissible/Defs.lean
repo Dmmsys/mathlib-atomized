@@ -55,9 +55,9 @@ class LieAdmissibleRing
     - assoc_def((x y z : L)) : associator x y z + associator z x y + associator y z x = associator y x z + associator z y x + associator x z y
 
 中文:
-类 LieAdmissibleRing
+类 LieAdmissible环
   参数: (L : 类型)
-  继承: NonUnitalNonAssocRing L
+  继承: 非幺非结合环 L
   公理与运算 (1 个):
     - assoc_def((x y z : L)) : associator x y z + associator z x y + associator y z x = associator y x z + associator z y x + associator x z y
 -/
@@ -78,9 +78,9 @@ class LieAdmissibleAlgebra
   (no additional axioms)
 
 中文:
-类 LieAdmissibleAlgebra
-  参数: (R L : 类型) [CommRing R] [LieAdmissibleRing L]
-  继承: Module R L, IsScalarTower R L L, SMulCommClass R L L
+类 LieAdmissible代数
+  参数: (R L : 类型) [交换环 R] [LieAdmissible环 L]
+  继承: 模 R L, 标量塔 R L L, 标量交换类 R L L
   (无附加公理)
 -/
 class LieAdmissibleAlgebra (R L : Type*) [CommRing R] [LieAdmissibleRing L]
@@ -112,7 +112,7 @@ instance instLieRing
 
 中文:
 实例 instLieRing
-  签名: [LieAdmissibleRing L]
+  签名: [LieAdmissible环 L]
   定义体: by
     simp only [Ring.lie_def, mul_add, add_mul]
     abel
@@ -155,7 +155,7 @@ instance instLieAlgebra
 
 中文:
 实例 instLieAlgebra
-  签名: [LieAdmissibleRing L] [LieAdmissibleAlgebra R L]
+  签名: [LieAdmissible环 L] [LieAdmissible代数 R L]
   定义体: by
     simp [Ring.lie_def, mul_smul_comm, smul_mul_assoc, ← smul_sub]
 
@@ -185,7 +185,7 @@ instance instLieAdmissibleRing
 
 中文:
 实例 instLieAdmissibleRing
-  签名: : LieAdmissibleRing L where
+  签名: : LieAdmissible环 L where
   定义体: by
     have assoc_xyz := LeftPreLieRing.assoc_symm' x y z
     have assoc_zxy := LeftPreLieRing.assoc_symm' z x y
@@ -216,7 +216,7 @@ instance instLieAdmissibleAlgebra
 
 中文:
 实例 instLieAdmissibleAlgebra
-  签名: : LieAdmissibleAlgebra R L where
+  签名: : LieAdmissible代数 R L where
 -/
 instance instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
 
@@ -240,7 +240,7 @@ instance instLieAdmissibleRing
 
 中文:
 实例 instLieAdmissibleRing
-  签名: : LieAdmissibleRing L where
+  签名: : LieAdmissible环 L where
   定义体: by
     have assoc_xyz := RightPreLieRing.assoc_symm' x y z
     have assoc_zxy := RightPreLieRing.assoc_symm' z x y
@@ -271,7 +271,7 @@ instance instLieAdmissibleAlgebra
 
 中文:
 实例 instLieAdmissibleAlgebra
-  签名: : LieAdmissibleAlgebra R L where
+  签名: : LieAdmissible代数 R L where
 -/
 instance instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where
 
@@ -293,7 +293,7 @@ abbreviation instLieAdmissibleRing
 
 中文:
 缩写 instLieAdmissibleRing
-  签名: : LieAdmissibleRing L where
+  签名: : LieAdmissible环 L where
   定义体: by
     suffices forall a b c : L, associator a b c = 0 by simp
     simp
@@ -322,7 +322,7 @@ abbreviation instLieAdmissibleAlgebra
 
 中文:
 缩写 instLieAdmissibleAlgebra
-  签名: : LieAdmissibleAlgebra R L where
+  签名: : LieAdmissible代数 R L where
   定义体: by simp
 -/
 abbrev instLieAdmissibleAlgebra : LieAdmissibleAlgebra R L where

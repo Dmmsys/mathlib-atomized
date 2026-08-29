@@ -62,7 +62,7 @@ definition transvection
 
 中文:
 定义 transvection
-  签名: (f : Dual R V) (v : V)
+  签名: (f : 对偶 R V) (v : V)
   定义体: x + f x • v
   map_add' x y := by simp [add_add_add_comm, add_smul]
   map_smul' r x := by simp [smul_eq_mul, smul_add, mul_smul]
@@ -86,7 +86,7 @@ theorem apply
 
 中文:
 定理 apply
-  条件: (f : Dual R V) (v x : V)
+  条件: (f : 对偶 R V) (v x : V)
   证明: rfl
 -/
 theorem apply (f : Dual R V) (v x : V) :
@@ -104,7 +104,7 @@ theorem comp_of_left_eq_apply
 
 中文:
 定理 comp_of_left_eq_apply
-  条件: {f : Dual R V} {v w : V} {x : V} (hw : f w = 0)
+  条件: {f : 对偶 R V} {v w : V} {x : V} (hw : f w = 0)
   证明: by
   simp [transvection, map_add, hw, add_assoc]
 
@@ -125,7 +125,7 @@ theorem comp_of_left_eq
 
 中文:
 定理 comp_of_left_eq
-  条件: {f : Dual R V} {v w : V} (hw : f w = 0)
+  条件: {f : 对偶 R V} {v w : V} (hw : f w = 0)
   证明: by
   ext; simp [comp_of_left_eq_apply hw]
 
@@ -146,7 +146,7 @@ theorem comp_of_right_eq_apply
 
 中文:
 定理 comp_of_right_eq_apply
-  条件: {f g : Dual R V} {v : V} {x : V} (hf : f v = 0)
+  条件: {f g : 对偶 R V} {v : V} {x : V} (hf : f v = 0)
   证明: by
   simp [transvection, map_add, hf, add_smul, add_assoc]
 
@@ -169,7 +169,7 @@ theorem comp_of_right_eq
 
 中文:
 定理 comp_of_right_eq
-  条件: {f g : Dual R V} {v : V} (hf : f v = 0)
+  条件: {f g : 对偶 R V} {v : V} (hf : f v = 0)
   证明: by
   ext; simp [comp_of_right_eq_apply hf]
 
@@ -223,7 +223,7 @@ theorem of_right_eq_zero
 
 中文:
 定理 of_right_eq_zero
-  条件: (f : Dual R V)
+  条件: (f : 对偶 R V)
   证明: by
   ext
   simp [transvection]
@@ -248,7 +248,7 @@ theorem comp_smul_smul
 
 中文:
 定理 comp_smul_smul
-  条件: {f : Dual R V} {v : V} {r s : R}
+  条件: {f : 对偶 R V} {v : V} {r s : R}
   证明: by
   ext x
   simp only [LinearMap.comp_apply, apply, map_add, map_smul, add_assoc]
@@ -325,7 +325,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: {W : 类型} [AddCommMonoid W] [Module R W]
+  结论: {W : 类型} [加法交换幺半群 W] [模 R W]
   证明: by
   ext; simp [transvection.apply]
 
@@ -362,7 +362,7 @@ definition transvection
 
 中文:
 定义 transvection
-  签名: {f : Dual R V} {v : V} (h : f v = 0)
+  签名: {f : 对偶 R V} {v : V} (h : f v = 0)
   定义体: LinearMap.transvection f v
   invFun := LinearMap.transvection f (-v)
   map_add' x y := by simp [map_add]
@@ -401,7 +401,7 @@ theorem apply
 
 中文:
 定理 apply
-  条件: {f : Dual R V} {v : V} (h : f v = 0) (x : V)
+  条件: {f : 对偶 R V} {v : V} (h : f v = 0) (x : V)
   证明: rfl
 
 @[simp]
@@ -423,7 +423,7 @@ theorem coe_toLinearMap
 
 中文:
 定理 coe_toLinearMap
-  条件: {f : Dual R V} {v : V} (h : f v = 0)
+  条件: {f : 对偶 R V} {v : V} (h : f v = 0)
   证明: rfl
 
 @[simp]
@@ -443,7 +443,7 @@ theorem coe_apply
 
 中文:
 定理 coe_apply
-  条件: {f : Dual R V} {v x : V} {h : f v = 0}
+  条件: {f : 对偶 R V} {v x : V} {h : f v = 0}
   证明: rfl
 -/
 theorem coe_apply {f : Dual R V} {v x : V} {h : f v = 0} :
@@ -461,7 +461,7 @@ theorem trans_of_left_eq
 
 中文:
 定理 trans_of_left_eq
-  结论: {f : Dual R V} {v w : V}
+  结论: {f : 对偶 R V} {v w : V}
   证明: by
   ext; simp [comp_of_left_eq_apply hw]
 
@@ -485,7 +485,7 @@ theorem trans_of_right_eq
 
 中文:
 定理 trans_of_right_eq
-  结论: {f g : Dual R V} {v : V}
+  结论: {f g : 对偶 R V} {v : V}
   证明: by
   ext; simp [comp_of_right_eq_apply hf]
 
@@ -512,7 +512,7 @@ theorem of_left_eq_zero
 
 中文:
 定理 of_left_eq_zero
-  条件: (v : V) (hv := LinearMap.zero_apply v)
+  条件: (v : V) (hv := 线性映射.zero_apply v)
   证明: by
   ext; simp [transvection]
 
@@ -536,7 +536,7 @@ theorem of_right_eq_zero
 
 中文:
 定理 of_right_eq_zero
-  条件: (f : Dual R V) (hf := f.map_zero)
+  条件: (f : 对偶 R V) (hf := f.map_zero)
   证明: by
   ext; simp [transvection]
 
@@ -558,7 +558,7 @@ theorem symm_eq
 
 中文:
 定理 symm_eq
-  结论: {f : Dual R V} {v : V}
+  结论: {f : 对偶 R V} {v : V}
   证明: by
   ext;
   simp [symm_apply_eq, comp_of_left_eq_apply hv']
@@ -581,7 +581,7 @@ theorem inv_eq
 
 中文:
 定理 inv_eq
-  结论: {f : Dual R V} {v : V}
+  结论: {f : 对偶 R V} {v : V}
   证明: symm_eq hv
 
 Depends on / 依赖: symm_eq, transvection
@@ -602,7 +602,7 @@ theorem symm_eq'
 
 中文:
 定理 symm_eq'
-  结论: {f : Dual R V} {v : V}
+  结论: {f : 对偶 R V} {v : V}
   证明: by
   ext; simp [symm_apply_eq, comp_of_right_eq_apply hf]
 
@@ -623,7 +623,7 @@ theorem inv_eq'
 
 中文:
 定理 inv_eq'
-  结论: {f : Dual R V} {v : V}
+  结论: {f : 对偶 R V} {v : V}
   证明: symm_eq' hf
 
 Depends on / 依赖: symm_eq, transvection
@@ -646,7 +646,7 @@ theorem mem_fixedSubmodule_transvection_iff
 
 中文:
 定理 mem_fixedSubmodule_transvection_iff
-  条件: {f : Dual R V} {v : V} {hfv : f v = 0} {x : V}
+  条件: {f : 对偶 R V} {v : V} {hfv : f v = 0} {x : V}
   证明: by
   simp [LinearMap.transvection.apply, add_eq_left]
 
@@ -669,7 +669,7 @@ theorem ker_le_fixedSubmodule_transvection
 
 中文:
 定理 ker_le_fixedSubmodule_transvection
-  条件: {f : Dual R V} {v : V} (hfv : f v = 0)
+  条件: {f : 对偶 R V} {v : V} (hfv : f v = 0)
   证明: by
   intro x hx
   rw [mem_ker] at hx
@@ -696,7 +696,7 @@ definition transvections
 
 中文:
 定义 transvections
-  签名: : Set (V ≃ₗ[R] V)
+  签名: : 集合 (V ≃ₗ[R] V)
   定义体: { e | exists (f : Dual R V) (v : V) (hfv : f v = 0), e = transvection hfv }
 
 Depends on / 依赖: transvection
@@ -734,7 +734,7 @@ theorem mem_transvections
 
 中文:
 定理 mem_transvections
-  条件: {f : Dual R V} {v : V} (hfv : f v = 0)
+  条件: {f : 对偶 R V} {v : V} (hfv : f v = 0)
   证明: ⟨f, v, hfv, rfl⟩
 -/
 @[simp] theorem mem_transvections {f : Dual R V} {v : V} (hfv : f v = 0) :
@@ -868,7 +868,7 @@ definition dilatransvections
 
 中文:
 定义 dilatransvections
-  签名: : Set (V ≃ₗ[R] V)
+  签名: : 集合 (V ≃ₗ[R] V)
   定义体: { e : V ≃ₗ[R] V | exists (f : Dual R V) (v : V), e = LinearMap.transvection f v }
 
 Depends on / 依赖: LinearMap, LinearMap.transvection, transvection
@@ -929,7 +929,7 @@ theorem transvection_mem_transvections
 
 中文:
 定理 transvection_mem_transvections
-  条件: {f : Dual R V} {v : V} {hfv : f v = 0}
+  条件: {f : 对偶 R V} {v : V} {hfv : f v = 0}
   证明: ⟨f, v, hfv, rfl⟩
 -/
 theorem transvection_mem_transvections {f : Dual R V} {v : V} {hfv : f v = 0} :
@@ -948,7 +948,7 @@ theorem transvection_mem_dilatransvections
 
 中文:
 定理 transvection_mem_dilatransvections
-  条件: {f : Dual R V} {v : V} (hfv : f v = 0)
+  条件: {f : 对偶 R V} {v : V} (hfv : f v = 0)
   证明: transvections_subset_dilatransvections transvection_mem_transvections
 
 @[simp]
@@ -1062,7 +1062,7 @@ definition dilatransvection
 
 中文:
 定义 dilatransvection
-  签名: {f : Dual R V} {v : V} (h : IsUnit (1 + f v))
+  签名: {f : 对偶 R V} {v : V} (h : 是单位 (1 + f v))
   定义体: LinearMap.transvection f v
   invFun := LinearMap.transvection f (-h.unit⁻¹ • v)
   map_add' x y := by simp [map_add]
@@ -1111,7 +1111,7 @@ theorem dilatransvection.coe_toLinearMap
 
 中文:
 定理 dilatransvection.coe_toLinearMap
-  条件: {f : Dual R V} {v : V} {h : IsUnit (1 + f v)}
+  条件: {f : 对偶 R V} {v : V} {h : 是单位 (1 + f v)}
   证明: rfl
 -/
 theorem dilatransvection.coe_toLinearMap {f : Dual R V} {v : V} {h : IsUnit (1 + f v)} :
@@ -1131,7 +1131,7 @@ theorem dilatransvection.apply
 
 中文:
 定理 dilatransvection.apply
-  条件: {f : Dual R V} {v : V} {h : IsUnit (1 + f v)} {x : V}
+  条件: {f : 对偶 R V} {v : V} {h : 是单位 (1 + f v)} {x : V}
   证明: by
   simp [dilatransvection, LinearMap.transvection.apply]
 
@@ -1156,7 +1156,7 @@ theorem dilatransvection_mem_dilatransvections
 
 中文:
 定理 dilatransvection_mem_dilatransvections
-  条件: {f : Dual R V} {v : V} {h : IsUnit (1 + f v)}
+  条件: {f : 对偶 R V} {v : V} {h : 是单位 (1 + f v)}
   证明: by
   simp only [dilatransvections, Set.mem_ofPred_eq]
   refine ⟨f, v, by simp⟩
@@ -1273,7 +1273,7 @@ theorem mem_dilatransvections_iff_finrank
 
 中文:
 定理 mem_dilatransvections_iff_finrank
-  条件: [Module.Finite K V] {e : V ≃ₗ[K] V}
+  条件: [模.有限 K V] {e : V ≃ₗ[K] V}
   证明: by
   rw [mem_dilatransvections_iff_rank]; rw [finrank]; rw [← one_toNat]; rw [toNat_le_iff_le_of_lt_aleph0 (rank_lt_aleph0 K _) one_lt_aleph0]
 
@@ -1295,7 +1295,7 @@ theorem mem_dilatransvections_iff_finrank_quotient
 
 中文:
 定理 mem_dilatransvections_iff_finrank_quotient
-  条件: [Module.Finite K V] {e : V ≃ₗ[K] V}
+  条件: [模.有限 K V] {e : V ≃ₗ[K] V}
   证明: by
   rw [mem_dilatransvections_iff_finrank]; rw [← (quotKerEquivRange _).finrank_eq]; rw [← fixedSubmodule_eq_ker]
 
@@ -1444,8 +1444,8 @@ theorem LinearMap.transvection.baseChange
   ext; simp [transvection, TensorProduct.tmul_add]
 
 中文:
-定理 LinearMap.transvection.baseChange
-  条件: (f : Dual R V) (v : V)
+定理 线性映射.transvection.baseChange
+  条件: (f : 对偶 R V) (v : V)
   证明: by
   ext; simp [transvection, TensorProduct.tmul_add]
 
@@ -1474,7 +1474,7 @@ theorem IsBaseChange.transvection
 
 中文:
 定理 IsBaseChange.transvection
-  条件: (f : Dual R V) (v : V)
+  条件: (f : 对偶 R V) (v : V)
   证明: by
   ext w
   induction w using ibc.inductionOn with
@@ -1514,7 +1514,7 @@ theorem LinearEquiv.transvection.baseChange
     LinearEquiv.transvection.coe_toLinearMap, LinearMap.transvection.baseChange]
 
 中文:
-定理 LinearEquiv.transvection.baseChange
+定理 线性等价.transvection.baseChange
   证明: by
   simp [← toLinearMap_inj, coe_baseChange,
     LinearEquiv.transvection.coe_toLinearMap, LinearMap.transvection.baseChange]
@@ -1539,7 +1539,7 @@ theorem LinearEquiv.dilatransvection.baseChange
   simp [he, LinearMap.transvection.baseChange]
 
 中文:
-定理 LinearEquiv.dilatransvection.baseChange
+定理 线性等价.dilatransvection.baseChange
   结论: (e : V ≃ₗ[R] V)
   证明: by
   obtain ⟨f, v, he⟩ := he
@@ -1591,7 +1591,7 @@ theorem det_ofField
 
 中文:
 定理 det_ofField
-  条件: [FiniteDimensional K V] (f : Dual K V) (v : V)
+  条件: [有限维 K V] (f : 对偶 K V) (v : V)
   证明: by
   classical
   by_cases hfv : f v = 0
@@ -1679,7 +1679,7 @@ theorem det_ofDomain
 
 中文:
 定理 det_ofDomain
-  条件: [Free R V] [Module.Finite R V] [IsDomain R] (f : Dual R V) (v : V)
+  条件: [自由 R V] [模.有限 R V] [是整环 R] (f : 对偶 R V) (v : V)
   证明: by
   let K := FractionRing R
   let : Field K := inferInstance
@@ -1717,7 +1717,7 @@ theorem det
 
 中文:
 定理 det
-  条件: [Free R V] [Module.Finite R V] (f : Dual R V) (v : V)
+  条件: [自由 R V] [模.有限 R V] (f : 对偶 R V) (v : V)
   证明: by
   rcases subsingleton_or_nontrivial R with hR | hR
   · subsingleton
@@ -1778,7 +1778,7 @@ theorem _root_.LinearEquiv.transvection.det_eq_one
   rw [transvection.det]; rw [hfv]; rw [add_zero]
 
 中文:
-定理 _root_.LinearEquiv.transvection.det_eq_one
+定理 _root_.线性等价.transvection.det_eq_one
   证明: by
   rw [← Units.val_inj]; rw [LinearEquiv.coe_det]; rw [LinearEquiv.transvection.coe_toLinearMap hfv]; rw [Units.val_one]
   by_contra! h

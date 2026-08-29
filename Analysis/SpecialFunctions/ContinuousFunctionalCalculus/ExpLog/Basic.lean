@@ -63,7 +63,7 @@ lemma NormedSpace.exp_continuousMap_eq
   simp [NormedSpace.exp_eq_tsum 𝕜]
 
 中文:
-引理 NormedSpace.exp_continuousMap_eq
+引理 赋范空间.exp_continuousMap_eq
   条件: (f : C(α, 𝕜))
   证明: by
   ext a
@@ -369,7 +369,7 @@ lemma log_smul'
 
 中文:
 引理 log_smul'
-  结论: [PartialOrder A] [StarOrderedRing A] [NonnegSpectrumClass 实数 A] {r : 实数} (a : A)
+  结论: [偏序 A] [StarOrdered环 A] [NonnegSpectrum类 实数 A] {r : 实数} (a : A)
   证明: by
   grind [log_smul]
 
@@ -422,7 +422,7 @@ lemma log_pow'
 
 中文:
 引理 log_pow'
-  结论: [PartialOrder A] [StarOrderedRing A] [NonnegSpectrumClass 实数 A] (n : 自然数) (a : A)
+  结论: [偏序 A] [StarOrdered环 A] [NonnegSpectrum类 实数 A] (n : 自然数) (a : A)
   证明: by
   grind [log_pow]
 
@@ -480,7 +480,7 @@ lemma exp_log
 
 中文:
 引理 exp_log
-  结论: [PartialOrder A] [StarOrderedRing A] [NonnegSpectrumClass 实数 A] (a : A)
+  结论: [偏序 A] [StarOrdered环 A] [NonnegSpectrum类 实数 A] (a : A)
   证明: by
   have ha₂ : forall x in spectrum Real a, x != 0 := by grind
   rw [← real_exp_eq_normedSpace_exp .log]; rw [log]; rw [← cfc_comp' Real.exp Real.log a (by fun_prop)]
@@ -509,7 +509,7 @@ lemma continuousOn_log
 
 中文:
 引理 continuousOn_log
-  结论: {A : 类型} [NormedRing A] [StarRing A] [NormedAlgebra 实数 A]
+  结论: {A : 类型} [赋范环 A] [对合环 A] [赋范代数 实数 A]
   证明: continuousOn_id.cfc_of_mem_nhdsSet _ (s := {0}ᶜ) by
     simpa using fun _ _ => spectrum.zero_notMem Real
 

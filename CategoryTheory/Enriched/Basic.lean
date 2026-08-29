@@ -65,14 +65,14 @@ class EnrichedCategory
     - assoc((W X Y Z : C)) : (α_ _ _ _).inv ≫ comp W X Y ▷ _ ≫ comp W Y Z = _ ◁ comp X Y Z ≫ comp W X Z  [default: by cat_disch]
 
 中文:
-类 EnrichedCategory
+类 Enriched范畴
   参数: (C : 类型u₁)
   公理与运算 (6 个):
     - Hom : C -> C -> V
-    - id((X : C)) : 𝟙_ V ⟶ Hom X X
-    - comp((X Y Z : C)) : Hom X Y otimes Hom Y Z ⟶ Hom X Z
-    - id_comp((X Y : C)) : (fun_ (Hom X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _  [默认: by cat_disch]
-    - comp_id((X Y : C)) : (ρ_ (Hom X Y)).inv ≫ _ ◁ id Y ≫ comp X Y Y = 𝟙 _  [默认: by cat_disch]
+    - id((X : C)) : 𝟙_ V ⟶ 态射 X X
+    - comp((X Y Z : C)) : 态射 X Y otimes 态射 Y Z ⟶ 态射 X Z
+    - id_comp((X Y : C)) : (fun_ (态射 X Y)).inv ≫ id X ▷ _ ≫ comp X X Y = 𝟙 _  [默认: by cat_disch]
+    - comp_id((X Y : C)) : (ρ_ (态射 X Y)).inv ≫ _ ◁ id Y ≫ comp X Y Y = 𝟙 _  [默认: by cat_disch]
     - assoc((W X Y Z : C)) : (α_ _ _ _).inv ≫ comp W X Y ▷ _ ≫ comp W Y Z = _ ◁ comp X Y Z ≫ comp W X Z  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch, comp_id
@@ -248,7 +248,7 @@ definition TransportEnrichment
 
 中文:
 定义 TransportEnrichment
-  签名: (F : V ⥤ W) [F.LaxMonoidal] (C : 类型u₁)
+  签名: (F : V ⥤ W) [F.松弛幺半群] (C : 类型u₁)
   定义体: C
 -/
 def TransportEnrichment (F : V ⥤ W) [F.LaxMonoidal] (C : Type u₁) :=
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnrichedCategory W (TransportEnrichment F C)
+  签名: Enriched范畴 W (TransportEnrichment F C)
   定义体: fun X Y : C => F.obj (X ⟶[V] Y)
   id := fun X : C => ε F ≫ F.map (eId V X)
   comp := fun X Y Z : C => μ F _ _ ≫ F.map (eComp V X Y Z)
@@ -362,7 +362,7 @@ definition categoryOfEnrichedCategoryType
 
 中文:
 定义 categoryOfEnrichedCategoryType
-  签名: (C : 类型u₁) [𝒞 : EnrichedCategory (类型v) C]
+  签名: (C : 类型u₁) [𝒞 : Enriched范畴 (类型v) C]
   定义体: 𝒞.Hom X Y
   id X := eId (Type v) X PUnit.unit
   comp f g := eComp (Type v) _ _ _ ⟨f, g⟩
@@ -395,7 +395,7 @@ definition enrichedCategoryTypeOfCategory
 
 中文:
 定义 enrichedCategoryTypeOfCategory
-  签名: (C : 类型u₁) [𝒞 : Category.{v} C]
+  签名: (C : 类型u₁) [𝒞 : 范畴.{v} C]
   定义体: 𝒞.Hom X Y
   id X := ↾fun _ => 𝟙 _
   comp _ _ _ := ↾fun p => p.1 ≫ p.2
@@ -463,7 +463,7 @@ definition ForgetEnrichment
 
 中文:
 定义 ForgetEnrichment
-  签名: (W : 类型v) [Category.{w} W] [MonoidalCategory W] (C : 类型u₁)
+  签名: (W : 类型v) [范畴.{w} W] [幺半群范畴 W] (C : 类型u₁)
   定义体: C
 -/
 def ForgetEnrichment (W : Type v) [Category.{w} W] [MonoidalCategory W] (C : Type u₁)
@@ -569,7 +569,7 @@ instance categoryForgetEnrichment
 
 中文:
 实例 categoryForgetEnrichment
-  签名: : Category (ForgetEnrichment W C)
+  签名: : 范畴 (ForgetEnrichment W C)
   定义体: enrichedCategoryTypeEquivCategory C (inferInstanceAs (EnrichedCategory (Type w)
       (TransportEnrichment (coyoneda.obj (op (𝟙_ W))) C)))
 
@@ -767,8 +767,8 @@ structure EnrichedFunctor
     - map_comp : forall X Y Z : C, eComp V X Y Z ≫ map X Z = (map X Y otimesₘ map Y Z) ≫ eComp V (obj X) (obj Y) (obj Z)  [default: by cat_disch]
 
 中文:
-结构 EnrichedFunctor
-  参数: (C : 类型u₁) [EnrichedCategory V C] (D : 类型u₂)
+结构 Enriched函子
+  参数: (C : 类型u₁) [Enriched范畴 V C] (D : 类型u₂)
   公理与运算 (4 个):
     - obj : C -> D
     - map : 对任意 X Y : C, (X ⟶[V] Y) ⟶ obj X ⟶[V] obj Y
@@ -808,7 +808,7 @@ definition id
 
 中文:
 定义 id
-  签名: (C : 类型u₁) [EnrichedCategory V C]
+  签名: (C : 类型u₁) [Enriched范畴 V C]
   定义体: X
   map _ _ := 𝟙 _
 -/
@@ -826,7 +826,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (EnrichedFunctor V C C)
+  签名: 可居 (Enriched函子 V C C)
   定义体: ⟨EnrichedFunctor.id V C⟩
 
 Depends on / 依赖: EnrichedFunctor, EnrichedFunctor.id
@@ -847,7 +847,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {C : 类型u₁} {D : 类型u₂} {E : 类型u₃} [EnrichedCategory V C]
+  签名: {C : 类型u₁} {D : 类型u₂} {E : 类型u₃} [Enriched范畴 V C]
   定义体: G.obj (F.obj X)
   map _ _ := F.map _ _ ≫ G.map _ _
 
@@ -875,7 +875,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {C : 类型u₁} {D : 类型u₂} [EnrichedCategory V C]
+  结论: {C : 类型u₁} {D : 类型u₂} [Enriched范畴 V C]
   证明: by
   match F, G with
   | mk F_obj F_map _ _, mk G_obj G_map _ _ =>
@@ -924,7 +924,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: (F : EnrichedFunctor W C D)
+  签名: (F : Enriched函子 W C D)
   定义体: ForgetEnrichment.of W (F.obj (ForgetEnrichment.to W X))
   map f :=
     ForgetEnrichment.homOf W
@@ -961,7 +961,7 @@ definition forgetComp
 
 中文:
 定义 forgetComp
-  签名: (F : EnrichedFunctor W C D) (G : EnrichedFunctor W D E)
+  签名: (F : Enriched函子 W C D) (G : Enriched函子 W D E)
   定义体: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [comp, forget])
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, forget, ofComponents
@@ -985,7 +985,7 @@ definition forgetId
 
 中文:
 定义 forgetId
-  签名: : (EnrichedFunctor.id W C).forget ≅ Functor.id _
+  签名: : (Enriched函子.id W C).forget ≅ 函子.id _
   定义体: NatIso.ofComponents (fun _ => Iso.refl _) (fun f => by simp [forget])
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, forget, ofComponents
@@ -1062,8 +1062,8 @@ structure GradedNatTrans
     - naturality : forall X Y : C, (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y otimesₘ app Y) ≫ eComp V _ _ _ = (app X otimesₘ G.map X Y) ≫ eComp V _ _ _
 
 中文:
-结构 GradedNatTrans
-  参数: (A : Center V) (F G : EnrichedFunctor V C D)
+结构 分次自然变换
+  参数: (A : 中心 V) (F G : Enriched函子 V C D)
   公理与运算 (2 个):
     - app : 对任意 X : C, A.1 ⟶ F.obj X ⟶[V] G.obj X
     - naturality : 对任意 X Y : C, (A.2.β (X ⟶[V] Y)).hom ≫ (F.map X Y otimesₘ app Y) ≫ eComp V _ _ _ = (app X otimesₘ G.map X Y) ≫ eComp V _ _ _
@@ -1089,8 +1089,8 @@ structure EnrichedNatTrans
     - out : F.forget ⟶ G.forget
 
 中文:
-结构 EnrichedNatTrans
-  参数: (F G : EnrichedFunctor V C D)
+结构 Enriched自然数Trans
+  参数: (F G : Enriched函子 V C D)
   公理与运算 (1 个):
     - out : F.forget ⟶ G.forget
 -/
@@ -1117,7 +1117,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (EnrichedFunctor V C D) where
+  签名: : 范畴 (Enriched函子 V C D) where
   定义体: EnrichedNatTrans F G
   id F := ⟨𝟙 _⟩
   comp F G := ⟨F.out ≫ G.out⟩
@@ -1147,7 +1147,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {F G : EnrichedFunctor V C D} {α β : F ⟶ G}
+  结论: {F G : Enriched函子 V C D} {α β : F ⟶ G}
   证明: by
   rcases α with ⟨α⟩
   rcases β with ⟨β⟩
@@ -1177,7 +1177,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {F G : EnrichedFunctor V C D} (h : F.forget ≅ G.forget)
+  签名: {F G : Enriched函子 V C D} (h : F.forget ≅ G.forget)
   定义体: ⟨h.hom⟩
   inv := ⟨h.inv⟩
 
@@ -1214,8 +1214,8 @@ definition enrichedNatTransYoneda
         rw [← id_tensor_comp_tensor_id (f.unop ≫ σ.app Y) _]; rw [id_tensor_comp]; rw [Category.assoc]; rw [C
 
 中文:
-定义 enrichedNatTransYoneda
-  签名: (F G : EnrichedFunctor V C D)
+定义 enriched自然数TransYoneda
+  签名: (F G : Enriched函子 V C D)
   定义体: GradedNatTrans ((Center.ofBraided V).obj (unop A)) F G
   map f := ↾fun σ =>
     { app X := f.unop ≫ σ.app X
@@ -1263,7 +1263,7 @@ definition enrichedFunctorTypeEquivFunctor
 
 中文:
 定义 enrichedFunctorTypeEquivFunctor
-  签名: {C : 类型u₁} [𝒞 : EnrichedCategory (类型v) C]
+  签名: {C : 类型u₁} [𝒞 : Enriched范畴 (类型v) C]
   定义体: { obj := fun X => F.obj X
       map := fun f => F.map _ _ f
       map_id := fun X => ConcreteCategory.congr_hom (F.map_id X) PUnit.unit
@@ -1305,8 +1305,8 @@ definition enrichedNatTransYonedaTypeIsoYonedaNatTrans
             naturality X Y := by ext ⟨x, 
 
 中文:
-定义 enrichedNatTransYonedaTypeIsoYonedaNatTrans
-  签名: {C : 类型v} [EnrichedCategory (类型v) C]
+定义 enriched自然数TransYonedaTypeIsoYoneda自然数Trans
+  签名: {C : 类型v} [Enriched范畴 (类型v) C]
   定义体: NatIso.ofComponents
     (fun α =>
       { hom := ↾fun σ => ↾fun x =>

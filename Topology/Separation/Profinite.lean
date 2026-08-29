@@ -41,7 +41,7 @@ theorem totallySeparatedSpace_of_t0_of_basis_clopen
 
 中文:
 定理 totallySeparatedSpace_of_t0_of_basis_clopen
-  结论: [T0Space X]
+  结论: [T0空间 X]
   证明: by
   constructor
   rintro x - y - hxy
@@ -89,7 +89,7 @@ theorem nhds_basis_clopen
 中文:
 定理 nhds_basis_clopen
   条件: (x : X)
-  结论: (𝓝 x).HasBasis (fun s : Set X => x in s ∧ IsClopen s) id
+  结论: (𝓝 x).有基 (fun s : 集合 X => x in s ∧ IsClopen s) id
   证明: ⟨fun U => by
     constructor
     · have hx : connectedComponent x = {x} :=
@@ -140,7 +140,7 @@ theorem isTopologicalBasis_isClopen
 
 中文:
 定理 isTopologicalBasis_isClopen
-  结论: IsTopologicalBasis { s : Set X | IsClopen s }
+  结论: 是TopologicalBasis { s : 集合 X | IsClopen s }
   证明: by
   apply isTopologicalBasis_of_isOpen_of_nhds fun U (hU : IsClopen U) => hU.2
   intro x U hxU U_op
@@ -168,8 +168,8 @@ theorem compact_exists_isClopen_in_isOpen
   proof: isTopologicalBasis_isClopen.mem_nhds_iff.1 (is_open.mem_nhds memU)
 
 中文:
-定理 compact_exists_isClopen_in_isOpen
-  条件: {x : X} {U : Set X} (is_open : IsOpen U) (memU : x in U)
+定理 compact_存在_isClopen_in_isOpen
+  条件: {x : X} {U : 集合 X} (is_open : 是开集 U) (memU : x in U)
   证明: isTopologicalBasis_isClopen.mem_nhds_iff.1 (is_open.mem_nhds memU)
 
 Depends on / 依赖: isTopologicalBasis_isClopen, isTopologicalBasis_isClopen.mem_nhds_iff, is_open, is_open.mem_nhds, mem_nhds, mem_nhds_iff
@@ -199,7 +199,7 @@ theorem loc_compact_Haus_tot_disc_of_zero_dim
 
 中文:
 定理 loc_compact_Haus_tot_disc_of_zero_dim
-  条件: [TotallyDisconnectedSpace H]
+  条件: [全不连通空间 H]
   证明: by
   refine isTopologicalBasis_of_isOpen_of_nhds (fun u hu => hu.2) fun x U memU hU => ?_
   obtain ⟨s, comp, xs, sU⟩ := exists_compact_subset hU memU
@@ -285,7 +285,7 @@ lemma exists_clopen_of_closed_subset_open
   cho
 
 中文:
-引理 exists_clopen_of_closed_subset_open
+引理 存在_clopen_of_closed_subset_open
   结论: {X : 类型}
   证明: by
   -- every `z ∈ Z` has clopen neighborhood `V z ⊆ U`
@@ -322,7 +322,7 @@ lemma exists_clopen_partition_of_clopen_cover
     re
 
 中文:
-引理 exists_clopen_partition_of_clopen_cover
+引理 存在_clopen_partition_of_clopen_cover
   证明: by
   induction I using Finite.induction_empty_option with
   | of_equiv e IH =>

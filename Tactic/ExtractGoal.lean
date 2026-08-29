@@ -151,7 +151,7 @@ theorem extracted_1.{u_1}
 
 中文:
 定理 extracted_1.{u_1}
-  条件: {α : Sort u_1} (a : α)
+  条件: {α : 类型层 u_1} (a : α)
   结论: 存在 f, f a = a
   证明: sorry
 -/

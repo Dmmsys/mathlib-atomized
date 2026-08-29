@@ -36,8 +36,8 @@ abbreviation Module.End
   body: M ->ₗ[R] M
 
 中文:
-缩写 Module.End
-  签名: (R : 类型u) (M : 类型v) [Semiring R] [AddCommMonoid M] [Module R M]
+缩写 模.End
+  签名: (R : 类型u) (M : 类型v) [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: M ->ₗ[R] M
 -/
 abbrev Module.End (R : Type u) (M : Type v) [Semiring R] [AddCommMonoid M] [Module R M] :=
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Module.End R M)
+  签名: 幺 (模.End R M)
   定义体: ⟨LinearMap.id⟩
 
 Depends on / 依赖: LinearMap, LinearMap.id
@@ -82,7 +82,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Module.End R M)
+  签名: 乘法 (模.End R M)
   定义体: ⟨fun f g => LinearMap.comp f g⟩
 
 Depends on / 依赖: LinearMap, LinearMap.comp
@@ -99,7 +99,7 @@ theorem one_eq_id
 
 中文:
 定理 one_eq_id
-  结论: (1 : Module.End R M) = .id
+  结论: (1 : 模.End R M) = .id
   证明: rfl
 -/
 theorem one_eq_id : (1 : Module.End R M) = .id := rfl
@@ -117,7 +117,7 @@ theorem mul_eq_comp
 
 中文:
 定理 mul_eq_comp
-  条件: (f g : Module.End R M)
+  条件: (f g : 模.End R M)
   结论: f * g = f.comp g
   证明: rfl
 
@@ -140,7 +140,7 @@ theorem one_apply
 中文:
 定理 one_apply
   条件: (x : M)
-  结论: (1 : Module.End R M) x = x
+  结论: (1 : 模.End R M) x = x
   证明: rfl
 
 @[simp]
@@ -159,7 +159,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: (f g : Module.End R M) (x : M)
+  条件: (f g : 模.End R M) (x : M)
   结论: (f * g) x = f (g x)
   证明: rfl
 -/
@@ -175,7 +175,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ⇑(1 : Module.End R M) = _root_.id
+  结论: ⇑(1 : 模.End R M) = _root_.id
   证明: rfl
 -/
 theorem coe_one : ⇑(1 : Module.End R M) = _root_.id := rfl
@@ -191,7 +191,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: (f g : Module.End R M)
+  条件: (f g : 模.End R M)
   结论: ⇑(f * g) = f ∘ g
   证明: rfl
 -/
@@ -209,7 +209,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial M]
+  签名: [非平凡 M]
   定义体: by
   obtain ⟨m, ne⟩ := exists_ne (0 : M)
   exact nontrivial_of_ne 1 0 fun p => ne (LinearMap.congr_fun p m)
@@ -232,7 +232,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (Module.End R M) where
+  签名: : 幺半群 (模.End R M) where
   定义体: LinearMap.ext fun _ => rfl
   mul_one := comp_id
   one_mul := id_comp
@@ -263,7 +263,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (Module.End R M) where
+  签名: : 半环 (模.End R M) where
   定义体: AddMonoidWithOne.unary
   __ := instMonoid
   __ := addCommMonoid
@@ -305,7 +305,7 @@ theorem natCast_apply
 中文:
 定理 natCast_apply
   条件: (n : 自然数) (m : M)
-  结论: (↑n : Module.End R M) m = n • m
+  结论: (↑n : 模.End R M) m = n • m
   证明: rfl
 
 @[simp]
@@ -322,7 +322,7 @@ theorem ofNat_apply
   proof: rfl
 
 中文:
-定理 ofNat_apply
+定理 of自然数_apply
   条件: (n : 自然数) [n.AtLeastTwo] (m : M)
   证明: rfl
 -/
@@ -341,7 +341,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (Module.End R N₁) where
+  签名: : 环 (模.End R N₁) where
   定义体: z • (1 : N₁ ->ₗ[R] N₁)
   intCast_ofNat := natCast_zsmul _
   intCast_negSucc := negSucc_zsmul _
@@ -365,7 +365,7 @@ theorem intCast_apply
 中文:
 定理 intCast_apply
   条件: (z : 整数) (m : N₁)
-  结论: (z : Module.End R N₁) m = z • m
+  结论: (z : 模.End R N₁) m = z • m
   证明: rfl
 -/
 theorem intCast_apply (z : Int) (m : N₁) : (z : Module.End R N₁) m = z • m :=
@@ -404,7 +404,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul S R] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量塔 S R M]
   定义体: ⟨fun s _ _ => (comp_smul _ s _).symm⟩
 
 Depends on / 依赖: comp_smul
@@ -423,7 +423,7 @@ instance instSMulCommClass'
 
 中文:
 实例 instSMulCommClass'
-  签名: [SMul S R] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量塔 S R M]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -442,7 +442,7 @@ theorem isUnit_apply_inv_apply_of_isUnit
 
 中文:
 定理 isUnit_apply_inv_apply_of_isUnit
-  条件: {f : End R M} (h : IsUnit f) (x : M)
+  条件: {f : End R M} (h : 是单位 f) (x : M)
   证明: show (f * h.unit.inv) x = x by simp
 
 Depends on / 依赖: h.unit.inv
@@ -461,7 +461,7 @@ theorem isUnit_inv_apply_apply_of_isUnit
 
 中文:
 定理 isUnit_inv_apply_apply_of_isUnit
-  条件: {f : End R M} (h : IsUnit f) (x : M)
+  条件: {f : End R M} (h : 是单位 f) (x : M)
   证明: (by simp : (h.unit.inv * f) x = x)
 
 Depends on / 依赖: h.unit.inv
@@ -633,8 +633,8 @@ theorem iterate_surjective
 
 中文:
 定理 iterate_surjective
-  条件: (h : Surjective f')
-  结论: 对任意 n : 自然数, Surjective (f' ^ n)
+  条件: (h : 满射 f')
+  结论: 对任意 n : 自然数, 满射 (f' ^ n)
 -/
 theorem iterate_surjective (h : Surjective f') : forall n : Nat, Surjective (f' ^ n)
   | 0 => surjective_id
@@ -652,8 +652,8 @@ theorem iterate_injective
 
 中文:
 定理 iterate_injective
-  条件: (h : Injective f')
-  结论: 对任意 n : 自然数, Injective (f' ^ n)
+  条件: (h : 单射 f')
+  结论: 对任意 n : 自然数, 单射 (f' ^ n)
 -/
 theorem iterate_injective (h : Injective f') : forall n : Nat, Injective (f' ^ n)
   | 0 => injective_id
@@ -671,8 +671,8 @@ theorem iterate_bijective
 
 中文:
 定理 iterate_bijective
-  条件: (h : Bijective f')
-  结论: 对任意 n : 自然数, Bijective (f' ^ n)
+  条件: (h : 双射 f')
+  结论: 对任意 n : 自然数, 双射 (f' ^ n)
 -/
 theorem iterate_bijective (h : Bijective f') : forall n : Nat, Bijective (f' ^ n)
   | 0 => bijective_id
@@ -692,7 +692,7 @@ theorem injective_of_iterate_injective
 
 中文:
 定理 injective_of_iterate_injective
-  条件: {n : 自然数} (hn : n != 0) (h : Injective (f' ^ n))
+  条件: {n : 自然数} (hn : n != 0) (h : 单射 (f' ^ n))
   证明: by
   rw [← Nat.succ_pred_eq_of_pos (show 0 < n by lia)]; rw [iterate_succ]; rw [coe_comp] at h
   exact h.of_comp
@@ -716,7 +716,7 @@ theorem surjective_of_iterate_surjective
 
 中文:
 定理 surjective_of_iterate_surjective
-  条件: {n : 自然数} (hn : n != 0) (h : Surjective (f' ^ n))
+  条件: {n : 自然数} (hn : n != 0) (h : 满射 (f' ^ n))
   证明: by
   rw [← Nat.succ_pred_eq_of_pos (Nat.pos_iff_ne_zero.mpr hn)]; rw [pow_succ']; rw [coe_mul] at h
   exact Surjective.of_comp h
@@ -740,7 +740,7 @@ definition smulLeft
 
 中文:
 定义 smulLeft
-  签名: (α : R) (hα : α in Set.center R)
+  签名: (α : R) (hα : α in 集合.center R)
   定义体: α • x
   map_add' := smul_add _
   map_smul' β _ := by simp [smul_smul, ((Set.mem_center_iff.mp hα).comm β).eq]
@@ -760,7 +760,7 @@ lemma smulLeft_eq
 
 中文:
 引理 smulLeft_eq
-  结论: {R : 类型} [CommSemiring R] [Module R M] (α : R)
+  结论: {R : 类型} [交换半环 R] [模 R M] (α : R)
   证明: rfl
 -/
 @[simp] lemma smulLeft_eq {R : Type*} [CommSemiring R] [Module R M] (α : R)
@@ -789,7 +789,7 @@ instance applyModule
 
 中文:
 实例 applyModule
-  签名: : Module (Module.End R M) M where
+  签名: : 模 (模.End R M) M where
   定义体: (· <| ·)
   smul_zero := map_zero
   smul_add := map_add
@@ -821,7 +821,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: (f : Module.End R M) (a : M)
+  条件: (f : 模.End R M) (a : M)
   结论: f • a = f a
   证明: rfl
 -/
@@ -838,7 +838,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (Module.End R M) M
+  签名: : 忠实标量乘法 (模.End R M) M
   定义体: ⟨LinearMap.ext⟩
 
 Depends on / 依赖: LinearMap, LinearMap.ext
@@ -856,7 +856,7 @@ instance apply_smulCommClass
 
 中文:
 实例 apply_smulCommClass
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: (e.map_smul_of_tower r m).symm
 
 Depends on / 依赖: e.map_smul_of_tower, map_smul_of_tower
@@ -875,7 +875,7 @@ instance apply_smulCommClass'
 
 中文:
 实例 apply_smulCommClass'
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -894,7 +894,7 @@ instance apply_isScalarTower
 
 中文:
 实例 apply_isScalarTower
-  签名: [Monoid S] [DistribMulAction S M] [SMulCommClass R S M]
+  签名: [幺半群 S] [分配乘法作用 S M] [标量交换类 R S M]
   定义体: ⟨fun _ _ _ => rfl⟩
 -/
 instance apply_isScalarTower [Monoid S] [DistribMulAction S M] [SMulCommClass R S M] :
@@ -925,8 +925,8 @@ definition DistribSMul.toLinearMap
   map_smul' _ _ := smul_comm _ _ _
 
 中文:
-定义 DistribSMul.toLinearMap
-  签名: [DistribSMul S M] [SMulCommClass S R M] (s : S)
+定义 分配标量乘法.toLinearMap
+  签名: [分配标量乘法 S M] [标量交换类 S R M] (s : S)
   定义体: HSMul.hSMul s
   map_add' := smul_add s
   map_smul' _ _ := smul_comm _ _ _
@@ -955,8 +955,8 @@ map_mul' _ _ := LinearMap.ext mul_smul _ _
 @[deprecated (since := "2026-01-07")] alias DistribMulAction.toLinearMap := DistribSMul.toLinearMap
 
 中文:
-定义 DistribMulAction.toModuleEnd
-  签名: [DistribMulAction S M] [SMulCommClass S R M]
+定义 分配乘法作用.toModuleEnd
+  签名: [分配乘法作用 S M] [标量交换类 S R M]
   定义体: DistribSMul.toLinearMap R M
 map_one' := LinearMap.ext one_smul _
 map_mul' _ _ := LinearMap.ext mul_smul _ _
@@ -996,8 +996,8 @@ map_zero' := LinearMap.ext zero_smul S
 map_add' := fun _ _ => LinearMap.ext add_smul _ _ }
 
 中文:
-定义 Module.toModuleEnd
-  签名: : S ->+* Module.End R M
+定义 模.toModuleEnd
+  签名: : S ->+* 模.End R M
   定义体: { DistribMulAction.toModuleEnd R M with
     toFun := DistribSMul.toLinearMap R M
 map_zero' := LinearMap.ext zero_smul S
@@ -1027,8 +1027,8 @@ definition RingEquiv.moduleEndSelf
 right_inv := fun _ => LinearMap.ext_ring one_mul _ }
 
 中文:
-定义 RingEquiv.moduleEndSelf
-  签名: : Rᵐᵒᵖ ≃+* Module.End R R
+定义 环等价.moduleEndSelf
+  签名: : Rᵐᵒᵖ ≃+* 模.End R R
   定义体: { Module.toModuleEnd R R with
     toFun := DistribSMul.toLinearMap R R
     invFun := fun f => MulOpposite.op (f 1)
@@ -1060,8 +1060,8 @@ definition RingEquiv.moduleEndSelfOp
 right_inv := fun _ => LinearMap.ext_ring_op mul_one _ }
 
 中文:
-定义 RingEquiv.moduleEndSelfOp
-  签名: : R ≃+* Module.End Rᵐᵒᵖ R
+定义 环等价.moduleEndSelfOp
+  签名: : R ≃+* 模.End Rᵐᵒᵖ R
   定义体: { Module.toModuleEnd _ _ with
     toFun := DistribSMul.toLinearMap _ _
     invFun := fun f => f 1
@@ -1086,8 +1086,8 @@ theorem Module.End.natCast_def
   proof: rfl
 
 中文:
-定理 Module.End.natCast_def
-  条件: (n : 自然数) [AddCommMonoid N₁] [Module R N₁]
+定理 模.End.natCast_def
+  条件: (n : 自然数) [加法交换幺半群 N₁] [模 R N₁]
   证明: rfl
 -/
 theorem Module.End.natCast_def (n : Nat) [AddCommMonoid N₁] [Module R N₁] :
@@ -1103,8 +1103,8 @@ theorem Module.End.intCast_def
   proof: rfl
 
 中文:
-定理 Module.End.intCast_def
-  条件: (z : 整数) [AddCommGroup N₁] [Module R N₁]
+定理 模.End.intCast_def
+  条件: (z : 整数) [加法交换群 N₁] [模 R N₁]
   证明: rfl
 -/
 theorem Module.End.intCast_def (z : Int) [AddCommGroup N₁] [Module R N₁] :
@@ -1244,7 +1244,7 @@ lemma smulRight_apply_eq_zero_iff
 
 中文:
 引理 smulRight_apply_eq_zero_iff
-  条件: [IsDomain S] {f : M₁ ->ₗ[R] S} {x : M} [Module.IsTorsionFree S M]
+  条件: [是整环 S] {f : M₁ ->ₗ[R] S} {x : M} [模.是无挠 S M]
   证明: by simp [DFunLike.ext_iff, forall_or_right]
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, ext_iff, forall_or_right
@@ -1495,7 +1495,7 @@ lemma commute_id_left
 
 中文:
 引理 commute_id_left
-  结论: Commute LinearMap.id f
+  结论: Commute 线性映射.id f
   证明: by ext; simp
 -/
 lemma commute_id_left : Commute LinearMap.id f := by ext; simp
@@ -1510,7 +1510,7 @@ lemma commute_id_right
 
 中文:
 引理 commute_id_right
-  结论: Commute f LinearMap.id
+  结论: Commute f 线性映射.id
   证明: by ext; simp
 -/
 lemma commute_id_right : Commute f LinearMap.id := by ext; simp

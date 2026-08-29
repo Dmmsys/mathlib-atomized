@@ -130,7 +130,7 @@ lemma ι_sigmaConstCokernelCofork_π
 
 中文:
 引理 ι_sigmaConstCokernelCofork_π
-  条件: (b : β) (hb : b ∉ Set.range f)
+  条件: (b : β) (hb : b ∉ 集合.range f)
   证明: by
   dsimp [sigmaConstCokernelCofork]
   rw [Sigma.ι_desc]

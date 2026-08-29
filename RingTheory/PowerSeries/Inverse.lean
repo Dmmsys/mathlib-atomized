@@ -474,7 +474,7 @@ theorem invOfUnit_eq'
 
 中文:
 定理 invOfUnit_eq'
-  条件: (φ : k⟦X⟧) (u : Units k) (h : constantCoeff φ = u)
+  条件: (φ : k⟦X⟧) (u : 单位群 k) (h : constantCoeff φ = u)
   证明: MvPowerSeries.invOfUnit_eq' φ _ h
 
 @[simp]
@@ -918,7 +918,7 @@ theorem map.isLocalHom
 
 中文:
 定理 map.isLocalHom
-  结论: IsLocalHom (map f)
+  结论: 是Local态射 (map f)
   证明: MvPowerSeries.map.isLocalHom f
 -/
 theorem map.isLocalHom : IsLocalHom (map f) :=
@@ -977,7 +977,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniqueFactorizationMonoid k⟦X⟧
+  签名: 唯一分解幺半群 k⟦X⟧
   定义体: hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid
 
 Depends on / 依赖: hasUnitMulPowIrreducibleFactorization, hasUnitMulPowIrreducibleFactorization.toUniqueFactorizationMonoid, toUniqueFactorizationMonoid
@@ -997,7 +997,7 @@ example : IsNoetherianRing k⟦X⟧ := inferInstance
 
 中文:
 实例 :
-  签名: IsDiscreteValuationRing k⟦X⟧
+  签名: 是离散赋值环 k⟦X⟧
   定义体: ofHasUnitMulPowIrreducibleFactorization hasUnitMulPowIrreducibleFactorization
 
 example : IsNoetherianRing k⟦X⟧ := inferInstance
@@ -1028,7 +1028,7 @@ theorem maximalIdeal_eq_span_X
 
 中文:
 定理 maximalIdeal_eq_span_X
-  结论: IsLocalRing.maximalIdeal (k⟦X⟧) = Ideal.span {X}
+  结论: 是局部环.maximalIdeal (k⟦X⟧) = 理想.span {X}
   证明: by
   have hX : (Ideal.span {(X : k⟦X⟧)}).IsMaximal := by
     rw [Ideal.isMaximal_iff]
@@ -1077,7 +1077,7 @@ instance :
 
 中文:
 实例 :
-  签名: StrongNormalizationMonoid k⟦X⟧
+  签名: StrongNormalization幺半群 k⟦X⟧
   定义体: (Unit_of_divided_by_X_pow_order f)⁻¹
   normUnit_zero := by simp only [Unit_of_divided_by_X_pow_order_zero, inv_one]
   normUnit_mul hf hg := by
@@ -1193,7 +1193,7 @@ theorem ker_coeff_eq_max_ideal
 
 中文:
 定理 ker_coeff_eq_max_ideal
-  结论: RingHom.ker (constantCoeff (R := k)) = maximalIdeal _
+  结论: 环态射.ker (constantCoeff (R := k)) = maximalIdeal _
   证明: Ideal.ext fun _ => by
     rw [RingHom.mem_ker]; rw [maximalIdeal_eq_span_X]; rw [Ideal.mem_span_singleton]; rw [X_dvd_iff]
 

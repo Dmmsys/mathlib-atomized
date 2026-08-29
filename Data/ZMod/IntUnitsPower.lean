@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (ZMod 2) (Additive 整数ˣ)
+  签名: 标量乘法 (ZMod 2) (加性 整数ˣ)
   定义体: .ofMul au.toMul ^ z.val
 
 Depends on / 依赖: au.toMul, z.val
@@ -57,7 +57,7 @@ lemma ZMod.smul_units_def
 
 中文:
 引理 ZMod.smul_units_def
-  条件: (z : ZMod 2) (au : Additive 整数ˣ)
+  条件: (z : ZMod 2) (au : 加性 整数ˣ)
   证明: rfl
 -/
 lemma ZMod.smul_units_def (z : ZMod 2) (au : Additive Intˣ) :
@@ -74,7 +74,7 @@ lemma ZMod.natCast_smul_units
 
 中文:
 引理 ZMod.natCast_smul_units
-  条件: (n : 自然数) (au : Additive 整数ˣ)
+  条件: (n : 自然数) (au : 加性 整数ˣ)
   结论: (n : ZMod 2) • au = n • au
   证明: (Int.units_pow_eq_pow_mod_two au n).symm
 
@@ -98,7 +98,7 @@ smul_zero _ := Additive.toMul.injectiv
 
 中文:
 实例 :
-  签名: Module (ZMod 2) (Additive 整数ˣ)
+  签名: 模 (ZMod 2) (加性 整数ˣ)
   定义体: .ofMul au.toMul ^ z.val
 one_smul _ := Additive.toMul.injective pow_one _
 mul_smul z₁ z₂ au := Additive.toMul.injective by
@@ -133,8 +133,8 @@ instance Int.instUnitsPow
   body: (r • Additive.ofMul u).toMul
 
 中文:
-实例 Int.instUnitsPow
-  签名: : Pow 整数ˣ R where
+实例 整数.instUnitsPow
+  签名: : 幂 整数ˣ R where
   定义体: (r • Additive.ofMul u).toMul
 
 Depends on / 依赖: Additive, Additive.ofMul
@@ -158,7 +158,7 @@ lemma ofMul_uzpow
 中文:
 引理 ofMul_uzpow
   条件: (u : 整数ˣ) (r : R)
-  结论: Additive.ofMul (u ^ r) = r • Additive.ofMul u
+  结论: 加性.ofMul (u ^ r) = r • 加性.ofMul u
   证明: rfl
 -/
 @[simp] lemma ofMul_uzpow (u : Intˣ) (r : R) : Additive.ofMul (u ^ r) = r • Additive.ofMul u := rfl
@@ -174,7 +174,7 @@ lemma toMul_uzpow
 
 中文:
 引理 toMul_uzpow
-  条件: (u : Additive 整数ˣ) (r : R)
+  条件: (u : 加性 整数ˣ) (r : R)
   结论: (r • u).toMul = u.toMul ^ r
   证明: rfl
 -/

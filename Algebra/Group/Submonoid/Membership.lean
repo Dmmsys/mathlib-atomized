@@ -70,7 +70,7 @@ lemma mem_iSup_of_directed
 
 中文:
 引理 mem_iSup_of_directed
-  结论: {ι : Sort*} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S)
+  结论: {ι : 类型层*} [非空 ι] {S : ι -> 子幺半群 M} (hS : Directed (· <= ·) S)
   证明: by
   refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
   suffices x in closure (⋃ i, (S i : Set M)) -> exists i, x in S i by
@@ -109,7 +109,7 @@ theorem mem_biSup_of_directedOn
 
 中文:
 定理 mem_biSup_of_directedOn
-  结论: {ι : 类型} {p : ι -> 命题} (hp : 存在 i, p i) {S : ι -> Submonoid M}
+  结论: {ι : 类型} {p : ι -> 命题} (hp : 存在 i, p i) {S : ι -> 子幺半群 M}
   证明: by
   rw [← nonempty_subtype] at hp
   rw [iSup_subtype']; rw [mem_iSup_of_directed]
@@ -145,7 +145,7 @@ theorem mem_iSup_prop
 
 中文:
 定理 mem_iSup_prop
-  条件: {p : 命题} {S : p -> Submonoid M} {x : M}
+  条件: {p : 命题} {S : p -> 子幺半群 M} {x : M}
   证明: by
   by_cases h : p <;>
   simp +contextual [h]
@@ -172,7 +172,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  条件: {ι} [Nonempty ι] {S : ι -> Submonoid M} (hS : Directed (· <= ·) S)
+  条件: {ι} [非空 ι] {S : ι -> 子幺半群 M} (hS : Directed (· <= ·) S)
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 @[to_additive]
@@ -198,7 +198,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {S : Set (Submonoid M)} (Sne : S.Nonempty)
+  结论: {S : 集合 (子幺半群 M)} (Sne : S.非空)
   证明: by
   have : Nonempty S := Sne.to_subtype
   simp [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val]
@@ -225,7 +225,7 @@ theorem coe_sSup_of_directedOn
 
 中文:
 定理 coe_sSup_of_directedOn
-  结论: {S : Set (Submonoid M)} (Sne : S.Nonempty)
+  结论: {S : 集合 (子幺半群 M)} (Sne : S.非空)
   证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 @[to_additive]
@@ -255,7 +255,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : Sort*} [Nonempty ι]
+  结论: {ι : 类型层*} [非空 ι]
   证明: by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
@@ -291,7 +291,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι]
   定义体: Submonoid.isMulCommutative_iSup S.monotone.directed_le
 
 @[to_additive]
@@ -319,7 +319,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : Submonoid M}
+  条件: {S T : 子幺半群 M}
   结论: 对任意 {x : M}, x in S -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -349,7 +349,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : Submonoid M}
+  条件: {S T : 子幺半群 M}
   结论: 对任意 {x : M}, x in T -> x in S ⊔ T
   证明: by
   rw [← SetLike.le_def]
@@ -377,7 +377,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : Submonoid M} {x y : M} (hx : x in S) (hy : y in T)
+  条件: {S T : 子幺半群 M} {x y : M} (hx : x in S) (hy : y in T)
   结论: x * y in S ⊔ T
   证明: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
@@ -403,7 +403,7 @@ theorem mem_iSup_of_mem
 
 中文:
 定理 mem_iSup_of_mem
-  条件: {ι : Sort*} {S : ι -> Submonoid M} (i : ι)
+  条件: {ι : 类型层*} {S : ι -> 子幺半群 M} (i : ι)
   证明: by
   rw [← SetLike.le_def]
   exact le_iSup _ _
@@ -430,7 +430,7 @@ theorem mem_sSup_of_mem
 
 中文:
 定理 mem_sSup_of_mem
-  条件: {S : Set (Submonoid M)} {s : Submonoid M} (hs : s in S)
+  条件: {S : 集合 (子幺半群 M)} {s : 子幺半群 M} (hs : s in S)
   证明: by
   rw [← SetLike.le_def]
   exact le_sSup hs
@@ -463,7 +463,7 @@ theorem iSup_induction
 
 中文:
 定理 iSup_induction
-  结论: {ι : Sort*} (S : ι -> Submonoid M) {motive : M -> 命题} {x : M}
+  结论: {ι : 类型层*} (S : ι -> 子幺半群 M) {motive : M -> 命题} {x : M}
   证明: by
   rw [iSup_eq_closure] at hx
   refine closure_induction (fun x hx => ?_) one (fun _ _ _ _ => mul _ _) hx
@@ -499,7 +499,7 @@ theorem iSup_induction'
 
 中文:
 定理 iSup_induction'
-  结论: {ι : Sort*} (S : ι -> Submonoid M) {motive : 对任意 x, (x in ⨆ i, S i) -> 命题}
+  结论: {ι : 类型层*} (S : ι -> 子幺半群 M) {motive : 对任意 x, (x in ⨆ i, S i) -> 命题}
   证明: by
   refine Exists.elim (?_ : exists Hx, motive x Hx) fun (hx : x in ⨆ i, S i) (hc : motive x hx) => hc
   refine @iSup_induction _ _ ι S (fun m => exists hm, motive m hm) _ hx (fun i x hx => ?_) ?_
@@ -547,7 +547,7 @@ theorem closure_range_of
 
 中文:
 定理 closure_range_of
-  结论: closure (Set.range <| @of α) = ⊤
+  结论: closure (集合.range <| @of α) = ⊤
   证明: eq_top_iff.2 fun x _ =>
     FreeMonoid.recOn x (one_mem _) fun _x _xs hxs =>
       mul_mem (subset_closure <| Set.mem_range_self _) hxs
@@ -579,7 +579,7 @@ theorem closure_singleton_eq
 中文:
 定理 closure_singleton_eq
   条件: (x : M)
-  结论: closure ({x} : Set M) = mrange (powersHom M x)
+  结论: closure ({x} : 集合 M) = mrange (powersHom M x)
   证明: closure_eq_of_le (Set.singleton_subset_iff.2 ⟨Multiplicative.ofAdd 1, pow_one x⟩) fun _ ⟨_, hn⟩ =>
     hn ▸ pow_mem (subset_closure <| Set.mem_singleton _) _
 
@@ -602,7 +602,7 @@ theorem mem_closure_singleton
 中文:
 定理 mem_closure_singleton
   条件: {x y : M}
-  结论: y in closure ({x} : Set M) ↔ 存在 n : 自然数, x ^ n = y
+  结论: y in closure ({x} : 集合 M) ↔ 存在 n : 自然数, x ^ n = y
   证明: by
   rw [closure_singleton_eq]; rw [mem_mrange]; rfl
 
@@ -623,7 +623,7 @@ theorem mem_closure_singleton_self
 中文:
 定理 mem_closure_singleton_self
   条件: {y : M}
-  结论: y in closure ({y} : Set M)
+  结论: y in closure ({y} : 集合 M)
   证明: mem_closure_singleton.2 ⟨1, pow_one y⟩
 
 Depends on / 依赖: mem_closure_singleton, pow_one
@@ -642,7 +642,7 @@ theorem closure_singleton_one
 
 中文:
 定理 closure_singleton_one
-  结论: closure ({1} : Set M) = ⊥
+  结论: closure ({1} : 集合 M) = ⊥
   证明: by
   simp [eq_bot_iff_forall, mem_closure_singleton]
 
@@ -672,8 +672,8 @@ theorem card_bot
 
 中文:
 定理 card_bot
-  条件: {_ : Fintype (⊥ : Submonoid M)}
-  结论: card (⊥ : Submonoid M) = 1
+  条件: {_ : 有限类型 (⊥ : 子幺半群 M)}
+  结论: card (⊥ : 子幺半群 M) = 1
   证明: card_eq_one_iff.2
 ⟨⟨(1 : M), Set.mem_singleton 1⟩, fun ⟨_y, hy⟩ => Subtype.ext mem_bot.1 hy⟩
 
@@ -804,7 +804,7 @@ theorem _root_.FreeMonoid.mrange_lift
 @[to_additive]
 
 中文:
-定理 _root_.FreeMonoid.mrange_lift
+定理 _root_.自由幺半群.mrange_lift
   条件: {α} (f : α -> M)
   证明: by
   rw [mrange_eq_map]; rw [← FreeMonoid.closure_range_of]; rw [map_mclosure]; rw [← Set.range_comp]; rw [FreeMonoid.lift_comp_of]
@@ -832,8 +832,8 @@ theorem closure_eq_mrange
 
 中文:
 定理 closure_eq_mrange
-  条件: (s : Set M)
-  结论: closure s = mrange (FreeMonoid.lift ((↑) : s -> M))
+  条件: (s : 集合 M)
+  结论: closure s = mrange (自由幺半群.lift ((↑) : s -> M))
   证明: by
   rw [FreeMonoid.mrange_lift]; rw [Subtype.range_coe]
 
@@ -859,7 +859,7 @@ theorem closure_eq_image_prod
 
 中文:
 定理 closure_eq_image_prod
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   rw [closure_eq_mrange]; rw [coe_mrange]; rw [← Set.range_list_map_coe]; rw [← Set.range_comp]
   exact congrArg _ (funext <| FreeMonoid.lift_apply _)
@@ -886,8 +886,8 @@ theorem exists_list_of_mem_closure
 @[to_additive]
 
 中文:
-定理 exists_list_of_mem_closure
-  条件: {s : Set M} {x : M} (hx : x in closure s)
+定理 存在_list_of_mem_closure
+  条件: {s : 集合 M} {x : M} (hx : x in closure s)
   证明: by
   rwa [← SetLike.mem_coe, closure_eq_image_prod, Set.mem_image] at hx
 
@@ -913,8 +913,8 @@ theorem exists_multiset_of_mem_closure
 @[to_additive (attr := elab_as_elim)]
 
 中文:
-定理 exists_multiset_of_mem_closure
-  结论: {M : 类型} [CommMonoid M] {s : Set M} {x : M}
+定理 存在_multiset_of_mem_closure
+  结论: {M : 类型} [交换幺半群 M] {s : 集合 M} {x : M}
   证明: by
   obtain ⟨l, h1, h2⟩ := exists_list_of_mem_closure hx
   exact ⟨l, h1, (Multiset.prod_coe l).trans h2⟩
@@ -989,7 +989,7 @@ theorem induction_of_closure_eq_top_left
 
 中文:
 定理 induction_of_closure_eq_top_left
-  结论: {s : Set M} {motive : M -> 命题} (hs : closure s = ⊤)
+  结论: {s : 集合 M} {motive : M -> 命题} (hs : closure s = ⊤)
   证明: by
   have : x in closure s := by simp [hs]
   induction this using closure_induction_left with
@@ -1053,7 +1053,7 @@ theorem induction_of_closure_eq_top_right
 
 中文:
 定理 induction_of_closure_eq_top_right
-  结论: {s : Set M} {motive : M -> 命题} (hs : closure s = ⊤)
+  结论: {s : 集合 M} {motive : M -> 命题} (hs : closure s = ⊤)
   证明: by
   have : x in closure s := by simp [hs]
   induction this using closure_induction_right with
@@ -1122,7 +1122,7 @@ theorem coe_powers
 中文:
 定理 coe_powers
   条件: (x : M)
-  结论: ↑(powers x) = Set.range fun n : 自然数 => x ^ n
+  结论: ↑(powers x) = 集合.range fun n : 自然数 => x ^ n
   证明: rfl
 -/
 theorem coe_powers (x : M) : ↑(powers x) = Set.range fun n : Nat => x ^ n :=
@@ -1158,7 +1158,7 @@ instance decidableMemPowers
 
 中文:
 实例 decidableMemPowers
-  签名: : DecidablePred (· in Submonoid.powers a)
+  签名: : DecidablePred (· in 子幺半群.powers a)
   定义体: Classical.decPred _
 
 Depends on / 依赖: Classical, Classical.decPred, decPred
@@ -1178,7 +1178,7 @@ instance fintypePowers
 
 中文:
 实例 fintypePowers
-  签名: [Fintype M]
+  签名: [有限类型 M]
   定义体: inferInstanceAs Fintype {y // y in powers a}
 
 Depends on / 依赖: Fintype, powers
@@ -1222,7 +1222,7 @@ lemma powers_le
 
 中文:
 引理 powers_le
-  条件: {n : M} {P : Submonoid M}
+  条件: {n : M} {P : 子幺半群 M}
   结论: powers n <= P ↔ n in P
   证明: by simp [powers_eq_closure]
 
@@ -1382,7 +1382,7 @@ theorem pow_apply
 中文:
 定理 pow_apply
   条件: (n : M) (m : 自然数)
-  结论: Submonoid.pow n m = ⟨n ^ m, m, rfl⟩
+  结论: 子幺半群.pow n m = ⟨n ^ m, m, rfl⟩
   证明: rfl
 -/
 theorem pow_apply (n : M) (m : Nat) : Submonoid.pow n m = ⟨n ^ m, m, rfl⟩ :=
@@ -1465,7 +1465,7 @@ theorem log_pow_eq_self
 
 中文:
 定理 log_pow_eq_self
-  结论: [DecidableEq M] {n : M} (h : Function.Injective fun m : 自然数 => n ^ m)
+  结论: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
   证明: pow_right_injective_iff_pow_injective.mp h pow_log_eq_self _
 
 Depends on / 依赖: pow_log_eq_self, pow_right_injective_iff_pow_injective, pow_right_injective_iff_pow_injective.mp
@@ -1492,7 +1492,7 @@ definition powLogEquiv
 
 中文:
 定义 powLogEquiv
-  签名: [DecidableEq M] {n : M} (h : Function.Injective fun m : 自然数 => n ^ m)
+  签名: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
   定义体: pow n m.toAdd
   invFun m := Multiplicative.ofAdd (log m)
   left_inv := log_pow_eq_self h
@@ -1519,7 +1519,7 @@ theorem log_mul
 
 中文:
 定理 log_mul
-  结论: [DecidableEq M] {n : M} (h : Function.Injective fun m : 自然数 => n ^ m)
+  结论: [DecidableEq M] {n : M} (h : 函数.单射 fun m : 自然数 => n ^ m)
   证明: map_mul (powLogEquiv h).symm x y
 
 Depends on / 依赖: map_mul, powLogEquiv
@@ -1564,7 +1564,7 @@ theorem map_powers
 
 中文:
 定理 map_powers
-  结论: {N : 类型} {F : 类型} [Monoid N] [FunLike F M N] [MonoidHomClass F M N]
+  结论: {N : 类型} {F : 类型} [幺半群 N] [函数状 F M N] [幺半群态射类 F M N]
   证明: by
   simp only [powers_eq_closure, map_mclosure f, Set.image_singleton]
 
@@ -1595,8 +1595,8 @@ theorem IsScalarTower.of_mclosure_eq_top
 @[to_additive]
 
 中文:
-定理 IsScalarTower.of_mclosure_eq_top
-  结论: {N α} [Monoid M] [MulAction M N] [SMul N α] [MulAction M α]
+定理 标量塔.of_mclosure_eq_top
+  结论: {N α} [幺半群 M] [乘法作用 M N] [标量乘法 N α] [乘法作用 M α]
   证明: by
   refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
   · intro y z
@@ -1635,8 +1635,8 @@ theorem SMulCommClass.of_mclosure_eq_top
     rw [mul_smul]; rw [mul_smul]; rw [hx']; rw [hs x hx]
 
 中文:
-定理 SMulCommClass.of_mclosure_eq_top
-  结论: {N α} [Monoid M] [SMul N α] [MulAction M α] {s : Set M}
+定理 标量交换类.of_mclosure_eq_top
+  结论: {N α} [幺半群 M] [标量乘法 N α] [乘法作用 M α] {s : 集合 M}
   证明: by
   refine ⟨fun x => Submonoid.induction_of_closure_eq_top_left htop x ?_ ?_⟩
   · intro y z
@@ -1678,7 +1678,7 @@ theorem sup_eq_range
 
 中文:
 定理 sup_eq_range
-  条件: (s t : Submonoid N)
+  条件: (s t : 子幺半群 N)
   结论: s ⊔ t = mrange (s.subtype.coprod t.subtype)
   证明: by
   rw [mrange_eq_map]; rw [← mrange_inl_sup_mrange_inr]; rw [map_sup]; rw [map_mrange]; rw [coprod_comp_inl]; rw [map_mrange]; rw [coprod_comp_inr]; rw [mrange_subtype]; rw [mrange_subtype]
@@ -1704,7 +1704,7 @@ theorem mem_sup
 
 中文:
 定理 mem_sup
-  条件: {s t : Submonoid N} {x : N}
+  条件: {s t : 子幺半群 N} {x : N}
   结论: x in s ⊔ t ↔ 存在 y in s, 存在 z in t, y * z = x
   证明: by
   simp only [sup_eq_range, mem_mrange, coprod_apply, coe_subtype, Prod.exists,
@@ -1732,8 +1732,8 @@ lemma forall_mem_sup
 @[to_additive, simp high]
 
 中文:
-引理 forall_mem_sup
-  条件: {s t : Submonoid N}
+引理 对任意_mem_sup
+  条件: {s t : 子幺半群 N}
   证明: by
   simp [mem_sup]
   aesop
@@ -1758,8 +1758,8 @@ lemma exists_mem_sup
   simp [mem_sup]
 
 中文:
-引理 exists_mem_sup
-  条件: {s t : Submonoid N}
+引理 存在_mem_sup
+  条件: {s t : 子幺半群 N}
   证明: by
   simp [mem_sup]
 
@@ -1812,7 +1812,7 @@ theorem mem_closure_singleton
 中文:
 定理 mem_closure_singleton
   条件: {x y : A}
-  结论: y in closure ({x} : Set A) ↔ 存在 n : 自然数, n • x = y
+  结论: y in closure ({x} : 集合 A) ↔ 存在 n : 自然数, n • x = y
   证明: by
   rw [closure_singleton_eq]; rw [AddMonoidHom.mem_mrange]; rfl
 
@@ -1832,7 +1832,7 @@ theorem closure_singleton_zero
 
 中文:
 定理 closure_singleton_zero
-  结论: closure ({0} : Set A) = ⊥
+  结论: closure ({0} : 集合 A) = ⊥
   证明: by
   simp [eq_bot_iff_forall, mem_closure_singleton, nsmul_zero]
 
@@ -1904,7 +1904,7 @@ theorem mem_closure_pair
 
 中文:
 定理 mem_closure_pair
-  条件: {A : 类型} [CommMonoid A] (a b c : A)
+  条件: {A : 类型} [交换幺半群 A] (a b c : A)
   证明: by
   rw [← Set.singleton_union]; rw [Submonoid.closure_union]; rw [mem_sup]
   simp_rw [mem_closure_singleton, exists_exists_eq_and]
@@ -1932,7 +1932,7 @@ theorem ofMul_image_powers_eq_multiples_ofMul
 
 中文:
 定理 ofMul_image_powers_eq_multiples_ofMul
-  条件: [Monoid M] {x : M}
+  条件: [幺半群 M] {x : M}
   证明: by
   ext
   exact Set.mem_image_iff_of_inverse (congrFun rfl) (congrFun rfl)
@@ -1957,7 +1957,7 @@ theorem ofAdd_image_multiples_eq_powers_ofAdd
 
 中文:
 定理 ofAdd_image_multiples_eq_powers_ofAdd
-  条件: [AddMonoid A] {x : A}
+  条件: [加法幺半群 A] {x : A}
   证明: by
   symm
   rw [Equiv.eq_image_iff_symm_image_eq]
@@ -1985,8 +1985,8 @@ theorem Nat.addSubmonoidClosure_one
   simp [AddSubmonoid.mem_closure_singleton]
 
 中文:
-定理 Nat.addSubmonoidClosure_one
-  结论: AddSubmonoid.closure ({1} : Set 自然数) = ⊤
+定理 自然数.addSubmonoidClosure_one
+  结论: 加法子幺半群.closure ({1} : 集合 自然数) = ⊤
   证明: by
   ext
   simp [AddSubmonoid.mem_closure_singleton]

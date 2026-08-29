@@ -117,7 +117,7 @@ theorem analyticOnNhd_const
 
 中文:
 定理 analyticOnNhd_const
-  条件: {v : F} {s : Set E}
+  条件: {v : F} {s : 集合 E}
   结论: AnalyticOnNhd 𝕜 (fun _ => v) s
   证明: fun _ _ => analyticAt_const
 
@@ -137,7 +137,7 @@ theorem analyticWithinAt_const
 
 中文:
 定理 analyticWithinAt_const
-  条件: {v : F} {s : Set E} {x : E}
+  条件: {v : F} {s : 集合 E} {x : E}
   结论: AnalyticWithinAt 𝕜 (fun _ => v) s x
   证明: analyticAt_const.analyticWithinAt
 
@@ -157,7 +157,7 @@ theorem analyticOn_const
 
 中文:
 定理 analyticOn_const
-  条件: {v : F} {s : Set E}
+  条件: {v : F} {s : 集合 E}
   结论: AnalyticOn 𝕜 (fun _ => v) s
   证明: analyticOnNhd_const.analyticOn
 
@@ -186,8 +186,8 @@ theorem HasFPowerSeriesWithinOnBall.add
     hasSum := fun hy h'y => (hf.hasSum hy h'y).add (hg.hasSum hy h'y) }
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.add
-  结论: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.add
+  结论: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: { r_le := le_trans (le_min_iff.2 ⟨hf.r_le, hg.r_le⟩) (pf.min_radius_le_radius_add pg)
     r_pos := hf.r_pos
     hasSum := fun hy h'y => (hf.hasSum hy h'y).add (hg.hasSum hy h'y) }
@@ -212,8 +212,8 @@ theorem HasFPowerSeriesOnBall.add
     hasSum := fun hy => (hf.hasSum hy).add (hg.hasSum hy) }
 
 中文:
-定理 HasFPowerSeriesOnBall.add
-  结论: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.add
+  结论: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: { r_le := le_trans (le_min_iff.2 ⟨hf.r_le, hg.r_le⟩) (pf.min_radius_le_radius_add pg)
     r_pos := hf.r_pos
     hasSum := fun hy => (hf.hasSum hy).add (hg.hasSum hy) }
@@ -375,8 +375,8 @@ theorem HasFPowerSeriesWithinOnBall.neg
     hasSum := fun hy h'y => (hf.hasSum hy h'y).neg }
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.neg
-  条件: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.neg
+  条件: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: { r_le := by
       rw [pf.radius_neg]
       exact hf.r_le
@@ -406,8 +406,8 @@ theorem HasFPowerSeriesOnBall.neg
     hasSum := fun hy => (hf.hasSum hy).neg }
 
 中文:
-定理 HasFPowerSeriesOnBall.neg
-  条件: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.neg
+  条件: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: { r_le := by
       rw [pf.radius_neg]
       exact hf.r_le
@@ -585,8 +585,8 @@ theorem HasFPowerSeriesWithinOnBall.sub
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.sub
-  结论: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.sub
+  结论: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -607,8 +607,8 @@ theorem HasFPowerSeriesOnBall.sub
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 中文:
-定理 HasFPowerSeriesOnBall.sub
-  结论: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.sub
+  结论: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -751,8 +751,8 @@ theorem HasFPowerSeriesWithinOnBall.const_smul
   hasSum := fun hy h'y => (hf.hasSum hy h'y).const_smul _
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.const_smul
-  条件: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.const_smul
+  条件: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: le_trans hf.r_le pf.radius_le_smul
   r_pos := hf.r_pos
   hasSum := fun hy h'y => (hf.hasSum hy h'y).const_smul _
@@ -776,8 +776,8 @@ theorem HasFPowerSeriesOnBall.const_smul
   hasSum := fun hy => (hf.hasSum hy).const_smul _
 
 中文:
-定理 HasFPowerSeriesOnBall.const_smul
-  条件: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.const_smul
+  条件: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: le_trans hf.r_le pf.radius_le_smul
   r_pos := hf.r_pos
   hasSum := fun hy => (hf.hasSum hy).const_smul _
@@ -1104,8 +1104,8 @@ lemma HasFPowerSeriesWithinOnBall.prod
     · exact Metric.mem_e
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.prod
-  结论: {e : E} {f : E -> F} {g : E -> G} {r s : 实数>=0∞} {t : Set E}
+引理 有FPowerSeriesWithinOnBall.乘积
+  结论: {e : E} {f : E -> F} {g : E -> G} {r s : 实数>=0∞} {t : 集合 E}
   证明: by
     rw [p.radius_prod_eq_min]
     exact min_le_min hf.r_le hg.r_le
@@ -1144,7 +1144,7 @@ lemma HasFPowerSeriesOnBall.prod
   exact hf.prod hg
 
 中文:
-引理 HasFPowerSeriesOnBall.prod
+引理 有FPowerSeriesOnBall.乘积
   结论: {e : E} {f : E -> F} {g : E -> G} {r s : 实数>=0∞}
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf hg ⊢
@@ -1171,8 +1171,8 @@ lemma HasFPowerSeriesWithinAt.prod
   exact ⟨_, hf.prod hg⟩
 
 中文:
-引理 HasFPowerSeriesWithinAt.prod
-  结论: {e : E} {f : E -> F} {g : E -> G} {s : Set E}
+引理 HasFPowerSeriesWithinAt.乘积
+  结论: {e : E} {f : E -> F} {g : E -> G} {s : 集合 E}
   证明: by
   rcases hf with ⟨_, hf⟩
   rcases hg with ⟨_, hg⟩
@@ -1200,7 +1200,7 @@ lemma HasFPowerSeriesAt.prod
   exact ⟨_, hf.prod hg⟩
 
 中文:
-引理 HasFPowerSeriesAt.prod
+引理 HasFPowerSeriesAt.乘积
   结论: {e : E} {f : E -> F} {g : E -> G}
   证明: by
   rcases hf with ⟨_, hf⟩
@@ -1229,8 +1229,8 @@ lemma AnalyticWithinAt.prod
   exact ⟨_, hf.prod hg⟩
 
 中文:
-引理 AnalyticWithinAt.prod
-  结论: {e : E} {f : E -> F} {g : E -> G} {s : Set E}
+引理 AnalyticWithinAt.乘积
+  结论: {e : E} {f : E -> F} {g : E -> G} {s : 集合 E}
   证明: by
   rcases hf with ⟨_, hf⟩
   rcases hg with ⟨_, hg⟩
@@ -1259,7 +1259,7 @@ lemma AnalyticAt.prod
   exact ⟨_, hf.prod hg⟩
 
 中文:
-引理 AnalyticAt.prod
+引理 AnalyticAt.乘积
   结论: {e : E} {f : E -> F} {g : E -> G}
   证明: by
   rcases hf with ⟨_, hf⟩
@@ -1284,8 +1284,8 @@ lemma AnalyticOn.prod
   proof: fun x hx => (hf x hx).prod (hg x hx)
 
 中文:
-引理 AnalyticOn.prod
-  结论: {f : E -> F} {g : E -> G} {s : Set E}
+引理 AnalyticOn.乘积
+  结论: {f : E -> F} {g : E -> G} {s : 集合 E}
   证明: fun x hx => (hf x hx).prod (hg x hx)
 -/
 lemma AnalyticOn.prod {f : E -> F} {g : E -> G} {s : Set E}
@@ -1302,8 +1302,8 @@ lemma AnalyticOnNhd.prod
   proof: fun x hx => (hf x hx).prod (hg x hx)
 
 中文:
-引理 AnalyticOnNhd.prod
-  结论: {f : E -> F} {g : E -> G} {s : Set E}
+引理 AnalyticOnNhd.乘积
+  结论: {f : E -> F} {g : E -> G} {s : 集合 E}
   证明: fun x hx => (hf x hx).prod (hg x hx)
 -/
 lemma AnalyticOnNhd.prod {f : E -> F} {g : E -> G} {s : Set E}
@@ -1342,7 +1342,7 @@ theorem AnalyticWithinAt.comp₂
 
 中文:
 定理 AnalyticWithinAt.comp₂
-  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : Set (F × G)}
+  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : 集合 (F × G)}
   证明: AnalyticWithinAt.comp ha (fa.prod ga) hf
 
 Depends on / 依赖: AnalyticWithinAt, AnalyticWithinAt.comp, fa.prod
@@ -1384,7 +1384,7 @@ theorem AnalyticOnNhd.comp₂
 
 中文:
 定理 AnalyticOnNhd.comp₂
-  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : Set (F × G)} {t : Set E}
+  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : 集合 (F × G)} {t : 集合 E}
   证明: fun _ xt => (ha _ (m _ xt)).comp₂ (fa _ xt) (ga _ xt)
 -/
 theorem AnalyticOnNhd.comp₂ {h : F × G -> H} {f : E -> F} {g : E -> G} {s : Set (F × G)} {t : Set E}
@@ -1402,7 +1402,7 @@ theorem AnalyticOn.comp₂
 
 中文:
 定理 AnalyticOn.comp₂
-  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : Set (F × G)}
+  结论: {h : F × G -> H} {f : E -> F} {g : E -> G} {s : 集合 (F × G)}
   证明: fun x hx => (ha _ (m hx)).comp₂ (fa x hx) (ga x hx) m
 -/
 theorem AnalyticOn.comp₂ {h : F × G -> H} {f : E -> F} {g : E -> G} {s : Set (F × G)}
@@ -1503,7 +1503,7 @@ alias AnalyticOnNhd.along_fst := AnalyticOnNhd.curry_left
 
 中文:
 定理 AnalyticOnNhd.curry_left
-  结论: {f : E × F -> G} {s : Set (E × F)} {y : F}
+  结论: {f : E × F -> G} {s : 集合 (E × F)} {y : F}
   证明: fun x m => (fa (x, y) m).curry_left
 alias AnalyticOnNhd.along_fst := AnalyticOnNhd.curry_left
 
@@ -1544,7 +1544,7 @@ alias AnalyticOnNhd.along_snd := AnalyticOnNhd.curry_right
 
 中文:
 定理 AnalyticOnNhd.curry_right
-  结论: {f : E × F -> G} {x : E} {s : Set (E × F)}
+  结论: {f : E × F -> G} {x : E} {s : 集合 (E × F)}
   证明: fun y m => (fa (x, y) m).curry_right
 alias AnalyticOnNhd.along_snd := AnalyticOnNhd.curry_right
 
@@ -1711,7 +1711,7 @@ lemma HasFPowerSeriesWithinOnBall.pi
   hasSum {_} m hy := Pi.hasSum.2 (fun i => (hf i).hasSum m hy)
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.pi
+引理 有FPowerSeriesWithinOnBall.pi
   证明: by
     apply FormalMultilinearSeries.le_radius_pi (fun i => ?_)
     exact (hf i).r_le
@@ -1766,7 +1766,7 @@ lemma HasFPowerSeriesOnBall.pi
   exact HasFPowerSeriesWithinOnBall.pi hf hr
 
 中文:
-引理 HasFPowerSeriesOnBall.pi
+引理 有FPowerSeriesOnBall.pi
   证明: by
   simp_rw [← hasFPowerSeriesWithinOnBall_univ] at hf ⊢
   exact HasFPowerSeriesWithinOnBall.pi hf hr
@@ -2088,7 +2088,7 @@ lemma analyticAt_smul
 
 中文:
 引理 analyticAt_smul
-  条件: [Module A E] [IsBoundedSMul A E] [IsScalarTower 𝕜 A E] (z : A × E)
+  条件: [模 A E] [是BoundedSMul A E] [标量塔 𝕜 A E] (z : A × E)
   证明: (ContinuousLinearMap.lsmul 𝕜 A).analyticAt_bilinear z
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, analyticAt_bilinear
@@ -2129,7 +2129,7 @@ lemma AnalyticWithinAt.smul
 
 中文:
 引理 AnalyticWithinAt.smul
-  结论: [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F]
+  结论: [模 A F] [是BoundedSMul A F] [标量塔 𝕜 A F]
   证明: (analyticAt_smul _).comp₂_analyticWithinAt hf hg
 
 Depends on / 依赖: analyticAt_smul
@@ -2152,7 +2152,7 @@ lemma AnalyticAt.smul
 
 中文:
 引理 AnalyticAt.smul
-  结论: [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F] {f : E -> A}
+  结论: [模 A F] [是BoundedSMul A F] [标量塔 𝕜 A F] {f : E -> A}
   证明: (analyticAt_smul _).comp₂ hf hg
 
 Depends on / 依赖: analyticAt_smul
@@ -2172,7 +2172,7 @@ lemma AnalyticOn.smul
 
 中文:
 引理 AnalyticOn.smul
-  结论: [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F]
+  结论: [模 A F] [是BoundedSMul A F] [标量塔 𝕜 A F]
   证明: fun _ m => (hf _ m).smul (hg _ m)
 -/
 lemma AnalyticOn.smul [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F]
@@ -2191,7 +2191,7 @@ lemma AnalyticOnNhd.smul
 
 中文:
 引理 AnalyticOnNhd.smul
-  结论: [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F]
+  结论: [模 A F] [是BoundedSMul A F] [标量塔 𝕜 A F]
   证明: fun _ m => (hf _ m).smul (hg _ m)
 -/
 lemma AnalyticOnNhd.smul [Module A F] [IsBoundedSMul A F] [IsScalarTower 𝕜 A F]
@@ -2209,7 +2209,7 @@ lemma AnalyticWithinAt.mul
 
 中文:
 引理 AnalyticWithinAt.mul
-  结论: {f g : E -> A} {s : Set E} {z : E}
+  结论: {f g : E -> A} {s : 集合 E} {z : E}
   证明: (analyticAt_mul _).comp₂_analyticWithinAt hf hg
 
 Depends on / 依赖: analyticAt_mul
@@ -2250,7 +2250,7 @@ lemma AnalyticOn.mul
 
 中文:
 引理 AnalyticOn.mul
-  结论: {f g : E -> A} {s : Set E}
+  结论: {f g : E -> A} {s : 集合 E}
   证明: hf.smul hg
 
 Depends on / 依赖: hf.smul
@@ -2270,7 +2270,7 @@ lemma AnalyticOnNhd.mul
 
 中文:
 引理 AnalyticOnNhd.mul
-  结论: {f g : E -> A} {s : Set E}
+  结论: {f g : E -> A} {s : 集合 E}
   证明: hf.smul hg
 
 Depends on / 依赖: hf.smul
@@ -2299,7 +2299,7 @@ lemma AnalyticWithinAt.pow
 
 中文:
 引理 AnalyticWithinAt.pow
-  结论: {f : E -> A} {z : E} {s : Set E} (hf : AnalyticWithinAt 𝕜 f s z)
+  结论: {f : E -> A} {z : E} {s : 集合 E} (hf : AnalyticWithinAt 𝕜 f s z)
   证明: by
   induction n with
   | zero =>
@@ -2360,7 +2360,7 @@ lemma AnalyticOn.pow
 
 中文:
 引理 AnalyticOn.pow
-  条件: {f : E -> A} {s : Set E} (hf : AnalyticOn 𝕜 f s) (n : 自然数)
+  条件: {f : E -> A} {s : 集合 E} (hf : AnalyticOn 𝕜 f s) (n : 自然数)
   证明: fun _ m => (hf _ m).pow n
 -/
 lemma AnalyticOn.pow {f : E -> A} {s : Set E} (hf : AnalyticOn 𝕜 f s) (n : Nat) :
@@ -2379,7 +2379,7 @@ lemma AnalyticOnNhd.pow
 
 中文:
 引理 AnalyticOnNhd.pow
-  条件: {f : E -> A} {s : Set E} (hf : AnalyticOnNhd 𝕜 f s) (n : 自然数)
+  条件: {f : E -> A} {s : 集合 E} (hf : AnalyticOnNhd 𝕜 f s) (n : 自然数)
   证明: fun _ m => (hf _ m).pow n
 -/
 lemma AnalyticOnNhd.pow {f : E -> A} {s : Set E} (hf : AnalyticOnNhd 𝕜 f s) (n : Nat) :
@@ -2400,7 +2400,7 @@ lemma AnalyticWithinAt.zpow_nonneg
 
 中文:
 引理 AnalyticWithinAt.zpow_nonneg
-  结论: {f : E -> 𝕝} {z : E} {s : Set E} {n : 整数}
+  结论: {f : E -> 𝕝} {z : E} {s : 集合 E} {n : 整数}
   证明: by
   simpa [← zpow_natCast, hn] using hf.pow n.toNat
 
@@ -2449,7 +2449,7 @@ lemma AnalyticOn.zpow_nonneg
 
 中文:
 引理 AnalyticOn.zpow_nonneg
-  结论: {f : E -> 𝕝} {s : Set E} {n : 整数} (hf : AnalyticOn 𝕜 f s)
+  结论: {f : E -> 𝕝} {s : 集合 E} {n : 整数} (hf : AnalyticOn 𝕜 f s)
   证明: by
   simpa [← zpow_natCast, hn] using hf.pow n.toNat
 
@@ -2475,7 +2475,7 @@ lemma AnalyticOnNhd.zpow_nonneg
 
 中文:
 引理 AnalyticOnNhd.zpow_nonneg
-  结论: {f : E -> 𝕝} {s : Set E} {n : 整数} (hf : AnalyticOnNhd 𝕜 f s)
+  结论: {f : E -> 𝕝} {s : 集合 E} {n : 整数} (hf : AnalyticOnNhd 𝕜 f s)
   证明: by
   simp_rw [(Eq.symm (Int.toNat_of_nonneg hn) : n = OfNat.ofNat n.toNat), zpow_ofNat]
   apply pow hf
@@ -2514,7 +2514,7 @@ theorem HasFPowerSeriesWithinOnBall.compContinuousLinearMap
   hasSum hy1 hy2 := 
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.compContinuousLinearMap
+定理 有FPowerSeriesWithinOnBall.compContinuousLinearMap
   证明: by
     calc
       _ <= pf.radius / ‖u‖ₑ := by
@@ -2559,8 +2559,8 @@ theorem HasFPowerSeriesOnBall.compContinuousLinearMap
   exact hf.compContinuousLinearMap
 
 中文:
-定理 HasFPowerSeriesOnBall.compContinuousLinearMap
-  条件: (hf : HasFPowerSeriesOnBall f pf (u x) r)
+定理 有FPowerSeriesOnBall.compContinuousLinearMap
+  条件: (hf : 有FPowerSeriesOnBall f pf (u x) r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf ⊢
   exact hf.compContinuousLinearMap
@@ -2719,8 +2719,8 @@ lemma HasFPowerSeriesWithinOnBall.restrictScalars
   proof: ⟨hf.r_le.trans (FormalMultilinearSeries.radius_le_of_le (fun n => by simp)), hf.r_pos, hf.hasSum⟩
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.restrictScalars
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+引理 有FPowerSeriesWithinOnBall.restrictScalars
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: ⟨hf.r_le.trans (FormalMultilinearSeries.radius_le_of_le (fun n => by simp)), hf.r_pos, hf.hasSum⟩
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.radius_le_of_le, hasSum, hf.hasSum, hf.r_le.trans, hf.r_pos, r_le, r_pos, radius_le_of_le
@@ -2738,8 +2738,8 @@ lemma HasFPowerSeriesOnBall.restrictScalars
   proof: ⟨hf.r_le.trans (FormalMultilinearSeries.radius_le_of_le (fun n => by simp)), hf.r_pos, hf.hasSum⟩
 
 中文:
-引理 HasFPowerSeriesOnBall.restrictScalars
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+引理 有FPowerSeriesOnBall.restrictScalars
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: ⟨hf.r_le.trans (FormalMultilinearSeries.radius_le_of_le (fun n => by simp)), hf.r_pos, hf.hasSum⟩
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.radius_le_of_le, hasSum, hf.hasSum, hf.r_le.trans, hf.r_pos, r_le, r_pos, radius_le_of_le
@@ -2962,7 +2962,7 @@ lemma formalMultilinearSeries_geometric_apply_norm
 
 中文:
 引理 formalMultilinearSeries_geometric_apply_norm
-  条件: [NormOneClass A] (n : 自然数)
+  条件: [NormOne类 A] (n : 自然数)
   证明: ContinuousMultilinearMap.norm_mkPiAlgebraFin
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.norm_mkPiAlgebraFin, norm_mkPiAlgebraFin
@@ -3010,7 +3010,7 @@ lemma formalMultilinearSeries_geometric_radius
 
 中文:
 引理 formalMultilinearSeries_geometric_radius
-  条件: [NormOneClass A]
+  条件: [NormOne类 A]
   证明: formalMultilinearSeries_geometric_eq_ofScalars 𝕜 A ▸
     FormalMultilinearSeries.ofScalars_radius_eq_of_tendsto A _ one_ne_zero (by simp)
 
@@ -3038,7 +3038,7 @@ lemma hasFPowerSeriesOnBall_inverse_one_sub
 
 中文:
 引理 hasFPowerSeriesOnBall_inverse_one_sub
-  条件: [HasSummableGeomSeries A]
+  条件: [有SummableGeomSeries A]
   证明: by
   constructor
   · exact one_le_formalMultilinearSeries_geometric_radius 𝕜 A
@@ -3074,7 +3074,7 @@ lemma analyticAt_inverse_one_sub
 
 中文:
 引理 analyticAt_inverse_one_sub
-  条件: [HasSummableGeomSeries A]
+  条件: [有SummableGeomSeries A]
   证明: ⟨_, ⟨_, hasFPowerSeriesOnBall_inverse_one_sub 𝕜 A⟩⟩
 
 Depends on / 依赖: hasFPowerSeriesOnBall_inverse_one_sub
@@ -3160,7 +3160,7 @@ lemma alternatingGeometricSeries_apply_norm
 
 中文:
 引理 alternatingGeometricSeries_apply_norm
-  条件: [NormOneClass A] (n : 自然数)
+  条件: [NormOne类 A] (n : 自然数)
   证明: by
   simp [alternatingGeometricSeries]
 
@@ -3183,7 +3183,7 @@ lemma one_le_alternatingGeometricSeries_radius
 
 中文:
 引理 one_le_alternatingGeometricSeries_radius
-  条件: [Nontrivial A]
+  条件: [非平凡 A]
   证明: by
   simpa only [FormalMultilinearSeries.radius_compNeg,
     alternatingGeometricSeries_eq_formalMultilinearSeries_geometric_comp_neg]
@@ -3207,7 +3207,7 @@ lemma alternatingGeometricSeries_radius
 
 中文:
 引理 alternatingGeometricSeries_radius
-  条件: [NormOneClass A]
+  条件: [NormOne类 A]
   证明: FormalMultilinearSeries.ofScalars_radius_eq_of_tendsto A _ one_ne_zero (by simp)
 
 Depends on / 依赖: FormalMultilinearSeries, FormalMultilinearSeries.ofScalars_radius_eq_of_tendsto, ofScalars_radius_eq_of_tendsto, one_ne_zero
@@ -3231,7 +3231,7 @@ lemma hasFPowerSeriesOnBall_inverse_one_add
 
 中文:
 引理 hasFPowerSeriesOnBall_inverse_one_add
-  条件: [HasSummableGeomSeries A] [Nontrivial A]
+  条件: [有SummableGeomSeries A] [非平凡 A]
   证明: by
   rw [alternatingGeometricSeries_eq_formalMultilinearSeries_geometric_comp_neg]
   convert_to HasFPowerSeriesOnBall ((fun x => Ring.inverse (1 - x)) ∘ (-ContinuousLinearMap.id 𝕜 A))
@@ -3264,7 +3264,7 @@ lemma analyticAt_inverse_one_add
 
 中文:
 引理 analyticAt_inverse_one_add
-  条件: [HasSummableGeomSeries A] [Nontrivial A]
+  条件: [有SummableGeomSeries A] [非平凡 A]
   证明: ⟨_, ⟨_, hasFPowerSeriesOnBall_inverse_one_add 𝕜 A⟩⟩
 
 Depends on / 依赖: hasFPowerSeriesOnBall_inverse_one_add
@@ -3295,7 +3295,7 @@ lemma analyticAt_inverse
 
 中文:
 引理 analyticAt_inverse
-  条件: [HasSummableGeomSeries A] (z : Aˣ)
+  条件: [有SummableGeomSeries A] (z : Aˣ)
   证明: by
   rcases subsingleton_or_nontrivial A with hA | hA
   · convert! analyticAt_const (v := (0 : A))
@@ -3346,7 +3346,7 @@ lemma analyticOnNhd_inverse
 
 中文:
 引理 analyticOnNhd_inverse
-  条件: [HasSummableGeomSeries A]
+  条件: [有SummableGeomSeries A]
   证明: fun _ hx => analyticAt_inverse (IsUnit.unit hx)
 
 Depends on / 依赖: IsUnit, IsUnit.unit, analyticAt_inverse
@@ -3458,7 +3458,7 @@ lemma analyticAt_inv
 中文:
 引理 analyticAt_inv
   条件: {z : 𝕝} (hz : z != 0)
-  结论: AnalyticAt 𝕜 Inv.inv z
+  结论: AnalyticAt 𝕜 取逆.inv z
   证明: by
   convert! analyticAt_inverse (𝕜 := 𝕜) (Units.mk0 _ hz)
   exact Ring.inverse_eq_inv'.symm
@@ -3519,7 +3519,7 @@ theorem AnalyticWithinAt.inv
 
 中文:
 定理 AnalyticWithinAt.inv
-  结论: {f : E -> 𝕝} {x : E} {s : Set E} (fa : AnalyticWithinAt 𝕜 f s x)
+  结论: {f : E -> 𝕝} {x : E} {s : 集合 E} (fa : AnalyticWithinAt 𝕜 f s x)
   证明: (analyticAt_inv f0).comp_analyticWithinAt fa
 
 Depends on / 依赖: analyticAt_inv, comp_analyticWithinAt
@@ -3562,7 +3562,7 @@ theorem AnalyticOn.inv
 
 中文:
 定理 AnalyticOn.inv
-  条件: {f : E -> 𝕝} {s : Set E} (fa : AnalyticOn 𝕜 f s) (f0 : 对任意 x in s, f x != 0)
+  条件: {f : E -> 𝕝} {s : 集合 E} (fa : AnalyticOn 𝕜 f s) (f0 : 对任意 x in s, f x != 0)
   证明: fun x m => (fa x m).inv (f0 x m)
 -/
 theorem AnalyticOn.inv {f : E -> 𝕝} {s : Set E} (fa : AnalyticOn 𝕜 f s) (f0 : forall x in s, f x != 0) :
@@ -3581,7 +3581,7 @@ theorem AnalyticOnNhd.inv
 
 中文:
 定理 AnalyticOnNhd.inv
-  结论: {f : E -> 𝕝} {s : Set E} (fa : AnalyticOnNhd 𝕜 f s)
+  结论: {f : E -> 𝕝} {s : 集合 E} (fa : AnalyticOnNhd 𝕜 f s)
   证明: fun x m => (fa x m).inv (f0 x m)
 -/
 theorem AnalyticOnNhd.inv {f : E -> 𝕝} {s : Set E} (fa : AnalyticOnNhd 𝕜 f s)
@@ -3607,7 +3607,7 @@ lemma AnalyticWithinAt.zpow
 
 中文:
 引理 AnalyticWithinAt.zpow
-  结论: {f : E -> 𝕝} {z : E} {s : Set E} {n : 整数}
+  结论: {f : E -> 𝕝} {z : E} {s : 集合 E} {n : 整数}
   证明: by
   by_cases hn : 0 <= n
   · exact zpow_nonneg h₁f hn
@@ -3675,7 +3675,7 @@ lemma AnalyticOn.zpow
 
 中文:
 引理 AnalyticOn.zpow
-  结论: {f : E -> 𝕝} {s : Set E} {n : 整数} (h₁f : AnalyticOn 𝕜 f s)
+  结论: {f : E -> 𝕝} {s : 集合 E} {n : 整数} (h₁f : AnalyticOn 𝕜 f s)
   证明: fun z hz => (h₁f z hz).zpow (h₂f z hz)
 -/
 lemma AnalyticOn.zpow {f : E -> 𝕝} {s : Set E} {n : Int} (h₁f : AnalyticOn 𝕜 f s)
@@ -3696,7 +3696,7 @@ lemma AnalyticOnNhd.zpow
 
 中文:
 引理 AnalyticOnNhd.zpow
-  结论: {f : E -> 𝕝} {s : Set E} {n : 整数} (h₁f : AnalyticOnNhd 𝕜 f s)
+  结论: {f : E -> 𝕝} {s : 集合 E} {n : 整数} (h₁f : AnalyticOnNhd 𝕜 f s)
   证明: fun z hz => (h₁f z hz).zpow (h₂f z hz)
 -/
 lemma AnalyticOnNhd.zpow {f : E -> 𝕝} {s : Set E} {n : Int} (h₁f : AnalyticOnNhd 𝕜 f s)
@@ -3722,7 +3722,7 @@ theorem analyticAt_iff_analytic_fun_smul
 
 中文:
 定理 analyticAt_iff_analytic_fun_smul
-  结论: [Module 𝕝 F] [IsBoundedSMul 𝕝 F] [IsScalarTower 𝕜 𝕝 F]
+  结论: [模 𝕝 F] [是BoundedSMul 𝕝 F] [标量塔 𝕜 𝕝 F]
   证明: by
   constructor
   · exact fun a => h₁f.smul a
@@ -3758,7 +3758,7 @@ theorem analyticAt_iff_analytic_smul
 
 中文:
 定理 analyticAt_iff_analytic_smul
-  结论: [Module 𝕝 F] [IsBoundedSMul 𝕝 F] [IsScalarTower 𝕜 𝕝 F]
+  结论: [模 𝕝 F] [是BoundedSMul 𝕝 F] [标量塔 𝕜 𝕝 F]
   证明: analyticAt_iff_analytic_fun_smul h₁f h₂f
 
 Depends on / 依赖: analyticAt_iff_analytic_fun_smul
@@ -3807,7 +3807,7 @@ theorem AnalyticWithinAt.div
 
 中文:
 定理 AnalyticWithinAt.div
-  结论: {f g : E -> 𝕝} {s : Set E} {x : E}
+  结论: {f g : E -> 𝕝} {s : 集合 E} {x : E}
   证明: by
   simp_rw [div_eq_mul_inv]; exact fa.mul (ga.inv g0)
 
@@ -3853,7 +3853,7 @@ theorem AnalyticOn.div
 
 中文:
 定理 AnalyticOn.div
-  结论: {f g : E -> 𝕝} {s : Set E}
+  结论: {f g : E -> 𝕝} {s : 集合 E}
   证明: fun x m =>
   (fa x m).div (ga x m) (g0 x m)
 -/
@@ -3873,7 +3873,7 @@ theorem AnalyticOnNhd.div
 
 中文:
 定理 AnalyticOnNhd.div
-  结论: {f g : E -> 𝕝} {s : Set E}
+  结论: {f g : E -> 𝕝} {s : 集合 E}
   证明: fun x m =>
   (fa x m).div (ga x m) (g0 x m)
 -/
@@ -3906,8 +3906,8 @@ theorem Finset.analyticWithinAt_sum
     exact (h a (Or.inl rfl)).add (hB fun b m => h b (Or.inr m))
 
 中文:
-定理 Finset.analyticWithinAt_sum
-  结论: {f : α -> E -> F} {c : E} {s : Set E}
+定理 有限集.analyticWithinAt_sum
+  结论: {f : α -> E -> F} {c : E} {s : 集合 E}
   证明: by
   classical
   induction N using Finset.induction with
@@ -3947,7 +3947,7 @@ theorem Finset.analyticAt_sum
   exact N.analyticWithinAt_sum h
 
 中文:
-定理 Finset.analyticAt_sum
+定理 有限集.analyticAt_sum
   结论: {f : α -> E -> F} {c : E}
   证明: by
   simp_rw [← analyticWithinAt_univ] at h ⊢
@@ -3972,8 +3972,8 @@ theorem Finset.analyticOn_sum
   proof: fun z zs => N.analyticWithinAt_sum (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOn_sum
-  结论: {f : α -> E -> F} {s : Set E}
+定理 有限集.analyticOn_sum
+  结论: {f : α -> E -> F} {s : 集合 E}
   证明: fun z zs => N.analyticWithinAt_sum (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticWithinAt_sum, analyticWithinAt_sum
@@ -3994,8 +3994,8 @@ theorem Finset.analyticOnNhd_sum
   proof: fun z zs => N.analyticAt_sum (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOnNhd_sum
-  结论: {f : α -> E -> F} {s : Set E}
+定理 有限集.analyticOnNhd_sum
+  结论: {f : α -> E -> F} {s : 集合 E}
   证明: fun z zs => N.analyticAt_sum (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticAt_sum, analyticAt_sum
@@ -4023,8 +4023,8 @@ theorem Finset.analyticWithinAt_fun_prod
     exact (h a (Or.inl rfl)).mul (hB fun b m => h b (Or.inr m))
 
 中文:
-定理 Finset.analyticWithinAt_fun_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticWithinAt_fun_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: by
   classical
   induction N using Finset.induction with
@@ -4062,8 +4062,8 @@ theorem Finset.analyticWithinAt_prod
   simp
 
 中文:
-定理 Finset.analyticWithinAt_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticWithinAt_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: by
   convert! N.analyticWithinAt_fun_prod h
   simp
@@ -4089,8 +4089,8 @@ theorem Finset.analyticAt_fun_prod
   exact N.analyticWithinAt_fun_prod h
 
 中文:
-定理 Finset.analyticAt_fun_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticAt_fun_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: by
   simp_rw [← analyticWithinAt_univ] at h ⊢
   exact N.analyticWithinAt_fun_prod h
@@ -4116,8 +4116,8 @@ theorem Finset.analyticAt_prod
   simp
 
 中文:
-定理 Finset.analyticAt_prod
-  结论: {α : 类型} {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticAt_prod
+  结论: {α : 类型} {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: by
   convert! N.analyticAt_fun_prod h
   simp
@@ -4139,8 +4139,8 @@ theorem Finset.analyticOn_fun_prod
   proof: fun z zs => N.analyticWithinAt_fun_prod (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOn_fun_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticOn_fun_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: fun z zs => N.analyticWithinAt_fun_prod (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticWithinAt_fun_prod, analyticWithinAt_fun_prod
@@ -4159,8 +4159,8 @@ theorem Finset.analyticOn_prod
   proof: fun z zs => N.analyticWithinAt_prod (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOn_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticOn_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: fun z zs => N.analyticWithinAt_prod (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticWithinAt_prod, analyticWithinAt_prod
@@ -4179,8 +4179,8 @@ theorem Finset.analyticOnNhd_fun_prod
   proof: fun z zs => N.analyticAt_fun_prod (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOnNhd_fun_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticOnNhd_fun_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: fun z zs => N.analyticAt_fun_prod (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticAt_fun_prod, analyticAt_fun_prod
@@ -4199,8 +4199,8 @@ theorem Finset.analyticOnNhd_prod
   proof: fun z zs => N.analyticAt_prod (fun n m => h n m z zs)
 
 中文:
-定理 Finset.analyticOnNhd_prod
-  结论: {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+定理 有限集.analyticOnNhd_prod
+  结论: {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: fun z zs => N.analyticAt_prod (fun n m => h n m z zs)
 
 Depends on / 依赖: N.analyticAt_prod, analyticAt_prod
@@ -4226,7 +4226,7 @@ theorem analyticAt_finprod
 
 中文:
 定理 analyticAt_finprod
-  结论: {α : 类型} {A : 类型} [NormedCommRing A] [NormedAlgebra 𝕜 A]
+  结论: {α : 类型} {A : 类型} [NormedComm环 A] [赋范代数 𝕜 A]
   证明: by
   by_cases hf : (Function.mulSupport f).Finite
   · simp_all [finprod_eq_prod _ hf, Finset.analyticAt_prod]
@@ -4270,8 +4270,8 @@ theorem HasFPowerSeriesWithinOnBall.unshift
     e
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.unshift
-  条件: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.unshift
+  条件: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: by
     rw [FormalMultilinearSeries.radius_unshift]
     exact hf.r_le
@@ -4316,8 +4316,8 @@ theorem HasFPowerSeriesOnBall.unshift
     exact
 
 中文:
-定理 HasFPowerSeriesOnBall.unshift
-  条件: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.unshift
+  条件: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: by
     rw [FormalMultilinearSeries.radius_unshift]
     exact hf.r_le

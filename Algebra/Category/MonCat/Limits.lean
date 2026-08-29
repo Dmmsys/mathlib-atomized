@@ -70,7 +70,7 @@ definition sectionsSubmonoid
 
 中文:
 定义 sectionsSubmonoid
-  签名: : Submonoid (对任意 j, F.obj j) where
+  签名: : 子幺半群 (对任意 j, F.obj j) where
   定义体: (F ⋙ forget MonCat).sections
   one_mem' {j} {j'} f := by simp
   mul_mem' {a} {b} ah bh {j} {j'} f := by simp [← ah f, ← bh f]
@@ -95,7 +95,7 @@ instance sectionsMonoid
 
 中文:
 实例 sectionsMonoid
-  签名: : Monoid (F ⋙ forget MonCat.{u}).sections
+  签名: : 幺半群 (F ⋙ forget 幺半群范畴.{u}).sections
   定义体: (sectionsSubmonoid F).toMonoid
 
 Depends on / 依赖: sectionsSubmonoid, toMonoid
@@ -179,7 +179,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: { pt := MonCat.of (Types.Small.limitCone (F ⋙ forget _)).pt
     π :=
     { app j := ofHom (limitπMonoidHom F j)
@@ -218,7 +218,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: by
   refine IsLimit.ofFaithful (forget MonCat) (Types.Small.limitConeIsLimit.{v, u} _)
     (fun s => ofHom { toFun := _, map_one' := ?_, map_mul' := ?_ }) (fun s => rfl)
@@ -254,7 +254,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: HasLimit.mk {
     cone := limitCone F
     isLimit := limitConeIsLimit F
@@ -323,7 +323,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits MonCat.{u}
+  签名: : 有极限 幺半群范畴.{u}
   定义体: MonCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: MonCat, MonCat.hasLimitsOfSize, hasLimitsOfSize
@@ -395,7 +395,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget MonCat.{u})
+  签名: : PreservesLimits (forget 幺半群范畴.{u})
   定义体: MonCat.forget_preservesLimitsOfSize.{u, u}
 
 Depends on / 依赖: MonCat, MonCat.forget_preservesLimitsOfSize, forget_preservesLimitsOfSize
@@ -516,7 +516,7 @@ instance forget_createsLimits
 
 中文:
 实例 forget_createsLimits
-  签名: : CreatesLimits (forget MonCat.{u})
+  签名: : CreatesLimits (forget 幺半群范畴.{u})
   定义体: MonCat.forget_createsLimitsOfSize.{u, u}
 
 Depends on / 依赖: MonCat, MonCat.forget_createsLimitsOfSize, forget_createsLimitsOfSize
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: Small.{u} (Functor.sections ((F ⋙ forget₂ CommMonCat MonCat) ⋙ forget MonCat))
+  签名: Small.{u} (函子.sections ((F ⋙ forget₂ 交换幺半群范畴 幺半群范畴) ⋙ forget 幺半群范畴))
   定义体: inferInstanceAs Small.{u} (Functor.sections (F ⋙ forget CommMonCat))
 
 Depends on / 依赖: CommMonCat, Functor, Functor.sections, forget, sections
@@ -628,7 +628,7 @@ naturality _ _ j := ext fun x => ConcreteCategory.
 
 中文:
 实例 forget₂CreatesLimit
-  签名: : CreatesLimit F (forget₂ CommMonCat MonCat.{u})
+  签名: : 创造极限 F (forget₂ 交换幺半群范畴 幺半群范畴.{u})
   定义体: createsLimitOfReflectsIso fun c' t =>
     { liftedCone :=
         { pt := CommMonCat.of (Types.Small.limitCone (F ⋙ forget CommMonCat)).pt
@@ -667,7 +667,7 @@ definition limitCone
 
 中文:
 定义 limitCone
-  签名: : Cone F
+  签名: : 锥 F
   定义体: liftLimit (limit.isLimit (F ⋙ forget₂ CommMonCat.{u} MonCat.{u}))
 
 Depends on / 依赖: CommMonCat, MonCat, isLimit, liftLimit, limit.isLimit
@@ -691,7 +691,7 @@ definition limitConeIsLimit
 
 中文:
 定义 limitConeIsLimit
-  签名: : IsLimit (limitCone F)
+  签名: : 是极限 (limitCone F)
   定义体: liftedLimitIsLimit _
 
 Depends on / 依赖: liftedLimitIsLimit
@@ -714,7 +714,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: HasLimit.mk {
     cone := limitCone F
     isLimit := limitConeIsLimit F
@@ -779,7 +779,7 @@ instance hasLimits
 
 中文:
 实例 hasLimits
-  签名: : HasLimits CommMonCat.{u}
+  签名: : 有极限 交换幺半群范畴.{u}
   定义体: CommMonCat.hasLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommMonCat, CommMonCat.hasLimitsOfSize, evaluationJointlyReflectsColimits, hasLimitsOfSize
@@ -900,7 +900,7 @@ instance _root_.AddCommMonCat.forget_preservesLimits
 @[to_additive existing]
 
 中文:
-实例 _root_.AddCommMonCat.forget_preservesLimits
+实例 _root_.加法交换幺半群范畴.forget_preservesLimits
   签名: :
   定义体: AddCommMonCat.forget_preservesLimitsOfSize.{u, u}
 
@@ -925,7 +925,7 @@ instance forget_preservesLimits
 
 中文:
 实例 forget_preservesLimits
-  签名: : PreservesLimits (forget CommMonCat.{u})
+  签名: : PreservesLimits (forget 交换幺半群范畴.{u})
   定义体: CommMonCat.forget_preservesLimitsOfSize.{u, u}
 
 @[to_additive]
@@ -1020,7 +1020,7 @@ instance forget_createsLimits
 
 中文:
 实例 forget_createsLimits
-  签名: : CreatesLimits (forget MonCat.{u})
+  签名: : CreatesLimits (forget 幺半群范畴.{u})
   定义体: CommMonCat.forget_createsLimitsOfSize.{u, u}
 
 Depends on / 依赖: CommMonCat, CommMonCat.forget_createsLimitsOfSize, forget_createsLimitsOfSize

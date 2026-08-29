@@ -303,7 +303,7 @@ theorem ack_strictMono_right
 
 中文:
 定理 ack_strictMono_right
-  结论: 对任意 m, StrictMono (ack m)
+  结论: 对任意 m, 严格递增 (ack m)
 -/
 theorem ack_strictMono_right : forall m, StrictMono (ack m)
   | 0, n₁, n₂, h => by simpa using h
@@ -327,7 +327,7 @@ theorem ack_mono_right
 中文:
 定理 ack_mono_right
   条件: (m : 自然数)
-  结论: Monotone (ack m)
+  结论: 递增 (ack m)
   证明: (ack_strictMono_right m).monotone
 
 Depends on / 依赖: ack_strictMono_right, monotone
@@ -349,7 +349,7 @@ theorem ack_injective_right
 中文:
 定理 ack_injective_right
   条件: (m : 自然数)
-  结论: Function.Injective (ack m)
+  结论: 函数.单射 (ack m)
   证明: (ack_strictMono_right m).injective
 
 @[simp]
@@ -442,7 +442,7 @@ theorem max_ack_right
 中文:
 定理 max_ack_right
   条件: (m n₁ n₂ : 自然数)
-  结论: ack m (max n₁ n₂) = max (ack m n₁) (ack m n₂)
+  结论: ack m (最大值 n₁ n₂) = 最大值 (ack m n₁) (ack m n₂)
   证明: (ack_mono_right m).map_max
 
 Depends on / 依赖: ack_mono_right, map_max
@@ -603,7 +603,7 @@ theorem ack_strictMono_left
 中文:
 定理 ack_strictMono_left
   条件: (n : 自然数)
-  结论: StrictMono fun m => ack m n
+  结论: 严格递增 fun m => ack m n
   证明: fun _m₁ _m₂ =>
   ack_strict_mono_left' n
 -/
@@ -622,7 +622,7 @@ theorem ack_mono_left
 中文:
 定理 ack_mono_left
   条件: (n : 自然数)
-  结论: Monotone fun m => ack m n
+  结论: 递增 fun m => ack m n
   证明: (ack_strictMono_left n).monotone
 
 Depends on / 依赖: ack_strictMono_left, monotone
@@ -644,7 +644,7 @@ theorem ack_injective_left
 中文:
 定理 ack_injective_left
   条件: (n : 自然数)
-  结论: Function.Injective fun m => ack m n
+  结论: 函数.单射 fun m => ack m n
   证明: (ack_strictMono_left n).injective
 
 @[simp]
@@ -739,7 +739,7 @@ theorem max_ack_left
 中文:
 定理 max_ack_left
   条件: (m₁ m₂ n : 自然数)
-  结论: ack (max m₁ m₂) n = max (ack m₁ n) (ack m₂ n)
+  结论: ack (最大值 m₁ m₂) n = 最大值 (ack m₁ n) (ack m₂ n)
   证明: (ack_mono_left n).map_max
 
 @[gcongr]
@@ -869,7 +869,7 @@ ack_strictMono_right _ ack_strictMono_left k lt_succ_of_le le_max_right m n
 中文:
 定理 ack_ack_lt_ack_max_add_two
   条件: (m n k : 自然数)
-  结论: ack m (ack n k) < ack (max m n + 2) k
+  结论: ack m (ack n k) < ack (最大值 m n + 2) k
   证明: calc
     ack m (ack n k) <= ack (max m n) (ack n k) := ack_mono_left _ (le_max_left _ _)
     _ < ack (max m n) (ack (max m n + 1) k) :=
@@ -936,7 +936,7 @@ theorem ack_pair_lt
 中文:
 定理 ack_pair_lt
   条件: (m n k : 自然数)
-  结论: ack m (pair n k) < ack (m + 4) (max n k)
+  结论: ack m (pair n k) < ack (m + 4) (最大值 n k)
   证明: (ack_strictMono_right m <| pair_lt_max_add_one_sq n k).trans
     ack_add_one_sq_lt_ack_add_four _ _
 
@@ -968,7 +968,7 @@ theorem exists_lt_ack_of_nat_primrec
     rw [ac
 
 中文:
-定理 exists_lt_ack_of_nat_primrec
+定理 存在_lt_ack_of_nat_primrec
   条件: {f : 自然数 -> 自然数} (hf : 自然数.Primrec f)
   证明: by
   induction hf with
@@ -1126,7 +1126,7 @@ definition pappAck
 
 中文:
 定义 pappAck
-  签名: : 自然数 -> Code
+  签名: : 自然数 -> 余de
 -/
 def pappAck : Nat -> Code
   | 0 => .succ
@@ -1176,7 +1176,7 @@ lemma eval_pappAck_step_zero
 
 中文:
 引理 eval_pappAck_step_zero
-  条件: (c : Code)
+  条件: (c : 余de)
   结论: (pappAck.step c).eval 0 = c.eval 1
   证明: by
   simp [pappAck.step, Code.eval]
@@ -1199,7 +1199,7 @@ lemma eval_pappAck_step_succ
 
 中文:
 引理 eval_pappAck_step_succ
-  条件: (c : Code) (n)
+  条件: (c : 余de) (n)
   证明: by
   simp [pappAck.step, Code.eval]
 

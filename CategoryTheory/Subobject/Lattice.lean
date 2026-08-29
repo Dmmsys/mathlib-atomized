@@ -114,7 +114,7 @@ definition mapTop
 
 中文:
 定义 mapTop
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: iso_of_both_ways (homMk (𝟙 _) rfl) (homMk (𝟙 _) (by simp [id_comp f]))
 
 Depends on / 依赖: id_comp, iso_of_both_ways
@@ -157,7 +157,7 @@ definition topLEPullbackSelf
 
 中文:
 定义 topLEPullbackSelf
-  签名: {A B : C} (f : A ⟶ B) [Mono f]
+  签名: {A B : C} (f : A ⟶ B) [单态射 f]
   定义体: homMk _ (pullback.lift_snd _ _ rfl)
 
 Depends on / 依赖: lift_snd, pullback, pullback.lift_snd
@@ -176,7 +176,7 @@ definition pullbackSelf
 
 中文:
 定义 pullbackSelf
-  签名: {A B : C} (f : A ⟶ B) [Mono f]
+  签名: {A B : C} (f : A ⟶ B) [单态射 f]
   定义体: iso_of_both_ways (leTop _) (topLEPullbackSelf _)
 
 Depends on / 依赖: iso_of_both_ways, topLEPullbackSelf
@@ -264,7 +264,7 @@ definition mapBot
 
 中文:
 定义 mapBot
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: iso_of_both_ways (homMk (initial.to _)) (homMk (𝟙 _))
 
 Depends on / 依赖: initial, initial.to, iso_of_both_ways
@@ -309,7 +309,7 @@ theorem bot_arrow_eq_zero
 
 中文:
 定理 bot_arrow_eq_zero
-  条件: [HasZeroMorphisms C] {B : C}
+  条件: [有ZeroMorphisms C] {B : C}
   结论: (⊥ : MonoOver B).arrow = 0
   证明: zero_of_source_iso_zero _ botCoeIsoZero
 
@@ -333,7 +333,7 @@ theorem initialTo_b_eq_zero
 
 中文:
 定理 initialTo_b_eq_zero
-  条件: [HasZeroMorphisms C] {B : C}
+  条件: [有ZeroMorphisms C] {B : C}
   结论: initial.to B = 0
   证明: by
   rw [← bot_arrow]; rw [bot_arrow_eq_zero]
@@ -373,7 +373,7 @@ definition inf
         rw [pullback.lift_snd_assoc]; rw [assoc]; rw [w 
 
 中文:
-定义 inf
+定义 下确界
   签名: {A : C}
   定义体: pullback f.arrow ⋙ map f.arrow
   map k :=
@@ -465,7 +465,7 @@ definition sup
   body: Functor.curryObj ((forget A).prod (forget A) ⋙ Functor.uncurry.obj Over.coprod ⋙ image)
 
 中文:
-定义 sup
+定义 上确界
   签名: {A : C}
   定义体: Functor.curryObj ((forget A).prod (forget A) ⋙ Functor.uncurry.obj Over.coprod ⋙ image)
 
@@ -714,7 +714,7 @@ theorem map_top
 
 中文:
 定理 map_top
-  条件: (f : X ⟶ Y) [Mono f]
+  条件: (f : X ⟶ Y) [单态射 f]
   结论: (map f).obj ⊤ = Subobject.mk f
   证明: Quotient.sound' ⟨MonoOver.mapTop f⟩
 
@@ -756,8 +756,8 @@ theorem isIso_iff_mk_eq_top
 
 中文:
 定理 isIso_iff_mk_eq_top
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
-  结论: IsIso f ↔ mk f = ⊤
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
+  结论: 是同构 f ↔ mk f = ⊤
   证明: ⟨fun _ => mk_eq_mk_of_comm _ _ (asIso f) (Category.comp_id _), fun h => by
     rw [← ofMkLEMk_comp h.le]; rw [Category.comp_id]
     exact (isoOfMkEqMk _ _ h).isIso_hom⟩
@@ -782,7 +782,7 @@ theorem isIso_arrow_iff_eq_top
 中文:
 定理 isIso_arrow_iff_eq_top
   条件: {Y : C} (P : Subobject Y)
-  结论: IsIso P.arrow ↔ P = ⊤
+  结论: 是同构 P.arrow ↔ P = ⊤
   证明: by
   rw [isIso_iff_mk_eq_top]; rw [mk_arrow]
 
@@ -819,7 +819,7 @@ theorem mk_eq_top_of_isIso
 
 中文:
 定理 mk_eq_top_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: mk f = ⊤
   证明: (isIso_iff_mk_eq_top f).mp inferInstance
 
@@ -839,7 +839,7 @@ theorem eq_top_of_isIso_arrow
 
 中文:
 定理 eq_top_of_isIso_arrow
-  条件: {Y : C} (P : Subobject Y) [IsIso P.arrow]
+  条件: {Y : C} (P : Subobject Y) [是同构 P.arrow]
   结论: P = ⊤
   证明: (isIso_arrow_iff_eq_top P).mp inferInstance
 
@@ -860,7 +860,7 @@ lemma epi_iff_mk_eq_top
 
 中文:
 引理 epi_iff_mk_eq_top
-  条件: [Balanced C] (f : X ⟶ Y) [Mono f]
+  条件: [Balanced C] (f : X ⟶ Y) [单态射 f]
   证明: by
   rw [← isIso_iff_mk_eq_top]
   exact ⟨fun _ => isIso_of_mono_of_epi f, fun _ => inferInstance⟩
@@ -907,7 +907,7 @@ theorem pullback_self
 
 中文:
 定理 pullback_self
-  条件: {A B : C} (f : A ⟶ B) [Mono f]
+  条件: {A B : C} (f : A ⟶ B) [单态射 f]
   结论: (pullback f).obj (mk f) = ⊤
   证明: Quotient.sound' ⟨MonoOver.pullbackSelf f⟩
 
@@ -998,7 +998,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  条件: (f : X ⟶ Y) [Mono f]
+  条件: (f : X ⟶ Y) [单态射 f]
   结论: (map f).obj ⊥ = ⊥
   证明: Quotient.sound' ⟨MonoOver.mapBot f⟩
 
@@ -1131,7 +1131,7 @@ theorem mk_eq_bot_iff_zero
 
 中文:
 定理 mk_eq_bot_iff_zero
-  条件: {f : X ⟶ Y} [Mono f]
+  条件: {f : X ⟶ Y} [单态射 f]
   结论: Subobject.mk f = ⊥ ↔ f = 0
   证明: ⟨fun h => by simpa [h, bot_factors_iff_zero] using mk_factors_self f, fun h =>
     mk_eq_mk_of_comm _ _ ((isoZeroOfMonoEqZero h).trans HasZeroObject.zeroIsoInitial) (by simp [h])⟩
@@ -1163,7 +1163,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: [HasPullbacks C]
+  签名: [有Pullbacks C]
   定义体: Subobject X.unop
   map f := ↾(pullback f.unop).obj
   map_id _ := by ext : 3; simp [pullback_id]
@@ -1192,7 +1192,7 @@ definition inf
   body: ThinSkeleton.map₂ MonoOver.inf
 
 中文:
-定义 inf
+定义 下确界
   签名: {A : C}
   定义体: ThinSkeleton.map₂ MonoOver.inf
 
@@ -1213,7 +1213,7 @@ theorem inf_le_left
 中文:
 定理 inf_le_left
   条件: {A : C} (f g : Subobject A)
-  结论: (inf.obj f).obj g <= f
+  结论: (下确界.obj f).obj g <= f
   证明: Quotient.inductionOn₂' f g fun _ _ => ⟨MonoOver.infLELeft _ _⟩
 
 Depends on / 依赖: MonoOver, MonoOver.infLELeft, Quotient, Quotient.inductionOn, exists_adj_of_nontrivial, h.coe.exists_adj_of_nontrivial, infLELeft
@@ -1233,7 +1233,7 @@ theorem inf_le_right
 中文:
 定理 inf_le_right
   条件: {A : C} (f g : Subobject A)
-  结论: (inf.obj f).obj g <= g
+  结论: (下确界.obj f).obj g <= g
   证明: Quotient.inductionOn₂' f g fun _ _ => ⟨MonoOver.infLERight _ _⟩
 
 Depends on / 依赖: MonoOver, MonoOver.infLERight, Quotient, Quotient.inductionOn, infLERight
@@ -1256,7 +1256,7 @@ theorem le_inf
 中文:
 定理 le_inf
   条件: {A : C} (h f g : Subobject A)
-  结论: h <= f -> h <= g -> h <= (inf.obj f).obj g
+  结论: h <= f -> h <= g -> h <= (下确界.obj f).obj g
   证明: Quotient.inductionOn₃' h f g
     (by
       rintro f g h ⟨k⟩ ⟨l⟩
@@ -1520,7 +1520,7 @@ theorem finset_inf_factors
 
 中文:
 定理 finset_inf_factors
-  条件: {I : 类型} {A B : C} {s : Finset I} {P : I -> Subobject B} (f : A ⟶ B)
+  条件: {I : 类型} {A B : C} {s : 有限集 I} {P : I -> Subobject B} (f : A ⟶ B)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1558,7 +1558,7 @@ theorem finset_inf_arrow_factors
 
 中文:
 定理 finset_inf_arrow_factors
-  结论: {I : 类型} {B : C} (s : Finset I) (P : I -> Subobject B) (i : I)
+  结论: {I : 类型} {B : C} (s : 有限集 I) (P : I -> Subobject B) (i : I)
   证明: by
   classical
   revert i m
@@ -1688,7 +1688,7 @@ theorem inf_def
 中文:
 定理 inf_def
   条件: {B : C} (m m' : Subobject B)
-  结论: m ⊓ m' = (inf.obj m).obj m'
+  结论: m ⊓ m' = (下确界.obj m).obj m'
   证明: rfl
 -/
 theorem inf_def {B : C} (m m' : Subobject B) : m ⊓ m' = (inf.obj m).obj m' :=
@@ -1749,7 +1749,7 @@ theorem inf_map
 
 中文:
 定理 inf_map
-  条件: {X Y : C} (g : Y ⟶ X) [Mono g] (f₁ f₂)
+  条件: {X Y : C} (g : Y ⟶ X) [单态射 g] (f₁ f₂)
   证明: by
   revert f₁
   apply Quotient.ind'
@@ -1784,7 +1784,7 @@ definition sup
   body: ThinSkeleton.map₂ MonoOver.sup
 
 中文:
-定义 sup
+定义 上确界
   签名: {A : C}
   定义体: ThinSkeleton.map₂ MonoOver.sup
 
@@ -1884,7 +1884,7 @@ theorem finset_sup_factors
 
 中文:
 定理 finset_sup_factors
-  结论: {I : 类型} {A B : C} {s : Finset I} {P : I -> Subobject B} {f : A ⟶ B}
+  结论: {I : 类型} {A B : C} {s : 有限集 I} {P : I -> Subobject B} {f : A ⟶ B}
   证明: by
   classical
   revert h
@@ -1928,7 +1928,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [HasInitial C] [InitialMonoClass C] {B : C}
+  签名: [HasInitial C] [InitialMono类 C] {B : C}
   定义体: { Subobject.orderTop, Subobject.orderBot with }
 
 Depends on / 依赖: Subobject, Subobject.orderBot, Subobject.orderTop, orderBot, orderTop
@@ -1961,7 +1961,7 @@ definition wideCospan
 
 中文:
 定义 wideCospan
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: WidePullbackShape.wideCospan A
     (fun j : equivShrink _ '' s => ((equivShrink (Subobject A)).symm j : C)) fun j =>
     ((equivShrink (Subobject A)).symm j).arrow
@@ -1986,7 +1986,7 @@ theorem wideCospan_map_term
 
 中文:
 定理 wideCospan_map_term
-  条件: {A : C} (s : Set (Subobject A)) (j)
+  条件: {A : C} (s : 集合 (Subobject A)) (j)
   证明: rfl
 -/
 theorem wideCospan_map_term {A : C} (s : Set (Subobject A)) (j) :
@@ -2015,7 +2015,7 @@ definition leInfCone
 
 中文:
 定义 leInfCone
-  签名: {A : C} (s : Set (Subobject A)) (f : Subobject A) (k : 对任意 g in s, f <= g)
+  签名: {A : C} (s : 集合 (Subobject A)) (f : Subobject A) (k : 对任意 g in s, f <= g)
   定义体: WidePullbackShape.mkCone f.arrow
     (fun j =>
       underlying.map
@@ -2053,7 +2053,7 @@ theorem leInfCone_π_app_none
 
 中文:
 定理 leInfCone_π_app_none
-  结论: {A : C} (s : Set (Subobject A)) (f : Subobject A)
+  结论: {A : C} (s : 集合 (Subobject A)) (f : Subobject A)
   证明: rfl
 -/
 theorem leInfCone_π_app_none {A : C} (s : Set (Subobject A)) (f : Subobject A)
@@ -2072,7 +2072,7 @@ definition widePullback
 
 中文:
 定义 widePullback
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: Limits.limit (wideCospan s)
 
 Depends on / 依赖: Limits, Limits.limit, wideCospan
@@ -2090,7 +2090,7 @@ definition widePullbackι
 
 中文:
 定义 widePullbackι
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: Limits.limit.π (wideCospan s) none
 
 Depends on / 依赖: Limits, Limits.limit, wideCospan
@@ -2116,7 +2116,7 @@ instance widePullbackι_mono
 
 中文:
 实例 widePullbackι_mono
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: ⟨fun u v h =>
     limit.hom_ext fun j => by
       cases j
@@ -2148,7 +2148,7 @@ definition sInf
 
 中文:
 定义 sInf
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: Subobject.mk (widePullbackι s)
 
 Depends on / 依赖: Subobject, Subobject.mk
@@ -2175,7 +2175,7 @@ theorem sInf_le
 
 中文:
 定理 sInf_le
-  条件: {A : C} (s : Set (Subobject A)) (f) (hf : f in s)
+  条件: {A : C} (s : 集合 (Subobject A)) (f) (hf : f in s)
   结论: sInf s <= f
   证明: by
   fapply le_of_comm
@@ -2216,7 +2216,7 @@ theorem le_sInf
 
 中文:
 定理 le_sInf
-  条件: {A : C} (s : Set (Subobject A)) (f : Subobject A) (k : 对任意 g in s, f <= g)
+  条件: {A : C} (s : 集合 (Subobject A)) (f : Subobject A) (k : 对任意 g in s, f <= g)
   证明: by
   fapply le_of_comm
   · exact Limits.limit.lift _ (leInfCone s f k) ≫ (underlyingIso _).inv
@@ -2267,7 +2267,7 @@ definition smallCoproductDesc
 
 中文:
 定义 smallCoproductDesc
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: Limits.Sigma.desc fun j : equivShrink _ '' s => ((equivShrink (Subobject A)).symm j).arrow
 
 Depends on / 依赖: Limits, Limits.Sigma.desc, Subobject, equivShrink
@@ -2287,7 +2287,7 @@ definition sSup
 
 中文:
 定义 sSup
-  签名: {A : C} (s : Set (Subobject A))
+  签名: {A : C} (s : 集合 (Subobject A))
   定义体: Subobject.mk (image.ι (smallCoproductDesc s))
 
 Depends on / 依赖: Subobject, Subobject.mk, smallCoproductDesc
@@ -2312,7 +2312,7 @@ theorem le_sSup
 
 中文:
 定理 le_sSup
-  条件: {A : C} (s : Set (Subobject A)) (f) (hf : f in s)
+  条件: {A : C} (s : 集合 (Subobject A)) (f) (hf : f in s)
   结论: f <= sSup s
   证明: by
   fapply le_of_comm
@@ -2342,7 +2342,7 @@ theorem symm_apply_mem_iff_mem_image
 
 中文:
 定理 symm_apply_mem_iff_mem_image
-  条件: {α β : 类型} (e : α ≃ β) (s : Set α) (x : β)
+  条件: {α β : 类型} (e : α ≃ β) (s : 集合 α) (x : β)
   证明: ⟨fun h => ⟨e.symm x, h, by simp⟩, by
     rintro ⟨a, m, rfl⟩
     simpa using m⟩
@@ -2377,7 +2377,7 @@ theorem sSup_le
 
 中文:
 定理 sSup_le
-  条件: {A : C} (s : Set (Subobject A)) (f : Subobject A) (k : 对任意 g in s, g <= f)
+  条件: {A : C} (s : 集合 (Subobject A)) (f : Subobject A) (k : 对任意 g in s, g <= f)
   证明: by
   fapply le_of_comm
   · refine (underlyingIso _).hom ≫ image.lift ⟨_, f.arrow, ?_, ?_⟩
@@ -2461,7 +2461,7 @@ lemma subsingleton_of_isInitial
 中文:
 引理 subsingleton_of_isInitial
   条件: {X : C} (hX : IsInitial X)
-  结论: Subsingleton (Subobject X)
+  结论: 子单例 (Subobject X)
   证明: by
   suffices forall (S : Subobject X), S = .mk (𝟙 _) from ⟨by simp [this]⟩
   intro S
@@ -2497,8 +2497,8 @@ lemma subsingleton_of_isZero
 
 中文:
 引理 subsingleton_of_isZero
-  条件: {X : C} (hX : IsZero X)
-  结论: Subsingleton (Subobject X)
+  条件: {X : C} (hX : 是零 X)
+  结论: 子单例 (Subobject X)
   证明: subsingleton_of_isInitial hX.isInitial
 
 Depends on / 依赖: hX.isInitial, isInitial, subsingleton_of_isInitial
@@ -2523,8 +2523,8 @@ theorem nontrivial_of_not_isZero
 
 中文:
 定理 nontrivial_of_not_isZero
-  条件: {X : C} (h : ¬IsZero X)
-  结论: Nontrivial (Subobject X)
+  条件: {X : C} (h : ¬是零 X)
+  结论: 非平凡 (Subobject X)
   证明: ⟨⟨mk (0 : 0 ⟶ X), mk (𝟙 X), fun w => h (IsZero.of_iso (isZero_zero C) (isoOfMkEqMk _ _ w).symm)⟩⟩
 
 Depends on / 依赖: IsZero, IsZero.of_iso, isZero_zero, isoOfMkEqMk, of_iso

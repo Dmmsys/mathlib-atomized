@@ -51,7 +51,7 @@ abbreviation ValuedCSP
 
 中文:
 缩写 ValuedCSP
-  签名: (D C : 类型) [AddCommMonoid C] [PartialOrder C] [IsOrderedAddMonoid C]
+  签名: (D C : 类型) [加法交换幺半群 C] [偏序 C] [是OrderedAdd幺半群 C]
   定义体: Set (Σ (n : Nat), (Fin n -> D) -> C) -- Cost functions `D^n → C` for any `n`
 
 Depends on / 依赖: functions
@@ -74,13 +74,13 @@ structure ValuedCSP.Term
     - app : Fin n -> ι
 
 中文:
-结构 ValuedCSP.Term
+结构 ValuedCSP.项
   参数: (Γ : ValuedCSP D C) (ι : 类型)
   公理与运算 (4 个):
     - n : 自然数
-    - f : (Fin n -> D) -> C
+    - f : (有限集 n -> D) -> C
     - inΓ : ⟨n, f⟩ in Γ
-    - app : Fin n -> ι
+    - app : 有限集 n -> ι
 -/
 structure ValuedCSP.Term (Γ : ValuedCSP D C) (ι : Type*) where
   /-- Arity of the function -/
@@ -101,7 +101,7 @@ definition ValuedCSP.Term.evalSolution
   body: t.f (x ∘ t.app)
 
 中文:
-定义 ValuedCSP.Term.evalSolution
+定义 ValuedCSP.项.evalSolution
   签名: {Γ : ValuedCSP D C} {ι : 类型}
   定义体: t.f (x ∘ t.app)
 
@@ -177,8 +177,8 @@ definition Function.HasMaxCutPropertyAt
     forall x y : D, f ![a, b] <= f ![x, y] ∧ (f ![a, b] = f ![x, y] -> a = x ∧ b = y ∨ a = y ∧ b = x)
 
 中文:
-定义 Function.HasMaxCutPropertyAt
-  签名: (f : (Fin 2 -> D) -> C) (a b : D)
+定义 函数.HasMaxCutPropertyAt
+  签名: (f : (有限集 2 -> D) -> C) (a b : D)
   定义体: f ![a, b] = f ![b, a] ∧
     forall x y : D, f ![a, b] <= f ![x, y] ∧ (f ![a, b] = f ![x, y] -> a = x ∧ b = y ∨ a = y ∧ b = x)
 
@@ -197,8 +197,8 @@ definition Function.HasMaxCutProperty
   body: exists a b : D, a != b ∧ f.HasMaxCutPropertyAt a b
 
 中文:
-定义 Function.HasMaxCutProperty
-  签名: (f : (Fin 2 -> D) -> C)
+定义 函数.HasMaxCutProperty
+  签名: (f : (有限集 2 -> D) -> C)
   定义体: exists a b : D, a != b ∧ f.HasMaxCutPropertyAt a b
 
 Depends on / 依赖: Countable, Finite, Finite.to_countable, HasMaxCutPropertyAt, f.HasMaxCutPropertyAt, to_countable
@@ -290,7 +290,7 @@ definition FractionalOperation.tt
 
 中文:
 定义 FractionalOperation.tt
-  签名: {ι : 类型} (ω : FractionalOperation D m) (x : Fin m -> ι -> D)
+  签名: {ι : 类型} (ω : FractionalOperation D m) (x : 有限集 m -> ι -> D)
   定义体: ω.map (fun (g : (Fin m -> D) -> D) (i : ι) => g ((Function.swap x) i))
 
 Depends on / 依赖: Countable, Function, Function.swap, Quotient, Quotient.countable, countable
@@ -309,8 +309,8 @@ definition Function.AdmitsFractional
     m • ((ω.tt x).map f).sum <= ω.size • Finset.univ.sum (fun i => f (x i))
 
 中文:
-定义 Function.AdmitsFractional
-  签名: {n : 自然数} (f : (Fin n -> D) -> C) (ω : FractionalOperation D m)
+定义 函数.AdmitsFractional
+  签名: {n : 自然数} (f : (有限集 n -> D) -> C) (ω : FractionalOperation D m)
   定义体: forall x : (Fin m -> (Fin n -> D)),
     m • ((ω.tt x).map f).sum <= ω.size • Finset.univ.sum (fun i => f (x i))
 
@@ -388,8 +388,8 @@ lemma Function.HasMaxCutPropertyAt.rows_lt_aux
     · rw
 
 中文:
-引理 Function.HasMaxCutPropertyAt.rows_lt_aux
-  结论: {C : 类型} [PartialOrder C]
+引理 函数.HasMaxCutPropertyAt.rows_lt_aux
+  结论: {C : 类型} [偏序 C]
   证明: by
   rw [FractionalOperation.tt]; rw [Multiset.mem_map] at rin
   rw [show r = ![r 0]; rw [r 1] by simp [← List.ofFn_inj]]
@@ -440,7 +440,7 @@ lemma Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
   
 
 中文:
-引理 Function.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
+引理 函数.HasMaxCutProperty.forbids_commutativeFractionalPolymorphism
   证明: by
   intro contr
   obtain ⟨a, b, hab, mcfab⟩ := mcf

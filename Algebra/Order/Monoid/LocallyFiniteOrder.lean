@@ -57,7 +57,7 @@ lemma Finset.card_Ico_mul_right
       exact ⟨a * d, ⟨by simpa using h₁, by simpa [mul_right_comm a c d]
 
 中文:
-引理 Finset.card_Ico_mul_right
+引理 有限集.card_Ico_mul_right
   条件: [ExistsMulOfLE M] (a b c : M)
   证明: by
   have : (Ico (a * c) (b * c)) = (Ico a b).map (mulRightEmbedding c) := by
@@ -137,7 +137,7 @@ definition LocallyFiniteOrder.addMonoidHom
     · have : -b <= a := by trans 0 <;> simp 
 
 中文:
-定义 LocallyFiniteOrder.addMonoidHom
+定义 局部有限序.addMonoidHom
   签名: :
   定义体: #(Ico 0 a) - #(Ico 0 (-a))
   map_zero' := by simp
@@ -189,7 +189,7 @@ definition LocallyFiniteOrder.orderAddMonoidHom
 @[simp]
 
 中文:
-定义 LocallyFiniteOrder.orderAddMonoidHom
+定义 局部有限序.orderAddMonoidHom
   签名: :
   定义体: addMonoidHom G
   monotone' a b hab := by
@@ -222,7 +222,7 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_toAddMonoidHom
 @[simp]
 
 中文:
-引理 LocallyFiniteOrder.orderAddMonoidHom_toAddMonoidHom
+引理 局部有限序.orderAddMonoidHom_toAddMonoidHom
   证明: rfl
 
 @[simp]
@@ -240,7 +240,7 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_apply
   proof: rfl
 
 中文:
-引理 LocallyFiniteOrder.orderAddMonoidHom_apply
+引理 局部有限序.orderAddMonoidHom_apply
   条件: (x : G)
   证明: rfl
 -/
@@ -258,7 +258,7 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_strictMono
   simpa [addMonoidHom, H.le]
 
 中文:
-引理 LocallyFiniteOrder.orderAddMonoidHom_strictMono
+引理 局部有限序.orderAddMonoidHom_strictMono
   证明: by
   rw [strictMono_iff_map_pos]
   intro g H
@@ -287,8 +287,8 @@ lemma LocallyFiniteOrder.orderAddMonoidHom_bijective
   obtain ⟨b, hb⟩ := exists_covBy_of_wellFoundedLT (α := Icc 0 a) (a := ⟨0, by simpa usi
 
 中文:
-引理 LocallyFiniteOrder.orderAddMonoidHom_bijective
-  条件: [Nontrivial G]
+引理 局部有限序.orderAddMonoidHom_bijective
+  条件: [非平凡 G]
   证明: by
   refine ⟨orderAddMonoidHom_strictMono.injective, ?_⟩
   suffices 1 in (orderAddMonoidHom G).range by
@@ -341,8 +341,8 @@ definition LocallyFiniteOrder.orderAddMonoidEquiv
     · simp [orderAddMonoidHom, 
 
 中文:
-定义 LocallyFiniteOrder.orderAddMonoidEquiv
-  签名: [Nontrivial G]
+定义 局部有限序.orderAddMonoidEquiv
+  签名: [非平凡 G]
   定义体: orderAddMonoidHom G
   __ := AddEquiv.ofBijective (orderAddMonoidHom G) orderAddMonoidHom_bijective
   map_le_map_iff' {a b} := by
@@ -373,8 +373,8 @@ lemma LocallyFiniteOrder.orderAddMonoidEquiv_apply
   proof: rfl
 
 中文:
-引理 LocallyFiniteOrder.orderAddMonoidEquiv_apply
-  条件: [Nontrivial G] (x : G)
+引理 局部有限序.orderAddMonoidEquiv_apply
+  条件: [非平凡 G] (x : G)
   证明: rfl
 -/
 lemma LocallyFiniteOrder.orderAddMonoidEquiv_apply [Nontrivial G] (x : G) :
@@ -393,8 +393,8 @@ definition LocallyFiniteOrder.orderMonoidEquiv
   (orderAddMonoidEquiv (Additive G)).toMultiplicative
 
 中文:
-定义 LocallyFiniteOrder.orderMonoidEquiv
-  签名: (G : 类型) [CommGroup G] [LinearOrder G]
+定义 局部有限序.orderMonoidEquiv
+  签名: (G : 类型) [交换群 G] [线性序 G]
   定义体: have : LocallyFiniteOrder (Additive G) := ‹LocallyFiniteOrder G›
   (orderAddMonoidEquiv (Additive G)).toMultiplicative
 
@@ -419,8 +419,8 @@ definition LocallyFiniteOrder.orderMonoidHom
   ⟨(orderAddMonoidHom (Additive G)).toMultiplicative, (orderAddMonoidHom (Additive G)).2⟩
 
 中文:
-定义 LocallyFiniteOrder.orderMonoidHom
-  签名: (G : 类型) [CommGroup G] [LinearOrder G]
+定义 局部有限序.orderMonoidHom
+  签名: (G : 类型) [交换群 G] [线性序 G]
   定义体: have : LocallyFiniteOrder (Additive G) := ‹LocallyFiniteOrder G›
   ⟨(orderAddMonoidHom (Additive G)).toMultiplicative, (orderAddMonoidHom (Additive G)).2⟩
 
@@ -443,8 +443,8 @@ lemma LocallyFiniteOrder.orderMonoidHom_strictMono
   fun a b h => orderAddMonoidHom_strictMono h
 
 中文:
-引理 LocallyFiniteOrder.orderMonoidHom_strictMono
-  结论: {G : 类型} [CommGroup G] [LinearOrder G]
+引理 局部有限序.orderMonoidHom_strictMono
+  结论: {G : 类型} [交换群 G] [线性序 G]
   证明: let : LocallyFiniteOrder (Additive G) := ‹LocallyFiniteOrder G›
   fun a b h => orderAddMonoidHom_strictMono h
 
@@ -469,8 +469,8 @@ definition LocallyFiniteOrder.orderMonoidWithZeroEquiv
   body: OrderMonoidIso.withZeroUnits.symm.trans (LocallyFiniteOrder.orderMonoidEquiv _).withZero
 
 中文:
-定义 LocallyFiniteOrder.orderMonoidWithZeroEquiv
-  签名: (G : 类型) [LinearOrderedCommGroupWithZero G]
+定义 局部有限序.orderMonoidWithZeroEquiv
+  签名: (G : 类型) [带零LinearOrderedComm群 G]
   定义体: OrderMonoidIso.withZeroUnits.symm.trans (LocallyFiniteOrder.orderMonoidEquiv _).withZero
 
 Depends on / 依赖: LocallyFiniteOrder, LocallyFiniteOrder.orderMonoidEquiv, OrderMonoidIso, OrderMonoidIso.withZeroUnits.symm.trans, orderMonoidEquiv, withZero, withZeroUnits
@@ -493,8 +493,8 @@ definition LocallyFiniteOrder.orderMonoidWithZeroHom
   monotone' a b h := by have := (orderMonoidHom Gˣ).monotone'; aesop
 
 中文:
-定义 LocallyFiniteOrder.orderMonoidWithZeroHom
-  签名: (G : 类型) [LinearOrderedCommGroupWithZero G]
+定义 局部有限序.orderMonoidWithZeroHom
+  签名: (G : 类型) [带零LinearOrderedComm群 G]
   定义体: (WithZero.map' (orderMonoidHom Gˣ)).comp
     OrderMonoidIso.withZeroUnits.symm.toMonoidWithZeroHom
   monotone' a b h := by have := (orderMonoidHom Gˣ).monotone'; aesop
@@ -519,7 +519,7 @@ lemma LocallyFiniteOrder.orderMonoidWithZeroHom_strictMono
   aesop (add simp orderMonoidWithZeroHom)
 
 中文:
-引理 LocallyFiniteOrder.orderMonoidWithZeroHom_strictMono
+引理 局部有限序.orderMonoidWithZeroHom_strictMono
   结论: {G : 类型}
   证明: by
   have := orderMonoidHom_strictMono (G := Gˣ)

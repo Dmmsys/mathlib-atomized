@@ -40,7 +40,7 @@ local notation "e'" e => equivalenceTransported e
 
 中文:
 实例 Transported.instBraidedCategory
-  签名: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
+  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
   定义体: .ofFaithful e.inverse (fun _ _ => e.functor.mapIso (β_ _ _)) fun _ _ => by
     simp +instances [fromInducedCoreMonoidal, Functor.CoreMonoidal.toLaxMonoidal]
 
@@ -79,7 +79,7 @@ definition transportedFunctorCompInverseLaxBraided
 
 中文:
 定义 transportedFunctorCompInverseLaxBraided
-  签名: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
+  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
   定义体: Functor.LaxBraided.ofNatIso (e' e).unitIso
 
 Depends on / 依赖: Functor, Functor.LaxBraided.ofNatIso, LaxBraided, ofNatIso, unitIso
@@ -103,7 +103,7 @@ definition transportedFunctorCompInverseBraided
 
 中文:
 定义 transportedFunctorCompInverseBraided
-  签名: (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C]
+  签名: (e : C ≌ D) [幺半群范畴 C] [辫范畴 C]
 -/
 def transportedFunctorCompInverseBraided (e : C ≌ D) [MonoidalCategory C] [BraidedCategory C] :
     ((e' e).functor ⋙ (e' e).inverse).Braided where
@@ -135,7 +135,7 @@ instance Transported.instSymmetricCategory
 
 中文:
 实例 Transported.instSymmetricCategory
-  签名: (e : C ≌ D) [MonoidalCategory C]
+  签名: (e : C ≌ D) [幺半群范畴 C]
   定义体: .ofFaithful (equivalenceTransported e).inverse
 
 Depends on / 依赖: equivalenceTransported, inverse, ofFaithful

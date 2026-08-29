@@ -727,7 +727,7 @@ theorem isSquare_ofNat_iff
   proof: isSquare_natCast_iff
 
 中文:
-定理 isSquare_ofNat_iff
+定理 isSquare_of自然数_iff
   条件: {n : 自然数}
   证明: isSquare_natCast_iff
 

@@ -332,7 +332,7 @@ theorem surjOn_log
 
 中文:
 定理 surjOn_log
-  结论: SurjOn log (Ioi 0) univ
+  结论: 满射限制 log (左开右无界区间 0) univ
   证明: fun x _ => ⟨exp x, exp_pos x, log_exp x⟩
 
 Depends on / 依赖: exp_pos, log_exp
@@ -351,7 +351,7 @@ theorem log_surjective
 
 中文:
 定理 log_surjective
-  结论: Surjective log
+  结论: 满射 log
   证明: fun x => ⟨exp x, log_exp x⟩
 
 @[simp]
@@ -559,7 +559,7 @@ theorem surjOn_log'
 
 中文:
 定理 surjOn_log'
-  结论: SurjOn log (Iio 0) univ
+  结论: 满射限制 log (左无界右开区间 0) univ
   证明: fun x _ =>
 ⟨-exp x, neg_lt_zero.2 exp_pos x, by rw [log_neg_eq_log, log_exp]⟩
 
@@ -1259,7 +1259,7 @@ theorem strictMonoOn_log
 
 中文:
 定理 strictMonoOn_log
-  结论: StrictMonoOn log (Set.Ioi 0)
+  结论: StrictMonoOn log (集合.左开右无界区间 0)
   证明: fun _ hx _ _ hxy => log_lt_log hx hxy
 
 Depends on / 依赖: log_lt_log
@@ -1280,7 +1280,7 @@ theorem strictAntiOn_log
 
 中文:
 定理 strictAntiOn_log
-  结论: StrictAntiOn log (Set.Iio 0)
+  结论: StrictAntiOn log (集合.左无界右开区间 0)
   证明: by
   rintro x (hx : x < 0) y (hy : y < 0) hxy
   rw [← log_abs y]; rw [← log_abs x]
@@ -1305,7 +1305,7 @@ theorem log_injOn_pos
 
 中文:
 定理 log_injOn_pos
-  结论: Set.InjOn log (Set.Ioi 0)
+  结论: 集合.单射限制 log (集合.左开右无界区间 0)
   证明: strictMonoOn_log.injOn
 
 Depends on / 依赖: strictMonoOn_log, strictMonoOn_log.injOn
@@ -1769,7 +1769,7 @@ theorem tendsto_log_atTop
 
 中文:
 定理 tendsto_log_atTop
-  结论: Tendsto log atTop atTop
+  结论: 收敛 log atTop atTop
   证明: tendsto_comp_exp_atTop.1 by simpa only [log_exp] using! tendsto_id
 
 Depends on / 依赖: log_exp, tendsto_comp_exp_atTop, tendsto_id
@@ -1788,7 +1788,7 @@ lemma tendsto_log_nhdsGT_zero
 
 中文:
 引理 tendsto_log_nhdsGT_zero
-  结论: Tendsto log (𝓝[>] 0) atBot
+  结论: 收敛 log (𝓝[>] 0) atBot
   证明: by
   simpa [← tendsto_comp_exp_atBot] using! tendsto_id
 
@@ -1808,7 +1808,7 @@ theorem tendsto_log_nhdsNE_zero
 
 中文:
 定理 tendsto_log_nhdsNE_zero
-  结论: Tendsto log (𝓝[!=] 0) atBot
+  结论: 收敛 log (𝓝[!=] 0) atBot
   证明: by
   simpa [comp_def] using tendsto_log_nhdsGT_zero.comp tendsto_abs_nhdsNE_zero
 
@@ -1827,7 +1827,7 @@ lemma tendsto_log_nhdsLT_zero
 
 中文:
 引理 tendsto_log_nhdsLT_zero
-  结论: Tendsto log (𝓝[<] 0) atBot
+  结论: 收敛 log (𝓝[<] 0) atBot
   证明: tendsto_log_nhdsNE_zero.mono_left nhdsWithin_mono _ fun _ h => ne_of_lt h
 
 Depends on / 依赖: mono_left, ne_of_lt, nhdsWithin_mono, tendsto_log_nhdsNE_zero, tendsto_log_nhdsNE_zero.mono_left
@@ -1876,7 +1876,7 @@ theorem continuous_log
 
 中文:
 定理 continuous_log
-  结论: Continuous fun x : { x : 实数 // x != 0 } => log x
+  结论: 连续 fun x : { x : 实数 // x != 0 } => log x
   证明: continuousOn_iff_continuous_domRestrict.1 continuousOn_log.mono fun _ => id
 
 Depends on / 依赖: continuousOn_iff_continuous_domRestrict, continuousOn_log, continuousOn_log.mono
@@ -1896,7 +1896,7 @@ theorem continuous_log'
 
 中文:
 定理 continuous_log'
-  结论: Continuous fun x : { x : 实数 // 0 < x } => log x
+  结论: 连续 fun x : { x : 实数 // 0 < x } => log x
   证明: continuousOn_iff_continuous_domRestrict.1 continuousOn_log.mono fun _ hx => ne_of_gt hx
 
 Depends on / 依赖: continuousOn_iff_continuous_domRestrict, continuousOn_log, continuousOn_log.mono, ne_of_gt
@@ -1976,7 +1976,7 @@ lemma log_list_prod
 
 中文:
 引理 log_list_prod
-  条件: {l : List 实数} (h : 对任意 x in l, x != 0)
+  条件: {l : 列表 实数} (h : 对任意 x in l, x != 0)
   证明: by
   induction l with
   | nil => simp
@@ -2036,7 +2036,7 @@ theorem log_prod
 
 中文:
 定理 log_prod
-  条件: {α : 类型} {s : Finset α} {f : α -> 实数} (hf : 对任意 x in s, f x != 0)
+  条件: {α : 类型} {s : 有限集 α} {f : α -> 实数} (hf : 对任意 x in s, f x != 0)
   证明: by
   rw [← prod_map_toList]; rw [log_list_prod (by simp_all)]
   simp
@@ -2060,8 +2060,8 @@ theorem _root_.Finsupp.log_prod
   proof: log_prod fun _x hx h₀ => Finsupp.mem_support_iff.1 hx hg _ h₀
 
 中文:
-定理 _root_.Finsupp.log_prod
-  结论: {α β : 类型} [Zero β] (f : α ->₀ β) (g : α -> β -> 实数)
+定理 _root_.有限支撑.log_prod
+  结论: {α β : 类型} [零 β] (f : α ->₀ β) (g : α -> β -> 实数)
   证明: log_prod fun _x hx h₀ => Finsupp.mem_support_iff.1 hx hg _ h₀
 -/
 protected theorem _root_.Finsupp.log_prod {α β : Type*} [Zero β] (f : α ->₀ β) (g : α -> β -> Real)
@@ -2311,7 +2311,7 @@ theorem image_log_Ioi
 中文:
 定理 image_log_Ioi
   条件: {a : 实数} (ha : 0 < a)
-  结论: log '' Ioi a = Ioi (log a)
+  结论: log '' 左开右无界区间 a = 左开右无界区间 (log a)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx).ne').image_Ioi_of_strictMonoOn
     (strictMonoOn_log.mono fun _ hx => ha.trans_le hx) tendsto_log_atTop
 
@@ -2339,7 +2339,7 @@ theorem image_log_Ici
 中文:
 定理 image_log_Ici
   条件: {a : 实数} (ha : 0 < a)
-  结论: log '' Ici a = Ici (log a)
+  结论: log '' 左闭右无界区间 a = 左闭右无界区间 (log a)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx).ne').image_Ici_of_monotoneOn
     (strictMonoOn_log.monotoneOn.mono fun _ hx => ha.trans_le hx) tendsto_log_atTop
 
@@ -2367,7 +2367,7 @@ theorem image_log_Icc
 中文:
 定理 image_log_Icc
   条件: {a b : 实数} (ha : 0 < a) (hab : a <= b)
-  结论: log '' Icc a b = Icc (log a) (log b)
+  结论: log '' 闭区间 a b = 闭区间 (log a) (log b)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx.1).ne').image_Icc_of_monotoneOn hab
     (strictMonoOn_log.monotoneOn.mono fun _ hx => ha.trans_le hx.1)
 
@@ -2395,7 +2395,7 @@ theorem image_log_Ico
 中文:
 定理 image_log_Ico
   条件: {a b : 实数} (ha : 0 < a) (hab : a <= b)
-  结论: log '' Ico a b = Ico (log a) (log b)
+  结论: log '' 左闭右开区间 a b = 左闭右开区间 (log a) (log b)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx.1).ne').image_Ico_of_strictMonoOn hab
     (strictMonoOn_log.mono fun _ hx => ha.trans_le hx.1)
 
@@ -2423,7 +2423,7 @@ theorem image_log_Ioc
 中文:
 定理 image_log_Ioc
   条件: {a b : 实数} (ha : 0 < a) (hab : a <= b)
-  结论: log '' Ioc a b = Ioc (log a) (log b)
+  结论: log '' 左开右闭区间 a b = 左开右闭区间 (log a) (log b)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx.1).ne').image_Ioc_of_strictMonoOn hab
     (strictMonoOn_log.mono fun _ hx => ha.trans_le hx.1)
 
@@ -2451,7 +2451,7 @@ theorem image_log_Ioo
 中文:
 定理 image_log_Ioo
   条件: {a b : 实数} (ha : 0 < a) (hab : a <= b)
-  结论: log '' Ioo a b = Ioo (log a) (log b)
+  结论: log '' 开区间 a b = 开区间 (log a) (log b)
   证明: (continuousOn_log.mono fun _ hx => (ha.trans_le hx.1).ne').image_Ioo_of_strictMonoOn hab
     (strictMonoOn_log.mono fun _ hx => ha.trans_le hx.1)
 
@@ -2506,7 +2506,7 @@ theorem image_log_Ioo_zero
 中文:
 定理 image_log_Ioo_zero
   条件: {a : 实数} (ha : 0 < a)
-  结论: log '' Ioo 0 a = Iio (log a)
+  结论: log '' 开区间 0 a = 左无界右开区间 (log a)
   证明: by
   nth_rw 1 [← exp_log ha, ← image_exp_Iio, ← image_comp, log_comp_exp, image_id]
 
@@ -2531,7 +2531,7 @@ theorem image_log_Ioc_zero
 中文:
 定理 image_log_Ioc_zero
   条件: {a : 实数} (ha : 0 < a)
-  结论: log '' Ioc 0 a = Iic (log a)
+  结论: log '' 左开右闭区间 0 a = 左无界右闭区间 (log a)
   证明: by
   nth_rw 1 [← exp_log ha, ← image_exp_Iic, ← image_comp, log_comp_exp, image_id]
 
@@ -2555,7 +2555,7 @@ theorem log_pos
 
 中文:
 定理 log_pos
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: 0 < 实数.log p
   证明: Real.log_pos mod_cast hp.one_lt
 
@@ -2575,7 +2575,7 @@ theorem log_ne_zero
 
 中文:
 定理 log_ne_zero
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: 实数.log p != 0
   证明: hp.log_pos.ne'
 
@@ -2600,8 +2600,8 @@ theorem Filter.Tendsto.log
   proof: (continuousAt_log hx).tendsto.comp h
 
 中文:
-定理 Filter.Tendsto.log
-  条件: {f : α -> 实数} {l : Filter α} {x : 实数} (h : Tendsto f l (𝓝 x)) (hx : x != 0)
+定理 滤子.收敛.log
+  条件: {f : α -> 实数} {l : 滤子 α} {x : 实数} (h : 收敛 f l (𝓝 x)) (hx : x != 0)
   证明: (continuousAt_log hx).tendsto.comp h
 
 Depends on / 依赖: continuousAt_log, tendsto, tendsto.comp
@@ -2631,9 +2631,9 @@ nonrec theorem ContinuousWithinAt.log (hf : ContinuousWithinAt f s a) (h₀ : f 
     ContinuousWithinAt (fun x 
 
 中文:
-定理 Continuous.log
-  条件: (hf : Continuous f) (h₀ : 对任意 x, f x != 0)
-  结论: Continuous fun x => log (f x)
+定理 连续.log
+  条件: (hf : 连续 f) (h₀ : 对任意 x, f x != 0)
+  结论: 连续 fun x => log (f x)
   证明: continuousOn_log.comp_continuous hf h₀
 
 @[fun_prop]
@@ -2727,7 +2727,7 @@ theorem tendsto_log_nat_add_one_sub_log
 
 中文:
 定理 tendsto_log_nat_add_one_sub_log
-  结论: Tendsto (fun k : 自然数 => log (k + 1) - log k) atTop (𝓝 0)
+  结论: 收敛 (fun k : 自然数 => log (k + 1) - log k) atTop (𝓝 0)
   证明: (tendsto_log_comp_add_sub_log 1).comp tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: tendsto_log_comp_add_sub_log, tendsto_natCast_atTop_atTop
@@ -2756,8 +2756,8 @@ lemma log_nonneg_of_isNat
   exact Real.log_natCast_nonneg _
 
 中文:
-引理 log_nonneg_of_isNat
-  条件: {n : 自然数} (h : NormNum.Is自然数 e n)
+引理 log_nonneg_of_is自然数
+  条件: {n : 自然数} (h : NormNum.是自然数 e n)
   结论: 0 <= 实数.log (e : 实数)
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
@@ -2781,8 +2781,8 @@ lemma log_pos_of_isNat
   simpa using w
 
 中文:
-引理 log_pos_of_isNat
-  条件: {n : 自然数} (h : NormNum.Is自然数 e n) (w : 自然数.blt 1 n = true)
+引理 log_pos_of_is自然数
+  条件: {n : 自然数} (h : NormNum.是自然数 e n) (w : 自然数.blt 1 n = true)
   证明: by
   rw [NormNum.IsNat.to_eq h rfl]
   apply Real.log_pos
@@ -2807,8 +2807,8 @@ lemma log_nonneg_of_isNegNat
   exact Real.log_neg_natCast_nonneg _
 
 中文:
-引理 log_nonneg_of_isNegNat
-  条件: {n : 自然数} (h : NormNum.Is整数 e (.negOf自然数 n))
+引理 log_nonneg_of_isNeg自然数
+  条件: {n : 自然数} (h : NormNum.是整数 e (.negOf自然数 n))
   证明: by
   rw [NormNum.IsInt.neg_to_eq h rfl]
   exact Real.log_neg_natCast_nonneg _
@@ -2833,8 +2833,8 @@ lemma log_pos_of_isNegNat
   simpa using w
 
 中文:
-引理 log_pos_of_isNegNat
-  条件: {n : 自然数} (h : NormNum.Is整数 e (.negOf自然数 n)) (w : 自然数.blt 1 n = true)
+引理 log_pos_of_isNeg自然数
+  条件: {n : 自然数} (h : NormNum.是整数 e (.negOf自然数 n)) (w : 自然数.blt 1 n = true)
   证明: by
   rw [NormNum.IsInt.neg_to_eq h rfl]
   rw [Real.log_neg_eq_log]
@@ -2917,7 +2917,7 @@ exact ne_of_lt Real.log_neg h₁' h₂'
 中文:
 引理 log_nz_of_isNNRat
   条件: {n : 自然数}
-  结论: (NormNum.IsNNRat e n d) -> (decide ((0 : Rat) < n / d))
+  结论: (NormNum.是NNRat e n d) -> (decide ((0 : 有理数) < n / d))
   证明: by
       simpa using (Rat.cast_pos (K := Real)).2 (of_decide_eq_true h₁)
     have h₂' : (n : Real) / d < 1 := by
@@ -2950,7 +2950,7 @@ exact ne_of_lt Real.log_neg_of_lt_zero h₁' h₂'
 中文:
 引理 log_nz_of_isRat_neg
   条件: {n : 整数}
-  结论: (NormNum.IsRat e n d) -> (decide (n / d < (0 : Rat)))
+  结论: (NormNum.是有理数 e n d) -> (decide (n / d < (0 : 有理数)))
   证明: by exact_mod_cast of_decide_eq_true h₁
     have h₂' : -1 < (n : Real) / d := by exact_mod_cast of_decide_eq_true h₂
 exact ne_of_lt Real.log_neg_of_lt_zero h₁' h₂'

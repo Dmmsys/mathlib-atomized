@@ -61,7 +61,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (End X)
+  签名: : 幺 (End X)
   定义体: ⟨𝟙 X⟩
 -/
 protected instance one : One (End X) := ⟨𝟙 X⟩
@@ -76,7 +76,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (End X)
+  签名: : 可居 (End X)
   定义体: ⟨𝟙 X⟩
 -/
 protected instance inhabited : Inhabited (End X) := ⟨𝟙 X⟩
@@ -91,7 +91,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (End X)
+  签名: : 乘法 (End X)
   定义体: ⟨fun x y => y ≫ x⟩
 -/
 protected instance mul : Mul (End X) := ⟨fun x y => y ≫ x⟩
@@ -197,7 +197,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: {C : 类型u} [Category.{v} C] {X : C}
+  签名: {C : 类型u} [范畴.{v} C] {X : C}
   定义体: Category.id_comp
   one_mul := Category.comp_id
   mul_assoc := fun x y z => (Category.assoc z y x).symm
@@ -310,7 +310,7 @@ instance group
 
 中文:
 实例 group
-  签名: {C : 类型u} [Groupoid.{v} C] (X : C)
+  签名: {C : 类型u} [群胚.{v} C] (X : C)
   定义体: Groupoid.comp_inv
   inv := Groupoid.inv
 
@@ -334,7 +334,7 @@ theorem isUnit_iff_isIso
 
 中文:
 定理 isUnit_iff_isIso
-  条件: {C : 类型u} [Category.{v} C] {X : C} (f : End X)
+  条件: {C : 类型u} [范畴.{v} C] {X : C} (f : End X)
   证明: ⟨fun h => { out := ⟨h.unit.inv, ⟨h.unit.inv_val, h.unit.val_inv⟩⟩ }, fun h =>
     ⟨⟨f, inv f, by simp, by simp⟩, rfl⟩⟩
 
@@ -395,7 +395,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (Aut X)
+  签名: : 可居 (Aut X)
   定义体: ⟨Iso.refl X⟩
 -/
 protected instance inhabited : Inhabited (Aut X) := ⟨Iso.refl X⟩
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (Aut X)
+  签名: 群 (Aut X)
   定义体: Iso.refl X
   inv := Iso.symm
   mul x y := Iso.trans y x

@@ -50,8 +50,8 @@ structure PolynomialModule
     - coeff : Nat ->₀ M
 
 中文:
-结构 PolynomialModule
-  参数: (R M : 类型) [CommRing R] [AddCommGroup M] [Module R M]
+结构 多项式模
+  参数: (R M : 类型) [交换环 R] [加法交换群 M] [模 R M]
   公理与运算 (2 个):
     - ofCoeff((R)) : :
     - coeff : 自然数 ->₀ M
@@ -95,7 +95,7 @@ lemma ofCoeff_coeff
 
 中文:
 引理 ofCoeff_coeff
-  条件: (x : PolynomialModule R M)
+  条件: (x : 多项式模 R M)
   结论: ofCoeff R x.coeff = x
   证明: rfl
 -/
@@ -117,7 +117,7 @@ definition coeffEquiv
 
 中文:
 定义 coeffEquiv
-  签名: : PolynomialModule R M ≃ (自然数 ->₀ M) where
+  签名: : 多项式模 R M ≃ (自然数 ->₀ M) where
   定义体: coeff
   invFun := ofCoeff R
   left_inv _ := rfl
@@ -139,8 +139,8 @@ lemma «forall»
   proof: (coeffEquiv R).forall_congr_left
 
 中文:
-引理 «forall»
-  条件: {P : PolynomialModule R M -> 命题}
+引理 «对任意»
+  条件: {P : 多项式模 R M -> 命题}
   结论: (对任意 p, P p) ↔ 对任意 q, P (ofCoeff R q)
   证明: (coeffEquiv R).forall_congr_left
 -/
@@ -157,8 +157,8 @@ lemma «exists»
   proof: (coeffEquiv R).exists_congr_left
 
 中文:
-引理 «exists»
-  条件: {P : PolynomialModule R M -> 命题}
+引理 «存在»
+  条件: {P : 多项式模 R M -> 命题}
   结论: (存在 p, P p) ↔ 存在 q, P (ofCoeff R q)
   证明: (coeffEquiv R).exists_congr_left
 -/
@@ -175,7 +175,7 @@ lemma coeff_injective
 
 中文:
 引理 coeff_injective
-  结论: (coeff : PolynomialModule R M -> 自然数 ->₀ M).Injective
+  结论: (coeff : 多项式模 R M -> 自然数 ->₀ M).单射
   证明: (coeffEquiv R).injective
 
 Depends on / 依赖: coeffEquiv, injective
@@ -195,7 +195,7 @@ lemma ofCoeff_injective
 
 中文:
 引理 ofCoeff_injective
-  结论: (ofCoeff R : (自然数 ->₀ M) -> PolynomialModule R M).Injective
+  结论: (ofCoeff R : (自然数 ->₀ M) -> 多项式模 R M).单射
   证明: (coeffEquiv R).symm.injective
 
 @[simp]
@@ -258,7 +258,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (PolynomialModule R M)
+  签名: : 可居 (多项式模 R M)
   定义体: fast_instance% (coeffEquiv R).inhabited
 
 Depends on / 依赖: coeffEquiv, fast_instance, inhabited
@@ -275,7 +275,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nontrivial M]
+  签名: [非平凡 M]
   定义体: (coeffEquiv R).nontrivial
 
 Depends on / 依赖: coeffEquiv, nontrivial
@@ -294,7 +294,7 @@ instance instUnique
 
 中文:
 实例 instUnique
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: fast_instance%
   (coeffEquiv R).unique
 
@@ -332,7 +332,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (PolynomialModule R M)
+  签名: : 加法交换群 (多项式模 R M)
   定义体: fast_instance%
   (coeffEquiv R).addCommGroup
 
@@ -353,7 +353,7 @@ definition coeffAddEquiv
 
 中文:
 定义 coeffAddEquiv
-  签名: : PolynomialModule R M ≃+ (自然数 ->₀ M)
+  签名: : 多项式模 R M ≃+ (自然数 ->₀ M)
   定义体: (coeffEquiv R).addEquiv
 
 Depends on / 依赖: addEquiv, coeffEquiv
@@ -370,7 +370,7 @@ lemma coeff_zero
 
 中文:
 引理 coeff_zero
-  结论: coeff (0 : PolynomialModule R M) = 0
+  结论: coeff (0 : 多项式模 R M) = 0
   证明: rfl
 -/
 @[simp] lemma coeff_zero : coeff (0 : PolynomialModule R M) = 0 := rfl
@@ -384,7 +384,7 @@ lemma ofCoeff_zero
 
 中文:
 引理 ofCoeff_zero
-  结论: (ofCoeff R 0 : PolynomialModule R M) = 0
+  结论: (ofCoeff R 0 : 多项式模 R M) = 0
   证明: rfl
 -/
 @[simp] lemma ofCoeff_zero : (ofCoeff R 0 : PolynomialModule R M) = 0 := rfl
@@ -431,7 +431,7 @@ lemma coeff_add
 
 中文:
 引理 coeff_add
-  条件: (x y : PolynomialModule R M)
+  条件: (x y : 多项式模 R M)
   结论: coeff (x + y) = coeff x + coeff y
   证明: rfl
 -/
@@ -470,7 +470,7 @@ lemma coeff_sum
 
 中文:
 引理 coeff_sum
-  条件: (s : Finset ι) (f : ι -> PolynomialModule R M)
+  条件: (s : 有限集 ι) (f : ι -> 多项式模 R M)
   证明: map_sum coeffAddEquiv ..
 
 @[simp]
@@ -493,7 +493,7 @@ lemma ofCoeff_sum
 
 中文:
 引理 ofCoeff_sum
-  条件: (s : Finset ι) (f : ι -> 自然数 ->₀ M)
+  条件: (s : 有限集 ι) (f : ι -> 自然数 ->₀ M)
   证明: map_sum coeffAddEquiv.symm ..
 
 @[simp]
@@ -516,7 +516,7 @@ lemma coeff_finsuppSum
 
 中文:
 引理 coeff_finsuppSum
-  条件: [AddCommMonoid N] (f : ι ->₀ N) (g : ι -> N -> PolynomialModule R M)
+  条件: [加法交换幺半群 N] (f : ι ->₀ N) (g : ι -> N -> 多项式模 R M)
   证明: map_finsuppSum coeffAddEquiv ..
 
 @[simp]
@@ -537,7 +537,7 @@ lemma ofCoeff_finsuppSum
 
 中文:
 引理 ofCoeff_finsuppSum
-  条件: [AddCommMonoid N] (f : ι ->₀ N) (g : ι -> N -> 自然数 ->₀ M)
+  条件: [加法交换幺半群 N] (f : ι ->₀ N) (g : ι -> N -> 自然数 ->₀ M)
   证明: map_finsuppSum coeffAddEquiv.symm ..
 
 Depends on / 依赖: coeffAddEquiv, coeffAddEquiv.symm, map_finsuppSum
@@ -651,7 +651,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module S (PolynomialModule R M)
+  签名: 模 S (多项式模 R M)
   定义体: (coeffEquiv R).module _
 
 Depends on / 依赖: coeffEquiv, module
@@ -674,7 +674,7 @@ definition coeffLinearEquiv
 
 中文:
 定义 coeffLinearEquiv
-  签名: : PolynomialModule R M ≃ₗ[S] 自然数 ->₀ M
+  签名: : 多项式模 R M ≃ₗ[S] 自然数 ->₀ M
   定义体: (coeffEquiv _).linearEquiv _
 
 Depends on / 依赖: coeffEquiv, linearEquiv
@@ -756,7 +756,7 @@ lemma induction_linear
 
 中文:
 引理 induction_linear
-  结论: {p : PolynomialModule R M -> 命题} (x : PolynomialModule R M) (zero : p 0)
+  结论: {p : 多项式模 R M -> 命题} (x : 多项式模 R M) (zero : p 0)
   证明: Finsupp.induction_linear (motive := (p <| ofCoeff R ·)) x.coeff zero (fun _ _ => add _ _)
     (fun _ _ => single _ _)
 
@@ -779,7 +779,7 @@ instance polynomialModule
 
 中文:
 实例 polynomialModule
-  签名: : Module R[X] (PolynomialModule R M)
+  签名: : 模 R[X] (多项式模 R M)
   定义体: inferInstanceAs Module R[X] Module.AEval' (coeffLinearEquiv R R).symm.comp
     (Finsupp.lmapDomain M R Nat.succ).comp (coeffLinearEquiv R R).toLinearMap
 
@@ -800,7 +800,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (f : R[X]) (m : PolynomialModule R M)
+  条件: (f : R[X]) (m : 多项式模 R M)
   证明: by
   rfl
 -/
@@ -825,7 +825,7 @@ inferInstanceAs IsScalarTower R R[X] Module.AEval' (coeffLinearEquiv R R).symm.c
 
 中文:
 实例 isScalarTower'
-  签名: (M : 类型u) [AddCommGroup M] [Module R M] [Module S M]
+  签名: (M : 类型u) [加法交换群 M] [模 R M] [模 S M]
   定义体: by
   have : IsScalarTower R R[X] (PolynomialModule R M) :=
 inferInstanceAs IsScalarTower R R[X] Module.AEval' (coeffLinearEquiv R R).symm.comp
@@ -935,7 +935,7 @@ theorem monomial_smul_apply
 
 中文:
 定理 monomial_smul_apply
-  条件: (i : 自然数) (r : R) (g : PolynomialModule R M) (n : 自然数)
+  条件: (i : 自然数) (r : R) (g : 多项式模 R M) (n : 自然数)
   证明: by
   induction g using PolynomialModule.induction_linear with
   | zero => simp
@@ -1001,7 +1001,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (f : R[X]) (g : PolynomialModule R M) (n : 自然数)
+  条件: (f : R[X]) (g : 多项式模 R M) (n : 自然数)
   证明: by
   induction f using Polynomial.induction_on' with
   | add p q hp hq => simp [add_smul, hp, hq, ← Finset.sum_add_distrib]
@@ -1041,7 +1041,7 @@ definition equivPolynomialSelf
 
 中文:
 定义 equivPolynomialSelf
-  签名: : PolynomialModule R R ≃ₗ[R[X]] R[X] where
+  签名: : 多项式模 R R ≃ₗ[R[X]] R[X] where
   定义体: coeffAddEquiv.trans AddMonoidAlgebra.coeffAddEquiv.symm.trans
     (toFinsuppIso R).symm.toAddEquiv
   map_smul' r x := by
@@ -1089,7 +1089,7 @@ definition equivPolynomial
 
 中文:
 定义 equivPolynomial
-  签名: {S : 类型} [CommRing S] [Algebra R S]
+  签名: {S : 类型} [交换环 S] [代数 R S]
   定义体: coeffAddEquiv.trans AddMonoidAlgebra.coeffAddEquiv.symm.trans
     (toFinsuppIso _).symm.toAddEquiv
   map_smul' _ _ := rfl
@@ -1116,7 +1116,7 @@ lemma equivPolynomialSelf_apply_eq
 
 中文:
 引理 equivPolynomialSelf_apply_eq
-  条件: (p : PolynomialModule R R)
+  条件: (p : 多项式模 R R)
   证明: rfl
 
 @[simp]
@@ -1137,7 +1137,7 @@ lemma equivPolynomial_single
 
 中文:
 引理 equivPolynomial_single
-  条件: {S : 类型} [CommRing S] [Algebra R S] (n : 自然数) (x : S)
+  条件: {S : 类型} [交换环 S] [代数 R S] (n : 自然数) (x : S)
   证明: rfl
 
 @[simp]
@@ -1158,7 +1158,7 @@ lemma equivPolynomial_symm_monomial
 
 中文:
 引理 equivPolynomial_symm_monomial
-  条件: {S : 类型} [CommRing S] [Algebra R S] (n : 自然数) (x : S)
+  条件: {S : 类型} [交换环 S] [代数 R S] (n : 自然数) (x : S)
   证明: rfl
 
 @[simp]
@@ -1177,7 +1177,7 @@ lemma equivPolynomial_symm_one
 
 中文:
 引理 equivPolynomial_symm_one
-  条件: {S : 类型} [CommRing S] [Algebra R S]
+  条件: {S : 类型} [交换环 S] [代数 R S]
   证明: rfl
 -/
 lemma equivPolynomial_symm_one {S : Type*} [CommRing S] [Algebra R S] :
@@ -1202,7 +1202,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: {f g : PolynomialModule R M ->ₗ[R] M'}
+  结论: {f g : 多项式模 R M ->ₗ[R] M'}
   证明: by
   simpa [← DFunLike.coe_fn_eq, funext_iff, PolynomialModule.forall] using Finsupp.lhom_ext'
     (φ := f.comp (coeffLinearEquiv R R).symm.toLinearMap)
@@ -1300,7 +1300,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: (f : M ->ₗ[R] M') (p : R[X]) (q : PolynomialModule R M)
+  条件: (f : M ->ₗ[R] M') (p : R[X]) (q : 多项式模 R M)
   证明: by
   induction q using induction_linear with
   | zero => rw [smul_zero, map_zero, smul_zero]
@@ -1432,7 +1432,7 @@ theorem eval_smul
 
 中文:
 定理 eval_smul
-  条件: (p : R[X]) (q : PolynomialModule R M) (r : R)
+  条件: (p : R[X]) (q : 多项式模 R M) (r : R)
   证明: by
   induction q using induction_linear with
   | zero => rw [smul_zero, map_zero, smul_zero]
@@ -1470,7 +1470,7 @@ theorem eval_map
 
 中文:
 定理 eval_map
-  条件: (f : M ->ₗ[R] M') (q : PolynomialModule R M) (r : R)
+  条件: (f : M ->ₗ[R] M') (q : 多项式模 R M) (r : R)
   证明: by
   induction q using induction_linear with
   | zero => simp_rw [map_zero]
@@ -1501,7 +1501,7 @@ theorem eval_map'
 
 中文:
 定理 eval_map'
-  条件: (f : M ->ₗ[R] M) (q : PolynomialModule R M) (r : R)
+  条件: (f : M ->ₗ[R] M) (q : 多项式模 R M) (r : R)
   证明: eval_map R f q r
 
 @[simp]
@@ -1528,7 +1528,7 @@ lemma aeval_equivPolynomial
 
 中文:
 引理 aeval_equivPolynomial
-  结论: {S : 类型} [CommRing S] [Algebra S R]
+  结论: {S : 类型} [交换环 S] [代数 S R]
   证明: by
   induction f using induction_linear with
   | zero => simp
@@ -1609,7 +1609,7 @@ theorem comp_eval
 
 中文:
 定理 comp_eval
-  条件: (p : R[X]) (q : PolynomialModule R M) (r : R)
+  条件: (p : R[X]) (q : 多项式模 R M) (r : R)
   证明: by
   rw [← LinearMap.comp_apply]
   induction q using induction_linear with
@@ -1643,7 +1643,7 @@ theorem comp_smul
 
 中文:
 定理 comp_smul
-  条件: (p p' : R[X]) (q : PolynomialModule R M)
+  条件: (p p' : R[X]) (q : 多项式模 R M)
   证明: by
   rw [comp_apply]; rw [map_smul]; rw [eval_smul]; rw [Polynomial.comp]; rw [Polynomial.eval_map]; rw [comp_apply]
   rfl

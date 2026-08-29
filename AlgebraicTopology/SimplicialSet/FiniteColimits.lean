@@ -125,7 +125,7 @@ lemma finite_of_isColimit
 
 中文:
 引理 finite_of_isColimit
-  条件: [Finite J] (h : 对任意 (j : J), (F.obj j).Finite)
+  条件: [有限 J] (h : 对任意 (j : J), (F.obj j).有限)
   证明: by
   rw [← finite_subcomplex_top_iff]; rw [← iSup_range_eq_top_of_isColimit hc]; rw [finite_iSup_iff]
   infer_instance
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊥_ SSet.{u}).Finite
+  签名: (⊥_ SSet.{u}).有限
   定义体: by
   apply finite_of_isColimit (initialIsInitial (C := SSet.{u}))
   rintro ⟨⟨⟩⟩

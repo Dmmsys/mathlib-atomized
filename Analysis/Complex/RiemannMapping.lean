@@ -50,8 +50,8 @@ theorem exists_injective_not_dense_image_deriv_ne_zero
     rcases this with
 
 中文:
-定理 exists_injective_not_dense_image_deriv_ne_zero
-  结论: {U : Set Complex} (hUo : IsOpen U)
+定理 存在_injective_not_dense_image_deriv_ne_zero
+  结论: {U : 集合 复形} (hUo : 是开集 U)
   证明: by
   -- WLOG, `0 ∉ U`, otherwise we choose `a ∉ U` and replace `U` with `-a +ᵥ U`
   wlog hU₀ : 0 ∉ U
@@ -131,8 +131,8 @@ lemma exists_mapsTo_unitBall_injOn_deriv_ne_zero
   -- Choose a closed ball `Metric.closedBall x ε`, `ε > 0`,
 
 中文:
-引理 exists_mapsTo_unitBall_injOn_deriv_ne_zero
-  结论: {U : Set Complex} (hUo : IsOpen U)
+引理 存在_mapsTo_unitBall_injOn_deriv_ne_zero
+  结论: {U : 集合 复形} (hUo : 是开集 U)
   证明: by
   -- Take a continuous branch of the square root on `U`.
   -- It is injective, differentiable function on `U`, and `f '' U` isn't dense in `ℂ`.

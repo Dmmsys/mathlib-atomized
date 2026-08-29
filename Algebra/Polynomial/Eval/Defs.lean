@@ -70,7 +70,7 @@ theorem eval₂_eq_sum
 中文:
 定理 eval₂_eq_sum
   条件: {f : R ->+* S} {x : S}
-  结论: p.eval₂ f x = p.sum fun e a => f a * x ^ e
+  结论: p.eval₂ f x = p.求和 fun e a => f a * x ^ e
   证明: by
   rw [eval₂_def]
 -/
@@ -90,7 +90,7 @@ theorem eval₂_congr
 
 中文:
 定理 eval₂_congr
-  结论: {R S : 类型} [Semiring R] [Semiring S] {f g : R ->+* S} {s t : S}
+  结论: {R S : 类型} [半环 R] [半环 S] {f g : R ->+* S} {s t : S}
   证明: by
   rintro rfl rfl rfl; rfl
 
@@ -337,8 +337,8 @@ lemma eval₂_ofNat
   simp [OfNat.ofNat]
 
 中文:
-引理 eval₂_ofNat
-  条件: {S : 类型} [Semiring S] (n : 自然数) [n.AtLeastTwo] (f : R ->+* S) (a : S)
+引理 eval₂_of自然数
+  条件: {S : 类型} [半环 S] (n : 自然数) [n.AtLeastTwo] (f : R ->+* S) (a : S)
   证明: by
   simp [OfNat.ofNat]
 
@@ -400,8 +400,8 @@ theorem eval₂_list_sum
 
 中文:
 定理 eval₂_list_sum
-  条件: (l : List R[X]) (x : S)
-  结论: eval₂ f x l.sum = (l.map (eval₂ f x)).sum
+  条件: (l : 列表 R[X]) (x : S)
+  结论: eval₂ f x l.求和 = (l.map (eval₂ f x)).求和
   证明: map_list_sum (eval₂AddMonoidHom f x) l
 
 Depends on / 依赖: map_list_sum
@@ -440,7 +440,7 @@ theorem eval₂_finsetSum
 
 中文:
 定理 eval₂_finsetSum
-  条件: (s : Finset ι) (g : ι -> R[X]) (x : S)
+  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : S)
   证明: map_sum (eval₂AddMonoidHom f x) _ _
 
 @[deprecated (since := "2026-04-08")] alias eval₂_finset_sum := eval₂_finsetSum
@@ -612,7 +612,7 @@ theorem eval₂_list_prod_noncomm
 
 中文:
 定理 eval₂_list_prod_noncomm
-  结论: (ps : List R[X])
+  结论: (ps : 列表 R[X])
   证明: by
   induction ps using List.reverseRecOn with
   | nil => simp
@@ -893,8 +893,8 @@ theorem eval₂_list_prod
 
 中文:
 定理 eval₂_list_prod
-  条件: (l : List R[X]) (x : S)
-  结论: eval₂ f x l.prod = (l.map (eval₂ f x)).prod
+  条件: (l : 列表 R[X]) (x : S)
+  结论: eval₂ f x l.乘积 = (l.map (eval₂ f x)).乘积
   证明: map_list_prod (eval₂RingHom f x) l
 
 Depends on / 依赖: map_list_prod
@@ -943,7 +943,7 @@ theorem eval₂_id
 
 中文:
 定理 eval₂_id
-  结论: eval₂ (RingHom.id _) x p = p.eval x
+  结论: eval₂ (环态射.id _) x p = p.eval x
   证明: rfl
 -/
 theorem eval₂_id : eval₂ (RingHom.id _) x p = p.eval x := rfl
@@ -962,7 +962,7 @@ theorem eval_eq_sum
 
 中文:
 定理 eval_eq_sum
-  结论: p.eval x = p.sum fun e a => a * x ^ e
+  结论: p.eval x = p.求和 fun e a => a * x ^ e
   证明: by
   rw [eval]; rw [eval₂_eq_sum]
   rfl
@@ -988,7 +988,7 @@ theorem eval₂_at_apply
 
 中文:
 定理 eval₂_at_apply
-  条件: {S : 类型} [Semiring S] (f : R ->+* S) (r : R)
+  条件: {S : 类型} [半环 S] (f : R ->+* S) (r : R)
   证明: by
   rw [eval₂_eq_sum]; rw [eval_eq_sum]; rw [sum]; rw [sum]; rw [map_sum f]
   simp only [f.map_mul, f.map_pow]
@@ -1018,7 +1018,7 @@ theorem eval₂_at_one
 
 中文:
 定理 eval₂_at_one
-  条件: {S : 类型} [Semiring S] (f : R ->+* S)
+  条件: {S : 类型} [半环 S] (f : R ->+* S)
   结论: p.eval₂ f 1 = f (p.eval 1)
   证明: by
   convert! eval₂_at_apply (p := p) f 1
@@ -1047,7 +1047,7 @@ theorem eval₂_at_natCast
 
 中文:
 定理 eval₂_at_natCast
-  条件: {S : 类型} [Semiring S] (f : R ->+* S) (n : 自然数)
+  条件: {S : 类型} [半环 S] (f : R ->+* S) (n : 自然数)
   证明: by
   convert! eval₂_at_apply (p := p) f n
   simp
@@ -1074,8 +1074,8 @@ theorem eval₂_at_ofNat
 @[simp]
 
 中文:
-定理 eval₂_at_ofNat
-  条件: {S : 类型} [Semiring S] (f : R ->+* S) (n : 自然数) [n.AtLeastTwo]
+定理 eval₂_at_of自然数
+  条件: {S : 类型} [半环 S] (f : R ->+* S) (n : 自然数) [n.AtLeastTwo]
   证明: by
   simp [OfNat.ofNat]
 
@@ -1145,7 +1145,7 @@ lemma eval_ofNat
 @[simp]
 
 中文:
-引理 eval_ofNat
+引理 eval_of自然数
   条件: (n : 自然数) [n.AtLeastTwo] (a : R)
   证明: by
   simp only [OfNat.ofNat, eval_natCast]
@@ -1403,8 +1403,8 @@ theorem eval_listSum
 
 中文:
 定理 eval_listSum
-  条件: (l : List R[X]) (x : R)
-  结论: eval x l.sum = (l.map (eval x)).sum
+  条件: (l : 列表 R[X]) (x : R)
+  结论: eval x l.求和 = (l.map (eval x)).求和
   证明: eval₂_list_sum ..
 -/
 theorem eval_listSum (l : List R[X]) (x : R) : eval x l.sum = (l.map (eval x)).sum :=
@@ -1422,7 +1422,7 @@ theorem eval_multisetSum
 中文:
 定理 eval_multisetSum
   条件: (s : Multiset R[X]) (x : R)
-  结论: eval x s.sum = (s.map (eval x)).sum
+  结论: eval x s.求和 = (s.map (eval x)).求和
   证明: eval₂_multiset_sum ..
 -/
 theorem eval_multisetSum (s : Multiset R[X]) (x : R) : eval x s.sum = (s.map (eval x)).sum :=
@@ -1457,7 +1457,7 @@ theorem eval_finsetSum
 
 中文:
 定理 eval_finsetSum
-  条件: (s : Finset ι) (g : ι -> R[X]) (x : R)
+  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : R)
   证明: eval₂_finsetSum _ _ _ _
 
 @[deprecated (since := "2026-04-08")] alias eval_finset_sum := eval_finsetSum
@@ -1556,7 +1556,7 @@ theorem IsRoot.dvd
 
 中文:
 定理 IsRoot.dvd
-  结论: {R : 类型} [CommSemiring R] {p q : R[X]} {x : R} (h : p.IsRoot x)
+  结论: {R : 类型} [交换半环 R] {p q : R[X]} {x : R} (h : p.IsRoot x)
   证明: by
   rwa [IsRoot, eval, eval₂_eq_zero_of_dvd_of_eval₂_eq_zero _ _ hpq]
 
@@ -1595,7 +1595,7 @@ theorem eval_surjective
 中文:
 定理 eval_surjective
   条件: (x : R)
-  结论: Function.Surjective eval x
+  结论: 函数.满射 eval x
   证明: fun y => ⟨C y, eval_C⟩
 
 Depends on / 依赖: eval_C
@@ -1636,7 +1636,7 @@ theorem comp_eq_sum_left
 
 中文:
 定理 comp_eq_sum_left
-  结论: p.comp q = p.sum fun e a => C a * q ^ e
+  结论: p.comp q = p.求和 fun e a => C a * q ^ e
   证明: by rw [comp, eval₂_eq_sum]
 
 @[simp]
@@ -1770,7 +1770,7 @@ theorem ofNat_comp
 @[simp]
 
 中文:
-定理 ofNat_comp
+定理 of自然数_comp
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R[X]).comp p = n
   证明: natCast_comp
@@ -2105,7 +2105,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  条件: {R : 类型} [CommSemiring R] (p q r : R[X])
+  条件: {R : 类型} [交换半环 R] (p q r : R[X])
   证明: eval₂_mul _ _
 
 @[simp]
@@ -2127,7 +2127,7 @@ theorem mul_comp_neg_X
 
 中文:
 定理 mul_comp_neg_X
-  条件: {R : 类型} [Ring R] (p q : R[X])
+  条件: {R : 类型} [环 R] (p q : R[X])
   证明: eval₂_mul_noncomm C (-X) fun _ => Commute.symm (commute_X _).neg_left
 
 @[simp]
@@ -2150,7 +2150,7 @@ theorem pow_comp
 
 中文:
 定理 pow_comp
-  条件: {R : 类型} [CommSemiring R] (p q : R[X]) (n : 自然数)
+  条件: {R : 类型} [交换半环 R] (p q : R[X]) (n : 自然数)
   证明: (MonoidHom.mk (OneHom.mk (fun r : R[X] => r.comp q) one_comp) fun r s => mul_comp r s q).map_pow
     p n
 
@@ -2174,7 +2174,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: {R : 类型} [CommSemiring R] (φ ψ χ : R[X])
+  条件: {R : 类型} [交换半环 R] (φ ψ χ : R[X])
   证明: by
   refine Polynomial.induction_on φ ?_ ?_ ?_ <;>
     · intros
@@ -2198,7 +2198,7 @@ lemma sum_comp
 
 中文:
 引理 sum_comp
-  条件: (s : Finset ι) (p : ι -> R[X]) (q : R[X])
+  条件: (s : 有限集 ι) (p : ι -> R[X]) (q : R[X])
   证明: Polynomial.eval₂_finsetSum _ _ _ _
 
 Depends on / 依赖: SubringClass, SubringClass.addSubgroupClass, addSubgroupClass
@@ -2495,7 +2495,7 @@ theorem map_ofNat
   proof: show (n : R[X]).map f = n by rw [Polynomial.map_natCast]
 
 中文:
-定理 map_ofNat
+定理 map_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: show (n : R[X]).map f = n by rw [Polynomial.map_natCast]
 -/
@@ -2552,7 +2552,7 @@ lemma mapRingHom_comp_C
 
 中文:
 引理 mapRingHom_comp_C
-  条件: {R S : 类型} [Semiring R] [Semiring S] (f : R ->+* S)
+  条件: {R S : 类型} [半环 R] [半环 S] (f : R ->+* S)
   证明: by ext; simp
 -/
 lemma mapRingHom_comp_C {R S : Type*} [Semiring R] [Semiring S] (f : R ->+* S) :
@@ -2599,8 +2599,8 @@ theorem map_list_prod
 
 中文:
 定理 map_list_prod
-  条件: (L : List R[X])
-  结论: L.prod.map f = (L.map <| map f).prod
+  条件: (L : 列表 R[X])
+  结论: L.乘积.map f = (L.map <| map f).乘积
   证明: Eq.symm List.prod_hom _ (mapRingHom f).toMonoidHom
 
 @[simp]
@@ -2673,7 +2673,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: {ι : 类型} (g : ι -> R[X]) (s : Finset ι)
+  条件: {ι : 类型} (g : ι -> R[X]) (s : 有限集 ι)
   证明: map_sum (mapRingHom f) _ _
 
 Depends on / 依赖: CanLift, Subring
@@ -2874,7 +2874,7 @@ lemma isRoot_comp
 
 中文:
 引理 isRoot_comp
-  条件: {R} [CommSemiring R] {p q : R[X]} {r : R}
+  条件: {R} [交换半环 R] {p q : R[X]} {r : R}
   证明: by simp_rw [IsRoot, eval_comp]
 
 Depends on / 依赖: IsRoot, eval_comp, simp_rw
@@ -3012,7 +3012,7 @@ theorem eval₂_finsetProd
 
 中文:
 定理 eval₂_finsetProd
-  条件: (s : Finset ι) (g : ι -> R[X]) (x : S)
+  条件: (s : 有限集 ι) (g : ι -> R[X]) (x : S)
   证明: map_prod (eval₂RingHom f x) _ _
 
 @[deprecated (since := "2026-04-08")] alias eval₂_finset_prod := eval₂_finsetProd
@@ -3036,8 +3036,8 @@ theorem eval_list_prod
 
 中文:
 定理 eval_list_prod
-  条件: (l : List R[X]) (x : R)
-  结论: eval x l.prod = (l.map (eval x)).prod
+  条件: (l : 列表 R[X]) (x : R)
+  结论: eval x l.乘积 = (l.map (eval x)).乘积
   证明: map_list_prod (evalRingHom x) l
 
 Depends on / 依赖: evalRingHom, map_list_prod
@@ -3057,7 +3057,7 @@ theorem eval_multiset_prod
 中文:
 定理 eval_multiset_prod
   条件: (s : Multiset R[X]) (x : R)
-  结论: eval x s.prod = (s.map (eval x)).prod
+  结论: eval x s.乘积 = (s.map (eval x)).乘积
   证明: (evalRingHom x).map_multiset_prod s
 
 Depends on / 依赖: evalRingHom, map_multiset_prod
@@ -3075,7 +3075,7 @@ theorem eval_prod
 
 中文:
 定理 eval_prod
-  条件: {ι : 类型} (s : Finset ι) (p : ι -> R[X]) (x : R)
+  条件: {ι : 类型} (s : 有限集 ι) (p : ι -> R[X]) (x : R)
   证明: map_prod (evalRingHom x) _ _
 
 Depends on / 依赖: evalRingHom, map_prod
@@ -3094,7 +3094,7 @@ theorem list_prod_comp
 
 中文:
 定理 list_prod_comp
-  条件: (l : List R[X]) (q : R[X])
+  条件: (l : 列表 R[X]) (q : R[X])
   证明: map_list_prod (compRingHom q) _
 
 Depends on / 依赖: compRingHom, map_list_prod
@@ -3132,7 +3132,7 @@ theorem prod_comp
 
 中文:
 定理 prod_comp
-  条件: {ι : 类型} (s : Finset ι) (p : ι -> R[X]) (q : R[X])
+  条件: {ι : 类型} (s : 有限集 ι) (p : ι -> R[X]) (q : R[X])
   证明: map_prod (compRingHom q) _ _
 
 Depends on / 依赖: compRingHom, map_prod
@@ -3154,7 +3154,7 @@ theorem isRoot_prod
 
 中文:
 定理 isRoot_prod
-  结论: {R} [CommSemiring R] [IsDomain R] {ι : 类型} (s : Finset ι) (p : ι -> R[X])
+  结论: {R} [交换半环 R] [是整环 R] {ι : 类型} (s : 有限集 ι) (p : ι -> R[X])
   证明: by
   simp only [IsRoot, eval_prod, Finset.prod_eq_zero_iff]
 
@@ -3218,7 +3218,7 @@ theorem eval_geom_sum
 
 中文:
 定理 eval_geom_sum
-  条件: {R} [CommSemiring R] {n : 自然数} {x : R}
+  条件: {R} [交换半环 R] {n : 自然数} {x : R}
   证明: by simp [eval_finsetSum]
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, eval_finsetSum, to_isDomain
@@ -3288,7 +3288,7 @@ theorem map_multiset_prod
 中文:
 定理 map_multiset_prod
   条件: (m : Multiset R[X])
-  结论: m.prod.map f = (m.map <| map f).prod
+  结论: m.乘积.map f = (m.map <| map f).乘积
   证明: Eq.symm Multiset.prod_hom _ (mapRingHom f).toMonoidHom
 -/
 protected theorem map_multiset_prod (m : Multiset R[X]) : m.prod.map f = (m.map <| map f).prod :=
@@ -3304,7 +3304,7 @@ theorem map_prod
 
 中文:
 定理 map_prod
-  条件: {ι : 类型} (g : ι -> R[X]) (s : Finset ι)
+  条件: {ι : 类型} (g : ι -> R[X]) (s : 有限集 ι)
   证明: map_prod (mapRingHom f) _ _
 -/
 protected theorem map_prod {ι : Type*} (g : ι -> R[X]) (s : Finset ι) :
@@ -3333,7 +3333,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  条件: {S} [Ring S] (f : R ->+* S)
+  条件: {S} [环 S] (f : R ->+* S)
   结论: (p - q).map f = p.map f - q.map f
   证明: (mapRingHom f).map_sub p q
 
@@ -3354,7 +3354,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  条件: {S} [Ring S] (f : R ->+* S)
+  条件: {S} [环 S] (f : R ->+* S)
   结论: (-p).map f = -p.map f
   证明: (mapRingHom f).map_neg p
 -/
@@ -3374,7 +3374,7 @@ lemma map_intCast
 
 中文:
 引理 map_intCast
-  条件: {S} [Ring S] (f : R ->+* S) (n : 整数)
+  条件: {S} [环 S] (f : R ->+* S) (n : 整数)
   结论: map f ↑n = ↑n
   证明: map_intCast (mapRingHom f) n
 
@@ -3425,7 +3425,7 @@ theorem eval₂_neg
 
 中文:
 定理 eval₂_neg
-  条件: {S} [Ring S] (f : R ->+* S) {x : S}
+  条件: {S} [环 S] (f : R ->+* S) {x : S}
   结论: (-p).eval₂ f x = -p.eval₂ f x
   证明: by
   rw [eq_neg_iff_add_eq_zero]; rw [← eval₂_add]; rw [neg_add_cancel]; rw [eval₂_zero]
@@ -3451,7 +3451,7 @@ theorem eval₂_sub
 
 中文:
 定理 eval₂_sub
-  条件: {S} [Ring S] (f : R ->+* S) {x : S}
+  条件: {S} [环 S] (f : R ->+* S) {x : S}
   证明: by
   rw [sub_eq_add_neg]; rw [eval₂_add]; rw [eval₂_neg]; rw [sub_eq_add_neg]
 
@@ -3606,7 +3606,7 @@ theorem eval₂_at_intCast
 
 中文:
 定理 eval₂_at_intCast
-  条件: {S : 类型} [Ring S] (f : R ->+* S) (n : 整数)
+  条件: {S : 类型} [环 S] (f : R ->+* S) (n : 整数)
   证明: by
   convert! eval₂_at_apply (p := p) f n
   simp

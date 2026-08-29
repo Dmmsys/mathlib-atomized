@@ -44,7 +44,7 @@ theorem monic_zero_iff_subsingleton
 
 中文:
 定理 monic_zero_iff_subsingleton
-  结论: Monic (0 : R[X]) ↔ Subsingleton R
+  结论: Monic (0 : R[X]) ↔ 子单例 R
   证明: subsingleton_iff_zero_eq_one
 
 Depends on / 依赖: subsingleton_iff_zero_eq_one
@@ -135,7 +135,7 @@ f.map_one ▸ hp ▸ leadingCoeff_map_eq_of_isUnit_leadingCoeff _ isUnit_one
 
 中文:
 定理 Monic.map
-  条件: [Semiring S] (f : R ->+* S) (hp : Monic p)
+  条件: [半环 S] (f : R ->+* S) (hp : Monic p)
   结论: Monic (p.map f)
   证明: .elim (·.elim ..) fun _ => subsingleton_or_nontrivial S
 f.map_one ▸ hp ▸ leadingCoeff_map_eq_of_isUnit_leadingCoeff _ isUnit_one
@@ -640,9 +640,9 @@ theorem _root_.Polynomial.not_isUnit_X_add_C
   grind
 
 中文:
-定理 _root_.Polynomial.not_isUnit_X_add_C
-  条件: [Nontrivial R] (a : R)
-  结论: ¬ IsUnit (X + C a)
+定理 _root_.多项式.not_isUnit_X_add_C
+  条件: [非平凡 R] (a : R)
+  结论: ¬ 是单位 (X + C a)
   证明: by
   rintro ⟨⟨_, g, hfg, hgf⟩, rfl⟩
   have h := (monic_X_add_C a).natDegree_mul' (right_ne_zero_of_mul_eq_one hfg)
@@ -776,7 +776,7 @@ theorem eq_one_of_map_eq_one
 
 中文:
 定理 eq_one_of_map_eq_one
-  结论: {S : 类型} [Semiring S] [Nontrivial S] (f : R ->+* S) (hp : p.Monic)
+  结论: {S : 类型} [半环 S] [非平凡 S] (f : R ->+* S) (hp : p.Monic)
   证明: by
   nontriviality R
   have hdeg : p.degree = 0 := by
@@ -843,7 +843,7 @@ theorem natDegree_pow_X_add_C
 
 中文:
 定理 natDegree_pow_X_add_C
-  条件: [Nontrivial R] (n : 自然数) (r : R)
+  条件: [非平凡 R] (n : 自然数) (r : R)
   结论: ((X + C r) ^ n).natDegree = n
   证明: by
   rw [(monic_X_add_C r).natDegree_pow]; rw [natDegree_X_add_C]; rw [mul_one]
@@ -869,7 +869,7 @@ theorem Monic.eq_one_of_isUnit
 
 中文:
 定理 Monic.eq_one_of_isUnit
-  条件: (hm : Monic p) (hpu : IsUnit p)
+  条件: (hm : Monic p) (hpu : 是单位 p)
   结论: p = 1
   证明: by
   nontriviality R
@@ -899,7 +899,7 @@ theorem Monic.isUnit_iff
 中文:
 定理 Monic.isUnit_iff
   条件: (hm : p.Monic)
-  结论: IsUnit p ↔ p = 1
+  结论: 是单位 p ↔ p = 1
   证明: ⟨hm.eq_one_of_isUnit, fun h => h.symm ▸ isUnit_one⟩
 
 Depends on / 依赖: eq_one_of_isUnit, h.symm, hm.eq_one_of_isUnit, isUnit_one
@@ -949,7 +949,7 @@ abbreviation MonicDegreeEq
 
 中文:
 缩写 MonicDegreeEq
-  签名: : Type _
+  签名: : 类型 _
   定义体: { p : R[X] // p.coeff n = 1 ∧ forall i > n, p.coeff i = 0 }
 
 @[simp]
@@ -971,7 +971,7 @@ lemma MonicDegreeEq.natDegree
 
 中文:
 引理 MonicDegreeEq.natDegree
-  条件: [Nontrivial R] (p : MonicDegreeEq R n)
+  条件: [非平凡 R] (p : MonicDegreeEq R n)
   证明: natDegree_eq_of_le_of_coeff_ne_zero (natDegree_le_iff_coeff_eq_zero.mpr p.2.2) (by simp [p.2.1])
 
 @[simp]
@@ -993,7 +993,7 @@ lemma MonicDegreeEq.degree
 
 中文:
 引理 MonicDegreeEq.degree
-  条件: [Nontrivial R] (p : MonicDegreeEq R n)
+  条件: [非平凡 R] (p : MonicDegreeEq R n)
   证明: degree_eq_of_le_of_coeff_ne_zero (degree_le_of_natDegree_le p.natDegree.le) (by simp [p.2.1])
 
 Depends on / 依赖: degree_eq_of_le_of_coeff_ne_zero, degree_le_of_natDegree_le, natDegree, p.natDegree.le
@@ -1140,7 +1140,7 @@ theorem monic_prod_of_monic
 
 中文:
 定理 monic_prod_of_monic
-  条件: (s : Finset ι) (f : ι -> R[X]) (hs : 对任意 i in s, Monic (f i))
+  条件: (s : 有限集 ι) (f : ι -> R[X]) (hs : 对任意 i in s, Monic (f i))
   证明: monic_multiset_prod_of_monic s.1 f hs
 
 Depends on / 依赖: monic_multiset_prod_of_monic
@@ -1235,7 +1235,7 @@ theorem Monic.nextCoeff_prod
 
 中文:
 定理 Monic.nextCoeff_prod
-  条件: (s : Finset ι) (f : ι -> R[X]) (h : 对任意 i in s, Monic (f i))
+  条件: (s : 有限集 ι) (f : ι -> R[X]) (h : 对任意 i in s, Monic (f i))
   证明: Monic.nextCoeff_multiset_prod s.1 f h
 
 Depends on / 依赖: Monic.nextCoeff_multiset_prod, nextCoeff_multiset_prod
@@ -1337,7 +1337,7 @@ lemma Monic.irreducible_iff_natDegree'
 中文:
 引理 Monic.irreducible_iff_natDegree'
   条件: (hp : p.Monic)
-  结论: Irreducible p ↔ p != 1 ∧
+  结论: 不可约 p ↔ p != 1 ∧
   证明: by
   simp_rw [hp.irreducible_iff_natDegree, mem_Ioc, Nat.le_div_iff_mul_le zero_lt_two, mul_two]
   apply and_congr_right'
@@ -1413,7 +1413,7 @@ lemma Monic.not_irreducible_iff_exists_add_mul_eq_coeff
       hav
 
 中文:
-引理 Monic.not_irreducible_iff_exists_add_mul_eq_coeff
+引理 Monic.not_irreducible_iff_存在_add_mul_eq_coeff
   条件: (hm : p.Monic) (hnd : p.natDegree = 2)
   证明: by
   cases subsingleton_or_nontrivial R
@@ -1472,7 +1472,7 @@ theorem Monic.natDegree_map
 
 中文:
 定理 Monic.natDegree_map
-  条件: [Semiring S] [Nontrivial S] {P : R[X]} (hmo : P.Monic) (f : R ->+* S)
+  条件: [半环 S] [非平凡 S] {P : R[X]} (hmo : P.Monic) (f : R ->+* S)
   证明: by
   refine le_antisymm natDegree_map_le (le_natDegree_of_ne_zero ?_)
   rw [coeff_map]; rw [Monic.coeff_natDegree hmo]; rw [map_one]
@@ -1500,7 +1500,7 @@ theorem Monic.degree_map
 
 中文:
 定理 Monic.degree_map
-  条件: [Semiring S] [Nontrivial S] {P : R[X]} (hmo : P.Monic) (f : R ->+* S)
+  条件: [半环 S] [非平凡 S] {P : R[X]} (hmo : P.Monic) (f : R ->+* S)
   证明: by
   simp_all
 -/
@@ -1527,7 +1527,7 @@ theorem monic_of_injective
 
 中文:
 定理 monic_of_injective
-  条件: (hf : Injective f) {p : R[X]} (hp : (p.map f).Monic)
+  条件: (hf : 单射 f) {p : R[X]} (hp : (p.map f).Monic)
   结论: p.Monic
   证明: by
   apply hf
@@ -1548,8 +1548,8 @@ theorem _root_.Function.Injective.monic_map_iff
   proof: ⟨Monic.map _, Polynomial.monic_of_injective hf⟩
 
 中文:
-定理 _root_.Function.Injective.monic_map_iff
-  条件: (hf : Injective f) {p : R[X]}
+定理 _root_.函数.单射.monic_map_iff
+  条件: (hf : 单射 f) {p : R[X]}
   证明: ⟨Monic.map _, Polynomial.monic_of_injective hf⟩
 
 Depends on / 依赖: Monic.map, Polynomial, Polynomial.monic_of_injective, monic_of_injective
@@ -1621,7 +1621,7 @@ theorem monic_X_pow_sub_C
 
 中文:
 定理 monic_X_pow_sub_C
-  条件: {R : 类型u} [Ring R] (a : R) {n : 自然数} (h : n != 0)
+  条件: {R : 类型u} [环 R] (a : R) {n : 自然数} (h : n != 0)
   证明: by
   simpa only [map_neg, ← sub_eq_add_neg] using monic_X_pow_add_C (-a) h
 
@@ -1646,7 +1646,7 @@ theorem not_isUnit_X_pow_sub_one
 
 中文:
 定理 not_isUnit_X_pow_sub_one
-  条件: (R : 类型) [Ring R] [Nontrivial R] (n : 自然数)
+  条件: (R : 类型) [环 R] [非平凡 R] (n : 自然数)
   证明: by
   intro h
   rcases eq_or_ne n 0 with (rfl | hn)
@@ -1950,8 +1950,8 @@ theorem Monic.isRegular
 
 中文:
 定理 Monic.isRegular
-  条件: {R : 类型} [Ring R] {p : R[X]} (hp : Monic p)
-  结论: IsRegular p
+  条件: {R : 类型} [环 R] {p : R[X]} (hp : Monic p)
+  结论: 是正则 p
   证明: by
   constructor
   · intro q r h
@@ -1992,7 +1992,7 @@ theorem degree_smul_of_smul_regular
 
 中文:
 定理 degree_smul_of_smul_regular
-  结论: {S : 类型} [SMulZeroClass S R] {k : S}
+  结论: {S : 类型} [SMulZero类 S R] {k : S}
   证明: by
   refine le_antisymm ?_ ?_
   · rw [degree_le_iff_coeff_zero]
@@ -2036,7 +2036,7 @@ theorem natDegree_smul_of_smul_regular
 
 中文:
 定理 natDegree_smul_of_smul_regular
-  结论: {S : 类型} [SMulZeroClass S R] {k : S}
+  结论: {S : 类型} [SMulZero类 S R] {k : S}
   证明: by
   by_cases hp : p = 0
   · simp [hp]
@@ -2067,7 +2067,7 @@ theorem leadingCoeff_smul_of_smul_regular
 
 中文:
 定理 leadingCoeff_smul_of_smul_regular
-  结论: {S : 类型} [SMulZeroClass S R] {k : S}
+  结论: {S : 类型} [SMulZero类 S R] {k : S}
   证明: by
   rw [Polynomial.leadingCoeff]; rw [Polynomial.leadingCoeff]; rw [coeff_smul]; rw [natDegree_smul_of_smul_regular p h]
 
@@ -2089,7 +2089,7 @@ theorem monic_of_isUnit_leadingCoeff_inv_smul
 
 中文:
 定理 monic_of_isUnit_leadingCoeff_inv_smul
-  条件: (h : IsUnit p.leadingCoeff)
+  条件: (h : 是单位 p.leadingCoeff)
   证明: by
   rw [Monic.def]; rw [leadingCoeff_smul_of_smul_regular _ (isSMulRegular_of_group _)]; rw [Units.smul_def]
   simp
@@ -2120,7 +2120,7 @@ theorem isUnit_leadingCoeff_mul_right_eq_zero_iff
 
 中文:
 定理 isUnit_leadingCoeff_mul_right_eq_zero_iff
-  条件: (h : IsUnit p.leadingCoeff) {q : R[X]}
+  条件: (h : 是单位 p.leadingCoeff) {q : R[X]}
   证明: by
   constructor
   · intro hp
@@ -2168,7 +2168,7 @@ theorem isUnit_leadingCoeff_mul_left_eq_zero_iff
 
 中文:
 定理 isUnit_leadingCoeff_mul_left_eq_zero_iff
-  条件: (h : IsUnit p.leadingCoeff) {q : R[X]}
+  条件: (h : 是单位 p.leadingCoeff) {q : R[X]}
   证明: by
   constructor
   · intro hp

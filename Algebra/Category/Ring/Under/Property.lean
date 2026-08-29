@@ -49,7 +49,7 @@ lemma RingHom.HasFiniteProducts.isClosedUnderLimitsOfShape
 limit.isoLimitCo
 
 中文:
-引理 RingHom.HasFiniteProducts.isClosedUnderLimitsOfShape
+引理 环态射.有FiniteProducts.isClosedUnderLimitsOfShape
   结论: (hQi : RespectsIso Q)
   证明: by
   refine .of_isClosedUnderLimitsOfShape fun (J : Type u) _ => ⟨fun A ⟨pres, hpres⟩ => ?_⟩
@@ -91,7 +91,7 @@ lemma RingHom.HasEqualizers.isClosedUnderLimitsOfShape
       HasLimit.is
 
 中文:
-引理 RingHom.HasEqualizers.isClosedUnderLimitsOfShape
+引理 环态射.HasEqualizers.isClosedUnderLimitsOfShape
   结论: (hQi : RespectsIso Q)
   证明: by
   refine ⟨fun A ⟨pres, hpres⟩ => ?_⟩
@@ -138,7 +138,7 @@ definition RingHom.HasFiniteProducts.createsFiniteProductsForget
 exact inferInstanceAs (toMorphismProperty Q).underObj.IsClosedUnderLimitsOfShape _
 
 中文:
-定义 RingHom.HasFiniteProducts.createsFiniteProductsForget
+定义 环态射.有FiniteProducts.createsFiniteProductsForget
   定义体: by
   refine .mk' _ fun (J : Type u) _ => ?_
   apply +allowSynthFailures Comma.forgetCreatesLimitsOfShapeOfClosed
@@ -167,8 +167,8 @@ lemma RingHom.HasFiniteProducts.hasFiniteProducts
   exact CategoryTheory.hasLimit_of_created D (Under.forget _ _ R)
 
 中文:
-引理 RingHom.HasFiniteProducts.hasFiniteProducts
-  结论: (hQi : RespectsIso Q) (hQp : HasFiniteProducts Q)
+引理 环态射.有FiniteProducts.hasFiniteProducts
+  结论: (hQi : RespectsIso Q) (hQp : 有FiniteProducts Q)
   证明: by
   refine ⟨fun n => ⟨fun D => ?_⟩⟩
   have := hQp.createsFiniteProductsForget hQi R
@@ -198,8 +198,8 @@ lemma RingHom.HasFiniteProducts.preservesFiniteProducts_pushout
     infer_instanc
 
 中文:
-引理 RingHom.HasFiniteProducts.preservesFiniteProducts_pushout
-  结论: (hQi : RingHom.RespectsIso Q)
+引理 环态射.有FiniteProducts.preservesFiniteProducts_pushout
+  结论: (hQi : 环态射.RespectsIso Q)
   证明: by
   have := hQp.createsFiniteProductsForget hQi R
   refine ⟨fun n => ⟨fun {K} => ?_⟩⟩
@@ -236,7 +236,7 @@ definition RingHom.HasEqualizers.createsLimitsWalkingParallelPair
   exact hQe.isClosedUnderLimitsOfShape hQi _
 
 中文:
-定义 RingHom.HasEqualizers.createsLimitsWalkingParallelPair
+定义 环态射.HasEqualizers.createsLimitsWalkingParallelPair
   签名: (hQi : RespectsIso Q)
   定义体: by
   apply +allowSynthFailures Comma.forgetCreatesLimitsOfShapeOfClosed
@@ -263,7 +263,7 @@ lemma RingHom.HasEqualizers.hasEqualizers
   exact hasLimit_of_created D (Under.forget _ _ R)
 
 中文:
-引理 RingHom.HasEqualizers.hasEqualizers
+引理 环态射.HasEqualizers.hasEqualizers
   结论: (hQi : RespectsIso Q) (hQe : HasEqualizers Q)
   证明: by
   refine ⟨fun D => ?_⟩
@@ -296,7 +296,7 @@ definition Under.createsFiniteLimitsForget
 
 中文:
 定义 Under.createsFiniteLimitsForget
-  签名: (hQi : RingHom.RespectsIso Q)
+  签名: (hQi : 环态射.RespectsIso Q)
   定义体: letI := hQp.createsFiniteProductsForget hQi
   letI := hQe.createsLimitsWalkingParallelPair hQi
   createsFiniteLimitsOfCreatesEqualizersAndFiniteProducts _
@@ -322,7 +322,7 @@ lemma Under.hasFiniteLimits
 
 中文:
 引理 Under.hasFiniteLimits
-  结论: (hQi : RingHom.RespectsIso Q)
+  结论: (hQi : 环态射.RespectsIso Q)
   证明: have := hQp.hasFiniteProducts hQi
   have := hQe.hasEqualizers hQi
   hasFiniteLimits_of_hasEqualizers_and_finite_products
@@ -360,7 +360,7 @@ lemma CommRingCat.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bij
   have w' : h' ≫ (tensorProd
 
 中文:
-引理 CommRingCat.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bijective
+引理 交换环范畴.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bijective
   证明: by
   let c : Fork f g := Under.equalizerFork f g
   let hc : IsLimit c := Under.equalizerForkIsLimit f g
@@ -406,7 +406,7 @@ lemma RingHom.HasStableEqualizers.preservesLimit_parallelPair_tensorProd
   exact hPse _ _ hA hB
 
 中文:
-引理 RingHom.HasStableEqualizers.preservesLimit_parallelPair_tensorProd
+引理 环态射.HasStableEqualizers.preservesLimit_parallelPair_tensorProd
   证明: by
   rw [CommRingCat.preservesLimit_parallelPair_tensorProd_iff_tensorEqualizer_bijective]
   exact hPse _ _ hA hB
@@ -435,7 +435,7 @@ lemma RingHom.HasStableEqualizers.preservesEqualizers_pushout
     rw [← CommRingCat.ofHom_hom f]; rw [← preservesLimit_iff_of_natIso _ (CommRingC
 
 中文:
-引理 RingHom.HasStableEqualizers.preservesEqualizers_pushout
+引理 环态射.HasStableEqualizers.preservesEqualizers_pushout
   结论: (hPi : RespectsIso P)
   证明: by
   refine ⟨fun {K} => ?_⟩
@@ -476,8 +476,8 @@ lemma RingHom.HasStableEqualizers.preservesFiniteLimits_pushout
   preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts _
 
 中文:
-引理 RingHom.HasStableEqualizers.preservesFiniteLimits_pushout
-  结论: (hPi : RingHom.RespectsIso P)
+引理 环态射.HasStableEqualizers.preservesFiniteLimits_pushout
+  结论: (hPi : 环态射.RespectsIso P)
   证明: have := hPp.preservesFiniteProducts_pushout hPi f
   have := hPse.preservesEqualizers_pushout hPi hPe f
   have := CommRingCat.Under.hasFiniteLimits hPi hPp hPe

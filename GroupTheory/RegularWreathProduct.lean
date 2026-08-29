@@ -53,7 +53,7 @@ structure RegularWreathProduct
     - right : Q
 
 中文:
-结构 RegularWreathProduct
+结构 正则圈积
   参数: where
   公理与运算 (2 个):
     - left : Q -> D
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (D ≀ᵣ Q)
+  签名: 乘法 (D ≀ᵣ Q)
   定义体: ⟨a.1 * (fun x => b.1 (a.2⁻¹ * x)), a.2 * b.2⟩
 -/
 instance : Mul (D ≀ᵣ Q) where
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (RegularWreathProduct D Q)
+  签名: 幺 (正则圈积 D Q)
   定义体: ⟨1, 1⟩
 
 @[simp]
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (RegularWreathProduct D Q)
+  签名: 取逆 (正则圈积 D Q)
   定义体: ⟨fun k => x.1⁻¹ (x.2 * k), x.2⁻¹⟩
 
 @[simp]
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (RegularWreathProduct D Q)
+  签名: 群 (正则圈积 D Q)
   定义体: by ext <;> simp [mul_assoc]
   one_mul a := by ext <;> simp
   mul_one a := by ext <;> simp
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RegularWreathProduct D Q)
+  签名: 可居 (正则圈积 D Q)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (RegularWreathProduct D Q) := ⟨1⟩
@@ -433,7 +433,7 @@ theorem rightHom_comp_inl_eq_id
 
 中文:
 定理 rightHom_comp_inl_eq_id
-  结论: (rightHom : D ≀ᵣ Q ->* Q).comp inl = MonoidHom.id _
+  结论: (rightHom : D ≀ᵣ Q ->* Q).comp inl = 幺半群态射.id _
   证明: by ext; simp
 
 @[simp]
@@ -494,8 +494,8 @@ instance [Finite
 omit [Group D] [Group Q] in
 
 中文:
-实例 [Finite
-  签名: D] [Finite Q] : Finite (D ≀ᵣ Q)
+实例 [有限
+  签名: D] [有限 Q] : 有限 (D ≀ᵣ Q)
   定义体: Finite.of_equiv _ (equivProd D Q).symm
 
 omit [Group D] [Group Q] in
@@ -518,7 +518,7 @@ theorem card
 
 中文:
 定理 card
-  条件: [Finite Q]
+  条件: [有限 Q]
   结论: 自然数.card (D ≀ᵣ Q) = 自然数.card D ^ 自然数.card Q * 自然数.card Q
   证明: by
   rw [Nat.card_congr (equivProd D Q)]; rw [Nat.card_prod (Q -> D) Q]; rw [Nat.card_fun]
@@ -542,7 +542,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: {D₁ Q₁ D₂ Q₂ : 类型} [Group D₁] [Group Q₁] [Group D₂] [Group Q₂]
+  签名: {D₁ Q₁ D₂ Q₂ : 类型} [群 D₁] [群 Q₁] [群 D₂] [群 Q₂]
   定义体: ⟨f ∘ (x.left ∘ g.symm), g x.right⟩
   invFun x := ⟨(f.symm ∘ x.left) ∘ g, g.symm x.right⟩
   left_inv x := by ext <;> simp
@@ -576,7 +576,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (D ≀ᵣ Q) (Λ × Q)
+  签名: 标量乘法 (D ≀ᵣ Q) (Λ × Q)
   定义体: ⟨(w.left (w.right * p.2)) • p.1, w.right * p.2⟩
 
 @[simp]
@@ -615,7 +615,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (D ≀ᵣ Q) (Λ × Q)
+  签名: 乘法作用 (D ≀ᵣ Q) (Λ × Q)
   定义体: by simp
   mul_smul := by simp [smul_smul, mul_assoc]
 
@@ -645,8 +645,8 @@ instance [Nonempty
  
 
 中文:
-实例 [Nonempty
-  签名: Q] [Nonempty Λ] : FaithfulSMul (D ≀ᵣ Q) (Λ × Q) where
+实例 [非空
+  签名: Q] [非空 Λ] : 忠实标量乘法 (D ≀ᵣ Q) (Λ × Q) where
   定义体: by
     simp only [smul_def, Prod.mk.injEq, mul_left_inj, Prod.forall]
     intro m₁ m₂ h
@@ -684,7 +684,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: : D ≀ᵣ Q ->* Equiv.Perm (Λ × Q)
+  签名: : D ≀ᵣ Q ->* 等价.置换 (Λ × Q)
   定义体: MulAction.toPermHom (D ≀ᵣ Q) (Λ × Q)
 
 Depends on / 依赖: MulAction, MulAction.toPermHom, toPermHom
@@ -703,8 +703,8 @@ theorem toPermInj
 
 中文:
 定理 toPermInj
-  条件: [Nonempty Λ]
-  结论: Function.Injective (toPerm D Q Λ)
+  条件: [非空 Λ]
+  结论: 函数.单射 (toPerm D Q Λ)
   证明: MulAction.toPerm_injective
 
 Depends on / 依赖: MulAction, MulAction.toPerm_injective, toPerm_injective
@@ -749,7 +749,7 @@ lemma IteratedWreathProduct_zero
 
 中文:
 引理 IteratedWreathProduct_zero
-  结论: IteratedWreathProduct G 0 = PUnit
+  结论: IteratedWreathProduct G 0 = 命题单元
   证明: rfl
 
 @[simp]
@@ -783,8 +783,8 @@ instance [Finite
   | succ n h => rw [IteratedWreathProduct_succ]; infer_instance
 
 中文:
-实例 [Finite
-  签名: G] : Finite (IteratedWreathProduct G n)
+实例 [有限
+  签名: G] : 有限 (IteratedWreathProduct G n)
   定义体: by
   induction n with
   | zero => rw [IteratedWreathProduct_zero]; infer_instance
@@ -812,7 +812,7 @@ theorem IteratedWreathProduct.card
 
 中文:
 定理 IteratedWreathProduct.card
-  条件: [Finite G]
+  条件: [有限 G]
   结论: 自然数.card (IteratedWreathProduct G n) =
   证明: by
   induction n with
@@ -844,7 +844,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (IteratedWreathProduct G n)
+  签名: 群 (IteratedWreathProduct G n)
   定义体: by
   induction n with
   | zero => rw [IteratedWreathProduct_zero]; infer_instance
@@ -869,7 +869,7 @@ definition iteratedWreathToPermHom
 
 中文:
 定义 iteratedWreathToPermHom
-  签名: (G : 类型) [Group G]
+  签名: (G : 类型) [群 G]
   定义体: MulAction.compHom (Fin n -> G) (iteratedWreathToPermHom G n)
       exact (Fin.succFunEquiv G n).symm.permCongrHom.toMonoidHom.comp
         (RegularWreathProduct.toPerm (IteratedWreathProduct G n) G (Fin n -> G))
@@ -898,7 +898,7 @@ lemma iteratedWreathToPermHomInj
 
 中文:
 引理 iteratedWreathToPermHomInj
-  条件: (G : 类型) [Group G]
+  条件: (G : 类型) [群 G]
   证明: MulAction.compHom (Fin n -> G) (iteratedWreathToPermHom G n)
       have : FaithfulSMul (IteratedWreathProduct G n) (Fin n -> G) :=
         ⟨fun h => iteratedWreathToPermHomInj G n (Equiv.ext h)⟩
@@ -934,7 +934,7 @@ definition Sylow.mulEquivIteratedWreathProduct
 
 中文:
 定义 Sylow.mulEquivIteratedWreathProduct
-  签名: (p : 自然数) [hp : Fact (自然数.Prime p)] (n : 自然数)
+  签名: (p : 自然数) [hp : Fact (自然数.素 p)] (n : 自然数)
   定义体: by
   let e1 : α ≃ (Fin n -> G) := (Finite.equivFinOfCardEq hα).trans
     (Finite.equivFinOfCardEq (by rw [Nat.card_fun, Nat.card_fin, hG])).symm

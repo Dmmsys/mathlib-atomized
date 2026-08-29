@@ -67,7 +67,7 @@ class Norm
     - norm : E -> Real
 
 中文:
-类 Norm
+类 范数
   参数: (E : 类型)
   公理与运算 (1 个):
     - norm : E -> 实数
@@ -88,7 +88,7 @@ class NNNorm
     - nnnorm : E -> Real>=0
 
 中文:
-类 NNNorm
+类 NN范数
   参数: (E : 类型)
   公理与运算 (1 个):
     - nnnorm : E -> 实数>=0
@@ -109,7 +109,7 @@ class ENorm
     - enorm : E -> Real>=0∞
 
 中文:
-类 ENorm
+类 E范数
   参数: (E : 类型)
   公理与运算 (1 个):
     - enorm : E -> 实数>=0∞
@@ -138,8 +138,8 @@ instance NNNorm.toENorm
   body: (‖·‖₊ : E -> Real>=0∞)
 
 中文:
-实例 NNNorm.toENorm
-  签名: : ENorm E where enorm
+实例 NN范数.toENorm
+  签名: : E范数 E where enorm
   定义体: (‖·‖₊ : E -> Real>=0∞)
 -/
 instance NNNorm.toENorm : ENorm E where enorm := (‖·‖₊ : E -> Real>=0∞)
@@ -171,7 +171,7 @@ lemma toNNReal_enorm
   proof: rfl
 
 中文:
-引理 toNNReal_enorm
+引理 toNN实数_enorm
   条件: (x : E)
   结论: ‖x‖ₑ.toNN实数 = ‖x‖₊
   证明: rfl
@@ -284,11 +284,11 @@ class ContinuousENorm
     - continuous_enorm : Continuous enorm
 
 中文:
-类 ContinuousENorm
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ENorm E
+类 余ntinuousE范数
+  参数: (E : 类型) [拓扑空间 E]
+  继承: E范数 E
   公理与运算 (1 个):
-    - continuous_enorm : Continuous enorm
+    - continuous_enorm : 连续 enorm
 -/
 class ContinuousENorm (E : Type*) [TopologicalSpace E] extends ENorm E where
   continuous_enorm : Continuous enorm
@@ -305,9 +305,9 @@ class ESeminormedAddMonoid
     - enorm_add_le : forall x y : E, ‖x + y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
 
 中文:
-类 ESeminormedAddMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ContinuousENorm E, AddMonoid E
+类 ESeminormedAdd幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: 余ntinuousE范数 E, 加法幺半群 E
   公理与运算 (2 个):
     - enorm_zero : ‖(0 : E)‖ₑ = 0
     - enorm_add_le : 对任意 x y : E, ‖x + y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
@@ -331,9 +331,9 @@ class ENormedAddMonoid
     - enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 0
 
 中文:
-类 ENormedAddMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedAddMonoid E
+类 ENormedAdd幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormedAdd幺半群 E
   公理与运算 (1 个):
     - enorm_eq_zero : 对任意 x : E, ‖x‖ₑ = 0 ↔ x = 0
 -/
@@ -356,9 +356,9 @@ class ESeminormedMonoid
     - enorm_mul_le : forall x y : E, ‖x * y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
 
 中文:
-类 ESeminormedMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ContinuousENorm E, Monoid E
+类 ESeminormed幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: 余ntinuousE范数 E, 幺半群 E
   公理与运算 (2 个):
     - enorm_zero : ‖(1 : E)‖ₑ = 0
     - enorm_mul_le : 对任意 x y : E, ‖x * y‖ₑ <= ‖x‖ₑ + ‖y‖ₑ
@@ -385,9 +385,9 @@ class ENormedMonoid
     - enorm_eq_zero : forall x : E, ‖x‖ₑ = 0 ↔ x = 1
 
 中文:
-类 ENormedMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedMonoid E
+类 ENormed幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormed幺半群 E
   公理与运算 (1 个):
     - enorm_eq_zero : 对任意 x : E, ‖x‖ₑ = 0 ↔ x = 1
 -/
@@ -404,9 +404,9 @@ class ESeminormedAddCommMonoid
   (no additional axioms)
 
 中文:
-类 ESeminormedAddCommMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedAddMonoid E, AddCommMonoid E
+类 ESeminormedAddComm幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormedAdd幺半群 E, 加法交换幺半群 E
   (无附加公理)
 -/
 class ESeminormedAddCommMonoid (E : Type*) [TopologicalSpace E]
@@ -425,9 +425,9 @@ class ENormedAddCommMonoid
   (no additional axioms)
 
 中文:
-类 ENormedAddCommMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedAddCommMonoid E, ENormedAddMonoid E
+类 ENormedAddComm幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormedAddComm幺半群 E, ENormedAdd幺半群 E
   (无附加公理)
 -/
 class ENormedAddCommMonoid (E : Type*) [TopologicalSpace E]
@@ -445,9 +445,9 @@ class ESeminormedCommMonoid
   (no additional axioms)
 
 中文:
-类 ESeminormedCommMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedMonoid E, CommMonoid E
+类 ESeminormedComm幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormed幺半群 E, 交换幺半群 E
   (无附加公理)
 -/
 class ESeminormedCommMonoid (E : Type*) [TopologicalSpace E]
@@ -469,9 +469,9 @@ class ENormedCommMonoid
   (no additional axioms)
 
 中文:
-类 ENormedCommMonoid
-  参数: (E : 类型) [TopologicalSpace E]
-  继承: ESeminormedCommMonoid E, ENormedMonoid E
+类 ENormedComm幺半群
+  参数: (E : 类型) [拓扑空间 E]
+  继承: ESeminormedComm幺半群 E, ENormed幺半群 E
   (无附加公理)
 -/
 class ENormedCommMonoid (E : Type*) [TopologicalSpace E]
@@ -489,9 +489,9 @@ class SeminormedAddGroup
     - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
 
 中文:
-类 SeminormedAddGroup
+类 半赋范加群
   参数: (E : 类型)
-  继承: Norm E, AddGroup E, PseudoMetricSpace E
+  继承: 范数 E, 加法群 E, 伪度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖-x + y‖
     - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
@@ -519,9 +519,9 @@ class SeminormedGroup
     - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
 
 中文:
-类 SeminormedGroup
+类 半赋范群
   参数: (E : 类型)
-  继承: Norm E, Group E, PseudoMetricSpace E
+  继承: 范数 E, 群 E, 伪度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖x⁻¹ * y‖
     - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
@@ -546,9 +546,9 @@ class NormedAddGroup
     - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
 
 中文:
-类 NormedAddGroup
+类 赋范加群
   参数: (E : 类型)
-  继承: Norm E, AddGroup E, MetricSpace E
+  继承: 范数 E, 加法群 E, 度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖-x + y‖
     - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
@@ -576,9 +576,9 @@ class NormedGroup
     - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
 
 中文:
-类 NormedGroup
+类 赋范群
   参数: (E : 类型)
-  继承: Norm E, Group E, MetricSpace E
+  继承: 范数 E, 群 E, 度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖x⁻¹ * y‖
     - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
@@ -603,9 +603,9 @@ class SeminormedAddCommGroup
     - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
 
 中文:
-类 SeminormedAddCommGroup
+类 SeminormedAddComm群
   参数: (E : 类型)
-  继承: Norm E, AddCommGroup E, 
+  继承: 范数 E, 加法交换群 E, 
   公理与运算 (2 个):
     - dist : = fun x y => ‖-x + y‖
     - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
@@ -634,9 +634,9 @@ class SeminormedCommGroup
     - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
 
 中文:
-类 SeminormedCommGroup
+类 SeminormedComm群
   参数: (E : 类型)
-  继承: Norm E, CommGroup E, PseudoMetricSpace E
+  继承: 范数 E, 交换群 E, 伪度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖x⁻¹ * y‖
     - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
@@ -661,9 +661,9 @@ class NormedAddCommGroup
     - dist_eq : forall x y, dist x y = ‖-x + y‖  [default: by aesop]
 
 中文:
-类 NormedAddCommGroup
+类 赋范交换加群
   参数: (E : 类型)
-  继承: Norm E, AddCommGroup E, MetricSpace E
+  继承: 范数 E, 加法交换群 E, 度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖-x + y‖
     - dist_eq : 对任意 x y, dist x y = ‖-x + y‖  [默认: by aesop]
@@ -691,9 +691,9 @@ class NormedCommGroup
     - dist_eq : forall x y, dist x y = ‖x⁻¹ * y‖  [default: by aesop]
 
 中文:
-类 NormedCommGroup
+类 NormedComm群
   参数: (E : 类型)
-  继承: Norm E, CommGroup E, MetricSpace E
+  继承: 范数 E, 交换群 E, 度量空间 E
   公理与运算 (2 个):
     - dist : = fun x y => ‖x⁻¹ * y‖
     - dist_eq : 对任意 x y, dist x y = ‖x⁻¹ * y‖  [默认: by aesop]
@@ -748,8 +748,8 @@ abbreviation NormedGroup.ofSeparation
 inv_mul_eq_one.1 h _ (‹SeminormedGroup E›.dist_eq _ _).symm.trans hxy }
 
 中文:
-缩写 NormedGroup.ofSeparation
-  签名: [SeminormedGroup E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
+缩写 赋范群.ofSeparation
+  签名: [半赋范群 E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
   定义体: ‹SeminormedGroup E›.dist_eq
   toMetricSpace :=
     { eq_of_dist_eq_zero := fun hxy =>
@@ -782,8 +782,8 @@ abbreviation NormedCommGroup.ofSeparation
   body: { ‹SeminormedCommGroup E›, NormedGroup.ofSeparation h with }
 
 中文:
-缩写 NormedCommGroup.ofSeparation
-  签名: [SeminormedCommGroup E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
+缩写 NormedComm群.ofSeparation
+  签名: [SeminormedComm群 E] (h : 对任意 x : E, ‖x‖ = 0 -> x = 1)
   定义体: { ‹SeminormedCommGroup E›, NormedGroup.ofSeparation h with }
 
 Depends on / 依赖: NormedGroup, NormedGroup.ofSeparation, SeminormedCommGroup, ofSeparation
@@ -808,8 +808,8 @@ abbreviation SeminormedGroup.ofMulDist
     · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
 
 中文:
-缩写 SeminormedGroup.ofMulDist
-  签名: [Norm E] [Group E] [PseudoMetricSpace E]
+缩写 半赋范群.ofMulDist
+  签名: [范数 E] [群 E] [伪度量空间 E]
   定义体: by
     rw [h₁]; apply le_antisymm
     · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
@@ -841,8 +841,8 @@ abbreviation SeminormedGroup.ofMulDist'
     · simpa only [div_eq_mul_inv, ← inv_mul_cancel x] using h₂ x y x⁻¹
 
 中文:
-缩写 SeminormedGroup.ofMulDist'
-  签名: [Norm E] [Group E] [PseudoMetricSpace E]
+缩写 半赋范群.ofMulDist'
+  签名: [范数 E] [群 E] [伪度量空间 E]
   定义体: by
     rw [h₁]; apply le_antisymm
     · simpa only [mul_inv_cancel, mul_one, ← mul_assoc, one_mul] using h₂ 1 (x⁻¹ * y) x
@@ -872,8 +872,8 @@ abbreviation SeminormedCommGroup.ofMulDist
     mul_comm := mul_comm }
 
 中文:
-缩写 SeminormedCommGroup.ofMulDist
-  签名: [Norm E] [CommGroup E] [PseudoMetricSpace E]
+缩写 SeminormedComm群.ofMulDist
+  签名: [范数 E] [交换群 E] [伪度量空间 E]
   定义体: { SeminormedGroup.ofMulDist h₁ h₂ with
     mul_comm := mul_comm }
 
@@ -899,8 +899,8 @@ abbreviation SeminormedCommGroup.ofMulDist'
     mul_comm := mul_comm }
 
 中文:
-缩写 SeminormedCommGroup.ofMulDist'
-  签名: [Norm E] [CommGroup E] [PseudoMetricSpace E]
+缩写 SeminormedComm群.ofMulDist'
+  签名: [范数 E] [交换群 E] [伪度量空间 E]
   定义体: { SeminormedGroup.ofMulDist' h₁ h₂ with
     mul_comm := mul_comm }
 
@@ -926,8 +926,8 @@ abbreviation NormedGroup.ofMulDist
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-缩写 NormedGroup.ofMulDist
-  签名: [Norm E] [Group E] [MetricSpace E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
+缩写 赋范群.ofMulDist
+  签名: [范数 E] [群 E] [度量空间 E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
   定义体: { SeminormedGroup.ofMulDist h₁ h₂ with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -952,8 +952,8 @@ abbreviation NormedGroup.ofMulDist'
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-缩写 NormedGroup.ofMulDist'
-  签名: [Norm E] [Group E] [MetricSpace E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
+缩写 赋范群.ofMulDist'
+  签名: [范数 E] [群 E] [度量空间 E] (h₁ : 对任意 x : E, ‖x‖ = dist 1 x)
   定义体: { SeminormedGroup.ofMulDist' h₁ h₂ with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -978,8 +978,8 @@ abbreviation NormedCommGroup.ofMulDist
     mul_comm := mul_comm }
 
 中文:
-缩写 NormedCommGroup.ofMulDist
-  签名: [Norm E] [CommGroup E] [MetricSpace E]
+缩写 NormedComm群.ofMulDist
+  签名: [范数 E] [交换群 E] [度量空间 E]
   定义体: { NormedGroup.ofMulDist h₁ h₂ with
     mul_comm := mul_comm }
 
@@ -1005,8 +1005,8 @@ abbreviation NormedCommGroup.ofMulDist'
     mul_comm := mul_comm }
 
 中文:
-缩写 NormedCommGroup.ofMulDist'
-  签名: [Norm E] [CommGroup E] [MetricSpace E]
+缩写 NormedComm群.ofMulDist'
+  签名: [范数 E] [交换群 E] [度量空间 E]
   定义体: { NormedGroup.ofMulDist' h₁ h₂ with
     mul_comm := mul_comm }
 
@@ -1042,8 +1042,8 @@ abbreviation GroupSeminorm.toSeminormedGroup
   dist_comm x y := by convert! map_inv_eq_map f (y⁻¹ * x) using 2; group
 
 中文:
-缩写 GroupSeminorm.toSeminormedGroup
-  签名: [Group E] (f : GroupSeminorm E)
+缩写 群半范数.toSeminormedGroup
+  签名: [群 E] (f : 群半范数 E)
   定义体: f (x⁻¹ * y)
   norm := f
   dist_eq _ _ := rfl
@@ -1079,8 +1079,8 @@ abbreviation GroupSeminorm.toSeminormedCommGroup
     mul_comm := mul_comm }
 
 中文:
-缩写 GroupSeminorm.toSeminormedCommGroup
-  签名: [CommGroup E] (f : GroupSeminorm E)
+缩写 群半范数.toSeminormedCommGroup
+  签名: [交换群 E] (f : 群半范数 E)
   定义体: { f.toSeminormedGroup with
     mul_comm := mul_comm }
 
@@ -1111,8 +1111,8 @@ abbreviation GroupNorm.toNormedGroup
 eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 eq_one_of_map_eq_zero f h }
 
 中文:
-缩写 GroupNorm.toNormedGroup
-  签名: [Group E] (f : GroupNorm E)
+缩写 群范数.toNormedGroup
+  签名: [群 E] (f : 群范数 E)
   定义体: { f.toGroupSeminorm.toSeminormedGroup with
 eq_of_dist_eq_zero := fun h => inv_mul_eq_one.1 eq_one_of_map_eq_zero f h }
 
@@ -1142,8 +1142,8 @@ abbreviation GroupNorm.toNormedCommGroup
     mul_comm := mul_comm }
 
 中文:
-缩写 GroupNorm.toNormedCommGroup
-  签名: [CommGroup E] (f : GroupNorm E)
+缩写 群范数.toNormedCommGroup
+  签名: [交换群 E] (f : 群范数 E)
   定义体: { f.toNormedGroup with
     mul_comm := mul_comm }
 

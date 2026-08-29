@@ -88,8 +88,8 @@ theorem Meromorphic.logDeriv_mul_eventuallyEq
     (fun x _ => h'f x) (fun x _ => h'g x)
 
 中文:
-定理 Meromorphic.logDeriv_mul_eventuallyEq
-  结论: (hf : Meromorphic f) (hg : Meromorphic g)
+定理 亚纯.logDeriv_mul_eventuallyEq
+  结论: (hf : 亚纯 f) (hg : 亚纯 g)
   证明: (meromorphicOn_univ.2 hf).logDeriv_mul_eventuallyEq (meromorphicOn_univ.2 hg)
     (fun x _ => h'f x) (fun x _ => h'g x)
 
@@ -121,7 +121,7 @@ theorem MeromorphicOn.logDeriv_prod_eventuallyEq
 
 中文:
 定理 MeromorphicOn.logDeriv_prod_eventuallyEq
-  结论: {ι : 类型} {s : Finset ι} {F : ι -> 𝕜 -> 𝕜'}
+  结论: {ι : 类型} {s : 有限集 ι} {F : ι -> 𝕜 -> 𝕜'}
   证明: by
   have hA : forallᶠ y in codiscreteWithin U, forall i in s, AnalyticAt 𝕜 (F i) y :=
     (eventually_all_finset s).2 fun i hi => (h i hi).analyticAt_mem_codiscreteWithin
@@ -160,8 +160,8 @@ theorem Meromorphic.logDeriv_prod_eventuallyEq
   aesop
 
 中文:
-定理 Meromorphic.logDeriv_prod_eventuallyEq
-  结论: {ι : 类型} {s : Finset ι} {F : ι -> 𝕜 -> 𝕜'}
+定理 亚纯.logDeriv_prod_eventuallyEq
+  结论: {ι : 类型} {s : 有限集 ι} {F : ι -> 𝕜 -> 𝕜'}
   证明: by
   apply MeromorphicOn.logDeriv_prod_eventuallyEq (fun i hi => meromorphicOn_univ.mpr (h i hi))
   aesop
@@ -217,7 +217,7 @@ theorem Meromorphic.logDeriv_finprod_eventuallyEq
   aesop
 
 中文:
-定理 Meromorphic.logDeriv_finprod_eventuallyEq
+定理 亚纯.logDeriv_finprod_eventuallyEq
   结论: {ι : 类型} {F : ι -> 𝕜 -> 𝕜'}
   证明: by
   apply MeromorphicOn.logDeriv_finprod_eventuallyEq hF (fun i => meromorphicOn_univ.mpr (h i))
@@ -279,8 +279,8 @@ theorem Meromorphic.logDeriv_zpow_eventuallyEq
   apply MeromorphicOn.logDeriv_zpow_eventuallyEq (meromorphicOn_univ.mpr hf)
 
 中文:
-定理 Meromorphic.logDeriv_zpow_eventuallyEq
-  条件: (hf : Meromorphic f) (n : 整数)
+定理 亚纯.logDeriv_zpow_eventuallyEq
+  条件: (hf : 亚纯 f) (n : 整数)
   证明: by
   apply MeromorphicOn.logDeriv_zpow_eventuallyEq (meromorphicOn_univ.mpr hf)
 
@@ -351,7 +351,7 @@ theorem Meromorphic.logDeriv_finprod_zpow_eventuallyEq
   aesop
 
 中文:
-定理 Meromorphic.logDeriv_finprod_zpow_eventuallyEq
+定理 亚纯.logDeriv_finprod_zpow_eventuallyEq
   结论: {ι : 类型} {F : ι -> 𝕜 -> 𝕜'} {d : ι -> 整数}
   证明: by
   apply MeromorphicOn.logDeriv_finprod_zpow_eventuallyEq hd (fun i => meromorphicOn_univ.mpr (h i))

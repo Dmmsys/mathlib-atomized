@@ -54,7 +54,7 @@ lemma exists_openSubgroup_separating
   have hsa : s in a • (V : Set
 
 中文:
-引理 exists_openSubgroup_separating
+引理 存在_openSubgroup_separating
   条件: {a b : G} (h : a != b)
   证明: by
   obtain ⟨u, v, _, open_v, mem_u, mem_v, dis⟩ := t2_separation (h ∘ inv_mul_eq_one.mp)

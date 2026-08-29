@@ -76,7 +76,7 @@ theorem MeasureTheory.StronglyMeasurable.integral_prod_right
   exact measurable_measure_prodMk_left hs
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.integral_prod_right
+定理 测度论.StronglyMeasurable.integral_prod_right
   条件: [SFinite ν] ⦃f
   结论: α -> β -> E⦄
   证明: by
@@ -105,7 +105,7 @@ theorem MeasureTheory.StronglyMeasurable.integral_prod_right'
   rw [← uncurry_curry f] at hf; exact hf.integral_prod_right
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.integral_prod_right'
+定理 测度论.StronglyMeasurable.integral_prod_right'
   条件: [SFinite ν] ⦃f
   结论: α × β -> E⦄
   证明: by
@@ -127,7 +127,7 @@ theorem MeasureTheory.StronglyMeasurable.integral_prod_left
   proof: (hf.comp_measurable measurable_swap).integral_prod_right'
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.integral_prod_left
+定理 测度论.StronglyMeasurable.integral_prod_left
   条件: [SFinite μ] ⦃f
   结论: α -> β -> E⦄
   证明: (hf.comp_measurable measurable_swap).integral_prod_right'
@@ -148,7 +148,7 @@ theorem MeasureTheory.StronglyMeasurable.integral_prod_left'
   proof: (hf.comp_measurable measurable_swap).integral_prod_right'
 
 中文:
-定理 MeasureTheory.StronglyMeasurable.integral_prod_left'
+定理 测度论.StronglyMeasurable.integral_prod_left'
   条件: [SFinite μ] ⦃f
   结论: α × β -> E⦄
   证明: (hf.comp_measurable measurable_swap).integral_prod_right'
@@ -186,7 +186,7 @@ theorem integrable_measure_prodMk_left
 
 中文:
 定理 integrable_measure_prodMk_left
-  结论: {s : Set (α × β)} (hs : MeasurableSet s)
+  结论: {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   refine ⟨(measurable_measure_prodMk_left hs).ennreal_toReal.aemeasurable.aestronglyMeasurable, ?_⟩
   simp_rw [hasFiniteIntegral_iff_enorm, measureReal_def, enorm_eq_ofReal toReal_nonneg]
@@ -229,7 +229,7 @@ theorem MeasureTheory.AEStronglyMeasurable.prod_swap
   exact hf.comp_measurable measurable_swap
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.prod_swap
+定理 测度论.AEStronglyMeasurable.prod_swap
   结论: [SFinite μ] [SFinite ν]
   证明: by
   rw [← prod_swap] at hf
@@ -250,8 +250,8 @@ theorem MeasureTheory.AEStronglyMeasurable.comp_fst
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.comp_fst
-  结论: {γ} [TopologicalSpace γ] {f : α -> γ}
+定理 测度论.AEStronglyMeasurable.comp_fst
+  结论: {γ} [拓扑空间 γ] {f : α -> γ}
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_fst
 
 Depends on / 依赖: comp_quasiMeasurePreserving, hf.comp_quasiMeasurePreserving, quasiMeasurePreserving_fst
@@ -269,8 +269,8 @@ theorem MeasureTheory.AEStronglyMeasurable.comp_snd
   proof: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.comp_snd
-  结论: {γ} [TopologicalSpace γ] {f : β -> γ}
+定理 测度论.AEStronglyMeasurable.comp_snd
+  结论: {γ} [拓扑空间 γ] {f : β -> γ}
   证明: hf.comp_quasiMeasurePreserving quasiMeasurePreserving_snd
 
 Depends on / 依赖: comp_quasiMeasurePreserving, hf.comp_quasiMeasurePreserving, quasiMeasurePreserving_snd
@@ -289,8 +289,8 @@ theorem MeasureTheory.AEStronglyMeasurable.integral_prod_right'
     filter_upwards [ae_ae_of_ae_prod hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.integral_prod_right'
-  结论: [SFinite ν] [NormedSpace 实数 E]
+定理 测度论.AEStronglyMeasurable.integral_prod_right'
+  结论: [SFinite ν] [赋范空间 实数 E]
   证明: ⟨fun x => ∫ y, hf.mk f (x, y) ∂ν, hf.stronglyMeasurable_mk.integral_prod_right', by
     filter_upwards [ae_ae_of_ae_prod hf.ae_eq_mk] with _ hx using integral_congr_ae hx⟩
 
@@ -314,7 +314,7 @@ theorem MeasureTheory.AEStronglyMeasurable.prodMk_left
     hf.stronglyMeasurable_mk.comp_measurable measurable_prodMk_left, hx⟩
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.prodMk_left
+定理 测度论.AEStronglyMeasurable.prodMk_left
   结论: [SFinite ν] {f : α × β -> X}
   证明: by
   filter_upwards [ae_ae_of_ae_prod hf.ae_eq_mk] with x hx
@@ -339,7 +339,7 @@ theorem MeasureTheory.AEStronglyMeasurable.prodMk_right
   proof: hf.prod_swap.prodMk_left
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.prodMk_right
+定理 测度论.AEStronglyMeasurable.prodMk_right
   结论: [SFinite μ] [SFinite ν] {f : α × β -> X}
   证明: hf.prod_swap.prodMk_left
 
@@ -362,7 +362,7 @@ theorem MeasureTheory.AEStronglyMeasurable.of_comp_snd
   exact hy
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.of_comp_snd
+定理 测度论.AEStronglyMeasurable.of_comp_snd
   结论: {f : β -> X} [SFinite ν]
   证明: by
   have := NeZero.mk hμ
@@ -384,7 +384,7 @@ theorem MeasureTheory.AEStronglyMeasurable.of_comp_fst
   proof: hf.prod_swap.of_comp_snd hν
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.of_comp_fst
+定理 测度论.AEStronglyMeasurable.of_comp_fst
   结论: {f : α -> X} [SFinite μ] [SFinite ν]
   证明: hf.prod_swap.of_comp_snd hν
 -/
@@ -401,7 +401,7 @@ theorem MeasureTheory.AEStronglyMeasurable.comp_fst_iff
   proof: ⟨(.of_comp_fst · hν), .comp_fst⟩
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.comp_fst_iff
+定理 测度论.AEStronglyMeasurable.comp_fst_iff
   结论: [SFinite μ] [SFinite ν] {f : α -> X}
   证明: ⟨(.of_comp_fst · hν), .comp_fst⟩
 
@@ -420,7 +420,7 @@ theorem MeasureTheory.AEStronglyMeasurable.comp_snd_iff
   proof: ⟨(.of_comp_snd · hμ), .comp_snd⟩
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.comp_snd_iff
+定理 测度论.AEStronglyMeasurable.comp_snd_iff
   结论: [SFinite ν] {f : β -> X}
   证明: ⟨(.of_comp_snd · hμ), .comp_snd⟩
 
@@ -469,9 +469,9 @@ theorem Integrable.swap
   proof: integrable_swap_iff.2 hf
 
 中文:
-定理 Integrable.swap
+定理 可积.swap
   条件: [SFinite μ] ⦃f
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν)) :
   证明: integrable_swap_iff.2 hf
 
 Depends on / 依赖: integrable_swap_iff
@@ -494,7 +494,7 @@ theorem hasFiniteIntegral_prod_iff
       (h1f.norm.comp_measurable measurable_prodMk_left).aestrong
 
 中文:
-定理 hasFiniteIntegral_prod_iff
+定理 hasFinite整数egral_prod_iff
   条件: ⦃f
   结论: α × β -> E⦄ (h1f : StronglyMeasurable f) :
   证明: by
@@ -541,9 +541,9 @@ theorem hasFiniteIntegral_prod_iff'
     fil
 
 中文:
-定理 hasFiniteIntegral_prod_iff'
+定理 hasFinite整数egral_prod_iff'
   条件: ⦃f
-  结论: α × β -> E⦄ (h1f : AEStronglyMeasurable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (h1f : AEStronglyMeasurable f (μ.乘积 ν)) :
   证明: by
   rw [hasFiniteIntegral_congr h1f.ae_eq_mk]; rw [hasFiniteIntegral_prod_iff h1f.stronglyMeasurable_mk]
   apply and_congr
@@ -584,7 +584,7 @@ theorem integrable_prod_iff
 中文:
 定理 integrable_prod_iff
   条件: ⦃f
-  结论: α × β -> E⦄ (h1f : AEStronglyMeasurable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (h1f : AEStronglyMeasurable f (μ.乘积 ν)) :
   证明: by
   simp [Integrable, h1f, hasFiniteIntegral_prod_iff', h1f.norm.integral_prod_right',
     h1f.prodMk_left]
@@ -635,9 +635,9 @@ theorem Integrable.prod_left_ae
   proof: ((integrable_prod_iff' hf.aestronglyMeasurable).mp hf).1
 
 中文:
-定理 Integrable.prod_left_ae
+定理 可积.prod_left_ae
   条件: [SFinite μ] ⦃f
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν)) :
   证明: ((integrable_prod_iff' hf.aestronglyMeasurable).mp hf).1
 
 Depends on / 依赖: aestronglyMeasurable, hf.aestronglyMeasurable, integrable_prod_iff
@@ -656,9 +656,9 @@ theorem Integrable.prod_right_ae
   proof: hf.swap.prod_left_ae
 
 中文:
-定理 Integrable.prod_right_ae
+定理 可积.prod_right_ae
   条件: [SFinite μ] ⦃f
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν)) :
   证明: hf.swap.prod_left_ae
 
 Depends on / 依赖: hf.swap.prod_left_ae, prod_left_ae
@@ -677,9 +677,9 @@ theorem Integrable.integral_norm_prod_left
   proof: ((integrable_prod_iff hf.aestronglyMeasurable).mp hf).2
 
 中文:
-定理 Integrable.integral_norm_prod_left
+定理 可积.integral_norm_prod_left
   条件: ⦃f
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν)) :
   证明: ((integrable_prod_iff hf.aestronglyMeasurable).mp hf).2
 
 Depends on / 依赖: aestronglyMeasurable, hf.aestronglyMeasurable, integrable_prod_iff
@@ -700,7 +700,7 @@ theorem Integrable.integral_norm_prod_right
 omit [SFinite ν] in
 
 中文:
-定理 Integrable.integral_norm_prod_right
+定理 可积.integral_norm_prod_right
   条件: [SFinite μ] ⦃f
   结论: α × β -> E⦄
   证明: hf.swap.integral_norm_prod_left
@@ -729,8 +729,8 @@ theorem Integrable.op_fst_snd
       simp only [enorm_eq_nnnorm, ENNReal.ofReal, ← ENNReal.coe_mul, ENNRea
 
 中文:
-定理 Integrable.op_fst_snd
-  结论: {F G : 类型} [NormedAddCommGroup F] [NormedAddCommGroup G]
+定理 可积.op_fst_snd
+  结论: {F G : 类型} [赋范交换加群 F] [赋范交换加群 G]
   证明: by
   use hop.comp_aestronglyMeasurable₂ hf.1.comp_fst hg.1.comp_snd
   rcases hop_norm with ⟨C, hC⟩
@@ -771,8 +771,8 @@ lemma Integrable.comp_fst
   exact hf.comp_fst ν
 
 中文:
-引理 Integrable.comp_fst
-  条件: {f : α -> E} (hf : 整数egrable f μ) (ν : Measure β) [IsFiniteMeasure ν]
+引理 可积.comp_fst
+  条件: {f : α -> E} (hf : 可积 f μ) (ν : 测度 β) [是有限测度 ν]
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.comp_fst ν
@@ -798,8 +798,8 @@ omit [SFinite ν] in
 @[fun_prop]
 
 中文:
-引理 Integrable.comp_snd
-  条件: {f : β -> E} (hf : 整数egrable f ν) (μ : Measure α) [IsFiniteMeasure μ]
+引理 可积.comp_snd
+  条件: {f : β -> E} (hf : 可积 f ν) (μ : 测度 α) [是有限测度 μ]
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢
   exact hf.comp_snd μ
@@ -828,8 +828,8 @@ omit [SFinite ν] in
 @[fun_prop]
 
 中文:
-定理 Integrable.smul_prod
-  结论: {R : 类型} [NormedRing R] [Module R E] [IsBoundedSMul R E]
+定理 可积.smul_prod
+  结论: {R : 类型} [赋范环 R] [模 R E] [是BoundedSMul R E]
   证明: hf.op_fst_snd continuous_smul ⟨1, by simpa using norm_smul_le⟩ hg
 
 omit [SFinite ν] in
@@ -853,8 +853,8 @@ theorem Integrable.mul_prod
   proof: hf.smul_prod hg
 
 中文:
-定理 Integrable.mul_prod
-  结论: {L : 类型} [NormedRing L] {f : α -> L} {g : β -> L} (hf : 整数egrable f μ)
+定理 可积.mul_prod
+  结论: {L : 类型} [赋范环 L] {f : α -> L} {g : β -> L} (hf : 可积 f μ)
   证明: hf.smul_prod hg
 
 Depends on / 依赖: ha.trans, hc.trans, hf.smul_prod, smul_prod
@@ -874,8 +874,8 @@ theorem IntegrableOn.swap
   exact hf.swap
 
 中文:
-定理 IntegrableOn.swap
-  结论: [SFinite μ] {f : α × β -> E} {s : Set α} {t : Set β}
+定理 整数egrableOn.swap
+  结论: [SFinite μ] {f : α × β -> E} {s : 集合 α} {t : 集合 β}
   证明: by
   rw [IntegrableOn]; rw [← Measure.prod_restrict] at hf ⊢
   exact hf.swap
@@ -901,8 +901,8 @@ theorem Integrable.of_comp_snd
   aesop (add simp [HasFiniteIntegral, lintegral_prod, ENNReal.mul_lt_top_iff])
 
 中文:
-定理 Integrable.of_comp_snd
-  条件: {f : β -> E} (hf : 整数egrable (f ·.2) (μ.prod ν)) (hμ : μ != 0)
+定理 可积.of_comp_snd
+  条件: {f : β -> E} (hf : 可积 (f ·.2) (μ.乘积 ν)) (hμ : μ != 0)
   证明: by
   rcases hf with ⟨hf_meas, hf_fin⟩
   use hf_meas.of_comp_snd hμ
@@ -927,8 +927,8 @@ theorem Integrable.of_comp_fst
   proof: hf.swap.of_comp_snd hν
 
 中文:
-定理 Integrable.of_comp_fst
-  结论: [SFinite μ] {f : α -> E} (hf : 整数egrable (f ·.1) (μ.prod ν))
+定理 可积.of_comp_fst
+  结论: [SFinite μ] {f : α -> E} (hf : 可积 (f ·.1) (μ.乘积 ν))
   证明: hf.swap.of_comp_snd hν
 
 Depends on / 依赖: hf.swap.of_comp_snd, of_comp_snd
@@ -948,8 +948,8 @@ theorem Integrable.comp_snd_iff
 omit [SFinite ν] in
 
 中文:
-定理 Integrable.comp_snd_iff
-  条件: [IsFiniteMeasure μ] {f : β -> E} (hμ : μ != 0)
+定理 可积.comp_snd_iff
+  条件: [是有限测度 μ] {f : β -> E} (hμ : μ != 0)
   证明: ⟨(.of_comp_snd · hμ), (.comp_snd · μ)⟩
 
 omit [SFinite ν] in
@@ -970,8 +970,8 @@ theorem Integrable.comp_fst_iff
   proof: ⟨(.of_comp_fst · hν), (.comp_fst · ν)⟩
 
 中文:
-定理 Integrable.comp_fst_iff
-  条件: [SFinite μ] [IsFiniteMeasure ν] {f : α -> E} (hν : ν != 0)
+定理 可积.comp_fst_iff
+  条件: [SFinite μ] [是有限测度 ν] {f : α -> E} (hν : ν != 0)
   证明: ⟨(.of_comp_fst · hν), (.comp_fst · ν)⟩
 
 Depends on / 依赖: comp_fst, of_comp_fst
@@ -998,9 +998,9 @@ theorem Integrable.integral_prod_left
   exact le_abs_self _
 
 中文:
-定理 Integrable.integral_prod_left
+定理 可积.integral_prod_left
   条件: ⦃f
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν)) :
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν)) :
   证明: by
   apply Integrable.mono hf.integral_norm_prod_left hf.aestronglyMeasurable.integral_prod_right'
   filter_upwards with x
@@ -1026,7 +1026,7 @@ theorem Integrable.integral_prod_right
   proof: hf.swap.integral_prod_left
 
 中文:
-定理 Integrable.integral_prod_right
+定理 可积.integral_prod_right
   条件: [SFinite μ] ⦃f
   结论: α × β -> E⦄
   证明: hf.swap.integral_prod_left
@@ -1070,8 +1070,8 @@ theorem setIntegral_prod_swap
   rw [← Measure.prod_restrict]; rw [← Measure.prod_restrict]; rw [integral_prod_swap]
 
 中文:
-定理 setIntegral_prod_swap
-  条件: (s : Set α) (t : Set β) (f : α × β -> E)
+定理 set整数egral_prod_swap
+  条件: (s : 集合 α) (t : 集合 β) (f : α × β -> E)
   证明: by
   rw [← Measure.prod_restrict]; rw [← Measure.prod_restrict]; rw [integral_prod_swap]
 
@@ -1102,7 +1102,7 @@ theorem integral_fn_integral_add
 中文:
 定理 integral_fn_integral_add
   条件: ⦃f g
-  结论: α × β -> E⦄ (F : E -> E') (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (F : E -> E') (hf : 可积 f (μ.乘积 ν))
   证明: by
   refine integral_congr_ae ?_
   filter_upwards [hf.prod_right_ae, hg.prod_right_ae] with _ h2f h2g
@@ -1133,7 +1133,7 @@ theorem integral_fn_integral_sub
 中文:
 定理 integral_fn_integral_sub
   条件: ⦃f g
-  结论: α × β -> E⦄ (F : E -> E') (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (F : E -> E') (hf : 可积 f (μ.乘积 ν))
   证明: by
   refine integral_congr_ae ?_
   filter_upwards [hf.prod_right_ae, hg.prod_right_ae] with _ h2f h2g
@@ -1164,7 +1164,7 @@ theorem lintegral_fn_integral_sub
 中文:
 定理 lintegral_fn_integral_sub
   条件: ⦃f g
-  结论: α × β -> E⦄ (F : E -> 实数>=0∞) (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (F : E -> 实数>=0∞) (hf : 可积 f (μ.乘积 ν))
   证明: by
   refine lintegral_congr_ae ?_
   filter_upwards [hf.prod_right_ae, hg.prod_right_ae] with _ h2f h2g
@@ -1193,7 +1193,7 @@ theorem integral_integral_add
 中文:
 定理 integral_integral_add
   条件: ⦃f g
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν))
   证明: (integral_fn_integral_add id hf hg).trans
     integral_add hf.integral_prod_left hg.integral_prod_left
 
@@ -1217,7 +1217,7 @@ theorem integral_integral_add'
 中文:
 定理 integral_integral_add'
   条件: ⦃f g
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν))
   证明: integral_integral_add hf hg
 
 Depends on / 依赖: integral_integral_add
@@ -1240,7 +1240,7 @@ theorem integral_integral_sub
 中文:
 定理 integral_integral_sub
   条件: ⦃f g
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν))
   证明: (integral_fn_integral_sub id hf hg).trans
     integral_sub hf.integral_prod_left hg.integral_prod_left
 
@@ -1264,7 +1264,7 @@ theorem integral_integral_sub'
 中文:
 定理 integral_integral_sub'
   条件: ⦃f g
-  结论: α × β -> E⦄ (hf : 整数egrable f (μ.prod ν))
+  结论: α × β -> E⦄ (hf : 可积 f (μ.乘积 ν))
   证明: integral_integral_sub hf hg
 
 Depends on / 依赖: integral_integral_sub
@@ -1330,7 +1330,7 @@ theorem integral_prod
 
 中文:
 定理 integral_prod
-  条件: (f : α × β -> E) (hf : 整数egrable f (μ.prod ν))
+  条件: (f : α × β -> E) (hf : 可积 f (μ.乘积 ν))
   证明: by
   by_cases hE : CompleteSpace E; swap; · simp only [integral, dif_neg hE]
   revert f
@@ -1372,7 +1372,7 @@ theorem integral_prod_symm
 
 中文:
 定理 integral_prod_symm
-  条件: (f : α × β -> E) (hf : 整数egrable f (μ.prod ν))
+  条件: (f : α × β -> E) (hf : 可积 f (μ.乘积 ν))
   证明: by
   rw [← integral_prod_swap f]; exact integral_prod _ hf.swap
 
@@ -1392,7 +1392,7 @@ theorem integral_integral
 
 中文:
 定理 integral_integral
-  条件: {f : α -> β -> E} (hf : 整数egrable (uncurry f) (μ.prod ν))
+  条件: {f : α -> β -> E} (hf : 可积 (uncurry f) (μ.乘积 ν))
   证明: (integral_prod _ hf).symm
 
 Depends on / 依赖: integral_prod
@@ -1411,7 +1411,7 @@ theorem integral_integral_symm
 
 中文:
 定理 integral_integral_symm
-  条件: {f : α -> β -> E} (hf : 整数egrable (uncurry f) (μ.prod ν))
+  条件: {f : α -> β -> E} (hf : 可积 (uncurry f) (μ.乘积 ν))
   证明: (integral_prod_symm _ hf.swap).symm
 
 Depends on / 依赖: hf.swap, integral_prod_symm
@@ -1432,7 +1432,7 @@ theorem integral_integral_swap
 中文:
 定理 integral_integral_swap
   条件: ⦃f
-  结论: α -> β -> E⦄ (hf : 整数egrable (uncurry f) (μ.prod ν)) :
+  结论: α -> β -> E⦄ (hf : 可积 (uncurry f) (μ.乘积 ν)) :
   证明: (integral_integral hf).trans (integral_prod_symm _ hf)
 
 Depends on / 依赖: integral_integral, integral_prod_symm
@@ -1457,7 +1457,7 @@ lemma intervalIntegral_integral_swap
     rw [integral_integral_swa
 
 中文:
-引理 intervalIntegral_integral_swap
+引理 interval整数egral_integral_swap
   结论: {a b : 实数} {f : 实数 -> α -> E}
   证明: by
   rcases le_total a b with (hab | hab)
@@ -1493,7 +1493,7 @@ lemma intervalIntegral_intervalIntegral_swap
   · rwa [← integrable_swap_iff, Measure.prod_restrict, ← Measure.volume_eq_prod, ← IntegrableOn]
 
 中文:
-引理 intervalIntegral_intervalIntegral_swap
+引理 interval整数egral_interval整数egral_swap
   结论: {F : 实数 -> 实数 -> E} {a b c d : 实数}
   证明: by
   rw [intervalIntegral.intervalIntegral_eq_integral_uIoc]; rw [← intervalIntegral_integral_swap]; rw [← intervalIntegral.integral_smul]
@@ -1520,8 +1520,8 @@ theorem setIntegral_prod
   exact integral_prod f hf
 
 中文:
-定理 setIntegral_prod
-  结论: (f : α × β -> E) {s : Set α} {t : Set β}
+定理 set整数egral_prod
+  结论: (f : α × β -> E) {s : 集合 α} {t : 集合 β}
   证明: by
   simp only [← Measure.prod_restrict s t, IntegrableOn] at hf ⊢
   exact integral_prod f hf
@@ -1592,7 +1592,7 @@ theorem integral_prod_smul
 
 中文:
 定理 integral_prod_smul
-  条件: {𝕜 : 类型} [RCLike 𝕜] [NormedSpace 𝕜 E] (f : α -> 𝕜) (g : β -> E)
+  条件: {𝕜 : 类型} [RCLike 𝕜] [赋范空间 𝕜 E] (f : α -> 𝕜) (g : β -> E)
   证明: by
   by_cases hE : CompleteSpace E; swap; · simp [integral, hE]
   by_cases h : Integrable (fun z : α × β => f z.1 • g z.2) (μ.prod ν)
@@ -1645,8 +1645,8 @@ theorem setIntegral_prod_mul
   apply integral_prod_mul
 
 中文:
-定理 setIntegral_prod_mul
-  结论: {L : 类型} [RCLike L] (f : α -> L) (g : β -> L) (s : Set α)
+定理 set整数egral_prod_mul
+  结论: {L : 类型} [RCLike L] (f : α -> L) (g : β -> L) (s : 集合 α)
   证明: by
   rw [← Measure.prod_restrict s t]
   apply integral_prod_mul
@@ -1672,7 +1672,7 @@ theorem integral_fun_snd
 中文:
 定理 integral_fun_snd
   条件: (f : β -> E)
-  结论: ∫ z, f z.2 ∂μ.prod ν = μ.real univ • ∫ y, f y ∂ν
+  结论: ∫ z, f z.2 ∂μ.乘积 ν = μ.real univ • ∫ y, f y ∂ν
   证明: by
   simpa using integral_prod_smul (1 : α -> Real) f
 
@@ -1695,7 +1695,7 @@ theorem integral_fun_fst
 中文:
 定理 integral_fun_fst
   条件: (f : α -> E)
-  结论: ∫ z, f z.1 ∂μ.prod ν = ν.real univ • ∫ x, f x ∂μ
+  结论: ∫ z, f z.1 ∂μ.乘积 ν = ν.real univ • ∫ x, f x ∂μ
   证明: by
   rw [← integral_prod_swap]
   apply integral_fun_snd
@@ -1751,7 +1751,7 @@ lemma integrable_continuousLinearMap_prod
 
 中文:
 引理 integrable_continuousLinearMap_prod
-  条件: (hμ : 整数egrable id μ) (hν : 整数egrable id ν)
+  条件: (hμ : 可积 id μ) (hν : 可积 id ν)
   证明: integrable_continuousLinearMap_prod' (ContinuousLinearMap.integrable_comp _ hμ)
     (ContinuousLinearMap.integrable_comp _ hν)
 
@@ -1807,7 +1807,7 @@ lemma integral_continuousLinearMap_prod
 
 中文:
 引理 integral_continuousLinearMap_prod
-  条件: (hμ : 整数egrable id μ) (hν : 整数egrable id ν)
+  条件: (hμ : 可积 id μ) (hν : 可积 id ν)
   证明: integral_continuousLinearMap_prod' (ContinuousLinearMap.integrable_comp _ hμ)
     (ContinuousLinearMap.integrable_comp _ hν)
 

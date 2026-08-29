@@ -45,7 +45,7 @@ abbreviation HasSubst
   body: IsNilpotent (MvPowerSeries.constantCoeff a)
 
 中文:
-缩写 HasSubst
+缩写 有Subst
   签名: (a : MvPowerSeries τ S)
   定义体: IsNilpotent (MvPowerSeries.constantCoeff a)
 
@@ -85,8 +85,8 @@ theorem HasSubst.const
   proof: hasSubst_iff.mp ha
 
 中文:
-定理 HasSubst.const
-  条件: {a : MvPowerSeries τ S} (ha : HasSubst a)
+定理 有Subst.const
+  条件: {a : MvPowerSeries τ S} (ha : 有Subst a)
   证明: hasSubst_iff.mp ha
 
 Depends on / 依赖: hasSubst_iff, hasSubst_iff.mp
@@ -124,8 +124,8 @@ theorem HasSubst.hasEval
   proof: isTopologicallyNilpotent_of_constantCoeff_isNilpotent ha
 
 中文:
-定理 HasSubst.hasEval
-  条件: [TopologicalSpace S] {a : MvPowerSeries τ S} (ha : HasSubst a)
+定理 有Subst.hasEval
+  条件: [拓扑空间 S] {a : MvPowerSeries τ S} (ha : 有Subst a)
   证明: isTopologicallyNilpotent_of_constantCoeff_isNilpotent ha
 -/
 theorem HasSubst.hasEval [TopologicalSpace S] {a : MvPowerSeries τ S} (ha : HasSubst a) :
@@ -141,7 +141,7 @@ theorem HasSubst.of_constantCoeff_zero
   simp [HasSubst, ha]
 
 中文:
-定理 HasSubst.of_constantCoeff_zero
+定理 有Subst.of_constantCoeff_zero
   结论: {a : MvPowerSeries τ S}
   证明: by
   simp [HasSubst, ha]
@@ -161,8 +161,8 @@ theorem HasSubst.of_constantCoeff_zero'
   proof: HasSubst.of_constantCoeff_zero ha
 
 中文:
-定理 HasSubst.of_constantCoeff_zero'
-  结论: {a : PowerSeries S}
+定理 有Subst.of_constantCoeff_zero'
+  结论: {a : 幂级数 S}
   证明: HasSubst.of_constantCoeff_zero ha
 
 Depends on / 依赖: HasSubst, HasSubst.of_constantCoeff_zero, of_constantCoeff_zero
@@ -181,7 +181,7 @@ theorem HasSubst.X
   simp [HasSubst]
 
 中文:
-定理 HasSubst.X
+定理 有Subst.X
   条件: (t : τ)
   证明: by
   simp [HasSubst]
@@ -199,8 +199,8 @@ theorem HasSubst.X'
   proof: HasSubst.X _
 
 中文:
-定理 HasSubst.X'
-  结论: HasSubst (X : R⟦X⟧)
+定理 有Subst.X'
+  结论: 有Subst (X : R⟦X⟧)
   证明: HasSubst.X _
 -/
 protected theorem HasSubst.X' : HasSubst (X : R⟦X⟧) :=
@@ -216,9 +216,9 @@ theorem HasSubst.X_pow
   proof: HasSubst.of_constantCoeff_zero' (by simp [hn])
 
 中文:
-定理 HasSubst.X_pow
+定理 有Subst.X_pow
   条件: {n : 自然数} (hn : n != 0)
-  结论: HasSubst (X ^ n : R⟦X⟧)
+  结论: 有Subst (X ^ n : R⟦X⟧)
   证明: HasSubst.of_constantCoeff_zero' (by simp [hn])
 -/
 protected theorem HasSubst.X_pow {n : Nat} (hn : n != 0) : HasSubst (X ^ n : R⟦X⟧) :=
@@ -236,7 +236,7 @@ theorem HasSubst.monomial
   rw [← MvPowerSeries.coeff_zero_eq_constantCoeff]; rw [MvPowerSeries.coeff_monomial]; rw [if_neg hn.symm]
 
 中文:
-定理 HasSubst.monomial
+定理 有Subst.monomial
   条件: {n : τ ->₀ 自然数} (hn : n != 0) (s : S)
   证明: by
   classical
@@ -258,7 +258,7 @@ theorem HasSubst.monomial'
   proof: HasSubst.monomial (Finsupp.single_ne_zero.mpr hn) s
 
 中文:
-定理 HasSubst.monomial'
+定理 有Subst.monomial'
   条件: {n : 自然数} (hn : n != 0) (s : S)
   证明: HasSubst.monomial (Finsupp.single_ne_zero.mpr hn) s
 -/
@@ -277,8 +277,8 @@ theorem HasSubst.zero
   exact MvPowerSeries.HasSubst.zero
 
 中文:
-定理 HasSubst.zero
-  结论: HasSubst (0 : MvPowerSeries τ R)
+定理 有Subst.zero
+  结论: 有Subst (0 : MvPowerSeries τ R)
   证明: by
   rw [hasSubst_iff]
   exact MvPowerSeries.HasSubst.zero
@@ -296,8 +296,8 @@ theorem HasSubst.zero'
   proof: PowerSeries.HasSubst.zero
 
 中文:
-定理 HasSubst.zero'
-  结论: HasSubst (0 : PowerSeries R)
+定理 有Subst.zero'
+  结论: 有Subst (0 : 幂级数 R)
   证明: PowerSeries.HasSubst.zero
 
 Depends on / 依赖: HasSubst, PowerSeries, PowerSeries.HasSubst.zero
@@ -316,8 +316,8 @@ theorem HasSubst.add
   proof: (Commute.all _ _).isNilpotent_add hf hg
 
 中文:
-定理 HasSubst.add
-  条件: (hf : HasSubst f) (hg : HasSubst g)
+定理 有Subst.add
+  条件: (hf : 有Subst f) (hg : 有Subst g)
   证明: (Commute.all _ _).isNilpotent_add hf hg
 -/
 theorem HasSubst.add (hf : HasSubst f) (hg : HasSubst g) :
@@ -336,8 +336,8 @@ theorem HasSubst.mul_left
   exact (Commute.all _ _).isNilpotent_mul_right hf
 
 中文:
-定理 HasSubst.mul_left
-  条件: (hf : HasSubst f)
+定理 有Subst.mul_left
+  条件: (hf : 有Subst f)
   证明: by
   simp only [HasSubst, map_mul]
   exact (Commute.all _ _).isNilpotent_mul_right hf
@@ -358,8 +358,8 @@ theorem HasSubst.mul_right
   exact (Commute.all _ _).isNilpotent_mul_left hf
 
 中文:
-定理 HasSubst.mul_right
-  条件: (hf : HasSubst f)
+定理 有Subst.mul_right
+  条件: (hf : 有Subst f)
   证明: by
   simp only [HasSubst, map_mul]
   exact (Commute.all _ _).isNilpotent_mul_left hf
@@ -378,8 +378,8 @@ theorem HasSubst.smul
   proof: ha.mul_right
 
 中文:
-定理 HasSubst.smul
-  条件: (r : MvPowerSeries τ S) {a : MvPowerSeries τ S} (ha : HasSubst a)
+定理 有Subst.smul
+  条件: (r : MvPowerSeries τ S) {a : MvPowerSeries τ S} (ha : 有Subst a)
   证明: ha.mul_right
 -/
 theorem HasSubst.smul (r : MvPowerSeries τ S) {a : MvPowerSeries τ S} (ha : HasSubst a) :
@@ -398,8 +398,8 @@ definition HasSubst.ideal
   smul_mem' := HasSubst.smul
 
 中文:
-定义 HasSubst.ideal
-  签名: : Ideal (MvPowerSeries τ S) where
+定义 有Subst.ideal
+  签名: : 理想 (MvPowerSeries τ S) where
   定义体: Set.ofPred HasSubst
   add_mem' := HasSubst.add
   zero_mem' := HasSubst.zero
@@ -424,8 +424,8 @@ theorem HasSubst.smul'
   exact IsNilpotent.smul hf _
 
 中文:
-定理 HasSubst.smul'
-  条件: (a : A) (hf : HasSubst f)
+定理 有Subst.smul'
+  条件: (a : A) (hf : 有Subst f)
   证明: by
   simp only [HasSubst, MvPowerSeries.constantCoeff_smul]
   exact IsNilpotent.smul hf _
@@ -446,7 +446,7 @@ theorem HasSubst.smul_X
   proof: (HasSubst.X t).smul' _
 
 中文:
-定理 HasSubst.smul_X
+定理 有Subst.smul_X
   条件: (a : A) (t : τ)
   证明: (HasSubst.X t).smul' _
 -/
@@ -464,9 +464,9 @@ theorem HasSubst.smul_X'
   proof: HasSubst.X'.smul' _
 
 中文:
-定理 HasSubst.smul_X'
+定理 有Subst.smul_X'
   条件: (a : A)
-  结论: HasSubst (a • X : R⟦X⟧)
+  结论: 有Subst (a • X : R⟦X⟧)
   证明: HasSubst.X'.smul' _
 
 Depends on / 依赖: HasSubst, HasSubst.X
@@ -489,8 +489,8 @@ lemma HasSubst.eventually_coeff_pow_eq_zero
     (by r
 
 中文:
-引理 HasSubst.eventually_coeff_pow_eq_zero
-  条件: {f : A⟦X⟧} (hf : HasSubst f) (n : 自然数)
+引理 有Subst.eventually_coeff_pow_eq_zero
+  条件: {f : A⟦X⟧} (hf : 有Subst f) (n : 自然数)
   证明: by
   obtain ⟨k, hk⟩ := id hf
   refine Filter.eventually_of_mem (Filter.Ici_mem_atTop (k * (n + 1))) fun m hm n' hn' =>
@@ -523,7 +523,7 @@ definition subst
 
 中文:
 定义 subst
-  签名: (a : MvPowerSeries τ S) (f : PowerSeries R)
+  签名: (a : MvPowerSeries τ S) (f : 幂级数 R)
   定义体: MvPowerSeries.subst (fun _ => a) f
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.subst, SecondCountableTopology, TotallyDisconnectedSpace
@@ -542,7 +542,7 @@ lemma subst_def
 
 中文:
 引理 subst_def
-  条件: (a : MvPowerSeries τ S) (f : PowerSeries R)
+  条件: (a : MvPowerSeries τ S) (f : 幂级数 R)
   证明: rfl
 -/
 lemma subst_def (a : MvPowerSeries τ S) (f : PowerSeries R) :
@@ -578,7 +578,7 @@ definition substAlgHom
 
 中文:
 定义 substAlgHom
-  签名: (ha : HasSubst a)
+  签名: (ha : 有Subst a)
   定义体: MvPowerSeries.substAlgHom ha.const
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.substAlgHom, X.prop, ha.const, substAlgHom
@@ -597,7 +597,7 @@ theorem coe_substAlgHom
 
 中文:
 定理 coe_substAlgHom
-  条件: (ha : HasSubst a)
+  条件: (ha : 有Subst a)
   证明: MvPowerSeries.coe_substAlgHom ha.const
 
 Depends on / 依赖: X.prop
@@ -642,7 +642,7 @@ theorem subst_add
 
 中文:
 定理 subst_add
-  条件: (ha : HasSubst a) (f g : PowerSeries R)
+  条件: (ha : 有Subst a) (f g : 幂级数 R)
   证明: by
   rw [← coe_substAlgHom ha]; rw [map_add]
 
@@ -663,7 +663,7 @@ theorem subst_sub
 
 中文:
 定理 subst_sub
-  条件: (ha : HasSubst a) (f g : PowerSeries R)
+  条件: (ha : 有Subst a) (f g : 幂级数 R)
   证明: by
   rw [← coe_substAlgHom ha]; rw [map_sub]
 
@@ -685,7 +685,7 @@ lemma subst_zero_eq_C_constantCoeff
 
 中文:
 引理 subst_zero_eq_C_constantCoeff
-  条件: {f : PowerSeries R}
+  条件: {f : 幂级数 R}
   证明: MvPowerSeries.subst_zero_eq_C_constantCoeff
 
 @[simp]
@@ -707,7 +707,7 @@ theorem subst_zero_of_constantCoeff_zero
 
 中文:
 定理 subst_zero_of_constantCoeff_zero
-  条件: {f : PowerSeries R} (hf : f.constantCoeff = 0)
+  条件: {f : 幂级数 R} (hf : f.constantCoeff = 0)
   证明: MvPowerSeries.subst_zero_of_constantCoeff_zero hf
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.subst_zero_of_constantCoeff_zero, subst_zero_of_constantCoeff_zero
@@ -727,7 +727,7 @@ theorem subst_pow
 
 中文:
 定理 subst_pow
-  条件: (ha : HasSubst a) (f : PowerSeries R) (n : 自然数)
+  条件: (ha : 有Subst a) (f : 幂级数 R) (n : 自然数)
   证明: by
   rw [← coe_substAlgHom ha]; rw [map_pow]
 
@@ -748,7 +748,7 @@ theorem subst_mul
 
 中文:
 定理 subst_mul
-  条件: (ha : HasSubst a) (f g : PowerSeries R)
+  条件: (ha : 有Subst a) (f g : 幂级数 R)
   证明: by
   rw [← coe_substAlgHom ha]; rw [map_mul]
 
@@ -769,7 +769,7 @@ theorem subst_smul
 
 中文:
 定理 subst_smul
-  结论: [Algebra A S] [IsScalarTower A R S]
+  结论: [代数 A S] [标量塔 A R S]
   证明: by
   rw [← coe_substAlgHom ha]; rw [AlgHom.map_smul_of_tower]
 
@@ -798,7 +798,7 @@ theorem coeff_subst_finite
 
 中文:
 定理 coeff_subst_finite
-  条件: (ha : HasSubst a) (f : PowerSeries R) (e : τ ->₀ 自然数)
+  条件: (ha : 有Subst a) (f : 幂级数 R) (e : τ ->₀ 自然数)
   证明: by
   rw [Function.HasFiniteSupport]
   convert (MvPowerSeries.coeff_subst_finite ha.const f e).image
@@ -832,7 +832,7 @@ theorem coeff_subst_finite'
 
 中文:
 定理 coeff_subst_finite'
-  条件: (hb : HasSubst b) (f : PowerSeries R) (e : 自然数)
+  条件: (hb : 有Subst b) (f : 幂级数 R) (e : 自然数)
   证明: coeff_subst_finite hb f _
 
 Depends on / 依赖: Finite, coeff_subst_finite
@@ -857,7 +857,7 @@ theorem coeff_subst
 
 中文:
 定理 coeff_subst
-  条件: (ha : HasSubst a) (f : PowerSeries R) (e : τ ->₀ 自然数)
+  条件: (ha : 有Subst a) (f : 幂级数 R) (e : τ ->₀ 自然数)
   证明: by
   rw [subst]; rw [MvPowerSeries.coeff_subst ha.const f e]; rw [← finsum_comp_equiv
     (Finsupp.uniqueLinearEquiv Nat Nat ()).toEquiv.symm]
@@ -890,7 +890,7 @@ theorem coeff_subst'
 
 中文:
 定理 coeff_subst'
-  条件: {b : S⟦X⟧} (hb : HasSubst b) (f : R⟦X⟧) (e : 自然数)
+  条件: {b : S⟦X⟧} (hb : 有Subst b) (f : R⟦X⟧) (e : 自然数)
   证明: by
   simp [PowerSeries.coeff, coeff_subst hb]
 
@@ -915,7 +915,7 @@ theorem constantCoeff_subst
 
 中文:
 定理 constantCoeff_subst
-  条件: (ha : HasSubst a) (f : PowerSeries R)
+  条件: (ha : 有Subst a) (f : 幂级数 R)
   证明: by
   simp only [← MvPowerSeries.coeff_zero_eq_constantCoeff_apply, coeff_subst ha f 0]
 
@@ -946,7 +946,7 @@ theorem coeff_subst_X_pow
 
 中文:
 定理 coeff_subst_X_pow
-  条件: {k : 自然数} (hk : k != 0) (f : PowerSeries R) (n : 自然数)
+  条件: {k : 自然数} (hk : k != 0) (f : 幂级数 R) (n : 自然数)
   证明: by
   split_ifs with h
   · rw [coeff_subst' (.X_pow hk), finsum_eq_single _ (n / k), ← pow_mul, Nat.mul_div_cancel' h,
@@ -985,7 +985,7 @@ theorem constantCoeff_subst_X_pow
 
 中文:
 定理 constantCoeff_subst_X_pow
-  条件: {k : 自然数} (hk : k != 0) (f : PowerSeries R)
+  条件: {k : 自然数} (hk : k != 0) (f : 幂级数 R)
   证明: by
   rw [← coeff_zero_eq_constantCoeff]; rw [coeff_subst_X_pow hk]; rw [if_pos (dvd_zero k)]; rw [Nat.zero_div]; rw [coeff_zero_eq_constantCoeff]
 
@@ -1008,7 +1008,7 @@ theorem constantCoeff_subst_eq_zero
 
 中文:
 定理 constantCoeff_subst_eq_zero
-  结论: (ha : a.constantCoeff = 0) (f : PowerSeries R)
+  结论: (ha : a.constantCoeff = 0) (f : 幂级数 R)
   证明: by
   have := MvPowerSeries.constantCoeff_subst_eq_zero
     (hasSubst_iff.mp <| HasSubst.of_constantCoeff_zero ha) (fun _ => ha) hf
@@ -1106,9 +1106,9 @@ theorem _root_.Polynomial.toPowerSeries_toMvPowerSeries
   proof: Polynomial.pUnitAlgEquiv_symm_toPowerSeries
 
 中文:
-定理 _root_.Polynomial.toPowerSeries_toMvPowerSeries
-  条件: (p : Polynomial R)
-  结论: (p : PowerSeries R) =
+定理 _root_.多项式.toPowerSeries_toMvPowerSeries
+  条件: (p : 多项式 R)
+  结论: (p : 幂级数 R) =
   证明: Polynomial.pUnitAlgEquiv_symm_toPowerSeries
 
 Depends on / 依赖: Polynomial, Polynomial.pUnitAlgEquiv_symm_toPowerSeries, pUnitAlgEquiv_symm_toPowerSeries
@@ -1131,7 +1131,7 @@ theorem substAlgHom_coe
 
 中文:
 定理 substAlgHom_coe
-  条件: (ha : HasSubst a) (p : Polynomial R)
+  条件: (ha : 有Subst a) (p : 多项式 R)
   证明: by
   rw [p.toPowerSeries_toMvPowerSeries]; rw [substAlgHom]; rw [MvPowerSeries.coe_substAlgHom]; rw [MvPowerSeries.subst_coe]; rw [← AlgHom.comp_apply]
   apply AlgHom.congr_fun
@@ -1158,7 +1158,7 @@ theorem substAlgHom_X
 
 中文:
 定理 substAlgHom_X
-  条件: (ha : HasSubst a)
+  条件: (ha : 有Subst a)
   证明: by
   rw [← Polynomial.coe_X]; rw [substAlgHom_coe]; rw [Polynomial.aeval_X]
 
@@ -1181,7 +1181,7 @@ theorem subst_coe
 
 中文:
 定理 subst_coe
-  条件: (ha : HasSubst a) (p : Polynomial R)
+  条件: (ha : 有Subst a) (p : 多项式 R)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_coe]
 
@@ -1226,7 +1226,7 @@ omit [Algebra R S] in
 
 中文:
 定理 subst_X
-  条件: (ha : HasSubst a)
+  条件: (ha : 有Subst a)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_X]
 
@@ -1249,7 +1249,7 @@ theorem map_subst
 
 中文:
 定理 map_subst
-  条件: {a : MvPowerSeries τ R} (ha : HasSubst a) {h : R ->+* S} (f : PowerSeries R)
+  条件: {a : MvPowerSeries τ R} (ha : 有Subst a) {h : R ->+* S} (f : 幂级数 R)
   证明: MvPowerSeries.map_subst (HasSubst.const ha) f
 
 Depends on / 依赖: HasSubst, HasSubst.const, MvPowerSeries, MvPowerSeries.map_subst, map_subst
@@ -1275,7 +1275,7 @@ theorem le_weightedOrder_subst
 
 中文:
 定理 le_weightedOrder_subst
-  条件: (w : τ -> 自然数) (ha : HasSubst a) (f : PowerSeries R)
+  条件: (w : τ -> 自然数) (ha : 有Subst a) (f : 幂级数 R)
   证明: by
   refine .trans ?_ (MvPowerSeries.le_weightedOrder_subst _ (PowerSeries.hasSubst_iff.mp ha) _)
   simp only [ne_eq, Function.comp_const, le_iInf_iff]
@@ -1306,7 +1306,7 @@ theorem le_order_subst
 
 中文:
 定理 le_order_subst
-  条件: (a : MvPowerSeries τ S) (ha : HasSubst a) (f : PowerSeries R)
+  条件: (a : MvPowerSeries τ S) (ha : 有Subst a) (f : 幂级数 R)
   证明: by
   refine .trans ?_ (MvPowerSeries.le_order_subst (PowerSeries.hasSubst_iff.mp ha) _)
   simp [order_eq_order]
@@ -1329,7 +1329,7 @@ theorem le_order_subst_left
 
 中文:
 定理 le_order_subst_left
-  结论: {f : MvPowerSeries τ R} {φ : PowerSeries R}
+  结论: {f : MvPowerSeries τ R} {φ : 幂级数 R}
   证明: .trans (ENat.self_le_mul_left φ.order (f.order_ne_zero_iff_constCoeff_eq_zero.mpr hf))
     (PowerSeries.le_order_subst f (HasSubst.of_constantCoeff_zero hf) _)
 
@@ -1351,7 +1351,7 @@ theorem le_order_subst_right
 
 中文:
 定理 le_order_subst_right
-  结论: {f : MvPowerSeries τ R} {φ : PowerSeries R}
+  结论: {f : MvPowerSeries τ R} {φ : 幂级数 R}
   证明: .trans (ENat.self_le_mul_right _ (order_ne_zero_iff_constCoeff_eq_zero.mpr hφ))
     (PowerSeries.le_order_subst f (HasSubst.of_constantCoeff_zero hf) _)
 
@@ -1374,7 +1374,7 @@ theorem le_order_subst_left'
 
 中文:
 定理 le_order_subst_left'
-  条件: {f φ : PowerSeries R} (hf : f.constantCoeff = 0)
+  条件: {f φ : 幂级数 R} (hf : f.constantCoeff = 0)
   证明: by
   conv_rhs => rw [order_eq_order]
   exact le_order_subst_left hf
@@ -1398,7 +1398,7 @@ theorem le_order_subst_right'
 
 中文:
 定理 le_order_subst_right'
-  结论: {f φ : PowerSeries R} (hf : f.constantCoeff = 0)
+  结论: {f φ : 幂级数 R} (hf : f.constantCoeff = 0)
   证明: by
   simp_rw [order_eq_order]
   exact le_order_subst_right hf hφ
@@ -1420,7 +1420,7 @@ theorem HasSubst.comp
   proof: MvPowerSeries.IsNilpotent_substAlgHom hb.const ha
 
 中文:
-定理 HasSubst.comp
+定理 有Subst.comp
   证明: MvPowerSeries.IsNilpotent_substAlgHom hb.const ha
 
 Depends on / 依赖: Clopens, Countable, Countable.of_equiv, Finite, Finite.of_injective, Finite.to_countable, FintypeCat, FintypeCat.toProfinite, Function, Function.Surjective.countable, LocallyConstant, LocallyConstant.coe_injective, LocallyConstant.equivClopens, Pi.finite, S.cone.pt, S.diagram, Surjective, TopologicalSpace, TopologicalSpace.Clopens.countable_iff_secondCountable, coe_injective
@@ -1443,7 +1443,7 @@ theorem substAlgHom_comp_substAlgHom
 
 中文:
 定理 substAlgHom_comp_substAlgHom
-  条件: (ha : HasSubst a) (hb : HasSubst b)
+  条件: (ha : 有Subst a) (hb : 有Subst b)
   证明: MvPowerSeries.substAlgHom_comp_substAlgHom _ _
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.substAlgHom_comp_substAlgHom, substAlgHom_comp_substAlgHom
@@ -1462,7 +1462,7 @@ theorem substAlgHom_comp_substAlgHom_apply
 
 中文:
 定理 substAlgHom_comp_substAlgHom_apply
-  条件: (ha : HasSubst a) (hb : HasSubst b) (f : PowerSeries R)
+  条件: (ha : 有Subst a) (hb : 有Subst b) (f : 幂级数 R)
   证明: DFunLike.congr_fun (substAlgHom_comp_substAlgHom ha hb) f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, substAlgHom_comp_substAlgHom
@@ -1482,7 +1482,7 @@ theorem subst_comp_subst
 
 中文:
 定理 subst_comp_subst
-  条件: (ha : HasSubst a) (hb : HasSubst b)
+  条件: (ha : 有Subst a) (hb : 有Subst b)
   证明: by
   simpa [funext_iff, DFunLike.ext_iff, coe_substAlgHom] using substAlgHom_comp_substAlgHom ha hb
 
@@ -1502,7 +1502,7 @@ theorem subst_comp_subst_apply
 
 中文:
 定理 subst_comp_subst_apply
-  条件: (ha : HasSubst a) (hb : HasSubst b) (f : PowerSeries R)
+  条件: (ha : 有Subst a) (hb : 有Subst b) (f : 幂级数 R)
   证明: congr_fun (subst_comp_subst ha hb) f
 
 Depends on / 依赖: congr_fun, subst_comp_subst
@@ -1526,7 +1526,7 @@ lemma rescale_eq
 
 中文:
 引理 rescale_eq
-  条件: (r : R) (f : PowerSeries R)
+  条件: (r : R) (f : 幂级数 R)
   证明: by
   ext n
   rw [coeff_rescale]; rw [coeff]; rw [MvPowerSeries.coeff_rescale]
@@ -1555,7 +1555,7 @@ lemma rescale_eq_subst
 
 中文:
 引理 rescale_eq_subst
-  条件: (r : R) (f : PowerSeries R)
+  条件: (r : R) (f : 幂级数 R)
   证明: by
   rw [rescale_eq]; rw [MvPowerSeries.rescale_eq_subst]; rw [X]; rw [subst]; rw [Pi.smul_def']
 
@@ -1696,7 +1696,7 @@ include hP in
 
 中文:
 定义 substInv
-  签名: : PowerSeries R
+  签名: : 幂级数 R
   定义体: .mk (substInvFun P)
 
 include hP in
@@ -1868,8 +1868,8 @@ alias hasSubst_substInv := HasSubst.substInv
 @[simp]
 
 中文:
-引理 HasSubst.substInv
-  结论: HasSubst P.substInv
+引理 有Subst.substInv
+  结论: 有Subst P.substInv
   证明: by simp [HasSubst, ← constantCoeff.eq_def]
 
 @[deprecated (since := "2026-04-27")]
@@ -1970,7 +1970,7 @@ definition substInvOfIsUnit
 
 中文:
 定义 substInvOfIsUnit
-  签名: : PowerSeries R
+  签名: : 幂级数 R
   定义体: letI := hP'.invertible
   substInv P
 
@@ -2036,8 +2036,8 @@ lemma HasSubst.substInvOfIsUnit
 @[simp]
 
 中文:
-引理 HasSubst.substInvOfIsUnit
-  结论: HasSubst (P.substInvOfIsUnit hP')
+引理 有Subst.substInvOfIsUnit
+  结论: 有Subst (P.substInvOfIsUnit hP')
   证明: by
   simp [HasSubst, ← constantCoeff.eq_def]
 
@@ -2154,7 +2154,7 @@ lemma subst_tsum
 
 中文:
 引理 subst_tsum
-  条件: (hx : Summable x) (ha : HasSubst a)
+  条件: (hx : Summable x) (ha : 有Subst a)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_eq_aeval ha]; rw [hx.map_tsum _]
   exact continuous_aeval _
@@ -2178,7 +2178,7 @@ lemma summable_subst
 
 中文:
 引理 summable_subst
-  条件: (hx : Summable x) (ha : HasSubst a)
+  条件: (hx : Summable x) (ha : 有Subst a)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_eq_aeval ha]
   exact hx.map _ (continuous_aeval _)
@@ -2213,7 +2213,7 @@ lemma coeff_subst_X_zero_add_X_one
 
 中文:
 引理 coeff_subst_X_zero_add_X_one
-  条件: (f : R⟦X⟧) (e : Fin 2 ->₀ 自然数)
+  条件: (f : R⟦X⟧) (e : 有限集 2 ->₀ 自然数)
   证明: by
   rw [PowerSeries.subst]; rw [MvPowerSeries.coeff_subst
     (MvPowerSeries.hasSubst_of_constantCoeff_zero (fun _ => by simp))]
@@ -2252,7 +2252,7 @@ lemma coeff_subst_X_zero_subst_mul_X_one
 
 中文:
 引理 coeff_subst_X_zero_subst_mul_X_one
-  条件: (f : R⟦X⟧) (e : Fin 2 ->₀ 自然数)
+  条件: (f : R⟦X⟧) (e : 有限集 2 ->₀ 自然数)
   证明: by
   rw [MvPowerSeries.coeff_mul]; rw [Finset.sum_eq_single (single 0 (e 0)]; rw [single 1 (e 1)) ?_ ?_]
   · grind [coeff_subst_single]

@@ -41,7 +41,7 @@ theorem map_finsuppSum'
 
 中文:
 定理 map_finsuppSum'
-  条件: (Q : QuadraticMap R M N) (f : ι ->₀ R) (g : ι -> R -> M)
+  条件: (Q : 二次映射 R M N) (f : ι ->₀ R) (g : ι -> R -> M)
   证明: Q.map_sum' ..
 
 Depends on / 依赖: Q.map_sum, map_sum
@@ -64,7 +64,7 @@ theorem apply_linearCombination'
 
 中文:
 定理 apply_linearCombination'
-  条件: (Q : QuadraticMap R M N) {g : ι -> M} (l : ι ->₀ R)
+  条件: (Q : 二次映射 R M N) {g : ι -> M} (l : ι ->₀ R)
   证明: by
   simp_rw [linearCombination_apply, map_finsuppSum', Q.map_smul, mul_smul]
   rw [(l * l).sum_of_support_subset support_mul_subset_left _ <| by simp]; rw [l.sym2Mul.sum_of_support_subset support_sym2Mul_subset _ by simp]
@@ -91,7 +91,7 @@ theorem sum_polar_sub_repr_sq
 
 中文:
 定理 sum_polar_sub_repr_sq
-  条件: (Q : QuadraticMap R M N) (bm : Basis ι R M) (x : M)
+  条件: (Q : 二次映射 R M N) (bm : 基 ι R M) (x : M)
   证明: by
   rw [← apply_linearCombination']; rw [Basis.linearCombination_repr]
 
@@ -114,7 +114,7 @@ theorem map_finsuppSum
 
 中文:
 定理 map_finsuppSum
-  条件: (Q : QuadraticMap R M N) (f : ι ->₀ R) (g : ι -> R -> M)
+  条件: (Q : 二次映射 R M N) (f : ι ->₀ R) (g : ι -> R -> M)
   证明: Q.map_sum _ _
 
 Depends on / 依赖: Q.map_sum, map_sum
@@ -136,7 +136,7 @@ theorem apply_linearCombination
 
 中文:
 定理 apply_linearCombination
-  条件: (Q : QuadraticMap R M N) {g : ι -> M} (l : ι ->₀ R)
+  条件: (Q : 二次映射 R M N) {g : ι -> M} (l : ι ->₀ R)
   证明: by
   simp_rw [linearCombination_apply, map_finsuppSum, Q.map_smul, mul_smul]
   rw [(l * l).sum_of_support_subset support_mul_subset_left _ <| by simp]
@@ -162,7 +162,7 @@ theorem sum_repr_sq_add_sum_repr_mul_polar
 
 中文:
 定理 sum_repr_sq_add_sum_repr_mul_polar
-  条件: (Q : QuadraticMap R M N) (bm : Basis ι R M) (x : M)
+  条件: (Q : 二次映射 R M N) (bm : 基 ι R M) (x : M)
   证明: by
   rw [← apply_linearCombination]; rw [Basis.linearCombination_repr]
 
@@ -191,7 +191,7 @@ definition toBilin
 
 中文:
 定义 toBilin
-  签名: (Q : QuadraticMap R M N) (bm : Basis ι R M)
+  签名: (Q : 二次映射 R M N) (bm : 基 ι R M)
   定义体: bm.constr (S := R) fun i =>
     bm.constr (S := R) fun j =>
       if i = j then Q (bm i) else if i < j then polar Q (bm i) (bm j) else 0
@@ -214,7 +214,7 @@ theorem toBilin_apply
 
 中文:
 定理 toBilin_apply
-  条件: (Q : QuadraticMap R M N) (bm : Basis ι R M) (i j : ι)
+  条件: (Q : 二次映射 R M N) (bm : 基 ι R M) (i j : ι)
   证明: by
   simp [toBilin]
 
@@ -240,7 +240,7 @@ theorem toQuadraticMap_toBilin
 
 中文:
 定理 toQuadraticMap_toBilin
-  条件: (Q : QuadraticMap R M N) (bm : Basis ι R M)
+  条件: (Q : 二次映射 R M N) (bm : 基 ι R M)
   证明: by
   ext x
   rw [← bm.linearCombination_repr x]; rw [LinearMap.BilinMap.toQuadraticMap_apply]; rw [Finsupp.linearCombination_apply]; rw [Finsupp.sum]
@@ -280,8 +280,8 @@ theorem _root_.LinearMap.BilinMap.toQuadraticMap_surjective
 @[simp]
 
 中文:
-定理 _root_.LinearMap.BilinMap.toQuadraticMap_surjective
-  条件: [Module.Free R M]
+定理 _root_.线性映射.BilinMap.toQuadraticMap_surjective
+  条件: [模.自由 R M]
   证明: by
   intro Q
   obtain ⟨ι, b⟩ := Module.Free.exists_basis (R := R) (M := M)
@@ -315,7 +315,7 @@ lemma add_toBilin
 
 中文:
 引理 add_toBilin
-  条件: (bm : Basis ι R M) (Q₁ Q₂ : QuadraticMap R M N)
+  条件: (bm : 基 ι R M) (Q₁ Q₂ : 二次映射 R M N)
   证明: by
   refine bm.ext fun i => bm.ext fun j => ?_
   obtain h | rfl | h := lt_trichotomy i j
@@ -352,7 +352,7 @@ lemma smul_toBilin
 
 中文:
 引理 smul_toBilin
-  条件: (bm : Basis ι R M) (s : S) (Q : QuadraticMap R M N)
+  条件: (bm : 基 ι R M) (s : S) (Q : 二次映射 R M N)
   证明: by
   refine bm.ext fun i => bm.ext fun j => ?_
   obtain h | rfl | h := lt_trichotomy i j
@@ -384,7 +384,7 @@ definition toBilinHom
 
 中文:
 定义 toBilinHom
-  签名: (bm : Basis ι R M)
+  签名: (bm : 基 ι R M)
   定义体: Q.toBilin bm
   map_add' := add_toBilin bm
   map_smul' := smul_toBilin S bm

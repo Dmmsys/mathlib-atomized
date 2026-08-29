@@ -61,7 +61,7 @@ definition liftFZero
 
 中文:
 定义 liftFZero
-  签名: {Y Z : C} (f : Y ⟶ Z) (P : ProjectiveResolution Y) (Q : ProjectiveResolution Z)
+  签名: {Y Z : C} (f : Y ⟶ Z) (P : 投射消解 Y) (Q : 投射消解 Z)
   定义体: Projective.factorThru (P.π.f 0 ≫ f) (Q.π.f 0)
 
 Depends on / 依赖: Projective, Projective.factorThru, factorThru
@@ -86,7 +86,7 @@ lemma exact₀
 
 中文:
 引理 exact₀
-  条件: {Z : C} (P : ProjectiveResolution Z)
+  条件: {Z : C} (P : 投射消解 Z)
   证明: ShortComplex.exact_of_g_is_cokernel _ P.isColimitCokernelCofork
 
 Depends on / 依赖: P.isColimitCokernelCofork, ShortComplex, ShortComplex.exact_of_g_is_cokernel, exact_of_g_is_cokernel, isColimitCokernelCofork
@@ -108,7 +108,7 @@ definition liftFOne
 
 中文:
 定义 liftFOne
-  签名: {Y Z : C} (f : Y ⟶ Z) (P : ProjectiveResolution Y) (Q : ProjectiveResolution Z)
+  签名: {Y Z : C} (f : Y ⟶ Z) (P : 投射消解 Y) (Q : 投射消解 Z)
   定义体: Q.exact₀.liftFromProjective (P.complex.d 1 0 ≫ liftFZero f P Q) (by simp [liftFZero])
 
 @[simp]
@@ -131,7 +131,7 @@ theorem liftFOne_zero_comm
 
 中文:
 定理 liftFOne_zero_comm
-  结论: {Y Z : C} (f : Y ⟶ Z) (P : ProjectiveResolution Y)
+  结论: {Y Z : C} (f : Y ⟶ Z) (P : 投射消解 Y)
   证明: by
   apply Q.exact₀.liftFromProjective_comp
 
@@ -154,7 +154,7 @@ definition liftFSucc
 
 中文:
 定义 liftFSucc
-  签名: {Y Z : C} (P : ProjectiveResolution Y) (Q : ProjectiveResolution Z) (n : 自然数)
+  签名: {Y Z : C} (P : 投射消解 Y) (Q : 投射消解 Z) (n : 自然数)
   定义体: ⟨(Q.exact_succ n).liftFromProjective
     (P.complex.d (n + 2) (n + 1) ≫ g') (by simp [w]),
       (Q.exact_succ n).liftFromProjective_comp _ _⟩
@@ -181,7 +181,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {Y Z : C} (f : Y ⟶ Z) (P : ProjectiveResolution Y) (Q : ProjectiveResolution Z)
+  签名: {Y Z : C} (f : Y ⟶ Z) (P : 投射消解 Y) (Q : 投射消解 Z)
   定义体: ChainComplex.mkHom _ _ (liftFZero f _ _) (liftFOne f _ _) (liftFOne_zero_comm f P Q)
     fun n ⟨g, g', w⟩ => ⟨(liftFSucc P Q n g g' w).1, (liftFSucc P Q n g g' w).2⟩
 
@@ -209,7 +209,7 @@ theorem lift_commutes
 
 中文:
 定理 lift_commutes
-  结论: {Y Z : C} (f : Y ⟶ Z) (P : ProjectiveResolution Y)
+  结论: {Y Z : C} (f : Y ⟶ Z) (P : 投射消解 Y)
   证明: by
   ext
   simp [lift, liftFZero, liftFOne]
@@ -256,7 +256,7 @@ definition liftHomotopyZeroZero
 
 中文:
 定义 liftHomotopyZeroZero
-  签名: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  签名: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   定义体: Q.exact₀.liftFromProjective (f.f 0) (congr_fun (congr_arg HomologicalComplex.Hom.f comm) 0)
 
 @[reassoc (attr := simp)]
@@ -278,7 +278,7 @@ lemma liftHomotopyZeroZero_comp
 
 中文:
 引理 liftHomotopyZeroZero_comp
-  结论: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  结论: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   证明: Q.exact₀.liftFromProjective_comp _ _
 
 Depends on / 依赖: DenseAt, DenseAt.ofIso, F.denseAt, G.asEquivalence.counitIso.symm.app, G.inv.obj, G.obj, Q.exact, asEquivalence, counitIso, denseAt, e.symm, liftFromProjective_comp, postcompEquivalence
@@ -302,7 +302,7 @@ definition liftHomotopyZeroOne
 
 中文:
 定义 liftHomotopyZeroOne
-  签名: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  签名: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   定义体: (Q.exact_succ 0).liftFromProjective (f.f 1 - P.complex.d 1 0 ≫ liftHomotopyZeroZero f comm)
     (by rw [Preadditive.sub_comp, assoc, HomologicalComplex.Hom.comm,
               liftHomotopyZeroZero_comp, sub_self])
@@ -329,7 +329,7 @@ lemma liftHomotopyZeroOne_comp
 
 中文:
 引理 liftHomotopyZeroOne_comp
-  结论: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  结论: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   证明: (Q.exact_succ 0).liftFromProjective_comp _ _
 
 Depends on / 依赖: Q.exact_succ, exact_succ, liftFromProjective_comp
@@ -352,7 +352,7 @@ definition liftHomotopyZeroSucc
 
 中文:
 定义 liftHomotopyZeroSucc
-  签名: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  签名: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   定义体: (Q.exact_succ (n + 1)).liftFromProjective (f.f (n + 2) - P.complex.d _ _ ≫ g') (by simp [w])
 
 @[reassoc (attr := simp)]
@@ -377,7 +377,7 @@ lemma liftHomotopyZeroSucc_comp
 
 中文:
 引理 liftHomotopyZeroSucc_comp
-  结论: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  结论: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   证明: (Q.exact_succ (n + 1)).liftFromProjective_comp _ _
 
 Depends on / 依赖: Q.exact_succ, exact_succ, liftFromProjective_comp
@@ -402,7 +402,7 @@ definition liftHomotopyZero
 
 中文:
 定义 liftHomotopyZero
-  签名: {Y Z : C} {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  签名: {Y Z : C} {P : 投射消解 Y} {Q : 投射消解 Z}
   定义体: Homotopy.mkInductive _ (liftHomotopyZeroZero f comm) (by simp)
     (liftHomotopyZeroOne f comm) (by simp) fun n ⟨g, g', w⟩ =>
     ⟨liftHomotopyZeroSucc f n g g' w, by simp⟩
@@ -425,7 +425,7 @@ definition liftHomotopy
 
 中文:
 定义 liftHomotopy
-  签名: {Y Z : C} (f : Y ⟶ Z) {P : ProjectiveResolution Y} {Q : ProjectiveResolution Z}
+  签名: {Y Z : C} (f : Y ⟶ Z) {P : 投射消解 Y} {Q : 投射消解 Z}
   定义体: Homotopy.equivSubZero.invFun (liftHomotopyZero _ (by simp [g_comm, h_comm]))
 
 Depends on / 依赖: Homotopy, Homotopy.equivSubZero.invFun, equivSubZero, g_comm, h_comm, invFun, liftHomotopyZero
@@ -446,7 +446,7 @@ definition liftIdHomotopy
 
 中文:
 定义 liftIdHomotopy
-  签名: (X : C) (P : ProjectiveResolution X)
+  签名: (X : C) (P : 投射消解 X)
   定义体: by
   apply liftHomotopy (𝟙 X) <;> simp
 
@@ -467,7 +467,7 @@ definition liftCompHomotopy
 
 中文:
 定义 liftCompHomotopy
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (P : ProjectiveResolution X)
+  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) (P : 投射消解 X)
   定义体: by
   apply liftHomotopy (f ≫ g) <;> simp
 
@@ -496,7 +496,7 @@ homotopyInvHomId := (liftCompHomotopy (𝟙 X) (𝟙 X) Q P Q).symm.trans by
 
 中文:
 定义 homotopyEquiv
-  签名: {X : C} (P Q : ProjectiveResolution X)
+  签名: {X : C} (P Q : 投射消解 X)
   定义体: lift (𝟙 X) P Q
   inv := lift (𝟙 X) Q P
 homotopyHomInvId := (liftCompHomotopy (𝟙 X) (𝟙 X) P Q P).symm.trans by
@@ -528,7 +528,7 @@ theorem homotopyEquiv_hom_π
 
 中文:
 定理 homotopyEquiv_hom_π
-  条件: {X : C} (P Q : ProjectiveResolution X)
+  条件: {X : C} (P Q : 投射消解 X)
   证明: by simp [homotopyEquiv]
 
 @[reassoc (attr := simp)]
@@ -549,7 +549,7 @@ theorem homotopyEquiv_inv_π
 
 中文:
 定理 homotopyEquiv_inv_π
-  条件: {X : C} (P Q : ProjectiveResolution X)
+  条件: {X : C} (P Q : 投射消解 X)
   证明: by simp [homotopyEquiv]
 
 Depends on / 依赖: homotopyEquiv
@@ -571,7 +571,7 @@ abbreviation projectiveResolution
 
 中文:
 缩写 projectiveResolution
-  签名: (Z : C) [HasZeroObject C]
+  签名: (Z : C) [有ZeroObject C]
   定义体: (HasProjectiveResolution.out (Z := Z)).some
 
 Depends on / 依赖: HasProjectiveResolution, HasProjectiveResolution.out
@@ -602,7 +602,7 @@ definition projectiveResolutions
 
 中文:
 定义 projectiveResolutions
-  签名: : C ⥤ HomotopyCategory C (ComplexShape.down 自然数) where
+  签名: : C ⥤ HomotopyCategory C (余mplexShape.down 自然数) where
   定义体: (HomotopyCategory.quotient _ _).obj (projectiveResolution X).complex
   map f := (HomotopyCategory.quotient _ _).map (ProjectiveResolution.lift f _ _)
   map_id X := by
@@ -635,8 +635,8 @@ definition ProjectiveResolution.iso
   body: HomotopyCategory.isoOfHomotopyEquiv (homotopyEquiv _ _)
 
 中文:
-定义 ProjectiveResolution.iso
-  签名: {X : C} (P : ProjectiveResolution X)
+定义 投射消解.iso
+  签名: {X : C} (P : 投射消解 X)
   定义体: HomotopyCategory.isoOfHomotopyEquiv (homotopyEquiv _ _)
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.isoOfHomotopyEquiv, homotopyEquiv, isoOfHomotopyEquiv
@@ -663,7 +663,7 @@ lemma ProjectiveResolution.iso_inv_naturality
 @[reassoc]
 
 中文:
-引理 ProjectiveResolution.iso_inv_naturality
+引理 投射消解.iso_inv_naturality
   结论: {X Y : C} (f : X ⟶ Y)
   证明: by
   apply HomotopyCategory.eq_of_homotopy
@@ -696,7 +696,7 @@ lemma ProjectiveResolution.iso_hom_naturality
   rw [← cancel_epi (P.iso).inv]; rw [iso_inv_naturality_assoc f P Q φ comm]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
 
 中文:
-引理 ProjectiveResolution.iso_hom_naturality
+引理 投射消解.iso_hom_naturality
   结论: {X Y : C} (f : X ⟶ Y)
   证明: by
   rw [← cancel_epi (P.iso).inv]; rw [iso_inv_naturality_assoc f P Q φ comm]; rw [Iso.inv_hom_id_assoc]; rw [Iso.inv_hom_id]; rw [comp_id]
@@ -784,7 +784,7 @@ definition ofComplex
 
 中文:
 定义 ofComplex
-  签名: : ChainComplex C 自然数
+  签名: : 链复形 C 自然数
   定义体: ChainComplex.mk' (Projective.over Z) (Projective.syzygies (Projective.π Z))
     (Projective.d (Projective.π Z)) (fun f => ⟨_, Projective.d f, by simp⟩)
 

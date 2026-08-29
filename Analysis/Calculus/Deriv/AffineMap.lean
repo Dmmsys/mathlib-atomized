@@ -98,7 +98,7 @@ theorem hasDerivAt
 
 中文:
 定理 hasDerivAt
-  结论: HasDerivAt f (f.linear 1) x
+  结论: 在点处可导 f (f.linear 1) x
   证明: f.hasDerivAtFilter
 
 Depends on / 依赖: f.hasDerivAtFilter, hasDerivAtFilter
@@ -161,7 +161,7 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  结论: Differentiable 𝕜 f
+  结论: 可微 𝕜 f
   证明: fun _ => f.differentiableAt
 -/
 protected theorem differentiable : Differentiable 𝕜 f := fun _ => f.differentiableAt
@@ -236,7 +236,7 @@ theorem hasDerivAt_lineMap
 
 中文:
 定理 hasDerivAt_lineMap
-  结论: HasDerivAt (lineMap a b) (b - a) x
+  结论: 在点处可导 (lineMap a b) (b - a) x
   证明: hasStrictDerivAt_lineMap.hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_lineMap, hasStrictDerivAt_lineMap.hasDerivAt

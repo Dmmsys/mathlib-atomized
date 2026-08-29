@@ -55,7 +55,7 @@ lemma hasColimit_ι_comp
 
 中文:
 引理 hasColimit_ι_comp
-  结论: 对任意 X, HasColimit (Grothendieck.ι F X ⋙ G)
+  结论: 对任意 X, 有余极限 (Grothendieck.ι F X ⋙ G)
   证明: fun X => hasColimit_of_iso (F := (F.map (𝟙 _)).toFunctor ⋙ Grothendieck.ι F X ⋙ G)
     (leftUnitor (Grothendieck.ι F X ⋙ G)).symm ≪≫
     (isoWhiskerRight (eqToIso congr($((F.map_id X).symm).toFunctor)) (Grothendieck.ι F X ⋙ G))
@@ -150,7 +150,7 @@ definition fiberwiseColim
 
 中文:
 定义 fiberwiseColim
-  签名: [对任意 c, HasColimitsOfShape (F.obj c) H]
+  签名: [对任意 c, 有形状余极限 (F.obj c) H]
   定义体: fiberwiseColimit G
   map α :=
     { app := fun c => colim.map (whiskerLeft _ α)
@@ -186,7 +186,7 @@ definition natTransIntoForgetCompFiberwiseColimit
       NatTrans.comp_app, whiskerRight_
 
 中文:
-定义 natTransIntoForgetCompFiberwiseColimit
+定义 natTrans整数oForgetCompFiberwiseColimit
   签名: :
   定义体: colimit.ι (Grothendieck.ι F X.base ⋙ G) X.fiber
   naturality _ _ f := by
@@ -227,7 +227,7 @@ definition coconeFiberwiseColimitOfCocone
 
 中文:
 定义 coconeFiberwiseColimitOfCocone
-  签名: (c : Cocone G)
+  签名: (c : 余锥 G)
   定义体: c.pt
   ι := { app := fun X => colimit.desc _ (c.whisker (Grothendieck.ι F X)),
          naturality := fun _ _ f => by dsimp; ext; simp }
@@ -258,7 +258,7 @@ definition isColimitCoconeFiberwiseColimitOfCocone
 
 中文:
 定义 isColimitCoconeFiberwiseColimitOfCocone
-  签名: {c : Cocone G} (hc : IsColimit c)
+  签名: {c : 余锥 G} (hc : 是余极限 c)
   定义体: hc.desc Cocone.mk s.pt natTransIntoForgetCompFiberwiseColimit G ≫
     whiskerLeft (Grothendieck.forget F) s.ι
   fac s c := by dsimp; ext; simp
@@ -293,8 +293,8 @@ lemma hasColimit_fiberwiseColimit
 
 中文:
 引理 hasColimit_fiberwiseColimit
-  条件: [HasColimit G]
-  结论: HasColimit (fiberwiseColimit G) where
+  条件: [有余极限 G]
+  结论: 有余极限 (fiberwiseColimit G) where
   证明: ⟨⟨_, isColimitCoconeFiberwiseColimitOfCocone (colimit.isColimit _)⟩⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitCoconeFiberwiseColimitOfCocone
@@ -324,7 +324,7 @@ definition coconeOfCoconeFiberwiseColimit
 
 中文:
 定义 coconeOfCoconeFiberwiseColimit
-  签名: (c : Cocone (fiberwiseColimit G))
+  签名: (c : 余锥 (fiberwiseColimit G))
   定义体: c.pt
   ι := { app := fun X => colimit.ι (Grothendieck.ι F X.base ⋙ G) X.fiber ≫ c.ι.app X.base
          naturality := fun {X Y} ⟨f, g⟩ => by
@@ -363,7 +363,7 @@ uniq s m hm := hc.hom_ext fun X => by
 
 中文:
 定义 isColimitCoconeOfFiberwiseCocone
-  签名: {c : Cocone (fiberwiseColimit G)} (hc : IsColimit c)
+  签名: {c : 余锥 (fiberwiseColimit G)} (hc : 是余极限 c)
   定义体: hc.desc Cocone.mk s.pt
     { app := fun X => colimit.desc (Grothendieck.ι F X ⋙ G) (s.whisker _) }
 uniq s m hm := hc.hom_ext fun X => by
@@ -402,7 +402,7 @@ lemma hasColimit_of_hasColimit_fiberwiseColimit_of_hasColimit
 
 中文:
 引理 hasColimit_of_hasColimit_fiberwiseColimit_of_hasColimit
-  结论: HasColimit G where
+  结论: 有余极限 G where
   证明: ⟨⟨_, isColimitCoconeOfFiberwiseCocone (colimit.isColimit _)⟩⟩
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitCoconeOfFiberwiseCocone
@@ -499,7 +499,7 @@ noncomputable section FiberwiseColim
 
 中文:
 定理 hasColimitsOfShape_grothendieck
-  结论: [对任意 X, HasColimitsOfShape (F.obj X) H]
+  结论: [对任意 X, 有形状余极限 (F.obj X) H]
   证明: hasColimit_of_hasColimit_fiberwiseColimit_of_hasColimit _
 
 noncomputable section FiberwiseColim

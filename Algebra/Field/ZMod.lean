@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: Field (ZMod p)
+  签名: 域 (ZMod p)
   定义体: mul_inv_cancel_aux p
   inv_zero := inv_zero p
   nnqsmul := _
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain (ZMod p)
+  签名: 是整环 (ZMod p)
   定义体: by constructor
 -/
 instance : IsDomain (ZMod p) := by constructor

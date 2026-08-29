@@ -40,7 +40,7 @@ structure SummationFilter
 结构 SummationFilter
   参数: (β)
   公理与运算 (1 个):
-    - filter : Filter (Finset β)
+    - filter : 滤子 (有限集 β)
 -/
 structure SummationFilter (β) where
   /-- The filter -/
@@ -227,7 +227,7 @@ instance [IsEmpty
   body: ⟨support_eq_univ_iff.mp Subsingleton.elim ..⟩
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: β] (L
   定义体: ⟨support_eq_univ_iff.mp Subsingleton.elim ..⟩
 
@@ -282,7 +282,7 @@ class HasSupport
     - eventually_le_support : forallᶠ s in L.filter, ↑s subseteq L.support
 
 中文:
-类 HasSupport
+类 有Support
   参数: (L : SummationFilter β)
   公理与运算 (1 个):
     - eventually_le_support : 对任意ᶠ s in L.filter, ↑s subseteq L.support
@@ -307,7 +307,7 @@ lemma eventually_mem_or_not_mem
 
 中文:
 引理 eventually_mem_or_not_mem
-  条件: (L : SummationFilter β) [HasSupport L] (b : β)
+  条件: (L : SummationFilter β) [有Support L] (b : β)
   证明: by
   rw [or_iff_not_imp_left]
   intro hb
@@ -488,8 +488,8 @@ instance [Countable
   body: atTop.isCountablyGenerated
 
 中文:
-实例 [Countable
-  签名: β] : IsCountablyGenerated (unconditional β).filter
+实例 [可数
+  签名: β] : 是余untablyGenerated (unconditional β).filter
   定义体: atTop.isCountablyGenerated
 
 Depends on / 依赖: atTop.isCountablyGenerated, isCountablyGenerated
@@ -552,7 +552,7 @@ have hL' : ∅ ∉ L.filter := empty_mem_iff_bot
 
 中文:
 引理 eq_unconditional_of_finite
-  结论: {β} [Finite β]
+  结论: {β} [有限 β]
   证明: by
   have := Fintype.ofFinite β
   have hAtTop : (atTop : Filter (Finset β)) = pure Finset.univ := by
@@ -629,7 +629,7 @@ instance [Nonempty
   body: ⟨by rw [conditional_filter]; infer_instance⟩
 
 中文:
-实例 [Nonempty
+实例 [非空
   签名: β] [IsDirectedOrder β] [IsCodirectedOrder β] : (conditional β).NeBot
   定义体: ⟨by rw [conditional_filter]; infer_instance⟩
 
@@ -647,8 +647,8 @@ instance [IsCountablyGenerated
   body: map.isCountablyGenerated ..
 
 中文:
-实例 [IsCountablyGenerated
-  签名: (atTop : Filter β)] [IsCountablyGenerated (atBot : Filter β)] :
+实例 [是余untablyGenerated
+  签名: (atTop : 滤子 β)] [是余untablyGenerated (atBot : 滤子 β)] :
   定义体: map.isCountablyGenerated ..
 
 Depends on / 依赖: isCountablyGenerated, map.isCountablyGenerated
@@ -671,7 +671,7 @@ lemma conditional_filter_eq_map_Iic
 
 中文:
 引理 conditional_filter_eq_map_Iic
-  条件: {γ} [PartialOrder γ] [LocallyFiniteOrder γ] [OrderBot γ]
+  条件: {γ} [偏序 γ] [局部有限序 γ] [有底序 γ]
   证明: by
   simp [isBot_bot.atBot_eq, comp_def, Finset.Icc_bot]
 
@@ -695,7 +695,7 @@ lemma conditional_filter_eq_map_Ici
 
 中文:
 引理 conditional_filter_eq_map_Ici
-  条件: {γ} [PartialOrder γ] [LocallyFiniteOrder γ] [OrderTop γ]
+  条件: {γ} [偏序 γ] [局部有限序 γ] [有顶序 γ]
   证明: by
   simp [isTop_top.atTop_eq, comp_def, Finset.Icc_top]
 
@@ -724,7 +724,7 @@ lemma conditional_filter_eq_map_range
 
 中文:
 引理 conditional_filter_eq_map_range
-  结论: (conditional 自然数).filter = atTop.map Finset.range
+  结论: (conditional 自然数).filter = atTop.map 有限集.range
   证明: by
   have (n : Nat) : Finset.Iic n = Finset.range (n + 1) := by ext x; simp [Nat.lt_succ_iff]
   simp only [conditional_filter_eq_map_Iic, funext this]

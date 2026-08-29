@@ -27,7 +27,7 @@ definition Complex.integerComplement
   body: (Set.range ((↑) : Int -> Complex))ᶜ
 
 中文:
-定义 Complex.integerComplement
+定义 复形.integerComplement
   定义体: (Set.range ((↑) : Int -> Complex))ᶜ
 
 Depends on / 依赖: Set.range
@@ -48,7 +48,7 @@ lemma integerComplement_eq
 
 中文:
 引理 integerComplement_eq
-  结论: Complex_整数 = {z : Complex | ¬ 存在 (n : 整数), n = z}
+  结论: Complex_整数 = {z : 复形 | ¬ 存在 (n : 整数), n = z}
   证明: rfl
 -/
 lemma integerComplement_eq : Complex_Int = {z : Complex | ¬ exists (n : Int), n = z} := rfl
@@ -69,7 +69,7 @@ alias integerComplement.mem_iff := mem_integerComplement_iff
 
 中文:
 引理 mem_integerComplement_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: x in Complex_整数 ↔ ¬ 存在 (n : 整数), n = x
   证明: Iff.rfl
 
@@ -128,8 +128,8 @@ alias integerComplement.add_coe_int_mem := add_intCast_mem_integerComplement
 
 中文:
 引理 add_intCast_mem_integerComplement
-  条件: {x : Complex} (a : 整数)
-  结论: x + (a : Complex) in Complex_整数 ↔ x in Complex_整数
+  条件: {x : 复形} (a : 整数)
+  结论: x + (a : 复形) in Complex_整数 ↔ x in Complex_整数
   证明: by
   simp only [mem_integerComplement_iff, not_iff_not]
   exact ⟨(Exists.elim · fun n hn => ⟨n - a, by simp [hn]⟩),
@@ -159,7 +159,7 @@ lemma integerComplement.ne_zero
 
 中文:
 引理 integerComplement.ne_zero
-  条件: {x : Complex} (hx : x in Complex_整数)
+  条件: {x : 复形} (hx : x in Complex_整数)
   结论: x != 0
   证明: fun hx' => hx ⟨0, by exact_mod_cast hx'.symm⟩
 -/
@@ -177,8 +177,8 @@ lemma integerComplement_add_ne_zero
 
 中文:
 引理 integerComplement_add_ne_zero
-  条件: {x : Complex} (hx : x in Complex_整数) (a : 整数)
-  结论: x + (a : Complex) != 0
+  条件: {x : 复形} (hx : x in Complex_整数) (a : 整数)
+  结论: x + (a : 复形) != 0
   证明: integerComplement.ne_zero ((add_intCast_mem_integerComplement a).mpr hx)
 
 Depends on / 依赖: add_intCast_mem_integerComplement, integerComplement, integerComplement.ne_zero, ne_zero
@@ -197,7 +197,7 @@ lemma integerComplement.ne_one
 
 中文:
 引理 integerComplement.ne_one
-  条件: {x : Complex} (hx : x in Complex_整数)
+  条件: {x : 复形} (hx : x in Complex_整数)
   结论: x != 1
   证明: fun hx' => hx ⟨1, by exact_mod_cast hx'.symm⟩
 -/
@@ -218,7 +218,7 @@ lemma integerComplement_pow_two_ne_pow_two
 
 中文:
 引理 integerComplement_pow_two_ne_pow_two
-  条件: {x : Complex} (hx : x in Complex_整数) (n : 整数)
+  条件: {x : 复形} (hx : x in Complex_整数) (n : 整数)
   结论: x ^ 2 != n ^ 2
   证明: by
   have := not_exists.mp hx n

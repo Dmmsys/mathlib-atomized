@@ -49,7 +49,7 @@ instance Prj.inhabited
 
 中文:
 实例 Prj.inhabited
-  签名: {v : TypeVec.{u} n} [Inhabited (v i)]
+  签名: {v : TypeVec.{u} n} [可居 (v i)]
   定义体: ⟨(default : v i)⟩
 -/
 instance Prj.inhabited {v : TypeVec.{u} n} [Inhabited (v i)] : Inhabited (Prj i v) :=
@@ -80,7 +80,7 @@ instance Prj.mvfunctor
 
 中文:
 实例 Prj.mvfunctor
-  签名: : MvFunctor (Prj i) where map
+  签名: : Mv函子 (Prj i) where map
   定义体: @Prj.map _ i
 
 Depends on / 依赖: Prj.map
@@ -98,7 +98,7 @@ B _ j := ULift PLift i = j
 
 中文:
 定义 Prj.P
-  签名: : MvPFunctor.{u} n where
+  签名: : MvP函子.{u} n where
   定义体: PUnit
 B _ j := ULift PLift i = j
 -/

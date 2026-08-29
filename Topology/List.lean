@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (List α)
+  签名: 拓扑空间 (列表 α)
   定义体: TopologicalSpace.mkOfNhds (traverse nhds)
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.mkOfNhds, mkOfNhds, traverse
@@ -62,7 +62,7 @@ suffices List.cons < > pure a <*> pure l <= List.cons < > 𝓝 a <*> traverse �
 
 中文:
 定理 nhds_list
-  条件: (as : List α)
+  条件: (as : 列表 α)
   结论: 𝓝 as = traverse 𝓝 as
   证明: by
   refine nhds_mkOfNhds _ _ ?_ ?_
@@ -125,7 +125,7 @@ theorem nhds_nil
 
 中文:
 定理 nhds_nil
-  结论: 𝓝 ([] : List α) = pure []
+  结论: 𝓝 ([] : 列表 α) = pure []
   证明: by
   rw [nhds_list]; rw [List.traverse_nil _]
 
@@ -146,8 +146,8 @@ theorem nhds_cons
 
 中文:
 定理 nhds_cons
-  条件: (a : α) (l : List α)
-  结论: 𝓝 (a::l) = List.cons < > 𝓝 a <*> 𝓝 l
+  条件: (a : α) (l : 列表 α)
+  结论: 𝓝 (a::l) = 列表.cons < > 𝓝 a <*> 𝓝 l
   证明: by
   rw [nhds_list]; rw [List.traverse_cons _]; rw [← nhds_list]
 
@@ -166,8 +166,8 @@ theorem List.tendsto_cons
   rw [nhds_cons]; rw [Tendsto]; rw [Filter.map_prod]; exact le_rfl
 
 中文:
-定理 List.tendsto_cons
-  条件: {a : α} {l : List α}
+定理 列表.tendsto_cons
+  条件: {a : α} {l : 列表 α}
   证明: by
   rw [nhds_cons]; rw [Tendsto]; rw [Filter.map_prod]; exact le_rfl
 
@@ -186,8 +186,8 @@ theorem Filter.Tendsto.cons
   proof: List.tendsto_cons.comp (Tendsto.prodMk hf hg)
 
 中文:
-定理 Filter.Tendsto.cons
-  结论: {α : 类型} {f : α -> β} {g : α -> List β} {a : Filter α} {b : β}
+定理 滤子.收敛.cons
+  结论: {α : 类型} {f : α -> β} {g : α -> 列表 β} {a : 滤子 α} {b : β}
   证明: List.tendsto_cons.comp (Tendsto.prodMk hf hg)
 
 Depends on / 依赖: List.tendsto_cons.comp, Tendsto, Tendsto.prodMk, prodMk, tendsto_cons
@@ -214,7 +214,7 @@ theorem tendsto_cons_iff
 
 中文:
 定理 tendsto_cons_iff
-  条件: {β : 类型} {f : List α -> β} {b : Filter β} {a : α} {l : List α}
+  条件: {β : 类型} {f : 列表 α -> β} {b : 滤子 β} {a : α} {l : 列表 α}
   证明: by
   have : 𝓝 (a::l) = (𝓝 a ×ˢ 𝓝 l).map fun p : α × List α => p.1::p.2 := by
     simp only [nhds_cons, Filter.prod_eq, (Filter.map_def _ _).symm,
@@ -242,7 +242,7 @@ theorem continuous_cons
 
 中文:
 定理 continuous_cons
-  结论: Continuous fun x : α × List α => (x.1::x.2 : List α)
+  结论: 连续 fun x : α × 列表 α => (x.1::x.2 : 列表 α)
   证明: continuous_iff_continuousAt.mpr fun ⟨_x, _y⟩ => continuousAt_fst.cons continuousAt_snd
 
 Depends on / 依赖: continuousAt_fst, continuousAt_fst.cons, continuousAt_snd, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr
@@ -259,7 +259,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  结论: {β : 类型} {f : List α -> β} {r : List α -> Filter β}
+  结论: {β : 类型} {f : 列表 α -> β} {r : 列表 α -> 滤子 β}
 -/
 theorem tendsto_nhds {β : Type*} {f : List α -> β} {r : List α -> Filter β}
     (h_nil : Tendsto f (pure []) (r []))
@@ -282,8 +282,8 @@ instance [DiscreteTopology
   rw [discreteTopology_iff_nhds]; intro l; induction l <;> simp [*, nhds_cons]
 
 中文:
-实例 [DiscreteTopology
-  签名: α] : DiscreteTopology (List α)
+实例 [离散拓扑
+  签名: α] : 离散拓扑 (列表 α)
   定义体: by
   rw [discreteTopology_iff_nhds]; intro l; induction l <;> simp [*, nhds_cons]
 
@@ -309,7 +309,7 @@ theorem continuousAt_length
 
 中文:
 定理 continuousAt_length
-  结论: 对任意 l : List α, ContinuousAt List.length l
+  结论: 对任意 l : 列表 α, ContinuousAt 列表.length l
   证明: by
   simp only [ContinuousAt, nhds_discrete]
   refine tendsto_nhds ?_ ?_
@@ -382,7 +382,7 @@ theorem tendsto_insertIdx
 
 中文:
 定理 tendsto_insertIdx
-  结论: {β} {n : 自然数} {a : α} {l : List α} {f : β -> α} {g : β -> List α}
+  结论: {β} {n : 自然数} {a : α} {l : 列表 α} {f : β -> α} {g : β -> 列表 α}
   证明: tendsto_insertIdx'.comp (hf.prodMk hg)
 
 Depends on / 依赖: hf.prodMk, prodMk, tendsto_insertIdx
@@ -405,7 +405,7 @@ theorem continuous_insertIdx
 中文:
 定理 continuous_insertIdx
   条件: {n : 自然数}
-  结论: Continuous fun p : α × List α => p.2.insertIdx n p.1
+  结论: 连续 fun p : α × 列表 α => p.2.insertIdx n p.1
   证明: continuous_iff_continuousAt.mpr fun ⟨a, l⟩ => by
     rw [ContinuousAt]; rw [nhds_prod_eq]; exact tendsto_insertIdx'
 
@@ -447,7 +447,7 @@ theorem continuous_eraseIdx
 中文:
 定理 continuous_eraseIdx
   条件: {n : 自然数}
-  结论: Continuous fun l : List α => eraseIdx l n
+  结论: 连续 fun l : 列表 α => eraseIdx l n
   证明: continuous_iff_continuousAt.mpr fun _a => tendsto_eraseIdx
 
 @[to_additive]
@@ -475,7 +475,7 @@ theorem tendsto_prod
 
 中文:
 定理 tendsto_prod
-  条件: [MulOneClass α] [ContinuousMul α] {l : List α}
+  条件: [MulOne类 α] [连续乘法 α] {l : 列表 α}
   证明: by
   induction l with
   | nil => simp +contextual [nhds_nil, mem_of_mem_nhds, tendsto_pure_left]
@@ -509,8 +509,8 @@ theorem continuous_prod
 
 中文:
 定理 continuous_prod
-  条件: [MulOneClass α] [ContinuousMul α]
-  结论: Continuous (prod : List α -> α)
+  条件: [MulOne类 α] [连续乘法 α]
+  结论: 连续 (乘积 : 列表 α -> α)
   证明: continuous_iff_continuousAt.mpr fun _l => tendsto_prod
 
 Depends on / 依赖: continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, tendsto_prod
@@ -560,7 +560,7 @@ theorem tendsto_insertIdx
 
 中文:
 定理 tendsto_insertIdx
-  条件: {n : 自然数} {i : Fin (n + 1)} {a : α}
+  条件: {n : 自然数} {i : 有限集 (n + 1)} {a : α}
 -/
 theorem tendsto_insertIdx {n : Nat} {i : Fin (n + 1)} {a : α} :
     forall {l : Vector α n},
@@ -582,7 +582,7 @@ theorem continuous_insertIdx'
 
 中文:
 定理 continuous_insertIdx'
-  条件: {n : 自然数} {i : Fin (n + 1)}
+  条件: {n : 自然数} {i : 有限集 (n + 1)}
   证明: continuous_iff_continuousAt.mpr fun ⟨a, l⟩ => by
     rw [ContinuousAt]; rw [nhds_prod_eq]; exact tendsto_insertIdx
 
@@ -603,7 +603,7 @@ theorem continuous_insertIdx
 
 中文:
 定理 continuous_insertIdx
-  结论: {n : 自然数} {i : Fin (n + 1)} {f : β -> α} {g : β -> Vector α n}
+  结论: {n : 自然数} {i : 有限集 (n + 1)} {f : β -> α} {g : β -> Vector α n}
   证明: continuous_insertIdx'.comp (hf.prodMk hg)
 
 Depends on / 依赖: continuous_insertIdx, hf.prodMk, prodMk
@@ -622,7 +622,7 @@ theorem continuousAt_eraseIdx
 
 中文:
 定理 continuousAt_eraseIdx
-  条件: {n : 自然数} {i : Fin (n + 1)}
+  条件: {n : 自然数} {i : 有限集 (n + 1)}
 -/
 theorem continuousAt_eraseIdx {n : Nat} {i : Fin (n + 1)} :
     forall {l : Vector α (n + 1)}, ContinuousAt (Vector.eraseIdx i) l
@@ -641,7 +641,7 @@ theorem continuous_eraseIdx
 
 中文:
 定理 continuous_eraseIdx
-  条件: {n : 自然数} {i : Fin (n + 1)}
+  条件: {n : 自然数} {i : 有限集 (n + 1)}
   证明: continuous_iff_continuousAt.mpr fun ⟨_a, _l⟩ => continuousAt_eraseIdx
 
 Depends on / 依赖: continuousAt_eraseIdx, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr

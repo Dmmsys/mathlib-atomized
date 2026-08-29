@@ -121,8 +121,8 @@ definition _root_.MeasureTheory.FiniteMeasure
   body: { μ : Measure Ω // IsFiniteMeasure μ }
 
 中文:
-定义 _root_.MeasureTheory.FiniteMeasure
-  签名: (Ω : 类型) [MeasurableSpace Ω]
+定义 _root_.测度论.有限测度
+  签名: (Ω : 类型) [可测空间 Ω]
   定义体: { μ : Measure Ω // IsFiniteMeasure μ }
 
 Depends on / 依赖: IsFiniteMeasure, Measure
@@ -142,7 +142,7 @@ definition toMeasure
 
 中文:
 定义 toMeasure
-  签名: : FiniteMeasure Ω -> Measure Ω
+  签名: : 有限测度 Ω -> 测度 Ω
   定义体: Subtype.val
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -159,7 +159,7 @@ instance instCoe
 
 中文:
 实例 instCoe
-  签名: : Coe (FiniteMeasure Ω) (MeasureTheory.Measure Ω)
+  签名: : Coe (有限测度 Ω) (测度论.测度 Ω)
   定义体: { coe := toMeasure }
 
 Depends on / 依赖: toMeasure
@@ -178,7 +178,7 @@ instance isFiniteMeasure
 
 中文:
 实例 isFiniteMeasure
-  签名: (μ : FiniteMeasure Ω)
+  签名: (μ : 有限测度 Ω)
   定义体: μ.prop
 
 @[simp]
@@ -197,8 +197,8 @@ theorem val_eq_toMeasure
 
 中文:
 定理 val_eq_toMeasure
-  条件: (ν : FiniteMeasure Ω)
-  结论: ν.val = (ν : Measure Ω)
+  条件: (ν : 有限测度 Ω)
+  结论: ν.val = (ν : 测度 Ω)
   证明: rfl
 -/
 theorem val_eq_toMeasure (ν : FiniteMeasure Ω) : ν.val = (ν : Measure Ω) := rfl
@@ -213,7 +213,7 @@ theorem toMeasure_injective
 
 中文:
 定理 toMeasure_injective
-  结论: Function.Injective ((↑) : FiniteMeasure Ω -> Measure Ω)
+  结论: 函数.单射 ((↑) : 有限测度 Ω -> 测度 Ω)
   证明: Subtype.coe_injective
 
 Depends on / 依赖: Subtype, Subtype.coe_injective, coe_injective
@@ -233,7 +233,7 @@ coe_injective μ ν h := toMeasure_injective Measure.ext fun s _ => by
 
 中文:
 实例 instFunLike
-  签名: : FunLike (FiniteMeasure Ω) (Set Ω) 实数>=0 where
+  签名: : 函数状 (有限测度 Ω) (集合 Ω) 实数>=0 where
   定义体: ((μ : Measure Ω) s).toNNReal
 coe_injective μ ν h := toMeasure_injective Measure.ext fun s _ => by
     simpa [ENNReal.toNNReal_eq_toNNReal_iff, measure_ne_top] using congr_fun h s
@@ -256,8 +256,8 @@ lemma coeFn_def
 
 中文:
 引理 coeFn_def
-  条件: (μ : FiniteMeasure Ω)
-  结论: μ = fun s => ((μ : Measure Ω) s).toNN实数
+  条件: (μ : 有限测度 Ω)
+  结论: μ = fun s => ((μ : 测度 Ω) s).toNN实数
   证明: rfl
 -/
 lemma coeFn_def (μ : FiniteMeasure Ω) : μ = fun s => ((μ : Measure Ω) s).toNNReal := rfl
@@ -274,7 +274,7 @@ lemma coeFn_mk
 
 中文:
 引理 coeFn_mk
-  条件: (μ : Measure Ω) (hμ)
+  条件: (μ : 测度 Ω) (hμ)
   证明: rfl
 
 @[simp, norm_cast]
@@ -295,7 +295,7 @@ lemma mk_apply
 
 中文:
 引理 mk_apply
-  条件: (μ : Measure Ω) (hμ) (s : Set Ω)
+  条件: (μ : 测度 Ω) (hμ) (s : 集合 Ω)
   证明: rfl
 
 Depends on / 依赖: FiniteMeasure, lex_iff_of_unique, toNNReal
@@ -313,7 +313,7 @@ lemma toMeasure_mk
 
 中文:
 引理 toMeasure_mk
-  条件: (μ : Measure Ω) (h : IsFiniteMeasure μ)
+  条件: (μ : 测度 Ω) (h : 是有限测度 μ)
   证明: rfl
 
 Depends on / 依赖: lt_irrefl
@@ -332,8 +332,8 @@ lemma measureReal_eq_coe_coeFn
 @[simp]
 
 中文:
-引理 measureReal_eq_coe_coeFn
-  条件: {μ : FiniteMeasure Ω} {s : Set Ω}
+引理 measure实数_eq_coe_coeFn
+  条件: {μ : 有限测度 Ω} {s : 集合 Ω}
   证明: rfl
 
 @[simp]
@@ -356,7 +356,7 @@ theorem ennreal_coeFn_eq_coeFn_toMeasure
 
 中文:
 定理 ennreal_coeFn_eq_coeFn_toMeasure
-  条件: (ν : FiniteMeasure Ω) (s : Set Ω)
+  条件: (ν : 有限测度 Ω) (s : 集合 Ω)
   证明: ENNReal.coe_toNNReal (measure_lt_top (↑ν) s).ne
 
 @[simp]
@@ -381,7 +381,7 @@ theorem null_iff_toMeasure_null
 
 中文:
 定理 null_iff_toMeasure_null
-  条件: (ν : FiniteMeasure Ω) (s : Set Ω)
+  条件: (ν : 有限测度 Ω) (s : 集合 Ω)
   证明: ⟨fun h => by rw [← ennreal_coeFn_eq_coeFn_toMeasure, h, ENNReal.coe_zero],
    fun h => congrArg ENNReal.toNNReal h⟩
 
@@ -406,7 +406,7 @@ theorem apply_mono
 
 中文:
 定理 apply_mono
-  条件: (μ : FiniteMeasure Ω) {s₁ s₂ : Set Ω} (h : s₁ subseteq s₂)
+  条件: (μ : 有限测度 Ω) {s₁ s₂ : 集合 Ω} (h : s₁ subseteq s₂)
   结论: μ s₁ <= μ s₂
   证明: ENNReal.toNNReal_mono (measure_ne_top _ s₂) ((μ : Measure Ω).mono h)
 
@@ -429,7 +429,7 @@ theorem apply_union_le
 
 中文:
 定理 apply_union_le
-  条件: (μ : FiniteMeasure Ω) {s₁ s₂ : Set Ω}
+  条件: (μ : 有限测度 Ω) {s₁ s₂ : 集合 Ω}
   结论: μ (s₁ union s₂) <= μ s₁ + μ s₂
   证明: by
   have := measure_union_le (μ := (μ : Measure Ω)) s₁ s₂
@@ -454,7 +454,7 @@ theorem mono_null
 
 中文:
 定理 mono_null
-  条件: (μ : FiniteMeasure Ω) (h : s subseteq t) (ht : μ t = 0)
+  条件: (μ : 有限测度 Ω) (h : s subseteq t) (ht : μ t = 0)
   结论: μ s = 0
   证明: eq_bot_mono (apply_mono μ h) ht
 
@@ -473,7 +473,7 @@ lemma pos_mono
 
 中文:
 引理 pos_mono
-  条件: (μ : FiniteMeasure Ω) (h : s subseteq t) (hs : 0 < μ s)
+  条件: (μ : 有限测度 Ω) (h : s subseteq t) (hs : 0 < μ s)
   证明: hs.trans_le μ.apply_mono h
 
 Depends on / 依赖: apply_mono, hs.trans_le, trans_le
@@ -493,7 +493,7 @@ lemma tendsto_measure_iUnion_accumulate
 
 中文:
 引理 tendsto_measure_iUnion_accumulate
-  结论: {ι : 类型} [Preorder ι]
+  结论: {ι : 类型} [预序 ι]
   证明: by
   simpa [← ennreal_coeFn_eq_coeFn_toMeasure]
     using tendsto_measure_iUnion_accumulate (μ := μ.toMeasure) (ι := ι)
@@ -514,7 +514,7 @@ definition mass
 
 中文:
 定义 mass
-  签名: (μ : FiniteMeasure Ω)
+  签名: (μ : 有限测度 Ω)
   定义体: μ univ
 -/
 def mass (μ : FiniteMeasure Ω) : Real>=0 := μ univ
@@ -533,7 +533,7 @@ theorem apply_le_mass
 
 中文:
 定理 apply_le_mass
-  条件: (μ : FiniteMeasure Ω) (s : Set Ω)
+  条件: (μ : 有限测度 Ω) (s : 集合 Ω)
   结论: μ s <= μ.mass
   证明: by
   simpa using! apply_mono μ (subset_univ s)
@@ -555,8 +555,8 @@ theorem ennreal_mass
 
 中文:
 定理 ennreal_mass
-  条件: {μ : FiniteMeasure Ω}
-  结论: (μ.mass : 实数>=0∞) = (μ : Measure Ω) univ
+  条件: {μ : 有限测度 Ω}
+  结论: (μ.mass : 实数>=0∞) = (μ : 测度 Ω) univ
   证明: ennreal_coeFn_eq_coeFn_toMeasure μ Set.univ
 
 Depends on / 依赖: Set.univ, ennreal_coeFn_eq_coeFn_toMeasure
@@ -574,7 +574,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (FiniteMeasure Ω) where zero
+  签名: : 零 (有限测度 Ω) where zero
   定义体: ⟨0, MeasureTheory.isFiniteMeasureZero⟩
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.isFiniteMeasureZero, isFiniteMeasureZero
@@ -593,7 +593,7 @@ lemma coeFn_zero
 
 中文:
 引理 coeFn_zero
-  结论: ⇑(0 : FiniteMeasure Ω) = 0
+  结论: ⇑(0 : 有限测度 Ω) = 0
   证明: rfl
 
 @[simp]
@@ -613,7 +613,7 @@ theorem zero_mass
 
 中文:
 定理 zero_mass
-  结论: (0 : FiniteMeasure Ω).mass = 0
+  结论: (0 : 有限测度 Ω).mass = 0
   证明: rfl
 
 @[simp]
@@ -636,7 +636,7 @@ theorem mass_zero_iff
 
 中文:
 定理 mass_zero_iff
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   结论: μ.mass = 0 ↔ μ = 0
   证明: by
   refine ⟨fun μ_mass => ?_, fun hμ => by simp only [hμ, zero_mass]⟩
@@ -665,7 +665,7 @@ theorem mass_nonzero_iff
 
 中文:
 定理 mass_nonzero_iff
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   结论: μ.mass != 0 ↔ μ != 0
   证明: not_iff_not.mpr FiniteMeasure.mass_zero_iff μ
 
@@ -689,8 +689,8 @@ theorem eq_of_forall_toMeasure_apply_eq
   exact h s s_mble
 
 中文:
-定理 eq_of_forall_toMeasure_apply_eq
-  结论: (μ ν : FiniteMeasure Ω)
+定理 eq_of_对任意_toMeasure_apply_eq
+  结论: (μ ν : 有限测度 Ω)
   证明: by
   apply Subtype.ext
   ext1 s s_mble
@@ -715,8 +715,8 @@ theorem eq_of_forall_apply_eq
   simpa [ennreal_coeFn_eq_coeFn_toMeasure] using congr_arg ((↑) : Real>=0 -> Real>=0∞) (h s s_mble)
 
 中文:
-定理 eq_of_forall_apply_eq
-  结论: (μ ν : FiniteMeasure Ω)
+定理 eq_of_对任意_apply_eq
+  结论: (μ ν : 有限测度 Ω)
   证明: by
   ext1 s s_mble
   simpa [ennreal_coeFn_eq_coeFn_toMeasure] using congr_arg ((↑) : Real>=0 -> Real>=0∞) (h s s_mble)
@@ -738,7 +738,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (FiniteMeasure Ω)
+  签名: : 可居 (有限测度 Ω)
   定义体: ⟨0⟩
 -/
 instance instInhabited : Inhabited (FiniteMeasure Ω) := ⟨0⟩
@@ -753,7 +753,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (FiniteMeasure Ω) where add μ ν
+  签名: : 加法 (有限测度 Ω) where add μ ν
   定义体: ⟨μ + ν, MeasureTheory.isFiniteMeasureAdd⟩
 
 Depends on / 依赖: MeasureTheory, MeasureTheory.isFiniteMeasureAdd, isFiniteMeasureAdd
@@ -775,7 +775,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R (FiniteMeasure Ω) where
+  签名: : 标量乘法 R (有限测度 Ω) where
   定义体: ⟨c • (μ : Measure Ω), MeasureTheory.isFiniteMeasureSMulOfNNRealTower⟩
 
 @[simp, norm_cast]
@@ -798,7 +798,7 @@ theorem toMeasure_zero
 
 中文:
 定理 toMeasure_zero
-  结论: ((↑) : FiniteMeasure Ω -> Measure Ω) 0 = 0
+  结论: ((↑) : 有限测度 Ω -> 测度 Ω) 0 = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -819,8 +819,8 @@ theorem toMeasure_add
 
 中文:
 定理 toMeasure_add
-  条件: (μ ν : FiniteMeasure Ω)
-  结论: ↑(μ + ν) = (↑μ + ↑ν : Measure Ω)
+  条件: (μ ν : 有限测度 Ω)
+  结论: ↑(μ + ν) = (↑μ + ↑ν : 测度 Ω)
   证明: rfl
 
 @[simp, norm_cast]
@@ -841,8 +841,8 @@ theorem toMeasure_smul
 
 中文:
 定理 toMeasure_smul
-  条件: (c : R) (μ : FiniteMeasure Ω)
-  结论: ↑(c • μ) = c • (μ : Measure Ω)
+  条件: (c : R) (μ : 有限测度 Ω)
+  结论: ↑(c • μ) = c • (μ : 测度 Ω)
   证明: rfl
 
 @[simp, norm_cast]
@@ -868,8 +868,8 @@ theorem coeFn_add
 
 中文:
 定理 coeFn_add
-  条件: (μ ν : FiniteMeasure Ω)
-  结论: (⇑(μ + ν) : Set Ω -> 实数>=0) = (⇑μ + ⇑ν : Set Ω -> 实数>=0)
+  条件: (μ ν : 有限测度 Ω)
+  结论: (⇑(μ + ν) : 集合 Ω -> 实数>=0) = (⇑μ + ⇑ν : 集合 Ω -> 实数>=0)
   证明: by
   funext
   simp only [Pi.add_apply, ← ENNReal.coe_inj, ennreal_coeFn_eq_coeFn_toMeasure,
@@ -898,7 +898,7 @@ theorem coeFn_smul
 
 中文:
 定理 coeFn_smul
-  条件: [IsScalarTower R 实数>=0 实数>=0] (c : R) (μ : FiniteMeasure Ω)
+  条件: [标量塔 R 实数>=0 实数>=0] (c : R) (μ : 有限测度 Ω)
   证明: by
   funext; simp [← ENNReal.coe_inj, ENNReal.coe_smul]
 
@@ -919,7 +919,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (FiniteMeasure Ω)
+  签名: : 加法交换幺半群 (有限测度 Ω)
   定义体: fast_instance%
   toMeasure_injective.addCommMonoid _ toMeasure_zero toMeasure_add fun _ _ => toMeasure_smul _ _
 
@@ -944,7 +944,7 @@ definition toMeasureAddMonoidHom
 
 中文:
 定义 toMeasureAddMonoidHom
-  签名: : FiniteMeasure Ω ->+ Measure Ω where
+  签名: : 有限测度 Ω ->+ 测度 Ω where
   定义体: (↑)
   map_zero' := toMeasure_zero
   map_add' := toMeasure_add
@@ -967,7 +967,7 @@ theorem toMeasure_sum
 
 中文:
 定理 toMeasure_sum
-  条件: {ι : 类型} {s : Finset ι} {ν : ι -> FiniteMeasure Ω}
+  条件: {ι : 类型} {s : 有限集 ι} {ν : ι -> 有限测度 Ω}
   证明: map_sum toMeasureAddMonoidHom _ _
 
 Depends on / 依赖: map_sum, toMeasureAddMonoidHom
@@ -991,7 +991,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [IsScalarTower R 实数>=0 实数>=0] (c : R) (μ : FiniteMeasure Ω) (s : Set Ω)
+  条件: [标量塔 R 实数>=0 实数>=0] (c : R) (μ : 有限测度 Ω) (s : 集合 Ω)
   证明: by
   rw [coeFn_smul]; rw [Pi.smul_apply]
 
@@ -1014,7 +1014,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: (μ : FiniteMeasure Ω) (A : Set Ω)
+  签名: (μ : 有限测度 Ω) (A : 集合 Ω)
   定义体: (μ : Measure Ω).restrict A
   property := MeasureTheory.isFiniteMeasureRestrict (μ : Measure Ω) A
 
@@ -1037,7 +1037,7 @@ theorem restrict_measure_eq
 
 中文:
 定理 restrict_measure_eq
-  条件: (μ : FiniteMeasure Ω) (A : Set Ω)
+  条件: (μ : 有限测度 Ω) (A : 集合 Ω)
   证明: rfl
 -/
 theorem restrict_measure_eq (μ : FiniteMeasure Ω) (A : Set Ω) :
@@ -1055,7 +1055,7 @@ theorem restrict_apply_measure
 
 中文:
 定理 restrict_apply_measure
-  结论: (μ : FiniteMeasure Ω) (A : Set Ω) {s : Set Ω}
+  结论: (μ : 有限测度 Ω) (A : 集合 Ω) {s : 集合 Ω}
   证明: Measure.restrict_apply s_mble
 
 @[simp]
@@ -1081,7 +1081,7 @@ theorem restrict_apply
 
 中文:
 定理 restrict_apply
-  条件: (μ : FiniteMeasure Ω) (A : Set Ω) {s : Set Ω} (s_mble : MeasurableSet s)
+  条件: (μ : 有限测度 Ω) (A : 集合 Ω) {s : 集合 Ω} (s_mble : 可测集 s)
   证明: by
   apply congr_arg ENNReal.toNNReal
   exact Measure.restrict_apply s_mble
@@ -1108,7 +1108,7 @@ theorem restrict_mass
 
 中文:
 定理 restrict_mass
-  条件: (μ : FiniteMeasure Ω) (A : Set Ω)
+  条件: (μ : 有限测度 Ω) (A : 集合 Ω)
   结论: (μ.restrict A).mass = μ A
   证明: by
   simp only [mass, restrict_apply μ A MeasurableSet.univ, univ_inter]
@@ -1130,7 +1130,7 @@ lemma restrict_univ
 
 中文:
 引理 restrict_univ
-  条件: {μ : FiniteMeasure Ω}
+  条件: {μ : 有限测度 Ω}
   结论: μ.restrict univ = μ
   证明: by
   ext; simp
@@ -1150,7 +1150,7 @@ lemma restrict_union
 
 中文:
 引理 restrict_union
-  条件: {μ : FiniteMeasure Ω} {s t : Set Ω} (h : Disjoint s t) (ht : MeasurableSet t)
+  条件: {μ : 有限测度 Ω} {s t : 集合 Ω} (h : Disjoint s t) (ht : 可测集 t)
   证明: by
   ext u hu
   simp [Measure.restrict_union h ht]
@@ -1179,7 +1179,7 @@ lemma restrict_biUnion_finset
 
 中文:
 引理 restrict_biUnion_finset
-  结论: {ι : 类型} {μ : FiniteMeasure Ω} {T : Finset ι}
+  结论: {ι : 类型} {μ : 有限测度 Ω} {T : 有限集 ι}
   证明: by
   ext t ht
   simp only [restrict_measure_eq, toMeasure_sum, Measure.coe_finsetSum, Finset.sum_apply]
@@ -1213,7 +1213,7 @@ theorem restrict_eq_zero_iff
 
 中文:
 定理 restrict_eq_zero_iff
-  条件: (μ : FiniteMeasure Ω) (A : Set Ω)
+  条件: (μ : 有限测度 Ω) (A : 集合 Ω)
   结论: μ.restrict A = 0 ↔ μ A = 0
   证明: by
   rw [← mass_zero_iff]; rw [restrict_mass]
@@ -1235,7 +1235,7 @@ theorem restrict_nonzero_iff
 
 中文:
 定理 restrict_nonzero_iff
-  条件: (μ : FiniteMeasure Ω) (A : Set Ω)
+  条件: (μ : 有限测度 Ω) (A : 集合 Ω)
   结论: μ.restrict A != 0 ↔ μ A != 0
   证明: by
   simp
@@ -1253,7 +1253,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSpace (FiniteMeasure Ω)
+  签名: 可测空间 (有限测度 Ω)
   定义体: inferInstanceAs MeasurableSpace (Subtype _)
 
 Depends on / 依赖: MeasurableSpace, Subtype
@@ -1277,7 +1277,7 @@ lemma measurableSet_isFiniteMeasure
 
 中文:
 引理 measurableSet_isFiniteMeasure
-  结论: MeasurableSet { μ : Measure Ω | IsFiniteMeasure μ }
+  结论: 可测集 { μ : 测度 Ω | 是有限测度 μ }
   证明: by
   suffices { μ : Measure Ω | IsFiniteMeasure μ } = (fun μ => μ univ) ⁻¹' (Set.Ico 0 ∞) by
     rw [this]
@@ -1312,7 +1312,7 @@ theorem measurable_fun_prod
 
 中文:
 定理 measurable_fun_prod
-  条件: {α β : 类型} [MeasurableSpace α] [MeasurableSpace β]
+  条件: {α β : 类型} [可测空间 α] [可测空间 β]
   证明: by
   have Heval {u v} (Hu : MeasurableSet u) (Hv : MeasurableSet v) :
       Measurable fun a : (FiniteMeasure α × FiniteMeasure β) =>
@@ -1349,7 +1349,7 @@ lemma apply_iUnion_le
 
 中文:
 引理 apply_iUnion_le
-  结论: {μ : FiniteMeasure Ω} {f : 自然数 -> Set Ω}
+  结论: {μ : 有限测度 Ω} {f : 自然数 -> 集合 Ω}
   证明: by
   simpa [← ENNReal.coe_le_coe, ENNReal.coe_tsum hf] using MeasureTheory.measure_iUnion_le f
 
@@ -1374,8 +1374,8 @@ theorem ext_of_forall_lintegral_eq
   exact ext_of_forall_lintegral_eq_of_IsFiniteMeasure h
 
 中文:
-定理 ext_of_forall_lintegral_eq
-  结论: [HasOuterApproxClosed Ω] [BorelSpace Ω]
+定理 ext_of_对任意_lintegral_eq
+  结论: [有OuterApproxClosed Ω] [Borel空间 Ω]
   证明: by
   apply Subtype.ext
   change (μ : Measure Ω) = (ν : Measure Ω)
@@ -1405,8 +1405,8 @@ theorem ext_of_forall_integral_eq
   exact h ⟨⟨fun x => (f x).toReal, Continuou
 
 中文:
-定理 ext_of_forall_integral_eq
-  结论: [HasOuterApproxClosed Ω] [BorelSpace Ω]
+定理 ext_of_对任意_integral_eq
+  结论: [有OuterApproxClosed Ω] [Borel空间 Ω]
   证明: by
   apply ext_of_forall_lintegral_eq
   intro f
@@ -1440,7 +1440,7 @@ definition testAgainstNN
 
 中文:
 定义 testAgainstNN
-  签名: (μ : FiniteMeasure Ω) (f : Ω ->ᵇ 实数>=0)
+  签名: (μ : 有限测度 Ω) (f : Ω ->ᵇ 实数>=0)
   定义体: (∫⁻ ω, f ω ∂(μ : Measure Ω)).toNNReal
 
 @[simp]
@@ -1461,7 +1461,7 @@ theorem testAgainstNN_coe_eq
 
 中文:
 定理 testAgainstNN_coe_eq
-  条件: {μ : FiniteMeasure Ω} {f : Ω ->ᵇ 实数>=0}
+  条件: {μ : 有限测度 Ω} {f : Ω ->ᵇ 实数>=0}
   证明: ENNReal.coe_toNNReal (f.lintegral_lt_top_of_nnreal _).ne
 
 Depends on / 依赖: ENNReal, ENNReal.coe_toNNReal, coe_toNNReal, f.lintegral_lt_top_of_nnreal, lintegral_lt_top_of_nnreal
@@ -1481,7 +1481,7 @@ theorem testAgainstNN_const
 
 中文:
 定理 testAgainstNN_const
-  条件: (μ : FiniteMeasure Ω) (c : 实数>=0)
+  条件: (μ : 有限测度 Ω) (c : 实数>=0)
   证明: by
   simp [← ENNReal.coe_inj]
 
@@ -1506,7 +1506,7 @@ theorem testAgainstNN_mono
 
 中文:
 定理 testAgainstNN_mono
-  条件: (μ : FiniteMeasure Ω) {f g : Ω ->ᵇ 实数>=0} (f_le_g : (f : Ω -> 实数>=0) <= g)
+  条件: (μ : 有限测度 Ω) {f g : Ω ->ᵇ 实数>=0} (f_le_g : (f : Ω -> 实数>=0) <= g)
   证明: by
   simp only [← ENNReal.coe_le_coe, testAgainstNN_coe_eq]
   gcongr
@@ -1537,7 +1537,7 @@ theorem testAgainstNN_zero
 
 中文:
 定理 testAgainstNN_zero
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   结论: μ.testAgainstNN 0 = 0
   证明: by
   simpa only [zero_mul] using! μ.testAgainstNN_const 0
@@ -1565,7 +1565,7 @@ theorem testAgainstNN_one
 
 中文:
 定理 testAgainstNN_one
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   结论: μ.testAgainstNN 1 = μ.mass
   证明: by
   simp only [testAgainstNN, coe_one, Pi.one_apply, ENNReal.coe_one, lintegral_one]
@@ -1593,7 +1593,7 @@ theorem zero_testAgainstNN_apply
 中文:
 定理 zero_testAgainstNN_apply
   条件: (f : Ω ->ᵇ 实数>=0)
-  结论: (0 : FiniteMeasure Ω).testAgainstNN f = 0
+  结论: (0 : 有限测度 Ω).testAgainstNN f = 0
   证明: by
   simp only [testAgainstNN, toMeasure_zero, lintegral_zero_measure, ENNReal.toNNReal_zero]
 
@@ -1616,7 +1616,7 @@ theorem zero_testAgainstNN
 
 中文:
 定理 zero_testAgainstNN
-  结论: (0 : FiniteMeasure Ω).testAgainstNN = 0
+  结论: (0 : 有限测度 Ω).testAgainstNN = 0
   证明: by
   funext
   simp only [zero_testAgainstNN_apply, Pi.zero_apply]
@@ -1642,7 +1642,7 @@ theorem smul_testAgainstNN_apply
 
 中文:
 定理 smul_testAgainstNN_apply
-  条件: (c : 实数>=0) (μ : FiniteMeasure Ω) (f : Ω ->ᵇ 实数>=0)
+  条件: (c : 实数>=0) (μ : 有限测度 Ω) (f : Ω ->ᵇ 实数>=0)
   证明: by
   simp only [testAgainstNN, toMeasure_smul, smul_eq_mul, ← ENNReal.smul_toNNReal, ENNReal.smul_def,
     lintegral_smul_measure]
@@ -1671,7 +1671,7 @@ theorem testAgainstNN_add
 
 中文:
 定理 testAgainstNN_add
-  条件: (μ : FiniteMeasure Ω) (f₁ f₂ : Ω ->ᵇ 实数>=0)
+  条件: (μ : 有限测度 Ω) (f₁ f₂ : Ω ->ᵇ 实数>=0)
   证明: by
   simp only [← ENNReal.coe_inj, BoundedContinuousFunction.coe_add, ENNReal.coe_add, Pi.add_apply,
     testAgainstNN_coe_eq]
@@ -1700,7 +1700,7 @@ theorem testAgainstNN_smul
 
 中文:
 定理 testAgainstNN_smul
-  结论: [IsScalarTower R 实数>=0 实数>=0] [PseudoMetricSpace R] [Zero R]
+  结论: [标量塔 R 实数>=0 实数>=0] [伪度量空间 R] [零 R]
   证明: by
   simp only [← ENNReal.coe_inj, BoundedContinuousFunction.coe_smul, testAgainstNN_coe_eq,
     ENNReal.coe_smul]
@@ -1734,7 +1734,7 @@ theorem testAgainstNN_lipschitz_estimate
 
 中文:
 定理 testAgainstNN_lipschitz_estimate
-  条件: (μ : FiniteMeasure Ω) (f g : Ω ->ᵇ 实数>=0)
+  条件: (μ : 有限测度 Ω) (f g : Ω ->ᵇ 实数>=0)
   证明: by
   simp only [← μ.testAgainstNN_const (nndist f g), ← testAgainstNN_add, ← ENNReal.coe_le_coe,
     BoundedContinuousFunction.coe_add, const_apply, ENNReal.coe_add, Pi.add_apply,
@@ -1779,7 +1779,7 @@ theorem testAgainstNN_lipschitz
 
 中文:
 定理 testAgainstNN_lipschitz
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   证明: by
   rw [lipschitzWith_iff_dist_le_mul]
   intro f₁ f₂
@@ -1825,7 +1825,7 @@ definition toWeakDualBCNN
 
 中文:
 定义 toWeakDualBCNN
-  签名: (μ : FiniteMeasure Ω)
+  签名: (μ : 有限测度 Ω)
   定义体: μ.testAgainstNN f
   map_add' := testAgainstNN_add μ
   map_smul' := testAgainstNN_smul μ
@@ -1855,7 +1855,7 @@ theorem coe_toWeakDualBCNN
 
 中文:
 定理 coe_toWeakDualBCNN
-  条件: (μ : FiniteMeasure Ω)
+  条件: (μ : 有限测度 Ω)
   结论: ⇑μ.toWeakDualBCNN = μ.testAgainstNN
   证明: rfl
 
@@ -1875,7 +1875,7 @@ theorem toWeakDualBCNN_apply
 
 中文:
 定理 toWeakDualBCNN_apply
-  条件: (μ : FiniteMeasure Ω) (f : Ω ->ᵇ 实数>=0)
+  条件: (μ : 有限测度 Ω) (f : Ω ->ᵇ 实数>=0)
   证明: rfl
 -/
 theorem toWeakDualBCNN_apply (μ : FiniteMeasure Ω) (f : Ω ->ᵇ Real>=0) :
@@ -1891,7 +1891,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (FiniteMeasure Ω)
+  签名: : 拓扑空间 (有限测度 Ω)
   定义体: TopologicalSpace.induced toWeakDualBCNN inferInstance
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, induced, toWeakDualBCNN
@@ -1909,7 +1909,7 @@ theorem toWeakDualBCNN_continuous
 
 中文:
 定理 toWeakDualBCNN_continuous
-  结论: Continuous (@toWeakDualBCNN Ω _ _ _)
+  结论: 连续 (@toWeakDualBCNN Ω _ _ _)
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -1955,7 +1955,7 @@ theorem continuous_mass
 
 中文:
 定理 continuous_mass
-  结论: Continuous fun μ : FiniteMeasure Ω => μ.mass
+  结论: 连续 fun μ : 有限测度 Ω => μ.mass
   证明: by
   simp_rw [← testAgainstNN_one]; exact continuous_testAgainstNN_eval 1
 -/
@@ -1971,8 +1971,8 @@ theorem _root_.Filter.Tendsto.mass
   proof: (continuous_mass.tendsto μ).comp h
 
 中文:
-定理 _root_.Filter.Tendsto.mass
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+定理 _root_.滤子.收敛.mass
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: (continuous_mass.tendsto μ).comp h
 
 Depends on / 依赖: continuous_mass, continuous_mass.tendsto, tendsto
@@ -1991,7 +1991,7 @@ theorem tendsto_iff_weakDual_tendsto
 
 中文:
 定理 tendsto_iff_weakDual_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: IsInducing.tendsto_nhds_iff ⟨rfl⟩
 
 Depends on / 依赖: IsInducing, IsInducing.tendsto_nhds_iff, tendsto_nhds_iff
@@ -2011,8 +2011,8 @@ theorem tendsto_iff_forall_toWeakDualBCNN_tendsto
   rw [tendsto_iff_weakDual_tendsto]; rw [tendsto_iff_forall_eval_tendsto_topDualPairing]; rfl
 
 中文:
-定理 tendsto_iff_forall_toWeakDualBCNN_tendsto
-  结论: {γ : 类型} {F : Filter γ}
+定理 tendsto_iff_对任意_toWeakDualBCNN_tendsto
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   rw [tendsto_iff_weakDual_tendsto]; rw [tendsto_iff_forall_eval_tendsto_topDualPairing]; rfl
 
@@ -2034,8 +2034,8 @@ theorem tendsto_iff_forall_testAgainstNN_tendsto
   rw [FiniteMeasure.tendsto_iff_forall_toWeakDualBCNN_tendsto]; rfl
 
 中文:
-定理 tendsto_iff_forall_testAgainstNN_tendsto
-  结论: {γ : 类型} {F : Filter γ}
+定理 tendsto_iff_对任意_testAgainstNN_tendsto
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   rw [FiniteMeasure.tendsto_iff_forall_toWeakDualBCNN_tendsto]; rfl
 
@@ -2062,7 +2062,7 @@ theorem tendsto_zero_testAgainstNN_of_tendsto_zero_mass
 
 中文:
 定理 tendsto_zero_testAgainstNN_of_tendsto_zero_mass
-  结论: {γ : 类型} {F : Filter γ}
+  结论: {γ : 类型} {F : 滤子 γ}
   证明: by
   apply tendsto_iff_dist_tendsto_zero.mpr
   have obs := fun i => (μs i).testAgainstNN_lipschitz_estimate f 0
@@ -2099,7 +2099,7 @@ theorem tendsto_zero_of_tendsto_zero_mass
 
 中文:
 定理 tendsto_zero_of_tendsto_zero_mass
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   rw [tendsto_iff_forall_testAgainstNN_tendsto]
   intro f
@@ -2127,8 +2127,8 @@ theorem tendsto_iff_forall_lintegral_tendsto
     ENNReal.toNNReal_coe]
 
 中文:
-定理 tendsto_iff_forall_lintegral_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+定理 tendsto_iff_对任意_lintegral_tendsto
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   rw [tendsto_iff_forall_toWeakDualBCNN_tendsto]
   simp_rw [toWeakDualBCNN_apply _ _, ← testAgainstNN_coe_eq, ENNReal.tendsto_coe,
@@ -2155,7 +2155,7 @@ instance :
 
 中文:
 实例 :
-  签名: R1Space (FiniteMeasure Ω)
+  签名: R1空间 (有限测度 Ω)
   定义体: IsInducing.r1Space (f := toWeakDualBCNN) ⟨rfl⟩
 
 Depends on / 依赖: IsInducing, IsInducing.r1Space, r1Space, toWeakDualBCNN
@@ -2237,7 +2237,7 @@ instance t2Space
 
 中文:
 实例 t2Space
-  签名: : T2Space (FiniteMeasure Ω)
+  签名: : T2空间 (有限测度 Ω)
   定义体: (isEmbedding_toWeakDualBCNN Ω).t2Space
 
 Depends on / 依赖: isEmbedding_toWeakDualBCNN, t2Space
@@ -2271,7 +2271,7 @@ theorem tendsto_lintegral_nn_of_le_const
 
 中文:
 定理 tendsto_lintegral_nn_of_le_const
-  结论: (μ : FiniteMeasure Ω) {fs : 自然数 -> Ω ->ᵇ 实数>=0} {c : 实数>=0}
+  结论: (μ : 有限测度 Ω) {fs : 自然数 -> Ω ->ᵇ 实数>=0} {c : 实数>=0}
   证明: tendsto_lintegral_nn_filter_of_le_const μ
     (.of_forall fun n => .of_forall (fs_le_const n))
     (.of_forall fs_lim)
@@ -2298,7 +2298,7 @@ theorem tendsto_testAgainstNN_filter_of_le_const
 
 中文:
 定理 tendsto_testAgainstNN_filter_of_le_const
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   apply (ENNReal.tendsto_toNNReal (f.lintegral_lt_top_of_nnreal (μ : Measure Ω)).ne).comp
   exact tendsto_lintegral_nn_filter_of_le_const (Ω := Ω) μ fs_le_const fs_lim
@@ -2325,7 +2325,7 @@ theorem tendsto_testAgainstNN_of_le_const
 
 中文:
 定理 tendsto_testAgainstNN_of_le_const
-  结论: {μ : FiniteMeasure Ω} {fs : 自然数 -> Ω ->ᵇ 实数>=0} {c : 实数>=0}
+  结论: {μ : 有限测度 Ω} {fs : 自然数 -> Ω ->ᵇ 实数>=0} {c : 实数>=0}
   证明: tendsto_testAgainstNN_filter_of_le_const
     (.of_forall fun n => .of_forall (fs_le_const n))
     (.of_forall fs_lim)
@@ -2369,8 +2369,8 @@ theorem tendsto_of_forall_integral_tendsto
   set f₀
 
 中文:
-定理 tendsto_of_forall_integral_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+定理 tendsto_of_对任意_integral_tendsto
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   apply tendsto_iff_forall_lintegral_tendsto.mpr
   intro f
@@ -2420,8 +2420,8 @@ theorem tendsto_iff_forall_integral_tendsto
   have tends_pos := (ENNRe
 
 中文:
-定理 tendsto_iff_forall_integral_tendsto
-  结论: {γ : 类型} {F : Filter γ} {μs : γ -> FiniteMeasure Ω}
+定理 tendsto_iff_对任意_integral_tendsto
+  结论: {γ : 类型} {F : 滤子 γ} {μs : γ -> 有限测度 Ω}
   证明: by
   refine ⟨?_, tendsto_of_forall_integral_tendsto⟩
   rw [tendsto_iff_forall_lintegral_tendsto]
@@ -2470,7 +2470,7 @@ theorem tendsto_iff_forall_integral_rclike_tendsto
     · exact (RCLike.continuous_ofReal.tendsto _).comp (h (f.comp RCLike.re RCLike
 
 中文:
-定理 tendsto_iff_forall_integral_rclike_tendsto
+定理 tendsto_iff_对任意_integral_rclike_tendsto
   结论: {γ : 类型} (𝕜 : 类型) [RCLike 𝕜]
   证明: by
   rw [tendsto_iff_forall_integral_tendsto]
@@ -2517,7 +2517,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousAdd (FiniteMeasure Ω)
+  签名: 连续加法 (有限测度 Ω)
   定义体: by
   refine ⟨continuous_iff_continuousAt.2 (fun p => ?_)⟩
   apply tendsto_iff_forall_lintegral_tendsto.2 (fun g => ?_)
@@ -2557,7 +2557,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul 实数>=0 (FiniteMeasure Ω)
+  签名: 连续标量乘法 实数>=0 (有限测度 Ω)
   定义体: by
   refine ⟨continuous_iff_continuousAt.2 (fun p => ?_)⟩
   apply tendsto_iff_forall_integral_tendsto.2 (fun g => ?_)
@@ -2592,7 +2592,7 @@ lemma continuous_iff_forall_continuous_lintegral
     forall_comm (α := X)]
 
 中文:
-引理 continuous_iff_forall_continuous_lintegral
+引理 continuous_iff_对任意_continuous_lintegral
   证明: by
   simp [continuous_iff_continuousAt, ContinuousAt, tendsto_iff_forall_lintegral_tendsto,
     forall_comm (α := X)]
@@ -2616,7 +2616,7 @@ lemma continuous_iff_forall_continuous_integral
 @[fun_prop]
 
 中文:
-引理 continuous_iff_forall_continuous_integral
+引理 continuous_iff_对任意_continuous_integral
   证明: by
   simp [continuous_iff_continuousAt, ContinuousAt, tendsto_iff_forall_integral_tendsto,
     forall_comm (α := X)]
@@ -2643,7 +2643,7 @@ lemma continuous_lintegral_boundedContinuousFunction
 
 中文:
 引理 continuous_lintegral_boundedContinuousFunction
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X]
+  结论: [可测空间 X] [OpensMeasurable空间 X]
   证明: continuous_iff_forall_continuous_lintegral.1 continuous_id _
 
 @[fun_prop]
@@ -2665,7 +2665,7 @@ lemma continuous_integral_boundedContinuousFunction
 
 中文:
 引理 continuous_integral_boundedContinuousFunction
-  结论: [MeasurableSpace X] [OpensMeasurableSpace X]
+  结论: [可测空间 X] [OpensMeasurable空间 X]
   证明: continuous_iff_forall_continuous_integral.1 continuous_id _
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuous_integral
@@ -2685,7 +2685,7 @@ lemma continuous_iff_forall_continuousMap_continuous_lintegral
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
 中文:
-引理 continuous_iff_forall_continuousMap_continuous_lintegral
+引理 continuous_iff_对任意_continuousMap_continuous_lintegral
   证明: continuous_iff_forall_continuous_lintegral.trans
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
@@ -2705,7 +2705,7 @@ lemma continuous_iff_forall_continuousMap_continuous_integral
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
 中文:
-引理 continuous_iff_forall_continuousMap_continuous_integral
+引理 continuous_iff_对任意_continuousMap_continuous_integral
   证明: continuous_iff_forall_continuous_integral.trans
     (ContinuousMap.equivBoundedOfCompact ..).symm.forall_congr_left
 
@@ -2728,7 +2728,7 @@ lemma continuous_lintegral_continuousMap
 
 中文:
 引理 continuous_lintegral_continuousMap
-  条件: [FunLike F X 实数>=0] [ContinuousMapClass F X 实数>=0] (f : F)
+  条件: [函数状 F X 实数>=0] [连续映射类 F X 实数>=0] (f : F)
   证明: continuous_iff_forall_continuousMap_continuous_lintegral.1 continuous_id ⟨f, map_continuous f⟩
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuousMap_continuous_lintegral, map_continuous
@@ -2747,7 +2747,7 @@ lemma continuous_integral_continuousMap
 
 中文:
 引理 continuous_integral_continuousMap
-  条件: [FunLike F X 实数] [ContinuousMapClass F X 实数] (f : F)
+  条件: [函数状 F X 实数] [连续映射类 F X 实数] (f : F)
   证明: continuous_iff_forall_continuousMap_continuous_integral.1 continuous_id ⟨f, map_continuous f⟩
 
 Depends on / 依赖: continuous_id, continuous_iff_forall_continuousMap_continuous_integral, map_continuous
@@ -2790,7 +2790,7 @@ lemma toMeasure_comap
 
 中文:
 引理 toMeasure_comap
-  条件: (f : Ω -> Ω') (μ : FiniteMeasure Ω')
+  条件: (f : Ω -> Ω') (μ : 有限测度 Ω')
   证明: rfl
 -/
 @[simp] lemma toMeasure_comap (f : Ω -> Ω') (μ : FiniteMeasure Ω') :
@@ -2809,7 +2809,7 @@ lemma mass_comap_le
 
 中文:
 引理 mass_comap_le
-  条件: (f : Ω -> Ω') (μ : FiniteMeasure Ω')
+  条件: (f : Ω -> Ω') (μ : 有限测度 Ω')
   证明: by
   simp only [mass, comap, mk_apply, coeFn_def, ne_eq, measure_ne_top, not_false_eq_true,
     ENNReal.toNNReal_le_toNNReal]
@@ -2841,8 +2841,8 @@ lemma _root_.Topology.IsClosedEmbedding.continuousOn_comap_finiteMeasure
   have A x : g x = g' (f x) := by change (⇑g) x = (⇑g' ∘ f) x; simp
 
 中文:
-引理 _root_.Topology.IsClosedEmbedding.continuousOn_comap_finiteMeasure
-  结论: [NormalSpace Ω']
+引理 _root_.拓扑.是闭嵌入.continuousOn_comap_finiteMeasure
+  结论: [正规空间 Ω']
   证明: by
   intro μ hμ
   simp only [ContinuousWithinAt]
@@ -2897,7 +2897,7 @@ definition map
 
 中文:
 定义 map
-  签名: (ν : FiniteMeasure Ω) (f : Ω -> Ω')
+  签名: (ν : 有限测度 Ω) (f : Ω -> Ω')
   定义体: ⟨(ν : Measure Ω).map f, (ν : Measure Ω).isFiniteMeasure_map f⟩
 
 Depends on / 依赖: Measure, isFiniteMeasure_map
@@ -2915,7 +2915,7 @@ lemma toMeasure_map
 
 中文:
 引理 toMeasure_map
-  条件: (ν : FiniteMeasure Ω) (f : Ω -> Ω')
+  条件: (ν : 有限测度 Ω) (f : Ω -> Ω')
   证明: rfl
 -/
 @[simp] lemma toMeasure_map (ν : FiniteMeasure Ω) (f : Ω -> Ω') :
@@ -2931,7 +2931,7 @@ lemma map_apply'
 
 中文:
 引理 map_apply'
-  结论: (ν : FiniteMeasure Ω) {f : Ω -> Ω'} (f_aemble : AEMeasurable f ν)
+  结论: (ν : 有限测度 Ω) {f : Ω -> Ω'} (f_aemble : 几乎处处可测 f ν)
   证明: Measure.map_apply_of_aemeasurable f_aemble A_mble
 
 Depends on / 依赖: A_mble, Measure, Measure.map_apply_of_aemeasurable, f_aemble, map_apply_of_aemeasurable
@@ -2953,7 +2953,7 @@ lemma map_apply_of_aemeasurable
 
 中文:
 引理 map_apply_of_aemeasurable
-  结论: (ν : FiniteMeasure Ω) {f : Ω -> Ω'} (f_aemble : AEMeasurable f ν)
+  结论: (ν : 有限测度 Ω) {f : Ω -> Ω'} (f_aemble : 几乎处处可测 f ν)
   证明: by
   have key := ν.map_apply' f_aemble A_mble
   exact (ENNReal.toNNReal_eq_toNNReal_iff' (measure_ne_top _ _) (measure_ne_top _ _)).mpr key
@@ -2976,7 +2976,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  结论: (ν : FiniteMeasure Ω) {f : Ω -> Ω'} (f_mble : Measurable f)
+  结论: (ν : 有限测度 Ω) {f : Ω -> Ω'} (f_mble : 可测 f)
   证明: map_apply_of_aemeasurable ν f_mble.aemeasurable A_mble
 
 Depends on / 依赖: A_mble, aemeasurable, f_mble, f_mble.aemeasurable, map_apply_of_aemeasurable
@@ -2996,7 +2996,7 @@ lemma map_add
 
 中文:
 引理 map_add
-  条件: {f : Ω -> Ω'} (f_mble : Measurable f) (ν₁ ν₂ : FiniteMeasure Ω)
+  条件: {f : Ω -> Ω'} (f_mble : 可测 f) (ν₁ ν₂ : 有限测度 Ω)
   证明: by ext; simp [*]
 -/
 @[simp] lemma map_add {f : Ω -> Ω'} (f_mble : Measurable f) (ν₁ ν₂ : FiniteMeasure Ω) :
@@ -3014,7 +3014,7 @@ lemma map_smul
 
 中文:
 引理 map_smul
-  条件: {f : Ω -> Ω'} (c : 实数>=0) (ν : FiniteMeasure Ω)
+  条件: {f : Ω -> Ω'} (c : 实数>=0) (ν : 有限测度 Ω)
   证明: by
   ext s _
   simp [toMeasure_smul]
@@ -3036,7 +3036,7 @@ definition mapHom
 
 中文:
 定义 mapHom
-  签名: {f : Ω -> Ω'} (f_mble : Measurable f)
+  签名: {f : Ω -> Ω'} (f_mble : 可测 f)
   定义体: fun ν => ν.map f
   map_add' := map_add f_mble
   map_smul' := map_smul
@@ -3064,7 +3064,7 @@ lemma mass_map_le
 
 中文:
 引理 mass_map_le
-  条件: (f : Ω -> Ω') (μ : FiniteMeasure Ω)
+  条件: (f : Ω -> Ω') (μ : 有限测度 Ω)
   结论: (μ.map f).mass <= μ.mass
   证明: by
   simp only [mass, coeFn_def, toMeasure_map, ne_eq, measure_ne_top, not_false_eq_true,
@@ -3103,7 +3103,7 @@ lemma tendsto_map_of_tendsto_of_continuous
 
 中文:
 引理 tendsto_map_of_tendsto_of_continuous
-  结论: {ι : 类型} {L : Filter ι}
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   rw [FiniteMeasure.tendsto_iff_forall_lintegral_tendsto] at lim ⊢
   intro g
@@ -3141,7 +3141,7 @@ lemma continuous_map
 
 中文:
 引理 continuous_map
-  条件: {f : Ω -> Ω'} (f_cont : Continuous f)
+  条件: {f : Ω -> Ω'} (f_cont : 连续 f)
   证明: by
   rw [continuous_iff_continuousAt]
   exact fun _ => tendsto_map_of_tendsto_of_continuous _ _ continuous_id.continuousAt f_cont
@@ -3165,7 +3165,7 @@ definition mapCLM
 
 中文:
 定义 mapCLM
-  签名: {f : Ω -> Ω'} (f_cont : Continuous f)
+  签名: {f : Ω -> Ω'} (f_cont : 连续 f)
   定义体: fun ν => ν.map f
   map_add' := map_add f_cont.measurable
   map_smul' := map_smul
@@ -3191,7 +3191,7 @@ lemma Topology.IsClosedEmbedding.isEmbedding_map_finiteMeasure
       simp only [null_iff_toMeasure_null, mem_ofPred_eq, toMeasure_map, 
 
 中文:
-引理 Topology.IsClosedEmbedding.isEmbedding_map_finiteMeasure
+引理 拓扑.是闭嵌入.isEmbedding_map_finiteMeasure
   结论: {Ω : 类型}
   证明: by
   let M : Set (FiniteMeasure Ω') := {μ | μ (range f)ᶜ = 0}

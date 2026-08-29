@@ -45,7 +45,7 @@ definition IsHamiltonian
 
 中文:
 定义 IsHamiltonian
-  签名: (p : G.Walk a b)
+  签名: (p : G.途径 a b)
   定义体: forall a, p.support.count a = 1
 
 Depends on / 依赖: p.support.count, support
@@ -64,7 +64,7 @@ lemma IsHamiltonian.map
 
 中文:
 引理 IsHamiltonian.map
-  条件: (hf : Bijective f) (hp : p.IsHamiltonian)
+  条件: (hf : 双射 f) (hp : p.IsHamiltonian)
   证明: by
   simp [IsHamiltonian, hf.surjective.forall, hf.injective, hp _]
 
@@ -104,7 +104,7 @@ lemma IsHamiltonian.isPath
 中文:
 引理 IsHamiltonian.isPath
   条件: (hp : p.IsHamiltonian)
-  结论: p.IsPath
+  结论: p.是道路
   证明: IsPath.mk' List.nodup_iff_count_le_one.2 (le_of_eq <| hp ·)
 
 Depends on / 依赖: IsPath, IsPath.mk, List.nodup_iff_count_le_one, le_of_eq, nodup_iff_count_le_one
@@ -122,8 +122,8 @@ lemma IsPath.isHamiltonian_of_mem
   le_antisymm (List.nodup_iff_count_le_one.1 hp.support_nodup _) (List.count_pos_iff.2 (hp' _))
 
 中文:
-引理 IsPath.isHamiltonian_of_mem
-  条件: (hp : p.IsPath) (hp' : 对任意 w, w in p.support)
+引理 是道路.isHamiltonian_of_mem
+  条件: (hp : p.是道路) (hp' : 对任意 w, w in p.support)
   证明: fun _ =>
   le_antisymm (List.nodup_iff_count_le_one.1 hp.support_nodup _) (List.count_pos_iff.2 (hp' _))
 -/
@@ -141,8 +141,8 @@ lemma IsPath.isHamiltonian_iff
   proof: ⟨(·.mem_support), hp.isHamiltonian_of_mem⟩
 
 中文:
-引理 IsPath.isHamiltonian_iff
-  条件: (hp : p.IsPath)
+引理 是道路.isHamiltonian_iff
+  条件: (hp : p.是道路)
   结论: p.IsHamiltonian ↔ 对任意 w, w in p.support
   证明: ⟨(·.mem_support), hp.isHamiltonian_of_mem⟩
 
@@ -164,7 +164,7 @@ theorem IsHamiltonian.of_subsingleton
 
 中文:
 定理 IsHamiltonian.of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: p.IsHamiltonian
   证明: by
   intro v
@@ -210,7 +210,7 @@ lemma IsHamiltonian.finite
 中文:
 引理 IsHamiltonian.finite
   条件: (hp : p.IsHamiltonian)
-  结论: Finite α
+  结论: 有限 α
   证明: by
   have := hp.fintype; infer_instance
 -/
@@ -229,7 +229,7 @@ lemma not_isHamiltonian_of_infinite
 
 中文:
 引理 not_isHamiltonian_of_infinite
-  条件: [h : Infinite α]
+  条件: [h : 无限 α]
   结论: ¬ p.IsHamiltonian
   证明: by
   contrapose! h; exact h.finite
@@ -258,7 +258,7 @@ omit [Fintype α] in
 中文:
 引理 IsHamiltonian.toFinset_support
   条件: (hp : p.IsHamiltonian)
-  结论: p.support.toFinset = Finset.univ
+  结论: p.support.toFinset = 有限集.univ
   证明: by
   simp [eq_univ_iff_forall, hp]
 
@@ -291,7 +291,7 @@ alias IsHamiltonian.setOf_support := IsHamiltonian.setOfPred_support
 中文:
 定理 IsHamiltonian.setOfPred_support
   条件: (hp : p.IsHamiltonian)
-  结论: {v | v in p.support} = Set.univ
+  结论: {v | v in p.support} = 集合.univ
   证明: Set.eq_univ_iff_forall.mpr hp.mem_support
 
 @[deprecated (since := "2026-07-09")]
@@ -318,7 +318,7 @@ lemma IsHamiltonian.length_eq
 中文:
 引理 IsHamiltonian.length_eq
   条件: (hp : p.IsHamiltonian)
-  结论: p.length = Fintype.card α - 1
+  结论: p.length = 有限类型.card α - 1
   证明: eq_tsub_of_add_eq by
     rw [← length_support]; rw [← List.sum_toFinset_count_eq_length]; rw [Finset.sum_congr rfl fun _ _ => hp _]; rw [← card_eq_sum_ones]; rw [hp.toFinset_support]; rw [card_univ]
 
@@ -342,7 +342,7 @@ lemma IsHamiltonian.length_support
 中文:
 引理 IsHamiltonian.length_support
   条件: (hp : p.IsHamiltonian)
-  结论: p.support.length = Fintype.card α
+  结论: p.support.length = 有限类型.card α
   证明: by
   have : Inhabited α := ⟨a⟩
   grind [Fintype.card_ne_zero, length_eq]
@@ -416,7 +416,7 @@ theorem isHamiltonian_iff_support_get_bijective
 
 中文:
 定理 isHamiltonian_iff_support_get_bijective
-  结论: p.IsHamiltonian ↔ p.support.get.Bijective
+  结论: p.IsHamiltonian ↔ p.support.get.双射
   证明: p.support.get_bijective_iff.symm
 
 Depends on / 依赖: get_bijective_iff, p.support.get_bijective_iff.symm, support
@@ -439,7 +439,7 @@ omit [DecidableEq β] in
 中文:
 定理 IsHamiltonian.getVert_surjective
   条件: (hp : p.IsHamiltonian)
-  结论: p.getVert.Surjective
+  结论: p.getVert.满射
   证明: .of_comp p.getVert_comp_val_eq_get_support ▸
 .surjective isHamiltonian_iff_support_get_bijective.mp hp
 
@@ -464,7 +464,7 @@ theorem IsHamiltonian.injective_of_isPath_map
 
 中文:
 定理 IsHamiltonian.injective_of_isPath_map
-  条件: (hp : p.IsHamiltonian) (h : (p.map f).IsPath)
+  条件: (hp : p.IsHamiltonian) (h : (p.map f).是道路)
   证明: by
   rw [← Set.injOn_univ]; rw [← hp.setOfPred_support]
   exact h.injOn_support_of_isPath_map
@@ -493,7 +493,7 @@ lemma isHamiltonian_iff_isPath_and_length_eq
 
 中文:
 引理 isHamiltonian_iff_isPath_and_length_eq
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   by_cases! h : IsEmpty α
   · exact h.elim' a
@@ -526,9 +526,9 @@ structure IsHamiltonianCycle
     - isHamiltonian_tail : p.tail.IsHamiltonian
 
 中文:
-结构 IsHamiltonianCycle
-  参数: (p : G.Walk a a)
-  继承: p.IsCycle
+结构 是HamiltonianCycle
+  参数: (p : G.途径 a a)
+  继承: p.是环
   公理与运算 (1 个):
     - isHamiltonian_tail : p.tail.IsHamiltonian
 -/
@@ -547,9 +547,9 @@ lemma IsHamiltonianCycle.isCycle
   proof: hp.toIsCycle
 
 中文:
-引理 IsHamiltonianCycle.isCycle
-  条件: (hp : p.IsHamiltonianCycle)
-  结论: p.IsCycle
+引理 是HamiltonianCycle.isCycle
+  条件: (hp : p.是HamiltonianCycle)
+  结论: p.是环
   证明: hp.toIsCycle
 
 Depends on / 依赖: hp.toIsCycle, toIsCycle
@@ -573,8 +573,8 @@ lemma IsHamiltonianCycle.map
     rw [List.count_map_of_injective _ _ hf
 
 中文:
-引理 IsHamiltonianCycle.map
-  结论: (hf : Bijective f)
+引理 是HamiltonianCycle.map
+  结论: (hf : 双射 f)
   证明: hp.isCycle.map hf.injective
   isHamiltonian_tail := by
     simp only [IsHamiltonian, hf.surjective.forall]
@@ -608,9 +608,9 @@ lemma IsHamiltonianCycle.finite
   proof: hp.isHamiltonian_tail.finite
 
 中文:
-引理 IsHamiltonianCycle.finite
-  条件: (hp : p.IsHamiltonianCycle)
-  结论: Finite α
+引理 是HamiltonianCycle.finite
+  条件: (hp : p.是HamiltonianCycle)
+  结论: 有限 α
   证明: hp.isHamiltonian_tail.finite
 -/
 protected lemma IsHamiltonianCycle.finite (hp : p.IsHamiltonianCycle) : Finite α :=
@@ -628,8 +628,8 @@ lemma not_isHamiltonianCycle_of_infinite
 
 中文:
 引理 not_isHamiltonianCycle_of_infinite
-  条件: [h : Infinite α]
-  结论: ¬ p.IsHamiltonianCycle
+  条件: [h : 无限 α]
+  结论: ¬ p.是HamiltonianCycle
   证明: by
   contrapose! h; exact h.finite
 -/
@@ -683,8 +683,8 @@ lemma IsHamiltonianCycle.mem_support
     support_tail_of_not_nil p hp.1.not_nil ▸ hp.isHamiltonian_tail.mem_support _
 
 中文:
-引理 IsHamiltonianCycle.mem_support
-  条件: (hp : p.IsHamiltonianCycle) (b : α)
+引理 是HamiltonianCycle.mem_support
+  条件: (hp : p.是HamiltonianCycle) (b : α)
   证明: List.mem_of_mem_tail
     support_tail_of_not_nil p hp.1.not_nil ▸ hp.isHamiltonian_tail.mem_support _
 
@@ -707,8 +707,8 @@ lemma IsHamiltonianCycle.length_eq
   exact ⟨a⟩
 
 中文:
-引理 IsHamiltonianCycle.length_eq
-  条件: [Fintype α] (hp : p.IsHamiltonianCycle)
+引理 是HamiltonianCycle.length_eq
+  条件: [有限类型 α] (hp : p.是HamiltonianCycle)
   证明: by
   rw [← length_tail_add_one hp.not_nil]; rw [hp.isHamiltonian_tail.length_eq]; rw [Nat.sub_add_cancel]
   rw [Nat.succ_le_iff]; rw [Fintype.card_pos_iff]
@@ -732,8 +732,8 @@ lemma IsHamiltonianCycle.count_support_self
   rw [← cons_tail_support]; rw [List.count_cons_self]; rw [← support_tail_of_not_nil _ hp.1.not_nil]; rw [hp.isHamiltonian_tail]
 
 中文:
-引理 IsHamiltonianCycle.count_support_self
-  条件: (hp : p.IsHamiltonianCycle)
+引理 是HamiltonianCycle.count_support_self
+  条件: (hp : p.是HamiltonianCycle)
   证明: by
   rw [← cons_tail_support]; rw [List.count_cons_self]; rw [← support_tail_of_not_nil _ hp.1.not_nil]; rw [hp.isHamiltonian_tail]
 
@@ -753,8 +753,8 @@ lemma IsHamiltonianCycle.support_count_of_ne
   rw [← cons_support_tail hp.1.not_nil]; rw [List.count_cons_of_ne h]; rw [hp.isHamiltonian_tail]
 
 中文:
-引理 IsHamiltonianCycle.support_count_of_ne
-  条件: (hp : p.IsHamiltonianCycle) (h : a != b)
+引理 是HamiltonianCycle.support_count_of_ne
+  条件: (hp : p.是HamiltonianCycle) (h : a != b)
   证明: by
   rw [← cons_support_tail hp.1.not_nil]; rw [List.count_cons_of_ne h]; rw [hp.isHamiltonian_tail]
 
@@ -779,7 +779,7 @@ lemma isHamiltonianCycle_iff_isCycle_and_length_eq
 
 中文:
 引理 isHamiltonianCycle_iff_isCycle_and_length_eq
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   refine ⟨fun h => ⟨h.isCycle, h.length_eq⟩, fun ⟨h₁, h₂⟩ => ⟨h₁, ?_⟩⟩
   refine isHamiltonian_iff_isPath_and_length_eq.mpr ⟨h₁.isPath_tail, ?_⟩
@@ -849,7 +849,7 @@ definition IsHamiltonian
 
 中文:
 定义 IsHamiltonian
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: Fintype.card α != 1 -> exists a, exists p : G.Walk a a, p.IsHamiltonianCycle
 
 Depends on / 依赖: Fintype, Fintype.card, G.Walk, IsHamiltonianCycle, p.IsHamiltonianCycle
@@ -867,8 +867,8 @@ lemma IsHamiltonian.exists_isHamiltonianCycle
 obtain ⟨u, p, hp⟩ := hG Fintype.one_lt_card.ne'; exact ⟨p.rotate v hp.mem_support _, by simpa⟩
 
 中文:
-引理 IsHamiltonian.exists_isHamiltonianCycle
-  条件: [Nontrivial α] (hG : G.IsHamiltonian) (v : α)
+引理 IsHamiltonian.存在_isHamiltonianCycle
+  条件: [非平凡 α] (hG : G.IsHamiltonian) (v : α)
   证明: by
 obtain ⟨u, p, hp⟩ := hG Fintype.one_lt_card.ne'; exact ⟨p.rotate v hp.mem_support _, by simpa⟩
 
@@ -888,7 +888,7 @@ lemma IsHamiltonian.mono
 
 中文:
 引理 IsHamiltonian.mono
-  条件: {H : SimpleGraph α} (hGH : G <= H) (hG : G.IsHamiltonian)
+  条件: {H : 简单图 α} (hGH : G <= H) (hG : G.IsHamiltonian)
   证明: fun hα => let ⟨_, p, hp⟩ := hG hα; ⟨_, p.map .ofLE hGH, hp.map bijective_id⟩
 
 Depends on / 依赖: bijective_id, hp.map, p.map
@@ -908,7 +908,7 @@ lemma not_isHamiltonian_of_isEmpty
 
 中文:
 引理 not_isHamiltonian_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: ¬G.IsHamiltonian
   证明: (IsEmpty.exists_iff.mp <| · <| by simp)
 
@@ -937,7 +937,7 @@ lemma IsHamiltonian.connected
 中文:
 引理 IsHamiltonian.connected
   条件: (hG : G.IsHamiltonian)
-  结论: G.Connected where
+  结论: G.连通 where
   证明: by
     obtain rfl | hab := eq_or_ne a b
     · rfl
@@ -972,7 +972,7 @@ lemma IsHamiltonian.of_card_eq_one
 
 中文:
 引理 IsHamiltonian.of_card_eq_one
-  条件: (h : Fintype.card α = 1)
+  条件: (h : 有限类型.card α = 1)
   结论: G.IsHamiltonian
   证明: (· h |>.elim)
 -/
@@ -995,7 +995,7 @@ have ⟨v, p, hp⟩ := hG by lia
 
 中文:
 引理 not_isHamiltonian_of_card_eq_two
-  条件: (h : Fintype.card α = 2)
+  条件: (h : 有限类型.card α = 2)
   结论: ¬G.IsHamiltonian
   证明: by
   intro hG
@@ -1025,7 +1025,7 @@ lemma not_isHamiltonian_bot_of_card_ne_one
 
 中文:
 引理 not_isHamiltonian_bot_of_card_ne_one
-  条件: (h : Fintype.card α != 1)
+  条件: (h : 有限类型.card α != 1)
   证明: by
   intro hG
   have ⟨v, p, hp⟩ := hG h
@@ -1050,7 +1050,7 @@ lemma IsHamiltonian.of_unique
 
 中文:
 引理 IsHamiltonian.of_unique
-  条件: [Unique α]
+  条件: [唯一 α]
   结论: G.IsHamiltonian
   证明: of_card_eq_one Fintype.card_unique
 

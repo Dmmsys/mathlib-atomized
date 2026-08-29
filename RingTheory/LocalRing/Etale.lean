@@ -75,7 +75,7 @@ refine eq_top_iff.mpr Submodule.le_of_le_smul_of_le_jacobson_bot
 
 中文:
 引理 adjoin_residue_eq_top_iff_adjoin_eq_top
-  条件: [Algebra.FormallyUnramified R S] (β : S)
+  条件: [代数.形式非分歧 R S] (β : S)
   证明: by
   constructor
   · intro hβ
@@ -127,8 +127,8 @@ theorem exists_adjoin_eq_top
   rw [hβ]; rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finit
 
 中文:
-定理 exists_adjoin_eq_top
-  条件: [Algebra.FormallyUnramified R S]
+定理 存在_adjoin_eq_top
+  条件: [代数.形式非分歧 R S]
   证明: by
   obtain ⟨β₀, hβ₀⟩ := Field.exists_primitive_element (ResidueField R) (ResidueField S)
   obtain ⟨β, hβ⟩ := residue_surjective (R := S) β₀
@@ -160,7 +160,7 @@ lemma finrank_eq_finrank_residueField
 
 中文:
 引理 finrank_eq_finrank_residueField
-  条件: [Algebra.Etale R S]
+  条件: [代数.平展 R S]
   证明: by
   have : Module.Free R S := Module.free_of_flat_of_isLocalRing
   have e := AddEquiv.toLinearEquiv (R := R ⧸ maximalIdeal R) (Ideal.quotEquivOfEq <|
@@ -201,7 +201,7 @@ have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
 
 中文:
 引理 minpoly_map_residue
-  结论: [Algebra.Etale R S]
+  结论: [代数.平展 R S]
   证明: by
 have h := minpoly.monic Algebra.IsIntegral.isIntegral (R := R) β
   -- Both monic, same degree, divisibility ⟹ equal

@@ -48,7 +48,7 @@ theorem measureReal_eq_zero_iff
   exact or_iff_left h
 
 中文:
-定理 measureReal_eq_zero_iff
+定理 measure实数_eq_zero_iff
   条件: (h : μ s != ∞ := by finiteness)
   证明: by
   rw [Measure.real]; rw [ENNReal.toReal_eq_zero_iff]
@@ -71,7 +71,7 @@ theorem measureReal_ne_zero_iff
   simp [measureReal_eq_zero_iff, h]
 
 中文:
-定理 measureReal_ne_zero_iff
+定理 measure实数_ne_zero_iff
   条件: (h : μ s != ∞ := by finiteness)
   证明: by
   simp [measureReal_eq_zero_iff, h]
@@ -91,8 +91,8 @@ theorem measureReal_zero
   proof: rfl
 
 中文:
-定理 measureReal_zero
-  结论: (0 : Measure α).real = 0
+定理 measure实数_zero
+  结论: (0 : 测度 α).real = 0
   证明: rfl
 -/
 @[simp] theorem measureReal_zero : (0 : Measure α).real = 0 := rfl
@@ -107,9 +107,9 @@ theorem measureReal_zero_apply
   proof: rfl
 
 中文:
-定理 measureReal_zero_apply
-  条件: (s : Set α)
-  结论: (0 : Measure α).real s = 0
+定理 measure实数_zero_apply
+  条件: (s : 集合 α)
+  结论: (0 : 测度 α).real s = 0
   证明: rfl
 -/
 theorem measureReal_zero_apply (s : Set α) : (0 : Measure α).real s = 0 := rfl
@@ -123,7 +123,7 @@ theorem measureReal_nonneg
   proof: ENNReal.toReal_nonneg
 
 中文:
-定理 measureReal_nonneg
+定理 measure实数_nonneg
   结论: 0 <= μ.real s
   证明: ENNReal.toReal_nonneg
 -/
@@ -140,7 +140,7 @@ theorem measureReal_empty
 @[simp]
 
 中文:
-定理 measureReal_empty
+定理 measure实数_empty
   结论: μ.real ∅ = 0
   证明: by simp [Measure.real]
 
@@ -159,9 +159,9 @@ theorem measureReal_univ_pos
   proof: ENNReal.toReal_pos (NeZero.ne (μ Set.univ)) (by finiteness)
 
 中文:
-定理 measureReal_univ_pos
-  条件: [IsFiniteMeasure μ] [NeZero μ]
-  结论: 0 < μ.real Set.univ
+定理 measure实数_univ_pos
+  条件: [是有限测度 μ] [NeZero μ]
+  结论: 0 < μ.real 集合.univ
   证明: ENNReal.toReal_pos (NeZero.ne (μ Set.univ)) (by finiteness)
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_pos, NeZero, NeZero.ne, Set.univ, finiteness, toReal_pos
@@ -181,9 +181,9 @@ theorem measureReal_univ_ne_zero
 @[simp]
 
 中文:
-定理 measureReal_univ_ne_zero
-  条件: [IsFiniteMeasure μ] [NeZero μ]
-  结论: μ.real Set.univ != 0
+定理 measure实数_univ_ne_zero
+  条件: [是有限测度 μ] [NeZero μ]
+  结论: μ.real 集合.univ != 0
   证明: measureReal_univ_pos.ne'
 
 @[simp]
@@ -205,9 +205,9 @@ theorem ofReal_measureReal
   simp [measureReal_def, h]
 
 中文:
-定理 ofReal_measureReal
+定理 of实数_measure实数
   条件: (h : μ s != ∞ := by finiteness)
-  结论: ENN实数.of实数 (μ.real s) = μ s
+  结论: 广义非负实数.of实数 (μ.real s) = μ s
   证明: by
   simp [measureReal_def, h]
 
@@ -226,9 +226,9 @@ theorem nonempty_of_measureReal_ne_zero
   proof: nonempty_iff_ne_empty.2 fun h' => h h'.symm ▸ measureReal_empty
 
 中文:
-定理 nonempty_of_measureReal_ne_zero
+定理 nonempty_of_measure实数_ne_zero
   条件: (h : μ.real s != 0)
-  结论: s.Nonempty
+  结论: s.非空
   证明: nonempty_iff_ne_empty.2 fun h' => h h'.symm ▸ measureReal_empty
 
 Depends on / 依赖: measureReal_empty, nonempty_iff_ne_empty
@@ -246,7 +246,7 @@ theorem measureReal_ennreal_smul_apply
   simp [Measure.real]
 
 中文:
-定理 measureReal_ennreal_smul_apply
+定理 measure实数_ennreal_smul_apply
   条件: (c : 实数>=0∞)
   证明: by
   simp [Measure.real]
@@ -265,7 +265,7 @@ theorem measureReal_nnreal_smul_apply
   simp [measureReal_def]
 
 中文:
-定理 measureReal_nnreal_smul_apply
+定理 measure实数_nnreal_smul_apply
   条件: (c : 实数>=0)
   证明: by
   simp [measureReal_def]
@@ -284,8 +284,8 @@ theorem map_measureReal_apply_of_aemeasurable
   simp_rw [measureReal_def, map_apply_of_aemeasurable hf hs]
 
 中文:
-定理 map_measureReal_apply_of_aemeasurable
-  结论: [MeasurableSpace β] {f : α -> β}
+定理 map_measure实数_apply_of_aemeasurable
+  结论: [可测空间 β] {f : α -> β}
   证明: by
   simp_rw [measureReal_def, map_apply_of_aemeasurable hf hs]
 
@@ -305,8 +305,8 @@ theorem map_measureReal_apply
   proof: map_measureReal_apply_of_aemeasurable hf.aemeasurable hs
 
 中文:
-定理 map_measureReal_apply
-  结论: [MeasurableSpace β] {f : α -> β} (hf : Measurable f)
+定理 map_measure实数_apply
+  结论: [可测空间 β] {f : α -> β} (hf : 可测 f)
   证明: map_measureReal_apply_of_aemeasurable hf.aemeasurable hs
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, map_measureReal_apply_of_aemeasurable
@@ -324,7 +324,7 @@ theorem measureReal_mono
   proof: ENNReal.toReal_mono h₂ (measure_mono h)
 
 中文:
-定理 measureReal_mono
+定理 measure实数_mono
   条件: (h : s₁ subseteq s₂) (h₂ : μ s₂ != ∞ := by finiteness)
   证明: ENNReal.toReal_mono h₂ (measure_mono h)
 -/
@@ -342,8 +342,8 @@ theorem measureReal_eq_measureReal_iff
   simp [measureReal_def, ENNReal.toReal_eq_toReal_iff' h₁ h₂]
 
 中文:
-定理 measureReal_eq_measureReal_iff
-  结论: {m : MeasurableSpace β} {ν : Measure β} {t : Set β}
+定理 measure实数_eq_measure实数_iff
+  结论: {m : 可测空间 β} {ν : 测度 β} {t : 集合 β}
   证明: by
   simp [measureReal_def, ENNReal.toReal_eq_toReal_iff' h₁ h₂]
 
@@ -366,7 +366,7 @@ theorem measureReal_restrict_apply₀
 @[simp]
 
 中文:
-定理 measureReal_restrict_apply₀
+定理 measure实数_restrict_apply₀
   条件: (ht : NullMeasurableSet t (μ.restrict s))
   证明: by
   simp only [measureReal_def, restrict_apply₀ ht]
@@ -390,8 +390,8 @@ theorem measureReal_restrict_apply
   simp only [measureReal_def, restrict_apply ht]
 
 中文:
-定理 measureReal_restrict_apply
-  条件: (ht : MeasurableSet t)
+定理 measure实数_restrict_apply
+  条件: (ht : 可测集 t)
   证明: by
   simp only [measureReal_def, restrict_apply ht]
 
@@ -414,8 +414,8 @@ theorem measureReal_restrict_apply_univ
 @[simp]
 
 中文:
-定理 measureReal_restrict_apply_univ
-  条件: (s : Set α)
+定理 measure实数_restrict_apply_univ
+  条件: (s : 集合 α)
   结论: (μ.restrict s).real univ = μ.real s
   证明: by
   simp
@@ -436,8 +436,8 @@ theorem measureReal_restrict_apply'
   simp only [measureReal_def, restrict_apply' hs]
 
 中文:
-定理 measureReal_restrict_apply'
-  条件: (hs : MeasurableSet s)
+定理 measure实数_restrict_apply'
+  条件: (hs : 可测集 s)
   证明: by
   simp only [measureReal_def, restrict_apply' hs]
 
@@ -460,7 +460,7 @@ theorem measureReal_restrict_apply₀'
 @[simp]
 
 中文:
-定理 measureReal_restrict_apply₀'
+定理 measure实数_restrict_apply₀'
   条件: (hs : NullMeasurableSet s μ)
   结论: μ.restrict s t = μ (t inter s)
   证明: by
@@ -483,8 +483,8 @@ theorem measureReal_restrict_apply_self
   simp [measureReal_def]
 
 中文:
-定理 measureReal_restrict_apply_self
-  条件: (s : Set α)
+定理 measure实数_restrict_apply_self
+  条件: (s : 集合 α)
   结论: (μ.restrict s).real s = μ.real s
   证明: by
   simp [measureReal_def]
@@ -505,7 +505,7 @@ theorem measureReal_mono_null
   simp [Measure.real, measure_mono_null h h₂]
 
 中文:
-定理 measureReal_mono_null
+定理 measure实数_mono_null
   条件: (h : s₁ subseteq s₂) (h₂ : μ.real s₂ = 0) (h'₂ : μ s₂ != ∞ := by finiteness)
   证明: by
   rw [measureReal_eq_zero_iff h'₂] at h₂
@@ -530,7 +530,7 @@ theorem measureReal_le_measureReal_union_left
   · exact measureReal_mono subset_union_left (measure_union_lt_top hs h.lt_top).ne
 
 中文:
-定理 measureReal_le_measureReal_union_left
+定理 measure实数_le_measure实数_union_left
   条件: (h : μ t != ∞ := by finiteness)
   证明: by
   rcases eq_top_or_lt_top (μ s) with hs | hs
@@ -556,7 +556,7 @@ theorem measureReal_le_measureReal_union_right
   exact measureReal_le_measureReal_union_left h
 
 中文:
-定理 measureReal_le_measureReal_union_right
+定理 measure实数_le_measure实数_union_right
   条件: (h : μ s != ∞ := by finiteness)
   证明: by
   rw [union_comm]
@@ -584,8 +584,8 @@ theorem measureReal_union_le
     have B : μ s₂ != ∞ := measure_ne_top_of_subset 
 
 中文:
-定理 measureReal_union_le
-  条件: (s₁ s₂ : Set α)
+定理 measure实数_union_le
+  条件: (s₁ s₂ : 集合 α)
   结论: μ.real (s₁ union s₂) <= μ.real s₁ + μ.real s₂
   证明: by
   rcases eq_top_or_lt_top (μ (s₁ union s₂)) with h | h
@@ -621,8 +621,8 @@ theorem measureReal_biUnion_finset_le
     exact (measureReal_union_le _ _).trans (by gcongr)
 
 中文:
-定理 measureReal_biUnion_finset_le
-  条件: (s : Finset β) (f : β -> Set α)
+定理 measure实数_biUnion_finset_le
+  条件: (s : 有限集 β) (f : β -> 集合 α)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -655,8 +655,8 @@ theorem measureReal_iUnion_fintype_le
   simp
 
 中文:
-定理 measureReal_iUnion_fintype_le
-  条件: [Fintype β] (f : β -> Set α)
+定理 measure实数_iUnion_fintype_le
+  条件: [有限类型 β] (f : β -> 集合 α)
   证明: by
   convert! measureReal_biUnion_finset_le Finset.univ f
   simp
@@ -679,8 +679,8 @@ theorem measureReal_iUnion_fintype
     ENNReal.toReal_sum (fun i _hi => h' i)]
 
 中文:
-定理 measureReal_iUnion_fintype
-  结论: [Fintype β] {f : β -> Set α} (hn : Pairwise (Disjoint on f))
+定理 measure实数_iUnion_fintype
+  结论: [有限类型 β] {f : β -> 集合 α} (hn : 两两 (Disjoint on f))
   证明: by
   simp_rw [measureReal_def, measure_iUnion hn h, tsum_fintype,
     ENNReal.toReal_sum (fun i _hi => h' i)]
@@ -704,7 +704,7 @@ theorem measureReal_union_null
 @[simp]
 
 中文:
-定理 measureReal_union_null
+定理 measure实数_union_null
   条件: (h₁ : μ.real s₁ = 0) (h₂ : μ.real s₂ = 0)
   证明: le_antisymm ((measureReal_union_le s₁ s₂).trans (by simp [h₁, h₂])) measureReal_nonneg
 
@@ -727,7 +727,7 @@ theorem measureReal_union_null_iff
   fun h => measureReal_union_null h.1 h.2⟩
 
 中文:
-定理 measureReal_union_null_iff
+定理 measure实数_union_null_iff
   证明: ⟨fun h => ⟨measureReal_mono_null subset_union_left h (by finiteness),
       measureReal_mono_null subset_union_right h (by finiteness)⟩,
   fun h => measureReal_union_null h.1 h.2⟩
@@ -752,7 +752,7 @@ theorem measureReal_congr
   simp [Measure.real, measure_congr H]
 
 中文:
-定理 measureReal_congr
+定理 measure实数_congr
   条件: (H : s =ᵐ[μ] t)
   结论: μ.real s = μ.real t
   证明: by
@@ -779,7 +779,7 @@ theorem measureReal_inter_add_sdiff₀
 alias measureReal_inter_add_diff₀ := measureReal_inter_add_
 
 中文:
-定理 measureReal_inter_add_sdiff₀
+定理 measure实数_inter_add_sdiff₀
   结论: (ht : NullMeasurableSet t μ)
   证明: by
   simp only [measureReal_def]
@@ -816,7 +816,7 @@ theorem measureReal_union_add_inter₀
   ac_rfl
 
 中文:
-定理 measureReal_union_add_inter₀
+定理 measure实数_union_add_inter₀
   结论: (ht : NullMeasurableSet t μ)
   证明: by
   have : μ (s union t) != ∞ :=
@@ -844,7 +844,7 @@ theorem measureReal_union_add_inter₀'
   rw [union_comm]; rw [inter_comm]; rw [measureReal_union_add_inter₀ hs h₂ h₁]; rw [add_comm]
 
 中文:
-定理 measureReal_union_add_inter₀'
+定理 measure实数_union_add_inter₀'
   结论: (hs : NullMeasurableSet s μ)
   证明: by
   rw [union_comm]; rw [inter_comm]; rw [measureReal_union_add_inter₀ hs h₂ h₁]; rw [add_comm]
@@ -867,7 +867,7 @@ theorem measureReal_union₀
   rw [measure_union₀ ht hd]; rw [ENNReal.toReal_add h₁ h₂]
 
 中文:
-定理 measureReal_union₀
+定理 measure实数_union₀
   结论: (ht : NullMeasurableSet t μ) (hd : AEDisjoint μ s t)
   证明: by
   simp only [Measure.real]
@@ -891,7 +891,7 @@ theorem measureReal_union₀'
   rw [union_comm]; rw [measureReal_union₀ hs (AEDisjoint.symm hd) h₂ h₁]; rw [add_comm]
 
 中文:
-定理 measureReal_union₀'
+定理 measure实数_union₀'
   结论: (hs : NullMeasurableSet s μ) (hd : AEDisjoint μ s t)
   证明: by
   rw [union_comm]; rw [measureReal_union₀ hs (AEDisjoint.symm hd) h₂ h₁]; rw [add_comm]
@@ -913,8 +913,8 @@ theorem measureReal_add_measureReal_compl₀
   rw [← measureReal_union₀' hs aedisjoint_compl_right]; rw [union_compl_self]
 
 中文:
-定理 measureReal_add_measureReal_compl₀
-  条件: [IsFiniteMeasure μ] (hs : NullMeasurableSet s μ)
+定理 measure实数_add_measure实数_compl₀
+  条件: [是有限测度 μ] (hs : NullMeasurableSet s μ)
   证明: by
   rw [← measureReal_union₀' hs aedisjoint_compl_right]; rw [union_compl_self]
 
@@ -933,8 +933,8 @@ theorem measureReal_add_measureReal_compl
   proof: measureReal_add_measureReal_compl₀ h.nullMeasurableSet
 
 中文:
-定理 measureReal_add_measureReal_compl
-  条件: [IsFiniteMeasure μ] (h : MeasurableSet s)
+定理 measure实数_add_measure实数_compl
+  条件: [是有限测度 μ] (h : 可测集 s)
   证明: measureReal_add_measureReal_compl₀ h.nullMeasurableSet
 
 Depends on / 依赖: h.nullMeasurableSet, nullMeasurableSet
@@ -952,8 +952,8 @@ theorem measureReal_union
   proof: measureReal_union₀ h.nullMeasurableSet hd.aedisjoint h₁ h₂
 
 中文:
-定理 measureReal_union
-  结论: (hd : Disjoint s₁ s₂) (h : MeasurableSet s₂)
+定理 measure实数_union
+  结论: (hd : Disjoint s₁ s₂) (h : 可测集 s₂)
   证明: measureReal_union₀ h.nullMeasurableSet hd.aedisjoint h₁ h₂
 
 Depends on / 依赖: aedisjoint, finiteness, h.nullMeasurableSet, hd.aedisjoint, nullMeasurableSet
@@ -972,8 +972,8 @@ theorem measureReal_union'
   proof: measureReal_union₀' h.nullMeasurableSet hd.aedisjoint h₁ h₂
 
 中文:
-定理 measureReal_union'
-  结论: (hd : Disjoint s₁ s₂) (h : MeasurableSet s₁)
+定理 measure实数_union'
+  结论: (hd : Disjoint s₁ s₂) (h : 可测集 s₁)
   证明: measureReal_union₀' h.nullMeasurableSet hd.aedisjoint h₁ h₂
 
 Depends on / 依赖: aedisjoint, finiteness, h.nullMeasurableSet, hd.aedisjoint, nullMeasurableSet
@@ -999,8 +999,8 @@ theorem measureReal_inter_add_sdiff
 alias measureReal_inter_add_diff := measureReal_inter_add_sdiff
 
 中文:
-定理 measureReal_inter_add_sdiff
-  结论: (ht : MeasurableSet t)
+定理 measure实数_inter_add_sdiff
+  结论: (ht : 可测集 t)
   证明: by
   simp only [Measure.real]
   rw [← ENNReal.toReal_add]; rw [measure_inter_add_sdiff _ ht]
@@ -1035,8 +1035,8 @@ theorem measureReal_sdiff_add_inter
 alias measureReal_diff_add_inter := measureReal_sdiff_add_inter
 
 中文:
-定理 measureReal_sdiff_add_inter
-  结论: (ht : MeasurableSet t)
+定理 measure实数_sdiff_add_inter
+  结论: (ht : 可测集 t)
   证明: (add_comm _ _).trans (measureReal_inter_add_sdiff ht h)
 
 @[deprecated (since := "2026-06-03")]
@@ -1061,8 +1061,8 @@ theorem measureReal_union_add_inter
   proof: measureReal_union_add_inter₀ ht.nullMeasurableSet h₁ h₂
 
 中文:
-定理 measureReal_union_add_inter
-  结论: (ht : MeasurableSet t)
+定理 measure实数_union_add_inter
+  结论: (ht : 可测集 t)
   证明: measureReal_union_add_inter₀ ht.nullMeasurableSet h₁ h₂
 
 Depends on / 依赖: finiteness, ht.nullMeasurableSet, nullMeasurableSet
@@ -1081,8 +1081,8 @@ theorem measureReal_union_add_inter'
   proof: measureReal_union_add_inter₀' hs.nullMeasurableSet h₁ h₂
 
 中文:
-定理 measureReal_union_add_inter'
-  结论: (hs : MeasurableSet s)
+定理 measure实数_union_add_inter'
+  结论: (hs : 可测集 s)
   证明: measureReal_union_add_inter₀' hs.nullMeasurableSet h₁ h₂
 
 Depends on / 依赖: finiteness, hs.nullMeasurableSet, nullMeasurableSet
@@ -1105,8 +1105,8 @@ lemma measureReal_symmDiff_eq
   · exact measure_ne_top_of_subset sdiff_subset h₂
 
 中文:
-引理 measureReal_symmDiff_eq
-  结论: (hs : MeasurableSet s) (ht : MeasurableSet t)
+引理 measure实数_symmDiff_eq
+  结论: (hs : 可测集 s) (ht : 可测集 t)
   证明: by
   simp only [Measure.real]
   rw [← ENNReal.toReal_add]; rw [measure_symmDiff_eq hs.nullMeasurableSet ht.nullMeasurableSet]
@@ -1137,8 +1137,8 @@ lemma measureReal_symmDiff_le
         (measure_union_ne_top (by finiten
 
 中文:
-引理 measureReal_symmDiff_le
-  结论: (u : Set α)
+引理 measure实数_symmDiff_le
+  结论: (u : 集合 α)
   证明: by
   rcases eq_top_or_lt_top (μ u) with hu | hu
   · simp only [measureReal_def, measure_symmDiff_eq_top h₁ hu, ENNReal.toReal_top]
@@ -1168,8 +1168,8 @@ theorem measureReal_biUnion_finset₀
   simp only [measureReal_def, measure_biUnion_finset₀ hd hm, ENNReal.toReal_sum h]
 
 中文:
-定理 measureReal_biUnion_finset₀
-  结论: {s : Finset ι} {f : ι -> Set α}
+定理 measure实数_biUnion_finset₀
+  结论: {s : 有限集 ι} {f : ι -> 集合 α}
   证明: by
   simp only [measureReal_def, measure_biUnion_finset₀ hd hm, ENNReal.toReal_sum h]
 
@@ -1190,8 +1190,8 @@ theorem measureReal_biUnion_finset
   proof: measureReal_biUnion_finset₀ hd.aedisjoint (fun b hb => (hm b hb).nullMeasurableSet) h
 
 中文:
-定理 measureReal_biUnion_finset
-  结论: {s : Finset ι} {f : ι -> Set α} (hd : PairwiseDisjoint (↑s) f)
+定理 measure实数_biUnion_finset
+  结论: {s : 有限集 ι} {f : ι -> 集合 α} (hd : PairwiseDisjoint (↑s) f)
   证明: measureReal_biUnion_finset₀ hd.aedisjoint (fun b hb => (hm b hb).nullMeasurableSet) h
 
 Depends on / 依赖: aedisjoint, finiteness, hd.aedisjoint, nullMeasurableSet
@@ -1211,8 +1211,8 @@ theorem sum_measureReal_preimage_singleton
   simp only [measureReal_def, ← sum_measure_preimage_singleton s hf, ENNReal.toReal_sum h]
 
 中文:
-定理 sum_measureReal_preimage_singleton
-  结论: (s : Finset β) {f : α -> β}
+定理 sum_measure实数_preimage_singleton
+  结论: (s : 有限集 β) {f : α -> β}
   证明: by
   simp only [measureReal_def, ← sum_measure_preimage_singleton s hf, ENNReal.toReal_sum h]
 
@@ -1233,8 +1233,8 @@ theorem sum_measureReal_singleton
   simp [measureReal_def, ← ENNReal.toReal_sum (fun _ _ => ne_of_lt measure_singleton_lt_top)]
 
 中文:
-定理 sum_measureReal_singleton
-  结论: [MeasurableSingletonClass α] [SigmaFinite μ]
+定理 sum_measure实数_singleton
+  结论: [MeasurableSingleton类 α] [σ有限 μ]
   证明: by
   simp [measureReal_def, ← ENNReal.toReal_sum (fun _ _ => ne_of_lt measure_singleton_lt_top)]
 -/
@@ -1257,7 +1257,7 @@ theorem measureReal_sdiff_null'
 @[deprecated (since := "2026-06-03")] alias measureReal_diff_null' := measureReal_sdiff_null'
 
 中文:
-定理 measureReal_sdiff_null'
+定理 measure实数_sdiff_null'
   条件: (h : μ.real (s₁ inter s₂) = 0) (h' : μ s₁ != ∞ := by finiteness)
   证明: by
   simp only [measureReal_def]
@@ -1290,7 +1290,7 @@ theorem measureReal_sdiff_null
 @[deprecated (since := "2026-06-03")] alias measureReal_diff_null := measureReal_sdiff_null
 
 中文:
-定理 measureReal_sdiff_null
+定理 measure实数_sdiff_null
   条件: (h : μ.real s₂ = 0) (h' : μ s₂ != ∞ := by finiteness)
   证明: by
   rcases eq_top_or_lt_top (μ s₁) with H | H
@@ -1322,8 +1322,8 @@ theorem measureReal_add_sdiff
 @[deprecated (since := "2026-06-03")] alias measureReal_add_diff := measureReal_add_sdiff
 
 中文:
-定理 measureReal_add_sdiff
-  结论: (hs : MeasurableSet s)
+定理 measure实数_add_sdiff
+  结论: (hs : 可测集 s)
   证明: by
   rw [← measureReal_union' (@disjoint_sdiff_right _ s t) hs h₁
     (measure_ne_top_of_subset sdiff_subset h₂)]; rw [union_sdiff_self]
@@ -1353,8 +1353,8 @@ theorem measureReal_sdiff'
 @[deprecated (since := "2026-06-03")] alias measureReal_diff' := measureReal_sdiff'
 
 中文:
-定理 measureReal_sdiff'
-  结论: (hm : MeasurableSet t)
+定理 measure实数_sdiff'
+  结论: (hm : 可测集 t)
   证明: by
   rw [union_comm]; rw [← measureReal_add_sdiff hm h₂ h₁]
   ring
@@ -1383,8 +1383,8 @@ theorem measureReal_sdiff
 @[deprecated (since := "2026-06-03")] alias measureReal_diff := measureReal_sdiff
 
 中文:
-定理 measureReal_sdiff
-  条件: (h : s₂ subseteq s₁) (h₂ : MeasurableSet s₂) (h₁ : μ s₁ != ∞ := by finiteness)
+定理 measure实数_sdiff
+  条件: (h : s₂ subseteq s₁) (h₂ : 可测集 s₂) (h₁ : μ s₁ != ∞ := by finiteness)
   证明: by
   rw [measureReal_sdiff' h₂ h₁ (measure_ne_top_of_subset h h₁)]; rw [union_eq_self_of_subset_right h]
 
@@ -1414,7 +1414,7 @@ theorem le_measureReal_sdiff
 @[deprecated (since := "2026-06-03
 
 中文:
-定理 le_measureReal_sdiff
+定理 le_measure实数_sdiff
   条件: (h : μ s₂ != ∞ := by finiteness)
   证明: by
   simp only [tsub_le_iff_left]
@@ -1450,8 +1450,8 @@ theorem measureReal_sdiff_lt_of_lt_add
 alias measureReal_diff_lt_of_lt_add := measureReal_sdiff_lt_of_lt_add
 
 中文:
-定理 measureReal_sdiff_lt_of_lt_add
-  结论: (hs : MeasurableSet s) (hst : s subseteq t) (ε : 实数)
+定理 measure实数_sdiff_lt_of_lt_add
+  结论: (hs : 可测集 s) (hst : s subseteq t) (ε : 实数)
   证明: by
   rw [measureReal_sdiff hst hs ht']; linarith
 
@@ -1481,8 +1481,8 @@ theorem measureReal_sdiff_le_iff_le_add
 alias measureReal_diff_le_iff_le_add := measureReal_sdiff_le_iff_le_add
 
 中文:
-定理 measureReal_sdiff_le_iff_le_add
-  结论: (hs : MeasurableSet s) (hst : s subseteq t) (ε : 实数)
+定理 measure实数_sdiff_le_iff_le_add
+  结论: (hs : 可测集 s) (hst : s subseteq t) (ε : 实数)
   证明: by
   rw [measureReal_sdiff hst hs ht']; rw [tsub_le_iff_left]
 
@@ -1513,7 +1513,7 @@ theorem measureReal_eq_measureReal_of_null_sdiff
 alias measureReal_eq_measureReal_of_null_diff := measureReal_eq_measureReal_of_null_sdiff
 
 中文:
-定理 measureReal_eq_measureReal_of_null_sdiff
+定理 measure实数_eq_measure实数_of_null_sdiff
   结论: (hst : s subseteq t)
   证明: by
   rw [measureReal_eq_zero_iff h] at h_nulldiff
@@ -1544,7 +1544,7 @@ theorem measureReal_eq_measureReal_of_between_null_sdiff
   simp [measureReal_def, A.1, A.2]
 
 中文:
-定理 measureReal_eq_measureReal_of_between_null_sdiff
+定理 measure实数_eq_measure实数_of_between_null_sdiff
   证明: by
   have A : μ s₁ = μ s₂ ∧ μ s₂ = μ s₃ :=
     measure_eq_measure_of_between_null_sdiff h12 h23 ((measureReal_eq_zero_iff h').1 h_nulldiff)
@@ -1573,7 +1573,7 @@ alias measureReal_eq_measureReal_smaller_of_between_null_diff :=
   measureReal_eq_measureReal_smaller_of_between_null_sdiff
 
 中文:
-定理 measureReal_eq_measureReal_smaller_of_between_null_sdiff
+定理 measure实数_eq_measure实数_smaller_of_between_null_sdiff
   结论: (h12 : s₁ subseteq s₂)
   证明: (measureReal_eq_measureReal_of_between_null_sdiff h12 h23 h_nulldiff h').1
 
@@ -1606,7 +1606,7 @@ alias measureReal_eq_measureReal_larger_of_between_null_diff :=
   measureReal_eq_measureReal_larger_of_between_null_sdiff
 
 中文:
-定理 measureReal_eq_measureReal_larger_of_between_null_sdiff
+定理 measure实数_eq_measure实数_larger_of_between_null_sdiff
   结论: (h12 : s₁ subseteq s₂)
   证明: (measureReal_eq_measureReal_of_between_null_sdiff h12 h23 h_nulldiff h').2
 
@@ -1636,8 +1636,8 @@ theorem measureReal_compl
   exact measureReal_sdiff (subset_univ s) h₁
 
 中文:
-定理 measureReal_compl
-  条件: [IsFiniteMeasure μ] (h₁ : MeasurableSet s)
+定理 measure实数_compl
+  条件: [是有限测度 μ] (h₁ : 可测集 s)
   证明: by
   rw [compl_eq_univ_sdiff]
   exact measureReal_sdiff (subset_univ s) h₁
@@ -1659,8 +1659,8 @@ theorem measureReal_compl₀
   linarith [measureReal_add_measureReal_compl₀ h₁]
 
 中文:
-定理 measureReal_compl₀
-  条件: [IsFiniteMeasure μ] (h₁ : NullMeasurableSet s μ)
+定理 measure实数_compl₀
+  条件: [是有限测度 μ] (h₁ : NullMeasurableSet s μ)
   证明: by
   linarith [measureReal_add_measureReal_compl₀ h₁]
 -/
@@ -1681,7 +1681,7 @@ theorem measureReal_union_congr_of_subset
   · exact (ENNReal.toReal_le_toReal h₁ (measure_ne_top_of_subset hs h₁)).1 hsμ
 
 中文:
-定理 measureReal_union_congr_of_subset
+定理 measure实数_union_congr_of_subset
   结论: (hs : s₁ subseteq s₂)
   证明: by
   simp only [measureReal_def]
@@ -1713,8 +1713,8 @@ theorem sum_measureReal_le_measureReal_univ
   exact sum_measure_le_measure_univ (fun i mi => (h i mi).nullMeasurableSet) H.aedisjoint
 
 中文:
-定理 sum_measureReal_le_measureReal_univ
-  结论: [IsFiniteMeasure μ] {s : Finset ι} {t : ι -> Set α}
+定理 sum_measure实数_le_measure实数_univ
+  结论: [是有限测度 μ] {s : 有限集 ι} {t : ι -> 集合 α}
   证明: by
   simp only [measureReal_def]
   rw [← ENNReal.toReal_sum (by finiteness)]
@@ -1741,8 +1741,8 @@ theorem measureReal_add_apply
   simp only [measureReal_def, add_apply, ENNReal.toReal_add h₁ h₂]
 
 中文:
-定理 measureReal_add_apply
-  结论: {μ₁ μ₂ : Measure α} (h₁ : μ₁ s != ∞ := by finiteness)
+定理 measure实数_add_apply
+  结论: {μ₁ μ₂ : 测度 α} (h₁ : μ₁ s != ∞ := by finiteness)
   证明: by
   simp only [measureReal_def, add_apply, ENNReal.toReal_add h₁ h₂]
 
@@ -1769,8 +1769,8 @@ theorem exists_nonempty_inter_of_measureReal_univ_lt_sum_measureReal
   · exact (ENNReal.sum_lt_top.mpr (fun i hi
 
 中文:
-定理 exists_nonempty_inter_of_measureReal_univ_lt_sum_measureReal
-  结论: [IsFiniteMeasure μ]
+定理 存在_nonempty_inter_of_measure实数_univ_lt_sum_measure实数
+  结论: [是有限测度 μ]
   证明: by
   apply exists_nonempty_inter_of_measure_univ_lt_sum_measure μ
     (fun i mi => (h i mi).nullMeasurableSet)
@@ -1807,7 +1807,7 @@ theorem nonempty_inter_of_measureReal_lt_add
   · exact ENNReal.add_ne_top.2 ⟨measure_ne_top_of_subset h's hu, measure_ne_top_of_subset 
 
 中文:
-定理 nonempty_inter_of_measureReal_lt_add
+定理 nonempty_inter_of_measure实数_lt_add
   证明: by
   apply nonempty_inter_of_measure_lt_add μ ht h's h't ?_
   apply (ENNReal.toReal_lt_toReal hu _).1
@@ -1838,7 +1838,7 @@ theorem nonempty_inter_of_measureReal_lt_add'
   exact nonempty_inter_of_measureReal_lt_add hs h't h's h hu
 
 中文:
-定理 nonempty_inter_of_measureReal_lt_add'
+定理 nonempty_inter_of_measure实数_lt_add'
   证明: by
   rw [add_comm] at h
   rw [inter_comm]
@@ -1867,7 +1867,7 @@ lemma probReal_compl_eq_one_sub₀
   rw [measureReal_compl₀ h]; rw [probReal_univ]
 
 中文:
-引理 probReal_compl_eq_one_sub₀
+引理 prob实数_compl_eq_one_sub₀
   条件: (h : NullMeasurableSet s μ)
   结论: μ.real sᶜ = 1 - μ.real s
   证明: by
@@ -1888,8 +1888,8 @@ lemma probReal_compl_eq_one_sub
   proof: probReal_compl_eq_one_sub₀ hs.nullMeasurableSet
 
 中文:
-引理 probReal_compl_eq_one_sub
-  条件: (hs : MeasurableSet s)
+引理 prob实数_compl_eq_one_sub
+  条件: (hs : 可测集 s)
   结论: μ.real sᶜ = 1 - μ.real s
   证明: probReal_compl_eq_one_sub₀ hs.nullMeasurableSet
 

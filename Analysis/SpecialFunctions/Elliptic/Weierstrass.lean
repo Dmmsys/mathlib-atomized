@@ -67,10 +67,10 @@ structure PeriodPair
 
 中文:
 结构 PeriodPair
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (3 个):
-    - ω₁ : Complex
-    - ω₂ : Complex
+    - ω₁ : 复形
+    - ω₂ : 复形
     - indep : LinearIndependent 实数 ![ω₁, ω₂]
 -/
 structure PeriodPair : Type where
@@ -94,7 +94,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Basis (Fin 2) 实数 Complex
+  签名: : 基 (有限集 2) 实数 复形
   定义体: basisOfLinearIndependentOfCardEqFinrank L.indep (by simp)
 -/
 protected def basis : Basis (Fin 2) Real Complex :=
@@ -139,7 +139,7 @@ definition lattice
 
 中文:
 定义 lattice
-  签名: : Submodule 整数 Complex
+  签名: : 子模 整数 复形
   定义体: Submodule.span Int {L.ω₁, L.ω₂}
 
 Depends on / 依赖: Submodule, Submodule.span
@@ -157,7 +157,7 @@ lemma mem_lattice
 
 中文:
 引理 mem_lattice
-  条件: {L : PeriodPair} {x : Complex}
+  条件: {L : PeriodPair} {x : 复形}
   证明: by
   simp only [lattice, Submodule.mem_span_pair, zsmul_eq_mul]
 
@@ -219,7 +219,7 @@ lemma mul_ω₁_add_mul_ω₂_mem_lattice
 
 中文:
 引理 mul_ω₁_add_mul_ω₂_mem_lattice
-  条件: {L : PeriodPair} {α β : Rat}
+  条件: {L : PeriodPair} {α β : 有理数}
   证明: by
   refine ⟨fun H => ?_, fun ⟨h₁, h₂⟩ => ?_⟩
   · obtain ⟨m, n, e⟩ := mem_lattice.mp H
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology L.lattice
+  签名: 离散拓扑 L.lattice
   定义体: L.lattice_eq_span_range_basis ▸ inferInstance
 
 Depends on / 依赖: L.lattice_eq_span_range_basis, lattice_eq_span_range_basis
@@ -349,7 +349,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZLattice 实数 L.lattice
+  签名: 是Z格 实数 L.lattice
   定义体: by
   simp_rw [L.lattice_eq_span_range_basis]
   infer_instance
@@ -371,7 +371,7 @@ lemma isClosed_lattice
 
 中文:
 引理 isClosed_lattice
-  结论: IsClosed (X := Complex) L.lattice
+  结论: 是闭集 (X := 复形) L.lattice
   证明: @AddSubgroup.isClosed_of_discrete _ _ _ _ _ L.lattice.toAddSubgroup
     (inferInstanceAs (DiscreteTopology L.lattice))
 
@@ -396,8 +396,8 @@ lemma isClosed_of_subset_lattice
 
 中文:
 引理 isClosed_of_subset_lattice
-  条件: {s : Set Complex} (hs : s subseteq L.lattice)
-  结论: IsClosed s
+  条件: {s : 集合 复形} (hs : s subseteq L.lattice)
+  结论: 是闭集 s
   证明: by
   convert!
     L.isClosed_lattice.isClosedMap_subtype_val _ (isClosed_discrete (α := L.lattice) ((↑) ⁻¹' s))
@@ -425,8 +425,8 @@ lemma isOpen_compl_lattice_sdiff
 
 中文:
 引理 isOpen_compl_lattice_sdiff
-  条件: {s : Set Complex}
-  结论: IsOpen (L.lattice \ s)ᶜ
+  条件: {s : 集合 复形}
+  结论: 是开集 (L.lattice \ s)ᶜ
   证明: (L.isClosed_of_subset_lattice Set.sdiff_subset).isOpen_compl
 
 @[deprecated (since := "2026-06-03")] alias isOpen_compl_lattice_diff := isOpen_compl_lattice_sdiff
@@ -453,7 +453,7 @@ alias compl_lattice_diff_singleton_mem_nhds := compl_lattice_sdiff_singleton_mem
 
 中文:
 引理 compl_lattice_sdiff_singleton_mem_nhds
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: (↑L.lattice \ {x})ᶜ in 𝓝 x
   证明: L.isOpen_compl_lattice_sdiff.mem_nhds (by simp)
 
@@ -478,7 +478,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace L.lattice
+  签名: 真空间 L.lattice
   定义体: .of_isClosed L.isClosed_lattice
 
 Depends on / 依赖: L.isClosed_lattice, isClosed_lattice, of_isClosed
@@ -496,7 +496,7 @@ definition latticeBasis
 
 中文:
 定义 latticeBasis
-  签名: : Basis (Fin 2) 整数 L.lattice
+  签名: : 基 (有限集 2) 整数 L.lattice
   定义体: (Basis.span (v := ![L.ω₁, L.ω₂]) (L.indep.restrict_scalars' _)).map
     (.ofEq _ _ (by simp [lattice, Set.pair_comm L.ω₂ L.ω₁]))
 
@@ -604,7 +604,7 @@ lemma hasSumLocallyUniformly_aux
 
 中文:
 引理 hasSumLocallyUniformly_aux
-  结论: (f : L.lattice -> Complex -> Complex)
+  结论: (f : L.lattice -> 复形 -> 复形)
   证明: by
   rw [hasSumLocallyUniformly_iff_tendstoLocallyUniformly]; rw [tendstoLocallyUniformly_iff_filter]
   intro x
@@ -652,7 +652,7 @@ lemma weierstrassP_bound
 
 中文:
 引理 weierstrassP_bound
-  条件: (r : 实数) (hr : 0 < r) (s : Complex) (hs : ‖s‖ < r) (l : Complex) (h : 2 * r <= ‖l‖)
+  条件: (r : 实数) (hr : 0 < r) (s : 复形) (hs : ‖s‖ < r) (l : 复形) (h : 2 * r <= ‖l‖)
   证明: by
   have : s != ↑l := by rintro rfl; linarith
   have : 0 < ‖l‖ := by linarith
@@ -708,7 +708,7 @@ scoped notation3 "℘[" L:max " - " l₀ "]" => weierstrassPExcept L l₀
 
 中文:
 定义 weierstrassPExcept
-  签名: (l₀ : Complex) (z : Complex)
+  签名: (l₀ : 复形) (z : 复形)
   定义体: ∑' l : L.lattice, if l = l₀ then 0 else (1 / (z - l) ^ 2 - 1 / l ^ 2)
 
 @[inherit_doc weierstrassPExcept]
@@ -738,7 +738,7 @@ lemma hasSumLocallyUniformly_weierstrassPExcept
 
 中文:
 引理 hasSumLocallyUniformly_weierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by
   refine L.hasSumLocallyUniformly_aux (u := (10 * · * ‖·‖ ^ (-3 : Real))) _
     (fun _ _ => (ZLattice.summable_norm_rpow _ _ (by simp; norm_num)).mul_left _) fun r hr =>
@@ -771,7 +771,7 @@ lemma hasSum_weierstrassPExcept
 
 中文:
 引理 hasSum_weierstrassPExcept
-  条件: (l₀ : Complex) (z : Complex)
+  条件: (l₀ : 复形) (z : 复形)
   证明: (L.hasSumLocallyUniformly_weierstrassPExcept l₀).hasSum
 
 Depends on / 依赖: L.hasSumLocallyUniformly_weierstrassPExcept, hasSum, hasSumLocallyUniformly_weierstrassPExcept
@@ -796,7 +796,7 @@ lemma differentiableOn_weierstrassPExcept
 
 中文:
 引理 differentiableOn_weierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by
   refine (L.hasSumLocallyUniformly_weierstrassPExcept l₀).hasSumLocallyUniformlyOn.differentiableOn
     (.of_forall fun s => .fun_sum fun i hi => ?_) L.isOpen_compl_lattice_sdiff
@@ -830,7 +830,7 @@ lemma weierstrassPExcept_neg
 
 中文:
 引理 weierstrassPExcept_neg
-  条件: (l₀ : Complex) (z : Complex)
+  条件: (l₀ : 复形) (z : 复形)
   证明: by
   simp only [weierstrassPExcept]
   rw [← (Equiv.neg L.lattice).tsum_eq]
@@ -860,7 +860,7 @@ lemma weierstrassPExcept_zero
 
 中文:
 引理 weierstrassPExcept_zero
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by simp [weierstrassPExcept]
 -/
 @[simp] lemma weierstrassPExcept_zero (l₀ : Complex) :
@@ -882,7 +882,7 @@ definition weierstrassP
 
 中文:
 定义 weierstrassP
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: ∑' l : L.lattice, (1 / (z - l) ^ 2 - 1 / l ^ 2)
 
 @[inherit_doc weierstrassP] scoped notation3 "℘[" L "]" => weierstrassP L
@@ -909,7 +909,7 @@ lemma weierstrassPExcept_add
 
 中文:
 引理 weierstrassPExcept_add
-  条件: (l₀ : L.lattice) (z : Complex)
+  条件: (l₀ : L.lattice) (z : 复形)
   证明: by
   trans ℘[L - l₀] z + ∑' i : L.lattice, if i = l₀.1 then (1 / (z - l₀.1) ^ 2 - 1 / l₀.1 ^ 2) else 0
   · simp
@@ -941,7 +941,7 @@ lemma weierstrassPExcept_def
 
 中文:
 引理 weierstrassPExcept_def
-  条件: (l₀ : L.lattice) (z : Complex)
+  条件: (l₀ : L.lattice) (z : 复形)
   证明: by
   rw [← L.weierstrassPExcept_add l₀]
   abel
@@ -967,7 +967,7 @@ lemma weierstrassPExcept_of_notMem
 
 中文:
 引理 weierstrassPExcept_of_notMem
-  条件: (l₀ : Complex) (hl : l₀ ∉ L.lattice)
+  条件: (l₀ : 复形) (hl : l₀ ∉ L.lattice)
   证明: by
   delta weierstrassPExcept weierstrassP
   congr! 3 with z l
@@ -1018,7 +1018,7 @@ lemma hasSum_weierstrassP
 
 中文:
 引理 hasSum_weierstrassP
-  条件: (z : Complex)
+  条件: (z : 复形)
   证明: L.hasSumLocallyUniformly_weierstrassP.hasSum
 
 Depends on / 依赖: L.hasSumLocallyUniformly_weierstrassP.hasSum, hasSum, hasSumLocallyUniformly_weierstrassP
@@ -1073,7 +1073,7 @@ lemma weierstrassP_neg
 
 中文:
 引理 weierstrassP_neg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ℘[L] (-z) = ℘[L] z
   证明: by
   simp only [weierstrassP]
@@ -1109,7 +1109,7 @@ lemma not_continuousAt_weierstrassP
 
 中文:
 引理 not_continuousAt_weierstrassP
-  条件: (x : Complex) (hx : x in L.lattice)
+  条件: (x : 复形) (hx : x in L.lattice)
   结论: ¬ ContinuousAt ℘[L] x
   证明: by
   eta_expand
@@ -1150,7 +1150,7 @@ scoped notation3 "℘'[" L:max " - " l₀ "]" => derivWeierstrassPExcept L l₀
 
 中文:
 定义 derivWeierstrassPExcept
-  签名: (l₀ : Complex) (z : Complex)
+  签名: (l₀ : 复形) (z : 复形)
   定义体: ∑' l : L.lattice, if l.1 = l₀ then 0 else -2 / (z - l) ^ 3
 
 @[inherit_doc derivWeierstrassPExcept]
@@ -1181,7 +1181,7 @@ lemma hasSumLocallyUniformly_derivWeierstrassPExcept
 
 中文:
 引理 hasSumLocallyUniformly_derivWeierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by
   refine L.hasSumLocallyUniformly_aux (u := fun _ => (16 * ‖·‖ ^ (-3 : Real))) _
     (fun _ _ => (ZLattice.summable_norm_rpow _ _ (by simp; norm_num)).mul_left _) fun r hr =>
@@ -1226,7 +1226,7 @@ lemma hasSum_derivWeierstrassPExcept
 
 中文:
 引理 hasSum_derivWeierstrassPExcept
-  条件: (l₀ : Complex) (z : Complex)
+  条件: (l₀ : 复形) (z : 复形)
   证明: (L.hasSumLocallyUniformly_derivWeierstrassPExcept l₀).tendstoLocallyUniformlyOn.tendsto_at
     (Set.mem_univ z)
 
@@ -1254,7 +1254,7 @@ lemma differentiableOn_derivWeierstrassPExcept
 
 中文:
 引理 differentiableOn_derivWeierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by
   refine L.hasSumLocallyUniformly_derivWeierstrassPExcept l₀
 .tendstoLocallyUniformlyOn.differentiableOn
@@ -1293,7 +1293,7 @@ lemma eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept
 
 中文:
 引理 eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: by
   refine ((L.hasSumLocallyUniformly_weierstrassPExcept l₀).tendstoLocallyUniformlyOn.deriv
     (.of_forall fun s => ?_) L.isOpen_compl_lattice_sdiff).unique ?_
@@ -1348,7 +1348,7 @@ lemma deriv_weierstrassPExcept_same
 
 中文:
 引理 deriv_weierstrassPExcept_same
-  条件: (l : Complex)
+  条件: (l : 复形)
   结论: deriv ℘[L - l] l = ℘'[L - l] l
   证明: L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept l (x := l) (by simp)
 -/
@@ -1372,7 +1372,7 @@ lemma derivWeierstrassPExcept_neg
 
 中文:
 引理 derivWeierstrassPExcept_neg
-  条件: (l₀ : Complex) (z : Complex)
+  条件: (l₀ : 复形) (z : 复形)
   证明: by
   simp only [derivWeierstrassPExcept]
   rw [← (Equiv.neg L.lattice).tsum_eq]
@@ -1429,7 +1429,7 @@ lemma derivWeierstrassPExcept_add_coe
 
 中文:
 引理 derivWeierstrassPExcept_add_coe
-  条件: (l₀ : Complex) (z : Complex) (l : L.lattice)
+  条件: (l₀ : 复形) (z : 复形) (l : L.lattice)
   证明: by
   simp only [derivWeierstrassPExcept]
   rw [← (Equiv.addRight l).tsum_eq]
@@ -1505,7 +1505,7 @@ lemma weierstrassP_add_coe_aux
 
 中文:
 引理 weierstrassP_add_coe_aux
-  条件: (z : Complex) (l : L.lattice) (hl : l.1 / 2 ∉ L.lattice)
+  条件: (z : 复形) (l : L.lattice) (hl : l.1 / 2 ∉ L.lattice)
   证明: by
   have hl0 : l != 0 := by rintro rfl; simp at hl
   by_cases hz : z in L.lattice
@@ -1548,7 +1548,7 @@ lemma weierstrassP_add_coe
 
 中文:
 引理 weierstrassP_add_coe
-  条件: (z : Complex) (l : L.lattice)
+  条件: (z : 复形) (l : L.lattice)
   结论: ℘[L] (z + l) = ℘[L] z
   证明: by
   let G : AddSubgroup Complex :=
@@ -1590,7 +1590,7 @@ lemma periodic_weierstrassP
 中文:
 引理 periodic_weierstrassP
   条件: (l : L.lattice)
-  结论: ℘[L].Periodic l
+  结论: ℘[L].周期 l
   证明: (L.weierstrassP_add_coe · l)
 
 @[simp]
@@ -1662,7 +1662,7 @@ lemma weierstrassP_sub_coe
 
 中文:
 引理 weierstrassP_sub_coe
-  条件: (z : Complex) (l : L.lattice)
+  条件: (z : 复形) (l : L.lattice)
   结论: ℘[L] (z - l) = ℘[L] z
   证明: by
   rw [← L.weierstrassP_add_coe _ l]; rw [sub_add_cancel]
@@ -1688,7 +1688,7 @@ definition derivWeierstrassP
 
 中文:
 定义 derivWeierstrassP
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: - ∑' l : L.lattice, 2 / (z - l) ^ 3
 
 @[inherit_doc weierstrassP] scoped notation3 "℘'[" L "]" => derivWeierstrassP L
@@ -1714,7 +1714,7 @@ lemma derivWeierstrassPExcept_sub
 
 中文:
 引理 derivWeierstrassPExcept_sub
-  条件: (l₀ : L.lattice) (z : Complex)
+  条件: (l₀ : L.lattice) (z : 复形)
   证明: by
   trans ℘'[L - l₀] z + ∑' i : L.lattice, if i.1 = l₀.1 then (- 2 / (z - l₀) ^ 3) else 0
   · simp [sub_eq_add_neg, neg_div]
@@ -1744,7 +1744,7 @@ lemma derivWeierstrassPExcept_def
 
 中文:
 引理 derivWeierstrassPExcept_def
-  条件: (l₀ : L.lattice) (z : Complex)
+  条件: (l₀ : L.lattice) (z : 复形)
   证明: by
   rw [← L.derivWeierstrassPExcept_sub l₀]; rw [sub_add_cancel]
 
@@ -1769,7 +1769,7 @@ lemma derivWeierstrassPExcept_of_notMem
 
 中文:
 引理 derivWeierstrassPExcept_of_notMem
-  条件: (l₀ : Complex) (hl : l₀ ∉ L.lattice)
+  条件: (l₀ : 复形) (hl : l₀ ∉ L.lattice)
   证明: by
   delta derivWeierstrassPExcept derivWeierstrassP
   simp_rw [← tsum_neg]
@@ -1822,7 +1822,7 @@ lemma hasSum_derivWeierstrassP
 
 中文:
 引理 hasSum_derivWeierstrassP
-  条件: (z : Complex)
+  条件: (z : 复形)
   证明: L.hasSumLocallyUniformly_derivWeierstrassP.tendstoLocallyUniformlyOn.tendsto_at (Set.mem_univ z)
 
 Depends on / 依赖: L.hasSumLocallyUniformly_derivWeierstrassP.tendstoLocallyUniformlyOn.tendsto_at, Set.mem_univ, hasSumLocallyUniformly_derivWeierstrassP, mem_univ, tendstoLocallyUniformlyOn, tendsto_at
@@ -1880,7 +1880,7 @@ lemma derivWeierstrassP_neg
 
 中文:
 引理 derivWeierstrassP_neg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ℘'[L] (-z) = - ℘'[L] z
   证明: by
   simp only [derivWeierstrassP]
@@ -1916,7 +1916,7 @@ lemma derivWeierstrassP_add_coe
 
 中文:
 引理 derivWeierstrassP_add_coe
-  条件: (z : Complex) (l : L.lattice)
+  条件: (z : 复形) (l : L.lattice)
   证明: by
   simp only [derivWeierstrassP]
   rw [← (Equiv.addRight l).tsum_eq]
@@ -1944,7 +1944,7 @@ lemma periodic_derivWeierstrassP
 中文:
 引理 periodic_derivWeierstrassP
   条件: (l : L.lattice)
-  结论: ℘'[L].Periodic l
+  结论: ℘'[L].周期 l
   证明: (L.derivWeierstrassP_add_coe · l)
 
 @[simp]
@@ -2018,7 +2018,7 @@ lemma derivWeierstrassP_sub_coe
 
 中文:
 引理 derivWeierstrassP_sub_coe
-  条件: (z : Complex) (l : L.lattice)
+  条件: (z : 复形) (l : L.lattice)
   证明: by
   rw [← L.derivWeierstrassP_add_coe _ l]; rw [sub_add_cancel]
 
@@ -2076,7 +2076,7 @@ definition sumInvPow
 
 中文:
 定义 sumInvPow
-  签名: (x : Complex) (r : 自然数)
+  签名: (x : 复形) (r : 自然数)
   定义体: ∑' l : L.lattice, ((l - x) ^ r)⁻¹
 
 Depends on / 依赖: L.lattice, lattice
@@ -2096,7 +2096,7 @@ lemma hasSum_sumInvPow
 
 中文:
 引理 hasSum_sumInvPow
-  条件: (x : Complex) {r : 自然数} (hr : 2 < r)
+  条件: (x : 复形) {r : 自然数} (hr : 2 < r)
   证明: by
   refine Summable.hasSum (.of_norm_bounded (ZLattice.summable_norm_sub_zpow _
     (-r) (by simpa) x) fun l => ?_)
@@ -2120,7 +2120,7 @@ definition weierstrassPExceptSummand
 
 中文:
 定义 weierstrassPExceptSummand
-  签名: (l₀ x : Complex) (i : 自然数) (l : L.lattice)
+  签名: (l₀ x : 复形) (i : 自然数) (l : L.lattice)
   定义体: if l.1 = l₀ then 0 else ((i + 1) * (l.1 - x) ^ (- ↑(i + 2) : Int) - i.casesOn (l.1 ^ (-2 : Int)) 0)
 
 Depends on / 依赖: casesOn, i.casesOn
@@ -2140,7 +2140,7 @@ definition weierstrassPExceptSeries
 
 中文:
 定义 weierstrassPExceptSeries
-  签名: (l₀ x : Complex)
+  签名: (l₀ x : 复形)
   定义体: letI := Classical.propDecidable
   .ofScalars _ fun i => if i = 0 then (℘[L - l₀] x) else (i + 1) *
     (L.sumInvPow x (i + 2) - if l₀ in L.lattice then ((l₀ - x) ^ (i + 2))⁻¹ else 0)
@@ -2169,7 +2169,7 @@ lemma coeff_weierstrassPExceptSeries
 
 中文:
 引理 coeff_weierstrassPExceptSeries
-  条件: (l₀ x : Complex) (i : 自然数)
+  条件: (l₀ x : 复形) (i : 自然数)
   证明: by
   delta weierstrassPExceptSummand weierstrassPExceptSeries
   cases i with
@@ -2222,7 +2222,7 @@ lemma summable_weierstrassPExceptSummand
 
 中文:
 引理 summable_weierstrassPExceptSummand
-  结论: (l₀ z x : Complex)
+  结论: (l₀ z x : 复形)
   证明: by
   -- We first find a `κ > 1`,
   -- such that the ball centered at `x` with radius `κ * ‖z - x‖` does not touch `L`.
@@ -2296,7 +2296,7 @@ lemma weierstrassPExcept_eq_tsum
 
 中文:
 引理 weierstrassPExcept_eq_tsum
-  结论: (l₀ z x : Complex)
+  结论: (l₀ z x : 复形)
   证明: by
   trans ∑' (l : L.lattice) (i : Nat), if l.1 = l₀ then 0 else
       ((i + 1) * (l.1 - x) ^ (- ↑(i + 2) : Int) - i.casesOn (l.1 ^ (-2 : Int)) 0) * (z - x) ^ i
@@ -2339,7 +2339,7 @@ lemma weierstrassPExceptSeries_hasSum
 
 中文:
 引理 weierstrassPExceptSeries_hasSum
-  结论: (l₀ z x : Complex)
+  结论: (l₀ z x : 复形)
   证明: by
   refine (Summable.hasSum_iff ?_).mpr (L.weierstrassPExcept_eq_tsum l₀ z x hx).symm
   simp_rw [coeff_weierstrassPExceptSeries, ← tsum_mul_right]
@@ -2374,7 +2374,7 @@ lemma hasFPowerSeriesOnBall_weierstrassPExcept
 
 中文:
 引理 hasFPowerSeriesOnBall_weierstrassPExcept
-  结论: (l₀ x : Complex) (r : NN实数) (hr0 : 0 < r)
+  结论: (l₀ x : 复形) (r : 非负实数) (hr0 : 0 < r)
   证明: by
   constructor
   · apply FormalMultilinearSeries.le_radius_of_tendsto (l := 0)
@@ -2429,7 +2429,7 @@ lemma hasFPowerSeriesAt_weierstrassPExcept
 
 中文:
 引理 hasFPowerSeriesAt_weierstrassPExcept
-  条件: (l : Complex)
+  条件: (l : 复形)
   证明: by
   obtain ⟨r, h₁, h₂⟩ := Metric.nhds_basis_closedBall.mem_iff.mp
     (L.compl_lattice_sdiff_singleton_mem_nhds l)
@@ -2459,8 +2459,8 @@ lemma analyticOnNhd_weierstrassPExcept
 
 中文:
 引理 analyticOnNhd_weierstrassPExcept
-  条件: (l₀ : Complex)
-  结论: AnalyticOnNhd Complex ℘[L - l₀] (L.lattice \ {l₀})ᶜ
+  条件: (l₀ : 复形)
+  结论: AnalyticOnNhd 复形 ℘[L - l₀] (L.lattice \ {l₀})ᶜ
   证明: (L.differentiableOn_weierstrassPExcept l₀).analyticOnNhd L.isOpen_compl_lattice_sdiff
 
 @[fun_prop]
@@ -2482,8 +2482,8 @@ lemma analyticAt_weierstrassPExcept
 
 中文:
 引理 analyticAt_weierstrassPExcept
-  条件: (l₀ : Complex)
-  结论: AnalyticAt Complex ℘[L - l₀] l₀
+  条件: (l₀ : 复形)
+  结论: AnalyticAt 复形 ℘[L - l₀] l₀
   证明: L.analyticOnNhd_weierstrassPExcept _ _ (by simp)
 
 Depends on / 依赖: L.analyticOnNhd_weierstrassPExcept, analyticOnNhd_weierstrassPExcept
@@ -2506,7 +2506,7 @@ lemma iteratedDeriv_weierstrassPExcept_self
 
 中文:
 引理 iteratedDeriv_weierstrassPExcept_self
-  条件: (l : Complex) {n : 自然数}
+  条件: (l : 复形) {n : 自然数}
   证明: by
   rw [← div_mul_cancel₀ (a := iteratedDeriv _ _ _) (b := ↑n !) (by simp)]; rw [← eq_div_iff_mul_eq (by simp)]
   trans if n = 0 then ℘[L - l] l else (n + 1) * L.sumInvPow l (n + 2)
@@ -2540,7 +2540,7 @@ definition derivWeierstrassPExceptSeries
 
 中文:
 定义 derivWeierstrassPExceptSeries
-  签名: (l₀ x : Complex)
+  签名: (l₀ x : 复形)
   定义体: letI := Classical.propDecidable
   .ofScalars _ fun i => (i + 1) * (i + 2) *
     (L.sumInvPow x (i + 3) - if l₀ in L.lattice then ((l₀ - x) ^ (i + 3))⁻¹ else 0)
@@ -2568,7 +2568,7 @@ lemma hasFPowerSeriesOnBall_derivWeierstrassPExcept
 
 中文:
 引理 hasFPowerSeriesOnBall_derivWeierstrassPExcept
-  结论: (l₀ x : Complex) (r : NN实数) (hr0 : 0 < r)
+  结论: (l₀ x : 复形) (r : 非负实数) (hr0 : 0 < r)
   证明: by
   refine .congr ?_
     ((L.eqOn_deriv_weierstrassPExcept_derivWeierstrassPExcept l₀).mono (.trans ?_ hr))
@@ -2605,7 +2605,7 @@ lemma hasFPowerSeriesAt_derivWeierstrassPExcept
 
 中文:
 引理 hasFPowerSeriesAt_derivWeierstrassPExcept
-  条件: (l : Complex)
+  条件: (l : 复形)
   证明: by
   obtain ⟨r, h₁, h₂⟩ := Metric.nhds_basis_closedBall.mem_iff.mp
     (L.compl_lattice_sdiff_singleton_mem_nhds l)
@@ -2634,7 +2634,7 @@ lemma analyticOnNhd_derivWeierstrassPExcept
 
 中文:
 引理 analyticOnNhd_derivWeierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: (L.differentiableOn_derivWeierstrassPExcept l₀).analyticOnNhd L.isOpen_compl_lattice_sdiff
 
 @[fun_prop]
@@ -2656,7 +2656,7 @@ lemma analyticAt_derivWeierstrassPExcept
 
 中文:
 引理 analyticAt_derivWeierstrassPExcept
-  条件: (l₀ : Complex)
+  条件: (l₀ : 复形)
   证明: L.analyticOnNhd_derivWeierstrassPExcept l₀ _ (by simp)
 
 Depends on / 依赖: L.analyticOnNhd_derivWeierstrassPExcept, analyticOnNhd_derivWeierstrassPExcept
@@ -2679,7 +2679,7 @@ lemma iteratedDeriv_derivWeierstrassPExcept_self
 
 中文:
 引理 iteratedDeriv_derivWeierstrassPExcept_self
-  条件: (l : Complex) {n : 自然数}
+  条件: (l : 复形) {n : 自然数}
   证明: by
   have : iteratedDeriv n ℘'[L - l] l / n ! = (↑n + 1) * (↑n + 2) * L.sumInvPow l (n + 3) := by
     simpa using congr($((L.analyticAt_derivWeierstrassPExcept l).hasFPowerSeriesAt
@@ -2708,7 +2708,7 @@ lemma deriv_derivWeierstrassPExcept_self
 
 中文:
 引理 deriv_derivWeierstrassPExcept_self
-  条件: (l : Complex)
+  条件: (l : 复形)
   证明: by
   simpa using! L.iteratedDeriv_derivWeierstrassPExcept_self l (n := 1)
 
@@ -2728,7 +2728,7 @@ lemma analyticOnNhd_derivWeierstrassP
 
 中文:
 引理 analyticOnNhd_derivWeierstrassP
-  结论: AnalyticOnNhd Complex ℘'[L] L.latticeᶜ
+  结论: AnalyticOnNhd 复形 ℘'[L] L.latticeᶜ
   证明: L.differentiableOn_derivWeierstrassP.analyticOnNhd L.isClosed_lattice.isOpen_compl
 
 Depends on / 依赖: L.differentiableOn_derivWeierstrassP.analyticOnNhd, L.isClosed_lattice.isOpen_compl, analyticOnNhd, differentiableOn_derivWeierstrassP, isClosed_lattice, isOpen_compl
@@ -2750,7 +2750,7 @@ definition weierstrassPSummand
 
 中文:
 定义 weierstrassPSummand
-  签名: (x : Complex) (i : 自然数) (l : L.lattice)
+  签名: (x : 复形) (i : 自然数) (l : L.lattice)
   定义体: ((i + 1) * (l.1 - x) ^ (- ↑(i + 2) : Int) - i.casesOn (l.1 ^ (-2 : Int)) 0)
 
 Depends on / 依赖: casesOn, i.casesOn
@@ -2768,7 +2768,7 @@ definition weierstrassPSeries
 
 中文:
 定义 weierstrassPSeries
-  签名: (x : Complex)
+  签名: (x : 复形)
   定义体: .ofScalars _ fun i => if i = 0 then (℘[L] x) else (i + 1) * L.sumInvPow x (i + 2)
 
 Depends on / 依赖: L.sumInvPow, ofScalars, sumInvPow
@@ -2790,7 +2790,7 @@ lemma weierstrassPExceptSeries_of_notMem
 
 中文:
 引理 weierstrassPExceptSeries_of_notMem
-  条件: (l₀ : Complex) (hl₀ : l₀ ∉ L.lattice)
+  条件: (l₀ : 复形) (hl₀ : l₀ ∉ L.lattice)
   证明: by
   delta weierstrassPSeries weierstrassPExceptSeries
   congr! with z i f
@@ -2817,7 +2817,7 @@ lemma weierstrassPExceptSummand_of_notMem
 
 中文:
 引理 weierstrassPExceptSummand_of_notMem
-  条件: (l₀ : Complex) (hl₀ : l₀ ∉ L.lattice)
+  条件: (l₀ : 复形) (hl₀ : l₀ ∉ L.lattice)
   证明: by
   grind [weierstrassPSummand, weierstrassPExceptSummand]
 
@@ -2840,7 +2840,7 @@ lemma coeff_weierstrassPSeries
 
 中文:
 引理 coeff_weierstrassPSeries
-  条件: (x : Complex) (i : 自然数)
+  条件: (x : 复形) (i : 自然数)
   证明: by
   simp_rw [← L.weierstrassPExceptSeries_of_notMem _ L.ω₁_div_two_notMem_lattice,
     L.coeff_weierstrassPExceptSeries,
@@ -2866,7 +2866,7 @@ lemma summable_weierstrassPSummand
 
 中文:
 引理 summable_weierstrassPSummand
-  结论: (z x : Complex)
+  结论: (z x : 复形)
   证明: by
   simp_rw [← L.weierstrassPExceptSummand_of_notMem _ L.ω₁_div_two_notMem_lattice]
   refine L.summable_weierstrassPExceptSummand _ z x fun l hl => hx l
@@ -2892,7 +2892,7 @@ lemma weierstrassPSeries_hasSum
 
 中文:
 引理 weierstrassPSeries_hasSum
-  条件: (z x : Complex) (hx : 对任意 l : L.lattice, ‖z - x‖ < ‖l - x‖)
+  条件: (z x : 复形) (hx : 对任意 l : L.lattice, ‖z - x‖ < ‖l - x‖)
   证明: by
   simp_rw [← L.weierstrassPExceptSeries_of_notMem _ L.ω₁_div_two_notMem_lattice,
     ← L.weierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice]
@@ -2920,7 +2920,7 @@ lemma hasFPowerSeriesOnBall_weierstrassP
 
 中文:
 引理 hasFPowerSeriesOnBall_weierstrassP
-  结论: (x : Complex) (r : NN实数) (hr0 : 0 < r)
+  结论: (x : 复形) (r : 非负实数) (hr0 : 0 < r)
   证明: by
   simp_rw [← L.weierstrassPExceptSeries_of_notMem _ L.ω₁_div_two_notMem_lattice,
     ← L.weierstrassPExcept_of_notMem _ L.ω₁_div_two_notMem_lattice]
@@ -2947,7 +2947,7 @@ lemma analyticOnNhd_weierstrassP
 
 中文:
 引理 analyticOnNhd_weierstrassP
-  结论: AnalyticOnNhd Complex ℘[L] L.latticeᶜ
+  结论: AnalyticOnNhd 复形 ℘[L] L.latticeᶜ
   证明: L.differentiableOn_weierstrassP.analyticOnNhd L.isClosed_lattice.isOpen_compl
 
 Depends on / 依赖: L.differentiableOn_weierstrassP.analyticOnNhd, L.isClosed_lattice.isOpen_compl, analyticOnNhd, differentiableOn_weierstrassP, isClosed_lattice, isOpen_compl
@@ -2968,7 +2968,7 @@ lemma ite_eq_one_sub_sq_mul_weierstrassP
 
 中文:
 引理 ite_eq_one_sub_sq_mul_weierstrassP
-  条件: (l₀ : Complex) (hl₀ : l₀ in L.lattice) (z : Complex)
+  条件: (l₀ : 复形) (hl₀ : l₀ in L.lattice) (z : 复形)
   证明: by
   grind [L.weierstrassPExcept_add ⟨_, hl₀⟩]
 
@@ -3000,7 +3000,7 @@ lemma meromorphic_weierstrassP
 
 中文:
 引理 meromorphic_weierstrassP
-  结论: Meromorphic ℘[L]
+  结论: 亚纯 ℘[L]
   证明: by
   intro x
   by_cases hx : x in L.lattice
@@ -3034,7 +3034,7 @@ lemma meromorphic_derivWeierstrassP
 
 中文:
 引理 meromorphic_derivWeierstrassP
-  结论: Meromorphic ℘'[L]
+  结论: 亚纯 ℘'[L]
   证明: by
   rw [← deriv_weierstrassP]
   fun_prop
@@ -3060,7 +3060,7 @@ lemma order_weierstrassP
 
 中文:
 引理 order_weierstrassP
-  条件: (l₀ : Complex) (h : l₀ in L.lattice)
+  条件: (l₀ : 复形) (h : l₀ in L.lattice)
   证明: by
   trans ↑(-2 : Int)
   · rw [meromorphicOrderAt_eq_int_iff (L.meromorphic_weierstrassP l₀)]
@@ -3171,7 +3171,7 @@ definition g₂
 
 中文:
 定义 g₂
-  签名: : Complex
+  签名: : 复形
   定义体: 60 * L.G 4
 -/
 def g₂ : Complex := 60 * L.G 4
@@ -3186,7 +3186,7 @@ definition g₃
 
 中文:
 定义 g₃
-  签名: : Complex
+  签名: : 复形
   定义体: 140 * L.G 6
 -/
 def g₃ : Complex := 140 * L.G 6
@@ -3204,7 +3204,7 @@ definition relation
 
 中文:
 定义 relation
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: letI := Classical.propDecidable
   if z in L.lattice then 0 else ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.g₃
 
@@ -3230,7 +3230,7 @@ lemma meromorphic_relation
 
 中文:
 引理 meromorphic_relation
-  结论: Meromorphic L.relation
+  结论: 亚纯 L.relation
   证明: by
   have : Meromorphic fun z => ℘'[L] z ^ 2 - 4 * ℘[L] z ^ 3 + L.g₂ * ℘[L] z + L.g₃ := by fun_prop
   refine fun z => (this _).congr ?_
@@ -3376,7 +3376,7 @@ lemma analyticAt_relation_zero
 
 中文:
 引理 analyticAt_relation_zero
-  结论: AnalyticAt Complex L.relation 0
+  结论: AnalyticAt 复形 L.relation 0
   证明: by
   refine .of_meromorphicOrderAt_pos (one_pos.trans_le ?_) (by simp [relation])
   suffices 7 <= meromorphicOrderAt (L.relation * id ^ 6) 0 by
@@ -3424,7 +3424,7 @@ lemma relation_add_coe
 
 中文:
 引理 relation_add_coe
-  条件: (x : Complex) (l : L.lattice)
+  条件: (x : 复形) (l : L.lattice)
   证明: by
   simp only [relation, derivWeierstrassP_add_coe, weierstrassP_add_coe]
   congr 1
@@ -3450,7 +3450,7 @@ lemma relation_sub_coe
 
 中文:
 引理 relation_sub_coe
-  条件: (x : Complex) (l : L.lattice)
+  条件: (x : 复形) (l : L.lattice)
   证明: by
   rw [← L.relation_add_coe _ l]; rw [sub_add_cancel]
 
@@ -3479,8 +3479,8 @@ lemma analyticAt_relation
 
 中文:
 引理 analyticAt_relation
-  条件: (x : Complex)
-  结论: AnalyticAt Complex L.relation x
+  条件: (x : 复形)
+  结论: AnalyticAt 复形 L.relation x
   证明: by
   by_cases hx : x in L.lattice
   · lift x to L.lattice using hx
@@ -3550,7 +3550,7 @@ lemma derivWeierstrassP_sq
 
 中文:
 引理 derivWeierstrassP_sq
-  条件: (z : Complex) (hz : z ∉ L.lattice)
+  条件: (z : 复形) (hz : z ∉ L.lattice)
   证明: by
   simpa [sub_eq_zero, relation, hz, sub_add] using congr($L.relation_eq_zero z)
 

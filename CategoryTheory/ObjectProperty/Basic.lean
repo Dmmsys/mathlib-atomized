@@ -67,7 +67,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: {P Q : Object命题erty C}
+  条件: {P Q : ObjectProperty C}
   证明: Iff.rfl
 
 @[push]
@@ -88,8 +88,8 @@ lemma not_le_iff_exists
   simp [le_def]
 
 中文:
-引理 not_le_iff_exists
-  条件: {P Q : Object命题erty C}
+引理 not_le_iff_存在
+  条件: {P Q : ObjectProperty C}
   证明: by
   simp [le_def]
 
@@ -112,7 +112,7 @@ class Is
 
 中文:
 类 Is
-  参数: (P : Object命题erty C) (X : C)
+  参数: (P : ObjectProperty C) (X : C)
   公理与运算 (1 个):
     - prop : P X
 -/
@@ -130,7 +130,7 @@ lemma prop_of_is
 
 中文:
 引理 prop_of_is
-  条件: (P : Object命题erty C) (X : C) [P.Is X]
+  条件: (P : ObjectProperty C) (X : C) [P.Is X]
   结论: P X
   证明: by rwa [← P.is_iff]
 
@@ -149,7 +149,7 @@ lemma is_of_prop
 
 中文:
 引理 is_of_prop
-  条件: (P : Object命题erty C) {X : C} (hX : P X)
+  条件: (P : ObjectProperty C) {X : C} (hX : P X)
   结论: P.Is X
   证明: by rwa [P.is_iff]
 
@@ -169,8 +169,8 @@ class Nonempty
     - exists_prop : exists X, P X
 
 中文:
-类 Nonempty
-  参数: (P : Object命题erty C)
+类 非空
+  参数: (P : ObjectProperty C)
   公理与运算 (1 个):
     - exists_prop : 存在 X, P X
 -/
@@ -187,8 +187,8 @@ lemma exists_prop_of_nonempty
   proof: Nonempty.exists_prop
 
 中文:
-引理 exists_prop_of_nonempty
-  条件: (P : Object命题erty C) [P.Nonempty]
+引理 存在_prop_of_nonempty
+  条件: (P : ObjectProperty C) [P.非空]
   结论: 存在 X, P X
   证明: Nonempty.exists_prop
 
@@ -208,8 +208,8 @@ lemma nonempty_of_prop
 
 中文:
 引理 nonempty_of_prop
-  条件: {P : Object命题erty C} {X : C} (h : P X)
-  结论: P.Nonempty
+  条件: {P : ObjectProperty C} {X : C} (h : P X)
+  结论: P.非空
   证明: ⟨X, h⟩
 -/
 lemma nonempty_of_prop {P : ObjectProperty C} {X : C} (h : P X) : P.Nonempty := ⟨X, h⟩
@@ -224,7 +224,7 @@ definition arbitrary
 
 中文:
 定义 arbitrary
-  签名: (P : Object命题erty C) [P.Nonempty]
+  签名: (P : ObjectProperty C) [P.非空]
   定义体: (exists_prop_of_nonempty P).choose
 
 Depends on / 依赖: exists_prop_of_nonempty
@@ -243,7 +243,7 @@ lemma prop_arbitrary
 
 中文:
 引理 prop_arbitrary
-  条件: (P : Object命题erty C) [P.Nonempty]
+  条件: (P : ObjectProperty C) [P.非空]
   结论: P P.arbitrary
   证明: (exists_prop_of_nonempty P).choose_spec
 
@@ -262,9 +262,9 @@ lemma Nonempty.mono
   proof: nonempty_of_prop (hPQ _ P.prop_arbitrary)
 
 中文:
-引理 Nonempty.mono
-  条件: {P Q : Object命题erty C} [P.Nonempty] (hPQ : P <= Q)
-  结论: Q.Nonempty
+引理 非空.mono
+  条件: {P Q : ObjectProperty C} [P.非空] (hPQ : P <= Q)
+  结论: Q.非空
   证明: nonempty_of_prop (hPQ _ P.prop_arbitrary)
 
 Depends on / 依赖: P.prop_arbitrary, nonempty_of_prop, prop_arbitrary
@@ -283,8 +283,8 @@ lemma nonempty_of_lt
 
 中文:
 引理 nonempty_of_lt
-  条件: {P Q : Object命题erty C} (h : P < Q)
-  结论: Q.Nonempty
+  条件: {P Q : ObjectProperty C} (h : P < Q)
+  结论: Q.非空
   证明: nonempty_of_prop (not_le_iff_exists.mp (not_le_of_gt h)).choose_spec.1
 
 Depends on / 依赖: choose_spec, nonempty_of_prop, not_le_iff_exists, not_le_iff_exists.mp, not_le_of_gt
@@ -307,7 +307,7 @@ inductive ofObj
 
 中文:
 归纳类型 ofObj
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (1 个):
     - mk: (i : ι) : ofObj (X i)
 -/
@@ -374,7 +374,7 @@ lemma ofObj_le_iff
 
 中文:
 引理 ofObj_le_iff
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: ⟨fun h i => h _ (by simp), fun h => by rintro _ ⟨i⟩; exact h i⟩
 -/
 lemma ofObj_le_iff (P : ObjectProperty C) :
@@ -390,8 +390,8 @@ instance [Nonempty
   body: nonempty_of_prop (ofObj_apply X (Classical.arbitrary ι))
 
 中文:
-实例 [Nonempty
-  签名: ι] : (ofObj X).Nonempty
+实例 [非空
+  签名: ι] : (ofObj X).非空
   定义体: nonempty_of_prop (ofObj_apply X (Classical.arbitrary ι))
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, nonempty_of_prop, ofObj_apply
@@ -415,7 +415,7 @@ lemma ofObj_subtypeVal
 
 中文:
 引理 ofObj_subtypeVal
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   ext X
   exact ⟨by rintro ⟨X, hX⟩; exact hX,
@@ -486,7 +486,7 @@ lemma singleton_le_iff
 
 中文:
 引理 singleton_le_iff
-  条件: {X : C} {P : Object命题erty C}
+  条件: {X : C} {P : ObjectProperty C}
   证明: by
   simp [ofObj_le_iff]
 
@@ -566,7 +566,7 @@ definition inverseImage
 
 中文:
 定义 inverseImage
-  签名: (P : Object命题erty D) (F : C ⥤ D)
+  签名: (P : ObjectProperty D) (F : C ⥤ D)
   定义体: fun X => P (F.obj X)
 
 @[simp]
@@ -587,7 +587,7 @@ lemma prop_inverseImage_iff
 
 中文:
 引理 prop_inverseImage_iff
-  条件: (P : Object命题erty D) (F : C ⥤ D) (X : C)
+  条件: (P : ObjectProperty D) (F : C ⥤ D) (X : C)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl, isGE_truncGT_obj, t.isGE_truncGT_obj
@@ -605,7 +605,7 @@ definition map
 
 中文:
 定义 map
-  签名: (P : Object命题erty C) (F : C ⥤ D)
+  签名: (P : ObjectProperty C) (F : C ⥤ D)
   定义体: fun Y => exists (X : C), P X ∧ Nonempty (F.obj X ≅ Y)
 
 Depends on / 依赖: F.obj, Nonempty, isGE_truncGT_obj, t.isGE_truncGT_obj
@@ -623,7 +623,7 @@ lemma prop_map_iff
 
 中文:
 引理 prop_map_iff
-  条件: (P : Object命题erty C) (F : C ⥤ D) (Y : D)
+  条件: (P : ObjectProperty C) (F : C ⥤ D) (Y : D)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -641,7 +641,7 @@ lemma prop_map_obj
 
 中文:
 引理 prop_map_obj
-  条件: (P : Object命题erty C) (F : C ⥤ D) {X : C} (hX : P X)
+  条件: (P : ObjectProperty C) (F : C ⥤ D) {X : C} (hX : P X)
   证明: ⟨X, hX, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Iso.refl
@@ -665,7 +665,7 @@ lemma map_monotone
 
 中文:
 引理 map_monotone
-  条件: {P Q : Object命题erty C} (h : P <= Q) (F : C ⥤ D)
+  条件: {P Q : ObjectProperty C} (h : P <= Q) (F : C ⥤ D)
   证明: by
   rintro X ⟨Y, hY, ⟨e⟩⟩
   exact ⟨Y, h _ hY, ⟨e⟩⟩
@@ -685,10 +685,10 @@ inductive strictMap
     - mk: (X : C) (hX : P X) : strictMap P F (F.obj X)
 
 中文:
-归纳类型 strictMap
-  参数: (P : Object命题erty C) (F : C ⥤ D)
+归纳类型 strict映射
+  参数: (P : ObjectProperty C) (F : C ⥤ D)
   构造子 (1 个):
-    - mk: (X : C) (hX : P X) : strictMap P F (F.obj X)
+    - mk: (X : C) (hX : P X) : strict映射 P F (F.obj X)
 -/
 inductive strictMap (P : ObjectProperty C) (F : C ⥤ D) : ObjectProperty D
   | mk (X : C) (hX : P X) : strictMap P F (F.obj X)
@@ -703,7 +703,7 @@ lemma strictMap_iff
 
 中文:
 引理 strictMap_iff
-  条件: (P : Object命题erty C) (F : C ⥤ D) (Y : D)
+  条件: (P : ObjectProperty C) (F : C ⥤ D) (Y : D)
   证明: ⟨by rintro ⟨X, hX⟩; exact ⟨X, hX, rfl⟩, by rintro ⟨X, hX, rfl⟩; exact ⟨X, hX⟩⟩
 -/
 lemma strictMap_iff (P : ObjectProperty C) (F : C ⥤ D) (Y : D) :
@@ -720,7 +720,7 @@ lemma strictMap_obj
 
 中文:
 引理 strictMap_obj
-  条件: (P : Object命题erty C) (F : C ⥤ D) {X : C} (hX : P X)
+  条件: (P : ObjectProperty C) (F : C ⥤ D) {X : C} (hX : P X)
   证明: ⟨X, hX⟩
 -/
 lemma strictMap_obj (P : ObjectProperty C) (F : C ⥤ D) {X : C} (hX : P X) :
@@ -742,7 +742,7 @@ lemma strictMap_monotone
 
 中文:
 引理 strictMap_monotone
-  条件: {P Q : Object命题erty C} (h : P <= Q) (F : C ⥤ D)
+  条件: {P Q : ObjectProperty C} (h : P <= Q) (F : C ⥤ D)
   证明: by
   rintro _ ⟨X, hX⟩
   exact ⟨X, h _ hX⟩
@@ -766,7 +766,7 @@ lemma strictMap_le_map
 
 中文:
 引理 strictMap_le_map
-  条件: (P : Object命题erty C) (F : C ⥤ D)
+  条件: (P : ObjectProperty C) (F : C ⥤ D)
   证明: by
   rintro _ ⟨X, hX⟩
   exact ⟨X, hX, ⟨Iso.refl _⟩⟩

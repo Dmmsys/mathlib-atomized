@@ -68,9 +68,9 @@ structure AddCon
     - add' : forall {w x y z}, r w x -> r y z -> r (w + y) (x + z)
 
 中文:
-结构 AddCon
-  参数: [Add M]
-  继承: Setoid M
+结构 加法Con
+  参数: [加法 M]
+  继承: 集合等价关系 M
   公理与运算 (1 个):
     - add' : 对任意 {w x y z}, r w x -> r y z -> r (w + y) (x + z)
 -/
@@ -93,8 +93,8 @@ structure Con
 
 中文:
 结构 Con
-  参数: [Mul M]
-  继承: Setoid M
+  参数: [乘法 M]
+  继承: 集合等价关系 M
   公理与运算 (1 个):
     - mul' : 对任意 {w x y z}, r w x -> r y z -> r (w * y) (x * z)
 -/
@@ -124,14 +124,14 @@ inductive AddConGen.Rel
     - add: forall {w x y z}, AddConGen.Rel r w x -> AddConGen.Rel r y z -> AddConGen.Rel r (w + y) (x + z)
 
 中文:
-归纳类型 AddConGen.Rel
-  参数: [Add M] (r : M -> M -> 命题)
+归纳类型 AddConGen.关系
+  参数: [加法 M] (r : M -> M -> 命题)
   构造子 (5 个):
-    - of: 对任意 x y, r x y -> AddConGen.Rel r x y
-    - refl: 对任意 x, AddConGen.Rel r x x
-    - symm: 对任意 {x y}, AddConGen.Rel r x y -> AddConGen.Rel r y x
-    - trans: 对任意 {x y z}, AddConGen.Rel r x y -> AddConGen.Rel r y z -> AddConGen.Rel r x z
-    - add: 对任意 {w x y z}, AddConGen.Rel r w x -> AddConGen.Rel r y z -> AddConGen.Rel r (w + y) (x + z)
+    - of: 对任意 x y, r x y -> AddConGen.关系 r x y
+    - refl: 对任意 x, AddConGen.关系 r x x
+    - symm: 对任意 {x y}, AddConGen.关系 r x y -> AddConGen.关系 r y x
+    - trans: 对任意 {x y z}, AddConGen.关系 r x y -> AddConGen.关系 r y z -> AddConGen.关系 r x z
+    - add: 对任意 {w x y z}, AddConGen.关系 r w x -> AddConGen.关系 r y z -> AddConGen.关系 r (w + y) (x + z)
 -/
 inductive AddConGen.Rel [Add M] (r : M -> M -> Prop) : M -> M -> Prop
   | of : forall x y, r x y -> AddConGen.Rel r x y
@@ -157,14 +157,14 @@ inductive ConGen.Rel
     - mul: forall {w x y z}, ConGen.Rel r w x -> ConGen.Rel r y z -> ConGen.Rel r (w * y) (x * z)
 
 中文:
-归纳类型 ConGen.Rel
-  参数: [Mul M] (r : M -> M -> 命题)
+归纳类型 ConGen.关系
+  参数: [乘法 M] (r : M -> M -> 命题)
   构造子 (5 个):
-    - of: 对任意 x y, r x y -> ConGen.Rel r x y
-    - refl: 对任意 x, ConGen.Rel r x x
-    - symm: 对任意 {x y}, ConGen.Rel r x y -> ConGen.Rel r y x
-    - trans: 对任意 {x y z}, ConGen.Rel r x y -> ConGen.Rel r y z -> ConGen.Rel r x z
-    - mul: 对任意 {w x y z}, ConGen.Rel r w x -> ConGen.Rel r y z -> ConGen.Rel r (w * y) (x * z)
+    - of: 对任意 x y, r x y -> ConGen.关系 r x y
+    - refl: 对任意 x, ConGen.关系 r x x
+    - symm: 对任意 {x y}, ConGen.关系 r x y -> ConGen.关系 r y x
+    - trans: 对任意 {x y z}, ConGen.关系 r x y -> ConGen.关系 r y z -> ConGen.关系 r x z
+    - mul: 对任意 {w x y z}, ConGen.关系 r w x -> ConGen.关系 r y z -> ConGen.关系 r (w * y) (x * z)
 -/
 inductive ConGen.Rel [Mul M] (r : M -> M -> Prop) : M -> M -> Prop
   | of : forall x y, r x y -> ConGen.Rel r x y
@@ -187,7 +187,7 @@ definition conGen
 
 中文:
 定义 conGen
-  签名: [Mul M] (r : M -> M -> 命题)
+  签名: [乘法 M] (r : M -> M -> 命题)
   定义体: ⟨⟨ConGen.Rel r, ⟨ConGen.Rel.refl, ConGen.Rel.symm, ConGen.Rel.trans⟩⟩, ConGen.Rel.mul⟩
 
 Depends on / 依赖: ConGen, ConGen.Rel, ConGen.Rel.mul, ConGen.Rel.refl, ConGen.Rel.symm, ConGen.Rel.trans
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Con M)
+  签名: 可居 (Con M)
   定义体: ⟨conGen emptyRelation⟩
 
 Depends on / 依赖: conGen, emptyRelation
@@ -230,7 +230,7 @@ lemma toSetoid_injective
 
 中文:
 引理 toSetoid_injective
-  结论: Injective (toSetoid (M := M))
+  结论: 单射 (toSetoid (M := M))
   证明: fun c d => by cases c; congr!
 -/
 @[to_additive] lemma toSetoid_injective : Injective (toSetoid (M := M)) :=
@@ -270,7 +270,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Con M) M (M -> 命题)
+  签名: 函数状 (Con M) M (M -> 命题)
   定义体: c.r
   coe_injective x y h := by
     rcases x with ⟨⟨x, _⟩, _⟩
@@ -400,7 +400,7 @@ theorem rel_mk
 
 中文:
 定理 rel_mk
-  条件: {s : Setoid M} {h a b}
+  条件: {s : 集合等价关系 M} {h a b}
   结论: Con.mk s h a b ↔ r a b
   证明: Iff.rfl
 
@@ -510,7 +510,7 @@ definition Quotient
   body: Quotient c.toSetoid
 
 中文:
-定义 Quotient
+定义 商
   定义体: Quotient c.toSetoid
 -/
 protected def Quotient :=
@@ -531,7 +531,7 @@ definition toQuotient
 
 中文:
 定义 toQuotient
-  签名: : M -> c.Quotient
+  签名: : M -> c.商
   定义体: Quotient.mk''
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -568,8 +568,8 @@ theorem quot_mk_eq_coe
 
 中文:
 定理 quot_mk_eq_coe
-  条件: {M : 类型} [Mul M] (c : Con M) (x : M)
-  结论: Quot.mk c x = (x : c.Quotient)
+  条件: {M : 类型} [乘法 M] (c : Con M) (x : M)
+  结论: 商.mk c x = (x : c.商)
   证明: rfl
 -/
 theorem quot_mk_eq_coe {M : Type*} [Mul M] (c : Con M) (x : M) : Quot.mk c x = (x : c.Quotient) :=
@@ -590,7 +590,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: {β} {c : Con M} (q : c.Quotient) (f : M -> β) (h : 对任意 a b, c a b -> f a = f b)
+  签名: {β} {c : Con M} (q : c.商) (f : M -> β) (h : 对任意 a b, c a b -> f a = f b)
   定义体: Quotient.liftOn' q f h
 -/
 protected def liftOn {β} {c : Con M} (q : c.Quotient) (f : M -> β) (h : forall a b, c a b -> f a = f b) :
@@ -612,7 +612,7 @@ definition liftOn₂
 
 中文:
 定义 liftOn₂
-  签名: {β} {c : Con M} (q r : c.Quotient) (f : M -> M -> β)
+  签名: {β} {c : Con M} (q r : c.商) (f : M -> M -> β)
   定义体: Quotient.liftOn₂' q r f h
 -/
 protected def liftOn₂ {β} {c : Con M} (q r : c.Quotient) (f : M -> M -> β)
@@ -633,7 +633,7 @@ definition hrecOn₂
 
 中文:
 定义 hrecOn₂
-  签名: {cM : Con M} {cN : Con N} {φ : cM.Quotient -> cN.Quotient -> Sort*}
+  签名: {cM : Con M} {cN : Con N} {φ : cM.商 -> cN.商 -> 类型层*}
   定义体: Quotient.hrecOn₂' a b f h
 
 @[to_additive (attr := simp)]
@@ -654,7 +654,7 @@ theorem hrec_on₂_coe
 
 中文:
 定理 hrec_on₂_coe
-  结论: {cM : Con M} {cN : Con N} {φ : cM.Quotient -> cN.Quotient -> Sort*} (a : M)
+  结论: {cM : Con M} {cN : Con N} {φ : cM.商 -> cN.商 -> 类型层*} (a : M)
   证明: rfl
 -/
 theorem hrec_on₂_coe {cM : Con M} {cN : Con N} {φ : cM.Quotient -> cN.Quotient -> Sort*} (a : M)
@@ -680,7 +680,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  条件: {C : c.Quotient -> 命题} (q : c.Quotient) (H : 对任意 x : M, C x)
+  条件: {C : c.商 -> 命题} (q : c.商) (H : 对任意 x : M, C x)
   结论: C q
   证明: Quotient.inductionOn' q H
 -/
@@ -700,7 +700,7 @@ theorem induction_on₂
 
 中文:
 定理 induction_on₂
-  结论: {d : Con N} {C : c.Quotient -> d.Quotient -> 命题} (p : c.Quotient)
+  结论: {d : Con N} {C : c.商 -> d.商 -> 命题} (p : c.商)
   证明: Quotient.inductionOn₂' p q H
 -/
 protected theorem induction_on₂ {d : Con N} {C : c.Quotient -> d.Quotient -> Prop} (p : c.Quotient)
@@ -725,7 +725,7 @@ theorem eq
 中文:
 定理 eq
   条件: {a b : M}
-  结论: (a : c.Quotient) = (b : c.Quotient) ↔ c a b
+  结论: (a : c.商) = (b : c.商) ↔ c a b
   证明: Quotient.eq''
 -/
 protected theorem eq {a b : M} : (a : c.Quotient) = (b : c.Quotient) ↔ c a b :=
@@ -745,7 +745,7 @@ instance hasMul
 
 中文:
 实例 hasMul
-  签名: : Mul c.Quotient
+  签名: : 乘法 c.商
   定义体: ⟨Quotient.map₂ (· * ·) fun _ _ h1 _ _ h2 => c.mul h1 h2⟩
 
 Depends on / 依赖: Quotient, Quotient.map, c.mul
@@ -771,7 +771,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (x y : M)
-  结论: (↑(x * y) : c.Quotient) = ↑x * ↑y
+  结论: (↑(x * y) : c.商) = ↑x * ↑y
   证明: rfl
 -/
 theorem coe_mul (x y : M) : (↑(x * y) : c.Quotient) = ↑x * ↑y :=
@@ -857,7 +857,7 @@ mul' := fun h1 h2 c hc => c.mul (h1 c hc) h2 c hc }
 
 中文:
 实例 :
-  签名: InfSet (Con M)
+  签名: 下确界集 (Con M)
   定义体: { r := fun x y => forall c : Con M, c in S -> c x y
 iseqv := ⟨fun x c _ => c.refl x, fun h c hc => c.symm h c hc,
 fun h1 h2 c hc => c.trans (h1 c hc) h2 c hc⟩
@@ -888,7 +888,7 @@ theorem sInf_toSetoid
 
 中文:
 定理 sInf_toSetoid
-  条件: (S : Set (Con M))
+  条件: (S : 集合 (Con M))
   结论: (sInf S).toSetoid = sInf (toSetoid '' S)
   证明: Setoid.ext fun x y =>
     ⟨fun h r ⟨c, hS, hr⟩ => by rw [← hr]; exact h c hS, fun h c hS => h c.toSetoid ⟨c, hS, rfl⟩⟩
@@ -919,7 +919,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Con M))
+  条件: (S : 集合 (Con M))
   证明: by
   ext
   simp only [sInf_image, iInf_apply, iInf_Prop_eq]
@@ -950,7 +950,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} (f : ι -> Con M)
+  条件: {ι : 类型层*} (f : ι -> Con M)
   结论: ⇑(iInf f) = ⨅ i, ⇑(f i)
   证明: by
   rw [iInf]; rw [coe_sInf]; rw [← Set.range_comp]; rw [sInf_range]; rw [Function.comp_def]
@@ -975,7 +975,7 @@ le_trans _ _ _ h1 h2 _ _ h := h2 h1 h
 
 中文:
 实例 :
-  签名: PartialOrder (Con M)
+  签名: 偏序 (Con M)
   定义体: id
 le_trans _ _ _ h1 h2 _ _ h := h2 h1 h
   le_antisymm _ _ hc hd := ext fun _ _ => ⟨fun h => hc h, fun h => hd h⟩
@@ -1004,7 +1004,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Con M)
+  签名: 完备格 (Con M)
   定义体: completeLatticeOfInf (Con M) fun s =>
       ⟨fun r hr x y h => (h : forall r in s, (r : Con M) x y) r hr, fun r hr x y h r' hr' =>
         hr hr'
@@ -1265,7 +1265,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (conGen (M := M)) DFunLike.coe where
+  签名: : Galois嵌入 (conGen (M := M)) 依赖函数状.coe where
   定义体: conGen r
   gc _ _ := conGen_le
   le_l_u _ := le_conGen
@@ -1290,7 +1290,7 @@ theorem conGen_monotone
 
 中文:
 定理 conGen_monotone
-  结论: Monotone (conGen (M := M))
+  结论: 递增 (conGen (M := M))
   证明: .gc.monotone_l Con.gi M
 -/
 theorem conGen_monotone : Monotone (conGen (M := M)) :=
@@ -1399,7 +1399,7 @@ theorem conGen_sSup
 
 中文:
 定理 conGen_sSup
-  条件: (rs : Set (M -> M -> 命题))
+  条件: (rs : 集合 (M -> M -> 命题))
   结论: conGen (sSup rs) = ⨆ r in rs, conGen r
   证明: .gc.l_sSup Con.gi M
 
@@ -1419,7 +1419,7 @@ theorem conGen_iSup
 
 中文:
 定理 conGen_iSup
-  条件: {ι : Sort*} (r : ι -> M -> M -> 命题)
+  条件: {ι : 类型层*} (r : ι -> M -> M -> 命题)
   结论: conGen (iSup r) = ⨆ i, conGen (r i)
   证明: .gc.l_iSup Con.gi M
 
@@ -1493,7 +1493,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (S : Set (Con M))
+  条件: (S : 集合 (Con M))
   结论: sSup S = conGen (sSup ((⇑) '' S))
   证明: .symm .l_sSup_u_image _ Con.gi M
 
@@ -1520,7 +1520,7 @@ theorem sSup_eq_conGen
 
 中文:
 定理 sSup_eq_conGen
-  条件: (S : Set (Con M))
+  条件: (S : 集合 (Con M))
   证明: by
   rw [sSup_def]
   congr! with x y
@@ -1670,7 +1670,7 @@ theorem comap_injective
 
 中文:
 定理 comap_injective
-  条件: (f : M -> N) (hf : Function.Surjective f) (hf')
+  条件: (f : M -> N) (hf : 函数.满射 f) (hf')
   证明: .of_comp (f := toSetoid) (Setoid.comap_injective f hf).comp toSetoid_injective
 
 Depends on / 依赖: Setoid, Setoid.comap_injective, comap_injective, of_comp, toSetoid, toSetoid_injective
@@ -1697,7 +1697,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One c.Quotient where
+  签名: : 幺 c.商 where
   定义体: Quotient.mk'' (1 : M)
   -- one := ((1 : M) : c.Quotient)
 
@@ -1727,7 +1727,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : M) : c.Quotient) = 1
+  结论: ((1 : M) : c.商) = 1
   证明: rfl
 -/
 theorem coe_one : ((1 : M) : c.Quotient) = 1 :=
@@ -1745,8 +1745,8 @@ instance Quotient.inhabited
   body: ⟨((1 : M) : c.Quotient)⟩
 
 中文:
-实例 Quotient.inhabited
-  签名: : Inhabited c.Quotient
+实例 商.inhabited
+  签名: : 可居 c.商
   定义体: ⟨((1 : M) : c.Quotient)⟩
 
 Depends on / 依赖: Quotient, c.Quotient
@@ -1774,7 +1774,7 @@ one_mul x := Quotient.inductionOn' x fun _ => congr_arg ((↑) : M -> c.Quotient
 
 中文:
 实例 mulOneClass
-  签名: : MulOneClass c.Quotient where
+  签名: : MulOne类 c.商 where
   定义体: Quotient.inductionOn' x fun _ => congr_arg ((↑) : M -> c.Quotient) mul_one _
 one_mul x := Quotient.inductionOn' x fun _ => congr_arg ((↑) : M -> c.Quotient) one_mul _
 
@@ -1799,7 +1799,7 @@ theorem pow
 
 中文:
 定理 pow
-  条件: {M : 类型} [Monoid M] (c : Con M)
+  条件: {M : 类型} [幺半群 M] (c : Con M)
 -/
 protected theorem pow {M : Type*} [Monoid M] (c : Con M) :
     forall (n : Nat) {w x}, c w x -> c (w ^ n) (x ^ n)
@@ -1824,7 +1824,7 @@ instance semigroup
 
 中文:
 实例 semigroup
-  签名: {M : 类型} [Semigroup M] (c : Con M)
+  签名: {M : 类型} [半群 M] (c : Con M)
   定义体: fast_instance%
   Function.Surjective.semigroup _ Quotient.mk''_surjective fun _ _ => rfl
 
@@ -1847,7 +1847,7 @@ instance commMagma
 
 中文:
 实例 commMagma
-  签名: {M : 类型} [CommMagma M] (c : Con M)
+  签名: {M : 类型} [交换原群 M] (c : Con M)
   定义体: fast_instance%
   Function.Surjective.commMagma _ Quotient.mk''_surjective fun _ _ => rfl
 
@@ -1869,7 +1869,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: {M : 类型} [CommSemigroup M] (c : Con M)
+  签名: {M : 类型} [交换半群 M] (c : Con M)
   定义体: Function.Surjective.commSemigroup _ Quotient.mk''_surjective fun _ _ => rfl
 
 Depends on / 依赖: Function, Function.Surjective.commSemigroup, Quotient, Quotient.mk, Surjective, _surjective, commSemigroup
@@ -1891,7 +1891,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: {M : 类型} [Monoid M] (c : Con M)
+  签名: {M : 类型} [幺半群 M] (c : Con M)
   定义体: fast_instance%
   Function.Surjective.monoid _ Quotient.mk''_surjective rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -1915,7 +1915,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: {M : 类型} [CommMonoid M] (c : Con M)
+  签名: {M : 类型} [交换幺半群 M] (c : Con M)
   定义体: fast_instance%
   fast_instance% Function.Surjective.commMonoid _ Quotient.mk''_surjective rfl
     (fun _ _ => rfl) fun _ _ => rfl
@@ -1954,7 +1954,7 @@ theorem map_of_mul_left_rel_one
 
 中文:
 定理 map_of_mul_left_rel_one
-  结论: [Monoid M] (c : Con M)
+  结论: [幺半群 M] (c : Con M)
   证明: by
   simp only [← Con.eq, coe_one, coe_mul] at *
   have hf' : forall x : M, (x : c.Quotient) * f x = 1 := fun x =>
@@ -2054,7 +2054,7 @@ instance hasInv
 
 中文:
 实例 hasInv
-  签名: : Inv c.Quotient
+  签名: : 取逆 c.商
   定义体: ⟨(Quotient.map' Inv.inv) fun _ _ => c.inv⟩
 
 Depends on / 依赖: Inv.inv, Quotient, Quotient.map, c.inv
@@ -2076,7 +2076,7 @@ instance hasDiv
 
 中文:
 实例 hasDiv
-  签名: : Div c.Quotient
+  签名: : 除法 c.商
   定义体: ⟨(Quotient.map₂ (· / ·)) fun _ _ h₁ _ _ h₂ => c.div h₁ h₂⟩
 
 Depends on / 依赖: Quotient, Quotient.map, c.div
@@ -2098,7 +2098,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: : Pow c.Quotient 整数
+  签名: : 幂 c.商 整数
   定义体: ⟨fun x z => Quotient.map' (fun x => x ^ z) (fun _ _ h => c.zpow z h) x⟩
 
 Depends on / 依赖: Quotient, Quotient.map, c.zpow
@@ -2121,7 +2121,7 @@ instance group
 
 中文:
 实例 group
-  签名: : Group c.Quotient
+  签名: : 群 c.商
   定义体: fast_instance%
   Function.Surjective.group Quotient.mk'' Quotient.mk''_surjective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
@@ -2147,7 +2147,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: {M : 类型} [CommGroup M] (c : Con M)
+  签名: {M : 类型} [交换群 M] (c : Con M)
   定义体: fast_instance%
   Function.Surjective.commGroup _ Quotient.mk''_surjective rfl (fun _ _ => rfl) (fun _ => rfl)
       (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -2186,7 +2186,7 @@ definition liftOnUnits
 
 中文:
 定义 liftOnUnits
-  签名: (u : Units c.Quotient) (f : 对任意 x y : M, c (x * y) 1 -> c (y * x) 1 -> α)
+  签名: (u : 单位群 c.商) (f : 对任意 x y : M, c (x * y) 1 -> c (y * x) 1 -> α)
   定义体: by
   refine
     Con.hrecOn₂ (cN := c) (φ := fun x y => x * y = 1 -> y * x = 1 -> α) (u : c.Quotient)
@@ -2258,7 +2258,7 @@ theorem induction_on_units
 
 中文:
 定理 induction_on_units
-  结论: {p : Units c.Quotient -> 命题} (u : Units c.Quotient)
+  结论: {p : 单位群 c.商 -> 命题} (u : 单位群 c.商)
   证明: by
   rcases u with ⟨⟨x⟩, ⟨y⟩, h₁, h₂⟩
   exact H x y (c.eq.1 h₁) (c.eq.1 h₂)

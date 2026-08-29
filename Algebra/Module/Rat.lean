@@ -30,7 +30,7 @@ theorem map_nnratCast_smul
 
 中文:
 定理 map_nnratCast_smul
-  结论: [AddCommMonoid M] [AddCommMonoid M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by
   rw [NNRat.cast_def]; rw [NNRat.cast_def]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [mul_smul]; rw [mul_smul]; rw [map_natCast_smul f R S]; rw [map_inv_natCast_smul f R S]
 
@@ -53,7 +53,7 @@ theorem map_ratCast_smul
 
 中文:
 定理 map_ratCast_smul
-  结论: [AddCommGroup M] [AddCommGroup M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换群 M] [加法交换群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by
   rw [Rat.cast_def]; rw [Rat.cast_def]; rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [mul_smul]; rw [mul_smul]; rw [map_intCast_smul f R S]; rw [map_inv_natCast_smul f R S]
 
@@ -75,7 +75,7 @@ theorem map_nnrat_smul
 
 中文:
 定理 map_nnrat_smul
-  结论: [AddCommMonoid M] [AddCommMonoid M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂]
   证明: map_nnratCast_smul f Rat>=0 Rat>=0 c x
 
 Depends on / 依赖: map_nnratCast_smul
@@ -96,7 +96,7 @@ theorem map_rat_smul
 
 中文:
 定理 map_rat_smul
-  结论: [AddCommGroup M] [AddCommGroup M₂]
+  结论: [加法交换群 M] [加法交换群 M₂]
   证明: map_ratCast_smul f Rat Rat c x
 
 Depends on / 依赖: map_ratCast_smul
@@ -118,7 +118,7 @@ instance subsingleton_nnrat_module
 
 中文:
 实例 subsingleton_nnrat_module
-  签名: (E : 类型) [AddCommMonoid E]
+  签名: (E : 类型) [加法交换幺半群 E]
   定义体: ⟨fun P Q => (Module.ext' P Q) fun r x =>
     map_nnrat_smul (_instM := P) (_instM₂ := Q) (AddMonoidHom.id E) r x⟩
 
@@ -139,7 +139,7 @@ instance subsingleton_rat_module
 
 中文:
 实例 subsingleton_rat_module
-  签名: (E : 类型) [AddCommGroup E]
+  签名: (E : 类型) [加法交换群 E]
   定义体: ⟨fun P Q => (Module.ext' P Q) fun r x =>
     map_rat_smul (_instM := P) (_instM₂ := Q) (AddMonoidHom.id E) r x⟩
 
@@ -159,7 +159,7 @@ theorem nnratCast_smul_eq
 
 中文:
 定理 nnratCast_smul_eq
-  结论: {E : 类型} (R S : 类型) [AddCommMonoid E] [DivisionSemiring R]
+  结论: {E : 类型} (R S : 类型) [加法交换幺半群 E] [除半环 R]
   证明: map_nnratCast_smul (AddMonoidHom.id E) R S r x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, map_nnratCast_smul
@@ -178,7 +178,7 @@ theorem ratCast_smul_eq
 
 中文:
 定理 ratCast_smul_eq
-  结论: {E : 类型} (R S : 类型) [AddCommGroup E] [DivisionRing R]
+  结论: {E : 类型} (R S : 类型) [加法交换群 E] [除环 R]
   证明: map_ratCast_smul (AddMonoidHom.id E) R S r x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, map_ratCast_smul
@@ -196,8 +196,8 @@ instance IsScalarTower.nnrat
   body: map_nnrat_smul ((smulAddHom R M).flip y) r x
 
 中文:
-实例 IsScalarTower.nnrat
-  签名: {R : 类型u} {M : 类型v} [Semiring R] [AddCommMonoid M] [Module R M]
+实例 标量塔.nnrat
+  签名: {R : 类型u} {M : 类型v} [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: map_nnrat_smul ((smulAddHom R M).flip y) r x
 
 Depends on / 依赖: map_nnrat_smul, smulAddHom
@@ -215,8 +215,8 @@ instance IsScalarTower.rat
   body: map_rat_smul ((smulAddHom R M).flip y) r x
 
 中文:
-实例 IsScalarTower.rat
-  签名: {R : 类型u} {M : 类型v} [Ring R] [AddCommGroup M] [Module R M]
+实例 标量塔.rat
+  签名: {R : 类型u} {M : 类型v} [环 R] [加法交换群 M] [模 R M]
   定义体: map_rat_smul ((smulAddHom R M).flip y) r x
 
 Depends on / 依赖: map_rat_smul, smulAddHom
@@ -236,7 +236,7 @@ lemma NNRat.cast_smul_eq_nnqsmul
 
 中文:
 引理 NNRat.cast_smul_eq_nnqsmul
-  结论: (R : 类型) [DivisionSemiring R]
+  结论: (R : 类型) [除半环 R]
   证明: by
   rw [← one_smul R x]; rw [← smul_assoc]; rw [← smul_assoc]; simp
 
@@ -257,8 +257,8 @@ lemma Rat.cast_smul_eq_qsmul
   rw [← one_smul R x]; rw [← smul_assoc]; rw [← smul_assoc]; simp
 
 中文:
-引理 Rat.cast_smul_eq_qsmul
-  结论: (R : 类型) [DivisionRing R]
+引理 有理数.cast_smul_eq_qsmul
+  结论: (R : 类型) [除环 R]
   证明: by
   rw [← one_smul R x]; rw [← smul_assoc]; rw [← smul_assoc]; simp
 
@@ -281,8 +281,8 @@ instance SMulCommClass.nnrat
   body: (map_nnrat_smul (DistribSMul.toAddMonoidHom M x) r y).symm
 
 中文:
-实例 SMulCommClass.nnrat
-  签名: [AddCommMonoid M] [DistribSMul α M] [Module Rat>=0 M]
+实例 标量交换类.nnrat
+  签名: [加法交换幺半群 M] [分配标量乘法 α M] [模 有理数>=0 M]
   定义体: (map_nnrat_smul (DistribSMul.toAddMonoidHom M x) r y).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_nnrat_smul, toAddMonoidHom
@@ -300,8 +300,8 @@ instance SMulCommClass.rat
   body: (map_rat_smul (DistribSMul.toAddMonoidHom M x) r y).symm
 
 中文:
-实例 SMulCommClass.rat
-  签名: [AddCommGroup M] [DistribSMul α M] [Module Rat M]
+实例 标量交换类.rat
+  签名: [加法交换群 M] [分配标量乘法 α M] [模 有理数 M]
   定义体: (map_rat_smul (DistribSMul.toAddMonoidHom M x) r y).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_rat_smul, toAddMonoidHom
@@ -319,8 +319,8 @@ instance SMulCommClass.nnrat'
   body: SMulCommClass.symm _ _ _
 
 中文:
-实例 SMulCommClass.nnrat'
-  签名: [AddCommMonoid M] [DistribSMul α M] [Module Rat>=0 M]
+实例 标量交换类.nnrat'
+  签名: [加法交换幺半群 M] [分配标量乘法 α M] [模 有理数>=0 M]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -338,8 +338,8 @@ instance SMulCommClass.rat'
   body: SMulCommClass.symm _ _ _
 
 中文:
-实例 SMulCommClass.rat'
-  签名: [AddCommGroup M] [DistribSMul α M] [Module Rat M]
+实例 标量交换类.rat'
+  签名: [加法交换群 M] [分配标量乘法 α M] [模 有理数 M]
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -362,9 +362,9 @@ lemma IsAddTorsionFree.of_module_nnrat
     simpa [← Nat.cast_smul_eq_nsmul Rat>=0 n, *] using congr((n⁻¹ : Rat>=0) • $hxy)
 
 中文:
-引理 IsAddTorsionFree.of_module_nnrat
-  条件: [AddCommMonoid M] [Module Rat>=0 M]
-  结论: IsAddTorsionFree M where
+引理 是加法无挠.of_module_nnrat
+  条件: [加法交换幺半群 M] [模 有理数>=0 M]
+  结论: 是加法无挠 M where
   证明: by
     simpa [← Nat.cast_smul_eq_nsmul Rat>=0 n, *] using congr((n⁻¹ : Rat>=0) • $hxy)
 
@@ -386,9 +386,9 @@ lemma IsAddTorsionFree.of_module_rat
     simpa [← Nat.cast_smul_eq_nsmul Rat n, *] using congr((n⁻¹ : Rat) • $hxy)
 
 中文:
-引理 IsAddTorsionFree.of_module_rat
-  条件: [AddCommGroup M] [Module Rat M]
-  结论: IsAddTorsionFree M where
+引理 是加法无挠.of_module_rat
+  条件: [加法交换群 M] [模 有理数 M]
+  结论: 是加法无挠 M where
   证明: by
     simpa [← Nat.cast_smul_eq_nsmul Rat n, *] using congr((n⁻¹ : Rat) • $hxy)
 

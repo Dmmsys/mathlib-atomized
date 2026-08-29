@@ -181,7 +181,7 @@ theorem log_ofNat
   proof: log_natCast b n
 
 中文:
-定理 log_ofNat
+定理 log_of自然数
   条件: (b : 自然数) (n : 自然数) [n.AtLeastTwo]
   证明: log_natCast b n
 
@@ -830,7 +830,7 @@ theorem clog_ofNat
   proof: clog_natCast b n
 
 中文:
-定理 clog_ofNat
+定理 clog_of自然数
   条件: (b : 自然数) (n : 自然数) [n.AtLeastTwo]
   证明: clog_natCast b n
 

@@ -36,8 +36,8 @@ instance [Finite
         ⟨by simp only [Finset.coe_univ, Set.mem_univ], h⟩
 
 中文:
-实例 [Finite
-  签名: V] : IsEmpty G.end where
+实例 [有限
+  签名: V] : 是空 G.end where
   定义体: by
     rintro ⟨s, _⟩
     cases nonempty_fintype V
@@ -68,7 +68,7 @@ lemma end_componentCompl_infinite
 
 中文:
 引理 end_componentCompl_infinite
-  条件: (e : G.end) (K : (Finset V)ᵒᵖ)
+  条件: (e : G.end) (K : (有限集 V)ᵒᵖ)
   证明: by
   refine (e.val K).infinite_iff_in_all_ranges.mpr (fun L h => ?_)
   change Opposite.unop K subseteq Opposite.unop (Opposite.op L) at h
@@ -92,7 +92,7 @@ instance componentComplFunctor_nonempty_of_infinite
 
 中文:
 实例 componentComplFunctor_nonempty_of_infinite
-  签名: [Infinite V] (K : (Finset V)ᵒᵖ)
+  签名: [无限 V] (K : (有限集 V)ᵒᵖ)
   定义体: G.componentCompl_nonempty_of_infinite K.unop
 
 Depends on / 依赖: G.componentCompl_nonempty_of_infinite, K.unop, componentCompl_nonempty_of_infinite
@@ -110,7 +110,7 @@ instance componentComplFunctor_finite
 
 中文:
 实例 componentComplFunctor_finite
-  签名: [LocallyFinite G] [Fact G.Preconnected]
+  签名: [局部有限 G] [Fact G.预连通]
   定义体: G.componentCompl_finite K.unop
 
 Depends on / 依赖: G.componentCompl_finite, K.unop, componentCompl_finite
@@ -129,7 +129,7 @@ lemma nonempty_ends_of_infinite
 
 中文:
 引理 nonempty_ends_of_infinite
-  条件: [LocallyFinite G] [Fact G.Preconnected] [Infinite V]
+  条件: [局部有限 G] [Fact G.预连通] [无限 V]
   证明: by
   apply nonempty_sections_of_finite_inverse_system G.componentComplFunctor
 

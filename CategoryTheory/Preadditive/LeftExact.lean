@@ -220,7 +220,7 @@ lemma preservesFiniteLimits_of_preservesKernels
 
 中文:
 引理 preservesFiniteLimits_of_preservesKernels
-  结论: [HasFiniteProducts C] [HasEqualizers C]
+  结论: [有FiniteProducts C] [HasEqualizers C]
   证明: have := preservesEqualizers_of_preservesKernels F
   have := preservesTerminalObject_of_preservesZeroMorphisms F
   have := preservesLimitsOfShape_pempty_of_preservesTerminal F
@@ -425,7 +425,7 @@ lemma preservesFiniteColimits_of_preservesCokernels
 
 中文:
 引理 preservesFiniteColimits_of_preservesCokernels
-  结论: [HasFiniteCoproducts C] [HasCoequalizers C]
+  结论: [有FiniteCoproducts C] [HasCoequalizers C]
   证明: by
   let := preservesCoequalizers_of_preservesCokernels F
   let := preservesInitialObject_of_preservesZeroMorphisms F

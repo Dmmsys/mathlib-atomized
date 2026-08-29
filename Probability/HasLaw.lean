@@ -47,10 +47,10 @@ structure HasLaw
     - map_eq : P.map X = μ
 
 中文:
-结构 HasLaw
-  参数: (P : Measure Ω := by volume_tac)
+结构 有Law
+  参数: (P : 测度 Ω := by volume_tac)
   公理与运算 (2 个):
-    - aemeasurable : AEMeasurable X P  [默认: by fun_prop]
+    - aemeasurable : 几乎处处可测 X P  [默认: by fun_prop]
     - map_eq : P.map X = μ
 
 Depends on / 依赖: AEMeasurable, P.map, aemeasurable, fun_prop, map_eq, protected, volume_tac
@@ -72,8 +72,8 @@ lemma HasLaw.measure_eq
   simp
 
 中文:
-引理 HasLaw.measure_eq
-  条件: (hX : HasLaw X μ P) {p : 𝓧 -> 命题} (hp : MeasurableSet {x | p x})
+引理 有Law.measure_eq
+  条件: (hX : 有Law X μ P) {p : 𝓧 -> 命题} (hp : 可测集 {x | p x})
   证明: by
   rw [← hX.map_eq]; rw [map_apply_of_aemeasurable hX.aemeasurable hp]
   simp
@@ -96,8 +96,8 @@ lemma HasLaw.measureReal_eq
   simp
 
 中文:
-引理 HasLaw.measureReal_eq
-  条件: (hX : HasLaw X μ P) {p : 𝓧 -> 命题} (hp : MeasurableSet {x | p x})
+引理 有Law.measure实数_eq
+  条件: (hX : 有Law X μ P) {p : 𝓧 -> 命题} (hp : 可测集 {x | p x})
   证明: by
   rw [← hX.map_eq]; rw [map_measureReal_apply_of_aemeasurable hX.aemeasurable hp]
   simp
@@ -120,8 +120,8 @@ lemma HasLaw.comp_of_hasLaw_comp
     rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.com
 
 中文:
-引理 HasLaw.comp_of_hasLaw_comp
-  结论: {Ω' 𝓨 : 类型} {m' : MeasurableSpace Ω'} {m𝓨 : MeasurableSpace 𝓨}
+引理 有Law.comp_of_hasLaw_comp
+  结论: {Ω' 𝓨 : 类型} {m' : 可测空间 Ω'} {m𝓨 : 可测空间 𝓨}
   证明: (hY.map_eq ▸ hf).comp_aemeasurable hY.aemeasurable
   map_eq := by
     rw [← Function.comp_def]; rw [← AEMeasurable.map_map_of_aemeasurable (hY.map_eq ▸ hf) hY.aemeasurable]; rw [hY.map_eq]; rw [← hX.map_eq]; rw [AEMeasurable.map_map_of_aemeasurable (hX.map_eq ▸ hf) hX.aemeasurable]; rw [Function.com
@@ -147,9 +147,9 @@ lemma HasLaw.congr
   map_eq := by rw [map_congr hY, hX.map_eq]
 
 中文:
-引理 HasLaw.congr
-  条件: (hX : HasLaw X μ P) (hY : Y =ᵐ[P] X)
-  结论: HasLaw Y μ P where
+引理 有Law.congr
+  条件: (hX : 有Law X μ P) (hY : Y =ᵐ[P] X)
+  结论: 有Law Y μ P where
   证明: hX.aemeasurable.congr hY.symm
   map_eq := by rw [map_congr hY, hX.map_eq]
 
@@ -172,7 +172,7 @@ lemma hasLaw_congr
 中文:
 引理 hasLaw_congr
   条件: (hXY : X =ᵐ[P] Y)
-  结论: HasLaw X μ P ↔ HasLaw Y μ P where
+  结论: 有Law X μ P ↔ 有Law Y μ P where
   证明: h.congr hXY.symm
   mpr h := h.congr hXY
 
@@ -192,8 +192,8 @@ lemma _root_.MeasureTheory.MeasurePreserving.hasLaw
   map_eq := h.map_eq
 
 中文:
-引理 _root_.MeasureTheory.MeasurePreserving.hasLaw
-  条件: (h : MeasurePreserving X P μ)
+引理 _root_.测度论.保测.hasLaw
+  条件: (h : 保测 X P μ)
   证明: h.measurable.aemeasurable
   map_eq := h.map_eq
 
@@ -214,8 +214,8 @@ lemma HasLaw.measurePreserving
   map_eq := h₁.map_eq
 
 中文:
-引理 HasLaw.measurePreserving
-  条件: (h₁ : HasLaw X μ P) (h₂ : Measurable X)
+引理 有Law.measurePreserving
+  条件: (h₁ : 有Law X μ P) (h₂ : 可测 X)
   证明: h₂
   map_eq := h₁.map_eq
 -/
@@ -233,8 +233,8 @@ lemma HasLaw.id
   proof: map_id
 
 中文:
-引理 HasLaw.id
-  结论: HasLaw id μ μ where
+引理 有Law.id
+  结论: 有Law id μ μ where
   证明: map_id
 -/
 protected lemma HasLaw.id : HasLaw id μ μ where
@@ -250,8 +250,8 @@ lemma HasLaw.ae_iff
   rw [← hX.map_eq]; rw [ae_map_iff hX.aemeasurable (measurableSet_setOfPred.2 hp)]
 
 中文:
-引理 HasLaw.ae_iff
-  条件: (hX : HasLaw X μ P) {p : 𝓧 -> 命题} (hp : Measurable p)
+引理 有Law.ae_iff
+  条件: (hX : 有Law X μ P) {p : 𝓧 -> 命题} (hp : 可测 p)
   证明: by
   rw [← hX.map_eq]; rw [ae_map_iff hX.aemeasurable (measurableSet_setOfPred.2 hp)]
 -/
@@ -269,8 +269,8 @@ theorem HasLaw.isFiniteMeasure_iff
   rw [← hX.map_eq]; rw [isFiniteMeasure_map_iff hX.aemeasurable]
 
 中文:
-定理 HasLaw.isFiniteMeasure_iff
-  条件: (hX : HasLaw X μ P)
+定理 有Law.isFiniteMeasure_iff
+  条件: (hX : 有Law X μ P)
   证明: by
   rw [← hX.map_eq]; rw [isFiniteMeasure_map_iff hX.aemeasurable]
 -/
@@ -288,8 +288,8 @@ theorem HasLaw.isProbabilityMeasure_iff
   rw [← hX.map_eq]; rw [isProbabilityMeasure_map_iff hX.aemeasurable]
 
 中文:
-定理 HasLaw.isProbabilityMeasure_iff
-  条件: (hX : HasLaw X μ P)
+定理 有Law.isProbabilityMeasure_iff
+  条件: (hX : 有Law X μ P)
   证明: by
   rw [← hX.map_eq]; rw [isProbabilityMeasure_map_iff hX.aemeasurable]
 -/
@@ -307,9 +307,9 @@ lemma HasLaw.isFiniteMeasure
   proof: hX.isFiniteMeasure_iff.2 ‹_›
 
 中文:
-引理 HasLaw.isFiniteMeasure
-  条件: [IsFiniteMeasure μ] (hX : HasLaw X μ P)
-  结论: IsFiniteMeasure P
+引理 有Law.isFiniteMeasure
+  条件: [是有限测度 μ] (hX : 有Law X μ P)
+  结论: 是有限测度 P
   证明: hX.isFiniteMeasure_iff.2 ‹_›
 
 Depends on / 依赖: hX.isFiniteMeasure_iff, isFiniteMeasure_iff
@@ -328,8 +328,8 @@ lemma HasLaw.isProbabilityMeasure
 @[fun_prop]
 
 中文:
-引理 HasLaw.isProbabilityMeasure
-  条件: [IsProbabilityMeasure μ] (hX : HasLaw X μ P)
+引理 有Law.isProbabilityMeasure
+  条件: [是概率测度 μ] (hX : 有Law X μ P)
   证明: hX.isProbabilityMeasure_iff.2 ‹_›
 
 @[fun_prop]
@@ -354,8 +354,8 @@ lemma HasLaw.comp
 @[fun_prop]
 
 中文:
-引理 HasLaw.comp
-  结论: {𝓨 : 类型} {m𝓨 : MeasurableSpace 𝓨} {ν : Measure 𝓨} {Y : 𝓧 -> 𝓨}
+引理 有Law.comp
+  结论: {𝓨 : 类型} {m𝓨 : 可测空间 𝓨} {ν : 测度 𝓨} {Y : 𝓧 -> 𝓨}
   证明: (hX.map_eq ▸ hY.aemeasurable).comp_aemeasurable hX.aemeasurable
   map_eq := by
     rw [← AEMeasurable.map_map_of_aemeasurable _ hX.aemeasurable]; rw [hX.map_eq]; rw [hY.map_eq]
@@ -382,8 +382,8 @@ lemma HasLaw.fun_comp
   proof: hY.comp hX
 
 中文:
-引理 HasLaw.fun_comp
-  结论: {𝓨 : 类型} {m𝓨 : MeasurableSpace 𝓨} {ν : Measure 𝓨} {Y : 𝓧 -> 𝓨}
+引理 有Law.fun_comp
+  结论: {𝓨 : 类型} {m𝓨 : 可测空间 𝓨} {ν : 测度 𝓨} {Y : 𝓧 -> 𝓨}
   证明: hY.comp hX
 
 Depends on / 依赖: hY.comp
@@ -401,8 +401,8 @@ lemma _root_.MeasureTheory.MeasurePreserving.comp_hasLaw
   proof: hY.hasLaw.comp hX
 
 中文:
-引理 _root_.MeasureTheory.MeasurePreserving.comp_hasLaw
-  结论: {𝓨 : 类型} {m𝓨 : MeasurableSpace 𝓨}
+引理 _root_.测度论.保测.comp_hasLaw
+  结论: {𝓨 : 类型} {m𝓨 : 可测空间 𝓨}
   证明: hY.hasLaw.comp hX
 
 Depends on / 依赖: hY.hasLaw.comp, hasLaw
@@ -423,8 +423,8 @@ lemma _root_.MeasureTheory.MeasurePreserving.fun_comp_hasLaw
 @[to_additive]
 
 中文:
-引理 _root_.MeasureTheory.MeasurePreserving.fun_comp_hasLaw
-  结论: {𝓨 : 类型} {m𝓨 : MeasurableSpace 𝓨}
+引理 _root_.测度论.保测.fun_comp_hasLaw
+  结论: {𝓨 : 类型} {m𝓨 : 可测空间 𝓨}
   证明: hY.comp_hasLaw hX
 
 @[to_additive]
@@ -452,7 +452,7 @@ lemma IndepFun.hasLaw_mul
 
 中文:
 引理 IndepFun.hasLaw_mul
-  结论: {M : 类型} [Monoid M] {mM : MeasurableSpace M} [MeasurableMul₂ M]
+  结论: {M : 类型} [幺半群 M] {mM : 可测空间 M} [MeasurableMul₂ M]
   证明: by
     rw [hXY.map_mul_eq_map_mconv_map₀' hX.aemeasurable hY.aemeasurable]; rw [hX.map_eq]; rw [hY.map_eq]
     · rwa [hX.map_eq]
@@ -482,7 +482,7 @@ lemma IndepFun.hasLaw_fun_mul
 
 中文:
 引理 IndepFun.hasLaw_fun_mul
-  结论: {M : 类型} [Monoid M] {mM : MeasurableSpace M} [MeasurableMul₂ M]
+  结论: {M : 类型} [幺半群 M] {mM : 可测空间 M} [MeasurableMul₂ M]
   证明: hXY.hasLaw_mul hX hY
 
 Depends on / 依赖: hXY.hasLaw_mul, hasLaw_mul
@@ -503,8 +503,8 @@ lemma HasLaw.integral_comp
   rwa [hX.map_eq]
 
 中文:
-引理 HasLaw.integral_comp
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+引理 有Law.integral_comp
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← hX.map_eq]; rw [integral_map hX.aemeasurable]; rw [Function.comp_def]
   rwa [hX.map_eq]
@@ -528,8 +528,8 @@ lemma HasLaw.lintegral_comp
   rwa [hX.map_eq]
 
 中文:
-引理 HasLaw.lintegral_comp
-  结论: {X : Ω -> 𝓧} (hX : HasLaw X μ P) {f : 𝓧 -> 实数>=0∞}
+引理 有Law.lintegral_comp
+  结论: {X : Ω -> 𝓧} (hX : 有Law X μ P) {f : 𝓧 -> 实数>=0∞}
   证明: by
   rw [← hX.map_eq]; rw [lintegral_map' _ hX.aemeasurable]
   rwa [hX.map_eq]
@@ -552,8 +552,8 @@ lemma HasLaw.integral_eq
   simp
 
 中文:
-引理 HasLaw.integral_eq
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+引理 有Law.integral_eq
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [← Function.id_comp X]; rw [hX.integral_comp aestronglyMeasurable_id]
   simp
@@ -581,8 +581,8 @@ lemma HasLaw.covariance_comp
   · exact hX.aemeasurable
 
 中文:
-引理 HasLaw.covariance_comp
-  结论: (hX : HasLaw X μ P) {f g : 𝓧 -> 实数}
+引理 有Law.covariance_comp
+  结论: (hX : 有Law X μ P) {f g : 𝓧 -> 实数}
   证明: by
   rw [← hX.map_eq]; rw [covariance_map]
   · rw [hX.map_eq]
@@ -612,8 +612,8 @@ lemma HasLaw.covariance_fun_comp
   proof: hX.covariance_comp hf hg
 
 中文:
-引理 HasLaw.covariance_fun_comp
-  结论: (hX : HasLaw X μ P) {f g : 𝓧 -> 实数}
+引理 有Law.covariance_fun_comp
+  结论: (hX : 有Law X μ P) {f g : 𝓧 -> 实数}
   证明: hX.covariance_comp hf hg
 
 Depends on / 依赖: covariance_comp, hX.covariance_comp
@@ -633,8 +633,8 @@ lemma HasLaw.variance_eq
   rw [← hX.map_eq]; rw [variance_map aemeasurable_id hX.aemeasurable]; rw [Function.id_comp]
 
 中文:
-引理 HasLaw.variance_eq
-  条件: {μ : Measure 实数} {X : Ω -> 实数} (hX : HasLaw X μ P)
+引理 有Law.variance_eq
+  条件: {μ : 测度 实数} {X : Ω -> 实数} (hX : 有Law X μ P)
   证明: by
   rw [← hX.map_eq]; rw [variance_map aemeasurable_id hX.aemeasurable]; rw [Function.id_comp]
 
@@ -655,9 +655,9 @@ lemma HasPDF.hasLaw
   map_eq := map_eq_withDensity_pdf X P μ
 
 中文:
-引理 HasPDF.hasLaw
-  条件: [h : HasPDF X P μ]
-  结论: HasLaw X (μ.withDensity (pdf X P μ)) P where
+引理 有PDF.hasLaw
+  条件: [h : 有PDF X P μ]
+  结论: 有Law X (μ.withDensity (pdf X P μ)) P where
   证明: h.aemeasurable
   map_eq := map_eq_withDensity_pdf X P μ
 
@@ -679,8 +679,8 @@ lemma HasLaw.ae_eq_of_smul_dirac
   apply Measure.ae_smul_measure (by simp)
 
 中文:
-引理 HasLaw.ae_eq_of_smul_dirac
-  结论: {c : 实数>=0∞} [MeasurableSingletonClass 𝓧] {x : 𝓧}
+引理 有Law.ae_eq_of_smul_dirac
+  结论: {c : 实数>=0∞} [MeasurableSingleton类 𝓧] {x : 𝓧}
   证明: by
   apply ae_of_ae_map (p := fun y => y = x) hX.aemeasurable
   rw [hX.map_eq]
@@ -704,8 +704,8 @@ lemma HasLaw.ae_eq_of_dirac
   proof: HasLaw.ae_eq_of_smul_dirac (c := 1) (by simpa)
 
 中文:
-引理 HasLaw.ae_eq_of_dirac
-  条件: [MeasurableSingletonClass 𝓧] {x : 𝓧} (hX : HasLaw X (.dirac x) P)
+引理 有Law.ae_eq_of_dirac
+  条件: [MeasurableSingleton类 𝓧] {x : 𝓧} (hX : 有Law X (.dirac x) P)
   证明: HasLaw.ae_eq_of_smul_dirac (c := 1) (by simpa)
 
 Depends on / 依赖: HasLaw, HasLaw.ae_eq_of_smul_dirac, ae_eq_of_smul_dirac
@@ -753,7 +753,7 @@ lemma hasLaw_dirac_of_ae_eq
 
 中文:
 引理 hasLaw_dirac_of_ae_eq
-  条件: [IsProbabilityMeasure P] {x : 𝓧} (hX : X =ᵐ[P] fun _ => x)
+  条件: [是概率测度 P] {x : 𝓧} (hX : X =ᵐ[P] fun _ => x)
   证明: by
   simpa using hasLaw_smul_dirac_of_ae_eq hX
 
@@ -774,7 +774,7 @@ lemma hasLaw_smul_dirac_iff
 
 中文:
 引理 hasLaw_smul_dirac_iff
-  条件: [MeasurableSingletonClass 𝓧] {x : 𝓧}
+  条件: [MeasurableSingleton类 𝓧] {x : 𝓧}
   证明: HasLaw.ae_eq_of_smul_dirac
   mpr := hasLaw_smul_dirac_of_ae_eq
 
@@ -796,7 +796,7 @@ lemma hasLaw_dirac_iff
 
 中文:
 引理 hasLaw_dirac_iff
-  条件: [IsProbabilityMeasure P] [MeasurableSingletonClass 𝓧] {x : 𝓧}
+  条件: [是概率测度 P] [MeasurableSingleton类 𝓧] {x : 𝓧}
   证明: HasLaw.ae_eq_of_dirac
   mpr := hasLaw_dirac_of_ae_eq
 
@@ -822,7 +822,7 @@ alias ⟨IndepFun.hasLaw_prod, _⟩ := indepFun_if
 
 中文:
 引理 indepFun_iff_hasLaw_prodMk_prod
-  结论: [IsFiniteMeasure P] {𝓨 : 类型} {m𝓨 : MeasurableSpace 𝓨}
+  结论: [是有限测度 P] {𝓨 : 类型} {m𝓨 : 可测空间 𝓨}
   证明: { map_eq := by
         rw [h.map_prod_eq_prod_map_map (by fun_prop) (by fun_prop)]; rw [hX.map_eq]; rw [hY.map_eq] }
   mpr h := by
@@ -855,7 +855,7 @@ lemma iIndepFun.hasLaw_pi
 
 中文:
 引理 iIndepFun.hasLaw_pi
-  结论: {ι : 类型} [Fintype ι] {𝓧 : ι -> 类型} {m𝓧 : 对任意 i, MeasurableSpace (𝓧 i)}
+  结论: {ι : 类型} [有限类型 ι] {𝓧 : ι -> 类型} {m𝓧 : 对任意 i, 可测空间 (𝓧 i)}
   证明: by
     rw [h.map_fun_eq_pi_map (by fun_prop)]
     simp_rw [fun i => (hX i).map_eq]
@@ -883,7 +883,7 @@ lemma iIndepFun_iff_hasLaw_pi_pi
 
 中文:
 引理 iIndepFun_iff_hasLaw_pi_pi
-  结论: [IsProbabilityMeasure P] {ι : 类型} [Fintype ι] {𝓧 : ι -> 类型}
+  结论: [是概率测度 P] {ι : 类型} [有限类型 ι] {𝓧 : ι -> 类型}
   证明: h.hasLaw_pi hX
   mpr h := by
     rw [iIndepFun_iff_map_fun_eq_pi_map (by fun_prop)]; rw [h.map_eq]

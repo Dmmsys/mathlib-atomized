@@ -61,8 +61,8 @@ definition prod
   body: Q₁.comp (LinearMap.fst _ _ _) + Q₂.comp (LinearMap.snd _ _ _)
 
 中文:
-定义 prod
-  签名: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P)
+定义 乘积
+  签名: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P)
   定义体: Q₁.comp (LinearMap.fst _ _ _) + Q₂.comp (LinearMap.snd _ _ _)
 
 Depends on / 依赖: LinearMap, LinearMap.fst, LinearMap.snd
@@ -82,7 +82,7 @@ definition IsometryEquiv.prod
   toLinearEquiv := LinearEquiv.prodCongr e₁.toLinearEquiv e₂.toLinearEquiv
 
 中文:
-定义 IsometryEquiv.prod
+定义 等距等价.乘积
   定义体: congr_arg₂ (· + ·) (e₁.map_app x.1) (e₂.map_app x.2)
   toLinearEquiv := LinearEquiv.prodCongr e₁.toLinearEquiv e₂.toLinearEquiv
 
@@ -108,8 +108,8 @@ definition Isometry.inl
   map_app' m₁ := by simp
 
 中文:
-定义 Isometry.inl
-  签名: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P)
+定义 等距.inl
+  签名: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P)
   定义体: LinearMap.inl R _ _
   map_app' m₁ := by simp
 
@@ -131,8 +131,8 @@ definition Isometry.inr
   map_app' m₁ := by simp
 
 中文:
-定义 Isometry.inr
-  签名: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P)
+定义 等距.inr
+  签名: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P)
   定义体: LinearMap.inr R _ _
   map_app' m₁ := by simp
 
@@ -155,8 +155,8 @@ definition Isometry.fst
   map_app' m₁ := by simp
 
 中文:
-定义 Isometry.fst
-  签名: (Q₁ : QuadraticMap R M₁ P)
+定义 等距.fst
+  签名: (Q₁ : 二次映射 R M₁ P)
   定义体: LinearMap.fst R _ _
   map_app' m₁ := by simp
 
@@ -181,8 +181,8 @@ definition Isometry.snd
 @[simp]
 
 中文:
-定义 Isometry.snd
-  签名: (Q₂ : QuadraticMap R M₂ P)
+定义 等距.snd
+  签名: (Q₂ : 二次映射 R M₂ P)
   定义体: LinearMap.snd R _ _
   map_app' m₁ := by simp
 
@@ -206,8 +206,8 @@ lemma Isometry.fst_comp_inl
 @[simp]
 
 中文:
-引理 Isometry.fst_comp_inl
-  条件: (Q₁ : QuadraticMap R M₁ P)
+引理 等距.fst_comp_inl
+  条件: (Q₁ : 二次映射 R M₁ P)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -228,8 +228,8 @@ lemma Isometry.snd_comp_inr
 @[simp]
 
 中文:
-引理 Isometry.snd_comp_inr
-  条件: (Q₂ : QuadraticMap R M₂ P)
+引理 等距.snd_comp_inr
+  条件: (Q₂ : 二次映射 R M₂ P)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -250,8 +250,8 @@ lemma Isometry.snd_comp_inl
 @[simp]
 
 中文:
-引理 Isometry.snd_comp_inl
-  条件: (Q₂ : QuadraticMap R M₂ P)
+引理 等距.snd_comp_inl
+  条件: (Q₂ : 二次映射 R M₂ P)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -270,8 +270,8 @@ lemma Isometry.fst_comp_inr
   proof: ext fun _ => rfl
 
 中文:
-引理 Isometry.fst_comp_inr
-  条件: (Q₁ : QuadraticMap R M₁ P)
+引理 等距.fst_comp_inr
+  条件: (Q₁ : 二次映射 R M₁ P)
   证明: ext fun _ => rfl
 -/
 lemma Isometry.fst_comp_inr (Q₁ : QuadraticMap R M₁ P) :
@@ -287,8 +287,8 @@ theorem Equivalent.prod
   proof: Nonempty.map2 IsometryEquiv.prod e₁ e₂
 
 中文:
-定理 Equivalent.prod
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+定理 Equivalent.乘积
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: Nonempty.map2 IsometryEquiv.prod e₁ e₂
 
 Depends on / 依赖: IsometryEquiv, IsometryEquiv.prod, Nonempty, Nonempty.map2
@@ -310,8 +310,8 @@ definition IsometryEquiv.prodComm
   map_app' _ := add_comm _ _
 
 中文:
-定义 IsometryEquiv.prodComm
-  签名: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P)
+定义 等距等价.prodComm
+  签名: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P)
   定义体: LinearEquiv.prodComm _ _ _
   map_app' _ := add_comm _ _
 
@@ -333,7 +333,7 @@ definition IsometryEquiv.prodProdProdComm
   map_app' _ := add_add_add_comm _ _ _ _
 
 中文:
-定义 IsometryEquiv.prodProdProdComm
+定义 等距等价.prodProdProdComm
   定义体: LinearEquiv.prodProdProdComm _ _ _ _ _
   map_app' _ := add_add_add_comm _ _ _ _
 
@@ -405,7 +405,7 @@ theorem nonneg_prod_iff
 
 中文:
 定理 nonneg_prod_iff
-  结论: [Preorder P] [AddLeftMono P]
+  结论: [预序 P] [AddLeftMono P]
   证明: by
   simp_rw [Prod.forall, prod_apply]
   constructor
@@ -449,7 +449,7 @@ theorem posDef_prod_iff
 
 中文:
 定理 posDef_prod_iff
-  结论: [PartialOrder P] [AddLeftMono P]
+  结论: [偏序 P] [AddLeftMono P]
   证明: by
   simp_rw [posDef_iff_nonneg, nonneg_prod_iff]
   constructor
@@ -486,8 +486,8 @@ theorem PosDef.prod
   proof: posDef_prod_iff.mpr ⟨h₁, h₂⟩
 
 中文:
-定理 PosDef.prod
-  结论: [PartialOrder P] [AddLeftMono P]
+定理 PosDef.乘积
+  结论: [偏序 P] [AddLeftMono P]
   证明: posDef_prod_iff.mpr ⟨h₁, h₂⟩
 
 Depends on / 依赖: posDef_prod_iff, posDef_prod_iff.mpr
@@ -506,8 +506,8 @@ theorem IsOrtho.prod
   proof: (congr_arg₂ HAdd.hAdd h₁ h₂).trans add_add_add_comm _ _ _ _
 
 中文:
-定理 IsOrtho.prod
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+定理 IsOrtho.乘积
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: (congr_arg₂ HAdd.hAdd h₁ h₂).trans add_add_add_comm _ _ _ _
 
 Depends on / 依赖: HAdd.hAdd, add_add_add_comm
@@ -527,7 +527,7 @@ theorem IsOrtho.inl_inr
 
 中文:
 定理 IsOrtho.inl_inr
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: QuadraticMap.IsOrtho.prod (.zero_right _) (.zero_left _)
 -/
 @[simp] theorem IsOrtho.inl_inr {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
@@ -545,7 +545,7 @@ theorem IsOrtho.inr_inl
 
 中文:
 定理 IsOrtho.inr_inl
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: (IsOrtho.inl_inr _ _).symm
 -/
 @[simp] theorem IsOrtho.inr_inl {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
@@ -563,7 +563,7 @@ theorem isOrtho_inl_inl_iff
 
 中文:
 定理 isOrtho_inl_inl_iff
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: by
   simp [isOrtho_def]
 -/
@@ -583,7 +583,7 @@ theorem isOrtho_inr_inr_iff
 
 中文:
 定理 isOrtho_inr_inr_iff
-  结论: {Q₁ : QuadraticMap R M₁ P} {Q₂ : QuadraticMap R M₂ P}
+  结论: {Q₁ : 二次映射 R M₁ P} {Q₂ : 二次映射 R M₂ P}
   证明: by
   simp [isOrtho_def]
 -/
@@ -613,7 +613,7 @@ theorem polar_prod
 
 中文:
 定理 polar_prod
-  条件: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P) (x y : M₁ × M₂)
+  条件: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P) (x y : M₁ × M₂)
   证明: by
   dsimp [polar]
   abel
@@ -633,7 +633,7 @@ theorem polarBilin_prod
 
 中文:
 定理 polarBilin_prod
-  条件: (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P)
+  条件: (Q₁ : 二次映射 R M₁ P) (Q₂ : 二次映射 R M₂ P)
   证明: LinearMap.ext₂ polar_prod _ _
 -/
 @[simp] theorem polarBilin_prod (Q₁ : QuadraticMap R M₁ P) (Q₂ : QuadraticMap R M₂ P) :
@@ -655,7 +655,7 @@ theorem associated_prod
 
 中文:
 定理 associated_prod
-  结论: [Invertible (2 : R)]
+  结论: [可逆 (2 : R)]
   证明: by
   dsimp [associated, associatedHom]
   rw [polarBilin_prod]; rw [smul_add]
@@ -693,7 +693,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: [Fintype ι] (Q : 对任意 i, QuadraticMap R (Mᵢ i) P)
+  签名: [有限类型 ι] (Q : 对任意 i, 二次映射 R (Mᵢ i) P)
   定义体: ∑ i, (Q i).comp (LinearMap.proj i : _ ->ₗ[R] Mᵢ i)
 
 @[simp]
@@ -714,7 +714,7 @@ theorem pi_apply
 
 中文:
 定理 pi_apply
-  条件: [Fintype ι] (Q : 对任意 i, QuadraticMap R (Mᵢ i) P) (x : 对任意 i, Mᵢ i)
+  条件: [有限类型 ι] (Q : 对任意 i, 二次映射 R (Mᵢ i) P) (x : 对任意 i, Mᵢ i)
   证明: sum_apply _ _ _
 
 Depends on / 依赖: sum_apply
@@ -735,7 +735,7 @@ theorem pi_apply_single
 
 中文:
 定理 pi_apply_single
-  结论: [Fintype ι] [DecidableEq ι]
+  结论: [有限类型 ι] [DecidableEq ι]
   证明: by
   rw [pi_apply]; rw [Fintype.sum_eq_single i fun j hj => ?_]; rw [Pi.single_eq_same]
   rw [Pi.single_eq_of_ne hj]; rw [map_zero]
@@ -763,8 +763,8 @@ definition IsometryEquiv.pi
   toLinearEquiv := LinearEquiv.piCongrRight fun i => (e i : Mᵢ i ≃ₗ[R] Nᵢ i)
 
 中文:
-定义 IsometryEquiv.pi
-  签名: [Fintype ι]
+定义 等距等价.pi
+  签名: [有限类型 ι]
   定义体: by
     simp only [pi_apply, LinearEquiv.piCongrRight,
       IsometryEquiv.coe_toLinearEquiv, IsometryEquiv.map_app]
@@ -792,8 +792,8 @@ definition Isometry.single
   map_app' := pi_apply_single _ _
 
 中文:
-定义 Isometry.single
-  签名: [Fintype ι] [DecidableEq ι] (Q : 对任意 i, QuadraticMap R (Mᵢ i) P) (i : ι)
+定义 等距.single
+  签名: [有限类型 ι] [DecidableEq ι] (Q : 对任意 i, 二次映射 R (Mᵢ i) P) (i : ι)
   定义体: LinearMap.single _ _ i
   map_app' := pi_apply_single _ _
 
@@ -819,8 +819,8 @@ definition Isometry.proj
     rw [Pi.single_eq_of_ne hij]; rw [zero_apply]
 
 中文:
-定义 Isometry.proj
-  签名: [Fintype ι] [DecidableEq ι] (i : ι) (Q : QuadraticMap R (Mᵢ i) P)
+定义 等距.proj
+  签名: [有限类型 ι] [DecidableEq ι] (i : ι) (Q : 二次映射 R (Mᵢ i) P)
   定义体: LinearMap.proj i
   map_app' m := by
     dsimp
@@ -848,8 +848,8 @@ theorem Isometry.proj_comp_single_of_same
   proof: ext fun _ => Pi.single_eq_same _ _
 
 中文:
-定理 Isometry.proj_comp_single_of_same
-  结论: [Fintype ι] [DecidableEq ι]
+定理 等距.proj_comp_single_of_same
+  结论: [有限类型 ι] [DecidableEq ι]
   证明: ext fun _ => Pi.single_eq_same _ _
 
 Depends on / 依赖: Pi.single_eq_same, single_eq_same
@@ -870,8 +870,8 @@ theorem Isometry.proj_comp_single_of_ne
   proof: ext fun _ => Pi.single_eq_of_ne h _
 
 中文:
-定理 Isometry.proj_comp_single_of_ne
-  结论: [Fintype ι] [DecidableEq ι]
+定理 等距.proj_comp_single_of_ne
+  结论: [有限类型 ι] [DecidableEq ι]
   证明: ext fun _ => Pi.single_eq_of_ne h _
 
 Depends on / 依赖: Pi.single_eq_of_ne, single_eq_of_ne
@@ -891,7 +891,7 @@ theorem Equivalent.pi
 
 中文:
 定理 Equivalent.pi
-  结论: [Fintype ι] {Q : 对任意 i, QuadraticMap R (Mᵢ i) P}
+  结论: [有限类型 ι] {Q : 对任意 i, 二次映射 R (Mᵢ i) P}
   证明: ⟨IsometryEquiv.pi fun i => Classical.choice (e i)⟩
 
 Depends on / 依赖: Classical, Classical.choice, IsometryEquiv, IsometryEquiv.pi, choice
@@ -922,7 +922,7 @@ theorem anisotropic_of_pi
 
 中文:
 定理 anisotropic_of_pi
-  结论: [Fintype ι]
+  结论: [有限类型 ι]
   证明: by
   simp_rw [Anisotropic, pi_apply, funext_iff, Pi.zero_apply] at h
   intro i x hx
@@ -969,7 +969,7 @@ theorem nonneg_pi_iff
 
 中文:
 定理 nonneg_pi_iff
-  结论: {P} [Fintype ι] [AddCommMonoid P] [PartialOrder P] [IsOrderedAddMonoid P]
+  结论: {P} [有限类型 ι] [加法交换幺半群 P] [偏序 P] [是OrderedAdd幺半群 P]
   证明: by
   simp_rw [pi, sum_apply, comp_apply, LinearMap.proj_apply]
   constructor
@@ -1014,7 +1014,7 @@ theorem posDef_pi_iff
 
 中文:
 定理 posDef_pi_iff
-  结论: {P} [Fintype ι] [AddCommMonoid P] [PartialOrder P] [IsOrderedAddMonoid P]
+  结论: {P} [有限类型 ι] [加法交换幺半群 P] [偏序 P] [是OrderedAdd幺半群 P]
   证明: by
   simp_rw [posDef_iff_nonneg, nonneg_pi_iff]
   constructor
@@ -1061,7 +1061,7 @@ theorem polar_pi
 
 中文:
 定理 polar_pi
-  条件: (Q : 对任意 i, QuadraticMap R (Mᵢ i) P) (x y : 对任意 i, Mᵢ i)
+  条件: (Q : 对任意 i, 二次映射 R (Mᵢ i) P) (x y : 对任意 i, Mᵢ i)
   证明: by
   dsimp [polar]
   simp_rw [Finset.sum_sub_distrib, pi_apply, Pi.add_apply]
@@ -1081,7 +1081,7 @@ theorem polarBilin_pi
 
 中文:
 定理 polarBilin_pi
-  条件: (Q : 对任意 i, QuadraticMap R (Mᵢ i) P)
+  条件: (Q : 对任意 i, 二次映射 R (Mᵢ i) P)
   证明: LinearMap.ext₂ fun x y => (polar_pi _ _ _).trans by simp
 -/
 @[simp] theorem polarBilin_pi (Q : forall i, QuadraticMap R (Mᵢ i) P) :
@@ -1101,7 +1101,7 @@ theorem associated_pi
 
 中文:
 定理 associated_pi
-  条件: [Invertible (2 : R)] (Q : 对任意 i, QuadraticMap R (Mᵢ i) P)
+  条件: [可逆 (2 : R)] (Q : 对任意 i, 二次映射 R (Mᵢ i) P)
   证明: by
   dsimp [associated, associatedHom]
   rw [polarBilin_pi]; rw [Finset.smul_sum]

@@ -48,8 +48,8 @@ instance ContMDiffVectorBundle.pullback
 
 
 中文:
-实例 ContMDiffVectorBundle.pullback
-  签名: : ContMDiffVectorBundle n F (f *ᵖ E) IB' where
+实例 余ntMDiffVectorBundle.pullback
+  签名: : 余ntMDiffVectorBundle n F (f *ᵖ E) IB' where
   定义体: by
     rintro _ _ ⟨e, he, rfl⟩ ⟨e', he', rfl⟩
     refine ((contMDiffOn_coordChangeL e e').comp f.contMDiff.contMDiffOn fun b hb => hb).congr ?_

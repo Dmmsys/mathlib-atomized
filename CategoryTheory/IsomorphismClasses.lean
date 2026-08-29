@@ -59,7 +59,7 @@ definition isIsomorphicSetoid
 
 中文:
 定义 isIsomorphicSetoid
-  签名: : Setoid C where
+  签名: : 集合等价关系 C where
   定义体: IsIsomorphic
   iseqv := ⟨fun X => ⟨Iso.refl X⟩, fun ⟨α⟩ => ⟨α.symm⟩, fun ⟨α⟩ ⟨β⟩ => ⟨α.trans β⟩⟩
 
@@ -121,8 +121,8 @@ theorem Groupoid.isIsomorphic_iff_nonempty_hom
   proof: (Groupoid.isoEquivHom X Y).nonempty_congr
 
 中文:
-定理 Groupoid.isIsomorphic_iff_nonempty_hom
-  条件: {C : 类型u} [Groupoid.{v} C] {X Y : C}
+定理 群胚.isIsomorphic_iff_nonempty_hom
+  条件: {C : 类型u} [群胚.{v} C] {X Y : C}
   证明: (Groupoid.isoEquivHom X Y).nonempty_congr
 
 Depends on / 依赖: Groupoid, Groupoid.isoEquivHom, isoEquivHom, nonempty_congr

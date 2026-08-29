@@ -36,7 +36,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: [CharZero F]
+  签名: [特征零 F]
   定义体: charZero_of_injective_algebraMap (algebraMap F _).injective
 
 Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective
@@ -54,7 +54,7 @@ instance charP
 
 中文:
 实例 charP
-  签名: [CharP F p]
+  签名: [特征p F p]
   定义体: charP_of_injective_algebraMap (algebraMap F _).injective p
 
 Depends on / 依赖: algebraMap, charP_of_injective_algebraMap, injective
@@ -90,7 +90,7 @@ instance charP'
 
 中文:
 实例 charP'
-  签名: [CharP E p]
+  签名: [特征p E p]
   定义体: Subfield.charP L.toSubfield p
 
 Depends on / 依赖: L.toSubfield, Subfield, Subfield.charP, toSubfield

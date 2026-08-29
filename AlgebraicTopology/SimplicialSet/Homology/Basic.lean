@@ -49,7 +49,7 @@ definition chainComplexFunctor
 
 中文:
 定义 chainComplexFunctor
-  签名: : C ⥤ SSet.{w} ⥤ ChainComplex C 自然数
+  签名: : C ⥤ SSet.{w} ⥤ 链复形 C 自然数
   定义体: (Functor.postcompose₂.obj (AlgebraicTopology.alternatingFaceMapComplex _)).obj
     (sigmaConst ⋙ SimplicialObject.whiskering _ _)
 
@@ -75,7 +75,7 @@ alias _root_.AlgebraicTopology.SSet.singularChainComplexFunctor :=
 
 中文:
 实例 :
-  签名: (chainComplexFunctor C).Additive
+  签名: (chainComplexFunctor C).加性
   定义体: by
   dsimp [chainComplexFunctor, SimplicialObject.whiskering]
   infer_instance
@@ -146,7 +146,7 @@ abbreviation chainComplex
 
 中文:
 缩写 chainComplex
-  签名: : ChainComplex C 自然数
+  签名: : 链复形 C 自然数
   定义体: ((SSet.chainComplexFunctor C).obj R).obj X
 
 Depends on / 依赖: SSet.chainComplexFunctor, chainComplexFunctor

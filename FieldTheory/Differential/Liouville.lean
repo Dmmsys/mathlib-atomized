@@ -47,10 +47,10 @@ class IsLiouville
     - isLiouville((a : F) (ι : Type) [Fintype ι] (c : ι -> F) (hc : forall x, (c x)′ = 0) (u : ι -> K) (v : K) (h : a = ∑ x, c x * logDeriv (u x) + v′)) : exists (ι₀ : Type) (_ : Fintype ι₀) (c₀ : ι₀ -> F) (_ : forall x, (c₀ x)′ = 0) (u₀ : ι₀ -> F) (v₀ : F), a = ∑ x, c₀ x * logDeriv (u₀ x) + v₀′
 
 中文:
-类 IsLiouville
+类 是Liouville
   参数: : 命题 where
   公理与运算 (1 个):
-    - isLiouville((a : F) (ι : Type) [Fintype ι] (c : ι -> F) (hc : 对任意 x, (c x)′ = 0) (u : ι -> K) (v : K) (h : a = ∑ x, c x * logDeriv (u x) + v′)) : 存在 (ι₀ : Type) (_ : Fintype ι₀) (c₀ : ι₀ -> F) (_ : 对任意 x, (c₀ x)′ = 0) (u₀ : ι₀ -> F) (v₀ : F), a = ∑ x, c₀ x * logDeriv (u₀ x) + v₀′
+    - isLiouville((a : F) (ι : 类型) [有限类型 ι] (c : ι -> F) (hc : 对任意 x, (c x)′ = 0) (u : ι -> K) (v : K) (h : a = ∑ x, c x * logDeriv (u x) + v′)) : 存在 (ι₀ : 类型) (_ : 有限类型 ι₀) (c₀ : ι₀ -> F) (_ : 对任意 x, (c₀ x)′ = 0) (u₀ : ι₀ -> F) (v₀ : F), a = ∑ x, c₀ x * logDeriv (u₀ x) + v₀′
 -/
 class IsLiouville : Prop where
   isLiouville (a : F) (ι : Type) [Fintype ι] (c : ι -> F) (hc : forall x, (c x)′ = 0)
@@ -67,8 +67,8 @@ instance IsLiouville.rfl
   body: ⟨ι, _, c, hc, u, v, h⟩
 
 中文:
-实例 IsLiouville.rfl
-  签名: : IsLiouville F F where
+实例 是Liouville.rfl
+  签名: : 是Liouville F F where
   定义体: ⟨ι, _, c, hc, u, v, h⟩
 -/
 instance IsLiouville.rfl : IsLiouville F F where
@@ -90,8 +90,8 @@ lemma IsLiouville.trans
     have hc (x : ι₀) := mem_
 
 中文:
-引理 IsLiouville.trans
-  结论: {A : 类型} [Field A] [Algebra K A] [Algebra F A]
+引理 是Liouville.trans
+  结论: {A : 类型} [域 A] [代数 K A] [代数 F A]
   证明: by
     obtain ⟨ι₀, _, c₀, hc₀, u₀, v₀, h₀⟩ := inst2.isLiouville (a : K) ι
         ((↑) ∘ c)
@@ -163,8 +163,8 @@ lemma IsLiouville.equiv
     simpa [AlgEquiv.commutes, map_add, map_sum, map_mul, logDeriv, algEquiv_deriv'] using h
 
 中文:
-引理 IsLiouville.equiv
-  结论: {K' : 类型} [Field K'] [Differential K'] [Algebra F K']
+引理 是Liouville.equiv
+  结论: {K' : 类型} [域 K'] [微分 K'] [代数 F K']
   证明: by
     apply inst.isLiouville a ι c hc (e.symm ∘ u) (e.symm v)
     apply_fun e.symm at h
@@ -272,7 +272,7 @@ instance isLiouville_of_finiteDimensional
 
 中文:
 实例 isLiouville_of_finiteDimensional
-  签名: [FiniteDimensional F K]
+  签名: [有限维 F K]
   定义体: let map := IsAlgClosed.lift (M := AlgebraicClosure F) (R := F) (S := K)
   let K' := map.fieldRange
   have : FiniteDimensional F K' :=

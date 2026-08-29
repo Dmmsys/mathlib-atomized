@@ -93,7 +93,7 @@ lemma lt_succ
 
 中文:
 引理 lt_succ
-  条件: [NoMaxOrder α] (x : WithBot α)
+  条件: [NoMax序 α] (x : WithBot α)
   结论: x < x.succ
   证明: succ_eq_succ x ▸ Order.lt_succ x
 
@@ -111,7 +111,7 @@ lemma succ_mono
 
 中文:
 引理 succ_mono
-  结论: Monotone (succ : WithBot α -> α)
+  结论: 递增 (succ : WithBot α -> α)
 -/
 lemma succ_mono : Monotone (succ : WithBot α -> α)
   | ⊥, _, _ => by simp
@@ -128,8 +128,8 @@ lemma succ_strictMono
 
 中文:
 引理 succ_strictMono
-  条件: [NoMaxOrder α]
-  结论: StrictMono (succ : WithBot α -> α)
+  条件: [NoMax序 α]
+  结论: 严格递增 (succ : WithBot α -> α)
 -/
 lemma succ_strictMono [NoMaxOrder α] : StrictMono (succ : WithBot α -> α)
   | ⊥, (b : α), hab => by simp
@@ -162,7 +162,7 @@ lemma succ_lt_succ
 
 中文:
 引理 succ_lt_succ
-  条件: [NoMaxOrder α] (hxy : x < y)
+  条件: [NoMax序 α] (hxy : x < y)
   结论: x.succ < y.succ
   证明: succ_strictMono hxy
 -/
@@ -280,7 +280,7 @@ lemma pred_mono
 
 中文:
 引理 pred_mono
-  结论: Monotone (pred : WithTop α -> α)
+  结论: 递增 (pred : WithTop α -> α)
 -/
 lemma pred_mono : Monotone (pred : WithTop α -> α)
   | _, ⊤, _ => by simp
@@ -297,8 +297,8 @@ lemma pred_strictMono
 
 中文:
 引理 pred_strictMono
-  条件: [NoMinOrder α]
-  结论: StrictMono (pred : WithTop α -> α)
+  条件: [NoMin序 α]
+  结论: 严格递增 (pred : WithTop α -> α)
 -/
 lemma pred_strictMono [NoMinOrder α] : StrictMono (pred : WithTop α -> α)
   | (b : α), ⊤, hab => by simp
@@ -331,7 +331,7 @@ lemma pred_lt_pred
 
 中文:
 引理 pred_lt_pred
-  条件: [NoMinOrder α] (hxy : x < y)
+  条件: [NoMin序 α] (hxy : x < y)
   结论: x.pred < y.pred
   证明: pred_strictMono hxy
 -/

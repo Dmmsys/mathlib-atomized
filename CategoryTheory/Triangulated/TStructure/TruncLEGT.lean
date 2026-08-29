@@ -884,7 +884,7 @@ lemma isZero_truncLE_obj_of_isGE
 
 中文:
 引理 isZero_truncLE_obj_of_isGE
-  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C) [t.IsGE X n₁]
+  条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁) (X : C) [t.是GE X n₁]
   证明: by
   rw [← t.isGE_iff_isZero_truncLE_obj _ _ h X]
   infer_instance

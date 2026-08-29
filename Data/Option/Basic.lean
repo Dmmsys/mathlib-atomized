@@ -52,7 +52,7 @@ theorem coe_def
 
 中文:
 定理 coe_def
-  结论: (fun a => ↑a : α -> Option α) = some
+  结论: (fun a => ↑a : α -> 选项类型 α) = some
   证明: rfl
 -/
 theorem coe_def : (fun a => ↑a : α -> Option α) = some :=
@@ -71,7 +71,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : α -> β} {y : β} {o : Option α}
+  条件: {f : α -> β} {y : β} {o : 选项类型 α}
   结论: y in o.map f ↔ 存在 x in o, f x = y
   证明: by simp
 
@@ -91,7 +91,7 @@ theorem mem_map_of_injective
 
 中文:
 定理 mem_map_of_injective
-  条件: {f : α -> β} (H : Function.Injective f) {a : α} {o : Option α}
+  条件: {f : α -> β} (H : 函数.单射 f) {a : α} {o : 选项类型 α}
   证明: by
   aesop
 -/
@@ -108,8 +108,8 @@ theorem forall_mem_map
   proof: by simp
 
 中文:
-定理 forall_mem_map
-  条件: {f : α -> β} {o : Option α} {p : β -> 命题}
+定理 对任意_mem_map
+  条件: {f : α -> β} {o : 选项类型 α} {p : β -> 命题}
   证明: by simp
 -/
 theorem forall_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} :
@@ -124,8 +124,8 @@ theorem exists_mem_map
   proof: by simp
 
 中文:
-定理 exists_mem_map
-  条件: {f : α -> β} {o : Option α} {p : β -> 命题}
+定理 存在_mem_map
+  条件: {f : α -> β} {o : 选项类型 α} {p : β -> 命题}
   证明: by simp
 -/
 theorem exists_mem_map {f : α -> β} {o : Option α} {p : β -> Prop} :
@@ -142,8 +142,8 @@ theorem coe_get
 
 中文:
 定理 coe_get
-  条件: {o : Option α} (h : o.isSome)
-  结论: ((Option.get _ h : α) : Option α) = o
+  条件: {o : 选项类型 α} (h : o.isSome)
+  结论: ((选项类型.get _ h : α) : 选项类型 α) = o
   证明: Option.some_get h
 
 Depends on / 依赖: Option.some_get, some_get
@@ -162,7 +162,7 @@ theorem eq_of_mem_of_mem
 
 中文:
 定理 eq_of_mem_of_mem
-  条件: {a : α} {o1 o2 : Option α} (h1 : a in o1) (h2 : a in o2)
+  条件: {a : α} {o1 o2 : 选项类型 α} (h1 : a in o1) (h2 : a in o2)
   结论: o1 = o2
   证明: h1.trans h2.symm
 
@@ -181,7 +181,7 @@ theorem Mem.leftUnique
 
 中文:
 定理 Mem.leftUnique
-  结论: Relator.LeftUnique ((· in ·) : α -> Option α -> 命题)
+  结论: Relator.LeftUnique ((· in ·) : α -> 选项类型 α -> 命题)
   证明: fun _ _ _ => mem_unique
 
 Depends on / 依赖: mem_unique
@@ -203,7 +203,7 @@ theorem some_injective
 中文:
 定理 some_injective
   条件: (α : 类型)
-  结论: Function.Injective (@some α)
+  结论: 函数.单射 (@some α)
   证明: fun _ _ => some_inj.mp
 
 @[simp]
@@ -227,7 +227,7 @@ theorem map_comp_some
 中文:
 定理 map_comp_some
   条件: (f : α -> β)
-  结论: Option.map f ∘ some = some ∘ f
+  结论: 选项类型.map f ∘ some = some ∘ f
   证明: rfl
 
 @[congr]
@@ -246,7 +246,7 @@ theorem bind_congr'
 
 中文:
 定理 bind_congr'
-  结论: {f g : α -> Option β} {x y : Option α} (hx : x = y)
+  结论: {f g : α -> 选项类型 β} {x y : 选项类型 α} (hx : x = y)
   证明: hx.symm ▸ bind_congr hf
 
 Depends on / 依赖: bind_congr, hx.symm
@@ -282,7 +282,7 @@ theorem bind_eq_bind'
 
 中文:
 定理 bind_eq_bind'
-  条件: {α β : 类型u} {f : α -> Option β} {x : Option α}
+  条件: {α β : 类型u} {f : α -> 选项类型 β} {x : 选项类型 α}
   结论: x >>= f = x.bind f
   证明: rfl
 -/
@@ -303,7 +303,7 @@ theorem map_coe
 中文:
 定理 map_coe
   条件: {α β} {a : α} {f : α -> β}
-  结论: f < > (a : Option α) = ↑(f a)
+  结论: f < > (a : 选项类型 α) = ↑(f a)
   证明: rfl
 
 @[simp]
@@ -324,7 +324,7 @@ theorem map_coe'
 中文:
 定理 map_coe'
   条件: {a : α} {f : α -> β}
-  结论: Option.map f (a : Option α) = ↑(f a)
+  结论: 选项类型.map f (a : 选项类型 α) = ↑(f a)
   证明: rfl
 -/
 theorem map_coe' {a : α} {f : α -> β} : Option.map f (a : Option α) = ↑(f a) :=
@@ -343,7 +343,7 @@ funext fun x => some_injective _ by simp only [← map_some, h]
 
 中文:
 定理 map_injective'
-  结论: Function.Injective (@Option.map α β)
+  结论: 函数.单射 (@选项类型.map α β)
   证明: fun f g h =>
 funext fun x => some_injective _ by simp only [← map_some, h]
 
@@ -367,7 +367,7 @@ theorem map_inj
 中文:
 定理 map_inj
   条件: {f g : α -> β}
-  结论: Option.map f = Option.map g ↔ f = g
+  结论: 选项类型.map f = 选项类型.map g ↔ f = g
   证明: map_injective'.eq_iff
 
 @[simp]
@@ -390,7 +390,7 @@ theorem map_eq_id
 中文:
 定理 map_eq_id
   条件: {f : α -> α}
-  结论: Option.map f = id ↔ f = id
+  结论: 选项类型.map f = id ↔ f = id
   证明: map_injective'.eq_iff' map_id
 
 Depends on / 依赖: eq_iff, map_id, map_injective
@@ -460,7 +460,7 @@ theorem pmap_bind
 
 中文:
 定理 pmap_bind
-  结论: {α β γ} {x : Option α} {g : α -> Option β} {p : β -> 命题} {f : 对任意 b, p b -> γ} (H)
+  结论: {α β γ} {x : 选项类型 α} {g : α -> 选项类型 β} {p : β -> 命题} {f : 对任意 b, p b -> γ} (H)
   证明: by
   grind [cases Option]
 -/
@@ -480,7 +480,7 @@ theorem bind_pmap
 
 中文:
 定理 bind_pmap
-  条件: {α β γ} {p : α -> 命题} (f : 对任意 a, p a -> β) (x : Option α) (g : β -> Option γ) (H)
+  条件: {α β γ} {p : α -> 命题} (f : 对任意 a, p a -> β) (x : 选项类型 α) (g : β -> 选项类型 γ) (H)
   证明: by
   grind [cases Option, pmap]
 -/
@@ -501,7 +501,7 @@ theorem pbind_eq_none
 
 中文:
 定理 pbind_eq_none
-  结论: {f : 对任意 a : α, a in x -> Option β}
+  结论: {f : 对任意 a : α, a in x -> 选项类型 β}
   证明: by
   grind [cases Option]
 -/
@@ -520,7 +520,7 @@ theorem join_pmap_eq_pmap_join
 
 中文:
 定理 join_pmap_eq_pmap_join
-  条件: {f : 对任意 a, p a -> β} {x : Option (Option α)} (H)
+  条件: {f : 对任意 a, p a -> β} {x : 选项类型 (选项类型 α)} (H)
   证明: by
   grind [cases Option]
 -/
@@ -539,7 +539,7 @@ theorem pmap_bind_id_eq_pmap_join
 
 中文:
 定理 pmap_bind_id_eq_pmap_join
-  条件: {f : 对任意 a, p a -> β} {x : Option (Option α)} (H)
+  条件: {f : 对任意 a, p a -> β} {x : 选项类型 (选项类型 α)} (H)
   证明: by
   grind [cases Option]
 -/
@@ -584,8 +584,8 @@ theorem iget_mem
 
 中文:
 定理 iget_mem
-  条件: [Inhabited α]
-  结论: 对任意 {o : Option α}, isSome o -> o.iget in o
+  条件: [可居 α]
+  结论: 对任意 {o : 选项类型 α}, isSome o -> o.iget in o
 -/
 theorem iget_mem [Inhabited α] : forall {o : Option α}, isSome o -> o.iget in o
   | some _, _ => rfl
@@ -601,8 +601,8 @@ theorem iget_of_mem
 
 中文:
 定理 iget_of_mem
-  条件: [Inhabited α] {a : α}
-  结论: 对任意 {o : Option α}, a in o -> o.iget = a
+  条件: [可居 α] {a : α}
+  结论: 对任意 {o : 选项类型 α}, a in o -> o.iget = a
 -/
 theorem iget_of_mem [Inhabited α] {a : α} : forall {o : Option α}, a in o -> o.iget = a
   | _, rfl => rfl
@@ -620,7 +620,7 @@ theorem getD_default_eq_iget
 
 中文:
 定理 getD_default_eq_iget
-  条件: [Inhabited α] (o : Option α)
+  条件: [可居 α] (o : 选项类型 α)
   证明: by cases o <;> rfl
 
 @[simp, grind =]
@@ -643,7 +643,7 @@ theorem failure_eq_none
 中文:
 定理 failure_eq_none
   条件: {α}
-  结论: failure = (none : Option α)
+  结论: failure = (none : 选项类型 α)
   证明: rfl
 
 @[simp]
@@ -663,7 +663,7 @@ theorem guard_eq_some'
 
 中文:
 定理 guard_eq_some'
-  条件: {p : 命题} [Decidable p] (u)
+  条件: {p : 命题} [可判定 p] (u)
   结论: _root_.guard p = some u ↔ p
   证明: by
   grind [cases Option, _root_.guard]
@@ -682,7 +682,7 @@ definition casesOn'
 
 中文:
 定义 casesOn'
-  签名: : Option α -> β -> (α -> β) -> β
+  签名: : 选项类型 α -> β -> (α -> β) -> β
 -/
 def casesOn' : Option α -> β -> (α -> β) -> β
   | none, n, _ => n
@@ -749,7 +749,7 @@ theorem casesOn'_coe
 中文:
 定理 casesOn'_coe
   条件: (x : β) (f : α -> β) (a : α)
-  结论: casesOn' (a : Option α) x f = f a
+  结论: casesOn' (a : 选项类型 α) x f = f a
   证明: rfl
 
 @[simp]
@@ -768,7 +768,7 @@ theorem casesOn'_none_coe
 
 中文:
 定理 casesOn'_none_coe
-  条件: (f : Option α -> β) (o : Option α)
+  条件: (f : 选项类型 α -> β) (o : 选项类型 α)
   证明: by cases o <;> rfl
 -/
 theorem casesOn'_none_coe (f : Option α -> β) (o : Option α) :
@@ -784,7 +784,7 @@ lemma casesOn'_eq_elim
 
 中文:
 引理 casesOn'_eq_elim
-  条件: (b : β) (f : α -> β) (a : Option α)
+  条件: (b : β) (f : α -> β) (a : 选项类型 α)
   证明: by cases a <;> rfl
 -/
 lemma casesOn'_eq_elim (b : β) (f : α -> β) (a : Option α) :
@@ -801,7 +801,7 @@ theorem orElse_eq_some
 
 中文:
 定理 orElse_eq_some
-  条件: (o o' : Option α) (x : α)
+  条件: (o o' : 选项类型 α) (x : α)
   证明: by
   simp
 -/
@@ -821,7 +821,7 @@ theorem orElse_eq_none
 
 中文:
 定理 orElse_eq_none
-  条件: (o o' : Option α)
+  条件: (o o' : 选项类型 α)
   结论: (o <|> o') = none ↔ o = none ∧ o' = none
   证明: by
   simp
@@ -842,7 +842,7 @@ theorem choice_eq_none
 
 中文:
 定理 choice_eq_none
-  条件: (α : 类型) [IsEmpty α]
+  条件: (α : 类型) [是空 α]
   结论: choice α = none
   证明: choice_eq_none_iff_not_nonempty.mpr (not_nonempty_iff_imp_false.mpr isEmptyElim)
 
@@ -866,7 +866,7 @@ theorem elim_none_some
 
 中文:
 定理 elim_none_some
-  条件: (f : Option α -> β) (i : Option α)
+  条件: (f : 选项类型 α -> β) (i : 选项类型 α)
   结论: i.elim (f none) (f ∘ some) = f i
   证明: by
   cases i <;> rfl
@@ -884,7 +884,7 @@ theorem elim_comp
 
 中文:
 定理 elim_comp
-  条件: (h : α -> β) {f : γ -> α} {x : α} {i : Option γ}
+  条件: (h : α -> β) {f : γ -> α} {x : α} {i : 选项类型 γ}
   证明: by cases i <;> rfl
 -/
 theorem elim_comp (h : α -> β) {f : γ -> α} {x : α} {i : Option γ} :
@@ -919,7 +919,7 @@ theorem elim_apply
 
 中文:
 定理 elim_apply
-  条件: {f : γ -> α -> β} {x : α -> β} {i : Option γ} {y : α}
+  条件: {f : γ -> α -> β} {x : α -> β} {i : 选项类型 γ} {y : α}
   证明: by rw [elim_comp fun f : α -> β => f y]
 
 Depends on / 依赖: elim_comp
@@ -1005,7 +1005,7 @@ theorem none_eq_map_iff
 
 中文:
 定理 none_eq_map_iff
-  条件: {x : Option α} {f : α -> β}
+  条件: {x : 选项类型 α} {f : α -> β}
   结论: none = x.map f ↔ x = none
   证明: by
   rw [eq_comm]; rw [map_eq_none_iff]
@@ -1029,7 +1029,7 @@ theorem some_eq_map_iff
 
 中文:
 定理 some_eq_map_iff
-  条件: {b : β} {x : Option α} {f : α -> β}
+  条件: {b : β} {x : 选项类型 α} {f : α -> β}
   证明: by
   rw [eq_comm]; rw [map_eq_some_iff]
 

@@ -114,7 +114,7 @@ theorem eq_quo_mul_pow_add_sum_rem_mul_pow
 
 中文:
 定理 eq_quo_mul_pow_add_sum_rem_mul_pow
-  结论: [Nontrivial R] (f : R[X]) {g : R[X]} (hg : g.Monic)
+  结论: [非平凡 R] (f : R[X]) {g : R[X]} (hg : g.Monic)
   证明: by
   induction n with
   | zero => simp
@@ -215,7 +215,7 @@ theorem eq_quo_mul_prod_add_sum_rem_mul_prod
 
 中文:
 定理 eq_quo_mul_prod_add_sum_rem_mul_prod
-  结论: [Nontrivial R] {ι : 类型} [DecidableEq ι]
+  结论: [非平凡 R] {ι : 类型} [DecidableEq ι]
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -369,7 +369,7 @@ theorem eq_quo_mul_prod_pow_add_sum_rem_mul_prod_pow
 
 中文:
 定理 eq_quo_mul_prod_pow_add_sum_rem_mul_prod_pow
-  结论: [Nontrivial R] {ι : 类型} [DecidableEq ι]
+  结论: [非平凡 R] {ι : 类型} [DecidableEq ι]
   证明: by
   obtain ⟨q, r, -, hf⟩ := eq_quo_mul_prod_add_sum_rem_mul_prod f
     (fun i hi => (hg i hi).pow (n i))
@@ -481,7 +481,7 @@ theorem mul_prod_pow_inverse_eq_quo_add_sum_rem_mul_pow_inverse
 
 中文:
 定理 mul_prod_pow_inverse_eq_quo_add_sum_rem_mul_pow_inverse
-  结论: [Nontrivial R] {ι : 类型}
+  结论: [非平凡 R] {ι : 类型}
   证明: by
   classical
   obtain ⟨q, r, hr, hf⟩ := eq_quo_mul_prod_pow_add_sum_rem_mul_prod_pow f hg hgg n
@@ -530,7 +530,7 @@ theorem quo_add_sum_rem_mul_pow_inverse_unique
 
 中文:
 定理 quo_add_sum_rem_mul_pow_inverse_unique
-  结论: [FaithfulSMul R[X] K] {ι : 类型}
+  结论: [忠实标量乘法 R[X] K] {ι : 类型}
   证明: by
   classical
   suffices hff : forall {q : R[X]} {r : (i : ι) -> Fin (n i) -> R[X]},
@@ -596,7 +596,7 @@ theorem div_prod_eq_quo_add_sum_rem_div
 
 中文:
 定理 div_prod_eq_quo_add_sum_rem_div
-  结论: (f : R[X]) {ι : 类型} {g : ι -> R[X]} {s : Finset ι}
+  结论: (f : R[X]) {ι : 类型} {g : ι -> R[X]} {s : 有限集 ι}
   证明: by
   have : Nontrivial R :=
     have : Nontrivial R[X] := Module.nontrivial R[X] K
@@ -643,7 +643,7 @@ theorem quo_add_sum_rem_div_unique
 
 中文:
 定理 quo_add_sum_rem_div_unique
-  结论: {ι : 类型} {g : ι -> R[X]} {s : Finset ι}
+  结论: {ι : 类型} {g : ι -> R[X]} {s : 有限集 ι}
   证明: by
   have : Nontrivial R :=
     have : Nontrivial R[X] := Module.nontrivial R[X] K

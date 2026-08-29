@@ -120,7 +120,7 @@ lemma rank_eq_zero_iff
 
 中文:
 引理 rank_eq_zero_iff
-  条件: {R M} [Ring R] [AddCommGroup M] [Module R M]
+  条件: {R M} [环 R] [加法交换群 M] [模 R M]
   证明: by
   nontriviality R
   constructor
@@ -169,7 +169,7 @@ theorem rank_zero_iff_forall_zero
     exists_and_right, and_iff_right (exists_ne (0 : R))]
 
 中文:
-定理 rank_zero_iff_forall_zero
+定理 rank_zero_iff_对任意_zero
   证明: by
   simp_rw [rank_eq_zero_iff, smul_eq_zero, and_or_left, not_and_self_iff, false_or,
     exists_and_right, and_iff_right (exists_ne (0 : R))]
@@ -191,7 +191,7 @@ theorem rank_zero_iff
 
 中文:
 定理 rank_zero_iff
-  结论: Module.rank R M = 0 ↔ Subsingleton M
+  结论: 模.rank R M = 0 ↔ 子单例 M
   证明: rank_zero_iff_forall_zero.trans (subsingleton_iff_forall_eq 0).symm
 
 Depends on / 依赖: rank_zero_iff_forall_zero, rank_zero_iff_forall_zero.trans, subsingleton_iff_forall_eq
@@ -209,8 +209,8 @@ theorem rank_pos_iff_exists_ne_zero
   contrapose!; rw [nonpos_iff_eq_zero]; exact rank_zero_iff_forall_zero
 
 中文:
-定理 rank_pos_iff_exists_ne_zero
-  结论: 0 < Module.rank R M ↔ 存在 x : M, x != 0
+定理 rank_pos_iff_存在_ne_zero
+  结论: 0 < 模.rank R M ↔ 存在 x : M, x != 0
   证明: by
   contrapose!; rw [nonpos_iff_eq_zero]; exact rank_zero_iff_forall_zero
 
@@ -229,7 +229,7 @@ theorem rank_pos_iff_nontrivial
 
 中文:
 定理 rank_pos_iff_nontrivial
-  结论: 0 < Module.rank R M ↔ Nontrivial M
+  结论: 0 < 模.rank R M ↔ 非平凡 M
   证明: rank_pos_iff_exists_ne_zero.trans (nontrivial_iff_exists_ne 0).symm
 
 Depends on / 依赖: nontrivial_iff_exists_ne, rank_pos_iff_exists_ne_zero, rank_pos_iff_exists_ne_zero.trans
@@ -248,8 +248,8 @@ theorem rank_pos
 
 中文:
 定理 rank_pos
-  条件: [Nontrivial M]
-  结论: 0 < Module.rank R M
+  条件: [非平凡 M]
+  结论: 0 < 模.rank R M
   证明: rank_pos_iff_nontrivial.mpr ‹_›
 
 Depends on / 依赖: rank_pos_iff_nontrivial, rank_pos_iff_nontrivial.mpr
@@ -270,9 +270,9 @@ theorem Module.finite_of_rank_eq_zero
   infer_instance
 
 中文:
-定理 Module.finite_of_rank_eq_zero
-  条件: (h : Module.rank R M = 0)
-  结论: Module.Finite R M
+定理 模.finite_of_rank_eq_zero
+  条件: (h : 模.rank R M = 0)
+  结论: 模.有限 R M
   证明: by
   nontriviality R
   rw [rank_zero_iff] at h
@@ -296,8 +296,8 @@ lemma exists_mem_ne_zero_of_rank_pos
   proof: exists_mem_ne_zero_of_ne_bot fun eq => by rw [eq, rank_bot] at h; exact lt_irrefl _ h
 
 中文:
-引理 exists_mem_ne_zero_of_rank_pos
-  条件: [Nontrivial R] {s : Submodule R M} (h : 0 < Module.rank R s)
+引理 存在_mem_ne_zero_of_rank_pos
+  条件: [非平凡 R] {s : 子模 R M} (h : 0 < 模.rank R s)
   证明: exists_mem_ne_zero_of_ne_bot fun eq => by rw [eq, rank_bot] at h; exact lt_irrefl _ h
 
 Depends on / 依赖: exists_mem_ne_zero_of_ne_bot, lt_irrefl, rank_bot
@@ -324,8 +324,8 @@ have := mk_lt_aleph0_iff.mp
   exact Module.Finite.of_basis b
 
 中文:
-定理 Module.finite_of_rank_eq_nat
-  条件: [Module.Free R M] {n : 自然数} (h : Module.rank R M = n)
+定理 模.finite_of_rank_eq_nat
+  条件: [模.自由 R M] {n : 自然数} (h : 模.rank R M = n)
   证明: by
   nontriviality R
   obtain ⟨⟨ι, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
@@ -352,8 +352,8 @@ theorem Module.finite_of_rank_eq_one
   proof: Module.finite_of_rank_eq_nat h.trans Nat.cast_one.symm
 
 中文:
-定理 Module.finite_of_rank_eq_one
-  条件: [Module.Free R M] (h : Module.rank R M = 1)
+定理 模.finite_of_rank_eq_one
+  条件: [模.自由 R M] (h : 模.rank R M = 1)
   证明: Module.finite_of_rank_eq_nat h.trans Nat.cast_one.symm
 
 Depends on / 依赖: Module, Module.finite_of_rank_eq_nat, Nat.cast_one.symm, cast_one, finite_of_rank_eq_nat, h.trans
@@ -376,8 +376,8 @@ theorem Module.Basis.nonempty_fintype_index_of_rank_lt_aleph0
     Cardinal.lt_aleph0_iff_fintype] at h
 
 中文:
-定理 Module.Basis.nonempty_fintype_index_of_rank_lt_aleph0
-  结论: {ι : 类型} (b : Basis ι R M)
+定理 模.基.nonempty_fintype_index_of_rank_lt_aleph0
+  结论: {ι : 类型} (b : 基 ι R M)
   证明: by
   rwa [← Cardinal.lift_lt, ← b.mk_eq_rank, Cardinal.lift_aleph0, Cardinal.lift_lt_aleph0,
     Cardinal.lt_aleph0_iff_fintype] at h
@@ -400,8 +400,8 @@ definition Module.Basis.fintypeIndexOfRankLtAleph0
   body: Classical.choice (b.nonempty_fintype_index_of_rank_lt_aleph0 h)
 
 中文:
-定义 Module.Basis.fintypeIndexOfRankLtAleph0
-  签名: {ι : 类型} (b : Basis ι R M)
+定义 模.基.fintypeIndexOfRankLtAleph0
+  签名: {ι : 类型} (b : 基 ι R M)
   定义体: Classical.choice (b.nonempty_fintype_index_of_rank_lt_aleph0 h)
 
 Depends on / 依赖: Classical, Classical.choice, b.nonempty_fintype_index_of_rank_lt_aleph0, choice, nonempty_fintype_index_of_rank_lt_aleph0
@@ -419,8 +419,8 @@ theorem Module.Basis.finite_index_of_rank_lt_aleph0
   proof: Set.finite_def.2 (b.nonempty_fintype_index_of_rank_lt_aleph0 h)
 
 中文:
-定理 Module.Basis.finite_index_of_rank_lt_aleph0
-  结论: {ι : 类型} {s : Set ι} (b : Basis s R M)
+定理 模.基.finite_index_of_rank_lt_aleph0
+  结论: {ι : 类型} {s : 集合 ι} (b : 基 s R M)
   证明: Set.finite_def.2 (b.nonempty_fintype_index_of_rank_lt_aleph0 h)
 
 Depends on / 依赖: Set.finite_def, b.nonempty_fintype_index_of_rank_lt_aleph0, finite_def, nonempty_fintype_index_of_rank_lt_aleph0
@@ -446,7 +446,7 @@ theorem cardinalMk_le_finrank
 
 中文:
 定理 cardinalMk_le_finrank
-  结论: [Module.Finite R M]
+  结论: [模.有限 R M]
   证明: by
   rw [← lift_le.{max v w}]
   simpa only [← finrank_eq_rank, lift_natCast, lift_le_nat_iff] using h.cardinal_lift_le_rank
@@ -469,7 +469,7 @@ theorem fintype_card_le_finrank
 
 中文:
 定理 fintype_card_le_finrank
-  结论: [Module.Finite R M]
+  结论: [模.有限 R M]
   证明: by
   simpa using h.cardinalMk_le_finrank
 
@@ -492,7 +492,7 @@ theorem finset_card_le_finrank
 
 中文:
 定理 finset_card_le_finrank
-  结论: [Module.Finite R M]
+  结论: [模.有限 R M]
   证明: by
   rw [← Fintype.card_coe]
   exact h.fintype_card_le_finrank
@@ -520,7 +520,7 @@ theorem lt_aleph0_of_finite
 
 中文:
 定理 lt_aleph0_of_finite
-  结论: {ι : Type w}
+  结论: {ι : 类型 w}
   证明: by
   apply Cardinal.lift_lt.1
   apply lt_of_le_of_lt
@@ -548,7 +548,7 @@ theorem finite
 
 中文:
 定理 finite
-  结论: [Module.Finite R M] {ι : 类型} {f : ι -> M}
+  结论: [模.有限 R M] {ι : 类型} {f : ι -> M}
   证明: Cardinal.lt_aleph0_iff_finite.1 h.lt_aleph0_of_finite
 
 Depends on / 依赖: Cardinal, Cardinal.lt_aleph0_iff_finite, h.lt_aleph0_of_finite, lt_aleph0_iff_finite, lt_aleph0_of_finite
@@ -567,7 +567,7 @@ theorem setFinite
 
 中文:
 定理 setFinite
-  结论: [Module.Finite R M] {b : Set M}
+  结论: [模.有限 R M] {b : 集合 M}
   证明: Cardinal.lt_aleph0_iff_set_finite.mp h.lt_aleph0_of_finite
 
 Depends on / 依赖: Cardinal, Cardinal.lt_aleph0_iff_set_finite.mp, h.lt_aleph0_of_finite, lt_aleph0_iff_set_finite, lt_aleph0_of_finite
@@ -592,8 +592,8 @@ lemma exists_finset_linearIndependent_of_le_rank
     have : Finite s := lt_aleph0_iff_finite.mp (hs' ▸ natCast_lt
 
 中文:
-引理 exists_finset_linearIndependent_of_le_rank
-  条件: {n : 自然数} (hn : n <= Module.rank R M)
+引理 存在_finset_linearIndependent_of_le_rank
+  条件: {n : 自然数} (hn : n <= 模.rank R M)
   证明: by
   rcases hn.eq_or_lt with h | h
   · obtain ⟨⟨s, hs⟩, hs'⟩ := exists_eq_ciSup_of_not_isSuccLimit
@@ -630,8 +630,8 @@ lemma exists_linearIndependent_of_le_rank
   ⟨_, (linearIndependent_equiv (Finset.equivFinOfCardEq hs).symm).mpr hs'⟩
 
 中文:
-引理 exists_linearIndependent_of_le_rank
-  条件: {n : 自然数} (hn : n <= Module.rank R M)
+引理 存在_linearIndependent_of_le_rank
+  条件: {n : 自然数} (hn : n <= 模.rank R M)
   证明: have ⟨_, hs, hs'⟩ := exists_finset_linearIndependent_of_le_rank hn
   ⟨_, (linearIndependent_equiv (Finset.equivFinOfCardEq hs).symm).mpr hs'⟩
 
@@ -653,7 +653,7 @@ lemma natCast_le_rank_iff
 
 中文:
 引理 natCast_le_rank_iff
-  条件: [Nontrivial R] {n : 自然数}
+  条件: [非平凡 R] {n : 自然数}
   证明: ⟨exists_linearIndependent_of_le_rank,
     fun H => by simpa using H.choose_spec.cardinal_lift_le_rank⟩
 
@@ -675,7 +675,7 @@ lemma natCast_le_rank_iff_finset
 
 中文:
 引理 natCast_le_rank_iff_finset
-  条件: [Nontrivial R] {n : 自然数}
+  条件: [非平凡 R] {n : 自然数}
   证明: ⟨exists_finset_linearIndependent_of_le_rank,
     fun ⟨s, h₁, h₂⟩ => by simpa [h₁] using h₂.cardinal_le_rank⟩
 
@@ -700,7 +700,7 @@ lemma exists_finset_linearIndependent_of_le_finrank
     ((Nat.cast_le.mpr hn).trans_eq (cast_toNat_of_lt_aleph0 (toNat_ne_zero.mp h).2))
 
 中文:
-引理 exists_finset_linearIndependent_of_le_finrank
+引理 存在_finset_linearIndependent_of_le_finrank
   条件: {n : 自然数} (hn : n <= finrank R M)
   证明: by
   by_cases h : finrank R M = 0
@@ -729,7 +729,7 @@ lemma exists_linearIndependent_of_le_finrank
   ⟨_, (linearIndependent_equiv (Finset.equivFinOfCardEq hs).symm).mpr hs'⟩
 
 中文:
-引理 exists_linearIndependent_of_le_finrank
+引理 存在_linearIndependent_of_le_finrank
   条件: {n : 自然数} (hn : n <= finrank R M)
   证明: have ⟨_, hs, hs'⟩ := exists_finset_linearIndependent_of_le_finrank hn
   ⟨_, (linearIndependent_equiv (Finset.equivFinOfCardEq hs).symm).mpr hs'⟩
@@ -751,8 +751,8 @@ theorem Module.Finite.not_linearIndependent_of_infinite
   proof: mt LinearIndependent.finite @not_finite _ _
 
 中文:
-定理 Module.Finite.not_linearIndependent_of_infinite
-  结论: {ι : 类型} [Infinite ι]
+定理 模.有限.not_linearIndependent_of_infinite
+  结论: {ι : 类型} [无限 ι]
   证明: mt LinearIndependent.finite @not_finite _ _
 
 Depends on / 依赖: LinearIndependent, LinearIndependent.finite, finite, not_finite
@@ -782,7 +782,7 @@ theorem iSupIndep.subtype_ne_bot_le_rank
 
 中文:
 定理 iSupIndep.subtype_ne_bot_le_rank
-  条件: {V : ι -> Submodule R M} (hV : iSupIndep V)
+  条件: {V : ι -> 子模 R M} (hV : iSupIndep V)
   证明: by
   set I := { i : ι // V i != ⊥ }
   have hI : forall i : I, exists v in V i, v != (0 : M) := by
@@ -918,8 +918,8 @@ theorem Module.exists_nontrivial_relation_of_finrank_lt_card
   rw [← Finset.sum_finset_coe]; convert! sum; apply Subtype.val_injective.ext
 
 中文:
-定理 Module.exists_nontrivial_relation_of_finrank_lt_card
-  结论: {t : Finset M}
+定理 模.存在_nontrivial_relation_of_finrank_lt_card
+  结论: {t : 有限集 M}
   证明: by
   obtain ⟨g, sum, z, nonzero⟩ := Fintype.not_linearIndependent_iff.mp
     (mt LinearIndependent.finset_card_le_finrank h.not_ge)
@@ -951,7 +951,7 @@ theorem Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
     rw [card_
 
 中文:
-定理 Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
+定理 模.存在_nontrivial_relation_sum_zero_of_finrank_succ_lt_card
   证明: by
   -- Pick an element x₀ ∈ t,
   obtain ⟨x₀, x₀_mem⟩ := card_pos.1 ((Nat.succ_pos _).trans h)
@@ -1015,8 +1015,8 @@ theorem Module.finrank_zero_of_subsingleton
   rw [finrank]; rw [rank_subsingleton']; rw [map_zero]
 
 中文:
-定理 Module.finrank_zero_of_subsingleton
-  条件: [Subsingleton M]
+定理 模.finrank_zero_of_subsingleton
+  条件: [子单例 M]
   证明: by
   rw [finrank]; rw [rank_subsingleton']; rw [map_zero]
 
@@ -1036,7 +1036,7 @@ lemma LinearIndependent.finrank_eq_zero_of_infinite
 
 中文:
 引理 LinearIndependent.finrank_eq_zero_of_infinite
-  结论: {ι} [Infinite ι] {v : ι -> M}
+  结论: {ι} [无限 ι] {v : ι -> M}
   证明: toNat_eq_zero.mpr .inr hv.aleph0_le_rank
 
 Depends on / 依赖: aleph0_le_rank, hv.aleph0_le_rank, toNat_eq_zero, toNat_eq_zero.mpr
@@ -1055,9 +1055,9 @@ theorem Module.nontrivial_of_finrank_pos
   contrapose! h; exact finrank_zero_of_subsingleton.le
 
 中文:
-定理 Module.nontrivial_of_finrank_pos
+定理 模.nontrivial_of_finrank_pos
   条件: (h : 0 < finrank R M)
-  结论: Nontrivial M
+  结论: 非平凡 M
   证明: by
   contrapose! h; exact finrank_zero_of_subsingleton.le
 
@@ -1075,7 +1075,7 @@ theorem Module.nontrivial_of_finrank_eq_succ
   proof: nontrivial_of_finrank_pos (R := R) (by rw [hn]; exact n.succ_pos)
 
 中文:
-定理 Module.nontrivial_of_finrank_eq_succ
+定理 模.nontrivial_of_finrank_eq_succ
   结论: {n : 自然数}
   证明: nontrivial_of_finrank_pos (R := R) (by rw [hn]; exact n.succ_pos)
 
@@ -1098,7 +1098,7 @@ theorem finrank_bot
 
 中文:
 定理 finrank_bot
-  结论: finrank R (⊥ : Submodule R M) = 0
+  结论: finrank R (⊥ : 子模 R M) = 0
   证明: finrank_eq_of_rank_eq (rank_bot _ _)
 
 Depends on / 依赖: finrank_eq_of_rank_eq, rank_bot
@@ -1124,8 +1124,8 @@ theorem Module.finrank_pos_iff_exists_ne_zero
   norm_cast
 
 中文:
-定理 Module.finrank_pos_iff_exists_ne_zero
-  条件: [IsDomain R] [IsTorsionFree R M]
+定理 模.finrank_pos_iff_存在_ne_zero
+  条件: [是整环 R] [是无挠 R M]
   证明: by
   rw [← @rank_pos_iff_exists_ne_zero R M]; rw [← finrank_eq_rank]
   norm_cast
@@ -1148,8 +1148,8 @@ theorem Module.finrank_pos_iff
   norm_cast
 
 中文:
-定理 Module.finrank_pos_iff
-  条件: [IsDomain R] [IsTorsionFree R M]
+定理 模.finrank_pos_iff
+  条件: [是整环 R] [是无挠 R M]
   证明: by
   rw [← rank_pos_iff_nontrivial (R := R)]; rw [← finrank_eq_rank]
   norm_cast
@@ -1170,8 +1170,8 @@ theorem Module.finrank_pos
   proof: finrank_pos_iff.mpr h
 
 中文:
-定理 Module.finrank_pos
-  条件: [IsDomain R] [IsTorsionFree R M] [h : Nontrivial M]
+定理 模.finrank_pos
+  条件: [是整环 R] [是无挠 R M] [h : 非平凡 M]
   证明: finrank_pos_iff.mpr h
 
 Depends on / 依赖: finrank_pos_iff, finrank_pos_iff.mpr
@@ -1190,7 +1190,7 @@ theorem Module.finrank_eq_zero_iff
   norm_cast
 
 中文:
-定理 Module.finrank_eq_zero_iff
+定理 模.finrank_eq_zero_iff
   证明: by
   rw [← rank_eq_zero_iff (R := R)]; rw [← finrank_eq_rank]
   norm_cast
@@ -1213,8 +1213,8 @@ theorem Module.finrank_zero_iff
   norm_cast
 
 中文:
-定理 Module.finrank_zero_iff
-  条件: [IsDomain R] [IsTorsionFree R M]
+定理 模.finrank_zero_iff
+  条件: [是整环 R] [是无挠 R M]
   证明: by
   rw [← rank_zero_iff (R := R)]; rw [← finrank_eq_rank]
   norm_cast
@@ -1239,8 +1239,8 @@ lemma Module.finrank_quotient_add_finrank_le
   exact mod_cast this
 
 中文:
-引理 Module.finrank_quotient_add_finrank_le
-  条件: (N : Submodule R M)
+引理 模.finrank_quotient_add_finrank_le
+  条件: (N : 子模 R M)
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   have := rank_quotient_add_rank_le N
@@ -1269,8 +1269,8 @@ theorem Module.finrank_eq_zero_of_rank_eq_zero
   rw [h]; rw [zero_toNat]
 
 中文:
-定理 Module.finrank_eq_zero_of_rank_eq_zero
-  条件: (h : Module.rank R M = 0)
+定理 模.finrank_eq_zero_of_rank_eq_zero
+  条件: (h : 模.rank R M = 0)
   证明: by
   delta finrank
   rw [h]; rw [zero_toNat]
@@ -1292,8 +1292,8 @@ theorem Module.finrank_eq_zero_of_not_faithfulSMul
   proof: finrank_eq_zero_of_rank_eq_zero (rank_eq_zero_of_not_faithfulSMul h)
 
 中文:
-定理 Module.finrank_eq_zero_of_not_faithfulSMul
-  条件: (h : ¬ FaithfulSMul R M)
+定理 模.finrank_eq_zero_of_not_faithfulSMul
+  条件: (h : ¬ 忠实标量乘法 R M)
   结论: finrank R M = 0
   证明: finrank_eq_zero_of_rank_eq_zero (rank_eq_zero_of_not_faithfulSMul h)
 
@@ -1319,9 +1319,9 @@ lemma Submodule.bot_eq_top_of_rank_eq_zero
   subsingleton
 
 中文:
-引理 Submodule.bot_eq_top_of_rank_eq_zero
-  条件: (h : Module.rank R M = 0)
-  结论: (⊥ : Submodule R M) = ⊤
+引理 子模.bot_eq_top_of_rank_eq_zero
+  条件: (h : 模.rank R M = 0)
+  结论: (⊥ : 子模 R M) = ⊤
   证明: by
   nontriviality R
   rw [rank_zero_iff] at h
@@ -1353,9 +1353,9 @@ congr_arg Subtype.val
 @[simp]
 
 中文:
-定理 Submodule.rank_eq_zero
-  条件: {S : Submodule R M}
-  结论: Module.rank R S = 0 ↔ S = ⊥
+定理 子模.rank_eq_zero
+  条件: {S : 子模 R M}
+  结论: 模.rank R S = 0 ↔ S = ⊥
   证明: ⟨fun h =>
     (Submodule.eq_bot_iff _).2 fun x hx =>
 congr_arg Subtype.val
@@ -1388,8 +1388,8 @@ theorem Submodule.finrank_eq_zero
 @[simp]
 
 中文:
-定理 Submodule.finrank_eq_zero
-  条件: [StrongRankCondition R] {S : Submodule R M} [Module.Finite R S]
+定理 子模.finrank_eq_zero
+  条件: [StrongRankCondition R] {S : 子模 R M} [模.有限 R S]
   证明: by
   rw [← Submodule.rank_eq_zero]; rw [← finrank_eq_rank]; rw [← @Nat.cast_zero Cardinal]; rw [Nat.cast_inj]
 
@@ -1412,8 +1412,8 @@ lemma Submodule.one_le_finrank_iff
   contrapose!; rw [Nat.lt_one_iff, finrank_eq_zero]
 
 中文:
-引理 Submodule.one_le_finrank_iff
-  条件: [StrongRankCondition R] {S : Submodule R M} [Module.Finite R S]
+引理 子模.one_le_finrank_iff
+  条件: [StrongRankCondition R] {S : 子模 R M} [模.有限 R S]
   证明: by
   contrapose!; rw [Nat.lt_one_iff, finrank_eq_zero]
 
@@ -1436,8 +1436,8 @@ theorem Set.finrank_empty
   rw [Set.finrank]; rw [span_empty]; rw [finrank_bot]
 
 中文:
-定理 Set.finrank_empty
-  条件: [Nontrivial R]
+定理 集合.finrank_empty
+  条件: [非平凡 R]
   证明: by
   rw [Set.finrank]; rw [span_empty]; rw [finrank_bot]
 
@@ -1497,7 +1497,7 @@ theorem finrank_eq_zero_of_basis_imp_false
 
 中文:
 定理 finrank_eq_zero_of_basis_imp_false
-  条件: (h : 对任意 s : Finset M, Basis.{v} (s : Set M) R M -> False)
+  条件: (h : 对任意 s : 有限集 M, 基.{v} (s : 集合 M) R M -> 假)
   证明: finrank_eq_zero_of_basis_imp_not_finite fun s b hs =>
     h hs.toFinset
       (by
@@ -1522,7 +1522,7 @@ theorem finrank_eq_zero_of_not_exists_basis
   proof: finrank_eq_zero_of_basis_imp_false fun s b => h ⟨s, ⟨b⟩⟩
 
 中文:
-定理 finrank_eq_zero_of_not_exists_basis
+定理 finrank_eq_zero_of_not_存在_basis
   证明: finrank_eq_zero_of_basis_imp_false fun s b => h ⟨s, ⟨b⟩⟩
 
 Depends on / 依赖: finrank_eq_zero_of_basis_imp_false
@@ -1539,7 +1539,7 @@ theorem finrank_eq_zero_of_not_exists_basis_finite
   proof: finrank_eq_zero_of_basis_imp_not_finite fun s b hs => h ⟨s, b, hs⟩
 
 中文:
-定理 finrank_eq_zero_of_not_exists_basis_finite
+定理 finrank_eq_zero_of_not_存在_basis_finite
   证明: finrank_eq_zero_of_basis_imp_not_finite fun s b hs => h ⟨s, b, hs⟩
 
 Depends on / 依赖: finrank_eq_zero_of_basis_imp_not_finite
@@ -1557,8 +1557,8 @@ theorem finrank_eq_zero_of_not_exists_basis_finset
   proof: finrank_eq_zero_of_basis_imp_false fun s b => h ⟨s, ⟨b⟩⟩
 
 中文:
-定理 finrank_eq_zero_of_not_exists_basis_finset
-  条件: (h : ¬存在 s : Finset M, Nonempty (Basis s R M))
+定理 finrank_eq_zero_of_not_存在_basis_finset
+  条件: (h : ¬存在 s : 有限集 M, 非空 (基 s R M))
   证明: finrank_eq_zero_of_basis_imp_false fun s b => h ⟨s, ⟨b⟩⟩
 
 Depends on / 依赖: finrank_eq_zero_of_basis_imp_false
@@ -1641,7 +1641,7 @@ theorem rank_le_one
 中文:
 定理 rank_le_one
   条件: (v : M) (h : 对任意 w : M, 存在 c : R, c • v = w)
-  结论: Module.rank R M <= 1
+  结论: 模.rank R M <= 1
   证明: by
   simpa using LinearMap.lift_rank_le_of_surjective _
     (id h : Surjective (LinearMap.toSpanSingleton R M v))
@@ -1733,7 +1733,7 @@ lemma finite_finsupp_self_iff
 
 中文:
 引理 finite_finsupp_self_iff
-  结论: Module.Finite R (ι ->₀ R) ↔ Subsingleton R ∨ Finite ι
+  结论: 模.有限 R (ι ->₀ R) ↔ 子单例 R ∨ 有限 ι
   证明: by
   simp only [finite_finsupp_iff, Finite.self, true_and, or_iff_right_iff_imp]
   exact fun _ => .inr inferInstance

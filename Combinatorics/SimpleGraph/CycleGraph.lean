@@ -34,7 +34,7 @@ definition cycleGraph
 
 中文:
 定义 cycleGraph
-  签名: : (n : 自然数) -> SimpleGraph (Fin n)
+  签名: : (n : 自然数) -> 简单图 (有限集 n)
 -/
 def cycleGraph : (n : Nat) -> SimpleGraph (Fin n)
   | 0 | 1 => ⊥
@@ -51,7 +51,7 @@ instance :
 
 中文:
 实例 :
-  签名: (n : 自然数) -> DecidableRel (cycleGraph n).Adj
+  签名: (n : 自然数) -> DecidableRel (cycleGraph n).伴随
 -/
 instance : (n : Nat) -> DecidableRel (cycleGraph n).Adj
   | 0 | 1 => fun _ _ => inferInstanceAs (Decidable False)
@@ -68,8 +68,8 @@ theorem cycleGraph_zero_adj
 
 中文:
 定理 cycleGraph_zero_adj
-  条件: {u v : Fin 0}
-  结论: ¬(cycleGraph 0).Adj u v
+  条件: {u v : 有限集 0}
+  结论: ¬(cycleGraph 0).伴随 u v
   证明: id
 -/
 theorem cycleGraph_zero_adj {u v : Fin 0} : ¬(cycleGraph 0).Adj u v := id
@@ -197,8 +197,8 @@ theorem cycleGraph_one_adj
 
 中文:
 定理 cycleGraph_one_adj
-  条件: {u v : Fin 1}
-  结论: ¬(cycleGraph 1).Adj u v
+  条件: {u v : 有限集 1}
+  结论: ¬(cycleGraph 1).伴随 u v
   证明: by
   simp [cycleGraph_one_eq_bot]
 
@@ -217,7 +217,7 @@ theorem cycleGraph_adj
 
 中文:
 定理 cycleGraph_adj
-  条件: {n : 自然数} {u v : Fin (n + 2)}
+  条件: {n : 自然数} {u v : 有限集 (n + 2)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -239,7 +239,7 @@ theorem cycleGraph_adj'
 
 中文:
 定理 cycleGraph_adj'
-  条件: {n : 自然数} {u v : Fin n}
+  条件: {n : 自然数} {u v : 有限集 n}
   证明: by
   match n with
   | 0 => exact u.elim0
@@ -268,7 +268,7 @@ theorem cycleGraph_neighborSet
 
 中文:
 定理 cycleGraph_neighborSet
-  条件: {n : 自然数} {v : Fin (n + 2)}
+  条件: {n : 自然数} {v : 有限集 (n + 2)}
   证明: by
   ext w
   simp only [mem_neighborSet, Set.mem_insert_iff, Set.mem_singleton_iff]
@@ -293,7 +293,7 @@ theorem cycleGraph_neighborFinset
 
 中文:
 定理 cycleGraph_neighborFinset
-  条件: {n : 自然数} {v : Fin (n + 2)}
+  条件: {n : 自然数} {v : 有限集 (n + 2)}
   证明: by
   simp [neighborFinset, cycleGraph_neighborSet]
 
@@ -314,7 +314,7 @@ theorem cycleGraph_degree_two_le
 
 中文:
 定理 cycleGraph_degree_two_le
-  条件: {n : 自然数} {v : Fin (n + 2)}
+  条件: {n : 自然数} {v : 有限集 (n + 2)}
   证明: by
   rw [SimpleGraph.degree]; rw [cycleGraph_neighborFinset]
 
@@ -337,7 +337,7 @@ theorem cycleGraph_degree_three_le
 
 中文:
 定理 cycleGraph_degree_three_le
-  条件: {n : 自然数} {v : Fin (n + 3)}
+  条件: {n : 自然数} {v : 有限集 (n + 3)}
   证明: by
   rw [cycleGraph_degree_two_le]; rw [Finset.card_pair]
   simp only [ne_eq, sub_eq_iff_eq_add, add_assoc v, left_eq_add]
@@ -409,7 +409,7 @@ theorem cycleGraph_preconnected
 中文:
 定理 cycleGraph_preconnected
   条件: {n : 自然数}
-  结论: (cycleGraph n).Preconnected
+  结论: (cycleGraph n).预连通
   证明: (pathGraph_preconnected n).mono pathGraph_le_cycleGraph
 
 Depends on / 依赖: pathGraph_le_cycleGraph, pathGraph_preconnected
@@ -429,7 +429,7 @@ theorem cycleGraph_connected
 中文:
 定理 cycleGraph_connected
   条件: {n : 自然数}
-  结论: (cycleGraph (n + 1)).Connected
+  结论: (cycleGraph (n + 1)).连通
   证明: (pathGraph_connected n).mono pathGraph_le_cycleGraph
 
 Depends on / 依赖: pathGraph_connected, pathGraph_le_cycleGraph
@@ -569,7 +569,7 @@ theorem cycleGraph.getVert_cycleCons
 
 中文:
 定理 cycleGraph.getVert_cycleCons
-  条件: (m : Fin (n + 3)) (i : 自然数) (hi : i <= m.val)
+  条件: (m : 有限集 (n + 3)) (i : 自然数) (hi : i <= m.val)
   证明: by
   obtain ⟨m, hm⟩ := m
   induction i generalizing m
@@ -624,7 +624,7 @@ theorem cycleGraph.isPath_tail_cycle
 
 中文:
 定理 cycleGraph.isPath_tail_cycle
-  结论: (cycleGraph.cycle n).tail.IsPath
+  结论: (cycleGraph.cycle n).tail.是道路
   证明: by
 .mpr fun ⟨i, hi⟩ ⟨j, hj⟩ hij => ?_ refine isPath_iff_injective_get_support _
   rw [support_tail_of_not_nil _ (of_decide_eq_false rfl)] at hi hj
@@ -649,7 +649,7 @@ theorem cycleGraph.isCycle_cycle
 
 中文:
 定理 cycleGraph.isCycle_cycle
-  结论: (cycleGraph.cycle n).IsCycle
+  结论: (cycleGraph.cycle n).是环
   证明: isCycle_iff_isPath_tail_and_le_length.mpr ⟨cycleGraph.isPath_tail_cycle, by simp⟩
 
 Depends on / 依赖: cycleGraph, cycleGraph.isPath_tail_cycle, isCycle_iff_isPath_tail_and_le_length, isCycle_iff_isPath_tail_and_le_length.mpr, isPath_tail_cycle

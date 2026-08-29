@@ -59,7 +59,7 @@ structure ContRepresentation
     - toMonoidHom : G ->* V ->L[R] V
 
 中文:
-结构 ContRepresentation
+结构 余ntRepresentation
   参数: where
   公理与运算 (2 个):
     - ofMonoidHom : :
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (ContRepresentation R G V) G (V ->L[R] V)
+  签名: 函数状 (余ntRepresentation R G V) G (V ->L[R] V)
   定义体: π.toMonoidHom
   coe_injective π₁ π₂ _ := by cases π₁; cases π₂; simp_all
 
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass (ContRepresentation R G V) G (V ->L[R] V)
+  签名: 幺半群态射类 (余ntRepresentation R G V) G (V ->L[R] V)
   定义体: π.toMonoidHom.map_one
   map_mul π := π.toMonoidHom.map_mul
 -/
@@ -119,8 +119,8 @@ lemma ContRepresentation.toMonoidHom_apply
   proof: rfl
 
 中文:
-引理 ContRepresentation.toMonoidHom_apply
-  条件: (π : ContRepresentation R G V) (g : G)
+引理 余ntRepresentation.toMonoidHom_apply
+  条件: (π : 余ntRepresentation R G V) (g : G)
   证明: rfl
 -/
 lemma ContRepresentation.toMonoidHom_apply (π : ContRepresentation R G V) (g : G) :
@@ -135,8 +135,8 @@ abbreviation ContRepresentation.toRepresentation
   body: .comp ContinuousLinearMap.toLinearMapRingHom.toMonoidHom π.toMonoidHom
 
 中文:
-缩写 ContRepresentation.toRepresentation
-  签名: (π : ContRepresentation R G V)
+缩写 余ntRepresentation.toRepresentation
+  签名: (π : 余ntRepresentation R G V)
   定义体: .comp ContinuousLinearMap.toLinearMapRingHom.toMonoidHom π.toMonoidHom
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.toLinearMapRingHom.toMonoidHom, Multiset, Multiset.map_eq_map, Subtype, Subtype.coe_injective, associated_zero_iff_eq_zero, coe_injective, contrapose, eq_or_ne, factors_prod, factors_unique, h.symm, h.trans, irreducible_of_factor, map_eq_map, map_subtype_coe_factors, rel_associated_iff_map_eq_map, toLinearMapRingHom, toMonoidHom
@@ -158,8 +158,8 @@ structure ContIntertwiningMap
     - isIntertwining'((g : G)) : toContinuousLinearMap ∘L π₁ g = π₂ g ∘L toContinuousLinearMap
 
 中文:
-结构 ContIntertwiningMap
-  参数: (π₁ : ContRepresentation R G V) (π₂ : ContRepresentation R G W)
+结构 余nt整数ertwining映射
+  参数: (π₁ : 余ntRepresentation R G V) (π₂ : 余ntRepresentation R G W)
   继承: V ->L[R] W
   公理与运算 (1 个):
     - isIntertwining'((g : G)) : toContinuousLinearMap ∘L π₁ g = π₂ g ∘L toContinuousLinearMap
@@ -189,7 +189,7 @@ abbreviation toIntertwiningMap
   isIntertwining' g := congr(ContinuousLinearMap.toLinearMap $(f.2 g))
 
 中文:
-缩写 toIntertwiningMap
+缩写 to整数ertwiningMap
   签名: (f : π₁ ->ⁱL π₂)
   定义体: f.toContinuousLinearMap.toLinearMap
   isIntertwining' g := congr(ContinuousLinearMap.toLinearMap $(f.2 g))
@@ -257,7 +257,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
+  结论: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W}
   证明: by
   cases f; cases g; congr
 -/
@@ -275,7 +275,7 @@ lemma toContinuousLinearMap_injective
 
 中文:
 引理 toContinuousLinearMap_injective
-  结论: {π₁ : ContRepresentation R G V}
+  结论: {π₁ : 余ntRepresentation R G V}
   证明: fun _ _ => ext
 -/
 lemma toContinuousLinearMap_injective {π₁ : ContRepresentation R G V}
@@ -292,8 +292,8 @@ lemma toIntertwiningMap_injective
   proof: fun _ _ _ => by ext; simp_all
 
 中文:
-引理 toIntertwiningMap_injective
-  结论: {π₁ : ContRepresentation R G V}
+引理 to整数ertwiningMap_injective
+  结论: {π₁ : 余ntRepresentation R G V}
   证明: fun _ _ _ => by ext; simp_all
 -/
 lemma toIntertwiningMap_injective {π₁ : ContRepresentation R G V}
@@ -312,7 +312,7 @@ lemma toFun_injective
 
 中文:
 引理 toFun_injective
-  条件: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
+  条件: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W}
   证明: fun f g h => by
   ext x; exact congr_fun h x
 
@@ -369,8 +369,8 @@ lemma isIntertwining
   proof: f.toIntertwiningMap.isIntertwining _ _ g v
 
 中文:
-引理 isIntertwining
-  结论: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
+引理 is整数ertwining
+  结论: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W}
   证明: f.toIntertwiningMap.isIntertwining _ _ g v
 
 Depends on / 依赖: f.toIntertwiningMap.isIntertwining, isIntertwining, toIntertwiningMap
@@ -399,7 +399,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
+  签名: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W}
   定义体: f.toContinuousLinearMap.comp g.toContinuousLinearMap
   isIntertwining' h := by rw [comp_assoc, g.2, ← comp_assoc, f.2, comp_assoc]
 
@@ -423,7 +423,7 @@ lemma toContinuousLinearMap_comp
 
 中文:
 引理 toContinuousLinearMap_comp
-  结论: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
+  结论: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W}
   证明: rfl
 -/
 lemma toContinuousLinearMap_comp {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W}
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (π₁ ->ⁱL π₂)
+  签名: 加法 (π₁ ->ⁱL π₂)
   定义体: ⟨f.toContinuousLinearMap + g.toContinuousLinearMap, by simp [g.2, f.2]⟩
 
 @[simp]
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (π₁ ->ⁱL π₁)
+  签名: 幺 (π₁ ->ⁱL π₁)
   定义体: .id
 -/
 instance : One (π₁ ->ⁱL π₁) where one := .id
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (π₁ ->ⁱL π₂)
+  签名: 零 (π₁ ->ⁱL π₂)
   定义体: ⟨0, by simp⟩
 
 @[simp]
@@ -650,7 +650,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddZeroClass (π₁ ->ⁱL π₂)
+  签名: 加法零类 (π₁ ->ⁱL π₂)
   定义体: fast_instance% toContinuousLinearMap_injective.addZeroClass _
     toContinuousLinearMap_zero toContinuousLinearMap_add
 
@@ -671,7 +671,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommSemigroup (π₁ ->ⁱL π₂)
+  签名: 加法交换半群 (π₁ ->ⁱL π₂)
   定义体: fast_instance% toContinuousLinearMap_injective.addCommSemigroup _
     toContinuousLinearMap_add
 
@@ -693,7 +693,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (π₁ ->ⁱL π₂)
+  签名: 取负 (π₁ ->ⁱL π₂)
   定义体: ⟨-f.toContinuousLinearMap, by simp [f.2]⟩
 
 @[simp]
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (π₁ ->ⁱL π₂)
+  签名: 减法 (π₁ ->ⁱL π₂)
   定义体: ⟨f.toContinuousLinearMap - g.toContinuousLinearMap, by simp [g.2, f.2]⟩
 
 @[simp]
@@ -842,7 +842,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {S : 类型} [Monoid S] [DistribMulAction S W] [SMulCommClass R S W]
+  签名: {S : 类型} [幺半群 S] [分配乘法作用 S W] [标量交换类 R S W]
   定义体: ⟨s • f.toContinuousLinearMap, fun g => by
     rw [ContinuousLinearMap.smul_comp]; rw [f.2]; rw [ContinuousLinearMap.comp_smul]⟩
 
@@ -904,7 +904,7 @@ lemma smul_comp
 
 中文:
 引理 smul_comp
-  结论: {S : 类型} [Monoid S] [DistribMulAction S U] [SMulCommClass R S U]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S U] [标量交换类 R S U]
   证明: by
   ext; simp
 -/
@@ -924,7 +924,7 @@ lemma comp_smul
 
 中文:
 引理 comp_smul
-  结论: {S : 类型} [Monoid S] [DistribMulAction S U] [SMulCommClass R S U]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S U] [标量交换类 R S U]
   证明: by
   ext; simp
 -/
@@ -947,7 +947,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (π₁ ->ⁱL π₂)
+  签名: 加法交换群 (π₁ ->ⁱL π₂)
   定义体: fast_instance% toContinuousLinearMap_injective.addCommGroup _ toContinuousLinearMap_zero
     toContinuousLinearMap_add toContinuousLinearMap_neg toContinuousLinearMap_sub
     (fun _ _ => toContinuousLinearMap_smul _ _) (fun _ _ => toContinuousLinearMap_smul _ _)
@@ -972,7 +972,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction S (π₁ ->ⁱL π₂)
+  签名: 分配乘法作用 S (π₁ ->ⁱL π₂)
   定义体: by ext; simp
   mul_smul _ _ _ := by ext; simp [mul_smul]
   smul_zero _ := by ext; simp
@@ -997,7 +997,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {S : 类型} [Ring S] [Module S W] [SMulCommClass R S W]
+  签名: {S : 类型} [环 S] [模 S W] [标量交换类 R S W]
   定义体: by ext; simp [add_smul]
   zero_smul _ := by ext; simp
 
@@ -1024,8 +1024,8 @@ structure Equiv
   (no additional axioms)
 
 中文:
-结构 Equiv
-  参数: (π₁ : ContRepresentation R G V) (π₂ : ContRepresentation R G W)
+结构 等价
+  参数: (π₁ : 余ntRepresentation R G V) (π₂ : 余ntRepresentation R G W)
   (无附加公理)
 -/
 structure Equiv (π₁ : ContRepresentation R G V) (π₂ : ContRepresentation R G W) extends
@@ -1053,7 +1053,7 @@ lemma isIntertwining
   proof: φ.isIntertwining' g
 
 中文:
-引理 isIntertwining
+引理 is整数ertwining
   条件: (g : G)
   证明: φ.isIntertwining' g
 
@@ -1113,7 +1113,7 @@ lemma toContIntertwiningMap_mk'
 @[simp]
 
 中文:
-引理 toContIntertwiningMap_mk'
+引理 toCont整数ertwiningMap_mk'
   条件: (e : V ≃L[R] W) (he : 对任意 g, e ∘L (ρ g) = (σ g) ∘L e)
   证明: rfl
 
@@ -1166,7 +1166,7 @@ lemma toContinuousLinearEquiv_inj
 
 中文:
 引理 toContinuousLinearEquiv_inj
-  条件: (φ ψ : σ.Equiv ρ)
+  条件: (φ ψ : σ.等价 ρ)
   证明: toContinuousLinearEquiv_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toContinuousLinearEquiv_injective, toContinuousLinearEquiv_injective.eq_iff
@@ -1189,7 +1189,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (Equiv ρ σ) V W
+  签名: 等价状 (等价 ρ σ) V W
   定义体: φ.toContinuousLinearEquiv
   inv φ := φ.invFun
   left_inv e := e.left_inv
@@ -1220,7 +1220,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousLinearEquivClass (σ.Equiv ρ) R W V
+  签名: ContinuousLinearEquivClass (σ.等价 ρ) R W V
   定义体: f.map_add
   map_smulₛₗ f := f.map_smul
   map_continuous f := f.cont
@@ -1271,7 +1271,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {φ ψ : Equiv ρ σ} (h : (φ : V -> W) = ψ)
+  条件: {φ ψ : 等价 ρ σ} (h : (φ : V -> W) = ψ)
   结论: φ = ψ
   证明: by
   cases φ; cases ψ
@@ -1292,7 +1292,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : Equiv ρ ρ
+  签名: : 等价 ρ ρ
   定义体: mk (ContinuousLinearEquiv.refl R V) (by simp)
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.refl
@@ -1308,7 +1308,7 @@ lemma toContIntertwiningMap_refl
   proof: rfl
 
 中文:
-引理 toContIntertwiningMap_refl
+引理 toCont整数ertwiningMap_refl
   结论: (refl ρ).toCont整数ertwiningMap = .id
   证明: rfl
 -/
@@ -1354,7 +1354,7 @@ lemma coe_toContIntertwiningMap
   proof: rfl
 
 中文:
-引理 coe_toContIntertwiningMap
+引理 coe_toCont整数ertwiningMap
   结论: ⇑φ.toCont整数ertwiningMap = φ
   证明: rfl
 -/
@@ -1439,7 +1439,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : Equiv σ ρ
+  签名: : 等价 σ ρ
   定义体: mk φ.toContinuousLinearEquiv.symm fun g => by
   rw [← cancel_left' (g := φ.toContinuousLinearEquiv.toContinuousLinearMap)
     φ.toContinuousLinearEquiv.injective]; rw [← comp_assoc]; rw [← comp_assoc]
@@ -1465,7 +1465,7 @@ lemma _root_.ContinuousLinearEquiv.isIntertwining_symm_isIntertwining
 @[simp]
 
 中文:
-引理 _root_.ContinuousLinearEquiv.isIntertwining_symm_isIntertwining
+引理 _root_.连续线性等价.is整数ertwining_symm_is整数ertwining
   结论: {e : V ≃L[R] W}
   证明: (mk e he).symm.isIntertwining g
 
@@ -1506,7 +1506,7 @@ lemma toLinearMap_symm
 
 中文:
 引理 toLinearMap_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: (symm φ).toLinearMap = φ.toLinearEquiv.symm
   证明: rfl
 -/
@@ -1523,7 +1523,7 @@ lemma coe_symm
 
 中文:
 引理 coe_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: ⇑φ.toLinearEquiv.symm = φ.symm
   证明: rfl
 -/
@@ -1545,7 +1545,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+  签名: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   定义体: mk
 (φ.toContinuousLinearEquiv.trans ψ.toContinuousLinearEquiv) fun g => by
   rw [← ContinuousLinearEquiv.comp_coe]; rw [comp_assoc]; rw [φ.isIntertwining]; rw [← comp_assoc]; rw [ψ.isIntertwining]; rw [comp_assoc]
@@ -1568,8 +1568,8 @@ lemma toContIntertwiningMap_trans
 @[simp]
 
 中文:
-引理 toContIntertwiningMap_trans
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+引理 toCont整数ertwiningMap_trans
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   证明: rfl
 
 @[simp]
@@ -1590,7 +1590,7 @@ lemma toContinuousLinearMap_trans
 
 中文:
 引理 toContinuousLinearMap_trans
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ)
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ)
   证明: rfl
 
 @[simp]
@@ -1611,7 +1611,7 @@ lemma trans_apply
 
 中文:
 引理 trans_apply
-  条件: (φ : Equiv ρ σ) (ψ : Equiv σ τ) (v : V)
+  条件: (φ : 等价 ρ σ) (ψ : 等价 σ τ) (v : V)
   证明: rfl
 
 @[simp]
@@ -1633,7 +1633,7 @@ lemma apply_symm_apply
 
 中文:
 引理 apply_symm_apply
-  条件: (φ : Equiv ρ σ) (v : W)
+  条件: (φ : 等价 ρ σ) (v : W)
   结论: φ (φ.symm v) = v
   证明: φ.right_inv v
 
@@ -1657,7 +1657,7 @@ lemma symm_apply_apply
 
 中文:
 引理 symm_apply_apply
-  条件: (φ : Equiv ρ σ) (v : V)
+  条件: (φ : 等价 ρ σ) (v : V)
   结论: φ.symm (φ v) = v
   证明: φ.left_inv v
 
@@ -1681,7 +1681,7 @@ lemma trans_symm
 
 中文:
 引理 trans_symm
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: φ.trans φ.symm = .refl ρ
   证明: by ext; simp
 
@@ -1701,7 +1701,7 @@ lemma symm_trans
 
 中文:
 引理 symm_trans
-  条件: (φ : Equiv ρ σ)
+  条件: (φ : 等价 ρ σ)
   结论: φ.symm.trans φ = .refl σ
   证明: by ext; simp
 -/
@@ -1722,7 +1722,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : ContRepresentation R G V
+  签名: : 余ntRepresentation R G V
   定义体: ofMonoidHom 1
 
 @[simp]
@@ -1761,7 +1761,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {H : 类型} [Monoid H] (π : ContRepresentation R G V) (φ : H ->* G)
+  签名: {H : 类型} [幺半群 H] (π : 余ntRepresentation R G V) (φ : H ->* G)
   定义体: ofMonoidHom (π.toMonoidHom.comp φ)
 
 Depends on / 依赖: ofMonoidHom, toMonoidHom, toMonoidHom.comp
@@ -1781,7 +1781,7 @@ lemma restrict_apply
 
 中文:
 引理 restrict_apply
-  结论: {H : 类型} [Monoid H] (π : ContRepresentation R G V) (φ : H ->* G)
+  结论: {H : 类型} [幺半群 H] (π : 余ntRepresentation R G V) (φ : H ->* G)
   证明: rfl
 
 @[simp]
@@ -1800,7 +1800,7 @@ lemma restrict_apply_apply
 
 中文:
 引理 restrict_apply_apply
-  结论: {H : 类型} [Monoid H] (π : ContRepresentation R G V) (φ : H ->* G)
+  结论: {H : 类型} [幺半群 H] (π : 余ntRepresentation R G V) (φ : H ->* G)
   证明: rfl
 -/
 lemma restrict_apply_apply {H : Type*} [Monoid H] (π : ContRepresentation R G V) (φ : H ->* G)
@@ -1817,8 +1817,8 @@ definition _root_.ContIntertwiningMap.restrict
     ext; simp [f.toContinuousLinearMap_apply, f.isIntertwining]
 
 中文:
-定义 _root_.ContIntertwiningMap.restrict
-  签名: {H : 类型} [Monoid H] {π : ContRepresentation R G V}
+定义 _root_.余nt整数ertwining映射.restrict
+  签名: {H : 类型} [幺半群 H] {π : 余ntRepresentation R G V}
   定义体: f.toContinuousLinearMap
   isIntertwining' h := by
     ext; simp [f.toContinuousLinearMap_apply, f.isIntertwining]
@@ -1841,8 +1841,8 @@ lemma _root_.ContIntertwiningMap.restrict_toContinuousLinearMap
   proof: rfl
 
 中文:
-引理 _root_.ContIntertwiningMap.restrict_toContinuousLinearMap
-  结论: {H : 类型} [Monoid H]
+引理 _root_.余nt整数ertwining映射.restrict_toContinuousLinearMap
+  结论: {H : 类型} [幺半群 H]
   证明: rfl
 -/
 lemma _root_.ContIntertwiningMap.restrict_toContinuousLinearMap {H : Type*} [Monoid H]
@@ -1858,8 +1858,8 @@ lemma _root_.ContIntertwiningMap.restrict_apply
   proof: rfl
 
 中文:
-引理 _root_.ContIntertwiningMap.restrict_apply
-  结论: {H : 类型} [Monoid H]
+引理 _root_.余nt整数ertwining映射.restrict_apply
+  结论: {H : 类型} [幺半群 H]
   证明: rfl
 -/
 @[simp] lemma _root_.ContIntertwiningMap.restrict_apply {H : Type*} [Monoid H]
@@ -1875,8 +1875,8 @@ lemma _root_.ContIntertwiningMap.restrict_sub
   proof: rfl
 
 中文:
-引理 _root_.ContIntertwiningMap.restrict_sub
-  结论: {H : 类型} [Monoid H]
+引理 _root_.余nt整数ertwining映射.restrict_sub
+  结论: {H : 类型} [幺半群 H]
   证明: rfl
 -/
 lemma _root_.ContIntertwiningMap.restrict_sub {H : Type*} [Monoid H]
@@ -1898,7 +1898,7 @@ definition invariants
 
 中文:
 定义 invariants
-  签名: (π : ContRepresentation R G V)
+  签名: (π : 余ntRepresentation R G V)
   定义体: {v | forall g, π g v = v}
   zero_mem' := by simp
   add_mem' _ _ := by simp_all
@@ -1923,7 +1923,7 @@ lemma mem_invariants
 
 中文:
 引理 mem_invariants
-  条件: {π : ContRepresentation R G V} (v : V)
+  条件: {π : 余ntRepresentation R G V} (v : V)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1940,7 +1940,7 @@ definition _root_.ContIntertwiningMap.mapInvariants
     simp +contextual [f.toContinuousLinearMap_apply, ← f.isIntertwining]
 
 中文:
-定义 _root_.ContIntertwiningMap.mapInvariants
+定义 _root_.余nt整数ertwining映射.mapInvariants
   定义体: f.toContinuousLinearMap.restrict by
     simp +contextual [f.toContinuousLinearMap_apply, ← f.isIntertwining]
 
@@ -1964,7 +1964,7 @@ lemma _root_.ContIntertwiningMap.mapInvariants_apply
 @[simp]
 
 中文:
-引理 _root_.ContIntertwiningMap.mapInvariants_apply
+引理 _root_.余nt整数ertwining映射.mapInvariants_apply
   证明: rfl
 
 @[simp]
@@ -1983,7 +1983,7 @@ lemma _root_.ContIntertwiningMap.mk_mapInvariants_apply
   proof: rfl
 
 中文:
-引理 _root_.ContIntertwiningMap.mk_mapInvariants_apply
+引理 _root_.余nt整数ertwining映射.mk_mapInvariants_apply
   证明: rfl
 -/
 lemma _root_.ContIntertwiningMap.mk_mapInvariants_apply
@@ -2003,7 +2003,7 @@ lemma invariants_le_invariants_restrict
 
 中文:
 引理 invariants_le_invariants_restrict
-  条件: (π : ContRepresentation R G V) (φ : H ->* G)
+  条件: (π : 余ntRepresentation R G V) (φ : H ->* G)
   证明: fun _ hv h => hv (φ h)
 -/
 lemma invariants_le_invariants_restrict (π : ContRepresentation R G V) (φ : H ->* G) :
@@ -2022,7 +2022,7 @@ definition _root_.ContIntertwiningMap.mapInvariantsOfRes
     simp +contextual [f.toContinuousLinearMap_apply, ← f.isIntertwining]
 
 中文:
-定义 _root_.ContIntertwiningMap.mapInvariantsOfRes
+定义 _root_.余nt整数ertwining映射.mapInvariantsOfRes
   签名: (φ : H ->* G)
   定义体: f.toContinuousLinearMap.restrict by
     simp +contextual [f.toContinuousLinearMap_apply, ← f.isIntertwining]
@@ -2046,7 +2046,7 @@ lemma _root_.ContIntertwiningMap.mapInvariantsOfRes_apply
 @[simp]
 
 中文:
-引理 _root_.ContIntertwiningMap.mapInvariantsOfRes_apply
+引理 _root_.余nt整数ertwining映射.mapInvariantsOfRes_apply
   结论: (φ : H ->* G)
   证明: rfl
 
@@ -2066,7 +2066,7 @@ lemma _root_.ContIntertwiningMap.mk_mapInvariantsOfRes_apply
   proof: rfl
 
 中文:
-引理 _root_.ContIntertwiningMap.mk_mapInvariantsOfRes_apply
+引理 _root_.余nt整数ertwining映射.mk_mapInvariantsOfRes_apply
   结论: (φ : H ->* G)
   证明: rfl
 -/
@@ -2097,7 +2097,7 @@ definition coindV
 
 中文:
 定义 coindV
-  签名: : Submodule R C(H, V) where
+  签名: : 子模 R C(H, V) where
   定义体: {f | forall g h, f (φ g * h) = π g (f h)}
   add_mem' := by simp +contextual
   zero_mem' := by simp
@@ -2141,7 +2141,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul R (π.coindV φ)
+  签名: 连续标量乘法 R (π.coindV φ)
   定义体: by continuity
 
 Depends on / 依赖: continuity
@@ -2170,7 +2170,7 @@ cont := continuous_induced_rng.2 by
 
 中文:
 定义 coind
-  签名: (π : ContRepresentation R G V)
+  签名: (π : 余ntRepresentation R G V)
   定义体: {
     toFun | ⟨f, hf⟩ => ⟨f.comp (ContinuousMap.mulRight h), by simp [mul_assoc, hf _]⟩
     map_add' _ _ := by simp
@@ -2210,7 +2210,7 @@ definition coind₁
 
 中文:
 定义 coind₁
-  签名: (π : ContRepresentation R G V)
+  签名: (π : 余ntRepresentation R G V)
   定义体: {
     toFun f := .comp (π g) (f.comp (ContinuousMap.mulLeft g⁻¹))
     map_add' _ _ := by ext; simp
@@ -2244,7 +2244,7 @@ lemma coind₁_apply_apply
 
 中文:
 引理 coind₁_apply_apply
-  条件: (π : ContRepresentation R G V) (g : G) (f : C(G, V)) (x : G)
+  条件: (π : 余ntRepresentation R G V) (g : G) (f : C(G, V)) (x : G)
   证明: rfl
 -/
 lemma coind₁_apply_apply (π : ContRepresentation R G V) (g : G) (f : C(G, V)) (x : G) :
@@ -2266,7 +2266,7 @@ definition coind₁Map
 
 中文:
 定义 coind₁Map
-  签名: {π₁ : ContRepresentation R G V} {π₂ : ContRepresentation R G W} (f : π₁ ->ⁱL π₂)
+  签名: {π₁ : 余ntRepresentation R G V} {π₂ : 余ntRepresentation R G W} (f : π₁ ->ⁱL π₂)
   定义体: (f : ContinuousMap _ _).comp
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
@@ -2299,7 +2299,7 @@ definition coind₁ι
 
 中文:
 定义 coind₁ι
-  签名: (π : ContRepresentation R G V)
+  签名: (π : 余ntRepresentation R G V)
   定义体: ContinuousMap.const G
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2327,7 +2327,7 @@ definition coind₁Equivcoind
 
 中文:
 定义 coind₁Equivcoind
-  签名: : (coind₁ (.trivial R (⊥ : Subgroup G) V)).Equiv
+  签名: : (coind₁ (.trivial R (⊥ : 子群 G) V)).等价
   定义体: .mk (Submodule.topContEquiv.symm.trans <|
     ContinuousLinearEquiv.ofEq _ _ (by simp [SetLike.ext_iff])) <| fun g => by
     simp [Subsingleton.elim g 1, ContinuousLinearMap.one_def]
@@ -2358,7 +2358,7 @@ definition coind₁Res
 
 中文:
 定义 coind₁Res
-  签名: (φ : H ->ₜ* G) (π : ContRepresentation R G V)
+  签名: (φ : H ->ₜ* G) (π : 余ntRepresentation R G V)
   定义体: ContinuousMap.compCLM R V φ.toContinuousMap
   isIntertwining' h := by
     ext F x
@@ -2386,7 +2386,7 @@ lemma coind₁Res_apply
 
 中文:
 引理 coind₁Res_apply
-  条件: (φ : H ->ₜ* G) (π : ContRepresentation R G V) (F : C(G, V)) (x : H)
+  条件: (φ : H ->ₜ* G) (π : 余ntRepresentation R G V) (F : C(G, V)) (x : H)
   证明: rfl
 -/
 lemma coind₁Res_apply (φ : H ->ₜ* G) (π : ContRepresentation R G V) (F : C(G, V)) (x : H) :
@@ -2456,7 +2456,7 @@ lemma coind₁Map_comp_coind₁ResMap
 
 中文:
 引理 coind₁Map_comp_coind₁ResMap
-  结论: (φ : H ->ₜ* G) {σ : ContRepresentation R H U}
+  结论: (φ : H ->ₜ* G) {σ : 余ntRepresentation R H U}
   证明: rfl
 -/
 lemma coind₁Map_comp_coind₁ResMap (φ : H ->ₜ* G) {σ : ContRepresentation R H U}
@@ -2473,7 +2473,7 @@ lemma coind₁ResMap_comp_coind₁Map_restrict
 
 中文:
 引理 coind₁ResMap_comp_coind₁Map_restrict
-  结论: (φ : H ->ₜ* G) {ρ : ContRepresentation R G U}
+  结论: (φ : H ->ₜ* G) {ρ : 余ntRepresentation R G U}
   证明: rfl
 -/
 lemma coind₁ResMap_comp_coind₁Map_restrict (φ : H ->ₜ* G) {ρ : ContRepresentation R G U}

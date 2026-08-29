@@ -179,7 +179,7 @@ definition fullSubcategoryEquiv
 
 中文:
 定义 fullSubcategoryEquiv
-  签名: {P : Object命题erty C} {X Y : P.FullSubcategory}
+  签名: {P : ObjectProperty C} {X Y : P.满子范畴}
   定义体: { h := h.h.hom
       h₀ := by
         dsimp
@@ -228,7 +228,7 @@ abbreviation RightHomotopy
 
 中文:
 缩写 RightHomotopy
-  签名: [CategoryWithWeakEquivalences C] (P : PathObject Y) (f g : X ⟶ Y)
+  签名: [带弱等价范畴 C] (P : PathObject Y) (f g : X ⟶ Y)
   定义体: P.toPrepathObject.RightHomotopy f g
 
 Depends on / 依赖: P.toPrepathObject.RightHomotopy, RightHomotopy, toPrepathObject
@@ -310,7 +310,7 @@ lemma weakEquivalence_iff
 
 中文:
 引理 weakEquivalence_iff
-  结论: [(weakEquivalences C).HasTwoOutOfThree命题erty]
+  结论: [(weakEquivalences C).有TwoOutOfThreeProperty]
   证明: by
   induction h
   grind [weakEquivalence_postcomp_iff]
@@ -369,7 +369,7 @@ lemma exists_good_pathObject
         aesop⟩, ⟨{ h := h.h ≫ d.i }⟩⟩
 
 中文:
-引理 exists_good_pathObject
+引理 存在_good_pathObject
   条件: {f g : X ⟶ Y} (h : P.RightHomotopy f g)
   证明: by
   let d := MorphismProperty.factorizationData (trivialCofibrations C) (fibrations C) P.p
@@ -437,7 +437,7 @@ definition RightHomotopyRel
 
 中文:
 定义 RightHomotopyRel
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: fun _ Y f g => exists (P : PathObject Y), Nonempty (P.RightHomotopy f g)
 
 Depends on / 依赖: Nonempty, P.RightHomotopy, PathObject, RightHomotopy
@@ -455,7 +455,7 @@ lemma PathObject.RightHomotopy.rightHomotopyRel
 
 中文:
 引理 PathObject.RightHomotopy.rightHomotopyRel
-  结论: [CategoryWithWeakEquivalences C]
+  结论: [带弱等价范畴 C]
   证明: ⟨_, ⟨h⟩⟩
 -/
 lemma PathObject.RightHomotopy.rightHomotopyRel [CategoryWithWeakEquivalences C]
@@ -485,7 +485,7 @@ lemma factorsThroughLocalization
 
 中文:
 引理 factorsThroughLocalization
-  条件: [CategoryWithWeakEquivalences C]
+  条件: [带弱等价范畴 C]
   证明: by
   rintro X Y f g ⟨P, ⟨h⟩⟩
   let L := (weakEquivalences C).Q
@@ -523,7 +523,7 @@ lemma refl
 
 中文:
 引理 refl
-  条件: [ModelCategory C] (f : X ⟶ Y)
+  条件: [模型范畴 C] (f : X ⟶ Y)
   结论: RightHomotopyRel f f
   证明: ⟨Classical.arbitrary _, ⟨PathObject.RightHomotopy.refl _ _⟩⟩
 
@@ -544,7 +544,7 @@ lemma precomp
 
 中文:
 引理 precomp
-  结论: [CategoryWithWeakEquivalences C]
+  结论: [带弱等价范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact (h.precomp i).rightHomotopyRel
@@ -568,8 +568,8 @@ lemma exists_good_pathObject
   exact h.exists_good_pathObject
 
 中文:
-引理 exists_good_pathObject
-  条件: [ModelCategory C] {f g : X ⟶ Y} (h : RightHomotopyRel f g)
+引理 存在_good_pathObject
+  条件: [模型范畴 C] {f g : X ⟶ Y} (h : RightHomotopyRel f g)
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact h.exists_good_pathObject
@@ -598,8 +598,8 @@ lemma exists_very_good_pathObject
       weakEquivalence_ι := weakEquivalence_of_
 
 中文:
-引理 exists_very_good_pathObject
-  结论: [ModelCategory C] {f g : X ⟶ Y} [IsCofibrant X]
+引理 存在_very_good_pathObject
+  结论: [模型范畴 C] {f g : X ⟶ Y} [IsCofibrant X]
   证明: by
   obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_pathObject
   let fac := MorphismProperty.factorizationData (cofibrations C) (trivialFibrations C) P.ι
@@ -641,7 +641,7 @@ lemma symm
 
 中文:
 引理 symm
-  结论: [CategoryWithWeakEquivalences C]
+  结论: [带弱等价范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact h.symm.rightHomotopyRel
@@ -666,7 +666,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: [ModelCategory C]
+  结论: [模型范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   obtain ⟨P', _, ⟨h'⟩⟩ := h'.exists_good_pathObject
@@ -693,7 +693,7 @@ lemma equivalence
 
 中文:
 引理 equivalence
-  条件: [ModelCategory C] (X Y : C) [IsFibrant Y]
+  条件: [模型范畴 C] (X Y : C) [IsFibrant Y]
   证明: .refl
   symm h := h.symm
   trans h h' := h.trans h'
@@ -723,7 +723,7 @@ lemma postcomp
 
 中文:
 引理 postcomp
-  结论: [ModelCategory C] {f g : X ⟶ Y} [IsCofibrant X] (h : RightHomotopyRel f g)
+  结论: [模型范畴 C] {f g : X ⟶ Y} [IsCofibrant X] (h : RightHomotopyRel f g)
   证明: by
   obtain ⟨P, _, ⟨h⟩⟩ := h.exists_very_good_pathObject
   obtain ⟨Q, _⟩ := PathObject.exists_very_good Z
@@ -767,7 +767,7 @@ definition RightHomotopyClass
 
 中文:
 定义 RightHomotopyClass
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: _root_.Quot (RightHomotopyRel (X := X) (Y := Y))
 
 Depends on / 依赖: RightHomotopyRel, _root_, _root_.Quot
@@ -787,7 +787,7 @@ definition RightHomotopyClass.mk
 
 中文:
 定义 RightHomotopyClass.mk
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: Quot.mk _
 
 Depends on / 依赖: Quot.mk
@@ -805,7 +805,7 @@ lemma RightHomotopyClass.mk_surjective
 
 中文:
 引理 RightHomotopyClass.mk_surjective
-  条件: [CategoryWithWeakEquivalences C]
+  条件: [带弱等价范畴 C]
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -826,7 +826,7 @@ lemma sound
 
 中文:
 引理 sound
-  条件: [CategoryWithWeakEquivalences C] {f g : X ⟶ Y} (h : RightHomotopyRel f g)
+  条件: [带弱等价范畴 C] {f g : X ⟶ Y} (h : RightHomotopyRel f g)
   证明: Quot.sound h
 
 Depends on / 依赖: Quot.sound
@@ -846,7 +846,7 @@ definition precomp
 
 中文:
 定义 precomp
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: fun g f => Quot.lift (fun g => mk (f ≫ g)) (fun _ _ h => sound (h.precomp f)) g
 
 @[simp]
@@ -868,7 +868,7 @@ lemma precomp_mk
 
 中文:
 引理 precomp_mk
-  条件: [CategoryWithWeakEquivalences C] (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: [带弱等价范畴 C] (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma precomp_mk [CategoryWithWeakEquivalences C] (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -886,7 +886,7 @@ lemma mk_eq_mk_iff
 
 中文:
 引理 mk_eq_mk_iff
-  条件: [ModelCategory C] [IsFibrant Y] (f g : X ⟶ Y)
+  条件: [模型范畴 C] [IsFibrant Y] (f g : X ⟶ Y)
   证明: by
   rw [← (RightHomotopyRel.equivalence X Y).eqvGen_iff]
   exact Quot.eq

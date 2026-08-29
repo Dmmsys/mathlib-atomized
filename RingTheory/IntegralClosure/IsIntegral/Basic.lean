@@ -37,7 +37,7 @@ theorem RingHom.isIntegralElem_map
   proof: ⟨X - C x, monic_X_sub_C _, by simp⟩
 
 中文:
-定理 RingHom.isIntegralElem_map
+定理 环态射.is整数egralElem_map
   条件: {x : R}
   结论: f.Is整数egralElem (f x)
   证明: ⟨X - C x, monic_X_sub_C _, by simp⟩
@@ -57,9 +57,9 @@ theorem isIntegral_algebraMap
   proof: (algebraMap R A).isIntegralElem_map
 
 中文:
-定理 isIntegral_algebraMap
+定理 is整数egral_algebraMap
   条件: {x : R}
-  结论: Is整数egral R (algebraMap R A x)
+  结论: 是整 R (algebraMap R A x)
   证明: (algebraMap R A).isIntegralElem_map
 
 Depends on / 依赖: algebraMap, isIntegralElem_map
@@ -79,7 +79,7 @@ lemma RingHom.IsIntegralElem.map
   exact ⟨p, hp, by simp_rw [← hom_eval₂, eval₂_eq_eval_map] at hx ⊢; simp [hx]⟩
 
 中文:
-引理 RingHom.IsIntegralElem.map
+引理 环态射.Is整数egralElem.map
   条件: {x : S} (hx : f.Is整数egralElem x) (g : S ->+* T)
   证明: by
   obtain ⟨p, hp, hx⟩ := hx
@@ -104,8 +104,8 @@ lemma RingHom.IsIntegralElem.of_map
 exact ⟨p, hp, hg by simp [Polynomial.hom_eval₂, hx]⟩
 
 中文:
-引理 RingHom.IsIntegralElem.of_map
-  结论: (hg : Function.Injective g) {x : S}
+引理 环态射.Is整数egralElem.of_map
+  结论: (hg : 函数.单射 g) {x : S}
   证明: by
   obtain ⟨p, hp, hx⟩ := hx
 exact ⟨p, hp, hg by simp [Polynomial.hom_eval₂, hx]⟩
@@ -128,8 +128,8 @@ lemma RingHom.IsIntegralElem.map_iff
   proof: ⟨of_map hg, (map · g)⟩
 
 中文:
-引理 RingHom.IsIntegralElem.map_iff
-  条件: (hg : Function.Injective g) {x : S}
+引理 环态射.Is整数egralElem.map_iff
+  条件: (hg : 函数.单射 g) {x : S}
   证明: ⟨of_map hg, (map · g)⟩
 
 Depends on / 依赖: of_map
@@ -158,7 +158,7 @@ lemma RingHom.IsIntegralElem.of_comp
   exact ⟨p.map f, hp.map _, by simpa only [eval₂_eq_eval_map, map_map] using hx⟩
 
 中文:
-引理 RingHom.IsIntegralElem.of_comp
+引理 环态射.Is整数egralElem.of_comp
   条件: {g : S ->+* T} {x : T} (hx : (g.comp f).Is整数egralElem x)
   证明: by
   obtain ⟨p, hp, hx⟩ := hx
@@ -182,8 +182,8 @@ theorem IsIntegral.map
   exact .map hb (RingHomClass.toRingHom f)
 
 中文:
-定理 IsIntegral.map
-  结论: {B C F : 类型} [Ring B] [Ring C] [Algebra R B] [Algebra A B] [Algebra R C]
+定理 是整.map
+  结论: {B C F : 类型} [环 B] [环 C] [代数 R B] [代数 A B] [代数 R C]
   证明: by
   rw [IsIntegral]; rw [← ((AlgHomClass.toAlgHom f).restrictScalars R).comp_algebraMap]
   exact .map hb (RingHomClass.toRingHom f)
@@ -211,8 +211,8 @@ theorem isIntegral_algHom_iff
   simp [IsIntegral, ← RingHom.IsIntegralElem.map_iff (g := (f : A ->+* B)) hf]
 
 中文:
-定理 isIntegral_algHom_iff
-  条件: (f : A ->ₐ[R] B) (hf : Function.Injective f) {x : A}
+定理 is整数egral_algHom_iff
+  条件: (f : A ->ₐ[R] B) (hf : 函数.单射 f) {x : A}
   证明: by
   simp [IsIntegral, ← RingHom.IsIntegralElem.map_iff (g := (f : A ->+* B)) hf]
 
@@ -240,8 +240,8 @@ theorem Submodule.span_range_natDegree_eq_adjoin
   rw [Su
 
 中文:
-定理 Submodule.span_range_natDegree_eq_adjoin
-  结论: {R A} [CommRing R] [Semiring A] [Algebra R A]
+定理 子模.span_range_natDegree_eq_adjoin
+  结论: {R A} [交换环 R] [半环 A] [代数 R A]
   证明: by
   nontriviality A
   have hf1 : f != 1 := by rintro rfl; simp [one_ne_zero' A] at hfx
@@ -282,8 +282,8 @@ theorem IsIntegral.fg_adjoin_singleton
   exact span_range_natDegree_eq_adjoin hfm (by rwa [aeval_def])
 
 中文:
-定理 IsIntegral.fg_adjoin_singleton
-  条件: [Algebra R B] {x : B} (hx : Is整数egral R x)
+定理 是整.fg_adjoin_singleton
+  条件: [代数 R B] {x : B} (hx : 是整 R x)
   证明: by
   classical
   rcases hx with ⟨f, hfm, hfx⟩
@@ -310,7 +310,7 @@ theorem RingHom.isIntegralElem_zero
   proof: f.map_zero ▸ f.isIntegralElem_map
 
 中文:
-定理 RingHom.isIntegralElem_zero
+定理 环态射.is整数egralElem_zero
   结论: f.Is整数egralElem 0
   证明: f.map_zero ▸ f.isIntegralElem_map
 
@@ -329,9 +329,9 @@ theorem isIntegral_zero
   proof: (algebraMap R B).isIntegralElem_zero
 
 中文:
-定理 isIntegral_zero
-  条件: [Algebra R B]
-  结论: Is整数egral R (0 : B)
+定理 is整数egral_zero
+  条件: [代数 R B]
+  结论: 是整 R (0 : B)
   证明: (algebraMap R B).isIntegralElem_zero
 
 Depends on / 依赖: algebraMap, isIntegralElem_zero
@@ -348,7 +348,7 @@ theorem RingHom.isIntegralElem_one
   proof: f.map_one ▸ f.isIntegralElem_map
 
 中文:
-定理 RingHom.isIntegralElem_one
+定理 环态射.is整数egralElem_one
   结论: f.Is整数egralElem 1
   证明: f.map_one ▸ f.isIntegralElem_map
 
@@ -367,9 +367,9 @@ theorem isIntegral_one
   proof: (algebraMap R B).isIntegralElem_one
 
 中文:
-定理 isIntegral_one
-  条件: [Algebra R B]
-  结论: Is整数egral R (1 : B)
+定理 is整数egral_one
+  条件: [代数 R B]
+  结论: 是整 R (1 : B)
   证明: (algebraMap R B).isIntegralElem_one
 
 Depends on / 依赖: algebraMap, isIntegralElem_one
@@ -389,8 +389,8 @@ theorem IsIntegral.of_pow
   ⟨expand R n p, hmonic.expand hn, by rwa [← aeval_def, expand_aeval]⟩
 
 中文:
-定理 IsIntegral.of_pow
-  条件: [Algebra R B] {x : B} {n : 自然数} (hn : 0 < n) (hx : Is整数egral R <| x ^ n)
+定理 是整.of_pow
+  条件: [代数 R B] {x : B} {n : 自然数} (hn : 0 < n) (hx : 是整 R <| x ^ n)
   证明: have ⟨p, hmonic, heval⟩ := hx
   ⟨expand R n p, hmonic.expand hn, by rwa [← aeval_def, expand_aeval]⟩
 
@@ -411,7 +411,7 @@ theorem IsIntegral.of_aeval_monic
   ⟨_, hmonic.comp monic deg, by rwa [eval₂_comp, ← aeval_def x]⟩
 
 中文:
-定理 IsIntegral.of_aeval_monic
+定理 是整.of_aeval_monic
   结论: {x : A} {p : R[X]} (monic : p.Monic)
   证明: have ⟨p, hmonic, heval⟩ := hx
   ⟨_, hmonic.comp monic deg, by rwa [eval₂_comp, ← aeval_def x]⟩
@@ -444,8 +444,8 @@ theorem IsIntegral.map_of_comp_eq
 @[simp]
 
 中文:
-定理 IsIntegral.map_of_comp_eq
-  结论: {R S T U : 类型} [CommRing R] [Ring S]
+定理 是整.map_of_comp_eq
+  结论: {R S T U : 类型} [交换环 R] [环 S]
   证明: let ⟨p, hp⟩ := ha
   ⟨p.map φ, hp.1.map _, by
     rw [← eval_map]; rw [map_map]; rw [h]; rw [← map_map]; rw [eval_map]; rw [eval₂_at_apply]; rw [eval_map]; rw [hp.2]; rw [ψ.map_zero]⟩
@@ -472,8 +472,8 @@ theorem isIntegral_algEquiv
   proof: ⟨fun h => by simpa using h.map f.symm, IsIntegral.map f⟩
 
 中文:
-定理 isIntegral_algEquiv
-  结论: {A B : 类型} [Ring A] [Ring B] [Algebra R A] [Algebra R B]
+定理 is整数egral_algEquiv
+  结论: {A B : 类型} [环 A] [环 B] [代数 R A] [代数 R B]
   证明: ⟨fun h => by simpa using h.map f.symm, IsIntegral.map f⟩
 
 Depends on / 依赖: IsIntegral, IsIntegral.map, f.symm, h.map
@@ -492,8 +492,8 @@ theorem IsIntegral.tower_top
 ⟨p.map algebraMap R A, hp.map _, by rw [← aeval_def, aeval_map_algebraMap, aeval_def, hpx]⟩
 
 中文:
-定理 IsIntegral.tower_top
-  结论: [Algebra A B] [IsScalarTower R A B] {x : B}
+定理 是整.tower_top
+  结论: [代数 A B] [标量塔 R A B] {x : B}
   证明: let ⟨p, hp, hpx⟩ := hx
 ⟨p.map algebraMap R A, hp.map _, by rw [← aeval_def, aeval_map_algebraMap, aeval_def, hpx]⟩
 
@@ -519,8 +519,8 @@ theorem RingEquiv.isIntegral_iff
   · have h' : (algebraMap T S) = (algebraMap R S).comp φ.symm.toRingHom :
 
 中文:
-定理 RingEquiv.isIntegral_iff
-  结论: {R S T : 类型} [CommRing R] [Ring S] [CommRing T]
+定理 环等价.is整数egral_iff
+  结论: {R S T : 类型} [交换环 R] [环 S] [交换环 T]
   证明: by
   constructor <;> intro ha
   · let : Algebra R T := φ.toRingHom.toAlgebra
@@ -557,8 +557,8 @@ theorem map_isIntegral_int
   proof: hb.map (f : B ->+* C).toIntAlgHom
 
 中文:
-定理 map_isIntegral_int
-  结论: {B C F : 类型} [Ring B] [Ring C] {b : B}
+定理 map_is整数egral_int
+  结论: {B C F : 类型} [环 B] [环 C] {b : B}
   证明: hb.map (f : B ->+* C).toIntAlgHom
 
 Depends on / 依赖: hb.map, toIntAlgHom
@@ -578,9 +578,9 @@ theorem IsIntegral.of_subring
   proof: hx.tower_top
 
 中文:
-定理 IsIntegral.of_subring
-  条件: {x : B} (T : Subring R) (hx : Is整数egral T x)
-  结论: Is整数egral R x
+定理 是整.of_subring
+  条件: {x : B} (T : 子环 R) (hx : 是整 T x)
+  结论: 是整 R x
   证明: hx.tower_top
 
 Depends on / 依赖: hx.tower_top, tower_top
@@ -600,8 +600,8 @@ theorem IsIntegral.algebraMap
   rw [IsScalarTower.algebraMap_eq R A B]; rw [← hom_eval₂]; rw [hx]; rw [map_zero]
 
 中文:
-定理 IsIntegral.algebraMap
-  结论: [Algebra A B] [IsScalarTower R A B] {x : A}
+定理 是整.algebraMap
+  结论: [代数 A B] [标量塔 R A B] {x : A}
   证明: by
   rcases h with ⟨f, hf, hx⟩
   use f, hf
@@ -622,8 +622,8 @@ theorem isIntegral_algebraMap_iff
   proof: isIntegral_algHom_iff (IsScalarTower.toAlgHom R A B) hAB
 
 中文:
-定理 isIntegral_algebraMap_iff
-  结论: [Algebra A B] [IsScalarTower R A B] {x : A}
+定理 is整数egral_algebraMap_iff
+  结论: [代数 A B] [标量塔 R A B] {x : A}
   证明: isIntegral_algHom_iff (IsScalarTower.toAlgHom R A B) hAB
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, isIntegral_algHom_iff, toAlgHom
@@ -648,7 +648,7 @@ theorem isIntegral_iff_isIntegral_closure_finite
   exact hs
 
 中文:
-定理 isIntegral_iff_isIntegral_closure_finite
+定理 is整数egral_iff_is整数egral_closure_finite
   条件: {r : B}
   证明: by
   constructor <;> intro hr
@@ -686,7 +686,7 @@ theorem fg_adjoin_of_finite
 
 中文:
 定理 fg_adjoin_of_finite
-  条件: {s : Set A} (hfs : s.Finite) (his : 对任意 x in s, Is整数egral R x)
+  条件: {s : 集合 A} (hfs : s.有限) (his : 对任意 x in s, 是整 R x)
   证明: by
   induction s, hfs using Set.Finite.induction_on with
   | empty =>
@@ -718,8 +718,8 @@ theorem Algebra.finite_adjoin_of_finite_of_isIntegral
   proof: .of_fg fg_adjoin_of_finite hf hi
 
 中文:
-定理 Algebra.finite_adjoin_of_finite_of_isIntegral
-  结论: {s : Set A} (hf : s.Finite)
+定理 代数.finite_adjoin_of_finite_of_is整数egral
+  结论: {s : 集合 A} (hf : s.有限)
   证明: .of_fg fg_adjoin_of_finite hf hi
 
 Depends on / 依赖: fg_adjoin_of_finite, of_fg
@@ -737,8 +737,8 @@ theorem Algebra.finite_adjoin_simple_of_isIntegral
   proof: .of_fg hi.fg_adjoin_singleton
 
 中文:
-定理 Algebra.finite_adjoin_simple_of_isIntegral
-  条件: {x : B} (hi : Is整数egral R x)
+定理 代数.finite_adjoin_simple_of_is整数egral
+  条件: {x : B} (hi : 是整 R x)
   证明: .of_fg hi.fg_adjoin_singleton
 
 Depends on / 依赖: fg_adjoin_singleton, hi.fg_adjoin_singleton, of_fg
@@ -757,7 +757,7 @@ theorem isNoetherian_adjoin_finset
 
 中文:
 定理 isNoetherian_adjoin_finset
-  结论: [IsNoetherianRing R] (s : Finset A)
+  结论: [是Noether环 R] (s : 有限集 A)
   证明: isNoetherian_of_fg_of_noetherian _ (fg_adjoin_of_finite s.finite_toSet hs)
 
 Depends on / 依赖: fg_adjoin_of_finite, finite_toSet, isNoetherian_of_fg_of_noetherian, s.finite_toSet
@@ -787,8 +787,8 @@ theorem IsIntegral.pair
   rw [aeval_prod_apply]; rw [aeval_mul]; rw [hp₁Eval]; rw [zero_mul]; rw [aeval_mul]; rw [hp₂Eval]; rw [mul_zero]; rw [Prod.zero_eq_mk]
 
 中文:
-定理 IsIntegral.pair
-  条件: {x : A × B} (hx₁ : Is整数egral R x.1) (hx₂ : Is整数egral R x.2)
+定理 是整.pair
+  条件: {x : A × B} (hx₁ : 是整 R x.1) (hx₂ : 是整 R x.2)
   证明: by
   obtain ⟨p₁, ⟨hp₁Monic, hp₁Eval⟩⟩ := hx₁
   obtain ⟨p₂, ⟨hp₂Monic, hp₂Eval⟩⟩ := hx₂
@@ -816,9 +816,9 @@ theorem IsIntegral.pair_iff
   proof: ⟨fun h => ⟨h.map (AlgHom.fst R A B), h.map (AlgHom.snd R A B)⟩, fun h => h.1.pair h.2⟩
 
 中文:
-定理 IsIntegral.pair_iff
+定理 是整.pair_iff
   条件: {x : A × B}
-  结论: Is整数egral R x ↔ Is整数egral R x.1 ∧ Is整数egral R x.2
+  结论: 是整 R x ↔ 是整 R x.1 ∧ 是整 R x.2
   证明: ⟨fun h => ⟨h.map (AlgHom.fst R A B), h.map (AlgHom.snd R A B)⟩, fun h => h.1.pair h.2⟩
 
 Depends on / 依赖: AlgHom, AlgHom.fst, AlgHom.snd, h.map

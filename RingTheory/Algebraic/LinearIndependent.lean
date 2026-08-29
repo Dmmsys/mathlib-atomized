@@ -38,7 +38,7 @@ X_sub_C_ne_zero a H (.X - .C a) (by simp [h])
   have h1 : forall i in s, m i • (b * (x - al
 
 中文:
-定理 Transcendental.linearIndependent_sub_inv
+定理 超越.linearIndependent_sub_inv
   证明: by
   classical
   rw [transcendental_iff] at H

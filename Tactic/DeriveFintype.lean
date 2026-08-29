@@ -247,7 +247,7 @@ exact ⟨ (mkIdent ctorIdxName) x, (mkIdent ctorThmName) x⟩)
 
 中文:
 实例 :
-  签名: Fintype (mkIdent declName)
+  签名: 有限类型 (mkIdent declName)
   定义体: Finset.mk (mkIdent enumListName) (mkIdent enumListNodupName)
       complete := by
         intro x
@@ -286,7 +286,7 @@ definition mkFintypeInstanceHandler
 
 中文:
 定义 mkFintypeInstanceHandler
-  签名: (declNames : Array Name)
+  签名: (declNames : 数组 Name)
   定义体: do
   if h : declNames.size != 1 then
     return false -- mutually inductive types are not supported

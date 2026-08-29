@@ -1104,7 +1104,7 @@ theorem abs_oangle_right_toReal_lt_pi_div_two_of_dist_eq
   exact o.abs_oangle_sub_right_toReal_lt_pi_div_two h
 
 中文:
-定理 abs_oangle_right_toReal_lt_pi_div_two_of_dist_eq
+定理 abs_oangle_right_to实数_lt_pi_div_two_of_dist_eq
   结论: {p₁ p₂ p₃ : P}
   证明: by
   simp_rw [dist_eq_norm_vsub V] at h
@@ -1128,7 +1128,7 @@ theorem abs_oangle_left_toReal_lt_pi_div_two_of_dist_eq
   proof: oangle_eq_oangle_of_dist_eq h ▸ abs_oangle_right_toReal_lt_pi_div_two_of_dist_eq h
 
 中文:
-定理 abs_oangle_left_toReal_lt_pi_div_two_of_dist_eq
+定理 abs_oangle_left_to实数_lt_pi_div_two_of_dist_eq
   结论: {p₁ p₂ p₃ : P}
   证明: oangle_eq_oangle_of_dist_eq h ▸ abs_oangle_right_toReal_lt_pi_div_two_of_dist_eq h
 
@@ -1185,7 +1185,7 @@ theorem angle_eq_abs_oangle_toReal
   proof: o.angle_eq_abs_oangle_toReal (vsub_ne_zero.2 hp₁) (vsub_ne_zero.2 hp₂)
 
 中文:
-定理 angle_eq_abs_oangle_toReal
+定理 angle_eq_abs_oangle_to实数
   条件: {p p₁ p₂ : P} (hp₁ : p₁ != p) (hp₂ : p₂ != p)
   证明: o.angle_eq_abs_oangle_toReal (vsub_ne_zero.2 hp₁) (vsub_ne_zero.2 hp₂)
 
@@ -2555,8 +2555,8 @@ theorem _root_.AffineSubspace.SSameSide.oangle_sign_eq
   have hf : ContinuousOn (fun p : P × P × P => ∡ p.1 p.2.1 p.2.2
 
 中文:
-定理 _root_.AffineSubspace.SSameSide.oangle_sign_eq
-  结论: {s : AffineSubspace 实数 P} {p₁ p₂ p₃ p₄ : P}
+定理 _root_.仿射子空间.SSameSide.oangle_sign_eq
+  结论: {s : 仿射子空间 实数 P} {p₁ p₂ p₃ p₄ : P}
   证明: by
   by_cases h : p₁ = p₂; · simp [h]
   let sp : Set (P × P × P) := (fun p : P => (p₁, p, p₂)) '' {p | s.SSameSide p₃ p}
@@ -2605,8 +2605,8 @@ theorem _root_.AffineSubspace.SOppSide.oangle_sign_eq_neg
   rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p
 
 中文:
-定理 _root_.AffineSubspace.SOppSide.oangle_sign_eq_neg
-  结论: {s : AffineSubspace 实数 P} {p₁ p₂ p₃ p₄ : P}
+定理 _root_.仿射子空间.SOppSide.oangle_sign_eq_neg
+  结论: {s : 仿射子空间 实数 P} {p₁ p₂ p₃ p₄ : P}
   证明: by
   have hp₁p₃ : p₁ != p₃ := by rintro rfl; exact hp₃p₄.left_notMem hp₁
   rw [← (hp₃p₄.symm.trans (sOppSide_pointReflection hp₁ hp₃p₄.left_notMem)).oangle_sign_eq hp₁ hp₂]; rw [← oangle_rotate_sign p₁]; rw [← oangle_rotate_sign p₁]; rw [oangle_swap₁₃_sign]; rw [(sbtw_pointReflection_of_ne Real hp₁p

@@ -46,7 +46,7 @@ theorem MonotoneOn.convexOn_of_deriv
 
 中文:
 定理 MonotoneOn.convexOn_of_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: convexOn_of_slope_mono_adjacent hD
     (by
       intro x y z hx hz hxy hyz
@@ -91,7 +91,7 @@ theorem AntitoneOn.concaveOn_of_deriv
 
 中文:
 定理 AntitoneOn.concaveOn_of_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: haveI : MonotoneOn (deriv (-f)) (interior D) := by
     simpa only [← deriv.neg] using h_anti.neg
   neg_convexOn_iff.mp (this.convexOn_of_deriv hD hf.neg hf'.neg)
@@ -119,8 +119,8 @@ theorem StrictMonoOn.exists_slope_lt_deriv_aux
   rcases nonempty_Ioo.2 hay with ⟨b
 
 中文:
-定理 StrictMonoOn.exists_slope_lt_deriv_aux
-  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (Icc x y))
+定理 StrictMonoOn.存在_slope_lt_deriv_aux
+  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (闭区间 x y))
   证明: by
   have A : DifferentiableOn Real f (Ioo x y) := fun w wmem =>
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
@@ -156,8 +156,8 @@ theorem StrictMonoOn.exists_slope_lt_deriv
       apply StrictMonoOn.exists_slope_lt_deriv
 
 中文:
-定理 StrictMonoOn.exists_slope_lt_deriv
-  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (Icc x y))
+定理 StrictMonoOn.存在_slope_lt_deriv
+  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (闭区间 x y))
   证明: by
   by_cases! h : forall w in Ioo x y, deriv f w != 0
   · apply StrictMonoOn.exists_slope_lt_deriv_aux hf hxy hf'_mono h
@@ -212,8 +212,8 @@ theorem StrictMonoOn.exists_deriv_lt_slope_aux
   rcases nonempty_Ioo.2 hxa with ⟨b
 
 中文:
-定理 StrictMonoOn.exists_deriv_lt_slope_aux
-  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (Icc x y))
+定理 StrictMonoOn.存在_deriv_lt_slope_aux
+  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (闭区间 x y))
   证明: by
   have A : DifferentiableOn Real f (Ioo x y) := fun w wmem =>
     (differentiableAt_of_deriv_ne_zero (h w wmem)).differentiableWithinAt
@@ -249,8 +249,8 @@ theorem StrictMonoOn.exists_deriv_lt_slope
       apply StrictMonoOn.exists_deriv_lt_slope
 
 中文:
-定理 StrictMonoOn.exists_deriv_lt_slope
-  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (Icc x y))
+定理 StrictMonoOn.存在_deriv_lt_slope
+  结论: {x y : 实数} {f : 实数 -> 实数} (hf : ContinuousOn f (闭区间 x y))
   证明: by
   by_cases! h : forall w in Ioo x y, deriv f w != 0
   · apply StrictMonoOn.exists_deriv_lt_slope_aux hf hxy hf'_mono h
@@ -305,7 +305,7 @@ theorem StrictMonoOn.strictConvexOn_of_deriv
 
 中文:
 定理 StrictMonoOn.strictConvexOn_of_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: strictConvexOn_of_slope_strict_mono_adjacent hD fun {x y z} hx hz hxy hyz => by
     -- First we prove some trivial inclusions
     have hxzD : Icc x z subseteq D := hD.ordConnected.out hx hz
@@ -345,7 +345,7 @@ theorem StrictAntiOn.strictConcaveOn_of_deriv
 
 中文:
 定理 StrictAntiOn.strictConcaveOn_of_deriv
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: have : StrictMonoOn (deriv (-f)) (interior D) := by simpa only [← deriv.neg] using h_anti.neg
   neg_neg f ▸ (this.strictConvexOn_of_deriv hD hf.neg).neg
 
@@ -367,8 +367,8 @@ theorem Monotone.convexOn_univ_of_deriv
     hf.differentiableOn
 
 中文:
-定理 Monotone.convexOn_univ_of_deriv
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f)
+定理 递增.convexOn_univ_of_deriv
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f)
   证明: (hf'_mono.monotoneOn _).convexOn_of_deriv convex_univ hf.continuous.continuousOn
     hf.differentiableOn
 
@@ -389,8 +389,8 @@ theorem Antitone.concaveOn_univ_of_deriv
     hf.differentiableOn
 
 中文:
-定理 Antitone.concaveOn_univ_of_deriv
-  结论: {f : 实数 -> 实数} (hf : Differentiable 实数 f)
+定理 递减.concaveOn_univ_of_deriv
+  结论: {f : 实数 -> 实数} (hf : 可微 实数 f)
   证明: (hf'_anti.antitoneOn _).concaveOn_of_deriv convex_univ hf.continuous.continuousOn
     hf.differentiableOn
 
@@ -410,8 +410,8 @@ theorem StrictMono.strictConvexOn_univ_of_deriv
   proof: (hf'_mono.strictMonoOn _).strictConvexOn_of_deriv convex_univ hf.continuousOn
 
 中文:
-定理 StrictMono.strictConvexOn_univ_of_deriv
-  结论: {f : 实数 -> 实数} (hf : Continuous f)
+定理 严格递增.strictConvexOn_univ_of_deriv
+  结论: {f : 实数 -> 实数} (hf : 连续 f)
   证明: (hf'_mono.strictMonoOn _).strictConvexOn_of_deriv convex_univ hf.continuousOn
 
 Depends on / 依赖: _mono, _mono.strictMonoOn, continuousOn, convex_univ, hf.continuousOn, strictConvexOn_of_deriv, strictMonoOn
@@ -429,8 +429,8 @@ theorem StrictAnti.strictConcaveOn_univ_of_deriv
   proof: (hf'_anti.strictAntiOn _).strictConcaveOn_of_deriv convex_univ hf.continuousOn
 
 中文:
-定理 StrictAnti.strictConcaveOn_univ_of_deriv
-  结论: {f : 实数 -> 实数} (hf : Continuous f)
+定理 严格递减.strictConcaveOn_univ_of_deriv
+  结论: {f : 实数 -> 实数} (hf : 连续 f)
   证明: (hf'_anti.strictAntiOn _).strictConcaveOn_of_deriv convex_univ hf.continuousOn
 
 Depends on / 依赖: _anti, _anti.strictAntiOn, continuousOn, convex_univ, hf.continuousOn, strictAntiOn, strictConcaveOn_of_deriv
@@ -451,7 +451,7 @@ theorem convexOn_of_deriv2_nonneg
 
 中文:
 定理 convexOn_of_deriv2_nonneg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数} (hf : ContinuousOn f D)
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数} (hf : ContinuousOn f D)
   证明: (monotoneOn_of_deriv_nonneg hD.interior hf''.continuousOn (by rwa [interior_interior]) <| by
         rwa [interior_interior]).convexOn_of_deriv
     hD hf hf'
@@ -477,7 +477,7 @@ theorem concaveOn_of_deriv2_nonpos
 
 中文:
 定理 concaveOn_of_deriv2_nonpos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数} (hf : ContinuousOn f D)
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数} (hf : ContinuousOn f D)
   证明: (antitoneOn_of_deriv_nonpos hD.interior hf''.continuousOn (by rwa [interior_interior]) <| by
         rwa [interior_interior]).concaveOn_of_deriv
     hD hf hf'
@@ -507,7 +507,7 @@ lemma convexOn_of_hasDerivWithinAt2_nonneg
 
 中文:
 引理 convexOn_of_hasDerivWithinAt2_nonneg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' f'' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' f'' : 实数 -> 实数}
   证明: by
   have : (interior D).EqOn (deriv f) f' := deriv_eqOn isOpen_interior hf'
   refine convexOn_of_deriv2_nonneg hD hf (fun x hx => (hf' _ hx).differentiableWithinAt) ?_ ?_
@@ -548,7 +548,7 @@ lemma concaveOn_of_hasDerivWithinAt2_nonpos
 
 中文:
 引理 concaveOn_of_hasDerivWithinAt2_nonpos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f f' f'' : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f f' f'' : 实数 -> 实数}
   证明: by
   have : (interior D).EqOn (deriv f) f' := deriv_eqOn isOpen_interior hf'
   refine concaveOn_of_deriv2_nonpos hD hf (fun x hx => (hf' _ hx).differentiableWithinAt) ?_ ?_
@@ -587,7 +587,7 @@ theorem strictConvexOn_of_deriv2_pos
 
 中文:
 定理 strictConvexOn_of_deriv2_pos
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: ((strictMonoOn_of_deriv_pos hD.interior fun z hz =>
           (differentiableAt_of_deriv_ne_zero
                 (hf'' z hz).ne').differentiableWithinAt.continuousWithinAt) <|
@@ -619,7 +619,7 @@ theorem strictConcaveOn_of_deriv2_neg
 
 中文:
 定理 strictConcaveOn_of_deriv2_neg
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: ((strictAntiOn_of_deriv_neg hD.interior fun z hz =>
           (differentiableAt_of_deriv_ne_zero
                 (hf'' z hz).ne).differentiableWithinAt.continuousWithinAt) <|
@@ -648,7 +648,7 @@ theorem convexOn_of_deriv2_nonneg'
 
 中文:
 定理 convexOn_of_deriv2_nonneg'
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: convexOn_of_deriv2_nonneg hD hf'.continuousOn (hf'.mono interior_subset)
     (hf''.mono interior_subset) fun x hx => hf''_nonneg x (interior_subset hx)
 
@@ -671,7 +671,7 @@ theorem concaveOn_of_deriv2_nonpos'
 
 中文:
 定理 concaveOn_of_deriv2_nonpos'
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: concaveOn_of_deriv2_nonpos hD hf'.continuousOn (hf'.mono interior_subset)
     (hf''.mono interior_subset) fun x hx => hf''_nonpos x (interior_subset hx)
 
@@ -693,7 +693,7 @@ theorem strictConvexOn_of_deriv2_pos'
 
 中文:
 定理 strictConvexOn_of_deriv2_pos'
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: strictConvexOn_of_deriv2_pos hD hf fun x hx => hf'' x (interior_subset hx)
 
 Depends on / 依赖: interior_subset, strictConvexOn_of_deriv2_pos
@@ -712,7 +712,7 @@ theorem strictConcaveOn_of_deriv2_neg'
 
 中文:
 定理 strictConcaveOn_of_deriv2_neg'
-  结论: {D : Set 实数} (hD : Convex 实数 D) {f : 实数 -> 实数}
+  结论: {D : 集合 实数} (hD : 凸 实数 D) {f : 实数 -> 实数}
   证明: strictConcaveOn_of_deriv2_neg hD hf fun x hx => hf'' x (interior_subset hx)
 
 Depends on / 依赖: interior_subset, strictConcaveOn_of_deriv2_neg
@@ -732,7 +732,7 @@ theorem convexOn_univ_of_deriv2_nonneg
 
 中文:
 定理 convexOn_univ_of_deriv2_nonneg
-  结论: {f : 实数 -> 实数} (hf' : Differentiable 实数 f)
+  结论: {f : 实数 -> 实数} (hf' : 可微 实数 f)
   证明: convexOn_of_deriv2_nonneg' convex_univ hf'.differentiableOn hf''.differentiableOn fun x _ =>
     hf''_nonneg x
 
@@ -755,7 +755,7 @@ theorem concaveOn_univ_of_deriv2_nonpos
 
 中文:
 定理 concaveOn_univ_of_deriv2_nonpos
-  结论: {f : 实数 -> 实数} (hf' : Differentiable 实数 f)
+  结论: {f : 实数 -> 实数} (hf' : 可微 实数 f)
   证明: concaveOn_of_deriv2_nonpos' convex_univ hf'.differentiableOn hf''.differentiableOn fun x _ =>
     hf''_nonpos x
 
@@ -777,7 +777,7 @@ theorem strictConvexOn_univ_of_deriv2_pos
 
 中文:
 定理 strictConvexOn_univ_of_deriv2_pos
-  结论: {f : 实数 -> 实数} (hf : Continuous f)
+  结论: {f : 实数 -> 实数} (hf : 连续 f)
   证明: strictConvexOn_of_deriv2_pos' convex_univ hf.continuousOn fun x _ => hf'' x
 
 Depends on / 依赖: continuousOn, convex_univ, hf.continuousOn, strictConvexOn_of_deriv2_pos
@@ -796,7 +796,7 @@ theorem strictConcaveOn_univ_of_deriv2_neg
 
 中文:
 定理 strictConcaveOn_univ_of_deriv2_neg
-  结论: {f : 实数 -> 实数} (hf : Continuous f)
+  结论: {f : 实数 -> 实数} (hf : 连续 f)
   证明: strictConcaveOn_of_deriv2_neg' convex_univ hf.continuousOn fun x _ => hf'' x
 
 Depends on / 依赖: continuousOn, convex_univ, hf.continuousOn, strictConcaveOn_of_deriv2_neg

@@ -77,11 +77,11 @@ class Bicategory
     - triangle : forall {a b c} (f : a ⟶ b) (g : b ⟶ c), (associator f (𝟙 b) g).hom ≫ whiskerLeft f (leftUnitor g).hom = whiskerRight (rightUnitor f).hom g  [default: by cat_disch]
 
 中文:
-类 Bicategory
+类 双范畴
   参数: (B : 类型u)
   继承: CategoryStruct.{v} B
   公理与运算 (18 个):
-    - homCategory : 对任意 a b : B, Category.{w} (a ⟶ b)  [默认: by infer_instance]
+    - homCategory : 对任意 a b : B, 范畴.{w} (a ⟶ b)  [默认: by infer_instance]
     - whiskerLeft({a b c : B} (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h)) : f ≫ g ⟶ f ≫ h
     - whiskerRight({a b c : B} {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c)) : f ≫ h ⟶ g ≫ h
     - associator({a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d)) : (f ≫ g) ≫ h ≅ f ≫ g ≫ h
@@ -497,7 +497,7 @@ instance whiskerLeft_isIso
 
 中文:
 实例 whiskerLeft_isIso
-  签名: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η]
+  签名: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [是同构 η]
   定义体: (whiskerLeftIso f (asIso η)).isIso_hom
 
 @[simp, push]
@@ -520,7 +520,7 @@ theorem inv_whiskerLeft
 
 中文:
 定理 inv_whiskerLeft
-  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [IsIso η]
+  条件: (f : a ⟶ b) {g h : b ⟶ c} (η : g ⟶ h) [是同构 η]
   证明: by
   apply IsIso.inv_eq_of_hom_inv_id
   simp only [← whiskerLeft_comp, whiskerLeft_id, IsIso.hom_inv_id]
@@ -565,7 +565,7 @@ instance whiskerRight_isIso
 
 中文:
 实例 whiskerRight_isIso
-  签名: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η]
+  签名: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [是同构 η]
   定义体: (whiskerRightIso (asIso η) h).isIso_hom
 
 @[simp, push]
@@ -596,7 +596,7 @@ scoped infixl:82 " ▷ᵢ " => whiskerRightIso
 
 中文:
 定理 inv_whiskerRight
-  条件: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [IsIso η]
+  条件: {f g : a ⟶ b} (η : f ⟶ g) (h : b ⟶ c) [是同构 η]
   证明: by
   apply IsIso.inv_eq_of_hom_inv_id
   simp only [← comp_whiskerRight, id_whiskerRight, IsIso.hom_inv_id]
@@ -1654,7 +1654,7 @@ definition associatorNatIsoLeft
   body: NatIso.ofComponents (α_ · g h)
 
 中文:
-定义 associatorNatIsoLeft
+定义 associator自然数IsoLeft
   签名: (a : B) (g : b ⟶ c) (h : c ⟶ d)
   定义体: NatIso.ofComponents (α_ · g h)
 
@@ -1676,7 +1676,7 @@ definition associatorNatIsoMiddle
   body: NatIso.ofComponents (α_ f · h)
 
 中文:
-定义 associatorNatIsoMiddle
+定义 associator自然数IsoMiddle
   签名: (f : a ⟶ b) (h : c ⟶ d)
   定义体: NatIso.ofComponents (α_ f · h)
 
@@ -1699,7 +1699,7 @@ definition associatorNatIsoRight
   body: NatIso.ofComponents (α_ f g ·)
 
 中文:
-定义 associatorNatIsoRight
+定义 associator自然数IsoRight
   签名: (f : a ⟶ b) (g : b ⟶ c) (d : B)
   定义体: NatIso.ofComponents (α_ f g ·)
 
@@ -1721,7 +1721,7 @@ definition leftUnitorNatIso
   body: NatIso.ofComponents (fun_ ·)
 
 中文:
-定义 leftUnitorNatIso
+定义 leftUnitor自然数Iso
   签名: (a b : B)
   定义体: NatIso.ofComponents (fun_ ·)
 
@@ -1742,7 +1742,7 @@ definition rightUnitorNatIso
   body: NatIso.ofComponents (ρ_ ·)
 
 中文:
-定义 rightUnitorNatIso
+定义 rightUnitor自然数Iso
   签名: (a b : B)
   定义体: NatIso.ofComponents (ρ_ ·)
 

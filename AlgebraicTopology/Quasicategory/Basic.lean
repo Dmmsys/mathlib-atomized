@@ -46,10 +46,10 @@ class Quasicategory
     - hornFilling' : forall ⦃n : Nat⦄ ⦃i : Fin (n + 3)⦄ (σ₀ : (Λ[n + 2, i] : SSet) ⟶ S) (_h0 : 0 < i) (_hn : i < Fin.last (n + 2)), exists σ : Δ[n + 2] ⟶ S, σ₀ = Λ[n + 2, i].ι ≫ σ
 
 中文:
-类 Quasicategory
+类 拟范畴
   参数: (S : SSet)
   公理与运算 (1 个):
-    - hornFilling' : 对任意 ⦃n : 自然数⦄ ⦃i : Fin (n + 3)⦄ (σ₀ : (Λ[n + 2, i] : SSet) ⟶ S) (_h0 : 0 < i) (_hn : i < Fin.last (n + 2)), 存在 σ : Δ[n + 2] ⟶ S, σ₀ = Λ[n + 2, i].ι ≫ σ
+    - hornFilling' : 对任意 ⦃n : 自然数⦄ ⦃i : 有限集 (n + 3)⦄ (σ₀ : (Λ[n + 2, i] : SSet) ⟶ S) (_h0 : 0 < i) (_hn : i < 有限集.last (n + 2)), 存在 σ : Δ[n + 2] ⟶ S, σ₀ = Λ[n + 2, i].ι ≫ σ
 -/
 class Quasicategory (S : SSet) : Prop where
   hornFilling' : forall ⦃n : Nat⦄ ⦃i : Fin (n + 3)⦄ (σ₀ : (Λ[n + 2, i] : SSet) ⟶ S)
@@ -70,9 +70,9 @@ lemma Quasicategory.hornFilling
   | n + 2 => exact Quasicategory.hornFilling' σ₀ h0 hn
 
 中文:
-引理 Quasicategory.hornFilling
-  条件: {S : SSet} [Quasicategory S] ⦃n
-  结论: 自然数⦄ ⦃i : Fin (n + 1)⦄
+引理 拟范畴.hornFilling
+  条件: {S : SSet} [拟范畴 S] ⦃n
+  结论: 自然数⦄ ⦃i : 有限集 (n + 1)⦄
   证明: by
   match n with
   | 0
@@ -145,7 +145,7 @@ lemma quasicategory_of_hasLiftingProperty
 
 中文:
 引理 quasicategory_of_hasLiftingProperty
-  结论: (S : SSet) {X : SSet} (t : Limits.IsTerminal X)
+  结论: (S : SSet) {X : SSet} (t : Limits.是终止 X)
   证明: let := h h0 hn
     ⟨(CommSq.mk (t.hom_ext (σ₀ ≫ t.from S) (Λ[n + 2, i].ι ≫ t.from Δ[n + 2]))).lift, by simp⟩
 
@@ -168,8 +168,8 @@ lemma Quasicategory.hasLiftingProperty
   proof: ⟨(hornFilling h0 hn _).choose, (hornFilling h0 hn _).choose_spec.symm, t.hom_ext _ _⟩
 
 中文:
-引理 Quasicategory.hasLiftingProperty
-  结论: (S : SSet) [Quasicategory S] {X : SSet}
+引理 拟范畴.hasLiftingProperty
+  结论: (S : SSet) [拟范畴 S] {X : SSet}
   证明: ⟨(hornFilling h0 hn _).choose, (hornFilling h0 hn _).choose_spec.symm, t.hom_ext _ _⟩
 
 Depends on / 依赖: choose_spec, choose_spec.symm, hom_ext, hornFilling, t.hom_ext
@@ -190,7 +190,7 @@ lemma quasicategory_iff_hasLiftingProperty
 
 中文:
 引理 quasicategory_iff_hasLiftingProperty
-  条件: (S : SSet) {X : SSet} (t : Limits.IsTerminal X)
+  条件: (S : SSet) {X : SSet} (t : Limits.是终止 X)
   证明: ⟨fun _ => Quasicategory.hasLiftingProperty S t, quasicategory_of_hasLiftingProperty S t⟩
 
 Depends on / 依赖: Quasicategory, Quasicategory.hasLiftingProperty, hasLiftingProperty, quasicategory_of_hasLiftingProperty

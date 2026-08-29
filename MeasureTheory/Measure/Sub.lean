@@ -36,7 +36,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: {α : 类型} [MeasurableSpace α]
+  签名: {α : 类型} [可测空间 α]
   定义体: ⟨fun μ ν => sInf { τ | μ <= τ + ν }⟩
 -/
 noncomputable instance instSub {α : Type*} [MeasurableSpace α] : Sub (Measure α) :=
@@ -229,7 +229,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: [IsFiniteMeasure ν] (h₁ : MeasurableSet s) (h₂ : ν <= μ)
+  条件: [是有限测度 ν] (h₁ : 可测集 s) (h₂ : ν <= μ)
   证明: by
   -- We begin by defining `measure_sub`, which will be equal to `(μ - ν)`.
   let measure_sub : Measure α := MeasureTheory.Measure.ofMeasurable
@@ -280,7 +280,7 @@ theorem sub_add_cancel_of_le
 
 中文:
 定理 sub_add_cancel_of_le
-  条件: [IsFiniteMeasure ν] (h₁ : ν <= μ)
+  条件: [是有限测度 ν] (h₁ : ν <= μ)
   结论: μ - ν + ν = μ
   证明: by
   ext1 s h_s_meas
@@ -308,7 +308,7 @@ lemma add_sub_cancel
 
 中文:
 引理 add_sub_cancel
-  条件: [IsFiniteMeasure ν]
+  条件: [是有限测度 ν]
   结论: μ + ν - ν = μ
   证明: by
   ext1 s hs
@@ -336,7 +336,7 @@ theorem restrict_sub_eq_restrict_sub_restrict
 
 中文:
 定理 restrict_sub_eq_restrict_sub_restrict
-  条件: (h_meas_s : MeasurableSet s)
+  条件: (h_meas_s : 可测集 s)
   证明: by
   repeat rw [sub_def]
   have h_nonempty : { d | μ <= d + ν }.Nonempty := ⟨μ, Measure.le_add_right le_rfl⟩
@@ -410,7 +410,7 @@ instance isFiniteMeasure_sub
 
 中文:
 实例 isFiniteMeasure_sub
-  签名: [IsFiniteMeasure μ]
+  签名: [是有限测度 μ]
   定义体: isFiniteMeasure_of_le μ sub_le
 
 Depends on / 依赖: isFiniteMeasure_of_le, sub_le
@@ -431,7 +431,7 @@ lemma sub_le_iff_le_add_of_le
 
 中文:
 引理 sub_le_iff_le_add_of_le
-  条件: [IsFiniteMeasure ν] (h_le : ν <= μ)
+  条件: [是有限测度 ν] (h_le : ν <= μ)
   结论: μ - ν <= ξ ↔ μ <= ξ + ν
   证明: by
   refine ⟨fun h => ?_, Measure.sub_le_of_le_add⟩

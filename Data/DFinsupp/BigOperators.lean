@@ -64,7 +64,7 @@ definition evalAddMonoidHom
 
 中文:
 定义 evalAddMonoidHom
-  签名: [对任意 i, AddZeroClass (β i)] (i : ι)
+  签名: [对任意 i, 加法零类 (β i)] (i : ι)
   定义体: (Pi.evalAddMonoidHom β i).comp coeFnAddMonoidHom
 
 @[simp, norm_cast]
@@ -89,7 +89,7 @@ theorem coe_finsetSum
 
 中文:
 定理 coe_finsetSum
-  条件: {α} [对任意 i, AddCommMonoid (β i)] (s : Finset α) (g : α -> Π₀ i, β i)
+  条件: {α} [对任意 i, 加法交换幺半群 (β i)] (s : 有限集 α) (g : α -> Π₀ i, β i)
   证明: map_sum coeFnAddMonoidHom g s
 
 @[deprecated (since := "2026-04-08")] alias coe_finset_sum := coe_finsetSum
@@ -117,7 +117,7 @@ theorem finsetSum_apply
 
 中文:
 定理 finsetSum_apply
-  条件: {α} [对任意 i, AddCommMonoid (β i)] (s : Finset α) (g : α -> Π₀ i, β i) (i : ι)
+  条件: {α} [对任意 i, 加法交换幺半群 (β i)] (s : 有限集 α) (g : α -> Π₀ i, β i) (i : ι)
   证明: map_sum (evalAddMonoidHom i) g s
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply := finsetSum_apply
@@ -149,8 +149,8 @@ definition prod
 @[to_additive]
 
 中文:
-定义 prod
-  签名: [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ] (f : Π₀ i, β i)
+定义 乘积
+  签名: [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ] (f : Π₀ i, β i)
   定义体: ∏ i in f.support, g i (f i)
 
 @[to_additive]
@@ -178,7 +178,7 @@ theorem prod_of_support_subset
 
 中文:
 定理 prod_of_support_subset
-  结论: [对任意 i, Zero (β i)]
+  结论: [对任意 i, 零 (β i)]
   证明: by
   simp only [DFinsupp.prod]
   apply Finset.prod_subset hs
@@ -279,7 +279,7 @@ theorem prod_mapRange_index
 
 中文:
 定理 prod_mapRange_index
-  结论: {β₁ : ι -> 类型v₁} {β₂ : ι -> 类型v₂} [对任意 i, Zero (β₁ i)]
+  结论: {β₁ : ι -> 类型v₁} {β₂ : ι -> 类型v₂} [对任意 i, 零 (β₁ i)]
   证明: by
   rw [mapRange_def]
   refine (Finset.prod_subset support_mk_subset ?_).trans ?_
@@ -320,7 +320,7 @@ theorem prod_zero_index
 
 中文:
 定理 prod_zero_index
-  结论: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: rfl
 
 @[to_additive]
@@ -347,7 +347,7 @@ theorem prod_single_index
 
 中文:
 定理 prod_single_index
-  结论: [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ]
+  结论: [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ]
   证明: by
   by_cases h : b != 0
   · simp [DFinsupp.prod, support_single h]
@@ -380,7 +380,7 @@ theorem prod_neg_index
 
 中文:
 定理 prod_neg_index
-  结论: [对任意 i, AddGroup (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ]
+  结论: [对任意 i, 加法群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ]
   证明: prod_mapRange_index h0
 
 @[to_additive]
@@ -405,7 +405,7 @@ theorem prod_comm
 
 中文:
 定理 prod_comm
-  结论: {ι₁ ι₂ : Sort _} {β₁ : ι₁ -> 类型} {β₂ : ι₂ -> 类型} [DecidableEq ι₁]
+  结论: {ι₁ ι₂ : 类型层 _} {β₁ : ι₁ -> 类型} {β₂ : ι₂ -> 类型} [DecidableEq ι₁]
   证明: Finset.prod_comm
 
 @[simp]
@@ -459,7 +459,7 @@ theorem support_sum
 
 中文:
 定理 support_sum
-  结论: {ι₁ : 类型u₁} [DecidableEq ι₁] {β₁ : ι₁ -> 类型v₁} [对任意 i₁, Zero (β₁ i₁)]
+  结论: {ι₁ : 类型u₁} [DecidableEq ι₁] {β₁ : ι₁ -> 类型v₁} [对任意 i₁, 零 (β₁ i₁)]
   证明: by
   have :
     forall i₁ : ι,
@@ -496,7 +496,7 @@ theorem prod_one
 
 中文:
 定理 prod_one
-  结论: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ]
+  结论: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ]
   证明: Finset.prod_const_one
 
 @[to_additive (attr := simp)]
@@ -520,7 +520,7 @@ theorem prod_mul
 
 中文:
 定理 prod_mul
-  结论: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ]
+  结论: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ]
   证明: Finset.prod_mul_distrib
 
 @[to_additive (attr := simp)]
@@ -545,7 +545,7 @@ theorem prod_inv
 
 中文:
 定理 prod_inv
-  结论: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: (map_prod (invMonoidHom : γ ->* γ) _ f.support).symm
 
 @[to_additive]
@@ -568,7 +568,7 @@ theorem prod_eq_one
 
 中文:
 定理 prod_eq_one
-  结论: [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [CommMonoid γ]
+  结论: [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [交换幺半群 γ]
   证明: Finset.prod_eq_one fun i _ => hyp i
 
 Depends on / 依赖: Finset, Finset.prod_eq_one, prod_eq_one
@@ -589,7 +589,7 @@ theorem smul_sum
 
 中文:
 定理 smul_sum
-  结论: {α : 类型} [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: {α : 类型} [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: Finset.smul_sum
 
 @[to_additive]
@@ -617,7 +617,7 @@ theorem prod_add_index
 
 中文:
 定理 prod_add_index
-  结论: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: have f_eq : (∏ i in f.support union g.support, h i (f i)) = f.prod h :=
     (Finset.prod_subset Finset.subset_union_left <| by
         simp +contextual [h_zero]).symm
@@ -660,7 +660,7 @@ theorem prod_eq_prod_fintype
 
 中文:
 定理 prod_eq_prod_fintype
-  结论: [Fintype ι] [对任意 i, Zero (β i)] [对任意 (i : ι) (x : β i), Decidable (x != 0)]
+  结论: [有限类型 ι] [对任意 i, 零 (β i)] [对任意 (i : ι) (x : β i), 可判定 (x != 0)]
   证明: by
   suffices (∏ i in v.support, f i (v i)) = ∏ i, f i (v i) by simp [DFinsupp.prod, this]
   apply Finset.prod_subset v.support.subset_univ
@@ -694,7 +694,7 @@ lemma prod_eq_zero_iff
 
 中文:
 引理 prod_eq_zero_iff
-  结论: f.prod g = 0 ↔ 存在 i in f.support, g i (f i) = 0
+  结论: f.乘积 g = 0 ↔ 存在 i in f.support, g i (f i) = 0
   证明: Finset.prod_eq_zero_iff
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero_iff, prod_eq_zero_iff
@@ -710,7 +710,7 @@ lemma prod_ne_zero_iff
 
 中文:
 引理 prod_ne_zero_iff
-  结论: f.prod g != 0 ↔ 对任意 i in f.support, g i (f i) != 0
+  结论: f.乘积 g != 0 ↔ 对任意 i in f.support, g i (f i) != 0
   证明: Finset.prod_ne_zero_iff
 
 Depends on / 依赖: Finset, Finset.prod_ne_zero_iff, prod_ne_zero_iff
@@ -733,7 +733,7 @@ definition sumZeroHom
 
 中文:
 定义 sumZeroHom
-  签名: [对任意 i, Zero (β i)] [AddCommMonoid γ] (φ : 对任意 i, ZeroHom (β i) γ)
+  签名: [对任意 i, 零 (β i)] [加法交换幺半群 γ] (φ : 对任意 i, 保零态射 (β i) γ)
   定义体: (f.support'.lift fun s => ∑ i in Multiset.toFinset s.1, φ i (f i)) by
       rintro ⟨sx, hx⟩ ⟨sy, hy⟩
       dsimp only [Subtype.coe_mk, toFun_eq_coe] at *
@@ -781,7 +781,7 @@ theorem sumZeroHom_single
 
 中文:
 定理 sumZeroHom_single
-  结论: [对任意 i, Zero (β i)] [AddCommMonoid γ] (φ : 对任意 i, ZeroHom (β i) γ) (i)
+  结论: [对任意 i, 零 (β i)] [加法交换幺半群 γ] (φ : 对任意 i, 保零态射 (β i) γ) (i)
   证明: by
   dsimp [sumZeroHom, single, Trunc.lift_mk]
   rw [Multiset.toFinset_singleton]; rw [Finset.sum_singleton]; rw [Pi.single_eq_same]
@@ -811,7 +811,7 @@ theorem sumZeroHom_piSingle
 
 中文:
 定理 sumZeroHom_piSingle
-  条件: [对任意 i, Zero (β i)] [AddCommMonoid γ] (i) (φ : ZeroHom (β i) γ)
+  条件: [对任意 i, 零 (β i)] [加法交换幺半群 γ] (i) (φ : 保零态射 (β i) γ)
   证明: by
   ext ⟨f, sf, hf⟩
   simp only [sumZeroHom, Trunc.lift, toFun_eq_coe, ZeroHom.coe_mk, coe_mk', ZeroHom.coe_comp,
@@ -849,7 +849,7 @@ theorem sumZeroHom_apply
 
 中文:
 定理 sumZeroHom_apply
-  结论: [对任意 i, AddZeroClass (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法零类 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: by
   rcases f with ⟨f, s, hf⟩
   change (∑ i in _, _) = ∑ i in _ with _, _
@@ -897,7 +897,7 @@ definition sumAddHom
 
 中文:
 定义 sumAddHom
-  签名: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (φ : 对任意 i, β i ->+ γ)
+  签名: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (φ : 对任意 i, β i ->+ γ)
   定义体: sumZeroHom fun i => φ i
   map_add' := by
     rintro ⟨f, sf, hf⟩ ⟨g, sg, hg⟩
@@ -946,7 +946,7 @@ theorem sumAddHom_single
 
 中文:
 定理 sumAddHom_single
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (φ : 对任意 i, β i ->+ γ) (i)
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (φ : 对任意 i, β i ->+ γ) (i)
   证明: sumZeroHom_single _ _ _
 
 @[simp]
@@ -974,7 +974,7 @@ theorem sumAddHom_piSingle
 
 中文:
 定理 sumAddHom_piSingle
-  条件: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (i) (φ : β i ->+ γ)
+  条件: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (i) (φ : β i ->+ γ)
   证明: AddMonoidHom.toZeroHom_injective by
     convert! sumZeroHom_piSingle i φ.toZeroHom using 1
     rw [DFinsupp.sumAddHom_toZeroHom]
@@ -1006,7 +1006,7 @@ theorem sumAddHom_comp_single
 
 中文:
 定理 sumAddHom_comp_single
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (f : 对任意 i, β i ->+ γ)
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (f : 对任意 i, β i ->+ γ)
   证明: AddMonoidHom.ext fun x => sumAddHom_single f i x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.ext, Fin.getElem_fin, Fin.is_lt, Option.getD_some, Option.get_some, _getD, _pos, getD_eq_getElem, getD_some, getElem, getElem_fin, get_some, is_lt, sumAddHom_single
@@ -1025,7 +1025,7 @@ theorem sumAddHom_apply
 
 中文:
 定理 sumAddHom_apply
-  结论: [对任意 i, AddZeroClass (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 加法零类 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: sumZeroHom_apply _ _
 
 Depends on / 依赖: sumZeroHom_apply
@@ -1048,7 +1048,7 @@ theorem sumAddHom_comm
 
 中文:
 定理 sumAddHom_comm
-  结论: {ι₁ ι₂ : Sort _} {β₁ : ι₁ -> 类型} {β₂ : ι₂ -> 类型} {γ : 类型}
+  结论: {ι₁ ι₂ : 类型层 _} {β₁ : ι₁ -> 类型} {β₂ : ι₂ -> 类型} {γ : 类型}
   证明: by
   obtain ⟨⟨f₁, s₁, h₁⟩, ⟨f₂, s₂, h₂⟩⟩ := f₁, f₂
   simpa [sumAddHom, sumZeroHom, AddMonoidHom.finsetSum_apply, AddMonoidHom.coe_mk,
@@ -1083,7 +1083,7 @@ definition liftAddHom
 
 中文:
 定义 liftAddHom
-  签名: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ]
+  签名: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ]
   定义体: sumAddHom
   invFun F i := F.comp (singleAddHom β i)
   left_inv x := by ext; simp
@@ -1110,7 +1110,7 @@ theorem liftAddHom_singleAddHom
 
 中文:
 定理 liftAddHom_singleAddHom
-  条件: [对任意 i, AddCommMonoid (β i)]
+  条件: [对任意 i, 加法交换幺半群 (β i)]
   证明: liftAddHom.toEquiv.eq_symm_apply.1 rfl
 
 Depends on / 依赖: eq_symm_apply, liftAddHom, liftAddHom.toEquiv.eq_symm_apply, toEquiv
@@ -1129,7 +1129,7 @@ theorem liftAddHom_apply_single
 
 中文:
 定理 liftAddHom_apply_single
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (f : 对任意 i, β i ->+ γ)
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (f : 对任意 i, β i ->+ γ)
   证明: by simp
 -/
 theorem liftAddHom_apply_single [forall i, AddZeroClass (β i)] [AddCommMonoid γ] (f : forall i, β i ->+ γ)
@@ -1145,7 +1145,7 @@ theorem liftAddHom_comp_single
 
 中文:
 定理 liftAddHom_comp_single
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (f : 对任意 i, β i ->+ γ)
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (f : 对任意 i, β i ->+ γ)
   证明: by simp
 -/
 theorem liftAddHom_comp_single [forall i, AddZeroClass (β i)] [AddCommMonoid γ] (f : forall i, β i ->+ γ)
@@ -1165,7 +1165,7 @@ theorem comp_liftAddHom
 
 中文:
 定理 comp_liftAddHom
-  结论: {δ : 类型} [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] [AddCommMonoid δ]
+  结论: {δ : 类型} [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] [加法交换幺半群 δ]
   证明: liftAddHom.symm_apply_eq.1
     funext fun a => by
       rw [liftAddHom_symm_apply]; rw [AddMonoidHom.comp_assoc]; rw [liftAddHom_comp_single]
@@ -1194,7 +1194,7 @@ theorem sumAddHom_zero
 
 中文:
 定理 sumAddHom_zero
-  条件: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ]
+  条件: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ]
   证明: map_zero liftAddHom
 
 @[simp]
@@ -1218,7 +1218,7 @@ theorem sumAddHom_add
 
 中文:
 定理 sumAddHom_add
-  结论: [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] (g : 对任意 i, β i ->+ γ)
+  结论: [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] (g : 对任意 i, β i ->+ γ)
   证明: map_add liftAddHom _ _
 
 @[simp]
@@ -1240,7 +1240,7 @@ theorem sumAddHom_singleAddHom
 
 中文:
 定理 sumAddHom_singleAddHom
-  条件: [对任意 i, AddCommMonoid (β i)]
+  条件: [对任意 i, 加法交换幺半群 (β i)]
   证明: liftAddHom_singleAddHom
 
 Depends on / 依赖: liftAddHom_singleAddHom
@@ -1259,7 +1259,7 @@ theorem comp_sumAddHom
 
 中文:
 定理 comp_sumAddHom
-  结论: {δ : 类型} [对任意 i, AddZeroClass (β i)] [AddCommMonoid γ] [AddCommMonoid δ]
+  结论: {δ : 类型} [对任意 i, 加法零类 (β i)] [加法交换幺半群 γ] [加法交换幺半群 δ]
   证明: comp_liftAddHom _ _
 
 Depends on / 依赖: comp_liftAddHom
@@ -1283,7 +1283,7 @@ theorem sum_sub_index
 
 中文:
 定理 sum_sub_index
-  结论: [对任意 i, AddGroup (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] [AddCommGroup γ]
+  结论: [对任意 i, 加法群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] [加法交换群 γ]
   证明: by
   have := (liftAddHom fun a => AddMonoidHom.ofMapSub (h a) (h_sub a)).map_sub f g
   rw [liftAddHom_apply]; rw [sumAddHom_apply]; rw [sumAddHom_apply]; rw [sumAddHom_apply] at this
@@ -1319,7 +1319,7 @@ alias prod_fins
 
 中文:
 定理 prod_finsetSum_index
-  结论: {γ : Type w} {α : Type x} [对任意 i, AddCommMonoid (β i)]
+  结论: {γ : 类型 w} {α : 类型 x} [对任意 i, 加法交换幺半群 (β i)]
   证明: by
   classical
   exact Finset.induction_on s (by simp [prod_zero_index])
@@ -1359,7 +1359,7 @@ theorem prod_sum_index
 
 中文:
 定理 prod_sum_index
-  结论: {ι₁ : 类型u₁} [DecidableEq ι₁] {β₁ : ι₁ -> 类型v₁} [对任意 i₁, Zero (β₁ i₁)]
+  结论: {ι₁ : 类型u₁} [DecidableEq ι₁] {β₁ : ι₁ -> 类型v₁} [对任意 i₁, 零 (β₁ i₁)]
   证明: (prod_finsetSum_index h_zero h_add).symm
 
 @[simp]
@@ -1390,7 +1390,7 @@ theorem sum_single
 
 中文:
 定理 sum_single
-  条件: [对任意 i, AddCommMonoid (β i)] [对任意 (i) (x : β i), Decidable (x != 0)] {f : Π₀ i, β i}
+  条件: [对任意 i, 加法交换幺半群 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)] {f : Π₀ i, β i}
   证明: by
   have := DFunLike.congr_fun (liftAddHom_singleAddHom (β := β)) f
   rw [liftAddHom_apply]; rw [sumAddHom_apply] at this
@@ -1418,7 +1418,7 @@ theorem prod_subtypeDomain_index
 
 中文:
 定理 prod_subtypeDomain_index
-  结论: [对任意 i, Zero (β i)] [对任意 (i) (x : β i), Decidable (x != 0)]
+  结论: [对任意 i, 零 (β i)] [对任意 (i) (x : β i), 可判定 (x != 0)]
   证明: by
   refine Finset.prod_bij (fun p _ => p) ?_ ?_ ?_ ?_ <;> aesop
 
@@ -1439,7 +1439,7 @@ theorem subtypeDomain_sum
 
 中文:
 定理 subtypeDomain_sum
-  结论: {ι} {β : ι -> 类型v} [对任意 i, AddCommMonoid (β i)] {s : Finset γ}
+  结论: {ι} {β : ι -> 类型v} [对任意 i, 加法交换幺半群 (β i)] {s : 有限集 γ}
   证明: map_sum (subtypeDomainAddMonoidHom β p) _ s
 
 Depends on / 依赖: map_sum, subtypeDomainAddMonoidHom
@@ -1459,7 +1459,7 @@ theorem subtypeDomain_finsupp_sum
 
 中文:
 定理 subtypeDomain_finsupp_sum
-  结论: {ι} {β : ι -> 类型v} {δ : γ -> Type x} [DecidableEq γ]
+  结论: {ι} {β : ι -> 类型v} {δ : γ -> 类型 x} [DecidableEq γ]
   证明: subtypeDomain_sum
 
 Depends on / 依赖: subtypeDomain_sum
@@ -1509,7 +1509,7 @@ theorem coe_dfinsuppProd
 
 中文:
 定理 coe_dfinsuppProd
-  条件: [MulOneClass R] [CommMonoid S] (f : Π₀ i, β i) (g : 对任意 i, β i -> R ->* S)
+  条件: [MulOne类 R] [交换幺半群 S] (f : Π₀ i, β i) (g : 对任意 i, β i -> R ->* S)
   证明: coe_finsetProd _ _
 
 @[to_additive]
@@ -1531,7 +1531,7 @@ theorem dfinsuppProd_apply
 
 中文:
 定理 dfinsuppProd_apply
-  结论: [MulOneClass R] [CommMonoid S] (f : Π₀ i, β i) (g : 对任意 i, β i -> R ->* S)
+  结论: [MulOne类 R] [交换幺半群 S] (f : Π₀ i, β i) (g : 对任意 i, β i -> R ->* S)
   证明: finsetProd_apply _ _ _
 
 Depends on / 依赖: finsetProd_apply
@@ -1562,7 +1562,7 @@ theorem map_dfinsuppSumAddHom
 
 中文:
 定理 map_dfinsuppSumAddHom
-  结论: [AddCommMonoid R] [AddCommMonoid S] [对任意 i, AddZeroClass (β i)]
+  结论: [加法交换幺半群 R] [加法交换幺半群 S] [对任意 i, 加法零类 (β i)]
   证明: DFunLike.congr_fun (comp_liftAddHom h g) f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, _getD, comp_liftAddHom, congr_fun, getD_default_eq_getI, getD_eq_getElem
@@ -1584,7 +1584,7 @@ theorem dfinsuppSumAddHom_apply
 
 中文:
 定理 dfinsuppSumAddHom_apply
-  结论: [AddZeroClass R] [AddCommMonoid S] [对任意 i, AddZeroClass (β i)]
+  结论: [加法零类 R] [加法交换幺半群 S] [对任意 i, 加法零类 (β i)]
   证明: map_dfinsuppSumAddHom (eval r) f g
 
 @[simp, norm_cast]
@@ -1607,7 +1607,7 @@ theorem coe_dfinsuppSumAddHom
 
 中文:
 定理 coe_dfinsuppSumAddHom
-  结论: [AddZeroClass R] [AddCommMonoid S] [对任意 i, AddZeroClass (β i)]
+  结论: [加法零类 R] [加法交换幺半群 S] [对任意 i, 加法零类 (β i)]
   证明: map_dfinsuppSumAddHom (coeFn R S) f g
 
 Depends on / 依赖: map_dfinsuppSumAddHom
@@ -1636,7 +1636,7 @@ theorem map_dfinsuppSumAddHom
 
 中文:
 定理 map_dfinsuppSumAddHom
-  结论: [NonAssocSemiring R] [NonAssocSemiring S] [对任意 i, AddZeroClass (β i)]
+  结论: [非结合半环 R] [非结合半环 S] [对任意 i, 加法零类 (β i)]
   证明: DFunLike.congr_fun (comp_liftAddHom h.toAddMonoidHom g) f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, comp_liftAddHom, congr_fun, h.toAddMonoidHom, toAddMonoidHom
@@ -1665,7 +1665,7 @@ theorem map_dfinsuppSumAddHom
 
 中文:
 定理 map_dfinsuppSumAddHom
-  结论: [AddCommMonoid R] [AddCommMonoid S] [对任意 i, AddZeroClass (β i)]
+  结论: [加法交换幺半群 R] [加法交换幺半群 S] [对任意 i, 加法零类 (β i)]
   证明: DFunLike.congr_fun (comp_liftAddHom h.toAddMonoidHom g) f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, comp_liftAddHom, congr_fun, h.toAddMonoidHom, toAddMonoidHom

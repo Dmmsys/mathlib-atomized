@@ -164,7 +164,7 @@ lemma δ_δ₀Iter
 
 中文:
 引理 δ_δ₀Iter
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 2))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 2))
   证明: by
   dsimp [δ, δ₀Iter]
   rw [← Functor.map_comp]; rw [← op_comp]; rw [SimplexCategory.δ₀Iter_δ ..]
@@ -194,7 +194,7 @@ lemma δ_δ₀Iter'
 
 中文:
 引理 δ_δ₀Iter'
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数}
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数}
   证明: by
   dsimp [δ, δ₀Iter]
   simp only [← Functor.map_comp, ← op_comp, SimplexCategory.δ₀Iter_δ' _ _ _ _ hi'']
@@ -225,7 +225,7 @@ lemma σ_δ₀Iter
 
 中文:
 引理 σ_δ₀Iter
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1))
   证明: by
   dsimp [σ, δ₀Iter]
   rw [← Functor.map_comp]; rw [← op_comp]; rw [SimplexCategory.δ₀Iter_σ ..]
@@ -254,7 +254,7 @@ lemma σ_δ₀Iter'
 
 中文:
 引理 σ_δ₀Iter'
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1)) (j' : Fin (n + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1)) (j' : 有限集 (n + 1))
   证明: by
   simp [σ, δ₀Iter, ← Functor.map_comp, ← op_comp,
     SimplexCategory.δ₀Iter_σ' i j j']
@@ -410,7 +410,7 @@ lemma σ₀Iter_δ
 
 中文:
 引理 σ₀Iter_δ
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数} (h : m + (j + 1) = n + 1 := by lia)
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数} (h : m + (j + 1) = n + 1 := by lia)
   证明: by
   simp only [σ₀Iter, δ, ← Functor.map_comp, ← op_comp, SimplexCategory.δ_σ₀Iter i j h]
 
@@ -438,7 +438,7 @@ lemma σ₀Iter_δ'
 
 中文:
 引理 σ₀Iter_δ'
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数}
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数}
   证明: by
   simp only [σ₀Iter, δ, ← Functor.map_comp, ← op_comp,
     SimplexCategory.δ_σ₀Iter' i j i']
@@ -470,7 +470,7 @@ lemma σ₀Iter_σ
 
 中文:
 引理 σ₀Iter_σ
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1)) (hi : n + i = m := by lia)
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1)) (hi : n + i = m := by lia)
   证明: by
   dsimp [σ, σ₀Iter]
   rw [← Functor.map_comp]; rw [← op_comp]; rw [SimplexCategory.σ_σ₀Iter ..]
@@ -500,7 +500,7 @@ lemma σ₀Iter_σ'
 
 中文:
 引理 σ₀Iter_σ'
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1)) (j' : Fin (n + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1)) (j' : 有限集 (n + 1))
   证明: by
   simp [σ, σ₀Iter, ← Functor.map_comp, ← op_comp,
     SimplexCategory.σ_σ₀Iter' i j j']

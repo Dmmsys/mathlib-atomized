@@ -34,7 +34,7 @@ theorem EventuallyLE.mul_le_mul
 
 中文:
 定理 EventuallyLE.mul_le_mul
-  结论: [MulZeroClass β] [Preorder β] [PosMulMono β] [MulPosMono β]
+  结论: [乘零类 β] [预序 β] [正乘递增 β] [乘正递增 β]
   证明: by
   filter_upwards [hf, hg, hg₀, hf₀] with x using _root_.mul_le_mul
 
@@ -59,7 +59,7 @@ theorem EventuallyLE.mul_le_mul'
 
 中文:
 定理 EventuallyLE.mul_le_mul'
-  结论: [Mul β] [Preorder β] [MulLeftMono β]
+  结论: [乘法 β] [预序 β] [MulLeftMono β]
   证明: by
   filter_upwards [hf, hg] with x hfx hgx using _root_.mul_le_mul' hfx hgx
 
@@ -80,7 +80,7 @@ theorem EventuallyLE.mul_nonneg
 
 中文:
 定理 EventuallyLE.mul_nonneg
-  结论: [Semiring β] [PartialOrder β] [IsOrderedRing β]
+  结论: [半环 β] [偏序 β] [是Ordered环 β]
   证明: by filter_upwards [hf, hg] with x using _root_.mul_nonneg
 
 Depends on / 依赖: _root_, _root_.mul_nonneg, filter_upwards, mul_nonneg
@@ -99,7 +99,7 @@ theorem eventually_sub_nonneg
 
 中文:
 定理 eventually_sub_nonneg
-  结论: [AddGroup β] [LE β] [AddRightMono β]
+  结论: [加法群 β] [LE β] [AddRightMono β]
   证明: eventually_congr Eventually.of_forall fun _ => sub_nonneg
 
 Depends on / 依赖: Eventually, Eventually.of_forall, eventually_congr, of_forall, sub_nonneg
@@ -129,7 +129,7 @@ inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mon
 
 中文:
 实例 instIsOrderedRing
-  签名: [Semiring β] [PartialOrder β] [IsOrderedRing β]
+  签名: [半环 β] [偏序 β] [是Ordered环 β]
   定义体: const_le zero_le_one
   mul_le_mul_of_nonneg_left x :=
 inductionOn x fun _f hx y z => inductionOn₂ y z fun _g _h hfg => hx.mp hfg.mono

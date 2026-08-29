@@ -41,7 +41,7 @@ structure JointlyReflectIsomorphisms
 结构 JointlyReflectIsomorphisms
   参数: (F : 对任意 i, C ⥤ D i)
   公理与运算 (1 个):
-    - isIso({X Y : C} (f : X ⟶ Y) [对任意 i, IsIso ((F i).map f)]) : IsIso f
+    - isIso({X Y : C} (f : X ⟶ Y) [对任意 i, 是同构 ((F i).map f)]) : 是同构 f
 -/
 structure JointlyReflectIsomorphisms (F : forall i, C ⥤ D i) : Prop where
   isIso {X Y : C} (f : X ⟶ Y) [forall i, IsIso ((F i).map f)] : IsIso f
@@ -59,7 +59,7 @@ structure JointlyReflectMonomorphisms
 结构 JointlyReflectMonomorphisms
   参数: (F : 对任意 i, C ⥤ D i)
   公理与运算 (1 个):
-    - mono({X Y : C} (f : X ⟶ Y) [对任意 i, Mono ((F i).map f)]) : Mono f
+    - mono({X Y : C} (f : X ⟶ Y) [对任意 i, 单态射 ((F i).map f)]) : 单态射 f
 -/
 structure JointlyReflectMonomorphisms (F : forall i, C ⥤ D i) : Prop where
   mono {X Y : C} (f : X ⟶ Y) [forall i, Mono ((F i).map f)] : Mono f
@@ -77,7 +77,7 @@ structure JointlyReflectEpimorphisms
 结构 JointlyReflectEpimorphisms
   参数: (F : 对任意 i, C ⥤ D i)
   公理与运算 (1 个):
-    - epi({X Y : C} (f : X ⟶ Y) [对任意 i, Epi ((F i).map f)]) : Epi f
+    - epi({X Y : C} (f : X ⟶ Y) [对任意 i, 满态射 ((F i).map f)]) : 满态射 f
 -/
 structure JointlyReflectEpimorphisms (F : forall i, C ⥤ D i) : Prop where
   epi {X Y : C} (f : X ⟶ Y) [forall i, Epi ((F i).map f)] : Epi f
@@ -92,7 +92,7 @@ structure JointlyFaithful
     - map_injective({X Y : C} {f g : X ⟶ Y} (h : forall i, (F i).map f = (F i).map g)) : f = g
 
 中文:
-结构 JointlyFaithful
+结构 联合忠实
   参数: (F : 对任意 i, C ⥤ D i)
   公理与运算 (1 个):
     - map_injective({X Y : C} {f g : X ⟶ Y} (h : 对任意 i, (F i).map f = (F i).map g)) : f = g
@@ -118,7 +118,7 @@ lemma JointlyFaithful.of_jointly_reflects_isIso_of_mono
     eq_of_epi_equalizer
 
 中文:
-引理 JointlyFaithful.of_jointly_reflects_isIso_of_mono
+引理 联合忠实.of_jointly_reflects_isIso_of_mono
   结论: [HasEqualizers C]
   证明: have :=
       hF (equalizer.ι f g) (fun i => by
@@ -182,7 +182,7 @@ lemma mono
 
 中文:
 引理 mono
-  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, Mono ((F i).map f)]
+  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, 单态射 ((F i).map f)]
   证明: by
   have hc := pullbackIsPullback f f
   rw [mono_iff_isIso_fst hc]; rw [h.isIso_iff]
@@ -211,7 +211,7 @@ lemma jointlyReflectMonomorphisms
 
 中文:
 引理 jointlyReflectMonomorphisms
-  结论: [对任意 i, PreservesLimitsOfShape WalkingCospan (F i)]
+  结论: [对任意 i, 保持形状极限 WalkingCospan (F i)]
   证明: h.mono f
 
 Depends on / 依赖: h.mono
@@ -236,7 +236,7 @@ lemma epi
 
 中文:
 引理 epi
-  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, Epi ((F i).map f)]
+  结论: {X Y : C} (f : X ⟶ Y) [hf : 对任意 i, 满态射 ((F i).map f)]
   证明: by
   have hc := pushoutIsPushout f f
   rw [epi_iff_isIso_inl hc]; rw [h.isIso_iff]
@@ -264,7 +264,7 @@ lemma jointlyReflectEpimorphisms
 
 中文:
 引理 jointlyReflectEpimorphisms
-  结论: [对任意 i, PreservesColimitsOfShape WalkingSpan (F i)]
+  结论: [对任意 i, 保持形状余极限 WalkingSpan (F i)]
   证明: h.epi f
 
 Depends on / 依赖: h.epi
@@ -284,7 +284,7 @@ lemma jointlyFaithful
 
 中文:
 引理 jointlyFaithful
-  条件: [对任意 i, PreservesLimitsOfShape WalkingParallelPair (F i)] [HasEqualizers C]
+  条件: [对任意 i, 保持形状极限 WalkingParallelPair (F i)] [HasEqualizers C]
   证明: .of_jointly_reflects_isIso_of_mono (fun _ _ _ _ _ => h.isIso _)
 
 Depends on / 依赖: h.isIso, of_jointly_reflects_isIso_of_mono
@@ -348,7 +348,7 @@ lemma jointlyReflectMonomorphisms
 
 中文:
 引理 jointlyReflectMonomorphisms
-  条件: (h : JointlyFaithful F)
+  条件: (h : 联合忠实 F)
   证明: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
     simp only [← cancel_mono ((F i).map f), ← Functor.map_comp, hg])⟩
 
@@ -370,7 +370,7 @@ lemma jointlyReflectEpimorphisms
 
 中文:
 引理 jointlyReflectEpimorphisms
-  条件: (h : JointlyFaithful F)
+  条件: (h : 联合忠实 F)
   证明: ⟨fun {Z} g₁ g₂ hg => h.map_injective (fun i => by
     simp only [← cancel_epi ((F i).map f), ← Functor.map_comp, hg])⟩
 
@@ -393,7 +393,7 @@ lemma jointlyReflectsIsomorphisms
 
 中文:
 引理 jointlyReflectsIsomorphisms
-  条件: [Balanced C] (h : JointlyFaithful F)
+  条件: [Balanced C] (h : 联合忠实 F)
   证明: have := h.jointlyReflectMonomorphisms.mono f
     have := h.jointlyReflectEpimorphisms.epi f
     Balanced.isIso_of_mono_of_epi f

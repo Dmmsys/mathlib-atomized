@@ -43,7 +43,7 @@ theorem Applicative.map_seq_map
   simp [functor_norm, Function.comp_def]
 
 中文:
-定理 Applicative.map_seq_map
+定理 适用.map_seq_map
   条件: (f : α -> β -> γ) (g : σ -> β) (x : F α) (y : F σ)
   证明: by
   simp [functor_norm, Function.comp_def]
@@ -65,7 +65,7 @@ theorem Applicative.pure_seq_eq_map'
   simp [functor_norm]
 
 中文:
-定理 Applicative.pure_seq_eq_map'
+定理 适用.pure_seq_eq_map'
   条件: (f : α -> β)
   结论: ((pure f : F (α -> β)) <*> ·) = (f <$> ·)
   证明: by
@@ -96,7 +96,7 @@ theorem Applicative.ext
       i
 
 中文:
-定理 Applicative.ext
+定理 适用.ext
   条件: {F}
   证明: by
       funext α x
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommApplicative Id
+  签名: 交换适用 Id
   定义体: rfl
 -/
 instance : CommApplicative Id where commutative_prod _ _ := rfl
@@ -182,7 +182,7 @@ theorem map_pure
 中文:
 定理 map_pure
   条件: (f : α -> β) (x : α)
-  结论: (f <$> pure x : Comp F G β) = pure (f x)
+  结论: (f <$> pure x : 复合 F G β) = pure (f x)
   证明: Comp.ext by simp
 
 Depends on / 依赖: Comp.ext
@@ -201,7 +201,7 @@ theorem seq_pure
 
 中文:
 定理 seq_pure
-  条件: (f : Comp F G (α -> β)) (x : α)
+  条件: (f : 复合 F G (α -> β)) (x : α)
   结论: f <*> pure x = (fun g : α -> β => g x) < > f
   证明: Comp.ext by simp [functor_norm]
 
@@ -220,7 +220,7 @@ theorem seq_assoc
 
 中文:
 定理 seq_assoc
-  条件: (x : Comp F G α) (f : Comp F G (α -> β)) (g : Comp F G (β -> γ))
+  条件: (x : 复合 F G α) (f : 复合 F G (α -> β)) (g : 复合 F G (β -> γ))
   证明: Comp.ext by simp [comp_def, functor_norm]
 
 Depends on / 依赖: Comp.ext, comp_def, functor_norm
@@ -240,7 +240,7 @@ theorem pure_seq_eq_map
 
 中文:
 定理 pure_seq_eq_map
-  条件: (f : α -> β) (x : Comp F G α)
+  条件: (f : α -> β) (x : 复合 F G α)
   结论: pure f <*> x = f < > x
   证明: Comp.ext by simp [functor_norm]
 
@@ -265,7 +265,7 @@ instance instLawfulApplicativeComp
 
 中文:
 实例 instLawfulApplicativeComp
-  签名: : LawfulApplicative (Comp F G) where
+  签名: : 合法适用 (复合 F G) where
   定义体: by intros; rfl
   seqRight_eq := by intros; rfl
   pure_seq := Comp.pure_seq_eq_map
@@ -294,7 +294,7 @@ theorem applicative_id_comp
 
 中文:
 定理 applicative_id_comp
-  条件: {F} [AF : Applicative F] [LawfulApplicative F]
+  条件: {F} [AF : 适用 F] [合法适用 F]
   证明: @Applicative.ext F _ _ (instLawfulApplicativeComp (F := Id)) _
     (fun _ => rfl) (fun _ _ => rfl)
 
@@ -316,7 +316,7 @@ theorem applicative_comp_id
 
 中文:
 定理 applicative_comp_id
-  条件: {F} [AF : Applicative F] [LawfulApplicative F]
+  条件: {F} [AF : 适用 F] [合法适用 F]
   证明: @Applicative.ext F _ _ (instLawfulApplicativeComp (G := Id)) _
     (fun _ => rfl) (fun f x => show id <$> f <*> x = f <*> x by rw [id_map])
 
@@ -357,8 +357,8 @@ theorem Comp.seq_mk
   proof: rfl
 
 中文:
-定理 Comp.seq_mk
-  结论: {α β : Type w} {f : 类型u -> 类型v} {g : Type w -> 类型u} [Applicative f]
+定理 复合.seq_mk
+  结论: {α β : 类型 w} {f : 类型u -> 类型v} {g : 类型 w -> 类型u} [适用 f]
   证明: rfl
 -/
 theorem Comp.seq_mk {α β : Type w} {f : Type u -> Type v} {g : Type w -> Type u} [Applicative f]

@@ -68,8 +68,8 @@ theorem Rat.int_algebraMap_injective
   proof: .of_comp (IsScalarTower.algebraMap_eq Int R Rat ▸ RingHom.injective_int (algebraMap Int Rat))
 
 中文:
-定理 Rat.int_algebraMap_injective
-  结论: Function.Injective (algebraMap 整数 R)
+定理 有理数.int_algebraMap_injective
+  结论: 函数.单射 (algebraMap 整数 R)
   证明: .of_comp (IsScalarTower.algebraMap_eq Int R Rat ▸ RingHom.injective_int (algebraMap Int Rat))
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.algebraMap_eq, RingHom, RingHom.injective_int, algebraMap, algebraMap_eq, injective_int, of_comp
@@ -92,8 +92,8 @@ obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1
 exact ⟨y, IsFractionRing.injective R Rat by simp only [← IsScalarTower.algebraMap_apply, hy]⟩
 
 中文:
-定理 Rat.int_algebraMap_surjective
-  条件: [IsFractionRing R Rat]
+定理 有理数.int_algebraMap_surjective
+  条件: [IsFractionRing R 有理数]
   证明: by
   intro x
 obtain ⟨y, hy⟩ := IsIntegrallyClosed.isIntegral_iff.1
@@ -120,7 +120,7 @@ definition Rat.IsIntegralClosure.intEquiv
 @[simp]
 
 中文:
-定义 Rat.IsIntegralClosure.intEquiv
+定义 有理数.是整闭包.intEquiv
   签名: : R ≃+* 整数
   定义体: (NumberField.RingOfIntegers.equiv R).symm.trans ringOfIntegersEquiv
 
@@ -143,8 +143,8 @@ theorem Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv
     IsIntegralClosure.mk']
 
 中文:
-定理 Rat.IsIntegralClosure.intEquiv_apply_eq_ringOfIntegersEquiv
-  条件: (x : 𝓞 Rat)
+定理 有理数.是整闭包.intEquiv_apply_eq_ringOf整数egersEquiv
+  条件: (x : 𝓞 有理数)
   证明: by
   simp [intEquiv, RingOfIntegers.equiv, IsIntegralClosure.equiv, IsIntegralClosure.lift,
     IsIntegralClosure.mk']
@@ -170,7 +170,7 @@ definition natGenerator
 
 中文:
 定义 natGenerator
-  签名: (v : HeightOneSpectrum R)
+  签名: (v : 高一谱 R)
   定义体: .natAbs Submodule.IsPrincipal.generator (v.asIdeal.map <| IsIntegralClosure.intEquiv R)
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.intEquiv, IsPrincipal, Submodule, Submodule.IsPrincipal.generator, asIdeal, generator, intEquiv, natAbs, v.asIdeal.map
@@ -189,7 +189,7 @@ theorem span_natGenerator
 
 中文:
 定理 span_natGenerator
-  条件: (v : HeightOneSpectrum R)
+  条件: (v : 高一谱 R)
   证明: by
   simp [natGenerator]
 
@@ -211,7 +211,7 @@ theorem natGenerator_dvd_iff
 
 中文:
 定理 natGenerator_dvd_iff
-  条件: (v : HeightOneSpectrum R) {n : 自然数}
+  条件: (v : 高一谱 R) {n : 自然数}
   证明: by
   rw [← span_natGenerator]; rw [Ideal.mem_span_singleton]
   exact Int.ofNat_dvd.symm
@@ -235,8 +235,8 @@ theorem prime_natGenerator
 
 中文:
 定理 prime_natGenerator
-  条件: (v : HeightOneSpectrum R)
-  结论: 自然数.Prime (natGenerator v)
+  条件: (v : 高一谱 R)
+  结论: 自然数.素 (natGenerator v)
   证明: Int.prime_iff_natAbs_prime.1 Submodule.IsPrincipal.prime_generator_of_isPrime _
     ((Ideal.map_eq_bot_iff_of_injective (IsIntegralClosure.intEquiv R).injective).not.2 v.ne_bot)
 
@@ -264,7 +264,7 @@ definition primesEquiv
 
 中文:
 定义 primesEquiv
-  签名: : HeightOneSpectrum R ≃ 自然数.Primes where
+  签名: : 高一谱 R ≃ 自然数.Primes where
   定义体: ⟨natGenerator v, prime_natGenerator v⟩
   invFun p :=
     have h : Prime ((Ideal.span {(p.1 : Int)}).map (IsIntegralClosure.intEquiv R).symm) :=
@@ -305,7 +305,7 @@ theorem valuation_equiv_padicValuation
 
 中文:
 定理 valuation_equiv_padicValuation
-  条件: (v : HeightOneSpectrum R)
+  条件: (v : 高一谱 R)
   证明: by
   simp [primesEquiv, Valuation.isEquiv_iff_val_le_one, valuation_le_one_iff_den,
     padicValuation_le_one_iff, natGenerator_dvd_iff,
@@ -331,7 +331,7 @@ definition withValEquiv
 
 中文:
 定义 withValEquiv
-  签名: (v : HeightOneSpectrum R)
+  签名: (v : 高一谱 R)
   定义体: (valuation_equiv_padicValuation v).uniformEquiv
 
 Depends on / 依赖: uniformEquiv, valuation_equiv_padicValuation
@@ -354,7 +354,7 @@ definition adicCompletion.padicEquiv
 
 中文:
 定义 adicCompletion.padicEquiv
-  签名: (v : HeightOneSpectrum R)
+  签名: (v : 高一谱 R)
   定义体: (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).trans
     (mapRingEquiv _ (withValEquiv v).continuous
       (withValEquiv v).symm.continuous).trans Padic.withValRingEquiv
@@ -385,8 +385,8 @@ definition adicCompletionIntegers.padicIntEquiv
         let e := (mapRing
 
 中文:
-定义 adicCompletionIntegers.padicIntEquiv
-  签名: (v : HeightOneSpectrum R)
+定义 adicCompletion整数egers.padic整数Equiv
+  签名: (v : 高一谱 R)
   定义体: let e0 := (IsDedekindDomain.HeightOneSpectrum.adicCompletion.equiv Rat v).restrict
           (v.adicCompletionIntegers Rat)
           (Valued.v (R := (v.valuation Rat).Completion)).valuationSubring
@@ -421,8 +421,8 @@ theorem adicCompletionIntegers.coe_padicIntEquiv_apply
   proof: rfl
 
 中文:
-定理 adicCompletionIntegers.coe_padicIntEquiv_apply
-  结论: (v : HeightOneSpectrum R)
+定理 adicCompletion整数egers.coe_padic整数Equiv_apply
+  结论: (v : 高一谱 R)
   证明: rfl
 -/
 theorem adicCompletionIntegers.coe_padicIntEquiv_apply (v : HeightOneSpectrum R)
@@ -437,8 +437,8 @@ theorem adicCompletionIntegers.coe_padicIntEquiv_symm_apply
   proof: rfl
 
 中文:
-定理 adicCompletionIntegers.coe_padicIntEquiv_symm_apply
-  结论: (v : HeightOneSpectrum R)
+定理 adicCompletion整数egers.coe_padic整数Equiv_symm_apply
+  结论: (v : 高一谱 R)
   证明: rfl
 -/
 theorem adicCompletionIntegers.coe_padicIntEquiv_symm_apply (v : HeightOneSpectrum R)
@@ -460,7 +460,7 @@ theorem adicCompletion.padicEquiv_bijOn
 
 中文:
 定理 adicCompletion.padicEquiv_bijOn
-  条件: (v : HeightOneSpectrum R)
+  条件: (v : 高一谱 R)
   证明: by
   refine ⟨fun x hx => ?_, (padicEquiv v).injective.injOn, fun y hy => ?_⟩
   · rw [← adicCompletionIntegers.coe_padicIntEquiv_apply v ⟨x, hx⟩]
@@ -531,7 +531,7 @@ definition adicCompletionIntegersEquiv
     (adicCompletionIntegers.padicIntEquiv (primesEquiv.symm p)).symm
 
 中文:
-定义 adicCompletionIntegersEquiv
+定义 adicCompletion整数egersEquiv
   签名: (p : 自然数.Primes)
   定义体: by
   apply (ContinuousAlgEquiv.cast (primesEquiv.apply_symm_apply p).symm).trans
@@ -559,7 +559,7 @@ theorem coe_adicCompletionIntegersEquiv_apply
   rw [← 
 
 中文:
-定理 coe_adicCompletionIntegersEquiv_apply
+定理 coe_adicCompletion整数egersEquiv_apply
   条件: (p : 自然数.Primes) (x : 整数_[p])
   证明: by
   simp only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.trans_apply,
@@ -594,7 +594,7 @@ theorem coe_adicCompletionIntegersEquiv_symm_apply
   rw [← Subtype.h
 
 中文:
-定理 coe_adicCompletionIntegersEquiv_symm_apply
+定理 coe_adicCompletion整数egersEquiv_symm_apply
   结论: (p : 自然数.Primes)
   证明: by
   simp -implicitDefEqProofs only [adicCompletionIntegersEquiv, ContinuousAlgEquiv.symm_trans_apply,

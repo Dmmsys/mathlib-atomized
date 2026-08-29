@@ -104,7 +104,7 @@ definition GradedMonoid
   body: Sigma A
 
 中文:
-定义 GradedMonoid
+定义 分次幺半群
   签名: (A : ι -> 类型)
   定义体: Sigma A
 -/
@@ -148,8 +148,8 @@ instance [forall
   body: GradedMonoid.mk g.1 (r • g.2)
 
 中文:
-实例 [forall
-  签名: i, SMul α (A i)] : SMul α (GradedMonoid A) where
+实例 [对任意
+  签名: i, 标量乘法 α (A i)] : 标量乘法 α (分次幺半群 A) where
   定义体: GradedMonoid.mk g.1 (r • g.2)
 
 Depends on / 依赖: GradedMonoid, GradedMonoid.mk
@@ -167,7 +167,7 @@ theorem fst_smul
 
 中文:
 定理 fst_smul
-  条件: [对任意 i, SMul α (A i)] (a : α) (x : GradedMonoid A)
+  条件: [对任意 i, 标量乘法 α (A i)] (a : α) (x : 分次幺半群 A)
   证明: rfl
 -/
 @[simp] theorem fst_smul [forall i, SMul α (A i)] (a : α) (x : GradedMonoid A) :
@@ -183,7 +183,7 @@ theorem snd_smul
 
 中文:
 定理 snd_smul
-  条件: [对任意 i, SMul α (A i)] (a : α) (x : GradedMonoid A)
+  条件: [对任意 i, 标量乘法 α (A i)] (a : α) (x : 分次幺半群 A)
   证明: rfl
 -/
 @[simp] theorem snd_smul [forall i, SMul α (A i)] (a : α) (x : GradedMonoid A) :
@@ -199,7 +199,7 @@ theorem smul_mk
 
 中文:
 定理 smul_mk
-  条件: [对任意 i, SMul α (A i)] {i} (c : α) (a : A i)
+  条件: [对任意 i, 标量乘法 α (A i)] {i} (c : α) (a : A i)
   证明: rfl
 -/
 theorem smul_mk [forall i, SMul α (A i)] {i} (c : α) (a : A i) :
@@ -215,8 +215,8 @@ instance [forall
   body: Sigma.ext rfl heq_of_eq smul_comm a b g.2
 
 中文:
-实例 [forall
-  签名: i, SMul α (A i)] [对任意 i, SMul β (A i)]
+实例 [对任意
+  签名: i, 标量乘法 α (A i)] [对任意 i, 标量乘法 β (A i)]
   定义体: Sigma.ext rfl heq_of_eq smul_comm a b g.2
 
 Depends on / 依赖: Sigma.ext, heq_of_eq, smul_comm
@@ -235,8 +235,8 @@ instance [SMul
   body: Sigma.ext rfl heq_of_eq smul_assoc a b g.2
 
 中文:
-实例 [SMul
-  签名: α β] [对任意 i, SMul α (A i)] [对任意 i, SMul β (A i)]
+实例 [标量乘法
+  签名: α β] [对任意 i, 标量乘法 α (A i)] [对任意 i, 标量乘法 β (A i)]
   定义体: Sigma.ext rfl heq_of_eq smul_assoc a b g.2
 
 Depends on / 依赖: Sigma.ext, heq_of_eq, smul_assoc
@@ -256,8 +256,8 @@ instance [Monoid
 mul_smul r₁ r₂ g := Sigma.ext rfl heq_of_eq mul_smul r₁ r₂ g.2
 
 中文:
-实例 [Monoid
-  签名: α] [对任意 i, MulAction α (A i)] :
+实例 [幺半群
+  签名: α] [对任意 i, 乘法作用 α (A i)] :
   定义体: Sigma.ext rfl heq_of_eq one_smul _ g.2
 mul_smul r₁ r₂ g := Sigma.ext rfl heq_of_eq mul_smul r₁ r₂ g.2
 
@@ -287,7 +287,7 @@ class GOne
 
 中文:
 类 GOne
-  参数: [Zero ι]
+  参数: [零 ι]
   公理与运算 (1 个):
     - one : A 0
 -/
@@ -305,7 +305,7 @@ instance GOne.toOne
 
 中文:
 实例 GOne.toOne
-  签名: [Zero ι] [GOne A]
+  签名: [零 ι] [GOne A]
   定义体: ⟨⟨_, GOne.one⟩⟩
 
 Depends on / 依赖: GOne.one
@@ -324,8 +324,8 @@ theorem fst_one
 
 中文:
 定理 fst_one
-  条件: [Zero ι] [GOne A]
-  结论: (1 : GradedMonoid A).fst = 0
+  条件: [零 ι] [GOne A]
+  结论: (1 : 分次幺半群 A).fst = 0
   证明: rfl
 -/
 @[simp] theorem fst_one [Zero ι] [GOne A] : (1 : GradedMonoid A).fst = 0 := rfl
@@ -341,8 +341,8 @@ theorem snd_one
 
 中文:
 定理 snd_one
-  条件: [Zero ι] [GOne A]
-  结论: (1 : GradedMonoid A).snd = GOne.one
+  条件: [零 ι] [GOne A]
+  结论: (1 : 分次幺半群 A).snd = GOne.one
   证明: rfl
 -/
 @[simp] theorem snd_one [Zero ι] [GOne A] : (1 : GradedMonoid A).snd = GOne.one := rfl
@@ -358,7 +358,7 @@ class GMul
 
 中文:
 类 GMul
-  参数: [Add ι]
+  参数: [加法 ι]
   公理与运算 (1 个):
     - mul({i j}) : A i -> A j -> A (i + j)
 -/
@@ -376,7 +376,7 @@ instance GMul.toMul
 
 中文:
 实例 GMul.toMul
-  签名: [Add ι] [GMul A]
+  签名: [加法 ι] [GMul A]
   定义体: ⟨fun x y => ⟨_, GMul.mul x.snd y.snd⟩⟩
 
 Depends on / 依赖: GMul.mul, x.snd, y.snd
@@ -394,7 +394,7 @@ theorem fst_mul
 
 中文:
 定理 fst_mul
-  条件: [Add ι] [GMul A] (x y : GradedMonoid A)
+  条件: [加法 ι] [GMul A] (x y : 分次幺半群 A)
   证明: rfl
 -/
 @[simp] theorem fst_mul [Add ι] [GMul A] (x y : GradedMonoid A) :
@@ -410,7 +410,7 @@ theorem snd_mul
 
 中文:
 定理 snd_mul
-  条件: [Add ι] [GMul A] (x y : GradedMonoid A)
+  条件: [加法 ι] [GMul A] (x y : 分次幺半群 A)
   证明: rfl
 -/
 @[simp] theorem snd_mul [Add ι] [GMul A] (x y : GradedMonoid A) :
@@ -426,7 +426,7 @@ theorem mk_mul_mk
 
 中文:
 定理 mk_mul_mk
-  条件: [Add ι] [GMul A] {i j} (a : A i) (b : A j)
+  条件: [加法 ι] [GMul A] {i j} (a : A i) (b : A j)
   证明: rfl
 -/
 theorem mk_mul_mk [Add ι] [GMul A] {i j} (a : A i) (b : A j) :
@@ -467,8 +467,8 @@ theorem gnpowRec_zero
 
 中文:
 定理 gnpowRec_zero
-  条件: (a : GradedMonoid A)
-  结论: GradedMonoid.mk _ (gnpowRec 0 a.snd) = 1
+  条件: (a : 分次幺半群 A)
+  结论: 分次幺半群.mk _ (gnpowRec 0 a.snd) = 1
   证明: Sigma.ext (zero_nsmul _) (heq_of_cast_eq _ rfl).symm
 
 @[simp]
@@ -489,7 +489,7 @@ theorem gnpowRec_succ
 
 中文:
 定理 gnpowRec_succ
-  条件: (n : 自然数) (a : GradedMonoid A)
+  条件: (n : 自然数) (a : 分次幺半群 A)
   证明: Sigma.ext (succ_nsmul _ _) (heq_of_cast_eq _ rfl).symm
 
 Depends on / 依赖: Sigma.ext, heq_of_cast_eq, succ_nsmul
@@ -521,16 +521,16 @@ class GMonoid
     - gnpow_succ' : forall (n : Nat) (a : GradedMonoid A), (GradedMonoid.mk _ <| gnpow n.succ a.snd) = ⟨_, gnpow n a.snd⟩ * a  [default: by apply_gmonoid_gnpowRec_succ_tac]
 
 中文:
-类 GMonoid
-  参数: [AddMonoid ι]
+类 G幺半群
+  参数: [加法幺半群 ι]
   继承: GMul A, GOne A
   公理与运算 (6 个):
-    - one_mul((a : GradedMonoid A)) : 1 * a = a
-    - mul_one((a : GradedMonoid A)) : a * 1 = a
-    - mul_assoc((a b c : GradedMonoid A)) : a * b * c = a * (b * c)
+    - one_mul((a : 分次幺半群 A)) : 1 * a = a
+    - mul_one((a : 分次幺半群 A)) : a * 1 = a
+    - mul_assoc((a b c : 分次幺半群 A)) : a * b * c = a * (b * c)
     - gnpow : 对任意 (n : 自然数) {i}, A i -> A (n • i)  [默认: GMonoid.gnpowRec]
-    - gnpow_zero' : 对任意 a : GradedMonoid A, GradedMonoid.mk _ (gnpow 0 a.snd) = 1  [默认: by apply_gmonoid_gnpowRec_zero_tac]
-    - gnpow_succ' : 对任意 (n : 自然数) (a : GradedMonoid A), (GradedMonoid.mk _ <| gnpow n.succ a.snd) = ⟨_, gnpow n a.snd⟩ * a  [默认: by apply_gmonoid_gnpowRec_succ_tac]
+    - gnpow_zero' : 对任意 a : 分次幺半群 A, 分次幺半群.mk _ (gnpow 0 a.snd) = 1  [默认: by apply_gmonoid_gnpowRec_zero_tac]
+    - gnpow_succ' : 对任意 (n : 自然数) (a : 分次幺半群 A), (分次幺半群.mk _ <| gnpow n.succ a.snd) = ⟨_, gnpow n a.snd⟩ * a  [默认: by apply_gmonoid_gnpowRec_succ_tac]
 
 Depends on / 依赖: GMonoid, GMonoid.gnpowRec, gnpowRec
 -/
@@ -566,8 +566,8 @@ instance GMonoid.toMonoid
   mul_assoc := GMonoid.mul_assoc
 
 中文:
-实例 GMonoid.toMonoid
-  签名: [AddMonoid ι] [GMonoid A]
+实例 G幺半群.toMonoid
+  签名: [加法幺半群 ι] [G幺半群 A]
   定义体: GradedMonoid.mk _ (GMonoid.gnpow n a.snd)
   npow_zero a := GMonoid.gnpow_zero' a
   npow_succ n a := GMonoid.gnpow_succ' n a
@@ -595,7 +595,7 @@ theorem fst_pow
 
 中文:
 定理 fst_pow
-  条件: [AddMonoid ι] [GMonoid A] (x : GradedMonoid A) (n : 自然数)
+  条件: [加法幺半群 ι] [G幺半群 A] (x : 分次幺半群 A) (n : 自然数)
   证明: rfl
 -/
 @[simp] theorem fst_pow [AddMonoid ι] [GMonoid A] (x : GradedMonoid A) (n : Nat) :
@@ -611,7 +611,7 @@ theorem snd_pow
 
 中文:
 定理 snd_pow
-  条件: [AddMonoid ι] [GMonoid A] (x : GradedMonoid A) (n : 自然数)
+  条件: [加法幺半群 ι] [G幺半群 A] (x : 分次幺半群 A) (n : 自然数)
   证明: rfl
 -/
 @[simp] theorem snd_pow [AddMonoid ι] [GMonoid A] (x : GradedMonoid A) (n : Nat) :
@@ -627,7 +627,7 @@ theorem mk_pow
 
 中文:
 定理 mk_pow
-  条件: [AddMonoid ι] [GMonoid A] {i} (a : A i) (n : 自然数)
+  条件: [加法幺半群 ι] [G幺半群 A] {i} (a : A i) (n : 自然数)
   证明: rfl
 -/
 theorem mk_pow [AddMonoid ι] [GMonoid A] {i} (a : A i) (n : Nat) :
@@ -644,11 +644,11 @@ class GCommMonoid
     - mul_comm((a : GradedMonoid A) (b : GradedMonoid A)) : a * b = b * a
 
 中文:
-类 GCommMonoid
-  参数: [AddCommMonoid ι]
-  继承: GMonoid A
+类 GComm幺半群
+  参数: [加法交换幺半群 ι]
+  继承: G幺半群 A
   公理与运算 (1 个):
-    - mul_comm((a : GradedMonoid A) (b : GradedMonoid A)) : a * b = b * a
+    - mul_comm((a : 分次幺半群 A) (b : 分次幺半群 A)) : a * b = b * a
 -/
 class GCommMonoid [AddCommMonoid ι] extends GMonoid A where
   /-- Multiplication is commutative -/
@@ -663,8 +663,8 @@ instance GCommMonoid.toCommMonoid
   body: GCommMonoid.mul_comm
 
 中文:
-实例 GCommMonoid.toCommMonoid
-  签名: [AddCommMonoid ι] [GCommMonoid A]
+实例 GComm幺半群.toCommMonoid
+  签名: [加法交换幺半群 ι] [GComm幺半群 A]
   定义体: GCommMonoid.mul_comm
 
 Depends on / 依赖: GCommMonoid, GCommMonoid.mul_comm, mul_comm
@@ -848,7 +848,7 @@ definition mkZeroMonoidHom
 
 中文:
 定义 mkZeroMonoidHom
-  签名: : A 0 ->* GradedMonoid A where
+  签名: : A 0 ->* 分次幺半群 A where
   定义体: mk 0
   map_one' := rfl
   map_mul' := mk_zero_smul
@@ -903,8 +903,8 @@ definition List.dProdIndex
 @[simp]
 
 中文:
-定义 List.dProdIndex
-  签名: (l : List α) (fι : α -> ι)
+定义 列表.dProdIndex
+  签名: (l : 列表 α) (fι : α -> ι)
   定义体: l.foldr (fun i b => fι i + b) 0
 
 @[simp]
@@ -927,9 +927,9 @@ theorem List.dProdIndex_nil
 @[simp]
 
 中文:
-定理 List.dProdIndex_nil
+定理 列表.dProdIndex_nil
   条件: (fι : α -> ι)
-  结论: ([] : List α).dProdIndex fι = 0
+  结论: ([] : 列表 α).dProdIndex fι = 0
   证明: rfl
 
 @[simp]
@@ -947,8 +947,8 @@ theorem List.dProdIndex_cons
   proof: rfl
 
 中文:
-定理 List.dProdIndex_cons
-  条件: (a : α) (l : List α) (fι : α -> ι)
+定理 列表.dProdIndex_cons
+  条件: (a : α) (l : 列表 α) (fι : α -> ι)
   证明: rfl
 -/
 theorem List.dProdIndex_cons (a : α) (l : List α) (fι : α -> ι) :
@@ -967,8 +967,8 @@ theorem List.dProdIndex_eq_map_sum
   | head::tail => simp [List.dProdIndex_eq_map_sum tail fι]
 
 中文:
-定理 List.dProdIndex_eq_map_sum
-  条件: (l : List α) (fι : α -> ι)
+定理 列表.dProdIndex_eq_map_sum
+  条件: (l : 列表 α) (fι : α -> ι)
   证明: by
   match l with
   | [] => simp
@@ -993,8 +993,8 @@ definition List.dProd
 @[simp]
 
 中文:
-定义 List.dProd
-  签名: (l : List α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
+定义 列表.dProd
+  签名: (l : 列表 α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
   定义体: l.foldrRecOn _ GradedMonoid.GOne.one fun _ x a _ => GradedMonoid.GMul.mul (fA a) x
 
 @[simp]
@@ -1014,7 +1014,7 @@ theorem List.dProd_nil
   proof: rfl
 
 中文:
-定理 List.dProd_nil
+定理 列表.dProd_nil
   条件: (fι : α -> ι) (fA : 对任意 a, A (fι a))
   证明: rfl
 -/
@@ -1034,8 +1034,8 @@ theorem List.dProd_cons
   proof: rfl
 
 中文:
-定理 List.dProd_cons
-  条件: (fι : α -> ι) (fA : 对任意 a, A (fι a)) (a : α) (l : List α)
+定理 列表.dProd_cons
+  条件: (fι : α -> ι) (fA : 对任意 a, A (fι a)) (a : α) (l : 列表 α)
   证明: rfl
 -/
 theorem List.dProd_cons (fι : α -> ι) (fA : forall a, A (fι a)) (a : α) (l : List α) :
@@ -1055,8 +1055,8 @@ theorem GradedMonoid.mk_list_dProd
     simp [← GradedMonoid.mk_list_dProd tail _ _, GradedMonoid.mk_mul_mk, List.prod_cons]
 
 中文:
-定理 GradedMonoid.mk_list_dProd
-  条件: (l : List α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
+定理 分次幺半群.mk_list_dProd
+  条件: (l : 列表 α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
   证明: by
   match l with
   | [] => simp only [List.dProdIndex_nil, List.dProd_nil, List.map_nil, List.prod_nil]; rfl
@@ -1084,8 +1084,8 @@ theorem GradedMonoid.list_prod_map_eq_dProd
   simp_rw [Sigma.eta]
 
 中文:
-定理 GradedMonoid.list_prod_map_eq_dProd
-  条件: (l : List α) (f : α -> GradedMonoid A)
+定理 分次幺半群.list_prod_map_eq_dProd
+  条件: (l : 列表 α) (f : α -> 分次幺半群 A)
   证明: by
   rw [GradedMonoid.mk_list_dProd]; rw [GradedMonoid.mk]
   simp_rw [Sigma.eta]
@@ -1107,8 +1107,8 @@ theorem GradedMonoid.list_prod_ofFn_eq_dProd
   rw [List.ofFn_eq_map]; rw [GradedMonoid.list_prod_map_eq_dProd]
 
 中文:
-定理 GradedMonoid.list_prod_ofFn_eq_dProd
-  条件: {n : 自然数} (f : Fin n -> GradedMonoid A)
+定理 分次幺半群.list_prod_ofFn_eq_dProd
+  条件: {n : 自然数} (f : 有限集 n -> 分次幺半群 A)
   证明: by
   rw [List.ofFn_eq_map]; rw [GradedMonoid.list_prod_map_eq_dProd]
 
@@ -1140,8 +1140,8 @@ instance One.gOne
 @[simps mul]
 
 中文:
-实例 One.gOne
-  签名: [Zero ι] [One R]
+实例 幺.gOne
+  签名: [零 ι] [幺 R]
   定义体: 1
 
 @[simps mul]
@@ -1158,8 +1158,8 @@ instance Mul.gMul
   body: x * y
 
 中文:
-实例 Mul.gMul
-  签名: [Add ι] [Mul R]
+实例 乘法.gMul
+  签名: [加法 ι] [乘法 R]
   定义体: x * y
 -/
 instance Mul.gMul [Add ι] [Mul R] : GradedMonoid.GMul fun _ : ι => R where mul x y := x * y
@@ -1180,8 +1180,8 @@ instance Monoid.gMonoid
   gnpow_zero' := fun _ => Sigma.ext (zero_nsmul _) (heq_of_
 
 中文:
-实例 Monoid.gMonoid
-  签名: [AddMonoid ι] [Monoid R]
+实例 幺半群.gMonoid
+  签名: [加法幺半群 ι] [幺半群 R]
   定义体: fun _ => Sigma.ext (zero_add _) (heq_of_eq (one_mul _))
   mul_one := fun _ => Sigma.ext (add_zero _) (heq_of_eq (mul_one _))
   mul_assoc := fun _ _ _ => Sigma.ext (add_assoc _ _ _) (heq_of_eq (mul_assoc _ _ _))
@@ -1207,8 +1207,8 @@ instance CommMonoid.gCommMonoid
   body: fun _ _ => Sigma.ext (add_comm _ _) (heq_of_eq (mul_comm _ _))
 
 中文:
-实例 CommMonoid.gCommMonoid
-  签名: [AddCommMonoid ι] [CommMonoid R]
+实例 交换幺半群.gCommMonoid
+  签名: [加法交换幺半群 ι] [交换幺半群 R]
   定义体: fun _ _ => Sigma.ext (add_comm _ _) (heq_of_eq (mul_comm _ _))
 
 Depends on / 依赖: DivInvOneMonoid, DivisionMonoid, DivisionMonoid.toDivInvOneMonoid, Sigma.ext, add_comm, heq_of_eq, mul_comm, toDivInvOneMonoid
@@ -1235,8 +1235,8 @@ theorem List.dProd_monoid
     rfl
 
 中文:
-定理 List.dProd_monoid
-  条件: {α} [AddMonoid ι] [Monoid R] (l : List α) (fι : α -> ι) (fA : α -> R)
+定理 列表.dProd_monoid
+  条件: {α} [加法幺半群 ι] [幺半群 R] (l : 列表 α) (fι : α -> ι) (fA : α -> R)
   证明: by
   match l with
   | [] =>
@@ -1277,8 +1277,8 @@ class SetLike.GradedOne
     - one_mem : (1 : R) in A 0
 
 中文:
-类 SetLike.GradedOne
-  参数: {S : 类型} [SetLike S R] [One R] [Zero ι] (A : ι -> S)
+类 集合状.分次幺元
+  参数: {S : 类型} [集合状 S R] [幺 R] [零 ι] (A : ι -> S)
   公理与运算 (1 个):
     - one_mem : (1 : R) in A 0
 -/
@@ -1295,8 +1295,8 @@ theorem SetLike.one_mem_graded
   proof: SetLike.GradedOne.one_mem
 
 中文:
-定理 SetLike.one_mem_graded
-  结论: {S : 类型} [SetLike S R] [One R] [Zero ι] (A : ι -> S)
+定理 集合状.one_mem_graded
+  结论: {S : 类型} [集合状 S R] [幺 R] [零 ι] (A : ι -> S)
   证明: SetLike.GradedOne.one_mem
 
 Depends on / 依赖: GradedOne, SetLike, SetLike.GradedOne.one_mem, one_mem
@@ -1316,8 +1316,8 @@ instance SetLike.gOne
 @[simp]
 
 中文:
-实例 SetLike.gOne
-  签名: {S : 类型} [SetLike S R] [One R] [Zero ι] (A : ι -> S)
+实例 集合状.gOne
+  签名: {S : 类型} [集合状 S R] [幺 R] [零 ι] (A : ι -> S)
   定义体: ⟨1, SetLike.one_mem_graded _⟩
 
 @[simp]
@@ -1338,8 +1338,8 @@ theorem SetLike.coe_gOne
   proof: rfl
 
 中文:
-定理 SetLike.coe_gOne
-  结论: {S : 类型} [SetLike S R] [One R] [Zero ι] (A : ι -> S)
+定理 集合状.coe_gOne
+  结论: {S : 类型} [集合状 S R] [幺 R] [零 ι] (A : ι -> S)
   证明: rfl
 -/
 theorem SetLike.coe_gOne {S : Type*} [SetLike S R] [One R] [Zero ι] (A : ι -> S)
@@ -1356,8 +1356,8 @@ class SetLike.GradedMul
     - mul_mem : forall ⦃i j⦄ {gi gj}, gi in A i -> gj in A j -> gi * gj in A (i + j)
 
 中文:
-类 SetLike.GradedMul
-  参数: {S : 类型} [SetLike S R] [Mul R] [Add ι] (A : ι -> S)
+类 集合状.分次乘法
+  参数: {S : 类型} [集合状 S R] [乘法 R] [加法 ι] (A : ι -> S)
   公理与运算 (1 个):
     - mul_mem : 对任意 ⦃i j⦄ {gi gj}, gi in A i -> gj in A j -> gi * gj in A (i + j)
 -/
@@ -1374,8 +1374,8 @@ theorem SetLike.mul_mem_graded
   proof: SetLike.GradedMul.mul_mem hi hj
 
 中文:
-定理 SetLike.mul_mem_graded
-  结论: {S : 类型} [SetLike S R] [Mul R] [Add ι] {A : ι -> S}
+定理 集合状.mul_mem_graded
+  结论: {S : 类型} [集合状 S R] [乘法 R] [加法 ι] {A : ι -> S}
   证明: SetLike.GradedMul.mul_mem hi hj
 
 Depends on / 依赖: GradedMul, SetLike, SetLike.GradedMul.mul_mem, mul_mem
@@ -1395,8 +1395,8 @@ instance SetLike.gMul
 @[simp]
 
 中文:
-实例 SetLike.gMul
-  签名: {S : 类型} [SetLike S R] [Mul R] [Add ι] (A : ι -> S)
+实例 集合状.gMul
+  签名: {S : 类型} [集合状 S R] [乘法 R] [加法 ι] (A : ι -> S)
   定义体: fun a b => ⟨(a * b : R), SetLike.mul_mem_graded a.prop b.prop⟩
 
 @[simp]
@@ -1417,8 +1417,8 @@ theorem SetLike.coe_gMul
   proof: rfl
 
 中文:
-定理 SetLike.coe_gMul
-  结论: {S : 类型} [SetLike S R] [Mul R] [Add ι] (A : ι -> S)
+定理 集合状.coe_gMul
+  结论: {S : 类型} [集合状 S R] [乘法 R] [加法 ι] (A : ι -> S)
   证明: rfl
 -/
 theorem SetLike.coe_gMul {S : Type*} [SetLike S R] [Mul R] [Add ι] (A : ι -> S)
@@ -1436,9 +1436,9 @@ class SetLike.GradedMonoid
   (no additional axioms)
 
 中文:
-类 SetLike.GradedMonoid
-  参数: {S : 类型} [SetLike S R] [Monoid R] [AddMonoid ι] (A : ι -> S)
-  继承: SetLike.GradedOne A, SetLike.GradedMul A
+类 集合状.分次幺半群
+  参数: {S : 类型} [集合状 S R] [幺半群 R] [加法幺半群 ι] (A : ι -> S)
+  继承: 集合状.分次幺元 A, 集合状.分次乘法 A
   (无附加公理)
 -/
 class SetLike.GradedMonoid {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι] (A : ι -> S) : Prop
@@ -1465,7 +1465,7 @@ definition submonoid
 
 中文:
 定义 submonoid
-  签名: : Submonoid R where
+  签名: : 子幺半群 R where
   定义体: A 0
   mul_mem' ha hb := add_zero (0 : ι) ▸ SetLike.mul_mem_graded ha hb
   one_mem' := SetLike.one_mem_graded A
@@ -1486,7 +1486,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (A 0)
+  签名: : 幺半群 (A 0)
   定义体: inferInstanceAs Monoid (GradeZero.submonoid A)
 
 Depends on / 依赖: GradeZero, GradeZero.submonoid, Monoid, submonoid
@@ -1624,7 +1624,7 @@ theorem list_prod_map_mem_graded
 
 中文:
 定理 list_prod_map_mem_graded
-  结论: {ι'} (l : List ι') (i : ι' -> ι) (r : ι' -> R)
+  结论: {ι'} (l : 列表 ι') (i : ι' -> ι) (r : ι' -> R)
   证明: by
   match l with
   | [] =>
@@ -1662,7 +1662,7 @@ theorem list_prod_ofFn_mem_graded
 
 中文:
 定理 list_prod_ofFn_mem_graded
-  条件: {n} (i : Fin n -> ι) (r : Fin n -> R) (h : 对任意 j, r j in A (i j))
+  条件: {n} (i : 有限集 n -> ι) (r : 有限集 n -> R) (h : 对任意 j, r j in A (i j))
   证明: by
   rw [List.ofFn_eq_map]; rw [List.ofFn_eq_map]
   exact list_prod_map_mem_graded _ _ _ fun _ _ => h _
@@ -1689,8 +1689,8 @@ instance SetLike.gMonoid
   gnpow := fun n _ a => ⟨(a:R)^n, SetLike.pow_mem_graded 
 
 中文:
-实例 SetLike.gMonoid
-  签名: {S : 类型} [SetLike S R] [Monoid R] [AddMonoid ι] (A : ι -> S)
+实例 集合状.gMonoid
+  签名: {S : 类型} [集合状 S R] [幺半群 R] [加法幺半群 ι] (A : ι -> S)
   定义体: fun ⟨_, _, _⟩ => Sigma.subtype_ext (zero_add _) (one_mul _)
   mul_one := fun ⟨_, _, _⟩ => Sigma.subtype_ext (add_zero _) (mul_one _)
   mul_assoc := fun ⟨_, _, _⟩ ⟨_, _, _⟩ ⟨_, _, _⟩ =>
@@ -1719,8 +1719,8 @@ theorem SetLike.coe_gnpow
   proof: rfl
 
 中文:
-定理 SetLike.coe_gnpow
-  结论: {S : 类型} [SetLike S R] [Monoid R] [AddMonoid ι] (A : ι -> S)
+定理 集合状.coe_gnpow
+  结论: {S : 类型} [集合状 S R] [幺半群 R] [加法幺半群 ι] (A : ι -> S)
   证明: rfl
 -/
 theorem SetLike.coe_gnpow {S : Type*} [SetLike S R] [Monoid R] [AddMonoid ι] (A : ι -> S)
@@ -1737,8 +1737,8 @@ instance SetLike.gCommMonoid
   body: fun ⟨_, _, _⟩ ⟨_, _, _⟩ => Sigma.subtype_ext (add_comm _ _) (mul_comm _ _)
 
 中文:
-实例 SetLike.gCommMonoid
-  签名: {S : 类型} [SetLike S R] [CommMonoid R] [AddCommMonoid ι] (A : ι -> S)
+实例 集合状.gCommMonoid
+  签名: {S : 类型} [集合状 S R] [交换幺半群 R] [加法交换幺半群 ι] (A : ι -> S)
   定义体: fun ⟨_, _, _⟩ ⟨_, _, _⟩ => Sigma.subtype_ext (add_comm _ _) (mul_comm _ _)
 
 Depends on / 依赖: Sigma.subtype_ext, add_comm, mul_comm, subtype_ext
@@ -1768,8 +1768,8 @@ theorem SetLike.coe_list_dProd
     rw [List.dProd_cons]; rw [coe_gMul]; rw [List.map_cons]; rw [List.prod_cons]; rw [SetLike.coe_list_dProd _ _ _ tail]
 
 中文:
-定理 SetLike.coe_list_dProd
-  结论: (A : ι -> S) [SetLike.GradedMonoid A] (fι : α -> ι)
+定理 集合状.coe_list_dProd
+  结论: (A : ι -> S) [集合状.分次幺半群 A] (fι : α -> ι)
   证明: by
   match l with
   | [] =>
@@ -1797,8 +1797,8 @@ theorem SetLike.list_dProd_eq
   proof: Subtype.ext SetLike.coe_list_dProd _ _ _ _
 
 中文:
-定理 SetLike.list_dProd_eq
-  结论: (A : ι -> S) [SetLike.GradedMonoid A] (fι : α -> ι) (fA : 对任意 a, A (fι a))
+定理 集合状.list_dProd_eq
+  结论: (A : ι -> S) [集合状.分次幺半群 A] (fι : α -> ι) (fA : 对任意 a, A (fι a))
   证明: Subtype.ext SetLike.coe_list_dProd _ _ _ _
 
 Depends on / 依赖: SetLike, SetLike.coe_list_dProd, Subtype, Subtype.ext, coe_list_dProd
@@ -1830,7 +1830,7 @@ definition SetLike.IsHomogeneousElem
 @[simp]
 
 中文:
-定义 SetLike.IsHomogeneousElem
+定义 集合状.IsHomogeneousElem
   签名: (A : ι -> S) (a : R)
   定义体: exists i, a in A i
 
@@ -1849,7 +1849,7 @@ theorem SetLike.isHomogeneousElem_coe
   proof: ⟨i, x.prop⟩
 
 中文:
-定理 SetLike.isHomogeneousElem_coe
+定理 集合状.isHomogeneousElem_coe
   条件: {A : ι -> S} {i} (x : A i)
   证明: ⟨i, x.prop⟩
 
@@ -1868,8 +1868,8 @@ theorem SetLike.isHomogeneousElem_one
   proof: ⟨0, SetLike.one_mem_graded _⟩
 
 中文:
-定理 SetLike.isHomogeneousElem_one
-  条件: [Zero ι] [One R] (A : ι -> S) [SetLike.GradedOne A]
+定理 集合状.isHomogeneousElem_one
+  条件: [零 ι] [幺 R] (A : ι -> S) [集合状.分次幺元 A]
   证明: ⟨0, SetLike.one_mem_graded _⟩
 
 Depends on / 依赖: SetLike, SetLike.one_mem_graded, one_mem_graded
@@ -1886,8 +1886,8 @@ theorem SetLike.IsHomogeneousElem.mul
   given: [Add ι] [Mul R] {A : ι -> S} [SetLike.GradedMul A] {a b : R}
 
 中文:
-定理 SetLike.IsHomogeneousElem.mul
-  条件: [Add ι] [Mul R] {A : ι -> S} [SetLike.GradedMul A] {a b : R}
+定理 集合状.IsHomogeneousElem.mul
+  条件: [加法 ι] [乘法 R] {A : ι -> S} [集合状.分次乘法 A] {a b : R}
 -/
 theorem SetLike.IsHomogeneousElem.mul [Add ι] [Mul R] {A : ι -> S} [SetLike.GradedMul A] {a b : R} :
     SetLike.IsHomogeneousElem A a -> SetLike.IsHomogeneousElem A b ->
@@ -1905,8 +1905,8 @@ definition SetLike.homogeneousSubmonoid
   mul_mem' a b := SetLike.IsHomogeneousElem.mul a b
 
 中文:
-定义 SetLike.homogeneousSubmonoid
-  签名: [AddMonoid ι] [Monoid R] (A : ι -> S) [SetLike.GradedMonoid A]
+定义 集合状.homogeneousSubmonoid
+  签名: [加法幺半群 ι] [幺半群 R] (A : ι -> S) [集合状.分次幺半群 A]
   定义体: { a | SetLike.IsHomogeneousElem A a }
   one_mem' := SetLike.isHomogeneousElem_one A
   mul_mem' a b := SetLike.IsHomogeneousElem.mul a b

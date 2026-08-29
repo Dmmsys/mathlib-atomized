@@ -35,7 +35,7 @@ definition toUnits
 
 中文:
 定义 toUnits
-  签名: [Group G]
+  签名: [群 G]
   定义体: ⟨x, x⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩
   invFun x := x
   map_mul' _ _ := Units.ext rfl
@@ -62,7 +62,7 @@ lemma toUnits_val_apply
 
 中文:
 引理 toUnits_val_apply
-  条件: {G : 类型} [Group G] (x : Gˣ)
+  条件: {G : 类型} [群 G] (x : Gˣ)
   结论: toUnits (x : G) = x
   证明: by
   simp_rw [← MulEquiv.eq_symm_apply, toUnits_symm_apply]
@@ -219,7 +219,7 @@ theorem mulLeft_bijective
 中文:
 定理 mulLeft_bijective
   条件: (a : Mˣ)
-  结论: Function.Bijective ((a * ·) : M -> M)
+  结论: 函数.双射 ((a * ·) : M -> M)
   证明: (mulLeft a).bijective
 
 Depends on / 依赖: bijective, mulLeft
@@ -297,7 +297,7 @@ theorem mulRight_bijective
 中文:
 定理 mulRight_bijective
   条件: (a : Mˣ)
-  结论: Function.Bijective ((· * a) : M -> M)
+  结论: 函数.双射 ((· * a) : M -> M)
   证明: (mulRight a).bijective
 
 Depends on / 依赖: bijective, mulRight
@@ -348,7 +348,7 @@ theorem coe_mulLeft
 中文:
 定理 coe_mulLeft
   条件: (a : G)
-  结论: ⇑(Equiv.mulLeft a) = (a * ·)
+  结论: ⇑(等价.mulLeft a) = (a * ·)
   证明: rfl
 -/
 theorem coe_mulLeft (a : G) : ⇑(Equiv.mulLeft a) = (a * ·) :=
@@ -371,7 +371,7 @@ theorem mulLeft_symm_apply
 中文:
 定理 mulLeft_symm_apply
   条件: (a : G)
-  结论: ((Equiv.mulLeft a).symm : G -> G) = (a⁻¹ * ·)
+  结论: ((等价.mulLeft a).symm : G -> G) = (a⁻¹ * ·)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -394,7 +394,7 @@ theorem mulLeft_symm
 中文:
 定理 mulLeft_symm
   条件: (a : G)
-  结论: (Equiv.mulLeft a).symm = Equiv.mulLeft a⁻¹
+  结论: (等价.mulLeft a).symm = 等价.mulLeft a⁻¹
   证明: ext fun _ => rfl
 
 @[to_additive]
@@ -413,9 +413,9 @@ theorem _root_.Group.mulLeft_bijective
   proof: (Equiv.mulLeft a).bijective
 
 中文:
-定理 _root_.Group.mulLeft_bijective
+定理 _root_.群.mulLeft_bijective
   条件: (a : G)
-  结论: Function.Bijective (a * ·)
+  结论: 函数.双射 (a * ·)
   证明: (Equiv.mulLeft a).bijective
 
 Depends on / 依赖: Equiv.mulLeft, bijective, mulLeft
@@ -460,7 +460,7 @@ theorem coe_mulRight
 中文:
 定理 coe_mulRight
   条件: (a : G)
-  结论: ⇑(Equiv.mulRight a) = fun x => x * a
+  结论: ⇑(等价.mulRight a) = fun x => x * a
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -481,7 +481,7 @@ theorem mulRight_symm
 中文:
 定理 mulRight_symm
   条件: (a : G)
-  结论: (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹
+  结论: (等价.mulRight a).symm = 等价.mulRight a⁻¹
   证明: ext fun _ => rfl
 -/
 theorem mulRight_symm (a : G) : (Equiv.mulRight a).symm = Equiv.mulRight a⁻¹ :=
@@ -504,7 +504,7 @@ theorem mulRight_symm_apply
 中文:
 定理 mulRight_symm_apply
   条件: (a : G)
-  结论: ((Equiv.mulRight a).symm : G -> G) = fun x => x * a⁻¹
+  结论: ((等价.mulRight a).symm : G -> G) = fun x => x * a⁻¹
   证明: rfl
 
 @[to_additive]
@@ -523,9 +523,9 @@ theorem _root_.Group.mulRight_bijective
   proof: (Equiv.mulRight a).bijective
 
 中文:
-定理 _root_.Group.mulRight_bijective
+定理 _root_.群.mulRight_bijective
   条件: (a : G)
-  结论: Function.Bijective (· * a)
+  结论: 函数.双射 (· * a)
   证明: (Equiv.mulRight a).bijective
 
 Depends on / 依赖: Equiv.mulRight, bijective, mulRight
@@ -628,7 +628,7 @@ theorem divRight_eq_mulRight_inv
 中文:
 定理 divRight_eq_mulRight_inv
   条件: (a : G)
-  结论: Equiv.divRight a = Equiv.mulRight a⁻¹
+  结论: 等价.divRight a = 等价.mulRight a⁻¹
   证明: ext fun _ => div_eq_mul_inv _ _
 
 Depends on / 依赖: div_eq_mul_inv
@@ -657,7 +657,7 @@ lemma symm_divLeft
 中文:
 引理 symm_divLeft
   条件: (a : G)
-  结论: (Equiv.divLeft a).symm = Equiv.divLeft a
+  结论: (等价.divLeft a).symm = 等价.divLeft a
   证明: ext fun _ => inv_mul_eq_div _ _
 
 @[to_additive (attr := simp)]
@@ -680,7 +680,7 @@ lemma divLeft_involutive
 中文:
 引理 divLeft_involutive
   条件: (a : G)
-  结论: Function.Involutive (Equiv.divLeft a)
+  结论: 函数.对合 (等价.divLeft a)
   证明: fun _ => div_div_cancel ..
 
 Depends on / 依赖: div_div_cancel
@@ -706,7 +706,7 @@ definition unitsEquivProdSubtype
 
 中文:
 定义 unitsEquivProdSubtype
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: ⟨(u, ↑u⁻¹), u.val_inv, u.inv_val⟩
   invFun p := Units.mk (p : α × α).1 (p : α × α).2 p.prop.1 p.prop.2
 
@@ -731,8 +731,8 @@ definition MulEquiv.inv
 @[to_additive (attr := simp)]
 
 中文:
-定义 MulEquiv.inv
-  签名: (G : 类型) [DivisionCommMonoid G]
+定义 乘法等价.inv
+  签名: (G : 类型) [DivisionComm幺半群 G]
   定义体: { Equiv.inv G with toFun := Inv.inv, invFun := Inv.inv, map_mul' := mul_inv }
 
 @[to_additive (attr := simp)]
@@ -752,8 +752,8 @@ theorem MulEquiv.inv_symm
   proof: rfl
 
 中文:
-定理 MulEquiv.inv_symm
-  条件: (G : 类型) [DivisionCommMonoid G]
+定理 乘法等价.inv_symm
+  条件: (G : 类型) [DivisionComm幺半群 G]
   证明: rfl
 -/
 theorem MulEquiv.inv_symm (G : Type*) [DivisionCommMonoid G] :
@@ -777,8 +777,8 @@ fun x y => EquivLike.injective f by simp
   mpr := .map f
 
 中文:
-引理 MulEquiv.isUnit_map
-  结论: IsUnit (f x) ↔ IsUnit x where
+引理 乘法等价.isUnit_map
+  结论: 是单位 (f x) ↔ 是单位 x where
   证明: by
 simpa using hx.map MonoidHom.mk ⟨EquivLike.inv f, EquivLike.injective f by simp⟩
 fun x y => EquivLike.injective f by simp
@@ -802,7 +802,7 @@ theorem isLocalHom_equiv
 
 中文:
 定理 isLocalHom_equiv
-  结论: IsLocalHom f where map_nonunit
+  结论: 是Local态射 f where map_nonunit
   证明: by simp
 -/
 @[instance] theorem isLocalHom_equiv : IsLocalHom f where map_nonunit := by simp

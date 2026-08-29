@@ -156,8 +156,8 @@ theorem IsBilimit.total
     simp [sum_comp, b.ι_π, comp_dite]
 
 中文:
-定理 IsBilimit.total
-  条件: {f : J -> C} {b : Bicone f} (i : b.IsBilimit)
+定理 是Bilimit.total
+  条件: {f : J -> C} {b : Bicone f} (i : b.是Bilimit)
   证明: i.isLimit.hom_ext fun j => by
     classical
     cases j
@@ -211,7 +211,7 @@ definition isBilimitOfIsLimit
 
 中文:
 定义 isBilimitOfIsLimit
-  签名: {f : J -> C} (t : Bicone f) (ht : IsLimit t.toCone)
+  签名: {f : J -> C} (t : Bicone f) (ht : 是极限 t.toCone)
   定义体: isBilimitOfTotal _
     ht.hom_ext fun j => by
       classical
@@ -239,7 +239,7 @@ definition biconeIsBilimitOfLimitConeOfIsLimit
 
 中文:
 定义 biconeIsBilimitOfLimitConeOfIsLimit
-  签名: {f : J -> C} {t : Cone (Discrete.functor f)}
+  签名: {f : J -> C} {t : 锥 (离散.functor f)}
   定义体: isBilimitOfIsLimit _ IsLimit.ofIsoLimit ht Cone.ext (Iso.refl _) (by simp)
 
 Depends on / 依赖: Cone.ext, IsLimit, IsLimit.ofIsoLimit, Iso.refl, isBilimitOfIsLimit, ofIsoLimit
@@ -265,7 +265,7 @@ definition isBilimitOfIsColimit
 
 中文:
 定义 isBilimitOfIsColimit
-  签名: {f : J -> C} (t : Bicone f) (ht : IsColimit t.toCocone)
+  签名: {f : J -> C} (t : Bicone f) (ht : 是余极限 t.toCocone)
   定义体: isBilimitOfTotal _
     ht.hom_ext fun j => by
       classical
@@ -296,7 +296,7 @@ definition biconeIsBilimitOfColimitCoconeOfIsColimit
 
 中文:
 定义 biconeIsBilimitOfColimitCoconeOfIsColimit
-  签名: {f : J -> C} {t : Cocone (Discrete.functor f)}
+  签名: {f : J -> C} {t : 余锥 (离散.functor f)}
   定义体: isBilimitOfIsColimit _ IsColimit.ofIsoColimit ht Cocone.ext (Iso.refl _) by
     simp
 
@@ -327,9 +327,9 @@ theorem HasBiproduct.of_hasProduct
       isBilimit := biconeIsBilimitOfLimitConeOfIsLimit (limit.isLimit _) }
 
 中文:
-定理 HasBiproduct.of_hasProduct
+定理 有Biproduct.of_hasProduct
   条件: (f : J -> C) [HasProduct f]
-  结论: HasBiproduct f
+  结论: 有Biproduct f
   证明: by
   cases nonempty_fintype J
   exact HasBiproduct.mk
@@ -358,9 +358,9 @@ theorem HasBiproduct.of_hasCoproduct
       isBilimit := biconeIsBilimitOfColimitCoconeOfIsColimit (colimit.isColimit _) }
 
 中文:
-定理 HasBiproduct.of_hasCoproduct
+定理 有Biproduct.of_hasCoproduct
   条件: (f : J -> C) [HasCoproduct f]
-  结论: HasBiproduct f
+  结论: 有Biproduct f
   证明: by
   cases nonempty_fintype J
   exact HasBiproduct.mk
@@ -387,9 +387,9 @@ theorem HasFiniteBiproducts.of_hasFiniteProducts
   proof: ⟨fun _ => { has_biproduct := fun _ => HasBiproduct.of_hasProduct _ }⟩
 
 中文:
-定理 HasFiniteBiproducts.of_hasFiniteProducts
-  条件: [HasFiniteProducts C]
-  结论: HasFiniteBiproducts C
+定理 有FiniteBiproducts.of_hasFiniteProducts
+  条件: [有FiniteProducts C]
+  结论: 有FiniteBiproducts C
   证明: ⟨fun _ => { has_biproduct := fun _ => HasBiproduct.of_hasProduct _ }⟩
 
 Depends on / 依赖: HasBiproduct, HasBiproduct.of_hasProduct, has_biproduct, of_hasProduct
@@ -406,8 +406,8 @@ theorem HasFiniteBiproducts.of_hasFiniteCoproducts
   proof: ⟨fun _ => { has_biproduct := fun _ => HasBiproduct.of_hasCoproduct _ }⟩
 
 中文:
-定理 HasFiniteBiproducts.of_hasFiniteCoproducts
-  条件: [HasFiniteCoproducts C]
+定理 有FiniteBiproducts.of_hasFiniteCoproducts
+  条件: [有FiniteCoproducts C]
   证明: ⟨fun _ => { has_biproduct := fun _ => HasBiproduct.of_hasCoproduct _ }⟩
 
 Depends on / 依赖: HasBiproduct, HasBiproduct.of_hasCoproduct, has_biproduct, of_hasCoproduct
@@ -546,7 +546,7 @@ theorem biproduct.map_eq
 
 中文:
 定理 biproduct.map_eq
-  条件: [HasFiniteBiproducts C] {f g : J -> C} {h : 对任意 j, f j ⟶ g j}
+  条件: [有FiniteBiproducts C] {f g : J -> C} {h : 对任意 j, f j ⟶ g j}
   证明: by
   classical
   ext
@@ -575,7 +575,7 @@ theorem biproduct.lift_matrix
 
 中文:
 定理 biproduct.lift_matrix
-  结论: {K : Type} [Finite K] [HasFiniteBiproducts C] {f : J -> C} {g : K -> C}
+  结论: {K : 类型} [有限 K] [有FiniteBiproducts C] {f : J -> C} {g : K -> C}
   证明: by
   ext
   simp [biproduct.lift_desc]
@@ -607,7 +607,7 @@ theorem biproduct.matrix_desc
 
 中文:
 定理 biproduct.matrix_desc
-  结论: [Fintype K] {f : J -> C} {g : K -> C}
+  结论: [有限类型 K] {f : J -> C} {g : K -> C}
   证明: by
   ext
   simp [lift_desc]
@@ -700,7 +700,7 @@ definition biproduct.reindex
 
 中文:
 定义 biproduct.reindex
-  签名: {β γ : Type} [Finite β] (ε : β ≃ γ)
+  签名: {β γ : 类型} [有限 β] (ε : β ≃ γ)
   定义体: biproduct.desc fun b => biproduct.ι f (ε b)
   inv := biproduct.lift fun b => biproduct.π f (ε b)
   hom_inv_id := by
@@ -793,8 +793,8 @@ theorem IsBilimit.binary_total
   proof: i.isLimit.hom_ext fun j => by rcases j with ⟨⟨⟩⟩ <;> simp
 
 中文:
-定理 IsBilimit.binary_total
-  条件: {X Y : C} {b : BinaryBicone X Y} (i : b.IsBilimit)
+定理 是Bilimit.binary_total
+  条件: {X Y : C} {b : BinaryBicone X Y} (i : b.是Bilimit)
   证明: i.isLimit.hom_ext fun j => by rcases j with ⟨⟨⟩⟩ <;> simp
 
 Depends on / 依赖: hom_ext, i.isLimit.hom_ext, isLimit
@@ -845,7 +845,7 @@ definition BinaryBicone.ofLimitCone
 
 中文:
 定义 BinaryBicone.ofLimitCone
-  签名: {X Y : C} {t : Cone (pair X Y)} (ht : IsLimit t)
+  签名: {X Y : C} {t : 锥 (pair X Y)} (ht : 是极限 t)
   定义体: t.pt
   fst := t.π.app ⟨WalkingPair.left⟩
   snd := t.π.app ⟨WalkingPair.right⟩
@@ -874,7 +874,7 @@ theorem inl_of_isLimit
 
 中文:
 定理 inl_of_isLimit
-  条件: {X Y : C} {t : BinaryBicone X Y} (ht : IsLimit t.toCone)
+  条件: {X Y : C} {t : BinaryBicone X Y} (ht : 是极限 t.toCone)
   证明: by
   apply ht.uniq (BinaryFan.mk (𝟙 X) 0); rintro ⟨⟨⟩⟩ <;> simp
 
@@ -896,7 +896,7 @@ theorem inr_of_isLimit
 
 中文:
 定理 inr_of_isLimit
-  条件: {X Y : C} {t : BinaryBicone X Y} (ht : IsLimit t.toCone)
+  条件: {X Y : C} {t : BinaryBicone X Y} (ht : 是极限 t.toCone)
   证明: by
   apply ht.uniq (BinaryFan.mk 0 (𝟙 Y)); rintro ⟨⟨⟩⟩ <;> simp
 
@@ -916,7 +916,7 @@ definition isBinaryBilimitOfIsLimit
 
 中文:
 定义 isBinaryBilimitOfIsLimit
-  签名: {X Y : C} (t : BinaryBicone X Y) (ht : IsLimit t.toCone)
+  签名: {X Y : C} (t : BinaryBicone X Y) (ht : 是极限 t.toCone)
   定义体: isBinaryBilimitOfTotal _ (by refine BinaryFan.IsLimit.hom_ext ht ?_ ?_ <;> simp)
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, IsLimit, hom_ext, isBinaryBilimitOfTotal
@@ -936,7 +936,7 @@ definition binaryBiconeIsBilimitOfLimitConeOfIsLimit
 
 中文:
 定义 binaryBiconeIsBilimitOfLimitConeOfIsLimit
-  签名: {X Y : C} {t : Cone (pair X Y)} (ht : IsLimit t)
+  签名: {X Y : C} {t : 锥 (pair X Y)} (ht : 是极限 t)
   定义体: isBinaryBilimitOfTotal _ BinaryFan.IsLimit.hom_ext ht (by simp) (by simp)
 
 Depends on / 依赖: BinaryFan, BinaryFan.IsLimit.hom_ext, IsLimit, hom_ext, isBinaryBilimitOfTotal
@@ -956,7 +956,7 @@ theorem HasBinaryBiproduct.of_hasBinaryProduct
       isBilimit := binaryBiconeIsBilimitOfLimitConeOfIsLimit (limit.isLimit _) }
 
 中文:
-定理 HasBinaryBiproduct.of_hasBinaryProduct
+定理 有BinaryBiproduct.of_hasBinaryProduct
   条件: (X Y : C) [HasBinaryProduct X Y]
   证明: HasBinaryBiproduct.mk
     { bicone := _
@@ -980,9 +980,9 @@ theorem HasBinaryBiproducts.of_hasBinaryProducts
   proof: { has_binary_biproduct := fun X Y => HasBinaryBiproduct.of_hasBinaryProduct X Y }
 
 中文:
-定理 HasBinaryBiproducts.of_hasBinaryProducts
+定理 有BinaryBiproducts.of_hasBinaryProducts
   条件: [HasBinaryProducts C]
-  结论: HasBinaryBiproducts C
+  结论: 有BinaryBiproducts C
   证明: { has_binary_biproduct := fun X Y => HasBinaryBiproduct.of_hasBinaryProduct X Y }
 
 Depends on / 依赖: HasBinaryBiproduct, HasBinaryBiproduct.of_hasBinaryProduct, has_binary_biproduct, of_hasBinaryProduct
@@ -1007,7 +1007,7 @@ definition BinaryBicone.ofColimitCocone
 
 中文:
 定义 BinaryBicone.ofColimitCocone
-  签名: {X Y : C} {t : Cocone (pair X Y)} (ht : IsColimit t)
+  签名: {X Y : C} {t : 余锥 (pair X Y)} (ht : 是余极限 t)
   定义体: t.pt
   fst := BinaryCofan.IsColimit.desc ht (𝟙 X) 0
   snd := BinaryCofan.IsColimit.desc ht 0 (𝟙 Y)
@@ -1037,7 +1037,7 @@ theorem fst_of_isColimit
 
 中文:
 定理 fst_of_isColimit
-  条件: {X Y : C} {t : BinaryBicone X Y} (ht : IsColimit t.toCocone)
+  条件: {X Y : C} {t : BinaryBicone X Y} (ht : 是余极限 t.toCocone)
   证明: by
   apply ht.uniq (BinaryCofan.mk (𝟙 X) 0)
   rintro ⟨⟨⟩⟩ <;> simp
@@ -1062,7 +1062,7 @@ theorem snd_of_isColimit
 
 中文:
 定理 snd_of_isColimit
-  条件: {X Y : C} {t : BinaryBicone X Y} (ht : IsColimit t.toCocone)
+  条件: {X Y : C} {t : BinaryBicone X Y} (ht : 是余极限 t.toCocone)
   证明: by
   apply ht.uniq (BinaryCofan.mk 0 (𝟙 Y))
   rintro ⟨⟨⟩⟩ <;> simp
@@ -1086,7 +1086,7 @@ definition isBinaryBilimitOfIsColimit
 
 中文:
 定义 isBinaryBilimitOfIsColimit
-  签名: {X Y : C} (t : BinaryBicone X Y) (ht : IsColimit t.toCocone)
+  签名: {X Y : C} (t : BinaryBicone X Y) (ht : 是余极限 t.toCocone)
   定义体: isBinaryBilimitOfTotal _ by
     refine BinaryCofan.IsColimit.hom_ext ht ?_ ?_ <;> simp
 
@@ -1112,7 +1112,7 @@ IsColimit.ofIsoColimit ht
 
 中文:
 定义 binaryBiconeIsBilimitOfColimitCoconeOfIsColimit
-  签名: {X Y : C} {t : Cocone (pair X Y)}
+  签名: {X Y : C} {t : 余锥 (pair X Y)}
   定义体: isBinaryBilimitOfIsColimit (BinaryBicone.ofColimitCocone ht)
 IsColimit.ofIsoColimit ht
       Cocone.ext (Iso.refl _) fun j => by
@@ -1138,7 +1138,7 @@ theorem HasBinaryBiproduct.of_hasBinaryCoproduct
       isBilimit := binaryBiconeIsBilimitOfColimitCoconeOfIsColimit (colimit.isColimit _) }
 
 中文:
-定理 HasBinaryBiproduct.of_hasBinaryCoproduct
+定理 有BinaryBiproduct.of_hasBinaryCoproduct
   条件: (X Y : C) [HasBinaryCoproduct X Y]
   证明: HasBinaryBiproduct.mk
     { bicone := _
@@ -1161,7 +1161,7 @@ theorem HasBinaryBiproducts.of_hasBinaryCoproducts
   proof: { has_binary_biproduct := fun X Y => HasBinaryBiproduct.of_hasBinaryCoproduct X Y }
 
 中文:
-定理 HasBinaryBiproducts.of_hasBinaryCoproducts
+定理 有BinaryBiproducts.of_hasBinaryCoproducts
   条件: [HasBinaryCoproducts C]
   证明: { has_binary_biproduct := fun X Y => HasBinaryBiproduct.of_hasBinaryCoproduct X Y }
 
@@ -1265,7 +1265,7 @@ theorem biprod.map_eq
 
 中文:
 定理 biprod.map_eq
-  条件: [HasBinaryBiproducts C] {W X Y Z : C} {f : W ⟶ Y} {g : X ⟶ Z}
+  条件: [有BinaryBiproducts C] {W X Y Z : C} {f : W ⟶ Y} {g : X ⟶ Z}
   证明: by
   ext <;> simp
 -/
@@ -1380,7 +1380,7 @@ definition binaryBiconeOfIsSplitMonoOfCokernel
 
 中文:
 定义 binaryBiconeOfIsSplitMonoOfCokernel
-  签名: {X Y : C} {f : X ⟶ Y} [IsSplitMono f] {c : CokernelCofork f}
+  签名: {X Y : C} {f : X ⟶ Y} [是分裂单态射 f] {c : 余核余叉 f}
   定义体: Y
   fst := retraction f
   snd := c.π
@@ -1436,7 +1436,7 @@ definition isBilimitBinaryBiconeOfIsSplitMonoOfCokernel
 
 中文:
 定义 isBilimitBinaryBiconeOfIsSplitMonoOfCokernel
-  签名: {X Y : C} {f : X ⟶ Y} [IsSplitMono f]
+  签名: {X Y : C} {f : X ⟶ Y} [是分裂单态射 f]
   定义体: isBinaryBilimitOfTotal _
     (by
       simp only [binaryBiconeOfIsSplitMonoOfCokernel_fst,
@@ -1636,7 +1636,7 @@ definition binaryBiconeOfIsSplitEpiOfKernel
 
 中文:
 定义 binaryBiconeOfIsSplitEpiOfKernel
-  签名: {X Y : C} {f : X ⟶ Y} [IsSplitEpi f] {c : KernelFork f}
+  签名: {X Y : C} {f : X ⟶ Y} [是分裂满态射 f] {c : 核叉 f}
   定义体: { pt := X
     fst :=
       let c' : KernelFork (𝟙 X - (𝟙 X - f ≫ section_ f)) := KernelFork.ofι (Fork.ι c) (by simp)
@@ -1680,7 +1680,7 @@ definition isBilimitBinaryBiconeOfIsSplitEpiOfKernel
 
 中文:
 定义 isBilimitBinaryBiconeOfIsSplitEpiOfKernel
-  签名: {X Y : C} {f : X ⟶ Y} [IsSplitEpi f]
+  签名: {X Y : C} {f : X ⟶ Y} [是分裂满态射 f]
   定义体: BinaryBicone.isBilimitOfKernelInl _ i.ofIsoLimit Fork.ext (Iso.refl _) (by simp)
 
 Depends on / 依赖: BinaryBicone, BinaryBicone.isBilimitOfKernelInl, Fork.ext, Iso.refl, i.ofIsoLimit, isBilimitOfKernelInl, ofIsoLimit
@@ -1705,7 +1705,7 @@ theorem biprod.add_eq_lift_id_desc
 
 中文:
 定理 biprod.add_eq_lift_id_desc
-  条件: [HasBinaryBiproduct X X]
+  条件: [有BinaryBiproduct X X]
   证明: by simp
 -/
 theorem biprod.add_eq_lift_id_desc [HasBinaryBiproduct X X] :
@@ -1721,7 +1721,7 @@ theorem biprod.add_eq_lift_desc_id
 
 中文:
 定理 biprod.add_eq_lift_desc_id
-  条件: [HasBinaryBiproduct Y Y]
+  条件: [有BinaryBiproduct Y Y]
   证明: by simp
 -/
 theorem biprod.add_eq_lift_desc_id [HasBinaryBiproduct Y Y] :
@@ -1752,7 +1752,7 @@ instance subsingleton_preadditive_of_hasBinaryBiproducts
 
 中文:
 实例 subsingleton_preadditive_of_hasBinaryBiproducts
-  签名: {C : 类型u} [Category.{v} C]
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: fun a b => by
     apply Preadditive.ext; funext X Y; apply AddCommGroup.ext; funext f g
     have h₁ := @biprod.add_eq_lift_id_desc _ _ a _ _ f g
@@ -2046,7 +2046,7 @@ definition Biprod.gaussian'
 
 中文:
 定义 Biprod.gaussian'
-  签名: [IsIso f₁₁]
+  签名: [是同构 f₁₁]
   定义体: ⟨Biprod.unipotentLower (-f₂₁ ≫ inv f₁₁), Biprod.unipotentUpper (-inv f₁₁ ≫ f₁₂),
     f₂₂ - f₂₁ ≫ inv f₁₁ ≫ f₁₂, by ext <;> simp; abel⟩
 
@@ -2072,7 +2072,7 @@ definition Biprod.gaussian
 
 中文:
 定义 Biprod.gaussian
-  签名: (f : X₁ ⊞ X₂ ⟶ Y₁ ⊞ Y₂) [IsIso (biprod.inl ≫ f ≫ biprod.fst)]
+  签名: (f : X₁ ⊞ X₂ ⟶ Y₁ ⊞ Y₂) [是同构 (biprod.inl ≫ f ≫ biprod.fst)]
   定义体: by
   let :=
     Biprod.gaussian' (biprod.inl ≫ f ≫ biprod.fst) (biprod.inl ≫ f ≫ biprod.snd)
@@ -2105,7 +2105,7 @@ definition Biprod.isoElim'
 
 中文:
 定义 Biprod.isoElim'
-  签名: [IsIso f₁₁] [IsIso (Biprod.ofComponents f₁₁ f₁₂ f₂₁ f₂₂)]
+  签名: [是同构 f₁₁] [是同构 (Biprod.ofComponents f₁₁ f₁₂ f₂₁ f₂₂)]
   定义体: by
   obtain ⟨L, R, g, w⟩ := Biprod.gaussian' f₁₁ f₁₂ f₂₁ f₂₂
   letI : IsIso (biprod.map f₁₁ g) := by
@@ -2140,7 +2140,7 @@ definition Biprod.isoElim
 
 中文:
 定义 Biprod.isoElim
-  签名: (f : X₁ ⊞ X₂ ≅ Y₁ ⊞ Y₂) [IsIso (biprod.inl ≫ f.hom ≫ biprod.fst)]
+  签名: (f : X₁ ⊞ X₂ ≅ Y₁ ⊞ Y₂) [是同构 (biprod.inl ≫ f.hom ≫ biprod.fst)]
   定义体: letI :
     IsIso
       (Biprod.ofComponents (biprod.inl ≫ f.hom ≫ biprod.fst) (biprod.inl ≫ f.hom ≫ biprod.snd)
@@ -2181,7 +2181,7 @@ theorem Biprod.column_nonzero_of_iso
 
 中文:
 定理 Biprod.column_nonzero_of_iso
-  条件: {W X Y Z : C} (f : W ⊞ X ⟶ Y ⊞ Z) [IsIso f]
+  条件: {W X Y Z : C} (f : W ⊞ X ⟶ Y ⊞ Z) [是同构 f]
   证明: by
   by_contra! ⟨nz, a₁, a₂⟩
   set x := biprod.inl ≫ f ≫ inv f ≫ biprod.fst
@@ -2242,7 +2242,7 @@ theorem Biproduct.column_nonzero_of_iso'
 
 中文:
 定理 Biproduct.column_nonzero_of_iso'
-  结论: {σ τ : Type} [Finite τ] {S : σ -> C} [HasBiproduct S]
+  结论: {σ τ : 类型} [有限 τ] {S : σ -> C} [有Biproduct S]
   证明: by
   cases nonempty_fintype τ
   intro z
@@ -2288,7 +2288,7 @@ definition Biproduct.columnNonzeroOfIso
 
 中文:
 定义 Biproduct.columnNonzeroOfIso
-  签名: {σ τ : Type} [Fintype τ] {S : σ -> C} [HasBiproduct S] {T : τ -> C}
+  签名: {σ τ : 类型} [有限类型 τ] {S : σ -> C} [有Biproduct S] {T : τ -> C}
   定义体: by
   classical
     apply truncSigmaOfExists
@@ -2336,7 +2336,7 @@ lemma preservesProduct_of_preservesBiproduct
 
 中文:
 引理 preservesProduct_of_preservesBiproduct
-  条件: {f : J -> C} [PreservesBiproduct f F]
+  条件: {f : J -> C} [保持Biproduct f F]
   证明: let ⟨_⟩ := nonempty_fintype J
     ⟨IsLimit.ofIsoLimit
         ((IsLimit.postcomposeInvEquiv (Discrete.compNatIsoDiscrete _ _) _).symm
@@ -2368,7 +2368,7 @@ lemma preservesProductsOfShape_of_preservesBiproductsOfShape
 
 中文:
 引理 preservesProductsOfShape_of_preservesBiproductsOfShape
-  条件: [PreservesBiproductsOfShape J F]
+  条件: [保持BiproductsOfShape J F]
   证明: preservesLimit_of_iso_diagram _ Discrete.natIsoFunctor.symm
 
 Depends on / 依赖: Discrete, Discrete.natIsoFunctor.symm, natIsoFunctor, preservesLimit_of_iso_diagram
@@ -2396,7 +2396,7 @@ lemma preservesBiproduct_of_preservesProduct
 
 中文:
 引理 preservesBiproduct_of_preservesProduct
-  条件: {f : J -> C} [PreservesLimit (Discrete.functor f) F]
+  条件: {f : J -> C} [保持极限 (离散.functor f) F]
   证明: let ⟨_⟩ := nonempty_fintype J
 ⟨isBilimitOfIsLimit _
       IsLimit.ofIsoLimit
@@ -2435,7 +2435,7 @@ lemma preservesBiproduct_of_mono_biproductComparison
 
 中文:
 引理 preservesBiproduct_of_mono_biproductComparison
-  结论: {f : J -> C} [HasBiproduct f]
+  结论: {f : J -> C} [有Biproduct f]
   证明: by
   have : HasProduct fun b => F.obj (f b) := by
     change HasProduct (F.obj ∘ f)
@@ -2479,7 +2479,7 @@ lemma preservesBiproduct_of_epi_biproductComparison'
 
 中文:
 引理 preservesBiproduct_of_epi_biproductComparison'
-  结论: {f : J -> C} [HasBiproduct f]
+  结论: {f : J -> C} [有Biproduct f]
   证明: by
   have : Epi (splitEpiBiproductComparison F f).section_ := by simpa
   have : IsIso (biproductComparison F f) :=
@@ -2529,7 +2529,7 @@ lemma preservesCoproduct_of_preservesBiproduct
 
 中文:
 引理 preservesCoproduct_of_preservesBiproduct
-  条件: {f : J -> C} [PreservesBiproduct f F]
+  条件: {f : J -> C} [保持Biproduct f F]
   证明: let ⟨_⟩ := nonempty_fintype J
     ⟨IsColimit.ofIsoColimit
         ((IsColimit.precomposeHomEquiv (Discrete.compNatIsoDiscrete _ _) _).symm
@@ -2561,7 +2561,7 @@ lemma preservesCoproductsOfShape_of_preservesBiproductsOfShape
 
 中文:
 引理 preservesCoproductsOfShape_of_preservesBiproductsOfShape
-  条件: [PreservesBiproductsOfShape J F]
+  条件: [保持BiproductsOfShape J F]
   证明: preservesColimit_of_iso_diagram _ Discrete.natIsoFunctor.symm
 
 Depends on / 依赖: Discrete, Discrete.natIsoFunctor.symm, natIsoFunctor, preservesColimit_of_iso_diagram
@@ -2680,7 +2680,7 @@ lemma preservesBinaryProducts_of_preservesBinaryBiproducts
 
 中文:
 引理 preservesBinaryProducts_of_preservesBinaryBiproducts
-  条件: [PreservesBinaryBiproducts F]
+  条件: [保持BinaryBiproducts F]
   证明: preservesLimit_of_iso_diagram _ (diagramIsoPair _).symm
 
 Depends on / 依赖: diagramIsoPair, preservesLimit_of_iso_diagram
@@ -2707,7 +2707,7 @@ lemma preservesBinaryBiproduct_of_preservesBinaryProduct
 
 中文:
 引理 preservesBinaryBiproduct_of_preservesBinaryProduct
-  条件: {X Y : C} [PreservesLimit (pair X Y) F]
+  条件: {X Y : C} [保持极限 (pair X Y) F]
   证明: ⟨isBinaryBilimitOfIsLimit _ IsLimit.ofIsoLimit
           ((IsLimit.postcomposeHomEquiv (diagramIsoPair _) (F.mapCone b.toCone)).symm
             (isLimitOfPreserves F hb.isLimit)) <|
@@ -2742,7 +2742,7 @@ lemma preservesBinaryBiproduct_of_mono_biprodComparison
 
 中文:
 引理 preservesBinaryBiproduct_of_mono_biprodComparison
-  结论: {X Y : C} [HasBinaryBiproduct X Y]
+  结论: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
   have that :
     prodComparison F X Y =
@@ -2782,7 +2782,7 @@ lemma preservesBinaryBiproduct_of_epi_biprodComparison'
 
 中文:
 引理 preservesBinaryBiproduct_of_epi_biprodComparison'
-  结论: {X Y : C} [HasBinaryBiproduct X Y]
+  结论: {X Y : C} [有BinaryBiproduct X Y]
   证明: by
   have : Epi (splitEpiBiprodComparison F X Y).section_ := by simpa
   have : IsIso (biprodComparison F X Y) :=
@@ -2868,7 +2868,7 @@ lemma preservesBinaryCoproducts_of_preservesBinaryBiproducts
 
 中文:
 引理 preservesBinaryCoproducts_of_preservesBinaryBiproducts
-  条件: [PreservesBinaryBiproducts F]
+  条件: [保持BinaryBiproducts F]
   证明: preservesColimit_of_iso_diagram _ (diagramIsoPair _).symm
 
 Depends on / 依赖: diagramIsoPair, preservesColimit_of_iso_diagram

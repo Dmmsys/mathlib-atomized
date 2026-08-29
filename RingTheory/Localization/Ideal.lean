@@ -54,7 +54,7 @@ theorem mk'_mem_iff
 
 中文:
 定理 mk'_mem_iff
-  条件: {x} {y : M} {I : Ideal S}
+  条件: {x} {y : M} {I : 理想 S}
   结论: mk' S x y in I ↔ algebraMap R S x in I
   证明: by
   constructor <;> intro h
@@ -84,7 +84,7 @@ definition map_ideal
 
 中文:
 定义 map_ideal
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: Submodule.localized' S M (Algebra.linearMap R S) I
 
 Depends on / 依赖: e.symm
@@ -109,8 +109,8 @@ theorem mem_map_algebraMap_iff
 
 中文:
 定理 mem_map_algebraMap_iff
-  条件: {I : Ideal R} {z}
-  结论: z in Ideal.map (algebraMap R S) I ↔
+  条件: {I : 理想 R} {z}
+  结论: z in 理想.map (algebraMap R S) I ↔
   证明: by
   rw [← show map_ideal M S I = Ideal.map (algebraMap R S) I by
     rw [map_ideal]; rw [Ideal.map]; rw [Ideal.span]; rw [Submodule.localized'_eq_span]; rw [Algebra.coe_linearMap],
@@ -147,7 +147,7 @@ lemma mk'_mem_map_algebraMap_iff
 
 中文:
 引理 mk'_mem_map_algebraMap_iff
-  条件: (I : Ideal R) (x : R) (s : M)
+  条件: (I : 理想 R) (x : R) (s : M)
   证明: by
   rw [← Ideal.unit_mul_mem_iff_mem _ (IsLocalization.map_units S s)]; rw [IsLocalization.mk'_spec']; rw [IsLocalization.mem_map_algebraMap_iff M]
   simp_rw [← map_mul, IsLocalization.eq_iff_exists M, mul_comm x, ← mul_assoc, ← Submonoid.coe_mul]
@@ -171,7 +171,7 @@ lemma algebraMap_mem_map_algebraMap_iff
 
 中文:
 引理 algebraMap_mem_map_algebraMap_iff
-  条件: (I : Ideal R) (x : R)
+  条件: (I : 理想 R) (x : R)
   证明: by
   rw [← IsLocalization.mk'_one (M := M)]; rw [mk'_mem_map_algebraMap_iff]
 
@@ -195,7 +195,7 @@ lemma map_algebraMap_ne_top_iff_disjoint
 
 中文:
 引理 map_algebraMap_ne_top_iff_disjoint
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   simp only [ne_eq, Ideal.eq_top_iff_one, ← map_one (algebraMap R S), not_iff_comm,
     IsLocalization.algebraMap_mem_map_algebraMap_iff M]
@@ -226,7 +226,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (I J : Ideal R)
+  条件: (I J : 理想 R)
   证明: by
   refine le_antisymm (Ideal.map_inf_le (algebraMap R S)) fun x hx => ?_
   simp only [Ideal.mem_inf, IsLocalization.mem_map_algebraMap_iff M, Prod.exists] at hx ⊢
@@ -260,7 +260,7 @@ definition mapFrameHom
 
 中文:
 定义 mapFrameHom
-  签名: : FrameHom (Ideal R) (Ideal S) where
+  签名: : 框架态射 (理想 R) (理想 S) where
   定义体: Ideal.map (algebraMap R S)
   map_inf' := IsLocalization.map_inf M S
   map_top' := Ideal.map_top (algebraMap R S)
@@ -289,7 +289,7 @@ include M in
 
 中文:
 引理 mapFrameHom_apply
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: rfl
 
 include M in
@@ -316,7 +316,7 @@ theorem map_under
 
 中文:
 定理 map_under
-  条件: (J : Ideal S)
+  条件: (J : 理想 S)
   证明: le_antisymm (Ideal.map_le_iff_le_comap.2 le_rfl) fun x hJ => by
     obtain ⟨r, s, hx⟩ := exists_mk'_eq M x
     rw [← hx] at hJ ⊢
@@ -403,7 +403,7 @@ theorem under_map_of_isPrime_disjoint
 
 中文:
 定理 under_map_of_isPrime_disjoint
-  条件: {I : Ideal R} (hI : I.IsPrime) (hM : Disjoint (M : Set R) I)
+  条件: {I : 理想 R} (hI : I.是素) (hM : Disjoint (M : 集合 R) I)
   证明: under_map_of_isPrimary_disjoint M S hI.isPrimary hM
 
 @[deprecated (since := "2026-04-09")] alias comap_map_of_isPrime_disjoint :=
@@ -428,7 +428,7 @@ theorem liesOver_map_of_isPrime_disjoint
 
 中文:
 定理 liesOver_map_of_isPrime_disjoint
-  条件: {I : Ideal R} [I.IsPrime] (hM : Disjoint (M : Set R) I)
+  条件: {I : 理想 R} [I.是素] (hM : Disjoint (M : 集合 R) I)
   证明: ⟨(under_map_of_isPrime_disjoint M S ‹_› hM).symm⟩
 
 Depends on / 依赖: under_map_of_isPrime_disjoint
@@ -455,7 +455,7 @@ include M in
 
 中文:
 定义 orderEmbedding
-  签名: : Ideal S ↪o Ideal R where
+  签名: : 理想 S ↪o 理想 R where
   定义体: J.under R
   inj' := Function.LeftInverse.injective (map_under M S)
   map_rel_iff' := by
@@ -491,7 +491,7 @@ theorem under_le_under_iff
 
 中文:
 定理 under_le_under_iff
-  条件: {I J : Ideal S}
+  条件: {I J : 理想 S}
   证明: by
   exact (IsLocalization.orderEmbedding M S).le_iff_le
 
@@ -523,7 +523,7 @@ theorem isPrime_iff_isPrime_disjoint
 
 中文:
 定理 isPrime_iff_isPrime_disjoint
-  条件: (J : Ideal S)
+  条件: (J : 理想 S)
   证明: by
   constructor
   · refine fun h =>
@@ -572,7 +572,7 @@ theorem isPrime_of_isPrime_disjoint
 
 中文:
 定理 isPrime_of_isPrime_disjoint
-  条件: (I : Ideal R) (hp : I.IsPrime) (hd : Disjoint (M : Set R) ↑I)
+  条件: (I : 理想 R) (hp : I.是素) (hd : Disjoint (M : 集合 R) ↑I)
   证明: by
   rw [isPrime_iff_isPrime_disjoint M S]; rw [under_map_of_isPrime_disjoint M S hp hd]
   exact ⟨hp, hd⟩
@@ -602,7 +602,7 @@ theorem disjoint_under_iff
 
 中文:
 定理 disjoint_under_iff
-  条件: (J : Ideal S)
+  条件: (J : 理想 S)
   证明: by
   rw [← iff_not_comm]; rw [Set.not_disjoint_iff]
   constructor
@@ -700,7 +700,7 @@ lemma map_radical
 
 中文:
 引理 map_radical
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   refine (I.map_radical_le (algebraMap R S)).antisymm ?_
   rintro x ⟨n, hn⟩
@@ -738,7 +738,7 @@ theorem ideal_eq_iInf_under_map_away
 
 中文:
 定理 ideal_eq_iInf_under_map_away
-  条件: {S : Finset R} (hS : Ideal.span (α := R) S = ⊤) (I : Ideal R)
+  条件: {S : 有限集 R} (hS : 理想.span (α := R) S = ⊤) (I : 理想 R)
   证明: by
   apply le_antisymm
   · simp only [le_iInf₂_iff, ← Ideal.map_le_iff_le_comap, le_refl, implies_true]
@@ -785,7 +785,7 @@ lemma map_eq_top_of_not_subset
 
 中文:
 引理 map_eq_top_of_not_subset
-  条件: {I : Ideal R} (hle : ¬ (I : Set R) subseteq Mᶜ)
+  条件: {I : 理想 R} (hle : ¬ (I : 集合 R) subseteq Mᶜ)
   证明: by
   simp only [Set.not_subset_iff_exists_mem_notMem, Set.mem_compl_iff, not_not] at hle
   obtain ⟨y, hy, hny⟩ := hle
@@ -828,7 +828,7 @@ theorem surjective_quotientMap_of_maximal_of_localization
 
 中文:
 定理 surjective_quotientMap_of_maximal_of_localization
-  结论: {I : Ideal S} [I.IsPrime] {J : Ideal R}
+  结论: {I : 理想 S} [I.是素] {J : 理想 R}
   证明: by
   intro s
   obtain ⟨s, rfl⟩ := Ideal.Quotient.mk_surjective s
@@ -892,7 +892,7 @@ theorem bot_lt_under_prime
 
 中文:
 定理 bot_lt_under_prime
-  结论: [IsDomain R] (hM : M <= R⁰) (p : Ideal S) [hpp : p.IsPrime]
+  结论: [是整环 R] (hM : M <= R⁰) (p : 理想 S) [hpp : p.是素]
   证明: by
   have : IsDomain S := isDomain_of_le_nonZeroDivisors _ hM
   rw [← Ideal.comap_bot_of_injective (algebraMap R S) (IsLocalization.injective _ hM)]
@@ -931,8 +931,8 @@ Submonoid.map_le_of_le_comap _ hM.trans
   have : algebraMap
 
 中文:
-引理 _root_.Module.IsTorsionFree.of_isLocalization
-  结论: [IsDomain R] [IsDomain S] {Rₚ Sₚ : 类型}
+引理 _root_.模.是无挠.of_isLocalization
+  结论: [是整环 R] [是整环 S] {Rₚ Sₚ : 类型}
   证明: by
   have e : Algebra.algebraMapSubmonoid S M <= S⁰ :=
 Submonoid.map_le_of_le_comap _ hM.trans
@@ -985,7 +985,7 @@ lemma of_surjective
 
 中文:
 引理 of_surjective
-  结论: {R' S' : 类型} [CommRing R'] [CommRing S'] [Algebra R' S']
+  结论: {R' S' : 类型} [交换环 R'] [交换环 S'] [代数 R' S']
   证明: by
     rintro ⟨_, y, hy, rfl⟩
     simpa only [← RingHom.comp_apply, H] using (IsLocalization.map_units S ⟨y, hy⟩).map g

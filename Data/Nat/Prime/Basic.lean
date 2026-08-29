@@ -35,7 +35,7 @@ theorem prime_mul_iff
 中文:
 定理 prime_mul_iff
   条件: {a b : 自然数}
-  结论: 自然数.Prime (a * b) ↔ a.Prime ∧ b = 1 ∨ b.Prime ∧ a = 1
+  结论: 自然数.素 (a * b) ↔ a.素 ∧ b = 1 ∨ b.素 ∧ a = 1
   证明: by
   simp only [irreducible_mul_iff, ← irreducible_iff_nat_prime, Nat.isUnit_iff]
 
@@ -57,7 +57,7 @@ theorem not_prime_mul
 中文:
 定理 not_prime_mul
   条件: {a b : 自然数} (a1 : a != 1) (b1 : b != 1)
-  结论: ¬Prime (a * b)
+  结论: ¬素 (a * b)
   证明: by
   simp [prime_mul_iff, *]
 
@@ -78,7 +78,7 @@ theorem not_prime_of_mul_eq
 中文:
 定理 not_prime_of_mul_eq
   条件: {a b n : 自然数} (h : a * b = n) (h₁ : a != 1) (h₂ : b != 1)
-  结论: ¬Prime n
+  结论: ¬素 n
   证明: h ▸ not_prime_mul h₁ h₂
 
 Depends on / 依赖: not_prime_mul
@@ -101,8 +101,8 @@ theorem Prime.dvd_iff_eq
   · exact (a1 rfl).elim
 
 中文:
-定理 Prime.dvd_iff_eq
-  条件: {p a : 自然数} (hp : p.Prime) (a1 : a != 1)
+定理 素.dvd_iff_eq
+  条件: {p a : 自然数} (hp : p.素) (a1 : a != 1)
   结论: a ∣ p ↔ p = a
   证明: by
   refine ⟨?_, by rintro rfl; rfl⟩
@@ -131,8 +131,8 @@ theorem Prime.eq_two_or_odd
     ((hp.eq_one_or_self_of_dvd 2 (dvd_of_mod_eq_zero h)).resolve_left (by decide)).symm
 
 中文:
-定理 Prime.eq_two_or_odd
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.eq_two_or_odd
+  条件: {p : 自然数} (hp : 素 p)
   结论: p = 2 ∨ p % 2 = 1
   证明: p.mod_two_eq_zero_or_one.imp_left fun h =>
     ((hp.eq_one_or_self_of_dvd 2 (dvd_of_mod_eq_zero h)).resolve_left (by decide)).symm
@@ -153,8 +153,8 @@ theorem Prime.eq_two_or_odd'
   proof: Or.imp_right (fun h => ⟨p / 2, (div_add_mod p 2).symm.trans (congr_arg _ h)⟩) hp.eq_two_or_odd
 
 中文:
-定理 Prime.eq_two_or_odd'
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.eq_two_or_odd'
+  条件: {p : 自然数} (hp : 素 p)
   结论: p = 2 ∨ Odd p
   证明: Or.imp_right (fun h => ⟨p / 2, (div_add_mod p 2).symm.trans (congr_arg _ h)⟩) hp.eq_two_or_odd
 
@@ -177,8 +177,8 @@ theorem Prime.five_le_of_ne_two_of_ne_three
   decide +revert
 
 中文:
-定理 Prime.five_le_of_ne_two_of_ne_three
-  结论: {p : 自然数} (hp : p.Prime) (h_two : p != 2)
+定理 素.five_le_of_ne_two_of_ne_three
+  结论: {p : 自然数} (hp : p.素) (h_two : p != 2)
   证明: by
   by_contra! h
   revert h_two h_three hp
@@ -204,8 +204,8 @@ theorem Prime.pred_pos
   proof: lt_pred_iff.2 pp.one_lt
 
 中文:
-定理 Prime.pred_pos
-  条件: {p : 自然数} (pp : Prime p)
+定理 素.pred_pos
+  条件: {p : 自然数} (pp : 素 p)
   结论: 0 < pred p
   证明: lt_pred_iff.2 pp.one_lt
 
@@ -225,7 +225,7 @@ theorem succ_pred_prime
 
 中文:
 定理 succ_pred_prime
-  条件: {p : 自然数} (pp : Prime p)
+  条件: {p : 自然数} (pp : 素 p)
   结论: succ (pred p) = p
   证明: succ_pred_eq_of_pos pp.pos
 
@@ -245,8 +245,8 @@ theorem exists_dvd_of_not_prime
 ne_of_lt (not_prime_iff_minFac_lt n2).1 np⟩
 
 中文:
-定理 exists_dvd_of_not_prime
-  条件: {n : 自然数} (n2 : 2 <= n) (np : ¬Prime n)
+定理 存在_dvd_of_not_prime
+  条件: {n : 自然数} (n2 : 2 <= n) (np : ¬素 n)
   结论: 存在 m, m ∣ n ∧ m != 1 ∧ m != n
   证明: ⟨minFac n, minFac_dvd _, ne_of_gt (minFac_prime (ne_of_gt n2)).one_lt,
 ne_of_lt (not_prime_iff_minFac_lt n2).1 np⟩
@@ -267,8 +267,8 @@ theorem exists_dvd_of_not_prime2
     (not_prime_iff_minFac_lt n2).1 np⟩
 
 中文:
-定理 exists_dvd_of_not_prime2
-  条件: {n : 自然数} (n2 : 2 <= n) (np : ¬Prime n)
+定理 存在_dvd_of_not_prime2
+  条件: {n : 自然数} (n2 : 2 <= n) (np : ¬素 n)
   证明: ⟨minFac n, minFac_dvd _, (minFac_prime (ne_of_gt n2)).two_le,
     (not_prime_iff_minFac_lt n2).1 np⟩
 
@@ -291,7 +291,7 @@ theorem not_prime_of_dvd_of_ne
 中文:
 定理 not_prime_of_dvd_of_ne
   条件: {m n : 自然数} (h1 : m ∣ n) (h2 : m != 1) (h3 : m != n)
-  结论: ¬Prime n
+  结论: ¬素 n
   证明: fun h => Or.elim (h.eq_one_or_self_of_dvd m h1) h2 h3
 
 Depends on / 依赖: Or.elim, eq_one_or_self_of_dvd, h.eq_one_or_self_of_dvd
@@ -311,7 +311,7 @@ theorem not_prime_of_dvd_of_lt
 中文:
 定理 not_prime_of_dvd_of_lt
   条件: {m n : 自然数} (h1 : m ∣ n) (h2 : 2 <= m) (h3 : m < n)
-  结论: ¬Prime n
+  结论: ¬素 n
   证明: not_prime_of_dvd_of_ne h1 (ne_of_gt h2) (ne_of_lt h3)
 
 Depends on / 依赖: ne_of_gt, ne_of_lt, not_prime_of_dvd_of_ne
@@ -329,9 +329,9 @@ theorem not_prime_iff_exists_dvd_ne
   proof: ⟨exists_dvd_of_not_prime h, fun ⟨_, h1, h2, h3⟩ => not_prime_of_dvd_of_ne h1 h2 h3⟩
 
 中文:
-定理 not_prime_iff_exists_dvd_ne
+定理 not_prime_iff_存在_dvd_ne
   条件: {n : 自然数} (h : 2 <= n)
-  结论: (¬Prime n) ↔ 存在 m, m ∣ n ∧ m != 1 ∧ m != n
+  结论: (¬素 n) ↔ 存在 m, m ∣ n ∧ m != 1 ∧ m != n
   证明: ⟨exists_dvd_of_not_prime h, fun ⟨_, h1, h2, h3⟩ => not_prime_of_dvd_of_ne h1 h2 h3⟩
 
 Depends on / 依赖: exists_dvd_of_not_prime, not_prime_of_dvd_of_ne
@@ -349,9 +349,9 @@ theorem not_prime_iff_exists_dvd_lt
   proof: ⟨exists_dvd_of_not_prime2 h, fun ⟨_, h1, h2, h3⟩ => not_prime_of_dvd_of_lt h1 h2 h3⟩
 
 中文:
-定理 not_prime_iff_exists_dvd_lt
+定理 not_prime_iff_存在_dvd_lt
   条件: {n : 自然数} (h : 2 <= n)
-  结论: (¬Prime n) ↔ 存在 m, m ∣ n ∧ 2 <= m ∧ m < n
+  结论: (¬素 n) ↔ 存在 m, m ∣ n ∧ 2 <= m ∧ m < n
   证明: ⟨exists_dvd_of_not_prime2 h, fun ⟨_, h1, h2, h3⟩ => not_prime_of_dvd_of_lt h1 h2 h3⟩
 
 Depends on / 依赖: exists_dvd_of_not_prime2, not_prime_of_dvd_of_lt
@@ -369,7 +369,7 @@ theorem not_prime_iff_exists_mul_eq
   rw [prime_iff_not_exists_mul_eq]; rw [and_iff_right h]; rw [Classical.not_not]
 
 中文:
-定理 not_prime_iff_exists_mul_eq
+定理 not_prime_iff_存在_mul_eq
   条件: {n : 自然数} (h : 2 <= n)
   证明: by
   rw [prime_iff_not_exists_mul_eq]; rw [and_iff_right h]; rw [Classical.not_not]
@@ -393,7 +393,7 @@ theorem dvd_of_forall_prime_mul_dvd
   exact _root_.trans (dvd_mul_left a p) (hdvd p hp.1 hp.2)
 
 中文:
-定理 dvd_of_forall_prime_mul_dvd
+定理 dvd_of_对任意_prime_mul_dvd
   结论: {a b : 自然数}
   证明: by
   obtain rfl | ha := eq_or_ne a 1
@@ -421,8 +421,8 @@ theorem Prime.even_iff
   rw [even_iff_two_dvd]; rw [prime_dvd_prime_iff_eq prime_two hp]; rw [eq_comm]
 
 中文:
-定理 Prime.even_iff
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.even_iff
+  条件: {p : 自然数} (hp : 素 p)
   结论: Even p ↔ p = 2
   证明: by
   rw [even_iff_two_dvd]; rw [prime_dvd_prime_iff_eq prime_two hp]; rw [eq_comm]
@@ -444,8 +444,8 @@ theorem Prime.odd_iff
   grind [hp.two_le]
 
 中文:
-定理 Prime.odd_iff
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.odd_iff
+  条件: {p : 自然数} (hp : 素 p)
   结论: Odd p ↔ 3 <= p
   证明: by
   rw [← not_iff_not]; rw [not_odd_iff_even]; rw [hp.even_iff]; rw [not_le]
@@ -467,8 +467,8 @@ theorem Prime.odd_of_ne_two
   proof: hp.eq_two_or_odd'.resolve_left h_two
 
 中文:
-定理 Prime.odd_of_ne_two
-  条件: {p : 自然数} (hp : p.Prime) (h_two : p != 2)
+定理 素.odd_of_ne_two
+  条件: {p : 自然数} (hp : p.素) (h_two : p != 2)
   结论: Odd p
   证明: hp.eq_two_or_odd'.resolve_left h_two
 
@@ -487,8 +487,8 @@ theorem Prime.even_sub_one
   proof: let ⟨n, hn⟩ := hp.odd_of_ne_two h2; ⟨n, by rw [hn, Nat.add_sub_cancel, two_mul]⟩
 
 中文:
-定理 Prime.even_sub_one
-  条件: {p : 自然数} (hp : p.Prime) (h2 : p != 2)
+定理 素.even_sub_one
+  条件: {p : 自然数} (hp : p.素) (h2 : p != 2)
   结论: Even (p - 1)
   证明: let ⟨n, hn⟩ := hp.odd_of_ne_two h2; ⟨n, by rw [hn, Nat.add_sub_cancel, two_mul]⟩
 
@@ -510,8 +510,8 @@ theorem Prime.mod_two_eq_one_iff_ne_two
   simp at h
 
 中文:
-定理 Prime.mod_two_eq_one_iff_ne_two
-  条件: {p : 自然数} (hp : p.Prime)
+定理 素.mod_two_eq_one_iff_ne_two
+  条件: {p : 自然数} (hp : p.素)
   结论: p % 2 = 1 ↔ p != 2
   证明: by
   refine ⟨fun h hf => ?_, hp.eq_two_or_odd.resolve_left⟩
@@ -536,7 +536,7 @@ theorem coprime_of_dvd'
 
 中文:
 定理 coprime_of_dvd'
-  条件: {m n : 自然数} (H : 对任意 k, Prime k -> k ∣ m -> k ∣ n -> k ∣ 1)
+  条件: {m n : 自然数} (H : 对任意 k, 素 k -> k ∣ m -> k ∣ n -> k ∣ 1)
   结论: Coprime m n
   证明: coprime_of_dvd fun k kp km kn => not_le_of_gt kp.one_lt le_of_dvd Nat.one_pos H k kp km kn
 
@@ -555,8 +555,8 @@ theorem Prime.dvd_iff_not_coprime
   proof: iff_not_comm.2 pp.coprime_iff_not_dvd
 
 中文:
-定理 Prime.dvd_iff_not_coprime
-  条件: {p n : 自然数} (pp : Prime p)
+定理 素.dvd_iff_not_coprime
+  条件: {p n : 自然数} (pp : 素 p)
   结论: p ∣ n ↔ ¬Coprime p n
   证明: iff_not_comm.2 pp.coprime_iff_not_dvd
 
@@ -583,9 +583,9 @@ theorem Prime.not_coprime_iff_dvd
     apply Nat.not_coprime_of_dvd_of_dvd (Prime.one_lt hp.1) hp.2.1 hp.2.2
 
 中文:
-定理 Prime.not_coprime_iff_dvd
+定理 素.not_coprime_iff_dvd
   条件: {m n : 自然数}
-  结论: ¬Coprime m n ↔ 存在 p, Prime p ∧ p ∣ m ∧ p ∣ n
+  结论: ¬Coprime m n ↔ 存在 p, 素 p ∧ p ∣ m ∧ p ∣ n
   证明: by
   apply Iff.intro
   · intro h
@@ -651,7 +651,7 @@ lemma gcd_eq_one_of_lt_minFac
 中文:
 引理 gcd_eq_one_of_lt_minFac
   条件: {n m : 自然数} (h₀ : m != 0) (h : m < minFac n)
-  结论: n.gcd m = 1
+  结论: n.最大公约数 m = 1
   证明: coprime_iff_gcd_eq_one.mp coprime_of_lt_minFac h₀ h
 
 Depends on / 依赖: coprime_iff_gcd_eq_one, coprime_iff_gcd_eq_one.mp, coprime_of_lt_minFac
@@ -669,8 +669,8 @@ theorem Prime.not_dvd_mul
   proof: mt pp.dvd_mul.1 by simp [Hm, Hn]
 
 中文:
-定理 Prime.not_dvd_mul
-  条件: {p m n : 自然数} (pp : Prime p) (Hm : ¬p ∣ m) (Hn : ¬p ∣ n)
+定理 素.not_dvd_mul
+  条件: {p m n : 自然数} (pp : 素 p) (Hm : ¬p ∣ m) (Hn : ¬p ∣ n)
   结论: ¬p ∣ m * n
   证明: mt pp.dvd_mul.1 by simp [Hm, Hn]
 -/
@@ -729,8 +729,8 @@ theorem Prime.dvd_of_dvd_pow
   proof: pp.prime.dvd_of_dvd_pow h
 
 中文:
-定理 Prime.dvd_of_dvd_pow
-  条件: {p m n : 自然数} (pp : Prime p) (h : p ∣ m ^ n)
+定理 素.dvd_of_dvd_pow
+  条件: {p m n : 自然数} (pp : 素 p) (h : p ∣ m ^ n)
   结论: p ∣ m
   证明: pp.prime.dvd_of_dvd_pow h
 -/
@@ -747,9 +747,9 @@ theorem Prime.not_prime_pow'
   proof: not_irreducible_pow hn
 
 中文:
-定理 Prime.not_prime_pow'
+定理 素.not_prime_pow'
   条件: {x n : 自然数} (hn : n != 1)
-  结论: ¬(x ^ n).Prime
+  结论: ¬(x ^ n).素
   证明: not_irreducible_pow hn
 
 Depends on / 依赖: not_irreducible_pow
@@ -767,9 +767,9 @@ theorem Prime.not_prime_pow
   proof: not_prime_pow' ((two_le_iff _).mp hn).2
 
 中文:
-定理 Prime.not_prime_pow
+定理 素.not_prime_pow
   条件: {x n : 自然数} (hn : 2 <= n)
-  结论: ¬(x ^ n).Prime
+  结论: ¬(x ^ n).素
   证明: not_prime_pow' ((two_le_iff _).mp hn).2
 
 Depends on / 依赖: not_prime_pow, two_le_iff
@@ -787,8 +787,8 @@ theorem Prime.eq_one_of_pow
   proof: not_imp_not.mp Prime.not_prime_pow' h
 
 中文:
-定理 Prime.eq_one_of_pow
-  条件: {x n : 自然数} (h : (x ^ n).Prime)
+定理 素.eq_one_of_pow
+  条件: {x n : 自然数} (h : (x ^ n).素)
   结论: n = 1
   证明: not_imp_not.mp Prime.not_prime_pow' h
 
@@ -810,8 +810,8 @@ theorem Prime.pow_eq_iff
   rw [← h]; rw [hp.eq_one_of_pow]; rw [eq_self_iff_true]; rw [_root_.and_true]; rw [pow_one]
 
 中文:
-定理 Prime.pow_eq_iff
-  条件: {p a k : 自然数} (hp : p.Prime)
+定理 素.pow_eq_iff
+  条件: {p a k : 自然数} (hp : p.素)
   结论: a ^ k = p ↔ a = p ∧ k = 1
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [h.1, h.2, pow_one]⟩
@@ -838,8 +838,8 @@ theorem Prime.mul_eq_prime_sq_iff
   suffices forall x' y' : Nat, x' != 1 -> y' != 1 -> x' * y' = p ^ 2 -> p ∣ x' -> x'
 
 中文:
-定理 Prime.mul_eq_prime_sq_iff
-  条件: {x y p : 自然数} (hp : p.Prime) (hx : x != 1) (hy : y != 1)
+定理 素.mul_eq_prime_sq_iff
+  条件: {x y p : 自然数} (hp : p.素) (hx : x != 1) (hy : y != 1)
   证明: by
   refine ⟨fun h => ?_, fun ⟨h₁, h₂⟩ => h₁.symm ▸ h₂.symm ▸ (sq _).symm⟩
   have pdvdxy : p ∣ x * y := by rw [h]; simp [sq]
@@ -883,8 +883,8 @@ theorem Prime.coprime_pow_of_not_dvd
   proof: (pp.coprime_iff_not_dvd.2 h).symm.pow_right _
 
 中文:
-定理 Prime.coprime_pow_of_not_dvd
-  条件: {p m a : 自然数} (pp : Prime p) (h : ¬p ∣ a)
+定理 素.coprime_pow_of_not_dvd
+  条件: {p m a : 自然数} (pp : 素 p) (h : ¬p ∣ a)
   结论: Coprime a (p ^ m)
   证明: (pp.coprime_iff_not_dvd.2 h).symm.pow_right _
 
@@ -904,7 +904,7 @@ theorem coprime_primes
 
 中文:
 定理 coprime_primes
-  条件: {p q : 自然数} (pp : Prime p) (pq : Prime q)
+  条件: {p q : 自然数} (pp : 素 p) (pq : 素 q)
   结论: Coprime p q ↔ p != q
   证明: pp.coprime_iff_not_dvd.trans not_congr dvd_prime_two_le pq pp.two_le
 
@@ -923,7 +923,7 @@ theorem coprime_pow_primes
 
 中文:
 定理 coprime_pow_primes
-  条件: {p q : 自然数} (n m : 自然数) (pp : Prime p) (pq : Prime q) (h : p != q)
+  条件: {p q : 自然数} (n m : 自然数) (pp : 素 p) (pq : 素 q) (h : p != q)
   证明: ((coprime_primes pp pq).2 h).pow _ _
 
 Depends on / 依赖: coprime_primes
@@ -944,7 +944,7 @@ theorem coprime_or_dvd_of_prime
 
 中文:
 定理 coprime_or_dvd_of_prime
-  条件: {p} (pp : Prime p) (i : 自然数)
+  条件: {p} (pp : 素 p) (i : 自然数)
   结论: Coprime p i ∨ p ∣ i
   证明: by
   rw [pp.dvd_iff_not_coprime]; apply em
@@ -966,7 +966,7 @@ theorem coprime_of_lt_prime
 
 中文:
 定理 coprime_of_lt_prime
-  条件: {n p} (ne_zero : n != 0) (hlt : n < p) (pp : Prime p)
+  条件: {n p} (ne_zero : n != 0) (hlt : n < p) (pp : 素 p)
   结论: Coprime p n
   证明: (coprime_or_dvd_of_prime pp n).resolve_right fun h => Nat.lt_le_asymm hlt
     (le_of_dvd (Nat.pos_of_ne_zero ne_zero) h)
@@ -987,7 +987,7 @@ theorem eq_or_coprime_of_le_prime
 
 中文:
 定理 eq_or_coprime_of_le_prime
-  条件: {n p} (ne_zero : n != 0) (hle : n <= p) (pp : Prime p)
+  条件: {n p} (ne_zero : n != 0) (hle : n <= p) (pp : 素 p)
   证明: hle.eq_or_lt.imp Eq.symm fun h => coprime_of_lt_prime ne_zero h pp
 
 Depends on / 依赖: Eq.symm, coprime_of_lt_prime, eq_or_lt, hle.eq_or_lt.imp, ne_zero
@@ -1007,7 +1007,7 @@ theorem prime_eq_prime_of_dvd_pow
 
 中文:
 定理 prime_eq_prime_of_dvd_pow
-  条件: {m p q} (pp : Prime p) (pq : Prime q) (h : p ∣ q ^ m)
+  条件: {m p q} (pp : 素 p) (pq : 素 q) (h : p ∣ q ^ m)
   结论: p = q
   证明: (prime_dvd_prime_iff_eq pp pq).mp (pp.dvd_of_dvd_pow h)
 
@@ -1028,7 +1028,7 @@ theorem dvd_prime_pow
 
 中文:
 定理 dvd_prime_pow
-  条件: {p : 自然数} (pp : Prime p) {m i : 自然数}
+  条件: {p : 自然数} (pp : 素 p) {m i : 自然数}
   结论: i ∣ p ^ m ↔ 存在 k <= m, i = p ^ k
   证明: by
   simp_rw [_root_.dvd_prime_pow (prime_iff.mp pp) m, associated_eq_eq]
@@ -1047,8 +1047,8 @@ theorem Prime.dvd_mul_of_dvd_ne
   proof: Coprime.mul_dvd_of_dvd_of_dvd ((coprime_primes pp1 pp2).mpr h_ne) h1 h2
 
 中文:
-定理 Prime.dvd_mul_of_dvd_ne
-  结论: {p1 p2 n : 自然数} (h_ne : p1 != p2) (pp1 : Prime p1) (pp2 : Prime p2)
+定理 素.dvd_mul_of_dvd_ne
+  结论: {p1 p2 n : 自然数} (h_ne : p1 != p2) (pp1 : 素 p1) (pp2 : 素 p2)
   证明: Coprime.mul_dvd_of_dvd_of_dvd ((coprime_primes pp1 pp2).mpr h_ne) h1 h2
 
 Depends on / 依赖: Coprime, Coprime.mul_dvd_of_dvd_of_dvd, coprime_primes, h_ne, mul_dvd_of_dvd_of_dvd
@@ -1070,7 +1070,7 @@ theorem eq_prime_pow_of_dvd_least_prime_pow
 
 中文:
 定理 eq_prime_pow_of_dvd_least_prime_pow
-  结论: {a p k : 自然数} (pp : Prime p) (h₁ : ¬a ∣ p ^ k)
+  结论: {a p k : 自然数} (pp : 素 p) (h₁ : ¬a ∣ p ^ k)
   证明: by
   obtain ⟨l, ⟨h, rfl⟩⟩ := (dvd_prime_pow pp).1 h₂
   congr
@@ -1096,8 +1096,8 @@ theorem ne_one_iff_exists_prime_dvd
     exact ⟨a.minFac, Nat.minFac_prime ha, a.minFac_dvd⟩
 
 中文:
-定理 ne_one_iff_exists_prime_dvd
-  结论: 对任意 {n}, n != 1 ↔ 存在 p : 自然数, p.Prime ∧ p ∣ n
+定理 ne_one_iff_存在_prime_dvd
+  结论: 对任意 {n}, n != 1 ↔ 存在 p : 自然数, p.素 ∧ p ∣ n
   证明: n + 2
     have ha : a != 1 := Nat.succ_succ_ne_one n
     simp only [a, true_iff, Ne, not_false_iff, ha]
@@ -1123,9 +1123,9 @@ theorem eq_one_iff_not_exists_prime_dvd
   simpa using not_iff_not.mpr ne_one_iff_exists_prime_dvd
 
 中文:
-定理 eq_one_iff_not_exists_prime_dvd
+定理 eq_one_iff_not_存在_prime_dvd
   条件: {n : 自然数}
-  结论: n = 1 ↔ 对任意 p : 自然数, p.Prime -> ¬p ∣ n
+  结论: n = 1 ↔ 对任意 p : 自然数, p.素 -> ¬p ∣ n
   证明: by
   simpa using not_iff_not.mpr ne_one_iff_exists_prime_dvd
 
@@ -1150,7 +1150,7 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
-  结论: {p : 自然数} (p_prime : Prime p) {m n k l : 自然数}
+  结论: {p : 自然数} (p_prime : 素 p) {m n k l : 自然数}
   证明: by
   have hpd : p ^ (k + l) * p ∣ m * n := by
       let hpmn' : p ^ (succ (k + l)) ∣ m * n := hpmn

@@ -46,8 +46,8 @@ definition AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly
     simpa [← Subalgebra.coe_eq_zero, ← aeval_d
 
 中文:
-定义 AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly
-  签名: {R : 类型} [CommRing R] [Algebra F R] (x : R)
+定义 代数等价.adjoinSingletonEquivAdjoinRootMinpoly
+  签名: {R : 类型} [交换环 R] [代数 F R] (x : R)
   定义体: AlgEquiv.symm AlgEquiv.ofBijective (Minpoly.toAdjoin F x) by
     refine ⟨(injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_, Minpoly.toAdjoin.surjective F x⟩
     obtain ⟨P, rfl⟩ := mk_surjective P₁
@@ -76,8 +76,8 @@ theorem AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom
 @[simp]
 
 中文:
-定理 AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom
-  结论: {R : 类型} [CommRing R]
+定理 代数等价.adjoinSingletonEquivAdjoinRootMinpoly_symm_toAlgHom
+  结论: {R : 类型} [交换环 R]
   证明: rfl
 
 @[simp]
@@ -96,8 +96,8 @@ theorem AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm
   proof: rfl
 
 中文:
-定理 AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm
-  结论: {R : 类型} [CommRing R]
+定理 代数等价.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm
+  结论: {R : 类型} [交换环 R]
   证明: rfl
 -/
 theorem AlgEquiv.coe_adjoinSingletonEquivAdjoinRootMinpoly_symm {R : Type*} [CommRing R]
@@ -113,7 +113,7 @@ definition Algebra.adjoin.liftSingleton
   body: (AdjoinRoot.liftAlgHom _ _ y h).comp (AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly F x).toAlgHom
 
 中文:
-定义 Algebra.adjoin.liftSingleton
+定义 代数.adjoin.liftSingleton
   签名: {S T : 类型}
   定义体: (AdjoinRoot.liftAlgHom _ _ y h).comp (AlgEquiv.adjoinSingletonEquivAdjoinRootMinpoly F x).toAlgHom
 
@@ -145,8 +145,8 @@ theorem Polynomial.lift_of_splits
     choose H3 _ using H3
 
 中文:
-定理 Polynomial.lift_of_splits
-  结论: {F K L : 类型} [Field F] [Field K] [Field L] [Algebra F K]
+定理 多项式.lift_of_splits
+  结论: {F K L : 类型} [域 F] [域 K] [域 L] [代数 F K]
   证明: by
   classical
     refine Finset.induction_on s (fun _ => ?_) fun a s _ ih H => ?_
@@ -204,7 +204,7 @@ theorem IsIntegral.mem_range_algHom_of_minpoly_splits
     exact ⟨((minpoly.monic int).map _).ne_zero, minpoly.aeval R x⟩
 
 中文:
-定理 IsIntegral.mem_range_algHom_of_minpoly_splits
+定理 是整.mem_range_algHom_of_minpoly_splits
   证明: show x in Set.range f from Set.image_subset_range _ ((minpoly R x).rootSet K) by
     rw [h.image_rootSet]; rw [mem_rootSet']
     exact ⟨((minpoly.monic int).map _).ne_zero, minpoly.aeval R x⟩
@@ -227,8 +227,8 @@ theorem IsIntegral.mem_range_algebraMap_of_minpoly_splits
   proof: int.mem_range_algHom_of_minpoly_splits h (IsScalarTower.toAlgHom R K L)
 
 中文:
-定理 IsIntegral.mem_range_algebraMap_of_minpoly_splits
-  结论: [Algebra K L] [IsScalarTower R K L]
+定理 是整.mem_range_algebraMap_of_minpoly_splits
+  结论: [代数 K L] [标量塔 R K L]
   证明: int.mem_range_algHom_of_minpoly_splits h (IsScalarTower.toAlgHom R K L)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, int.mem_range_algHom_of_minpoly_splits, mem_range_algHom_of_minpoly_splits, toAlgHom
@@ -252,7 +252,7 @@ theorem minpoly_neg_splits
 
 中文:
 定理 minpoly_neg_splits
-  条件: [Algebra K L] {x : L} (g : ((minpoly K x).map (algebraMap K L)).Splits)
+  条件: [代数 K L] {x : L} (g : ((minpoly K x).map (algebraMap K L)).Splits)
   证明: by
   rw [minpoly.neg]; rw [Polynomial.map_mul]
   apply Splits.mul _ (by simpa [map_comp] using g.comp_neg_X)
@@ -279,7 +279,7 @@ theorem minpoly_add_algebraMap_splits
 
 中文:
 定理 minpoly_add_algebraMap_splits
-  结论: [Algebra K L] {x : L} (r : K)
+  结论: [代数 K L] {x : L} (r : K)
   证明: by
   simpa [minpoly.add_algebraMap, map_comp] using g.comp_X_sub_C (algebraMap K L r)
 
@@ -301,7 +301,7 @@ theorem minpoly_sub_algebraMap_splits
 
 中文:
 定理 minpoly_sub_algebraMap_splits
-  结论: [Algebra K L] {x : L} (r : K)
+  结论: [代数 K L] {x : L} (r : K)
   证明: by
   simpa only [sub_eq_add_neg, map_neg] using minpoly_add_algebraMap_splits (-r) g
 
@@ -323,7 +323,7 @@ theorem minpoly_algebraMap_add_splits
 
 中文:
 定理 minpoly_algebraMap_add_splits
-  结论: [Algebra K L] {x : L} (r : K)
+  结论: [代数 K L] {x : L} (r : K)
   证明: by
   simpa only [add_comm] using minpoly_add_algebraMap_splits r g
 
@@ -345,7 +345,7 @@ theorem minpoly_algebraMap_sub_splits
 
 中文:
 定理 minpoly_algebraMap_sub_splits
-  结论: [Algebra K L] {x : L} (r : K)
+  结论: [代数 K L] {x : L} (r : K)
   证明: by
   simpa only [neg_sub] using minpoly_neg_splits (minpoly_sub_algebraMap_splits r g)
 
@@ -370,8 +370,8 @@ theorem IsIntegral.minpoly_splits_tower_top'
     (by rw [← map_map, map_dvd_map']; exact minpoly.dvd_map_of_isScalarTower R K x)
 
 中文:
-定理 IsIntegral.minpoly_splits_tower_top'
-  结论: (int : Is整数egral R x) {f : K ->+* L}
+定理 是整.minpoly_splits_tower_top'
+  结论: (int : 是整 R x) {f : K ->+* L}
   证明: Splits.of_dvd h (map_monic_ne_zero (minpoly.monic int))
     (by rw [← map_map, map_dvd_map']; exact minpoly.dvd_map_of_isScalarTower R K x)
 
@@ -394,8 +394,8 @@ theorem IsIntegral.minpoly_splits_tower_top
   exact int.minpoly_splits_tower_top' h
 
 中文:
-定理 IsIntegral.minpoly_splits_tower_top
-  结论: [Algebra K L] [Algebra R L] [IsScalarTower R K L]
+定理 是整.minpoly_splits_tower_top
+  结论: [代数 K L] [代数 R L] [标量塔 R K L]
   证明: by
   rw [IsScalarTower.algebraMap_eq R K L] at h
   exact int.minpoly_splits_tower_top' h
@@ -419,7 +419,7 @@ lemma Subalgebra.adjoin_rank_le
 .trans Cardinal.mk_range_le exact rank_span_le _
 
 中文:
-引理 Subalgebra.adjoin_rank_le
+引理 子代数.adjoin_rank_le
   结论: {F : 类型} (E : 类型) {K : 类型}
   证明: by
   rw [← rank_toSubmodule]; rw [Module.Free.rank_eq_card_chooseBasisIndex F L]; rw [L.adjoin_eq_span_basis E (Module.Free.chooseBasis F L)]

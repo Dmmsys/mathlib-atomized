@@ -54,7 +54,7 @@ class IsKilling
     - killingCompl_top_eq_bot : LieIdeal.killingCompl R L ⊤ = ⊥
 
 中文:
-类 IsKilling
+类 是Killing
   参数: : 命题 where
   公理与运算 (1 个):
     - killingCompl_top_eq_bot : LieIdeal.killingCompl R L ⊤ = ⊥
@@ -148,7 +148,7 @@ exact h₁.1 IsKilling.ideal_eq_bot_of_isLieAbelian I
 
 中文:
 实例 instSemisimple
-  签名: [IsKilling K L] [Module.Finite K L]
+  签名: [是Killing K L] [模.有限 K L]
   定义体: by
   apply InvariantForm.isSemisimple_of_nondegenerate (Φ := killingForm K L)
   · exact IsKilling.killingForm_nondegenerate _ _
@@ -267,8 +267,8 @@ lemma isKilling_of_equiv
 
 中文:
 引理 isKilling_of_equiv
-  条件: [IsKilling R L] (e : L ≃ₗ⁅R⁆ L')
-  结论: IsKilling R L'
+  条件: [是Killing R L] (e : L ≃ₗ⁅R⁆ L')
+  结论: 是Killing R L'
   证明: by
   constructor
   ext x'
@@ -316,7 +316,7 @@ lemma LieIdeal.isCompl_killingCompl
 
 中文:
 引理 LieIdeal.isCompl_killingCompl
-  条件: [IsKilling K L] [Module.Finite K L] (I : LieIdeal K L)
+  条件: [是Killing K L] [模.有限 K L] (I : LieIdeal K L)
   证明: by
   suffices Disjoint I I.killingCompl by
     rwa [← LieSubmodule.isCompl_toSubmodule, I.toSubmodule_killingCompl,

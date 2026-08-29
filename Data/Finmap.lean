@@ -37,7 +37,7 @@ definition keys
 
 中文:
 定义 keys
-  签名: (s : Multiset (Sigma β))
+  签名: (s : Multiset (依赖和类型 β))
   定义体: s.map Sigma.fst
 
 @[simp]
@@ -61,8 +61,8 @@ theorem coe_keys
 
 中文:
 定理 coe_keys
-  条件: {l : List (Sigma β)}
-  结论: keys (l : Multiset (Sigma β)) = (l.keys : Multiset α)
+  条件: {l : 列表 (依赖和类型 β)}
+  结论: keys (l : Multiset (依赖和类型 β)) = (l.keys : Multiset α)
   证明: rfl
 
 @[simp]
@@ -83,7 +83,7 @@ theorem keys_zero
 
 中文:
 定理 keys_zero
-  结论: keys (0 : Multiset (Sigma β)) = 0
+  结论: keys (0 : Multiset (依赖和类型 β)) = 0
   证明: rfl
 
 @[simp]
@@ -104,7 +104,7 @@ theorem keys_cons
 
 中文:
 定理 keys_cons
-  条件: {a : α} {b : β a} {s : Multiset (Sigma β)}
+  条件: {a : α} {b : β a} {s : Multiset (依赖和类型 β)}
   证明: by
   simp [keys]
 
@@ -127,7 +127,7 @@ theorem keys_singleton
 中文:
 定理 keys_singleton
   条件: {a : α} {b : β a}
-  结论: keys ({⟨a, b⟩} : Multiset (Sigma β)) = {a}
+  结论: keys ({⟨a, b⟩} : Multiset (依赖和类型 β)) = {a}
   证明: rfl
 -/
 theorem keys_singleton {a : α} {b : β a} : keys ({⟨a, b⟩} : Multiset (Sigma β)) = {a} := rfl
@@ -144,7 +144,7 @@ definition NodupKeys
 
 中文:
 定义 NodupKeys
-  签名: (s : Multiset (Sigma β))
+  签名: (s : Multiset (依赖和类型 β))
   定义体: Quot.liftOn s List.NodupKeys fun _ _ p => propext perm_nodupKeys p
 
 @[simp]
@@ -166,7 +166,7 @@ theorem coe_nodupKeys
 
 中文:
 定理 coe_nodupKeys
-  条件: {l : List (Sigma β)}
+  条件: {l : 列表 (依赖和类型 β)}
   结论: @NodupKeys α β l ↔ l.NodupKeys
   证明: Iff.rfl
 
@@ -237,7 +237,7 @@ structure Finmap
 结构 Finmap
   参数: (β : α -> 类型v)
   公理与运算 (2 个):
-    - entries : Multiset (Sigma β)
+    - entries : Multiset (依赖和类型 β)
     - nodupKeys : entries.NodupKeys
 -/
 structure Finmap (β : α -> Type v) : Type max u v where
@@ -328,8 +328,8 @@ definition List.toFinmap
   body: s.toAList.toFinmap
 
 中文:
-定义 List.toFinmap
-  签名: [DecidableEq α] (s : List (Sigma β))
+定义 列表.toFinmap
+  签名: [DecidableEq α] (s : 列表 (依赖和类型 β))
   定义体: s.toAList.toFinmap
 
 Depends on / 依赖: s.toAList.toFinmap, toAList, toFinmap
@@ -774,7 +774,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Finmap β)
+  签名: 可居 (Finmap β)
   定义体: ⟨∅⟩
 
 @[simp]
@@ -1013,7 +1013,7 @@ theorem dlookup_list_toFinmap
 
 中文:
 定理 dlookup_list_toFinmap
-  条件: (a : α) (s : List (Sigma β))
+  条件: (a : α) (s : 列表 (依赖和类型 β))
   结论: lookup a s.toFinmap = s.dlookup a
   证明: by
   rw [List.toFinmap]; rw [lookup_toFinmap]; rw [lookup_to_alist]
@@ -1449,7 +1449,7 @@ definition foldl
 
 中文:
 定义 foldl
-  签名: {δ : Type w} (f : δ -> 对任意 a, β a -> δ)
+  签名: {δ : 类型 w} (f : δ -> 对任意 a, β a -> δ)
   定义体: letI : RightCommutative fun d (s : Sigma β) => f d s.1 s.2 := ⟨fun _ _ _ => H _ _ _ _ _⟩
   m.entries.foldl (fun d s => f d s.1 s.2) d
 
@@ -1471,7 +1471,7 @@ definition any
 
 中文:
 定义 any
-  签名: (f : 对任意 x, β x -> 布尔) (s : Finmap β)
+  签名: (f : 对任意 x, β x -> 布尔值) (s : Finmap β)
   定义体: s.foldl (fun x y z => x || f y z)
     (fun _ _ _ _ => by simp_rw [Bool.or_assoc, Bool.or_comm, imp_true_iff]) false
 
@@ -1492,7 +1492,7 @@ definition all
 
 中文:
 定义 all
-  签名: (f : 对任意 x, β x -> 布尔) (s : Finmap β)
+  签名: (f : 对任意 x, β x -> 布尔值) (s : Finmap β)
   定义体: s.foldl (fun x y z => x && f y z)
     (fun _ _ _ _ => by simp_rw [Bool.and_assoc, Bool.and_comm, imp_true_iff]) true
 
@@ -1756,7 +1756,7 @@ instance :
 
 中文:
 实例 :
-  签名: SDiff (Finmap β)
+  签名: 对称差 (Finmap β)
   定义体: ⟨sdiff⟩
 -/
 instance : SDiff (Finmap β) :=
@@ -1963,7 +1963,7 @@ theorem toFinmap_cons
 
 中文:
 定理 toFinmap_cons
-  条件: (a : α) (b : β a) (xs : List (Sigma β))
+  条件: (a : α) (b : β a) (xs : 列表 (依赖和类型 β))
   证明: rfl
 -/
 theorem toFinmap_cons (a : α) (b : β a) (xs : List (Sigma β)) :
@@ -1986,7 +1986,7 @@ theorem mem_list_toFinmap
 
 中文:
 定理 mem_list_toFinmap
-  条件: (a : α) (xs : List (Sigma β))
+  条件: (a : α) (xs : 列表 (依赖和类型 β))
   证明: by
   induction xs with
   | nil => simp only [toFinmap_nil, notMem_empty, not_mem_nil, exists_false]
@@ -2114,7 +2114,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union (Finmap β)
+  签名: 并集 (Finmap β)
   定义体: ⟨union⟩
 
 @[simp]

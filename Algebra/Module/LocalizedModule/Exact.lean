@@ -48,7 +48,7 @@ lemma LocalizedModule.map_exact
 
 中文:
 引理 LocalizedModule.map_exact
-  条件: (g : M₀ ->ₗ[R] M₁) (h : M₁ ->ₗ[R] M₂) (ex : Exact g h)
+  条件: (g : M₀ ->ₗ[R] M₁) (h : M₁ ->ₗ[R] M₂) (ex : 正合 g h)
   证明: fun y => Iff.intro
     (induction_on
       (fun m s hy => by
@@ -87,8 +87,8 @@ theorem IsLocalizedModule.map_exact
     (map_iso_commute S f₀ f₁ g) (map_iso_commute S f₁ f₂ h) (LocalizedModule.map_exact S g h ex)
 
 中文:
-定理 IsLocalizedModule.map_exact
-  条件: (g : M₀ ->ₗ[R] M₁) (h : M₁ ->ₗ[R] M₂) (ex : Function.Exact g h)
+定理 是Localized模.map_exact
+  条件: (g : M₀ ->ₗ[R] M₁) (h : M₁ ->ₗ[R] M₂) (ex : 函数.正合 g h)
   证明: Function.Exact.of_ladder_linearEquiv_of_exact
     (map_iso_commute S f₀ f₁ g) (map_iso_commute S f₁ f₂ h) (LocalizedModule.map_exact S g h ex)
 

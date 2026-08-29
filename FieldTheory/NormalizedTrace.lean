@@ -90,7 +90,7 @@ exact trace_eq_of_algEquiv e AdjoinSimple.gen F a
 
 中文:
 定理 normalizedTraceAux_map
-  条件: {E : 类型} [Field E] [Algebra F E] (f : E ->ₐ[F] K) (a : E)
+  条件: {E : 类型} [域 E] [代数 F E] (f : E ->ₐ[F] K) (a : E)
   证明: by
   let e := (F⟮a⟯.equivMap f).trans (equivOfEq <| Set.image_singleton ▸ adjoin_map F {a} f)
   simp_rw [normalizedTraceAux, ← LinearEquiv.finrank_eq e.toLinearEquiv]
@@ -114,7 +114,7 @@ theorem normalizedTraceAux_intermediateField
 
 中文:
 定理 normalizedTraceAux_intermediateField
-  条件: {E : 整数ermediateField F K} (a : E)
+  条件: {E : 中间域 F K} (a : E)
   证明: normalizedTraceAux_map F K E.val a
 -/
 private theorem normalizedTraceAux_intermediateField {E : IntermediateField F K} (a : E) :
@@ -137,7 +137,7 @@ Nat.pos_iff_ne_zero.mp Module.finrank_pos (R := F⟮a⟯) (M := K)
 
 中文:
 定理 normalizedTraceAux_eq_of_finiteDimensional
-  条件: [FiniteDimensional F K] (a : K)
+  条件: [有限维 F K] (a : K)
   证明: by
 have h := (Nat.cast_ne_zero (R := F)).mpr
 Nat.pos_iff_ne_zero.mp Module.finrank_pos (R := F⟮a⟯) (M := K)
@@ -286,7 +286,7 @@ theorem normalizedTrace_self
 
 中文:
 定理 normalizedTrace_self
-  结论: normalizedTrace F F = LinearMap.id
+  结论: normalizedTrace F F = 线性映射.id
   证明: LinearMap.ext normalizedTrace_self_apply
 
 Depends on / 依赖: LinearMap, LinearMap.ext, normalizedTrace_self_apply
@@ -305,7 +305,7 @@ theorem normalizedTrace_eq_of_finiteDimensional_apply
 
 中文:
 定理 normalizedTrace_eq_of_finiteDimensional_apply
-  条件: [FiniteDimensional F K] (a : K)
+  条件: [有限维 F K] (a : K)
   证明: normalizedTraceAux_eq_of_finiteDimensional F a
 
 Depends on / 依赖: normalizedTraceAux_eq_of_finiteDimensional
@@ -324,7 +324,7 @@ theorem normalizedTrace_eq_of_finiteDimensional
 
 中文:
 定理 normalizedTrace_eq_of_finiteDimensional
-  条件: [FiniteDimensional F K]
+  条件: [有限维 F K]
   证明: LinearMap.ext normalizedTrace_eq_of_finiteDimensional_apply F
 
 Depends on / 依赖: LinearMap, LinearMap.ext, normalizedTrace_eq_of_finiteDimensional_apply
@@ -345,7 +345,7 @@ theorem normalizedTrace_map
 
 中文:
 定理 normalizedTrace_map
-  结论: {E : 类型} [Field E] [Algebra F E] [Algebra.Is整数egral F E]
+  结论: {E : 类型} [域 E] [代数 F E] [代数.是整 F E]
   证明: normalizedTraceAux_map F K f a
 
 Depends on / 依赖: normalizedTraceAux_map
@@ -364,7 +364,7 @@ theorem normalizedTrace_intermediateField
 
 中文:
 定理 normalizedTrace_intermediateField
-  条件: {E : 整数ermediateField F K} (a : E)
+  条件: {E : 中间域 F K} (a : E)
   证明: normalizedTraceAux_intermediateField F K a
 
 Depends on / 依赖: normalizedTraceAux_intermediateField
@@ -440,7 +440,7 @@ theorem normalizedTrace_algebraMap_of_lifts
 
 中文:
 定理 normalizedTrace_algebraMap_of_lifts
-  结论: [CharZero E] [Algebra.Is整数egral E K] (a : K)
+  结论: [特征零 E] [代数.是整 E K] (a : K)
   证明: by
   have ha : IsIntegral F a := IsIntegral.isIntegral a
   simp [normalizedTrace_minpoly F a, normalizedTrace_minpoly E a, ← minpoly.map_algebraMap ha h,
@@ -469,7 +469,7 @@ theorem normalizedTrace_trans_apply_aux
 
 中文:
 定理 normalizedTrace_trans_apply_aux
-  结论: [FiniteDimensional F E] [Algebra.Is整数egral E K]
+  结论: [有限维 F E] [代数.是整 E K]
   证明: by
   have : FiniteDimensional E E⟮a⟯ :=
     IntermediateField.adjoin.finiteDimensional (IsIntegral.isIntegral a)
@@ -505,7 +505,7 @@ theorem normalizedTrace_trans_apply
 
 中文:
 定理 normalizedTrace_trans_apply
-  条件: [Algebra.Is整数egral E K] [CharZero E] (a : K)
+  条件: [代数.是整 E K] [特征零 E] (a : K)
   证明: let S : Set E := (minpoly E a).coeffs
   let E₀ := IntermediateField.adjoin F S
   have : FiniteDimensional F E₀ := IntermediateField.finiteDimensional_adjoin
@@ -541,7 +541,7 @@ theorem normalizedTrace_trans
 
 中文:
 定理 normalizedTrace_trans
-  条件: [Algebra.Is整数egral E K] [CharZero E]
+  条件: [代数.是整 E K] [特征零 E]
   证明: LinearMap.ext normalizedTrace_trans_apply F E K
 
 Depends on / 依赖: LinearMap, LinearMap.ext, normalizedTrace_trans_apply
@@ -597,7 +597,7 @@ theorem normalizedTrace_comp_algHom
 
 中文:
 定理 normalizedTrace_comp_algHom
-  结论: {E : 类型} [Field E] [Algebra F E] [Algebra.Is整数egral F E]
+  结论: {E : 类型} [域 E] [代数 F E] [代数.是整 F E]
   证明: LinearMap.ext normalizedTrace_map F K f
 
 Depends on / 依赖: LinearMap, LinearMap.ext, normalizedTrace_map
@@ -616,7 +616,7 @@ theorem normalizedTrace_surjective
 
 中文:
 定理 normalizedTrace_surjective
-  结论: Function.Surjective (normalizedTrace F K)
+  结论: 函数.满射 (normalizedTrace F K)
   证明: fun a => ⟨algebraMap F K a, normalizedTrace_algebraMap_apply_eq_self F K a⟩
 
 Depends on / 依赖: algebraMap, normalizedTrace_algebraMap_apply_eq_self

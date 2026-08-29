@@ -60,8 +60,8 @@ theorem IsStandardSmooth.of_basis_kaehlerDifferential
   have : Function.Bijective (P.cotangentRestrict _
 
 中文:
-定理 IsStandardSmooth.of_basis_kaehlerDifferential
-  结论: [FinitePresentation R S]
+定理 是StandardSmooth.of_basis_kaehlerDifferential
+  结论: [有限呈现 R S]
   证明: by
   nontriviality S
   obtain ⟨n, ⟨P⟩⟩ := (FiniteType.iff_exists_generators (R := R) (S := S)).mp inferInstance
@@ -114,8 +114,8 @@ theorem IsStandardSmooth.iff_exists_basis_kaehlerDifferential
   exact ⟨_, P.basisKaehler, by simp [Set.range_subset_iff]⟩
 
 中文:
-定理 IsStandardSmooth.iff_exists_basis_kaehlerDifferential
-  条件: [FinitePresentation R S]
+定理 是StandardSmooth.iff_存在_basis_kaehlerDifferential
+  条件: [有限呈现 R S]
   证明: by
   refine ⟨fun h => ⟨inferInstance, ?_⟩, fun ⟨h, ⟨_, b, hb⟩⟩ => .of_basis_kaehlerDifferential b hb⟩
   obtain ⟨ι, σ, _, _, ⟨P⟩⟩ := Algebra.IsStandardSmooth.out (R := R) (S := S)
@@ -144,7 +144,7 @@ theorem Etale.iff_isStandardSmoothOfRelativeDimension_zero
   refine ⟨inferInstance, ⟨Empty, Module.Basis.empty Ω[S⁄R], ?
 
 中文:
-定理 Etale.iff_isStandardSmoothOfRelativeDimension_zero
+定理 平展.iff_isStandardSmoothOfRelativeDimension_zero
   证明: by
   refine ⟨fun h => ?_, fun _ => inferInstance⟩
   nontriviality S
@@ -181,8 +181,8 @@ theorem IsSmoothAt.exists_notMem_isStandardSmooth
       apply IsLocalization.isPrime_of_isPrime_disjoint (.
 
 中文:
-定理 IsSmoothAt.exists_notMem_isStandardSmooth
-  结论: [FinitePresentation R S] (p : Ideal S) [p.IsPrime]
+定理 IsSmoothAt.存在_notMem_isStandardSmooth
+  结论: [有限呈现 R S] (p : 理想 S) [p.是素]
   证明: by
   -- By replacing `S` by some `S[1/g]` we may assume `S` is globally smooth.
   wlog h : Smooth R S
@@ -252,8 +252,8 @@ theorem Smooth.exists_span_eq_top_isStandardSmooth
   `refine ⟨Set.range (fun p : PrimeSpectrum S ↦ f 
 
 中文:
-定理 Smooth.exists_span_eq_top_isStandardSmooth
-  条件: [Smooth R S]
+定理 光滑.存在_span_eq_top_isStandardSmooth
+  条件: [光滑 R S]
   证明: by
   choose f hf₁ hf₂ using IsSmoothAt.exists_notMem_isStandardSmooth R (S := S)
   /- #adaptation_note Before https://github.com/leanprover/lean4/pull/13166

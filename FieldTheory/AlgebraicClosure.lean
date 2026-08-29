@@ -46,7 +46,7 @@ definition algebraicClosure
 
 中文:
 定义 algebraicClosure
-  签名: : 整数ermediateField F E
+  签名: : 中间域 F E
   定义体: Algebra.IsAlgebraic.toIntermediateField (integralClosure F E)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.toIntermediateField, IsAlgebraic, integralClosure, toIntermediateField
@@ -189,7 +189,7 @@ obtain ⟨y, rfl⟩ := mem_bot.1 h ▸ mem_algebraicClosure_iff'.2
 
 中文:
 定理 map_eq_of_algebraicClosure_eq_bot
-  结论: [Algebra E K] [IsScalarTower F E K]
+  结论: [代数 E K] [标量塔 F E K]
   证明: by
   refine le_antisymm (map_le_of_algHom _) (fun x hx => ?_)
 obtain ⟨y, rfl⟩ := mem_bot.1 h ▸ mem_algebraicClosure_iff'.2
@@ -265,7 +265,7 @@ instance isAlgebraic
 
 中文:
 实例 isAlgebraic
-  签名: : Algebra.IsAlgebraic F (algebraicClosure F E)
+  签名: : 代数.是代数 F (algebraicClosure F E)
   定义体: ⟨fun x => isAlgebraic_iff.mpr x.2.isAlgebraic⟩
 
 Depends on / 依赖: isAlgebraic, isAlgebraic_iff, isAlgebraic_iff.mpr
@@ -282,8 +282,8 @@ instance isIntegralClosure
   body: inferInstanceAs (IsIntegralClosure (integralClosure F E) F E)
 
 中文:
-实例 isIntegralClosure
-  签名: : Is整数egralClosure (algebraicClosure F E) F E
+实例 is整数egralClosure
+  签名: : 是整闭包 (algebraicClosure F E) F E
   定义体: inferInstanceAs (IsIntegralClosure (integralClosure F E) F E)
 
 Depends on / 依赖: IsIntegralClosure, integralClosure
@@ -302,8 +302,8 @@ theorem Transcendental.algebraicClosure
   proof: ha.extendScalars _
 
 中文:
-定理 Transcendental.algebraicClosure
-  条件: {a : E} (ha : Transcendental F a)
+定理 超越.algebraicClosure
+  条件: {a : E} (ha : 超越 F a)
   证明: ha.extendScalars _
 -/
 protected theorem Transcendental.algebraicClosure {a : E} (ha : Transcendental F a) :
@@ -324,7 +324,7 @@ theorem le_algebraicClosure'
 
 中文:
 定理 le_algebraicClosure'
-  条件: {L : 整数ermediateField F E} (hs : 对任意 x : L, IsAlgebraic F x)
+  条件: {L : 中间域 F E} (hs : 对任意 x : L, 是代数 F x)
   证明: fun x h => by
   simpa only [mem_algebraicClosure_iff, IsAlgebraic, ne_eq, ← aeval_algebraMap_eq_zero_iff E,
     Algebra.algebraMap_self, RingHom.id_apply, IntermediateField.algebraMap_apply] using hs ⟨x, h⟩
@@ -346,7 +346,7 @@ theorem le_algebraicClosure
 
 中文:
 定理 le_algebraicClosure
-  条件: (L : 整数ermediateField F E) [Algebra.IsAlgebraic F L]
+  条件: (L : 中间域 F E) [代数.是代数 F L]
   证明: le_algebraicClosure' F E (Algebra.IsAlgebraic.isAlgebraic)
 
 Depends on / 依赖: Algebra, Algebra.IsAlgebraic.isAlgebraic, IsAlgebraic, isAlgebraic, le_algebraicClosure
@@ -367,7 +367,7 @@ theorem le_algebraicClosure_iff
 
 中文:
 定理 le_algebraicClosure_iff
-  条件: (L : 整数ermediateField F E)
+  条件: (L : 中间域 F E)
   证明: ⟨fun h => ⟨fun x => by simpa only [IsAlgebraic, ne_eq, ← aeval_algebraMap_eq_zero_iff E,
     IntermediateField.algebraMap_apply,
     Algebra.algebraMap_self, RingHomCompTriple.comp_apply, mem_algebraicClosure_iff] using h x.2⟩,
@@ -442,8 +442,8 @@ theorem IsAlgClosed.algebraicClosure_eq_bot_iff
   obtain ⟨x, rfl⟩ := h ▸ mem_algebraicClosure_iff'.2 (minpoly
 
 中文:
-定理 IsAlgClosed.algebraicClosure_eq_bot_iff
-  条件: [IsAlgClosed E]
+定理 是代数闭.algebraicClosure_eq_bot_iff
+  条件: [是代数闭 E]
   证明: by
   refine ⟨fun h => IsAlgClosed.of_exists_root _ fun p hmon hirr => ?_,
     fun _ => IntermediateField.eq_bot_of_isAlgClosed_of_isAlgebraic _⟩
@@ -471,8 +471,8 @@ theorem IntermediateField.isAlgebraic_adjoin_iff_isAlgebraic
     fun _ => Iff.imp Iff.rfl mem_algebraicClosure_iff))
 
 中文:
-定理 IntermediateField.isAlgebraic_adjoin_iff_isAlgebraic
-  条件: {S : Set E}
+定理 中间域.isAlgebraic_adjoin_iff_isAlgebraic
+  条件: {S : 集合 E}
   证明: ((le_algebraicClosure_iff F E _).symm.trans (adjoin_le_iff.trans <| forall_congr' <|
     fun _ => Iff.imp Iff.rfl mem_algebraicClosure_iff))
 
@@ -496,7 +496,7 @@ instance isAlgClosure
 
 中文:
 实例 isAlgClosure
-  签名: [IsAlgClosed E]
+  签名: [是代数闭 E]
   定义体: ⟨(IsAlgClosed.algebraicClosure_eq_bot_iff _ E).mp (algebraicClosure_eq_bot F E),
     isAlgebraic F E⟩
 
@@ -517,7 +517,7 @@ theorem eq_top_iff
 
 中文:
 定理 eq_top_iff
-  结论: algebraicClosure F E = ⊤ ↔ Algebra.IsAlgebraic F E
+  结论: algebraicClosure F E = ⊤ ↔ 代数.是代数 F E
   证明: ⟨fun h => ⟨fun _ => mem_algebraicClosure_iff.1 (h ▸ mem_top)⟩,
     fun _ => top_unique fun x _ => mem_algebraicClosure_iff.2 (Algebra.IsAlgebraic.isAlgebraic x)⟩
 
@@ -537,7 +537,7 @@ theorem le_restrictScalars
 
 中文:
 定理 le_restrictScalars
-  条件: [Algebra E K] [IsScalarTower F E K]
+  条件: [代数 E K] [标量塔 F E K]
   证明: fun _ h => mem_algebraicClosure_iff.2 IsAlgebraic.tower_top E (mem_algebraicClosure_iff.1 h)
 
 Depends on / 依赖: IsAlgebraic, IsAlgebraic.tower_top, mem_algebraicClosure_iff, tower_top
@@ -557,7 +557,7 @@ theorem eq_restrictScalars_of_isAlgebraic
 
 中文:
 定理 eq_restrictScalars_of_isAlgebraic
-  结论: [Algebra E K] [IsScalarTower F E K]
+  结论: [代数 E K] [标量塔 F E K]
   证明: (algebraicClosure.le_restrictScalars F E K).antisymm fun _ h =>
     isIntegral_trans _ h
 
@@ -578,7 +578,7 @@ theorem adjoin_le
 
 中文:
 定理 adjoin_le
-  条件: [Algebra E K] [IsScalarTower F E K]
+  条件: [代数 E K] [标量塔 F E K]
   证明: adjoin_le_iff.2 le_restrictScalars F E K
 
 Depends on / 依赖: adjoin_le_iff, le_restrictScalars

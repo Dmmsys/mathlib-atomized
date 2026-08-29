@@ -38,9 +38,9 @@ structure Subalgebra
     - one_mem' : = (algebraMap R A).map_one ▸ algebraMap_mem' 1
 
 中文:
-结构 Subalgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A] [Algebra R A]
-  继承: Subsemiring A
+结构 子代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A] [代数 R A]
+  继承: 子半环 A
   公理与运算 (3 个):
     - algebraMap_mem' : 对任意 r, algebraMap R A r in carrier
     - zero_mem' : = (algebraMap R A).map_zero ▸ algebraMap_mem' 0
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subalgebra R A) A
+  签名: 集合状 (子代数 R A) A
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -99,7 +99,7 @@ initialize_simps_projections Subalgebra (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subalgebra R A)
+  签名: 偏序 (子代数 R A)
   定义体: .ofSetLike (Subalgebra R A) A
 
 initialize_simps_projections Subalgebra (carrier -> coe, as_prefix coe)
@@ -126,8 +126,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Subsemiring A) (h)
-  结论: (Subalgebra.mk (R := R) s h : Set A) = s
+  条件: (s : 子半环 A) (h)
+  结论: (子代数.mk (R := R) s h : 集合 A) = s
   证明: rfl
 
 @[simp]
@@ -147,8 +147,8 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: (s : Subsemiring A) (h) (x)
-  结论: x in Subalgebra.mk (R := R) s h ↔ x in s
+  条件: (s : 子半环 A) (h) (x)
+  结论: x in 子代数.mk (R := R) s h ↔ x in s
   证明: .rfl
 -/
 theorem mem_mk (s : Subsemiring A) (h) (x) : x in Subalgebra.mk (R := R) s h ↔ x in s :=
@@ -173,7 +173,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: {S R A : 类型} [交换半环 R] [半环 A] [代数 R A]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubsemiringClass (Subalgebra R A) A
+  签名: 子半环类 (子代数 R A) A
   定义体: add_mem (s := s.toSubsemiring)
   mul_mem {s} := mul_mem (s := s.toSubsemiring)
   one_mem {s} := one_mem s.toSubsemiring
@@ -248,7 +248,7 @@ theorem mem_toSubsemiring
 
 中文:
 定理 mem_toSubsemiring
-  条件: {S : Subalgebra R A} {x}
+  条件: {S : 子代数 R A} {x}
   结论: x in S.toSubsemiring ↔ x in S
   证明: Iff.rfl
 
@@ -270,7 +270,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subalgebra R A} {x : A}
+  条件: {s : 子代数 R A} {x : A}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -295,7 +295,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Subalgebra R A} (h : 对任意 x : A, x in S ↔ x in T)
+  条件: {S T : 子代数 R A} (h : 对任意 x : A, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -318,8 +318,8 @@ theorem coe_toSubsemiring
 
 中文:
 定理 coe_toSubsemiring
-  条件: (S : Subalgebra R A)
-  结论: (↑S.toSubsemiring : Set A) = S
+  条件: (S : 子代数 R A)
+  结论: (↑S.toSubsemiring : 集合 A) = S
   证明: rfl
 -/
 theorem coe_toSubsemiring (S : Subalgebra R A) : (↑S.toSubsemiring : Set A) = S :=
@@ -353,7 +353,7 @@ theorem toSubsemiring_inj
 
 中文:
 定理 toSubsemiring_inj
-  条件: {S U : Subalgebra R A}
+  条件: {S U : 子代数 R A}
   结论: S.toSubsemiring = U.toSubsemiring ↔ S = U
   证明: toSubsemiring_injective.eq_iff
 
@@ -377,7 +377,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Subalgebra R A) (s : Set A) (hs : s = ↑S)
+  签名: (S : 子代数 R A) (s : 集合 A) (hs : s = ↑S)
   定义体: { S.toSubsemiring.copy s hs with
     carrier := s
     algebraMap_mem' := hs.symm ▸ S.algebraMap_mem' }
@@ -398,7 +398,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : Subalgebra R A) (s : Set A) (hs : s = ↑S)
+  条件: (S : 子代数 R A) (s : 集合 A) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -421,7 +421,7 @@ instance instSMulMemClass
 
 中文:
 实例 instSMulMemClass
-  签名: : SMulMemClass (Subalgebra R A) R A where
+  签名: : SMulMem类 (子代数 R A) R A where
   定义体: (Algebra.smul_def r x).symm ▸ mul_mem (S.algebraMap_mem' r) hx
 
 @[simp, aesop safe (rule_sets := [SetLike])]
@@ -442,7 +442,7 @@ theorem _root_.algebraMap_mem
 
 中文:
 定理 _root_.algebraMap_mem
-  结论: {S R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: {S R A : 类型} [交换半环 R] [半环 A] [代数 R A]
   证明: Algebra.algebraMap_eq_smul_one (A := A) r ▸ SMulMemClass.smul_mem r (one_mem s)
 
 Depends on / 依赖: Algebra, Algebra.algebraMap_eq_smul_one, SMulMemClass, SMulMemClass.smul_mem, algebraMap_eq_smul_one, one_mem, smul_mem
@@ -498,7 +498,7 @@ theorem range_subset
 
 中文:
 定理 range_subset
-  结论: Set.range (algebraMap R A) subseteq S
+  结论: 集合.range (algebraMap R A) subseteq S
   证明: fun _x ⟨r, hr⟩ => hr ▸ S.algebraMap_mem r
 
 Depends on / 依赖: S.algebraMap_mem, algebraMap_mem
@@ -515,7 +515,7 @@ theorem range_le
 
 中文:
 定理 range_le
-  结论: Set.range (algebraMap R A) <= S
+  结论: 集合.range (algebraMap R A) <= S
   证明: S.range_subset
 
 Depends on / 依赖: S.range_subset, range_subset
@@ -676,8 +676,8 @@ theorem list_prod_mem
 
 中文:
 定理 list_prod_mem
-  条件: {L : List A} (h : 对任意 x in L, x in S)
-  结论: L.prod in S
+  条件: {L : 列表 A} (h : 对任意 x in L, x in S)
+  结论: L.乘积 in S
   证明: list_prod_mem h
 -/
 protected theorem list_prod_mem {L : List A} (h : forall x in L, x in S) : L.prod in S :=
@@ -694,8 +694,8 @@ theorem list_sum_mem
 
 中文:
 定理 list_sum_mem
-  条件: {L : List A} (h : 对任意 x in L, x in S)
-  结论: L.sum in S
+  条件: {L : 列表 A} (h : 对任意 x in L, x in S)
+  结论: L.求和 in S
   证明: list_sum_mem h
 -/
 protected theorem list_sum_mem {L : List A} (h : forall x in L, x in S) : L.sum in S :=
@@ -713,7 +713,7 @@ theorem multiset_sum_mem
 中文:
 定理 multiset_sum_mem
   条件: {m : Multiset A} (h : 对任意 x in m, x in S)
-  结论: m.sum in S
+  结论: m.求和 in S
   证明: multiset_sum_mem m h
 -/
 protected theorem multiset_sum_mem {m : Multiset A} (h : forall x in m, x in S) : m.sum in S :=
@@ -729,7 +729,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  条件: {ι : Type w} {t : Finset ι} {f : ι -> A} (h : 对任意 x in t, f x in S)
+  条件: {ι : 类型 w} {t : 有限集 ι} {f : ι -> A} (h : 对任意 x in t, f x in S)
   证明: sum_mem h
 -/
 protected theorem sum_mem {ι : Type w} {t : Finset ι} {f : ι -> A} (h : forall x in t, f x in S) :
@@ -746,7 +746,7 @@ theorem multiset_prod_mem
 
 中文:
 定理 multiset_prod_mem
-  结论: {R : 类型u} {A : 类型v} [CommSemiring R] [CommSemiring A]
+  结论: {R : 类型u} {A : 类型v} [交换半环 R] [交换半环 A]
   证明: multiset_prod_mem m h
 -/
 protected theorem multiset_prod_mem {R : Type u} {A : Type v} [CommSemiring R] [CommSemiring A]
@@ -763,7 +763,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {R : 类型u} {A : 类型v} [CommSemiring R] [CommSemiring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换半环 R] [交换半环 A] [代数 R A]
   证明: prod_mem h
 -/
 protected theorem prod_mem {R : Type u} {A : Type v} [CommSemiring R] [CommSemiring A] [Algebra R A]
@@ -784,7 +784,7 @@ definition toNonUnitalSubalgebra
 
 中文:
 定义 toNonUnitalSubalgebra
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S
   smul_mem' r _x hx := S.smul_mem hx r
 -/
@@ -805,7 +805,7 @@ lemma one_mem_toNonUnitalSubalgebra
 
 中文:
 引理 one_mem_toNonUnitalSubalgebra
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   结论: (1 : A) in S.toNonUnitalSubalgebra
   证明: S.one_mem
 
@@ -827,7 +827,7 @@ lemma mem_toNonUnitalSubalgebra
 
 中文:
 引理 mem_toNonUnitalSubalgebra
-  条件: {S : Subalgebra R A} {x : A}
+  条件: {S : 子代数 R A} {x : A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -846,7 +846,7 @@ lemma toNonUnitalSubalgebra_injective
 
 中文:
 引理 toNonUnitalSubalgebra_injective
-  结论: Function.Injective
+  结论: 函数.单射
   证明: fun _ _ => by simp [SetLike.ext_iff]
 
 Depends on / 依赖: SetLike, SetLike.ext_iff, ext_iff
@@ -865,7 +865,7 @@ lemma toNonUnitalSubalgebra_inj
 
 中文:
 引理 toNonUnitalSubalgebra_inj
-  条件: {S U : Subalgebra R A}
+  条件: {S U : 子代数 R A}
   证明: toNonUnitalSubalgebra_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalSubalgebra_injective, toNonUnitalSubalgebra_injective.eq_iff
@@ -888,7 +888,7 @@ theorem neg_mem
 
 中文:
 定理 neg_mem
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: neg_mem hx
 -/
 protected theorem neg_mem {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -905,7 +905,7 @@ theorem sub_mem
 
 中文:
 定理 sub_mem
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: sub_mem hx hy
 -/
 protected theorem sub_mem {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -922,7 +922,7 @@ theorem zsmul_mem
 
 中文:
 定理 zsmul_mem
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: zsmul_mem hx n
 -/
 protected theorem zsmul_mem {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -939,7 +939,7 @@ theorem intCast_mem
 
 中文:
 定理 intCast_mem
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: intCast_mem S n
 -/
 protected theorem intCast_mem {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -958,7 +958,7 @@ definition toAddSubmonoid
 
 中文:
 定义 toAddSubmonoid
-  签名: {R : 类型u} {A : 类型v} [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: {R : 类型u} {A : 类型v} [交换半环 R] [半环 A] [代数 R A]
   定义体: S.toSubsemiring.toAddSubmonoid
 
 Depends on / 依赖: S.toSubsemiring.toAddSubmonoid, toAddSubmonoid, toSubsemiring
@@ -979,7 +979,7 @@ definition toSubring
 
 中文:
 定义 toSubring
-  签名: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A] (S : Subalgebra R A)
+  签名: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A] (S : 子代数 R A)
   定义体: { S.toSubsemiring with neg_mem' := S.neg_mem }
 
 Depends on / 依赖: S.neg_mem, S.toSubsemiring, neg_mem, toSubsemiring
@@ -998,7 +998,7 @@ theorem mem_toSubring
 
 中文:
 定理 mem_toSubring
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1017,7 +1017,7 @@ theorem coe_toSubring
 
 中文:
 定理 coe_toSubring
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 -/
 theorem coe_toSubring {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -1035,7 +1035,7 @@ theorem toSubring_injective
 
 中文:
 定理 toSubring_injective
-  条件: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  条件: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: fun S T h =>
   ext fun x => by rw [← mem_toSubring, ← mem_toSubring, h]
 -/
@@ -1053,7 +1053,7 @@ theorem toSubring_inj
 
 中文:
 定理 toSubring_inj
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: toSubring_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toSubring_injective, toSubring_injective.eq_iff
@@ -1072,7 +1072,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited S
+  签名: 可居 S
   定义体: ⟨(0 : S.toSubsemiring)⟩
 
 Depends on / 依赖: S.toSubsemiring, toSubsemiring
@@ -1094,7 +1094,7 @@ instance toSemiring
 
 中文:
 实例 toSemiring
-  签名: {R A} [CommSemiring R] [Semiring A] [Algebra R A] (S : Subalgebra R A)
+  签名: {R A} [交换半环 R] [半环 A] [代数 R A] (S : 子代数 R A)
   定义体: S.toSubsemiring.toSemiring
 
 Depends on / 依赖: S.toSubsemiring.toSemiring, toSemiring, toSubsemiring
@@ -1113,7 +1113,7 @@ instance toCommSemiring
 
 中文:
 实例 toCommSemiring
-  签名: {R A} [CommSemiring R] [CommSemiring A] [Algebra R A] (S : Subalgebra R A)
+  签名: {R A} [交换半环 R] [交换半环 A] [代数 R A] (S : 子代数 R A)
   定义体: S.toSubsemiring.toCommSemiring
 
 Depends on / 依赖: S.toSubsemiring.toCommSemiring, toCommSemiring, toSubsemiring
@@ -1132,7 +1132,7 @@ instance toRing
 
 中文:
 实例 toRing
-  签名: {R A} [CommRing R] [Ring A] [Algebra R A] (S : Subalgebra R A)
+  签名: {R A} [交换环 R] [环 A] [代数 R A] (S : 子代数 R A)
   定义体: S.toSubring.toRing
 
 Depends on / 依赖: S.toSubring.toRing, toRing, toSubring
@@ -1150,7 +1150,7 @@ instance toCommRing
 
 中文:
 实例 toCommRing
-  签名: {R A} [CommRing R] [CommRing A] [Algebra R A] (S : Subalgebra R A)
+  签名: {R A} [交换环 R] [交换环 A] [代数 R A] (S : 子代数 R A)
   定义体: S.toSubring.toCommRing
 
 Depends on / 依赖: S.toSubring.toCommRing, toCommRing, toSubring
@@ -1179,7 +1179,7 @@ definition toSubmodule
 
 中文:
 定义 toSubmodule
-  签名: : Subalgebra R A ↪o Submodule R A where
+  签名: : 子代数 R A ↪o 子模 R A where
   定义体: { toFun := fun S =>
         { S with
           carrier := S
@@ -1239,8 +1239,8 @@ theorem coe_toSubmodule
 
 中文:
 定理 coe_toSubmodule
-  条件: (S : Subalgebra R A)
-  结论: (toSubmodule S : Set A) = S
+  条件: (S : 子代数 R A)
+  结论: (toSubmodule S : 集合 A) = S
   证明: rfl
 -/
 theorem coe_toSubmodule (S : Subalgebra R A) : (toSubmodule S : Set A) = S := rfl
@@ -1255,7 +1255,7 @@ theorem toSubmodule_injective
 
 中文:
 定理 toSubmodule_injective
-  结论: Function.Injective (toSubmodule : Subalgebra R A -> Submodule R A)
+  结论: 函数.单射 (toSubmodule : 子代数 R A -> 子模 R A)
   证明: fun _S₁ _S₂ h => SetLike.ext (SetLike.ext_iff.mp h :)
 
 Depends on / 依赖: SetLike, SetLike.ext, SetLike.ext_iff.mp, ext_iff
@@ -1282,7 +1282,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R S
+  签名: 模 R S
   定义体: inferInstance
 -/
 instance : Module R S :=
@@ -1297,8 +1297,8 @@ instance [Semiring
   body: inferInstance
 
 中文:
-实例 [Semiring
-  签名: R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A] : IsScalarTower R' R S
+实例 [半环
+  签名: R'] [标量乘法 R' R] [模 R' A] [标量塔 R' R A] : 标量塔 R' R S
   定义体: inferInstance
 -/
 instance [Semiring R'] [SMul R' R] [Module R' A] [IsScalarTower R' R A] : IsScalarTower R' R S :=
@@ -1332,7 +1332,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra R S
+  签名: : 代数 R S
   定义体: S.algebra'
 
 @[simp]
@@ -1352,7 +1352,7 @@ theorem mk_algebraMap
 
 中文:
 定理 mk_algebraMap
-  条件: {S : Subalgebra R A} (r : R) (hr : algebraMap R A r in S)
+  条件: {S : 子代数 R A} (r : R) (hr : algebraMap R A r in S)
   证明: rfl
 -/
 theorem mk_algebraMap {S : Subalgebra R A} (r : R) (hr : algebraMap R A r in S) :
@@ -1370,7 +1370,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: [IsTorsionFree R A]
+  签名: [是无挠 R A]
   定义体: S.toSubmodule.instIsTorsionFree
 
 Depends on / 依赖: S.toSubmodule.instIsTorsionFree, instIsTorsionFree, toSubmodule
@@ -1452,7 +1452,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 -/
 protected theorem coe_neg {R : Type u} {A : Type v} [CommRing R] [Ring A] [Algebra R A]
@@ -1470,7 +1470,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  结论: {R : 类型u} {A : 类型v} [CommRing R] [Ring A] [Algebra R A]
+  结论: {R : 类型u} {A : 类型v} [交换环 R] [环 A] [代数 R A]
   证明: rfl
 
 @[simp, norm_cast]
@@ -1491,7 +1491,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul R' R] [SMul R' A] [IsScalarTower R' R A] (r : R') (x : S)
+  条件: [标量乘法 R' R] [标量乘法 R' A] [标量塔 R' R A] (r : R') (x : S)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1510,7 +1510,7 @@ theorem coe_algebraMap
 
 中文:
 定理 coe_algebraMap
-  结论: [CommSemiring R'] [SMul R' R] [Algebra R' A] [IsScalarTower R' R A]
+  结论: [交换半环 R'] [标量乘法 R' R] [代数 R' A] [标量塔 R' R A]
   证明: rfl
 -/
 theorem coe_algebraMap [CommSemiring R'] [SMul R' R] [Algebra R' A] [IsScalarTower R' R A]
@@ -1677,7 +1677,7 @@ theorem toSubring_subtype
 
 中文:
 定理 toSubring_subtype
-  条件: {R A : 类型} [CommRing R] [Ring A] [Algebra R A] (S : Subalgebra R A)
+  条件: {R A : 类型} [交换环 R] [环 A] [代数 R A] (S : 子代数 R A)
   证明: rfl
 -/
 theorem toSubring_subtype {R A : Type*} [CommRing R] [Ring A] [Algebra R A] (S : Subalgebra R A) :
@@ -1693,7 +1693,7 @@ definition toSubmoduleEquiv
 
 中文:
 定义 toSubmoduleEquiv
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: LinearEquiv.ofEq _ _ rfl
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofEq
@@ -1716,7 +1716,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : A ->ₐ[R] B) (S : Subalgebra R A)
+  签名: (f : A ->ₐ[R] B) (S : 子代数 R A)
   定义体: { S.toSubsemiring.map (f : A ->+* B) with
     algebraMap_mem' := fun r => f.commutes r ▸ Set.mem_image_of_mem _ (S.algebraMap_mem r) }
 
@@ -1740,7 +1740,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {S₁ S₂ : Subalgebra R A} {f : A ->ₐ[R] B}
+  条件: {S₁ S₂ : 子代数 R A} {f : A ->ₐ[R] B}
   结论: S₁ <= S₂ -> S₁.map f <= S₂.map f
   证明: Set.image_mono
 
@@ -1763,8 +1763,8 @@ ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
 中文:
 定理 map_injective
-  条件: {f : A ->ₐ[R] B} (hf : Function.Injective f)
-  结论: Function.Injective (map f)
+  条件: {f : A ->ₐ[R] B} (hf : 函数.单射 f)
+  结论: 函数.单射 (map f)
   证明: fun _S₁ _S₂ ih =>
 ext Set.ext_iff.1 Set.image_injective.2 hf Set.ext SetLike.ext_iff.mp ih
 
@@ -1788,8 +1788,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : Subalgebra R A)
-  结论: S.map (AlgHom.id R A) = S
+  条件: (S : 子代数 R A)
+  结论: S.map (代数态射.id R A) = S
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -1809,7 +1809,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (S : Subalgebra R A) (g : B ->ₐ[R] C) (f : A ->ₐ[R] B)
+  条件: (S : 子代数 R A) (g : B ->ₐ[R] C) (f : A ->ₐ[R] B)
   证明: SetLike.coe_injective Set.image_image _ _ _
 
 @[simp]
@@ -1832,7 +1832,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {S : Subalgebra R A} {f : A ->ₐ[R] B} {y : B}
+  条件: {S : 子代数 R A} {f : A ->ₐ[R] B} {y : B}
   结论: y in map f S ↔ 存在 x in S, f x = y
   证明: Subsemiring.mem_map
 
@@ -1851,7 +1851,7 @@ theorem map_toSubmodule
 
 中文:
 定理 map_toSubmodule
-  条件: {S : Subalgebra R A} {f : A ->ₐ[R] B}
+  条件: {S : 子代数 R A} {f : A ->ₐ[R] B}
   证明: SetLike.coe_injective rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -1874,7 +1874,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : A ->ₐ[R] B) (S : Subalgebra R B)
+  签名: (f : A ->ₐ[R] B) (S : 子代数 R B)
   定义体: { S.toSubsemiring.comap (f : A ->+* B) with
     algebraMap_mem' := fun r =>
       show f (algebraMap R A r) in S from (f.commutes r).symm ▸ S.algebraMap_mem r }
@@ -1898,7 +1898,7 @@ theorem map_le
 
 中文:
 定理 map_le
-  条件: {S : Subalgebra R A} {f : A ->ₐ[R] B} {U : Subalgebra R B}
+  条件: {S : 子代数 R A} {f : A ->ₐ[R] B} {U : 子代数 R B}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -1942,7 +1942,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: (S : Subalgebra R B) (f : A ->ₐ[R] B) (x : A)
+  条件: (S : 子代数 R B) (f : A ->ₐ[R] B) (x : A)
   结论: x in S.comap f ↔ f x in S
   证明: Iff.rfl
 
@@ -1961,7 +1961,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: {R A : 类型} [CommSemiring R] [Semiring A] [NoZeroDivisors A]
+  签名: {R A : 类型} [交换半环 R] [半环 A] [无零因子 A]
   定义体: inferInstanceAs (NoZeroDivisors S.toSubsemiring)
 
 Depends on / 依赖: NoZeroDivisors, S.toSubsemiring, toSubsemiring
@@ -1980,7 +1980,7 @@ instance isDomain
 
 中文:
 实例 isDomain
-  签名: {R A : 类型} [CommRing R] [Ring A] [IsDomain A] [Algebra R A]
+  签名: {R A : 类型} [交换环 R] [环 A] [是整环 A] [代数 R A]
   定义体: inferInstanceAs (IsDomain S.toSubring)
 
 Depends on / 依赖: IsDomain, S.toSubring, toSubring
@@ -2095,7 +2095,7 @@ definition toSubalgebra
 
 中文:
 定义 toSubalgebra
-  签名: (p : Submodule R A) (h_one : (1 : A) in p)
+  签名: (p : 子模 R A) (h_one : (1 : A) in p)
   定义体: { p with
     mul_mem' := fun hx hy => h_mul _ _ hx hy
     one_mem' := h_one
@@ -2127,7 +2127,7 @@ theorem mem_toSubalgebra
 
 中文:
 定理 mem_toSubalgebra
-  条件: {p : Submodule R A} {h_one h_mul} {x}
+  条件: {p : 子模 R A} {h_one h_mul} {x}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -2147,7 +2147,7 @@ theorem toSubalgebra_mk
 
 中文:
 定理 toSubalgebra_mk
-  条件: (s : Submodule R A) (h1 hmul)
+  条件: (s : 子模 R A) (h1 hmul)
   证明: rfl
 
 @[simp]
@@ -2171,7 +2171,7 @@ theorem toSubalgebra_toSubmodule
 
 中文:
 定理 toSubalgebra_toSubmodule
-  条件: (p : Submodule R A) (h_one h_mul)
+  条件: (p : 子模 R A) (h_one h_mul)
   证明: SetLike.coe_injective rfl
 
 @[simp]
@@ -2192,8 +2192,8 @@ theorem _root_.Subalgebra.toSubmodule_toSubalgebra
   proof: SetLike.coe_injective rfl
 
 中文:
-定理 _root_.Subalgebra.toSubmodule_toSubalgebra
-  条件: (S : Subalgebra R A)
+定理 _root_.子代数.toSubmodule_toSubalgebra
+  条件: (S : 子代数 R A)
   证明: SetLike.coe_injective rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -2326,7 +2326,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (f : A ->ₐ[R] B) (S : Subalgebra R B) (hf : 对任意 x, f x in S)
+  签名: (f : A ->ₐ[R] B) (S : 子代数 R B) (hf : 对任意 x, f x in S)
   定义体: { RingHom.codRestrict (f : A ->+* B) S hf with commutes' := fun r => Subtype.ext <| f.commutes r }
 
 @[simp]
@@ -2349,7 +2349,7 @@ theorem val_comp_codRestrict
 
 中文:
 定理 val_comp_codRestrict
-  条件: (f : A ->ₐ[R] B) (S : Subalgebra R B) (hf : 对任意 x, f x in S)
+  条件: (f : A ->ₐ[R] B) (S : 子代数 R B) (hf : 对任意 x, f x in S)
   证明: AlgHom.ext fun _ => rfl
 
 @[simp]
@@ -2371,7 +2371,7 @@ theorem coe_codRestrict
 
 中文:
 定理 coe_codRestrict
-  条件: (f : A ->ₐ[R] B) (S : Subalgebra R B) (hf : 对任意 x, f x in S) (x : A)
+  条件: (f : A ->ₐ[R] B) (S : 子代数 R B) (hf : 对任意 x, f x in S) (x : A)
   证明: rfl
 -/
 theorem coe_codRestrict (f : A ->ₐ[R] B) (S : Subalgebra R B) (hf : forall x, f x in S) (x : A) :
@@ -2388,7 +2388,7 @@ theorem injective_codRestrict
 
 中文:
 定理 injective_codRestrict
-  条件: (f : A ->ₐ[R] B) (S : Subalgebra R B) (hf : 对任意 x, f x in S)
+  条件: (f : A ->ₐ[R] B) (S : 子代数 R B) (hf : 对任意 x, f x in S)
   证明: ⟨fun H _x _y hxy => H Subtype.ext hxy, fun H _x _y hxy => H (congr_arg Subtype.val hxy :)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, congr_arg
@@ -2443,7 +2443,7 @@ theorem rangeRestrict_surjective
 中文:
 定理 rangeRestrict_surjective
   条件: (f : A ->ₐ[R] B)
-  结论: Function.Surjective (f.rangeRestrict)
+  结论: 函数.满射 (f.rangeRestrict)
   证明: fun ⟨_y, hy⟩ =>
     let ⟨x, hx⟩ := hy
     ⟨x, SetCoe.ext hx⟩
@@ -2465,7 +2465,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [Fintype A] [DecidableEq B] (φ : A ->ₐ[R] B)
+  签名: [有限类型 A] [DecidableEq B] (φ : A ->ₐ[R] B)
   定义体: Set.fintypeRange φ
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -2499,7 +2499,7 @@ Subtype.ext
 
 中文:
 定义 ofLeftInverse
-  签名: {g : B -> A} {f : A ->ₐ[R] B} (h : Function.LeftInverse g f)
+  签名: {g : B -> A} {f : A ->ₐ[R] B} (h : 函数.左逆 g f)
   定义体: { f.rangeRestrict with
     toFun := f.rangeRestrict
     invFun := g ∘ f.range.val
@@ -2536,7 +2536,7 @@ theorem ofLeftInverse_apply
 
 中文:
 定理 ofLeftInverse_apply
-  条件: {g : B -> A} {f : A ->ₐ[R] B} (h : Function.LeftInverse g f) (x : A)
+  条件: {g : B -> A} {f : A ->ₐ[R] B} (h : 函数.左逆 g f) (x : A)
   证明: rfl
 
 @[simp]
@@ -2556,7 +2556,7 @@ theorem ofLeftInverse_symm_apply
 
 中文:
 定理 ofLeftInverse_symm_apply
-  结论: {g : B -> A} {f : A ->ₐ[R] B} (h : Function.LeftInverse g f)
+  结论: {g : B -> A} {f : A ->ₐ[R] B} (h : 函数.左逆 g f)
   证明: rfl
 -/
 theorem ofLeftInverse_symm_apply {g : B -> A} {f : A ->ₐ[R] B} (h : Function.LeftInverse g f)
@@ -2575,7 +2575,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: (f : A ->ₐ[R] B) (hf : Function.Injective f)
+  签名: (f : A ->ₐ[R] B) (hf : 函数.单射 f)
   定义体: ofLeftInverse (Classical.choose_spec hf.hasLeftInverse)
 
 @[simp]
@@ -2596,7 +2596,7 @@ theorem ofInjective_apply
 
 中文:
 定理 ofInjective_apply
-  条件: (f : A ->ₐ[R] B) (hf : Function.Injective f) (x : A)
+  条件: (f : A ->ₐ[R] B) (hf : 函数.单射 f) (x : A)
   证明: rfl
 -/
 theorem ofInjective_apply (f : A ->ₐ[R] B) (hf : Function.Injective f) (x : A) :
@@ -2615,7 +2615,7 @@ definition ofInjectiveField
 
 中文:
 定义 ofInjectiveField
-  签名: {E F : 类型} [DivisionRing E] [Semiring F] [Nontrivial F]
+  签名: {E F : 类型} [除环 E] [半环 F] [非平凡 F]
   定义体: ofInjective f f.toRingHom.injective
 
 #adaptation_note
@@ -2643,7 +2643,7 @@ definition subalgebraMap
 
 中文:
 定义 subalgebraMap
-  签名: (e : A ≃ₐ[R] B) (S : Subalgebra R A)
+  签名: (e : A ≃ₐ[R] B) (S : 子代数 R A)
   定义体: { e.toRingEquiv.subsemiringMap S.toSubsemiring with
     commutes' := fun r => by ext; exact e.commutes r }
 
@@ -2673,7 +2673,7 @@ instance subsingleton_of_subsingleton
 
 中文:
 实例 subsingleton_of_subsingleton
-  签名: [Subsingleton A]
+  签名: [子单例 A]
   定义体: ⟨fun B C => ext fun x => by simp only [Subsingleton.elim x 0, zero_mem B, zero_mem C]⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, zero_mem
@@ -2714,7 +2714,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : Subalgebra R A} (h : S <= T)
+  签名: {S T : 子代数 R A} (h : S <= T)
   定义体: Set.inclusion h
   map_one' := rfl
   map_add' _ _ := rfl
@@ -2746,7 +2746,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  结论: Function.Injective (inclusion h)
+  结论: 函数.单射 (inclusion h)
   证明: fun _ _ => Subtype.ext ∘ Subtype.mk.inj
 
 @[simp]
@@ -2769,7 +2769,7 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  结论: inclusion (le_refl S) = AlgHom.id R S
+  结论: inclusion (le_refl S) = 代数态射.id R S
   证明: AlgHom.ext fun _x => Subtype.ext rfl
 
 @[simp]
@@ -2930,7 +2930,7 @@ definition equivOfEq
 
 中文:
 定义 equivOfEq
-  签名: (S T : Subalgebra R A) (h : S = T)
+  签名: (S T : 子代数 R A) (h : S = T)
   定义体: LinearEquiv.ofEq _ _ (congr_arg toSubmodule h)
   toFun x := ⟨x, h ▸ x.2⟩
   invFun x := ⟨x, h.symm ▸ x.2⟩
@@ -2961,7 +2961,7 @@ theorem equivOfEq_symm
 
 中文:
 定理 equivOfEq_symm
-  条件: (S T : Subalgebra R A) (h : S = T)
+  条件: (S T : 子代数 R A) (h : S = T)
   证明: rfl
 
 @[simp]
@@ -2983,8 +2983,8 @@ theorem equivOfEq_rfl
 
 中文:
 定理 equivOfEq_rfl
-  条件: (S : Subalgebra R A)
-  结论: equivOfEq S S rfl = AlgEquiv.refl
+  条件: (S : 子代数 R A)
+  结论: equivOfEq S S rfl = 代数等价.refl
   证明: by ext; rfl
 
 @[simp]
@@ -3002,7 +3002,7 @@ theorem equivOfEq_trans
 
 中文:
 定理 equivOfEq_trans
-  条件: (S T U : Subalgebra R A) (hST : S = T) (hTU : T = U)
+  条件: (S T U : 子代数 R A) (hST : S = T) (hTU : T = U)
   证明: rfl
 -/
 theorem equivOfEq_trans (S T U : Subalgebra R A) (hST : S = T) (hTU : T = U) :
@@ -3041,7 +3041,7 @@ definition _root_.AlgHom.subalgebraMap
   body: (f.comp S.val).codRestrict _ fun x => ⟨_, x.2, rfl⟩
 
 中文:
-定义 _root_.AlgHom.subalgebraMap
+定义 _root_.代数态射.subalgebraMap
   签名: : S ->ₐ[R] S.map f
   定义体: (f.comp S.val).codRestrict _ fun x => ⟨_, x.2, rfl⟩
 
@@ -3062,7 +3062,7 @@ theorem _root_.AlgHom.subalgebraMap_coe_apply
   proof: rfl
 
 中文:
-定理 _root_.AlgHom.subalgebraMap_coe_apply
+定理 _root_.代数态射.subalgebraMap_coe_apply
   条件: (x : S)
   结论: f.subalgebraMap S x = f x
   证明: rfl
@@ -3078,8 +3078,8 @@ theorem _root_.AlgHom.subalgebraMap_surjective
   proof: f.toAddMonoidHom.addSubmonoidMap_surjective S.toAddSubmonoid
 
 中文:
-定理 _root_.AlgHom.subalgebraMap_surjective
-  结论: Function.Surjective (f.subalgebraMap S)
+定理 _root_.代数态射.subalgebraMap_surjective
+  结论: 函数.满射 (f.subalgebraMap S)
   证明: f.toAddMonoidHom.addSubmonoidMap_surjective S.toAddSubmonoid
 
 Depends on / 依赖: S.toAddSubmonoid, addSubmonoidMap_surjective, f.toAddMonoidHom.addSubmonoidMap_surjective, toAddMonoidHom, toAddSubmonoid
@@ -3154,7 +3154,7 @@ instance [SMul
   body: inferInstanceAs (SMul S.toSubsemiring α)
 
 中文:
-实例 [SMul
+实例 [标量乘法
   签名: A α] (S
   定义体: inferInstanceAs (SMul S.toSubsemiring α)
 
@@ -3174,7 +3174,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [SMul A α] {S : Subalgebra R A} (g : S) (m : α)
+  条件: [标量乘法 A α] {S : 子代数 R A} (g : S) (m : α)
   结论: g • m = (g : A) • m
   证明: rfl
 -/
@@ -3190,7 +3190,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMul A β] [SMul α β] [SMulCommClass A α β] (S : Subalgebra R A)
+  签名: [标量乘法 A β] [标量乘法 α β] [标量交换类 A α β] (S : 子代数 R A)
   定义体: S.toSubsemiring.smulCommClass_left
 
 Depends on / 依赖: S.toSubsemiring.smulCommClass_left, smulCommClass_left, toSubsemiring
@@ -3209,7 +3209,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul α β] [SMul A β] [SMulCommClass α A β] (S : Subalgebra R A)
+  签名: [标量乘法 α β] [标量乘法 A β] [标量交换类 α A β] (S : 子代数 R A)
   定义体: S.toSubsemiring.smulCommClass_right
 
 Depends on / 依赖: S.toSubsemiring.smulCommClass_right, smulCommClass_right, toSubsemiring
@@ -3228,7 +3228,7 @@ instance isScalarTower_left
 
 中文:
 实例 isScalarTower_left
-  签名: [SMul α β] [SMul A α] [SMul A β] [IsScalarTower A α β]
+  签名: [标量乘法 α β] [标量乘法 A α] [标量乘法 A β] [标量塔 A α β]
   定义体: inferInstanceAs (IsScalarTower S.toSubsemiring α β)
 
 Depends on / 依赖: IsScalarTower, S.toSubsemiring, toSubsemiring
@@ -3256,8 +3256,8 @@ instance [SMul
   body: inferInstanceAs (FaithfulSMul S.toSubsemiring α)
 
 中文:
-实例 [SMul
-  签名: A α] [FaithfulSMul A α] (S
+实例 [标量乘法
+  签名: A α] [忠实标量乘法 A α] (S
   定义体: inferInstanceAs (FaithfulSMul S.toSubsemiring α)
 
 Depends on / 依赖: FaithfulSMul, S.toSubsemiring, toSubsemiring
@@ -3274,7 +3274,7 @@ instance [MulAction
   body: inferInstanceAs (MulAction S.toSubsemiring α)
 
 中文:
-实例 [MulAction
+实例 [乘法作用
   签名: A α] (S
   定义体: inferInstanceAs (MulAction S.toSubsemiring α)
 
@@ -3292,8 +3292,8 @@ instance [AddMonoid
   body: inferInstanceAs (DistribMulAction S.toSubsemiring α)
 
 中文:
-实例 [AddMonoid
-  签名: α] [DistribMulAction A α] (S
+实例 [加法幺半群
+  签名: α] [分配乘法作用 A α] (S
   定义体: inferInstanceAs (DistribMulAction S.toSubsemiring α)
 
 Depends on / 依赖: DistribMulAction, S.toSubsemiring, toSubsemiring
@@ -3310,8 +3310,8 @@ instance [Zero
   body: inferInstanceAs (SMulWithZero S.toSubsemiring α)
 
 中文:
-实例 [Zero
-  签名: α] [SMulWithZero A α] (S
+实例 [零
+  签名: α] [带零标量乘法 A α] (S
   定义体: inferInstanceAs (SMulWithZero S.toSubsemiring α)
 
 Depends on / 依赖: S.toSubsemiring, SMulWithZero, toSubsemiring
@@ -3328,8 +3328,8 @@ instance [Zero
   body: inferInstanceAs (MulActionWithZero S.toSubsemiring α)
 
 中文:
-实例 [Zero
-  签名: α] [MulActionWithZero A α] (S
+实例 [零
+  签名: α] [带零乘法作用 A α] (S
   定义体: inferInstanceAs (MulActionWithZero S.toSubsemiring α)
 
 Depends on / 依赖: MulActionWithZero, S.toSubsemiring, toSubsemiring
@@ -3347,7 +3347,7 @@ instance moduleLeft
 
 中文:
 实例 moduleLeft
-  签名: [AddCommMonoid α] [Module A α] (S : Subalgebra R A)
+  签名: [加法交换幺半群 α] [模 A α] (S : 子代数 R A)
   定义体: inferInstanceAs (Module S.toSubsemiring α)
 
 Depends on / 依赖: Module, S.toSubsemiring, toSubsemiring
@@ -3365,7 +3365,7 @@ instance toAlgebra
 
 中文:
 实例 toAlgebra
-  签名: {R A : 类型} [CommSemiring R] [CommSemiring A] [Semiring α] [Algebra R A]
+  签名: {R A : 类型} [交换半环 R] [交换半环 A] [半环 α] [代数 R A]
   定义体: Algebra.ofSubsemiring S.toSubsemiring
 
 Depends on / 依赖: Algebra, Algebra.ofSubsemiring, S.toSubsemiring, ofSubsemiring, toSubsemiring
@@ -3384,7 +3384,7 @@ theorem algebraMap_eq
 
 中文:
 定理 algebraMap_eq
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Semiring α] [Algebra R A]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [半环 α] [代数 R A]
   证明: rfl
 -/
 theorem algebraMap_eq {R A : Type*} [CommSemiring R] [CommSemiring A] [Semiring α] [Algebra R A]
@@ -3403,7 +3403,7 @@ theorem algebraMap_def
 
 中文:
 定理 algebraMap_def
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Semiring α]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [半环 α]
   证明: rfl
 
 @[simp]
@@ -3425,7 +3425,7 @@ theorem algebraMap_mk
 
 中文:
 定理 algebraMap_mk
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Semiring α]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [半环 α]
   证明: rfl
 
 @[simp]
@@ -3447,7 +3447,7 @@ lemma algebraMap_apply
 
 中文:
 引理 algebraMap_apply
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Algebra R A]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [代数 R A]
   证明: rfl
 
 @[simp]
@@ -3470,7 +3470,7 @@ theorem rangeS_algebraMap
 
 中文:
 定理 rangeS_algebraMap
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Algebra R A]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [代数 R A]
   证明: by
   rw [algebraMap_eq]; rw [Algebra.algebraMap_self]; rw [RingHom.id_comp]; rw [← toSubsemiring_subtype]; rw [Subsemiring.rangeS_subtype]
 
@@ -3496,7 +3496,7 @@ theorem range_algebraMap
 
 中文:
 定理 range_algebraMap
-  结论: {R A : 类型} [CommRing R] [CommRing A] [Algebra R A]
+  结论: {R A : 类型} [交换环 R] [交换环 A] [代数 R A]
   证明: by
   rw [algebraMap_eq]; rw [Algebra.algebraMap_self]; rw [RingHom.id_comp]; rw [← toSubring_subtype]; rw [Subring.range_subtype]
 
@@ -3519,7 +3519,7 @@ lemma setRange_algebraMap
 
 中文:
 引理 setRange_algebraMap
-  结论: {R A : 类型} [CommSemiring R] [CommSemiring A] [Algebra R A]
+  结论: {R A : 类型} [交换半环 R] [交换半环 A] [代数 R A]
   证明: SetLike.ext'_iff.mp S.rangeS_algebraMap
 
 Depends on / 依赖: S.rangeS_algebraMap, SetLike, SetLike.ext, _iff, _iff.mp, rangeS_algebraMap
@@ -3539,7 +3539,7 @@ instance instIsTorsionFree'
 
 中文:
 实例 instIsTorsionFree'
-  签名: [IsDomain A] (S : Subalgebra R A)
+  签名: [是整环 A] (S : 子代数 R A)
   定义体: .comap Subtype.val (fun r hr => by simpa [isRegular_iff_ne_zero] using hr.ne_zero)
     (by simp [smul_def])
 
@@ -3564,9 +3564,9 @@ theorem _root_.Set.algebraMap_mem_center
   simp only [Semigroup.mem_center_iff, commutes, forall_const]
 
 中文:
-定理 _root_.Set.algebraMap_mem_center
+定理 _root_.集合.algebraMap_mem_center
   条件: (r : R)
-  结论: algebraMap R A r in Set.center A
+  结论: algebraMap R A r in 集合.center A
   证明: by
   simp only [Semigroup.mem_center_iff, commutes, forall_const]
 
@@ -3592,7 +3592,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Subalgebra R A
+  签名: : 子代数 R A
   定义体: { Subsemiring.center A with algebraMap_mem' := Set.algebraMap_mem_center }
 
 @[simp]
@@ -3613,7 +3613,7 @@ theorem center_toSubring
 
 中文:
 定理 center_toSubring
-  条件: (R A : 类型) [CommRing R] [Ring A] [Algebra R A]
+  条件: (R A : 类型) [交换环 R] [环 A] [代数 R A]
   证明: rfl
 -/
 theorem center_toSubring (R A : Type*) [CommRing R] [Ring A] [Algebra R A] :
@@ -3632,7 +3632,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (center R A)
+  签名: 交换半环 (center R A)
   定义体: inferInstanceAs (CommSemiring (Subsemiring.center A))
 
 Depends on / 依赖: CommSemiring, Subsemiring, Subsemiring.center, center
@@ -3677,8 +3677,8 @@ theorem _root_.Set.algebraMap_mem_centralizer
   proof: fun _a _h => (Algebra.commutes _ _).symm
 
 中文:
-定理 _root_.Set.algebraMap_mem_centralizer
-  条件: {s : Set A} (r : R)
+定理 _root_.集合.algebraMap_mem_centralizer
+  条件: {s : 集合 A} (r : R)
   证明: fun _a _h => (Algebra.commutes _ _).symm
 
 Depends on / 依赖: Algebra, Algebra.commutes, commutes
@@ -3701,7 +3701,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set A)
+  签名: (s : 集合 A)
   定义体: { Subsemiring.centralizer s with algebraMap_mem' := Set.algebraMap_mem_centralizer }
 
 @[simp, norm_cast]
@@ -3723,8 +3723,8 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: (s : Set A)
-  结论: (centralizer R s : Set A) = s.centralizer
+  条件: (s : 集合 A)
+  结论: (centralizer R s : 集合 A) = s.centralizer
   证明: rfl
 -/
 theorem coe_centralizer (s : Set A) : (centralizer R s : Set A) = s.centralizer :=
@@ -3741,7 +3741,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {s : Set A} {z : A}
+  条件: {s : 集合 A} {z : A}
   结论: z in centralizer R s ↔ 对任意 g in s, g * z = z * g
   证明: Iff.rfl
 
@@ -3783,7 +3783,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: (s t : Set A) (h : s subseteq t)
+  条件: (s t : 集合 A) (h : s subseteq t)
   结论: centralizer R t <= centralizer R s
   证明: Set.centralizer_subset h
 
@@ -3805,7 +3805,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer R Set.univ = center R A
+  结论: centralizer R 集合.univ = center R A
   证明: SetLike.ext' (Set.centralizer_univ A)
 
 Depends on / 依赖: Set.centralizer_univ, SetLike, SetLike.ext, centralizer_univ
@@ -3825,7 +3825,7 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: {s : Subalgebra R A}
+  条件: {s : 子代数 R A}
   证明: Set.subset_centralizer_centralizer
 
 @[simp]
@@ -3849,7 +3849,7 @@ lemma centralizer_centralizer_centralizer
 
 中文:
 引理 centralizer_centralizer_centralizer
-  条件: {s : Set A}
+  条件: {s : 集合 A}
   证明: by
   apply SetLike.coe_injective
   simp only [coe_centralizer, Set.centralizer_centralizer_centralizer]
@@ -3883,7 +3883,7 @@ definition subalgebraOfSubsemiring
 
 中文:
 定义 subalgebraOfSubsemiring
-  签名: (S : Subsemiring R)
+  签名: (S : 子半环 R)
   定义体: { S with algebraMap_mem' := fun i => natCast_mem S i }
 
 @[simp]
@@ -3904,7 +3904,7 @@ theorem mem_subalgebraOfSubsemiring
 
 中文:
 定理 mem_subalgebraOfSubsemiring
-  条件: {x : R} {S : Subsemiring R}
+  条件: {x : R} {S : 子半环 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3937,7 +3937,7 @@ definition subalgebraOfSubring
 
 中文:
 定义 subalgebraOfSubring
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: { S with
     algebraMap_mem' := fun i =>
       Int.induction_on i (by simp)
@@ -3971,7 +3971,7 @@ theorem mem_subalgebraOfSubring
 
 中文:
 定理 mem_subalgebraOfSubring
-  条件: {x : R} {S : Subring R}
+  条件: {x : R} {S : 子环 R}
   结论: x in subalgebraOfSubring S ↔ x in S
   证明: Iff.rfl
 
@@ -4072,7 +4072,7 @@ theorem le_equalizer
 
 中文:
 定理 le_equalizer
-  条件: {φ ψ : A ->ₐ[R] B} {S : Subalgebra R A}
+  条件: {φ ψ : A ->ₐ[R] B} {S : 子代数 R A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4125,8 +4125,8 @@ definition NonUnitalSubalgebra.toSubalgebra
       (Algebra.algebraMap_eq_smul_one (R := R) (A := A) r).symm ▸ SMulMemClass.smul_mem r h1 }
 
 中文:
-定义 NonUnitalSubalgebra.toSubalgebra
-  签名: (S : NonUnitalSubalgebra R A) (h1 : (1 : A) in S)
+定义 NonUnital子代数.toSubalgebra
+  签名: (S : NonUnital子代数 R A) (h1 : (1 : A) in S)
   定义体: { S with
     one_mem' := h1
     algebraMap_mem' := fun r =>
@@ -4150,8 +4150,8 @@ lemma Subalgebra.toNonUnitalSubalgebra_toSubalgebra
   proof: by cases S; rfl
 
 中文:
-引理 Subalgebra.toNonUnitalSubalgebra_toSubalgebra
-  条件: (S : Subalgebra R A)
+引理 子代数.toNonUnitalSubalgebra_toSubalgebra
+  条件: (S : 子代数 R A)
   证明: by cases S; rfl
 -/
 lemma Subalgebra.toNonUnitalSubalgebra_toSubalgebra (S : Subalgebra R A) :
@@ -4167,8 +4167,8 @@ lemma NonUnitalSubalgebra.toSubalgebra_toNonUnitalSubalgebra
   cases S; rfl
 
 中文:
-引理 NonUnitalSubalgebra.toSubalgebra_toNonUnitalSubalgebra
-  结论: (S : NonUnitalSubalgebra R A)
+引理 NonUnital子代数.toSubalgebra_toNonUnitalSubalgebra
+  结论: (S : NonUnital子代数 R A)
   证明: by
   cases S; rfl
 -/

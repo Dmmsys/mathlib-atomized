@@ -47,7 +47,7 @@ definition PresentedMonoid
 
 中文:
 定义 PresentedMonoid
-  签名: (rels : FreeMonoid α -> FreeMonoid α -> 命题)
+  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
   定义体: (conGen rels).Quotient
 
 Depends on / 依赖: Quotient, conGen
@@ -78,7 +78,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (rels : FreeMonoid α -> FreeMonoid α -> 命题)
+  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
   定义体: Quotient.mk (conGen rels).toSetoid
   map_one' := rfl
   map_mul' := fun _ _ => rfl
@@ -105,7 +105,7 @@ definition of
 
 中文:
 定义 of
-  签名: (rels : FreeMonoid α -> FreeMonoid α -> 命题) (x : α)
+  签名: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题) (x : α)
   定义体: mk rels (.of x)
 -/
 def of (rels : FreeMonoid α -> FreeMonoid α -> Prop) (x : α) : PresentedMonoid rels :=
@@ -248,7 +248,7 @@ theorem closure_range_of
 
 中文:
 定理 closure_range_of
-  条件: (rels : FreeMonoid α -> FreeMonoid α -> 命题)
+  条件: (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
   证明: by
   rw [Submonoid.eq_top_iff']
   intro x
@@ -283,7 +283,7 @@ theorem surjective_mk
 
 中文:
 定理 surjective_mk
-  条件: {rels : FreeMonoid α -> FreeMonoid α -> 命题}
+  条件: {rels : 自由幺半群 α -> 自由幺半群 α -> 命题}
   证明: fun x => PresentedMonoid.inductionOn x fun a => .intro a rfl
 
 Depends on / 依赖: PresentedMonoid, PresentedMonoid.inductionOn, inductionOn
@@ -335,7 +335,7 @@ theorem toMonoid.unique
 
 中文:
 定理 toMonoid.unique
-  结论: (g : MonoidHom (conGen rels).Quotient M)
+  结论: (g : 幺半群态射 (conGen rels).商 M)
   证明: Con.lift_unique (Con.conGen_le.2 h) g (FreeMonoid.hom_eq hg)
 
 @[to_additive (attr := simp)]
@@ -379,7 +379,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {M : 类型} [Monoid M] (rels : FreeMonoid α -> FreeMonoid α -> 命题)
+  结论: {M : 类型} [幺半群 M] (rels : 自由幺半群 α -> 自由幺半群 α -> 命题)
   证明: by
   apply MonoidHom.eq_of_eqOn_denseM (closure_range_of _)
   grind [Set.eqOn_range]

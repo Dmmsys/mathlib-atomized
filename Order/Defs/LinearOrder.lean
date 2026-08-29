@@ -100,9 +100,9 @@ class LinearOrder
     - compare_eq_compareOfLessAndEq : forall a b, compare a b = compareOfLessAndEq a b  [default: by compareOfLessAndEq_rfl]
 
 中文:
-类 LinearOrder
+类 线性序
   参数: (α : 类型)
-  继承: PartialOrder α, Min α, Max α, Ord α
+  继承: 偏序 α, 最小值 α, 最大值 α, 序 α
   公理与运算 (10 个):
     - le_total((a b : α)) : a <= b ∨ b <= a
     - toDecidableLE : DecidableLE α
@@ -110,8 +110,8 @@ class LinearOrder
     - toDecidableLT : DecidableLT α  [默认: @decidableLTOfDecidableLE _ _ toDecidableLE]
     - min : = fun a b => if a <= b then a else b
     - max : = fun a b => if a <= b then b else a
-    - min_def : 对任意 a b, min a b = if a <= b then a else b  [默认: by intros; rfl]
-    - max_def : 对任意 a b, max a b = if a <= b then b else a  [默认: by intros; rfl]
+    - min_def : 对任意 a b, 最小值 a b = if a <= b then a else b  [默认: by intros; rfl]
+    - max_def : 对任意 a b, 最大值 a b = if a <= b then b else a  [默认: by intros; rfl]
     - compare(a b) : = compareOfLessAndEq a b
     - compare_eq_compareOfLessAndEq : 对任意 a b, compare a b = compareOfLessAndEq a b  [默认: by compareOfLessAndEq_rfl]
 
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.IsLinearOrder α
+  签名: Std.是线性序 α
   定义体: LinearOrder.le_total
 
 Depends on / 依赖: LinearOrder, LinearOrder.le_total, le_total
@@ -426,7 +426,7 @@ theorem le_imp_le_of_lt_imp_lt
 
 中文:
 定理 le_imp_le_of_lt_imp_lt
-  结论: {α β} [Preorder α] [LinearOrder β] {a b : α} {c d : β}
+  结论: {α β} [预序 α] [线性序 β] {a b : α} {c d : β}
   证明: le_of_not_gt fun h' => not_le_of_gt (H h') h
 
 @[grind =]
@@ -451,7 +451,7 @@ lemma min_def
 中文:
 引理 min_def
   条件: (a b : α)
-  结论: min a b = if a <= b then a else b
+  结论: 最小值 a b = if a <= b then a else b
   证明: LinearOrder.min_def a b
 @[grind =]
 
@@ -471,7 +471,7 @@ lemma max_def
 中文:
 引理 max_def
   条件: (a b : α)
-  结论: max a b = if a <= b then b else a
+  结论: 最大值 a b = if a <= b then b else a
   证明: LinearOrder.max_def a b
 
 Depends on / 依赖: LinearOrder, LinearOrder.max_def, max_def
@@ -551,7 +551,7 @@ theorem min_def'
 中文:
 定理 min_def'
   条件: (a b : α)
-  结论: min a b = if b <= a then b else a
+  结论: 最小值 a b = if b <= a then b else a
   证明: by
   obtain h | h | h := lt_trichotomy a b <;> simp [le_of_lt, not_le_of_gt, h, min_def]
 
@@ -578,7 +578,7 @@ theorem max_def'
 中文:
 定理 max_def'
   条件: (a b : α)
-  结论: max a b = if b <= a then a else b
+  结论: 最大值 a b = if b <= a then a else b
   证明: by
   obtain h | h | h := lt_trichotomy a b <;> simp [le_of_lt, not_le_of_gt, h, max_def]
 
@@ -606,7 +606,7 @@ lemma min_le_left
 中文:
 引理 min_le_left
   条件: (a b : α)
-  结论: min a b <= a
+  结论: 最小值 a b <= a
   证明: by
   rw [min_def]
   split_ifs with h <;> simp [h, le_of_not_ge]
@@ -636,7 +636,7 @@ lemma min_le_right
 中文:
 引理 min_le_right
   条件: (a b : α)
-  结论: min a b <= b
+  结论: 最小值 a b <= b
   证明: by
   rw [min_def]
   split_ifs with h <;> simp [h]
@@ -666,7 +666,7 @@ lemma le_min
 中文:
 引理 le_min
   条件: (h₁ : c <= a) (h₂ : c <= b)
-  结论: c <= min a b
+  结论: c <= 最小值 a b
   证明: by
   rw [min_def]
   split_ifs <;> assumption
@@ -694,7 +694,7 @@ lemma eq_min
 中文:
 引理 eq_min
   条件: (h₁ : c <= a) (h₂ : c <= b) (h₃ : 对任意 {d}, d <= a -> d <= b -> d <= c)
-  结论: c = min a b
+  结论: c = 最小值 a b
   证明: le_antisymm (le_min h₁ h₂) (h₃ (min_le_left a b) (min_le_right a b))
 
 @[to_dual]
@@ -719,7 +719,7 @@ lemma min_comm
 中文:
 引理 min_comm
   条件: (a b : α)
-  结论: min a b = min b a
+  结论: 最小值 a b = 最小值 b a
   证明: eq_min (min_le_right a b) (min_le_left a b) fun h₁ h₂ => le_min h₂ h₁
 
 @[to_dual]
@@ -748,7 +748,7 @@ lemma min_assoc
 中文:
 引理 min_assoc
   条件: (a b c : α)
-  结论: min (min a b) c = min a (min b c)
+  结论: 最小值 (最小值 a b) c = 最小值 a (最小值 b c)
   证明: eq_min
     (le_trans (min_le_left ..) (min_le_left ..))
     (le_min (le_trans (min_le_left ..) (min_le_right ..)) (min_le_right ..))
@@ -780,7 +780,7 @@ lemma min_left_comm
 中文:
 引理 min_left_comm
   条件: (a b c : α)
-  结论: min a (min b c) = min b (min a c)
+  结论: 最小值 a (最小值 b c) = 最小值 b (最小值 a c)
   证明: by
   rw [← min_assoc]; rw [min_comm a]; rw [min_assoc]
 
@@ -803,7 +803,7 @@ lemma min_self
 中文:
 引理 min_self
   条件: (a : α)
-  结论: min a a = a
+  结论: 最小值 a a = a
   证明: by rw [min_def, ite_id]
 
 @[to_dual]
@@ -825,7 +825,7 @@ lemma min_eq_left
 中文:
 引理 min_eq_left
   条件: (h : a <= b)
-  结论: min a b = a
+  结论: 最小值 a b = a
   证明: (eq_min le_rfl h (fun h _ => h)).symm
 
 @[to_dual]
@@ -847,7 +847,7 @@ lemma min_eq_right
 中文:
 引理 min_eq_right
   条件: (h : b <= a)
-  结论: min a b = b
+  结论: 最小值 a b = b
   证明: min_comm b a ▸ min_eq_left h
 
 Depends on / 依赖: min_comm, min_eq_left
@@ -866,7 +866,7 @@ lemma min_eq_left_of_lt
 中文:
 引理 min_eq_left_of_lt
   条件: (h : a < b)
-  结论: min a b = a
+  结论: 最小值 a b = a
   证明: min_eq_left (le_of_lt h)
 -/
 @[to_dual] lemma min_eq_left_of_lt (h : a < b) : min a b = a := min_eq_left (le_of_lt h)
@@ -884,7 +884,7 @@ lemma min_eq_right_of_lt
 中文:
 引理 min_eq_right_of_lt
   条件: (h : b < a)
-  结论: min a b = b
+  结论: 最小值 a b = b
   证明: min_eq_right (le_of_lt h)
 
 @[to_dual max_lt]
@@ -905,7 +905,7 @@ lemma lt_min
 中文:
 引理 lt_min
   条件: (h₁ : a < b) (h₂ : a < c)
-  结论: a < min b c
+  结论: a < 最小值 b c
   证明: by
   cases le_total b c <;> simp [min_eq_left, min_eq_right, *]
 
@@ -1173,12 +1173,12 @@ structure LinOrd
     - [str : LinearOrder carrier]
 
 中文:
-结构 LinOrd
+结构 线性序
   参数: where
   公理与运算 (3 个):
     - of : :
     - (carrier : 类型)
-    - [str : LinearOrder carrier]
+    - [str : 线性序 carrier]
 -/
 structure LinOrd where
   /-- Construct a bundled `LinOrd` from the underlying type and typeclass. -/
@@ -1203,7 +1203,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort LinOrd (Type _)
+  签名: CoeSort 线性序 (类型 _)
   定义体: ⟨LinOrd.carrier⟩
 
 Depends on / 依赖: LinOrd, LinOrd.carrier, carrier

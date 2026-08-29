@@ -38,7 +38,7 @@ ULift.ext _ _ pullback.condition _ _⟩
 
 中文:
 实例 :
-  签名: compHausToCondensed.PreservesEpimorphisms
+  签名: compHausToCondensed.保持Epimorphisms
   定义体: by
     rw [CondensedSet.epi_iff_locallySurjective_on_compHaus]
     intro S g
@@ -72,7 +72,7 @@ example : compHausToCondensed.PreservesEffectiveEpis := inferInstance
 
 中文:
 实例 :
-  签名: IsRegularEpiCategory CondensedSet.{u}
+  签名: 是正则满态射范畴 CondensedSet.{u}
   定义体: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
 
 example : compHausToCondensed.PreservesEffectiveEpis := inferInstance

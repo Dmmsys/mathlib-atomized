@@ -43,12 +43,12 @@ structure ShortExact
     - [epi_g : Epi S.g]
 
 中文:
-结构 ShortExact
+结构 短正合
   参数: : 命题 where
   公理与运算 (3 个):
-    - exact : S.Exact
-    - [mono_f : Mono S.f]
-    - [epi_g : Epi S.g]
+    - exact : S.正合
+    - [mono_f : 单态射 S.f]
+    - [epi_g : 满态射 S.g]
 -/
 structure ShortExact : Prop where
   exact : S.Exact
@@ -67,9 +67,9 @@ lemma ShortExact.mk'
   proof: h
 
 中文:
-引理 ShortExact.mk'
-  条件: (h : S.Exact) (_ : Mono S.f) (_ : Epi S.g)
-  结论: S.ShortExact where
+引理 短正合.mk'
+  条件: (h : S.正合) (_ : 单态射 S.f) (_ : 满态射 S.g)
+  结论: S.短正合 where
   证明: h
 -/
 lemma ShortExact.mk' (h : S.Exact) (_ : Mono S.f) (_ : Epi S.g) : S.ShortExact where
@@ -97,8 +97,8 @@ lemma shortExact_of_iso
 
 中文:
 引理 shortExact_of_iso
-  条件: (e : S₁ ≅ S₂) (h : S₁.ShortExact)
-  结论: S₂.ShortExact where
+  条件: (e : S₁ ≅ S₂) (h : S₁.短正合)
+  结论: S₂.短正合 where
   证明: exact_of_iso e h.exact
   mono_f := by
     suffices Mono (S₂.f ≫ e.inv.τ₂) by
@@ -144,7 +144,7 @@ lemma shortExact_iff_of_iso
 中文:
 引理 shortExact_iff_of_iso
   条件: (e : S₁ ≅ S₂)
-  结论: S₁.ShortExact ↔ S₂.ShortExact
+  结论: S₁.短正合 ↔ S₂.短正合
   证明: by
   constructor
   · exact shortExact_of_iso e
@@ -176,9 +176,9 @@ lemma ShortExact.op
     infer_instance
 
 中文:
-引理 ShortExact.op
-  条件: (h : S.ShortExact)
-  结论: S.op.ShortExact where
+引理 短正合.op
+  条件: (h : S.短正合)
+  结论: S.op.短正合 where
   证明: h.exact.op
   mono_f := by
     have := h.epi_g
@@ -221,9 +221,9 @@ lemma ShortExact.unop
     infer_instance
 
 中文:
-引理 ShortExact.unop
-  条件: {S : ShortComplex Cᵒᵖ} (h : S.ShortExact)
-  结论: S.unop.ShortExact where
+引理 短正合.unop
+  条件: {S : 短复形 Cᵒᵖ} (h : S.短正合)
+  结论: S.unop.短正合 where
   证明: h.exact.unop
   mono_f := by
     have := h.epi_g
@@ -259,7 +259,7 @@ lemma shortExact_iff_op
 
 中文:
 引理 shortExact_iff_op
-  结论: S.ShortExact ↔ S.op.ShortExact
+  结论: S.短正合 ↔ S.op.短正合
   证明: ⟨ShortExact.op, ShortExact.unop⟩
 
 Depends on / 依赖: ShortExact, ShortExact.op, ShortExact.unop
@@ -278,8 +278,8 @@ lemma shortExact_iff_unop
 
 中文:
 引理 shortExact_iff_unop
-  条件: (S : ShortComplex Cᵒᵖ)
-  结论: S.ShortExact ↔ S.unop.ShortExact
+  条件: (S : 短复形 Cᵒᵖ)
+  结论: S.短正合 ↔ S.unop.短正合
   证明: S.unop.shortExact_iff_op.symm
 
 Depends on / 依赖: S.unop.shortExact_iff_op.symm, shortExact_iff_op
@@ -300,8 +300,8 @@ lemma ShortExact.map
   epi_g := (inferInstance : Epi (F.map S.g))
 
 中文:
-引理 ShortExact.map
-  结论: (h : S.ShortExact) (F : C ⥤ D)
+引理 短正合.map
+  结论: (h : S.短正合) (F : C ⥤ D)
   证明: h.exact.map F
   mono_f := (inferInstance : Mono (F.map S.f))
   epi_g := (inferInstance : Epi (F.map S.g))
@@ -328,8 +328,8 @@ lemma ShortExact.map_of_exact
   exact hS.map F
 
 中文:
-引理 ShortExact.map_of_exact
-  结论: (hS : S.ShortExact)
+引理 短正合.map_of_exact
+  结论: (hS : S.短正合)
   证明: by
   have := hS.mono_f
   have := hS.epi_g
@@ -369,8 +369,8 @@ lemma ShortExact.isIso_f_iff
     appl
 
 中文:
-引理 ShortExact.isIso_f_iff
-  条件: {S : ShortComplex C} (hS : S.ShortExact) [Balanced C]
+引理 短正合.isIso_f_iff
+  条件: {S : 短复形 C} (hS : S.短正合) [Balanced C]
   证明: by
   have := hS.exact.hasZeroObject
   have := hS.mono_f
@@ -416,8 +416,8 @@ lemma ShortExact.isIso_g_iff
     have : Mono S.g := (S.exact_iff_mono (hX₁.eq_of_src _ _)).1 h
 
 中文:
-引理 ShortExact.isIso_g_iff
-  条件: {S : ShortComplex C} (hS : S.ShortExact) [Balanced C]
+引理 短正合.isIso_g_iff
+  条件: {S : 短复形 C} (hS : S.短正合) [Balanced C]
   证明: by
   have := hS.exact.hasZeroObject
   have := hS.mono_f
@@ -461,7 +461,7 @@ lemma isIso₂_of_shortExact_of_isIso₁₃
 
 中文:
 引理 isIso₂_of_shortExact_of_isIso₁₃
-  结论: [Balanced C] {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: [Balanced C] {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   have := h₁.mono_f
   have := h₂.mono_f
@@ -493,7 +493,7 @@ lemma isIso₂_of_shortExact_of_isIso₁₃'
 
 中文:
 引理 isIso₂_of_shortExact_of_isIso₁₃'
-  结论: [Balanced C] {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+  结论: [Balanced C] {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: isIso₂_of_shortExact_of_isIso₁₃ φ h₁ h₂
 -/
 lemma isIso₂_of_shortExact_of_isIso₁₃' [Balanced C] {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
@@ -511,8 +511,8 @@ definition ShortExact.fIsKernel
   exact hS.exact.fIsKernel
 
 中文:
-定义 ShortExact.fIsKernel
-  签名: [Balanced C] {S : ShortComplex C} (hS : S.ShortExact)
+定义 短正合.fIsKernel
+  签名: [Balanced C] {S : 短复形 C} (hS : S.短正合)
   定义体: by
   have := hS.mono_f
   exact hS.exact.fIsKernel
@@ -535,8 +535,8 @@ definition ShortExact.gIsCokernel
   exact hS.exact.gIsCokernel
 
 中文:
-定义 ShortExact.gIsCokernel
-  签名: [Balanced C] {S : ShortComplex C} (hS : S.ShortExact)
+定义 短正合.gIsCokernel
+  签名: [Balanced C] {S : 短复形 C} (hS : S.短正合)
   定义体: by
   have := hS.epi_g
   exact hS.exact.gIsCokernel
@@ -567,8 +567,8 @@ lemma Exact.shortExact
       { τ₁ :=
 
 中文:
-引理 Exact.shortExact
-  条件: {S : ShortComplex C} (hS : S.Exact) (h : S.HomologyData)
+引理 正合.shortExact
+  条件: {S : 短复形 C} (hS : S.正合) (h : S.同调数据)
   证明: by
     have := hS.epi_f' h.left
     have := hS.mono_g' h.right
@@ -613,7 +613,7 @@ lemma Splitting.shortExact
 
 中文:
 引理 Splitting.shortExact
-  条件: {S : ShortComplex C} [HasZeroObject C] (s : S.Splitting)
+  条件: {S : 短复形 C} [有ZeroObject C] (s : S.Splitting)
   证明: s.exact
   mono_f := s.mono_f
   epi_g := s.epi_g
@@ -639,7 +639,7 @@ definition splittingOfInjective
 
 中文:
 定义 splittingOfInjective
-  签名: {S : ShortComplex C} (hS : S.ShortExact)
+  签名: {S : 短复形 C} (hS : S.短正合)
   定义体: have := hS.mono_f
   Splitting.ofExactOfRetraction S hS.exact (Injective.factorThru (𝟙 S.X₁) S.f) (by simp) hS.epi_g
 
@@ -662,7 +662,7 @@ definition splittingOfProjective
 
 中文:
 定义 splittingOfProjective
-  签名: {S : ShortComplex C} (hS : S.ShortExact)
+  签名: {S : 短复形 C} (hS : S.短正合)
   定义体: have := hS.epi_g
   Splitting.ofExactOfSection S hS.exact (Projective.factorThru (𝟙 S.X₃) S.g) (by simp) hS.mono_f
 

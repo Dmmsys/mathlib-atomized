@@ -51,8 +51,8 @@ theorem LinearMap.exists_map_addHaar_eq_smul_addHaar'
   fol
 
 中文:
-定理 LinearMap.exists_map_addHaar_eq_smul_addHaar'
-  条件: (h : Function.Surjective L)
+定理 线性映射.存在_map_addHaar_eq_smul_addHaar'
+  条件: (h : 函数.满射 L)
   证明: by
   /- This is true for the second projection in product spaces, as the projection of the Haar
   measure `μS.prod μT` is equal to the Haar measure `μT` multiplied by the total mass of `μS`. This
@@ -132,8 +132,8 @@ theorem LinearMap.exists_map_addHaar_eq_smul_addHaar
   exact ⟨_, by simp [c_pos, NeZero.ne addHaar], hc⟩
 
 中文:
-定理 LinearMap.exists_map_addHaar_eq_smul_addHaar
-  条件: (h : Function.Surjective L)
+定理 线性映射.存在_map_addHaar_eq_smul_addHaar
+  条件: (h : 函数.满射 L)
   证明: by
   rcases L.exists_map_addHaar_eq_smul_addHaar' μ ν h with ⟨c, c_pos, -, hc⟩
   exact ⟨_, by simp [c_pos, NeZero.ne addHaar], hc⟩
@@ -163,7 +163,7 @@ lemma ae_comp_linearMap_mem_iff
 
 中文:
 引理 ae_comp_linearMap_mem_iff
-  条件: (h : Function.Surjective L) {s : Set F} (hs : MeasurableSet s)
+  条件: (h : 函数.满射 L) {s : 集合 F} (hs : 可测集 s)
   证明: by
   have : FiniteDimensional 𝕜 E := .of_locallyCompactSpace 𝕜
   have : AEMeasurable L μ := L.continuous_of_finiteDimensional.aemeasurable
@@ -199,7 +199,7 @@ lemma ae_ae_add_linearMap_mem_iff
 
 中文:
 引理 ae_ae_add_linearMap_mem_iff
-  条件: [LocallyCompactSpace F] {s : Set F} (hs : MeasurableSet s)
+  条件: [局部紧空间 F] {s : 集合 F} (hs : 可测集 s)
   证明: by
   have : FiniteDimensional 𝕜 E := .of_locallyCompactSpace 𝕜
   have : FiniteDimensional 𝕜 F := .of_locallyCompactSpace 𝕜
@@ -238,7 +238,7 @@ lemma ae_mem_of_ae_add_linearMap_mem
 
 中文:
 引理 ae_mem_of_ae_add_linearMap_mem
-  结论: [LocallyCompactSpace F] {s : Set F} (hs : MeasurableSet s)
+  结论: [局部紧空间 F] {s : 集合 F} (hs : 可测集 s)
   证明: (ae_ae_add_linearMap_mem_iff L μ ν hs).1 (Filter.Eventually.of_forall h)
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, ae_ae_add_linearMap_mem_iff, of_forall

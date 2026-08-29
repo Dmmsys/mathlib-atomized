@@ -869,7 +869,7 @@ theorem le_map_sSup_subset_fixedPoints
 
 中文:
 定理 le_map_sSup_subset_fixedPoints
-  条件: (A : Set α) (hA : A subseteq fixedPoints f)
+  条件: (A : 集合 α) (hA : A subseteq fixedPoints f)
   证明: sSup_le fun _ hx => hA hx ▸ (f.mono <| le_sSup hx)
 
 Depends on / 依赖: f.mono, le_sSup, sSup_le
@@ -888,7 +888,7 @@ theorem map_sInf_subset_fixedPoints_le
 
 中文:
 定理 map_sInf_subset_fixedPoints_le
-  条件: (A : Set α) (hA : A subseteq fixedPoints f)
+  条件: (A : 集合 α) (hA : A subseteq fixedPoints f)
   证明: le_sInf fun _ hx => hA hx ▸ (f.mono <| sInf_le hx)
 
 Depends on / 依赖: f.mono, le_sInf, sInf_le
@@ -920,7 +920,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (fixedPoints f)
+  签名: 有界序 (fixedPoints f)
   定义体: ⟨f.gfp, f.isFixedPt_gfp⟩
   bot := ⟨f.lfp, f.isFixedPt_lfp⟩
   le_top x := f.le_gfp x.2.ge
@@ -999,7 +999,7 @@ fun _ hx => f.nextFixed_le _ sSup_le Set.forall_mem_image.2 hx⟩
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (fixedPoints f) where
+  签名: : 完备格 (fixedPoints f) where
   定义体: f.nextFixed (sSup (Subtype.val '' s))
       (f.le_map_sSup_subset_fixedPoints (Subtype.val '' s)
         fun _ ⟨x, hx⟩ => hx.2 ▸ x.2)

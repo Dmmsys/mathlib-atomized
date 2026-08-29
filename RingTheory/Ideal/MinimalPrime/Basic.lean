@@ -45,8 +45,8 @@ definition Ideal.IsMinimalPrime
   body: Minimal (fun q => q.IsPrime ∧ I <= q) p
 
 中文:
-定义 Ideal.IsMinimalPrime
-  签名: (p : Ideal R)
+定义 理想.IsMinimalPrime
+  签名: (p : 理想 R)
   定义体: Minimal (fun q => q.IsPrime ∧ I <= q) p
 -/
 protected def Ideal.IsMinimalPrime (p : Ideal R) : Prop := Minimal (fun q => q.IsPrime ∧ I <= q) p
@@ -62,9 +62,9 @@ lemma Ideal.IsMinimalPrime.isPrime
   proof: h.1.1
 
 中文:
-引理 Ideal.IsMinimalPrime.isPrime
-  条件: {p : Ideal R} (h : I.IsMinimalPrime p)
-  结论: p.IsPrime
+引理 理想.IsMinimalPrime.isPrime
+  条件: {p : 理想 R} (h : I.IsMinimalPrime p)
+  结论: p.是素
   证明: h.1.1
 -/
 lemma Ideal.IsMinimalPrime.isPrime {p : Ideal R} (h : I.IsMinimalPrime p) : p.IsPrime := h.1.1
@@ -80,8 +80,8 @@ lemma Ideal.IsMinimalPrime.le
   proof: h.1.2
 
 中文:
-引理 Ideal.IsMinimalPrime.le
-  条件: {p : Ideal R} (h : I.IsMinimalPrime p)
+引理 理想.IsMinimalPrime.le
+  条件: {p : 理想 R} (h : I.IsMinimalPrime p)
   结论: I <= p
   证明: h.1.2
 -/
@@ -97,7 +97,7 @@ abbreviation IsMinimalPrime
 
 中文:
 缩写 IsMinimalPrime
-  签名: (p : Ideal R)
+  签名: (p : 理想 R)
   定义体: (⊥ : Ideal R).IsMinimalPrime p
 
 Depends on / 依赖: IsMinimalPrime
@@ -115,8 +115,8 @@ lemma IsMinimalPrime.isPrime
 
 中文:
 引理 IsMinimalPrime.isPrime
-  条件: {p : Ideal R} (h : IsMinimalPrime p)
-  结论: p.IsPrime
+  条件: {p : 理想 R} (h : IsMinimalPrime p)
+  结论: p.是素
   证明: h.1.1
 -/
 lemma IsMinimalPrime.isPrime {p : Ideal R} (h : IsMinimalPrime p) : p.IsPrime := h.1.1
@@ -133,8 +133,8 @@ lemma IsMinimalPrime.iff_minimal
 
 中文:
 引理 IsMinimalPrime.iff_minimal
-  条件: (p : Ideal R)
-  结论: IsMinimalPrime p ↔ Minimal Ideal.IsPrime p
+  条件: (p : 理想 R)
+  结论: IsMinimalPrime p ↔ 极小 理想.是素 p
   证明: by
   simp [Ideal.IsMinimalPrime]
 
@@ -152,8 +152,8 @@ abbreviation Ideal.minimalPrimes
   body: {p | I.IsMinimalPrime p}
 
 中文:
-缩写 Ideal.minimalPrimes
-  签名: : Set (Ideal R)
+缩写 理想.minimalPrimes
+  签名: : 集合 (理想 R)
   定义体: {p | I.IsMinimalPrime p}
 -/
 protected abbrev Ideal.minimalPrimes : Set (Ideal R) :=
@@ -170,7 +170,7 @@ abbreviation minimalPrimes
 
 中文:
 缩写 minimalPrimes
-  签名: : Set (Ideal R)
+  签名: : 集合 (理想 R)
   定义体: {p | IsMinimalPrime p}
 
 Depends on / 依赖: IsMinimalPrime
@@ -188,7 +188,7 @@ lemma minimalPrimes_eq_minimals
 
 中文:
 引理 minimalPrimes_eq_minimals
-  结论: minimalPrimes R = {x | Minimal Ideal.IsPrime x}
+  结论: minimalPrimes R = {x | 极小 理想.是素 x}
   证明: congr_arg Minimal (by simp)
 
 Depends on / 依赖: Minimal, congr_arg
@@ -209,9 +209,9 @@ theorem Ideal.minimalPrimes_isPrime
   proof: h.1.1
 
 中文:
-定理 Ideal.minimalPrimes_isPrime
-  条件: {p : Ideal R} (h : p in minimalPrimes R)
-  结论: p.IsPrime
+定理 理想.minimalPrimes_isPrime
+  条件: {p : 理想 R} (h : p in minimalPrimes R)
+  结论: p.是素
   证明: h.1.1
 -/
 theorem Ideal.minimalPrimes_isPrime {p : Ideal R} (h : p in minimalPrimes R) : p.IsPrime :=
@@ -234,8 +234,8 @@ theorem Ideal.exists_minimalPrimes_le
   · refine ⟨show J.Is
 
 中文:
-定理 Ideal.exists_minimalPrimes_le
-  条件: [J.IsPrime] (e : I <= J)
+定理 理想.存在_minimalPrimes_le
+  条件: [J.是素] (e : I <= J)
   结论: 存在 p in I.minimalPrimes, p <= J
   证明: by
   set S := { p : (Ideal R)ᵒᵈ | Ideal.IsPrime p ∧ I <= OrderDual.ofDual p }
@@ -279,9 +279,9 @@ theorem Ideal.nonempty_minimalPrimes
   exact ⟨p, hp⟩
 
 中文:
-定理 Ideal.nonempty_minimalPrimes
+定理 理想.nonempty_minimalPrimes
   条件: (h : I != ⊤)
-  结论: Nonempty I.minimalPrimes
+  结论: 非空 I.minimalPrimes
   证明: by
   obtain ⟨m, hm, hle⟩ := Ideal.exists_le_maximal I h
   obtain ⟨p, hp, -⟩ := Ideal.exists_minimalPrimes_le hle
@@ -309,7 +309,7 @@ theorem Ideal.eq_bot_of_minimalPrimes_eq_empty
 @[simp]
 
 中文:
-定理 Ideal.eq_bot_of_minimalPrimes_eq_empty
+定理 理想.eq_bot_of_minimalPrimes_eq_empty
   条件: (h : I.minimalPrimes = ∅)
   结论: I = ⊤
   证明: by
@@ -344,7 +344,7 @@ theorem Ideal.radical_minimalPrimes
     simp only [a
 
 中文:
-定理 Ideal.radical_minimalPrimes
+定理 理想.radical_minimalPrimes
   结论: I.radical.minimalPrimes = I.minimalPrimes
   证明: by
   rw [Ideal.minimalPrimes]; rw [Ideal.minimalPrimes]
@@ -389,7 +389,7 @@ theorem Ideal.sInf_minimalPrimes
     exact hI.1.symm
 
 中文:
-定理 Ideal.sInf_minimalPrimes
+定理 理想.sInf_minimalPrimes
   结论: sInf I.minimalPrimes = I.radical
   证明: by
   rw [I.radical_eq_sInf]
@@ -440,8 +440,8 @@ theorem Ideal.minimalPrimes_eq_subsingleton
     exact ⟨⟨Ideal.isPrime_radical hI, Ideal.le_radical⟩, fun _ H _ => H.1.radical_le_iff.mpr H.2⟩
 
 中文:
-定理 Ideal.minimalPrimes_eq_subsingleton
-  条件: (hI : I.IsPrimary)
+定理 理想.minimalPrimes_eq_subsingleton
+  条件: (hI : I.是准素)
   结论: I.minimalPrimes = {I.radical}
   证明: by
   ext J
@@ -477,8 +477,8 @@ theorem Ideal.minimalPrimes_eq_subsingleton_self
   exact ⟨⟨inferInstance, rfl.le⟩, fun _ h _ => h.2⟩
 
 中文:
-定理 Ideal.minimalPrimes_eq_subsingleton_self
-  条件: [I.IsPrime]
+定理 理想.minimalPrimes_eq_subsingleton_self
+  条件: [I.是素]
   结论: I.minimalPrimes = {I}
   证明: by
   ext J
@@ -504,8 +504,8 @@ theorem IsDomain.minimalPrimes_eq_singleton_bot
   proof: Ideal.minimalPrimes_eq_subsingleton_self
 
 中文:
-定理 IsDomain.minimalPrimes_eq_singleton_bot
-  条件: [IsDomain R]
+定理 是整环.minimalPrimes_eq_singleton_bot
+  条件: [是整环 R]
   证明: Ideal.minimalPrimes_eq_subsingleton_self
 
 Depends on / 依赖: Ideal.minimalPrimes_eq_subsingleton_self, minimalPrimes_eq_subsingleton_self
@@ -533,8 +533,8 @@ theorem Ideal.minimalPrimes_top
   exact h.isPrime.ne_top (top_le_iff.mp h.le)
 
 中文:
-定理 Ideal.minimalPrimes_top
-  结论: (⊤ : Ideal R).minimalPrimes = ∅
+定理 理想.minimalPrimes_top
+  结论: (⊤ : 理想 R).minimalPrimes = ∅
   证明: by
   ext p
   simp only [Set.notMem_empty, iff_false]
@@ -567,8 +567,8 @@ theorem Ideal.minimalPrimes_eq_empty_iff
     exact Ideal.minimalPrimes_top
 
 中文:
-定理 Ideal.minimalPrimes_eq_empty_iff
-  条件: (I : Ideal R)
+定理 理想.minimalPrimes_eq_empty_iff
+  条件: (I : 理想 R)
   证明: by
   constructor
   · intro e
@@ -609,8 +609,8 @@ lemma Ideal.mem_minimalPrimes_sup
       h.2 ⟨isPrime_map_quotientMk_of_isPrime hq.1, ma
 
 中文:
-引理 Ideal.mem_minimalPrimes_sup
-  结论: {R : 类型} [CommRing R] {p I J : Ideal R} [p.IsPrime]
+引理 理想.mem_minimalPrimes_sup
+  结论: {R : 类型} [交换环 R] {p I J : 理想 R} [p.是素]
   证明: by
   refine ⟨⟨‹_›, ?_⟩, fun q ⟨_, hq⟩ hqp => ?_⟩
   · rw [sup_le_iff]
@@ -649,7 +649,7 @@ lemma Ideal.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
       rw [Ideal.m
 
 中文:
-引理 Ideal.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
+引理 理想.map_sup_mem_minimalPrimes_of_map_quotientMk_mem_minimalPrimes
   证明: by
   refine ⟨⟨inferInstance, sup_le_iff.mpr ?_⟩, fun q ⟨_, hleq⟩ hqle => ?_⟩
   · refine ⟨?_, hJP⟩

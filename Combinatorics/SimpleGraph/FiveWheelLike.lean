@@ -109,8 +109,8 @@ lemma IsNClique.insert_insert
 · exact h2.1 (mem_insert_self _ s) (mem_insert_of_mem h) fun h' => (h3 (h' ▸ h)).elim
 
 中文:
-引理 IsNClique.insert_insert
-  结论: (h1 : G.IsNClique r (insert a s))
+引理 是NClique.insert_insert
+  结论: (h1 : G.是NClique r (insert a s))
   证明: by
   apply h1.insert (fun b hb => ?_)
   obtain (rfl | h) := mem_insert.1 hb
@@ -137,8 +137,8 @@ lemma IsNClique.insert_insert_erase
   exact hs.insert_erase (fun _ h => hd _ (mem_sdiff.1 h).1 (mem_sdiff.1 h).2) (mem_insert_of_mem hc)
 
 中文:
-引理 IsNClique.insert_insert_erase
-  结论: (hs : G.IsNClique r (insert a s)) (hc : c in s)
+引理 是NClique.insert_insert_erase
+  结论: (hs : G.是NClique r (insert a s)) (hc : c in s)
   证明: by
   rw [insert_comm]; rw [← erase_insert_of_ne (fun h : a = c => ha (h ▸ hc) |>.elim)]
   simp_rw [adj_comm, ← notMem_singleton] at hd
@@ -179,18 +179,18 @@ structure IsFiveWheelLike
     - card_inter : #(s inter t) = k
 
 中文:
-结构 IsFiveWheelLike
-  参数: (G : SimpleGraph α) (r k : 自然数) (v w₁ w₂ : α) (s t : Finset α)
+结构 是FiveWheelLike
+  参数: (G : 简单图 α) (r k : 自然数) (v w₁ w₂ : α) (s t : 有限集 α)
   公理与运算 (10 个):
-    - isPathGraph3Compl : G.IsPathGraph3Compl v w₁ w₂
+    - isPathGraph3Compl : G.是PathGraph3Compl v w₁ w₂
     - notMem_left : v ∉ s
     - notMem_right : v ∉ t
     - fst_notMem : w₁ ∉ s
     - snd_notMem : w₂ ∉ t
-    - isNClique_left : G.IsNClique (r + 1) (insert v s)
-    - isNClique_fst_left : G.IsNClique (r + 1) (insert w₁ s)
-    - isNClique_right : G.IsNClique (r + 1) (insert v t)
-    - isNClique_snd_right : G.IsNClique (r + 1) (insert w₂ t)
+    - isNClique_left : G.是NClique (r + 1) (insert v s)
+    - isNClique_fst_left : G.是NClique (r + 1) (insert w₁ s)
+    - isNClique_right : G.是NClique (r + 1) (insert v t)
+    - isNClique_snd_right : G.是NClique (r + 1) (insert w₂ t)
     - card_inter : #(s inter t) = k
 -/
 structure IsFiveWheelLike (G : SimpleGraph α) (r k : Nat) (v w₁ w₂ : α) (s t : Finset α) :
@@ -219,7 +219,7 @@ lemma exists_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite
   exact ⟨_, _, _, 
 
 中文:
-引理 exists_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite
+引理 存在_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite
   证明: by
   obtain ⟨v, w₁, w₂, p3⟩ := exists_isPathGraph3Compl_of_not_isCompleteMultipartite hnc
   obtain ⟨s, h1, h2, h3, h4⟩ := exists_of_maximal_cliqueFree_not_adj h p3.ne_fst p3.not_adj_fst
@@ -246,7 +246,7 @@ definition FiveWheelLikeFree
 
 中文:
 定义 FiveWheelLikeFree
-  签名: (G : SimpleGraph α) (r k : 自然数)
+  签名: (G : 简单图 α) (r k : 自然数)
   定义体: forall {v w₁ w₂ s t}, ¬ G.IsFiveWheelLike r k v w₁ w₂ s t
 
 Depends on / 依赖: G.IsFiveWheelLike, IsFiveWheelLike
@@ -273,7 +273,7 @@ lemma symm
 
 中文:
 引理 symm
-  结论: G.IsFiveWheelLike r k v w₂ w₁ t s
+  结论: G.是FiveWheelLike r k v w₂ w₁ t s
   证明: let ⟨p2, d1, d2, d3, d4, c1, c2, c3, c4, hk⟩ := hw
   ⟨p2.symm, d2, d1, d4, d3, c3, c4, c1, c2, by rwa [inter_comm]⟩
 
@@ -468,7 +468,7 @@ lemma exists_max_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartit
   obtain ⟨_, _, _, _, _, hw⟩ := N
 
 中文:
-引理 exists_max_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite
+引理 存在_max_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite
   证明: by
   obtain ⟨_, _, _, s, t, hw⟩ :=
     exists_isFiveWheelLike_of_maximal_cliqueFree_not_isCompleteMultipartite h hnc
@@ -578,7 +578,7 @@ lemma sum_degree_le_of_le_not_adj
 
 中文:
 引理 sum_degree_le_of_le_not_adj
-  结论: [Fintype α] [DecidableEq α] [DecidableRel G.Adj]
+  结论: [有限类型 α] [DecidableEq α] [DecidableRel G.伴随]
   证明: calc
   _ = ∑ v, #(G.neighborFinset v inter W) := by
     simp_rw [degree, card_eq_sum_ones]
@@ -621,7 +621,7 @@ lemma exist_not_adj_of_adj_inter
 
 中文:
 引理 exist_not_adj_of_adj_inter
-  条件: (hW : 对任意 ⦃y⦄, y in s inter t -> G.Adj x y)
+  条件: (hW : 对任意 ⦃y⦄, y in s inter t -> G.伴随 x y)
   证明: by
   obtain ⟨a, ha, haj⟩ := hw.isNClique_fst_left.exists_not_adj_of_cliqueFree_succ hcf x
   obtain ⟨b, hb, hbj⟩ := hw.isNClique_snd_right.exists_not_adj_of_cliqueFree_succ hcf x
@@ -654,8 +654,8 @@ lemma exists_isFiveWheelLike_succ_of_not_adj_le_two
     by_co
 
 中文:
-引理 exists_isFiveWheelLike_succ_of_not_adj_le_two
-  结论: (hW : 对任意 ⦃y⦄, y in s inter t -> G.Adj x y)
+引理 存在_isFiveWheelLike_succ_of_not_adj_le_two
+  结论: (hW : 对任意 ⦃y⦄, y in s inter t -> G.伴随 x y)
   证明: by
   obtain ⟨a, b, c, d, ha, haj, hb, hbj, hc, hcj, hd, hdj, hab, had, hbc, hat, hbs⟩ :=
     hw.exist_not_adj_of_adj_inter hcf hW
@@ -735,7 +735,7 @@ lemma minDegree_le_of_cliqueFree_fiveWheelLikeFree_succ
 
 中文:
 引理 minDegree_le_of_cliqueFree_fiveWheelLikeFree_succ
-  结论: [Fintype α]
+  结论: [有限类型 α]
   证明: by
   let X : Finset α := {x | forall ⦃y⦄, y in s inter t -> G.Adj x y}
   let W := {v} union ({w₁} union ({w₂} union (s union t)))
@@ -822,7 +822,7 @@ theorem colorable_of_cliqueFree_lt_minDegree
 
 中文:
 定理 colorable_of_cliqueFree_lt_minDegree
-  结论: [Fintype α] [DecidableRel G.Adj]
+  结论: [有限类型 α] [DecidableRel G.伴随]
   证明: by
   match r with
   | 0 | 1 => aesop

@@ -306,7 +306,7 @@ instance convInv
 
 中文:
 实例 convInv
-  签名: : Inv (WithConv <| A ->ₐ[R] C) where
+  签名: : 取逆 (WithConv <| A ->ₐ[R] C) where
   定义体: toConv f.ofConv.comp (HopfAlgebra.antipodeAlgHom R A)
 
 Depends on / 依赖: HopfAlgebra, HopfAlgebra.antipodeAlgHom, antipodeAlgHom, f.ofConv.comp, ofConv, toConv
@@ -329,7 +329,7 @@ trans toConv ((lmul' R).comp (Algebra.TensorProduct.map f.ofConv f.ofConv)).comp
 
 中文:
 实例 convGroup
-  签名: : Group (WithConv <| A ->ₐ[R] C) where
+  签名: : 群 (WithConv <| A ->ₐ[R] C) where
   定义体: by
     have H : (lmul' R).comp (Algebra.TensorProduct.map f.ofConv f.ofConv) =
       f.ofConv.comp (lmul' R) := by ext <;> simp
@@ -363,8 +363,8 @@ instance [IsCocomm
   signature: R A] : CommGroup (WithConv <| A ->ₐ[R] C) where
 
 中文:
-实例 [IsCocomm
-  签名: R A] : CommGroup (WithConv <| A ->ₐ[R] C) where
+实例 [是余comm
+  签名: R A] : 交换群 (WithConv <| A ->ₐ[R] C) where
 -/
 instance [IsCocomm R A] : CommGroup (WithConv <| A ->ₐ[R] C) where
 

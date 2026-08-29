@@ -48,7 +48,7 @@ abbreviation Relations
     x = DFinsupp.single j' (F.map u a) - DFinsupp.single j a}
 
 中文:
-缩写 Relations
+缩写 关系
   签名: [DecidableEq J]
   定义体: AddSubgroup.closure {x | exists (j j' : J) (u : j ⟶ j') (a : F.obj j),
     x = DFinsupp.single j' (F.map u a) - DFinsupp.single j a}
@@ -68,7 +68,7 @@ definition Quot
   body: DFinsupp (fun j => F.obj j) ⧸ Relations F
 
 中文:
-定义 Quot
+定义 商
   签名: [DecidableEq J]
   定义体: DFinsupp (fun j => F.obj j) ⧸ Relations F
 
@@ -87,7 +87,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: J] : AddCommGroup (Quot F)
+  签名: J] : 加法交换群 (商 F)
   定义体: QuotientAddGroup.Quotient.addCommGroup (Relations F)
 
 Depends on / 依赖: Quotient, QuotientAddGroup, QuotientAddGroup.Quotient.addCommGroup, Relations, addCommGroup
@@ -104,7 +104,7 @@ definition Quot.ι
   body: (QuotientAddGroup.mk' _).comp (DFinsupp.singleAddHom (fun j => F.obj j) j)
 
 中文:
-定义 Quot.ι
+定义 商.ι
   签名: [DecidableEq J] (j : J)
   定义体: (QuotientAddGroup.mk' _).comp (DFinsupp.singleAddHom (fun j => F.obj j) j)
 
@@ -122,8 +122,8 @@ lemma Quot.addMonoidHom_ext
   proof: QuotientAddGroup.addMonoidHom_ext _ (DFinsupp.addHom_ext h)
 
 中文:
-引理 Quot.addMonoidHom_ext
-  结论: [DecidableEq J] {α : 类型} [AddMonoid α] {f g : Quot F ->+ α}
+引理 商.addMonoidHom_ext
+  结论: [DecidableEq J] {α : 类型} [加法幺半群 α] {f g : 商 F ->+ α}
   证明: QuotientAddGroup.addMonoidHom_ext _ (DFinsupp.addHom_ext h)
 
 Depends on / 依赖: DFinsupp, DFinsupp.addHom_ext, QuotientAddGroup, QuotientAddGroup.addMonoidHom_ext, addHom_ext, addMonoidHom_ext
@@ -153,7 +153,7 @@ definition Quot.desc
   rw [c.ι.n
 
 中文:
-定义 Quot.desc
+定义 商.desc
   签名: [DecidableEq J]
   定义体: by
   refine QuotientAddGroup.lift _ (DFinsupp.sumAddHom fun x => (c.ι.app x).hom) ?_
@@ -193,7 +193,7 @@ lemma Quot.ι_desc
   simp
 
 中文:
-引理 Quot.ι_desc
+引理 商.ι_desc
   条件: [DecidableEq J] (j : J) (x : F.obj j)
   证明: by
   dsimp [desc, ι]
@@ -225,7 +225,7 @@ lemma Quot.map_ι
   exact AddSubgroup.subset_closure ⟨j, j', f, x, rfl⟩
 
 中文:
-引理 Quot.map_ι
+引理 商.map_ι
   条件: [DecidableEq J] {j j' : J} {f : j ⟶ j'} (x : F.obj j)
   证明: by
   dsimp [ι]
@@ -457,8 +457,8 @@ lemma Quot.desc_quotQuotUliftAddEquiv
   rfl
 
 中文:
-引理 Quot.desc_quotQuotUliftAddEquiv
-  条件: [DecidableEq J] (c : Cocone F)
+引理 商.desc_quotQuotUliftAddEquiv
+  条件: [DecidableEq J] (c : 余锥 F)
   证明: by
   refine Quot.addMonoidHom_ext _ (fun j a => ?_)
   dsimp
@@ -496,7 +496,7 @@ definition toCocone
 
 中文:
 定义 toCocone
-  签名: [DecidableEq J] {A : Type w} [AddCommGroup A] (f : Quot F ->+ A)
+  签名: [DecidableEq J] {A : 类型 w} [加法交换群 A] (f : 商 F ->+ A)
   定义体: AddCommGrpCat.of A
 ι.app j := ofHom f.comp (Quot.ι F j)
 
@@ -522,8 +522,8 @@ lemma Quot.desc_toCocone_desc
   simp
 
 中文:
-引理 Quot.desc_toCocone_desc
-  结论: [DecidableEq J] {A : Type w} [AddCommGroup A] (f : Quot F ->+ A)
+引理 商.desc_toCocone_desc
+  结论: [DecidableEq J] {A : 类型 w} [加法交换群 A] (f : 商 F ->+ A)
   证明: by
   refine Quot.addMonoidHom_ext F (fun j x => ?_)
   rw [AddMonoidHom.comp_apply]; rw [ι_desc]
@@ -554,8 +554,8 @@ lemma Quot.desc_toCocone_desc_app
   dsimp
 
 中文:
-引理 Quot.desc_toCocone_desc_app
-  结论: [DecidableEq J] {A : Type w} [AddCommGroup A] (f : Quot F ->+ A)
+引理 商.desc_toCocone_desc_app
+  结论: [DecidableEq J] {A : 类型 w} [加法交换群 A] (f : 商 F ->+ A)
   证明: by
   conv_rhs => rw [← Quot.desc_toCocone_desc F c f hc]
   dsimp
@@ -643,7 +643,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: [DecidableEq J] [Small.{w} (Quot.{w} F)]
+  签名: [DecidableEq J] [Small.{w} (商.{w} F)]
   定义体: AddCommGrpCat.of (Shrink (Quot F))
   ι :=
     { app j :=
@@ -682,8 +682,8 @@ theorem Quot.desc_colimitCocone
     using! Quot.ι_desc F (colimitCocone F) j x
 
 中文:
-定理 Quot.desc_colimitCocone
-  条件: [DecidableEq J] (F : J ⥤ AddCommGrpCat.{w}) [Small.{w} (Quot F)]
+定理 商.desc_colimitCocone
+  条件: [DecidableEq J] (F : J ⥤ 加法交换群范畴.{w}) [Small.{w} (商 F)]
   证明: by
   refine Quot.addMonoidHom_ext F (fun j x => ?_)
   simpa only [colimitCocone_pt, AddEquiv.toAddMonoidHom_eq_coe, AddMonoidHom.coe_coe]
@@ -710,7 +710,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: [DecidableEq J] [Small.{w} (Quot F)]
+  签名: [DecidableEq J] [Small.{w} (商 F)]
   定义体: by
   refine isColimit_of_bijective_desc F _ ?_
   rw [Quot.desc_colimitCocone]
@@ -739,8 +739,8 @@ lemma hasColimit_of_small_quot
 
 中文:
 引理 hasColimit_of_small_quot
-  条件: [DecidableEq J] (h : Small.{w} (Quot F))
-  结论: HasColimit F
+  条件: [DecidableEq J] (h : Small.{w} (商 F))
+  结论: 有余极限 F
   证明: ⟨_, colimitCoconeIsColimit F⟩
 
 Depends on / 依赖: colimitCoconeIsColimit
@@ -758,7 +758,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: J] [Small.{w} J] : Small.{w} (Quot F)
+  签名: J] [Small.{w} J] : Small.{w} (商 F)
   定义体: small_of_surjective (QuotientAddGroup.mk'_surjective _)
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.mk, _surjective, small_of_surjective
@@ -778,7 +778,7 @@ instance hasColimit
 
 中文:
 实例 hasColimit
-  签名: [Small.{w} J] (F : J ⥤ AddCommGrpCat.{w})
+  签名: [Small.{w} J] (F : J ⥤ 加法交换群范畴.{w})
   定义体: by
   classical
   exact hasColimit_of_small_quot F inferInstance
@@ -835,7 +835,7 @@ QuotientAddGroup.lift _ (cokernel.π f).hom by
 
 中文:
 定义 cokernelIsoQuotient
-  签名: {G H : AddCommGrpCat.{u}} (f : G ⟶ H)
+  签名: {G H : 加法交换群范畴.{u}} (f : G ⟶ H)
   定义体: cokernel.desc f (ofHom (mk' _)) by
         ext x
         simp

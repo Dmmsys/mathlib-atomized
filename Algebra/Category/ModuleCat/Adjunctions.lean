@@ -45,7 +45,7 @@ map {_ _} f := ofHom Finsupp.lmapDomain _ _ (f : _ -> _)
 
 中文:
 定义 free
-  签名: : 类型u ⥤ ModuleCat R where
+  签名: : 类型u ⥤ 模范畴 R where
   定义体: ModuleCat.of R (X ->₀ R)
 map {_ _} f := ofHom Finsupp.lmapDomain _ _ (f : _ -> _)
 
@@ -70,7 +70,7 @@ definition monoidAlgebraFree
 
 中文:
 定义 monoidAlgebraFree
-  签名: : 类型u ⥤ ModuleCat.{u} R where
+  签名: : 类型u ⥤ 模范畴.{u} R where
   定义体: .of R R[X]
   map f := ofHom (MonoidAlgebra.mapDomainLinearMap R R f)
 -/
@@ -112,7 +112,7 @@ lemma free_hom_ext
 
 中文:
 引理 free_hom_ext
-  结论: {X : 类型u} {M : ModuleCat.{u} R} {f g : (free R).obj X ⟶ M}
+  结论: {X : 类型u} {M : 模范畴.{u} R} {f g : (free R).obj X ⟶ M}
   证明: ModuleCat.hom_ext (Finsupp.lhom_ext' (fun x => LinearMap.ext_ring (h x)))
 
 Depends on / 依赖: Finsupp, Finsupp.lhom_ext, LinearMap, LinearMap.ext_ring, ModuleCat, ModuleCat.hom_ext, ext_ring, hom_ext, lhom_ext
@@ -134,7 +134,7 @@ definition freeDesc
 
 中文:
 定义 freeDesc
-  签名: {X : 类型u} {M : ModuleCat.{u} R} (f : X ⟶ M)
+  签名: {X : 类型u} {M : 模范畴.{u} R} (f : X ⟶ M)
   定义体: ofHom Finsupp.lift M R X f
 
 @[simp]
@@ -161,7 +161,7 @@ lemma freeDesc_apply
 
 中文:
 引理 freeDesc_apply
-  条件: {X : 类型u} {M : ModuleCat.{u} R} (f : X ⟶ M) (x : X)
+  条件: {X : 类型u} {M : 模范畴.{u} R} (f : X ⟶ M) (x : X)
   证明: by
   dsimp [freeDesc]
   erw [Finsupp.lift_apply, Finsupp.sum_single_index]
@@ -214,7 +214,7 @@ definition freeHomEquiv
 
 中文:
 定义 freeHomEquiv
-  签名: {X : 类型u} {M : ModuleCat.{u} R}
+  签名: {X : 类型u} {M : 模范畴.{u} R}
   定义体: ↾fun x => φ (freeMk x)
   invFun ψ := freeDesc (↾ψ)
   left_inv _ := by ext; simp
@@ -246,7 +246,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : free R ⊣ forget (ModuleCat.{u} R)
+  签名: : free R ⊣ forget (模范畴.{u} R)
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun _ _ => freeHomEquiv
       homEquiv_naturality_left_symm := fun {X Y M} f g => by ext; simp [freeHomEquiv] }
@@ -272,7 +272,7 @@ lemma adj_homEquiv
 
 中文:
 引理 adj_homEquiv
-  条件: (X : 类型u) (M : ModuleCat.{u} R)
+  条件: (X : 类型u) (M : 模范畴.{u} R)
   证明: by
   simp only [adj, Adjunction.mkOfHomEquiv_homEquiv]
 
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget (ModuleCat.{u} R)).IsRightAdjoint
+  签名: (forget (模范畴.{u} R)).是右伴随
   定义体: (adj R).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint
@@ -330,7 +330,7 @@ inv := ofHom Finsupp.lapply PUnit.unit
 
 中文:
 定义 εIso
-  签名: : 𝟙_ (ModuleCat R) ≅ (free R).obj (𝟙_ (类型u)) where
+  签名: : 𝟙_ (模范畴 R) ≅ (free R).obj (𝟙_ (类型u)) where
   定义体: ofHom Finsupp.lsingle PUnit.unit
 inv := ofHom Finsupp.lapply PUnit.unit
   hom_inv_id := by
@@ -368,7 +368,7 @@ lemma εIso_hom_one
 
 中文:
 引理 εIso_hom_one
-  结论: (εIso R).hom 1 = freeMk PUnit.unit
+  结论: (εIso R).hom 1 = freeMk 命题单元.unit
   证明: rfl
 -/
 lemma εIso_hom_one : (εIso R).hom 1 = freeMk PUnit.unit := rfl
@@ -389,7 +389,7 @@ lemma εIso_inv_freeMk
 
 中文:
 引理 εIso_inv_freeMk
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   结论: (εIso R).inv (freeMk x) = 1
   证明: by
   dsimp [εIso, freeMk]
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: (free R).Monoidal
+  签名: (free R).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := εIso R
       μIso := μIso R
@@ -552,7 +552,7 @@ lemma free_ε_one
 
 中文:
 引理 free_ε_one
-  结论: ε (free R) 1 = freeMk PUnit.unit
+  结论: ε (free R) 1 = freeMk 命题单元.unit
   证明: rfl
 -/
 lemma free_ε_one : ε (free R) 1 = freeMk PUnit.unit := rfl
@@ -573,7 +573,7 @@ lemma free_η_freeMk
 
 中文:
 引理 free_η_freeMk
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   结论: η (free R) (freeMk x) = 1
   证明: by
   apply FreeMonoidal.εIso_inv_freeMk
@@ -655,7 +655,7 @@ definition Free
   body: C
 
 中文:
-定义 Free
+定义 自由
   签名: (_ : 类型) (C : 类型u)
   定义体: C
 -/
@@ -671,7 +671,7 @@ definition Free.of
   body: X
 
 中文:
-定义 Free.of
+定义 自由.of
   签名: (R : 类型) {C : 类型u} (X : C)
   定义体: X
 -/
@@ -702,7 +702,7 @@ instance categoryFree
 
 中文:
 实例 categoryFree
-  签名: : Category (Free R C) where
+  签名: : 范畴 (自由 R C) where
   定义体: fun X Y : C => (X ⟶ Y) ->₀ R
   id := fun X : C => Finsupp.single (𝟙 X) 1
   comp {X _ Z : C} f g :=
@@ -743,7 +743,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Free R C)
+  签名: 预加性 (自由 R C)
   定义体: Finsupp.instAddCommGroup
   add_comp X Y Z f f' g := by
     dsimp +instances [CategoryTheory.categoryFree]
@@ -785,7 +785,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (Free R C)
+  签名: 线性 R (自由 R C)
   定义体: Finsupp.module _ R
   smul_comp X Y Z r f g := by
     dsimp +instances [CategoryTheory.categoryFree]
@@ -856,7 +856,7 @@ definition embedding
 
 中文:
 定义 embedding
-  签名: : C ⥤ Free R C where
+  签名: : C ⥤ 自由 R C where
   定义体: X
   map {_ _} f := Finsupp.single f 1
   map_id _ := rfl
@@ -1055,7 +1055,7 @@ definition ext
 
 中文:
 定义 ext
-  签名: {F G : Free R C ⥤ D} [F.Additive] [F.Linear R] [G.Additive] [G.Linear R]
+  签名: {F G : 自由 R C ⥤ D} [F.加性] [F.线性 R] [G.加性] [G.线性 R]
   定义体: NatIso.ofComponents (fun X => α.app X)
     (by
       intro X Y f
@@ -1092,7 +1092,7 @@ definition liftUnique
 
 中文:
 定义 liftUnique
-  签名: (F : C ⥤ D) (L : Free R C ⥤ D) [L.Additive] [L.Linear R]
+  签名: (F : C ⥤ D) (L : 自由 R C ⥤ D) [L.加性] [L.线性 R]
   定义体: ext R (α.trans (embeddingLiftIso R F).symm)
 
 Depends on / 依赖: embeddingLiftIso

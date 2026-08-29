@@ -428,7 +428,7 @@ lemma isBigO_apply_r_sub_b
 
 中文:
 引理 isBigO_apply_r_sub_b
-  结论: (q : 实数 -> 实数) (hq_diff : DifferentiableOn 实数 q (Set.Ioi 1))
+  结论: (q : 实数 -> 实数) (hq_diff : DifferentiableOn 实数 q (集合.左开右无界区间 1))
   证明: by
   let b' := b (min_bi b) / 2
   have hb_pos : 0 < b' := by have := R.b_pos (min_bi b); positivity

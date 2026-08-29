@@ -173,13 +173,13 @@ structure CatCospanTransformMorphism
     - right_coherence : ψ.squareRight.iso.hom ≫ Functor.whiskerRight right G' = Functor.whiskerLeft G base ≫ ψ'.squareRight.iso.hom  [default: by cat_disch]
 
 中文:
-结构 CatCospanTransformMorphism
+结构 CatCospanTransform态射
   公理与运算 (5 个):
     - left : ψ.left ⟶ ψ'.left
     - right : ψ.right ⟶ ψ'.right
     - base : ψ.base ⟶ ψ'.base
-    - left_coherence : ψ.squareLeft.iso.hom ≫ Functor.whiskerRight left F' = Functor.whiskerLeft F base ≫ ψ'.squareLeft.iso.hom  [默认: by cat_disch]
-    - right_coherence : ψ.squareRight.iso.hom ≫ Functor.whiskerRight right G' = Functor.whiskerLeft G base ≫ ψ'.squareRight.iso.hom  [默认: by cat_disch]
+    - left_coherence : ψ.squareLeft.iso.hom ≫ 函子.whiskerRight left F' = 函子.whiskerLeft F base ≫ ψ'.squareLeft.iso.hom  [默认: by cat_disch]
+    - right_coherence : ψ.squareRight.iso.hom ≫ 函子.whiskerRight right G' = 函子.whiskerLeft G base ≫ ψ'.squareRight.iso.hom  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -227,7 +227,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (CatCospanTransform F G F' G') where
+  签名: : 范畴 (CatCospanTransform F G F' G') where
   定义体: CatCospanTransformMorphism ψ ψ'
   id ψ :=
     { left := 𝟙 _
@@ -494,7 +494,7 @@ instance isIso_left
 
 中文:
 实例 isIso_left
-  签名: : IsIso f.left
+  签名: : 是同构 f.left
   定义体: ⟨(inv f).left, by simp [← CatCospanTransform.category_comp_left]⟩
 
 Depends on / 依赖: CatCospanTransform, CatCospanTransform.category_comp_left, category_comp_left
@@ -512,7 +512,7 @@ instance isIso_right
 
 中文:
 实例 isIso_right
-  签名: : IsIso f.right
+  签名: : 是同构 f.right
   定义体: ⟨(inv f).right, by simp [← CatCospanTransform.category_comp_right]⟩
 
 Depends on / 依赖: CatCospanTransform, CatCospanTransform.category_comp_right, category_comp_right
@@ -532,7 +532,7 @@ instance isIso_base
 
 中文:
 实例 isIso_base
-  签名: : IsIso f.base
+  签名: : 是同构 f.base
   定义体: ⟨(inv f).base, by simp [← CatCospanTransform.category_comp_base]⟩
 
 @[simp]
@@ -738,7 +738,7 @@ lemma isIso_iff
 
 中文:
 引理 isIso_iff
-  结论: IsIso f ↔ IsIso f.left ∧ IsIso f.base ∧ IsIso f.right where
+  结论: 是同构 f ↔ 是同构 f.left ∧ 是同构 f.base ∧ 是同构 f.right where
   证明: ⟨inferInstance, inferInstance, inferInstance⟩
   mpr h := by
     obtain ⟨_, _, _⟩ := h
@@ -1138,7 +1138,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (ψ ◁ θ)
+  签名: 是同构 (ψ ◁ θ)
   定义体: ⟨ψ ◁ inv θ, ⟨by simp [← whiskerLeft_comp], by simp [← whiskerLeft_comp]⟩⟩
 
 Depends on / 依赖: whiskerLeft_comp
@@ -1179,7 +1179,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (η ▷ φ)
+  签名: 是同构 (η ▷ φ)
   定义体: ⟨inv η ▷ φ, ⟨by simp [← comp_whiskerRight], by simp [← comp_whiskerRight]⟩⟩
 
 Depends on / 依赖: comp_whiskerRight

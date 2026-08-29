@@ -25,8 +25,8 @@ instance [Fintype
   body: QuotientGroup.fintype (commutator G)
 
 中文:
-实例 [Fintype
-  签名: G] [DecidablePred (· in commutator G)] : Fintype (Abelianization G)
+实例 [有限类型
+  签名: G] [DecidablePred (· in commutator G)] : 有限类型 (交换化 G)
   定义体: QuotientGroup.fintype (commutator G)
 -/
 instance [Fintype G] [DecidablePred (· in commutator G)] : Fintype (Abelianization G) :=
@@ -41,8 +41,8 @@ instance [Finite
   body: Quotient.finite _
 
 中文:
-实例 [Finite
-  签名: G] : Finite (Abelianization G)
+实例 [有限
+  签名: G] : 有限 (交换化 G)
   定义体: Quotient.finite _
 
 Depends on / 依赖: Quotient, Quotient.finite, finite

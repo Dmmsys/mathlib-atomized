@@ -60,7 +60,7 @@ theorem MeasureTheory.measure_unitBall_eq_integral_div_gamma
       zero_div, zero_add, Real.Gamma_one, div_one, norm_zero, Real.zero_rp
 
 中文:
-定理 MeasureTheory.measure_unitBall_eq_integral_div_gamma
+定理 测度论.measure_unitBall_eq_integral_div_gamma
   结论: {E : 类型} {p : 实数}
   证明: by
   obtain hE | hE := subsingleton_or_nontrivial E
@@ -111,7 +111,7 @@ theorem MeasureTheory.measure_lt_one_eq_integral_div_gamma
   let : NormedSpace Real F := { norm_smul_le := fun _ _ => h5 
 
 中文:
-定理 MeasureTheory.measure_lt_one_eq_integral_div_gamma
+定理 测度论.measure_lt_one_eq_integral_div_gamma
   条件: {p : 实数} (hp : 0 < p)
   证明: by
   -- We copy `E` to a new type `F` on which we will put the norm defined by `g`
@@ -168,8 +168,8 @@ theorem MeasureTheory.measure_le_eq_lt
   let : NormedSpace Real F := { norm_smul_le := fun _ _ => h5 
 
 中文:
-定理 MeasureTheory.measure_le_eq_lt
-  条件: [Nontrivial E] (r : 实数)
+定理 测度论.measure_le_eq_lt
+  条件: [非平凡 E] (r : 实数)
   证明: by
   -- We copy `E` to a new type `F` on which we will put the norm defined by `g`
   let F : Type _ := E
@@ -231,7 +231,7 @@ theorem MeasureTheory.volume_sum_rpow_lt_one
   -- We collect facts about `Lp
 
 中文:
-定理 MeasureTheory.volume_sum_rpow_lt_one
+定理 测度论.volume_sum_rpow_lt_one
   条件: (hp : 1 <= p)
   证明: by
   have h₁ : 0 < p := by linarith
@@ -292,8 +292,8 @@ theorem MeasureTheory.volume_sum_rpow_lt
       refine ⟨fun 
 
 中文:
-定理 MeasureTheory.volume_sum_rpow_lt
-  条件: [Nonempty ι] {p : 实数} (hp : 1 <= p) (r : 实数)
+定理 测度论.volume_sum_rpow_lt
+  条件: [非空 ι] {p : 实数} (hp : 1 <= p) (r : 实数)
   证明: by
   have h₁ (x : ι -> Real) : 0 <= ∑ i, |x i| ^ p := by positivity
   have h₂ : forall x : ι -> Real, 0 <= (∑ i, |x i| ^ p) ^ (1 / p) := fun x => rpow_nonneg (h₁ x) _
@@ -338,8 +338,8 @@ theorem MeasureTheory.volume_sum_rpow_le
     simp [PiLp.nor
 
 中文:
-定理 MeasureTheory.volume_sum_rpow_le
-  条件: [Nonempty ι] {p : 实数} (hp : 1 <= p) (r : 实数)
+定理 测度论.volume_sum_rpow_le
+  条件: [非空 ι] {p : 实数} (hp : 1 <= p) (r : 实数)
   证明: by
   have h₁ : 0 < p := by linarith
   have : (ENNReal.ofReal p).toReal = p := toReal_ofReal (le_of_lt h₁)
@@ -385,7 +385,7 @@ theorem Complex.volume_sum_rpow_lt_one
   -- We collect facts about
 
 中文:
-定理 Complex.volume_sum_rpow_lt_one
+定理 复形.volume_sum_rpow_lt_one
   条件: {p : 实数} (hp : 1 <= p)
   证明: by
   have h₁ : 0 < p := by linarith
@@ -445,8 +445,8 @@ theorem Complex.volume_sum_rpow_lt
       ref
 
 中文:
-定理 Complex.volume_sum_rpow_lt
-  条件: [Nonempty ι] {p : 实数} (hp : 1 <= p) (r : 实数)
+定理 复形.volume_sum_rpow_lt
+  条件: [非空 ι] {p : 实数} (hp : 1 <= p) (r : 实数)
   证明: by
   have h₁ (x : ι -> Complex) : 0 <= ∑ i, ‖x i‖ ^ p := by positivity
   have h₂ : forall x : ι -> Complex, 0 <= (∑ i, ‖x i‖ ^ p) ^ (1 / p) := fun x => rpow_nonneg (h₁ x) _
@@ -493,8 +493,8 @@ theorem Complex.volume_sum_rpow_le
    
 
 中文:
-定理 Complex.volume_sum_rpow_le
-  条件: [Nonempty ι] {p : 实数} (hp : 1 <= p) (r : 实数)
+定理 复形.volume_sum_rpow_le
+  条件: [非空 ι] {p : 实数} (hp : 1 <= p) (r : 实数)
   证明: by
   have h₁ : 0 < p := by linarith
   have : (ENNReal.ofReal p).toReal = p := toReal_ofReal (le_of_lt h₁)
@@ -796,7 +796,7 @@ lemma volume_ball_fin_two
 
 中文:
 引理 volume_ball_fin_two
-  条件: (x : EuclideanSpace 实数 (Fin 2)) (r : 实数)
+  条件: (x : EuclideanSpace 实数 (有限集 2)) (r : 实数)
   证明: by
   norm_num [InnerProductSpace.volume_ball_of_dim_even (k := 1) (by simp) x]
 
@@ -822,7 +822,7 @@ lemma volume_closedBall_fin_two
 
 中文:
 引理 volume_closedBall_fin_two
-  条件: (x : EuclideanSpace 实数 (Fin 2)) (r : 实数)
+  条件: (x : EuclideanSpace 实数 (有限集 2)) (r : 实数)
   证明: by
   rw [addHaar_closedBall_eq_addHaar_ball]; rw [volume_ball_fin_two x r]
 
@@ -848,7 +848,7 @@ lemma volume_ball_fin_three
 
 中文:
 引理 volume_ball_fin_three
-  条件: (x : EuclideanSpace 实数 (Fin 3)) (r : 实数)
+  条件: (x : EuclideanSpace 实数 (有限集 3)) (r : 实数)
   证明: by
   norm_num [InnerProductSpace.volume_ball_of_dim_odd (k := 1) (by simp) x]
 
@@ -872,7 +872,7 @@ lemma volume_closedBall_fin_three
 
 中文:
 引理 volume_closedBall_fin_three
-  条件: (x : EuclideanSpace 实数 (Fin 3)) (r : 实数)
+  条件: (x : EuclideanSpace 实数 (有限集 3)) (r : 实数)
   证明: by
   rw [addHaar_closedBall_eq_addHaar_ball]; rw [volume_ball_fin_three x]
 
@@ -902,8 +902,8 @@ theorem Complex.volume_ball
 @[simp]
 
 中文:
-定理 Complex.volume_ball
-  条件: (a : Complex) (r : 实数)
+定理 复形.volume_ball
+  条件: (a : 复形) (r : 实数)
   证明: by
   simp [InnerProductSpace.volume_ball_of_dim_even (k := 1) (by simp) a,
     ← NNReal.coe_real_pi, ofReal_coe_nnreal]
@@ -928,8 +928,8 @@ theorem Complex.volume_closedBall
   rw [addHaar_closedBall_eq_addHaar_ball]; rw [Complex.volume_ball]
 
 中文:
-定理 Complex.volume_closedBall
-  条件: (a : Complex) (r : 实数)
+定理 复形.volume_closedBall
+  条件: (a : 复形) (r : 实数)
   证明: by
   rw [addHaar_closedBall_eq_addHaar_ball]; rw [Complex.volume_ball]
 

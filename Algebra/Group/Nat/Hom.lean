@@ -43,7 +43,7 @@ lemma ext_nat'
 
 中文:
 引理 ext_nat'
-  条件: [AddZeroClass A] [AddMonoidHomClass F 自然数 A] (f g : F) (h : f 1 = g 1)
+  条件: [加法零类 A] [加法幺半群态射类 F 自然数 A] (f g : F) (h : f 1 = g 1)
   结论: f = g
   证明: DFunLike.ext f g by
     intro n
@@ -75,8 +75,8 @@ lemma AddMonoidHom.ext_nat
   proof: ext_nat' f g
 
 中文:
-引理 AddMonoidHom.ext_nat
-  条件: [AddZeroClass A] {f g : 自然数 ->+ A}
+引理 加法幺半群态射.ext_nat
+  条件: [加法零类 A] {f g : 自然数 ->+ A}
   结论: f 1 = g 1 -> f = g
   证明: ext_nat' f g
 
@@ -170,7 +170,7 @@ lemma AddMonoidHom.apply_nat
   rw [← multiplesHom_symm_apply]; rw [← multiplesHom_apply]; rw [Equiv.apply_symm_apply]
 
 中文:
-引理 AddMonoidHom.apply_nat
+引理 加法幺半群态射.apply_nat
   条件: (f : 自然数 ->+ M) (n : 自然数)
   结论: f n = n • f 1
   证明: by
@@ -249,7 +249,7 @@ lemma MonoidHom.apply_mnat
 @[ext]
 
 中文:
-引理 MonoidHom.apply_mnat
+引理 幺半群态射.apply_mnat
   条件: (f : Multiplicative 自然数 ->* M) (n : Multiplicative 自然数)
   证明: by
   rw [← powersHom_symm_apply]; rw [← powersHom_apply]; rw [Equiv.apply_symm_apply]
@@ -273,7 +273,7 @@ lemma MonoidHom.ext_mnat
   proof: MonoidHom.ext fun n => by rw [f.apply_mnat, g.apply_mnat, h]
 
 中文:
-引理 MonoidHom.ext_mnat
+引理 幺半群态射.ext_mnat
   条件: ⦃f g
   结论: Multiplicative 自然数 ->* M⦄
   证明: MonoidHom.ext fun n => by rw [f.apply_mnat, g.apply_mnat, h]

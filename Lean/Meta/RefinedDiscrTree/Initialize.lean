@@ -79,10 +79,10 @@ structure PreDiscrTree
 
 中文:
 结构 PreDiscrTree
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (2 个):
     - root : Std.HashMap Key 自然数  [默认: {}]
-    - tries : Array (Array (LazyEntry × α))  [默认: #[]]
+    - tries : 数组 (数组 (LazyEntry × α))  [默认: #[]]
 -/
 structure PreDiscrTree (α : Type) where
   /-- Maps keys to index in tries array. -/
@@ -262,7 +262,7 @@ structure ImportErrorData
 结构 ImportErrorData
   参数: where
   公理与运算 (1 个):
-    - errors : IO.Ref (Array ImportFailure)
+    - errors : IO.Ref (数组 ImportFailure)
 -/
 private structure ImportErrorData where
   errors : IO.Ref (Array ImportFailure)
@@ -382,10 +382,10 @@ structure InitResults
 
 中文:
 结构 InitResults
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (2 个):
     - tree : PreDiscrTree α  [默认: {}]
-    - errors : Array ImportFailure  [默认: #[]]
+    - errors : 数组 ImportFailure  [默认: #[]]
 -/
 private structure InitResults (α : Type) where
   tree : PreDiscrTree α := {}
@@ -509,7 +509,7 @@ definition createImportInitResults
 
 中文:
 定义 createImportInitResults
-  签名: (cctx : Core.Context) (ngen : NameGenerator)
+  签名: (cctx : 核.余ntext) (ngen : NameGenerator)
   定义体: do
   let tree := { root := .emptyWithCapacity capacity }
   go start stop tree (← ImportErrorData.new) (← IO.mkRef {}) (← IO.mkRef { env, ngen })
@@ -648,7 +648,7 @@ structure ModuleDiscrTreeRef
 
 中文:
 结构 ModuleDiscrTreeRef
-  参数: (α : Type _)
+  参数: (α : 类型 _)
   公理与运算 (1 个):
     - ref : IO.Ref (RefinedDiscrTree α)
 -/
@@ -705,7 +705,7 @@ definition createModuleDiscrTree
 
 中文:
 定义 createModuleDiscrTree
-  签名: (act : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry))))
+  签名: (act : Name -> ConstantInfo -> MetaM (列表 (α × 列表 (Key × LazyEntry))))
   定义体: do
   let env ← getEnv
   let ngen ← getChildNgen
@@ -736,7 +736,7 @@ definition createModuleTreeRef
 
 中文:
 定义 createModuleTreeRef
-  签名: (act : Name -> ConstantInfo -> MetaM (List (α × List (Key × LazyEntry))))
+  签名: (act : Name -> ConstantInfo -> MetaM (列表 (α × 列表 (Key × LazyEntry))))
   定义体: do
   profileitM Exception "build module discriminator tree" (← getOptions) do
     let t ← createModuleDiscrTree act

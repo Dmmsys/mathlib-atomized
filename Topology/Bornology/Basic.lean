@@ -56,10 +56,10 @@ class Bornology
     - le_cofinite((α)) : cobounded <= cofinite
 
 中文:
-类 Bornology
+类 有界结构
   参数: (α : 类型)
   公理与运算 (2 个):
-    - cobounded((α)) : Filter α
+    - cobounded((α)) : 滤子 α
     - le_cofinite((α)) : cobounded <= cofinite
 -/
 class Bornology (α : Type*) where
@@ -81,8 +81,8 @@ lemma Bornology.ext
   congr
 
 中文:
-引理 Bornology.ext
-  结论: (t t' : Bornology α)
+引理 有界结构.ext
+  结论: (t t' : 有界结构 α)
   证明: by
   cases t
   cases t'
@@ -108,8 +108,8 @@ definition Bornology.ofBounded
   le_cofinite := by simpa [le_cofinite_iff_compl_singleton_mem]
 
 中文:
-定义 Bornology.ofBounded
-  签名: {α : 类型} (B : Set (Set α))
+定义 有界结构.ofBounded
+  签名: {α : 类型} (B : 集合 (集合 α))
   定义体: comk (· in B) empty_mem subset_mem union_mem
   le_cofinite := by simpa [le_cofinite_iff_compl_singleton_mem]
 
@@ -138,8 +138,8 @@ definition Bornology.ofBounded'
     exact subset_mem s hs {x} (singleton_subset_iff.mpr hxs)
 
 中文:
-定义 Bornology.ofBounded'
-  签名: {α : 类型} (B : Set (Set α))
+定义 有界结构.ofBounded'
+  签名: {α : 类型} (B : 集合 (集合 α))
   定义体: Bornology.ofBounded B empty_mem subset_mem union_mem fun x => by
     rw [sUnion_eq_univ_iff] at sUnion_univ
     rcases sUnion_univ x with ⟨s, hs, hxs⟩
@@ -171,7 +171,7 @@ definition IsCobounded
 
 中文:
 定义 IsCobounded
-  签名: [Bornology α] (s : Set α)
+  签名: [有界结构 α] (s : 集合 α)
   定义体: s in cobounded α
 
 Depends on / 依赖: cobounded
@@ -189,7 +189,7 @@ definition IsBounded
 
 中文:
 定义 IsBounded
-  签名: [Bornology α] (s : Set α)
+  签名: [有界结构 α] (s : 集合 α)
   定义体: IsCobounded sᶜ
 
 Depends on / 依赖: IsCobounded
@@ -210,7 +210,7 @@ theorem isCobounded_def
 
 中文:
 定理 isCobounded_def
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: IsCobounded s ↔ s in cobounded α
   证明: Iff.rfl
 
@@ -232,7 +232,7 @@ theorem isBounded_def
 
 中文:
 定理 isBounded_def
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: IsBounded s ↔ sᶜ in cobounded α
   证明: Iff.rfl
 
@@ -316,7 +316,7 @@ theorem isBounded_empty
 
 中文:
 定理 isBounded_empty
-  结论: IsBounded (∅ : Set α)
+  结论: IsBounded (∅ : 集合 α)
   证明: by
   rw [isBounded_def]; rw [compl_empty]
   exact univ_mem
@@ -344,7 +344,7 @@ theorem nonempty_of_not_isBounded
 中文:
 定理 nonempty_of_not_isBounded
   条件: (h : ¬IsBounded s)
-  结论: s.Nonempty
+  结论: s.非空
   证明: by
   rw [nonempty_iff_ne_empty]
   rintro rfl
@@ -372,7 +372,7 @@ theorem isBounded_singleton
 
 中文:
 定理 isBounded_singleton
-  结论: IsBounded ({x} : Set α)
+  结论: IsBounded ({x} : 集合 α)
   证明: by
   rw [isBounded_def]
   exact le_cofinite _ (finite_singleton x).compl_mem_cofinite
@@ -396,7 +396,7 @@ theorem isBounded_iff_forall_mem
 @[simp]
 
 中文:
-定理 isBounded_iff_forall_mem
+定理 isBounded_iff_对任意_mem
   结论: IsBounded s ↔ 对任意 x in s, IsBounded s
   证明: ⟨fun h _ _ => h, fun h => by
     rcases s.eq_empty_or_nonempty with rfl | ⟨x, hx⟩
@@ -424,7 +424,7 @@ theorem isCobounded_univ
 
 中文:
 定理 isCobounded_univ
-  结论: IsCobounded (univ : Set α)
+  结论: IsCobounded (univ : 集合 α)
   证明: univ_mem
 
 @[simp]
@@ -573,7 +573,7 @@ theorem sUnion_bounded_univ
 
 中文:
 定理 sUnion_bounded_univ
-  结论: ⋃₀ { s : Set α | IsBounded s } = univ
+  结论: ⋃₀ { s : 集合 α | IsBounded s } = univ
   证明: sUnion_eq_univ_iff.2 fun a => ⟨{a}, isBounded_singleton, mem_singleton a⟩
 
 Depends on / 依赖: isBounded_singleton, mem_singleton, sUnion_eq_univ_iff
@@ -640,7 +640,7 @@ theorem comap_cobounded_le_iff
 
 中文:
 定理 comap_cobounded_le_iff
-  条件: [Bornology β] {f : α -> β}
+  条件: [有界结构 β] {f : α -> β}
   证明: by
   refine
     ⟨fun h s hs => ?_, fun h t ht =>
@@ -672,7 +672,7 @@ theorem ext_iff'
 
 中文:
 定理 ext_iff'
-  条件: {t t' : Bornology α}
+  条件: {t t' : 有界结构 α}
   证明: Bornology.ext_iff.trans Filter.ext_iff
 
 Depends on / 依赖: Bornology, Bornology.ext_iff.trans, Filter, Filter.ext_iff, ext_iff
@@ -691,7 +691,7 @@ theorem ext_iff_isBounded
 
 中文:
 定理 ext_iff_isBounded
-  条件: {t t' : Bornology α}
+  条件: {t t' : 有界结构 α}
   证明: ext_iff'.trans compl_surjective.forall
 
 Depends on / 依赖: compl_surjective, compl_surjective.forall, ext_iff
@@ -712,7 +712,7 @@ theorem isCobounded_ofBounded_iff
 
 中文:
 定理 isCobounded_ofBounded_iff
-  条件: (B : Set (Set α)) {empty_mem subset_mem union_mem sUnion_univ}
+  条件: (B : 集合 (集合 α)) {empty_mem subset_mem union_mem sUnion_univ}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -732,7 +732,7 @@ theorem isBounded_ofBounded_iff
 
 中文:
 定理 isBounded_ofBounded_iff
-  条件: (B : Set (Set α)) {empty_mem subset_mem union_mem sUnion_univ}
+  条件: (B : 集合 (集合 α)) {empty_mem subset_mem union_mem sUnion_univ}
   证明: by
   rw [isBounded_def]; rw [ofBounded_cobounded]; rw [compl_mem_comk]
 
@@ -755,8 +755,8 @@ theorem isCobounded_biInter
 @[simp]
 
 中文:
-定理 isCobounded_biInter
-  条件: {s : Set ι} {f : ι -> Set α} (hs : s.Finite)
+定理 isCobounded_bi整数er
+  条件: {s : 集合 ι} {f : ι -> 集合 α} (hs : s.有限)
   证明: biInter_mem hs
 
 @[simp]
@@ -779,8 +779,8 @@ theorem isCobounded_biInter_finset
 @[simp]
 
 中文:
-定理 isCobounded_biInter_finset
-  条件: (s : Finset ι) {f : ι -> Set α}
+定理 isCobounded_bi整数er_finset
+  条件: (s : 有限集 ι) {f : ι -> 集合 α}
   证明: biInter_finset_mem s
 
 @[simp]
@@ -801,8 +801,8 @@ theorem isCobounded_iInter
   proof: iInter_mem
 
 中文:
-定理 isCobounded_iInter
-  条件: [Finite ι] {f : ι -> Set α}
+定理 isCobounded_i整数er
+  条件: [有限 ι] {f : ι -> 集合 α}
   证明: iInter_mem
 
 Depends on / 依赖: iInter_mem
@@ -820,8 +820,8 @@ theorem isCobounded_sInter
   proof: sInter_mem hs
 
 中文:
-定理 isCobounded_sInter
-  条件: {S : Set (Set α)} (hs : S.Finite)
+定理 isCobounded_s整数er
+  条件: {S : 集合 (集合 α)} (hs : S.有限)
   证明: sInter_mem hs
 
 Depends on / 依赖: sInter_mem
@@ -841,7 +841,7 @@ theorem isBounded_biUnion
 
 中文:
 定理 isBounded_biUnion
-  条件: {s : Set ι} {f : ι -> Set α} (hs : s.Finite)
+  条件: {s : 集合 ι} {f : ι -> 集合 α} (hs : s.有限)
   证明: by
   simp only [← isCobounded_compl_iff, compl_iUnion, isCobounded_biInter hs]
 
@@ -861,7 +861,7 @@ theorem isBounded_biUnion_finset
 
 中文:
 定理 isBounded_biUnion_finset
-  条件: (s : Finset ι) {f : ι -> Set α}
+  条件: (s : 有限集 ι) {f : ι -> 集合 α}
   证明: isBounded_biUnion s.finite_toSet
 
 Depends on / 依赖: finite_toSet, isBounded_biUnion, s.finite_toSet
@@ -882,7 +882,7 @@ theorem isBounded_sUnion
 
 中文:
 定理 isBounded_sUnion
-  条件: {S : Set (Set α)} (hs : S.Finite)
+  条件: {S : 集合 (集合 α)} (hs : S.有限)
   证明: by rw [sUnion_eq_biUnion, isBounded_biUnion hs]
 
 @[simp]
@@ -904,7 +904,7 @@ theorem isBounded_iUnion
 
 中文:
 定理 isBounded_iUnion
-  条件: [Finite ι] {s : ι -> Set α}
+  条件: [有限 ι] {s : ι -> 集合 α}
   证明: by
   rw [← sUnion_range]; rw [isBounded_sUnion (finite_range s)]; rw [forall_mem_range]
 
@@ -947,8 +947,8 @@ theorem Filter.HasBasis.disjoint_cobounded_iff
   proof: h.disjoint_iff_left
 
 中文:
-定理 Filter.HasBasis.disjoint_cobounded_iff
-  结论: [Bornology α] {ι : Sort*} {p : ι -> 命题}
+定理 滤子.有基.disjoint_cobounded_iff
+  结论: [有界结构 α] {ι : 类型层*} {p : ι -> 命题}
   证明: h.disjoint_iff_left
 
 Depends on / 依赖: disjoint_iff_left, h.disjoint_iff_left
@@ -969,8 +969,8 @@ theorem Filter.disjoint_cobounded_iff
 alias ⟨Disjoint.exists_isBounded, _⟩ := Filter.disjoint_cobounded_iff
 
 中文:
-定理 Filter.disjoint_cobounded_iff
-  条件: [Bornology α] {l : Filter α}
+定理 滤子.disjoint_cobounded_iff
+  条件: [有界结构 α] {l : 滤子 α}
   证明: l.basis_sets.disjoint_cobounded_iff
 
 alias ⟨Disjoint.exists_isBounded, _⟩ := Filter.disjoint_cobounded_iff
@@ -992,8 +992,8 @@ theorem Bornology.IsBounded.disjoint_cobounded
   proof: l.disjoint_cobounded_iff.mpr ⟨s, hl, hs⟩
 
 中文:
-定理 Bornology.IsBounded.disjoint_cobounded
-  结论: [Bornology α]
+定理 有界结构.IsBounded.disjoint_cobounded
+  结论: [有界结构 α]
   证明: l.disjoint_cobounded_iff.mpr ⟨s, hl, hs⟩
 
 Depends on / 依赖: disjoint_cobounded_iff, l.disjoint_cobounded_iff.mpr
@@ -1017,8 +1017,8 @@ nonrec lemma Filter.Tendsto.eventually_ne_cobounded [Bornology α] {f : β -> α
 h.eventually eventually_ne_cobounded a
 
 中文:
-定理 Set.Finite.isBounded
-  条件: [Bornology α] {s : Set α} (hs : s.Finite)
+定理 集合.有限.isBounded
+  条件: [有界结构 α] {s : 集合 α} (hs : s.有限)
   结论: IsBounded s
   证明: Bornology.le_cofinite α hs.compl_mem_cofinite
 
@@ -1045,7 +1045,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bornology PUnit
+  签名: 有界结构 命题单元
   定义体: ⟨⊥, bot_le⟩
 -/
 instance : Bornology PUnit :=
@@ -1061,8 +1061,8 @@ abbreviation Bornology.cofinite
   le_cofinite := le_rfl
 
 中文:
-缩写 Bornology.cofinite
-  签名: : Bornology α where
+缩写 有界结构.cofinite
+  签名: : 有界结构 α where
   定义体: Filter.cofinite
   le_cofinite := le_rfl
 
@@ -1082,10 +1082,10 @@ class BoundedSpace
     - bounded_univ : Bornology.IsBounded (univ : Set α)
 
 中文:
-类 BoundedSpace
-  参数: (α : 类型) [Bornology α]
+类 有界空间
+  参数: (α : 类型) [有界结构 α]
   公理与运算 (1 个):
-    - bounded_univ : Bornology.IsBounded (univ : Set α)
+    - bounded_univ : 有界结构.IsBounded (univ : 集合 α)
 -/
 class BoundedSpace (α : Type*) [Bornology α] : Prop where
   /-- The `Set.univ` is bounded. -/
@@ -1110,7 +1110,7 @@ theorem isBounded_univ
 
 中文:
 定理 isBounded_univ
-  结论: IsBounded (univ : Set α) ↔ BoundedSpace α
+  结论: IsBounded (univ : 集合 α) ↔ 有界空间 α
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 -/
 theorem isBounded_univ : IsBounded (univ : Set α) ↔ BoundedSpace α :=
@@ -1127,7 +1127,7 @@ theorem cobounded_eq_bot_iff
 
 中文:
 定理 cobounded_eq_bot_iff
-  结论: cobounded α = ⊥ ↔ BoundedSpace α
+  结论: cobounded α = ⊥ ↔ 有界空间 α
   证明: by
   rw [← isBounded_univ]; rw [isBounded_def]; rw [compl_univ]; rw [empty_mem_iff_bot]
 
@@ -1149,7 +1149,7 @@ theorem IsBounded.all
 
 中文:
 定理 IsBounded.all
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsBounded s
   证明: BoundedSpace.bounded_univ.subset s.subset_univ
 
@@ -1169,7 +1169,7 @@ theorem IsCobounded.all
 
 中文:
 定理 IsCobounded.all
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsCobounded s
   证明: compl_compl s ▸ IsBounded.all sᶜ
 
@@ -1214,7 +1214,7 @@ instance instBornology
 
 中文:
 实例 instBornology
-  签名: : Bornology αᵒᵈ
+  签名: : 有界结构 αᵒᵈ
   定义体: ‹Bornology α›
 
 Depends on / 依赖: Bornology
@@ -1231,7 +1231,7 @@ lemma isCobounded_preimage_ofDual
 
 中文:
 引理 isCobounded_preimage_ofDual
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 -/
 @[simp] lemma isCobounded_preimage_ofDual {s : Set α} :
@@ -1247,7 +1247,7 @@ lemma isCobounded_preimage_toDual
 
 中文:
 引理 isCobounded_preimage_toDual
-  条件: {s : Set αᵒᵈ}
+  条件: {s : 集合 αᵒᵈ}
   证明: Iff.rfl
 -/
 @[simp] lemma isCobounded_preimage_toDual {s : Set αᵒᵈ} :
@@ -1263,7 +1263,7 @@ lemma isBounded_preimage_ofDual
 
 中文:
 引理 isBounded_preimage_ofDual
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 -/
 @[simp] lemma isBounded_preimage_ofDual {s : Set α} :
@@ -1279,7 +1279,7 @@ lemma isBounded_preimage_toDual
 
 中文:
 引理 isBounded_preimage_toDual
-  条件: {s : Set αᵒᵈ}
+  条件: {s : 集合 αᵒᵈ}
   证明: Iff.rfl
 -/
 @[simp] lemma isBounded_preimage_toDual {s : Set αᵒᵈ} :

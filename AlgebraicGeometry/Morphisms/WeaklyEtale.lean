@@ -52,11 +52,11 @@ class WeaklyEtale
     - flat_diagonal : Flat (pullback.diagonal f)  [default: by infer_instance]
 
 中文:
-类 WeaklyEtale
+类 弱平展
   参数: : 命题 where
   公理与运算 (2 个):
-    - flat : Flat f  [默认: by infer_instance]
-    - flat_diagonal : Flat (pullback.diagonal f)  [默认: by infer_instance]
+    - flat : 平坦 f  [默认: by infer_instance]
+    - flat_diagonal : 平坦 (pullback.diagonal f)  [默认: by infer_instance]
 
 Depends on / 依赖: diagonal, flat_diagonal, infer_instance, pullback, pullback.diagonal
 -/
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.RespectsIso @WeaklyEtale
+  签名: MorphismProperty.RespectsIso @弱平展
   定义体: by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @WeaklyEtale
+  签名: MorphismProperty.是Multiplicative @弱平展
   定义体: by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
@@ -151,8 +151,8 @@ instance [WeaklyEtale
   body: MorphismProperty.comp_mem _ f g inferInstance inferInstance
 
 中文:
-实例 [WeaklyEtale
-  签名: f] [WeaklyEtale g] : WeaklyEtale (f ≫ g)
+实例 [弱平展
+  签名: f] [弱平展 g] : 弱平展 (f ≫ g)
   定义体: MorphismProperty.comp_mem _ f g inferInstance inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderBaseChange @WeaklyEtale
+  签名: MorphismProperty.是StableUnderBaseChange @弱平展
   定义体: by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtSource @WeaklyEtale
+  签名: IsZariskiLocalAtSource @弱平展
   定义体: by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
@@ -221,7 +221,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @WeaklyEtale
+  签名: IsZariskiLocalAtTarget @弱平展
   定义体: by
   rw [weaklyEtale_eq_flat_inf_diagonal_flat]
   infer_instance
@@ -268,7 +268,7 @@ exact inferInstanceAs WeaklyEtale (pullback.diagonal f)
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @WeaklyEtale @WeaklyEtale
+  签名: MorphismProperty.有OfPostcompProperty @弱平展 @弱平展
   定义体: by
   rw [MorphismProperty.hasOfPostcompProperty_iff_le_diagonal]
   intro X Y f hf
@@ -292,8 +292,8 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [WeaklyEtale (f ≫ g)] [WeaklyEtale g]
-  结论: WeaklyEtale f
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [弱平展 (f ≫ g)] [弱平展 g]
+  结论: 弱平展 f
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -313,7 +313,7 @@ lemma etale_le_weaklyEtale
 
 中文:
 引理 etale_le_weaklyEtale
-  结论: @Etale <= @WeaklyEtale
+  结论: @平展 <= @弱平展
   证明: fun _ _ _ _ => inferInstance
 -/
 lemma etale_le_weaklyEtale : @Etale <= @WeaklyEtale :=

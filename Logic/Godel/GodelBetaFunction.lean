@@ -107,7 +107,7 @@ definition supOfSeq
 
 中文:
 定义 supOfSeq
-  签名: (a : Fin m -> 自然数)
+  签名: (a : 有限集 m -> 自然数)
   定义体: max m (Finset.sup .univ a) + 1
 -/
 private def supOfSeq (a : Fin m -> Nat) : Nat := max m (Finset.sup .univ a) + 1
@@ -123,7 +123,7 @@ definition coprimes
 
 中文:
 定义 coprimes
-  签名: (a : Fin m -> 自然数)
+  签名: (a : 有限集 m -> 自然数)
   定义体: fun i => (i + 1) * (supOfSeq a)! + 1
 -/
 private def coprimes (a : Fin m -> Nat) : Fin m -> Nat := fun i => (i + 1) * (supOfSeq a)! + 1
@@ -147,7 +147,7 @@ lemma coprimes_lt
 
 中文:
 引理 coprimes_lt
-  条件: (a : Fin m -> 自然数) (i)
+  条件: (a : 有限集 m -> 自然数) (i)
   结论: a i < coprimes a i
   证明: by
   have h₁ : a i < supOfSeq a :=
@@ -187,8 +187,8 @@ lemma pairwise_coprime_coprimes
 
 中文:
 引理 pairwise_coprime_coprimes
-  条件: (a : Fin m -> 自然数)
-  结论: Pairwise (Coprime on coprimes a)
+  条件: (a : 有限集 m -> 自然数)
+  结论: 两两 (Coprime on coprimes a)
   证明: by
   intro i j hij
   wlog! ltij : i < j
@@ -241,7 +241,7 @@ definition unbeta
 
 中文:
 定义 unbeta
-  签名: (l : List 自然数)
+  签名: (l : 列表 自然数)
   定义体: (chineseRemainderOfFinset (ι := Fin l.length) (l[·]) (coprimes (l[·])) Finset.univ
     (by simp [coprimes])
     (by simpa using Set.pairwise_univ.mpr (pairwise_coprime_coprimes _)) : Nat).pair
@@ -271,7 +271,7 @@ lemma beta_unbeta_coe
 
 中文:
 引理 beta_unbeta_coe
-  条件: (l : List 自然数) (i : Fin l.length)
+  条件: (l : 列表 自然数) (i : 有限集 l.length)
   结论: beta (unbeta l) i = l[i]
   证明: by
   simpa [beta, unbeta, coprimes] using mod_eq_of_modEq

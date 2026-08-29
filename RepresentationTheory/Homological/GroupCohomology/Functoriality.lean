@@ -160,7 +160,7 @@ lemma cochainsMap_comp
 
 中文:
 引理 cochainsMap_comp
-  结论: {G H K : 类型u} [Group G] [Group H]
+  结论: {G H K : 类型u} [群 G] [群 H]
   证明: by
   rfl
 
@@ -227,7 +227,7 @@ lemma cochainsMap_f_map_mono
 
 中文:
 引理 cochainsMap_f_map_mono
-  条件: (hf : Function.Surjective f) [Mono φ] (i : 自然数)
+  条件: (hf : 函数.满射 f) [单态射 φ] (i : 自然数)
   证明: by
   simpa [ModuleCat.mono_iff_injective] using!
 ((Rep.mono_iff_injective φ).1 inferInstance).comp_left.comp
@@ -251,7 +251,7 @@ instance cochainsMap_id_f_map_mono
 
 中文:
 实例 cochainsMap_id_f_map_mono
-  签名: {A B : Rep k G} (φ : A ⟶ B) [Mono φ] (i : 自然数)
+  签名: {A B : Rep k G} (φ : A ⟶ B) [单态射 φ] (i : 自然数)
   定义体: cochainsMap_f_map_mono (MonoidHom.id G) φ (fun x => ⟨x, rfl⟩) i
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, cochainsMap_f_map_mono
@@ -273,7 +273,7 @@ lemma cochainsMap_f_map_epi
 
 中文:
 引理 cochainsMap_f_map_epi
-  条件: (hf : Function.Injective f) [Epi φ] (i : 自然数)
+  条件: (hf : 函数.单射 f) [满态射 φ] (i : 自然数)
   证明: by
   simpa [ModuleCat.epi_iff_surjective] using!
 ((Rep.epi_iff_surjective φ).1 inferInstance).comp_left.comp
@@ -297,7 +297,7 @@ instance cochainsMap_id_f_map_epi
 
 中文:
 实例 cochainsMap_id_f_map_epi
-  签名: {A B : Rep k G} (φ : A ⟶ B) [Epi φ] (i : 自然数)
+  签名: {A B : Rep k G} (φ : A ⟶ B) [满态射 φ] (i : 自然数)
   定义体: cochainsMap_f_map_epi (MonoidHom.id G) φ (fun _ _ h => h) i
 
 Depends on / 依赖: MonoidHom, MonoidHom.id, cochainsMap_f_map_epi
@@ -362,7 +362,7 @@ lemma cocyclesMap_id
 
 中文:
 引理 cocyclesMap_id
-  结论: cocyclesMap (MonoidHom.id G) (𝟙 B) n = 𝟙 _
+  结论: cocyclesMap (幺半群态射.id G) (𝟙 B) n = 𝟙 _
   证明: HomologicalComplex.cyclesMap_id _ _
 
 @[reassoc]
@@ -386,7 +386,7 @@ lemma cocyclesMap_comp
 
 中文:
 引理 cocyclesMap_comp
-  结论: {G H K : 类型u} [Group G] [Group H]
+  结论: {G H K : 类型u} [群 G] [群 H]
   证明: by
   simp [cocyclesMap, ← HomologicalComplex.cyclesMap_comp, ← cochainsMap_comp]
 
@@ -501,7 +501,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  结论: map (MonoidHom.id G) (𝟙 B) n = 𝟙 _
+  结论: map (幺半群态射.id G) (𝟙 B) n = 𝟙 _
   证明: HomologicalComplex.homologyMap_id _ _
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.homologyMap_id, homologyMap_id
@@ -521,7 +521,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  结论: {G H K : 类型u} [Group G] [Group H]
+  结论: {G H K : 类型u} [群 G] [群 H]
   证明: by
   simp [map, ← HomologicalComplex.homologyMap_comp, ← cochainsMap_comp]
 
@@ -841,7 +841,7 @@ instance mono_map_0_of_mono
 
 中文:
 实例 mono_map_0_of_mono
-  签名: {A B : Rep k G} (f : A ⟶ B) [Mono f]
+  签名: {A B : Rep k G} (f : A ⟶ B) [单态射 f]
   定义体: by
     simp only [← cancel_mono (H0Iso B).hom, Category.assoc, map_id_comp_H0Iso_hom] at hgh
     simp_all [cancel_mono]
@@ -988,7 +988,7 @@ theorem mapShortComplexH1_comp
 
 中文:
 定理 mapShortComplexH1_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: rfl
 
 @[reassoc]
@@ -1237,7 +1237,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (H1InfRes A S).f
+  签名: 单态射 (H1InfRes A S).f
   定义体: by
   rw [ModuleCat.mono_iff_injective]; rw [injective_iff_map_eq_zero]
   intro x hx
@@ -1278,7 +1278,7 @@ lemma H1InfRes_exact
 
 中文:
 引理 H1InfRes_exact
-  结论: (H1InfRes A S).Exact
+  结论: (H1InfRes A S).正合
   证明: by
   rw [moduleCat_exact_iff_ker_sub_range]
   intro x hx
@@ -1443,7 +1443,7 @@ theorem mapShortComplexH2_comp
 
 中文:
 定理 mapShortComplexH2_comp
-  结论: {G H K : 类型u} [Group G] [Group H] [Group K]
+  结论: {G H K : 类型u} [群 G] [群 H] [群 K]
   证明: rfl
 
 @[reassoc]
@@ -1599,7 +1599,7 @@ definition cochainsFunctor
 
 中文:
 定义 cochainsFunctor
-  签名: : Rep k G ⥤ CochainComplex (ModuleCat k) 自然数 where
+  签名: : Rep k G ⥤ 上链复形 (模范畴 k) 自然数 where
   定义体: inhomogeneousCochains A
   map f := cochainsMap (MonoidHom.id _) f
   map_id _ := cochainsMap_id
@@ -1622,7 +1622,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cochainsFunctor k G).PreservesZeroMorphisms
+  签名: (cochainsFunctor k G).保持ZeroMorphisms
 -/
 instance : (cochainsFunctor k G).PreservesZeroMorphisms where
 /--
@@ -1634,7 +1634,7 @@ instance :
 
 中文:
 实例 :
-  签名: (cochainsFunctor k G).Additive
+  签名: (cochainsFunctor k G).加性
 -/
 instance : (cochainsFunctor k G).Additive where
 
@@ -1698,7 +1698,7 @@ definition resNatTrans
       ← cochainsMap_comp, res_ob
 
 中文:
-定义 resNatTrans
+定义 res自然数Trans
   签名: (n : 自然数)
   定义体: map f (𝟙 _) n
   naturality {X Y} φ := by
@@ -1734,8 +1734,8 @@ definition infNatTrans
       ← HomologicalCompl
 
 中文:
-定义 infNatTrans
-  签名: (S : Subgroup G) [S.Normal] (n : 自然数)
+定义 inf自然数Trans
+  签名: (S : 子群 G) [S.正规] (n : 自然数)
   定义体: map (QuotientGroup.mk' S) (ofHom <| A.ρ.quotientToInvariants_lift S) n
   naturality {X Y} φ := by
     simp only [Functor.comp_map, functor_map, ← cancel_epi (groupCohomology.π _ n),

@@ -99,7 +99,7 @@ definition IsInteriorPoint
   body: extChartAt I x x in interior (range I)
 
 中文:
-定义 IsInteriorPoint
+定义 Is整数eriorPoint
   签名: (x : M)
   定义体: extChartAt I x x in interior (range I)
 
@@ -136,7 +136,7 @@ definition interior
 
 中文:
 定义 interior
-  签名: : Set M
+  签名: : 集合 M
   定义体: { x : M | I.IsInteriorPoint x }
 -/
 protected def interior : Set M := { x : M | I.IsInteriorPoint x }
@@ -151,7 +151,7 @@ lemma isInteriorPoint_iff
     fun h => OpenPartialHomeomorph.interior_extend_target_subset_interior_range _ h⟩
 
 中文:
-引理 isInteriorPoint_iff
+引理 is整数eriorPoint_iff
   条件: {x : M}
   证明: ⟨fun h => (chartAt H x).mem_interior_extend_target (mem_chart_target H x) h,
     fun h => OpenPartialHomeomorph.interior_extend_target_subset_interior_range _ h⟩
@@ -174,7 +174,7 @@ definition boundary
 
 中文:
 定义 boundary
-  签名: : Set M
+  签名: : 集合 M
   定义体: { x : M | I.IsBoundaryPoint x }
 -/
 protected def boundary : Set M := { x : M | I.IsBoundaryPoint x }
@@ -211,7 +211,7 @@ lemma isInteriorPoint_or_isBoundaryPoint
   exact fun h => ⟨mem_range_self _, h⟩
 
 中文:
-引理 isInteriorPoint_or_isBoundaryPoint
+引理 is整数eriorPoint_or_isBoundaryPoint
   条件: (x : M)
   结论: I.Is整数eriorPoint x ∨ I.IsBoundaryPoint x
   证明: by
@@ -234,7 +234,7 @@ lemma interior_union_boundary_eq_univ
 
 中文:
 引理 interior_union_boundary_eq_univ
-  结论: (I.interior M) union (I.boundary M) = (univ : Set M)
+  结论: (I.interior M) union (I.boundary M) = (univ : 集合 M)
   证明: eq_univ_of_forall fun x => (mem_union _ _ _).mpr (I.isInteriorPoint_or_isBoundaryPoint x)
 
 Depends on / 依赖: I.isInteriorPoint_or_isBoundaryPoint, eq_univ_of_forall, isInteriorPoint_or_isBoundaryPoint, mem_union
@@ -286,7 +286,7 @@ lemma isInteriorPoint_iff_not_isBoundaryPoint
   exact h
 
 中文:
-引理 isInteriorPoint_iff_not_isBoundaryPoint
+引理 is整数eriorPoint_iff_not_isBoundaryPoint
   条件: (x : M)
   证明: by
   refine ⟨?_,
@@ -315,7 +315,7 @@ lemma isBoundaryPoint_iff_not_isInteriorPoint
   simp [isInteriorPoint_iff_not_isBoundaryPoint]
 
 中文:
-引理 isBoundaryPoint_iff_not_isInteriorPoint
+引理 isBoundaryPoint_iff_not_is整数eriorPoint
   条件: (x : M)
   证明: by
   simp [isInteriorPoint_iff_not_isBoundaryPoint]
@@ -380,7 +380,7 @@ lemma _root_.range_mem_nhds_isInteriorPoint
   exact ⟨interior (range I), interior_subset, isOpen_interior, h⟩
 
 中文:
-引理 _root_.range_mem_nhds_isInteriorPoint
+引理 _root_.range_mem_nhds_is整数eriorPoint
   条件: {x : M} (h : I.Is整数eriorPoint x)
   证明: by
   rw [mem_nhds_iff]
@@ -403,7 +403,7 @@ class _root_.BoundarylessManifold
     - isInteriorPoint' : forall x : M, IsInteriorPoint I x
 
 中文:
-类 _root_.BoundarylessManifold
+类 _root_.无边界流形
   参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜]
   公理与运算 (1 个):
     - isInteriorPoint' : 对任意 x : M, Is整数eriorPoint I x
@@ -432,7 +432,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundarylessManifold I M
+  签名: 无边界流形 I M
   定义体: by
     let r := ((chartAt H x).isOpen_extend_target (I := I)).interior_eq
     have : extChartAt I x = (chartAt H x).extend I := rfl
@@ -463,8 +463,8 @@ instance BoundarylessManifold.of_empty
   body: (IsEmpty.false x).elim
 
 中文:
-实例 BoundarylessManifold.of_empty
-  签名: [IsEmpty M]
+实例 无边界流形.of_empty
+  签名: [是空 M]
   定义体: (IsEmpty.false x).elim
 
 Depends on / 依赖: IsEmpty, IsEmpty.false
@@ -481,8 +481,8 @@ lemma _root_.BoundarylessManifold.isInteriorPoint
   proof: BoundarylessManifold.isInteriorPoint' x
 
 中文:
-引理 _root_.BoundarylessManifold.isInteriorPoint
-  条件: {x : M} [BoundarylessManifold I M]
+引理 _root_.无边界流形.is整数eriorPoint
+  条件: {x : M} [无边界流形 I M]
   证明: BoundarylessManifold.isInteriorPoint' x
 
 Depends on / 依赖: BoundarylessManifold, BoundarylessManifold.isInteriorPoint, isInteriorPoint
@@ -501,7 +501,7 @@ lemma interior_eq_univ
 
 中文:
 引理 interior_eq_univ
-  条件: [BoundarylessManifold I M]
+  条件: [无边界流形 I M]
   结论: I.interior M = univ
   证明: eq_univ_of_forall fun _ => BoundarylessManifold.isInteriorPoint
 
@@ -521,8 +521,8 @@ lemma Boundaryless.boundary_eq_empty
   rw [← I.compl_interior]; rw [I.interior_eq_univ]; rw [compl_empty_iff]
 
 中文:
-引理 Boundaryless.boundary_eq_empty
-  条件: [BoundarylessManifold I M]
+引理 无边界.boundary_eq_empty
+  条件: [无边界流形 I M]
   结论: I.boundary M = ∅
   证明: by
   rw [← I.compl_interior]; rw [I.interior_eq_univ]; rw [compl_empty_iff]
@@ -541,8 +541,8 @@ instance [BoundarylessManifold
   body: isEmpty_coe_sort.mpr Boundaryless.boundary_eq_empty
 
 中文:
-实例 [BoundarylessManifold
-  签名: I M] : IsEmpty (I.boundary M)
+实例 [无边界流形
+  签名: I M] : 是空 (I.boundary M)
   定义体: isEmpty_coe_sort.mpr Boundaryless.boundary_eq_empty
 
 Depends on / 依赖: Boundaryless, Boundaryless.boundary_eq_empty, boundary_eq_empty, isEmpty_coe_sort, isEmpty_coe_sort.mpr
@@ -565,8 +565,8 @@ lemma Boundaryless.iff_boundary_eq_empty
   trivial
 
 中文:
-引理 Boundaryless.iff_boundary_eq_empty
-  结论: I.boundary M = ∅ ↔ BoundarylessManifold I M
+引理 无边界.iff_boundary_eq_empty
+  结论: I.boundary M = ∅ ↔ 无边界流形 I M
   证明: by
   refine ⟨fun h => { isInteriorPoint' := ?_ }, fun a => boundary_eq_empty⟩
   intro x
@@ -595,9 +595,9 @@ lemma Boundaryless.of_boundary_eq_empty
   proof: (Boundaryless.iff_boundary_eq_empty (I := I)).mp h
 
 中文:
-引理 Boundaryless.of_boundary_eq_empty
+引理 无边界.of_boundary_eq_empty
   条件: (h : I.boundary M = ∅)
-  结论: BoundarylessManifold I M
+  结论: 无边界流形 I M
   证明: (Boundaryless.iff_boundary_eq_empty (I := I)).mp h
 
 Depends on / 依赖: Boundaryless, Boundaryless.iff_boundary_eq_empty, iff_boundary_eq_empty
@@ -749,7 +749,7 @@ lemma isInteriorPoint_iff_of_mem_atlas
   exact mem_interior_range_iff_of_mem_atlas hn (chart_mem_atlas H x) he (mem_chart_source H x) hx
 
 中文:
-引理 isInteriorPoint_iff_of_mem_atlas
+引理 is整数eriorPoint_iff_of_mem_atlas
   条件: (hn : n != 0) (he : e in atlas H M) (hx : x in e.source)
   证明: by
   rw [isInteriorPoint_iff]
@@ -801,7 +801,7 @@ lemma isOpen_interior
 中文:
 引理 isOpen_interior
   条件: (hn : n != 0)
-  结论: IsOpen (I.interior M)
+  结论: 是开集 (I.interior M)
   证明: by
   refine isOpen_iff_forall_mem_open.2 fun x hx => ⟨_, ?_, isOpen_extChartAt_preimage (I := I) x
     isOpen_interior, mem_chart_source H x, isInteriorPoint_iff.1 hx⟩
@@ -826,7 +826,7 @@ lemma isClosed_boundary
 中文:
 引理 isClosed_boundary
   条件: (hn : n != 0)
-  结论: IsClosed (I.boundary M)
+  结论: 是闭集 (I.boundary M)
   证明: by
   rw [← I.compl_interior]; rw [isClosed_compl_iff]
   exact I.isOpen_interior hn
@@ -864,7 +864,7 @@ lemma MDifferentiableAt.isInteriorPoint_of_surjective_mfderiv
   let _ : NormedSpace Real E := NormedSpace.rest
 
 中文:
-引理 MDifferentiableAt.isInteriorPoint_of_surjective_mfderiv
+引理 MDifferentiableAt.is整数eriorPoint_of_surjective_mfderiv
   结论: {f : M -> N} {x : M}
   证明: by
   -- Since p-adic manifolds don't have boundary, WLOG `𝕜` is `ℝ` or `ℂ` and `E` is normed over `ℝ`.
@@ -919,7 +919,7 @@ lemma IsLocalDiffeomorphAt.isInteriorPoint_iff
     refine (hf.localInverse_mdifferentiableAt hn).isInteri
 
 中文:
-引理 IsLocalDiffeomorphAt.isInteriorPoint_iff
+引理 IsLocalDiffeomorphAt.is整数eriorPoint_iff
   结论: (hn : n != 0) {f : M -> N} {x : M}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -973,7 +973,7 @@ lemma IsLocalDiffeomorphOn.preimage_interior_inter
 
 中文:
 引理 IsLocalDiffeomorphOn.preimage_interior_inter
-  结论: (hn : n != 0) {f : M -> N} {s : Set M}
+  结论: (hn : n != 0) {f : M -> N} {s : 集合 M}
   证明: by
   ext x
   simpa using! fun hx => ((hf ⟨x, hx⟩).isInteriorPoint_iff hn).symm
@@ -997,7 +997,7 @@ lemma IsLocalDiffeomorphOn.preimage_boundary_inter
 
 中文:
 引理 IsLocalDiffeomorphOn.preimage_boundary_inter
-  结论: (hn : n != 0) {f : M -> N} {s : Set M}
+  结论: (hn : n != 0) {f : M -> N} {s : 集合 M}
   证明: by
   ext x
   simpa using! fun hx => ((hf ⟨x, hx⟩).isBoundaryPoint_iff hn).symm
@@ -1084,7 +1084,7 @@ lemma Diffeomorph.preimage_interior
   proof: Φ.isLocalDiffeomorph.preimage_interior hn
 
 中文:
-引理 Diffeomorph.preimage_interior
+引理 微分同胚.preimage_interior
   条件: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: Φ.isLocalDiffeomorph.preimage_interior hn
 
@@ -1103,7 +1103,7 @@ lemma Diffeomorph.preimage_boundary
   proof: Φ.isLocalDiffeomorph.preimage_boundary hn
 
 中文:
-引理 Diffeomorph.preimage_boundary
+引理 微分同胚.preimage_boundary
   条件: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: Φ.isLocalDiffeomorph.preimage_boundary hn
 
@@ -1122,7 +1122,7 @@ lemma Diffeomorph.image_interior
   proof: (Φ.eq_preimage_iff_image_eq _ _).1 (Φ.preimage_interior hn).symm
 
 中文:
-引理 Diffeomorph.image_interior
+引理 微分同胚.image_interior
   条件: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: (Φ.eq_preimage_iff_image_eq _ _).1 (Φ.preimage_interior hn).symm
 
@@ -1141,7 +1141,7 @@ lemma Diffeomorph.image_boundary
   proof: (Φ.eq_preimage_iff_image_eq _ _).1 (Φ.preimage_boundary hn).symm
 
 中文:
-引理 Diffeomorph.image_boundary
+引理 微分同胚.image_boundary
   条件: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: (Φ.eq_preimage_iff_image_eq _ _).1 (Φ.preimage_boundary hn).symm
 
@@ -1160,7 +1160,7 @@ lemma Diffeomorph.boundarylessManifold
   proof: Φ.symm.isLocalDiffeomorph.boundarylessManifold hn
 
 中文:
-引理 Diffeomorph.boundarylessManifold
+引理 微分同胚.boundarylessManifold
   结论: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: Φ.symm.isLocalDiffeomorph.boundarylessManifold hn
 
@@ -1179,7 +1179,7 @@ lemma Diffeomorph.boundarylessManifold_iff
   proof: ⟨fun _ => Φ.boundarylessManifold hn, fun _ => Φ.symm.boundarylessManifold hn⟩
 
 中文:
-引理 Diffeomorph.boundarylessManifold_iff
+引理 微分同胚.boundarylessManifold_iff
   条件: (hn : n != 0) (Φ : M ≃ₘ^n⟮I, I'⟯ N)
   证明: ⟨fun _ => Φ.boundarylessManifold hn, fun _ => Φ.symm.boundarylessManifold hn⟩
 
@@ -1210,7 +1210,7 @@ lemma isInteriorPoint_iff_isInteriorPoint_val
     fun _ _ => (chartAt H x.1).extend_preimage_mem_nhds (mem_chart_source H x.1) (u.2.mem_nhds x.2)
 
 中文:
-引理 isInteriorPoint_iff_isInteriorPoint_val
+引理 is整数eriorPoint_iff_is整数eriorPoint_val
   条件: {u : Opens M} {x : u}
   证明: by
   simpa [I.isInteriorPoint_iff, u.chartAt_eq,
@@ -1302,8 +1302,8 @@ instance BoundarylessManifold.open
   body: ⟨fun _ => I.isInteriorPoint_iff_isInteriorPoint_val.2 BoundarylessManifold.isInteriorPoint⟩
 
 中文:
-实例 BoundarylessManifold.open
-  签名: [BoundarylessManifold I M] (u : Opens M)
+实例 无边界流形.open
+  签名: [无边界流形 I M] (u : Opens M)
   定义体: ⟨fun _ => I.isInteriorPoint_iff_isInteriorPoint_val.2 BoundarylessManifold.isInteriorPoint⟩
 
 Depends on / 依赖: BoundarylessManifold, BoundarylessManifold.isInteriorPoint, I.isInteriorPoint_iff_isInteriorPoint_val, isInteriorPoint, isInteriorPoint_iff_isInteriorPoint_val
@@ -1408,7 +1408,7 @@ lemma boundary_of_boundaryless_left
 
 中文:
 引理 boundary_of_boundaryless_left
-  条件: [BoundarylessManifold I M]
+  条件: [无边界流形 I M]
   证明: by
   rw [boundary_prod]; rw [Boundaryless.boundary_eq_empty (I := I)]
   have : Set.prod (∅ : Set M) (univ : Set N) = ∅ := Set.empty_prod
@@ -1435,7 +1435,7 @@ lemma boundary_of_boundaryless_right
 
 中文:
 引理 boundary_of_boundaryless_right
-  条件: [BoundarylessManifold J N]
+  条件: [无边界流形 J N]
   证明: by
   rw [boundary_prod]; rw [Boundaryless.boundary_eq_empty (I := J)]
   have : Set.prod (univ : Set M) (∅ : Set N) = ∅ := Set.prod_empty
@@ -1463,8 +1463,8 @@ instance BoundarylessManifold.prod
   exact ⟨Set.prod_empty, Set.empt
 
 中文:
-实例 BoundarylessManifold.prod
-  签名: [BoundarylessManifold I M] [BoundarylessManifold J N]
+实例 无边界流形.乘积
+  签名: [无边界流形 I M] [无边界流形 J N]
   定义体: by
   apply Boundaryless.of_boundary_eq_empty
   simp only [boundary_prod, Boundaryless.boundary_eq_empty, union_empty_iff]
@@ -1623,7 +1623,7 @@ lemma isInteriorPoint_disjointUnion_left
   grind [isInteriorPoint_iff_not_isBoundaryPoint, boundaryPoint_inl]
 
 中文:
-引理 isInteriorPoint_disjointUnion_left
+引理 is整数eriorPoint_disjointUnion_left
   结论: {p : M oplus M'} (hp : I.Is整数eriorPoint p)
   证明: by
   grind [isInteriorPoint_iff_not_isBoundaryPoint, boundaryPoint_inl]
@@ -1644,7 +1644,7 @@ lemma isInteriorPoint_disjointUnion_right
   grind [isInteriorPoint_iff_not_isBoundaryPoint, boundaryPoint_inr]
 
 中文:
-引理 isInteriorPoint_disjointUnion_right
+引理 is整数eriorPoint_disjointUnion_right
   结论: {p : M oplus M'} (hp : I.Is整数eriorPoint p)
   证明: by
   grind [isInteriorPoint_iff_not_isBoundaryPoint, boundaryPoint_inr]
@@ -1688,7 +1688,7 @@ lemma boundary_disjointUnion
 
 中文:
 引理 boundary_disjointUnion
-  结论: ModelWithCorners.boundary (I := I) (M oplus M') =
+  结论: 带角模型.boundary (I := I) (M oplus M') =
   证明: by
   simp only [← ModelWithCorners.compl_interior, interior_disjointUnion, inl_compl_union_inr_compl]
 -/

@@ -101,9 +101,9 @@ class Algebra
     - smul_def' : forall r x, r • x = algebraMap r * x
 
 中文:
-类 Algebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A]
-  继承: SMul R A
+类 代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
+  继承: 标量乘法 R A
   公理与运算 (3 个):
     - algebraMap((R) (A)) : R ->+* A
     - commutes' : 对任意 r x, algebraMap r * x = x * algebraMap r
@@ -126,8 +126,8 @@ theorem Algebra.subsingleton
   proof: (algebraMap R A).codomain_trivial
 
 中文:
-定理 Algebra.subsingleton
-  结论: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A] [Algebra R A]
+定理 代数.subsingleton
+  结论: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A] [代数 R A]
   证明: (algebraMap R A).codomain_trivial
 
 Depends on / 依赖: algebraMap, codomain_trivial
@@ -147,8 +147,8 @@ definition Algebra.cast
   body: algebraMap R A
 
 中文:
-定义 Algebra.cast
-  签名: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+定义 代数.cast
+  签名: {R A : 类型} [交换半环 R] [半环 A] [代数 R A]
   定义体: algebraMap R A
 
 Depends on / 依赖: algebraMap
@@ -375,8 +375,8 @@ abbreviation RingHom.toAlgebra'
   algebraMap := i
 
 中文:
-缩写 RingHom.toAlgebra'
-  签名: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
+缩写 环态射.toAlgebra'
+  签名: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
   定义体: i c * x
   commutes' := h
   smul_def' _ _ := rfl
@@ -401,8 +401,8 @@ theorem RingHom.smul_toAlgebra'
     r • s = i r * s := rfl
 
 中文:
-定理 RingHom.smul_toAlgebra'
-  结论: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
+定理 环态射.smul_toAlgebra'
+  结论: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
   证明: RingHom.toAlgebra' i h
     r • s = i r * s := rfl
 
@@ -423,8 +423,8 @@ theorem RingHom.algebraMap_toAlgebra'
   proof: rfl
 
 中文:
-定理 RingHom.algebraMap_toAlgebra'
-  结论: {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
+定理 环态射.algebraMap_toAlgebra'
+  结论: {R S} [交换半环 R] [半环 S] (i : R ->+* S)
   证明: rfl
 -/
 theorem RingHom.algebraMap_toAlgebra' {R S} [CommSemiring R] [Semiring S] (i : R ->+* S)
@@ -441,8 +441,8 @@ abbreviation RingHom.toAlgebra
   body: i.toAlgebra' fun _ => mul_comm _
 
 中文:
-缩写 RingHom.toAlgebra
-  签名: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
+缩写 环态射.toAlgebra
+  签名: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
   定义体: i.toAlgebra' fun _ => mul_comm _
 
 Depends on / 依赖: i.toAlgebra, mul_comm, toAlgebra
@@ -460,8 +460,8 @@ theorem RingHom.smul_toAlgebra
     r • s = i r * s := rfl
 
 中文:
-定理 RingHom.smul_toAlgebra
-  结论: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
+定理 环态射.smul_toAlgebra
+  结论: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
   证明: RingHom.toAlgebra i
     r • s = i r * s := rfl
 
@@ -481,8 +481,8 @@ theorem RingHom.algebraMap_toAlgebra
   proof: rfl
 
 中文:
-定理 RingHom.algebraMap_toAlgebra
-  条件: {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S)
+定理 环态射.algebraMap_toAlgebra
+  条件: {R S} [交换半环 R] [交换半环 S] (i : R ->+* S)
   证明: rfl
 -/
 theorem RingHom.algebraMap_toAlgebra {R S} [CommSemiring R] [CommSemiring S] (i : R ->+* S) :
@@ -509,7 +509,7 @@ abbreviation ofModule'
 
 中文:
 缩写 ofModule'
-  签名: [CommSemiring R] [Semiring A] [Module R A]
+  签名: [交换半环 R] [半环 A] [模 R A]
   定义体: { toFun r := r • (1 : A)
     map_one' := one_smul _ _
     map_mul' r₁ r₂ := by simp only [h₁, mul_smul]
@@ -542,7 +542,7 @@ abbreviation ofModule
 
 中文:
 缩写 ofModule
-  签名: [CommSemiring R] [Semiring A] [Module R A]
+  签名: [交换半环 R] [半环 A] [模 R A]
   定义体: ofModule' (fun r x => by rw [h₁, one_mul]) fun r x => by rw [h₂, mul_one]
 
 Depends on / 依赖: mul_one, ofModule, one_mul
@@ -578,7 +578,7 @@ theorem algebra_ext
 
 中文:
 定理 algebra_ext
-  结论: {R : 类型} [CommSemiring R] {A : 类型} [Semiring A] (P Q : Algebra R A)
+  结论: {R : 类型} [交换半环 R] {A : 类型} [半环 A] (P Q : 代数 R A)
   证明: by
   replace h : P.algebraMap = Q.algebraMap := DFunLike.ext _ _ h
   have h' : (haveI := P; (· • ·) : R -> A -> A) = (haveI := Q; (· • ·) : R -> A -> A) := by
@@ -609,7 +609,7 @@ lemma _root_.toAlgebra_algebraMap
 
 中文:
 引理 _root_.toAlgebra_algebraMap
-  条件: [Algebra R S]
+  条件: [代数 R S]
   证明: algebra_ext _ _ fun _ => rfl
 
 Depends on / 依赖: algebra_ext
@@ -808,8 +808,8 @@ theorem _root_.RingHom.smulOneHom_eq_algebraMap
   proof: RingHom.ext fun r => (algebraMap_eq_smul_one r).symm
 
 中文:
-定理 _root_.RingHom.smulOneHom_eq_algebraMap
-  结论: RingHom.smulOneHom = algebraMap R A
+定理 _root_.环态射.smulOneHom_eq_algebraMap
+  结论: 环态射.smulOneHom = algebraMap R A
   证明: RingHom.ext fun r => (algebraMap_eq_smul_one r).symm
 
 Depends on / 依赖: RingHom, RingHom.ext, algebraMap_eq_smul_one
@@ -880,7 +880,7 @@ theorem _root_.smul_algebraMap
 
 中文:
 定理 _root_.smul_algebraMap
-  结论: {α : 类型} [Monoid α] [MulDistribMulAction α A]
+  结论: {α : 类型} [幺半群 α] [MulDistribMul作用 α A]
   证明: by
   rw [algebraMap_eq_smul_one]; rw [smul_comm a r (1 : A)]; rw [smul_one]
 
@@ -907,7 +907,7 @@ abbreviation compHom
 
 中文:
 缩写 compHom
-  签名: : Algebra S A where
+  签名: : 代数 S A where
   定义体: Module.compHom A f
   algebraMap := (algebraMap R A).comp f
   commutes' _ _ := Algebra.commutes _ _
@@ -1029,7 +1029,7 @@ theorem linearMap_apply
 中文:
 定理 linearMap_apply
   条件: (r : R)
-  结论: Algebra.linearMap R A r = algebraMap R A r
+  结论: 代数.linearMap R A r = algebraMap R A r
   证明: rfl
 -/
 theorem linearMap_apply (r : R) : Algebra.linearMap R A r = algebraMap R A r :=
@@ -1045,7 +1045,7 @@ theorem coe_linearMap
 
 中文:
 定理 coe_linearMap
-  结论: ⇑(Algebra.linearMap R A) = algebraMap R A
+  结论: ⇑(代数.linearMap R A) = algebraMap R A
   证明: rfl
 -/
 theorem coe_linearMap : ⇑(Algebra.linearMap R A) = algebraMap R A :=
@@ -1070,7 +1070,7 @@ lemma linearMap_self
 
 中文:
 引理 linearMap_self
-  结论: Algebra.linearMap R R = .id
+  结论: 代数.linearMap R R = .id
   证明: rfl
 -/
 @[simp] lemma linearMap_self : Algebra.linearMap R R = .id := rfl
@@ -1132,7 +1132,7 @@ theorem algebraMap.coe_smul
 
 中文:
 定理 algebraMap.coe_smul
-  条件: [SMul A C] [IsScalarTower A B C]
+  条件: [标量乘法 A C] [标量塔 A B C]
   结论: (a • b : B) = a • (b : C)
   证明: by
   simp [Algebra.algebraMap_eq_smul_one]
@@ -1156,7 +1156,7 @@ theorem algebraMap.coe_smul'
 
 中文:
 定理 algebraMap.coe_smul'
-  条件: [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C]
+  条件: [幺半群 A] [MulDistribMul作用 A C] [SMulDistrib类 A B C]
   证明: by
   simp [Algebra.algebraMap_eq_smul_one, smul_distrib_smul]
 
@@ -1176,7 +1176,7 @@ theorem algebraMap.smul
 
 中文:
 定理 algebraMap.smul
-  条件: [SMul A C] [IsScalarTower A B C]
+  条件: [标量乘法 A C] [标量塔 A B C]
   证明: coe_smul _ _ _
 
 Depends on / 依赖: coe_smul
@@ -1194,7 +1194,7 @@ theorem algebraMap.smul'
 
 中文:
 定理 algebraMap.smul'
-  条件: [Monoid A] [MulDistribMulAction A C] [SMulDistribClass A B C]
+  条件: [幺半群 A] [MulDistribMul作用 A C] [SMulDistrib类 A B C]
   证明: coe_smul' _ _ _
 
 Depends on / 依赖: coe_smul

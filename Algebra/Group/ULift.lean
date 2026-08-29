@@ -41,7 +41,7 @@ instance one
 
 中文:
 实例 one
-  签名: [One α]
+  签名: [幺 α]
   定义体: ⟨⟨1⟩⟩
 
 @[to_additive (attr := simp)]
@@ -63,8 +63,8 @@ theorem one_down
 
 中文:
 定理 one_down
-  条件: [One α]
-  结论: (1 : ULift α).down = 1
+  条件: [幺 α]
+  结论: (1 : 类型层提升 α).down = 1
   证明: rfl
 
 @[to_additive]
@@ -85,7 +85,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: ⟨fun f g => ⟨f.down * g.down⟩⟩
 
 @[to_additive (attr := simp)]
@@ -109,7 +109,7 @@ theorem mul_down
 
 中文:
 定理 mul_down
-  条件: [Mul α]
+  条件: [乘法 α]
   结论: (x * y).down = x.down * y.down
   证明: rfl
 
@@ -131,7 +131,7 @@ instance div
 
 中文:
 实例 div
-  签名: [Div α]
+  签名: [除法 α]
   定义体: ⟨fun f g => ⟨f.down / g.down⟩⟩
 
 @[to_additive (attr := simp)]
@@ -155,7 +155,7 @@ theorem div_down
 
 中文:
 定理 div_down
-  条件: [Div α]
+  条件: [除法 α]
   结论: (x / y).down = x.down / y.down
   证明: rfl
 
@@ -177,7 +177,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: ⟨fun f => ⟨f.down⁻¹⟩⟩
 
 @[to_additive (attr := simp)]
@@ -201,7 +201,7 @@ theorem inv_down
 
 中文:
 定理 inv_down
-  条件: [Inv α]
+  条件: [取逆 α]
   结论: x⁻¹.down = x.down⁻¹
   证明: rfl
 
@@ -223,7 +223,7 @@ instance pow
 
 中文:
 实例 pow
-  签名: [Pow α β]
+  签名: [幂 α β]
   定义体: ⟨fun x n => up (x.down ^ n)⟩
 
 @[to_additive (attr := to_additive, simp) smul_down]
@@ -245,7 +245,7 @@ theorem pow_down
 
 中文:
 定理 pow_down
-  条件: [Pow α β] (a : ULift.{w} α) (b : β)
+  条件: [幂 α β] (a : 类型层提升.{w} α) (b : β)
   结论: (a ^ b).down = a.down ^ b
   证明: rfl
 -/
@@ -266,8 +266,8 @@ definition _root_.MulEquiv.ulift
 @[to_additive]
 
 中文:
-定义 _root_.MulEquiv.ulift
-  签名: [Mul α]
+定义 _root_.乘法等价.ulift
+  签名: [乘法 α]
   定义体: { Equiv.ulift with map_mul' := fun _ _ => rfl }
 
 @[to_additive]
@@ -290,7 +290,7 @@ instance semigroup
 
 中文:
 实例 semigroup
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: (MulEquiv.ulift.injective.semigroup _) fun _ _ => rfl
 
 @[to_additive]
@@ -313,7 +313,7 @@ instance commSemigroup
 
 中文:
 实例 commSemigroup
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: (Equiv.ulift.injective.commSemigroup _) fun _ _ => rfl
 
 @[to_additive]
@@ -336,7 +336,7 @@ instance mulOneClass
 
 中文:
 实例 mulOneClass
-  签名: [MulOneClass α]
+  签名: [MulOne类 α]
   定义体: Equiv.ulift.injective.mulOneClass _ rfl (by intros; rfl)
 
 @[to_additive]
@@ -359,7 +359,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: Equiv.ulift.injective.monoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
@@ -382,7 +382,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: Equiv.ulift.injective.commMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
@@ -406,7 +406,7 @@ instance divInvMonoid
 
 中文:
 实例 divInvMonoid
-  签名: [DivInvMonoid α]
+  签名: [除逆幺半群 α]
   定义体: Equiv.ulift.injective.divInvMonoid _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -432,7 +432,7 @@ instance group
 
 中文:
 实例 group
-  签名: [Group α]
+  签名: [群 α]
   定义体: Equiv.ulift.injective.group _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -458,7 +458,7 @@ instance commGroup
 
 中文:
 实例 commGroup
-  签名: [CommGroup α]
+  签名: [交换群 α]
   定义体: Equiv.ulift.injective.commGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -483,7 +483,7 @@ instance leftCancelSemigroup
 
 中文:
 实例 leftCancelSemigroup
-  签名: [LeftCancelSemigroup α]
+  签名: [左消去半群 α]
   定义体: Equiv.ulift.injective.leftCancelSemigroup _ fun _ _ => rfl
 
 @[to_additive]
@@ -506,7 +506,7 @@ instance rightCancelSemigroup
 
 中文:
 实例 rightCancelSemigroup
-  签名: [RightCancelSemigroup α]
+  签名: [右消去半群 α]
   定义体: Equiv.ulift.injective.rightCancelSemigroup _ fun _ _ => rfl
 
 @[to_additive]
@@ -529,7 +529,7 @@ instance leftCancelMonoid
 
 中文:
 实例 leftCancelMonoid
-  签名: [LeftCancelMonoid α]
+  签名: [左消去幺半群 α]
   定义体: Equiv.ulift.injective.leftCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
@@ -552,7 +552,7 @@ instance rightCancelMonoid
 
 中文:
 实例 rightCancelMonoid
-  签名: [RightCancelMonoid α]
+  签名: [右消去幺半群 α]
   定义体: Equiv.ulift.injective.rightCancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
@@ -575,7 +575,7 @@ instance cancelMonoid
 
 中文:
 实例 cancelMonoid
-  签名: [CancelMonoid α]
+  签名: [消去幺半群 α]
   定义体: Equiv.ulift.injective.cancelMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[to_additive]
@@ -596,7 +596,7 @@ instance cancelCommMonoid
 
 中文:
 实例 cancelCommMonoid
-  签名: [CancelCommMonoid α]
+  签名: [消去交换幺半群 α]
   定义体: Equiv.ulift.injective.cancelCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Equiv.ulift.injective.cancelCommMonoid, cancelCommMonoid, injective
@@ -614,7 +614,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Nontrivial α]
+  签名: [非平凡 α]
   定义体: Equiv.ulift.symm.injective.nontrivial
 
 Depends on / 依赖: Equiv.ulift.symm.injective.nontrivial, injective, nontrivial

@@ -114,7 +114,7 @@ theorem index_comap_of_surjective
 
 中文:
 定理 index_comap_of_surjective
-  条件: {f : G' ->* G} (hf : Function.Surjective f)
+  条件: {f : G' ->* G} (hf : 函数.满射 f)
   证明: by
   have key : forall x y : G',
       QuotientGroup.leftRel (H.comap f) x y ↔ QuotientGroup.leftRel H (f x) (f y) := by
@@ -180,7 +180,7 @@ theorem relIndex_comap
 
 中文:
 定理 relIndex_comap
-  条件: (f : G' ->* G) (K : Subgroup G')
+  条件: (f : G' ->* G) (K : 子群 G')
   证明: by
   rw [relIndex]; rw [subgroupOf]; rw [comap_comap]; rw [index_comap]; rw [← f.map_range]; rw [K.range_subtype]
 
@@ -206,7 +206,7 @@ theorem relIndex_map_map_of_injective
 
 中文:
 定理 relIndex_map_map_of_injective
-  条件: {f : G ->* G'} (H K : Subgroup G) (hf : Function.Injective f)
+  条件: {f : G ->* G'} (H K : 子群 G) (hf : 函数.单射 f)
   证明: by
   rw [← Subgroup.relIndex_comap]; rw [Subgroup.comap_map_eq_self_of_injective hf]
 
@@ -230,7 +230,7 @@ theorem relIndex_map_map
 
 中文:
 定理 relIndex_map_map
-  条件: (f : G ->* G') (H K : Subgroup G)
+  条件: (f : G ->* G') (H K : 子群 G)
   证明: by
   rw [← comap_map_eq]; rw [← comap_map_eq]; rw [relIndex_comap]; rw [(gc_map_comap f).l_u_l_eq_l]
 
@@ -462,7 +462,7 @@ theorem relIndex_sup_right
 
 中文:
 定理 relIndex_sup_right
-  条件: [K.Normal]
+  条件: [K.正规]
   结论: K.relIndex (H ⊔ K) = K.relIndex H
   证明: Nat.card_congr (QuotientGroup.quotientInfEquivProdNormalQuotient H K).toEquiv.symm
 
@@ -488,7 +488,7 @@ theorem relIndex_sup_left
 
 中文:
 定理 relIndex_sup_left
-  条件: [K.Normal]
+  条件: [K.正规]
   结论: K.relIndex (K ⊔ H) = K.relIndex H
   证明: by
   rw [sup_comm]; rw [relIndex_sup_right]
@@ -512,7 +512,7 @@ theorem relIndex_dvd_index_of_normal
 
 中文:
 定理 relIndex_dvd_index_of_normal
-  条件: [H.Normal]
+  条件: [H.正规]
   结论: H.relIndex K ∣ H.index
   证明: relIndex_sup_right K H ▸ relIndex_dvd_index_of_le le_sup_right
 
@@ -630,7 +630,7 @@ lemma index_eq_two_iff_exists_notMem_and
     fun h b => ⟨h.2 b, fun h' => h.1 (by simpa using mul_mem (inv_mem h'.2) h'.1)⟩⟩
 
 中文:
-引理 index_eq_two_iff_exists_notMem_and
+引理 index_eq_two_iff_存在_notMem_and
   证明: by
   simp only [index_eq_two_iff, xor_iff_or_and_not_and]
   exact exists_congr fun a => ⟨fun h => ⟨fun ha => ((h a)).2 ⟨mul_mem ha ha, ha⟩, fun b => (h b).1⟩,
@@ -659,7 +659,7 @@ lemma index_eq_two_iff_exists_notMem_and'
     fun h b => ⟨h.2 b, fun h' => h.1 (by simpa using mul_mem h'.1 (inv_mem h'.2))⟩⟩
 
 中文:
-引理 index_eq_two_iff_exists_notMem_and'
+引理 index_eq_two_iff_存在_notMem_and'
   证明: by
   simp only [index_eq_two_iff', xor_iff_or_and_not_and]
   exact exists_congr fun a => ⟨fun h => ⟨fun ha => ((h a)).2 ⟨mul_mem ha ha, ha⟩, fun b => (h b).1⟩,
@@ -731,7 +731,7 @@ lemma relIndex_eq_two_iff_exists_notMem_and
   simp only [and_left_comm]
 
 中文:
-引理 relIndex_eq_two_iff_exists_notMem_and
+引理 relIndex_eq_two_iff_存在_notMem_and
   证明: by
   rw [Subgroup.relIndex]; rw [Subgroup.index_eq_two_iff_exists_notMem_and]
   simp only [mem_subgroupOf, coe_mul, Subtype.forall, Subtype.exists, exists_and_left, exists_prop]
@@ -763,7 +763,7 @@ lemma relIndex_eq_two_iff_exists_notMem_and'
 @[to_additive]
 
 中文:
-引理 relIndex_eq_two_iff_exists_notMem_and'
+引理 relIndex_eq_two_iff_存在_notMem_and'
   证明: by
   rw [Subgroup.relIndex]; rw [Subgroup.index_eq_two_iff_exists_notMem_and']
   simp only [mem_subgroupOf, coe_mul, Subtype.forall, Subtype.exists, exists_and_left, exists_prop]
@@ -882,7 +882,7 @@ theorem index_top
 
 中文:
 定理 index_top
-  结论: (⊤ : Subgroup G).index = 1
+  结论: (⊤ : 子群 G).index = 1
   证明: Nat.card_eq_one_iff_unique.mpr ⟨QuotientGroup.subsingleton_quotient_top, ⟨1⟩⟩
 
 @[to_additive (attr := simp)]
@@ -905,7 +905,7 @@ theorem index_bot
 
 中文:
 定理 index_bot
-  结论: (⊥ : Subgroup G).index = 自然数.card G
+  结论: (⊥ : 子群 G).index = 自然数.card G
   证明: Nat.card_congr QuotientGroup.quotientBot.toEquiv
 
 @[to_additive (attr := simp)]
@@ -928,7 +928,7 @@ theorem relIndex_top_left
 
 中文:
 定理 relIndex_top_left
-  结论: (⊤ : Subgroup G).relIndex H = 1
+  结论: (⊤ : 子群 G).relIndex H = 1
   证明: index_top
 
 @[to_additive (attr := simp)]
@@ -977,7 +977,7 @@ theorem relIndex_bot_left
 
 中文:
 定理 relIndex_bot_left
-  结论: (⊥ : Subgroup G).relIndex H = 自然数.card H
+  结论: (⊥ : 子群 G).relIndex H = 自然数.card H
   证明: by
   rw [relIndex]; rw [bot_subgroupOf]; rw [index_bot]
 
@@ -1129,7 +1129,7 @@ theorem card_dvd_of_surjective
 
 中文:
 定理 card_dvd_of_surjective
-  条件: (f : G ->* G') (hf : Function.Surjective f)
+  条件: (f : G ->* G') (hf : 函数.满射 f)
   证明: by
   rw [← Nat.card_congr (QuotientGroup.quotientKerEquivOfSurjective f hf).toEquiv]
   exact Dvd.intro_left (Nat.card f.ker) f.ker.card_mul_index
@@ -1234,7 +1234,7 @@ theorem index_map_dvd
 
 中文:
 定理 index_map_dvd
-  条件: {f : G ->* G'} (hf : Function.Surjective f)
+  条件: {f : G ->* G'} (hf : 函数.满射 f)
   证明: by
   rw [index_map]; rw [f.range_eq_top_of_surjective hf]; rw [index_top]; rw [mul_one]
   exact index_dvd_of_le le_sup_left
@@ -1291,7 +1291,7 @@ theorem index_map_eq
 
 中文:
 定理 index_map_eq
-  条件: (hf1 : Surjective f) (hf2 : f.ker <= H)
+  条件: (hf1 : 满射 f) (hf2 : f.ker <= H)
   结论: (H.map f).index = H.index
   证明: Nat.dvd_antisymm (H.index_map_dvd hf1) (H.dvd_index_map hf2)
 
@@ -1316,7 +1316,7 @@ lemma index_map_of_bijective
 
 中文:
 引理 index_map_of_bijective
-  条件: (hf : Bijective f) (H : Subgroup G)
+  条件: (hf : 双射 f) (H : 子群 G)
   结论: (H.map f).index = H.index
   证明: index_map_eq _ hf.2 (by rw [f.ker_eq_bot hf.1]; exact bot_le)
 
@@ -1366,7 +1366,7 @@ theorem index_map_of_injective
 
 中文:
 定理 index_map_of_injective
-  条件: {f : G ->* G'} (hf : Function.Injective f)
+  条件: {f : G ->* G'} (hf : 函数.单射 f)
   证明: by
   rw [H.index_map]; rw [f.ker_eq_bot hf]; rw [sup_bot_eq]
 
@@ -1392,7 +1392,7 @@ theorem index_map_subtype
 
 中文:
 定理 index_map_subtype
-  条件: {H : Subgroup G} (K : Subgroup H)
+  条件: {H : 子群 G} (K : 子群 H)
   证明: by
   rw [K.index_map_of_injective H.subtype_injective]; rw [H.range_subtype]
 
@@ -1557,7 +1557,7 @@ exact fun h => hJK relIndex_eq_zero_of_le_right (map_comap_le _ _) h
 
 中文:
 引理 relIndex_comap_ne_zero
-  条件: (f : G ->* G') {J K : Subgroup G'} (hJK : J.relIndex K != 0)
+  条件: (f : G ->* G') {J K : 子群 G'} (hJK : J.relIndex K != 0)
   证明: by
   rw [relIndex_comap]
 exact fun h => hJK relIndex_eq_zero_of_le_right (map_comap_le _ _) h
@@ -1749,7 +1749,7 @@ lemma relIndex_inter_ne_zero
 
 中文:
 引理 relIndex_inter_ne_zero
-  条件: {J K : Subgroup G} (hJK : J.relIndex K != 0) (L : Subgroup G)
+  条件: {J K : 子群 G} (hJK : J.relIndex K != 0) (L : 子群 G)
   证明: by
   rw [← range_subtype L]; rw [inf_comm]; rw [← map_comap_eq]; rw [inf_comm]; rw [← map_comap_eq]; rw [← relIndex_comap]; rw [comap_map_eq_self_of_injective (subtype_injective L)]
   exact relIndex_comap_ne_zero _ hJK
@@ -1838,7 +1838,7 @@ theorem relIndex_iInf_ne_zero
 
 中文:
 定理 relIndex_iInf_ne_zero
-  结论: {ι : 类型} [_hι : Finite ι] {f : ι -> Subgroup G}
+  结论: {ι : 类型} [_hι : 有限 ι] {f : ι -> 子群 G}
   证明: haveI := Fintype.ofFinite ι
   (Finset.prod_ne_zero_iff.mpr fun i _hi => hf i) ∘
     Nat.card_pi.symm.trans ∘
@@ -1872,7 +1872,7 @@ theorem relIndex_iInf_le
 
 中文:
 定理 relIndex_iInf_le
-  条件: {ι : 类型} [Fintype ι] (f : ι -> Subgroup G)
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> 子群 G)
   证明: le_of_le_of_eq
     (Finite.card_le_of_embedding' (quotientiInfSubgroupOfEmbedding f L) fun h =>
       let ⟨i, _hi, h⟩ := Finset.prod_eq_zero_iff.mp (Nat.card_pi.symm.trans h)
@@ -1906,7 +1906,7 @@ theorem index_iInf_ne_zero
 
 中文:
 定理 index_iInf_ne_zero
-  结论: {ι : 类型} [Finite ι] {f : ι -> Subgroup G}
+  结论: {ι : 类型} [有限 ι] {f : ι -> 子群 G}
   证明: by
   simp_rw [← relIndex_top_right] at hf ⊢
   exact relIndex_iInf_ne_zero hf
@@ -1933,7 +1933,7 @@ theorem index_iInf_le
 
 中文:
 定理 index_iInf_le
-  条件: {ι : 类型} [Fintype ι] (f : ι -> Subgroup G)
+  条件: {ι : 类型} [有限类型 ι] (f : ι -> 子群 G)
   证明: by simp_rw [← relIndex_top_right, relIndex_iInf_le]
 
 @[to_additive (attr := simp) index_eq_one]
@@ -2208,7 +2208,7 @@ theorem index_ne_zero_of_finite
 
 中文:
 定理 index_ne_zero_of_finite
-  条件: [hH : Finite (G ⧸ H)]
+  条件: [hH : 有限 (G ⧸ H)]
   结论: H.index != 0
   证明: by
   cases nonempty_fintype (G ⧸ H)
@@ -2260,7 +2260,7 @@ lemma index_eq_zero_iff_infinite
 
 中文:
 引理 index_eq_zero_iff_infinite
-  结论: H.index = 0 ↔ Infinite (G ⧸ H)
+  结论: H.index = 0 ↔ 无限 (G ⧸ H)
   证明: by
   simp [index_eq_card, Nat.card_eq_zero]
 
@@ -2285,7 +2285,7 @@ lemma index_ne_zero_iff_finite
 
 中文:
 引理 index_ne_zero_iff_finite
-  结论: H.index != 0 ↔ Finite (G ⧸ H)
+  结论: H.index != 0 ↔ 有限 (G ⧸ H)
   证明: by
   simp [index_eq_zero_iff_infinite]
 
@@ -2310,7 +2310,7 @@ theorem one_lt_index_of_ne_top
 
 中文:
 定理 one_lt_index_of_ne_top
-  条件: [Finite (G ⧸ H)] (hH : H != ⊤)
+  条件: [有限 (G ⧸ H)] (hH : H != ⊤)
   结论: 1 < H.index
   证明: Nat.one_lt_iff_ne_zero_and_ne_one.mpr ⟨index_ne_zero_of_finite, mt index_eq_one.mp hH⟩
 
@@ -2336,7 +2336,7 @@ lemma finite_quotient_of_finite_quotient_of_index_ne_zero
 
 中文:
 引理 finite_quotient_of_finite_quotient_of_index_ne_zero
-  结论: {X : 类型} [MulAction G X]
+  结论: {X : 类型} [乘法作用 G X]
   证明: by
   have := fintypeOfIndexNeZero hi
   exact MulAction.finite_quotient_of_finite_quotient_of_finite_quotient
@@ -2364,7 +2364,7 @@ lemma finite_quotient_of_pretransitive_of_index_ne_zero
 
 中文:
 引理 finite_quotient_of_pretransitive_of_index_ne_zero
-  结论: {X : 类型} [MulAction G X]
+  结论: {X : 类型} [乘法作用 G X]
   证明: by
   have := (MulAction.pretransitive_iff_subsingleton_quotient G X).1 inferInstance
   exact finite_quotient_of_finite_quotient_of_index_ne_zero hi
@@ -2392,7 +2392,7 @@ lemma exists_pow_mem_of_index_ne_zero
     rw [eq_comm]; rw [QuotientGroup.eq]; rw [← zpow_natCast]; rw [← zpow_natCast]; rw [← zpow_neg]; rw [← zpow
 
 中文:
-引理 exists_pow_mem_of_index_ne_zero
+引理 存在_pow_mem_of_index_ne_zero
   条件: (h : H.index != 0) (a : G)
   证明: by
   suffices exists n₁ n₂, n₁ < n₂ ∧ n₂ <= H.index ∧ ((a ^ n₂ : G) : G ⧸ H) = ((a ^ n₁ : G) : G ⧸ H) by
@@ -2444,7 +2444,7 @@ lemma exists_pow_mem_of_relIndex_ne_zero
 @[to_additive]
 
 中文:
-引理 exists_pow_mem_of_relIndex_ne_zero
+引理 存在_pow_mem_of_relIndex_ne_zero
   条件: (h : H.relIndex K != 0) {a : G} (ha : a in K)
   证明: by
   rcases exists_pow_mem_of_index_ne_zero h ⟨a, ha⟩ with ⟨n, hlt, hle, he⟩
@@ -2541,8 +2541,8 @@ lemma index_prod
 
 中文:
 引理 index_prod
-  条件: (H : Subgroup G) (K : Subgroup G')
-  结论: (H.prod K).index = H.index * K.index
+  条件: (H : 子群 G) (K : 子群 G')
+  结论: (H.乘积 K).index = H.index * K.index
   证明: by
   simp_rw [index, ← Nat.card_prod]
   exact Nat.card_congr (QuotientGroup.prodEquiv H K)
@@ -2572,7 +2572,7 @@ lemma index_pi
 
 中文:
 引理 index_pi
-  条件: {ι : 类型} [Fintype ι] (H : ι -> Subgroup G)
+  条件: {ι : 类型} [有限类型 ι] (H : ι -> 子群 G)
   证明: by
   simp_rw [index, ← Nat.card_pi]
   refine Nat.card_congr
@@ -2603,7 +2603,7 @@ lemma index_toAddSubgroup
 
 中文:
 引理 index_toAddSubgroup
-  结论: (Subgroup.toAddSubgroup H).index = H.index
+  结论: (子群.toAddSubgroup H).index = H.index
   证明: rfl
 
 @[simp]
@@ -2623,8 +2623,8 @@ lemma _root_.AddSubgroup.index_toSubgroup
 @[simp]
 
 中文:
-引理 _root_.AddSubgroup.index_toSubgroup
-  条件: {G : 类型} [AddGroup G] (H : AddSubgroup G)
+引理 _root_.加法子群.index_toSubgroup
+  条件: {G : 类型} [加法群 G] (H : 加法子群 G)
   证明: rfl
 
 @[simp]
@@ -2663,8 +2663,8 @@ lemma _root_.AddSubgroup.relIndex_toSubgroup
   proof: rfl
 
 中文:
-引理 _root_.AddSubgroup.relIndex_toSubgroup
-  条件: {G : 类型} [AddGroup G] (H K : AddSubgroup G)
+引理 _root_.加法子群.relIndex_toSubgroup
+  条件: {G : 类型} [加法群 G] (H K : 加法子群 G)
   证明: rfl
 -/
 lemma _root_.AddSubgroup.relIndex_toSubgroup {G : Type*} [AddGroup G] (H K : AddSubgroup G) :
@@ -2683,8 +2683,8 @@ class _root_.AddSubgroup.FiniteIndex
     - index_ne_zero : H.index != 0
 
 中文:
-类 _root_.AddSubgroup.FiniteIndex
-  参数: {G : 类型} [AddGroup G] (H : AddSubgroup G)
+类 _root_.加法子群.FiniteIndex
+  参数: {G : 类型} [加法群 G] (H : 加法子群 G)
   公理与运算 (1 个):
     - index_ne_zero : H.index != 0
 -/
@@ -2724,8 +2724,8 @@ class _root_.AddSubgroup.IsFiniteRelIndex
     - relIndex_ne_zero : H.relIndex K != 0
 
 中文:
-类 _root_.AddSubgroup.IsFiniteRelIndex
-  参数: {G : 类型} [AddGroup G] (H K : AddSubgroup G)
+类 _root_.加法子群.是FiniteRelIndex
+  参数: {G : 类型} [加法群 G] (H K : 加法子群 G)
   公理与运算 (1 个):
     - relIndex_ne_zero : H.relIndex K != 0
 -/
@@ -2744,7 +2744,7 @@ class IsFiniteRelIndex
     - relIndex_ne_zero : H.relIndex K != 0
 
 中文:
-类 IsFiniteRelIndex
+类 是FiniteRelIndex
   参数: : 命题 where
   公理与运算 (1 个):
     - relIndex_ne_zero : H.relIndex K != 0
@@ -2765,7 +2765,7 @@ lemma relIndex_ne_zero
 
 中文:
 引理 relIndex_ne_zero
-  条件: [H.IsFiniteRelIndex K]
+  条件: [H.是FiniteRelIndex K]
   结论: H.relIndex K != 0
   证明: IsFiniteRelIndex.relIndex_ne_zero
 
@@ -2786,8 +2786,8 @@ instance IsFiniteRelIndex.to_finiteIndex_subgroupOf
 @[to_additive]
 
 中文:
-实例 IsFiniteRelIndex.to_finiteIndex_subgroupOf
-  签名: [H.IsFiniteRelIndex K]
+实例 是FiniteRelIndex.to_finiteIndex_subgroupOf
+  签名: [H.是FiniteRelIndex K]
   定义体: relIndex_ne_zero
 
 @[to_additive]
@@ -2811,7 +2811,7 @@ lemma isFiniteRelIndex_iff_relIndex_ne_zero
 
 中文:
 引理 isFiniteRelIndex_iff_relIndex_ne_zero
-  结论: H.IsFiniteRelIndex K ↔ H.relIndex K != 0
+  结论: H.是FiniteRelIndex K ↔ H.relIndex K != 0
   证明: ⟨fun _ => relIndex_ne_zero, IsFiniteRelIndex.mk⟩
 
 @[to_additive]
@@ -2931,8 +2931,8 @@ theorem _root_.AddSubgroup.finiteIndex_toSubgroup_iff
 @[to_additive (attr := simp)]
 
 中文:
-定理 _root_.AddSubgroup.finiteIndex_toSubgroup_iff
-  条件: {G : 类型} [AddGroup G] (H : AddSubgroup G)
+定理 _root_.加法子群.finiteIndex_toSubgroup_iff
+  条件: {G : 类型} [加法群 G] (H : 加法子群 G)
   证明: by
   simp [finiteIndex_iff, AddSubgroup.finiteIndex_iff]
 
@@ -2956,7 +2956,7 @@ lemma isFiniteRelIndex_top_iff
 
 中文:
 引理 isFiniteRelIndex_top_iff
-  结论: H.IsFiniteRelIndex ⊤ ↔ H.FiniteIndex
+  结论: H.是FiniteRelIndex ⊤ ↔ H.FiniteIndex
   证明: by
   rw [finiteIndex_iff]; rw [isFiniteRelIndex_iff_relIndex_ne_zero]; rw [relIndex_top_right]
 
@@ -3026,7 +3026,7 @@ theorem finiteIndex_of_finite_quotient
 
 中文:
 定理 finiteIndex_of_finite_quotient
-  条件: [Finite (G ⧸ H)]
+  条件: [有限 (G ⧸ H)]
   结论: FiniteIndex H
   证明: ⟨index_ne_zero_of_finite⟩
 
@@ -3050,7 +3050,7 @@ theorem finiteIndex_iff_finite_quotient
 
 中文:
 定理 finiteIndex_iff_finite_quotient
-  结论: FiniteIndex H ↔ Finite (G ⧸ H)
+  结论: FiniteIndex H ↔ 有限 (G ⧸ H)
   证明: ⟨fun _ => inferInstance, fun _ => finiteIndex_of_finite_quotient⟩
 
 @[to_additive]
@@ -3076,7 +3076,7 @@ instance [FiniteIndex
 
 中文:
 实例 [FiniteIndex
-  签名: H] [FiniteIndex K] : FiniteIndex (H.prod K)
+  签名: H] [FiniteIndex K] : FiniteIndex (H.乘积 K)
   定义体: by
   simp_all [finiteIndex_iff]
 
@@ -3101,7 +3101,7 @@ mpr := fun ⟨_, _⟩ => Nat.finite_of_card_ne_zero
 
 中文:
 定理 finite_iff_finite_and_finiteIndex
-  结论: Finite G ↔ Finite H ∧ H.FiniteIndex where
+  结论: 有限 G ↔ 有限 H ∧ H.FiniteIndex where
   证明: ⟨inferInstance, inferInstance⟩
 mpr := fun ⟨_, _⟩ => Nat.finite_of_card_ne_zero
     H.card_mul_index ▸ mul_ne_zero Nat.card_pos.ne' FiniteIndex.index_ne_zero
@@ -3126,7 +3126,7 @@ theorem _root_.MonoidHom.finite_iff_finite_ker_range
 @[to_additive]
 
 中文:
-定理 _root_.MonoidHom.finite_iff_finite_ker_range
+定理 _root_.幺半群态射.finite_iff_finite_ker_range
   条件: (f : G ->* G')
   证明: by
   rw [finite_iff_finite_and_finiteIndex f.ker]; rw [← (QuotientGroup.quotientKerEquivRange f).finite_iff]; rw [finiteIndex_iff_finite_quotient]
@@ -3152,7 +3152,7 @@ instance :
 
 中文:
 实例 :
-  签名: FiniteIndex (⊤ : Subgroup G)
+  签名: FiniteIndex (⊤ : 子群 G)
   定义体: ⟨ne_of_eq_of_ne index_top one_ne_zero⟩
 
 @[to_additive]
@@ -3198,7 +3198,7 @@ theorem finiteIndex_iInf
 
 中文:
 定理 finiteIndex_iInf
-  结论: {ι : 类型} [Finite ι] {f : ι -> Subgroup G}
+  结论: {ι : 类型} [有限 ι] {f : ι -> 子群 G}
   证明: ⟨index_iInf_ne_zero fun i => (hf i).index_ne_zero⟩
 
 @[to_additive]
@@ -3224,7 +3224,7 @@ theorem finiteIndex_iInf'
 
 中文:
 定理 finiteIndex_iInf'
-  结论: {ι : 类型} {s : Finset ι}
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
   rw [iInf_subtype']
   exact finiteIndex_iInf fun ⟨i, hi⟩ => hs i hi
@@ -3252,7 +3252,7 @@ instance instFiniteIndex_subgroupOf
 
 中文:
 实例 instFiniteIndex_subgroupOf
-  签名: (H K : Subgroup G) [H.FiniteIndex]
+  签名: (H K : 子群 G) [H.FiniteIndex]
   定义体: ⟨fun h => H.index_ne_zero_of_finite H.index_eq_zero_of_relIndex_eq_zero h⟩
 
 @[to_additive]
@@ -3305,7 +3305,7 @@ exact finiteIndex_of_le subgroupOf_mono L h
 
 中文:
 引理 isFiniteRelIndex_of_le_left
-  条件: (L : Subgroup G) [H.IsFiniteRelIndex L] (h : H <= K)
+  条件: (L : 子群 G) [H.是FiniteRelIndex L] (h : H <= K)
   证明: by
   rw [isFiniteRelIndex_iff_finiteIndex] at *
 exact finiteIndex_of_le subgroupOf_mono L h
@@ -3341,7 +3341,7 @@ lemma isFiniteRelIndex_of_le_right
 
 中文:
 引理 isFiniteRelIndex_of_le_right
-  条件: (h : K <= L) [H.IsFiniteRelIndex L]
+  条件: (h : K <= L) [H.是FiniteRelIndex L]
   证明: by
   rw [isFiniteRelIndex_iff_relIndex_ne_zero]
   exact mt (relIndex_eq_zero_of_le_right h) relIndex_ne_zero
@@ -3372,7 +3372,7 @@ lemma isFiniteRelIndex_of_finiteIndex
 中文:
 引理 isFiniteRelIndex_of_finiteIndex
   条件: [h : H.FiniteIndex]
-  结论: H.IsFiniteRelIndex K
+  结论: H.是FiniteRelIndex K
   证明: by
   rw [← isFiniteRelIndex_top_iff] at h
   exact isFiniteRelIndex_of_le_right _ le_top
@@ -3456,7 +3456,7 @@ instance finiteIndex_ker
 
 中文:
 实例 finiteIndex_ker
-  签名: {G' : 类型} [Group G'] (f : G ->* G') [Finite f.range]
+  签名: {G' : 类型} [群 G'] (f : G ->* G') [有限 f.range]
   定义体: @finiteIndex_of_finite_quotient G _ f.ker
     (Finite.of_equiv f.range (QuotientGroup.quotientKerEquivRange f).symm)
 
@@ -3501,8 +3501,8 @@ instance _root_.AddSubgroup.finiteIndex_normalCore
   exact H.toSubgroup.finiteIndex_normalCore
 
 中文:
-实例 _root_.AddSubgroup.finiteIndex_normalCore
-  签名: {G : 类型} [AddGroup G] (H : AddSubgroup G)
+实例 _root_.加法子群.finiteIndex_normalCore
+  签名: {G : 类型} [加法群 G] (H : 加法子群 G)
   定义体: by
   rw [← AddSubgroup.finiteIndex_toSubgroup_iff] at h ⊢
   exact H.toSubgroup.finiteIndex_normalCore
@@ -3562,8 +3562,8 @@ lemma Subgroup.relIndex_pointwise_smul
   rw [pointwise_smul_def K]; rw [← relIndex_comap]; rw [pointwise_smul_def]; rw [comap_map_eq_self_of_injective (by intro a b; simp)]
 
 中文:
-引理 Subgroup.relIndex_pointwise_smul
-  条件: [Group G] [MulDistribMulAction H G] (J K : Subgroup G)
+引理 子群.relIndex_pointwise_smul
+  条件: [群 G] [MulDistribMul作用 H G] (J K : 子群 G)
   证明: by
   rw [pointwise_smul_def K]; rw [← relIndex_comap]; rw [pointwise_smul_def]; rw [comap_map_eq_self_of_injective (by intro a b; simp)]
 
@@ -3584,8 +3584,8 @@ lemma AddSubgroup.relIndex_pointwise_smul
   rw [pointwise_smul_def K]; rw [← relIndex_comap]; rw [pointwise_smul_def]; rw [comap_map_eq_self_of_injective (by intro a b; simp)]
 
 中文:
-引理 AddSubgroup.relIndex_pointwise_smul
-  结论: [AddGroup G] [DistribMulAction H G]
+引理 加法子群.relIndex_pointwise_smul
+  结论: [加法群 G] [分配乘法作用 H G]
   证明: by
   rw [pointwise_smul_def K]; rw [← relIndex_comap]; rw [pointwise_smul_def]; rw [comap_map_eq_self_of_injective (by intro a b; simp)]
 
@@ -3630,7 +3630,7 @@ theorem index_stabilizer_of_transitive
 
 中文:
 定理 index_stabilizer_of_transitive
-  条件: [IsPretransitive G X]
+  条件: [是Pretransitive G X]
   证明: by
   rw [index_stabilizer]; rw [orbit_eq_univ]; rw [Set.ncard_univ]
 -/
@@ -3656,7 +3656,7 @@ refine range_eq_top.1 SetLike.ext' Set.eq_of_subset_of_ncard_le (Set.subset_univ
 
 中文:
 引理 surjective_of_card_ker_le_div
-  结论: {G M : 类型} [Group G] [Group M] [Finite G] [Finite M]
+  结论: {G M : 类型} [群 G] [群 M] [有限 G] [有限 M]
   证明: by
 refine range_eq_top.1 SetLike.ext' Set.eq_of_subset_of_ncard_le (Set.subset_univ _) ?_
   rw [Subgroup.coe_top]; rw [Set.ncard_univ]; rw [← Nat.card_coe_set_eq]; rw [SetLike.coe_sort_coe]; rw [← Nat.card_congr (QuotientGroup.quotientKerEquivRange f).toEquiv]
@@ -3694,7 +3694,7 @@ lemma card_fiber_eq_of_mem_range
 
 中文:
 引理 card_fiber_eq_of_mem_range
-  条件: (f : F) {x y : M} (hx : x in Set.range f) (hy : y in Set.range f)
+  条件: (f : F) {x y : M} (hx : x in 集合.range f) (hy : y in 集合.range f)
   证明: by
   rcases hx with ⟨x, rfl⟩
   rcases hy with ⟨y, rfl⟩
@@ -3737,7 +3737,7 @@ lemma index_smul
 
 中文:
 引理 index_smul
-  条件: (a : G) (S : AddSubgroup A)
+  条件: (a : G) (S : 加法子群 A)
   结论: (a • S).index = S.index
   证明: index_map_of_bijective (MulAction.bijective _) _
 

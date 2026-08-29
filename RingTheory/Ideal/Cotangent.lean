@@ -48,8 +48,8 @@ definition Cotangent
 deriving Inhabited
 
 中文:
-定义 Cotangent
-  签名: : Type _
+定义 余切
+  签名: : 类型 _
   定义体: I ⧸ (I • ⊤ : Submodule R I)
 deriving Inhabited
 
@@ -77,7 +77,7 @@ definition toCotangent
 
 中文:
 定义 toCotangent
-  签名: : I ->ₗ[R] I.Cotangent
+  签名: : I ->ₗ[R] I.余切
   定义体: Submodule.mkQ _
 
 Depends on / 依赖: Submodule, Submodule.mkQ
@@ -96,7 +96,7 @@ theorem map_toCotangent_ker
 
 中文:
 定理 map_toCotangent_ker
-  结论: (LinearMap.ker I.toCotangent).map I.subtype = I ^ 2
+  结论: (线性映射.ker I.toCotangent).map I.subtype = I ^ 2
   证明: by
   rw [Ideal.toCotangent]; rw [Submodule.ker_mkQ]; rw [pow_two]; rw [Submodule.map_smul'' I ⊤ (Submodule.subtype I)]; rw [smul_eq_mul]; rw [Submodule.map_subtype_top]
 
@@ -119,7 +119,7 @@ theorem mem_toCotangent_ker
 中文:
 定理 mem_toCotangent_ker
   条件: {x : I}
-  结论: x in LinearMap.ker I.toCotangent ↔ (x : R) in I ^ 2
+  结论: x in 线性映射.ker I.toCotangent ↔ (x : R) in I ^ 2
   证明: by
   rw [← I.map_toCotangent_ker]
   simp
@@ -184,7 +184,7 @@ theorem toCotangent_surjective
 
 中文:
 定理 toCotangent_surjective
-  结论: Function.Surjective I.toCotangent
+  结论: 函数.满射 I.toCotangent
   证明: Submodule.mkQ_surjective _
 
 Depends on / 依赖: Submodule, Submodule.mkQ_surjective, mkQ_surjective
@@ -201,7 +201,7 @@ theorem toCotangent_range
 
 中文:
 定理 toCotangent_range
-  结论: LinearMap.range I.toCotangent = ⊤
+  结论: 线性映射.range I.toCotangent = ⊤
   证明: Submodule.range_mkQ _
 
 Depends on / 依赖: Submodule, Submodule.range_mkQ, range_mkQ
@@ -226,7 +226,7 @@ I.toCotangent_eq.mpr ((p
 
 中文:
 定理 cotangent_subsingleton_iff
-  结论: Subsingleton I.Cotangent ↔ IsIdempotentElem I
+  结论: 子单例 I.余切 ↔ IsIdempotentElem I
   证明: by
   constructor
   · intro H
@@ -261,7 +261,7 @@ definition cotangentToQuotientSquare
 
 中文:
 定义 cotangentToQuotientSquare
-  签名: : I.Cotangent ->ₗ[R] R ⧸ I ^ 2
+  签名: : I.余切 ->ₗ[R] R ⧸ I ^ 2
   定义体: Submodule.mapQ (I • ⊤) (I ^ 2) I.subtype
     (by
       rw [← Submodule.map_le_iff_le_comap]; rw [Submodule.map_smul'']; rw [Submodule.map_top]; rw [Submodule.range_subtype]; rw [smul_eq_mul]; rw [pow_two])
@@ -326,7 +326,7 @@ lemma cotangentToQuotientSquare_injective
 
 中文:
 引理 cotangentToQuotientSquare_injective
-  结论: Function.Injective I.cotangentToQuotientSquare
+  结论: 函数.单射 I.cotangentToQuotientSquare
   证明: by
   rw [injective_iff_map_eq_zero]
   intro x hx
@@ -355,8 +355,8 @@ lemma Cotangent.smul_eq_zero_of_mem
   exact Ideal.mul_mem_mul hx m.2
 
 中文:
-引理 Cotangent.smul_eq_zero_of_mem
-  结论: {I : Ideal R}
+引理 余切.smul_eq_zero_of_mem
+  结论: {I : 理想 R}
   证明: by
   obtain ⟨m, rfl⟩ := Ideal.toCotangent_surjective _ m
   rw [← map_smul]; rw [Ideal.toCotangent_eq_zero]; rw [pow_two]
@@ -395,7 +395,7 @@ definition cotangentIdeal
 
 中文:
 定义 cotangentIdeal
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: Submodule.map (Quotient.mk (I ^ 2) |>.toSemilinearMap) I
 
 Depends on / 依赖: Quotient, Quotient.mk, Submodule, Submodule.map, toSemilinearMap
@@ -420,7 +420,7 @@ theorem cotangentIdeal_square
 
 中文:
 定理 cotangentIdeal_square
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: I.cotangentIdeal ^ 2 = ⊥
   证明: by
   rw [eq_bot_iff]; rw [pow_two I.cotangentIdeal]; rw [← smul_eq_mul]
@@ -453,7 +453,7 @@ lemma mk_mem_cotangentIdeal
 
 中文:
 引理 mk_mem_cotangentIdeal
-  条件: {I : Ideal R} {x : R}
+  条件: {I : 理想 R} {x : R}
   证明: by
   refine ⟨fun ⟨y, hy, e⟩ => ?_, fun h => ⟨x, h, rfl⟩⟩
   simpa using sub_mem hy (Ideal.pow_le_self two_ne_zero
@@ -477,7 +477,7 @@ lemma comap_cotangentIdeal
 
 中文:
 引理 comap_cotangentIdeal
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: Ideal.ext fun _ => mk_mem_cotangentIdeal
 
 Depends on / 依赖: Ideal.ext, mk_mem_cotangentIdeal
@@ -528,7 +528,7 @@ definition cotangentEquivIdeal
 
 中文:
 定义 cotangentEquivIdeal
-  签名: : I.Cotangent ≃ₗ[R] I.cotangentIdeal
+  签名: : I.余切 ≃ₗ[R] I.cotangentIdeal
   定义体: by
   refine
   { LinearMap.codRestrict (I.cotangentIdeal.restrictScalars R) I.cotangentToQuotientSquare
@@ -566,7 +566,7 @@ theorem cotangentEquivIdeal_apply
 
 中文:
 定理 cotangentEquivIdeal_apply
-  条件: (x : I.Cotangent)
+  条件: (x : I.余切)
   证明: rfl
 -/
 theorem cotangentEquivIdeal_apply (x : I.Cotangent) :
@@ -610,7 +610,7 @@ definition _root_.AlgHom.kerSquareLift
     rw [IsScalarTower.algebraMap_apply R A]; rw [RingHom.toFun_eq_coe]; rw [Ideal.Quotient.algebraMap_eq]; rw [Ideal.Quotient.lift_
 
 中文:
-定义 _root_.AlgHom.kerSquareLift
+定义 _root_.代数态射.kerSquareLift
   签名: (f : A ->ₐ[R] B)
   定义体: by
   refine { Ideal.Quotient.lift (RingHom.ker f.toRingHom ^ 2) f.toRingHom ?_ with commutes' := ?_ }
@@ -640,7 +640,7 @@ lemma _root_.AlgHom.kerSquareLift_mk
   proof: rfl
 
 中文:
-引理 _root_.AlgHom.kerSquareLift_mk
+引理 _root_.代数态射.kerSquareLift_mk
   条件: (f : A ->ₐ[R] B) (x : A)
   结论: f.kerSquareLift x = f x
   证明: rfl
@@ -660,7 +660,7 @@ theorem _root_.AlgHom.ker_kerSquareLift
   · rintro _ ⟨x, hx, rfl⟩; exact hx
 
 中文:
-定理 _root_.AlgHom.ker_kerSquareLift
+定理 _root_.代数态射.ker_kerSquareLift
   条件: (f : A ->ₐ[R] B)
   证明: by
   apply le_antisymm
@@ -684,8 +684,8 @@ instance Algebra.kerSquareLift
   body: (Algebra.ofId R A).kerSquareLift.toAlgebra
 
 中文:
-实例 Algebra.kerSquareLift
-  签名: : Algebra (R ⧸ (RingHom.ker (algebraMap R A) ^ 2)) A
+实例 代数.kerSquareLift
+  签名: : 代数 (R ⧸ (环态射.ker (algebraMap R A) ^ 2)) A
   定义体: (Algebra.ofId R A).kerSquareLift.toAlgebra
 
 Depends on / 依赖: Algebra, Algebra.ofId, kerSquareLift, kerSquareLift.toAlgebra, toAlgebra
@@ -703,8 +703,8 @@ instance [Algebra
     (IsScalarTower.toAlgHom R A B).kerSquareLift.comp_algebraMap.symm
 
 中文:
-实例 [Algebra
-  签名: A B] [IsScalarTower R A B] :
+实例 [代数
+  签名: A B] [标量塔 R A B] :
   定义体: IsScalarTower.of_algebraMap_eq'
     (IsScalarTower.toAlgHom R A B).kerSquareLift.comp_algebraMap.symm
 
@@ -758,7 +758,7 @@ definition mapCotangent
 
 中文:
 定义 mapCotangent
-  签名: (I₁ : Ideal A) (I₂ : Ideal B) (f : A ->ₐ[R] B) (h : I₁ <= I₂.comap f)
+  签名: (I₁ : 理想 A) (I₂ : 理想 B) (f : A ->ₐ[R] B) (h : I₁ <= I₂.comap f)
   定义体: by
   refine Submodule.mapQ ((I₁ • ⊤ : Submodule A I₁).restrictScalars R)
     ((I₂ • ⊤ : Submodule B I₂).restrictScalars R) ?_ ?_
@@ -934,7 +934,7 @@ invFun := Cotangent.lift (I.toCotangent ∘ₗ LinearEquiv.ofEq J I hIJ.symm) fu
 
 中文:
 定义 equivOfEq
-  签名: (I J : Ideal R) (hIJ : I = J)
+  签名: (I J : 理想 R) (hIJ : I = J)
   定义体: Cotangent.lift (J.toCotangent ∘ₗ LinearEquiv.ofEq I J hIJ) fun x y => by
     simp [toCotangent_eq_zero, ← hIJ, sq, mul_mem_mul]
 invFun := Cotangent.lift (I.toCotangent ∘ₗ LinearEquiv.ofEq J I hIJ.symm) fun x y => by
@@ -972,7 +972,7 @@ lemma equivOfEq_toCotangent
 
 中文:
 引理 equivOfEq_toCotangent
-  条件: (I J : Ideal R) (hIJ : I = J) (x : I)
+  条件: (I J : 理想 R) (hIJ : I = J) (x : I)
   证明: rfl
 
 @[simp]
@@ -992,7 +992,7 @@ lemma equivOfEq_symm
 
 中文:
 引理 equivOfEq_symm
-  条件: (I J : Ideal R) (hIJ : I = J)
+  条件: (I J : 理想 R) (hIJ : I = J)
   证明: rfl
 -/
 lemma equivOfEq_symm (I J : Ideal R) (hIJ : I = J) :
@@ -1015,7 +1015,7 @@ abbreviation CotangentSpace
 
 中文:
 缩写 CotangentSpace
-  签名: : Type _
+  签名: : 类型 _
   定义体: (maximalIdeal R).Cotangent
 
 Depends on / 依赖: Cotangent, maximalIdeal
@@ -1032,7 +1032,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (ResidueField R) (CotangentSpace R)
+  签名: 模 (ResidueField R) (CotangentSpace R)
   定义体: inferInstanceAs Module (R ⧸ maximalIdeal R) _
 
 Depends on / 依赖: Module, maximalIdeal
@@ -1050,7 +1050,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (ResidueField R) (CotangentSpace R)
+  签名: 标量塔 R (ResidueField R) (CotangentSpace R)
   定义体: inferInstanceAs IsScalarTower R (R ⧸ maximalIdeal R) _
 
 Depends on / 依赖: IsScalarTower, maximalIdeal
@@ -1068,8 +1068,8 @@ instance [IsNoetherianRing
   body: Module.Finite.of_restrictScalars_finite R _ _
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] : FiniteDimensional (ResidueField R) (CotangentSpace R)
+实例 [是Noether环
+  签名: R] : 有限维 (ResidueField R) (CotangentSpace R)
   定义体: Module.Finite.of_restrictScalars_finite R _ _
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_restrictScalars_finite, of_restrictScalars_finite
@@ -1092,7 +1092,7 @@ lemma subsingleton_cotangentSpace_iff
 
 中文:
 引理 subsingleton_cotangentSpace_iff
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   refine (maximalIdeal R).cotangent_subsingleton_iff.trans ?_
   rw [IsLocalRing.isField_iff_maximalIdeal_eq]; rw [Ideal.isIdempotentElem_iff_eq_bot_or_top_of_isLocalRing]
@@ -1120,7 +1120,7 @@ lemma CotangentSpace.map_eq_top_iff
 
 中文:
 引理 CotangentSpace.map_eq_top_iff
-  条件: [IsNoetherianRing R] {M : Submodule R (maximalIdeal R)}
+  条件: [是Noether环 R] {M : 子模 R (maximalIdeal R)}
   证明: by
   refine ⟨fun H => eq_top_iff.mpr ?_, by rintro rfl; simp [Ideal.toCotangent_range]⟩
   refine (Submodule.map_le_map_iff_of_injective (Submodule.injective_subtype _) _ _).mp ?_
@@ -1151,7 +1151,7 @@ lemma CotangentSpace.span_image_eq_top_iff
 
 中文:
 引理 CotangentSpace.span_image_eq_top_iff
-  条件: [IsNoetherianRing R] {s : Set (maximalIdeal R)}
+  条件: [是Noether环 R] {s : 集合 (maximalIdeal R)}
   证明: by
   rw [← map_eq_top_iff]; rw [← (Submodule.restrictScalars_injective R ..).eq_iff]; rw [Submodule.restrictScalars_span]
   · simp
@@ -1228,7 +1228,7 @@ theorem rank_cotangentSpace_eq_spanrank_maximalIdeal
 
 中文:
 定理 rank_cotangentSpace_eq_spanrank_maximalIdeal
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: rank_cotangentSpace_eq_spanrank_maximalIdeal_of_fg (maximalIdeal R).fg_of_isNoetherianRing
 
 Depends on / 依赖: fg_of_isNoetherianRing, maximalIdeal, rank_cotangentSpace_eq_spanrank_maximalIdeal_of_fg
@@ -1250,7 +1250,7 @@ lemma finrank_cotangentSpace_eq_zero_iff
 
 中文:
 引理 finrank_cotangentSpace_eq_zero_iff
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   rw [finrank_zero_iff]; rw [subsingleton_cotangentSpace_iff]
 
@@ -1270,7 +1270,7 @@ lemma finrank_cotangentSpace_eq_zero
 
 中文:
 引理 finrank_cotangentSpace_eq_zero
-  条件: (R) [Field R]
+  条件: (R) [域 R]
   证明: finrank_cotangentSpace_eq_zero_iff.mpr (Field.toIsField R)
 
 Depends on / 依赖: Field.toIsField, finrank_cotangentSpace_eq_zero_iff, finrank_cotangentSpace_eq_zero_iff.mpr, toIsField
@@ -1293,7 +1293,7 @@ theorem finrank_cotangentSpace_le_one_iff
 
 中文:
 定理 finrank_cotangentSpace_le_one_iff
-  条件: [IsNoetherianRing R]
+  条件: [是Noether环 R]
   证明: by
   rw [Module.finrank_le_one_iff_top_isPrincipal]; rw [isPrincipal_iff]; rw [(maximalIdeal R).toCotangent_surjective.exists]; rw [isPrincipal_iff]
   simp_rw [← Set.image_singleton, eq_comm (a := ⊤), CotangentSpace.span_image_eq_top_iff,
@@ -1327,8 +1327,8 @@ lemma Ideal.mapCotangent_surjective_of_comap_eq
   simpa using I.toCotangent.congr_arg (SetCoe.ext hy')
 
 中文:
-引理 Ideal.mapCotangent_surjective_of_comap_eq
-  结论: (surj : Function.Surjective (algebraMap A B))
+引理 理想.mapCotangent_surjective_of_comap_eq
+  结论: (surj : 函数.满射 (algebraMap A B))
   证明: by
   intro x
   rcases I.toCotangent_surjective x with ⟨x', rfl⟩
@@ -1364,8 +1364,8 @@ lemma Ideal.mapCotangent_ker_of_surjective
       Ideal.t
 
 中文:
-引理 Ideal.mapCotangent_ker_of_surjective
-  结论: (surj : Function.Surjective (algebraMap A B))
+引理 理想.mapCotangent_ker_of_surjective
+  结论: (surj : 函数.满射 (algebraMap A B))
   证明: by
   have eqmap := Ideal.eq_map_of_comap_eq_ker_sup _ surj eq
   refine le_antisymm (fun x hx => ?_) ?_

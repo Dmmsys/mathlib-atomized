@@ -27,8 +27,8 @@ definition Equiv.boolNot
   body: Bool.involutive_not.toPerm
 
 中文:
-定义 Equiv.boolNot
-  签名: : Equiv.Perm 布尔
+定义 等价.boolNot
+  签名: : 等价.置换 布尔值
   定义体: Bool.involutive_not.toPerm
 
 Depends on / 依赖: Bool.involutive_not.toPerm, involutive_not, toPerm
@@ -49,7 +49,7 @@ theorem not_bijective
 
 中文:
 定理 not_bijective
-  结论: Bijective not
+  结论: 双射 not
   证明: Equiv.boolNot.bijective
 
 Depends on / 依赖: Equiv.boolNot.bijective, bijective, boolNot
@@ -65,7 +65,7 @@ theorem not_injective
 
 中文:
 定理 not_injective
-  结论: Injective not
+  结论: 单射 not
   证明: Equiv.boolNot.injective
 
 Depends on / 依赖: Equiv.boolNot.injective, boolNot, injective
@@ -81,7 +81,7 @@ theorem not_surjective
 
 中文:
 定理 not_surjective
-  结论: Surjective not
+  结论: 满射 not
   证明: Equiv.boolNot.surjective
 
 Depends on / 依赖: Equiv.boolNot.surjective, boolNot, surjective
@@ -98,7 +98,7 @@ theorem not_leftInverse
 
 中文:
 定理 not_leftInverse
-  结论: LeftInverse not not
+  结论: 左逆 not not
   证明: not_not
 
 Depends on / 依赖: not_not
@@ -114,7 +114,7 @@ theorem not_rightInverse
 
 中文:
 定理 not_rightInverse
-  结论: RightInverse not not
+  结论: 右逆 not not
   证明: not_not
 
 Depends on / 依赖: not_not

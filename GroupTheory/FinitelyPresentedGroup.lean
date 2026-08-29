@@ -55,8 +55,8 @@ definition Subgroup.IsFinitelyNormallyGenerated
 alias Subgroup.IsNormalClosureFG := Subgroup.IsFinitelyNormallyGenerated
 
 中文:
-定义 Subgroup.IsFinitelyNormallyGenerated
-  签名: (N : Subgroup G)
+定义 子群.IsFinitelyNormallyGenerated
+  签名: (N : 子群 G)
   定义体: exists S : Set G, S.Finite ∧ Subgroup.normalClosure S = N
 
 @[deprecated (since := "2026-06-25")]
@@ -90,7 +90,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {N : Subgroup G} (hN : N.IsFinitelyNormallyGenerated)
+  结论: {N : 子群 G} (hN : N.IsFinitelyNormallyGenerated)
   证明: by
   obtain ⟨S, hSfinite, hSclosure⟩ := hN
   refine ⟨f '' S, hSfinite.image _, ?_⟩
@@ -118,7 +118,7 @@ theorem of_FG
 
 中文:
 定理 of_FG
-  条件: (N : Subgroup G) [N.Normal] [h : Group.FG N]
+  条件: (N : 子群 G) [N.正规] [h : 群.FG N]
   结论: N.IsFinitelyNormallyGenerated
   证明: by
   obtain ⟨S, rfl, hS⟩ := N.fg_iff.mp ((Group.fg_iff_subgroup_fg N).mp h)
@@ -153,7 +153,7 @@ theorem comap
 
 中文:
 定理 comap
-  结论: {N : Subgroup H} (hN : N.IsFinitelyNormallyGenerated)
+  结论: {N : 子群 H} (hN : N.IsFinitelyNormallyGenerated)
   证明: by
   obtain ⟨S, hS_fin, hS⟩ := hN
   obtain ⟨T, hT_fin, hT⟩ := hf'
@@ -188,7 +188,7 @@ theorem bot
 
 中文:
 定理 bot
-  结论: (⊥ : Subgroup G).IsFinitelyNormallyGenerated
+  结论: (⊥ : 子群 G).IsFinitelyNormallyGenerated
   证明: of_FG _
 -/
 protected theorem bot : (⊥ : Subgroup G).IsFinitelyNormallyGenerated := of_FG _
@@ -206,10 +206,10 @@ class AddGroup.IsFinitelyPresented
     - Function.Surjective : φ ∧ φ.ker.IsFinitelyNormallyGenerated
 
 中文:
-类 AddGroup.IsFinitelyPresented
-  参数: (G : 类型) [AddGroup G]
+类 加法群.是FinitelyPresented
+  参数: (G : 类型) [加法群 G]
   公理与运算 (2 个):
-    - out : 存在 (n : 自然数) (φ : FreeAddGroup (Fin n) ->+ G),
+    - out : 存在 (n : 自然数) (φ : 自由加法群 (有限集 n) ->+ G),
     - Function.Surjective : φ ∧ φ.ker.IsFinitelyNormallyGenerated
 -/
 class AddGroup.IsFinitelyPresented (G : Type*) [AddGroup G] : Prop where
@@ -231,10 +231,10 @@ class Group.IsFinitelyPresented
     - Function.Surjective : φ ∧ φ.ker.IsFinitelyNormallyGenerated
 
 中文:
-类 Group.IsFinitelyPresented
-  参数: (G : 类型) [Group G]
+类 群.是FinitelyPresented
+  参数: (G : 类型) [群 G]
   公理与运算 (2 个):
-    - out : 存在 (n : 自然数) (φ : FreeGroup (Fin n) ->* G),
+    - out : 存在 (n : 自然数) (φ : 自由群 (有限集 n) ->* G),
     - Function.Surjective : φ ∧ φ.ker.IsFinitelyNormallyGenerated
 -/
 class Group.IsFinitelyPresented (G : Type*) [Group G] : Prop where
@@ -260,8 +260,8 @@ theorem equiv
 
 中文:
 定理 equiv
-  条件: (iso : G ≃* H) [h : IsFinitelyPresented G]
-  结论: IsFinitelyPresented H
+  条件: (iso : G ≃* H) [h : 是FinitelyPresented G]
+  结论: 是FinitelyPresented H
   证明: by
   obtain ⟨n, φ, hφsurj, hNC⟩ := h
   refine ⟨n, (iso : G ->* H).comp φ, iso.surjective.comp hφsurj, ?_⟩
@@ -292,7 +292,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  结论: [hG : IsFinitelyPresented G] (f : G ->* H)
+  结论: [hG : 是FinitelyPresented G] (f : G ->* H)
   证明: by
   obtain ⟨n, φ, hφ_surj, hφ_ker⟩ := hG.out
   refine ⟨n, f.comp φ, hf_surj.comp hφ_surj, ?_⟩
@@ -324,7 +324,7 @@ theorem quotient
 
 中文:
 定理 quotient
-  结论: [hG : IsFinitelyPresented G] (N : Subgroup G) [N.Normal]
+  结论: [hG : 是FinitelyPresented G] (N : 子群 G) [N.正规]
   证明: of_surjective (QuotientGroup.mk' N) (QuotientGroup.mk'_surjective N)
     ((QuotientGroup.ker_mk' N).symm ▸ hN)
 
@@ -347,8 +347,8 @@ theorem exists_mulEquiv_presentedGroup
   exact ⟨n, s, hs, ⟨(quotientKerEquivOfSurjective φ hφ).symm.trans (quotientMulEquivOfEq hsφ.symm)⟩⟩
 
 中文:
-定理 exists_mulEquiv_presentedGroup
-  条件: [hg : IsFinitelyPresented G]
+定理 存在_mulEquiv_presentedGroup
+  条件: [hg : 是FinitelyPresented G]
   证明: by
   obtain ⟨n, φ, hφ, s, hs, hsφ⟩ := hg
   exact ⟨n, s, hs, ⟨(quotientKerEquivOfSurjective φ hφ).symm.trans (quotientMulEquivOfEq hsφ.symm)⟩⟩
@@ -376,8 +376,8 @@ instance [Finite
     exact .bot
 
 中文:
-实例 [Finite
-  签名: α] : IsFinitelyPresented (FreeGroup α)
+实例 [有限
+  签名: α] : 是FinitelyPresented (自由群 α)
   定义体: by
   have ⟨n, _, f, hf_surj, hf_inj⟩ := Finite.exists_equiv_fin α
   refine ⟨n, FreeGroup.map f, FreeGroup.map_surjective hf_surj.surjective, ?_⟩
@@ -402,7 +402,7 @@ instance [Finite
     ⟨s, ‹_›, (QuotientGroup.ker_mk' (Subgroup.normalClosure s)).symm⟩
 
 中文:
-实例 [Finite
+实例 [有限
   签名: α] (s
   定义体: of_surjective (PresentedGroup.mk s) (PresentedGroup.mk_surjective s)
     ⟨s, ‹_›, (QuotientGroup.ker_mk' (Subgroup.normalClosure s)).symm⟩
@@ -424,7 +424,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFinitelyPresented (Multiplicative 整数)
+  签名: 是FinitelyPresented (Multiplicative 整数)
   定义体: equiv (FreeGroup.mulEquivIntOfUnique : FreeGroup Unit ≃* Multiplicative Int)
 
 Depends on / 依赖: FreeGroup, FreeGroup.mulEquivIntOfUnique, Multiplicative, mulEquivIntOfUnique
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup.IsFinitelyPresented 整数
+  签名: 加法群.是FinitelyPresented 整数
   定义体: AddGroup.IsFinitelyPresented.equiv (FreeAddGroup.addEquivIntOfUnique : FreeAddGroup Unit ≃+ Int)
 
 Depends on / 依赖: AddGroup, AddGroup.IsFinitelyPresented.equiv, FreeAddGroup, FreeAddGroup.addEquivIntOfUnique, IsFinitelyPresented, addEquivIntOfUnique
@@ -462,8 +462,8 @@ instance [IsFinitelyPresented
   exact equiv ((PresentedGroup.coprodPresentations sG sH).trans (MulEquiv.coprodCongr φG φH).symm)
 
 中文:
-实例 [IsFinitelyPresented
-  签名: G] [IsFinitelyPresented H] :
+实例 [是FinitelyPresented
+  签名: G] [是FinitelyPresented H] :
   定义体: by
   obtain ⟨_, sG, ⟨_ : Finite sG, ⟨φG⟩⟩⟩ := exists_mulEquiv_presentedGroup (G := G)
   obtain ⟨_, sH, ⟨_ : Finite sH, ⟨φH⟩⟩⟩ := exists_mulEquiv_presentedGroup (G := H)
@@ -490,8 +490,8 @@ instance [Finite
   body: of_surjective FreeGroup.prod FreeGroup.prod_surjective (.of_FG FreeGroup.prod.ker)
 
 中文:
-实例 [Finite
-  签名: G] : IsFinitelyPresented G
+实例 [有限
+  签名: G] : 是FinitelyPresented G
   定义体: of_surjective FreeGroup.prod FreeGroup.prod_surjective (.of_FG FreeGroup.prod.ker)
 
 Depends on / 依赖: FreeGroup, FreeGroup.prod, FreeGroup.prod.ker, FreeGroup.prod_surjective, of_FG, of_surjective, prod_surjective

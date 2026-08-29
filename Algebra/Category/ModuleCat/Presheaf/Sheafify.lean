@@ -86,7 +86,7 @@ lemma _root_.PresheafOfModules.Sheafify.app_eq_of_isLocallyInjective
     rw [← NatTrans.naturality_apply (D
 
 中文:
-引理 _root_.PresheafOfModules.Sheafify.app_eq_of_isLocallyInjective
+引理 _root_.预模层.Sheafify.app_eq_of_isLocallyInjective
   证明: by
   apply hA _ (Presheaf.equalizerSieve r₀ r₀' ⊓
       Presheaf.equalizerSieve (F := M₀.presheaf) m₀ m₀')
@@ -176,7 +176,7 @@ lemma isCompatible_map_smul
 
 中文:
 引理 isCompatible_map_smul
-  结论: ((r₀.smul m₀).map (whiskerRight φ (forget _))).Compatible
+  结论: ((r₀.smul m₀).map (whiskerRight φ (forget _))).余mpatible
   证明: by
   intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ h₁ h₂ fac
   let a₁ := r₀ f₁ h₁
@@ -276,7 +276,7 @@ definition SMulCandidate.mk'
 
 中文:
 定义 SMulCandidate.mk'
-  签名: (S : Sieve X.unop) (hS : S in J X.unop)
+  签名: (S : 筛 X.unop) (hS : S in J X.unop)
   定义体: a
   h Y f a₀ ha₀ b₀ hb₀ := by
     apply A.isSeparated _ _ (J.pullback_stable f.unop hS)
@@ -330,7 +330,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (SMulCandidate α φ r m)
+  签名: 非空 (SMulCandidate α φ r m)
   定义体: ⟨by
   let S := (Presheaf.imageSieve α r ⊓ Presheaf.imageSieve φ m)
   have hS : S in J _ := by
@@ -381,7 +381,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (SMulCandidate α φ r m)
+  签名: 子单例 (SMulCandidate α φ r m)
   定义体: by
     rintro ⟨x₁, h₁⟩ ⟨x₂, h₂⟩
     simp only [SMulCandidate.mk.injEq]
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (SMulCandidate α φ r m)
+  签名: 唯一 (SMulCandidate α φ r m)
   定义体: uniqueOfSubsingleton (Nonempty.some inferInstance)
 
 Depends on / 依赖: Nonempty, Nonempty.some, uniqueOfSubsingleton
@@ -688,7 +688,7 @@ definition module
 
 中文:
 定义 module
-  签名: : Module (R.obj.obj X) (A.obj.obj X) where
+  签名: : 模 (R.obj.obj X) (A.obj.obj X) where
   定义体: smul α φ r m
   one_smul := Sheafify.one_smul α φ
   zero_smul := Sheafify.zero_smul α φ
@@ -760,7 +760,7 @@ definition sheafify
 
 中文:
 定义 sheafify
-  签名: : SheafOfModules.{v} R where
+  签名: : 模层.{v} R where
   定义体: letI := Sheafify.module α φ; ofPresheaf A.obj (Sheafify.map_smul _ _)
   isSheaf := A.property
 
@@ -866,7 +866,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallyInjective J (toSheafify α φ)
+  签名: 是LocallyInjective J (toSheafify α φ)
   定义体: by
   dsimp [IsLocallyInjective]; infer_instance
 
@@ -887,7 +887,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocallySurjective J (toSheafify α φ)
+  签名: 是LocallySurjective J (toSheafify α φ)
   定义体: by
   dsimp [IsLocallySurjective]; infer_instance
 
@@ -910,7 +910,7 @@ definition sheafifyHomEquiv'
 
 中文:
 定义 sheafifyHomEquiv'
-  签名: {F : PresheafOfModules.{v} R.obj}
+  签名: {F : 预模层.{v} R.obj}
   定义体: (restrictHomEquivOfIsLocallySurjective α hF).trans
     (homEquivOfIsLocallyBijective (f := toSheafify α φ)
       (N := (restrictScalars α).obj F) hF)
@@ -934,7 +934,7 @@ lemma comp_toPresheaf_map_sheafifyHomEquiv'_symm_hom
 
 中文:
 引理 comp_toPresheaf_map_sheafifyHomEquiv'_symm_hom
-  结论: {F : PresheafOfModules.{v} R.obj}
+  结论: {F : 预模层.{v} R.obj}
   证明: (toPresheaf _).congr_map ((sheafifyHomEquiv' α φ hF).apply_symm_apply f)
 
 Depends on / 依赖: apply_symm_apply, congr_map, sheafifyHomEquiv, toPresheaf
@@ -955,7 +955,7 @@ definition sheafifyHomEquiv
 
 中文:
 定义 sheafifyHomEquiv
-  签名: {F : SheafOfModules.{v} R}
+  签名: {F : 模层.{v} R}
   定义体: (SheafOfModules.fullyFaithfulForget R).homEquiv.trans
     (sheafifyHomEquiv' α φ F.isSheaf)
 

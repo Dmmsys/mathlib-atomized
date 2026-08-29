@@ -289,7 +289,7 @@ lemma wInner_of_isEmpty
 
 中文:
 引理 wInner_of_isEmpty
-  条件: [IsEmpty ι] (w : ι -> 实数) (f g : 对任意 i, E i)
+  条件: [是空 ι] (w : ι -> 实数) (f g : 对任意 i, E i)
   结论: ⟪f, g⟫_[𝕜, w] = 0
   证明: by
   simp [Subsingleton.elim f 0]
@@ -309,7 +309,7 @@ lemma wInner_smul_left
 
 中文:
 引理 wInner_smul_left
-  结论: {𝕝 : 类型} [CommSemiring 𝕝] [StarRing 𝕝] [Algebra 𝕝 𝕜] [StarModule 𝕝 𝕜]
+  结论: {𝕝 : 类型} [交换半环 𝕝] [对合环 𝕝] [代数 𝕝 𝕜] [对合模 𝕝 𝕜]
   证明: by
   simp_rw [wInner, Pi.smul_apply, inner_smul_left_eq_star_smul, starRingEnd_apply, smul_sum,
     smul_comm (w _)]
@@ -333,7 +333,7 @@ lemma wInner_smul_right
 
 中文:
 引理 wInner_smul_right
-  结论: {𝕝 : 类型} [CommSemiring 𝕝] [StarRing 𝕝] [Algebra 𝕝 𝕜] [StarModule 𝕝 𝕜]
+  结论: {𝕝 : 类型} [交换半环 𝕝] [对合环 𝕝] [代数 𝕝 𝕜] [对合模 𝕝 𝕜]
   证明: by
   simp_rw [wInner, Pi.smul_apply, inner_smul_right_eq_smul, smul_sum, smul_comm c]
 

@@ -36,7 +36,7 @@ definition functorOfIsEmpty
 
 中文:
 定义 functorOfIsEmpty
-  签名: [IsEmpty C]
+  签名: [是空 C]
   定义体: isEmptyElim
   map := fun {X} => isEmptyElim X
   map_id := fun {X} => isEmptyElim X
@@ -61,8 +61,8 @@ definition Functor.isEmptyExt
   body: NatIso.ofComponents isEmptyElim (fun {X} => isEmptyElim X)
 
 中文:
-定义 Functor.isEmptyExt
-  签名: [IsEmpty C] (F G : C ⥤ D)
+定义 函子.isEmptyExt
+  签名: [是空 C] (F G : C ⥤ D)
   定义体: NatIso.ofComponents isEmptyElim (fun {X} => isEmptyElim X)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, isEmptyElim, ofComponents
@@ -86,7 +86,7 @@ definition equivalenceOfIsEmpty
 
 中文:
 定义 equivalenceOfIsEmpty
-  签名: [IsEmpty C] [IsEmpty D]
+  签名: [是空 C] [是空 D]
   定义体: functorOfIsEmpty C D
   inverse := functorOfIsEmpty D C
   unitIso := Functor.isEmptyExt _ _
@@ -112,7 +112,7 @@ definition emptyEquivalence
 
 中文:
 定义 emptyEquivalence
-  签名: : Discrete.{w} PEmpty ≌ Discrete.{v} PEmpty
+  签名: : 离散.{w} 命题空 ≌ 离散.{v} 命题空
   定义体: equivalenceOfIsEmpty _ _
 
 Depends on / 依赖: equivalenceOfIsEmpty
@@ -131,7 +131,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : Discrete.{w} PEmpty ⥤ C
+  签名: : 离散.{w} 命题空 ⥤ C
   定义体: Discrete.functor PEmpty.elim
 
 Depends on / 依赖: Discrete, Discrete.functor, PEmpty, PEmpty.elim, functor
@@ -151,7 +151,7 @@ definition emptyExt
 
 中文:
 定义 emptyExt
-  签名: (F G : Discrete.{w} PEmpty ⥤ C)
+  签名: (F G : 离散.{w} 命题空 ⥤ C)
   定义体: Discrete.natIso fun x => x.as.elim
 
 Depends on / 依赖: Discrete, Discrete.natIso, natIso, x.as.elim
@@ -169,7 +169,7 @@ definition uniqueFromEmpty
 
 中文:
 定义 uniqueFromEmpty
-  签名: (F : Discrete.{w} PEmpty ⥤ C)
+  签名: (F : 离散.{w} 命题空 ⥤ C)
   定义体: emptyExt _ _
 
 Depends on / 依赖: emptyExt
@@ -188,7 +188,7 @@ theorem empty_ext'
 
 中文:
 定理 empty_ext'
-  条件: (F G : Discrete.{w} PEmpty ⥤ C)
+  条件: (F G : 离散.{w} 命题空 ⥤ C)
   结论: F = G
   证明: Functor.ext (fun x => x.as.elim) fun x _ _ => x.as.elim
 

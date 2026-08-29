@@ -41,7 +41,7 @@ theorem nil_product
 
 中文:
 定理 nil_product
-  条件: (l : List β)
+  条件: (l : 列表 β)
   结论: (@nil α) ×ˢ l = []
   证明: rfl
 
@@ -63,7 +63,7 @@ theorem product_cons
 
 中文:
 定理 product_cons
-  条件: (a : α) (l₁ : List α) (l₂ : List β)
+  条件: (a : α) (l₁ : 列表 α) (l₂ : 列表 β)
   证明: rfl
 
 @[simp]
@@ -82,7 +82,7 @@ theorem product_nil
 
 中文:
 定理 product_nil
-  结论: 对任意 l : List α, l ×ˢ (@nil β) = []
+  结论: 对任意 l : 列表 α, l ×ˢ (@nil β) = []
 -/
 theorem product_nil : forall l : List α, l ×ˢ (@nil β) = []
   | [] => rfl
@@ -100,7 +100,7 @@ theorem mem_product
 
 中文:
 定理 mem_product
-  条件: {l₁ : List α} {l₂ : List β} {a : α} {b : β}
+  条件: {l₁ : 列表 α} {l₂ : 列表 β} {a : α} {b : β}
   证明: by
   simp_all [SProd.sprod, product, mem_flatMap, mem_map, Prod.ext_iff, and_left_comm]
 
@@ -125,7 +125,7 @@ theorem length_product
 
 中文:
 定理 length_product
-  条件: (l₁ : List α) (l₂ : List β)
+  条件: (l₁ : 列表 α) (l₂ : 列表 β)
   证明: by
   induction l₁ with
   | nil => exact (Nat.zero_mul _).symm
@@ -162,7 +162,7 @@ theorem nil_sigma
 
 中文:
 定理 nil_sigma
-  条件: (l : 对任意 a, List (σ a))
+  条件: (l : 对任意 a, 列表 (σ a))
   结论: (@nil α).sigma l = []
   证明: rfl
 
@@ -184,7 +184,7 @@ theorem sigma_cons
 
 中文:
 定理 sigma_cons
-  条件: (a : α) (l₁ : List α) (l₂ : 对任意 a, List (σ a))
+  条件: (a : α) (l₁ : 列表 α) (l₂ : 对任意 a, 列表 (σ a))
   证明: rfl
 
 @[simp]
@@ -203,7 +203,7 @@ theorem sigma_nil
 
 中文:
 定理 sigma_nil
-  结论: 对任意 l : List α, (l.sigma fun a => @nil (σ a)) = []
+  结论: 对任意 l : 列表 α, (l.sigma fun a => @nil (σ a)) = []
 -/
 theorem sigma_nil : forall l : List α, (l.sigma fun a => @nil (σ a)) = []
   | [] => rfl
@@ -222,7 +222,7 @@ theorem mem_sigma
 
 中文:
 定理 mem_sigma
-  条件: {l₁ : List α} {l₂ : 对任意 a, List (σ a)} {a : α} {b : σ a}
+  条件: {l₁ : 列表 α} {l₂ : 对任意 a, 列表 (σ a)} {a : α} {b : σ a}
   证明: by
   simp [List.sigma, mem_flatMap, mem_map, exists_and_left, and_left_comm,
     exists_eq_left, exists_eq_right]
@@ -248,7 +248,7 @@ theorem mem_map_swap
 
 中文:
 定理 mem_map_swap
-  条件: (x : α) (y : β) (xs : List (α × β))
+  条件: (x : α) (y : β) (xs : 列表 (α × β))
   证明: by
   simp
 -/

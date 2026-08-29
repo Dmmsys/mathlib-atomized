@@ -39,13 +39,13 @@ structure SemilatSupCat
     - [isOrderBot : OrderBot.{u} X]
 
 中文:
-结构 SemilatSupCat
-  参数: : Type (u + 1) where
+结构 SemilatSup范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (4 个):
     - of : :
     - X : 类型u
     - [isSemilatticeSup : SemilatticeSup X]
-    - [isOrderBot : OrderBot.{u} X]
+    - [isOrderBot : 有底序.{u} X]
 -/
 structure SemilatSupCat : Type (u + 1) where
   /-- Construct a bundled `SemilatSupCat` from a `SemilatticeSup`. -/
@@ -68,13 +68,13 @@ structure SemilatInfCat
     - [isOrderTop : OrderTop.{u} X]
 
 中文:
-结构 SemilatInfCat
-  参数: : Type (u + 1) where
+结构 SemilatInf范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (4 个):
     - of : :
     - X : 类型u
     - [isSemilatticeInf : SemilatticeInf X]
-    - [isOrderTop : OrderTop.{u} X]
+    - [isOrderTop : 有顶序.{u} X]
 -/
 structure SemilatInfCat : Type (u + 1) where
   /-- Construct a bundled `SemilatInfCat` from a `SemilatticeInf`. -/
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort SemilatSupCat 类型
+  签名: CoeSort SemilatSup范畴 类型
   定义体: ⟨SemilatSupCat.X⟩
 
 Depends on / 依赖: SemilatSupCat, SemilatSupCat.X
@@ -117,7 +117,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [SemilatticeSup α] [OrderBot α]
+  条件: (α : 类型) [SemilatticeSup α] [有底序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SemilatSupCat
+  签名: 可居 SemilatSup范畴
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited SemilatSupCat :=
@@ -155,7 +155,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} SemilatSupCat
+  签名: 大范畴.{u} SemilatSup范畴
   定义体: SupBotHom X Y
   id X := SupBotHom.id X
   comp f g := g.comp f
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory SemilatSupCat (SupBotHom · ·)
+  签名: 余ncrete范畴 SemilatSup范畴 (SupBot态射 · ·)
   定义体: f
   ofHom f := f
 -/
@@ -205,7 +205,7 @@ instance hasForgetToPartOrd
 
 中文:
 实例 hasForgetToPartOrd
-  签名: : HasForget₂ SemilatSupCat PartOrd where
+  签名: : 有Forget₂ SemilatSup范畴 偏序 where
   定义体: .of X
   forget₂.map f := PartOrd.ofHom ⟨f.toSupHom, OrderHomClass.mono f.toSupHom⟩
 
@@ -226,7 +226,7 @@ theorem coe_forget_to_partOrd
 
 中文:
 定理 coe_forget_to_partOrd
-  条件: (X : SemilatSupCat)
+  条件: (X : SemilatSup范畴)
   证明: rfl
 -/
 theorem coe_forget_to_partOrd (X : SemilatSupCat) :
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort SemilatInfCat 类型
+  签名: CoeSort SemilatInf范畴 类型
   定义体: ⟨SemilatInfCat.X⟩
 
 Depends on / 依赖: SemilatInfCat, SemilatInfCat.X
@@ -268,7 +268,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [SemilatticeInf α] [OrderTop α]
+  条件: (α : 类型) [SemilatticeInf α] [有顶序 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -285,7 +285,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SemilatInfCat
+  签名: 可居 SemilatInf范畴
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited SemilatInfCat :=
@@ -306,7 +306,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} SemilatInfCat
+  签名: 大范畴.{u} SemilatInf范畴
   定义体: InfTopHom X Y
   id X := InfTopHom.id X
   comp f g := g.comp f
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory SemilatInfCat (InfTopHom · ·)
+  签名: 余ncrete范畴 SemilatInf范畴 (InfTop态射 · ·)
   定义体: f
   ofHom f := f
 -/
@@ -356,7 +356,7 @@ instance hasForgetToPartOrd
 
 中文:
 实例 hasForgetToPartOrd
-  签名: : HasForget₂ SemilatInfCat PartOrd where
+  签名: : 有Forget₂ SemilatInf范畴 偏序 where
   定义体: .of X
   forget₂.map f := PartOrd.ofHom ⟨f.toInfHom, OrderHomClass.mono f.toInfHom⟩
 
@@ -377,7 +377,7 @@ theorem coe_forget_to_partOrd
 
 中文:
 定理 coe_forget_to_partOrd
-  条件: (X : SemilatInfCat)
+  条件: (X : SemilatInf范畴)
   证明: rfl
 -/
 theorem coe_forget_to_partOrd (X : SemilatInfCat) :
@@ -404,8 +404,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : SemilatSupCat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : SemilatSup范畴.{u}} (e : α ≃o β)
   定义体: (e : SupBotHom _ _)
   inv := (e.symm : SupBotHom _ _)
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -430,7 +430,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : SemilatSupCat ⥤ SemilatInfCat where
+  签名: : SemilatSup范畴 ⥤ SemilatInf范畴 where
   定义体: .of Xᵒᵈ
   map {_ _} := SupBotHom.dual
 -/
@@ -456,8 +456,8 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : SemilatInfCat.{u}} (e : α ≃o β)
+定义 同构.mk
+  签名: {α β : SemilatInf范畴.{u}} (e : α ≃o β)
   定义体: (e : InfTopHom _ _)
   inv := (e.symm : InfTopHom _ _)
   hom_inv_id := by ext; exact e.symm_apply_apply _
@@ -482,7 +482,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : SemilatInfCat ⥤ SemilatSupCat where
+  签名: : SemilatInf范畴 ⥤ SemilatSup范畴 where
   定义体: .of Xᵒᵈ
   map {_ _} := InfTopHom.dual
 -/
@@ -507,7 +507,7 @@ counitIso := NatIso.ofComponents fun X => SemilatInfCat.Iso.mk OrderIso.dualDual
 
 中文:
 定义 SemilatSupCatEquivSemilatInfCat
-  签名: : SemilatSupCat ≌ SemilatInfCat where
+  签名: : SemilatSup范畴 ≌ SemilatInf范畴 where
   定义体: SemilatSupCat.dual
   inverse := SemilatInfCat.dual
 unitIso := NatIso.ofComponents fun X => SemilatSupCat.Iso.mk OrderIso.dualDual X

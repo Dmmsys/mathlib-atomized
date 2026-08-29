@@ -34,7 +34,7 @@ inductive PosNum
 
 中文:
 归纳类型 PosNum
-  参数: : Type
+  参数: : 类型
   构造子 (3 个):
     - one: PosNum
     - bit1: PosNum -> PosNum
@@ -56,7 +56,7 @@ instance :
 
 中文:
 实例 :
-  签名: One PosNum
+  签名: 幺 PosNum
   定义体: ⟨PosNum.one⟩
 -/
 instance : One PosNum :=
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited PosNum
+  签名: 可居 PosNum
   定义体: ⟨1⟩
 -/
 instance : Inhabited PosNum :=
@@ -90,7 +90,7 @@ inductive Num
 
 中文:
 归纳类型 Num
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - zero: Num
     - pos: PosNum -> Num
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero Num
+  签名: 零 Num
   定义体: ⟨Num.zero⟩
 -/
 instance : Zero Num :=
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: One Num
+  签名: 幺 Num
   定义体: ⟨Num.pos 1⟩
 
 Depends on / 依赖: Num.pos
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Num
+  签名: 可居 Num
   定义体: ⟨0⟩
 -/
 instance : Inhabited Num :=
@@ -163,7 +163,7 @@ inductive ZNum
 
 中文:
 归纳类型 ZNum
-  参数: : Type
+  参数: : 类型
   构造子 (3 个):
     - zero: ZNum
     - pos: PosNum -> ZNum
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero ZNum
+  签名: 零 ZNum
   定义体: ⟨ZNum.zero⟩
 -/
 instance : Zero ZNum :=
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: One ZNum
+  签名: 幺 ZNum
   定义体: ⟨ZNum.pos 1⟩
 -/
 instance : One ZNum :=
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ZNum
+  签名: 可居 ZNum
   定义体: ⟨0⟩
 -/
 instance : Inhabited ZNum :=
@@ -235,7 +235,7 @@ definition bit
 
 中文:
 定义 bit
-  签名: (b : 布尔)
+  签名: (b : 布尔值)
   定义体: cond b bit1 bit0
 -/
 def bit (b : Bool) : PosNum -> PosNum :=
@@ -266,7 +266,7 @@ definition isOne
 
 中文:
 定义 isOne
-  签名: : PosNum -> 布尔
+  签名: : PosNum -> 布尔值
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.apply_symm_apply, algebraMap_apply, algebraMap_extendRightEquiv, apply_symm_apply
 -/
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add PosNum
+  签名: 加法 PosNum
   定义体: ⟨PosNum.add⟩
 
 Depends on / 依赖: PosNum, PosNum.add
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul PosNum
+  签名: 乘法 PosNum
   定义体: ⟨PosNum.mul⟩
 
 Depends on / 依赖: PosNum, PosNum.mul
@@ -419,7 +419,7 @@ definition ofNatSucc
   signature: : Nat -> PosNum
 
 中文:
-定义 ofNatSucc
+定义 of自然数Succ
   签名: : 自然数 -> PosNum
 -/
 def ofNatSucc : Nat -> PosNum
@@ -435,7 +435,7 @@ definition ofNat
   body: ofNatSucc (Nat.pred n)
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: (n : 自然数)
   定义体: ofNatSucc (Nat.pred n)
 
@@ -566,7 +566,7 @@ definition castNum
 
 中文:
 定义 castNum
-  签名: [Zero α]
+  签名: [零 α]
 -/
 def castNum [Zero α] : Num -> α
   | 0 => 0
@@ -675,7 +675,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add Num
+  签名: 加法 Num
   定义体: ⟨Num.add⟩
 
 Depends on / 依赖: Num.add
@@ -723,7 +723,7 @@ definition bit
 
 中文:
 定义 bit
-  签名: (b : 布尔)
+  签名: (b : 布尔值)
   定义体: cond b Num.bit1 Num.bit0
 
 Depends on / 依赖: Num.bit0, Num.bit1
@@ -787,7 +787,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul Num
+  签名: 乘法 Num
   定义体: ⟨Num.mul⟩
 
 Depends on / 依赖: Num.mul
@@ -915,7 +915,7 @@ definition ofNat'
   body: Nat.binaryRec 0 (fun b _ => cond b Num.bit1 Num.bit0)
 
 中文:
-定义 ofNat'
+定义 of自然数'
   签名: : 自然数 -> Num
   定义体: Nat.binaryRec 0 (fun b _ => cond b Num.bit1 Num.bit0)
 
@@ -956,7 +956,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg ZNum
+  签名: 取负 ZNum
   定义体: ⟨zNeg⟩
 -/
 instance : Neg ZNum :=
@@ -1066,7 +1066,7 @@ definition ofInt'
   signature: : Int -> ZNum
 
 中文:
-定义 ofInt'
+定义 of整数'
   签名: : 整数 -> ZNum
 -/
 def ofInt' : Int -> ZNum
@@ -1107,7 +1107,7 @@ definition ofZNum'
 
 中文:
 定义 ofZNum'
-  签名: : ZNum -> Option PosNum
+  签名: : ZNum -> 选项类型 PosNum
 -/
 def ofZNum' : ZNum -> Option PosNum
   | ZNum.pos p => some p
@@ -1162,7 +1162,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub PosNum
+  签名: 减法 PosNum
   定义体: ⟨PosNum.sub⟩
 
 Depends on / 依赖: PosNum, PosNum.sub
@@ -1183,7 +1183,7 @@ definition ppred
 
 中文:
 定义 ppred
-  签名: : Num -> Option Num
+  签名: : Num -> 选项类型 Num
 -/
 def ppred : Num -> Option Num
   | 0 => none
@@ -1230,7 +1230,7 @@ definition ofZNum'
 
 中文:
 定义 ofZNum'
-  签名: : ZNum -> Option Num
+  签名: : ZNum -> 选项类型 Num
 -/
 def ofZNum' : ZNum -> Option Num
   | 0 => some 0
@@ -1313,7 +1313,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub Num
+  签名: 减法 Num
   定义体: ⟨Num.sub⟩
 
 Depends on / 依赖: Num.sub
@@ -1356,7 +1356,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add ZNum
+  签名: 加法 ZNum
   定义体: ⟨ZNum.add⟩
 
 Depends on / 依赖: ZNum.add
@@ -1393,7 +1393,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul ZNum
+  签名: 乘法 ZNum
   定义体: ⟨ZNum.mul⟩
 
 Depends on / 依赖: ZNum.mul
@@ -1681,7 +1681,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div Num
+  签名: 除法 Num
   定义体: ⟨Num.div⟩
 
 Depends on / 依赖: Num.div
@@ -1699,7 +1699,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mod Num
+  签名: 取模 Num
   定义体: ⟨Num.mod⟩
 
 Depends on / 依赖: Num.mod
@@ -1732,7 +1732,7 @@ definition gcd
   body: if a <= b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: (a b : Num)
   定义体: if a <= b then gcdAux (a.natSize + b.natSize) a b else gcdAux (b.natSize + a.natSize) b a
 
@@ -1790,7 +1790,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div ZNum
+  签名: 除法 ZNum
   定义体: ⟨ZNum.div⟩
 
 Depends on / 依赖: ZNum.div
@@ -1808,7 +1808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mod ZNum
+  签名: 取模 ZNum
   定义体: ⟨ZNum.mod⟩
 
 Depends on / 依赖: ZNum.mod
@@ -1825,7 +1825,7 @@ definition gcd
   body: a.abs.gcd b.abs
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: (a b : ZNum)
   定义体: a.abs.gcd b.abs
 

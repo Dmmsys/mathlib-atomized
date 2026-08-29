@@ -114,8 +114,8 @@ abbreviation Set.EquicontinuousAt
   body: EquicontinuousAt ((↑) : H -> X -> α) x₀
 
 中文:
-缩写 Set.EquicontinuousAt
-  签名: (H : Set <| X -> α) (x₀ : X)
+缩写 集合.EquicontinuousAt
+  签名: (H : 集合 <| X -> α) (x₀ : X)
   定义体: EquicontinuousAt ((↑) : H -> X -> α) x₀
 -/
 protected abbrev Set.EquicontinuousAt (H : Set <| X -> α) (x₀ : X) : Prop :=
@@ -131,7 +131,7 @@ definition EquicontinuousWithinAt
 
 中文:
 定义 EquicontinuousWithinAt
-  签名: (F : ι -> X -> α) (S : Set X) (x₀ : X)
+  签名: (F : ι -> X -> α) (S : 集合 X) (x₀ : X)
   定义体: forall U in 𝓤 α, forallᶠ x in 𝓝[S] x₀, forall i, (F i x₀, F i x) in U
 -/
 def EquicontinuousWithinAt (F : ι -> X -> α) (S : Set X) (x₀ : X) : Prop :=
@@ -146,8 +146,8 @@ abbreviation Set.EquicontinuousWithinAt
   body: EquicontinuousWithinAt ((↑) : H -> X -> α) S x₀
 
 中文:
-缩写 Set.EquicontinuousWithinAt
-  签名: (H : Set <| X -> α) (S : Set X) (x₀ : X)
+缩写 集合.EquicontinuousWithinAt
+  签名: (H : 集合 <| X -> α) (S : 集合 X) (x₀ : X)
   定义体: EquicontinuousWithinAt ((↑) : H -> X -> α) S x₀
 -/
 protected abbrev Set.EquicontinuousWithinAt (H : Set <| X -> α) (S : Set X) (x₀ : X) : Prop :=
@@ -180,8 +180,8 @@ abbreviation Set.Equicontinuous
   body: Equicontinuous ((↑) : H -> X -> α)
 
 中文:
-缩写 Set.Equicontinuous
-  签名: (H : Set <| X -> α)
+缩写 集合.Equicontinuous
+  签名: (H : 集合 <| X -> α)
   定义体: Equicontinuous ((↑) : H -> X -> α)
 -/
 protected abbrev Set.Equicontinuous (H : Set <| X -> α) : Prop :=
@@ -197,7 +197,7 @@ definition EquicontinuousOn
 
 中文:
 定义 EquicontinuousOn
-  签名: (F : ι -> X -> α) (S : Set X)
+  签名: (F : ι -> X -> α) (S : 集合 X)
   定义体: forall x₀ in S, EquicontinuousWithinAt F S x₀
 
 Depends on / 依赖: EquicontinuousWithinAt
@@ -214,8 +214,8 @@ abbreviation Set.EquicontinuousOn
   body: EquicontinuousOn ((↑) : H -> X -> α) S
 
 中文:
-缩写 Set.EquicontinuousOn
-  签名: (H : Set <| X -> α) (S : Set X)
+缩写 集合.EquicontinuousOn
+  签名: (H : 集合 <| X -> α) (S : 集合 X)
   定义体: EquicontinuousOn ((↑) : H -> X -> α) S
 -/
 protected abbrev Set.EquicontinuousOn (H : Set <| X -> α) (S : Set X) : Prop :=
@@ -246,8 +246,8 @@ abbreviation Set.UniformEquicontinuous
   body: UniformEquicontinuous ((↑) : H -> β -> α)
 
 中文:
-缩写 Set.UniformEquicontinuous
-  签名: (H : Set <| β -> α)
+缩写 集合.UniformEquicontinuous
+  签名: (H : 集合 <| β -> α)
   定义体: UniformEquicontinuous ((↑) : H -> β -> α)
 -/
 protected abbrev Set.UniformEquicontinuous (H : Set <| β -> α) : Prop :=
@@ -263,7 +263,7 @@ definition UniformEquicontinuousOn
 
 中文:
 定义 UniformEquicontinuousOn
-  签名: (F : ι -> β -> α) (S : Set β)
+  签名: (F : ι -> β -> α) (S : 集合 β)
   定义体: forall U in 𝓤 α, forallᶠ xy : β × β in 𝓤 β ⊓ 𝓟 (S ×ˢ S), forall i, (F i xy.1, F i xy.2) in U
 -/
 def UniformEquicontinuousOn (F : ι -> β -> α) (S : Set β) : Prop :=
@@ -278,8 +278,8 @@ abbreviation Set.UniformEquicontinuousOn
   body: UniformEquicontinuousOn ((↑) : H -> β -> α) S
 
 中文:
-缩写 Set.UniformEquicontinuousOn
-  签名: (H : Set <| β -> α) (S : Set β)
+缩写 集合.UniformEquicontinuousOn
+  签名: (H : 集合 <| β -> α) (S : 集合 β)
   定义体: UniformEquicontinuousOn ((↑) : H -> β -> α) S
 -/
 protected abbrev Set.UniformEquicontinuousOn (H : Set <| β -> α) (S : Set β) : Prop :=
@@ -314,7 +314,7 @@ lemma EquicontinuousWithinAt.mono
 
 中文:
 引理 EquicontinuousWithinAt.mono
-  结论: {F : ι -> X -> α} {x₀ : X} {S T : Set X}
+  结论: {F : ι -> X -> α} {x₀ : X} {S T : 集合 X}
   证明: fun U hU => (H U hU).filter_mono nhdsWithin_mono x₀ hST
 
 Depends on / 依赖: filter_mono, nhdsWithin_mono
@@ -354,7 +354,7 @@ lemma equicontinuousAt_restrict_iff
 
 中文:
 引理 equicontinuousAt_restrict_iff
-  条件: (F : ι -> X -> α) {S : Set X} (x₀ : S)
+  条件: (F : ι -> X -> α) {S : 集合 X} (x₀ : S)
   证明: by
   simp [EquicontinuousWithinAt, EquicontinuousAt,
     ← eventually_nhds_subtype_iff]
@@ -395,7 +395,7 @@ lemma EquicontinuousOn.mono
 
 中文:
 引理 EquicontinuousOn.mono
-  结论: {F : ι -> X -> α} {S T : Set X}
+  结论: {F : ι -> X -> α} {S T : 集合 X}
   证明: fun x hx => (H x (hST hx)).mono hST
 -/
 lemma EquicontinuousOn.mono {F : ι -> X -> α} {S T : Set X}
@@ -434,7 +434,7 @@ lemma equicontinuous_restrict_iff
 
 中文:
 引理 equicontinuous_restrict_iff
-  条件: (F : ι -> X -> α) {S : Set X}
+  条件: (F : ι -> X -> α) {S : 集合 X}
   证明: by
   simp [Equicontinuous, EquicontinuousOn, equicontinuousAt_restrict_iff]
 
@@ -473,7 +473,7 @@ lemma UniformEquicontinuousOn.mono
 
 中文:
 引理 UniformEquicontinuousOn.mono
-  结论: {F : ι -> β -> α} {S T : Set β}
+  结论: {F : ι -> β -> α} {S T : 集合 β}
   证明: fun U hU => (H U hU).filter_mono by gcongr
 
 Depends on / 依赖: filter_mono
@@ -516,7 +516,7 @@ lemma uniformEquicontinuous_restrict_iff
 
 中文:
 引理 uniformEquicontinuous_restrict_iff
-  条件: (F : ι -> β -> α) {S : Set β}
+  条件: (F : ι -> β -> α) {S : 集合 β}
   证明: by
   rw [UniformEquicontinuous]; rw [UniformEquicontinuousOn]
   conv in _ ⊓ _ => rw [← Subtype.range_val (s := S), ← range_prodMap, ← map_comap]
@@ -547,7 +547,7 @@ lemma equicontinuousAt_empty
 
 中文:
 引理 equicontinuousAt_empty
-  条件: [h : IsEmpty ι] (F : ι -> X -> α) (x₀ : X)
+  条件: [h : 是空 ι] (F : ι -> X -> α) (x₀ : X)
   证明: fun _ _ => Eventually.of_forall (fun _ => h.elim)
 
 @[simp]
@@ -571,7 +571,7 @@ lemma equicontinuousWithinAt_empty
 
 中文:
 引理 equicontinuousWithinAt_empty
-  条件: [h : IsEmpty ι] (F : ι -> X -> α) (S : Set X) (x₀ : X)
+  条件: [h : 是空 ι] (F : ι -> X -> α) (S : 集合 X) (x₀ : X)
   证明: fun _ _ => Eventually.of_forall (fun _ => h.elim)
 
 @[simp]
@@ -595,7 +595,7 @@ lemma equicontinuous_empty
 
 中文:
 引理 equicontinuous_empty
-  条件: [IsEmpty ι] (F : ι -> X -> α)
+  条件: [是空 ι] (F : ι -> X -> α)
   证明: equicontinuousAt_empty F
 
 @[simp]
@@ -619,7 +619,7 @@ lemma equicontinuousOn_empty
 
 中文:
 引理 equicontinuousOn_empty
-  条件: [IsEmpty ι] (F : ι -> X -> α) (S : Set X)
+  条件: [是空 ι] (F : ι -> X -> α) (S : 集合 X)
   证明: fun x₀ _ => equicontinuousWithinAt_empty F S x₀
 
 @[simp]
@@ -643,7 +643,7 @@ lemma uniformEquicontinuous_empty
 
 中文:
 引理 uniformEquicontinuous_empty
-  条件: [h : IsEmpty ι] (F : ι -> β -> α)
+  条件: [h : 是空 ι] (F : ι -> β -> α)
   证明: fun _ _ => Eventually.of_forall (fun _ => h.elim)
 
 @[simp]
@@ -665,7 +665,7 @@ lemma uniformEquicontinuousOn_empty
 
 中文:
 引理 uniformEquicontinuousOn_empty
-  条件: [h : IsEmpty ι] (F : ι -> β -> α) (S : Set β)
+  条件: [h : 是空 ι] (F : ι -> β -> α) (S : 集合 β)
   证明: fun _ _ => Eventually.of_forall (fun _ => h.elim)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, h.elim, of_forall
@@ -687,7 +687,7 @@ theorem equicontinuousAt_finite
 
 中文:
 定理 equicontinuousAt_finite
-  条件: [Finite ι] {F : ι -> X -> α} {x₀ : X}
+  条件: [有限 ι] {F : ι -> X -> α} {x₀ : X}
   证明: by
   simp [EquicontinuousAt, ContinuousAt, (nhds_basis_uniformity' (𝓤 α).basis_sets).tendsto_right_iff,
     UniformSpace.ball, @forall_comm _ ι]
@@ -712,7 +712,7 @@ theorem equicontinuousWithinAt_finite
 
 中文:
 定理 equicontinuousWithinAt_finite
-  条件: [Finite ι] {F : ι -> X -> α} {S : Set X} {x₀ : X}
+  条件: [有限 ι] {F : ι -> X -> α} {S : 集合 X} {x₀ : X}
   证明: by
   simp [EquicontinuousWithinAt, ContinuousWithinAt,
     (nhds_basis_uniformity' (𝓤 α).basis_sets).tendsto_right_iff, UniformSpace.ball,
@@ -737,7 +737,7 @@ theorem equicontinuous_finite
 
 中文:
 定理 equicontinuous_finite
-  条件: [Finite ι] {F : ι -> X -> α}
+  条件: [有限 ι] {F : ι -> X -> α}
   证明: by
   simp only [Equicontinuous, equicontinuousAt_finite, continuous_iff_continuousAt, @forall_comm ι]
 
@@ -758,7 +758,7 @@ theorem equicontinuousOn_finite
 
 中文:
 定理 equicontinuousOn_finite
-  条件: [Finite ι] {F : ι -> X -> α} {S : Set X}
+  条件: [有限 ι] {F : ι -> X -> α} {S : 集合 X}
   证明: by
   simp only [EquicontinuousOn, equicontinuousWithinAt_finite, ContinuousOn, @forall_comm ι]
 
@@ -779,7 +779,7 @@ theorem uniformEquicontinuous_finite
 
 中文:
 定理 uniformEquicontinuous_finite
-  条件: [Finite ι] {F : ι -> β -> α}
+  条件: [有限 ι] {F : ι -> β -> α}
   证明: by
   simp only [UniformEquicontinuous, eventually_all, @forall_comm _ ι]; rfl
 
@@ -800,7 +800,7 @@ theorem uniformEquicontinuousOn_finite
 
 中文:
 定理 uniformEquicontinuousOn_finite
-  条件: [Finite ι] {F : ι -> β -> α} {S : Set β}
+  条件: [有限 ι] {F : ι -> β -> α} {S : 集合 β}
   证明: by
   simp only [UniformEquicontinuousOn, eventually_all, @forall_comm _ ι]; rfl
 
@@ -821,7 +821,7 @@ theorem equicontinuousAt_unique
 
 中文:
 定理 equicontinuousAt_unique
-  条件: [Unique ι] {F : ι -> X -> α} {x : X}
+  条件: [唯一 ι] {F : ι -> X -> α} {x : X}
   证明: equicontinuousAt_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, equicontinuousAt_finite, equicontinuousAt_finite.trans, forall_iff
@@ -840,7 +840,7 @@ theorem equicontinuousWithinAt_unique
 
 中文:
 定理 equicontinuousWithinAt_unique
-  条件: [Unique ι] {F : ι -> X -> α} {S : Set X} {x : X}
+  条件: [唯一 ι] {F : ι -> X -> α} {S : 集合 X} {x : X}
   证明: equicontinuousWithinAt_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, equicontinuousWithinAt_finite, equicontinuousWithinAt_finite.trans, forall_iff
@@ -859,7 +859,7 @@ theorem equicontinuous_unique
 
 中文:
 定理 equicontinuous_unique
-  条件: [Unique ι] {F : ι -> X -> α}
+  条件: [唯一 ι] {F : ι -> X -> α}
   证明: equicontinuous_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, equicontinuous_finite, equicontinuous_finite.trans, forall_iff
@@ -878,7 +878,7 @@ theorem equicontinuousOn_unique
 
 中文:
 定理 equicontinuousOn_unique
-  条件: [Unique ι] {F : ι -> X -> α} {S : Set X}
+  条件: [唯一 ι] {F : ι -> X -> α} {S : 集合 X}
   证明: equicontinuousOn_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, equicontinuousOn_finite, equicontinuousOn_finite.trans, forall_iff
@@ -897,7 +897,7 @@ theorem uniformEquicontinuous_unique
 
 中文:
 定理 uniformEquicontinuous_unique
-  条件: [Unique ι] {F : ι -> β -> α}
+  条件: [唯一 ι] {F : ι -> β -> α}
   证明: uniformEquicontinuous_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_iff, uniformEquicontinuous_finite, uniformEquicontinuous_finite.trans
@@ -916,7 +916,7 @@ theorem uniformEquicontinuousOn_unique
 
 中文:
 定理 uniformEquicontinuousOn_unique
-  条件: [Unique ι] {F : ι -> β -> α} {S : Set β}
+  条件: [唯一 ι] {F : ι -> β -> α} {S : 集合 β}
   证明: uniformEquicontinuousOn_finite.trans Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_iff, uniformEquicontinuousOn_finite, uniformEquicontinuousOn_finite.trans
@@ -941,7 +941,7 @@ theorem equicontinuousWithinAt_iff_pair
 
 中文:
 定理 equicontinuousWithinAt_iff_pair
-  条件: {F : ι -> X -> α} {S : Set X} {x₀ : X} (hx₀ : x₀ in S)
+  条件: {F : ι -> X -> α} {S : 集合 X} {x₀ : X} (hx₀ : x₀ in S)
   证明: by
   constructor <;> intro H U hU
   · rcases comp_symm_mem_uniformity_sets hU with ⟨V, hV, hVsymm, hVU⟩
@@ -1017,7 +1017,7 @@ theorem UniformEquicontinuousOn.equicontinuousOn
 
 中文:
 定理 UniformEquicontinuousOn.equicontinuousOn
-  结论: {F : ι -> β -> α} {S : Set β}
+  结论: {F : ι -> β -> α} {S : 集合 β}
   证明: fun _ hx₀ U hU =>
   mem_of_superset (ball_mem_nhdsWithin hx₀ (h U hU)) fun _ hx i => hx i
 -/
@@ -1055,7 +1055,7 @@ theorem EquicontinuousWithinAt.continuousWithinAt
 
 中文:
 定理 EquicontinuousWithinAt.continuousWithinAt
-  结论: {F : ι -> X -> α} {S : Set X} {x₀ : X}
+  结论: {F : ι -> X -> α} {S : 集合 X} {x₀ : X}
   证明: (UniformSpace.hasBasis_nhds _).tendsto_right_iff.2 fun U ⟨hU, _⟩ => (h U hU).mono fun _x hx => hx i
 
 Depends on / 依赖: UniformSpace, UniformSpace.hasBasis_nhds, hasBasis_nhds, tendsto_right_iff
@@ -1074,8 +1074,8 @@ theorem Set.EquicontinuousAt.continuousAt_of_mem
   proof: h.continuousAt ⟨f, hf⟩
 
 中文:
-定理 Set.EquicontinuousAt.continuousAt_of_mem
-  结论: {H : Set <| X -> α} {x₀ : X}
+定理 集合.EquicontinuousAt.continuousAt_of_mem
+  结论: {H : 集合 <| X -> α} {x₀ : X}
   证明: h.continuousAt ⟨f, hf⟩
 -/
 protected theorem Set.EquicontinuousAt.continuousAt_of_mem {H : Set <| X -> α} {x₀ : X}
@@ -1091,8 +1091,8 @@ theorem Set.EquicontinuousWithinAt.continuousWithinAt_of_mem
   proof: h.continuousWithinAt ⟨f, hf⟩
 
 中文:
-定理 Set.EquicontinuousWithinAt.continuousWithinAt_of_mem
-  结论: {H : Set <| X -> α}
+定理 集合.EquicontinuousWithinAt.continuousWithinAt_of_mem
+  结论: {H : 集合 <| X -> α}
   证明: h.continuousWithinAt ⟨f, hf⟩
 -/
 protected theorem Set.EquicontinuousWithinAt.continuousWithinAt_of_mem {H : Set <| X -> α}
@@ -1129,7 +1129,7 @@ theorem EquicontinuousOn.continuousOn
 
 中文:
 定理 EquicontinuousOn.continuousOn
-  结论: {F : ι -> X -> α} {S : Set X} (h : EquicontinuousOn F S)
+  结论: {F : ι -> X -> α} {S : 集合 X} (h : EquicontinuousOn F S)
   证明: fun x hx => (h x hx).continuousWithinAt i
 
 Depends on / 依赖: continuousWithinAt
@@ -1147,8 +1147,8 @@ theorem Set.Equicontinuous.continuous_of_mem
   proof: h.continuous ⟨f, hf⟩
 
 中文:
-定理 Set.Equicontinuous.continuous_of_mem
-  结论: {H : Set <| X -> α} (h : H.Equicontinuous)
+定理 集合.Equicontinuous.continuous_of_mem
+  结论: {H : 集合 <| X -> α} (h : H.Equicontinuous)
   证明: h.continuous ⟨f, hf⟩
 -/
 protected theorem Set.Equicontinuous.continuous_of_mem {H : Set <| X -> α} (h : H.Equicontinuous)
@@ -1164,8 +1164,8 @@ theorem Set.EquicontinuousOn.continuousOn_of_mem
   proof: h.continuousOn ⟨f, hf⟩
 
 中文:
-定理 Set.EquicontinuousOn.continuousOn_of_mem
-  结论: {H : Set <| X -> α} {S : Set X}
+定理 集合.EquicontinuousOn.continuousOn_of_mem
+  结论: {H : 集合 <| X -> α} {S : 集合 X}
   证明: h.continuousOn ⟨f, hf⟩
 -/
 protected theorem Set.EquicontinuousOn.continuousOn_of_mem {H : Set <| X -> α} {S : Set X}
@@ -1202,7 +1202,7 @@ theorem UniformEquicontinuousOn.uniformContinuousOn
 
 中文:
 定理 UniformEquicontinuousOn.uniformContinuousOn
-  结论: {F : ι -> β -> α} {S : Set β}
+  结论: {F : ι -> β -> α} {S : 集合 β}
   证明: fun U hU =>
   mem_map.mpr (mem_of_superset (h U hU) fun _ hxy => hxy i)
 -/
@@ -1220,8 +1220,8 @@ theorem Set.UniformEquicontinuous.uniformContinuous_of_mem
   proof: h.uniformContinuous ⟨f, hf⟩
 
 中文:
-定理 Set.UniformEquicontinuous.uniformContinuous_of_mem
-  结论: {H : Set <| β -> α}
+定理 集合.UniformEquicontinuous.uniformContinuous_of_mem
+  结论: {H : 集合 <| β -> α}
   证明: h.uniformContinuous ⟨f, hf⟩
 -/
 protected theorem Set.UniformEquicontinuous.uniformContinuous_of_mem {H : Set <| β -> α}
@@ -1237,8 +1237,8 @@ theorem Set.UniformEquicontinuousOn.uniformContinuousOn_of_mem
   proof: h.uniformContinuousOn ⟨f, hf⟩
 
 中文:
-定理 Set.UniformEquicontinuousOn.uniformContinuousOn_of_mem
-  结论: {H : Set <| β -> α}
+定理 集合.UniformEquicontinuousOn.uniformContinuousOn_of_mem
+  结论: {H : 集合 <| β -> α}
   证明: h.uniformContinuousOn ⟨f, hf⟩
 -/
 protected theorem Set.UniformEquicontinuousOn.uniformContinuousOn_of_mem {H : Set <| β -> α}
@@ -1272,7 +1272,7 @@ theorem EquicontinuousWithinAt.comp
 
 中文:
 定理 EquicontinuousWithinAt.comp
-  结论: {F : ι -> X -> α} {S : Set X} {x₀ : X}
+  结论: {F : ι -> X -> α} {S : 集合 X} {x₀ : X}
   证明: fun U hU => (h U hU).mono fun _ H k => H (u k)
 -/
 theorem EquicontinuousWithinAt.comp {F : ι -> X -> α} {S : Set X} {x₀ : X}
@@ -1289,8 +1289,8 @@ theorem Set.EquicontinuousAt.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.EquicontinuousAt.mono
-  结论: {H H' : Set <| X -> α} {x₀ : X}
+定理 集合.EquicontinuousAt.mono
+  结论: {H H' : 集合 <| X -> α} {x₀ : X}
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.EquicontinuousAt.mono {H H' : Set <| X -> α} {x₀ : X}
@@ -1306,8 +1306,8 @@ theorem Set.EquicontinuousWithinAt.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.EquicontinuousWithinAt.mono
-  结论: {H H' : Set <| X -> α} {S : Set X} {x₀ : X}
+定理 集合.EquicontinuousWithinAt.mono
+  结论: {H H' : 集合 <| X -> α} {S : 集合 X} {x₀ : X}
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.EquicontinuousWithinAt.mono {H H' : Set <| X -> α} {S : Set X} {x₀ : X}
@@ -1340,7 +1340,7 @@ theorem EquicontinuousOn.comp
 
 中文:
 定理 EquicontinuousOn.comp
-  条件: {F : ι -> X -> α} {S : Set X} (h : EquicontinuousOn F S) (u : κ -> ι)
+  条件: {F : ι -> X -> α} {S : 集合 X} (h : EquicontinuousOn F S) (u : κ -> ι)
   证明: fun x hx => (h x hx).comp u
 -/
 theorem EquicontinuousOn.comp {F : ι -> X -> α} {S : Set X} (h : EquicontinuousOn F S) (u : κ -> ι) :
@@ -1355,8 +1355,8 @@ theorem Set.Equicontinuous.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.Equicontinuous.mono
-  结论: {H H' : Set <| X -> α} (h : H.Equicontinuous)
+定理 集合.Equicontinuous.mono
+  结论: {H H' : 集合 <| X -> α} (h : H.Equicontinuous)
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.Equicontinuous.mono {H H' : Set <| X -> α} (h : H.Equicontinuous)
@@ -1372,8 +1372,8 @@ theorem Set.EquicontinuousOn.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.EquicontinuousOn.mono
-  结论: {H H' : Set <| X -> α} {S : Set X}
+定理 集合.EquicontinuousOn.mono
+  结论: {H H' : 集合 <| X -> α} {S : 集合 X}
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.EquicontinuousOn.mono {H H' : Set <| X -> α} {S : Set X}
@@ -1406,7 +1406,7 @@ theorem UniformEquicontinuousOn.comp
 
 中文:
 定理 UniformEquicontinuousOn.comp
-  结论: {F : ι -> β -> α} {S : Set β} (h : UniformEquicontinuousOn F S)
+  结论: {F : ι -> β -> α} {S : 集合 β} (h : UniformEquicontinuousOn F S)
   证明: fun U hU => (h U hU).mono fun _ H k => H (u k)
 -/
 theorem UniformEquicontinuousOn.comp {F : ι -> β -> α} {S : Set β} (h : UniformEquicontinuousOn F S)
@@ -1422,8 +1422,8 @@ theorem Set.UniformEquicontinuous.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.UniformEquicontinuous.mono
-  结论: {H H' : Set <| β -> α} (h : H.UniformEquicontinuous)
+定理 集合.UniformEquicontinuous.mono
+  结论: {H H' : 集合 <| β -> α} (h : H.UniformEquicontinuous)
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.UniformEquicontinuous.mono {H H' : Set <| β -> α} (h : H.UniformEquicontinuous)
@@ -1439,8 +1439,8 @@ theorem Set.UniformEquicontinuousOn.mono
   proof: h.comp (inclusion hH)
 
 中文:
-定理 Set.UniformEquicontinuousOn.mono
-  结论: {H H' : Set <| β -> α} {S : Set β}
+定理 集合.UniformEquicontinuousOn.mono
+  结论: {H H' : 集合 <| β -> α} {S : 集合 β}
   证明: h.comp (inclusion hH)
 -/
 protected theorem Set.UniformEquicontinuousOn.mono {H H' : Set <| β -> α} {S : Set β}
@@ -1479,7 +1479,7 @@ theorem equicontinuousWithinAt_iff_range
 
 中文:
 定理 equicontinuousWithinAt_iff_range
-  条件: {F : ι -> X -> α} {S : Set X} {x₀ : X}
+  条件: {F : ι -> X -> α} {S : 集合 X} {x₀ : X}
   证明: by
   simp only [EquicontinuousWithinAt, forall_subtype_range_iff]
 
@@ -1518,7 +1518,7 @@ theorem equicontinuousOn_iff_range
 
 中文:
 定理 equicontinuousOn_iff_range
-  条件: {F : ι -> X -> α} {S : Set X}
+  条件: {F : ι -> X -> α} {S : 集合 X}
   证明: forall_congr' fun _ => forall_congr' fun _ => equicontinuousWithinAt_iff_range
 
 Depends on / 依赖: equicontinuousWithinAt_iff_range, forall_congr
@@ -1560,7 +1560,7 @@ theorem uniformEquicontinuousOn_iff_range
 
 中文:
 定理 uniformEquicontinuousOn_iff_range
-  条件: {F : ι -> β -> α} {S : Set β}
+  条件: {F : ι -> β -> α} {S : 集合 β}
   证明: ⟨fun h => by rw [← comp_rangeSplitting F]; exact h.comp _, fun h =>
     h.comp (rangeFactorization F)⟩
 
@@ -1611,7 +1611,7 @@ theorem equicontinuousWithinAt_iff_continuousWithinAt
 
 中文:
 定理 equicontinuousWithinAt_iff_continuousWithinAt
-  条件: {F : ι -> X -> α} {S : Set X} {x₀ : X}
+  条件: {F : ι -> X -> α} {S : 集合 X} {x₀ : X}
   证明: by
   rw [ContinuousWithinAt]; rw [(UniformFun.hasBasis_nhds ι α _).tendsto_right_iff]
   rfl
@@ -1656,7 +1656,7 @@ theorem equicontinuousOn_iff_continuousOn
 
 中文:
 定理 equicontinuousOn_iff_continuousOn
-  条件: {F : ι -> X -> α} {S : Set X}
+  条件: {F : ι -> X -> α} {S : 集合 X}
   证明: by
   simp_rw [EquicontinuousOn, ContinuousOn, equicontinuousWithinAt_iff_continuousWithinAt]
 
@@ -1702,7 +1702,7 @@ theorem uniformEquicontinuousOn_iff_uniformContinuousOn
 
 中文:
 定理 uniformEquicontinuousOn_iff_uniformContinuousOn
-  条件: {F : ι -> β -> α} {S : Set β}
+  条件: {F : ι -> β -> α} {S : 集合 β}
   证明: by
   rw [UniformContinuousOn]; rw [(UniformFun.hasBasis_uniformity ι α).tendsto_right_iff]
   rfl
@@ -1727,7 +1727,7 @@ theorem equicontinuousWithinAt_iInf_rng
 
 中文:
 定理 equicontinuousWithinAt_iInf_rng
-  结论: {u : κ -> UniformSpace α'} {F : ι -> X -> α'}
+  结论: {u : κ -> 一致空间 α'} {F : ι -> X -> α'}
   证明: by
   simp +instances only [equicontinuousWithinAt_iff_continuousWithinAt (uα := _), topologicalSpace]
   unfold ContinuousWithinAt
@@ -1751,7 +1751,7 @@ theorem equicontinuousAt_iInf_rng
 
 中文:
 定理 equicontinuousAt_iInf_rng
-  结论: {u : κ -> UniformSpace α'} {F : ι -> X -> α'}
+  结论: {u : κ -> 一致空间 α'} {F : ι -> X -> α'}
   证明: by
   simp only [← equicontinuousWithinAt_univ (uα := _), equicontinuousWithinAt_iInf_rng]
 
@@ -1774,7 +1774,7 @@ theorem equicontinuous_iInf_rng
 
 中文:
 定理 equicontinuous_iInf_rng
-  条件: {u : κ -> UniformSpace α'} {F : ι -> X -> α'}
+  条件: {u : κ -> 一致空间 α'} {F : ι -> X -> α'}
   证明: by
   simp_rw +instances [equicontinuous_iff_continuous (uα := _), UniformFun.topologicalSpace]
   rw [UniformFun.iInf_eq]; rw [toTopologicalSpace_iInf]; rw [continuous_iInf_rng]
@@ -1797,7 +1797,7 @@ theorem equicontinuousOn_iInf_rng
 
 中文:
 定理 equicontinuousOn_iInf_rng
-  结论: {u : κ -> UniformSpace α'} {F : ι -> X -> α'}
+  结论: {u : κ -> 一致空间 α'} {F : ι -> X -> α'}
   证明: by
   simp_rw [EquicontinuousOn, equicontinuousWithinAt_iInf_rng, @forall_comm _ κ]
 
@@ -1820,7 +1820,7 @@ theorem uniformEquicontinuous_iInf_rng
 
 中文:
 定理 uniformEquicontinuous_iInf_rng
-  条件: {u : κ -> UniformSpace α'} {F : ι -> β -> α'}
+  条件: {u : κ -> 一致空间 α'} {F : ι -> β -> α'}
   证明: by
   simp_rw [uniformEquicontinuous_iff_uniformContinuous (uα := _)]
   rw [UniformFun.iInf_eq]; rw [uniformContinuous_iInf_rng]
@@ -1845,7 +1845,7 @@ theorem uniformEquicontinuousOn_iInf_rng
 
 中文:
 定理 uniformEquicontinuousOn_iInf_rng
-  结论: {u : κ -> UniformSpace α'} {F : ι -> β -> α'}
+  结论: {u : κ -> 一致空间 α'} {F : ι -> β -> α'}
   证明: by
   simp_rw [uniformEquicontinuousOn_iff_uniformContinuousOn (uα := _)]
   unfold UniformContinuousOn
@@ -1872,7 +1872,7 @@ exact hk.mono_left inf_le_inf_right _ iInf_le _ k
 
 中文:
 定理 equicontinuousWithinAt_iInf_dom
-  结论: {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
+  结论: {t : κ -> 拓扑空间 X'} {F : ι -> X' -> α}
   证明: by
   simp only [equicontinuousWithinAt_iff_continuousWithinAt (tX := _)] at hk ⊢
   unfold ContinuousWithinAt nhdsWithin at hk ⊢
@@ -1899,7 +1899,7 @@ theorem equicontinuousAt_iInf_dom
 
 中文:
 定理 equicontinuousAt_iInf_dom
-  结论: {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
+  结论: {t : κ -> 拓扑空间 X'} {F : ι -> X' -> α}
   证明: by
   rw [← equicontinuousWithinAt_univ (tX := _)] at hk ⊢
   exact equicontinuousWithinAt_iInf_dom hk
@@ -1920,7 +1920,7 @@ theorem equicontinuous_iInf_dom
 
 中文:
 定理 equicontinuous_iInf_dom
-  结论: {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
+  结论: {t : κ -> 拓扑空间 X'} {F : ι -> X' -> α}
   证明: fun x => equicontinuousAt_iInf_dom (hk x)
 -/
 theorem equicontinuous_iInf_dom {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
@@ -1938,7 +1938,7 @@ theorem equicontinuousOn_iInf_dom
 
 中文:
 定理 equicontinuousOn_iInf_dom
-  结论: {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
+  结论: {t : κ -> 拓扑空间 X'} {F : ι -> X' -> α}
   证明: fun x hx => equicontinuousWithinAt_iInf_dom (hk x hx)
 -/
 theorem equicontinuousOn_iInf_dom {t : κ -> TopologicalSpace X'} {F : ι -> X' -> α}
@@ -1958,7 +1958,7 @@ theorem uniformEquicontinuous_iInf_dom
 
 中文:
 定理 uniformEquicontinuous_iInf_dom
-  结论: {u : κ -> UniformSpace β'} {F : ι -> β' -> α}
+  结论: {u : κ -> 一致空间 β'} {F : ι -> β' -> α}
   证明: by
   simp_rw [uniformEquicontinuous_iff_uniformContinuous (uβ := _)] at hk ⊢
   exact uniformContinuous_iInf_dom hk
@@ -1983,7 +1983,7 @@ exact hk.mono_left inf_le_inf_right _ iInf_le _ k
 
 中文:
 定理 uniformEquicontinuousOn_iInf_dom
-  结论: {u : κ -> UniformSpace β'} {F : ι -> β' -> α}
+  结论: {u : κ -> 一致空间 β'} {F : ι -> β' -> α}
   证明: by
   simp_rw [uniformEquicontinuousOn_iff_uniformContinuousOn (uβ := _)] at hk ⊢
   unfold UniformContinuousOn
@@ -2009,8 +2009,8 @@ theorem Filter.HasBasis.equicontinuousAt_iff_left
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousAt_iff_left
-  结论: {p : κ -> 命题} {s : κ -> Set X}
+定理 滤子.有基.equicontinuousAt_iff_left
+  结论: {p : κ -> 命题} {s : κ -> 集合 X}
   证明: by
   rw [equicontinuousAt_iff_continuousAt]; rw [ContinuousAt]; rw [hX.tendsto_iff (UniformFun.hasBasis_nhds ι α _)]
   rfl
@@ -2034,8 +2034,8 @@ theorem Filter.HasBasis.equicontinuousWithinAt_iff_left
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousWithinAt_iff_left
-  结论: {p : κ -> 命题} {s : κ -> Set X}
+定理 滤子.有基.equicontinuousWithinAt_iff_left
+  结论: {p : κ -> 命题} {s : κ -> 集合 X}
   证明: by
   rw [equicontinuousWithinAt_iff_continuousWithinAt]; rw [ContinuousWithinAt]; rw [hX.tendsto_iff (UniformFun.hasBasis_nhds ι α _)]
   rfl
@@ -2059,8 +2059,8 @@ theorem Filter.HasBasis.equicontinuousAt_iff_right
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousAt_iff_right
-  结论: {p : κ -> 命题} {s : κ -> Set (α × α)}
+定理 滤子.有基.equicontinuousAt_iff_right
+  结论: {p : κ -> 命题} {s : κ -> 集合 (α × α)}
   证明: by
   rw [equicontinuousAt_iff_continuousAt]; rw [ContinuousAt]; rw [(UniformFun.hasBasis_nhds_of_basis ι α _ hα).tendsto_right_iff]
   rfl
@@ -2084,7 +2084,7 @@ theorem Filter.HasBasis.equicontinuousWithinAt_iff_right
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousWithinAt_iff_right
+定理 滤子.有基.equicontinuousWithinAt_iff_right
   结论: {p : κ -> 命题}
   证明: by
   rw [equicontinuousWithinAt_iff_continuousWithinAt]; rw [ContinuousWithinAt]; rw [(UniformFun.hasBasis_nhds_of_basis ι α _ hα).tendsto_right_iff]
@@ -2109,8 +2109,8 @@ theorem Filter.HasBasis.equicontinuousAt_iff
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousAt_iff
-  结论: {κ₁ κ₂ : 类型} {p₁ : κ₁ -> 命题} {s₁ : κ₁ -> Set X}
+定理 滤子.有基.equicontinuousAt_iff
+  结论: {κ₁ κ₂ : 类型} {p₁ : κ₁ -> 命题} {s₁ : κ₁ -> 集合 X}
   证明: by
   rw [equicontinuousAt_iff_continuousAt]; rw [ContinuousAt]; rw [hX.tendsto_iff (UniformFun.hasBasis_nhds_of_basis ι α _ hα)]
   rfl
@@ -2136,7 +2136,7 @@ theorem Filter.HasBasis.equicontinuousWithinAt_iff
   rfl
 
 中文:
-定理 Filter.HasBasis.equicontinuousWithinAt_iff
+定理 滤子.有基.equicontinuousWithinAt_iff
   结论: {κ₁ κ₂ : 类型} {p₁ : κ₁ -> 命题}
   证明: by
   rw [equicontinuousWithinAt_iff_continuousWithinAt]; rw [ContinuousWithinAt]; rw [hX.tendsto_iff (UniformFun.hasBasis_nhds_of_basis ι α _ hα)]
@@ -2164,7 +2164,7 @@ theorem Filter.HasBasis.uniformEquicontinuous_iff_left
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuous_iff_left
+定理 滤子.有基.uniformEquicontinuous_iff_left
   结论: {p : κ -> 命题}
   证明: by
   rw [uniformEquicontinuous_iff_uniformContinuous]; rw [UniformContinuous]; rw [hβ.tendsto_iff (UniformFun.hasBasis_uniformity ι α)]
@@ -2193,7 +2193,7 @@ theorem Filter.HasBasis.uniformEquicontinuousOn_iff_left
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuousOn_iff_left
+定理 滤子.有基.uniformEquicontinuousOn_iff_left
   结论: {p : κ -> 命题}
   证明: by
   rw [uniformEquicontinuousOn_iff_uniformContinuousOn]; rw [UniformContinuousOn]; rw [hβ.tendsto_iff (UniformFun.hasBasis_uniformity ι α)]
@@ -2221,7 +2221,7 @@ theorem Filter.HasBasis.uniformEquicontinuous_iff_right
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuous_iff_right
+定理 滤子.有基.uniformEquicontinuous_iff_right
   结论: {p : κ -> 命题}
   证明: by
   rw [uniformEquicontinuous_iff_uniformContinuous]; rw [UniformContinuous]; rw [(UniformFun.hasBasis_uniformity_of_basis ι α hα).tendsto_right_iff]
@@ -2246,7 +2246,7 @@ theorem Filter.HasBasis.uniformEquicontinuousOn_iff_right
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuousOn_iff_right
+定理 滤子.有基.uniformEquicontinuousOn_iff_right
   结论: {p : κ -> 命题}
   证明: by
   rw [uniformEquicontinuousOn_iff_uniformContinuousOn]; rw [UniformContinuousOn]; rw [(UniformFun.hasBasis_uniformity_of_basis ι α hα).tendsto_right_iff]
@@ -2273,7 +2273,7 @@ theorem Filter.HasBasis.uniformEquicontinuous_iff
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuous_iff
+定理 滤子.有基.uniformEquicontinuous_iff
   结论: {κ₁ κ₂ : 类型} {p₁ : κ₁ -> 命题}
   证明: by
   rw [uniformEquicontinuous_iff_uniformContinuous]; rw [UniformContinuous]; rw [hβ.tendsto_iff (UniformFun.hasBasis_uniformity_of_basis ι α hα)]
@@ -2303,7 +2303,7 @@ theorem Filter.HasBasis.uniformEquicontinuousOn_iff
   rfl
 
 中文:
-定理 Filter.HasBasis.uniformEquicontinuousOn_iff
+定理 滤子.有基.uniformEquicontinuousOn_iff
   结论: {κ₁ κ₂ : 类型} {p₁ : κ₁ -> 命题}
   证明: by
   rw [uniformEquicontinuousOn_iff_uniformContinuousOn]; rw [UniformContinuousOn]; rw [hβ.tendsto_iff (UniformFun.hasBasis_uniformity_of_basis ι α hα)]
@@ -2333,7 +2333,7 @@ theorem IsUniformInducing.equicontinuousAt_iff
   rfl
 
 中文:
-定理 IsUniformInducing.equicontinuousAt_iff
+定理 是UniformInducing.equicontinuousAt_iff
   结论: {F : ι -> X -> α} {x₀ : X} {u : α -> β}
   证明: by
   have := (UniformFun.postcomp_isUniformInducing (α := ι) hu).isInducing
@@ -2360,8 +2360,8 @@ lemma IsUniformInducing.equicontinuousWithinAt_iff
   rfl
 
 中文:
-引理 IsUniformInducing.equicontinuousWithinAt_iff
-  结论: {F : ι -> X -> α} {S : Set X} {x₀ : X} {u : α -> β}
+引理 是UniformInducing.equicontinuousWithinAt_iff
+  结论: {F : ι -> X -> α} {S : 集合 X} {x₀ : X} {u : α -> β}
   证明: by
   have := (UniformFun.postcomp_isUniformInducing (α := ι) hu).isInducing
   simp only [equicontinuousWithinAt_iff_continuousWithinAt, this.continuousWithinAt_iff]
@@ -2387,8 +2387,8 @@ lemma IsUniformInducing.equicontinuous_iff
   rw [hu.equicontinuousAt_iff]
 
 中文:
-引理 IsUniformInducing.equicontinuous_iff
-  条件: {F : ι -> X -> α} {u : α -> β} (hu : IsUniformInducing u)
+引理 是UniformInducing.equicontinuous_iff
+  条件: {F : ι -> X -> α} {u : α -> β} (hu : 是UniformInducing u)
   证明: by
   congrm forall x, ?_
   rw [hu.equicontinuousAt_iff]
@@ -2411,8 +2411,8 @@ theorem IsUniformInducing.equicontinuousOn_iff
   rw [hu.equicontinuousWithinAt_iff]
 
 中文:
-定理 IsUniformInducing.equicontinuousOn_iff
-  结论: {F : ι -> X -> α} {S : Set X} {u : α -> β}
+定理 是UniformInducing.equicontinuousOn_iff
+  结论: {F : ι -> X -> α} {S : 集合 X} {u : α -> β}
   证明: by
   congrm forall x in S, ?_
   rw [hu.equicontinuousWithinAt_iff]
@@ -2436,7 +2436,7 @@ theorem IsUniformInducing.uniformEquicontinuous_iff
   rfl
 
 中文:
-定理 IsUniformInducing.uniformEquicontinuous_iff
+定理 是UniformInducing.uniformEquicontinuous_iff
   结论: {F : ι -> β -> α} {u : α -> γ}
   证明: by
   have := UniformFun.postcomp_isUniformInducing (α := ι) hu
@@ -2463,8 +2463,8 @@ theorem IsUniformInducing.uniformEquicontinuousOn_iff
   rfl
 
 中文:
-定理 IsUniformInducing.uniformEquicontinuousOn_iff
-  结论: {F : ι -> β -> α} {S : Set β} {u : α -> γ}
+定理 是UniformInducing.uniformEquicontinuousOn_iff
+  结论: {F : ι -> β -> α} {S : 集合 β} {u : α -> γ}
   证明: by
   have := UniformFun.postcomp_isUniformInducing (α := ι) hu
   simp only [uniformEquicontinuousOn_iff_uniformContinuousOn, this.uniformContinuousOn_iff]
@@ -2495,7 +2495,7 @@ theorem EquicontinuousWithinAt.closure'
 
 中文:
 定理 EquicontinuousWithinAt.closure'
-  结论: {A : Set Y} {u : Y -> X -> α} {S : Set X} {x₀ : X}
+  结论: {A : 集合 Y} {u : Y -> X -> α} {S : 集合 X} {x₀ : X}
   证明: by
   intro U hU
   rcases mem_uniformity_isClosed hU with ⟨V, hV, hVclosed, hVU⟩
@@ -2530,7 +2530,7 @@ theorem EquicontinuousAt.closure'
 
 中文:
 定理 EquicontinuousAt.closure'
-  结论: {A : Set Y} {u : Y -> X -> α} {x₀ : X}
+  结论: {A : 集合 Y} {u : Y -> X -> α} {x₀ : X}
   证明: by
   rw [← equicontinuousWithinAt_univ] at hA ⊢
   exact hA.closure' (Pi.continuous_domRestrict _ |>.comp hu) (continuous_apply x₀ |>.comp hu)
@@ -2552,8 +2552,8 @@ theorem Set.EquicontinuousAt.closure
   proof: hA.closure' (u := id) continuous_id
 
 中文:
-定理 Set.EquicontinuousAt.closure
-  结论: {A : Set (X -> α)} {x₀ : X}
+定理 集合.EquicontinuousAt.closure
+  结论: {A : 集合 (X -> α)} {x₀ : X}
   证明: hA.closure' (u := id) continuous_id
 -/
 protected theorem Set.EquicontinuousAt.closure {A : Set (X -> α)} {x₀ : X}
@@ -2569,8 +2569,8 @@ theorem Set.EquicontinuousWithinAt.closure
   proof: hA.closure' (u := id) (Pi.continuous_domRestrict _) (continuous_apply _)
 
 中文:
-定理 Set.EquicontinuousWithinAt.closure
-  结论: {A : Set (X -> α)} {S : Set X} {x₀ : X}
+定理 集合.EquicontinuousWithinAt.closure
+  结论: {A : 集合 (X -> α)} {S : 集合 X} {x₀ : X}
   证明: hA.closure' (u := id) (Pi.continuous_domRestrict _) (continuous_apply _)
 -/
 protected theorem Set.EquicontinuousWithinAt.closure {A : Set (X -> α)} {S : Set X} {x₀ : X}
@@ -2588,7 +2588,7 @@ theorem Equicontinuous.closure'
 
 中文:
 定理 Equicontinuous.closure'
-  结论: {A : Set Y} {u : Y -> X -> α}
+  结论: {A : 集合 Y} {u : Y -> X -> α}
   证明: fun x => (hA x).closure' hu
 
 Depends on / 依赖: closure
@@ -2607,7 +2607,7 @@ theorem EquicontinuousOn.closure'
 
 中文:
 定理 EquicontinuousOn.closure'
-  结论: {A : Set Y} {u : Y -> X -> α} {S : Set X}
+  结论: {A : 集合 Y} {u : Y -> X -> α} {S : 集合 X}
   证明: fun x hx => (hA x hx).closure' hu .comp hu by exact continuous_apply ⟨x, hx⟩
 
 Depends on / 依赖: closure, continuous_apply
@@ -2626,8 +2626,8 @@ theorem Set.Equicontinuous.closure
   proof: fun x => Set.EquicontinuousAt.closure (hA x)
 
 中文:
-定理 Set.Equicontinuous.closure
-  条件: {A : Set <| X -> α} (hA : A.Equicontinuous)
+定理 集合.Equicontinuous.closure
+  条件: {A : 集合 <| X -> α} (hA : A.Equicontinuous)
   证明: fun x => Set.EquicontinuousAt.closure (hA x)
 -/
 protected theorem Set.Equicontinuous.closure {A : Set <| X -> α} (hA : A.Equicontinuous) :
@@ -2642,8 +2642,8 @@ theorem Set.EquicontinuousOn.closure
   proof: fun x hx => Set.EquicontinuousWithinAt.closure (hA x hx)
 
 中文:
-定理 Set.EquicontinuousOn.closure
-  结论: {A : Set <| X -> α} {S : Set X}
+定理 集合.EquicontinuousOn.closure
+  结论: {A : 集合 <| X -> α} {S : 集合 X}
   证明: fun x hx => Set.EquicontinuousWithinAt.closure (hA x hx)
 -/
 protected theorem Set.EquicontinuousOn.closure {A : Set <| X -> α} {S : Set X}
@@ -2667,7 +2667,7 @@ theorem UniformEquicontinuousOn.closure'
 
 中文:
 定理 UniformEquicontinuousOn.closure'
-  结论: {A : Set Y} {u : Y -> β -> α} {S : Set β}
+  结论: {A : 集合 Y} {u : Y -> β -> α} {S : 集合 β}
   证明: by
   intro U hU
   rcases mem_uniformity_isClosed hU with ⟨V, hV, hVclosed, hVU⟩
@@ -2704,7 +2704,7 @@ theorem UniformEquicontinuous.closure'
 
 中文:
 定理 UniformEquicontinuous.closure'
-  结论: {A : Set Y} {u : Y -> β -> α}
+  结论: {A : 集合 Y} {u : Y -> β -> α}
   证明: by
   rw [← uniformEquicontinuousOn_univ] at hA ⊢
   exact hA.closure' (Pi.continuous_domRestrict _ |>.comp hu)
@@ -2726,8 +2726,8 @@ theorem Set.UniformEquicontinuous.closure
   proof: UniformEquicontinuous.closure' (u := id) hA continuous_id
 
 中文:
-定理 Set.UniformEquicontinuous.closure
-  结论: {A : Set <| β -> α}
+定理 集合.UniformEquicontinuous.closure
+  结论: {A : 集合 <| β -> α}
   证明: UniformEquicontinuous.closure' (u := id) hA continuous_id
 -/
 protected theorem Set.UniformEquicontinuous.closure {A : Set <| β -> α}
@@ -2743,8 +2743,8 @@ theorem Set.UniformEquicontinuousOn.closure
   proof: UniformEquicontinuousOn.closure' (u := id) hA (Pi.continuous_domRestrict _)
 
 中文:
-定理 Set.UniformEquicontinuousOn.closure
-  结论: {A : Set <| β -> α} {S : Set β}
+定理 集合.UniformEquicontinuousOn.closure
+  结论: {A : 集合 <| β -> α} {S : 集合 β}
   证明: UniformEquicontinuousOn.closure' (u := id) hA (Pi.continuous_domRestrict _)
 -/
 protected theorem Set.UniformEquicontinuousOn.closure {A : Set <| β -> α} {S : Set β}
@@ -2786,8 +2786,8 @@ theorem Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt
 hVU ball_mono hWV (f x₀) hWclosed.mem_of_tendsto (h₂.prodMk_nhds (h₁ x hx
 
 中文:
-定理 Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt
-  结论: {l : Filter ι} [l.NeBot]
+定理 滤子.收敛.continuousWithinAt_of_equicontinuousWithinAt
+  结论: {l : 滤子 ι} [l.NeBot]
   证明: by
   intro U hU; rw [mem_map]
   rcases UniformSpace.mem_nhds_iff.mp hU with ⟨V, hV, hVU⟩
@@ -2819,8 +2819,8 @@ theorem Filter.Tendsto.continuousAt_of_equicontinuousAt
   exact continuousWithinAt_of_equicontinuousWithinAt (fun x _ => h₁ x) (h₁ x₀) h₂
 
 中文:
-定理 Filter.Tendsto.continuousAt_of_equicontinuousAt
-  结论: {l : Filter ι} [l.NeBot] {F : ι -> X -> α}
+定理 滤子.收敛.continuousAt_of_equicontinuousAt
+  结论: {l : 滤子 ι} [l.NeBot] {F : ι -> X -> α}
   证明: by
   rw [← continuousWithinAt_univ]; rw [← equicontinuousWithinAt_univ]; rw [tendsto_pi_nhds] at *
   exact continuousWithinAt_of_equicontinuousWithinAt (fun x _ => h₁ x) (h₁ x₀) h₂
@@ -2840,8 +2840,8 @@ theorem Filter.Tendsto.continuous_of_equicontinuous
   proof: continuous_iff_continuousAt.mpr fun x => h₁.continuousAt_of_equicontinuousAt (h₂ x)
 
 中文:
-定理 Filter.Tendsto.continuous_of_equicontinuous
-  结论: {l : Filter ι} [l.NeBot] {F : ι -> X -> α}
+定理 滤子.收敛.continuous_of_equicontinuous
+  结论: {l : 滤子 ι} [l.NeBot] {F : ι -> X -> α}
   证明: continuous_iff_continuousAt.mpr fun x => h₁.continuousAt_of_equicontinuousAt (h₂ x)
 
 Depends on / 依赖: continuousAt_of_equicontinuousAt, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr
@@ -2859,8 +2859,8 @@ theorem Filter.Tendsto.continuousOn_of_equicontinuousOn
   proof: fun x hx => Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt h₁ (h₁ x hx) (h₂ x hx)
 
 中文:
-定理 Filter.Tendsto.continuousOn_of_equicontinuousOn
-  结论: {l : Filter ι} [l.NeBot] {F : ι -> X -> α}
+定理 滤子.收敛.continuousOn_of_equicontinuousOn
+  结论: {l : 滤子 ι} [l.NeBot] {F : ι -> X -> α}
   证明: fun x hx => Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt h₁ (h₁ x hx) (h₂ x hx)
 
 Depends on / 依赖: Filter, Filter.Tendsto.continuousWithinAt_of_equicontinuousWithinAt, Tendsto, continuousWithinAt_of_equicontinuousWithinAt
@@ -2885,8 +2885,8 @@ exact hVU hVclosed.mem_of_tendsto ((h₁ x hxS).prodMk_nhds (h₁ y hyS))
     Eventually.of_forall hxy
 
 中文:
-定理 Filter.Tendsto.uniformContinuousOn_of_uniformEquicontinuousOn
-  结论: {l : Filter ι} [l.NeBot]
+定理 滤子.收敛.uniformContinuousOn_of_uniformEquicontinuousOn
+  结论: {l : 滤子 ι} [l.NeBot]
   证明: by
   intro U hU; rw [mem_map]
   rcases mem_uniformity_isClosed hU with ⟨V, hV, hVclosed, hVU⟩
@@ -2919,8 +2919,8 @@ theorem Filter.Tendsto.uniformContinuous_of_uniformEquicontinuous
   exact uniformContinuousOn_of_uniformEquicontinuousOn (fun x _ => h₁ x) h₂
 
 中文:
-定理 Filter.Tendsto.uniformContinuous_of_uniformEquicontinuous
-  结论: {l : Filter ι} [l.NeBot]
+定理 滤子.收敛.uniformContinuous_of_uniformEquicontinuous
+  结论: {l : 滤子 ι} [l.NeBot]
   证明: by
   rw [← uniformContinuousOn_univ]; rw [← uniformEquicontinuousOn_univ]; rw [tendsto_pi_nhds] at *
   exact uniformContinuousOn_of_uniformEquicontinuousOn (fun x _ => h₁ x) h₂
@@ -2947,7 +2947,7 @@ even
 
 中文:
 定理 EquicontinuousAt.tendsto_of_mem_closure
-  结论: {l : Filter ι} {F : ι -> X -> α} {f : X -> α}
+  结论: {l : 滤子 ι} {F : ι -> X -> α} {f : X -> α}
   证明: by
   rw [(nhds_basis_uniformity (𝓤 α).basis_sets).tendsto_right_iff] at hf ⊢
   intro U hU
@@ -2986,7 +2986,7 @@ alias Equicontinuous.isClosed_setOf_tendsto := Equicontinuous.isClosed_setOfPred
 
 中文:
 定理 Equicontinuous.isClosed_setOfPred_tendsto
-  结论: {l : Filter ι} {F : ι -> X -> α} {f : X -> α}
+  结论: {l : 滤子 ι} {F : ι -> X -> α} {f : X -> α}
   证明: closure_subset_iff_isClosed.mp fun x hx =>
     (hF x).tendsto_of_mem_closure (hf.continuousAt.mono_left inf_le_left) (fun _ => id) hx
 

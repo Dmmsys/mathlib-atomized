@@ -46,7 +46,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing Rat where
+  签名: : 交换环 有理数 where
   定义体: addCommGroup
   __ := commMonoid
   zero_mul := Rat.zero_mul
@@ -92,7 +92,7 @@ instance commGroupWithZero
 
 中文:
 实例 commGroupWithZero
-  签名: : CommGroupWithZero Rat
+  签名: : 带零交换群 有理数
   定义体: { exists_pair_ne := ⟨0, 1, Rat.zero_ne_one⟩
     inv_zero := Rat.inv_zero
     mul_inv_cancel := Rat.mul_inv_cancel
@@ -124,7 +124,7 @@ instance isDomain
 
 中文:
 实例 isDomain
-  签名: : IsDomain Rat
+  签名: : 是整环 有理数
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -142,7 +142,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero Rat where cast_injective a b hab
+  签名: : 特征零 有理数 where cast_injective a b hab
   定义体: by simpa using congr_arg num hab
 
 Depends on / 依赖: congr_arg
@@ -160,7 +160,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring Rat
+  签名: : 交换半环 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -176,7 +176,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring Rat
+  签名: : 半环 有理数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -194,7 +194,7 @@ lemma divInt_div_divInt_cancel_left
   rw [div_eq_mul_inv]; rw [inv_divInt]; rw [divInt_mul_divInt_cancel hx]
 
 中文:
-引理 divInt_div_divInt_cancel_left
+引理 div整数_div_div整数_cancel_left
   条件: {x : 整数} (hx : x != 0) (n d : 整数)
   证明: by
   rw [div_eq_mul_inv]; rw [inv_divInt]; rw [divInt_mul_divInt_cancel hx]
@@ -215,7 +215,7 @@ lemma divInt_div_divInt_cancel_right
   rw [div_eq_mul_inv]; rw [inv_divInt]; rw [mul_comm]; rw [divInt_mul_divInt_cancel hx]
 
 中文:
-引理 divInt_div_divInt_cancel_right
+引理 div整数_div_div整数_cancel_right
   条件: {x : 整数} (hx : x != 0) (n d : 整数)
   证明: by
   rw [div_eq_mul_inv]; rw [inv_divInt]; rw [mul_comm]; rw [divInt_mul_divInt_cancel hx]
@@ -238,8 +238,8 @@ lemma num_div_den
 
 中文:
 引理 num_div_den
-  条件: (r : Rat)
-  结论: (r.num : Rat) / (r.den : Rat) = r
+  条件: (r : 有理数)
+  结论: (r.num : 有理数) / (r.den : 有理数) = r
   证明: by
   rw [← Int.cast_natCast]; rw [← divInt_eq_div]; rw [num_divInt_den]
 
@@ -259,7 +259,7 @@ lemma divInt_pow
   simp [divInt_eq_div, div_pow]
 
 中文:
-引理 divInt_pow
+引理 div整数_pow
   条件: (num : 自然数) (den : 整数) (n : 自然数)
   结论: (num /. den) ^ n = num ^ n /. den ^ n
   证明: by
@@ -298,7 +298,7 @@ lemma natCast_eq_divInt
   proof: by rw [← Int.cast_natCast, intCast_eq_divInt]
 
 中文:
-引理 natCast_eq_divInt
+引理 natCast_eq_div整数
   条件: (n : 自然数)
   结论: ↑n = n /. 1
   证明: by rw [← Int.cast_natCast, intCast_eq_divInt]
@@ -321,7 +321,7 @@ lemma mul_den_eq_num
 
 中文:
 引理 mul_den_eq_num
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: q * q.den = q.num
   证明: by
   suffices (q.num /. ↑q.den) * (↑q.den /. 1) = q.num /. 1 by simp_all
@@ -344,7 +344,7 @@ lemma den_mul_eq_num
 
 中文:
 引理 den_mul_eq_num
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: q.den * q = q.num
   证明: by rw [mul_comm, mul_den_eq_num]
 -/

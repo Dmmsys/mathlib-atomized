@@ -80,7 +80,7 @@ apply of_equiv piRight R S _ M ≪≫ₗ .piCongrRight fun i => (hf i).equiv
 
 中文:
 引理 pi
-  结论: {ι : 类型} [Finite ι]
+  结论: {ι : 类型} [有限 ι]
   证明: by
   classical
   cases nonempty_fintype ι
@@ -114,7 +114,7 @@ theorem finitePow
 
 中文:
 定理 finitePow
-  结论: (ι : 类型) [Finite ι]
+  结论: (ι : 类型) [有限 ι]
   证明: IsBaseChange.pi (f := fun _ => f) (fun _ => hf)
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.pi
@@ -194,7 +194,7 @@ instance pi
 
 中文:
 实例 pi
-  签名: {ι : 类型} [Finite ι]
+  签名: {ι : 类型} [有限 ι]
   定义体: by
   let (i : ι) : Module (Localization S) (M' i) := IsLocalizedModule.module S (f i)
   rw [isLocalizedModule_iff_isBaseChange S (Localization S)]

@@ -60,7 +60,7 @@ definition preVariationFun
 
 中文:
 定义 preVariationFun
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: if h : MeasurableSet s then
     ⨆ (P : Finpartition (⟨s, h⟩ : Subtype MeasurableSet)), ∑ p in P.parts, f p
   else 0
@@ -83,7 +83,7 @@ lemma preVariationFun_apply
 
 中文:
 引理 preVariationFun_apply
-  条件: {s : Set X} (h : MeasurableSet s)
+  条件: {s : 集合 X} (h : 可测集 s)
   证明: by
   simp [preVariationFun, h]
 
@@ -105,7 +105,7 @@ lemma preVariationFun_of_not_measurableSet
 
 中文:
 引理 preVariationFun_of_not_measurableSet
-  条件: {s : Set X} (h : ¬ MeasurableSet s)
+  条件: {s : 集合 X} (h : ¬ 可测集 s)
   证明: by
   simp [preVariationFun, h]
 
@@ -153,7 +153,7 @@ lemma zero
 
 中文:
 引理 zero
-  结论: preVariationFun (0 : Set X -> 实数>=0∞) = 0
+  结论: preVariationFun (0 : 集合 X -> 实数>=0∞) = 0
   证明: by ext; simp [preVariationFun]
 
 Depends on / 依赖: preVariationFun
@@ -171,7 +171,7 @@ lemma sum_le
 
 中文:
 引理 sum_le
-  结论: {s : Set X} (hs : MeasurableSet s)
+  结论: {s : 集合 X} (hs : 可测集 s)
   证明: by
   simpa [preVariationFun, hs, le_iSup_iff] using fun _ a => a P
 
@@ -191,8 +191,8 @@ abbreviation _root_.Finpartition.toMeasurableSet
   body: P.toSubtype (by measurability) (by measurability) (by measurability) hs hP
 
 中文:
-缩写 _root_.Finpartition.toMeasurableSet
-  签名: {s : Set X} (P : Finpartition s)
+缩写 _root_.有限分拆.toMeasurableSet
+  签名: {s : 集合 X} (P : 有限分拆 s)
   定义体: P.toSubtype (by measurability) (by measurability) (by measurability) hs hP
 
 Depends on / 依赖: P.toSubtype, measurability, toSubtype
@@ -214,7 +214,7 @@ lemma sum_le'
 
 中文:
 引理 sum_le'
-  结论: {s : Set X} (hs : MeasurableSet s)
+  结论: {s : 集合 X} (hs : 可测集 s)
   证明: by
   simp only [P.sum_eq_sum_finpartition_subtype (by measurability) (by measurability)
     (by measurability) hs hP f, sum_le f hs (P.toMeasurableSet hs hP)]
@@ -241,7 +241,7 @@ lemma sum_le_preVariationFun_of_subset
 
 中文:
 引理 sum_le_preVariationFun_of_subset
-  结论: {s₁ s₂ : Set X} (hs₁ : MeasurableSet s₁)
+  结论: {s₁ s₂ : 集合 X} (hs₁ : 可测集 s₁)
   证明: by
   calc
     ∑ p in P.parts, f p <= ∑ p in (P.extendOfLE h).parts, f p :=
@@ -272,7 +272,7 @@ lemma mono
 
 中文:
 引理 mono
-  条件: {s₁ s₂ : Set X} (hs₂ : MeasurableSet s₂) (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 X} (hs₂ : 可测集 s₂) (h : s₁ subseteq s₂)
   证明: by
   by_cases hs₁ : MeasurableSet s₁
   · have := sum_le_preVariationFun_of_subset f hs₁ hs₂ h
@@ -298,8 +298,8 @@ lemma exists_Finpartition_sum_gt
   simp_all [preVariationFun, lt_iSup_iff]
 
 中文:
-引理 exists_Finpartition_sum_gt
-  结论: {s : Set X} (hs : MeasurableSet s) {a : 实数>=0∞}
+引理 存在_Finpartition_sum_gt
+  结论: {s : 集合 X} (hs : 可测集 s) {a : 实数>=0∞}
   证明: by
   simp_all [preVariationFun, lt_iSup_iff]
 
@@ -326,8 +326,8 @@ lemma exists_Finpartition_sum_ge
       exa
 
 中文:
-引理 exists_Finpartition_sum_ge
-  结论: {s : Set X} (hs : MeasurableSet s) {ε : 实数>=0} (hε : 0 < ε)
+引理 存在_Finpartition_sum_ge
+  结论: {s : 集合 X} (hs : 可测集 s) {ε : 实数>=0} (hε : 0 < ε)
   证明: by
   let ε' := min ε (preVariationFun f s).toNNReal
   have hε' : ε' <= preVariationFun f s := by simp_all [ε']
@@ -374,8 +374,8 @@ lemma exists_Finpartition_sum_ge'
   exact exists_Finpartition_sum_ge _ hs (by simpa using hε) h
 
 中文:
-引理 exists_Finpartition_sum_ge'
-  结论: {s : Set X} (hs : MeasurableSet s) {ε : 实数>=0∞} (hε : 0 < ε)
+引理 存在_Finpartition_sum_ge'
+  结论: {s : 集合 X} (hs : 可测集 s) {ε : 实数>=0∞} (hε : 0 < ε)
   证明: by
   rcases eq_top_or_lt_top ε with rfl | h'ε
   · simp
@@ -408,7 +408,7 @@ lemma sum_le_preVariationFun_iUnion'
 
 中文:
 引理 sum_le_preVariationFun_iUnion'
-  结论: {s : 自然数 -> Set X} (hs : 对任意 i, MeasurableSet (s i))
+  结论: {s : 自然数 -> 集合 X} (hs : 对任意 i, 可测集 (s i))
   证明: by
   let s' (i : Nat) : Subtype MeasurableSet := ⟨s i, hs i⟩
   have hs_disj : Set.PairwiseDisjoint (Finset.range n : Set Nat) s' := fun i _ j _ hij => by
@@ -454,7 +454,7 @@ have hs'' i : preVariationFun f (s i) != ⊤ := lt_top_iff_ne_top.mp
 
 中文:
 引理 sum_le_preVariationFun_iUnion
-  结论: {s : 自然数 -> Set X} (hs : 对任意 i, MeasurableSet (s i))
+  结论: {s : 自然数 -> 集合 X} (hs : 对任意 i, 可测集 (s i))
   证明: by
   refine ENNReal.tsum_le_of_sum_range_le fun n => ?_
   by_cases hn : n = 0
@@ -502,7 +502,7 @@ definition IsSigmaSubadditiveSetFun
 
 中文:
 定义 IsSigmaSubadditiveSetFun
-  签名: (f : Set X -> 实数>=0∞)
+  签名: (f : 集合 X -> 实数>=0∞)
   定义体: forall (s : Nat -> {t : Set X // MeasurableSet t}), Pairwise (Disjoint on (Subtype.val ∘ s)) ->
     f (⋃ i, (s i).val) <= ∑' i, f (s i)
 
@@ -522,7 +522,7 @@ lemma isSigmaSubadditiveSetFun_zero
 
 中文:
 引理 isSigmaSubadditiveSetFun_zero
-  结论: IsSigmaSubadditiveSetFun (0 : Set X -> 实数>=0∞)
+  结论: IsSigmaSubadditiveSetFun (0 : 集合 X -> 实数>=0∞)
   证明: by intro; simp
 -/
 lemma isSigmaSubadditiveSetFun_zero : IsSigmaSubadditiveSetFun (0 : Set X -> Real>=0∞) := by intro; simp
@@ -546,7 +546,7 @@ lemma iUnion
 
 中文:
 引理 iUnion
-  结论: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : 自然数 -> Set X)
+  结论: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : 自然数 -> 集合 X)
   证明: by
   refine ENNReal.summable.hasSum_iff.mpr (le_antisymm (sum_le_preVariationFun_iUnion f hs hs') ?_)
   refine ENNReal.le_tsum_of_forall_lt_exists_sum fun b hb => ?_
@@ -636,7 +636,7 @@ lemma ennrealPreVariation_apply
 
 中文:
 引理 ennrealPreVariation_apply
-  条件: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : Set X)
+  条件: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : 集合 X)
   证明: rfl
 
 @[simp]
@@ -694,7 +694,7 @@ lemma preVariation_apply
 
 中文:
 引理 preVariation_apply
-  条件: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : Set X)
+  条件: (hf : IsSigmaSubadditiveSetFun f) (hf' : f ∅ = 0) (s : 集合 X)
   证明: rfl
 
 @[simp]

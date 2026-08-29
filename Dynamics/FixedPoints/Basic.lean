@@ -114,7 +114,7 @@ theorem to_leftInverse
 
 中文:
 定理 to_leftInverse
-  条件: (hf : IsFixedPt f x) (h : LeftInverse g f)
+  条件: (hf : IsFixedPt f x) (h : 左逆 g f)
   结论: IsFixedPt g x
   证明: calc
     g x = g (f x) := congr_arg g hf.symm
@@ -179,7 +179,7 @@ theorem preimage_iterate
 
 中文:
 定理 preimage_iterate
-  条件: {s : Set α} (h : IsFixedPt (Set.preimage f) s) (n : 自然数)
+  条件: {s : 集合 α} (h : IsFixedPt (集合.原像 f) s) (n : 自然数)
   证明: by
   rw [Set.preimage_iterate_eq]
   exact h.iterate n
@@ -201,7 +201,7 @@ lemma image_iterate
 
 中文:
 引理 image_iterate
-  条件: {s : Set α} (h : IsFixedPt (Set.image f) s) (n : 自然数)
+  条件: {s : 集合 α} (h : IsFixedPt (集合.像 f) s) (n : 自然数)
   证明: Set.image_iterate_eq ▸ h.iterate n
 
 Depends on / 依赖: Set.image_iterate_eq, h.iterate, image_iterate_eq, iterate
@@ -340,8 +340,8 @@ theorem Injective.isFixedPt_apply_iff
   proof: ⟨fun h => hf h.eq, IsFixedPt.apply⟩
 
 中文:
-定理 Injective.isFixedPt_apply_iff
-  条件: (hf : Injective f) {x : α}
+定理 单射.isFixedPt_apply_iff
+  条件: (hf : 单射 f) {x : α}
   证明: ⟨fun h => hf h.eq, IsFixedPt.apply⟩
 
 Depends on / 依赖: IsFixedPt, IsFixedPt.apply, h.eq

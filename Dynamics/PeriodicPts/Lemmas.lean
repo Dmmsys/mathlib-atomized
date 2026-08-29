@@ -56,7 +56,7 @@ theorem bijOn_periodicPts
 
 中文:
 定理 bijOn_periodicPts
-  结论: BijOn f (periodicPts f) (periodicPts f)
+  结论: 双射限制 f (periodicPts f) (periodicPts f)
   证明: iUnion_pnat_ptsOfPeriod f ▸
     bijOn_iUnion_of_directed (directed_ptsOfPeriod_pnat f) fun i => bijOn_ptsOfPeriod f i.pos
 
@@ -78,7 +78,7 @@ theorem minimalPeriod_eq_prime_iff
 
 中文:
 定理 minimalPeriod_eq_prime_iff
-  条件: {p : 自然数} [hp : Fact p.Prime]
+  条件: {p : 自然数} [hp : Fact p.素]
   证明: by
   rw [Function.isPeriodicPt_iff_minimalPeriod_dvd]; rw [Nat.dvd_prime hp.out]; rw [← minimalPeriod_eq_one_iff_isFixedPt.not]; rw [or_and_right]; rw [and_not_self_iff]; rw [false_or]; rw [iff_self_and]
   exact fun h => ne_of_eq_of_ne h hp.out.ne_one
@@ -122,7 +122,7 @@ theorem minimalPeriod_eq_prime
 
 中文:
 定理 minimalPeriod_eq_prime
-  结论: {p : 自然数} [hp : Fact p.Prime] (hper : IsPeriodicPt f p x)
+  结论: {p : 自然数} [hp : Fact p.素] (hper : IsPeriodicPt f p x)
   证明: minimalPeriod_eq_prime_iff.mpr ⟨hper, hfix⟩
 
 Depends on / 依赖: minimalPeriod_eq_prime_iff, minimalPeriod_eq_prime_iff.mpr
@@ -143,7 +143,7 @@ theorem minimalPeriod_eq_prime_pow
 
 中文:
 定理 minimalPeriod_eq_prime_pow
-  结论: {p k : 自然数} [hp : Fact p.Prime] (hk : ¬IsPeriodicPt f (p ^ k) x)
+  结论: {p k : 自然数} [hp : Fact p.素] (hk : ¬IsPeriodicPt f (p ^ k) x)
   证明: by
   apply Nat.eq_prime_pow_of_dvd_least_prime_pow hp.out <;>
     rwa [← isPeriodicPt_iff_minimalPeriod_dvd]
@@ -232,7 +232,7 @@ theorem minimalPeriod_le_card
 
 中文:
 定理 minimalPeriod_le_card
-  条件: [Fintype α]
+  条件: [有限类型 α]
   结论: minimalPeriod f x <= card α
   证明: by
   rw [← periodicOrbit_length]
@@ -255,7 +255,7 @@ theorem isPeriodicPt_factorial_card_of_mem_periodicPts
 
 中文:
 定理 isPeriodicPt_factorial_card_of_mem_periodicPts
-  条件: [Fintype α] (h : x in periodicPts f)
+  条件: [有限类型 α] (h : x in periodicPts f)
   证明: isPeriodicPt_iff_minimalPeriod_dvd.mpr
     (Nat.dvd_factorial (minimalPeriod_pos_of_mem_periodicPts h) minimalPeriod_le_card)
 
@@ -278,7 +278,7 @@ theorem mem_periodicPts_iff_isPeriodicPt_factorial_card
 
 中文:
 定理 mem_periodicPts_iff_isPeriodicPt_factorial_card
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: isPeriodicPt_factorial_card_of_mem_periodicPts
   mpr h := minimalPeriod_pos_iff_mem_periodicPts.mp
     (IsPeriodicPt.minimalPeriod_pos (Nat.factorial_pos _) h)
@@ -306,8 +306,8 @@ theorem Injective.mem_periodicPts
   · exact mk_mem_periodicPts (by lia) (iterate_
 
 中文:
-定理 Injective.mem_periodicPts
-  条件: [Finite α] (h : Injective f) (x : α)
+定理 单射.mem_periodicPts
+  条件: [有限 α] (h : 单射 f) (x : α)
   结论: x in periodicPts f
   证明: by
   obtain ⟨m, n, heq, hne⟩ : exists m n, f^[m] x = f^[n] x ∧ m != n := by
@@ -339,8 +339,8 @@ theorem injective_iff_periodicPts_eq_univ
 
 中文:
 定理 injective_iff_periodicPts_eq_univ
-  条件: [Finite α]
-  结论: Injective f ↔ periodicPts f = univ
+  条件: [有限 α]
+  结论: 单射 f ↔ periodicPts f = univ
   证明: by
   refine ⟨fun h => eq_univ_iff_forall.mpr h.mem_periodicPts, fun h => ?_⟩
   rw [Finite.injective_iff_surjective]; rw [← range_eq_univ]; rw [← univ_subset_iff]; rw [← h]
@@ -365,7 +365,7 @@ theorem injective_iff_iterate_factorial_card_eq_id
 
 中文:
 定理 injective_iff_iterate_factorial_card_eq_id
-  条件: [Fintype α]
+  条件: [有限类型 α]
   证明: by
   simp only [injective_iff_periodicPts_eq_univ, mem_periodicPts_iff_isPeriodicPt_factorial_card,
     funext_iff, eq_univ_iff_forall, IsPeriodicPt, id, IsFixedPt]
@@ -417,7 +417,7 @@ theorem minimalPeriod_fst_dvd
 
 中文:
 定理 minimalPeriod_fst_dvd
-  结论: minimalPeriod f x.1 ∣ minimalPeriod (Prod.map f g) x
+  结论: minimalPeriod f x.1 ∣ minimalPeriod (积类型.map f g) x
   证明: by
   rw [minimalPeriod_prodMap]; exact Nat.dvd_lcm_left _ _
 
@@ -437,7 +437,7 @@ theorem minimalPeriod_snd_dvd
 
 中文:
 定理 minimalPeriod_snd_dvd
-  结论: minimalPeriod g x.2 ∣ minimalPeriod (Prod.map f g) x
+  结论: minimalPeriod g x.2 ∣ minimalPeriod (积类型.map f g) x
   证明: by
   rw [minimalPeriod_prodMap]; exact Nat.dvd_lcm_right _ _
 
@@ -484,7 +484,7 @@ theorem minimalPeriod_piMap_fintype
 
 中文:
 定理 minimalPeriod_piMap_fintype
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: eq_of_forall_dvd by simp [← isPeriodicPt_iff_minimalPeriod_dvd]
 
 Depends on / 依赖: eq_of_forall_dvd, isPeriodicPt_iff_minimalPeriod_dvd

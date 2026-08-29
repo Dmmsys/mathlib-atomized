@@ -48,7 +48,7 @@ definition CommRingCat.moduleCatRestrictScalarsPseudofunctor
     (fun f g => Cat.Hom.isoMk <| restrictScalarsComp g.unop.hom f.unop.hom)
 
 中文:
-定义 CommRingCat.moduleCatRestrictScalarsPseudofunctor
+定义 交换环范畴.moduleCatRestrictScalarsPseudofunctor
   签名: :
   定义体: LocallyDiscrete.mkPseudofunctor
     (fun R => Cat.of (ModuleCat.{v} R.unop))
@@ -82,7 +82,7 @@ definition RingCat.moduleCatRestrictScalarsPseudofunctor
     (fun f g => Cat.Hom.isoMk <| restrictScalarsComp g.unop.hom f.unop.hom)
 
 中文:
-定义 RingCat.moduleCatRestrictScalarsPseudofunctor
+定义 环范畴.moduleCatRestrictScalarsPseudofunctor
   签名: :
   定义体: LocallyDiscrete.mkPseudofunctor
     (fun R => Cat.of (ModuleCat.{v} R.unop))
@@ -120,7 +120,7 @@ definition CommRingCat.moduleCatExtendScalarsPseudofunctor
   
 
 中文:
-定义 CommRingCat.moduleCatExtendScalarsPseudofunctor
+定义 交换环范畴.moduleCatExtendScalarsPseudofunctor
   签名: :
   定义体: by
   refine LocallyDiscrete.mkPseudofunctor

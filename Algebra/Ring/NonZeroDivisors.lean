@@ -42,7 +42,7 @@ theorem IsLeftRegular.pow_injective
 
 中文:
 定理 IsLeftRegular.pow_injective
-  结论: [IsMulTorsionFree R]
+  结论: [是MulTorsionFree R]
   证明: by
   intro n m hnm
   have main {n m} (h₁ : n <= m) (h₂ : r ^ n = r ^ m) : n = m := by
@@ -78,7 +78,7 @@ theorem IsRightRegular.pow_injective
 
 中文:
 定理 IsRightRegular.pow_injective
-  结论: {M : 类型} [Monoid M] [IsMulTorsionFree M] {x : M}
+  结论: {M : 类型} [幺半群 M] [是MulTorsionFree M] {x : M}
   证明: MulOpposite.unop_injective.comp (isLeftRegular_op.mpr hx).pow_injective
     (MulOpposite.op_eq_one_iff x).not.mpr hx'
 
@@ -100,8 +100,8 @@ theorem IsMulTorsionFree.pow_right_injective
 @[simp]
 
 中文:
-定理 IsMulTorsionFree.pow_right_injective
-  结论: {M : 类型} [CancelMonoid M] [IsMulTorsionFree M]
+定理 是MulTorsionFree.pow_right_injective
+  结论: {M : 类型} [消去幺半群 M] [是MulTorsionFree M]
   证明: IsLeftRegular.pow_injective (IsLeftRegular.all x) hx
 
 @[simp]
@@ -122,8 +122,8 @@ theorem IsMulTorsionFree.pow_right_inj
   proof: (pow_right_injective hx).eq_iff
 
 中文:
-定理 IsMulTorsionFree.pow_right_inj
-  结论: {M : 类型} [CancelMonoid M] [IsMulTorsionFree M] {x : M}
+定理 是MulTorsionFree.pow_right_inj
+  结论: {M : 类型} [消去幺半群 M] [是MulTorsionFree M] {x : M}
   证明: (pow_right_injective hx).eq_iff
 
 Depends on / 依赖: eq_iff, pow_right_injective
@@ -142,8 +142,8 @@ theorem IsMulTorsionFree.pow_right_injective₀
 @[simp]
 
 中文:
-定理 IsMulTorsionFree.pow_right_injective₀
-  结论: {M : 类型} [MonoidWithZero M] [IsLeftCancelMulZero M]
+定理 是MulTorsionFree.pow_right_injective₀
+  结论: {M : 类型} [带零幺半群 M] [是左消去MulZero M]
   证明: IsLeftRegular.pow_injective (IsLeftCancelMulZero.mul_left_cancel_of_ne_zero hx') hx
 
 @[simp]
@@ -164,8 +164,8 @@ theorem IsMulTorsionFree.pow_right_inj₀
   proof: (pow_right_injective₀ hx hx').eq_iff
 
 中文:
-定理 IsMulTorsionFree.pow_right_inj₀
-  结论: {M : 类型} [MonoidWithZero M] [IsLeftCancelMulZero M]
+定理 是MulTorsionFree.pow_right_inj₀
+  结论: {M : 类型} [带零幺半群 M] [是左消去MulZero M]
   证明: (pow_right_injective₀ hx hx').eq_iff
 
 Depends on / 依赖: eq_iff
@@ -189,7 +189,7 @@ theorem IsLeftRegular.isUnit_of_finite
 中文:
 定理 IsLeftRegular.isUnit_of_finite
   条件: (h : IsLeftRegular r)
-  结论: IsUnit r
+  结论: 是单位 r
   证明: by
   rwa [IsUnit.isUnit_iff_mulLeft_bijective, ← Finite.injective_iff_bijective]
 
@@ -211,7 +211,7 @@ theorem IsRightRegular.isUnit_of_finite
 中文:
 定理 IsRightRegular.isUnit_of_finite
   条件: (h : IsRightRegular r)
-  结论: IsUnit r
+  结论: 是单位 r
   证明: by
   rwa [IsUnit.isUnit_iff_mulRight_bijective, ← Finite.injective_iff_bijective]
 
@@ -231,7 +231,7 @@ theorem isRegular_iff_isUnit_of_finite
 
 中文:
 定理 isRegular_iff_isUnit_of_finite
-  结论: IsRegular r ↔ IsUnit r where
+  结论: 是正则 r ↔ 是单位 r where
   证明: h.1.isUnit_of_finite
   mpr h := h.isRegular
 
@@ -293,7 +293,7 @@ lemma isRegular_iff_mem_nonZeroDivisors
 
 中文:
 引理 isRegular_iff_mem_nonZeroDivisors
-  结论: IsRegular r ↔ r in R⁰
+  结论: 是正则 r ↔ r in R⁰
   证明: isRegular_iff_eq_zero_of_mul
 
 Depends on / 依赖: isRegular_iff_eq_zero_of_mul
@@ -311,7 +311,7 @@ lemma le_nonZeroDivisorsLeft_iff_isLeftRegular
 
 中文:
 引理 le_nonZeroDivisorsLeft_iff_isLeftRegular
-  条件: {S : Submonoid R}
+  条件: {S : 子幺半群 R}
   证明: by
   simp_rw [SetLike.le_def, isLeftRegular_iff_mem_nonZeroDivisorsLeft, Subtype.forall]
 
@@ -332,7 +332,7 @@ lemma le_nonZeroDivisorsRight_iff_isRightRegular
 
 中文:
 引理 le_nonZeroDivisorsRight_iff_isRightRegular
-  条件: {S : Submonoid R}
+  条件: {S : 子幺半群 R}
   证明: by
   simp_rw [SetLike.le_def, isRightRegular_iff_mem_nonZeroDivisorsRight, Subtype.forall]
 
@@ -354,7 +354,7 @@ lemma le_nonZeroDivisors_iff_isRegular
 
 中文:
 引理 le_nonZeroDivisors_iff_isRegular
-  条件: {S : Submonoid R}
+  条件: {S : 子幺半群 R}
   证明: by
   simp_rw [nonZeroDivisors, le_inf_iff, le_nonZeroDivisorsLeft_iff_isLeftRegular,
     le_nonZeroDivisorsRight_iff_isRightRegular, isRegular_iff, forall_and]
@@ -501,8 +501,8 @@ lemma isUnit_iff_mem_nonZeroDivisors_of_finite
 
 中文:
 引理 isUnit_iff_mem_nonZeroDivisors_of_finite
-  条件: [Finite R]
-  结论: IsUnit a ↔ a in nonZeroDivisors R
+  条件: [有限 R]
+  结论: 是单位 a ↔ a in nonZeroDivisors R
   证明: by
   rw [← isRegular_iff_mem_nonZeroDivisors]; rw [isRegular_iff_isUnit_of_finite]
 

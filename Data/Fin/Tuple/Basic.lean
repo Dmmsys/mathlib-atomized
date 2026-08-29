@@ -107,7 +107,7 @@ theorem tuple0_le
 
 中文:
 定理 tuple0_le
-  条件: {α : Fin 0 -> 类型} [对任意 i, Preorder (α i)] (f g : 对任意 i, α i)
+  条件: {α : 有限集 0 -> 类型} [对任意 i, 预序 (α i)] (f g : 对任意 i, α i)
   结论: f <= g
   证明: finZeroElim
 
@@ -146,7 +146,7 @@ theorem tail_def
 
 中文:
 定理 tail_def
-  条件: {n : 自然数} {α : Fin (n + 1) -> Sort*} {q : 对任意 i, α i}
+  条件: {n : 自然数} {α : 有限集 (n + 1) -> 类型层*} {q : 对任意 i, α i}
   证明: rfl
 -/
 theorem tail_def {n : Nat} {α : Fin (n + 1) -> Sort*} {q : forall i, α i} :
@@ -165,7 +165,7 @@ definition cons
 
 中文:
 定义 cons
-  签名: (x : α 0) (p : 对任意 i : Fin n, α i.succ)
+  签名: (x : α 0) (p : 对任意 i : 有限集 n, α i.succ)
   定义体: fun j => Fin.cases x p j
 
 @[simp]
@@ -232,7 +232,7 @@ theorem cons_comp_succ
 
 中文:
 定理 cons_comp_succ
-  条件: {α : Sort*} (x : α) (p : Fin n -> α)
+  条件: {α : 类型层*} (x : α) (p : 有限集 n -> α)
   证明: funext fun _ => Fin.cons_succ ..
 
 @[simp]
@@ -277,7 +277,7 @@ theorem cons_one
 
 中文:
 定理 cons_one
-  条件: {α : Fin (n + 2) -> Sort*} (x : α 0) (p : 对任意 i : Fin n.succ, α i.succ)
+  条件: {α : 有限集 (n + 2) -> 类型层*} (x : α 0) (p : 对任意 i : 有限集 n.succ, α i.succ)
   证明: by
   rw [← cons_succ x p]; rfl
 
@@ -301,7 +301,7 @@ theorem cons_last
 
 中文:
 定理 cons_last
-  条件: {α : Fin (n + 2) -> Sort*} (x : α 0) (p : 对任意 i : Fin n.succ, α i.succ)
+  条件: {α : 有限集 (n + 2) -> 类型层*} (x : α 0) (p : 对任意 i : 有限集 n.succ, α i.succ)
   证明: by
   rw [← cons_succ x p]; rfl
 
@@ -349,7 +349,7 @@ theorem cons_injective2
 
 中文:
 定理 cons_injective2
-  结论: Function.Injective2 (@cons n α)
+  结论: 函数.Injective2 (@cons n α)
   证明: fun x₀ y₀ x y h =>
   ⟨congr_fun h 0, funext fun i => by simpa using congr_fun h (Fin.succ i)⟩
 
@@ -369,7 +369,7 @@ theorem cons_inj
 
 中文:
 定理 cons_inj
-  条件: {x₀ y₀ : α 0} {x y : 对任意 i : Fin n, α i.succ}
+  条件: {x₀ y₀ : α 0} {x y : 对任意 i : 有限集 n, α i.succ}
   证明: cons_injective2.eq_iff
 
 Depends on / 依赖: cons_injective2, cons_injective2.eq_iff, eq_iff
@@ -389,8 +389,8 @@ theorem cons_left_injective
 
 中文:
 定理 cons_left_injective
-  条件: (x : 对任意 i : Fin n, α i.succ)
-  结论: Function.Injective fun x₀ => cons x₀ x
+  条件: (x : 对任意 i : 有限集 n, α i.succ)
+  结论: 函数.单射 fun x₀ => cons x₀ x
   证明: cons_injective2.left _
 
 Depends on / 依赖: cons_injective2, cons_injective2.left
@@ -410,7 +410,7 @@ theorem cons_right_injective
 中文:
 定理 cons_right_injective
   条件: (x₀ : α 0)
-  结论: Function.Injective (cons x₀)
+  结论: 函数.单射 (cons x₀)
   证明: cons_injective2.right _
 
 Depends on / 依赖: cons_injective2, cons_injective2.right
@@ -484,7 +484,7 @@ theorem cons_zero_succ
 
 中文:
 定理 cons_zero_succ
-  结论: (cons 0 Fin.succ : Fin (n + 1) -> Fin (n + 1)) = id
+  结论: (cons 0 有限集.succ : 有限集 (n + 1) -> 有限集 (n + 1)) = id
   证明: cons_self_tail id
 
 Depends on / 依赖: cons_self_tail
@@ -510,7 +510,7 @@ definition consEquiv
 
 中文:
 定义 consEquiv
-  签名: (α : Fin (n + 1) -> 类型)
+  签名: (α : 有限集 (n + 1) -> 类型)
   定义体: cons f.1 f.2
   invFun f := (f 0, tail f)
   left_inv f := by simp
@@ -534,7 +534,7 @@ definition consCases
 
 中文:
 定义 consCases
-  签名: {motive : (对任意 i : Fin n.succ, α i) -> Sort v} (cons : 对任意 x₀ x, motive (Fin.cons x₀ x))
+  签名: {motive : (对任意 i : 有限集 n.succ, α i) -> 类型层 v} (cons : 对任意 x₀ x, motive (有限集.cons x₀ x))
   定义体: _root_.cast (by rw [cons_self_tail]) cons (x 0) (tail x)
 
 Depends on / 依赖: _root_, _root_.cast, cons_self_tail
@@ -557,7 +557,7 @@ theorem consCases_cons
 
 中文:
 定理 consCases_cons
-  结论: {motive : (对任意 i : Fin n.succ, α i) -> Sort v}
+  结论: {motive : (对任意 i : 有限集 n.succ, α i) -> 类型层 v}
   证明: by
   rw [consCases]; rw [cast_eq]
   congr
@@ -581,7 +581,7 @@ definition consInduction
 
 中文:
 定义 consInduction
-  签名: {α : Sort*} {motive : 对任意 {n : 自然数}, (Fin n -> α) -> Sort v} (elim0 : motive Fin.elim0)
+  签名: {α : 类型层*} {motive : 对任意 {n : 自然数}, (有限集 n -> α) -> 类型层 v} (elim0 : motive 有限集.elim0)
 -/
 def consInduction {α : Sort*} {motive : forall {n : Nat}, (Fin n -> α) -> Sort v} (elim0 : motive Fin.elim0)
     (cons : forall {n} (x₀) (x : Fin n -> α), motive x -> motive (Fin.cons x₀ x)) :
@@ -601,7 +601,7 @@ theorem cons_injective_of_injective
 
 中文:
 定理 cons_injective_of_injective
-  结论: {α} {x₀ : α} {x : Fin n -> α} (hx₀ : x₀ ∉ Set.range x)
+  结论: {α} {x₀ : α} {x : 有限集 n -> α} (hx₀ : x₀ ∉ 集合.range x)
   证明: by
   intro i j
   cases i using Fin.cases <;> cases j using Fin.cases <;> aesop (add simp [hx.eq_iff])
@@ -628,7 +628,7 @@ theorem cons_injective_iff
 
 中文:
 定理 cons_injective_iff
-  条件: {α} {x₀ : α} {x : Fin n -> α}
+  条件: {α} {x₀ : α} {x : 有限集 n -> α}
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun h => cons_injective_of_injective h.1 h.2⟩
   · rintro ⟨i, hi⟩
@@ -657,8 +657,8 @@ theorem exists_cons
 @[simp]
 
 中文:
-定理 exists_cons
-  条件: {α : Fin (n + 1) -> 类型} (q : 对任意 i, α i)
+定理 存在_cons
+  条件: {α : 有限集 (n + 1) -> 类型} (q : 对任意 i, α i)
   证明: ⟨q 0, tail q, (cons_self_tail q).symm⟩
 
 @[simp]
@@ -681,8 +681,8 @@ theorem forall_fin_zero_pi
 @[simp]
 
 中文:
-定理 forall_fin_zero_pi
-  条件: {α : Fin 0 -> Sort*} {P : (对任意 i, α i) -> 命题}
+定理 对任意_fin_zero_pi
+  条件: {α : 有限集 0 -> 类型层*} {P : (对任意 i, α i) -> 命题}
   证明: ⟨fun h => h _, fun h x => Subsingleton.elim finZeroElim x ▸ h⟩
 
 @[simp]
@@ -703,8 +703,8 @@ theorem exists_fin_zero_pi
   proof: ⟨fun ⟨x, h⟩ => Subsingleton.elim x finZeroElim ▸ h, fun h => ⟨_, h⟩⟩
 
 中文:
-定理 exists_fin_zero_pi
-  条件: {α : Fin 0 -> Sort*} {P : (对任意 i, α i) -> 命题}
+定理 存在_fin_zero_pi
+  条件: {α : 有限集 0 -> 类型层*} {P : (对任意 i, α i) -> 命题}
   证明: ⟨fun ⟨x, h⟩ => Subsingleton.elim x finZeroElim ▸ h, fun h => ⟨_, h⟩⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, finZeroElim
@@ -723,9 +723,9 @@ theorem forall_fin_succ_pi
   proof: ⟨fun h a v => h (Fin.cons a v), consCases⟩
 
 中文:
-定理 forall_fin_succ_pi
+定理 对任意_fin_succ_pi
   条件: {P : (对任意 i, α i) -> 命题}
-  结论: (对任意 x, P x) ↔ 对任意 a v, P (Fin.cons a v)
+  结论: (对任意 x, P x) ↔ 对任意 a v, P (有限集.cons a v)
   证明: ⟨fun h a v => h (Fin.cons a v), consCases⟩
 
 Depends on / 依赖: Fin.cons, consCases
@@ -743,9 +743,9 @@ theorem exists_fin_succ_pi
   proof: ⟨fun ⟨x, h⟩ => ⟨x 0, tail x, (cons_self_tail x).symm ▸ h⟩, fun ⟨_, _, h⟩ => ⟨_, h⟩⟩
 
 中文:
-定理 exists_fin_succ_pi
+定理 存在_fin_succ_pi
   条件: {P : (对任意 i, α i) -> 命题}
-  结论: (存在 x, P x) ↔ 存在 a v, P (Fin.cons a v)
+  结论: (存在 x, P x) ↔ 存在 a v, P (有限集.cons a v)
   证明: ⟨fun ⟨x, h⟩ => ⟨x 0, tail x, (cons_self_tail x).symm ▸ h⟩, fun ⟨_, _, h⟩ => ⟨_, h⟩⟩
 
 Depends on / 依赖: cons_self_tail
@@ -827,7 +827,7 @@ theorem comp_cons
 
 中文:
 定理 comp_cons
-  条件: {α : Sort*} {β : Sort*} (g : α -> β) (y : α) (q : Fin n -> α)
+  条件: {α : 类型层*} {β : 类型层*} (g : α -> β) (y : α) (q : 有限集 n -> α)
   证明: by
   ext j
   by_cases h : j = 0
@@ -861,7 +861,7 @@ theorem comp_tail
 
 中文:
 定理 comp_tail
-  条件: {α : Sort*} {β : Sort*} (g : α -> β) (q : Fin n.succ -> α)
+  条件: {α : 类型层*} {β : 类型层*} (g : α -> β) (q : 有限集 n.succ -> α)
   证明: by
   ext j
   simp [tail]
@@ -885,7 +885,7 @@ theorem le_cons
 
 中文:
 定理 le_cons
-  条件: [对任意 i, Preorder (α i)] {x : α 0} {q : 对任意 i, α i} {p : 对任意 i : Fin n, α i.succ}
+  条件: [对任意 i, 预序 (α i)] {x : α 0} {q : 对任意 i, α i} {p : 对任意 i : 有限集 n, α i.succ}
   证明: forall_fin_succ.trans and_congr Iff.rfl forall_congr' fun j => by simp [tail]
 
 Depends on / 依赖: Iff.rfl, and_congr, forall_congr, forall_fin_succ, forall_fin_succ.trans
@@ -904,7 +904,7 @@ theorem cons_le
 
 中文:
 定理 cons_le
-  条件: [对任意 i, Preorder (α i)] {x : α 0} {q : 对任意 i, α i} {p : 对任意 i : Fin n, α i.succ}
+  条件: [对任意 i, 预序 (α i)] {x : α 0} {q : 对任意 i, α i} {p : 对任意 i : 有限集 n, α i.succ}
   证明: @le_cons _ (fun i => (α i)ᵒᵈ) _ x q p
 
 Depends on / 依赖: le_cons
@@ -923,7 +923,7 @@ theorem cons_le_cons
 
 中文:
 定理 cons_le_cons
-  条件: [对任意 i, Preorder (α i)] {x₀ y₀ : α 0} {x y : 对任意 i : Fin n, α i.succ}
+  条件: [对任意 i, 预序 (α i)] {x₀ y₀ : α 0} {x y : 对任意 i : 有限集 n, α i.succ}
   证明: forall_fin_succ.trans and_congr_right' by simp only [cons_succ, Pi.le_def]
 
 Depends on / 依赖: Pi.le_def, and_congr_right, cons_succ, forall_fin_succ, forall_fin_succ.trans, le_def
@@ -946,7 +946,7 @@ theorem range_fin_succ
 
 中文:
 定理 range_fin_succ
-  条件: {α} (f : Fin (n + 1) -> α)
+  条件: {α} (f : 有限集 (n + 1) -> α)
   证明: Set.ext fun _ => exists_fin_succ.trans eq_comm.or Iff.rfl
 
 @[simp]
@@ -969,7 +969,7 @@ theorem range_cons
 
 中文:
 定理 range_cons
-  条件: {α} {n : 自然数} (x : α) (b : Fin n -> α)
+  条件: {α} {n : 自然数} (x : α) (b : 有限集 n -> α)
   证明: by
   rw [range_fin_succ]; rw [cons_zero]; rw [tail_cons]
 
@@ -995,7 +995,7 @@ definition append
 
 中文:
 定义 append
-  签名: (a : Fin m -> α) (b : Fin n -> α)
+  签名: (a : 有限集 m -> α) (b : 有限集 n -> α)
   定义体: @Fin.addCases _ _ (fun _ => α) a b
 
 @[simp]
@@ -1016,7 +1016,7 @@ theorem append_left
 
 中文:
 定理 append_left
-  条件: (u : Fin m -> α) (v : Fin n -> α) (i : Fin m)
+  条件: (u : 有限集 m -> α) (v : 有限集 n -> α) (i : 有限集 m)
   证明: addCases_left _
 
 Depends on / 依赖: addCases_left
@@ -1039,7 +1039,7 @@ theorem append_left'
 
 中文:
 定理 append_left'
-  条件: (u : Fin m -> α) (v : Fin n -> α) (i : Fin m)
+  条件: (u : 有限集 m -> α) (v : 有限集 n -> α) (i : 有限集 m)
   证明: addCases_left _
 
 @[simp]
@@ -1061,7 +1061,7 @@ theorem append_right
 
 中文:
 定理 append_right
-  条件: (u : Fin m -> α) (v : Fin n -> α) (i : Fin n)
+  条件: (u : 有限集 m -> α) (v : 有限集 n -> α) (i : 有限集 n)
   证明: addCases_right _
 
 Depends on / 依赖: addCases_right
@@ -1087,7 +1087,7 @@ theorem append_right_nil
 
 中文:
 定理 append_right_nil
-  条件: (u : Fin m -> α) (v : Fin n -> α) (hv : n = 0)
+  条件: (u : 有限集 m -> α) (v : 有限集 n -> α) (hv : n = 0)
   证明: by
   refine funext (Fin.addCases (fun l => ?_) fun r => ?_)
   · rw [append_left, Function.comp_apply]
@@ -1118,7 +1118,7 @@ theorem append_elim0
 
 中文:
 定理 append_elim0
-  条件: (u : Fin m -> α)
+  条件: (u : 有限集 m -> α)
   证明: append_right_nil _ _ rfl
 
 Depends on / 依赖: append_right_nil
@@ -1144,7 +1144,7 @@ theorem append_left_nil
 
 中文:
 定理 append_left_nil
-  条件: (u : Fin m -> α) (v : Fin n -> α) (hu : m = 0)
+  条件: (u : 有限集 m -> α) (v : 有限集 n -> α) (hu : m = 0)
   证明: by
   refine funext (Fin.addCases (fun l => ?_) fun r => ?_)
   · exact (Fin.cast hu l).elim0
@@ -1175,7 +1175,7 @@ theorem elim0_append
 
 中文:
 定理 elim0_append
-  条件: (v : Fin n -> α)
+  条件: (v : 有限集 n -> α)
   证明: append_left_nil _ _ rfl
 
 Depends on / 依赖: append_left_nil
@@ -1205,7 +1205,7 @@ theorem append_assoc
 
 中文:
 定理 append_assoc
-  条件: {p : 自然数} (a : Fin m -> α) (b : Fin n -> α) (c : Fin p -> α)
+  条件: {p : 自然数} (a : 有限集 m -> α) (b : 有限集 n -> α) (c : 有限集 p -> α)
   证明: by
   ext i
   rw [Function.comp_apply]
@@ -1252,7 +1252,7 @@ theorem append_left_eq_cons
 
 中文:
 定理 append_left_eq_cons
-  条件: {n : 自然数} (x₀ : Fin 1 -> α) (x : Fin n -> α)
+  条件: {n : 自然数} (x₀ : 有限集 1 -> α) (x : 有限集 n -> α)
   证明: by
   ext i
   refine Fin.addCases ?_ ?_ i <;> clear i
@@ -1286,7 +1286,7 @@ theorem cons_eq_append
 
 中文:
 定理 cons_eq_append
-  条件: (x : α) (xs : Fin n -> α)
+  条件: (x : α) (xs : 有限集 n -> α)
   证明: by
   funext i; simp [append_left_eq_cons]
 
@@ -1307,7 +1307,7 @@ lemma append_cast_left
 
 中文:
 引理 append_cast_left
-  结论: {n m} (xs : Fin n -> α) (ys : Fin m -> α) (n' : 自然数)
+  结论: {n m} (xs : 有限集 n -> α) (ys : 有限集 m -> α) (n' : 自然数)
   证明: by
   subst h; simp
 -/
@@ -1327,7 +1327,7 @@ lemma append_cast_right
 
 中文:
 引理 append_cast_right
-  结论: {n m} (xs : Fin n -> α) (ys : Fin m -> α) (m' : 自然数)
+  结论: {n m} (xs : 有限集 n -> α) (ys : 有限集 m -> α) (m' : 自然数)
   证明: by
   subst h; simp
 -/
@@ -1351,7 +1351,7 @@ lemma append_rev
 
 中文:
 引理 append_rev
-  条件: {m n} (xs : Fin m -> α) (ys : Fin n -> α) (i : Fin (m + n))
+  条件: {m n} (xs : 有限集 m -> α) (ys : 有限集 n -> α) (i : 有限集 (m + n))
   证明: by
   rcases rev_surjective i with ⟨i, rfl⟩
   rw [rev_rev]
@@ -1379,7 +1379,7 @@ lemma append_comp_rev
 
 中文:
 引理 append_comp_rev
-  条件: {m n} (xs : Fin m -> α) (ys : Fin n -> α)
+  条件: {m n} (xs : 有限集 m -> α) (ys : 有限集 n -> α)
   证明: funext append_rev xs ys
 
 Depends on / 依赖: append_rev
@@ -1400,7 +1400,7 @@ theorem append_castAdd_natAdd
 
 中文:
 定理 append_castAdd_natAdd
-  条件: {f : Fin (m + n) -> α}
+  条件: {f : 有限集 (m + n) -> α}
   证明: by
   unfold append addCases
   simp
@@ -1423,7 +1423,7 @@ theorem addCases_castAdd_natAdd
 
 中文:
 定理 addCases_castAdd_natAdd
-  条件: {γ : Fin (m + n) -> Sort*} (v : 对任意 i, γ i) (i : Fin (m + n))
+  条件: {γ : 有限集 (m + n) -> 类型层*} (v : 对任意 i, γ i) (i : 有限集 (m + n))
   证明: by
   cases i using addCases <;> simp
 
@@ -1444,7 +1444,7 @@ theorem append_comp_sumElim
 
 中文:
 定理 append_comp_sumElim
-  条件: {xs : Fin m -> α} {ys : Fin n -> α}
+  条件: {xs : 有限集 m -> α} {ys : 有限集 n -> α}
   证明: by
   ext (i | j) <;> simp
 -/
@@ -1468,7 +1468,7 @@ theorem append_injective_iff
 
 中文:
 定理 append_injective_iff
-  条件: {xs : Fin m -> α} {ys : Fin n -> α}
+  条件: {xs : 有限集 m -> α} {ys : 有限集 n -> α}
   证明: by
   -- TODO: move things around so we can just import this.
   -- We inline it because it's still shorter than proving from scratch.
@@ -1503,7 +1503,7 @@ definition «repeat»
 
 中文:
 定义 «repeat»
-  签名: (m : 自然数) (a : Fin n -> α)
+  签名: (m : 自然数) (a : 有限集 n -> α)
 -/
 def «repeat» (m : Nat) (a : Fin n -> α) : Fin (m * n) -> α
   | i => a i.modNat
@@ -1521,7 +1521,7 @@ theorem repeat_apply
 
 中文:
 定理 repeat_apply
-  条件: (a : Fin n -> α) (i : Fin (m * n))
+  条件: (a : 有限集 n -> α) (i : 有限集 (m * n))
   证明: rfl
 
 @[simp]
@@ -1543,7 +1543,7 @@ theorem repeat_zero
 
 中文:
 定理 repeat_zero
-  条件: (a : Fin n -> α)
+  条件: (a : 有限集 n -> α)
   证明: funext fun x => (x.cast (Nat.zero_mul _)).elim0
 
 @[simp]
@@ -1571,8 +1571,8 @@ theorem repeat_one
 
 中文:
 定理 repeat_one
-  条件: (a : Fin n -> α)
-  结论: Fin.repeat 1 a = a ∘ Fin.cast (自然数.one_mul _)
+  条件: (a : 有限集 n -> α)
+  结论: 有限集.repeat 1 a = a ∘ 有限集.cast (自然数.one_mul _)
   证明: by
   generalize_proofs h
   apply funext
@@ -1607,7 +1607,7 @@ theorem repeat_succ
 
 中文:
 定理 repeat_succ
-  条件: (a : Fin n -> α) (m : 自然数)
+  条件: (a : 有限集 n -> α) (m : 自然数)
   证明: by
   generalize_proofs h
   apply funext
@@ -1648,8 +1648,8 @@ theorem repeat_add
 
 中文:
 定理 repeat_add
-  条件: (a : Fin n -> α) (m₁ m₂ : 自然数)
-  结论: Fin.repeat (m₁ + m₂) a =
+  条件: (a : 有限集 n -> α) (m₁ m₂ : 自然数)
+  结论: 有限集.repeat (m₁ + m₂) a =
   证明: by
   generalize_proofs h
   apply funext
@@ -1679,7 +1679,7 @@ theorem repeat_rev
 
 中文:
 定理 repeat_rev
-  条件: (a : Fin n -> α) (k : Fin (m * n))
+  条件: (a : 有限集 n -> α) (k : 有限集 (m * n))
   证明: congr_arg a k.modNat_rev
 
 Depends on / 依赖: congr_arg, k.modNat_rev, modNat_rev
@@ -1698,7 +1698,7 @@ theorem repeat_comp_rev
 
 中文:
 定理 repeat_comp_rev
-  条件: (a : Fin n -> α)
+  条件: (a : 有限集 n -> α)
   证明: funext repeat_rev a
 
 Depends on / 依赖: repeat_rev
@@ -1732,7 +1732,7 @@ definition init
 
 中文:
 定义 init
-  签名: (q : 对任意 i, α i) (i : Fin n)
+  签名: (q : 对任意 i, α i) (i : 有限集 n)
   定义体: q i.castSucc
 
 Depends on / 依赖: castSucc, i.castSucc
@@ -1770,7 +1770,7 @@ definition snoc
 
 中文:
 定义 snoc
-  签名: (p : 对任意 i : Fin n, α i.castSucc) (x : α (last n)) (i : Fin (n + 1))
+  签名: (p : 对任意 i : 有限集 n, α i.castSucc) (x : α (last n)) (i : 有限集 (n + 1))
   定义体: if h : i.val < n then _root_.cast (by rw [Fin.castSucc_castLT i h]) (p (castLT i h))
   else _root_.cast (by rw [eq_last_of_not_lt h]) x
 
@@ -1878,7 +1878,7 @@ theorem snoc_comp_castSucc
 
 中文:
 定理 snoc_comp_castSucc
-  条件: {α : Sort*} {a : α} {f : Fin n -> α}
+  条件: {α : 类型层*} {a : α} {f : 有限集 n -> α}
   证明: funext fun i => by rw [Function.comp_apply, snoc_castSucc]
 
 @[simp]
@@ -1917,7 +1917,7 @@ lemma snoc_zero
 
 中文:
 引理 snoc_zero
-  条件: {α : Sort*} (p : Fin 0 -> α) (x : α)
+  条件: {α : 类型层*} (p : 有限集 0 -> α) (x : α)
   证明: rfl
 
 @[simp]
@@ -1944,7 +1944,7 @@ theorem snoc_comp_natAdd
 
 中文:
 定理 snoc_comp_natAdd
-  条件: {n m : 自然数} {α : Sort*} (f : Fin (m + n) -> α) (a : α)
+  条件: {n m : 自然数} {α : 类型层*} (f : 有限集 (m + n) -> α) (a : α)
   证明: by
   ext i
   refine Fin.lastCases ?_ (fun i => ?_) i
@@ -1980,7 +1980,7 @@ theorem snoc_castAdd
 
 中文:
 定理 snoc_castAdd
-  结论: {α : Fin (n + m + 1) -> Sort*} (f : 对任意 i : Fin (n + m), α i.castSucc)
+  结论: {α : 有限集 (n + m + 1) -> 类型层*} (f : 对任意 i : 有限集 (n + m), α i.castSucc)
   证明: dif_pos _
 
 @[simp]
@@ -2002,7 +2002,7 @@ theorem snoc_comp_castAdd
 
 中文:
 定理 snoc_comp_castAdd
-  条件: {n m : 自然数} {α : Sort*} (f : Fin (n + m) -> α) (a : α)
+  条件: {n m : 自然数} {α : 类型层*} (f : 有限集 (n + m) -> α) (a : α)
   证明: funext (snoc_castAdd _ _)
 
 Depends on / 依赖: snoc_castAdd
@@ -2081,7 +2081,7 @@ lemma range_snoc
 
 中文:
 引理 range_snoc
-  条件: {α : 类型} (f : Fin n -> α) (x : α)
+  条件: {α : 类型} (f : 有限集 n -> α) (x : α)
   证明: by
   ext; simp [Fin.exists_fin_succ', or_comm, eq_comm]
 
@@ -2104,7 +2104,7 @@ theorem snoc_injective2
 
 中文:
 定理 snoc_injective2
-  结论: Function.Injective2 (@snoc n α)
+  结论: 函数.Injective2 (@snoc n α)
   证明: fun x y xₙ yₙ h =>
   ⟨funext fun i => by simpa using congr_fun h (castSucc i), by simpa using congr_fun h (last n)⟩
 
@@ -2124,7 +2124,7 @@ theorem snoc_inj
 
 中文:
 定理 snoc_inj
-  条件: {x y : 对任意 i : Fin n, α i.castSucc} {xₙ yₙ : α (last n)}
+  条件: {x y : 对任意 i : 有限集 n, α i.castSucc} {xₙ yₙ : α (last n)}
   证明: snoc_injective2.eq_iff
 
 Depends on / 依赖: eq_iff, snoc_injective2, snoc_injective2.eq_iff
@@ -2143,7 +2143,7 @@ theorem snoc_right_injective
 
 中文:
 定理 snoc_right_injective
-  条件: (x : 对任意 i : Fin n, α i.castSucc)
+  条件: (x : 对任意 i : 有限集 n, α i.castSucc)
   证明: snoc_injective2.right _
 
 Depends on / 依赖: snoc_injective2, snoc_injective2.right
@@ -2164,7 +2164,7 @@ theorem snoc_left_injective
 中文:
 定理 snoc_left_injective
   条件: (xₙ : α (last n))
-  结论: Function.Injective (snoc · xₙ)
+  结论: 函数.单射 (snoc · xₙ)
   证明: snoc_injective2.left _
 
 Depends on / 依赖: snoc_injective2, snoc_injective2.left
@@ -2268,7 +2268,7 @@ theorem tail_init_eq_init_tail
 
 中文:
 定理 tail_init_eq_init_tail
-  条件: {β : Sort*} (q : Fin (n + 2) -> β)
+  条件: {β : 类型层*} (q : 有限集 (n + 2) -> β)
   证明: by
   ext i
   simp [tail, init]
@@ -2297,7 +2297,7 @@ theorem cons_snoc_eq_snoc_cons
 
 中文:
 定理 cons_snoc_eq_snoc_cons
-  条件: {β : Sort*} (a : β) (q : Fin n -> β) (b : β)
+  条件: {β : 类型层*} (a : β) (q : 有限集 n -> β) (b : β)
   证明: by
   ext i
   cases i using Fin.cases with
@@ -2338,7 +2338,7 @@ theorem comp_snoc
 
 中文:
 定理 comp_snoc
-  条件: {α : Sort*} {β : Sort*} (g : α -> β) (q : Fin n -> α) (y : α)
+  条件: {α : 类型层*} {β : 类型层*} (g : α -> β) (q : 有限集 n -> α) (y : α)
   证明: by
   ext j
   by_cases h : j.val < n
@@ -2374,7 +2374,7 @@ theorem append_right_eq_snoc
 
 中文:
 定理 append_right_eq_snoc
-  条件: {α : Sort*} {n : 自然数} (x : Fin n -> α) (x₀ : Fin 1 -> α)
+  条件: {α : 类型层*} {n : 自然数} (x : 有限集 n -> α) (x₀ : 有限集 1 -> α)
   证明: by
   ext i
   refine Fin.addCases ?_ ?_ i <;> clear i
@@ -2408,7 +2408,7 @@ theorem snoc_eq_append
 
 中文:
 定理 snoc_eq_append
-  条件: {α : Sort*} (xs : Fin n -> α) (x : α)
+  条件: {α : 类型层*} (xs : 有限集 n -> α) (x : α)
   证明: (append_right_eq_snoc xs (cons x Fin.elim0)).symm
 
 Depends on / 依赖: Fin.elim0, append_right_eq_snoc
@@ -2428,7 +2428,7 @@ theorem append_left_snoc
 
 中文:
 定理 append_left_snoc
-  条件: {n m} {α : Sort*} (xs : Fin n -> α) (x : α) (ys : Fin m -> α)
+  条件: {n m} {α : 类型层*} (xs : 有限集 n -> α) (x : α) (ys : 有限集 m -> α)
   证明: by
   rw [snoc_eq_append]; rw [append_assoc]; rw [append_left_eq_cons]; rw [append_cast_right]; rfl
 
@@ -2450,7 +2450,7 @@ theorem append_right_cons
 
 中文:
 定理 append_right_cons
-  条件: {n m} {α : Sort*} (xs : Fin n -> α) (y : α) (ys : Fin m -> α)
+  条件: {n m} {α : 类型层*} (xs : 有限集 n -> α) (y : α) (ys : 有限集 m -> α)
   证明: by
   rw [append_left_snoc]; rfl
 
@@ -2482,7 +2482,7 @@ theorem append_cons
 
 中文:
 定理 append_cons
-  条件: {α : Sort*} (a : α) (as : Fin n -> α) (bs : Fin m -> α)
+  条件: {α : 类型层*} (a : α) (as : 有限集 n -> α) (bs : 有限集 m -> α)
   证明: by
   funext i
   rcases i with ⟨i, -⟩
@@ -2530,7 +2530,7 @@ theorem append_snoc
 
 中文:
 定理 append_snoc
-  条件: {α : Sort*} (as : Fin n -> α) (bs : Fin m -> α) (b : α)
+  条件: {α : 类型层*} (as : 有限集 n -> α) (bs : 有限集 m -> α) (b : α)
   证明: by
   funext i
   rcases i with ⟨i, isLt⟩
@@ -2569,7 +2569,7 @@ theorem comp_init
 
 中文:
 定理 comp_init
-  条件: {α : Sort*} {β : Sort*} (g : α -> β) (q : Fin n.succ -> α)
+  条件: {α : 类型层*} {β : 类型层*} (g : α -> β) (q : 有限集 n.succ -> α)
   证明: by
   ext j
   simp [init]
@@ -2597,7 +2597,7 @@ definition snocEquiv
 
 中文:
 定义 snocEquiv
-  签名: (α : Fin (n + 1) -> 类型)
+  签名: (α : 有限集 (n + 1) -> 类型)
   定义体: Fin.snoc f.2 f.1 _
   invFun f := ⟨f _, Fin.init f⟩
   left_inv f := by simp
@@ -2623,7 +2623,7 @@ definition snocCases
 
 中文:
 定义 snocCases
-  签名: {motive : (对任意 i : Fin n.succ, α i) -> Sort*}
+  签名: {motive : (对任意 i : 有限集 n.succ, α i) -> 类型层*}
   定义体: _root_.cast (by rw [Fin.snoc_init_self]) snoc (Fin.init x) (x <| Fin.last _)
 
 Depends on / 依赖: Fin.init, Fin.last, Fin.snoc_init_self, _root_, _root_.cast, snoc_init_self
@@ -2664,7 +2664,7 @@ definition snocInduction
 
 中文:
 定义 snocInduction
-  签名: {α : Sort*}
+  签名: {α : 类型层*}
 -/
 def snocInduction {α : Sort*}
     {motive : forall {n : Nat}, (Fin n -> α) -> Sort*}
@@ -2693,7 +2693,7 @@ theorem snoc_injective_of_injective
 
 中文:
 定理 snoc_injective_of_injective
-  结论: {α} {x₀ : α} {x : Fin n -> α}
+  结论: {α} {x₀ : α} {x : 有限集 n -> α}
   证明: fun i j h => by
   induction i using lastCases with
   | cast i =>
@@ -2742,7 +2742,7 @@ theorem snoc_injective_iff
 
 中文:
 定理 snoc_injective_iff
-  条件: {α} {x₀ : α} {x : Fin n -> α}
+  条件: {α} {x₀ : α} {x : 有限集 n -> α}
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun h => snoc_injective_of_injective h.1 h.2⟩
   · simpa [Function.comp] using h.comp (Fin.castSucc_injective _)
@@ -2784,7 +2784,7 @@ definition succAboveCases
 
 中文:
 定义 succAboveCases
-  签名: {α : Fin (n + 1) -> Sort u} (i : Fin (n + 1)) (x : α i)
+  签名: {α : 有限集 (n + 1) -> 类型层 u} (i : 有限集 (n + 1)) (x : α i)
   定义体: if hj : j = i then Eq.rec x hj.symm
   else
     if hlt : j < i then (succAbove_castPred_of_lt _ _ hlt) ▸ (p _)
@@ -2814,8 +2814,8 @@ lemma forall_iff_castSucc
   proof: ⟨fun h => ⟨h _, fun _ => h _⟩, fun h => lastCases h.1 h.2⟩
 
 中文:
-引理 forall_iff_castSucc
-  条件: {P : Fin (n + 1) -> 命题}
+引理 对任意_iff_castSucc
+  条件: {P : 有限集 (n + 1) -> 命题}
   证明: ⟨fun h => ⟨h _, fun _ => h _⟩, fun h => lastCases h.1 h.2⟩
 
 Depends on / 依赖: lastCases
@@ -2833,8 +2833,8 @@ theorem forall_fin_add
   proof: ⟨fun h => ⟨fun _ => h _, fun _ => h _⟩, fun ⟨hm, hn⟩ => Fin.addCases hm hn⟩
 
 中文:
-定理 forall_fin_add
-  条件: {m n} (P : Fin (m + n) -> 命题)
+定理 对任意_fin_add
+  条件: {m n} (P : 有限集 (m + n) -> 命题)
   证明: ⟨fun h => ⟨fun _ => h _, fun _ => h _⟩, fun ⟨hm, hn⟩ => Fin.addCases hm hn⟩
 
 Depends on / 依赖: Fin.addCases, addCases
@@ -2855,8 +2855,8 @@ theorem forall_fin_add_pi
     exact (addCases_castAdd_natAdd v _).symm
 
 中文:
-定理 forall_fin_add_pi
-  条件: {γ : Fin (m + n) -> Sort*} {P : (对任意 i, γ i) -> 命题}
+定理 对任意_fin_add_pi
+  条件: {γ : 有限集 (m + n) -> 类型层*} {P : (对任意 i, γ i) -> 命题}
   证明: hv (addCases vm vn)
   mpr h v := by
     convert h (fun i => v (castAdd n i)) (fun j => v (natAdd m j))
@@ -2886,8 +2886,8 @@ lemma exists_iff_castSucc
   mpr := by rintro (h | ⟨i, hi⟩) <;> exact ⟨_, ‹_›⟩
 
 中文:
-引理 exists_iff_castSucc
-  条件: {P : Fin (n + 1) -> 命题}
+引理 存在_iff_castSucc
+  条件: {P : 有限集 (n + 1) -> 命题}
   证明: by
     rintro ⟨i, hi⟩
     cases i using lastCases with
@@ -2915,8 +2915,8 @@ theorem forall_iff_succAbove
   proof: ⟨fun h => ⟨h _, fun _ => h _⟩, fun h => succAboveCases p h.1 h.2⟩
 
 中文:
-定理 forall_iff_succAbove
-  条件: {P : Fin (n + 1) -> 命题} (p : Fin (n + 1))
+定理 对任意_iff_succAbove
+  条件: {P : 有限集 (n + 1) -> 命题} (p : 有限集 (n + 1))
   证明: ⟨fun h => ⟨h _, fun _ => h _⟩, fun h => succAboveCases p h.1 h.2⟩
 
 Depends on / 依赖: succAboveCases
@@ -2939,8 +2939,8 @@ lemma exists_iff_succAbove
   mpr := by rintro (h | ⟨i, hi⟩) <;> exact ⟨_, ‹_›⟩
 
 中文:
-引理 exists_iff_succAbove
-  条件: {P : Fin (n + 1) -> 命题} (p : Fin (n + 1))
+引理 存在_iff_succAbove
+  条件: {P : 有限集 (n + 1) -> 命题} (p : 有限集 (n + 1))
   证明: by
     rintro ⟨i, hi⟩
     induction i using p.succAboveCases
@@ -2970,7 +2970,7 @@ theorem eq_self_or_eq_succAbove
 
 中文:
 定理 eq_self_or_eq_succAbove
-  条件: (p i : Fin (n + 1))
+  条件: (p i : 有限集 (n + 1))
   结论: i = p ∨ 存在 j, i = p.succAbove j
   证明: succAboveCases p (.inl rfl) (fun j => .inr ⟨j, rfl⟩) i
 
@@ -2989,7 +2989,7 @@ definition removeNth
 
 中文:
 定义 removeNth
-  签名: (p : Fin (n + 1)) (f : 对任意 i, α i)
+  签名: (p : 有限集 (n + 1)) (f : 对任意 i, α i)
   定义体: fun i => f (p.succAbove i)
 
 Depends on / 依赖: p.succAbove, succAbove
@@ -3008,7 +3008,7 @@ definition insertNth
 
 中文:
 定义 insertNth
-  签名: (i : Fin (n + 1)) (x : α i) (p : 对任意 j : Fin n, α (i.succAbove j)) (j : Fin (n + 1))
+  签名: (i : 有限集 (n + 1)) (x : α i) (p : 对任意 j : 有限集 n, α (i.succAbove j)) (j : 有限集 (n + 1))
   定义体: succAboveCases i x p j
 
 @[simp]
@@ -3032,7 +3032,7 @@ theorem insertNth_apply_same
 
 中文:
 定理 insertNth_apply_same
-  条件: (i : Fin (n + 1)) (x : α i) (p : 对任意 j, α (i.succAbove j))
+  条件: (i : 有限集 (n + 1)) (x : α i) (p : 对任意 j, α (i.succAbove j))
   证明: by simp [insertNth, succAboveCases]
 
 @[simp]
@@ -3060,7 +3060,7 @@ theorem insertNth_apply_succAbove
 
 中文:
 定理 insertNth_apply_succAbove
-  结论: (i : Fin (n + 1)) (x : α i) (p : 对任意 j, α (i.succAbove j))
+  结论: (i : 有限集 (n + 1)) (x : α i) (p : 对任意 j, α (i.succAbove j))
   证明: by
   simp only [insertNth, succAboveCases, dif_neg (succAbove_ne _ _), succAbove_lt_iff_castSucc_lt]
   split_ifs with hlt
@@ -3114,7 +3114,7 @@ lemma removeNth_apply
 
 中文:
 引理 removeNth_apply
-  条件: (p : Fin (n + 1)) (f : 对任意 i, α i) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (f : 对任意 i, α i) (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -3134,7 +3134,7 @@ theorem cons_comp_succ_succAbove
 
 中文:
 定理 cons_comp_succ_succAbove
-  条件: (x : β) (p : Fin (n + 1) -> β) (i : Fin (n + 1))
+  条件: (x : β) (p : 有限集 (n + 1) -> β) (i : 有限集 (n + 1))
   证明: funext (Fin.cases rfl fun _ => by simp [removeNth])
 
 Depends on / 依赖: Fin.cases, removeNth
@@ -3153,7 +3153,7 @@ lemma removeNth_fun_const
 
 中文:
 引理 removeNth_fun_const
-  条件: {α : 类型} {n : 自然数} (i : Fin (n + 1)) (a : α)
+  条件: {α : 类型} {n : 自然数} (i : 有限集 (n + 1)) (a : α)
   证明: rfl
 -/
 lemma removeNth_fun_const {α : Type*} {n : Nat} (i : Fin (n + 1)) (a : α) :
@@ -3170,7 +3170,7 @@ lemma removeNth_insertNth
 
 中文:
 引理 removeNth_insertNth
-  条件: (p : Fin (n + 1)) (a : α p) (f : 对任意 i, α (succAbove p i))
+  条件: (p : 有限集 (n + 1)) (a : α p) (f : 对任意 i, α (succAbove p i))
   证明: by ext; unfold removeNth; simp
 -/
 @[simp] lemma removeNth_insertNth (p : Fin (n + 1)) (a : α p) (f : forall i, α (succAbove p i)) :
@@ -3210,7 +3210,7 @@ lemma removeNth_last
 
 中文:
 引理 removeNth_last
-  条件: {α : 类型} (f : Fin (n + 1) -> α)
+  条件: {α : 类型} (f : 有限集 (n + 1) -> α)
   结论: removeNth (last n) f = init f
   证明: by
   ext; simp [init, removeNth]
@@ -3231,7 +3231,7 @@ theorem insertNth_comp_succAbove
 
 中文:
 定理 insertNth_comp_succAbove
-  条件: (i : Fin (n + 1)) (x : β) (p : Fin n -> β)
+  条件: (i : 有限集 (n + 1)) (x : β) (p : 有限集 n -> β)
   证明: funext (insertNth_apply_succAbove i _ _)
 
 Depends on / 依赖: insertNth_apply_succAbove
@@ -3251,7 +3251,7 @@ theorem insertNth_eq_iff
 
 中文:
 定理 insertNth_eq_iff
-  条件: {p : Fin (n + 1)} {a : α p} {f : 对任意 i, α (p.succAbove i)} {g : 对任意 j, α j}
+  条件: {p : 有限集 (n + 1)} {a : α p} {f : 对任意 i, α (p.succAbove i)} {g : 对任意 j, α j}
   证明: by
   simp [funext_iff, forall_iff_succAbove p, removeNth]
 
@@ -3272,7 +3272,7 @@ theorem eq_insertNth_iff
 
 中文:
 定理 eq_insertNth_iff
-  条件: {p : Fin (n + 1)} {a : α p} {f : 对任意 i, α (p.succAbove i)} {g : 对任意 j, α j}
+  条件: {p : 有限集 (n + 1)} {a : α p} {f : 对任意 i, α (p.succAbove i)} {g : 对任意 j, α j}
   证明: by
   simpa [eq_comm] using insertNth_eq_iff
 
@@ -3295,7 +3295,7 @@ theorem insertNth_injective2
 
 中文:
 定理 insertNth_injective2
-  条件: {p : Fin (n + 1)}
+  条件: {p : 有限集 (n + 1)}
   证明: fun xₚ yₚ x y h =>
   ⟨by simpa using congr_fun h p, funext fun i => by simpa using congr_fun h (succAbove p i)⟩
 
@@ -3316,7 +3316,7 @@ theorem insertNth_inj
 
 中文:
 定理 insertNth_inj
-  条件: {p : Fin (n + 1)} {x y : 对任意 i, α (succAbove p i)} {xₚ yₚ : α p}
+  条件: {p : 有限集 (n + 1)} {x y : 对任意 i, α (succAbove p i)} {xₚ yₚ : α p}
   证明: insertNth_injective2.eq_iff
 
 Depends on / 依赖: eq_iff, insertNth_injective2, insertNth_injective2.eq_iff
@@ -3335,7 +3335,7 @@ theorem insertNth_left_injective
 
 中文:
 定理 insertNth_left_injective
-  条件: {p : Fin (n + 1)} (x : 对任意 i, α (succAbove p i))
+  条件: {p : 有限集 (n + 1)} (x : 对任意 i, α (succAbove p i))
   证明: insertNth_injective2.left _
 
 Depends on / 依赖: insertNth_injective2, insertNth_injective2.left
@@ -3354,7 +3354,7 @@ theorem insertNth_right_injective
 
 中文:
 定理 insertNth_right_injective
-  条件: {p : Fin (n + 1)} (x : α p)
+  条件: {p : 有限集 (n + 1)} (x : α p)
   证明: insertNth_injective2.right _
 
 Depends on / 依赖: insertNth_injective2, insertNth_injective2.right
@@ -3374,7 +3374,7 @@ theorem insertNth_apply_below
 
 中文:
 定理 insertNth_apply_below
-  结论: {i j : Fin (n + 1)} (h : j < i) (x : α i)
+  结论: {i j : 有限集 (n + 1)} (h : j < i) (x : α i)
   证明: by
   rw [insertNth]; rw [succAboveCases]; rw [dif_neg (Fin.ne_of_lt h)]; rw [dif_pos h]
 
@@ -3396,7 +3396,7 @@ theorem insertNth_apply_above
 
 中文:
 定理 insertNth_apply_above
-  结论: {i j : Fin (n + 1)} (h : i < j) (x : α i)
+  结论: {i j : 有限集 (n + 1)} (h : i < j) (x : α i)
   证明: by
   rw [insertNth]; rw [succAboveCases]; rw [dif_neg (Fin.ne_of_gt h)]; rw [dif_neg (Fin.lt_asymm h)]
 
@@ -3422,7 +3422,7 @@ theorem insertNth_zero
 
 中文:
 定理 insertNth_zero
-  条件: (x : α 0) (p : 对任意 j : Fin n, α (succAbove 0 j))
+  条件: (x : α 0) (p : 对任意 j : 有限集 n, α (succAbove 0 j))
   证明: by
   refine insertNth_eq_iff.2 ⟨by simp, ?_⟩
   ext j
@@ -3452,7 +3452,7 @@ theorem insertNth_zero'
 
 中文:
 定理 insertNth_zero'
-  条件: (x : β) (p : Fin n -> β)
+  条件: (x : β) (p : 有限集 n -> β)
   结论: @insertNth _ (fun _ => β) 0 x p = cons x p
   证明: by
   simp [insertNth_zero]
@@ -3482,7 +3482,7 @@ theorem insertNth_last
 
 中文:
 定理 insertNth_last
-  条件: (x : α (last n)) (p : 对任意 j : Fin n, α ((last n).succAbove j))
+  条件: (x : α (last n)) (p : 对任意 j : 有限集 n, α ((last n).succAbove j))
   证明: by
   refine insertNth_eq_iff.2 ⟨by simp, ?_⟩
   ext j
@@ -3520,7 +3520,7 @@ theorem insertNth_last'
 
 中文:
 定理 insertNth_last'
-  条件: (x : β) (p : Fin n -> β)
+  条件: (x : β) (p : 有限集 n -> β)
   证明: by simp [insertNth_last]
 
 Depends on / 依赖: insertNth_last
@@ -3542,7 +3542,7 @@ lemma insertNth_rev
 
 中文:
 引理 insertNth_rev
-  条件: {α : Sort*} (i : Fin (n + 1)) (a : α) (f : Fin n -> α) (j : Fin (n + 1))
+  条件: {α : 类型层*} (i : 有限集 (n + 1)) (a : α) (f : 有限集 n -> α) (j : 有限集 (n + 1))
   证明: by
   induction j using Fin.succAboveCases
   · exact rev i
@@ -3572,7 +3572,7 @@ theorem insertNth_comp_rev
 
 中文:
 定理 insertNth_comp_rev
-  条件: {α} (i : Fin (n + 1)) (x : α) (p : Fin n -> α)
+  条件: {α} (i : 有限集 (n + 1)) (x : α) (p : 有限集 n -> α)
   证明: by
   funext x
   apply insertNth_rev
@@ -3603,7 +3603,7 @@ theorem insertNth_succ_cons
 
 中文:
 定理 insertNth_succ_cons
-  条件: {α} (i : Fin (n + 1)) (x a : α) (p : Fin n -> α)
+  条件: {α} (i : 有限集 (n + 1)) (x a : α) (p : 有限集 n -> α)
   证明: by
   ext j
   cases j using Fin.succAboveCases i.succ with
@@ -3634,7 +3634,7 @@ theorem cons_rev
 
 中文:
 定理 cons_rev
-  条件: {α n} (a : α) (f : Fin n -> α) (i : Fin <| n + 1)
+  条件: {α n} (a : α) (f : 有限集 n -> α) (i : 有限集 <| n + 1)
   证明: by
   simpa using insertNth_rev 0 a f i
 
@@ -3655,7 +3655,7 @@ theorem cons_comp_rev
 
 中文:
 定理 cons_comp_rev
-  条件: {α n} (a : α) (f : Fin n -> α)
+  条件: {α n} (a : α) (f : 有限集 n -> α)
   证明: by
   funext i; exact cons_rev ..
 
@@ -3676,7 +3676,7 @@ theorem snoc_rev
 
 中文:
 定理 snoc_rev
-  条件: {α n} (a : α) (f : Fin n -> α) (i : Fin <| n + 1)
+  条件: {α n} (a : α) (f : 有限集 n -> α) (i : 有限集 <| n + 1)
   证明: by
   simpa using insertNth_rev (last n) a f i
 
@@ -3696,7 +3696,7 @@ theorem snoc_comp_rev
 
 中文:
 定理 snoc_comp_rev
-  条件: {α n} (a : α) (f : Fin n -> α)
+  条件: {α n} (a : α) (f : 有限集 n -> α)
   证明: funext snoc_rev a f
 
 Depends on / 依赖: snoc_rev
@@ -3715,7 +3715,7 @@ theorem insertNth_binop
 
 中文:
 定理 insertNth_binop
-  结论: (op : 对任意 j, α j -> α j -> α j) (i : Fin (n + 1)) (x y : α i)
+  结论: (op : 对任意 j, α j -> α j -> α j) (i : 有限集 (n + 1)) (x y : α i)
   证明: insertNth_eq_iff.2 by unfold removeNth; simp
 
 Depends on / 依赖: insertNth_eq_iff, removeNth
@@ -3741,7 +3741,7 @@ theorem insertNth_le_iff
 
 中文:
 定理 insertNth_le_iff
-  条件: {i : Fin (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)} {q : 对任意 j, α j}
+  条件: {i : 有限集 (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)} {q : 对任意 j, α j}
   证明: by
   simp [Pi.le_def, forall_iff_succAbove i]
 
@@ -3762,7 +3762,7 @@ theorem le_insertNth_iff
 
 中文:
 定理 le_insertNth_iff
-  条件: {i : Fin (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)} {q : 对任意 j, α j}
+  条件: {i : 有限集 (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)} {q : 对任意 j, α j}
   证明: by
   simp [Pi.le_def, forall_iff_succAbove i]
 
@@ -3788,7 +3788,7 @@ lemma removeNth_update
 
 中文:
 引理 removeNth_update
-  条件: (p : Fin (n + 1)) (x) (f : 对任意 j, α j)
+  条件: (p : 有限集 (n + 1)) (x) (f : 对任意 j, α j)
   证明: by ext i; simp [removeNth]
 
 @[simp]
@@ -3809,7 +3809,7 @@ lemma removeNth_update_succAbove
 
 中文:
 引理 removeNth_update_succAbove
-  结论: (p : Fin (n + 1)) (i : Fin n) (x : α (p.succAbove i))
+  结论: (p : 有限集 (n + 1)) (i : 有限集 n) (x : α (p.succAbove i))
   证明: by
   ext j
   rcases eq_or_ne j i with rfl | hne <;> simp [removeNth, *]
@@ -3832,7 +3832,7 @@ lemma insertNth_removeNth
 
 中文:
 引理 insertNth_removeNth
-  条件: (p : Fin (n + 1)) (x) (f : 对任意 j, α j)
+  条件: (p : 有限集 (n + 1)) (x) (f : 对任意 j, α j)
   证明: by simp [Fin.insertNth_eq_iff]
 -/
 @[simp] lemma insertNth_removeNth (p : Fin (n + 1)) (x) (f : forall j, α j) :
@@ -3850,7 +3850,7 @@ lemma insertNth_self_removeNth
 
 中文:
 引理 insertNth_self_removeNth
-  条件: (p : Fin (n + 1)) (f : 对任意 j, α j)
+  条件: (p : 有限集 (n + 1)) (f : 对任意 j, α j)
   证明: by simp
 
 @[simp]
@@ -3873,7 +3873,7 @@ lemma range_insertNth
 
 中文:
 引理 range_insertNth
-  条件: {α : 类型} (p : Fin (n + 1)) (x : α) (f : Fin n -> α)
+  条件: {α : 类型} (p : 有限集 (n + 1)) (x : α) (f : 有限集 n -> α)
   证明: by
   ext y
   simp [Fin.exists_iff_succAbove p, Set.insert, eq_comm]
@@ -3901,7 +3901,7 @@ theorem update_insertNth
 
 中文:
 定理 update_insertNth
-  条件: (p : Fin (n + 1)) (x y : α p) (f : 对任意 i, α (p.succAbove i))
+  条件: (p : 有限集 (n + 1)) (x y : α p) (f : 对任意 i, α (p.succAbove i))
   证明: by
   simp [eq_insertNth_iff]
 
@@ -3925,7 +3925,7 @@ theorem insertNth_update
 
 中文:
 定理 insertNth_update
-  结论: (p : Fin (n + 1)) (x : α p) (i : Fin n) (y : α (p.succAbove i))
+  结论: (p : 有限集 (n + 1)) (x : α p) (i : 有限集 n) (y : α (p.succAbove i))
   证明: by
   simp [insertNth_eq_iff]
 
@@ -3954,7 +3954,7 @@ definition insertNthEquiv
 
 中文:
 定义 insertNthEquiv
-  签名: (α : Fin (n + 1) -> 类型u) (p : Fin (n + 1))
+  签名: (α : 有限集 (n + 1) -> 类型u) (p : 有限集 (n + 1))
   定义体: insertNth p f.1 f.2
   invFun f := (f p, removeNth p f)
   left_inv f := by ext <;> simp
@@ -3980,7 +3980,7 @@ lemma insertNthEquiv_zero
 
 中文:
 引理 insertNthEquiv_zero
-  条件: (α : Fin (n + 1) -> 类型)
+  条件: (α : 有限集 (n + 1) -> 类型)
   结论: insertNthEquiv α 0 = consEquiv α
   证明: Equiv.symm_bijective.injective by ext <;> rfl
 -/
@@ -4019,7 +4019,7 @@ theorem removeNth_removeNth_heq_swap
 
 中文:
 定理 removeNth_removeNth_heq_swap
-  结论: {α : Fin (n + 2) -> Sort*} (m : 对任意 i, α i)
+  结论: {α : 有限集 (n + 2) -> 类型层*} (m : 对任意 i, α i)
   证明: by
   apply Function.hfunext rfl
   simp only [heq_iff_eq]
@@ -4051,7 +4051,7 @@ theorem removeNth_removeNth_eq_swap
 
 中文:
 定理 removeNth_removeNth_eq_swap
-  结论: {α : Sort*} (m : Fin (n + 2) -> α)
+  结论: {α : 类型层*} (m : 有限集 (n + 2) -> α)
   证明: heq_iff_eq.mp (removeNth_removeNth_heq_swap m i j)
 
 Depends on / 依赖: heq_iff_eq, heq_iff_eq.mp, removeNth_removeNth_heq_swap
@@ -4082,7 +4082,7 @@ definition findX
 
 中文:
 定义 findX
-  签名: {n : 自然数} (p : Fin n -> 命题) [DecidablePred p] (h : 存在 k, p k)
+  签名: {n : 自然数} (p : 有限集 n -> 命题) [DecidablePred p] (h : 存在 k, p k)
   定义体: go n (by grind) where
   go (m : Nat) (hj : forall j (hm : j < n - m), ¬p ⟨j, by grind⟩) := match m with
   | m + 1 => if hnm : p ⟨_, n.sub_lt h.choose.pos (by grind)⟩
@@ -4108,7 +4108,7 @@ definition find
 
 中文:
 定义 find
-  签名: {n : 自然数} (p : Fin n -> 命题) [DecidablePred p] (h : 存在 k, p k)
+  签名: {n : 自然数} (p : 有限集 n -> 命题) [DecidablePred p] (h : 存在 k, p k)
   定义体: (Fin.findX p h).1
 -/
 protected def find {n : Nat} (p : Fin n -> Prop) [DecidablePred p] (h : exists k, p k) : Fin n :=
@@ -4128,7 +4128,7 @@ grind_pattern Fin.find_spec => Fin.find p h
 中文:
 定理 find_spec
   条件: (h : 存在 k, p k)
-  结论: p (Fin.find p h)
+  结论: p (有限集.find p h)
   证明: (Fin.findX p h).2.1
 
 grind_pattern Fin.find_spec => Fin.find p h
@@ -4151,7 +4151,7 @@ theorem find_min
 中文:
 定理 find_min
   条件: (h : 存在 k, p k)
-  结论: 对任意 {j : Fin n}, j < Fin.find p h -> ¬ p j
+  结论: 对任意 {j : 有限集 n}, j < 有限集.find p h -> ¬ p j
   证明: @(Fin.findX p h).2.2
 -/
 protected theorem find_min (h : exists k, p k) : forall {j : Fin n}, j < Fin.find p h -> ¬ p j :=
@@ -4167,7 +4167,7 @@ theorem find_le_of_pos
 
 中文:
 定理 find_le_of_pos
-  条件: (h : 存在 k, p k) {j : Fin n}
+  条件: (h : 存在 k, p k) {j : 有限集 n}
   证明: (j.find_min _ <| lt_of_not_ge ·).mtr
 -/
 protected theorem find_le_of_pos (h : exists k, p k) {j : Fin n} :
@@ -4185,8 +4185,8 @@ theorem find_eq_iff
 
 中文:
 定理 find_eq_iff
-  条件: {i : Fin n} (h : 存在 k, p k)
-  结论: Fin.find p h = i ↔ p i ∧ 对任意 j < i, ¬ p j
+  条件: {i : 有限集 n} (h : 存在 k, p k)
+  结论: 有限集.find p h = i ↔ p i ∧ 对任意 j < i, ¬ p j
   证明: by
   refine ⟨?_, fun ⟨hm, hlt⟩ => have := Fin.find_le_of_pos h hm; ?_⟩ <;> grind
 
@@ -4250,8 +4250,8 @@ lemma find_lt_iff
 
 中文:
 引理 find_lt_iff
-  条件: (h : 存在 k, p k) (i : Fin n)
-  结论: Fin.find p h < i ↔ 存在 m < i, p m
+  条件: (h : 存在 k, p k) (i : 有限集 n)
+  结论: 有限集.find p h < i ↔ 存在 m < i, p m
   证明: ⟨by grind, fun ⟨_, hxi, hx⟩ => (Fin.find_le_of_pos h hx).trans_lt hxi⟩
 -/
 @[simp] lemma find_lt_iff (h : exists k, p k) (i : Fin n) : Fin.find p h < i ↔ exists m < i, p m :=
@@ -4268,8 +4268,8 @@ lemma find_le_iff
 
 中文:
 引理 find_le_iff
-  条件: (h : 存在 k, p k) (i : Fin n)
-  结论: Fin.find p h <= i ↔ 存在 m <= i, p m
+  条件: (h : 存在 k, p k) (i : 有限集 n)
+  结论: 有限集.find p h <= i ↔ 存在 m <= i, p m
   证明: ⟨by grind, fun ⟨_, hxi, hx⟩ => (Fin.find_le_of_pos h hx).trans hxi⟩
 -/
 @[simp] lemma find_le_iff (h : exists k, p k) (i : Fin n) : Fin.find p h <= i ↔ exists m <= i, p m :=
@@ -4287,8 +4287,8 @@ lemma lt_find_iff
 
 中文:
 引理 lt_find_iff
-  条件: (h : 存在 k, p k) (i : Fin n)
-  结论: i < Fin.find p h ↔ 对任意 m <= i, ¬p m
+  条件: (h : 存在 k, p k) (i : 有限集 n)
+  结论: i < 有限集.find p h ↔ 对任意 m <= i, ¬p m
   证明: by
   simp_rw [← not_le, find_le_iff, not_exists, not_and]
 -/
@@ -4307,8 +4307,8 @@ lemma le_find_iff
 
 中文:
 引理 le_find_iff
-  条件: (h : 存在 k, p k) (i : Fin n)
-  结论: i <= Fin.find p h ↔ 对任意 m < i, ¬p m
+  条件: (h : 存在 k, p k) (i : 有限集 n)
+  结论: i <= 有限集.find p h ↔ 对任意 m < i, ¬p m
   证明: by
   simp_rw [← not_lt, find_lt_iff, not_exists, not_and]
 -/
@@ -4325,7 +4325,7 @@ lemma find_eq_zero
 
 中文:
 引理 find_eq_zero
-  条件: {p : Fin (n + 1) -> 命题} [DecidablePred p] (h : 存在 k, p k)
+  条件: {p : 有限集 (n + 1) -> 命题} [DecidablePred p] (h : 存在 k, p k)
   证明: by simp [find_eq_iff]
 -/
 @[simp] lemma find_eq_zero {p : Fin (n + 1) -> Prop} [DecidablePred p] (h : exists k, p k) :
@@ -4344,7 +4344,7 @@ lemma find_of_not_zero
 
 中文:
 引理 find_of_not_zero
-  结论: {p : Fin (n + 1) -> 命题} [DecidablePred p]
+  结论: {p : 有限集 (n + 1) -> 命题} [DecidablePred p]
   证明: by
   simp_rw [find_eq_iff, forall_fin_succ, h0, not_false_eq_true,
     implies_true, true_and, succ_lt_succ_iff]
@@ -4373,7 +4373,7 @@ theorem find_eq_dite
 
 中文:
 定理 find_eq_dite
-  条件: {p : Fin (n + 1) -> 命题} [DecidablePred p] (h : 存在 i, p i)
+  条件: {p : 有限集 (n + 1) -> 命题} [DecidablePred p] (h : 存在 i, p i)
   证明: by
   split_ifs
   · grind [find_eq_zero]
@@ -4481,7 +4481,7 @@ lemma find_le
 中文:
 引理 find_le
   条件: (hi : p i)
-  结论: Fin.find p ⟨i, hi⟩ <= i
+  结论: 有限集.find p ⟨i, hi⟩ <= i
   证明: (Fin.find_le_iff _ _).2 ⟨i, le_refl _, hi⟩
 
 Depends on / 依赖: Fin.find_le_iff, find_le_iff, le_refl
@@ -4499,7 +4499,7 @@ lemma find_pos
 
 中文:
 引理 find_pos
-  条件: {p : Fin (n + 1) -> 命题} [DecidablePred p] (h : 存在 i, p i)
+  条件: {p : 有限集 (n + 1) -> 命题} [DecidablePred p] (h : 存在 i, p i)
   证明: Fin.pos_iff_ne_zero.trans (Fin.find_eq_zero _).not
 
 Depends on / 依赖: Fin.find_eq_zero, Fin.pos_iff_ne_zero.trans, find_eq_zero, pos_iff_ne_zero
@@ -4522,7 +4522,7 @@ lemma find_of_find_le
 
 中文:
 引理 find_of_find_le
-  结论: {p : Fin (m + n) -> 命题} [DecidablePred p]
+  结论: {p : 有限集 (m + n) -> 命题} [DecidablePred p]
   证明: by
   have hⱼ : exists j : Fin n, p (j.natAdd m) :=
     ⟨(Fin.cast (Nat.add_comm _ _) (Fin.find p hᵢ)).subNat _ hm, by simp [Fin.find_spec]⟩
@@ -4556,7 +4556,7 @@ theorem find?_eq_dite
 
 中文:
 定理 find?_eq_dite
-  条件: {p : Fin n -> 布尔}
+  条件: {p : 有限集 n -> 布尔值}
   证明: by
   split_ifs <;> grind
 
@@ -4594,7 +4594,7 @@ theorem get_find?_eq_find_of_eq_true
 
 中文:
 定理 get_find?_eq_find_of_eq_true
-  条件: {p : Fin n -> 布尔} (h : p i)
+  条件: {p : 有限集 n -> 布尔值} (h : p i)
   证明: by
   simp_rw [find?_eq_dite, Option.get_dite]
 
@@ -4656,7 +4656,7 @@ theorem mem_find?_iff
 
 中文:
 定理 mem_find?_iff
-  条件: {p : Fin n -> 布尔} {i : Fin n}
+  条件: {p : 有限集 n -> 布尔值} {i : 有限集 n}
   证明: by simp
 -/
 theorem mem_find?_iff {p : Fin n -> Bool} {i : Fin n} :
@@ -4671,8 +4671,8 @@ theorem find?_eq_some_find_of_exists
   proof: by simp_rw [find?_eq_dite, h, dite_true]
 
 中文:
-定理 find?_eq_some_find_of_exists
-  条件: {p : Fin n -> 布尔} (h : 存在 i, p i)
+定理 find?_eq_some_find_of_存在
+  条件: {p : 有限集 n -> 布尔值} (h : 存在 i, p i)
   证明: by simp_rw [find?_eq_dite, h, dite_true]
 -/
 theorem find?_eq_some_find_of_exists {p : Fin n -> Bool} (h : exists i, p i) :
@@ -4689,7 +4689,7 @@ theorem find?_eq_some_find_of_isSome
 
 中文:
 定理 find?_eq_some_find_of_isSome
-  条件: {p : Fin n -> 布尔} (h : (find? p).isSome)
+  条件: {p : 有限集 n -> 布尔值} (h : (find? p).isSome)
   证明: by
   simp_rw [find?_eq_dite, exists_eq_true_of_isSome_find? h, dite_true]
 -/
@@ -4714,7 +4714,7 @@ definition contractNth
 
 中文:
 定义 contractNth
-  签名: (j : Fin (n + 1)) (op : α -> α -> α) (g : Fin (n + 1) -> α) (k : Fin n)
+  签名: (j : 有限集 (n + 1)) (op : α -> α -> α) (g : 有限集 (n + 1) -> α) (k : 有限集 n)
   定义体: if (k : Nat) < j then g (Fin.castSucc k)
   else if (k : Nat) = j then op (g (Fin.castSucc k)) (g k.succ) else g k.succ
 
@@ -4734,7 +4734,7 @@ theorem contractNth_apply_of_lt
 
 中文:
 定理 contractNth_apply_of_lt
-  结论: (j : Fin (n + 1)) (op : α -> α -> α) (g : Fin (n + 1) -> α) (k : Fin n)
+  结论: (j : 有限集 (n + 1)) (op : α -> α -> α) (g : 有限集 (n + 1) -> α) (k : 有限集 n)
   证明: if_pos h
 
 Depends on / 依赖: if_pos
@@ -4755,7 +4755,7 @@ theorem contractNth_apply_of_eq
 
 中文:
 定理 contractNth_apply_of_eq
-  结论: (j : Fin (n + 1)) (op : α -> α -> α) (g : Fin (n + 1) -> α) (k : Fin n)
+  结论: (j : 有限集 (n + 1)) (op : α -> α -> α) (g : 有限集 (n + 1) -> α) (k : 有限集 n)
   证明: by
   have : ¬(k : Nat) < j := not_lt.2 (le_of_eq h.symm)
   rw [contractNth]; rw [if_neg this]; rw [if_pos h]
@@ -4778,7 +4778,7 @@ theorem contractNth_apply_of_gt
 
 中文:
 定理 contractNth_apply_of_gt
-  结论: (j : Fin (n + 1)) (op : α -> α -> α) (g : Fin (n + 1) -> α) (k : Fin n)
+  结论: (j : 有限集 (n + 1)) (op : α -> α -> α) (g : 有限集 (n + 1) -> α) (k : 有限集 n)
   证明: by
   rw [contractNth]; rw [if_neg (not_lt_of_gt h)]; rw [if_neg (Ne.symm <| ne_of_lt h)]
 
@@ -4804,7 +4804,7 @@ theorem contractNth_apply_of_ne
 
 中文:
 定理 contractNth_apply_of_ne
-  结论: (j : Fin (n + 1)) (op : α -> α -> α) (g : Fin (n + 1) -> α) (k : Fin n)
+  结论: (j : 有限集 (n + 1)) (op : α -> α -> α) (g : 有限集 (n + 1) -> α) (k : 有限集 n)
   证明: by
   rcases lt_trichotomy (k : Nat) j with (h | h | h)
   · rwa [j.succAbove_of_castSucc_lt, contractNth_apply_of_lt]
@@ -4839,7 +4839,7 @@ lemma comp_contractNth
 
 中文:
 引理 comp_contractNth
-  结论: {β : Sort*} (opα : α -> α -> α) (opβ : β -> β -> β) {f : α -> β}
+  结论: {β : 类型层*} (opα : α -> α -> α) (opβ : β -> β -> β) {f : α -> β}
   证明: by
   ext x
   rcases lt_trichotomy (x : Nat) j with (h | h | h)
@@ -4889,7 +4889,7 @@ theorem sigma_eq_iff_eq_comp_cast
 
 中文:
 定理 sigma_eq_iff_eq_comp_cast
-  条件: {α : 类型} {a b : Σ ii, Fin ii -> α}
+  条件: {α : 类型} {a b : Σ ii, 有限集 ii -> α}
   证明: ⟨fun h => h ▸ ⟨rfl, funext Fin.rec fun _ _ => rfl⟩, fun ⟨_, h'⟩ =>
     sigma_eq_of_eq_comp_cast _ h'⟩
 
@@ -4917,7 +4917,7 @@ left_inv _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
 
 中文:
 定义 piFinTwoEquiv
-  签名: (α : Fin 2 -> 类型u)
+  签名: (α : 有限集 2 -> 类型u)
   定义体: (f 0, f 1)
 invFun p := Fin.cons p.1 Fin.cons p.2 finZeroElim
 left_inv _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩

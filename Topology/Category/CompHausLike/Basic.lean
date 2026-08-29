@@ -84,12 +84,12 @@ structure CompHausLike
     - prop : P toTop
 
 中文:
-结构 CompHausLike
+结构 余mpHausLike
   参数: where
   公理与运算 (4 个):
-    - toTop : TopCat
-    - [is_compact : CompactSpace toTop]
-    - [is_hausdorff : T2Space toTop]
+    - toTop : 顶元素范畴
+    - [is_compact : 紧空间 toTop]
+    - [is_hausdorff : T2空间 toTop]
     - prop : P toTop
 -/
 structure CompHausLike where
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CompHausLike P) (类型u)
+  签名: CoeSort (余mpHausLike P) (类型u)
   定义体: ⟨fun X => X.toTop⟩
 
 Depends on / 依赖: X.toTop
@@ -134,7 +134,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (CompHausLike P)
+  签名: : 范畴 (余mpHausLike P)
   定义体: inferInstanceAs Category (InducedCategory _ toTop)
 
 Depends on / 依赖: Category, InducedCategory
@@ -152,7 +152,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory (CompHausLike P) (C(·, ·))
+  签名: : 余ncrete范畴 (余mpHausLike P) (C(·, ·))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory
@@ -170,7 +170,7 @@ instance hasForget₂
 
 中文:
 实例 hasForget₂
-  签名: : HasForget₂ (CompHausLike P) TopCat
+  签名: : 有Forget₂ (余mpHausLike P) 顶元素范畴
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toTop) _
 
 Depends on / 依赖: InducedCategory
@@ -190,10 +190,10 @@ class HasProp
     - hasProp : P (TopCat.of X)
 
 中文:
-类 HasProp
+类 有命题
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasProp : P (TopCat.of X)
+    - hasProp : P (顶元素范畴.of X)
 -/
 class HasProp : Prop where
   hasProp : P (TopCat.of X)
@@ -215,7 +215,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: : CompHausLike P where
+  签名: : 余mpHausLike P where
   定义体: TopCat.of X
   is_compact := ‹_›
   is_hausdorff := ‹_›
@@ -241,7 +241,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  结论: (CompHausLike.of P X : Type _) = X
+  结论: (余mpHausLike.of P X : 类型 _) = X
   证明: rfl
 
 @[simp]
@@ -262,7 +262,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  条件: (X : CompHausLike P)
+  条件: (X : 余mpHausLike P)
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -282,7 +282,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: {X Y Z : CompHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 余mpHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 theorem coe_comp {X Y Z : CompHausLike P} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -323,7 +323,7 @@ lemma hom_ofHom
 中文:
 引理 hom_ofHom
   条件: (f : C(X, Y))
-  结论: ConcreteCategory.hom (ofHom P f) = f
+  结论: 余ncrete范畴.hom (ofHom P f) = f
   证明: rfl
 -/
 @[simp] lemma hom_ofHom (f : C(X, Y)) : ConcreteCategory.hom (ofHom P f) = f := rfl
@@ -338,7 +338,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  结论: ofHom P (ContinuousMap.id X) = 𝟙 (of _ X)
+  结论: ofHom P (连续映射.id X) = 𝟙 (of _ X)
   证明: rfl
 -/
 @[simp] lemma ofHom_id : ofHom P (ContinuousMap.id X) = 𝟙 (of _ X) := rfl
@@ -377,7 +377,7 @@ definition toCompHausLike
 
 中文:
 定义 toCompHausLike
-  签名: {P P' : TopCat -> 命题} (h : 对任意 (X : CompHausLike P), P X.toTop -> P' X.toTop)
+  签名: {P P' : 顶元素范畴 -> 命题} (h : 对任意 (X : 余mpHausLike P), P X.toTop -> P' X.toTop)
   定义体: haveI : HasProp P' X := ⟨(h _ X.prop)⟩
     CompHausLike.of _ X
   map {X Y} f := ConcreteCategory.ofHom f.hom.hom
@@ -405,7 +405,7 @@ definition fullyFaithfulToCompHausLike
 
 中文:
 定义 fullyFaithfulToCompHausLike
-  签名: : (toCompHausLike h).FullyFaithful where
+  签名: : (toCompHausLike h).满忠实 where
   定义体: ConcreteCategory.ofHom f.hom.hom
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, f.hom.hom
@@ -423,7 +423,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toCompHausLike h).Full
+  签名: (toCompHausLike h).满
   定义体: (fullyFaithfulToCompHausLike h).full
 
 Depends on / 依赖: fullyFaithfulToCompHausLike
@@ -440,7 +440,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toCompHausLike h).Faithful
+  签名: (toCompHausLike h).忠实
   定义体: (fullyFaithfulToCompHausLike h).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulToCompHausLike
@@ -463,7 +463,7 @@ definition compHausLikeToTop
 
 中文:
 定义 compHausLikeToTop
-  签名: : CompHausLike.{u} P ⥤ TopCat.{u}
+  签名: : 余mpHausLike.{u} P ⥤ 顶元素范畴.{u}
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor
@@ -486,7 +486,7 @@ definition fullyFaithfulCompHausLikeToTop
 
 中文:
 定义 fullyFaithfulCompHausLikeToTop
-  签名: : (compHausLikeToTop P).FullyFaithful
+  签名: : (compHausLikeToTop P).满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -504,7 +504,7 @@ instance :
 
 中文:
 实例 :
-  签名: (compHausLikeToTop P).Full
+  签名: (compHausLikeToTop P).满
   定义体: inferInstanceAs (inducedFunctor _).Full
 
 Depends on / 依赖: inducedFunctor
@@ -522,7 +522,7 @@ instance :
 
 中文:
 实例 :
-  签名: (compHausLikeToTop P).Faithful
+  签名: (compHausLikeToTop P).忠实
   定义体: inferInstanceAs (inducedFunctor _).Faithful
 
 Depends on / 依赖: Faithful, inducedFunctor
@@ -550,7 +550,7 @@ theorem epi_of_surjective
 
 中文:
 定理 epi_of_surjective
-  条件: {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (hf : Function.Surjective f)
+  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y) (hf : 函数.满射 f)
   证明: by
   rw [← CategoryTheory.ofHom_epi_iff_surjective] at hf
   exact (forget (CompHausLike P)).epi_of_epi_map hf
@@ -579,7 +579,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  条件: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
+  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
   证明: by
   constructor
   · intro hf x₁ x₂ h
@@ -614,8 +614,8 @@ theorem isClosedMap
 
 中文:
 定理 isClosedMap
-  条件: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
-  结论: IsClosedMap f
+  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
+  结论: 是闭映射 f
   证明: fun _ hC =>
   (hC.isCompact.image f.hom.hom.continuous).isClosed
 -/
@@ -643,7 +643,7 @@ theorem isIso_of_bijective
 
 中文:
 定理 isIso_of_bijective
-  条件: {X Y : CompHausLike.{u} P} (f : X ⟶ Y) (bij : Function.Bijective f)
+  条件: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y) (bij : 函数.双射 f)
   证明: by
   let E := Equiv.ofBijective _ bij
   have hE : Continuous E.symm := by
@@ -703,7 +703,7 @@ definition isoOfBijective
 
 中文:
 定义 isoOfBijective
-  签名: {X Y : CompHausLike.{u} P} (f : X ⟶ Y)
+  签名: {X Y : 余mpHausLike.{u} P} (f : X ⟶ Y)
   定义体: letI := isIso_of_bijective _ bij
   asIso f
 
@@ -726,7 +726,7 @@ definition isoOfHomeo
 
 中文:
 定义 isoOfHomeo
-  签名: {X Y : CompHausLike.{u} P} (f : X ≃ₜ Y)
+  签名: {X Y : 余mpHausLike.{u} P} (f : X ≃ₜ Y)
   定义体: (fullyFaithfulCompHausLikeToTop P).preimageIso (TopCat.isoOfHomeo f)
 
 Depends on / 依赖: TopCat, TopCat.isoOfHomeo, fullyFaithfulCompHausLikeToTop, isoOfHomeo, preimageIso
@@ -746,7 +746,7 @@ definition homeoOfIso
 
 中文:
 定义 homeoOfIso
-  签名: {X Y : CompHausLike.{u} P} (f : X ≅ Y)
+  签名: {X Y : 余mpHausLike.{u} P} (f : X ≅ Y)
   定义体: TopCat.homeoOfIso (compHausLikeToTop P).mapIso f
 
 Depends on / 依赖: TopCat, TopCat.homeoOfIso, compHausLikeToTop, homeoOfIso, mapIso
@@ -768,7 +768,7 @@ definition isoEquivHomeo
 
 中文:
 定义 isoEquivHomeo
-  签名: {X Y : CompHausLike.{u} P}
+  签名: {X Y : 余mpHausLike.{u} P}
   定义体: homeoOfIso
   invFun := isoOfHomeo
 
@@ -788,7 +788,7 @@ definition const
 
 中文:
 定义 const
-  签名: {P : TopCat.{u} -> 命题}
+  签名: {P : 顶元素范畴.{u} -> 命题}
   定义体: ofHom _ (ContinuousMap.const _ s)
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.const
@@ -807,7 +807,7 @@ lemma const_comp
 
 中文:
 引理 const_comp
-  结论: {P : TopCat.{u} -> 命题} {S T U : CompHausLike.{u} P}
+  结论: {P : 顶元素范畴.{u} -> 命题} {S T U : 余mpHausLike.{u} P}
   证明: rfl
 -/
 lemma const_comp {P : TopCat.{u} -> Prop} {S T U : CompHausLike.{u} P}

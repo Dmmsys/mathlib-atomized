@@ -148,7 +148,7 @@ definition N
 
 中文:
 定义 N
-  签名: : SimplicialObject A ⥤ ChainComplex A 自然数
+  签名: : SimplicialObject A ⥤ 链复形 A 自然数
   定义体: AlgebraicTopology.normalizedMooreComplex A
 
 Depends on / 依赖: AlgebraicTopology, AlgebraicTopology.normalizedMooreComplex, normalizedMooreComplex
@@ -168,7 +168,7 @@ definition Γ
 
 中文:
 定义 Γ
-  签名: : ChainComplex A 自然数 ⥤ SimplicialObject A
+  签名: : 链复形 A 自然数 ⥤ SimplicialObject A
   定义体: Idempotents.DoldKan.Γ
 
 #adaptation_note
@@ -232,7 +232,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: : SimplicialObject A ≌ ChainComplex A 自然数
+  签名: : SimplicialObject A ≌ 链复形 A 自然数
   定义体: (Idempotents.DoldKan.equivalence (C := A)).changeFunctor comparisonN.symm
 
 Depends on / 依赖: DoldKan, Idempotents, Idempotents.DoldKan.equivalence, changeFunctor, comparisonN, comparisonN.symm, equivalence

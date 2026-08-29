@@ -64,7 +64,7 @@ definition mulDysonETransform
 
 中文:
 定义 mulDysonETransform
-  签名: : Finset α × Finset α
+  签名: : 有限集 α × 有限集 α
   定义体: (x.1 union e • x.2, x.2 inter e⁻¹ • x.1)
 
 @[to_additive]
@@ -212,7 +212,7 @@ definition mulETransformLeft
 
 中文:
 定义 mulETransformLeft
-  签名: : Finset α × Finset α
+  签名: : 有限集 α × 有限集 α
   定义体: (x.1 inter op e • x.1, x.2 union e⁻¹ • x.2)
 -/
 def mulETransformLeft : Finset α × Finset α :=
@@ -234,7 +234,7 @@ definition mulETransformRight
 
 中文:
 定义 mulETransformRight
-  签名: : Finset α × Finset α
+  签名: : 有限集 α × 有限集 α
   定义体: (x.1 union op e • x.1, x.2 inter e⁻¹ • x.2)
 
 @[to_additive (attr := simp)]

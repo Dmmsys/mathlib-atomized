@@ -49,7 +49,7 @@ theorem rotate_mod
 
 中文:
 定理 rotate_mod
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate (n % l.length) = l.rotate n
   证明: by simp [rotate]
 
@@ -74,7 +74,7 @@ theorem rotate_nil
 中文:
 定理 rotate_nil
   条件: (n : 自然数)
-  结论: ([] : List α).rotate n = []
+  结论: ([] : 列表 α).rotate n = []
   证明: by simp [rotate]
 
 @[simp]
@@ -95,7 +95,7 @@ theorem rotate_zero
 
 中文:
 定理 rotate_zero
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l.rotate 0 = l
   证明: by simp [rotate]
 
@@ -117,7 +117,7 @@ theorem rotate'_nil
 中文:
 定理 rotate'_nil
   条件: (n : 自然数)
-  结论: ([] : List α).rotate' n = []
+  结论: ([] : 列表 α).rotate' n = []
   证明: by simp
 
 @[simp]
@@ -136,7 +136,7 @@ theorem rotate'_zero
 
 中文:
 定理 rotate'_zero
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l.rotate' 0 = l
   证明: by cases l <;> rfl
 -/
@@ -154,7 +154,7 @@ theorem rotate'_cons_succ
 
 中文:
 定理 rotate'_cons_succ
-  条件: (l : List α) (a : α) (n : 自然数)
+  条件: (l : 列表 α) (a : α) (n : 自然数)
   证明: by simp [rotate']
 
 @[simp]
@@ -172,7 +172,7 @@ theorem length_rotate'
 
 中文:
 定理 length_rotate'
-  结论: 对任意 (l : List α) (n : 自然数), (l.rotate' n).length = l.length
+  结论: 对任意 (l : 列表 α) (n : 自然数), (l.rotate' n).length = l.length
 -/
 theorem length_rotate' : forall (l : List α) (n : Nat), (l.rotate' n).length = l.length
   | [], _ => by simp
@@ -216,7 +216,7 @@ theorem rotate'_rotate'
 
 中文:
 定理 rotate'_rotate'
-  结论: 对任意 (l : List α) (n m : 自然数), (l.rotate' n).rotate' m = l.rotate' (n + m)
+  结论: 对任意 (l : 列表 α) (n m : 自然数), (l.rotate' n).rotate' m = l.rotate' (n + m)
 -/
 theorem rotate'_rotate' : forall (l : List α) (n m : Nat), (l.rotate' n).rotate' m = l.rotate' (n + m)
   | a :: l, 0, m => by simp
@@ -239,7 +239,7 @@ theorem rotate'_length
 
 中文:
 定理 rotate'_length
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: rotate' l l.length = l
   证明: by
   rw [rotate'_eq_drop_append_take le_rfl]; simp
@@ -265,7 +265,7 @@ theorem rotate'_length_mul
 
 中文:
 定理 rotate'_length_mul
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: 对任意 n : 自然数, l.rotate' (l.length * n) = l
   证明: by
         simp [-rotate'_length, Nat.mul_succ, rotate'_rotate']
@@ -297,7 +297,7 @@ theorem rotate'_mod
 
 中文:
 定理 rotate'_mod
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate' (n % l.length) = l.rotate' n
   证明: calc l.rotate' (n % l.length)
     _ = (l.rotate' (n % l.length)).rotate'
@@ -324,7 +324,7 @@ theorem rotate_eq_rotate'
 
 中文:
 定理 rotate_eq_rotate'
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate n = l.rotate' n
   证明: if h : l.length = 0 then by simp_all [length_eq_zero_iff]
   else by
@@ -352,7 +352,7 @@ theorem rotate_cons_succ
 
 中文:
 定理 rotate_cons_succ
-  条件: (l : List α) (a : α) (n : 自然数)
+  条件: (l : 列表 α) (a : α) (n : 自然数)
   证明: by
   rw [rotate_eq_rotate']; rw [rotate_eq_rotate']; rw [rotate'_cons_succ]
 
@@ -372,7 +372,7 @@ theorem mem_rotate
 
 中文:
 定理 mem_rotate
-  结论: 对任意 {l : List α} {a : α} {n : 自然数}, a in l.rotate n ↔ a in l
+  结论: 对任意 {l : 列表 α} {a : α} {n : 自然数}, a in l.rotate n ↔ a in l
 -/
 theorem mem_rotate : forall {l : List α} {a : α} {n : Nat}, a in l.rotate n ↔ a in l
   | [], _, n => by simp
@@ -394,7 +394,7 @@ theorem length_rotate
 
 中文:
 定理 length_rotate
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: (l.rotate n).length = l.length
   证明: by
   rw [rotate_eq_rotate']; rw [length_rotate']
@@ -441,7 +441,7 @@ theorem rotate_eq_drop_append_take
 
 中文:
 定理 rotate_eq_drop_append_take
-  条件: {l : List α} {n : 自然数}
+  条件: {l : 列表 α} {n : 自然数}
   证明: by
   rw [rotate_eq_rotate']; exact rotate'_eq_drop_append_take
 
@@ -466,7 +466,7 @@ theorem rotate_eq_drop_append_take_mod
 
 中文:
 定理 rotate_eq_drop_append_take_mod
-  条件: {l : List α} {n : 自然数}
+  条件: {l : 列表 α} {n : 自然数}
   证明: by
   rcases l.length.zero_le.eq_or_lt with hl | hl
   · simp [eq_nil_of_length_eq_zero hl.symm]
@@ -500,7 +500,7 @@ theorem rotate_append_length_eq
 
 中文:
 定理 rotate_append_length_eq
-  条件: (l l' : List α)
+  条件: (l l' : 列表 α)
   结论: (l ++ l').rotate l.length = l' ++ l
   证明: by
   rw [rotate_eq_rotate']
@@ -533,7 +533,7 @@ theorem rotate_rotate
 
 中文:
 定理 rotate_rotate
-  条件: (l : List α) (n m : 自然数)
+  条件: (l : 列表 α) (n m : 自然数)
   结论: (l.rotate n).rotate m = l.rotate (n + m)
   证明: by
   rw [rotate_eq_rotate']; rw [rotate_eq_rotate']; rw [rotate_eq_rotate']; rw [rotate'_rotate']
@@ -560,7 +560,7 @@ theorem rotate_length
 
 中文:
 定理 rotate_length
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: rotate l l.length = l
   证明: by
   rw [rotate_eq_rotate']; rw [rotate'_length]
@@ -585,7 +585,7 @@ theorem rotate_length_mul
 
 中文:
 定理 rotate_length_mul
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate (l.length * n) = l
   证明: by
   rw [rotate_eq_rotate']; rw [rotate'_length_mul]
@@ -616,7 +616,7 @@ theorem rotate_perm
 
 中文:
 定理 rotate_perm
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate n ~ l
   证明: by
   rw [rotate_eq_rotate']
@@ -656,7 +656,7 @@ theorem nodup_rotate
 
 中文:
 定理 nodup_rotate
-  条件: {l : List α} {n : 自然数}
+  条件: {l : 列表 α} {n : 自然数}
   结论: Nodup (l.rotate n) ↔ Nodup l
   证明: (rotate_perm l n).nodup_iff
 
@@ -685,7 +685,7 @@ theorem rotate_eq_nil_iff
 
 中文:
 定理 rotate_eq_nil_iff
-  条件: {l : List α} {n : 自然数}
+  条件: {l : 列表 α} {n : 自然数}
   结论: l.rotate n = [] ↔ l = []
   证明: by
   induction n generalizing l with
@@ -719,7 +719,7 @@ theorem nil_eq_rotate_iff
 
 中文:
 定理 nil_eq_rotate_iff
-  条件: {l : List α} {n : 自然数}
+  条件: {l : 列表 α} {n : 自然数}
   结论: [] = l.rotate n ↔ [] = l
   证明: by
   rw [eq_comm]; rw [rotate_eq_nil_iff]; rw [eq_comm]
@@ -765,7 +765,7 @@ theorem zipWith_rotate_distrib
 
 中文:
 定理 zipWith_rotate_distrib
-  结论: {β γ : 类型} (f : α -> β -> γ) (l : List α) (l' : List β) (n : 自然数)
+  结论: {β γ : 类型} (f : α -> β -> γ) (l : 列表 α) (l' : 列表 β) (n : 自然数)
   证明: by
   rw [rotate_eq_drop_append_take_mod]; rw [rotate_eq_drop_append_take_mod]; rw [rotate_eq_drop_append_take_mod]; rw [h]; rw [zipWith_append]; rw [← drop_zipWith]; rw [←
     take_zipWith]; rw [List.length_zipWith]; rw [h]; rw [min_self]
@@ -791,7 +791,7 @@ theorem zipWith_rotate_one
 
 中文:
 定理 zipWith_rotate_one
-  条件: {β : 类型} (f : α -> α -> β) (x y : α) (l : List α)
+  条件: {β : 类型} (f : α -> α -> β) (x y : α) (l : 列表 α)
   证明: by
   simp
 -/
@@ -815,7 +815,7 @@ theorem getElem?_rotate
 
 中文:
 定理 getElem?_rotate
-  条件: {l : List α} {n m : 自然数} (hml : m < l.length)
+  条件: {l : 列表 α} {n m : 自然数} (hml : m < l.length)
   证明: by
   rw [rotate_eq_drop_append_take_mod]
   rcases lt_or_ge m (l.drop (n % l.length)).length with hm | hm
@@ -856,7 +856,7 @@ theorem getElem_rotate
 
 中文:
 定理 getElem_rotate
-  条件: (l : List α) (n : 自然数) (k : 自然数) (h : k < (l.rotate n).length)
+  条件: (l : 列表 α) (n : 自然数) (k : 自然数) (h : k < (l.rotate n).length)
   证明: by
   rw [← Option.some_inj]; rw [← getElem?_eq_getElem]; rw [← getElem?_eq_getElem]; rw [getElem?_rotate]
   exact h.trans_eq (length_rotate _ _)
@@ -882,7 +882,7 @@ theorem get_rotate
 
 中文:
 定理 get_rotate
-  条件: (l : List α) (n : 自然数) (k : Fin (l.rotate n).length)
+  条件: (l : 列表 α) (n : 自然数) (k : 有限集 (l.rotate n).length)
   证明: by
   simp [getElem_rotate]
 
@@ -907,7 +907,7 @@ theorem head?_rotate
 
 中文:
 定理 head?_rotate
-  条件: {l : List α} {n : 自然数} (h : n < l.length)
+  条件: {l : 列表 α} {n : 自然数} (h : n < l.length)
   结论: head? (l.rotate n) = l[n]?
   证明: by
   rw [head?_eq_getElem?]; rw [getElem?_rotate (n.zero_le.trans_lt h)]; rw [Nat.zero_add]; rw [Nat.mod_eq_of_lt h]
@@ -925,7 +925,7 @@ theorem get_rotate_one
 
 中文:
 定理 get_rotate_one
-  条件: (l : List α) (k : Fin (l.rotate 1).length)
+  条件: (l : 列表 α) (k : 有限集 (l.rotate 1).length)
   证明: get_rotate l 1 k
 
 Depends on / 依赖: get_rotate
@@ -951,7 +951,7 @@ theorem getElem_eq_getElem_rotate
 
 中文:
 定理 getElem_eq_getElem_rotate
-  条件: (l : List α) (n : 自然数) (k : 自然数) (hk : k < l.length)
+  条件: (l : 列表 α) (n : 自然数) (k : 自然数) (hk : k < l.length)
   证明: by
   rw [getElem_rotate]
   refine congr_arg l.get (Fin.eq_of_val_eq ?_)
@@ -981,7 +981,7 @@ theorem get_eq_get_rotate
 
 中文:
 定理 get_eq_get_rotate
-  条件: (l : List α) (n : 自然数) (k : Fin l.length)
+  条件: (l : 列表 α) (n : 自然数) (k : 有限集 l.length)
   证明: by
   simpa using getElem_eq_getElem_rotate _ _ _ _
 
@@ -1001,7 +1001,7 @@ theorem rotate_eq_self_iff_eq_replicate
 
 中文:
 定理 rotate_eq_self_iff_eq_replicate
-  条件: [hα : Nonempty α]
+  条件: [hα : 非空 α]
 -/
 theorem rotate_eq_self_iff_eq_replicate [hα : Nonempty α] :
     forall {l : List α}, (forall n, l.rotate n = l) ↔ exists a, l = replicate l.length a
@@ -1023,7 +1023,7 @@ theorem rotate_one_eq_self_iff_eq_replicate
 
 中文:
 定理 rotate_one_eq_self_iff_eq_replicate
-  条件: [Nonempty α] {l : List α}
+  条件: [非空 α] {l : 列表 α}
   证明: ⟨fun h =>
     rotate_eq_self_iff_eq_replicate.mp fun n =>
       Nat.rec l.rotate_zero (fun n hn => by rwa [Nat.succ_eq_add_one, ← l.rotate_rotate, hn]) n,
@@ -1055,7 +1055,7 @@ theorem rotate_injective
 中文:
 定理 rotate_injective
   条件: (n : 自然数)
-  结论: Function.Injective fun l : List α => l.rotate n
+  结论: 函数.单射 fun l : 列表 α => l.rotate n
   证明: by
   rintro l l' (h : l.rotate n = l'.rotate n)
   have hle : l.length = l'.length := (l.length_rotate n).symm.trans (h.symm ▸ l'.length_rotate n)
@@ -1084,7 +1084,7 @@ theorem rotate_eq_rotate
 
 中文:
 定理 rotate_eq_rotate
-  条件: {l l' : List α} {n : 自然数}
+  条件: {l l' : 列表 α} {n : 自然数}
   结论: l.rotate n = l'.rotate n ↔ l = l'
   证明: (rotate_injective n).eq_iff
 
@@ -1109,7 +1109,7 @@ theorem rotate_eq_iff
 
 中文:
 定理 rotate_eq_iff
-  条件: {l l' : List α} {n : 自然数}
+  条件: {l l' : 列表 α} {n : 自然数}
   证明: by
   rw [← @rotate_eq_rotate _ l _ n]; rw [rotate_rotate]; rw [← rotate_mod l']; rw [add_mod]
   rcases l'.length.zero_le.eq_or_lt with hl | hl
@@ -1145,7 +1145,7 @@ theorem rotate_eq_singleton_iff
 
 中文:
 定理 rotate_eq_singleton_iff
-  条件: {l : List α} {n : 自然数} {x : α}
+  条件: {l : 列表 α} {n : 自然数} {x : α}
   结论: l.rotate n = [x] ↔ l = [x]
   证明: by
   rw [rotate_eq_iff]; rw [rotate_singleton]
@@ -1170,7 +1170,7 @@ theorem singleton_eq_rotate_iff
 
 中文:
 定理 singleton_eq_rotate_iff
-  条件: {l : List α} {n : 自然数} {x : α}
+  条件: {l : 列表 α} {n : 自然数} {x : α}
   结论: [x] = l.rotate n ↔ [x] = l
   证明: by
   rw [eq_comm]; rw [rotate_eq_singleton_iff]; rw [eq_comm]
@@ -1198,7 +1198,7 @@ theorem reverse_rotate
 
 中文:
 定理 reverse_rotate
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   证明: by
   rw [← length_reverse]; rw [← rotate_eq_iff]
   induction n generalizing l with
@@ -1240,7 +1240,7 @@ theorem rotate_reverse
 
 中文:
 定理 rotate_reverse
-  条件: (l : List α) (n : 自然数)
+  条件: (l : 列表 α) (n : 自然数)
   证明: by
   rw [← reverse_reverse l]
   simp_rw [reverse_rotate, reverse_reverse, rotate_eq_iff, rotate_rotate, length_rotate,
@@ -1285,7 +1285,7 @@ theorem map_rotate
 
 中文:
 定理 map_rotate
-  条件: {β : 类型} (f : α -> β) (l : List α) (n : 自然数)
+  条件: {β : 类型} (f : α -> β) (l : 列表 α) (n : 自然数)
   证明: by
   induction n generalizing l with
   | zero => simp
@@ -1318,7 +1318,7 @@ theorem Nodup.rotate_congr
 
 中文:
 定理 Nodup.rotate_congr
-  结论: {l : List α} (hl : l.Nodup) (hn : l != []) (i j : 自然数)
+  结论: {l : 列表 α} (hl : l.Nodup) (hn : l != []) (i j : 自然数)
   证明: by
   rw [← rotate_mod l i]; rw [← rotate_mod l j] at h
   simpa only [head?_rotate, mod_lt, length_pos_of_ne_nil hn, getElem?_eq_getElem, Option.some_inj,
@@ -1347,7 +1347,7 @@ theorem Nodup.rotate_congr_iff
 
 中文:
 定理 Nodup.rotate_congr_iff
-  条件: {l : List α} (hl : l.Nodup) {i j : 自然数}
+  条件: {l : 列表 α} (hl : l.Nodup) {i j : 自然数}
   证明: by
   rcases eq_or_ne l [] with rfl | hn
   · simp
@@ -1376,7 +1376,7 @@ theorem Nodup.rotate_eq_self_iff
 
 中文:
 定理 Nodup.rotate_eq_self_iff
-  条件: {l : List α} (hl : l.Nodup) {n : 自然数}
+  条件: {l : 列表 α} (hl : l.Nodup) {n : 自然数}
   证明: by
   rw [← zero_mod]; rw [← hl.rotate_congr_iff]; rw [rotate_zero]
 
@@ -1432,7 +1432,7 @@ theorem IsRotated.refl
 
 中文:
 定理 IsRotated.refl
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l ~r l
   证明: ⟨0, by simp⟩
 
@@ -1514,8 +1514,8 @@ theorem IsRotated.forall
 @[trans]
 
 中文:
-定理 IsRotated.forall
-  条件: (l : List α) (n : 自然数)
+定理 IsRotated.对任意
+  条件: (l : 列表 α) (n : 自然数)
   结论: l.rotate n ~r l
   证明: IsRotated.symm ⟨n, rfl⟩
 
@@ -1534,7 +1534,7 @@ theorem IsRotated.trans
 
 中文:
 定理 IsRotated.trans
-  结论: 对任意 {l l' l'' : List α}, l ~r l' -> l' ~r l'' -> l ~r l''
+  结论: 对任意 {l l' l'' : 列表 α}, l ~r l' -> l' ~r l'' -> l ~r l''
 -/
 theorem IsRotated.trans : forall {l l' l'' : List α}, l ~r l' -> l' ~r l'' -> l ~r l''
   | _, _, _, ⟨n, rfl⟩, ⟨m, rfl⟩ => ⟨n + m, by rw [rotate_rotate]⟩
@@ -1549,7 +1549,7 @@ theorem IsRotated.eqv
 
 中文:
 定理 IsRotated.eqv
-  结论: Equivalence (@IsRotated α)
+  结论: 等价 (@IsRotated α)
   证明: Equivalence.mk IsRotated.refl IsRotated.symm IsRotated.trans
 
 Depends on / 依赖: Equivalence, Equivalence.mk, IsRotated, IsRotated.refl, IsRotated.symm, IsRotated.trans
@@ -1747,7 +1747,7 @@ theorem isRotated_concat
 
 中文:
 定理 isRotated_concat
-  条件: (hd : α) (tl : List α)
+  条件: (hd : α) (tl : 列表 α)
   结论: (tl ++ [hd]) ~r (hd :: tl)
   证明: IsRotated.symm ⟨1, by simp⟩
 
@@ -1902,7 +1902,7 @@ theorem isRotated_iff_mem_map_range
 
 中文:
 定理 isRotated_iff_mem_map_range
-  结论: l ~r l' ↔ l' in (List.range (l.length + 1)).map l.rotate
+  结论: l ~r l' ↔ l' in (列表.range (l.length + 1)).map l.rotate
   证明: by
   simp_rw [mem_map, mem_range, isRotated_iff_mod]
   exact
@@ -1930,7 +1930,7 @@ theorem IsRotated.map
 
 中文:
 定理 IsRotated.map
-  条件: {β : 类型} {l₁ l₂ : List α} (h : l₁ ~r l₂) (f : α -> β)
+  条件: {β : 类型} {l₁ l₂ : 列表 α} (h : l₁ ~r l₂) (f : α -> β)
   证明: by
   obtain ⟨n, rfl⟩ := h
   rw [map_rotate]
@@ -2041,7 +2041,7 @@ definition cyclicPermutations
 
 中文:
 定义 cyclicPermutations
-  签名: : List α -> List (List α)
+  签名: : 列表 α -> 列表 (列表 α)
 -/
 def cyclicPermutations : List α -> List (List α)
   | [] => [[]]
@@ -2058,7 +2058,7 @@ theorem cyclicPermutations_nil
 
 中文:
 定理 cyclicPermutations_nil
-  结论: cyclicPermutations ([] : List α) = [[]]
+  结论: cyclicPermutations ([] : 列表 α) = [[]]
   证明: rfl
 -/
 theorem cyclicPermutations_nil : cyclicPermutations ([] : List α) = [[]] :=
@@ -2074,7 +2074,7 @@ theorem cyclicPermutations_cons
 
 中文:
 定理 cyclicPermutations_cons
-  条件: (x : α) (l : List α)
+  条件: (x : α) (l : 列表 α)
   证明: rfl
 -/
 theorem cyclicPermutations_cons (x : α) (l : List α) :
@@ -2093,7 +2093,7 @@ theorem cyclicPermutations_of_ne_nil
 
 中文:
 定理 cyclicPermutations_of_ne_nil
-  条件: (l : List α) (h : l != [])
+  条件: (l : 列表 α) (h : l != [])
   证明: by
   obtain ⟨hd, tl, rfl⟩ := exists_cons_of_ne_nil h
   exact cyclicPermutations_cons _ _
@@ -2117,7 +2117,7 @@ theorem length_cyclicPermutations_cons
 
 中文:
 定理 length_cyclicPermutations_cons
-  条件: (x : α) (l : List α)
+  条件: (x : α) (l : 列表 α)
   证明: by simp [cyclicPermutations_cons]
 
 @[simp]
@@ -2140,7 +2140,7 @@ theorem length_cyclicPermutations_of_ne_nil
 
 中文:
 定理 length_cyclicPermutations_of_ne_nil
-  条件: (l : List α) (h : l != [])
+  条件: (l : 列表 α) (h : l != [])
   证明: by simp [cyclicPermutations_of_ne_nil _ h]
 
 @[simp]
@@ -2160,7 +2160,7 @@ theorem cyclicPermutations_ne_nil
 
 中文:
 定理 cyclicPermutations_ne_nil
-  结论: 对任意 l : List α, cyclicPermutations l != []
+  结论: 对任意 l : 列表 α, cyclicPermutations l != []
 -/
 theorem cyclicPermutations_ne_nil : forall l : List α, cyclicPermutations l != []
   | a::l, h => by simpa using congr_arg length h
@@ -2182,7 +2182,7 @@ theorem getElem_cyclicPermutations
 
 中文:
 定理 getElem_cyclicPermutations
-  条件: (l : List α) (n : 自然数) (h : n < length (cyclicPermutations l))
+  条件: (l : 列表 α) (n : 自然数) (h : n < length (cyclicPermutations l))
   证明: by
   cases l with
   | nil => simp
@@ -2215,7 +2215,7 @@ theorem get_cyclicPermutations
 
 中文:
 定理 get_cyclicPermutations
-  条件: (l : List α) (n : Fin (length (cyclicPermutations l)))
+  条件: (l : 列表 α) (n : 有限集 (length (cyclicPermutations l)))
   证明: by
   simp
 
@@ -2240,7 +2240,7 @@ theorem head_cyclicPermutations
 
 中文:
 定理 head_cyclicPermutations
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   have h : 0 < length (cyclicPermutations l) := length_pos_of_ne_nil (cyclicPermutations_ne_nil _)
   rw [← get_mk_zero h]; rw [get_cyclicPermutations]; rw [Fin.val_mk]; rw [rotate_zero]
@@ -2267,7 +2267,7 @@ theorem head?_cyclicPermutations
 
 中文:
 定理 head?_cyclicPermutations
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: (cyclicPermutations l).head? = l
   证明: by
   rw [head?_eq_some_head (cyclicPermutations_ne_nil l)]; rw [head_cyclicPermutations]
@@ -2288,7 +2288,7 @@ theorem cyclicPermutations_injective
 
 中文:
 定理 cyclicPermutations_injective
-  结论: Function.Injective (@cyclicPermutations α)
+  结论: 函数.单射 (@cyclicPermutations α)
   证明: fun l l' h => by
   simpa using congr_arg head? h
 
@@ -2310,7 +2310,7 @@ theorem cyclicPermutations_inj
 
 中文:
 定理 cyclicPermutations_inj
-  条件: {l l' : List α}
+  条件: {l l' : 列表 α}
   证明: cyclicPermutations_injective.eq_iff
 
 Depends on / 依赖: cyclicPermutations_injective, cyclicPermutations_injective.eq_iff, eq_iff
@@ -2331,7 +2331,7 @@ theorem length_mem_cyclicPermutations
 
 中文:
 定理 length_mem_cyclicPermutations
-  条件: (l : List α) (h : l' in cyclicPermutations l)
+  条件: (l : 列表 α) (h : l' in cyclicPermutations l)
   证明: by
   obtain ⟨k, hk, rfl⟩ := get_of_mem h
   simp
@@ -2357,7 +2357,7 @@ theorem mem_cyclicPermutations_self
 
 中文:
 定理 mem_cyclicPermutations_self
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l in cyclicPermutations l
   证明: by
   simpa using head_mem (cyclicPermutations_ne_nil l)
@@ -2386,7 +2386,7 @@ theorem cyclicPermutations_rotate
 
 中文:
 定理 cyclicPermutations_rotate
-  条件: (l : List α) (k : 自然数)
+  条件: (l : 列表 α) (k : 自然数)
   证明: by
   have : (l.rotate k).cyclicPermutations.length = length (l.cyclicPermutations.rotate k) := by
     cases l
@@ -2464,7 +2464,7 @@ theorem cyclicPermutations_eq_nil_iff
 
 中文:
 定理 cyclicPermutations_eq_nil_iff
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: cyclicPermutations l = [[]] ↔ l = []
   证明: cyclicPermutations_injective.eq_iff' rfl
 
@@ -2486,7 +2486,7 @@ theorem cyclicPermutations_eq_singleton_iff
 
 中文:
 定理 cyclicPermutations_eq_singleton_iff
-  条件: {l : List α} {x : α}
+  条件: {l : 列表 α} {x : α}
   证明: cyclicPermutations_injective.eq_iff' rfl
 
 Depends on / 依赖: cyclicPermutations_injective, cyclicPermutations_injective.eq_iff, eq_iff
@@ -2511,7 +2511,7 @@ theorem Nodup.cyclicPermutations
 
 中文:
 定理 Nodup.cyclicPermutations
-  条件: {l : List α} (hn : Nodup l)
+  条件: {l : 列表 α} (hn : Nodup l)
   证明: by
   rcases eq_or_ne l [] with rfl | hl
   · simp
@@ -2543,7 +2543,7 @@ theorem IsRotated.cyclicPermutations
 
 中文:
 定理 IsRotated.cyclicPermutations
-  条件: {l l' : List α} (h : l ~r l')
+  条件: {l l' : 列表 α} (h : l ~r l')
   证明: by
   obtain ⟨k, rfl⟩ := h
   exact ⟨k, by simp⟩
@@ -2567,7 +2567,7 @@ theorem isRotated_cyclicPermutations_iff
 
 中文:
 定理 isRotated_cyclicPermutations_iff
-  条件: {l l' : List α}
+  条件: {l l' : 列表 α}
   证明: by
   simp only [IsRotated, ← cyclicPermutations_rotate, cyclicPermutations_inj]
 
@@ -2591,7 +2591,7 @@ instance isRotatedDecidable
 
 中文:
 实例 isRotatedDecidable
-  签名: (l l' : List α)
+  签名: (l l' : 列表 α)
   定义体: decidable_of_iff' _ isRotated_iff_mem_map_range
 
 Depends on / 依赖: decidable_of_iff, isRotated_iff_mem_map_range

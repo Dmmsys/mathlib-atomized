@@ -55,7 +55,7 @@ definition binomialSeries
 
 中文:
 定义 binomialSeries
-  签名: (A) [One A] [SMul R A] (r : R)
+  签名: (A) [幺 A] [标量乘法 R A] (r : R)
   定义体: mk fun n => Ring.choose r n • 1
 
 @[simp]
@@ -78,7 +78,7 @@ lemma binomialSeries_coeff
 
 中文:
 引理 binomialSeries_coeff
-  条件: [Semiring A] [SMul R A] (r : R) (n : 自然数)
+  条件: [半环 A] [标量乘法 R A] (r : R) (n : 自然数)
   证明: coeff_mk n fun n => Ring.choose r n • 1
 
 @[simp]
@@ -103,7 +103,7 @@ lemma binomialSeries_constantCoeff
 
 中文:
 引理 binomialSeries_constantCoeff
-  条件: [Ring A] [Algebra R A] (r : R)
+  条件: [环 A] [代数 R A] (r : R)
   证明: by
   simp [← coeff_zero_eq_constantCoeff_apply]
 
@@ -133,7 +133,7 @@ lemma binomialSeries_add
 
 中文:
 引理 binomialSeries_add
-  条件: [Ring A] [Algebra R A] (r s : R)
+  条件: [环 A] [代数 R A] (r s : R)
   证明: by
   ext n
   simp only [binomialSeries_coeff, Ring.add_choose_eq n (Commute.all r s), coeff_mul,
@@ -171,7 +171,7 @@ lemma binomialSeries_nat
 
 中文:
 引理 binomialSeries_nat
-  条件: [Ring A] [Algebra R A] (d : 自然数)
+  条件: [环 A] [代数 R A] (d : 自然数)
   证明: by
   ext n
   have hright : (1 + X) ^ d = (((1 : Polynomial A) + (Polynomial.X)) ^ d).toPowerSeries := by
@@ -203,7 +203,7 @@ lemma binomialSeries_zero
 
 中文:
 引理 binomialSeries_zero
-  条件: [Ring A] [Algebra R A]
+  条件: [环 A] [代数 R A]
   证明: by
   simpa using binomialSeries_nat 0
 
@@ -230,7 +230,7 @@ lemma rescale_neg_one_invOneSubPow
 
 中文:
 引理 rescale_neg_one_invOneSubPow
-  条件: [CommRing A] (d : 自然数)
+  条件: [交换环 A] (d : 自然数)
   证明: by
   ext n
   rw [coeff_rescale]; rw [binomialSeries_coeff]; rw [← Int.cast_negOnePow_natCast]; rw [← zsmul_eq_mul]

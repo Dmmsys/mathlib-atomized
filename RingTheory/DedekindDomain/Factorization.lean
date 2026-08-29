@@ -75,8 +75,8 @@ definition IsDedekindDomain.HeightOneSpectrum.maxPowDividing
   body: v.asIdeal ^ (Associates.mk v.asIdeal).count (Associates.mk I).factors
 
 中文:
-定义 IsDedekindDomain.HeightOneSpectrum.maxPowDividing
-  签名: (I : Ideal R)
+定义 是Dedekind整环.高一谱.maxPowDividing
+  签名: (I : 理想 R)
   定义体: v.asIdeal ^ (Associates.mk v.asIdeal).count (Associates.mk I).factors
 
 Depends on / 依赖: Associates, Associates.mk, asIdeal, factors, v.asIdeal
@@ -94,7 +94,7 @@ theorem IsDedekindDomain.HeightOneSpectrum.maxPowDividing_eq_pow_multiset_count
   rw [maxPowDividing]; rw [factors_mk _ hI]; rw [count_some (irreducible_mk.mpr v.irreducible)]; rw [← Multiset.count_map_eq_count' _ _ Subtype.val_injective]; rw [map_subtype_coe_factors']; rw [factors_eq_normalizedFactors]; rw [← Multiset.count_map_eq_count' _ _ (mk_injective (M := Ideal R))]
 
 中文:
-定理 IsDedekindDomain.HeightOneSpectrum.maxPowDividing_eq_pow_multiset_count
+定理 是Dedekind整环.高一谱.maxPowDividing_eq_pow_multiset_count
   证明: by
   rw [maxPowDividing]; rw [factors_mk _ hI]; rw [count_some (irreducible_mk.mpr v.irreducible)]; rw [← Multiset.count_map_eq_count' _ _ Subtype.val_injective]; rw [map_subtype_coe_factors']; rw [factors_eq_normalizedFactors]; rw [← Multiset.count_map_eq_count' _ _ (mk_injective (M := Ideal R))]
 
@@ -121,8 +121,8 @@ theorem Ideal.finite_factors
   exact Subtype.coe_injective (HeightOneSpectrum.ext (by simpa using hvw))
 
 中文:
-定理 Ideal.finite_factors
-  条件: {I : Ideal R} (hI : I != 0)
+定理 理想.finite_factors
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   rw [← Set.finite_coe_iff]; rw [Set.coe_ofPred]
   have h_fin := fintypeSubtypeDvd I hI
@@ -158,7 +158,7 @@ theorem Associates.finite_factors
 
 中文:
 定理 Associates.finite_factors
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   have h_supp : {v : HeightOneSpectrum R | ¬((Associates.mk v.asIdeal).count
       (Associates.mk I).factors : Int) = 0} = {v : HeightOneSpectrum R | v.asIdeal ∣ I} := by
@@ -200,7 +200,7 @@ theorem hasFiniteMulSupport
 
 中文:
 定理 hasFiniteMulSupport
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: haveI h_subset : {v : HeightOneSpectrum R | v.maxPowDividing I != 1} subseteq
       {v : HeightOneSpectrum R |
         ((Associates.mk v.asIdeal).count (Associates.mk I).factors : Int) != 0} := by
@@ -241,7 +241,7 @@ theorem hasFiniteMulSupport_coe
 
 中文:
 定理 hasFiniteMulSupport_coe
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   rw [HasFiniteMulSupport]; rw [mulSupport]
   simp_rw [Ne, zpow_natCast, ← FractionalIdeal.coeIdeal_pow, FractionalIdeal.coeIdeal_eq_one]
@@ -278,7 +278,7 @@ theorem hasFiniteMulSupport_inv
 
 中文:
 定理 hasFiniteMulSupport_inv
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   rw [HasFiniteMulSupport]; rw [mulSupport]
   simp_rw [zpow_neg, Ne, inv_eq_one]
@@ -313,7 +313,7 @@ theorem finprod_not_dvd
 
 中文:
 定理 finprod_not_dvd
-  条件: (I : Ideal R) (hI : I != 0)
+  条件: (I : 理想 R) (hI : I != 0)
   证明: by
   classical
   have hf := hasFiniteMulSupport hI
@@ -359,7 +359,7 @@ theorem Associates.finprod_ne_zero
 
 中文:
 定理 Associates.finprod_ne_zero
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   classical
   rw [Associates.mk_ne_zero]; rw [finprod_def]
@@ -399,7 +399,7 @@ theorem finprod_count
 
 中文:
 定理 finprod_count
-  条件: (I : Ideal R) (hI : I != 0)
+  条件: (I : 理想 R) (hI : I != 0)
   结论: (Associates.mk v.asIdeal).count
   证明: by
   have h_ne_zero := Associates.finprod_ne_zero I
@@ -442,7 +442,7 @@ theorem finprod_heightOneSpectrum_factorization
 
 中文:
 定理 finprod_heightOneSpectrum_factorization
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   rw [← associated_iff_eq]; rw [← Associates.mk_eq_mk_iff_associated]
   apply Associates.eq_of_eq_counts
@@ -486,7 +486,7 @@ theorem iInf_maxPowDividing_eq
 
 中文:
 定理 iInf_maxPowDividing_eq
-  条件: {I : Ideal R} (h0 : I != 0)
+  条件: {I : 理想 R} (h0 : I != 0)
   证明: by
   nth_rw 2 [← Ideal.finprod_heightOneSpectrum_factorization h0]
   classical
@@ -528,7 +528,7 @@ theorem finprod_heightOneSpectrum_factorization_coe
 
 中文:
 定理 finprod_heightOneSpectrum_factorization_coe
-  条件: {I : Ideal R} (hI : I != 0)
+  条件: {I : 理想 R} (hI : I != 0)
   证明: by
   conv_rhs => rw [← Ideal.finprod_heightOneSpectrum_factorization hI]
   rw [FractionalIdeal.coeIdeal_finprod R⁰ K (le_refl _)]
@@ -864,7 +864,7 @@ theorem count_mul'
 
 中文:
 定理 count_mul'
-  条件: (I I' : FractionalIdeal R⁰ K) [Decidable (I != 0 ∧ I' != 0)]
+  条件: (I I' : FractionalIdeal R⁰ K) [可判定 (I != 0 ∧ I' != 0)]
   证明: by
   split_ifs with h
   · exact count_mul K v h.1 h.2
@@ -925,7 +925,7 @@ theorem count_prod
 
 中文:
 定理 count_prod
-  条件: {ι} (s : Finset ι) (I : ι -> FractionalIdeal R⁰ K) (hS : 对任意 i in s, I i != 0)
+  条件: {ι} (s : 有限集 ι) (I : ι -> FractionalIdeal R⁰ K) (hS : 对任意 i in s, I i != 0)
   证明: by
   classical
   induction s using Finset.induction with
@@ -1172,7 +1172,7 @@ theorem count_maximal_coprime
 
 中文:
 定理 count_maximal_coprime
-  条件: {w : HeightOneSpectrum R} (hw : w != v)
+  条件: {w : 高一谱 R} (hw : w != v)
   证明: by
   have hw_fact : (w.asIdeal : FractionalIdeal R⁰ K) =
       spanSingleton R⁰ ((algebraMap R K) 1)⁻¹ * ↑w.asIdeal := by
@@ -1209,7 +1209,7 @@ theorem count_maximal
 
 中文:
 定理 count_maximal
-  条件: (w : HeightOneSpectrum R) [Decidable (w = v)]
+  条件: (w : 高一谱 R) [可判定 (w = v)]
   证明: by
   split_ifs with h
   · rw [h, count_self]
@@ -1242,7 +1242,7 @@ theorem count_finprod_coprime
 
 中文:
 定理 count_finprod_coprime
-  条件: (exps : HeightOneSpectrum R -> 整数)
+  条件: (exps : 高一谱 R -> 整数)
   证明: by
   apply finprod_mem_induction fun I => count K v I = 0
   · exact count_one K v
@@ -1283,7 +1283,7 @@ theorem count_finsuppProd
 
 中文:
 定理 count_finsuppProd
-  条件: (exps : HeightOneSpectrum R ->₀ 整数)
+  条件: (exps : 高一谱 R ->₀ 整数)
   证明: by
   rw [Finsupp.prod]; rw [count_prod]
   · classical simp only [count_zpow, count_maximal, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq',
@@ -1316,7 +1316,7 @@ theorem count_finprod
 
 中文:
 定理 count_finprod
-  结论: (exps : HeightOneSpectrum R -> 整数)
+  结论: (exps : 高一谱 R -> 整数)
   证明: by
   convert! count_finsuppProd K v (Finsupp.mk h_exps.toFinset exps (fun _ => h_exps.mem_toFinset))
   rw [finprod_eq_finsetProd_of_mulSupport_subset (s := h_exps.toFinset)]; rw [Finsupp.prod]
@@ -1352,7 +1352,7 @@ theorem count_coe
 
 中文:
 定理 count_coe
-  条件: {J : Ideal R} (hJ : J != 0)
+  条件: {J : 理想 R} (hJ : J != 0)
   证明: by
   rw [count_well_defined K (J := J) (a := 1)]; rw [Ideal.span_singleton_one]; rw [sub_eq_self]; rw [Nat.cast_eq_zero]; rw [← Ideal.one_eq_top]; rw [Associates.mk_one]; rw [Associates.factors_one]; rw [Associates.count_zero v.associates_irreducible]
   · simpa only [ne_eq, coeIdeal_eq_zero]
@@ -1380,7 +1380,7 @@ theorem count_coe_nonneg
 
 中文:
 定理 count_coe_nonneg
-  条件: (J : Ideal R)
+  条件: (J : 理想 R)
   结论: 0 <= count K v J
   证明: by
   by_cases hJ : J = 0
@@ -1573,8 +1573,8 @@ lemma IsDedekindDomain.exists_sup_span_eq
     exact ⟨a, by rw [← e, ← Ideal.add_eq_sup, ← mul_add, e', Ideal
 
 中文:
-引理 IsDedekindDomain.exists_sup_span_eq
-  条件: {I J : Ideal R} (hIJ : I <= J) (hI : I != 0)
+引理 是Dedekind整环.存在_sup_span_eq
+  条件: {I J : 理想 R} (hIJ : I <= J) (hI : I != 0)
   证明: by
   classical
   obtain ⟨I, rfl⟩ := Ideal.dvd_iff_le.mpr hIJ
@@ -1648,8 +1648,8 @@ lemma IsDedekindDomain.exists_eq_span_pair
   use y
 
 中文:
-引理 IsDedekindDomain.exists_eq_span_pair
-  条件: {I : Ideal R} {x : R} (hxI : x in I) (hx : x != 0)
+引理 是Dedekind整环.存在_eq_span_pair
+  条件: {I : 理想 R} {x : R} (hxI : x in I) (hx : x != 0)
   证明: by
   obtain ⟨y, rfl⟩ := exists_sup_span_eq (I.span_singleton_le_iff_mem.mpr hxI) (by simpa)
   simp_rw [← Ideal.span_union, Set.union_singleton, Set.pair_comm x]
@@ -1678,7 +1678,7 @@ lemma IsDedekindDomain.exists_add_spanSingleton_mul_eq
   have H : Ideal.span {c.den.1} * a.num <= c.num
 
 中文:
-引理 IsDedekindDomain.exists_add_spanSingleton_mul_eq
+引理 是Dedekind整环.存在_add_spanSingleton_mul_eq
   证明: by
   wlog hb' : b = 1
   · obtain ⟨x, e⟩ := this (a := b⁻¹ * a) (b := 1) (c := b⁻¹ * c) (by gcongr) (by simp [ha, hb])
@@ -1973,8 +1973,8 @@ theorem Ideal.map_algebraMap_eq_finsetProd_pow
   rw [finprod_eq_finsetProd_of_mul
 
 中文:
-定理 Ideal.map_algebraMap_eq_finsetProd_pow
-  条件: {p : Ideal S} [p.IsMaximal] (hp : p != 0)
+定理 理想.map_algebraMap_eq_finsetProd_pow
+  条件: {p : 理想 S} [p.是极大] (hp : p != 0)
   证明: by
   have h : map (algebraMap S R) p != 0 := map_ne_bot_of_ne_bot hp
   rw [← finprod_heightOneSpectrum_factorization (I := p.map (algebraMap S R)) h]
@@ -2122,8 +2122,8 @@ lemma Ideal.emultiplicity_bot
   proof: Submodule.zero_eq_bot (R := R) (M := R) ▸ emultiplicity_zero I
 
 中文:
-引理 Ideal.emultiplicity_bot
-  条件: {R : 类型} [CommSemiring R] (I : Ideal R)
+引理 理想.emultiplicity_bot
+  条件: {R : 类型} [交换半环 R] (I : 理想 R)
   结论: emultiplicity I ⊥ = ⊤
   证明: Submodule.zero_eq_bot (R := R) (M := R) ▸ emultiplicity_zero I
 
@@ -2145,8 +2145,8 @@ lemma Ideal.finprod_heightOneSpectrum_pow_multiplicity
     using finprod_heightOneSpectrum_factorization hI
 
 中文:
-引理 Ideal.finprod_heightOneSpectrum_pow_multiplicity
-  条件: {I : Ideal R} (hI : I != ⊥)
+引理 理想.finprod_heightOneSpectrum_pow_multiplicity
+  条件: {I : 理想 R} (hI : I != ⊥)
   证明: by
   simpa only [maxPowDividing_eq_pow_multiplicity hI]
     using finprod_heightOneSpectrum_factorization hI
@@ -2279,7 +2279,7 @@ exact
 
 中文:
 引理 emultiplicity_iSup
-  条件: (I : ι -> Ideal R)
+  条件: (I : ι -> 理想 R)
   证明: by
   induction ι using Finite.induction_empty_option with
   | h_empty =>
@@ -2326,7 +2326,7 @@ FiniteMultiplicity.of_prime_left (prime p) hI i
 
 中文:
 引理 multiplicity_iSup
-  条件: [Nonempty ι] {I : ι -> Ideal R} (hI : 对任意 i, I i != ⊥)
+  条件: [非空 ι] {I : ι -> 理想 R} (hI : 对任意 i, I i != ⊥)
   证明: by
   have H i : FiniteMultiplicity p.asIdeal (I i) :=
 FiniteMultiplicity.of_prime_left (prime p) hI i

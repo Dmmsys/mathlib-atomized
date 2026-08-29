@@ -56,10 +56,10 @@ class Module.Injective
     - out : forall ⦃X Y : Type v⦄ [AddCommGroup X] [AddCommGroup Y] [Module R X] [Module R Y] (f : X ->ₗ[R] Y) (_ : Function.Injective f) (g : X ->ₗ[R] Q), exists h : Y ->ₗ[R] Q, forall x, h (f x) = g x
 
 中文:
-类 Module.Injective
+类 模.单射
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 ⦃X Y : 类型v⦄ [AddCommGroup X] [AddCommGroup Y] [Module R X] [Module R Y] (f : X ->ₗ[R] Y) (_ : Function.Injective f) (g : X ->ₗ[R] Q), 存在 h : Y ->ₗ[R] Q, 对任意 x, h (f x) = g x
+    - out : 对任意 ⦃X Y : 类型v⦄ [加法交换群 X] [加法交换群 Y] [模 R X] [模 R Y] (f : X ->ₗ[R] Y) (_ : 函数.单射 f) (g : X ->ₗ[R] Q), 存在 h : Y ->ₗ[R] Q, 对任意 x, h (f x) = g x
 
 Depends on / 依赖: Module, torsionBy
 -/
@@ -77,7 +77,7 @@ definition Module.Baer
   body: forall (I : Ideal R) (g : I ->ₗ[R] Q), exists g' : R ->ₗ[R] Q, forall (x : R) (mem : x in I), g' x = g ⟨x, mem⟩
 
 中文:
-定义 Module.Baer
+定义 模.Baer
   签名: : 命题
   定义体: forall (I : Ideal R) (g : I ->ₗ[R] Q), exists g' : R ->ₗ[R] Q, forall (x : R) (mem : x in I), g' x = g ⟨x, mem⟩
 -/
@@ -102,8 +102,8 @@ lemma of_equiv
 
 中文:
 引理 of_equiv
-  条件: (e : Q ≃ₗ[R] M) (h : Module.Baer R Q)
-  结论: Module.Baer R M
+  条件: (e : Q ≃ₗ[R] M) (h : 模.Baer R Q)
+  结论: 模.Baer R M
   证明: fun I g =>
   have ⟨g', h'⟩ := h I (e.symm ∘ₗ g)
   ⟨e ∘ₗ g', by simpa [LinearEquiv.eq_symm_apply] using h'⟩
@@ -124,7 +124,7 @@ lemma congr
 中文:
 引理 congr
   条件: (e : Q ≃ₗ[R] M)
-  结论: Module.Baer R Q ↔ Module.Baer R M
+  结论: 模.Baer R Q ↔ 模.Baer R M
   证明: ⟨of_equiv e, of_equiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_equiv
@@ -151,8 +151,8 @@ lemma iff_surjective
 
 中文:
 引理 iff_surjective
-  条件: {R : 类型u} [CommRing R] [Module R M]
-  结论: Module.Baer R M ↔
+  条件: {R : 类型u} [交换环 R] [模 R M]
+  结论: 模.Baer R M ↔
   证明: by
   refine ⟨fun h I g => ?_, fun h I g => ?_⟩
   · rcases h I g with ⟨g', hg'⟩
@@ -188,11 +188,11 @@ structure ExtensionOf
     - is_extension : forall m : M, f m = toLinearPMap ⟨i m, le ⟨m, rfl⟩⟩
 
 中文:
-结构 ExtensionOf
+结构 扩张
   参数: extends N ->ₗ.[R] Q
   继承: N ->ₗ.[R] Q
   公理与运算 (2 个):
-    - le : LinearMap.range i <= domain
+    - le : 线性映射.range i <= domain
     - is_extension : 对任意 m : M, f m = toLinearPMap ⟨i m, le ⟨m, rfl⟩⟩
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_restrictScalars_finite, of_restrictScalars_finite
@@ -218,8 +218,8 @@ theorem ExtensionOf.ext
   exact LinearPMap.ext domain_eq to_fun_eq
 
 中文:
-定理 ExtensionOf.ext
-  结论: {a b : ExtensionOf i f} (domain_eq : a.domain = b.domain)
+定理 扩张.ext
+  结论: {a b : 扩张 i f} (domain_eq : a.domain = b.domain)
   证明: by
   rcases a with ⟨a, a_le, e1⟩
   congr
@@ -244,8 +244,8 @@ theorem ExtensionOf.dExt
   proof: ext domain_eq fun _ _ _ => to_fun_eq rfl
 
 中文:
-定理 ExtensionOf.dExt
-  结论: {a b : ExtensionOf i f} (domain_eq : a.domain = b.domain)
+定理 扩张.dExt
+  结论: {a b : 扩张 i f} (domain_eq : a.domain = b.domain)
   证明: ext domain_eq fun _ _ _ => to_fun_eq rfl
 
 Depends on / 依赖: domain_eq, to_fun_eq
@@ -266,8 +266,8 @@ theorem ExtensionOf.dExt_iff
     ExtensionOf.dExt h1 h2⟩
 
 中文:
-定理 ExtensionOf.dExt_iff
-  条件: {a b : ExtensionOf i f}
+定理 扩张.dExt_iff
+  条件: {a b : 扩张 i f}
   证明: ⟨fun r => r ▸ ⟨rfl, fun _ _ h => congr_arg a.toFun mod_cast h⟩, fun ⟨h1, h2⟩ =>
     ExtensionOf.dExt h1 h2⟩
 
@@ -287,7 +287,7 @@ theorem ExtensionOf.toLinearPMap_injective
   proof: fun _ _ _ => by ext <;> congr!
 
 中文:
-定理 ExtensionOf.toLinearPMap_injective
+定理 扩张.toLinearPMap_injective
   证明: fun _ _ _ => by ext <;> congr!
 
 Depends on / 依赖: ExtensionOf, ExtensionOf.toLinearPMap, toLinearPMap
@@ -314,7 +314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (ExtensionOf i f)
+  签名: 最小值 (扩张 i f)
   定义体: { X1.toLinearPMap ⊓ X2.toLinearPMap with
       le := fun x hx =>
         (by
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ExtensionOf i f)
+  签名: 偏序 (扩张 i f)
   定义体: PartialOrder.lift _ ExtensionOf.toLinearPMap_injective
 
 Depends on / 依赖: ExtensionOf, ExtensionOf.toLinearPMap_injective, PartialOrder, PartialOrder.lift, toLinearPMap_injective
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (ExtensionOf i f)
+  签名: SemilatticeInf (扩张 i f)
   定义体: ExtensionOf.toLinearPMap_injective.semilatticeInf _
     .rfl .rfl fun X Y => LinearPMap.ext rfl fun x y h => by congr
 
@@ -389,7 +389,7 @@ theorem chain_linearPMap_of_chain_extensionOf
 
 中文:
 定理 chain_linearPMap_of_chain_extensionOf
-  结论: {c : Set (ExtensionOf i f)}
+  结论: {c : 集合 (扩张 i f)}
   证明: by
   rintro _ ⟨a, a_mem, rfl⟩ _ ⟨b, b_mem, rfl⟩ ne
   exact hchain a_mem b_mem (ne_of_apply_ne _ ne)
@@ -418,8 +418,8 @@ refine le_trans hnonempty.some.le
   
 
 中文:
-定义 ExtensionOf.max
-  签名: {c : Set (ExtensionOf i f)} (hchain : IsChain (· <= ·) c)
+定义 扩张.最大值
+  签名: {c : 集合 (扩张 i f)} (hchain : IsChain (· <= ·) c)
   定义体: { LinearPMap.sSup _
       (IsChain.directedOn <| chain_linearPMap_of_chain_extensionOf hchain) with
     le := by
@@ -457,8 +457,8 @@ theorem ExtensionOf.le_max
     (Set.mem_image _ _ _).mpr ⟨a, ha, rfl⟩
 
 中文:
-定理 ExtensionOf.le_max
-  结论: {c : Set (ExtensionOf i f)} (hchain : IsChain (· <= ·) c)
+定理 扩张.le_max
+  结论: {c : 集合 (扩张 i f)} (hchain : IsChain (· <= ·) c)
   证明: LinearPMap.le_sSup (IsChain.directedOn <| chain_linearPMap_of_chain_extensionOf hchain)
     (Set.mem_image _ _ _).mpr ⟨a, ha, rfl⟩
 
@@ -488,8 +488,8 @@ instance ExtensionOf.inhabited
  
 
 中文:
-实例 ExtensionOf.inhabited
-  签名: : Inhabited (ExtensionOf i f) where
+实例 扩张.inhabited
+  签名: : 可居 (扩张 i f) where
   定义体: { domain := LinearMap.range i
       toFun :=
         { toFun := fun x => f x.2.choose
@@ -535,7 +535,7 @@ definition extensionOfMax
 
 中文:
 定义 extensionOfMax
-  签名: : ExtensionOf i f
+  签名: : 扩张 i f
   定义体: (@zorn_le_nonempty (ExtensionOf i f) _ ⟨Inhabited.default⟩ fun _ hchain hnonempty =>
       ⟨ExtensionOf.max hchain hnonempty, ExtensionOf.le_max hchain hnonempty⟩).choose
 
@@ -751,7 +751,7 @@ definition ExtensionOfMaxAdjoin.extendIdealTo
 
 中文:
 定义 ExtensionOfMaxAdjoin.extendIdealTo
-  签名: (h : Module.Baer R Q) (y : N)
+  签名: (h : 模.Baer R Q) (y : N)
   定义体: (h (ExtensionOfMaxAdjoin.ideal i f y) (ExtensionOfMaxAdjoin.idealTo i f y)).choose
 
 Depends on / 依赖: ExtensionOfMaxAdjoin, ExtensionOfMaxAdjoin.ideal, ExtensionOfMaxAdjoin.idealTo, idealTo
@@ -769,7 +769,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_is_extension
 
 中文:
 定理 ExtensionOfMaxAdjoin.extendIdealTo_is_extension
-  条件: (h : Module.Baer R Q) (y : N)
+  条件: (h : 模.Baer R Q) (y : N)
   证明: (h (ExtensionOfMaxAdjoin.ideal i f y) (ExtensionOfMaxAdjoin.idealTo i f y)).choose_spec
 
 Depends on / 依赖: ExtensionOfMaxAdjoin, ExtensionOfMaxAdjoin.ideal, ExtensionOfMaxAdjoin.idealTo, choose_spec, idealTo
@@ -796,7 +796,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_wd'
 
 中文:
 定理 ExtensionOfMaxAdjoin.extendIdealTo_wd'
-  结论: (h : Module.Baer R Q) {y : N} (r : R)
+  结论: (h : 模.Baer R Q) {y : N} (r : R)
   证明: by
   have : r in ideal i f y := by
     change (r • y) in (extensionOfMax i f).toLinearPMap.domain
@@ -831,7 +831,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_wd
 
 中文:
 定理 ExtensionOfMaxAdjoin.extendIdealTo_wd
-  结论: (h : Module.Baer R Q) {y : N} (r r' : R)
+  结论: (h : 模.Baer R Q) {y : N} (r r' : R)
   证明: by
   rw [← sub_eq_zero]; rw [← map_sub]
   convert! ExtensionOfMaxAdjoin.extendIdealTo_wd' i f h (r - r') _
@@ -858,7 +858,7 @@ theorem ExtensionOfMaxAdjoin.extendIdealTo_eq
 
 中文:
 定理 ExtensionOfMaxAdjoin.extendIdealTo_eq
-  结论: (h : Module.Baer R Q) {y : N} (r : R)
+  结论: (h : 模.Baer R Q) {y : N} (r : R)
   证明: by
   simp only [ExtensionOfMaxAdjoin.extendIdealTo_is_extension i f h _ _ hr,
     ExtensionOfMaxAdjoin.idealTo, LinearMap.coe_mk, AddHom.coe_mk]
@@ -883,7 +883,7 @@ definition ExtensionOfMaxAdjoin.extensionToFun
 
 中文:
 定义 ExtensionOfMaxAdjoin.extensionToFun
-  签名: (h : Module.Baer R Q) {y : N}
+  签名: (h : 模.Baer R Q) {y : N}
   定义体: fun x =>
   (extensionOfMax i f).toLinearPMap (ExtensionOfMaxAdjoin.fst i x) +
     ExtensionOfMaxAdjoin.extendIdealTo i f h y (ExtensionOfMaxAdjoin.snd i x)
@@ -911,7 +911,7 @@ theorem ExtensionOfMaxAdjoin.extensionToFun_wd
 
 中文:
 定理 ExtensionOfMaxAdjoin.extensionToFun_wd
-  结论: (h : Module.Baer R Q) {y : N}
+  结论: (h : 模.Baer R Q) {y : N}
   证明: by
   obtain ⟨a, ha⟩ := a
   have eq2 :
@@ -964,7 +964,7 @@ definition extensionOfMaxAdjoin
 
 中文:
 定义 extensionOfMaxAdjoin
-  签名: (h : Module.Baer R Q) (y : N)
+  签名: (h : 模.Baer R Q) (y : N)
   定义体: supExtensionOfMaxSingleton i f y -- (extensionOfMax i f).domain ⊔ Submodule.span R {y}
   le := le_trans (extensionOfMax i f).le le_sup_left
   toFun :=
@@ -1019,7 +1019,7 @@ theorem extensionOfMax_le
 
 中文:
 定理 extensionOfMax_le
-  条件: (h : Module.Baer R Q) {y : N}
+  条件: (h : 模.Baer R Q) {y : N}
   证明: ⟨le_sup_left, fun x x' EQ => by
     symm
     change ExtensionOfMaxAdjoin.extensionToFun i f h _ = _
@@ -1049,7 +1049,7 @@ theorem extensionOfMax_to_submodule_eq_top
 
 中文:
 定理 extensionOfMax_to_submodule_eq_top
-  条件: (h : Module.Baer R Q)
+  条件: (h : 模.Baer R Q)
   证明: by
   refine Submodule.eq_top_iff'.mpr fun y => ?_
   rw [← extensionOfMax_is_max i f _ (extensionOfMax_le i f h)]; rw [extensionOfMaxAdjoin]; rw [Submodule.mem_sup]
@@ -1078,7 +1078,7 @@ theorem extension_property
 
 中文:
 定理 extension_property
-  结论: (h : Module.Baer R Q)
+  结论: (h : 模.Baer R Q)
   证明: haveI : Fact (Function.Injective f) := ⟨hf⟩
   Exists.intro
     { toFun := ((extensionOfMax f g).toLinearPMap
@@ -1107,7 +1107,7 @@ theorem extension_property_addMonoidHom
 
 中文:
 定理 extension_property_addMonoidHom
-  结论: (h : Module.Baer 整数 Q)
+  结论: (h : 模.Baer 整数 Q)
   证明: have ⟨g', hg'⟩ := h.extension_property f.toIntLinearMap hf g.toIntLinearMap
   ⟨g', congr(LinearMap.toAddMonoidHom $hg')⟩
 
@@ -1131,8 +1131,8 @@ theorem injective
 
 中文:
 定理 injective
-  条件: (h : Module.Baer R Q)
-  结论: Module.Injective R Q where
+  条件: (h : 模.Baer R Q)
+  结论: 模.单射 R Q where
   证明: by
     obtain ⟨h, H⟩ := Module.Baer.extension_property h i hi f
     exact ⟨h, DFunLike.congr_fun H⟩
@@ -1159,8 +1159,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: [Small.{v} R] (inj : Module.Injective R Q)
-  结论: Module.Baer R Q
+  条件: [Small.{v} R] (inj : 模.单射 R Q)
+  结论: 模.Baer R Q
   证明: by
   intro I g
   let eI := Shrink.linearEquiv R I
@@ -1191,7 +1191,7 @@ theorem iff_injective
 中文:
 定理 iff_injective
   条件: [Small.{v} R]
-  结论: Module.Baer R Q ↔ Module.Injective R Q
+  结论: 模.Baer R Q ↔ 模.单射 R Q
   证明: ⟨Module.Baer.injective, Module.Baer.of_injective⟩
 -/
 protected theorem iff_injective [Small.{v} R] : Module.Baer R Q ↔ Module.Injective R Q :=
@@ -1214,7 +1214,7 @@ lemma Module.ulift_injective_of_injective
 ⟨ULift.moduleEquiv.symm.toLinearMap ∘ₗ g', fun r hr => ULift.ext _ _ hg' r hr⟩
 
 中文:
-引理 Module.ulift_injective_of_injective
+引理 模.ulift_injective_of_injective
   结论: [Small.{v} R]
   证明: Module.Baer.injective fun I g =>
   have ⟨g', hg'⟩ := Module.Baer.iff_injective.mpr inj I (ULift.moduleEquiv.toLinearMap ∘ₗ g)
@@ -1239,7 +1239,7 @@ lemma Module.injective_of_ulift_injective
       (ULift.moduleEquiv.symm.toLinearMap ∘ₗ g ∘ₗ eX.toLinearMa
 
 中文:
-引理 Module.injective_of_ulift_injective
+引理 模.injective_of_ulift_injective
   证明: let eX := ULift.moduleEquiv.{_, _, v'} (R := R) (M := X)
     have ⟨g', hg'⟩ := inj.out (ULift.moduleEquiv.{_, _, v'}.symm.toLinearMap ∘ₗ f ∘ₗ eX.toLinearMap)
       (by exact ULift.moduleEquiv.symm.injective.comp <| hf.comp eX.injective)
@@ -1269,7 +1269,7 @@ lemma Module.injective_iff_ulift_injective
    Module.injective_of_ulift_injective R⟩
 
 中文:
-引理 Module.injective_iff_ulift_injective
+引理 模.injective_iff_ulift_injective
   证明: ⟨Module.ulift_injective_of_injective R,
    Module.injective_of_ulift_injective R⟩
 
@@ -1299,7 +1299,7 @@ lemma Module.Injective.extension_property
   proof: (Module.Baer.of_injective inj).extension_property f hf g
 
 中文:
-引理 Module.Injective.extension_property
+引理 模.单射.extension_property
   证明: (Module.Baer.of_injective inj).extension_property f hf g
 
 Depends on / 依赖: Module, Module.Baer.of_injective, extension_property, of_injective
@@ -1325,7 +1325,7 @@ instance Module.Injective.pi
     exact DFunLike.congr_fun (hl i) x⟩
 
 中文:
-实例 Module.Injective.pi
+实例 模.单射.pi
   定义体: ⟨fun X Y _ _ _ _ f hf g => by
     choose l hl using fun i => extension_property R _ _ _ f hf ((LinearMap.proj i).comp g)
     refine ⟨LinearMap.pi l, fun x => ?_⟩
@@ -1362,8 +1362,8 @@ theorem Module.Injective.of_ringEquiv
   have hf (x) (
 
 中文:
-定理 Module.Injective.of_ringEquiv
-  结论: {R : 类型u} [Ring R] [Small.{v} R] {S : 类型u'} [Ring S]
+定理 模.单射.of_ringEquiv
+  结论: {R : 类型u} [环 R] [Small.{v} R] {S : 类型u'} [环 S]
   证明: by
   apply Module.Baer.injective (fun I g => ?_)
   let I' := Submodule.map e₁.symm.toSemilinearEquiv.toLinearMap I

@@ -45,11 +45,11 @@ inductive colimitsClosure
 
 中文:
 归纳类型 colimitsClosure
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (3 个):
     - of_mem: (X : C) (hX : P X) : colimitsClosure X
     - of_isoClosure: {X Y : C} (e : X ≅ Y) (hX : colimitsClosure X) : colimitsClosure Y
-    - of_colimitPresentation: {X : C} {a : α} (pres : ColimitPresentation (J a) X) (h : 对任意 j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
+    - of_colimitPresentation: {X : C} {a : α} (pres : 余limitPresentation (J a) X) (h : 对任意 j, colimitsClosure (pres.diag.obj j)) : colimitsClosure X
 -/
 inductive colimitsClosure : ObjectProperty C
   | of_mem (X : C) (hX : P X) : colimitsClosure X
@@ -85,8 +85,8 @@ instance [P.Nonempty]
   body: .mono (P.le_colimitsClosure J)
 
 中文:
-实例 [P.Nonempty]
-  签名: : (P.colimitsClosure J).Nonempty
+实例 [P.非空]
+  签名: : (P.colimitsClosure J).非空
   定义体: .mono (P.le_colimitsClosure J)
 
 Depends on / 依赖: P.le_colimitsClosure, le_colimitsClosure
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.colimitsClosure J).IsClosedUnderIsomorphisms
+  签名: (P.colimitsClosure J).在同构下封闭
   定义体: .of_isoClosure e hX
 
 Depends on / 依赖: of_isoClosure
@@ -133,7 +133,7 @@ lemma colimitsClosure_le
 
 中文:
 引理 colimitsClosure_le
-  结论: {Q : Object命题erty C} [Q.IsClosedUnderIsomorphisms]
+  结论: {Q : ObjectProperty C} [Q.在同构下封闭]
   证明: by
   intro X hX
   induction hX with
@@ -163,7 +163,7 @@ lemma colimitsClosure_monotone
 
 中文:
 引理 colimitsClosure_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: colimitsClosure_le (h.trans (Q.le_colimitsClosure J))
 
 Depends on / 依赖: Q.le_colimitsClosure, colimitsClosure_le, h.trans, le_colimitsClosure
@@ -184,7 +184,7 @@ lemma colimitsClosure_eq_self
 
 中文:
 引理 colimitsClosure_eq_self
-  结论: [P.IsClosedUnderIsomorphisms]
+  结论: [P.在同构下封闭]
   证明: le_antisymm (colimitsClosure_le (le_refl P)) (P.le_colimitsClosure J)
 
 @[simp]
@@ -208,7 +208,7 @@ lemma colimitsClosure_bot
 
 中文:
 引理 colimitsClosure_bot
-  条件: [对任意 (a : α), Nonempty (J a)]
+  条件: [对任意 (a : α), 非空 (J a)]
   证明: colimitsClosure_eq_self _ _
 
 @[simp]
@@ -230,7 +230,7 @@ lemma colimitsClosure_top
 
 中文:
 引理 colimitsClosure_top
-  结论: colimitsClosure (⊤ : Object命题erty C) J = ⊤
+  结论: colimitsClosure (⊤ : ObjectProperty C) J = ⊤
   证明: colimitsClosure_eq_self _ _
 
 Depends on / 依赖: colimitsClosure_eq_self, infer_instance, truncLE
@@ -276,7 +276,7 @@ abbreviation colimitClosure
 
 中文:
 缩写 colimitClosure
-  签名: (J : 类型) [Category* J]
+  签名: (J : 类型) [范畴* J]
   定义体: P.colimitsClosure (fun (_ : Unit) => J)
 
 Depends on / 依赖: P.colimitsClosure, colimitsClosure

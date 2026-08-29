@@ -33,8 +33,8 @@ theorem isIntegral_stableUnderComposition
   introv R hf hg; exact hf.trans _ _ hg
 
 中文:
-定理 isIntegral_stableUnderComposition
-  结论: StableUnderComposition fun f => f.Is整数egral
+定理 is整数egral_stableUnderComposition
+  结论: StableUnderComposition fun f => f.是整
   证明: by
   introv R hf hg; exact hf.trans _ _ hg
 
@@ -56,8 +56,8 @@ theorem isIntegral_respectsIso
   apply RingHom.isIntegralElem_map
 
 中文:
-定理 isIntegral_respectsIso
-  结论: RespectsIso fun f => f.Is整数egral
+定理 is整数egral_respectsIso
+  结论: RespectsIso fun f => f.是整
   证明: by
   apply isIntegral_stableUnderComposition.respectsIso
   introv x
@@ -85,8 +85,8 @@ theorem isIntegral_isStableUnderBaseChange
   infer_instance
 
 中文:
-定理 isIntegral_isStableUnderBaseChange
-  结论: IsStableUnderBaseChange fun f => f.Is整数egral
+定理 is整数egral_isStableUnderBaseChange
+  结论: 是StableUnderBaseChange fun f => f.是整
   证明: by
   refine IsStableUnderBaseChange.mk isIntegral_respectsIso ?_
   introv int
@@ -117,7 +117,7 @@ theorem isIntegral_ofLocalizationSpan
   have : IsScalarTower R (Localization.Away t) (Localization.Away (f t)) := .of_algebra
 
 中文:
-定理 isIntegral_ofLocalizationSpan
+定理 is整数egral_ofLocalizationSpan
   证明: by
   introv R hs H r
   let := f.toAlgebra

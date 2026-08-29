@@ -67,7 +67,7 @@ class IsExtension
     - exact : i.range = p.ker
 
 中文:
-类 IsExtension
+类 是扩张
   参数: (i : N ->ₗ⁅R⁆ L) (p : L ->ₗ⁅R⁆ M)
   公理与运算 (3 个):
     - ker_eq_bot : i.ker = ⊥
@@ -88,7 +88,7 @@ lemma _root_.LieHom.range_eq_ker_iff
   proof: ⟨fun h x => by simp [← LieHom.coe_range, h], fun h => (p.ker.toLieSubalgebra.ext i.range h).symm⟩
 
 中文:
-引理 _root_.LieHom.range_eq_ker_iff
+引理 _root_.Lie态射.range_eq_ker_iff
   条件: (i : N ->ₗ⁅R⁆ L) (p : L ->ₗ⁅R⁆ M)
   证明: ⟨fun h x => by simp [← LieHom.coe_range, h], fun h => (p.ker.toLieSubalgebra.ext i.range h).symm⟩
 
@@ -107,8 +107,8 @@ definition IsExtension.kerEquivRange
   body: .ofEq (R := R) (M := L) p.ker i.range by simp [exact (i := i) (p := p)]
 
 中文:
-定义 IsExtension.kerEquivRange
-  签名: (i : N ->ₗ⁅R⁆ L) (p : L ->ₗ⁅R⁆ M) [IsExtension i p]
+定义 是扩张.kerEquivRange
+  签名: (i : N ->ₗ⁅R⁆ L) (p : L ->ₗ⁅R⁆ M) [是扩张 i p]
   定义体: .ofEq (R := R) (M := L) p.ker i.range by simp [exact (i := i) (p := p)]
 
 Depends on / 依赖: i.range, p.ker
@@ -133,15 +133,15 @@ structure Extension
     - IsExtension : IsExtension incl proj
 
 中文:
-结构 Extension
+结构 扩张
   参数: where
   公理与运算 (6 个):
     - L : 类型
-    - instLieRing : LieRing L
-    - instLieAlgebra : LieAlgebra R L
+    - instLieRing : Lie环 L
+    - instLieAlgebra : Lie代数 R L
     - incl : N ->ₗ⁅R⁆ L
     - proj : L ->ₗ⁅R⁆ M
-    - IsExtension : IsExtension incl proj
+    - IsExtension : 是扩张 incl proj
 -/
 structure Extension where
   /-- The middle object in the sequence. -/
@@ -168,8 +168,8 @@ definition IsExtension.extension
   body: ⟨L, _, _, i, p, h⟩
 
 中文:
-定义 IsExtension.extension
-  签名: {i : N ->ₗ⁅R⁆ L} {p : L ->ₗ⁅R⁆ M} (h : IsExtension i p)
+定义 是扩张.extension
+  签名: {i : N ->ₗ⁅R⁆ L} {p : L ->ₗ⁅R⁆ M} (h : 是扩张 i p)
   定义体: ⟨L, _, _, i, p, h⟩
 -/
 @[simps] def IsExtension.extension {i : N ->ₗ⁅R⁆ L} {p : L ->ₗ⁅R⁆ M} (h : IsExtension i p) :
@@ -188,7 +188,7 @@ lemma isExtension_of_surjective
 
 中文:
 引理 isExtension_of_surjective
-  条件: (f : L ->ₗ⁅R⁆ M) (hf : Surjective f)
+  条件: (f : L ->ₗ⁅R⁆ M) (hf : 满射 f)
   证明: LieIdeal.ker_incl f.ker
   range_eq_top := (LieHom.range_eq_top f).mpr hf
   exact := LieIdeal.incl_range f.ker
@@ -217,7 +217,7 @@ lemma incl_apply_mem_ker
 
 中文:
 引理 incl_apply_mem_ker
-  条件: (E : Extension R M L) (x : M)
+  条件: (E : 扩张 R M L) (x : M)
   证明: Exact.apply_apply_eq_zero ((E.incl.range_eq_ker_iff E.proj).mp E.IsExtension.exact) x
 
 Depends on / 依赖: E.IsExtension.exact, E.incl.range_eq_ker_iff, E.proj, Exact.apply_apply_eq_zero, IsExtension, apply_apply_eq_zero, range_eq_ker_iff
@@ -236,7 +236,7 @@ lemma proj_incl
 
 中文:
 引理 proj_incl
-  条件: (E : Extension R M L) (x : M)
+  条件: (E : 扩张 R M L) (x : M)
   证明: LieHom.mem_ker.mp (incl_apply_mem_ker E x)
 -/
 @[simp] lemma proj_incl (E : Extension R M L) (x : M) :
@@ -253,7 +253,7 @@ lemma incl_injective
 
 中文:
 引理 incl_injective
-  条件: (E : Extension R M L)
+  条件: (E : 扩张 R M L)
   证明: (LieHom.ker_eq_bot E.incl).mp E.IsExtension.ker_eq_bot
 
 Depends on / 依赖: E.IsExtension.ker_eq_bot, E.incl, IsExtension, LieHom, LieHom.ker_eq_bot, ker_eq_bot
@@ -272,7 +272,7 @@ lemma proj_surjective
 
 中文:
 引理 proj_surjective
-  条件: (E : Extension R M L)
+  条件: (E : 扩张 R M L)
   证明: (LieHom.range_eq_top E.proj).mp E.IsExtension.range_eq_top
 
 Depends on / 依赖: E.IsExtension.range_eq_top, E.proj, IsExtension, LieHom, LieHom.range_eq_top, range_eq_top
@@ -300,7 +300,7 @@ structure ofTwoCocycle
 
 中文:
 结构 ofTwoCocycle
-  参数: {R L M} [CommRing R] [LieRing L] [LieAlgebra R L] [AddCommGroup M]
+  参数: {R L M} [交换环 R] [Lie环 L] [Lie代数 R L] [加法交换群 M]
   公理与运算 (1 个):
     - carrier : L × M
 -/
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (ofTwoCocycle c)
+  签名: 加法交换群 (ofTwoCocycle c)
   定义体: (ofProd c).symm.addCommGroup
 
 Depends on / 依赖: addCommGroup, ofProd, symm.addCommGroup
@@ -359,7 +359,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (ofTwoCocycle c)
+  签名: 模 R (ofTwoCocycle c)
   定义体: (ofProd c).symm.module R
 
 Depends on / 依赖: module, ofProd, symm.module
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (ofTwoCocycle c)
+  签名: Lie环 (ofTwoCocycle c)
   定义体: letI x₁ := ((ofProd c).symm x).1; letI x₂ := ((ofProd c).symm x).2
     letI y₁ := ((ofProd c).symm y).1; letI y₂ := ((ofProd c).symm y).2
     ofProd c (⁅x₁, y₁⁆, (c : L ->ₗ[R] L ->ₗ[R] M) x₁ y₁ + ⁅x₁, y₂⁆ - ⁅y₁, x₂⁆)
@@ -588,7 +588,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra R (ofTwoCocycle c)
+  签名: Lie代数 R (ofTwoCocycle c)
   定义体: by
     simp only [bracket_ofTwoCocycle]
     exact Equiv.congr_arg (by simp [← smul_add, smul_sub])
@@ -618,7 +618,7 @@ definition LieEquiv.ofCoboundary
 map_lie' := ((ofProd c').eq_symm_apply).1 by simp [bracket_ofTwoCocycle,
 
 中文:
-定义 LieEquiv.ofCoboundary
+定义 Lie等价.ofCoboundary
   签名: (c' : twoCocycle R L M) (x : oneCochain R L M)
   定义体: letI z := (ofProd c).symm y
     ofProd c' (z.1, z.2 - x z.1)
@@ -676,7 +676,7 @@ definition ofTwoCocycle
 
 中文:
 定义 ofTwoCocycle
-  签名: : Extension R M L where
+  签名: : 扩张 R M L where
   定义体: LieAlgebra.ofTwoCocycle c
   instLieRing := inferInstance
   instLieAlgebra := inferInstance
@@ -737,7 +737,7 @@ definition ofAlg
 
 中文:
 定义 ofAlg
-  签名: : LieAlgebra.ofTwoCocycle c ≃ₗ⁅R⁆ (ofTwoCocycle c).L
+  签名: : Lie代数.ofTwoCocycle c ≃ₗ⁅R⁆ (ofTwoCocycle c).L
   定义体: LieEquiv.refl
 
 Depends on / 依赖: LieEquiv, LieEquiv.refl
@@ -820,7 +820,7 @@ lemma lie_incl_mem_ker
 
 中文:
 引理 lie_incl_mem_ker
-  条件: {E : Extension R M L} (x : E.L) (y : M)
+  条件: {E : 扩张 R M L} (x : E.L) (y : M)
   证明: by
   rw [LieHom.mem_ker]; rw [LieHom.map_lie]; rw [proj_incl]; rw [lie_zero]
 
@@ -847,7 +847,7 @@ definition toKer
 
 中文:
 定义 toKer
-  签名: (E : Extension R M L)
+  签名: (E : 扩张 R M L)
   定义体: ⟨E.incl m, E.incl_apply_mem_ker m⟩
   map_add' _ _ := by simp
   map_smul' _ _ := by simp
@@ -882,7 +882,7 @@ lemma lie_toKer_apply
 
 中文:
 引理 lie_toKer_apply
-  条件: (E : Extension R M L) (x : M) (y : E.L)
+  条件: (E : 扩张 R M L) (x : M) (y : E.L)
   证明: by
   rfl
 
@@ -928,7 +928,7 @@ definition ringModuleOf
 
 中文:
 定义 ringModuleOf
-  签名: [IsLieAbelian M] (E : Extension R M L)
+  签名: [IsLieAbelian M] (E : 扩张 R M L)
   定义体: E.toKer.symm ⁅E.proj_surjective.hasRightInverse.choose x, E.toKer y⁆
   add_lie x y m := by
     set h := E.proj_surjective.hasRightInverse
@@ -967,7 +967,7 @@ lemma ringModuleOf_bracket_proj
 
 中文:
 引理 ringModuleOf_bracket_proj
-  条件: [IsLieAbelian M] (E : Extension R M L) (y : M) (z : E.L)
+  条件: [IsLieAbelian M] (E : 扩张 R M L) (y : M) (z : E.L)
   证明: E.ringModuleOf
     ⁅E.proj z, y⁆ = E.toKer.symm ⁅z, E.toKer y⁆ := by
   obtain ⟨x, hx⟩ : E.proj_surjective.hasRightInverse.choose (E.proj z) - z in E.incl.range := by
@@ -1003,7 +1003,7 @@ lemma lieModuleOf
 
 中文:
 引理 lieModuleOf
-  条件: [IsLieAbelian M] (E : Extension R M L)
+  条件: [IsLieAbelian M] (E : 扩张 R M L)
   证明: E.ringModuleOf
     LieModule R L M := by
   let := E.ringModuleOf
@@ -1037,7 +1037,7 @@ lemma toKer_bracket
 
 中文:
 引理 toKer_bracket
-  条件: [IsLieAbelian M] (E : Extension R M L) (x : E.proj.ker) (y : L)
+  条件: [IsLieAbelian M] (E : 扩张 R M L) (x : E.proj.ker) (y : L)
   证明: E.ringModuleOf
     E.toKer ⁅y, E.toKer.symm x⁆ = ⁅E.proj_surjective.hasRightInverse.choose y, x⁆ := by
   simp
@@ -1061,7 +1061,7 @@ lemma lie_apply_proj_of_leftInverse_eq
 
 中文:
 引理 lie_apply_proj_of_leftInverse_eq
-  结论: [IsLieAbelian M] (E : Extension R M L) {s : L ->ₗ[R] E.L}
+  结论: [IsLieAbelian M] (E : 扩张 R M L) {s : L ->ₗ[R] E.L}
   证明: by
   rw [← sub_eq_zero]; rw [← sub_lie]
   exact trivial_lie_zero E.proj.ker E.proj.ker ⟨_, (by simp [hs.eq])⟩ y
@@ -1089,7 +1089,7 @@ abbreviation twoCocycleAux
 
 中文:
 缩写 twoCocycleAux
-  签名: (E : Extension R M L) {s : L ->ₗ[R] E.L}
+  签名: (E : 扩张 R M L) {s : L ->ₗ[R] E.L}
   定义体: { toFun y := ⟨⁅s x, s y⁆ - s ⁅x, y⁆, by simp [hs.eq]⟩
       map_add' _ _ := by simp; abel
       map_smul' _ _ := by simp [smul_sub] }
@@ -1127,7 +1127,7 @@ definition twoCocycleOf
 
 中文:
 定义 twoCocycleOf
-  签名: [IsLieAbelian M] (E : Extension R M L) {s : L ->ₗ[R] E.L}
+  签名: [IsLieAbelian M] (E : 扩张 R M L) {s : L ->ₗ[R] E.L}
   定义体: E.ringModuleOf
     have := E.lieModuleOf
     twoCocycle R L M where
@@ -1184,7 +1184,7 @@ definition oneCochainOfTwoSplitting
 
 中文:
 定义 oneCochainOfTwoSplitting
-  签名: (E : Extension R M L) {s₁ s₂ : L ->ₗ[R] E.L}
+  签名: (E : 扩张 R M L) {s₁ s₂ : L ->ₗ[R] E.L}
   定义体: E.toKer.symm ⟨(s₁ x) - (s₂ x), LieHom.mem_ker.mpr (by rw [map_sub, sub_eq_zero, hs₁, hs₂])⟩
   map_add' _ _ := by
     rw [← map_add]; rw [AddMemClass.mk_add_mk]; rw [EquivLike.apply_eq_iff_eq]; rw [Subtype.mk_eq_mk]; rw [map_add]; rw [map_add]; rw [add_sub_add_comm]
@@ -1219,7 +1219,7 @@ lemma d₁₂_oneCochainOfTwoSplitting
 
 中文:
 引理 d₁₂_oneCochainOfTwoSplitting
-  结论: [IsLieAbelian M] (E : Extension R M L) {s₁ s₂ : L ->ₗ[R] E.L}
+  结论: [IsLieAbelian M] (E : 扩张 R M L) {s₁ s₂ : L ->ₗ[R] E.L}
   证明: E.ringModuleOf
     letI := E.lieModuleOf
     d₁₂ R L M (E.oneCochainOfTwoSplitting hs₁ hs₂) = E.twoCocycleOf hs₁ - E.twoCocycleOf hs₂ := by

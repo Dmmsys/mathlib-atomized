@@ -43,7 +43,7 @@ theorem hofer
 
 中文:
 定理 hofer
-  结论: {X : 类型} [MetricSpace X] [CompleteSpace X] (x : X) (ε : 实数) (ε_pos : 0 < ε)
+  结论: {X : 类型} [度量空间 X] [完备空间 X] (x : X) (ε : 实数) (ε_pos : 0 < ε)
   证明: by
   by_contra! H
   have reformulation : forall (x') (k : Nat), ε * ϕ x <= ε / 2 ^ k * ϕ x' ↔ 2 ^ k * ϕ x <= ϕ x' := by

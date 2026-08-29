@@ -140,7 +140,7 @@ theorem ne_zero_iff_exists_coeff_ne_zero_and_weight
   simpa using ne_zero_iff_exists_coeff_ne_zero f
 
 中文:
-定理 ne_zero_iff_exists_coeff_ne_zero_and_weight
+定理 ne_zero_iff_存在_coeff_ne_zero_and_weight
   证明: by
   simpa using ne_zero_iff_exists_coeff_ne_zero f
 
@@ -249,7 +249,7 @@ theorem exists_coeff_ne_zero_and_weightedOrder
   exact Nat.find_spec h1
 
 中文:
-定理 exists_coeff_ne_zero_and_weightedOrder
+定理 存在_coeff_ne_zero_and_weightedOrder
   证明: by
   classical
   simp_rw [weightedOrder, dif_neg ((ne_zero_iff_weightedOrder_finite w).mpr h), Nat.cast_inj]
@@ -445,7 +445,7 @@ theorem weightedOrder_monomial
 
 中文:
 定理 weightedOrder_monomial
-  条件: {d : σ ->₀ 自然数} {a : R} [Decidable (a = 0)]
+  条件: {d : σ ->₀ 自然数} {a : R} [可判定 (a = 0)]
   证明: by
   classical
   split_ifs with h
@@ -515,7 +515,7 @@ theorem weightedOrder_one
 
 中文:
 定理 weightedOrder_one
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (1 : MvPowerSeries σ R).weightedOrder w = 0
   证明: weightedOrder_monomial_of_ne_zero w one_ne_zero
 
@@ -720,7 +720,7 @@ alias weightedOrder_mul_ge := le_weightedOrder_mul
 
 中文:
 定理 le_weightedOrder_prod
-  结论: {R : 类型} [CommSemiring R] {ι : 类型} (w : σ -> 自然数)
+  结论: {R : 类型} [交换半环 R] {ι : 类型} (w : σ -> 自然数)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -855,7 +855,7 @@ theorem coeff_mul_prod_one_sub_of_lt_weightedOrder
 
 中文:
 定理 coeff_mul_prod_one_sub_of_lt_weightedOrder
-  结论: {R ι : 类型} [CommRing R] (d : σ ->₀ 自然数)
+  结论: {R ι : 类型} [交换环 R] (d : σ ->₀ 自然数)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -926,7 +926,7 @@ theorem weightedOrder_toSubring
 
 中文:
 定理 weightedOrder_toSubring
-  条件: (p : MvPowerSeries σ R) (T : Subring R) (hp : 对任意 n, p.coeff n in T)
+  条件: (p : MvPowerSeries σ R) (T : 子环 R) (hp : 对任意 n, p.coeff n in T)
   证明: by
   refine eq_of_le_of_ge ?_ ?_
   · refine le_weightedOrder w fun d hd => by
@@ -965,7 +965,7 @@ theorem ne_zero_iff_exists_coeff_ne_zero_and_degree
   exact ne_zero_iff_exists_coeff_ne_zero_and_weight (fun _ => 1)
 
 中文:
-定理 ne_zero_iff_exists_coeff_ne_zero_and_degree
+定理 ne_zero_iff_存在_coeff_ne_zero_and_degree
   证明: by
   simp_rw [degree_eq_weight_one]
   exact ne_zero_iff_exists_coeff_ne_zero_and_weight (fun _ => 1)
@@ -1062,7 +1062,7 @@ theorem exists_coeff_ne_zero_and_order
   exact exists_coeff_ne_zero_and_weightedOrder _ h
 
 中文:
-定理 exists_coeff_ne_zero_and_order
+定理 存在_coeff_ne_zero_and_order
   条件: (h : f.order.to自然数 = f.order)
   证明: by
   simp_rw [degree_eq_weight_one]
@@ -1209,7 +1209,7 @@ theorem order_monomial
 
 中文:
 定理 order_monomial
-  条件: {d : σ ->₀ 自然数} {a : R} [Decidable (a = 0)]
+  条件: {d : σ ->₀ 自然数} {a : R} [可判定 (a = 0)]
   证明: by
   rw [degree_eq_weight_one]
   exact weightedOrder_monomial _
@@ -1255,7 +1255,7 @@ theorem min_order_le_add
 
 中文:
 定理 min_order_le_add
-  结论: min f.order g.order <= (f + g).order
+  结论: 最小值 f.order g.order <= (f + g).order
   证明: min_weightedOrder_le_add _
 
 Depends on / 依赖: min_weightedOrder_le_add
@@ -1336,7 +1336,7 @@ theorem le_order_prod
 
 中文:
 定理 le_order_prod
-  结论: {R : 类型} [CommSemiring R] {ι : 类型}
+  结论: {R : 类型} [交换半环 R] {ι : 类型}
   证明: le_weightedOrder_prod _ _ _
 
 Depends on / 依赖: le_weightedOrder_prod
@@ -1539,7 +1539,7 @@ theorem coeff_mul_prod_one_sub_of_lt_order
 
 中文:
 定理 coeff_mul_prod_one_sub_of_lt_order
-  结论: {R ι : 类型} [CommRing R] (d : σ ->₀ 自然数) (s : Finset ι)
+  结论: {R ι : 类型} [交换环 R] (d : σ ->₀ 自然数) (s : 有限集 ι)
   证明: by
   rw [degree_eq_weight_one]
   exact coeff_mul_prod_one_sub_of_lt_weightedOrder _ d s f g
@@ -1592,7 +1592,7 @@ theorem order_toSubring
 
 中文:
 定理 order_toSubring
-  条件: (p : MvPowerSeries σ R) (T : Subring R) (hp : 对任意 n, p.coeff n in T)
+  条件: (p : MvPowerSeries σ R) (T : 子环 R) (hp : 对任意 n, p.coeff n in T)
   证明: by
   refine eq_of_le_of_ge ?_ ?_
   · exact le_order fun d hd => by simp [coeff_of_lt_order hd, ← p.coeff_toSubring T hp]

@@ -113,7 +113,7 @@ lemma hasDerivAt_fourierChar
 中文:
 引理 hasDerivAt_fourierChar
   条件: (x : 实数)
-  结论: HasDerivAt (𝐞 · : 实数 -> Complex) (2 * π * I * 𝐞 x) x
+  结论: 在点处可导 (𝐞 · : 实数 -> 复形) (2 * π * I * 𝐞 x) x
   证明: by
   have h1 (y : Real) : 𝐞 y = fourier 1 (y : UnitAddCircle) := by
     rw [fourierChar_apply]; rw [fourier_coe_apply]
@@ -140,7 +140,7 @@ lemma differentiable_fourierChar
 
 中文:
 引理 differentiable_fourierChar
-  结论: Differentiable 实数 (𝐞 · : 实数 -> Complex)
+  结论: 可微 实数 (𝐞 · : 实数 -> 复形)
   证明: fun x => (Real.hasDerivAt_fourierChar x).differentiableAt
 
 Depends on / 依赖: Real.hasDerivAt_fourierChar, differentiableAt, hasDerivAt_fourierChar
@@ -160,7 +160,7 @@ lemma deriv_fourierChar
 中文:
 引理 deriv_fourierChar
   条件: (x : 实数)
-  结论: deriv (𝐞 · : 实数 -> Complex) x = 2 * π * I * 𝐞 x
+  结论: deriv (𝐞 · : 实数 -> 复形) x = 2 * π * I * 𝐞 x
   证明: (Real.hasDerivAt_fourierChar x).deriv
 
 Depends on / 依赖: Real.hasDerivAt_fourierChar, hasDerivAt_fourierChar
@@ -460,7 +460,7 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.fourierSMulRight
   -- 
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.fourierSMulRight
+引理 _root_.测度论.AEStronglyMeasurable.fourierSMulRight
   证明: by
   apply AEStronglyMeasurable.fun_const_smul
   have aux0 : Continuous fun p : (W ->L[Real] Real) × E => p.1.smulRight p.2 :=
@@ -499,7 +499,7 @@ theorem hasFDerivAt_fourierIntegral
     (fourierIntegral_convergent_iff continuous_fourie
 
 中文:
-定理 hasFDerivAt_fourierIntegral
+定理 hasFDerivAt_fourier整数egral
   证明: by
   let F : W -> V -> E := fun w' v => 𝐞 (-L v w') • f v
   let F' : W -> V -> W ->L[Real] E := fun w' v => 𝐞 (-L v w') • fourierSMulRight L f v
@@ -546,7 +546,7 @@ lemma fderiv_fourierIntegral
   exact (hasFDerivAt_fourierIntegral L hf hf' w).fderiv
 
 中文:
-引理 fderiv_fourierIntegral
+引理 fderiv_fourier整数egral
   证明: by
   ext w : 1
   exact (hasFDerivAt_fourierIntegral L hf hf' w).fderiv
@@ -569,7 +569,7 @@ lemma differentiable_fourierIntegral
   proof: fun w => (hasFDerivAt_fourierIntegral L hf hf' w).differentiableAt
 
 中文:
-引理 differentiable_fourierIntegral
+引理 differentiable_fourier整数egral
   证明: fun w => (hasFDerivAt_fourierIntegral L hf hf' w).differentiableAt
 
 Depends on / 依赖: differentiableAt, hasFDerivAt_fourierIntegral
@@ -595,8 +595,8 @@ theorem fourierIntegral_fderiv
     simpa only [fourierInt
 
 中文:
-定理 fourierIntegral_fderiv
-  结论: [MeasurableSpace V] [BorelSpace V] [FiniteDimensional 实数 V]
+定理 fourier整数egral_fderiv
+  结论: [可测空间 V] [Borel空间 V] [有限维 实数 V]
   证明: by
   ext w y
   let g (v : V) : Complex := 𝐞 (-L v w)
@@ -664,7 +664,7 @@ lemma fourierPowSMulRight_apply
 
 中文:
 引理 fourierPowSMulRight_apply
-  条件: {f : V -> E} {v : V} {n : 自然数} {m : Fin n -> W}
+  条件: {f : V -> E} {v : V} {n : 自然数} {m : 有限集 n -> W}
   证明: by
   simp [fourierPowSMulRight]
 -/
@@ -710,8 +710,8 @@ lemma _root_.Continuous.fourierPowSMulRight
   exact Continuous.comp (map_continuous _) (continuous_pi (fun _ => L.continuous))
 
 中文:
-引理 _root_.Continuous.fourierPowSMulRight
-  条件: {f : V -> E} (hf : Continuous f) (n : 自然数)
+引理 _root_.连续.fourierPowSMulRight
+  条件: {f : V -> E} (hf : 连续 f) (n : 自然数)
   证明: by
   simp_rw [fourierPowSMulRight_eq_comp]
   apply Continuous.fun_const_smul
@@ -740,7 +740,7 @@ lemma _root_.ContDiff.fourierPowSMulRight
   exact contDiff_pi.2 (fun _ => L.contDiff)
 
 中文:
-引理 _root_.ContDiff.fourierPowSMulRight
+引理 _root_.连续可微.fourierPowSMulRight
   证明: by
   simp_rw [fourierPowSMulRight_eq_comp]
   apply ContDiff.const_smul
@@ -921,7 +921,7 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.fourierPowSMulRight
   exact Continuous.comp (map_continuous _) (continuous_pi (fun _ => L.continuo
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.fourierPowSMulRight
+引理 _root_.测度论.AEStronglyMeasurable.fourierPowSMulRight
   证明: by
   simp_rw [fourierPowSMulRight_eq_comp]
   apply AEStronglyMeasurable.fun_const_smul
@@ -953,7 +953,7 @@ lemma integrable_fourierPowSMulRight
 
 中文:
 引理 integrable_fourierPowSMulRight
-  结论: {n : 自然数} (hf : 整数egrable (fun v => ‖v‖ ^ n * ‖f v‖) μ)
+  结论: {n : 自然数} (hf : 可积 (fun v => ‖v‖ ^ n * ‖f v‖) μ)
   证明: by
   refine (hf.const_mul ((2 * π * ‖L‖) ^ n)).mono' (h'f.fourierPowSMulRight L n) ?_
   filter_upwards with v
@@ -983,7 +983,7 @@ lemma hasFTaylorSeriesUpTo_fourierIntegral
   ·
 
 中文:
-引理 hasFTaylorSeriesUpTo_fourierIntegral
+引理 hasFTaylorSeriesUpTo_fourier整数egral
   结论: {N : 自然数∞ω}
   证明: by
   constructor
@@ -1052,7 +1052,7 @@ lemma hasFTaylorSeriesUpTo_fourierIntegral'
   proof: hasFTaylorSeriesUpTo_fourierIntegral _ (fun n hn => hf n (mod_cast hn)) h'f
 
 中文:
-引理 hasFTaylorSeriesUpTo_fourierIntegral'
+引理 hasFTaylorSeriesUpTo_fourier整数egral'
   结论: {N : 自然数∞}
   证明: hasFTaylorSeriesUpTo_fourierIntegral _ (fun n hn => hf n (mod_cast hn)) h'f
 
@@ -1079,7 +1079,7 @@ theorem contDiff_fourierIntegral
     simpa [this] using! contDiff_const
 
 中文:
-定理 contDiff_fourierIntegral
+定理 contDiff_fourier整数egral
   结论: {N : 自然数∞}
   证明: by
   by_cases h'f : Integrable f μ
@@ -1111,7 +1111,7 @@ lemma iteratedFDeriv_fourierIntegral
     (mod_cast hn) w).symm
 
 中文:
-引理 iteratedFDeriv_fourierIntegral
+引理 iteratedFDeriv_fourier整数egral
   结论: {N : 自然数∞}
   证明: by
   ext w : 1
@@ -1147,8 +1147,8 @@ theorem fourierIntegral_iteratedFDeriv
   |
 
 中文:
-定理 fourierIntegral_iteratedFDeriv
-  结论: [FiniteDimensional 实数 V]
+定理 fourier整数egral_iteratedFDeriv
+  结论: [有限维 实数 V]
   证明: by
   induction n with
   | zero =>
@@ -1213,8 +1213,8 @@ theorem fourierPowSMulRight_iteratedFDeriv_fourierIntegral
     have I : Inte
 
 中文:
-定理 fourierPowSMulRight_iteratedFDeriv_fourierIntegral
-  结论: [FiniteDimensional 实数 V]
+定理 fourierPowSMulRight_iteratedFDeriv_fourier整数egral
+  结论: [有限维 实数 V]
   证明: by
   rw [fourierIntegral_iteratedFDeriv (N := N) _ (hf.fourierPowSMulRight _ _) _ hn]
   · congr
@@ -1268,8 +1268,8 @@ theorem norm_fourierPowSMulRight_iteratedFDeriv_fourierIntegral_le
     simp onl
 
 中文:
-定理 norm_fourierPowSMulRight_iteratedFDeriv_fourierIntegral_le
-  结论: [FiniteDimensional 实数 V]
+定理 norm_fourierPowSMulRight_iteratedFDeriv_fourier整数egral_le
+  结论: [有限维 实数 V]
   证明: by
   rw [fourierPowSMulRight_iteratedFDeriv_fourierIntegral L hf h'f hk hn]
   apply (norm_fourierIntegral_le_integral_norm _ _ _ _ _).trans
@@ -1321,8 +1321,8 @@ lemma pow_mul_norm_iteratedFDeriv_fourierIntegral_le
     linarith [one_le_pi_di
 
 中文:
-引理 pow_mul_norm_iteratedFDeriv_fourierIntegral_le
-  结论: [FiniteDimensional 实数 V]
+引理 pow_mul_norm_iteratedFDeriv_fourier整数egral_le
+  结论: [有限维 实数 V]
   证明: calc
   |L v w| ^ n * ‖(iteratedFDeriv Real k (fourierIntegral 𝐞 μ L.toLinearMap₁₂ f)) w‖
   _ <= (2 * π) ^ n
@@ -1501,7 +1501,7 @@ theorem fourier_iteratedFDeriv
 
 中文:
 定理 fourier_iteratedFDeriv
-  结论: {N : 自然数∞} (hf : ContDiff 实数 N f)
+  结论: {N : 自然数∞} (hf : 连续可微 实数 N f)
   证明: by
   rw [← flip_innerSL_real V]
   exact VectorFourier.fourierIntegral_iteratedFDeriv (innerSL Real) hf h'f hn
@@ -1736,7 +1736,7 @@ theorem fourier_iteratedDeriv
 
 中文:
 定理 fourier_iteratedDeriv
-  结论: {f : 实数 -> E} {N : 自然数∞} {n : 自然数} (hf : ContDiff 实数 N f)
+  结论: {f : 实数 -> E} {N : 自然数∞} {n : 自然数} (hf : 连续可微 实数 N f)
   证明: by
   ext x : 1
   have A : forall (n : Nat), n <= N -> Integrable (iteratedFDeriv Real n f) := by

@@ -30,8 +30,8 @@ instance [Semiring
     ⟨mul_le_mul_of_nonneg_right hbc.1 ha.1, mul_le_mul_of_nonneg_right hbc.2 ha.2⟩
 
 中文:
-实例 [Semiring
-  签名: α] [PartialOrder α] [IsOrderedRing α]
+实例 [半环
+  签名: α] [偏序 α] [是Ordered环 α]
   定义体: ⟨zero_le_one, zero_le_one⟩
   mul_le_mul_of_nonneg_left _a ha _b _c hbc :=
     ⟨mul_le_mul_of_nonneg_left hbc.1 ha.1, mul_le_mul_of_nonneg_left hbc.2 ha.2⟩

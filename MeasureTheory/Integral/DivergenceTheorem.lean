@@ -118,7 +118,7 @@ theorem integral_divergence_of_hasFDerivWithinAt_off_countable_aux₁
 
 中文:
 定理 integral_divergence_of_hasFDerivWithinAt_off_countable_aux₁
-  结论: (I : Box (Fin (n + 1)))
+  结论: (I : Box (有限集 (n + 1)))
   证明: by
   wlog hE : CompleteSpace E generalizing
   · simp [integral, hE]
@@ -172,7 +172,7 @@ theorem integral_divergence_of_hasFDerivAt_off_countable_aux₂
 
 中文:
 定理 integral_divergence_of_hasFDerivAt_off_countable_aux₂
-  结论: (I : Box (Fin (n + 1)))
+  结论: (I : Box (有限集 (n + 1)))
   证明: by
   /- Choose a monotone sequence `J k` of subboxes that cover the interior of `I` and prove that
     these boxes satisfy the assumptions of the previous lemma. -/
@@ -463,7 +463,7 @@ theorem integral_eq_of_hasDerivAt_off_countable_of_le
 
 中文:
 定理 integral_eq_of_hasDerivAt_off_countable_of_le
-  结论: [CompleteSpace E] (f f' : 实数 -> E)
+  结论: [完备空间 E] (f f' : 实数 -> E)
   证明: by
   set e : Real ≃L[Real] Real¹ := (ContinuousLinearEquiv.funUnique (Fin 1) Real Real).symm
   set F' : Real -> Real ->L[Real] E := fun x => smulRight (1 : Real ->L[Real] Real) (f' x)
@@ -515,7 +515,7 @@ theorem integral_eq_of_hasDerivAt_off_countable
 
 中文:
 定理 integral_eq_of_hasDerivAt_off_countable
-  结论: [CompleteSpace E] (f f' : 实数 -> E) {a b : 实数}
+  结论: [完备空间 E] (f f' : 实数 -> E) {a b : 实数}
   证明: by
   rcases le_total a b with hab | hab
   · simp only [uIcc_of_le hab, min_eq_left hab, max_eq_right hab] at *

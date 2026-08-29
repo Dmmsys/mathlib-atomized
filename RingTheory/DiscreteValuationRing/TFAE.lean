@@ -55,8 +55,8 @@ theorem exists_maximalIdeal_pow_eq_of_principal
     (Se
 
 中文:
-定理 exists_maximalIdeal_pow_eq_of_principal
-  结论: [IsNoetherianRing R] [IsLocalRing R] [IsDomain R]
+定理 存在_maximalIdeal_pow_eq_of_principal
+  结论: [是Noether环 R] [是局部环 R] [是整环 R]
   证明: by
   by_cases h : IsField R
   · let _ := h.toField
@@ -141,7 +141,7 @@ theorem maximalIdeal_isPrincipal_of_isDedekindDomain
 
 中文:
 定理 maximalIdeal_isPrincipal_of_isDedekindDomain
-  条件: [IsLocalRing R] [IsDedekindDomain R]
+  条件: [是局部环 R] [是Dedekind整环 R]
   证明: by
   classical
   by_cases ne_bot : maximalIdeal R = ⊥
@@ -281,8 +281,8 @@ theorem IsDiscreteValuationRing.TFAE
   convert! tf
 
 中文:
-定理 IsDiscreteValuationRing.TFAE
-  结论: [IsNoetherianRing R] [IsLocalRing R] [IsDomain R]
+定理 是离散赋值环.TFAE
+  结论: [是Noether环 R] [是局部环 R] [是整环 R]
   证明: by
   have : finrank (ResidueField R) (CotangentSpace R) = 1 ↔
       finrank (ResidueField R) (CotangentSpace R) <= 1 := by
@@ -326,8 +326,8 @@ lemma IsLocalRing.finrank_CotangentSpace_eq_one_iff
   · exact (IsDiscreteValuationRing.TFAE R hR).out 5 0
 
 中文:
-引理 IsLocalRing.finrank_CotangentSpace_eq_one_iff
-  结论: [IsNoetherianRing R] [IsLocalRing R]
+引理 是局部环.finrank_CotangentSpace_eq_one_iff
+  结论: [是Noether环 R] [是局部环 R]
   证明: by
   by_cases hR : IsField R
   · let := hR.toField
@@ -356,8 +356,8 @@ lemma IsLocalRing.finrank_CotangentSpace_eq_one
   proof: finrank_CotangentSpace_eq_one_iff.mpr ‹_›
 
 中文:
-引理 IsLocalRing.finrank_CotangentSpace_eq_one
-  条件: [IsDomain R] [IsDiscreteValuationRing R]
+引理 是局部环.finrank_CotangentSpace_eq_one
+  条件: [是整环 R] [是离散赋值环 R]
   证明: finrank_CotangentSpace_eq_one_iff.mpr ‹_›
 
 Depends on / 依赖: finrank_CotangentSpace_eq_one_iff, finrank_CotangentSpace_eq_one_iff.mpr
@@ -380,8 +380,8 @@ lemma IsDiscreteValuationRing.ringKrullDim_eq_one
     exact IsDiscreteValuationRing.not_isField R KrullDimLE.is
 
 中文:
-引理 IsDiscreteValuationRing.ringKrullDim_eq_one
-  条件: [IsDomain R] [IsDiscreteValuationRing R]
+引理 是离散赋值环.ringKrullDim_eq_one
+  条件: [是整环 R] [是离散赋值环 R]
   证明: by
   refine eq_of_le_of_not_lt (krullDimLE_iff (n := 1).mp ?_) fun h => ?_
   · exact krullDimLE_one_iff_of_isPrime_bot.mpr fun I hI hI' => hI'.isMaximal hI
@@ -408,8 +408,8 @@ lemma IsDiscreteValuationRing.not_krullDimLE_zero
   simp [krullDimLE_iff, ringKrullDim_eq_one R]
 
 中文:
-引理 IsDiscreteValuationRing.not_krullDimLE_zero
-  条件: [IsDomain R] [IsDiscreteValuationRing R]
+引理 是离散赋值环.not_krullDimLE_zero
+  条件: [是整环 R] [是离散赋值环 R]
   证明: by
   simp [krullDimLE_iff, ringKrullDim_eq_one R]
 
@@ -429,8 +429,8 @@ instance [IsDomain
   body: krullDimLE_iff.mpr (IsDiscreteValuationRing.ringKrullDim_eq_one R).le
 
 中文:
-实例 [IsDomain
-  签名: R] [IsDiscreteValuationRing R] : KrullDimLE 1 R
+实例 [是整环
+  签名: R] [是离散赋值环 R] : Krull维数不超过 1 R
   定义体: krullDimLE_iff.mpr (IsDiscreteValuationRing.ringKrullDim_eq_one R).le
 
 Depends on / 依赖: IsDiscreteValuationRing, IsDiscreteValuationRing.ringKrullDim_eq_one, krullDimLE_iff, krullDimLE_iff.mpr, ringKrullDim_eq_one

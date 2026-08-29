@@ -62,7 +62,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (SingleObj α)
+  签名: 箭图 (SingleObj α)
   定义体: ⟨fun _ _ => α⟩
 -/
 instance : Quiver (SingleObj α) :=
@@ -132,7 +132,7 @@ abbreviation hasInvolutiveReverse
 
 中文:
 缩写 hasInvolutiveReverse
-  签名: (rev : α -> α) (h : Function.Involutive rev)
+  签名: (rev : α -> α) (h : 函数.对合 rev)
   定义体: hasReverse rev
   inv' := h
 
@@ -275,7 +275,7 @@ definition pathToList
 
 中文:
 定义 pathToList
-  签名: : 对任意 {x : SingleObj α}, Path (star α) x -> List α
+  签名: : 对任意 {x : SingleObj α}, 道路 (star α) x -> 列表 α
 -/
 def pathToList : forall {x : SingleObj α}, Path (star α) x -> List α
   | _, Path.nil => []
@@ -294,7 +294,7 @@ definition listToPath
 
 中文:
 定义 listToPath
-  签名: : List α -> Path (star α) (star α)
+  签名: : 列表 α -> 道路 (star α) (star α)
 -/
 def listToPath : List α -> Path (star α) (star α)
   | [] => Path.nil
@@ -314,7 +314,7 @@ theorem listToPath_pathToList
 
 中文:
 定理 listToPath_pathToList
-  条件: {x : SingleObj α} (p : Path (star α) x)
+  条件: {x : SingleObj α} (p : 道路 (star α) x)
   证明: by
   induction p with
   | nil => rfl
@@ -342,7 +342,7 @@ theorem pathToList_listToPath
 
 中文:
 定理 pathToList_listToPath
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: pathToList (listToPath l) = l
   证明: by
   induction l with
@@ -368,7 +368,7 @@ definition pathEquivList
 
 中文:
 定义 pathEquivList
-  签名: : Path (star α) (star α) ≃ List α
+  签名: : 道路 (star α) (star α) ≃ 列表 α
   定义体: ⟨pathToList, listToPath, fun p => listToPath_pathToList p, pathToList_listToPath⟩
 
 @[simp]
@@ -391,7 +391,7 @@ theorem pathEquivList_nil
 
 中文:
 定理 pathEquivList_nil
-  结论: pathEquivList Path.nil = ([] : List α)
+  结论: pathEquivList 道路.nil = ([] : 列表 α)
   证明: rfl
 
 @[simp]
@@ -412,7 +412,7 @@ theorem pathEquivList_cons
 
 中文:
 定理 pathEquivList_cons
-  条件: (p : Path (star α) (star α)) (a : star α ⟶ star α)
+  条件: (p : 道路 (star α) (star α)) (a : star α ⟶ star α)
   证明: rfl
 
 @[simp]
@@ -434,7 +434,7 @@ theorem pathEquivList_symm_nil
 
 中文:
 定理 pathEquivList_symm_nil
-  结论: pathEquivList.symm ([] : List α) = Path.nil
+  结论: pathEquivList.symm ([] : 列表 α) = 道路.nil
   证明: rfl
 
 @[simp]
@@ -453,7 +453,7 @@ theorem pathEquivList_symm_cons
 
 中文:
 定理 pathEquivList_symm_cons
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   证明: rfl
 -/
 theorem pathEquivList_symm_cons (l : List α) (a : α) :

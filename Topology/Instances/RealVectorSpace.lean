@@ -34,7 +34,7 @@ theorem map_real_smul
 
 中文:
 定理 map_real_smul
-  结论: {G} [FunLike G E F] [AddMonoidHomClass G E F] (f : G) (hf : Continuous f)
+  结论: {G} [函数状 G E F] [加法幺半群态射类 G E F] (f : G) (hf : 连续 f)
   证明: suffices (fun c : Real => f (c • x)) = fun c : Real => c • f x from congr_fun this c
   Rat.isDenseEmbedding_coe_real.dense.equalizer (by fun_prop)
     (continuous_id.smul continuous_const) (funext fun r => map_ratCast_smul f Real Real r x)
@@ -63,8 +63,8 @@ definition toRealLinearMap
 @[simp]
 
 中文:
-定义 toRealLinearMap
-  签名: (f : E ->+ F) (hf : Continuous f)
+定义 to实数LinearMap
+  签名: (f : E ->+ F) (hf : 连续 f)
   定义体: ⟨{ toFun := f
       map_add' := f.map_add
       map_smul' := map_real_smul f hf }, hf⟩
@@ -89,8 +89,8 @@ theorem coe_toRealLinearMap
   proof: rfl
 
 中文:
-定理 coe_toRealLinearMap
-  条件: (f : E ->+ F) (hf : Continuous f)
+定理 coe_to实数LinearMap
+  条件: (f : E ->+ F) (hf : 连续 f)
   结论: ⇑(f.to实数LinearMap hf) = f
   证明: rfl
 -/
@@ -109,8 +109,8 @@ definition AddEquiv.toRealLinearEquiv
   body: { e, e.toAddMonoidHom.toRealLinearMap h₁ with }
 
 中文:
-定义 AddEquiv.toRealLinearEquiv
-  签名: (e : E ≃+ F) (h₁ : Continuous e) (h₂ : Continuous e.symm)
+定义 加法等价.to实数LinearEquiv
+  签名: (e : E ≃+ F) (h₁ : 连续 e) (h₂ : 连续 e.symm)
   定义体: { e, e.toAddMonoidHom.toRealLinearMap h₁ with }
 
 Depends on / 依赖: e.toAddMonoidHom.toRealLinearMap, toAddMonoidHom, toRealLinearMap

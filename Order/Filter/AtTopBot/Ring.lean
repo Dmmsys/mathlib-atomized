@@ -34,8 +34,8 @@ theorem Tendsto.atTop_mul_atTop₀
     hf.eventually (eventually_ge_atTop 1)] with _ using le_mul_of_one_le_left
 
 中文:
-定理 Tendsto.atTop_mul_atTop₀
-  条件: (hf : Tendsto f l atTop) (hg : Tendsto g l atTop)
+定理 收敛.atTop_mul_atTop₀
+  条件: (hf : 收敛 f l atTop) (hg : 收敛 g l atTop)
   证明: by
   refine tendsto_atTop_mono' _ ?_ hg
   filter_upwards [hg.eventually (eventually_ge_atTop 0),
@@ -59,7 +59,7 @@ theorem tendsto_mul_self_atTop
 
 中文:
 定理 tendsto_mul_self_atTop
-  结论: Tendsto (fun x : α => x * x) atTop atTop
+  结论: 收敛 (fun x : α => x * x) atTop atTop
   证明: tendsto_id.atTop_mul_atTop₀ tendsto_id
 
 Depends on / 依赖: tendsto_id, tendsto_id.atTop_mul_atTop
@@ -79,7 +79,7 @@ theorem tendsto_pow_atTop
 中文:
 定理 tendsto_pow_atTop
   条件: {n : 自然数} (hn : n != 0)
-  结论: Tendsto (fun x : α => x ^ n) atTop atTop
+  结论: 收敛 (fun x : α => x ^ n) atTop atTop
   证明: tendsto_atTop_mono' _ ((eventually_ge_atTop 1).mono fun _x hx => le_self_pow₀ hx hn) tendsto_id
 
 Depends on / 依赖: eventually_ge_atTop, tendsto_atTop_mono, tendsto_id
@@ -99,7 +99,7 @@ theorem zero_pow_eventuallyEq
 
 中文:
 定理 zero_pow_eventuallyEq
-  条件: [MonoidWithZero α]
+  条件: [带零幺半群 α]
   证明: eventually_atTop.2 ⟨1, fun _n hn => zero_pow Nat.one_le_iff_ne_zero.1 hn⟩
 
 Depends on / 依赖: Nat.one_le_iff_ne_zero, eventually_atTop, one_le_iff_ne_zero, zero_pow
@@ -124,8 +124,8 @@ have := hf.atTop_mul_atTop₀ tendsto_neg_atBot_atTop.comp hg
     tendsto_neg_atTop_atBot.comp this
 
 中文:
-定理 Tendsto.atTop_mul_atBot₀
-  条件: (hf : Tendsto f l atTop) (hg : Tendsto g l atBot)
+定理 收敛.atTop_mul_atBot₀
+  条件: (hf : 收敛 f l atTop) (hg : 收敛 g l atBot)
   证明: by
 have := hf.atTop_mul_atTop₀ tendsto_neg_atBot_atTop.comp hg
   simpa only [Function.comp_def, neg_mul_eq_mul_neg, neg_neg] using
@@ -152,8 +152,8 @@ theorem Tendsto.atBot_mul_atTop₀
     tendsto_neg_atTop_atBot.comp this
 
 中文:
-定理 Tendsto.atBot_mul_atTop₀
-  条件: (hf : Tendsto f l atBot) (hg : Tendsto g l atTop)
+定理 收敛.atBot_mul_atTop₀
+  条件: (hf : 收敛 f l atBot) (hg : 收敛 g l atTop)
   证明: by
   have : Tendsto (fun x => -f x * g x) l atTop :=
     (tendsto_neg_atBot_atTop.comp hf).atTop_mul_atTop₀ hg
@@ -181,8 +181,8 @@ theorem Tendsto.atBot_mul_atBot₀
   simpa only [neg_mul_neg] using this
 
 中文:
-定理 Tendsto.atBot_mul_atBot₀
-  条件: (hf : Tendsto f l atBot) (hg : Tendsto g l atBot)
+定理 收敛.atBot_mul_atBot₀
+  条件: (hf : 收敛 f l atBot) (hg : 收敛 g l atBot)
   证明: by
   have : Tendsto (fun x => -f x * -g x) l atTop :=
     (tendsto_neg_atBot_atTop.comp hf).atTop_mul_atTop₀ (tendsto_neg_atBot_atTop.comp hg)
@@ -212,8 +212,8 @@ theorem Tendsto.atTop_of_const_mul₀
     fun _x hx => le_of_mul_le_mul_left hx hc
 
 中文:
-定理 Tendsto.atTop_of_const_mul₀
-  条件: {c : α} (hc : 0 < c) (hf : Tendsto (fun x => c * f x) l atTop)
+定理 收敛.atTop_of_const_mul₀
+  条件: {c : α} (hc : 0 < c) (hf : 收敛 (fun x => c * f x) l atTop)
   证明: tendsto_atTop.2 fun b => (tendsto_atTop.1 hf (c * b)).mono
     fun _x hx => le_of_mul_le_mul_left hx hc
 
@@ -236,8 +236,8 @@ theorem Tendsto.atTop_of_mul_const₀
 @[simp]
 
 中文:
-定理 Tendsto.atTop_of_mul_const₀
-  条件: {c : α} (hc : 0 < c) (hf : Tendsto (fun x => f x * c) l atTop)
+定理 收敛.atTop_of_mul_const₀
+  条件: {c : α} (hc : 0 < c) (hf : 收敛 (fun x => f x * c) l atTop)
   证明: tendsto_atTop.2 fun b => (tendsto_atTop.1 hf (b * c)).mono
     fun _x hx => le_of_mul_le_mul_right hx hc
 
@@ -263,7 +263,7 @@ theorem tendsto_pow_atTop_iff
 中文:
 定理 tendsto_pow_atTop_iff
   条件: {n : 自然数}
-  结论: Tendsto (fun x : α => x ^ n) atTop atTop ↔ n != 0
+  结论: 收敛 (fun x : α => x ^ n) atTop atTop ↔ n != 0
   证明: ⟨fun h hn => by simp only [hn, pow_zero, not_tendsto_const_atTop] at h, tendsto_pow_atTop⟩
 
 Depends on / 依赖: not_tendsto_const_atTop, pow_zero, tendsto_pow_atTop
@@ -282,7 +282,7 @@ theorem not_tendsto_pow_atTop_atBot
 
 中文:
 定理 not_tendsto_pow_atTop_atBot
-  条件: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  条件: [环 α] [线性序 α] [是StrictOrdered环 α]
 -/
 theorem not_tendsto_pow_atTop_atBot [Ring α] [LinearOrder α] [IsStrictOrderedRing α] :
     forall {n : Nat}, ¬Tendsto (fun x : α => x ^ n) atTop atBot
@@ -305,7 +305,7 @@ theorem exists_lt_mul_self
   proof: ((eventually_ge_atTop 0).and (tendsto_mul_self_atTop.eventually (eventually_gt_atTop a))).exists
 
 中文:
-定理 exists_lt_mul_self
+定理 存在_lt_mul_self
   条件: (a : R)
   结论: 存在 x >= 0, a < x * x
   证明: ((eventually_ge_atTop 0).and (tendsto_mul_self_atTop.eventually (eventually_gt_atTop a))).exists
@@ -326,7 +326,7 @@ theorem exists_le_mul_self
   ⟨x, hx0, hxa.le⟩
 
 中文:
-定理 exists_le_mul_self
+定理 存在_le_mul_self
   条件: (a : R)
   结论: 存在 x >= 0, a <= x * x
   证明: let ⟨x, hx0, hxa⟩ := exists_lt_mul_self a

@@ -46,8 +46,8 @@ definition ShortComplex.toComposableArrows
   body: ComposableArrows.mk₂ S.f S.g
 
 中文:
-定义 ShortComplex.toComposableArrows
-  签名: (S : ShortComplex C)
+定义 短复形.toComposableArrows
+  签名: (S : 短复形 C)
   定义体: ComposableArrows.mk₂ S.f S.g
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.mk
@@ -66,8 +66,8 @@ definition ShortComplex.mapToComposableArrows
 @[simp]
 
 中文:
-定义 ShortComplex.mapToComposableArrows
-  签名: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+定义 短复形.mapToComposableArrows
+  签名: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   定义体: ComposableArrows.homMk₂ φ.τ₁ φ.τ₂ φ.τ₃ φ.comm₁₂.symm φ.comm₂₃.symm
 
 @[simp]
@@ -90,8 +90,8 @@ theorem ShortComplex.mapToComposableArrows_app_0
 @[simp]
 
 中文:
-定理 ShortComplex.mapToComposableArrows_app_0
-  条件: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+定理 短复形.mapToComposableArrows_app_0
+  条件: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: rfl
 
 @[simp]
@@ -111,8 +111,8 @@ theorem ShortComplex.mapToComposableArrows_app_1
 @[simp]
 
 中文:
-定理 ShortComplex.mapToComposableArrows_app_1
-  条件: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+定理 短复形.mapToComposableArrows_app_1
+  条件: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: rfl
 
 @[simp]
@@ -132,8 +132,8 @@ theorem ShortComplex.mapToComposableArrows_app_2
 @[simp]
 
 中文:
-定理 ShortComplex.mapToComposableArrows_app_2
-  条件: {S₁ S₂ : ShortComplex C} (φ : S₁ ⟶ S₂)
+定理 短复形.mapToComposableArrows_app_2
+  条件: {S₁ S₂ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: rfl
 
 @[simp]
@@ -154,8 +154,8 @@ theorem ShortComplex.mapToComposableArrows_id
 @[simp]
 
 中文:
-定理 ShortComplex.mapToComposableArrows_id
-  条件: {S₁ : ShortComplex C}
+定理 短复形.mapToComposableArrows_id
+  条件: {S₁ : 短复形 C}
   证明: by
   cat_disch
 
@@ -178,8 +178,8 @@ theorem ShortComplex.mapToComposableArrows_comp
   cat_disch
 
 中文:
-定理 ShortComplex.mapToComposableArrows_comp
-  结论: {S₁ S₂ S₃ : ShortComplex C} (φ : S₁ ⟶ S₂)
+定理 短复形.mapToComposableArrows_comp
+  结论: {S₁ S₂ S₃ : 短复形 C} (φ : S₁ ⟶ S₂)
   证明: by
   cat_disch
 
@@ -205,7 +205,7 @@ structure IsComplex
     - zero((i : Nat) (hi : i + 2 <= n := by omega)) : S.map' i (i + 1) ≫ S.map' (i + 1) (i + 2) = 0
 
 中文:
-结构 IsComplex
+结构 是复形
   参数: : 命题 where
   公理与运算 (1 个):
     - zero((i : 自然数) (hi : i + 2 <= n := by omega)) : S.map' i (i + 1) ≫ S.map' (i + 1) (i + 2) = 0
@@ -233,8 +233,8 @@ lemma IsComplex.zero'
   exact hS.zero i hk
 
 中文:
-引理 IsComplex.zero'
-  结论: (hS : S.IsComplex) (i j k : 自然数) (hij : i + 1 = j := by omega)
+引理 是复形.zero'
+  结论: (hS : S.是复形) (i j k : 自然数) (hij : i + 1 = j := by omega)
   证明: by
   subst hij hjk
   exact hS.zero i hk
@@ -258,7 +258,7 @@ lemma isComplex_of_iso
 
 中文:
 引理 isComplex_of_iso
-  条件: {S₁ S₂ : ComposableArrows C n} (e : S₁ ≅ S₂) (h₁ : S₁.IsComplex)
+  条件: {S₁ S₂ : ComposableArrows C n} (e : S₁ ≅ S₂) (h₁ : S₁.是复形)
   证明: by
     rw [← cancel_epi (ComposableArrows.app' e.hom i)]; rw [comp_zero]; rw [← NatTrans.naturality_assoc]; rw [← NatTrans.naturality]; rw [reassoc_of% (h₁.zero i hi)]; rw [zero_comp]
 
@@ -300,7 +300,7 @@ lemma isComplex₀
 中文:
 引理 isComplex₀
   条件: (S : ComposableArrows C 0)
-  结论: S.IsComplex where
+  结论: S.是复形 where
   证明: by simp at hi
 -/
 lemma isComplex₀ (S : ComposableArrows C 0) : S.IsComplex where
@@ -318,7 +318,7 @@ lemma isComplex₁
 中文:
 引理 isComplex₁
   条件: (S : ComposableArrows C 1)
-  结论: S.IsComplex where
+  结论: S.是复形 where
   证明: by lia
 -/
 lemma isComplex₁ (S : ComposableArrows C 1) : S.IsComplex where
@@ -336,7 +336,7 @@ abbreviation sc'
 
 中文:
 缩写 sc'
-  签名: (hS : S.IsComplex) (i j k : 自然数) (hij : i + 1 = j := by omega)
+  签名: (hS : S.是复形) (i j k : 自然数) (hij : i + 1 = j := by omega)
   定义体: ShortComplex.mk (S.map' i j) (S.map' j k) (hS.zero' i j k)
 
 Depends on / 依赖: S.map, ShortComplex, ShortComplex.mk, hS.zero
@@ -356,7 +356,7 @@ abbreviation sc
 
 中文:
 缩写 sc
-  签名: (hS : S.IsComplex) (i : 自然数) (hi : i + 2 <= n := by omega)
+  签名: (hS : S.是复形) (i : 自然数) (hi : i + 2 <= n := by omega)
   定义体: S.sc' hS i (i + 1) (i + 2)
 
 Depends on / 依赖: S.sc, ShortComplex
@@ -376,11 +376,11 @@ structure Exact
     - exact((i : Nat) (hi : i + 2 <= n := by omega)) : (S.sc toIsComplex i).Exact
 
 中文:
-结构 Exact
-  参数: : 命题 extends S.IsComplex where
-  继承: S.IsComplex
+结构 正合
+  参数: : 命题 extends S.是复形 where
+  继承: S.是复形
   公理与运算 (1 个):
-    - exact((i : 自然数) (hi : i + 2 <= n := by omega)) : (S.sc toIsComplex i).Exact
+    - exact((i : 自然数) (hi : i + 2 <= n := by omega)) : (S.sc toIsComplex i).正合
 
 Depends on / 依赖: S.sc, toIsComplex
 -/
@@ -400,8 +400,8 @@ lemma Exact.exact'
   exact hS.exact i hk
 
 中文:
-引理 Exact.exact'
-  结论: (hS : S.Exact) (i j k : 自然数) (hij : i + 1 = j := by omega)
+引理 正合.exact'
+  结论: (hS : S.正合) (i j k : 自然数) (hij : i + 1 = j := by omega)
   证明: by
   subst hij hjk
   exact hS.exact i hk
@@ -423,8 +423,8 @@ abbreviation Exact.sc'
   body: S.sc' hS.toIsComplex i j k
 
 中文:
-缩写 Exact.sc'
-  签名: (hS : S.Exact) (i j k : 自然数) (hij : i + 1 = j := by lia)
+缩写 正合.sc'
+  签名: (hS : S.正合) (i j k : 自然数) (hij : i + 1 = j := by lia)
   定义体: S.sc' hS.toIsComplex i j k
 
 Depends on / 依赖: S.sc, ShortComplex, hS.toIsComplex, toIsComplex
@@ -443,8 +443,8 @@ abbreviation Exact.sc
   body: S.sc' hS.toIsComplex i (i + 1) (i + 2)
 
 中文:
-缩写 Exact.sc
-  签名: (hS : S.Exact) (i : 自然数) (hi : i + 2 <= n := by lia)
+缩写 正合.sc
+  签名: (hS : S.正合) (i : 自然数) (hi : i + 2 <= n := by lia)
   定义体: S.sc' hS.toIsComplex i (i + 1) (i + 2)
 
 Depends on / 依赖: S.sc, ShortComplex, hS.toIsComplex, toIsComplex
@@ -467,7 +467,7 @@ definition sc'Map
 
 中文:
 定义 sc'Map
-  签名: {S₁ S₂ : ComposableArrows C n} (φ : S₁ ⟶ S₂) (h₁ : S₁.IsComplex) (h₂ : S₂.IsComplex)
+  签名: {S₁ S₂ : ComposableArrows C n} (φ : S₁ ⟶ S₂) (h₁ : S₁.是复形) (h₂ : S₂.是复形)
   定义体: φ.app _
   τ₂ := φ.app _
   τ₃ := φ.app _
@@ -492,7 +492,7 @@ definition scMap
 
 中文:
 定义 scMap
-  签名: {S₁ S₂ : ComposableArrows C n} (φ : S₁ ⟶ S₂) (h₁ : S₁.IsComplex) (h₂ : S₂.IsComplex)
+  签名: {S₁ S₂ : ComposableArrows C n} (φ : S₁ ⟶ S₂) (h₁ : S₁.是复形) (h₂ : S₂.是复形)
   定义体: sc'Map φ h₁ h₂ i (i + 1) (i + 2)
 -/
 def scMap {S₁ S₂ : ComposableArrows C n} (φ : S₁ ⟶ S₂) (h₁ : S₁.IsComplex) (h₂ : S₂.IsComplex)
@@ -576,7 +576,7 @@ lemma exact_of_iso
 
 中文:
 引理 exact_of_iso
-  条件: {S₁ S₂ : ComposableArrows C n} (e : S₁ ≅ S₂) (h₁ : S₁.Exact)
+  条件: {S₁ S₂ : ComposableArrows C n} (e : S₁ ≅ S₂) (h₁ : S₁.正合)
   证明: isComplex_of_iso e h₁.toIsComplex
   exact i hi := ShortComplex.exact_of_iso (scMapIso e h₁.toIsComplex
     (isComplex_of_iso e h₁.toIsComplex) i) (h₁.exact i hi)
@@ -621,7 +621,7 @@ lemma exact₀
 中文:
 引理 exact₀
   条件: (S : ComposableArrows C 0)
-  结论: S.Exact where
+  结论: S.正合 where
   证明: S.isComplex₀
   exact i hi := by simp at hi
 
@@ -644,7 +644,7 @@ lemma exact₁
 中文:
 引理 exact₁
   条件: (S : ComposableArrows C 1)
-  结论: S.Exact where
+  结论: S.正合 where
   证明: S.isComplex₁
   exact i hi := by exfalso; lia
 
@@ -723,8 +723,8 @@ lemma _root_.CategoryTheory.ShortComplex.isComplex_toComposableArrows
   isComplex₂_mk _ (by simp [-Fin.reduceFinMk])
 
 中文:
-引理 _root_.CategoryTheory.ShortComplex.isComplex_toComposableArrows
-  条件: (S : ShortComplex C)
+引理 _root_.范畴论.短复形.isComplex_toComposableArrows
+  条件: (S : 短复形 C)
   证明: -- Disable `Fin.reduceFinMk` because otherwise `Precompose.map_one_succ` does not apply. (https://github.com/leanprover-community/mathlib4/issues/27382)
   isComplex₂_mk _ (by simp [-Fin.reduceFinMk])
 -/
@@ -750,7 +750,7 @@ lemma exact₂_iff
 
 中文:
 引理 exact₂_iff
-  条件: (S : ComposableArrows C 2) (hS : S.IsComplex)
+  条件: (S : ComposableArrows C 2) (hS : S.是复形)
   证明: by
   constructor
   · intro h
@@ -799,7 +799,7 @@ lemma _root_.CategoryTheory.ShortComplex.Exact.exact_toComposableArrows
   proof: exact₂_mk _ _ hS
 
 中文:
-引理 _root_.CategoryTheory.ShortComplex.Exact.exact_toComposableArrows
+引理 _root_.范畴论.短复形.正合.exact_toComposableArrows
   证明: exact₂_mk _ _ hS
 -/
 lemma _root_.CategoryTheory.ShortComplex.Exact.exact_toComposableArrows
@@ -815,7 +815,7 @@ lemma _root_.CategoryTheory.ShortComplex.exact_iff_exact_toComposableArrows
   proof: (S.toComposableArrows.exact₂_iff S.isComplex_toComposableArrows).symm
 
 中文:
-引理 _root_.CategoryTheory.ShortComplex.exact_iff_exact_toComposableArrows
+引理 _root_.范畴论.短复形.exact_iff_exact_toComposableArrows
   证明: (S.toComposableArrows.exact₂_iff S.isComplex_toComposableArrows).symm
 
 Depends on / 依赖: S.isComplex_toComposableArrows, S.toComposableArrows.exact, isComplex_toComposableArrows, toComposableArrows
@@ -891,8 +891,8 @@ lemma Exact.δ₀
   exact hS.2
 
 中文:
-引理 Exact.δ₀
-  条件: {S : ComposableArrows C (n + 2)} (hS : S.Exact)
+引理 正合.δ₀
+  条件: {S : ComposableArrows C (n + 2)} (hS : S.正合)
   证明: by
   rw [exact_iff_δ₀] at hS
   exact hS.2
@@ -994,8 +994,8 @@ lemma Exact.δlast
   exact hS.1
 
 中文:
-引理 Exact.δlast
-  条件: {S : ComposableArrows C (n + 2)} (hS : S.Exact)
+引理 正合.δlast
+  条件: {S : ComposableArrows C (n + 2)} (hS : S.正合)
   证明: by
   rw [exact_iff_δlast] at hS
   exact hS.1
@@ -1060,8 +1060,8 @@ lemma Exact.isIso_map'
   apply isIso_of_mono_of_epi
 
 中文:
-引理 Exact.isIso_map'
-  结论: {C : 类型} [Category* C] [Preadditive C]
+引理 正合.isIso_map'
+  结论: {C : 类型} [范畴* C] [预加性 C]
   证明: by
   have := (hS.exact k).mono_g h₀
   have := (hS.exact (k + 1)).epi_f h₁

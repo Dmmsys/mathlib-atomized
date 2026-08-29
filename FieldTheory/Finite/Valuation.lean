@@ -63,7 +63,7 @@ lemma valuation_algebraMap_le_one
 
 中文:
 引理 valuation_algebraMap_le_one
-  条件: (v : Valuation A Γ) (a : Fq)
+  条件: (v : 赋值 A Γ) (a : Fq)
   证明: by by_cases a = 0 <;> grind [zero_le]
 
 Depends on / 依赖: zero_le
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrivialOn Fq v
+  签名: 是TrivialOn Fq v
   定义体: FiniteField.valuation_algebraMap_eq_one v a ha
 
 Depends on / 依赖: FiniteField, FiniteField.valuation_algebraMap_eq_one, valuation_algebraMap_eq_one

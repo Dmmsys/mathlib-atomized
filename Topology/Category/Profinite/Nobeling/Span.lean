@@ -54,7 +54,7 @@ definition πJ
 
 中文:
 定义 πJ
-  签名: : LocallyConstant (π C (· in s)) 整数 ->ₗ[整数] LocallyConstant C 整数
+  签名: : 局部常数 (π C (· in s)) 整数 ->ₗ[整数] 局部常数 C 整数
   定义体: LocallyConstant.comapₗ Int ⟨_, (continuous_projRestrict C (· in s))⟩
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.comap, continuous_projRestrict
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (π C (· in s))
+  签名: 有限类型 (π C (· in s))
   定义体: by
   let f : π C (· in s) -> (s -> Bool) := fun x j => x.val j.val
   refine Fintype.ofInjective f ?_
@@ -174,7 +174,7 @@ theorem spanFinBasis.span
 
 中文:
 定理 spanFinBasis.span
-  结论: ⊤ <= Submodule.span 整数 (Set.range (spanFinBasis C s))
+  结论: ⊤ <= 子模.span 整数 (集合.range (spanFinBasis C s))
   证明: by
   intro f _
   rw [Finsupp.mem_span_range_iff_exists_finsupp]
@@ -229,7 +229,7 @@ theorem list_prod_apply
 
 中文:
 定理 list_prod_apply
-  条件: {I} (C : Set (I -> 布尔)) (x : C) (l : List (LocallyConstant C 整数))
+  条件: {I} (C : 集合 (I -> 布尔值)) (x : C) (l : 列表 (局部常数 C 整数))
   证明: by
   rw [← map_list_prod (LocallyConstant.evalMonoidHom x) l]; rw [LocallyConstant.evalMonoidHom_apply]
 
@@ -439,7 +439,7 @@ theorem GoodProducts.finsuppSum_mem_span_eval
 
 中文:
 定理 GoodProducts.finsuppSum_mem_span_eval
-  结论: {a : I} {as : List I}
+  结论: {a : I} {as : 列表 I}
   证明: by
   apply Submodule.finsuppSum_mem
   intro m hm
@@ -611,7 +611,7 @@ refine Submodule.span_mono ?_ Submodule.apply_mem_span_image_of_mem_span (πJ C 
 
 中文:
 定理 GoodProducts.span
-  条件: [WellFoundedLT I] (hC : IsClosed C)
+  条件: [WellFoundedLT I] (hC : 是闭集 C)
   证明: by
   rw [span_iff_products]
   intro f _

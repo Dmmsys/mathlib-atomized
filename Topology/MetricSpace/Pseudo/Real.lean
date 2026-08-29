@@ -96,7 +96,7 @@ lemma dist_le_of_mem_Icc
 
 中文:
 引理 dist_le_of_mem_Icc
-  条件: {x y x' y' : 实数} (hx : x in Icc x' y') (hy : y in Icc x' y')
+  条件: {x y x' y' : 实数} (hx : x in 闭区间 x' y') (hy : y in 闭区间 x' y')
   证明: by
   simpa only [Real.dist_eq, abs_of_nonpos (sub_nonpos.2 <| hx.1.trans hx.2), neg_sub] using
     Real.dist_le_of_mem_uIcc (Icc_subset_uIcc hx) (Icc_subset_uIcc hy)
@@ -118,7 +118,7 @@ lemma dist_le_of_mem_Icc_01
 
 中文:
 引理 dist_le_of_mem_Icc_01
-  条件: {x y : 实数} (hx : x in Icc (0 : 实数) 1) (hy : y in Icc (0 : 实数) 1)
+  条件: {x y : 实数} (hx : x in 闭区间 (0 : 实数) 1) (hy : y in 闭区间 (0 : 实数) 1)
   证明: by simpa only [sub_zero] using Real.dist_le_of_mem_Icc hx hy
 
 Depends on / 依赖: Real.dist_le_of_mem_Icc, dist_le_of_mem_Icc, sub_zero
@@ -142,7 +142,7 @@ lemma dist_le_of_mem_pi_Icc
 
 中文:
 引理 dist_le_of_mem_pi_Icc
-  条件: (hx : x in Icc x' y') (hy : y in Icc x' y')
+  条件: (hx : x in 闭区间 x' y') (hy : y in 闭区间 x' y')
   结论: dist x y <= dist x' y'
   证明: by
   refine (dist_pi_le_iff dist_nonneg).2 fun b =>

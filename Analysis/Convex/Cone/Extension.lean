@@ -145,7 +145,7 @@ theorem exists_top
     have cne : c.Nonempty := ⟨y
 
 中文:
-定理 exists_top
+定理 存在_top
   结论: (p : E ->ₗ.[实数] 实数) (hp_nonneg : 对任意 x : p.domain, (x : E) in s -> 0 <= p x)
   证明: by
   set S := { p : E ->ₗ.[Real] Real | forall x : p.domain, (x : E) in s -> 0 <= p x }
@@ -235,7 +235,7 @@ theorem exists_extension_of_le_sublinear
       add_mem' := fun hx
 
 中文:
-定理 exists_extension_of_le_sublinear
+定理 存在_extension_of_le_sublinear
   结论: (f : E ->ₗ.[实数] 实数) (N : E -> 实数)
   证明: by
   have N_0 : N 0 = 0 := by grind [N_hom 2 (by norm_num) 0, smul_zero]

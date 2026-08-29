@@ -58,13 +58,13 @@ structure SemimoduleCat
     - [isModule : Module R carrier]
 
 中文:
-结构 SemimoduleCat
+结构 Semimodule范畴
   参数: where
   公理与运算 (4 个):
     - private(mk) : :
     - carrier : 类型v
-    - [isAddCommMonoid : AddCommMonoid carrier]
-    - [isModule : Module R carrier]
+    - [isAddCommMonoid : 加法交换幺半群 carrier]
+    - [isModule : 模 R carrier]
 -/
 structure SemimoduleCat where
   private mk ::
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (SemimoduleCat.{v} R) (类型v)
+  签名: CoeSort (Semimodule范畴.{v} R) (类型v)
   定义体: ⟨SemimoduleCat.carrier⟩
 
 Depends on / 依赖: SemimoduleCat, SemimoduleCat.carrier, carrier
@@ -110,7 +110,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [AddCommMonoid X] [Module R X]
+  签名: (X : 类型v) [加法交换幺半群 X] [模 R X]
   定义体: ⟨X⟩
 -/
 abbrev of (X : Type v) [AddCommMonoid X] [Module R X] : SemimoduleCat.{v} R :=
@@ -127,7 +127,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [Semiring X] [Module R X]
+  条件: (X : 类型v) [半环 X] [模 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -152,8 +152,8 @@ structure Hom
     - hom' : M ->ₗ[R] N
 
 中文:
-结构 Hom
-  参数: (M N : SemimoduleCat.{v} R)
+结构 态射
+  参数: (M N : Semimodule范畴.{v} R)
   公理与运算 (2 个):
     - mk : :
     - hom' : M ->ₗ[R] N
@@ -175,7 +175,7 @@ instance moduleCategory
 
 中文:
 实例 moduleCategory
-  签名: : Category.{v, max (v + 1) u} (SemimoduleCat.{v} R) where
+  签名: : 范畴.{v, 最大值 (v + 1) u} (Semimodule范畴.{v} R) where
   定义体: Hom M N
   id _ := ⟨LinearMap.id⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -196,7 +196,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (SemimoduleCat.{v} R) (· ->ₗ[R] ·)
+  签名: 余ncrete范畴 (Semimodule范畴.{v} R) (· ->ₗ[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -219,8 +219,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := SemimoduleCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: {A B : SemimoduleCat.{v} R} (f : Hom A B)
+缩写 态射.hom
+  签名: {A B : Semimodule范畴.{v} R} (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := SemimoduleCat R) f
 -/
 abbrev Hom.hom {A B : SemimoduleCat.{v} R} (f : Hom A B) :=
@@ -236,7 +236,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [AddCommMonoid X] [Module R X] [AddCommMonoid Y] [Module R Y]
+  签名: {X Y : 类型v} [加法交换幺半群 X] [模 R X] [加法交换幺半群 Y] [模 R Y]
   定义体: ConcreteCategory.ofHom (C := SemimoduleCat R) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, SemimoduleCat
@@ -256,8 +256,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : SemimoduleCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : Semimodule范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -283,8 +283,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {M : SemimoduleCat.{v} R}
-  结论: (𝟙 M : M ⟶ M).hom = LinearMap.id
+  条件: {M : Semimodule范畴.{v} R}
+  结论: (𝟙 M : M ⟶ M).hom = 线性映射.id
   证明: rfl
 -/
 lemma hom_id {M : SemimoduleCat.{v} R} : (𝟙 M : M ⟶ M).hom = LinearMap.id := rfl
@@ -301,7 +301,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (M : SemimoduleCat.{v} R) (x : M)
+  条件: (M : Semimodule范畴.{v} R) (x : M)
   证明: by simp
 
 @[simp]
@@ -320,7 +320,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {M N O : SemimoduleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O)
+  条件: {M N O : Semimodule范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O)
   证明: rfl
 -/
 lemma hom_comp {M N O : SemimoduleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) :
@@ -338,7 +338,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {M N O : SemimoduleCat.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
+  条件: {M N O : Semimodule范畴.{v} R} (f : M ⟶ N) (g : N ⟶ O) (x : M)
   证明: by simp
 
 @[ext]
@@ -358,7 +358,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : SemimoduleCat.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
+  条件: {M N : Semimodule范畴.{v} R} {f g : M ⟶ N} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -378,7 +378,7 @@ lemma hom_bijective
 
 中文:
 引理 hom_bijective
-  条件: {M N : SemimoduleCat.{v} R}
+  条件: {M N : Semimodule范畴.{v} R}
   证明: by cases f; cases g; simpa using! h
   right f := ⟨⟨f⟩, rfl⟩
 -/
@@ -397,7 +397,7 @@ lemma hom_injective
 
 中文:
 引理 hom_injective
-  条件: {M N : SemimoduleCat.{v} R}
+  条件: {M N : Semimodule范畴.{v} R}
   证明: hom_bijective.injective
 
 Depends on / 依赖: hom_bijective, hom_bijective.injective, injective
@@ -418,7 +418,7 @@ lemma hom_surjective
 
 中文:
 引理 hom_surjective
-  条件: {M N : SemimoduleCat.{v} R}
+  条件: {M N : Semimodule范畴.{v} R}
   证明: hom_bijective.surjective
 
 @[simp]
@@ -442,7 +442,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {X Y : 类型v} [AddCommMonoid X] [Module R X] [AddCommMonoid Y]
+  结论: {X Y : 类型v} [加法交换幺半群 X] [模 R X] [加法交换幺半群 Y]
   证明: rfl
 
 @[simp]
@@ -463,7 +463,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {M N : SemimoduleCat.{v} R} (f : M ⟶ N)
+  条件: {M N : Semimodule范畴.{v} R} (f : M ⟶ N)
   证明: rfl
 
 @[simp]
@@ -485,8 +485,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型v} [AddCommMonoid M] [Module R M]
-  结论: ofHom LinearMap.id = 𝟙 (of R M)
+  条件: {M : 类型v} [加法交换幺半群 M] [模 R M]
+  结论: ofHom 线性映射.id = 𝟙 (of R M)
   证明: rfl
 
 @[simp]
@@ -504,7 +504,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N O : 类型v} [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid O] [Module R M]
+  结论: {M N O : 类型v} [加法交换幺半群 M] [加法交换幺半群 N] [加法交换幺半群 O] [模 R M]
   证明: rfl
 -/
 lemma ofHom_comp {M N O : Type v} [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid O] [Module R M]
@@ -522,7 +522,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {M N : 类型v} [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
+  结论: {M N : 类型v} [加法交换幺半群 M] [加法交换幺半群 N] [模 R M] [模 R N]
   证明: rfl
 -/
 lemma ofHom_apply {M N : Type v} [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
@@ -540,7 +540,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {M N : SemimoduleCat.{v} R} (e : M ≅ N) (x : M)
+  条件: {M N : Semimodule范畴.{v} R} (e : M ≅ N) (x : M)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -560,7 +560,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {M N : SemimoduleCat.{v} R} (e : M ≅ N) (x : N)
+  条件: {M N : Semimodule范畴.{v} R} (e : M ≅ N) (x : N)
   结论: e.hom (e.inv x) = x
   证明: by
   simp
@@ -579,7 +579,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: {M N : SemimoduleCat.{v} R}
+  签名: {M N : Semimodule范畴.{v} R}
   定义体: Hom.hom
   invFun := ofHom
 
@@ -604,8 +604,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: {M : SemimoduleCat.{v} R}
-  结论: ((forget (SemimoduleCat.{v} R)).obj M : Type _) = M
+  条件: {M : Semimodule范畴.{v} R}
+  结论: ((forget (Semimodule范畴.{v} R)).obj M : 类型 _) = M
   证明: rfl
 
 @[deprecated ConcreteCategory.forget_map_eq_ofHom (since := "2026-02-25")]
@@ -624,7 +624,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {M N : SemimoduleCat.{v} R} (f : M ⟶ N)
+  条件: {M N : Semimodule范畴.{v} R} (f : M ⟶ N)
   证明: rfl
 -/
 lemma forget_map {M N : SemimoduleCat.{v} R} (f : M ⟶ N) :
@@ -644,7 +644,7 @@ instance hasForgetToAddCommMonoid
 
 中文:
 实例 hasForgetToAddCommMonoid
-  签名: : HasForget₂ (SemimoduleCat R) AddCommMonCat where
+  签名: : 有Forget₂ (Semimodule范畴 R) 加法交换幺半群范畴 where
   定义体: { obj := fun M => .of M
       map := fun f => AddCommMonCat.ofHom f.hom.toAddMonoidHom }
 
@@ -668,7 +668,7 @@ theorem forget₂_obj
 
 中文:
 定理 forget₂_obj
-  条件: (X : SemimoduleCat R)
+  条件: (X : Semimodule范畴 R)
   证明: rfl
 -/
 theorem forget₂_obj (X : SemimoduleCat R) :
@@ -687,7 +687,7 @@ theorem forget₂_obj_moduleCat_of
 
 中文:
 定理 forget₂_obj_moduleCat_of
-  条件: (X : 类型v) [AddCommMonoid X] [Module R X]
+  条件: (X : 类型v) [加法交换幺半群 X] [模 R X]
   证明: rfl
 
 @[simp]
@@ -707,7 +707,7 @@ theorem forget₂_map
 
 中文:
 定理 forget₂_map
-  条件: (X Y : SemimoduleCat R) (f : X ⟶ Y)
+  条件: (X Y : Semimodule范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_map (X Y : SemimoduleCat R) (f : X ⟶ Y) :
@@ -724,7 +724,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SemimoduleCat R)
+  签名: 可居 (Semimodule范畴 R)
   定义体: ⟨of R PUnit⟩
 -/
 instance : Inhabited (SemimoduleCat R) :=
@@ -741,7 +741,7 @@ theorem of_coe
 
 中文:
 定理 of_coe
-  条件: (X : SemimoduleCat R)
+  条件: (X : Semimodule范畴 R)
   结论: of R X = X
   证明: rfl
 -/
@@ -766,8 +766,8 @@ theorem isZero_of_subsingleton
 
 中文:
 定理 isZero_of_subsingleton
-  条件: (M : SemimoduleCat R) [Subsingleton M]
-  结论: IsZero M where
+  条件: (M : Semimodule范畴 R) [子单例 M]
+  结论: 是零 M where
   证明: ⟨⟨⟨ofHom (0 : M ->ₗ[R] X)⟩, fun f => by
     ext x
     rw [Subsingleton.elim x (0 : M)]
@@ -797,7 +797,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroObject (SemimoduleCat.{v} R)
+  签名: 有ZeroObject (Semimodule范畴.{v} R)
   定义体: ⟨⟨of R PUnit, isZero_of_subsingleton _⟩⟩
 
 Depends on / 依赖: isZero_of_subsingleton
@@ -831,8 +831,8 @@ definition LinearEquiv.toModuleIsoₛ
   inv_hom_id := by ext; apply e.right_inv
 
 中文:
-定义 LinearEquiv.toModuleIsoₛ
-  签名: {g₁ : AddCommMonoid X₁} {g₂ : AddCommMonoid X₂} {m₁ : Module R X₁}
+定义 线性等价.toModuleIsoₛ
+  签名: {g₁ : 加法交换幺半群 X₁} {g₂ : 加法交换幺半群 X₂} {m₁ : 模 R X₁}
   定义体: ofHom (e : X₁ ->ₗ[R] X₂)
   inv := ofHom (e.symm : X₂ ->ₗ[R] X₁)
   hom_inv_id := by ext; apply e.left_inv
@@ -857,7 +857,7 @@ definition toLinearEquivₛ
 
 中文:
 定义 toLinearEquivₛ
-  签名: {X Y : SemimoduleCat R} (i : X ≅ Y)
+  签名: {X Y : Semimodule范畴 R} (i : X ≅ Y)
   定义体: LinearEquiv.ofLinearMap i.hom.hom i.inv.hom (by aesop) (by aesop)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofLinearMap, i.hom.hom, i.inv.hom, ofLinearMap
@@ -881,7 +881,7 @@ definition linearEquivIsoModuleIsoₛ
 
 中文:
 定义 linearEquivIsoModuleIsoₛ
-  签名: {X Y : 类型u} [AddCommMonoid X] [AddCommMonoid Y] [Module R X]
+  签名: {X Y : 类型u} [加法交换幺半群 X] [加法交换幺半群 Y] [模 R X]
   定义体: ↾fun e => e.toModuleIsoₛ
   inv := ↾fun i => i.toLinearEquivₛ
 
@@ -911,7 +911,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M ⟶ N)
+  签名: 加法 (M ⟶ N)
   定义体: ⟨f.hom + g.hom⟩
 
 Depends on / 依赖: f.hom, g.hom
@@ -946,7 +946,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ⟶ N)
+  签名: 零 (M ⟶ N)
   定义体: ⟨0⟩
 -/
 instance : Zero (M ⟶ N) where
@@ -979,7 +979,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (M ⟶ N)
+  签名: 标量乘法 自然数 (M ⟶ N)
   定义体: ⟨n • f.hom⟩
 
 Depends on / 依赖: Classical, Classical.indefiniteDescription, f.hom, indefiniteDescription
@@ -1018,7 +1018,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (M ⟶ N)
+  签名: 加法交换幺半群 (M ⟶ N)
   定义体: Function.Injective.addCommMonoid Hom.hom hom_injective rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 Depends on / 依赖: Function, Function.Injective.addCommMonoid, Hom.hom, Injective, addCommMonoid, hom_injective
@@ -1037,7 +1037,7 @@ lemma hom_sum
 
 中文:
 引理 hom_sum
-  条件: {ι : 类型} (f : ι -> (M ⟶ N)) (s : Finset ι)
+  条件: {ι : 类型} (f : ι -> (M ⟶ N)) (s : 有限集 ι)
   证明: map_sum ({ toFun := SemimoduleCat.Hom.hom, map_zero' := SemimoduleCat.hom_zero,
              map_add' := hom_add } : (M ⟶ N) ->+ (M ->ₗ[R] N)) _ _
 -/
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (SemimoduleCat.{v} R)
+  签名: 有ZeroMorphisms (Semimodule范畴.{v} R)
 -/
 instance : HasZeroMorphisms (SemimoduleCat.{v} R) where
 
@@ -1097,8 +1097,8 @@ theorem subsingleton_of_isZero
 
 中文:
 定理 subsingleton_of_isZero
-  条件: (h : IsZero M)
-  结论: Subsingleton M
+  条件: (h : 是零 M)
+  结论: 子单例 M
   证明: by
   refine subsingleton_of_forall_eq 0 (fun x => ?_)
   rw [← LinearMap.id_apply (R := R) x]; rw [← SemimoduleCat.hom_id]
@@ -1124,7 +1124,7 @@ lemma isZero_iff_subsingleton
 
 中文:
 引理 isZero_iff_subsingleton
-  结论: IsZero M ↔ Subsingleton M where
+  结论: 是零 M ↔ 子单例 M where
   证明: subsingleton_of_isZero
   mpr _ := isZero_of_subsingleton M
 
@@ -1147,7 +1147,7 @@ lemma isZero_of_iff_subsingleton
 
 中文:
 引理 isZero_of_iff_subsingleton
-  条件: {M : 类型} [AddCommMonoid M] [Module R M]
+  条件: {M : 类型} [加法交换幺半群 M] [模 R M]
   证明: isZero_iff_subsingleton
 
 Depends on / 依赖: isZero_iff_subsingleton
@@ -1172,7 +1172,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (M ⟶ N)
+  签名: 标量乘法 S (M ⟶ N)
   定义体: ⟨c • f.hom⟩
 
 Depends on / 依赖: f.hom
@@ -1215,8 +1215,8 @@ instance Hom.instModule
     (fun _ _ => rfl)
 
 中文:
-实例 Hom.instModule
-  签名: : Module S (M ⟶ N)
+实例 态射.instModule
+  签名: : 模 S (M ⟶ N)
   定义体: Function.Injective.module S
     { toFun := Hom.hom, map_zero' := hom_zero, map_add' := hom_add }
     hom_injective
@@ -1301,7 +1301,7 @@ theorem Iso.homCongr_eq_arrowCongr
   proof: rfl
 
 中文:
-定理 Iso.homCongr_eq_arrowCongr
+定理 同构.homCongr_eq_arrowCongr
   条件: (i : X ≅ X') (j : Y ≅ Y') (f : X ⟶ Y)
   证明: rfl
 -/
@@ -1318,7 +1318,7 @@ theorem Iso.conj_eq_conj
   proof: rfl
 
 中文:
-定理 Iso.conj_eq_conj
+定理 同构.conj_eq_conj
   条件: (i : X ≅ X') (f : End X)
   证明: rfl
 -/
@@ -1343,7 +1343,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget (SemimoduleCat.{v} R)).ReflectsIsomorphisms
+  签名: (forget (Semimodule范畴.{v} R)).反映同构
   定义体: (inferInstance : IsIso ((LinearEquiv.mk f.hom
       (asIso ((forget (SemimoduleCat R)).map f)).toEquiv.invFun
       (Equiv.left_inv _) (Equiv.right_inv _)).toModuleIsoₛ).hom)
@@ -1370,7 +1370,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (SemimoduleCat.{v} R) AddCommMonCat.{v}).ReflectsIsomorphisms
+  签名: (forget₂ (Semimodule范畴.{v} R) 加法交换幺半群范畴.{v}).反映同构
   定义体: by
     have : IsIso ((forget _).map f) := by
       change IsIso ((forget _).map ((forget₂ _ AddCommMonCat).map f))
@@ -1406,7 +1406,7 @@ definition ofHom₂
 
 中文:
 定义 ofHom₂
-  签名: {M N P : SemimoduleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
+  签名: {M N P : Semimodule范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
   定义体: ofHom homLinearEquiv.symm.toLinearMap ∘ₗ f
 
 Depends on / 依赖: homLinearEquiv, homLinearEquiv.symm.toLinearMap, toLinearMap
@@ -1426,8 +1426,8 @@ definition Hom.hom₂
   body: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
 
 中文:
-定义 Hom.hom₂
-  签名: {M N P : SemimoduleCat.{u} R} (f : M ⟶ (of R (N ⟶ P)))
+定义 态射.hom₂
+  签名: {M N P : Semimodule范畴.{u} R} (f : M ⟶ (of R (N ⟶ P)))
   定义体: (f ≫ ofHom homLinearEquiv.toLinearMap).hom
 -/
 def Hom.hom₂ {M N P : SemimoduleCat.{u} R} (f : M ⟶ (of R (N ⟶ P))) : M ->ₗ[R] N ->ₗ[R] P :=
@@ -1442,8 +1442,8 @@ lemma Hom.hom₂_ofHom₂
   proof: rfl
 
 中文:
-引理 Hom.hom₂_ofHom₂
-  条件: {M N P : SemimoduleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
+引理 态射.hom₂_ofHom₂
+  条件: {M N P : Semimodule范畴.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P)
   证明: rfl
 -/
 @[simp] lemma Hom.hom₂_ofHom₂ {M N P : SemimoduleCat.{u} R} (f : M ->ₗ[R] N ->ₗ[R] P) :
@@ -1459,7 +1459,7 @@ lemma ofHom₂_hom₂
 
 中文:
 引理 ofHom₂_hom₂
-  条件: {M N P : SemimoduleCat.{u} R} (f : M ⟶ of R (N ⟶ P))
+  条件: {M N P : Semimodule范畴.{u} R} (f : M ⟶ of R (N ⟶ P))
   证明: rfl
 -/
 @[simp] lemma ofHom₂_hom₂ {M N P : SemimoduleCat.{u} R} (f : M ⟶ of R (N ⟶ P)) :
@@ -1479,8 +1479,8 @@ theorem LinearMap.comp_id_semiModuleCat
   proof: by simp
 
 中文:
-定理 LinearMap.comp_id_semiModuleCat
-  结论: {R} [Semiring R]
+定理 线性映射.comp_id_semiModuleCat
+  结论: {R} [半环 R]
   证明: by simp
 -/
 @[simp] theorem LinearMap.comp_id_semiModuleCat {R} [Semiring R]
@@ -1496,8 +1496,8 @@ theorem LinearMap.id_semiModuleCat_comp
   proof: by simp
 
 中文:
-定理 LinearMap.id_semiModuleCat_comp
-  结论: {R} [Semiring R]
+定理 线性映射.id_semiModuleCat_comp
+  结论: {R} [半环 R]
   证明: by simp
 -/
 @[simp] theorem LinearMap.id_semiModuleCat_comp {R} [Semiring R]

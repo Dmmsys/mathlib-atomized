@@ -278,7 +278,7 @@ theorem coe_fib_neg
 中文:
 定理 coe_fib_neg
   条件: (n : 整数)
-  结论: (fib (-n) : Rat) = (-1) ^ (n + 1) * fib n
+  结论: (fib (-n) : 有理数) = (-1) ^ (n + 1) * fib n
   证明: by
   aesop (add safe (by rw [fib_neg, neg_one_zpow_eq_ite]))
 
@@ -621,7 +621,7 @@ theorem gcd_fib
 中文:
 定理 gcd_fib
   条件: (m n : 整数)
-  结论: gcd (fib m) (fib n) = 自然数.fib (gcd m n)
+  结论: 最大公约数 (fib m) (fib n) = 自然数.fib (最大公约数 m n)
   证明: by
   obtain ⟨m, (rfl | rfl)⟩ := m.eq_nat_or_neg
     <;> obtain ⟨n, (rfl | rfl)⟩ := n.eq_nat_or_neg

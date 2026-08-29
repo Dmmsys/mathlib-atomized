@@ -41,7 +41,7 @@ definition EventuallyConst
 
 中文:
 定义 EventuallyConst
-  签名: (f : α -> β) (l : Filter α)
+  签名: (f : α -> β) (l : 滤子 α)
   定义体: (map f l).Subsingleton
 
 Depends on / 依赖: Subsingleton
@@ -57,8 +57,8 @@ theorem HasBasis.eventuallyConst_iff
   proof: (h.map f).subsingleton_iff.trans by simp only [Set.Subsingleton, forall_mem_image]
 
 中文:
-定理 HasBasis.eventuallyConst_iff
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set α}
+定理 有基.eventuallyConst_iff
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: (h.map f).subsingleton_iff.trans by simp only [Set.Subsingleton, forall_mem_image]
 
 Depends on / 依赖: Set.Subsingleton, Subsingleton, forall_mem_image, h.map, subsingleton_iff, subsingleton_iff.trans
@@ -77,8 +77,8 @@ theorem HasBasis.eventuallyConst_iff'
     ⟨fun h => (h · · (x i) (hx i hi)), fun h a ha b hb => h a ha ▸ (h b hb).symm⟩
 
 中文:
-定理 HasBasis.eventuallyConst_iff'
-  结论: {ι : Sort*} {p : ι -> 命题} {s : ι -> Set α}
+定理 有基.eventuallyConst_iff'
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: h.eventuallyConst_iff.trans exists_congr fun i => and_congr_right fun hi =>
     ⟨fun h => (h · · (x i) (hx i hi)), fun h a ha b hb => h a ha ▸ (h b hb).symm⟩
 
@@ -102,7 +102,7 @@ alias ⟨EventuallyConst.exists_tendsto, _⟩ := eventuallyConst_iff_tendsto
 
 中文:
 引理 eventuallyConst_iff_tendsto
-  条件: [Nonempty β]
+  条件: [非空 β]
   证明: subsingleton_iff_exists_le_pure
 
 alias ⟨EventuallyConst.exists_tendsto, _⟩ := eventuallyConst_iff_tendsto
@@ -126,7 +126,7 @@ theorem EventuallyConst.of_tendsto
 
 中文:
 定理 EventuallyConst.of_tendsto
-  条件: {x : β} (h : Tendsto f l (pure x))
+  条件: {x : β} (h : 收敛 f l (pure x))
   结论: EventuallyConst f l
   证明: have : Nonempty β := ⟨x⟩; eventuallyConst_iff_tendsto.2 ⟨x, h⟩
 
@@ -146,8 +146,8 @@ theorem eventuallyConst_iff_exists_eventuallyEq
 alias ⟨EventuallyConst.eventuallyEq_const, _⟩ := eventuallyConst_iff_exists_eventuallyEq
 
 中文:
-定理 eventuallyConst_iff_exists_eventuallyEq
-  条件: [Nonempty β]
+定理 eventuallyConst_iff_存在_eventuallyEq
+  条件: [非空 β]
   证明: subsingleton_iff_exists_singleton_mem
 
 alias ⟨EventuallyConst.eventuallyEq_const, _⟩ := eventuallyConst_iff_exists_eventuallyEq
@@ -212,7 +212,7 @@ theorem eventuallyConst_set'
 
 中文:
 定理 eventuallyConst_set'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: eventuallyConst_pred'
 
 Depends on / 依赖: eventuallyConst_pred
@@ -231,7 +231,7 @@ theorem eventuallyConst_set
 
 中文:
 定理 eventuallyConst_set
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: eventuallyConst_pred
 
 Depends on / 依赖: IsHausdorff, Subsingleton, eventuallyConst_pred, of_subsingleton
@@ -250,7 +250,7 @@ theorem eventuallyConst_preimage
 
 中文:
 定理 eventuallyConst_preimage
-  条件: {s : Set β} {f : α -> β}
+  条件: {s : 集合 β} {f : α -> β}
   证明: .rfl
 -/
 theorem eventuallyConst_preimage {s : Set β} {f : α -> β} :
@@ -288,7 +288,7 @@ theorem eventuallyConst_id
 
 中文:
 定理 eventuallyConst_id
-  结论: EventuallyConst id l ↔ l.Subsingleton
+  结论: EventuallyConst id l ↔ l.子单例
   证明: Iff.rfl
 -/
 @[simp] theorem eventuallyConst_id : EventuallyConst id l ↔ l.Subsingleton := Iff.rfl
@@ -372,7 +372,7 @@ nonrec lemma anti {l'} (h : EventuallyConst f l) (hl' : l' <= l) : EventuallyCon
 
 中文:
 引理 of_subsingleton_right
-  条件: [Subsingleton β]
+  条件: [子单例 β]
   结论: EventuallyConst f l
   证明: .of_subsingleton
 
@@ -400,7 +400,7 @@ lemma of_subsingleton_left
 
 中文:
 引理 of_subsingleton_left
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: EventuallyConst f l
   证明: .map .of_subsingleton f
 
@@ -444,7 +444,7 @@ lemma inv
 
 中文:
 引理 inv
-  条件: [Inv β] (h : EventuallyConst f l)
+  条件: [取逆 β] (h : EventuallyConst f l)
   结论: EventuallyConst (f⁻¹) l
   证明: h.comp Inv.inv
 -/
@@ -460,7 +460,7 @@ lemma comp_tendsto
 
 中文:
 引理 comp_tendsto
-  结论: {lb : Filter β} {g : β -> γ} (hg : EventuallyConst g lb)
+  结论: {lb : 滤子 β} {g : β -> γ} (hg : EventuallyConst g lb)
   证明: hg.anti hf
 
 Depends on / 依赖: IsPrecomplete, Subsingleton, hg.anti, of_subsingleton
@@ -544,7 +544,7 @@ lemma mul
 
 中文:
 引理 mul
-  条件: [Mul β] {g : α -> β} (hf : EventuallyConst f l) (hg : EventuallyConst g l)
+  条件: [乘法 β] {g : α -> β} (hf : EventuallyConst f l) (hg : EventuallyConst g l)
   证明: hf.comp₂ (· * ·) hg
 
 Depends on / 依赖: hf.comp
@@ -664,7 +664,7 @@ lemma eventuallyConst_atTop
 
 中文:
 引理 eventuallyConst_atTop
-  条件: [SemilatticeSup α] [Nonempty α]
+  条件: [SemilatticeSup α] [非空 α]
   证明: (atTop_basis.eventuallyConst_iff' fun _ _ => self_mem_Ici).trans by
     simp only [true_and, mem_Ici]
 

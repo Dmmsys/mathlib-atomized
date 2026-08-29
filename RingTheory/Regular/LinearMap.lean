@@ -82,7 +82,7 @@ lemma subsingleton_linearMap_iff
 
 中文:
 引理 subsingleton_linearMap_iff
-  条件: [IsNoetherianRing R] [Module.Finite R M] [Module.Finite R N]
+  条件: [是Noether环 R] [模.有限 R M] [模.有限 R N]
   证明: by
   refine ⟨fun hom0 => ?_, fun ⟨r, mem_ann, reg⟩ =>
     linearMap_subsingleton_of_mem_annihilator reg mem_ann⟩

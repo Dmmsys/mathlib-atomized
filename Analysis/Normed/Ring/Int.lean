@@ -130,7 +130,7 @@ theorem toNat_add_toNat_neg_eq_nnnorm
 @[simp]
 
 中文:
-定理 toNat_add_toNat_neg_eq_nnnorm
+定理 to自然数_add_to自然数_neg_eq_nnnorm
   条件: (n : 整数)
   结论: ↑n.to自然数 + ↑(-n).to自然数 = ‖n‖₊
   证明: by
@@ -156,7 +156,7 @@ theorem toNat_add_toNat_neg_eq_norm
     congrArg NNReal.toReal (toNat_add_toNat_neg_eq_nnnorm n)
 
 中文:
-定理 toNat_add_toNat_neg_eq_norm
+定理 to自然数_add_to自然数_neg_eq_norm
   条件: (n : 整数)
   结论: ↑n.to自然数 + ↑(-n).to自然数 = ‖n‖
   证明: by

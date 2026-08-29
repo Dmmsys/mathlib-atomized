@@ -80,7 +80,7 @@ abbreviation Subcomplex
   body: Subfunctor X
 
 中文:
-缩写 Subcomplex
+缩写 子复形
   定义体: Subfunctor X
 
 Depends on / 依赖: Subfunctor
@@ -101,7 +101,7 @@ abbreviation toSSet
 
 中文:
 缩写 toSSet
-  签名: (A : X.Subcomplex)
+  签名: (A : X.子复形)
   定义体: A.toFunctor
 
 Depends on / 依赖: A.toFunctor, toFunctor
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut X.Subcomplex SSet.{u}
+  签名: CoeOut X.子复形 SSet.{u}
   定义体: fun S => S.toSSet
 
 Depends on / 依赖: S.toSSet, toSSet
@@ -141,7 +141,7 @@ abbreviation ι
 
 中文:
 缩写 ι
-  签名: (A : Subcomplex X)
+  签名: (A : 子复形 X)
   定义体: Subfunctor.ι A
 
 Depends on / 依赖: Subfunctor
@@ -187,7 +187,7 @@ lemma homOfLE_comp
 
 中文:
 引理 homOfLE_comp
-  条件: {S₃ : X.Subcomplex} (h' : S₂ <= S₃)
+  条件: {S₃ : X.子复形} (h' : S₂ <= S₃)
   证明: rfl
 -/
 lemma homOfLE_comp {S₃ : X.Subcomplex} (h' : S₂ <= S₃) :
@@ -261,7 +261,7 @@ instance mono_homOfLE
 
 中文:
 实例 mono_homOfLE
-  签名: : Mono (homOfLE h)
+  签名: : 单态射 (homOfLE h)
   定义体: mono_of_mono_fac (homOfLE_ι h)
 
 Depends on / 依赖: mono_of_mono_fac
@@ -305,7 +305,7 @@ definition toSSetFunctor
 
 中文:
 定义 toSSetFunctor
-  签名: : X.Subcomplex ⥤ SSet.{u} where
+  签名: : X.子复形 ⥤ SSet.{u} where
   定义体: A
   map h := homOfLE (leOfHom h)
 -/
@@ -332,7 +332,7 @@ definition topIso
 
 中文:
 定义 topIso
-  签名: : ((⊤ : X.Subcomplex) : SSet) ≅ X
+  签名: : ((⊤ : X.子复形) : SSet) ≅ X
   定义体: NatIso.ofComponents (fun n => (Equiv.Set.univ (X.obj n)).toIso)
 
 @[simp]
@@ -355,7 +355,7 @@ lemma topIso_hom
 
 中文:
 引理 topIso_hom
-  结论: (topIso X).hom = Subcomplex.ι _
+  结论: (topIso X).hom = 子复形.ι _
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -373,7 +373,7 @@ lemma topIso_inv_ι
 
 中文:
 引理 topIso_inv_ι
-  结论: (topIso X).inv ≫ Subfunctor.ι _ = 𝟙 _
+  结论: (topIso X).inv ≫ 子函子.ι _ = 𝟙 _
   证明: rfl
 -/
 lemma topIso_inv_ι : (topIso X).inv ≫ Subfunctor.ι _ = 𝟙 _ := rfl
@@ -390,7 +390,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (((⊥ : X.Subcomplex) : SSet.{u}) ⟶ Y)
+  签名: 子单例 (((⊥ : X.子复形) : SSet.{u}) ⟶ Y)
   定义体: by ext _ ⟨_, h⟩; tauto
 -/
 instance : Subsingleton (((⊥ : X.Subcomplex) : SSet.{u}) ⟶ Y) where
@@ -408,7 +408,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (((⊥ : X.Subcomplex) : SSet.{u}) ⟶ Y)
+  签名: 唯一 (((⊥ : X.子复形) : SSet.{u}) ⟶ Y)
   定义体: { app _ := ↾fun ⟨_, h⟩ => by tauto
       naturality _ _ _ := by ext ⟨_, h⟩; tauto }
   uniq := by subsingleton
@@ -431,7 +431,7 @@ definition isInitialBot
 
 中文:
 定义 isInitialBot
-  签名: : IsInitial ((⊥ : X.Subcomplex) : SSet.{u})
+  签名: : IsInitial ((⊥ : X.子复形) : SSet.{u})
   定义体: IsInitial.ofUnique _
 
 Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
@@ -518,7 +518,7 @@ lemma ofSimplex_le_iff
 
 中文:
 引理 ofSimplex_le_iff
-  条件: {n : 自然数} (x : X _⦋n⦌) (A : X.Subcomplex)
+  条件: {n : 自然数} (x : X _⦋n⦌) (A : X.子复形)
   证明: Subfunctor.ofSection_le_iff _ _
 
 Depends on / 依赖: Subfunctor, Subfunctor.ofSection_le_iff, ofSection_le_iff
@@ -595,7 +595,7 @@ lemma ofSimplex_map_of_epi
 
 中文:
 引理 ofSimplex_map_of_epi
-  结论: {X : SSet.{u}} {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f]
+  结论: {X : SSet.{u}} {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [满态射 f]
   证明: by
   refine le_antisymm (ofSimplex_map_le f x) ?_
   simp only [Subfunctor.ofSection_le_iff]
@@ -626,7 +626,7 @@ abbreviation range
 
 中文:
 缩写 range
-  签名: : Y.Subcomplex
+  签名: : Y.子复形
   定义体: Subfunctor.range f
 
 Depends on / 依赖: Subfunctor, Subfunctor.range
@@ -645,7 +645,7 @@ abbreviation toRange
 
 中文:
 缩写 toRange
-  签名: : X ⟶ Subcomplex.range f
+  签名: : X ⟶ 子复形.range f
   定义体: Subfunctor.toRange f
 
 @[simp, reassoc]
@@ -667,7 +667,7 @@ lemma toRange_ι
 
 中文:
 引理 toRange_ι
-  结论: toRange f ≫ (Subcomplex.range f).ι = f
+  结论: toRange f ≫ (子复形.range f).ι = f
   证明: rfl
 
 @[simp]
@@ -701,7 +701,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (toRange f)
+  签名: 满态射 (toRange f)
   定义体: inferInstanceAs (Epi (Subfunctor.toRange f))
 
 Depends on / 依赖: Subfunctor, Subfunctor.toRange, toRange
@@ -718,8 +718,8 @@ instance [Mono
   body: mono_of_mono_fac (toRange_ι f)
 
 中文:
-实例 [Mono
-  签名: f] : Mono (toRange f)
+实例 [单态射
+  签名: f] : 单态射 (toRange f)
   定义体: mono_of_mono_fac (toRange_ι f)
 
 Depends on / 依赖: mono_of_mono_fac
@@ -736,8 +736,8 @@ instance [Mono
   body: isIso_of_mono_of_epi _
 
 中文:
-实例 [Mono
-  签名: f] : IsIso (toRange f)
+实例 [单态射
+  签名: f] : 是同构 (toRange f)
   定义体: isIso_of_mono_of_epi _
 
 Depends on / 依赖: isIso_of_mono_of_epi
@@ -758,7 +758,7 @@ lemma range_eq_top_iff
 
 中文:
 引理 range_eq_top_iff
-  结论: Subcomplex.range f = ⊤ ↔ Epi f
+  结论: 子复形.range f = ⊤ ↔ 满态射 f
   证明: by
   rw [NatTrans.epi_iff_epi_app]; rw [Subfunctor.ext_iff]; rw [funext_iff]
   simp only [epi_iff_surjective, Subfunctor.range_obj, Subfunctor.top_obj,
@@ -783,8 +783,8 @@ lemma range_eq_top
 
 中文:
 引理 range_eq_top
-  条件: [Epi f]
-  结论: Subcomplex.range f = ⊤
+  条件: [满态射 f]
+  结论: 子复形.range f = ⊤
   证明: by
   rwa [range_eq_top_iff]
 
@@ -875,8 +875,8 @@ definition preimage
 @[simp]
 
 中文:
-定义 preimage
-  签名: (A : X.Subcomplex) (p : Y ⟶ X)
+定义 原像
+  签名: (A : X.子复形) (p : Y ⟶ X)
   定义体: p.app n ⁻¹' (A.obj n)
   map f := (Set.preimage_mono (A.map f)).trans (by simp [Set.preimage_preimage])
 
@@ -901,7 +901,7 @@ lemma preimage_max
 
 中文:
 引理 preimage_max
-  条件: (A B : X.Subcomplex) (p : Y ⟶ X)
+  条件: (A B : X.子复形) (p : Y ⟶ X)
   证明: rfl
 
 @[simp]
@@ -922,7 +922,7 @@ lemma preimage_min
 
 中文:
 引理 preimage_min
-  条件: (A B : X.Subcomplex) (p : Y ⟶ X)
+  条件: (A B : X.子复形) (p : Y ⟶ X)
   证明: rfl
 
 @[simp]
@@ -943,7 +943,7 @@ lemma preimage_iSup
 
 中文:
 引理 preimage_iSup
-  条件: {ι : 类型} (A : ι -> X.Subcomplex) (p : Y ⟶ X)
+  条件: {ι : 类型} (A : ι -> X.子复形) (p : Y ⟶ X)
   证明: by aesop
 
 @[simp]
@@ -964,7 +964,7 @@ lemma preimage_iInf
 
 中文:
 引理 preimage_iInf
-  条件: {ι : 类型} (A : ι -> X.Subcomplex) (p : Y ⟶ X)
+  条件: {ι : 类型} (A : ι -> X.子复形) (p : Y ⟶ X)
   证明: by aesop
 
 @[simp]
@@ -984,8 +984,8 @@ lemma preimage_id
 
 中文:
 引理 preimage_id
-  条件: (A : X.Subcomplex)
-  结论: A.preimage (𝟙 X) = A
+  条件: (A : X.子复形)
+  结论: A.原像 (𝟙 X) = A
   证明: rfl
 -/
 lemma preimage_id (A : X.Subcomplex) : A.preimage (𝟙 X) = A := rfl
@@ -1000,7 +1000,7 @@ lemma preimage_comp
 
 中文:
 引理 preimage_comp
-  条件: {Z : SSet.{u}} (A : Z.Subcomplex) (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {Z : SSet.{u}} (A : Z.子复形) (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma preimage_comp {Z : SSet.{u}} (A : Z.Subcomplex) (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -1019,8 +1019,8 @@ lemma preimage_ι
 
 中文:
 引理 preimage_ι
-  条件: (A : X.Subcomplex)
-  结论: A.preimage A.ι = ⊤
+  条件: (A : X.子复形)
+  结论: A.原像 A.ι = ⊤
   证明: by aesop
 -/
 lemma preimage_ι (A : X.Subcomplex) : A.preimage A.ι = ⊤ := by aesop
@@ -1042,8 +1042,8 @@ definition image
   body: Subfunctor.image A f
 
 中文:
-定义 image
-  签名: : Y.Subcomplex
+定义 像
+  签名: : Y.子复形
   定义体: Subfunctor.image A f
 
 Depends on / 依赖: Subfunctor, Subfunctor.image
@@ -1061,7 +1061,7 @@ lemma image_le_iff
 
 中文:
 引理 image_le_iff
-  条件: (Z : Y.Subcomplex)
+  条件: (Z : Y.子复形)
   证明: by
   simp [Subfunctor.le_def]
 
@@ -1083,7 +1083,7 @@ lemma image_top
 
 中文:
 引理 image_top
-  结论: (⊤ : X.Subcomplex).image f = range f
+  结论: (⊤ : X.子复形).像 f = range f
   证明: by aesop
 
 @[simp]
@@ -1101,7 +1101,7 @@ lemma image_id
 
 中文:
 引理 image_id
-  结论: A.image (𝟙 _) = A
+  结论: A.像 (𝟙 _) = A
   证明: by aesop
 -/
 lemma image_id : A.image (𝟙 _) = A := by aesop
@@ -1149,7 +1149,7 @@ lemma image_eq_range
 
 中文:
 引理 image_eq_range
-  结论: A.image f = range (A.ι ≫ f)
+  结论: A.像 f = range (A.ι ≫ f)
   证明: by aesop
 -/
 lemma image_eq_range : A.image f = range (A.ι ≫ f) := by aesop
@@ -1167,7 +1167,7 @@ lemma image_iSup
 
 中文:
 引理 image_iSup
-  条件: {ι : 类型} (S : ι -> X.Subcomplex) (f : X ⟶ Y)
+  条件: {ι : 类型} (S : ι -> X.子复形) (f : X ⟶ Y)
   证明: by
   aesop
 
@@ -1190,7 +1190,7 @@ lemma preimage_range
 
 中文:
 引理 preimage_range
-  结论: (range f).preimage f = ⊤
+  结论: (range f).原像 f = ⊤
   证明: le_antisymm (by simp) (by rw [← image_le_iff, image_top])
 
 @[simp]
@@ -1214,7 +1214,7 @@ lemma image_le_range
 
 中文:
 引理 image_le_range
-  结论: A.image f <= range f
+  结论: A.像 f <= range f
   证明: by
   simp [image_le_iff, preimage_range, le_top]
 
@@ -1274,7 +1274,7 @@ definition toImage
 
 中文:
 定义 toImage
-  签名: : (A : SSet) ⟶ (A.image f : SSet)
+  签名: : (A : SSet) ⟶ (A.像 f : SSet)
   定义体: (A.image f).lift (A.ι ≫ f) (by rw [image_eq_range])
 
 @[reassoc (attr := simp)]
@@ -1295,7 +1295,7 @@ lemma toImage_ι
 
 中文:
 引理 toImage_ι
-  结论: A.toImage f ≫ (A.image f).ι = A.ι ≫ f
+  结论: A.toImage f ≫ (A.像 f).ι = A.ι ≫ f
   证明: rfl
 -/
 lemma toImage_ι : A.toImage f ≫ (A.image f).ι = A.ι ≫ f := rfl
@@ -1314,7 +1314,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (A.toImage f)
+  签名: 满态射 (A.toImage f)
   定义体: by
   rw [← range_eq_top_iff]
   apply le_antisymm (by simp)
@@ -1342,7 +1342,7 @@ lemma image_monotone
 
 中文:
 引理 image_monotone
-  结论: Monotone (fun (S : X.Subcomplex) => S.image f)
+  结论: 递增 (fun (S : X.子复形) => S.像 f)
   证明: by
   intro S T h
   rw [image_le_iff]
@@ -1370,7 +1370,7 @@ lemma preimage_eq_top_iff
 
 中文:
 引理 preimage_eq_top_iff
-  条件: (B : X.Subcomplex) (f : Y ⟶ X)
+  条件: (B : X.子复形) (f : Y ⟶ X)
   证明: by
   rw [← image_top]; rw [image_le_iff]; rw [top_le_iff]
 
@@ -1396,7 +1396,7 @@ lemma image_preimage_le
 
 中文:
 引理 image_preimage_le
-  条件: (B : X.Subcomplex) (f : Y ⟶ X)
+  条件: (B : X.子复形) (f : Y ⟶ X)
   证明: by
   rw [image_le_iff]
 
@@ -1422,7 +1422,7 @@ lemma preimage_image_of_isIso
 
 中文:
 引理 preimage_image_of_isIso
-  条件: (f : X ⟶ Y) (B : Y.Subcomplex) [IsIso f]
+  条件: (f : X ⟶ Y) (B : Y.子复形) [是同构 f]
   证明: by
   apply le_antisymm (B.image_preimage_le f)
   · intro n y hy
@@ -1449,7 +1449,7 @@ lemma preimage_inv
 
 中文:
 引理 preimage_inv
-  条件: {X Y : SSet.{u}} (A : Subcomplex X) (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : SSet.{u}} (A : 子复形 X) (f : X ⟶ Y) [是同构 f]
   证明: by
   ext _ x
   simp only [preimage_obj, NatIso.isIso_inv_app, Set.mem_preimage, image_obj, Set.mem_image]
@@ -1474,7 +1474,7 @@ lemma image_inv
 
 中文:
 引理 image_inv
-  条件: {X Y : SSet.{u}} (A : Subcomplex Y) (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : SSet.{u}} (A : 子复形 Y) (f : X ⟶ Y) [是同构 f]
   证明: by
   simp [← preimage_inv]
 
@@ -1500,7 +1500,7 @@ definition fromPreimage
 
 中文:
 定义 fromPreimage
-  签名: (A : X.Subcomplex) (p : Y ⟶ X)
+  签名: (A : X.子复形) (p : Y ⟶ X)
   定义体: lift (Subcomplex.ι _ ≫ p) (by simp [range_comp])
 
 @[reassoc (attr := simp)]
@@ -1522,7 +1522,7 @@ lemma fromPreimage_ι
 
 中文:
 引理 fromPreimage_ι
-  条件: (A : X.Subcomplex) (p : Y ⟶ X)
+  条件: (A : X.子复形) (p : Y ⟶ X)
   证明: rfl
 -/
 lemma fromPreimage_ι (A : X.Subcomplex) (p : Y ⟶ X) :

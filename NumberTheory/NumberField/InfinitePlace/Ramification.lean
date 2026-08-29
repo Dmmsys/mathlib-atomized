@@ -80,7 +80,7 @@ lemma comap_mk
 
 中文:
 引理 comap_mk
-  条件: (φ : K ->+* Complex) (f : k ->+* K)
+  条件: (φ : K ->+* 复形) (f : k ->+* K)
   结论: (mk φ).comap f = mk (φ.comp f)
   证明: rfl
 -/
@@ -98,7 +98,7 @@ lemma comap_id
 中文:
 引理 comap_id
   条件: (w : InfinitePlace K)
-  结论: w.comap (RingHom.id K) = w
+  结论: w.comap (环态射.id K) = w
   证明: rfl
 -/
 lemma comap_id (w : InfinitePlace K) : w.comap (RingHom.id K) = w := rfl
@@ -169,7 +169,7 @@ lemma coe_mk_comp
 
 中文:
 引理 coe_mk_comp
-  结论: {ψ : K ->+* Complex} {f : k ->+* K}
+  结论: {ψ : K ->+* 复形} {f : k ->+* K}
   证明: rfl
 -/
 lemma coe_mk_comp {ψ : K ->+* Complex} {f : k ->+* K}
@@ -185,7 +185,7 @@ lemma comap_mk_lift
 
 中文:
 引理 comap_mk_lift
-  条件: [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex)
+  条件: [代数 k K] [代数.是代数 k K] (φ : k ->+* 复形)
   证明: by simp
 -/
 lemma comap_mk_lift [Algebra k K] [Algebra.IsAlgebraic k K] (φ : k ->+* Complex) :
@@ -203,7 +203,7 @@ lemma IsReal.comap
   exact hφ.comp f
 
 中文:
-引理 IsReal.comap
+引理 Is实数.comap
   条件: (f : k ->+* K) {w : InfinitePlace K} (hφ : Is实数 w)
   证明: by
   rw [← mk_embedding w]; rw [comap_mk]; rw [isReal_mk_iff]
@@ -229,8 +229,8 @@ lemma IsComplex.of_comap
   exact (IsReal.comap f).mt hf
 
 中文:
-引理 IsComplex.of_comap
-  条件: (f : k ->+* K) {w : InfinitePlace K} (hf : IsComplex (w.comap f))
+引理 是复形.of_comap
+  条件: (f : k ->+* K) {w : InfinitePlace K} (hf : 是复形 (w.comap f))
   证明: by
   rw [← not_isReal_iff_isComplex] at hf ⊢
   exact (IsReal.comap f).mt hf
@@ -252,7 +252,7 @@ lemma isReal_comap_iff
   rw [← mk_embedding w]; rw [comap_mk]; rw [isReal_mk_iff]; rw [isReal_mk_iff]; rw [ComplexEmbedding.isReal_comp_iff]
 
 中文:
-引理 isReal_comap_iff
+引理 is实数_comap_iff
   条件: (f : k ≃+* K) {w : InfinitePlace K}
   证明: by
   rw [← mk_embedding w]; rw [comap_mk]; rw [isReal_mk_iff]; rw [isReal_mk_iff]; rw [ComplexEmbedding.isReal_comp_iff]
@@ -274,7 +274,7 @@ lemma comap_surjective
 
 中文:
 引理 comap_surjective
-  条件: [Algebra k K] [Algebra.IsAlgebraic k K]
+  条件: [代数 k K] [代数.是代数 k K]
   证明: fun w =>
   ⟨(mk (ComplexEmbedding.lift K w.embedding)), by simp⟩
 -/
@@ -293,7 +293,7 @@ theorem comap_embedding_of_isReal
     (by rwa [← isReal_mk_iff]; rw [← comap_mk]; rw [mk_embedding])]
 
 中文:
-定理 comap_embedding_of_isReal
+定理 comap_embedding_of_is实数
   条件: (f : k ->+* K) {w : InfinitePlace K} (h : (w.comap f).Is实数)
   证明: by
    rw [← mk_embedding w]; rw [comap_mk]; rw [mk_embedding]; rw [embedding_mk_eq_of_isReal
@@ -354,7 +354,7 @@ lemma card_mono
 
 中文:
 引理 card_mono
-  条件: [NumberField k] [NumberField K]
+  条件: [数域 k] [数域 K]
   证明: have := Module.Finite.of_restrictScalars_finite Rat k K
   Fintype.card_le_of_surjective _ comap_surjective
 
@@ -381,7 +381,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Gal(K/k) (InfinitePlace K)
+  签名: 乘法作用 Gal(K/k) (InfinitePlace K)
   定义体: fun σ w => w.comap σ.symm
   one_smul := fun _ => rfl
   mul_smul := fun _ _ _ => rfl
@@ -436,7 +436,7 @@ lemma smul_mk
 
 中文:
 引理 smul_mk
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   结论: σ • mk φ = mk (φ.comp σ.symm)
   证明: rfl
 -/
@@ -454,7 +454,7 @@ lemma comap_smul
 中文:
 引理 comap_smul
   条件: {f : F ->+* K}
-  结论: (σ • w).comap f = w.comap (RingHom.comp σ.symm f)
+  结论: (σ • w).comap f = w.comap (环态射.comp σ.symm f)
   证明: rfl
 -/
 lemma comap_smul {f : F ->+* K} : (σ • w).comap f = w.comap (RingHom.comp σ.symm f) := rfl
@@ -470,7 +470,7 @@ lemma isReal_smul_iff
   proof: isReal_comap_iff (f := σ.symm.toRingEquiv)
 
 中文:
-引理 isReal_smul_iff
+引理 is实数_smul_iff
   结论: Is实数 (σ • w) ↔ Is实数 w
   证明: isReal_comap_iff (f := σ.symm.toRingEquiv)
 
@@ -489,7 +489,7 @@ lemma isComplex_smul_iff
 
 中文:
 引理 isComplex_smul_iff
-  结论: IsComplex (σ • w) ↔ IsComplex w
+  结论: 是复形 (σ • w) ↔ 是复形 w
   证明: by
   rw [← not_isReal_iff_isComplex]; rw [← not_isReal_iff_isComplex]; rw [isReal_smul_iff]
 
@@ -507,8 +507,8 @@ lemma ComplexEmbedding.exists_comp_symm_eq_of_comp_eq
   proof: NumberField.ComplexEmbedding.exists_comp_symm_eq_of_comp_eq φ ψ h
 
 中文:
-引理 ComplexEmbedding.exists_comp_symm_eq_of_comp_eq
-  结论: [IsGalois k K] (φ ψ : K ->+* Complex)
+引理 ComplexEmbedding.存在_comp_symm_eq_of_comp_eq
+  结论: [是Galois k K] (φ ψ : K ->+* 复形)
   证明: NumberField.ComplexEmbedding.exists_comp_symm_eq_of_comp_eq φ ψ h
 
 Depends on / 依赖: ComplexEmbedding, NumberField, NumberField.ComplexEmbedding.exists_comp_symm_eq_of_comp_eq, exists_comp_symm_eq_of_comp_eq
@@ -533,8 +533,8 @@ lemma exists_smul_eq_of_comap_eq
     rw [← mk_embedding w]; rw [← mk_embedding w']; rw [smul_mk]
 
 中文:
-引理 exists_smul_eq_of_comap_eq
-  结论: [IsGalois k K] {w w' : InfinitePlace K}
+引理 存在_smul_eq_of_comap_eq
+  结论: [是Galois k K] {w w' : InfinitePlace K}
   证明: by
   rw [← mk_embedding w]; rw [← mk_embedding w']; rw [comap_mk]; rw [comap_mk]; rw [mk_eq_iff] at h
   cases h with
@@ -574,7 +574,7 @@ lemma mem_orbit_iff
 
 中文:
 引理 mem_orbit_iff
-  条件: [IsGalois k K] {w w' : InfinitePlace K}
+  条件: [是Galois k K] {w w' : InfinitePlace K}
   证明: by
   refine ⟨?_, exists_smul_eq_of_comap_eq⟩
   rintro ⟨σ, rfl : σ • w = w'⟩
@@ -610,7 +610,7 @@ definition orbitRelEquiv
 
 中文:
 定义 orbitRelEquiv
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: by
   refine Equiv.ofBijective (Quotient.lift (comap · (algebraMap k K))
     fun _ _ e => (mem_orbit_iff.mp e).symm) ⟨?_, ?_⟩
@@ -642,7 +642,7 @@ lemma orbitRelEquiv_apply_mk''
 
 中文:
 引理 orbitRelEquiv_apply_mk''
-  条件: [IsGalois k K] (w : InfinitePlace K)
+  条件: [是Galois k K] (w : InfinitePlace K)
   证明: rfl
 -/
 lemma orbitRelEquiv_apply_mk'' [IsGalois k K] (w : InfinitePlace K) :
@@ -894,7 +894,7 @@ theorem isRamified_iff
 
 中文:
 定理 isRamified_iff
-  结论: w.IsRamified k ↔ w.IsComplex ∧ (w.comap (algebraMap k K)).Is实数
+  结论: w.IsRamified k ↔ w.是复形 ∧ (w.comap (algebraMap k K)).Is实数
   证明: not_isUnramified_iff
 
 Depends on / 依赖: not_isUnramified_iff
@@ -914,7 +914,7 @@ theorem IsRamified.isComplex
 中文:
 定理 IsRamified.isComplex
   条件: (h : w.IsRamified k)
-  结论: w.IsComplex
+  结论: w.是复形
   证明: (isRamified_iff.1 h).1
 
 Depends on / 依赖: isRamified_iff
@@ -931,7 +931,7 @@ theorem IsRamified.isReal
   proof: (isRamified_iff.1 h).2
 
 中文:
-定理 IsRamified.isReal
+定理 IsRamified.is实数
   条件: (h : w.IsRamified k)
   结论: (w.comap (algebraMap k K)).Is实数
   证明: (isRamified_iff.1 h).2
@@ -1075,7 +1075,7 @@ theorem isRamified_mk_iff_isMixed
 
 中文:
 定理 isRamified_mk_iff_isMixed
-  条件: {φ : K ->+* Complex}
+  条件: {φ : K ->+* 复形}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases embedding_mk_eq φ with (hl | hr)
@@ -1166,7 +1166,7 @@ theorem isUnramified_mk_iff_isUnmixed
 
 中文:
 定理 isUnramified_mk_iff_isUnmixed
-  条件: {φ : K ->+* Complex}
+  条件: {φ : K ->+* 复形}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases embedding_mk_eq φ with (hl | hr)
@@ -1203,7 +1203,7 @@ lemma IsReal.isUnramified
   proof: isUnramified_iff.mpr (Or.inl h)
 
 中文:
-引理 IsReal.isUnramified
+引理 Is实数.isUnramified
   条件: (h : Is实数 w)
   结论: IsUnramified k w
   证明: isUnramified_iff.mpr (Or.inl h)
@@ -1223,7 +1223,7 @@ lemma _root_.NumberField.ComplexEmbedding.IsConj.isUnramified_mk_iff
   rw [h.ext_iff]; rw [ComplexEmbedding.isConj_one_iff]; rw [← not_iff_not]; rw [not_isUnramified_iff]; rw [← not_isReal_iff_isComplex]; rw [comap_mk]; rw [isReal_mk_iff]; rw [isReal_mk_iff]; rw [eq_true h.isReal_comp]; rw [and_true]
 
 中文:
-引理 _root_.NumberField.ComplexEmbedding.IsConj.isUnramified_mk_iff
+引理 _root_.数域.ComplexEmbedding.IsConj.isUnramified_mk_iff
   证明: by
   rw [h.ext_iff]; rw [ComplexEmbedding.isConj_one_iff]; rw [← not_iff_not]; rw [not_isUnramified_iff]; rw [← not_isReal_iff_isComplex]; rw [comap_mk]; rw [isReal_mk_iff]; rw [isReal_mk_iff]; rw [eq_true h.isReal_comp]; rw [and_true]
 
@@ -1249,8 +1249,8 @@ lemma isUnramified_mk_iff_forall_isConj
   let := (φ.comp (algebraMap k K))
 
 中文:
-引理 isUnramified_mk_iff_forall_isConj
-  条件: [IsGalois k K] {φ : K ->+* Complex}
+引理 isUnramified_mk_iff_对任意_isConj
+  条件: [是Galois k K] {φ : K ->+* 复形}
   证明: by
   refine ⟨fun H σ hσ => hσ.isUnramified_mk_iff.mp H,
     fun H => ?_⟩
@@ -1294,7 +1294,7 @@ lemma mem_stabilizer_mk_iff
 
 中文:
 引理 mem_stabilizer_mk_iff
-  条件: (φ : K ->+* Complex) (σ : Gal(K/k))
+  条件: (φ : K ->+* 复形) (σ : Gal(K/k))
   证明: by
   simp only [MulAction.mem_stabilizer_iff, smul_mk, mk_eq_iff]
   rw [← ComplexEmbedding.isConj_symm]; rw [ComplexEmbedding.conjugate]; rw [star_eq_iff_star_eq]
@@ -1350,7 +1350,7 @@ lemma _root_.NumberField.ComplexEmbedding.IsConj.coe_stabilizer_mk
   rw [SetLike.mem_coe]; rw [mem_stabilizer_mk_iff]; rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff]; rw [← h.ext_iff]; rw [eq_comm (a := σ)]
 
 中文:
-引理 _root_.NumberField.ComplexEmbedding.IsConj.coe_stabilizer_mk
+引理 _root_.数域.ComplexEmbedding.IsConj.coe_stabilizer_mk
   证明: by
   ext
   rw [SetLike.mem_coe]; rw [mem_stabilizer_mk_iff]; rw [Set.mem_insert_iff]; rw [Set.mem_singleton_iff]; rw [← h.ext_iff]; rw [eq_comm (a := σ)]
@@ -1429,7 +1429,7 @@ lemma isUnramified_iff_stabilizer_eq_bot
 
 中文:
 引理 isUnramified_iff_stabilizer_eq_bot
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   结论: IsUnramified k w ↔ Stab w = ⊥
   证明: by
   rw [← mk_embedding w]; rw [isUnramified_mk_iff_forall_isConj]
@@ -1454,7 +1454,7 @@ lemma isUnramified_iff_card_stabilizer_eq_one
 
 中文:
 引理 isUnramified_iff_card_stabilizer_eq_one
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   证明: by
   rw [isUnramified_iff_stabilizer_eq_bot]; rw [Subgroup.card_eq_one]
 
@@ -1476,7 +1476,7 @@ lemma not_isUnramified_iff_card_stabilizer_eq_two
 
 中文:
 引理 not_isUnramified_iff_card_stabilizer_eq_two
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   证明: by
   rw [isUnramified_iff_card_stabilizer_eq_one]
   obtain (e | e) := nat_card_stabilizer_eq_one_or_two k w <;> rw [e] <;> decide
@@ -1498,7 +1498,7 @@ lemma isRamified_iff_card_stabilizer_eq_two
 
 中文:
 引理 isRamified_iff_card_stabilizer_eq_two
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   证明: not_isUnramified_iff_card_stabilizer_eq_two
 
 Depends on / 依赖: not_isUnramified_iff_card_stabilizer_eq_two
@@ -1520,8 +1520,8 @@ lemma exists_isConj_of_isRamified
   grind
 
 中文:
-引理 exists_isConj_of_isRamified
-  条件: [IsGalois k K] {φ : K ->+* Complex} (h : IsRamified k (mk φ))
+引理 存在_isConj_of_isRamified
+  条件: [是Galois k K] {φ : K ->+* 复形} (h : IsRamified k (mk φ))
   证明: by
   rw [isRamified_iff_card_stabilizer_eq_two]; rw [Nat.card_eq_two_iff] at h
   obtain ⟨⟨x, hx⟩, ⟨y, hy⟩, h₁, -⟩ := h
@@ -1551,7 +1551,7 @@ lemma card_stabilizer
 
 中文:
 引理 card_stabilizer
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   证明: by
   split
   · rwa [← isUnramified_iff_card_stabilizer_eq_one]
@@ -1582,7 +1582,7 @@ lemma even_nat_card_aut_of_not_isUnramified
 
 中文:
 引理 even_nat_card_aut_of_not_isUnramified
-  条件: [IsGalois k K] (hw : ¬ IsUnramified k w)
+  条件: [是Galois k K] (hw : ¬ IsUnramified k w)
   证明: by
   by_cases H : Finite Gal(K/k)
   · cases nonempty_fintype Gal(K/k)
@@ -1614,7 +1614,7 @@ lemma even_card_aut_of_not_isUnramified
 
 中文:
 引理 even_card_aut_of_not_isUnramified
-  条件: [IsGalois k K] (hw : ¬ IsUnramified k w)
+  条件: [是Galois k K] (hw : ¬ IsUnramified k w)
   证明: even_nat_card_aut_of_not_isUnramified hw
 
 Depends on / 依赖: even_nat_card_aut_of_not_isUnramified
@@ -1636,7 +1636,7 @@ lemma even_finrank_of_not_isUnramified
 
 中文:
 引理 even_finrank_of_not_isUnramified
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: by
   by_cases FiniteDimensional k K
   · exact IsGalois.card_aut_eq_finrank k K ▸ even_card_aut_of_not_isUnramified hw
@@ -1701,7 +1701,7 @@ lemma isUnramifiedIn_comap
 
 中文:
 引理 isUnramifiedIn_comap
-  条件: [IsGalois k K] {w : InfinitePlace K}
+  条件: [是Galois k K] {w : InfinitePlace K}
   证明: by
   refine ⟨fun H => H _ rfl, fun H v hv => ?_⟩
   obtain ⟨σ, rfl⟩ := exists_smul_eq_of_comap_eq hv
@@ -1728,7 +1728,7 @@ lemma even_card_aut_of_not_isUnramifiedIn
 
 中文:
 引理 even_card_aut_of_not_isUnramifiedIn
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: by
   obtain ⟨v, rfl⟩ := comap_surjective (K := K) w
   rw [isUnramifiedIn_comap] at hw
@@ -1789,7 +1789,7 @@ lemma card_isUnramified
 
 中文:
 引理 card_isUnramified
-  条件: [NumberField k] [IsGalois k K]
+  条件: [数域 k] [是Galois k K]
   证明: by
   rw [← IsGalois.card_aut_eq_finrank]; rw [Finset.card_eq_sum_card_fiberwise (f := (comap · (algebraMap k K)))
     (t := {w : InfinitePlace k | w.IsUnramifiedIn K})]; rw [← smul_eq_mul]; rw [← sum_const]
@@ -1834,7 +1834,7 @@ lemma card_isUnramified_compl
 
 中文:
 引理 card_isUnramified_compl
-  条件: [NumberField k] [IsGalois k K]
+  条件: [数域 k] [是Galois k K]
   证明: by
   rw [← IsGalois.card_aut_eq_finrank]; rw [Finset.card_eq_sum_card_fiberwise (f := (comap · (algebraMap k K)))
     (t := ({w : InfinitePlace k | w.IsUnramifiedIn K} : Finset _)ᶜ)]; rw [← smul_eq_mul]; rw [← sum_const]
@@ -1874,7 +1874,7 @@ lemma card_eq_card_isUnramifiedIn
 
 中文:
 引理 card_eq_card_isUnramifiedIn
-  条件: [NumberField k] [IsGalois k K]
+  条件: [数域 k] [是Galois k K]
   证明: by
   rw [← card_isUnramified]; rw [← card_isUnramified_compl]; rw [Finset.card_add_card_compl]
 
@@ -1904,7 +1904,7 @@ class IsUnramifiedAtInfinitePlaces
     - isUnramified : forall w : InfinitePlace K, w.IsUnramified k
 
 中文:
-类 IsUnramifiedAtInfinitePlaces
+类 是UnramifiedAtInfinitePlaces
   参数: : 命题 where
   公理与运算 (1 个):
     - isUnramified : 对任意 w : InfinitePlace K, w.IsUnramified k
@@ -1921,8 +1921,8 @@ instance IsUnramifiedAtInfinitePlaces.id
   body: w.isUnramified_self
 
 中文:
-实例 IsUnramifiedAtInfinitePlaces.id
-  签名: : IsUnramifiedAtInfinitePlaces K K where
+实例 是UnramifiedAtInfinitePlaces.id
+  签名: : 是UnramifiedAtInfinitePlaces K K where
   定义体: w.isUnramified_self
 
 Depends on / 依赖: isUnramified_self, w.isUnramified_self
@@ -1938,7 +1938,7 @@ lemma IsUnramifiedAtInfinitePlaces.trans
   proof: Eq.trans (IsScalarTower.algebraMap_eq k K F ▸ h₁.1 (w.comap (algebraMap _ _))) (h₂.1 w)
 
 中文:
-引理 IsUnramifiedAtInfinitePlaces.trans
+引理 是UnramifiedAtInfinitePlaces.trans
   证明: Eq.trans (IsScalarTower.algebraMap_eq k K F ▸ h₁.1 (w.comap (algebraMap _ _))) (h₂.1 w)
 
 Depends on / 依赖: Eq.trans, IsScalarTower, IsScalarTower.algebraMap_eq, algebraMap, algebraMap_eq, w.comap
@@ -1958,8 +1958,8 @@ lemma IsUnramifiedAtInfinitePlaces.top
   proof: (h.1 w).of_restrictScalars K
 
 中文:
-引理 IsUnramifiedAtInfinitePlaces.top
-  条件: [h : IsUnramifiedAtInfinitePlaces k F]
+引理 是UnramifiedAtInfinitePlaces.top
+  条件: [h : 是UnramifiedAtInfinitePlaces k F]
   证明: (h.1 w).of_restrictScalars K
 
 Depends on / 依赖: of_restrictScalars
@@ -1979,8 +1979,8 @@ lemma IsUnramifiedAtInfinitePlaces.bot
     exact (h₁.1 w).comap K
 
 中文:
-引理 IsUnramifiedAtInfinitePlaces.bot
-  结论: [h₁ : IsUnramifiedAtInfinitePlaces k F]
+引理 是UnramifiedAtInfinitePlaces.bot
+  结论: [h₁ : 是UnramifiedAtInfinitePlaces k F]
   证明: by
     obtain ⟨w, rfl⟩ := InfinitePlace.comap_surjective (K := F) w
     exact (h₁.1 w).comap K
@@ -2005,8 +2005,8 @@ lemma NumberField.InfinitePlace.isUnramified
   proof: IsUnramifiedAtInfinitePlaces.isUnramified w
 
 中文:
-引理 NumberField.InfinitePlace.isUnramified
-  结论: [IsUnramifiedAtInfinitePlaces k K]
+引理 数域.InfinitePlace.isUnramified
+  结论: [是UnramifiedAtInfinitePlaces k K]
   证明: IsUnramifiedAtInfinitePlaces.isUnramified w
 
 Depends on / 依赖: IsUnramifiedAtInfinitePlaces, IsUnramifiedAtInfinitePlaces.isUnramified, isUnramified
@@ -2025,8 +2025,8 @@ lemma NumberField.InfinitePlace.isUnramifiedIn
   proof: fun v _ => v.isUnramified k
 
 中文:
-引理 NumberField.InfinitePlace.isUnramifiedIn
-  结论: [IsUnramifiedAtInfinitePlaces k K]
+引理 数域.InfinitePlace.isUnramifiedIn
+  结论: [是UnramifiedAtInfinitePlaces k K]
   证明: fun v _ => v.isUnramified k
 
 Depends on / 依赖: isUnramified, v.isUnramified
@@ -2046,7 +2046,7 @@ lemma IsUnramifiedAtInfinitePlaces_of_odd_card_aut
 
 中文:
 引理 IsUnramifiedAtInfinitePlaces_of_odd_card_aut
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: ⟨fun _ => not_not.mp (Nat.not_even_iff_odd.2 h ∘ InfinitePlace.even_card_aut_of_not_isUnramified)⟩
 
 Depends on / 依赖: InfinitePlace, InfinitePlace.even_card_aut_of_not_isUnramified, Nat.not_even_iff_odd, even_card_aut_of_not_isUnramified, not_even_iff_odd, not_not, not_not.mp
@@ -2065,7 +2065,7 @@ lemma IsUnramifiedAtInfinitePlaces_of_odd_finrank
 
 中文:
 引理 IsUnramifiedAtInfinitePlaces_of_odd_finrank
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: ⟨fun _ => not_not.mp (Nat.not_even_iff_odd.2 h ∘ InfinitePlace.even_finrank_of_not_isUnramified)⟩
 
 Depends on / 依赖: InfinitePlace, InfinitePlace.even_finrank_of_not_isUnramified, Nat.not_even_iff_odd, even_finrank_of_not_isUnramified, not_even_iff_odd, not_not, not_not.mp
@@ -2091,8 +2091,8 @@ lemma IsUnramifiedAtInfinitePlaces.card_infinitePlace
   exact InfinitePlace.isUnr
 
 中文:
-引理 IsUnramifiedAtInfinitePlaces.card_infinitePlace
-  结论: [NumberField k] [NumberField K]
+引理 是UnramifiedAtInfinitePlaces.card_infinitePlace
+  结论: [数域 k] [数域 K]
   证明: by
   classical
   rw [InfinitePlace.card_eq_card_isUnramifiedIn (k := k) (K := K)]; rw [Finset.filter_true_of_mem]; rw [Finset.card_univ]; rw [Finset.card_eq_zero.mpr]; rw [zero_mul]; rw [add_zero]
@@ -2214,8 +2214,8 @@ theorem isComplex_of_isComplex_under
 
 中文:
 定理 isComplex_of_isComplex_under
-  条件: (hv : v.IsComplex)
-  结论: w.IsComplex
+  条件: (hv : v.是复形)
+  结论: w.是复形
   证明: by
   rw [isComplex_iff]; rw [ComplexEmbedding.isReal_iff]; rw [RingHom.ext_iff]; rw [not_forall] at hv ⊢
   obtain ⟨x, hx⟩ := hv
@@ -2244,7 +2244,7 @@ theorem isReal_of_isReal_over
   exact mt (isComplex_of_isComplex_under w) hw
 
 中文:
-定理 isReal_of_isReal_over
+定理 is实数_of_is实数_over
   条件: (hw : w.Is实数)
   结论: v.Is实数
   证明: by
@@ -2268,7 +2268,7 @@ theorem IsRamified.liesOver_isReal_under
   proof: LiesOver.comap_eq w v ▸ (isRamified_iff.1 hw).2
 
 中文:
-定理 IsRamified.liesOver_isReal_under
+定理 IsRamified.liesOver_is实数_under
   条件: (hw : w.IsRamified K)
   证明: LiesOver.comap_eq w v ▸ (isRamified_iff.1 hw).2
 
@@ -2288,7 +2288,7 @@ theorem IsUnramified.liesOver_isReal_over
     (by simpa [LiesOver.comap_eq w v] using not_isComplex_iff_isReal.2 hv)
 
 中文:
-定理 IsUnramified.liesOver_isReal_over
+定理 IsUnramified.liesOver_is实数_over
   条件: (hw : w.IsUnramified K) (hv : v.Is实数)
   结论: w.Is实数
   证明: (InfinitePlace.isUnramified_iff.1 hw).resolve_right
@@ -2316,7 +2316,7 @@ definition placesOver
 
 中文:
 定义 placesOver
-  签名: : Set (InfinitePlace L)
+  签名: : 集合 (InfinitePlace L)
   定义体: { w | w.LiesOver v }
 
 Depends on / 依赖: LiesOver, w.LiesOver
@@ -2333,7 +2333,7 @@ definition unramifiedPlacesOver
 
 中文:
 定义 unramifiedPlacesOver
-  签名: : Set (InfinitePlace L)
+  签名: : 集合 (InfinitePlace L)
   定义体: { w | w.LiesOver v ∧ w.IsUnramified K }
 
 Depends on / 依赖: IsUnramified, LiesOver, w.IsUnramified, w.LiesOver
@@ -2350,7 +2350,7 @@ definition ramifiedPlacesOver
 
 中文:
 定义 ramifiedPlacesOver
-  签名: : Set (InfinitePlace L)
+  签名: : 集合 (InfinitePlace L)
   定义体: { w | w.LiesOver v ∧ w.IsRamified K }
 
 Depends on / 依赖: IsRamified, LiesOver, w.IsRamified, w.LiesOver
@@ -2370,7 +2370,7 @@ theorem mk_mem_unramifiedPlacesOver
 
 中文:
 定理 mk_mem_unramifiedPlacesOver
-  条件: {φ : L ->+* Complex} (h : φ in unmixedEmbeddingsOver L (v.embedding))
+  条件: {φ : L ->+* 复形} (h : φ in unmixedEmbeddingsOver L (v.embedding))
   证明: ⟨⟨have := h.1; mk_embedding v ▸ LiesOver.comp_eq (mk φ).1 (mk v.embedding).1⟩,
     h.2.mk_isUnramified⟩
 
@@ -2428,7 +2428,7 @@ theorem mk_mem_ramifiedPlacesOver
 
 中文:
 定理 mk_mem_ramifiedPlacesOver
-  条件: {φ : L ->+* Complex} (h : φ in mixedEmbeddingsOver L (v.embedding))
+  条件: {φ : L ->+* 复形} (h : φ in mixedEmbeddingsOver L (v.embedding))
   证明: ⟨⟨have := h.1; mk_embedding v ▸ LiesOver.comp_eq (mk φ).1 (mk v.embedding).1⟩, h.2.mk_isRamified⟩
 
 Depends on / 依赖: LiesOver, LiesOver.comp_eq, comp_eq, embedding, mk_embedding, mk_isRamified, v.embedding
@@ -2638,7 +2638,7 @@ theorem mapsTo_embeddingConjugateIte
 
 中文:
 定理 mapsTo_embeddingConjugateIte
-  结论: (unramifiedPlacesOver L v).MapsTo
+  结论: (unramifiedPlacesOver L v).映射到
   证明: by
   rintro w ⟨_, hw⟩
   by_cases h : ComplexEmbedding.LiesOver w.embedding v.embedding
@@ -2671,7 +2671,7 @@ h.2.isReal_iff_isReal.1 by have := h.1.over; aesop
 
 中文:
 定理 surjOn_embeddingConjugateIte
-  结论: (unramifiedPlacesOver L v).SurjOn
+  结论: (unramifiedPlacesOver L v).满射限制
   证明: by
   refine fun ψ h => ⟨mk ψ, mk_mem_unramifiedPlacesOver h, ?_⟩
   rcases embedding_mk_eq ψ with (_ | hψ)
@@ -2700,7 +2700,7 @@ theorem bijOn_extensionIte
 
 中文:
 定理 bijOn_extensionIte
-  结论: (unramifiedPlacesOver L v).BijOn (embeddingConjugateIte v)
+  结论: (unramifiedPlacesOver L v).双射限制 (embeddingConjugateIte v)
   证明: ⟨mapsTo_embeddingConjugateIte L v, ((embedding_injective _).ite (star_injective.comp
     (embedding_injective _)) (fun _ _ => eq_of_embedding_eq_conjugate L)).injOn,
       surjOn_embeddingConjugateIte L v⟩
@@ -2744,7 +2744,7 @@ theorem unramifedPlacesOver_ncard_add_eq_finrank
 
 中文:
 定理 unramifedPlacesOver_ncard_add_eq_finrank
-  条件: [NumberField K] [NumberField L]
+  条件: [数域 K] [数域 L]
   证明: by
   classical
   let : Algebra K Complex := v.embedding.toAlgebra

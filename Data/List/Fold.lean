@@ -74,7 +74,7 @@ lemma foldl_cons_eq_apply_foldl
 
 中文:
 引理 foldl_cons_eq_apply_foldl
-  条件: [hv : RightCommutative v]
+  条件: [hv : 右交换 v]
   证明: by
   rw [foldl_cons]
   induction l generalizing a b <;> simp [*, hv.right_comm]
@@ -98,7 +98,7 @@ lemma foldr_cons_eq_foldr_apply
 
 中文:
 引理 foldr_cons_eq_foldr_apply
-  条件: [hf : LeftCommutative f]
+  条件: [hf : 左交换 f]
   证明: by
   rw [foldr_cons]
   induction l generalizing a b <;> simp [*, hf.left_comm]
@@ -121,7 +121,7 @@ lemma foldl1_eq_foldr1
 
 中文:
 引理 foldl1_eq_foldr1
-  条件: {f : α -> α -> α} [ha : Std.Associative f] {a b : α}
+  条件: {f : α -> α -> α} [ha : Std.结合 f] {a b : α}
   证明: by
   induction l generalizing a <;> simp [*, ha.assoc]
 
@@ -142,7 +142,7 @@ theorem foldl_eq_foldr_of_commute
 
 中文:
 定理 foldl_eq_foldr_of_commute
-  条件: {f : α -> α -> α} [Std.Associative f] (ha : 对任意 x, f a x = f x a)
+  条件: {f : α -> α -> α} [Std.结合 f] (ha : 对任意 x, f a x = f x a)
   证明: by
   induction l <;> simp [*, foldl_assoc]
 
@@ -162,7 +162,7 @@ theorem foldl_eq_foldr
 
 中文:
 定理 foldl_eq_foldr
-  条件: {f : α -> α -> α} [hf : Std.Commutative f] [Std.Associative f]
+  条件: {f : α -> α -> α} [hf : Std.交换 f] [Std.结合 f]
   证明: foldl_eq_foldr_of_commute (hf.comm a)
 
 Depends on / 依赖: foldl_eq_foldr_of_commute, hf.comm
@@ -183,7 +183,7 @@ theorem foldl_flip_eq_foldr
 
 中文:
 定理 foldl_flip_eq_foldr
-  条件: [LeftCommutative f]
+  条件: [左交换 f]
   结论: l.foldl (flip f) b = l.foldr f b
   证明: by
   induction l generalizing b <;> simp [*, flip, foldr_cons_eq_foldr_apply, -foldr_cons]
@@ -209,7 +209,7 @@ theorem foldr_flip_eq_foldl
 
 中文:
 定理 foldr_flip_eq_foldl
-  条件: [RightCommutative v]
+  条件: [右交换 v]
   结论: l.foldr (flip v) b = l.foldl v b
   证明: by
   induction l generalizing b <;> simp [*, flip, foldl_cons_eq_apply_foldl, -foldl_cons]

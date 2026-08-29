@@ -69,7 +69,7 @@ instance maximalIdeal.isMaximal
 
 中文:
 实例 maximalIdeal.isMaximal
-  签名: : (maximalIdeal R).IsMaximal
+  签名: : (maximalIdeal R).是极大
   定义体: by
   rw [Ideal.isMaximal_iff]
   constructor
@@ -106,8 +106,8 @@ theorem isMaximal_iff
 
 中文:
 定理 isMaximal_iff
-  条件: {I : Ideal R}
-  结论: I.IsMaximal ↔ I = maximalIdeal R where
+  条件: {I : 理想 R}
+  结论: I.是极大 ↔ I = maximalIdeal R where
   证明: hI.eq_of_le (maximalIdeal.isMaximal R).1.1 fun _ h => hI.1.1 ∘ I.eq_top_of_isUnit_mem h
   mpr e := e ▸ maximalIdeal.isMaximal R
 
@@ -128,7 +128,7 @@ theorem maximal_ideal_unique
 
 中文:
 定理 maximal_ideal_unique
-  结论: 存在! I : Ideal R, I.IsMaximal
+  结论: 存在! I : 理想 R, I.是极大
   证明: by
   simp [isMaximal_iff]
 
@@ -150,7 +150,7 @@ theorem eq_maximalIdeal
 
 中文:
 定理 eq_maximalIdeal
-  条件: {I : Ideal R} (hI : I.IsMaximal)
+  条件: {I : 理想 R} (hI : I.是极大)
   结论: I = maximalIdeal R
   证明: ExistsUnique.unique (maximal_ideal_unique R) hI maximalIdeal.isMaximal R
 
@@ -172,7 +172,7 @@ omit [IsLocalRing R] in
 
 中文:
 实例 :
-  签名: Unique (MaximalSpectrum R)
+  签名: 唯一 (极大谱 R)
   定义体: ⟨maximalIdeal R, maximalIdeal.isMaximal R⟩
 uniq := fun I => MaximalSpectrum.ext_iff.mpr eq_maximalIdeal I.isMaximal
 
@@ -197,7 +197,7 @@ fun I hI => MaximalSpectrum.mk.inj Subsingleton.elim ⟨I, hI⟩ m⟩
 
 中文:
 定理 of_singleton_maximalSpectrum
-  结论: [Subsingleton (MaximalSpectrum R)]
+  结论: [子单例 (极大谱 R)]
   证明: let m := Classical.arbitrary (MaximalSpectrum R)
   .of_unique_max_ideal ⟨m.asIdeal, m.isMaximal,
 fun I hI => MaximalSpectrum.mk.inj Subsingleton.elim ⟨I, hI⟩ m⟩
@@ -223,7 +223,7 @@ theorem le_maximalIdeal
 
 中文:
 定理 le_maximalIdeal
-  条件: {J : Ideal R} (hJ : J != ⊤)
+  条件: {J : 理想 R} (hJ : J != ⊤)
   结论: J <= maximalIdeal R
   证明: by
   rcases Ideal.exists_le_maximal J hJ with ⟨M, hM1, hM2⟩
@@ -246,7 +246,7 @@ theorem le_maximalIdeal_of_isPrime
 
 中文:
 定理 le_maximalIdeal_of_isPrime
-  条件: (p : Ideal R) [hp : p.IsPrime]
+  条件: (p : 理想 R) [hp : p.是素]
   结论: p <= maximalIdeal R
   证明: le_maximalIdeal hp.ne_top
 
@@ -268,7 +268,7 @@ theorem notMem_maximalIdeal
 中文:
 定理 notMem_maximalIdeal
   条件: {x : R}
-  结论: x ∉ maximalIdeal R ↔ IsUnit x
+  结论: x ∉ maximalIdeal R ↔ 是单位 x
   证明: by
   simp only [mem_maximalIdeal, mem_nonunits_iff, not_not]
 
@@ -289,7 +289,7 @@ theorem isField_iff_maximalIdeal_eq
 
 中文:
 定理 isField_iff_maximalIdeal_eq
-  结论: IsField R ↔ maximalIdeal R = ⊥
+  结论: 是域 R ↔ maximalIdeal R = ⊥
   证明: not_iff_not.mp
     ⟨Ring.ne_bot_of_isMaximal_of_not_isField inferInstance, fun h =>
       Ring.not_isField_iff_exists_prime.mpr ⟨_, h, Ideal.IsMaximal.isPrime' _⟩⟩
@@ -317,7 +317,7 @@ theorem maximalIdeal_le_jacobson
 
 中文:
 定理 maximalIdeal_le_jacobson
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: le_sInf fun _ ⟨_, h⟩ => le_of_eq (IsLocalRing.eq_maximalIdeal h).symm
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.eq_maximalIdeal, eq_maximalIdeal, le_of_eq, le_sInf
@@ -337,7 +337,7 @@ theorem jacobson_eq_maximalIdeal
 
 中文:
 定理 jacobson_eq_maximalIdeal
-  条件: (I : Ideal R) (h : I != ⊤)
+  条件: (I : 理想 R) (h : I != ⊤)
   证明: le_antisymm (sInf_le ⟨le_maximalIdeal h, maximalIdeal.isMaximal R⟩)
               (maximalIdeal_le_jacobson I)
 
@@ -359,7 +359,7 @@ theorem ringJacobson_eq_maximalIdeal
 
 中文:
 定理 ringJacobson_eq_maximalIdeal
-  结论: Ring.jacobson R = maximalIdeal R
+  结论: 环.jacobson R = maximalIdeal R
   证明: Ideal.jacobson_bot.symm.trans (jacobson_eq_maximalIdeal _ top_ne_bot.symm)
 
 Depends on / 依赖: Ideal.jacobson_bot.symm.trans, completeSpace_coe, isClosed_closure, isClosed_closure.completeSpace_coe, jacobson_bot, jacobson_eq_maximalIdeal, top_ne_bot, top_ne_bot.symm
@@ -383,7 +383,7 @@ theorem ker_eq_maximalIdeal
 
 中文:
 定理 ker_eq_maximalIdeal
-  条件: [DivisionRing K] (φ : R ->+* K) (hφ : Function.Surjective φ)
+  条件: [除环 K] (φ : R ->+* K) (hφ : 函数.满射 φ)
   证明: IsLocalRing.eq_maximalIdeal (RingHom.ker_isMaximal_of_surjective φ) hφ
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.eq_maximalIdeal, RingHom, RingHom.ker_isMaximal_of_surjective, eq_maximalIdeal, ker_isMaximal_of_surjective
@@ -405,8 +405,8 @@ theorem maximalIdeal_eq_bot
 
 中文:
 定理 maximalIdeal_eq_bot
-  条件: {R : 类型} [Field R]
-  结论: IsLocalRing.maximalIdeal R = ⊥
+  条件: {R : 类型} [域 R]
+  结论: 是局部环.maximalIdeal R = ⊥
   证明: IsLocalRing.isField_iff_maximalIdeal_eq.mp (Field.toIsField R)
 
 Depends on / 依赖: Field.toIsField, IsLocalRing, IsLocalRing.isField_iff_maximalIdeal_eq.mp, isField_iff_maximalIdeal_eq, toIsField
@@ -426,8 +426,8 @@ lemma Subsemiring.isLocalRing_of_unit
       (fun hx => Or.inl (h_unit x.val x.prop hx)) (fun hy => Or.inr (h_unit y.val y.prop hy))
 
 中文:
-引理 Subsemiring.isLocalRing_of_unit
-  结论: {R : 类型} [Semiring R] [IsLocalRing R] (S : Subsemiring R)
+引理 子半环.isLocalRing_of_unit
+  结论: {R : 类型} [半环 R] [是局部环 R] (S : 子半环 R)
   证明: (‹IsLocalRing R›.isUnit_or_isUnit_of_add_one congr(Subtype.val $hxy)).elim
       (fun hx => Or.inl (h_unit x.val x.prop hx)) (fun hy => Or.inr (h_unit y.val y.prop hy))
 
@@ -449,8 +449,8 @@ lemma Subring.isLocalRing_of_unit
   proof: S.toSubsemiring.isLocalRing_of_unit h_unit
 
 中文:
-引理 Subring.isLocalRing_of_unit
-  结论: {R : 类型} [Ring R] [IsLocalRing R] (S : Subring R)
+引理 子环.isLocalRing_of_unit
+  结论: {R : 类型} [环 R] [是局部环 R] (S : 子环 R)
   证明: S.toSubsemiring.isLocalRing_of_unit h_unit
 
 Depends on / 依赖: S.toSubsemiring.isLocalRing_of_unit, h_unit, isLocalRing_of_unit, toSubsemiring

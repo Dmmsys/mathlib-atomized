@@ -36,7 +36,7 @@ definition Matrix.matchVecConsPrefixQ
     | throwError m!"Expected {vec} to have type {q(Fin $m -> 
 
 中文:
-定义 Matrix.matchVecConsPrefixQ
+定义 矩阵.matchVecConsPrefixQ
   签名: {u : Level} {α : Q(类型u)} {n : Q(自然数)}
   定义体: do
   let (l, m, vec) ← Matrix.matchVecConsPrefix n vec
@@ -66,7 +66,7 @@ definition permArray
 
 中文:
 定义 permArray
-  签名: {α : 类型} [Inhabited α] (vec : Array α) (perm : Array 自然数)
+  签名: {α : 类型} [可居 α] (vec : 数组 α) (perm : 数组 自然数)
   定义体: perm.map (vec[·]!)
 -/
 private def permArray {α : Type*} [Inhabited α] (vec : Array α) (perm : Array Nat) : Array α :=
@@ -108,7 +108,7 @@ definition arrayOfVecFinQ
 
 中文:
 定义 arrayOfVecFinQ
-  签名: (n : Q(自然数)) (vn : 自然数) (perm : Q(Fin $n -> Fin $n))
+  签名: (n : Q(自然数)) (vn : 自然数) (perm : Q(有限集 $n -> 有限集 $n))
   定义体: do
   let mut out : Array Nat := #[]
   for idx in *...vn do
@@ -142,7 +142,7 @@ theorem eq_etaExpand
 
 中文:
 定理 eq_etaExpand
-  条件: {α : 类型} {m : 自然数} (v : Fin m -> α)
+  条件: {α : 类型} {m : 自然数} (v : 有限集 m -> α)
   结论: v = FinVec.etaExpand v
   证明: (FinVec.etaExpand_eq _).symm
 

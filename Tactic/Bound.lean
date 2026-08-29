@@ -104,8 +104,8 @@ lemma Nat.cast_pos_of_pos
   proof: Nat.cast_pos.mpr
 
 中文:
-引理 Nat.cast_pos_of_pos
-  结论: {R : Type} [Semiring R] [PartialOrder R] [IsOrderedRing R] [Nontrivial R]
+引理 自然数.cast_pos_of_pos
+  结论: {R : 类型} [半环 R] [偏序 R] [是Ordered环 R] [非平凡 R]
   证明: Nat.cast_pos.mpr
 
 Depends on / 依赖: Nat.cast_pos.mpr, cast_pos
@@ -123,8 +123,8 @@ lemma Nat.one_le_cast_of_le
   proof: Nat.one_le_cast.mpr
 
 中文:
-引理 Nat.one_le_cast_of_le
-  结论: {α : Type} [AddCommMonoidWithOne α] [PartialOrder α]
+引理 自然数.one_le_cast_of_le
+  结论: {α : 类型} [加法交换带幺幺半群 α] [偏序 α]
   证明: Nat.one_le_cast.mpr
 
 Depends on / 依赖: Nat.one_le_cast.mpr, one_le_cast
@@ -193,7 +193,7 @@ lemma le_max_of_le_left_or_le_right
 
 中文:
 引理 le_max_of_le_left_or_le_right
-  结论: a <= b ∨ a <= c -> a <= max b c
+  结论: a <= b ∨ a <= c -> a <= 最大值 b c
   证明: le_max_iff.mpr
 
 Depends on / 依赖: le_max_iff, le_max_iff.mpr
@@ -209,7 +209,7 @@ lemma lt_max_of_lt_left_or_lt_right
 
 中文:
 引理 lt_max_of_lt_left_or_lt_right
-  结论: a < b ∨ a < c -> a < max b c
+  结论: a < b ∨ a < c -> a < 最大值 b c
   证明: lt_max_iff.mpr
 
 Depends on / 依赖: lt_max_iff, lt_max_iff.mpr
@@ -225,7 +225,7 @@ lemma min_le_of_left_le_or_right_le
 
 中文:
 引理 min_le_of_left_le_or_right_le
-  结论: a <= c ∨ b <= c -> min a b <= c
+  结论: a <= c ∨ b <= c -> 最小值 a b <= c
   证明: min_le_iff.mpr
 
 Depends on / 依赖: min_le_iff, min_le_iff.mpr
@@ -241,7 +241,7 @@ lemma min_lt_of_left_lt_or_right_lt
 
 中文:
 引理 min_lt_of_left_lt_or_right_lt
-  结论: a < c ∨ b < c -> min a b < c
+  结论: a < c ∨ b < c -> 最小值 a b < c
   证明: min_lt_iff.mpr
 
 Depends on / 依赖: min_lt_iff, min_lt_iff.mpr

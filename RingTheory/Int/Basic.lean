@@ -96,7 +96,7 @@ theorem sq_of_gcd_eq_one
 
 中文:
 定理 sq_of_gcd_eq_one
-  条件: {a b c : 整数} (h : 整数.gcd a b = 1) (heq : a * b = c ^ 2)
+  条件: {a b c : 整数} (h : 整数.最大公约数 a b = 1) (heq : a * b = c ^ 2)
   证明: by
   have h' : IsUnit (GCDMonoid.gcd a b) := by
     rw [← coe_gcd]; rw [h]; rw [Int.ofNat_one]
@@ -186,8 +186,8 @@ theorem Int.Prime.dvd_mul
   rwa [← hp.dvd_mul, ← Int.natAbs_mul, ← Int.natCast_dvd]
 
 中文:
-定理 Int.Prime.dvd_mul
-  条件: {m n : 整数} {p : 自然数} (hp : 自然数.Prime p) (h : (p : 整数) ∣ m * n)
+定理 整数.素.dvd_mul
+  条件: {m n : 整数} {p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ m * n)
   证明: by
   rwa [← hp.dvd_mul, ← Int.natAbs_mul, ← Int.natCast_dvd]
 
@@ -208,8 +208,8 @@ theorem Int.Prime.dvd_mul'
   exact Int.Prime.dvd_mul hp h
 
 中文:
-定理 Int.Prime.dvd_mul'
-  条件: {m n : 整数} {p : 自然数} (hp : 自然数.Prime p) (h : (p : 整数) ∣ m * n)
+定理 整数.素.dvd_mul'
+  条件: {m n : 整数} {p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ m * n)
   证明: by
   rw [Int.natCast_dvd]; rw [Int.natCast_dvd]
   exact Int.Prime.dvd_mul hp h
@@ -232,8 +232,8 @@ theorem Int.Prime.dvd_pow
   exact hp.dvd_of_dvd_pow h
 
 中文:
-定理 Int.Prime.dvd_pow
-  条件: {n : 整数} {k p : 自然数} (hp : 自然数.Prime p) (h : (p : 整数) ∣ n ^ k)
+定理 整数.素.dvd_pow
+  条件: {n : 整数} {k p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ n ^ k)
   证明: by
   rw [Int.natCast_dvd]; rw [Int.natAbs_pow] at h
   exact hp.dvd_of_dvd_pow h
@@ -256,8 +256,8 @@ theorem Int.Prime.dvd_pow'
   exact Int.Prime.dvd_pow hp h
 
 中文:
-定理 Int.Prime.dvd_pow'
-  条件: {n : 整数} {k p : 自然数} (hp : 自然数.Prime p) (h : (p : 整数) ∣ n ^ k)
+定理 整数.素.dvd_pow'
+  条件: {n : 整数} {k p : 自然数} (hp : 自然数.素 p) (h : (p : 整数) ∣ n ^ k)
   证明: by
   rw [Int.natCast_dvd]
   exact Int.Prime.dvd_pow hp h
@@ -285,7 +285,7 @@ theorem prime_two_or_dvd_of_dvd_two_mul_pow_self_two
 
 中文:
 定理 prime_two_or_dvd_of_dvd_two_mul_pow_self_two
-  结论: {m : 整数} {p : 自然数} (hp : 自然数.Prime p)
+  结论: {m : 整数} {p : 自然数} (hp : 自然数.素 p)
   证明: by
   rcases Int.Prime.dvd_mul hp h with hp2 | hpp
   · apply Or.intro_left
@@ -319,9 +319,9 @@ theorem exists_prime_and_dvd
   exact ⟨p, Nat.prime_iff_prime_int.mp pp, Int.natCast_dvd.mpr pd⟩
 
 中文:
-定理 exists_prime_and_dvd
+定理 存在_prime_and_dvd
   条件: {n : 整数} (hn : n.natAbs != 1)
-  结论: 存在 p, Prime p ∧ p ∣ n
+  结论: 存在 p, 素 p ∧ p ∣ n
   证明: by
   obtain ⟨p, pp, pd⟩ := Nat.exists_prime_and_dvd hn
   exact ⟨p, Nat.prime_iff_prime_int.mp pp, Int.natCast_dvd.mpr pd⟩
@@ -344,7 +344,7 @@ theorem prime_iff_natAbs_prime
 中文:
 定理 prime_iff_natAbs_prime
   条件: {k : 整数}
-  结论: Prime k ↔ 自然数.Prime k.natAbs
+  结论: 素 k ↔ 自然数.素 k.natAbs
   证明: (Int.associated_natAbs k).prime_iff.trans Nat.prime_iff_prime_int.symm
 
 Depends on / 依赖: Int.associated_natAbs, Nat.prime_iff_prime_int.symm, associated_natAbs, prime_iff, prime_iff.trans, prime_iff_prime_int
@@ -363,7 +363,7 @@ instance instDecidablePredPrime
 
 中文:
 实例 instDecidablePredPrime
-  签名: : DecidablePred (Prime : 整数 -> 命题)
+  签名: : DecidablePred (素 : 整数 -> 命题)
   定义体: fun m =>
   decidable_of_iff (Nat.Prime m.natAbs) prime_iff_natAbs_prime.symm
 -/
@@ -389,7 +389,7 @@ theorem span_natAbs
 中文:
 定理 span_natAbs
   条件: (a : 整数)
-  结论: Ideal.span ({(a.natAbs : 整数)} : Set 整数) = Ideal.span {a}
+  结论: 理想.span ({(a.natAbs : 整数)} : 集合 整数) = 理想.span {a}
   证明: by
   rw [Ideal.span_singleton_eq_span_singleton]
   exact (associated_natAbs _).symm

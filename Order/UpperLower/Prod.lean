@@ -42,9 +42,9 @@ theorem IsUpperSet.prod
   proof: fun _ _ h ha => ⟨hs h.1 ha.1, ht h.2 ha.2⟩
 
 中文:
-定理 IsUpperSet.prod
-  条件: (hs : IsUpperSet s) (ht : IsUpperSet t)
-  结论: IsUpperSet (s ×ˢ t)
+定理 是上集.乘积
+  条件: (hs : 是上集 s) (ht : 是上集 t)
+  结论: 是上集 (s ×ˢ t)
   证明: fun _ _ h ha => ⟨hs h.1 ha.1, ht h.2 ha.2⟩
 -/
 theorem IsUpperSet.prod (hs : IsUpperSet s) (ht : IsUpperSet t) : IsUpperSet (s ×ˢ t) :=
@@ -60,9 +60,9 @@ theorem IsLowerSet.prod
   proof: fun _ _ h ha => ⟨hs h.1 ha.1, ht h.2 ha.2⟩
 
 中文:
-定理 IsLowerSet.prod
-  条件: (hs : IsLowerSet s) (ht : IsLowerSet t)
-  结论: IsLowerSet (s ×ˢ t)
+定理 是下集.乘积
+  条件: (hs : 是下集 s) (ht : 是下集 t)
+  结论: 是下集 (s ×ˢ t)
   证明: fun _ _ h ha => ⟨hs h.1 ha.1, ht h.2 ha.2⟩
 -/
 theorem IsLowerSet.prod (hs : IsLowerSet s) (ht : IsLowerSet t) : IsLowerSet (s ×ˢ t) :=
@@ -83,8 +83,8 @@ definition prod
   body: ⟨s ×ˢ t, s.2.prod t.2⟩
 
 中文:
-定义 prod
-  签名: : UpperSet (α × β)
+定义 乘积
+  签名: : 上集 (α × β)
   定义体: ⟨s ×ˢ t, s.2.prod t.2⟩
 -/
 def prod : UpperSet (α × β) :=
@@ -102,7 +102,7 @@ instance instSProd
 
 中文:
 实例 instSProd
-  签名: : SProd (UpperSet α) (UpperSet β) (UpperSet (α × β)) where
+  签名: : SProd (上集 α) (上集 β) (上集 (α × β)) where
   定义体: UpperSet.prod
 
 @[simp, norm_cast]
@@ -125,7 +125,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  结论: ((s ×ˢ t : UpperSet (α × β)) : Set (α × β)) = (s : Set α) ×ˢ t
+  结论: ((s ×ˢ t : 上集 (α × β)) : 集合 (α × β)) = (s : 集合 α) ×ˢ t
   证明: rfl
 
 @[simp]
@@ -145,7 +145,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {s : UpperSet α} {t : UpperSet β}
+  条件: {s : 上集 α} {t : 上集 β}
   结论: x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t
   证明: Iff.rfl
 
@@ -168,7 +168,7 @@ theorem Ici_prod
 中文:
 定理 Ici_prod
   条件: (x : α × β)
-  结论: Ici x = Ici x.1 ×ˢ Ici x.2
+  结论: 左闭右无界区间 x = 左闭右无界区间 x.1 ×ˢ 左闭右无界区间 x.2
   证明: rfl
 
 @[simp]
@@ -191,7 +191,7 @@ theorem Ici_prod_Ici
 中文:
 定理 Ici_prod_Ici
   条件: (a : α) (b : β)
-  结论: Ici a ×ˢ Ici b = Ici (a, b)
+  结论: 左闭右无界区间 a ×ˢ 左闭右无界区间 b = 左闭右无界区间 (a, b)
   证明: rfl
 
 @[simp]
@@ -212,7 +212,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  结论: s ×ˢ (⊤ : UpperSet β) = ⊤
+  结论: s ×ˢ (⊤ : 上集 β) = ⊤
   证明: ext prod_empty
 
 @[simp]
@@ -235,7 +235,7 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  结论: (⊤ : UpperSet α) ×ˢ t = ⊤
+  结论: (⊤ : 上集 α) ×ˢ t = ⊤
   证明: ext empty_prod
 
 @[simp]
@@ -258,7 +258,7 @@ theorem bot_prod_bot
 
 中文:
 定理 bot_prod_bot
-  结论: (⊥ : UpperSet α) ×ˢ (⊥ : UpperSet β) = ⊥
+  结论: (⊥ : 上集 α) ×ˢ (⊥ : 上集 β) = ⊥
   证明: ext univ_prod_univ
 
 @[simp]
@@ -562,8 +562,8 @@ definition prod
   body: ⟨s ×ˢ t, s.2.prod t.2⟩
 
 中文:
-定义 prod
-  签名: : LowerSet (α × β)
+定义 乘积
+  签名: : 下集 (α × β)
   定义体: ⟨s ×ˢ t, s.2.prod t.2⟩
 -/
 def prod : LowerSet (α × β) := ⟨s ×ˢ t, s.2.prod t.2⟩
@@ -580,7 +580,7 @@ instance instSProd
 
 中文:
 实例 instSProd
-  签名: : SProd (LowerSet α) (LowerSet β) (LowerSet (α × β)) where
+  签名: : SProd (下集 α) (下集 β) (下集 (α × β)) where
   定义体: LowerSet.prod
 
 @[simp, norm_cast]
@@ -603,7 +603,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  结论: ((s ×ˢ t : LowerSet (α × β)) : Set (α × β)) = (s : Set α) ×ˢ t
+  结论: ((s ×ˢ t : 下集 (α × β)) : 集合 (α × β)) = (s : 集合 α) ×ˢ t
   证明: rfl
 
 @[simp]
@@ -622,7 +622,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {s : LowerSet α} {t : LowerSet β}
+  条件: {s : 下集 α} {t : 下集 β}
   结论: x in s ×ˢ t ↔ x.1 in s ∧ x.2 in t
   证明: Iff.rfl
 
@@ -645,7 +645,7 @@ theorem Iic_prod
 中文:
 定理 Iic_prod
   条件: (x : α × β)
-  结论: Iic x = Iic x.1 ×ˢ Iic x.2
+  结论: 左无界右闭区间 x = 左无界右闭区间 x.1 ×ˢ 左无界右闭区间 x.2
   证明: rfl
 
 @[simp]
@@ -668,7 +668,7 @@ theorem Ici_prod_Ici
 中文:
 定理 Ici_prod_Ici
   条件: (a : α) (b : β)
-  结论: Iic a ×ˢ Iic b = Iic (a, b)
+  结论: 左无界右闭区间 a ×ˢ 左无界右闭区间 b = 左无界右闭区间 (a, b)
   证明: rfl
 
 @[simp]
@@ -689,7 +689,7 @@ theorem prod_bot
 
 中文:
 定理 prod_bot
-  结论: s ×ˢ (⊥ : LowerSet β) = ⊥
+  结论: s ×ˢ (⊥ : 下集 β) = ⊥
   证明: ext prod_empty
 
 @[simp]
@@ -712,7 +712,7 @@ theorem bot_prod
 
 中文:
 定理 bot_prod
-  结论: (⊥ : LowerSet α) ×ˢ t = ⊥
+  结论: (⊥ : 下集 α) ×ˢ t = ⊥
   证明: ext empty_prod
 
 @[simp]
@@ -735,7 +735,7 @@ theorem top_prod_top
 
 中文:
 定理 top_prod_top
-  结论: (⊤ : LowerSet α) ×ˢ (⊤ : LowerSet β) = ⊤
+  结论: (⊤ : 下集 α) ×ˢ (⊤ : 下集 β) = ⊤
   证明: ext univ_prod_univ
 
 @[simp]
@@ -1038,7 +1038,7 @@ theorem upperClosure_prod
 
 中文:
 定理 upperClosure_prod
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   ext
   simp [Prod.le_def, @and_and_and_comm _ (_ in t)]
@@ -1065,7 +1065,7 @@ theorem lowerClosure_prod
 
 中文:
 定理 lowerClosure_prod
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   ext
   simp [Prod.le_def, @and_and_and_comm _ (_ in t)]

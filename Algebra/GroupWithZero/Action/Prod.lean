@@ -42,7 +42,7 @@ theorem smul_zero_mk
 
 中文:
 定理 smul_zero_mk
-  条件: {α : 类型} [Monoid M] [AddMonoid α] [DistribMulAction M α] (a : M) (c : β)
+  条件: {α : 类型} [幺半群 M] [加法幺半群 α] [分配乘法作用 M α] (a : M) (c : β)
   证明: by rw [Prod.smul_mk, smul_zero]
 
 Depends on / 依赖: Prod.smul_mk, smul_mk, smul_zero
@@ -60,7 +60,7 @@ theorem smul_mk_zero
 
 中文:
 定理 smul_mk_zero
-  条件: {β : 类型} [Monoid M] [AddMonoid β] [DistribMulAction M β] (a : M) (b : α)
+  条件: {β : 类型} [幺半群 M] [加法幺半群 β] [分配乘法作用 M β] (a : M) (b : α)
   证明: by rw [Prod.smul_mk, smul_zero]
 
 Depends on / 依赖: Prod.smul_mk, smul_mk, smul_zero
@@ -80,7 +80,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: {R M N : 类型} [Zero M] [Zero N] [SMulZeroClass R M] [SMulZeroClass R N]
+  签名: {R M N : 类型} [零 M] [零 N] [SMulZero类 R M] [SMulZero类 R N]
   定义体: by ext <;> exact smul_zero _
 
 Depends on / 依赖: smul_zero
@@ -98,7 +98,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: {R M N : 类型} [AddZeroClass M] [AddZeroClass N] [DistribSMul R M]
+  签名: {R M N : 类型} [加法零类 M] [加法零类 N] [分配标量乘法 R M]
   定义体: by ext <;> exact smul_add ..
 
 Depends on / 依赖: smul_add
@@ -117,7 +117,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: {R : 类型} [Monoid R] [AddMonoid M] [AddMonoid N]
+  签名: {R : 类型} [幺半群 R] [加法幺半群 M] [加法幺半群 N]
   定义体: { Prod.mulAction, Prod.distribSMul with }
 
 Depends on / 依赖: Prod.distribSMul, Prod.mulAction, distribSMul, mulAction
@@ -137,7 +137,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: {R : 类型} [Monoid R] [Monoid M] [Monoid N]
+  签名: {R : 类型} [幺半群 R] [幺半群 M] [幺半群 N]
   定义体: by ext <;> exact smul_mul' ..
   smul_one _ := by ext <;> exact smul_one _
 
@@ -158,7 +158,7 @@ instance smulWithZero
 
 中文:
 实例 smulWithZero
-  签名: {R : 类型} [Zero R] [Zero M] [Zero N] [SMulWithZero R M] [SMulWithZero R N]
+  签名: {R : 类型} [零 R] [零 M] [零 N] [带零标量乘法 R M] [带零标量乘法 R N]
   定义体: by ext <;> exact zero_smul ..
 
 Depends on / 依赖: zero_smul
@@ -177,7 +177,7 @@ instance mulActionWithZero
 
 中文:
 实例 mulActionWithZero
-  签名: {R : 类型} [MonoidWithZero R] [Zero M] [Zero N] [MulActionWithZero R M]
+  签名: {R : 类型} [带零幺半群 R] [零 M] [零 N] [带零乘法作用 R M]
   定义体: { Prod.mulAction, Prod.smulWithZero with }
 
 Depends on / 依赖: Prod.mulAction, Prod.smulWithZero, mulAction, smulWithZero
@@ -205,8 +205,8 @@ abbreviation DistribMulAction.prodOfSMulCommClass
   smul_add mn a a' := by change mn.1 • mn.2 • _ = (_ : α); rw [smul_add, smul_add]; rfl
 
 中文:
-缩写 DistribMulAction.prodOfSMulCommClass
-  签名: [DistribMulAction M α] [DistribMulAction N α]
+缩写 分配乘法作用.prodOfSMulCommClass
+  签名: [分配乘法作用 M α] [分配乘法作用 N α]
   定义体: MulAction.prodOfSMulCommClass M N α
   smul_zero mn := by change mn.1 • mn.2 • 0 = (0 : α); rw [smul_zero, smul_zero]
   smul_add mn a a' := by change mn.1 • mn.2 • _ = (_ : α); rw [smul_add, smul_add]; rfl
@@ -233,8 +233,8 @@ definition DistribMulAction.prodEquiv
     DistribMulAction.prodOfSMulCommClass M N α
 
 中文:
-定义 DistribMulAction.prodEquiv
-  签名: : DistribMulAction (M × N) α ≃
+定义 分配乘法作用.prodEquiv
+  签名: : 分配乘法作用 (M × N) α ≃
   定义体: letI instM := DistribMulAction.compHom α (.inl M N)
     letI instN := DistribMulAction.compHom α (.inr M N)
     ⟨instM, instN, (MulAction.prodEquiv M N α inferInstance).2.2⟩

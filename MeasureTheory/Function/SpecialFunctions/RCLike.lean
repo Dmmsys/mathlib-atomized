@@ -34,7 +34,7 @@ theorem measurable_re
 
 中文:
 定理 measurable_re
-  结论: Measurable (re : 𝕜 -> 实数)
+  结论: 可测 (re : 𝕜 -> 实数)
   证明: continuous_re.measurable
 
 Depends on / 依赖: continuous_re, continuous_re.measurable, measurable
@@ -52,7 +52,7 @@ theorem measurable_im
 
 中文:
 定理 measurable_im
-  结论: Measurable (im : 𝕜 -> 实数)
+  结论: 可测 (im : 𝕜 -> 实数)
   证明: continuous_im.measurable
 
 Depends on / 依赖: continuous_im, continuous_im.measurable, measurable
@@ -80,9 +80,9 @@ theorem Measurable.re
 @[fun_prop]
 
 中文:
-定理 Measurable.re
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => RCLike.re (f x)
+定理 可测.re
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => RCLike.re (f x)
   证明: RCLike.measurable_re.comp hf
 
 @[fun_prop]
@@ -105,9 +105,9 @@ theorem AEMeasurable.re
 @[fun_prop]
 
 中文:
-定理 AEMeasurable.re
-  条件: (hf : AEMeasurable f μ)
-  结论: AEMeasurable (fun x => RCLike.re (f x)) μ
+定理 几乎处处可测.re
+  条件: (hf : 几乎处处可测 f μ)
+  结论: 几乎处处可测 (fun x => RCLike.re (f x)) μ
   证明: RCLike.measurable_re.comp_aemeasurable hf
 
 @[fun_prop]
@@ -130,9 +130,9 @@ theorem Measurable.im
 @[fun_prop]
 
 中文:
-定理 Measurable.im
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => RCLike.im (f x)
+定理 可测.im
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => RCLike.im (f x)
   证明: RCLike.measurable_im.comp hf
 
 @[fun_prop]
@@ -153,9 +153,9 @@ theorem AEMeasurable.im
   proof: RCLike.measurable_im.comp_aemeasurable hf
 
 中文:
-定理 AEMeasurable.im
-  条件: (hf : AEMeasurable f μ)
-  结论: AEMeasurable (fun x => RCLike.im (f x)) μ
+定理 几乎处处可测.im
+  条件: (hf : 几乎处处可测 f μ)
+  结论: 几乎处处可测 (fun x => RCLike.im (f x)) μ
   证明: RCLike.measurable_im.comp_aemeasurable hf
 
 Depends on / 依赖: RCLike, RCLike.measurable_im.comp_aemeasurable, comp_aemeasurable, measurable_im
@@ -179,8 +179,8 @@ theorem RCLike.measurable_ofReal
   proof: RCLike.continuous_ofReal.measurable
 
 中文:
-定理 RCLike.measurable_ofReal
-  结论: Measurable ((↑) : 实数 -> 𝕜)
+定理 RCLike.measurable_of实数
+  结论: 可测 ((↑) : 实数 -> 𝕜)
   证明: RCLike.continuous_ofReal.measurable
 
 Depends on / 依赖: RCLike, RCLike.continuous_ofReal.measurable, continuous_ofReal, measurable
@@ -202,7 +202,7 @@ theorem measurable_of_re_im
 
 中文:
 定理 measurable_of_re_im
-  结论: (hre : Measurable fun x => RCLike.re (f x))
+  结论: (hre : 可测 fun x => RCLike.re (f x))
   证明: by
   convert!
     Measurable.fun_add (M := 𝕜) (RCLike.measurable_ofReal.comp hre)
@@ -232,7 +232,7 @@ theorem aemeasurable_of_re_im
 
 中文:
 定理 aemeasurable_of_re_im
-  结论: (hre : AEMeasurable (fun x => RCLike.re (f x)) μ)
+  结论: (hre : 几乎处处可测 (fun x => RCLike.re (f x)) μ)
   证明: by
   convert!
     AEMeasurable.fun_add (M := 𝕜) (RCLike.measurable_ofReal.comp_aemeasurable hre)

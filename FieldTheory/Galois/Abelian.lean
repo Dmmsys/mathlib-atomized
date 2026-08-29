@@ -29,8 +29,8 @@ class IsAbelianGalois
   (no additional axioms)
 
 中文:
-类 IsAbelianGalois
-  参数: (K L : 类型) [Field K] [Field L] [Algebra K L]
+类 是AbelianGalois
+  参数: (K L : 类型) [域 K] [域 L] [代数 K L]
   (无附加公理)
 -/
 class IsAbelianGalois (K L : Type*) [Field K] [Field L] [Algebra K L] : Prop extends
@@ -50,8 +50,8 @@ lemma IsAbelianGalois.tower_bot
       ((InfiniteGalois.normal_iff_isGalois _).mp inferInstance
 
 中文:
-引理 IsAbelianGalois.tower_bot
-  条件: [IsAbelianGalois K M]
+引理 是AbelianGalois.tower_bot
+  条件: [是AbelianGalois K M]
   证明: have : IsGalois K L :=
     ((AlgEquiv.ofBijective (IsScalarTower.toAlgHom K L M).rangeRestrict
       ⟨RingHom.injective _, AlgHom.rangeRestrict_surjective _⟩).transfer_galois
@@ -84,8 +84,8 @@ lemma IsAbelianGalois.tower_top
       (mul_comm (x.restrictScalars K) (y.restrictScalars K)) }
 
 中文:
-引理 IsAbelianGalois.tower_top
-  条件: [IsAbelianGalois K M]
+引理 是AbelianGalois.tower_top
+  条件: [是AbelianGalois K M]
   证明: have : IsGalois L M := .tower_top_of_isGalois K L M
   { is_comm.comm x y := AlgEquiv.restrictScalars_injective K
       (mul_comm (x.restrictScalars K) (y.restrictScalars K)) }
@@ -111,8 +111,8 @@ lemma IsAbelianGalois.of_algHom
   .tower_bot K L M
 
 中文:
-引理 IsAbelianGalois.of_algHom
-  条件: (f : L ->ₐ[K] M) [IsAbelianGalois K M]
+引理 是AbelianGalois.of_algHom
+  条件: (f : L ->ₐ[K] M) [是AbelianGalois K M]
   证明: letI := f.toRingHom.toAlgebra
   haveI := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   .tower_bot K L M
@@ -134,7 +134,7 @@ instance [IsAbelianGalois
   body: .tower_bot K K' L
 
 中文:
-实例 [IsAbelianGalois
+实例 [是AbelianGalois
   签名: K L] (K'
   定义体: .tower_bot K K' L
 
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAbelianGalois K K
+  签名: 是AbelianGalois K K
   定义体: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAbelianGalois K (⊥ : 整数ermediateField K L)
+  签名: 是AbelianGalois K (⊥ : 中间域 K L)
   定义体: .of_algHom (IntermediateField.botEquiv K L).toAlgHom
 
 Depends on / 依赖: IntermediateField, IntermediateField.botEquiv, botEquiv, of_algHom, toAlgHom
@@ -192,8 +192,8 @@ lemma IsAbelianGalois.of_isCyclic
   statement: IsAbelianGalois K L where
 
 中文:
-引理 IsAbelianGalois.of_isCyclic
-  条件: [IsGalois K L] [IsCyclic Gal(L/K)]
-  结论: IsAbelianGalois K L where
+引理 是AbelianGalois.of_isCyclic
+  条件: [是Galois K L] [是循环 Gal(L/K)]
+  结论: 是AbelianGalois K L where
 -/
 lemma IsAbelianGalois.of_isCyclic [IsGalois K L] [IsCyclic Gal(L/K)] : IsAbelianGalois K L where

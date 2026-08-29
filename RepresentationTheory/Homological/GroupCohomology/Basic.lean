@@ -101,7 +101,7 @@ definition d
 
 中文:
 定义 d
-  签名: [Monoid G] (A : Rep k G) (n : 自然数)
+  签名: [幺半群 G] (A : Rep k G) (n : 自然数)
   定义体: ModuleCat.ofHom
   { toFun f g :=
       A.ρ (g 0) (f fun i => g i.succ) + Finset.univ.sum fun j : Fin (n + 1) =>
@@ -180,7 +180,7 @@ abbreviation inhomogeneousCochains
 
 中文:
 缩写 inhomogeneousCochains
-  签名: : CochainComplex (ModuleCat k) 自然数
+  签名: : 上链复形 (模范畴 k) 自然数
   定义体: CochainComplex.of (fun n => ModuleCat.of k ((Fin n -> G) -> A))
     (fun n => inhomogeneousCochains.d A n) fun n => by
     rw [d_eq]; rw [d_eq]
@@ -317,7 +317,7 @@ abbreviation cocyclesMk
 
 中文:
 缩写 cocyclesMk
-  签名: {n : 自然数} (f : (Fin n -> G) -> A) (h : inhomogeneousCochains.d A n f = 0)
+  签名: {n : 自然数} (f : (有限集 n -> G) -> A) (h : inhomogeneousCochains.d A n f = 0)
   定义体: (inhomogeneousCochains A).cyclesMk f (n + 1) (by simp) (by simp [h])
 
 Depends on / 依赖: cyclesMk, inhomogeneousCochains
@@ -374,7 +374,7 @@ theorem iCocycles_mk
 
 中文:
 定理 iCocycles_mk
-  条件: {n : 自然数} (f : (Fin n -> G) -> A) (h : inhomogeneousCochains.d A n f = 0)
+  条件: {n : 自然数} (f : (有限集 n -> G) -> A) (h : inhomogeneousCochains.d A n f = 0)
   证明: by
   exact (inhomogeneousCochains A).i_cyclesMk (i := n) f (n + 1) (by simp) (by simp [h])
 
@@ -398,7 +398,7 @@ definition groupCohomology
 
 中文:
 定义 groupCohomology
-  签名: [Group G] (A : Rep k G) (n : 自然数)
+  签名: [群 G] (A : Rep k G) (n : 自然数)
   定义体: (inhomogeneousCochains A).homology n
 
 Depends on / 依赖: homology, inhomogeneousCochains
@@ -416,7 +416,7 @@ abbreviation groupCohomology.π
 
 中文:
 缩写 groupCohomology.π
-  签名: [Group G] (A : Rep k G) (n : 自然数)
+  签名: [群 G] (A : Rep k G) (n : 自然数)
   定义体: (inhomogeneousCochains A).homologyπ n
 
 Depends on / 依赖: inhomogeneousCochains
@@ -439,7 +439,7 @@ theorem groupCohomology_induction_on
 
 中文:
 定理 groupCohomology_induction_on
-  结论: [Group G] {A : Rep k G} {n : 自然数}
+  结论: [群 G] {A : Rep k G} {n : 自然数}
   证明: by
   rcases (ModuleCat.epi_iff_surjective (π A n)).1 inferInstance x with ⟨y, rfl⟩
   exact h y
@@ -463,7 +463,7 @@ definition groupCohomologyIsoExt
 
 中文:
 定义 groupCohomologyIsoExt
-  签名: [Group G] (A : Rep k G) (n : 自然数)
+  签名: [群 G] (A : Rep k G) (n : 自然数)
   定义体: isoOfQuasiIsoAt (HomotopyEquiv.ofIso (inhomogeneousCochainsIso A)).hom n ≪≫
     (Rep.barResolution.extIso k G A n).symm
 
@@ -484,7 +484,7 @@ definition groupCohomologyIso
 
 中文:
 定义 groupCohomologyIso
-  签名: [Group G] (A : Rep k G) (n : 自然数)
+  签名: [群 G] (A : Rep k G) (n : 自然数)
   定义体: groupCohomologyIsoExt A n ≪≫ P.isoExt _ _
 
 Depends on / 依赖: P.isoExt, groupCohomologyIsoExt, isoExt

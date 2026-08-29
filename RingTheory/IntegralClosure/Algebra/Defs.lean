@@ -42,10 +42,10 @@ class Algebra.IsIntegral
     - isIntegral : forall x : A, IsIntegral R x
 
 中文:
-类 Algebra.IsIntegral
+类 代数.是整
   参数: : 命题 where
   公理与运算 (1 个):
-    - isIntegral : 对任意 x : A, Is整数egral R x
+    - isIntegral : 对任意 x : A, 是整 R x
 -/
 @[mk_iff] protected class Algebra.IsIntegral : Prop where
   isIntegral : forall x : A, IsIntegral R x
@@ -61,8 +61,8 @@ lemma Algebra.isIntegral_def
   proof: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 
 中文:
-引理 Algebra.isIntegral_def
-  结论: Algebra.Is整数egral R A ↔ 对任意 x : A, Is整数egral R x
+引理 代数.is整数egral_def
+  结论: 代数.是整 R A ↔ 对任意 x : A, 是整 R x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma Algebra.isIntegral_def : Algebra.IsIntegral R A ↔ forall x : A, IsIntegral R x :=
@@ -77,8 +77,8 @@ lemma algebraMap_isIntegral_iff
   proof: (Algebra.isIntegral_iff ..).symm
 
 中文:
-引理 algebraMap_isIntegral_iff
-  结论: (algebraMap R A).Is整数egral ↔ Algebra.Is整数egral R A
+引理 algebraMap_is整数egral_iff
+  结论: (algebraMap R A).是整 ↔ 代数.是整 R A
   证明: (Algebra.isIntegral_iff ..).symm
 
 Depends on / 依赖: Algebra, Algebra.isIntegral_iff, isIntegral_iff

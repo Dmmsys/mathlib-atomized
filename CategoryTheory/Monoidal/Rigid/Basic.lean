@@ -424,7 +424,7 @@ class HasRightDual
     - [exact : ExactPairing X rightDual]
 
 中文:
-类 HasRightDual
+类 有RightDual
   参数: (X : C)
   公理与运算 (2 个):
     - rightDual : C
@@ -446,7 +446,7 @@ class HasLeftDual
     - [exact : ExactPairing leftDual Y]
 
 中文:
-类 HasLeftDual
+类 有LeftDual
   参数: (Y : C)
   公理与运算 (2 个):
     - leftDual : C
@@ -480,7 +480,7 @@ instance hasRightDualUnit
 
 中文:
 实例 hasRightDualUnit
-  签名: : HasRightDual (𝟙_ C) where
+  签名: : 有RightDual (𝟙_ C) where
   定义体: 𝟙_ C
 -/
 instance hasRightDualUnit : HasRightDual (𝟙_ C) where
@@ -496,7 +496,7 @@ instance hasLeftDualUnit
 
 中文:
 实例 hasLeftDualUnit
-  签名: : HasLeftDual (𝟙_ C) where
+  签名: : 有LeftDual (𝟙_ C) where
   定义体: 𝟙_ C
 -/
 instance hasLeftDualUnit : HasLeftDual (𝟙_ C) where
@@ -512,7 +512,7 @@ instance hasRightDualLeftDual
 
 中文:
 实例 hasRightDualLeftDual
-  签名: {X : C} [HasLeftDual X]
+  签名: {X : C} [有LeftDual X]
   定义体: X
 -/
 instance hasRightDualLeftDual {X : C} [HasLeftDual X] : HasRightDual ᘁX where
@@ -528,7 +528,7 @@ instance hasLeftDualRightDual
 
 中文:
 实例 hasLeftDualRightDual
-  签名: {X : C} [HasRightDual X]
+  签名: {X : C} [有RightDual X]
   定义体: X
 -/
 instance hasLeftDualRightDual {X : C} [HasRightDual X] : HasLeftDual Xᘁ where
@@ -547,7 +547,7 @@ definition hasRightDualTensor
 
 中文:
 定义 hasRightDualTensor
-  签名: {X Y : C} [HasRightDual X] [HasRightDual Y]
+  签名: {X Y : C} [有RightDual X] [有RightDual Y]
   定义体: Yᘁ otimes Xᘁ
 
 Depends on / 依赖: otimes
@@ -571,7 +571,7 @@ definition hasLeftDualTensor
 
 中文:
 定义 hasLeftDualTensor
-  签名: {X Y : C} [HasLeftDual X] [HasLeftDual Y]
+  签名: {X Y : C} [有LeftDual X] [有LeftDual Y]
   定义体: ᘁY otimes ᘁX
 
 @[simp]
@@ -596,7 +596,7 @@ theorem leftDual_rightDual
 
 中文:
 定理 leftDual_rightDual
-  条件: {X : C} [HasRightDual X]
+  条件: {X : C} [有RightDual X]
   结论: ᘁXᘁ = X
   证明: rfl
 
@@ -617,7 +617,7 @@ theorem rightDual_leftDual
 
 中文:
 定理 rightDual_leftDual
-  条件: {X : C} [HasLeftDual X]
+  条件: {X : C} [有LeftDual X]
   结论: (ᘁX)ᘁ = X
   证明: rfl
 -/
@@ -634,7 +634,7 @@ definition rightAdjointMate
 
 中文:
 定义 rightAdjointMate
-  签名: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
+  签名: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
   定义体: (ρ_ _).inv ≫ _ ◁ η_ _ _ ≫ _ ◁ f ▷ _ ≫ (α_ _ _ _).inv ≫ ε_ _ _ ▷ _ ≫ (fun_ _).hom
 
 Depends on / 依赖: fun_
@@ -657,7 +657,7 @@ definition leftAdjointMate
 
 中文:
 定义 leftAdjointMate
-  签名: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
+  签名: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
   定义体: (fun_ _).inv ≫ η_ (ᘁX) X ▷ _ ≫ (_ ◁ f) ▷ _ ≫ (α_ _ _ _).hom ≫ _ ◁ ε_ _ _ ≫ (ρ_ _).hom
 
 @[inherit_doc] notation f "ᘁ" => rightAdjointMate f
@@ -688,7 +688,7 @@ theorem rightAdjointMate_id
 
 中文:
 定理 rightAdjointMate_id
-  条件: {X : C} [HasRightDual X]
+  条件: {X : C} [有RightDual X]
   结论: (𝟙 X)ᘁ = 𝟙 (Xᘁ)
   证明: by
   simp [rightAdjointMate]
@@ -713,7 +713,7 @@ theorem leftAdjointMate_id
 
 中文:
 定理 leftAdjointMate_id
-  条件: {X : C} [HasLeftDual X]
+  条件: {X : C} [有LeftDual X]
   结论: (ᘁ(𝟙 X)) = 𝟙 (ᘁX)
   证明: by
   simp [leftAdjointMate]
@@ -737,7 +737,7 @@ theorem rightAdjointMate_comp
 
 中文:
 定理 rightAdjointMate_comp
-  结论: {X Y Z : C} [HasRightDual X] [HasRightDual Y] {f : X ⟶ Y}
+  结论: {X Y Z : C} [有RightDual X] [有RightDual Y] {f : X ⟶ Y}
   证明: calc
     _ = 𝟙 _ otimes≫ (Yᘁ : C) ◁ η_ X Xᘁ ≫ Yᘁ ◁ f ▷ Xᘁ otimes≫ (ε_ Y Yᘁ ▷ Xᘁ ≫ 𝟙_ C ◁ g) otimes≫ 𝟙 _ := by
       dsimp only [rightAdjointMate]; monoidal
@@ -771,7 +771,7 @@ theorem leftAdjointMate_comp
 
 中文:
 定理 leftAdjointMate_comp
-  结论: {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] {f : X ⟶ Y}
+  结论: {X Y Z : C} [有LeftDual X] [有LeftDual Y] {f : X ⟶ Y}
   证明: calc
     _ = 𝟙 _ otimes≫ η_ (ᘁX : C) X ▷ (ᘁY) otimes≫ (ᘁX) ◁ f ▷ (ᘁY) otimes≫ ((ᘁX) ◁ ε_ (ᘁY) Y ≫ g ▷ 𝟙_ C) otimes≫ 𝟙 _ := by
       dsimp only [leftAdjointMate]; monoidal
@@ -810,7 +810,7 @@ theorem comp_rightAdjointMate
 
 中文:
 定理 comp_rightAdjointMate
-  结论: {X Y Z : C} [HasRightDual X] [HasRightDual Y] [HasRightDual Z]
+  结论: {X Y Z : C} [有RightDual X] [有RightDual Y] [有RightDual Z]
   证明: by
   rw [rightAdjointMate_comp]
   simp only [rightAdjointMate, comp_whiskerRight]
@@ -860,7 +860,7 @@ theorem comp_leftAdjointMate
 
 中文:
 定理 comp_leftAdjointMate
-  结论: {X Y Z : C} [HasLeftDual X] [HasLeftDual Y] [HasLeftDual Z] {f : X ⟶ Y}
+  结论: {X Y Z : C} [有LeftDual X] [有LeftDual Y] [有LeftDual Z] {f : X ⟶ Y}
   证明: by
   rw [leftAdjointMate_comp]
   simp only [leftAdjointMate, MonoidalCategory.whiskerLeft_comp]
@@ -1154,7 +1154,7 @@ definition closedOfHasLeftDual
 
 中文:
 定义 closedOfHasLeftDual
-  签名: (Y : C) [HasLeftDual Y]
+  签名: (Y : C) [有LeftDual Y]
   定义体: tensorLeft (ᘁY)
   adj := tensorLeftAdjunction (ᘁY) Y
 
@@ -1264,7 +1264,7 @@ theorem tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight
 
 中文:
 定理 tensorLeftHomEquiv_symm_coevaluation_comp_whiskerRight
-  结论: {X Y : C} [HasRightDual X]
+  结论: {X Y : C} [有RightDual X]
   证明: by
   dsimp [tensorLeftHomEquiv, rightAdjointMate]
   simp
@@ -1291,7 +1291,7 @@ theorem tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft
 
 中文:
 定理 tensorRightHomEquiv_symm_coevaluation_comp_whiskerLeft
-  结论: {X Y : C} [HasLeftDual X]
+  结论: {X Y : C} [有LeftDual X]
   证明: by
   dsimp [tensorRightHomEquiv, leftAdjointMate]
   simp
@@ -1361,7 +1361,7 @@ theorem tensorLeftHomEquiv_whiskerLeft_comp_evaluation
 
 中文:
 定理 tensorLeftHomEquiv_whiskerLeft_comp_evaluation
-  条件: {Y Z : C} [HasLeftDual Z] (f : Y ⟶ ᘁZ)
+  条件: {Y Z : C} [有LeftDual Z] (f : Y ⟶ ᘁZ)
   证明: calc
     _ = 𝟙 _ otimes≫ (η_ (ᘁZ : C) Z ▷ Y ≫ ((ᘁZ) otimes Z) ◁ f) otimes≫ (ᘁZ) ◁ ε_ (ᘁZ) Z := by
       dsimp [tensorLeftHomEquiv]; monoidal
@@ -1397,7 +1397,7 @@ theorem tensorLeftHomEquiv_whiskerRight_comp_evaluation
 
 中文:
 定理 tensorLeftHomEquiv_whiskerRight_comp_evaluation
-  结论: {X Y : C} [HasLeftDual X] [HasLeftDual Y]
+  结论: {X Y : C} [有LeftDual X] [有LeftDual Y]
   证明: by
   dsimp [tensorLeftHomEquiv, leftAdjointMate]
   simp
@@ -1424,7 +1424,7 @@ theorem tensorRightHomEquiv_whiskerLeft_comp_evaluation
 
 中文:
 定理 tensorRightHomEquiv_whiskerLeft_comp_evaluation
-  结论: {X Y : C} [HasRightDual X] [HasRightDual Y]
+  结论: {X Y : C} [有RightDual X] [有RightDual Y]
   证明: by
   dsimp [tensorRightHomEquiv, rightAdjointMate]
   simp
@@ -1454,7 +1454,7 @@ theorem tensorRightHomEquiv_whiskerRight_comp_evaluation
 
 中文:
 定理 tensorRightHomEquiv_whiskerRight_comp_evaluation
-  条件: {X Y : C} [HasRightDual X] (f : Y ⟶ Xᘁ)
+  条件: {X Y : C} [有RightDual X] (f : Y ⟶ Xᘁ)
   证明: calc
     _ = 𝟙 _ otimes≫ (Y ◁ η_ X Xᘁ ≫ f ▷ (X otimes Xᘁ)) otimes≫ ε_ X Xᘁ ▷ Xᘁ := by
       dsimp [tensorRightHomEquiv]; monoidal
@@ -1491,7 +1491,7 @@ theorem coevaluation_comp_rightAdjointMate
 
 中文:
 定理 coevaluation_comp_rightAdjointMate
-  条件: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
+  条件: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
   证明: by
   apply_fun (tensorLeftHomEquiv _ Y (Yᘁ) _).symm
   simp
@@ -1520,7 +1520,7 @@ theorem leftAdjointMate_comp_evaluation
 
 中文:
 定理 leftAdjointMate_comp_evaluation
-  条件: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
+  条件: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
   证明: by
   apply_fun tensorLeftHomEquiv _ (ᘁX) X _
   simp
@@ -1549,7 +1549,7 @@ theorem coevaluation_comp_leftAdjointMate
 
 中文:
 定理 coevaluation_comp_leftAdjointMate
-  条件: {X Y : C} [HasLeftDual X] [HasLeftDual Y] (f : X ⟶ Y)
+  条件: {X Y : C} [有LeftDual X] [有LeftDual Y] (f : X ⟶ Y)
   证明: by
   apply_fun (tensorRightHomEquiv _ (ᘁY) Y _).symm
   simp
@@ -1576,7 +1576,7 @@ theorem rightAdjointMate_comp_evaluation
 
 中文:
 定理 rightAdjointMate_comp_evaluation
-  条件: {X Y : C} [HasRightDual X] [HasRightDual Y] (f : X ⟶ Y)
+  条件: {X Y : C} [有RightDual X] [有RightDual Y] (f : X ⟶ Y)
   证明: by
   apply_fun tensorRightHomEquiv _ X (Xᘁ) _
   simp
@@ -1821,7 +1821,7 @@ theorem rightDualIso_id
 中文:
 定理 rightDualIso_id
   条件: {X Y : C} (p : ExactPairing X Y)
-  结论: rightDualIso p p = Iso.refl Y
+  结论: rightDualIso p p = 同构.refl Y
   证明: by
   ext
   simp only [rightDualIso, Iso.refl_hom, @rightAdjointMate_id]
@@ -1849,7 +1849,7 @@ theorem leftDualIso_id
 中文:
 定理 leftDualIso_id
   条件: {X Y : C} (p : ExactPairing X Y)
-  结论: leftDualIso p p = Iso.refl X
+  结论: leftDualIso p p = 同构.refl X
   证明: by
   ext
   simp only [leftDualIso, Iso.refl_hom, @leftAdjointMate_id]
@@ -1870,7 +1870,7 @@ definition rightDualTensorIso
 
 中文:
 定义 rightDualTensorIso
-  签名: (X Y : C) [HasRightDual X] [HasRightDual Y]
+  签名: (X Y : C) [有RightDual X] [有RightDual Y]
   定义体: rightDualIso HasRightDual.exact ExactPairing.tensor
 
 Depends on / 依赖: ExactPairing, ExactPairing.tensor, HasRightDual, HasRightDual.exact, rightDualIso, tensor
@@ -1890,7 +1890,7 @@ definition leftDualTensorIso
 
 中文:
 定义 leftDualTensorIso
-  签名: (X Y : C) [HasLeftDual X] [HasLeftDual Y]
+  签名: (X Y : C) [有LeftDual X] [有LeftDual Y]
   定义体: leftDualIso HasLeftDual.exact ExactPairing.tensor
 
 Depends on / 依赖: ExactPairing, ExactPairing.tensor, HasLeftDual, HasLeftDual.exact, leftDualIso, tensor
@@ -1910,10 +1910,10 @@ class RightRigidCategory
     - [rightDual : forall X : C, HasRightDual X]
 
 中文:
-类 RightRigidCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 RightRigid范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   公理与运算 (1 个):
-    - [rightDual : 对任意 X : C, HasRightDual X]
+    - [rightDual : 对任意 X : C, 有RightDual X]
 -/
 class RightRigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] where
   [rightDual : forall X : C, HasRightDual X]
@@ -1928,10 +1928,10 @@ class LeftRigidCategory
     - [leftDual : forall X : C, HasLeftDual X]
 
 中文:
-类 LeftRigidCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 LeftRigid范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   公理与运算 (1 个):
-    - [leftDual : 对任意 X : C, HasLeftDual X]
+    - [leftDual : 对任意 X : C, 有LeftDual X]
 -/
 class LeftRigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] where
   [leftDual : forall X : C, HasLeftDual X]
@@ -1958,7 +1958,7 @@ definition monoidalClosedOfLeftRigidCategory
 
 中文:
 定义 monoidalClosedOfLeftRigidCategory
-  签名: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+  签名: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   定义体: closedOfHasLeftDual X
 
 Depends on / 依赖: closedOfHasLeftDual
@@ -1976,8 +1976,8 @@ class RigidCategory
   (no additional axioms)
 
 中文:
-类 RigidCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 Rigid范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   (无附加公理)
 -/
 class RigidCategory (C : Type u) [Category.{v} C] [MonoidalCategory.{v} C] extends

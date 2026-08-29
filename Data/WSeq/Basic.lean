@@ -55,7 +55,7 @@ definition ofSeq
 
 中文:
 定义 ofSeq
-  签名: : Seq α -> WSeq α
+  签名: : 序列 α -> WSeq α
   定义体: (· <$> ·) some
 -/
 def ofSeq : Seq α -> WSeq α :=
@@ -73,7 +73,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: ofSeq l
 -/
 def ofList (l : List α) : WSeq α :=
@@ -107,7 +107,7 @@ instance coeSeq
 
 中文:
 实例 coeSeq
-  签名: : Coe (Seq α) (WSeq α)
+  签名: : Coe (序列 α) (WSeq α)
   定义体: ⟨ofSeq⟩
 -/
 instance coeSeq : Coe (Seq α) (WSeq α) :=
@@ -123,7 +123,7 @@ instance coeList
 
 中文:
 实例 coeList
-  签名: : Coe (List α) (WSeq α)
+  签名: : Coe (列表 α) (WSeq α)
   定义体: ⟨ofList⟩
 
 Depends on / 依赖: ofList
@@ -177,7 +177,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (WSeq α)
+  签名: : 可居 (WSeq α)
   定义体: ⟨nil⟩
 -/
 instance inhabited : Inhabited (WSeq α) :=
@@ -233,7 +233,7 @@ definition destruct
 
 中文:
 定义 destruct
-  签名: : WSeq α -> Computation (Option (α × WSeq α))
+  签名: : WSeq α -> Computation (选项类型 (α × WSeq α))
   定义体: Computation.corec fun s =>
     match Seq.destruct s with
     | none => Sum.inl none
@@ -261,7 +261,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {motive : WSeq α -> Sort v} (s : WSeq α) (nil : motive nil)
+  签名: {motive : WSeq α -> 类型层 v} (s : WSeq α) (nil : motive nil)
   定义体: Seq.recOn s nil fun o => Option.recOn o think cons
 
 Depends on / 依赖: Option.recOn, Seq.recOn
@@ -569,7 +569,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad WSeq where
+  签名: : 单子 WSeq where
   定义体: @map
   pure := @ret
   bind := @bind
@@ -661,7 +661,7 @@ theorem seq_destruct_nil
 
 中文:
 定理 seq_destruct_nil
-  结论: Seq.destruct (nil : WSeq α) = none
+  结论: 序列.destruct (nil : WSeq α) = none
   证明: rfl
 
 @[simp]
@@ -684,7 +684,7 @@ theorem seq_destruct_cons
 中文:
 定理 seq_destruct_cons
   条件: (a : α) (s)
-  结论: Seq.destruct (cons a s) = some (some a, s)
+  结论: 序列.destruct (cons a s) = some (some a, s)
   证明: Seq.destruct_cons _ _
 
 @[simp]
@@ -709,7 +709,7 @@ theorem seq_destruct_think
 中文:
 定理 seq_destruct_think
   条件: (s : WSeq α)
-  结论: Seq.destruct (think s) = some (none, s)
+  结论: 序列.destruct (think s) = some (none, s)
   证明: Seq.destruct_cons _ _
 
 @[simp]
@@ -1370,7 +1370,7 @@ definition tail.aux
 
 中文:
 定义 tail.aux
-  签名: : Option (α × WSeq α) -> Computation (Option (α × WSeq α))
+  签名: : 选项类型 (α × WSeq α) -> Computation (选项类型 (α × WSeq α))
 -/
 def tail.aux : Option (α × WSeq α) -> Computation (Option (α × WSeq α))
   | none => Computation.pure none
@@ -1412,7 +1412,7 @@ definition drop.aux
 
 中文:
 定义 drop.aux
-  签名: : 自然数 -> Option (α × WSeq α) -> Computation (Option (α × WSeq α))
+  签名: : 自然数 -> 选项类型 (α × WSeq α) -> Computation (选项类型 (α × WSeq α))
 -/
 def drop.aux : Nat -> Option (α × WSeq α) -> Computation (Option (α × WSeq α))
   | 0 => Computation.pure
@@ -1993,7 +1993,7 @@ theorem exists_get?_of_mem
     simp only [get?, dropn_think
 
 中文:
-定理 exists_get?_of_mem
+定理 存在_get?_of_mem
   条件: {s : WSeq α} {a} (h : a in s)
   结论: 存在 n, some a in get? s n
   证明: by
@@ -2050,7 +2050,7 @@ theorem exists_dropn_of_mem
    
 
 中文:
-定理 exists_dropn_of_mem
+定理 存在_dropn_of_mem
   条件: {s : WSeq α} {a} (h : a in s)
   证明: let ⟨n, h⟩ := exists_get?_of_mem h
   ⟨n, by
@@ -2159,7 +2159,7 @@ theorem exists_of_mem_map
 @[simp]
 
 中文:
-定理 exists_of_mem_map
+定理 存在_of_mem_map
   条件: {f} {b : β}
   结论: 对任意 {s : WSeq α}, b in map f s -> 存在 a, a in s ∧ f a = b
   证明: Seq.exists_of_mem_map h
@@ -2237,7 +2237,7 @@ theorem toList'_nil
 
 中文:
 定理 toList'_nil
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: destruct_eq_pure rfl
 
 Depends on / 依赖: destruct_eq_pure
@@ -2262,7 +2262,7 @@ theorem toList'_cons
 
 中文:
 定理 toList'_cons
-  条件: (l : List α) (s : WSeq α) (a : α)
+  条件: (l : 列表 α) (s : WSeq α) (a : α)
   证明: destruct_eq_think by simp [cons]
 -/
 theorem toList'_cons (l : List α) (s : WSeq α) (a : α) :
@@ -2290,7 +2290,7 @@ theorem toList'_think
 
 中文:
 定理 toList'_think
-  条件: (l : List α) (s : WSeq α)
+  条件: (l : 列表 α) (s : WSeq α)
   证明: destruct_eq_think by simp [think]
 -/
 theorem toList'_think (l : List α) (s : WSeq α) :
@@ -2325,7 +2325,7 @@ theorem toList'_map
 
 中文:
 定理 toList'_map
-  条件: (l : List α) (s : WSeq α)
+  条件: (l : 列表 α) (s : WSeq α)
   证明: by
   refine
     Computation.eq_of_bisim
@@ -2384,7 +2384,7 @@ theorem toList_cons
 中文:
 定理 toList_cons
   条件: (a : α) (s)
-  结论: toList (cons a s) = (List.cons a <$> toList s).think
+  结论: toList (cons a s) = (列表.cons a <$> toList s).think
   证明: destruct_eq_think by
     unfold toList
     simp only [toList'_cons, Computation.destruct_think, Sum.inr.injEq]
@@ -2437,7 +2437,7 @@ theorem toList_ofList
 
 中文:
 定理 toList_ofList
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: l in toList (ofList l)
   证明: by
   induction l with
@@ -2472,7 +2472,7 @@ theorem destruct_ofSeq
 
 中文:
 定理 destruct_ofSeq
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   证明: destruct_eq_pure by
     simp only [destruct, Seq.destruct, Option.map_eq_map, ofSeq, Computation.corec_eq, rmap,
       Seq.head]
@@ -2511,7 +2511,7 @@ theorem head_ofSeq
 
 中文:
 定理 head_ofSeq
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: head (ofSeq s) = Computation.pure s.head
   证明: by
   simp only [head, Option.map_eq_map, destruct_ofSeq, Computation.map_pure, Option.map_map]
@@ -2542,7 +2542,7 @@ theorem tail_ofSeq
 
 中文:
 定理 tail_ofSeq
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: tail (ofSeq s) = ofSeq s.tail
   证明: by
   simp only [tail, destruct_ofSeq, map_pure', flatten_pure]
@@ -2571,7 +2571,7 @@ theorem dropn_ofSeq
 
 中文:
 定理 dropn_ofSeq
-  条件: (s : Seq α)
+  条件: (s : 序列 α)
   结论: 对任意 n, drop (ofSeq s) n = ofSeq (s.drop n)
 -/
 theorem dropn_ofSeq (s : Seq α) : forall n, drop (ofSeq s) n = ofSeq (s.drop n)
@@ -2594,8 +2594,8 @@ theorem get?_ofSeq
 
 中文:
 定理 get?_ofSeq
-  条件: (s : Seq α) (n)
-  结论: get? (ofSeq s) n = Computation.pure (Seq.get? s n)
+  条件: (s : 序列 α) (n)
+  结论: get? (ofSeq s) n = Computation.pure (序列.get? s n)
   证明: by
   dsimp [get?]; rw [dropn_ofSeq, head_ofSeq, Seq.head_dropn]
 
@@ -2807,7 +2807,7 @@ theorem exists_of_mem_join
   · intro b ss o s S ej
 
 中文:
-定理 exists_of_mem_join
+定理 存在_of_mem_join
   条件: {a : α}
   结论: 对任意 {S : WSeq (WSeq α)}, a in join S -> 存在 s, s in S ∧ a in s
   证明: by
@@ -2862,7 +2862,7 @@ theorem exists_of_mem_bind
   ⟨a, as, by rwa [e]⟩
 
 中文:
-定理 exists_of_mem_bind
+定理 存在_of_mem_bind
   条件: {s : WSeq α} {f : α -> WSeq β} {b} (h : b in bind s f)
   证明: let ⟨t, tm, bt⟩ := exists_of_mem_join h
   let ⟨a, as, e⟩ := exists_of_mem_map tm
@@ -3003,7 +3003,7 @@ definition destruct_join.aux
 
 中文:
 定义 destruct_join.aux
-  签名: : Option (WSeq α × WSeq (WSeq α)) -> Computation (Option (α × WSeq α))
+  签名: : 选项类型 (WSeq α × WSeq (WSeq α)) -> Computation (选项类型 (α × WSeq α))
 -/
 def destruct_join.aux : Option (WSeq α × WSeq (WSeq α)) -> Computation (Option (α × WSeq α))
   | none => Computation.pure none

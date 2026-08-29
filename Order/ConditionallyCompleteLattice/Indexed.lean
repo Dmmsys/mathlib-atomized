@@ -46,7 +46,7 @@ theorem WithTop.iInf_empty
 
 中文:
 定理 WithTop.iInf_empty
-  条件: [IsEmpty ι] [InfSet α] (f : ι -> WithTop α)
+  条件: [是空 ι] [下确界集 α] (f : ι -> WithTop α)
   证明: by rw [iInf, range_eq_empty, WithTop.sInf_empty]
 
 @[norm_cast]
@@ -70,7 +70,7 @@ theorem WithTop.coe_iInf
 
 中文:
 定理 WithTop.coe_iInf
-  条件: [Nonempty ι] [InfSet α] {f : ι -> α} (hf : BddBelow (range f))
+  条件: [非空 ι] [下确界集 α] {f : ι -> α} (hf : BddBelow (range f))
   证明: by
   rw [iInf]; rw [iInf]; rw [WithTop.coe_sInf' (range_nonempty f) hf]; rw [← range_comp]; rw [Function.comp_def]
 
@@ -96,7 +96,7 @@ theorem WithTop.coe_iSup
 
 中文:
 定理 WithTop.coe_iSup
-  条件: [SupSet α] (f : ι -> α) (h : BddAbove (Set.range f))
+  条件: [上确界集 α] (f : ι -> α) (h : BddAbove (集合.range f))
   证明: by
   rw [iSup]; rw [iSup]; rw [WithTop.coe_sSup' h]; rw [← range_comp]; rw [Function.comp_def]
 
@@ -121,7 +121,7 @@ theorem WithBot.ciSup_empty
 
 中文:
 定理 WithBot.ciSup_empty
-  条件: [IsEmpty ι] [SupSet α] (f : ι -> WithBot α)
+  条件: [是空 ι] [上确界集 α] (f : ι -> WithBot α)
   证明: WithTop.iInf_empty (α := αᵒᵈ) _
 
 @[norm_cast]
@@ -143,7 +143,7 @@ theorem WithBot.coe_iSup
 
 中文:
 定理 WithBot.coe_iSup
-  条件: [Nonempty ι] [SupSet α] {f : ι -> α} (hf : BddAbove (range f))
+  条件: [非空 ι] [上确界集 α] {f : ι -> α} (hf : BddAbove (range f))
   证明: WithTop.coe_iInf (α := αᵒᵈ) hf
 
 Depends on / 依赖: WithTop, WithTop.coe_iInf, coe_iInf
@@ -168,7 +168,7 @@ theorem WithBot.coe_biSup
 
 中文:
 定理 WithBot.coe_biSup
-  结论: {ι : 类型} {s : Set ι} (hs : s.Nonempty)
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.非空)
   证明: by
   rcases hs with ⟨j, hj⟩
   have : Nonempty ι := Nonempty.intro j
@@ -202,7 +202,7 @@ theorem WithBot.coe_iInf
 
 中文:
 定理 WithBot.coe_iInf
-  条件: [InfSet α] (f : ι -> α) (h : BddBelow (Set.range f))
+  条件: [下确界集 α] (f : ι -> α) (h : BddBelow (集合.range f))
   证明: WithTop.coe_iSup (α := αᵒᵈ) _ h
 
 Depends on / 依赖: WithTop, WithTop.coe_iSup, coe_iSup
@@ -226,7 +226,7 @@ refine le_antisymm (by simpa using fun _ => biInf_le _)
 
 中文:
 定理 WithBot.coe_biInf
-  条件: {ι : 类型} {s : Set ι} {α : 类型} [CompleteLattice α] (f : ι -> α)
+  条件: {ι : 类型} {s : 集合 ι} {α : 类型} [完备格 α] (f : ι -> α)
   证明: by
 refine le_antisymm (by simpa using fun _ => biInf_le _)
     (le_iInf_iff.mpr fun i => ?_).trans_eq (WithBot.coe_iInf _ (OrderBot.bddBelow _)).symm
@@ -260,7 +260,7 @@ theorem isLUB_ciSup
 
 中文:
 定理 isLUB_ciSup
-  条件: [Nonempty ι] {f : ι -> α} (H : BddAbove (range f))
+  条件: [非空 ι] {f : ι -> α} (H : BddAbove (range f))
   证明: isLUB_csSup (range_nonempty f) H
 
 Depends on / 依赖: isLUB_csSup, range_nonempty
@@ -281,7 +281,7 @@ theorem isLUB_ciSup_set
 
 中文:
 定理 isLUB_ciSup_set
-  条件: {f : β -> α} {s : Set β} (H : BddAbove (f '' s)) (Hne : s.Nonempty)
+  条件: {f : β -> α} {s : 集合 β} (H : BddAbove (f '' s)) (Hne : s.非空)
   证明: by
   rw [← sSup_image']
   exact isLUB_csSup (Hne.image _) H
@@ -303,7 +303,7 @@ theorem isGLB_ciInf
 
 中文:
 定理 isGLB_ciInf
-  条件: [Nonempty ι] {f : ι -> α} (H : BddBelow (range f))
+  条件: [非空 ι] {f : ι -> α} (H : BddBelow (range f))
   证明: isGLB_csInf (range_nonempty f) H
 
 Depends on / 依赖: isGLB_csInf, range_nonempty
@@ -322,7 +322,7 @@ theorem isGLB_ciInf_set
 
 中文:
 定理 isGLB_ciInf_set
-  条件: {f : β -> α} {s : Set β} (H : BddBelow (f '' s)) (Hne : s.Nonempty)
+  条件: {f : β -> α} {s : 集合 β} (H : BddBelow (f '' s)) (Hne : s.非空)
   证明: isLUB_ciSup_set (α := αᵒᵈ) H Hne
 
 Depends on / 依赖: isLUB_ciSup_set
@@ -341,7 +341,7 @@ theorem ciSup_le_iff
 
 中文:
 定理 ciSup_le_iff
-  条件: [Nonempty ι] {f : ι -> α} {a : α} (hf : BddAbove (range f))
+  条件: [非空 ι] {f : ι -> α} {a : α} (hf : BddAbove (range f))
   证明: (isLUB_le_iff <| isLUB_ciSup hf).trans forall_mem_range
 
 Depends on / 依赖: forall_mem_range, isLUB_ciSup, isLUB_le_iff
@@ -360,7 +360,7 @@ theorem le_ciInf_iff
 
 中文:
 定理 le_ciInf_iff
-  条件: [Nonempty ι] {f : ι -> α} {a : α} (hf : BddBelow (range f))
+  条件: [非空 ι] {f : ι -> α} {a : α} (hf : BddBelow (range f))
   证明: (le_isGLB_iff <| isGLB_ciInf hf).trans forall_mem_range
 
 Depends on / 依赖: forall_mem_range, isGLB_ciInf, le_isGLB_iff
@@ -379,7 +379,7 @@ theorem ciSup_set_le_iff
 
 中文:
 定理 ciSup_set_le_iff
-  结论: {ι : 类型} {s : Set ι} {f : ι -> α} {a : α} (hs : s.Nonempty)
+  结论: {ι : 类型} {s : 集合 ι} {f : ι -> α} {a : α} (hs : s.非空)
   证明: (isLUB_le_iff <| isLUB_ciSup_set hf hs).trans forall_mem_image
 
 Depends on / 依赖: forall_mem_image, isLUB_ciSup_set, isLUB_le_iff
@@ -398,7 +398,7 @@ theorem le_ciInf_set_iff
 
 中文:
 定理 le_ciInf_set_iff
-  结论: {ι : 类型} {s : Set ι} {f : ι -> α} {a : α} (hs : s.Nonempty)
+  结论: {ι : 类型} {s : 集合 ι} {f : ι -> α} {a : α} (hs : s.非空)
   证明: (le_isGLB_iff <| isGLB_ciInf_set hf hs).trans forall_mem_image
 
 Depends on / 依赖: forall_mem_image, isGLB_ciInf_set, le_isGLB_iff
@@ -418,7 +418,7 @@ theorem IsLUB.ciSup_eq
 
 中文:
 定理 IsLUB.ciSup_eq
-  条件: [Nonempty ι] {f : ι -> α} (H : IsLUB (range f) a)
+  条件: [非空 ι] {f : ι -> α} (H : IsLUB (range f) a)
   结论: ⨆ i, f i = a
   证明: H.csSup_eq (range_nonempty f)
 
@@ -437,7 +437,7 @@ theorem IsLUB.ciSup_set_eq
 
 中文:
 定理 IsLUB.ciSup_set_eq
-  条件: {s : Set β} {f : β -> α} (H : IsLUB (f '' s) a) (Hne : s.Nonempty)
+  条件: {s : 集合 β} {f : β -> α} (H : IsLUB (f '' s) a) (Hne : s.非空)
   证明: IsLUB.csSup_eq (image_eq_range f s ▸ H) (image_eq_range f s ▸ Hne.image f)
 
 Depends on / 依赖: Hne.image, IsLUB.csSup_eq, csSup_eq, image_eq_range
@@ -457,7 +457,7 @@ theorem IsGLB.ciInf_eq
 
 中文:
 定理 IsGLB.ciInf_eq
-  条件: [Nonempty ι] {f : ι -> α} (H : IsGLB (range f) a)
+  条件: [非空 ι] {f : ι -> α} (H : IsGLB (range f) a)
   结论: ⨅ i, f i = a
   证明: H.csInf_eq (range_nonempty f)
 
@@ -476,7 +476,7 @@ theorem IsGLB.ciInf_set_eq
 
 中文:
 定理 IsGLB.ciInf_set_eq
-  条件: {s : Set β} {f : β -> α} (H : IsGLB (f '' s) a) (Hne : s.Nonempty)
+  条件: {s : 集合 β} {f : β -> α} (H : IsGLB (f '' s) a) (Hne : s.非空)
   证明: IsGLB.csInf_eq (image_eq_range f s ▸ H) (image_eq_range f s ▸ Hne.image f)
 
 Depends on / 依赖: Hne.image, IsGLB.csInf_eq, csInf_eq, image_eq_range
@@ -496,7 +496,7 @@ theorem ciSup_le
 
 中文:
 定理 ciSup_le
-  条件: [Nonempty ι] {f : ι -> α} {c : α} (H : 对任意 x, f x <= c)
+  条件: [非空 ι] {f : ι -> α} {c : α} (H : 对任意 x, f x <= c)
   结论: iSup f <= c
   证明: csSup_le (range_nonempty f) (by rwa [forall_mem_range])
 
@@ -560,7 +560,7 @@ exact ciSup_le fun j => le_sup_of_le_left h ⟨_, ⟨i, rfl⟩, ⟨j, rfl⟩⟩
 
 中文:
 定理 BddAbove.range_iSup_of_iUnion_range
-  结论: {κ : ι -> Sort*} {f : 对任意 i, κ i -> α}
+  结论: {κ : ι -> 类型层*} {f : 对任意 i, κ i -> α}
   证明: by
   have ⟨a, h⟩ := H
   refine ⟨a ⊔ (sSup ∅), fun x ⟨i, hx⟩ => hx ▸ ?_⟩
@@ -589,7 +589,7 @@ theorem le_ciSup₂
 
 中文:
 定理 le_ciSup₂
-  结论: {κ : ι -> Sort*} {f : 对任意 i, κ i -> α} (H : BddAbove <| ⋃ i, range (f i)) (i : ι)
+  结论: {κ : ι -> 类型层*} {f : 对任意 i, κ i -> α} (H : BddAbove <| ⋃ i, range (f i)) (i : ι)
   证明: le_ciSup_of_le H.range_iSup_of_iUnion_range i
     le_ciSup (H.mono <| subset_iUnion (range <| f ·) i) j
 
@@ -672,7 +672,7 @@ theorem le_ciSup_set
 
 中文:
 定理 le_ciSup_set
-  条件: {f : β -> α} {s : Set β} (H : BddAbove (f '' s)) {c : β} (hc : c in s)
+  条件: {f : β -> α} {s : 集合 β} (H : BddAbove (f '' s)) {c : β} (hc : c in s)
   证明: (le_csSup H <| mem_image_of_mem f hc).trans_eq sSup_image'
 
 Depends on / 依赖: IsScalarTower, le_csSup, mem_image_of_mem, sSup_image, trans_eq
@@ -733,7 +733,7 @@ theorem le_ciInf
 
 中文:
 定理 le_ciInf
-  条件: [Nonempty ι] {f : ι -> α} {c : α} (H : 对任意 x, c <= f x)
+  条件: [非空 ι] {f : ι -> α} {c : α} (H : 对任意 x, c <= f x)
   结论: c <= iInf f
   证明: ciSup_le (α := αᵒᵈ) H
 
@@ -791,8 +791,8 @@ theorem ciSup_mono_of_forall_exists
   proof: .elim le_ciSup_of_le hg ciSup_le fun i => h i
 
 中文:
-定理 ciSup_mono_of_forall_exists
-  结论: {ι'} [Nonempty ι] {f : ι -> α} {g : ι' -> α}
+定理 ciSup_mono_of_对任意_存在
+  结论: {ι'} [非空 ι] {f : ι -> α} {g : ι' -> α}
   证明: .elim le_ciSup_of_le hg ciSup_le fun i => h i
 
 Depends on / 依赖: ciSup_le, le_ciSup_of_le
@@ -810,8 +810,8 @@ theorem ciInf_mono_of_forall_exists
   proof: ciSup_mono_of_forall_exists (α := αᵒᵈ) hf h
 
 中文:
-定理 ciInf_mono_of_forall_exists
-  结论: {ι'} [Nonempty ι'] {f : ι -> α} {g : ι' -> α}
+定理 ciInf_mono_of_对任意_存在
+  结论: {ι'} [非空 ι'] {f : ι -> α} {g : ι' -> α}
   证明: ciSup_mono_of_forall_exists (α := αᵒᵈ) hf h
 
 Depends on / 依赖: ciSup_mono_of_forall_exists
@@ -835,7 +835,7 @@ exact le_ciInf fun j => inf_le_of_left_le h ⟨_, ⟨i, rfl⟩, ⟨j, rfl⟩⟩
 
 中文:
 定理 BddBelow.range_iInf_of_iUnion_range
-  结论: {κ : ι -> Sort*} {f : 对任意 i, κ i -> α}
+  结论: {κ : ι -> 类型层*} {f : 对任意 i, κ i -> α}
   证明: by
   have ⟨a, h⟩ := H
   refine ⟨a ⊓ (sInf ∅), fun x ⟨i, hx⟩ => hx ▸ ?_⟩
@@ -864,7 +864,7 @@ theorem ciInf₂_le
 
 中文:
 定理 ciInf₂_le
-  结论: {κ : ι -> Sort*} {f : 对任意 i, κ i -> α} (H : BddBelow <| ⋃ i, range (f i)) (i : ι)
+  结论: {κ : ι -> 类型层*} {f : 对任意 i, κ i -> α} (H : BddBelow <| ⋃ i, range (f i)) (i : ι)
   证明: ciInf_le_of_le H.range_iInf_of_iUnion_range i
     ciInf_le (H.mono <| subset_iUnion (range <| f ·) i) j
 
@@ -885,7 +885,7 @@ theorem ciInf_set_le
 
 中文:
 定理 ciInf_set_le
-  条件: {f : β -> α} {s : Set β} (H : BddBelow (f '' s)) {c : β} (hc : c in s)
+  条件: {f : β -> α} {s : 集合 β} (H : BddBelow (f '' s)) {c : β} (hc : c in s)
   证明: le_ciSup_set (α := αᵒᵈ) H hc
 
 Depends on / 依赖: le_ciSup_set
@@ -904,7 +904,7 @@ lemma ciInf_le_ciSup
 
 中文:
 引理 ciInf_le_ciSup
-  条件: [Nonempty ι] {f : ι -> α} (hf : BddBelow (range f)) (hf' : BddAbove (range f))
+  条件: [非空 ι] {f : ι -> α} (hf : BddBelow (range f)) (hf' : BddAbove (range f))
   证明: (ciInf_le hf (Classical.arbitrary _)).trans le_ciSup hf' (Classical.arbitrary _)
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, ciInf_le, le_ciSup
@@ -932,7 +932,7 @@ lemma ciSup_prod
 
 中文:
 引理 ciSup_prod
-  条件: {f : β × γ -> α} (hf : BddAbove (Set.range f))
+  条件: {f : β × γ -> α} (hf : BddAbove (集合.range f))
   证明: by
   rcases isEmpty_or_nonempty β
   · simp [iSup_of_empty']
@@ -977,7 +977,7 @@ lemma ciInf_prod
 
 中文:
 引理 ciInf_prod
-  条件: {f : β × γ -> α} (hf : BddBelow (Set.range f))
+  条件: {f : β × γ -> α} (hf : BddBelow (集合.range f))
   证明: ciSup_prod (α := αᵒᵈ) hf
 
 Depends on / 依赖: ciSup_prod
@@ -996,8 +996,8 @@ theorem ciSup_eq_of_forall_le_of_forall_lt_exists_gt
 fun w hw => exists_range_iff.mpr h₂ w hw
 
 中文:
-定理 ciSup_eq_of_forall_le_of_forall_lt_exists_gt
-  结论: [Nonempty ι] {f : ι -> α} (h₁ : 对任意 i, f i <= b)
+定理 ciSup_eq_of_对任意_le_of_对任意_lt_存在_gt
+  结论: [非空 ι] {f : ι -> α} (h₁ : 对任意 i, f i <= b)
   证明: csSup_eq_of_forall_le_of_forall_lt_exists_gt (range_nonempty f) (forall_mem_range.mpr h₁)
 fun w hw => exists_range_iff.mpr h₂ w hw
 
@@ -1017,8 +1017,8 @@ theorem ciInf_eq_of_forall_ge_of_forall_gt_exists_lt
   proof: ciSup_eq_of_forall_le_of_forall_lt_exists_gt (α := αᵒᵈ) h₁ h₂
 
 中文:
-定理 ciInf_eq_of_forall_ge_of_forall_gt_exists_lt
-  结论: [Nonempty ι] {f : ι -> α} (h₁ : 对任意 i, b <= f i)
+定理 ciInf_eq_of_对任意_ge_of_对任意_gt_存在_lt
+  结论: [非空 ι] {f : ι -> α} (h₁ : 对任意 i, b <= f i)
   证明: ciSup_eq_of_forall_le_of_forall_lt_exists_gt (α := αᵒᵈ) h₁ h₂
 
 Depends on / 依赖: ciSup_eq_of_forall_le_of_forall_lt_exists_gt
@@ -1038,8 +1038,8 @@ lemma Set.Iic_ciInf
   simpa using le_ciInf_iff hf
 
 中文:
-引理 Set.Iic_ciInf
-  条件: [Nonempty ι] {f : ι -> α} (hf : BddBelow (range f))
+引理 集合.Iic_ciInf
+  条件: [非空 ι] {f : ι -> α} (hf : BddBelow (range f))
   证明: by
   ext
   simpa using le_ciInf_iff hf
@@ -1060,8 +1060,8 @@ lemma Set.Ici_ciSup
   proof: Iic_ciInf (α := αᵒᵈ) hf
 
 中文:
-引理 Set.Ici_ciSup
-  条件: [Nonempty ι] {f : ι -> α} (hf : BddAbove (range f))
+引理 集合.Ici_ciSup
+  条件: [非空 ι] {f : ι -> α} (hf : BddAbove (range f))
   证明: Iic_ciInf (α := αᵒᵈ) hf
 
 Depends on / 依赖: Iic_ciInf
@@ -1087,7 +1087,7 @@ theorem ciSup_subtype
 
 中文:
 定理 ciSup_subtype
-  结论: {p : ι -> 命题} {f : Subtype p -> α}
+  结论: {p : ι -> 命题} {f : 子类型 p -> α}
   证明: by
   cases isEmpty_or_nonempty (Subtype p)
   · rw [iSup_of_empty', cbiSup_eq_of_forall_not fun i h => isEmptyElim (⟨i, h⟩ : Subtype p)]
@@ -1130,7 +1130,7 @@ theorem ciInf_subtype
 
 中文:
 定理 ciInf_subtype
-  结论: {p : ι -> 命题} {f : Subtype p -> α}
+  结论: {p : ι -> 命题} {f : 子类型 p -> α}
   证明: ciSup_subtype (α := αᵒᵈ) hf hf'
 
 Depends on / 依赖: ciSup_subtype
@@ -1206,7 +1206,7 @@ theorem ciSup_subtype_fun
 
 中文:
 定理 ciSup_subtype_fun
-  结论: {ι} {s : Set ι} {f : ι -> α}
+  结论: {ι} {s : 集合 ι} {f : ι -> α}
   证明: ciSup_subtype hf hf'
 
 @[deprecated (since := "2026-04-04")] alias ciSup_subtype'' := ciSup_subtype_fun
@@ -1232,7 +1232,7 @@ theorem ciInf_subtype_fun
 
 中文:
 定理 ciInf_subtype_fun
-  结论: {ι} {s : Set ι} {f : ι -> α}
+  结论: {ι} {s : 集合 ι} {f : ι -> α}
   证明: ciInf_subtype hf hf'
 
 @[deprecated (since := "2026-04-04")] alias ciInf_subtype'' := ciInf_subtype_fun
@@ -1257,7 +1257,7 @@ theorem csSup_image
 
 中文:
 定理 csSup_image
-  结论: {s : Set β} {f : β -> α}
+  结论: {s : 集合 β} {f : β -> α}
   证明: by
   rw [← ciSup_subtype_fun hf hf']; rw [iSup]; rw [Set.image_eq_range]
 
@@ -1278,7 +1278,7 @@ theorem csInf_image
 
 中文:
 定理 csInf_image
-  结论: {s : Set β} {f : β -> α}
+  结论: {s : 集合 β} {f : β -> α}
   证明: csSup_image (α := αᵒᵈ) hf hf'
 
 Depends on / 依赖: csSup_image
@@ -1302,7 +1302,7 @@ theorem cbiSup_id
 
 中文:
 定理 cbiSup_id
-  条件: {s : Set α} (hs : BddAbove s) (h : sSup ∅ <= sSup s)
+  条件: {s : 集合 α} (hs : BddAbove s) (h : sSup ∅ <= sSup s)
   结论: ⨆ i in s, i = sSup s
   证明: by
   rw [← csSup_image (Subtype.range_coe ▸ hs)]; rw [Set.image_id']
@@ -1330,7 +1330,7 @@ theorem cbiInf_id
 
 中文:
 定理 cbiInf_id
-  条件: {s : Set α} (hs : BddBelow s) (h : sInf s <= sInf ∅)
+  条件: {s : 集合 α} (hs : BddBelow s) (h : sInf s <= sInf ∅)
   结论: ⨅ i in s, i = sInf s
   证明: by
   rw [← csInf_image (Subtype.range_coe ▸ hs)]; rw [Set.image_id']
@@ -1361,7 +1361,7 @@ lemma ciSup_image
 
 中文:
 引理 ciSup_image
-  结论: {ι ι' : 类型} {s : Set ι} {f : ι -> ι'} {g : ι' -> α}
+  结论: {ι ι' : 类型} {s : 集合 ι} {f : ι -> ι'} {g : ι' -> α}
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hs)
   · rw [Set.image_empty, cbiSup_empty, cbiSup_empty]
@@ -1403,7 +1403,7 @@ lemma ciInf_image
 
 中文:
 引理 ciInf_image
-  结论: {ι ι' : 类型} {s : Set ι} {f : ι -> ι'} {g : ι' -> α}
+  结论: {ι ι' : 类型} {s : 集合 ι} {f : ι -> ι'} {g : ι' -> α}
   证明: ciSup_image (α := αᵒᵈ) hf hg'
 
 Depends on / 依赖: ciSup_image
@@ -1518,8 +1518,8 @@ theorem ciSup_exists_le
       simp [h, iSup_of_empty', ciSup_const]
 
 中文:
-定理 ciSup_exists_le
-  条件: {p : ι -> 命题} {f : Exists p -> α}
+定理 ciSup_存在_le
+  条件: {p : ι -> 命题} {f : 存在 p -> α}
   结论: ⨆ ih, f ih <= ⨆ (i) (h), f ⟨i, h⟩
   证明: by
   by_cases! h : Exists p
@@ -1551,8 +1551,8 @@ theorem le_ciInf_exists
   proof: ciSup_exists_le (α := αᵒᵈ)
 
 中文:
-定理 le_ciInf_exists
-  条件: {p : ι -> 命题} {f : Exists p -> α}
+定理 le_ciInf_存在
+  条件: {p : ι -> 命题} {f : 存在 p -> α}
   结论: ⨅ (i) (h), f ⟨i, h⟩ <= ⨅ ih, f ih
   证明: ciSup_exists_le (α := αᵒᵈ)
 
@@ -1678,8 +1678,8 @@ theorem exists_lt_of_lt_ciSup
   ⟨i, h⟩
 
 中文:
-定理 exists_lt_of_lt_ciSup
-  条件: [Nonempty ι] {f : ι -> α} (h : b < iSup f)
+定理 存在_lt_of_lt_ciSup
+  条件: [非空 ι] {f : ι -> α} (h : b < iSup f)
   结论: 存在 i, b < f i
   证明: let ⟨_, ⟨i, rfl⟩, h⟩ := exists_lt_of_lt_csSup (range_nonempty f) h
   ⟨i, h⟩
@@ -1700,8 +1700,8 @@ theorem exists_lt_of_ciInf_lt
   proof: exists_lt_of_lt_ciSup (α := αᵒᵈ) h
 
 中文:
-定理 exists_lt_of_ciInf_lt
-  条件: [Nonempty ι] {f : ι -> α} (h : iInf f < a)
+定理 存在_lt_of_ciInf_lt
+  条件: [非空 ι] {f : ι -> α} (h : iInf f < a)
   结论: 存在 i, f i < a
   证明: exists_lt_of_lt_ciSup (α := αᵒᵈ) h
 
@@ -1721,7 +1721,7 @@ theorem lt_ciSup_iff
 
 中文:
 定理 lt_ciSup_iff
-  条件: [Nonempty ι] {f : ι -> α} (hb : BddAbove (range f))
+  条件: [非空 ι] {f : ι -> α} (hb : BddAbove (range f))
   证明: by
   simpa only [mem_range, exists_exists_eq_and] using! lt_csSup_iff hb (range_nonempty _)
 
@@ -1742,7 +1742,7 @@ theorem ciInf_lt_iff
 
 中文:
 定理 ciInf_lt_iff
-  条件: [Nonempty ι] {f : ι -> α} (hb : BddBelow (range f))
+  条件: [非空 ι] {f : ι -> α} (hb : BddBelow (range f))
   证明: by
   simpa only [mem_range, exists_exists_eq_and] using! csInf_lt_iff hb (range_nonempty _)
 
@@ -1809,8 +1809,8 @@ theorem cbiSup_eq_of_not_forall
   have bdd : BddAbove (ra
 
 中文:
-定理 cbiSup_eq_of_not_forall
-  条件: {p : ι -> 命题} {f : Subtype p -> α} (hp : ¬ (对任意 i, p i))
+定理 cbiSup_eq_of_not_对任意
+  条件: {p : ι -> 命题} {f : 子类型 p -> α} (hp : ¬ (对任意 i, p i))
   证明: by
   rcases le_or_gt (sSup ∅) (iSup f) with le | gt
   · rw [max_eq_left le]
@@ -1849,8 +1849,8 @@ theorem cbiInf_eq_of_not_forall
   proof: cbiSup_eq_of_not_forall (α := αᵒᵈ) hp
 
 中文:
-定理 cbiInf_eq_of_not_forall
-  条件: {p : ι -> 命题} {f : Subtype p -> α} (hp : ¬ (对任意 i, p i))
+定理 cbiInf_eq_of_not_对任意
+  条件: {p : ι -> 命题} {f : 子类型 p -> α} (hp : ¬ (对任意 i, p i))
   证明: cbiSup_eq_of_not_forall (α := αᵒᵈ) hp
 
 Depends on / 依赖: cbiSup_eq_of_not_forall
@@ -1870,7 +1870,7 @@ theorem ciInf_eq_bot_of_bot_mem
 
 中文:
 定理 ciInf_eq_bot_of_bot_mem
-  条件: [OrderBot α] {f : ι -> α} (hs : ⊥ in range f)
+  条件: [有底序 α] {f : ι -> α} (hs : ⊥ in range f)
   结论: iInf f = ⊥
   证明: csInf_eq_bot_of_bot_mem hs
 
@@ -1892,7 +1892,7 @@ theorem ciSup_eq_top_of_top_mem
 
 中文:
 定理 ciSup_eq_top_of_top_mem
-  条件: [OrderTop α] {f : ι -> α} (hs : ⊤ in range f)
+  条件: [有顶序 α] {f : ι -> α} (hs : ⊤ in range f)
   结论: iSup f = ⊤
   证明: csSup_eq_top_of_top_mem hs
 
@@ -1918,7 +1918,7 @@ theorem ciInf_mem
 
 中文:
 定理 ciInf_mem
-  条件: [Nonempty ι] (f : ι -> α)
+  条件: [非空 ι] (f : ι -> α)
   结论: iInf f in range f
   证明: csInf_mem (range_nonempty f)
 
@@ -1943,7 +1943,7 @@ lemma ciInf_eq_iff
 
 中文:
 引理 ciInf_eq_iff
-  条件: [Nonempty ι] (f : ι -> α) (n : α)
+  条件: [非空 ι] (f : ι -> α) (n : α)
   证明: by
   have : OrderBot α := WellFoundedLT.toOrderBot α
   constructor
@@ -1989,7 +1989,7 @@ theorem ciSup_of_empty
 
 中文:
 定理 ciSup_of_empty
-  条件: [IsEmpty ι] (f : ι -> α)
+  条件: [是空 ι] (f : ι -> α)
   结论: ⨆ i, f i = ⊥
   证明: by
   rw [iSup_of_empty']; rw [csSup_empty]
@@ -2010,7 +2010,7 @@ theorem ciSup_false
 
 中文:
 定理 ciSup_false
-  条件: (f : False -> α)
+  条件: (f : 假 -> α)
   结论: ⨆ i, f i = ⊥
   证明: ciSup_of_empty f
 
@@ -2048,7 +2048,7 @@ theorem le_ciInf_iff'
 
 中文:
 定理 le_ciInf_iff'
-  条件: [Nonempty ι] {f : ι -> α} {a : α}
+  条件: [非空 ι] {f : ι -> α} {a : α}
   结论: a <= iInf f ↔ 对任意 i, a <= f i
   证明: le_ciInf_iff (OrderBot.bddBelow _)
 
@@ -2190,7 +2190,7 @@ theorem exists_lt_of_lt_ciSup'
   exact ciSup_le' h
 
 中文:
-定理 exists_lt_of_lt_ciSup'
+定理 存在_lt_of_lt_ciSup'
   条件: {f : ι -> α} {a : α} (h : a < ⨆ i, f i)
   结论: 存在 i, a < f i
   证明: by
@@ -2214,7 +2214,7 @@ theorem ciSup_mono_of_forall_exists'
 @[deprecated (since := "2026-05-03")] alias ciSup_mono' := ciSup_mono_of_forall_exists'
 
 中文:
-定理 ciSup_mono_of_forall_exists'
+定理 ciSup_mono_of_对任意_存在'
   结论: {ι'} {f : ι -> α} {g : ι' -> α} (hg : BddAbove <| range g)
   证明: .elim le_ciSup_of_le hg ciSup_le' fun i => h i
 
@@ -2242,8 +2242,8 @@ refine le_antisymm ciSup_exists_le ciSup_le' fun i => ciSup_le' fun hi => ?_
 @[simp]
 
 中文:
-定理 ciSup_exists
-  条件: {p : ι -> 命题} {f : Exists p -> α}
+定理 ciSup_存在
+  条件: {p : ι -> 命题} {f : 存在 p -> α}
   结论: ⨆ ih, f ih = ⨆ (i) (h), f ⟨i, h⟩
   证明: by
 refine le_antisymm ciSup_exists_le ciSup_le' fun i => ciSup_le' fun hi => ?_
@@ -2343,7 +2343,7 @@ theorem l_csSup
 
 中文:
 定理 l_csSup
-  条件: (gc : GaloisConnection l u) {s : Set α} (hne : s.Nonempty) (hbdd : BddAbove s)
+  条件: (gc : GaloisConnection l u) {s : 集合 α} (hne : s.非空) (hbdd : BddAbove s)
   证明: Eq.symm IsLUB.ciSup_set_eq (gc.isLUB_l_image <| isLUB_csSup hne hbdd) hne
 
 Depends on / 依赖: Eq.symm, IsLUB.ciSup_set_eq, ciSup_set_eq, gc.isLUB_l_image, isLUB_csSup, isLUB_l_image
@@ -2362,7 +2362,7 @@ theorem l_csSup'
 
 中文:
 定理 l_csSup'
-  条件: (gc : GaloisConnection l u) {s : Set α} (hne : s.Nonempty) (hbdd : BddAbove s)
+  条件: (gc : GaloisConnection l u) {s : 集合 α} (hne : s.非空) (hbdd : BddAbove s)
   证明: by rw [gc.l_csSup hne hbdd, sSup_image']
 
 Depends on / 依赖: gc.l_csSup, l_csSup, sSup_image
@@ -2401,7 +2401,7 @@ theorem l_ciSup_set
 
 中文:
 定理 l_ciSup_set
-  结论: (gc : GaloisConnection l u) {s : Set γ} {f : γ -> α} (hf : BddAbove (f '' s))
+  结论: (gc : GaloisConnection l u) {s : 集合 γ} {f : γ -> α} (hf : BddAbove (f '' s))
   证明: by
   have := hne.to_subtype
   rw [image_eq_range] at hf
@@ -2425,7 +2425,7 @@ theorem u_csInf
 
 中文:
 定理 u_csInf
-  条件: (gc : GaloisConnection l u) {s : Set β} (hne : s.Nonempty) (hbdd : BddBelow s)
+  条件: (gc : GaloisConnection l u) {s : 集合 β} (hne : s.非空) (hbdd : BddBelow s)
   证明: gc.dual.l_csSup hne hbdd
 
 Depends on / 依赖: gc.dual.l_csSup, l_csSup
@@ -2444,7 +2444,7 @@ theorem u_csInf'
 
 中文:
 定理 u_csInf'
-  条件: (gc : GaloisConnection l u) {s : Set β} (hne : s.Nonempty) (hbdd : BddBelow s)
+  条件: (gc : GaloisConnection l u) {s : 集合 β} (hne : s.非空) (hbdd : BddBelow s)
   证明: gc.dual.l_csSup' hne hbdd
 
 Depends on / 依赖: gc.dual.l_csSup, l_csSup
@@ -2482,7 +2482,7 @@ theorem u_ciInf_set
 
 中文:
 定理 u_ciInf_set
-  结论: (gc : GaloisConnection l u) {s : Set γ} {f : γ -> β} (hf : BddBelow (f '' s))
+  结论: (gc : GaloisConnection l u) {s : 集合 γ} {f : γ -> β} (hf : BddBelow (f '' s))
   证明: gc.dual.l_ciSup_set hf hne
 
 Depends on / 依赖: gc.dual.l_ciSup_set, l_ciSup_set
@@ -2508,7 +2508,7 @@ theorem map_csSup
 
 中文:
 定理 map_csSup
-  条件: (e : α ≃o β) {s : Set α} (hne : s.Nonempty) (hbdd : BddAbove s)
+  条件: (e : α ≃o β) {s : 集合 α} (hne : s.非空) (hbdd : BddAbove s)
   证明: e.to_galoisConnection.l_csSup hne hbdd
 
 Depends on / 依赖: e.to_galoisConnection.l_csSup, l_csSup, to_galoisConnection
@@ -2527,7 +2527,7 @@ theorem map_csSup'
 
 中文:
 定理 map_csSup'
-  条件: (e : α ≃o β) {s : Set α} (hne : s.Nonempty) (hbdd : BddAbove s)
+  条件: (e : α ≃o β) {s : 集合 α} (hne : s.非空) (hbdd : BddAbove s)
   证明: e.to_galoisConnection.l_csSup' hne hbdd
 
 Depends on / 依赖: e.to_galoisConnection.l_csSup, l_csSup, to_galoisConnection
@@ -2565,7 +2565,7 @@ theorem map_ciSup_set
 
 中文:
 定理 map_ciSup_set
-  结论: (e : α ≃o β) {s : Set γ} {f : γ -> α} (hf : BddAbove (f '' s))
+  结论: (e : α ≃o β) {s : 集合 γ} {f : γ -> α} (hf : BddAbove (f '' s))
   证明: e.to_galoisConnection.l_ciSup_set hf hne
 
 Depends on / 依赖: e.to_galoisConnection.l_ciSup_set, l_ciSup_set, to_galoisConnection
@@ -2584,7 +2584,7 @@ theorem map_csInf
 
 中文:
 定理 map_csInf
-  条件: (e : α ≃o β) {s : Set α} (hne : s.Nonempty) (hbdd : BddBelow s)
+  条件: (e : α ≃o β) {s : 集合 α} (hne : s.非空) (hbdd : BddBelow s)
   证明: e.dual.map_csSup hne hbdd
 
 Depends on / 依赖: e.dual.map_csSup, map_csSup
@@ -2603,7 +2603,7 @@ theorem map_csInf'
 
 中文:
 定理 map_csInf'
-  条件: (e : α ≃o β) {s : Set α} (hne : s.Nonempty) (hbdd : BddBelow s)
+  条件: (e : α ≃o β) {s : 集合 α} (hne : s.非空) (hbdd : BddBelow s)
   证明: e.dual.map_csSup' hne hbdd
 
 Depends on / 依赖: e.dual.map_csSup, map_csSup
@@ -2641,7 +2641,7 @@ theorem map_ciInf_set
 
 中文:
 定理 map_ciInf_set
-  结论: (e : α ≃o β) {s : Set γ} {f : γ -> α} (hf : BddBelow (f '' s))
+  结论: (e : α ≃o β) {s : 集合 γ} {f : γ -> α} (hf : BddBelow (f '' s))
   证明: e.dual.map_ciSup_set hf hne
 
 Depends on / 依赖: e.dual.map_ciSup_set, map_ciSup_set
@@ -2767,7 +2767,7 @@ lemma iInf_coe_eq_top
 
 中文:
 引理 iInf_coe_eq_top
-  结论: ⨅ x, (f x : WithTop α) = ⊤ ↔ IsEmpty ι
+  结论: ⨅ x, (f x : WithTop α) = ⊤ ↔ 是空 ι
   证明: by simp [isEmpty_iff]
 
 Depends on / 依赖: isEmpty_iff
@@ -2785,7 +2785,7 @@ lemma iInf_coe_lt_top
 
 中文:
 引理 iInf_coe_lt_top
-  结论: ⨅ i, (f i : WithTop α) < ⊤ ↔ Nonempty ι
+  结论: ⨅ i, (f i : WithTop α) < ⊤ ↔ 非空 ι
   证明: by
   rw [lt_top_iff_ne_top]; rw [Ne]; rw [iInf_coe_eq_top]; rw [not_isEmpty_iff]
 

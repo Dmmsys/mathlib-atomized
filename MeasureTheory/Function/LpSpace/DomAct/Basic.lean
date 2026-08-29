@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (Lp E p μ)
+  签名: 标量乘法 Mᵈᵐᵃ (Lp E p μ)
   定义体: Lp.compMeasurePreserving (mk.symm c • ·) (measurePreserving_smul _ _) f
 
 @[to_additive (attr := simp)]
@@ -138,7 +138,7 @@ theorem smul_Lp_const
 
 中文:
 定理 smul_Lp_const
-  条件: [IsFiniteMeasure μ] (c : Mᵈᵐᵃ) (a : E)
+  条件: [是有限测度 μ] (c : Mᵈᵐᵃ) (a : E)
   证明: rfl
 
 @[to_additive]
@@ -177,8 +177,8 @@ instance [SMul
   body: Subtype.val_injective.smulCommClass (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [SMul
-  签名: N α] [SMulCommClass M N α] [SMulInvariantMeasure N α μ] [MeasurableConstSMul N α] :
+实例 [标量乘法
+  签名: N α] [标量交换类 M N α] [标量乘不变测度 N α μ] [可测常数标量乘法 N α] :
   定义体: Subtype.val_injective.smulCommClass (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.smulCommClass, smulCommClass, val_injective
@@ -302,7 +302,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribSMul Mᵈᵐᵃ (Lp E p μ)
+  签名: 分配标量乘法 Mᵈᵐᵃ (Lp E p μ)
   定义体: rfl
   smul_add := by rintro _ ⟨⟨⟩, _⟩ ⟨⟨⟩, _⟩; rfl
 -/
@@ -424,7 +424,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIsometricSMul Mᵈᵐᵃ (Lp E p μ)
+  签名: 是是ometricSMul Mᵈᵐᵃ (Lp E p μ)
   定义体: ⟨edist_smul_Lp⟩
 
 Depends on / 依赖: edist_smul_Lp
@@ -448,7 +448,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Mᵈᵐᵃ (Lp E p μ)
+  签名: 乘法作用 Mᵈᵐᵃ (Lp E p μ)
   定义体: Subtype.val_injective.mulAction _ fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.mulAction, mulAction, val_injective
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction Mᵈᵐᵃ (Lp E p μ)
+  签名: 分配乘法作用 Mᵈᵐᵃ (Lp E p μ)
   定义体: Subtype.val_injective.distribMulAction ⟨⟨_, rfl⟩, fun _ _ => rfl⟩ fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.distribMulAction, distribMulAction, val_injective

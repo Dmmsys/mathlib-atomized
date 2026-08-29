@@ -50,8 +50,8 @@ theorem Module.Dual.exists_extension_of_le_seminorm_real
   exact ⟨g, hg, p.abs_le_of_le hl⟩
 
 中文:
-定理 Module.Dual.exists_extension_of_le_seminorm_real
-  结论: [Module 实数 E]
+定理 模.对偶.存在_extension_of_le_seminorm_real
+  结论: [模 实数 E]
   证明: by
   obtain ⟨g, hg, hl⟩ := by
     refine exists_extension_of_le_sublinear ⟨S, f⟩ p (fun _ hc _ => ?_) ?_ hp
@@ -88,8 +88,8 @@ theorem Module.Dual.exists_extension_of_le_seminorm
     fr.exists_extension_o
 
 中文:
-定理 Module.Dual.exists_extension_of_le_seminorm
-  结论: [Module 𝕜 E] (S : Submodule 𝕜 E) (f : Dual 𝕜 S)
+定理 模.对偶.存在_extension_of_le_seminorm
+  结论: [模 𝕜 E] (S : 子模 𝕜 E) (f : 对偶 𝕜 S)
   证明: by
   let : RCLike 𝕜 := IsRCLikeNormedField.rclike 𝕜
   let : Module Real E := .restrictScalars Real 𝕜 E
@@ -129,7 +129,7 @@ theorem Module.Dual.exists_continuous_extension_of_le_seminorm_real
     ⟨{⟨p, hp_cont⟩}, 1, fun x => by simpa using (le_abs_self _).trans (hl x)⟩⟩, hg, hl⟩
 
 中文:
-定理 Module.Dual.exists_continuous_extension_of_le_seminorm_real
+定理 模.对偶.存在_continuous_extension_of_le_seminorm_real
   证明: by
   obtain ⟨g, hg, hl⟩ := f.exists_extension_of_le_seminorm_real S hp
   exact ⟨⟨g, (PolynormableSpace.withSeminorms Real E).continuous_real_rng g
@@ -159,8 +159,8 @@ theorem Module.Dual.exists_continuous_extension_of_le_seminorm
   exact ⟨{⟨p, hp_cont⟩}, 1, by simpa⟩
 
 中文:
-定理 Module.Dual.exists_continuous_extension_of_le_seminorm
-  结论: (S : Submodule 𝕜 E) (f : Dual 𝕜 S)
+定理 模.对偶.存在_continuous_extension_of_le_seminorm
+  结论: (S : 子模 𝕜 E) (f : 对偶 𝕜 S)
   证明: by
   obtain ⟨g, hg, hle⟩ := Dual.exists_extension_of_le_seminorm S f hp
   refine ⟨⟨g, (PolynormableSpace.withSeminorms 𝕜 E).continuous_normedSpace_rng 𝕜 g ?_⟩, hg, hle⟩
@@ -188,8 +188,8 @@ theorem StrongDual.exists_extension
   exact ⟨g, hg⟩
 
 中文:
-定理 StrongDual.exists_extension
-  结论: {𝕜} [NontriviallyNormedField 𝕜] [IsRCLikeNormedField 𝕜]
+定理 StrongDual.存在_extension
+  结论: {𝕜} [NontriviallyNormedField 𝕜] [是RCLikeNormedField 𝕜]
   证明: by
   obtain ⟨q, hq_cont, hq⟩ := Seminorm.exists_le_comp_of_isInducing (f := S.subtype)
     (p := f.toSeminorm) f.continuous.norm IsInducing.subtypeVal
@@ -225,8 +225,8 @@ lemma ContinuousLinearMap.exist_extension_of_finiteDimensional_range
   choose gi hgf using fun i => StrongDual.exists_extension S (fi
 
 中文:
-引理 ContinuousLinearMap.exist_extension_of_finiteDimensional_range
-  结论: {S : Submodule 𝕜 E}
+引理 连续线性映射.exist_extension_of_finiteDimensional_range
+  结论: {S : 子模 𝕜 E}
   证明: by
   let : RCLike 𝕜 := IsRCLikeNormedField.rclike 𝕜
   let b := Module.finBasis 𝕜 f.range
@@ -261,8 +261,8 @@ lemma Submodule.ClosedComplemented.of_finiteDimensional
   exact ⟨g, DFunLike.congr_fun hg.symm⟩
 
 中文:
-引理 Submodule.ClosedComplemented.of_finiteDimensional
-  结论: [PolynormableSpace 𝕜 F] (S : Submodule 𝕜 F)
+引理 子模.ClosedComplemented.of_finiteDimensional
+  结论: [Polynormable空间 𝕜 F] (S : 子模 𝕜 F)
   证明: by
   let ⟨g, hg⟩ := (ContinuousLinearMap.id 𝕜 S).exist_extension_of_finiteDimensional_range
   exact ⟨g, DFunLike.congr_fun hg.symm⟩

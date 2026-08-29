@@ -40,8 +40,8 @@ abbreviation Forall
   body: forall x, p x
 
 中文:
-缩写 Forall
-  签名: {α : Sort*} (p : α -> Sort*)
+缩写 任意
+  签名: {α : 类型层*} (p : α -> 类型层*)
   定义体: forall x, p x
 -/
 abbrev Forall {α : Sort*} (p : α -> Sort*) := forall x, p x
@@ -174,7 +174,7 @@ definition whnfPred
 
 中文:
 定义 whnfPred
-  签名: (e : Expr) (pred : Expr -> MetaM 布尔)
+  签名: (e : Expr) (pred : Expr -> MetaM 布尔值)
   定义体: do
   whnfEasyCases e fun e => do
     let e ← whnfCore e
@@ -241,7 +241,7 @@ structure Arg
   参数: where
   公理与运算 (2 个):
     - expr : Expr
-    - coe : Option Expr  [默认: none]
+    - coe : 选项类型 Expr  [默认: none]
 -/
 structure Arg where
   /-- argument of type `α` -/
@@ -285,7 +285,7 @@ definition withApp
 
 中文:
 定义 withApp
-  签名: {α} (e : Expr) (k : Expr -> Array Arg -> MetaM α)
+  签名: {α} (e : Expr) (k : Expr -> 数组 Arg -> MetaM α)
   定义体: go e #[]
 -/
 partial def withApp {α} (e : Expr) (k : Expr -> Array Arg -> MetaM α) : MetaM α :=
@@ -388,7 +388,7 @@ definition mkAppN
 
 中文:
 定义 mkAppN
-  签名: (f : Expr) (xs : Array Arg)
+  签名: (f : Expr) (xs : 数组 Arg)
   定义体: xs.foldl (init := f) (fun f x =>
     match x with
     | ⟨x, .none⟩ => (f.app x)

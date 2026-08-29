@@ -51,7 +51,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  签名: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   定义体: hu ▸ hv ▸ p
 
 @[simp]
@@ -73,7 +73,7 @@ theorem copy_rfl_rfl
 
 中文:
 定理 copy_rfl_rfl
-  条件: {u v} (p : G.Walk u v)
+  条件: {u v} (p : G.途径 u v)
   结论: p.copy rfl rfl = p
   证明: rfl
 
@@ -96,7 +96,7 @@ theorem copy_copy
 
 中文:
 定理 copy_copy
-  结论: {u v u' v' u'' v''} (p : G.Walk u v)
+  结论: {u v u' v' u'' v''} (p : G.途径 u v)
   证明: by
   subst_vars
   rfl
@@ -124,7 +124,7 @@ theorem copy_nil
 中文:
 定理 copy_nil
   条件: {u u'} (hu : u = u')
-  结论: (Walk.nil : G.Walk u u).copy hu hu = nil
+  结论: (途径.nil : G.途径 u u).copy hu hu = nil
   证明: by
   subst_vars
   rfl
@@ -147,7 +147,7 @@ theorem copy_cons
 
 中文:
 定理 copy_cons
-  条件: {u v w u' w'} (h : G.Adj u v) (p : G.Walk v w) (hu : u = u') (hw : w = w')
+  条件: {u v w u' w'} (h : G.伴随 u v) (p : G.途径 v w) (hu : u = u') (hw : w = w')
   证明: by
   subst_vars
   rfl
@@ -172,7 +172,7 @@ theorem cons_copy
 
 中文:
 定理 cons_copy
-  条件: {u v w v' w'} (h : G.Adj u v) (p : G.Walk v' w') (hv : v' = v) (hw : w' = w)
+  条件: {u v w v' w'} (h : G.伴随 u v) (p : G.途径 v' w') (hv : v' = v) (hw : w' = w)
   证明: by
   subst_vars
   rfl
@@ -209,7 +209,7 @@ definition concat
 
 中文:
 定义 concat
-  签名: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  签名: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   定义体: p.append (cons h nil)
 
 Depends on / 依赖: append, p.append
@@ -226,7 +226,7 @@ theorem concat_eq_append
 
 中文:
 定理 concat_eq_append
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: rfl
 -/
 theorem concat_eq_append {u v w : V} (p : G.Walk u v) (h : G.Adj v w) :
@@ -261,7 +261,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: {u v : V} (w : G.Walk u v)
+  签名: {u v : V} (w : G.途径 u v)
   定义体: w.reverseAux nil
 
 @[simp]
@@ -283,7 +283,7 @@ theorem cons_append
 
 中文:
 定理 cons_append
-  条件: {u v w x : V} (h : G.Adj u v) (p : G.Walk v w) (q : G.Walk w x)
+  条件: {u v w x : V} (h : G.伴随 u v) (p : G.途径 v w) (q : G.途径 w x)
   证明: rfl
 
 @[simp]
@@ -304,7 +304,7 @@ theorem cons_nil_append
 
 中文:
 定理 cons_nil_append
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: rfl
 
 @[simp]
@@ -326,7 +326,7 @@ theorem nil_append
 
 中文:
 定理 nil_append
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: nil.append p = p
   证明: rfl
 
@@ -348,7 +348,7 @@ theorem append_nil
 
 中文:
 定理 append_nil
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.append nil = p
   证明: by
   induction p <;> simp [*]
@@ -369,7 +369,7 @@ theorem append_assoc
 
 中文:
 定理 append_assoc
-  条件: {u v w x : V} (p : G.Walk u v) (q : G.Walk v w) (r : G.Walk w x)
+  条件: {u v w x : V} (p : G.途径 u v) (q : G.途径 v w) (r : G.途径 w x)
   证明: by
   induction p <;> simp [*]
 
@@ -392,7 +392,7 @@ theorem append_copy_copy
 
 中文:
 定理 append_copy_copy
-  结论: {u v w u' v' w'} (p : G.Walk u v) (q : G.Walk v w)
+  结论: {u v w u' v' w'} (p : G.途径 u v) (q : G.途径 v w)
   证明: by
   subst_vars
   rfl
@@ -416,7 +416,7 @@ theorem concat_nil
 
 中文:
 定理 concat_nil
-  条件: {u v : V} (h : G.Adj u v)
+  条件: {u v : V} (h : G.伴随 u v)
   结论: nil.concat h = cons h nil
   证明: rfl
 
@@ -435,7 +435,7 @@ theorem concat_cons
 
 中文:
 定理 concat_cons
-  条件: {u v w x : V} (h : G.Adj u v) (p : G.Walk v w) (h' : G.Adj w x)
+  条件: {u v w x : V} (h : G.伴随 u v) (p : G.途径 v w) (h' : G.伴随 w x)
   证明: rfl
 -/
 theorem concat_cons {u v w x : V} (h : G.Adj u v) (p : G.Walk v w) (h' : G.Adj w x) :
@@ -451,7 +451,7 @@ theorem append_concat
 
 中文:
 定理 append_concat
-  条件: {u v w x : V} (p : G.Walk u v) (q : G.Walk v w) (h : G.Adj w x)
+  条件: {u v w x : V} (p : G.途径 u v) (q : G.途径 v w) (h : G.伴随 w x)
   证明: append_assoc _ _ _
 
 Depends on / 依赖: append_assoc
@@ -470,7 +470,7 @@ theorem concat_append
 
 中文:
 定理 concat_append
-  条件: {u v w x : V} (p : G.Walk u v) (h : G.Adj v w) (q : G.Walk w x)
+  条件: {u v w x : V} (p : G.途径 u v) (h : G.伴随 v w) (q : G.途径 w x)
   证明: by
   rw [concat_eq_append]; rw [← append_assoc]; rw [cons_nil_append]
 
@@ -494,8 +494,8 @@ theorem exists_cons_eq_concat
     exact ⟨y, cons h q, h'', hc ▸ concat_cons _ _ _ ▸ rfl⟩
 
 中文:
-定理 exists_cons_eq_concat
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+定理 存在_cons_eq_concat
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: by
   induction p generalizing u with
   | nil => exact ⟨_, nil, h, rfl⟩
@@ -521,7 +521,7 @@ theorem exists_concat_eq_cons
   given: {u v w : V}
 
 中文:
-定理 exists_concat_eq_cons
+定理 存在_concat_eq_cons
   条件: {u v w : V}
 -/
 theorem exists_concat_eq_cons {u v w : V} :
@@ -543,7 +543,7 @@ theorem reverse_nil
 中文:
 定理 reverse_nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).reverse = nil
+  结论: (nil : G.途径 u u).reverse = nil
   证明: rfl
 -/
 theorem reverse_nil {u : V} : (nil : G.Walk u u).reverse = nil := rfl
@@ -561,7 +561,7 @@ theorem reverse_singleton
 
 中文:
 定理 reverse_singleton
-  条件: {u v : V} (h : G.Adj u v)
+  条件: {u v : V} (h : G.伴随 u v)
   结论: (cons h nil).reverse = cons h.symm nil
   证明: rfl
 
@@ -584,7 +584,7 @@ theorem reverse_toWalk
 
 中文:
 定理 reverse_toWalk
-  条件: {u v : V} (h : G.Adj u v)
+  条件: {u v : V} (h : G.伴随 u v)
   结论: h.toWalk.reverse = h.symm.toWalk
   证明: rfl
 
@@ -605,7 +605,7 @@ theorem cons_reverseAux
 
 中文:
 定理 cons_reverseAux
-  条件: {u v w x : V} (p : G.Walk u v) (q : G.Walk w x) (h : G.Adj w u)
+  条件: {u v w x : V} (p : G.途径 u v) (q : G.途径 w x) (h : G.伴随 w u)
   证明: rfl
 
 @[simp]
@@ -683,7 +683,7 @@ theorem reverseAux_eq_reverse_append
 
 中文:
 定理 reverseAux_eq_reverse_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk u w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 u w)
   证明: by simp [reverse]
 
 @[simp]
@@ -704,7 +704,7 @@ theorem reverse_cons
 
 中文:
 定理 reverse_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: by simp [reverse]
 
 @[simp]
@@ -729,7 +729,7 @@ theorem reverse_copy
 
 中文:
 定理 reverse_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -754,7 +754,7 @@ theorem reverse_append
 
 中文:
 定理 reverse_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by simp [reverse]
 
 @[simp]
@@ -777,7 +777,7 @@ theorem reverse_concat
 
 中文:
 定理 reverse_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: by simp [concat_eq_append]
 
 @[simp]
@@ -802,7 +802,7 @@ theorem reverse_reverse
 
 中文:
 定理 reverse_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.reverse.reverse = p
   证明: by
   induction p with
@@ -826,7 +826,7 @@ theorem reverse_surjective
 中文:
 定理 reverse_surjective
   条件: {u v : V}
-  结论: Function.Surjective (reverse : G.Walk u v -> _)
+  结论: 函数.满射 (reverse : G.途径 u v -> _)
   证明: RightInverse.surjective reverse_reverse
 
 Depends on / 依赖: RightInverse, RightInverse.surjective, reverse_reverse, surjective
@@ -846,7 +846,7 @@ theorem reverse_injective
 中文:
 定理 reverse_injective
   条件: {u v : V}
-  结论: Function.Injective (reverse : G.Walk u v -> _)
+  结论: 函数.单射 (reverse : G.途径 u v -> _)
   证明: RightInverse.injective reverse_reverse
 
 Depends on / 依赖: RightInverse, RightInverse.injective, injective, reverse_reverse
@@ -868,7 +868,7 @@ theorem reverse_bijective
 中文:
 定理 reverse_bijective
   条件: {u v : V}
-  结论: Function.Bijective (reverse : G.Walk u v -> _)
+  结论: 函数.双射 (reverse : G.途径 u v -> _)
   证明: ⟨reverse_injective, reverse_surjective⟩
 
 @[simp]
@@ -893,7 +893,7 @@ theorem length_copy
 
 中文:
 定理 length_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -919,7 +919,7 @@ theorem length_append
 
 中文:
 定理 length_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by
   induction p <;> simp [*, add_comm, add_assoc]
 
@@ -944,7 +944,7 @@ theorem length_concat
 
 中文:
 定理 length_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: length_append _ _
 
 @[simp]
@@ -970,7 +970,7 @@ theorem length_reverseAux
 
 中文:
 定理 length_reverseAux
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk u w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 u w)
   证明: by
   induction p with
   | nil => simp!
@@ -996,7 +996,7 @@ theorem length_reverse
 
 中文:
 定理 length_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.reverse.length = p.length
   证明: by simp [reverse]
 
@@ -1015,7 +1015,7 @@ theorem getVert_append
 
 中文:
 定理 getVert_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w) (i : 自然数)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w) (i : 自然数)
   证明: by
   induction p generalizing i <;> cases i <;> simp [*]
 
@@ -1036,7 +1036,7 @@ theorem getVert_append'
 
 中文:
 定理 getVert_append'
-  条件: (p : G.Walk u v) (q : G.Walk v w) (i : 自然数)
+  条件: (p : G.途径 u v) (q : G.途径 v w) (i : 自然数)
   证明: by
   induction p generalizing i <;> cases i <;> simp [*]
 
@@ -1066,7 +1066,7 @@ theorem getVert_reverse
 
 中文:
 定理 getVert_reverse
-  条件: {u v : V} (p : G.Walk u v) (i : 自然数)
+  条件: {u v : V} (p : G.途径 u v) (i : 自然数)
   证明: by
   induction p with
   | nil => rfl
@@ -1132,7 +1132,7 @@ definition concatRec
 
 中文:
 定义 concatRec
-  签名: {u v : V} (p : G.Walk u v)
+  签名: {u v : V} (p : G.途径 u v)
   定义体: reverse_reverse p ▸ concatRecAux @Hnil @Hconcat p.reverse
 
 @[simp]
@@ -1178,7 +1178,7 @@ theorem concatRec_concat
 
 中文:
 定理 concatRec_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: by
   simp only [concatRec]
   apply eq_of_heq (rec_heq_of_heq _ _)
@@ -1215,7 +1215,7 @@ theorem concat_ne_nil
 
 中文:
 定理 concat_ne_nil
-  条件: {u v : V} (p : G.Walk u v) (h : G.Adj v u)
+  条件: {u v : V} (p : G.途径 u v) (h : G.伴随 v u)
   结论: p.concat h != nil
   证明: by
   cases p <;> simp [concat]
@@ -1246,7 +1246,7 @@ theorem concat_inj
 
 中文:
 定理 concat_inj
-  结论: {u v v' w : V} {p : G.Walk u v} {h : G.Adj v w} {p' : G.Walk u v'}
+  结论: {u v v' w : V} {p : G.途径 u v} {h : G.伴随 v w} {p' : G.途径 u v'}
   证明: by
   induction p with
   | nil =>
@@ -1296,7 +1296,7 @@ theorem support_concat
 
 中文:
 定理 support_concat
-  条件: (p : G.Walk u v) (h : G.Adj v w)
+  条件: (p : G.途径 u v) (h : G.伴随 v w)
   证明: by
   induction p <;> simp [*, concat_nil]
 
@@ -1321,7 +1321,7 @@ theorem support_copy
 
 中文:
 定理 support_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -1344,7 +1344,7 @@ theorem support_append
 
 中文:
 定理 support_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   induction p <;> cases p' <;> simp [*]
 
@@ -1367,7 +1367,7 @@ theorem support_reverse
 
 中文:
 定理 support_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.reverse.support = p.support.reverse
   证明: by
   induction p <;> simp [support_append, *]
@@ -1388,7 +1388,7 @@ theorem support_append_eq_support_dropLast_append
 
 中文:
 定理 support_append_eq_support_dropLast_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   induction p <;> simp_all [List.dropLast_cons_of_ne_nil]
 
@@ -1411,7 +1411,7 @@ theorem tail_support_append
 
 中文:
 定理 tail_support_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   rw [support_append]; rw [List.tail_append_of_ne_nil (support_ne_nil _)]
 
@@ -1440,7 +1440,7 @@ theorem dropLast_support_concat
 
 中文:
 定理 dropLast_support_concat
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.support.dropLast ++ [v] = p.support
   证明: by
   cases p with | nil => rfl | cons h p
@@ -1469,7 +1469,7 @@ theorem support_eq_concat
 
 中文:
 定理 support_eq_concat
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.support = p.support.dropLast.concat v
   证明: by
   simp
@@ -1494,7 +1494,7 @@ lemma ext_support
 
 中文:
 引理 ext_support
-  条件: {u v} {p q : G.Walk u v} (h : p.support = q.support)
+  条件: {u v} {p q : G.途径 u v} (h : p.support = q.support)
   结论: p = q
   证明: by
   refine darts_injective (Dart.toProd_injective.list_map (List.rightInverse_unzip_zip.injective ?_))
@@ -1526,7 +1526,7 @@ theorem mem_tail_support_append_iff
 
 中文:
 定理 mem_tail_support_append_iff
-  条件: {t u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {t u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   rw [tail_support_append]; rw [List.mem_append]
 
@@ -1550,7 +1550,7 @@ theorem mem_support_append_iff
 
 中文:
 定理 mem_support_append_iff
-  条件: {t u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {t u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   grind [mem_support_iff, mem_tail_support_append_iff, end_mem_tail_support_of_ne]
 
@@ -1571,7 +1571,7 @@ theorem support_prefix_support_concat
 
 中文:
 定理 support_prefix_support_concat
-  条件: {u v w : V} (p : G.Walk u v) (hadj : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (hadj : G.伴随 v w)
   证明: by
   simp
 -/
@@ -1590,7 +1590,7 @@ theorem support_subset_support_concat
 
 中文:
 定理 support_subset_support_concat
-  条件: {u v w : V} (p : G.Walk u v) (hadj : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (hadj : G.伴随 v w)
   证明: by
   simp
 -/
@@ -1611,7 +1611,7 @@ theorem support_prefix_support_append
 
 中文:
 定理 support_prefix_support_append
-  结论: {V : 类型u} {G : SimpleGraph V} {u v w : V}
+  结论: {V : 类型u} {G : 简单图 V} {u v w : V}
   证明: by
   simp [support_append]
 
@@ -1637,7 +1637,7 @@ alias subset_support_append_left := support_subset_support_append_left
 
 中文:
 定理 support_subset_support_append_left
-  结论: {V : 类型u} {G : SimpleGraph V} {u v w : V}
+  结论: {V : 类型u} {G : 简单图 V} {u v w : V}
   证明: .subset support_prefix_support_append p q
 
 @[deprecated (since := "2026-05-25")]
@@ -1665,7 +1665,7 @@ theorem support_suffix_support_append
 
 中文:
 定理 support_suffix_support_append
-  结论: {V : 类型u} {G : SimpleGraph V} {u v w : V}
+  结论: {V : 类型u} {G : 简单图 V} {u v w : V}
   证明: by
   simp [support_append_eq_support_dropLast_append]
 
@@ -1691,7 +1691,7 @@ alias subset_support_append_right := support_subset_support_append_right
 
 中文:
 定理 support_subset_support_append_right
-  结论: {V : 类型u} {G : SimpleGraph V} {u v w : V}
+  结论: {V : 类型u} {G : 简单图 V} {u v w : V}
   证明: .subset support_suffix_support_append p q
 
 @[deprecated (since := "2026-05-25")]
@@ -1717,7 +1717,7 @@ theorem coe_support_append
 
 中文:
 定理 coe_support_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   rw [support_append]; rw [← Multiset.coe_add]; rw [coe_support]
 
@@ -1739,7 +1739,7 @@ theorem coe_support_append'
 
 中文:
 定理 coe_support_append'
-  条件: [DecidableEq V] {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: [DecidableEq V] {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   simp_rw [support_append, ← Multiset.coe_add, coe_support, add_comm ({v} : Multiset V),
     ← add_assoc, add_tsub_cancel_right]
@@ -1772,7 +1772,7 @@ theorem ofSupport_support
 
 中文:
 定理 ofSupport_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   match p with
   | nil => rfl
@@ -1810,7 +1810,7 @@ theorem darts_concat
 
 中文:
 定理 darts_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: by
   induction p <;> simp [*, concat_nil]
 
@@ -1837,7 +1837,7 @@ theorem darts_copy
 
 中文:
 定理 darts_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -1863,7 +1863,7 @@ theorem darts_append
 
 中文:
 定理 darts_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by
   induction p <;> simp [*]
 
@@ -1885,7 +1885,7 @@ theorem darts_reverse
 
 中文:
 定理 darts_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   induction p <;> simp [*]
 -/
@@ -1903,7 +1903,7 @@ theorem mem_darts_reverse
 
 中文:
 定理 mem_darts_reverse
-  条件: {u v : V} {d : G.Dart} {p : G.Walk u v}
+  条件: {u v : V} {d : G.Dart} {p : G.途径 u v}
   证明: by simp
 -/
 theorem mem_darts_reverse {u v : V} {d : G.Dart} {p : G.Walk u v} :
@@ -1930,7 +1930,7 @@ theorem ofDarts_darts
 
 中文:
 定理 ofDarts_darts
-  条件: {u v : V} {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {u v : V} {p : G.途径 u v} (hp : ¬p.Nil)
   证明: by
   match p, hp with
   | nil, hp => simp at hp
@@ -1967,7 +1967,7 @@ theorem edges_concat
 
 中文:
 定理 edges_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: by simp [edges]
 
 @[simp]
@@ -1990,7 +1990,7 @@ theorem edges_copy
 
 中文:
 定理 edges_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -2015,7 +2015,7 @@ theorem edges_append
 
 中文:
 定理 edges_append
-  条件: {u v w : V} (p : G.Walk u v) (p' : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (p' : G.途径 v w)
   证明: by simp [edges]
 
 @[simp]
@@ -2036,7 +2036,7 @@ theorem edges_reverse
 
 中文:
 定理 edges_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.reverse.edges = p.edges.reverse
   证明: by
   simp [edges]
@@ -2055,7 +2055,7 @@ theorem dart_snd_mem_support_of_mem_darts
 
 中文:
 定理 dart_snd_mem_support_of_mem_darts
-  结论: {u v : V} (p : G.Walk u v) {d : G.Dart}
+  结论: {u v : V} (p : G.途径 u v) {d : G.Dart}
   证明: by
   simpa using p.reverse.dart_fst_mem_support_of_mem_darts (by simp [h] : d.symm in p.reverse.darts)
 
@@ -2080,7 +2080,7 @@ theorem fst_mem_support_of_mem_edges
 
 中文:
 定理 fst_mem_support_of_mem_edges
-  条件: {t u v w : V} (p : G.Walk v w) (he : s(t, u) in p.edges)
+  条件: {t u v w : V} (p : G.途径 v w) (he : s(t, u) in p.edges)
   证明: by
   obtain ⟨d, hd, he⟩ := List.mem_map.mp he
   rw [dart_edge_eq_mk'_iff'] at he
@@ -2108,7 +2108,7 @@ theorem snd_mem_support_of_mem_edges
 
 中文:
 定理 snd_mem_support_of_mem_edges
-  条件: {t u v w : V} (p : G.Walk v w) (he : s(t, u) in p.edges)
+  条件: {t u v w : V} (p : G.途径 v w) (he : s(t, u) in p.edges)
   证明: p.fst_mem_support_of_mem_edges (Sym2.eq_swap ▸ he)
 
 Depends on / 依赖: Sym2.eq_swap, eq_swap, fst_mem_support_of_mem_edges, p.fst_mem_support_of_mem_edges
@@ -2127,7 +2127,7 @@ theorem mem_support_of_mem_edges
 
 中文:
 定理 mem_support_of_mem_edges
-  结论: {u v w : V} {e : Sym2 V} {p : G.Walk u v} (he : e in p.edges)
+  结论: {u v w : V} {e : Sym2 V} {p : G.途径 u v} (he : e in p.edges)
   证明: hv.elim fun _ heq => p.fst_mem_support_of_mem_edges heq ▸ he
 
 Depends on / 依赖: fst_mem_support_of_mem_edges, hv.elim, p.fst_mem_support_of_mem_edges
@@ -2151,7 +2151,7 @@ theorem edges_nodup_of_support_nodup
 
 中文:
 定理 edges_nodup_of_support_nodup
-  条件: {u v : V} {p : G.Walk u v} (h : p.support.Nodup)
+  条件: {u v : V} {p : G.途径 u v} (h : p.support.Nodup)
   证明: by
   induction p with
   | nil => simp
@@ -2184,7 +2184,7 @@ theorem nodup_tail_support_reverse
 
 中文:
 定理 nodup_tail_support_reverse
-  条件: {u : V} {p : G.Walk u u}
+  条件: {u : V} {p : G.途径 u u}
   证明: by
   refine p.support_reverse ▸ p.support.nodup_tail_reverse ?_
   rw [← getVert_eq_support_getElem? _ (by lia)]; rw [List.getLast?_eq_getElem?]; rw [← getVert_eq_support_getElem? _ (by rw [Walk.length_support]; lia)]
@@ -2214,7 +2214,7 @@ lemma edgeSet_reverse
 
 中文:
 引理 edgeSet_reverse
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.reverse.edgeSet = p.edgeSet
   证明: by ext; simp
 
@@ -2233,7 +2233,7 @@ theorem edgeSet_concat
 
 中文:
 定理 edgeSet_concat
-  条件: {u v w : V} (p : G.Walk u v) (h : G.Adj v w)
+  条件: {u v w : V} (p : G.途径 u v) (h : G.伴随 v w)
   证明: by ext; simp [or_comm]
 
 Depends on / 依赖: or_comm
@@ -2253,7 +2253,7 @@ theorem edgeSet_append
 
 中文:
 定理 edgeSet_append
-  条件: {u v w : V} (p : G.Walk u v) (q : G.Walk v w)
+  条件: {u v w : V} (p : G.途径 u v) (q : G.途径 v w)
   证明: by ext; simp
 
 @[simp]
@@ -2274,7 +2274,7 @@ theorem edgeSet_copy
 
 中文:
 定理 edgeSet_copy
-  条件: {u v u' v'} (p : G.Walk u v) (hu : u = u') (hv : v = v')
+  条件: {u v u' v'} (p : G.途径 u v) (hu : u = u') (hv : v = v')
   证明: by ext; simp
 
 @[simp]
@@ -2295,7 +2295,7 @@ lemma nil_append_iff
 
 中文:
 引理 nil_append_iff
-  条件: {p : G.Walk u v} {q : G.Walk v w}
+  条件: {p : G.途径 u v} {q : G.途径 v w}
   结论: (p.append q).Nil ↔ p.Nil ∧ q.Nil
   证明: by
   cases p <;> cases q <;> simp
@@ -2316,7 +2316,7 @@ lemma Nil.append
 
 中文:
 引理 Nil.append
-  条件: {p : G.Walk u v} {q : G.Walk v w} (hp : p.Nil) (hq : q.Nil)
+  条件: {p : G.途径 u v} {q : G.途径 v w} (hp : p.Nil) (hq : q.Nil)
   证明: by
   simp [hp, hq]
 
@@ -2339,7 +2339,7 @@ lemma nil_reverse
 
 中文:
 引理 nil_reverse
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.reverse.Nil ↔ p.Nil
   证明: by
   cases p <;> simp
@@ -2363,7 +2363,7 @@ definition drop
 
 中文:
 定义 drop
-  签名: {u v : V} (p : G.Walk u v) (n : 自然数)
+  签名: {u v : V} (p : G.途径 u v) (n : 自然数)
   定义体: match p, n with
   | .nil, _ => .nil
   | p, 0 => p.copy (getVert_zero p).symm rfl
@@ -2392,7 +2392,7 @@ lemma drop_length
 
 中文:
 引理 drop_length
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.drop n).length = p.length - n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop]
@@ -2416,7 +2416,7 @@ lemma drop_getVert
 
 中文:
 引理 drop_getVert
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   结论: (p.drop n).getVert m = p.getVert (n + m)
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop, add_right_comm]
@@ -2440,7 +2440,7 @@ lemma drop_add_heq
 
 中文:
 引理 drop_add_heq
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   结论: p.drop (n + m) ≍ (p.drop n).drop m
   证明: by
   rw [add_comm]
@@ -2462,7 +2462,7 @@ lemma drop_add_eq
 
 中文:
 引理 drop_add_eq
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   证明: eq_of_heq .trans by simp [Walk.copy] drop_add_heq ..
 
 Depends on / 依赖: Walk.copy, _aux, drop_add_heq, eq_of_heq, sorted_zero_eq_min
@@ -2484,7 +2484,7 @@ lemma nil_drop_iff
 
 中文:
 引理 nil_drop_iff
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.drop n).Nil ↔ p.length <= n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop]
@@ -2508,7 +2508,7 @@ lemma drop_cons_eq
 
 中文:
 引理 drop_cons_eq
-  条件: (h : G.Adj u v) (p : G.Walk v w) (n : 自然数) (hn : n != 0)
+  条件: (h : G.伴随 u v) (p : G.途径 v w) (n : 自然数) (hn : n != 0)
   证明: by
   apply ext_support
   obtain ⟨_, rfl⟩ := Nat.exists_add_one_eq.mpr (Nat.ne_zero_iff_zero_lt.mp hn)
@@ -2536,7 +2536,7 @@ lemma darts_drop
 
 中文:
 引理 darts_drop
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.drop n).darts = p.darts.drop n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop]
@@ -2558,7 +2558,7 @@ lemma edges_drop
 
 中文:
 引理 edges_drop
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.drop n).edges = p.edges.drop n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop]
@@ -2584,7 +2584,7 @@ definition take
 
 中文:
 定义 take
-  签名: {u v : V} (p : G.Walk u v) (n : 自然数)
+  签名: {u v : V} (p : G.途径 u v) (n : 自然数)
   定义体: match p, n with
   | .nil, _ => .nil
   | p, 0 => nil.copy rfl (getVert_zero p).symm
@@ -2615,7 +2615,7 @@ lemma take_zero
 
 中文:
 引理 take_zero
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.take 0 = nil.copy rfl p.getVert_zero.symm
   证明: by
   cases p <;> simp [take]
@@ -2638,7 +2638,7 @@ lemma take_length
 
 中文:
 引理 take_length
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).length = n ⊓ p.length
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, take]
@@ -2662,7 +2662,7 @@ lemma take_getVert
 
 中文:
 引理 take_getVert
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   结论: (p.take n).getVert m = p.getVert (n ⊓ m)
   证明: by
   induction p generalizing n m <;> cases n <;> cases m <;> simp [*, take]
@@ -2686,7 +2686,7 @@ lemma take_add_heq
 
 中文:
 引理 take_add_heq
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   证明: by
   rw [add_comm]
   induction p generalizing n <;> cases n <;> simp [take, drop]
@@ -2710,7 +2710,7 @@ lemma take_add_eq
 
 中文:
 引理 take_add_eq
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   证明: eq_of_heq .trans by simp [Walk.copy] take_add_heq ..
 
 Depends on / 依赖: Walk.copy, eq_of_heq, take_add_heq
@@ -2732,7 +2732,7 @@ lemma nil_take_iff
 
 中文:
 引理 nil_take_iff
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).Nil ↔ p.Nil ∨ n = 0
   证明: by
   cases p <;> cases n <;> simp [take]
@@ -2755,7 +2755,7 @@ lemma support_take
 
 中文:
 引理 support_take
-  条件: {u v} (p : G.Walk u v) (n : 自然数)
+  条件: {u v} (p : G.途径 u v) (n : 自然数)
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, take]
 
@@ -2784,7 +2784,7 @@ lemma take_take
 
 中文:
 引理 take_take
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   证明: by
   apply ext_support
   simp [support_take, List.take_take, Nat.min_left_comm]
@@ -2813,7 +2813,7 @@ lemma take_of_length_le
 
 中文:
 引理 take_of_length_le
-  条件: {u v n} {p : G.Walk u v} (h : p.length <= n)
+  条件: {u v n} {p : G.途径 u v} (h : p.length <= n)
   证明: by
   induction n generalizing p u with
   | zero => cases p <;> simp [take] at h ⊢
@@ -2847,7 +2847,7 @@ lemma take_cons_eq
 
 中文:
 引理 take_cons_eq
-  条件: (h : G.Adj u v) (p : G.Walk v w) (n : 自然数) (hn : n != 0)
+  条件: (h : G.伴随 u v) (p : G.途径 v w) (n : 自然数) (hn : n != 0)
   证明: by
   apply ext_support
   grind [support_copy, support_take]
@@ -2871,7 +2871,7 @@ lemma darts_take
 
 中文:
 引理 darts_take
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).darts = p.darts.take n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, take]
@@ -2895,7 +2895,7 @@ lemma edges_take
 
 中文:
 引理 edges_take
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).edges = p.edges.take n
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, take]
@@ -2920,7 +2920,7 @@ lemma penultimate_concat
 
 中文:
 引理 penultimate_concat
-  条件: {t u v} (p : G.Walk u v) (h : G.Adj v t)
+  条件: {t u v} (p : G.途径 u v) (h : G.伴随 v t)
   证明: by simp [concat_eq_append, getVert_append]
 
 @[simp]
@@ -2945,7 +2945,7 @@ lemma snd_reverse
 
 中文:
 引理 snd_reverse
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.reverse.snd = p.penultimate
   证明: by
   simpa using getVert_reverse p 1
@@ -2970,7 +2970,7 @@ lemma penultimate_reverse
 
 中文:
 引理 penultimate_reverse
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.reverse.penultimate = p.snd
   证明: by
   cases p <;> simp [snd, getVert_append]
@@ -2992,7 +2992,7 @@ definition tail
 
 中文:
 定义 tail
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: p.drop 1
 
 @[simp]
@@ -3016,7 +3016,7 @@ theorem darts_tail
 
 中文:
 定理 darts_tail
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   结论: p.tail.darts = p.darts.tail
   证明: by
   simp [tail, darts_drop]
@@ -3043,7 +3043,7 @@ theorem edges_tail
 
 中文:
 定理 edges_tail
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   结论: p.tail.edges = p.edges.tail
   证明: by
   simp [tail, edges_drop]
@@ -3067,7 +3067,7 @@ lemma drop_zero
 
 中文:
 引理 drop_zero
-  条件: {u v} (p : G.Walk u v)
+  条件: {u v} (p : G.途径 u v)
   证明: by
   cases p <;> simp [Walk.drop]
 
@@ -3090,7 +3090,7 @@ lemma nil_drop_of_length_le
 
 中文:
 引理 nil_drop_of_length_le
-  条件: {u v n} {p : G.Walk u v} (h : p.length <= n)
+  条件: {u v n} {p : G.途径 u v} (h : p.length <= n)
   证明: by
   rw [← length_eq_zero_iff]; rw [drop_length]; rw [Nat.sub_eq_zero_of_le h]
 
@@ -3116,7 +3116,7 @@ lemma drop_support_eq_support_drop_min
 
 中文:
 引理 drop_support_eq_support_drop_min
-  条件: {u v} (p : G.Walk u v) (n : 自然数)
+  条件: {u v} (p : G.途径 u v) (n : 自然数)
   证明: by
   induction p generalizing n <;> cases n <;> simp [*, drop]
 
@@ -3144,7 +3144,7 @@ theorem drop_drop
 
 中文:
 定理 drop_drop
-  条件: (p : G.Walk u v) (n m : 自然数)
+  条件: (p : G.途径 u v) (n m : 自然数)
   证明: by
   apply ext_support
   simp_rw [support_copy, drop_support_eq_support_drop_min, drop_length, List.drop_drop]
@@ -3178,7 +3178,7 @@ theorem append_take_drop_eq
 
 中文:
 定理 append_take_drop_eq
-  条件: (p : G.Walk u v) (n : 自然数)
+  条件: (p : G.途径 u v) (n : 自然数)
   结论: (p.take n).append (p.drop n) = p
   证明: by
   apply ext_support
@@ -3210,7 +3210,7 @@ definition dropLast
 
 中文:
 定义 dropLast
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: p.take (p.length - 1)
 
 @[simp]
@@ -3253,8 +3253,8 @@ lemma tail_cons_nil
 
 中文:
 引理 tail_cons_nil
-  条件: (h : G.Adj u v)
-  结论: (Walk.cons h .nil).tail = .nil
+  条件: (h : G.伴随 u v)
+  结论: (途径.cons h .nil).tail = .nil
   证明: rfl
 
 @[simp]
@@ -3275,7 +3275,7 @@ lemma tail_cons
 
 中文:
 引理 tail_cons
-  条件: (h : G.Adj u v) (p : G.Walk v w)
+  条件: (h : G.伴随 u v) (p : G.途径 v w)
   证明: by
   cases p <;> rfl
 
@@ -3319,7 +3319,7 @@ lemma dropLast_cons_nil
 
 中文:
 引理 dropLast_cons_nil
-  条件: (h : G.Adj u v)
+  条件: (h : G.伴随 u v)
   结论: (cons h nil).dropLast = nil
   证明: rfl
 
@@ -3338,7 +3338,7 @@ lemma dropLast_cons_cons
 
 中文:
 引理 dropLast_cons_cons
-  条件: {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w')
+  条件: {w'} (h : G.伴随 u v) (h₂ : G.伴随 v w) (p : G.途径 w w')
   证明: rfl
 -/
 lemma dropLast_cons_cons {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w') :
@@ -3356,7 +3356,7 @@ lemma dropLast_cons_of_not_nil
 
 中文:
 引理 dropLast_cons_of_not_nil
-  条件: (h : G.Adj u v) (p : G.Walk v w) (hp : ¬ p.Nil)
+  条件: (h : G.伴随 u v) (p : G.途径 v w) (hp : ¬ p.Nil)
   证明: p.notNilRec (by simp) hp h
 
 @[simp]
@@ -3382,7 +3382,7 @@ theorem darts_dropLast
 
 中文:
 定理 darts_dropLast
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   结论: p.dropLast.darts = p.darts.dropLast
   证明: by
   simp [dropLast, darts_take, List.dropLast_eq_take]
@@ -3409,7 +3409,7 @@ theorem edges_dropLast
 
 中文:
 定理 edges_dropLast
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   结论: p.dropLast.edges = p.edges.dropLast
   证明: by
   simp [dropLast, edges_take, List.dropLast_eq_take]
@@ -3436,7 +3436,7 @@ lemma dropLast_concat
 
 中文:
 引理 dropLast_concat
-  条件: {t u v} (p : G.Walk u v) (h : G.Adj v t)
+  条件: {t u v} (p : G.途径 u v) (h : G.伴随 v t)
   证明: by
   induction p
   · rfl
@@ -3464,7 +3464,7 @@ lemma cons_tail_eq
 
 中文:
 引理 cons_tail_eq
-  条件: (p : G.Walk u v) (hp : ¬ p.Nil)
+  条件: (p : G.途径 u v) (hp : ¬ p.Nil)
   证明: by
   cases p <;> simp at hp ⊢
 -/
@@ -3493,7 +3493,7 @@ lemma concat_dropLast
 
 中文:
 引理 concat_dropLast
-  条件: {p : G.Walk u v} (hp : G.Adj p.penultimate v)
+  条件: {p : G.途径 u v} (hp : G.伴随 p.penultimate v)
   结论: p.dropLast.concat hp = p
   证明: by
   induction p with
@@ -3525,7 +3525,7 @@ lemma support_tail_of_not_nil
 
 中文:
 引理 support_tail_of_not_nil
-  条件: (p : G.Walk u v) (hp : ¬ p.Nil)
+  条件: (p : G.途径 u v) (hp : ¬ p.Nil)
   证明: by
   simp [← p.cons_tail_eq hp]
 
@@ -3547,7 +3547,7 @@ lemma cons_support_tail
 
 中文:
 引理 cons_support_tail
-  条件: {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {p : G.途径 u v} (hp : ¬p.Nil)
   结论: u :: p.tail.support = p.support
   证明: by
   simp [hp]
@@ -3568,7 +3568,7 @@ theorem support_dropLast_concat
 
 中文:
 定理 support_dropLast_concat
-  条件: {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {p : G.途径 u v} (hp : ¬p.Nil)
   证明: by
   rw [← support_concat _ <| adj_penultimate hp]; rw [concat_dropLast]
 
@@ -3594,7 +3594,7 @@ theorem support_dropLast
 
 中文:
 定理 support_dropLast
-  条件: {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {p : G.途径 u v} (hp : ¬p.Nil)
   证明: by
   simp [← support_dropLast_concat hp]
 
@@ -3619,7 +3619,7 @@ theorem length_tail
 
 中文:
 定理 length_tail
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.tail.length = p.length - 1
   证明: by
   cases p <;> simp
@@ -3638,7 +3638,7 @@ lemma length_tail_add_one
 
 中文:
 引理 length_tail_add_one
-  条件: {p : G.Walk u v} (hp : ¬ p.Nil)
+  条件: {p : G.途径 u v} (hp : ¬ p.Nil)
   证明: by
   rw [← length_cons (p.adj_snd hp)]; rw [cons_tail_eq _ hp]
 
@@ -3661,7 +3661,7 @@ lemma length_dropLast_add_one
 
 中文:
 引理 length_dropLast_add_one
-  条件: {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {p : G.途径 u v} (hp : ¬p.Nil)
   证明: by
   rw [← length_concat _ <| p.adj_penultimate hp]; rw [concat_dropLast]
 
@@ -3686,7 +3686,7 @@ lemma length_dropLast
 
 中文:
 引理 length_dropLast
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.dropLast.length = p.length - 1
   证明: by
   cases p <;> simp [← length_dropLast_add_one not_nil_cons]
@@ -3709,7 +3709,7 @@ theorem getVert_dropLast
 
 中文:
 定理 getVert_dropLast
-  条件: {n} {p : G.Walk u v} (h : n < p.length)
+  条件: {n} {p : G.途径 u v} (h : n < p.length)
   证明: by
   grind [getVert_eq_support_getElem, length_dropLast, support_dropLast]
 
@@ -3740,7 +3740,7 @@ theorem reverse_tail
 
 中文:
 定理 reverse_tail
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: by
   match p with
   | nil => simp
@@ -3778,7 +3778,7 @@ theorem reverse_dropLast
 
 中文:
 定理 reverse_dropLast
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: by
   match p with
   | nil => simp
@@ -3808,7 +3808,7 @@ lemma Nil.tail
 
 中文:
 引理 Nil.tail
-  条件: {p : G.Walk v w} (hp : p.Nil)
+  条件: {p : G.途径 v w} (hp : p.Nil)
   结论: p.tail.Nil
   证明: by
   cases p <;> simp at hp ⊢
@@ -3827,7 +3827,7 @@ lemma not_nil_of_tail_not_nil
 
 中文:
 引理 not_nil_of_tail_not_nil
-  条件: {p : G.Walk v w} (hp : ¬ p.tail.Nil)
+  条件: {p : G.途径 v w} (hp : ¬ p.tail.Nil)
   结论: ¬ p.Nil
   证明: mt Nil.tail hp
 
@@ -3847,7 +3847,7 @@ lemma Nil.dropLast
 
 中文:
 引理 Nil.dropLast
-  条件: {p : G.Walk v w} (hp : p.Nil)
+  条件: {p : G.途径 v w} (hp : p.Nil)
   结论: p.dropLast.Nil
   证明: by
   cases p <;> simp at hp ⊢
@@ -3867,7 +3867,7 @@ lemma nil_copy
 
 中文:
 引理 nil_copy
-  条件: {u' v' : V} {p : G.Walk u v} (hu : u = u') (hv : v = v')
+  条件: {u' v' : V} {p : G.途径 u v} (hu : u = u') (hv : v = v')
   证明: by
   subst_vars
   rfl
@@ -3889,8 +3889,8 @@ lemma Nil.eq_copy_nil
 
 中文:
 引理 Nil.eq_copy_nil
-  条件: {p : G.Walk u v} (h : p.Nil)
-  结论: p = Walk.nil.copy rfl h.eq
+  条件: {p : G.途径 u v} (h : p.Nil)
+  结论: p = 途径.nil.copy rfl h.eq
   证明: by
   grind [eq_nil_iff_nil, copy_rfl_rfl]
 
@@ -3909,7 +3909,7 @@ lemma drop_of_length_le
 
 中文:
 引理 drop_of_length_le
-  条件: {u v n} {p : G.Walk u v} (h : p.length <= n)
+  条件: {u v n} {p : G.途径 u v} (h : p.length <= n)
   证明: (nil_drop_of_length_le h).eq_copy_nil
 
 Depends on / 依赖: eq_copy_nil, nil_drop_of_length_le
@@ -3930,7 +3930,7 @@ lemma getVert_copy
 
 中文:
 引理 getVert_copy
-  条件: {u v w x : V} (p : G.Walk u v) (i : 自然数) (h : u = w) (h' : v = x)
+  条件: {u v w x : V} (p : G.途径 u v) (i : 自然数) (h : u = w) (h' : v = x)
   证明: by
   subst_vars
   rfl
@@ -3951,7 +3951,7 @@ lemma getVert_tail
 
 中文:
 引理 getVert_tail
-  条件: {u v n} (p : G.Walk u v)
+  条件: {u v n} (p : G.途径 u v)
   证明: by
   cases p <;> simp
 -/
@@ -3968,7 +3968,7 @@ lemma getVert_mem_tail_support
 
 中文:
 引理 getVert_mem_tail_support
-  条件: {u v : V} {p : G.Walk u v} (hp : ¬p.Nil)
+  条件: {u v : V} {p : G.途径 u v} (hp : ¬p.Nil)
 -/
 lemma getVert_mem_tail_support {u v : V} {p : G.Walk u v} (hp : ¬p.Nil) :
     forall {i : Nat}, i != 0 -> p.getVert i in p.support.tail
@@ -3988,7 +3988,7 @@ lemma support_injective
 中文:
 引理 support_injective
   条件: {u v : V}
-  结论: (support (G := G) (u := u) (v := v)).Injective
+  结论: (support (G := G) (u := u) (v := v)).单射
   证明: fun _ _ => ext_support
 
 Depends on / 依赖: Injective
@@ -4014,7 +4014,7 @@ exact ext_support List.ext_getElem?_iff.mpr this
 
 中文:
 引理 ext_getVert_le_length
-  结论: {u v} {p q : G.Walk u v} (hl : p.length = q.length)
+  结论: {u v} {p q : G.途径 u v} (hl : p.length = q.length)
   证明: by
   suffices forall k : Nat, p.support[k]? = q.support[k]? by
 exact ext_support List.ext_getElem?_iff.mpr this
@@ -4058,7 +4058,7 @@ lemma ext_getVert
 
 中文:
 引理 ext_getVert
-  条件: {u v} {p q : G.Walk u v} (h : 对任意 k, p.getVert k = q.getVert k)
+  条件: {u v} {p q : G.途径 u v} (h : 对任意 k, p.getVert k = q.getVert k)
   证明: by
   wlog hpq : p.length <= q.length generalizing p q
   · exact (this (h · |>.symm) (le_of_not_ge hpq)).symm
@@ -4090,7 +4090,7 @@ theorem support_tail_perm_support_dropLast
 
 中文:
 定理 support_tail_perm_support_dropLast
-  条件: (p : G.Walk u u)
+  条件: (p : G.途径 u u)
   证明: by
   cases p with | nil => rfl | cons h p
   grw [← List.perm_cons u, List.perm_comm, ← List.perm_append_singleton,
@@ -4117,7 +4117,7 @@ simpa using support_tail_perm_support_dropLast p.cons h
 
 中文:
 定理 tail_support_perm_dropLast_support
-  条件: (p : G.Walk u u)
+  条件: (p : G.途径 u u)
   证明: by
   cases p with | nil => rfl | cons h p
 simpa using support_tail_perm_support_dropLast p.cons h

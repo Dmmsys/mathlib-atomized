@@ -279,7 +279,7 @@ lemma _root_.LinearMap.IsSymm.tmul
   exact congr_arg₂ (HSMul.hSMul) (hB₂.eq x₂ y₂) (hB₁.eq x₁ y₁)
 
 中文:
-引理 _root_.LinearMap.IsSymm.tmul
+引理 _root_.线性映射.是Symm.tmul
   结论: {B₁ : BilinForm A M₁} {B₂ : BilinForm R M₂}
   证明: by
   rw [LinearMap.isSymm_iff_eq_flip]
@@ -362,7 +362,7 @@ lemma baseChange_eq_zero_iff
 
 中文:
 引理 baseChange_eq_zero_iff
-  结论: [FaithfulSMul R A]
+  结论: [忠实标量乘法 R A]
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
   ext m m'
@@ -385,9 +385,9 @@ lemma IsSymm.baseChange
   proof: IsSymm.tmul ⟨mul_comm⟩ hB₂
 
 中文:
-引理 IsSymm.baseChange
-  条件: {B₂ : BilinForm R M₂} (hB₂ : B₂.IsSymm)
-  结论: (B₂.baseChange A).IsSymm
+引理 是Symm.baseChange
+  条件: {B₂ : BilinForm R M₂} (hB₂ : B₂.是Symm)
+  结论: (B₂.baseChange A).是Symm
   证明: IsSymm.tmul ⟨mul_comm⟩ hB₂
 
 Depends on / 依赖: IsSymm, IsSymm.tmul, mul_comm

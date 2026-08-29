@@ -46,7 +46,7 @@ theorem prod_sigma
 
 中文:
 定理 prod_sigma
-  条件: {σ : α -> 类型} (s : Finset α) (t : 对任意 a, Finset (σ a)) (f : Sigma σ -> β)
+  条件: {σ : α -> 类型} (s : 有限集 α) (t : 对任意 a, 有限集 (σ a)) (f : 依赖和类型 σ -> β)
   证明: by
   simp_rw [← disjiUnion_map_sigma_mk, prod_disjiUnion, prod_map, Function.Embedding.sigmaMk_apply]
 
@@ -72,7 +72,7 @@ theorem prod_sigma'
 
 中文:
 定理 prod_sigma'
-  条件: {σ : α -> 类型} (s : Finset α) (t : 对任意 a, Finset (σ a)) (f : 对任意 a, σ a -> β)
+  条件: {σ : α -> 类型} (s : 有限集 α) (t : 对任意 a, 有限集 (σ a)) (f : 对任意 a, σ a -> β)
   证明: Eq.symm prod_sigma s t fun x => f x.1 x.2
 
 @[to_additive]
@@ -98,7 +98,7 @@ theorem prod_finset_product
 
 中文:
 定理 prod_finset_product
-  结论: (r : Finset (γ × α)) (s : Finset γ) (t : γ -> Finset α)
+  结论: (r : 有限集 (γ × α)) (s : 有限集 γ) (t : γ -> 有限集 α)
   证明: by
   refine Eq.trans ?_ (prod_sigma s t fun p => f (p.1, p.2))
   apply prod_equiv (Equiv.sigmaEquivProd _ _).symm <;> simp [h]
@@ -126,7 +126,7 @@ theorem prod_finset_product'
 
 中文:
 定理 prod_finset_product'
-  结论: (r : Finset (γ × α)) (s : Finset γ) (t : γ -> Finset α)
+  结论: (r : 有限集 (γ × α)) (s : 有限集 γ) (t : γ -> 有限集 α)
   证明: prod_finset_product r s t h
 
 @[to_additive]
@@ -153,7 +153,7 @@ theorem prod_finset_product_right
 
 中文:
 定理 prod_finset_product_right
-  结论: (r : Finset (α × γ)) (s : Finset γ) (t : γ -> Finset α)
+  结论: (r : 有限集 (α × γ)) (s : 有限集 γ) (t : γ -> 有限集 α)
   证明: by
   refine Eq.trans ?_ (prod_sigma s t fun p => f (p.2, p.1))
   apply prod_equiv ((Equiv.prodComm _ _).trans (Equiv.sigmaEquivProd _ _).symm) <;> simp [h]
@@ -179,7 +179,7 @@ theorem prod_finset_product_right'
 
 中文:
 定理 prod_finset_product_right'
-  结论: (r : Finset (α × γ)) (s : Finset γ) (t : γ -> Finset α)
+  结论: (r : 有限集 (α × γ)) (s : 有限集 γ) (t : γ -> 有限集 α)
   证明: prod_finset_product_right r s t h
 
 Depends on / 依赖: prod_finset_product_right
@@ -203,7 +203,7 @@ theorem prod_product
 
 中文:
 定理 prod_product
-  条件: (s : Finset γ) (t : Finset α) (f : γ × α -> β)
+  条件: (s : 有限集 γ) (t : 有限集 α) (f : γ × α -> β)
   证明: prod_finset_product (s ×ˢ t) s (fun _a => t) fun _p => mem_product
 
 Depends on / 依赖: mem_product, prod_finset_product
@@ -228,7 +228,7 @@ theorem prod_product'
 
 中文:
 定理 prod_product'
-  条件: (s : Finset γ) (t : Finset α) (f : γ -> α -> β)
+  条件: (s : 有限集 γ) (t : 有限集 α) (f : γ -> α -> β)
   证明: prod_product ..
 
 @[to_additive]
@@ -250,7 +250,7 @@ theorem prod_product_right
 
 中文:
 定理 prod_product_right
-  条件: (s : Finset γ) (t : Finset α) (f : γ × α -> β)
+  条件: (s : 有限集 γ) (t : 有限集 α) (f : γ × α -> β)
   证明: prod_finset_product_right (s ×ˢ t) t (fun _a => s) fun _p => mem_product.trans and_comm
 
 Depends on / 依赖: and_comm, mem_product, mem_product.trans, prod_finset_product_right
@@ -271,7 +271,7 @@ theorem prod_product_right'
 
 中文:
 定理 prod_product_right'
-  条件: (s : Finset γ) (t : Finset α) (f : γ -> α -> β)
+  条件: (s : 有限集 γ) (t : 有限集 α) (f : γ -> α -> β)
   证明: prod_product_right ..
 
 Depends on / 依赖: prod_product_right
@@ -301,7 +301,7 @@ theorem prod_comm'
 
 中文:
 定理 prod_comm'
-  结论: {s : Finset γ} {t : γ -> Finset α} {t' : Finset α} {s' : α -> Finset γ}
+  结论: {s : 有限集 γ} {t : γ -> 有限集 α} {t' : 有限集 α} {s' : α -> 有限集 γ}
   证明: by
   classical
     have : forall z : γ × α, (z in s.biUnion fun x => (t x).map <| Function.Embedding.sectR x _) ↔
@@ -337,7 +337,7 @@ theorem prod_comm
 
 中文:
 定理 prod_comm
-  条件: {s : Finset γ} {t : Finset α} {f : γ -> α -> β}
+  条件: {s : 有限集 γ} {t : 有限集 α} {f : γ -> α -> β}
   证明: prod_comm' fun _ _ => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, prod_comm
@@ -359,7 +359,7 @@ theorem prod_comm_cycle
 
 中文:
 定理 prod_comm_cycle
-  条件: {s : Finset γ} {t : Finset α} {u : Finset κ} {f : γ -> α -> κ -> β}
+  条件: {s : 有限集 γ} {t : 有限集 α} {u : 有限集 κ} {f : γ -> α -> κ -> β}
   证明: by
   simp_rw [prod_comm (s := t), prod_comm (s := s)]
 
@@ -382,7 +382,7 @@ theorem card_sigma
 
 中文:
 定理 card_sigma
-  条件: {σ : α -> 类型} (s : Finset α) (t : 对任意 a, Finset (σ a))
+  条件: {σ : α -> 类型} (s : 有限集 α) (t : 对任意 a, 有限集 (σ a))
   证明: Multiset.card_sigma _ _
 
 Depends on / 依赖: Multiset, Multiset.card_sigma, card_sigma

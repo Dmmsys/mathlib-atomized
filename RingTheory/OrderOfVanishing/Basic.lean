@@ -91,8 +91,8 @@ definition Ideal.mulQuot
   body: Submodule.mapQ _ _ (LinearMap.mul R R a) (Submodule.le_comap_map _ _)
 
 中文:
-定义 Ideal.mulQuot
-  签名: (a : R) (I : Ideal R)
+定义 理想.mulQuot
+  签名: (a : R) (I : 理想 R)
   定义体: Submodule.mapQ _ _ (LinearMap.mul R R a) (Submodule.le_comap_map _ _)
 
 Depends on / 依赖: LinearMap, LinearMap.mul, Submodule, Submodule.le_comap_map, Submodule.mapQ, le_comap_map
@@ -116,8 +116,8 @@ lemma Ideal.mulQuot_injective
   · have m : I = Submodule.comap (mul R R a) (
 
 中文:
-引理 Ideal.mulQuot_injective
-  条件: {a : R} (I : Ideal R) (ha : a in nonZeroDivisors R)
+引理 理想.mulQuot_injective
+  条件: {a : R} (I : 理想 R) (ha : a in nonZeroDivisors R)
   证明: by
   simp only [mulQuot, Submodule.mapQ, ← ker_eq_bot]
   apply Submodule.ker_liftQ_eq_bot'
@@ -149,8 +149,8 @@ definition Ideal.quotOfMul
   body: Submodule.factor Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
 
 中文:
-定义 Ideal.quotOfMul
-  签名: (a : R) (I : Ideal R)
+定义 理想.quotOfMul
+  签名: (a : R) (I : 理想 R)
   定义体: Submodule.factor Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
 
 Depends on / 依赖: Submodule, Submodule.factor, Submodule.singleton_set_smul, Submodule.smul_le_span, factor, singleton_set_smul, smul_le_span
@@ -171,8 +171,8 @@ exact Submodule.factor_surjective
     Submodule.singleton_set_smul I a ▸ Submodule.smul_le_span {a} I
 
 中文:
-引理 Ideal.quotOfMul_surjective
-  条件: {a : R} (I : Ideal R)
+引理 理想.quotOfMul_surjective
+  条件: {a : R} (I : 理想 R)
   证明: by
   simp only [Ideal.quotOfMul]
 exact Submodule.factor_surjective
@@ -201,8 +201,8 @@ lemma Ideal.exact_mulQuot_quotOfMul
       Quotient.mk_eq_mk, Set.image_singleton, Q
 
 中文:
-引理 Ideal.exact_mulQuot_quotOfMul
-  条件: {a : R} (I : Ideal R)
+引理 理想.exact_mulQuot_quotOfMul
+  条件: {a : R} (I : 理想 R)
   证明: by
   simp only [exact_iff]
   have : ker (Ideal.quotOfMul a I) = a • ⊤ := by
@@ -298,7 +298,7 @@ lemma ord_zero
 
 中文:
 引理 ord_zero
-  结论: ord R 0 = Module.length R R
+  结论: ord R 0 = 模.length R R
   证明: by
   simp only [ord]
   let m := (Submodule.quotEquivOfEqBot (Ideal.span {0} : Submodule R R) (span_singleton_zero))
@@ -371,7 +371,7 @@ lemma ord_mul_of_isUnit_left
 
 中文:
 引理 ord_mul_of_isUnit_left
-  条件: {a : R} (h : IsUnit a) (x : R)
+  条件: {a : R} (h : 是单位 a) (x : R)
   结论: ord R (a * x) = ord R x
   证明: by
   rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_left_unit h x]
@@ -396,7 +396,7 @@ lemma ord_mul_of_isUnit_right
 
 中文:
 引理 ord_mul_of_isUnit_right
-  条件: {a : R} (h : IsUnit a) (x : R)
+  条件: {a : R} (h : 是单位 a) (x : R)
   结论: ord R (x * a) = ord R x
   证明: by
   rw [ord]; rw [ord]; rw [Ideal.span_singleton_mul_right_unit h x]
@@ -473,7 +473,7 @@ lemma ord_smul_of_isUnit
 
 中文:
 引理 ord_smul_of_isUnit
-  结论: {S : 类型} [CommRing S] [Algebra S R]
+  结论: {S : 类型} [交换环 S] [代数 S R]
   证明: by
   rw [Algebra.smul_def a x]
   exact ord_mul_of_isUnit_left (RingHom.isUnit_map (algebraMap S R) h) x
@@ -558,7 +558,7 @@ lemma ord_le_smul
 
 中文:
 引理 ord_le_smul
-  条件: {S : 类型} [CommRing S] [Algebra S R] (a : S) (x : R)
+  条件: {S : 类型} [交换环 S] [代数 S R] (a : S) (x : R)
   证明: by simp [Algebra.smul_def, ord_le_ord_mul]
 
 Depends on / 依赖: Algebra, Algebra.smul_def, ord_le_ord_mul, smul_def
@@ -582,7 +582,7 @@ lemma ord_of_isUnit
 
 中文:
 引理 ord_of_isUnit
-  条件: {x : R} (hx : IsUnit x)
+  条件: {x : R} (hx : 是单位 x)
   结论: ord R x = 0
   证明: by
   simpa using ord_smul_of_isUnit hx (1 : R)
@@ -613,7 +613,7 @@ theorem ord_of_irreducible
 
 中文:
 定理 ord_of_irreducible
-  条件: {ϖ : R} (hϖ : Irreducible ϖ)
+  条件: {ϖ : R} (hϖ : 不可约 ϖ)
   结论: ord R ϖ = 1
   证明: by
   rw [Ring.ord]; rw [Module.length_eq_one_iff]
@@ -666,7 +666,7 @@ definition ordMonoidWithZeroHom
 
 中文:
 定义 ordMonoidWithZeroHom
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: if x in nonZeroDivisors R
              then (ENat.recTopCoe 0 (WithZero.coe <| Multiplicative.ofAdd ·) (Ring.ord R x))
              else 0
@@ -713,7 +713,7 @@ lemma ordMonoidWithZeroHom_eq_zero_iff
 
 中文:
 引理 ordMonoidWithZeroHom_eq_zero_iff
-  条件: [Nontrivial R] (y : nonZeroDivisors R)
+  条件: [非平凡 R] (y : nonZeroDivisors R)
   证明: by
   simp only [ordMonoidWithZeroHom, MonoidWithZeroHom.coe_mk, ZeroHom.coe_mk, SetLike.coe_mem,
     ↓reduceIte]
@@ -742,7 +742,7 @@ theorem ordMonoidWithZeroHom_eq_ord
 
 中文:
 定理 ordMonoidWithZeroHom_eq_ord
-  条件: [Nontrivial R] {x : R} (h : x in nonZeroDivisors R)
+  条件: [非平凡 R] {x : R} (h : x in nonZeroDivisors R)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -786,7 +786,7 @@ theorem ordMonoidWithZeroHom_eq_zero
 
 中文:
 定理 ordMonoidWithZeroHom_eq_zero
-  条件: [Nontrivial R] {x : R} (h : x ∉ nonZeroDivisors R)
+  条件: [非平凡 R] {x : R} (h : x ∉ nonZeroDivisors R)
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -809,7 +809,7 @@ theorem _root_.isFiniteLength_quotient_span_singleton
 
 中文:
 定理 _root_.isFiniteLength_quotient_span_singleton
-  结论: [IsNoetherianRing R]
+  结论: [是Noether环 R]
   证明: by
   rw [isFiniteLength_iff_isNoetherian_isArtinian]
   suffices IsArtinianRing (R ⧸ Ideal.span {x}) from
@@ -890,7 +890,7 @@ lemma ordMonoidWithZeroHom_isUnit
 中文:
 引理 ordMonoidWithZeroHom_isUnit
   条件: (y : nonZeroDivisors R)
-  结论: IsUnit (ordMonoidWithZeroHom R y)
+  结论: 是单位 (ordMonoidWithZeroHom R y)
   证明: by
   simp [ordMonoidWithZeroHom_eq_zero_iff, ord_ne_top]
 

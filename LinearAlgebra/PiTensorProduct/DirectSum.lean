@@ -41,7 +41,7 @@ definition ofDirectSumEquiv
 
 中文:
 定义 ofDirectSumEquiv
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: have : Fintype ι := Fintype.ofFinite ι
   ofDFinsuppEquiv
 
@@ -67,7 +67,7 @@ theorem ofDirectSumEquiv_tprod_lof
 
 中文:
 定理 ofDirectSumEquiv_tprod_lof
-  结论: [Fintype ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限类型 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: by
   classical
   rw [ofDirectSumEquiv]
@@ -100,7 +100,7 @@ theorem ofDirectSumEquiv_symm_lof_tprod
 
 中文:
 定理 ofDirectSumEquiv_symm_lof_tprod
-  结论: [Fintype ι] [(i : ι) -> DecidableEq (κ i)]
+  结论: [有限类型 ι] [(i : ι) -> DecidableEq (κ i)]
   证明: by
   classical
   rw [ofDirectSumEquiv]
@@ -131,7 +131,7 @@ theorem ofDirectSumEquiv_tprod_apply
 
 中文:
 定理 ofDirectSumEquiv_tprod_apply
-  结论: [Finite ι]
+  结论: [有限 ι]
   证明: by
   have : Fintype ι := Fintype.ofFinite ι
   convert! ofDFinsuppEquiv_tprod_apply _ _

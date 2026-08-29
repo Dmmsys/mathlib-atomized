@@ -46,7 +46,7 @@ structure QuadraticAlgebra
     - im : R
 
 中文:
-结构 QuadraticAlgebra
+结构 二次代数
   参数: (R : 类型u) (a b : R)
   公理与运算 (2 个):
     - re : R
@@ -102,7 +102,7 @@ theorem mk_eta
 
 中文:
 定理 mk_eta
-  条件: {a b} (z : QuadraticAlgebra R a b)
+  条件: {a b} (z : 二次代数 R a b)
   证明: rfl
 -/
 theorem mk_eta {a b} (z : QuadraticAlgebra R a b) :
@@ -119,8 +119,8 @@ instance [Subsingleton
   body: (equivProd a b).subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: R] : Subsingleton (QuadraticAlgebra R a b)
+实例 [子单例
+  签名: R] : 子单例 (二次代数 R a b)
   定义体: (equivProd a b).subsingleton
 
 Depends on / 依赖: equivProd, subsingleton
@@ -136,8 +136,8 @@ instance [Nontrivial
   body: (equivProd a b).nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (QuadraticAlgebra R a b)
+实例 [非平凡
+  签名: R] : 非平凡 (二次代数 R a b)
   定义体: (equivProd a b).nontrivial
 
 Depends on / 依赖: equivProd, nontrivial
@@ -179,7 +179,7 @@ theorem re_C
 
 中文:
 定理 re_C
-  结论: (.C r : QuadraticAlgebra R a b).re = r
+  结论: (.C r : 二次代数 R a b).re = r
   证明: rfl
 
 @[simp]
@@ -197,7 +197,7 @@ theorem im_C
 
 中文:
 定理 im_C
-  结论: (.C r : QuadraticAlgebra R a b).im = 0
+  结论: (.C r : 二次代数 R a b).im = 0
   证明: rfl
 -/
 theorem im_C : (.C r : QuadraticAlgebra R a b).im = 0 := rfl
@@ -214,7 +214,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Function.Injective (.C : R -> QuadraticAlgebra R a b)
+  结论: 函数.单射 (.C : R -> 二次代数 R a b)
   证明: fun _ _ h => congr_arg re h
 
 @[simp]
@@ -237,7 +237,7 @@ theorem C_inj
 中文:
 定理 C_inj
   条件: {x y : R}
-  结论: (.C x : QuadraticAlgebra R a b) = .C y ↔ x = y
+  结论: (.C x : 二次代数 R a b) = .C y ↔ x = y
   证明: C_injective.eq_iff
 
 Depends on / 依赖: C_injective, C_injective.eq_iff, eq_iff
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (QuadraticAlgebra R a b)
+  签名: 零 (二次代数 R a b)
   定义体: ⟨⟨0, 0⟩⟩
 -/
 instance : Zero (QuadraticAlgebra R a b) := ⟨⟨0, 0⟩⟩
@@ -270,7 +270,7 @@ theorem re_zero
 
 中文:
 定理 re_zero
-  结论: (0 : QuadraticAlgebra R a b).re = 0
+  结论: (0 : 二次代数 R a b).re = 0
   证明: rfl
 -/
 @[simp] theorem re_zero : (0 : QuadraticAlgebra R a b).re = 0 := rfl
@@ -287,7 +287,7 @@ theorem im_zero
 
 中文:
 定理 im_zero
-  结论: (0 : QuadraticAlgebra R a b).im = 0
+  结论: (0 : 二次代数 R a b).im = 0
   证明: rfl
 
 @[simp]
@@ -307,7 +307,7 @@ theorem C_zero
 
 中文:
 定理 C_zero
-  结论: (.C 0 : QuadraticAlgebra R a b) = 0
+  结论: (.C 0 : 二次代数 R a b) = 0
   证明: rfl
 
 @[simp]
@@ -328,7 +328,7 @@ theorem C_eq_zero_iff
 中文:
 定理 C_eq_zero_iff
   条件: {r : R}
-  结论: (.C r : QuadraticAlgebra R a b) = 0 ↔ r = 0
+  结论: (.C r : 二次代数 R a b) = 0 ↔ r = 0
   证明: by
   rw [← C_zero]; rw [C_inj]
 
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (QuadraticAlgebra R a b)
+  签名: 可居 (二次代数 R a b)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (QuadraticAlgebra R a b) := ⟨0⟩
@@ -365,7 +365,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (QuadraticAlgebra R a b)
+  签名: 幺 (二次代数 R a b)
   定义体: ⟨⟨1, 0⟩⟩
 -/
 instance : One (QuadraticAlgebra R a b) := ⟨⟨1, 0⟩⟩
@@ -380,7 +380,7 @@ theorem re_one
 
 中文:
 定理 re_one
-  结论: (1 : QuadraticAlgebra R a b).re = 1
+  结论: (1 : 二次代数 R a b).re = 1
   证明: rfl
 -/
 @[scoped simp] theorem re_one : (1 : QuadraticAlgebra R a b).re = 1 := rfl
@@ -397,7 +397,7 @@ theorem im_one
 
 中文:
 定理 im_one
-  结论: (1 : QuadraticAlgebra R a b).im = 0
+  结论: (1 : 二次代数 R a b).im = 0
   证明: rfl
 
 @[simp]
@@ -417,7 +417,7 @@ theorem C_one
 
 中文:
 定理 C_one
-  结论: (.C 1 : QuadraticAlgebra R a b) = 1
+  结论: (.C 1 : 二次代数 R a b) = 1
   证明: rfl
 
 @[simp]
@@ -438,7 +438,7 @@ theorem C_eq_one_iff
 中文:
 定理 C_eq_one_iff
   条件: {r : R}
-  结论: (.C r : QuadraticAlgebra R a b) = 1 ↔ r = 1
+  结论: (.C r : 二次代数 R a b) = 1 ↔ r = 1
   证明: by
   rw [← C_one]; rw [C_inj]
 
@@ -464,7 +464,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (QuadraticAlgebra R a b)
+  签名: 加法 (二次代数 R a b)
   定义体: ⟨z.re + w.re, z.im + w.im⟩
 
 Depends on / 依赖: w.im, w.re, z.im, z.re
@@ -482,7 +482,7 @@ theorem re_add
 
 中文:
 定理 re_add
-  条件: (z w : QuadraticAlgebra R a b)
+  条件: (z w : 二次代数 R a b)
   证明: rfl
 -/
 @[simp] theorem re_add (z w : QuadraticAlgebra R a b) :
@@ -500,7 +500,7 @@ theorem im_add
 
 中文:
 定理 im_add
-  条件: (z w : QuadraticAlgebra R a b)
+  条件: (z w : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -519,7 +519,7 @@ theorem mk_add_mk
 
 中文:
 定理 mk_add_mk
-  条件: (z w : QuadraticAlgebra R a b)
+  条件: (z w : 二次代数 R a b)
   证明: rfl
 -/
 theorem mk_add_mk (z w : QuadraticAlgebra R a b) :
@@ -544,7 +544,7 @@ theorem C_add
 中文:
 定理 C_add
   条件: (x y : R)
-  结论: (.C (x + y) : QuadraticAlgebra R a b) = .C x + .C y
+  结论: (.C (x + y) : 二次代数 R a b) = .C x + .C y
   证明: by
   ext <;> simp
 -/
@@ -566,7 +566,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (QuadraticAlgebra R a b)
+  签名: 取负 (二次代数 R a b)
   定义体: ⟨-z.re, -z.im⟩
 
 Depends on / 依赖: z.im, z.re
@@ -584,7 +584,7 @@ theorem re_neg
 
 中文:
 定理 re_neg
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   结论: (-z).re = -z.re
   证明: rfl
 -/
@@ -603,7 +603,7 @@ theorem im_neg
 
 中文:
 定理 im_neg
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   结论: (-z).im = -z.im
   证明: rfl
 
@@ -645,8 +645,8 @@ theorem C_neg
 
 中文:
 定理 C_neg
-  条件: [NegZeroClass R] (x : R)
-  结论: (.C (-x) : QuadraticAlgebra R a b) = -.C x
+  条件: [NegZero类 R] (x : R)
+  结论: (.C (-x) : 二次代数 R a b) = -.C x
   证明: by
   ext <;> simp
 -/
@@ -662,8 +662,8 @@ instance [Sub
   body: ⟨z.re - w.re, z.im - w.im⟩
 
 中文:
-实例 [Sub
-  签名: R] : Sub (QuadraticAlgebra R a b) where
+实例 [减法
+  签名: R] : 减法 (二次代数 R a b) where
   定义体: ⟨z.re - w.re, z.im - w.im⟩
 
 Depends on / 依赖: w.im, w.re, z.im, z.re
@@ -681,7 +681,7 @@ theorem re_sub
 
 中文:
 定理 re_sub
-  条件: [Sub R] (z w : QuadraticAlgebra R a b)
+  条件: [减法 R] (z w : 二次代数 R a b)
   证明: rfl
 -/
 @[simp] theorem re_sub [Sub R] (z w : QuadraticAlgebra R a b) :
@@ -699,7 +699,7 @@ theorem im_sub
 
 中文:
 定理 im_sub
-  条件: [Sub R] (z w : QuadraticAlgebra R a b)
+  条件: [减法 R] (z w : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -720,7 +720,7 @@ theorem mk_sub_mk
 
 中文:
 定理 mk_sub_mk
-  条件: [Sub R] (x1 y1 x2 y2 : R)
+  条件: [减法 R] (x1 y1 x2 y2 : R)
   证明: rfl
 
 @[simp]
@@ -739,7 +739,7 @@ theorem C_sub
 
 中文:
 定理 C_sub
-  条件: (r1 r2 : R) [SubNegZeroMonoid R]
+  条件: (r1 r2 : R) [SubNegZero幺半群 R]
   证明: QuadraticAlgebra.ext rfl zero_sub_zero.symm
 
 Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext, zero_sub_zero, zero_sub_zero.symm
@@ -763,7 +763,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (QuadraticAlgebra R a b)
+  签名: 乘法 (二次代数 R a b)
   定义体: ⟨z.1 * w.1 + a * z.2 * w.2, z.1 * w.2 + z.2 * w.1 + b * z.2 * w.2⟩
 -/
 instance : Mul (QuadraticAlgebra R a b) where
@@ -779,7 +779,7 @@ theorem re_mul
 
 中文:
 定理 re_mul
-  条件: (z w : QuadraticAlgebra R a b)
+  条件: (z w : 二次代数 R a b)
   证明: rfl
 -/
 @[simp] theorem re_mul (z w : QuadraticAlgebra R a b) :
@@ -797,7 +797,7 @@ theorem im_mul
 
 中文:
 定理 im_mul
-  条件: (z w : QuadraticAlgebra R a b)
+  条件: (z w : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -838,7 +838,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (QuadraticAlgebra R a b)
+  签名: 标量乘法 S (二次代数 R a b)
   定义体: ⟨s • z.re, s • z.im⟩
 
 Depends on / 依赖: z.im, z.re
@@ -854,8 +854,8 @@ instance [SMul
   body: by ext <;> exact smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T R] : IsScalarTower S T (QuadraticAlgebra R a b) where
+实例 [标量乘法
+  签名: S T] [标量塔 S T R] : 标量塔 S T (二次代数 R a b) where
   定义体: by ext <;> exact smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -872,8 +872,8 @@ instance [SMulCommClass
   body: by ext <;> exact smul_comm _ _ _
 
 中文:
-实例 [SMulCommClass
-  签名: S T R] : SMulCommClass S T (QuadraticAlgebra R a b) where
+实例 [标量交换类
+  签名: S T R] : 标量交换类 S T (二次代数 R a b) where
   定义体: by ext <;> exact smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -890,8 +890,8 @@ instance [SMul
   body: by ext <;> exact op_smul_eq_smul _ _
 
 中文:
-实例 [SMul
-  签名: Sᵐᵒᵖ R] [IsCentralScalar S R] : IsCentralScalar S (QuadraticAlgebra R a b) where
+实例 [标量乘法
+  签名: Sᵐᵒᵖ R] [中心标量 S R] : 中心标量 S (二次代数 R a b) where
   定义体: by ext <;> exact op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -910,7 +910,7 @@ theorem re_smul
 
 中文:
 定理 re_smul
-  条件: (s : S) (z : QuadraticAlgebra R a b)
+  条件: (s : S) (z : 二次代数 R a b)
   结论: (s • z).re = s • z.re
   证明: rfl
 -/
@@ -929,7 +929,7 @@ theorem im_smul
 
 中文:
 定理 im_smul
-  条件: (s : S) (z : QuadraticAlgebra R a b)
+  条件: (s : S) (z : 二次代数 R a b)
   结论: (s • z).im = s • z.im
   证明: rfl
 
@@ -968,8 +968,8 @@ instance [Monoid
   mul_smul _ _ _ := by ext <;> simp [mul_smul]
 
 中文:
-实例 [Monoid
-  签名: S] [MulAction S R] : MulAction S (QuadraticAlgebra R a b) where
+实例 [幺半群
+  签名: S] [乘法作用 S R] : 乘法作用 S (二次代数 R a b) where
   定义体: by ext <;> simp
   mul_smul _ _ _ := by ext <;> simp [mul_smul]
 
@@ -992,7 +992,7 @@ theorem C_smul
 
 中文:
 定理 C_smul
-  条件: [Zero R] [SMulZeroClass S R] (s : S) (r : R)
+  条件: [零 R] [SMulZero类 S R] (s : S) (r : R)
   证明: QuadraticAlgebra.ext rfl (smul_zero _).symm
 
 Depends on / 依赖: QuadraticAlgebra, QuadraticAlgebra.ext, smul_zero
@@ -1011,8 +1011,8 @@ instance [AddMonoid
   refine (equivProd a b).injective.addMonoid _ rfl ?_ ?_ <;> intros <;> rfl
 
 中文:
-实例 [AddMonoid
-  签名: R] : AddMonoid (QuadraticAlgebra R a b)
+实例 [加法幺半群
+  签名: R] : 加法幺半群 (二次代数 R a b)
   定义体: fast_instance% by
   refine (equivProd a b).injective.addMonoid _ rfl ?_ ?_ <;> intros <;> rfl
 
@@ -1031,8 +1031,8 @@ instance [Monoid
   smul_add _ _ _ := by ext <;> simp
 
 中文:
-实例 [Monoid
-  签名: S] [AddMonoid R] [DistribMulAction S R] :
+实例 [幺半群
+  签名: S] [加法幺半群 R] [分配乘法作用 S R] :
   定义体: by ext <;> simp
   smul_add _ _ _ := by ext <;> simp
 
@@ -1053,8 +1053,8 @@ instance [AddCommMonoid
   refine (equivProd a b).injective.addCommMonoid _ rfl ?_ ?_ <;> intros <;> rfl
 
 中文:
-实例 [AddCommMonoid
-  签名: R] : AddCommMonoid (QuadraticAlgebra R a b)
+实例 [加法交换幺半群
+  签名: R] : 加法交换幺半群 (二次代数 R a b)
   定义体: fast_instance% by
   refine (equivProd a b).injective.addCommMonoid _ rfl ?_ ?_ <;> intros <;> rfl
 
@@ -1073,8 +1073,8 @@ instance [Semiring
   zero_smul x := by ext <;> simp
 
 中文:
-实例 [Semiring
-  签名: S] [AddCommMonoid R] [Module S R] : Module S (QuadraticAlgebra R a b) where
+实例 [半环
+  签名: S] [加法交换幺半群 R] [模 S R] : 模 S (二次代数 R a b) where
   定义体: by ext <;> simp [add_smul]
   zero_smul x := by ext <;> simp
 
@@ -1094,8 +1094,8 @@ instance [AddGroup
   refine (equivProd a b).injective.addGroup _ rfl ?_ ?_ ?_ ?_ ?_ <;> intros <;> rfl
 
 中文:
-实例 [AddGroup
-  签名: R] : AddGroup (QuadraticAlgebra R a b)
+实例 [加法群
+  签名: R] : 加法群 (二次代数 R a b)
   定义体: fast_instance% by
   refine (equivProd a b).injective.addGroup _ rfl ?_ ?_ ?_ ?_ ?_ <;> intros <;> rfl
 
@@ -1112,8 +1112,8 @@ instance [AddCommGroup
   signature: R] : AddCommGroup (QuadraticAlgebra R a b) where
 
 中文:
-实例 [AddCommGroup
-  签名: R] : AddCommGroup (QuadraticAlgebra R a b) where
+实例 [加法交换群
+  签名: R] : 加法交换群 (二次代数 R a b) where
 -/
 instance [AddCommGroup R] : AddCommGroup (QuadraticAlgebra R a b) where
 
@@ -1134,7 +1134,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoidWithOne (QuadraticAlgebra R a b)
+  签名: 加法交换带幺幺半群 (二次代数 R a b)
   定义体: .C n
   natCast_zero := by ext <;> simp
   natCast_succ n := by ext <;> simp
@@ -1159,7 +1159,7 @@ theorem C_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 C_ofNat
+定理 C_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: by
   ext <;> rfl
@@ -1185,7 +1185,7 @@ theorem re_natCast
 中文:
 定理 re_natCast
   条件: (n : 自然数)
-  结论: (n : QuadraticAlgebra R a b).re = n
+  结论: (n : 二次代数 R a b).re = n
   证明: rfl
 
 @[simp, norm_cast]
@@ -1205,7 +1205,7 @@ theorem im_natCast
 中文:
 定理 im_natCast
   条件: (n : 自然数)
-  结论: (n : QuadraticAlgebra R a b).im = 0
+  结论: (n : 二次代数 R a b).im = 0
   证明: rfl
 -/
 theorem im_natCast (n : Nat) : (n : QuadraticAlgebra R a b).im = 0 := rfl
@@ -1224,7 +1224,7 @@ theorem C_natCast
 中文:
 定理 C_natCast
   条件: (n : 自然数)
-  结论: .C (n : R) = (↑n : QuadraticAlgebra R a b)
+  结论: .C (n : R) = (↑n : 二次代数 R a b)
   证明: rfl
 
 @[scoped simp]
@@ -1244,9 +1244,9 @@ theorem re_ofNat
 @[scoped simp]
 
 中文:
-定理 re_ofNat
+定理 re_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : QuadraticAlgebra R a b).re = of自然数(n)
+  结论: (of自然数(n) : 二次代数 R a b).re = of自然数(n)
   证明: rfl
 
 @[scoped simp]
@@ -1264,9 +1264,9 @@ theorem im_ofNat
   proof: rfl
 
 中文:
-定理 im_ofNat
+定理 im_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: (of自然数(n) : QuadraticAlgebra R a b).im = 0
+  结论: (of自然数(n) : 二次代数 R a b).im = 0
   证明: rfl
 -/
 theorem im_ofNat (n : Nat) [n.AtLeastTwo] : (ofNat(n) : QuadraticAlgebra R a b).im = 0 := rfl
@@ -1290,7 +1290,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroupWithOne (QuadraticAlgebra R a b)
+  签名: 加法交换带幺群 (二次代数 R a b)
   定义体: .C n
   intCast_ofNat n := by norm_cast
   intCast_negSucc n := by rw [Int.negSucc_eq, Int.cast_neg, C_neg]; norm_cast
@@ -1317,7 +1317,7 @@ theorem re_intCast
 中文:
 定理 re_intCast
   条件: (n : 整数)
-  结论: (n : QuadraticAlgebra R a b).re = n
+  结论: (n : 二次代数 R a b).re = n
   证明: rfl
 
 @[simp, norm_cast]
@@ -1339,7 +1339,7 @@ theorem im_intCast
 中文:
 定理 im_intCast
   条件: (n : 整数)
-  结论: (n : QuadraticAlgebra R a b).im = 0
+  结论: (n : 二次代数 R a b).im = 0
   证明: rfl
 -/
 theorem im_intCast (n : Int) : (n : QuadraticAlgebra R a b).im = 0 := rfl
@@ -1356,7 +1356,7 @@ theorem C_intCast
 中文:
 定理 C_intCast
   条件: (n : 整数)
-  结论: .C (n : R) = (n : QuadraticAlgebra R a b)
+  结论: .C (n : R) = (n : 二次代数 R a b)
   证明: rfl
 -/
 theorem C_intCast (n : Int) : .C (n : R) = (n : QuadraticAlgebra R a b) := rfl
@@ -1379,7 +1379,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring (QuadraticAlgebra R a b) where
+  签名: : 非幺非结合半环 (二次代数 R a b) where
   定义体: by ext <;> simp [mul_add] <;> abel
   right_distrib _ _ _ := by ext <;> simp [mul_add, add_mul] <;> abel
   zero_mul _ := by ext <;> simp
@@ -1406,7 +1406,7 @@ theorem C_mul_eq_smul
 
 中文:
 定理 C_mul_eq_smul
-  条件: (r : R) (x : QuadraticAlgebra R a b)
+  条件: (r : R) (x : 二次代数 R a b)
   证明: by
   ext <;> simp
 
@@ -1430,7 +1430,7 @@ theorem C_mul
 中文:
 定理 C_mul
   条件: (x y : R)
-  结论: .C (x * y) = (.C x * .C y : QuadraticAlgebra R a b)
+  结论: .C (x * y) = (.C x * .C y : 二次代数 R a b)
   证明: by
   ext <;> simp
 -/
@@ -1455,7 +1455,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: : NonAssocSemiring (QuadraticAlgebra R a b) where
+  签名: : 非结合半环 (二次代数 R a b) where
   定义体: by ext <;> simp
   mul_one _ := by ext <;> simp
 
@@ -1506,7 +1506,7 @@ definition reₗ
 
 中文:
 定义 reₗ
-  签名: : QuadraticAlgebra R a b ->ₗ[R] R where
+  签名: : 二次代数 R a b ->ₗ[R] R where
   定义体: re
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1532,7 +1532,7 @@ definition imₗ
 
 中文:
 定义 imₗ
-  签名: : QuadraticAlgebra R a b ->ₗ[R] R where
+  签名: : 二次代数 R a b ->ₗ[R] R where
   定义体: im
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1558,7 +1558,7 @@ map_smul' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
 
 中文:
 定义 linearEquivTuple
-  签名: : QuadraticAlgebra R a b ≃ₗ[R] (Fin 2 -> R) where
+  签名: : 二次代数 R a b ≃ₗ[R] (有限集 2 -> R) where
   定义体: equivProd a b
 map_add' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
 map_smul' _ _ := funext Fin.forall_fin_two.2 ⟨rfl, rfl⟩
@@ -1585,7 +1585,7 @@ lemma linearEquivTuple_apply
 
 中文:
 引理 linearEquivTuple_apply
-  条件: (z : QuadraticAlgebra R a b)
+  条件: (z : 二次代数 R a b)
   证明: rfl
 
 @[simp]
@@ -1604,7 +1604,7 @@ lemma linearEquivTuple_symm_apply
 
 中文:
 引理 linearEquivTuple_symm_apply
-  条件: (x : Fin 2 -> R)
+  条件: (x : 有限集 2 -> R)
   证明: rfl
 -/
 lemma linearEquivTuple_symm_apply (x : Fin 2 -> R) :
@@ -1622,7 +1622,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Module.Basis (Fin 2) R (QuadraticAlgebra R a b)
+  签名: : 模.基 (有限集 2) R (二次代数 R a b)
   定义体: .ofEquivFun linearEquivTuple a b
 
 @[simp]
@@ -1643,7 +1643,7 @@ theorem basis_repr_apply
 
 中文:
 定理 basis_repr_apply
-  条件: (x : QuadraticAlgebra R a b)
+  条件: (x : 二次代数 R a b)
   证明: rfl
 -/
 theorem basis_repr_apply (x : QuadraticAlgebra R a b) :
@@ -1659,7 +1659,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite R (QuadraticAlgebra R a b)
+  签名: 模.有限 R (二次代数 R a b)
   定义体: .of_basis (basis a b)
 
 Depends on / 依赖: of_basis
@@ -1676,7 +1676,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R (QuadraticAlgebra R a b)
+  签名: 模.自由 R (二次代数 R a b)
   定义体: .of_basis (basis a b)
 
 Depends on / 依赖: of_basis
@@ -1696,7 +1696,7 @@ theorem rank_eq_two
 中文:
 定理 rank_eq_two
   条件: [StrongRankCondition R]
-  结论: Module.rank R (QuadraticAlgebra R a b) = 2
+  结论: 模.rank R (二次代数 R a b) = 2
   证明: by
   simp [rank_eq_card_basis (basis a b)]
 
@@ -1742,7 +1742,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring (QuadraticAlgebra R a b) where
+  签名: : 交换半环 (二次代数 R a b) where
   定义体: by ext <;> simp <;> ring
   mul_comm _ _ := by ext <;> simp <;> ring
 
@@ -1767,8 +1767,8 @@ instance [CommSemiring
   smul_def' s x := by ext <;> simp [Algebra.smul_de
 
 中文:
-实例 [CommSemiring
-  签名: S] [Algebra S R] : Algebra S (QuadraticAlgebra R a b) where
+实例 [交换半环
+  签名: S] [代数 S R] : 代数 S (二次代数 R a b) where
   定义体: .C (algebraMap S R s)
   algebraMap.map_one' := by ext <;> simp
   algebraMap.map_mul' x y := by ext <;> simp
@@ -1800,7 +1800,7 @@ theorem algebraMap_eq
 中文:
 定理 algebraMap_eq
   条件: (r : R)
-  结论: algebraMap R (QuadraticAlgebra R a b) r = ⟨r, 0⟩
+  结论: algebraMap R (二次代数 R a b) r = ⟨r, 0⟩
   证明: rfl
 -/
 theorem algebraMap_eq (r : R) : algebraMap R (QuadraticAlgebra R a b) r = ⟨r, 0⟩ := rfl
@@ -1817,7 +1817,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  结论: (algebraMap R (QuadraticAlgebra R a b) : _ -> _).Injective
+  结论: (algebraMap R (二次代数 R a b) : _ -> _).单射
   证明: fun _ _ => by simp [algebraMap_eq]
 
 @[simp]
@@ -1864,7 +1864,7 @@ theorem algebraMap_re
 
 中文:
 定理 algebraMap_re
-  结论: (algebraMap R (QuadraticAlgebra R a b) r).re = r
+  结论: (algebraMap R (二次代数 R a b) r).re = r
   证明: rfl
 
 @[simp]
@@ -1882,7 +1882,7 @@ theorem algebraMap_im
 
 中文:
 定理 algebraMap_im
-  结论: (algebraMap R (QuadraticAlgebra R a b) r).im = 0
+  结论: (algebraMap R (二次代数 R a b) r).im = 0
   证明: rfl
 -/
 theorem algebraMap_im : (algebraMap R (QuadraticAlgebra R a b) r).im = 0 := rfl
@@ -1898,8 +1898,8 @@ instance [Semiring
 @[simp]
 
 中文:
-实例 [Semiring
-  签名: S] [Module S R] [Module.IsTorsionFree S R] :
+实例 [半环
+  签名: S] [模 S R] [模.是无挠 S R] :
   定义体: (linearEquivTuple ..).injective.moduleIsTorsionFree _ (by simp)
 
 @[simp]
@@ -1923,7 +1923,7 @@ theorem C_pow
 中文:
 定理 C_pow
   条件: (n : 自然数) (r : R)
-  结论: (.C (r ^ n : R) : QuadraticAlgebra R a b) = (.C r) ^ n
+  结论: (.C (r ^ n : R) : 二次代数 R a b) = (.C r) ^ n
   证明: (algebraMap R (QuadraticAlgebra R a b)).map_pow r n
 
 Depends on / 依赖: QuadraticAlgebra, algebraMap, map_pow
@@ -1944,7 +1944,7 @@ theorem mul_C_eq_smul
 
 中文:
 定理 mul_C_eq_smul
-  条件: (r : R) (x : QuadraticAlgebra R a b)
+  条件: (r : R) (x : 二次代数 R a b)
   证明: by
   rw [mul_comm]; rw [C_mul_eq_smul r x]
 
@@ -1967,7 +1967,7 @@ theorem C_eq_algebraMap
 
 中文:
 定理 C_eq_algebraMap
-  结论: QuadraticAlgebra.C = (algebraMap R (QuadraticAlgebra R a b))
+  结论: 二次代数.C = (algebraMap R (二次代数 R a b))
   证明: rfl
 -/
 theorem C_eq_algebraMap : QuadraticAlgebra.C = (algebraMap R (QuadraticAlgebra R a b)) := rfl
@@ -2008,7 +2008,7 @@ theorem algebraMap_dvd_iff
 
 中文:
 定理 algebraMap_dvd_iff
-  条件: {r : R} {z : QuadraticAlgebra R a b}
+  条件: {r : R} {z : 二次代数 R a b}
   证明: by
   constructor
   · rintro ⟨x, rfl⟩
@@ -2070,7 +2070,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (QuadraticAlgebra R a b) where
+  签名: : 交换环 (二次代数 R a b) where
 -/
 instance instCommRing : CommRing (QuadraticAlgebra R a b) where
 
@@ -2086,8 +2086,8 @@ instance [CharZero
 @[simp]
 
 中文:
-实例 [CharZero
-  签名: R] : CharZero (QuadraticAlgebra R a b) where
+实例 [特征零
+  签名: R] : 特征零 (二次代数 R a b) where
   定义体: by
     simp [QuadraticAlgebra.ext_iff]
 

@@ -40,8 +40,8 @@ theorem ker_eq_bot_of_mono
 
 中文:
 定理 ker_eq_bot_of_mono
-  条件: [Mono f]
-  结论: LinearMap.ker f.hom = ⊥
+  条件: [单态射 f]
+  结论: 线性映射.ker f.hom = ⊥
   证明: LinearMap.ker_eq_bot_of_cancel fun u v h => ModuleCat.hom_ext_iff.mp
 (@cancel_mono _ _ _ _ _ f _ (↟u) (↟v)).1 ModuleCat.hom_ext_iff.mpr h
 
@@ -63,8 +63,8 @@ theorem range_eq_top_of_epi
 
 中文:
 定理 range_eq_top_of_epi
-  条件: [Epi f]
-  结论: LinearMap.range f.hom = ⊤
+  条件: [满态射 f]
+  结论: 线性映射.range f.hom = ⊤
   证明: LinearMap.range_eq_top_of_cancel fun u v h => ModuleCat.hom_ext_iff.mp
 (@cancel_epi _ _ _ _ _ f _ (↟u) (↟v)).1 ModuleCat.hom_ext_iff.mpr h
 
@@ -85,7 +85,7 @@ ConcreteCategory.mono_of_injective _ by convert! LinearMap.ker_eq_bot.1 hf⟩
 
 中文:
 定理 mono_iff_ker_eq_bot
-  结论: Mono f ↔ LinearMap.ker f.hom = ⊥
+  结论: 单态射 f ↔ 线性映射.ker f.hom = ⊥
   证明: ⟨fun _ => ker_eq_bot_of_mono _, fun hf =>
 ConcreteCategory.mono_of_injective _ by convert! LinearMap.ker_eq_bot.1 hf⟩
 
@@ -106,7 +106,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  结论: Mono f ↔ Function.Injective f
+  结论: 单态射 f ↔ 函数.单射 f
   证明: by
   rw [mono_iff_ker_eq_bot]; rw [LinearMap.ker_eq_bot]
 
@@ -126,7 +126,7 @@ ConcreteCategory.epi_of_surjective _ by convert! LinearMap.range_eq_top.1 hf⟩
 
 中文:
 定理 epi_iff_range_eq_top
-  结论: Epi f ↔ LinearMap.range f.hom = ⊤
+  结论: 满态射 f ↔ 线性映射.range f.hom = ⊤
   证明: ⟨fun _ => range_eq_top_of_epi _, fun hf =>
 ConcreteCategory.epi_of_surjective _ by convert! LinearMap.range_eq_top.1 hf⟩
 
@@ -147,7 +147,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  结论: Epi f ↔ Function.Surjective f
+  结论: 满态射 f ↔ 函数.满射 f
   证明: by
   rw [epi_iff_range_eq_top]; rw [LinearMap.range_eq_top]
 
@@ -168,7 +168,7 @@ definition uniqueOfEpiZero
 
 中文:
 定义 uniqueOfEpiZero
-  签名: (X) [h : Epi (0 : X ⟶ of R M)]
+  签名: (X) [h : 满态射 (0 : X ⟶ of R M)]
   定义体: uniqueOfSurjectiveZero X ((ModuleCat.epi_iff_surjective _).mp h)
 
 Depends on / 依赖: ModuleCat, ModuleCat.epi_iff_surjective, epi_iff_surjective, uniqueOfSurjectiveZero
@@ -186,7 +186,7 @@ instance mono_as_hom'_subtype
 
 中文:
 实例 mono_as_hom'_subtype
-  签名: (U : Submodule R X)
+  签名: (U : 子模 R X)
   定义体: (mono_iff_ker_eq_bot _).mpr (Submodule.ker_subtype U)
 
 Depends on / 依赖: Submodule, Submodule.ker_subtype, ker_subtype, mono_iff_ker_eq_bot
@@ -204,7 +204,7 @@ instance epi_as_hom''_mkQ
 
 中文:
 实例 epi_as_hom''_mkQ
-  签名: (U : Submodule R X)
+  签名: (U : 子模 R X)
   定义体: (epi_iff_range_eq_top _).mpr Submodule.range_mkQ _
 
 Depends on / 依赖: Submodule, Submodule.range_mkQ, epi_iff_range_eq_top, range_mkQ
@@ -224,7 +224,7 @@ instance forget_preservesEpimorphisms
 
 中文:
 实例 forget_preservesEpimorphisms
-  签名: : (forget (ModuleCat.{v} R)).PreservesEpimorphisms where
+  签名: : (forget (模范畴.{v} R)).保持Epimorphisms where
   定义体: by
       rw [CategoryTheory.ofHom_epi_iff_surjective]; rw [← epi_iff_surjective]
       exact hf
@@ -248,7 +248,7 @@ instance forget_preservesMonomorphisms
 
 中文:
 实例 forget_preservesMonomorphisms
-  签名: : (forget (ModuleCat.{v} R)).PreservesMonomorphisms where
+  签名: : (forget (模范畴.{v} R)).保持Monomorphisms where
   定义体: by
       rw [CategoryTheory.ofHom_mono_iff_injective]; rw [← mono_iff_injective]
       exact hf

@@ -57,7 +57,7 @@ structure AList
 结构 AList
   参数: (β : α -> 类型v)
   公理与运算 (2 个):
-    - entries : List (Sigma β)
+    - entries : 列表 (依赖和类型 β)
     - nodupKeys : entries.NodupKeys
 -/
 structure AList (β : α -> Type v) : Type max u v where
@@ -76,8 +76,8 @@ definition List.toAList
   nodupKeys := nodupKeys_dedupKeys l
 
 中文:
-定义 List.toAList
-  签名: [DecidableEq α] {β : α -> 类型v} (l : List (Sigma β))
+定义 列表.toAList
+  签名: [DecidableEq α] {β : α -> 类型v} (l : 列表 (依赖和类型 β))
   定义体: _
   nodupKeys := nodupKeys_dedupKeys l
 -/
@@ -179,7 +179,7 @@ theorem keys_mk
 
 中文:
 定理 keys_mk
-  条件: (l : List (Sigma β)) (h)
+  条件: (l : 列表 (依赖和类型 β)) (h)
   结论: (AList.mk l h).keys = l.keys
   证明: rfl
 -/
@@ -263,7 +263,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {l : List (Sigma β)} {h} {x : α}
+  条件: {l : 列表 (依赖和类型 β)} {h} {x : α}
   结论: x in AList.mk l h ↔ x in l.keys
   证明: .rfl
 -/
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AList β)
+  签名: 可居 (AList β)
   定义体: ⟨∅⟩
 
 @[simp]
@@ -414,7 +414,7 @@ theorem singleton_entries
 中文:
 定理 singleton_entries
   条件: (a : α) (b : β a)
-  结论: (singleton a b).entries = [Sigma.mk a b]
+  结论: (singleton a b).entries = [依赖和类型.mk a b]
   证明: rfl
 
 @[simp]
@@ -712,7 +712,7 @@ definition foldl
 
 中文:
 定义 foldl
-  签名: {δ : Type w} (f : δ -> 对任意 a, β a -> δ) (d : δ) (m : AList β)
+  签名: {δ : 类型 w} (f : δ -> 对任意 a, β a -> δ) (d : δ) (m : AList β)
   定义体: m.entries.foldl (fun r a => f r a.1 a.2) d
 
 Depends on / 依赖: entries, m.entries.foldl
@@ -1157,7 +1157,7 @@ theorem lookup_to_alist
 
 中文:
 定理 lookup_to_alist
-  条件: {a} (s : List (Sigma β))
+  条件: {a} (s : 列表 (依赖和类型 β))
   结论: lookup a s.toAList = s.dlookup a
   证明: by
   rw [List.toAList]; rw [lookup]; rw [dlookup_dedupKeys]
@@ -1259,8 +1259,8 @@ theorem entries_toAList
 
 中文:
 定理 entries_toAList
-  条件: (xs : List (Sigma β))
-  结论: (List.toAList xs).entries = dedupKeys xs
+  条件: (xs : 列表 (依赖和类型 β))
+  结论: (列表.toAList xs).entries = dedupKeys xs
   证明: rfl
 -/
 theorem entries_toAList (xs : List (Sigma β)) : (List.toAList xs).entries = dedupKeys xs :=
@@ -1276,7 +1276,7 @@ theorem toAList_cons
 
 中文:
 定理 toAList_cons
-  条件: (a : α) (b : β a) (xs : List (Sigma β))
+  条件: (a : α) (b : β a) (xs : 列表 (依赖和类型 β))
   证明: rfl
 -/
 theorem toAList_cons (a : α) (b : β a) (xs : List (Sigma β)) :
@@ -1294,7 +1294,7 @@ theorem mk_cons_eq_insert
 
 中文:
 定理 mk_cons_eq_insert
-  条件: (c : Sigma β) (l : List (Sigma β)) (h : (c :: l).NodupKeys)
+  条件: (c : 依赖和类型 β) (l : 列表 (依赖和类型 β)) (h : (c :: l).NodupKeys)
   证明: by
   simpa [insert] using (kerase_of_notMem_keys <| notMem_keys_of_nodupKeys_cons h).symm
 
@@ -1315,7 +1315,7 @@ definition insertRec
 
 中文:
 定义 insertRec
-  签名: {C : AList β -> Sort*} (H0 : C ∅)
+  签名: {C : AList β -> 类型层*} (H0 : C ∅)
 -/
 def insertRec {C : AList β -> Sort*} (H0 : C ∅)
     (IH : forall (a : α) (b : β a) (l : AList β), a ∉ l -> C l -> C (l.insert a b)) :
@@ -1342,7 +1342,7 @@ theorem insertRec_empty
 
 中文:
 定理 insertRec_empty
-  结论: {C : AList β -> Sort*} (H0 : C ∅)
+  结论: {C : AList β -> 类型层*} (H0 : C ∅)
   证明: by
   change @insertRec α β _ C H0 IH ⟨[], _⟩ = H0
   rw [insertRec]
@@ -1373,7 +1373,7 @@ theorem insertRec_insert
 
 中文:
 定理 insertRec_insert
-  结论: {C : AList β -> Sort*} (H0 : C ∅)
+  结论: {C : AList β -> 类型层*} (H0 : C ∅)
   证明: by
   obtain ⟨l, hl⟩ := l
   suffices @insertRec α β _ C H0 IH ⟨c :: l, nodupKeys_cons.2 ⟨h, hl⟩⟩ ≍
@@ -1409,7 +1409,7 @@ theorem insertRec_insert_mk
 
 中文:
 定理 insertRec_insert_mk
-  结论: {C : AList β -> Sort*} (H0 : C ∅)
+  结论: {C : AList β -> 类型层*} (H0 : C ∅)
   证明: @insertRec_insert α β _ C H0 IH ⟨a, b⟩ l h
 
 Depends on / 依赖: insertRec_insert
@@ -1510,7 +1510,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union (AList β)
+  签名: 并集 (AList β)
   定义体: ⟨union⟩
 
 @[simp]

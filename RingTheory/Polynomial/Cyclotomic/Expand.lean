@@ -50,7 +50,7 @@ theorem cyclotomic_expand_eq_cyclotomic_mul
 
 中文:
 定理 cyclotomic_expand_eq_cyclotomic_mul
-  结论: {p n : 自然数} (hp : 自然数.Prime p) (hdiv : ¬p ∣ n)
+  结论: {p n : 自然数} (hp : 自然数.素 p) (hdiv : ¬p ∣ n)
   证明: by
   rcases Nat.eq_zero_or_pos n with (rfl | hnpos)
   · simp
@@ -113,7 +113,7 @@ lemma cyclotomic_six
 
 中文:
 引理 cyclotomic_six
-  条件: (R : 类型) [Ring R]
+  条件: (R : 类型) [环 R]
   结论: cyclotomic 6 R = X ^ 2 - X + 1
   证明: by
   suffices cyclotomic 6 Int = X ^ 2 - X + 1 by
@@ -152,7 +152,7 @@ theorem cyclotomic_expand_eq_cyclotomic
 
 中文:
 定理 cyclotomic_expand_eq_cyclotomic
-  结论: {p n : 自然数} (hp : 自然数.Prime p) (hdiv : p ∣ n) (R : 类型)
+  结论: {p n : 自然数} (hp : 自然数.素 p) (hdiv : p ∣ n) (R : 类型)
   证明: by
   rcases n.eq_zero_or_pos with (rfl | hzero)
   · simp
@@ -200,7 +200,7 @@ theorem cyclotomic_irreducible_pow_of_irreducible_pow
 
 中文:
 定理 cyclotomic_irreducible_pow_of_irreducible_pow
-  结论: {p : 自然数} (hp : 自然数.Prime p) {R} [CommRing R]
+  结论: {p : 自然数} (hp : 自然数.素 p) {R} [交换环 R]
   证明: by
   rcases m.eq_zero_or_pos with (rfl | hm)
   · simpa using irreducible_X_sub_C (1 : R)
@@ -236,7 +236,7 @@ theorem cyclotomic_irreducible_of_irreducible_pow
 
 中文:
 定理 cyclotomic_irreducible_of_irreducible_pow
-  结论: {p : 自然数} (hp : 自然数.Prime p) {R} [CommRing R]
+  结论: {p : 自然数} (hp : 自然数.素 p) {R} [交换环 R]
   证明: pow_one p ▸ cyclotomic_irreducible_pow_of_irreducible_pow hp hn.bot_lt h
 
 Depends on / 依赖: bot_lt, cyclotomic_irreducible_pow_of_irreducible_pow, hn.bot_lt, pow_one
@@ -262,7 +262,7 @@ theorem cyclotomic_mul_prime_eq_pow_of_not_dvd
 
 中文:
 定理 cyclotomic_mul_prime_eq_pow_of_not_dvd
-  结论: (R : 类型) {p n : 自然数} [hp : Fact (自然数.Prime p)]
+  结论: (R : 类型) {p n : 自然数} [hp : Fact (自然数.素 p)]
   证明: by
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ (p - 1) by
@@ -295,7 +295,7 @@ theorem cyclotomic_mul_prime_dvd_eq_pow
 
 中文:
 定理 cyclotomic_mul_prime_dvd_eq_pow
-  结论: (R : 类型) {p n : 自然数} [hp : Fact (自然数.Prime p)] [Ring R]
+  结论: (R : 类型) {p n : 自然数} [hp : Fact (自然数.素 p)] [环 R]
   证明: by
   let : Algebra (ZMod p) R := ZMod.algebra _ _
   suffices cyclotomic (n * p) (ZMod p) = cyclotomic n (ZMod p) ^ p by
@@ -324,7 +324,7 @@ theorem cyclotomic_mul_prime_pow_eq
 
 中文:
 定理 cyclotomic_mul_prime_pow_eq
-  结论: (R : 类型) {p m : 自然数} [Fact (自然数.Prime p)] [Ring R] [CharP R p]
+  结论: (R : 类型) {p m : 自然数} [Fact (自然数.素 p)] [环 R] [特征p R p]
   证明: ⟨p ^ a * m, by rw [← mul_assoc, pow_succ']⟩
     rw [pow_succ']; rw [mul_assoc]; rw [mul_comm]; rw [cyclotomic_mul_prime_dvd_eq_pow R hdiv]; rw [cyclotomic_mul_prime_pow_eq _ _ a.succ_pos]; rw [← pow_mul]
     · simp only [Nat.succ_sub_succ_eq_sub, Nat.sub_zero]
@@ -360,7 +360,7 @@ theorem isRoot_cyclotomic_prime_pow_mul_iff_of_charP
 
 中文:
 定理 isRoot_cyclotomic_prime_pow_mul_iff_of_charP
-  结论: {m k p : 自然数} {R : 类型} [CommRing R]
+  结论: {m k p : 自然数} {R : 类型} [交换环 R]
   证明: by
   rcases k.eq_zero_or_pos with (rfl | hk)
   · rw [pow_zero, one_mul, isRoot_cyclotomic_iff]

@@ -58,7 +58,7 @@ definition covarianceBilin
 
 中文:
 定义 covarianceBilin
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: ContinuousLinearMap.bilinearComp (covarianceBilinDual μ)
     (toDualMap Real E).toContinuousLinearMap (toDualMap Real E).toContinuousLinearMap
 
@@ -82,7 +82,7 @@ lemma covarianceBilin_zero
 
 中文:
 引理 covarianceBilin_zero
-  结论: covarianceBilin (0 : Measure E) = 0
+  结论: covarianceBilin (0 : 测度 E) = 0
   证明: by
   rw [covarianceBilin]
   simp
@@ -150,7 +150,7 @@ lemma covarianceBilin_apply
 
 中文:
 引理 covarianceBilin_apply
-  条件: [CompleteSpace E] [IsFiniteMeasure μ] (h : MemLp id 2 μ) (x y : E)
+  条件: [完备空间 E] [是有限测度 μ] (h : MemLp id 2 μ) (x y : E)
   证明: by
   simp [covarianceBilin, covarianceBilinDual_apply' h]
 
@@ -193,7 +193,7 @@ lemma covarianceBilin_self
 
 中文:
 引理 covarianceBilin_self
-  条件: [CompleteSpace E] [IsFiniteMeasure μ] (h : MemLp id 2 μ) (x : E)
+  条件: [完备空间 E] [是有限测度 μ] (h : MemLp id 2 μ) (x : E)
   证明: by
   rw [covarianceBilin_eq_covarianceBilinDual]; rw [covarianceBilinDual_self_eq_variance h]
   rfl
@@ -217,7 +217,7 @@ lemma covarianceBilin_apply_eq_cov
 
 中文:
 引理 covarianceBilin_apply_eq_cov
-  结论: [CompleteSpace E] [IsFiniteMeasure μ]
+  结论: [完备空间 E] [是有限测度 μ]
   证明: by
   rw [covarianceBilin_eq_covarianceBilinDual]; rw [covarianceBilinDual_eq_covariance h]
   rfl
@@ -244,7 +244,7 @@ lemma covarianceBilin_real
 
 中文:
 引理 covarianceBilin_real
-  条件: {μ : Measure 实数} [IsFiniteMeasure μ] (x y : 实数)
+  条件: {μ : 测度 实数} [是有限测度 μ] (x y : 实数)
   证明: by
   by_cases h : MemLp id 2 μ
   · simp only [covarianceBilin_apply_eq_cov h, RCLike.inner_apply, conj_trivial, mul_comm]
@@ -271,7 +271,7 @@ lemma covarianceBilin_real_self
 
 中文:
 引理 covarianceBilin_real_self
-  条件: {μ : Measure 实数} [IsFiniteMeasure μ] (x : 实数)
+  条件: {μ : 测度 实数} [是有限测度 μ] (x : 实数)
   证明: by
   rw [covarianceBilin_real]; rw [pow_two]
 
@@ -340,7 +340,7 @@ lemma covarianceBilin_map
 
 中文:
 引理 covarianceBilin_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F]
   证明: by
   rw [covarianceBilin_apply]; rw [covarianceBilin_apply h]
   · simp_rw [id, L.integral_id_map (h.integrable (by simp))]
@@ -378,7 +378,7 @@ lemma covarianceBilin_map_const_add
 
 中文:
 引理 covarianceBilin_map_const_add
-  条件: [CompleteSpace E] [IsProbabilityMeasure μ] (c : E)
+  条件: [完备空间 E] [是概率测度 μ] (c : E)
   证明: by
   by_cases h : MemLp id 2 μ
   · ext x y
@@ -426,7 +426,7 @@ lemma covarianceBilin_apply_basisFun
 
 中文:
 引理 covarianceBilin_apply_basisFun
-  结论: {ι Ω : 类型} [Fintype ι] {mΩ : MeasurableSpace Ω}
+  结论: {ι Ω : 类型} [有限类型 ι] {mΩ : 可测空间 Ω}
   证明: by
   have (i : ι) := (hX i).aemeasurable
   rw [covarianceBilin_apply_eq_cov]; rw [covariance_map]
@@ -463,7 +463,7 @@ lemma covarianceBilin_apply_basisFun_self
 
 中文:
 引理 covarianceBilin_apply_basisFun_self
-  结论: {ι Ω : 类型} [Fintype ι] {mΩ : MeasurableSpace Ω}
+  结论: {ι Ω : 类型} [有限类型 ι] {mΩ : 可测空间 Ω}
   证明: by
   rw [covarianceBilin_apply_basisFun hX]; rw [covariance_self]
   have (i : ι) := (hX i).aemeasurable
@@ -495,7 +495,7 @@ lemma covarianceBilin_apply_pi
 
 中文:
 引理 covarianceBilin_apply_pi
-  结论: {ι Ω : 类型} [Fintype ι] {mΩ : MeasurableSpace Ω}
+  结论: {ι Ω : 类型} [有限类型 ι] {mΩ : 可测空间 Ω}
   证明: by
   have (i : ι) := (hX i).aemeasurable
   nth_rw 1 [covarianceBilin_apply_eq_cov, covariance_map_fun, ← (basisFun ι Real).sum_repr' x,
@@ -539,7 +539,7 @@ definition covarianceOperator
 
 中文:
 定义 covarianceOperator
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: continuousLinearMapOfBilin ContinuousLinearMap.bilinearComp (uncenteredCovarianceBilinDual μ)
     (toDualMap Real E).toContinuousLinearMap (toDualMap Real E).toContinuousLinearMap
 
@@ -562,7 +562,7 @@ lemma covarianceOperator_zero
 
 中文:
 引理 covarianceOperator_zero
-  结论: covarianceOperator (0 : Measure E) = 0
+  结论: covarianceOperator (0 : 测度 E) = 0
   证明: by
   simp [covarianceOperator]
 

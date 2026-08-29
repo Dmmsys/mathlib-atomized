@@ -64,7 +64,7 @@ theorem Ioi_zero_eq_map
 
 中文:
 定理 Ioi_zero_eq_map
-  结论: Ioi (0 : Fin n.succ) = univ.map (Fin.succEmb _)
+  结论: 左开右无界区间 (0 : 有限集 n.succ) = univ.map (有限集.succEmb _)
   证明: coe_injective by ext; simp [pos_iff_ne_zero]
 
 @[simp]
@@ -85,7 +85,7 @@ theorem Iio_last_eq_map
 
 中文:
 定理 Iio_last_eq_map
-  结论: Iio (Fin.last n) = Finset.univ.map Fin.castSuccEmb
+  结论: 左无界右开区间 (有限集.last n) = 有限集.univ.map 有限集.castSuccEmb
   证明: coe_injective by ext; simp [lt_def]
 
 Depends on / 依赖: Set.image_nonempty.mpr, coe_injective, image_nonempty, lt_def, ratLt_nonempty
@@ -104,8 +104,8 @@ theorem Ioi_succ
 
 中文:
 定理 Ioi_succ
-  条件: (i : Fin n)
-  结论: Ioi i.succ = (Ioi i).map (Fin.succEmb _)
+  条件: (i : 有限集 n)
+  结论: 左开右无界区间 i.succ = (左开右无界区间 i).map (有限集.succEmb _)
   证明: by simp
 
 Depends on / 依赖: Set.image_add, image_add, ratLt_add
@@ -123,8 +123,8 @@ theorem Iio_castSucc
 
 中文:
 定理 Iio_castSucc
-  条件: (i : Fin n)
-  结论: Iio (castSucc i) = (Iio i).map Fin.castSuccEmb
+  条件: (i : 有限集 n)
+  结论: 左无界右开区间 (castSucc i) = (左无界右开区间 i).map 有限集.castSuccEmb
   证明: by simp
 -/
 theorem Iio_castSucc (i : Fin n) : Iio (castSucc i) = (Iio i).map Fin.castSuccEmb := by simp
@@ -142,7 +142,7 @@ theorem card_filter_val_lt
 中文:
 定理 card_filter_val_lt
   条件: {m : 自然数}
-  结论: #{i : Fin n | i < m} = min n m
+  结论: #{i : 有限集 n | i < m} = 最小值 n m
   证明: by
   simp [← card_map valEmbedding, ← filter_filter, exists_iff, map_filter']
 
@@ -162,7 +162,7 @@ theorem card_filter_univ_succ
 
 中文:
 定理 card_filter_univ_succ
-  条件: (p : Fin (n + 1) -> 命题) [DecidablePred p]
+  条件: (p : 有限集 (n + 1) -> 命题) [DecidablePred p]
   证明: by
   rw [Fin.univ_succ]; rw [filter_cons]; rw [apply_ite Finset.card]; rw [card_cons]; rw [filter_map]; rw [card_map]; rfl
 
@@ -183,7 +183,7 @@ theorem card_filter_univ_succ'
 
 中文:
 定理 card_filter_univ_succ'
-  条件: (p : Fin (n + 1) -> 命题) [DecidablePred p]
+  条件: (p : 有限集 (n + 1) -> 命题) [DecidablePred p]
   证明: by
   rw [card_filter_univ_succ]; split_ifs <;> simp [add_comm]
 
@@ -208,7 +208,7 @@ theorem card_filter_univ_eq_vector_get_eq_count
 
 中文:
 定理 card_filter_univ_eq_vector_get_eq_count
-  条件: [DecidableEq α] (a : α) (v : List.Vector α n)
+  条件: [DecidableEq α] (a : α) (v : 列表.Vector α n)
   证明: by
   induction v with
   | nil => simp
@@ -244,7 +244,7 @@ theorem lt_card_filter_univ_iff_apply_of_imp
 
 中文:
 定理 lt_card_filter_univ_iff_apply_of_imp
-  结论: {j : Fin n} (p : Fin n -> 命题) [DecidablePred p]
+  结论: {j : 有限集 n} (p : 有限集 n -> 命题) [DecidablePred p]
   证明: by
   have h1 (k : Fin n) (hk : ¬ p k) : #{i | p i} <= k := by
     rw [← Fin.card_Iio]
@@ -284,7 +284,7 @@ lemma _root_.Finset.image_fin_univ
 @[simp]
 
 中文:
-引理 _root_.Finset.image_fin_univ
+引理 _root_.有限集.image_fin_univ
   条件: {n : 自然数}
   证明: by
   ext
@@ -310,8 +310,8 @@ lemma _root_.Finset.sup_fin_univ
   rw [← image_fin_univ]; rw [sup_image]; rw [Function.comp_def]
 
 中文:
-引理 _root_.Finset.sup_fin_univ
-  条件: [SemilatticeSup α] [OrderBot α] {n : 自然数} (f : 自然数 -> α)
+引理 _root_.有限集.sup_fin_univ
+  条件: [SemilatticeSup α] [有底序 α] {n : 自然数} (f : 自然数 -> α)
   证明: by
   rw [← image_fin_univ]; rw [sup_image]; rw [Function.comp_def]
 

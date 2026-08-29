@@ -60,8 +60,8 @@ theorem HasFDerivAtFilter.const_smul
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAtFilter.const_smul
-  条件: (h : HasFDerivAtFilter f f' L) (c : R)
+定理 有FDerivAtFilter.const_smul
+  条件: (h : 有FDerivAtFilter f f' L) (c : R)
   证明: (c • (1 : F ->L[𝕜] F)).hasFDerivAtFilter.comp h tendsto_map
 
 @[to_fun (attr := fun_prop)]
@@ -132,8 +132,8 @@ theorem HasFDerivAt.const_smul
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.const_smul
-  条件: (h : HasFDerivAt f f' x) (c : R)
+定理 在点处Fréchet可导.const_smul
+  条件: (h : 在点处Fréchet可导 f f' x) (c : R)
   证明: HasFDerivAtFilter.const_smul h c
 
 @[to_fun (attr := fun_prop)]
@@ -225,8 +225,8 @@ theorem Differentiable.const_smul
   proof: fun x => (h x).const_smul c
 
 中文:
-定理 Differentiable.const_smul
-  条件: (h : Differentiable 𝕜 f) (c : R)
+定理 可微.const_smul
+  条件: (h : 可微 𝕜 f) (c : R)
   证明: fun x => (h x).const_smul c
 
 Depends on / 依赖: const_smul
@@ -287,7 +287,7 @@ lemma differentiableWithinAt_smul_iff
 
 中文:
 引理 differentiableWithinAt_smul_iff
-  条件: (c : R) [Invertible c]
+  条件: (c : R) [可逆 c]
   证明: by
   refine ⟨fun h => ?_, fun h => h.const_smul c⟩
   apply (h.const_smul ⅟c).congr_of_eventuallyEq ?_ (by simp)
@@ -318,7 +318,7 @@ theorem fderivWithin_const_smul_of_invertible
 
 中文:
 定理 fderivWithin_const_smul_of_invertible
-  结论: (c : R) [Invertible c]
+  结论: (c : R) [可逆 c]
   证明: by
   by_cases h : DifferentiableWithinAt 𝕜 f s x
   · exact (h.hasFDerivWithinAt.const_smul c).fderivWithin hs
@@ -390,7 +390,7 @@ lemma differentiableAt_smul_iff
 
 中文:
 引理 differentiableAt_smul_iff
-  条件: (c : R) [Invertible c]
+  条件: (c : R) [可逆 c]
   证明: by
   rw [← differentiableWithinAt_univ]; rw [differentiableWithinAt_smul_iff]; rw [differentiableWithinAt_univ]
 
@@ -411,7 +411,7 @@ theorem fderiv_const_smul_of_invertible
 
 中文:
 定理 fderiv_const_smul_of_invertible
-  条件: (c : R) [Invertible c]
+  条件: (c : R) [可逆 c]
   证明: by
   simp [← fderivWithin_univ, fderivWithin_const_smul_of_invertible c uniqueDiffWithinAt_univ]
 
@@ -473,7 +473,7 @@ omit [DivisionSemiring R] [Module R F] [SMulCommClass 𝕜 R F] [ContinuousConst
 
 中文:
 引理 fderivWithin_const_smul_field'
-  条件: {s : Set 𝕜} {f : 𝕜 -> F} {x : 𝕜} (c : R)
+  条件: {s : 集合 𝕜} {f : 𝕜 -> F} {x : 𝕜} (c : R)
   证明: by
   by_cases hsx : UniqueDiffWithinAt 𝕜 s x
   · exact fderivWithin_const_smul_field c hsx
@@ -504,7 +504,7 @@ lemma fderivWithin_neg'
 
 中文:
 引理 fderivWithin_neg'
-  条件: {s : Set 𝕜} {f : 𝕜 -> F} {x : 𝕜}
+  条件: {s : 集合 𝕜} {f : 𝕜 -> F} {x : 𝕜}
   证明: by
   simpa only [neg_smul, one_smul] using fderivWithin_const_smul_field' (f := f) (-1 : 𝕜)
 
@@ -573,8 +573,8 @@ theorem HasFDerivAtFilter.add
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAtFilter.add
-  结论: (hf : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.add
+  结论: (hf : 有FDerivAtFilter f f' L)
   证明: .of_isLittleO (hf.isLittleO.add hg.isLittleO).congr_left fun _ => by
     grind [Pi.add_apply]
 
@@ -647,8 +647,8 @@ theorem HasFDerivAt.add
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.add
-  条件: (hf : HasFDerivAt f f' x) (hg : HasFDerivAt g g' x)
+定理 在点处Fréchet可导.add
+  条件: (hf : 在点处Fréchet可导 f f' x) (hg : 在点处Fréchet可导 g g' x)
   证明: HasFDerivAtFilter.add hf hg
 
 @[to_fun (attr := fun_prop)]
@@ -738,8 +738,8 @@ theorem Differentiable.add
   proof: fun x => (hf x).add (hg x)
 
 中文:
-定理 Differentiable.add
-  条件: (hf : Differentiable 𝕜 f) (hg : Differentiable 𝕜 g)
+定理 可微.add
+  条件: (hf : 可微 𝕜 f) (hg : 可微 𝕜 g)
   证明: fun x => (hf x).add (hg x)
 -/
 theorem Differentiable.add (hf : Differentiable 𝕜 f) (hg : Differentiable 𝕜 g) :
@@ -947,7 +947,7 @@ alias ⟨_, HasFDerivAt.add_const⟩ := hasFDerivAt_add_const_iff
 中文:
 定理 hasFDerivAt_add_const_iff
   条件: (c : F)
-  结论: HasFDerivAt (f · + c) f' x ↔ HasFDerivAt f f' x
+  结论: 在点处Fréchet可导 (f · + c) f' x ↔ 在点处Fréchet可导 f f' x
   证明: hasFDerivAtFilter_add_const_iff c
 
 @[fun_prop]
@@ -1266,7 +1266,7 @@ alias ⟨_, HasFDerivAt.const_add⟩ := hasFDerivAt_const_add_iff
 中文:
 定理 hasFDerivAt_const_add_iff
   条件: (c : F)
-  结论: HasFDerivAt (c + f ·) f' x ↔ HasFDerivAt f f' x
+  结论: 在点处Fréchet可导 (c + f ·) f' x ↔ 在点处Fréchet可导 f f' x
   证明: hasFDerivAtFilter_const_add_iff c
 
 @[fun_prop]
@@ -1515,7 +1515,7 @@ theorem HasStrictFDerivAt.sum
   convert! HasStrictFDerivAt.fun_sum h; simp
 
 中文:
-定理 HasStrictFDerivAt.sum
+定理 HasStrictFDerivAt.求和
   条件: (h : 对任意 i in u, HasStrictFDerivAt (A i) (A' i) x)
   证明: by
   convert! HasStrictFDerivAt.fun_sum h; simp
@@ -1538,8 +1538,8 @@ theorem HasFDerivAtFilter.fun_sum
   simp
 
 中文:
-定理 HasFDerivAtFilter.fun_sum
-  条件: (h : 对任意 i in u, HasFDerivAtFilter (A i) (A' i) L)
+定理 有FDerivAtFilter.fun_sum
+  条件: (h : 对任意 i in u, 有FDerivAtFilter (A i) (A' i) L)
   证明: by
   simp only [hasFDerivAtFilter_iff_isLittleO] at *
   convert! IsLittleO.sum h
@@ -1565,8 +1565,8 @@ theorem HasFDerivAtFilter.sum
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.sum
-  条件: (h : 对任意 i in u, HasFDerivAtFilter (A i) (A' i) L)
+定理 有FDerivAtFilter.求和
+  条件: (h : 对任意 i in u, 有FDerivAtFilter (A i) (A' i) L)
   证明: by
   convert! HasFDerivAtFilter.fun_sum h; simp
 
@@ -1614,7 +1614,7 @@ theorem HasFDerivWithinAt.sum
 @[fun_prop]
 
 中文:
-定理 HasFDerivWithinAt.sum
+定理 HasFDerivWithinAt.求和
   条件: (h : 对任意 i in u, HasFDerivWithinAt (A i) (A' i) s x)
   证明: HasFDerivAtFilter.sum h
 
@@ -1638,8 +1638,8 @@ theorem HasFDerivAt.fun_sum
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.fun_sum
-  条件: (h : 对任意 i in u, HasFDerivAt (A i) (A' i) x)
+定理 在点处Fréchet可导.fun_sum
+  条件: (h : 对任意 i in u, 在点处Fréchet可导 (A i) (A' i) x)
   证明: HasFDerivAtFilter.fun_sum h
 
 @[fun_prop]
@@ -1662,8 +1662,8 @@ theorem HasFDerivAt.sum
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.sum
-  条件: (h : 对任意 i in u, HasFDerivAt (A i) (A' i) x)
+定理 在点处Fréchet可导.求和
+  条件: (h : 对任意 i in u, 在点处Fréchet可导 (A i) (A' i) x)
   证明: HasFDerivAtFilter.sum h
 
 @[fun_prop]
@@ -1714,7 +1714,7 @@ theorem DifferentiableWithinAt.sum
 @[simp, fun_prop]
 
 中文:
-定理 DifferentiableWithinAt.sum
+定理 DifferentiableWithinAt.求和
   条件: (h : 对任意 i in u, DifferentiableWithinAt 𝕜 (A i) s x)
   证明: HasFDerivWithinAt.differentiableWithinAt
     HasFDerivWithinAt.sum fun i hi => (h i hi).hasFDerivWithinAt
@@ -1764,7 +1764,7 @@ theorem DifferentiableAt.sum
 @[fun_prop]
 
 中文:
-定理 DifferentiableAt.sum
+定理 DifferentiableAt.求和
   条件: (h : 对任意 i in u, DifferentiableAt 𝕜 (A i) x)
   证明: HasFDerivAt.differentiableAt HasFDerivAt.sum fun i hi => (h i hi).hasFDerivAt
 
@@ -1813,7 +1813,7 @@ theorem DifferentiableOn.sum
 @[simp, fun_prop]
 
 中文:
-定理 DifferentiableOn.sum
+定理 DifferentiableOn.求和
   条件: (h : 对任意 i in u, DifferentiableOn 𝕜 (A i) s)
   证明: fun x hx =>
   DifferentiableWithinAt.sum fun i hi => h i hi x hx
@@ -1836,8 +1836,8 @@ theorem Differentiable.fun_sum
 @[simp, fun_prop]
 
 中文:
-定理 Differentiable.fun_sum
-  条件: (h : 对任意 i in u, Differentiable 𝕜 (A i))
+定理 可微.fun_sum
+  条件: (h : 对任意 i in u, 可微 𝕜 (A i))
   证明: fun x => DifferentiableAt.fun_sum fun i hi => h i hi x
 
 @[simp, fun_prop]
@@ -1858,8 +1858,8 @@ theorem Differentiable.sum
   proof: fun x => DifferentiableAt.sum fun i hi => h i hi x
 
 中文:
-定理 Differentiable.sum
-  条件: (h : 对任意 i in u, Differentiable 𝕜 (A i))
+定理 可微.求和
+  条件: (h : 对任意 i in u, 可微 𝕜 (A i))
   证明: fun x => DifferentiableAt.sum fun i hi => h i hi x
 
 Depends on / 依赖: DifferentiableAt, DifferentiableAt.sum
@@ -1964,8 +1964,8 @@ theorem HasFDerivAtFilter.neg
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAtFilter.neg
-  条件: (h : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.neg
+  条件: (h : 有FDerivAtFilter f f' L)
   证明: (-1 : F ->L[𝕜] F).hasFDerivAtFilter.comp h tendsto_map
 
 @[to_fun (attr := fun_prop)]
@@ -2037,9 +2037,9 @@ theorem HasFDerivAt.neg
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.neg
-  条件: (h : HasFDerivAt f f' x)
-  结论: HasFDerivAt (-f) (-f') x
+定理 在点处Fréchet可导.neg
+  条件: (h : 在点处Fréchet可导 f f' x)
+  结论: 在点处Fréchet可导 (-f) (-f') x
   证明: HasFDerivAtFilter.neg h
 
 @[to_fun (attr := fun_prop)]
@@ -2269,9 +2269,9 @@ theorem Differentiable.neg
 @[simp]
 
 中文:
-定理 Differentiable.neg
-  条件: (h : Differentiable 𝕜 f)
-  结论: Differentiable 𝕜 (-f)
+定理 可微.neg
+  条件: (h : 可微 𝕜 f)
+  结论: 可微 𝕜 (-f)
   证明: fun x =>
   (h x).neg
 
@@ -2293,7 +2293,7 @@ theorem differentiable_fun_neg_iff
 
 中文:
 定理 differentiable_fun_neg_iff
-  结论: (Differentiable 𝕜 fun y => -f y) ↔ Differentiable 𝕜 f
+  结论: (可微 𝕜 fun y => -f y) ↔ 可微 𝕜 f
   证明: ⟨fun h => by simpa only [neg_neg] using h.fun_neg, fun h => h.neg⟩
 
 @[simp]
@@ -2314,7 +2314,7 @@ theorem differentiable_neg_iff
 
 中文:
 定理 differentiable_neg_iff
-  结论: Differentiable 𝕜 (-f) ↔ Differentiable 𝕜 f
+  结论: 可微 𝕜 (-f) ↔ 可微 𝕜 f
   证明: ⟨fun h => by simpa only [neg_neg] using h.neg, fun h => h.neg⟩
 
 Depends on / 依赖: h.neg, neg_neg
@@ -2437,8 +2437,8 @@ theorem HasFDerivAtFilter.sub
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAtFilter.sub
-  条件: (hf : HasFDerivAtFilter f f' L) (hg : HasFDerivAtFilter g g' L)
+定理 有FDerivAtFilter.sub
+  条件: (hf : 有FDerivAtFilter f f' L) (hg : 有FDerivAtFilter g g' L)
   证明: by
   simpa only [sub_eq_add_neg] using hf.add hg.neg
 
@@ -2510,8 +2510,8 @@ theorem HasFDerivAt.sub
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasFDerivAt.sub
-  条件: (hf : HasFDerivAt f f' x) (hg : HasFDerivAt g g' x)
+定理 在点处Fréchet可导.sub
+  条件: (hf : 在点处Fréchet可导 f f' x) (hg : 在点处Fréchet可导 g g' x)
   证明: HasFDerivAtFilter.sub hf hg
 
 @[to_fun (attr := fun_prop)]
@@ -2817,8 +2817,8 @@ theorem Differentiable.sub
 @[to_fun (attr := simp)]
 
 中文:
-定理 Differentiable.sub
-  条件: (hf : Differentiable 𝕜 f) (hg : Differentiable 𝕜 g)
+定理 可微.sub
+  条件: (hf : 可微 𝕜 f) (hg : 可微 𝕜 g)
   证明: fun x => (hf x).sub (hg x)
 
 @[to_fun (attr := simp)]
@@ -2840,8 +2840,8 @@ lemma Differentiable.add_iff_left
 @[to_fun (attr := simp)]
 
 中文:
-引理 Differentiable.add_iff_left
-  条件: (hg : Differentiable 𝕜 g)
+引理 可微.add_iff_left
+  条件: (hg : 可微 𝕜 g)
   证明: by
   refine ⟨fun h => ?_, fun hf => hf.add hg⟩
   simpa only [add_sub_cancel_right] using h.sub hg
@@ -2868,8 +2868,8 @@ lemma Differentiable.add_iff_right
 @[to_fun (attr := simp)]
 
 中文:
-引理 Differentiable.add_iff_right
-  条件: (hg : Differentiable 𝕜 f)
+引理 可微.add_iff_right
+  条件: (hg : 可微 𝕜 f)
   证明: by
   simp only [add_comm f, hg.add_iff_left]
 
@@ -2894,8 +2894,8 @@ lemma Differentiable.sub_iff_left
 @[to_fun (attr := simp)]
 
 中文:
-引理 Differentiable.sub_iff_left
-  条件: (hg : Differentiable 𝕜 g)
+引理 可微.sub_iff_left
+  条件: (hg : 可微 𝕜 g)
   证明: by
   simp only [sub_eq_add_neg, differentiable_neg_iff, hg, add_iff_left]
 
@@ -2918,8 +2918,8 @@ lemma Differentiable.sub_iff_right
   simp only [sub_eq_add_neg, differentiable_neg_iff, hg, add_iff_right]
 
 中文:
-引理 Differentiable.sub_iff_right
-  条件: (hg : Differentiable 𝕜 f)
+引理 可微.sub_iff_right
+  条件: (hg : 可微 𝕜 f)
   证明: by
   simp only [sub_eq_add_neg, differentiable_neg_iff, hg, add_iff_right]
 
@@ -3127,7 +3127,7 @@ alias ⟨_, HasFDerivAt.sub_const⟩ := hasFDerivAt_sub_const_iff
 中文:
 定理 hasFDerivAt_sub_const_iff
   条件: (c : F)
-  结论: HasFDerivAt (f · - c) f' x ↔ HasFDerivAt f f' x
+  结论: 在点处Fréchet可导 (f · - c) f' x ↔ 在点处Fréchet可导 f f' x
   证明: hasFDerivAtFilter_sub_const_iff c
 
 @[fun_prop]
@@ -3183,7 +3183,7 @@ theorem hasFDerivAt_sub_const
 中文:
 定理 hasFDerivAt_sub_const
   条件: {x : F} (c : F)
-  结论: HasFDerivAt (· - c) (.id 𝕜 F) x
+  结论: 在点处Fréchet可导 (· - c) (.id 𝕜 F) x
   证明: (hasFDerivAt_id x).sub_const c
 
 @[fun_prop]
@@ -3300,8 +3300,8 @@ theorem Differentiable.sub_const
   proof: fun x => (hf x).sub_const c
 
 中文:
-定理 Differentiable.sub_const
-  条件: (hf : Differentiable 𝕜 f) (c : F)
+定理 可微.sub_const
+  条件: (hf : 可微 𝕜 f) (c : F)
   证明: fun x => (hf x).sub_const c
 
 Depends on / 依赖: sub_const
@@ -3364,8 +3364,8 @@ theorem HasFDerivAtFilter.const_sub
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.const_sub
-  条件: (hf : HasFDerivAtFilter f f' L) (c : F)
+定理 有FDerivAtFilter.const_sub
+  条件: (hf : 有FDerivAtFilter f f' L) (c : F)
   证明: by
   simpa only [sub_eq_add_neg] using! hf.neg.const_add c
 
@@ -3437,8 +3437,8 @@ theorem HasFDerivAt.const_sub
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.const_sub
-  条件: (hf : HasFDerivAt f f' x) (c : F)
+定理 在点处Fréchet可导.const_sub
+  条件: (hf : 在点处Fréchet可导 f f' x) (c : F)
   证明: HasFDerivAtFilter.const_sub hf c
 
 @[fun_prop]
@@ -3556,8 +3556,8 @@ theorem Differentiable.const_sub
   proof: fun x => (hf x).const_sub c
 
 中文:
-定理 Differentiable.const_sub
-  条件: (hf : Differentiable 𝕜 f) (c : F)
+定理 可微.const_sub
+  条件: (hf : 可微 𝕜 f) (c : F)
   证明: fun x => (hf x).const_sub c
 
 Depends on / 依赖: const_sub

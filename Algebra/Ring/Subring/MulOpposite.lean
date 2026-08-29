@@ -35,7 +35,7 @@ definition op
 
 中文:
 定义 op
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S.toSubsemiring.op
   neg_mem' := by simp
 
@@ -59,7 +59,7 @@ theorem mem_op
 
 中文:
 定理 mem_op
-  条件: {x : Rᵐᵒᵖ} {S : Subring R}
+  条件: {x : Rᵐᵒᵖ} {S : 子环 R}
   结论: x in S.op ↔ x.unop in S
   证明: Iff.rfl
 
@@ -80,7 +80,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (S : Subring Rᵐᵒᵖ)
+  签名: (S : 子环 Rᵐᵒᵖ)
   定义体: S.toSubsemiring.unop
   neg_mem' := by simp
 -/
@@ -104,7 +104,7 @@ theorem mem_unop
 
 中文:
 定理 mem_unop
-  条件: {x : R} {S : Subring Rᵐᵒᵖ}
+  条件: {x : R} {S : 子环 Rᵐᵒᵖ}
   结论: x in S.unop ↔ MulOpposite.op x in S
   证明: Iff.rfl
 
@@ -128,7 +128,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (S : Subring R)
+  条件: (S : 子环 R)
   结论: S.op.unop = S
   证明: rfl
 
@@ -148,7 +148,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (S : Subring Rᵐᵒᵖ)
+  条件: (S : 子环 Rᵐᵒᵖ)
   结论: S.unop.op = S
   证明: rfl
 -/
@@ -166,7 +166,7 @@ theorem op_le_iff
 
 中文:
 定理 op_le_iff
-  条件: {S₁ : Subring R} {S₂ : Subring Rᵐᵒᵖ}
+  条件: {S₁ : 子环 R} {S₂ : 子环 Rᵐᵒᵖ}
   结论: S₁.op <= S₂ ↔ S₁ <= S₂.unop
   证明: MulOpposite.op_surjective.forall
 
@@ -188,7 +188,7 @@ theorem le_op_iff
 
 中文:
 定理 le_op_iff
-  条件: {S₁ : Subring Rᵐᵒᵖ} {S₂ : Subring R}
+  条件: {S₁ : 子环 Rᵐᵒᵖ} {S₂ : 子环 R}
   结论: S₁ <= S₂.op ↔ S₁.unop <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -213,7 +213,7 @@ theorem op_le_op_iff
 
 中文:
 定理 op_le_op_iff
-  条件: {S₁ S₂ : Subring R}
+  条件: {S₁ S₂ : 子环 R}
   结论: S₁.op <= S₂.op ↔ S₁ <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -236,7 +236,7 @@ theorem unop_le_unop_iff
 
 中文:
 定理 unop_le_unop_iff
-  条件: {S₁ S₂ : Subring Rᵐᵒᵖ}
+  条件: {S₁ S₂ : 子环 Rᵐᵒᵖ}
   结论: S₁.unop <= S₂.unop ↔ S₁ <= S₂
   证明: MulOpposite.unop_surjective.forall
 
@@ -261,7 +261,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Subring R ≃o Subring Rᵐᵒᵖ where
+  签名: : 子环 R ≃o 子环 Rᵐᵒᵖ where
   定义体: Subring.op
   invFun := Subring.unop
   left_inv := unop_op
@@ -287,7 +287,7 @@ theorem op_injective
 
 中文:
 定理 op_injective
-  结论: (@Subring.op R _).Injective
+  结论: (@子环.op R _).单射
   证明: opEquiv.injective
 
 Depends on / 依赖: injective, opEquiv, opEquiv.injective
@@ -303,7 +303,7 @@ theorem unop_injective
 
 中文:
 定理 unop_injective
-  结论: (@Subring.unop R _).Injective
+  结论: (@子环.unop R _).单射
   证明: opEquiv.symm.injective
 
 Depends on / 依赖: injective, opEquiv, opEquiv.symm.injective
@@ -320,7 +320,7 @@ theorem op_inj
 
 中文:
 定理 op_inj
-  条件: {S T : Subring R}
+  条件: {S T : 子环 R}
   结论: S.op = T.op ↔ S = T
   证明: opEquiv.eq_iff_eq
 -/
@@ -338,7 +338,7 @@ theorem unop_inj
 
 中文:
 定理 unop_inj
-  条件: {S T : Subring Rᵐᵒᵖ}
+  条件: {S T : 子环 Rᵐᵒᵖ}
   结论: S.unop = T.unop ↔ S = T
   证明: opEquiv.symm.eq_iff_eq
 
@@ -359,7 +359,7 @@ theorem op_bot
 
 中文:
 定理 op_bot
-  结论: (⊥ : Subring R).op = ⊥
+  结论: (⊥ : 子环 R).op = ⊥
   证明: opEquiv.map_bot
 
 @[simp]
@@ -382,7 +382,7 @@ theorem op_eq_bot
 
 中文:
 定理 op_eq_bot
-  条件: {S : Subring R}
+  条件: {S : 子环 R}
   结论: S.op = ⊥ ↔ S = ⊥
   证明: op_injective.eq_iff' op_bot
 
@@ -405,7 +405,7 @@ theorem unop_bot
 
 中文:
 定理 unop_bot
-  结论: (⊥ : Subring Rᵐᵒᵖ).unop = ⊥
+  结论: (⊥ : 子环 Rᵐᵒᵖ).unop = ⊥
   证明: opEquiv.symm.map_bot
 
 @[simp]
@@ -428,7 +428,7 @@ theorem unop_eq_bot
 
 中文:
 定理 unop_eq_bot
-  条件: {S : Subring Rᵐᵒᵖ}
+  条件: {S : 子环 Rᵐᵒᵖ}
   结论: S.unop = ⊥ ↔ S = ⊥
   证明: unop_injective.eq_iff' unop_bot
 
@@ -451,7 +451,7 @@ theorem op_top
 
 中文:
 定理 op_top
-  结论: (⊤ : Subring R).op = ⊤
+  结论: (⊤ : 子环 R).op = ⊤
   证明: rfl
 
 @[simp]
@@ -472,7 +472,7 @@ theorem op_eq_top
 
 中文:
 定理 op_eq_top
-  条件: {S : Subring R}
+  条件: {S : 子环 R}
   结论: S.op = ⊤ ↔ S = ⊤
   证明: op_injective.eq_iff' op_top
 
@@ -495,7 +495,7 @@ theorem unop_top
 
 中文:
 定理 unop_top
-  结论: (⊤ : Subring Rᵐᵒᵖ).unop = ⊤
+  结论: (⊤ : 子环 Rᵐᵒᵖ).unop = ⊤
   证明: rfl
 
 @[simp]
@@ -514,7 +514,7 @@ theorem unop_eq_top
 
 中文:
 定理 unop_eq_top
-  条件: {S : Subring Rᵐᵒᵖ}
+  条件: {S : 子环 Rᵐᵒᵖ}
   结论: S.unop = ⊤ ↔ S = ⊤
   证明: unop_injective.eq_iff' unop_top
 
@@ -533,7 +533,7 @@ theorem op_sup
 
 中文:
 定理 op_sup
-  条件: (S₁ S₂ : Subring R)
+  条件: (S₁ S₂ : 子环 R)
   结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
   证明: opEquiv.map_sup _ _
 
@@ -553,7 +553,7 @@ theorem unop_sup
 
 中文:
 定理 unop_sup
-  条件: (S₁ S₂ : Subring Rᵐᵒᵖ)
+  条件: (S₁ S₂ : 子环 Rᵐᵒᵖ)
   结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
   证明: opEquiv.symm.map_sup _ _
 
@@ -573,7 +573,7 @@ theorem op_inf
 
 中文:
 定理 op_inf
-  条件: (S₁ S₂ : Subring R)
+  条件: (S₁ S₂ : 子环 R)
   结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
   证明: rfl
 -/
@@ -590,7 +590,7 @@ theorem unop_inf
 
 中文:
 定理 unop_inf
-  条件: (S₁ S₂ : Subring Rᵐᵒᵖ)
+  条件: (S₁ S₂ : 子环 Rᵐᵒᵖ)
   结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
   证明: rfl
 -/
@@ -607,7 +607,7 @@ theorem op_sSup
 
 中文:
 定理 op_sSup
-  条件: (S : Set (Subring R))
+  条件: (S : 集合 (子环 R))
   结论: (sSup S).op = sSup (.unop ⁻¹' S)
   证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
 
@@ -627,7 +627,7 @@ theorem unop_sSup
 
 中文:
 定理 unop_sSup
-  条件: (S : Set (Subring Rᵐᵒᵖ))
+  条件: (S : 集合 (子环 Rᵐᵒᵖ))
   结论: (sSup S).unop = sSup (.op ⁻¹' S)
   证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
 
@@ -647,7 +647,7 @@ theorem op_sInf
 
 中文:
 定理 op_sInf
-  条件: (S : Set (Subring R))
+  条件: (S : 集合 (子环 R))
   结论: (sInf S).op = sInf (.unop ⁻¹' S)
   证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
 
@@ -667,7 +667,7 @@ theorem unop_sInf
 
 中文:
 定理 unop_sInf
-  条件: (S : Set (Subring Rᵐᵒᵖ))
+  条件: (S : 集合 (子环 Rᵐᵒᵖ))
   结论: (sInf S).unop = sInf (.op ⁻¹' S)
   证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
 
@@ -687,7 +687,7 @@ theorem op_iSup
 
 中文:
 定理 op_iSup
-  条件: (S : ι -> Subring R)
+  条件: (S : ι -> 子环 R)
   结论: (iSup S).op = ⨆ i, (S i).op
   证明: opEquiv.map_iSup _
 
@@ -706,7 +706,7 @@ theorem unop_iSup
 
 中文:
 定理 unop_iSup
-  条件: (S : ι -> Subring Rᵐᵒᵖ)
+  条件: (S : ι -> 子环 Rᵐᵒᵖ)
   结论: (iSup S).unop = ⨆ i, (S i).unop
   证明: opEquiv.symm.map_iSup _
 
@@ -726,7 +726,7 @@ theorem op_iInf
 
 中文:
 定理 op_iInf
-  条件: (S : ι -> Subring R)
+  条件: (S : ι -> 子环 R)
   结论: (iInf S).op = ⨅ i, (S i).op
   证明: opEquiv.map_iInf _
 
@@ -745,7 +745,7 @@ theorem unop_iInf
 
 中文:
 定理 unop_iInf
-  条件: (S : ι -> Subring Rᵐᵒᵖ)
+  条件: (S : ι -> 子环 Rᵐᵒᵖ)
   结论: (iInf S).unop = ⨅ i, (S i).unop
   证明: opEquiv.symm.map_iInf _
 
@@ -768,7 +768,7 @@ theorem op_closure
 
 中文:
 定理 op_closure
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: (closure s).op = closure (MulOpposite.unop ⁻¹' s)
   证明: by
   simp_rw [closure, op_sInf, Set.preimage_ofPred_eq, coe_unop]
@@ -795,7 +795,7 @@ theorem unop_closure
 
 中文:
 定理 unop_closure
-  条件: (s : Set Rᵐᵒᵖ)
+  条件: (s : 集合 Rᵐᵒᵖ)
   结论: (closure s).unop = closure (MulOpposite.op ⁻¹' s)
   证明: by
   rw [← op_inj]; rw [op_unop]; rw [op_closure]
@@ -819,7 +819,7 @@ definition addEquivOp
 
 中文:
 定义 addEquivOp
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S.toSubsemiring.addEquivOp
 
 Depends on / 依赖: S.toSubsemiring.addEquivOp, addEquivOp, toSubsemiring
@@ -838,7 +838,7 @@ definition ringEquivOpMop
 
 中文:
 定义 ringEquivOpMop
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S.toSubsemiring.ringEquivOpMop
 
 Depends on / 依赖: S.toSubsemiring.ringEquivOpMop, ringEquivOpMop, toSubsemiring
@@ -857,7 +857,7 @@ definition mopRingEquivOp
 
 中文:
 定义 mopRingEquivOp
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S.toSubsemiring.mopRingEquivOp
 
 Depends on / 依赖: S.toSubsemiring.mopRingEquivOp, mopRingEquivOp, toSubsemiring

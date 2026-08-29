@@ -45,7 +45,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R>=0 S where
+  签名: : 标量乘法 R>=0 S where
   定义体: c.val • x
 
 @[simp, norm_cast]
@@ -113,7 +113,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: : IsScalarTower R>=0 S M
+  签名: : 标量塔 R>=0 S M
   定义体: SMul.comp.isScalarTower ↑Nonneg.coeRingHom
 
 Depends on / 依赖: Nonneg, Nonneg.coeRingHom, SMul.comp.isScalarTower, coeRingHom, isScalarTower
@@ -138,7 +138,7 @@ instance instSMulWithZero
 
 中文:
 实例 instSMulWithZero
-  签名: : SMulWithZero R>=0 S where
+  签名: : 带零标量乘法 R>=0 S where
   定义体: smul_zero _
   zero_smul _ := zero_smul _ _
 
@@ -166,7 +166,7 @@ instance instIsOrderedModule
 
 中文:
 实例 instIsOrderedModule
-  签名: [hM : IsOrderedModule R M]
+  签名: [hM : 是Ordered模 R M]
   定义体: hM.smul_le_smul_of_nonneg_left hb ha
   smul_le_smul_of_nonneg_right _b hb _a₁ _a₂ ha := hM.smul_le_smul_of_nonneg_right hb ha
 
@@ -187,7 +187,7 @@ instance instIsStrictOrderedModule
 
 中文:
 实例 instIsStrictOrderedModule
-  签名: [hM : IsStrictOrderedModule R M]
+  签名: [hM : 是StrictOrdered模 R M]
   定义体: hM.smul_lt_smul_of_pos_left hb ha
   smul_lt_smul_of_pos_right _b hb _a₁ _a₂ ha := hM.smul_lt_smul_of_pos_right hb ha
 
@@ -215,7 +215,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module R>=0 M where
+  签名: : 模 R>=0 M where
   定义体: instSMul.smul
   __ := Module.compHom M coeRingHom
 

@@ -81,7 +81,7 @@ lemma objEquiv_apply_fst'
 
 中文:
 引理 objEquiv_apply_fst'
-  条件: (hd : x.dim = d) (i : Fin (d + 1))
+  条件: (hd : x.dim = d) (i : 有限集 (d + 1))
   证明: rfl
 
 #adaptation_note
@@ -103,7 +103,7 @@ lemma objEquiv_apply_snd'
 
 中文:
 引理 objEquiv_apply_snd'
-  条件: (hd : x.dim = d) (i : Fin (d + 1))
+  条件: (hd : x.dim = d) (i : 有限集 (d + 1))
   证明: rfl
 -/
 lemma objEquiv_apply_snd' (hd : x.dim = d) (i : Fin (d + 1)) :
@@ -130,7 +130,7 @@ definition IsIndex
 
 中文:
 定义 IsIndex
-  签名: : Fin (d + 1) -> 命题
+  签名: : 有限集 (d + 1) -> 命题
   定义体: Fin.cases False (fun l =>
     (x.cast hd).simplex.1 l.castSucc = k.castSucc ∧
     (x.cast hd).simplex.1 l.succ = k.succ ∧
@@ -157,7 +157,7 @@ lemma isIndex_zero
 
 中文:
 引理 isIndex_zero
-  结论: IsIndex x hd 0 ↔ False
+  结论: IsIndex x hd 0 ↔ 假
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -174,7 +174,7 @@ lemma isIndex_succ
 
 中文:
 引理 isIndex_succ
-  条件: (l : Fin d)
+  条件: (l : 有限集 d)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -199,7 +199,7 @@ lemma mem_range_left
 
 中文:
 引理 mem_range_left
-  条件: (i : Fin (m + 2)) (hi : i != k.castSucc)
+  条件: (i : 有限集 (m + 2)) (hi : i != k.castSucc)
   证明: by
   subst hd
   have := x.notMem
@@ -229,7 +229,7 @@ lemma mem_range_right
 
 中文:
 引理 mem_range_right
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: by
   subst hd
   have := x.notMem
@@ -257,7 +257,7 @@ definition finset
 
 中文:
 定义 finset
-  签名: : Finset (Fin (d + 1))
+  签名: : 有限集 (有限集 (d + 1))
   定义体: { l : Fin (d + 1) | (x.cast hd).simplex.1 l = k.succ }
 
 @[simp]
@@ -279,7 +279,7 @@ lemma mem_finset_iff
 
 中文:
 引理 mem_finset_iff
-  条件: (l : Fin (d + 1))
+  条件: (l : 有限集 (d + 1))
   证明: by
   simp [finset]
 
@@ -301,7 +301,7 @@ lemma nonempty_finset
 
 中文:
 引理 nonempty_finset
-  结论: (finset x hd).Nonempty
+  结论: (finset x hd).非空
   证明: by
   obtain ⟨i, hi⟩ := mem_range_left x hd k.succ (by grind)
   exact ⟨i, by simpa using hi⟩
@@ -321,8 +321,8 @@ definition min
   body: (finset x hd).min' (nonempty_finset x hd)
 
 中文:
-定义 min
-  签名: : Fin (d + 1)
+定义 最小值
+  签名: : 有限集 (d + 1)
   定义体: (finset x hd).min' (nonempty_finset x hd)
 
 Depends on / 依赖: finset, nonempty_finset
@@ -342,7 +342,7 @@ lemma simplex_fst_min
 
 中文:
 引理 simplex_fst_min
-  结论: dsimp% (x.cast hd).simplex.1 (min x hd) = k.succ
+  结论: dsimp% (x.cast hd).simplex.1 (最小值 x hd) = k.succ
   证明: by
   rw [← mem_finset_iff]
   apply Finset.min'_mem
@@ -374,7 +374,7 @@ lemma simplex_fst_le_castSucc_iff
 
 中文:
 引理 simplex_fst_le_castSucc_iff
-  条件: (i : Fin (d + 1))
+  条件: (i : 有限集 (d + 1))
   证明: by
   contrapose!
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -475,7 +475,7 @@ lemma succ_le_simplex_fst_iff
 
 中文:
 引理 succ_le_simplex_fst_iff
-  条件: (i : Fin (d + 1))
+  条件: (i : 有限集 (d + 1))
   证明: by
   refine ⟨fun hi => ?_, fun hi => ?_⟩
   · by_contra!
@@ -512,7 +512,7 @@ lemma simplex_fst_le_castSucc_iff
 
 中文:
 引理 simplex_fst_le_castSucc_iff
-  条件: (i : Fin (d + 1))
+  条件: (i : 有限集 (d + 1))
   证明: by
   rw [Fin.le_castSucc_iff]; rw [← not_le]; rw [hl.succ_le_simplex_fst_iff]; rw [not_le]
 
@@ -535,7 +535,7 @@ lemma min_eq
 
 中文:
 引理 min_eq
-  结论: min x hd = l.succ
+  结论: 最小值 x hd = l.succ
   证明: le_antisymm (Finset.min'_le _ _ (by simpa using hl.simplex_fst_succ))
     ((Finset.le_min'_iff _ _ ).2 (fun i hi => by
       rw [mem_finset_iff] at hi
@@ -561,7 +561,7 @@ lemma unique
 
 中文:
 引理 unique
-  条件: {l' : Fin d} (hl' : IsIndex x hd l'.succ)
+  条件: {l' : 有限集 d} (hl' : IsIndex x hd l'.succ)
   结论: l = l'
   证明: by
   rw [← Fin.succ_inj]; rw [← hl.min_eq]; rw [hl'.min_eq]
@@ -657,10 +657,10 @@ structure Type₁
 结构 Type₁
   参数: where
   公理与运算 (5 个):
-    - x : (Subcomplex.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).N
+    - x : (子复形.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).N
     - d : 自然数
     - hd : x.dim = d + 1
-    - index : Fin (d + 1)
+    - index : 有限集 (d + 1)
     - isIndex : IsIndex x hd index.succ
 -/
 structure Type₁ where
@@ -690,7 +690,7 @@ definition IsIndex.type₁
 
 中文:
 定义 IsIndex.type₁
-  签名: {hd : x.dim = d + 1} {i : Fin (d + 1)}
+  签名: {hd : x.dim = d + 1} {i : 有限集 (d + 1)}
   定义体: x
   d := d
   hd := hd
@@ -809,7 +809,7 @@ definition φ
 
 中文:
 定义 φ
-  签名: (i : Fin (d + 2))
+  签名: (i : 有限集 (d + 2))
   定义体: if i = (min x hd).castSucc
   then ⟨k.castSucc, (x.cast hd).simplex.2 (min x hd)⟩
   else objEquiv (x.cast hd).simplex ((min x hd).predAbove i)
@@ -857,7 +857,7 @@ lemma φ_succAbove
 
 中文:
 引理 φ_succAbove
-  条件: (i : Fin (d + 1))
+  条件: (i : 有限集 (d + 1))
   证明: by
   simp [φ]
 -/
@@ -876,7 +876,7 @@ lemma φ_of_ne
 
 中文:
 引理 φ_of_ne
-  条件: (i : Fin (d + 2)) (hi : i != (min x hd).castSucc)
+  条件: (i : 有限集 (d + 2)) (hi : i != (最小值 x hd).castSucc)
   证明: if_neg hi
 
 Depends on / 依赖: if_neg
@@ -896,7 +896,7 @@ lemma φ_of_lt
 
 中文:
 引理 φ_of_lt
-  条件: (i : Fin (d + 2)) (hi : i < (min x hd).castSucc)
+  条件: (i : 有限集 (d + 2)) (hi : i < (最小值 x hd).castSucc)
   证明: by
   rw [φ_of_ne _ _ _ hi.ne]; rw [Fin.predAbove_of_le_castSucc _ _ hi.le]
 
@@ -917,7 +917,7 @@ lemma φ_of_gt
 
 中文:
 引理 φ_of_gt
-  条件: (i : Fin (d + 2)) (hi : (min x hd).castSucc < i)
+  条件: (i : 有限集 (d + 2)) (hi : (最小值 x hd).castSucc < i)
   证明: by
   rw [φ_of_ne _ _ _ hi.ne']; rw [Fin.predAbove_of_castSucc_lt _ _ hi]
 
@@ -942,7 +942,7 @@ lemma φ_succ_snd
 
 中文:
 引理 φ_succ_snd
-  结论: (φ x hd (min x hd).succ).2 = (φ x hd (min x hd).castSucc).2
+  结论: (φ x hd (最小值 x hd).succ).2 = (φ x hd (最小值 x hd).castSucc).2
   证明: by
   have := φ_succAbove x hd (min x hd)
   simp_all [φ_castSucc]
@@ -965,7 +965,7 @@ lemma φ_succ_fst
 
 中文:
 引理 φ_succ_fst
-  结论: (φ x hd (min x hd).succ).1 = k.succ
+  结论: (φ x hd (最小值 x hd).succ).1 = k.succ
   证明: by
   have := φ_succAbove x hd (min x hd)
   simp_all [simplex_fst_min x hd]
@@ -997,7 +997,7 @@ lemma strictMono_φ
 
 中文:
 引理 strictMono_φ
-  结论: StrictMono (φ x hd)
+  结论: 严格递增 (φ x hd)
   证明: by
   have hx' := (prodStdSimplex.nonDegenerate_iff_strictMono_objEquiv _).1
     (x.cast hd).nonDegenerate
@@ -1078,7 +1078,7 @@ lemma simplex_fst_apply
 
 中文:
 引理 simplex_fst_apply
-  条件: (i : Fin (d + 2))
+  条件: (i : 有限集 (d + 2))
   证明: rfl
 
 @[simp]
@@ -1097,7 +1097,7 @@ lemma simplex_snd_apply
 
 中文:
 引理 simplex_snd_apply
-  条件: (i : Fin (d + 2))
+  条件: (i : 有限集 (d + 2))
   证明: rfl
 -/
 lemma simplex_snd_apply (i : Fin (d + 2)) :
@@ -1246,7 +1246,7 @@ lemma min_δ
 
 中文:
 引理 min_δ
-  结论: min (d := d) hl.δ rfl = l
+  结论: 最小值 (d := d) hl.δ rfl = l
   证明: by
   refine le_antisymm (Finset.min'_le _ _ ?_)
     (Finset.le_min' _ _ _ (fun y hy => ?_))
@@ -1331,7 +1331,7 @@ lemma eq_of_isType₂_δ
 
 中文:
 引理 eq_of_isType₂_δ
-  结论: {u : (Subcomplex.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).N}
+  结论: {u : (子复形.unionProd.{u} Λ[m + 1, k.castSucc] ∂Δ[n]).N}
   证明: by
   obtain rfl : u.dim = d := congr_arg S.dim hu'
   rw [S.ext_iff] at hu'
@@ -1509,7 +1509,7 @@ definition pairingCore
 
 中文:
 定义 pairingCore
-  签名: {m : 自然数} (k : Fin (m + 1)) (n : 自然数)
+  签名: {m : 自然数} (k : 有限集 (m + 1)) (n : 自然数)
   定义体: Type₁.{u} k n
   dim s := s.d
   simplex s := (s.x.cast s.hd).simplex
@@ -1571,7 +1571,7 @@ lemma type₁_pairingCore
 
 中文:
 引理 type₁_pairingCore
-  结论: {m : 自然数} (k : Fin (m + 1)) {n : 自然数}
+  结论: {m : 自然数} (k : 有限集 (m + 1)) {n : 自然数}
   证明: Subcomplex.N.cast_eq_self _ s.hd
 
 Depends on / 依赖: Subcomplex, Subcomplex.N.cast_eq_self, cast_eq_self, s.hd
@@ -1600,7 +1600,7 @@ definition weakRankFunction
 
 中文:
 定义 weakRankFunction
-  签名: {m : 自然数} (k : Fin (m + 1)) (n : 自然数)
+  签名: {m : 自然数} (k : 有限集 (m + 1)) (n : 自然数)
   定义体: (finset s.x rfl).card
   lt := by
     intro ⟨s, d, hds, is, hs⟩ ⟨t, d', hdt, it, ht⟩ ⟨h₁, h₂⟩ h₃
@@ -1698,7 +1698,7 @@ definition pairing
 
 中文:
 定义 pairing
-  签名: {m : 自然数} (k : Fin (m + 2)) (n : 自然数)
+  签名: {m : 自然数} (k : 有限集 (m + 2)) (n : 自然数)
   定义体: if hk : k = Fin.last (m + 1) then
     (pairingCore (0 : Fin (m + 1)) n).pairing.op.ofIso
       (((stdSimplex.opIso _).symm otimesᵢ (stdSimplex.opIso _).symm) ≪≫
@@ -1729,7 +1729,7 @@ lemma pairing_castSucc
 
 中文:
 引理 pairing_castSucc
-  条件: {m : 自然数} (k : Fin (m + 1)) (n : 自然数)
+  条件: {m : 自然数} (k : 有限集 (m + 1)) (n : 自然数)
   证明: dif_neg (by grind)
 
 Depends on / 依赖: dif_neg

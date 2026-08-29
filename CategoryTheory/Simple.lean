@@ -60,10 +60,10 @@ class Simple
     - mono_isIso_iff_nonzero : forall {Y : C} (f : Y ⟶ X) [Mono f], IsIso f ↔ f != 0
 
 中文:
-类 Simple
+类 单
   参数: (X : C)
   公理与运算 (1 个):
-    - mono_isIso_iff_nonzero : 对任意 {Y : C} (f : Y ⟶ X) [Mono f], IsIso f ↔ f != 0
+    - mono_isIso_iff_nonzero : 对任意 {Y : C} (f : Y ⟶ X) [单态射 f], 是同构 f ↔ f != 0
 -/
 class Simple (X : C) : Prop where
   mono_isIso_iff_nonzero : forall {Y : C} (f : Y ⟶ X) [Mono f], IsIso f ↔ f != 0
@@ -79,8 +79,8 @@ theorem isIso_of_mono_of_nonzero
 
 中文:
 定理 isIso_of_mono_of_nonzero
-  条件: {X Y : C} [Simple Y] {f : X ⟶ Y} [Mono f] (w : f != 0)
-  结论: IsIso f
+  条件: {X Y : C} [单 Y] {f : X ⟶ Y} [单态射 f] (w : f != 0)
+  结论: 是同构 f
   证明: (Simple.mono_isIso_iff_nonzero f).mpr w
 
 Depends on / 依赖: Simple, Simple.mono_isIso_iff_nonzero, mono_isIso_iff_nonzero
@@ -98,8 +98,8 @@ theorem Functor.simple_of_simple_obj
     rw [← isIso_iff_of_reflects_iso g F]; rw [Simple.mono_isIso_iff_nonzero (F.map g)]; rw [ne_eq]; rw [ne_eq]; rw [not_iff_not]; rw [F.map_eq_zero_iff]
 
 中文:
-定理 Functor.simple_of_simple_obj
-  结论: {D : 类型} [Category* D] [HasZeroMorphisms D] (F : C ⥤ D)
+定理 函子.simple_of_simple_obj
+  结论: {D : 类型} [范畴* D] [有ZeroMorphisms D] (F : C ⥤ D)
   证明: .mk fun {Y} g _ => by
     rw [← isIso_iff_of_reflects_iso g F]; rw [Simple.mono_isIso_iff_nonzero (F.map g)]; rw [ne_eq]; rw [ne_eq]; rw [not_iff_not]; rw [F.map_eq_zero_iff]
 
@@ -130,9 +130,9 @@ theorem Simple.of_iso
           apply isIso_of_mo
 
 中文:
-定理 Simple.of_iso
-  条件: {X Y : C} [Simple Y] (i : X ≅ Y)
-  结论: Simple X
+定理 单.of_iso
+  条件: {X Y : C} [单 Y] (i : X ≅ Y)
+  结论: 单 X
   证明: { mono_isIso_iff_nonzero := fun f m => by
       constructor
       · intro h w
@@ -173,9 +173,9 @@ theorem Simple.iff_of_iso
   proof: ⟨fun _ => Simple.of_iso i.symm, fun _ => Simple.of_iso i⟩
 
 中文:
-定理 Simple.iff_of_iso
+定理 单.iff_of_iso
   条件: {X Y : C} (i : X ≅ Y)
-  结论: Simple X ↔ Simple Y
+  结论: 单 X ↔ 单 Y
   证明: ⟨fun _ => Simple.of_iso i.symm, fun _ => Simple.of_iso i⟩
 
 Depends on / 依赖: Simple, Simple.of_iso, i.symm, of_iso
@@ -198,7 +198,7 @@ have := Simple.of_iso Functor.preimageIso _ this
 
 中文:
 定理 simple_obj
-  结论: {D : 类型} [Category* D] [HasZeroMorphisms D] (F : C ⥤ D)
+  结论: {D : 类型} [范畴* D] [有ZeroMorphisms D] (F : C ⥤ D)
   证明: by
   rw [← F.asEquivalence_functor]
   have := F.asEquivalence.counitIso.app (F.asEquivalence.functor.obj X)
@@ -226,7 +226,7 @@ theorem simple_obj_iff
 
 中文:
 定理 simple_obj_iff
-  结论: {D : 类型} [Category* D] [HasZeroMorphisms D] (F : C ⥤ D)
+  结论: {D : 类型} [范畴* D] [有ZeroMorphisms D] (F : C ⥤ D)
   证明: ⟨fun _ => Functor.simple_of_simple_obj F X, fun _ => simple_obj F X⟩
 
 Depends on / 依赖: Functor, Functor.simple_of_simple_obj, simple_obj, simple_of_simple_obj
@@ -249,7 +249,7 @@ theorem kernel_zero_of_nonzero_from_simple
 
 中文:
 定理 kernel_zero_of_nonzero_from_simple
-  结论: {X Y : C} [Simple X] {f : X ⟶ Y} [HasKernel f]
+  结论: {X Y : C} [单 X] {f : X ⟶ Y} [HasKernel f]
   证明: by
   by_contra h
   have := isIso_of_mono_of_nonzero h
@@ -277,7 +277,7 @@ theorem epi_of_nonzero_to_simple
 
 中文:
 定理 epi_of_nonzero_to_simple
-  结论: [HasEqualizers C] {X Y : C} [Simple Y] {f : X ⟶ Y} [HasImage f]
+  结论: [HasEqualizers C] {X Y : C} [单 Y] {f : X ⟶ Y} [有像 f]
   证明: by
   rw [← image.fac f]
   have : IsIso (image.ι f) := isIso_of_mono_of_nonzero fun h => w (eq_zero_of_image_eq_zero h)
@@ -303,7 +303,7 @@ theorem mono_to_simple_zero_of_not_iso
 
 中文:
 定理 mono_to_simple_zero_of_not_iso
-  结论: {X Y : C} [Simple Y] {f : X ⟶ Y} [Mono f]
+  结论: {X Y : C} [单 Y] {f : X ⟶ Y} [单态射 f]
   证明: by
   by_contra h
   exact w (isIso_of_mono_of_nonzero h)
@@ -326,7 +326,7 @@ theorem id_nonzero
 
 中文:
 定理 id_nonzero
-  条件: (X : C) [Simple.{v} X]
+  条件: (X : C) [单.{v} X]
   结论: 𝟙 X != 0
   证明: (Simple.mono_isIso_iff_nonzero (𝟙 X)).mp (by infer_instance)
 
@@ -351,9 +351,9 @@ theorem Simple.not_isZero
   simpa [Limits.IsZero.iff_id_eq_zero] using id_nonzero X
 
 中文:
-定理 Simple.not_isZero
-  条件: (X : C) [Simple X]
-  结论: ¬IsZero X
+定理 单.not_isZero
+  条件: (X : C) [单 X]
+  结论: ¬是零 X
   证明: by
   simpa [Limits.IsZero.iff_id_eq_zero] using id_nonzero X
 
@@ -379,8 +379,8 @@ theorem zero_not_simple
 
 中文:
 定理 zero_not_simple
-  条件: [Simple (0 : C)]
-  结论: False
+  条件: [单 (0 : C)]
+  结论: 假
   证明: (Simple.mono_isIso_iff_nonzero (0 : (0 : C) ⟶ (0 : C))).mp ⟨⟨0, by simp⟩⟩ rfl
 
 Depends on / 依赖: Simple, Simple.mono_isIso_iff_nonzero, mono_isIso_iff_nonzero
@@ -418,7 +418,7 @@ theorem simple_of_cosimple
 
 中文:
 定理 simple_of_cosimple
-  条件: (X : C) (h : 对任意 {Z : C} (f : X ⟶ Z) [Epi f], IsIso f ↔ f != 0)
+  条件: (X : C) (h : 对任意 {Z : C} (f : X ⟶ Z) [满态射 f], 是同构 f ↔ f != 0)
   证明: ⟨fun {Y} f I => by
     fconstructor
     · intros
@@ -463,8 +463,8 @@ theorem isIso_of_epi_of_nonzero
 
 中文:
 定理 isIso_of_epi_of_nonzero
-  条件: {X Y : C} [Simple X] {f : X ⟶ Y} [Epi f] (w : f != 0)
-  结论: IsIso f
+  条件: {X Y : C} [单 X] {f : X ⟶ Y} [满态射 f] (w : f != 0)
+  结论: 是同构 f
   证明: -- `f ≠ 0` means that `kernel.ι f` is not an iso, and hence zero, and hence `f` is a mono.
   haveI : Mono f :=
     Preadditive.mono_of_kernel_zero (mono_to_simple_zero_of_not_iso (kernel_not_iso_of_nonzero w))
@@ -489,7 +489,7 @@ theorem cokernel_zero_of_nonzero_to_simple
 
 中文:
 定理 cokernel_zero_of_nonzero_to_simple
-  条件: {X Y : C} [Simple Y] {f : X ⟶ Y} (w : f != 0)
+  条件: {X Y : C} [单 Y] {f : X ⟶ Y} (w : f != 0)
   证明: by
   by_contra h
   have := isIso_of_epi_of_nonzero h
@@ -515,7 +515,7 @@ theorem epi_from_simple_zero_of_not_iso
 
 中文:
 定理 epi_from_simple_zero_of_not_iso
-  结论: {X Y : C} [Simple X] {f : X ⟶ Y} [Epi f]
+  结论: {X Y : C} [单 X] {f : X ⟶ Y} [满态射 f]
   证明: by
   by_contra h
   exact w (isIso_of_epi_of_nonzero h)
@@ -554,7 +554,7 @@ theorem Biprod.isIso_inl_iff_isZero
 中文:
 定理 Biprod.isIso_inl_iff_isZero
   条件: (X Y : C)
-  结论: IsIso (biprod.inl : X ⟶ X ⊞ Y) ↔ IsZero Y
+  结论: 是同构 (biprod.inl : X ⟶ X ⊞ Y) ↔ 是零 Y
   证明: by
   rw [biprod.isIso_inl_iff_id_eq_fst_comp_inl]; rw [← biprod.total]; rw [add_eq_left]
   constructor
@@ -593,7 +593,7 @@ theorem indecomposable_of_simple
 
 中文:
 定理 indecomposable_of_simple
-  条件: (X : C) [Simple X]
+  条件: (X : C) [单 X]
   结论: Indecomposable X
   证明: ⟨Simple.not_isZero X, fun Y Z i => by
     refine or_iff_not_imp_left.mpr fun h => ?_
@@ -654,8 +654,8 @@ theorem simple_of_isSimpleOrder_subobject
 
 中文:
 定理 simple_of_isSimpleOrder_subobject
-  条件: (X : C) [IsSimpleOrder (Subobject X)]
-  结论: Simple X
+  条件: (X : C) [是单序 (Subobject X)]
+  结论: 单 X
   证明: by
   constructor; intro Y f hf; constructor
   · intro i
@@ -698,7 +698,7 @@ theorem simple_iff_subobject_isSimpleOrder
 中文:
 定理 simple_iff_subobject_isSimpleOrder
   条件: (X : C)
-  结论: Simple X ↔ IsSimpleOrder (Subobject X)
+  结论: 单 X ↔ 是单序 (Subobject X)
   证明: ⟨by
     intro h
     infer_instance, by
@@ -727,7 +727,7 @@ theorem subobject_simple_iff_isAtom
 中文:
 定理 subobject_simple_iff_isAtom
   条件: {X : C} (Y : Subobject X)
-  结论: Simple (Y : C) ↔ IsAtom Y
+  结论: 单 (Y : C) ↔ IsAtom Y
   证明: (simple_iff_subobject_isSimpleOrder _).trans
     ((OrderIso.isSimpleOrder_iff (subobjectOrderIso Y)).trans Set.isSimpleOrder_Iic_iff_isAtom)
 

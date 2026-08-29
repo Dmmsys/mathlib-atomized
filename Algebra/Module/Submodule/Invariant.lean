@@ -46,7 +46,7 @@ le_trans hq Submodule.comap_mono le_sup_right⟩
 
 中文:
 定义 invtSubmodule
-  签名: : Sublattice (Submodule R M) where
+  签名: : 子格 (子模 R M) where
   定义体: {p : Submodule R M | p <= p.comap f}
   supClosed' p hp q hq := sup_le_iff.mpr
 ⟨le_trans hp Submodule.comap_mono le_sup_left,
@@ -76,7 +76,7 @@ lemma mem_invtSubmodule
 
 中文:
 引理 mem_invtSubmodule
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -95,7 +95,7 @@ theorem mem_invtSubmodule_iff_map_le
 
 中文:
 定理 mem_invtSubmodule_iff_map_le
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   证明: Submodule.map_le_iff_le_comap.symm
 
 Depends on / 依赖: Submodule, Submodule.map_le_iff_le_comap.symm, map_le_iff_le_comap
@@ -115,7 +115,7 @@ alias ⟨_, _root_.Set.Mapsto.mem_invtSubmodule⟩ := mem_invtSubmodule_iff_maps
 
 中文:
 定理 mem_invtSubmodule_iff_mapsTo
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   证明: Iff.rfl
 
 alias ⟨_, _root_.Set.Mapsto.mem_invtSubmodule⟩ := mem_invtSubmodule_iff_mapsTo
@@ -136,8 +136,8 @@ theorem mem_invtSubmodule_iff_forall_mem_of_mem
   proof: Iff.rfl
 
 中文:
-定理 mem_invtSubmodule_iff_forall_mem_of_mem
-  条件: {p : Submodule R M}
+定理 mem_invtSubmodule_iff_对任意_mem_of_mem
+  条件: {p : 子模 R M}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -156,7 +156,7 @@ lemma mem_invtSubmodule_symm_iff_le_map
 
 中文:
 引理 mem_invtSubmodule_symm_iff_le_map
-  条件: {f : M ≃ₗ[R] M} {p : Submodule R M}
+  条件: {f : M ≃ₗ[R] M} {p : 子模 R M}
   证明: (mem_invtSubmodule_iff_map_le _).trans (f.toEquiv.symm.subset_symm_image _ _).symm
 
 Depends on / 依赖: f.toEquiv.symm.subset_symm_image, mem_invtSubmodule_iff_map_le, subset_symm_image, toEquiv
@@ -256,7 +256,7 @@ lemma inf_mem
 
 中文:
 引理 inf_mem
-  条件: {p q : Submodule R M} (hp : p in f.invtSubmodule) (hq : q in f.invtSubmodule)
+  条件: {p q : 子模 R M} (hp : p in f.invtSubmodule) (hq : q in f.invtSubmodule)
   证明: Sublattice.inf_mem hp hq
 
 Depends on / 依赖: Sublattice, Sublattice.inf_mem, inf_mem
@@ -275,7 +275,7 @@ lemma sup_mem
 
 中文:
 引理 sup_mem
-  条件: {p q : Submodule R M} (hp : p in f.invtSubmodule) (hq : q in f.invtSubmodule)
+  条件: {p q : 子模 R M} (hp : p in f.invtSubmodule) (hq : q in f.invtSubmodule)
   证明: Sublattice.sup_mem hp hq
 
 Depends on / 依赖: Sublattice, Sublattice.sup_mem, sup_mem
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (f.invtSubmodule)
+  签名: 有界序 (f.invtSubmodule)
   定义体: ⟨⊤, invtSubmodule.top_mem f⟩
   bot := ⟨⊥, invtSubmodule.bot_mem f⟩
   le_top := fun ⟨p, hp⟩ => by simp
@@ -418,7 +418,7 @@ lemma mk_eq_bot_iff
 
 中文:
 引理 mk_eq_bot_iff
-  条件: {p : Submodule R M} (hp : p in f.invtSubmodule)
+  条件: {p : 子模 R M} (hp : p in f.invtSubmodule)
   证明: Subtype.mk_eq_bot_iff (by simp [invtSubmodule]) _
 -/
 protected lemma mk_eq_bot_iff {p : Submodule R M} (hp : p in f.invtSubmodule) :
@@ -438,7 +438,7 @@ lemma mk_eq_top_iff
 
 中文:
 引理 mk_eq_top_iff
-  条件: {p : Submodule R M} (hp : p in f.invtSubmodule)
+  条件: {p : 子模 R M} (hp : p in f.invtSubmodule)
   证明: Subtype.mk_eq_top_iff (by simp [invtSubmodule]) _
 
 @[simp]
@@ -459,7 +459,7 @@ lemma disjoint_mk_iff
 
 中文:
 引理 disjoint_mk_iff
-  结论: {p q : Submodule R M}
+  结论: {p q : 子模 R M}
   证明: by
   rw [disjoint_iff]; rw [disjoint_iff]; rw [Sublattice.mk_inf_mk]; rw [Subtype.mk_eq_bot_iff (⊥ : f.invtSubmodule).property]
 -/
@@ -509,7 +509,7 @@ lemma codisjoint_mk_iff
 
 中文:
 引理 codisjoint_mk_iff
-  结论: {p q : Submodule R M}
+  结论: {p q : 子模 R M}
   证明: by
   rw [codisjoint_iff]; rw [codisjoint_iff]; rw [Sublattice.mk_sup_mk]; rw [Subtype.mk_eq_top_iff (⊤ : f.invtSubmodule).property]
 -/
@@ -559,7 +559,7 @@ lemma isCompl_mk_iff
 
 中文:
 引理 isCompl_mk_iff
-  结论: {p q : Submodule R M}
+  结论: {p q : 子模 R M}
   证明: by
   simp [isCompl_iff]
 -/
@@ -608,7 +608,7 @@ lemma map_subtype_mem_of_mem_invtSubmodule
 
 中文:
 引理 map_subtype_mem_of_mem_invtSubmodule
-  结论: {p : Submodule R M} (hp : p in f.invtSubmodule)
+  结论: {p : 子模 R M} (hp : p in f.invtSubmodule)
   证明: by
   rintro - ⟨⟨x, hx⟩, hx', rfl⟩
   specialize hq hx'
@@ -635,7 +635,7 @@ lemma comp
 
 中文:
 引理 comp
-  结论: {p : Submodule R M} {g : End R M}
+  结论: {p : 子模 R M} {g : End R M}
   证明: fun _ hx => hf (hg hx)
 -/
 protected lemma comp {p : Submodule R M} {g : End R M}
@@ -654,8 +654,8 @@ lemma _root_.LinearEquiv.map_mem_invtSubmodule_conj_iff
   rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_co
 
 中文:
-引理 _root_.LinearEquiv.map_mem_invtSubmodule_conj_iff
-  结论: {R M N : 类型} [CommSemiring R]
+引理 _root_.线性等价.map_mem_invtSubmodule_conj_iff
+  结论: {R M N : 类型} [交换半环 R]
   证明: by
   have : e.symm.toLinearMap ∘ₗ ((e ∘ₗ f) ∘ₗ e.symm.toLinearMap) ∘ₗ e = f := by ext; simp
   rw [LinearEquiv.conj_apply]; rw [mem_invtSubmodule]; rw [mem_invtSubmodule]; rw [Submodule.map_le_iff_le_comap]; rw [Submodule.map_equiv_eq_comap_symm]; rw [← Submodule.comap_comp]; rw [← Submodule.comap_co
@@ -677,8 +677,8 @@ lemma _root_.LinearEquiv.map_mem_invtSubmodule_iff
   simp [← e.map_mem_invtSubmodule_conj_iff]
 
 中文:
-引理 _root_.LinearEquiv.map_mem_invtSubmodule_iff
-  结论: {R M N : 类型} [CommSemiring R]
+引理 _root_.线性等价.map_mem_invtSubmodule_iff
+  结论: {R M N : 类型} [交换半环 R]
   证明: by
   simp [← e.map_mem_invtSubmodule_conj_iff]
 

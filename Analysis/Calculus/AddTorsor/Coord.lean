@@ -30,8 +30,8 @@ theorem smooth_barycentric_coord
 
 中文:
 定理 smooth_barycentric_coord
-  条件: (b : AffineBasis ι 𝕜 E) (i : ι)
-  结论: ContDiff 𝕜 ⊤ (b.coord i)
+  条件: (b : 仿射基 ι 𝕜 E) (i : ι)
+  结论: 连续可微 𝕜 ⊤ (b.coord i)
   证明: (⟨b.coord i, continuous_barycentric_coord b i⟩ : E ->ᴬ[𝕜] 𝕜).contDiff
 
 Depends on / 依赖: b.coord, contDiff, continuous_barycentric_coord

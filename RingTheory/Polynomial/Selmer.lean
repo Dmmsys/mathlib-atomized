@@ -47,7 +47,7 @@ theorem X_pow_sub_X_sub_one_irreducible_aux
 
 中文:
 定理 X_pow_sub_X_sub_one_irreducible_aux
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ¬(z ^ n = z + 1 ∧ z ^ n + z ^ 2 = 0)
   证明: by
   rintro ⟨h1, h2⟩
@@ -92,7 +92,7 @@ theorem X_pow_sub_X_sub_one_irreducible
 中文:
 定理 X_pow_sub_X_sub_one_irreducible
   条件: (hn1 : n != 1)
-  结论: Irreducible (X ^ n - X - 1 : 整数[X])
+  结论: 不可约 (X ^ n - X - 1 : 整数[X])
   证明: by
   by_cases hn0 : n = 0
   · rw [hn0, pow_zero, sub_sub, add_comm, ← sub_sub, sub_self, zero_sub]
@@ -140,7 +140,7 @@ theorem X_pow_sub_X_sub_one_irreducible_rat
 中文:
 定理 X_pow_sub_X_sub_one_irreducible_rat
   条件: (hn1 : n != 1)
-  结论: Irreducible (X ^ n - X - 1 : Rat[X])
+  结论: 不可约 (X ^ n - X - 1 : 有理数[X])
   证明: by
   by_cases hn0 : n = 0
   · rw [hn0, pow_zero, sub_sub, add_comm, ← sub_sub, sub_self, zero_sub]

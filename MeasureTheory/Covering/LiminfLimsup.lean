@@ -53,7 +53,7 @@ theorem blimsup_cthickening_ae_le_of_eventually_mul_le_aux
 
 中文:
 定理 blimsup_cthickening_ae_le_of_eventually_mul_le_aux
-  结论: (p : 自然数 -> 命题) {s : 自然数 -> Set α}
+  结论: (p : 自然数 -> 命题) {s : 自然数 -> 集合 α}
   证明: by
   /- Sketch of proof:
 
@@ -190,7 +190,7 @@ theorem blimsup_cthickening_ae_le_of_eventually_mul_le
 
 中文:
 定理 blimsup_cthickening_ae_le_of_eventually_mul_le
-  结论: (p : 自然数 -> 命题) {s : 自然数 -> Set α} {M : 实数}
+  结论: (p : 自然数 -> 命题) {s : 自然数 -> 集合 α} {M : 实数}
   证明: by
   let R₁ i := max 0 (r₁ i)
   let R₂ i := max 0 (r₂ i)
@@ -240,7 +240,7 @@ theorem blimsup_cthickening_mul_ae_eq
 
 中文:
 定理 blimsup_cthickening_mul_ae_eq
-  结论: (p : 自然数 -> 命题) (s : 自然数 -> Set α) {M : 实数} (hM : 0 < M)
+  结论: (p : 自然数 -> 命题) (s : 自然数 -> 集合 α) {M : 实数} (hM : 0 < M)
   证明: by
   have : forall (p : Nat -> Prop) {r : Nat -> Real} (_ : Tendsto r atTop (𝓝[>] 0)),
       (blimsup (fun i => cthickening (M * r i) (s i)) atTop p : Set α) =ᵐ[μ]
@@ -303,7 +303,7 @@ theorem blimsup_cthickening_ae_eq_blimsup_thickening
 
 中文:
 定理 blimsup_cthickening_ae_eq_blimsup_thickening
-  结论: {p : 自然数 -> 命题} {s : 自然数 -> Set α} {r : 自然数 -> 实数}
+  结论: {p : 自然数 -> 命题} {s : 自然数 -> 集合 α} {r : 自然数 -> 实数}
   证明: by
   refine eventuallyLE_antisymm_iff.mpr ⟨?_, LE.le.eventuallyLE ?_⟩
   · rw [eventuallyLE_congr (blimsup_cthickening_mul_ae_eq μ p s (one_half_pos (α := Real)) r hr).symm
@@ -339,7 +339,7 @@ theorem blimsup_thickening_mul_ae_eq_aux
 
 中文:
 定理 blimsup_thickening_mul_ae_eq_aux
-  结论: (p : 自然数 -> 命题) (s : 自然数 -> Set α) {M : 实数} (hM : 0 < M)
+  结论: (p : 自然数 -> 命题) (s : 自然数 -> 集合 α) {M : 实数} (hM : 0 < M)
   证明: by
   have h₁ := blimsup_cthickening_ae_eq_blimsup_thickening (s := s) μ hr hr'
   have h₂ := blimsup_cthickening_mul_ae_eq μ p s hM r hr
@@ -374,7 +374,7 @@ blimsup_congr' Eventually.of_forall fun i hi => by simp [q, hu i hi]
 
 中文:
 定理 blimsup_thickening_mul_ae_eq
-  结论: (p : 自然数 -> 命题) (s : 自然数 -> Set α) {M : 实数} (hM : 0 < M) (r : 自然数 -> 实数)
+  结论: (p : 自然数 -> 命题) (s : 自然数 -> 集合 α) {M : 实数} (hM : 0 < M) (r : 自然数 -> 实数)
   证明: by
   let q : Nat -> Prop := fun i => p i ∧ 0 < r i
   have hq {u : Nat -> Set α} (hu : forall i, u i != ∅ -> 0 < r i) :

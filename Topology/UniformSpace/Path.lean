@@ -40,7 +40,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (Path x y)
+  签名: : 一致空间 (道路 x y)
   定义体: .comap ((↑) : _ -> C(I, X)) ContinuousMap.compactConvergenceUniformSpace
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.compactConvergenceUniformSpace, compactConvergenceUniformSpace
@@ -59,7 +59,7 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  结论: IsUniformEmbedding ((↑) : Path x y -> C(I, X)) where
+  结论: 是一致嵌入 ((↑) : 道路 x y -> C(I, X)) where
   证明: rfl
   injective := ContinuousMap.coe_injective'
 -/
@@ -78,8 +78,8 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  条件: (γ : Path x y)
-  结论: UniformContinuous γ
+  条件: (γ : 道路 x y)
+  结论: 一致连续 γ
   证明: CompactSpace.uniformContinuous_of_continuous map_continuous _
 
 Depends on / 依赖: CompactSpace, CompactSpace.uniformContinuous_of_continuous, map_continuous, uniformContinuous_of_continuous
@@ -98,8 +98,8 @@ theorem uniformContinuous_extend
 
 中文:
 定理 uniformContinuous_extend
-  条件: (γ : Path x y)
-  结论: UniformContinuous γ.extend
+  条件: (γ : 道路 x y)
+  结论: 一致连续 γ.extend
   证明: γ.uniformContinuous.comp .uniformContinuous LipschitzWith.projIcc _
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.projIcc, projIcc, uniformContinuous, uniformContinuous.comp
@@ -117,7 +117,7 @@ theorem uniformContinuous_extend_left
 
 中文:
 定理 uniformContinuous_extend_left
-  结论: UniformContinuous (Path.extend : Path x y -> C(实数, X))
+  结论: 一致连续 (道路.extend : 道路 x y -> C(实数, X))
   证明: ContinuousMap.projIccCM.uniformContinuous_comp_left.comp isUniformEmbedding_coe.uniformContinuous
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.projIccCM.uniformContinuous_comp_left.comp, isUniformEmbedding_coe, isUniformEmbedding_coe.uniformContinuous, projIccCM, uniformContinuous, uniformContinuous_comp_left
@@ -134,8 +134,8 @@ theorem _root_.Filter.HasBasis.uniformityPath
   proof: hU.compactConvergenceUniformity_of_compact.comap _
 
 中文:
-定理 _root_.Filter.HasBasis.uniformityPath
-  结论: {ι : Sort*} {p : ι -> 命题} {U : ι -> Set (X × X)}
+定理 _root_.滤子.有基.uniformityPath
+  结论: {ι : 类型层*} {p : ι -> 命题} {U : ι -> 集合 (X × X)}
   证明: hU.compactConvergenceUniformity_of_compact.comap _
 
 Depends on / 依赖: compactConvergenceUniformity_of_compact, hU.compactConvergenceUniformity_of_compact.comap
@@ -173,7 +173,7 @@ theorem uniformContinuous_symm
 
 中文:
 定理 uniformContinuous_symm
-  结论: UniformContinuous (Path.symm : Path x y -> Path y x)
+  结论: 一致连续 (道路.symm : 道路 x y -> 道路 y x)
   证明: .mpr fun U hU => hasBasis_uniformity.uniformContinuous_iff hasBasis_uniformity
     ⟨U, hU, fun _ _ h x => h (σ x)⟩
 
@@ -220,7 +220,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace X]
+  签名: [完备空间 X]
   定义体: isUniformEmbedding_coe.completeSpace by simpa [Set.EqOn, range_coe]
     using ContinuousMap.isComplete_setOfPred_eqOn (Function.update (fun _ : I => y) 0 x) {0, 1}
 

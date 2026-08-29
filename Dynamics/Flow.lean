@@ -50,8 +50,8 @@ definition IsInvariant
   body: forall t, MapsTo (ϕ t) s s
 
 中文:
-定义 IsInvariant
-  签名: (ϕ : τ -> α -> α) (s : Set α)
+定义 是不变
+  签名: (ϕ : τ -> α -> α) (s : 集合 α)
   定义体: forall t, MapsTo (ϕ t) s s
 
 Depends on / 依赖: MapsTo
@@ -72,7 +72,7 @@ theorem isInvariant_iff_image
 
 中文:
 定理 isInvariant_iff_image
-  结论: IsInvariant ϕ s ↔ 对任意 t, ϕ t '' s subseteq s
+  结论: 是不变 ϕ s ↔ 对任意 t, ϕ t '' s subseteq s
   证明: by
   simp_rw [IsInvariant, mapsTo_iff_image_subset]
 
@@ -91,7 +91,7 @@ definition IsForwardInvariant
 
 中文:
 定义 IsForwardInvariant
-  签名: [Preorder τ] [Zero τ] (ϕ : τ -> α -> α) (s : Set α)
+  签名: [预序 τ] [零 τ] (ϕ : τ -> α -> α) (s : 集合 α)
   定义体: forall ⦃t⦄, 0 <= t -> MapsTo (ϕ t) s s
 
 Depends on / 依赖: MapsTo
@@ -108,8 +108,8 @@ theorem IsInvariant.isForwardInvariant
   proof: fun t _ht => h t
 
 中文:
-定理 IsInvariant.isForwardInvariant
-  结论: [Preorder τ] [Zero τ] {ϕ : τ -> α -> α} {s : Set α}
+定理 是不变.isForwardInvariant
+  结论: [预序 τ] [零 τ] {ϕ : τ -> α -> α} {s : 集合 α}
   证明: fun t _ht => h t
 -/
 theorem IsInvariant.isForwardInvariant [Preorder τ] [Zero τ] {ϕ : τ -> α -> α} {s : Set α}
@@ -125,7 +125,7 @@ theorem IsForwardInvariant.isInvariant
 
 中文:
 定理 IsForwardInvariant.isInvariant
-  结论: [AddMonoid τ] [PartialOrder τ] [CanonicallyOrderedAdd τ]
+  结论: [加法幺半群 τ] [偏序 τ] [典范有序加法 τ]
   证明: fun _ => h zero_le
 
 Depends on / 依赖: zero_le
@@ -144,7 +144,7 @@ theorem isForwardInvariant_iff_isInvariant
 
 中文:
 定理 isForwardInvariant_iff_isInvariant
-  结论: [AddMonoid τ] [PartialOrder τ] [CanonicallyOrderedAdd τ]
+  结论: [加法幺半群 τ] [偏序 τ] [典范有序加法 τ]
   证明: ⟨IsForwardInvariant.isInvariant, IsInvariant.isForwardInvariant⟩
 
 Depends on / 依赖: IsForwardInvariant, IsForwardInvariant.isInvariant, IsInvariant, IsInvariant.isForwardInvariant, isForwardInvariant, isInvariant
@@ -174,11 +174,11 @@ structure Flow
     - map_zero' : forall x, toFun 0 x = x
 
 中文:
-结构 Flow
-  参数: [TopologicalSpace τ] [TopologicalSpace α] [AddZero τ]
+结构 流
+  参数: [拓扑空间 τ] [拓扑空间 α] [加法零 τ]
   公理与运算 (4 个):
     - toFun : τ -> α -> α
-    - cont' : Continuous (uncurry toFun)
+    - cont' : 连续 (uncurry toFun)
     - map_add' : 对任意 t₁ t₂ x, toFun (t₁ + t₂) x = toFun t₁ (toFun t₂ x)
     - map_zero' : 对任意 x, toFun 0 x = x
 -/
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Flow τ α) fun _ => τ -> α -> α
+  签名: CoeFun (流 τ α) fun _ => τ -> α -> α
   定义体: ⟨Flow.toFun⟩
 
 Depends on / 依赖: Flow.toFun
@@ -230,7 +230,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Flow τ α where
+  签名: : 流 τ α where
   定义体: id
   cont' := continuous_snd
   map_add' _ _ _ := rfl
@@ -259,7 +259,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (t : τ)
-  结论: Flow.id τ α t = id
+  结论: 流.id τ α t = id
   证明: rfl
 -/
 theorem id_apply (t : τ) : Flow.id τ α t = id := rfl
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Flow τ α)
+  签名: 可居 (流 τ α)
   定义体: ⟨Flow.id τ α⟩
 
 @[ext]
@@ -296,7 +296,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: 对任意 {ϕ₁ ϕ₂ : Flow τ α}, (对任意 t x, ϕ₁ t x = ϕ₂ t x) -> ϕ₁ = ϕ₂
+  结论: 对任意 {ϕ₁ ϕ₂ : 流 τ α}, (对任意 t x, ϕ₁ t x = ϕ₂ t x) -> ϕ₁ = ϕ₂
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, mulAction
 -/
@@ -321,7 +321,7 @@ alias _root_.Continuous.flow := Flow.continuous
 
 中文:
 定理 continuous
-  结论: {β : 类型} [TopologicalSpace β] {t : β -> τ} (ht : Continuous t)
+  结论: {β : 类型} [拓扑空间 β] {t : β -> τ} (ht : 连续 t)
   证明: ϕ.cont'.comp (ht.prodMk hf)
 
 alias _root_.Continuous.flow := Flow.continuous
@@ -348,7 +348,7 @@ theorem continuous_toFun
 中文:
 定理 continuous_toFun
   条件: (t : τ)
-  结论: Continuous (ϕ.toFun t)
+  结论: 连续 (ϕ.toFun t)
   证明: by
   fun_prop
 
@@ -432,7 +432,7 @@ definition fromIter
 
 中文:
 定义 fromIter
-  签名: {g : α -> α} (h : Continuous g)
+  签名: {g : α -> α} (h : 连续 g)
   定义体: g^[n]
   cont' := continuous_prod_of_discrete_left.mpr h.iterate
   map_add' := iterate_add_apply _
@@ -457,7 +457,7 @@ theorem fromIter_apply
 
 中文:
 定理 fromIter_apply
-  条件: {g : α -> α} (h : Continuous g) (n : 自然数) (x : α)
+  条件: {g : α -> α} (h : 连续 g) (n : 自然数) (x : α)
   证明: rfl
 -/
 theorem fromIter_apply {g : α -> α} (h : Continuous g) (n : Nat) (x : α) :
@@ -478,7 +478,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {s : Set α} (h : IsInvariant ϕ s)
+  签名: {s : 集合 α} (h : 是不变 ϕ s)
   定义体: (h t).restrict _ _ _
   cont' := Continuous.subtype_mk (by fun_prop) _
   map_add' _ _ _ := Subtype.ext (map_add _ _ _ _)
@@ -505,7 +505,7 @@ theorem coe_restrict_apply
 
 中文:
 定理 coe_restrict_apply
-  条件: {s : Set α} (h : IsInvariant ϕ s) (t : τ) (x : s)
+  条件: {s : 集合 α} (h : 是不变 ϕ s) (t : τ) (x : s)
   证明: rfl
 -/
 theorem coe_restrict_apply {s : Set α} (h : IsInvariant ϕ s) (t : τ) (x : s) :
@@ -531,7 +531,7 @@ definition toAddAction
 
 中文:
 定义 toAddAction
-  签名: : AddAction τ α where
+  签名: : 加法作用 τ α where
   定义体: ϕ
   add_vadd := ϕ.map_add'
   zero_vadd := ϕ.map_zero'
@@ -554,7 +554,7 @@ definition restrictAddSubmonoid
 
 中文:
 定义 restrictAddSubmonoid
-  签名: (S : AddSubmonoid τ)
+  签名: (S : 加法子幺半群 τ)
   定义体: ϕ t x
   cont' := by fun_prop
   map_add' t₁ t₂ x := ϕ.map_add' t₁ t₂ x
@@ -576,7 +576,7 @@ theorem restrictAddSubmonoid_apply
 
 中文:
 定理 restrictAddSubmonoid_apply
-  条件: (S : AddSubmonoid τ) (t : S) (x : α)
+  条件: (S : 加法子幺半群 τ) (t : S) (x : α)
   证明: rfl
 -/
 theorem restrictAddSubmonoid_apply (S : AddSubmonoid τ) (t : S) (x : α) :
@@ -613,7 +613,7 @@ theorem orbit_eq_range
 中文:
 定理 orbit_eq_range
   条件: (x : α)
-  结论: orbit ϕ x = Set.range (fun t => ϕ t x)
+  结论: orbit ϕ x = 集合.range (fun t => ϕ t x)
   证明: rfl
 -/
 theorem orbit_eq_range (x : α) : orbit ϕ x = Set.range (fun t => ϕ t x) := rfl
@@ -688,7 +688,7 @@ theorem nonempty_orbit
 中文:
 定理 nonempty_orbit
   条件: (x : α)
-  结论: Set.Nonempty (orbit ϕ x)
+  结论: 集合.非空 (orbit ϕ x)
   证明: ϕ.toAddAction.nonempty_orbit x
 
 Depends on / 依赖: nonempty_orbit, toAddAction, toAddAction.nonempty_orbit
@@ -727,7 +727,7 @@ theorem isInvariant_orbit
 中文:
 定理 isInvariant_orbit
   条件: (x : α)
-  结论: IsInvariant ϕ (orbit ϕ x)
+  结论: 是不变 ϕ (orbit ϕ x)
   证明: fun t _ => ϕ.toAddAction.mem_orbit_of_mem_orbit t
 
 Depends on / 依赖: mem_orbit_of_mem_orbit, toAddAction, toAddAction.mem_orbit_of_mem_orbit
@@ -745,7 +745,7 @@ theorem orbit_restrict
 
 中文:
 定理 orbit_restrict
-  条件: (s : Set α) (hs : IsInvariant ϕ s) (x : s)
+  条件: (s : 集合 α) (hs : 是不变 ϕ s) (x : s)
   证明: Set.ext (fun x => by simp [orbit_eq_range, Subtype.ext_iff])
 
 Depends on / 依赖: Set.ext, Subtype, Subtype.ext_iff, ext_iff, orbit_eq_range
@@ -766,7 +766,7 @@ definition restrictNonneg
 
 中文:
 定义 restrictNonneg
-  签名: : Flow (AddSubmonoid.nonneg τ) α
+  签名: : 流 (加法子幺半群.nonneg τ) α
   定义体: ϕ.restrictAddSubmonoid (.nonneg τ)
 
 Depends on / 依赖: nonneg, restrictAddSubmonoid
@@ -882,12 +882,12 @@ structure IsSemiconjugacy
     - semiconj : forall t, Function.Semiconj π (ϕ t) (ψ t)
 
 中文:
-结构 IsSemiconjugacy
-  参数: (π : α -> β) (ϕ : Flow τ α) (ψ : Flow τ β)
+结构 是Semiconjugacy
+  参数: (π : α -> β) (ϕ : 流 τ α) (ψ : 流 τ β)
   公理与运算 (3 个):
-    - cont : Continuous π
-    - surj : Function.Surjective π
-    - semiconj : 对任意 t, Function.Semiconj π (ϕ t) (ψ t)
+    - cont : 连续 π
+    - surj : 函数.满射 π
+    - semiconj : 对任意 t, 函数.Semiconj π (ϕ t) (ψ t)
 -/
 structure IsSemiconjugacy (π : α -> β) (ϕ : Flow τ α) (ψ : Flow τ β) : Prop where
   cont : Continuous π
@@ -903,7 +903,7 @@ theorem IsSemiconjugacy.comp
   proof: ⟨h₂.cont.comp h₁.cont, h₂.surj.comp h₁.surj, fun t => (h₂.semiconj t).comp_left (h₁.semiconj t)⟩
 
 中文:
-定理 IsSemiconjugacy.comp
+定理 是Semiconjugacy.comp
   结论: {π : α -> β} {ρ : β -> γ}
   证明: ⟨h₂.cont.comp h₁.cont, h₂.surj.comp h₁.surj, fun t => (h₂.semiconj t).comp_left (h₁.semiconj t)⟩
 
@@ -924,8 +924,8 @@ theorem isSemiconjugacy_id_iff_eq
 
 中文:
 定理 isSemiconjugacy_id_iff_eq
-  条件: (ϕ ψ : Flow τ α)
-  结论: IsSemiconjugacy id ϕ ψ ↔ ϕ = ψ
+  条件: (ϕ ψ : 流 τ α)
+  结论: 是Semiconjugacy id ϕ ψ ↔ ϕ = ψ
   证明: ⟨fun h => ext h.semiconj, fun h => h.recOn ⟨continuous_id, surjective_id, fun _ => .id_left⟩⟩
 
 Depends on / 依赖: continuous_id, h.recOn, h.semiconj, id_left, semiconj, surjective_id
@@ -943,7 +943,7 @@ definition IsFactorOf
 
 中文:
 定义 IsFactorOf
-  签名: (ψ : Flow τ β) (ϕ : Flow τ α)
+  签名: (ψ : 流 τ β) (ϕ : 流 τ α)
   定义体: exists π : α -> β, IsSemiconjugacy π ϕ ψ
 
 Depends on / 依赖: IsSemiconjugacy
@@ -960,8 +960,8 @@ theorem IsSemiconjugacy.isFactorOf
   proof: ⟨π, h⟩
 
 中文:
-定理 IsSemiconjugacy.isFactorOf
-  条件: {π : α -> β} (h : IsSemiconjugacy π ϕ ψ)
+定理 是Semiconjugacy.isFactorOf
+  条件: {π : α -> β} (h : 是Semiconjugacy π ϕ ψ)
   结论: IsFactorOf ψ ϕ
   证明: ⟨π, h⟩
 -/
@@ -1092,8 +1092,8 @@ theorem isInvariant_iff_image_eq
 
 中文:
 定理 isInvariant_iff_image_eq
-  条件: (s : Set α)
-  结论: IsInvariant ϕ s ↔ 对任意 t, ϕ t '' s = s
+  条件: (s : 集合 α)
+  结论: 是不变 ϕ s ↔ 对任意 t, ϕ t '' s = s
   证明: (isInvariant_iff_image _ _).trans
     (Iff.intro
       (fun h t => Subset.antisymm (h t) fun _ hx => ⟨_, h (-t) ⟨_, hx, rfl⟩, by simp [← map_add]⟩)
@@ -1118,7 +1118,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (t : τ) (s : Set α)
+  条件: (t : τ) (s : 集合 α)
   结论: ϕ t '' s = ϕ (-t) ⁻¹' s
   证明: (ϕ.toHomeomorph t).toEquiv.image_eq_preimage_symm s
 
@@ -1148,7 +1148,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: : Flow τ α where
+  签名: : 流 τ α where
   定义体: ϕ (-t)
   cont' := by fun_prop
   map_add' _ _ _ := by rw [neg_add, map_add]

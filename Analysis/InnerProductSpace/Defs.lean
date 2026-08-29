@@ -85,7 +85,7 @@ class Inner
     - inner((𝕜)) : E -> E -> 𝕜
 
 中文:
-类 Inner
+类 内积
   参数: (𝕜 E : 类型)
   公理与运算 (1 个):
     - inner((𝕜)) : E -> E -> 𝕜
@@ -131,8 +131,8 @@ class InnerProductSpace
     - smul_left : forall x y r, inner (r • x) y = conj r * inner x y
 
 中文:
-类 InnerProductSpace
-  参数: (𝕜 : 类型) (E : 类型) [RCLike 𝕜] [SeminormedAddCommGroup E]
+类 内积空间
+  参数: (𝕜 : 类型) (E : 类型) [RCLike 𝕜] [SeminormedAddComm群 E]
   公理与运算 (4 个):
     - norm_sq_eq_re_inner : 对任意 x : E, ‖x‖ ^ 2 = re (inner x x)
     - conj_inner_symm : 对任意 x y, conj (inner y x) = inner x y
@@ -182,9 +182,9 @@ structure PreInnerProductSpace.Core
     - smul_left(x y r) : inner (r • x) y = conj r * inner x y
 
 中文:
-结构 PreInnerProductSpace.Core
-  参数: (𝕜 : 类型) (F : 类型) [RCLike 𝕜] [AddCommGroup F]
-  继承: Inner 𝕜 F
+结构 PreInnerProduct空间.核
+  参数: (𝕜 : 类型) (F : 类型) [RCLike 𝕜] [加法交换群 F]
+  继承: 内积 𝕜 F
   公理与运算 (4 个):
     - conj_inner_symm(x y) : conj (inner y x) = inner x y
     - re_inner_nonneg(x) : 0 <= re (inner x x)
@@ -215,9 +215,9 @@ structure InnerProductSpace.Core
     - definite : forall x, inner x x = 0 -> x = 0
 
 中文:
-结构 InnerProductSpace.Core
-  参数: (𝕜 : 类型) (F : 类型) [RCLike 𝕜] [AddCommGroup F]
-  继承: PreInnerProductSpace.Core 𝕜 F
+结构 内积空间.核
+  参数: (𝕜 : 类型) (F : 类型) [RCLike 𝕜] [加法交换群 F]
+  继承: PreInnerProduct空间.核 𝕜 F
   公理与运算 (1 个):
     - definite : 对任意 x, inner x x = 0 -> x = 0
 -/
@@ -254,8 +254,8 @@ definition PreInnerProductSpace.toCore
   re_inner_nonneg x := by rw [← InnerProductSpace.norm_sq_eq_re_inner]; apply sq_nonneg
 
 中文:
-定义 PreInnerProductSpace.toCore
-  签名: [SeminormedAddCommGroup E] [c : InnerProductSpace 𝕜 E]
+定义 PreInnerProduct空间.toCore
+  签名: [SeminormedAddComm群 E] [c : 内积空间 𝕜 E]
   定义体: c
   re_inner_nonneg x := by rw [← InnerProductSpace.norm_sq_eq_re_inner]; apply sq_nonneg
 -/
@@ -284,8 +284,8 @@ norm_eq_zero.1 eq_zero_of_pow_eq_zero (n := 2) by
         rw [InnerProductSpace.norm_sq_eq_re_inner (𝕜 := 𝕜) x]; rw [hx]; rw [map_zero] }
 
 中文:
-定义 InnerProductSpace.toCore
-  签名: [NormedAddCommGroup E] [c : InnerProductSpace 𝕜 E]
+定义 内积空间.toCore
+  签名: [赋范交换加群 E] [c : 内积空间 𝕜 E]
   定义体: { c with
     re_inner_nonneg := fun x => by
       rw [← InnerProductSpace.norm_sq_eq_re_inner]
@@ -334,7 +334,7 @@ definition toPreInner'
 
 中文:
 定义 toPreInner'
-  签名: : Inner 𝕜 F
+  签名: : 内积 𝕜 F
   定义体: c.toInner
 
 Depends on / 依赖: c.toInner, toInner
@@ -482,7 +482,7 @@ theorem ofReal_normSq_eq_inner_self
   exact ⟨by simp only [ofReal_re, normSq], by simp only [inner_self_im, ofReal_im]⟩
 
 中文:
-定理 ofReal_normSq_eq_inner_self
+定理 of实数_normSq_eq_inner_self
   条件: (x : F)
   结论: (normSqF x : 𝕜) = ⟪x, x⟫
   证明: by
@@ -706,7 +706,7 @@ theorem inner_self_ofReal_re
   norm_num [ext_iff, inner_self_im]
 
 中文:
-定理 inner_self_ofReal_re
+定理 inner_self_of实数_re
   条件: (x : F)
   结论: (re ⟪x, x⟫ : 𝕜) = ⟪x, x⟫
   证明: by
@@ -908,7 +908,7 @@ theorem inner_smul_ofReal_left
   rw [inner_smul_left]; rw [conj_ofReal]; rw [mul_comm]
 
 中文:
-定理 inner_smul_ofReal_left
+定理 inner_smul_of实数_left
   条件: (x y : F) {t : 实数}
   结论: ⟪(t : 𝕜) • x, y⟫ = ⟪x, y⟫ * t
   证明: by
@@ -930,7 +930,7 @@ theorem inner_smul_ofReal_right
   rw [inner_smul_right]; rw [mul_comm]
 
 中文:
-定理 inner_smul_ofReal_right
+定理 inner_smul_of实数_right
   条件: (x y : F) {t : 实数}
   结论: ⟪x, (t : 𝕜) • y⟫ = ⟪x, y⟫ * t
   证明: by
@@ -951,7 +951,7 @@ theorem re_inner_smul_ofReal_smul_self
   simp [inner_smul_ofReal_left, inner_smul_ofReal_right, normSq]
 
 中文:
-定理 re_inner_smul_ofReal_smul_self
+定理 re_inner_smul_of实数_smul_self
   条件: (x : F) {t : 实数}
   证明: by
   simp [inner_smul_ofReal_left, inner_smul_ofReal_right, normSq]
@@ -1101,7 +1101,7 @@ definition toNorm
 
 中文:
 定义 toNorm
-  签名: : Norm F where norm x
+  签名: : 范数 F where norm x
   定义体: √(re ⟪x, x⟫)
 -/
 def toNorm : Norm F where norm x := √(re ⟪x, x⟫)
@@ -1213,7 +1213,7 @@ definition toSeminormedAddCommGroup
 
 中文:
 定义 toSeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup F
+  签名: : SeminormedAddComm群 F
   定义体: AddGroupSeminorm.toSeminormedAddCommGroup
     { toFun := fun x => √(re ⟪x, x⟫)
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
@@ -1259,7 +1259,7 @@ omit c in
 
 中文:
 定义 toNormedSpace
-  签名: : NormedSpace 𝕜 F where
+  签名: : 赋范空间 𝕜 F where
   定义体: by
     rw [norm_eq_sqrt_re_inner]; rw [inner_smul_left]; rw [inner_smul_right]; rw [← mul_assoc]
     rw [RCLike.conj_mul]; rw [← ofReal_pow]; rw [re_ofReal_mul]; rw [sqrt_mul]; rw [← ofReal_normSq_eq_inner_self]; rw [ofReal_re]
@@ -1293,8 +1293,8 @@ lemma toSeminormedSpaceCore
 
 中文:
 引理 toSeminormedSpaceCore
-  条件: (c : PreInnerProductSpace.Core 𝕜 F)
-  结论: SeminormedSpace.Core 𝕜 F where
+  条件: (c : PreInnerProduct空间.核 𝕜 F)
+  结论: 半赋范空间.核 𝕜 F where
   证明: norm_nonneg x
   norm_smul c x := by
     let : NormedSpace 𝕜 F := toNormedSpace
@@ -1334,7 +1334,7 @@ definition toInner'
 
 中文:
 定义 toInner'
-  签名: : Inner 𝕜 F
+  签名: : 内积 𝕜 F
   定义体: cd.toInner
 
 Depends on / 依赖: cd.toInner, toInner
@@ -1431,7 +1431,7 @@ definition toNormedAddCommGroup
 
 中文:
 定义 toNormedAddCommGroup
-  签名: : NormedAddCommGroup F
+  签名: : 赋范交换加群 F
   定义体: AddGroupNorm.toNormedAddCommGroup
     { toFun := fun x => √(re ⟪x, x⟫)
       map_zero' := by simp only [sqrt_zero, inner_zero_right, map_zero]
@@ -1479,8 +1479,8 @@ lemma toNormedSpaceCore
 
 中文:
 引理 toNormedSpaceCore
-  条件: (cd : InnerProductSpace.Core 𝕜 F)
-  结论: NormedSpace.Core 𝕜 F where
+  条件: (cd : 内积空间.核 𝕜 F)
+  结论: 赋范空间.核 𝕜 F where
   证明: norm_nonneg x
   norm_eq_zero_iff x := norm_eq_zero
   norm_smul c x := by
@@ -1630,8 +1630,8 @@ definition InnerProductSpace.ofCore
       simp [h₁, sq_sqrt, h₂] }
 
 中文:
-定义 InnerProductSpace.ofCore
-  签名: [AddCommGroup F] [Module 𝕜 F] (cd : PreInnerProductSpace.Core 𝕜 F)
+定义 内积空间.ofCore
+  签名: [加法交换群 F] [模 𝕜 F] (cd : PreInnerProduct空间.核 𝕜 F)
   定义体: letI : NormedSpace 𝕜 F := InnerProductSpace.Core.toNormedSpace
   { cd with
     norm_sq_eq_re_inner := fun x => by
@@ -1671,8 +1671,8 @@ definition InnerProductSpace.ofCoreOfTopology
       have h₁ : ‖x‖ ^ 2 = √(re (cd.inner x x)) ^
 
 中文:
-定义 InnerProductSpace.ofCoreOfTopology
-  签名: [AddCommGroup F] [hF : Module 𝕜 F] [TopologicalSpace F]
+定义 内积空间.ofCoreOfTopology
+  签名: [加法交换群 F] [hF : 模 𝕜 F] [拓扑空间 F]
   定义体: cd.toNormedAddCommGroupOfTopology h h';
     InnerProductSpace 𝕜 F :=
   letI : NormedAddCommGroup F := cd.toNormedAddCommGroupOfTopology h h'
@@ -1709,7 +1709,7 @@ structure HilbertSpace
   (no additional axioms)
 
 中文:
-结构 HilbertSpace
+结构 Hilbert空间
   参数: (𝕜 E : 类型) [RCLike 𝕜]
   (无附加公理)
 -/
@@ -1732,7 +1732,7 @@ instance :
 
 中文:
 实例 :
-  签名: InnerProductSpace 𝕜 PUnit
+  签名: 内积空间 𝕜 命题单元
   定义体: 0
   norm_sq_eq_re_inner := by simp
   conj_inner_symm := by simp
@@ -1757,7 +1757,7 @@ lemma inner_eq_zero
 
 中文:
 引理 inner_eq_zero
-  条件: (x y : PUnit)
+  条件: (x y : 命题单元)
   结论: inner 𝕜 x y = 0
   证明: rfl
 -/

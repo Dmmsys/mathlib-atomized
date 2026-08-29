@@ -51,7 +51,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inner 实数 ℍ
+  签名: 内积 实数 ℍ
   定义体: ⟨fun a b => (a * star b).re⟩
 -/
 instance : Inner Real ℍ :=
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAddCommGroup ℍ
+  签名: 赋范交换加群 ℍ
   定义体: @InnerProductSpace.Core.toNormedAddCommGroup Real ℍ _ _ _
     { toInner := inferInstance
       conj_inner_symm := fun x y => by simp [inner_def, mul_comm]
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: InnerProductSpace 实数 ℍ
+  签名: 内积空间 实数 ℍ
   定义体: InnerProductSpace.ofCore _
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.ofCore, ofCore
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormOneClass ℍ
+  签名: NormOne类 ℍ
   定义体: ⟨by rw [norm_eq_sqrt_real_inner, inner_self, normSq.map_one, Real.sqrt_one]⟩
 
 @[simp, norm_cast]
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedDivisionRing ℍ
+  签名: NormedDivision环 ℍ
   定义体: rfl
   norm_mul _ _ := by simp_rw [norm_eq_sqrt_real_inner, inner_self]; simp
 -/
@@ -311,7 +311,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAlgebra 实数 ℍ
+  签名: 赋范代数 实数 ℍ
   定义体: norm_smul_le
   toAlgebra := Quaternion.algebra
 
@@ -331,7 +331,7 @@ instance :
 
 中文:
 实例 :
-  签名: CStarRing ℍ
+  签名: CStar环 ℍ
   定义体: le_of_eq Eq.symm (norm_mul _ _).trans congr_arg (· * ‖x‖) (norm_star x)
 
 Depends on / 依赖: Eq.symm, congr_arg, le_of_eq, norm_mul, norm_star
@@ -350,7 +350,7 @@ definition coeComplex
 
 中文:
 定义 coeComplex
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: ⟨z.re, z.im, 0, 0⟩
 
 Depends on / 依赖: PreservesLimitsOfShape, WalkingCospan
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe Complex ℍ
+  签名: Coe 复形 ℍ
   定义体: ⟨coeComplex⟩
 
 @[simp, norm_cast]
@@ -392,7 +392,7 @@ theorem re_coeComplex
 
 中文:
 定理 re_coeComplex
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z : ℍ).re = z.re
   证明: rfl
 
@@ -415,7 +415,7 @@ theorem imI_coeComplex
 
 中文:
 定理 imI_coeComplex
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z : ℍ).imI = z.im
   证明: rfl
 
@@ -438,7 +438,7 @@ theorem imJ_coeComplex
 
 中文:
 定理 imJ_coeComplex
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z : ℍ).imJ = 0
   证明: rfl
 
@@ -463,7 +463,7 @@ theorem imK_coeComplex
 
 中文:
 定理 imK_coeComplex
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: (z : ℍ).imK = 0
   证明: rfl
 
@@ -486,7 +486,7 @@ theorem coeComplex_add
 
 中文:
 定理 coeComplex_add
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ↑(z + w) = (z + w : ℍ)
   证明: by ext <;> simp
 
@@ -508,7 +508,7 @@ theorem coeComplex_mul
 
 中文:
 定理 coeComplex_mul
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   结论: ↑(z * w) = (z * w : ℍ)
   证明: by ext <;> simp
 
@@ -531,7 +531,7 @@ theorem coeComplex_zero
 
 中文:
 定理 coeComplex_zero
-  结论: ((0 : Complex) : ℍ) = 0
+  结论: ((0 : 复形) : ℍ) = 0
   证明: rfl
 
 @[simp, norm_cast]
@@ -552,7 +552,7 @@ theorem coeComplex_one
 
 中文:
 定理 coeComplex_one
-  结论: ((1 : Complex) : ℍ) = 1
+  结论: ((1 : 复形) : ℍ) = 1
   证明: rfl
 
 @[simp, norm_cast]
@@ -576,7 +576,7 @@ theorem coe_real_complex_mul
 
 中文:
 定理 coe_real_complex_mul
-  条件: (r : 实数) (z : Complex)
+  条件: (r : 实数) (z : 复形)
   结论: (r • z : ℍ) = ↑r * ↑z
   证明: by ext <;> simp
 
@@ -597,7 +597,7 @@ theorem coeComplex_coe
 中文:
 定理 coeComplex_coe
   条件: (r : 实数)
-  结论: ((r : Complex) : ℍ) = r
+  结论: ((r : 复形) : ℍ) = r
   证明: rfl
 -/
 theorem coeComplex_coe (r : Real) : ((r : Complex) : ℍ) = r :=
@@ -620,7 +620,7 @@ definition ofComplex
 
 中文:
 定义 ofComplex
-  签名: : Complex ->ₐ[实数] ℍ where
+  签名: : 复形 ->ₐ[实数] ℍ where
   定义体: (↑)
   map_one' := rfl
   map_zero' := rfl
@@ -700,7 +700,7 @@ definition linearIsometryEquivTuple
 
 中文:
 定义 linearIsometryEquivTuple
-  签名: : ℍ ≃ₗᵢ[实数] EuclideanSpace 实数 (Fin 4)
+  签名: : ℍ ≃ₗᵢ[实数] EuclideanSpace 实数 (有限集 4)
   定义体: { (QuaternionAlgebra.linearEquivTuple (-1 : Real) (0 : Real) (-1 : Real)).trans
       (WithLp.linearEquiv 2 Real (Fin 4 -> Real)).symm with
     toFun := fun a => !₂[a.1, a.2, a.3, a.4]
@@ -731,7 +731,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous (coe : 实数 -> ℍ)
+  结论: 连续 (coe : 实数 -> ℍ)
   证明: continuous_algebraMap Real ℍ
 
 @[continuity]
@@ -756,7 +756,7 @@ theorem continuous_normSq
 
 中文:
 定理 continuous_normSq
-  结论: Continuous (normSq : ℍ -> 实数)
+  结论: 连续 (normSq : ℍ -> 实数)
   证明: by
   simpa [← normSq_eq_norm_mul_self] using
     (continuous_norm.fun_mul continuous_norm : Continuous fun q : ℍ => ‖q‖ * ‖q‖)
@@ -782,7 +782,7 @@ theorem continuous_re
 
 中文:
 定理 continuous_re
-  结论: Continuous fun q : ℍ => q.re
+  结论: 连续 fun q : ℍ => q.re
   证明: (PiLp.continuous_apply 2 _ 0).comp linearIsometryEquivTuple.continuous
 
 @[continuity]
@@ -805,7 +805,7 @@ theorem continuous_imI
 
 中文:
 定理 continuous_imI
-  结论: Continuous fun q : ℍ => q.imI
+  结论: 连续 fun q : ℍ => q.imI
   证明: (PiLp.continuous_apply 2 _ 1).comp linearIsometryEquivTuple.continuous
 
 @[continuity]
@@ -828,7 +828,7 @@ theorem continuous_imJ
 
 中文:
 定理 continuous_imJ
-  结论: Continuous fun q : ℍ => q.imJ
+  结论: 连续 fun q : ℍ => q.imJ
   证明: (PiLp.continuous_apply 2 _ 2).comp linearIsometryEquivTuple.continuous
 
 @[continuity]
@@ -851,7 +851,7 @@ theorem continuous_imK
 
 中文:
 定理 continuous_imK
-  结论: Continuous fun q : ℍ => q.imK
+  结论: 连续 fun q : ℍ => q.imK
   证明: (PiLp.continuous_apply 2 _ 3).comp linearIsometryEquivTuple.continuous
 
 @[continuity]
@@ -873,7 +873,7 @@ theorem continuous_im
 
 中文:
 定理 continuous_im
-  结论: Continuous fun q : ℍ => q.im
+  结论: 连续 fun q : ℍ => q.im
   证明: by
   simpa only [← sub_re_self] using! continuous_id.sub (continuous_coe.comp continuous_re)
 
@@ -894,7 +894,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace ℍ
+  签名: 完备空间 ℍ
   定义体: haveI : IsUniformEmbedding linearIsometryEquivTuple.toLinearEquiv.toEquiv.symm :=
     linearIsometryEquivTuple.toContinuousLinearEquiv.symm.isUniformEmbedding
   (completeSpace_congr this).1 inferInstance

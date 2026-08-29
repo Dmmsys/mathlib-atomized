@@ -38,7 +38,7 @@ structure AtomM.Context
     - evalAtom : Expr -> MetaM Simp.Result  [default: fun e => pure { expr := e }]
 
 中文:
-结构 AtomM.Context
+结构 AtomM.余ntext
   参数: where
   公理与运算 (2 个):
     - red : TransparencyMode
@@ -65,7 +65,7 @@ structure AtomM.State
 结构 AtomM.State
   参数: where
   公理与运算 (1 个):
-    - atoms : Array Expr  [默认: #[]]
+    - atoms : 数组 Expr  [默认: #[]]
 -/
 structure AtomM.State where
   /-- The list of atoms-up-to-defeq encountered thus far, used for atom sorting. -/
@@ -96,7 +96,7 @@ definition AtomM.run
 
 中文:
 定义 AtomM.run
-  签名: {α : Type} (red : TransparencyMode) (m : AtomM α)
+  签名: {α : 类型} (red : TransparencyMode) (m : AtomM α)
   定义体: (m { red, evalAtom }).run' {}
 -/
 def AtomM.run {α : Type} (red : TransparencyMode) (m : AtomM α)

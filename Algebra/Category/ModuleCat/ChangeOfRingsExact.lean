@@ -44,8 +44,8 @@ lemma ModuleCat.restrictScalars_map_exact
   exact h
 
 中文:
-引理 ModuleCat.restrictScalars_map_exact
-  条件: (S : ShortComplex (ModuleCat.{v} R')) (h : S.Exact)
+引理 模范畴.restrictScalars_map_exact
+  条件: (S : 短复形 (模范畴.{v} R')) (h : S.正合)
   证明: by
   rw [CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact] at h ⊢
   exact h
@@ -70,7 +70,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFiniteLimits (ModuleCat.restrictScalars.{v} f)
+  签名: Limits.保持FiniteLimits (模范畴.restrictScalars.{v} f)
   定义体: by
   have := ((CategoryTheory.Functor.exact_tfae (ModuleCat.restrictScalars.{v} f)).out 1 3).mp
     (ModuleCat.restrictScalars_map_exact f)
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFiniteColimits (ModuleCat.restrictScalars.{v} f)
+  签名: Limits.保持FiniteColimits (模范畴.restrictScalars.{v} f)
   定义体: by
   have := ((CategoryTheory.Functor.exact_tfae (ModuleCat.restrictScalars.{v} f)).out 1 3).mp
     (ModuleCat.restrictScalars_map_exact f)

@@ -36,7 +36,7 @@ definition directSum
 
 中文:
 定义 directSum
-  签名: (ψ : 对任意 i, AddChar (G i) R)
+  签名: (ψ : 对任意 i, 加法特征 (G i) R)
   定义体: toAddMonoidHomEquiv.symm DirectSum.toAddMonoid fun i => toAddMonoidHomEquiv (ψ i)
 
 Depends on / 依赖: DirectSum, DirectSum.toAddMonoid, toAddMonoid, toAddMonoidHomEquiv, toAddMonoidHomEquiv.symm

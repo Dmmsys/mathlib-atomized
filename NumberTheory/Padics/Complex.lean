@@ -77,7 +77,7 @@ instance isAlgebraic
 
 中文:
 实例 isAlgebraic
-  签名: : Algebra.IsAlgebraic Rat_[p] (PadicAlgCl p)
+  签名: : 代数.是代数 Rat_[p] (PadicAlgCl p)
   定义体: AlgebraicClosure.isAlgebraic _
 
 Depends on / 依赖: AlgebraicClosure, AlgebraicClosure.isAlgebraic, isAlgebraic
@@ -126,7 +126,7 @@ instance normedField
 
 中文:
 实例 normedField
-  签名: : NormedField (PadicAlgCl p)
+  签名: : 赋范域 (PadicAlgCl p)
   定义体: spectralNorm.normedField Rat_[p] (PadicAlgCl p)
 
 Depends on / 依赖: PadicAlgCl, Rat_, normedField, spectralNorm, spectralNorm.normedField
@@ -161,7 +161,7 @@ instance normedAlgebra
 
 中文:
 实例 normedAlgebra
-  签名: : NormedAlgebra Rat_[p] (PadicAlgCl p)
+  签名: : 赋范代数 Rat_[p] (PadicAlgCl p)
   定义体: spectralNorm.normedAlgebra _ _
 
 Depends on / 依赖: normedAlgebra, spectralNorm, spectralNorm.normedAlgebra
@@ -217,7 +217,7 @@ instance isUltrametricDist
 
 中文:
 实例 isUltrametricDist
-  签名: : IsUltrametricDist (PadicAlgCl p)
+  签名: : 是UltrametricDist (PadicAlgCl p)
   定义体: IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm (PadicAlgCl.isNonarchimedean p)
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.isUltrametricDist_of_forall_norm_add_le_max_norm, PadicAlgCl, PadicAlgCl.isNonarchimedean, isNonarchimedean, isUltrametricDist_of_forall_norm_add_le_max_norm
@@ -235,7 +235,7 @@ instance valued
 
 中文:
 实例 valued
-  签名: : Valued (PadicAlgCl p) 实数>=0
+  签名: : 赋值 (PadicAlgCl p) 实数>=0
   定义体: NormedField.toValued
 
 Depends on / 依赖: NormedField, NormedField.toValued, toValued
@@ -254,7 +254,7 @@ theorem valuation_def
 中文:
 定理 valuation_def
   条件: (x : PadicAlgCl p)
-  结论: Valued.v x = ‖x‖₊
+  结论: 赋值.v x = ‖x‖₊
   证明: rfl
 -/
 theorem valuation_def (x : PadicAlgCl p) : Valued.v x = ‖x‖₊ := rfl
@@ -271,7 +271,7 @@ theorem valuation_coe
 中文:
 定理 valuation_coe
   条件: (x : PadicAlgCl p)
-  结论: ((Valued.v x : 实数>=0) : 实数) = ‖x‖
+  结论: ((赋值.v x : 实数>=0) : 实数) = ‖x‖
   证明: rfl
 -/
 theorem valuation_coe (x : PadicAlgCl p) : ((Valued.v x : Real>=0) : Real) = ‖x‖ := rfl
@@ -290,8 +290,8 @@ theorem valuation_p
 
 中文:
 定理 valuation_p
-  条件: (p : 自然数) [Fact p.Prime]
-  结论: Valued.v (p : PadicAlgCl p) = 1 / (p : 实数>=0)
+  条件: (p : 自然数) [Fact p.素]
+  结论: 赋值.v (p : PadicAlgCl p) = 1 / (p : 实数>=0)
   证明: by
   rw [← map_natCast (algebraMap Rat_[p] (PadicAlgCl p))]
   ext
@@ -324,7 +324,7 @@ instance :
 
 中文:
 实例 :
-  签名: RankOne (PadicAlgCl.valued p).v
+  签名: 秩一 (PadicAlgCl.valued p).v
   定义体: embedding
   strictMono' := embedding_strictMono
   exists_val_nontrivial := by
@@ -356,7 +356,7 @@ instance :
 
 中文:
 实例 :
-  签名: UniformContinuousConstSMul Rat_[p] (PadicAlgCl p)
+  签名: 一致连续常数标量乘法 Rat_[p] (PadicAlgCl p)
   定义体: uniformContinuousConstSMul_of_continuousConstSMul Rat_[p] (PadicAlgCl p)
 
 Depends on / 依赖: PadicAlgCl, Rat_, uniformContinuousConstSMul_of_continuousConstSMul
@@ -404,7 +404,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: : CharZero (PadicAlgCl p)
+  签名: : 特征零 (PadicAlgCl p)
   定义体: (RingHom.charZero_iff (algebraMap Rat_[p] (PadicAlgCl p)).injective).mp inferInstance
 
 Depends on / 依赖: PadicAlgCl, Rat_, RingHom, RingHom.charZero_iff, algebraMap, charZero_iff, injective
@@ -444,7 +444,7 @@ instance valued
 
 中文:
 实例 valued
-  签名: : Valued Complex_[p] 实数>=0
+  签名: : 赋值 Complex_[p] 实数>=0
   定义体: Valued.valuedCompletion
 
 Depends on / 依赖: Valued, Valued.valuedCompletion, valuedCompletion
@@ -463,7 +463,7 @@ theorem valuation_extends
 中文:
 定理 valuation_extends
   条件: (x : PadicAlgCl p)
-  结论: Valued.v (x : Complex_[p]) = Valued.v x
+  结论: 赋值.v (x : Complex_[p]) = 赋值.v x
   证明: Valued.extensionValuation_apply_coe _
 
 Depends on / 依赖: Valued, Valued.extensionValuation_apply_coe, extensionValuation_apply_coe
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower Rat_[p] (PadicAlgCl p) Complex_[p]
+  签名: 标量塔 Rat_[p] (PadicAlgCl p) Complex_[p]
   定义体: IsScalarTower.of_algebraMap_eq (congrFun rfl)
 
 @[simp, norm_cast]
@@ -559,7 +559,7 @@ theorem valuation_p
 
 中文:
 定理 valuation_p
-  结论: Valued.v (p : Complex_[p]) = 1 / (p : 实数>=0)
+  结论: 赋值.v (p : Complex_[p]) = 1 / (p : 实数>=0)
   证明: by
   rw [← map_natCast (algebraMap (PadicAlgCl p) Complex_[p]), ← coe_eq, valuation_extends,
     PadicAlgCl.valuation_p]
@@ -592,7 +592,7 @@ instance :
 
 中文:
 实例 :
-  签名: RankOne (PadicComplex.valued p).v
+  签名: 秩一 (PadicComplex.valued p).v
   定义体: embedding
   strictMono' := embedding_strictMono
   exists_val_nontrivial := by
@@ -626,8 +626,8 @@ theorem RankOne.hom_eq_embedding
   proof: rfl
 
 中文:
-定理 RankOne.hom_eq_embedding
-  结论: RankOne.hom (PadicComplex.valued p).v = embedding
+定理 秩一.hom_eq_embedding
+  结论: 秩一.hom (PadicComplex.valued p).v = embedding
   证明: rfl
 -/
 theorem RankOne.hom_eq_embedding : RankOne.hom (PadicComplex.valued p).v = embedding := rfl
@@ -642,7 +642,7 @@ instance normedField
 
 中文:
 实例 normedField
-  签名: : NormedField Complex_[p]
+  签名: : 赋范域 Complex_[p]
   定义体: inferInstance
 -/
 instance normedField : NormedField Complex_[p] := inferInstance
@@ -701,7 +701,7 @@ instance isUltrametricDist
 
 中文:
 实例 isUltrametricDist
-  签名: : IsUltrametricDist Complex_[p]
+  签名: : 是UltrametricDist Complex_[p]
   定义体: IsUltrametricDist.of_normedAlgebra Rat_[p]
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.of_normedAlgebra, Rat_, of_normedAlgebra
@@ -718,7 +718,7 @@ theorem isNonarchimedean
 
 中文:
 定理 isNonarchimedean
-  结论: IsNonarchimedean (Norm.norm : Complex_[p] -> 实数)
+  结论: IsNonarchimedean (范数.norm : Complex_[p] -> 实数)
   证明: IsUltrametricDist.norm_add_le_max
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.norm_add_le_max, norm_add_le_max
@@ -740,7 +740,7 @@ theorem norm_eq_norm'
 
 中文:
 定理 norm_eq_norm'
-  结论: (‖·‖ : Complex_[p] -> 实数) = Valued.v.norm
+  结论: (‖·‖ : Complex_[p] -> 实数) = 赋值.v.norm
   证明: by
   apply UniformSpace.Completion.extension_unique (f := @norm (PadicAlgCl p) _) (g := Valued.v.norm)
   · exact uniformContinuous_norm
@@ -773,7 +773,7 @@ theorem norm_eq_norm
 中文:
 定理 norm_eq_norm
   条件: (x : Complex_[p])
-  结论: ‖x‖ = Valued.v.norm x
+  结论: ‖x‖ = 赋值.v.norm x
   证明: by
   congr!
   exact norm_eq_norm' p
@@ -869,7 +869,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: : CharZero Complex_[p]
+  签名: : 特征零 Complex_[p]
   定义体: (RingHom.charZero_iff (algebraMap Rat_[p] Complex_[p]).injective).mp inferInstance
 
 Depends on / 依赖: Complex_, Rat_, RingHom, RingHom.charZero_iff, algebraMap, charZero_iff, injective
@@ -887,7 +887,7 @@ instance isAlgClosed
 
 中文:
 实例 isAlgClosed
-  签名: : IsAlgClosed Complex_[p]
+  签名: : 是代数闭 Complex_[p]
   定义体: IsAlgClosed.of_denseRange UniformSpace.Completion.denseRange_coe
 
 Depends on / 依赖: Completion, IsAlgClosed, IsAlgClosed.of_denseRange, UniformSpace, UniformSpace.Completion.denseRange_coe, denseRange_coe, of_denseRange
@@ -906,8 +906,8 @@ definition PadicComplexInt
   body: (PadicComplex.valued p).v.valuationSubring
 
 中文:
-定义 PadicComplexInt
-  签名: : ValuationSubring Complex_[p]
+定义 PadicComplex整数
+  签名: : 赋值子环 Complex_[p]
   定义体: (PadicComplex.valued p).v.valuationSubring
 
 Depends on / 依赖: PadicComplex, PadicComplex.valued, v.valuationSubring, valuationSubring, valued
@@ -926,8 +926,8 @@ theorem PadicComplexInt.integers
   proof: Valuation.integer.integers _
 
 中文:
-定理 PadicComplexInt.integers
-  结论: Valuation.整数egers (PadicComplex.valued p).v 𝓞_Complex_[p]
+定理 PadicComplex整数.integers
+  结论: 赋值.整数egers (PadicComplex.valued p).v 𝓞_Complex_[p]
   证明: Valuation.integer.integers _
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers

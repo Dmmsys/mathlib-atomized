@@ -49,7 +49,7 @@ lemma congr_toOrderHom_apply
 
 中文:
 引理 congr_toOrderHom_apply
-  结论: {a b : SimplexCategory} {f g : a ⟶ b} (h : f = g)
+  结论: {a b : 单纯形范畴} {f g : a ⟶ b} (h : f = g)
   证明: by rw [h]
 -/
 lemma congr_toOrderHom_apply {a b : SimplexCategory} {f g : a ⟶ b} (h : f = g)
@@ -67,7 +67,7 @@ definition const
 
 中文:
 定义 const
-  签名: (x y : SimplexCategory) (i : Fin (y.len + 1))
+  签名: (x y : 单纯形范畴) (i : 有限集 (y.len + 1))
   定义体: Hom.mk ⟨fun _ => i, by tauto⟩
 
 @[simp]
@@ -110,7 +110,7 @@ lemma const_apply
 
 中文:
 引理 const_apply
-  条件: (x y : SimplexCategory) (i : Fin (y.len + 1)) (a : Fin (x.len + 1))
+  条件: (x y : 单纯形范畴) (i : 有限集 (y.len + 1)) (a : 有限集 (x.len + 1))
   证明: rfl
 
 @[simp]
@@ -129,7 +129,7 @@ theorem const_comp
 
 中文:
 定理 const_comp
-  结论: (x : SimplexCategory) {y z : SimplexCategory}
+  结论: (x : 单纯形范畴) {y z : 单纯形范畴}
   证明: rfl
 -/
 theorem const_comp (x : SimplexCategory) {y z : SimplexCategory}
@@ -148,7 +148,7 @@ theorem const_fac_thru_zero
 
 中文:
 定理 const_fac_thru_zero
-  条件: (n m : SimplexCategory) (i : Fin (m.len + 1))
+  条件: (n m : 单纯形范畴) (i : 有限集 (m.len + 1))
   证明: by
   rw [const_comp]; rfl
 
@@ -168,8 +168,8 @@ theorem Hom.ext_zero_left
   ext i; match i with | 0 => exact h0 ▸ rfl
 
 中文:
-定理 Hom.ext_zero_left
-  结论: {n : SimplexCategory} (f g : ⦋0⦌ ⟶ n)
+定理 态射.ext_zero_left
+  结论: {n : 单纯形范畴} (f g : ⦋0⦌ ⟶ n)
   证明: by
   ext i; match i with | 0 => exact h0 ▸ rfl
 -/
@@ -188,7 +188,7 @@ theorem eq_const_of_zero
 
 中文:
 定理 eq_const_of_zero
-  条件: {n : SimplexCategory} (f : ⦋0⦌ ⟶ n)
+  条件: {n : 单纯形范畴} (f : ⦋0⦌ ⟶ n)
   证明: by
   ext x; match x with | 0 => rfl
 -/
@@ -205,8 +205,8 @@ theorem exists_eq_const_of_zero
   proof: ⟨_, eq_const_of_zero _⟩
 
 中文:
-定理 exists_eq_const_of_zero
-  条件: {n : SimplexCategory} (f : ⦋0⦌ ⟶ n)
+定理 存在_eq_const_of_zero
+  条件: {n : 单纯形范畴} (f : ⦋0⦌ ⟶ n)
   证明: ⟨_, eq_const_of_zero _⟩
 
 Depends on / 依赖: eq_const_of_zero
@@ -226,7 +226,7 @@ theorem eq_const_to_zero
 
 中文:
 定理 eq_const_to_zero
-  条件: {n : SimplexCategory} (f : n ⟶ ⦋0⦌)
+  条件: {n : 单纯形范畴} (f : n ⟶ ⦋0⦌)
   证明: by
   ext : 3
   apply @Subsingleton.elim (Fin 1)
@@ -251,8 +251,8 @@ theorem Hom.ext_one_left
   | 1 => exact h1 ▸ rfl
 
 中文:
-定理 Hom.ext_one_left
-  结论: {n : SimplexCategory} (f g : ⦋1⦌ ⟶ n)
+定理 态射.ext_one_left
+  结论: {n : 单纯形范畴} (f g : ⦋1⦌ ⟶ n)
   证明: by
   ext i
   match i with
@@ -349,7 +349,7 @@ definition mkHom
 
 中文:
 定义 mkHom
-  签名: {n m : 自然数} (f : Fin (n + 1) ->o Fin (m + 1))
+  签名: {n m : 自然数} (f : 有限集 (n + 1) ->o 有限集 (m + 1))
   定义体: SimplexCategory.Hom.mk f
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.Hom.mk
@@ -374,7 +374,7 @@ definition mkOfLe
 
 中文:
 定义 mkOfLe
-  签名: {n} (i j : Fin (n + 1)) (h : i <= j)
+  签名: {n} (i j : 有限集 (n + 1)) (h : i <= j)
   定义体: SimplexCategory.mkHom {
     toFun := fun | 0 => i | 1 => j
     monotone' := fun
@@ -405,7 +405,7 @@ lemma mkOfLe_refl
 
 中文:
 引理 mkOfLe_refl
-  条件: {n} (j : Fin (n + 1))
+  条件: {n} (j : 有限集 (n + 1))
   证明: Hom.ext_one_left _ _
 
 Depends on / 依赖: Hom.ext_one_left, ext_one_left
@@ -466,7 +466,7 @@ definition mkOfSucc
 
 中文:
 定义 mkOfSucc
-  签名: {n} (i : Fin n)
+  签名: {n} (i : 有限集 n)
   定义体: SimplexCategory.mkHom {
     toFun := fun | 0 => i.castSucc | 1 => i.succ
     monotone' := fun
@@ -499,7 +499,7 @@ lemma mkOfSucc_homToOrderHom_zero
 
 中文:
 引理 mkOfSucc_homToOrderHom_zero
-  条件: {n} (i : Fin n)
+  条件: {n} (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -522,7 +522,7 @@ lemma mkOfSucc_homToOrderHom_one
 
 中文:
 引理 mkOfSucc_homToOrderHom_one
-  条件: {n} (i : Fin n)
+  条件: {n} (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -543,7 +543,7 @@ lemma mkOfSucc_eq_id
 
 中文:
 引理 mkOfSucc_eq_id
-  结论: mkOfSucc (0 : Fin 1) = 𝟙 _
+  结论: mkOfSucc (0 : 有限集 1) = 𝟙 _
   证明: by decide
 -/
 lemma mkOfSucc_eq_id : mkOfSucc (0 : Fin 1) = 𝟙 _ := by decide
@@ -565,7 +565,7 @@ definition mkOfLeComp
 
 中文:
 定义 mkOfLeComp
-  签名: {n} (i j k : Fin (n + 1)) (h₁ : i <= j) (h₂ : j <= k)
+  签名: {n} (i j k : 有限集 (n + 1)) (h₁ : i <= j) (h₂ : j <= k)
   定义体: SimplexCategory.mkHom {
     toFun := fun | 0 => i | 1 => j | 2 => k
     monotone' := fun
@@ -632,7 +632,7 @@ lemma const_subinterval_eq
 
 中文:
 引理 const_subinterval_eq
-  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : Fin (l + 1))
+  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : 有限集 (l + 1))
   证明: by
   rw [const_comp]
   congr
@@ -666,7 +666,7 @@ lemma mkOfSucc_subinterval_eq
 
 中文:
 引理 mkOfSucc_subinterval_eq
-  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : Fin l)
+  条件: {n} (j l : 自然数) (hjl : j + l <= n) (i : 有限集 l)
   证明: by
   unfold subinterval mkOfSucc
   ext (i : Fin 2)
@@ -752,7 +752,7 @@ lemma eqToHom_toOrderHom
 
 中文:
 引理 eqToHom_toOrderHom
-  条件: {x y : SimplexCategory} (h : x = y)
+  条件: {x y : 单纯形范畴} (h : x = y)
   证明: by
   subst h
   rfl
@@ -784,7 +784,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: {n} (i : Fin (n + 2))
+  签名: {n} (i : 有限集 (n + 2))
   定义体: mkHom (Fin.succAboveOrderEmb i).toOrderHom
 
 Depends on / 依赖: Fin.succAboveOrderEmb, succAboveOrderEmb, toOrderHom
@@ -802,7 +802,7 @@ definition σ
 
 中文:
 定义 σ
-  签名: {n} (i : Fin (n + 1))
+  签名: {n} (i : 有限集 (n + 1))
   定义体: mkHom i.predAboveOrderHom
 
 Depends on / 依赖: i.predAboveOrderHom, predAboveOrderHom
@@ -827,7 +827,7 @@ theorem δ_comp_δ
 
 中文:
 定理 δ_comp_δ
-  条件: {n} {i j : Fin (n + 2)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 2)} (H : i <= j)
   证明: by
   ext k
   dsimp [δ, Fin.succAbove]
@@ -861,7 +861,7 @@ theorem δ_comp_δ'
 
 中文:
 定理 δ_comp_δ'
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : i.castSucc < j)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : i.castSucc < j)
   证明: by
   rw [← δ_comp_δ]
   · rw [Fin.succ_pred]
@@ -892,7 +892,7 @@ theorem δ_comp_δ''
 
 中文:
 定理 δ_comp_δ''
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : i <= Fin.castSucc j)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : i <= 有限集.castSucc j)
   证明: by
   rw [δ_comp_δ]
   · rfl
@@ -920,7 +920,7 @@ theorem δ_comp_δ_self
 
 中文:
 定理 δ_comp_δ_self
-  条件: {n} {i : Fin (n + 2)}
+  条件: {n} {i : 有限集 (n + 2)}
   结论: δ i ≫ δ i.castSucc = δ i ≫ δ i.succ
   证明: (δ_comp_δ (le_refl i)).symm
 
@@ -944,7 +944,7 @@ theorem δ_comp_δ_self'
 
 中文:
 定理 δ_comp_δ_self'
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 3)} (H : j = i.castSucc)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 3)} (H : j = i.castSucc)
   证明: by
   subst H
   rw [δ_comp_δ_self]
@@ -974,7 +974,7 @@ theorem δ_comp_σ_of_le
 
 中文:
 定理 δ_comp_σ_of_le
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : i <= j.castSucc)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : i <= j.castSucc)
   证明: by
   ext k : 3
   dsimp [σ, δ]
@@ -1025,7 +1025,7 @@ theorem δ_comp_σ_self
 
 中文:
 定理 δ_comp_σ_self
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   证明: by
   rcases i with ⟨i, hi⟩
   ext ⟨j, hj⟩
@@ -1062,7 +1062,7 @@ theorem δ_comp_σ_self'
 
 中文:
 定理 δ_comp_σ_self'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.castSucc)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.castSucc)
   证明: by
   subst H
   rw [δ_comp_σ_self]
@@ -1093,7 +1093,7 @@ theorem δ_comp_σ_succ
 
 中文:
 定理 δ_comp_σ_succ
-  条件: {n} {i : Fin (n + 1)}
+  条件: {n} {i : 有限集 (n + 1)}
   结论: δ i.succ ≫ σ i = 𝟙 ⦋n⦌
   证明: by
   ext j
@@ -1126,7 +1126,7 @@ theorem δ_comp_σ_succ'
 
 中文:
 定理 δ_comp_σ_succ'
-  条件: {n} {j : Fin (n + 2)} {i : Fin (n + 1)} (H : j = i.succ)
+  条件: {n} {j : 有限集 (n + 2)} {i : 有限集 (n + 1)} (H : j = i.succ)
   证明: by
   subst H
   rw [δ_comp_σ_succ]
@@ -1156,7 +1156,7 @@ theorem δ_comp_σ_of_gt
 
 中文:
 定理 δ_comp_σ_of_gt
-  条件: {n} {i : Fin (n + 2)} {j : Fin (n + 1)} (H : j.castSucc < i)
+  条件: {n} {i : 有限集 (n + 2)} {j : 有限集 (n + 1)} (H : j.castSucc < i)
   证明: by
   ext k : 3
   dsimp [δ, σ]
@@ -1205,7 +1205,7 @@ theorem δ_comp_σ_of_gt'
 
 中文:
 定理 δ_comp_σ_of_gt'
-  条件: {n} {i : Fin (n + 3)} {j : Fin (n + 2)} (H : j.succ < i)
+  条件: {n} {i : 有限集 (n + 3)} {j : 有限集 (n + 2)} (H : j.succ < i)
   证明: by
   rw [← δ_comp_σ_of_gt]
   · simp
@@ -1246,7 +1246,7 @@ theorem σ_comp_σ
 
 中文:
 定理 σ_comp_σ
-  条件: {n} {i j : Fin (n + 1)} (H : i <= j)
+  条件: {n} {i j : 有限集 (n + 1)} (H : i <= j)
   证明: by
   ext k : 3
   dsimp [σ]
@@ -1303,7 +1303,7 @@ lemma δ_zero_eq_const
 
 中文:
 引理 δ_zero_eq_const
-  结论: δ (0 : Fin 2) = const _ _ 1
+  结论: δ (0 : 有限集 2) = const _ _ 1
   证明: by decide
 -/
 lemma δ_zero_eq_const : δ (0 : Fin 2) = const _ _ 1 := by decide
@@ -1318,7 +1318,7 @@ lemma δ_one_eq_const
 
 中文:
 引理 δ_one_eq_const
-  结论: δ (1 : Fin 2) = const _ _ 0
+  结论: δ (1 : 有限集 2) = const _ _ 0
   证明: by decide
 -/
 lemma δ_one_eq_const : δ (1 : Fin 2) = const _ _ 0 := by decide
@@ -1333,7 +1333,7 @@ definition factor_δ
 
 中文:
 定义 factor_δ
-  签名: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
+  签名: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : 有限集 (n + 2))
   定义体: f ≫ σ (Fin.predAbove 0 j)
 
 Depends on / 依赖: Fin.predAbove, predAbove
@@ -1355,7 +1355,7 @@ lemma factor_δ_spec
 
 中文:
 引理 factor_δ_spec
-  结论: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : Fin (n + 2))
+  结论: {m n : 自然数} (f : ⦋m⦌ ⟶ ⦋n + 1⦌) (j : 有限集 (n + 2))
   证明: by
   ext k : 3
   cases j using Fin.cases <;> simp_all [factor_δ, δ, σ]
@@ -1386,7 +1386,7 @@ lemma δ_zero_mkOfSucc
 
 中文:
 引理 δ_zero_mkOfSucc
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   证明: by
   ext x
   fin_cases x
@@ -1416,7 +1416,7 @@ lemma δ_one_mkOfSucc
 
 中文:
 引理 δ_one_mkOfSucc
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   证明: by
   ext x
   fin_cases x
@@ -1444,7 +1444,7 @@ lemma mkOfSucc_δ_lt
 
 中文:
 引理 mkOfSucc_δ_lt
-  结论: {n : 自然数} {i : Fin n} {j : Fin (n + 2)}
+  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
   证明: by
   ext x
   fin_cases x
@@ -1479,7 +1479,7 @@ lemma mkOfSucc_δ_gt
 
 中文:
 引理 mkOfSucc_δ_gt
-  结论: {n : 自然数} {i : Fin n} {j : Fin (n + 2)}
+  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
   证明: by
   ext x
   simp only [δ, len_mk, mkHom, comp_toOrderHom, Hom.toOrderHom_mk, OrderHom.comp_coe,
@@ -1521,7 +1521,7 @@ lemma mkOfSucc_δ_eq
 
 中文:
 引理 mkOfSucc_δ_eq
-  结论: {n : 自然数} {i : Fin n} {j : Fin (n + 2)}
+  结论: {n : 自然数} {i : 有限集 n} {j : 有限集 (n + 2)}
   证明: by
   ext x
   fin_cases x
@@ -1561,7 +1561,7 @@ lemma mkOfSucc_one_eq_δ
 
 中文:
 引理 mkOfSucc_one_eq_δ
-  结论: mkOfSucc (1 : Fin 2) = δ 0
+  结论: mkOfSucc (1 : 有限集 2) = δ 0
   证明: by decide
 -/
 lemma mkOfSucc_one_eq_δ : mkOfSucc (1 : Fin 2) = δ 0 := by decide
@@ -1576,7 +1576,7 @@ lemma mkOfSucc_zero_eq_δ
 
 中文:
 引理 mkOfSucc_zero_eq_δ
-  结论: mkOfSucc (0 : Fin 2) = δ 2
+  结论: mkOfSucc (0 : 有限集 2) = δ 2
   证明: by decide
 -/
 lemma mkOfSucc_zero_eq_δ : mkOfSucc (0 : Fin 2) = δ 2 := by decide
@@ -1698,7 +1698,7 @@ definition skeletalFunctor
 
 中文:
 定义 skeletalFunctor
-  签名: : SimplexCategory ⥤ NonemptyFinLinOrd where
+  签名: : 单纯形范畴 ⥤ 非空有限线性序 where
   定义体: NonemptyFinLinOrd.of (Fin (a.len + 1))
   map f := NonemptyFinLinOrd.ofHom f.toOrderHom
 
@@ -1718,7 +1718,7 @@ theorem skeletalFunctor.coe_map
 
 中文:
 定理 skeletalFunctor.coe_map
-  条件: {Δ₁ Δ₂ : SimplexCategory} (f : Δ₁ ⟶ Δ₂)
+  条件: {Δ₁ Δ₂ : 单纯形范畴} (f : Δ₁ ⟶ Δ₂)
   证明: rfl
 -/
 theorem skeletalFunctor.coe_map {Δ₁ Δ₂ : SimplexCategory} (f : Δ₁ ⟶ Δ₂) :
@@ -1740,7 +1740,7 @@ theorem skeletal
 
 中文:
 定理 skeletal
-  结论: Skeletal SimplexCategory
+  结论: Skeletal 单纯形范畴
   证明: fun X Y ⟨I⟩ => by
   suffices Fintype.card (Fin (X.len + 1)) = Fintype.card (Fin (Y.len + 1)) by
     ext
@@ -1769,7 +1769,7 @@ instance :
 
 中文:
 实例 :
-  签名: skeletalFunctor.Full
+  签名: skeletalFunctor.满
   定义体: ⟨SimplexCategory.Hom.mk f.hom.hom, rfl⟩
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.Hom.mk, f.hom.hom
@@ -1789,7 +1789,7 @@ instance :
 
 中文:
 实例 :
-  签名: skeletalFunctor.Faithful
+  签名: skeletalFunctor.忠实
   定义体: by
     ext : 3
     exact CategoryTheory.congr_fun h _
@@ -1818,7 +1818,7 @@ instance :
 
 中文:
 实例 :
-  签名: skeletalFunctor.EssSurj
+  签名: skeletalFunctor.本质满射
   定义体: ⟨⦋(Fintype.card X - 1 : Nat)⦌,
       ⟨by
         have aux : Fintype.card X = Fintype.card X - 1 + 1 :=
@@ -1858,7 +1858,7 @@ instance isEquivalence
 
 中文:
 实例 isEquivalence
-  签名: : skeletalFunctor.IsEquivalence where
+  签名: : skeletalFunctor.是等价 where
 -/
 noncomputable instance isEquivalence : skeletalFunctor.IsEquivalence where
 
@@ -1874,7 +1874,7 @@ definition skeletalEquivalence
 
 中文:
 定义 skeletalEquivalence
-  签名: : SimplexCategory ≌ NonemptyFinLinOrd
+  签名: : 单纯形范畴 ≌ 非空有限线性序
   定义体: Functor.asEquivalence skeletalFunctor
 
 Depends on / 依赖: Functor, Functor.asEquivalence, asEquivalence, skeletalFunctor
@@ -1917,7 +1917,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory SimplexCategory (fun i j => Fin (i.len + 1) ->o Fin (j.len + 1))
+  签名: 余ncrete范畴 单纯形范畴 (fun i j => 有限集 (i.len + 1) ->o 有限集 (j.len + 1))
   定义体: Hom.toOrderHom
   ofHom f := Hom.mk f
 
@@ -1940,8 +1940,8 @@ lemma toType_apply
 
 中文:
 引理 toType_apply
-  条件: (x : SimplexCategory)
-  结论: ToType x = Fin (x.len + 1)
+  条件: (x : 单纯形范畴)
+  结论: ToType x = 有限集 (x.len + 1)
   证明: rfl
 
 @[simp]
@@ -1960,8 +1960,8 @@ lemma concreteCategoryHom_id
 
 中文:
 引理 concreteCategoryHom_id
-  条件: (n : SimplexCategory)
-  结论: ConcreteCategory.hom (𝟙 n) = .id
+  条件: (n : 单纯形范畴)
+  结论: 余ncrete范畴.hom (𝟙 n) = .id
   证明: rfl
 -/
 lemma concreteCategoryHom_id (n : SimplexCategory) : ConcreteCategory.hom (𝟙 n) = .id := rfl
@@ -1976,7 +1976,7 @@ lemma coe_δ
 
 中文:
 引理 coe_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: rfl
 -/
 lemma coe_δ {n : Nat} (i : Fin (n + 2)) :
@@ -1992,7 +1992,7 @@ lemma coe_σ
 
 中文:
 引理 coe_σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: rfl
 -/
 lemma coe_σ {n : Nat} (i : Fin (n + 1)) :
@@ -2017,7 +2017,7 @@ theorem mono_iff_injective
 
 中文:
 定理 mono_iff_injective
-  条件: {n m : SimplexCategory} {f : n ⟶ m}
+  条件: {n m : 单纯形范畴} {f : n ⟶ m}
   证明: by
   rw [← Functor.mono_map_iff_mono skeletalEquivalence.functor]
   dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
@@ -2048,7 +2048,7 @@ theorem epi_iff_surjective
 
 中文:
 定理 epi_iff_surjective
-  条件: {n m : SimplexCategory} {f : n ⟶ m}
+  条件: {n m : 单纯形范畴} {f : n ⟶ m}
   证明: by
   rw [← Functor.epi_map_iff_epi skeletalEquivalence.functor]
   dsimp only [skeletalEquivalence, Functor.asEquivalence_functor]
@@ -2077,7 +2077,7 @@ theorem len_le_of_mono
 
 中文:
 定理 len_le_of_mono
-  条件: {x y : SimplexCategory} (f : x ⟶ y) [Mono f]
+  条件: {x y : 单纯形范畴} (f : x ⟶ y) [单态射 f]
   结论: x.len <= y.len
   证明: by
   simpa using Fintype.card_le_of_injective f.toOrderHom.toFun
@@ -2100,7 +2100,7 @@ theorem le_of_mono
 
 中文:
 定理 le_of_mono
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [Mono f]
+  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [单态射 f]
   结论: n <= m
   证明: len_le_of_mono f
 
@@ -2122,7 +2122,7 @@ theorem len_le_of_epi
 
 中文:
 定理 len_le_of_epi
-  条件: {x y : SimplexCategory} (f : x ⟶ y) [Epi f]
+  条件: {x y : 单纯形范畴} (f : x ⟶ y) [满态射 f]
   结论: y.len <= x.len
   证明: by
   simpa using Fintype.card_le_of_surjective f.toOrderHom.toFun
@@ -2145,7 +2145,7 @@ theorem le_of_epi
 
 中文:
 定理 le_of_epi
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [Epi f]
+  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [满态射 f]
   结论: m <= n
   证明: len_le_of_epi f
 
@@ -2164,7 +2164,7 @@ lemma len_eq_of_isIso
 
 中文:
 引理 len_eq_of_isIso
-  条件: {x y : SimplexCategory} (f : x ⟶ y) [IsIso f]
+  条件: {x y : 单纯形范畴} (f : x ⟶ y) [是同构 f]
   结论: x.len = y.len
   证明: le_antisymm (len_le_of_mono f) (len_le_of_epi f)
 
@@ -2184,7 +2184,7 @@ lemma eq_of_isIso
 
 中文:
 引理 eq_of_isIso
-  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [IsIso f]
+  条件: {n m : 自然数} (f : ⦋n⦌ ⟶ ⦋m⦌) [是同构 f]
   结论: n = m
   证明: len_eq_of_isIso f
 
@@ -2215,7 +2215,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget SimplexCategory).ReflectsIsomorphisms
+  签名: (forget 单纯形范畴).反映同构
   定义体: ⟨fun f hf =>
     Iso.isIso_hom
       { hom := f
@@ -2262,7 +2262,7 @@ theorem isIso_of_bijective
 
 中文:
 定理 isIso_of_bijective
-  结论: {x y : SimplexCategory} {f : x ⟶ y}
+  结论: {x y : 单纯形范畴} {f : x ⟶ y}
   证明: haveI : IsIso ((forget SimplexCategory).map f) := (isIso_iff_bijective _).mpr hf
   isIso_of_reflects_iso f (forget SimplexCategory)
 
@@ -2287,7 +2287,7 @@ lemma isIso_iff_of_mono
 
 中文:
 引理 isIso_iff_of_mono
-  条件: {n m : SimplexCategory} (f : n ⟶ m) [hf : Mono f]
+  条件: {n m : 单纯形范畴} (f : n ⟶ m) [hf : 单态射 f]
   证明: by
   refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
   obtain rfl : n = m := by aesop
@@ -2321,7 +2321,7 @@ lemma isIso_iff_of_epi
 
 中文:
 引理 isIso_iff_of_epi
-  条件: {n m : SimplexCategory} (f : n ⟶ m) [hf : Epi f]
+  条件: {n m : 单纯形范畴} (f : n ⟶ m) [hf : 满态射 f]
   证明: by
   refine ⟨fun _ => len_eq_of_isIso f, fun h => ?_⟩
   obtain rfl : n = m := by aesop
@@ -2349,7 +2349,7 @@ instance :
 
 中文:
 实例 :
-  签名: Balanced SimplexCategory
+  签名: Balanced 单纯形范畴
   定义体: by
     rw [isIso_iff_of_epi]
     exact le_antisymm (len_le_of_mono f) (len_le_of_epi f)
@@ -2379,7 +2379,7 @@ definition orderIsoOfIso
 
 中文:
 定义 orderIsoOfIso
-  签名: {x y : SimplexCategory} (e : x ≅ y)
+  签名: {x y : 单纯形范畴} (e : x ≅ y)
   定义体: Equiv.toOrderIso
     { toFun := e.hom.toOrderHom
       invFun := e.inv.toOrderHom
@@ -2415,8 +2415,8 @@ theorem iso_eq_iso_refl
 
 中文:
 定理 iso_eq_iso_refl
-  条件: {x : SimplexCategory} (e : x ≅ x)
-  结论: e = Iso.refl x
+  条件: {x : 单纯形范畴} (e : x ≅ x)
+  结论: e = 同构.refl x
   证明: by
   have h : (Finset.univ : Finset (Fin (x.len + 1))).card = x.len + 1 := Finset.card_fin (x.len + 1)
   have eq₁ := Finset.orderEmbOfFin_unique' h fun i => Finset.mem_univ ((orderIsoOfIso e) i)
@@ -2444,7 +2444,7 @@ theorem eq_id_of_isIso
 
 中文:
 定理 eq_id_of_isIso
-  条件: {x : SimplexCategory} (f : x ⟶ x) [IsIso f]
+  条件: {x : 单纯形范畴} (f : x ⟶ x) [是同构 f]
   结论: f = 𝟙 _
   证明: congr_arg (fun φ : _ ≅ _ => φ.hom) (iso_eq_iso_refl (asIso f))
 
@@ -2472,7 +2472,7 @@ theorem eq_σ_comp_of_not_injective'
 
 中文:
 定理 eq_σ_comp_of_not_injective'
-  结论: {n : 自然数} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
+  结论: {n : 自然数} {Δ' : 单纯形范畴} (θ : ⦋n + 1⦌ ⟶ Δ')
   证明: by
   use δ i.succ ≫ θ
   ext x : 3
@@ -2532,7 +2532,7 @@ theorem eq_σ_comp_of_not_injective
 
 中文:
 定理 eq_σ_comp_of_not_injective
-  结论: {n : 自然数} {Δ' : SimplexCategory} (θ : ⦋n + 1⦌ ⟶ Δ')
+  结论: {n : 自然数} {Δ' : 单纯形范畴} (θ : ⦋n + 1⦌ ⟶ Δ')
   证明: by
   simp only [Function.Injective, exists_prop, not_forall] at hθ
   -- as θ is not injective, there exists `x<y` such that `θ x = θ y`
@@ -2580,7 +2580,7 @@ exact .symm this _ (hi _)
 
 中文:
 定理 eq_comp_δ_of_not_surjective'
-  结论: {n : 自然数} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
+  结论: {n : 自然数} {Δ : 单纯形范畴} (θ : Δ ⟶ ⦋n + 1⦌)
   证明: by
   use θ ≫ σ (.predAbove (.last n) i)
   ext x : 3
@@ -2615,7 +2615,7 @@ theorem eq_comp_δ_of_not_surjective
 
 中文:
 定理 eq_comp_δ_of_not_surjective
-  结论: {n : 自然数} {Δ : SimplexCategory} (θ : Δ ⟶ ⦋n + 1⦌)
+  结论: {n : 自然数} {Δ : 单纯形范畴} (θ : Δ ⟶ ⦋n + 1⦌)
   证明: by
   obtain ⟨i, hi⟩ := not_forall.mp hθ
   use i
@@ -2642,7 +2642,7 @@ theorem eq_id_of_mono
 
 中文:
 定理 eq_id_of_mono
-  条件: {x : SimplexCategory} (i : x ⟶ x) [Mono i]
+  条件: {x : 单纯形范畴} (i : x ⟶ x) [单态射 i]
   结论: i = 𝟙 _
   证明: have := (isIso_iff_of_mono i).mpr rfl
   eq_id_of_isIso _
@@ -2665,7 +2665,7 @@ theorem eq_id_of_epi
 
 中文:
 定理 eq_id_of_epi
-  条件: {x : SimplexCategory} (i : x ⟶ x) [Epi i]
+  条件: {x : 单纯形范畴} (i : x ⟶ x) [满态射 i]
   结论: i = 𝟙 _
   证明: have := (isIso_iff_of_epi i).mpr rfl
   eq_id_of_isIso _
@@ -2696,8 +2696,8 @@ theorem eq_σ_of_epi
 
 中文:
 定理 eq_σ_of_epi
-  条件: {n : 自然数} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [Epi θ]
-  结论: 存在 i : Fin (n + 1), θ = σ i
+  条件: {n : 自然数} (θ : ⦋n + 1⦌ ⟶ ⦋n⦌) [满态射 θ]
+  结论: 存在 i : 有限集 (n + 1), θ = σ i
   证明: by
   obtain ⟨i, θ', h⟩ := eq_σ_comp_of_not_injective θ (by
     rw [← mono_iff_injective]
@@ -2742,8 +2742,8 @@ theorem eq_δ_of_mono
 
 中文:
 定理 eq_δ_of_mono
-  条件: {n : 自然数} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [Mono θ]
-  结论: 存在 i : Fin (n + 2), θ = δ i
+  条件: {n : 自然数} (θ : ⦋n⦌ ⟶ ⦋n + 1⦌) [单态射 θ]
+  结论: 存在 i : 有限集 (n + 2), θ = δ i
   证明: by
   obtain ⟨i, θ', h⟩ := eq_comp_δ_of_not_surjective θ (by
     rw [← epi_iff_surjective]
@@ -2779,7 +2779,7 @@ theorem len_lt_of_mono
 
 中文:
 定理 len_lt_of_mono
-  条件: {Δ' Δ : SimplexCategory} (i : Δ' ⟶ Δ) [Mono i] (hi' : Δ != Δ')
+  条件: {Δ' Δ : 单纯形范畴} (i : Δ' ⟶ Δ) [单态射 i] (hi' : Δ != Δ')
   证明: by
   grind [-> len_le_of_mono, SimplexCategory.ext]
 
@@ -2799,7 +2799,7 @@ instance :
 
 中文:
 实例 :
-  签名: SplitEpiCategory SimplexCategory
+  签名: 分裂满态射范畴 单纯形范畴
   定义体: skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence
 
 Depends on / 依赖: inverse, skeletalEquivalence, skeletalEquivalence.inverse.splitEpiCategoryImpOfIsEquivalence, splitEpiCategoryImpOfIsEquivalence
@@ -2818,7 +2818,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasStrongEpiMonoFactorisations SimplexCategory
+  签名: 有StrongEpiMonoFactorisations 单纯形范畴
   定义体: Functor.hasStrongEpiMonoFactorisations_imp_of_isEquivalence
     SimplexCategory.skeletalEquivalence.inverse
 
@@ -2838,7 +2838,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasStrongEpiImages SimplexCategory
+  签名: 有StrongEpiImages 单纯形范畴
   定义体: Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
 
 Depends on / 依赖: Limits, Limits.hasStrongEpiImages_of_hasStrongEpiMonoFactorisations, hasStrongEpiImages_of_hasStrongEpiMonoFactorisations
@@ -2863,7 +2863,7 @@ theorem image_eq
 
 中文:
 定理 image_eq
-  结论: {Δ Δ' Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [Epi e] {i : Δ' ⟶ Δ''}
+  结论: {Δ Δ' Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ Δ'} [满态射 e] {i : Δ' ⟶ Δ''}
   证明: by
   have := strongEpi_of_epi e
   let e := image.isoStrongEpiMono e i fac
@@ -2891,7 +2891,7 @@ theorem image_ι_eq
 
 中文:
 定理 image_ι_eq
-  结论: {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
+  结论: {Δ Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ 像 φ} [满态射 e]
   证明: by
   have := strongEpi_of_epi e
   rw [← image.isoStrongEpiMono_hom_comp_ι e i fac]; rw [SimplexCategory.eq_id_of_isIso (image.isoStrongEpiMono e i fac).hom]; rw [Category.id_comp]
@@ -2914,7 +2914,7 @@ theorem factorThruImage_eq
 
 中文:
 定理 factorThruImage_eq
-  结论: {Δ Δ'' : SimplexCategory} {φ : Δ ⟶ Δ''} {e : Δ ⟶ image φ} [Epi e]
+  结论: {Δ Δ'' : 单纯形范畴} {φ : Δ ⟶ Δ''} {e : Δ ⟶ 像 φ} [满态射 e]
   证明: by
   rw [← cancel_mono i]; rw [fac]; rw [← image_ι_eq fac]; rw [image.fac]
 
@@ -2939,7 +2939,7 @@ definition toPartOrd
 
 中文:
 定义 toPartOrd
-  签名: : SimplexCategory ⥤ PartOrd.{u}
+  签名: : 单纯形范畴 ⥤ 偏序.{u}
   定义体: skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd FinPartOrd ⋙
     forget₂ FinPartOrd PartOrd ⋙ PartOrd.uliftFunctor
 
@@ -2964,7 +2964,7 @@ lemma toPartOrd_obj
 
 中文:
 引理 toPartOrd_obj
-  条件: (n : SimplexCategory)
+  条件: (n : 单纯形范畴)
   证明: rfl
 
 @[simp]
@@ -2983,7 +2983,7 @@ lemma toPartOrd_map_apply
 
 中文:
 引理 toPartOrd_map_apply
-  条件: {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len + 1)))
+  条件: {n m : 单纯形范畴} (f : n ⟶ m) (i : (有限集 (n.len + 1)))
   证明: rfl
 -/
 lemma toPartOrd_map_apply {n m : SimplexCategory} (f : n ⟶ m) (i : (Fin (n.len + 1))) :
@@ -3004,7 +3004,7 @@ definition toCat
 
 中文:
 定义 toCat
-  签名: : SimplexCategory ⥤ Cat.{0}
+  签名: : 单纯形范畴 ⥤ Cat.{0}
   定义体: SimplexCategory.skeletalFunctor ⋙ forget₂ NonemptyFinLinOrd LinOrd ⋙
       forget₂ LinOrd Lat ⋙ forget₂ Lat PartOrd ⋙
       forget₂ PartOrd Preord ⋙ preordToCat
@@ -3028,7 +3028,7 @@ theorem toCat.obj_eq_Fin
 中文:
 定理 toCat.obj_eq_Fin
   条件: (n : 自然数)
-  结论: toCat.obj ⦋n⦌ = Fin (n + 1)
+  结论: toCat.obj ⦋n⦌ = 有限集 (n + 1)
   证明: rfl
 -/
 theorem toCat.obj_eq_Fin (n : Nat) : toCat.obj ⦋n⦌ = Fin (n + 1) := rfl
@@ -3044,7 +3044,7 @@ instance uniqueHomToZero
 
 中文:
 实例 uniqueHomToZero
-  签名: {Δ : SimplexCategory}
+  签名: {Δ : 单纯形范畴}
   定义体: Δ.const _ 0
   uniq := eq_const_to_zero
 -/
@@ -3062,7 +3062,7 @@ definition isTerminalZero
 
 中文:
 定义 isTerminalZero
-  签名: : IsTerminal (⦋0⦌ : SimplexCategory)
+  签名: : 是终止 (⦋0⦌ : 单纯形范畴)
   定义体: IsTerminal.ofUnique ⦋0⦌
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
@@ -3080,7 +3080,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTerminal SimplexCategory
+  签名: 有终止 单纯形范畴
   定义体: IsTerminal.hasTerminal isTerminalZero
 
 Depends on / 依赖: IsTerminal, IsTerminal.hasTerminal, hasTerminal, isTerminalZero
@@ -3098,7 +3098,7 @@ definition topIsoZero
 
 中文:
 定义 topIsoZero
-  签名: : ⊤_ SimplexCategory ≅ ⦋0⦌
+  签名: : ⊤_ 单纯形范畴 ≅ ⦋0⦌
   定义体: terminalIsoIsTerminal isTerminalZero
 
 Depends on / 依赖: isTerminalZero, terminalIsoIsTerminal
@@ -3122,7 +3122,7 @@ lemma δ_injective
 中文:
 引理 δ_injective
   条件: {n : 自然数}
-  结论: Function.Injective (δ (n := n))
+  结论: 函数.单射 (δ (n := n))
   证明: by
   intro i j hij
   rw [← Fin.succAbove_left_inj]
@@ -3153,7 +3153,7 @@ lemma σ_injective
 中文:
 引理 σ_injective
   条件: {n : 自然数}
-  结论: Function.Injective (σ (n := n))
+  结论: 函数.单射 (σ (n := n))
   证明: by
   intro i j hij
   rw [← Fin.predAbove_left_inj]

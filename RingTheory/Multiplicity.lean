@@ -45,7 +45,7 @@ abbreviation FiniteMultiplicity
 
 中文:
 缩写 FiniteMultiplicity
-  签名: [Monoid α] (a b : α)
+  签名: [幺半群 α] (a b : α)
   定义体: exists n : Nat, ¬a ^ (n + 1) ∣ b
 
 Depends on / 依赖: MulAction
@@ -64,7 +64,7 @@ definition emultiplicity
 
 中文:
 定义 emultiplicity
-  签名: [Monoid α] (a b : α)
+  签名: [幺半群 α] (a b : α)
   定义体: if h : FiniteMultiplicity a b then Nat.find h else ⊤
 
 Depends on / 依赖: DistribMulAction, FiniteMultiplicity, Nat.find
@@ -82,7 +82,7 @@ definition multiplicity
 
 中文:
 定义 multiplicity
-  签名: [Monoid α] (a b : α)
+  签名: [幺半群 α] (a b : α)
   定义体: (emultiplicity a b).untopD 1
 
 Depends on / 依赖: DistribMulAction, emultiplicity, untopD
@@ -653,7 +653,7 @@ theorem Int.natCast_emultiplicity
 @[norm_cast]
 
 中文:
-定理 Int.natCast_emultiplicity
+定理 整数.natCast_emultiplicity
   条件: (a b : 自然数)
   证明: by
   unfold emultiplicity FiniteMultiplicity
@@ -679,7 +679,7 @@ theorem Int.natCast_multiplicity
   proof: multiplicity_eq_of_emultiplicity_eq (natCast_emultiplicity a b)
 
 中文:
-定理 Int.natCast_multiplicity
+定理 整数.natCast_multiplicity
   条件: (a b : 自然数)
   结论: multiplicity (a : 整数) (b : 整数) = multiplicity a b
   证明: multiplicity_eq_of_emultiplicity_eq (natCast_emultiplicity a b)
@@ -704,7 +704,7 @@ theorem FiniteMultiplicity.not_iff_forall
     by simp [FiniteMultiplicity]; tauto⟩
 
 中文:
-定理 FiniteMultiplicity.not_iff_forall
+定理 FiniteMultiplicity.not_iff_对任意
   结论: ¬FiniteMultiplicity a b ↔ 对任意 n : 自然数, a ^ n ∣ b
   证明: ⟨fun h n =>
     Nat.casesOn n
@@ -741,7 +741,7 @@ alias FiniteMultiplicity.not_unit := FiniteMultiplicity.not_isUnit
 中文:
 定理 FiniteMultiplicity.not_isUnit
   条件: (h : FiniteMultiplicity a b)
-  结论: ¬IsUnit a
+  结论: ¬是单位 a
   证明: let ⟨n, hn⟩ := h
   hn ∘ IsUnit.dvd ∘ IsUnit.pow (n + 1)
 
@@ -1217,7 +1217,7 @@ theorem emultiplicity_eq_ofNat
 @[simp]
 
 中文:
-定理 emultiplicity_eq_ofNat
+定理 emultiplicity_eq_of自然数
   条件: {a b n : 自然数} [n.AtLeastTwo]
   证明: emultiplicity_eq_coe
 
@@ -1241,7 +1241,7 @@ theorem FiniteMultiplicity.not_of_isUnit_left
 
 中文:
 定理 FiniteMultiplicity.not_of_isUnit_left
-  条件: (b : α) (ha : IsUnit a)
+  条件: (b : α) (ha : 是单位 a)
   结论: ¬FiniteMultiplicity a b
   证明: (·.not_isUnit ha)
 
@@ -1378,7 +1378,7 @@ theorem emultiplicity_eq_zero_of_irreducible_ne
 
 中文:
 定理 emultiplicity_eq_zero_of_irreducible_ne
-  结论: {R : 类型} [CommMonoidWithZero R]
+  结论: {R : 类型} [带零交换幺半群 R]
   证明: emultiplicity_eq_zero.2 ((ha.dvd_irreducible_iff_associated hb).not.2 fun ⟨u, _⟩ => by
     simp_all [Subsingleton.elim u 1])
 
@@ -1460,7 +1460,7 @@ theorem FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd
   exact (hfin.multiplicity_eq_iff.1 (by simp)).2 h₁
 
 中文:
-定理 FiniteMultiplicity.exists_eq_pow_mul_and_not_dvd
+定理 FiniteMultiplicity.存在_eq_pow_mul_and_not_dvd
   条件: (hfin : FiniteMultiplicity a b)
   证明: by
   obtain ⟨c, hc⟩ := pow_multiplicity_dvd a b
@@ -1597,7 +1597,7 @@ theorem le_emultiplicity_map
 
 中文:
 定理 le_emultiplicity_map
-  结论: {F : 类型} [FunLike F α β] [MonoidHomClass F α β]
+  结论: {F : 类型} [函数状 F α β] [幺半群态射类 F α β]
   证明: emultiplicity_le_emultiplicity_iff.2 fun n => by rw [← map_pow]; exact map_dvd f
 
 Depends on / 依赖: emultiplicity_le_emultiplicity_iff, map_dvd, map_pow
@@ -1618,7 +1618,7 @@ theorem emultiplicity_map_eq
 
 中文:
 定理 emultiplicity_map_eq
-  结论: {F : 类型} [EquivLike F α β] [MulEquivClass F α β]
+  结论: {F : 类型} [等价状 F α β] [乘法等价类 F α β]
   证明: by
   simp [emultiplicity_eq_emultiplicity_iff, ← map_pow, map_dvd_iff]
 
@@ -1638,7 +1638,7 @@ theorem multiplicity_map_eq
 
 中文:
 定理 multiplicity_map_eq
-  结论: {F : 类型} [EquivLike F α β] [MulEquivClass F α β]
+  结论: {F : 类型} [等价状 F α β] [乘法等价类 F α β]
   证明: multiplicity_eq_of_emultiplicity_eq (emultiplicity_map_eq f)
 
 Depends on / 依赖: emultiplicity_map_eq, multiplicity_eq_of_emultiplicity_eq
@@ -1803,7 +1803,7 @@ have ha : a != 0 := fun ha => hb zero_dvd_iff.mp by rw [ha] at h; exact h 1
         Classical.by_contradiction
 
 中文:
-定理 Nat.finiteMultiplicity_iff
+定理 自然数.finiteMultiplicity_iff
   条件: {a b : 自然数}
   结论: FiniteMultiplicity a b ↔ a != 1 ∧ 0 < b
   证明: by
@@ -1868,7 +1868,7 @@ theorem emultiplicity_of_isUnit_right
 
 中文:
 定理 emultiplicity_of_isUnit_right
-  结论: {a b : α} (ha : ¬IsUnit a)
+  结论: {a b : α} (ha : ¬是单位 a)
   证明: emultiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
 
 Depends on / 依赖: emultiplicity_eq_zero, emultiplicity_eq_zero.mpr, isUnit_of_dvd_unit
@@ -1887,7 +1887,7 @@ theorem multiplicity_of_isUnit_right
 
 中文:
 定理 multiplicity_of_isUnit_right
-  结论: {a b : α} (ha : ¬IsUnit a)
+  结论: {a b : α} (ha : ¬是单位 a)
   证明: multiplicity_eq_zero.mpr fun h => ha (isUnit_of_dvd_unit h hb)
 
 Depends on / 依赖: isUnit_of_dvd_unit, multiplicity_eq_zero, multiplicity_eq_zero.mpr
@@ -1907,7 +1907,7 @@ theorem emultiplicity_of_one_right
 
 中文:
 定理 emultiplicity_of_one_right
-  条件: {a : α} (ha : ¬IsUnit a)
+  条件: {a : α} (ha : ¬是单位 a)
   结论: emultiplicity a 1 = 0
   证明: emultiplicity_of_isUnit_right ha isUnit_one
 
@@ -1927,7 +1927,7 @@ theorem multiplicity_of_one_right
 
 中文:
 定理 multiplicity_of_one_right
-  条件: {a : α} (ha : ¬IsUnit a)
+  条件: {a : α} (ha : ¬是单位 a)
   结论: multiplicity a 1 = 0
   证明: multiplicity_of_isUnit_right ha isUnit_one
 
@@ -1947,7 +1947,7 @@ theorem emultiplicity_of_unit_right
 
 中文:
 定理 emultiplicity_of_unit_right
-  条件: {a : α} (ha : ¬IsUnit a) (u : αˣ)
+  条件: {a : α} (ha : ¬是单位 a) (u : αˣ)
   结论: emultiplicity a u = 0
   证明: emultiplicity_of_isUnit_right ha u.isUnit
 
@@ -1967,7 +1967,7 @@ theorem multiplicity_of_unit_right
 
 中文:
 定理 multiplicity_of_unit_right
-  条件: {a : α} (ha : ¬IsUnit a) (u : αˣ)
+  条件: {a : α} (ha : ¬是单位 a) (u : αˣ)
   结论: multiplicity a u = 0
   证明: multiplicity_of_isUnit_right ha u.isUnit
 
@@ -2358,7 +2358,7 @@ theorem Int.emultiplicity_natAbs
   · rw [emultiplicity_neg, Int.natCast_emultiplicity]
 
 中文:
-定理 Int.emultiplicity_natAbs
+定理 整数.emultiplicity_natAbs
   条件: (a : 自然数) (b : 整数)
   证明: by
   rcases Int.natAbs_eq b with h | h <;> conv_rhs => rw [h]
@@ -2382,7 +2382,7 @@ theorem Int.multiplicity_natAbs
   proof: multiplicity_eq_of_emultiplicity_eq (Int.emultiplicity_natAbs a b)
 
 中文:
-定理 Int.multiplicity_natAbs
+定理 整数.multiplicity_natAbs
   条件: (a : 自然数) (b : 整数)
   证明: multiplicity_eq_of_emultiplicity_eq (Int.emultiplicity_natAbs a b)
 
@@ -2599,7 +2599,7 @@ theorem finiteMultiplicity_mul_aux
 
 中文:
 定理 finiteMultiplicity_mul_aux
-  条件: {p : α} (hp : Prime p) {a b : α}
+  条件: {p : α} (hp : 素 p) {a b : α}
   证明: ⟨p ^ (n + m) * s, by simp [hs, pow_add, mul_comm, mul_left_comm]⟩
     (hp.2.2 a b this).elim
       (fun ⟨x, hx⟩ =>
@@ -2651,8 +2651,8 @@ theorem Prime.finiteMultiplicity_mul
   proof: fun ⟨n, hn⟩ ⟨m, hm⟩ => ⟨n + m, finiteMultiplicity_mul_aux hp hn hm⟩
 
 中文:
-定理 Prime.finiteMultiplicity_mul
-  条件: {p a b : α} (hp : Prime p)
+定理 素.finiteMultiplicity_mul
+  条件: {p a b : α} (hp : 素 p)
   证明: fun ⟨n, hn⟩ ⟨m, hm⟩ => ⟨n + m, finiteMultiplicity_mul_aux hp hn hm⟩
 
 Depends on / 依赖: finiteMultiplicity_mul_aux
@@ -2672,7 +2672,7 @@ theorem FiniteMultiplicity.mul_iff
 
 中文:
 定理 FiniteMultiplicity.mul_iff
-  条件: {p a b : α} (hp : Prime p)
+  条件: {p a b : α} (hp : 素 p)
   证明: ⟨fun h => ⟨h.mul_left, h.mul_right⟩, fun h =>
     hp.finiteMultiplicity_mul h.1 h.2⟩
 
@@ -2697,7 +2697,7 @@ theorem FiniteMultiplicity.pow
 
 中文:
 定理 FiniteMultiplicity.pow
-  结论: {p a : α} (hp : Prime p)
+  结论: {p a : α} (hp : 素 p)
   证明: match k, hfin with
   | 0, _ => ⟨0, by simp [mt isUnit_iff_dvd_one.2 hp.2.1]⟩
   | k + 1, ha => by rw [_root_.pow_succ']; exact hp.finiteMultiplicity_mul ha (ha.pow hp)
@@ -2796,7 +2796,7 @@ theorem multiplicity_mul
 
 中文:
 定理 multiplicity_mul
-  条件: {p a b : α} (hp : Prime p) (hfin : FiniteMultiplicity p (a * b))
+  条件: {p a b : α} (hp : 素 p) (hfin : FiniteMultiplicity p (a * b))
   证明: by
   have hdiva : p ^ multiplicity p a ∣ a := pow_multiplicity_dvd ..
   have hdivb : p ^ multiplicity p b ∣ b := pow_multiplicity_dvd ..
@@ -2836,7 +2836,7 @@ theorem emultiplicity_mul
 
 中文:
 定理 emultiplicity_mul
-  条件: {p a b : α} (hp : Prime p)
+  条件: {p a b : α} (hp : 素 p)
   证明: by
   by_cases hfin : FiniteMultiplicity p (a * b)
   · rw [hfin.emultiplicity_eq_multiplicity, hfin.mul_left.emultiplicity_eq_multiplicity,
@@ -2872,8 +2872,8 @@ theorem Finset.emultiplicity_prod
   | insert a s has ih => simpa [has, ← ih] using emultiplicity_mul hp
 
 中文:
-定理 Finset.emultiplicity_prod
-  条件: {β : 类型} {p : α} (hp : Prime p) (s : Finset β) (f : β -> α)
+定理 有限集.emultiplicity_prod
+  条件: {β : 类型} {p : α} (hp : 素 p) (s : 有限集 β) (f : β -> α)
   证明: by classical
   induction s using Finset.induction with
   | empty =>
@@ -2904,7 +2904,7 @@ theorem emultiplicity_pow
 
 中文:
 定理 emultiplicity_pow
-  条件: {p a : α} (hp : Prime p) {k : 自然数}
+  条件: {p a : α} (hp : 素 p) {k : 自然数}
   证明: by
   induction k with
   | zero => simp [emultiplicity_of_one_right hp.not_isUnit]
@@ -2930,7 +2930,7 @@ theorem FiniteMultiplicity.multiplicity_pow
 
 中文:
 定理 FiniteMultiplicity.multiplicity_pow
-  结论: {p a : α} (hp : Prime p)
+  结论: {p a : α} (hp : 素 p)
   证明: by
   exact_mod_cast (ha.pow hp).emultiplicity_eq_multiplicity ▸
     ha.emultiplicity_eq_multiplicity ▸ emultiplicity_pow hp
@@ -2954,7 +2954,7 @@ theorem emultiplicity_pow_self
 
 中文:
 定理 emultiplicity_pow_self
-  条件: {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : 自然数)
+  条件: {p : α} (h0 : p != 0) (hu : ¬是单位 p) (n : 自然数)
   证明: by
   apply emultiplicity_eq_of_dvd_of_not_dvd
   · rfl
@@ -2980,7 +2980,7 @@ theorem multiplicity_pow_self
 
 中文:
 定理 multiplicity_pow_self
-  条件: {p : α} (h0 : p != 0) (hu : ¬IsUnit p) (n : 自然数)
+  条件: {p : α} (h0 : p != 0) (hu : ¬是单位 p) (n : 自然数)
   证明: multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_pow_self h0 hu n)
 
 Depends on / 依赖: emultiplicity_pow_self, multiplicity_eq_of_emultiplicity_eq_some
@@ -2999,7 +2999,7 @@ theorem emultiplicity_pow_self_of_prime
 
 中文:
 定理 emultiplicity_pow_self_of_prime
-  条件: {p : α} (hp : Prime p) (n : 自然数)
+  条件: {p : α} (hp : 素 p) (n : 自然数)
   证明: emultiplicity_pow_self hp.ne_zero hp.not_isUnit n
 
 Depends on / 依赖: emultiplicity_pow_self, hp.ne_zero, hp.not_isUnit, ne_zero, not_isUnit
@@ -3018,7 +3018,7 @@ theorem multiplicity_pow_self_of_prime
 
 中文:
 定理 multiplicity_pow_self_of_prime
-  条件: {p : α} (hp : Prime p) (n : 自然数)
+  条件: {p : α} (hp : 素 p) (n : 自然数)
   证明: multiplicity_pow_self hp.ne_zero hp.not_isUnit n
 
 Depends on / 依赖: hp.ne_zero, hp.not_isUnit, multiplicity_pow_self, ne_zero, not_isUnit
@@ -3082,7 +3082,7 @@ theorem Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs
   simp only [FiniteMultiplicity.def, ← Int.natAbs_dvd_natAbs, Int.natAbs_pow]
 
 中文:
-定理 Int.finiteMultiplicity_iff_finiteMultiplicity_natAbs
+定理 整数.finiteMultiplicity_iff_finiteMultiplicity_natAbs
   条件: {a b : 整数}
   证明: by
   simp only [FiniteMultiplicity.def, ← Int.natAbs_dvd_natAbs, Int.natAbs_pow]
@@ -3104,7 +3104,7 @@ theorem Int.finiteMultiplicity_iff
   rw [finiteMultiplicity_iff_finiteMultiplicity_natAbs]; rw [Nat.finiteMultiplicity_iff]; rw [pos_iff_ne_zero]; rw [Int.natAbs_ne_zero]
 
 中文:
-定理 Int.finiteMultiplicity_iff
+定理 整数.finiteMultiplicity_iff
   条件: {a b : 整数}
   结论: FiniteMultiplicity a b ↔ a.natAbs != 1 ∧ b != 0
   证明: by
@@ -3124,7 +3124,7 @@ instance Nat.decidableFiniteMultiplicity
   body: fun _ _ => decidable_of_iff' _ Nat.finiteMultiplicity_iff
 
 中文:
-实例 Nat.decidableFiniteMultiplicity
+实例 自然数.decidableFiniteMultiplicity
   签名: : DecidableRel fun a b : 自然数 => FiniteMultiplicity a b
   定义体: fun _ _ => decidable_of_iff' _ Nat.finiteMultiplicity_iff
 
@@ -3142,7 +3142,7 @@ instance Int.decidableMultiplicityFinite
   body: fun _ _ => decidable_of_iff' _ Int.finiteMultiplicity_iff
 
 中文:
-实例 Int.decidableMultiplicityFinite
+实例 整数.decidableMultiplicityFinite
   签名: : DecidableRel fun a b : 整数 => FiniteMultiplicity a b
   定义体: fun _ _ => decidable_of_iff' _ Int.finiteMultiplicity_iff
 

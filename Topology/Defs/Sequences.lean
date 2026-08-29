@@ -59,7 +59,7 @@ definition seqClosure
 
 中文:
 定义 seqClosure
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: { a | exists x : Nat -> X, (forall n : Nat, x n in s) ∧ Tendsto x atTop (𝓝 a) }
 
 Depends on / 依赖: Tendsto
@@ -77,7 +77,7 @@ definition IsSeqClosed
 
 中文:
 定义 IsSeqClosed
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃x : Nat -> X⦄ ⦃p : X⦄, (forall n, x n in s) -> Tendsto x atTop (𝓝 p) -> p in s
 
 Depends on / 依赖: Tendsto
@@ -113,7 +113,7 @@ definition IsSeqCompact
 
 中文:
 定义 IsSeqCompact
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃x : Nat -> X⦄, (forall n, x n in s) -> exists a in s, exists φ : Nat -> Nat, StrictMono φ ∧ Tendsto (x ∘ φ) atTop (𝓝 a)
 
 Depends on / 依赖: StrictMono, Tendsto
@@ -136,10 +136,10 @@ class SeqCompactSpace
     - isSeqCompact_univ : IsSeqCompact (univ : Set X)
 
 中文:
-类 SeqCompactSpace
+类 SeqCompact空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - isSeqCompact_univ : IsSeqCompact (univ : Set X)
+    - isSeqCompact_univ : IsSeqCompact (univ : 集合 X)
 -/
 class SeqCompactSpace : Prop where
   isSeqCompact_univ : IsSeqCompact (univ : Set X)
@@ -156,10 +156,10 @@ class FrechetUrysohnSpace
     - closure_subset_seqClosure : forall s : Set X, closure s subseteq seqClosure s
 
 中文:
-类 FrechetUrysohnSpace
+类 FrechetUrysohn空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - closure_subset_seqClosure : 对任意 s : Set X, closure s subseteq seqClosure s
+    - closure_subset_seqClosure : 对任意 s : 集合 X, closure s subseteq seqClosure s
 -/
 class FrechetUrysohnSpace : Prop where
   closure_subset_seqClosure : forall s : Set X, closure s subseteq seqClosure s
@@ -174,10 +174,10 @@ class SequentialSpace
     - isClosed_of_seq : forall s : Set X, IsSeqClosed s -> IsClosed s
 
 中文:
-类 SequentialSpace
+类 Sequential空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - isClosed_of_seq : 对任意 s : Set X, IsSeqClosed s -> IsClosed s
+    - isClosed_of_seq : 对任意 s : 集合 X, IsSeqClosed s -> 是闭集 s
 
 Depends on / 依赖: SequentialSpace, SequentialSpace.isClosed_of_seq, isClosed_of_seq
 -/
@@ -196,7 +196,7 @@ theorem IsSeqClosed.isClosed
 
 中文:
 定理 IsSeqClosed.isClosed
-  条件: [SequentialSpace X] {s : Set X} (hs : IsSeqClosed s)
+  条件: [Sequential空间 X] {s : 集合 X} (hs : IsSeqClosed s)
   证明: SequentialSpace.isClosed_of_seq s hs
 -/
 protected theorem IsSeqClosed.isClosed [SequentialSpace X] {s : Set X} (hs : IsSeqClosed s) :

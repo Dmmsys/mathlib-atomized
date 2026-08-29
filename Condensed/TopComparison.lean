@@ -143,7 +143,7 @@ instance [PreservesFiniteCoproducts
   ⟨fun _ => comp_preservesLimitsOfShape G.op (yonedaPresheaf' X)⟩
 
 中文:
-实例 [PreservesFiniteCoproducts
+实例 [保持FiniteCoproducts
   签名: G] :
   定义体: have := preservesFiniteProducts_op G
   ⟨fun _ => comp_preservesLimitsOfShape G.op (yonedaPresheaf' X)⟩
@@ -179,7 +179,7 @@ definition TopCat.toSheafCompHausLike
     rw [Presheaf.isSheaf_iff_preservesFiniteProducts_and_equalizer
 
 中文:
-定义 TopCat.toSheafCompHausLike
+定义 顶元素范畴.toSheafCompHausLike
   签名: :
   定义体: CompHausLike.preregular hs
     Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w)) where
@@ -246,8 +246,8 @@ abbreviation TopCat.toCondensedSet
   body: toSheafCompHausLike.{u + 1} _ X (fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
 中文:
-缩写 TopCat.toCondensedSet
-  签名: (X : TopCat.{u + 1})
+缩写 顶元素范畴.toCondensedSet
+  签名: (X : 顶元素范畴.{u + 1})
   定义体: toSheafCompHausLike.{u + 1} _ X (fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
 Depends on / 依赖: CompHaus, CompHaus.effectiveEpi_tfae, effectiveEpi_tfae, toSheafCompHausLike
@@ -265,7 +265,7 @@ abbreviation topCatToCondensedSet
 
 中文:
 缩写 topCatToCondensedSet
-  签名: : TopCat.{u + 1} ⥤ CondensedSet.{u}
+  签名: : 顶元素范畴.{u + 1} ⥤ CondensedSet.{u}
   定义体: topCatToSheafCompHausLike.{u + 1} _ (fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
 Depends on / 依赖: CompHaus, CompHaus.effectiveEpi_tfae, effectiveEpi_tfae, topCatToSheafCompHausLike

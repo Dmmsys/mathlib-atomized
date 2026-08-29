@@ -60,7 +60,7 @@ theorem IsLinearSet.definable
 
 中文:
 定理 IsLinearSet.definable
-  条件: [Finite α] (hs : IsLinearSet s)
+  条件: [有限 α] (hs : IsLinearSet s)
   结论: A.Definable presburger s
   证明: by
   rw [isLinearSet_iff] at hs
@@ -110,7 +110,7 @@ theorem IsSemilinearSet.definable
 
 中文:
 定理 IsSemilinearSet.definable
-  条件: [Finite α] (hs : IsSemilinearSet s)
+  条件: [有限 α] (hs : IsSemilinearSet s)
   证明: by
   rw [isSemilinearSet_iff] at hs
   rcases hs with ⟨S, hS, rfl⟩
@@ -159,7 +159,7 @@ lemma term_realize_eq_add_dotProduct
 
 中文:
 引理 term_realize_eq_add_dotProduct
-  条件: [Fintype α] (t : presburger[[A]].Term α)
+  条件: [有限类型 α] (t : presburger[[A]].项 α)
   证明: by
   classical
   induction t with simp only [Term.realize]
@@ -279,7 +279,7 @@ lemma isSemilinearSet_formula_realize_semilinear
 
 中文:
 引理 isSemilinearSet_formula_realize_semilinear
-  条件: (φ : presburger[[A]].Formula α)
+  条件: (φ : presburger[[A]].公式 α)
   证明: by
   let e := Equiv.sumEmpty α (Fin 0)
   convert! (isSemilinearSet_boundedFormula_realize φ).image (LinearMap.funLeft Nat Nat e.symm)
@@ -309,7 +309,7 @@ theorem definable_iff_isSemilinearSet
 
 中文:
 定理 definable_iff_isSemilinearSet
-  条件: {s : Set (α -> 自然数)}
+  条件: {s : 集合 (α -> 自然数)}
   证明: ⟨fun ⟨φ, hφ⟩ => hφ ▸ isSemilinearSet_formula_realize_semilinear φ, IsSemilinearSet.definable⟩
 
 Depends on / 依赖: IsSemilinearSet, IsSemilinearSet.definable, definable, isSemilinearSet_formula_realize_semilinear
@@ -331,7 +331,7 @@ theorem definable₁_iff_ultimately_periodic
 
 中文:
 定理 definable₁_iff_ultimately_periodic
-  条件: {s : Set 自然数}
+  条件: {s : 集合 自然数}
   证明: by
   rw [Definable₁]; rw [definable_iff_isSemilinearSet]; rw [← isSemilinearSet_image_iff (LinearEquiv.funUnique (Fin 1) Nat Nat)]; rw [← preimage_ofPred_eq]
   simp only [LinearEquiv.funUnique_apply, Function.eval, Fin.default_eq_zero, ofPred_mem_eq]
@@ -362,7 +362,7 @@ theorem mul_not_definable
 
 中文:
 定理 mul_not_definable
-  结论: ¬ A.Definable presburger {v : Fin 3 -> 自然数 | v 0 = v 1 * v 2}
+  结论: ¬ A.Definable presburger {v : 有限集 3 -> 自然数 | v 0 = v 1 * v 2}
   证明: by
   intro hmul
   have hsqr : A.Definable₁ presburger {x * x | x : Nat} := by

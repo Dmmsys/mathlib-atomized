@@ -125,7 +125,7 @@ definition visitWithM
 
 中文:
 定义 visitWithM
-  签名: {β} (arr : Array β) (visitM : β -> m α)
+  签名: {β} (arr : 数组 β) (visitM : β -> m α)
   定义体: arr.foldlM (init := empty) fun acc msg => return combine acc (← visitM msg)
 -/
 @[inline] def visitWithM {β} (arr : Array β) (visitM : β -> m α)
@@ -145,7 +145,7 @@ return .ascend ← visitWithM arr visitM empty combine
 
 中文:
 定义 visitWithAndAscendM
-  签名: {β} (arr : Array β) (visitM : β -> m α)
+  签名: {β} (arr : 数组 β) (visitM : β -> m α)
   定义体: do
   if arr.isEmpty then return .ascend else
 return .ascend ← visitWithM arr visitM empty combine
@@ -215,7 +215,7 @@ definition onlyOnDefEqNodes
 
 中文:
 定义 onlyOnDefEqNodes
-  签名: {m} [Monad m] {α}
+  签名: {m} [单子 m] {α}
   定义体: fun td header children => do
     if td.cls == `Meta.isDefEq.onFailure then return .ascend
     unless (`Meta.isDefEq).isPrefixOf td.cls do return .descend
@@ -275,7 +275,7 @@ definition collectIsDefEqChecks
 
 中文:
 定义 collectIsDefEqChecks
-  签名: (pred : Lean.TraceResult -> 布尔)
+  签名: (pred : Lean.TraceResult -> 布尔值)
   定义体: msg.visitTraceNodesM onlyOnDefEqNodes fun td header children => do
     if let some status := td.result? then
       if pred status then
@@ -452,7 +452,7 @@ definition analyzeTraces
 
 中文:
 定义 analyzeTraces
-  签名: (strictMsgs permMsgs : Array MessageData) (includeSynth : 布尔 := false)
+  签名: (strictMsgs permMsgs : 数组 MessageData) (includeSynth : 布尔值 := false)
   定义体: do
   -- Build sets of permissive successes and failures for transition-point detection.
   let mut permSuccesses : Std.HashSet String := {}
@@ -538,7 +538,7 @@ definition ppEscalations
 
 中文:
 定义 ppEscalations
-  签名: : List (Options -> Options)
+  签名: : 列表 (Options -> Options)
   定义体: [ fun o => o.setBool `pp.universes true
   , fun o => o.setBool `pp.explicit true
   ]
@@ -565,7 +565,7 @@ definition disambiguateFailures
 
 中文:
 定义 disambiguateFailures
-  签名: (failures : Array MessageData)
+  签名: (failures : 数组 MessageData)
   定义体: failures.mapM fun f => do
     unless isIdenticalSidesStr (← f.toString) do return f
     for ppLevel in ppEscalations do
@@ -600,7 +600,7 @@ definition reportDefEqAbuse
 
 中文:
 定义 reportDefEqAbuse
-  签名: {m : Type -> Type} [Monad m] [MonadLog m] [AddMessageContext m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadLog m] [AddMessageContext m]
   定义体: do
   let failureEmoji := Lean.TraceResult.failure.toEmoji
   if !synthResults.isEmpty then

@@ -40,7 +40,7 @@ theorem SL_reduction_mod_hom_val
 
 中文:
 定理 SL_reduction_mod_hom_val
-  条件: (γ : SL(2, 整数)) (i j : Fin 2)
+  条件: (γ : SL(2, 整数)) (i j : 有限集 2)
   证明: rfl
 -/
 theorem SL_reduction_mod_hom_val (γ : SL(2, Int)) (i j : Fin 2) :
@@ -61,7 +61,7 @@ definition Gamma
 
 中文:
 定义 Gamma
-  签名: : Subgroup SL(2, 整数)
+  签名: : 子群 SL(2, 整数)
   定义体: SLMOD(N).ker
 
 @[inherit_doc] scoped notation "Γ(" n ")" => Gamma n
@@ -129,7 +129,7 @@ theorem Gamma_normal
 
 中文:
 定理 Gamma_normal
-  结论: Subgroup.Normal (Gamma N)
+  结论: 子群.正规 (Gamma N)
   证明: SLMOD(N).normal_ker
 
 Depends on / 依赖: normal_ker
@@ -193,7 +193,7 @@ theorem Gamma_one_coe_eq_SL
 
 中文:
 定理 Gamma_one_coe_eq_SL
-  结论: (↑(Gamma 1) : Subgroup (GL (Fin 2) 实数)) = 𝒮ℒ
+  结论: (↑(Gamma 1) : 子群 (GL (有限集 2) 实数)) = 𝒮ℒ
   证明: by
   simp [Gamma_one_top, MonoidHom.range_eq_map]
 
@@ -275,7 +275,7 @@ definition Gamma0
 
 中文:
 定义 Gamma0
-  签名: : Subgroup SL(2, 整数) where
+  签名: : 子群 SL(2, 整数) where
   定义体: { g | (g 1 0 : ZMod N) = 0 }
   one_mem' := by simp
   mul_mem' {a} {b} ha hb := by
@@ -559,7 +559,7 @@ definition IsCongruenceSubgroup
 
 中文:
 定义 IsCongruenceSubgroup
-  签名: (Γ : Subgroup SL(2, 整数))
+  签名: (Γ : 子群 SL(2, 整数))
   定义体: exists N != 0, Gamma N <= Γ
 -/
 def IsCongruenceSubgroup (Γ : Subgroup SL(2, Int)) : Prop :=
@@ -577,7 +577,7 @@ theorem isCongruenceSubgroup_trans
 
 中文:
 定理 isCongruenceSubgroup_trans
-  结论: (H K : Subgroup SL(2, 整数)) (h : H <= K)
+  结论: (H K : 子群 SL(2, 整数)) (h : H <= K)
   证明: by
   obtain ⟨N, hN⟩ := h2
   exact ⟨N, hN.1, hN.2.trans h⟩
@@ -665,7 +665,7 @@ lemma IsCongruenceSubgroup.finiteIndex
 
 中文:
 引理 IsCongruenceSubgroup.finiteIndex
-  结论: {Γ : Subgroup SL(2, 整数)}
+  结论: {Γ : 子群 SL(2, 整数)}
   证明: by
   obtain ⟨N, hN⟩ := h
   have : NeZero N := ⟨hN.1⟩
@@ -732,7 +732,7 @@ definition conjGL
 
 中文:
 定义 conjGL
-  签名: (Γ : Subgroup SL(2, 整数)) (g : GL (Fin 2) 实数)
+  签名: (Γ : 子群 SL(2, 整数)) (g : GL (有限集 2) 实数)
   定义体: ((toConjAct g⁻¹) • (Γ.map <| mapGL Real)).comap (mapGL Real)
 
 Depends on / 依赖: toConjAct
@@ -753,7 +753,7 @@ lemma mem_conjGL
 
 中文:
 引理 mem_conjGL
-  条件: {Γ : Subgroup SL(2, 整数)} {g : GL (Fin 2) 实数} {x : SL(2, 整数)}
+  条件: {Γ : 子群 SL(2, 整数)} {g : GL (有限集 2) 实数} {x : SL(2, 整数)}
   证明: by
   simp [conjGL, mapGL, Subgroup.mem_inv_pointwise_smul_iff, toConjAct_smul]
 
@@ -777,7 +777,7 @@ lemma conjGL_coe
 
 中文:
 引理 conjGL_coe
-  条件: (Γ : Subgroup SL(2, 整数)) (g : SL(2, 整数))
+  条件: (Γ : 子群 SL(2, 整数)) (g : SL(2, 整数))
   证明: by
   ext x
   simp_rw [mem_conjGL, ← map_inv, ← map_mul, toGL_injective.eq_iff, map_intCast_injective.eq_iff,
@@ -827,7 +827,7 @@ theorem conj_cong_is_cong
 
 中文:
 定理 conj_cong_is_cong
-  结论: (g : ConjAct SL(2, 整数)) (Γ : Subgroup SL(2, 整数))
+  结论: (g : ConjAct SL(2, 整数)) (Γ : 子群 SL(2, 整数))
   证明: by
   obtain ⟨N, HN⟩ := h
   refine ⟨N, ?_⟩
@@ -861,8 +861,8 @@ theorem exists_Gamma_le_conj
   -- we take
 
 中文:
-定理 exists_Gamma_le_conj
-  条件: (g : GL (Fin 2) Rat) (M : 自然数) [NeZero M]
+定理 存在_Gamma_le_conj
+  条件: (g : GL (有限集 2) 有理数) (M : 自然数) [NeZero M]
   证明: by
   -- Give names to the numerators and denominators of `g` and `g⁻¹`
   let A₁ := g.1
@@ -936,8 +936,8 @@ theorem exists_Gamma_le_conj'
   simpa only [Subtype.ext_iff, Units.ext_i
 
 中文:
-定理 exists_Gamma_le_conj'
-  条件: (g : GL (Fin 2) Rat) (M : 自然数) [NeZero M]
+定理 存在_Gamma_le_conj'
+  条件: (g : GL (有限集 2) 有理数) (M : 自然数) [NeZero M]
   证明: by
   obtain ⟨N, hN, h⟩ := exists_Gamma_le_conj g M
   refine ⟨N, hN, fun y hy => ?_⟩
@@ -981,8 +981,8 @@ lemma finiteIndex_conjGL
 
 中文:
 引理 finiteIndex_conjGL
-  条件: (g : GL (Fin 2) Rat)
-  结论: (conjGL ⊤ (g.map <| Rat.castHom 实数)).FiniteIndex
+  条件: (g : GL (有限集 2) 有理数)
+  结论: (conjGL ⊤ (g.map <| 有理数.castHom 实数)).FiniteIndex
   证明: by
   constructor
   let t := (toConjAct <| g.map <| Rat.castHom Real)⁻¹
@@ -1024,7 +1024,7 @@ lemma isArithmetic_conj_SL2Z
 
 中文:
 引理 isArithmetic_conj_SL2Z
-  条件: (g : GL (Fin 2) Rat)
+  条件: (g : GL (有限集 2) 有理数)
   证明: by
   constructor
   rw [MonoidHom.range_eq_map]
@@ -1057,8 +1057,8 @@ lemma _root_.Subgroup.IsArithmetic.conj
     (isArithmetic_conj_SL2Z g).is_commensurable⟩
 
 中文:
-引理 _root_.Subgroup.IsArithmetic.conj
-  结论: (𝒢 : Subgroup (GL (Fin 2) 实数)) [𝒢.IsArithmetic]
+引理 _root_.子群.是Arithmetic.conj
+  结论: (𝒢 : 子群 (GL (有限集 2) 实数)) [𝒢.是Arithmetic]
   证明: ⟨(Subgroup.IsArithmetic.is_commensurable.conj _).trans
     (isArithmetic_conj_SL2Z g).is_commensurable⟩
 
@@ -1087,7 +1087,7 @@ obtain ⟨y, hy, hy'⟩ := Subgroup.mem_inv_pointwise_smul_iff.mp hN' ⟨x, hx, 
 
 中文:
 引理 IsCongruenceSubgroup.conjGL
-  结论: {Γ : Subgroup SL(2, 整数)} (hΓ : IsCongruenceSubgroup Γ)
+  结论: {Γ : 子群 SL(2, 整数)} (hΓ : IsCongruenceSubgroup Γ)
   证明: by
   obtain ⟨M, hN, hΓM⟩ := hΓ
   have _ : NeZero M := ⟨hN⟩

@@ -90,7 +90,7 @@ instance ContinuousMultilinearMap.instContinuousEval
       (isEmbedding_toUniformOnFun.continuous.prodMap continuous_id) fun (f, x) => f.c
 
 中文:
-实例 ContinuousMultilinearMap.instContinuousEval
+实例 连续多重线性映射.instContinuousEval
   签名: :
   定义体: by
     cases nonempty_fintype ι
@@ -127,7 +127,7 @@ lemma continuous_uncurry_of_multilinear
 
 中文:
 引理 continuous_uncurry_of_multilinear
-  条件: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F)
+  条件: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E F)
   证明: by
   fun_prop
 
@@ -147,7 +147,7 @@ lemma continuousOn_uncurry_of_multilinear
 
 中文:
 引理 continuousOn_uncurry_of_multilinear
-  条件: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F) {s}
+  条件: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E F) {s}
   证明: f.continuous_uncurry_of_multilinear.continuousOn
 
 Depends on / 依赖: continuousOn, continuous_uncurry_of_multilinear, f.continuous_uncurry_of_multilinear.continuousOn
@@ -166,7 +166,7 @@ lemma continuousAt_uncurry_of_multilinear
 
 中文:
 引理 continuousAt_uncurry_of_multilinear
-  条件: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F) {x}
+  条件: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E F) {x}
   证明: f.continuous_uncurry_of_multilinear.continuousAt
 
 Depends on / 依赖: continuousAt, continuous_uncurry_of_multilinear, f.continuous_uncurry_of_multilinear.continuousAt
@@ -185,7 +185,7 @@ lemma continuousWithinAt_uncurry_of_multilinear
 
 中文:
 引理 continuousWithinAt_uncurry_of_multilinear
-  条件: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E F) {s x}
+  条件: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E F) {s x}
   证明: f.continuous_uncurry_of_multilinear.continuousWithinAt
 
 Depends on / 依赖: continuousWithinAt, continuous_uncurry_of_multilinear, f.continuous_uncurry_of_multilinear.continuousWithinAt
@@ -230,7 +230,7 @@ have : Inseparable (update m i 0) m := inseparable_pi.2
 
 中文:
 引理 norm_map_coord_zero
-  结论: (f : MultilinearMap 𝕜 E G) (hf : Continuous f)
+  结论: (f : 多重线性映射 𝕜 E G) (hf : 连续 f)
   证明: by
   classical
   rw [← inseparable_zero_iff_norm] at hi ⊢
@@ -265,7 +265,7 @@ theorem bound_of_shell_of_norm_map_coord_zero
 
 中文:
 定理 bound_of_shell_of_norm_map_coord_zero
-  结论: (f : MultilinearMap 𝕜 E G)
+  结论: (f : 多重线性映射 𝕜 E G)
   证明: by
   by_cases! hm : exists i, ‖m i‖ = 0
   · rcases hm with ⟨i, hi⟩
@@ -298,7 +298,7 @@ theorem bound_of_shell_of_continuous
 
 中文:
 定理 bound_of_shell_of_continuous
-  结论: (f : MultilinearMap 𝕜 E G) (hfc : Continuous f)
+  结论: (f : 多重线性映射 𝕜 E G) (hfc : 连续 f)
   证明: bound_of_shell_of_norm_map_coord_zero f (norm_map_coord_zero f hfc) hε hc hf m
 
 Depends on / 依赖: bound_of_shell_of_norm_map_coord_zero, norm_map_coord_zero
@@ -323,8 +323,8 @@ theorem exists_bound_of_continuous
   obtain ⟨ε : Real, ε0 : 0 < ε, hε : forall m : forall i, E i, ‖m - 0‖ < ε -> ‖f m - f 
 
 中文:
-定理 exists_bound_of_continuous
-  条件: (f : MultilinearMap 𝕜 E G) (hf : Continuous f)
+定理 存在_bound_of_continuous
+  条件: (f : 多重线性映射 𝕜 E G) (hf : 连续 f)
   证明: by
   cases isEmpty_or_nonempty ι
   · refine ⟨‖f 0‖ + 1, add_pos_of_nonneg_of_pos (norm_nonneg _) zero_lt_one, fun m => ?_⟩
@@ -371,7 +371,7 @@ theorem norm_image_sub_le_of_bound'
 
 中文:
 定理 norm_image_sub_le_of_bound'
-  结论: [DecidableEq ι] (f : MultilinearMap 𝕜 E G) {C : 实数} (hC : 0 <= C)
+  结论: [DecidableEq ι] (f : 多重线性映射 𝕜 E G) {C : 实数} (hC : 0 <= C)
   证明: by
   have A :
     forall s : Finset ι,
@@ -442,7 +442,7 @@ theorem norm_image_sub_le_of_bound
 
 中文:
 定理 norm_image_sub_le_of_bound
-  结论: (f : MultilinearMap 𝕜 E G)
+  结论: (f : 多重线性映射 𝕜 E G)
   证明: by
   classical
   have A :
@@ -501,7 +501,7 @@ theorem continuous_of_bound
 
 中文:
 定理 continuous_of_bound
-  条件: (f : MultilinearMap 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
+  条件: (f : 多重线性映射 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
   证明: by
   let D := max C 1
   have D_pos : 0 <= D := le_trans zero_le_one (le_max_right _ _)
@@ -543,7 +543,7 @@ definition mkContinuous
 
 中文:
 定义 mkContinuous
-  签名: (f : MultilinearMap 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
+  签名: (f : 多重线性映射 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
   定义体: { f with cont := f.continuous_of_bound C H }
 
 @[simp]
@@ -565,7 +565,7 @@ theorem coe_mkContinuous
 
 中文:
 定理 coe_mkContinuous
-  条件: (f : MultilinearMap 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
+  条件: (f : 多重线性映射 𝕜 E G) (C : 实数) (H : 对任意 m, ‖f m‖ <= C * ∏ i, ‖m i‖)
   证明: rfl
 -/
 theorem coe_mkContinuous (f : MultilinearMap 𝕜 E G) (C : Real) (H : forall m, ‖f m‖ <= C * ∏ i, ‖m i‖) :
@@ -588,7 +588,7 @@ theorem restr_norm_le
 
 中文:
 定理 restr_norm_le
-  结论: {k n : 自然数} (f : MultilinearMap 𝕜 (fun _ : Fin n => G) G')
+  结论: {k n : 自然数} (f : 多重线性映射 𝕜 (fun _ : 有限集 n => G) G')
   证明: by
   rw [mul_right_comm]; rw [mul_assoc]
   convert! H _ using 2
@@ -633,7 +633,7 @@ theorem bound
 
 中文:
 定理 bound
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   证明: f.toMultilinearMap.exists_bound_of_continuous f.2
 
 Depends on / 依赖: exists_bound_of_continuous, f.toMultilinearMap.exists_bound_of_continuous, toMultilinearMap
@@ -654,7 +654,7 @@ definition opNorm
 
 中文:
 定义 opNorm
-  签名: (f : ContinuousMultilinearMap 𝕜 E G)
+  签名: (f : 连续多重线性映射 𝕜 E G)
   定义体: sInf { c | 0 <= (c : Real) ∧ forall m, ‖f m‖ <= c * ∏ i, ‖m i‖ }
 -/
 def opNorm (f : ContinuousMultilinearMap 𝕜 E G) : Real :=
@@ -670,7 +670,7 @@ instance hasOpNorm
 
 中文:
 实例 hasOpNorm
-  签名: : Norm (ContinuousMultilinearMap 𝕜 E G)
+  签名: : 范数 (连续多重线性映射 𝕜 E G)
   定义体: ⟨opNorm⟩
 
 Depends on / 依赖: opNorm
@@ -688,7 +688,7 @@ instance hasOpNorm'
 
 中文:
 实例 hasOpNorm'
-  签名: : Norm (ContinuousMultilinearMap 𝕜 (fun _ : ι => G) G')
+  签名: : 范数 (连续多重线性映射 𝕜 (fun _ : ι => G) G')
   定义体: ContinuousMultilinearMap.hasOpNorm
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.hasOpNorm, hasOpNorm
@@ -706,7 +706,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   证明: rfl
 -/
 theorem norm_def (f : ContinuousMultilinearMap 𝕜 E G) :
@@ -726,7 +726,7 @@ theorem bounds_nonempty
 
 中文:
 定理 bounds_nonempty
-  条件: {f : ContinuousMultilinearMap 𝕜 E G}
+  条件: {f : 连续多重线性映射 𝕜 E G}
   证明: let ⟨M, hMp, hMb⟩ := f.bound
   ⟨M, le_of_lt hMp, hMb⟩
 
@@ -747,7 +747,7 @@ theorem bounds_bddBelow
 
 中文:
 定理 bounds_bddBelow
-  条件: {f : ContinuousMultilinearMap 𝕜 E G}
+  条件: {f : 连续多重线性映射 𝕜 E G}
   证明: ⟨0, fun _ ⟨hn, _⟩ => hn⟩
 -/
 theorem bounds_bddBelow {f : ContinuousMultilinearMap 𝕜 E G} :
@@ -767,7 +767,7 @@ theorem isLeast_opNorm
 
 中文:
 定理 isLeast_opNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   证明: by
   refine IsClosed.isLeast_csInf ?_ bounds_nonempty bounds_bddBelow
   simp only [Set.ofPred_and, Set.ofPred_forall]
@@ -792,7 +792,7 @@ theorem opNorm_nonneg
 
 中文:
 定理 opNorm_nonneg
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   结论: 0 <= ‖f‖
   证明: Real.sInf_nonneg fun _ ⟨hx, _⟩ => hx
 
@@ -811,7 +811,7 @@ theorem le_opNorm
 
 中文:
 定理 le_opNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (m : 对任意 i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E G) (m : 对任意 i, E i)
   证明: f.isLeast_opNorm.1.2 m
 
 Depends on / 依赖: f.isLeast_opNorm, isLeast_opNorm
@@ -830,7 +830,7 @@ theorem le_mul_prod_of_opNorm_le_of_le
 
 中文:
 定理 le_mul_prod_of_opNorm_le_of_le
-  结论: {f : ContinuousMultilinearMap 𝕜 E G}
+  结论: {f : 连续多重线性映射 𝕜 E G}
   证明: (f.le_opNorm m).trans by gcongr; exacts [f.opNorm_nonneg.trans hC, hm _]
 
 Depends on / 依赖: exacts, f.le_opNorm, f.opNorm_nonneg.trans, le_opNorm, opNorm_nonneg
@@ -850,7 +850,7 @@ theorem le_opNorm_mul_prod_of_le
 
 中文:
 定理 le_opNorm_mul_prod_of_le
-  结论: (f : ContinuousMultilinearMap 𝕜 E G)
+  结论: (f : 连续多重线性映射 𝕜 E G)
   证明: le_mul_prod_of_opNorm_le_of_le le_rfl hm
 
 Depends on / 依赖: le_mul_prod_of_opNorm_le_of_le, le_rfl
@@ -870,7 +870,7 @@ theorem le_opNorm_mul_pow_card_of_le
 
 中文:
 定理 le_opNorm_mul_pow_card_of_le
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) {m b} (hm : ‖m‖ <= b)
+  条件: (f : 连续多重线性映射 𝕜 E G) {m b} (hm : ‖m‖ <= b)
   证明: by
   simpa only [prod_const] using! f.le_opNorm_mul_prod_of_le fun i => (norm_le_pi_norm m i).trans hm
 
@@ -891,7 +891,7 @@ theorem le_opNorm_mul_pow_of_le
 
 中文:
 定理 le_opNorm_mul_pow_of_le
-  结论: {n : 自然数} {Ei : Fin n -> 类型} [对任意 i, SeminormedAddCommGroup (Ei i)]
+  结论: {n : 自然数} {Ei : 有限集 n -> 类型} [对任意 i, SeminormedAddComm群 (Ei i)]
   证明: by
   simpa only [Fintype.card_fin] using f.le_opNorm_mul_pow_card_of_le hm
 
@@ -912,7 +912,7 @@ theorem le_of_opNorm_le
 
 中文:
 定理 le_of_opNorm_le
-  条件: {f : ContinuousMultilinearMap 𝕜 E G} {C : 实数} (h : ‖f‖ <= C) (m : 对任意 i, E i)
+  条件: {f : 连续多重线性映射 𝕜 E G} {C : 实数} (h : ‖f‖ <= C) (m : 对任意 i, E i)
   证明: le_mul_prod_of_opNorm_le_of_le h fun _ => le_rfl
 
 Depends on / 依赖: le_mul_prod_of_opNorm_le_of_le, le_rfl
@@ -931,7 +931,7 @@ theorem ratio_le_opNorm
 
 中文:
 定理 ratio_le_opNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (m : 对任意 i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E G) (m : 对任意 i, E i)
   证明: div_le_of_le_mul₀ (by positivity) (opNorm_nonneg _) (f.le_opNorm m)
 
 Depends on / 依赖: f.le_opNorm, le_opNorm, opNorm_nonneg
@@ -950,7 +950,7 @@ theorem unit_le_opNorm
 
 中文:
 定理 unit_le_opNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) {m : 对任意 i, E i} (h : ‖m‖ <= 1)
+  条件: (f : 连续多重线性映射 𝕜 E G) {m : 对任意 i, E i} (h : ‖m‖ <= 1)
   证明: (le_opNorm_mul_pow_card_of_le f h).trans by simp
 
 Depends on / 依赖: le_opNorm_mul_pow_card_of_le
@@ -969,7 +969,7 @@ theorem opNorm_le_bound
 
 中文:
 定理 opNorm_le_bound
-  结论: {f : ContinuousMultilinearMap 𝕜 E G}
+  结论: {f : 连续多重线性映射 𝕜 E G}
   证明: csInf_le bounds_bddBelow ⟨hMp, hM⟩
 
 Depends on / 依赖: bounds_bddBelow, csInf_le
@@ -988,7 +988,7 @@ theorem opNorm_le_iff
 
 中文:
 定理 opNorm_le_iff
-  条件: {f : ContinuousMultilinearMap 𝕜 E G} {C : 实数} (hC : 0 <= C)
+  条件: {f : 连续多重线性映射 𝕜 E G} {C : 实数} (hC : 0 <= C)
   证明: ⟨fun h _ => le_of_opNorm_le h _, opNorm_le_bound hC⟩
 
 Depends on / 依赖: le_of_opNorm_le, opNorm_le_bound
@@ -1010,7 +1010,7 @@ theorem opNorm_add_le
 
 中文:
 定理 opNorm_add_le
-  条件: (f g : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f g : 连续多重线性映射 𝕜 E G)
   结论: ‖f + g‖ <= ‖f‖ + ‖g‖
   证明: opNorm_le_bound (add_nonneg (opNorm_nonneg f) (opNorm_nonneg g)) fun x => by
     rw [add_mul]
@@ -1033,7 +1033,7 @@ theorem opNorm_zero
 
 中文:
 定理 opNorm_zero
-  结论: ‖(0 : ContinuousMultilinearMap 𝕜 E G)‖ = 0
+  结论: ‖(0 : 连续多重线性映射 𝕜 E G)‖ = 0
   证明: (opNorm_nonneg _).antisymm' opNorm_le_bound le_rfl fun m => by simp
 
 Depends on / 依赖: antisymm, le_rfl, opNorm_le_bound, opNorm_nonneg
@@ -1052,7 +1052,7 @@ theorem opNorm_neg
 
 中文:
 定理 opNorm_neg
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   结论: ‖-f‖ = ‖f‖
   证明: by simp [norm_def]
 
@@ -1076,7 +1076,7 @@ theorem opNorm_smul_le
 
 中文:
 定理 opNorm_smul_le
-  条件: (c : 𝕜') (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (c : 𝕜') (f : 连续多重线性映射 𝕜 E G)
   结论: ‖c • f‖ <= ‖c‖ * ‖f‖
   证明: (c • f).opNorm_le_bound (mul_nonneg (norm_nonneg _) (opNorm_nonneg _)) fun m => by
     grw [smul_apply, norm_smul_le, mul_assoc, le_opNorm]
@@ -1098,7 +1098,7 @@ definition seminorm
 
 中文:
 定义 seminorm
-  签名: : Seminorm 𝕜 (ContinuousMultilinearMap 𝕜 E G)
+  签名: : 半范数 𝕜 (连续多重线性映射 𝕜 E G)
   定义体: .ofSMulLE norm opNorm_zero opNorm_add_le fun c f => f.opNorm_smul_le c
 -/
 protected def seminorm : Seminorm 𝕜 (ContinuousMultilinearMap 𝕜 E G) :=
@@ -1172,7 +1172,7 @@ instance instPseudoMetricSpace
 
 中文:
 实例 instPseudoMetricSpace
-  签名: : PseudoMetricSpace (ContinuousMultilinearMap 𝕜 E G)
+  签名: : 伪度量空间 (连续多重线性映射 𝕜 E G)
   定义体: .replaceUniformity
     (ContinuousMultilinearMap.seminorm 𝕜 E G).toSeminormedAddCommGroup.toPseudoMetricSpace
     uniformity_eq_seminorm
@@ -1229,7 +1229,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBoundedSMul 𝕜' (ContinuousMultilinearMap 𝕜 E G)
+  签名: 是BoundedSMul 𝕜' (连续多重线性映射 𝕜 E G)
   定义体: .of_norm_smul_le opNorm_smul_le
 
 Depends on / 依赖: of_norm_smul_le, opNorm_smul_le
@@ -1249,7 +1249,7 @@ instance normedSpace
 
 中文:
 实例 normedSpace
-  签名: : NormedSpace 𝕜' (ContinuousMultilinearMap 𝕜 E G)
+  签名: : 赋范空间 𝕜' (连续多重线性映射 𝕜 E G)
   定义体: ⟨fun c f => f.opNorm_smul_le c⟩
 
 Depends on / 依赖: f.opNorm_smul_le, opNorm_smul_le
@@ -1267,7 +1267,7 @@ instance normedSpace'
 
 中文:
 实例 normedSpace'
-  签名: : NormedSpace 𝕜' (ContinuousMultilinearMap 𝕜 (fun _ : ι => G') G)
+  签名: : 赋范空间 𝕜' (连续多重线性映射 𝕜 (fun _ : ι => G') G)
   定义体: ContinuousMultilinearMap.normedSpace
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.normedSpace, normedSpace
@@ -1289,7 +1289,7 @@ theorem le_opNNNorm
 
 中文:
 定理 le_opNNNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (m : 对任意 i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E G) (m : 对任意 i, E i)
   证明: NNReal.coe_le_coe.1 by
     push_cast
     exact f.le_opNorm m
@@ -1312,7 +1312,7 @@ theorem le_of_opNNNorm_le
 
 中文:
 定理 le_of_opNNNorm_le
-  结论: (f : ContinuousMultilinearMap 𝕜 E G)
+  结论: (f : 连续多重线性映射 𝕜 E G)
   证明: (f.le_opNNNorm m).trans mul_le_mul' h le_rfl
 
 Depends on / 依赖: f.le_opNNNorm, le_opNNNorm, le_rfl, mul_le_mul
@@ -1332,7 +1332,7 @@ theorem opNNNorm_le_iff
 
 中文:
 定理 opNNNorm_le_iff
-  条件: {f : ContinuousMultilinearMap 𝕜 E G} {C : 实数>=0}
+  条件: {f : 连续多重线性映射 𝕜 E G} {C : 实数>=0}
   证明: by
   simp only [← NNReal.coe_le_coe]; simp [opNorm_le_iff C.coe_nonneg, NNReal.coe_prod]
 
@@ -1353,7 +1353,7 @@ theorem isLeast_opNNNorm
 
 中文:
 定理 isLeast_opNNNorm
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   证明: by
   simpa only [← opNNNorm_le_iff] using! isLeast_Ici
 
@@ -1374,7 +1374,7 @@ theorem opNNNorm_prod
 
 中文:
 定理 opNNNorm_prod
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (g : ContinuousMultilinearMap 𝕜 E G')
+  条件: (f : 连续多重线性映射 𝕜 E G) (g : 连续多重线性映射 𝕜 E G')
   证明: eq_of_forall_ge_iff fun _ => by
     simp only [opNNNorm_le_iff, prod_apply, Prod.nnnorm_def, max_le_iff, forall_and]
 
@@ -1395,7 +1395,7 @@ theorem opNorm_prod
 
 中文:
 定理 opNorm_prod
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (g : ContinuousMultilinearMap 𝕜 E G')
+  条件: (f : 连续多重线性映射 𝕜 E G) (g : 连续多重线性映射 𝕜 E G')
   证明: congr_arg NNReal.toReal (opNNNorm_prod f g)
 
 Depends on / 依赖: NNReal, NNReal.toReal, congr_arg, opNNNorm_prod, toReal
@@ -1432,7 +1432,7 @@ theorem opNorm_pi
 
 中文:
 定理 opNorm_pi
-  结论: {ι' : 类型v'} [Fintype ι'] {E' : ι' -> Type wE'}
+  结论: {ι' : 类型v'} [有限类型 ι'] {E' : ι' -> 类型 wE'}
   证明: congr_arg NNReal.toReal (opNNNorm_pi f)
 
 Depends on / 依赖: NNReal, NNReal.toReal, congr_arg, opNNNorm_pi, toReal
@@ -1460,7 +1460,7 @@ theorem norm_ofSubsingleton
 
 中文:
 定理 norm_ofSubsingleton
-  条件: [Subsingleton ι] (i : ι) (f : G ->L[𝕜] G')
+  条件: [子单例 ι] (i : ι) (f : G ->L[𝕜] G')
   证明: by
   let : Unique ι := uniqueOfSubsingleton i
   simp [norm_def, ContinuousLinearMap.norm_def, (Equiv.funUnique _ _).symm.surjective.forall]
@@ -1485,7 +1485,7 @@ theorem nnnorm_ofSubsingleton
 
 中文:
 定理 nnnorm_ofSubsingleton
-  条件: [Subsingleton ι] (i : ι) (f : G ->L[𝕜] G')
+  条件: [子单例 ι] (i : ι) (f : G ->L[𝕜] G')
   证明: NNReal.eq norm_ofSubsingleton i f
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_ofSubsingleton
@@ -1512,7 +1512,7 @@ definition ofSubsingletonₗᵢ
 
 中文:
 定义 ofSubsingletonₗᵢ
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: { ofSubsingleton 𝕜 G G' i with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl
@@ -1539,7 +1539,7 @@ theorem norm_ofSubsingleton_id_le
 
 中文:
 定理 norm_ofSubsingleton_id_le
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   证明: by
   rw [norm_ofSubsingleton]
   apply ContinuousLinearMap.norm_id_le
@@ -1561,7 +1561,7 @@ theorem nnnorm_ofSubsingleton_id_le
 
 中文:
 定理 nnnorm_ofSubsingleton_id_le
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   证明: norm_ofSubsingleton_id_le _ _ _
 
 Depends on / 依赖: norm_ofSubsingleton_id_le
@@ -1590,7 +1590,7 @@ theorem norm_constOfIsEmpty
 
 中文:
 定理 norm_constOfIsEmpty
-  条件: [IsEmpty ι] (x : G)
+  条件: [是空 ι] (x : G)
   结论: ‖constOfIsEmpty 𝕜 E x‖ = ‖x‖
   证明: by
   apply le_antisymm
@@ -1620,7 +1620,7 @@ theorem nnnorm_constOfIsEmpty
 
 中文:
 定理 nnnorm_constOfIsEmpty
-  条件: [IsEmpty ι] (x : G)
+  条件: [是空 ι] (x : G)
   结论: ‖constOfIsEmpty 𝕜 E x‖₊ = ‖x‖₊
   证明: NNReal.eq norm_constOfIsEmpty _ _ _
 
@@ -1679,7 +1679,7 @@ definition piₗᵢ
 
 中文:
 定义 piₗᵢ
-  签名: {ι' : 类型v'} [Fintype ι'] {E' : ι' -> Type wE'} [对任意 i', NormedAddCommGroup (E' i')]
+  签名: {ι' : 类型v'} [有限类型 ι'] {E' : ι' -> 类型 wE'} [对任意 i', 赋范交换加群 (E' i')]
   定义体: piLinearEquiv
   norm_map' := opNorm_pi
 
@@ -1713,7 +1713,7 @@ theorem norm_restrictScalars
 
 中文:
 定理 norm_restrictScalars
-  条件: (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (f : 连续多重线性映射 𝕜 E G)
   证明: rfl
 -/
 theorem norm_restrictScalars (f : ContinuousMultilinearMap 𝕜 E G) :
@@ -1735,7 +1735,7 @@ definition restrictScalarsₗᵢ
 
 中文:
 定义 restrictScalarsₗᵢ
-  签名: : ContinuousMultilinearMap 𝕜 E G ->ₗᵢ[𝕜'] ContinuousMultilinearMap 𝕜' E G where
+  签名: : 连续多重线性映射 𝕜 E G ->ₗᵢ[𝕜'] 连续多重线性映射 𝕜' E G where
   定义体: restrictScalars 𝕜'
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1761,7 +1761,7 @@ theorem norm_image_sub_le'
 
 中文:
 定理 norm_image_sub_le'
-  条件: [DecidableEq ι] (f : ContinuousMultilinearMap 𝕜 E G) (m₁ m₂ : 对任意 i, E i)
+  条件: [DecidableEq ι] (f : 连续多重线性映射 𝕜 E G) (m₁ m₂ : 对任意 i, E i)
   证明: f.toMultilinearMap.norm_image_sub_le_of_bound' (norm_nonneg _) f.le_opNorm _ _
 
 Depends on / 依赖: f.le_opNorm, f.toMultilinearMap.norm_image_sub_le_of_bound, le_opNorm, norm_image_sub_le_of_bound, norm_nonneg, toMultilinearMap
@@ -1780,7 +1780,7 @@ theorem norm_image_sub_le
 
 中文:
 定理 norm_image_sub_le
-  条件: (f : ContinuousMultilinearMap 𝕜 E G) (m₁ m₂ : 对任意 i, E i)
+  条件: (f : 连续多重线性映射 𝕜 E G) (m₁ m₂ : 对任意 i, E i)
   证明: f.toMultilinearMap.norm_image_sub_le_of_bound (norm_nonneg _) f.le_opNorm _ _
 
 Depends on / 依赖: f.le_opNorm, f.toMultilinearMap.norm_image_sub_le_of_bound, le_opNorm, norm_image_sub_le_of_bound, norm_nonneg, toMultilinearMap
@@ -1802,8 +1802,8 @@ theorem MultilinearMap.mkContinuous_norm_le
   proof: ContinuousMultilinearMap.opNorm_le_bound hC fun m => H m
 
 中文:
-定理 MultilinearMap.mkContinuous_norm_le
-  结论: (f : MultilinearMap 𝕜 E G) {C : 实数} (hC : 0 <= C)
+定理 多重线性映射.mkContinuous_norm_le
+  结论: (f : 多重线性映射 𝕜 E G) {C : 实数} (hC : 0 <= C)
   证明: ContinuousMultilinearMap.opNorm_le_bound hC fun m => H m
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.opNorm_le_bound, opNorm_le_bound
@@ -1822,8 +1822,8 @@ theorem MultilinearMap.mkContinuous_norm_le'
 mul_le_mul_of_nonneg_right (le_max_left _ _) by positivity
 
 中文:
-定理 MultilinearMap.mkContinuous_norm_le'
-  结论: (f : MultilinearMap 𝕜 E G) {C : 实数}
+定理 多重线性映射.mkContinuous_norm_le'
+  结论: (f : 多重线性映射 𝕜 E G) {C : 实数}
   证明: ContinuousMultilinearMap.opNorm_le_bound (le_max_right _ _) fun m => (H m).trans
 mul_le_mul_of_nonneg_right (le_max_left _ _) by positivity
 
@@ -1847,7 +1847,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: {k n : 自然数} (f : (G [×n]->L[𝕜] G' :)) (s : Finset (Fin n)) (hk : #s = k) (z : G)
+  签名: {k n : 自然数} (f : (G [×n]->L[𝕜] G' :)) (s : 有限集 (有限集 n)) (hk : #s = k) (z : G)
   定义体: (f.toMultilinearMap.restr s hk z).mkContinuous (‖f‖ * ‖z‖ ^ (n - k)) fun _ =>
     MultilinearMap.restr_norm_le _ _ _ _ f.le_opNorm _
 
@@ -1870,7 +1870,7 @@ theorem norm_restr
 
 中文:
 定理 norm_restr
-  条件: {k n : 自然数} (f : G [×n]->L[𝕜] G') (s : Finset (Fin n)) (hk : #s = k) (z : G)
+  条件: {k n : 自然数} (f : G [×n]->L[𝕜] G') (s : 有限集 (有限集 n)) (hk : #s = k) (z : G)
   证明: by
   apply MultilinearMap.mkContinuous_norm_le
   exact mul_nonneg (norm_nonneg _) (pow_nonneg (norm_nonneg _) _)
@@ -1901,8 +1901,8 @@ theorem norm_mkPiAlgebra_le
 
 中文:
 定理 norm_mkPiAlgebra_le
-  条件: [Nonempty ι]
-  结论: ‖ContinuousMultilinearMap.mkPiAlgebra 𝕜 ι A‖ <= 1
+  条件: [非空 ι]
+  结论: ‖连续多重线性映射.mkPiAlgebra 𝕜 ι A‖ <= 1
   证明: by
   refine opNorm_le_bound zero_le_one fun m => ?_
   simp only [ContinuousMultilinearMap.mkPiAlgebra_apply, one_mul]
@@ -1931,7 +1931,7 @@ theorem norm_mkPiAlgebra_of_empty
 
 中文:
 定理 norm_mkPiAlgebra_of_empty
-  条件: [IsEmpty ι]
+  条件: [是空 ι]
   证明: by
   apply le_antisymm
   · apply opNorm_le_bound <;> simp
@@ -1966,8 +1966,8 @@ theorem norm_mkPiAlgebra
 
 中文:
 定理 norm_mkPiAlgebra
-  条件: [NormOneClass A]
-  结论: ‖ContinuousMultilinearMap.mkPiAlgebra 𝕜 ι A‖ = 1
+  条件: [NormOne类 A]
+  结论: ‖连续多重线性映射.mkPiAlgebra 𝕜 ι A‖ = 1
   证明: by
   cases isEmpty_or_nonempty ι
   · simp [norm_mkPiAlgebra_of_empty]
@@ -2007,7 +2007,7 @@ theorem norm_mkPiAlgebraFin_succ_le
 
 中文:
 定理 norm_mkPiAlgebraFin_succ_le
-  结论: ‖ContinuousMultilinearMap.mkPiAlgebraFin 𝕜 n.succ A‖ <= 1
+  结论: ‖连续多重线性映射.mkPiAlgebraFin 𝕜 n.succ A‖ <= 1
   证明: by
   refine opNorm_le_bound zero_le_one fun m => ?_
   simp only [ContinuousMultilinearMap.mkPiAlgebraFin_apply, one_mul, List.ofFn_eq_map,
@@ -2067,7 +2067,7 @@ theorem norm_mkPiAlgebraFin_zero
 
 中文:
 定理 norm_mkPiAlgebraFin_zero
-  结论: ‖ContinuousMultilinearMap.mkPiAlgebraFin 𝕜 0 A‖ = ‖(1 : A)‖
+  结论: ‖连续多重线性映射.mkPiAlgebraFin 𝕜 0 A‖ = ‖(1 : A)‖
   证明: by
   refine le_antisymm ?_ ?_
   · refine opNorm_le_bound (norm_nonneg (1 : A)) ?_
@@ -2131,7 +2131,7 @@ refine le_of_eq_of_le ?_
 
 中文:
 定理 norm_mkPiAlgebraFin
-  条件: [NormOneClass A]
+  条件: [NormOne类 A]
   证明: by
   cases n
   · rw [norm_mkPiAlgebraFin_zero]
@@ -2176,7 +2176,7 @@ theorem nnnorm_smulRight
 
 中文:
 定理 nnnorm_smulRight
-  条件: (f : ContinuousMultilinearMap 𝕜 E 𝕜) (z : G)
+  条件: (f : 连续多重线性映射 𝕜 E 𝕜) (z : G)
   证明: by
   refine le_antisymm ?_ ?_
   · refine opNNNorm_le_iff.2 fun m => (nnnorm_smul_le _ _).trans ?_
@@ -2219,7 +2219,7 @@ theorem norm_smulRight
 
 中文:
 定理 norm_smulRight
-  条件: (f : ContinuousMultilinearMap 𝕜 E 𝕜) (z : G)
+  条件: (f : 连续多重线性映射 𝕜 E 𝕜) (z : G)
   证明: congr_arg NNReal.toReal (nnnorm_smulRight f z)
 
 @[simp]
@@ -2244,7 +2244,7 @@ theorem norm_mkPiRing
 中文:
 定理 norm_mkPiRing
   条件: (z : G)
-  结论: ‖ContinuousMultilinearMap.mkPiRing 𝕜 ι z‖ = ‖z‖
+  结论: ‖连续多重线性映射.mkPiRing 𝕜 ι z‖ = ‖z‖
   证明: by
   rw [ContinuousMultilinearMap.mkPiRing]; rw [norm_smulRight]; rw [norm_mkPiAlgebra]; rw [one_mul]
 
@@ -2270,7 +2270,7 @@ definition smulRightL
 
 中文:
 定义 smulRightL
-  签名: : ContinuousMultilinearMap 𝕜 E 𝕜 ->L[𝕜] G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G
+  签名: : 连续多重线性映射 𝕜 E 𝕜 ->L[𝕜] G ->L[𝕜] 连续多重线性映射 𝕜 E G
   定义体: LinearMap.mkContinuous₂
     { toFun := fun f =>
         { toFun := fun z => f.smulRight z
@@ -2301,7 +2301,7 @@ lemma smulRightL_apply
 
 中文:
 引理 smulRightL_apply
-  条件: (f : ContinuousMultilinearMap 𝕜 E 𝕜) (z : G)
+  条件: (f : 连续多重线性映射 𝕜 E 𝕜) (z : G)
   证明: rfl
 -/
 @[simp] lemma smulRightL_apply (f : ContinuousMultilinearMap 𝕜 E 𝕜) (z : G) :
@@ -2347,7 +2347,7 @@ definition piFieldEquiv
 
 中文:
 定义 piFieldEquiv
-  签名: : G ≃ₗᵢ[𝕜] ContinuousMultilinearMap 𝕜 (fun _ : ι => 𝕜) G where
+  签名: : G ≃ₗᵢ[𝕜] 连续多重线性映射 𝕜 (fun _ : ι => 𝕜) G where
   定义体: ContinuousMultilinearMap.mkPiRing 𝕜 ι z
   invFun f := f fun _ => 1
   map_add' z z' := by
@@ -2399,7 +2399,7 @@ simpa using ((f x).mkContinuous_norm_le' _).trans_eq by
 
 中文:
 定义 mkContinuousLinear
-  签名: (f : G ->ₗ[𝕜] MultilinearMap 𝕜 E G') (C : 实数)
+  签名: (f : G ->ₗ[𝕜] 多重线性映射 𝕜 E G') (C : 实数)
   定义体: LinearMap.mkContinuous
     { toFun := fun x => (f x).mkContinuous (C * ‖x‖) <| H x
       map_add' := fun x y => by
@@ -2440,7 +2440,7 @@ theorem mkContinuousLinear_norm_le'
 
 中文:
 定理 mkContinuousLinear_norm_le'
-  结论: (f : G ->ₗ[𝕜] MultilinearMap 𝕜 E G') (C : 实数)
+  结论: (f : G ->ₗ[𝕜] 多重线性映射 𝕜 E G') (C : 实数)
   证明: by
   dsimp only [mkContinuousLinear]
   exact LinearMap.mkContinuous_norm_le _ (le_max_right _ _) _
@@ -2462,7 +2462,7 @@ theorem mkContinuousLinear_norm_le
 
 中文:
 定理 mkContinuousLinear_norm_le
-  结论: (f : G ->ₗ[𝕜] MultilinearMap 𝕜 E G') {C : 实数} (hC : 0 <= C)
+  结论: (f : G ->ₗ[𝕜] 多重线性映射 𝕜 E G') {C : 实数} (hC : 0 <= C)
   证明: (mkContinuousLinear_norm_le' f C H).trans_eq (max_eq_left hC)
 
 Depends on / 依赖: max_eq_left, mkContinuousLinear_norm_le, trans_eq
@@ -2493,7 +2493,7 @@ definition mkContinuousMultilinear
 
 中文:
 定义 mkContinuousMultilinear
-  签名: (f : MultilinearMap 𝕜 E (MultilinearMap 𝕜 E' G)) (C : 实数)
+  签名: (f : 多重线性映射 𝕜 E (多重线性映射 𝕜 E' G)) (C : 实数)
   定义体: mkContinuous
     { toFun := fun m => mkContinuous (f m) (C * ∏ i, ‖m i‖) <| H m
       map_update_add' := fun m i x y => by
@@ -2536,7 +2536,7 @@ theorem mkContinuousMultilinear_apply
 
 中文:
 定理 mkContinuousMultilinear_apply
-  结论: (f : MultilinearMap 𝕜 E (MultilinearMap 𝕜 E' G)) {C : 实数}
+  结论: (f : 多重线性映射 𝕜 E (多重线性映射 𝕜 E' G)) {C : 实数}
   证明: rfl
 -/
 theorem mkContinuousMultilinear_apply (f : MultilinearMap 𝕜 E (MultilinearMap 𝕜 E' G)) {C : Real}
@@ -2556,7 +2556,7 @@ theorem mkContinuousMultilinear_norm_le'
 
 中文:
 定理 mkContinuousMultilinear_norm_le'
-  结论: (f : MultilinearMap 𝕜 E (MultilinearMap 𝕜 E' G)) (C : 实数)
+  结论: (f : 多重线性映射 𝕜 E (多重线性映射 𝕜 E' G)) (C : 实数)
   证明: by
   dsimp only [mkContinuousMultilinear]
   exact mkContinuous_norm_le _ (le_max_right _ _) _
@@ -2579,7 +2579,7 @@ theorem mkContinuousMultilinear_norm_le
 
 中文:
 定理 mkContinuousMultilinear_norm_le
-  结论: (f : MultilinearMap 𝕜 E (MultilinearMap 𝕜 E' G)) {C : 实数}
+  结论: (f : 多重线性映射 𝕜 E (多重线性映射 𝕜 E' G)) {C : 实数}
   证明: (mkContinuousMultilinear_norm_le' f C H).trans_eq (max_eq_left hC)
 
 Depends on / 依赖: max_eq_left, mkContinuousMultilinear_norm_le, trans_eq
@@ -2606,7 +2606,7 @@ theorem norm_compContinuousMultilinearMap_le
 
 中文:
 定理 norm_compContinuousMultilinearMap_le
-  条件: (g : G ->L[𝕜] G') (f : ContinuousMultilinearMap 𝕜 E G)
+  条件: (g : G ->L[𝕜] G') (f : 连续多重线性映射 𝕜 E G)
   证明: ContinuousMultilinearMap.opNorm_le_bound (by positivity) fun m =>
     calc
 ‖g (f m)‖ <= ‖g‖ * (‖f‖ * ∏ i, ‖m i‖) := g.le_opNorm_of_le f.le_opNorm _
@@ -2643,7 +2643,7 @@ definition flipMultilinear
 
 中文:
 定义 flipMultilinear
-  签名: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G')
+  签名: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E G')
   定义体: MultilinearMap.mkContinuous
     { toFun := fun m =>
         LinearMap.mkContinuous
@@ -2698,8 +2698,8 @@ definition _root_.ContinuousMultilinearMap.flipLinear
     rw [LinearMap.coe_mk]; rw [AddHom.coe_mk]; rw
 
 中文:
-定义 _root_.ContinuousMultilinearMap.flipLinear
-  签名: (f : ContinuousMultilinearMap 𝕜 E (G ->L[𝕜] G'))
+定义 _root_.连续多重线性映射.flipLinear
+  签名: (f : 连续多重线性映射 𝕜 E (G ->L[𝕜] G'))
   定义体: MultilinearMap.mkContinuousLinear
     { toFun x :=
         { toFun m := f m x
@@ -2735,7 +2735,7 @@ lemma flipLinear_flipMultilinear
 
 中文:
 引理 flipLinear_flipMultilinear
-  条件: (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G')
+  条件: (f : G ->L[𝕜] 连续多重线性映射 𝕜 E G')
   证明: rfl
 -/
 @[simp] lemma flipLinear_flipMultilinear (f : G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G') :
@@ -2749,7 +2749,7 @@ lemma _root_.ContinuousMultilinearMap.flipMultilinear_flipLinear
   proof: rfl
 
 中文:
-引理 _root_.ContinuousMultilinearMap.flipMultilinear_flipLinear
+引理 _root_.连续多重线性映射.flipMultilinear_flipLinear
   证明: rfl
 -/
 @[simp] lemma _root_.ContinuousMultilinearMap.flipMultilinear_flipLinear
@@ -2772,7 +2772,7 @@ definition flipMultilinearEquivₗ
 
 中文:
 定义 flipMultilinearEquivₗ
-  签名: : (G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G') ≃ₗ[𝕜]
+  签名: : (G ->L[𝕜] 连续多重线性映射 𝕜 E G') ≃ₗ[𝕜]
   定义体: f.flipMultilinear
   invFun f := f.flipLinear
   map_add' f g := by ext; simp
@@ -2810,7 +2810,7 @@ definition flipMultilinearEquiv
 
 中文:
 定义 flipMultilinearEquiv
-  签名: : (G ->L[𝕜] ContinuousMultilinearMap 𝕜 E G') ≃L[𝕜]
+  签名: : (G ->L[𝕜] 连续多重线性映射 𝕜 E G') ≃L[𝕜]
   定义体: by
   refine (flipMultilinearEquivₗ 𝕜 E G G').toContinuousLinearEquivOfBounds 1 1 ?_ ?_
   · intro f
@@ -2879,7 +2879,7 @@ theorem LinearIsometry.norm_compContinuousMultilinearMap
     ContinuousMultilinearMap.norm_def, Function.comp_apply]
 
 中文:
-定理 LinearIsometry.norm_compContinuousMultilinearMap
+定理 线性等距.norm_compContinuousMultilinearMap
   结论: (g : G ->ₗᵢ[𝕜] G')
   证明: by
   simp only [ContinuousLinearMap.compContinuousMultilinearMap_coe,
@@ -2911,7 +2911,7 @@ theorem norm_compContinuousLinearMap_le
 
 中文:
 定理 norm_compContinuousLinearMap_le
-  结论: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  结论: (g : 连续多重线性映射 𝕜 E₁ G)
   证明: opNorm_le_bound (by positivity) fun m =>
     calc
       ‖g fun i => f i (m i)‖ <= ‖g‖ * ∏ i, ‖f i (m i)‖ := g.le_opNorm _
@@ -2942,7 +2942,7 @@ theorem norm_compContinuous_linearIsometry_le
 
 中文:
 定理 norm_compContinuous_linearIsometry_le
-  结论: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  结论: (g : 连续多重线性映射 𝕜 E₁ G)
   证明: by
   refine opNorm_le_bound (norm_nonneg _) fun m => ?_
   apply (g.le_opNorm _).trans _
@@ -2976,7 +2976,7 @@ theorem norm_compContinuous_linearIsometryEquiv
 
 中文:
 定理 norm_compContinuous_linearIsometryEquiv
-  结论: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  结论: (g : 连续多重线性映射 𝕜 E₁ G)
   证明: by
   apply le_antisymm (g.norm_compContinuous_linearIsometry_le fun i => (f i).toLinearIsometry)
   have : g = (g.compContinuousLinearMap fun i => (f i : E i ->L[𝕜] E₁ i)).compContinuousLinearMap
@@ -3040,7 +3040,7 @@ definition compContinuousLinearMapLRight
 
 中文:
 定义 compContinuousLinearMapLRight
-  签名: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  签名: (g : 连续多重线性映射 𝕜 E₁ G)
   定义体: MultilinearMap.mkContinuous
     { toFun := fun f => g.compContinuousLinearMap f
       map_update_add' := by
@@ -3081,7 +3081,7 @@ theorem compContinuousLinearMapLRight_apply
 
 中文:
 定理 compContinuousLinearMapLRight_apply
-  结论: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  结论: (g : 连续多重线性映射 𝕜 E₁ G)
   证明: rfl
 -/
 theorem compContinuousLinearMapLRight_apply (g : ContinuousMultilinearMap 𝕜 E₁ G)
@@ -3099,7 +3099,7 @@ theorem norm_compContinuousLinearMapLRight_le
 
 中文:
 定理 norm_compContinuousLinearMapLRight_le
-  条件: (g : ContinuousMultilinearMap 𝕜 E₁ G)
+  条件: (g : 连续多重线性映射 𝕜 E₁ G)
   证明: MultilinearMap.mkContinuous_norm_le _ (norm_nonneg _) _
 -/
 theorem norm_compContinuousLinearMapLRight_le (g : ContinuousMultilinearMap 𝕜 E₁ G) :
@@ -3260,7 +3260,7 @@ definition iteratedFDerivComponent
 
 中文:
 定义 iteratedFDerivComponent
-  签名: {α : 类型} [Fintype α]
+  签名: {α : 类型} [有限类型 α]
   定义体: (f.toMultilinearMap.iteratedFDerivComponent e).mkContinuousMultilinear ‖f‖ by
     intro x m
     simp only [MultilinearMap.iteratedFDerivComponent, MultilinearMap.domDomRestrictₗ,
@@ -3303,7 +3303,7 @@ lemma iteratedFDerivComponent_apply
 
 中文:
 引理 iteratedFDerivComponent_apply
-  结论: {α : 类型} [Fintype α]
+  结论: {α : 类型} [有限类型 α]
   证明: by
   simp [iteratedFDerivComponent, MultilinearMap.iteratedFDerivComponent,
     MultilinearMap.domDomRestrictₗ]
@@ -3332,7 +3332,7 @@ lemma norm_iteratedFDerivComponent_le
 
 中文:
 引理 norm_iteratedFDerivComponent_le
-  结论: {α : 类型} [Fintype α]
+  结论: {α : 类型} [有限类型 α]
   证明: calc
   ‖f.iteratedFDerivComponent e (fun i => x i)‖
     <= ‖f.iteratedFDerivComponent e‖ * ∏ i : {a : ι // a ∉ s}, ‖x i‖ :=
@@ -3366,7 +3366,7 @@ definition iteratedFDeriv
 
 中文:
 定义 iteratedFDeriv
-  签名: (f : ContinuousMultilinearMap 𝕜 E₁ G) (k : 自然数) (x : (i : ι) -> E₁ i)
+  签名: (f : 连续多重线性映射 𝕜 E₁ G) (k : 自然数) (x : (i : ι) -> E₁ i)
   定义体: ∑ e : Fin k ↪ ι, iteratedFDerivComponent f e.toEquivRange (Pi.compRightL 𝕜 _ Subtype.val x)
 -/
 protected def iteratedFDeriv (f : ContinuousMultilinearMap 𝕜 E₁ G) (k : Nat) (x : (i : ι) -> E₁ i) :
@@ -3390,7 +3390,7 @@ lemma norm_iteratedFDeriv_le'
 
 中文:
 引理 norm_iteratedFDeriv_le'
-  条件: (f : ContinuousMultilinearMap 𝕜 E₁ G) (k : 自然数) (x : (i : ι) -> E₁ i)
+  条件: (f : 连续多重线性映射 𝕜 E₁ G) (k : 自然数) (x : (i : ι) -> E₁ i)
   证明: by
   classical
   calc ‖f.iteratedFDeriv k x‖
@@ -3441,7 +3441,7 @@ theorem opNorm_zero_iff
 
 中文:
 定理 opNorm_zero_iff
-  条件: {f : ContinuousMultilinearMap 𝕜 E G}
+  条件: {f : 连续多重线性映射 𝕜 E G}
   结论: ‖f‖ = 0 ↔ f = 0
   证明: by
   simp [← (opNorm_nonneg f).ge_iff_eq', opNorm_le_iff le_rfl, ContinuousMultilinearMap.ext_iff]
@@ -3461,7 +3461,7 @@ instance normedAddCommGroup
 
 中文:
 实例 normedAddCommGroup
-  签名: : NormedAddCommGroup (ContinuousMultilinearMap 𝕜 E G)
+  签名: : 赋范交换加群 (连续多重线性映射 𝕜 E G)
   定义体: NormedAddCommGroup.ofSeparation fun _ => opNorm_zero_iff.mp
 
 Depends on / 依赖: NormedAddCommGroup, NormedAddCommGroup.ofSeparation, ofSeparation, opNorm_zero_iff, opNorm_zero_iff.mp
@@ -3501,7 +3501,7 @@ theorem norm_ofSubsingleton_id
 
 中文:
 定理 norm_ofSubsingleton_id
-  条件: [Subsingleton ι] [Nontrivial G] (i : ι)
+  条件: [子单例 ι] [非平凡 G] (i : ι)
   证明: by
   simp [ContinuousLinearMap.norm_id]
 
@@ -3521,7 +3521,7 @@ theorem nnnorm_ofSubsingleton_id
 
 中文:
 定理 nnnorm_ofSubsingleton_id
-  条件: [Subsingleton ι] [Nontrivial G] (i : ι)
+  条件: [子单例 ι] [非平凡 G] (i : ι)
   证明: NNReal.eq norm_ofSubsingleton_id ..
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_ofSubsingleton_id
@@ -3556,7 +3556,7 @@ theorem bound_of_shell
 
 中文:
 定理 bound_of_shell
-  结论: (f : MultilinearMap 𝕜 E G) {ε : ι -> 实数} {C : 实数} {c : ι -> 𝕜}
+  结论: (f : 多重线性映射 𝕜 E G) {ε : ι -> 实数} {C : 实数} {c : ι -> 𝕜}
   证明: bound_of_shell_of_norm_map_coord_zero f
     (fun h => by rw [map_coord_zero f _ (norm_eq_zero.1 h), norm_zero]) hε hc hf m
 

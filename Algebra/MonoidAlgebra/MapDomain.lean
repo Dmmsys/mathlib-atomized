@@ -158,8 +158,8 @@ lemma mapDomain_injective
 
 中文:
 引理 mapDomain_injective
-  条件: (hf : Injective f)
-  结论: Injective (mapDomain (R := R) f)
+  条件: (hf : 单射 f)
+  结论: 单射 (mapDomain (R := R) f)
   证明: ofCoeff_injective.comp (Finsupp.mapDomain_injective hf).comp coeff_injective
 -/
 lemma mapDomain_injective (hf : Injective f) : Injective (mapDomain (R := R) f) :=
@@ -178,7 +178,7 @@ theorem mapDomain_one
 
 中文:
 定理 mapDomain_one
-  条件: [One M] [One N] {F : 类型} [FunLike F M N] [OneHomClass F M N] (f : F)
+  条件: [幺 M] [幺 N] {F : 类型} [函数状 F M N] [幺态射类 F M N] (f : F)
   证明: by
   simp [one_def]
 
@@ -313,7 +313,7 @@ lemma map_sum
 
 中文:
 引理 map_sum
-  条件: (f : R ->+ S) (s : Finset ι) (x : ι -> R[M])
+  条件: (f : R ->+ S) (s : 有限集 ι) (x : ι -> R[M])
   证明: by ext; simp
 
 @[to_additive (attr := simp)]
@@ -401,7 +401,7 @@ lemma range_map
 中文:
 引理 range_map
   条件: (f : R ->+ S)
-  结论: Set.range (map (M := M) f) = {x | 对任意 i, x.coeff i in Set.range f}
+  结论: 集合.range (map (M := M) f) = {x | 对任意 i, x.coeff i in 集合.range f}
   证明: calc
     _ = coeffEquiv ⁻¹' (Set.range (mapRange f (map_zero f) ∘ coeffEquiv)) := by
       simp_rw [comp_def, Equiv.eq_preimage_iff_image_eq, ← Set.range_comp', coeffEquiv_apply,
@@ -433,8 +433,8 @@ lemma map_injective
 
 中文:
 引理 map_injective
-  条件: (f : R ->+ S) (he : Injective f)
-  结论: Injective (map (M := M) f)
+  条件: (f : R ->+ S) (he : 单射 f)
+  结论: 单射 (map (M := M) f)
   证明: by
   have : map (M := M) f = coeffEquiv.symm ∘ Finsupp.mapRange f (map_zero f) ∘ coeffEquiv := by
     ext; simp [ofCoeff_mapRange]
@@ -463,8 +463,8 @@ lemma map_surjective
 
 中文:
 引理 map_surjective
-  条件: (f : R ->+ S) (he : Surjective f)
-  结论: Surjective (map (M := M) f)
+  条件: (f : R ->+ S) (he : 满射 f)
+  结论: 满射 (map (M := M) f)
   证明: by
   have : map (M := M) f = coeffEquiv.symm ∘ Finsupp.mapRange f (map_zero f) ∘ coeffEquiv := by
     ext; simp [ofCoeff_mapRange]
@@ -496,7 +496,7 @@ definition comapDomain
 
 中文:
 定义 comapDomain
-  签名: (f : M -> N) (hf : Injective f) (x : R[N])
+  签名: (f : M -> N) (hf : 单射 f) (x : R[N])
   定义体: .ofCoeff x.coeff.comapDomain f hf.injOn
 
 @[to_additive (attr := simp)]
@@ -588,7 +588,7 @@ lemma comapDomain_single_of_not_mem_range
 
 中文:
 引理 comapDomain_single_of_not_mem_range
-  条件: {r : R} {n : N} (hn : n ∉ Set.range f) (hf)
+  条件: {r : R} {n : N} (hn : n ∉ 集合.range f) (hf)
   证明: by ext; simp [*]
 -/
 lemma comapDomain_single_of_not_mem_range {r : R} {n : N} (hn : n ∉ Set.range f) (hf) :
@@ -608,7 +608,7 @@ definition comapDomainAddMonoidHom
 
 中文:
 定义 comapDomainAddMonoidHom
-  签名: (f : M -> N) (hf : Injective f)
+  签名: (f : M -> N) (hf : 单射 f)
   定义体: comapDomain f hf
   map_zero' := by simp
   map_add' := by simp
@@ -654,7 +654,7 @@ lemma mapDomain_comapDomain
 
 中文:
 引理 mapDomain_comapDomain
-  条件: {f : M -> N} {x : R[N]} (hx : ↑x.coeff.support subseteq Set.range f) (hf)
+  条件: {f : M -> N} {x : R[N]} (hx : ↑x.coeff.support subseteq 集合.range f) (hf)
   证明: by
   ext : 1; exact Finsupp.mapDomain_comapDomain _ hf _ hx
 
@@ -1902,7 +1902,7 @@ invFun x := .ofCoeff x.coeff.mapDomain Multiplicative.toAdd
 
 中文:
 定义 toMultiplicative
-  签名: : AddMonoidAlgebra R M ≃+* MonoidAlgebra R (Multiplicative M) where
+  签名: : 加法幺半群代数 R M ≃+* 幺半群代数 R (Multiplicative M) where
   定义体: .ofCoeff x.coeff.mapDomain .ofAdd
 invFun x := .ofCoeff x.coeff.mapDomain Multiplicative.toAdd
   left_inv x := by ext; simp
@@ -1973,7 +1973,7 @@ invFun x := .ofCoeff x.coeff.mapDomain Additive.toMul
 
 中文:
 定义 toAdditive
-  签名: : MonoidAlgebra R M ≃+* AddMonoidAlgebra R (Additive M) where
+  签名: : 幺半群代数 R M ≃+* 加法幺半群代数 R (加性 M) where
   定义体: .ofCoeff x.coeff.mapDomain .ofMul
 invFun x := .ofCoeff x.coeff.mapDomain Additive.toMul
   left_inv x := by ext; simp

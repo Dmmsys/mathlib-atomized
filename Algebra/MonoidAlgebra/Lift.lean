@@ -103,7 +103,7 @@ theorem liftNC_mul
 
 中文:
 定理 liftNC_mul
-  结论: {g_hom : 类型} [FunLike g_hom G R] [MulHomClass g_hom G R]
+  结论: {g_hom : 类型} [函数状 g_hom G R] [乘法态射类 g_hom G R]
   证明: by
   conv_rhs => rw [← sum_coeff_single a, ← sum_coeff_single b]
   simp_rw [mul_def, map_finsuppSum, liftNC_single, Finsupp.sum_mul, Finsupp.mul_sum]
@@ -138,7 +138,7 @@ theorem liftNC_one
 
 中文:
 定理 liftNC_one
-  结论: {g_hom : 类型} [FunLike g_hom G R] [OneHomClass g_hom G R]
+  结论: {g_hom : 类型} [函数状 g_hom G R] [幺态射类 g_hom G R]
   证明: by simp [one_def]
 
 Depends on / 依赖: one_def

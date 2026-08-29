@@ -47,8 +47,8 @@ lemma IdentDistrib.prodMk
       exact Measure.isFiniteMeasure_of_map hXZ.aeme
 
 中文:
-引理 IdentDistrib.prodMk
-  结论: [IsFiniteMeasure μ]
+引理 同分布.prodMk
+  结论: [是有限测度 μ]
   证明: hXZ.aemeasurable_fst.prodMk hYW.aemeasurable_fst
   aemeasurable_snd := hXZ.aemeasurable_snd.prodMk hYW.aemeasurable_snd
   map_eq := by
@@ -85,8 +85,8 @@ lemma IdentDistrib.pi
     rw [(iIndepFun_
 
 中文:
-引理 IdentDistrib.pi
-  结论: [Countable ι] {E : ι -> 类型} {mE : 对任意 i, MeasurableSpace (E i)}
+引理 同分布.pi
+  结论: [可数 ι] {E : ι -> 类型} {mE : 对任意 i, 可测空间 (E i)}
   证明: aemeasurable_pi_lambda _ fun i => (h i).aemeasurable_fst
   aemeasurable_snd := aemeasurable_pi_lambda _ fun i => (h i).aemeasurable_snd
   map_eq := by

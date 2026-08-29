@@ -49,11 +49,11 @@ structure BoxAdditiveMap
     - sum_partition_boxes' : forall J : Box ι, ↑J <= I -> forall π : Prepartition J, π.IsPartition -> ∑ Ji in π.boxes, toFun Ji = toFun J
 
 中文:
-结构 BoxAdditiveMap
-  参数: (ι M : 类型) [AddCommMonoid M] (I : WithTop (Box ι))
+结构 BoxAdditive映射
+  参数: (ι M : 类型) [加法交换幺半群 M] (I : WithTop (Box ι))
   公理与运算 (2 个):
     - toFun : Box ι -> M
-    - sum_partition_boxes' : 对任意 J : Box ι, ↑J <= I -> 对任意 π : Prepartition J, π.IsPartition -> ∑ Ji in π.boxes, toFun Ji = toFun J
+    - sum_partition_boxes' : 对任意 J : Box ι, ↑J <= I -> 对任意 π : 预分拆 J, π.IsPartition -> ∑ Ji in π.boxes, toFun Ji = toFun J
 -/
 structure BoxAdditiveMap (ι M : Type*) [AddCommMonoid M] (I : WithTop (Box ι)) where
   /-- The function underlying this additive map. -/
@@ -91,7 +91,7 @@ initialize_simps_projections BoxIntegral.BoxAdditiveMap (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (ι ->ᵇᵃ[I₀] M) (Box ι) M
+  签名: 函数状 (ι ->ᵇᵃ[I₀] M) (Box ι) M
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -133,7 +133,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective fun (f : ι ->ᵇᵃ[I₀] M) x => f x
+  结论: 单射 fun (f : ι ->ᵇᵃ[I₀] M) x => f x
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -195,7 +195,7 @@ theorem sum_partition_boxes
 
 中文:
 定理 sum_partition_boxes
-  结论: (f : ι ->ᵇᵃ[I₀] M) (hI : ↑I <= I₀) {π : Prepartition I}
+  结论: (f : ι ->ᵇᵃ[I₀] M) (hI : ↑I <= I₀) {π : 预分拆 I}
   证明: f.sum_partition_boxes' I hI π h
 
 Depends on / 依赖: f.sum_partition_boxes, sum_partition_boxes
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ι ->ᵇᵃ[I₀] M)
+  签名: 零 (ι ->ᵇᵃ[I₀] M)
   定义体: ⟨⟨0, fun _ _ _ _ => sum_const_zero⟩⟩
 
 Depends on / 依赖: sum_const_zero
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ι ->ᵇᵃ[I₀] M)
+  签名: 可居 (ι ->ᵇᵃ[I₀] M)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (ι ->ᵇᵃ[I₀] M) :=
@@ -253,7 +253,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (ι ->ᵇᵃ[I₀] M)
+  签名: 加法 (ι ->ᵇᵃ[I₀] M)
   定义体: ⟨fun f g =>
     ⟨f + g, fun I hI π hπ => by
       simp only [Pi.add_apply, sum_add_distrib, sum_partition_boxes _ hI hπ]⟩⟩
@@ -282,7 +282,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (ι ->ᵇᵃ[I₀] M)
+  签名: 加法交换幺半群 (ι ->ᵇᵃ[I₀] M)
   定义体: Function.Injective.addCommMonoid _ coe_injective rfl (fun _ _ => rfl) fun _ _ => rfl
 
 @[simp]
@@ -325,7 +325,7 @@ lemma smul_apply
 
 中文:
 引理 smul_apply
-  结论: {R : 类型} [Monoid R] [DistribMulAction R M]
+  结论: {R : 类型} [幺半群 R] [分配乘法作用 R M]
   证明: rfl
 -/
 lemma smul_apply {R : Type*} [Monoid R] [DistribMulAction R M]
@@ -393,7 +393,7 @@ definition ofMapSplitAdd
 
 中文:
 定义 ofMapSplitAdd
-  签名: [Finite ι] (f : Box ι -> M) (I₀ : WithTop (Box ι))
+  签名: [有限 ι] (f : Box ι -> M) (I₀ : WithTop (Box ι))
   定义体: by
   classical
   refine ⟨f, ?_⟩
@@ -466,7 +466,7 @@ theorem sum_boxes_congr
 
 中文:
 定理 sum_boxes_congr
-  结论: [Finite ι] (f : ι ->ᵇᵃ[I₀] M) (hI : ↑I <= I₀) {π₁ π₂ : Prepartition I}
+  结论: [有限 ι] (f : ι ->ᵇᵃ[I₀] M) (hI : ↑I <= I₀) {π₁ π₂ : 预分拆 I}
   证明: by
   rcases exists_splitMany_inf_eq_filter_of_finite {π₁, π₂} ((finite_singleton _).insert _) with
     ⟨s, hs⟩
@@ -514,7 +514,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (ι ->ᵇᵃ[I₀] M)
+  签名: 取负 (ι ->ᵇᵃ[I₀] M)
   定义体: ⟨fun f =>
     ⟨-(f : Box ι -> M), fun I hI π hπ => by
       simp only [Pi.neg_apply, Finset.sum_neg_distrib, sum_partition_boxes _ hI hπ]⟩⟩
@@ -538,7 +538,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (ι ->ᵇᵃ[I₀] M)
+  签名: 减法 (ι ->ᵇᵃ[I₀] M)
   定义体: ⟨fun f g =>
     ⟨(f : Box ι -> M) - g, fun I hI π hπ => by
       simp only [Pi.sub_apply, Finset.sum_sub_distrib, sum_partition_boxes _ hI hπ]⟩⟩
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (ι ->ᵇᵃ[I₀] M)
+  签名: 加法交换群 (ι ->ᵇᵃ[I₀] M)
   定义体: Function.Injective.addCommGroup _ DFunLike.coe_injective
     rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl)
@@ -691,7 +691,7 @@ definition upperSubLower.{u}
 
 中文:
 定义 upperSubLower.{u}
-  签名: {G : 类型u} [AddCommGroup G] (I₀ : Box (Fin (n + 1))) (i : Fin (n + 1))
+  签名: {G : 类型u} [加法交换群 G] (I₀ : Box (有限集 (n + 1))) (i : 有限集 (n + 1))
   定义体: ofMapSplitAdd (fun J : Box (Fin (n + 1)) => f (J.upper i) (J.face i) - f (J.lower i) (J.face i))
     I₀
     (by

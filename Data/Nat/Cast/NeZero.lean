@@ -47,7 +47,7 @@ lemma natCast_ne
 
 中文:
 引理 natCast_ne
-  条件: (n : 自然数) (R) [AddMonoidWithOne R] [h : NeZero (n : R)]
+  条件: (n : 自然数) (R) [加法带幺幺半群 R] [h : NeZero (n : R)]
   结论: (n : R) != 0
   证明: h.out
 
@@ -66,7 +66,7 @@ lemma of_neZero_natCast
 
 中文:
 引理 of_neZero_natCast
-  条件: (R) [AddMonoidWithOne R] {n : 自然数} [h : NeZero (n : R)]
+  条件: (R) [加法带幺幺半群 R] {n : 自然数} [h : NeZero (n : R)]
   结论: NeZero n
   证明: ⟨by rintro rfl; exact h.out Nat.cast_zero⟩
 
@@ -86,7 +86,7 @@ lemma pos_of_neZero_natCast
 
 中文:
 引理 pos_of_neZero_natCast
-  条件: (R) [AddMonoidWithOne R] {n : 自然数} [NeZero (n : R)]
+  条件: (R) [加法带幺幺半群 R] {n : 自然数} [NeZero (n : R)]
   结论: 0 < n
   证明: Nat.pos_of_ne_zero (of_neZero_natCast R).out
 

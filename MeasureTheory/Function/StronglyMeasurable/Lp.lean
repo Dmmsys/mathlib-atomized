@@ -125,8 +125,8 @@ theorem Integrable.aefinStronglyMeasurable
   proof: (memLp_one_iff_integrable.mpr hf).aefinStronglyMeasurable one_ne_zero ENNReal.coe_ne_top
 
 中文:
-定理 Integrable.aefinStronglyMeasurable
-  条件: (hf : 整数egrable f μ)
+定理 可积.aefinStronglyMeasurable
+  条件: (hf : 可积 f μ)
   结论: AEFinStronglyMeasurable f μ
   证明: (memLp_one_iff_integrable.mpr hf).aefinStronglyMeasurable one_ne_zero ENNReal.coe_ne_top
 

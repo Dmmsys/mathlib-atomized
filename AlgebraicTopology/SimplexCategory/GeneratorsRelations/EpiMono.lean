@@ -43,7 +43,7 @@ definition splitMonoδ
 
 中文:
 定义 splitMonoδ
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: by
     induction i using Fin.lastCases with
     | last => exact σ (Fin.last n)
@@ -82,7 +82,7 @@ definition splitEpiσ
 
 中文:
 定义 splitEpiσ
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: δ i.castSucc
   id := δ_comp_σ_self
 -/
@@ -133,7 +133,7 @@ lemma P_σ.σ
 
 中文:
 引理 P_σ.σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   结论: P_σ (σ i)
   证明: .of _ (.σ i)
 -/
@@ -150,7 +150,7 @@ lemma P_δ.δ
 
 中文:
 引理 P_δ.δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   结论: P_δ (δ i)
   证明: .of _ (.δ i)
 -/
@@ -172,7 +172,7 @@ lemma isSplitEpi_P_σ
 中文:
 引理 isSplitEpi_P_σ
   条件: {x y : SimplexCategoryGenRel} {e : x ⟶ y} (he : P_σ e)
-  结论: IsSplitEpi e
+  结论: 是分裂满态射 e
   证明: by
   induction he with
   | of x hx => cases hx; infer_instance
@@ -345,7 +345,7 @@ lemma switch_δ_σ
 
 中文:
 引理 switch_δ_σ
-  条件: {n : 自然数} (i : Fin (n + 2)) (i' : Fin (n + 3))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (i' : 有限集 (n + 3))
   证明: by
   obtain h | rfl | h := lt_trichotomy i.castSucc i'
   · rw [Fin.castSucc_lt_iff_succ_le] at h
@@ -384,7 +384,7 @@ lemma switch_δ_σ₀
 
 中文:
 引理 switch_δ_σ₀
-  条件: (i : Fin 1) (i' : Fin 2)
+  条件: (i : 有限集 1) (i' : 有限集 2)
   证明: by
   fin_cases i; fin_cases i'
   · exact δ_comp_σ_self
@@ -412,7 +412,7 @@ lemma factor_δ_σ
 
 中文:
 引理 factor_δ_σ
-  条件: {n : 自然数} (i : Fin (n + 1)) (i' : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (i' : 有限集 (n + 2))
   证明: by
   cases n with
   | zero => exact ⟨_, _, _, P_σ.id_mem _, P_δ.id_mem _, by simp [switch_δ_σ₀]⟩
@@ -449,7 +449,7 @@ lemma factor_P_δ_σ
 
 中文:
 引理 factor_P_δ_σ
-  结论: {n : 自然数} (i : Fin (n + 1)) {x : SimplexCategoryGenRel}
+  结论: {n : 自然数} (i : 有限集 (n + 1)) {x : SimplexCategoryGenRel}
   证明: by
   induction n generalizing x with
   | zero => cases hf with
@@ -502,7 +502,7 @@ theorem exists_P_σ_P_δ_factorization
     obtain ⟨z, e, m, ⟨he, hm, rfl
 
 中文:
-定理 exists_P_σ_P_δ_factorization
+定理 存在_P_σ_P_δ_factorization
   条件: {x y : SimplexCategoryGenRel} (f : x ⟶ y)
   证明: by
   induction f with
@@ -558,7 +558,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasFactorization P_σ P_δ
+  签名: MorphismProperty.有分解 P_σ P_δ
   定义体: by
     obtain ⟨z, e, m, he, hm, fac⟩ := exists_P_σ_P_δ_factorization f
     exact ⟨⟨z, e, m, fac.symm, he, hm⟩⟩

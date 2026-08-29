@@ -47,7 +47,7 @@ structure TwistShiftData
     - z((a b : A)) : (CatCenter C)ˣ
     - z_zero_zero : z 0 0 = 1  [默认: by cat_disch]
     - assoc((a b c : A)) : z (a + b) c * z a b = z a (b + c) * z b c  [默认: by cat_disch]
-    - commShift((a b : A)) : 自然数Trans.CommShift (z a b).val A  [默认: by infer_instance]
+    - commShift((a b : A)) : 自然变换.交换Shift (z a b).val A  [默认: by infer_instance]
 
 Depends on / 依赖: CommShift, NatTrans, NatTrans.CommShift, cat_disch, commShift, infer_instance
 -/
@@ -147,7 +147,7 @@ definition Category
   body: C
 
 中文:
-定义 Category
+定义 范畴
   签名: (_ : TwistShiftData C A)
   定义体: C
 -/
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category t.Category
+  签名: 范畴 t.范畴
   定义体: inferInstanceAs (Category C)
 
 Depends on / 依赖: Category
@@ -186,7 +186,7 @@ definition shiftMkCore
 
 中文:
 定义 shiftMkCore
-  签名: : ShiftMkCore t.Category A where
+  签名: : ShiftMkCore t.范畴 A where
   定义体: shiftFunctor C a
   zero := shiftFunctorZero C A
   add a b := NatIso.ofComponents (fun X => t.z a b • (shiftFunctorAdd C a b).app X) (by
@@ -218,7 +218,7 @@ instance hasShift
 
 中文:
 实例 hasShift
-  签名: : HasShift t.Category A
+  签名: : 有Shift t.范畴 A
   定义体: hasShiftMk _ _ (shiftMkCore t)
 
 Depends on / 依赖: hasShiftMk, shiftMkCore
@@ -255,7 +255,7 @@ lemma shiftFunctor_map
 
 中文:
 引理 shiftFunctor_map
-  条件: {X Y : t.Category} (f : X ⟶ Y) (m : A)
+  条件: {X Y : t.范畴} (f : X ⟶ Y) (m : A)
   证明: by
   simp
 -/
@@ -274,7 +274,7 @@ lemma shiftFunctorZero_hom_app
 
 中文:
 引理 shiftFunctorZero_hom_app
-  条件: (X : t.Category)
+  条件: (X : t.范畴)
   证明: (Category.id_comp _).symm
 
 Depends on / 依赖: Category, Category.id_comp, id_comp
@@ -294,7 +294,7 @@ lemma shiftFunctorZero_inv_app
 
 中文:
 引理 shiftFunctorZero_inv_app
-  条件: (X : t.Category)
+  条件: (X : t.范畴)
   证明: (Category.comp_id _).symm
 
 Depends on / 依赖: Category, Category.comp_id, comp_id
@@ -324,7 +324,7 @@ lemma shiftFunctorAdd'_hom_app
 
 中文:
 引理 shiftFunctorAdd'_hom_app
-  条件: (i j k : A) (h : i + j = k) (X : t.Category)
+  条件: (i j k : A) (h : i + j = k) (X : t.范畴)
   证明: by
   have : (shiftFunctorAdd' t.Category i j k h).hom.app X =
       (t.z i j).val • (shiftFunctorAdd' C i j k h).hom.app X := by
@@ -371,7 +371,7 @@ lemma shiftFunctorAdd'_inv_app
 
 中文:
 引理 shiftFunctorAdd'_inv_app
-  条件: (i j k : A) (h : i + j = k) (X : t.Category)
+  条件: (i j k : A) (h : i + j = k) (X : t.范畴)
   证明: by
   have : (shiftFunctorAdd' t.Category i j k h).inv.app X =
       ((t.z i j)⁻¹).val • (shiftFunctorAdd' C i j k h).inv.app X := by

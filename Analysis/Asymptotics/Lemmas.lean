@@ -51,7 +51,7 @@ theorem isBigOWith_principal
 
 中文:
 定理 isBigOWith_principal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: IsBigOWith c (𝓟 s) f g ↔ 对任意 x in s, ‖f x‖ <= c * ‖g x‖
   证明: by
   rw [IsBigOWith_def]; rw [eventually_principal]
@@ -75,7 +75,7 @@ theorem isBigO_principal
 
 中文:
 定理 isBigO_principal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: f =O[𝓟 s] g ↔ 存在 c, 对任意 x in s, ‖f x‖ <= c * ‖g x‖
   证明: by
   simp_rw [isBigO_iff, eventually_principal]
@@ -105,7 +105,7 @@ theorem isLittleO_principal
 
 中文:
 定理 isLittleO_principal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: f'' =o[𝓟 s] g' ↔ 对任意 x in s, f'' x = 0
   证明: by
   refine ⟨fun h x hx => norm_le_zero_iff.1 ?_, fun h => ?_⟩
@@ -215,7 +215,7 @@ theorem isBigOWith_const_one
 
 中文:
 定理 isBigOWith_const_one
-  条件: (c : E) (l : Filter α)
+  条件: (c : E) (l : 滤子 α)
   证明: by simp [isBigOWith_iff]
 
 Depends on / 依赖: isBigOWith_iff
@@ -234,7 +234,7 @@ theorem isBigO_const_one
 
 中文:
 定理 isBigO_const_one
-  条件: (c : E) (l : Filter α)
+  条件: (c : E) (l : 滤子 α)
   结论: (fun _x : α => c) =O[l] fun _x => (1 : F)
   证明: (isBigOWith_const_one F c l).isBigO
 
@@ -286,7 +286,7 @@ theorem isLittleO_one_iff
 中文:
 定理 isLittleO_one_iff
   条件: {f : α -> E'''}
-  结论: f =o[l] (fun _x => 1 : α -> F) ↔ Tendsto f l (𝓝 0)
+  结论: f =o[l] (fun _x => 1 : α -> F) ↔ 收敛 f l (𝓝 0)
   证明: by
   simp only [isLittleO_iff, norm_one, mul_one, Metric.nhds_basis_closedBall.tendsto_right_iff,
     Metric.mem_closedBall, dist_zero_right]
@@ -346,7 +346,7 @@ isLittleO_iff_nat_mul_le_aux Or.inl fun _x => by simp only [norm_one, zero_le_on
 
 中文:
 定理 isLittleO_one_left_iff
-  结论: (fun _x => 1 : α -> F) =o[l] f ↔ Tendsto (fun x => ‖f x‖) l atTop
+  结论: (fun _x => 1 : α -> F) =o[l] f ↔ 收敛 (fun x => ‖f x‖) l atTop
   证明: calc
     (fun _x => 1 : α -> F) =o[l] f ↔ forall n : Nat, forallᶠ x in l, ↑n * ‖(1 : F)‖ <= ‖f x‖ :=
 isLittleO_iff_nat_mul_le_aux Or.inl fun _x => by simp only [norm_one, zero_le_one]
@@ -373,8 +373,8 @@ theorem _root_.Filter.Tendsto.isBigO_one
   proof: h.norm.isBoundedUnder_le.isBigO_one F
 
 中文:
-定理 _root_.Filter.Tendsto.isBigO_one
-  条件: {c : E'} (h : Tendsto f' l (𝓝 c))
+定理 _root_.滤子.收敛.isBigO_one
+  条件: {c : E'} (h : 收敛 f' l (𝓝 c))
   证明: h.norm.isBoundedUnder_le.isBigO_one F
 
 Depends on / 依赖: h.norm.isBoundedUnder_le.isBigO_one, isBigO_one, isBoundedUnder_le
@@ -393,7 +393,7 @@ theorem IsBigO.trans_tendsto_nhds
 
 中文:
 定理 IsBigO.trans_tendsto_nhds
-  条件: (hfg : f =O[l] g') {y : F'} (hg : Tendsto g' l (𝓝 y))
+  条件: (hfg : f =O[l] g') {y : F'} (hg : 收敛 g' l (𝓝 y))
   证明: hfg.trans hg.isBigO_one F
 
 Depends on / 依赖: hfg.trans, hg.isBigO_one, isBigO_one
@@ -419,7 +419,7 @@ lemma isBigO_one_nhds_ne_iff
 
 中文:
 引理 isBigO_one_nhds_ne_iff
-  条件: [TopologicalSpace α] {a : α}
+  条件: [拓扑空间 α] {a : α}
   证明: by
   refine ⟨fun h => ?_, fun h => h.mono nhdsWithin_le_nhds⟩
   simp only [isBigO_one_iff, IsBoundedUnder, IsBounded, eventually_map] at h ⊢
@@ -492,7 +492,7 @@ theorem _root_.Filter.IsBoundedUnder.isBigO_const
   proof: (h.isBigO_one Real).trans (isBigO_const_const _ hc _)
 
 中文:
-定理 _root_.Filter.IsBoundedUnder.isBigO_const
+定理 _root_.滤子.IsBoundedUnder.isBigO_const
   结论: (h : IsBoundedUnder (· <= ·) l (norm ∘ f))
   证明: (h.isBigO_one Real).trans (isBigO_const_const _ hc _)
 
@@ -512,7 +512,7 @@ theorem isBigO_const_of_tendsto
 
 中文:
 定理 isBigO_const_of_tendsto
-  条件: {y : E''} (h : Tendsto f'' l (𝓝 y)) {c : F''} (hc : c != 0)
+  条件: {y : E''} (h : 收敛 f'' l (𝓝 y)) {c : F''} (hc : c != 0)
   证明: h.norm.isBoundedUnder_le.isBigO_const hc
 
 Depends on / 依赖: h.norm.isBoundedUnder_le.isBigO_const, isBigO_const, isBoundedUnder_le
@@ -677,7 +677,7 @@ theorem IsBigO.trans_tendsto
 
 中文:
 定理 IsBigO.trans_tendsto
-  条件: (hfg : f'' =O[l] g'') (hg : Tendsto g'' l (𝓝 0))
+  条件: (hfg : f'' =O[l] g'') (hg : 收敛 g'' l (𝓝 0))
   证明: (isLittleO_one_iff Real).1 hfg.trans_isLittleO (isLittleO_one_iff Real).2 hg
 
 Depends on / 依赖: hfg.trans_isLittleO, isLittleO_one_iff, trans_isLittleO
@@ -696,7 +696,7 @@ theorem IsLittleO.trans_tendsto
 
 中文:
 定理 IsLittleO.trans_tendsto
-  条件: (hfg : f'' =o[l] g'') (hg : Tendsto g'' l (𝓝 0))
+  条件: (hfg : f'' =o[l] g'') (hg : 收敛 g'' l (𝓝 0))
   证明: hfg.isBigO.trans_tendsto hg
 
 Depends on / 依赖: hfg.isBigO.trans_tendsto, isBigO, trans_tendsto
@@ -716,7 +716,7 @@ lemma isLittleO_id_one
 
 中文:
 引理 isLittleO_id_one
-  条件: [One F''] [NeZero (1 : F'')]
+  条件: [幺 F''] [NeZero (1 : F'')]
   结论: (fun x : E'' => x) =o[𝓝 0] (1 : E'' -> F'')
   证明: isLittleO_id_const one_ne_zero
 
@@ -736,7 +736,7 @@ theorem continuousAt_iff_isLittleO
 
 中文:
 定理 continuousAt_iff_isLittleO
-  结论: {α : 类型} {E : 类型} [NormedRing E] [One F] [NormOneClass F]
+  结论: {α : 类型} {E : 类型} [赋范环 E] [幺 F] [NormOne类 F]
   证明: by
   simp [ContinuousAt, ← tendsto_sub_nhds_zero_iff]
 
@@ -757,7 +757,7 @@ theorem _root_.ContinuousAt.isLittleO
 
 中文:
 定理 _root_.ContinuousAt.isLittleO
-  结论: {α : 类型} {E : 类型} [NormedRing E] [One F]
+  结论: {α : 类型} {E : 类型} [赋范环 E] [幺 F]
   证明: continuousAt_iff_isLittleO.mp hcont
 
 Depends on / 依赖: continuousAt_iff_isLittleO, continuousAt_iff_isLittleO.mp
@@ -777,7 +777,7 @@ theorem _root_.ContinuousAt.isBigO
 
 中文:
 定理 _root_.ContinuousAt.isBigO
-  结论: {α : 类型} {E : 类型} [NormedRing E] [One F] [NormOneClass F]
+  结论: {α : 类型} {E : 类型} [赋范环 E] [幺 F] [NormOne类 F]
   证明: hcont.isLittleO.isBigO.congr_of_sub.mpr (isBigO_const_one ..)
 
 Depends on / 依赖: congr_of_sub, hcont.isLittleO.isBigO.congr_of_sub.mpr, isBigO, isBigO_const_one, isLittleO
@@ -1245,7 +1245,7 @@ theorem IsBigO.listProd
 
 中文:
 定理 IsBigO.listProd
-  结论: {L : List ι} {f : ι -> α -> R} {g : ι -> α -> 𝕜}
+  结论: {L : 列表 ι} {f : ι -> α -> R} {g : ι -> α -> 𝕜}
   证明: by
   induction L with
   | nil => simp [isBoundedUnder_const]
@@ -1276,7 +1276,7 @@ theorem IsBigO.multisetProd
 
 中文:
 定理 IsBigO.multisetProd
-  结论: {R 𝕜 : 类型} [SeminormedCommRing R] [NormedField 𝕜]
+  结论: {R 𝕜 : 类型} [SeminormedComm环 R] [赋范域 𝕜]
   证明: by
   obtain ⟨l, rfl⟩ : exists l : List ι, ↑l = s := Quotient.mk_surjective s
   exact mod_cast IsBigO.listProd hf
@@ -1299,7 +1299,7 @@ theorem IsBigO.finsetProd
 
 中文:
 定理 IsBigO.finsetProd
-  结论: {R 𝕜 : 类型} [SeminormedCommRing R] [NormedField 𝕜]
+  结论: {R 𝕜 : 类型} [SeminormedComm环 R] [赋范域 𝕜]
   证明: .multisetProd hf
 
 Depends on / 依赖: multisetProd
@@ -1327,7 +1327,7 @@ theorem IsLittleO.listProd
 
 中文:
 定理 IsLittleO.listProd
-  结论: {L : List ι} {f : ι -> α -> R} {g : ι -> α -> 𝕜}
+  结论: {L : 列表 ι} {f : ι -> α -> R} {g : ι -> α -> 𝕜}
   证明: by
   induction L with
   | nil => simp at h₂
@@ -1364,7 +1364,7 @@ theorem IsLittleO.multisetProd
 
 中文:
 定理 IsLittleO.multisetProd
-  结论: {R 𝕜 : 类型} [SeminormedCommRing R] [NormedField 𝕜]
+  结论: {R 𝕜 : 类型} [SeminormedComm环 R] [赋范域 𝕜]
   证明: by
   obtain ⟨l, rfl⟩ : exists l : List ι, ↑l = s := Quotient.mk_surjective s
   exact mod_cast IsLittleO.listProd h₁ h₂
@@ -1388,7 +1388,7 @@ theorem IsLittleO.finsetProd
 
 中文:
 定理 IsLittleO.finsetProd
-  结论: {R 𝕜 : 类型} [SeminormedCommRing R] [NormedField 𝕜]
+  结论: {R 𝕜 : 类型} [SeminormedComm环 R] [赋范域 𝕜]
   证明: .multisetProd h₁ h₂
 
 Depends on / 依赖: multisetProd
@@ -1444,7 +1444,7 @@ theorem IsLittleO.tendsto_inv_smul_nhds_zero
 
 中文:
 定理 IsLittleO.tendsto_inv_smul_nhds_zero
-  结论: [Module 𝕜 E'] [NormSMulClass 𝕜 E']
+  结论: [模 𝕜 E'] [NormSMul类 𝕜 E']
   证明: by
   simpa only [div_eq_inv_mul, ← norm_inv, ← norm_smul, ← tendsto_zero_iff_norm_tendsto_zero] using
     h.norm_norm.tendsto_div_nhds_zero
@@ -1722,7 +1722,7 @@ theorem IsLittleO.of_tendsto_div_atTop
 
 中文:
 定理 IsLittleO.of_tendsto_div_atTop
-  条件: (h : Tendsto (fun x => g x / f x) l atTop)
+  条件: (h : 收敛 (fun x => g x / f x) l atTop)
   结论: f =o[l] g
   证明: by
   apply Asymptotics.isLittleO_of_tendsto'
@@ -1759,7 +1759,7 @@ theorem IsLittleO.of_tendsto_div_atBot
 
 中文:
 定理 IsLittleO.of_tendsto_div_atBot
-  条件: (h : Tendsto (fun x => g x / f x) l atBot)
+  条件: (h : 收敛 (fun x => g x / f x) l atBot)
   结论: f =o[l] g
   证明: by
   refine IsLittleO.of_neg_left (IsLittleO.of_tendsto_div_atTop ?_)
@@ -1833,7 +1833,7 @@ theorem isBigOWith_iff_exists_eq_mul
     exact isBigOWith_of_eq_mul φ hφ h
 
 中文:
-定理 isBigOWith_iff_exists_eq_mul
+定理 isBigOWith_iff_存在_eq_mul
   条件: (hc : 0 <= c)
   证明: by
   constructor
@@ -1865,7 +1865,7 @@ theorem IsBigOWith.exists_eq_mul
   proof: (isBigOWith_iff_exists_eq_mul hc).mp h
 
 中文:
-定理 IsBigOWith.exists_eq_mul
+定理 IsBigOWith.存在_eq_mul
   条件: (h : IsBigOWith c l u v) (hc : 0 <= c)
   证明: (isBigOWith_iff_exists_eq_mul hc).mp h
 
@@ -1892,7 +1892,7 @@ theorem isBigO_iff_exists_eq_mul
 alias ⟨IsBigO.exists_eq_mul, _⟩ := isBigO_
 
 中文:
-定理 isBigO_iff_exists_eq_mul
+定理 isBigO_iff_存在_eq_mul
   证明: by
   constructor
   · rintro h
@@ -1932,7 +1932,7 @@ theorem isLittleO_iff_exists_eq_mul
     exact isBigOWith_of_eq_mul _ ((hφ c hpos).mono fun x => le_of_lt) huvφ
 
 中文:
-定理 isLittleO_iff_exists_eq_mul
+定理 isLittleO_iff_存在_eq_mul
   证明: by
   constructor
   · exact fun h => ⟨fun x => u x / v x, h.tendsto_div_nhds_zero, h.eventually_mul_div_cancel.symm⟩
@@ -1971,7 +1971,7 @@ theorem div_isBoundedUnder_of_isBigO
 
 中文:
 定理 div_isBoundedUnder_of_isBigO
-  条件: {α : 类型} {l : Filter α} {f g : α -> 𝕜} (h : f =O[l] g)
+  条件: {α : 类型} {l : 滤子 α} {f g : α -> 𝕜} (h : f =O[l] g)
   证明: by
   obtain ⟨c, h₀, hc⟩ := h.exists_nonneg
   refine ⟨c, eventually_map.2 (hc.bound.mono fun x hx => ?_)⟩
@@ -2004,7 +2004,7 @@ theorem isBigO_iff_div_isBoundedUnder
 
 中文:
 定理 isBigO_iff_div_isBoundedUnder
-  结论: {α : 类型} {l : Filter α} {f g : α -> 𝕜}
+  结论: {α : 类型} {l : 滤子 α} {f g : α -> 𝕜}
   证明: by
   refine ⟨div_isBoundedUnder_of_isBigO, fun h => ?_⟩
   obtain ⟨c, hc⟩ := h
@@ -2037,7 +2037,7 @@ theorem isBigO_of_div_tendsto_nhds
 
 中文:
 定理 isBigO_of_div_tendsto_nhds
-  结论: {α : 类型} {l : Filter α} {f g : α -> 𝕜}
+  结论: {α : 类型} {l : 滤子 α} {f g : α -> 𝕜}
   证明: (isBigO_iff_div_isBoundedUnder hgf).2 H.norm.isBoundedUnder_le
 
 Depends on / 依赖: H.norm.isBoundedUnder_le, isBigO_iff_div_isBoundedUnder, isBoundedUnder_le
@@ -2060,7 +2060,7 @@ theorem IsLittleO.tendsto_zero_of_tendsto
 
 中文:
 定理 IsLittleO.tendsto_zero_of_tendsto
-  结论: {u : α -> E'} {v : α -> 𝕜} {l : Filter α} {y : 𝕜}
+  结论: {u : α -> E'} {v : α -> 𝕜} {l : 滤子 α} {y : 𝕜}
   证明: by
   suffices h : u =o[l] fun _x => (1 : 𝕜) by
     rwa [isLittleO_one_iff] at h
@@ -2095,7 +2095,7 @@ theorem isBigOWith_of_div_tendsto_nhds
 
 中文:
 定理 isBigOWith_of_div_tendsto_nhds
-  结论: {C : 实数} {a : 𝕜} {f g : α -> 𝕜} {l : Filter α}
+  结论: {C : 实数} {a : 𝕜} {f g : α -> 𝕜} {l : 滤子 α}
   证明: by
   simp only [IsBigOWith]
   apply (((continuous_norm.tendsto _).comp h).eventually_const_le ha).mono
@@ -2137,7 +2137,7 @@ theorem isBigO_of_div_tendsto_nhds_of_ne_zero
 
 中文:
 定理 isBigO_of_div_tendsto_nhds_of_ne_zero
-  结论: {l : Filter α} {f g : α -> 𝕜}
+  结论: {l : 滤子 α} {f g : α -> 𝕜}
   证明: by
   obtain ⟨C, hC, ha⟩ : exists C, 0 < C ∧ C⁻¹ < ‖a‖ := ⟨‖a‖⁻¹ + 1, by positivity, by field_simp; simpa⟩
   simp only [IsBigO]
@@ -2267,7 +2267,7 @@ theorem IsBigO.eq_zero_of_norm_pow_within
 
 中文:
 定理 IsBigO.eq_zero_of_norm_pow_within
-  结论: {f : E'' -> F''} {s : Set E''} {x₀ : E''} {n : 自然数}
+  结论: {f : E'' -> F''} {s : 集合 E''} {x₀ : E''} {n : 自然数}
   证明: mem_of_mem_nhdsWithin hx₀ h.eq_zero_imp by simp_rw [sub_self, norm_zero, zero_pow hn]
 
 Depends on / 依赖: eq_zero_imp, h.eq_zero_imp, mem_of_mem_nhdsWithin, norm_zero, simp_rw, sub_self, zero_pow
@@ -2633,7 +2633,7 @@ theorem isBigOWith_pi
 
 中文:
 定理 isBigOWith_pi
-  结论: {ι : 类型} [Fintype ι] {E' : ι -> 类型} [对任意 i, SeminormedAddCommGroup (E' i)]
+  结论: {ι : 类型} [有限类型 ι] {E' : ι -> 类型} [对任意 i, SeminormedAddComm群 (E' i)]
   证明: by
   have this (x) : 0 <= C * ‖g' x‖ := by positivity
   simp only [isBigOWith_iff, pi_norm_le_iff_of_nonneg (this _), eventually_all]
@@ -2663,7 +2663,7 @@ theorem isBigO_pi
 
 中文:
 定理 isBigO_pi
-  结论: {ι : 类型} [Fintype ι] {E' : ι -> 类型} [对任意 i, SeminormedAddCommGroup (E' i)]
+  结论: {ι : 类型} [有限类型 ι] {E' : ι -> 类型} [对任意 i, SeminormedAddComm群 (E' i)]
   证明: by
   simp only [isBigO_iff_eventually_isBigOWith, ← eventually_all]
   exact eventually_congr (eventually_atTop.2 ⟨0, fun c => isBigOWith_pi⟩)
@@ -2690,7 +2690,7 @@ theorem isLittleO_pi
 
 中文:
 定理 isLittleO_pi
-  结论: {ι : 类型} [Fintype ι] {E' : ι -> 类型} [对任意 i, SeminormedAddCommGroup (E' i)]
+  结论: {ι : 类型} [有限类型 ι] {E' : ι -> 类型} [对任意 i, SeminormedAddComm群 (E' i)]
   证明: by
   simp +contextual only [IsLittleO_def, isBigOWith_pi, le_of_lt]
   exact ⟨fun h i c hc => h hc i, fun h c hc i => h i hc⟩
@@ -2712,7 +2712,7 @@ theorem IsBigO.natCast_atTop
 
 中文:
 定理 IsBigO.natCast_atTop
-  结论: {R : 类型} [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  结论: {R : 类型} [半环 R] [偏序 R] [是StrictOrdered环 R]
   证明: IsBigO.comp_tendsto h tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: IsBigO, IsBigO.comp_tendsto, comp_tendsto, tendsto_natCast_atTop_atTop
@@ -2733,7 +2733,7 @@ theorem IsLittleO.natCast_atTop
 
 中文:
 定理 IsLittleO.natCast_atTop
-  结论: {R : 类型} [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  结论: {R : 类型} [半环 R] [偏序 R] [是StrictOrdered环 R]
   证明: IsLittleO.comp_tendsto h tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: IsLittleO, IsLittleO.comp_tendsto, comp_tendsto, tendsto_natCast_atTop_atTop
@@ -2754,8 +2754,8 @@ theorem isBigO_atTop_iff_eventually_exists
   rw [isBigO_iff]; rw [exists_eventually_atTop]
 
 中文:
-定理 isBigO_atTop_iff_eventually_exists
-  结论: {α : 类型} [SemilatticeSup α] [Nonempty α]
+定理 isBigO_atTop_iff_eventually_存在
+  结论: {α : 类型} [SemilatticeSup α] [非空 α]
   证明: by
   rw [isBigO_iff]; rw [exists_eventually_atTop]
 
@@ -2775,7 +2775,7 @@ theorem isBigO_atTop_iff_eventually_exists_pos
   simp_rw [isBigO_iff'', ← exists_prop, Subtype.exists', exists_eventually_atTop]
 
 中文:
-定理 isBigO_atTop_iff_eventually_exists_pos
+定理 isBigO_atTop_iff_eventually_存在_pos
   结论: {α : 类型}
   证明: by
   simp_rw [isBigO_iff'', ← exists_prop, Subtype.exists', exists_eventually_atTop]
@@ -2986,7 +2986,7 @@ theorem summable_of_isBigO
 
 中文:
 定理 summable_of_isBigO
-  结论: {ι E} [SeminormedAddCommGroup E] [CompleteSpace E]
+  结论: {ι E} [SeminormedAddComm群 E] [完备空间 E]
   证明: let ⟨_, hC⟩ := h.isBigOWith
   .of_norm_bounded_eventually (hg.abs.mul_left _) hC.bound
 
@@ -3007,7 +3007,7 @@ theorem summable_of_isBigO_nat
 
 中文:
 定理 summable_of_isBigO_nat
-  结论: {E} [SeminormedAddCommGroup E] [CompleteSpace E]
+  结论: {E} [SeminormedAddComm群 E] [完备空间 E]
   证明: summable_of_isBigO hg Nat.cofinite_eq_atTop.symm ▸ h
 
 Depends on / 依赖: Nat.cofinite_eq_atTop.symm, cofinite_eq_atTop, summable_of_isBigO
@@ -3051,7 +3051,7 @@ lemma Summable.mul_tendsto_const
 
 中文:
 引理 Summable.mul_tendsto_const
-  结论: {F ι : 类型} [NormedRing F] [NormMulClass F] [NormOneClass F]
+  结论: {F ι : 类型} [赋范环 F] [NormMul类 F] [NormOne类 F]
   证明: by
   apply summable_of_isBigO hf
   simpa using (isBigO_const_mul_self 1 f _).mul (hg.isBigO_one F)
@@ -3280,7 +3280,7 @@ theorem isBigO_principal
 
 中文:
 定理 isBigO_principal
-  结论: (hf : ContinuousOn f s) (hs : IsCompact s)
+  结论: (hf : ContinuousOn f s) (hs : 是紧集 s)
   证明: (hf.isBigOWith_principal hs hc).isBigO
 -/
 protected theorem isBigO_principal (hf : ContinuousOn f s) (hs : IsCompact s)
@@ -3361,7 +3361,7 @@ lemma NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded
   simpa using! IsLittleO.smul_isBigO hε (hf.isBigO_const (one_ne_zero : (1 : 𝕜) != 0))
 
 中文:
-引理 NormedField.tendsto_zero_smul_of_tendsto_zero_of_bounded
+引理 赋范域.tendsto_zero_smul_of_tendsto_zero_of_bounded
   结论: {ι 𝕜 E : 类型}
   证明: by
   rw [← isLittleO_one_iff 𝕜] at hε ⊢

@@ -46,7 +46,7 @@ theorem invOf_mul_cancel_left
 
 中文:
 定理 invOf_mul_cancel_left
-  条件: (A : Matrix n n α) (B : Matrix n m α) [Invertible A]
+  条件: (A : 矩阵 n n α) (B : 矩阵 n m α) [可逆 A]
   证明: by rw [← Matrix.mul_assoc, invOf_mul_self, Matrix.one_mul]
 -/
 protected theorem invOf_mul_cancel_left (A : Matrix n n α) (B : Matrix n m α) [Invertible A] :
@@ -62,7 +62,7 @@ theorem mul_invOf_cancel_left
 
 中文:
 定理 mul_invOf_cancel_left
-  条件: (A : Matrix n n α) (B : Matrix n m α) [Invertible A]
+  条件: (A : 矩阵 n n α) (B : 矩阵 n m α) [可逆 A]
   证明: by rw [← Matrix.mul_assoc, mul_invOf_self, Matrix.one_mul]
 -/
 protected theorem mul_invOf_cancel_left (A : Matrix n n α) (B : Matrix n m α) [Invertible A] :
@@ -78,7 +78,7 @@ theorem invOf_mul_cancel_right
 
 中文:
 定理 invOf_mul_cancel_right
-  条件: (A : Matrix m n α) (B : Matrix n n α) [Invertible B]
+  条件: (A : 矩阵 m n α) (B : 矩阵 n n α) [可逆 B]
   证明: by rw [Matrix.mul_assoc, invOf_mul_self, Matrix.mul_one]
 -/
 protected theorem invOf_mul_cancel_right (A : Matrix m n α) (B : Matrix n n α) [Invertible B] :
@@ -94,7 +94,7 @@ theorem mul_invOf_cancel_right
 
 中文:
 定理 mul_invOf_cancel_right
-  条件: (A : Matrix m n α) (B : Matrix n n α) [Invertible B]
+  条件: (A : 矩阵 m n α) (B : 矩阵 n n α) [可逆 B]
   证明: by rw [Matrix.mul_assoc, mul_invOf_self, Matrix.mul_one]
 -/
 protected theorem mul_invOf_cancel_right (A : Matrix m n α) (B : Matrix n n α) [Invertible B] :
@@ -197,7 +197,7 @@ instance invertibleConjTranspose
 
 中文:
 实例 invertibleConjTranspose
-  签名: [Invertible A]
+  签名: [可逆 A]
   定义体: Invertible.star _
 
 Depends on / 依赖: Invertible, Invertible.star
@@ -215,7 +215,7 @@ lemma conjTranspose_invOf
 
 中文:
 引理 conjTranspose_invOf
-  条件: [Invertible A] [Invertible Aᴴ]
+  条件: [可逆 A] [可逆 Aᴴ]
   结论: (⅟A)ᴴ = ⅟(Aᴴ)
   证明: star_invOf _
 
@@ -237,7 +237,7 @@ definition invertibleOfInvertibleConjTranspose
 
 中文:
 定义 invertibleOfInvertibleConjTranspose
-  签名: [Invertible Aᴴ]
+  签名: [可逆 Aᴴ]
   定义体: by
   rw [← conjTranspose_conjTranspose A]; rw [← star_eq_conjTranspose]
   infer_instance
@@ -258,7 +258,7 @@ lemma isUnit_conjTranspose
 
 中文:
 引理 isUnit_conjTranspose
-  结论: IsUnit Aᴴ ↔ IsUnit A
+  结论: 是单位 Aᴴ ↔ 是单位 A
   证明: isUnit_star
 -/
 @[simp] lemma isUnit_conjTranspose : IsUnit Aᴴ ↔ IsUnit A := isUnit_star
@@ -283,7 +283,7 @@ instance invertibleTranspose
 
 中文:
 实例 invertibleTranspose
-  签名: [Invertible A]
+  签名: [可逆 A]
   定义体: (⅟A)ᵀ
   invOf_mul_self := by rw [← transpose_mul, mul_invOf_self, transpose_one]
   mul_invOf_self := by rw [← transpose_mul, invOf_mul_self, transpose_one]
@@ -306,7 +306,7 @@ lemma transpose_invOf
 
 中文:
 引理 transpose_invOf
-  条件: [Invertible A] [Invertible Aᵀ]
+  条件: [可逆 A] [可逆 Aᵀ]
   结论: (⅟A)ᵀ = ⅟(Aᵀ)
   证明: by
   let := invertibleTranspose A
@@ -332,7 +332,7 @@ definition invertibleOfInvertibleTranspose
 
 中文:
 定义 invertibleOfInvertibleTranspose
-  签名: [Invertible Aᵀ]
+  签名: [可逆 Aᵀ]
   定义体: (⅟(Aᵀ))ᵀ
   invOf_mul_self := by rw [← transpose_one, ← mul_invOf_self Aᵀ, transpose_mul, transpose_transpose]
   mul_invOf_self := by rw [← transpose_one, ← invOf_mul_self Aᵀ, transpose_mul, transpose_transpose]
@@ -358,7 +358,7 @@ definition transposeInvertibleEquivInvertible
 
 中文:
 定义 transposeInvertibleEquivInvertible
-  签名: : Invertible Aᵀ ≃ Invertible A where
+  签名: : 可逆 Aᵀ ≃ 可逆 A where
   定义体: @invertibleOfInvertibleTranspose _ _ _ _ _ _
   invFun := @invertibleTranspose _ _ _ _ _ _
   left_inv _ := Subsingleton.elim _ _
@@ -384,7 +384,7 @@ lemma isUnit_transpose
 
 中文:
 引理 isUnit_transpose
-  结论: IsUnit Aᵀ ↔ IsUnit A
+  结论: 是单位 Aᵀ ↔ 是单位 A
   证明: by
   simp only [← nonempty_invertible_iff_isUnit,
     (transposeInvertibleEquivInvertible A).nonempty_congr]
@@ -504,7 +504,7 @@ definition invertibleAddMulMul
 
 中文:
 定义 invertibleAddMulMul
-  签名: : Invertible (A + U * C * V) where
+  签名: : 可逆 (A + U * C * V) where
   定义体: ⅟A - ⅟A * U * ⅟(⅟C + V * ⅟A * U) * V * ⅟A
   invOf_mul_self := add_mul_mul_invOf_mul_eq_one' _ _ _ _
   mul_invOf_self := add_mul_mul_invOf_mul_eq_one _ _ _ _
@@ -526,7 +526,7 @@ theorem invOf_add_mul_mul
 
 中文:
 定理 invOf_add_mul_mul
-  条件: [Invertible (A + U * C * V)]
+  条件: [可逆 (A + U * C * V)]
   证明: by
   let := invertibleAddMulMul A U C V
   convert! (rfl : ⅟(A + U * C * V) = _)
@@ -635,7 +635,7 @@ definition invertibleAddMulMul'
 
 中文:
 定义 invertibleAddMulMul'
-  签名: : Invertible (A + U * C * V) where
+  签名: : 可逆 (A + U * C * V) where
   定义体: ⅟A - ⅟A * U * C * ⅟(C + C * V * ⅟A * U * C) * C * V * ⅟A
   invOf_mul_self := add_mul_mul_mul_invOf_eq_one' A U C V
   mul_invOf_self := add_mul_mul_mul_invOf_eq_one A U C V
@@ -657,7 +657,7 @@ theorem invOf_add_mul_mul'
 
 中文:
 定理 invOf_add_mul_mul'
-  条件: [Invertible (A + U * C * V)]
+  条件: [可逆 (A + U * C * V)]
   证明: by
   let := invertibleAddMulMul' A U C V
   convert! (rfl : ⅟(A + U * C * V) = _)

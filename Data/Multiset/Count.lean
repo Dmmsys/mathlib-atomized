@@ -70,7 +70,7 @@ theorem coe_countP
 
 中文:
 定理 coe_countP
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: countP p l = l.countP p
   证明: rfl
 
@@ -250,7 +250,7 @@ theorem countP_True
 中文:
 定理 countP_True
   条件: {s : Multiset α}
-  结论: countP (fun _ => True) s = card s
+  结论: countP (fun _ => 真) s = card s
   证明: Quot.inductionOn s fun _l => congrFun List.countP_true _
 
 @[simp]
@@ -273,7 +273,7 @@ theorem countP_False
 中文:
 定理 countP_False
   条件: {s : Multiset α}
-  结论: countP (fun _ => False) s = 0
+  结论: countP (fun _ => 假) s = 0
   证明: Quot.inductionOn s fun _l => congrFun List.countP_false _
 
 Depends on / 依赖: List.countP_false, Quot.inductionOn, countP_false, inductionOn
@@ -478,7 +478,7 @@ theorem coe_count
 
 中文:
 定理 coe_count
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: count a (ofList l) = l.count a
   证明: by
   simp_rw [count, List.count, coe_countP (a = ·) l, @eq_comm _ a]
@@ -895,7 +895,7 @@ lemma count_injective
 
 中文:
 引理 count_injective
-  结论: Injective fun (s : Multiset α) a => s.count a
+  结论: 单射 fun (s : Multiset α) a => s.count a
   证明: fun _s _t hst => ext' congr_fun hst
 
 Depends on / 依赖: congr_fun
@@ -947,8 +947,8 @@ theorem Rel.countP_eq
     exact (if_congr ⟨fun h => _root_.
 
 中文:
-定理 Rel.countP_eq
-  结论: (r : α -> α -> 命题) [IsTrans α r] [Std.Symm r] {s t : Multiset α} (x : α)
+定理 关系.countP_eq
+  结论: (r : α -> α -> 命题) [是Trans α r] [Std.Symm r] {s t : Multiset α} (x : α)
   证明: by
   induction s using Multiset.induction_on generalizing t with
   | empty => rw [rel_zero_left.mp h]

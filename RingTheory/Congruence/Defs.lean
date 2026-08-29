@@ -44,8 +44,8 @@ structure RingCon
 
 中文:
 结构 RingCon
-  参数: (R : 类型) [Add R] [Mul R]
-  继承: Con R, AddCon R
+  参数: (R : 类型) [加法 R] [乘法 R]
+  继承: Con R, 加法Con R
   (无附加公理)
 -/
 structure RingCon (R : Type*) [Add R] [Mul R] extends Con R, AddCon R where
@@ -73,15 +73,15 @@ inductive RingConGen.Rel
     - mul: forall {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z -> RingConGen.Rel r (w * y) (x * z)
 
 中文:
-归纳类型 RingConGen.Rel
-  参数: [Add R] [Mul R] (r : R -> R -> 命题)
+归纳类型 RingConGen.关系
+  参数: [加法 R] [乘法 R] (r : R -> R -> 命题)
   构造子 (6 个):
-    - of: 对任意 x y, r x y -> RingConGen.Rel r x y
-    - refl: 对任意 x, RingConGen.Rel r x x
-    - symm: 对任意 {x y}, RingConGen.Rel r x y -> RingConGen.Rel r y x
-    - trans: 对任意 {x y z}, RingConGen.Rel r x y -> RingConGen.Rel r y z -> RingConGen.Rel r x z
-    - add: 对任意 {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z -> RingConGen.Rel r (w + y) (x + z)
-    - mul: 对任意 {w x y z}, RingConGen.Rel r w x -> RingConGen.Rel r y z -> RingConGen.Rel r (w * y) (x * z)
+    - of: 对任意 x y, r x y -> RingConGen.关系 r x y
+    - refl: 对任意 x, RingConGen.关系 r x x
+    - symm: 对任意 {x y}, RingConGen.关系 r x y -> RingConGen.关系 r y x
+    - trans: 对任意 {x y z}, RingConGen.关系 r x y -> RingConGen.关系 r y z -> RingConGen.关系 r x z
+    - add: 对任意 {w x y z}, RingConGen.关系 r w x -> RingConGen.关系 r y z -> RingConGen.关系 r (w + y) (x + z)
+    - mul: 对任意 {w x y z}, RingConGen.关系 r w x -> RingConGen.关系 r y z -> RingConGen.关系 r (w * y) (x * z)
 -/
 inductive RingConGen.Rel [Add R] [Mul R] (r : R -> R -> Prop) : R -> R -> Prop
   | of : forall x y, r x y -> RingConGen.Rel r x y
@@ -106,7 +106,7 @@ definition ringConGen
 
 中文:
 定义 ringConGen
-  签名: [Add R] [Mul R] (r : R -> R -> 命题)
+  签名: [加法 R] [乘法 R] (r : R -> R -> 命题)
   定义体: RingConGen.Rel r
   iseqv := ⟨RingConGen.Rel.refl, @RingConGen.Rel.symm _ _ _ _, @RingConGen.Rel.trans _ _ _ _⟩
   add' := RingConGen.Rel.add
@@ -136,7 +136,7 @@ lemma toCon_injective
 
 中文:
 引理 toCon_injective
-  结论: Injective fun c : RingCon R => c.toCon
+  结论: 单射 fun c : RingCon R => c.toCon
   证明: fun c d => by cases c; congr!
 -/
 lemma toCon_injective : Injective fun c : RingCon R => c.toCon := fun c d => by cases c; congr!
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (RingCon R) R (R -> 命题)
+  签名: 函数状 (RingCon R) R (R -> 命题)
   定义体: c.r
   coe_injective := DFunLike.coe_injective.comp toCon_injective
 -/
@@ -332,7 +332,7 @@ theorem sub
 
 中文:
 定理 sub
-  结论: {S : 类型} [AddGroup S] [Mul S] (t : RingCon S)
+  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.sub h h'
 -/
 protected theorem sub {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
@@ -348,7 +348,7 @@ theorem neg
 
 中文:
 定理 neg
-  结论: {S : 类型} [AddGroup S] [Mul S] (t : RingCon S)
+  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.neg h
 -/
 protected theorem neg {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
@@ -364,7 +364,7 @@ theorem nsmul
 
 中文:
 定理 nsmul
-  结论: {S : 类型} [AddMonoid S] [Mul S] (t : RingCon S)
+  结论: {S : 类型} [加法幺半群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.nsmul m hx
 -/
 protected theorem nsmul {S : Type*} [AddMonoid S] [Mul S] (t : RingCon S)
@@ -380,7 +380,7 @@ theorem zsmul
 
 中文:
 定理 zsmul
-  结论: {S : 类型} [AddGroup S] [Mul S] (t : RingCon S)
+  结论: {S : 类型} [加法群 S] [乘法 S] (t : RingCon S)
   证明: t.toAddCon.zsmul z hx
 -/
 protected theorem zsmul {S : Type*} [AddGroup S] [Mul S] (t : RingCon S)
@@ -398,7 +398,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (RingCon R)
+  签名: 可居 (RingCon R)
   定义体: ⟨ringConGen emptyRelation⟩
 
 @[simp]
@@ -570,7 +570,7 @@ theorem comap_nonUnitalRingHomId
 
 中文:
 定理 comap_nonUnitalRingHomId
-  条件: {R} [NonUnitalNonAssocSemiring R] (J : RingCon R)
+  条件: {R} [非幺非结合半环 R] (J : RingCon R)
   证明: rfl
 
 @[simp]
@@ -614,7 +614,7 @@ theorem comap_ringHomId
 
 中文:
 定理 comap_ringHomId
-  条件: {R} [NonAssocSemiring R] (J : RingCon R)
+  条件: {R} [非结合半环 R] (J : RingCon R)
   证明: rfl
 
 @[simp]
@@ -657,7 +657,7 @@ definition Quotient
   body: Quotient c.toSetoid
 
 中文:
-定义 Quotient
+定义 商
   定义体: Quotient c.toSetoid
 -/
 protected def Quotient :=
@@ -693,7 +693,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeTC R c.Quotient
+  签名: CoeTC R c.商
   定义体: ⟨toQuotient⟩
 
 Depends on / 依赖: toQuotient
@@ -719,7 +719,7 @@ theorem quot_mk_eq_coe
 中文:
 定理 quot_mk_eq_coe
   条件: (x : R)
-  结论: Quot.mk c x = (x : c.Quotient)
+  结论: 商.mk c x = (x : c.商)
   证明: rfl
 -/
 theorem quot_mk_eq_coe (x : R) : Quot.mk c x = (x : c.Quotient) :=
@@ -740,7 +740,7 @@ theorem eq
 中文:
 定理 eq
   条件: {a b : R}
-  结论: (a : c.Quotient) = (b : c.Quotient) ↔ c a b
+  结论: (a : c.商) = (b : c.商) ↔ c a b
   证明: Quotient.eq''
 -/
 protected theorem eq {a b : R} : (a : c.Quotient) = (b : c.Quotient) ↔ c a b :=
@@ -772,7 +772,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add c.Quotient
+  签名: 加法 c.商
   定义体: inferInstanceAs (Add c.toAddCon.Quotient)
 
 @[simp, norm_cast]
@@ -794,7 +794,7 @@ theorem coe_add
 中文:
 定理 coe_add
   条件: (x y : R)
-  结论: (↑(x + y) : c.Quotient) = ↑x + ↑y
+  结论: (↑(x + y) : c.商) = ↑x + ↑y
   证明: rfl
 -/
 theorem coe_add (x y : R) : (↑(x + y) : c.Quotient) = ↑x + ↑y :=
@@ -812,7 +812,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul c.Quotient
+  签名: 乘法 c.商
   定义体: inferInstanceAs (Mul c.toCon.Quotient)
 
 @[simp, norm_cast]
@@ -834,7 +834,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (x y : R)
-  结论: (↑(x * y) : c.Quotient) = ↑x * ↑y
+  结论: (↑(x * y) : c.商) = ↑x * ↑y
   证明: rfl
 -/
 theorem coe_mul (x y : R) : (↑(x * y) : c.Quotient) = ↑x * ↑y :=
@@ -858,7 +858,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero c.Quotient
+  签名: 零 c.商
   定义体: inferInstanceAs (Zero c.toAddCon.Quotient)
 
 @[simp, norm_cast]
@@ -878,7 +878,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: (↑(0 : R) : c.Quotient) = 0
+  结论: (↑(0 : R) : c.商) = 0
   证明: rfl
 -/
 theorem coe_zero : (↑(0 : R) : c.Quotient) = 0 :=
@@ -902,7 +902,7 @@ instance :
 
 中文:
 实例 :
-  签名: One c.Quotient
+  签名: 幺 c.商
   定义体: inferInstanceAs (One c.toCon.Quotient)
 
 @[simp, norm_cast]
@@ -922,7 +922,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: (↑(1 : R) : c.Quotient) = 1
+  结论: (↑(1 : R) : c.商) = 1
   证明: rfl
 -/
 theorem coe_one : (↑(1 : R) : c.Quotient) = 1 :=
@@ -940,7 +940,7 @@ definition smulAux
 
 中文:
 定义 smulAux
-  签名: [Add R] [Mul R] {α : 类型} [SMul α R]
+  签名: [加法 R] [乘法 R] {α : 类型} [标量乘法 α R]
   定义体: Quotient.map' (a • ·) (h a) x
 
 Depends on / 依赖: Quotient, Quotient.map
@@ -966,7 +966,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg c.Quotient
+  签名: 取负 c.商
   定义体: inferInstanceAs (Neg c.toAddCon.Quotient)
 
 @[simp, norm_cast]
@@ -988,7 +988,7 @@ theorem coe_neg
 中文:
 定理 coe_neg
   条件: (x : R)
-  结论: (↑(-x) : c.Quotient) = -x
+  结论: (↑(-x) : c.商) = -x
   证明: rfl
 -/
 theorem coe_neg (x : R) : (↑(-x) : c.Quotient) = -x :=
@@ -1006,7 +1006,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub c.Quotient
+  签名: 减法 c.商
   定义体: inferInstanceAs (Sub c.toAddCon.Quotient)
 
 @[simp, norm_cast]
@@ -1028,7 +1028,7 @@ theorem coe_sub
 中文:
 定理 coe_sub
   条件: (x y : R)
-  结论: (↑(x - y) : c.Quotient) = x - y
+  结论: (↑(x - y) : c.商) = x - y
   证明: rfl
 -/
 theorem coe_sub (x y : R) : (↑(x - y) : c.Quotient) = x - y :=
@@ -1046,7 +1046,7 @@ instance hasZSMul
 
 中文:
 实例 hasZSMul
-  签名: : SMul 整数 c.Quotient
+  签名: : 标量乘法 整数 c.商
   定义体: ⟨c.smulAux (RingCon.zsmul c)⟩
 
 @[simp, norm_cast]
@@ -1068,7 +1068,7 @@ theorem coe_zsmul
 中文:
 定理 coe_zsmul
   条件: (z : 整数) (x : R)
-  结论: (↑(z • x) : c.Quotient) = z • (x : c.Quotient)
+  结论: (↑(z • x) : c.商) = z • (x : c.商)
   证明: rfl
 -/
 theorem coe_zsmul (z : Int) (x : R) : (↑(z • x) : c.Quotient) = z • (x : c.Quotient) :=
@@ -1092,7 +1092,7 @@ instance hasNSMul
 
 中文:
 实例 hasNSMul
-  签名: : SMul 自然数 c.Quotient
+  签名: : 标量乘法 自然数 c.商
   定义体: ⟨c.smulAux (RingCon.nsmul c)⟩
 
 @[simp, norm_cast]
@@ -1114,7 +1114,7 @@ theorem coe_nsmul
 中文:
 定理 coe_nsmul
   条件: (n : 自然数) (x : R)
-  结论: (↑(n • x) : c.Quotient) = n • (x : c.Quotient)
+  结论: (↑(n • x) : c.商) = n • (x : c.商)
   证明: rfl
 -/
 theorem coe_nsmul (n : Nat) (x : R) : (↑(n • x) : c.Quotient) = n • (x : c.Quotient) :=
@@ -1138,7 +1138,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow c.Quotient 自然数
+  签名: 幂 c.商 自然数
   定义体: inferInstanceAs (Pow c.toCon.Quotient Nat)
 
 @[simp, norm_cast]
@@ -1160,7 +1160,7 @@ theorem coe_pow
 中文:
 定理 coe_pow
   条件: (x : R) (n : 自然数)
-  结论: (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n
+  结论: (↑(x ^ n) : c.商) = (x : c.商) ^ n
   证明: rfl
 -/
 theorem coe_pow (x : R) (n : Nat) : (↑(x ^ n) : c.Quotient) = (x : c.Quotient) ^ n :=
@@ -1184,7 +1184,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast c.Quotient
+  签名: 自然数嵌入 c.商
   定义体: ⟨fun n => ↑(n : R)⟩
 
 @[simp, norm_cast]
@@ -1205,7 +1205,7 @@ theorem coe_natCast
 中文:
 定理 coe_natCast
   条件: (n : 自然数)
-  结论: (↑(n : R) : c.Quotient) = n
+  结论: (↑(n : R) : c.商) = n
   证明: rfl
 -/
 theorem coe_natCast (n : Nat) : (↑(n : R) : c.Quotient) = n :=
@@ -1229,7 +1229,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast c.Quotient
+  签名: 整数嵌入 c.商
   定义体: ⟨fun z => ↑(z : R)⟩
 
 @[simp, norm_cast]
@@ -1250,7 +1250,7 @@ theorem coe_intCast
 中文:
 定理 coe_intCast
   条件: (n : 自然数)
-  结论: (↑(n : R) : c.Quotient) = n
+  结论: (↑(n : R) : c.商) = n
   证明: rfl
 -/
 theorem coe_intCast (n : Nat) : (↑(n : R) : c.Quotient) = n :=
@@ -1267,8 +1267,8 @@ instance [Inhabited
   body: ⟨↑(default : R)⟩
 
 中文:
-实例 [Inhabited
-  签名: R] [Add R] [Mul R] (c
+实例 [可居
+  签名: R] [加法 R] [乘法 R] (c
   定义体: ⟨↑(default : R)⟩
 -/
 instance [Inhabited R] [Add R] [Mul R] (c : RingCon R) : Inhabited c.Quotient :=
@@ -1295,8 +1295,8 @@ instance [AddZeroClass
   body: inferInstanceAs AddZeroClass c.toAddCon.Quotient
 
 中文:
-实例 [AddZeroClass
-  签名: R] [Mul R] (c
+实例 [加法零类
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddZeroClass c.toAddCon.Quotient
 
 Depends on / 依赖: AddZeroClass, Quotient, c.toAddCon.Quotient, toAddCon
@@ -1313,8 +1313,8 @@ instance [AddSemigroup
   body: inferInstanceAs AddSemigroup c.toAddCon.Quotient
 
 中文:
-实例 [AddSemigroup
-  签名: R] [Mul R] (c
+实例 [加法半群
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddSemigroup c.toAddCon.Quotient
 
 Depends on / 依赖: AddSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -1331,8 +1331,8 @@ instance [AddCommMagma
   body: inferInstanceAs AddCommMagma c.toAddCon.Quotient
 
 中文:
-实例 [AddCommMagma
-  签名: R] [Mul R] (c
+实例 [加法交换原群
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddCommMagma c.toAddCon.Quotient
 
 Depends on / 依赖: AddCommMagma, Quotient, c.toAddCon.Quotient, toAddCon
@@ -1349,8 +1349,8 @@ instance [AddCommSemigroup
   body: inferInstanceAs AddCommSemigroup c.toAddCon.Quotient
 
 中文:
-实例 [AddCommSemigroup
-  签名: R] [Mul R] (c
+实例 [加法交换半群
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddCommSemigroup c.toAddCon.Quotient
 
 Depends on / 依赖: AddCommSemigroup, Quotient, c.toAddCon.Quotient, toAddCon
@@ -1368,8 +1368,8 @@ instance [AddMonoid
 __ : AddMonoid c.Quotient := inferInstanceAs AddMonoid c.toAddCon.Quotient
 
 中文:
-实例 [AddMonoid
-  签名: R] [Mul R] (c
+实例 [加法幺半群
+  签名: R] [乘法 R] (c
   定义体: n • x
 __ : AddMonoid c.Quotient := inferInstanceAs AddMonoid c.toAddCon.Quotient
 -/
@@ -1386,8 +1386,8 @@ instance [AddCommMonoid
   body: inferInstanceAs AddCommMonoid c.toAddCon.Quotient
 
 中文:
-实例 [AddCommMonoid
-  签名: R] [Mul R] (c
+实例 [加法交换幺半群
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddCommMonoid c.toAddCon.Quotient
 
 Depends on / 依赖: AddCommMonoid, Quotient, bfamilyOfFamily, c.toAddCon.Quotient, enum_typein, toAddCon
@@ -1405,8 +1405,8 @@ instance [AddGroup
 __ : AddGroup c.Quotient := inferInstanceAs AddGroup c.toAddCon.Quotient
 
 中文:
-实例 [AddGroup
-  签名: R] [Mul R] (c
+实例 [加法群
+  签名: R] [乘法 R] (c
   定义体: n • x
 __ : AddGroup c.Quotient := inferInstanceAs AddGroup c.toAddCon.Quotient
 -/
@@ -1423,8 +1423,8 @@ instance [AddCommGroup
   body: inferInstanceAs AddCommGroup c.toAddCon.Quotient
 
 中文:
-实例 [AddCommGroup
-  签名: R] [Mul R] (c
+实例 [加法交换群
+  签名: R] [乘法 R] (c
   定义体: inferInstanceAs AddCommGroup c.toAddCon.Quotient
 
 Depends on / 依赖: AddCommGroup, Quotient, c.toAddCon.Quotient, familyOfBFamily, toAddCon, typein_enum
@@ -1445,8 +1445,8 @@ instance [Add
   body: inferInstanceAs MulOneClass c.toCon.Quotient
 
 中文:
-实例 [Add
-  签名: R] [MulOneClass R] (c
+实例 [加法
+  签名: R] [MulOne类 R] (c
   定义体: inferInstanceAs MulOneClass c.toCon.Quotient
 
 Depends on / 依赖: MulOneClass, Quotient, c.toCon.Quotient
@@ -1463,8 +1463,8 @@ instance [Add
   body: inferInstanceAs Semigroup c.toCon.Quotient
 
 中文:
-实例 [Add
-  签名: R] [Semigroup R] (c
+实例 [加法
+  签名: R] [半群 R] (c
   定义体: inferInstanceAs Semigroup c.toCon.Quotient
 
 Depends on / 依赖: Quotient, Semigroup, c.toCon.Quotient
@@ -1481,8 +1481,8 @@ instance [Add
   body: inferInstanceAs CommMagma c.toCon.Quotient
 
 中文:
-实例 [Add
-  签名: R] [CommMagma R] (c
+实例 [加法
+  签名: R] [交换原群 R] (c
   定义体: inferInstanceAs CommMagma c.toCon.Quotient
 
 Depends on / 依赖: CommMagma, Quotient, c.toCon.Quotient
@@ -1499,8 +1499,8 @@ instance [Add
   body: inferInstanceAs CommSemigroup c.toCon.Quotient
 
 中文:
-实例 [Add
-  签名: R] [CommSemigroup R] (c
+实例 [加法
+  签名: R] [交换半群 R] (c
   定义体: inferInstanceAs CommSemigroup c.toCon.Quotient
 
 Depends on / 依赖: CommSemigroup, Quotient, c.toCon.Quotient
@@ -1520,8 +1520,8 @@ instance [Add
     npow n x := x ^ n }
 
 中文:
-实例 [Add
-  签名: R] [Monoid R] (c
+实例 [加法
+  签名: R] [幺半群 R] (c
   定义体: fast_instance%
   { __ : Monoid c.toCon.Quotient := inferInstanceAs _
     -- see https://leanprover.zulipchat.com/#narrow/channel/287929-mathlib4/topic/inferInstanceAs.20creates.20non-reducible.20diamonds/near/603969174
@@ -1543,8 +1543,8 @@ instance [Add
   body: inferInstanceAs CommMonoid c.toCon.Quotient
 
 中文:
-实例 [Add
-  签名: R] [CommMonoid R] (c
+实例 [加法
+  签名: R] [交换幺半群 R] (c
   定义体: inferInstanceAs CommMonoid c.toCon.Quotient
 
 Depends on / 依赖: CommMonoid, Quotient, c.toCon.Quotient
@@ -1565,7 +1565,7 @@ instance [NonUnitalNonAssocSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocSemiring
+实例 [非幺非结合半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalNonAssocSemiring _ Quotient.mk''_surjective rfl
@@ -1589,7 +1589,7 @@ instance [NonUnitalNonAssocCommSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocCommSemiring
+实例 [非幺非结合交换半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalNonAssocCommSemiring _ Quotient.mk''_surjective rfl
@@ -1613,7 +1613,7 @@ instance [NonAssocSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [NonAssocSemiring
+实例 [非结合半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonAssocSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1636,7 +1636,7 @@ instance [NonAssocCommSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [NonAssocCommSemiring
+实例 [非结合交换半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonAssocCommSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1660,7 +1660,7 @@ instance [NonUnitalSemiring
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalSemiring
+实例 [非幺半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1683,7 +1683,7 @@ instance [NonUnitalCommSemiring
     (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommSemiring
+实例 [非幺交换半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalCommSemiring _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1707,7 +1707,7 @@ instance [Semiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [Semiring
+实例 [半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.semiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1730,7 +1730,7 @@ instance [CommSemiring
     (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
 
 中文:
-实例 [CommSemiring
+实例 [交换半环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.commSemiring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1753,7 +1753,7 @@ instance [NonUnitalNonAssocRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocRing
+实例 [非幺非结合环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalNonAssocRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1777,7 +1777,7 @@ instance [NonUnitalNonAssocCommRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalNonAssocCommRing
+实例 [非幺非结合交换环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalNonAssocCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1802,7 +1802,7 @@ instance [NonAssocRing
     (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [NonAssocRing
+实例 [非结合环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonAssocRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1828,7 +1828,7 @@ instance [NonAssocCommRing
     (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [NonAssocCommRing
+实例 [非结合交换环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonAssocCommRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1853,7 +1853,7 @@ instance [NonUnitalRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalRing
+实例 [非幺环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1876,7 +1876,7 @@ instance [NonUnitalCommRing
     (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [NonUnitalCommRing
+实例 [非幺交换环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.nonUnitalCommRing _ Quotient.mk''_surjective rfl (fun _ _ => rfl)
@@ -1900,7 +1900,7 @@ instance [Ring
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [Ring
+实例 [环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.ring _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1926,7 +1926,7 @@ instance [CommRing
     (fun _ _ => rfl) (fun _ => rfl) fun _ => rfl
 
 中文:
-实例 [CommRing
+实例 [交换环
   签名: R] (c
   定义体: fast_instance%
   Function.Surjective.commRing _ Quotient.mk''_surjective rfl rfl (fun _ _ => rfl)
@@ -1958,7 +1958,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: : R ->+* c.Quotient where
+  签名: : R ->+* c.商 where
   定义体: toQuotient
   map_zero' := rfl
   map_one' := rfl
@@ -1986,7 +1986,7 @@ theorem mk'_surjective
 
 中文:
 定理 mk'_surjective
-  结论: Function.Surjective c.mk'
+  结论: 函数.满射 c.mk'
   证明: Quotient.mk''_surjective
 
 @[simp]
@@ -2005,7 +2005,7 @@ theorem coe_mk'
 
 中文:
 定理 coe_mk'
-  结论: (c.mk' : R -> c.Quotient) = ((↑) : R -> c.Quotient)
+  结论: (c.mk' : R -> c.商) = ((↑) : R -> c.商)
   证明: rfl
 -/
 theorem coe_mk' : (c.mk' : R -> c.Quotient) = ((↑) : R -> c.Quotient) :=

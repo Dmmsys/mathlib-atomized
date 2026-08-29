@@ -59,7 +59,7 @@ definition levyProkhorovEDist
 
 中文:
 定义 levyProkhorovEDist
-  签名: (μ ν : Measure Ω)
+  签名: (μ ν : 测度 Ω)
   定义体: sInf {ε | forall B, MeasurableSet B ->
             μ B <= ν (thickening ε.toReal B) + ε ∧ ν B <= μ (thickening ε.toReal B) + ε}
 
@@ -83,8 +83,8 @@ lemma meas_le_of_le_of_forall_le_meas_thickening_add
   exact measure_mono (μ := ν) (thickening_mono (toReal_mono ε_top h_le) B)
 
 中文:
-引理 meas_le_of_le_of_forall_le_meas_thickening_add
-  结论: {ε₁ ε₂ : 实数>=0∞} (μ ν : Measure Ω)
+引理 meas_le_of_le_of_对任意_le_meas_thickening_add
+  结论: {ε₁ ε₂ : 实数>=0∞} (μ ν : 测度 Ω)
   证明: by
   by_cases ε_top : ε₂ = ∞
   · simp only [ε_top, toReal_top,
@@ -115,7 +115,7 @@ lemma left_measure_le_of_levyProkhorovEDist_lt
 
 中文:
 引理 left_measure_le_of_levyProkhorovEDist_lt
-  结论: {μ ν : Measure Ω} {c : 实数>=0∞}
+  结论: {μ ν : 测度 Ω} {c : 实数>=0∞}
   证明: by
   obtain ⟨c', ⟨hc', lt_c⟩⟩ := sInf_lt_iff.mp h
   exact meas_le_of_le_of_forall_le_meas_thickening_add μ ν lt_c.le (hc' B B_mble).1
@@ -140,7 +140,7 @@ lemma right_measure_le_of_levyProkhorovEDist_lt
 
 中文:
 引理 right_measure_le_of_levyProkhorovEDist_lt
-  结论: {μ ν : Measure Ω} {c : 实数>=0∞}
+  结论: {μ ν : 测度 Ω} {c : 实数>=0∞}
   证明: by
   obtain ⟨c', ⟨hc', lt_c⟩⟩ := sInf_lt_iff.mp h
   exact meas_le_of_le_of_forall_le_meas_thickening_add ν μ lt_c.le (hc' B B_mble).2
@@ -169,8 +169,8 @@ lemma levyProkhorovEDist_le_of_forall_add_pos_le
   simpa only [add_assoc] using h ε B (by positivity) coe_lt_top B_mble
 
 中文:
-引理 levyProkhorovEDist_le_of_forall_add_pos_le
-  结论: (μ ν : Measure Ω) (δ : 实数>=0∞)
+引理 levyProkhorovEDist_le_of_对任意_add_pos_le
+  结论: (μ ν : 测度 Ω) (δ : 实数>=0∞)
   证明: by
   apply ENNReal.le_of_forall_pos_le_add
   intro ε hε _
@@ -210,8 +210,8 @@ lemma levyProkhorovEDist_le_of_forall
     (by simp only [add_lt_top, Ne.lt_top δ_top, x_lt_top, and_self]) 
 
 中文:
-引理 levyProkhorovEDist_le_of_forall
-  结论: (μ ν : Measure Ω) (δ : 实数>=0∞)
+引理 levyProkhorovEDist_le_of_对任意
+  结论: (μ ν : 测度 Ω) (δ : 实数>=0∞)
   证明: by
   by_cases δ_top : δ = ∞
   · simp only [δ_top, le_top]
@@ -244,7 +244,7 @@ lemma levyProkhorovEDist_le_max_measure_univ
 
 中文:
 引理 levyProkhorovEDist_le_max_measure_univ
-  条件: (μ ν : Measure Ω)
+  条件: (μ ν : 测度 Ω)
   证明: by
   refine sInf_le fun B _ => ⟨?_, ?_⟩ <;> apply le_add_left <;> simp [measure_mono]
 
@@ -264,7 +264,7 @@ lemma levyProkhorovEDist_lt_top
 
 中文:
 引理 levyProkhorovEDist_lt_top
-  条件: (μ ν : Measure Ω) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 Ω) [是有限测度 μ] [是有限测度 ν]
   证明: (levyProkhorovEDist_le_max_measure_univ μ ν).trans_lt by simp [measure_lt_top]
 -/
 @[simp] lemma levyProkhorovEDist_lt_top (μ ν : Measure Ω) [IsFiniteMeasure μ] [IsFiniteMeasure ν] :
@@ -281,7 +281,7 @@ lemma levyProkhorovEDist_ne_top
 
 中文:
 引理 levyProkhorovEDist_ne_top
-  条件: (μ ν : Measure Ω) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 Ω) [是有限测度 μ] [是有限测度 ν]
   证明: (levyProkhorovEDist_lt_top μ ν).ne
 -/
 @[simp] lemma levyProkhorovEDist_ne_top (μ ν : Measure Ω) [IsFiniteMeasure μ] [IsFiniteMeasure ν] :
@@ -302,7 +302,7 @@ refine le_add_right measure_mono self_subset_thickening ?_ _
 
 中文:
 引理 levyProkhorovEDist_self
-  条件: (μ : Measure Ω)
+  条件: (μ : 测度 Ω)
   结论: levyProkhorovEDist μ μ = 0
   证明: by
   rw [← nonpos_iff_eq_zero]; rw [← csInf_Ioo zero_lt_top]
@@ -327,7 +327,7 @@ lemma levyProkhorovEDist_comm
 
 中文:
 引理 levyProkhorovEDist_comm
-  条件: (μ ν : Measure Ω)
+  条件: (μ ν : 测度 Ω)
   证明: by
   simp only [levyProkhorovEDist, and_comm]
 
@@ -354,7 +354,7 @@ lemma levyProkhorovEDist_triangle
 
 中文:
 引理 levyProkhorovEDist_triangle
-  条件: [OpensMeasurableSpace Ω] (μ ν κ : Measure Ω)
+  条件: [OpensMeasurable空间 Ω] (μ ν κ : 测度 Ω)
   证明: by
   by_cases LPμν_finite : levyProkhorovEDist μ ν = ∞
   · simp [LPμν_finite]
@@ -413,7 +413,7 @@ definition levyProkhorovDist
 
 中文:
 定义 levyProkhorovDist
-  签名: (μ ν : Measure Ω)
+  签名: (μ ν : 测度 Ω)
   定义体: (levyProkhorovEDist μ ν).toReal
 
 Depends on / 依赖: levyProkhorovEDist, toReal
@@ -432,7 +432,7 @@ lemma levyProkhorovDist_self
 
 中文:
 引理 levyProkhorovDist_self
-  条件: (μ : Measure Ω)
+  条件: (μ : 测度 Ω)
   证明: by
   simp only [levyProkhorovDist, levyProkhorovEDist_self, toReal_zero]
 
@@ -453,7 +453,7 @@ lemma levyProkhorovDist_comm
 
 中文:
 引理 levyProkhorovDist_comm
-  条件: (μ ν : Measure Ω)
+  条件: (μ ν : 测度 Ω)
   证明: by
   simp only [levyProkhorovDist, levyProkhorovEDist_comm]
 
@@ -478,7 +478,7 @@ convert! ENNReal.toReal_mono ?_ levyProkhorovEDist_triangle μ ν κ
 
 中文:
 引理 levyProkhorovDist_triangle
-  结论: [OpensMeasurableSpace Ω] (μ ν κ : Measure Ω)
+  结论: [OpensMeasurable空间 Ω] (μ ν κ : 测度 Ω)
   证明: by
   have dμν_finite := (levyProkhorovEDist_lt_top μ ν).ne
   have dνκ_finite := (levyProkhorovEDist_lt_top ν κ).ne
@@ -513,7 +513,7 @@ lemma measure_le_measure_closure_of_levyProkhorovEDist_eq_zero
 
 中文:
 引理 measure_le_measure_closure_of_levyProkhorovEDist_eq_zero
-  结论: {μ ν : Measure Ω}
+  结论: {μ ν : 测度 Ω}
   证明: by
   have key : Tendsto (fun ε => ν (thickening ε.toReal s)) (𝓝[>] (0 : Real>=0∞)) (𝓝 (ν (closure s))) := by
     have aux : Tendsto ENNReal.toReal (𝓝[>] 0) (𝓝[>] 0) := by
@@ -555,7 +555,7 @@ lemma measure_eq_measure_of_levyProkhorovEDist_eq_zero_of_isClosed
 
 中文:
 引理 measure_eq_measure_of_levyProkhorovEDist_eq_zero_of_isClosed
-  结论: {μ ν : Measure Ω}
+  结论: {μ ν : 测度 Ω}
   证明: by
   apply le_antisymm
   · exact measure_le_measure_closure_of_levyProkhorovEDist_eq_zero
@@ -592,7 +592,7 @@ lemma levyProkhorovEDist_le_of_forall_le
   rw [prob_compl_eq_one_sub isOpen_thickening.measura
 
 中文:
-引理 levyProkhorovEDist_le_of_forall_le
+引理 levyProkhorovEDist_le_of_对任意_le
   证明: by
   apply levyProkhorovEDist_le_of_forall μ ν δ
   intro ε B ε_gt ε_lt_top B_mble
@@ -636,7 +636,7 @@ lemma levyProkhorovDist_le_of_forall_le
     · simpa [ofReal_toReal_eq_iff.mpr ε_lt_top.ne
 
 中文:
-引理 levyProkhorovDist_le_of_forall_le
+引理 levyProkhorovDist_le_of_对任意_le
   证明: by
   apply toReal_le_of_le_ofReal δ_nn
   apply levyProkhorovEDist_le_of_forall_le
@@ -711,7 +711,7 @@ lemma toMeasure_injective
 中文:
 引理 toMeasure_injective
   条件: {α : 类型}
-  结论: (toMeasure : LevyProkhorov α -> α).Injective
+  结论: (toMeasure : LevyProkhorov α -> α).单射
   证明: fun ⟨μ⟩ ⟨ν⟩ => by congr!
 -/
 lemma toMeasure_injective {α : Type*} : (toMeasure : LevyProkhorov α -> α).Injective :=
@@ -831,7 +831,7 @@ lemma edist_measure_def
 
 中文:
 引理 edist_measure_def
-  条件: (μ ν : LevyProkhorov (Measure Ω))
+  条件: (μ ν : LevyProkhorov (测度 Ω))
   证明: rfl
 -/
 lemma edist_measure_def (μ ν : LevyProkhorov (Measure Ω)) :
@@ -847,7 +847,7 @@ lemma edist_finiteMeasure_def
 
 中文:
 引理 edist_finiteMeasure_def
-  条件: (μ ν : LevyProkhorov (FiniteMeasure Ω))
+  条件: (μ ν : LevyProkhorov (有限测度 Ω))
   证明: rfl
 -/
 lemma edist_finiteMeasure_def (μ ν : LevyProkhorov (FiniteMeasure Ω)) :
@@ -863,7 +863,7 @@ lemma dist_finiteMeasure_def
 
 中文:
 引理 dist_finiteMeasure_def
-  条件: (μ ν : LevyProkhorov (FiniteMeasure Ω))
+  条件: (μ ν : LevyProkhorov (有限测度 Ω))
   证明: rfl
 -/
 lemma dist_finiteMeasure_def (μ ν : LevyProkhorov (FiniteMeasure Ω)) :
@@ -879,7 +879,7 @@ lemma edist_probabilityMeasure_def
 
 中文:
 引理 edist_probabilityMeasure_def
-  条件: (μ ν : LevyProkhorov (ProbabilityMeasure Ω))
+  条件: (μ ν : LevyProkhorov (概率测度 Ω))
   证明: rfl
 -/
 lemma edist_probabilityMeasure_def (μ ν : LevyProkhorov (ProbabilityMeasure Ω)) :
@@ -895,7 +895,7 @@ lemma dist_probabilityMeasure_def
 
 中文:
 引理 dist_probabilityMeasure_def
-  条件: (μ ν : LevyProkhorov (ProbabilityMeasure Ω))
+  条件: (μ ν : LevyProkhorov (概率测度 Ω))
   证明: rfl
 -/
 lemma dist_probabilityMeasure_def (μ ν : LevyProkhorov (ProbabilityMeasure Ω)) :
@@ -916,7 +916,7 @@ instance levyProkhorovDist_metricSpace_probabilityMeasure
 
 中文:
 实例 levyProkhorovDist_metricSpace_probabilityMeasure
-  签名: [BorelSpace Ω]
+  签名: [Borel空间 Ω]
   定义体: by
     apply toMeasure_injective
     apply ProbabilityMeasure.toMeasure_injective
@@ -962,7 +962,7 @@ lemma BoundedContinuousFunction.integral_eq_integral_meas_le_of_hasFiniteIntegra
   · exact Eventually.of_forall (fun x => BoundedContinuousFunction.apply_le_norm f x)
 
 中文:
-引理 BoundedContinuousFunction.integral_eq_integral_meas_le_of_hasFiniteIntegral
+引理 有界连续函数.integral_eq_integral_meas_le_of_hasFinite整数egral
   证明: by
   rw [Integrable.integral_eq_integral_Ioc_meas_le (M := ‖f‖) ?_ f_nn ?_]
   · exact ⟨f.continuous.measurable.aestronglyMeasurable, hf⟩
@@ -986,7 +986,7 @@ lemma BoundedContinuousFunction.integral_eq_integral_meas_le
   proof: integral_eq_integral_meas_le_of_hasFiniteIntegral _ _ f_nn (f.integrable μ).2
 
 中文:
-引理 BoundedContinuousFunction.integral_eq_integral_meas_le
+引理 有界连续函数.integral_eq_integral_meas_le
   证明: integral_eq_integral_meas_le_of_hasFiniteIntegral _ _ f_nn (f.integrable μ).2
 
 Depends on / 依赖: f.integrable, f_nn, integrable, integral_eq_integral_meas_le_of_hasFiniteIntegral
@@ -1014,8 +1014,8 @@ ENNReal.toReal_mono ?_
        
 
 中文:
-引理 BoundedContinuousFunction.integral_le_of_levyProkhorovEDist_lt
-  结论: (μ ν : Measure Ω)
+引理 有界连续函数.integral_le_of_levyProkhorovEDist_lt
+  结论: (μ ν : 测度 Ω)
   证明: by
   rw [BoundedContinuousFunction.integral_eq_integral_meas_le f μ f_nn]
   have key : (fun (t : Real) => μ.real {a | t <= f a})
@@ -1233,8 +1233,8 @@ lemma ProbabilityMeasure.toMeasure_add_pos_gt_mem_nhds
     apply lt_of_lt_of_le (ENNReal.sub_lt_self (by f
 
 中文:
-引理 ProbabilityMeasure.toMeasure_add_pos_gt_mem_nhds
-  结论: (P : ProbabilityMeasure Ω)
+引理 概率测度.toMeasure_add_pos_gt_mem_nhds
+  结论: (P : 概率测度 Ω)
   证明: by
   by_cases! easy : P.toMeasure G < ε
   · exact Eventually.of_forall (fun _ => lt_of_lt_of_le easy le_add_self)
@@ -1282,7 +1282,7 @@ lemma SeparableSpace.exists_measurable_partition_diam_le
   obtain ⟨xs, xs_dense⟩ := exists_dense_
 
 中文:
-引理 SeparableSpace.exists_measurable_partition_diam_le
+引理 可分空间.存在_measurable_partition_diam_le
   条件: {ε : 实数} (ε_pos : 0 < ε)
   证明: by
   cases isEmpty_or_nonempty Ω
@@ -1522,7 +1522,7 @@ instance instMetrizableSpaceProbabilityMeasure
 
 中文:
 实例 instMetrizableSpaceProbabilityMeasure
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: by
   let : PseudoMetricSpace X := TopologicalSpace.pseudoMetrizableSpacePseudoMetric X
   exact LevyProkhorov.probabilityMeasureHomeomorph.isEmbedding.metrizableSpace

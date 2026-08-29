@@ -70,7 +70,7 @@ lemma threeAPFree_frontier
 
 中文:
 引理 threeAPFree_frontier
-  结论: {𝕜 E : 类型} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: {𝕜 E : 类型} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   intro a ha b hb c hc habc
   obtain rfl : (1 / 2 : 𝕜) • a + (1 / 2 : 𝕜) • c = b := by
@@ -111,7 +111,7 @@ lemma threeAPFree_sphere
 
 中文:
 引理 threeAPFree_sphere
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   obtain rfl | hr := eq_or_ne r 0
   · rw [sphere_zero]
@@ -306,7 +306,7 @@ theorem norm_of_mem_sphere
 
 中文:
 定理 norm_of_mem_sphere
-  条件: {x : Fin n -> 自然数} (hx : x in sphere n d k)
+  条件: {x : 有限集 n -> 自然数} (hx : x in sphere n d k)
   证明: by
   rw [EuclideanSpace.norm_eq]
   dsimp
@@ -330,7 +330,7 @@ theorem sphere_subset_preimage_metric_sphere
 
 中文:
 定理 sphere_subset_preimage_metric_sphere
-  结论: (sphere n d k : Set (Fin n -> 自然数)) subseteq
+  结论: (sphere n d k : 集合 (有限集 n -> 自然数)) subseteq
   证明: fun x hx => by rw [Set.mem_preimage, mem_sphere_zero_iff_norm, norm_of_mem_sphere hx]
 
 Depends on / 依赖: Set.mem_preimage, mem_preimage, mem_sphere_zero_iff_norm, norm_of_mem_sphere
@@ -375,7 +375,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: (d : 自然数) (a : Fin 0 -> 自然数)
+  条件: (d : 自然数) (a : 有限集 0 -> 自然数)
   结论: map d a = 0
   证明: by simp [map]
 -/
@@ -392,7 +392,7 @@ theorem map_succ
 
 中文:
 定理 map_succ
-  条件: (a : Fin (n + 1) -> 自然数)
+  条件: (a : 有限集 (n + 1) -> 自然数)
   证明: by
   simp [map, Fin.sum_univ_succ, _root_.pow_succ, ← mul_assoc, ← sum_mul]
 
@@ -413,8 +413,8 @@ theorem map_succ'
 
 中文:
 定理 map_succ'
-  条件: (a : Fin (n + 1) -> 自然数)
-  结论: map d a = a 0 + map d (a ∘ Fin.succ) * d
+  条件: (a : 有限集 (n + 1) -> 自然数)
+  结论: map d a = a 0 + map d (a ∘ 有限集.succ) * d
   证明: map_succ _
 
 Depends on / 依赖: map_succ
@@ -436,7 +436,7 @@ dsimp; exact sum_le_sum fun i _ => Nat.mul_le_mul_right _ h i
 中文:
 定理 map_monotone
   条件: (d : 自然数)
-  结论: Monotone (map d : (Fin n -> 自然数) -> 自然数)
+  结论: 递增 (map d : (有限集 n -> 自然数) -> 自然数)
   证明: fun x y h => by
 dsimp; exact sum_le_sum fun i _ => Nat.mul_le_mul_right _ h i
 
@@ -457,7 +457,7 @@ theorem map_mod
 
 中文:
 定理 map_mod
-  条件: (a : Fin n.succ -> 自然数)
+  条件: (a : 有限集 n.succ -> 自然数)
   结论: map d a % d = a 0 % d
   证明: by
   rw [map_succ]; rw [Nat.add_mul_mod_self_right]
@@ -482,7 +482,7 @@ theorem map_eq_iff
 
 中文:
 定理 map_eq_iff
-  条件: {x₁ x₂ : Fin n.succ -> 自然数} (hx₁ : 对任意 i, x₁ i < d) (hx₂ : 对任意 i, x₂ i < d)
+  条件: {x₁ x₂ : 有限集 n.succ -> 自然数} (hx₁ : 对任意 i, x₁ i < d) (hx₂ : 对任意 i, x₂ i < d)
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [map_succ', map_succ', h.1, h.2]⟩
   have : x₁ 0 = x₂ 0 := by
@@ -517,7 +517,7 @@ theorem map_injOn
 
 中文:
 定理 map_injOn
-  结论: {x : Fin n -> 自然数 | 对任意 i, x i < d}.InjOn (map d)
+  结论: {x : 有限集 n -> 自然数 | 对任意 i, x i < d}.单射限制 (map d)
   证明: by
   intro x₁ hx₁ x₂ hx₂ h
   induction n with
@@ -633,7 +633,7 @@ theorem sum_sq_le_of_mem_box
 中文:
 定理 sum_sq_le_of_mem_box
   条件: (hx : x in box n d)
-  结论: ∑ i : Fin n, x i ^ 2 <= n * (d - 1) ^ 2
+  结论: ∑ i : 有限集 n, x i ^ 2 <= n * (d - 1) ^ 2
   证明: by
   rw [mem_box] at hx
   have : forall i, x i ^ 2 <= (d - 1) ^ 2 := fun i =>
@@ -661,7 +661,7 @@ theorem sum_eq
 
 中文:
 定理 sum_eq
-  结论: (∑ i : Fin n, d * (2 * d + 1) ^ (i : 自然数)) = ((2 * d + 1) ^ n - 1) / 2
+  结论: (∑ i : 有限集 n, d * (2 * d + 1) ^ (i : 自然数)) = ((2 * d + 1) ^ n - 1) / 2
   证明: by
   refine (Nat.div_eq_of_eq_mul_left zero_lt_two ?_).symm
   rw [← sum_range fun i => d * (2 * d + 1) ^ (i : Nat)]; rw [← mul_sum]; rw [mul_right_comm]; rw [mul_comm d]; rw [←
@@ -684,7 +684,7 @@ theorem sum_lt
 
 中文:
 定理 sum_lt
-  结论: (∑ i : Fin n, d * (2 * d + 1) ^ (i : 自然数)) < (2 * d + 1) ^ n
+  结论: (∑ i : 有限集 n, d * (2 * d + 1) ^ (i : 自然数)) < (2 * d + 1) ^ n
   证明: sum_eq.trans_lt (Nat.div_le_self _ 2).trans_lt pred_lt (pow_pos (succ_pos _) _).ne'
 
 Depends on / 依赖: Nat.div_le_self, div_le_self, pow_pos, pred_lt, succ_pos, sum_eq, sum_eq.trans_lt, trans_lt
@@ -710,7 +710,7 @@ theorem card_sphere_le_rothNumberNat
     exact (map_le_of_mem_box hx)
 
 中文:
-定理 card_sphere_le_rothNumberNat
+定理 card_sphere_le_rothNumber自然数
   条件: (n d k : 自然数)
   证明: by
   cases n
@@ -757,7 +757,7 @@ theorem exists_large_sphere_aux
     exact (cast_add_one_pos _)
 
 中文:
-定理 exists_large_sphere_aux
+定理 存在_large_sphere_aux
   条件: (n d : 自然数)
   结论: 存在 k in range (n * (d - 1) ^ 2 + 1),
   证明: by
@@ -794,7 +794,7 @@ theorem exists_large_sphere
   simp only [← le_sub_iff_add_le', cast_mul, ← mul_sub
 
 中文:
-定理 exists_large_sphere
+定理 存在_large_sphere
   条件: (n d : 自然数)
   证明: by
   obtain ⟨k, -, hk⟩ := exists_large_sphere_aux n d

@@ -39,7 +39,7 @@ theorem hasStrictDerivAt_tan
 
 中文:
 定理 hasStrictDerivAt_tan
-  条件: {x : Complex} (h : cos x != 0)
+  条件: {x : 复形} (h : cos x != 0)
   结论: HasStrictDerivAt tan (1 / cos x ^ 2) x
   证明: by
   convert! (hasStrictDerivAt_sin x).div (hasStrictDerivAt_cos x) h using 1
@@ -64,8 +64,8 @@ theorem hasDerivAt_tan
 
 中文:
 定理 hasDerivAt_tan
-  条件: {x : Complex} (h : cos x != 0)
-  结论: HasDerivAt tan (1 / cos x ^ 2) x
+  条件: {x : 复形} (h : cos x != 0)
+  结论: 在点处可导 tan (1 / cos x ^ 2) x
   证明: (hasStrictDerivAt_tan h).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_tan
@@ -90,7 +90,7 @@ theorem tendsto_norm_tan_of_cos_eq_zero
 
 中文:
 定理 tendsto_norm_tan_of_cos_eq_zero
-  条件: {x : Complex} (hx : cos x = 0)
+  条件: {x : 复形} (hx : cos x = 0)
   证明: by
   simp only [tan_eq_sin_div_cos, norm_div]
   have A : sin x != 0 := fun h => by simpa [*, sq] using sin_sq_add_cos_sq x
@@ -149,7 +149,7 @@ theorem continuousAt_tan
 
 中文:
 定理 continuousAt_tan
-  条件: {x : Complex}
+  条件: {x : 复形}
   结论: ContinuousAt tan x ↔ cos x != 0
   证明: by
   refine ⟨fun hc h₀ => ?_, fun h => (hasDerivAt_tan h).continuousAt⟩
@@ -179,8 +179,8 @@ theorem differentiableAt_tan
 
 中文:
 定理 differentiableAt_tan
-  条件: {x : Complex}
-  结论: DifferentiableAt Complex tan x ↔ cos x != 0
+  条件: {x : 复形}
+  结论: DifferentiableAt 复形 tan x ↔ cos x != 0
   证明: ⟨fun h => continuousAt_tan.1 h.continuousAt, fun h => (hasDerivAt_tan h).differentiableAt⟩
 
 @[simp]
@@ -207,7 +207,7 @@ theorem deriv_tan
 
 中文:
 定理 deriv_tan
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: deriv tan x = 1 / cos x ^ 2
   证明: if h : cos x = 0 then by
     have : ¬DifferentiableAt Complex tan x := mt differentiableAt_tan.1 (Classical.not_not.2 h)
@@ -236,8 +236,8 @@ theorem contDiffAt_tan
 
 中文:
 定理 contDiffAt_tan
-  条件: {x : Complex} {n : WithTop 自然数∞}
-  结论: ContDiffAt Complex n tan x ↔ cos x != 0
+  条件: {x : 复形} {n : WithTop 自然数∞}
+  结论: ContDiffAt 复形 n tan x ↔ cos x != 0
   证明: ⟨fun h => continuousAt_tan.1 h.continuousAt, contDiff_sin.contDiffAt.div contDiff_cos.contDiffAt⟩
 
 Depends on / 依赖: contDiffAt, contDiff_cos, contDiff_cos.contDiffAt, contDiff_sin, contDiff_sin.contDiffAt.div, continuousAt, continuousAt_tan, h.continuousAt

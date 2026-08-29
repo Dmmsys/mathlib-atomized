@@ -66,7 +66,7 @@ lemma subset_upperBounds_mul
 
 中文:
 引理 subset_upperBounds_mul
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: upperBounds s * upperBounds t subseteq upperBounds (s * t)
   证明: image2_subset_iff.2 fun _ hx _ hy => mul_mem_upperBounds_mul hx hy
 
@@ -114,7 +114,7 @@ lemma subset_lowerBounds_mul
 
 中文:
 引理 subset_lowerBounds_mul
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: lowerBounds s * lowerBounds t subseteq lowerBounds (s * t)
   证明: subset_upperBounds_mul (M := Mᵒᵈ) _ _
 

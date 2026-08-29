@@ -89,7 +89,7 @@ lemma range_ι
 
 中文:
 引理 range_ι
-  条件: (G : Subfunctor F)
+  条件: (G : 子函子 F)
   结论: range G.ι = G
   证明: by aesop
 -/
@@ -287,7 +287,7 @@ lemma range_eq_top
 
 中文:
 引理 range_eq_top
-  条件: [Epi p]
+  条件: [满态射 p]
   结论: range p = ⊤
   证明: by rwa [← epi_iff_range_eq_top]
 
@@ -305,7 +305,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (toRange p)
+  签名: 满态射 (toRange p)
   定义体: by simp [epi_iff_range_eq_top]
 
 Depends on / 依赖: epi_iff_range_eq_top
@@ -330,8 +330,8 @@ instance [Mono
     infer_instance
 
 中文:
-实例 [Mono
-  签名: p] : IsIso (toRange p)
+实例 [单态射
+  签名: p] : 是同构 (toRange p)
   定义体: by
   have := mono_of_mono_fac (toRange_ι p)
   rw [NatTrans.isIso_iff_isIso_app]
@@ -392,8 +392,8 @@ definition image
     exact ⟨F.map φ x, G.map φ hx, by apply NatTrans.naturality_apply⟩
 
 中文:
-定义 image
-  签名: : Subfunctor F' where
+定义 像
+  签名: : 子函子 F' where
   定义体: (f.app i) '' (G.obj i)
   map := by
     rintro Δ Δ' φ _ ⟨x, hx, rfl⟩
@@ -419,7 +419,7 @@ lemma image_top
 
 中文:
 引理 image_top
-  结论: (⊤ : Subfunctor F).image f = range f
+  结论: (⊤ : 子函子 F).像 f = range f
   证明: by aesop
 
 @[simp]
@@ -437,7 +437,7 @@ lemma image_iSup
 
 中文:
 引理 image_iSup
-  条件: {ι : 类型} (G : ι -> Subfunctor F) (f : F ⟶ F')
+  条件: {ι : 类型} (G : ι -> 子函子 F) (f : F ⟶ F')
   证明: by aesop
 -/
 lemma image_iSup {ι : Type*} (G : ι -> Subfunctor F) (f : F ⟶ F') :
@@ -495,8 +495,8 @@ definition preimage
 @[simp]
 
 中文:
-定义 preimage
-  签名: (G : Subfunctor F) (p : F' ⟶ F)
+定义 原像
+  签名: (G : 子函子 F) (p : F' ⟶ F)
   定义体: p.app n ⁻¹' (G.obj n)
   map f := (Set.preimage_mono (G.map f)).trans (by
     simp only [Set.preimage_preimage, NatTrans.naturality_apply]
@@ -523,7 +523,7 @@ lemma preimage_id
 
 中文:
 引理 preimage_id
-  条件: (G : Subfunctor F)
+  条件: (G : 子函子 F)
   证明: by aesop
 -/
 lemma preimage_id (G : Subfunctor F) :
@@ -539,7 +539,7 @@ lemma preimage_comp
 
 中文:
 引理 preimage_comp
-  条件: (G : Subfunctor F) (f : F'' ⟶ F') (g : F' ⟶ F)
+  条件: (G : 子函子 F) (f : F'' ⟶ F') (g : F' ⟶ F)
   证明: by aesop
 -/
 lemma preimage_comp (G : Subfunctor F) (f : F'' ⟶ F') (g : F' ⟶ F) :
@@ -556,7 +556,7 @@ lemma image_le_iff
 
 中文:
 引理 image_le_iff
-  条件: (G : Subfunctor F) (f : F ⟶ F') (G' : Subfunctor F')
+  条件: (G : 子函子 F) (f : F ⟶ F') (G' : 子函子 F')
   证明: by
   simp [Subfunctor.le_def]
 
@@ -579,7 +579,7 @@ definition fromPreimage
 
 中文:
 定义 fromPreimage
-  签名: (G : Subfunctor F) (p : F' ⟶ F)
+  签名: (G : 子函子 F) (p : F' ⟶ F)
   定义体: lift ((G.preimage p).ι ≫ p) (by
     rw [range_comp]; rw [range_ι]; rw [image_le_iff])
 
@@ -603,7 +603,7 @@ lemma fromPreimage_ι
 
 中文:
 引理 fromPreimage_ι
-  条件: (G : Subfunctor F) (p : F' ⟶ F)
+  条件: (G : 子函子 F) (p : F' ⟶ F)
   证明: rfl
 -/
 lemma fromPreimage_ι (G : Subfunctor F) (p : F' ⟶ F) :
@@ -623,7 +623,7 @@ lemma preimage_eq_top_iff
 
 中文:
 引理 preimage_eq_top_iff
-  条件: (G : Subfunctor F) (p : F' ⟶ F)
+  条件: (G : 子函子 F) (p : F' ⟶ F)
   证明: by
   rw [← image_top]; rw [image_le_iff]
   simp
@@ -654,7 +654,7 @@ lemma preimage_image_of_epi
 
 中文:
 引理 preimage_image_of_epi
-  条件: (G : Subfunctor F) (p : F' ⟶ F) [hp : Epi p]
+  条件: (G : 子函子 F) (p : F' ⟶ F) [hp : 满态射 p]
   证明: by
   apply le_antisymm
   · rw [image_le_iff]

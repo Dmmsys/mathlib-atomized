@@ -44,7 +44,7 @@ definition Wbtw
 
 中文:
 定义 Wbtw
-  签名: (l : List P)
+  签名: (l : 列表 P)
   定义体: l.Triplewise (Wbtw R)
 -/
 protected def Wbtw (l : List P) : Prop :=
@@ -63,8 +63,8 @@ lemma wbtw_cons
 
 中文:
 引理 wbtw_cons
-  条件: {p : P} {l : List P}
-  结论: (p :: l).Wbtw R ↔ l.Pairwise (Wbtw R p) ∧ l.Wbtw R
+  条件: {p : P} {l : 列表 P}
+  结论: (p :: l).Wbtw R ↔ l.两两 (Wbtw R p) ∧ l.Wbtw R
   证明: triplewise_cons
 
 Depends on / 依赖: triplewise_cons
@@ -84,7 +84,7 @@ definition Sbtw
 
 中文:
 定义 Sbtw
-  签名: (l : List P)
+  签名: (l : 列表 P)
   定义体: l.Wbtw R ∧ l.Pairwise (· != ·)
 -/
 protected def Sbtw (l : List P) : Prop :=
@@ -103,7 +103,7 @@ lemma wbtw_nil
 
 中文:
 引理 wbtw_nil
-  结论: ([] : List P).Wbtw R
+  结论: ([] : 列表 P).Wbtw R
   证明: by
   simp [List.Wbtw]
 -/
@@ -121,7 +121,7 @@ lemma sbtw_nil
 
 中文:
 引理 sbtw_nil
-  结论: ([] : List P).Sbtw R
+  结论: ([] : 列表 P).Sbtw R
   证明: by
   simp [List.Sbtw]
 -/
@@ -252,7 +252,7 @@ lemma sbtw_triple
 
 中文:
 引理 sbtw_triple
-  条件: [IsOrderedRing R] {p₁ p₂ p₃ : P}
+  条件: [是Ordered环 R] {p₁ p₂ p₃ : P}
   结论: [p₁, p₂, p₃].Sbtw R ↔ Sbtw R p₁ p₂ p₃
   证明: by
   simp only [List.Sbtw, wbtw_triple, ne_eq, pairwise_cons, mem_cons, not_mem_nil, or_false,
@@ -304,7 +304,7 @@ lemma sbtw_four
 
 中文:
 引理 sbtw_four
-  条件: [IsOrderedRing R] {p₁ p₂ p₃ p₄ : P}
+  条件: [是Ordered环 R] {p₁ p₂ p₃ p₄ : P}
   结论: [p₁, p₂, p₃, p₄].Sbtw R ↔
   证明: by
   simp [List.Sbtw, List.Wbtw, triplewise_cons, Sbtw]
@@ -328,7 +328,7 @@ lemma Sbtw.wbtw
 
 中文:
 引理 Sbtw.wbtw
-  条件: {l : List P} (h : l.Sbtw R)
+  条件: {l : 列表 P} (h : l.Sbtw R)
   结论: l.Wbtw R
   证明: h.1
 -/
@@ -346,8 +346,8 @@ lemma Sbtw.pairwise_ne
 
 中文:
 引理 Sbtw.pairwise_ne
-  条件: {l : List P} (h : l.Sbtw R)
-  结论: l.Pairwise (· != ·)
+  条件: {l : 列表 P} (h : l.Sbtw R)
+  结论: l.两两 (· != ·)
   证明: h.2
 -/
 lemma Sbtw.pairwise_ne {l : List P} (h : l.Sbtw R) : l.Pairwise (· != ·) :=
@@ -372,7 +372,7 @@ lemma sbtw_iff_triplewise_and_ne_pair
 
 中文:
 引理 sbtw_iff_triplewise_and_ne_pair
-  条件: [IsOrderedRing R] {l : List P}
+  条件: [是Ordered环 R] {l : 列表 P}
   证明: by
   rw [List.Sbtw]
   induction l with
@@ -443,7 +443,7 @@ lemma sbtw_cons
 
 中文:
 引理 sbtw_cons
-  条件: [IsOrderedRing R] {p : P} {l : List P}
+  条件: [是Ordered环 R] {p : P} {l : 列表 P}
   证明: by
   rw [sbtw_iff_triplewise_and_ne_pair]; rw [← not_exists]; rw [triplewise_cons]
   simp only [cons.injEq, exists_eq_left', and_assoc, and_congr_right_iff, ne_eq, and_congr_left_iff]
@@ -475,8 +475,8 @@ lemma _root_.Function.Injective.list_wbtw_map_iff
   proof: ⟨fun h => h.of_map hf.wbtw_map_iff.1, fun h => h.map f⟩
 
 中文:
-引理 _root_.Function.Injective.list_wbtw_map_iff
-  结论: {l : List P} {f : P ->ᵃ[R] P'}
+引理 _root_.函数.单射.list_wbtw_map_iff
+  结论: {l : 列表 P} {f : P ->ᵃ[R] P'}
   证明: ⟨fun h => h.of_map hf.wbtw_map_iff.1, fun h => h.map f⟩
 
 Depends on / 依赖: h.map, h.of_map, hf.wbtw_map_iff, of_map, wbtw_map_iff
@@ -497,8 +497,8 @@ lemma _root_.Function.Injective.list_sbtw_map_iff
     simp [hf.ne_iff]
 
 中文:
-引理 _root_.Function.Injective.list_sbtw_map_iff
-  结论: {l : List P} {f : P ->ᵃ[R] P'}
+引理 _root_.函数.单射.list_sbtw_map_iff
+  结论: {l : 列表 P} {f : P ->ᵃ[R] P'}
   证明: by
   rw [List.Sbtw]; rw [List.Sbtw]; rw [hf.list_wbtw_map_iff]
   refine ⟨fun ⟨hl, hp⟩ => ⟨hl, hp.of_map _ ?_⟩, fun ⟨hl, hp⟩ => ⟨hl, hp.map _ ?_⟩⟩ <;>
@@ -523,8 +523,8 @@ lemma _root_.AffineEquiv.list_wbtw_map_iff
   apply hf.list_wbtw_map_iff
 
 中文:
-引理 _root_.AffineEquiv.list_wbtw_map_iff
-  条件: {l : List P} (f : P ≃ᵃ[R] P')
+引理 _root_.仿射等价.list_wbtw_map_iff
+  条件: {l : 列表 P} (f : P ≃ᵃ[R] P')
   证明: by
   have hf : Function.Injective f.toAffineMap := f.injective
   apply hf.list_wbtw_map_iff
@@ -547,8 +547,8 @@ lemma _root_.AffineEquiv.list_sbtw_map_iff
   apply hf.list_sbtw_map_iff
 
 中文:
-引理 _root_.AffineEquiv.list_sbtw_map_iff
-  条件: {l : List P} (f : P ≃ᵃ[R] P')
+引理 _root_.仿射等价.list_sbtw_map_iff
+  条件: {l : 列表 P} (f : P ≃ᵃ[R] P')
   证明: by
   have hf : Function.Injective f.toAffineMap := f.injective
   apply hf.list_sbtw_map_iff
@@ -582,7 +582,7 @@ lemma SortedLE.wbtw
 
 中文:
 引理 SortedLE.wbtw
-  条件: {l : List R} (h : l.SortedLE)
+  条件: {l : 列表 R} (h : l.SortedLE)
   结论: l.Wbtw R
   证明: by
   rw [List.Wbtw]; rw [List.triplewise_iff_getElem]
@@ -607,7 +607,7 @@ lemma SortedLT.sbtw
 
 中文:
 引理 SortedLT.sbtw
-  条件: {l : List R} (h : l.SortedLT)
+  条件: {l : 列表 R} (h : l.SortedLT)
   结论: l.Sbtw R
   证明: ⟨h.sortedLE.wbtw, h.nodup⟩
 
@@ -634,8 +634,8 @@ lemma exists_map_eq_of_sorted_nonempty_iff_wbtw
     indu
 
 中文:
-引理 exists_map_eq_of_sorted_nonempty_iff_wbtw
-  条件: {l : List P} (hl : l != [])
+引理 存在_map_eq_of_sorted_nonempty_iff_wbtw
+  条件: {l : 列表 P} (hl : l != [])
   证明: by
   refine ⟨fun ⟨l', hl's, hl'l⟩ => ?_, fun h => ?_⟩
   · rw [← hl'l]
@@ -714,8 +714,8 @@ lemma exists_map_eq_of_sorted_iff_wbtw
     · exact ⟨l.head hl, l.getLast hl, (exists_map_eq_of
 
 中文:
-引理 exists_map_eq_of_sorted_iff_wbtw
-  条件: {l : List P}
+引理 存在_map_eq_of_sorted_iff_wbtw
+  条件: {l : 列表 P}
   证明: by
   refine ⟨fun ⟨p₁, p₂, l', hl's, hl'l⟩ => ?_, fun h => ?_⟩
   · subst hl'l
@@ -755,8 +755,8 @@ lemma exists_map_eq_of_sorted_nonempty_iff_sbtw
     · exact 
 
 中文:
-引理 exists_map_eq_of_sorted_nonempty_iff_sbtw
-  条件: {l : List P} (hl : l != [])
+引理 存在_map_eq_of_sorted_nonempty_iff_sbtw
+  条件: {l : 列表 P} (hl : l != [])
   证明: by
   refine ⟨fun ⟨l', hl's, hl'l, hla⟩ =>
             ⟨(exists_map_eq_of_sorted_nonempty_iff_wbtw hl).1
@@ -816,8 +816,8 @@ lemma exists_map_eq_of_sorted_iff_sbtw
 
 
 中文:
-引理 exists_map_eq_of_sorted_iff_sbtw
-  条件: [Nontrivial P] {l : List P}
+引理 存在_map_eq_of_sorted_iff_sbtw
+  条件: [非平凡 P] {l : 列表 P}
   证明: by
   refine ⟨fun ⟨p₁, p₂, hp₁p₂, l', hl's, hl'l⟩ => ?_, fun h => ?_⟩
   · subst hl'l

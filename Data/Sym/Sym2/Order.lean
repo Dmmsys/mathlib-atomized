@@ -30,7 +30,7 @@ definition sup
   body: Sym2.lift ⟨(· ⊔ ·), sup_comm⟩ x
 
 中文:
-定义 sup
+定义 上确界
   签名: [SemilatticeSup α] (x : Sym2 α)
   定义体: Sym2.lift ⟨(· ⊔ ·), sup_comm⟩ x
 
@@ -50,7 +50,7 @@ theorem sup_mk
 中文:
 定理 sup_mk
   条件: [SemilatticeSup α] (a b : α)
-  结论: s(a, b).sup = a ⊔ b
+  结论: s(a, b).上确界 = a ⊔ b
   证明: rfl
 -/
 @[simp] theorem sup_mk [SemilatticeSup α] (a b : α) : s(a, b).sup = a ⊔ b := rfl
@@ -64,7 +64,7 @@ definition inf
   body: Sym2.lift ⟨(· ⊓ ·), inf_comm⟩ x
 
 中文:
-定义 inf
+定义 下确界
   签名: [SemilatticeInf α] (x : Sym2 α)
   定义体: Sym2.lift ⟨(· ⊓ ·), inf_comm⟩ x
 
@@ -84,7 +84,7 @@ theorem inf_mk
 中文:
 定理 inf_mk
   条件: [SemilatticeInf α] (a b : α)
-  结论: s(a, b).inf = a ⊓ b
+  结论: s(a, b).下确界 = a ⊓ b
   证明: rfl
 -/
 @[simp] theorem inf_mk [SemilatticeInf α] (a b : α) : s(a, b).inf = a ⊓ b := rfl
@@ -101,8 +101,8 @@ theorem inf_le_sup
 
 中文:
 定理 inf_le_sup
-  条件: [Lattice α] (s : Sym2 α)
-  结论: s.inf <= s.sup
+  条件: [格 α] (s : Sym2 α)
+  结论: s.下确界 <= s.上确界
   证明: by
   cases s using Sym2.ind; simp
 -/
@@ -128,7 +128,7 @@ Subtype.ext Prod.ext (by simp [hxy]) (by simp [hxy])
 
 中文:
 定义 sortEquiv
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: ⟨(s.inf, s.sup), Sym2.inf_le_sup _⟩
   invFun p := s(p.1.1, p.1.2)
 left_inv := Sym2.ind fun a b => eq_iff.mpr by
@@ -164,7 +164,7 @@ theorem inf_eq_inf_and_sup_eq_sup
 
 中文:
 定理 inf_eq_inf_and_sup_eq_sup
-  条件: [LinearOrder α] {s t : Sym2 α}
+  条件: [线性序 α] {s t : Sym2 α}
   证明: by
   induction s with | _ a b
   induction t with | _ c d

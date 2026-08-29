@@ -34,7 +34,7 @@ have : Module.Finite k (Module.End A V) := .of_injective (LinearMap.restrictScal
   classical exact IsAlgClosed.algebraMap_bijective_of_isIntegral (k := k)
 
 中文:
-定理 IsSimpleModule.algebraMap_end_bijective_of_isAlgClosed
+定理 是单模.algebraMap_end_bijective_of_isAlgClosed
   证明: by
 have : Module.Finite k (Module.End A V) := .of_injective (LinearMap.restrictScalarsₗ k A V V k)
     LinearMap.restrictScalars_injective _
@@ -67,8 +67,8 @@ theorem IsSimpleModule.finrank_eq_one_of_isMulCommutative
   
 
 中文:
-定理 IsSimpleModule.finrank_eq_one_of_isMulCommutative
-  条件: [IsMulCommutative A]
+定理 是单模.finrank_eq_one_of_isMulCommutative
+  条件: [是MulCommutative A]
   证明: by
   have : Nontrivial V := IsSimpleModule.nontrivial A V
   obtain ⟨v, v_nz⟩ := exists_ne (0 : V)

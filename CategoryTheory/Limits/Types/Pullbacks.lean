@@ -484,7 +484,7 @@ lemma range_fst_of_isPullback
 
 中文:
 引理 range_fst_of_isPullback
-  条件: (h : IsPullback fst snd f g)
+  条件: (h : 是拉回 fst snd f g)
   证明: by
   let e := h.isoPullback ≪≫ Types.pullbackIsoPullback f g
   have : fst = _root_.Prod.fst ∘ Subtype.val ∘ e.hom := by
@@ -517,7 +517,7 @@ lemma range_snd_of_isPullback
 
 中文:
 引理 range_snd_of_isPullback
-  条件: (h : IsPullback fst snd f g)
+  条件: (h : 是拉回 fst snd f g)
   证明: by
   rw [range_fst_of_isPullback (IsPullback.flip h)]
 
@@ -542,7 +542,7 @@ lemma range_pullbackFst
 
 中文:
 引理 range_pullbackFst
-  结论: Set.range (pullback.fst f g) = f ⁻¹' Set.range g
+  结论: 集合.range (pullback.fst f g) = f ⁻¹' 集合.range g
   证明: range_fst_of_isPullback (.of_hasPullback f g)
 
 @[simp]
@@ -563,7 +563,7 @@ lemma range_pullbackSnd
 
 中文:
 引理 range_pullbackSnd
-  结论: Set.range (pullback.snd f g) = g ⁻¹' Set.range f
+  结论: 集合.range (pullback.snd f g) = g ⁻¹' 集合.range f
   证明: range_snd_of_isPullback (.of_hasPullback f g)
 
 Depends on / 依赖: of_hasPullback, range_snd_of_isPullback
@@ -588,7 +588,7 @@ lemma ext_of_isPullback
 
 中文:
 引理 ext_of_isPullback
-  结论: (h : IsPullback t l r b) {x₁ y₁ : X₁}
+  结论: (h : 是拉回 t l r b) {x₁ y₁ : X₁}
   证明: (h.isLimit.conePointUniqueUpToIso (Types.pullbackLimitCone _ _).isLimit).toEquiv.injective
     (by dsimp; ext <;> assumption)
 
@@ -613,8 +613,8 @@ lemma exists_of_isPullback
     congr_arg _root_.Prod.snd hx₁⟩
 
 中文:
-引理 exists_of_isPullback
-  结论: (h : IsPullback t l r b)
+引理 存在_of_isPullback
+  结论: (h : 是拉回 t l r b)
   证明: by
   obtain ⟨x₁, hx₁⟩ :=
     (PullbackCone.IsLimit.equivPullbackObj h.isLimit).surjective ⟨⟨x₂, x₃⟩, hx⟩

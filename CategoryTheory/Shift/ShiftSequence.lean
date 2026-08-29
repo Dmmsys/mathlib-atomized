@@ -63,7 +63,7 @@ class ShiftSequence
     - isoZero : sequence 0 ≅ F
     - shiftIso((n a a' : M) (ha' : n + a = a')) : shiftFunctor C n ⋙ sequence a ≅ sequence a'
     - shiftIso_zero((a : M)) : shiftIso 0 a a (zero_add a) = isoWhiskerRight (shiftFunctorZero C M) _ ≪≫ leftUnitor _
-    - shiftIso_add : 对任意 (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''), shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerRight (shiftFunctorAdd C m n) _ ≪≫ Functor.associator _ _ _ ≪≫ isoWhiskerLeft _ (shiftIso n a a' ha') ≪≫ shiftIso m a' a'' ha''
+    - shiftIso_add : 对任意 (n m a a' a'' : M) (ha' : n + a = a') (ha'' : m + a' = a''), shiftIso (m + n) a a'' (by rw [add_assoc, ha', ha'']) = isoWhiskerRight (shiftFunctorAdd C m n) _ ≪≫ 函子.associator _ _ _ ≪≫ isoWhiskerLeft _ (shiftIso n a a' ha') ≪≫ shiftIso m a' a'' ha''
 -/
 class ShiftSequence where
   /-- a sequence of functors -/
@@ -750,7 +750,7 @@ definition leftComp
 
 中文:
 定义 leftComp
-  签名: [π.CommShift M] [H.ShiftSequence M]
+  签名: [π.交换Shift M] [H.ShiftSequence M]
   定义体: π ⋙ H.shift n
   isoZero := isoWhiskerLeft π (H.isoShiftZero M) ≪≫ e
   shiftIso n a a' ha' :=
@@ -790,7 +790,7 @@ instance [π.CommShift
   body: leftComp (Iso.refl _) _
 
 中文:
-实例 [π.CommShift
+实例 [π.交换Shift
   签名: M] [H.ShiftSequence M] : (π ⋙ H).ShiftSequence M
   定义体: leftComp (Iso.refl _) _
 

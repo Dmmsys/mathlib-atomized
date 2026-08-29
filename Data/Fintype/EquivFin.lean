@@ -66,7 +66,7 @@ definition truncEquivFin
 
 中文:
 定义 truncEquivFin
-  签名: (α) [DecidableEq α] [Fintype α]
+  签名: (α) [DecidableEq α] [有限类型 α]
   定义体: by
   unfold card Finset.card
   exact
@@ -99,7 +99,7 @@ definition equivFin
 
 中文:
 定义 equivFin
-  签名: (α) [Fintype α]
+  签名: (α) [有限类型 α]
   定义体: letI := Classical.decEq α
   (truncEquivFin α).out
 
@@ -126,7 +126,7 @@ definition truncFinBijection
 
 中文:
 定义 truncFinBijection
-  签名: (α) [Fintype α]
+  签名: (α) [有限类型 α]
   定义体: by
   unfold card Finset.card
   refine
@@ -166,7 +166,7 @@ definition truncEquivFinOfCardEq
 
 中文:
 定义 truncEquivFinOfCardEq
-  签名: [DecidableEq α] {n : 自然数} (h : Fintype.card α = n)
+  签名: [DecidableEq α] {n : 自然数} (h : 有限类型.card α = n)
   定义体: (truncEquivFin α).map fun e => e.trans (finCongr h)
 
 Depends on / 依赖: e.trans, finCongr, truncEquivFin
@@ -185,7 +185,7 @@ definition equivFinOfCardEq
 
 中文:
 定义 equivFinOfCardEq
-  签名: {n : 自然数} (h : Fintype.card α = n)
+  签名: {n : 自然数} (h : 有限类型.card α = n)
   定义体: letI := Classical.decEq α
   (truncEquivFinOfCardEq h).out
 
@@ -255,8 +255,8 @@ theorem card_eq
 
 中文:
 定理 card_eq
-  条件: {α β} [_F : Fintype α] [_G : Fintype β]
-  结论: card α = card β ↔ Nonempty (α ≃ β)
+  条件: {α β} [_F : 有限类型 α] [_G : 有限类型 β]
+  结论: card α = card β ↔ 非空 (α ≃ β)
   证明: ⟨fun h =>
     haveI := Classical.propDecidable
     (truncEquivOfCardEq h).nonempty,
@@ -283,9 +283,9 @@ theorem Fintype.finite
   proof: ⟨Fintype.equivFin α⟩
 
 中文:
-定理 Fintype.finite
-  条件: {α : 类型} (_inst : Fintype α)
-  结论: Finite α
+定理 有限类型.finite
+  条件: {α : 类型} (_inst : 有限类型 α)
+  结论: 有限 α
   证明: ⟨Fintype.equivFin α⟩
 -/
 protected theorem Fintype.finite {α : Type*} (_inst : Fintype α) : Finite α :=
@@ -309,7 +309,7 @@ theorem finite_iff_nonempty_fintype
 中文:
 定理 finite_iff_nonempty_fintype
   条件: (α : 类型)
-  结论: Finite α ↔ Nonempty (Fintype α)
+  结论: 有限 α ↔ 非空 (有限类型 α)
   证明: ⟨fun _ => nonempty_fintype α, fun ⟨_⟩ => inferInstance⟩
 
 Depends on / 依赖: nonempty_fintype
@@ -329,8 +329,8 @@ definition Fintype.ofFinite
   body: (nonempty_fintype α).some
 
 中文:
-定义 Fintype.ofFinite
-  签名: (α : 类型) [Finite α]
+定义 有限类型.ofFinite
+  签名: (α : 类型) [有限 α]
   定义体: (nonempty_fintype α).some
 
 Depends on / 依赖: nonempty_fintype
@@ -350,9 +350,9 @@ theorem Finite.of_injective
   classical exact .of_equiv (Set.range (e ∘ f)) (Equiv.ofInjective _ (e.injective.comp H)).symm
 
 中文:
-定理 Finite.of_injective
-  条件: {α β : Sort*} [Finite β] (f : α -> β) (H : Injective f)
-  结论: Finite α
+定理 有限.of_injective
+  条件: {α β : 类型层*} [有限 β] (f : α -> β) (H : 单射 f)
+  结论: 有限 α
   证明: by
   rcases Finite.exists_equiv_fin β with ⟨n, ⟨e⟩⟩
   classical exact .of_equiv (Set.range (e ∘ f)) (Equiv.ofInjective _ (e.injective.comp H)).symm
@@ -395,8 +395,8 @@ instance Subtype.finite
   body: Finite.of_injective Subtype.val Subtype.coe_injective
 
 中文:
-实例 Subtype.finite
-  签名: {α : Sort*} [Finite α] {p : α -> 命题}
+实例 子类型.finite
+  签名: {α : 类型层*} [有限 α] {p : α -> 命题}
   定义体: Finite.of_injective Subtype.val Subtype.coe_injective
 
 Depends on / 依赖: Finite, Finite.of_injective, Subtype, Subtype.coe_injective, Subtype.val, coe_injective, of_injective
@@ -414,9 +414,9 @@ theorem Finite.of_surjective
   proof: Finite.of_injective _ injective_surjInv H
 
 中文:
-定理 Finite.of_surjective
-  条件: {α β : Sort*} [Finite α] (f : α -> β) (H : Surjective f)
-  结论: Finite β
+定理 有限.of_surjective
+  条件: {α β : 类型层*} [有限 α] (f : α -> β) (H : 满射 f)
+  结论: 有限 β
   证明: Finite.of_injective _ injective_surjInv H
 
 Depends on / 依赖: Finite, Finite.of_injective, injective_surjInv, of_injective
@@ -433,8 +433,8 @@ instance Quot.finite
   body: Finite.of_surjective _ Quot.mk_surjective
 
 中文:
-实例 Quot.finite
-  签名: {α : Sort*} [Finite α] (r : α -> α -> 命题)
+实例 商.finite
+  签名: {α : 类型层*} [有限 α] (r : α -> α -> 命题)
   定义体: Finite.of_surjective _ Quot.mk_surjective
 
 Depends on / 依赖: Finite, Finite.of_surjective, Quot.mk_surjective, mk_surjective, of_surjective
@@ -451,8 +451,8 @@ instance Quotient.finite
   body: Quot.finite _
 
 中文:
-实例 Quotient.finite
-  签名: {α : Sort*} [Finite α] (s : Setoid α)
+实例 商.finite
+  签名: {α : 类型层*} [有限 α] (s : 集合等价关系 α)
   定义体: Quot.finite _
 
 Depends on / 依赖: Quot.finite, finite
@@ -513,7 +513,7 @@ theorem card_eq_one_iff_nonempty_unique
 
 中文:
 定理 card_eq_one_iff_nonempty_unique
-  结论: card α = 1 ↔ Nonempty (Unique α)
+  结论: card α = 1 ↔ 非空 (唯一 α)
   证明: ⟨fun h =>
     let ⟨d, h⟩ := Fintype.card_eq_one_iff.mp h
     ⟨{ default := d
@@ -586,7 +586,7 @@ theorem card_le_one_iff_subsingleton
 
 中文:
 定理 card_le_one_iff_subsingleton
-  结论: card α <= 1 ↔ Subsingleton α
+  结论: card α <= 1 ↔ 子单例 α
   证明: card_le_one_iff.trans subsingleton_iff.symm
 
 Depends on / 依赖: card_le_one_iff, card_le_one_iff.trans, holderConjugate_iff_eq_conjExponent, subsingleton_iff, subsingleton_iff.symm
@@ -605,7 +605,7 @@ theorem one_lt_card_iff_nontrivial
 
 中文:
 定理 one_lt_card_iff_nontrivial
-  结论: 1 < card α ↔ Nontrivial α
+  结论: 1 < card α ↔ 非平凡 α
   证明: by
   contrapose!; exact card_le_one_iff_subsingleton
 
@@ -625,7 +625,7 @@ theorem exists_ne_of_one_lt_card
   exists_ne a
 
 中文:
-定理 exists_ne_of_one_lt_card
+定理 存在_ne_of_one_lt_card
   条件: (h : 1 < card α) (a : α)
   结论: 存在 b : α, b != a
   证明: haveI : Nontrivial α := one_lt_card_iff_nontrivial.1 h
@@ -648,7 +648,7 @@ theorem exists_pair_of_one_lt_card
   exists_pair_ne α
 
 中文:
-定理 exists_pair_of_one_lt_card
+定理 存在_pair_of_one_lt_card
   条件: (h : 1 < card α)
   结论: 存在 a b : α, a != b
   证明: haveI : Nontrivial α := one_lt_card_iff_nontrivial.1 h
@@ -670,7 +670,7 @@ theorem card_eq_one_of_forall_eq
   proof: Fintype.card_eq_one_iff.2 ⟨i, h⟩
 
 中文:
-定理 card_eq_one_of_forall_eq
+定理 card_eq_one_of_对任意_eq
   条件: {i : α} (h : 对任意 j, j = i)
   结论: card α = 1
   证明: Fintype.card_eq_one_iff.2 ⟨i, h⟩
@@ -691,8 +691,8 @@ theorem one_lt_card
 
 中文:
 定理 one_lt_card
-  条件: [h : Nontrivial α]
-  结论: 1 < Fintype.card α
+  条件: [h : 非平凡 α]
+  结论: 1 < 有限类型.card α
   证明: Fintype.one_lt_card_iff_nontrivial.mpr h
 
 Depends on / 依赖: Fintype, Fintype.one_lt_card_iff_nontrivial.mpr, one_lt_card_iff_nontrivial
@@ -781,7 +781,7 @@ theorem _root_.Function.LeftInverse.rightInverse_of_card_le
     hfg
 
 中文:
-定理 _root_.Function.LeftInverse.rightInverse_of_card_le
+定理 _root_.函数.左逆.rightInverse_of_card_le
   结论: {f : α -> β} {g : β -> α}
   证明: have hsurj : Surjective f := surjective_iff_hasRightInverse.2 ⟨g, hfg⟩
   rightInverse_of_injective_of_leftInverse
@@ -808,7 +808,7 @@ theorem _root_.Function.RightInverse.leftInverse_of_card_le
   proof: Function.LeftInverse.rightInverse_of_card_le hfg hcard
 
 中文:
-定理 _root_.Function.RightInverse.leftInverse_of_card_le
+定理 _root_.函数.右逆.leftInverse_of_card_le
   结论: {f : α -> β} {g : β -> α}
   证明: Function.LeftInverse.rightInverse_of_card_le hfg hcard
 
@@ -841,7 +841,7 @@ definition ofLeftInverseOfCardLE
 
 中文:
 定义 ofLeftInverseOfCardLE
-  签名: (hβα : card β <= card α) (f : α -> β) (g : β -> α) (h : LeftInverse g f)
+  签名: (hβα : card β <= card α) (f : α -> β) (g : β -> α) (h : 左逆 g f)
   定义体: f
   invFun := g
   left_inv := h
@@ -869,7 +869,7 @@ definition ofRightInverseOfCardLE
 
 中文:
 定义 ofRightInverseOfCardLE
-  签名: (hαβ : card α <= card β) (f : α -> β) (g : β -> α) (h : RightInverse g f)
+  签名: (hαβ : card α <= card β) (f : α -> β) (g : β -> α) (h : 右逆 g f)
   定义体: f
   invFun := g
   left_inv := h.leftInverse_of_card_le hαβ
@@ -893,8 +893,8 @@ definition Finset.equivFin
   body: Fintype.equivFinOfCardEq (Fintype.card_coe _)
 
 中文:
-定义 Finset.equivFin
-  签名: (s : Finset α)
+定义 有限集.equivFin
+  签名: (s : 有限集 α)
   定义体: Fintype.equivFinOfCardEq (Fintype.card_coe _)
 
 Depends on / 依赖: Fintype, Fintype.card_coe, Fintype.equivFinOfCardEq, card_coe, equivFinOfCardEq
@@ -911,8 +911,8 @@ definition Finset.equivFinOfCardEq
   body: Fintype.equivFinOfCardEq ((Fintype.card_coe _).trans h)
 
 中文:
-定义 Finset.equivFinOfCardEq
-  签名: {s : Finset α} {n : 自然数} (h : #s = n)
+定义 有限集.equivFinOfCardEq
+  签名: {s : 有限集 α} {n : 自然数} (h : #s = n)
   定义体: Fintype.equivFinOfCardEq ((Fintype.card_coe _).trans h)
 
 Depends on / 依赖: Fintype, Fintype.card_coe, Fintype.equivFinOfCardEq, card_coe, equivFinOfCardEq
@@ -930,8 +930,8 @@ theorem Finset.card_eq_of_equiv_fin
   proof: Fin.equiv_iff_eq.1 ⟨s.equivFin.symm.trans i⟩
 
 中文:
-定理 Finset.card_eq_of_equiv_fin
-  条件: {s : Finset α} {n : 自然数} (i : s ≃ Fin n)
+定理 有限集.card_eq_of_equiv_fin
+  条件: {s : 有限集 α} {n : 自然数} (i : s ≃ 有限集 n)
   结论: #s = n
   证明: Fin.equiv_iff_eq.1 ⟨s.equivFin.symm.trans i⟩
 
@@ -949,8 +949,8 @@ theorem Finset.card_eq_of_equiv_fintype
   proof: card_eq_of_equiv_fin i.trans Fintype.equivFin β
 
 中文:
-定理 Finset.card_eq_of_equiv_fintype
-  条件: {s : Finset α} [Fintype β] (i : s ≃ β)
+定理 有限集.card_eq_of_equiv_fintype
+  条件: {s : 有限集 α} [有限类型 β] (i : s ≃ β)
   证明: card_eq_of_equiv_fin i.trans Fintype.equivFin β
 
 Depends on / 依赖: Fintype, Fintype.equivFin, card_eq_of_equiv_fin, equivFin, i.trans
@@ -967,8 +967,8 @@ definition Finset.equivOfCardEq
   body: Fintype.equivOfCardEq ((Fintype.card_coe _).trans (h.trans (Fintype.card_coe _).symm))
 
 中文:
-定义 Finset.equivOfCardEq
-  签名: {s : Finset α} {t : Finset β} (h : #s = #t)
+定义 有限集.equivOfCardEq
+  签名: {s : 有限集 α} {t : 有限集 β} (h : #s = #t)
   定义体: Fintype.equivOfCardEq ((Fintype.card_coe _).trans (h.trans (Fintype.card_coe _).symm))
 
 Depends on / 依赖: Fintype, Fintype.card_coe, Fintype.equivOfCardEq, card_coe, equivOfCardEq, h.trans
@@ -986,8 +986,8 @@ theorem Finset.card_eq_of_equiv
   proof: (card_eq_of_equiv_fintype i).trans (Fintype.card_coe _)
 
 中文:
-定理 Finset.card_eq_of_equiv
-  条件: {s : Finset α} {t : Finset β} (i : s ≃ t)
+定理 有限集.card_eq_of_equiv
+  条件: {s : 有限集 α} {t : 有限集 β} (i : s ≃ t)
   结论: #s = #t
   证明: (card_eq_of_equiv_fintype i).trans (Fintype.card_coe _)
 
@@ -1010,7 +1010,7 @@ definition equivOfFiniteSelfEmbedding
 
 中文:
 定义 equivOfFiniteSelfEmbedding
-  签名: [Finite α] (e : α ↪ α)
+  签名: [有限 α] (e : α ↪ α)
   定义体: Equiv.ofBijective e e.2.bijective_of_finite
 
 @[simp]
@@ -1033,7 +1033,7 @@ theorem toEmbedding_equivOfFiniteSelfEmbedding
 
 中文:
 定理 toEmbedding_equivOfFiniteSelfEmbedding
-  条件: [Finite α] (e : α ↪ α)
+  条件: [有限 α] (e : α ↪ α)
   证明: by
   ext
   rfl
@@ -1053,8 +1053,8 @@ definition _root_.Equiv.embeddingEquivOfFinite
   invFun e := e.toEmbedding
 
 中文:
-定义 _root_.Equiv.embeddingEquivOfFinite
-  签名: (α : 类型) [Finite α]
+定义 _root_.等价.embeddingEquivOfFinite
+  签名: (α : 类型) [有限 α]
   定义体: e.equivOfFiniteSelfEmbedding
   invFun e := e.toEmbedding
 
@@ -1077,7 +1077,7 @@ definition truncOfCardLE
 
 中文:
 定义 truncOfCardLE
-  签名: [Fintype α] [Fintype β] [DecidableEq α] [DecidableEq β]
+  签名: [有限类型 α] [有限类型 β] [DecidableEq α] [DecidableEq β]
   定义体: (Fintype.truncEquivFin α).bind fun ea =>
     (Fintype.truncEquivFin β).map fun eb =>
       ea.toEmbedding.trans ((Fin.castLEEmb h).trans eb.symm.toEmbedding)
@@ -1100,7 +1100,7 @@ theorem nonempty_of_card_le
 
 中文:
 定理 nonempty_of_card_le
-  条件: [Fintype α] [Fintype β] (h : Fintype.card α <= Fintype.card β)
+  条件: [有限类型 α] [有限类型 β] (h : 有限类型.card α <= 有限类型.card β)
   证明: by classical exact (truncOfCardLE h).nonempty
 
 Depends on / 依赖: classical, nonempty, truncOfCardLE
@@ -1118,7 +1118,7 @@ theorem nonempty_iff_card_le
 
 中文:
 定理 nonempty_iff_card_le
-  条件: [Fintype α] [Fintype β]
+  条件: [有限类型 α] [有限类型 β]
   证明: ⟨fun ⟨e⟩ => Fintype.card_le_of_embedding e, nonempty_of_card_le⟩
 
 Depends on / 依赖: Fintype, Fintype.card_le_of_embedding, card_le_of_embedding, nonempty_of_card_le
@@ -1139,8 +1139,8 @@ theorem exists_of_card_le_finset
   exact ⟨f.trans (Embedding.subtype _), by simp [Set.range_subset_iff]⟩
 
 中文:
-定理 exists_of_card_le_finset
-  条件: [Fintype α] {s : Finset β} (h : Fintype.card α <= #s)
+定理 存在_of_card_le_finset
+  条件: [有限类型 α] {s : 有限集 β} (h : 有限类型.card α <= #s)
   证明: by
   rw [← Fintype.card_coe] at h
   rcases nonempty_of_card_le h with ⟨f⟩
@@ -1168,8 +1168,8 @@ lemma exists_of_card_eq_finset
   · simp [← hsn]
 
 中文:
-引理 exists_of_card_eq_finset
-  条件: [Fintype α] {s : Finset β} (hsn : Fintype.card α = s.card)
+引理 存在_of_card_eq_finset
+  条件: [有限类型 α] {s : 有限集 β} (hsn : 有限类型.card α = s.card)
   证明: by
   obtain ⟨f : α ↪ β, hf⟩ := exists_of_card_le_finset (Nat.le_of_eq hsn)
   use f
@@ -1201,8 +1201,8 @@ theorem Finset.univ_map_embedding
   rw [← e.toEmbedding_equivOfFiniteSelfEmbedding]; rw [univ_map_equiv_to_embedding]
 
 中文:
-定理 Finset.univ_map_embedding
-  条件: {α : 类型} [Fintype α] (e : α ↪ α)
+定理 有限集.univ_map_embedding
+  条件: {α : 类型} [有限类型 α] (e : α ↪ α)
   结论: univ.map e = univ
   证明: by
   rw [← e.toEmbedding_equivOfFiniteSelfEmbedding]; rw [univ_map_equiv_to_embedding]
@@ -1226,7 +1226,7 @@ h' h.injective_of_finite (Equiv.ofBijective _ w).symm
 
 中文:
 定理 card_lt_of_surjective_not_injective
-  结论: [Fintype α] [Fintype β] (f : α -> β)
+  结论: [有限类型 α] [有限类型 β] (f : α -> β)
   证明: card_lt_of_injective_not_surjective _ (Function.injective_surjInv h) fun hg =>
     have w : Function.Bijective (Function.surjInv h) := ⟨Function.injective_surjInv h, hg⟩
 h' h.injective_of_finite (Equiv.ofBijective _ w).symm
@@ -1253,9 +1253,9 @@ theorem Fintype.false
 @[simp]
 
 中文:
-定理 Fintype.false
-  条件: [Infinite α] (_h : Fintype α)
-  结论: False
+定理 有限类型.false
+  条件: [无限 α] (_h : 有限类型 α)
+  结论: 假
   证明: not_finite α
 
 @[simp]
@@ -1276,7 +1276,7 @@ theorem isEmpty_fintype
 中文:
 定理 isEmpty_fintype
   条件: {α : 类型}
-  结论: IsEmpty (Fintype α) ↔ Infinite α
+  结论: 是空 (有限类型 α) ↔ 无限 α
   证明: ⟨fun ⟨h⟩ => ⟨fun h' => (@nonempty_fintype α h').elim h⟩, fun ⟨h⟩ => ⟨fun h' => h h'.finite⟩⟩
 
 Depends on / 依赖: finite, nonempty_fintype
@@ -1296,7 +1296,7 @@ definition fintypeOfNotInfinite
 
 中文:
 定义 fintypeOfNotInfinite
-  签名: {α : 类型} (h : ¬Infinite α)
+  签名: {α : 类型} (h : ¬无限 α)
   定义体: @Fintype.ofFinite _ (not_infinite_iff_finite.mp h)
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, not_infinite_iff_finite, not_infinite_iff_finite.mp, ofFinite
@@ -1340,8 +1340,8 @@ theorem of_not_fintype
 
 中文:
 定理 of_not_fintype
-  条件: (h : Fintype α -> False)
-  结论: Infinite α
+  条件: (h : 有限类型 α -> 假)
+  结论: 无限 α
   证明: isEmpty_fintype.mp ⟨h⟩
 
 Depends on / 依赖: isEmpty_fintype, isEmpty_fintype.mp
@@ -1366,7 +1366,7 @@ Finset.card_lt_card by rwa [Set.toFinset_ssubset_
 
 中文:
 定理 of_injective_to_set
-  条件: {s : Set α} (hs : s != Set.univ) {f : α -> s} (hf : Injective f)
+  条件: {s : 集合 α} (hs : s != 集合.univ) {f : α -> s} (hf : 单射 f)
   证明: of_not_fintype fun h => by
     classical
       refine lt_irrefl (Fintype.card α) ?_
@@ -1399,7 +1399,7 @@ theorem of_surjective_from_set
 
 中文:
 定理 of_surjective_from_set
-  条件: {s : Set α} (hs : s != Set.univ) {f : s -> α} (hf : Surjective f)
+  条件: {s : 集合 α} (hs : s != 集合.univ) {f : s -> α} (hf : 满射 f)
   证明: of_injective_to_set hs (injective_surjInv hf)
 
 Depends on / 依赖: injective_surjInv, of_injective_to_set
@@ -1418,8 +1418,8 @@ theorem exists_notMem_finset
   proof: not_forall.1 fun h => Fintype.false ⟨s, h⟩
 
 中文:
-定理 exists_notMem_finset
-  条件: [Infinite α] (s : Finset α)
+定理 存在_notMem_finset
+  条件: [无限 α] (s : 有限集 α)
   结论: 存在 x, x ∉ s
   证明: not_forall.1 fun h => Fintype.false ⟨s, h⟩
 
@@ -1445,8 +1445,8 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  条件: (α : 类型) [Infinite α]
-  结论: Nonempty α
+  条件: (α : 类型) [无限 α]
+  结论: 非空 α
   证明: by infer_instance
 -/
 protected theorem nonempty (α : Type*) [Infinite α] : Nonempty α := by infer_instance
@@ -1462,8 +1462,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: {α β} [Infinite β] (f : β -> α) (hf : Injective f)
-  结论: Infinite α
+  条件: {α β} [无限 β] (f : β -> α) (hf : 单射 f)
+  结论: 无限 α
   证明: ⟨fun _I => (Finite.of_injective f hf).false⟩
 
 Depends on / 依赖: Finite, Finite.of_injective, of_injective
@@ -1482,8 +1482,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: {α β} [Infinite β] (f : α -> β) (hf : Surjective f)
-  结论: Infinite α
+  条件: {α β} [无限 β] (f : α -> β) (hf : 满射 f)
+  结论: 无限 α
   证明: ⟨fun _I => (Finite.of_surjective f hf).false⟩
 
 Depends on / 依赖: Finite, Finite.of_surjective, of_surjective
@@ -1504,7 +1504,7 @@ theorem sigma_of_right
 
 中文:
 定理 sigma_of_right
-  条件: {β : α -> 类型} {a : α} [Infinite (β a)]
+  条件: {β : α -> 类型} {a : α} [无限 (β a)]
   证明: Infinite.of_injective (f := fun x => ⟨a,x⟩) fun _ _ => by simp
 
 Depends on / 依赖: Infinite, Infinite.of_injective, of_injective
@@ -1530,7 +1530,7 @@ instance :
 
 中文:
 实例 :
-  签名: Infinite 自然数
+  签名: 无限 自然数
   定义体: Infinite.of_not_fintype by
     intro h
     exact (Finset.range _).card_le_univ.not_gt ((Nat.lt_succ_self _).trans_eq (card_range _).symm)
@@ -1551,8 +1551,8 @@ instance Int.infinite
   body: Infinite.of_injective Int.ofNat fun _ _ => Int.ofNat.inj
 
 中文:
-实例 Int.infinite
-  签名: : Infinite 整数
+实例 整数.infinite
+  签名: : 无限 整数
   定义体: Infinite.of_injective Int.ofNat fun _ _ => Int.ofNat.inj
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Int.ofNat, Int.ofNat.inj, of_injective
@@ -1570,8 +1570,8 @@ instance [Nonempty
   Infinite.of_injective (fun n => Multiset.replicate n x) (Multiset.replicate_left_injective _)
 
 中文:
-实例 [Nonempty
-  签名: α] : Infinite (Multiset α)
+实例 [非空
+  签名: α] : 无限 (Multiset α)
   定义体: let ⟨x⟩ := ‹Nonempty α›
   Infinite.of_injective (fun n => Multiset.replicate n x) (Multiset.replicate_left_injective _)
 
@@ -1590,8 +1590,8 @@ instance [Nonempty
   body: Infinite.of_surjective ((↑) : List α -> Multiset α) Quot.mk_surjective
 
 中文:
-实例 [Nonempty
-  签名: α] : Infinite (List α)
+实例 [非空
+  签名: α] : 无限 (列表 α)
   定义体: Infinite.of_surjective ((↑) : List α -> Multiset α) Quot.mk_surjective
 
 Depends on / 依赖: Infinite, Infinite.of_surjective, Multiset, Quot.mk_surjective, mk_surjective, of_surjective
@@ -1609,7 +1609,7 @@ instance String.infinite
 
 中文:
 实例 String.infinite
-  签名: : Infinite String
+  签名: : 无限 String
   定义体: Infinite.of_injective String.ofList (fun _ _ => String.ofList_injective)
 
 Depends on / 依赖: Infinite, Infinite.of_injective, String.ofList, String.ofList_injective, ofList, ofList_injective, of_injective
@@ -1626,8 +1626,8 @@ instance Infinite.set
   body: Infinite.of_injective singleton Set.singleton_injective
 
 中文:
-实例 Infinite.set
-  签名: [Infinite α]
+实例 无限.set
+  签名: [无限 α]
   定义体: Infinite.of_injective singleton Set.singleton_injective
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Set.singleton_injective, of_injective, singleton, singleton_injective
@@ -1644,8 +1644,8 @@ instance [Infinite
   body: Infinite.of_injective singleton Finset.singleton_injective
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite (Finset α)
+实例 [无限
+  签名: α] : 无限 (有限集 α)
   定义体: Infinite.of_injective singleton Finset.singleton_injective
 
 Depends on / 依赖: Finset, Finset.singleton_injective, Infinite, Infinite.of_injective, of_injective, singleton, singleton_injective
@@ -1662,8 +1662,8 @@ instance [Infinite
   body: Infinite.of_injective some (Option.some_injective α)
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite (Option α)
+实例 [无限
+  签名: α] : 无限 (选项类型 α)
   定义体: Infinite.of_injective some (Option.some_injective α)
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Option.some_injective, of_injective, some_injective
@@ -1680,8 +1680,8 @@ instance Sum.infinite_of_left
   body: Infinite.of_injective Sum.inl Sum.inl_injective
 
 中文:
-实例 Sum.infinite_of_left
-  签名: [Infinite α]
+实例 和.infinite_of_left
+  签名: [无限 α]
   定义体: Infinite.of_injective Sum.inl Sum.inl_injective
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Sum.inl, Sum.inl_injective, inl_injective, of_injective
@@ -1698,8 +1698,8 @@ instance Sum.infinite_of_right
   body: Infinite.of_injective Sum.inr Sum.inr_injective
 
 中文:
-实例 Sum.infinite_of_right
-  签名: [Infinite β]
+实例 和.infinite_of_right
+  签名: [无限 β]
   定义体: Infinite.of_injective Sum.inr Sum.inr_injective
 
 Depends on / 依赖: Infinite, Infinite.of_injective, Sum.inr, Sum.inr_injective, inr_injective, of_injective
@@ -1716,8 +1716,8 @@ instance Prod.infinite_of_right
   body: Infinite.of_surjective Prod.snd Prod.snd_surjective
 
 中文:
-实例 Prod.infinite_of_right
-  签名: [Nonempty α] [Infinite β]
+实例 积类型.infinite_of_right
+  签名: [非空 α] [无限 β]
   定义体: Infinite.of_surjective Prod.snd Prod.snd_surjective
 
 Depends on / 依赖: Infinite, Infinite.of_surjective, Prod.snd, Prod.snd_surjective, of_surjective, snd_surjective
@@ -1734,8 +1734,8 @@ instance Prod.infinite_of_left
   body: Infinite.of_surjective Prod.fst Prod.fst_surjective
 
 中文:
-实例 Prod.infinite_of_left
-  签名: [Infinite α] [Nonempty β]
+实例 积类型.infinite_of_left
+  签名: [无限 α] [非空 β]
   定义体: Infinite.of_surjective Prod.fst Prod.fst_surjective
 
 Depends on / 依赖: Infinite, Infinite.of_surjective, Prod.fst, Prod.fst_surjective, fst_surjective, of_surjective
@@ -1755,8 +1755,8 @@ instance [Infinite
   exact Infinite.of_injective _ (Equiv.swap_injective_of_left a)
 
 中文:
-实例 [Infinite
-  签名: α] : Infinite (Equiv.Perm α)
+实例 [无限
+  签名: α] : 无限 (等价.置换 α)
   定义体: by
   classical
   obtain ⟨a : α⟩ := Nontrivial.to_nonempty (α := α)
@@ -1786,7 +1786,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def natEmbeddingAux (α : 类型) [Infinite α]
+  签名: def natEmbeddingAux (α : 类型) [无限 α]
   定义体: Classical.decEq α
     Classical.choose
       (exists_notMem_finset
@@ -1820,7 +1820,7 @@ theorem natEmbeddingAux_injective
 
 中文:
 定理 natEmbeddingAux_injective
-  条件: (α : 类型) [Infinite α]
+  条件: (α : 类型) [无限 α]
   证明: by
   rintro m n h
   let := Classical.decEq α
@@ -1857,7 +1857,7 @@ definition natEmbedding
 
 中文:
 定义 natEmbedding
-  签名: (α : 类型) [Infinite α]
+  签名: (α : 类型) [无限 α]
   定义体: ⟨_, natEmbeddingAux_injective α⟩
 
 Depends on / 依赖: natEmbeddingAux_injective
@@ -1875,9 +1875,9 @@ theorem exists_subset_card_eq
   proof: ⟨(range n).map (natEmbedding α), by rw [card_map, card_range]⟩
 
 中文:
-定理 exists_subset_card_eq
-  条件: (α : 类型) [Infinite α] (n : 自然数)
-  结论: 存在 s : Finset α, #s = n
+定理 存在_subset_card_eq
+  条件: (α : 类型) [无限 α] (n : 自然数)
+  结论: 存在 s : 有限集 α, #s = n
   证明: ⟨(range n).map (natEmbedding α), by rw [card_map, card_range]⟩
 
 Depends on / 依赖: card_map, card_range, natEmbedding
@@ -1902,8 +1902,8 @@ theorem exists_superset_card_eq
     refine ⟨Fi
 
 中文:
-定理 exists_superset_card_eq
-  条件: [Infinite α] (s : Finset α) (n : 自然数) (hn : #s <= n)
+定理 存在_superset_card_eq
+  条件: [无限 α] (s : 有限集 α) (n : 自然数) (hn : #s <= n)
   证明: by
   induction n generalizing s with
   | zero => exact ⟨s, subset_rfl, Nat.eq_zero_of_le_zero hn⟩
@@ -1948,7 +1948,7 @@ definition fintypeOfFinsetCardLe
 
 中文:
 定义 fintypeOfFinsetCardLe
-  签名: {ι : 类型} (n : 自然数) (w : 对任意 s : Finset ι, #s <= n)
+  签名: {ι : 类型} (n : 自然数) (w : 对任意 s : 有限集 ι, #s <= n)
   定义体: by
   apply fintypeOfNotInfinite
   intro i
@@ -1979,8 +1979,8 @@ theorem not_injective_infinite_finite
 
 中文:
 定理 not_injective_infinite_finite
-  条件: {α β} [Infinite α] [Finite β] (f : α -> β)
-  结论: ¬Injective f
+  条件: {α β} [无限 α] [有限 β] (f : α -> β)
+  结论: ¬单射 f
   证明: fun hf => (Finite.of_injective f hf).false
 
 Depends on / 依赖: Finite, Finite.of_injective, of_injective
@@ -1997,8 +1997,8 @@ instance Function.Embedding.is_empty
   body: ⟨fun f => not_injective_infinite_finite f f.2⟩
 
 中文:
-实例 Function.Embedding.is_empty
-  签名: {α β} [Infinite α] [Finite β]
+实例 函数.嵌入.is_empty
+  签名: {α β} [无限 α] [有限 β]
   定义体: ⟨fun f => not_injective_infinite_finite f f.2⟩
 
 Depends on / 依赖: not_injective_infinite_finite
@@ -2017,8 +2017,8 @@ theorem not_surjective_finite_infinite
 
 中文:
 定理 not_surjective_finite_infinite
-  条件: {α β} [Finite α] [Infinite β] (f : α -> β)
-  结论: ¬Surjective f
+  条件: {α β} [有限 α] [无限 β] (f : α -> β)
+  结论: ¬满射 f
   证明: fun hf => (Infinite.of_surjective f hf).not_finite ‹_›
 
 Depends on / 依赖: Infinite, Infinite.of_surjective, not_finite, of_surjective

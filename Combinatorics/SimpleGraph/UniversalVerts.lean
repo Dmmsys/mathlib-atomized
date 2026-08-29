@@ -40,7 +40,7 @@ definition universalVerts
 
 中文:
 定义 universalVerts
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: {v : V | G.IsUniversal v}
 
 Depends on / 依赖: G.IsUniversal, IsUniversal
@@ -58,7 +58,7 @@ lemma isClique_universalVerts
 
 中文:
 引理 isClique_universalVerts
-  条件: (G : SimpleGraph V)
+  条件: (G : 简单图 V)
   结论: G.IsClique G.universalVerts
   证明: fun _ hx _ _ hxy => hx hxy
 -/
@@ -79,7 +79,7 @@ definition deleteUniversalVerts
 
 中文:
 定义 deleteUniversalVerts
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: (⊤ : Subgraph G).deleteVerts G.universalVerts
 
 Depends on / 依赖: G.universalVerts, Subgraph, deleteVerts, universalVerts
@@ -102,8 +102,8 @@ lemma Subgraph.IsMatching.exists_of_universalVerts
 .symm have hadj (v : s) : G.Adj v (f v) :=
 
 中文:
-引理 Subgraph.IsMatching.exists_of_universalVerts
-  结论: [Finite V] {s : Set V}
+引理 子图.IsMatching.存在_of_universalVerts
+  结论: [有限 V] {s : 集合 V}
   证明: by
   obtain ⟨t, ht⟩ := Set.exists_subset_card_eq hc
   refine ⟨t, ht.1, ?_⟩
@@ -137,7 +137,7 @@ lemma disjoint_image_val_universalVerts
 
 中文:
 引理 disjoint_image_val_universalVerts
-  条件: (s : Set G.deleteUniversalVerts.verts)
+  条件: (s : 集合 G.deleteUniversalVerts.verts)
   证明: by
   simpa [← Set.disjoint_compl_right_iff_subset, Set.compl_eq_univ_sdiff] using
     Subtype.coe_image_subset _ s
@@ -164,7 +164,7 @@ sdiff_eq_left.mpr Set.disjoint_of_subset_right h (disjoint_image_val_universalVe
 
 中文:
 引理 even_ncard_image_val_supp_sdiff_image_val_rep_union
-  结论: {t : Set V}
+  结论: {t : 集合 V}
   证明: by
   simp [-deleteUniversalVerts_verts, ← Set.sdiff_inter_sdiff,
     ← Set.image_sdiff Subtype.val_injective,

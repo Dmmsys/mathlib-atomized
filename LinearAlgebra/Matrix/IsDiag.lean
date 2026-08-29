@@ -46,7 +46,7 @@ definition IsDiag
 
 中文:
 定义 IsDiag
-  签名: [Zero α] (A : Matrix n n α)
+  签名: [零 α] (A : 矩阵 n n α)
   定义体: Pairwise fun i j => A i j = 0
 
 @[simp]
@@ -69,7 +69,7 @@ theorem isDiag_diagonal
 
 中文:
 定理 isDiag_diagonal
-  条件: [Zero α] [DecidableEq n] (d : n -> α)
+  条件: [零 α] [DecidableEq n] (d : n -> α)
   结论: (diagonal d).IsDiag
   证明: fun _ _ =>
   Matrix.diagonal_apply_ne _
@@ -90,7 +90,7 @@ theorem IsDiag.diagonal_diag
 
 中文:
 定理 IsDiag.diagonal_diag
-  条件: [Zero α] [DecidableEq n] {A : Matrix n n α} (h : A.IsDiag)
+  条件: [零 α] [DecidableEq n] {A : 矩阵 n n α} (h : A.IsDiag)
   证明: ext fun i j => by
     obtain rfl | hij := Decidable.eq_or_ne i j
     · rw [diagonal_apply_eq, diag]
@@ -115,7 +115,7 @@ theorem isDiag_iff_diagonal_diag
 
 中文:
 定理 isDiag_iff_diagonal_diag
-  条件: [Zero α] [DecidableEq n] (A : Matrix n n α)
+  条件: [零 α] [DecidableEq n] (A : 矩阵 n n α)
   证明: ⟨IsDiag.diagonal_diag, fun hd => hd ▸ isDiag_diagonal (diag A)⟩
 
 Depends on / 依赖: IsDiag, IsDiag.diagonal_diag, diagonal_diag, isDiag_diagonal
@@ -135,7 +135,7 @@ theorem isDiag_of_subsingleton
 
 中文:
 定理 isDiag_of_subsingleton
-  条件: [Zero α] [Subsingleton n] (A : Matrix n n α)
+  条件: [零 α] [子单例 n] (A : 矩阵 n n α)
   结论: A.IsDiag
   证明: fun i j h => (h <| Subsingleton.elim i j).elim
 
@@ -157,8 +157,8 @@ theorem isDiag_zero
 
 中文:
 定理 isDiag_zero
-  条件: [Zero α]
-  结论: (0 : Matrix n n α).IsDiag
+  条件: [零 α]
+  结论: (0 : 矩阵 n n α).IsDiag
   证明: fun _ _ _ => rfl
 -/
 theorem isDiag_zero [Zero α] : (0 : Matrix n n α).IsDiag := fun _ _ _ => rfl
@@ -177,8 +177,8 @@ theorem isDiag_one
 
 中文:
 定理 isDiag_one
-  条件: [DecidableEq n] [Zero α] [One α]
-  结论: (1 : Matrix n n α).IsDiag
+  条件: [DecidableEq n] [零 α] [幺 α]
+  结论: (1 : 矩阵 n n α).IsDiag
   证明: fun _ _ =>
   one_apply_ne
 -/
@@ -197,7 +197,7 @@ theorem IsDiag.map
 
 中文:
 定理 IsDiag.map
-  条件: [Zero α] [Zero β] {A : Matrix n n α} (ha : A.IsDiag) {f : α -> β} (hf : f 0 = 0)
+  条件: [零 α] [零 β] {A : 矩阵 n n α} (ha : A.IsDiag) {f : α -> β} (hf : f 0 = 0)
   证明: by
   intro i j h
   simp [ha h, hf]
@@ -222,7 +222,7 @@ theorem IsDiag.neg
 
 中文:
 定理 IsDiag.neg
-  条件: [SubtractionMonoid α] {A : Matrix n n α} (ha : A.IsDiag)
+  条件: [Subtraction幺半群 α] {A : 矩阵 n n α} (ha : A.IsDiag)
   结论: (-A).IsDiag
   证明: by
   intro i j h
@@ -246,7 +246,7 @@ theorem isDiag_neg_iff
 
 中文:
 定理 isDiag_neg_iff
-  条件: [SubtractionMonoid α] {A : Matrix n n α}
+  条件: [Subtraction幺半群 α] {A : 矩阵 n n α}
   结论: (-A).IsDiag ↔ A.IsDiag
   证明: ⟨fun ha _ _ h => neg_eq_zero.1 (ha h), IsDiag.neg⟩
 
@@ -267,7 +267,7 @@ theorem IsDiag.add
 
 中文:
 定理 IsDiag.add
-  条件: [AddZeroClass α] {A B : Matrix n n α} (ha : A.IsDiag) (hb : B.IsDiag)
+  条件: [加法零类 α] {A B : 矩阵 n n α} (ha : A.IsDiag) (hb : B.IsDiag)
   证明: by
   intro i j h
   simp [ha h, hb h]
@@ -289,7 +289,7 @@ theorem IsDiag.sub
 
 中文:
 定理 IsDiag.sub
-  条件: [SubtractionMonoid α] {A B : Matrix n n α} (ha : A.IsDiag) (hb : B.IsDiag)
+  条件: [Subtraction幺半群 α] {A B : 矩阵 n n α} (ha : A.IsDiag) (hb : B.IsDiag)
   证明: by
   intro i j h
   simp [ha h, hb h]
@@ -313,7 +313,7 @@ theorem IsDiag.smul
 
 中文:
 定理 IsDiag.smul
-  结论: [Zero α] [SMulZeroClass R α] (k : R) {A : Matrix n n α}
+  结论: [零 α] [SMulZero类 R α] (k : R) {A : 矩阵 n n α}
   证明: by
   intro i j h
   simp [ha h]
@@ -336,7 +336,7 @@ theorem isDiag_smul_one
 
 中文:
 定理 isDiag_smul_one
-  条件: (n) [MulZeroOneClass α] [DecidableEq n] (k : α)
+  条件: (n) [乘零幺类 α] [DecidableEq n] (k : α)
   证明: isDiag_one.smul k
 
 Depends on / 依赖: isDiag_one, isDiag_one.smul
@@ -359,7 +359,7 @@ theorem IsDiag.transpose
 
 中文:
 定理 IsDiag.transpose
-  条件: [Zero α] {A : Matrix n n α} (ha : A.IsDiag)
+  条件: [零 α] {A : 矩阵 n n α} (ha : A.IsDiag)
   结论: Aᵀ.IsDiag
   证明: fun _ _ h =>
   ha h.symm
@@ -381,7 +381,7 @@ theorem isDiag_transpose_iff
 
 中文:
 定理 isDiag_transpose_iff
-  条件: [Zero α] {A : Matrix n n α}
+  条件: [零 α] {A : 矩阵 n n α}
   结论: Aᵀ.IsDiag ↔ A.IsDiag
   证明: ⟨IsDiag.transpose, IsDiag.transpose⟩
 
@@ -402,7 +402,7 @@ theorem IsDiag.conjTranspose
 
 中文:
 定理 IsDiag.conjTranspose
-  结论: [NonUnitalNonAssocSemiring α] [StarRing α] {A : Matrix n n α}
+  结论: [非幺非结合半环 α] [对合环 α] {A : 矩阵 n n α}
   证明: ha.transpose.map (star_zero _)
 
 @[simp]
@@ -426,7 +426,7 @@ theorem isDiag_conjTranspose_iff
 
 中文:
 定理 isDiag_conjTranspose_iff
-  条件: [NonUnitalNonAssocSemiring α] [StarRing α] {A : Matrix n n α}
+  条件: [非幺非结合半环 α] [对合环 α] {A : 矩阵 n n α}
   证明: ⟨fun ha => by
     convert! ha.conjTranspose
     simp, IsDiag.conjTranspose⟩
@@ -449,7 +449,7 @@ theorem IsDiag.submatrix
 
 中文:
 定理 IsDiag.submatrix
-  结论: [Zero α] {A : Matrix n n α} (ha : A.IsDiag) {f : m -> n}
+  结论: [零 α] {A : 矩阵 n n α} (ha : A.IsDiag) {f : m -> n}
   证明: fun _ _ h => ha (hf.ne h)
 
 Depends on / 依赖: hf.ne
@@ -472,7 +472,7 @@ theorem IsDiag.kronecker
 
 中文:
 定理 IsDiag.kronecker
-  结论: [MulZeroClass α] {A : Matrix m m α} {B : Matrix n n α} (hA : A.IsDiag)
+  结论: [乘零类 α] {A : 矩阵 m m α} {B : 矩阵 n n α} (hA : A.IsDiag)
   证明: by
   rintro ⟨a, b⟩ ⟨c, d⟩ h
   simp only [Prod.mk_inj, Ne, not_and_or] at h
@@ -504,8 +504,8 @@ theorem IsDiag.isSymm
 
 中文:
 定理 IsDiag.isSymm
-  条件: [Zero α] {A : Matrix n n α} (h : A.IsDiag)
-  结论: A.IsSymm
+  条件: [零 α] {A : 矩阵 n n α} (h : A.IsDiag)
+  结论: A.是Symm
   证明: by
   ext i j
   by_cases g : i = j; · rw [g, transpose_apply]
@@ -533,7 +533,7 @@ theorem IsDiag.fromBlocks
 
 中文:
 定理 IsDiag.fromBlocks
-  结论: [Zero α] {A : Matrix m m α} {D : Matrix n n α} (ha : A.IsDiag)
+  结论: [零 α] {A : 矩阵 m m α} {D : 矩阵 n n α} (ha : A.IsDiag)
   证明: by
   rintro (i | i) (j | j) hij
   · exact ha (ne_of_apply_ne _ hij)
@@ -570,7 +570,7 @@ theorem isDiag_fromBlocks_iff
 
 中文:
 定理 isDiag_fromBlocks_iff
-  结论: [Zero α] {A : Matrix m m α} {B : Matrix m n α} {C : Matrix n m α}
+  结论: [零 α] {A : 矩阵 m m α} {B : 矩阵 m n α} {C : 矩阵 n m α}
   证明: by
   constructor
   · intro h
@@ -608,7 +608,7 @@ theorem IsDiag.fromBlocks_of_isSymm
 
 中文:
 定理 IsDiag.fromBlocks_of_isSymm
-  结论: [Zero α] {A : Matrix m m α} {C : Matrix n m α}
+  结论: [零 α] {A : 矩阵 m m α} {C : 矩阵 n m α}
   证明: by
   rw [← (isSymm_fromBlocks_iff.1 h).2.1]
   exact ha.fromBlocks hd
@@ -631,7 +631,7 @@ theorem mul_transpose_self_isDiag_iff_hasOrthogonalRows
 
 中文:
 定理 mul_transpose_self_isDiag_iff_hasOrthogonalRows
-  结论: [Fintype n] [Mul α] [AddCommMonoid α]
+  结论: [有限类型 n] [乘法 α] [加法交换幺半群 α]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -650,7 +650,7 @@ theorem transpose_mul_self_isDiag_iff_hasOrthogonalCols
 
 中文:
 定理 transpose_mul_self_isDiag_iff_hasOrthogonalCols
-  结论: [Fintype m] [Mul α] [AddCommMonoid α]
+  结论: [有限类型 m] [乘法 α] [加法交换幺半群 α]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

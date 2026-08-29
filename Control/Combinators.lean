@@ -24,7 +24,7 @@ definition joinM
 
 中文:
 定义 joinM
-  签名: {m : 类型u -> 类型u} [Monad m] {α : 类型u} (a : m (m α))
+  签名: {m : 类型u -> 类型u} [单子 m] {α : 类型u} (a : m (m α))
   定义体: bind a id
 -/
 def joinM {m : Type u -> Type u} [Monad m] {α : Type u} (a : m (m α)) : m α :=
@@ -42,7 +42,7 @@ definition condM
 
 中文:
 定义 condM
-  签名: {m : Type -> Type} [Monad m] {α : Type} (mbool : m 布尔) (tm fm : m α)
+  签名: {m : 类型 -> 类型} [单子 m] {α : 类型} (mbool : m 布尔值) (tm fm : m α)
   定义体: do
   let b ← mbool
   cond b tm fm

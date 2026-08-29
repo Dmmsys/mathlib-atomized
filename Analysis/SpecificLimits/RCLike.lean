@@ -30,7 +30,7 @@ theorem tendsto_ofReal_cobounded_cobounded
   proof: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_norm_cobounded_atTop)
 
 中文:
-定理 tendsto_ofReal_cobounded_cobounded
+定理 tendsto_of实数_cobounded_cobounded
   证明: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_norm_cobounded_atTop)
 
 Depends on / 依赖: mod_cast, tendsto_norm_atTop_iff_cobounded, tendsto_norm_atTop_iff_cobounded.mp, tendsto_norm_cobounded_atTop
@@ -47,7 +47,7 @@ theorem tendsto_ofReal_atTop_cobounded
   proof: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_abs_atTop_atTop)
 
 中文:
-定理 tendsto_ofReal_atTop_cobounded
+定理 tendsto_of实数_atTop_cobounded
   证明: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_abs_atTop_atTop)
 
 Depends on / 依赖: mod_cast, tendsto_abs_atTop_atTop, tendsto_norm_atTop_iff_cobounded, tendsto_norm_atTop_iff_cobounded.mp
@@ -64,7 +64,7 @@ theorem tendsto_ofReal_atBot_cobounded
   proof: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_abs_atBot_atTop)
 
 中文:
-定理 tendsto_ofReal_atBot_cobounded
+定理 tendsto_of实数_atBot_cobounded
   证明: tendsto_norm_atTop_iff_cobounded.mp (mod_cast tendsto_abs_atBot_atTop)
 
 Depends on / 依赖: mod_cast, tendsto_abs_atBot_atTop, tendsto_norm_atTop_iff_cobounded, tendsto_norm_atTop_iff_cobounded.mp

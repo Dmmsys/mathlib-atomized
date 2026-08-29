@@ -121,7 +121,7 @@ lemma strictConvexOn_klFun
 
 中文:
 引理 strictConvexOn_klFun
-  结论: StrictConvexOn 实数 (Ici 0) klFun
+  结论: StrictConvexOn 实数 (左闭右无界区间 0) klFun
   证明: (strictConvexOn_mul_log.add_convexOn (convexOn_const _ (convex_Ici _))).sub_concaveOn
     (concaveOn_id (convex_Ici _))
 
@@ -141,7 +141,7 @@ lemma convexOn_klFun
 
 中文:
 引理 convexOn_klFun
-  结论: ConvexOn 实数 (Ici 0) klFun
+  结论: ConvexOn 实数 (左闭右无界区间 0) klFun
   证明: strictConvexOn_klFun.convexOn
 
 Depends on / 依赖: convexOn, strictConvexOn_klFun, strictConvexOn_klFun.convexOn
@@ -158,7 +158,7 @@ lemma convexOn_Ioi_klFun
 
 中文:
 引理 convexOn_Ioi_klFun
-  结论: ConvexOn 实数 (Ioi 0) klFun
+  结论: ConvexOn 实数 (左开右无界区间 0) klFun
   证明: convexOn_klFun.subset (Ioi_subset_Ici le_rfl) (convex_Ioi _)
 
 Depends on / 依赖: Ioi_subset_Ici, convexOn_klFun, convexOn_klFun.subset, convex_Ioi, le_rfl, subset
@@ -178,7 +178,7 @@ lemma continuous_klFun
 
 中文:
 引理 continuous_klFun
-  结论: Continuous klFun
+  结论: 连续 klFun
   证明: by unfold klFun; fun_prop
 
 Depends on / 依赖: fun_prop
@@ -197,7 +197,7 @@ lemma measurable_klFun
 
 中文:
 引理 measurable_klFun
-  结论: Measurable klFun
+  结论: 可测 klFun
   证明: continuous_klFun.measurable
 
 Depends on / 依赖: continuous_klFun, continuous_klFun.measurable, measurable
@@ -239,7 +239,7 @@ lemma hasDerivAt_klFun
 中文:
 引理 hasDerivAt_klFun
   条件: (hx : x != 0)
-  结论: HasDerivAt klFun (log x) x
+  结论: 在点处可导 klFun (log x) x
   证明: by
   convert! ((hasDerivAt_mul_log hx).add (hasDerivAt_const x 1)).sub (hasDerivAt_id x) using 1
   ring
@@ -318,7 +318,7 @@ lemma not_differentiableWithinAt_klFun_Ioi_zero
 
 中文:
 引理 not_differentiableWithinAt_klFun_Ioi_zero
-  结论: ¬ DifferentiableWithinAt 实数 klFun (Ioi 0) 0
+  结论: ¬ DifferentiableWithinAt 实数 klFun (左开右无界区间 0) 0
   证明: by
   refine not_differentiableWithinAt_of_deriv_tendsto_atBot_Ioi _ ?_
   rw [deriv_klFun]
@@ -344,7 +344,7 @@ lemma not_differentiableWithinAt_klFun_Iio_zero
 
 中文:
 引理 not_differentiableWithinAt_klFun_Iio_zero
-  结论: ¬ DifferentiableWithinAt 实数 klFun (Iio 0) 0
+  结论: ¬ DifferentiableWithinAt 实数 klFun (左无界右开区间 0) 0
   证明: by
   refine not_differentiableWithinAt_of_deriv_tendsto_atBot_Iio _ ?_
   rw [deriv_klFun]
@@ -374,7 +374,7 @@ lemma rightDeriv_klFun
 
 中文:
 引理 rightDeriv_klFun
-  结论: derivWithin klFun (Ioi x) x = log x
+  结论: derivWithin klFun (左开右无界区间 x) x = log x
   证明: by
   by_cases h0 : x = 0
   · simp only [h0, log_zero]
@@ -406,7 +406,7 @@ lemma leftDeriv_klFun
 
 中文:
 引理 leftDeriv_klFun
-  结论: derivWithin klFun (Iio x) x = log x
+  结论: derivWithin klFun (左无界右开区间 x) x = log x
   证明: by
   by_cases h0 : x = 0
   · simp only [h0, log_zero]
@@ -431,7 +431,7 @@ lemma rightDeriv_klFun_one
 
 中文:
 引理 rightDeriv_klFun_one
-  结论: derivWithin klFun (Ioi 1) 1 = 0
+  结论: derivWithin klFun (左开右无界区间 1) 1 = 0
   证明: by simp
 -/
 lemma rightDeriv_klFun_one : derivWithin klFun (Ioi 1) 1 = 0 := by simp
@@ -446,7 +446,7 @@ lemma leftDeriv_klFun_one
 
 中文:
 引理 leftDeriv_klFun_one
-  结论: derivWithin klFun (Iio 1) 1 = 0
+  结论: derivWithin klFun (左无界右开区间 1) 1 = 0
   证明: by simp
 -/
 lemma leftDeriv_klFun_one : derivWithin klFun (Iio 1) 1 = 0 := by simp
@@ -485,7 +485,7 @@ lemma isMinOn_klFun
 
 中文:
 引理 isMinOn_klFun
-  结论: IsMinOn klFun (Ici 0) 1
+  结论: IsMinOn klFun (左闭右无界区间 0) 1
   证明: convexOn_klFun.isMinOn_of_rightDeriv_eq_zero (by simp) (by simp)
 
 Depends on / 依赖: convexOn_klFun, convexOn_klFun.isMinOn_of_rightDeriv_eq_zero, isMinOn_of_rightDeriv_eq_zero
@@ -555,7 +555,7 @@ lemma tendsto_klFun_atTop
 
 中文:
 引理 tendsto_klFun_atTop
-  结论: Tendsto klFun atTop atTop
+  结论: 收敛 klFun atTop atTop
   证明: by
   have : klFun = (fun x => x * (log x - 1) + 1) := by unfold klFun; ext; ring
   rw [this]
@@ -627,7 +627,7 @@ lemma integral_klFun_rnDeriv
 
 中文:
 引理 integral_klFun_rnDeriv
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   unfold klFun
   rw [integral_sub]; rw [integral_add]; rw [integral_const]; rw [Measure.integral_toReal_rnDeriv hμν]; rw [smul_eq_mul]; rw [mul_one]

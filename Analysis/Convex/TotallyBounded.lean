@@ -49,8 +49,8 @@ lemma TotallyBounded.convexHull
   obtain ⟨t', htf', hts'⟩ := tot
 
 中文:
-引理 TotallyBounded.convexHull
-  条件: (hs : TotallyBounded s)
+引理 全有界.convexHull
+  条件: (hs : 全有界 s)
   证明: by
   rw [totallyBounded_iff_subset_finite_iUnion_nhds_zero] at ⊢ hs
   intro U hU
@@ -83,7 +83,7 @@ lemma totallyBounded_convexHull
 
 中文:
 引理 totallyBounded_convexHull
-  结论: TotallyBounded (convexHull 实数 s) ↔ TotallyBounded s where
+  结论: 全有界 (convexHull 实数 s) ↔ 全有界 s where
   证明: .subset subset_convexHull ..
   mpr := .convexHull
 -/

@@ -71,7 +71,7 @@ instance AbsConvexOpenSets.instCoeOut
 
 中文:
 实例 AbsConvexOpenSets.instCoeOut
-  签名: : CoeOut (AbsConvexOpenSets 𝕜 E) (Set E)
+  签名: : CoeOut (AbsConvexOpenSets 𝕜 E) (集合 E)
   定义体: ⟨Subtype.val⟩
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -95,7 +95,7 @@ theorem coe_zero_mem
 中文:
 定理 coe_zero_mem
   条件: (s : AbsConvexOpenSets 𝕜 E)
-  结论: (0 : E) in (s : Set E)
+  结论: (0 : E) in (s : 集合 E)
   证明: s.2.1
 -/
 theorem coe_zero_mem (s : AbsConvexOpenSets 𝕜 E) : (0 : E) in (s : Set E) :=
@@ -113,7 +113,7 @@ theorem coe_isOpen
 中文:
 定理 coe_isOpen
   条件: (s : AbsConvexOpenSets 𝕜 E)
-  结论: IsOpen (s : Set E)
+  结论: 是开集 (s : 集合 E)
   证明: s.2.2.1
 -/
 theorem coe_isOpen (s : AbsConvexOpenSets 𝕜 E) : IsOpen (s : Set E) :=
@@ -131,7 +131,7 @@ theorem coe_nhds
 中文:
 定理 coe_nhds
   条件: (s : AbsConvexOpenSets 𝕜 E)
-  结论: (s : Set E) in 𝓝 (0 : E)
+  结论: (s : 集合 E) in 𝓝 (0 : E)
   证明: s.coe_isOpen.mem_nhds s.coe_zero_mem
 
 Depends on / 依赖: coe_isOpen, coe_zero_mem, mem_nhds, s.coe_isOpen.mem_nhds, s.coe_zero_mem
@@ -151,7 +151,7 @@ theorem coe_balanced
 中文:
 定理 coe_balanced
   条件: (s : AbsConvexOpenSets 𝕜 E)
-  结论: Balanced 𝕜 (s : Set E)
+  结论: Balanced 𝕜 (s : 集合 E)
   证明: s.2.2.2.1
 -/
 theorem coe_balanced (s : AbsConvexOpenSets 𝕜 E) : Balanced 𝕜 (s : Set E) :=
@@ -169,7 +169,7 @@ theorem coe_convex
 中文:
 定理 coe_convex
   条件: (s : AbsConvexOpenSets 𝕜 E)
-  结论: Convex 𝕜 (s : Set E)
+  结论: 凸 𝕜 (s : 集合 E)
   证明: s.2.2.2.2
 -/
 theorem coe_convex (s : AbsConvexOpenSets 𝕜 E) : Convex 𝕜 (s : Set E) :=
@@ -191,7 +191,7 @@ instance AbsConvexOpenSets.instNonempty
 
 中文:
 实例 AbsConvexOpenSets.instNonempty
-  签名: : Nonempty (AbsConvexOpenSets 𝕜 E)
+  签名: : 非空 (AbsConvexOpenSets 𝕜 E)
   定义体: by
   rw [← exists_true_iff_nonempty]
   dsimp only [AbsConvexOpenSets]
@@ -327,8 +327,8 @@ instance LocallyConvexSpace.toPolynormableSpace
   body: with_gaugeSeminormFamily.toPolynormableSpace
 
 中文:
-实例 LocallyConvexSpace.toPolynormableSpace
-  签名: : PolynormableSpace 𝕜 E
+实例 LocallyConvex空间.toPolynormableSpace
+  签名: : Polynormable空间 𝕜 E
   定义体: with_gaugeSeminormFamily.toPolynormableSpace
 
 Depends on / 依赖: toPolynormableSpace, with_gaugeSeminormFamily, with_gaugeSeminormFamily.toPolynormableSpace

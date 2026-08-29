@@ -36,7 +36,7 @@ deriving instance ToExpr for Syntax
 
 中文:
 实例 [ToLevel.{u}]
-  签名: : ToExpr PUnit.{u+1} where
+  签名: : ToExpr 命题单元.{u+1} where
   定义体: mkConst ``PUnit.unit [toLevel.{u+1}]
   toTypeExpr := mkConst ``PUnit [toLevel.{u+1}]
 

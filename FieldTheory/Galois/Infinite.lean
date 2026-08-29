@@ -77,7 +77,7 @@ lemma fixingSubgroup_isClosed
 
 中文:
 引理 fixingSubgroup_isClosed
-  条件: (L : 整数ermediateField k K) [IsGalois k K]
+  条件: (L : 中间域 k K) [是Galois k K]
   证明: isOpen_iff_mem_nhds.mpr fun σ h => by
     apply mem_nhds_iff.mpr
     rcases Set.not_subset.mp ((mem_fixingSubgroup_iff Gal(K/k)).not.mp h) with ⟨y, yL, ne⟩
@@ -125,7 +125,7 @@ lemma fixedField_fixingSubgroup
 
 中文:
 引理 fixedField_fixingSubgroup
-  条件: (L : 整数ermediateField k K) [IsGalois k K]
+  条件: (L : 中间域 k K) [是Galois k K]
   证明: by
   apply le_antisymm
   · intro x hx
@@ -168,7 +168,7 @@ lemma fixedField_bot
 
 中文:
 引理 fixedField_bot
-  条件: [IsGalois k K]
+  条件: [是Galois k K]
   证明: by
   rw [← IntermediateField.fixingSubgroup_bot]; rw [fixedField_fixingSubgroup]
 
@@ -189,7 +189,7 @@ theorem mem_bot_iff_fixed
 
 中文:
 定理 mem_bot_iff_fixed
-  条件: [IsGalois k K] (x : K)
+  条件: [是Galois k K] (x : K)
   证明: by
   simp [← fixedField_bot, IntermediateField.mem_fixedField_iff]
 
@@ -209,7 +209,7 @@ theorem mem_range_algebraMap_iff_fixed
 
 中文:
 定理 mem_range_algebraMap_iff_fixed
-  条件: [IsGalois k K] (x : K)
+  条件: [是Galois k K] (x : K)
   证明: mem_bot_iff_fixed x
 
 Depends on / 依赖: mem_bot_iff_fixed
@@ -239,7 +239,7 @@ lemma restrict_fixedField
 
 中文:
 引理 restrict_fixedField
-  条件: (H : Subgroup Gal(K/k)) (L : 整数ermediateField k K) [Normal k L]
+  条件: (H : 子群 Gal(K/k)) (L : 中间域 k K) [正规 k L]
   证明: by
   apply SetLike.ext'
   ext x
@@ -296,7 +296,7 @@ lemma fixingSubgroup_fixedField
 
 中文:
 引理 fixingSubgroup_fixedField
-  条件: (H : ClosedSubgroup Gal(K/k)) [IsGalois k K]
+  条件: (H : 闭子群 Gal(K/k)) [是Galois k K]
   证明: by
   apply le_antisymm _ ((IntermediateField.le_iff_le H.toSubgroup
     (IntermediateField.fixedField H.toSubgroup)).mp le_rfl)
@@ -373,8 +373,8 @@ definition IntermediateFieldEquivClosedSubgroup
     rw [← fixedField_fixingSubgroup L]; rw [IntermediateField.le_i
 
 中文:
-定义 IntermediateFieldEquivClosedSubgroup
-  签名: [IsGalois k K]
+定义 整数ermediateFieldEquivClosedSubgroup
+  签名: [是Galois k K]
   定义体: ⟨L.fixingSubgroup, fixingSubgroup_isClosed L⟩
   invFun H := IntermediateField.fixedField H.1
   left_inv L := fixedField_fixingSubgroup L
@@ -407,8 +407,8 @@ definition GaloisInsertionIntermediateFieldClosedSubgroup
   body: OrderIso.toGaloisInsertion IntermediateFieldEquivClosedSubgroup
 
 中文:
-定义 GaloisInsertionIntermediateFieldClosedSubgroup
-  签名: [IsGalois k K]
+定义 GaloisInsertion整数ermediateFieldClosedSubgroup
+  签名: [是Galois k K]
   定义体: OrderIso.toGaloisInsertion IntermediateFieldEquivClosedSubgroup
 
 Depends on / 依赖: IntermediateFieldEquivClosedSubgroup, OrderIso, OrderIso.toGaloisInsertion, toGaloisInsertion
@@ -432,8 +432,8 @@ definition GaloisCoinsertionIntermediateFieldSubgroup
   choice_eq _ _ := rfl
 
 中文:
-定义 GaloisCoinsertionIntermediateFieldSubgroup
-  签名: [IsGalois k K]
+定义 GaloisCoinsertion整数ermediateFieldSubgroup
+  签名: [是Galois k K]
   定义体: IntermediateField.fixedField H
   gc E H := (IntermediateField.le_iff_le H E).symm
   u_l_le K := le_of_eq (fixedField_fixingSubgroup K)
@@ -461,7 +461,7 @@ definition normalAutEquivQuotient
 
 中文:
 定义 normalAutEquivQuotient
-  签名: [IsGalois k K]
+  签名: [是Galois k K]
   定义体: QuotientGroup.liftEquiv _ (restrictNormalHom_surjective K)
     ((fixingSubgroup_fixedField H).symm.trans (fixedField H.1).restrictNormalHom_ker.symm)
 
@@ -484,7 +484,7 @@ lemma normalAutEquivQuotient_apply
 
 中文:
 引理 normalAutEquivQuotient_apply
-  结论: [IsGalois k K]
+  结论: [是Galois k K]
   证明: rfl
 -/
 lemma normalAutEquivQuotient_apply [IsGalois k K]
@@ -509,7 +509,7 @@ theorem isOpen_iff_finite
 
 中文:
 定理 isOpen_iff_finite
-  条件: (L : 整数ermediateField k K) [IsGalois k K]
+  条件: (L : 中间域 k K) [是Galois k K]
   证明: by
   refine ⟨fun h => ?_, fun h => IntermediateField.fixingSubgroup_isOpen L⟩
   have : (IntermediateFieldEquivClosedSubgroup.toFun L).carrier in nhds 1 :=
@@ -556,7 +556,7 @@ IntermediateField.fixedField g x.1
 
 中文:
 定理 normal_iff_isGalois
-  条件: (L : 整数ermediateField k K) [IsGalois k K]
+  条件: (L : 中间域 k K) [是Galois k K]
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · let g (x : K) := L.fixingSubgroup.map (restrictNormalHom (adjoin k {x}))
@@ -605,7 +605,7 @@ theorem isOpen_and_normal_iff_finite_and_isGalois
 
 中文:
 定理 isOpen_and_normal_iff_finite_and_isGalois
-  条件: (L : 整数ermediateField k K) [IsGalois k K]
+  条件: (L : 中间域 k K) [是Galois k K]
   证明: by
   rw [isOpen_iff_finite]; rw [normal_iff_isGalois]
 

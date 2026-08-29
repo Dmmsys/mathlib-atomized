@@ -56,9 +56,9 @@ theorem Rat.RingOfIntegers.isUnit_iff
     Subtype.coe_injective.eq_iff]; rfl
 
 中文:
-定理 Rat.RingOfIntegers.isUnit_iff
-  条件: {x : 𝓞 Rat}
-  结论: IsUnit x ↔ (x : Rat) = 1 ∨ (x : Rat) = -1
+定理 有理数.RingOf整数egers.isUnit_iff
+  条件: {x : 𝓞 有理数}
+  结论: 是单位 x ↔ (x : 有理数) = 1 ∨ (x : 有理数) = -1
   证明: by
   simp_rw [(isUnit_map_iff (Rat.ringOfIntegersEquiv : 𝓞 Rat ->+* Int) x).symm, Int.isUnit_iff,
     RingEquiv.coe_toRingHom, RingEquiv.map_eq_one_iff, RingEquiv.map_eq_neg_one_iff, ←
@@ -90,8 +90,8 @@ theorem NumberField.isUnit_iff_norm
   rw [← abs_one]; rw [abs_eq_abs]; rw [← Rat.RingOfIntegers.isUnit_iff]
 
 中文:
-定理 NumberField.isUnit_iff_norm
-  条件: [NumberField K] {x : 𝓞 K}
+定理 数域.isUnit_iff_norm
+  条件: [数域 K] {x : 𝓞 K}
   证明: by
   convert! (RingOfIntegers.isUnit_norm Rat (F := K)).symm
   rw [← abs_one]; rw [abs_eq_abs]; rw [← Rat.RingOfIntegers.isUnit_iff]
@@ -137,7 +137,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : (𝓞 K)ˣ -> K)
+  结论: 函数.单射 ((↑) : (𝓞 K)ˣ -> K)
   证明: RingOfIntegers.coe_injective.comp Units.val_injective
 
 Depends on / 依赖: RingOfIntegers, RingOfIntegers.coe_injective.comp, Units.val_injective, coe_injective, val_injective
@@ -174,7 +174,7 @@ theorem _root_.IsPrimitiveRoot.coe_coe_iff
     (f := (algebraMap (𝓞 K) K).toMonoidHom.comp (Units.coeHom (𝓞 K))) (coe_injective K)
 
 中文:
-定理 _root_.IsPrimitiveRoot.coe_coe_iff
+定理 _root_.是PrimitiveRoot.coe_coe_iff
   条件: {ν : (𝓞 K)ˣ} {n : 自然数}
   证明: IsPrimitiveRoot.map_iff_of_injective
     (f := (algebraMap (𝓞 K) K).toMonoidHom.comp (Units.coeHom (𝓞 K))) (coe_injective K)
@@ -316,7 +316,7 @@ definition complexEmbedding
 
 中文:
 定义 complexEmbedding
-  签名: (φ : K ->+* Complex)
+  签名: (φ : K ->+* 复形)
   定义体: (map φ).comp (map (algebraMap (𝓞 K) K).toMonoidHom)
 
 @[simp]
@@ -335,7 +335,7 @@ theorem complexEmbedding_apply
 
 中文:
 定理 complexEmbedding_apply
-  条件: (φ : K ->+* Complex) (u : (𝓞 K)ˣ)
+  条件: (φ : K ->+* 复形) (u : (𝓞 K)ˣ)
   证明: rfl
 -/
 protected theorem complexEmbedding_apply (φ : K ->+* Complex) (u : (𝓞 K)ˣ) :
@@ -353,7 +353,7 @@ theorem complexEmbedding_injective
 
 中文:
 定理 complexEmbedding_injective
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   证明: (map_injective φ.injective).comp (map_injective RingOfIntegers.coe_injective)
 
 @[simp]
@@ -373,7 +373,7 @@ theorem complexEmbedding_inj
 
 中文:
 定理 complexEmbedding_inj
-  条件: (φ : K ->+* Complex) (u v : (𝓞 K)ˣ)
+  条件: (φ : K ->+* 复形) (u v : (𝓞 K)ˣ)
   证明: (Units.complexEmbedding_injective φ).eq_iff
 -/
 protected theorem complexEmbedding_inj (φ : K ->+* Complex) (u v : (𝓞 K)ˣ) :
@@ -396,7 +396,7 @@ theorem norm
 
 中文:
 定理 norm
-  条件: [NumberField K] (x : (𝓞 K)ˣ)
+  条件: [数域 K] (x : (𝓞 K)ˣ)
   证明: by
   rw [← RingOfIntegers.coe_norm]; rw [isUnit_iff_norm.mp x.isUnit]
 -/
@@ -436,7 +436,7 @@ theorem sum_mult_mul_log
 
 中文:
 定理 sum_mult_mul_log
-  条件: [NumberField K] (x : (𝓞 K)ˣ)
+  条件: [数域 K] (x : (𝓞 K)ˣ)
   证明: by
   simpa [Units.norm, Real.log_prod, Real.log_pow] using
     congr_arg Real.log (prod_eq_abs_norm (x : K))
@@ -460,7 +460,7 @@ definition torsion
 
 中文:
 定义 torsion
-  签名: : Subgroup (𝓞 K)ˣ
+  签名: : 子群 (𝓞 K)ˣ
   定义体: CommGroup.torsion (𝓞 K)ˣ
 
 Depends on / 依赖: CommGroup, CommGroup.torsion, torsion
@@ -477,7 +477,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (torsion K)
+  签名: 非空 (torsion K)
   定义体: One.instNonempty
 
 Depends on / 依赖: One.instNonempty, instNonempty
@@ -535,7 +535,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (torsion K)
+  签名: 有限 (torsion K)
   定义体: by
   refine Set.Finite.of_finite_image ?_ (coe_injective K).injOn
   refine (Embeddings.finite_of_norm_le K Complex 1).subset
@@ -566,7 +566,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCyclic (torsion K)
+  签名: 是循环 (torsion K)
   定义体: isCyclic_subgroup_units _
 
 Depends on / 依赖: isCyclic_subgroup_units
@@ -738,7 +738,7 @@ theorem map_complexEmbedding_torsion
 
 中文:
 定理 map_complexEmbedding_torsion
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   证明: by
   apply Subgroup.eq_of_le_of_card_ge
   · rw [← rootsOfUnity_eq_torsion]
@@ -842,7 +842,7 @@ theorem torsionOrder_eq_two_of_odd_finrank
 
 中文:
 定理 torsionOrder_eq_two_of_odd_finrank
-  条件: (h : Odd (Module.finrank Rat K))
+  条件: (h : Odd (模.finrank 有理数 K))
   证明: by
   classical
   let := Fintype.ofFinite (torsion K)

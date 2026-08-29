@@ -96,8 +96,8 @@ theorem fourierMultiplierCLM_ofReal
   exact smulLeftCLM_ofReal 𝕜 hg (𝓕 f)
 
 中文:
-定理 fourierMultiplierCLM_ofReal
-  条件: {g : E -> 实数} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F))
+定理 fourierMultiplierCLM_of实数
+  条件: {g : E -> 实数} (hg : g.有TemperateGrowth) (f : 𝓢(E, F))
   证明: by
   simp_rw [fourierMultiplierCLM_apply]
   congr 1
@@ -122,7 +122,7 @@ theorem fourierMultiplierCLM_smul
 
 中文:
 定理 fourierMultiplierCLM_smul
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth) (c : 𝕜)
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth) (c : 𝕜)
   证明: by
   ext1 f
   simp [fourierMultiplierCLM_apply, smulLeftCLM_smul hg]
@@ -147,7 +147,7 @@ theorem fourierMultiplierCLM_sum
 
 中文:
 定理 fourierMultiplierCLM_sum
-  结论: {g : ι -> E -> 𝕜} {s : Finset ι}
+  结论: {g : ι -> E -> 𝕜} {s : 有限集 ι}
   证明: by
   ext1 f
   simp [fourierMultiplierCLM_apply, smulLeftCLM_sum hg]
@@ -333,7 +333,7 @@ definition fourierMultiplierCLM
 
 中文:
 定义 fourierMultiplierCLM
-  签名: (g : E -> Complex)
+  签名: (g : E -> 复形)
   定义体: fourierInvCLM Complex 𝓢'(E, F) ∘L (smulLeftCLM F g) ∘L fourierCLM Complex 𝓢'(E, F)
 
 Depends on / 依赖: fourierCLM, fourierInvCLM, smulLeftCLM
@@ -354,7 +354,7 @@ theorem fourierMultiplierCLM_apply
 
 中文:
 定理 fourierMultiplierCLM_apply
-  条件: (g : E -> Complex) (f : 𝓢'(E, F))
+  条件: (g : E -> 复形) (f : 𝓢'(E, F))
   证明: by
   rfl
 
@@ -378,7 +378,7 @@ theorem fourierMultiplierCLM_apply_apply
 
 中文:
 定理 fourierMultiplierCLM_apply_apply
-  条件: (g : E -> Complex) (f : 𝓢'(E, F)) (u : 𝓢(E, Complex))
+  条件: (g : E -> 复形) (f : 𝓢'(E, F)) (u : 𝓢(E, 复形))
   证明: by
   rfl
 
@@ -401,7 +401,7 @@ theorem fourierMultiplierCLM_const
 
 中文:
 定理 fourierMultiplierCLM_const
-  条件: (c : Complex)
+  条件: (c : 复形)
   证明: by
   ext
   simp
@@ -422,7 +422,7 @@ theorem fourierMultiplierCLM_fourierMultiplierCLM_apply
 
 中文:
 定理 fourierMultiplierCLM_fourierMultiplierCLM_apply
-  结论: {g₁ g₂ : E -> Complex}
+  结论: {g₁ g₂ : E -> 复形}
   证明: by
   simp [fourierMultiplierCLM_apply, smulLeftCLM_smulLeftCLM_apply hg₁ hg₂]
 
@@ -446,7 +446,7 @@ theorem fourierMultiplierCLM_compL_fourierMultiplierCLM
 
 中文:
 定理 fourierMultiplierCLM_compL_fourierMultiplierCLM
-  结论: {g₁ g₂ : E -> Complex}
+  结论: {g₁ g₂ : E -> 复形}
   证明: by
   ext1 f
   simp [fourierMultiplierCLM_fourierMultiplierCLM_apply hg₁ hg₂]
@@ -472,7 +472,7 @@ theorem fourierMultiplierCLM_smul
 
 中文:
 定理 fourierMultiplierCLM_smul
-  条件: {g : E -> Complex} (hg : g.HasTemperateGrowth) (c : Complex)
+  条件: {g : E -> 复形} (hg : g.有TemperateGrowth) (c : 复形)
   证明: by
   ext1 f
   simp [fourierMultiplierCLM_apply, smulLeftCLM_smul hg]
@@ -497,7 +497,7 @@ theorem fourierMultiplierCLM_sum
 
 中文:
 定理 fourierMultiplierCLM_sum
-  结论: {g : ι -> E -> Complex} {s : Finset ι}
+  结论: {g : ι -> E -> 复形} {s : 有限集 ι}
   证明: by
   ext f u
   simp [SchwartzMap.smulLeftCLM_sum hg]
@@ -527,7 +527,7 @@ theorem fourierMultiplierCLM_toTemperedDistributionCLM_eq
 
 中文:
 定理 fourierMultiplierCLM_toTemperedDistributionCLM_eq
-  结论: {g : E -> Complex}
+  结论: {g : E -> 复形}
   证明: by
   ext u
   simp [SchwartzMap.integral_fourier_smul_eq, SchwartzMap.fourierMultiplierCLM_apply g f,

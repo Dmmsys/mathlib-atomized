@@ -33,7 +33,7 @@ instance addZeroClass'
 
 中文:
 实例 addZeroClass'
-  签名: {β} [AddZeroClass β]
+  签名: {β} [加法零类 β]
   定义体: @DFinsupp.addZeroClass α (fun _ => β) _
 
 Depends on / 依赖: DFinsupp, DFinsupp.addZeroClass, addZeroClass
@@ -214,7 +214,7 @@ theorem toDFinsupp_singleton
 中文:
 定理 toDFinsupp_singleton
   条件: (a : α)
-  结论: toDFinsupp {a} = DFinsupp.single a 1
+  结论: toDFinsupp {a} = 直和有限支撑.single a 1
   证明: by
   rw [← replicate_one]; rw [toDFinsupp_replicate]
 
@@ -260,7 +260,7 @@ theorem toDFinsupp_toMultiset
 中文:
 定理 toDFinsupp_toMultiset
   条件: (s : Multiset α)
-  结论: DFinsupp.toMultiset (Multiset.toDFinsupp s) = s
+  结论: 直和有限支撑.toMultiset (Multiset.toDFinsupp s) = s
   证明: equivDFinsupp.symm_apply_apply s
 
 Depends on / 依赖: equivDFinsupp, equivDFinsupp.symm_apply_apply, symm_apply_apply
@@ -280,7 +280,7 @@ theorem toDFinsupp_injective
 
 中文:
 定理 toDFinsupp_injective
-  结论: Injective (toDFinsupp : Multiset α -> Π₀ _a, 自然数)
+  结论: 单射 (toDFinsupp : Multiset α -> Π₀ _a, 自然数)
   证明: equivDFinsupp.injective
 
 @[simp]
@@ -446,7 +446,7 @@ theorem toMultiset_injective
 
 中文:
 定理 toMultiset_injective
-  结论: Injective (toMultiset : (Π₀ _a, 自然数) -> Multiset α)
+  结论: 单射 (toMultiset : (Π₀ _a, 自然数) -> Multiset α)
   证明: Multiset.equivDFinsupp.symm.injective
 
 @[simp]

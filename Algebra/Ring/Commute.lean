@@ -88,7 +88,7 @@ theorem mul_self_sub_mul_self_eq
 
 中文:
 定理 mul_self_sub_mul_self_eq
-  条件: [NonUnitalNonAssocRing R] {a b : R} (h : Commute a b)
+  条件: [非幺非结合环 R] {a b : R} (h : Commute a b)
   证明: by
   rw [add_mul]; rw [mul_sub]; rw [mul_sub]; rw [h.eq]; rw [sub_add_sub_cancel]
 
@@ -109,7 +109,7 @@ theorem mul_self_sub_mul_self_eq'
 
 中文:
 定理 mul_self_sub_mul_self_eq'
-  条件: [NonUnitalNonAssocRing R] {a b : R} (h : Commute a b)
+  条件: [非幺非结合环 R] {a b : R} (h : Commute a b)
   证明: by
   rw [mul_add]; rw [sub_mul]; rw [sub_mul]; rw [h.eq]; rw [sub_add_sub_cancel]
 
@@ -130,7 +130,7 @@ theorem mul_self_eq_mul_self_iff
 
 中文:
 定理 mul_self_eq_mul_self_iff
-  结论: [NonUnitalNonAssocRing R] [NoZeroDivisors R] {a b : R}
+  结论: [非幺非结合环 R] [无零因子 R] {a b : R}
   证明: by
   rw [← sub_eq_zero]; rw [h.mul_self_sub_mul_self_eq]; rw [mul_eq_zero]; rw [or_comm]; rw [sub_eq_zero]; rw [add_eq_zero_iff_eq_neg]
 
@@ -637,7 +637,7 @@ theorem mul_self_sub_mul_self
 
 中文:
 定理 mul_self_sub_mul_self
-  条件: [NonUnitalNonAssocCommRing R] (a b : R)
+  条件: [非幺非结合交换环 R] (a b : R)
   证明: (Commute.all a b).mul_self_sub_mul_self_eq
 
 Depends on / 依赖: Commute, Commute.all, mul_self_sub_mul_self_eq
@@ -658,7 +658,7 @@ theorem mul_self_sub_one
 
 中文:
 定理 mul_self_sub_one
-  条件: [NonAssocRing R] (a : R)
+  条件: [非结合环 R] (a : R)
   结论: a * a - 1 = (a + 1) * (a - 1)
   证明: by
   rw [← (Commute.one_right a).mul_self_sub_mul_self_eq]; rw [mul_one]
@@ -678,7 +678,7 @@ theorem mul_self_eq_mul_self_iff
 
 中文:
 定理 mul_self_eq_mul_self_iff
-  条件: [NonUnitalNonAssocCommRing R] [NoZeroDivisors R] {a b : R}
+  条件: [非幺非结合交换环 R] [无零因子 R] {a b : R}
   证明: (Commute.all a b).mul_self_eq_mul_self_iff
 
 Depends on / 依赖: Commute, Commute.all, mul_self_eq_mul_self_iff
@@ -698,7 +698,7 @@ theorem mul_self_eq_one_iff
 
 中文:
 定理 mul_self_eq_one_iff
-  条件: [NonAssocRing R] [NoZeroDivisors R] {a : R}
+  条件: [非结合环 R] [无零因子 R] {a : R}
   证明: by
   rw [← (Commute.one_right a).mul_self_eq_mul_self_iff]; rw [mul_one]
 
@@ -909,7 +909,7 @@ theorem inv_eq_self_iff
 
 中文:
 定理 inv_eq_self_iff
-  条件: [Ring R] [NoZeroDivisors R] (u : Rˣ)
+  条件: [环 R] [无零因子 R] (u : Rˣ)
   结论: u⁻¹ = u ↔ u = 1 ∨ u = -1
   证明: by
   rw [inv_eq_iff_mul_eq_one]

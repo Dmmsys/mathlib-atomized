@@ -42,7 +42,7 @@ mem_ball_zero_iff.2 by
 
 中文:
 实例 :
-  签名: SMul (closedBall (0 : 𝕜) 1) (ball (0 : E) r)
+  签名: 标量乘法 (closedBall (0 : 𝕜) 1) (ball (0 : E) r)
   定义体: ⟨(c : 𝕜) • ↑x,
 mem_ball_zero_iff.2 by
         simpa only [norm_smul, one_mul] using
@@ -70,7 +70,7 @@ mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
 中文:
 实例 mulActionClosedBallBall
-  签名: : MulAction (closedBall (0 : 𝕜) 1) (ball (0 : E) r) where
+  签名: : 乘法作用 (closedBall (0 : 𝕜) 1) (ball (0 : E) r) where
   定义体: Subtype.ext one_smul 𝕜 _
 mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
@@ -90,7 +90,7 @@ instance continuousSMul_closedBall_ball
 
 中文:
 实例 continuousSMul_closedBall_ball
-  签名: : ContinuousSMul (closedBall (0 : 𝕜) 1) (ball (0 : E) r)
+  签名: : 连续标量乘法 (closedBall (0 : 𝕜) 1) (ball (0 : E) r)
   定义体: ⟨Continuous.subtype_mk (by fun_prop) _⟩
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -112,7 +112,7 @@ mem_closedBall_zero_iff.2 by
 
 中文:
 实例 :
-  签名: SMul (closedBall (0 : 𝕜) 1) (closedBall (0 : E) r)
+  签名: 标量乘法 (closedBall (0 : 𝕜) 1) (closedBall (0 : E) r)
   定义体: ⟨(c : 𝕜) • ↑x,
 mem_closedBall_zero_iff.2 by
         simpa only [norm_smul, one_mul] using
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (sphere (0 : 𝕜) 1) (ball (0 : E) r)
+  签名: 标量乘法 (sphere (0 : 𝕜) 1) (ball (0 : E) r)
   定义体: inclusion sphere_subset_closedBall c • x
 
 Depends on / 依赖: inclusion, sphere_subset_closedBall
@@ -203,7 +203,7 @@ mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
 中文:
 实例 mulActionSphereBall
-  签名: : MulAction (sphere (0 : 𝕜) 1) (ball (0 : E) r) where
+  签名: : 乘法作用 (sphere (0 : 𝕜) 1) (ball (0 : E) r) where
   定义体: Subtype.ext one_smul _ _
 mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
@@ -223,7 +223,7 @@ instance continuousSMul_sphere_ball
 
 中文:
 实例 continuousSMul_sphere_ball
-  签名: : ContinuousSMul (sphere (0 : 𝕜) 1) (ball (0 : E) r)
+  签名: : 连续标量乘法 (sphere (0 : 𝕜) 1) (ball (0 : E) r)
   定义体: ⟨Continuous.subtype_mk (by fun_prop) _⟩
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (sphere (0 : 𝕜) 1) (closedBall (0 : E) r)
+  签名: 标量乘法 (sphere (0 : 𝕜) 1) (closedBall (0 : E) r)
   定义体: inclusion sphere_subset_closedBall c • x
 
 Depends on / 依赖: inclusion, sphere_subset_closedBall
@@ -260,7 +260,7 @@ mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
 中文:
 实例 mulActionSphereClosedBall
-  签名: : MulAction (sphere (0 : 𝕜) 1) (closedBall (0 : E) r) where
+  签名: : 乘法作用 (sphere (0 : 𝕜) 1) (closedBall (0 : E) r) where
   定义体: Subtype.ext one_smul _ _
 mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
@@ -301,7 +301,7 @@ mem_sphere_zero_iff_norm.2 by
 
 中文:
 实例 :
-  签名: SMul (sphere (0 : 𝕜) 1) (sphere (0 : E) r)
+  签名: 标量乘法 (sphere (0 : 𝕜) 1) (sphere (0 : E) r)
   定义体: ⟨(c : 𝕜) • ↑x,
 mem_sphere_zero_iff_norm.2 by
         rw [norm_smul]; rw [mem_sphere_zero_iff_norm.1 c.coe_prop]; rw [mem_sphere_zero_iff_norm.1 x.coe_prop]; rw [one_mul]⟩
@@ -325,7 +325,7 @@ mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
 中文:
 实例 mulActionSphereSphere
-  签名: : MulAction (sphere (0 : 𝕜) 1) (sphere (0 : E) r) where
+  签名: : 乘法作用 (sphere (0 : 𝕜) 1) (sphere (0 : E) r) where
   定义体: Subtype.ext one_smul _ _
 mul_smul _ _ _ := Subtype.ext mul_smul _ _ _
 
@@ -345,7 +345,7 @@ instance continuousSMul_sphere_sphere
 
 中文:
 实例 continuousSMul_sphere_sphere
-  签名: : ContinuousSMul (sphere (0 : 𝕜) 1) (sphere (0 : E) r)
+  签名: : 连续标量乘法 (sphere (0 : 𝕜) 1) (sphere (0 : E) r)
   定义体: ⟨Continuous.subtype_mk (by fun_prop) _⟩
 
 Depends on / 依赖: Continuous, Continuous.subtype_mk, fun_prop, subtype_mk
@@ -622,7 +622,7 @@ instance instSMulCommClass_sphere_ball_ball
 
 中文:
 实例 instSMulCommClass_sphere_ball_ball
-  签名: [NormedAlgebra 𝕜 𝕜']
+  签名: [赋范代数 𝕜 𝕜']
   定义体: ⟨fun a b c => Subtype.ext smul_comm (a : 𝕜) (b : 𝕜') (c : 𝕜')⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm

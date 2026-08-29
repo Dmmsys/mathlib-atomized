@@ -138,7 +138,7 @@ definition pprodEquivProdPLift
 
 中文:
 定义 pprodEquivProdPLift
-  签名: : PProd α β ≃ PLift α × PLift β
+  签名: : 命题积类型 α β ≃ 命题层提升 α × 命题层提升 β
   定义体: Equiv.plift.symm.pprodProd Equiv.plift.symm
 
 Depends on / 依赖: Equiv.plift.symm, Equiv.plift.symm.pprodProd, pprodProd
@@ -229,7 +229,7 @@ theorem coe_prodComm
 中文:
 定理 coe_prodComm
   条件: (α β)
-  结论: (⇑(prodComm α β) : α × β -> β × α) = Prod.swap
+  结论: (⇑(prodComm α β) : α × β -> β × α) = 积类型.swap
   证明: rfl
 
 @[simp, grind =]
@@ -454,7 +454,7 @@ definition prodUnique
 
 中文:
 定义 prodUnique
-  签名: (α β) [Unique β]
+  签名: (α β) [唯一 β]
   定义体: ((Equiv.refl α).prodCongr <| equivPUnit.{_, 1} β).trans prodPUnit α
 
 @[simp]
@@ -476,8 +476,8 @@ theorem coe_prodUnique
 
 中文:
 定理 coe_prodUnique
-  条件: {α β} [Unique β]
-  结论: (⇑(prodUnique α β) : α × β -> α) = Prod.fst
+  条件: {α β} [唯一 β]
+  结论: (⇑(prodUnique α β) : α × β -> α) = 积类型.fst
   证明: rfl
 -/
 theorem coe_prodUnique {α β} [Unique β] : (⇑(prodUnique α β) : α × β -> α) = Prod.fst :=
@@ -496,7 +496,7 @@ theorem prodUnique_apply
 
 中文:
 定理 prodUnique_apply
-  条件: {α β} [Unique β] (x : α × β)
+  条件: {α β} [唯一 β] (x : α × β)
   结论: prodUnique α β x = x.1
   证明: rfl
 
@@ -517,7 +517,7 @@ theorem prodUnique_symm_apply
 
 中文:
 定理 prodUnique_symm_apply
-  条件: {α β} [Unique β] (x : α)
+  条件: {α β} [唯一 β] (x : α)
   结论: (prodUnique α β).symm x = (x, default)
   证明: rfl
 -/
@@ -536,7 +536,7 @@ definition uniqueProd
 
 中文:
 定义 uniqueProd
-  签名: (α β) [Unique β]
+  签名: (α β) [唯一 β]
   定义体: ((equivPUnit.{_, 1} β).prodCongr <| Equiv.refl α).trans punitProd α
 
 @[simp]
@@ -558,8 +558,8 @@ theorem coe_uniqueProd
 
 中文:
 定理 coe_uniqueProd
-  条件: {α β} [Unique β]
-  结论: (⇑(uniqueProd α β) : β × α -> α) = Prod.snd
+  条件: {α β} [唯一 β]
+  结论: (⇑(uniqueProd α β) : β × α -> α) = 积类型.snd
   证明: rfl
 -/
 theorem coe_uniqueProd {α β} [Unique β] : (⇑(uniqueProd α β) : β × α -> α) = Prod.snd :=
@@ -578,7 +578,7 @@ theorem uniqueProd_apply
 
 中文:
 定理 uniqueProd_apply
-  条件: {α β} [Unique β] (x : β × α)
+  条件: {α β} [唯一 β] (x : β × α)
   结论: uniqueProd α β x = x.2
   证明: rfl
 
@@ -598,7 +598,7 @@ theorem uniqueProd_symm_apply
 
 中文:
 定理 uniqueProd_symm_apply
-  条件: {α β} [Unique β] (x : α)
+  条件: {α β} [唯一 β] (x : α)
   证明: rfl
 -/
 theorem uniqueProd_symm_apply {α β} [Unique β] (x : α) :
@@ -617,7 +617,7 @@ definition sigmaUnique
 
 中文:
 定义 sigmaUnique
-  签名: (α) (β : α -> 类型) [对任意 a, Unique (β a)]
+  签名: (α) (β : α -> 类型) [对任意 a, 唯一 (β a)]
   定义体: (Equiv.sigmaCongrRight fun a => equivPUnit.{_, 1} (β a)).trans sigmaPUnit α
 
 @[simp]
@@ -638,7 +638,7 @@ theorem coe_sigmaUnique
 
 中文:
 定理 coe_sigmaUnique
-  条件: {α} {β : α -> 类型} [对任意 a, Unique (β a)]
+  条件: {α} {β : α -> 类型} [对任意 a, 唯一 (β a)]
   证明: rfl
 -/
 theorem coe_sigmaUnique {α} {β : α -> Type*} [forall a, Unique (β a)] :
@@ -657,7 +657,7 @@ theorem sigmaUnique_apply
 
 中文:
 定理 sigmaUnique_apply
-  条件: {α} {β : α -> 类型} [对任意 a, Unique (β a)] (x : (a : α) × β a)
+  条件: {α} {β : α -> 类型} [对任意 a, 唯一 (β a)] (x : (a : α) × β a)
   证明: rfl
 
 @[simp]
@@ -677,7 +677,7 @@ theorem sigmaUnique_symm_apply
 
 中文:
 定理 sigmaUnique_symm_apply
-  条件: {α} {β : α -> 类型} [对任意 a, Unique (β a)] (x : α)
+  条件: {α} {β : α -> 类型} [对任意 a, 唯一 (β a)] (x : α)
   证明: rfl
 -/
 theorem sigmaUnique_symm_apply {α} {β : α -> Type*} [forall a, Unique (β a)] (x : α) :
@@ -696,7 +696,7 @@ definition uniqueSigma
 
 中文:
 定义 uniqueSigma
-  签名: {α} (β : α -> 类型) [Unique α]
+  签名: {α} (β : α -> 类型) [唯一 α]
   定义体: fun p => (Unique.eq_default _).rec p.2
   invFun := fun b => ⟨default, b⟩
   left_inv := fun _ => Sigma.ext (Unique.default_eq _) (eqRec_heq _ _)
@@ -720,7 +720,7 @@ theorem uniqueSigma_apply
 
 中文:
 定理 uniqueSigma_apply
-  条件: {α} {β : α -> 类型} [Unique α] (x : (a : α) × β a)
+  条件: {α} {β : α -> 类型} [唯一 α] (x : (a : α) × β a)
   证明: rfl
 
 @[simp]
@@ -740,7 +740,7 @@ theorem uniqueSigma_symm_apply
 
 中文:
 定理 uniqueSigma_symm_apply
-  条件: {α} {β : α -> 类型} [Unique α] (y : β default)
+  条件: {α} {β : α -> 类型} [唯一 α] (y : β default)
   证明: rfl
 -/
 theorem uniqueSigma_symm_apply {α} {β : α -> Type*} [Unique α] (y : β default) :
@@ -1136,7 +1136,7 @@ definition prodExtendRight
 
 中文:
 定义 prodExtendRight
-  签名: : Perm (α₁ × β₁) where
+  签名: : 置换 (α₁ × β₁) where
   定义体: if ab.fst = a then (a, e ab.snd) else ab
   invFun ab := if ab.fst = a then (a, e.symm ab.snd) else ab
   left_inv := by grind
@@ -1206,7 +1206,7 @@ theorem eq_of_prodExtendRight_ne
 
 中文:
 定理 eq_of_prodExtendRight_ne
-  结论: {e : Perm β₁} {a a' : α₁} {b : β₁}
+  结论: {e : 置换 β₁} {a a' : α₁} {b : β₁}
   证明: by
   contrapose! h
   exact prodExtendRight_apply_ne _ h _
@@ -1785,7 +1785,7 @@ definition subsingletonProdSelfEquiv
 
 中文:
 定义 subsingletonProdSelfEquiv
-  签名: {α} [Subsingleton α]
+  签名: {α} [子单例 α]
   定义体: p.1
   invFun a := (a, a)
   left_inv _ := Subsingleton.elim _ _
@@ -1818,7 +1818,7 @@ definition optionProdEquiv
 
 中文:
 定义 optionProdEquiv
-  签名: : Option α × β ≃ β oplus α × β where
+  签名: : 选项类型 α × β ≃ β oplus α × β where
   定义体: x.1.casesOn (.inl x.2) (fun a => .inr (a, x.2))
   invFun x := x.casesOn (.mk none) (.map some id)
   left_inv

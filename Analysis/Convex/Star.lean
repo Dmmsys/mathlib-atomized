@@ -77,7 +77,7 @@ definition StarConvex
 
 中文:
 定义 StarConvex
-  签名: (𝕜 : 类型) {E : 类型} [Semiring 𝕜] [PartialOrder 𝕜]
+  签名: (𝕜 : 类型) {E : 类型} [半环 𝕜] [偏序 𝕜]
   定义体: forall ⦃y : E⦄, y in s -> forall ⦃a b : 𝕜⦄, 0 <= a -> 0 <= b -> a + b = 1 -> a • x + b • y in s
 -/
 def StarConvex (𝕜 : Type*) {E : Type*} [Semiring 𝕜] [PartialOrder 𝕜]
@@ -251,8 +251,8 @@ theorem starConvex_sInter
   proof: fun _ hy _ _ ha hb hab s hs => h s hs (hy s hs) ha hb hab
 
 中文:
-定理 starConvex_sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, StarConvex 𝕜 x s)
+定理 starConvex_s整数er
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, StarConvex 𝕜 x s)
   证明: fun _ hy _ _ ha hb hab s hs => h s hs (hy s hs) ha hb hab
 -/
 theorem starConvex_sInter {S : Set (Set E)} (h : forall s in S, StarConvex 𝕜 x s) :
@@ -267,8 +267,8 @@ theorem starConvex_iInter
   proof: sInter_range s ▸ starConvex_sInter forall_mem_range.2 h
 
 中文:
-定理 starConvex_iInter
-  条件: {ι : Sort*} {s : ι -> Set E} (h : 对任意 i, StarConvex 𝕜 x (s i))
+定理 starConvex_i整数er
+  条件: {ι : 类型层*} {s : ι -> 集合 E} (h : 对任意 i, StarConvex 𝕜 x (s i))
   证明: sInter_range s ▸ starConvex_sInter forall_mem_range.2 h
 
 Depends on / 依赖: forall_mem_range, sInter_range, starConvex_sInter
@@ -286,8 +286,8 @@ theorem starConvex_iInter₂
   proof: starConvex_iInter fun i => starConvex_iInter (h i)
 
 中文:
-定理 starConvex_iInter₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {s : (i : ι) -> κ i -> Set E}
+定理 starConvex_i整数er₂
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {s : (i : ι) -> κ i -> 集合 E}
   证明: starConvex_iInter fun i => starConvex_iInter (h i)
 
 Depends on / 依赖: starConvex_iInter
@@ -337,7 +337,7 @@ theorem starConvex_iUnion
 
 中文:
 定理 starConvex_iUnion
-  条件: {ι : Sort*} {s : ι -> Set E} (hs : 对任意 i, StarConvex 𝕜 x (s i))
+  条件: {ι : 类型层*} {s : ι -> 集合 E} (hs : 对任意 i, StarConvex 𝕜 x (s i))
   证明: by
   rintro y hy a b ha hb hab
   rw [mem_iUnion] at hy ⊢
@@ -363,7 +363,7 @@ theorem starConvex_iUnion₂
 
 中文:
 定理 starConvex_iUnion₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {s : (i : ι) -> κ i -> Set E}
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {s : (i : ι) -> κ i -> 集合 E}
   证明: starConvex_iUnion fun i => starConvex_iUnion (h i)
 
 Depends on / 依赖: starConvex_iUnion
@@ -384,7 +384,7 @@ theorem starConvex_sUnion
 
 中文:
 定理 starConvex_sUnion
-  条件: {S : Set (Set E)} (hS : 对任意 s in S, StarConvex 𝕜 x s)
+  条件: {S : 集合 (集合 E)} (hS : 对任意 s in S, StarConvex 𝕜 x s)
   证明: by
   rw [sUnion_eq_iUnion]
   exact starConvex_iUnion fun s => hS _ s.2
@@ -406,8 +406,8 @@ theorem StarConvex.prod
   ⟨hs hy.1 ha hb hab, ht hy.2 ha hb hab⟩
 
 中文:
-定理 StarConvex.prod
-  结论: {y : F} {s : Set E} {t : Set F} (hs : StarConvex 𝕜 x s)
+定理 StarConvex.乘积
+  结论: {y : F} {s : 集合 E} {t : 集合 F} (hs : StarConvex 𝕜 x s)
   证明: fun _ hy _ _ ha hb hab =>
   ⟨hs hy.1 ha hb hab, ht hy.2 ha hb hab⟩
 -/
@@ -425,7 +425,7 @@ theorem starConvex_pi
 
 中文:
 定理 starConvex_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, AddCommMonoid (E i)] [对任意 i, SMul 𝕜 (E i)]
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 加法交换幺半群 (E i)] [对任意 i, 标量乘法 𝕜 (E i)]
   证明: fun _ hy _ _ ha hb hab i hi => ht hi (hy i hi) ha hb hab
 -/
 theorem starConvex_pi {ι : Type*} {E : ι -> Type*} [forall i, AddCommMonoid (E i)] [forall i, SMul 𝕜 (E i)]
@@ -452,7 +452,7 @@ theorem StarConvex.mem
 
 中文:
 定理 StarConvex.mem
-  条件: [ZeroLEOneClass 𝕜] (hs : StarConvex 𝕜 x s) (h : s.Nonempty)
+  条件: [ZeroLEOne类 𝕜] (hs : StarConvex 𝕜 x s) (h : s.非空)
   结论: x in s
   证明: by
   obtain ⟨y, hy⟩ := h
@@ -484,7 +484,7 @@ theorem starConvex_iff_forall_pos
     rwa [hab, one_smul, zero_smul, add_zero
 
 中文:
-定理 starConvex_iff_forall_pos
+定理 starConvex_iff_对任意_pos
   条件: (hx : x in s)
   结论: StarConvex 𝕜 x s ↔
   证明: by
@@ -528,7 +528,7 @@ theorem starConvex_iff_forall_ne_pos
     rwa [hab, zero_smul, one_smul, add_
 
 中文:
-定理 starConvex_iff_forall_ne_pos
+定理 starConvex_iff_对任意_ne_pos
   条件: (hx : x in s)
   证明: by
   refine ⟨fun h y hy _ a b ha hb hab => h hy ha.le hb.le hab, ?_⟩
@@ -568,7 +568,7 @@ theorem starConvex_iff_openSegment_subset
 
 中文:
 定理 starConvex_iff_openSegment_subset
-  条件: [ZeroLEOneClass 𝕜] (hx : x in s)
+  条件: [ZeroLEOne类 𝕜] (hx : x in s)
   证明: starConvex_iff_segment_subset.trans
     forall₂_congr fun _ hy => (openSegment_subset_iff_segment_subset hx hy).symm
 
@@ -638,7 +638,7 @@ theorem StarConvex.is_linear_image
 
 中文:
 定理 StarConvex.is_linear_image
-  条件: (hs : StarConvex 𝕜 x s) {f : E -> F} (hf : IsLinearMap 𝕜 f)
+  条件: (hs : StarConvex 𝕜 x s) {f : E -> F} (hf : 是线性映射 𝕜 f)
   证明: hs.linear_image hf.mk' f
 
 Depends on / 依赖: hf.mk, hs.linear_image, linear_image
@@ -660,7 +660,7 @@ theorem StarConvex.linear_preimage
 
 中文:
 定理 StarConvex.linear_preimage
-  条件: {s : Set F} (f : E ->ₗ[𝕜] F) (hs : StarConvex 𝕜 (f x) s)
+  条件: {s : 集合 F} (f : E ->ₗ[𝕜] F) (hs : StarConvex 𝕜 (f x) s)
   证明: by
   intro y hy a b ha hb hab
   rw [mem_preimage]; rw [f.map_add]; rw [f.map_smul]; rw [f.map_smul]
@@ -684,7 +684,7 @@ theorem StarConvex.is_linear_preimage
 
 中文:
 定理 StarConvex.is_linear_preimage
-  结论: {s : Set F} {f : E -> F} (hs : StarConvex 𝕜 (f x) s)
+  结论: {s : 集合 F} {f : E -> F} (hs : StarConvex 𝕜 (f x) s)
   证明: hs.linear_preimage hf.mk' f
 
 Depends on / 依赖: hf.mk, hs.linear_preimage, linear_preimage
@@ -705,7 +705,7 @@ theorem StarConvex.add
 
 中文:
 定理 StarConvex.add
-  条件: {t : Set E} (hs : StarConvex 𝕜 x s) (ht : StarConvex 𝕜 y t)
+  条件: {t : 集合 E} (hs : StarConvex 𝕜 x s) (ht : StarConvex 𝕜 y t)
   证明: by
   rw [← add_image_prod]
   exact (hs.prod ht).is_linear_image IsLinearMap.isLinearMap_add
@@ -846,7 +846,7 @@ theorem StarConvex.sub'
 
 中文:
 定理 StarConvex.sub'
-  条件: {s : Set (E × E)} (hs : StarConvex 𝕜 (x, y) s)
+  条件: {s : 集合 (E × E)} (hs : StarConvex 𝕜 (x, y) s)
   证明: hs.is_linear_image IsLinearMap.isLinearMap_sub
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.isLinearMap_sub, hs.is_linear_image, isLinearMap_sub, is_linear_image
@@ -1099,7 +1099,7 @@ theorem StarConvex.affine_preimage
 
 中文:
 定理 StarConvex.affine_preimage
-  条件: (f : E ->ᵃ[𝕜] F) {s : Set F} (hs : StarConvex 𝕜 (f x) s)
+  条件: (f : E ->ᵃ[𝕜] F) {s : 集合 F} (hs : StarConvex 𝕜 (f x) s)
   证明: by
   intro y hy a b ha hb hab
   rw [mem_preimage]; rw [Convex.combo_affine_apply hab]
@@ -1126,7 +1126,7 @@ theorem StarConvex.affine_image
 
 中文:
 定理 StarConvex.affine_image
-  条件: (f : E ->ᵃ[𝕜] F) {s : Set E} (hs : StarConvex 𝕜 x s)
+  条件: (f : E ->ᵃ[𝕜] F) {s : 集合 E} (hs : StarConvex 𝕜 x s)
   证明: by
   rintro y ⟨y', ⟨hy', hy'f⟩⟩ a b ha hb hab
   refine ⟨a • x + b • y', ⟨hs hy' ha hb hab, ?_⟩⟩
@@ -1215,7 +1215,7 @@ lemma starConvex_compl_Iic
 中文:
 引理 starConvex_compl_Iic
   条件: (h : x < y)
-  结论: StarConvex 𝕜 y (Iic x)ᶜ
+  结论: StarConvex 𝕜 y (左无界右闭区间 x)ᶜ
   证明: by
   refine (starConvex_iff_forall_pos <| by simp [h.not_ge]).mpr fun z hz a b ha hb hab => ?_
   rw [mem_compl_iff]; rw [mem_Iic] at hz ⊢
@@ -1250,7 +1250,7 @@ lemma starConvex_compl_Ici
 中文:
 引理 starConvex_compl_Ici
   条件: (h : x < y)
-  结论: StarConvex 𝕜 x (Ici y)ᶜ
+  结论: StarConvex 𝕜 x (左闭右无界区间 y)ᶜ
   证明: starConvex_compl_Iic (E := Eᵒᵈ) h
 
 Depends on / 依赖: starConvex_compl_Iic
@@ -1370,8 +1370,8 @@ theorem Set.OrdConnected.starConvex
       _ = y := Convex.comb
 
 中文:
-定理 Set.OrdConnected.starConvex
-  结论: [Semiring 𝕜] [PartialOrder 𝕜] [AddCommMonoid E] [PartialOrder E]
+定理 集合.序连通.starConvex
+  结论: [半环 𝕜] [偏序 𝕜] [加法交换幺半群 E] [偏序 E]
   证明: by
   intro y hy a b ha hb hab
   obtain hxy | hyx := h _ hy
@@ -1418,7 +1418,7 @@ alias ⟨StarConvex.ordConnected, _⟩ := starConvex_iff_ordConnected
 
 中文:
 定理 starConvex_iff_ordConnected
-  结论: [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  结论: [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   simp_rw [ordConnected_iff_uIcc_subset_left hx, starConvex_iff_segment_subset, segment_eq_uIcc]
 

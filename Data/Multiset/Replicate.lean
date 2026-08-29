@@ -61,7 +61,7 @@ theorem coe_replicate
 中文:
 定理 coe_replicate
   条件: (n : 自然数) (a : α)
-  结论: (List.replicate n a : Multiset α) = replicate n a
+  结论: (列表.replicate n a : Multiset α) = replicate n a
   证明: rfl
 
 Depends on / 依赖: Computation, Computation.exists_of_mem_map, Or.inl, _tail, eq_or_mem_iff_mem, exists_of_mem_map, generalizing, injection, mem_of_mem_tail
@@ -257,7 +257,7 @@ theorem replicate_right_injective
 中文:
 定理 replicate_right_injective
   条件: {n : 自然数} (hn : n != 0)
-  结论: Injective (@replicate α n)
+  结论: 单射 (@replicate α n)
   证明: fun _ _ h => (eq_replicate.1 h).2 _ mem_replicate.2 ⟨hn, rfl⟩
 
 Depends on / 依赖: destruct_eq_think, eq_replicate, mem_replicate
@@ -296,7 +296,7 @@ theorem replicate_left_injective
 中文:
 定理 replicate_left_injective
   条件: (a : α)
-  结论: Injective (replicate · a)
+  结论: 单射 (replicate · a)
   证明: LeftInverse.injective (card_replicate · a)
 
 Depends on / 依赖: Computation, Computation.corec, Computation.eq_of_bisim, Computation.map, LeftInverse, LeftInverse.injective, Seq.destruct, Sum.inl, Sum.inr, card_replicate, destruct, eq_of_bisim, injective, l.reverse, reverse
@@ -335,8 +335,8 @@ theorem replicate_le_coe
 
 中文:
 定理 replicate_le_coe
-  条件: {a : α} {n} {l : List α}
-  结论: replicate n a <= l ↔ List.replicate n a <+ l
+  条件: {a : α} {n} {l : 列表 α}
+  结论: replicate n a <= l ↔ 列表.replicate n a <+ l
   证明: ⟨fun ⟨_l', p, s⟩ => perm_replicate.1 p ▸ s, Sublist.subperm⟩
 
 Depends on / 依赖: Sublist, Sublist.subperm, perm_replicate, subperm
@@ -675,7 +675,7 @@ theorem nodup_iff_pairwise
 中文:
 定理 nodup_iff_pairwise
   条件: {α} {s : Multiset α}
-  结论: Nodup s ↔ Pairwise (· != ·) s
+  结论: Nodup s ↔ 两两 (· != ·) s
   证明: Quotient.inductionOn s fun _ => pairwise_coe_iff_pairwise.symm
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn, pairwise_coe_iff_pairwise, pairwise_coe_iff_pairwise.symm
@@ -693,7 +693,7 @@ theorem Nodup.pairwise
 
 中文:
 定理 Nodup.pairwise
-  结论: (对任意 a in s, 对任意 b in s, a != b -> r a b) -> Nodup s -> Pairwise r s
+  结论: (对任意 a in s, 对任意 b in s, a != b -> r a b) -> Nodup s -> 两两 r s
   证明: Quotient.inductionOn s fun l h hl => ⟨l, rfl, hl.imp_of_mem fun {a b} ha hb => h a ha b hb⟩
 -/
 protected theorem Nodup.pairwise : (forall a in s, forall b in s, a != b -> r a b) -> Nodup s -> Pairwise r s :=

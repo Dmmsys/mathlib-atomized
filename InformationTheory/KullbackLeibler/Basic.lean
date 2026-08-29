@@ -73,7 +73,7 @@ lemma klDiv_of_ac_of_integrable
 
 中文:
 引理 klDiv_of_ac_of_integrable
-  条件: (h1 : μ ≪ ν) (h2 : 整数egrable (llr μ ν) μ)
+  条件: (h1 : μ ≪ ν) (h2 : 可积 (llr μ ν) μ)
   证明: by
   rw [klDiv_def]
   exact if_pos ⟨h1, h2⟩
@@ -133,7 +133,7 @@ lemma klDiv_of_not_integrable
 
 中文:
 引理 klDiv_of_not_integrable
-  条件: (h : ¬ 整数egrable (llr μ ν) μ)
+  条件: (h : ¬ 可积 (llr μ ν) μ)
   结论: klDiv μ ν = ∞
   证明: by
   rw [klDiv_def]
@@ -166,7 +166,7 @@ lemma klDiv_self
 
 中文:
 引理 klDiv_self
-  条件: (μ : Measure α) [SigmaFinite μ]
+  条件: (μ : 测度 α) [σ有限 μ]
   结论: klDiv μ μ = 0
   证明: by
   have h := llr_self μ
@@ -202,7 +202,7 @@ lemma klDiv_zero_left
 
 中文:
 引理 klDiv_zero_left
-  条件: [IsFiniteMeasure ν]
+  条件: [是有限测度 ν]
   结论: klDiv 0 ν = ν univ
   证明: by
   convert! klDiv_of_ac_of_integrable (Measure.AbsolutelyContinuous.zero _) integrable_zero_measure
@@ -251,7 +251,7 @@ lemma klDiv_eq_top_iff
 
 中文:
 引理 klDiv_eq_top_iff
-  结论: klDiv μ ν = ∞ ↔ μ ≪ ν -> ¬ 整数egrable (llr μ ν) μ
+  结论: klDiv μ ν = ∞ ↔ μ ≪ ν -> ¬ 可积 (llr μ ν) μ
   证明: by
   constructor <;> intro h
   · contrapose! h
@@ -277,7 +277,7 @@ lemma klDiv_ne_top_iff
 
 中文:
 引理 klDiv_ne_top_iff
-  结论: klDiv μ ν != ∞ ↔ μ ≪ ν ∧ 整数egrable (llr μ ν) μ
+  结论: klDiv μ ν != ∞ ↔ μ ≪ ν ∧ 可积 (llr μ ν) μ
   证明: by
   simp [ne_eq, klDiv_eq_top_iff]
 
@@ -297,7 +297,7 @@ lemma klDiv_ne_top
 
 中文:
 引理 klDiv_ne_top
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   结论: klDiv μ ν != ∞
   证明: klDiv_ne_top_iff.mpr ⟨hμν, h_int⟩
 
@@ -423,7 +423,7 @@ lemma integral_llr_add_sub_measure_univ_nonneg
 
 中文:
 引理 integral_llr_add_sub_measure_univ_nonneg
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   rw [← integral_klFun_rnDeriv hμν h_int]
   exact integral_nonneg fun x => klFun_nonneg ENNReal.toReal_nonneg
@@ -446,8 +446,8 @@ lemma toReal_klDiv
   exact integral_llr_add_sub_measure_univ_nonneg h h_int
 
 中文:
-引理 toReal_klDiv
-  条件: (h : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+引理 to实数_klDiv
+  条件: (h : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   rw [klDiv_of_ac_of_integrable h h_int]; rw [ENNReal.toReal_ofReal]
   exact integral_llr_add_sub_measure_univ_nonneg h h_int
@@ -471,7 +471,7 @@ lemma toReal_klDiv_of_measure_eq
   · rw [klDiv_of_not_integrable h_int, integral_undef h_int, ENNReal.toReal_top]
 
 中文:
-引理 toReal_klDiv_of_measure_eq
+引理 to实数_klDiv_of_measure_eq
   条件: (h : μ ≪ ν) (h_eq : μ univ = ν univ)
   证明: by
   by_cases h_int : Integrable (llr μ ν) μ
@@ -501,7 +501,7 @@ lemma toReal_klDiv_eq_integral_klFun
     · rwa [integrable_klF
 
 中文:
-引理 toReal_klDiv_eq_integral_klFun
+引理 to实数_klDiv_eq_integral_klFun
   条件: (h : μ ≪ ν)
   证明: by
   by_cases h_int : Integrable (llr μ ν) μ
@@ -540,8 +540,8 @@ lemma toReal_klDiv_smul_left
   simp only [integral_smul
 
 中文:
-引理 toReal_klDiv_smul_left
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ) (c : 实数>=0)
+引理 to实数_klDiv_smul_left
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ) (c : 实数>=0)
   证明: by
   by_cases hc : c = 0
   · simp [hc, measureReal_def]
@@ -587,8 +587,8 @@ lemma toReal_klDiv_smul_right_eq_smul_left
   rw [toReal_kl
 
 中文:
-引理 toReal_klDiv_smul_right_eq_smul_left
-  结论: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+引理 to实数_klDiv_smul_right_eq_smul_left
+  结论: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   by_cases hc : c = 0
   · simp only [hc, zero_smul, NNReal.coe_zero, inv_zero, klDiv_zero_left, zero_mul]
@@ -634,8 +634,8 @@ lemma toReal_klDiv_smul_right
   field_simp
 
 中文:
-引理 toReal_klDiv_smul_right
-  结论: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+引理 to实数_klDiv_smul_right
+  结论: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   rw [toReal_klDiv_smul_right_eq_smul_left hμν h_int c]; rw [toReal_klDiv_smul_left hμν h_int c⁻¹]
   simp only [NNReal.coe_inv, log_inv, mul_neg, neg_mul, ← sub_eq_add_neg]
@@ -667,8 +667,8 @@ lemma toReal_klDiv_smul_same
     fun_prop
 
 中文:
-引理 toReal_klDiv_smul_same
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ) (c : 实数>=0)
+引理 to实数_klDiv_smul_same
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ) (c : 实数>=0)
   证明: by
   by_cases hc : c = 0
   · simp [hc]
@@ -708,7 +708,7 @@ lemma klDiv_smul_right_eq_smul_left
 
 中文:
 引理 klDiv_smul_right_eq_smul_left
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν] {c : 实数>=0} (hc : c != 0)
+  条件: [是有限测度 μ] [是有限测度 ν] {c : 实数>=0} (hc : c != 0)
   证明: by
   have hc' : (c : Real>=0∞) != 0 := by simpa
   have hμ_smul : μ = c • (c⁻¹ • μ) := by rw [smul_smul, mul_inv_cancel₀ hc, one_smul]
@@ -783,7 +783,7 @@ lemma klDiv_smul_same
 
 中文:
 引理 klDiv_smul_same
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν] (c : 实数>=0)
+  条件: [是有限测度 μ] [是有限测度 ν] (c : 实数>=0)
   证明: by
   by_cases hc : c = 0
   · simp [hc]
@@ -849,7 +849,7 @@ lemma integral_llr_add_mul_log_nonneg
 
 中文:
 引理 integral_llr_add_mul_log_nonneg
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   by_cases hμ : μ = 0
   · simp [hμ]
@@ -897,8 +897,8 @@ lemma mul_klFun_le_toReal_klDiv
   _ = (klDiv μ ν).toReal := by rw [toReal_klDiv_eq
 
 中文:
-引理 mul_klFun_le_toReal_klDiv
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+引理 mul_klFun_le_to实数_klDiv
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   calc ν.real univ * klFun (μ.real univ / ν.real univ)
   _ <= ∫ x, klFun (μ.rnDeriv ν x).toReal ∂ν := by
@@ -933,8 +933,8 @@ lemma mul_log_le_toReal_klDiv
   have : ν.real univ * (μ.real univ / ν.real univ) = μ.re
 
 中文:
-引理 mul_log_le_toReal_klDiv
-  条件: (hμν : μ ≪ ν) (h_int : 整数egrable (llr μ ν) μ)
+引理 mul_log_le_to实数_klDiv
+  条件: (hμν : μ ≪ ν) (h_int : 可积 (llr μ ν) μ)
   证明: by
   by_cases hμ : μ = 0
   · simp [hμ, measureReal_def]
@@ -979,7 +979,7 @@ lemma mul_log_le_klDiv
 
 中文:
 引理 mul_log_le_klDiv
-  条件: (μ ν : Measure α) [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: (μ ν : 测度 α) [是有限测度 μ] [是有限测度 ν]
   证明: by
   by_cases hμν : μ ≪ ν
   swap; · simp [hμν]
@@ -1023,7 +1023,7 @@ lemma klDiv_eq_zero_iff
 
 中文:
 引理 klDiv_eq_zero_iff
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  条件: [是有限测度 μ] [是有限测度 ν]
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ klDiv_self _⟩
   have h_ne : klDiv μ ν != ⊤ := by simp [h]

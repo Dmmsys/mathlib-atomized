@@ -149,7 +149,7 @@ theorem HasFDerivWithinAt.lim
 
 中文:
 定理 HasFDerivWithinAt.lim
-  结论: (h : HasFDerivWithinAt f f' s x) {α : 类型} {l : Filter α}
+  结论: (h : HasFDerivWithinAt f f' s x) {α : 类型} {l : 滤子 α}
   证明: by
   have tendsto_arg : Tendsto (fun n => x + d n) l (𝓝[s] x) := by
     rw [tendsto_nhdsWithin_iff]
@@ -251,8 +251,8 @@ theorem HasFDerivAt.unique
   exact uniqueDiffWithinAt_univ.eq h₀ h₁
 
 中文:
-定理 HasFDerivAt.unique
-  条件: (h₀ : HasFDerivAt f f' x) (h₁ : HasFDerivAt f f₁' x)
+定理 在点处Fréchet可导.unique
+  条件: (h₀ : 在点处Fréchet可导 f f' x) (h₁ : 在点处Fréchet可导 f f₁' x)
   结论: f' = f₁'
   证明: by
   rw [HasFDerivAt]; rw [← nhdsWithin_univ] at *
@@ -325,8 +325,8 @@ theorem HasFDerivAt.hasFDerivAtFilter
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.hasFDerivAtFilter
-  条件: (h : HasFDerivAt f f' x) (hL : L <= 𝓝 x ×ˢ pure x)
+定理 在点处Fréchet可导.hasFDerivAtFilter
+  条件: (h : 在点处Fréchet可导 f f' x) (hL : L <= 𝓝 x ×ˢ pure x)
   证明: h.mono hL
 
 @[fun_prop]
@@ -350,8 +350,8 @@ theorem HasFDerivAt.hasFDerivWithinAt
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.hasFDerivWithinAt
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.hasFDerivWithinAt
+  条件: (h : 在点处Fréchet可导 f f' x)
   结论: HasFDerivWithinAt f f' s x
   证明: h.hasFDerivAtFilter prod_mono_left _ nhdsWithin_le_nhds
 
@@ -397,8 +397,8 @@ theorem HasFDerivAt.differentiableAt
 @[simp]
 
 中文:
-定理 HasFDerivAt.differentiableAt
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.differentiableAt
+  条件: (h : 在点处Fréchet可导 f f' x)
   结论: DifferentiableAt 𝕜 f x
   证明: ⟨f', h⟩
 
@@ -421,7 +421,7 @@ alias ⟨HasFDerivWithinAt.hasFDerivAt_of_univ, _⟩ := hasFDerivWithinAt_univ
 
 中文:
 定理 hasFDerivWithinAt_univ
-  结论: HasFDerivWithinAt f f' univ x ↔ HasFDerivAt f f' x
+  结论: HasFDerivWithinAt f f' univ x ↔ 在点处Fréchet可导 f f' x
   证明: by
   simp only [HasFDerivWithinAt, nhdsWithin_univ, HasFDerivAt]
 
@@ -511,7 +511,7 @@ lemma hasFDerivWithinAt_of_isOpen
 
 中文:
 引理 hasFDerivWithinAt_of_isOpen
-  条件: (h : IsOpen s) (hx : x in s)
+  条件: (h : 是开集 s) (hx : x in s)
   证明: hasFDerivWithinAt_of_mem_nhds (h.mem_nhds hx)
 
 @[simp]
@@ -596,7 +596,7 @@ alias ⟨_, HasFDerivWithinAt.insert'⟩ := hasFDerivWithinAt_insert
 
 中文:
 定理 hasFDerivWithinAt_insert
-  条件: [T1Space E] {y : E}
+  条件: [T1空间 E] {y : E}
   证明: by
   rcases eq_or_ne x y with (rfl | h)
   · apply hasFDerivWithinAt_insert_self
@@ -668,7 +668,7 @@ alias hasFDerivWithinAt_diff_singleton := hasFDerivWithinAt_sdiff_singleton
 
 中文:
 定理 hasFDerivWithinAt_sdiff_singleton
-  条件: [T1Space E] (y : E)
+  条件: [T1空间 E] (y : E)
   证明: by
   rw [← hasFDerivWithinAt_insert]; rw [insert_sdiff_singleton]; rw [hasFDerivWithinAt_insert]
 
@@ -762,7 +762,7 @@ theorem HasFDerivWithinAt.of_finite
 
 中文:
 定理 HasFDerivWithinAt.of_finite
-  条件: [T1Space E] (h : s.Finite)
+  条件: [T1空间 E] (h : s.有限)
   结论: HasFDerivWithinAt f f' s x
   证明: by
   induction s, h using Set.Finite.induction_on with
@@ -788,7 +788,7 @@ theorem DifferentiableWithinAt.of_finite
 
 中文:
 定理 DifferentiableWithinAt.of_finite
-  条件: [T1Space E] (h : s.Finite)
+  条件: [T1空间 E] (h : s.有限)
   证明: ⟨0, .of_finite h⟩
 
 @[simp]
@@ -813,7 +813,7 @@ theorem HasFDerivWithinAt.singleton
 
 中文:
 定理 HasFDerivWithinAt.singleton
-  条件: [T1Space E] {y}
+  条件: [T1空间 E] {y}
   结论: HasFDerivWithinAt f f' {x} y
   证明: .of_finite finite_singleton _
 
@@ -833,7 +833,7 @@ theorem DifferentiableWithinAt.singleton
 
 中文:
 定理 DifferentiableWithinAt.singleton
-  条件: [T1Space E] {y}
+  条件: [T1空间 E] {y}
   证明: ⟨0, .singleton⟩
 -/
 protected theorem DifferentiableWithinAt.singleton [T1Space E] {y} :
@@ -850,7 +850,7 @@ theorem HasFDerivWithinAt.of_subsingleton
 
 中文:
 定理 HasFDerivWithinAt.of_subsingleton
-  条件: [T1Space E] (h : s.Subsingleton)
+  条件: [T1空间 E] (h : s.子单例)
   证明: .of_finite h.finite
 
 Depends on / 依赖: finite, h.finite, of_finite
@@ -871,7 +871,7 @@ theorem DifferentiableWithinAt.of_subsingleton
 
 中文:
 定理 DifferentiableWithinAt.of_subsingleton
-  条件: [T1Space E] (h : s.Subsingleton)
+  条件: [T1空间 E] (h : s.子单例)
   证明: .of_finite h.finite
 
 @[fun_prop]
@@ -933,7 +933,7 @@ theorem HasFDerivAt.lim
     refine (eventually_ne_of_tendsto_no
 
 中文:
-定理 HasFDerivAt.lim
+定理 在点处Fréchet可导.lim
   证明: by
   refine (hasFDerivWithinAt_univ.2 hf).lim ?_ (.of_forall fun _ => mem_univ _) ?_
   · rw [tendsto_norm_atTop_iff_cobounded] at hc
@@ -1074,7 +1074,7 @@ theorem HasFDerivWithinAt.of_not_accPt
 
 中文:
 定理 HasFDerivWithinAt.of_not_accPt
-  条件: (h : ¬AccPt x (𝓟 s))
+  条件: (h : ¬聚点 x (𝓟 s))
   证明: by
   rw [accPt_principal_iff_nhdsWithin]; rw [not_neBot] at h
   rw [← hasFDerivWithinAt_sdiff_singleton_self]; rw [hasFDerivWithinAt_iff_isLittleOTVS]; rw [h]
@@ -1119,7 +1119,7 @@ theorem fderivWithin_zero_of_not_accPt
 
 中文:
 定理 fderivWithin_zero_of_not_accPt
-  条件: (h : ¬AccPt x (𝓟 s))
+  条件: (h : ¬聚点 x (𝓟 s))
   证明: by
   rw [fderivWithin]; rw [if_pos (.of_not_accPt h)]
 
@@ -1158,7 +1158,7 @@ theorem fderivWithin_zero_of_not_uniqueDiffWithinAt
 
 中文:
 定理 fderivWithin_zero_of_not_uniqueDiffWithinAt
-  结论: {f : 𝕜 -> F} {x : 𝕜} {s : Set 𝕜}
+  结论: {f : 𝕜 -> F} {x : 𝕜} {s : 集合 𝕜}
   证明: fderivWithin_zero_of_not_accPt mt AccPt.uniqueDiffWithinAt h
 
 Depends on / 依赖: AccPt.uniqueDiffWithinAt, fderivWithin_zero_of_not_accPt, uniqueDiffWithinAt
@@ -1287,7 +1287,7 @@ theorem HasFDerivAt.fderiv
   rw [h.unique h.differentiableAt.hasFDerivAt]
 
 中文:
-定理 HasFDerivAt.fderiv
+定理 在点处Fréchet可导.fderiv
   证明: by
   rw [h.unique h.differentiableAt.hasFDerivAt]
 -/
@@ -1382,7 +1382,7 @@ theorem DifferentiableWithinAt.congr_nhds
 
 中文:
 定理 DifferentiableWithinAt.congr_nhds
-  结论: (h : DifferentiableWithinAt 𝕜 f s x) {t : Set E}
+  结论: (h : DifferentiableWithinAt 𝕜 f s x) {t : 集合 E}
   证明: h.mono_of_mem_nhdsWithin hst ▸ self_mem_nhdsWithin
 
 Depends on / 依赖: h.mono_of_mem_nhdsWithin, mono_of_mem_nhdsWithin, self_mem_nhdsWithin
@@ -1401,7 +1401,7 @@ theorem differentiableWithinAt_congr_nhds
 
 中文:
 定理 differentiableWithinAt_congr_nhds
-  条件: {t : Set E} (hst : 𝓝[s] x = 𝓝[t] x)
+  条件: {t : 集合 E} (hst : 𝓝[s] x = 𝓝[t] x)
   证明: ⟨fun h => h.congr_nhds hst, fun h => h.congr_nhds hst.symm⟩
 
 Depends on / 依赖: congr_nhds, h.congr_nhds, hst.symm
@@ -1507,7 +1507,7 @@ alias ⟨_, DifferentiableWithinAt.insert'⟩ := differentiableWithinAt_insert
 
 中文:
 定理 differentiableWithinAt_insert
-  条件: [T1Space E] {y : E}
+  条件: [T1空间 E] {y : E}
   证明: by
   simp only [DifferentiableWithinAt, hasFDerivWithinAt_insert]
 
@@ -1555,8 +1555,8 @@ theorem Differentiable.differentiableAt
   proof: h x
 
 中文:
-定理 Differentiable.differentiableAt
-  条件: (h : Differentiable 𝕜 f)
+定理 可微.differentiableAt
+  条件: (h : 可微 𝕜 f)
   结论: DifferentiableAt 𝕜 f x
   证明: h x
 -/
@@ -1612,7 +1612,7 @@ theorem differentiableOn_univ
 
 中文:
 定理 differentiableOn_univ
-  结论: DifferentiableOn 𝕜 f univ ↔ Differentiable 𝕜 f
+  结论: DifferentiableOn 𝕜 f univ ↔ 可微 𝕜 f
   证明: by
   simp only [DifferentiableOn, Differentiable, differentiableWithinAt_univ, mem_univ,
     forall_true_left]
@@ -1636,8 +1636,8 @@ theorem Differentiable.differentiableOn
   proof: (differentiableOn_univ.2 h).mono (subset_univ _)
 
 中文:
-定理 Differentiable.differentiableOn
-  条件: (h : Differentiable 𝕜 f)
+定理 可微.differentiableOn
+  条件: (h : 可微 𝕜 f)
   结论: DifferentiableOn 𝕜 f s
   证明: (differentiableOn_univ.2 h).mono (subset_univ _)
 
@@ -1770,7 +1770,7 @@ theorem fderivWithin_of_isOpen
 
 中文:
 定理 fderivWithin_of_isOpen
-  条件: (hs : IsOpen s) (hx : x in s)
+  条件: (hs : 是开集 s) (hx : x in s)
   结论: fderivWithin 𝕜 f s x = fderiv 𝕜 f x
   证明: fderivWithin_of_mem_nhds (hs.mem_nhds hx)
 
@@ -1815,7 +1815,7 @@ theorem fderiv_mem_iff
 
 中文:
 定理 fderiv_mem_iff
-  条件: {f : E -> F} {s : Set (E ->L[𝕜] F)} {x : E}
+  条件: {f : E -> F} {s : 集合 (E ->L[𝕜] F)} {x : E}
   结论: fderiv 𝕜 f x in s ↔
   证明: by
   by_cases hx : DifferentiableAt 𝕜 f x <;> simp [fderiv_zero_of_not_differentiableAt, *]
@@ -1838,7 +1838,7 @@ theorem fderivWithin_mem_iff
 
 中文:
 定理 fderivWithin_mem_iff
-  条件: {f : E -> F} {t : Set E} {s : Set (E ->L[𝕜] F)} {x : E}
+  条件: {f : E -> F} {t : 集合 E} {s : 集合 (E ->L[𝕜] F)} {x : E}
   证明: by
   by_cases hx : DifferentiableWithinAt 𝕜 f t x <;>
     simp [fderivWithin_zero_of_not_differentiableWithinAt, *]
@@ -1898,7 +1898,7 @@ lemma differentiableOn_union_iff_of_isOpen
 
 中文:
 引理 differentiableOn_union_iff_of_isOpen
-  条件: (hs : IsOpen s) (ht : IsOpen t)
+  条件: (hs : 是开集 s) (ht : 是开集 t)
   证明: ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right⟩,
     fun ⟨hfs, hft⟩ => DifferentiableOn.union_of_isOpen hfs hft hs ht⟩
 
@@ -1946,7 +1946,7 @@ lemma DifferentiableOn.iUnion_of_isOpen
 
 中文:
 引理 DifferentiableOn.iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: by
   rintro x ⟨si, ⟨i, rfl⟩, hxsi⟩
 .differentiableWithinAt exact (hf i).differentiableAt ((hs i).mem_nhds hxsi)
@@ -1970,7 +1970,7 @@ lemma differentiableOn_iUnion_iff_of_isOpen
 
 中文:
 引理 differentiableOn_iUnion_iff_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: ⟨fun h i => h.mono subset_iUnion_of_subset i fun _ a => a,
    fun h => DifferentiableOn.iUnion_of_isOpen h hs⟩
 
@@ -1994,7 +1994,7 @@ lemma differentiable_of_differentiableOn_iUnion_of_isOpen
 
 中文:
 引理 differentiable_of_differentiableOn_iUnion_of_isOpen
-  结论: {ι : 类型} {s : ι -> Set E}
+  结论: {ι : 类型} {s : ι -> 集合 E}
   证明: by
   rw [← differentiableOn_univ]; rw [← hs']
   exact DifferentiableOn.iUnion_of_isOpen hf hs
@@ -2028,8 +2028,8 @@ theorem HasFDerivAtFilter.isBigOTVS_sub
   simpa using hf.isLittleOTVS.isBigOTVS.fun_add f'.isBigOTVS_comp
 
 中文:
-定理 HasFDerivAtFilter.isBigOTVS_sub
-  条件: (hf : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.isBigOTVS_sub
+  条件: (hf : 有FDerivAtFilter f f' L)
   证明: by
   simpa using hf.isLittleOTVS.isBigOTVS.fun_add f'.isBigOTVS_comp
 
@@ -2109,8 +2109,8 @@ theorem HasFDerivAt.isBigOTVS_sub
   simpa using! HasFDerivAtFilter.isBigOTVS_sub h
 
 中文:
-定理 HasFDerivAt.isBigOTVS_sub
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.isBigOTVS_sub
+  条件: (h : 在点处Fréchet可导 f f' x)
   结论: (f · - f x) =O[𝕜; 𝓝 x] (· - x)
   证明: by
   simpa using! HasFDerivAtFilter.isBigOTVS_sub h
@@ -2161,8 +2161,8 @@ theorem HasFDerivAtFilter.tendsto_nhds
   simpa using! this.add_const (f x)
 
 中文:
-定理 HasFDerivAtFilter.tendsto_nhds
-  结论: {L : Filter E} (hL : L <= 𝓝 x)
+定理 有FDerivAtFilter.tendsto_nhds
+  结论: {L : 滤子 E} (hL : L <= 𝓝 x)
   证明: by
   have : (f · - f x) =o[𝕜; L] (1 : E -> 𝕜) := by
 .trans_isLittleOTVS ?_ .comp_tendsto prod_pure.ge refine h.isBigOTVS_sub
@@ -2214,8 +2214,8 @@ theorem HasFDerivAt.continuousAt
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.continuousAt
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.continuousAt
+  条件: (h : 在点处Fréchet可导 f f' x)
   结论: ContinuousAt f x
   证明: HasFDerivAtFilter.tendsto_nhds le_rfl h
 
@@ -2317,9 +2317,9 @@ theorem Differentiable.continuous
   proof: continuous_iff_continuousAt.2 fun x => (h x).continuousAt
 
 中文:
-定理 Differentiable.continuous
-  条件: (h : Differentiable 𝕜 f)
-  结论: Continuous f
+定理 可微.continuous
+  条件: (h : 可微 𝕜 f)
+  结论: 连续 f
   证明: continuous_iff_continuousAt.2 fun x => (h x).continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt
@@ -2362,8 +2362,8 @@ theorem hasFDerivAtFilter_id
 
 中文:
 定理 hasFDerivAtFilter_id
-  条件: (L : Filter (E × E))
-  结论: HasFDerivAtFilter id (.id 𝕜 E) L
+  条件: (L : 滤子 (E × E))
+  结论: 有FDerivAtFilter id (.id 𝕜 E) L
   证明: .of_isLittleOTVS (IsLittleOTVS.zero _ _).congr_left by simp
 
 @[fun_prop]
@@ -2412,7 +2412,7 @@ theorem hasFDerivWithinAt_id
 
 中文:
 定理 hasFDerivWithinAt_id
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   结论: HasFDerivWithinAt id (.id 𝕜 E) s x
   证明: hasFDerivAtFilter_id _
 
@@ -2438,7 +2438,7 @@ theorem hasFDerivAt_id
 中文:
 定理 hasFDerivAt_id
   条件: (x : E)
-  结论: HasFDerivAt id (.id 𝕜 E) x
+  结论: 在点处Fréchet可导 id (.id 𝕜 E) x
   证明: hasFDerivAtFilter_id _
 
 @[to_fun (attr := simp, fun_prop) differentiableAt_fun_id]
@@ -2516,7 +2516,7 @@ theorem differentiable_id
 
 中文:
 定理 differentiable_id
-  结论: Differentiable 𝕜 (id : E -> E)
+  结论: 可微 𝕜 (id : E -> E)
   证明: fun _ => differentiableAt_id
 
 @[fun_prop]
@@ -2564,7 +2564,7 @@ theorem fderiv_id
 
 中文:
 定理 fderiv_id
-  条件: [ContinuousAdd E] [ContinuousSMul 𝕜 E] [T2Space E]
+  条件: [连续加法 E] [连续标量乘法 𝕜 E] [T2空间 E]
   结论: fderiv 𝕜 id x = .id 𝕜 E
   证明: HasFDerivAt.fderiv (hasFDerivAt_id x)
 
@@ -2594,7 +2594,7 @@ theorem fderivWithin_id
 
 中文:
 定理 fderivWithin_id
-  结论: [ContinuousAdd E] [ContinuousSMul 𝕜 E] [T2Space E]
+  结论: [连续加法 E] [连续标量乘法 𝕜 E] [T2空间 E]
   证明: by
   rw [DifferentiableAt.fderivWithin differentiableAt_id hxs]
   exact fderiv_id
@@ -2636,8 +2636,8 @@ theorem HasFDerivAtFilter.isEquivalent_sub
 exact hf.isLittleOTVS.trans_isBigOTVS .symm.isBigOTVS f'.isThetaTVS_comp hf'
 
 中文:
-定理 HasFDerivAtFilter.isEquivalent_sub
-  结论: (hf : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.isEquivalent_sub
+  结论: (hf : 有FDerivAtFilter f f' L)
   证明: by
   rw [IsEquivalent]; rw [← isLittleOTVS_iff_isLittleO (𝕜 := 𝕜)]
 exact hf.isLittleOTVS.trans_isBigOTVS .symm.isBigOTVS f'.isThetaTVS_comp hf'
@@ -2659,8 +2659,8 @@ theorem HasFDerivAtFilter.isThetaTVS_sub
   proof: .isTheta.isThetaTVS.trans f'.isThetaTVS_comp hf' hf.isEquivalent_sub hf'
 
 中文:
-定理 HasFDerivAtFilter.isThetaTVS_sub
-  结论: (hf : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.isThetaTVS_sub
+  结论: (hf : 有FDerivAtFilter f f' L)
   证明: .isTheta.isThetaTVS.trans f'.isThetaTVS_comp hf' hf.isEquivalent_sub hf'
 
 Depends on / 依赖: hf.isEquivalent_sub, isEquivalent_sub, isTheta, isTheta.isThetaTVS.trans, isThetaTVS, isThetaTVS_comp
@@ -2680,8 +2680,8 @@ theorem HasFDerivAt.isEquivalent_sub
   simpa using! HasFDerivAtFilter.isEquivalent_sub hf hf'
 
 中文:
-定理 HasFDerivAt.isEquivalent_sub
-  条件: (hf : HasFDerivAt f f' x) (hf' : Topology.IsInducing f')
+定理 在点处Fréchet可导.isEquivalent_sub
+  条件: (hf : 在点处Fréchet可导 f f' x) (hf' : 拓扑.是Inducing f')
   证明: by
   simpa using! HasFDerivAtFilter.isEquivalent_sub hf hf'
 
@@ -2701,8 +2701,8 @@ theorem HasFDerivAt.isThetaTVS_sub
   simpa [IsThetaTVS] using! HasFDerivAtFilter.isThetaTVS_sub hf hf'
 
 中文:
-定理 HasFDerivAt.isThetaTVS_sub
-  条件: (hf : HasFDerivAt f f' x) (hf' : Topology.IsInducing f')
+定理 在点处Fréchet可导.isThetaTVS_sub
+  条件: (hf : 在点处Fréchet可导 f f' x) (hf' : 拓扑.是Inducing f')
   证明: by
   simpa [IsThetaTVS] using! HasFDerivAtFilter.isThetaTVS_sub hf hf'
 
@@ -2927,8 +2927,8 @@ theorem HasFDerivAtFilter.isBigO_sub
   proof: h.isBigOTVS_sub.isBigO
 
 中文:
-定理 HasFDerivAtFilter.isBigO_sub
-  条件: (h : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.isBigO_sub
+  条件: (h : 有FDerivAtFilter f f' L)
   证明: h.isBigOTVS_sub.isBigO
 
 Depends on / 依赖: h.isBigOTVS_sub.isBigO, isBigO, isBigOTVS_sub
@@ -2985,8 +2985,8 @@ theorem HasFDerivAt.isBigO_sub
   proof: h.isBigOTVS_sub.isBigO
 
 中文:
-定理 HasFDerivAt.isBigO_sub
-  条件: (h : HasFDerivAt f f' x₀)
+定理 在点处Fréchet可导.isBigO_sub
+  条件: (h : 在点处Fréchet可导 f f' x₀)
   结论: (f · - f x₀) =O[𝓝 x₀] (· - x₀)
   证明: h.isBigOTVS_sub.isBigO
 
@@ -3095,8 +3095,8 @@ theorem HasFDerivAtFilter.isTheta_sub
   proof: .isTheta hf.isThetaTVS_sub hf'
 
 中文:
-定理 HasFDerivAtFilter.isTheta_sub
-  结论: (hf : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.isTheta_sub
+  结论: (hf : 有FDerivAtFilter f f' L)
   证明: .isTheta hf.isThetaTVS_sub hf'
 
 Depends on / 依赖: hf.isThetaTVS_sub, isTheta, isThetaTVS_sub
@@ -3135,8 +3135,8 @@ theorem HasFDerivAt.isTheta_sub
   proof: .isTheta hf.isThetaTVS_sub hf'
 
 中文:
-定理 HasFDerivAt.isTheta_sub
-  条件: (hf : HasFDerivAt f f' x) (hf' : Topology.IsInducing f')
+定理 在点处Fréchet可导.isTheta_sub
+  条件: (hf : 在点处Fréchet可导 f f' x) (hf' : 拓扑.是Inducing f')
   证明: .isTheta hf.isThetaTVS_sub hf'
 
 Depends on / 依赖: hf.isThetaTVS_sub, isTheta, isThetaTVS_sub
@@ -3162,7 +3162,7 @@ theorem HasStrictFDerivAt.exists_lipschitzOnWith_of_nnnorm_lt
     ⟨U, Uo.mem_nhds xU, lipschitzOnWith_iff_norm_sub_le.2 fun x hx y hy => hU (mk_mem_prod hx hy)⟩
 
 中文:
-定理 HasStrictFDerivAt.exists_lipschitzOnWith_of_nnnorm_lt
+定理 HasStrictFDerivAt.存在_lipschitzOnWith_of_nnnorm_lt
   结论: (hf : HasStrictFDerivAt f f' x)
   证明: by
   have := hf.isLittleO.add_isBigOWith (f'.isBigOWith_comp _ _) hK
@@ -3190,7 +3190,7 @@ theorem HasStrictFDerivAt.exists_lipschitzOnWith
   proof: (exists_gt _).imp hf.exists_lipschitzOnWith_of_nnnorm_lt
 
 中文:
-定理 HasStrictFDerivAt.exists_lipschitzOnWith
+定理 HasStrictFDerivAt.存在_lipschitzOnWith
   条件: (hf : HasStrictFDerivAt f f' x)
   证明: (exists_gt _).imp hf.exists_lipschitzOnWith_of_nnnorm_lt
 
@@ -3214,8 +3214,8 @@ theorem HasFDerivAt.le_of_lip'
   rw [add_sub_cancel_left] 
 
 中文:
-定理 HasFDerivAt.le_of_lip'
-  结论: {f : E -> F} {f' : E ->L[𝕜] F} {x₀ : E} (hf : HasFDerivAt f f' x₀)
+定理 在点处Fréchet可导.le_of_lip'
+  结论: {f : E -> F} {f' : E ->L[𝕜] F} {x₀ : E} (hf : 在点处Fréchet可导 f f' x₀)
   证明: by
   refine le_of_forall_pos_le_add fun ε ε0 => opNorm_le_of_nhds_zero ?_ ?_
   · exact add_nonneg hC₀ ε0.le
@@ -3247,7 +3247,7 @@ theorem HasFDerivAt.le_of_lipschitzOn
   filter_upwards [hs] with x hx using hlip.norm_sub_le hx (mem_of_mem_nhds hs)
 
 中文:
-定理 HasFDerivAt.le_of_lipschitzOn
+定理 在点处Fréchet可导.le_of_lipschitzOn
   证明: by
   refine hf.le_of_lip' C.coe_nonneg ?_
   filter_upwards [hs] with x hx using hlip.norm_sub_le hx (mem_of_mem_nhds hs)
@@ -3269,8 +3269,8 @@ theorem HasFDerivAt.le_of_lipschitz
   proof: hf.le_of_lipschitzOn univ_mem (lipschitzOnWith_univ.2 hlip)
 
 中文:
-定理 HasFDerivAt.le_of_lipschitz
-  结论: {f : E -> F} {f' : E ->L[𝕜] F} {x₀ : E} (hf : HasFDerivAt f f' x₀)
+定理 在点处Fréchet可导.le_of_lipschitz
+  结论: {f : E -> F} {f' : E ->L[𝕜] F} {x₀ : E} (hf : 在点处Fréchet可导 f f' x₀)
   证明: hf.le_of_lipschitzOn univ_mem (lipschitzOnWith_univ.2 hlip)
 
 Depends on / 依赖: hf.le_of_lipschitzOn, le_of_lipschitzOn, lipschitzOnWith_univ, univ_mem
@@ -3324,7 +3324,7 @@ theorem norm_fderiv_le_of_lipschitzOn
 
 中文:
 定理 norm_fderiv_le_of_lipschitzOn
-  结论: {f : E -> F} {x₀ : E} {s : Set E} (hs : s in 𝓝 x₀)
+  结论: {f : E -> F} {x₀ : E} {s : 集合 E} (hs : s in 𝓝 x₀)
   证明: by
   refine norm_fderiv_le_of_lip' 𝕜 C.coe_nonneg ?_
   filter_upwards [hs] with x hx using hlip.norm_sub_le hx (mem_of_mem_nhds hs)
@@ -3381,7 +3381,7 @@ lemma HasFDerivAt.comp_semilinear
   simpa using ((L.isBigO_comp _ _).trans_isLittleO this).trans_isBigO (R.isBigO_id _)
 
 中文:
-引理 HasFDerivAt.comp_semilinear
+引理 在点处Fréchet可导.comp_semilinear
   结论: {f : V -> W} {z : V'} {f' : V ->L[𝕜] W}
   证明: by
   have : RingHomIsometric σ' := .inv σ

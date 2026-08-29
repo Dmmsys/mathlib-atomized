@@ -52,7 +52,7 @@ lemma EReal.log_exp
   · simp
 
 中文:
-引理 EReal.log_exp
+引理 E实数.log_exp
   条件: (x : E实数)
   结论: log (exp x) = x
   证明: by
@@ -83,7 +83,7 @@ lemma ENNReal.exp_log
   rw [← ENNReal.ofReal_toReal hx_top]; rw [log_ofReal_of_pos hx_pos]; rw [exp_coe]; rw [Real.exp_log hx_pos]
 
 中文:
-引理 ENNReal.exp_log
+引理 广义非负实数.exp_log
   条件: (x : 实数>=0∞)
   结论: exp (log x) = x
   证明: by
@@ -249,7 +249,7 @@ definition _root_.EReal.expOrderIso
   body: logOrderIso.symm
 
 中文:
-定义 _root_.EReal.expOrderIso
+定义 _root_.E实数.expOrderIso
   定义体: logOrderIso.symm
 
 Depends on / 依赖: logOrderIso, logOrderIso.symm
@@ -266,7 +266,7 @@ lemma _root_.EReal.expOrderIso_apply
   proof: rfl
 
 中文:
-引理 _root_.EReal.expOrderIso_apply
+引理 _root_.E实数.expOrderIso_apply
   条件: (x : E实数)
   结论: expOrderIso x = exp x
   证明: rfl
@@ -296,7 +296,7 @@ lemma _root_.EReal.expOrderIso_symm
   proof: rfl
 
 中文:
-引理 _root_.EReal.expOrderIso_symm
+引理 _root_.E实数.expOrderIso_symm
   结论: expOrderIso.symm = logOrderIso
   证明: rfl
 -/
@@ -349,7 +349,7 @@ definition _root_.EReal.expHomeomorph
   body: expOrderIso.toHomeomorph
 
 中文:
-定义 _root_.EReal.expHomeomorph
+定义 _root_.E实数.expHomeomorph
   签名: : E实数 ≃ₜ 实数>=0∞
   定义体: expOrderIso.toHomeomorph
 
@@ -367,7 +367,7 @@ lemma _root_.EReal.expHomeomorph_apply
   proof: rfl
 
 中文:
-引理 _root_.EReal.expHomeomorph_apply
+引理 _root_.E实数.expHomeomorph_apply
   条件: (x : E实数)
   结论: expHomeomorph x = exp x
   证明: rfl
@@ -400,7 +400,7 @@ lemma _root_.EReal.expHomeomorph_symm
 @[continuity, fun_prop]
 
 中文:
-引理 _root_.EReal.expHomeomorph_symm
+引理 _root_.E实数.expHomeomorph_symm
   结论: expHomeomorph.symm = logHomeomorph
   证明: rfl
 
@@ -421,7 +421,7 @@ lemma continuous_log
 
 中文:
 引理 continuous_log
-  结论: Continuous log
+  结论: 连续 log
   证明: logOrderIso.continuous
 
 @[continuity, fun_prop]
@@ -441,7 +441,7 @@ lemma continuous_exp
 
 中文:
 引理 continuous_exp
-  结论: Continuous exp
+  结论: 连续 exp
   证明: expOrderIso.continuous
 
 Depends on / 依赖: continuous, expOrderIso, expOrderIso.continuous
@@ -457,8 +457,8 @@ lemma _root_.EReal.tendsto_exp_nhds_top_nhds_top
   proof: continuous_exp.tendsto ⊤
 
 中文:
-引理 _root_.EReal.tendsto_exp_nhds_top_nhds_top
-  结论: Filter.Tendsto exp (𝓝 ⊤) (𝓝 ⊤)
+引理 _root_.E实数.tendsto_exp_nhds_top_nhds_top
+  结论: 滤子.收敛 exp (𝓝 ⊤) (𝓝 ⊤)
   证明: continuous_exp.tendsto ⊤
 
 Depends on / 依赖: continuous_exp, continuous_exp.tendsto, tendsto
@@ -477,8 +477,8 @@ lemma _root_.EReal.tendsto_exp_nhds_zero_nhds_one
   simp
 
 中文:
-引理 _root_.EReal.tendsto_exp_nhds_zero_nhds_one
-  结论: Filter.Tendsto exp (𝓝 0) (𝓝 1)
+引理 _root_.E实数.tendsto_exp_nhds_zero_nhds_one
+  结论: 滤子.收敛 exp (𝓝 0) (𝓝 1)
   证明: by
   convert! continuous_exp.tendsto 0
   simp
@@ -498,8 +498,8 @@ lemma _root_.EReal.tendsto_exp_nhds_bot_nhds_zero
   proof: continuous_exp.tendsto ⊥
 
 中文:
-引理 _root_.EReal.tendsto_exp_nhds_bot_nhds_zero
-  结论: Filter.Tendsto exp (𝓝 ⊥) (𝓝 0)
+引理 _root_.E实数.tendsto_exp_nhds_bot_nhds_zero
+  结论: 滤子.收敛 exp (𝓝 ⊥) (𝓝 0)
   证明: continuous_exp.tendsto ⊥
 
 Depends on / 依赖: continuous_exp, continuous_exp.tendsto, tendsto
@@ -656,7 +656,7 @@ lemma measurable_log
 
 中文:
 引理 measurable_log
-  结论: Measurable log
+  结论: 可测 log
   证明: continuous_log.measurable
 
 @[fun_prop]
@@ -677,8 +677,8 @@ lemma _root_.EReal.measurable_exp
 @[fun_prop]
 
 中文:
-引理 _root_.EReal.measurable_exp
-  结论: Measurable exp
+引理 _root_.E实数.measurable_exp
+  结论: 可测 exp
   证明: continuous_exp.measurable
 
 @[fun_prop]
@@ -699,8 +699,8 @@ lemma _root_.Measurable.ennreal_log
 @[fun_prop]
 
 中文:
-引理 _root_.Measurable.ennreal_log
-  结论: {α : 类型} {_ : MeasurableSpace α}
+引理 _root_.可测.ennreal_log
+  结论: {α : 类型} {_ : 可测空间 α}
   证明: measurable_log.comp hf
 
 @[fun_prop]
@@ -721,8 +721,8 @@ lemma _root_.Measurable.ereal_exp
   proof: measurable_exp.comp hf
 
 中文:
-引理 _root_.Measurable.ereal_exp
-  结论: {α : 类型} {_ : MeasurableSpace α}
+引理 _root_.可测.ereal_exp
+  结论: {α : 类型} {_ : 可测空间 α}
   证明: measurable_exp.comp hf
 
 Depends on / 依赖: measurable_exp, measurable_exp.comp
@@ -745,7 +745,7 @@ instance :
 
 中文:
 实例 :
-  签名: PolishSpace E实数
+  签名: Polish空间 E实数
   定义体: ENNReal.logOrderIso.symm.toHomeomorph.isClosedEmbedding.polishSpace
 
 Depends on / 依赖: ENNReal, ENNReal.logOrderIso.symm.toHomeomorph.isClosedEmbedding.polishSpace, isClosedEmbedding, logOrderIso, polishSpace, toHomeomorph

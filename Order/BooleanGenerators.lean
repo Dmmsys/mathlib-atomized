@@ -51,11 +51,11 @@ structure BooleanGenerators
     - finitelyAtomistic : forall (s : Finset α) (a : α), ↑s subseteq S -> IsCompactElement a -> a <= s.sup id -> exists t subseteq s, a = t.sup id
 
 中文:
-结构 BooleanGenerators
-  参数: (S : Set α)
+结构 布尔eanGenerators
+  参数: (S : 集合 α)
   公理与运算 (2 个):
     - isAtom : 对任意 I in S, IsAtom I
-    - finitelyAtomistic : 对任意 (s : Finset α) (a : α), ↑s subseteq S -> IsCompactElement a -> a <= s.sup id -> 存在 t subseteq s, a = t.sup id
+    - finitelyAtomistic : 对任意 (s : 有限集 α) (a : α), ↑s subseteq S -> IsCompactElement a -> a <= s.上确界 id -> 存在 t subseteq s, a = t.上确界 id
 -/
 structure BooleanGenerators (S : Set α) : Prop where
   /-- The elements in a collection of Boolean generators are all atoms. -/
@@ -82,7 +82,7 @@ lemma mono
 
 中文:
 引理 mono
-  条件: (hS : 布尔eanGenerators S) {T : Set α} (hTS : T subseteq S)
+  条件: (hS : 布尔eanGenerators S) {T : 集合 α} (hTS : T subseteq S)
   结论: 布尔eanGenerators T where
   证明: hS.isAtom I (hTS hI)
   finitelyAtomistic := fun s a hs => hS.finitelyAtomistic s a (le_trans hs hTS)
@@ -239,7 +239,7 @@ lemma sSup_inter
 
 中文:
 引理 sSup_inter
-  条件: (hS : 布尔eanGenerators S) {T₁ T₂ : Set α} (hT₁ : T₁ subseteq S) (hT₂ : T₂ subseteq S)
+  条件: (hS : 布尔eanGenerators S) {T₁ T₂ : 集合 α} (hT₁ : T₁ subseteq S) (hT₂ : T₂ subseteq S)
   证明: by
   apply le_antisymm
   · apply le_inf
@@ -392,7 +392,7 @@ lemma sSup_le_sSup_iff_of_atoms
 
 中文:
 引理 sSup_le_sSup_iff_of_atoms
-  条件: (hS : 布尔eanGenerators S) (X Y : Set α) (hX : X subseteq S) (hY : Y subseteq S)
+  条件: (hS : 布尔eanGenerators S) (X Y : 集合 α) (hX : X subseteq S) (hY : Y subseteq S)
   证明: by
   refine ⟨?_, sSup_le_sSup⟩
   intro h a ha

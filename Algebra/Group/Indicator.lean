@@ -63,7 +63,7 @@ theorem mulIndicator_union_mul_inter_apply
 
 中文:
 定理 mulIndicator_union_mul_inter_apply
-  条件: (f : α -> M) (s t : Set α) (a : α)
+  条件: (f : α -> M) (s t : 集合 α) (a : α)
   证明: by
   by_cases hs : a in s <;> by_cases ht : a in t <;> simp [*]
 
@@ -87,7 +87,7 @@ theorem mulIndicator_union_mul_inter
 
 中文:
 定理 mulIndicator_union_mul_inter
-  条件: (f : α -> M) (s t : Set α)
+  条件: (f : α -> M) (s t : 集合 α)
   证明: funext mulIndicator_union_mul_inter_apply f s t
 
 @[to_additive]
@@ -158,7 +158,7 @@ theorem mulIndicator_symmDiff
 
 中文:
 定理 mulIndicator_symmDiff
-  条件: (s t : Set α) (f : α -> M)
+  条件: (s t : 集合 α) (f : α -> M)
   证明: mulIndicator_union_of_disjoint (disjoint_sdiff_self_right.mono_left sdiff_le) _
 
 @[to_additive]
@@ -187,7 +187,7 @@ theorem mulIndicator_mul
 
 中文:
 定理 mulIndicator_mul
-  条件: (s : Set α) (f g : α -> M)
+  条件: (s : 集合 α) (f g : α -> M)
   证明: by
   funext
   simp only [mulIndicator]
@@ -220,7 +220,7 @@ theorem mulIndicator_mul'
 
 中文:
 定理 mulIndicator_mul'
-  条件: (s : Set α) (f g : α -> M)
+  条件: (s : 集合 α) (f g : α -> M)
   证明: mulIndicator_mul s f g
 
 @[to_additive (attr := simp)]
@@ -244,7 +244,7 @@ theorem mulIndicator_compl_mul_self_apply
 
 中文:
 定理 mulIndicator_compl_mul_self_apply
-  条件: (s : Set α) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (f : α -> M) (a : α)
   证明: by_cases (fun ha : a in s => by simp [ha]) fun ha => by simp [ha]
 
 @[to_additive (attr := simp)]
@@ -266,7 +266,7 @@ theorem mulIndicator_compl_mul_self
 
 中文:
 定理 mulIndicator_compl_mul_self
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   证明: funext mulIndicator_compl_mul_self_apply s f
 
 @[to_additive (attr := simp)]
@@ -290,7 +290,7 @@ theorem mulIndicator_self_mul_compl_apply
 
 中文:
 定理 mulIndicator_self_mul_compl_apply
-  条件: (s : Set α) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (f : α -> M) (a : α)
   证明: by_cases (fun ha : a in s => by simp [ha]) fun ha => by simp [ha]
 
 @[to_additive (attr := simp)]
@@ -312,7 +312,7 @@ theorem mulIndicator_self_mul_compl
 
 中文:
 定理 mulIndicator_self_mul_compl
-  条件: (s : Set α) (f : α -> M)
+  条件: (s : 集合 α) (f : α -> M)
   证明: funext mulIndicator_self_mul_compl_apply s f
 
 @[to_additive]
@@ -438,7 +438,7 @@ definition mulIndicatorHom
 
 中文:
 定义 mulIndicatorHom
-  签名: {α} (M) [MulOneClass M] (s : Set α)
+  签名: {α} (M) [MulOne类 M] (s : 集合 α)
   定义体: mulIndicator s
   map_one' := mulIndicator_one M s
   map_mul' := mulIndicator_mul s
@@ -470,7 +470,7 @@ theorem mulIndicator_inv'
 
 中文:
 定理 mulIndicator_inv'
-  条件: (s : Set α) (f : α -> G)
+  条件: (s : 集合 α) (f : α -> G)
   结论: mulIndicator s f⁻¹ = (mulIndicator s f)⁻¹
   证明: (mulIndicatorHom G s).map_inv f
 
@@ -494,7 +494,7 @@ theorem mulIndicator_inv
 
 中文:
 定理 mulIndicator_inv
-  条件: (s : Set α) (f : α -> G)
+  条件: (s : 集合 α) (f : α -> G)
   证明: mulIndicator_inv' s f
 
 @[to_additive]
@@ -518,7 +518,7 @@ theorem mulIndicator_div
 
 中文:
 定理 mulIndicator_div
-  条件: (s : Set α) (f g : α -> G)
+  条件: (s : 集合 α) (f g : α -> G)
   证明: (mulIndicatorHom G s).map_div f g
 
 @[to_additive]
@@ -542,7 +542,7 @@ theorem mulIndicator_div'
 
 中文:
 定理 mulIndicator_div'
-  条件: (s : Set α) (f g : α -> G)
+  条件: (s : 集合 α) (f g : α -> G)
   证明: mulIndicator_div s f g
 
 @[to_additive indicator_compl']
@@ -566,7 +566,7 @@ theorem mulIndicator_compl
 
 中文:
 定理 mulIndicator_compl
-  条件: (s : Set α) (f : α -> G)
+  条件: (s : 集合 α) (f : α -> G)
   证明: eq_mul_inv_of_mul_eq s.mulIndicator_compl_mul_self f
 
 @[to_additive indicator_compl]
@@ -590,7 +590,7 @@ theorem mulIndicator_compl'
 
 中文:
 定理 mulIndicator_compl'
-  条件: (s : Set α) (f : α -> G)
+  条件: (s : 集合 α) (f : α -> G)
   证明: by rw [div_eq_mul_inv, mulIndicator_compl]
 
 @[to_additive indicator_sdiff']
@@ -707,7 +707,7 @@ lemma mulSupport_subset_subsingleton_of_disjoint_on_mulSupport
 
 中文:
 引理 mulSupport_subset_subsingleton_of_disjoint_on_mulSupport
-  结论: [One β] {s : γ -> Set α} (f : α -> β)
+  结论: [幺 β] {s : γ -> 集合 α} (f : α -> β)
   证明: by
   suffices forall j', j' != j -> {i} subseteq s j -> {i} subseteq s j' -> {i} subseteq mulSupport f -> False by by_contra; aesop
   intro j' h hj hj' hi
@@ -774,7 +774,7 @@ theorem map_mulIndicator
 
 中文:
 定理 map_mulIndicator
-  结论: {M N F : 类型} [One M] [One N] [FunLike F M N] [OneHomClass F M N] (f : F)
+  结论: {M N F : 类型} [幺 M] [幺 N] [函数状 F M N] [幺态射类 F M N] (f : F)
   证明: by
   simp [Set.mulIndicator_comp_of_one]
 

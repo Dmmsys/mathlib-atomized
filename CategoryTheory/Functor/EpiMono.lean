@@ -39,10 +39,10 @@ class PreservesMonomorphisms
     - preserves : forall {X Y : C} (f : X ⟶ Y) [Mono f], Mono (F.map f)
 
 中文:
-类 PreservesMonomorphisms
+类 保持Monomorphisms
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f], Mono (F.map f)
+    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f], 单态射 (F.map f)
 -/
 class PreservesMonomorphisms (F : C ⥤ D) : Prop where
   /-- A functor preserves monomorphisms if it maps monomorphisms to monomorphisms. -/
@@ -60,10 +60,10 @@ class PreservesEpimorphisms
     - preserves : forall {X Y : C} (f : X ⟶ Y) [Epi f], Epi (F.map f)
 
 中文:
-类 PreservesEpimorphisms
+类 保持Epimorphisms
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [Epi f], Epi (F.map f)
+    - preserves : 对任意 {X Y : C} (f : X ⟶ Y) [满态射 f], 满态射 (F.map f)
 -/
 class PreservesEpimorphisms (F : C ⥤ D) : Prop where
   /-- A functor preserves epimorphisms if it maps epimorphisms to epimorphisms. -/
@@ -80,7 +80,7 @@ instance map_epi
 
 中文:
 实例 map_epi
-  签名: (F : C ⥤ D) [PreservesEpimorphisms F] {X Y : C} (f : X ⟶ Y) [Epi f]
+  签名: (F : C ⥤ D) [保持Epimorphisms F] {X Y : C} (f : X ⟶ Y) [满态射 f]
   定义体: PreservesEpimorphisms.preserves f
 
 Depends on / 依赖: PreservesEpimorphisms, PreservesEpimorphisms.preserves, preserves
@@ -99,10 +99,10 @@ class ReflectsMonomorphisms
     - reflects : forall {X Y : C} (f : X ⟶ Y), Mono (F.map f) -> Mono f
 
 中文:
-类 ReflectsMonomorphisms
+类 反映单态射
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), Mono (F.map f) -> Mono f
+    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), 单态射 (F.map f) -> 单态射 f
 -/
 class ReflectsMonomorphisms (F : C ⥤ D) : Prop where
   /-- A functor reflects monomorphisms if morphisms that are mapped to monomorphisms are themselves
@@ -122,10 +122,10 @@ class ReflectsEpimorphisms
     - reflects : forall {X Y : C} (f : X ⟶ Y), Epi (F.map f) -> Epi f
 
 中文:
-类 ReflectsEpimorphisms
+类 反映满态射
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), Epi (F.map f) -> Epi f
+    - reflects : 对任意 {X Y : C} (f : X ⟶ Y), 满态射 (F.map f) -> 满态射 f
 -/
 class ReflectsEpimorphisms (F : C ⥤ D) : Prop where
   /-- A functor reflects epimorphisms if morphisms that are mapped to epimorphisms are themselves
@@ -145,7 +145,7 @@ theorem epi_of_epi_map
 
 中文:
 定理 epi_of_epi_map
-  结论: (F : C ⥤ D) [ReflectsEpimorphisms F] {X Y : C} {f : X ⟶ Y}
+  结论: (F : C ⥤ D) [反映满态射 F] {X Y : C} {f : X ⟶ Y}
   证明: ReflectsEpimorphisms.reflects f h
 
 @[to_dual]
@@ -171,7 +171,7 @@ instance preservesMonomorphisms_comp
 
 中文:
 实例 preservesMonomorphisms_comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [PreservesMonomorphisms F]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [保持Monomorphisms F]
   定义体: by
     rw [comp_map]
     exact inferInstance
@@ -199,7 +199,7 @@ instance reflectsMonomorphisms_comp
 
 中文:
 实例 reflectsMonomorphisms_comp
-  签名: (F : C ⥤ D) (G : D ⥤ E) [ReflectsMonomorphisms F]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [反映单态射 F]
   定义体: F.mono_of_mono_map (G.mono_of_mono_map h)
 
 @[to_dual]
@@ -273,8 +273,8 @@ lemma PreservesMonomorphisms.of_natTrans
 @[to_dual]
 
 中文:
-引理 PreservesMonomorphisms.of_natTrans
-  结论: {F G : C ⥤ D} [PreservesMonomorphisms F]
+引理 保持Monomorphisms.of_natTrans
+  结论: {F G : C ⥤ D} [保持Monomorphisms F]
   证明: by
     suffices Mono (G.map π ≫ f.app Y) from mono_of_mono (G.map π) (f.app Y)
     rw [f.naturality π]
@@ -304,8 +304,8 @@ theorem PreservesMonomorphisms.of_iso
 @[to_dual]
 
 中文:
-定理 PreservesMonomorphisms.of_iso
-  条件: {F G : C ⥤ D} [PreservesMonomorphisms F] (α : F ≅ G)
+定理 保持Monomorphisms.of_iso
+  条件: {F G : C ⥤ D} [保持Monomorphisms F] (α : F ≅ G)
   证明: of_natTrans α.inv
 
 @[to_dual]
@@ -328,7 +328,7 @@ theorem PreservesMonomorphisms.iso_iff
 @[to_dual]
 
 中文:
-定理 PreservesMonomorphisms.iso_iff
+定理 保持Monomorphisms.iso_iff
   条件: {F G : C ⥤ D} (α : F ≅ G)
   证明: ⟨fun _ => of_iso α, fun _ => of_iso α.symm⟩
 
@@ -355,8 +355,8 @@ theorem ReflectsMonomorphisms.of_iso
 @[to_dual]
 
 中文:
-定理 ReflectsMonomorphisms.of_iso
-  条件: {F G : C ⥤ D} [ReflectsMonomorphisms F] (α : F ≅ G)
+定理 反映单态射.of_iso
+  条件: {F G : C ⥤ D} [反映单态射 F] (α : F ≅ G)
   证明: by
     apply F.mono_of_mono_map
     suffices F.map f = (α.app X).hom ≫ G.map f ≫ (α.app Y).inv from this ▸ mono_comp _ _
@@ -389,7 +389,7 @@ alias preservesMonomorphisms.of_iso := PreservesMonomorphisms.of_iso
 @[deprecated (since := "2026-06
 
 中文:
-定理 ReflectsMonomorphisms.iso_iff
+定理 反映单态射.iso_iff
   条件: {F G : C ⥤ D} (α : F ≅ G)
   证明: ⟨fun _ => of_iso α, fun _ => of_iso α.symm⟩
 
@@ -493,8 +493,8 @@ alias preservesEpimorphisms.ofRetract := PreservesEpimorphisms.ofRetract
 alias preservesMonomorphisms.ofRetract := PreservesMonomorphisms.ofRetract
 
 中文:
-引理 PreservesEpimorphisms.ofRetract
-  条件: {F G : C ⥤ D} (r : Retract G F) [F.PreservesEpimorphisms]
+引理 保持Epimorphisms.ofRetract
+  条件: {F G : C ⥤ D} (r : 收缩 G F) [F.保持Epimorphisms]
   证明: (PreservesEpimorphisms.of_natTrans r.r).preserves
 
 @[deprecated (since := "2026-06-25")]
@@ -538,7 +538,7 @@ definition splitEpiEquiv
 
 中文:
 定义 splitEpiEquiv
-  签名: [Full F] [Faithful F]
+  签名: [满 F] [忠实 F]
   定义体: f.map F
   invFun s := ⟨F.preimage s.section_, by
     apply F.map_injective
@@ -579,8 +579,8 @@ theorem isSplitEpi_iff
 
 中文:
 定理 isSplitEpi_iff
-  条件: [Full F] [Faithful F]
-  结论: IsSplitEpi (F.map f) ↔ IsSplitEpi f
+  条件: [满 F] [忠实 F]
+  结论: 是分裂满态射 (F.map f) ↔ 是分裂满态射 f
   证明: by
   constructor
   · intro h
@@ -614,7 +614,7 @@ theorem epi_map_iff_epi
 
 中文:
 定理 epi_map_iff_epi
-  条件: [hF₁ : PreservesEpimorphisms F] [hF₂ : ReflectsEpimorphisms F]
+  条件: [hF₁ : 保持Epimorphisms F] [hF₂ : 反映满态射 F]
   证明: by
   constructor
   · exact F.epi_of_epi_map
@@ -648,7 +648,7 @@ theorem splitEpiCategoryImpOfIsEquivalence
 
 中文:
 定理 splitEpiCategoryImpOfIsEquivalence
-  条件: [IsEquivalence F] [SplitEpiCategory C]
+  条件: [是等价 F] [分裂满态射范畴 C]
   证明: ⟨fun {X} {Y} f => by
     intro
     rw [← F.inv.isSplitEpi_iff f]
@@ -687,7 +687,7 @@ theorem strongEpi_map_of_strongEpi
 
 中文:
 定理 strongEpi_map_of_strongEpi
-  结论: (adj : F ⊣ F') (f : A ⟶ B) [F'.PreservesMonomorphisms]
+  结论: (adj : F ⊣ F') (f : A ⟶ B) [F'.保持Monomorphisms]
   证明: ⟨inferInstance, fun X Y Z => by
     intro
     rw [adj.hasLiftingProperty_iff]
@@ -717,7 +717,7 @@ instance strongEpi_map_of_isEquivalence
 
 中文:
 实例 strongEpi_map_of_isEquivalence
-  签名: [F.IsEquivalence] (f : A ⟶ B) [_h : StrongEpi f]
+  签名: [F.是等价] (f : A ⟶ B) [_h : 强满态射 f]
   定义体: F.asEquivalence.toAdjunction.strongEpi_map_of_strongEpi f
 
 @[to_dual]
@@ -760,7 +760,7 @@ theorem strongEpi_map_iff_strongEpi_of_isEquivalence
 
 中文:
 定理 strongEpi_map_iff_strongEpi_of_isEquivalence
-  条件: [IsEquivalence F]
+  条件: [是等价 F]
   证明: by
   constructor
   · intro

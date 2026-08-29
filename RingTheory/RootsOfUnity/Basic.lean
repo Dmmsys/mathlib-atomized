@@ -67,7 +67,7 @@ definition rootsOfUnity
 
 中文:
 定义 rootsOfUnity
-  签名: (k : 自然数) (M : 类型) [CommMonoid M]
+  签名: (k : 自然数) (M : 类型) [交换幺半群 M]
   定义体: {ζ | ζ ^ k = 1}
   one_mem' := one_pow _
   mul_mem' _ _ := by simp_all only [Set.mem_ofPred_eq, mul_pow, one_mul]
@@ -181,7 +181,7 @@ theorem rootsOfUnity_one
 
 中文:
 定理 rootsOfUnity_one
-  条件: (M : 类型) [CommMonoid M]
+  条件: (M : 类型) [交换幺半群 M]
   结论: rootsOfUnity 1 M = ⊥
   证明: by
   ext1
@@ -209,7 +209,7 @@ lemma rootsOfUnity_zero
 
 中文:
 引理 rootsOfUnity_zero
-  条件: (M : 类型) [CommMonoid M]
+  条件: (M : 类型) [交换幺半群 M]
   结论: rootsOfUnity 0 M = ⊤
   证明: by
   ext1
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (rootsOfUnity 1 M)
+  签名: 子单例 (rootsOfUnity 1 M)
   定义体: by simp [subsingleton_iff]
 -/
 instance : Subsingleton (rootsOfUnity 1 M) := by simp [subsingleton_iff]
@@ -410,7 +410,7 @@ theorem rootsOfUnity.coe_pow
 
 中文:
 定理 rootsOfUnity.coe_pow
-  条件: [CommMonoid R] (ζ : rootsOfUnity k R) (m : 自然数)
+  条件: [交换幺半群 R] (ζ : rootsOfUnity k R) (m : 自然数)
   证明: by
   rw [Subgroup.coe_pow]; rw [Units.val_pow_eq_pow_val]
 
@@ -435,7 +435,7 @@ definition rootsOfUnityUnitsMulEquiv
 
 中文:
 定义 rootsOfUnityUnitsMulEquiv
-  签名: (M : 类型) [CommMonoid M] (n : 自然数)
+  签名: (M : 类型) [交换幺半群 M] (n : 自然数)
   定义体: ⟨ζ.val, (mem_rootsOfUnity ..).mpr (mem_rootsOfUnity' ..).mp ζ.prop⟩
   invFun ζ := ⟨toUnits ζ.val, by
     simp only [mem_rootsOfUnity, ← map_pow, EmbeddingLike.map_eq_one_iff]
@@ -474,7 +474,7 @@ definition restrictRootsOfUnity
 
 中文:
 定义 restrictRootsOfUnity
-  签名: [MonoidHomClass F R S] (σ : F) (n : 自然数)
+  签名: [幺半群态射类 F R S] (σ : F) (n : 自然数)
   定义体: { toFun := fun ξ => ⟨Units.map σ (ξ : Rˣ), by
       rw [mem_rootsOfUnity]; rw [← map_pow]; rw [Units.ext_iff]; rw [Units.coe_map]; rw [ξ.prop]
       exact map_one σ⟩
@@ -504,7 +504,7 @@ theorem restrictRootsOfUnity_coe_apply
 
 中文:
 定理 restrictRootsOfUnity_coe_apply
-  条件: [MonoidHomClass F R S] (σ : F) (ζ : rootsOfUnity k R)
+  条件: [幺半群态射类 F R S] (σ : F) (ζ : rootsOfUnity k R)
   证明: rfl
 -/
 theorem restrictRootsOfUnity_coe_apply [MonoidHomClass F R S] (σ : F) (ζ : rootsOfUnity k R) :
@@ -532,7 +532,7 @@ theorem MulEquiv.restrictRootsOfUnity_coe_apply
 @[simp]
 
 中文:
-定理 MulEquiv.restrictRootsOfUnity_coe_apply
+定理 乘法等价.restrictRootsOfUnity_coe_apply
   条件: (σ : R ≃* S) (ζ : rootsOfUnity k R)
   证明: rfl
 
@@ -554,7 +554,7 @@ theorem MulEquiv.restrictRootsOfUnity_symm
 @[simp]
 
 中文:
-定理 MulEquiv.restrictRootsOfUnity_symm
+定理 乘法等价.restrictRootsOfUnity_symm
   条件: (σ : R ≃* S)
   证明: rfl
 
@@ -577,7 +577,7 @@ theorem Units.val_set_image_rootsOfUnity
     fun h => ⟨(rootsOfUnity.mkOfPowEq x h), ⟨Subtype.coe_prop (rootsOfUnity.mkOfPowEq x h), rfl⟩⟩⟩
 
 中文:
-定理 Units.val_set_image_rootsOfUnity
+定理 单位群.val_set_image_rootsOfUnity
   条件: [NeZero k]
   证明: by
   ext x
@@ -602,7 +602,7 @@ theorem Units.val_set_image_rootsOfUnity_one
   simp
 
 中文:
-定理 Units.val_set_image_rootsOfUnity_one
+定理 单位群.val_set_image_rootsOfUnity_one
   结论: ((↑) : Rˣ -> R) '' (rootsOfUnity 1 R) = {1}
   证明: by
   simp
@@ -628,8 +628,8 @@ theorem Units.val_set_image_rootsOfUnity_two
   simp
 
 中文:
-定理 Units.val_set_image_rootsOfUnity_two
-  条件: [NoZeroDivisors R]
+定理 单位群.val_set_image_rootsOfUnity_two
+  条件: [无零因子 R]
   证明: by
   ext x
   simp
@@ -785,7 +785,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (rootsOfUnity k R)
+  签名: 有限 (rootsOfUnity k R)
   定义体: by
   classical
   exact .of_equiv { x // x in nthRoots k (1 : R) } (rootsOfUnityEquivNthRoots R k).symm
@@ -804,7 +804,7 @@ instance rootsOfUnity.isCyclic
 
 中文:
 实例 rootsOfUnity.isCyclic
-  签名: : IsCyclic (rootsOfUnity k R)
+  签名: : 是循环 (rootsOfUnity k R)
   定义体: isCyclic_of_injective_ringHom ((Units.coeHom R).comp (rootsOfUnity k R).subtype) coe_injective
 
 Depends on / 依赖: Units.coeHom, coeHom, coe_injective, isCyclic_of_injective_ringHom, rootsOfUnity, subtype
@@ -864,7 +864,7 @@ theorem map_rootsOfUnity_eq_pow_self
 
 中文:
 定理 map_rootsOfUnity_eq_pow_self
-  结论: [FunLike F R R] [MonoidHomClass F R R] (σ : F)
+  结论: [函数状 F R R] [幺半群态射类 F R R] (σ : F)
   证明: by
   obtain ⟨m, hm⟩ := MonoidHom.map_cyclic (restrictRootsOfUnity σ k)
   rw [← restrictRootsOfUnity_coe_apply]; rw [hm]; rw [← zpow_mod_orderOf]; rw [← Int.toNat_of_nonneg
@@ -966,7 +966,7 @@ invFun ζ := monoidHomOfForallMemZpowers hg (g' := (ζ.val : G')) by
 
 中文:
 定义 monoidHomMulEquivRootsOfUnityOfGenerator
-  签名: {G : 类型} [CommGroup G] {g : G}
+  签名: {G : 类型} [交换群 G] {g : G}
   定义体: ⟨(IsUnit.map φ <| Group.isUnit g).unit, by
     simp only [mem_rootsOfUnity, Units.ext_iff, Units.val_pow_eq_pow_val, IsUnit.unit_spec,
       ← map_pow, pow_card_eq_one', map_one, Units.val_one]⟩
@@ -1004,7 +1004,7 @@ lemma monoidHom_mulEquiv_rootsOfUnity
 
 中文:
 引理 monoidHom_mulEquiv_rootsOfUnity
-  结论: (G : 类型) [CommGroup G] [IsCyclic G]
+  结论: (G : 类型) [交换群 G] [是循环 G]
   证明: by
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := G)
   exact ⟨monoidHomMulEquivRootsOfUnityOfGenerator hg G'⟩

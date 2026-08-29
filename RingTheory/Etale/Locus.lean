@@ -40,7 +40,7 @@ abbreviation IsEtaleAt
 
 中文:
 缩写 IsEtaleAt
-  签名: (q : Ideal A) [q.IsPrime]
+  签名: (q : 理想 A) [q.是素]
   定义体: FormallyEtale R (Localization.AtPrime q)
 
 Depends on / 依赖: AtPrime, FormallyEtale, Localization, Localization.AtPrime
@@ -61,7 +61,7 @@ definition etaleLocus
 
 中文:
 定义 etaleLocus
-  签名: : Set (PrimeSpectrum A)
+  签名: : 集合 (素谱 A)
   定义体: { p | IsEtaleAt R p.asIdeal }
 
 @[simp]
@@ -83,7 +83,7 @@ lemma mem_etaleLocus_iff
 
 中文:
 引理 mem_etaleLocus_iff
-  条件: {p : PrimeSpectrum A}
+  条件: {p : 素谱 A}
   结论: p in etaleLocus R A ↔ IsEtaleAt R p.asIdeal
   证明: .rfl
 -/
@@ -230,7 +230,7 @@ lemma isOpen_etaleLocus
 
 中文:
 引理 isOpen_etaleLocus
-  结论: IsOpen (etaleLocus R A)
+  结论: 是开集 (etaleLocus R A)
   证明: by
   rw [etaleLocus_eq_unramfiedLocus_inter_smoothLocus]
   exact isOpen_unramifiedLocus.inter isOpen_smoothLocus
@@ -299,7 +299,7 @@ lemma exists_etale_of_isEtaleAt
   exact ⟨r, hpr, ⟨basicOpen_subset_etaleLocus_iff.mp hr, .of_isLocalizationAway r⟩⟩
 
 中文:
-引理 exists_etale_of_isEtaleAt
+引理 存在_etale_of_isEtaleAt
   证明: by
   obtain ⟨_, ⟨_, ⟨r, rfl⟩, rfl⟩, hpr, hr⟩ :=
     PrimeSpectrum.isBasis_basic_opens.exists_subset_of_mem_open

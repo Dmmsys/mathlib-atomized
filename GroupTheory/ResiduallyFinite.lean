@@ -31,10 +31,10 @@ class AddGroup.ResiduallyFinite
     - iInf_eq_bot : ⨅ H : FiniteIndexNormalAddSubgroup G, H.toAddSubgroup = ⊥
 
 中文:
-类 AddGroup.ResiduallyFinite
-  参数: (G : 类型) [AddGroup G]
+类 加法群.ResiduallyFinite
+  参数: (G : 类型) [加法群 G]
   公理与运算 (1 个):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormalAddSubgroup G, H.toAddSubgroup = ⊥
+    - iInf_eq_bot : ⨅ H : FiniteIndexNormalAdd子群 G, H.toAddSubgroup = ⊥
 -/
 class AddGroup.ResiduallyFinite (G : Type*) [AddGroup G] : Prop where
   iInf_eq_bot : ⨅ H : FiniteIndexNormalAddSubgroup G, H.toAddSubgroup = ⊥
@@ -52,9 +52,9 @@ class ResiduallyFinite
 
 中文:
 类 ResiduallyFinite
-  参数: (G : 类型) [Group G]
+  参数: (G : 类型) [群 G]
   公理与运算 (1 个):
-    - iInf_eq_bot : ⨅ H : FiniteIndexNormalSubgroup G, H.toSubgroup = ⊥
+    - iInf_eq_bot : ⨅ H : FiniteIndexNormal子群 G, H.toSubgroup = ⊥
 -/
 class ResiduallyFinite (G : Type*) [Group G] : Prop where
   iInf_eq_bot : ⨅ H : FiniteIndexNormalSubgroup G, H.toSubgroup = ⊥
@@ -98,7 +98,7 @@ theorem residuallyFinite_iff_forall_finiteIndexNormalSubgroup
 @[to_additive]
 
 中文:
-定理 residuallyFinite_iff_forall_finiteIndexNormalSubgroup
+定理 residuallyFinite_iff_对任意_finiteIndexNormalSubgroup
   证明: by
   simp_rw [residuallyFinite_def, Subgroup.eq_bot_iff_forall, Subgroup.mem_iInf,
     FiniteIndexNormalSubgroup.mem_toSubgroup_iff]
@@ -124,7 +124,7 @@ theorem eq_one_iff_forall_finiteIndexNormalSubroup
 @[to_additive]
 
 中文:
-定理 eq_one_iff_forall_finiteIndexNormalSubroup
+定理 eq_one_iff_对任意_finiteIndexNormalSubroup
   结论: [ResiduallyFinite G]
   证明: residuallyFinite_iff_forall_finiteIndexNormalSubgroup.mp ‹_› g hg
 
@@ -148,7 +148,7 @@ theorem residuallyFinite_iff_exists_finiteIndexNormalSubgroup
 @[to_additive]
 
 中文:
-定理 residuallyFinite_iff_exists_finiteIndexNormalSubgroup
+定理 residuallyFinite_iff_存在_finiteIndexNormalSubgroup
   证明: by
   simp_rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup, ← not_forall, not_imp_not]
 
@@ -172,7 +172,7 @@ theorem exists_finiteIndexNormalSubgroup_notMem
 @[to_additive]
 
 中文:
-定理 exists_finiteIndexNormalSubgroup_notMem
+定理 存在_finiteIndexNormalSubgroup_notMem
   条件: [ResiduallyFinite G] (g : G) (hg : g != 1)
   证明: residuallyFinite_iff_exists_finiteIndexNormalSubgroup.mp ‹_› g hg
 
@@ -198,7 +198,7 @@ theorem residuallyFinite_iff_forall_finiteIndex
 @[to_additive]
 
 中文:
-定理 residuallyFinite_iff_forall_finiteIndex
+定理 residuallyFinite_iff_对任意_finiteIndex
   证明: by
   rw [residuallyFinite_iff_forall_finiteIndexNormalSubgroup]
   exact forall_congr' fun g => ⟨fun h hg => h fun H => hg H,
@@ -225,7 +225,7 @@ theorem residuallyFinite_iff_exists_finiteIndex
     not_imp_not]
 
 中文:
-定理 residuallyFinite_iff_exists_finiteIndex
+定理 residuallyFinite_iff_存在_finiteIndex
   证明: by
   simp_rw [residuallyFinite_iff_forall_finiteIndex, ← Classical.not_imp, ← not_forall,
     not_imp_not]
@@ -252,7 +252,7 @@ exists_finiteIndexNormalSubgroup_notMem (g⁻¹ * h) fun h => hgh eq_of_inv_mul_
   exact ⟨H, by simpa [QuotientGroup.eq]⟩
 
 中文:
-定理 exists_finiteIndexNormalSubgroup_of_residuallyFinite
+定理 存在_finiteIndexNormalSubgroup_of_residuallyFinite
   结论: [ResiduallyFinite G] (g h : G)
   证明: by
   obtain ⟨H, hH⟩ :=
@@ -284,7 +284,7 @@ theorem residuallyFinite_of_forall_exists_finite_monoidHom.{u}
 @[to_additive]
 
 中文:
-定理 residuallyFinite_of_forall_exists_finite_monoidHom.{u}
+定理 residuallyFinite_of_对任意_存在_finite_monoidHom.{u}
   证明: by
   rw [residuallyFinite_iff_exists_finiteIndex]
   intro g hg
@@ -315,7 +315,7 @@ instance [Finite
 @[to_additive]
 
 中文:
-实例 [Finite
+实例 [有限
   签名: G] : ResiduallyFinite G
   定义体: residuallyFinite_iff_forall_finiteIndex.mpr fun _ hg => hg ⊥
 

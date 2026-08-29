@@ -41,7 +41,7 @@ structure EffectivePresentation
   公理与运算 (3 个):
     - p : C
     - f : F.obj p ⟶ X
-    - effectiveEpi : EffectiveEpi f
+    - effectiveEpi : 有效满态射 f
 -/
 structure EffectivePresentation (X : D) where
   /-- The object of `C` giving the source of the effective epi -/
@@ -64,7 +64,7 @@ class EffectivelyEnough
 类 EffectivelyEnough
   参数: : 命题 where
   公理与运算 (1 个):
-    - presentation : 对任意 (X : D), Nonempty (F.EffectivePresentation X)
+    - presentation : 对任意 (X : D), 非空 (F.EffectivePresentation X)
 -/
 class EffectivelyEnough : Prop where
   /-- For every `X : D`, there exists an object `p` of `C` with an effective epi `F.obj p ⟶ X`. -/
@@ -145,7 +145,7 @@ instance [IsEquivalence
   body: ⟨equivalenceEffectivePresentation F.asEquivalence X⟩
 
 中文:
-实例 [IsEquivalence
+实例 [是等价
   签名: F] : EffectivelyEnough F where
   定义体: ⟨equivalenceEffectivePresentation F.asEquivalence X⟩
 

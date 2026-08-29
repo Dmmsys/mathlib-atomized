@@ -127,7 +127,7 @@ theorem poly_eq_of_wittPolynomial_bind_eq'
 
 中文:
 定理 poly_eq_of_wittPolynomial_bind_eq'
-  结论: [Fact p.Prime] (f g : 自然数 -> MvPolynomial (idx × 自然数) 整数)
+  结论: [Fact p.素] (f g : 自然数 -> 多元多项式 (idx × 自然数) 整数)
   证明: by
   ext1 n
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
@@ -164,7 +164,7 @@ theorem poly_eq_of_wittPolynomial_bind_eq
 
 中文:
 定理 poly_eq_of_wittPolynomial_bind_eq
-  结论: [Fact p.Prime] (f g : 自然数 -> MvPolynomial 自然数 整数)
+  结论: [Fact p.素] (f g : 自然数 -> 多元多项式 自然数 整数)
   证明: by
   ext1 n
   apply MvPolynomial.map_injective (Int.castRingHom Rat) Int.cast_injective
@@ -196,8 +196,8 @@ class IsPoly
   (no additional axioms)
 
 中文:
-类 IsPoly
-  参数: (f : 对任意 ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R)
+类 是Poly
+  参数: (f : 对任意 ⦃R⦄ [交换环 R], Witt向量 p R -> 𝕎 R)
   (无附加公理)
 
 Depends on / 依赖: ContinuousEval, ContinuousEval.toContinuousEvalConst, ContinuousEvalConst, toContinuousEvalConst
@@ -217,7 +217,7 @@ instance idIsPoly
 
 中文:
 实例 idIsPoly
-  签名: : IsPoly p fun _ _ => id
+  签名: : 是Poly p fun _ _ => id
   定义体: ⟨⟨X, by intros; simp only [aeval_X, id]⟩⟩
 
 Depends on / 依赖: aeval_X, intros
@@ -235,7 +235,7 @@ instance idIsPolyI'
 
 中文:
 实例 idIsPolyI'
-  签名: : IsPoly p fun _ _ a => a
+  签名: : 是Poly p fun _ _ a => a
   定义体: WittVector.idIsPoly _
 
 Depends on / 依赖: WittVector, WittVector.idIsPoly, idIsPoly
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (IsPoly p fun _ _ => id)
+  签名: 可居 (是Poly p fun _ _ => id)
   定义体: ⟨WittVector.idIsPoly p⟩
 
 Depends on / 依赖: WittVector, WittVector.idIsPoly, idIsPoly
@@ -286,7 +286,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [Fact p.Prime] {f g} (hf : IsPoly p f) (hg : IsPoly p g)
+  结论: [Fact p.素] {f g} (hf : 是Poly p f) (hg : 是Poly p g)
   证明: by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
@@ -342,7 +342,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: {g f} [hg : IsPoly p g] [hf : IsPoly p f]
+  签名: {g f} [hg : 是Poly p g] [hf : 是Poly p f]
   定义体: by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
@@ -371,8 +371,8 @@ class IsPoly₂
   (no additional axioms)
 
 中文:
-类 IsPoly₂
-  参数: (f : 对任意 ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R -> 𝕎 R)
+类 是Poly₂
+  参数: (f : 对任意 ⦃R⦄ [交换环 R], Witt向量 p R -> 𝕎 R -> 𝕎 R)
   (无附加公理)
 -/
 class IsPoly₂ (f : forall ⦃R⦄ [CommRing R], WittVector p R -> 𝕎 R -> 𝕎 R) : Prop where mk' ::
@@ -400,8 +400,8 @@ instance IsPoly₂.comp
   simp +unfoldPartialApp only [peval, aeval_bind₁, hh, 
 
 中文:
-实例 IsPoly₂.comp
-  签名: {h f g} [hh : IsPoly₂ p h] [hf : IsPoly p f] [hg : IsPoly p g]
+实例 是Poly₂.comp
+  签名: {h f g} [hh : 是Poly₂ p h] [hf : 是Poly p f] [hg : 是Poly p g]
   定义体: by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
@@ -445,8 +445,8 @@ instance IsPoly.comp₂
   simp only [peval, aeval_bind₁, hg, hf]
 
 中文:
-实例 IsPoly.comp₂
-  签名: {g f} [hg : IsPoly p g] [hf : IsPoly₂ p f]
+实例 是Poly.comp₂
+  签名: {g f} [hg : 是Poly p g] [hf : 是Poly₂ p f]
   定义体: by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
@@ -480,8 +480,8 @@ instance IsPoly₂.diag
   fin_cases i <;> simp
 
 中文:
-实例 IsPoly₂.diag
-  签名: {f} [hf : IsPoly₂ p f]
+实例 是Poly₂.diag
+  签名: {f} [hf : 是Poly₂ p f]
   定义体: by
   obtain ⟨φ, hf⟩ := hf
   refine ⟨⟨fun n => bind₁ (uncurry ![X, X]) (φ n), ?_⟩⟩
@@ -516,7 +516,7 @@ instance negIsPoly
 
 中文:
 实例 negIsPoly
-  签名: [Fact p.Prime]
+  签名: [Fact p.素]
   定义体: ⟨⟨fun n => rename Prod.snd (wittNeg p n), by
       intros; funext n
       rw [neg_coeff]; rw [aeval_eq_eval₂Hom]; rw [eval₂Hom_rename]
@@ -548,7 +548,7 @@ instance zeroIsPoly
 
 中文:
 实例 zeroIsPoly
-  签名: [Fact p.Prime]
+  签名: [Fact p.素]
   定义体: ⟨⟨0, by intros; funext n; simp only [Pi.zero_apply, map_zero, zero_coeff]⟩⟩
 
 @[simp]
@@ -570,7 +570,7 @@ theorem bind₁_zero_wittPolynomial
 
 中文:
 定理 bind₁_zero_wittPolynomial
-  条件: [Fact p.Prime] (n : 自然数)
+  条件: [Fact p.素] (n : 自然数)
   证明: by
   rw [← aeval_eq_bind₁]; rw [aeval_zero]; rw [constantCoeff_wittPolynomial]; rw [map_zero]
 
@@ -616,7 +616,7 @@ theorem bind₁_onePoly_wittPolynomial
 
 中文:
 定理 bind₁_onePoly_wittPolynomial
-  条件: [hp : Fact p.Prime] (n : 自然数)
+  条件: [hp : Fact p.素] (n : 自然数)
   证明: by
   rw [wittPolynomial_eq_sum_C_mul_X_pow]; rw [map_sum]; rw [Finset.sum_eq_single 0]
   · simp only [onePoly, one_pow, one_mul, map_pow, C_1, pow_zero, bind₁_X_right, if_true]
@@ -650,7 +650,7 @@ instance oneIsPoly
 
 中文:
 实例 oneIsPoly
-  签名: [Fact p.Prime]
+  签名: [Fact p.素]
   定义体: ⟨⟨onePoly, by
       intros; funext n; cases n
       · simp only [one_coeff_zero, onePoly, ite_true, map_one]
@@ -680,7 +680,7 @@ instance addIsPoly₂
 
 中文:
 实例 addIsPoly₂
-  签名: [Fact p.Prime]
+  签名: [Fact p.素]
   定义体: ⟨⟨wittAdd p, by intros; ext; exact add_coeff _ _ _⟩⟩
 
 Depends on / 依赖: add_coeff, intros, wittAdd
@@ -698,7 +698,7 @@ instance mulIsPoly₂
 
 中文:
 实例 mulIsPoly₂
-  签名: [Fact p.Prime]
+  签名: [Fact p.素]
   定义体: ⟨⟨wittMul p, by intros; ext; exact mul_coeff _ _ _⟩⟩
 
 Depends on / 依赖: intros, mul_coeff, wittMul
@@ -722,8 +722,8 @@ theorem IsPoly.map
   simp_rw [map_coeff, hf, map_aeval, funext (map_coef
 
 中文:
-定理 IsPoly.map
-  条件: [Fact p.Prime] {f} (hf : IsPoly p f) (g : R ->+* S) (x : 𝕎 R)
+定理 是Poly.map
+  条件: [Fact p.素] {f} (hf : 是Poly p f) (g : R ->+* S) (x : 𝕎 R)
   证明: by
   -- this could be turned into a tactic “macro” (taking `hf` as parameter)
   -- so that applications do not have to worry about the universe issue
@@ -754,7 +754,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: p.Prime] : Inhabited (IsPoly₂ p (fun _ _ => (· + ·)))
+  签名: p.素] : 可居 (是Poly₂ p (fun _ _ => (· + ·)))
   定义体: ⟨addIsPoly₂⟩
 -/
 instance [Fact p.Prime] : Inhabited (IsPoly₂ p (fun _ _ => (· + ·))) :=
@@ -781,7 +781,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [Fact p.Prime] {f g} (hf : IsPoly₂ p f) (hg : IsPoly₂ p g)
+  结论: [Fact p.素] {f g} (hf : 是Poly₂ p f) (hg : 是Poly₂ p g)
   证明: by
   obtain ⟨φ, hf⟩ := hf
   obtain ⟨ψ, hg⟩ := hg
@@ -840,7 +840,7 @@ theorem map
 
 中文:
 定理 map
-  条件: [Fact p.Prime] {f} (hf : IsPoly₂ p f) (g : R ->+* S) (x y : 𝕎 R)
+  条件: [Fact p.素] {f} (hf : 是Poly₂ p f) (g : R ->+* S) (x y : 𝕎 R)
   证明: by
   -- this could be turned into a tactic “macro” (taking `hf` as parameter)
   -- so that applications do not have to worry about the universe issue

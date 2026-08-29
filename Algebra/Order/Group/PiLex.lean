@@ -37,7 +37,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: [对任意 i, CommMonoid (α i)] [对任意 i, PartialOrder (α i)]
+  签名: [对任意 i, 交换幺半群 (α i)] [对任意 i, 偏序 (α i)]
   定义体: hxy.elim (fun hxyz => hxyz ▸ le_rfl) fun ⟨i, hi⟩ =>
       Or.inr ⟨i, fun j hji => congr_arg (· * z j) (hi.1 j hji), mul_lt_mul_left hi.2 _⟩
   le_of_mul_le_mul_left _ _ _ hxyz :=

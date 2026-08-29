@@ -282,7 +282,7 @@ theorem sum_inertiaDeg_eq_finrank
 
 中文:
 定理 sum_inertiaDeg_eq_finrank
-  条件: [NumberField K] [NumberField L]
+  条件: [数域 K] [数域 L]
   证明: by
   rw [← union_ramifiedPlacesOver_unramifiedPlacesOver L v]; rw [toFinset_union]; rw [sum_union (Set.disjoint_toFinset.2 <| disjoint_ramifiedPlacesOver_unramifiedPlacesOver L v)]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_two (by simpa using h))]; rw [sum_congr rfl (fun _ h => inertiaDeg_eq_one 
 

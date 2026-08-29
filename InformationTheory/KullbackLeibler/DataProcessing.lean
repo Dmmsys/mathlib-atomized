@@ -84,7 +84,7 @@ ae_of_ae_trim _ hf_cvx.map_condExp_rnDeriv_le hg.comap_le hf hf_cont_at h_int] w
 
 中文:
 引理 comp_rnDeriv_map_le
-  结论: (hμν : μ ≪ ν) (hg : Measurable g) (hf : StronglyMeasurable f)
+  结论: (hμν : μ ≪ ν) (hg : 可测 g) (hf : StronglyMeasurable f)
   证明: by
   filter_upwards [toReal_rnDeriv_map hμν hg,
 ae_of_ae_trim _ hf_cvx.map_condExp_rnDeriv_le hg.comap_le hf hf_cont_at h_int] with a ha1 ha2
@@ -119,7 +119,7 @@ lemma integrable_comp_rnDeriv_map
 
 中文:
 引理 integrable_comp_rnDeriv_map
-  结论: (hμν : μ ≪ ν) (hg : Measurable g) (hf : StronglyMeasurable f)
+  结论: (hμν : μ ≪ ν) (hg : 可测 g) (hf : StronglyMeasurable f)
   证明: by
   have hf_cont : ContinuousOn f (Ici 0) := hf_cvx.continuousOn_Ici hf_cont_at
   obtain ⟨c, c', h⟩ : exists c c', forall x, 0 <= x -> c * x + c' <= f x :=
@@ -276,7 +276,7 @@ lemma integrable_llr_map
 
 中文:
 引理 integrable_llr_map
-  结论: (hμν : μ ≪ ν) (hg : Measurable g)
+  结论: (hμν : μ ≪ ν) (hg : 可测 g)
   证明: by
   rw [← integrable_klFun_rnDeriv_iff (hμν.map hg)]
   refine convexOn_klFun.integrable_comp_rnDeriv_map hμν hg (by fun_prop) (by fun_prop) ?_
@@ -304,8 +304,8 @@ lemma toReal_klDiv_map_of_ac
   filter_upwards [toReal_rnDeriv_map hμν hg] with a ha using by rw [ha]
 
 中文:
-引理 toReal_klDiv_map_of_ac
-  条件: (hμν : μ ≪ ν) (hg : Measurable g)
+引理 to实数_klDiv_map_of_ac
+  条件: (hμν : μ ≪ ν) (hg : 可测 g)
   证明: by
   rw [toReal_klDiv_eq_integral_klFun (hμν.map hg)]; rw [integral_map hg.aemeasurable
       (StronglyMeasurable.aestronglyMeasurable (by fun_prop))]
@@ -335,7 +335,7 @@ lemma klDiv_map_of_ac
 
 中文:
 引理 klDiv_map_of_ac
-  条件: (hμν : μ ≪ ν) (hg : Measurable g) (h_int : 整数egrable (llr μ ν) μ)
+  条件: (hμν : μ ≪ ν) (hg : 可测 g) (h_int : 可积 (llr μ ν) μ)
   证明: by
   rw [klDiv_eq_integral_klFun]; rw [if_pos ⟨hμν.map hg]; rw [integrable_llr_map hμν hg h_int⟩]
   congr
@@ -360,7 +360,7 @@ lemma toReal_klDiv_trim_of_ac
   simp [trim_eq_map, toReal_klDiv_map_of_ac hμν (measurable_id'' hm)]
 
 中文:
-引理 toReal_klDiv_trim_of_ac
+引理 to实数_klDiv_trim_of_ac
   条件: (hm : m <= m𝓧) (hμν : μ ≪ ν)
   证明: by
   simp [trim_eq_map, toReal_klDiv_map_of_ac hμν (measurable_id'' hm)]
@@ -392,7 +392,7 @@ theorem klDiv_map_le
 
 中文:
 定理 klDiv_map_le
-  条件: (hg : Measurable g)
+  条件: (hg : 可测 g)
   结论: klDiv (μ.map g) (ν.map g) <= klDiv μ ν
   证明: by
   by_cases hμν : μ ≪ ν
@@ -465,7 +465,7 @@ theorem klDiv_comp_right_le
 
 中文:
 定理 klDiv_comp_right_le
-  条件: (κ : Kernel 𝓧 𝓨) [IsMarkovKernel κ]
+  条件: (κ : 核 𝓧 𝓨) [是MarkovKernel κ]
   证明: calc klDiv (κ ∘ₘ μ) (κ ∘ₘ ν)
   _ <= klDiv (μ otimesₘ κ) (ν otimesₘ κ) := by
     rw [← Measure.snd_compProd]; rw [← Measure.snd_compProd]

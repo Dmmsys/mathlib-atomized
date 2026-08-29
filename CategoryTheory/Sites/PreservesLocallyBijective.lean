@@ -42,7 +42,7 @@ lemma isLocallyInjective_whisker
 
 中文:
 引理 isLocallyInjective_whisker
-  条件: [H.IsCocontinuous J K] [IsLocallyInjective K f]
+  条件: [H.是余continuous J K] [是LocallyInjective K f]
   证明: H.cover_lift J K (equalizerSieve_mem K f x y h)
 
 Depends on / 依赖: H.cover_lift, cover_lift, equalizerSieve_mem
@@ -69,7 +69,7 @@ lemma isLocallyInjective_of_whisker
 
 中文:
 引理 isLocallyInjective_of_whisker
-  结论: (hH : CoverPreserving J K H)
+  结论: (hH : 余verPreserving J K H)
   证明: by
     apply K.transitive (H.is_cover_of_isCoverDense K X.unop)
     intro Y g ⟨⟨Z, lift, m, fac⟩⟩
@@ -107,7 +107,7 @@ lemma isLocallyInjective_whisker_iff
 
 中文:
 引理 isLocallyInjective_whisker_iff
-  结论: (hH : CoverPreserving J K H) [H.IsCocontinuous J K]
+  结论: (hH : 余verPreserving J K H) [H.是余continuous J K]
   证明: ⟨fun _ => isLocallyInjective_of_whisker J K H f hH,
     fun _ => isLocallyInjective_whisker J K H f⟩
 
@@ -128,7 +128,7 @@ lemma isLocallySurjective_whisker
 
 中文:
 引理 isLocallySurjective_whisker
-  条件: [H.IsCocontinuous J K] [IsLocallySurjective K f]
+  条件: [H.是余continuous J K] [是LocallySurjective K f]
   证明: H.cover_lift J K (imageSieve_mem K f a)
 
 Depends on / 依赖: H.cover_lift, cover_lift, imageSieve_mem
@@ -153,7 +153,7 @@ have hh := hH.cover_preserve imageSieve_mem J (whiskerLeft H.op f) (G.map m.op a
 
 中文:
 引理 isLocallySurjective_of_whisker
-  结论: (hH : CoverPreserving J K H)
+  结论: (hH : 余verPreserving J K H)
   证明: by
     apply K.transitive (H.is_cover_of_isCoverDense K X)
     intro Y g ⟨⟨Z, lift, m, fac⟩⟩
@@ -189,7 +189,7 @@ lemma isLocallySurjective_whisker_iff
 
 中文:
 引理 isLocallySurjective_whisker_iff
-  结论: (hH : CoverPreserving J K H) [H.IsCocontinuous J K]
+  结论: (hH : 余verPreserving J K H) [H.是余continuous J K]
   证明: ⟨fun _ => isLocallySurjective_of_whisker J K H f hH,
     fun _ => isLocallySurjective_whisker J K H f⟩
 

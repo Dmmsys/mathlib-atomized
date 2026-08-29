@@ -28,8 +28,8 @@ theorem isNat_eq_false
   statement: {a b : α} -> {a' b' : Nat} ->
 
 中文:
-定理 isNat_eq_false
-  条件: [AddMonoidWithOne α] [CharZero α]
+定理 is自然数_eq_false
+  条件: [加法带幺幺半群 α] [特征零 α]
   结论: {a b : α} -> {a' b' : 自然数} ->
 -/
 theorem isNat_eq_false [AddMonoidWithOne α] [CharZero α] : {a b : α} -> {a' b' : Nat} ->
@@ -45,8 +45,8 @@ theorem isInt_eq_false
   statement: {a b : α} -> {a' b' : Int} ->
 
 中文:
-定理 isInt_eq_false
-  条件: [Ring α] [CharZero α]
+定理 is整数_eq_false
+  条件: [环 α] [特征零 α]
   结论: {a b : α} -> {a' b' : 整数} ->
 
 Depends on / 依赖: TotallyDisconnectedSpace, TotallyDisconnectedSpace.t1Space, t1Space
@@ -66,7 +66,7 @@ theorem NNRat.invOf_denom_swap
 
 中文:
 定理 NNRat.invOf_denom_swap
-  结论: [Semiring α] (n₁ n₂ : 自然数) (a₁ a₂ : α)
+  结论: [半环 α] (n₁ n₂ : 自然数) (a₁ a₂ : α)
   证明: by
   rw [mul_invOf_eq_iff_eq_mul_right]; rw [← Nat.commute_cast]; rw [mul_assoc]; rw [← mul_left_eq_iff_eq_invOf_mul]; rw [Nat.commute_cast]
 
@@ -86,7 +86,7 @@ theorem isNNRat_eq_false
 
 中文:
 定理 isNNRat_eq_false
-  条件: [Semiring α] [CharZero α]
+  条件: [半环 α] [特征零 α]
   结论: {a b : α} -> {na nb : 自然数} -> {da db : 自然数} ->
 -/
 theorem isNNRat_eq_false [Semiring α] [CharZero α] : {a b : α} -> {na nb : Nat} -> {da db : Nat} ->
@@ -105,8 +105,8 @@ theorem Rat.invOf_denom_swap
   rw [mul_invOf_eq_iff_eq_mul_right]; rw [← Int.commute_cast]; rw [mul_assoc]; rw [← mul_left_eq_iff_eq_invOf_mul]; rw [Int.commute_cast]
 
 中文:
-定理 Rat.invOf_denom_swap
-  结论: [Ring α] (n₁ n₂ : 整数) (a₁ a₂ : α)
+定理 有理数.invOf_denom_swap
+  结论: [环 α] (n₁ n₂ : 整数) (a₁ a₂ : α)
   证明: by
   rw [mul_invOf_eq_iff_eq_mul_right]; rw [← Int.commute_cast]; rw [mul_assoc]; rw [← mul_left_eq_iff_eq_invOf_mul]; rw [Int.commute_cast]
 
@@ -126,7 +126,7 @@ theorem isRat_eq_false
 
 中文:
 定理 isRat_eq_false
-  条件: [Ring α] [CharZero α]
+  条件: [环 α] [特征零 α]
   结论: {a b : α} -> {na nb : 整数} -> {da db : 自然数} ->
 -/
 theorem isRat_eq_false [Ring α] [CharZero α] : {a b : α} -> {na nb : Int} -> {da db : Nat} ->

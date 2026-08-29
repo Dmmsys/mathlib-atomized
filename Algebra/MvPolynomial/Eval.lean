@@ -74,7 +74,7 @@ definition eval₂
 
 中文:
 定义 eval₂
-  签名: (p : MvPolynomial σ R)
+  签名: (p : 多元多项式 σ R)
   定义体: (AddMonoidAlgebra.coeff p).sum fun s a => f a * s.prod fun n e => g n ^ e
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.coeff, s.prod
@@ -92,7 +92,7 @@ theorem eval₂_eq
 
 中文:
 定理 eval₂_eq
-  条件: (g : R ->+* S₁) (X : σ -> S₁) (f : MvPolynomial σ R)
+  条件: (g : R ->+* S₁) (X : σ -> S₁) (f : 多元多项式 σ R)
   证明: rfl
 -/
 theorem eval₂_eq (g : R ->+* S₁) (X : σ -> S₁) (f : MvPolynomial σ R) :
@@ -113,7 +113,7 @@ theorem eval₂_eq'
 
 中文:
 定理 eval₂_eq'
-  条件: [Fintype σ] (g : R ->+* S₁) (X : σ -> S₁) (f : MvPolynomial σ R)
+  条件: [有限类型 σ] (g : R ->+* S₁) (X : σ -> S₁) (f : 多元多项式 σ R)
   证明: by
   simp only [eval₂_eq, ← Finsupp.prod_pow]
   rfl
@@ -138,7 +138,7 @@ theorem eval₂_zero
 
 中文:
 定理 eval₂_zero
-  结论: (0 : MvPolynomial σ R).eval₂ f g = 0
+  结论: (0 : 多元多项式 σ R).eval₂ f g = 0
   证明: Finsupp.sum_zero_index
 
 Depends on / 依赖: Finsupp, Finsupp.sum_zero_index, sum_zero_index
@@ -186,7 +186,7 @@ theorem eval₂_monomial
 
 中文:
 定理 eval₂_monomial
-  结论: (monomial s a).eval₂ f g = f a * s.prod fun n e => g n ^ e
+  结论: (monomial s a).eval₂ f g = f a * s.乘积 fun n e => g n ^ e
   证明: Finsupp.sum_single_index (by simp [f.map_zero])
 
 @[simp]
@@ -234,7 +234,7 @@ theorem eval₂_one
 
 中文:
 定理 eval₂_one
-  结论: (1 : MvPolynomial σ R).eval₂ f g = 1
+  结论: (1 : 多元多项式 σ R).eval₂ f g = 1
   证明: (eval₂_C _ _ _).trans f.map_one
 
 Depends on / 依赖: f.map_one, map_one
@@ -254,7 +254,7 @@ theorem eval₂_natCast
 中文:
 定理 eval₂_natCast
   条件: (n : 自然数)
-  结论: (n : MvPolynomial σ R).eval₂ f g = n
+  结论: (n : 多元多项式 σ R).eval₂ f g = n
   证明: (eval₂_C _ _ _).trans (map_natCast f n)
 -/
 @[simp] theorem eval₂_natCast (n : Nat) : (n : MvPolynomial σ R).eval₂ f g = n :=
@@ -271,7 +271,7 @@ theorem eval₂_ofNat
 @[simp]
 
 中文:
-定理 eval₂_ofNat
+定理 eval₂_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: eval₂_natCast f g n
 
@@ -481,7 +481,7 @@ theorem eval₂_pow
 
 中文:
 定理 eval₂_pow
-  条件: {p : MvPolynomial σ R}
+  条件: {p : 多元多项式 σ R}
   结论: 对任意 {n : 自然数}, (p ^ n).eval₂ f g = p.eval₂ f g ^ n
 -/
 theorem eval₂_pow {p : MvPolynomial σ R} : forall {n : Nat}, (p ^ n).eval₂ f g = p.eval₂ f g ^ n
@@ -535,7 +535,7 @@ lemma eval₂_dvd
 
 中文:
 引理 eval₂_dvd
-  条件: (f : R ->+* S₁) (g : σ -> S₁) {p q : MvPolynomial σ R} (h : p ∣ q)
+  条件: (f : R ->+* S₁) (g : σ -> S₁) {p q : 多元多项式 σ R} (h : p ∣ q)
   证明: map_dvd (eval₂Hom f g) h
 
 @[simp]
@@ -576,7 +576,7 @@ theorem eval₂Hom_congr
 
 中文:
 定理 eval₂Hom_congr
-  条件: {f₁ f₂ : R ->+* S₁} {g₁ g₂ : σ -> S₁} {p₁ p₂ : MvPolynomial σ R}
+  条件: {f₁ f₂ : R ->+* S₁} {g₁ g₂ : σ -> S₁} {p₁ p₂ : 多元多项式 σ R}
   证明: by
   rintro rfl rfl rfl; rfl
 -/
@@ -644,7 +644,7 @@ theorem comp_eval₂Hom
 
 中文:
 定理 comp_eval₂Hom
-  条件: [CommSemiring S₂] (f : R ->+* S₁) (g : σ -> S₁) (φ : S₁ ->+* S₂)
+  条件: [交换半环 S₂] (f : R ->+* S₁) (g : σ -> S₁) (φ : S₁ ->+* S₂)
   证明: by
   ext <;> simp
 -/
@@ -664,7 +664,7 @@ theorem map_eval₂Hom
 
 中文:
 定理 map_eval₂Hom
-  结论: [CommSemiring S₂] (f : R ->+* S₁) (g : σ -> S₁) (φ : S₁ ->+* S₂)
+  结论: [交换半环 S₂] (f : R ->+* S₁) (g : σ -> S₁) (φ : S₁ ->+* S₂)
   证明: by
   rw [← comp_eval₂Hom]
   rfl
@@ -684,7 +684,7 @@ theorem hom_eval₂
 
 中文:
 定理 hom_eval₂
-  结论: [CommSemiring S₂] (p : MvPolynomial σ R) (f : R ->+* S₁)
+  结论: [交换半环 S₂] (p : 多元多项式 σ R) (f : R ->+* S₁)
   证明: map_eval₂Hom f g φ p
 -/
 theorem hom_eval₂ [CommSemiring S₂] (p : MvPolynomial σ R) (f : R ->+* S₁)
@@ -727,7 +727,7 @@ theorem eval₂Hom_smul
 
 中文:
 定理 eval₂Hom_smul
-  条件: (f : R ->+* S₁) (g : σ -> S₁) (r : R) (P : MvPolynomial σ R)
+  条件: (f : R ->+* S₁) (g : σ -> S₁) (r : R) (P : 多元多项式 σ R)
   证明: by
   simp [smul_eq_C_mul]
 
@@ -751,7 +751,7 @@ theorem eval₂_comp_left
 
 中文:
 定理 eval₂_comp_left
-  条件: {S₂} [CommSemiring S₂] (k : S₁ ->+* S₂) (f : R ->+* S₁) (g : σ -> S₁) (p)
+  条件: {S₂} [交换半环 S₂] (k : S₁ ->+* S₂) (f : R ->+* S₁) (g : σ -> S₁) (p)
   证明: by
   apply MvPolynomial.induction_on p <;>
     simp +contextual [eval₂_add, k.map_add, eval₂_mul, k.map_mul]
@@ -779,7 +779,7 @@ theorem eval₂_eta
 
 中文:
 定理 eval₂_eta
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: eval₂ C X p = p
   证明: by
   apply MvPolynomial.induction_on p <;>
@@ -839,7 +839,7 @@ theorem eval₂_sum
 
 中文:
 定理 eval₂_sum
-  条件: (s : Finset S₂) (p : S₂ -> MvPolynomial σ R)
+  条件: (s : 有限集 S₂) (p : S₂ -> 多元多项式 σ R)
   证明: map_sum (eval₂Hom f g) _ s
 -/
 @[simp] theorem eval₂_sum (s : Finset S₂) (p : S₂ -> MvPolynomial σ R) :
@@ -856,7 +856,7 @@ theorem eval₂_prod
 
 中文:
 定理 eval₂_prod
-  条件: (s : Finset S₂) (p : S₂ -> MvPolynomial σ R)
+  条件: (s : 有限集 S₂) (p : S₂ -> 多元多项式 σ R)
   证明: map_prod (eval₂Hom f g) _ s
 -/
 @[simp] theorem eval₂_prod (s : Finset S₂) (p : S₂ -> MvPolynomial σ R) :
@@ -875,7 +875,7 @@ theorem eval₂_assoc
 
 中文:
 定理 eval₂_assoc
-  条件: (q : S₂ -> MvPolynomial σ R) (p : MvPolynomial S₂ R)
+  条件: (q : S₂ -> 多元多项式 σ R) (p : 多元多项式 S₂ R)
   证明: by
   change _ = eval₂Hom f g (eval₂ C q p)
   rw [eval₂_comp_left (eval₂Hom f g)]; congr with a; simp
@@ -919,7 +919,7 @@ theorem eval_eq
 
 中文:
 定理 eval_eq
-  条件: (X : σ -> R) (f : MvPolynomial σ R)
+  条件: (X : σ -> R) (f : 多元多项式 σ R)
   证明: rfl
 -/
 theorem eval_eq (X : σ -> R) (f : MvPolynomial σ R) :
@@ -936,7 +936,7 @@ theorem eval_eq'
 
 中文:
 定理 eval_eq'
-  条件: [Fintype σ] (X : σ -> R) (f : MvPolynomial σ R)
+  条件: [有限类型 σ] (X : σ -> R) (f : 多元多项式 σ R)
   证明: eval₂_eq' (RingHom.id R) X f
 
 Depends on / 依赖: RingHom, RingHom.id
@@ -957,7 +957,7 @@ theorem eval_monomial
 
 中文:
 定理 eval_monomial
-  结论: eval f (monomial s a) = a * s.prod fun n e => f n ^ e
+  结论: eval f (monomial s a) = a * s.乘积 fun n e => f n ^ e
   证明: eval₂_monomial _ _
 
 @[simp]
@@ -1014,7 +1014,7 @@ theorem eval_ofNat
 @[simp]
 
 中文:
-定理 eval_ofNat
+定理 eval_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: map_ofNat _ n
 
@@ -1037,7 +1037,7 @@ theorem smul_eval
 
 中文:
 定理 smul_eval
-  条件: (x) (p : MvPolynomial σ R) (s)
+  条件: (x) (p : 多元多项式 σ R) (s)
   结论: eval x (s • p) = s * eval x p
   证明: by
   rw [smul_eq_C_mul]; rw [(eval x).map_mul]; rw [eval_C]
@@ -1105,7 +1105,7 @@ theorem eval_sum
 
 中文:
 定理 eval_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> MvPolynomial σ R) (g : σ -> R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 多元多项式 σ R) (g : σ -> R)
   证明: map_sum (eval g) _ _
 
 Depends on / 依赖: map_sum
@@ -1124,7 +1124,7 @@ theorem eval_prod
 
 中文:
 定理 eval_prod
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> MvPolynomial σ R) (g : σ -> R)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 多元多项式 σ R) (g : σ -> R)
   证明: map_prod (eval g) _ _
 
 Depends on / 依赖: map_prod
@@ -1148,7 +1148,7 @@ theorem eval_assoc
 
 中文:
 定理 eval_assoc
-  条件: {τ} (f : σ -> MvPolynomial τ R) (g : τ -> R) (p : MvPolynomial σ R)
+  条件: {τ} (f : σ -> 多元多项式 τ R) (g : τ -> R) (p : 多元多项式 σ R)
   证明: by
   rw [eval₂_comp_left (eval g)]
   unfold eval; simp only [coe_eval₂Hom]
@@ -1174,8 +1174,8 @@ theorem eval₂_id
 
 中文:
 定理 eval₂_id
-  条件: {g : σ -> R} (p : MvPolynomial σ R)
-  结论: eval₂ (RingHom.id _) g p = eval g p
+  条件: {g : σ -> R} (p : 多元多项式 σ R)
+  结论: eval₂ (环态射.id _) g p = eval g p
   证明: rfl
 -/
 theorem eval₂_id {g : σ -> R} (p : MvPolynomial σ R) : eval₂ (RingHom.id _) g p = eval g p :=
@@ -1197,7 +1197,7 @@ theorem eval_eval₂
 
 中文:
 定理 eval_eval₂
-  结论: {S τ : 类型} {x : τ -> S} [CommSemiring S]
+  结论: {S τ : 类型} {x : τ -> S} [交换半环 S]
   证明: by
   apply induction_on p
   · simp
@@ -1236,7 +1236,7 @@ definition map
 
 中文:
 定义 map
-  签名: : MvPolynomial σ R ->+* MvPolynomial σ S₁
+  签名: : 多元多项式 σ R ->+* 多元多项式 σ S₁
   定义体: AddMonoidAlgebra.mapRingHom _ f
 
 @[simp]
@@ -1281,7 +1281,7 @@ theorem map_C
 
 中文:
 定理 map_C
-  结论: 对任意 a : R, map f (C a : MvPolynomial σ R) = C (f a)
+  结论: 对任意 a : R, map f (C a : 多元多项式 σ R) = C (f a)
   证明: map_monomial _ _
 
 Depends on / 依赖: map_monomial
@@ -1300,7 +1300,7 @@ theorem map_ofNat
 @[simp]
 
 中文:
-定理 map_ofNat
+定理 map_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: _root_.map_ofNat _ _
 
@@ -1323,7 +1323,7 @@ theorem map_X
 中文:
 定理 map_X
   条件: (n : σ)
-  结论: map f (X n : MvPolynomial σ R) = X n
+  结论: map f (X n : 多元多项式 σ R) = X n
   证明: by simp [X]
 -/
 theorem map_X (n : σ) : map f (X n : MvPolynomial σ R) = X n := by simp [X]
@@ -1338,7 +1338,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: 对任意 p : MvPolynomial σ R, map (RingHom.id R) p = p
+  结论: 对任意 p : 多元多项式 σ R, map (环态射.id R) p = p
   证明: AddMonoidAlgebra.map_id
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.map_id, map_id
@@ -1355,7 +1355,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: [CommSemiring S₂] (g : S₁ ->+* S₂) (p : MvPolynomial σ R)
+  条件: [交换半环 S₂] (g : S₁ ->+* S₂) (p : 多元多项式 σ R)
   证明: AddMonoidAlgebra.map_map ..
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.map_map, map_map
@@ -1375,7 +1375,7 @@ theorem eval₂_eq_eval_map
 
 中文:
 定理 eval₂_eq_eval_map
-  条件: (g : σ -> S₁) (p : MvPolynomial σ R)
+  条件: (g : σ -> S₁) (p : 多元多项式 σ R)
   结论: p.eval₂ f g = eval g (map f p)
   证明: by
   simp [eval₂, eval]; simp [map, MvPolynomial, Finsupp.sum_mapRange_index, mapRingHom]
@@ -1402,7 +1402,7 @@ theorem eval₂_comp_right
 
 中文:
 定理 eval₂_comp_right
-  条件: {S₂} [CommSemiring S₂] (k : S₁ ->+* S₂) (f : R ->+* S₁) (g : σ -> S₁) (p)
+  条件: {S₂} [交换半环 S₂] (k : S₁ ->+* S₂) (f : R ->+* S₁) (g : σ -> S₁) (p)
   证明: by
   apply MvPolynomial.induction_on p
   · intro r
@@ -1441,7 +1441,7 @@ theorem map_eval₂
 
 中文:
 定理 map_eval₂
-  条件: (f : R ->+* S₁) (g : S₂ -> MvPolynomial S₃ R) (p : MvPolynomial S₂ R)
+  条件: (f : R ->+* S₁) (g : S₂ -> 多元多项式 S₃ R) (p : 多元多项式 S₂ R)
   证明: by
   apply MvPolynomial.induction_on p
   · intro r
@@ -1474,7 +1474,7 @@ lemma eval₂_map_comp_C
 
 中文:
 引理 eval₂_map_comp_C
-  结论: {ι : 类型} (f : R ->+* S₁) (h : ι -> MvPolynomial σ S₁)
+  结论: {ι : 类型} (f : R ->+* S₁) (h : ι -> 多元多项式 σ S₁)
   证明: by
   induction p using MvPolynomial.induction_on <;> simp_all
 
@@ -1495,7 +1495,7 @@ lemma map_eval
 
 中文:
 引理 map_eval
-  条件: {S₂ : 类型} [CommSemiring S₂] (q : S₁ ->+* S₂) (g : σ -> S₁) (p : MvPolynomial σ S₁)
+  条件: {S₂ : 类型} [交换半环 S₂] (q : S₁ ->+* S₂) (g : σ -> S₁) (p : 多元多项式 σ S₁)
   证明: by
   rw [← eval₂_eq_eval_map]; rw [← eval₂_id]; rw [eval₂_comp_right]; rw [map_id]
 
@@ -1524,7 +1524,7 @@ theorem coeff_map
 
 中文:
 定理 coeff_map
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: 对任意 m : σ ->₀ 自然数, coeff m (map f p) = f (coeff m p)
   证明: by
   classical
@@ -1579,7 +1579,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: by
   intro p q h
   simp only [MvPolynomial.ext_iff, coeff_map] at h ⊢
@@ -1605,7 +1605,7 @@ theorem map_injective_iff
 
 中文:
 定理 map_injective_iff
-  结论: Function.Injective (map (σ := σ) f) ↔ Function.Injective f
+  结论: 函数.单射 (map (σ := σ) f) ↔ 函数.单射 f
   证明: ⟨fun h r r' eq => by simpa using h (a₁ := C r) (a₂ := C r') (by simpa), map_injective f⟩
 
 Depends on / 依赖: Function, Function.Injective, Injective
@@ -1631,7 +1631,7 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (hf : Function.Surjective f)
+  条件: (hf : 函数.满射 f)
   证明: fun p => by
   induction p using MvPolynomial.induction_on' with
   | monomial i fr =>
@@ -1666,7 +1666,7 @@ theorem map_surjective_iff
 
 中文:
 定理 map_surjective_iff
-  结论: Function.Surjective (map (σ := σ) f) ↔ Function.Surjective f
+  结论: 函数.满射 (map (σ := σ) f) ↔ 函数.满射 f
   证明: ⟨fun h s => let ⟨p, h⟩ := h (C s); ⟨p.coeff 0, by simpa [coeff_map] using congr(coeff 0 $h)⟩,
     map_surjective f⟩
 
@@ -1687,7 +1687,7 @@ theorem map_leftInverse
 
 中文:
 定理 map_leftInverse
-  条件: {f : R ->+* S₁} {g : S₁ ->+* R} (hf : Function.LeftInverse f g)
+  条件: {f : R ->+* S₁} {g : S₁ ->+* R} (hf : 函数.左逆 f g)
   证明: fun X => by
   rw [map_map]; rw [(RingHom.ext hf : f.comp g = RingHom.id _)]; rw [map_id]
 
@@ -1709,7 +1709,7 @@ theorem map_rightInverse
 
 中文:
 定理 map_rightInverse
-  条件: {f : R ->+* S₁} {g : S₁ ->+* R} (hf : Function.RightInverse f g)
+  条件: {f : R ->+* S₁} {g : S₁ ->+* R} (hf : 函数.右逆 f g)
   证明: (map_leftInverse hf.leftInverse).rightInverse
 
 @[simp]
@@ -1732,7 +1732,7 @@ theorem eval_map
 
 中文:
 定理 eval_map
-  条件: (f : R ->+* S₁) (g : σ -> S₁) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₁) (g : σ -> S₁) (p : 多元多项式 σ R)
   证明: by
   apply MvPolynomial.induction_on p <;> · simp +contextual
 
@@ -1755,7 +1755,7 @@ theorem eval₂_comp
 
 中文:
 定理 eval₂_comp
-  条件: (f : R ->+* S₁) (g : σ -> R) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₁) (g : σ -> R) (p : 多元多项式 σ R)
   证明: by
   rw [← p.map_id]; rw [eval_map]; rw [eval₂_comp_right]
 
@@ -1781,7 +1781,7 @@ theorem eval₂_map
 
 中文:
 定理 eval₂_map
-  结论: [CommSemiring S₂] (f : R ->+* S₁) (g : σ -> S₂) (φ : S₁ ->+* S₂)
+  结论: [交换半环 S₂] (f : R ->+* S₁) (g : σ -> S₂) (φ : S₁ ->+* S₂)
   证明: by
   rw [← eval_map]; rw [← eval_map]; rw [map_map]
 
@@ -1806,7 +1806,7 @@ theorem eval₂Hom_map_hom
 
 中文:
 定理 eval₂Hom_map_hom
-  结论: [CommSemiring S₂] (f : R ->+* S₁) (g : σ -> S₂) (φ : S₁ ->+* S₂)
+  结论: [交换半环 S₂] (f : R ->+* S₁) (g : σ -> S₂) (φ : S₁ ->+* S₂)
   证明: eval₂_map f g φ p
 
 @[simp]
@@ -1826,7 +1826,7 @@ theorem constantCoeff_map
 
 中文:
 定理 constantCoeff_map
-  条件: (f : R ->+* S₁) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* S₁) (φ : 多元多项式 σ R)
   证明: coeff_map f φ 0
 
 Depends on / 依赖: coeff_map
@@ -1870,7 +1870,7 @@ theorem support_map_subset
 
 中文:
 定理 support_map_subset
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: (map f p).support subseteq p.support
   证明: by
   simp only [Finset.subset_iff, mem_support_iff]
@@ -1903,7 +1903,7 @@ theorem support_map_of_injective
 
 中文:
 定理 support_map_of_injective
-  条件: (p : MvPolynomial σ R) {f : R ->+* S₁} (hf : Injective f)
+  条件: (p : 多元多项式 σ R) {f : R ->+* S₁} (hf : 单射 f)
   证明: by
   apply Finset.Subset.antisymm
   · exact MvPolynomial.support_map_subset _ _
@@ -1961,7 +1961,7 @@ theorem map_mapRange_eq_iff
 
 中文:
 定理 map_mapRange_eq_iff
-  条件: (f : R ->+* S₁) (g : S₁ -> R) (hg : g 0 = 0) (φ : MvPolynomial σ S₁)
+  条件: (f : R ->+* S₁) (g : S₁ -> R) (hg : g 0 = 0) (φ : 多元多项式 σ S₁)
   证明: by
   simp_rw [MvPolynomial.ext_iff, coeff_map]; rfl
 
@@ -1990,7 +1990,7 @@ lemma coeffs_map
 
 中文:
 引理 coeffs_map
-  条件: (f : R ->+* S₁) (p : MvPolynomial σ R) [DecidableEq S₁]
+  条件: (f : R ->+* S₁) (p : 多元多项式 σ R) [DecidableEq S₁]
   证明: by
   classical
   induction p using induction_on'' with
@@ -2030,7 +2030,7 @@ lemma coe_coeffs_map
 
 中文:
 引理 coe_coeffs_map
-  条件: (f : R ->+* S₁) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₁) (p : 多元多项式 σ R)
   证明: by
   classical
   exact mod_cast coeffs_map f p
@@ -2062,7 +2062,7 @@ lemma mem_range_map_iff_coeffs_subset
 
 中文:
 引理 mem_range_map_iff_coeffs_subset
-  条件: {f : R ->+* S₁} {x : MvPolynomial σ S₁}
+  条件: {f : R ->+* S₁} {x : 多元多项式 σ S₁}
   证明: by
   classical
   refine ⟨fun hx => ?_, fun hx => ?_⟩
@@ -2118,7 +2118,7 @@ definition eval₂AlgHom
 
 中文:
 定义 eval₂AlgHom
-  签名: : MvPolynomial σ R ->ₐ[R] S₁
+  签名: : 多元多项式 σ R ->ₐ[R] S₁
   定义体: { eval₂Hom (algebraMap R S₁) g with
     commutes' r := by simp }
 
@@ -2140,7 +2140,7 @@ theorem eval₂AlgHom_apply
 
 中文:
 定理 eval₂AlgHom_apply
-  条件: (P : MvPolynomial σ R)
+  条件: (P : 多元多项式 σ R)
   证明: rfl
 
 @[simp]
@@ -2201,7 +2201,7 @@ definition mapAlgHom
 
 中文:
 定义 mapAlgHom
-  签名: [CommSemiring S₂] [Algebra R S₁] [Algebra R S₂] (f : S₁ ->ₐ[R] S₂)
+  签名: [交换半环 S₂] [代数 R S₁] [代数 R S₂] (f : S₁ ->ₐ[R] S₂)
   定义体: AddMonoidAlgebra.mapAlgHom _ f
 
 @[simp]
@@ -2224,7 +2224,7 @@ lemma mapAlgHom_apply
 
 中文:
 引理 mapAlgHom_apply
-  结论: [CommSemiring S₂] [Algebra R S₁] [Algebra R S₂] (f : S₁ ->ₐ[R] S₂)
+  结论: [交换半环 S₂] [代数 R S₁] [代数 R S₂] (f : S₁ ->ₐ[R] S₂)
   证明: rfl
 
 @[simp]
@@ -2245,7 +2245,7 @@ theorem mapAlgHom_id
 
 中文:
 定理 mapAlgHom_id
-  条件: [Algebra R S₁]
+  条件: [代数 R S₁]
   证明: AlgHom.ext map_id
 
 @[simp]
@@ -2267,7 +2267,7 @@ theorem mapAlgHom_coe_ringHom
 
 中文:
 定理 mapAlgHom_coe_ringHom
-  条件: [CommSemiring S₂] [Algebra R S₁] [Algebra R S₂] (f : S₁ ->ₐ[R] S₂)
+  条件: [交换半环 S₂] [代数 R S₁] [代数 R S₂] (f : S₁ ->ₐ[R] S₂)
   证明: RingHom.mk_coe _ _ _ _ _
 
 Depends on / 依赖: RingHom, RingHom.mk_coe, mk_coe
@@ -2291,7 +2291,7 @@ lemma range_mapAlgHom
 
 中文:
 引理 range_mapAlgHom
-  条件: [CommSemiring S₂] [Algebra R S₁] [Algebra R S₂] (f : S₁ ->ₐ[R] S₂)
+  条件: [交换半环 S₂] [代数 R S₁] [代数 R S₂] (f : S₁ ->ₐ[R] S₂)
   证明: by
   simp only [← SetLike.coe_set_eq, Subalgebra.coe_toSubmodule, AlgHom.coe_range]
   ext
@@ -2327,7 +2327,7 @@ definition aeval
 
 中文:
 定义 aeval
-  签名: : MvPolynomial σ R ->ₐ[R] S₁
+  签名: : 多元多项式 σ R ->ₐ[R] S₁
   定义体: { eval₂Hom (algebraMap R S₁) f with commutes' := fun _r => eval₂_C _ _ _ }
 
 Depends on / 依赖: algebraMap, commutes
@@ -2346,7 +2346,7 @@ theorem aeval_def
 
 中文:
 定理 aeval_def
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: aeval f p = eval₂ (algebraMap R S₁) f p
   证明: rfl
 -/
@@ -2366,7 +2366,7 @@ theorem aeval_eq_eval₂Hom
 
 中文:
 定理 aeval_eq_eval₂Hom
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: aeval f p = eval₂Hom (algebraMap R S₁) f p
   证明: rfl
 
@@ -2408,7 +2408,7 @@ lemma aeval_eq_eval
 
 中文:
 引理 aeval_eq_eval
-  结论: (aeval f : MvPolynomial σ S₁ -> S₁) = eval f
+  结论: (aeval f : 多元多项式 σ S₁ -> S₁) = eval f
   证明: rfl
 
 @[simp]
@@ -2428,7 +2428,7 @@ theorem aeval_X
 中文:
 定理 aeval_X
   条件: (s : σ)
-  结论: aeval f (X s : MvPolynomial σ R) = f s
+  结论: aeval f (X s : 多元多项式 σ R) = f s
   证明: eval₂_X _ _ _
 -/
 theorem aeval_X (s : σ) : aeval f (X s : MvPolynomial σ R) = f s :=
@@ -2461,7 +2461,7 @@ theorem aeval_ofNat
   proof: map_ofNat _ _
 
 中文:
-定理 aeval_ofNat
+定理 aeval_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: map_ofNat _ _
 -/
@@ -2482,7 +2482,7 @@ theorem aeval_unique
 
 中文:
 定理 aeval_unique
-  条件: (φ : MvPolynomial σ R ->ₐ[R] S₁)
+  条件: (φ : 多元多项式 σ R ->ₐ[R] S₁)
   结论: φ = aeval (φ ∘ X)
   证明: by
   ext i
@@ -2502,7 +2502,7 @@ theorem aeval_X_left
 
 中文:
 定理 aeval_X_left
-  结论: aeval X = AlgHom.id R (MvPolynomial σ R)
+  结论: aeval X = 代数态射.id R (多元多项式 σ R)
   证明: (aeval_unique (AlgHom.id R _)).symm
 
 Depends on / 依赖: AlgHom, AlgHom.id, aeval_unique
@@ -2521,7 +2521,7 @@ theorem aeval_X_left_apply
 
 中文:
 定理 aeval_X_left_apply
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   结论: aeval X p = p
   证明: AlgHom.congr_fun aeval_X_left p
 
@@ -2542,7 +2542,7 @@ theorem comp_aeval
 
 中文:
 定理 comp_aeval
-  条件: {B : 类型} [CommSemiring B] [Algebra R B] (φ : S₁ ->ₐ[R] B)
+  条件: {B : 类型} [交换半环 B] [代数 R B] (φ : S₁ ->ₐ[R] B)
   证明: by
   ext i
   simp
@@ -2565,7 +2565,7 @@ lemma comp_aeval_apply
 
 中文:
 引理 comp_aeval_apply
-  结论: {B : 类型} [CommSemiring B] [Algebra R B] (φ : S₁ ->ₐ[R] B)
+  结论: {B : 类型} [交换半环 B] [代数 R B] (φ : S₁ ->ₐ[R] B)
   证明: by
   rw [← comp_aeval]; rw [AlgHom.coe_comp]; rw [comp_apply]
 
@@ -2591,7 +2591,7 @@ theorem map_aeval
 
 中文:
 定理 map_aeval
-  条件: {B : 类型} [CommSemiring B] (g : σ -> S₁) (φ : S₁ ->+* B) (p : MvPolynomial σ R)
+  条件: {B : 类型} [交换半环 B] (g : σ -> S₁) (φ : S₁ ->+* B) (p : 多元多项式 σ R)
   证明: by
   rw [← comp_eval₂Hom]
   rfl
@@ -2617,7 +2617,7 @@ theorem aeval_range
 
 中文:
 定理 aeval_range
-  结论: (aeval f).range = Algebra.adjoin R (Set.range f)
+  结论: (aeval f).range = 代数.adjoin R (集合.range f)
   证明: by
   apply le_antisymm
   · rintro x ⟨p, rfl⟩
@@ -2696,7 +2696,7 @@ theorem eval₂Hom_zero_apply
 
 中文:
 定理 eval₂Hom_zero_apply
-  条件: (f : R ->+* S₂) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₂) (p : 多元多项式 σ R)
   证明: RingHom.congr_fun (eval₂Hom_zero f) p
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun
@@ -2717,7 +2717,7 @@ theorem eval₂Hom_zero'_apply
 
 中文:
 定理 eval₂Hom_zero'_apply
-  条件: (f : R ->+* S₂) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₂) (p : 多元多项式 σ R)
   证明: eval₂Hom_zero_apply f p
 
 @[simp]
@@ -2739,7 +2739,7 @@ theorem eval₂_zero_apply
 
 中文:
 定理 eval₂_zero_apply
-  条件: (f : R ->+* S₂) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₂) (p : 多元多项式 σ R)
   证明: eval₂Hom_zero_apply _ _
 
 @[simp]
@@ -2761,7 +2761,7 @@ theorem eval₂_zero'_apply
 
 中文:
 定理 eval₂_zero'_apply
-  条件: (f : R ->+* S₂) (p : MvPolynomial σ R)
+  条件: (f : R ->+* S₂) (p : 多元多项式 σ R)
   证明: eval₂_zero_apply f p
 
 @[simp]
@@ -2783,7 +2783,7 @@ theorem aeval_zero
 
 中文:
 定理 aeval_zero
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: eval₂Hom_zero_apply (algebraMap R S₁) p
 
 @[simp]
@@ -2807,7 +2807,7 @@ theorem aeval_zero'
 
 中文:
 定理 aeval_zero'
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: aeval_zero p
 
 @[simp]
@@ -2889,7 +2889,7 @@ theorem eval₂Hom_eq_zero
 
 中文:
 定理 eval₂Hom_eq_zero
-  结论: (f : R ->+* S₂) (g : σ -> S₂) (φ : MvPolynomial σ R)
+  结论: (f : R ->+* S₂) (g : σ -> S₂) (φ : 多元多项式 σ R)
   证明: by
   rw [φ.as_sum]; rw [map_sum]
   refine Finset.sum_eq_zero fun d hd => ?_
@@ -2919,7 +2919,7 @@ theorem aeval_eq_zero
 
 中文:
 定理 aeval_eq_zero
-  结论: [Algebra R S₂] (f : σ -> S₂) (φ : MvPolynomial σ R)
+  结论: [代数 R S₂] (f : σ -> S₂) (φ : 多元多项式 σ R)
   证明: eval₂Hom_eq_zero _ _ _ h
 -/
 theorem aeval_eq_zero [Algebra R S₂] (f : σ -> S₂) (φ : MvPolynomial σ R)
@@ -2936,7 +2936,7 @@ theorem aeval_sum
 
 中文:
 定理 aeval_sum
-  条件: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R)
   证明: map_sum (MvPolynomial.aeval f) _ _
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.aeval, map_sum
@@ -2955,7 +2955,7 @@ theorem aeval_prod
 
 中文:
 定理 aeval_prod
-  条件: {ι : 类型} (s : Finset ι) (φ : ι -> MvPolynomial σ R)
+  条件: {ι : 类型} (s : 有限集 ι) (φ : ι -> 多元多项式 σ R)
   证明: map_prod (MvPolynomial.aeval f) _ _
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.aeval, map_prod
@@ -2976,7 +2976,7 @@ theorem _root_.Algebra.adjoin_range_eq_range_aeval
     Function.comp_def, MvPolynomial.aeval_X]
 
 中文:
-定理 _root_.Algebra.adjoin_range_eq_range_aeval
+定理 _root_.代数.adjoin_range_eq_range_aeval
   证明: by
   simp only [← Algebra.map_top, ← MvPolynomial.adjoin_range_X, AlgHom.map_adjoin, ← Set.range_comp,
     Function.comp_def, MvPolynomial.aeval_X]
@@ -2998,8 +2998,8 @@ theorem _root_.Algebra.adjoin_eq_range
   rw [← Algebra.adjoin_range_eq_range_aeval]; rw [Subtype.range_coe]
 
 中文:
-定理 _root_.Algebra.adjoin_eq_range
-  条件: (s : Set S₁)
+定理 _root_.代数.adjoin_eq_range
+  条件: (s : 集合 S₁)
   证明: by
   rw [← Algebra.adjoin_range_eq_range_aeval]; rw [Subtype.range_coe]
 
@@ -3102,7 +3102,7 @@ theorem aevalTower_ofNat
 @[simp]
 
 中文:
-定理 aevalTower_ofNat
+定理 aevalTower_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: _root_.map_ofNat _ _
 
@@ -3125,7 +3125,7 @@ theorem aevalTower_comp_C
 
 中文:
 定理 aevalTower_comp_C
-  结论: (aevalTower g y : MvPolynomial σ R ->+* A).comp C = g
+  结论: (aevalTower g y : 多元多项式 σ R ->+* A).comp C = g
   证明: RingHom.ext aevalTower_C _ _
 
 Depends on / 依赖: RingHom, RingHom.ext, aevalTower_C
@@ -3145,7 +3145,7 @@ theorem aevalTower_algebraMap
 中文:
 定理 aevalTower_algebraMap
   条件: (x : R)
-  结论: aevalTower g y (algebraMap R (MvPolynomial σ R) x) = g x
+  结论: aevalTower g y (algebraMap R (多元多项式 σ R) x) = g x
   证明: eval₂_C _ _ _
 -/
 theorem aevalTower_algebraMap (x : R) : aevalTower g y (algebraMap R (MvPolynomial σ R) x) = g x :=
@@ -3289,7 +3289,7 @@ theorem eval₂_mem
 
 中文:
 定理 eval₂_mem
-  结论: {f : R ->+* S} {p : MvPolynomial σ R} {s : subS}
+  结论: {f : R ->+* S} {p : 多元多项式 σ R} {s : subS}
   证明: by
   classical
   replace hs : forall i, f (p.coeff i) in s := by
@@ -3339,7 +3339,7 @@ theorem eval_mem
 
 中文:
 定理 eval_mem
-  结论: {p : MvPolynomial σ S} {s : subS} (hs : 对任意 i in p.support, p.coeff i in s) {v : σ -> S}
+  结论: {p : 多元多项式 σ S} {s : subS} (hs : 对任意 i in p.support, p.coeff i in s) {v : σ -> S}
   证明: eval₂_mem hs hv
 -/
 theorem eval_mem {p : MvPolynomial σ S} {s : subS} (hs : forall i in p.support, p.coeff i in s) {v : σ -> S}
@@ -3365,7 +3365,7 @@ lemma aeval_sumElim
 
 中文:
 引理 aeval_sumElim
-  条件: {σ τ : 类型} (p : MvPolynomial (σ oplus τ) R) (f : τ -> S) (g : σ -> T)
+  条件: {σ τ : 类型} (p : 多元多项式 (σ oplus τ) R) (f : τ -> S) (g : σ -> T)
   证明: by
   induction p using MvPolynomial.induction_on with
   | C r => simp [← IsScalarTower.algebraMap_apply]
@@ -3407,7 +3407,7 @@ definition algebraMvPolynomial
 
 中文:
 定义 algebraMvPolynomial
-  签名: : Algebra (MvPolynomial σ R) (MvPolynomial σ S)
+  签名: : 代数 (多元多项式 σ R) (多元多项式 σ S)
   定义体: inferInstanceAs Algebra (AddMonoidAlgebra _ _) (AddMonoidAlgebra _ _)
 
 Depends on / 依赖: AddMonoidAlgebra, Algebra
@@ -3445,7 +3445,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R (MvPolynomial σ R) (MvPolynomial σ S)
+  签名: 标量塔 R (多元多项式 σ R) (多元多项式 σ S)
   定义体: IsScalarTower.of_algebraMap_eq' (by ext; simp [C, monomial, map])
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, monomial, of_algebraMap_eq
@@ -3463,8 +3463,8 @@ instance [FaithfulSMul
     (map_injective _ <| FaithfulSMul.algebraMap_injective ..)
 
 中文:
-实例 [FaithfulSMul
-  签名: R S] : FaithfulSMul (MvPolynomial σ R) (MvPolynomial σ S)
+实例 [忠实标量乘法
+  签名: R S] : 忠实标量乘法 (多元多项式 σ R) (多元多项式 σ S)
   定义体: (faithfulSMul_iff_algebraMap_injective ..).mpr
     (map_injective _ <| FaithfulSMul.algebraMap_injective ..)
 

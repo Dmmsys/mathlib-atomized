@@ -49,8 +49,8 @@ class SetLike.GradedBracket
     - bracket_mem : forall ⦃i j⦄ {gi gj}, gi in ℒ i -> gj in ℒ j -> ⁅gi, gj⁆ in ℒ (i + j)
 
 中文:
-类 SetLike.GradedBracket
-  参数: [SetLike σ L] [Bracket L L] [Add ι] (ℒ : ι -> σ)
+类 集合状.GradedBracket
+  参数: [集合状 σ L] [Bracket L L] [加法 ι] (ℒ : ι -> σ)
   公理与运算 (1 个):
     - bracket_mem : 对任意 ⦃i j⦄ {gi gj}, gi in ℒ i -> gj in ℒ j -> ⁅gi, gj⁆ in ℒ (i + j)
 -/
@@ -71,9 +71,9 @@ class GradedLieAlgebra
   (no additional axioms)
 
 中文:
-类 GradedLieAlgebra
-  参数: extends SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
-  继承: SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
+类 GradedLie代数
+  参数: extends 集合状.GradedBracket ℒ, 直和.分解 ℒ
+  继承: 集合状.GradedBracket ℒ, 直和.分解 ℒ
   (无附加公理)
 -/
 class GradedLieAlgebra extends SetLike.GradedBracket ℒ, DirectSum.Decomposition ℒ
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (⨁ i, ℒ i)
+  签名: Lie环 (⨁ i, ℒ i)
   定义体: decomposeLinearEquiv ℒ
     ⁅(decomposeLinearEquiv ℒ).symm x, (decomposeLinearEquiv ℒ).symm y⁆
   add_lie _ _ _ := by simp
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieAlgebra R (⨁ i, ℒ i)
+  签名: Lie代数 R (⨁ i, ℒ i)
   定义体: by simp [add_smul]
   zero_smul _ := by simp
   lie_smul _ _ _ := by simp

@@ -38,8 +38,8 @@ structure FiniteGrp
 结构 FiniteGrp
   参数: where
   公理与运算 (2 个):
-    - toGrp : GrpCat.{u}
-    - [isFinite : Finite toGrp]
+    - toGrp : 群范畴.{u}
+    - [isFinite : 有限 toGrp]
 -/
 structure FiniteGrp where
   /-- A group that is finite -/
@@ -62,8 +62,8 @@ structure FiniteAddGrp
 结构 FiniteAddGrp
   参数: where
   公理与运算 (2 个):
-    - toAddGrp : AddGrpCat.{u}
-    - [isFinite : Finite toAddGrp]
+    - toAddGrp : 加法群范畴.{u}
+    - [isFinite : 有限 toAddGrp]
 -/
 structure FiniteAddGrp where
   /-- An additive group that is finite -/
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category FiniteGrp
+  签名: 范畴 FiniteGrp
   定义体: inferInstanceAs Category (InducedCategory _ FiniteGrp.toGrp)
 
 @[to_additive]
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory FiniteGrp (· ->* ·)
+  签名: 余ncrete范畴 FiniteGrp (· ->* ·)
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toGrp) _
 
 @[to_additive]
@@ -163,7 +163,7 @@ definition of
 
 中文:
 定义 of
-  签名: (G : 类型u) [Group G] [Finite G]
+  签名: (G : 类型u) [群 G] [有限 G]
   定义体: GrpCat.of G
   isFinite := ‹_›
 
@@ -188,7 +188,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: {X Y : 类型u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y)
+  签名: {X Y : 类型u} [群 X] [有限 X] [群 Y] [有限 Y] (f : X ->* Y)
   定义体: InducedCategory.homMk (GrpCat.ofHom f)
 
 @[to_additive]
@@ -209,7 +209,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y) (x : X)
+  条件: {X Y : 类型u} [群 X] [有限 X] [群 Y] [有限 Y] (f : X ->* Y) (x : X)
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [Group X] [Finite X] [Group Y] [Finite Y] (f : X ->* Y) (x : X) :

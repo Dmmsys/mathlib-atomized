@@ -456,7 +456,7 @@ theorem bernoulli_succ_eval
 中文:
 定理 bernoulli_succ_eval
   条件: (n p : 自然数)
-  结论: (bernoulli p.succ).eval (n : Rat) =
+  结论: (bernoulli p.succ).eval (n : 有理数) =
   证明: by
   apply eq_add_of_sub_eq'
   rw [sum_range_pow_eq_bernoulli_sub]
@@ -541,7 +541,7 @@ theorem bernoulli_eval_one_add
 
 中文:
 定理 bernoulli_eval_one_add
-  条件: (n : 自然数) (x : Rat)
+  条件: (n : 自然数) (x : 有理数)
   证明: by
   have := bernoulli_comp_one_add_X n
   simpa using congr(Polynomial.eval x $this)
@@ -617,7 +617,7 @@ theorem bernoulli_eval_neg
 
 中文:
 定理 bernoulli_eval_neg
-  条件: (n : 自然数) (x : Rat)
+  条件: (n : 自然数) (x : 有理数)
   证明: by
   simpa [mul_add] using congr_arg (Polynomial.eval x) (bernoulli_comp_neg_X n)
 
@@ -677,7 +677,7 @@ theorem bernoulli_eval_one_sub
 
 中文:
 定理 bernoulli_eval_one_sub
-  条件: (n : 自然数) (x : Rat)
+  条件: (n : 自然数) (x : 有理数)
   证明: by
   simpa using congr_arg (Polynomial.eval x) (bernoulli_comp_one_sub_X n)
 

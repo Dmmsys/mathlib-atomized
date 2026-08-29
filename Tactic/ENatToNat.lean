@@ -104,7 +104,7 @@ lemma coe_ofNat
   proof: rfl
 
 中文:
-引理 coe_ofNat
+引理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/

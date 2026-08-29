@@ -64,9 +64,9 @@ structure Config
     - mode : = RingMode.SOP
 
 中文:
-结构 Config
-  参数: extends AtomM.Recurse.Config
-  继承: AtomM.Recurse.Config
+结构 余nfig
+  参数: extends AtomM.Recurse.余nfig
+  继承: AtomM.Recurse.余nfig
   公理与运算 (2 个):
     - ifUnchanged : = BehaviorIfUnchanged.error
     - mode : = RingMode.SOP
@@ -178,7 +178,7 @@ theorem mul_neg
 
 中文:
 定理 mul_neg
-  条件: {R} [Ring R] (a b : R)
+  条件: {R} [环 R] (a b : R)
   结论: a * -b = -(a * b)
   证明: by simp
 -/
@@ -194,7 +194,7 @@ theorem add_neg
 
 中文:
 定理 add_neg
-  条件: {R} [Ring R] (a b : R)
+  条件: {R} [环 R] (a b : R)
   结论: a + -b = a - b
   证明: (sub_eq_add_neg ..).symm
 
@@ -256,7 +256,7 @@ theorem int_rawCast_neg
 
 中文:
 定理 int_rawCast_neg
-  条件: {R} [Ring R]
+  条件: {R} [环 R]
   结论: (整数.rawCast (.negOf自然数 n) : R) = -自然数.rawCast n
   证明: by simp
 -/
@@ -271,7 +271,7 @@ theorem nnrat_rawCast
 
 中文:
 定理 nnrat_rawCast
-  条件: {R} [DivisionSemiring R]
+  条件: {R} [除半环 R]
   证明: by simp
 -/
 theorem nnrat_rawCast {R} [DivisionSemiring R] :
@@ -286,7 +286,7 @@ theorem rat_rawCast_neg
 
 中文:
 定理 rat_rawCast_neg
-  条件: {R} [DivisionRing R]
+  条件: {R} [除环 R]
   证明: by simp
 -/
 theorem rat_rawCast_neg {R} [DivisionRing R] :
@@ -310,7 +310,7 @@ definition cleanup
 
 中文:
 定义 cleanup
-  签名: (cfg : RingNF.Config) (r : Simp.Result)
+  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
   定义体: do
   match cfg.mode with
   | .raw => pure r

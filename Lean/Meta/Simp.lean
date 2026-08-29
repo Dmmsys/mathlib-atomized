@@ -134,7 +134,7 @@ definition getPropHyps
 
 中文:
 定义 getPropHyps
-  签名: : MetaM (Array FVarId)
+  签名: : MetaM (数组 FVarId)
   定义体: do
   let mut result := #[]
   for localDecl in (← getLCtx) do
@@ -168,7 +168,7 @@ definition simpTheoremsOfNames
 
 中文:
 定义 simpTheoremsOfNames
-  签名: (lemmas : List Name := []) (simpOnly : 布尔 := false)
+  签名: (lemmas : 列表 Name := []) (simpOnly : 布尔值 := false)
   定义体: do
   lemmas.foldlM (·.addConst ·)
     (← if simpOnly then
@@ -202,8 +202,8 @@ definition Simp.Context.ofNames
     (congrTheorems := ← Lean.Meta.getSimpCongrTheorems)
 
 中文:
-定义 Simp.Context.ofNames
-  签名: (lemmas : List Name := []) (simpOnly : 布尔 := false)
+定义 Simp.余ntext.ofNames
+  签名: (lemmas : 列表 Name := []) (simpOnly : 布尔值 := false)
   定义体: do
   Simp.mkContext config
     (simpTheorems := #[← simpTheoremsOfNames lemmas simpOnly])
@@ -234,8 +234,8 @@ definition Simp.Context.ofArgs
   return r.ctx
 
 中文:
-定义 Simp.Context.ofArgs
-  签名: (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp.Config := {})
+定义 Simp.余ntext.ofArgs
+  签名: (args : TSyntax ``Parser.Tactic.simpArgs) (config : Simp.余nfig := {})
   定义体: do
   let simpTheorems ← Meta.getSimpTheorems
   let congrTheorems ← Meta.getSimpCongrTheorems
@@ -266,7 +266,7 @@ definition simpOnlyNames
 
 中文:
 定义 simpOnlyNames
-  签名: (lemmas : List Name) (e : Expr) (config : Simp.Config := {})
+  签名: (lemmas : 列表 Name) (e : Expr) (config : Simp.余nfig := {})
   定义体: do
 (·.1) < > simp e (← Simp.Context.ofNames lemmas true config)
 -/
@@ -289,7 +289,7 @@ definition simpType
 
 中文:
 定义 simpType
-  签名: (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : Option Expr := none)
+  签名: (S : Expr -> MetaM Simp.Result) (e : Expr) (type? : 选项类型 Expr := none)
   定义体: do
   let type ← type?.getDM (inferType e)
   match ← S type with

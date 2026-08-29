@@ -65,8 +65,8 @@ definition IsPushout.IsVanKampen
     (_ : CommSq f' g' h' i'), IsPushout f' g' h
 
 中文:
-定义 IsPushout.IsVanKampen
-  签名: (_ : IsPushout f g h i)
+定义 是推出.IsVanKampen
+  签名: (_ : 是推出 f g h i)
   定义体: forall ⦃W' X' Y' Z' : C⦄ (f' : W' ⟶ X') (g' : W' ⟶ Y') (h' : X' ⟶ Z') (i' : Y' ⟶ Z') (αW : W' ⟶ W)
     (αX : X' ⟶ X) (αY : Y' ⟶ Y) (αZ : Z' ⟶ Z) (_ : IsPullback f' αW αX f)
     (_ : IsPullback g' αW αY g) (_ : CommSq h' αX αZ h) (_ : CommSq i' αY αZ i)
@@ -94,8 +94,8 @@ lemma IsPushout.IsVanKampen.exists_cube_filling
   · refine IsPullback.of
 
 中文:
-引理 IsPushout.IsVanKampen.exists_cube_filling
-  结论: {H : IsPushout f g h i} (H' : H.IsVanKampen)
+引理 是推出.IsVanKampen.存在_cube_filling
+  结论: {H : 是推出 f g h i} (H' : H.IsVanKampen)
   证明: by
   let l := hi.lift ((pullback.fst αX f) ≫ h') ((pullback.snd αX f) ≫ g)
     (by simp only [Category.assoc, hh.toCommSq.w, pullback.condition_assoc, ← H.w])
@@ -136,8 +136,8 @@ theorem IsPushout.IsVanKampen.flip
     H' g' f' i' h' αW αY αX αZ hg hf hi hh w.flip
 
 中文:
-定理 IsPushout.IsVanKampen.flip
-  条件: {H : IsPushout f g h i} (H' : H.IsVanKampen)
+定理 是推出.IsVanKampen.flip
+  条件: {H : 是推出 f g h i} (H' : H.IsVanKampen)
   证明: by
   introv W' hf hg hh hi w
   simpa only [IsPushout.flip_iff, IsPullback.flip_iff, and_comm] using
@@ -168,8 +168,8 @@ theorem IsPushout.isVanKampen_iff
           (by convert! hα WalkingSpan.Hom.snd) ?_ ?_ ?
 
 中文:
-定理 IsPushout.isVanKampen_iff
-  条件: (H : IsPushout f g h i)
+定理 是推出.isVanKampen_iff
+  条件: (H : 是推出 f g h i)
   证明: by
   constructor
   · intro H F' c' α fα eα hα
@@ -243,8 +243,8 @@ theorem IsPushout.isVanKampen_iff'
   · intro H' W' X' Y' Z' f' g' h' i' αW αX α
 
 中文:
-定理 IsPushout.isVanKampen_iff'
-  条件: {H : IsPushout f g h i}
+定理 是推出.isVanKampen_iff'
+  条件: {H : 是推出 f g h i}
   证明: by
   constructor
   · intro H' X' Y' Z' h' i' αX αY αZ sq_h sq_i _
@@ -295,7 +295,7 @@ lemma IsPushout.isVanKampen_isPullback_isPullback_hom_ext
   exact H''.hom_ext h'_w i'_w
 
 中文:
-引理 IsPushout.isVanKampen_isPullback_isPullback_hom_ext
+引理 是推出.isVanKampen_isPullback_isPullback_hom_ext
   证明: by
   obtain ⟨W', f', g', αW, _, _, H''⟩ := H'.exists_cube_filling hh hi
   exact H''.hom_ext h'_w i'_w
@@ -331,7 +331,7 @@ theorem is_coprod_iff_isPushout
 
 中文:
 定理 is_coprod_iff_isPushout
-  结论: {X E Y YE : C} (c : BinaryCofan X E) (hc : IsColimit c) {f : X ⟶ Y}
+  结论: {X E Y YE : C} (c : BinaryCofan X E) (hc : 是余极限 c) {f : X ⟶ Y}
   证明: by
   constructor
   · rintro ⟨h⟩
@@ -399,8 +399,8 @@ theorem IsPushout.isVanKampen_inl
     ⟨hg, IsPullback.of_hasPullback α
 
 中文:
-定理 IsPushout.isVanKampen_inl
-  结论: {W E X Z : C} (c : BinaryCofan W E) [FinitaryExtensive C]
+定理 是推出.isVanKampen_inl
+  结论: {W E X Z : C} (c : BinaryCofan W E) [有限广延 C]
   证明: by
   obtain ⟨hc₁⟩ := (is_coprod_iff_isPushout c hc H.1).mpr H
   introv W' hf hg hh hi w
@@ -461,8 +461,8 @@ theorem IsPushout.IsVanKampen.isPullback_of_mono_left
     (IsPushout.of_horiz_isIso ⟨by simp⟩)).1.flip
 
 中文:
-定理 IsPushout.IsVanKampen.isPullback_of_mono_left
-  结论: [Mono f] {H : IsPushout f g h i}
+定理 是推出.IsVanKampen.isPullback_of_mono_left
+  结论: [单态射 f] {H : 是推出 f g h i}
   证明: ((H' (𝟙 _) g g (𝟙 Y) (𝟙 _) f (𝟙 _) i (IsKernelPair.id_of_mono f)
       (IsPullback.of_vert_isIso ⟨by simp⟩) H.1.flip ⟨rfl⟩ ⟨by simp⟩).mp
     (IsPushout.of_horiz_isIso ⟨by simp⟩)).1.flip
@@ -486,8 +486,8 @@ theorem IsPushout.IsVanKampen.isPullback_of_mono_right
     (IsPushout.of_vert_isIso ⟨by simp⟩)).2
 
 中文:
-定理 IsPushout.IsVanKampen.isPullback_of_mono_right
-  结论: [Mono g] {H : IsPushout f g h i}
+定理 是推出.IsVanKampen.isPullback_of_mono_right
+  结论: [单态射 g] {H : 是推出 f g h i}
   证明: ((H' f (𝟙 _) (𝟙 _) f (𝟙 _) (𝟙 _) g h (IsPullback.of_vert_isIso ⟨by simp⟩)
       (IsKernelPair.id_of_mono g) ⟨rfl⟩ H.1 ⟨by simp⟩).mp
     (IsPushout.of_vert_isIso ⟨by simp⟩)).2
@@ -512,8 +512,8 @@ theorem IsPushout.IsVanKampen.mono_of_mono_left
       (IsPushout.of_horiz_isIso ⟨by simp⟩)).2
 
 中文:
-定理 IsPushout.IsVanKampen.mono_of_mono_left
-  结论: [Mono f] {H : IsPushout f g h i}
+定理 是推出.IsVanKampen.mono_of_mono_left
+  结论: [单态射 f] {H : 是推出 f g h i}
   证明: IsKernelPair.mono_of_isIso_fst
     ((H' (𝟙 _) g g (𝟙 Y) (𝟙 _) f (𝟙 _) i (IsKernelPair.id_of_mono f)
         (IsPullback.of_vert_isIso ⟨by simp⟩) H.1.flip ⟨rfl⟩ ⟨by simp⟩).mp
@@ -540,8 +540,8 @@ theorem IsPushout.IsVanKampen.mono_of_mono_right
       (IsPushout.of_vert_isIso ⟨by simp⟩)).1
 
 中文:
-定理 IsPushout.IsVanKampen.mono_of_mono_right
-  结论: [Mono g] {H : IsPushout f g h i}
+定理 是推出.IsVanKampen.mono_of_mono_right
+  结论: [单态射 g] {H : 是推出 f g h i}
   证明: IsKernelPair.mono_of_isIso_fst
     ((H' f (𝟙 _) (𝟙 _) f (𝟙 _) (𝟙 _) g h (IsPullback.of_vert_isIso ⟨by simp⟩)
         (IsKernelPair.id_of_mono g) ⟨rfl⟩ H.1 ⟨by simp⟩).mp
@@ -569,11 +569,11 @@ class Adhesive
 
 中文:
 类 Adhesive
-  参数: (C : 类型u) [Category.{v} C]
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (3 个):
-    - [hasPullback_of_mono_left : 对任意 {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S) [Mono f], HasPullback f g]
-    - [hasPushout_of_mono_left : 对任意 {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y) [Mono f], HasPushout f g]
-    - van_kampen : 对任意 {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} [Mono f] (H : IsPushout f g h i), H.IsVanKampen
+    - [hasPullback_of_mono_left : 对任意 {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S) [单态射 f], HasPullback f g]
+    - [hasPushout_of_mono_left : 对任意 {X Y S : C} (f : S ⟶ X) (g : S ⟶ Y) [单态射 f], HasPushout f g]
+    - van_kampen : 对任意 {W X Y Z : C} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} [单态射 f] (H : 是推出 f g h i), H.IsVanKampen
 -/
 class Adhesive (C : Type u) [Category.{v} C] : Prop where
   [hasPullback_of_mono_left : forall {X Y S : C} (f : X ⟶ S) (g : Y ⟶ S) [Mono f], HasPullback f g]
@@ -594,7 +594,7 @@ theorem Adhesive.van_kampen'
 
 中文:
 定理 Adhesive.van_kampen'
-  条件: [Adhesive C] [Mono g] (H : IsPushout f g h i)
+  条件: [Adhesive C] [单态射 g] (H : 是推出 f g h i)
   结论: H.IsVanKampen
   证明: (Adhesive.van_kampen H.flip).flip
 
@@ -613,7 +613,7 @@ theorem Adhesive.isPullback_of_isPushout_of_mono_left
 
 中文:
 定理 Adhesive.isPullback_of_isPushout_of_mono_left
-  结论: [Adhesive C] (H : IsPushout f g h i)
+  结论: [Adhesive C] (H : 是推出 f g h i)
   证明: (Adhesive.van_kampen H).isPullback_of_mono_left
 
 Depends on / 依赖: Adhesive, Adhesive.van_kampen, isPullback_of_mono_left, van_kampen
@@ -632,7 +632,7 @@ theorem Adhesive.isPullback_of_isPushout_of_mono_right
 
 中文:
 定理 Adhesive.isPullback_of_isPushout_of_mono_right
-  结论: [Adhesive C] (H : IsPushout f g h i)
+  结论: [Adhesive C] (H : 是推出 f g h i)
   证明: (Adhesive.van_kampen' H).isPullback_of_mono_right
 
 Depends on / 依赖: Adhesive, Adhesive.van_kampen, isPullback_of_mono_right, van_kampen
@@ -651,7 +651,7 @@ theorem Adhesive.mono_of_isPushout_of_mono_left
 
 中文:
 定理 Adhesive.mono_of_isPushout_of_mono_left
-  条件: [Adhesive C] (H : IsPushout f g h i) [Mono f]
+  条件: [Adhesive C] (H : 是推出 f g h i) [单态射 f]
   证明: (Adhesive.van_kampen H).mono_of_mono_left
 
 Depends on / 依赖: Adhesive, Adhesive.van_kampen, mono_of_mono_left, van_kampen
@@ -670,7 +670,7 @@ theorem Adhesive.mono_of_isPushout_of_mono_right
 
 中文:
 定理 Adhesive.mono_of_isPushout_of_mono_right
-  条件: [Adhesive C] (H : IsPushout f g h i) [Mono g]
+  条件: [Adhesive C] (H : 是推出 f g h i) [单态射 g]
   证明: (Adhesive.van_kampen' H).mono_of_mono_right
 
 Depends on / 依赖: Adhesive, Adhesive.van_kampen, mono_of_mono_right, van_kampen
@@ -690,7 +690,7 @@ lemma Adhesive.isPushout_isPullback_isPullback_hom_ext
 
 中文:
 引理 Adhesive.isPushout_isPullback_isPullback_hom_ext
-  结论: [Adhesive C] [Mono f] (H : IsPushout f g h i)
+  结论: [Adhesive C] [单态射 f] (H : 是推出 f g h i)
   证明: IsPushout.isVanKampen_isPullback_isPullback_hom_ext (Adhesive.van_kampen H) hh hi h'_w i'_w
 
 Depends on / 依赖: Adhesive, Adhesive.van_kampen, IsPushout, IsPushout.isVanKampen_isPullback_isPullback_hom_ext, isVanKampen_isPullback_isPullback_hom_ext, van_kampen
@@ -835,7 +835,7 @@ instance Type.adhesive
     (IsPushout.isVanKampen_inl _ (Types.isCoprodOfMono f) _ _ _ H.flip).flip⟩
 
 中文:
-实例 Type.adhesive
+实例 类型.adhesive
   签名: : Adhesive (类型u)
   定义体: ⟨fun {_ _ _ _ f _ _ _ _} H =>
     (IsPushout.isVanKampen_inl _ (Types.isCoprodOfMono f) _ _ _ H.flip).flip⟩
@@ -884,7 +884,7 @@ instance adhesive_functor
 
 中文:
 实例 adhesive_functor
-  签名: [Adhesive C] [HasPullbacks C] [HasPushouts C]
+  签名: [Adhesive C] [有Pullbacks C] [有Pushouts C]
   定义体: by
   constructor
   intro W X Y Z f g h i hf H
@@ -1007,7 +1007,7 @@ theorem adhesive_of_reflective
 
 中文:
 定理 adhesive_of_reflective
-  结论: [HasPullbacks D] [Adhesive C] [HasPullbacks C] [HasPushouts C]
+  结论: [有Pullbacks D] [Adhesive C] [有Pullbacks C] [有Pushouts C]
   证明: by
   have := adj.leftAdjoint_preservesColimits
   have := adj.rightAdjoint_preservesLimits

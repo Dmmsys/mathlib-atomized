@@ -43,7 +43,7 @@ F.map_injective by
 
 中文:
 定义 ExactPairing.ofFaithful
-  签名: [F.Faithful] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
+  签名: [F.忠实] {X Y : C} (eval : Y otimes X ⟶ 𝟙_ C)
   定义体: eval
   coevaluation' := coeval
   evaluation_coevaluation' :=
@@ -84,7 +84,7 @@ definition ExactPairing.ofFullyFaithful
 
 中文:
 定义 ExactPairing.ofFullyFaithful
-  签名: [F.Full] [F.Faithful] (X Y : C)
+  签名: [F.满] [F.忠实] (X Y : C)
   定义体: .ofFaithful F (F.preimage (δ F _ _ ≫ ε_ _ _ ≫ (ε F)))
     (F.preimage (η F ≫ η_ _ _ ≫ μ F _ _)) (by simp) (by simp)
 
@@ -116,7 +116,7 @@ definition hasLeftDualOfEquivalence
 
 中文:
 定义 hasLeftDualOfEquivalence
-  签名: (X : C) [HasLeftDual (F.obj X)]
+  签名: (X : C) [有LeftDual (F.obj X)]
   定义体: G.obj (ᘁ(F.obj X))
   exact := by
     letI := exactPairingCongrLeft (X := F.obj (G.obj ᘁ(F.obj X)))
@@ -149,7 +149,7 @@ definition hasRightDualOfEquivalence
 
 中文:
 定义 hasRightDualOfEquivalence
-  签名: (X : C) [HasRightDual (F.obj X)]
+  签名: (X : C) [有RightDual (F.obj X)]
   定义体: G.obj ((F.obj X)ᘁ)
   exact := by
     letI := exactPairingCongrRight (X := F.obj X) (Y := F.obj (G.obj (F.obj X)ᘁ))
@@ -178,7 +178,7 @@ definition leftRigidCategoryOfEquivalence
 
 中文:
 定义 leftRigidCategoryOfEquivalence
-  签名: [LeftRigidCategory D]
+  签名: [LeftRigid范畴 D]
   定义体: hasLeftDualOfEquivalence adj X
 
 Depends on / 依赖: hasLeftDualOfEquivalence
@@ -198,7 +198,7 @@ definition rightRigidCategoryOfEquivalence
 
 中文:
 定义 rightRigidCategoryOfEquivalence
-  签名: [RightRigidCategory D]
+  签名: [RightRigid范畴 D]
   定义体: hasRightDualOfEquivalence adj X
 
 Depends on / 依赖: hasRightDualOfEquivalence
@@ -219,7 +219,7 @@ definition rigidCategoryOfEquivalence
 
 中文:
 定义 rigidCategoryOfEquivalence
-  签名: [RigidCategory D]
+  签名: [Rigid范畴 D]
   定义体: hasLeftDualOfEquivalence adj X
   rightDual X := hasRightDualOfEquivalence adj X
 

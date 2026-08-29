@@ -68,8 +68,8 @@ theorem Finset.rado_selection
   have (s : Finset α) : s.restrict ⁻¹' {f | exists
 
 中文:
-定理 Finset.rado_selection
-  条件: (g : Finset α -> (a : α) -> β a)
+定理 有限集.rado_selection
+  条件: (g : 有限集 α -> (a : α) -> β a)
   证明: by
   classical
   let instTop (a : α) : TopologicalSpace (β a) := ⊥
@@ -110,8 +110,8 @@ theorem Finset.rado_selection_subtype
   simpa [hg] using Finset.rado_selection g'
 
 中文:
-定理 Finset.rado_selection_subtype
-  条件: (g : (s : Finset α) -> (a : s) -> β a)
+定理 有限集.rado_selection_subtype
+  条件: (g : (s : 有限集 α) -> (a : s) -> β a)
   证明: by
   classical
   have (a : α) : Nonempty (β a) := ⟨g {a} ⟨a, by simp⟩⟩
@@ -143,8 +143,8 @@ theorem Set.Finite.rado_selection
   exact ⟨t, by simp_all⟩
 
 中文:
-定理 Set.Finite.rado_selection
-  条件: (g : (s : Set α) -> s.Finite -> (a : α) -> β a)
+定理 集合.有限.rado_selection
+  条件: (g : (s : 集合 α) -> s.有限 -> (a : α) -> β a)
   证明: by
   obtain ⟨χ, hχ⟩ := Finset.rado_selection (fun s => g s s.finite_toSet)
   refine ⟨χ, fun s hs => ?_⟩
@@ -175,8 +175,8 @@ theorem Set.Finite.rado_selection_subtype
   exact ⟨t, by simp_all⟩
 
 中文:
-定理 Set.Finite.rado_selection_subtype
-  条件: (g : (s : Set α) -> s.Finite -> (a : s) -> β a)
+定理 集合.有限.rado_selection_subtype
+  条件: (g : (s : 集合 α) -> s.有限 -> (a : s) -> β a)
   证明: by
   obtain ⟨χ, hχ⟩ := Finset.rado_selection_subtype (β := β) (fun s => g s s.finite_toSet)
   refine ⟨χ, fun s hs => ?_⟩

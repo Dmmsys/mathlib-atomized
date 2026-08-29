@@ -39,7 +39,7 @@ definition Int.ModEq
 notation:50 a " ≡ " b " [ZMOD " n "]" => Int.ModEq n a b
 
 中文:
-定义 Int.ModEq
+定义 整数.ModEq
   签名: (n a b : 整数)
   定义体: a % n = b % n
 
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Decidable (ModEq n a b)
+  签名: 可判定 (ModEq n a b)
   定义体: decEq (a % n) (b % n)
 -/
 instance : Decidable (ModEq n a b) := decEq (a % n) (b % n)
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans 整数 (ModEq n)
+  签名: 是Trans 整数 (ModEq n)
   定义体: @Int.ModEq.trans n
 
 Depends on / 依赖: Int.ModEq.trans
@@ -999,7 +999,7 @@ theorem cancel_left_div_gcd
 中文:
 定理 cancel_left_div_gcd
   条件: (hm : 0 < m) (h : c * a ≡ c * b [ZMOD m])
-  结论: a ≡ b [ZMOD m / gcd m c]
+  结论: a ≡ b [ZMOD m / 最大公约数 m c]
   证明: cancel_right_div_gcd hm by simpa [mul_comm] using h
 
 Depends on / 依赖: cancel_right_div_gcd, mul_comm
@@ -1847,7 +1847,7 @@ theorem gcd_a_modEq
 中文:
 定理 gcd_a_modEq
   条件: (a b : 自然数)
-  结论: (a : 整数) * 自然数.gcdA a b ≡ 自然数.gcd a b [ZMOD b]
+  结论: (a : 整数) * 自然数.gcdA a b ≡ 自然数.最大公约数 a b [ZMOD b]
   证明: by
   rw [← add_zero ((a : Int) * _)]; rw [Nat.gcd_eq_gcd_ab]
   exact (dvd_mul_right _ _).zero_modEq_int.add_left _
@@ -1922,7 +1922,7 @@ theorem existsUnique_equiv
       rwa [abs_of_pos hb] at this, by simp [ModEq]⟩
 
 中文:
-定理 existsUnique_equiv
+定理 存在Unique_equiv
   条件: (a : 整数) {b : 整数} (hb : 0 < b)
   证明: ⟨a % b, emod_nonneg _ (ne_of_gt hb),
     by
@@ -1950,7 +1950,7 @@ theorem existsUnique_equiv_nat
     constructor <;> rw [natAbs_of_nonneg hz1] <;> assumption⟩
 
 中文:
-定理 existsUnique_equiv_nat
+定理 存在Unique_equiv_nat
   条件: (a : 整数) {b : 整数} (hb : 0 < b)
   结论: 存在 z : 自然数, ↑z < b ∧ ↑z ≡ a [ZMOD b]
   证明: let ⟨z, hz1, hz2, hz3⟩ := existsUnique_equiv a hb

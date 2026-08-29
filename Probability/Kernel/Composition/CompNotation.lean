@@ -53,8 +53,8 @@ lemma comp_apply_univ
 
 中文:
 引理 comp_apply_univ
-  条件: [IsMarkovKernel κ]
-  结论: (κ ∘ₘ μ) Set.univ = μ Set.univ
+  条件: [是MarkovKernel κ]
+  结论: (κ ∘ₘ μ) 集合.univ = μ 集合.univ
   证明: by
   simp [bind_apply .univ κ.aemeasurable]
 
@@ -75,7 +75,7 @@ lemma deterministic_comp_eq_map
 
 中文:
 引理 deterministic_comp_eq_map
-  条件: {f : α -> β} (hf : Measurable f)
+  条件: {f : α -> β} (hf : 可测 f)
   证明: Measure.bind_dirac_eq_map μ hf
 
 @[simp]
@@ -97,7 +97,7 @@ lemma id_comp
 
 中文:
 引理 id_comp
-  结论: Kernel.id ∘ₘ μ = μ
+  结论: 核.id ∘ₘ μ = μ
   证明: by rw [Kernel.id, deterministic_comp_eq_map, Measure.map_id]
 
 Depends on / 依赖: Kernel, Kernel.id, Measure, Measure.map_id, deterministic_comp_eq_map, map_id
@@ -117,8 +117,8 @@ lemma swap_comp
 
 中文:
 引理 swap_comp
-  条件: {μ : Measure (α × β)}
-  结论: (Kernel.swap α β) ∘ₘ μ = μ.map Prod.swap
+  条件: {μ : 测度 (α × β)}
+  结论: (核.swap α β) ∘ₘ μ = μ.map 积类型.swap
   证明: deterministic_comp_eq_map measurable_swap
 
 @[simp]
@@ -140,8 +140,8 @@ lemma const_comp
 
 中文:
 引理 const_comp
-  条件: {ν : Measure β}
-  结论: (Kernel.const α ν) ∘ₘ μ = μ Set.univ • ν
+  条件: {ν : 测度 β}
+  结论: (核.const α ν) ∘ₘ μ = μ 集合.univ • ν
   证明: μ.bind_const
 
 Depends on / 依赖: bind_const

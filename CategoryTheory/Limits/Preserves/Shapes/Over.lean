@@ -39,7 +39,7 @@ instance PreservesLimitsOfShape.ofWidePullbacks
   body: preservesLimitsOfShape_of_equiv WithTerminal.widePullbackShapeEquiv F
 
 中文:
-实例 PreservesLimitsOfShape.ofWidePullbacks
+实例 保持形状极限.ofWidePullbacks
   签名: {J : 类型}
   定义体: preservesLimitsOfShape_of_equiv WithTerminal.widePullbackShapeEquiv F
 
@@ -64,8 +64,8 @@ instance PreservesLimitsOfShape.overPost
 ⟨isLimitEquiv isLimitConeD.ofIsoLimit Cone.ext (.refl _) fun | .star | .of a => by aesop⟩
 
 中文:
-实例 PreservesLimitsOfShape.overPost
-  签名: [PreservesLimitsOfShape (WithTerminal J) F]
+实例 保持形状极限.overPost
+  签名: [保持形状极限 (WithTerminal J) F]
   定义体: have isLimitConeD := (IsLimit.postcomposeHomEquiv liftFromOverComp.symm _).symm
       isLimitOfPreserves F (isLimitEquiv.symm isLimitConeK)
 ⟨isLimitEquiv isLimitConeD.ofIsoLimit Cone.ext (.refl _) fun | .star | .of a => by aesop⟩
@@ -86,8 +86,8 @@ instance PreservesFiniteLimits.overPost
   body: inferInstance
 
 中文:
-实例 PreservesFiniteLimits.overPost
-  签名: [PreservesFiniteLimits F]
+实例 保持FiniteLimits.overPost
+  签名: [保持FiniteLimits F]
   定义体: inferInstance
 -/
 instance PreservesFiniteLimits.overPost [PreservesFiniteLimits F] :
@@ -102,8 +102,8 @@ instance PreservesLimitsOfSize.overPost
   signature: [PreservesLimitsOfSize.{w', w} F]
 
 中文:
-实例 PreservesLimitsOfSize.overPost
-  签名: [PreservesLimitsOfSize.{w', w} F]
+实例 保持LimitsOfSize.overPost
+  签名: [保持LimitsOfSize.{w', w} F]
 -/
 instance PreservesLimitsOfSize.overPost [PreservesLimitsOfSize.{w', w} F] :
     PreservesLimitsOfSize.{w', w} (Over.post F (X := X)) where
@@ -123,8 +123,8 @@ instance PreservesColimitsOfShape.underPost
       Cocone.ext (.refl _) fun | .star | .of a => by aesop⟩
 
 中文:
-实例 PreservesColimitsOfShape.underPost
-  签名: [PreservesColimitsOfShape (WithInitial J) F]
+实例 保持形状余极限.underPost
+  签名: [保持形状余极限 (WithInitial J) F]
   定义体: have isColimitCoconeD := (IsColimit.precomposeHomEquiv liftFromUnderComp _).symm
       isColimitOfPreserves F (isColimitEquiv.symm isColimitCoconeK)
 ⟨isColimitEquiv isColimitCoconeD.ofIsoColimit
@@ -147,8 +147,8 @@ instance PreservesFiniteColimits.underPost
   body: inferInstance
 
 中文:
-实例 PreservesFiniteColimits.underPost
-  签名: [PreservesFiniteColimits F]
+实例 保持FiniteColimits.underPost
+  签名: [保持FiniteColimits F]
   定义体: inferInstance
 -/
 instance PreservesFiniteColimits.underPost [PreservesFiniteColimits F] :
@@ -163,8 +163,8 @@ instance PreservesColimitsOfSize.underPost
   signature: [PreservesColimitsOfSize.{w', w} F]
 
 中文:
-实例 PreservesColimitsOfSize.underPost
-  签名: [PreservesColimitsOfSize.{w', w} F]
+实例 保持余limitsOfSize.underPost
+  签名: [保持余limitsOfSize.{w', w} F]
 -/
 instance PreservesColimitsOfSize.underPost [PreservesColimitsOfSize.{w', w} F] :
     PreservesColimitsOfSize.{w', w} (Under.post F (X := X)) where

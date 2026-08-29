@@ -48,7 +48,7 @@ theorem factorization_factorial
 
 中文:
 定理 factorization_factorial
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   证明: by
         rw [factorial_succ]; rw [factorization_mul (zero_ne_add_one n).symm n.factorial_ne_zero]; rw [coe_add]; rw [Pi.add_apply]
       _ = #{i in Ico 1 b | p ^ i ∣ n + 1} + ∑ i in Ico 1 b, n / p ^ i := by
@@ -84,7 +84,7 @@ theorem sub_one_mul_factorization_factorial
 
 中文:
 定理 sub_one_mul_factorization_factorial
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   simp only [factorization_factorial hp <| lt_succ_of_lt <| Nat.lt_add_one (log p n),
     ← Finset.sum_Ico_add' _ 0 _ 1, Ico_zero_eq_range,
@@ -114,7 +114,7 @@ theorem factorization_factorial_mul_succ
 
 中文:
 定理 factorization_factorial_mul_succ
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   have h0 : 2 <= p := hp.two_le
   have h1 : 1 <= p * n + 1 := Nat.le_add_left _ _
@@ -154,7 +154,7 @@ theorem factorization_factorial_mul
 
 中文:
 定理 factorization_factorial_mul
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   induction n with
   | zero => simp
@@ -186,7 +186,7 @@ theorem factorization_factorial_le_div_pred
 
 中文:
 定理 factorization_factorial_le_div_pred
-  条件: {p : 自然数} (hp : p.Prime) (n : 自然数)
+  条件: {p : 自然数} (hp : p.素) (n : 自然数)
   证明: by
   rw [factorization_factorial hp (Nat.lt_add_one (log p n))]
   exact Nat.geom_sum_Ico_le hp.two_le _ _
@@ -213,7 +213,7 @@ lemma multiplicity_choose_aux
 
 中文:
 引理 multiplicity_choose_aux
-  条件: {p n b k : 自然数} (hp : p.Prime) (hkn : k <= n)
+  条件: {p n b k : 自然数} (hp : p.素) (hkn : k <= n)
   证明: calc
     ∑ i in Finset.Ico 1 b, n / p ^ i = ∑ i in Finset.Ico 1 b, (k + (n - k)) / p ^ i := by
       simp only [add_tsub_cancel_of_le hkn]
@@ -249,7 +249,7 @@ theorem factorization_choose'
 
 中文:
 定理 factorization_choose'
-  条件: {p n k b : 自然数} (hp : p.Prime) (hnb : log p (n + k) < b)
+  条件: {p n k b : 自然数} (hp : p.素) (hnb : log p (n + k) < b)
   证明: by
   have h₁ : (choose (n + k) k).factorization p + (k ! * n !).factorization p
     = #{i in Ico 1 b | p ^ i <= k % p ^ i + n % p ^ i} + (k ! * n !).factorization p := by
@@ -281,7 +281,7 @@ theorem factorization_choose
 
 中文:
 定理 factorization_choose
-  条件: {p n k b : 自然数} (hp : p.Prime) (hkn : k <= n) (hnb : log p n < b)
+  条件: {p n k b : 自然数} (hp : p.素) (hkn : k <= n) (hnb : log p n < b)
   证明: by
   rw [← factorization_choose' hp ((Nat.sub_add_cancel hkn).symm ▸ hnb)]; rw [Nat.sub_add_cancel hkn]
 
@@ -353,7 +353,7 @@ theorem factorization_choose_prime_pow_add_factorization
 
 中文:
 定理 factorization_choose_prime_pow_add_factorization
-  结论: (hp : p.Prime) (hkn : k <= p ^ n)
+  结论: (hp : p.素) (hkn : k <= p ^ n)
   证明: by
   apply le_antisymm
   · have hdisj : Disjoint {i in Ico 1 n.succ | p ^ i <= k % p ^ i + (p ^ n - k) % p ^ i}
@@ -389,7 +389,7 @@ theorem factorization_choose_prime_pow
 
 中文:
 定理 factorization_choose_prime_pow
-  条件: {p n k : 自然数} (hp : p.Prime) (hkn : k <= p ^ n) (hk0 : k != 0)
+  条件: {p n k : 自然数} (hp : p.素) (hkn : k <= p ^ n) (hk0 : k != 0)
   证明: by
   nth_rewrite 2 [← factorization_choose_prime_pow_add_factorization hp hkn hk0]
   rw [Nat.add_sub_cancel_right]

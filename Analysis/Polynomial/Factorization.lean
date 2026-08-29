@@ -42,7 +42,7 @@ exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f
 
 中文:
 引理 eq_isMonicOfDegree_one_mul_isMonicOfDegree
-  结论: {F : 类型} [Field F]
+  结论: {F : 类型} [域 F]
   证明: by
   obtain ⟨f₁, hf₁m, hf₁i, f₂, hf₂⟩ :=
 exists_monic_irreducible_factor f not_isUnit_of_natDegree_pos f

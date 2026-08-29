@@ -99,7 +99,7 @@ abbreviation List.Vector.Perm.isSetoid
   body: (List.isSetoid α).comap Subtype.val
 
 中文:
-缩写 List.Vector.Perm.isSetoid
+缩写 列表.Vector.置换.isSetoid
   签名: (α : 类型) (n : 自然数)
   定义体: (List.isSetoid α).comap Subtype.val
 
@@ -132,7 +132,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Sym α n -> Multiset α)
+  结论: 单射 ((↑) : Sym α n -> Multiset α)
   证明: Subtype.coe_injective
 
 @[simp, norm_cast]
@@ -392,7 +392,7 @@ definition ofVector
 
 中文:
 定义 ofVector
-  签名: : List.Vector α n -> Sym α n
+  签名: : 列表.Vector α n -> Sym α n
   定义体: fun x => ⟨↑x.val, (Multiset.coe_card _).trans x.2⟩
 
 Depends on / 依赖: Multiset, Multiset.coe_card, coe_card, x.val
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (List.Vector α n) (Sym α n)
+  签名: Coe (列表.Vector α n) (Sym α n)
   定义体: ofVector x
 
 @[simp]
@@ -434,7 +434,7 @@ theorem ofVector_nil
 
 中文:
 定理 ofVector_nil
-  结论: ↑(Vector.nil : List.Vector α 0) = (Sym.nil : Sym α 0)
+  结论: ↑(Vector.nil : 列表.Vector α 0) = (Sym.nil : Sym α 0)
   证明: rfl
 
 @[simp]
@@ -457,7 +457,7 @@ theorem ofVector_cons
 
 中文:
 定理 ofVector_cons
-  条件: (a : α) (v : List.Vector α n)
+  条件: (a : α) (v : 列表.Vector α n)
   证明: by
   cases v
   rfl
@@ -574,7 +574,7 @@ lemma «forall»
   simp [Sym]
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : Sym α n -> 命题}
   证明: by
   simp [Sym]
@@ -596,7 +596,7 @@ lemma «exists»
 @[simp]
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : Sym α n -> 命题}
   证明: by
   simp [Sym]
@@ -727,7 +727,7 @@ theorem cons_of_coe_eq
 
 中文:
 定理 cons_of_coe_eq
-  条件: (a : α) (v : List.Vector α n)
+  条件: (a : α) (v : 列表.Vector α n)
   结论: a ::ₛ (↑v : Sym α n) = ↑(a ::ᵥ v)
   证明: Subtype.ext by
     cases v
@@ -752,7 +752,7 @@ theorem sound
 
 中文:
 定理 sound
-  条件: {a b : List.Vector α n} (h : a.val ~ b.val)
+  条件: {a b : 列表.Vector α n} (h : a.val ~ b.val)
   结论: (↑a : Sym α n) = ↑b
   证明: Subtype.ext Quotient.sound h
 
@@ -969,7 +969,7 @@ instance instZeroSym
 
 中文:
 实例 instZeroSym
-  签名: : Zero (Sym α 0)
+  签名: : 零 (Sym α 0)
   定义体: ⟨⟨0, rfl⟩⟩
 
 Depends on / 依赖: CommGroup, IsSolvable
@@ -1038,7 +1038,7 @@ instance uniqueZero
 
 中文:
 实例 uniqueZero
-  签名: : Unique (Sym α 0)
+  签名: : 唯一 (Sym α 0)
   定义体: ⟨⟨nil⟩, eq_nil_of_card_zero⟩
 
 Depends on / 依赖: eq_nil_of_card_zero
@@ -1177,7 +1177,7 @@ theorem exists_mem
   proof: Multiset.card_pos_iff_exists_mem.1 s.2.symm ▸ n.succ_pos
 
 中文:
-定理 exists_mem
+定理 存在_mem
   条件: (s : Sym α n.succ)
   结论: 存在 a, a in s
   证明: Multiset.card_pos_iff_exists_mem.1 s.2.symm ▸ n.succ_pos
@@ -1205,7 +1205,7 @@ theorem exists_cons_of_mem
   exact h
 
 中文:
-定理 exists_cons_of_mem
+定理 存在_cons_of_mem
   条件: {s : Sym α (n + 1)} {a : α} (h : a in s)
   结论: 存在 t, s = a ::ₛ t
   证明: by
@@ -1242,7 +1242,7 @@ theorem exists_eq_cons_of_succ
   classical exact ⟨a, s.erase a ha, (cons_erase ha).symm⟩
 
 中文:
-定理 exists_eq_cons_of_succ
+定理 存在_eq_cons_of_succ
   条件: (s : Sym α n.succ)
   结论: 存在 (a : α) (s' : Sym α n), s = a ::ₛ s'
   证明: by
@@ -1285,7 +1285,7 @@ theorem eq_replicate_of_subsingleton
 
 中文:
 定理 eq_replicate_of_subsingleton
-  条件: [Subsingleton α] (a : α) {n : 自然数} (s : Sym α n)
+  条件: [子单例 α] (a : α) {n : 自然数} (s : Sym α n)
   证明: eq_replicate.2 fun _ _ => Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, eq_replicate
@@ -1308,7 +1308,7 @@ instance [Subsingleton
       rw [eq_replicate_of_subsingleton b s']; rw [eq_replicate_of_subsingleton b s]⟩
 
 中文:
-实例 [Subsingleton
+实例 [子单例
   签名: α] (n
   定义体: ⟨by
     cases n
@@ -1337,7 +1337,7 @@ instance inhabitedSym
 
 中文:
 实例 inhabitedSym
-  签名: [Inhabited α] (n : 自然数)
+  签名: [可居 α] (n : 自然数)
   定义体: ⟨replicate n default⟩
 
 Depends on / 依赖: replicate
@@ -1355,7 +1355,7 @@ instance inhabitedSym'
 
 中文:
 实例 inhabitedSym'
-  签名: [Inhabited α] (n : 自然数)
+  签名: [可居 α] (n : 自然数)
   定义体: ⟨Quotient.mk' (List.Vector.replicate n default)⟩
 
 Depends on / 依赖: List.Vector.replicate, Quotient, Quotient.mk, Vector, replicate
@@ -1655,7 +1655,7 @@ coe_injective Multiset.map_injective hf coe_inj.2 h
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (hf : Injective f) (n : 自然数)
+  条件: {f : α -> β} (hf : 单射 f) (n : 自然数)
   证明: fun _ _ h =>
 coe_injective Multiset.map_injective hf coe_inj.2 h
 -/
@@ -2139,7 +2139,7 @@ definition fill
 
 中文:
 定义 fill
-  签名: (a : α) (i : Fin (n + 1)) (m : Sym α (n - i))
+  签名: (a : α) (i : 有限集 (n + 1)) (m : Sym α (n - i))
   定义体: Sym.cast (Nat.sub_add_cancel i.is_le) (m.append (replicate i a))
 
 Depends on / 依赖: Nat.sub_add_cancel, Sym.cast, append, i.is_le, is_le, m.append, replicate, sub_add_cancel
@@ -2157,7 +2157,7 @@ theorem coe_fill
 
 中文:
 定理 coe_fill
-  条件: {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)}
+  条件: {a : α} {i : 有限集 (n + 1)} {m : Sym α (n - i)}
   证明: rfl
 -/
 theorem coe_fill {a : α} {i : Fin (n + 1)} {m : Sym α (n - i)} :
@@ -2175,7 +2175,7 @@ theorem mem_fill_iff
 
 中文:
 定理 mem_fill_iff
-  条件: {a b : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
+  条件: {a b : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
   证明: by
   rw [fill]; rw [mem_cast]; rw [mem_append_iff]; rw [or_comm]; rw [mem_replicate]
 
@@ -2242,7 +2242,7 @@ theorem sigma_sub_ext
 
 中文:
 定理 sigma_sub_ext
-  条件: {m₁ m₂ : Σ i : Fin (n + 1), Sym α (n - i)} (h : (m₁.2 : Multiset α) = m₂.2)
+  条件: {m₁ m₂ : Σ i : 有限集 (n + 1), Sym α (n - i)} (h : (m₁.2 : Multiset α) = m₂.2)
   证明: Sigma.subtype_ext
     (Fin.ext <| by
       rw [← Nat.sub_sub_self (Nat.le_of_lt_succ m₁.1.is_lt)]; rw [← m₁.2.2]; rw [val_eq_coe]; rw [h]; rw [← val_eq_coe]; rw [m₂.2.2]; rw [Nat.sub_sub_self (Nat.le_of_lt_succ m₂.1.is_lt)])
@@ -2343,7 +2343,7 @@ theorem count_coe_fill_self_of_notMem
 
 中文:
 定理 count_coe_fill_self_of_notMem
-  结论: [DecidableEq α] {a : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
+  结论: [DecidableEq α] {a : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
   证明: by
   simp [coe_fill, coe_replicate, hx]
 
@@ -2366,7 +2366,7 @@ theorem count_coe_fill_of_ne
 
 中文:
 定理 count_coe_fill_of_ne
-  结论: [DecidableEq α] {a x : α} {i : Fin (n + 1)} {s : Sym α (n - i)}
+  结论: [DecidableEq α] {a x : α} {i : 有限集 (n + 1)} {s : Sym α (n - i)}
   证明: by
   suffices x ∉ Multiset.replicate i a by simp [coe_fill, coe_replicate, this]
   simp [Multiset.mem_replicate, hx]
@@ -2408,7 +2408,7 @@ o.1.get Option.ne_none_iff_isSome.1 ne_of_mem_of_not_mem o.2 h)
 
 中文:
 定义 encode
-  签名: [DecidableEq α] (s : Sym (Option α) n.succ)
+  签名: [DecidableEq α] (s : Sym (选项类型 α) n.succ)
   定义体: if h : none in s then Sum.inl (s.erase none h)
   else
     Sum.inr
@@ -2439,7 +2439,7 @@ theorem encode_of_none_mem
 
 中文:
 定理 encode_of_none_mem
-  条件: [DecidableEq α] (s : Sym (Option α) n.succ) (h : none in s)
+  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ) (h : none in s)
   证明: dif_pos h
 
 @[simp]
@@ -2461,7 +2461,7 @@ theorem encode_of_none_notMem
 
 中文:
 定理 encode_of_none_notMem
-  条件: [DecidableEq α] (s : Sym (Option α) n.succ) (h : none ∉ s)
+  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ) (h : none ∉ s)
   证明: dif_neg h
 
 Depends on / 依赖: dif_neg
@@ -2482,7 +2482,7 @@ definition decode
 
 中文:
 定义 decode
-  签名: : Sym (Option α) n oplus Sym α n.succ -> Sym (Option α) n.succ
+  签名: : Sym (选项类型 α) n oplus Sym α n.succ -> Sym (选项类型 α) n.succ
 -/
 def decode : Sym (Option α) n oplus Sym α n.succ -> Sym (Option α) n.succ
   | Sum.inl s => none ::ₛ s
@@ -2502,8 +2502,8 @@ theorem decode_inl
 
 中文:
 定理 decode_inl
-  条件: (s : Sym (Option α) n)
-  结论: decode (Sum.inl s) = none ::ₛ s
+  条件: (s : Sym (选项类型 α) n)
+  结论: decode (和.inl s) = none ::ₛ s
   证明: rfl
 
 @[simp]
@@ -2526,7 +2526,7 @@ theorem decode_inr
 中文:
 定理 decode_inr
   条件: (s : Sym α n.succ)
-  结论: decode (Sum.inr s) = s.map Embedding.some
+  结论: decode (和.inr s) = s.map 嵌入.some
   证明: rfl
 
 @[simp]
@@ -2553,7 +2553,7 @@ theorem decode_encode
 
 中文:
 定理 decode_encode
-  条件: [DecidableEq α] (s : Sym (Option α) n.succ)
+  条件: [DecidableEq α] (s : Sym (选项类型 α) n.succ)
   结论: decode (encode s) = s
   证明: by
   by_cases h : none in s
@@ -2593,7 +2593,7 @@ theorem encode_decode
 
 中文:
 定理 encode_decode
-  条件: [DecidableEq α] (s : Sym (Option α) n oplus Sym α n.succ)
+  条件: [DecidableEq α] (s : Sym (选项类型 α) n oplus Sym α n.succ)
   证明: by
   obtain s | s := s
   · simp

@@ -36,7 +36,7 @@ theorem lintegral_sub'
 
 中文:
 定理 lintegral_sub'
-  结论: {f g : α -> 实数>=0∞} (hg : AEMeasurable g μ) (hg_fin : ∫⁻ a, g a ∂μ != ∞)
+  结论: {f g : α -> 实数>=0∞} (hg : 几乎处处可测 g μ) (hg_fin : ∫⁻ a, g a ∂μ != ∞)
   证明: by
   refine ENNReal.eq_sub_of_add_eq hg_fin ?_
   rw [← lintegral_add_right' _ hg]
@@ -60,7 +60,7 @@ theorem lintegral_sub
 
 中文:
 定理 lintegral_sub
-  结论: {f g : α -> 实数>=0∞} (hg : Measurable g) (hg_fin : ∫⁻ a, g a ∂μ != ∞)
+  结论: {f g : α -> 实数>=0∞} (hg : 可测 g) (hg_fin : ∫⁻ a, g a ∂μ != ∞)
   证明: lintegral_sub' hg.aemeasurable hg_fin h_le
 
 Depends on / 依赖: aemeasurable, h_le, hg.aemeasurable, hg_fin, lintegral_sub
@@ -86,7 +86,7 @@ theorem lintegral_sub_le'
 
 中文:
 定理 lintegral_sub_le'
-  条件: (f g : α -> 实数>=0∞) (hf : AEMeasurable f μ)
+  条件: (f g : α -> 实数>=0∞) (hf : 几乎处处可测 f μ)
   证明: by
   rw [tsub_le_iff_right]
   by_cases hfi : ∫⁻ x, f x ∂μ = ∞
@@ -118,7 +118,7 @@ theorem lintegral_sub_le
 
 中文:
 定理 lintegral_sub_le
-  条件: (f g : α -> 实数>=0∞) (hf : Measurable f)
+  条件: (f g : α -> 实数>=0∞) (hf : 可测 f)
   证明: lintegral_sub_le' f g hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, lintegral_sub_le
@@ -141,7 +141,7 @@ theorem lintegral_iInf_ae
 
 中文:
 定理 lintegral_iInf_ae
-  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, Measurable (f n))
+  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, 可测 (f n))
   证明: have fn_le_f0 : ∫⁻ a, ⨅ n, f n a ∂μ <= ∫⁻ a, f 0 a ∂μ :=
     lintegral_mono fun _ => iInf_le_of_le 0 le_rfl
   have fn_le_f0' : ⨅ n, ∫⁻ a, f n a ∂μ <= ∫⁻ a, f 0 a ∂μ := iInf_le_of_le 0 le_rfl
@@ -190,7 +190,7 @@ theorem lintegral_iInf
 
 中文:
 定理 lintegral_iInf
-  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, Measurable (f n)) (h_anti : Antitone f)
+  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, 可测 (f n)) (h_anti : 递减 f)
   证明: lintegral_iInf_ae h_meas (fun n => ae_of_all _ <| h_anti n.le_succ) h_fin
 
 Depends on / 依赖: ae_of_all, h_anti, h_fin, h_meas, le_succ, lintegral_iInf_ae, n.le_succ
@@ -216,7 +216,7 @@ theorem lintegral_iInf'
 
 中文:
 定理 lintegral_iInf'
-  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, AEMeasurable (f n) μ)
+  结论: {f : 自然数 -> α -> 实数>=0∞} (h_meas : 对任意 n, 几乎处处可测 (f n) μ)
   证明: by
   simp_rw [← iInf_apply]
   let p : α -> (Nat -> Real>=0∞) -> Prop := fun _ f' => Antitone f'
@@ -265,7 +265,7 @@ theorem lintegral_iInf_directed_of_measurable
 
 中文:
 定理 lintegral_iInf_directed_of_measurable
-  结论: [Countable β]
+  结论: [可数 β]
   证明: by
   cases nonempty_encodable β
   cases isEmpty_or_nonempty β
@@ -369,7 +369,7 @@ theorem exists_setLIntegral_compl_lt
     obtain ⟨g, hgf, hgε⟩ : exists (g : α ->ₛ Real>=0∞) (_ : g <
 
 中文:
-定理 exists_setLIntegral_compl_lt
+定理 存在_setL整数egral_compl_lt
   结论: {f : α -> 实数>=0∞} (hf : ∫⁻ a, f a ∂μ != ∞)
   证明: by
   by_cases hf₀ : ∫⁻ a, f a ∂μ = 0
@@ -418,7 +418,7 @@ theorem exists_measurable_le_setLIntegral_eq_of_integrable
   · rw [hifg] at h
 
 中文:
-定理 exists_measurable_le_setLIntegral_eq_of_integrable
+定理 存在_measurable_le_setL整数egral_eq_of_integrable
   条件: {f : α -> 实数>=0∞} (hf : ∫⁻ a, f a ∂μ != ∞)
   证明: by
   obtain ⟨g, hmg, hgf, hifg⟩ := exists_measurable_le_lintegral_eq (μ := μ) f

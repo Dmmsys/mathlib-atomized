@@ -149,7 +149,7 @@ lemma colimitHomIsoLimitYoneda_hom_comp_π
 
 中文:
 引理 colimitHomIsoLimitYoneda_hom_comp_π
-  条件: [HasLimitsOfShape Iᵒᵖ (类型u₂)] (A : C) (i : I)
+  条件: [有形状极限 Iᵒᵖ (类型u₂)] (A : C) (i : I)
   证明: by
   simp only [colimitHomIsoLimitYoneda, Iso.trans_hom, Iso.app_hom, Category.assoc]
   erw [limitObjIsoLimitCompEvaluation_hom_π]
@@ -180,7 +180,7 @@ lemma colimitHomIsoLimitYoneda_inv_comp_π
 
 中文:
 引理 colimitHomIsoLimitYoneda_inv_comp_π
-  条件: [HasLimitsOfShape Iᵒᵖ (类型u₂)] (A : C) (i : I)
+  条件: [有形状极限 Iᵒᵖ (类型u₂)] (A : C) (i : I)
   证明: by
   rw [← dsimp% colimitHomIsoLimitYoneda_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
 
@@ -276,7 +276,7 @@ definition colimitHomIsoLimitYoneda'
 
 中文:
 定义 colimitHomIsoLimitYoneda'
-  签名: [HasLimitsOfShape I (类型u₂)] (A : C)
+  签名: [有形状极限 I (类型u₂)] (A : C)
   定义体: (coyonedaOpColimitIsoLimitCoyoneda' F).app A ≪≫ limitObjIsoLimitCompEvaluation _ _
 
 Depends on / 依赖: coyonedaOpColimitIsoLimitCoyoneda, limitObjIsoLimitCompEvaluation
@@ -302,7 +302,7 @@ lemma colimitHomIsoLimitYoneda'_hom_comp_π
 
 中文:
 引理 colimitHomIsoLimitYoneda'_hom_comp_π
-  条件: [HasLimitsOfShape I (类型u₂)] (A : C) (i : I)
+  条件: [有形状极限 I (类型u₂)] (A : C) (i : I)
   证明: by
   simp only [colimitHomIsoLimitYoneda', Iso.trans_hom,
     Iso.app_hom, Category.assoc]
@@ -333,7 +333,7 @@ lemma colimitHomIsoLimitYoneda'_inv_comp_π
 
 中文:
 引理 colimitHomIsoLimitYoneda'_inv_comp_π
-  条件: [HasLimitsOfShape I (类型u₂)] (A : C) (i : I)
+  条件: [有形状极限 I (类型u₂)] (A : C) (i : I)
   证明: by
   rw [← dsimp% colimitHomIsoLimitYoneda'_hom_comp_π]; rw [← Category.assoc]; rw [Iso.inv_hom_id]; rw [Category.id_comp]
 -/

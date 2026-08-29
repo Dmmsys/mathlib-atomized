@@ -53,7 +53,7 @@ definition attach
 
 中文:
 定义 attach
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨Multiset.attach s.1, nodup_attach.2 s.2⟩
 
 @[simp]
@@ -77,7 +77,7 @@ theorem attach_val
 
 中文:
 定理 attach_val
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.attach.1 = s.1.attach
   证明: rfl
 
@@ -100,7 +100,7 @@ theorem mem_attach
 
 中文:
 定理 mem_attach
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: 对任意 x, x in s.attach
   证明: Multiset.mem_attach _
 
@@ -123,8 +123,8 @@ theorem coe_attach
 
 中文:
 定理 coe_attach
-  条件: (s : Finset α)
-  结论: (s.attach : Set s) = Set.univ
+  条件: (s : 有限集 α)
+  结论: (s.attach : 集合 s) = 集合.univ
   证明: by ext; simp
 -/
 theorem coe_attach (s : Finset α) : (s.attach : Set s) = Set.univ := by ext; simp

@@ -184,7 +184,7 @@ theorem convexOn_of_slope_mono_adjacent
 
 中文:
 定理 convexOn_of_slope_mono_adjacent
-  结论: (hs : Convex 𝕜 s)
+  结论: (hs : 凸 𝕜 s)
   证明: LinearOrder.convexOn_of_lt hs fun x hx z hz hxz a b ha hb hab => by
     simp only [smul_eq_mul]
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
@@ -222,7 +222,7 @@ theorem concaveOn_of_slope_anti_adjacent
 
 中文:
 定理 concaveOn_of_slope_anti_adjacent
-  结论: (hs : Convex 𝕜 s)
+  结论: (hs : 凸 𝕜 s)
   证明: by
   rw [← neg_convexOn_iff]
   refine convexOn_of_slope_mono_adjacent hs fun hx hz hxy hyz => ?_
@@ -256,7 +256,7 @@ theorem strictConvexOn_of_slope_strict_mono_adjacent
 
 中文:
 定理 strictConvexOn_of_slope_strict_mono_adjacent
-  结论: (hs : Convex 𝕜 s)
+  结论: (hs : 凸 𝕜 s)
   证明: LinearOrder.strictConvexOn_of_lt hs fun x hx z hz hxz a b ha hb hab => by
     simp only [smul_eq_mul]
     have hxy : x < a * x + b * z := by linear_combination b * hxz - x * hab
@@ -294,7 +294,7 @@ theorem strictConcaveOn_of_slope_strict_anti_adjacent
 
 中文:
 定理 strictConcaveOn_of_slope_strict_anti_adjacent
-  结论: (hs : Convex 𝕜 s)
+  结论: (hs : 凸 𝕜 s)
   证明: by
   rw [← neg_strictConvexOn_iff]
   refine strictConvexOn_of_slope_strict_mono_adjacent hs fun hx hz hxy hyz => ?_

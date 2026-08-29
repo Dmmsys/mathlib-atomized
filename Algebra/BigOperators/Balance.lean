@@ -205,7 +205,7 @@ lemma map_balance
 
 中文:
 引理 map_balance
-  条件: [FunLike F G H] [LinearMapClass F Rat>=0 G H] (g : F) (f : ι -> G) (a : ι)
+  条件: [函数状 F G H] [线性映射类 F 有理数>=0 G H] (g : F) (f : ι -> G) (a : ι)
   证明: by simp [balance, map_expect]
 -/
 @[simp] lemma map_balance [FunLike F G H] [LinearMapClass F Rat>=0 G H] (g : F) (f : ι -> G) (a : ι) :

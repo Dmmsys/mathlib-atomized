@@ -174,7 +174,7 @@ theorem foldr_prod_map_ι
 
 中文:
 定理 foldr_prod_map_ι
-  条件: (l : List M) (f : M ->ₗ[R] N ->ₗ[R] N) (hf) (n : N)
+  条件: (l : 列表 M) (f : M ->ₗ[R] N ->ₗ[R] N) (hf) (n : N)
   证明: by
   induction l with
   | nil => rw [List.map_nil, List.prod_nil, List.foldr_nil, foldr_one]
@@ -374,7 +374,7 @@ theorem foldl_prod_map_ι
 
 中文:
 定理 foldl_prod_map_ι
-  条件: (l : List M) (f : M ->ₗ[R] N ->ₗ[R] N) (hf) (n : N)
+  条件: (l : 列表 M) (f : M ->ₗ[R] N ->ₗ[R] N) (hf) (n : N)
   证明: by
   rw [← foldr_reverse]; rw [reverse_prod_map_ι]; rw [← List.map_reverse]; rw [foldr_prod_map_ι]; rw [List.foldr_reverse]
 

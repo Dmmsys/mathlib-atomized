@@ -100,7 +100,7 @@ definition d
 
 中文:
 定义 d
-  签名: {G A : C} {M : ModuleCat (End G)ᵐᵒᵖ}
+  签名: {G A : C} {M : 模范畴 (End G)ᵐᵒᵖ}
   定义体: Sigma.desc fun (m : M) => g m
 
 Depends on / 依赖: Sigma.desc
@@ -122,7 +122,7 @@ theorem ι_d
 
 中文:
 定理 ι_d
-  条件: {G A : C} {M : ModuleCat (End G)ᵐᵒᵖ} (g : M ⟶ ModuleCat.of (End G)ᵐᵒᵖ (G ⟶ A)) (m : M)
+  条件: {G A : C} {M : 模范畴 (End G)ᵐᵒᵖ} (g : M ⟶ 模范畴.of (End G)ᵐᵒᵖ (G ⟶ A)) (m : M)
   证明: by
   simp [d]
 -/
@@ -148,7 +148,7 @@ theorem kernel_ι_d_comp_d
 
 中文:
 定理 kernel_ι_d_comp_d
-  结论: {G : C} (hG : IsSeparator G) {A B : C} {M : ModuleCat (End G)ᵐᵒᵖ}
+  结论: {G : C} (hG : IsSeparator G) {A B : C} {M : 模范畴 (End G)ᵐᵒᵖ}
   证明: by
   refine (isColimitFiniteSubproductsCocone (fun (_ : M) => G)).pullback_zero_ext (fun F => ?_)
   dsimp only [liftToFinsetObj_obj, Discrete.functor_obj_eq_as, finiteSubcoproductsCocone_pt,
@@ -193,8 +193,8 @@ theorem exists_d_comp_eq_d
   con
 
 中文:
-定理 exists_d_comp_eq_d
-  结论: {G : C} (hG : IsSeparator G) {A} (B : C) [Injective B]
+定理 存在_d_comp_eq_d
+  结论: {G : C} (hG : IsSeparator G) {A} (B : C) [单射 B]
   证明: by
   let l₁ : image (d g) ⟶ B := epiDesc (factorThruImage (d g)) (d f) (by
     rw [← kernelFactorThruImage_hom_comp_ι]; rw [Category.assoc]; rw [kernel_ι_d_comp_d hG _ hg]; rw [comp_zero])
@@ -239,7 +239,7 @@ theorem GabrielPopescu.full
 中文:
 定理 GabrielPopescu.full
   条件: (G : C) (hG : IsSeparator G)
-  结论: (preadditiveCoyonedaObj G).Full where
+  结论: (preadditiveCoyonedaObj G).满 where
   证明: by
     have := (isSeparator_iff_epi G).1 hG A
     have h := kernel_ι_d_comp_d hG (𝟙 _) inferInstance f

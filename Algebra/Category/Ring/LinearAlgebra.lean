@@ -43,7 +43,7 @@ lemma nontrivial_of_isPushout_of_isField
 
 中文:
 引理 nontrivial_of_isPushout_of_isField
-  结论: {A B C D : CommRingCat.{u}}
+  结论: {A B C D : 交换环范畴.{u}}
   证明: by
   let : Field A := hA.toField
   algebraize [f.hom, g.hom]

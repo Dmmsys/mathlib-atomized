@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (A otimes[R] B)
+  签名: 对合 (A otimes[R] B)
   定义体: congr (starLinearEquiv R) (starLinearEquiv R) x
 
 @[simp]
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarAddMonoid (A otimes[R] B)
+  签名: StarAdd幺半群 (A otimes[R] B)
   定义体: map_add _
 
 Depends on / 依赖: map_add
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule R (A otimes[R] B)
+  签名: 对合模 R (A otimes[R] B)
   定义体: map_smulₛₗ _
 -/
 instance : StarModule R (A otimes[R] B) where

@@ -56,11 +56,11 @@ inductive IsAtomic
     - rel: {l : Nat} (R : L.Relations l) (ts : Fin l -> L.Term (α oplus (Fin n))) : IsAtomic (R.boundedFormula ts)
 
 中文:
-归纳类型 IsAtomic
+归纳类型 是原子的
   参数: : L.BoundedFormula α n -> 命题
   构造子 (2 个):
-    - equal: (t₁ t₂ : L.Term (α oplus (Fin n))) : IsAtomic (t₁.bdEqual t₂)
-    - rel: {l : 自然数} (R : L.Relations l) (ts : Fin l -> L.Term (α oplus (Fin n))) : IsAtomic (R.boundedFormula ts)
+    - equal: (t₁ t₂ : L.项 (α oplus (有限集 n))) : 是原子的 (t₁.bdEqual t₂)
+    - rel: {l : 自然数} (R : L.关系 l) (ts : 有限集 l -> L.项 (α oplus (有限集 n))) : 是原子的 (R.boundedFormula ts)
 -/
 inductive IsAtomic : L.BoundedFormula α n -> Prop
   | equal (t₁ t₂ : L.Term (α oplus (Fin n))) : IsAtomic (t₁.bdEqual t₂)
@@ -80,7 +80,7 @@ theorem not_all_isAtomic
 中文:
 定理 not_all_isAtomic
   条件: (φ : L.BoundedFormula α (n + 1))
-  结论: ¬φ.all.IsAtomic
+  结论: ¬φ.all.是原子的
   证明: fun con => by
   cases con
 -/
@@ -99,7 +99,7 @@ theorem not_ex_isAtomic
 中文:
 定理 not_ex_isAtomic
   条件: (φ : L.BoundedFormula α (n + 1))
-  结论: ¬φ.ex.IsAtomic
+  结论: ¬φ.ex.是原子的
   证明: fun con => by cases con
 -/
 theorem not_ex_isAtomic (φ : L.BoundedFormula α (n + 1)) : ¬φ.ex.IsAtomic := fun con => by cases con
@@ -113,8 +113,8 @@ theorem IsAtomic.relabel
   proof: IsAtomic.recOn h (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 中文:
-定理 IsAtomic.relabel
-  结论: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.IsAtomic)
+定理 是原子的.relabel
+  结论: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.是原子的)
   证明: IsAtomic.recOn h (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 Depends on / 依赖: IsAtomic, IsAtomic.equal, IsAtomic.recOn, IsAtomic.rel
@@ -133,9 +133,9 @@ theorem IsAtomic.liftAt
   proof: IsAtomic.recOn h (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 中文:
-定理 IsAtomic.liftAt
-  条件: {k m : 自然数} (h : IsAtomic φ)
-  结论: (φ.liftAt k m).IsAtomic
+定理 是原子的.liftAt
+  条件: {k m : 自然数} (h : 是原子的 φ)
+  结论: (φ.liftAt k m).是原子的
   证明: IsAtomic.recOn h (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 Depends on / 依赖: IsAtomic, IsAtomic.equal, IsAtomic.recOn, IsAtomic.rel
@@ -153,9 +153,9 @@ theorem IsAtomic.castLE
   proof: IsAtomic.recOn hφ (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 中文:
-定理 IsAtomic.castLE
-  条件: {h : l <= n} (hφ : IsAtomic φ)
-  结论: (φ.castLE h).IsAtomic
+定理 是原子的.castLE
+  条件: {h : l <= n} (hφ : 是原子的 φ)
+  结论: (φ.castLE h).是原子的
   证明: IsAtomic.recOn hφ (fun _ _ => IsAtomic.equal _ _) fun _ _ => IsAtomic.rel _ _
 
 Depends on / 依赖: IsAtomic, IsAtomic.equal, IsAtomic.recOn, IsAtomic.rel
@@ -175,12 +175,12 @@ inductive IsQF
     - imp: {φ₁ φ₂ : L.BoundedFormula α n} (h₁ : IsQF φ₁) (h₂ : IsQF φ₂) : IsQF (φ₁.imp φ₂)
 
 中文:
-归纳类型 IsQF
+归纳类型 是QF
   参数: : L.BoundedFormula α n -> 命题
   构造子 (3 个):
-    - falsum: IsQF falsum
-    - of_isAtomic: {φ : L.BoundedFormula α n} (h : IsAtomic φ) : IsQF φ
-    - imp: {φ₁ φ₂ : L.BoundedFormula α n} (h₁ : IsQF φ₁) (h₂ : IsQF φ₂) : IsQF (φ₁.imp φ₂)
+    - falsum: 是QF falsum
+    - of_isAtomic: {φ : L.BoundedFormula α n} (h : 是原子的 φ) : 是QF φ
+    - imp: {φ₁ φ₂ : L.BoundedFormula α n} (h₁ : 是QF φ₁) (h₂ : 是QF φ₂) : 是QF (φ₁.imp φ₂)
 -/
 inductive IsQF : L.BoundedFormula α n -> Prop
   | falsum : IsQF falsum
@@ -197,9 +197,9 @@ theorem IsAtomic.isQF
   proof: IsQF.of_isAtomic
 
 中文:
-定理 IsAtomic.isQF
+定理 是原子的.isQF
   条件: {φ : L.BoundedFormula α n}
-  结论: IsAtomic φ -> IsQF φ
+  结论: 是原子的 φ -> 是QF φ
   证明: IsQF.of_isAtomic
 
 Depends on / 依赖: IsQF.of_isAtomic, of_isAtomic
@@ -217,7 +217,7 @@ theorem isQF_bot
 
 中文:
 定理 isQF_bot
-  结论: IsQF (⊥ : L.BoundedFormula α n)
+  结论: 是QF (⊥ : L.BoundedFormula α n)
   证明: IsQF.falsum
 
 Depends on / 依赖: IsQF.falsum, falsum
@@ -238,8 +238,8 @@ theorem not
 
 中文:
 定理 not
-  条件: {φ : L.BoundedFormula α n} (h : IsQF φ)
-  结论: IsQF φ.not
+  条件: {φ : L.BoundedFormula α n} (h : 是QF φ)
+  结论: 是QF φ.not
   证明: h.imp isQF_bot
 
 Depends on / 依赖: h.imp, isQF_bot
@@ -257,7 +257,7 @@ theorem top
 
 中文:
 定理 top
-  结论: IsQF (⊤ : L.BoundedFormula α n)
+  结论: 是QF (⊤ : L.BoundedFormula α n)
   证明: isQF_bot.not
 
 Depends on / 依赖: isQF_bot, isQF_bot.not
@@ -274,9 +274,9 @@ theorem sup
   proof: hφ.not.imp hψ
 
 中文:
-定理 sup
-  条件: {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ)
-  结论: IsQF (φ ⊔ ψ)
+定理 上确界
+  条件: {φ ψ : L.BoundedFormula α n} (hφ : 是QF φ) (hψ : 是QF ψ)
+  结论: 是QF (φ ⊔ ψ)
   证明: hφ.not.imp hψ
 
 Depends on / 依赖: not.imp
@@ -294,9 +294,9 @@ theorem inf
   proof: (hφ.imp hψ.not).not
 
 中文:
-定理 inf
-  条件: {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ)
-  结论: IsQF (φ ⊓ ψ)
+定理 下确界
+  条件: {φ ψ : L.BoundedFormula α n} (hφ : 是QF φ) (hψ : 是QF ψ)
+  结论: 是QF (φ ⊓ ψ)
   证明: (hφ.imp hψ.not).not
 -/
 theorem inf {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsQF ψ) : IsQF (φ ⊓ ψ) :=
@@ -312,7 +312,7 @@ theorem relabel
 
 中文:
 定理 relabel
-  条件: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.IsQF) (f : α -> β oplus (Fin n))
+  条件: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.是QF) (f : α -> β oplus (有限集 n))
   证明: IsQF.recOn h isQF_bot (fun h => (h.relabel f).isQF) fun _ _ h1 h2 => h1.imp h2
 -/
 protected theorem relabel {m : Nat} {φ : L.BoundedFormula α m} (h : φ.IsQF) (f : α -> β oplus (Fin n)) :
@@ -330,8 +330,8 @@ theorem liftAt
 
 中文:
 定理 liftAt
-  条件: {k m : 自然数} (h : IsQF φ)
-  结论: (φ.liftAt k m).IsQF
+  条件: {k m : 自然数} (h : 是QF φ)
+  结论: (φ.liftAt k m).是QF
   证明: IsQF.recOn h isQF_bot (fun ih => ih.liftAt.isQF) fun _ _ ih1 ih2 => ih1.imp ih2
 -/
 protected theorem liftAt {k m : Nat} (h : IsQF φ) : (φ.liftAt k m).IsQF :=
@@ -348,8 +348,8 @@ theorem castLE
 
 中文:
 定理 castLE
-  条件: {h : l <= n} (hφ : IsQF φ)
-  结论: (φ.castLE h).IsQF
+  条件: {h : l <= n} (hφ : 是QF φ)
+  结论: (φ.castLE h).是QF
   证明: IsQF.recOn hφ isQF_bot (fun ih => ih.castLE.isQF) fun _ _ ih1 ih2 => ih1.imp ih2
 -/
 protected theorem castLE {h : l <= n} (hφ : IsQF φ) : (φ.castLE h).IsQF :=
@@ -371,7 +371,7 @@ theorem not_all_isQF
 中文:
 定理 not_all_isQF
   条件: (φ : L.BoundedFormula α (n + 1))
-  结论: ¬φ.all.IsQF
+  结论: ¬φ.all.是QF
   证明: fun con => by
   obtain - | con := con
   exact φ.not_all_isAtomic con
@@ -397,7 +397,7 @@ theorem not_ex_isQF
 中文:
 定理 not_ex_isQF
   条件: (φ : L.BoundedFormula α (n + 1))
-  结论: ¬φ.ex.IsQF
+  结论: ¬φ.ex.是QF
   证明: fun con => by
   obtain - | con | con := con
   · exact φ.not_ex_isAtomic con
@@ -422,12 +422,12 @@ inductive IsPrenex
     - ex: {n : Nat} {φ : L.BoundedFormula α (n + 1)} (h : IsPrenex φ) : IsPrenex φ.ex
 
 中文:
-归纳类型 IsPrenex
+归纳类型 是Prenex
   参数: : 对任意 {n}, L.BoundedFormula α n -> 命题
   构造子 (3 个):
-    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsPrenex φ
-    - all: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : IsPrenex φ) : IsPrenex φ.all
-    - ex: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : IsPrenex φ) : IsPrenex φ.ex
+    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : 是QF φ) : 是Prenex φ
+    - all: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : 是Prenex φ) : 是Prenex φ.all
+    - ex: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : 是Prenex φ) : 是Prenex φ.ex
 -/
 inductive IsPrenex : forall {n}, L.BoundedFormula α n -> Prop
   | of_isQF {n : Nat} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsPrenex φ
@@ -444,9 +444,9 @@ theorem IsQF.isPrenex
   proof: IsPrenex.of_isQF
 
 中文:
-定理 IsQF.isPrenex
+定理 是QF.isPrenex
   条件: {φ : L.BoundedFormula α n}
-  结论: IsQF φ -> IsPrenex φ
+  结论: 是QF φ -> 是Prenex φ
   证明: IsPrenex.of_isQF
 
 Depends on / 依赖: IsPrenex, IsPrenex.of_isQF, of_isQF
@@ -464,9 +464,9 @@ theorem IsAtomic.isPrenex
   proof: h.isQF.isPrenex
 
 中文:
-定理 IsAtomic.isPrenex
-  条件: {φ : L.BoundedFormula α n} (h : IsAtomic φ)
-  结论: IsPrenex φ
+定理 是原子的.isPrenex
+  条件: {φ : L.BoundedFormula α n} (h : 是原子的 φ)
+  结论: 是Prenex φ
   证明: h.isQF.isPrenex
 
 Depends on / 依赖: h.isQF.isPrenex, isPrenex
@@ -483,7 +483,7 @@ theorem IsPrenex.induction_on_all_not
   proof: IsPrenex.recOn h hq (fun _ => ha) fun _ ih => hn (ha (hn ih))
 
 中文:
-定理 IsPrenex.induction_on_all_not
+定理 是Prenex.induction_on_all_not
   结论: {P : 对任意 {n}, L.BoundedFormula α n -> 命题}
   证明: IsPrenex.recOn h hq (fun _ => ha) fun _ ih => hn (ha (hn ih))
 
@@ -506,8 +506,8 @@ theorem IsPrenex.relabel
     fun _ h => by simp [h.ex]
 
 中文:
-定理 IsPrenex.relabel
-  结论: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.IsPrenex)
+定理 是Prenex.relabel
+  结论: {m : 自然数} {φ : L.BoundedFormula α m} (h : φ.是Prenex)
   证明: IsPrenex.recOn h (fun h => (h.relabel f).isPrenex) (fun _ h => by simp [h.all])
     fun _ h => by simp [h.ex]
 
@@ -531,9 +531,9 @@ theorem IsPrenex.castLE
     (@fun _ _ _ ih _ _ => (ih _ _).ex) _ _
 
 中文:
-定理 IsPrenex.castLE
-  条件: (hφ : IsPrenex φ)
-  结论: 对任意 {n} {h : l <= n}, (φ.castLE h).IsPrenex
+定理 是Prenex.castLE
+  条件: (hφ : 是Prenex φ)
+  结论: 对任意 {n} {h : l <= n}, (φ.castLE h).是Prenex
   证明: IsPrenex.recOn (motive := @fun l φ _ => forall (n : Nat) (h : l <= n), (φ.castLE h).IsPrenex) hφ
     (@fun _ _ ih _ _ => ih.castLE.isPrenex)
     (@fun _ _ _ ih _ _ => (ih _ _).all)
@@ -558,9 +558,9 @@ theorem IsPrenex.liftAt
     fun _ ih => ih.castLE.ex
 
 中文:
-定理 IsPrenex.liftAt
-  条件: {k m : 自然数} (h : IsPrenex φ)
-  结论: (φ.liftAt k m).IsPrenex
+定理 是Prenex.liftAt
+  条件: {k m : 自然数} (h : 是Prenex φ)
+  结论: (φ.liftAt k m).是Prenex
   证明: IsPrenex.recOn h (fun ih => ih.liftAt.isPrenex) (fun _ ih => ih.castLE.all)
     fun _ ih => ih.castLE.ex
 
@@ -594,7 +594,7 @@ theorem IsQF.toPrenexImpRight
   given: {φ : L.BoundedFormula α n}
 
 中文:
-定理 IsQF.toPrenexImpRight
+定理 是QF.toPrenexImpRight
   条件: {φ : L.BoundedFormula α n}
 -/
 theorem IsQF.toPrenexImpRight {φ : L.BoundedFormula α n} :
@@ -621,7 +621,7 @@ theorem isPrenex_toPrenexImpRight
 
 中文:
 定理 isPrenex_toPrenexImpRight
-  条件: {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsPrenex ψ)
+  条件: {φ ψ : L.BoundedFormula α n} (hφ : 是QF φ) (hψ : 是Prenex ψ)
   证明: by
   induction hψ with
   | of_isQF hψ => rw [hψ.toPrenexImpRight]; exact (hφ.imp hψ).isPrenex
@@ -660,7 +660,7 @@ English:
 theorem IsQF.toPrenexImp
 
 中文:
-定理 IsQF.toPrenexImp
+定理 是QF.toPrenexImp
 -/
 theorem IsQF.toPrenexImp :
     forall {φ ψ : L.BoundedFormula α n}, φ.IsQF -> φ.toPrenexImp ψ = φ.toPrenexImpRight ψ
@@ -686,7 +686,7 @@ theorem isPrenex_toPrenexImp
 
 中文:
 定理 isPrenex_toPrenexImp
-  条件: {φ ψ : L.BoundedFormula α n} (hφ : IsPrenex φ) (hψ : IsPrenex ψ)
+  条件: {φ ψ : L.BoundedFormula α n} (hφ : 是Prenex φ) (hψ : 是Prenex ψ)
   证明: by
   induction hφ with
   | of_isQF hφ => rw [hφ.toPrenexImp]; exact isPrenex_toPrenexImpRight hφ hψ
@@ -734,7 +734,7 @@ theorem toPrenex_isPrenex
 中文:
 定理 toPrenex_isPrenex
   条件: (φ : L.BoundedFormula α n)
-  结论: φ.toPrenex.IsPrenex
+  结论: φ.toPrenex.是Prenex
   证明: BoundedFormula.recOn φ isQF_bot.isPrenex (fun _ _ => (IsAtomic.equal _ _).isPrenex)
     (fun _ _ => (IsAtomic.rel _ _).isPrenex) (fun _ _ h1 h2 => isPrenex_toPrenexImp h1 h2)
     fun _ => IsPrenex.all
@@ -765,7 +765,7 @@ theorem realize_toPrenexImpRight
 
 中文:
 定理 realize_toPrenexImpRight
-  结论: {φ ψ : L.BoundedFormula α n} (hφ : IsQF φ) (hψ : IsPrenex ψ)
+  结论: {φ ψ : L.BoundedFormula α n} (hφ : 是QF φ) (hψ : 是Prenex ψ)
   证明: by
   induction hψ with
   | of_isQF hψ => rw [hψ.toPrenexImpRight]
@@ -822,7 +822,7 @@ theorem realize_toPrenexImp
 
 中文:
 定理 realize_toPrenexImp
-  结论: {φ ψ : L.BoundedFormula α n} (hφ : IsPrenex φ) (hψ : IsPrenex ψ)
+  结论: {φ ψ : L.BoundedFormula α n} (hφ : 是Prenex φ) (hψ : 是Prenex ψ)
   证明: by
   revert ψ
   induction hφ with
@@ -917,7 +917,7 @@ theorem IsQF.induction_on_sup_not
     (hse (φ₁.imp_iff_not_sup φ₂)).2 (hsup (hnot h1) h2)
 
 中文:
-定理 IsQF.induction_on_sup_not
+定理 是QF.induction_on_sup_not
   结论: {P : L.BoundedFormula α n -> 命题} {φ : L.BoundedFormula α n}
   证明: IsQF.recOn h hf @ha fun {φ₁ φ₂} _ _ h1 h2 =>
     (hse (φ₁.imp_iff_not_sup φ₂)).2 (hsup (hnot h1) h2)
@@ -946,7 +946,7 @@ theorem IsQF.induction_on_inf_not
     (fun {_} => hnot) fun {_ _} => hse
 
 中文:
-定理 IsQF.induction_on_inf_not
+定理 是QF.induction_on_inf_not
   结论: {P : L.BoundedFormula α n -> 命题} {φ : L.BoundedFormula α n}
   证明: h.induction_on_sup_not hf ha
     (fun {φ₁ φ₂} h1 h2 =>
@@ -1043,7 +1043,7 @@ theorem induction_on_exists_not
     (fun {_ _} => hex) fun {_ _ _} => hse
 
 中文:
-定理 induction_on_exists_not
+定理 induction_on_存在_not
   结论: {P : 对任意 {m}, L.BoundedFormula α m -> 命题} (φ : L.BoundedFormula α n)
   证明: φ.induction_on_all_ex (fun {_ _} => hqf)
     (fun {_ φ} hφ => (hse φ.all_iff_not_ex_not).2 (hnot (hex (hnot hφ))))
@@ -1073,11 +1073,11 @@ inductive IsUniversal
     - all: {n : Nat} {φ : L.BoundedFormula α (n + 1)} (h : IsUniversal φ) : IsUniversal φ.all
 
 中文:
-归纳类型 IsUniversal
+归纳类型 是泛
   参数: : 对任意 {n}, L.BoundedFormula α n -> 命题
   构造子 (2 个):
-    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsUniversal φ
-    - all: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : IsUniversal φ) : IsUniversal φ.all
+    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : 是QF φ) : 是泛 φ
+    - all: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : 是泛 φ) : 是泛 φ.all
 -/
 inductive IsUniversal : forall {n}, L.BoundedFormula α n -> Prop
   | of_isQF {n : Nat} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsUniversal φ
@@ -1093,9 +1093,9 @@ lemma IsQF.isUniversal
   proof: IsUniversal.of_isQF
 
 中文:
-引理 IsQF.isUniversal
+引理 是QF.isUniversal
   条件: {φ : L.BoundedFormula α n}
-  结论: IsQF φ -> IsUniversal φ
+  结论: 是QF φ -> 是泛 φ
   证明: IsUniversal.of_isQF
 
 Depends on / 依赖: IsUniversal, IsUniversal.of_isQF, of_isQF
@@ -1113,9 +1113,9 @@ lemma IsAtomic.isUniversal
   proof: h.isQF.isUniversal
 
 中文:
-引理 IsAtomic.isUniversal
-  条件: {φ : L.BoundedFormula α n} (h : IsAtomic φ)
-  结论: IsUniversal φ
+引理 是原子的.isUniversal
+  条件: {φ : L.BoundedFormula α n} (h : 是原子的 φ)
+  结论: 是泛 φ
   证明: h.isQF.isUniversal
 
 Depends on / 依赖: h.isQF.isUniversal, isUniversal
@@ -1134,11 +1134,11 @@ inductive IsExistential
     - ex: {n : Nat} {φ : L.BoundedFormula α (n + 1)} (h : IsExistential φ) : IsExistential φ.ex
 
 中文:
-归纳类型 IsExistential
+归纳类型 是存在
   参数: : 对任意 {n}, L.BoundedFormula α n -> 命题
   构造子 (2 个):
-    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsExistential φ
-    - ex: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : IsExistential φ) : IsExistential φ.ex
+    - of_isQF: {n : 自然数} {φ : L.BoundedFormula α n} (h : 是QF φ) : 是存在 φ
+    - ex: {n : 自然数} {φ : L.BoundedFormula α (n + 1)} (h : 是存在 φ) : 是存在 φ.ex
 -/
 inductive IsExistential : forall {n}, L.BoundedFormula α n -> Prop
   | of_isQF {n : Nat} {φ : L.BoundedFormula α n} (h : IsQF φ) : IsExistential φ
@@ -1154,9 +1154,9 @@ lemma IsQF.isExistential
   proof: IsExistential.of_isQF
 
 中文:
-引理 IsQF.isExistential
+引理 是QF.isExistential
   条件: {φ : L.BoundedFormula α n}
-  结论: IsQF φ -> IsExistential φ
+  结论: 是QF φ -> 是存在 φ
   证明: IsExistential.of_isQF
 
 Depends on / 依赖: IsExistential, IsExistential.of_isQF, of_isQF
@@ -1174,9 +1174,9 @@ lemma IsAtomic.isExistential
   proof: h.isQF.isExistential
 
 中文:
-引理 IsAtomic.isExistential
-  条件: {φ : L.BoundedFormula α n} (h : IsAtomic φ)
-  结论: IsExistential φ
+引理 是原子的.isExistential
+  条件: {φ : L.BoundedFormula α n} (h : 是原子的 φ)
+  结论: 是存在 φ
   证明: h.isQF.isExistential
 
 Depends on / 依赖: h.isQF.isExistential, isExistential
@@ -1204,8 +1204,8 @@ lemma IsAtomic.realize_comp_of_injective
     exact HomClass.map_rel f R (fun i => Term.realize (Sum.elim v xs) (ts i))
 
 中文:
-引理 IsAtomic.realize_comp_of_injective
-  结论: {φ : L.BoundedFormula α n} (hA : φ.IsAtomic)
+引理 是原子的.realize_comp_of_injective
+  结论: {φ : L.BoundedFormula α n} (hA : φ.是原子的)
   证明: by
   induction hA with
   | equal t₁ t₂ => simp only [realize_bdEqual, ← Sum.comp_elim, HomClass.realize_term, hInj.eq_iff,
@@ -1235,8 +1235,8 @@ lemma IsAtomic.realize_comp
   proof: hA.realize_comp_of_injective (EmbeddingLike.injective f)
 
 中文:
-引理 IsAtomic.realize_comp
-  结论: {φ : L.BoundedFormula α n} (hA : φ.IsAtomic)
+引理 是原子的.realize_comp
+  结论: {φ : L.BoundedFormula α n} (hA : φ.是原子的)
   证明: hA.realize_comp_of_injective (EmbeddingLike.injective f)
 
 Depends on / 依赖: EmbeddingLike, EmbeddingLike.injective, hA.realize_comp_of_injective, injective, realize_comp_of_injective
@@ -1264,8 +1264,8 @@ lemma IsQF.realize_embedding
       simp only [realize_rel, ← Sum.comp_elim, HomClass.realize_ter
 
 中文:
-引理 IsQF.realize_embedding
-  结论: {φ : L.BoundedFormula α n} (hQF : φ.IsQF)
+引理 是QF.realize_embedding
+  结论: {φ : L.BoundedFormula α n} (hQF : φ.是QF)
   证明: by
   induction hQF with
   | falsum => rfl
@@ -1306,8 +1306,8 @@ lemma IsUniversal.realize_embedding
     exact h (f a)
 
 中文:
-引理 IsUniversal.realize_embedding
-  结论: {φ : L.BoundedFormula α n} (hU : φ.IsUniversal)
+引理 是泛.realize_embedding
+  结论: {φ : L.BoundedFormula α n} (hU : φ.是泛)
   证明: by
   induction hU with
   | of_isQF hQF => simp [hQF.realize_embedding]
@@ -1346,8 +1346,8 @@ lemma IsExistential.realize_embedding
     exact ih ha
 
 中文:
-引理 IsExistential.realize_embedding
-  结论: {φ : L.BoundedFormula α n} (hE : φ.IsExistential)
+引理 是存在.realize_embedding
+  结论: {φ : L.BoundedFormula α n} (hE : φ.是存在)
   证明: by
   induction hE with
   | of_isQF hQF => simp [hQF.realize_embedding]
@@ -1384,10 +1384,10 @@ class Theory.IsUniversal
     - isUniversal_of_mem : forall ⦃φ⦄, φ in T -> φ.IsUniversal
 
 中文:
-类 Theory.IsUniversal
+类 Theory.是泛
   参数: (T : L.Theory)
   公理与运算 (1 个):
-    - isUniversal_of_mem : 对任意 ⦃φ⦄, φ in T -> φ.IsUniversal
+    - isUniversal_of_mem : 对任意 ⦃φ⦄, φ in T -> φ.是泛
 -/
 class Theory.IsUniversal (T : L.Theory) : Prop where
   isUniversal_of_mem : forall ⦃φ⦄, φ in T -> φ.IsUniversal
@@ -1405,8 +1405,8 @@ lemma Theory.IsUniversal.models_of_embedding
   exact Theory.realize_sentence_of_mem T hφ
 
 中文:
-引理 Theory.IsUniversal.models_of_embedding
-  结论: {T : L.Theory} [hT : T.IsUniversal]
+引理 Theory.是泛.models_of_embedding
+  结论: {T : L.Theory} [hT : T.是泛]
   证明: by
   simp only [model_iff]
   refine fun φ hφ => (hT.isUniversal_of_mem hφ).realize_embedding f (?_)
@@ -1430,7 +1430,7 @@ instance Substructure.models_of_isUniversal
   body: Theory.IsUniversal.models_of_embedding (Substructure.subtype S)
 
 中文:
-实例 Substructure.models_of_isUniversal
+实例 子结构.models_of_isUniversal
   定义体: Theory.IsUniversal.models_of_embedding (Substructure.subtype S)
 
 Depends on / 依赖: IsUniversal, Substructure, Substructure.subtype, Theory, Theory.IsUniversal.models_of_embedding, models_of_embedding, subtype
@@ -1449,7 +1449,7 @@ lemma Theory.IsUniversal.insert
   exact hT.isUniversal_of_mem⟩
 
 中文:
-引理 Theory.IsUniversal.insert
+引理 Theory.是泛.insert
   证明: ⟨by
   simp only [Set.mem_insert_iff, forall_eq_or_imp, hφ, true_and]
   exact hT.isUniversal_of_mem⟩
@@ -1476,7 +1476,7 @@ lemma isAtomic
 
 中文:
 引理 isAtomic
-  条件: (r : L.Relations l) (ts : Fin l -> L.Term (α oplus (Fin n)))
+  条件: (r : L.关系 l) (ts : 有限集 l -> L.项 (α oplus (有限集 n)))
   证明: IsAtomic.rel r ts
 
 Depends on / 依赖: IsAtomic, IsAtomic.rel
@@ -1494,7 +1494,7 @@ lemma isQF
 
 中文:
 引理 isQF
-  条件: (r : L.Relations l) (ts : Fin l -> L.Term (α oplus (Fin n)))
+  条件: (r : L.关系 l) (ts : 有限集 l -> L.项 (α oplus (有限集 n)))
   证明: (r.isAtomic ts).isQF
 
 Depends on / 依赖: isAtomic, r.isAtomic
@@ -1514,7 +1514,7 @@ lemma isUniversal_reflexive
 
 中文:
 引理 isUniversal_reflexive
-  结论: r.reflexive.IsUniversal
+  结论: r.reflexive.是泛
   证明: (r.isQF _).isUniversal.all
 -/
 protected lemma isUniversal_reflexive : r.reflexive.IsUniversal :=
@@ -1530,7 +1530,7 @@ lemma isUniversal_irreflexive
 
 中文:
 引理 isUniversal_irreflexive
-  结论: r.irreflexive.IsUniversal
+  结论: r.irreflexive.是泛
   证明: (r.isAtomic _).isQF.not.isUniversal.all
 -/
 protected lemma isUniversal_irreflexive : r.irreflexive.IsUniversal :=
@@ -1546,7 +1546,7 @@ lemma isUniversal_symmetric
 
 中文:
 引理 isUniversal_symmetric
-  结论: r.symmetric.IsUniversal
+  结论: r.symmetric.是泛
   证明: ((r.isQF _).imp (r.isQF _)).isUniversal.all.all
 -/
 protected lemma isUniversal_symmetric : r.symmetric.IsUniversal :=
@@ -1562,7 +1562,7 @@ lemma isUniversal_antisymmetric
 
 中文:
 引理 isUniversal_antisymmetric
-  结论: r.antisymmetric.IsUniversal
+  结论: r.antisymmetric.是泛
   证明: ((r.isQF _).imp ((r.isQF _).imp (IsAtomic.equal _ _).isQF)).isUniversal.all.all
 -/
 protected lemma isUniversal_antisymmetric : r.antisymmetric.IsUniversal :=
@@ -1578,7 +1578,7 @@ lemma isUniversal_transitive
 
 中文:
 引理 isUniversal_transitive
-  结论: r.transitive.IsUniversal
+  结论: r.transitive.是泛
   证明: ((r.isQF _).imp ((r.isQF _).imp (r.isQF _))).isUniversal.all.all.all
 -/
 protected lemma isUniversal_transitive : r.transitive.IsUniversal :=
@@ -1594,7 +1594,7 @@ lemma isUniversal_total
 
 中文:
 引理 isUniversal_total
-  结论: r.total.IsUniversal
+  结论: r.total.是泛
   证明: ((r.isQF _).sup (r.isQF _)).isUniversal.all.all
 -/
 protected lemma isUniversal_total : r.total.IsUniversal :=
@@ -1612,9 +1612,9 @@ theorem Formula.isAtomic_graph
   proof: BoundedFormula.IsAtomic.equal _ _
 
 中文:
-定理 Formula.isAtomic_graph
-  条件: (f : L.Functions n)
-  结论: (Formula.graph f).IsAtomic
+定理 公式.isAtomic_graph
+  条件: (f : L.函数 n)
+  结论: (公式.graph f).是原子的
   证明: BoundedFormula.IsAtomic.equal _ _
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.IsAtomic.equal, IsAtomic

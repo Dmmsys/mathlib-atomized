@@ -54,7 +54,7 @@ definition TendstoLocallyUniformlyOn
 
 中文:
 定义 TendstoLocallyUniformlyOn
-  签名: (F : ι -> α -> β) (f : α -> β) (p : Filter ι) (s : Set α)
+  签名: (F : ι -> α -> β) (f : α -> β) (p : 滤子 ι) (s : 集合 α)
   定义体: forall u in 𝓤 β, forall x in s, exists t in 𝓝[s] x, forallᶠ n in p, forall y in t, (f y, F n y) in u
 -/
 def TendstoLocallyUniformlyOn (F : ι -> α -> β) (f : α -> β) (p : Filter ι) (s : Set α) :=
@@ -70,7 +70,7 @@ definition TendstoLocallyUniformly
 
 中文:
 定义 TendstoLocallyUniformly
-  签名: (F : ι -> α -> β) (f : α -> β) (p : Filter ι)
+  签名: (F : ι -> α -> β) (f : α -> β) (p : 滤子 ι)
   定义体: forall u in 𝓤 β, forall x : α, exists t in 𝓝 x, forallᶠ n in p, forall y in t, (f y, F n y) in u
 -/
 def TendstoLocallyUniformly (F : ι -> α -> β) (f : α -> β) (p : Filter ι) :=
@@ -108,7 +108,7 @@ nonrec theorem IsOpen.tendstoLocallyUniformlyOn_iff_forall_tendsto (hs : IsOpen 
       forall x in s, Tendsto (fun y : ι × α => (f y.2, F y.1 y.2)) 
 
 中文:
-定理 tendstoLocallyUniformlyOn_iff_forall_tendsto
+定理 tendstoLocallyUniformlyOn_iff_对任意_tendsto
   证明: forall₂_comm.trans forall₄_congr fun _ _ _ _ => by
     simp_rw [mem_map, mem_prod_iff_right, mem_preimage]
 
@@ -139,7 +139,7 @@ theorem tendstoLocallyUniformly_iff_forall_tendsto
   simp [← tendstoLocallyUniformlyOn_univ, isOpen_univ.tendstoLocallyUniformlyOn_iff_forall_tendsto]
 
 中文:
-定理 tendstoLocallyUniformly_iff_forall_tendsto
+定理 tendstoLocallyUniformly_iff_对任意_tendsto
   证明: by
   simp [← tendstoLocallyUniformlyOn_univ, isOpen_univ.tendstoLocallyUniformlyOn_iff_forall_tendsto]
 
@@ -247,7 +247,7 @@ theorem tendstoLocallyUniformlyOn_iUnion
 
 中文:
 定理 tendstoLocallyUniformlyOn_iUnion
-  结论: {ι' : Sort*} {S : ι' -> Set α} (hS : 对任意 i, IsOpen (S i))
+  结论: {ι' : 类型层*} {S : ι' -> 集合 α} (hS : 对任意 i, 是开集 (S i))
   证明: (isOpen_iUnion hS).tendstoLocallyUniformlyOn_iff_forall_tendsto.2 fun _x hx =>
     let ⟨i, hi⟩ := mem_iUnion.1 hx
     (hS i).tendstoLocallyUniformlyOn_iff_forall_tendsto.1 (h i) _ hi
@@ -272,7 +272,7 @@ theorem tendstoLocallyUniformlyOn_biUnion
 
 中文:
 定理 tendstoLocallyUniformlyOn_biUnion
-  结论: {s : Set γ} {S : γ -> Set α} (hS : 对任意 i in s, IsOpen (S i))
+  结论: {s : 集合 γ} {S : γ -> 集合 α} (hS : 对任意 i in s, 是开集 (S i))
   证明: tendstoLocallyUniformlyOn_iUnion (fun i => isOpen_iUnion (hS i))
     fun i => tendstoLocallyUniformlyOn_iUnion (hS i) (h i)
 
@@ -296,7 +296,7 @@ theorem tendstoLocallyUniformlyOn_sUnion
 
 中文:
 定理 tendstoLocallyUniformlyOn_sUnion
-  结论: (S : Set (Set α)) (hS : 对任意 s in S, IsOpen s)
+  结论: (S : 集合 (集合 α)) (hS : 对任意 s in S, 是开集 s)
   证明: by
   rw [sUnion_eq_biUnion]
   exact tendstoLocallyUniformlyOn_biUnion hS h
@@ -320,7 +320,7 @@ theorem TendstoLocallyUniformlyOn.union
 
 中文:
 定理 TendstoLocallyUniformlyOn.union
-  结论: (hs₁ : IsOpen s) (hs₂ : IsOpen s')
+  结论: (hs₁ : 是开集 s) (hs₂ : 是开集 s')
   证明: by
   rw [← sUnion_pair]
   refine tendstoLocallyUniformlyOn_sUnion _ ?_ ?_ <;> simp [*]
@@ -365,7 +365,7 @@ theorem tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace
 
 中文:
 定理 tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   证明: by
   refine ⟨fun h V hV => ?_, TendstoUniformly.tendstoLocallyUniformly⟩
   choose U hU using h V hV
@@ -405,7 +405,7 @@ theorem tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact
 
 中文:
 定理 tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact
-  条件: (hs : IsCompact s)
+  条件: (hs : 是紧集 s)
   证明: by
   have : CompactSpace s := isCompact_iff_compactSpace.mp hs
   refine ⟨fun h => ?_, TendstoUniformlyOn.tendstoLocallyUniformlyOn⟩
@@ -444,7 +444,7 @@ theorem TendstoLocallyUniformlyOn.comp
 
 中文:
 定理 TendstoLocallyUniformlyOn.comp
-  结论: [TopologicalSpace γ] {t : Set γ}
+  结论: [拓扑空间 γ] {t : 集合 γ}
   证明: by
   intro u hu x hx
   rcases h u hu (g x) (hg hx) with ⟨a, ha, H⟩
@@ -476,7 +476,7 @@ theorem TendstoLocallyUniformly.comp
 
 中文:
 定理 TendstoLocallyUniformly.comp
-  结论: [TopologicalSpace γ] (h : TendstoLocallyUniformly F f p)
+  结论: [拓扑空间 γ] (h : TendstoLocallyUniformly F f p)
   证明: by
   rw [← tendstoLocallyUniformlyOn_univ] at h ⊢
   rw [← continuousOn_univ] at cg
@@ -505,7 +505,7 @@ theorem UniformContinuousOn.comp_tendstoLocallyUniformlyOn
 
 中文:
 定理 UniformContinuousOn.comp_tendstoLocallyUniformlyOn
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: by
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at hf ⊢
   refine fun x hx => Tendsto.comp hg (tendsto_inf.mpr ⟨hf x hx, tendsto_principal.mpr ?_⟩)
@@ -533,7 +533,7 @@ theorem UniformContinuousOn.comp_tendstoLocallyUniformly
 
 中文:
 定理 UniformContinuousOn.comp_tendstoLocallyUniformly
-  结论: {t : Set β}
+  结论: {t : 集合 β}
   证明: by
   rw [← tendstoLocallyUniformlyOn_univ] at *
   apply hg.comp_tendstoLocallyUniformlyOn hf <;> simpa [MapsTo]
@@ -557,8 +557,8 @@ theorem UniformContinuous.comp_tendstoLocallyUniformlyOn
     mapsTo_univ _ _
 
 中文:
-定理 UniformContinuous.comp_tendstoLocallyUniformlyOn
-  结论: (hg : UniformContinuous g)
+定理 一致连续.comp_tendstoLocallyUniformlyOn
+  结论: (hg : 一致连续 g)
   证明: hg.uniformContinuousOn.comp_tendstoLocallyUniformlyOn hf (mapsTo_univ _ _) .of_forall fun _ =>
     mapsTo_univ _ _
 
@@ -579,8 +579,8 @@ theorem UniformContinuous.comp_tendstoLocallyUniformly
   proof: (hg.uniformContinuousOn (s := univ)).comp_tendstoLocallyUniformly hf (by simp) (by simp)
 
 中文:
-定理 UniformContinuous.comp_tendstoLocallyUniformly
-  结论: (hg : UniformContinuous g)
+定理 一致连续.comp_tendstoLocallyUniformly
+  结论: (hg : 一致连续 g)
   证明: (hg.uniformContinuousOn (s := univ)).comp_tendstoLocallyUniformly hf (by simp) (by simp)
 
 Depends on / 依赖: comp_tendstoLocallyUniformly, hg.uniformContinuousOn, uniformContinuousOn
@@ -606,7 +606,7 @@ theorem TendstoLocallyUniformlyOn.prodMk
 
 中文:
 定理 TendstoLocallyUniformlyOn.prodMk
-  结论: [UniformSpace γ] {G : ι -> α -> γ} {g : α -> γ}
+  结论: [一致空间 γ] {G : ι -> α -> γ} {g : α -> γ}
   证明: by
   rw [tendstoLocallyUniformlyOn_iff_forall_tendsto] at *
   intro x hx
@@ -633,7 +633,7 @@ theorem TendstoLocallyUniformlyOn.piProd
 
 中文:
 定理 TendstoLocallyUniformlyOn.piProd
-  结论: [UniformSpace γ] {G : ι -> α -> γ} {g : α -> γ}
+  结论: [一致空间 γ] {G : ι -> α -> γ} {g : α -> γ}
   证明: hF.prodMk hG
 
 Depends on / 依赖: hF.prodMk, prodMk
@@ -655,7 +655,7 @@ theorem TendstoLocallyUniformly.prodMk
 
 中文:
 定理 TendstoLocallyUniformly.prodMk
-  结论: [UniformSpace γ] {G : ι -> α -> γ} {g : α -> γ}
+  结论: [一致空间 γ] {G : ι -> α -> γ} {g : α -> γ}
   证明: by
   rw [← tendstoLocallyUniformlyOn_univ] at *
   exact hF.prodMk hG
@@ -678,7 +678,7 @@ theorem TendstoLocallyUniformly.piProd
 
 中文:
 定理 TendstoLocallyUniformly.piProd
-  结论: [UniformSpace γ] {G : ι -> α -> γ} {g : α -> γ}
+  结论: [一致空间 γ] {G : ι -> α -> γ} {g : α -> γ}
   证明: hF.prodMk hG
 
 Depends on / 依赖: hF.prodMk, prodMk
@@ -700,7 +700,7 @@ lemma tendstoLocallyUniformlyOn_of_forall_exists_nhds
 exact htr.mono_left prod_mono_right _ le_principal_iff.mpr ht
 
 中文:
-引理 tendstoLocallyUniformlyOn_of_forall_exists_nhds
+引理 tendstoLocallyUniformlyOn_of_对任意_存在_nhds
   证明: by
   refine tendstoLocallyUniformlyOn_iff_forall_tendsto.mpr fun x hx => ?_
   obtain ⟨t, ht, htr⟩ := h x hx
@@ -726,7 +726,7 @@ lemma tendstoLocallyUniformly_of_forall_exists_nhds
  tendstoLocallyUniformlyOn_of_forall_exists_nhds (by simpa using h)
 
 中文:
-引理 tendstoLocallyUniformly_of_forall_exists_nhds
+引理 tendstoLocallyUniformly_of_对任意_存在_nhds
   证明: tendstoLocallyUniformlyOn_univ.mp
  tendstoLocallyUniformlyOn_of_forall_exists_nhds (by simpa using h)
 
@@ -755,7 +755,7 @@ theorem tendstoLocallyUniformlyOn_TFAE
 
 中文:
 定理 tendstoLocallyUniformlyOn_TFAE
-  结论: [LocallyCompactSpace α] (G : ι -> α -> β) (g : α -> β)
+  结论: [局部紧空间 α] (G : ι -> α -> β) (g : α -> β)
   证明: by
   tfae_have 1 -> 2
   | h, K, hK1, hK2 =>
@@ -795,8 +795,8 @@ theorem tendstoLocallyUniformlyOn_iff_forall_isCompact
   proof: (tendstoLocallyUniformlyOn_TFAE F f p hs).out 0 1
 
 中文:
-定理 tendstoLocallyUniformlyOn_iff_forall_isCompact
-  条件: [LocallyCompactSpace α] (hs : IsOpen s)
+定理 tendstoLocallyUniformlyOn_iff_对任意_isCompact
+  条件: [局部紧空间 α] (hs : 是开集 s)
   证明: (tendstoLocallyUniformlyOn_TFAE F f p hs).out 0 1
 
 Depends on / 依赖: tendstoLocallyUniformlyOn_TFAE
@@ -816,8 +816,8 @@ lemma tendstoLocallyUniformly_iff_forall_isCompact
     tendstoLocallyUniformlyOn_iff_forall_isCompact isOpen_univ, Set.subset_univ, forall_true_left]
 
 中文:
-引理 tendstoLocallyUniformly_iff_forall_isCompact
-  条件: [LocallyCompactSpace α]
+引理 tendstoLocallyUniformly_iff_对任意_isCompact
+  条件: [局部紧空间 α]
   证明: by
   simp only [← tendstoLocallyUniformlyOn_univ,
     tendstoLocallyUniformlyOn_iff_forall_isCompact isOpen_univ, Set.subset_univ, forall_true_left]
@@ -925,7 +925,7 @@ theorem TendstoLocallyUniformlyOn.unique
 
 中文:
 定理 TendstoLocallyUniformlyOn.unique
-  结论: [p.NeBot] [T2Space β] {g : α -> β}
+  结论: [p.NeBot] [T2空间 β] {g : α -> β}
   证明: fun _a ha => tendsto_nhds_unique (hf.tendsto_at ha) (hg.tendsto_at ha)
 
 Depends on / 依赖: hf.tendsto_at, hg.tendsto_at, tendsto_at, tendsto_nhds_unique

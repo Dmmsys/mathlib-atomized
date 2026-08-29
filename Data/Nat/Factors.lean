@@ -48,7 +48,7 @@ decreasing_by exact factors_lemma
 
 中文:
 定义 primeFactorsList
-  签名: : 自然数 -> List 自然数
+  签名: : 自然数 -> 列表 自然数
   定义体: minFac (k + 2)
     m :: primeFactorsList ((k + 2) / m)
 decreasing_by exact factors_lemma
@@ -149,7 +149,7 @@ theorem prime_of_mem_primeFactorsList
 中文:
 定理 prime_of_mem_primeFactorsList
   条件: {n : 自然数}
-  结论: 对任意 {p : 自然数}, p in primeFactorsList n -> Prime p
+  结论: 对任意 {p : 自然数}, p in primeFactorsList n -> 素 p
   证明: by
   match n with
   | 0 => simp
@@ -211,7 +211,7 @@ theorem prod_primeFactorsList
 
 中文:
 定理 prod_primeFactorsList
-  结论: 对任意 {n}, n != 0 -> List.prod (primeFactorsList n) = n
+  结论: 对任意 {n}, n != 0 -> 列表.乘积 (primeFactorsList n) = n
   证明: minFac (k + 2)
     have : (k + 2) / m < (k + 2) := factors_lemma
     show (primeFactorsList (k + 2)).prod = (k + 2) by
@@ -249,7 +249,7 @@ theorem primeFactorsList_prime
 
 中文:
 定理 primeFactorsList_prime
-  条件: {p : 自然数} (hp : 自然数.Prime p)
+  条件: {p : 自然数} (hp : 自然数.素 p)
   结论: p.primeFactorsList = [p]
   证明: by
   have : p = p - 2 + 2 := Nat.eq_add_of_sub_eq hp.two_le rfl
@@ -328,7 +328,7 @@ theorem isChain_two_cons_primeFactorsList
 中文:
 定理 isChain_two_cons_primeFactorsList
   条件: (n)
-  结论: List.IsChain (· <= ·) (2 :: primeFactorsList n)
+  结论: 列表.IsChain (· <= ·) (2 :: primeFactorsList n)
   证明: isChain_cons_primeFactorsList fun _ pp _ => pp.two_le
 
 Depends on / 依赖: isChain_cons_primeFactorsList, pp.two_le, two_le
@@ -348,7 +348,7 @@ theorem isChain_primeFactorsList
 中文:
 定理 isChain_primeFactorsList
   条件: (n)
-  结论: List.IsChain (· <= ·) (primeFactorsList n)
+  结论: 列表.IsChain (· <= ·) (primeFactorsList n)
   证明: (isChain_two_cons_primeFactorsList _).tail
 
 Depends on / 依赖: isChain_two_cons_primeFactorsList
@@ -368,7 +368,7 @@ theorem primeFactorsList_sorted
 中文:
 定理 primeFactorsList_sorted
   条件: (n : 自然数)
-  结论: List.SortedLE (primeFactorsList n)
+  结论: 列表.SortedLE (primeFactorsList n)
   证明: (isChain_primeFactorsList _).sortedLE
 
 Depends on / 依赖: isChain_primeFactorsList, sortedLE
@@ -508,7 +508,7 @@ theorem mem_primeFactorsList_iff_dvd
 
 中文:
 定理 mem_primeFactorsList_iff_dvd
-  条件: {n p : 自然数} (hn : n != 0) (hp : Prime p)
+  条件: {n p : 自然数} (hn : n != 0) (hp : 素 p)
   证明: prod_primeFactorsList hn ▸ List.dvd_prod h
   mpr h := mem_list_primes_of_dvd_prod (prime_iff.mp hp)
     (fun _ h => prime_iff.mp (prime_of_mem_primeFactorsList h)) ((prod_primeFactorsList hn).symm ▸ h)
@@ -562,7 +562,7 @@ theorem mem_primeFactorsList
 中文:
 定理 mem_primeFactorsList
   条件: {n p} (hn : n != 0)
-  结论: p in primeFactorsList n ↔ Prime p ∧ p ∣ n
+  结论: p in primeFactorsList n ↔ 素 p ∧ p ∣ n
   证明: ⟨fun h => ⟨prime_of_mem_primeFactorsList h, dvd_of_mem_primeFactorsList h⟩, fun ⟨hprime, hdvd⟩ =>
     (mem_primeFactorsList_iff_dvd hn hprime).mpr hdvd⟩
 
@@ -585,7 +585,7 @@ lemma mem_primeFactorsList'
 中文:
 引理 mem_primeFactorsList'
   条件: {n p}
-  结论: p in n.primeFactorsList ↔ p.Prime ∧ p ∣ n ∧ n != 0
+  结论: p in n.primeFactorsList ↔ p.素 ∧ p ∣ n ∧ n != 0
   证明: by
   cases n <;> simp [mem_primeFactorsList, *]
 -/
@@ -643,7 +643,7 @@ theorem primeFactorsList_unique
 
 中文:
 定理 primeFactorsList_unique
-  条件: {n : 自然数} {l : List 自然数} (h₁ : prod l = n) (h₂ : 对任意 p in l, Prime p)
+  条件: {n : 自然数} {l : 列表 自然数} (h₁ : 乘积 l = n) (h₂ : 对任意 p in l, 素 p)
   证明: by
   refine perm_of_prod_eq_prod ?_ ?_ ?_
   · rw [h₁]
@@ -685,8 +685,8 @@ theorem Prime.primeFactorsList_pow
   rwa [eq_of_mem_replicate hq]
 
 中文:
-定理 Prime.primeFactorsList_pow
-  条件: {p : 自然数} (hp : p.Prime) (n : 自然数)
+定理 素.primeFactorsList_pow
+  条件: {p : 自然数} (hp : p.素) (n : 自然数)
   证明: by
   symm
   rw [← List.replicate_perm]
@@ -957,7 +957,7 @@ theorem replicate_subperm_primeFactorsList_iff
 
 中文:
 定理 replicate_subperm_primeFactorsList_iff
-  条件: {a b n : 自然数} (ha : Prime a) (hb : b != 0)
+  条件: {a b n : 自然数} (ha : 素 a) (hb : b != 0)
   证明: by
   induction n generalizing b with
   | zero => simp
@@ -1145,7 +1145,7 @@ theorem eq_two_pow_or_exists_odd_prime_and_dvd
           hprime.eq_two_or_odd'.resolve_right fun hodd => H ⟨_,
 
 中文:
-定理 eq_two_pow_or_exists_odd_prime_and_dvd
+定理 eq_two_pow_or_存在_odd_prime_and_dvd
   条件: (n : 自然数)
   证明: (eq_or_ne n 0).elim (fun hn => Or.inr ⟨3, prime_three, hn.symm ▸ dvd_zero 3, ⟨1, rfl⟩⟩) fun hn =>
     or_iff_not_imp_right.mpr fun H =>
@@ -1177,7 +1177,7 @@ theorem four_dvd_or_exists_odd_prime_and_dvd_of_two_lt
   · exact Or.inr ⟨p, hp, hdvd, hodd⟩
 
 中文:
-定理 four_dvd_or_exists_odd_prime_and_dvd_of_two_lt
+定理 four_dvd_or_存在_odd_prime_and_dvd_of_two_lt
   条件: {n : 自然数} (n2 : 2 < n)
   证明: by
   obtain ⟨_ | _ | k, rfl⟩ | ⟨p, hp, hdvd, hodd⟩ := n.eq_two_pow_or_exists_odd_prime_and_dvd

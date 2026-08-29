@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarMul (FreeMonoid α)
+  签名: StarMul (自由幺半群 α)
   定义体: List.reverse
   star_involutive := List.reverse_reverse
   star_mul := fun _ _ => List.reverse_append
@@ -84,7 +84,7 @@ theorem star_one
 
 中文:
 定理 star_one
-  结论: star (1 : FreeMonoid α) = 1
+  结论: star (1 : 自由幺半群 α) = 1
   证明: rfl
 -/
 theorem star_one : star (1 : FreeMonoid α) = 1 :=
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (FreeAlgebra R X)
+  签名: 对合环 (FreeAlgebra R X)
   定义体: MulOpposite.unop ∘ lift R (MulOpposite.op ∘ ι R)
   star_involutive x := by
     simp only [Function.comp_apply]

@@ -39,8 +39,8 @@ instance NormedGroup.to_isIsometricSMul
 @[to_additive]
 
 中文:
-实例 NormedGroup.to_isIsometricSMul
-  签名: : IsIsometricSMul E E
+实例 赋范群.to_isIsometricSMul
+  签名: : 是是ometricSMul E E
   定义体: ⟨fun a => Isometry.of_dist_eq fun b c => by simp [dist_eq_norm_inv_mul]⟩
 
 @[to_additive]
@@ -62,8 +62,8 @@ theorem Isometry.norm_map_of_map_one
 @[to_additive (attr := simp) norm_map]
 
 中文:
-定理 Isometry.norm_map_of_map_one
-  条件: {f : E -> F} (hi : Isometry f) (h₁ : f 1 = 1) (x : E)
+定理 等距.norm_map_of_map_one
+  条件: {f : E -> F} (hi : 等距 f) (h₁ : f 1 = 1) (x : E)
   证明: by rw [← dist_one_right, ← h₁, hi.dist_eq, dist_one_right]
 
 @[to_additive (attr := simp) norm_map]
@@ -86,7 +86,7 @@ theorem norm_map'
 
 中文:
 定理 norm_map'
-  条件: [FunLike 𝓕 E F] [IsometryClass 𝓕 E F] [OneHomClass 𝓕 E F] (f : 𝓕) (x : E)
+  条件: [函数状 𝓕 E F] [等距类 𝓕 E F] [幺态射类 𝓕 E F] (f : 𝓕) (x : E)
   证明: (IsometryClass.isometry f).norm_map_of_map_one (map_one f) x
 
 @[to_additive (attr := simp) nnnorm_map]
@@ -110,7 +110,7 @@ theorem nnnorm_map'
 
 中文:
 定理 nnnorm_map'
-  条件: [FunLike 𝓕 E F] [IsometryClass 𝓕 E F] [OneHomClass 𝓕 E F] (f : 𝓕) (x : E)
+  条件: [函数状 𝓕 E F] [等距类 𝓕 E F] [幺态射类 𝓕 E F] (f : 𝓕) (x : E)
   证明: NNReal.eq norm_map' f x
 
 @[to_additive (attr := simp) enorm_map]
@@ -134,7 +134,7 @@ lemma enorm_map'
 
 中文:
 引理 enorm_map'
-  条件: [FunLike 𝓕 E F] [IsometryClass 𝓕 E F] [OneHomClass 𝓕 E F] (f : 𝓕) (x : E)
+  条件: [函数状 𝓕 E F] [等距类 𝓕 E F] [幺态射类 𝓕 E F] (f : 𝓕) (x : E)
   证明: by simp [enorm]
 
 @[to_additive (attr := simp)]
@@ -214,8 +214,8 @@ theorem MonoidHomClass.lipschitz_of_bound
 @[to_additive]
 
 中文:
-定理 MonoidHomClass.lipschitz_of_bound
-  结论: [MonoidHomClass 𝓕 E F] (f : 𝓕) (C : 实数)
+定理 幺半群态射类.lipschitz_of_bound
+  结论: [幺半群态射类 𝓕 E F] (f : 𝓕) (C : 实数)
   证明: LipschitzWith.of_dist_le' fun x y => by
     simpa only [dist_eq_norm_inv_mul, map_mul, map_inv] using h (x⁻¹ * y)
 
@@ -347,8 +347,8 @@ theorem MonoidHomClass.continuous_of_bound
 @[to_additive]
 
 中文:
-定理 MonoidHomClass.continuous_of_bound
-  结论: [MonoidHomClass 𝓕 E F] (f : 𝓕) (C : 实数)
+定理 幺半群态射类.continuous_of_bound
+  结论: [幺半群态射类 𝓕 E F] (f : 𝓕) (C : 实数)
   证明: (MonoidHomClass.lipschitz_of_bound f C h).continuous
 
 @[to_additive]
@@ -371,8 +371,8 @@ theorem MonoidHomClass.uniformContinuous_of_bound
 @[to_additive]
 
 中文:
-定理 MonoidHomClass.uniformContinuous_of_bound
-  结论: [MonoidHomClass 𝓕 E F] (f : 𝓕) (C : 实数)
+定理 幺半群态射类.uniformContinuous_of_bound
+  结论: [幺半群态射类 𝓕 E F] (f : 𝓕) (C : 实数)
   证明: (MonoidHomClass.lipschitz_of_bound f C h).uniformContinuous
 
 @[to_additive]
@@ -398,8 +398,8 @@ theorem MonoidHomClass.isometry_iff_norm
 alias ⟨_, MonoidHomClass.isometry_of_norm⟩ := MonoidHomClass.isometry_iff_norm
 
 中文:
-定理 MonoidHomClass.isometry_iff_norm
-  条件: [MonoidHomClass 𝓕 E F] (f : 𝓕)
+定理 幺半群态射类.isometry_iff_norm
+  条件: [幺半群态射类 𝓕 E F] (f : 𝓕)
   证明: by
   simp only [isometry_iff_dist_eq, dist_eq_norm_inv_mul, ← map_inv, ← map_mul]
   refine ⟨fun h x => ?_, fun h x y => h _⟩
@@ -433,8 +433,8 @@ theorem MonoidHomClass.lipschitz_of_bound_nnnorm
 @[to_additive]
 
 中文:
-定理 MonoidHomClass.lipschitz_of_bound_nnnorm
-  结论: [MonoidHomClass 𝓕 E F] (f : 𝓕) (C : 实数>=0)
+定理 幺半群态射类.lipschitz_of_bound_nnnorm
+  结论: [幺半群态射类 𝓕 E F] (f : 𝓕) (C : 实数>=0)
   证明: @Real.toNNReal_coe C ▸ MonoidHomClass.lipschitz_of_bound f C h
 
 @[to_additive]
@@ -458,8 +458,8 @@ theorem MonoidHomClass.antilipschitz_of_bound
 @[to_additive LipschitzWith.norm_le_mul]
 
 中文:
-定理 MonoidHomClass.antilipschitz_of_bound
-  结论: [MonoidHomClass 𝓕 E F] (f : 𝓕) {K : 实数>=0}
+定理 幺半群态射类.antilipschitz_of_bound
+  结论: [幺半群态射类 𝓕 E F] (f : 𝓕) {K : 实数>=0}
   证明: AntilipschitzWith.of_le_mul_dist fun x y => by
     simpa only [dist_eq_norm_inv_mul, map_inv, map_mul] using h (x⁻¹ * y)
 
@@ -560,8 +560,8 @@ theorem antilipschitzWith_iff_exists_mul_le_norm'
   · g
 
 中文:
-定理 antilipschitzWith_iff_exists_mul_le_norm'
-  条件: [MonoidHomClass 𝓕 E F] {f : 𝓕}
+定理 antilipschitzWith_iff_存在_mul_le_norm'
+  条件: [幺半群态射类 𝓕 E F] {f : 𝓕}
   证明: by
   refine ⟨fun ⟨K, hK⟩ => ⟨(K + 1)⁻¹, by positivity, fun x => ?_⟩, fun ⟨c, hc0, hc⟩ =>
     ⟨.mk c⁻¹ (by positivity), MonoidHomClass.antilipschitz_of_bound f fun x => ?_⟩⟩
@@ -615,8 +615,8 @@ theorem OneHomClass.bound_of_antilipschitz
 @[to_additive]
 
 中文:
-定理 OneHomClass.bound_of_antilipschitz
-  结论: [OneHomClass 𝓕 E F] (f : 𝓕) {K : 实数>=0}
+定理 幺态射类.bound_of_antilipschitz
+  结论: [幺态射类 𝓕 E F] (f : 𝓕) {K : 实数>=0}
   证明: h.le_mul_nnnorm' (map_one f) x
 
 @[to_additive]
@@ -637,8 +637,8 @@ theorem Isometry.nnnorm_map_of_map_one
   proof: Subtype.ext hi.norm_map_of_map_one h₁ x
 
 中文:
-定理 Isometry.nnnorm_map_of_map_one
-  条件: {f : E -> F} (hi : Isometry f) (h₁ : f 1 = 1) (x : E)
+定理 等距.nnnorm_map_of_map_one
+  条件: {f : E -> F} (hi : 等距 f) (h₁ : f 1 = 1) (x : E)
   证明: Subtype.ext hi.norm_map_of_map_one h₁ x
 
 Depends on / 依赖: Subtype, Subtype.ext, hi.norm_map_of_map_one, norm_map_of_map_one
@@ -687,7 +687,7 @@ theorem lipschitzWith_one_nnnorm'
 
 中文:
 定理 lipschitzWith_one_nnnorm'
-  结论: LipschitzWith 1 (NNNorm.nnnorm : E -> 实数>=0)
+  结论: LipschitzWith 1 (NN范数.nnnorm : E -> 实数>=0)
   证明: lipschitzWith_one_norm'
 
 @[to_additive (attr := fun_prop) uniformContinuous_norm]
@@ -710,7 +710,7 @@ theorem uniformContinuous_norm'
 
 中文:
 定理 uniformContinuous_norm'
-  结论: UniformContinuous (norm : E -> 实数)
+  结论: 一致连续 (norm : E -> 实数)
   证明: lipschitzWith_one_norm'.uniformContinuous
 
 @[to_additive (attr := fun_prop) uniformContinuous_nnnorm]
@@ -731,7 +731,7 @@ theorem uniformContinuous_nnnorm'
 
 中文:
 定理 uniformContinuous_nnnorm'
-  结论: UniformContinuous fun a : E => ‖a‖₊
+  结论: 一致连续 fun a : E => ‖a‖₊
   证明: uniformContinuous_norm'.subtype_mk _
 
 Depends on / 依赖: subtype_mk, uniformContinuous_norm
@@ -757,8 +757,8 @@ instance NormedGroup.to_isIsometricSMul_right
 @[to_additive (attr := simp)]
 
 中文:
-实例 NormedGroup.to_isIsometricSMul_right
-  签名: : IsIsometricSMul Eᵐᵒᵖ E
+实例 赋范群.to_isIsometricSMul_right
+  签名: : 是是ometricSMul Eᵐᵒᵖ E
   定义体: ⟨fun a => Isometry.of_dist_eq fun b c => by simp⟩
 
 @[to_additive (attr := simp)]
@@ -1593,7 +1593,7 @@ instance instMulNorm
 
 中文:
 实例 instMulNorm
-  签名: : Norm (SeparationQuotient E) where
+  签名: : 范数 (SeparationQuotient E) where
   定义体: lift Norm.norm fun _ _ h => h.norm_eq_norm'
 
 Depends on / 依赖: Norm.norm, h.norm_eq_norm, norm_eq_norm
@@ -1638,7 +1638,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedCommGroup (SeparationQuotient E)
+  签名: NormedComm群 (SeparationQuotient E)
   定义体: instCommGroup
   dist_eq := Quotient.ind₂ dist_eq_norm_inv_mul
 
@@ -1753,7 +1753,7 @@ lemma CauchySeq.mul_norm_bddAbove
 
 中文:
 引理 CauchySeq.mul_norm_bddAbove
-  结论: {G : 类型} [SeminormedGroup G] {u : 自然数 -> G}
+  结论: {G : 类型} [半赋范群 G] {u : 自然数 -> G}
   证明: by
   obtain ⟨C, -, hC⟩ := cauchySeq_bdd hu
   simp_rw [SeminormedGroup.dist_eq] at hC
@@ -1793,7 +1793,7 @@ alias ⟨LipschitzOnWith.norm_div_le, _⟩ := lipschitzOnWith_iff_norm_div_le
 
 中文:
 定理 lipschitzOnWith_iff_norm_div_le
-  条件: {f : E -> F} {C : 实数>=0} {s : Set E}
+  条件: {f : E -> F} {C : 实数>=0} {s : 集合 E}
   证明: by
   simpa [← norm_inv_mul] using lipschitzOnWith_iff_norm_inv_mul_le
 
@@ -1822,7 +1822,7 @@ theorem LipschitzOnWith.norm_div_le_of_le
 
 中文:
 定理 LipschitzOnWith.norm_div_le_of_le
-  结论: {f : E -> F} {C : 实数>=0} {s : Set E} {a b : E} {r : 实数}
+  结论: {f : E -> F} {C : 实数>=0} {s : 集合 E} {a b : E} {r : 实数}
   证明: (h.norm_div_le ha hb).trans by gcongr
 
 @[to_additive]
@@ -1899,7 +1899,7 @@ theorem isometry_intCast
 
 中文:
 定理 isometry_intCast
-  结论: Isometry ((↑) : 整数 -> 实数)
+  结论: 等距 ((↑) : 整数 -> 实数)
   证明: Isometry.of_dist_eq by tauto
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -1917,7 +1917,7 @@ theorem isClosedEmbedding_intCast
 
 中文:
 定理 isClosedEmbedding_intCast
-  结论: IsClosedEmbedding ((↑) : 整数 -> 实数)
+  结论: 是闭嵌入 ((↑) : 整数 -> 实数)
   证明: isometry_intCast.isClosedEmbedding
 
 Depends on / 依赖: isClosedEmbedding, isometry_intCast, isometry_intCast.isClosedEmbedding
@@ -1935,7 +1935,7 @@ lemma isClosed_range_intCast
 
 中文:
 引理 isClosed_range_intCast
-  结论: IsClosed (Set.range ((↑) : 整数 -> 实数))
+  结论: 是闭集 (集合.range ((↑) : 整数 -> 实数))
   证明: isClosedEmbedding_intCast.isClosed_range
 
 Depends on / 依赖: isClosedEmbedding_intCast, isClosedEmbedding_intCast.isClosed_range, isClosed_range
@@ -1953,7 +1953,7 @@ lemma isOpen_compl_range_intCast
 
 中文:
 引理 isOpen_compl_range_intCast
-  结论: IsOpen (Set.range ((↑) : 整数 -> 实数))ᶜ
+  结论: 是开集 (集合.range ((↑) : 整数 -> 实数))ᶜ
   证明: Real.isClosed_range_intCast.isOpen_compl
 
 Depends on / 依赖: Real.isClosed_range_intCast.isOpen_compl, isClosed_range_intCast, isOpen_compl

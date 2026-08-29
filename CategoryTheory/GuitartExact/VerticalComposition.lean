@@ -294,7 +294,7 @@ lemma of_vComp
 
 中文:
 引理 of_vComp
-  条件: [R₁.EssSurj] [w.GuitartExact] [(w ≫ᵥ w').GuitartExact]
+  条件: [R₁.本质满射] [w.GuitartExact] [(w ≫ᵥ w').GuitartExact]
   证明: by
   rw [guitartExact_iff_initial]
   intro Y₂
@@ -350,7 +350,7 @@ lemma vComp_iff_of_essSurj
 
 中文:
 引理 vComp_iff_of_essSurj
-  条件: [R₁.EssSurj] [w.GuitartExact]
+  条件: [R₁.本质满射] [w.GuitartExact]
   证明: ⟨fun _ => of_vComp w w', fun _ => inferInstance⟩
 
 Depends on / 依赖: of_vComp

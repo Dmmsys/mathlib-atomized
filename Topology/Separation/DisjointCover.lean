@@ -51,9 +51,9 @@ lemma exists_finite_clopen_cover
   -- Apply compa
 
 中文:
-引理 exists_finite_clopen_cover
+引理 存在_finite_clopen_cover
   条件: (hU : IsOpenCover U)
-  结论: 存在 (n : 自然数) (V : Fin n -> Clopens X),
+  结论: 存在 (n : 自然数) (V : 有限集 n -> Clopens X),
   证明: by
   -- Choose an index `r x` for each point in `X` such that `∀ x, x ∈ U (r x)`.
   choose r hr using hU.exists_mem
@@ -90,7 +90,7 @@ lemma exists_finite_nonempty_disjoint_clopen_cover
   refine ⟨#t, fun k 
 
 中文:
-引理 exists_finite_nonempty_disjoint_clopen_cover
+引理 存在_finite_nonempty_disjoint_clopen_cover
   条件: (hU : IsOpenCover U)
   证明: by
   classical
@@ -135,7 +135,7 @@ lemma exists_open_prod_subset_of_mem_nhds_diagonal
   exact ⟨_, huo.inter hvo, ⟨hux, hvx⟩, fun p hp => H ⟨hp.1.1, hp.2.2⟩⟩
 
 中文:
-引理 exists_open_prod_subset_of_mem_nhds_diagonal
+引理 存在_open_prod_subset_of_mem_nhds_diagonal
   条件: (hS : S in nhdsSet (diagonal X)) (x : X)
   证明: by
   have : S in 𝓝 (x, x) := mem_nhdsSet_iff_forall.mp hS _ rfl
@@ -164,7 +164,7 @@ lemma exists_finite_open_cover_prod_subset_of_mem_nhds_diagonal_of_compact
   simpa [iUnion_subtype, ← univ_subset_iff] using ht
 
 中文:
-引理 exists_finite_open_cover_prod_subset_of_mem_nhds_diagonal_of_compact
+引理 存在_finite_open_cover_prod_subset_of_mem_nhds_diagonal_of_compact
   证明: by
   choose U hUo hUx hUp using exists_open_prod_subset_of_mem_nhds_diagonal hS
   obtain ⟨t, ht⟩ := isCompact_univ.elim_finite_subcover _ hUo (fun x _ => mem_iUnion.mpr ⟨_, hUx x⟩)
@@ -196,7 +196,7 @@ lemma exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profi
  
 
 中文:
-引理 exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profinite
+引理 存在_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profinite
   证明: by
   obtain ⟨t, U, hUc, hUS⟩ := exists_finite_open_cover_prod_subset_of_mem_nhds_diagonal_of_compact hS
   -- Now refine it to a disjoint covering.
@@ -235,7 +235,7 @@ lemma exists_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal
   exact exists_finite_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal_of_profinite this
 
 中文:
-引理 exists_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal
+引理 存在_disjoint_nonempty_clopen_cover_of_mem_nhds_diagonal
   条件: (hS : S in nhdsSet (diagonal V))
   证明: by
   have : (f.prodMap f) ⁻¹' S in nhdsSet (diagonal X) := by
@@ -270,7 +270,7 @@ lemma exists_finite_approximation_of_mem_nhds_diagonal
     simpa [← Clopens.coe_di
 
 中文:
-引理 exists_finite_approximation_of_mem_nhds_diagonal
+引理 存在_finite_approximation_of_mem_nhds_diagonal
   条件: (hS : S in nhdsSet (diagonal V))
   证明: by
   obtain ⟨n, E, hEne, hES, hEuniv, hEdis⟩ :=
@@ -323,8 +323,8 @@ lemma exists_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
     (mulIndicator_of_mem rfl 
 
 中文:
-引理 exists_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
-  结论: [CommMonoid V]
+引理 存在_finite_sum_const_mulIndicator_approximation_of_mem_nhds_diagonal
+  结论: [交换幺半群 V]
   证明: by
   obtain ⟨n, g, h, hg, hgh⟩ := exists_finite_approximation_of_mem_nhds_diagonal f hS
   refine ⟨n, fun i => ⟨_, (isClopen_discrete {i}).preimage hg⟩, h, fun x => ?_⟩

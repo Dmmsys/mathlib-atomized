@@ -79,7 +79,7 @@ class IsRiemannianManifold
     - out((x y : M)) : edist x y = riemannianEDist I x y
 
 中文:
-类 IsRiemannianManifold
+类 是RiemannianManifold
   参数: : 命题 where
   公理与运算 (1 个):
     - out((x y : M)) : edist x y = riemannianEDist I x y
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: RiemannianBundle (fun (x : F) => TangentSpace% x)
+  签名: Riemann丛 (fun (x : F) => TangentSpace% x)
   定义体: ⟨(riemannianMetricVectorSpace F).toRiemannianMetric⟩
 
 Depends on / 依赖: riemannianMetricVectorSpace, toRiemannianMetric
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsRiemannianManifold 𝓘(实数, F) F
+  签名: 是RiemannianManifold 𝓘(实数, F) F
   定义体: by
   refine ⟨fun x y => le_antisymm ?_ ?_⟩
   · simp only [riemannianEDist, le_iInf_iff]
@@ -762,7 +762,7 @@ lemma setOfPred_riemannianEDist_lt_subset_nhds
 
 中文:
 引理 setOfPred_riemannianEDist_lt_subset_nhds
-  条件: [RegularSpace M] {x : M} {s : Set M} (hs : s in 𝓝 x)
+  条件: [正则空间 M] {x : M} {s : 集合 M} (hs : s in 𝓝 x)
   证明: by
   /- Consider a closed neighborhood `u` of `x` on which the derivative of the extended chart is
   bounded by some `C`, contained in `s`, then an open neighborhood `v` of `x` inside `u`,
@@ -896,7 +896,7 @@ alias setOf_riemannianEDist_lt_subset_nhds' := setOfPred_riemannianEDist_lt_subs
 
 中文:
 引理 setOfPred_riemannianEDist_lt_subset_nhds'
-  结论: [RegularSpace M] {x : M} {s : Set M}
+  结论: [正则空间 M] {x : M} {s : 集合 M}
   证明: by
   rcases setOfPred_riemannianEDist_lt_subset_nhds I hs with ⟨c, c_pos, hc⟩
   exact ⟨c, mod_cast c_pos, hc⟩
@@ -931,8 +931,8 @@ definition PseudoEMetricSpace.ofRiemannianMetric
    
 
 中文:
-定义 PseudoEMetricSpace.ofRiemannianMetric
-  签名: [RegularSpace M]
+定义 PseudoEMetric空间.ofRiemannianMetric
+  签名: [正则空间 M]
   定义体: PseudoEMetricSpace.ofEDistOfTopology (riemannianEDist I (M := M))
     (fun _ => riemannianEDist_self)
     (fun _ _ => riemannianEDist_comm)
@@ -965,7 +965,7 @@ instance [RegularSpace
   exact ⟨fun x y => rfl⟩
 
 中文:
-实例 [RegularSpace
+实例 [正则空间
   签名: M] :
   定义体: .ofRiemannianMetric I M
     IsRiemannianManifold I M := by
@@ -994,8 +994,8 @@ definition EMetricSpace.ofRiemannianMetric
 noncomputable alias EmetricSpace.ofRiemannianMetric := EMetricSpace.ofRiemannianMetric
 
 中文:
-定义 EMetricSpace.ofRiemannianMetric
-  签名: [T3Space M]
+定义 广义度量空间.ofRiemannianMetric
+  签名: [T3空间 M]
   定义体: letI : PseudoEMetricSpace M := .ofRiemannianMetric I M
   EMetricSpace.ofT0PseudoEMetricSpace M
 

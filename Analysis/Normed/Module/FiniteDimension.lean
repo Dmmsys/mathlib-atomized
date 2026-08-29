@@ -158,7 +158,7 @@ definition toAffineIsometryEquiv
 
 中文:
 定义 toAffineIsometryEquiv
-  签名: [Inhabited P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂) (h : finrank 𝕜 V₁ = finrank 𝕜 V₂)
+  签名: [可居 P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂) (h : finrank 𝕜 V₁ = finrank 𝕜 V₂)
   定义体: AffineIsometryEquiv.mk' li (li.linearIsometry.toLinearIsometryEquiv h)
     (Inhabited.default (α := P₁)) fun p => by simp
 
@@ -184,7 +184,7 @@ theorem coe_toAffineIsometryEquiv
 
 中文:
 定理 coe_toAffineIsometryEquiv
-  结论: [Inhabited P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂)
+  结论: [可居 P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂)
   证明: rfl
 
 @[simp]
@@ -204,7 +204,7 @@ theorem toAffineIsometryEquiv_apply
 
 中文:
 定理 toAffineIsometryEquiv_apply
-  结论: [Inhabited P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂)
+  结论: [可居 P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂)
   证明: rfl
 -/
 theorem toAffineIsometryEquiv_apply [Inhabited P₁] (li : P₁ ->ᵃⁱ[𝕜] P₂)
@@ -233,9 +233,9 @@ theorem AffineMap.continuous_of_finiteDimensional
   proof: AffineMap.continuous_linear_iff.1 f.linear.continuous_of_finiteDimensional
 
 中文:
-定理 AffineMap.continuous_of_finiteDimensional
+定理 仿射映射.continuous_of_finiteDimensional
   条件: (f : PE ->ᵃ[𝕜] PF)
-  结论: Continuous f
+  结论: 连续 f
   证明: AffineMap.continuous_linear_iff.1 f.linear.continuous_of_finiteDimensional
 
 Depends on / 依赖: AffineMap, AffineMap.continuous_linear_iff, continuous_linear_iff, continuous_of_finiteDimensional, f.linear.continuous_of_finiteDimensional, linear
@@ -253,9 +253,9 @@ theorem AffineEquiv.continuous_of_finiteDimensional
   proof: f.toAffineMap.continuous_of_finiteDimensional
 
 中文:
-定理 AffineEquiv.continuous_of_finiteDimensional
+定理 仿射等价.continuous_of_finiteDimensional
   条件: (f : PE ≃ᵃ[𝕜] PF)
-  结论: Continuous f
+  结论: 连续 f
   证明: f.toAffineMap.continuous_of_finiteDimensional
 
 Depends on / 依赖: continuous_of_finiteDimensional, f.toAffineMap.continuous_of_finiteDimensional, toAffineMap
@@ -278,7 +278,7 @@ definition AffineEquiv.toContinuousAffineEquiv
 @[simp]
 
 中文:
-定义 AffineEquiv.toContinuousAffineEquiv
+定义 仿射等价.toContinuousAffineEquiv
   签名: : (PE ≃ᵃ[𝕜] PF) ≃ (PE ≃ᴬ[𝕜] PF) where
   定义体: haveI := f.linear.finiteDimensional
     ⟨f, f.continuous_of_finiteDimensional, f.symm.continuous_of_finiteDimensional⟩
@@ -310,7 +310,7 @@ theorem AffineEquiv.coe_toContinuousAffineEquiv
 @[simp]
 
 中文:
-定理 AffineEquiv.coe_toContinuousAffineEquiv
+定理 仿射等价.coe_toContinuousAffineEquiv
   条件: (f : PE ≃ᵃ[𝕜] PF)
   证明: rfl
 
@@ -331,7 +331,7 @@ theorem AffineEquiv.toAffineEquiv_toContinuousAffineEquiv
 @[simp]
 
 中文:
-定理 AffineEquiv.toAffineEquiv_toContinuousAffineEquiv
+定理 仿射等价.toAffineEquiv_toContinuousAffineEquiv
   条件: (f : PE ≃ᵃ[𝕜] PF)
   证明: rfl
 
@@ -350,7 +350,7 @@ theorem AffineEquiv.toContinuousAffineEquiv_symm_apply
   proof: rfl
 
 中文:
-定理 AffineEquiv.toContinuousAffineEquiv_symm_apply
+定理 仿射等价.toContinuousAffineEquiv_symm_apply
   条件: (f : PE ≃ᴬ[𝕜] PF)
   证明: rfl
 -/
@@ -368,7 +368,7 @@ definition AffineEquiv.toHomeomorphOfFiniteDimensional
 @[simp]
 
 中文:
-定义 AffineEquiv.toHomeomorphOfFiniteDimensional
+定义 仿射等价.toHomeomorphOfFiniteDimensional
   签名: (f : PE ≃ᵃ[𝕜] PF)
   定义体: (toContinuousAffineEquiv f).toHomeomorph
 
@@ -391,7 +391,7 @@ theorem AffineEquiv.coe_toHomeomorphOfFiniteDimensional
 @[simp]
 
 中文:
-定理 AffineEquiv.coe_toHomeomorphOfFiniteDimensional
+定理 仿射等价.coe_toHomeomorphOfFiniteDimensional
   条件: (f : PE ≃ᵃ[𝕜] PF)
   证明: rfl
 
@@ -411,7 +411,7 @@ theorem AffineEquiv.coe_toHomeomorphOfFiniteDimensional_symm
   proof: rfl
 
 中文:
-定理 AffineEquiv.coe_toHomeomorphOfFiniteDimensional_symm
+定理 仿射等价.coe_toHomeomorphOfFiniteDimensional_symm
   条件: (f : PE ≃ᵃ[𝕜] PF)
   证明: rfl
 -/
@@ -435,7 +435,7 @@ theorem AffineMap.lipschitzWith_of_finiteDimensional
   exact fL.le_opNorm _
 
 中文:
-定理 AffineMap.lipschitzWith_of_finiteDimensional
+定理 仿射映射.lipschitzWith_of_finiteDimensional
   条件: (f : PE ->ᵃ[𝕜] PF)
   证明: by
   let fL : E ->L[𝕜] F := f.linear.toContinuousLinearMap
@@ -470,8 +470,8 @@ theorem ContinuousLinearMap.continuous_det
     si
 
 中文:
-定理 ContinuousLinearMap.continuous_det
-  结论: Continuous fun f : E ->L[𝕜] E => f.det
+定理 连续线性映射.continuous_det
+  结论: 连续 fun f : E ->L[𝕜] E => f.det
   证明: by
   change Continuous fun f : E ->L[𝕜] E => LinearMap.det (f : E ->ₗ[𝕜] E)
   -- TODO: this could be easier with `det_cases`
@@ -519,7 +519,7 @@ theorem lipschitzExtensionConstant_pos
 
 中文:
 定理 lipschitzExtensionConstant_pos
-  结论: (E' : 类型) [NormedAddCommGroup E'] [NormedSpace 实数 E']
+  结论: (E' : 类型) [赋范交换加群 E'] [赋范空间 实数 E']
   证明: by
   rw [lipschitzExtensionConstant]
   exact zero_lt_one.trans_le (le_max_right _ _)
@@ -546,7 +546,7 @@ theorem LipschitzOnWith.extend_finite_dimension
 
 中文:
 定理 LipschitzOnWith.extend_finite_dimension
-  结论: {α : 类型} [PseudoMetricSpace α] {E' : 类型}
+  结论: {α : 类型} [伪度量空间 α] {E' : 类型}
   证明: by
   /- This result is already known for spaces `ι → ℝ`. We use a continuous linear equiv between
     `E'` and such a space to transfer the result to `E'`. -/
@@ -592,8 +592,8 @@ theorem LinearMap.exists_antilipschitzWith
     exact ⟨_, e.nnnorm_symm_pos, e.antilipschitz⟩
 
 中文:
-定理 LinearMap.exists_antilipschitzWith
-  结论: [FiniteDimensional 𝕜 E] (f : E ->ₗ[𝕜] F)
+定理 线性映射.存在_antilipschitzWith
+  结论: [有限维 𝕜 E] (f : E ->ₗ[𝕜] F)
   证明: by
   cases subsingleton_or_nontrivial E
   · exact ⟨1, zero_lt_one, AntilipschitzWith.of_subsingleton⟩
@@ -626,8 +626,8 @@ theorem LinearMap.injective_iff_antilipschitz
     exact H.injective
 
 中文:
-定理 LinearMap.injective_iff_antilipschitz
-  条件: [FiniteDimensional 𝕜 E] (f : E ->ₗ[𝕜] F)
+定理 线性映射.injective_iff_antilipschitz
+  条件: [有限维 𝕜 E] (f : E ->ₗ[𝕜] F)
   证明: by
   constructor
   · rw [← LinearMap.ker_eq_bot]
@@ -658,8 +658,8 @@ theorem AffineMap.antilipschitzWith_of_finiteDimensional
   exact ZeroHomClass.bound_of_antilipschitz f.linear hK (x -ᵥ y
 
 中文:
-定理 AffineMap.antilipschitzWith_of_finiteDimensional
-  结论: {PE PF : 类型} [MetricSpace PE]
+定理 仿射映射.antilipschitzWith_of_finiteDimensional
+  结论: {PE PF : 类型} [度量空间 PE]
   证明: by
   obtain ⟨K, -, hK⟩ := f.linear.injective_iff_antilipschitz.mp (f.linear_injective_iff.mpr hf)
   refine ⟨K, AntilipschitzWith.of_le_mul_dist fun x y => ?_⟩
@@ -694,8 +694,8 @@ have : forallᶠ φ in 𝓝 φ₀, ‖φ - φ₀‖₊ < K⁻¹ := eventually_nn
   exact ⟨(K⁻¹ - ‖
 
 中文:
-定理 ContinuousLinearMap.isOpen_injective
-  条件: [FiniteDimensional 𝕜 E]
+定理 连续线性映射.isOpen_injective
+  条件: [有限维 𝕜 E]
   证明: by
   rw [isOpen_iff_eventually]
   rintro φ₀ hφ₀
@@ -733,8 +733,8 @@ definition ContinuousLinearEquiv.piRing
         (LinearMap.toContinuousLinearMap.toLinearMap
 
 中文:
-定义 ContinuousLinearEquiv.piRing
-  签名: (ι : 类型) [Fintype ι] [DecidableEq ι]
+定义 连续线性等价.piRing
+  签名: (ι : 类型) [有限类型 ι] [DecidableEq ι]
   定义体: { LinearMap.toContinuousLinearMap.symm.trans (LinearEquiv.piRing 𝕜 E ι 𝕜) with
     continuous_invFun := by
       simp_rw [LinearEquiv.invFun_eq_symm, LinearEquiv.trans_symm, LinearEquiv.symm_symm]
@@ -779,7 +779,7 @@ Tendsto.norm ((co
 
 中文:
 定理 LinearIndependent.eventually
-  结论: {ι} [Finite ι] {f : ι -> E}
+  结论: {ι} [有限 ι] {f : ι -> E}
   证明: by
   cases nonempty_fintype ι
   classical
@@ -827,7 +827,7 @@ alias isOpen_setOf_linearIndependent := isOpen_setOfPred_linearIndependent
 
 中文:
 定理 isOpen_setOfPred_linearIndependent
-  条件: {ι : 类型} [Finite ι]
+  条件: {ι : 类型} [有限 ι]
   证明: isOpen_iff_mem_nhds.2 fun _ => LinearIndependent.eventually
 
 @[deprecated (since := "2026-07-09")]
@@ -897,7 +897,7 @@ theorem isOpen_setOfPred_affineIndependent
 
 中文:
 定理 isOpen_setOfPred_affineIndependent
-  条件: {ι : 类型} [Finite ι]
+  条件: {ι : 类型} [有限 ι]
   证明: by
   classical
   rcases isEmpty_or_nonempty ι with h | ⟨⟨i₀⟩⟩
@@ -945,7 +945,7 @@ theorem opNNNorm_le
 
 中文:
 定理 opNNNorm_le
-  结论: {ι : 类型} [Fintype ι] (v : Basis ι 𝕜 E) {u : E ->L[𝕜] F} (M : 实数>=0)
+  结论: {ι : 类型} [有限类型 ι] (v : 基 ι 𝕜 E) {u : E ->L[𝕜] F} (M : 实数>=0)
   证明: u.opNNNorm_le_bound _ fun e => by
     set φ := v.equivFunL.toContinuousLinearMap
     calc
@@ -984,7 +984,7 @@ theorem opNorm_le
 
 中文:
 定理 opNorm_le
-  结论: {ι : 类型} [Fintype ι] (v : Basis ι 𝕜 E) {u : E ->L[𝕜] F} {M : 实数}
+  结论: {ι : 类型} [有限类型 ι] (v : 基 ι 𝕜 E) {u : E ->L[𝕜] F} {M : 实数}
   证明: by
   simpa using! NNReal.coe_le_coe.mpr (v.opNNNorm_le ⟨M, hM⟩ hu)
 
@@ -1009,8 +1009,8 @@ theorem exists_opNNNorm_le
 (v.opNNNorm_le M hu).trans mul_le_mul_of_nonneg_right (le_max_left _ _) zero_le⟩
 
 中文:
-定理 exists_opNNNorm_le
-  条件: {ι : 类型} [Finite ι] (v : Basis ι 𝕜 E)
+定理 存在_opNNNorm_le
+  条件: {ι : 类型} [有限 ι] (v : 基 ι 𝕜 E)
   证明: by
   cases nonempty_fintype ι
   exact
@@ -1041,8 +1041,8 @@ theorem exists_opNorm_le
   simpa using! h ⟨M, hM⟩ H
 
 中文:
-定理 exists_opNorm_le
-  条件: {ι : 类型} [Finite ι] (v : Basis ι 𝕜 E)
+定理 存在_opNorm_le
+  条件: {ι : 类型} [有限 ι] (v : 基 ι 𝕜 E)
   证明: by
   obtain ⟨C, hC, h⟩ := v.exists_opNNNorm_le (F := F)
   refine ⟨C, hC, ?_⟩
@@ -1075,8 +1075,8 @@ instance [FiniteDimensional
   exact e₂.toHomeomorph.secondCountableTopolog
 
 中文:
-实例 [FiniteDimensional
-  签名: 𝕜 E] [SecondCountableTopology F] :
+实例 [有限维
+  签名: 𝕜 E] [第二可数拓扑 F] :
   定义体: by
   let d := Module.finrank 𝕜 E
   let e₁ : E ≃L[𝕜] Fin d -> 𝕜 :=
@@ -1105,8 +1105,8 @@ theorem AffineSubspace.closed_of_finiteDimensional
   proof: s.isClosed_direction_iff.mp s.direction.closed_of_finiteDimensional
 
 中文:
-定理 AffineSubspace.closed_of_finiteDimensional
-  结论: {P : 类型} [MetricSpace P]
+定理 仿射子空间.closed_of_finiteDimensional
+  结论: {P : 类型} [度量空间 P]
   证明: s.isClosed_direction_iff.mp s.direction.closed_of_finiteDimensional
 
 Depends on / 依赖: closed_of_finiteDimensional, direction, isClosed_direction_iff, s.direction.closed_of_finiteDimensional, s.isClosed_direction_iff.mp
@@ -1136,7 +1136,7 @@ theorem exists_norm_le_le_norm_sub_of_finset
  
 
 中文:
-定理 exists_norm_le_le_norm_sub_of_finset
+定理 存在_norm_le_le_norm_sub_of_finset
   结论: {c : 𝕜} (hc : 1 < ‖c‖) {R : 实数} (hR : ‖c‖ < R)
   证明: by
   let F := Submodule.span 𝕜 (s : Set E)
@@ -1190,7 +1190,7 @@ theorem exists_seq_norm_le_one_le_norm_sub'
   exact exists_norm_le_le_norm_sub_of_finset hc hR h s
 
 中文:
-定理 exists_seq_norm_le_one_le_norm_sub'
+定理 存在_seq_norm_le_one_le_norm_sub'
   结论: {c : 𝕜} (hc : 1 < ‖c‖) {R : 实数} (hR : ‖c‖ < R)
   证明: by
   have : Std.Symm fun x y : E => 1 <= ‖x - y‖ := by
@@ -1231,8 +1231,8 @@ theorem exists_seq_norm_le_one_le_norm_sub
   exact ⟨‖c‖ + 1, f, hc.trans A, hf.1, hf.2⟩
 
 中文:
-定理 exists_seq_norm_le_one_le_norm_sub
-  条件: (h : ¬FiniteDimensional 𝕜 E)
+定理 存在_seq_norm_le_one_le_norm_sub
+  条件: (h : ¬有限维 𝕜 E)
   证明: by
   obtain ⟨c, hc⟩ : exists c : 𝕜, 1 < ‖c‖ := NormedField.exists_one_lt_norm 𝕜
   have A : ‖c‖ < ‖c‖ + 1 := by linarith
@@ -1259,8 +1259,8 @@ theorem FiniteDimensional.of_isCompact_closedBall₀
   proof: .of_totallyBounded_nhds_zero 𝕜 (Metric.closedBall_mem_nhds 0 rpos) h.totallyBounded
 
 中文:
-定理 FiniteDimensional.of_isCompact_closedBall₀
-  结论: {V : 类型} [NormedAddCommGroup V] [Module 𝕜 V]
+定理 有限维.of_isCompact_closedBall₀
+  结论: {V : 类型} [赋范交换加群 V] [模 𝕜 V]
   证明: .of_totallyBounded_nhds_zero 𝕜 (Metric.closedBall_mem_nhds 0 rpos) h.totallyBounded
 
 Depends on / 依赖: Metric, Metric.closedBall_mem_nhds, closedBall_mem_nhds, h.totallyBounded, of_totallyBounded_nhds_zero, totallyBounded
@@ -1279,8 +1279,8 @@ theorem FiniteDimensional.of_isCompact_closedBall
   proof: .of_isCompact_closedBall₀ 𝕜 rpos by simpa using h.vadd (-c)
 
 中文:
-定理 FiniteDimensional.of_isCompact_closedBall
-  结论: {V : 类型} [NormedAddCommGroup V] [Module 𝕜 V]
+定理 有限维.of_isCompact_closedBall
+  结论: {V : 类型} [赋范交换加群 V] [模 𝕜 V]
   证明: .of_isCompact_closedBall₀ 𝕜 rpos by simpa using h.vadd (-c)
 
 Depends on / 依赖: h.vadd
@@ -1304,7 +1304,7 @@ have : c ^ n != 0 := pow_ne_zero _ fun h => by simp [h, zero_le_one.not_gt] at h
     simpa [_ro
 
 中文:
-引理 ProperSpace.of_locallyCompactSpace
+引理 真空间.of_locallyCompactSpace
   结论: (𝕜 : 类型) [NontriviallyNormedField 𝕜] {E : 类型}
   证明: by
   rcases exists_isCompact_closedBall (0 : E) with ⟨r, rpos, hr⟩
@@ -1340,8 +1340,8 @@ lemma ProperSpace.of_locallyCompact_module
   .of_locallyCompactSpace 𝕜
 
 中文:
-引理 ProperSpace.of_locallyCompact_module
-  结论: (V : 类型) [AddCommGroup V] [TopologicalSpace V]
+引理 真空间.of_locallyCompact_module
+  结论: (V : 类型) [加法交换群 V] [拓扑空间 V]
   证明: have : LocallyCompactSpace 𝕜 := by
     obtain ⟨v, hv⟩ : exists v : V, v != 0 := exists_ne 0
     let L : 𝕜 -> V := fun t => t • v
@@ -1380,7 +1380,7 @@ theorem continuousWithinAt_clm_apply
 
 中文:
 定理 continuousWithinAt_clm_apply
-  结论: {X : 类型} [TopologicalSpace X] [FiniteDimensional 𝕜 E]
+  结论: {X : 类型} [拓扑空间 X] [有限维 𝕜 E]
   证明: by
   refine ⟨fun h y => (apply 𝕜 F y).continuous.continuousAt.comp_continuousWithinAt h, fun h => ?_⟩
   let e : (E ->L[𝕜] F) ≃L[𝕜] Fin (finrank 𝕜 E) -> F :=
@@ -1412,7 +1412,7 @@ theorem continuousOn_clm_apply
 
 中文:
 定理 continuousOn_clm_apply
-  结论: {X : 类型} [TopologicalSpace X] [FiniteDimensional 𝕜 E]
+  结论: {X : 类型} [拓扑空间 X] [有限维 𝕜 E]
   证明: by
   simp_rw [ContinuousOn, continuousWithinAt_clm_apply, imp_forall_iff]
   exact forall_comm
@@ -1436,7 +1436,7 @@ theorem continuousAt_clm_apply
 
 中文:
 定理 continuousAt_clm_apply
-  结论: {X : 类型} [TopologicalSpace X] [FiniteDimensional 𝕜 E]
+  结论: {X : 类型} [拓扑空间 X] [有限维 𝕜 E]
   证明: by
   simp_rw [← continuousWithinAt_univ, continuousWithinAt_clm_apply]
 
@@ -1458,7 +1458,7 @@ theorem continuous_clm_apply
 
 中文:
 定理 continuous_clm_apply
-  结论: {X : 类型} [TopologicalSpace X] [FiniteDimensional 𝕜 E]
+  结论: {X : 类型} [拓扑空间 X] [有限维 𝕜 E]
   证明: by
   simp_rw [← continuousOn_univ, continuousOn_clm_apply]
 
@@ -1488,9 +1488,9 @@ theorem FiniteDimensional.proper
   exact e.symm.antilipschitz.properSpace e.symm.continuous e.symm.surjective
 
 中文:
-定理 FiniteDimensional.proper
-  条件: [FiniteDimensional 𝕜 E]
-  结论: 命题erSpace E
+定理 有限维.proper
+  条件: [有限维 𝕜 E]
+  结论: 真空间 E
   证明: by
   have : ProperSpace 𝕜 := .of_locallyCompactSpace 𝕜
   set e := ContinuousLinearEquiv.ofFinrankEq (@finrank_fin_fun 𝕜 _ _ (finrank 𝕜 E)).symm
@@ -1535,8 +1535,8 @@ Metric.mem_closedBall.2 ge_of_eq ?_, hys⟩, hyd⟩
   rwa [dist_comm]
 
 中文:
-定理 exists_mem_frontier_infDist_compl_eq_dist
-  结论: {E : 类型} [NormedAddCommGroup E]
+定理 存在_mem_frontier_infDist_compl_eq_dist
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   rcases Metric.exists_mem_closure_infDist_eq_dist (nonempty_compl.2 hs) x with ⟨y, hys, hyd⟩
   rw [closure_compl] at hys
@@ -1591,7 +1591,7 @@ theorem summable_norm_iff
 
 中文:
 定理 summable_norm_iff
-  结论: {α E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {α E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   refine ⟨Summable.of_norm, fun hf => ?_⟩
   -- First we use a finite basis to reduce the problem to the case `E = Fin N → ℝ`
@@ -1634,7 +1634,7 @@ theorem summable_of_sum_range_norm_le
 
 中文:
 定理 summable_of_sum_range_norm_le
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: summable_norm_iff.mp summable_of_sum_range_le (fun _ => norm_nonneg _) h
 
 Depends on / 依赖: norm_nonneg, summable_norm_iff, summable_norm_iff.mp, summable_of_sum_range_le
@@ -1654,7 +1654,7 @@ theorem summable_of_isBigO'
 
 中文:
 定理 summable_of_isBigO'
-  结论: {ι E F : 类型} [NormedAddCommGroup E] [CompleteSpace E]
+  结论: {ι E F : 类型} [赋范交换加群 E] [完备空间 E]
   证明: summable_of_isBigO hg.norm h.norm_right
 
 Depends on / 依赖: h.norm_right, hg.norm, norm_right, summable_of_isBigO
@@ -1695,7 +1695,7 @@ theorem summable_of_isBigO_nat'
 
 中文:
 定理 summable_of_isBigO_nat'
-  结论: {E F : 类型} [NormedAddCommGroup E] [CompleteSpace E]
+  结论: {E F : 类型} [赋范交换加群 E] [完备空间 E]
   证明: summable_of_isBigO_nat hg.norm h.norm_right
 
 Depends on / 依赖: h.norm_right, hg.norm, norm_right, summable_of_isBigO_nat
@@ -1724,7 +1724,7 @@ theorem summable_norm_mul_geometric_of_norm_lt_one'
 
 中文:
 定理 summable_norm_mul_geometric_of_norm_lt_one'
-  结论: {F : 类型} [NormedRing F]
+  结论: {F : 类型} [赋范环 F]
   证明: by
   rcases exists_between hr with ⟨r', hrr', h⟩
   apply summable_of_isBigO_nat (summable_geometric_of_lt_one ((norm_nonneg _).trans hrr'.le) h).norm
@@ -1767,7 +1767,7 @@ theorem summable_of_isEquivalent
 
 中文:
 定理 summable_of_isEquivalent
-  结论: {ι E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {ι E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: summable_of_isBigO' hg h.isBigO
 
 Depends on / 依赖: h.isBigO, isBigO, summable_of_isBigO
@@ -1787,7 +1787,7 @@ theorem summable_of_isEquivalent_nat
 
 中文:
 定理 summable_of_isEquivalent_nat
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: summable_of_isBigO_nat' hg h.isBigO
 
 Depends on / 依赖: h.isBigO, isBigO, summable_of_isBigO_nat
@@ -1807,7 +1807,7 @@ theorem Asymptotics.IsTheta.summable_iff
 
 中文:
 定理 Asymptotics.IsTheta.summable_iff
-  结论: {ι E F : 类型} [NormedAddCommGroup E]
+  结论: {ι E F : 类型} [赋范交换加群 E]
   证明: ⟨fun hf => summable_of_isBigO' hf h.isBigO_symm, fun hg => summable_of_isBigO' hg h.isBigO⟩
 
 Depends on / 依赖: h.isBigO, h.isBigO_symm, isBigO, isBigO_symm, summable_of_isBigO
@@ -1828,7 +1828,7 @@ theorem Asymptotics.IsTheta.summable_iff_nat
 
 中文:
 定理 Asymptotics.IsTheta.summable_iff_nat
-  结论: {E F : 类型} [NormedAddCommGroup E]
+  结论: {E F : 类型} [赋范交换加群 E]
   证明: IsTheta.summable_iff by simpa [← Nat.cofinite_eq_atTop] using h
 
 Depends on / 依赖: IsTheta, IsTheta.summable_iff, Nat.cofinite_eq_atTop, cofinite_eq_atTop, summable_iff
@@ -1852,7 +1852,7 @@ alias IsEquivalent.summable_iff := Asymptotics.IsEquivalent.summable_iff
 
 中文:
 定理 Asymptotics.IsEquivalent.summable_iff
-  结论: {ι E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {ι E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: h.isTheta.summable_iff
 
 @[deprecated (since := "2026-02-07")]
@@ -1881,7 +1881,7 @@ alias IsEquivalent.summable_iff_nat := Asymptotics.IsEquivalent.summable_iff_nat
 
 中文:
 定理 Asymptotics.IsEquivalent.summable_iff_nat
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: h.isTheta.summable_iff_nat
 
 @[deprecated (since := "2026-02-07")]
@@ -1917,7 +1917,7 @@ theorem continuous_coe_repr
 
 中文:
 定理 continuous_coe_repr
-  结论: Continuous (fun m : M => ⇑(B.repr m))
+  结论: 连续 (fun m : M => ⇑(B.repr m))
   证明: have := Finite.of_basis B
   LinearMap.continuous_of_finiteDimensional B.equivFun.toLinearMap
 
@@ -1941,7 +1941,7 @@ theorem continuous_toMatrix
 
 中文:
 定理 continuous_toMatrix
-  结论: Continuous fun (v : ι -> M) => B.toMatrix v
+  结论: 连续 fun (v : ι -> M) => B.toMatrix v
   证明: let _ := Fintype.ofFinite ι
   have := Finite.of_basis B
   LinearMap.continuous_of_finiteDimensional B.toMatrixEquiv.toLinearMap

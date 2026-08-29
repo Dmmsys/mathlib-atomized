@@ -36,8 +36,8 @@ definition RingEquiv.piFinTwo
     map_mul' := fun _ _ => rfl }
 
 中文:
-定义 RingEquiv.piFinTwo
-  签名: (R : Fin 2 -> 类型) [对任意 i, Semiring (R i)]
+定义 环等价.piFinTwo
+  签名: (R : 有限集 2 -> 类型) [对任意 i, 半环 (R i)]
   定义体: { piFinTwoEquiv R with
     toFun := piFinTwoEquiv R
     map_add' := fun _ _ => rfl

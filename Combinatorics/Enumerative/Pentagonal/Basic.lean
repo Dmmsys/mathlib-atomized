@@ -168,7 +168,7 @@ theorem pentagonal_injective
 
 中文:
 定理 pentagonal_injective
-  结论: Function.Injective pentagonal
+  结论: 函数.单射 pentagonal
   证明: by
   intro x y h
   replace h : (3 * (x + y) - 1) * (x - y) = 0 := by grind [two_mul_natCast_pentagonal]
@@ -259,7 +259,7 @@ theorem pentagonal_strictMonoOn
 
 中文:
 定理 pentagonal_strictMonoOn
-  结论: StrictMonoOn pentagonal (Set.Ici 0)
+  结论: StrictMonoOn pentagonal (集合.左闭右无界区间 0)
   证明: by
   apply strictMonoOn_of_lt_add_one Set.ordConnected_Ici
   grind [natCast_pentagonal]
@@ -282,7 +282,7 @@ theorem pentagonal_strictAntiOn
 
 中文:
 定理 pentagonal_strictAntiOn
-  结论: StrictAntiOn pentagonal (Set.Iic 0)
+  结论: StrictAntiOn pentagonal (集合.左无界右闭区间 0)
   证明: by
   apply strictAntiOn_of_add_one_lt Set.ordConnected_Iic
   grind [natCast_pentagonal]

@@ -63,7 +63,7 @@ theorem getD_eq_getElem?
 
 中文:
 定理 getD_eq_getElem?
-  条件: (i : Fin l.length)
+  条件: (i : 有限集 l.length)
   结论: l.getD i d = l[i]?.get (by simp)
   证明: by
   simp only [getD_eq_getElem?_getD, Fin.is_lt, getElem?_pos, Option.getD_some, Fin.getElem_fin,
@@ -84,7 +84,7 @@ theorem getD_eq_get
 
 中文:
 定理 getD_eq_get
-  条件: (i : Fin l.length)
+  条件: (i : 有限集 l.length)
   结论: l.getD i d = l.get i
   证明: getD_eq_getElem ..
 
@@ -146,7 +146,7 @@ theorem getD_reverse
 
 中文:
 定理 getD_reverse
-  条件: {l : List α} (i) (h : i < length l)
+  条件: {l : 列表 α} (i) (h : i < length l)
   证明: by
   grind
 -/
@@ -256,7 +256,7 @@ theorem getD_append
 
 中文:
 定理 getD_append
-  条件: (l l' : List α) (d : α) (n : 自然数) (h : n < l.length)
+  条件: (l l' : 列表 α) (d : α) (n : 自然数) (h : n < l.length)
   证明: by
   grind
 -/
@@ -275,7 +275,7 @@ theorem getD_append_right
 
 中文:
 定理 getD_append_right
-  条件: (l l' : List α) (d : α) (n : 自然数) (h : l.length <= n)
+  条件: (l l' : 列表 α) (d : α) (n : 自然数) (h : l.length <= n)
   证明: by
   grind
 -/
@@ -298,7 +298,7 @@ theorem getD_surjective_iff
 
 中文:
 定理 getD_surjective_iff
-  条件: {l : List α} {d : α}
+  条件: {l : 列表 α} {d : α}
   证明: by
   apply forall_congr'
   have : exists x, l.length <= x := ⟨_, Nat.le_refl _⟩
@@ -327,8 +327,8 @@ theorem getD_surjective
 
 中文:
 定理 getD_surjective
-  条件: {l : List α} (h : 对任意 x, x in l) (d : α)
-  结论: (l.getD · d).Surjective
+  条件: {l : 列表 α} (h : 对任意 x, x in l) (d : α)
+  结论: (l.getD · d).满射
   证明: getD_surjective_iff.mpr fun _ => .inr h _
 
 Depends on / 依赖: getD_surjective_iff, getD_surjective_iff.mpr
@@ -355,7 +355,7 @@ theorem getI_nil
 
 中文:
 定理 getI_nil
-  结论: getI ([] : List α) n = default
+  结论: getI ([] : 列表 α) n = default
   证明: rfl
 
 @[simp]
@@ -469,7 +469,7 @@ theorem getI_append
 
 中文:
 定理 getI_append
-  条件: (l l' : List α) (n : 自然数) (h : n < l.length)
+  条件: (l l' : 列表 α) (n : 自然数) (h : n < l.length)
   证明: getD_append _ _ _ _ h
 
 Depends on / 依赖: getD_append
@@ -487,7 +487,7 @@ theorem getI_append_right
 
 中文:
 定理 getI_append_right
-  条件: (l l' : List α) (n : 自然数) (h : l.length <= n)
+  条件: (l l' : 列表 α) (n : 自然数) (h : l.length <= n)
   证明: getD_append_right _ _ _ _ h
 
 Depends on / 依赖: getD_append_right

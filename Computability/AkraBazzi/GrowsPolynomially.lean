@@ -137,7 +137,7 @@ lemma eventually_atTop_le
 
 中文:
 引理 eventually_atTop_le
-  条件: {b : 实数} (hb : b in Set.Ioo 0 1) (hf : GrowsPolynomially f)
+  条件: {b : 实数} (hb : b in 集合.开区间 0 1) (hf : GrowsPolynomially f)
   证明: by
   obtain ⟨c₁, _, c₂, hc₂, h⟩ := hf b hb
   refine ⟨c₂, hc₂, ?_⟩
@@ -165,7 +165,7 @@ lemma eventually_atTop_le_nat
 
 中文:
 引理 eventually_atTop_le_nat
-  条件: {b : 实数} (hb : b in Set.Ioo 0 1) (hf : GrowsPolynomially f)
+  条件: {b : 实数} (hb : b in 集合.开区间 0 1) (hf : GrowsPolynomially f)
   证明: by
   obtain ⟨c, hc_mem, hc⟩ := hf.eventually_atTop_le hb
   exact ⟨c, hc_mem, hc.natCast_atTop⟩
@@ -191,7 +191,7 @@ lemma eventually_atTop_ge
 
 中文:
 引理 eventually_atTop_ge
-  条件: {b : 实数} (hb : b in Set.Ioo 0 1) (hf : GrowsPolynomially f)
+  条件: {b : 实数} (hb : b in 集合.开区间 0 1) (hf : GrowsPolynomially f)
   证明: by
   obtain ⟨c₁, hc₁, c₂, _, h⟩ := hf b hb
   refine ⟨c₁, hc₁, ?_⟩
@@ -219,7 +219,7 @@ lemma eventually_atTop_ge_nat
 
 中文:
 引理 eventually_atTop_ge_nat
-  条件: {b : 实数} (hb : b in Set.Ioo 0 1) (hf : GrowsPolynomially f)
+  条件: {b : 实数} (hb : b in 集合.开区间 0 1) (hf : GrowsPolynomially f)
   证明: by
   obtain ⟨c, hc_mem, hc⟩ := hf.eventually_atTop_ge hb
   exact ⟨c, hc_mem, hc.natCast_atTop⟩

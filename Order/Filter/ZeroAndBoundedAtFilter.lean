@@ -38,7 +38,7 @@ definition ZeroAtFilter
 
 中文:
 定义 ZeroAtFilter
-  签名: [Zero β] [TopologicalSpace β] (l : Filter α) (f : α -> β)
+  签名: [零 β] [拓扑空间 β] (l : 滤子 α) (f : α -> β)
   定义体: Filter.Tendsto f l (𝓝 0)
 
 Depends on / 依赖: Filter, Filter.Tendsto, Tendsto
@@ -63,7 +63,7 @@ nonrec theorem ZeroAtFilter.neg [TopologicalSpace
 
 中文:
 定理 zero_zeroAtFilter
-  条件: [Zero β] [TopologicalSpace β] (l : Filter α)
+  条件: [零 β] [拓扑空间 β] (l : 滤子 α)
   证明: tendsto_const_nhds
 
 nonrec theorem ZeroAtFilter.add [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
@@ -98,7 +98,7 @@ theorem ZeroAtFilter.smul
 
 中文:
 定理 ZeroAtFilter.smul
-  结论: [TopologicalSpace β] [Zero β]
+  结论: [拓扑空间 β] [零 β]
   证明: by simpa using! hf.const_smul c
 
 Depends on / 依赖: const_smul, hf.const_smul
@@ -148,7 +148,7 @@ definition zeroAtFilterAddSubmonoid
 
 中文:
 定义 zeroAtFilterAddSubmonoid
-  签名: [TopologicalSpace β] [AddZeroClass β] [ContinuousAdd β]
+  签名: [拓扑空间 β] [加法零类 β] [连续加法 β]
   定义体: {f | ZeroAtFilter l f}
   add_mem' ha hb := ha.add hb
   zero_mem' := zero_zeroAtFilter l
@@ -171,7 +171,7 @@ definition BoundedAtFilter
 
 中文:
 定义 BoundedAtFilter
-  签名: [Norm β] (l : Filter α) (f : α -> β)
+  签名: [范数 β] (l : 滤子 α) (f : α -> β)
   定义体: Asymptotics.IsBigO l f (1 : α -> Real)
 
 Depends on / 依赖: Asymptotics, Asymptotics.IsBigO, IsBigO
@@ -189,7 +189,7 @@ theorem ZeroAtFilter.boundedAtFilter
 
 中文:
 定理 ZeroAtFilter.boundedAtFilter
-  结论: [SeminormedAddGroup β] {l : Filter α} {f : α -> β}
+  结论: [半赋范加群 β] {l : 滤子 α} {f : α -> β}
   证明: ((Asymptotics.isLittleO_one_iff _).mpr hf).isBigO
 
 Depends on / 依赖: Asymptotics, Asymptotics.isLittleO_one_iff, Quotient, Quotient.mk, _surjective, isBigO, isLittleO_one_iff
@@ -208,7 +208,7 @@ theorem const_boundedAtFilter
 
 中文:
 定理 const_boundedAtFilter
-  条件: [Norm β] (l : Filter α) (c : β)
+  条件: [范数 β] (l : 滤子 α) (c : β)
   证明: Asymptotics.isBigO_const_const c one_ne_zero l
 
 Depends on / 依赖: Asymptotics, Asymptotics.isBigO_const_const, isBigO_const_const, one_ne_zero
@@ -233,7 +233,7 @@ theorem BoundedAtFilter.neg
 
 中文:
 定理 BoundedAtFilter.neg
-  结论: [SeminormedAddCommGroup β] {l : Filter α} {f : α -> β}
+  结论: [SeminormedAddComm群 β] {l : 滤子 α} {f : α -> β}
   证明: hf.neg_left
 
 Depends on / 依赖: hf.neg_left, neg_left
@@ -290,7 +290,7 @@ theorem ZeroAtFilter.mul_boundedAtFilter
 
 中文:
 定理 ZeroAtFilter.mul_boundedAtFilter
-  结论: [SeminormedRing β] {l : Filter α}
+  结论: [Seminormed环 β] {l : 滤子 α}
   证明: by
   rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hf ⊢
   simpa using! hf.mul_isBigO hg
@@ -314,7 +314,7 @@ theorem BoundedAtFilter.mul_zeroAtFilter
 
 中文:
 定理 BoundedAtFilter.mul_zeroAtFilter
-  结论: [SeminormedRing β] {l : Filter α}
+  结论: [Seminormed环 β] {l : 滤子 α}
   证明: by
   rw [ZeroAtFilter]; rw [← Asymptotics.isLittleO_one_iff (F := Real)] at hg ⊢
   simpa using! hf.mul_isLittleO hg
@@ -391,8 +391,8 @@ theorem BoundedAtFilter.prod
   proof: (boundedFilterSubalgebra β l).prod_mem (f := f) h
 
 中文:
-定理 BoundedAtFilter.prod
-  结论: {ι : Type} (s : Finset ι) [SeminormedCommRing β]
+定理 BoundedAtFilter.乘积
+  结论: {ι : 类型} (s : 有限集 ι) [SeminormedComm环 β]
   证明: (boundedFilterSubalgebra β l).prod_mem (f := f) h
 
 Depends on / 依赖: boundedFilterSubalgebra, prod_mem

@@ -55,8 +55,8 @@ structure Homotopy
     - wr((i : E.I₀)) : a i ≫ F.p₂ (H i) = g.h₀ i
 
 中文:
-结构 Homotopy
-  参数: (f g : E.Hom F)
+结构 同伦
+  参数: (f g : E.态射 F)
   公理与运算 (4 个):
     - H((i : E.I₀)) : F.I₁ (f.s₀ i) (g.s₀ i)
     - a((i : E.I₀)) : E.X i ⟶ F.Y (H i)
@@ -94,7 +94,7 @@ lemma Homotopy.mapMultiforkOfIsLimit_eq
   simp [-Homotopy.wl, -Homotopy.
 
 中文:
-引理 Homotopy.mapMultiforkOfIsLimit_eq
+引理 同伦.mapMultiforkOfIsLimit_eq
   证明: by
   refine Multifork.IsLimit.hom_ext hc fun a => ?_
   have heq := d.condition ⟨⟨(f.s₀ a), (g.s₀ a)⟩, H.H a⟩
@@ -135,8 +135,8 @@ definition Homotopy.isLimitMultifork
    
 
 中文:
-定义 Homotopy.isLimitMultifork
-  签名: (f : E.Hom F) (g : F.Hom E) (hgf : Homotopy (g.comp f) (.id F))
+定义 同伦.isLimitMultifork
+  签名: (f : E.态射 F) (g : F.态射 E) (hgf : 同伦 (g.comp f) (.id F))
   定义体: by
   refine Multifork.IsLimit.mk _ ?_ ?_ ?_
   · intro t
@@ -185,8 +185,8 @@ definition Homotopy.isLimitMultiforkEquiv
   right_inv _ := Subsingleton.elim _ _
 
 中文:
-定义 Homotopy.isLimitMultiforkEquiv
-  签名: (f : E.Hom F) (g : F.Hom E)
+定义 同伦.isLimitMultiforkEquiv
+  签名: (f : E.态射 F) (g : F.态射 E)
   定义体: hgf.isLimitMultifork _ _ h
   invFun h := hfg.isLimitMultifork _ _ h
   left_inv _ := Subsingleton.elim _ _
@@ -269,7 +269,7 @@ definition cylinder
 
 中文:
 定义 cylinder
-  签名: (f g : E.Hom F)
+  签名: (f g : E.态射 F)
   定义体: Σ (i : E.I₀), F.I₁ (f.s₀ i) (g.s₀ i)
   X p := cylinderX f g p.2
   f p := cylinderf f g p.2
@@ -433,7 +433,7 @@ definition cylinderHom
 
 中文:
 定义 cylinderHom
-  签名: : (cylinder f g).Hom E where
+  签名: : (cylinder f g).态射 E where
   定义体: p.1
   s₁ k := k.down
   h₀ p := pullback.fst _ _
@@ -523,8 +523,8 @@ lemma exists_nonempty_homotopy
   proof: ⟨cylinder f g, PreOneHypercover.cylinderHom f g, ⟨cylinderHomotopy f g⟩⟩
 
 中文:
-引理 exists_nonempty_homotopy
-  条件: (f g : E.Hom F)
+引理 存在_nonempty_homotopy
+  条件: (f g : E.态射 F)
   证明: ⟨cylinder f g, PreOneHypercover.cylinderHom f g, ⟨cylinderHomotopy f g⟩⟩
 
 Depends on / 依赖: PreOneHypercover, PreOneHypercover.cylinderHom, cylinder, cylinderHom, cylinderHomotopy
@@ -570,7 +570,7 @@ definition cylinder
 
 中文:
 定义 cylinder
-  签名: (f g : E.Hom F)
+  签名: (f g : E.态射 F)
   定义体: mk' (PreOneHypercover.cylinder f g)
     (by
       rw [PreOneHypercover.sieve₀_cylinder]
@@ -603,8 +603,8 @@ lemma exists_nonempty_homotopy
   proof: ⟨cylinder f g, PreOneHypercover.cylinderHom f g, ⟨PreOneHypercover.cylinderHomotopy f g⟩⟩
 
 中文:
-引理 exists_nonempty_homotopy
-  条件: (f g : E.Hom F)
+引理 存在_nonempty_homotopy
+  条件: (f g : E.态射 F)
   证明: ⟨cylinder f g, PreOneHypercover.cylinderHom f g, ⟨PreOneHypercover.cylinderHomotopy f g⟩⟩
 
 Depends on / 依赖: PreOneHypercover, PreOneHypercover.cylinderHom, PreOneHypercover.cylinderHomotopy, cylinder, cylinderHom, cylinderHomotopy
@@ -680,7 +680,7 @@ lemma _root_.CategoryTheory.PreOneHypercover.Homotopy.map_eq_map
   proof: Quotient.sound _ ⟨H⟩
 
 中文:
-引理 _root_.CategoryTheory.PreOneHypercover.Homotopy.map_eq_map
+引理 _root_.范畴论.PreOneHypercover.同伦.map_eq_map
   结论: {S : C} {E F : J.OneHypercover S}
   证明: Quotient.sound _ ⟨H⟩
 
@@ -705,7 +705,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (J.HOneHypercover S)
+  签名: 非空 (J.HOneHypercover S)
   定义体: ⟨⟨Nonempty.some inferInstance⟩⟩
 
 Depends on / 依赖: Nonempty, Nonempty.some
@@ -728,7 +728,7 @@ instance isCofiltered_of_hasPullbacks
 
 中文:
 实例 isCofiltered_of_hasPullbacks
-  签名: [HasPullbacks C]
+  签名: [有Pullbacks C]
   定义体: ⟨⟨E.1.inter F.1⟩, Quot.mk _ (PreOneHypercover.interFst _ _),
       Quot.mk _ (PreOneHypercover.interSnd _ _), ⟨⟩⟩
   cone_maps {X Y} f g := by

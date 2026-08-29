@@ -48,13 +48,13 @@ structure Monad
     - right_unit : forall X : C, toFunctor.map (η.app X) ≫ μ.app _ = 𝟙 _  [default: by cat_disch]
 
 中文:
-结构 Monad
+结构 单子
   参数: extends C ⥤ C
   继承: C ⥤ C
   公理与运算 (5 个):
     - η : 𝟭 _ ⟶ toFunctor
     - μ : toFunctor ⋙ toFunctor ⟶ toFunctor
-    - assoc : 对任意 X, toFunctor.map (自然数Trans.app μ X) ≫ μ.app _ = μ.app _ ≫ μ.app _  [默认: by cat_disch]
+    - assoc : 对任意 X, toFunctor.map (自然变换.app μ X) ≫ μ.app _ = μ.app _ ≫ μ.app _  [默认: by cat_disch]
     - left_unit : 对任意 X : C, η.app (toFunctor.obj X) ≫ μ.app _ = 𝟙 _  [默认: by cat_disch]
     - right_unit : 对任意 X : C, toFunctor.map (η.app X) ≫ μ.app _ = 𝟙 _  [默认: by cat_disch]
 
@@ -82,8 +82,8 @@ lemma Monad.unit_naturality
 @[reassoc]
 
 中文:
-引理 Monad.unit_naturality
-  条件: (T : Monad C) ⦃X Y
+引理 单子.unit_naturality
+  条件: (T : 单子 C) ⦃X Y
   结论: C⦄ (f : X ⟶ Y) :
   证明: T.η.naturality _
 
@@ -106,8 +106,8 @@ lemma Monad.mu_naturality
   proof: T.μ.naturality _
 
 中文:
-引理 Monad.mu_naturality
-  条件: (T : Monad C) ⦃X Y
+引理 单子.mu_naturality
+  条件: (T : 单子 C) ⦃X Y
   结论: C⦄ (f : X ⟶ Y) :
   证明: T.μ.naturality _
 
@@ -132,13 +132,13 @@ structure Comonad
     - right_counit : forall X : C, δ.app X ≫ toFunctor.map (ε.app X) = 𝟙 _  [default: by cat_disch]
 
 中文:
-结构 Comonad
+结构 余单子
   参数: extends C ⥤ C
   继承: C ⥤ C
   公理与运算 (5 个):
     - ε : toFunctor ⟶ 𝟭 _
     - δ : toFunctor ⟶ toFunctor ⋙ toFunctor
-    - coassoc : 对任意 X, 自然数Trans.app δ _ ≫ toFunctor.map (δ.app X) = δ.app _ ≫ δ.app _  [默认: by cat_disch]
+    - coassoc : 对任意 X, 自然变换.app δ _ ≫ toFunctor.map (δ.app X) = δ.app _ ≫ δ.app _  [默认: by cat_disch]
     - left_counit : 对任意 X : C, δ.app X ≫ ε.app (toFunctor.obj X) = 𝟙 _  [默认: by cat_disch]
     - right_counit : 对任意 X : C, δ.app X ≫ toFunctor.map (ε.app X) = 𝟙 _  [默认: by cat_disch]
 
@@ -167,8 +167,8 @@ lemma Comonad.counit_naturality
 @[reassoc]
 
 中文:
-引理 Comonad.counit_naturality
-  条件: (T : Comonad C) ⦃X Y
+引理 余单子.counit_naturality
+  条件: (T : 余单子 C) ⦃X Y
   结论: C⦄ (f : X ⟶ Y) :
   证明: T.ε.naturality _
 
@@ -191,8 +191,8 @@ lemma Comonad.delta_naturality
   proof: T.δ.naturality _
 
 中文:
-引理 Comonad.delta_naturality
-  条件: (T : Comonad C) ⦃X Y
+引理 余单子.delta_naturality
+  条件: (T : 余单子 C) ⦃X Y
   结论: C⦄ (f : X ⟶ Y) :
   证明: T.δ.naturality _
 
@@ -215,7 +215,7 @@ instance coeMonad
 
 中文:
 实例 coeMonad
-  签名: : Coe (Monad C) (C ⥤ C)
+  签名: : Coe (单子 C) (C ⥤ C)
   定义体: ⟨fun T => T.toFunctor⟩
 
 Depends on / 依赖: T.toFunctor, toFunctor
@@ -237,7 +237,7 @@ initialize_simps_projections CategoryTheory.Comonad (toFunctor -> coe)
 
 中文:
 实例 coeComonad
-  签名: : Coe (Comonad C) (C ⥤ C)
+  签名: : Coe (余单子 C) (C ⥤ C)
   定义体: ⟨fun G => G.toFunctor⟩
 
 initialize_simps_projections CategoryTheory.Monad (toFunctor -> coe)
@@ -271,9 +271,9 @@ structure MonadHom
     - app_μ : forall X, T₁.μ.app X ≫ app X = (T₁.map (app X) ≫ app _) ≫ T₂.μ.app X  [default: by cat_disch]
 
 中文:
-结构 MonadHom
-  参数: (T₁ T₂ : Monad C)
-  继承: NatTrans (T₁ : C ⥤ C) T₂
+结构 单子态射
+  参数: (T₁ T₂ : 单子 C)
+  继承: 自然变换 (T₁ : C ⥤ C) T₂
   公理与运算 (2 个):
     - app_η : 对任意 X, T₁.η.app X ≫ app X = T₂.η.app X  [默认: by cat_disch]
     - app_μ : 对任意 X, T₁.μ.app X ≫ app X = (T₁.map (app X) ≫ app _) ≫ T₂.μ.app X  [默认: by cat_disch]
@@ -301,9 +301,9 @@ structure ComonadHom
     - app_δ : forall X, app X ≫ N.δ.app X = M.δ.app X ≫ app _ ≫ N.map (app X)  [default: by cat_disch]
 
 中文:
-结构 ComonadHom
-  参数: (M N : Comonad C)
-  继承: NatTrans (M : C ⥤ C) N
+结构 余单子态射
+  参数: (M N : 余单子 C)
+  继承: 自然变换 (M : C ⥤ C) N
   公理与运算 (2 个):
     - app_ε : 对任意 X, app X ≫ N.ε.app X = M.ε.app X  [默认: by cat_disch]
     - app_δ : 对任意 X, app X ≫ N.δ.app X = M.δ.app X ≫ app _ ≫ N.map (app X)  [默认: by cat_disch]
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Monad C)
+  签名: 箭图 (单子 C)
   定义体: MonadHom
 
 Depends on / 依赖: MonadHom
@@ -349,7 +349,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Comonad C)
+  签名: 箭图 (余单子 C)
   定义体: ComonadHom
 
 @[ext]
@@ -372,8 +372,8 @@ lemma MonadHom.ext'
 @[ext]
 
 中文:
-引理 MonadHom.ext'
-  条件: {T₁ T₂ : Monad C} (f g : T₁ ⟶ T₂) (h : f.app = g.app)
+引理 单子态射.ext'
+  条件: {T₁ T₂ : 单子 C} (f g : T₁ ⟶ T₂) (h : f.app = g.app)
   结论: f = g
   证明: MonadHom.ext h
 
@@ -395,8 +395,8 @@ lemma ComonadHom.ext'
   proof: ComonadHom.ext h
 
 中文:
-引理 ComonadHom.ext'
-  条件: {T₁ T₂ : Comonad C} (f g : T₁ ⟶ T₂) (h : f.app = g.app)
+引理 余单子态射.ext'
+  条件: {T₁ T₂ : 余单子 C} (f g : T₁ ⟶ T₂) (h : f.app = g.app)
   结论: f = g
   证明: ComonadHom.ext h
 
@@ -419,7 +419,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Monad C)
+  签名: 范畴 (单子 C)
   定义体: { toNatTrans := 𝟙 (M : C ⥤ C) }
   comp f g :=
     { toNatTrans :=
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Comonad C)
+  签名: 范畴 (余单子 C)
   定义体: { toNatTrans := 𝟙 (M : C ⥤ C) }
   comp f g :=
     { toNatTrans :=
@@ -482,8 +482,8 @@ theorem MonadHom.id_toNatTrans
 @[simp]
 
 中文:
-定理 MonadHom.id_toNatTrans
-  条件: (T : Monad C)
+定理 单子态射.id_to自然数Trans
+  条件: (T : 单子 C)
   结论: (𝟙 T : T ⟶ T).to自然数Trans = 𝟙 (T : C ⥤ C)
   证明: rfl
 
@@ -502,8 +502,8 @@ theorem MonadHom.comp_toNatTrans
   proof: rfl
 
 中文:
-定理 MonadHom.comp_toNatTrans
-  条件: {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
+定理 单子态射.comp_to自然数Trans
+  条件: {T₁ T₂ T₃ : 单子 C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
   证明: rfl
 -/
 theorem MonadHom.comp_toNatTrans {T₁ T₂ T₃ : Monad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃) :
@@ -526,8 +526,8 @@ theorem ComonadHom.id_toNatTrans
 @[simp]
 
 中文:
-定理 ComonadHom.id_toNatTrans
-  条件: (T : Comonad C)
+定理 余单子态射.id_to自然数Trans
+  条件: (T : 余单子 C)
   结论: (𝟙 T : T ⟶ T).to自然数Trans = 𝟙 (T : C ⥤ C)
   证明: rfl
 
@@ -546,8 +546,8 @@ theorem comp_toNatTrans
   proof: rfl
 
 中文:
-定理 comp_toNatTrans
-  条件: {T₁ T₂ T₃ : Comonad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
+定理 comp_to自然数Trans
+  条件: {T₁ T₂ T₃ : 余单子 C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃)
   证明: rfl
 -/
 theorem comp_toNatTrans {T₁ T₂ T₃ : Comonad C} (f : T₁ ⟶ T₂) (g : T₂ ⟶ T₃) :
@@ -576,7 +576,7 @@ definition MonadIso.mk
 
 中文:
 定义 MonadIso.mk
-  签名: {M N : Monad C} (f : (M : C ⥤ C) ≅ N)
+  签名: {M N : 单子 C} (f : (M : C ⥤ C) ≅ N)
   定义体: { toNatTrans := f.hom
       app_η := f_η
       app_μ := f_μ }
@@ -628,7 +628,7 @@ definition ComonadIso.mk
 
 中文:
 定义 ComonadIso.mk
-  签名: {M N : Comonad C} (f : (M : C ⥤ C) ≅ N)
+  签名: {M N : 余单子 C} (f : (M : C ⥤ C) ≅ N)
   定义体: { toNatTrans := f.hom
       app_ε := f_ε
       app_δ := f_δ }
@@ -674,7 +674,7 @@ definition monadToFunctor
 
 中文:
 定义 monadToFunctor
-  签名: : Monad C ⥤ C ⥤ C where
+  签名: : 单子 C ⥤ C ⥤ C where
   定义体: T
   map f := f.toNatTrans
 -/
@@ -691,7 +691,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monadToFunctor C).Faithful
+  签名: (monadToFunctor C).忠实
 -/
 instance : (monadToFunctor C).Faithful where
 
@@ -707,7 +707,7 @@ theorem monadToFunctor_mapIso_monad_iso_mk
 
 中文:
 定理 monadToFunctor_mapIso_monad_iso_mk
-  条件: {M N : Monad C} (f : (M : C ⥤ C) ≅ N) (f_η f_μ)
+  条件: {M N : 单子 C} (f : (M : C ⥤ C) ≅ N) (f_η f_μ)
   证明: by
   ext
   rfl
@@ -728,7 +728,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monadToFunctor C).ReflectsIsomorphisms
+  签名: (monadToFunctor C).反映同构
   定义体: (MonadIso.mk (asIso ((monadToFunctor C).map f)) f.app_η f.app_μ).isIso_hom
 
 Depends on / 依赖: MonadIso, MonadIso.mk, f.app_, isIso_hom, monadToFunctor
@@ -750,7 +750,7 @@ definition comonadToFunctor
 
 中文:
 定义 comonadToFunctor
-  签名: : Comonad C ⥤ C ⥤ C where
+  签名: : 余单子 C ⥤ C ⥤ C where
   定义体: G
   map f := f.toNatTrans
 -/
@@ -767,7 +767,7 @@ instance :
 
 中文:
 实例 :
-  签名: (comonadToFunctor C).Faithful
+  签名: (comonadToFunctor C).忠实
 -/
 instance : (comonadToFunctor C).Faithful where
 
@@ -783,7 +783,7 @@ theorem comonadToFunctor_mapIso_comonad_iso_mk
 
 中文:
 定理 comonadToFunctor_mapIso_comonad_iso_mk
-  条件: {M N : Comonad C} (f : (M : C ⥤ C) ≅ N) (f_ε f_δ)
+  条件: {M N : 余单子 C} (f : (M : C ⥤ C) ≅ N) (f_ε f_δ)
   证明: by
   ext
   rfl
@@ -804,7 +804,7 @@ instance :
 
 中文:
 实例 :
-  签名: (comonadToFunctor C).ReflectsIsomorphisms
+  签名: (comonadToFunctor C).反映同构
   定义体: (ComonadIso.mk (asIso ((comonadToFunctor C).map f)) f.app_ε f.app_δ).isIso_hom
 
 Depends on / 依赖: ComonadIso, ComonadIso.mk, comonadToFunctor, f.app_, isIso_hom
@@ -826,8 +826,8 @@ definition MonadIso.toNatIso
   body: (monadToFunctor C).mapIso h
 
 中文:
-定义 MonadIso.toNatIso
-  签名: {M N : Monad C} (h : M ≅ N)
+定义 MonadIso.to自然数Iso
+  签名: {M N : 单子 C} (h : M ≅ N)
   定义体: (monadToFunctor C).mapIso h
 
 Depends on / 依赖: mapIso, monadToFunctor
@@ -847,8 +847,8 @@ definition ComonadIso.toNatIso
   body: (comonadToFunctor C).mapIso h
 
 中文:
-定义 ComonadIso.toNatIso
-  签名: {M N : Comonad C} (h : M ≅ N)
+定义 ComonadIso.to自然数Iso
+  签名: {M N : 余单子 C} (h : M ≅ N)
   定义体: (comonadToFunctor C).mapIso h
 
 Depends on / 依赖: comonadToFunctor, mapIso
@@ -874,7 +874,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Monad C where
+  签名: : 单子 C where
   定义体: 𝟭 C
   η := 𝟙 (𝟭 C)
   μ := 𝟙 (𝟭 C)
@@ -894,7 +894,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Monad C)
+  签名: 可居 (单子 C)
   定义体: ⟨Monad.id C⟩
 
 Depends on / 依赖: Monad.id
@@ -921,7 +921,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Comonad C where
+  签名: : 余单子 C where
   定义体: 𝟭 _
   ε := 𝟙 (𝟭 C)
   δ := 𝟙 (𝟭 C)
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Comonad C)
+  签名: 可居 (余单子 C)
   定义体: ⟨Comonad.id C⟩
 
 Depends on / 依赖: Comonad, Comonad.id
@@ -977,7 +977,7 @@ definition transport
 
 中文:
 定义 transport
-  签名: {F : C ⥤ C} (T : Monad C) (i : (T : C ⥤ C) ≅ F)
+  签名: {F : C ⥤ C} (T : 单子 C) (i : (T : C ⥤ C) ≅ F)
   定义体: F
   η := T.η ≫ i.hom
   μ := (i.inv ◫ i.inv) ≫ T.μ ≫ i.hom
@@ -1037,7 +1037,7 @@ definition transport
 
 中文:
 定义 transport
-  签名: {F : C ⥤ C} (T : Comonad C) (i : (T : C ⥤ C) ≅ F)
+  签名: {F : C ⥤ C} (T : 余单子 C) (i : (T : C ⥤ C) ≅ F)
   定义体: F
   ε := i.inv ≫ T.ε
   δ := i.inv ≫ T.δ ≫ (i.hom ◫ i.hom)
@@ -1083,7 +1083,7 @@ lemma map_unit_app
 
 中文:
 引理 map_unit_app
-  条件: (T : Monad C) (X : C) [IsIso T.μ]
+  条件: (T : 单子 C) (X : C) [是同构 T.μ]
   证明: by
   simp [← cancel_mono (T.μ.app _)]
 
@@ -1105,7 +1105,7 @@ lemma isSplitMono_iff_isIso_unit
 
 中文:
 引理 isSplitMono_iff_isIso_unit
-  条件: (T : Monad C) (X : C) [IsIso T.μ]
+  条件: (T : 单子 C) (X : C) [是同构 T.μ]
   证明: by
   refine ⟨fun _ => ⟨retraction (T.η.app X), by simp, ?_⟩, fun _ => inferInstance⟩
   rw [← map_id]; rw [← show T.η.app X ≫ retraction (T.η.app X) = 𝟙 X from IsSplitMono.id _]; rw [map_comp]; rw [T.map_unit_app X]; rw [← T.unit_naturality]
@@ -1132,7 +1132,7 @@ lemma map_counit_app
 
 中文:
 引理 map_counit_app
-  条件: (T : Comonad C) (X : C) [IsIso T.δ]
+  条件: (T : 余单子 C) (X : C) [是同构 T.δ]
   证明: by
   simp [← cancel_epi (T.δ.app _)]
 
@@ -1154,7 +1154,7 @@ lemma isSplitEpi_iff_isIso_counit
 
 中文:
 引理 isSplitEpi_iff_isIso_counit
-  条件: (T : Comonad C) (X : C) [IsIso T.δ]
+  条件: (T : 余单子 C) (X : C) [是同构 T.δ]
   证明: by
   refine ⟨fun _ => ⟨section_ (T.ε.app X), ?_, by simp⟩, fun _ => inferInstance⟩
   rw [← map_id]; rw [← show section_ (T.ε.app X) ≫ T.ε.app X = 𝟙 X from IsSplitEpi.id (T.ε.app X)]; rw [map_comp]; rw [T.map_counit_app X]; rw [T.counit_naturality]

@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: CStarModule A A
+  签名: CStar模 A A
   定义体: y * star x
   inner_add_right := add_mul ..
   inner_self_nonneg := mul_star_self_nonneg _
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm C⋆ᵐᵒᵈ(A, E × F)
+  签名: 范数 C⋆ᵐᵒᵈ(A, E × F)
   定义体: √‖⟪x.1, x.1⟫_A + ⟪x.2, x.2⟫_A‖
 -/
 noncomputable instance : Norm C⋆ᵐᵒᵈ(A, E × F) where
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: CStarModule A C⋆ᵐᵒᵈ(A, E × F)
+  签名: CStar模 A C⋆ᵐᵒᵈ(A, E × F)
   定义体: ⟪x.1, y.1⟫_A + ⟪x.2, y.2⟫_A
   inner_add_right {x y z} := by simpa using add_add_add_comm ..
   inner_self_nonneg := add_nonneg CStarModule.inner_self_nonneg CStarModule.inner_self_nonneg
@@ -319,7 +319,7 @@ lemma max_le_prod_norm
 中文:
 引理 max_le_prod_norm
   条件: (x : C⋆ᵐᵒᵈ(A, E × F))
-  结论: max ‖x.1‖ ‖x.2‖ <= ‖x‖
+  结论: 最大值 ‖x.1‖ ‖x.2‖ <= ‖x‖
   证明: by
   rw [prod_norm]
   simp only [norm_eq_sqrt_norm_inner_self (A := A) (E := E),
@@ -384,7 +384,7 @@ definition normedAddCommGroupProdAux
 
 中文:
 定义 normedAddCommGroupProdAux
-  签名: : NormedAddCommGroup C⋆ᵐᵒᵈ(A, E × F)
+  签名: : 赋范交换加群 C⋆ᵐᵒᵈ(A, E × F)
   定义体: NormedAddCommGroup.ofCore (CStarModule.normedSpaceCore A)
 
 Depends on / 依赖: CStarModule, CStarModule.normedSpaceCore, NormedAddCommGroup, NormedAddCommGroup.ofCore, normedSpaceCore, ofCore
@@ -472,7 +472,7 @@ lemma isBounded_prod_iff_aux
 
 中文:
 引理 isBounded_prod_iff_aux
-  条件: (s : Set C⋆ᵐᵒᵈ(A, E × F))
+  条件: (s : 集合 C⋆ᵐᵒᵈ(A, E × F))
   证明: isBounded_iff_of_bilipschitz antilipschitzWith_two_equiv_prod_aux
     lipschitzWith_one_equiv_prod_aux s
 -/
@@ -493,7 +493,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAddCommGroup C⋆ᵐᵒᵈ(A, E × F)
+  签名: 赋范交换加群 C⋆ᵐᵒᵈ(A, E × F)
   定义体: fast_instance% .ofCoreReplaceAll (normedSpaceCore A) ?_ ?_
 
 Depends on / 依赖: fast_instance, normedSpaceCore, ofCoreReplaceAll
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedSpace Complex C⋆ᵐᵒᵈ(A, E × F)
+  签名: 赋范空间 复形 C⋆ᵐᵒᵈ(A, E × F)
   定义体: .ofCore (normedSpaceCore A)
 
 Depends on / 依赖: normedSpaceCore, ofCore
@@ -542,7 +542,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm C⋆ᵐᵒᵈ(A, Π i, E i)
+  签名: 范数 C⋆ᵐᵒᵈ(A, Π i, E i)
   定义体: √‖∑ i, ⟪x i, x i⟫_A‖
 -/
 noncomputable instance : Norm C⋆ᵐᵒᵈ(A, Π i, E i) where
@@ -644,7 +644,7 @@ refine inner_self.mp le_antisymm (le_of_le_of_eq ?_ h) inner_self_nonneg
 
 中文:
 实例 :
-  签名: CStarModule A C⋆ᵐᵒᵈ(A, Π i, E i)
+  签名: CStar模 A C⋆ᵐᵒᵈ(A, Π i, E i)
   定义体: ∑ i, ⟪x i, y i⟫_A
   inner_add_right {x y z} := by simp [sum_add_distrib]
 inner_self_nonneg := sum_nonneg fun _ _ => CStarModule.inner_self_nonneg
@@ -864,7 +864,7 @@ definition normedAddCommGroupPiAux
 
 中文:
 定义 normedAddCommGroupPiAux
-  签名: : NormedAddCommGroup C⋆ᵐᵒᵈ(A, Π i, E i)
+  签名: : 赋范交换加群 C⋆ᵐᵒᵈ(A, Π i, E i)
   定义体: NormedAddCommGroup.ofCore (CStarModule.normedSpaceCore A)
 
 Depends on / 依赖: CStarModule, CStarModule.normedSpaceCore, NormedAddCommGroup, NormedAddCommGroup.ofCore, normedSpaceCore, ofCore
@@ -947,7 +947,7 @@ lemma isBounded_pi_iff_aux
 
 中文:
 引理 isBounded_pi_iff_aux
-  条件: (s : Set C⋆ᵐᵒᵈ(A, Π i, E i))
+  条件: (s : 集合 C⋆ᵐᵒᵈ(A, Π i, E i))
   证明: isBounded_iff_of_bilipschitz antilipschitzWith_card_equiv_pi_aux lipschitzWith_one_equiv_pi_aux s
 -/
 private lemma isBounded_pi_iff_aux (s : Set C⋆ᵐᵒᵈ(A, Π i, E i)) :
@@ -966,7 +966,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAddCommGroup C⋆ᵐᵒᵈ(A, Π i, E i)
+  签名: 赋范交换加群 C⋆ᵐᵒᵈ(A, Π i, E i)
   定义体: fast_instance% .ofCoreReplaceAll (normedSpaceCore A) ?_ ?_
 
 Depends on / 依赖: fast_instance, normedSpaceCore, ofCoreReplaceAll
@@ -986,7 +986,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedSpace Complex C⋆ᵐᵒᵈ(A, Π i, E i)
+  签名: 赋范空间 复形 C⋆ᵐᵒᵈ(A, Π i, E i)
   定义体: .ofCore (normedSpaceCore A)
 
 Depends on / 依赖: normedSpaceCore, ofCore
@@ -1022,7 +1022,7 @@ instance instCStarModuleComplex
 
 中文:
 实例 instCStarModuleComplex
-  签名: : CStarModule Complex E where
+  签名: : CStar模 复形 E where
   定义体: ⟪x, y⟫_Complex
   inner_add_right := by simp [_root_.inner_add_right]
   inner_self_nonneg {x} := by

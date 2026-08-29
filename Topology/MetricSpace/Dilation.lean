@@ -97,8 +97,8 @@ class DilationClass
     - edist_eq' : forall f : F, exists r : Real>=0, r != 0 ∧ forall x y : α, edist (f x) (f y) = r * edist x y
 
 中文:
-类 DilationClass
-  参数: (F : 类型) (α β : outParam 类型) [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+类 Dilation类
+  参数: (F : 类型) (α β : outParam 类型) [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   公理与运算 (1 个):
     - edist_eq' : 对任意 f : F, 存在 r : 实数>=0, r != 0 ∧ 对任意 x y : α, edist (f x) (f y) = r * edist x y
 -/
@@ -127,7 +127,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (α ->ᵈ β) α β where
+  签名: : 函数状 (α ->ᵈ β) α β where
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 -/
@@ -147,7 +147,7 @@ instance toDilationClass
 
 中文:
 实例 toDilationClass
-  签名: : DilationClass (α ->ᵈ β) α β where
+  签名: : Dilation类 (α ->ᵈ β) α β where
   定义体: edist_eq' f
 
 @[simp]
@@ -338,7 +338,7 @@ definition ratio
 
 中文:
 定义 ratio
-  签名: [DilationClass F α β] (f : F)
+  签名: [Dilation类 F α β] (f : F)
   定义体: if forall x y : α, edist x y = 0 ∨ edist x y = ⊤ then 1 else (DilationClass.edist_eq' f).choose
 
 Depends on / 依赖: DilationClass, DilationClass.edist_eq, edist_eq
@@ -358,7 +358,7 @@ theorem ratio_of_trivial
 
 中文:
 定理 ratio_of_trivial
-  结论: [DilationClass F α β] (f : F)
+  结论: [Dilation类 F α β] (f : F)
   证明: if_pos h
 
 @[nontriviality]
@@ -381,7 +381,7 @@ theorem ratio_of_subsingleton
 
 中文:
 定理 ratio_of_subsingleton
-  条件: [Subsingleton α] [DilationClass F α β] (f : F)
+  条件: [子单例 α] [Dilation类 F α β] (f : F)
   结论: ratio f = 1
   证明: if_pos fun x y => by simp [Subsingleton.elim x y]
 
@@ -404,7 +404,7 @@ theorem ratio_ne_zero
 
 中文:
 定理 ratio_ne_zero
-  条件: [DilationClass F α β] (f : F)
+  条件: [Dilation类 F α β] (f : F)
   结论: ratio f != 0
   证明: by
   rw [ratio]; split_ifs
@@ -431,7 +431,7 @@ theorem ratio_pos
 
 中文:
 定理 ratio_pos
-  条件: [DilationClass F α β] (f : F)
+  条件: [Dilation类 F α β] (f : F)
   结论: 0 < ratio f
   证明: (ratio_ne_zero f).bot_lt
 
@@ -462,7 +462,7 @@ theorem edist_eq
 
 中文:
 定理 edist_eq
-  条件: [DilationClass F α β] (f : F) (x y : α)
+  条件: [Dilation类 F α β] (f : F) (x y : α)
   证明: by
   rw [ratio]; split_ifs with key
   · rcases DilationClass.edist_eq' f with ⟨r, hne, hr⟩
@@ -500,7 +500,7 @@ theorem nndist_eq
 
 中文:
 定理 nndist_eq
-  结论: {α β F : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β] [FunLike F α β]
+  结论: {α β F : 类型} [伪度量空间 α] [伪度量空间 β] [函数状 F α β]
   证明: by
   simp only [← ENNReal.coe_inj, ← edist_nndist, ENNReal.coe_mul, edist_eq]
 
@@ -525,7 +525,7 @@ theorem dist_eq
 
 中文:
 定理 dist_eq
-  结论: {α β F : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β] [FunLike F α β]
+  结论: {α β F : 类型} [伪度量空间 α] [伪度量空间 β] [函数状 F α β]
   证明: by
   simp only [dist_nndist, nndist_eq, NNReal.coe_mul]
 
@@ -547,7 +547,7 @@ theorem ratio_unique
 
 中文:
 定理 ratio_unique
-  结论: [DilationClass F α β] {f : F} {x y : α} {r : 实数>=0} (h₀ : edist x y != 0)
+  结论: [Dilation类 F α β] {f : F} {x y : α} {r : 实数>=0} (h₀ : edist x y != 0)
   证明: by
   simpa only [hr, ENNReal.mul_left_inj h₀ htop, ENNReal.coe_inj] using edist_eq f x y
 
@@ -568,7 +568,7 @@ theorem ratio_unique_of_nndist_ne_zero
 
 中文:
 定理 ratio_unique_of_nndist_ne_zero
-  结论: {α β F : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β]
+  结论: {α β F : 类型} [伪度量空间 α] [伪度量空间 β]
   证明: ratio_unique (by rwa [edist_nndist, ENNReal.coe_ne_zero]) (edist_ne_top x y)
     (by rw [edist_nndist, edist_nndist, hr, ENNReal.coe_mul])
 
@@ -591,7 +591,7 @@ NNReal.eq by rw [coe_nndist, hr, NNReal.coe_mul, coe_nndist]
 
 中文:
 定理 ratio_unique_of_dist_ne_zero
-  结论: {α β} {F : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β]
+  结论: {α β} {F : 类型} [伪度量空间 α] [伪度量空间 β]
   证明: ratio_unique_of_nndist_ne_zero (NNReal.coe_ne_zero.1 hxy)
 NNReal.eq by rw [coe_nndist, hr, NNReal.coe_mul, coe_nndist]
 
@@ -619,7 +619,7 @@ definition mkOfNNDistEq
 
 中文:
 定义 mkOfNNDistEq
-  签名: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α -> β)
+  签名: {α β} [伪度量空间 α] [伪度量空间 β] (f : α -> β)
   定义体: f
   edist_eq' := by
     rcases h with ⟨r, hne, h⟩
@@ -649,7 +649,7 @@ theorem coe_mkOfNNDistEq
 
 中文:
 定理 coe_mkOfNNDistEq
-  条件: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α -> β) (h)
+  条件: {α β} [伪度量空间 α] [伪度量空间 β] (f : α -> β) (h)
   证明: rfl
 
 @[simp]
@@ -669,7 +669,7 @@ theorem mk_coe_of_nndist_eq
 
 中文:
 定理 mk_coe_of_nndist_eq
-  结论: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α ->ᵈ β)
+  结论: {α β} [伪度量空间 α] [伪度量空间 β] (f : α ->ᵈ β)
   证明: ext fun _ => rfl
 -/
 theorem mk_coe_of_nndist_eq {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α ->ᵈ β)
@@ -690,7 +690,7 @@ definition mkOfDistEq
 
 中文:
 定义 mkOfDistEq
-  签名: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α -> β)
+  签名: {α β} [伪度量空间 α] [伪度量空间 β] (f : α -> β)
   定义体: mkOfNNDistEq f
     h.imp fun r hr =>
 ⟨hr.1, fun x y => NNReal.eq by rw [coe_nndist, hr.2, NNReal.coe_mul, coe_nndist]⟩
@@ -718,7 +718,7 @@ theorem coe_mkOfDistEq
 
 中文:
 定理 coe_mkOfDistEq
-  条件: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α -> β) (h)
+  条件: {α β} [伪度量空间 α] [伪度量空间 β] (f : α -> β) (h)
   证明: rfl
 
 @[simp]
@@ -738,7 +738,7 @@ theorem mk_coe_of_dist_eq
 
 中文:
 定理 mk_coe_of_dist_eq
-  条件: {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α ->ᵈ β) (h)
+  条件: {α β} [伪度量空间 α] [伪度量空间 β] (f : α ->ᵈ β) (h)
   证明: ext fun _ => rfl
 -/
 theorem mk_coe_of_dist_eq {α β} [PseudoMetricSpace α] [PseudoMetricSpace β] (f : α ->ᵈ β) (h) :
@@ -767,8 +767,8 @@ definition _root_.Isometry.toDilation
 @[simp]
 
 中文:
-定义 _root_.Isometry.toDilation
-  签名: (f : α -> β) (hf : Isometry f)
+定义 _root_.等距.toDilation
+  签名: (f : α -> β) (hf : 等距 f)
   定义体: f
   edist_eq' := ⟨1, one_ne_zero, by simpa using! hf⟩
 
@@ -793,8 +793,8 @@ lemma _root_.Isometry.toDilation_ratio
 .symm exact ratio_unique h₁ h₂ (by simp [hf x y])
 
 中文:
-引理 _root_.Isometry.toDilation_ratio
-  条件: {f : α -> β} {hf : Isometry f}
+引理 _root_.等距.toDilation_ratio
+  条件: {f : α -> β} {hf : 等距 f}
   结论: ratio hf.toDilation = 1
   证明: by
   by_cases! h : forall x y : α, edist x y = 0 ∨ edist x y = ⊤
@@ -863,7 +863,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: {α : 类型} [EMetricSpace α] [FunLike F α β] [DilationClass F α β]
+  结论: {α : 类型} [广义度量空间 α] [函数状 F α β] [Dilation类 F α β]
   证明: (antilipschitz f).injective
 -/
 protected theorem injective {α : Type*} [EMetricSpace α] [FunLike F α β] [DilationClass F α β]
@@ -882,7 +882,7 @@ definition id
 
 中文:
 定义 id
-  签名: (α) [PseudoEMetricSpace α]
+  签名: (α) [PseudoEMetric空间 α]
   定义体: id
   edist_eq' := ⟨1, one_ne_zero, fun x y => by simp only [id, ENNReal.coe_one, one_mul]⟩
 -/
@@ -902,7 +902,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (α ->ᵈ α)
+  签名: 可居 (α ->ᵈ α)
   定义体: ⟨Dilation.id α⟩
 
 @[simp]
@@ -995,7 +995,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {δ : 类型} [PseudoEMetricSpace δ] (f : α ->ᵈ β) (g : β ->ᵈ γ)
+  结论: {δ : 类型} [PseudoEMetric空间 δ] (f : α ->ᵈ β) (g : β ->ᵈ γ)
   证明: rfl
 
 @[simp]
@@ -1134,7 +1134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (α ->ᵈ α)
+  签名: 幺半群 (α ->ᵈ α)
   定义体: Dilation.id α
   mul := comp
   mul_one := comp_id
@@ -1337,7 +1337,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : β ->ᵈ γ} {f : α ->ᵈ β} (hf : Surjective f)
+  条件: {g₁ g₂ : β ->ᵈ γ} {f : α ->ᵈ β} (hf : 满射 f)
   证明: ⟨fun h => Dilation.ext hf.forall.2 (Dilation.ext_iff.1 h), fun h => h ▸ rfl⟩
 
 @[simp]
@@ -1359,7 +1359,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : β ->ᵈ γ} {f₁ f₂ : α ->ᵈ β} (hg : Injective g)
+  条件: {g : β ->ᵈ γ} {f₁ f₂ : α ->ᵈ β} (hg : 单射 g)
   证明: ⟨fun h => Dilation.ext fun x => hg by rw [← comp_apply, h, comp_apply], fun h => h ▸ rfl⟩
 
 Depends on / 依赖: Dilation, Dilation.ext, comp_apply
@@ -1378,7 +1378,7 @@ theorem isUniformInducing
 
 中文:
 定理 isUniformInducing
-  结论: IsUniformInducing (f : α -> β)
+  结论: 是UniformInducing (f : α -> β)
   证明: (antilipschitz f).isUniformInducing (lipschitz f).uniformContinuous
 
 Depends on / 依赖: antilipschitz, isUniformInducing, lipschitz, uniformContinuous
@@ -1396,7 +1396,7 @@ theorem tendsto_nhds_iff
 
 中文:
 定理 tendsto_nhds_iff
-  条件: {ι : 类型} {g : ι -> α} {a : Filter ι} {b : α}
+  条件: {ι : 类型} {g : ι -> α} {a : 滤子 ι} {b : α}
   证明: (Dilation.isUniformInducing f).isInducing.tendsto_nhds_iff
 
 Depends on / 依赖: Dilation, Dilation.isUniformInducing, isInducing, isInducing.tendsto_nhds_iff, isUniformInducing, tendsto_nhds_iff
@@ -1415,7 +1415,7 @@ theorem toContinuous
 
 中文:
 定理 toContinuous
-  结论: Continuous (f : α -> β)
+  结论: 连续 (f : α -> β)
   证明: (lipschitz f).continuous
 
 Depends on / 依赖: continuous, lipschitz
@@ -1438,7 +1438,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ediam ((f : α -> β) '' s) = ratio f * ediam s
   证明: by
   refine ((lipschitz f).ediam_image_le s).antisymm ?_
@@ -1465,7 +1465,7 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  结论: ediam (range (f : α -> β)) = ratio f * ediam (univ : Set α)
+  结论: ediam (range (f : α -> β)) = ratio f * ediam (univ : 集合 α)
   证明: by
   rw [← image_univ]; exact ediam_image f univ
 
@@ -1540,7 +1540,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: {γ} [TopologicalSpace γ] {g : γ -> α} {s : Set γ}
+  条件: {γ} [拓扑空间 γ] {g : γ -> α} {s : 集合 γ}
   证明: (Dilation.isUniformInducing f).isInducing.continuousOn_iff.symm
 
 Depends on / 依赖: Dilation, Dilation.isUniformInducing, continuousOn_iff, isInducing, isInducing.continuousOn_iff.symm, isUniformInducing
@@ -1559,7 +1559,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {γ} [TopologicalSpace γ] {g : γ -> α}
+  条件: {γ} [拓扑空间 γ] {g : γ -> α}
   证明: (Dilation.isUniformInducing f).isInducing.continuous_iff.symm
 
 Depends on / 依赖: Dilation, Dilation.isUniformInducing, continuous_iff, isInducing, isInducing.continuous_iff.symm, isUniformInducing
@@ -1585,7 +1585,7 @@ lemma isUniformEmbedding
 
 中文:
 引理 isUniformEmbedding
-  条件: [PseudoEMetricSpace β] [DilationClass F α β] (f : F)
+  条件: [PseudoEMetric空间 β] [Dilation类 F α β] (f : F)
   证明: (antilipschitz f).isUniformEmbedding (lipschitz f).uniformContinuous
 
 Depends on / 依赖: antilipschitz, isUniformEmbedding, lipschitz, uniformContinuous
@@ -1604,7 +1604,7 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: [PseudoEMetricSpace β] [DilationClass F α β] (f : F)
+  条件: [PseudoEMetric空间 β] [Dilation类 F α β] (f : F)
   证明: (Dilation.isUniformEmbedding f).isEmbedding
 
 Depends on / 依赖: Dilation, Dilation.isUniformEmbedding, isEmbedding, isUniformEmbedding
@@ -1623,7 +1623,7 @@ lemma isClosedEmbedding
 
 中文:
 引理 isClosedEmbedding
-  条件: [CompleteSpace α] [EMetricSpace β] [DilationClass F α β] (f : F)
+  条件: [完备空间 α] [广义度量空间 β] [Dilation类 F α β] (f : F)
   证明: (antilipschitz f).isClosedEmbedding (lipschitz f).uniformContinuous
 
 Depends on / 依赖: antilipschitz, isClosedEmbedding, lipschitz, uniformContinuous
@@ -1651,7 +1651,7 @@ theorem ratio_comp
 
 中文:
 定理 ratio_comp
-  结论: [MetricSpace α] [Nontrivial α] [PseudoEMetricSpace β]
+  结论: [度量空间 α] [非平凡 α] [PseudoEMetric空间 β]
   证明: ratio_comp'
     let ⟨x, y, hne⟩ := exists_pair_ne α; ⟨x, y, mt edist_eq_zero.1 hne, edist_ne_top _ _⟩
 
@@ -1678,7 +1678,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: diam ((f : α -> β) '' s) = ratio f * diam s
   证明: by
   simp [diam, ediam_image, ENNReal.toReal_mul]
@@ -1699,7 +1699,7 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  结论: diam (range (f : α -> β)) = ratio f * diam (univ : Set α)
+  结论: diam (range (f : α -> β)) = ratio f * diam (univ : 集合 α)
   证明: by
   rw [← image_univ]; rw [diam_image]
 
@@ -1777,7 +1777,7 @@ lemma tendsto_cobounded
 
 中文:
 引理 tendsto_cobounded
-  结论: Filter.Tendsto f (cobounded α) (cobounded β)
+  结论: 滤子.收敛 f (cobounded α) (cobounded β)
   证明: (Dilation.antilipschitz f).tendsto_cobounded
 
 @[simp]
@@ -1798,7 +1798,7 @@ lemma comap_cobounded
 
 中文:
 引理 comap_cobounded
-  结论: Filter.comap f (cobounded β) = cobounded α
+  结论: 滤子.comap f (cobounded β) = cobounded α
   证明: le_antisymm (lipschitz f).comap_cobounded_le (tendsto_cobounded f).le_comap
 
 Depends on / 依赖: comap_cobounded_le, le_antisymm, le_comap, lipschitz, tendsto_cobounded

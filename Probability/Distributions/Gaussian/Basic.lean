@@ -51,8 +51,8 @@ class IsGaussian
     - map_eq_gaussianReal((L : StrongDual Real E)) : μ.map L = gaussianReal (μ[L]) (Var[L; μ]).toNNReal
 
 中文:
-类 IsGaussian
-  参数: {E : 类型} [TopologicalSpace E] [AddCommMonoid E] [Module 实数 E]
+类 是Gaussian
+  参数: {E : 类型} [拓扑空间 E] [加法交换幺半群 E] [模 实数 E]
   公理与运算 (1 个):
     - map_eq_gaussianReal((L : StrongDual 实数 E)) : μ.map L = gaussian实数 (μ[L]) (Var[L; μ]).toNN实数
 
@@ -75,8 +75,8 @@ instance IsGaussian.toIsProbabilityMeasure
       Measure.map_apply (by fun_prop : Measurable (0 : StrongDual Real E)) .univ] using this
 
 中文:
-实例 IsGaussian.toIsProbabilityMeasure
-  签名: {E : 类型} [TopologicalSpace E] [AddCommMonoid E]
+实例 是Gaussian.toIsProbabilityMeasure
+  签名: {E : 类型} [拓扑空间 E] [加法交换幺半群 E]
   定义体: by
     have : μ.map (0 : StrongDual Real E) Set.univ = 1 := by
       simp [-FunLike.coe_zero, IsGaussian.map_eq_gaussianReal]
@@ -111,7 +111,7 @@ instance isGaussian_gaussianReal
     posit
 
 中文:
-实例 isGaussian_gaussianReal
+实例 isGaussian_gaussian实数
   签名: (m : 实数) (v : 实数>=0)
   定义体: by
     rw [gaussianReal_map_continuousLinearMap]
@@ -147,8 +147,8 @@ lemma IsGaussian.eq_gaussianReal
   _ = gaussianReal μ[id] Var[id; μ].toNNReal := by rw [h.map_eq_gaussianReal]; simp
 
 中文:
-引理 IsGaussian.eq_gaussianReal
-  条件: (μ : Measure 实数) (h : IsGaussian μ)
+引理 是Gaussian.eq_gaussian实数
+  条件: (μ : 测度 实数) (h : 是Gaussian μ)
   证明: calc
   μ = μ.map (ContinuousLinearMap.id Real Real) := by simp
   _ = gaussianReal μ[id] Var[id; μ].toNNReal := by rw [h.map_eq_gaussianReal]; simp
@@ -174,7 +174,7 @@ lemma isGaussian_of_isGaussian_map
 
 中文:
 引理 isGaussian_of_isGaussian_map
-  结论: {E : 类型} [TopologicalSpace E] [AddCommMonoid E]
+  结论: {E : 类型} [拓扑空间 E] [加法交换幺半群 E]
   证明: by
   refine ⟨fun L => ?_⟩
   rw [(h L).eq_gaussianReal]; rw [integral_map]; rw [variance_map]
@@ -204,8 +204,8 @@ lemma isGaussian_of_map_eq_gaussianReal
   infer_instance
 
 中文:
-引理 isGaussian_of_map_eq_gaussianReal
-  结论: {E : 类型} [TopologicalSpace E] [AddCommMonoid E]
+引理 isGaussian_of_map_eq_gaussian实数
+  结论: {E : 类型} [拓扑空间 E] [加法交换幺半群 E]
   证明: by
   refine isGaussian_of_isGaussian_map fun L => ?_
   obtain ⟨m, v, h⟩ := h L
@@ -235,7 +235,7 @@ lemma isGaussian_map_of_measurable
 
 中文:
 引理 isGaussian_map_of_measurable
-  结论: {E F : 类型} [TopologicalSpace E] [AddCommMonoid E]
+  结论: {E F : 类型} [拓扑空间 E] [加法交换幺半群 E]
   证明: by
   refine isGaussian_of_map_eq_gaussianReal fun L' => ⟨μ[L' ∘L L], Var[L' ∘L L; μ].toNNReal, ?_⟩
   rw [Measure.map_map (by fun_prop) hL]; rw [← ContinuousLinearMap.coe_comp]; rw [IsGaussian.map_eq_gaussianReal]
@@ -271,8 +271,8 @@ lemma IsGaussian.of_subsingleton
   all_goals simp
 
 中文:
-引理 IsGaussian.of_subsingleton
-  条件: [Subsingleton E] [IsProbabilityMeasure μ]
+引理 是Gaussian.of_subsingleton
+  条件: [子单例 E] [是概率测度 μ]
   证明: by
   convert! instIsGaussianDirac (x := (0 : E))
   ext s -
@@ -303,8 +303,8 @@ lemma IsGaussian.memLp_dual
 @[fun_prop]
 
 中文:
-引理 IsGaussian.memLp_dual
-  结论: (μ : Measure E) [IsGaussian μ] (L : StrongDual 实数 E)
+引理 是Gaussian.memLp_dual
+  结论: (μ : 测度 E) [是Gaussian μ] (L : StrongDual 实数 E)
   证明: by
   suffices MemLp (id ∘ L) p μ from this
   rw [← memLp_map_measure_iff (by fun_prop) (by fun_prop)]; rw [IsGaussian.map_eq_gaussianReal L]
@@ -335,8 +335,8 @@ lemma IsGaussian.integrable_dual
   exact IsGaussian.memLp_dual μ L 1 (by simp)
 
 中文:
-引理 IsGaussian.integrable_dual
-  条件: (μ : Measure E) [IsGaussian μ] (L : StrongDual 实数 E)
+引理 是Gaussian.integrable_dual
+  条件: (μ : 测度 E) [是Gaussian μ] (L : StrongDual 实数 E)
   证明: by
   rw [← memLp_one_iff_integrable]
   exact IsGaussian.memLp_dual μ L 1 (by simp)
@@ -398,7 +398,7 @@ lemma isGaussian_map_equiv_iff
 
 中文:
 引理 isGaussian_map_equiv_iff
-  条件: {μ : Measure E} (L : E ≃L[实数] F)
+  条件: {μ : 测度 E} (L : E ≃L[实数] F)
   证明: by
   refine ⟨fun h => ?_, fun _ => inferInstance⟩
   suffices μ = (μ.map L).map L.symm by rw [this]; infer_instance
@@ -432,7 +432,7 @@ lemma IsGaussian.charFunDual_eq
     simp only [ofReal_one,
 
 中文:
-引理 IsGaussian.charFunDual_eq
+引理 是Gaussian.charFunDual_eq
   条件: (L : StrongDual 实数 E)
   证明: by
   calc charFunDual μ L
@@ -475,7 +475,7 @@ theorem isGaussian_iff_charFunDual_eq
 
 中文:
 定理 isGaussian_iff_charFunDual_eq
-  条件: {μ : Measure E} [IsFiniteMeasure μ]
+  条件: {μ : 测度 E} [是有限测度 μ]
   证明: by
   refine ⟨fun h => h.charFunDual_eq, fun h => ⟨fun L => Measure.ext_of_charFun ?_⟩⟩
   ext u
@@ -521,8 +521,8 @@ lemma IsGaussian.charFun_eq
   simp [toDualMap]
 
 中文:
-引理 IsGaussian.charFun_eq
-  条件: [IsGaussian μ] (t : E)
+引理 是Gaussian.charFun_eq
+  条件: [是Gaussian μ] (t : E)
   证明: by
   rw [charFun_eq_charFunDual_toDualMap]; rw [IsGaussian.charFunDual_eq]
   simp [toDualMap]
@@ -549,7 +549,7 @@ lemma isGaussian_iff_charFun_eq
 
 中文:
 引理 isGaussian_iff_charFun_eq
-  条件: [CompleteSpace E] [IsFiniteMeasure μ]
+  条件: [完备空间 E] [是有限测度 μ]
   证明: by
   simp_rw [isGaussian_iff_charFunDual_eq, (toDual Real E).surjective.forall,
     charFun_eq_charFunDual_toDualMap]
@@ -579,7 +579,7 @@ instance isGaussian_conv
 
 中文:
 实例 isGaussian_conv
-  签名: [SecondCountableTopology E]
+  签名: [第二可数拓扑 E]
   定义体: by
     have : (μ ∗ ν)[L] = ∫ x, x ∂((μ.map L).conv (ν.map L)) := by
       rw [← Measure.map_conv_continuousLinearMap L]; rw [integral_map (φ := L) (by fun_prop) (by fun_prop)]
@@ -623,7 +623,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGaussian (μ.map (fun x => -x))
+  签名: 是Gaussian (μ.map (fun x => -x))
   定义体: by
   change IsGaussian (μ.map (ContinuousLinearEquiv.neg Real))
   infer_instance

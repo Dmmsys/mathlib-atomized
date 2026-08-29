@@ -79,7 +79,7 @@ lemma transfiniteIterate_bot
 
 中文:
 引理 transfiniteIterate_bot
-  条件: [OrderBot J] (i₀ : I)
+  条件: [有底序 J] (i₀ : I)
   证明: by
   dsimp [transfiniteIterate]
   simp only [isMin_iff_eq_bot, SuccOrder.limitRecOn_isMin, id_eq]
@@ -132,7 +132,7 @@ lemma transfiniteIterate_limit
 
 中文:
 引理 transfiniteIterate_limit
-  条件: (i₀ : I) (j : J) (hj : Order.IsSuccLimit j)
+  条件: (i₀ : I) (j : J) (hj : Order.是SuccLimit j)
   证明: by
   dsimp [transfiniteIterate]
   rw [SuccOrder.limitRecOn_of_isSuccLimit _ _ _ hj]

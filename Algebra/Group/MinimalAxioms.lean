@@ -53,8 +53,8 @@ abbreviation Group.ofLeftAxioms
         
 
 中文:
-缩写 Group.ofLeftAxioms
-  签名: {G : 类型u} [Mul G] [Inv G] [One G]
+缩写 群.ofLeftAxioms
+  签名: {G : 类型u} [乘法 G] [取逆 G] [幺 G]
   定义体: { mul_assoc := assoc,
     one_mul := one_mul,
     inv_mul_cancel := inv_mul_cancel,
@@ -109,8 +109,8 @@ abbreviation Group.ofRightAxioms
        
 
 中文:
-缩写 Group.ofRightAxioms
-  签名: {G : 类型u} [Mul G] [Inv G] [One G]
+缩写 群.ofRightAxioms
+  签名: {G : 类型u} [乘法 G] [取逆 G] [幺 G]
   定义体: have inv_mul_cancel : forall a : G, a⁻¹ * a = 1 := fun a =>
     calc a⁻¹ * a = (a⁻¹ * a) * 1 := (mul_one _).symm
       _ = (a⁻¹ * a) * ((a⁻¹ * a) * (a⁻¹ * a)⁻¹) := by

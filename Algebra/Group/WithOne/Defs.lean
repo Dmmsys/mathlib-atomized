@@ -125,7 +125,7 @@ instance instMonad
 
 中文:
 实例 instMonad
-  签名: : Monad WithOne
+  签名: : 单子 WithOne
   定义体: inferInstanceAs Monad Option
 
 @[to_additive]
@@ -146,7 +146,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (WithOne α)
+  签名: : 幺 (WithOne α)
   定义体: ⟨none⟩
 
 @[to_additive]
@@ -167,7 +167,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: ⟨Option.merge (· * ·)⟩
 
 @[to_additive]
@@ -190,7 +190,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: ⟨fun a => Option.map Inv.inv a⟩
 
 @[to_additive]
@@ -213,7 +213,7 @@ instance instInvOneClass
 
 中文:
 实例 instInvOneClass
-  签名: [Inv α]
+  签名: [取逆 α]
   定义体: { WithOne.instOne, WithOne.instInv with inv_one := rfl }
 
 @[to_additive]
@@ -236,7 +236,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (WithOne α)
+  签名: : 可居 (WithOne α)
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -259,7 +259,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: Option.nontrivial
 
 @[to_additive]
@@ -279,8 +279,8 @@ instance [IsEmpty
   body: inferInstanceAs Subsingleton (Option α)
 
 中文:
-实例 [IsEmpty
-  签名: α] : Subsingleton (WithOne α)
+实例 [是空
+  签名: α] : 子单例 (WithOne α)
   定义体: inferInstanceAs Subsingleton (Option α)
 
 Depends on / 依赖: Subsingleton
@@ -346,7 +346,7 @@ lemma «forall»
 @[to_additive]
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : WithOne α -> 命题}
   结论: (对任意 x, p x) ↔ p 1 ∧ 对任意 a : α, p a
   证明: Option.forall
@@ -366,7 +366,7 @@ lemma «exists»
   proof: Option.exists
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : WithOne α -> 命题}
   结论: (存在 x, p x) ↔ p 1 ∨ 存在 a : α, p a
   证明: Option.exists
@@ -384,7 +384,7 @@ definition _root_.WithZero.recZeroCoe
 
 中文:
 定义 _root_.WithZero.recZeroCoe
-  签名: {motive : WithZero α -> Sort*} (zero : motive 0)
+  签名: {motive : WithZero α -> 类型层*} (zero : motive 0)
 -/
 def _root_.WithZero.recZeroCoe {motive : WithZero α -> Sort*} (zero : motive 0)
     (coe : forall a : α, motive a) : forall n : WithZero α, motive n
@@ -402,7 +402,7 @@ definition recOneCoe
 
 中文:
 定义 recOneCoe
-  签名: {motive : WithOne α -> Sort*} (one : motive 1) (coe : 对任意 a : α, motive a)
+  签名: {motive : WithOne α -> 类型层*} (one : motive 1) (coe : 对任意 a : α, motive a)
 -/
 def recOneCoe {motive : WithOne α -> Sort*} (one : motive 1) (coe : forall a : α, motive a) :
     forall n : WithOne α, motive n
@@ -422,7 +422,7 @@ lemma recOneCoe_one
 
 中文:
 引理 recOneCoe_one
-  条件: {motive : WithOne α -> Sort*} (h₁ h₂)
+  条件: {motive : WithOne α -> 类型层*} (h₁ h₂)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -442,7 +442,7 @@ lemma recOneCoe_coe
 
 中文:
 引理 recOneCoe_coe
-  条件: {motive : WithOne α -> Sort*} (h₁ h₂) (a : α)
+  条件: {motive : WithOne α -> 类型层*} (h₁ h₂) (a : α)
   证明: rfl
 -/
 lemma recOneCoe_coe {motive : WithOne α -> Sort*} (h₁ h₂) (a : α) :
@@ -566,7 +566,7 @@ theorem ne_one_iff_exists
 @[to_additive]
 
 中文:
-定理 ne_one_iff_exists
+定理 ne_one_iff_存在
   条件: {x : WithOne α}
   结论: x != 1 ↔ 存在 a : α, ↑a = x
   证明: Option.ne_none_iff_exists
@@ -639,7 +639,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  结论: Function.Injective (coe : α -> WithOne α)
+  结论: 函数.单射 (coe : α -> WithOne α)
   证明: Option.some_injective _
 
 @[to_additive (attr := elab_as_elim)]
@@ -686,7 +686,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: [Mul α]
+  签名: [乘法 α]
   定义体: (Option.lawfulIdentity_merge _).left_id
   mul_one := (Option.lawfulIdentity_merge _).right_id
 
@@ -712,7 +712,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: [Mul α] (a b : α)
+  条件: [乘法 α] (a b : α)
   结论: (↑(a * b) : WithOne α) = a * b
   证明: rfl
 
@@ -738,7 +738,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: instMulOneClass
   mul_assoc
     | 1, b, c => by simp
@@ -768,7 +768,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
 -/
 instance instCommMonoid [CommSemigroup α] : CommMonoid (WithOne α) where
   mul_comm
@@ -789,7 +789,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv α] (a : α)
+  条件: [取逆 α] (a : α)
   结论: ((a⁻¹ : α) : WithOne α) = (a : WithOne α)⁻¹
   证明: rfl
 -/

@@ -49,7 +49,7 @@ theorem Quiver.Hom.op_inj
 @[to_dual self]
 
 中文:
-定理 Quiver.Hom.op_inj
+定理 箭图.态射.op_inj
   条件: {X Y : C}
   证明: fun _ _ H =>
   congr_arg Quiver.Hom.unop H
@@ -72,7 +72,7 @@ theorem Quiver.Hom.unop_inj
 @[simp, to_dual self]
 
 中文:
-定理 Quiver.Hom.unop_inj
+定理 箭图.态射.unop_inj
   条件: {X Y : Cᵒᵖ}
   证明: fun _ _ H => congr_arg Quiver.Hom.op H
 
@@ -97,7 +97,7 @@ theorem Quiver.Hom.unop_op
 @[simp, to_dual self]
 
 中文:
-定理 Quiver.Hom.unop_op
+定理 箭图.态射.unop_op
   条件: {X Y : C} (f : X ⟶ Y)
   结论: f.op.unop = f
   证明: rfl
@@ -119,7 +119,7 @@ theorem Quiver.Hom.unop_op'
 @[simp, to_dual self]
 
 中文:
-定理 Quiver.Hom.unop_op'
+定理 箭图.态射.unop_op'
   条件: {X Y : Cᵒᵖ} {x}
   证明: rfl
 
@@ -141,7 +141,7 @@ theorem Quiver.Hom.op_unop
 @[simp, to_dual self]
 
 中文:
-定理 Quiver.Hom.op_unop
+定理 箭图.态射.op_unop
   条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
   结论: f.unop.op = f
   证明: rfl
@@ -162,9 +162,9 @@ theorem Quiver.Hom.unop_mk
   proof: rfl
 
 中文:
-定理 Quiver.Hom.unop_mk
+定理 箭图.态射.unop_mk
   条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  结论: Quiver.Hom.unop { unop := f } = f
+  结论: 箭图.态射.unop { unop := f } = f
   证明: rfl
 -/
 theorem Quiver.Hom.unop_mk {X Y : Cᵒᵖ} (f : X ⟶ Y) : Quiver.Hom.unop { unop := f } = f :=
@@ -377,8 +377,8 @@ instance Category.opposite
   assoc f g h := by simp only [← op_comp_unop, Quiver.Hom.unop_op, assoc]
 
 中文:
-实例 Category.opposite
-  签名: : Category.{v₁} Cᵒᵖ where
+实例 范畴.opposite
+  签名: : 范畴.{v₁} Cᵒᵖ where
   定义体: CategoryStruct.opposite
   comp_id f := by rw [← op_comp_unop, unop_id, id_comp, Quiver.Hom.op_unop]
   id_comp f := by rw [← op_comp_unop, unop_id, comp_id, Quiver.Hom.op_unop]
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opOp C).IsEquivalence
+  签名: (opOp C).是等价
   定义体: (opOpEquivalence C).isEquivalence_inverse
 
 Depends on / 依赖: isEquivalence_inverse, opOpEquivalence
@@ -545,7 +545,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unopUnop C).IsEquivalence
+  签名: (unopUnop C).是等价
   定义体: (opOpEquivalence C).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, opOpEquivalence
@@ -567,7 +567,7 @@ instance isIso_op
 
 中文:
 实例 isIso_op
-  签名: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : C} (f : X ⟶ Y) [是同构 f]
   定义体: ⟨⟨(inv f).op, ⟨Quiver.Hom.unop_inj (by simp), Quiver.Hom.unop_inj (by simp)⟩⟩⟩
 
 Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, unop_inj
@@ -592,8 +592,8 @@ theorem isIso_of_op
 
 中文:
 定理 isIso_of_op
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f.op]
-  结论: IsIso f
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f.op]
+  结论: 是同构 f
   证明: ⟨⟨(inv f.op).unop, ⟨Quiver.Hom.op_inj (by simp), Quiver.Hom.op_inj (by simp)⟩⟩⟩
 
 @[to_dual self]
@@ -618,7 +618,7 @@ theorem isIso_op_iff
 中文:
 定理 isIso_op_iff
   条件: {X Y : C} (f : X ⟶ Y)
-  结论: IsIso f.op ↔ IsIso f
+  结论: 是同构 f.op ↔ 是同构 f
   证明: ⟨fun _ => isIso_of_op _, fun _ => inferInstance⟩
 
 @[to_dual self]
@@ -644,7 +644,7 @@ theorem isIso_unop_iff
 中文:
 定理 isIso_unop_iff
   条件: {X Y : Cᵒᵖ} (f : X ⟶ Y)
-  结论: IsIso f.unop ↔ IsIso f
+  结论: 是同构 f.unop ↔ 是同构 f
   证明: by
   rw [← isIso_op_iff f.unop]; rw [Quiver.Hom.op_unop]
 
@@ -668,7 +668,7 @@ instance isIso_unop
 
 中文:
 实例 isIso_unop
-  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : Cᵒᵖ} (f : X ⟶ Y) [是同构 f]
   定义体: (isIso_unop_iff _).2 inferInstance
 
 @[simp, push ←, to_dual self]
@@ -694,7 +694,7 @@ theorem op_inv
 
 中文:
 定理 op_inv
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: (inv f).op = inv f.op
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -722,7 +722,7 @@ theorem unop_inv
 
 中文:
 定理 unop_inv
-  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : Cᵒᵖ} (f : X ⟶ Y) [是同构 f]
   结论: (inv f).unop = inv f.unop
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -1053,8 +1053,8 @@ definition FullyFaithful.op
   body: .op hF.preimage f.unop
 
 中文:
-定义 FullyFaithful.op
-  签名: {F : C ⥤ D} (hF : F.FullyFaithful)
+定义 满忠实.op
+  签名: {F : C ⥤ D} (hF : F.满忠实)
   定义体: .op hF.preimage f.unop
 -/
 protected def FullyFaithful.op {F : C ⥤ D} (hF : F.FullyFaithful) : F.op.FullyFaithful where
@@ -1069,8 +1069,8 @@ definition FullyFaithful.unop
   body: (hF.preimage f.op).unop
 
 中文:
-定义 FullyFaithful.unop
-  签名: {F : Cᵒᵖ ⥤ Dᵒᵖ} (hF : F.FullyFaithful)
+定义 满忠实.unop
+  签名: {F : Cᵒᵖ ⥤ Dᵒᵖ} (hF : F.满忠实)
   定义体: (hF.preimage f.op).unop
 -/
 protected def FullyFaithful.unop {F : Cᵒᵖ ⥤ Dᵒᵖ} (hF : F.FullyFaithful) :
@@ -1087,7 +1087,7 @@ instance rightOp_faithful
 
 中文:
 实例 rightOp_faithful
-  签名: {F : Cᵒᵖ ⥤ D} [Faithful F]
+  签名: {F : Cᵒᵖ ⥤ D} [忠实 F]
   定义体: Quiver.Hom.op_inj (map_injective F (Quiver.Hom.op_inj h))
 
 Depends on / 依赖: Quiver, Quiver.Hom.op_inj, map_injective, op_inj
@@ -1105,7 +1105,7 @@ instance leftOp_faithful
 
 中文:
 实例 leftOp_faithful
-  签名: {F : C ⥤ Dᵒᵖ} [Faithful F]
+  签名: {F : C ⥤ Dᵒᵖ} [忠实 F]
   定义体: Quiver.Hom.unop_inj (map_injective F (Quiver.Hom.unop_inj h))
 
 Depends on / 依赖: Quiver, Quiver.Hom.unop_inj, map_injective, unop_inj
@@ -1123,7 +1123,7 @@ instance rightOp_full
 
 中文:
 实例 rightOp_full
-  签名: {F : Cᵒᵖ ⥤ D} [Full F]
+  签名: {F : Cᵒᵖ ⥤ D} [满 F]
   定义体: ⟨(F.preimage f.unop).unop, by simp⟩
 
 Depends on / 依赖: F.preimage, f.unop, preimage
@@ -1141,7 +1141,7 @@ instance leftOp_full
 
 中文:
 实例 leftOp_full
-  签名: {F : C ⥤ Dᵒᵖ} [Full F]
+  签名: {F : C ⥤ Dᵒᵖ} [满 F]
   定义体: ⟨(F.preimage f.op).op, by simp⟩
 
 Depends on / 依赖: F.preimage, f.op, preimage
@@ -1158,8 +1158,8 @@ definition FullyFaithful.leftOp
   body: .op hF.preimage f.op
 
 中文:
-定义 FullyFaithful.leftOp
-  签名: {F : C ⥤ Dᵒᵖ} (hF : F.FullyFaithful)
+定义 满忠实.leftOp
+  签名: {F : C ⥤ Dᵒᵖ} (hF : F.满忠实)
   定义体: .op hF.preimage f.op
 -/
 protected def FullyFaithful.leftOp {F : C ⥤ Dᵒᵖ} (hF : F.FullyFaithful) :
@@ -1175,8 +1175,8 @@ definition FullyFaithful.rightOp
   body: .unop hF.preimage f.unop
 
 中文:
-定义 FullyFaithful.rightOp
-  签名: {F : Cᵒᵖ ⥤ D} (hF : F.FullyFaithful)
+定义 满忠实.rightOp
+  签名: {F : Cᵒᵖ ⥤ D} (hF : F.满忠实)
   定义体: .unop hF.preimage f.unop
 -/
 protected def FullyFaithful.rightOp {F : Cᵒᵖ ⥤ D} (hF : F.FullyFaithful) :
@@ -1195,7 +1195,7 @@ definition rightOpComp
 
 中文:
 定义 rightOpComp
-  签名: {E : 类型} [Category* E] (F : Cᵒᵖ ⥤ D) (G : D ⥤ E)
+  签名: {E : 类型} [范畴* E] (F : Cᵒᵖ ⥤ D) (G : D ⥤ E)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -1216,7 +1216,7 @@ definition leftOpComp
 
 中文:
 定义 leftOpComp
-  签名: {E : 类型} [Category* E] (F : C ⥤ D) (G : D ⥤ Eᵒᵖ)
+  签名: {E : 类型} [范畴* E] (F : C ⥤ D) (G : D ⥤ Eᵒᵖ)
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -1383,7 +1383,7 @@ theorem op_id
 中文:
 定理 op_id
   条件: (F : C ⥤ D)
-  结论: 自然数Trans.op (𝟙 F) = 𝟙 F.op
+  结论: 自然变换.op (𝟙 F) = 𝟙 F.op
   证明: rfl
 
 @[simp, to_dual self, reassoc]
@@ -1427,7 +1427,7 @@ lemma op_whiskerRight
 
 中文:
 引理 op_whiskerRight
-  条件: {E : 类型} [Category* E] {H : D ⥤ E} (α : F ⟶ G)
+  条件: {E : 类型} [范畴* E] {H : D ⥤ E} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1452,7 +1452,7 @@ lemma op_whiskerLeft
 
 中文:
 引理 op_whiskerLeft
-  条件: {E : 类型} [Category* E] {H : E ⥤ C} (α : F ⟶ G)
+  条件: {E : 类型} [范畴* E] {H : E ⥤ C} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1503,7 +1503,7 @@ theorem unop_id
 中文:
 定理 unop_id
   条件: (F : Cᵒᵖ ⥤ Dᵒᵖ)
-  结论: 自然数Trans.unop (𝟙 F) = 𝟙 F.unop
+  结论: 自然变换.unop (𝟙 F) = 𝟙 F.unop
   证明: rfl
 
 @[simp, to_dual self, reassoc]
@@ -1547,7 +1547,7 @@ lemma unop_whiskerRight
 
 中文:
 引理 unop_whiskerRight
-  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [Category* E] {H : Dᵒᵖ ⥤ Eᵒᵖ} (α : F ⟶ G)
+  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [范畴* E] {H : Dᵒᵖ ⥤ Eᵒᵖ} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1573,7 +1573,7 @@ lemma unop_whiskerLeft
 
 中文:
 引理 unop_whiskerLeft
-  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [Category* E] {H : Eᵒᵖ ⥤ Cᵒᵖ} (α : F ⟶ G)
+  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [范畴* E] {H : Eᵒᵖ ⥤ Cᵒᵖ} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1628,7 +1628,7 @@ theorem removeOp_id
 中文:
 定理 removeOp_id
   条件: (F : C ⥤ D)
-  结论: 自然数Trans.removeOp (𝟙 F.op) = 𝟙 F
+  结论: 自然变换.removeOp (𝟙 F.op) = 𝟙 F
   证明: rfl
 -/
 theorem removeOp_id (F : C ⥤ D) : NatTrans.removeOp (𝟙 F.op) = 𝟙 F :=
@@ -1676,7 +1676,7 @@ theorem removeUnop_id
 中文:
 定理 removeUnop_id
   条件: (F : Cᵒᵖ ⥤ Dᵒᵖ)
-  结论: 自然数Trans.removeUnop (𝟙 F.unop) = 𝟙 F
+  结论: 自然变换.removeUnop (𝟙 F.unop) = 𝟙 F
   证明: rfl
 -/
 theorem removeUnop_id (F : Cᵒᵖ ⥤ Dᵒᵖ) : NatTrans.removeUnop (𝟙 F.unop) = 𝟙 F :=
@@ -1728,7 +1728,7 @@ theorem leftOp_id
 
 中文:
 定理 leftOp_id
-  结论: 自然数Trans.leftOp (𝟙 F : F ⟶ F) = 𝟙 F.leftOp
+  结论: 自然变换.leftOp (𝟙 F : F ⟶ F) = 𝟙 F.leftOp
   证明: rfl
 
 @[simp, to_dual self]
@@ -1751,7 +1751,7 @@ theorem leftOp_comp
 中文:
 定理 leftOp_comp
   条件: (α : F ⟶ G) (β : G ⟶ H)
-  结论: 自然数Trans.leftOp (α ≫ β) =
+  结论: 自然变换.leftOp (α ≫ β) =
   证明: rfl
 
 @[to_dual none, reassoc]
@@ -1772,7 +1772,7 @@ lemma leftOpWhiskerRight
 
 中文:
 引理 leftOpWhiskerRight
-  条件: {E : 类型} [Category* E] {H : E ⥤ C} (α : F ⟶ G)
+  条件: {E : 类型} [范畴* E] {H : E ⥤ C} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1824,7 +1824,7 @@ theorem removeLeftOp_id
 
 中文:
 定理 removeLeftOp_id
-  结论: 自然数Trans.removeLeftOp (𝟙 F.leftOp) = 𝟙 F
+  结论: 自然变换.removeLeftOp (𝟙 F.leftOp) = 𝟙 F
   证明: rfl
 -/
 theorem removeLeftOp_id : NatTrans.removeLeftOp (𝟙 F.leftOp) = 𝟙 F :=
@@ -1876,7 +1876,7 @@ theorem rightOp_id
 
 中文:
 定理 rightOp_id
-  结论: 自然数Trans.rightOp (𝟙 F : F ⟶ F) = 𝟙 F.rightOp
+  结论: 自然变换.rightOp (𝟙 F : F ⟶ F) = 𝟙 F.rightOp
   证明: rfl
 
 @[simp, to_dual self]
@@ -1899,7 +1899,7 @@ theorem rightOp_comp
 中文:
 定理 rightOp_comp
   条件: (α : F ⟶ G) (β : G ⟶ H)
-  结论: 自然数Trans.rightOp (α ≫ β) =
+  结论: 自然变换.rightOp (α ≫ β) =
   证明: rfl
 
 @[to_dual none, reassoc]
@@ -1920,7 +1920,7 @@ lemma rightOpWhiskerRight
 
 中文:
 引理 rightOpWhiskerRight
-  条件: {E : 类型} [Category* E] {H : D ⥤ E} (α : F ⟶ G)
+  条件: {E : 类型} [范畴* E] {H : D ⥤ E} (α : F ⟶ G)
   证明: by
   cat_disch
 
@@ -1972,7 +1972,7 @@ theorem removeRightOp_id
 
 中文:
 定理 removeRightOp_id
-  结论: 自然数Trans.removeRightOp (𝟙 F.rightOp) = 𝟙 F
+  结论: 自然变换.removeRightOp (𝟙 F.rightOp) = 𝟙 F
   证明: rfl
 -/
 theorem removeRightOp_id : NatTrans.removeRightOp (𝟙 F.rightOp) = 𝟙 F :=
@@ -2101,7 +2101,7 @@ theorem op_refl
 
 中文:
 定理 op_refl
-  结论: Iso.op (Iso.refl X) = Iso.refl (op X)
+  结论: 同构.op (同构.refl X) = 同构.refl (op X)
   证明: rfl
 
 @[simp]
@@ -2145,7 +2145,7 @@ theorem op_symm
 中文:
 定理 op_symm
   条件: (α : X ≅ Y)
-  结论: Iso.op α.symm = (Iso.op α).symm
+  结论: 同构.op α.symm = (同构.op α).symm
   证明: rfl
 
 @[simp]
@@ -2167,7 +2167,7 @@ theorem unop_refl
 中文:
 定理 unop_refl
   条件: (X : Cᵒᵖ)
-  结论: Iso.unop (Iso.refl X) = Iso.refl X.unop
+  结论: 同构.unop (同构.refl X) = 同构.refl X.unop
   证明: rfl
 
 @[simp]
@@ -2209,7 +2209,7 @@ theorem unop_symm
 中文:
 定理 unop_symm
   条件: {X Y : Cᵒᵖ} (α : X ≅ Y)
-  结论: Iso.unop α.symm = (Iso.unop α).symm
+  结论: 同构.unop α.symm = (同构.unop α).symm
   证明: rfl
 -/
 theorem unop_symm {X Y : Cᵒᵖ} (α : X ≅ Y) : Iso.unop α.symm = (Iso.unop α).symm := rfl
@@ -2318,7 +2318,7 @@ theorem op_refl
 
 中文:
 定理 op_refl
-  结论: 自然数Iso.op (Iso.refl F) = Iso.refl F.op
+  结论: 自然数Iso.op (同构.refl F) = 同构.refl F.op
   证明: rfl
 
 @[simp]
@@ -2428,7 +2428,7 @@ theorem unop_refl
 中文:
 定理 unop_refl
   条件: (F : Cᵒᵖ ⥤ Dᵒᵖ)
-  结论: 自然数Iso.unop (Iso.refl F) = Iso.refl F.unop
+  结论: 自然数Iso.unop (同构.refl F) = 同构.refl F.unop
   证明: rfl
 
 @[simp]
@@ -2486,7 +2486,7 @@ lemma op_isoWhiskerRight
 
 中文:
 引理 op_isoWhiskerRight
-  条件: {E : 类型} [Category* E] {H : D ⥤ E} (α : F ≅ G)
+  条件: {E : 类型} [范畴* E] {H : D ⥤ E} (α : F ≅ G)
   证明: by
   cat_disch
 
@@ -2508,7 +2508,7 @@ lemma op_isoWhiskerLeft
 
 中文:
 引理 op_isoWhiskerLeft
-  条件: {E : 类型} [Category* E] {H : E ⥤ C} (α : F ≅ G)
+  条件: {E : 类型} [范畴* E] {H : E ⥤ C} (α : F ≅ G)
   证明: by
   cat_disch
 
@@ -2530,7 +2530,7 @@ lemma unop_whiskerRight
 
 中文:
 引理 unop_whiskerRight
-  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [Category* E] {H : Dᵒᵖ ⥤ Eᵒᵖ} (α : F ≅ G)
+  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [范畴* E] {H : Dᵒᵖ ⥤ Eᵒᵖ} (α : F ≅ G)
   证明: by
   cat_disch
 
@@ -2553,7 +2553,7 @@ lemma unop_whiskerLeft
 
 中文:
 引理 unop_whiskerLeft
-  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [Category* E] {H : Eᵒᵖ ⥤ Cᵒᵖ} (α : F ≅ G)
+  条件: {F G : Cᵒᵖ ⥤ Dᵒᵖ} {E : 类型} [范畴* E] {H : Eᵒᵖ ⥤ Cᵒᵖ} (α : F ≅ G)
   证明: by
   cat_disch
 
@@ -2620,7 +2620,7 @@ lemma op_associator
 
 中文:
 引理 op_associator
-  结论: {E E' : 类型} [Category* E] [Category* E']
+  结论: {E E' : 类型} [范畴* E] [范畴* E']
   证明: by
   cat_disch
 
@@ -2693,7 +2693,7 @@ lemma unop_associator
 
 中文:
 引理 unop_associator
-  结论: {E E' : 类型} [Category* E] [Category* E']
+  结论: {E E' : 类型} [范畴* E] [范畴* E']
   证明: by
   cat_disch
 
@@ -2728,7 +2728,7 @@ lemma inv_op
 
 中文:
 引理 inv_op
-  条件: (α : F ⟶ G) [IsIso α]
+  条件: (α : F ⟶ G) [是同构 α]
   证明: IsIso.inv_eq_of_hom_inv_id (by simp [← NatTrans.op_comp])
 
 Depends on / 依赖: IsIso.inv_eq_of_hom_inv_id, NatTrans, NatTrans.op_comp, inv_eq_of_hom_inv_id, op_comp
@@ -2906,7 +2906,7 @@ instance subsingleton_of_unop
 
 中文:
 实例 subsingleton_of_unop
-  签名: (A B : Cᵒᵖ) [Subsingleton (unop B ⟶ unop A)]
+  签名: (A B : Cᵒᵖ) [子单例 (unop B ⟶ unop A)]
   定义体: (opEquiv A B).subsingleton
 
 @[to_dual self]

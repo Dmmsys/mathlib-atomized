@@ -53,7 +53,7 @@ scoped[Pointwise] attribute [instance] Subsemiring.
 
 中文:
 定义 pointwiseMulAction
-  签名: : MulAction M (Subsemiring R) where
+  签名: : 乘法作用 M (子半环 R) where
   定义体: S.map (MulSemiringAction.toRingHom _ _ a)
   one_smul S := (congr_arg (fun f => S.map f) (RingHom.ext <| one_smul M)).trans S.map_id
   mul_smul _a₁ _a₂ S :=
@@ -83,7 +83,7 @@ theorem pointwise_smul_def
 
 中文:
 定理 pointwise_smul_def
-  条件: {a : M} (S : Subsemiring R)
+  条件: {a : M} (S : 子半环 R)
   证明: rfl
 
 @[simp, norm_cast]
@@ -106,8 +106,8 @@ theorem coe_pointwise_smul
 
 中文:
 定理 coe_pointwise_smul
-  条件: (m : M) (S : Subsemiring R)
-  结论: ↑(m • S) = m • (S : Set R)
+  条件: (m : M) (S : 子半环 R)
+  结论: ↑(m • S) = m • (S : 集合 R)
   证明: rfl
 
 @[simp]
@@ -126,7 +126,7 @@ theorem pointwise_smul_toAddSubmonoid
 
 中文:
 定理 pointwise_smul_toAddSubmonoid
-  条件: (m : M) (S : Subsemiring R)
+  条件: (m : M) (S : 子半环 R)
   证明: rfl
 -/
 theorem pointwise_smul_toAddSubmonoid (m : M) (S : Subsemiring R) :
@@ -144,7 +144,7 @@ theorem smul_mem_pointwise_smul
 
 中文:
 定理 smul_mem_pointwise_smul
-  条件: (m : M) (r : R) (S : Subsemiring R)
+  条件: (m : M) (r : R) (S : 子半环 R)
   结论: r in S -> m • r in m • S
   证明: (Set.smul_mem_smul_set : _ -> _ in m • (S : Set R))
 
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass M (Subsemiring R) HSMul.hSMul LE.le
+  签名: 协变类 M (子半环 R) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => image_mono⟩
 
 Depends on / 依赖: IsOpenImmersion, image_mono, infer_instance, of_comp
@@ -182,8 +182,8 @@ theorem mem_smul_pointwise_iff_exists
 @[simp]
 
 中文:
-定理 mem_smul_pointwise_iff_exists
-  条件: (m : M) (r : R) (S : Subsemiring R)
+定理 mem_smul_pointwise_iff_存在
+  条件: (m : M) (r : R) (S : 子半环 R)
   证明: (Set.mem_smul_set : r in m • (S : Set R) ↔ _)
 
 @[simp]
@@ -207,7 +207,7 @@ theorem smul_bot
 中文:
 定理 smul_bot
   条件: (a : M)
-  结论: a • (⊥ : Subsemiring R) = ⊥
+  结论: a • (⊥ : 子半环 R) = ⊥
   证明: map_bot _
 
 Depends on / 依赖: map_bot
@@ -226,7 +226,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (a : M) (S T : Subsemiring R)
+  条件: (a : M) (S T : 子半环 R)
   结论: a • (S ⊔ T) = a • S ⊔ a • T
   证明: map_sup _ _ _
 
@@ -246,7 +246,7 @@ theorem smul_closure
 
 中文:
 定理 smul_closure
-  条件: (a : M) (s : Set R)
+  条件: (a : M) (s : 集合 R)
   结论: a • closure s = closure (a • s)
   证明: RingHom.map_closureS _ _
 
@@ -265,7 +265,7 @@ instance pointwise_central_scalar
 
 中文:
 实例 pointwise_central_scalar
-  签名: [MulSemiringAction Mᵐᵒᵖ R] [IsCentralScalar M R]
+  签名: [MulSemiring作用 Mᵐᵒᵖ R] [中心标量 M R]
   定义体: ⟨fun _a S => (congr_arg fun f => S.map f) RingHom.ext op_smul_eq_smul _⟩
 
 Depends on / 依赖: RingHom, RingHom.ext, S.map, congr_arg, op_smul_eq_smul
@@ -294,7 +294,7 @@ theorem smul_mem_pointwise_smul_iff
 
 中文:
 定理 smul_mem_pointwise_smul_iff
-  条件: {a : M} {S : Subsemiring R} {x : R}
+  条件: {a : M} {S : 子半环 R} {x : R}
   结论: a • x in a • S ↔ x in S
   证明: smul_mem_smul_set_iff
 
@@ -313,7 +313,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem
-  条件: {a : M} {S : Subsemiring R} {x : R}
+  条件: {a : M} {S : 子半环 R} {x : R}
   证明: mem_smul_set_iff_inv_smul_mem
 
 Depends on / 依赖: mem_smul_set_iff_inv_smul_mem
@@ -335,7 +335,7 @@ theorem mem_inv_pointwise_smul_iff
 
 中文:
 定理 mem_inv_pointwise_smul_iff
-  条件: {a : M} {S : Subsemiring R} {x : R}
+  条件: {a : M} {S : 子半环 R} {x : R}
   结论: x in a⁻¹ • S ↔ a • x in S
   证明: mem_inv_smul_set_iff
 
@@ -357,7 +357,7 @@ theorem pointwise_smul_le_pointwise_smul_iff
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff
-  条件: {a : M} {S T : Subsemiring R}
+  条件: {a : M} {S T : 子半环 R}
   证明: smul_set_subset_smul_set_iff
 
 Depends on / 依赖: map_prop, smul_set_subset_smul_set_iff
@@ -377,7 +377,7 @@ theorem pointwise_smul_subset_iff
 
 中文:
 定理 pointwise_smul_subset_iff
-  条件: {a : M} {S T : Subsemiring R}
+  条件: {a : M} {S T : 子半环 R}
   结论: a • S <= T ↔ S <= a⁻¹ • T
   证明: smul_set_subset_iff_subset_inv_smul_set
 
@@ -397,7 +397,7 @@ theorem subset_pointwise_smul_iff
 
 中文:
 定理 subset_pointwise_smul_iff
-  条件: {a : M} {S T : Subsemiring R}
+  条件: {a : M} {S T : 子半环 R}
   结论: S <= a • T ↔ a⁻¹ • S <= T
   证明: subset_smul_set_iff
 
@@ -428,7 +428,7 @@ theorem smul_mem_pointwise_smul_iff₀
 
 中文:
 定理 smul_mem_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) (S : Subsemiring R) (x : R)
+  条件: {a : M} (ha : a != 0) (S : 子半环 R) (x : R)
   证明: smul_mem_smul_set_iff₀ ha (S : Set R) x
 -/
 theorem smul_mem_pointwise_smul_iff₀ {a : M} (ha : a != 0) (S : Subsemiring R) (x : R) :
@@ -445,7 +445,7 @@ theorem mem_pointwise_smul_iff_inv_smul_mem₀
 
 中文:
 定理 mem_pointwise_smul_iff_inv_smul_mem₀
-  条件: {a : M} (ha : a != 0) (S : Subsemiring R) (x : R)
+  条件: {a : M} (ha : a != 0) (S : 子半环 R) (x : R)
   证明: mem_smul_set_iff_inv_smul_mem₀ ha (S : Set R) x
 -/
 theorem mem_pointwise_smul_iff_inv_smul_mem₀ {a : M} (ha : a != 0) (S : Subsemiring R) (x : R) :
@@ -464,7 +464,7 @@ theorem mem_inv_pointwise_smul_iff₀
 
 中文:
 定理 mem_inv_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) (S : Subsemiring R) (x : R)
+  条件: {a : M} (ha : a != 0) (S : 子半环 R) (x : R)
   证明: mem_inv_smul_set_iff₀ ha (S : Set R) x
 
 @[simp]
@@ -484,7 +484,7 @@ theorem pointwise_smul_le_pointwise_smul_iff₀
 
 中文:
 定理 pointwise_smul_le_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) {S T : Subsemiring R}
+  条件: {a : M} (ha : a != 0) {S T : 子半环 R}
   证明: smul_set_subset_smul_set_iff₀ ha
 -/
 theorem pointwise_smul_le_pointwise_smul_iff₀ {a : M} (ha : a != 0) {S T : Subsemiring R} :
@@ -501,7 +501,7 @@ theorem pointwise_smul_le_iff₀
 
 中文:
 定理 pointwise_smul_le_iff₀
-  条件: {a : M} (ha : a != 0) {S T : Subsemiring R}
+  条件: {a : M} (ha : a != 0) {S T : 子半环 R}
   证明: smul_set_subset_iff₀ ha
 -/
 theorem pointwise_smul_le_iff₀ {a : M} (ha : a != 0) {S T : Subsemiring R} :
@@ -518,7 +518,7 @@ theorem le_pointwise_smul_iff₀
 
 中文:
 定理 le_pointwise_smul_iff₀
-  条件: {a : M} (ha : a != 0) {S T : Subsemiring R}
+  条件: {a : M} (ha : a != 0) {S T : 子半环 R}
   证明: subset_smul_set_iff₀ ha
 -/
 theorem le_pointwise_smul_iff₀ {a : M} (ha : a != 0) {S T : Subsemiring R} :

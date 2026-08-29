@@ -63,7 +63,7 @@ class LinearWeights
 
 中文:
 类 LinearWeights
-  参数: [LieRing.IsNilpotent L]
+  参数: [Lie环.是幂零 L]
   公理与运算 (3 个):
     - map_add : 对任意 χ : L -> R, genWeightSpace M χ != ⊥ -> 对任意 x y, χ (x + y) = χ x + χ y
     - map_smul : 对任意 χ : L -> R, genWeightSpace M χ != ⊥ -> 对任意 (t : R) x, χ (t • x) = t • χ x
@@ -131,7 +131,7 @@ instance instLinearMapClass
 
 中文:
 实例 instLinearMapClass
-  签名: : LinearMapClass (Weight R L M) R L R where
+  签名: : 线性映射类 (Weight R L M) R L R where
   定义体: LinearWeights.map_add χ χ.genWeightSpace_ne_bot
   map_smulₛₗ χ := LinearWeights.map_smul χ χ.genWeightSpace_ne_bot
 
@@ -188,7 +188,7 @@ lemma coe_toLinear_eq_zero_iff
 
 中文:
 引理 coe_toLinear_eq_zero_iff
-  结论: (χ : L ->ₗ[R] R) = 0 ↔ χ.IsZero
+  结论: (χ : L ->ₗ[R] R) = 0 ↔ χ.是零
   证明: ⟨fun h => funext fun x => LinearMap.congr_fun h x, fun h => by ext; simp [h.eq]⟩
 -/
 @[simp] lemma coe_toLinear_eq_zero_iff : (χ : L ->ₗ[R] R) = 0 ↔ χ.IsZero :=
@@ -242,7 +242,7 @@ instance instLinearWeightsOfIsLieAbelian
 
 中文:
 实例 instLinearWeightsOfIsLieAbelian
-  签名: [IsLieAbelian L] [IsDomain R] [Module.IsTorsionFree R M]
+  签名: [IsLieAbelian L] [是整环 R] [模.是无挠 R M]
   定义体: have aux : forall (χ : L -> R), genWeightSpace M χ != ⊥ -> forall (x y : L), χ (x + y) = χ x + χ y := by
     have h : forall x y, Commute (toEnd R L M x) (toEnd R L M y) := fun x y => by
       rw [commute_iff_lie_eq]; rw [← LieHom.map_lie]; rw [trivial_lie_zero]; rw [map_zero]
@@ -338,7 +338,7 @@ instance instLinearWeightsOfCharZero
 
 中文:
 实例 instLinearWeightsOfCharZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: by
     rw [← smul_right_inj (zero_lt_finrank_genWeightSpace hχ).ne']; rw [smul_add]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← Pi.smul_apply]; rw [← trace_comp_toEnd_genWeightSpace_eq]; rw [map_add]
   map_smul χ hχ t x := by
@@ -387,7 +387,7 @@ lemma aux
 
 中文:
 引理 aux
-  条件: [h : Nontrivial (shiftedGenWeightSpace R L M χ)]
+  条件: [h : 非平凡 (shiftedGenWeightSpace R L M χ)]
   结论: genWeightSpace M χ != ⊥
   证明: (LieSubmodule.nontrivial_iff_ne_bot _ _ _).mp h
 -/
@@ -415,7 +415,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRingModule L (shiftedGenWeightSpace R L M χ)
+  签名: Lie环模 L (shiftedGenWeightSpace R L M χ)
   定义体: ⁅x, m⁆ - χ x • m
   add_lie x y m := by
     nontriviality shiftedGenWeightSpace R L M χ
@@ -483,7 +483,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule R L (shiftedGenWeightSpace R L M χ)
+  签名: Lie模 R L (shiftedGenWeightSpace R L M χ)
   定义体: by
     nontriviality shiftedGenWeightSpace R L M χ
     apply Subtype.ext
@@ -557,8 +557,8 @@ instance [IsNoetherian
   body: LieModule.isNilpotent_iff_forall'.mpr fun x => isNilpotent_toEnd_sub_algebraMap M χ x
 
 中文:
-实例 [IsNoetherian
-  签名: R M] : IsNilpotent L (shiftedGenWeightSpace R L M χ)
+实例 [是Noether
+  签名: R M] : 是幂零 L (shiftedGenWeightSpace R L M χ)
   定义体: LieModule.isNilpotent_iff_forall'.mpr fun x => isNilpotent_toEnd_sub_algebraMap M χ x
 
 Depends on / 依赖: LieModule, LieModule.isNilpotent_iff_forall, isNilpotent_iff_forall, isNilpotent_toEnd_sub_algebraMap
@@ -583,8 +583,8 @@ lemma exists_forall_lie_eq_smul
   simp_rw [mem_maxTrivSubmodule, Sub
 
 中文:
-引理 exists_forall_lie_eq_smul
-  条件: [LinearWeights R L M] [IsNoetherian R M] (χ : Weight R L M)
+引理 存在_对任意_lie_eq_smul
+  条件: [LinearWeights R L M] [是Noether R M] (χ : Weight R L M)
   证明: by
   replace hχ : Nontrivial (shiftedGenWeightSpace R L M χ) :=
     (LieSubmodule.nontrivial_iff_ne_bot R L M).mpr χ.genWeightSpace_ne_bot
@@ -621,8 +621,8 @@ lemma exists_nontrivial_weightSpace_of_isNilpotent
   simp only [LieSubmodule.nontrivial_iff_ne_bot, LieSubmodule.eq_bot_iff, ne_e
 
 中文:
-引理 exists_nontrivial_weightSpace_of_isNilpotent
-  结论: [Field k] [LieAlgebra k L] [Module k M]
+引理 存在_nontrivial_weightSpace_of_isNilpotent
+  结论: [域 k] [Lie代数 k L] [模 k M]
   证明: by
   obtain ⟨χ⟩ : Nonempty (Weight k L M) := by
     by_contra! contra

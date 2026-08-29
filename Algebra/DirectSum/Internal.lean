@@ -69,8 +69,8 @@ theorem SetLike.algebraMap_mem_graded
 exact (A 0).smul_mem s SetLike.one_mem_graded _
 
 中文:
-定理 SetLike.algebraMap_mem_graded
-  结论: [Zero ι] [CommSemiring S] [Semiring R] [Algebra S R]
+定理 集合状.algebraMap_mem_graded
+  结论: [零 ι] [交换半环 S] [半环 R] [代数 S R]
   证明: by
   rw [Algebra.algebraMap_eq_smul_one]
 exact (A 0).smul_mem s SetLike.one_mem_graded _
@@ -98,8 +98,8 @@ theorem SetLike.natCast_mem_graded
     exact add_mem n_ih (SetLike.one_mem_graded _)
 
 中文:
-定理 SetLike.natCast_mem_graded
-  结论: [Zero ι] [AddMonoidWithOne R] [SetLike σ R]
+定理 集合状.natCast_mem_graded
+  结论: [零 ι] [加法带幺幺半群 R] [集合状 σ R]
   证明: by
   induction n with
   | zero =>
@@ -135,8 +135,8 @@ theorem SetLike.intCast_mem_graded
     exact neg_mem (SetLike.natCast_mem_graded _ _)
 
 中文:
-定理 SetLike.intCast_mem_graded
-  结论: [Zero ι] [AddGroupWithOne R] [SetLike σ R]
+定理 集合状.intCast_mem_graded
+  结论: [零 ι] [加法带幺群 R] [集合状 σ R]
   证明: by
   cases z
   · rw [Int.ofNat_eq_natCast, Int.cast_natCast]
@@ -176,7 +176,7 @@ instance gnonUnitalNonAssocSemiring
 
 中文:
 实例 gnonUnitalNonAssocSemiring
-  签名: [Add ι] [NonUnitalNonAssocSemiring R] [SetLike σ R]
+  签名: [加法 ι] [非幺非结合半环 R] [集合状 σ R]
   定义体: Subtype.ext (mul_zero _)
   zero_mul _ := Subtype.ext (zero_mul _)
   mul_add _ _ _ := Subtype.ext (mul_add _ _ _)
@@ -204,7 +204,7 @@ instance gsemiring
 
 中文:
 实例 gsemiring
-  签名: [AddMonoid ι] [Semiring R] [SetLike σ R] [AddSubmonoidClass σ R] (A : ι -> σ)
+  签名: [加法幺半群 ι] [半环 R] [集合状 σ R] [加法子幺半群类 σ R] (A : ι -> σ)
   定义体: ⟨n, SetLike.natCast_mem_graded _ _⟩
   natCast_zero := Subtype.ext Nat.cast_zero
   natCast_succ n := Subtype.ext (Nat.cast_succ n)
@@ -226,7 +226,7 @@ instance gcommSemiring
 
 中文:
 实例 gcommSemiring
-  签名: [AddCommMonoid ι] [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
+  签名: [加法交换幺半群 ι] [交换半环 R] [集合状 σ R] [加法子幺半群类 σ R]
 -/
 instance gcommSemiring [AddCommMonoid ι] [CommSemiring R] [SetLike σ R] [AddSubmonoidClass σ R]
     (A : ι -> σ) [SetLike.GradedMonoid A] : DirectSum.GCommSemiring fun i => A i where
@@ -243,7 +243,7 @@ intCast_negSucc_ofNat n := Subtype.ext Int.cast_negSucc n
 
 中文:
 实例 gring
-  签名: [AddMonoid ι] [Ring R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
+  签名: [加法幺半群 ι] [环 R] [集合状 σ R] [加法子群类 σ R] (A : ι -> σ)
   定义体: ⟨z, SetLike.intCast_mem_graded _ _⟩
 intCast_ofNat n := Subtype.ext Int.cast_natCast n
 intCast_negSucc_ofNat n := Subtype.ext Int.cast_negSucc n
@@ -265,7 +265,7 @@ instance gcommRing
 
 中文:
 实例 gcommRing
-  签名: [AddCommMonoid ι] [CommRing R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
+  签名: [加法交换幺半群 ι] [交换环 R] [集合状 σ R] [加法子群类 σ R] (A : ι -> σ)
 -/
 instance gcommRing [AddCommMonoid ι] [CommRing R] [SetLike σ R] [AddSubgroupClass σ R] (A : ι -> σ)
     [SetLike.GradedMonoid A] : DirectSum.GCommRing fun i => A i where
@@ -288,7 +288,7 @@ definition coeRingHom
 
 中文:
 定义 coeRingHom
-  签名: [AddMonoid ι] [SetLike.GradedMonoid A]
+  签名: [加法幺半群 ι] [集合状.分次幺半群 A]
   定义体: DirectSum.toSemiring (fun i => AddSubmonoidClass.subtype (A i)) rfl fun _ _ => rfl
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.subtype, DirectSum, DirectSum.toSemiring, subtype, toSemiring
@@ -308,7 +308,7 @@ theorem coeRingHom_of
 
 中文:
 定理 coeRingHom_of
-  条件: [AddMonoid ι] [SetLike.GradedMonoid A] (i : ι) (x : A i)
+  条件: [加法幺半群 ι] [集合状.分次幺半群 A] (i : ι) (x : A i)
   证明: DirectSum.toSemiring_of _ _ _ _ _
 
 Depends on / 依赖: DirectSum, DirectSum.toSemiring_of, toSemiring_of
@@ -330,7 +330,7 @@ theorem coe_mul_apply
 
 中文:
 定理 coe_mul_apply
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A]
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A]
   证明: by
   rw [mul_eq_sum_support_ghas_mul]; rw [DFinsupp.finsetSum_apply]; rw [AddSubmonoidClass.coe_finsetSum]
   simp_rw [coe_of_apply, apply_ite, ZeroMemClass.coe_zero, ← Finset.sum_filter, SetLike.coe_gMul]
@@ -364,7 +364,7 @@ theorem coe_mul_apply_eq_dfinsuppSum
 
 中文:
 定理 coe_mul_apply_eq_dfinsuppSum
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A]
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A]
   证明: by
   rw [mul_eq_dfinsuppSum]
   iterate 2 rw [DFinsupp.sum_apply, DFinsupp.sum, AddSubmonoidClass.coe_finsetSum]; congr; ext
@@ -408,7 +408,7 @@ theorem coe_mul_apply_eq_sum_antidiagonal
 
 中文:
 定理 coe_mul_apply_eq_sum_antidiagonal
-  结论: [AddMonoid ι] [HasAntidiagonal ι]
+  结论: [加法幺半群 ι] [有Antidiagonal ι]
   证明: by
   classical
   rw [coe_mul_apply]
@@ -446,7 +446,7 @@ theorem coe_of_mul_apply_aux
 
 中文:
 定理 coe_of_mul_apply_aux
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A] {i : ι} (r : A i)
   证明: by
   classical
     rw [coe_mul_apply_eq_dfinsuppSum]
@@ -495,7 +495,7 @@ theorem coe_mul_of_apply_aux
 
 中文:
 定理 coe_mul_of_apply_aux
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i) {i : ι}
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i) {i : ι}
   证明: by
   classical
     rw [coe_mul_apply_eq_dfinsuppSum]; rw [DFinsupp.sum_comm]
@@ -533,7 +533,7 @@ theorem coe_of_mul_apply_add
 
 中文:
 定理 coe_of_mul_apply_add
-  结论: [AddLeftCancelMonoid ι] [SetLike.GradedMonoid A] {i : ι} (r : A i)
+  结论: [加法左消去幺半群 ι] [集合状.分次幺半群 A] {i : ι} (r : A i)
   证明: coe_of_mul_apply_aux _ _ _ fun _x => ⟨fun h => add_left_cancel h, fun h => h ▸ rfl⟩
 
 Depends on / 依赖: add_left_cancel, coe_of_mul_apply_aux
@@ -552,7 +552,7 @@ theorem coe_mul_of_apply_add
 
 中文:
 定理 coe_mul_of_apply_add
-  结论: [AddRightCancelMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
+  结论: [加法右消去幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i)
   证明: coe_mul_of_apply_aux _ _ _ fun _x => ⟨fun h => add_right_cancel h, fun h => h ▸ rfl⟩
 
 Depends on / 依赖: add_right_cancel, coe_mul_of_apply_aux
@@ -571,7 +571,7 @@ theorem coe_of_mul_apply_of_mem_zero
 
 中文:
 定理 coe_of_mul_apply_of_mem_zero
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A] (r : A 0)
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : A 0)
   证明: coe_of_mul_apply_aux _ _ _ fun _x => by rw [zero_add]
 
 Depends on / 依赖: coe_of_mul_apply_aux, zero_add
@@ -590,7 +590,7 @@ theorem coe_mul_of_apply_of_mem_zero
 
 中文:
 定理 coe_mul_of_apply_of_mem_zero
-  结论: [AddMonoid ι] [SetLike.GradedMonoid A] (r : ⨁ i, A i)
+  结论: [加法幺半群 ι] [集合状.分次幺半群 A] (r : ⨁ i, A i)
   证明: coe_mul_of_apply_aux _ _ _ fun _x => by rw [add_zero]
 
 Depends on / 依赖: Seq.TerminatedAt, Seq.head, Stream, TerminatedAt, _tail, add_zero, coe_mul_of_apply_aux, generalizing, gp_head, s.get, s.head, s.tail.TerminatedAt, s_head_eq, terminatedAt_n
@@ -745,7 +745,7 @@ theorem coe_mul_of_apply
 
 中文:
 定理 coe_mul_of_apply
-  条件: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [Decidable (i <= n)]
+  条件: (r : ⨁ i, A i) {i : ι} (r' : A i) (n : ι) [可判定 (i <= n)]
   证明: by
   split_ifs with h
   exacts [coe_mul_of_apply_of_le _ _ _ n h, coe_mul_of_apply_of_not_le _ _ _ n h]
@@ -769,7 +769,7 @@ theorem coe_of_mul_apply
 
 中文:
 定理 coe_of_mul_apply
-  条件: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [Decidable (i <= n)]
+  条件: {i : ι} (r : A i) (r' : ⨁ i, A i) (n : ι) [可判定 (i <= n)]
   证明: by
   split_ifs with h
   exacts [coe_of_mul_apply_of_le _ _ _ n h, coe_of_mul_apply_of_not_le _ _ _ n h]
@@ -803,7 +803,7 @@ Sigma.subtype_ext ((zero_add i).trans (add_
 
 中文:
 实例 galgebra
-  签名: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R] (A : ι -> Submodule S R)
+  签名: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R] (A : ι -> 子模 S R)
   定义体: ((Algebra.linearMap S R).codRestrict (A 0) <| SetLike.algebraMap_mem_graded A).toAddMonoidHom
 map_one := Subtype.ext (algebraMap S R).map_one
 map_mul _x _y := Sigma.subtype_ext (add_zero 0).symm (algebraMap S R).map_mul _ _
@@ -833,7 +833,7 @@ theorem setLike.coe_galgebra_toFun
 
 中文:
 定理 setLike.coe_galgebra_toFun
-  结论: {ι} [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
+  结论: {ι} [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
   证明: rfl
 
 Depends on / 依赖: algebraMap
@@ -857,7 +857,7 @@ instance nat_power_gradedMonoid
 
 中文:
 实例 nat_power_gradedMonoid
-  签名: [CommSemiring S] [Semiring R] [Algebra S R] (p : Submodule S R)
+  签名: [交换半环 S] [半环 R] [代数 S R] (p : 子模 S R)
   定义体: by
     rw [← one_le]; rw [pow_zero]
   mul_mem i j p q hp hq := by
@@ -885,8 +885,8 @@ definition DirectSum.coeAlgHom
   body: DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
 
 中文:
-定义 DirectSum.coeAlgHom
-  签名: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
+定义 直和.coeAlgHom
+  签名: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
   定义体: DirectSum.toAlgebra S _ (fun i => (A i).subtype) rfl (fun _ _ => rfl)
 
 Depends on / 依赖: DirectSum, DirectSum.toAlgebra, subtype, toAlgebra
@@ -906,8 +906,8 @@ theorem Submodule.iSup_eq_toSubmodule_range
 @[simp]
 
 中文:
-定理 Submodule.iSup_eq_toSubmodule_range
-  结论: [AddMonoid ι] [CommSemiring S] [Semiring R]
+定理 子模.iSup_eq_toSubmodule_range
+  结论: [加法幺半群 ι] [交换半环 S] [半环 R]
   证明: (Submodule.iSup_eq_range_dfinsupp_lsum A).trans SetLike.coe_injective rfl
 
 @[simp]
@@ -929,8 +929,8 @@ theorem DirectSum.coeAlgHom_of
   proof: DirectSum.toSemiring_of _ rfl (fun _ _ => rfl) _ _
 
 中文:
-定理 DirectSum.coeAlgHom_of
-  结论: [AddMonoid ι] [CommSemiring S] [Semiring R] [Algebra S R]
+定理 直和.coeAlgHom_of
+  结论: [加法幺半群 ι] [交换半环 S] [半环 R] [代数 S R]
   证明: DirectSum.toSemiring_of _ rfl (fun _ _ => rfl) _ _
 
 Depends on / 依赖: DirectSum, DirectSum.toSemiring_of, toSemiring_of
@@ -962,7 +962,7 @@ definition subsemiring
 
 中文:
 定义 subsemiring
-  签名: : Subsemiring R where
+  签名: : 子半环 R where
   定义体: submonoid A
   add_mem' := add_mem
   zero_mem' := zero_mem (A 0)
@@ -985,7 +985,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (A 0)
+  签名: : 半环 (A 0)
   定义体: inferInstanceAs Semiring (subsemiring A)
 
 Depends on / 依赖: Semiring, subsemiring
@@ -1018,7 +1018,7 @@ theorem coe_ofNat
   proof: rfl
 
 中文:
-定理 coe_ofNat
+定理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1042,7 +1042,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring (A 0)
+  签名: : 交换半环 (A 0)
   定义体: inferInstanceAs CommSemiring (subsemiring A)
 
 Depends on / 依赖: CommSemiring, subsemiring
@@ -1059,7 +1059,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (A 0) R
+  签名: 代数 (A 0) R
   定义体: inferInstanceAs Algebra (SetLike.GradeZero.subsemiring A) R
 
 Depends on / 依赖: Algebra, GradeZero, SetLike, SetLike.GradeZero.subsemiring, subsemiring
@@ -1101,7 +1101,7 @@ definition subring
 
 中文:
 定义 subring
-  签名: : Subring R where
+  签名: : 子环 R where
   定义体: subsemiring A
   neg_mem' := neg_mem
 
@@ -1122,7 +1122,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (A 0)
+  签名: : 环 (A 0)
   定义体: inferInstanceAs Ring (subring A)
 
 Depends on / 依赖: subring
@@ -1163,7 +1163,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (A 0)
+  签名: : 交换环 (A 0)
   定义体: inferInstanceAs CommRing (subring A)
 
 Depends on / 依赖: CommRing, subring
@@ -1187,7 +1187,7 @@ definition subalgebra
 
 中文:
 定义 subalgebra
-  签名: : Subalgebra S R where
+  签名: : 子代数 S R where
   定义体: subsemiring A
   algebraMap_mem' := algebraMap_mem_graded A
 
@@ -1208,7 +1208,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra S (A 0)
+  签名: : 代数 S (A 0)
   定义体: inferInstanceAs Algebra S (subalgebra A)
 
 Depends on / 依赖: Algebra, subalgebra
@@ -1246,8 +1246,8 @@ theorem SetLike.homogeneous_zero_submodule
   proof: ⟨0, Submodule.zero_mem _⟩
 
 中文:
-定理 SetLike.homogeneous_zero_submodule
-  结论: [Zero ι] [Semiring S] [AddCommMonoid R] [Module S R]
+定理 集合状.homogeneous_zero_submodule
+  结论: [零 ι] [半环 S] [加法交换幺半群 R] [模 S R]
   证明: ⟨0, Submodule.zero_mem _⟩
 
 Depends on / 依赖: Submodule, Submodule.zero_mem, zero_mem
@@ -1266,8 +1266,8 @@ theorem SetLike.Homogeneous.smul
   ⟨i, Submodule.smul_mem _ _ hi⟩
 
 中文:
-定理 SetLike.Homogeneous.smul
-  结论: [CommSemiring S] [Semiring R] [Algebra S R] {A : ι -> Submodule S R}
+定理 集合状.齐次.smul
+  结论: [交换半环 S] [半环 R] [代数 S R] {A : ι -> 子模 S R}
   证明: let ⟨i, hi⟩ := hr
   ⟨i, Submodule.smul_mem _ _ hi⟩
 
@@ -1353,7 +1353,7 @@ theorem listProd_apply_eq_zero'
 
 中文:
 定理 listProd_apply_eq_zero'
-  结论: {l : List ((⨁ i, A i) × ι)}
+  结论: {l : 列表 ((⨁ i, A i) × ι)}
   证明: by
   induction l generalizing n with
   | nil => simp at hn
@@ -1390,7 +1390,7 @@ theorem listProd_apply_eq_zero
 
 中文:
 定理 listProd_apply_eq_zero
-  结论: {l : List (⨁ i, A i)} {m : ι}
+  结论: {l : 列表 (⨁ i, A i)} {m : ι}
   证明: by
   -- a proof which uses `DirectSum.listProd_apply_eq_zero'` is actually more work
   induction l generalizing n with
@@ -1486,7 +1486,7 @@ theorem finsetProd_apply_eq_zero'
 
 中文:
 定理 finsetProd_apply_eq_zero'
-  结论: {s : Finset ((⨁ i, A i) × ι)}
+  结论: {s : 有限集 ((⨁ i, A i) × ι)}
   证明: by
   simpa using listProd_apply_eq_zero' (l := s.toList) (by simpa using hs) (by simpa)
 
@@ -1508,7 +1508,7 @@ theorem finsetProd_apply_eq_zero
 
 中文:
 定理 finsetProd_apply_eq_zero
-  结论: {s : Finset (⨁ i, A i)} {m : ι}
+  结论: {s : 有限集 (⨁ i, A i)} {m : ι}
   证明: by
   simpa using listProd_apply_eq_zero (l := s.toList) (by simpa using hs) (by simpa)
 

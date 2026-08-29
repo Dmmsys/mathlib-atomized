@@ -45,7 +45,7 @@ lemma coe_span_smul
 
 中文:
 引理 coe_span_smul
-  结论: {R' M' : 类型} [CommSemiring R'] [AddCommMonoid M'] [Module R' M']
+  结论: {R' M' : 类型} [交换半环 R'] [加法交换幺半群 M'] [模 R' M']
   证明: set_smul_eq_of_le _ _ _
     (by rintro r n hr hn
         induction hr using Submodule.span_induction with
@@ -85,7 +85,7 @@ lemma span_singleton_toAddSubgroup_eq_zmultiples
 
 中文:
 引理 span_singleton_toAddSubgroup_eq_zmultiples
-  条件: {M : 类型} [AddCommGroup M] (a : M)
+  条件: {M : 类型} [加法交换群 M] (a : M)
   证明: by
   ext i
   simp [Submodule.mem_span_singleton, AddSubgroup.mem_zmultiples_iff]
@@ -106,7 +106,7 @@ lemma _root_.Ideal.span_singleton_toAddSubgroup_eq_zmultiples
   proof: Submodule.span_singleton_toAddSubgroup_eq_zmultiples _
 
 中文:
-引理 _root_.Ideal.span_singleton_toAddSubgroup_eq_zmultiples
+引理 _root_.理想.span_singleton_toAddSubgroup_eq_zmultiples
   条件: (a : 整数)
   证明: Submodule.span_singleton_toAddSubgroup_eq_zmultiples _
 -/
@@ -130,8 +130,8 @@ theorem _root_.Ideal.smul_eq_mul
   proof: rfl
 
 中文:
-定理 _root_.Ideal.smul_eq_mul
-  条件: (I J : Ideal R)
+定理 _root_.理想.smul_eq_mul
+  条件: (I J : 理想 R)
   结论: I • J = I * J
   证明: rfl
 -/
@@ -171,7 +171,7 @@ theorem map_le_smul_top
 
 中文:
 定理 map_le_smul_top
-  条件: (I : Ideal R) (f : R ->ₗ[R] M)
+  条件: (I : 理想 R) (f : R ->ₗ[R] M)
   证明: by
   rintro _ ⟨y, hy, rfl⟩
   rw [← mul_one y]; rw [← smul_eq_mul]; rw [f.map_smul]
@@ -198,7 +198,7 @@ theorem top_smul
 
 中文:
 定理 top_smul
-  结论: (⊤ : Ideal R) • N = N
+  结论: (⊤ : 理想 R) • N = N
   证明: le_antisymm smul_le_right fun r hri => one_smul R r ▸ smul_mem_smul mem_top hri
 
 Depends on / 依赖: le_antisymm, mem_top, one_smul, smul_le_right, smul_mem_smul
@@ -237,7 +237,7 @@ theorem mem_of_span_top_of_smul_mem
 
 中文:
 定理 mem_of_span_top_of_smul_mem
-  结论: (M' : Submodule R M) (s : Set R) (hs : Ideal.span s = ⊤) (x : M)
+  结论: (M' : 子模 R M) (s : 集合 R) (hs : 理想.span s = ⊤) (x : M)
   证明: by
   suffices LinearMap.range (LinearMap.toSpanSingleton R M x) <= M' by
     rw [← LinearMap.toSpanSingleton_apply_one R M x]
@@ -314,7 +314,7 @@ theorem mem_smul_top_iff
 
 中文:
 定理 mem_smul_top_iff
-  条件: (N : Submodule R M) (x : N)
+  条件: (N : 子模 R M) (x : N)
   证明: by
   have : Submodule.map N.subtype (I • ⊤) = I • N := by
     rw [Submodule.map_smul'']; rw [Submodule.map_top]; rw [Submodule.range_subtype]
@@ -345,7 +345,7 @@ theorem smul_comap_le_comap_smul
 
 中文:
 定理 smul_comap_le_comap_smul
-  条件: (f : M ->ₗ[R] M') (S : Submodule R M') (I : Ideal R)
+  条件: (f : M ->ₗ[R] M') (S : 子模 R M') (I : 理想 R)
   证明: by
   refine Submodule.smul_le.mpr fun r hr x hx => ?_
   rw [Submodule.mem_comap] at hx ⊢
@@ -374,7 +374,7 @@ lemma comap_smul''
 
 中文:
 引理 comap_smul''
-  结论: {f : M ->ₗ[R] M'} (hf : Function.Injective f) {p : Submodule R M'}
+  结论: {f : M ->ₗ[R] M'} (hf : 函数.单射 f) {p : 子模 R M'}
   证明: by
   refine le_antisymm ?_ (by simp)
   conv_lhs => rw [← Submodule.map_comap_eq_self hp, ← Submodule.map_smul'']
@@ -408,7 +408,7 @@ theorem mem_smul_span_singleton
 
 中文:
 定理 mem_smul_span_singleton
-  条件: [I.IsTwoSided] {m : M} {x : M}
+  条件: [I.是TwoSided] {m : M} {x : M}
   证明: ⟨fun hx =>
     smul_induction_on hx
       (fun r hri _ hnm =>
@@ -449,7 +449,7 @@ theorem span_smul_span
 
 中文:
 定理 span_smul_span
-  条件: [(Ideal.span S).IsTwoSided]
+  条件: [(理想.span S).是TwoSided]
   证明: le_antisymm (smul_le.mpr fun r hr m hm => by
     revert r
     refine span_induction (fun m hm r hr => span_induction
@@ -490,7 +490,7 @@ theorem mem_smul_span
 
 中文:
 定理 mem_smul_span
-  条件: {s : Set M} {x : M}
+  条件: {s : 集合 M} {x : M}
   证明: by
   rw [← I.span_eq] at *
   rw [Submodule.span_smul_span]; rw [I.span_eq]
@@ -520,7 +520,7 @@ exact Submodule.sum_mem _ fun c _ => smul_mem_smul (ha c) subset_span Set.mem_ra
     · 
 
 中文:
-定理 mem_ideal_smul_span_iff_exists_sum
+定理 mem_ideal_smul_span_iff_存在_sum
   条件: {ι : 类型} (f : ι -> M) (x : M)
   证明: by
   constructor; swap
@@ -567,8 +567,8 @@ theorem mem_ideal_smul_span_iff_exists_sum'
   rw [← Submodule.mem_ideal_smul_span_iff_exists_sum]; rw [← Set.image_eq_range]
 
 中文:
-定理 mem_ideal_smul_span_iff_exists_sum'
-  条件: {ι : 类型} (s : Set ι) (f : ι -> M) (x : M)
+定理 mem_ideal_smul_span_iff_存在_sum'
+  条件: {ι : 类型} (s : 集合 ι) (f : ι -> M) (x : M)
   证明: by
   rw [← Submodule.mem_ideal_smul_span_iff_exists_sum]; rw [← Set.image_eq_range]
 
@@ -600,7 +600,7 @@ theorem smul_eq_map₂
 
 中文:
 定理 smul_eq_map₂
-  结论: I • N = Submodule.map₂ (LinearMap.lsmul R M) I N
+  结论: I • N = 子模.map₂ (线性映射.lsmul R M) I N
   证明: le_antisymm (smul_le.mpr fun _m hm _n => Submodule.apply_mem_map₂ _ hm)
     (map₂_le.mpr fun _m hm _n => smul_mem_smul hm)
 
@@ -624,7 +624,7 @@ theorem ideal_span_singleton_smul
 
 中文:
 定理 ideal_span_singleton_smul
-  条件: (r : R) (N : Submodule R M)
+  条件: (r : R) (N : 子模 R M)
   证明: by
   conv_lhs => rw [← span_eq N, span_smul_span]
   simpa using span_eq (r • N)
@@ -650,7 +650,7 @@ theorem mem_of_span_eq_top_of_smul_pow_mem
 
 中文:
 定理 mem_of_span_eq_top_of_smul_pow_mem
-  结论: (M' : Submodule R M) (s : Set R) (hs : Ideal.span s = ⊤)
+  结论: (M' : 子模 R M) (s : 集合 R) (hs : 理想.span s = ⊤)
   证明: by
   choose f hf using H
   apply M'.mem_of_span_top_of_smul_mem _ (Ideal.span_range_pow_eq_top s hs f)
@@ -679,7 +679,7 @@ theorem map_pointwise_smul
 
 中文:
 定理 map_pointwise_smul
-  条件: (r : R) (N : Submodule R M) (f : M ->ₗ[R] M')
+  条件: (r : R) (N : 子模 R M) (f : M ->ₗ[R] M')
   证明: by
   simp_rw [← ideal_span_singleton_smul, map_smul'']
 
@@ -713,7 +713,7 @@ theorem add_eq_sup
 
 中文:
 定理 add_eq_sup
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   结论: I + J = I ⊔ J
   证明: rfl
 
@@ -735,7 +735,7 @@ theorem zero_eq_bot
 
 中文:
 定理 zero_eq_bot
-  结论: (0 : Ideal R) = ⊥
+  结论: (0 : 理想 R) = ⊥
   证明: rfl
 
 @[simp]
@@ -755,8 +755,8 @@ theorem sum_eq_sup
 
 中文:
 定理 sum_eq_sup
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> Ideal R)
-  结论: s.sum f = s.sup f
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 理想 R)
+  结论: s.求和 f = s.上确界 f
   证明: rfl
 -/
 theorem sum_eq_sup {ι : Type*} (s : Finset ι) (f : ι -> Ideal R) : s.sum f = s.sup f :=
@@ -780,7 +780,7 @@ theorem one_eq_top
 
 中文:
 定理 one_eq_top
-  结论: (1 : Ideal R) = ⊤
+  结论: (1 : 理想 R) = ⊤
   证明: by
   rw [Submodule.one_eq_span]; rw [← Ideal.span]; rw [Ideal.span_singleton_one]
 
@@ -962,7 +962,7 @@ theorem mul_le_left
 
 中文:
 定理 mul_le_left
-  条件: [I.IsTwoSided]
+  条件: [I.是TwoSided]
   结论: I * J <= I
   证明: mul_le.2 fun _ hr _ _ => I.mul_mem_right _ hr
 
@@ -987,7 +987,7 @@ theorem sup_mul_right_self
 
 中文:
 定理 sup_mul_right_self
-  条件: [I.IsTwoSided]
+  条件: [I.是TwoSided]
   结论: I ⊔ I * J = I
   证明: sup_eq_left.2 mul_le_left
 
@@ -1010,7 +1010,7 @@ theorem mul_right_self_sup
 
 中文:
 定理 mul_right_self_sup
-  条件: [I.IsTwoSided]
+  条件: [I.是TwoSided]
   结论: I * J ⊔ I = I
   证明: sup_eq_right.2 mul_le_left
 
@@ -1200,7 +1200,7 @@ theorem mul_iSup
 
 中文:
 定理 mul_iSup
-  条件: {ι : Sort*} (J : ι -> Ideal R)
+  条件: {ι : 类型层*} (J : ι -> 理想 R)
   证明: Submodule.smul_iSup
 
 Depends on / 依赖: Submodule, Submodule.smul_iSup, smul_iSup
@@ -1219,7 +1219,7 @@ theorem iSup_mul
 
 中文:
 定理 iSup_mul
-  条件: {ι : Sort*} (J : ι -> Ideal R) (I : Ideal R)
+  条件: {ι : 类型层*} (J : ι -> 理想 R) (I : 理想 R)
   证明: Submodule.iSup_smul
 
 Depends on / 依赖: Submodule, Submodule.iSup_smul, iSup_smul
@@ -1412,7 +1412,7 @@ theorem mul_eq_bot
 
 中文:
 定理 mul_eq_bot
-  条件: [NoZeroDivisors R]
+  条件: [无零因子 R]
   结论: I * J = ⊥ ↔ I = ⊥ ∨ J = ⊥
   证明: Submodule.mul_eq_bot
 
@@ -1431,7 +1431,7 @@ theorem pow_eq_bot
 
 中文:
 定理 pow_eq_bot
-  条件: [IsReduced R] {n : 自然数} (hn : n != 0)
+  条件: [是既约 R] {n : 自然数} (hn : n != 0)
   结论: I ^ n = ⊥ ↔ I = ⊥
   证明: Submodule.pow_eq_bot hn
 
@@ -1454,7 +1454,7 @@ theorem span_mul_span
 
 中文:
 定理 span_mul_span
-  条件: (S T : Set R) [(span S).IsTwoSided]
+  条件: (S T : 集合 R) [(span S).是TwoSided]
   证明: Submodule.span_smul_span S T
 
 Depends on / 依赖: Submodule, Submodule.span_smul_span, span_smul_span
@@ -1474,7 +1474,7 @@ theorem span_mul_span'
 
 中文:
 定理 span_mul_span'
-  条件: (S T : Set R) [(span S).IsTwoSided]
+  条件: (S T : 集合 R) [(span S).是TwoSided]
   结论: span S * span T = span (S * T)
   证明: (span_mul_span S T).trans congr_arg span Set.ext by simp [Set.mem_mul, eq_comm]
 
@@ -1494,7 +1494,7 @@ theorem span_singleton_mul_span_singleton
 
 中文:
 定理 span_singleton_mul_span_singleton
-  条件: (r s : R) [(span {r}).IsTwoSided]
+  条件: (r s : R) [(span {r}).是TwoSided]
   证明: by
   rw [span_mul_span']; rw [Set.singleton_mul_singleton]
 
@@ -1519,7 +1519,7 @@ theorem span_singleton_pow
 
 中文:
 定理 span_singleton_pow
-  条件: (s : R) [(span {s}).IsTwoSided] (n : 自然数)
+  条件: (s : R) [(span {s}).是TwoSided] (n : 自然数)
   证明: by
   induction n with
   | zero => simp [Submodule.pow_zero, Set.singleton_one]
@@ -1547,7 +1547,7 @@ theorem mem_mul_span_singleton
 
 中文:
 定理 mem_mul_span_singleton
-  条件: {x y : R} {I : Ideal R} [I.IsTwoSided]
+  条件: {x y : R} {I : 理想 R} [I.是TwoSided]
   证明: Submodule.mem_smul_span_singleton
 
 Depends on / 依赖: Submodule, Submodule.mem_smul_span_singleton, mem_smul_span_singleton
@@ -1567,7 +1567,7 @@ theorem span_singleton_mul_left_mono
 
 中文:
 定理 span_singleton_mul_left_mono
-  结论: [IsDomain R] [I.IsTwoSided] [J.IsTwoSided]
+  结论: [是整环 R] [I.是TwoSided] [J.是TwoSided]
   证明: by
   simp [SetLike.le_def, mem_mul_span_singleton, hx]
 
@@ -1588,7 +1588,7 @@ theorem span_singleton_mul_left_inj
 
 中文:
 定理 span_singleton_mul_left_inj
-  结论: [IsDomain R] [I.IsTwoSided] [J.IsTwoSided]
+  结论: [是整环 R] [I.是TwoSided] [J.是TwoSided]
   证明: by
   simp only [le_antisymm_iff, span_singleton_mul_left_mono hx]
 
@@ -1609,7 +1609,7 @@ theorem mul_le_inf
 
 中文:
 定理 mul_le_inf
-  条件: [I.IsTwoSided]
+  条件: [I.是TwoSided]
   结论: I * J <= I ⊓ J
   证明: mul_le.2 fun r hri s hsj => ⟨I.mul_mem_right s hri, J.mul_mem_left r hsj⟩
 
@@ -1630,7 +1630,7 @@ lemma inf_ne_bot_of_ne_bot
 
 中文:
 引理 inf_ne_bot_of_ne_bot
-  结论: [NoZeroDivisors R] {I J : Ideal R} [I.IsTwoSided]
+  结论: [无零因子 R] {I J : 理想 R} [I.是TwoSided]
   证明: by
   grw [← bot_lt_iff_ne_bot, ← mul_le_inf, bot_lt_iff_ne_bot, Ne, mul_eq_bot]
   exact not_or_intro hI hJ
@@ -1658,7 +1658,7 @@ theorem sup_mul_eq_of_coprime_left
 
 中文:
 定理 sup_mul_eq_of_coprime_left
-  条件: [I.IsTwoSided] (h : I ⊔ J = ⊤)
+  条件: [I.是TwoSided] (h : I ⊔ J = ⊤)
   结论: I ⊔ J * K = I ⊔ K
   证明: le_antisymm (sup_le_sup_left mul_le_right _) fun i hi => by
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
@@ -1690,7 +1690,7 @@ theorem sup_mul_eq_of_coprime_right
 
 中文:
 定理 sup_mul_eq_of_coprime_right
-  条件: [J.IsTwoSided] (h : I ⊔ K = ⊤)
+  条件: [J.是TwoSided] (h : I ⊔ K = ⊤)
   结论: I ⊔ J * K = I ⊔ J
   证明: le_antisymm (sup_le_sup_left mul_le_left _) fun i hi => by
     rw [eq_top_iff_one] at h; rw [Submodule.mem_sup] at h hi ⊢
@@ -1720,7 +1720,7 @@ theorem mul_sup_eq_of_coprime_left
 
 中文:
 定理 mul_sup_eq_of_coprime_left
-  条件: [J.IsTwoSided] (h : I ⊔ J = ⊤)
+  条件: [J.是TwoSided] (h : I ⊔ J = ⊤)
   结论: I * K ⊔ J = K ⊔ J
   证明: by
   rw [sup_comm] at h
@@ -1745,7 +1745,7 @@ theorem mul_sup_eq_of_coprime_right
 
 中文:
 定理 mul_sup_eq_of_coprime_right
-  条件: [I.IsTwoSided] (h : K ⊔ J = ⊤)
+  条件: [I.是TwoSided] (h : K ⊔ J = ⊤)
   结论: I * K ⊔ J = I ⊔ J
   证明: by
   rw [sup_comm] at h
@@ -1774,7 +1774,7 @@ exact s.induction_on' (by simp) fun {i t} his hts hit eq_top => top_unique by
 
 中文:
 定理 sup_iInf_eq_top
-  结论: {s : Finset ι} {J : ι -> Ideal R} [对任意 i, (J i).IsTwoSided]
+  结论: {s : 有限集 ι} {J : ι -> 理想 R} [对任意 i, (J i).是TwoSided]
   证明: by
   classical
 exact s.induction_on' (by simp) fun {i t} his hts hit eq_top => top_unique by
@@ -1803,7 +1803,7 @@ theorem iInf_sup_eq_top
 
 中文:
 定理 iInf_sup_eq_top
-  结论: {s : Finset ι} {J : ι -> Ideal R} [对任意 i, (J i).IsTwoSided]
+  结论: {s : 有限集 ι} {J : ι -> 理想 R} [对任意 i, (J i).是TwoSided]
   证明: by
   rw [sup_comm]; rw [sup_iInf_eq_top]; intro i hi; rw [sup_comm, h i hi]
 
@@ -1827,7 +1827,7 @@ theorem sup_pow_eq_top
 
 中文:
 定理 sup_pow_eq_top
-  条件: [I.IsTwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [I.是TwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ⊔ J ^ n = ⊤
   证明: by
   induction n with
@@ -1857,7 +1857,7 @@ theorem sup_pow_eq_top'
 
 中文:
 定理 sup_pow_eq_top'
-  条件: [J.IsTwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [J.是TwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ⊔ J ^ n = ⊤
   证明: by
   induction n with
@@ -1887,7 +1887,7 @@ theorem pow_sup_eq_top
 
 中文:
 定理 pow_sup_eq_top
-  条件: [I.IsTwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [I.是TwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ^ n ⊔ J = ⊤
   证明: by
   rw [sup_comm]; rw [sup_pow_eq_top' (sup_comm I J ▸ h)]
@@ -1909,7 +1909,7 @@ theorem pow_sup_eq_top'
 
 中文:
 定理 pow_sup_eq_top'
-  条件: [J.IsTwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [J.是TwoSided] {n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ^ n ⊔ J = ⊤
   证明: by
   rw [sup_comm]; rw [sup_pow_eq_top (sup_comm I J ▸ h)]
@@ -1930,7 +1930,7 @@ theorem pow_sup_pow_eq_top
 
 中文:
 定理 pow_sup_pow_eq_top
-  条件: [I.IsTwoSided] {m n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [I.是TwoSided] {m n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ^ m ⊔ J ^ n = ⊤
   证明: pow_sup_eq_top (sup_pow_eq_top h)
 
@@ -1950,7 +1950,7 @@ theorem pow_sup_pow_eq_top'
 
 中文:
 定理 pow_sup_pow_eq_top'
-  条件: [J.IsTwoSided] {m n : 自然数} (h : I ⊔ J = ⊤)
+  条件: [J.是TwoSided] {m n : 自然数} (h : I ⊔ J = ⊤)
   结论: I ^ m ⊔ J ^ n = ⊤
   证明: pow_sup_eq_top' (sup_pow_eq_top' h)
 
@@ -1973,7 +1973,7 @@ theorem mul_top
 
 中文:
 定理 mul_top
-  条件: [I.IsTwoSided]
+  条件: [I.是TwoSided]
   结论: I * ⊤ = I
   证明: le_antisymm (mul_le.mpr fun _i hi _r _ => mul_mem_right _ _ hi)
     fun i hi => mul_one i ▸ mul_mem_mul hi Submodule.mem_top
@@ -1995,7 +1995,7 @@ theorem span_pair_mul_span_pair
 
 中文:
 定理 span_pair_mul_span_pair
-  条件: (w x y z : R) [(span {w, x}).IsTwoSided]
+  条件: (w x y z : R) [(span {w, x}).是TwoSided]
   证明: by
   rw [span_mul_span']; congr; ext r; simp [Set.mem_mul, or_assoc, eq_comm (a := r)]
 
@@ -2020,7 +2020,7 @@ theorem top_pow
 中文:
 定理 top_pow
   条件: (n : 自然数)
-  结论: (⊤ ^ n : Ideal R) = ⊤
+  结论: (⊤ ^ n : 理想 R) = ⊤
   证明: Nat.recOn n one_eq_top fun n ih => by rw [Submodule.pow_succ, ih, top_mul]
 
 @[simp]
@@ -2081,7 +2081,7 @@ theorem natCast_eq_top
 中文:
 定理 natCast_eq_top
   条件: {n : 自然数} (hn : n != 0)
-  结论: (n : Ideal R) = ⊤
+  结论: (n : 理想 R) = ⊤
   证明: by
   induction n with
   | zero => exact (hn rfl).elim
@@ -2108,9 +2108,9 @@ theorem ofNat_eq_top
   proof: natCast_eq_top (NeZero.ne _)
 
 中文:
-定理 ofNat_eq_top
+定理 of自然数_eq_top
   条件: {n : 自然数} [n.AtLeastTwo]
-  结论: (of自然数(n) : Ideal R) = ⊤
+  结论: (of自然数(n) : 理想 R) = ⊤
   证明: natCast_eq_top (NeZero.ne _)
 
 Depends on / 依赖: NeZero, NeZero.ne, natCast_eq_top
@@ -2129,7 +2129,7 @@ simpa [hnI] using pow_le_pow_right hmn pow_mem_pow hx m
 
 中文:
 定理 pow_eq_zero_of_mem
-  结论: {I : Ideal R} {n m : 自然数} (hnI : I ^ n = 0) (hmn : n <= m) {x : R}
+  结论: {I : 理想 R} {n m : 自然数} (hnI : I ^ n = 0) (hmn : n <= m) {x : R}
   证明: by
 simpa [hnI] using pow_le_pow_right hmn pow_mem_pow hx m
 
@@ -2180,7 +2180,7 @@ theorem prod_mem_prod
 
 中文:
 定理 prod_mem_prod
-  条件: {ι : 类型} {s : Finset ι} {I : ι -> Ideal R} {x : ι -> R}
+  条件: {ι : 类型} {s : 有限集 ι} {I : ι -> 理想 R} {x : ι -> R}
   证明: by
   classical
     refine Finset.induction_on s ?_ ?_
@@ -2272,7 +2272,7 @@ theorem mem_span_singleton_mul
 
 中文:
 定理 mem_span_singleton_mul
-  条件: {x y : R} {I : Ideal R}
+  条件: {x y : R} {I : 理想 R}
   结论: x in span {y} * I ↔ 存在 z in I, y * z = x
   证明: by
   simp only [mul_comm, mem_mul_span_singleton]
@@ -2296,7 +2296,7 @@ lemma range_mul
 
 中文:
 引理 range_mul
-  结论: (A : 类型) [CommSemiring A] [Module R A]
+  结论: (A : 类型) [交换半环 A] [模 R A]
   证明: by
   aesop (add simp Ideal.mem_span_singleton) (add simp dvd_def)
 
@@ -2319,7 +2319,7 @@ lemma range_mul'
 中文:
 引理 range_mul'
   条件: (a : R)
-  结论: LinearMap.range (LinearMap.mul R R a) = Ideal.span {a}
+  结论: 线性映射.range (线性映射.mul R R a) = 理想.span {a}
   证明: range_mul ..
 
 Depends on / 依赖: range_mul
@@ -2337,7 +2337,7 @@ theorem le_span_singleton_mul_iff
 
 中文:
 定理 le_span_singleton_mul_iff
-  条件: {x : R} {I J : Ideal R}
+  条件: {x : R} {I J : 理想 R}
   证明: show (forall {zI} (_ : zI in I), zI in span {x} * J) ↔ forall zI in I, exists zJ in J, x * zJ = zI by
     simp only [mem_span_singleton_mul]
 
@@ -2359,7 +2359,7 @@ theorem span_singleton_mul_le_iff
 
 中文:
 定理 span_singleton_mul_le_iff
-  条件: {x : R} {I J : Ideal R}
+  条件: {x : R} {I J : 理想 R}
   证明: by
   simp [SetLike.le_def, mem_span_singleton_mul]
 
@@ -2380,7 +2380,7 @@ theorem span_singleton_mul_le_span_singleton_mul
 
 中文:
 定理 span_singleton_mul_le_span_singleton_mul
-  条件: {x y : R} {I J : Ideal R}
+  条件: {x y : R} {I J : 理想 R}
   证明: by
   simp only [span_singleton_mul_le_iff, mem_span_singleton_mul, eq_comm]
 
@@ -2402,7 +2402,7 @@ theorem span_singleton_mul_right_mono
 
 中文:
 定理 span_singleton_mul_right_mono
-  条件: [IsDomain R] {x : R} (hx : x != 0)
+  条件: [是整环 R] {x : R} (hx : x != 0)
   证明: by
   simp_rw [span_singleton_mul_le_span_singleton_mul, mul_right_inj' hx,
     exists_eq_right', SetLike.le_def]
@@ -2425,7 +2425,7 @@ theorem span_singleton_mul_right_inj
 
 中文:
 定理 span_singleton_mul_right_inj
-  条件: [IsDomain R] {x : R} (hx : x != 0)
+  条件: [是整环 R] {x : R} (hx : x != 0)
   证明: by
   simp only [le_antisymm_iff, span_singleton_mul_right_mono hx]
 
@@ -2446,7 +2446,7 @@ theorem span_singleton_mul_right_injective
 
 中文:
 定理 span_singleton_mul_right_injective
-  条件: [IsDomain R] {x : R} (hx : x != 0)
+  条件: [是整环 R] {x : R} (hx : x != 0)
   证明: fun _ _ =>
   (span_singleton_mul_right_inj hx).mp
 -/
@@ -2465,7 +2465,7 @@ theorem span_singleton_mul_left_injective
 
 中文:
 定理 span_singleton_mul_left_injective
-  条件: [IsDomain R] {x : R} (hx : x != 0)
+  条件: [是整环 R] {x : R} (hx : x != 0)
   证明: fun _ _ =>
   (span_singleton_mul_left_inj hx).mp
 -/
@@ -2484,7 +2484,7 @@ theorem eq_span_singleton_mul
 
 中文:
 定理 eq_span_singleton_mul
-  条件: {x : R} (I J : Ideal R)
+  条件: {x : R} (I J : 理想 R)
   证明: by
   simp only [le_antisymm_iff, le_span_singleton_mul_iff, span_singleton_mul_le_iff]
 
@@ -2505,7 +2505,7 @@ theorem span_singleton_mul_eq_span_singleton_mul
 
 中文:
 定理 span_singleton_mul_eq_span_singleton_mul
-  条件: {x y : R} (I J : Ideal R)
+  条件: {x y : R} (I J : 理想 R)
   证明: by
   simp only [le_antisymm_iff, span_singleton_mul_le_span_singleton_mul, eq_comm]
 
@@ -2526,7 +2526,7 @@ theorem prod_span
 
 中文:
 定理 prod_span
-  条件: {ι : 类型} (s : Finset ι) (I : ι -> Set R)
+  条件: {ι : 类型} (s : 有限集 ι) (I : ι -> 集合 R)
   证明: Submodule.prod_span s I
 
 Depends on / 依赖: Submodule, Submodule.prod_span, prod_span
@@ -2547,7 +2547,7 @@ theorem prod_span_singleton
 
 中文:
 定理 prod_span_singleton
-  条件: {ι : 类型} (s : Finset ι) (I : ι -> R)
+  条件: {ι : 类型} (s : 有限集 ι) (I : ι -> R)
   证明: Submodule.prod_span_singleton s I
 
 @[simp]
@@ -2595,7 +2595,7 @@ theorem finset_inf_span_singleton
 
 中文:
 定理 finset_inf_span_singleton
-  结论: {ι : 类型} (s : Finset ι) (I : ι -> R)
+  结论: {ι : 类型} (s : 有限集 ι) (I : ι -> R)
   证明: by
   ext x
   simp only [Submodule.mem_finsetInf, Ideal.mem_span_singleton]
@@ -2622,7 +2622,7 @@ theorem iInf_span_singleton
 
 中文:
 定理 iInf_span_singleton
-  结论: {ι : 类型} [Fintype ι] {I : ι -> R}
+  结论: {ι : 类型} [有限类型 ι] {I : ι -> R}
   证明: by
   rw [← Finset.inf_univ_eq_iInf]; rw [finset_inf_span_singleton]
   rwa [Finset.coe_univ, Set.pairwise_univ]
@@ -2647,7 +2647,7 @@ theorem iInf_span_singleton_natCast
 
 中文:
 定理 iInf_span_singleton_natCast
-  结论: {R : 类型} [CommRing R] {ι : 类型} [Fintype ι]
+  结论: {R : 类型} [交换环 R] {ι : 类型} [有限类型 ι]
   证明: by
   rw [iInf_span_singleton]; rw [Nat.cast_prod]
   exact fun i j h => (hI h).cast
@@ -2678,7 +2678,7 @@ theorem sup_eq_top_iff_isCoprime
 
 中文:
 定理 sup_eq_top_iff_isCoprime
-  条件: {R : 类型} [CommSemiring R] (x y : R)
+  条件: {R : 类型} [交换半环 R] (x y : R)
   证明: by
   rw [eq_top_iff_one]; rw [Submodule.mem_sup]
   constructor
@@ -2719,8 +2719,8 @@ theorem multiset_prod_le_inf
 
 中文:
 定理 multiset_prod_le_inf
-  条件: {s : Multiset (Ideal R)}
-  结论: s.prod <= s.inf
+  条件: {s : Multiset (理想 R)}
+  结论: s.乘积 <= s.下确界
   证明: by
   refine s.induction_on ?_ ?_
   · rw [Multiset.inf_zero]
@@ -2750,8 +2750,8 @@ theorem prod_le_inf
 
 中文:
 定理 prod_le_inf
-  条件: {s : Finset ι} {f : ι -> Ideal R}
-  结论: s.prod f <= s.inf f
+  条件: {s : 有限集 ι} {f : ι -> 理想 R}
+  结论: s.乘积 f <= s.下确界 f
   证明: multiset_prod_le_inf
 
 Depends on / 依赖: multiset_prod_le_inf
@@ -2803,7 +2803,7 @@ theorem sup_prod_eq_top
 
 中文:
 定理 sup_prod_eq_top
-  条件: {s : Finset ι} {J : ι -> Ideal R} (h : 对任意 i, i in s -> I ⊔ J i = ⊤)
+  条件: {s : 有限集 ι} {J : ι -> 理想 R} (h : 对任意 i, i in s -> I ⊔ J i = ⊤)
   证明: Finset.prod_induction _ (fun J => I ⊔ J = ⊤)
     (fun _ _ hJ hK => (sup_mul_eq_of_coprime_left hJ).trans hK)
     (by simp_rw [one_eq_top, sup_top_eq]) h
@@ -2827,7 +2827,7 @@ theorem sup_multiset_prod_eq_top
 
 中文:
 定理 sup_multiset_prod_eq_top
-  条件: {s : Multiset (Ideal R)} (h : 对任意 p in s, I ⊔ p = ⊤)
+  条件: {s : Multiset (理想 R)} (h : 对任意 p in s, I ⊔ p = ⊤)
   证明: Multiset.prod_induction (I ⊔ · = ⊤) s (fun _ _ hp hq => (sup_mul_eq_of_coprime_left hp).trans hq)
     (by simp only [one_eq_top, le_top, sup_of_le_right]) h
 
@@ -2848,7 +2848,7 @@ theorem prod_sup_eq_top
 
 中文:
 定理 prod_sup_eq_top
-  条件: {s : Finset ι} {J : ι -> Ideal R} (h : 对任意 i, i in s -> J i ⊔ I = ⊤)
+  条件: {s : 有限集 ι} {J : ι -> 理想 R} (h : 对任意 i, i in s -> J i ⊔ I = ⊤)
   证明: by rw [sup_comm, sup_prod_eq_top]; intro i hi; rw [sup_comm, h i hi]
 
 Depends on / 依赖: sup_comm, sup_prod_eq_top
@@ -2868,7 +2868,7 @@ lemma multiset_prod_eq_bot
 
 中文:
 引理 multiset_prod_eq_bot
-  条件: {R : 类型} [CommSemiring R] [IsDomain R] {s : Multiset (Ideal R)}
+  条件: {R : 类型} [交换半环 R] [是整环 R] {s : Multiset (理想 R)}
   证明: Multiset.prod_eq_zero_iff
 
 Depends on / 依赖: Multiset, Multiset.prod_eq_zero_iff, prod_eq_zero_iff
@@ -2938,7 +2938,7 @@ theorem isCoprime_of_isMaximal
 
 中文:
 定理 isCoprime_of_isMaximal
-  条件: [I.IsMaximal] [J.IsMaximal] (ne : I != J)
+  条件: [I.是极大] [J.是极大] (ne : I != J)
   结论: IsCoprime I J
   证明: by
   rw [isCoprime_iff_codisjoint]; rw [isMaximal_def] at *
@@ -2980,7 +2980,7 @@ theorem isCoprime_iff_exists
   rw [← add_eq_one_iff]; rw [isCoprime_iff_add]
 
 中文:
-定理 isCoprime_iff_exists
+定理 isCoprime_iff_存在
   结论: IsCoprime I J ↔ 存在 i in I, 存在 j in J, i + j = 1
   证明: by
   rw [← add_eq_one_iff]; rw [isCoprime_iff_add]
@@ -3024,7 +3024,7 @@ theorem coprime_of_no_prime_ge
 
 中文:
 定理 coprime_of_no_prime_ge
-  条件: {I J : Ideal R} (h : 对任意 P, I <= P -> J <= P -> ¬IsPrime P)
+  条件: {I J : 理想 R} (h : 对任意 P, I <= P -> J <= P -> ¬是素 P)
   证明: by
   rw [isCoprime_iff_sup_eq]
   by_contra hIJ
@@ -3114,7 +3114,7 @@ theorem _root_.IsCoprime.exists
   proof: isCoprime_iff_exists.mp h
 
 中文:
-定理 _root_.IsCoprime.exists
+定理 _root_.IsCoprime.存在
   条件: (h : IsCoprime I J)
   结论: 存在 i in I, 存在 j in J, i + j = 1
   证明: isCoprime_iff_exists.mp h
@@ -3189,7 +3189,7 @@ theorem isCoprime_biInf
 
 中文:
 定理 isCoprime_biInf
-  结论: {J : ι -> Ideal R} {s : Finset ι}
+  结论: {J : ι -> 理想 R} {s : 有限集 ι}
   证明: by
   simp only [isCoprime_iff_add, one_eq_top] at hf ⊢
   exact sup_iInf_eq_top hf
@@ -3266,7 +3266,7 @@ theorem prod_eq_iInf_of_pairwise_isCoprime
 
 中文:
 定理 prod_eq_iInf_of_pairwise_isCoprime
-  结论: {s : Finset ι} {J : ι -> Ideal R}
+  结论: {s : 有限集 ι} {J : ι -> 理想 R}
   证明: by
   classical
   induction s using Finset.induction with
@@ -3305,7 +3305,7 @@ definition radical
 
 中文:
 定义 radical
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: { r | exists n : Nat, r ^ n in I }
   zero_mem' := ⟨1, (pow_one (0 : R)).symm ▸ I.zero_mem⟩
   add_mem' := fun {_ _} ⟨m, hxmi⟩ ⟨n, hyni⟩ =>
@@ -3348,7 +3348,7 @@ definition IsRadical
 
 中文:
 定义 IsRadical
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: I.radical <= I
 
 Depends on / 依赖: I.radical, radical
@@ -3433,7 +3433,7 @@ theorem radical_top
 
 中文:
 定理 radical_top
-  结论: (radical ⊤ : Ideal R) = ⊤
+  结论: (radical ⊤ : 理想 R) = ⊤
   证明: (eq_top_iff_one _).2 ⟨0, Submodule.mem_top⟩
 
 Depends on / 依赖: Submodule, Submodule.mem_top, eq_top_iff_one, mem_top
@@ -3587,8 +3587,8 @@ theorem IsPrime.isRadical
   H.mem_of_pow_mem n hrni
 
 中文:
-定理 IsPrime.isRadical
-  条件: (H : IsPrime I)
+定理 是素.isRadical
+  条件: (H : 是素 I)
   结论: I.IsRadical
   证明: fun _ ⟨n, hrni⟩ =>
   H.mem_of_pow_mem n hrni
@@ -3606,8 +3606,8 @@ theorem IsPrime.radical
   proof: IsRadical.radical H.isRadical
 
 中文:
-定理 IsPrime.radical
-  条件: (H : IsPrime I)
+定理 是素.radical
+  条件: (H : 是素 I)
   结论: radical I = I
   证明: IsRadical.radical H.isRadical
 
@@ -3626,7 +3626,7 @@ theorem mem_radical_of_pow_mem
 
 中文:
 定理 mem_radical_of_pow_mem
-  条件: {I : Ideal R} {x : R} {m : 自然数} (hx : x ^ m in radical I)
+  条件: {I : 理想 R} {x : R} {m : 自然数} (hx : x ^ m in radical I)
   证明: radical_idem I ▸ ⟨m, hx⟩
 
 Depends on / 依赖: radical_idem
@@ -3675,7 +3675,7 @@ theorem disjoint_powers_iff_notMem_of_isPrime
 
 中文:
 定理 disjoint_powers_iff_notMem_of_isPrime
-  条件: [I.IsPrime] (y : R)
+  条件: [I.是素] (y : R)
   证明: disjoint_powers_iff_notMem y (IsPrime.isRadical ‹_›)
 
 Depends on / 依赖: IsPrime, IsPrime.isRadical, disjoint_powers_iff_notMem, isRadical
@@ -3746,7 +3746,7 @@ theorem IsRadical.inf
   rw [IsRadical]; rw [radical_inf]; exact inf_le_inf hI hJ
 
 中文:
-定理 IsRadical.inf
+定理 IsRadical.下确界
   条件: (hI : IsRadical I) (hJ : IsRadical J)
   结论: IsRadical (I ⊓ J)
   证明: by
@@ -3769,7 +3769,7 @@ lemma isRadical_bot_iff
 
 中文:
 引理 isRadical_bot_iff
-  结论: (⊥ : Ideal R).IsRadical ↔ IsReduced R
+  结论: (⊥ : 理想 R).IsRadical ↔ 是既约 R
   证明: by
   simp only [IsRadical, SetLike.le_def, Ideal.mem_radical_iff, Ideal.mem_bot,
     forall_exists_index, isReduced_iff, IsNilpotent]
@@ -3791,8 +3791,8 @@ lemma isRadical_bot
 
 中文:
 引理 isRadical_bot
-  条件: [IsReduced R]
-  结论: (⊥ : Ideal R).IsRadical
+  条件: [是既约 R]
+  结论: (⊥ : 理想 R).IsRadical
   证明: by rwa [isRadical_bot_iff]
 
 Depends on / 依赖: isRadical_bot_iff
@@ -3813,7 +3813,7 @@ definition radicalInfTopHom
 
 中文:
 定义 radicalInfTopHom
-  签名: : InfTopHom (Ideal R) (Ideal R) where
+  签名: : InfTop态射 (理想 R) (理想 R) where
   定义体: radical
   map_inf' := radical_inf
   map_top' := radical_top _
@@ -3839,7 +3839,7 @@ lemma radicalInfTopHom_apply
 
 中文:
 引理 radicalInfTopHom_apply
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   结论: radicalInfTopHom I = radical I
   证明: rfl
 -/
@@ -3858,7 +3858,7 @@ lemma radical_finset_inf
 
 中文:
 引理 radical_finset_inf
-  结论: {ι} {s : Finset ι} {f : ι -> Ideal R} {i : ι} (hi : i in s)
+  结论: {ι} {s : 有限集 ι} {f : ι -> 理想 R} {i : ι} (hi : i in s)
   证明: by
   rw [← radicalInfTopHom_apply]; rw [map_finset_inf]; rw [← Finset.inf'_eq_inf ⟨_]; rw [hi⟩]
   exact Finset.inf'_eq_of_forall _ _ hs
@@ -3882,7 +3882,7 @@ theorem radical_iInf_le
 
 中文:
 定理 radical_iInf_le
-  条件: {ι} (I : ι -> Ideal R)
+  条件: {ι} (I : ι -> 理想 R)
   结论: radical (⨅ i, I i) <= ⨅ i, radical (I i)
   证明: le_iInf fun _ => radical_mono (iInf_le _ _)
 
@@ -3902,7 +3902,7 @@ theorem isRadical_iInf
 
 中文:
 定理 isRadical_iInf
-  条件: {ι} (I : ι -> Ideal R) (hI : 对任意 i, IsRadical (I i))
+  条件: {ι} (I : ι -> 理想 R) (hI : 对任意 i, IsRadical (I i))
   结论: IsRadical (⨅ i, I i)
   证明: (radical_iInf_le I).trans (iInf_mono hI)
 
@@ -3955,8 +3955,8 @@ theorem IsPrime.radical_le_iff
   proof: IsRadical.radical_le_iff hJ.isRadical
 
 中文:
-定理 IsPrime.radical_le_iff
-  条件: (hJ : IsPrime J)
+定理 是素.radical_le_iff
+  条件: (hJ : 是素 J)
   结论: I.radical <= J ↔ I <= J
   证明: IsRadical.radical_le_iff hJ.isRadical
 
@@ -3982,8 +3982,8 @@ theorem radical_eq_sInf
 
 中文:
 定理 radical_eq_sInf
-  条件: (I : Ideal R)
-  结论: radical I = sInf { J : Ideal R | I <= J ∧ IsPrime J }
+  条件: (I : 理想 R)
+  结论: radical I = sInf { J : 理想 R | I <= J ∧ 是素 J }
   证明: le_antisymm (le_sInf fun _ hJ => hJ.2.radical_le_iff.2 hJ.1) fun r hr =>
     by_contradiction fun hri =>
       let ⟨m, hIm, hm⟩ :=
@@ -4042,7 +4042,7 @@ theorem isRadical_bot_of_noZeroDivisors
 
 中文:
 定理 isRadical_bot_of_noZeroDivisors
-  条件: {R} [CommSemiring R] [NoZeroDivisors R]
+  条件: {R} [交换半环 R] [无零因子 R]
   证明: isRadical_bot
 
 @[simp]
@@ -4066,7 +4066,7 @@ alias radical_bot_of_noZeroDivisors := radical_bot_of_isReduced
 
 中文:
 定理 radical_bot_of_isReduced
-  条件: {R : 类型u} [CommSemiring R] [IsReduced R]
+  条件: {R : 类型u} [交换半环 R] [是既约 R]
   证明: eq_bot_iff.2 isRadical_bot
 
 @[deprecated (since := "2026-08-03")]
@@ -4091,7 +4091,7 @@ instance :
 
 中文:
 实例 :
-  签名: IdemCommSemiring (Ideal R)
+  签名: IdemCommSemiring (理想 R)
   定义体: inferInstance
 -/
 instance : IdemCommSemiring (Ideal R) :=
@@ -4126,8 +4126,8 @@ theorem IsPrime.mul_le
   simp_rw [hp.mul_mem_iff_mem_or_mem, SetLike.le_def, ← forall_or_left, or_comm, forall_or_left]
 
 中文:
-定理 IsPrime.mul_le
-  条件: {I J P : Ideal R} (hp : IsPrime P)
+定理 是素.mul_le
+  条件: {I J P : 理想 R} (hp : 是素 P)
   结论: I * J <= P ↔ I <= P ∨ J <= P
   证明: by
   rw [or_comm]; rw [Ideal.mul_le]
@@ -4149,8 +4149,8 @@ theorem IsPrime.inf_le
   proof: ⟨fun h => hp.mul_le.1 mul_le_inf.trans h, fun h => h.elim inf_le_left.trans inf_le_right.trans⟩
 
 中文:
-定理 IsPrime.inf_le
-  条件: {I J P : Ideal R} (hp : IsPrime P)
+定理 是素.inf_le
+  条件: {I J P : 理想 R} (hp : 是素 P)
   结论: I ⊓ J <= P ↔ I <= P ∨ J <= P
   证明: ⟨fun h => hp.mul_le.1 mul_le_inf.trans h, fun h => h.elim inf_le_left.trans inf_le_right.trans⟩
 
@@ -4168,8 +4168,8 @@ theorem IsPrime.multiset_prod_le
   proof: s.induction_on (by simp [hp.ne_top]) fun I s ih => by simp [hp.mul_le, ih]
 
 中文:
-定理 IsPrime.multiset_prod_le
-  条件: {s : Multiset (Ideal R)} {P : Ideal R} (hp : IsPrime P)
+定理 是素.multiset_prod_le
+  条件: {s : Multiset (理想 R)} {P : 理想 R} (hp : 是素 P)
   证明: s.induction_on (by simp [hp.ne_top]) fun I s ih => by simp [hp.mul_le, ih]
 
 Depends on / 依赖: hp.mul_le, hp.ne_top, induction_on, mul_le, ne_top, s.induction_on
@@ -4188,8 +4188,8 @@ theorem IsPrime.multiset_prod_map_le
   simp_rw [hp.multiset_prod_le, Multiset.mem_map, exists_exists_and_eq_and]
 
 中文:
-定理 IsPrime.multiset_prod_map_le
-  结论: {s : Multiset ι} (f : ι -> Ideal R) {P : Ideal R}
+定理 是素.multiset_prod_map_le
+  结论: {s : Multiset ι} (f : ι -> 理想 R) {P : 理想 R}
   证明: by
   simp_rw [hp.multiset_prod_le, Multiset.mem_map, exists_exists_and_eq_and]
 
@@ -4209,8 +4209,8 @@ theorem IsPrime.multiset_prod_mem_iff_exists_mem
   simpa using (hI.multiset_prod_map_le (span {·}))
 
 中文:
-定理 IsPrime.multiset_prod_mem_iff_exists_mem
-  条件: {I : Ideal R} (hI : I.IsPrime) (s : Multiset R)
+定理 是素.multiset_prod_mem_iff_存在_mem
+  条件: {I : 理想 R} (hI : I.是素) (s : Multiset R)
   证明: by
   simpa using (hI.multiset_prod_map_le (span {·}))
 
@@ -4233,8 +4233,8 @@ theorem IsPrime.pow_le_iff
   exact h
 
 中文:
-定理 IsPrime.pow_le_iff
-  条件: {I P : Ideal R} [hP : P.IsPrime] {n : 自然数} (hn : n != 0)
+定理 是素.pow_le_iff
+  条件: {I P : 理想 R} [hP : P.是素] {n : 自然数} (hn : n != 0)
   证明: by
   have h : (Multiset.replicate n I).prod <= P ↔ _ := hP.multiset_prod_le
   simp_rw [Multiset.prod_replicate, Multiset.mem_replicate, ne_eq, hn, not_false_eq_true,
@@ -4263,8 +4263,8 @@ theorem IsPrime.le_of_pow_le
   · exact (pow_le_iff hn).mp h
 
 中文:
-定理 IsPrime.le_of_pow_le
-  条件: {I P : Ideal R} [hP : P.IsPrime] {n : 自然数} (h : I ^ n <= P)
+定理 是素.le_of_pow_le
+  条件: {I P : 理想 R} [hP : P.是素] {n : 自然数} (h : I ^ n <= P)
   证明: by
   by_cases hn : n = 0
   · rw [hn, pow_zero, one_eq_top] at h
@@ -4289,8 +4289,8 @@ theorem IsPrime.prod_le
   proof: hp.multiset_prod_map_le f
 
 中文:
-定理 IsPrime.prod_le
-  条件: {s : Finset ι} {f : ι -> Ideal R} {P : Ideal R} (hp : IsPrime P)
+定理 是素.prod_le
+  条件: {s : 有限集 ι} {f : ι -> 理想 R} {P : 理想 R} (hp : 是素 P)
   证明: hp.multiset_prod_map_le f
 
 Depends on / 依赖: hp.multiset_prod_map_le, multiset_prod_map_le
@@ -4310,8 +4310,8 @@ theorem IsPrime.prod_mem_iff
   exact hp.prod_le
 
 中文:
-定理 IsPrime.prod_mem_iff
-  条件: {s : Finset ι} {x : ι -> R} {p : Ideal R} [hp : p.IsPrime]
+定理 是素.prod_mem_iff
+  条件: {s : 有限集 ι} {x : ι -> R} {p : 理想 R} [hp : p.是素]
   证明: by
   simp_rw [← span_singleton_le_iff_mem, ← prod_span_singleton]
   exact hp.prod_le
@@ -4334,8 +4334,8 @@ theorem IsPrime.prod_mem_iff_exists_mem
   exact hI.multiset_prod_mem_iff_exists_mem s.val
 
 中文:
-定理 IsPrime.prod_mem_iff_exists_mem
-  条件: {I : Ideal R} (hI : I.IsPrime) (s : Finset R)
+定理 是素.prod_mem_iff_存在_mem
+  条件: {I : 理想 R} (hI : I.是素) (s : 有限集 R)
   证明: by
   rw [Finset.prod_eq_multiset_prod]; rw [Multiset.map_id']
   exact hI.multiset_prod_mem_iff_exists_mem s.val
@@ -4356,8 +4356,8 @@ theorem IsPrime.inf_le'
   proof: ⟨fun h => hp.prod_le.1 prod_le_inf.trans h, fun ⟨_, his, hip⟩ => (Finset.inf_le his).trans hip⟩
 
 中文:
-定理 IsPrime.inf_le'
-  条件: {s : Finset ι} {f : ι -> Ideal R} {P : Ideal R} (hp : IsPrime P)
+定理 是素.inf_le'
+  条件: {s : 有限集 ι} {f : ι -> 理想 R} {P : 理想 R} (hp : 是素 P)
   证明: ⟨fun h => hp.prod_le.1 prod_le_inf.trans h, fun ⟨_, his, hip⟩ => (Finset.inf_le his).trans hip⟩
 
 Depends on / 依赖: Finset, Finset.inf_le, hp.prod_le, inf_le, prod_le, prod_le_inf, prod_le_inf.trans
@@ -4376,7 +4376,7 @@ theorem eq_inf_of_isPrime_inf
 
 中文:
 定理 eq_inf_of_isPrime_inf
-  条件: {s : Finset ι} {f : ι -> Ideal R} (hp : IsPrime (s.inf f))
+  条件: {s : 有限集 ι} {f : ι -> 理想 R} (hp : 是素 (s.下确界 f))
   证明: (hp.inf_le'.mp le_rfl).imp (fun _ ⟨h1, h2⟩ => ⟨h1, le_antisymm h2 (Finset.inf_le h1)⟩)
 
 Depends on / 依赖: Finset, Finset.inf_le, hp.inf_le, inf_le, le_antisymm, le_rfl
@@ -4396,8 +4396,8 @@ theorem IsPrime.notMem_of_isCoprime_of_mem
   Ideal.IsPrime.one_notMem ‹_› (e ▸ I.add_mem (I.mul_mem_left a hx) (I.mul_mem_left b hy))
 
 中文:
-定理 IsPrime.notMem_of_isCoprime_of_mem
-  结论: {I : Ideal R} [I.IsPrime] {x y : R} (h : IsCoprime x y)
+定理 是素.notMem_of_isCoprime_of_mem
+  结论: {I : 理想 R} [I.是素] {x y : R} (h : IsCoprime x y)
   证明: fun hy =>
   have ⟨a, b, e⟩ := h
   Ideal.IsPrime.one_notMem ‹_› (e ▸ I.add_mem (I.mul_mem_left a hx) (I.mul_mem_left b hy))
@@ -4417,7 +4417,7 @@ theorem subset_union
 
 中文:
 定理 subset_union
-  条件: {R : 类型u} [Ring R] {I J K : Ideal R}
+  条件: {R : 类型u} [环 R] {I J K : 理想 R}
   证明: AddSubgroupClass.subset_union
 
 Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.subset_union, subset_union
@@ -4444,7 +4444,7 @@ Set.Subset.trans h
 
 中文:
 定理 subset_union_prime'
-  结论: {R : 类型u} [CommRing R] {s : Finset ι} {f : ι -> Ideal R} {a b : ι}
+  结论: {R : 类型u} [交换环 R] {s : 有限集 ι} {f : ι -> 理想 R} {a b : ι}
   证明: by
   suffices
     ((I : Set R) subseteq f a union f b union ⋃ i in (↑s : Set ι), f i) -> I <= f a ∨ I <= f b ∨ exists i in s, I <= f i from
@@ -4572,7 +4572,7 @@ theorem subset_union_prime
 
 中文:
 定理 subset_union_prime
-  结论: {R : 类型u} [CommRing R] {s : Finset ι} {f : ι -> Ideal R} (a b : ι)
+  结论: {R : 类型u} [交换环 R] {s : 有限集 ι} {f : ι -> 理想 R} (a b : ι)
   证明: suffices ((I : Set R) subseteq ⋃ i in (↑s : Set ι), f i) -> exists i, i in s ∧ I <= f i by
     have aux := fun h => (bex_def.2 <| this h)
     simp_rw [exists_prop] at aux
@@ -4648,7 +4648,7 @@ lemma subset_union_prime_finite
 
 中文:
 引理 subset_union_prime_finite
-  结论: {R ι : 类型} [CommRing R] {s : Set ι}
+  结论: {R ι : 类型} [交换环 R] {s : 集合 ι}
   证明: by
   rcases Set.Finite.exists_finset hs with ⟨t, ht⟩
   have heq : ⋃ i in s, f i = ⋃ i in t, (f i : Set R) := by
@@ -4722,8 +4722,8 @@ theorem IsMaximal.exists_inv_pow
       
 
 中文:
-定理 IsMaximal.exists_inv_pow
-  结论: (I : Ideal R) [I.IsMaximal]
+定理 是极大.存在_inv_pow
+  结论: (I : 理想 R) [I.是极大]
   证明: by
   obtain ⟨y, i, hmem, hi⟩ := Ideal.IsMaximal.exists_inv ‹_› hx
   obtain ⟨y, hy⟩ : exists y : R, y * x + i ^ n = 1 := by
@@ -4768,8 +4768,8 @@ theorem IsMaximal.mul_mem_pow
   exact add_mem (mul_mem_left _ _ h) (mul_mem_right _ _ hi)
 
 中文:
-定理 IsMaximal.mul_mem_pow
-  结论: (I : Ideal R) [I.IsMaximal]
+定理 是极大.mul_mem_pow
+  结论: (I : 理想 R) [I.是极大]
   证明: by
   rw [Classical.or_iff_not_imp_left]
   intro ha
@@ -4803,8 +4803,8 @@ theorem IsMaximal.mem_pow_mul
   exact mul_mem_pow _ h
 
 中文:
-定理 IsMaximal.mem_pow_mul
-  结论: {R : 类型} [CommSemiring R] (I : Ideal R) [I.IsMaximal]
+定理 是极大.mem_pow_mul
+  结论: {R : 类型} [交换半环 R] (I : 理想 R) [I.是极大]
   证明: by
   rw [mul_comm] at h
   rw [or_comm]
@@ -4830,7 +4830,7 @@ theorem le_of_dvd
 
 中文:
 定理 le_of_dvd
-  条件: {I J : Ideal R}
+  条件: {I J : 理想 R}
   结论: I ∣ J -> J <= I
 -/
 theorem le_of_dvd {I J : Ideal R} : I ∣ J -> J <= I
@@ -4848,7 +4848,7 @@ theorem dvd_bot
 
 中文:
 定理 dvd_bot
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   结论: I ∣ ⊥
   证明: dvd_zero I
 
@@ -4872,8 +4872,8 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  条件: {I : Ideal R}
-  结论: IsUnit I ↔ I = ⊤
+  条件: {I : 理想 R}
+  结论: 是单位 I ↔ I = ⊤
   证明: isUnit_iff_dvd_one.trans
     ((@one_eq_top R _).symm ▸
       ⟨fun h => eq_top_iff.mpr (Ideal.le_of_dvd h), fun h => ⟨⊤, by rw [mul_top, h]⟩⟩)
@@ -4896,7 +4896,7 @@ instance uniqueUnits
 
 中文:
 实例 uniqueUnits
-  签名: : Unique (Ideal R)ˣ where
+  签名: : 唯一 (理想 R)ˣ where
   定义体: 1
   uniq u := Units.ext (show (u : Ideal R) = 1 by rw [isUnit_iff.mp u.isUnit, one_eq_top])
 -/
@@ -4977,7 +4977,7 @@ theorem finsuppTotal_apply_eq_of_fintype
 
 中文:
 定理 finsuppTotal_apply_eq_of_fintype
-  条件: [Fintype ι] (f : ι ->₀ I)
+  条件: [有限类型 ι] (f : ι ->₀ I)
   证明: by
   rw [finsuppTotal_apply]; rw [Finsupp.sum_fintype]
   exact fun _ => zero_smul _ _
@@ -5064,7 +5064,7 @@ theorem Finsupp.mem_ideal_span_range_iff_exists_finsupp
   proof: Finsupp.mem_span_range_iff_exists_finsupp
 
 中文:
-定理 Finsupp.mem_ideal_span_range_iff_exists_finsupp
+定理 有限支撑.mem_ideal_span_range_iff_存在_finsupp
   条件: {x : R} {v : α -> R}
   证明: Finsupp.mem_span_range_iff_exists_finsupp
 
@@ -5083,8 +5083,8 @@ theorem Ideal.mem_span_range_iff_exists_fun
   proof: Submodule.mem_span_range_iff_exists_fun _
 
 中文:
-定理 Ideal.mem_span_range_iff_exists_fun
-  条件: [Fintype α] {x : R} {v : α -> R}
+定理 理想.mem_span_range_iff_存在_fun
+  条件: [有限类型 α] {x : R} {v : α -> R}
   证明: Submodule.mem_span_range_iff_exists_fun _
 
 Depends on / 依赖: Submodule, Submodule.mem_span_range_iff_exists_fun, mem_span_range_iff_exists_fun
@@ -5106,7 +5106,7 @@ theorem Associates.mk_ne_zero'
 
 中文:
 定理 Associates.mk_ne_zero'
-  条件: {R : 类型} [CommSemiring R] {r : R}
+  条件: {R : 类型} [交换半环 R] {r : R}
   证明: by
   rw [Associates.mk_ne_zero]; rw [Ideal.zero_eq_bot]; rw [Ne]; rw [Ideal.span_singleton_eq_bot]
 
@@ -5131,8 +5131,8 @@ theorem Ideal.span_singleton_nonZeroDivisors
       span_singleton_eq_b
 
 中文:
-定理 Ideal.span_singleton_nonZeroDivisors
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R]
+定理 理想.span_singleton_nonZeroDivisors
+  结论: {R : 类型} [交换半环 R] [无零因子 R]
   证明: by
   cases subsingleton_or_nontrivial R
   · simp_rw [← nonZeroDivisorsRight_eq_nonZeroDivisors]
@@ -5159,8 +5159,8 @@ theorem Ideal.primeCompl_le_nonZeroDivisors
   proof: le_nonZeroDivisors_of_noZeroDivisors not_not_intro P.zero_mem
 
 中文:
-定理 Ideal.primeCompl_le_nonZeroDivisors
-  结论: {R : 类型} [CommSemiring R] [NoZeroDivisors R]
+定理 理想.primeCompl_le_nonZeroDivisors
+  结论: {R : 类型} [交换半环 R] [无零因子 R]
   证明: le_nonZeroDivisors_of_noZeroDivisors not_not_intro P.zero_mem
 
 Depends on / 依赖: P.zero_mem, le_nonZeroDivisors_of_noZeroDivisors, not_not_intro, zero_mem
@@ -5192,7 +5192,7 @@ instance moduleSubmodule
 
 中文:
 实例 moduleSubmodule
-  签名: : Module (Ideal R) (Submodule R M) where
+  签名: : 模 (理想 R) (子模 R M) where
   定义体: smul_sup
   add_smul := sup_smul
   mul_smul := Submodule.mul_smul
@@ -5245,7 +5245,7 @@ theorem set_smul_top_eq_span
 
 中文:
 定理 set_smul_top_eq_span
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: (span_smul_eq s ⊤).symm.trans (Ideal.span s).mul_top
 
 Depends on / 依赖: Ideal.span, mul_top, span_smul_eq, symm.trans
@@ -5266,8 +5266,8 @@ lemma smul_le_span
 
 中文:
 引理 smul_le_span
-  条件: (s : Set R) (I : Ideal R)
-  结论: s • I <= Ideal.span s
+  条件: (s : 集合 R) (I : 理想 R)
+  结论: s • I <= 理想.span s
   证明: by
   simp [← Submodule.set_smul_top_eq_span, smul_le_smul_left]
 
@@ -5296,7 +5296,7 @@ instance algebraIdeal
 
 中文:
 实例 algebraIdeal
-  签名: : Algebra (Ideal R) (Submodule R A) where
+  签名: : 代数 (理想 R) (子模 R A) where
   定义体: moduleSubmodule
   algebraMap :=
   { toFun := map (Algebra.linearMap R A)
@@ -5388,7 +5388,7 @@ lemma smul_top_le_comap_smul_top
 
 中文:
 引理 smul_top_le_comap_smul_top
-  结论: [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N]
+  结论: [加法交换幺半群 M] [加法交换幺半群 N] [模 R M] [模 R N]
   证明: map_le_iff_le_comap.mp le_of_eq_of_le (map_smul'' _ _ _)
     smul_mono_right _ le_top
 
@@ -5410,7 +5410,7 @@ lemma comap_smul_top_of_surjective
 
 中文:
 引理 comap_smul_top_of_surjective
-  结论: [AddCommGroup M] [AddCommGroup N] [Module R M] [Module R N]
+  结论: [加法交换群 M] [加法交换群 N] [模 R M] [模 R N]
   证明: by
   rw [← Submodule.comap_map_eq f]; rw [Submodule.map_smul'']; rw [map_top]; rw [LinearMap.range_eq_top.mpr h]
 
@@ -5443,8 +5443,8 @@ lemma Ideal.exists_subset_radical_span_sup_of_subset_radical_sup
   refi
 
 中文:
-引理 Ideal.exists_subset_radical_span_sup_of_subset_radical_sup
-  结论: {R : 类型} [CommSemiring R]
+引理 理想.存在_subset_radical_span_sup_of_subset_radical_sup
+  结论: {R : 类型} [交换半环 R]
   证明: by
   replace hs : forall z : s, exists (m : Nat) (a b : R) (ha : a in I) (hb : b in J), a + b = z ^ m := by
     rintro ⟨z, hzs⟩

@@ -31,7 +31,7 @@ theorem lintegral_ofReal_le_lintegral_enorm
   exact le_abs_self (f x)
 
 中文:
-定理 lintegral_ofReal_le_lintegral_enorm
+定理 lintegral_of实数_le_lintegral_enorm
   条件: (f : α -> 实数)
   证明: by
   simp_rw [← ofReal_norm]

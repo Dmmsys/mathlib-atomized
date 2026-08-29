@@ -106,7 +106,7 @@ theorem top
 
 中文:
 定理 top
-  结论: x ≡ y [SMOD (⊤ : Submodule R M)]
+  结论: x ≡ y [SMOD (⊤ : 子模 R M)]
   证明: (Submodule.Quotient.eq ⊤).2 mem_top
 
 @[simp]
@@ -130,7 +130,7 @@ theorem bot
 
 中文:
 定理 bot
-  结论: x ≡ y [SMOD (⊥ : Submodule R M)] ↔ x = y
+  结论: x ≡ y [SMOD (⊥ : 子模 R M)] ↔ x = y
   证明: by
   rw [SModEq.def]; rw [Submodule.Quotient.eq]; rw [mem_bot]; rw [sub_eq_zero]
 
@@ -176,7 +176,7 @@ lemma of_toAddSubgroup_le
 
 中文:
 引理 of_toAddSubgroup_le
-  结论: {U : Submodule R M} {V : Submodule S M}
+  结论: {U : 子模 R M} {V : 子模 S M}
   证明: by
   simp only [SModEq, Submodule.Quotient.eq] at hxy ⊢
   exact h hxy
@@ -349,8 +349,8 @@ theorem sum
 @[gcongr]
 
 中文:
-定理 sum
-  结论: {ι} {s : Finset ι} {x y : ι -> M}
+定理 求和
+  结论: {ι} {s : 有限集 ι} {x y : ι -> M}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp [SModEq.rfl]
@@ -475,7 +475,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: {I : Ideal A} {x₁ x₂ y₁ y₂ : A} (hxy₁ : x₁ ≡ y₁ [SMOD I])
+  结论: {I : 理想 A} {x₁ x₂ y₁ y₂ : A} (hxy₁ : x₁ ≡ y₁ [SMOD I])
   证明: by
   simp only [SModEq.def, Ideal.Quotient.mk_eq_mk, map_mul] at hxy₁ hxy₂ ⊢
   rw [hxy₁]; rw [hxy₂]
@@ -506,8 +506,8 @@ theorem prod
 @[gcongr]
 
 中文:
-定理 prod
-  结论: {I : Ideal A} {ι} {s : Finset ι} {x y : ι -> A}
+定理 乘积
+  结论: {I : 理想 A} {ι} {s : 有限集 ι} {x y : ι -> A}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp [SModEq.rfl]
@@ -542,7 +542,7 @@ lemma pow
 
 中文:
 引理 pow
-  条件: {I : Ideal A} {x y : A} (n : 自然数) (hxy : x ≡ y [SMOD I])
+  条件: {I : 理想 A} {x y : A} (n : 自然数) (hxy : x ≡ y [SMOD I])
   证明: by
   simp only [SModEq.def, Ideal.Quotient.mk_eq_mk, map_pow] at hxy ⊢
   rw [hxy]
@@ -706,7 +706,7 @@ theorem eval
 
 中文:
 定理 eval
-  条件: {R : 类型} [CommRing R] {I : Ideal R} {x y : R} (h : x ≡ y [SMOD I]) (f : R[X])
+  条件: {R : 类型} [交换环 R] {I : 理想 R} {x y : R} (h : x ≡ y [SMOD I]) (f : R[X])
   证明: by
   simp_rw [Polynomial.eval_eq_sum, Polynomial.sum]
   gcongr
@@ -730,7 +730,7 @@ theorem restrictScalars
 
 中文:
 定理 restrictScalars
-  条件: [SMul S R] [IsScalarTower S R M]
+  条件: [标量乘法 S R] [标量塔 S R M]
   结论: x ≡ y [SMOD U.restrictScalars S] ↔
   证明: by simp [SModEq.sub_mem]
 
@@ -749,7 +749,7 @@ theorem idealQuotientMk
 
 中文:
 定理 idealQuotientMk
-  条件: {R : 类型} [CommRing R] {I : Ideal R} {x y : R}
+  条件: {R : 类型} [交换环 R] {I : 理想 R} {x y : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -776,7 +776,7 @@ theorem _root_.Submodule.vadd_set_subset_vadd_set_iff
     intro
 
 中文:
-定理 _root_.Submodule.vadd_set_subset_vadd_set_iff
+定理 _root_.子模.vadd_set_subset_vadd_set_iff
   证明: by
   rw [SModEq.sub_mem]
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -808,7 +808,7 @@ theorem _root_.Submodule.vadd_set_eq_vadd_set_iff
       (Submodule.vadd_set_subset_vadd_set_iff.mpr h.symm)⟩
 
 中文:
-定理 _root_.Submodule.vadd_set_eq_vadd_set_iff
+定理 _root_.子模.vadd_set_eq_vadd_set_iff
   证明: ⟨fun h => Submodule.vadd_set_subset_vadd_set_iff.mp h.subset,
     fun h => Set.Subset.antisymm (Submodule.vadd_set_subset_vadd_set_iff.mpr h)
       (Submodule.vadd_set_subset_vadd_set_iff.mpr h.symm)⟩

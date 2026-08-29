@@ -38,7 +38,7 @@ definition MethodsRef
 
 中文:
 定义 MethodsRef
-  签名: : Type
+  签名: : 类型
   定义体: MethodsRefPointed.type
 -/
 private def MethodsRef : Type := MethodsRefPointed.type
@@ -161,7 +161,7 @@ structure State
     - levels : Alloc Level  [默认: ⟨(∅ : Std.HashMap Level Nat).insert .zero 0, 1⟩]
     - exprs : Alloc Expr
     - defs : Std.HashSet Name
-    - stk : Array (布尔 × Entry)
+    - stk : 数组 (布尔值 × Entry)
 
 Depends on / 依赖: HashMap, Name.anonymous, Std.HashMap, anonymous, insert
 -/
@@ -185,7 +185,7 @@ class OfState
 
 中文:
 类 OfState
-  参数: (α : Type) [BEq α] [Hashable α]
+  参数: (α : 类型) [BEq α] [Hashable α]
   公理与运算 (2 个):
     - get : State -> Alloc α
     - modify : (Alloc α -> Alloc α) -> State -> State
@@ -553,7 +553,7 @@ definition runExportM
 
 中文:
 定义 runExportM
-  签名: {α : Type} (m : ExportM α)
+  签名: {α : 类型} (m : ExportM α)
   定义体: m.run' default
 
 Depends on / 依赖: m.run

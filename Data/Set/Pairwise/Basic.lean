@@ -53,7 +53,7 @@ theorem pairwise_on_bool
 中文:
 定理 pairwise_on_bool
   条件: [Std.Symm r] {a b : α}
-  结论: Pairwise (r on fun c => cond c a b) ↔ r a b
+  结论: 两两 (r on fun c => cond c a b) ↔ r a b
   证明: by
   simpa [Pairwise, Function.onFun] using symm
 
@@ -72,7 +72,7 @@ theorem pairwise_disjoint_on_bool
 
 中文:
 定理 pairwise_disjoint_on_bool
-  条件: [PartialOrder α] [OrderBot α] {a b : α}
+  条件: [偏序 α] [有底序 α] {a b : α}
   证明: pairwise_on_bool
 
 Depends on / 依赖: pairwise_on_bool
@@ -94,7 +94,7 @@ mpr h _m _n hmn := hmn.lt_or_gt.elim (@h _ _) fun h' => symm_of r h h'
 
 中文:
 定理 Std.Symm.pairwise_on
-  条件: [LinearOrder ι] [Std.Symm r] (f : ι -> α)
+  条件: [线性序 ι] [Std.Symm r] (f : ι -> α)
   证明: h hmn.ne
 mpr h _m _n hmn := hmn.lt_or_gt.elim (@h _ _) fun h' => symm_of r h h'
 
@@ -119,7 +119,7 @@ theorem pairwise_disjoint_on
 
 中文:
 定理 pairwise_disjoint_on
-  条件: [PartialOrder α] [OrderBot α] [LinearOrder ι] (f : ι -> α)
+  条件: [偏序 α] [有底序 α] [线性序 ι] (f : ι -> α)
   证明: Std.Symm.pairwise_on f
 
 Depends on / 依赖: Std.Symm.pairwise_on, pairwise_on
@@ -138,7 +138,7 @@ theorem pairwise_disjoint_mono
 
 中文:
 定理 pairwise_disjoint_mono
-  结论: [PartialOrder α] [OrderBot α] (hs : Pairwise (Disjoint on f))
+  结论: [偏序 α] [有底序 α] (hs : 两两 (Disjoint on f))
   证明: hs.mono fun i j hij => Disjoint.mono (h i) (h j) hij
 
 Depends on / 依赖: Disjoint, Disjoint.mono, hs.mono
@@ -162,8 +162,8 @@ theorem Pairwise.disjoint_extend_bot
   · simpa only
 
 中文:
-定理 Pairwise.disjoint_extend_bot
-  结论: [PartialOrder γ] [OrderBot γ]
+定理 两两.disjoint_extend_bot
+  结论: [偏序 γ] [有底序 γ]
   证明: by
   intro b₁ b₂ hne
   rcases em (exists a₁, e a₁ = b₁) with ⟨a₁, rfl⟩ | hb₁
@@ -196,9 +196,9 @@ theorem Pairwise.mono
   proof: fun _x xt _y yt => hs (h xt) (h yt)
 
 中文:
-定理 Pairwise.mono
-  条件: (h : t subseteq s) (hs : s.Pairwise r)
-  结论: t.Pairwise r
+定理 两两.mono
+  条件: (h : t subseteq s) (hs : s.两两 r)
+  结论: t.两两 r
   证明: fun _x xt _y yt => hs (h xt) (h yt)
 -/
 theorem Pairwise.mono (h : t subseteq s) (hs : s.Pairwise r) : t.Pairwise r :=
@@ -214,9 +214,9 @@ theorem Pairwise.mono'
   proof: hr.imp H
 
 中文:
-定理 Pairwise.mono'
-  条件: (H : r <= p) (hr : s.Pairwise r)
-  结论: s.Pairwise p
+定理 两两.mono'
+  条件: (H : r <= p) (hr : s.两两 r)
+  结论: s.两两 p
   证明: hr.imp H
 
 Depends on / 依赖: hr.imp
@@ -234,9 +234,9 @@ theorem Pairwise.inter_left
   proof: hs.mono Set.inter_subset_left
 
 中文:
-定理 Pairwise.inter_left
-  条件: (hs : s.Pairwise r) (t : Set α)
-  结论: (s inter t).Pairwise r
+定理 两两.inter_left
+  条件: (hs : s.两两 r) (t : 集合 α)
+  结论: (s inter t).两两 r
   证明: hs.mono Set.inter_subset_left
 
 Depends on / 依赖: Set.inter_subset_left, hs.mono, inter_subset_left
@@ -254,9 +254,9 @@ theorem Pairwise.inter_right
   proof: hs.mono Set.inter_subset_right
 
 中文:
-定理 Pairwise.inter_right
-  条件: (hs : s.Pairwise r) (t : Set α)
-  结论: (t inter s).Pairwise r
+定理 两两.inter_right
+  条件: (hs : s.两两 r) (t : 集合 α)
+  结论: (t inter s).两两 r
   证明: hs.mono Set.inter_subset_right
 
 Depends on / 依赖: Set.inter_subset_right, hs.mono, inter_subset_right
@@ -275,8 +275,8 @@ theorem pairwise_top
 
 中文:
 定理 pairwise_top
-  条件: (s : Set α)
-  结论: s.Pairwise ⊤
+  条件: (s : 集合 α)
+  结论: s.两两 ⊤
   证明: pairwise_of_forall s _ fun _ _ => trivial
 
 Depends on / 依赖: pairwise_of_forall
@@ -296,9 +296,9 @@ theorem Subsingleton.pairwise
 @[simp]
 
 中文:
-定理 Subsingleton.pairwise
-  条件: (h : s.Subsingleton) (r : α -> α -> 命题)
-  结论: s.Pairwise r
+定理 子单例.pairwise
+  条件: (h : s.子单例) (r : α -> α -> 命题)
+  结论: s.两两 r
   证明: fun _x hx _y hy hne => (hne (h hx hy)).elim
 
 @[simp]
@@ -321,7 +321,7 @@ theorem pairwise_empty
 中文:
 定理 pairwise_empty
   条件: (r : α -> α -> 命题)
-  结论: (∅ : Set α).Pairwise r
+  结论: (∅ : 集合 α).两两 r
   证明: subsingleton_empty.pairwise r
 
 @[simp]
@@ -344,7 +344,7 @@ theorem pairwise_singleton
 中文:
 定理 pairwise_singleton
   条件: (a : α) (r : α -> α -> 命题)
-  结论: Set.Pairwise {a} r
+  结论: 集合.两两 {a} r
   证明: subsingleton_singleton.pairwise r
 
 Depends on / 依赖: pairwise, subsingleton_singleton, subsingleton_singleton.pairwise
@@ -366,7 +366,7 @@ alias ⟨Pairwise.of_refl, _⟩ := pairwise_iff_of_refl
 中文:
 定理 pairwise_iff_of_refl
   条件: [Std.Refl r]
-  结论: s.Pairwise r ↔ 对任意 ⦃a⦄, a in s -> 对任意 ⦃b⦄, b in s -> r a b
+  结论: s.两两 r ↔ 对任意 ⦃a⦄, a in s -> 对任意 ⦃b⦄, b in s -> r a b
   证明: forall₄_congr fun _ _ _ _ => or_iff_not_imp_left.symm.trans or_iff_right_of_imp of_eq
 
 alias ⟨Pairwise.of_refl, _⟩ := pairwise_iff_of_refl
@@ -395,8 +395,8 @@ theorem Nonempty.pairwise_iff_exists_forall
     exact @IsTrans.trans α r _ (f x) z (f y) (hz _ hx) (symm <| hz _ hy)
 
 中文:
-定理 Nonempty.pairwise_iff_exists_forall
-  条件: [IsEquiv α r] {s : Set ι} (hs : s.Nonempty)
+定理 非空.pairwise_iff_存在_对任意
+  条件: [Is等价 α r] {s : 集合 ι} (hs : s.非空)
   证明: by
   constructor
   · rcases hs with ⟨y, hy⟩
@@ -429,8 +429,8 @@ theorem Nonempty.pairwise_eq_iff_exists_eq
   proof: hs.pairwise_iff_exists_forall
 
 中文:
-定理 Nonempty.pairwise_eq_iff_exists_eq
-  条件: {s : Set α} (hs : s.Nonempty) {f : α -> ι}
+定理 非空.pairwise_eq_iff_存在_eq
+  条件: {s : 集合 α} (hs : s.非空) {f : α -> ι}
   证明: hs.pairwise_iff_exists_forall
 
 Depends on / 依赖: X.carrier.str, carrier, hs.pairwise_iff_exists_forall, pairwise_iff_exists_forall
@@ -451,8 +451,8 @@ theorem pairwise_iff_exists_forall
   · exact hne.pairwise_iff_exists_forall
 
 中文:
-定理 pairwise_iff_exists_forall
-  结论: [Nonempty ι] (s : Set α) (f : α -> ι) {r : ι -> ι -> 命题}
+定理 pairwise_iff_存在_对任意
+  结论: [非空 ι] (s : 集合 α) (f : α -> ι) {r : ι -> ι -> 命题}
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hne)
   · simp
@@ -475,8 +475,8 @@ theorem pairwise_eq_iff_exists_eq
   proof: pairwise_iff_exists_forall s f
 
 中文:
-定理 pairwise_eq_iff_exists_eq
-  条件: [Nonempty ι] (s : Set α) (f : α -> ι)
+定理 pairwise_eq_iff_存在_eq
+  条件: [非空 ι] (s : 集合 α) (f : α -> ι)
   证明: pairwise_iff_exists_forall s f
 
 Depends on / 依赖: pairwise_iff_exists_forall
@@ -580,8 +580,8 @@ theorem Pairwise.insert
   proof: pairwise_insert.2 ⟨hs, h⟩
 
 中文:
-定理 Pairwise.insert
-  条件: (hs : s.Pairwise r) (h : 对任意 b in s, a != b -> r a b ∧ r b a)
+定理 两两.insert
+  条件: (hs : s.两两 r) (h : 对任意 b in s, a != b -> r a b ∧ r b a)
   证明: pairwise_insert.2 ⟨hs, h⟩
 -/
 protected theorem Pairwise.insert (hs : s.Pairwise r) (h : forall b in s, a != b -> r a b ∧ r b a) :
@@ -597,8 +597,8 @@ theorem Pairwise.insert_of_notMem
   proof: (pairwise_insert_of_notMem ha).2 ⟨hs, h⟩
 
 中文:
-定理 Pairwise.insert_of_notMem
-  条件: (ha : a ∉ s) (hs : s.Pairwise r) (h : 对任意 b in s, r a b ∧ r b a)
+定理 两两.insert_of_notMem
+  条件: (ha : a ∉ s) (hs : s.两两 r) (h : 对任意 b in s, r a b ∧ r b a)
   证明: (pairwise_insert_of_notMem ha).2 ⟨hs, h⟩
 
 Depends on / 依赖: pairwise_insert_of_notMem
@@ -675,8 +675,8 @@ theorem Pairwise.insert_of_symm
 @[deprecated (since := "2026-06-10")] alias Pairwise.insert_of_symmetric := Pairwise.insert_of_symm
 
 中文:
-定理 Pairwise.insert_of_symm
-  结论: [Std.Symm r] (hs : s.Pairwise r)
+定理 两两.insert_of_symm
+  结论: [Std.Symm r] (hs : s.两两 r)
   证明: pairwise_insert_of_symm.mpr ⟨hs, h⟩
 
 @[deprecated (since := "2026-06-10")] alias Pairwise.insert_of_symmetric := Pairwise.insert_of_symm
@@ -699,7 +699,7 @@ theorem pairwise_pair
 
 中文:
 定理 pairwise_pair
-  结论: Set.Pairwise {a, b} r ↔ a != b -> r a b ∧ r b a
+  结论: 集合.两两 {a, b} r ↔ a != b -> r a b ∧ r b a
   证明: by simp [pairwise_insert]
 
 Depends on / 依赖: pairwise_insert
@@ -721,7 +721,7 @@ theorem pairwise_pair_of_symm
 中文:
 定理 pairwise_pair_of_symm
   条件: [Std.Symm r]
-  结论: Set.Pairwise {a, b} r ↔ a != b -> r a b
+  结论: 集合.两两 {a, b} r ↔ a != b -> r a b
   证明: by
   simp [pairwise_insert_of_symm]
 
@@ -747,7 +747,7 @@ theorem pairwise_univ
 
 中文:
 定理 pairwise_univ
-  结论: (univ : Set α).Pairwise r ↔ Pairwise r
+  结论: (univ : 集合 α).两两 r ↔ 两两 r
   证明: by
   simp only [Set.Pairwise, Pairwise, mem_univ, forall_const]
 
@@ -771,7 +771,7 @@ alias ⟨Pairwise.subsingleton, _⟩ := pairwise_bot_iff
 
 中文:
 定理 pairwise_bot_iff
-  结论: s.Pairwise (⊥ : α -> α -> 命题) ↔ (s : Set α).Subsingleton
+  结论: s.两两 (⊥ : α -> α -> 命题) ↔ (s : 集合 α).子单例
   证明: ⟨fun h _a ha _b hb => h.eq ha hb id, fun h => h.pairwise _⟩
 
 alias ⟨Pairwise.subsingleton, _⟩ := pairwise_bot_iff
@@ -797,8 +797,8 @@ alias ⟨InjOn.pairwise_ne, _⟩ := injOn_iff_pairwise_ne
 
 中文:
 引理 injOn_iff_pairwise_ne
-  条件: {s : Set ι}
-  结论: InjOn f s ↔ s.Pairwise (f · != f ·)
+  条件: {s : 集合 ι}
+  结论: 单射限制 f s ↔ s.两两 (f · != f ·)
   证明: by
   simp only [InjOn, Set.Pairwise, not_imp_not]
 
@@ -821,9 +821,9 @@ theorem Pairwise.image
   proof: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy hne => h hx hy ne_of_apply_ne _ hne
 
 中文:
-定理 Pairwise.image
-  条件: {s : Set ι} (h : s.Pairwise (r on f))
-  结论: (f '' s).Pairwise r
+定理 两两.像
+  条件: {s : 集合 ι} (h : s.两两 (r on f))
+  结论: (f '' s).两两 r
   证明: forall_mem_image.2 fun _x hx => forall_mem_image.2 fun _y hy hne => h hx hy ne_of_apply_ne _ hne
 -/
 protected theorem Pairwise.image {s : Set ι} (h : s.Pairwise (r on f)) : (f '' s).Pairwise r :=
@@ -839,8 +839,8 @@ theorem InjOn.pairwise_image
   simp +contextual [h.eq_iff, Set.Pairwise]
 
 中文:
-定理 InjOn.pairwise_image
-  条件: {s : Set ι} (h : s.InjOn f)
+定理 单射限制.pairwise_image
+  条件: {s : 集合 ι} (h : s.单射限制 f)
   证明: by
   simp +contextual [h.eq_iff, Set.Pairwise]
 
@@ -860,9 +860,9 @@ lemma _root_.Pairwise.range_pairwise
   proof: image_univ ▸ (pairwise_univ.mpr hr).image
 
 中文:
-引理 _root_.Pairwise.range_pairwise
-  条件: (hr : Pairwise (r on f))
-  结论: (Set.range f).Pairwise r
+引理 _root_.两两.range_pairwise
+  条件: (hr : 两两 (r on f))
+  结论: (集合.range f).两两 r
   证明: image_univ ▸ (pairwise_univ.mpr hr).image
 
 Depends on / 依赖: image_univ, pairwise_univ, pairwise_univ.mpr
@@ -887,7 +887,7 @@ alias ⟨Pairwise.set_of_subtype, Set.Pairwise.subtype⟩ := pairwise_subtype_if
 
 中文:
 定理 pairwise_subtype_iff_pairwise_set
-  条件: (s : Set α) (r : α -> α -> 命题)
+  条件: (s : 集合 α) (r : α -> α -> 命题)
   证明: by
   simp only [Pairwise, Set.Pairwise, SetCoe.forall, Ne, Subtype.ext_iff]
 
@@ -917,7 +917,7 @@ definition PairwiseDisjoint
 
 中文:
 定义 PairwiseDisjoint
-  签名: (s : Set ι) (f : ι -> α)
+  签名: (s : 集合 ι) (f : ι -> α)
   定义体: s.Pairwise (Disjoint on f)
 
 Depends on / 依赖: Disjoint, Pairwise, s.Pairwise
@@ -998,7 +998,7 @@ theorem pairwiseDisjoint_empty
 
 中文:
 定理 pairwiseDisjoint_empty
-  结论: (∅ : Set ι).PairwiseDisjoint f
+  结论: (∅ : 集合 ι).PairwiseDisjoint f
   证明: pairwise_empty _
 
 @[simp]
@@ -1044,7 +1044,7 @@ lemma pairwiseDisjoint_singleton'
 
 中文:
 引理 pairwiseDisjoint_singleton'
-  条件: (s : Set ι)
+  条件: (s : 集合 ι)
   证明: by intro; grind
 -/
 lemma pairwiseDisjoint_singleton' (s : Set ι) :
@@ -1160,8 +1160,8 @@ theorem InjOn.pairwiseDisjoint_image
   proof: h.pairwise_image
 
 中文:
-定理 InjOn.pairwiseDisjoint_image
-  条件: {g : ι' -> ι} {s : Set ι'} (h : s.InjOn g)
+定理 单射限制.pairwiseDisjoint_image
+  条件: {g : ι' -> ι} {s : 集合 ι'} (h : s.单射限制 g)
   证明: h.pairwise_image
 
 Depends on / 依赖: h.pairwise_image, pairwise_image
@@ -1286,7 +1286,7 @@ lemma pairwiseDisjoint_range_iff
 
 中文:
 引理 pairwiseDisjoint_range_iff
-  条件: {α β : 类型} {f : α -> (Set β)}
+  条件: {α β : 类型} {f : α -> (集合 β)}
   证明: by
   aesop (add simp [PairwiseDisjoint, Set.Pairwise])
 
@@ -1305,8 +1305,8 @@ lemma _root_.Pairwise.pairwiseDisjoint
   proof: h.set_pairwise s
 
 中文:
-引理 _root_.Pairwise.pairwiseDisjoint
-  条件: (h : Pairwise (Disjoint on f)) (s : Set ι)
+引理 _root_.两两.pairwiseDisjoint
+  条件: (h : 两两 (Disjoint on f)) (s : 集合 ι)
   证明: h.set_pairwise s
 
 Depends on / 依赖: h.set_pairwise, set_pairwise
@@ -1393,7 +1393,7 @@ theorem pairwiseDisjoint_fiber
 
 中文:
 定理 pairwiseDisjoint_fiber
-  条件: (f : ι -> α) (s : Set α)
+  条件: (f : ι -> α) (s : 集合 α)
   结论: s.PairwiseDisjoint fun a => f ⁻¹' {a}
   证明: fun _a _ _b _ h => disjoint_iff_inf_le.mpr fun _i ⟨hia, hib⟩ => h (Eq.symm hia).trans hib
 
@@ -1413,7 +1413,7 @@ theorem PairwiseDisjoint.elim_set
 
 中文:
 定理 PairwiseDisjoint.elim_set
-  结论: {s : Set ι} {f : ι -> Set α} (hs : s.PairwiseDisjoint f) {i j : ι}
+  结论: {s : 集合 ι} {f : ι -> 集合 α} (hs : s.PairwiseDisjoint f) {i j : ι}
   证明: hs.elim hi hj not_disjoint_iff.2 ⟨a, hai, haj⟩
 
 Depends on / 依赖: hs.elim, not_disjoint_iff
@@ -1433,8 +1433,8 @@ theorem PairwiseDisjoint.prod
 hij Prod.ext (hs.elim_set hi hj _ hai haj) ht.elim_set hi' hj' _ hbi hbj
 
 中文:
-定理 PairwiseDisjoint.prod
-  结论: {f : ι -> Set α} {g : ι' -> Set β} (hs : s.PairwiseDisjoint f)
+定理 PairwiseDisjoint.乘积
+  结论: {f : ι -> 集合 α} {g : ι' -> 集合 β} (hs : s.PairwiseDisjoint f)
   证明: fun ⟨_, _⟩ ⟨hi, hi'⟩ ⟨_, _⟩ ⟨hj, hj'⟩ hij =>
   disjoint_left.2 fun ⟨_, _⟩ ⟨hai, hbi⟩ ⟨haj, hbj⟩ =>
 hij Prod.ext (hs.elim_set hi hj _ hai haj) ht.elim_set hi' hj' _ hbi hbj
@@ -1462,7 +1462,7 @@ hIJ
 
 中文:
 定理 pairwiseDisjoint_pi
-  结论: {ι' α : ι -> 类型} {s : 对任意 i, Set (ι' i)} {f : 对任意 i, ι' i -> Set (α i)}
+  结论: {ι' α : ι -> 类型} {s : 对任意 i, 集合 (ι' i)} {f : 对任意 i, ι' i -> 集合 (α i)}
   证明: fun _ hI _ hJ hIJ =>
   disjoint_left.2 fun a haI haJ =>
 hIJ
@@ -1496,7 +1496,7 @@ theorem pairwiseDisjoint_image_right_iff
 
 中文:
 定理 pairwiseDisjoint_image_right_iff
-  结论: {f : α -> β -> γ} {s : Set α} {t : Set β}
+  结论: {f : α -> β -> γ} {s : 集合 α} {t : 集合 β}
   证明: by
   refine ⟨fun hs x hx y hy (h : f _ _ = _) => ?_, fun hs x hx y hy h => ?_⟩
   · suffices x.1 = y.1 by exact Prod.ext this (hf _ hx.1 <| h.trans <| by rw [this])
@@ -1535,7 +1535,7 @@ theorem pairwiseDisjoint_image_left_iff
 
 中文:
 定理 pairwiseDisjoint_image_left_iff
-  结论: {f : α -> β -> γ} {s : Set α} {t : Set β}
+  结论: {f : α -> β -> γ} {s : 集合 α} {t : 集合 β}
   证明: by
   refine ⟨fun ht x hx y hy (h : f _ _ = _) => ?_, fun ht x hx y hy h => ?_⟩
   · suffices x.2 = y.2 by exact Prod.ext (hf _ hx.2 <| h.trans <| by rw [this]) this
@@ -1572,7 +1572,7 @@ lemma exists_ne_mem_inter_of_not_pairwiseDisjoint
   ob
 
 中文:
-引理 exists_ne_mem_inter_of_not_pairwiseDisjoint
+引理 存在_ne_mem_inter_of_not_pairwiseDisjoint
   证明: by
   change ¬ forall i, i in s -> forall j, j in s -> i != j -> forall t, t <= f i -> t <= f j -> t <= ⊥ at h
   simp only [not_forall] at h
@@ -1607,8 +1607,8 @@ lemma exists_lt_mem_inter_of_not_pairwiseDisjoint
   · exact ⟨j, hj, i, hi, h_lt, x, hx₂, hx₁⟩
 
 中文:
-引理 exists_lt_mem_inter_of_not_pairwiseDisjoint
-  结论: [LinearOrder ι]
+引理 存在_lt_mem_inter_of_not_pairwiseDisjoint
+  结论: [线性序 ι]
   证明: by
   obtain ⟨i, hi, j, hj, hne, x, hx₁, hx₂⟩ := exists_ne_mem_inter_of_not_pairwiseDisjoint h
   rcases lt_or_lt_iff_ne.mpr hne with h_lt | h_lt
@@ -1657,7 +1657,7 @@ lemma exists_ne_mem_inter_of_not_pairwise_disjoint
   exact ⟨i, j, h⟩
 
 中文:
-引理 exists_ne_mem_inter_of_not_pairwise_disjoint
+引理 存在_ne_mem_inter_of_not_pairwise_disjoint
   证明: by
   rw [← pairwise_univ] at h
   obtain ⟨i, _hi, j, _hj, h⟩ := exists_ne_mem_inter_of_not_pairwiseDisjoint h
@@ -1684,8 +1684,8 @@ lemma exists_lt_mem_inter_of_not_pairwise_disjoint
   exact ⟨i, j, h⟩
 
 中文:
-引理 exists_lt_mem_inter_of_not_pairwise_disjoint
-  结论: [LinearOrder ι]
+引理 存在_lt_mem_inter_of_not_pairwise_disjoint
+  结论: [线性序 ι]
   证明: by
   rw [← pairwise_univ] at h
   obtain ⟨i, _hi, j, _hj, h⟩ := exists_lt_mem_inter_of_not_pairwiseDisjoint h
@@ -1712,7 +1712,7 @@ theorem pairwise_disjoint_fiber
 中文:
 定理 pairwise_disjoint_fiber
   条件: (f : ι -> α)
-  结论: Pairwise (Disjoint on fun a : α => f ⁻¹' {a})
+  结论: 两两 (Disjoint on fun a : α => f ⁻¹' {a})
   证明: pairwise_univ.1 Set.pairwiseDisjoint_fiber f univ
 
 Depends on / 依赖: Set.pairwiseDisjoint_fiber, pairwiseDisjoint_fiber, pairwise_univ
@@ -1735,7 +1735,7 @@ alias subsingleton_setOf_mem_iff_pairwise_disjoint :=
 
 中文:
 引理 subsingleton_setOfPred_mem_iff_pairwise_disjoint
-  条件: {f : ι -> Set α}
+  条件: {f : ι -> 集合 α}
   证明: ⟨fun h _ _ hij => disjoint_left.2 fun a hi hj => hij (h a hi hj),
    fun h _ _ hx _ hy => by_contra fun hne => disjoint_left.1 (h hne) hx hy⟩
 
@@ -1786,7 +1786,7 @@ lemma pairwise_ne_iff_injective
 中文:
 引理 pairwise_ne_iff_injective
   条件: {f : ι -> α}
-  结论: Pairwise (fun i j => f i != f j) ↔ f.Injective
+  结论: 两两 (fun i j => f i != f j) ↔ f.单射
   证明: by
   simp
 -/

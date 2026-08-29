@@ -44,8 +44,8 @@ theorem Integrable.comp_inv
 @[to_additive]
 
 中文:
-定理 Integrable.comp_inv
-  条件: [IsInvInvariant μ] {f : G -> F} (hf : 整数egrable f μ)
+定理 可积.comp_inv
+  条件: [是InvInvariant μ] {f : G -> F} (hf : 可积 f μ)
   证明: (hf.mono_measure (map_inv_eq_self μ).le).comp_measurable measurable_inv
 
 @[to_additive]
@@ -71,7 +71,7 @@ theorem integral_inv_eq_self
 
 中文:
 定理 integral_inv_eq_self
-  条件: (f : G -> E) (μ : Measure G) [IsInvInvariant μ]
+  条件: (f : G -> E) (μ : 测度 G) [是InvInvariant μ]
   证明: by
   have h : MeasurableEmbedding fun x : G => x⁻¹ := (MeasurableEquiv.inv G).measurableEmbedding
   rw [← h.integral_map]; rw [map_inv_eq_self]
@@ -99,8 +99,8 @@ theorem IntegrableOn.comp_inv
   simpa using! hf
 
 中文:
-定理 IntegrableOn.comp_inv
-  条件: [IsInvInvariant μ] {f : G -> F} {s : Set G} (hf : 整数egrableOn f s μ)
+定理 整数egrableOn.comp_inv
+  条件: [是InvInvariant μ] {f : G -> F} {s : 集合 G} (hf : 整数egrableOn f s μ)
   证明: by
   apply (integrable_map_equiv (MeasurableEquiv.inv G) f).mp
   have : s⁻¹ = MeasurableEquiv.inv G ⁻¹' s := by simp
@@ -136,8 +136,8 @@ theorem IntegrableOn.comp_inv_Iic
 @[to_additive]
 
 中文:
-定理 IntegrableOn.comp_inv_Iic
-  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (Set.Ici c⁻¹) μ)
+定理 整数egrableOn.comp_inv_Iic
+  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (集合.左闭右无界区间 c⁻¹) μ)
   证明: by
   simpa using hf.comp_inv
 
@@ -162,8 +162,8 @@ theorem IntegrableOn.comp_inv_Ici
 @[to_additive]
 
 中文:
-定理 IntegrableOn.comp_inv_Ici
-  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (Set.Iic c⁻¹) μ)
+定理 整数egrableOn.comp_inv_Ici
+  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (集合.左无界右闭区间 c⁻¹) μ)
   证明: by
   simpa using hf.comp_inv
 
@@ -188,8 +188,8 @@ theorem IntegrableOn.comp_inv_Iio
 @[to_additive]
 
 中文:
-定理 IntegrableOn.comp_inv_Iio
-  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (Set.Ioi c⁻¹) μ)
+定理 整数egrableOn.comp_inv_Iio
+  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (集合.左开右无界区间 c⁻¹) μ)
   证明: by
   simpa using hf.comp_inv
 
@@ -212,8 +212,8 @@ theorem IntegrableOn.comp_inv_Ioi
   simpa using hf.comp_inv
 
 中文:
-定理 IntegrableOn.comp_inv_Ioi
-  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (Set.Iio c⁻¹) μ)
+定理 整数egrableOn.comp_inv_Ioi
+  条件: {c : G} {f : G -> F} (hf : 整数egrableOn f (集合.左无界右开区间 c⁻¹) μ)
   证明: by
   simpa using hf.comp_inv
 
@@ -246,7 +246,7 @@ theorem integral_mul_left_eq_self
 
 中文:
 定理 integral_mul_left_eq_self
-  条件: [IsMulLeftInvariant μ] (f : G -> E) (g : G)
+  条件: [是MulLeftInvariant μ] (f : G -> E) (g : G)
   证明: by
   have h_mul : MeasurableEmbedding fun x => g * x := (MeasurableEquiv.mulLeft g).measurableEmbedding
   rw [← h_mul.integral_map]; rw [map_mul_left_eq_self]
@@ -278,7 +278,7 @@ theorem integral_mul_right_eq_self
 
 中文:
 定理 integral_mul_right_eq_self
-  条件: [IsMulRightInvariant μ] (f : G -> E) (g : G)
+  条件: [是MulRightInvariant μ] (f : G -> E) (g : G)
   证明: by
   have h_mul : MeasurableEmbedding fun x => x * g :=
     (MeasurableEquiv.mulRight g).measurableEmbedding
@@ -306,7 +306,7 @@ theorem integral_div_right_eq_self
 
 中文:
 定理 integral_div_right_eq_self
-  条件: [IsMulRightInvariant μ] (f : G -> E) (g : G)
+  条件: [是MulRightInvariant μ] (f : G -> E) (g : G)
   证明: by
   simp_rw [div_eq_mul_inv, integral_mul_right_eq_self f g⁻¹]
 
@@ -333,7 +333,7 @@ theorem integral_eq_zero_of_mul_left_eq_neg
 
 中文:
 定理 integral_eq_zero_of_mul_left_eq_neg
-  条件: [IsMulLeftInvariant μ] (hf' : 对任意 x, f (g * x) = -f x)
+  条件: [是MulLeftInvariant μ] (hf' : 对任意 x, f (g * x) = -f x)
   证明: by
   have : IsAddTorsionFree E := .of_isTorsionFree Real E
   simp_rw [← self_eq_neg, ← integral_neg, ← hf', integral_mul_left_eq_self]
@@ -364,7 +364,7 @@ theorem integral_eq_zero_of_mul_right_eq_neg
 
 中文:
 定理 integral_eq_zero_of_mul_right_eq_neg
-  条件: [IsMulRightInvariant μ] (hf' : 对任意 x, f (x * g) = -f x)
+  条件: [是MulRightInvariant μ] (hf' : 对任意 x, f (x * g) = -f x)
   证明: by
   have : IsAddTorsionFree E := .of_isTorsionFree Real E
   simp_rw [← self_eq_neg, ← integral_neg, ← hf', integral_mul_right_eq_self]
@@ -390,8 +390,8 @@ theorem Integrable.comp_mul_left
 @[to_additive]
 
 中文:
-定理 Integrable.comp_mul_left
-  条件: {f : G -> F} [IsMulLeftInvariant μ] (hf : 整数egrable f μ) (g : G)
+定理 可积.comp_mul_left
+  条件: {f : G -> F} [是MulLeftInvariant μ] (hf : 可积 f μ) (g : G)
   证明: (hf.mono_measure (map_mul_left_eq_self μ g).le).comp_measurable measurable_const_mul g
 
 @[to_additive]
@@ -414,8 +414,8 @@ theorem Integrable.comp_mul_right
 @[to_additive]
 
 中文:
-定理 Integrable.comp_mul_right
-  结论: {f : G -> F} [IsMulRightInvariant μ] (hf : 整数egrable f μ)
+定理 可积.comp_mul_right
+  结论: {f : G -> F} [是MulRightInvariant μ] (hf : 可积 f μ)
   证明: (hf.mono_measure (map_mul_right_eq_self μ g).le).comp_measurable measurable_mul_const g
 
 @[to_additive]
@@ -438,8 +438,8 @@ theorem Integrable.comp_div_right
   exact hf.comp_mul_right g⁻¹
 
 中文:
-定理 Integrable.comp_div_right
-  结论: {f : G -> F} [IsMulRightInvariant μ] (hf : 整数egrable f μ)
+定理 可积.comp_div_right
+  结论: {f : G -> F} [是MulRightInvariant μ] (hf : 可积 f μ)
   证明: by
   simp_rw [div_eq_mul_inv]
   exact hf.comp_mul_right g⁻¹
@@ -465,8 +465,8 @@ theorem Integrable.comp_div_left
 @[to_additive]
 
 中文:
-定理 Integrable.comp_div_left
-  结论: {f : G -> F} [IsInvInvariant μ] [IsMulLeftInvariant μ]
+定理 可积.comp_div_left
+  结论: {f : G -> F} [是InvInvariant μ] [是MulLeftInvariant μ]
   证明: ((measurePreserving_div_left μ g).integrable_comp hf.aestronglyMeasurable).mpr hf
 
 @[to_additive]
@@ -493,7 +493,7 @@ theorem integrable_comp_div_left
 
 中文:
 定理 integrable_comp_div_left
-  条件: (f : G -> F) [IsInvInvariant μ] [IsMulLeftInvariant μ] (g : G)
+  条件: (f : G -> F) [是InvInvariant μ] [是MulLeftInvariant μ] (g : G)
   证明: by
   refine ⟨fun h => ?_, fun h => h.comp_div_left g⟩
   convert! h.comp_inv.comp_mul_left g⁻¹
@@ -522,7 +522,7 @@ theorem integral_div_left_eq_self
 
 中文:
 定理 integral_div_left_eq_self
-  结论: (f : G -> E) (μ : Measure G) [IsInvInvariant μ]
+  结论: (f : G -> E) (μ : 测度 G) [是InvInvariant μ]
   证明: by
   simp_rw [div_eq_mul_inv, integral_inv_eq_self (fun x => f (x' * x)) μ,
     integral_mul_left_eq_self f x']
@@ -553,7 +553,7 @@ theorem integral_smul_eq_self
 
 中文:
 定理 integral_smul_eq_self
-  条件: {μ : Measure α} [SMulInvariantMeasure G α μ] (f : α -> E) {g : G}
+  条件: {μ : 测度 α} [标量乘不变测度 G α μ] (f : α -> E) {g : G}
   证明: by
   have h : MeasurableEmbedding fun x : α => g • x := (MeasurableEquiv.smul g).measurableEmbedding
   rw [← h.integral_map]; rw [MeasureTheory.map_smul]

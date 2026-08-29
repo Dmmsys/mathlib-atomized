@@ -26,8 +26,8 @@ lemma Units.index_posSubgroup
   · simp [h, xor_comm, h.le]
 
 中文:
-引理 Units.index_posSubgroup
-  条件: (R : 类型) [Ring R] [LinearOrder R] [IsStrictOrderedRing R]
+引理 单位群.index_posSubgroup
+  条件: (R : 类型) [环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rw [Subgroup.index_eq_two_iff]
   refine ⟨-1, fun a => ?_⟩

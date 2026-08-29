@@ -93,7 +93,7 @@ definition Proj
 
 中文:
 定义 Proj
-  签名: : (I -> 布尔) -> (I -> 布尔)
+  签名: : (I -> 布尔值) -> (I -> 布尔值)
   定义体: fun c i => if J i then c i else false
 
 @[simp]
@@ -140,7 +140,7 @@ definition π
 
 中文:
 定义 π
-  签名: : Set (I -> 布尔)
+  签名: : 集合 (I -> 布尔值)
   定义体: (Proj J) '' C
 -/
 def π : Set (I -> Bool) := (Proj J) '' C
@@ -180,7 +180,7 @@ theorem continuous_projRestrict
 
 中文:
 定理 continuous_projRestrict
-  结论: Continuous (ProjRestrict C J)
+  结论: 连续 (ProjRestrict C J)
   证明: Continuous.restrict _ (continuous_proj _)
 
 Depends on / 依赖: Continuous, Continuous.restrict, continuous_proj, restrict
@@ -203,7 +203,7 @@ theorem proj_eq_self
 
 中文:
 定理 proj_eq_self
-  条件: {x : I -> 布尔} (h : 对任意 i, x i != false -> J i)
+  条件: {x : I -> 布尔值} (h : 对任意 i, x i != false -> J i)
   结论: Proj J x = x
   证明: by
   ext i
@@ -359,7 +359,7 @@ theorem continuous_projRestricts
 中文:
 定理 continuous_projRestricts
   条件: (h : 对任意 i, J i -> K i)
-  结论: Continuous (ProjRestricts C h)
+  结论: 连续 (ProjRestricts C h)
   证明: Continuous.comp (Homeomorph.continuous _) (continuous_projRestrict _ _)
 
 Depends on / 依赖: Continuous, Continuous.comp, Homeomorph, Homeomorph.continuous, continuous, continuous_projRestrict
@@ -379,7 +379,7 @@ theorem surjective_projRestricts
 中文:
 定理 surjective_projRestricts
   条件: (h : 对任意 i, J i -> K i)
-  结论: Function.Surjective (ProjRestricts C h)
+  结论: 函数.满射 (ProjRestricts C h)
   证明: (Homeomorph.surjective _).comp (Set.surjective_mapsTo_image_restrict _ _)
 
 Depends on / 依赖: Homeomorph, Homeomorph.surjective, Set.surjective_mapsTo_image_restrict, surjective, surjective_mapsTo_image_restrict
@@ -525,7 +525,7 @@ lemma iso_map_bijective
 
 中文:
 引理 iso_map_bijective
-  结论: Function.Bijective (iso_map C J)
+  结论: 函数.双射 (iso_map C J)
   证明: by
   refine ⟨fun a b h => ?_, fun a => ?_⟩
   · ext i
@@ -576,7 +576,7 @@ definition spanFunctor
 
 中文:
 定义 spanFunctor
-  签名: [对任意 (s : Finset I) (i : I), Decidable (i in s)] (hC : IsCompact C)
+  签名: [对任意 (s : 有限集 I) (i : I), 可判定 (i in s)] (hC : 是紧集 C)
   定义体: @Profinite.of (π C (· in (unop s))) _
     (by rw [← isCompact_iff_compactSpace]; exact hC.image (continuous_proj _)) _ _
   map h := @CompHausLike.ofHom _ _ _ (_) (_) (_) (_) (_) (_) (_) (_)
@@ -612,7 +612,7 @@ definition spanCone
 
 中文:
 定义 spanCone
-  签名: [对任意 (s : Finset I) (i : I), Decidable (i in s)] (hC : IsCompact C)
+  签名: [对任意 (s : 有限集 I) (i : I), 可判定 (i in s)] (hC : 是紧集 C)
   定义体: @Profinite.of C _ (by rwa [← isCompact_iff_compactSpace]) _ _
   π :=
   { app s := ConcreteCategory.ofHom ⟨ProjRestrict C (· in unop s), continuous_projRestrict _ _⟩
@@ -691,7 +691,7 @@ definition spanCone_isLimit
 
 中文:
 定义 spanCone_isLimit
-  签名: [对任意 (s : Finset I) (i : I), Decidable (i in s)] (hC : IsCompact C)
+  签名: [对任意 (s : 有限集 I) (i : I), 可判定 (i in s)] (hC : 是紧集 C)
   定义体: IsLimit.postcomposeHomEquiv (spanFunctorIsoIndexFunctor hC) _
     (IsLimit.ofIsoLimit (indexCone_isLimit hC) (Cone.ext (Iso.refl _) (fun ⟨s⟩ => by
       ext
@@ -785,7 +785,7 @@ definition Products
 
 中文:
 定义 Products
-  签名: (I : 类型) [LinearOrder I]
+  签名: (I : 类型) [线性序 I]
   定义体: {l : List I // l.IsChain (· > ·)}
 
 Depends on / 依赖: IsChain, l.IsChain
@@ -804,7 +804,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (Products I)
+  签名: 线性序 (Products I)
   定义体: inferInstanceAs (LinearOrder {l : List I // l.IsChain (· > ·)})
 
 Depends on / 依赖: IsChain, LinearOrder, l.IsChain
@@ -827,7 +827,7 @@ theorem lt_iff_lex_lt
 中文:
 定理 lt_iff_lex_lt
   条件: (l m : Products I)
-  结论: l < m ↔ List.Lex (· < ·) l.val m.val
+  结论: l < m ↔ 列表.Lex (· < ·) l.val m.val
   证明: by
   simp
 -/
@@ -912,7 +912,7 @@ theorem rel_head!_of_mem
 
 中文:
 定理 rel_head!_of_mem
-  条件: [Inhabited I] {i : I} {l : Products I} (hi : i in l.val)
+  条件: [可居 I] {i : I} {l : Products I} (hi : i in l.val)
   证明: List.Pairwise.head!_le l.2.sortedGT.sortedGE.pairwise hi
 
 Depends on / 依赖: List.Pairwise.head, Pairwise, pairwise, sortedGE, sortedGT, sortedGT.sortedGE.pairwise
@@ -931,7 +931,7 @@ theorem head!_le_of_lt
 
 中文:
 定理 head!_le_of_lt
-  条件: [Inhabited I] {q l : Products I} (h : q < l) (hq : q.val != [])
+  条件: [可居 I] {q l : Products I} (h : q < l) (hq : q.val != [])
   证明: List.head!_le_of_lt l.val q.val h hq
 
 Depends on / 依赖: List.head, _le_of_lt, l.val, q.val
@@ -993,7 +993,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Function.Injective (eval C)
+  结论: 函数.单射 (eval C)
   证明: by
   intro ⟨a, ha⟩ ⟨b, hb⟩ h
   dsimp [eval] at h
@@ -1057,7 +1057,7 @@ theorem equiv_toFun_eq_eval
 
 中文:
 定理 equiv_toFun_eq_eval
-  结论: (equiv_range C).toFun = Set.rangeFactorization (eval C)
+  结论: (equiv_range C).toFun = 集合.rangeFactorization (eval C)
   证明: rfl
 -/
 theorem equiv_toFun_eq_eval : (equiv_range C).toFun = Set.rangeFactorization (eval C) := rfl
@@ -1223,7 +1223,7 @@ theorem prop_of_isGood
 
 中文:
 定理 prop_of_isGood
-  结论: {l : Products I} (J : I -> 命题) [对任意 j, Decidable (J j)]
+  结论: {l : Products I} (J : I -> 命题) [对任意 j, 可判定 (J j)]
   证明: by
   intro i hi
   by_contra h'
@@ -1353,7 +1353,7 @@ definition term
 
 中文:
 定义 term
-  签名: {o : Ordinal} (ho : o < Ordinal.type ((· < ·) : I -> I -> 命题))
+  签名: {o : 序数} (ho : o < 序数.type ((· < ·) : I -> I -> 命题))
   定义体: Ordinal.enum ((· < ·) : I -> I -> Prop) ⟨o, ho⟩
 
 Depends on / 依赖: Ordinal, Ordinal.enum
@@ -1376,7 +1376,7 @@ theorem term_ord_aux
 
 中文:
 定理 term_ord_aux
-  条件: {i : I} (ho : ord I i < Ordinal.type ((· < ·) : I -> I -> 命题))
+  条件: {i : I} (ho : ord I i < 序数.type ((· < ·) : I -> I -> 命题))
   证明: by
   simp only [term, ord, Ordinal.enum_typein]
 
@@ -1400,7 +1400,7 @@ theorem ord_term_aux
 
 中文:
 定理 ord_term_aux
-  条件: {o : Ordinal} (ho : o < Ordinal.type ((· < ·) : I -> I -> 命题))
+  条件: {o : 序数} (ho : o < 序数.type ((· < ·) : I -> I -> 命题))
   证明: by
   simp only [ord, term, Ordinal.typein_enum]
 
@@ -1425,7 +1425,7 @@ theorem ord_term
 
 中文:
 定理 ord_term
-  条件: {o : Ordinal} (ho : o < Ordinal.type ((· < ·) : I -> I -> 命题)) (i : I)
+  条件: {o : 序数} (ho : o < 序数.type ((· < ·) : I -> I -> 命题)) (i : I)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · subst h
@@ -1453,7 +1453,7 @@ definition contained
 
 中文:
 定义 contained
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: forall f, f in C -> forall (i : I), f i = true -> ord I i < o
 -/
 def contained (o : Ordinal) : Prop := forall f, f in C -> forall (i : I), f i = true -> ord I i < o
@@ -1471,7 +1471,7 @@ definition P
 
 中文:
 定义 P
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: o <= Ordinal.type (· < · : I -> I -> Prop) ->
   (forall (C : Set (I -> Bool)), IsClosed C -> contained C o ->
     LinearIndependent Int (GoodProducts.eval C))
@@ -1500,7 +1500,7 @@ theorem Products.prop_of_isGood_of_contained
 
 中文:
 定理 Products.prop_of_isGood_of_contained
-  结论: {l : Products I} (o : Ordinal) (h : l.isGood C)
+  结论: {l : Products I} (o : 序数) (h : l.isGood C)
   证明: by
   by_contra h'
   apply h
@@ -1539,7 +1539,7 @@ theorem contained_eq_proj
 
 中文:
 定理 contained_eq_proj
-  条件: (o : Ordinal) (h : contained C o)
+  条件: (o : 序数) (h : contained C o)
   证明: by
   have := proj_prop_eq_self C (ord I · < o)
   simp only [ne_eq, Bool.not_eq_false, π] at this
@@ -1564,8 +1564,8 @@ theorem isClosed_proj
 
 中文:
 定理 isClosed_proj
-  条件: (o : Ordinal) (hC : IsClosed C)
-  结论: IsClosed (π C (ord I · < o))
+  条件: (o : 序数) (hC : 是闭集 C)
+  结论: 是闭集 (π C (ord I · < o))
   证明: (continuous_proj (ord I · < o)).isClosedMap C hC
 
 Depends on / 依赖: continuous_proj, isClosedMap
@@ -1586,7 +1586,7 @@ theorem contained_proj
 
 中文:
 定理 contained_proj
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: contained (π C (ord I · < o)) o
   证明: by
   intro x ⟨_, _, h⟩ j hj
@@ -1609,7 +1609,7 @@ definition πs
 
 中文:
 定义 πs
-  签名: (o : Ordinal)
+  签名: (o : 序数)
   定义体: LocallyConstant.comapₗ Int ⟨(ProjRestrict C (ord I · < o)), (continuous_projRestrict _ _)⟩
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.comap, ProjRestrict, continuous_projRestrict
@@ -1628,7 +1628,7 @@ theorem coe_πs
 
 中文:
 定理 coe_πs
-  条件: (o : Ordinal) (f : LocallyConstant (π C (ord I · < o)) 整数)
+  条件: (o : 序数) (f : 局部常数 (π C (ord I · < o)) 整数)
   证明: by
   rfl
 -/
@@ -1648,8 +1648,8 @@ theorem injective_πs
 
 中文:
 定理 injective_πs
-  条件: (o : Ordinal)
-  结论: Function.Injective (πs C o)
+  条件: (o : 序数)
+  结论: 函数.单射 (πs C o)
   证明: LocallyConstant.comap_injective ⟨_, (continuous_projRestrict _ _)⟩
     (Set.surjective_mapsTo_image_restrict _ _)
 
@@ -1674,7 +1674,7 @@ definition πs'
 
 中文:
 定义 πs'
-  签名: {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
+  签名: {o₁ o₂ : 序数} (h : o₁ <= o₂)
   定义体: LocallyConstant.comapₗ Int ⟨(ProjRestricts C (fun _ hh => lt_of_lt_of_le hh h)),
     (continuous_projRestricts _ _)⟩
 
@@ -1696,7 +1696,7 @@ theorem coe_πs'
 
 中文:
 定理 coe_πs'
-  条件: {o₁ o₂ : Ordinal} (h : o₁ <= o₂) (f : LocallyConstant (π C (ord I · < o₁)) 整数)
+  条件: {o₁ o₂ : 序数} (h : o₁ <= o₂) (f : 局部常数 (π C (ord I · < o₁)) 整数)
   证明: by
   rfl
 -/
@@ -1716,8 +1716,8 @@ theorem injective_πs'
 
 中文:
 定理 injective_πs'
-  条件: {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
-  结论: Function.Injective (πs' C h)
+  条件: {o₁ o₂ : 序数} (h : o₁ <= o₂)
+  结论: 函数.单射 (πs' C h)
   证明: LocallyConstant.comap_injective ⟨_, (continuous_projRestricts _ _)⟩
     (surjective_projRestricts _ fun _ hi => lt_of_lt_of_le hi h)
 
@@ -1739,7 +1739,7 @@ theorem lt_ord_of_lt
 
 中文:
 定理 lt_ord_of_lt
-  结论: {l m : Products I} {o : Ordinal} (h₁ : m < l)
+  结论: {l m : Products I} {o : 序数} (h₁ : m < l)
   证明: List.SortedGT.lt_ord_of_lt l.2.sortedGT m.2.sortedGT h₁ h₂
 
 Depends on / 依赖: List.SortedGT.lt_ord_of_lt, SortedGT, lt_ord_of_lt, sortedGT
@@ -1759,7 +1759,7 @@ theorem eval_πs
 
 中文:
 定理 eval_πs
-  条件: {l : Products I} {o : Ordinal} (hlt : 对任意 i in l.val, ord I i < o)
+  条件: {l : Products I} {o : 序数} (hlt : 对任意 i in l.val, ord I i < o)
   证明: by
   simpa only [← LocallyConstant.coe_inj] using! evalFacProp C (ord I · < o) hlt
 
@@ -1782,7 +1782,7 @@ theorem eval_πs'
 
 中文:
 定理 eval_πs'
-  结论: {l : Products I} {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
+  结论: {l : Products I} {o₁ o₂ : 序数} (h : o₁ <= o₂)
   证明: by
   rw [← LocallyConstant.coe_inj]; rw [← LocallyConstant.toFun_eq_coe]
   exact evalFacProps C (fun (i : I) => ord I i < o₁) (fun (i : I) => ord I i < o₂) hlt
@@ -1812,7 +1812,7 @@ theorem eval_πs_image
 
 中文:
 定理 eval_πs_image
-  结论: {l : Products I} {o : Ordinal}
+  结论: {l : Products I} {o : 序数}
   证明: by
   ext f
   simp only [Set.mem_image, Set.mem_ofPred_eq, exists_exists_and_eq_and]
@@ -1846,7 +1846,7 @@ theorem eval_πs_image'
 
 中文:
 定理 eval_πs_image'
-  结论: {l : Products I} {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
+  结论: {l : Products I} {o₁ o₂ : 序数} (h : o₁ <= o₂)
   证明: by
   ext f
   simp only [Set.mem_image, Set.mem_ofPred_eq, exists_exists_and_eq_and]
@@ -1875,7 +1875,7 @@ theorem head_lt_ord_of_isGood
 
 中文:
 定理 head_lt_ord_of_isGood
-  结论: [Inhabited I] {l : Products I} {o : Ordinal}
+  结论: [可居 I] {l : Products I} {o : 序数}
   证明: prop_of_isGood C (ord I · < o) h l.val.head! (List.head!_mem_self hn)
 
 Depends on / 依赖: List.head, _mem_self, l.val.head, prop_of_isGood
@@ -1898,7 +1898,7 @@ theorem isGood_mono
 
 中文:
 定理 isGood_mono
-  结论: {l : Products I} {o₁ o₂ : Ordinal} (h : o₁ <= o₂)
+  结论: {l : Products I} {o₁ o₂ : 序数} (h : o₁ <= o₂)
   证明: by
   intro hl'
   apply hl

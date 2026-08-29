@@ -44,7 +44,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: [MeasurableSpace α] [SMul M α]
+  签名: [可测空间 α] [标量乘法 M α]
   定义体: ⟨fun _ _ _ => rfl⟩
 -/
 instance zero [MeasurableSpace α] [SMul M α] : SMulInvariantMeasure M α (0 : Measure α) :=
@@ -67,7 +67,7 @@ instance add
 
 中文:
 实例 add
-  签名: [SMulInvariantMeasure M α μ] [SMulInvariantMeasure M α ν]
+  签名: [标量乘不变测度 M α μ] [标量乘不变测度 M α ν]
   定义体: ⟨fun c _s hs =>
     show _ + _ = _ + _ from
       congr_arg₂ (· + ·) (measure_preimage_smul c hs) (measure_preimage_smul c hs)⟩
@@ -95,7 +95,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMulInvariantMeasure M α μ] (c : 实数>=0∞)
+  签名: [标量乘不变测度 M α μ] (c : 实数>=0∞)
   定义体: ⟨fun a _s hs => show c • _ = c • _ from congr_arg (c • ·) (measure_preimage_smul a hs)⟩
 
 @[to_additive]
@@ -116,7 +116,7 @@ instance smul_nnreal
 
 中文:
 实例 smul_nnreal
-  签名: [SMulInvariantMeasure M α μ] (c : 实数>=0)
+  签名: [标量乘不变测度 M α μ] (c : 实数>=0)
   定义体: SMulInvariantMeasure.smul c
 
 Depends on / 依赖: SMulInvariantMeasure, SMulInvariantMeasure.smul
@@ -146,7 +146,7 @@ theorem measure_preimage_smul_le
 
 中文:
 定理 measure_preimage_smul_le
-  条件: (c : G) (s : Set α)
+  条件: (c : G) (s : 集合 α)
   结论: μ ((c • ·) ⁻¹' s) <= μ s
   证明: (outerMeasure_le_iff (m := .map (c • ·) μ.1)).2
     (fun _s hs => (SMulInvariantMeasure.measure_preimage_smul _ hs).le) _
@@ -172,7 +172,7 @@ theorem tendsto_smul_ae
 中文:
 定理 tendsto_smul_ae
   条件: (c : G)
-  结论: Filter.Tendsto (c • ·) (ae μ) (ae μ)
+  结论: 滤子.收敛 (c • ·) (ae μ) (ae μ)
   证明: fun _s hs =>
   eq_bot_mono (measure_preimage_smul_le μ c _) hs
 -/
@@ -253,7 +253,7 @@ theorem measure_preimage_smul
 
 中文:
 定理 measure_preimage_smul
-  条件: (c : G) (s : Set α)
+  条件: (c : G) (s : 集合 α)
   结论: μ ((c • ·) ⁻¹' s) = μ s
   证明: (measure_preimage_smul_le μ c s).antisymm by
     simpa [preimage_preimage] using measure_preimage_smul_le μ c⁻¹ ((c • ·) ⁻¹' s)
@@ -281,7 +281,7 @@ theorem measure_smul
 
 中文:
 定理 measure_smul
-  条件: (c : G) (s : Set α)
+  条件: (c : G) (s : 集合 α)
   结论: μ (c • s) = μ s
   证明: by
   simpa only [preimage_smul_inv] using measure_preimage_smul μ c⁻¹ s
@@ -308,7 +308,7 @@ theorem measure_inter_inv_smul
 
 中文:
 定理 measure_inter_inv_smul
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (s inter c⁻¹ • t) = μ (c • s inter t)
   证明: by
   rw [← measure_smul _ c]; rw [smul_set_inter]; rw [smul_smul]; rw [mul_inv_cancel]; rw [one_smul]
@@ -335,7 +335,7 @@ theorem measure_inv_smul_inter
 
 中文:
 定理 measure_inv_smul_inter
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (c⁻¹ • s inter t) = μ (s inter c • t)
   证明: by
   simpa [inv_inv] using (measure_inter_inv_smul _ c⁻¹ _ _).symm
@@ -362,7 +362,7 @@ theorem measure_union_inv_smul
 
 中文:
 定理 measure_union_inv_smul
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (s union c⁻¹ • t) = μ (c • s union t)
   证明: by
   rw [← measure_smul _ c]; rw [smul_set_union]; rw [smul_smul]; rw [mul_inv_cancel]; rw [one_smul]
@@ -389,7 +389,7 @@ theorem measure_inv_smul_union
 
 中文:
 定理 measure_inv_smul_union
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (c⁻¹ • s union t) = μ (s union c • t)
   证明: by
   simpa [inv_inv] using (measure_union_inv_smul _ c⁻¹ _ _).symm
@@ -416,7 +416,7 @@ theorem measure_sdiff_inv_smul
 
 中文:
 定理 measure_sdiff_inv_smul
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (s \ c⁻¹ • t) = μ (c • s \ t)
   证明: by
   rw [← measure_smul _ c]; rw [smul_set_sdiff]; rw [smul_smul]; rw [mul_inv_cancel]; rw [one_smul]
@@ -443,7 +443,7 @@ theorem measure_inv_smul_sdiff
 
 中文:
 定理 measure_inv_smul_sdiff
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (c⁻¹ • s \ t) = μ (s \ c • t)
   证明: by
   simpa [inv_inv] using (measure_sdiff_inv_smul _ c⁻¹ _ _).symm
@@ -470,7 +470,7 @@ theorem measure_symmDiff_inv_smul
 
 中文:
 定理 measure_symmDiff_inv_smul
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ (s ∆ (c⁻¹ • t)) = μ ((c • s) ∆ t)
   证明: by
   rw [← measure_smul _ c]; rw [smul_set_symmDiff]; rw [smul_smul]; rw [mul_inv_cancel]; rw [one_smul]
@@ -495,7 +495,7 @@ theorem measure_inv_smul_symmDiff
 
 中文:
 定理 measure_inv_smul_symmDiff
-  条件: (c : G) (s t : Set α)
+  条件: (c : G) (s t : 集合 α)
   结论: μ ((c⁻¹ • s) ∆ t) = μ (s ∆ (c • t))
   证明: by
   simpa [inv_inv] using (measure_symmDiff_inv_smul _ c⁻¹ _ _).symm
@@ -574,7 +574,7 @@ theorem smul_mem_ae
 
 中文:
 定理 smul_mem_ae
-  条件: (c : G) {s : Set α}
+  条件: (c : G) {s : 集合 α}
   结论: c • s in ae μ ↔ s in ae μ
   证明: by
   simp only [mem_ae_iff, ← smul_set_compl, measure_smul_eq_zero_iff]
@@ -630,7 +630,7 @@ theorem eventuallyConst_smul_set_ae
 
 中文:
 定理 eventuallyConst_smul_set_ae
-  条件: (c : G) {s : Set α}
+  条件: (c : G) {s : 集合 α}
   证明: by
   rw [← preimage_smul_inv]; rw [eventuallyConst_preimage]; rw [Filter.map_smul]; rw [smul_ae]
 
@@ -655,7 +655,7 @@ theorem smul_set_ae_le
 
 中文:
 定理 smul_set_ae_le
-  条件: (c : G) {s t : Set α}
+  条件: (c : G) {s t : 集合 α}
   结论: c • s <=ᵐ[μ] c • t ↔ s <=ᵐ[μ] t
   证明: by
   simp only [ae_le_set, ← smul_set_sdiff, measure_smul_eq_zero_iff]
@@ -679,7 +679,7 @@ theorem smul_set_ae_eq
 
 中文:
 定理 smul_set_ae_eq
-  条件: (c : G) {s t : Set α}
+  条件: (c : G) {s t : 集合 α}
   结论: c • s =ᵐ[μ] c • t ↔ s =ᵐ[μ] t
   证明: by
   simp only [Filter.eventuallyLE_antisymm_iff, smul_set_ae_le]
@@ -713,7 +713,7 @@ theorem measurePreserving_smul
 
 中文:
 定理 measurePreserving_smul
-  结论: MeasurePreserving (c • ·) μ μ
+  结论: 保测 (c • ·) μ μ
   证明: { measurable := measurable_const_smul c
     map_eq := by
       ext1 s hs
@@ -761,7 +761,7 @@ theorem MeasurePreserving.smulInvariantMeasure_iterateMulAct
 @[to_additive]
 
 中文:
-定理 MeasurePreserving.smulInvariantMeasure_iterateMulAct
+定理 保测.smulInvariantMeasure_iterateMulAct
   证明: ⟨fun n _s hs => (hf.iterate n.val).measure_preimage hs.nullMeasurableSet⟩
 
 @[to_additive]
@@ -824,7 +824,7 @@ _ = μ (f ⁻¹' (m • ·) ⁻¹' S) := map_apply hf hS.preimage (measurable_co
 
 中文:
 定理 smulInvariantMeasure_map
-  结论: [SMul M α] [SMul M β]
+  结论: [标量乘法 M α] [标量乘法 M β]
   证明: calc
     map f μ ((m • ·) ⁻¹' S)
 _ = μ (f ⁻¹' (m • ·) ⁻¹' S) := map_apply hf hS.preimage (measurable_const_smul _)
@@ -858,7 +858,7 @@ instance smulInvariantMeasure_map_smul
 
 中文:
 实例 smulInvariantMeasure_map_smul
-  签名: [SMul M α] [SMul N α] [SMulCommClass N M α]
+  签名: [标量乘法 M α] [标量乘法 N α] [标量交换类 N M α]
   定义体: smulInvariantMeasure_map μ _ (smul_comm n) measurable_const_smul _
 
 Depends on / 依赖: measurable_const_smul, smulInvariantMeasure_map, smul_comm
@@ -1011,7 +1011,7 @@ measure_mono_null ht
 
 中文:
 定理 measure_isOpen_pos_of_smulInvariant_of_compact_ne_zero
-  结论: (hK : IsCompact K) (hμK : μ K != 0)
+  结论: (hK : 是紧集 K) (hμK : μ K != 0)
   证明: let ⟨t, ht⟩ := hK.exists_finite_cover_smul G hU hne
   pos_iff_ne_zero.2 fun hμU =>
 hμK
@@ -1049,7 +1049,7 @@ Ne.lt_top by rwa [measure_preimage_smul]⟩⟩
 
 中文:
 定理 isLocallyFiniteMeasure_of_smulInvariant
-  条件: (hU : IsOpen U) (hne : U.Nonempty) (hμU : μ U != ∞)
+  条件: (hU : 是开集 U) (hne : U.非空) (hμU : μ U != ∞)
   证明: ⟨fun x =>
     let ⟨g, hg⟩ := hU.exists_smul_mem G x hne
     ⟨(g • ·) ⁻¹' U, (hU.preimage (continuous_id.const_smul _)).mem_nhds hg,
@@ -1080,7 +1080,7 @@ theorem measure_isOpen_pos_of_smulInvariant_of_ne_zero
 
 中文:
 定理 measure_isOpen_pos_of_smulInvariant_of_ne_zero
-  结论: (hμ : μ != 0) (hU : IsOpen U)
+  结论: (hμ : μ != 0) (hU : 是开集 U)
   证明: let ⟨_K, hK, hμK⟩ := Regular.exists_isCompact_not_null.mpr hμ
   measure_isOpen_pos_of_smulInvariant_of_compact_ne_zero G hK hμK hU hne
 
@@ -1107,7 +1107,7 @@ theorem measure_pos_iff_nonempty_of_smulInvariant
 
 中文:
 定理 measure_pos_iff_nonempty_of_smulInvariant
-  条件: (hμ : μ != 0) (hU : IsOpen U)
+  条件: (hμ : μ != 0) (hU : 是开集 U)
   证明: ⟨fun h => nonempty_of_measure_ne_zero h.ne',
     measure_isOpen_pos_of_smulInvariant_of_ne_zero G hμ hU⟩
 
@@ -1132,7 +1132,7 @@ theorem measure_eq_zero_iff_eq_empty_of_smulInvariant
 
 中文:
 定理 measure_eq_zero_iff_eq_empty_of_smulInvariant
-  条件: (hμ : μ != 0) (hU : IsOpen U)
+  条件: (hμ : μ != 0) (hU : 是开集 U)
   证明: by
   rw [← not_iff_not]; rw [← Ne]; rw [← pos_iff_ne_zero]; rw [measure_pos_iff_nonempty_of_smulInvariant G hμ hU]; rw [nonempty_iff_ne_empty]
 

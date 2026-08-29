@@ -41,7 +41,7 @@ theorem iSup_decode₂
 
 中文:
 定理 iSup_decode₂
-  条件: [CompleteLattice α] (f : β -> α)
+  条件: [完备格 α] (f : β -> α)
   证明: by
   rw [iSup_comm]
   simp only [mem_decode₂, iSup_iSup_eq_right]
@@ -66,7 +66,7 @@ theorem iUnion_decode₂
 
 中文:
 定理 iUnion_decode₂
-  条件: (f : β -> Set α)
+  条件: (f : β -> 集合 α)
   结论: ⋃ (i : 自然数) (b in decode₂ β i), f b = ⋃ b, f b
   证明: iSup_decode₂ f
 
@@ -92,7 +92,7 @@ theorem iUnion_decode₂_cases
 
 中文:
 定理 iUnion_decode₂_cases
-  条件: {f : β -> Set α} {C : Set α -> 命题} (H0 : C ∅) (H1 : 对任意 b, C (f b)) {n}
+  条件: {f : β -> 集合 α} {C : 集合 α -> 命题} (H0 : C ∅) (H1 : 对任意 b, C (f b)) {n}
   证明: match decode₂ β n with
   | none => by
     simp only [Option.mem_def, iUnion_of_empty, iUnion_empty, reduceCtorEq]
@@ -129,7 +129,7 @@ theorem iUnion_decode₂_disjoint_on
 
 中文:
 定理 iUnion_decode₂_disjoint_on
-  条件: {f : β -> Set α} (hd : Pairwise (Disjoint on f))
+  条件: {f : β -> 集合 α} (hd : 两两 (Disjoint on f))
   证明: by
   rintro i j ij
   refine disjoint_left.mpr fun x => ?_

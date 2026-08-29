@@ -94,14 +94,14 @@ structure Ctx
 
 中文:
 结构 Ctx
-  参数: {u : Level} {α : Q(类型u)} (rα : Q(CommRing $α))
+  参数: {u : Level} {α : Q(类型u)} (rα : Q(交换环 $α))
   公理与运算 (6 个):
     - cα : Common.Cache (commSemiringOfCommRing rα)
     - rc : Common.RingCompute RatCoeff (commSemiringOfCommRing rα)
     - dimension : 自然数
     - dimensionLit : Q(自然数)
-    - arrayExpr : Q(Array $α)
-    - arrayEntries : Array Q($α)
+    - arrayExpr : Q(数组 $α)
+    - arrayEntries : 数组 Q($α)
 -/
 structure Ctx {u : Level} {α : Q(Type u)} (rα : Q(CommRing $α)) where
   /-- `Ring` evaluation cache for the scalar ring. -/
@@ -135,7 +135,7 @@ structure ReifiedBirdDet
   公理与运算 (4 个):
     - {u : Level}
     - {α : Q(类型u)}
-    - rα : Q(CommRing $α)
+    - rα : Q(交换环 $α)
     - ctx : Ctx rα
 -/
 structure ReifiedBirdDet where

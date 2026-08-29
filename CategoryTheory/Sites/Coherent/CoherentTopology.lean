@@ -40,7 +40,7 @@ theorem coherentTopology.mem_sieves_of_hasEffectiveEpiFamily
 
 中文:
 定理 coherentTopology.mem_sieves_of_hasEffectiveEpiFamily
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   证明: by
   intro ⟨α, _, Y, π, hπ⟩
   apply (coherentCoverage C).mem_toGrothendieck_sieves_of_superset (R := Presieve.ofArrows Y π)
@@ -74,7 +74,7 @@ theorem EffectiveEpiFamily.transitive_of_finite
 
 中文:
 定理 EffectiveEpiFamily.transitive_of_finite
-  结论: {α : Type} [Finite α] {Y : α -> C}
+  结论: {α : 类型} [有限 α] {Y : α -> C}
   证明: by
   rw [← Sieve.effectiveEpimorphic_family]
   suffices h₂ : (Sieve.generate (Presieve.ofArrows (fun (⟨a, b⟩ : Σ _, β _) => Y_n a b)
@@ -158,7 +158,7 @@ theorem coherentTopology.mem_sieves_iff_hasEffectiveEpiFamily
 
 中文:
 定理 coherentTopology.mem_sieves_iff_hasEffectiveEpiFamily
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   证明: by
   constructor
   · intro h

@@ -57,7 +57,7 @@ theorem coe_join
 
 中文:
 定理 coe_join
-  结论: 对任意 L : List (List α), join (L.map ((↑) : List α -> Multiset α) :
+  结论: 对任意 L : 列表 (列表 α), join (L.map ((↑) : 列表 α -> Multiset α) :
 -/
 theorem coe_join : forall L : List (List α), join (L.map ((↑) : List α -> Multiset α) :
     Multiset (Multiset α)) = L.flatten
@@ -204,7 +204,7 @@ theorem card_join
 中文:
 定理 card_join
   条件: (S)
-  结论: card (@join α S) = sum (map card S)
+  结论: card (@join α S) = 求和 (map card S)
   证明: Multiset.induction_on S (by simp) (by simp)
 
 @[simp]
@@ -260,7 +260,7 @@ theorem prod_join
 
 中文:
 定理 prod_join
-  条件: [CommMonoid α] {S : Multiset (Multiset α)}
+  条件: [交换幺半群 α] {S : Multiset (Multiset α)}
   证明: by
   induction S using Multiset.induction with
   | empty => simp
@@ -288,8 +288,8 @@ theorem rel_join
 
 中文:
 定理 rel_join
-  条件: {r : α -> β -> 命题} {s t} (h : Rel (Rel r) s t)
-  结论: Rel r s.join t.join
+  条件: {r : α -> β -> 命题} {s t} (h : 关系 (关系 r) s t)
+  结论: 关系 r s.join t.join
   证明: by
   induction h with
   | zero => simp
@@ -342,7 +342,7 @@ theorem filterMap_join
 
 中文:
 定理 filterMap_join
-  条件: (S : Multiset (Multiset α)) (f : α -> Option β)
+  条件: (S : Multiset (Multiset α)) (f : α -> 选项类型 β)
   证明: by
   induction S using Multiset.induction with
   | empty => simp
@@ -401,7 +401,7 @@ theorem coe_bind
 
 中文:
 定理 coe_bind
-  条件: (l : List α) (f : α -> List β)
+  条件: (l : 列表 α) (f : α -> 列表 β)
   结论: (@bind α β l fun a => f a) = l.flatMap f
   证明: by
   rw [List.flatMap]; rw [← coe_join]; rw [List.map_map]
@@ -628,7 +628,7 @@ theorem card_bind
 
 中文:
 定理 card_bind
-  结论: card (s.bind f) = (s.map (card ∘ f)).sum
+  结论: card (s.bind f) = (s.map (card ∘ f)).求和
   证明: by simp [bind]
 
 @[congr]
@@ -861,7 +861,7 @@ theorem filterMap_eq_bind
 
 中文:
 定理 filterMap_eq_bind
-  条件: (m : Multiset α) (f : α -> Option β)
+  条件: (m : Multiset α) (f : α -> 选项类型 β)
   证明: by
   induction m using Multiset.induction with
   | empty => simp
@@ -890,7 +890,7 @@ theorem bind_filterMap
 
 中文:
 定理 bind_filterMap
-  条件: (m : Multiset α) (f : α -> Option β) (g : β -> Multiset γ)
+  条件: (m : Multiset α) (f : α -> 选项类型 β) (g : β -> Multiset γ)
   证明: by
   simp only [filterMap_eq_bind, Multiset.bind_assoc]
   apply Multiset.bind_congr; intro a ham
@@ -921,7 +921,7 @@ theorem filterMap_bind
 
 中文:
 定理 filterMap_bind
-  条件: (m : Multiset α) (f : α -> Multiset β) (g : β -> Option γ)
+  条件: (m : Multiset α) (f : α -> Multiset β) (g : β -> 选项类型 γ)
   证明: by
   simp [bind, filterMap_join]
 
@@ -944,7 +944,7 @@ theorem prod_bind
 
 中文:
 定理 prod_bind
-  条件: [CommMonoid β] (s : Multiset α) (t : α -> Multiset β)
+  条件: [交换幺半群 β] (s : Multiset α) (t : α -> Multiset β)
   证明: by simp [bind]
 -/
 theorem prod_bind [CommMonoid β] (s : Multiset α) (t : α -> Multiset β) :
@@ -1237,7 +1237,7 @@ theorem coe_product
 
 中文:
 定理 coe_product
-  条件: (l₁ : List α) (l₂ : List β)
+  条件: (l₁ : 列表 α) (l₂ : 列表 β)
   证明: by
   dsimp only [SProd.sprod]
   rw [product]; rw [List.product]; rw [← coe_bind]
@@ -1287,7 +1287,7 @@ theorem cons_product
 
 中文:
 定理 cons_product
-  结论: (a ::ₘ s) ×ˢ t = map (Prod.mk a) t + s ×ˢ t
+  结论: (a ::ₘ s) ×ˢ t = map (积类型.mk a) t + s ×ˢ t
   证明: by simp [SProd.sprod, product]
 
 @[simp]
@@ -1507,7 +1507,7 @@ lemma prod_map_product_eq_prod_prod
 
 中文:
 引理 prod_map_product_eq_prod_prod
-  结论: {M : 类型} [CommMonoid M]
+  结论: {M : 类型} [交换幺半群 M]
   证明: by
   induction s using Multiset.induction <;> simp_all
 
@@ -1562,7 +1562,7 @@ theorem coe_sigma
 
 中文:
 定理 coe_sigma
-  条件: (l₁ : List α) (l₂ : 对任意 a, List (σ a))
+  条件: (l₁ : 列表 α) (l₂ : 对任意 a, 列表 (σ a))
   证明: by
   rw [Multiset.sigma]; rw [List.sigma]; rw [← coe_bind]
   simp
@@ -1611,7 +1611,7 @@ theorem cons_sigma
 
 中文:
 定理 cons_sigma
-  结论: (a ::ₘ s).sigma t = (t a).map (Sigma.mk a) + s.sigma t
+  结论: (a ::ₘ s).sigma t = (t a).map (依赖和类型.mk a) + s.sigma t
   证明: by
   simp [Multiset.sigma]
 
@@ -1707,7 +1707,7 @@ theorem card_sigma
 
 中文:
 定理 card_sigma
-  结论: card (s.sigma t) = sum (map (fun a => card (t a)) s)
+  结论: card (s.sigma t) = 求和 (map (fun a => card (t a)) s)
   证明: by
   simp [Multiset.sigma, (· ∘ ·)]
 

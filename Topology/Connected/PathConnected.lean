@@ -181,7 +181,7 @@ theorem Joined.map
 
 中文:
 定理 Joined.map
-  条件: {x y : X} {f : X -> Y} (h : Joined x y) (hf : Continuous f)
+  条件: {x y : X} {f : X -> Y} (h : Joined x y) (hf : 连续 f)
   证明: ⟨h.somePath.map hf⟩
 
 @[to_additive]
@@ -205,7 +205,7 @@ theorem Joined.mul
 
 中文:
 定理 Joined.mul
-  结论: {M : 类型} [Mul M] [TopologicalSpace M] [ContinuousMul M]
+  结论: {M : 类型} [乘法 M] [拓扑空间 M] [连续乘法 M]
   证明: ⟨hs.somePath.mul ht.somePath⟩
 
 @[to_additive]
@@ -232,7 +232,7 @@ theorem Joined.listProd
 
 中文:
 定理 Joined.listProd
-  结论: {M : 类型} [MulOneClass M] [TopologicalSpace M] [ContinuousMul M]
+  结论: {M : 类型} [MulOne类 M] [拓扑空间 M] [连续乘法 M]
   证明: by
   induction h with
   | nil => rfl
@@ -258,7 +258,7 @@ theorem Joined.inv
 
 中文:
 定理 Joined.inv
-  结论: {G : 类型} [Inv G] [TopologicalSpace G] [ContinuousInv G]
+  结论: {G : 类型} [取逆 G] [拓扑空间 G] [连续取逆 G]
   证明: ⟨h.somePath.inv⟩
 
 Depends on / 依赖: h.somePath.inv, somePath
@@ -282,7 +282,7 @@ definition pathSetoid
 
 中文:
 定义 pathSetoid
-  签名: : Setoid X where
+  签名: : 集合等价关系 X where
   定义体: Joined
   iseqv := Equivalence.mk Joined.refl Joined.symm Joined.trans
 
@@ -343,7 +343,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk (X := X))
+  结论: 函数.满射 (mk (X := X))
   证明: by
   rintro ⟨x⟩
   exact ⟨x, rfl⟩
@@ -391,7 +391,7 @@ lemma sound
 
 中文:
 引理 sound
-  条件: {x y : X} (p : Path x y)
+  条件: {x y : X} (p : 道路 x y)
   结论: mk x = mk y
   证明: Quotient.sound ⟨p⟩
 
@@ -410,7 +410,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace ZerothHomotopy X
+  签名: 拓扑空间 ZerothHomotopy X
   定义体: inferInstanceAs TopologicalSpace Quotient _
 
 Depends on / 依赖: Quotient, TopologicalSpace
@@ -428,7 +428,7 @@ lemma isQuotientMap_mk
 
 中文:
 引理 isQuotientMap_mk
-  结论: IsQuotientMap (ZerothHomotopy.mk (X := X))
+  结论: 是商映射 (ZerothHomotopy.mk (X := X))
   证明: isQuotientMap_quotient_mk'
 -/
 lemma isQuotientMap_mk : IsQuotientMap (ZerothHomotopy.mk (X := X)) :=
@@ -444,7 +444,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (ZerothHomotopy 实数)
+  签名: : 可居 (ZerothHomotopy 实数)
   定义体: ⟨@Quotient.mk' Real (pathSetoid Real) 0⟩
 
 Depends on / 依赖: Quotient, Quotient.mk, pathSetoid
@@ -461,8 +461,8 @@ instance [Nonempty
   body: ⟨.mk (Classical.arbitrary _)⟩
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty (ZerothHomotopy X)
+实例 [非空
+  签名: X] : 非空 (ZerothHomotopy X)
   定义体: ⟨.mk (Classical.arbitrary _)⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
@@ -532,7 +532,7 @@ definition JoinedIn
 
 中文:
 定义 JoinedIn
-  签名: (F : Set X) (x y : X)
+  签名: (F : 集合 X) (x y : X)
   定义体: exists γ : Path x y, forall t, γ t in F
 -/
 def JoinedIn (F : Set X) (x y : X) : Prop :=
@@ -771,7 +771,7 @@ theorem JoinedIn.mono
 
 中文:
 定理 JoinedIn.mono
-  条件: {U V : Set X} (h : JoinedIn U x y) (hUV : U subseteq V)
+  条件: {U V : 集合 X} (h : JoinedIn U x y) (hUV : U subseteq V)
   结论: JoinedIn V x y
   证明: ⟨h.somePath, fun t => hUV (h.somePath_mem t)⟩
 
@@ -908,8 +908,8 @@ theorem Inseparable.joinedIn
   proof: h.specializes.joinedIn hx hy
 
 中文:
-定理 Inseparable.joinedIn
-  条件: (h : Inseparable x y) (hx : x in F) (hy : y in F)
+定理 不可分.joinedIn
+  条件: (h : 不可分 x y) (hx : x in F) (hy : y in F)
   结论: JoinedIn F x y
   证明: h.specializes.joinedIn hx hy
 
@@ -950,7 +950,7 @@ theorem JoinedIn.map
 
 中文:
 定理 JoinedIn.map
-  条件: (h : JoinedIn F x y) {f : X -> Y} (hf : Continuous f)
+  条件: (h : JoinedIn F x y) {f : X -> Y} (hf : 连续 f)
   证明: h.map_continuousOn hf.continuousOn
 
 Depends on / 依赖: continuousOn, h.map_continuousOn, hf.continuousOn, map_continuousOn
@@ -975,8 +975,8 @@ theorem Topology.IsInducing.joinedIn_image
     refine ⟨⟨⟨γ', ?_⟩, rfl, rfl⟩, 
 
 中文:
-定理 Topology.IsInducing.joinedIn_image
-  结论: {f : X -> Y} (hf : IsInducing f) (hx : x in F)
+定理 拓扑.是Inducing.joinedIn_image
+  结论: {f : X -> Y} (hf : 是Inducing f) (hx : x in F)
   证明: by
   refine ⟨?_, (.map · hf.continuous)⟩
   rintro ⟨γ, hγ⟩
@@ -1013,7 +1013,7 @@ theorem JoinedIn.mul
 
 中文:
 定理 JoinedIn.mul
-  结论: {M : 类型} [Mul M] [TopologicalSpace M] [ContinuousMul M]
+  结论: {M : 类型} [乘法 M] [拓扑空间 M] [连续乘法 M]
   证明: ⟨hs.somePath.mul ht.somePath, fun t => Set.mul_mem_mul (hs.somePath_mem t) (ht.somePath_mem t)⟩
 
 @[to_additive]
@@ -1036,7 +1036,7 @@ theorem JoinedIn.inv
 
 中文:
 定理 JoinedIn.inv
-  结论: {G : 类型} [InvolutiveInv G] [TopologicalSpace G] [ContinuousInv G]
+  结论: {G : 类型} [InvolutiveInv G] [拓扑空间 G] [连续取逆 G]
   证明: ⟨hs.somePath.inv, fun t => Set.inv_mem_inv.mpr (hs.somePath_mem t)⟩
 
 Depends on / 依赖: Set.inv_mem_inv.mpr, hs.somePath.inv, hs.somePath_mem, inv_mem_inv, somePath, somePath_mem
@@ -1123,7 +1123,7 @@ theorem pathComponent.nonempty
 中文:
 定理 pathComponent.nonempty
   条件: (x : X)
-  结论: (pathComponent x).Nonempty
+  结论: (pathComponent x).非空
   证明: ⟨x, mem_pathComponent_self x⟩
 
 Depends on / 依赖: mem_pathComponent_self
@@ -1332,7 +1332,7 @@ definition pathComponentIn
 
 中文:
 定义 pathComponentIn
-  签名: (F : Set X) (x : X)
+  签名: (F : 集合 X) (x : X)
   定义体: { y | JoinedIn F x y }
 
 @[simp]
@@ -1432,7 +1432,7 @@ theorem pathComponentIn_nonempty_iff
 
 中文:
 定理 pathComponentIn_nonempty_iff
-  结论: (pathComponentIn F x).Nonempty ↔ x in F
+  结论: (pathComponentIn F x).非空 ↔ x in F
   证明: ⟨fun ⟨_, ⟨γ, hγ⟩⟩ => γ.source ▸ hγ 0, fun hx => ⟨x, mem_pathComponentIn_self hx⟩⟩
 
 Depends on / 依赖: mem_pathComponentIn_self, source
@@ -1476,7 +1476,7 @@ theorem pathComponentIn_mono
 
 中文:
 定理 pathComponentIn_mono
-  条件: {G : Set X} (h : F subseteq G)
+  条件: {G : 集合 X} (h : F subseteq G)
   证明: fun _ ⟨γ, hγ⟩ => ⟨γ, fun t => h (hγ t)⟩
 -/
 theorem pathComponentIn_mono {G : Set X} (h : F subseteq G) :
@@ -1499,8 +1499,8 @@ definition Submonoid.pathComponentOne
   one_mem' := mem_pathComponent_self 1
 
 中文:
-定义 Submonoid.pathComponentOne
-  签名: (M : 类型) [Monoid M] [TopologicalSpace M] [ContinuousMul M]
+定义 子幺半群.pathComponentOne
+  签名: (M : 类型) [幺半群 M] [拓扑空间 M] [连续乘法 M]
   定义体: pathComponent (1 : M)
   mul_mem' {m₁ m₂} hm₁ hm₂ := by simpa using! hm₁.mul hm₂
   one_mem' := mem_pathComponent_self 1
@@ -1526,8 +1526,8 @@ definition Subgroup.pathComponentOne
   inv_mem' {g} hg := by simpa using! hg.inv
 
 中文:
-定义 Subgroup.pathComponentOne
-  签名: (G : 类型) [Group G] [TopologicalSpace G] [IsTopologicalGroup G]
+定义 子群.pathComponentOne
+  签名: (G : 类型) [群 G] [拓扑空间 G] [是拓扑群 G]
   定义体: .pathComponentOne G
   inv_mem' {g} hg := by simpa using! hg.inv
 
@@ -1549,8 +1549,8 @@ instance Subgroup.Normal.pathComponentOne
   body: fun ⟨γ⟩ g => ⟨⟨⟨(g * γ · * g⁻¹), by fun_prop⟩, by simp, by simp⟩⟩
 
 中文:
-实例 Subgroup.Normal.pathComponentOne
-  签名: (G : 类型) [Group G] [TopologicalSpace G]
+实例 子群.正规.pathComponentOne
+  签名: (G : 类型) [群 G] [拓扑空间 G]
   定义体: fun ⟨γ⟩ g => ⟨⟨⟨(g * γ · * g⁻¹), by fun_prop⟩, by simp, by simp⟩⟩
 
 Depends on / 依赖: fun_prop
@@ -1571,8 +1571,8 @@ definition IsPathConnected
   body: exists x in F, forall ⦃y⦄, y in F -> JoinedIn F x y
 
 中文:
-定义 IsPathConnected
-  签名: (F : Set X)
+定义 是道路连通
+  签名: (F : 集合 X)
   定义体: exists x in F, forall ⦃y⦄, y in F -> JoinedIn F x y
 
 Depends on / 依赖: JoinedIn
@@ -1595,7 +1595,7 @@ theorem isPathConnected_iff_eq
 
 中文:
 定理 isPathConnected_iff_eq
-  结论: IsPathConnected F ↔ 存在 x in F, pathComponentIn F x = F
+  结论: 是道路连通 F ↔ 存在 x in F, pathComponentIn F x = F
   证明: by
   constructor <;> rintro ⟨x, x_in, h⟩ <;> use x, x_in
   · ext y
@@ -1623,8 +1623,8 @@ theorem IsPathConnected.joinedIn
   (hb x_in).symm.trans (hb y_in)
 
 中文:
-定理 IsPathConnected.joinedIn
-  条件: (h : IsPathConnected F)
+定理 是道路连通.joinedIn
+  条件: (h : 是道路连通 F)
   证明: fun _x x_in _y y_in =>
   let ⟨_b, _b_in, hb⟩ := h
   (hb x_in).symm.trans (hb y_in)
@@ -1669,9 +1669,9 @@ theorem IsPathConnected.nonempty
   proof: .1 isPathConnected_iff.mp h
 
 中文:
-定理 IsPathConnected.nonempty
-  条件: (h : IsPathConnected F)
-  结论: F.Nonempty
+定理 是道路连通.nonempty
+  条件: (h : 是道路连通 F)
+  结论: F.非空
   证明: .1 isPathConnected_iff.mp h
 
 Depends on / 依赖: isPathConnected_iff, isPathConnected_iff.mp
@@ -1693,8 +1693,8 @@ theorem IsPathConnected.image'
   exact hf.mono (range_subset_iff.2 (hx y_in).somePath_mem)
 
 中文:
-定理 IsPathConnected.image'
-  结论: (hF : IsPathConnected F)
+定理 是道路连通.像'
+  结论: (hF : 是道路连通 F)
   证明: by
   rcases hF with ⟨x, x_in, hx⟩
   use f x, mem_image_of_mem f x_in
@@ -1723,8 +1723,8 @@ theorem IsPathConnected.image
 @[to_additive]
 
 中文:
-定理 IsPathConnected.image
-  条件: (hF : IsPathConnected F) {f : X -> Y} (hf : Continuous f)
+定理 是道路连通.像
+  条件: (hF : 是道路连通 F) {f : X -> Y} (hf : 连续 f)
   证明: hF.image' hf.continuousOn
 
 @[to_additive]
@@ -1748,8 +1748,8 @@ theorem IsPathConnected.mul
 @[to_additive]
 
 中文:
-定理 IsPathConnected.mul
-  结论: {M : 类型} [Mul M] [TopologicalSpace M] [ContinuousMul M]
+定理 是道路连通.mul
+  结论: {M : 类型} [乘法 M] [拓扑空间 M] [连续乘法 M]
   证明: let ⟨a, ha_mem, ha⟩ := hs; let ⟨b, hb_mem, hb⟩ := ht
   ⟨a * b, mul_mem_mul ha_mem hb_mem, Set.forall_mem_image2.2 fun _x hx _y hy => (ha hx).mul (hb hy)⟩
 
@@ -1774,8 +1774,8 @@ theorem IsPathConnected.inv
 .map continuous_inv⟩ ⟨a⁻¹, inv_mem_inv.mpr ha_mem, fun x hx => by simpa using ha (mem_inv.mp hx)
 
 中文:
-定理 IsPathConnected.inv
-  结论: {G : 类型} [InvolutiveInv G] [TopologicalSpace G] [ContinuousInv G]
+定理 是道路连通.inv
+  结论: {G : 类型} [InvolutiveInv G] [拓扑空间 G] [连续取逆 G]
   证明: let ⟨a, ha_mem, ha⟩ := hs
 .map continuous_inv⟩ ⟨a⁻¹, inv_mem_inv.mpr ha_mem, fun x hx => by simpa using ha (mem_inv.mp hx)
 
@@ -1805,8 +1805,8 @@ theorem Homeomorph.isPathConnected_image
   proof: h.isInducing.isPathConnected_iff.symm
 
 中文:
-定理 Homeomorph.isPathConnected_image
-  条件: {s : Set X} (h : X ≃ₜ Y)
+定理 同胚.isPathConnected_image
+  条件: {s : 集合 X} (h : X ≃ₜ Y)
   证明: h.isInducing.isPathConnected_iff.symm
 
 Depends on / 依赖: h.isInducing.isPathConnected_iff.symm, isInducing, isPathConnected_iff
@@ -1827,8 +1827,8 @@ theorem Homeomorph.isPathConnected_preimage
   rw [← Homeomorph.image_symm]; exact h.symm.isPathConnected_image
 
 中文:
-定理 Homeomorph.isPathConnected_preimage
-  条件: {s : Set Y} (h : X ≃ₜ Y)
+定理 同胚.isPathConnected_preimage
+  条件: {s : 集合 Y} (h : X ≃ₜ Y)
   证明: by
   rw [← Homeomorph.image_symm]; exact h.symm.isPathConnected_image
 
@@ -1847,8 +1847,8 @@ theorem IsPathConnected.mem_pathComponent
   proof: (h.joinedIn x x_in y y_in).joined
 
 中文:
-定理 IsPathConnected.mem_pathComponent
-  条件: (h : IsPathConnected F) (x_in : x in F) (y_in : y in F)
+定理 是道路连通.mem_pathComponent
+  条件: (h : 是道路连通 F) (x_in : x in F) (y_in : y in F)
   证明: (h.joinedIn x x_in y y_in).joined
 
 Depends on / 依赖: h.joinedIn, joined, joinedIn, x_in, y_in
@@ -1866,8 +1866,8 @@ theorem IsPathConnected.subset_pathComponent
   proof: fun _y y_in => h.mem_pathComponent x_in y_in
 
 中文:
-定理 IsPathConnected.subset_pathComponent
-  条件: (h : IsPathConnected F) (x_in : x in F)
+定理 是道路连通.subset_pathComponent
+  条件: (h : 是道路连通 F) (x_in : x in F)
   证明: fun _y y_in => h.mem_pathComponent x_in y_in
 
 Depends on / 依赖: h.mem_pathComponent, mem_pathComponent, x_in, y_in
@@ -1884,8 +1884,8 @@ theorem IsPathConnected.subset_pathComponentIn
   proof: fun y hys => (hs.joinedIn x hxs y hys).mono hsF
 
 中文:
-定理 IsPathConnected.subset_pathComponentIn
-  结论: {s : Set X} (hs : IsPathConnected s)
+定理 是道路连通.subset_pathComponentIn
+  结论: {s : 集合 X} (hs : 是道路连通 s)
   证明: fun y hys => (hs.joinedIn x hxs y hys).mono hsF
 
 Depends on / 依赖: hs.joinedIn, joinedIn
@@ -1909,7 +1909,7 @@ theorem isPathConnected_singleton
 中文:
 定理 isPathConnected_singleton
   条件: (x : X)
-  结论: IsPathConnected ({x} : Set X)
+  结论: 是道路连通 ({x} : 集合 X)
   证明: by
   refine ⟨x, rfl, ?_⟩
   rintro y rfl
@@ -1938,7 +1938,7 @@ theorem isPathConnected_pathComponentIn
 中文:
 定理 isPathConnected_pathComponentIn
   条件: (h : x in F)
-  结论: IsPathConnected (pathComponentIn F x)
+  结论: 是道路连通 (pathComponentIn F x)
   证明: ⟨x, mem_pathComponentIn_self h, fun _ ⟨γ, hγ⟩ => by
     refine ⟨γ, fun t =>
       ⟨(γ.truncateOfLE t.2.1).cast (γ.extend_zero.symm) (γ.extend_extends' t).symm, fun t' => ?_⟩⟩
@@ -1966,7 +1966,7 @@ theorem isPathConnected_pathComponent
 
 中文:
 定理 isPathConnected_pathComponent
-  结论: IsPathConnected (pathComponent x)
+  结论: 是道路连通 (pathComponent x)
   证明: by
   rw [← pathComponentIn_univ]
   exact isPathConnected_pathComponentIn (mem_univ x)
@@ -1991,8 +1991,8 @@ theorem IsPathConnected.union
   · exact (hV.joinedIn x xV y yV).mono subset_union_right
 
 中文:
-定理 IsPathConnected.union
-  结论: {U V : Set X} (hU : IsPathConnected U) (hV : IsPathConnected V)
+定理 是道路连通.union
+  结论: {U V : 集合 X} (hU : 是道路连通 U) (hV : 是道路连通 V)
   证明: by
   rcases hUV with ⟨x, xU, xV⟩
   use x, Or.inl xU
@@ -2020,8 +2020,8 @@ theorem IsPathConnected.preimage_coe
   rwa [IsInducing.subtypeVal.isPathConnected_iff, Subtype.image_preimage_val, inter_eq_right.2 hWU]
 
 中文:
-定理 IsPathConnected.preimage_coe
-  条件: {U W : Set X} (hW : IsPathConnected W) (hWU : W subseteq U)
+定理 是道路连通.preimage_coe
+  条件: {U W : 集合 X} (hW : 是道路连通 W) (hWU : W subseteq U)
   证明: by
   rwa [IsInducing.subtypeVal.isPathConnected_iff, Subtype.image_preimage_val, inter_eq_right.2 hWU]
 
@@ -2049,7 +2049,7 @@ theorem IsPathConnected.exists_path_through_family
     use Path.refl 
 
 中文:
-定理 IsPathConnected.exists_path_through_family
+定理 是道路连通.存在_path_through_family
   结论: {n : 自然数}
   证明: by
   cases p using snocCases with | _ p x => ?_
@@ -2102,7 +2102,7 @@ theorem IsPathConnected.exists_path_through_family'
   exact ⟨γ, t, h₁, ht⟩
 
 中文:
-定理 IsPathConnected.exists_path_through_family'
+定理 是道路连通.存在_path_through_family'
   结论: {n : 自然数}
   证明: by
   rcases h.exists_path_through_family p hp with ⟨γ, hγ⟩
@@ -2141,10 +2141,10 @@ class PathConnectedSpace
     - joined : forall x y : X, Joined x y
 
 中文:
-类 PathConnectedSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 道路连通空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (2 个):
-    - nonempty : Nonempty X
+    - nonempty : 非空 X
     - joined : 对任意 x y : X, Joined x y
 -/
 class PathConnectedSpace (X : Type*) [TopologicalSpace X] : Prop where
@@ -2228,7 +2228,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (ZerothHomotopy X)
+  签名: 子单例 (ZerothHomotopy X)
   定义体: (pathConnectedSpace_iff_zerothHomotopy.1 inferInstance).2
 
 Depends on / 依赖: pathConnectedSpace_iff_zerothHomotopy
@@ -2249,7 +2249,7 @@ theorem pathConnectedSpace_iff_univ
 
 中文:
 定理 pathConnectedSpace_iff_univ
-  结论: PathConnectedSpace X ↔ IsPathConnected (univ : Set X)
+  结论: 道路连通空间 X ↔ 是道路连通 (univ : 集合 X)
   证明: by
   simp [pathConnectedSpace_iff, isPathConnected_iff, nonempty_iff_univ_nonempty]
 
@@ -2269,7 +2269,7 @@ theorem isPathConnected_iff_pathConnectedSpace
 
 中文:
 定理 isPathConnected_iff_pathConnectedSpace
-  结论: IsPathConnected F ↔ PathConnectedSpace F
+  结论: 是道路连通 F ↔ 道路连通空间 F
   证明: by
   rw [pathConnectedSpace_iff_univ]; rw [IsInducing.subtypeVal.isPathConnected_iff]; rw [image_univ]; rw [Subtype.range_val_subtype]; rw [ofPred_mem_eq]
 
@@ -2289,8 +2289,8 @@ theorem isPathConnected_univ
 
 中文:
 定理 isPathConnected_univ
-  条件: [PathConnectedSpace X]
-  结论: IsPathConnected (univ : Set X)
+  条件: [道路连通空间 X]
+  结论: 是道路连通 (univ : 集合 X)
   证明: pathConnectedSpace_iff_univ.mp inferInstance
 
 Depends on / 依赖: pathConnectedSpace_iff_univ, pathConnectedSpace_iff_univ.mp
@@ -2310,7 +2310,7 @@ theorem isPathConnected_range
 
 中文:
 定理 isPathConnected_range
-  条件: [PathConnectedSpace X] {f : X -> Y} (hf : Continuous f)
+  条件: [道路连通空间 X] {f : X -> Y} (hf : 连续 f)
   证明: by
   rw [← image_univ]
   exact isPathConnected_univ.image hf
@@ -2333,8 +2333,8 @@ theorem Function.Surjective.pathConnectedSpace
   exact isPathConnected_range hf'
 
 中文:
-定理 Function.Surjective.pathConnectedSpace
-  结论: [PathConnectedSpace X]
+定理 函数.满射.pathConnectedSpace
+  结论: [道路连通空间 X]
   证明: by
   rw [pathConnectedSpace_iff_univ]; rw [← hf.range_eq]
   exact isPathConnected_range hf'
@@ -2355,8 +2355,8 @@ instance Quotient.instPathConnectedSpace
   body: Quotient.mk'_surjective.pathConnectedSpace continuous_coinduced_rng
 
 中文:
-实例 Quotient.instPathConnectedSpace
-  签名: {s : Setoid X} [PathConnectedSpace X]
+实例 商.instPathConnectedSpace
+  签名: {s : 集合等价关系 X} [道路连通空间 X]
   定义体: Quotient.mk'_surjective.pathConnectedSpace continuous_coinduced_rng
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, _surjective.pathConnectedSpace, continuous_coinduced_rng, pathConnectedSpace
@@ -2375,8 +2375,8 @@ instance Real.instPathConnectedSpace
   nonempty := inferInstance
 
 中文:
-实例 Real.instPathConnectedSpace
-  签名: : PathConnectedSpace 实数 where
+实例 实数.instPathConnectedSpace
+  签名: : 道路连通空间 实数 where
   定义体: ⟨⟨⟨fun (t : I) => (1 - t) * x + t * y, by fun_prop⟩, by simp, by simp⟩⟩
   nonempty := inferInstance
 
@@ -2401,7 +2401,7 @@ theorem Joined.prod
   proof: ⟨hx.somePath.prod hy.somePath⟩
 
 中文:
-定理 Joined.prod
+定理 Joined.乘积
   条件: {x₁ x₂ : X} {y₁ y₂ : Y} (hx : Joined x₁ x₂) (hy : Joined y₁ y₂)
   证明: ⟨hx.somePath.prod hy.somePath⟩
 
@@ -2420,7 +2420,7 @@ theorem JoinedIn.prod
   proof: ⟨hx.somePath.prod hy.somePath, by simp⟩
 
 中文:
-定理 JoinedIn.prod
+定理 JoinedIn.乘积
   条件: {x₁ x₂ : X} {y₁ y₂ : Y} (hx : JoinedIn s x₁ x₂) (hy : JoinedIn t y₁ y₂)
   证明: ⟨hx.somePath.prod hy.somePath, by simp⟩
 
@@ -2469,8 +2469,8 @@ theorem IsPathConnected.prod
 .prod ht.joinedIn y₁ hy₁ y₂ hy₂ exact hs.joinedIn x₁ hx₁ x₂ hx₂
 
 中文:
-定理 IsPathConnected.prod
-  条件: (hs : IsPathConnected s) (ht : IsPathConnected t)
+定理 是道路连通.乘积
+  条件: (hs : 是道路连通 s) (ht : 是道路连通 t)
   证明: by
   rw [isPathConnected_iff]
   refine ⟨hs.nonempty.prod ht.nonempty, fun (x₁, y₁) ⟨hx₁, hy₁⟩ (x₂, y₂) ⟨hx₂, hy₂⟩ => ?_⟩
@@ -2495,8 +2495,8 @@ instance Prod.instPathConnectedSpace
   exact isPathConnected_univ.prod isPathConnected_univ
 
 中文:
-实例 Prod.instPathConnectedSpace
-  签名: [PathConnectedSpace X] [PathConnectedSpace Y]
+实例 积类型.instPathConnectedSpace
+  签名: [道路连通空间 X] [道路连通空间 Y]
   定义体: by
   rw [pathConnectedSpace_iff_univ]; rw [← Set.univ_prod_univ]
   exact isPathConnected_univ.prod isPathConnected_univ
@@ -2544,7 +2544,7 @@ theorem JoinedIn.pi
 
 中文:
 定理 JoinedIn.pi
-  结论: {s : 对任意 i, Set (Z i)} {x y : 对任意 i, Z i}
+  结论: {s : 对任意 i, 集合 (Z i)} {x y : 对任意 i, Z i}
   证明: ⟨.pi (fun i => (h i).somePath), by simp⟩
 
 Depends on / 依赖: somePath
@@ -2591,8 +2591,8 @@ theorem IsPathConnected.pi
   exact ⟨x, by simpa, fun y hy => .pi fun i => hjoin i (by grind)⟩
 
 中文:
-定理 IsPathConnected.pi
-  条件: {s : 对任意 i, Set (Z i)} (h : 对任意 i, IsPathConnected (s i))
+定理 是道路连通.pi
+  条件: {s : 对任意 i, 集合 (Z i)} (h : 对任意 i, 是道路连通 (s i))
   证明: by
   choose x hx hjoin using h
   exact ⟨x, by simpa, fun y hy => .pi fun i => hjoin i (by grind)⟩
@@ -2613,8 +2613,8 @@ instance Pi.instPathConnectedSpace
   exact .pi fun _ => isPathConnected_univ
 
 中文:
-实例 Pi.instPathConnectedSpace
-  签名: [对任意 i, PathConnectedSpace (Z i)]
+实例 依赖函数类型.instPathConnectedSpace
+  签名: [对任意 i, 道路连通空间 (Z i)]
   定义体: by
   rw [pathConnectedSpace_iff_univ]; rw [← Set.pi_univ]
   exact .pi fun _ => isPathConnected_univ
@@ -2639,7 +2639,7 @@ theorem pathConnectedSpace_iff_eq
 
 中文:
 定理 pathConnectedSpace_iff_eq
-  结论: PathConnectedSpace X ↔ 存在 x : X, pathComponent x = univ
+  结论: 道路连通空间 X ↔ 存在 x : X, pathComponent x = univ
   证明: by
   simp [pathConnectedSpace_iff_univ, isPathConnected_iff_eq]
 
@@ -2670,9 +2670,9 @@ theorem IsPathConnected.isConnected
   exact @PathConnectedSpace.connectedSpace _ _ hF
 
 中文:
-定理 IsPathConnected.isConnected
-  条件: (hF : IsPathConnected F)
-  结论: IsConnected F
+定理 是道路连通.isConnected
+  条件: (hF : 是道路连通 F)
+  结论: 是连通 F
   证明: by
   rw [isConnected_iff_connectedSpace]
   rw [isPathConnected_iff_pathConnectedSpace] at hF
@@ -2701,8 +2701,8 @@ theorem exists_path_through_family
   exact ⟨γ, h⟩
 
 中文:
-定理 exists_path_through_family
-  条件: {n : 自然数} (p : Fin (n + 1) -> X)
+定理 存在_path_through_family
+  条件: {n : 自然数} (p : 有限集 (n + 1) -> X)
   证明: by
   have : IsPathConnected (univ : Set X) := pathConnectedSpace_iff_univ.mp (by infer_instance)
   rcases this.exists_path_through_family p fun _i => True.intro with ⟨γ, -, h⟩
@@ -2728,8 +2728,8 @@ theorem exists_path_through_family'
   exact ⟨γ, t, h⟩
 
 中文:
-定理 exists_path_through_family'
-  条件: {n : 自然数} (p : Fin (n + 1) -> X)
+定理 存在_path_through_family'
+  条件: {n : 自然数} (p : 有限集 (n + 1) -> X)
   证明: by
   have : IsPathConnected (univ : Set X) := pathConnectedSpace_iff_univ.mp (by infer_instance)
   rcases this.exists_path_through_family' p fun _i => True.intro with ⟨γ, t, -, h⟩
@@ -2781,8 +2781,8 @@ instance [CompactSpace
   body: Quotient.compactSpace
 
 中文:
-实例 [CompactSpace
-  签名: X] : CompactSpace ZerothHomotopy X
+实例 [紧空间
+  签名: X] : 紧空间 ZerothHomotopy X
   定义体: Quotient.compactSpace
 
 Depends on / 依赖: Quotient, Quotient.compactSpace, compactSpace

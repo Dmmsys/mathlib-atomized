@@ -172,7 +172,7 @@ instance instInhabitedEmb
 
 中文:
 实例 instInhabitedEmb
-  签名: : Inhabited (Emb F E)
+  签名: : 可居 (Emb F E)
   定义体: ⟨IsScalarTower.toAlgHom F E _⟩
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, toAlgHom
@@ -189,7 +189,7 @@ instance instNeZeroFinSepDegree
 
 中文:
 实例 instNeZeroFinSepDegree
-  签名: [FiniteDimensional F E]
+  签名: [有限维 F E]
   定义体: ⟨Nat.card_ne_zero.2 ⟨inferInstance, Fintype.finite minpoly.AlgHom.fintype _ _ _⟩⟩
 
 Depends on / 依赖: AlgHom, Fintype, Fintype.finite, Nat.card_ne_zero, card_ne_zero, finite, fintype, minpoly, minpoly.AlgHom.fintype
@@ -298,7 +298,7 @@ theorem finSepDegree_bot
 
 中文:
 定理 finSepDegree_bot
-  结论: finSepDegree F (⊥ : 整数ermediateField F E) = 1
+  结论: finSepDegree F (⊥ : 中间域 F E) = 1
   证明: by
   rw [finSepDegree_eq_of_equiv _ _ _ (botEquiv F E)]; rw [finSepDegree_self]
 
@@ -325,7 +325,7 @@ theorem finSepDegree_bot'
 
 中文:
 定理 finSepDegree_bot'
-  结论: finSepDegree F (⊥ : 整数ermediateField E K) = finSepDegree F E
+  结论: finSepDegree F (⊥ : 中间域 E K) = finSepDegree F E
   证明: finSepDegree_eq_of_equiv _ _ _ ((botEquiv E K).restrictScalars F)
 
 @[simp]
@@ -346,7 +346,7 @@ theorem finSepDegree_top
 
 中文:
 定理 finSepDegree_top
-  结论: finSepDegree F (⊤ : 整数ermediateField E K) = finSepDegree F K
+  结论: finSepDegree F (⊤ : 中间域 E K) = finSepDegree F K
   证明: finSepDegree_eq_of_equiv _ _ _ ((topEquiv (F := E) (E := K)).restrictScalars F)
 
 Depends on / 依赖: finSepDegree_eq_of_equiv, restrictScalars, topEquiv
@@ -366,7 +366,7 @@ theorem isSeparable_bot
 
 中文:
 定理 isSeparable_bot
-  结论: Algebra.IsSeparable F (⊥ : 整数ermediateField F E)
+  结论: 代数.是可分 F (⊥ : 中间域 F E)
   证明: AlgEquiv.Algebra.isSeparable (IntermediateField.botEquiv F E).symm
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.Algebra.isSeparable, Algebra, IntermediateField, IntermediateField.botEquiv, botEquiv, isSeparable
@@ -409,7 +409,7 @@ Classical.choice Function.Embedding.antisymm
 
 中文:
 定义 embEquivOfAdjoinSplits
-  签名: {S : Set E} (hS : adjoin F S = ⊤)
+  签名: {S : 集合 E} (hS : adjoin F S = ⊤)
   定义体: have : Algebra.IsAlgebraic F (⊤ : IntermediateField F E) :=
     (hS ▸ isAlgebraic_adjoin (S := S) fun x hx => (hK x hx).1)
   have halg := (topEquiv (F := F) (E := E)).isAlgebraic
@@ -438,7 +438,7 @@ theorem finSepDegree_eq_of_adjoin_splits
 
 中文:
 定理 finSepDegree_eq_of_adjoin_splits
-  结论: {S : Set E} (hS : adjoin F S = ⊤)
+  结论: {S : 集合 E} (hS : adjoin F S = ⊤)
   证明: Nat.card_congr (embEquivOfAdjoinSplits F E K hS hK)
 
 Depends on / 依赖: Nat.card_congr, card_congr, embEquivOfAdjoinSplits
@@ -458,7 +458,7 @@ definition embEquivOfIsAlgClosed
 
 中文:
 定义 embEquivOfIsAlgClosed
-  签名: [Algebra.IsAlgebraic F E] [IsAlgClosed K]
+  签名: [代数.是代数 F E] [是代数闭 K]
   定义体: embEquivOfAdjoinSplits F E K (adjoin_univ F E) fun s _ =>
     ⟨Algebra.IsIntegral.isIntegral s, IsAlgClosed.splits _⟩
 
@@ -482,7 +482,7 @@ theorem finSepDegree_eq_of_isAlgClosed
 
 中文:
 定理 finSepDegree_eq_of_isAlgClosed
-  条件: [Algebra.IsAlgebraic F E] [IsAlgClosed K]
+  条件: [代数.是代数 F E] [是代数闭 K]
   证明: Nat.card_congr (embEquivOfIsAlgClosed F E K)
 
 Depends on / 依赖: Nat.card_congr, card_congr, embEquivOfIsAlgClosed
@@ -504,7 +504,7 @@ definition embProdEmbOfIsAlgebraic
 
 中文:
 定义 embProdEmbOfIsAlgebraic
-  签名: [Algebra E K] [IsScalarTower F E K] [Algebra.IsAlgebraic E K]
+  签名: [代数 E K] [标量塔 F E K] [代数.是代数 E K]
   定义体: let e : forall f : E ->ₐ[F] AlgebraicClosure K,
       @AlgHom E K _ _ _ _ _ f.toRingHom.toAlgebra ≃ Emb E K := fun f =>
     (@embEquivOfIsAlgClosed E K _ _ _ _ _ f.toRingHom.toAlgebra).symm
@@ -540,7 +540,7 @@ instance infinite_emb_of_transcendental
 
 中文:
 实例 infinite_emb_of_transcendental
-  签名: [H : Algebra.Transcendental F E]
+  签名: [H : 代数.超越 F E]
   定义体: by
   obtain ⟨ι, x, hx⟩ := exists_isTranscendenceBasis' F E
   have := hx.isAlgebraic_field
@@ -583,7 +583,7 @@ theorem finSepDegree_eq_zero_of_transcendental
 
 中文:
 定理 finSepDegree_eq_zero_of_transcendental
-  条件: [Algebra.Transcendental F E]
+  条件: [代数.超越 F E]
   证明: Nat.card_eq_zero_of_infinite
 
 Depends on / 依赖: Nat.card_eq_zero_of_infinite, card_eq_zero_of_infinite
@@ -927,7 +927,7 @@ theorem natSepDegree_eq_natDegree_of_separable
 
 中文:
 定理 natSepDegree_eq_natDegree_of_separable
-  条件: (h : f.Separable)
+  条件: (h : f.可分)
   证明: (natSepDegree_eq_natDegree_iff f h.ne_zero).2 h
 
 Depends on / 依赖: h.ne_zero, natSepDegree_eq_natDegree_iff, ne_zero
@@ -945,8 +945,8 @@ theorem Separable.natSepDegree_eq_natDegree
   proof: natSepDegree_eq_natDegree_of_separable f h
 
 中文:
-定理 Separable.natSepDegree_eq_natDegree
-  条件: (h : f.Separable)
+定理 可分.natSepDegree_eq_natDegree
+  条件: (h : f.可分)
   证明: natSepDegree_eq_natDegree_of_separable f h
 
 Depends on / 依赖: natSepDegree_eq_natDegree_of_separable
@@ -989,7 +989,7 @@ theorem natSepDegree_eq_of_isAlgClosed
 
 中文:
 定理 natSepDegree_eq_of_isAlgClosed
-  条件: [DecidableEq E] [IsAlgClosed E]
+  条件: [DecidableEq E] [是代数闭 E]
   证明: natSepDegree_eq_of_splits f (IsAlgClosed.splits _)
 
 Depends on / 依赖: IsAlgClosed, IsAlgClosed.splits, natSepDegree_eq_of_splits, splits
@@ -1422,7 +1422,7 @@ theorem IsSeparableContraction.natSepDegree_eq
 
 中文:
 定理 IsSeparableContraction.natSepDegree_eq
-  结论: {g : Polynomial F} {q : 自然数} [ExpChar F q]
+  结论: {g : 多项式 F} {q : 自然数} [ExpChar F q]
   证明: by
   obtain ⟨h1, m, h2⟩ := h
   rw [← h2]; rw [natSepDegree_expand]; rw [h1.natSepDegree_eq_natDegree]
@@ -1473,7 +1473,7 @@ theorem natSepDegree_dvd_natDegree
 
 中文:
 定理 natSepDegree_dvd_natDegree
-  条件: (h : Irreducible f)
+  条件: (h : 不可约 f)
   证明: by
   obtain ⟨q, _⟩ := ExpChar.exists F
   have hf := h.hasSeparableContraction q
@@ -1875,7 +1875,7 @@ theorem finSepDegree_adjoin_simple_eq_natSepDegree
 
 中文:
 定理 finSepDegree_adjoin_simple_eq_natSepDegree
-  条件: {α : E} (halg : IsAlgebraic F α)
+  条件: {α : E} (halg : 是代数 F α)
   证明: by
   have : finSepDegree F F⟮α⟯ = _ := Nat.card_congr
     (algHomAdjoinIntegralEquiv F (K := AlgebraicClosure F⟮α⟯) halg.isIntegral)
@@ -1940,7 +1940,7 @@ exact Nat.le_of_dvd finrank_pos finSepDegree_adjoin_simple_dvd_finrank F E α
 
 中文:
 定理 finSepDegree_adjoin_simple_le_finrank
-  条件: (α : E) (halg : IsAlgebraic F α)
+  条件: (α : E) (halg : 是代数 F α)
   证明: by
   have := adjoin.finiteDimensional halg.isIntegral
 exact Nat.le_of_dvd finrank_pos finSepDegree_adjoin_simple_dvd_finrank F E α
@@ -1963,7 +1963,7 @@ theorem finSepDegree_adjoin_simple_eq_finrank_iff
 
 中文:
 定理 finSepDegree_adjoin_simple_eq_finrank_iff
-  条件: (α : E) (halg : IsAlgebraic F α)
+  条件: (α : E) (halg : 是代数 F α)
   证明: by
   rw [finSepDegree_adjoin_simple_eq_natSepDegree F E halg]; rw [adjoin.finrank halg.isIntegral]; rw [natSepDegree_eq_natDegree_iff _ (minpoly.ne_zero halg.isIntegral)]; rw [IsSeparable]
 
@@ -2026,7 +2026,7 @@ theorem finSepDegree_le_finrank
 
 中文:
 定理 finSepDegree_le_finrank
-  条件: [FiniteDimensional F E]
+  条件: [有限维 F E]
   证明: Nat.le_of_dvd finrank_pos finSepDegree_dvd_finrank F E
 
 Depends on / 依赖: Nat.le_of_dvd, finSepDegree_dvd_finrank, finrank_pos, le_of_dvd
@@ -2050,7 +2050,7 @@ theorem finSepDegree_eq_finrank_of_isSeparable
 
 中文:
 定理 finSepDegree_eq_finrank_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   证明: by
   wlog hfd : FiniteDimensional F E generalizing E with H
   · rw [finrank_of_infinite_dimensional hfd]
@@ -2100,7 +2100,7 @@ refine (finSepDegree_adjoin_simple_eq_finrank_iff F E x halg).1 le_antisymm
 
 中文:
 定理 finSepDegree_eq_finrank_iff
-  条件: [FiniteDimensional F E]
+  条件: [有限维 F E]
   证明: ⟨fun heq => ⟨fun x => by
     have halg := IsAlgebraic.of_finite F x
 refine (finSepDegree_adjoin_simple_eq_finrank_iff F E x halg).1 le_antisymm
@@ -2131,8 +2131,8 @@ lemma IntermediateField.isSeparable_of_mem_isSeparable
   simpa only [IsSeparable, minpoly_eq] using Algebra.IsSeparable.isSeparable F (K := L) ⟨x, h⟩
 
 中文:
-引理 IntermediateField.isSeparable_of_mem_isSeparable
-  结论: {L : 整数ermediateField F E}
+引理 中间域.isSeparable_of_mem_isSeparable
+  结论: {L : 中间域 F E}
   证明: by
   simpa only [IsSeparable, minpoly_eq] using Algebra.IsSeparable.isSeparable F (K := L) ⟨x, h⟩
 
@@ -2157,7 +2157,7 @@ theorem IntermediateField.isSeparable_adjoin_simple_iff_isSeparable
       finSepDegree_adjoin_simple_eq_finrank_iff F E x h.isAlgebraic
 
 中文:
-定理 IntermediateField.isSeparable_adjoin_simple_iff_isSeparable
+定理 中间域.isSeparable_adjoin_simple_iff_isSeparable
   条件: {x : E}
   证明: by
   refine ⟨fun _ => ?_, fun hsep => ?_⟩
@@ -2194,8 +2194,8 @@ theorem IsSeparable.of_algebra_isSeparable_of_isSeparable
   have h : g.map (algebraMap E' E) = f
 
 中文:
-定理 IsSeparable.of_algebra_isSeparable_of_isSeparable
-  结论: [Algebra E K] [IsScalarTower F E K]
+定理 是可分.of_algebra_isSeparable_of_isSeparable
+  结论: [代数 E K] [标量塔 F E K]
   证明: by
   set f := minpoly E x with hf
   let E' : IntermediateField F E := adjoin F f.coeffs
@@ -2243,8 +2243,8 @@ theorem Algebra.IsSeparable.trans
     (Algebra.IsSeparable.isSeparable E x)⟩
 
 中文:
-定理 Algebra.IsSeparable.trans
-  结论: [Algebra E K] [IsScalarTower F E K]
+定理 代数.是可分.trans
+  结论: [代数 E K] [标量塔 F E K]
   证明: ⟨fun x => IsSeparable.of_algebra_isSeparable_of_isSeparable F
     (Algebra.IsSeparable.isSeparable E x)⟩
 
@@ -2268,7 +2268,7 @@ theorem IntermediateField.isSeparable_adjoin_pair_of_isSeparable
   exact Algebra.IsSeparable.trans F F⟮x⟯ F⟮x⟯⟮y⟯
 
 中文:
-定理 IntermediateField.isSeparable_adjoin_pair_of_isSeparable
+定理 中间域.isSeparable_adjoin_pair_of_isSeparable
   结论: {x y : E}
   证明: by
   rw [← adjoin_simple_adjoin_simple]
@@ -2302,7 +2302,7 @@ isSeparable_of_mem_isSeparable F E F⟮x, y⟯.mul_mem (subset_adjoin F _ (.inl 
 
 中文:
 定理 isSeparable_mul
-  条件: {x y : E} (hx : IsSeparable F x) (hy : IsSeparable F y)
+  条件: {x y : E} (hx : 是可分 F x) (hy : 是可分 F y)
   证明: haveI := isSeparable_adjoin_pair_of_isSeparable F E hx hy
 isSeparable_of_mem_isSeparable F E F⟮x, y⟯.mul_mem (subset_adjoin F _ (.inl rfl))
     (subset_adjoin F _ (.inr rfl))
@@ -2327,7 +2327,7 @@ isSeparable_of_mem_isSeparable F E F⟮x, y⟯.add_mem (subset_adjoin F _ (.inl 
 
 中文:
 定理 isSeparable_add
-  条件: {x y : E} (hx : IsSeparable F x) (hy : IsSeparable F y)
+  条件: {x y : E} (hx : 是可分 F x) (hy : 是可分 F y)
   证明: haveI := isSeparable_adjoin_pair_of_isSeparable F E hx hy
 isSeparable_of_mem_isSeparable F E F⟮x, y⟯.add_mem (subset_adjoin F _ (.inl rfl))
     (subset_adjoin F _ (.inr rfl))
@@ -2351,7 +2351,7 @@ isSeparable_of_mem_isSeparable F E F⟮x⟯.neg_mem mem_adjoin_simple_self F x
 
 中文:
 定理 isSeparable_neg
-  条件: {x : E} (hx : IsSeparable F x)
+  条件: {x : E} (hx : 是可分 F x)
   证明: haveI := (isSeparable_adjoin_simple_iff_isSeparable F E).2 hx
 isSeparable_of_mem_isSeparable F E F⟮x⟯.neg_mem mem_adjoin_simple_self F x
 
@@ -2374,7 +2374,7 @@ isSeparable_of_mem_isSeparable F E F⟮x, y⟯.sub_mem (subset_adjoin F _ (.inl 
 
 中文:
 定理 isSeparable_sub
-  条件: {x y : E} (hx : IsSeparable F x) (hy : IsSeparable F y)
+  条件: {x y : E} (hx : 是可分 F x) (hy : 是可分 F y)
   证明: haveI := isSeparable_adjoin_pair_of_isSeparable F E hx hy
 isSeparable_of_mem_isSeparable F E F⟮x, y⟯.sub_mem (subset_adjoin F _ (.inl rfl))
     (subset_adjoin F _ (.inr rfl))
@@ -2399,8 +2399,8 @@ isSeparable_of_mem_isSeparable F E F⟮x⟯.inv_mem mem_adjoin_simple_self F x
 
 中文:
 定理 isSeparable_inv
-  条件: {x : E} (hx : IsSeparable F x)
-  结论: IsSeparable F x⁻¹
+  条件: {x : E} (hx : 是可分 F x)
+  结论: 是可分 F x⁻¹
   证明: haveI := (isSeparable_adjoin_simple_iff_isSeparable F E).2 hx
 isSeparable_of_mem_isSeparable F E F⟮x⟯.inv_mem mem_adjoin_simple_self F x
 
@@ -2429,7 +2429,7 @@ theorem perfectField_iff_splits_of_natSepDegree_eq_one
 
 中文:
 定理 perfectField_iff_splits_of_natSepDegree_eq_one
-  条件: (F : 类型) [Field F]
+  条件: (F : 类型) [域 F]
   证明: by
   refine ⟨fun ⟨h⟩ f hf => ?_, fun h => ?_⟩
   · have hf0 : f != 0 := by aesop
@@ -2470,8 +2470,8 @@ theorem PerfectField.splits_of_natSepDegree_eq_one
   proof: (perfectField_iff_splits_of_natSepDegree_eq_one K).mp ‹_› _ (natSepDegree_map K f i ▸ hf)
 
 中文:
-定理 PerfectField.splits_of_natSepDegree_eq_one
-  结论: [PerfectField K] {f : E[X]}
+定理 完美域.splits_of_natSepDegree_eq_one
+  结论: [完美域 K] {f : E[X]}
   证明: (perfectField_iff_splits_of_natSepDegree_eq_one K).mp ‹_› _ (natSepDegree_map K f i ▸ hf)
 
 Depends on / 依赖: natSepDegree_map, perfectField_iff_splits_of_natSepDegree_eq_one

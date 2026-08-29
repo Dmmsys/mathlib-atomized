@@ -38,10 +38,10 @@ class CreatesFiniteLimits
     - createsFiniteLimits : forall (J : Type) [SmallCategory J] [FinCategory J], CreatesLimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 CreatesFiniteLimits
+类 创造有限极限
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - createsFiniteLimits : 对任意 (J : Type) [SmallCategory J] [FinCategory J], CreatesLimitsOfShape J F  [默认: by infer_instance]
+    - createsFiniteLimits : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 创造形状极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -129,7 +129,7 @@ instance compCreatesFiniteLimits
 
 中文:
 实例 compCreatesFiniteLimits
-  签名: (F : C ⥤ D) (G : D ⥤ E) [CreatesFiniteLimits F]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [创造有限极限 F]
   定义体: compCreatesLimitsOfShape F G
 
 Depends on / 依赖: compCreatesLimitsOfShape
@@ -149,8 +149,8 @@ definition createsFiniteLimitsOfNatIso
   body: createsLimitsOfShapeOfNatIso h
 
 中文:
-定义 createsFiniteLimitsOfNatIso
-  签名: {F G : C ⥤ D} {h : F ≅ G} [CreatesFiniteLimits F]
+定义 createsFiniteLimitsOf自然数Iso
+  签名: {F G : C ⥤ D} {h : F ≅ G} [创造有限极限 F]
   定义体: createsLimitsOfShapeOfNatIso h
 
 Depends on / 依赖: createsLimitsOfShapeOfNatIso
@@ -169,7 +169,7 @@ theorem hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits
 
 中文:
 定理 hasFiniteLimits_of_hasLimitsLimits_of_createsFiniteLimits
-  结论: (F : C ⥤ D) [HasFiniteLimits D]
+  结论: (F : C ⥤ D) [有有限极限 D]
   证明: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape F
 
 Depends on / 依赖: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape
@@ -197,7 +197,7 @@ class CreatesFiniteProducts
 类 CreatesFiniteProducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - creates : 对任意 (J : Type) [Fintype J], CreatesLimitsOfShape (Discrete J) F  [默认: by infer_instance]
+    - creates : 对任意 (J : 类型) [有限类型 J], 创造形状极限 (离散 J) F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -268,7 +268,7 @@ definition createsFiniteProductsOfNatIso
   body: createsLimitsOfShapeOfNatIso h
 
 中文:
-定义 createsFiniteProductsOfNatIso
+定义 createsFiniteProductsOf自然数Iso
   签名: {F G : C ⥤ D} {h : F ≅ G} [CreatesFiniteProducts F]
   定义体: createsLimitsOfShapeOfNatIso h
 
@@ -293,10 +293,10 @@ class CreatesFiniteColimits
     - createsFiniteColimits : forall (J : Type) [SmallCategory J] [FinCategory J], CreatesColimitsOfShape J F  [default: by infer_instance]
 
 中文:
-类 CreatesFiniteColimits
+类 创造有限余极限
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - createsFiniteColimits : 对任意 (J : Type) [SmallCategory J] [FinCategory J], CreatesColimitsOfShape J F  [默认: by infer_instance]
+    - createsFiniteColimits : 对任意 (J : 类型) [小范畴 J] [有限范畴 J], 创造形状余极限 J F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -384,7 +384,7 @@ instance compCreatesFiniteColimits
 
 中文:
 实例 compCreatesFiniteColimits
-  签名: (F : C ⥤ D) (G : D ⥤ E) [CreatesFiniteColimits F]
+  签名: (F : C ⥤ D) (G : D ⥤ E) [创造有限余极限 F]
   定义体: compCreatesColimitsOfShape F G
 
 Depends on / 依赖: compCreatesColimitsOfShape
@@ -404,8 +404,8 @@ definition createsFiniteColimitsOfNatIso
   body: createsColimitsOfShapeOfNatIso h
 
 中文:
-定义 createsFiniteColimitsOfNatIso
-  签名: {F G : C ⥤ D} {h : F ≅ G} [CreatesFiniteColimits F]
+定义 createsFiniteColimitsOf自然数Iso
+  签名: {F G : C ⥤ D} {h : F ≅ G} [创造有限余极限 F]
   定义体: createsColimitsOfShapeOfNatIso h
 
 Depends on / 依赖: createsColimitsOfShapeOfNatIso
@@ -424,7 +424,7 @@ theorem hasFiniteColimits_of_hasColimits_of_createsFiniteColimits
 
 中文:
 定理 hasFiniteColimits_of_hasColimits_of_createsFiniteColimits
-  结论: (F : C ⥤ D) [HasFiniteColimits D]
+  结论: (F : C ⥤ D) [有有限余极限 D]
   证明: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape F
 
 Depends on / 依赖: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -452,7 +452,7 @@ class CreatesFiniteCoproducts
 类 CreatesFiniteCoproducts
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - creates : 对任意 (J : Type) [Fintype J], CreatesColimitsOfShape (Discrete J) F  [默认: by infer_instance]
+    - creates : 对任意 (J : 类型) [有限类型 J], 创造形状余极限 (离散 J) F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -500,7 +500,7 @@ definition createsFiniteCoproductsOfNatIso
   body: createsColimitsOfShapeOfNatIso h
 
 中文:
-定义 createsFiniteCoproductsOfNatIso
+定义 createsFiniteCoproductsOf自然数Iso
   签名: {F G : C ⥤ D} {h : F ≅ G} [CreatesFiniteCoproducts F]
   定义体: createsColimitsOfShapeOfNatIso h
 

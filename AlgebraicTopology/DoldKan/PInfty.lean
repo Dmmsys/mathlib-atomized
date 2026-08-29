@@ -613,7 +613,7 @@ theorem map_PInfty_f
 
 中文:
 定理 map_PInfty_f
-  结论: {D : 类型} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
+  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
   证明: by
   simp only [PInfty_f, map_P]
 

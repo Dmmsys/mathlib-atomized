@@ -137,7 +137,7 @@ lemma triangEnvelopeIter_succ'
 
 中文:
 引理 triangEnvelopeIter_succ'
-  条件: [IsTriangulated C] (n : 自然数)
+  条件: [是三角 C] (n : 自然数)
   证明: by
   rw [triangEnvelopeIter]; rw [extensionProductIter_succ']; rw [← retractClosure_extensionProduct_retractClosure_retractClosure]
   simp
@@ -163,7 +163,7 @@ lemma triangEnvelopeIter_add
 
 中文:
 引理 triangEnvelopeIter_add
-  条件: [IsTriangulated C] {n m n' : 自然数} (h : n = n' + 1 := by lia)
+  条件: [是三角 C] {n m n' : 自然数} (h : n = n' + 1 := by lia)
   证明: by
   simp only [triangEnvelopeIter, retractClosure_extensionProduct_retractClosure_retractClosure,
     extensionProductIter_add _ h]
@@ -188,7 +188,7 @@ lemma triangEnvelopeIter_add'
 
 中文:
 引理 triangEnvelopeIter_add'
-  条件: [IsTriangulated C] {n m m' : 自然数} (h : m = m' + 1 := by lia)
+  条件: [是三角 C] {n m m' : 自然数} (h : m = m' + 1 := by lia)
   证明: by
   simp only [triangEnvelopeIter, retractClosure_extensionProduct_retractClosure_retractClosure,
     extensionProductIter_add' _ h]
@@ -213,7 +213,7 @@ lemma monotone_triangEnvelopeIter
 
 中文:
 引理 monotone_triangEnvelopeIter
-  条件: {Q : Object命题erty C} (hPQ : P <= Q) (n : 自然数)
+  条件: {Q : ObjectProperty C} (hPQ : P <= Q) (n : 自然数)
   证明: monotone_retractClosure monotone_extensionProductIter
     (monotone_retractClosure <| limitsClosure_monotone _ <| monotone_shiftClosure hPQ) n
 
@@ -339,7 +339,7 @@ definition triangEnvelope
 
 中文:
 定义 triangEnvelope
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: ⨆ n, P.triangEnvelopeIter n
 
 Depends on / 依赖: P.triangEnvelopeIter, triangEnvelopeIter
@@ -413,8 +413,8 @@ instance [P.Nonempty]
   body: .mono P.le_triangEnvelope
 
 中文:
-实例 [P.Nonempty]
-  签名: : P.triangEnvelope.Nonempty
+实例 [P.非空]
+  签名: : P.triangEnvelope.非空
   定义体: .mono P.le_triangEnvelope
 
 Depends on / 依赖: P.le_triangEnvelope, le_triangEnvelope
@@ -434,7 +434,7 @@ lemma monotone_triangEnvelope
 
 中文:
 引理 monotone_triangEnvelope
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: iSup_le fun n => (P.monotone_triangEnvelopeIter h n).trans
     (Q.triangEnvelopeIter_le_triangEnvelope n)
 
@@ -459,7 +459,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.triangEnvelope.IsStableUnderRetracts
+  签名: P.triangEnvelope.是StableUnderRetracts
   定义体: by
     intro X Y r hY
     rw [prop_triangEnvelope_iff] at hY ⊢
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.triangEnvelope.IsStableUnderShift 整数
+  签名: P.triangEnvelope.是StableUnderShift 整数
   定义体: IsStableUnderShiftBy.mk by
     intro X hX
     rw [prop_triangEnvelope_iff] at hX
@@ -525,8 +525,8 @@ instance [IsTriangulated
   exact le_retractClosure _ _ ⟨_, _, _, _, _, hT, hn, hm⟩
 
 中文:
-实例 [IsTriangulated
-  签名: C] : P.triangEnvelope.IsTriangulatedClosed₂
+实例 [是三角
+  签名: C] : P.triangEnvelope.是TriangulatedClosed₂
   定义体: by
   apply IsTriangulatedClosed₂.mk'
   intro T hT h₁ h₂
@@ -557,8 +557,8 @@ instance [P.Nonempty]
   signature: [IsTriangulated C]
 
 中文:
-实例 [P.Nonempty]
-  签名: [IsTriangulated C]
+实例 [P.非空]
+  签名: [是三角 C]
 -/
 instance [P.Nonempty] [IsTriangulated C] : P.triangEnvelope.IsTriangulated where
 
@@ -578,7 +578,7 @@ lemma triangEnvelope_le_iff
 
 中文:
 引理 triangEnvelope_le_iff
-  条件: {Q : Object命题erty C} [Q.IsStableUnderRetracts] [Q.IsTriangulated]
+  条件: {Q : ObjectProperty C} [Q.是StableUnderRetracts] [Q.是三角]
   证明: by
   refine ⟨fun h => le_trans P.le_triangEnvelope h, fun h => ?_⟩
   rw [triangEnvelope]; rw [iSup_le_iff]

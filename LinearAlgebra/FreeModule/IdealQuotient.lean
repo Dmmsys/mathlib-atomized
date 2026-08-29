@@ -37,7 +37,7 @@ definition quotientEquivPiSpan
 
 中文:
 定义 quotientEquivPiSpan
-  签名: (I : Ideal S) (b : Basis ι R S) (hI : I != ⊥)
+  签名: (I : 理想 S) (b : 基 ι R S) (hI : I != ⊥)
   定义体: Submodule.quotientEquivPiSpan (I.restrictScalars R) b finrank_eq_finrank b I hI
 
 Depends on / 依赖: I.restrictScalars, Submodule, Submodule.quotientEquivPiSpan, finrank_eq_finrank, quotientEquivPiSpan, restrictScalars
@@ -56,7 +56,7 @@ definition quotientEquivPiZMod
 
 中文:
 定义 quotientEquivPiZMod
-  签名: (I : Ideal S) (b : Basis ι 整数 S) (hI : I != ⊥)
+  签名: (I : 理想 S) (b : 基 ι 整数 S) (hI : I != ⊥)
   定义体: Submodule.quotientEquivPiZMod (I.restrictScalars Int) b finrank_eq_finrank b I hI
 
 Depends on / 依赖: I.restrictScalars, Submodule, Submodule.quotientEquivPiZMod, finrank_eq_finrank, quotientEquivPiZMod, restrictScalars
@@ -76,7 +76,7 @@ Submodule.finiteQuotientOfFreeOfRankEq (I.restrictScalars Int) finrank_eq_finran
 
 中文:
 定理 finiteQuotientOfFreeOfNeBot
-  结论: [Module.Free 整数 S] [Module.Finite 整数 S]
+  结论: [模.自由 整数 S] [模.有限 整数 S]
   证明: let b := Module.Free.chooseBasis Int S
 Submodule.finiteQuotientOfFreeOfRankEq (I.restrictScalars Int) finrank_eq_finrank b I hI
 
@@ -121,7 +121,7 @@ theorem finrank_quotient_eq_sum
 
 中文:
 定理 finrank_quotient_eq_sum
-  结论: {ι} [Fintype ι] (b : Basis ι R S) [Nontrivial F]
+  结论: {ι} [有限类型 ι] (b : 基 ι R S) [非平凡 F]
   证明: by
   -- slow, and dot notation doesn't work
   rw [LinearEquiv.finrank_eq <| quotientEquivDirectSum F b hI]; rw [Module.finrank_directSum]

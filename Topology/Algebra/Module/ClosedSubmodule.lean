@@ -43,9 +43,9 @@ structure ClosedSubmodule
   (no additional axioms)
 
 中文:
-结构 ClosedSubmodule
-  参数: extends Submodule R M, Closeds M
-  继承: Submodule R M, Closeds M
+结构 闭子模
+  参数: extends 子模 R M, Closeds M
+  继承: 子模 R M, Closeds M
   (无附加公理)
 -/
 structure ClosedSubmodule extends Submodule R M, Closeds M where
@@ -71,7 +71,7 @@ lemma toSubmodule_injective
 
 中文:
 引理 toSubmodule_injective
-  结论: Injective (toSubmodule : ClosedSubmodule R M -> Submodule R M)
+  结论: 单射 (toSubmodule : 闭子模 R M -> 子模 R M)
   证明: fun s t h => by cases s; congr!
 -/
 lemma toSubmodule_injective : Injective (toSubmodule : ClosedSubmodule R M -> Submodule R M) :=
@@ -88,7 +88,7 @@ coe_injective _ _ h := toSubmodule_injective SetLike.coe_injective h
 
 中文:
 实例 :
-  签名: SetLike (ClosedSubmodule R M) M
+  签名: 集合状 (闭子模 R M) M
   定义体: s.1
 coe_injective _ _ h := toSubmodule_injective SetLike.coe_injective h
 -/
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ClosedSubmodule R M)
+  签名: 偏序 (闭子模 R M)
   定义体: .ofSetLike (ClosedSubmodule R M) M
 
 Depends on / 依赖: ClosedSubmodule, ofSetLike
@@ -123,7 +123,7 @@ lemma toCloseds_injective
 
 中文:
 引理 toCloseds_injective
-  结论: Injective (toCloseds : ClosedSubmodule R M -> Closeds M)
+  结论: 单射 (toCloseds : 闭子模 R M -> Closeds M)
   证明: fun _s _t h => SetLike.coe_injective congr(($h : Set M))
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSubmonoidClass (ClosedSubmodule R M) M
+  签名: 加法子幺半群类 (闭子模 R M) M
   定义体: s.zero_mem
   add_mem {s} := s.add_mem
 
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (ClosedSubmodule R M) R M
+  签名: SMulMem类 (闭子模 R M) R M
   定义体: s.smul_mem r
 
 Depends on / 依赖: s.smul_mem, smul_mem
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (ClosedSubmodule R M) (Submodule R M)
+  签名: Coe (闭子模 R M) (子模 R M)
   定义体: toSubmodule
 
 Depends on / 依赖: toSubmodule
@@ -199,7 +199,7 @@ lemma carrier_eq_coe
 
 中文:
 引理 carrier_eq_coe
-  条件: (s : ClosedSubmodule R M)
+  条件: (s : 闭子模 R M)
   结论: s.carrier = s
   证明: rfl
 -/
@@ -218,7 +218,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {s : Submodule R M} {hs}
+  条件: {s : 子模 R M} {hs}
   结论: x in mk s hs ↔ x in s
   证明: .rfl
 
@@ -240,8 +240,8 @@ lemma coe_toSubmodule
 
 中文:
 引理 coe_toSubmodule
-  条件: (s : ClosedSubmodule R M)
-  结论: (s.toSubmodule : Set M) = s
+  条件: (s : 闭子模 R M)
+  结论: (s.toSubmodule : 集合 M) = s
   证明: rfl
 
 @[simp]
@@ -263,7 +263,7 @@ lemma mem_toSubmodule_iff
 
 中文:
 引理 mem_toSubmodule_iff
-  条件: (x : M) (s : ClosedSubmodule R M)
+  条件: (x : M) (s : 闭子模 R M)
   结论: x in s.toSubmodule ↔ x in s
   证明: by
   rfl
@@ -285,8 +285,8 @@ lemma coe_toCloseds
 
 中文:
 引理 coe_toCloseds
-  条件: (s : ClosedSubmodule R M)
-  结论: (s.toCloseds : Set M) = s
+  条件: (s : 闭子模 R M)
+  结论: (s.toCloseds : 集合 M) = s
   证明: rfl
 -/
 lemma coe_toCloseds (s : ClosedSubmodule R M) : (s.toCloseds : Set M) = s := rfl
@@ -304,8 +304,8 @@ initialize_simps_projections ClosedSubmodule (carrier -> coe, as_prefix coe)
 
 中文:
 引理 isClosed
-  条件: (s : ClosedSubmodule R M)
-  结论: IsClosed (s : Set M)
+  条件: (s : 闭子模 R M)
+  结论: 是闭集 (s : 集合 M)
   证明: s.isClosed'
 
 initialize_simps_projections ClosedSubmodule (carrier -> coe, as_prefix coe)
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Submodule R M) (ClosedSubmodule R M) toSubmodule (IsClosed (X := M) ·)
+  签名: CanLift (子模 R M) (闭子模 R M) toSubmodule (是闭集 (X := M) ·)
   定义体: ⟨⟨s, hs⟩, rfl⟩
 -/
 instance : CanLift (Submodule R M) (ClosedSubmodule R M) toSubmodule (IsClosed (X := M) ·) where
@@ -342,7 +342,7 @@ lemma toSubmodule_le_toSubmodule
 
 中文:
 引理 toSubmodule_le_toSubmodule
-  条件: {s t : ClosedSubmodule R M}
+  条件: {s t : 闭子模 R M}
   证明: .rfl
 -/
 @[simp, norm_cast] lemma toSubmodule_le_toSubmodule {s t : ClosedSubmodule R M} :
@@ -363,7 +363,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : M ->L[R] N) (s : ClosedSubmodule R N)
+  签名: (f : M ->L[R] N) (s : 闭子模 R N)
   定义体: .comap (f : M ->ₗ[R] N) s
   isClosed' := by simpa using s.isClosed.preimage f.continuous
 
@@ -385,7 +385,7 @@ lemma mem_comap
 
 中文:
 引理 mem_comap
-  条件: {f : M ->L[R] N} {s : ClosedSubmodule R N} {x : M}
+  条件: {f : M ->L[R] N} {s : 闭子模 R N} {x : M}
   结论: x in s.comap f ↔ f x in s
   证明: .rfl
 -/
@@ -401,7 +401,7 @@ lemma toSubmodule_comap
 
 中文:
 引理 toSubmodule_comap
-  条件: (f : M ->L[R] N) (s : ClosedSubmodule R N)
+  条件: (f : M ->L[R] N) (s : 闭子模 R N)
   证明: rfl
 -/
 @[simp] lemma toSubmodule_comap (f : M ->L[R] N) (s : ClosedSubmodule R N) :
@@ -418,7 +418,7 @@ lemma comap_id
 
 中文:
 引理 comap_id
-  条件: (s : ClosedSubmodule R M)
+  条件: (s : 闭子模 R M)
   结论: s.comap (.id _ _) = s
   证明: rfl
 -/
@@ -434,7 +434,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  条件: (g : N ->L[R] O) (f : M ->L[R] N) (s : ClosedSubmodule R O)
+  条件: (g : N ->L[R] O) (f : M ->L[R] N) (s : 闭子模 R O)
   证明: rfl
 -/
 lemma comap_comap (g : N ->L[R] O) (f : M ->L[R] N) (s : ClosedSubmodule R O) :
@@ -450,7 +450,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (ClosedSubmodule R M) where
+  签名: : 最小值 (闭子模 R M) where
   定义体: ⟨s ⊓ t, s.isClosed.inter t.isClosed⟩
 
 Depends on / 依赖: isClosed, s.isClosed.inter, t.isClosed
@@ -470,7 +470,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet (ClosedSubmodule R M) where
+  签名: : 下确界集 (闭子模 R M) where
   定义体: ⟨⨅ s in S, s, by simpa using isClosed_biInter fun x hx => x.isClosed⟩
 
 @[simp, norm_cast]
@@ -493,7 +493,7 @@ lemma toSubmodule_sInf
 
 中文:
 引理 toSubmodule_sInf
-  条件: (S : Set (ClosedSubmodule R M))
+  条件: (S : 集合 (闭子模 R M))
   证明: rfl
 
 @[simp, norm_cast]
@@ -514,7 +514,7 @@ lemma toSubmodule_iInf
 
 中文:
 引理 toSubmodule_iInf
-  条件: (f : ι -> ClosedSubmodule R M)
+  条件: (f : ι -> 闭子模 R M)
   证明: by rw [iInf, toSubmodule_sInf, iInf_range]
 
 @[simp, norm_cast]
@@ -539,8 +539,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (S : Set (ClosedSubmodule R M))
-  结论: ↑(sInf S) = ⨅ s in S, (s : Set M)
+  条件: (S : 集合 (闭子模 R M))
+  结论: ↑(sInf S) = ⨅ s in S, (s : 集合 M)
   证明: by
   simp [← coe_toSubmodule]
 
@@ -564,8 +564,8 @@ lemma coe_iInf
 
 中文:
 引理 coe_iInf
-  条件: (f : ι -> ClosedSubmodule R M)
-  结论: ↑(⨅ i, f i) = ⨅ i, (f i : Set M)
+  条件: (f : ι -> 闭子模 R M)
+  结论: ↑(⨅ i, f i) = ⨅ i, (f i : 集合 M)
   证明: by
   simp [← coe_toSubmodule]
 
@@ -586,7 +586,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: {S : Set (ClosedSubmodule R M)}
+  条件: {S : 集合 (闭子模 R M)}
   结论: x in sInf S ↔ 对任意 s in S, x in s
   证明: by
   simp [← SetLike.mem_coe]
@@ -606,7 +606,7 @@ lemma mem_iInf
 
 中文:
 引理 mem_iInf
-  条件: {f : ι -> ClosedSubmodule R M}
+  条件: {f : ι -> 闭子模 R M}
   结论: x in ⨅ i, f i ↔ 对任意 i, x in f i
   证明: by
   simp [← SetLike.mem_coe]
@@ -626,7 +626,7 @@ instance instSemilatticeInf
 
 中文:
 实例 instSemilatticeInf
-  签名: : SemilatticeInf (ClosedSubmodule R M)
+  签名: : SemilatticeInf (闭子模 R M)
   定义体: toSubmodule_injective.semilatticeInf _ .rfl .rfl fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -647,7 +647,7 @@ lemma toSubmodule_inf
 
 中文:
 引理 toSubmodule_inf
-  条件: (s t : ClosedSubmodule R M)
+  条件: (s t : 闭子模 R M)
   证明: rfl
 -/
 lemma toSubmodule_inf (s t : ClosedSubmodule R M) :
@@ -664,8 +664,8 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: (s t : ClosedSubmodule R M)
-  结论: ↑(s ⊓ t) = (s ⊓ t : Set M)
+  条件: (s t : 闭子模 R M)
+  结论: ↑(s ⊓ t) = (s ⊓ t : 集合 M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inf (s t : ClosedSubmodule R M) : ↑(s ⊓ t) = (s ⊓ t : Set M) := rfl
@@ -695,7 +695,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (ClosedSubmodule R M)
+  签名: 余mpleteSemilatticeInf (闭子模 R M)
   定义体: .of_image toSubmodule_le_toSubmodule isGLB_biInf
 
 Depends on / 依赖: isGLB_biInf, of_image, toSubmodule_le_toSubmodule
@@ -714,7 +714,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (ClosedSubmodule R M)
+  签名: 有顶序 (闭子模 R M)
   定义体: ⟨⊤, isClosed_univ⟩
   le_top s := le_top (a := s.toSubmodule)
 
@@ -734,7 +734,7 @@ lemma toSubmodule_top
 
 中文:
 引理 toSubmodule_top
-  结论: toSubmodule (⊤ : ClosedSubmodule R M) = ⊤
+  结论: toSubmodule (⊤ : 闭子模 R M) = ⊤
   证明: rfl
 -/
 @[simp, norm_cast] lemma toSubmodule_top : toSubmodule (⊤ : ClosedSubmodule R M) = ⊤ := rfl
@@ -749,7 +749,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ((⊤ : ClosedSubmodule R M) : Set M) = .univ
+  结论: ((⊤ : 闭子模 R M) : 集合 M) = .univ
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : ((⊤ : ClosedSubmodule R M) : Set M) = .univ := rfl
@@ -764,7 +764,7 @@ lemma mem_top
 
 中文:
 引理 mem_top
-  结论: x in (⊤ : ClosedSubmodule R M)
+  结论: x in (⊤ : 闭子模 R M)
   证明: trivial
 -/
 @[simp] lemma mem_top : x in (⊤ : ClosedSubmodule R M) := trivial
@@ -783,7 +783,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (ClosedSubmodule R M) where
+  签名: : 有底序 (闭子模 R M) where
   定义体: ⟨⊥, isClosed_singleton⟩
   bot_le s := bot_le (a := s.toSubmodule)
 
@@ -803,7 +803,7 @@ lemma toSubmodule_bot
 
 中文:
 引理 toSubmodule_bot
-  结论: toSubmodule (⊥ : ClosedSubmodule R M) = ⊥
+  结论: toSubmodule (⊥ : 闭子模 R M) = ⊥
   证明: rfl
 -/
 @[simp, norm_cast] lemma toSubmodule_bot : toSubmodule (⊥ : ClosedSubmodule R M) = ⊥ := rfl
@@ -818,7 +818,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ((⊥ : ClosedSubmodule R M) : Set M) = {0}
+  结论: ((⊥ : 闭子模 R M) : 集合 M) = {0}
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : ((⊥ : ClosedSubmodule R M) : Set M) = {0} := rfl
@@ -833,7 +833,7 @@ lemma mem_bot
 
 中文:
 引理 mem_bot
-  结论: x in (⊥ : ClosedSubmodule R M) ↔ x = 0
+  结论: x in (⊥ : 闭子模 R M) ↔ x = 0
   证明: .rfl
 -/
 @[simp] lemma mem_bot : x in (⊥ : ClosedSubmodule R M) ↔ x = 0 := .rfl
@@ -857,7 +857,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Submodule R M)
+  签名: (s : 子模 R M)
   定义体: s.topologicalClosure
   isClosed' := isClosed_closure
 -/
@@ -878,7 +878,7 @@ lemma closure_le
 
 中文:
 引理 closure_le
-  条件: {s : Submodule R M} {t : ClosedSubmodule R M}
+  条件: {s : 子模 R M} {t : 闭子模 R M}
   结论: s.closure <= t ↔ s <= t
   证明: t.isClosed.closure_subset_iff
 
@@ -901,7 +901,7 @@ lemma mem_closure_iff
 
 中文:
 引理 mem_closure_iff
-  条件: {x : M} {s : Submodule R M}
+  条件: {x : M} {s : 子模 R M}
   结论: x in s.closure ↔ x in s.topologicalClosure
   证明: Iff.rfl
 
@@ -929,7 +929,7 @@ lemma closure_eq
 
 中文:
 引理 closure_eq
-  条件: {s : ClosedSubmodule R M}
+  条件: {s : 闭子模 R M}
   结论: s.closure = s
   证明: by
   ext
@@ -959,7 +959,7 @@ lemma closure_eq'
 
 中文:
 引理 closure_eq'
-  条件: {s : Submodule R M} (hs : IsClosed s.carrier)
+  条件: {s : 子模 R M} (hs : 是闭集 s.carrier)
   结论: s.closure = ⟨s, hs⟩
   证明: by
   ext; simp
@@ -985,7 +985,7 @@ lemma closure_toSubmodule_eq
 
 中文:
 引理 closure_toSubmodule_eq
-  条件: {s : ClosedSubmodule R N}
+  条件: {s : 闭子模 R N}
   结论: s.toSubmodule.closure = s
   证明: by
   ext x; simp
@@ -1005,7 +1005,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : M ->L[R] N) (s : ClosedSubmodule R M)
+  签名: (f : M ->L[R] N) (s : 闭子模 R M)
   定义体: (s.toSubmodule.map (f : M ->ₗ[R] N)).closure
 
 @[simp]
@@ -1026,7 +1026,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: [ContinuousAdd M] [ContinuousConstSMul R M] (s : ClosedSubmodule R M)
+  条件: [连续加法 M] [连续常数标量乘法 R M] (s : 闭子模 R M)
   证明: SetLike.coe_injective by simp [map]
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -1045,7 +1045,7 @@ lemma map_le_iff_le_comap
 
 中文:
 引理 map_le_iff_le_comap
-  条件: {s : ClosedSubmodule R M} {t : ClosedSubmodule R N}
+  条件: {s : 闭子模 R M} {t : 闭子模 R N}
   证明: by
   simp [map, Submodule.map_le_iff_le_comap]; simp [← toSubmodule_le_toSubmodule]
 
@@ -1086,7 +1086,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (ClosedSubmodule R N)
+  签名: 最大值 (闭子模 R N)
   定义体: (s.toSubmodule ⊔ t.toSubmodule).closure
 
 @[simp]
@@ -1164,7 +1164,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (ClosedSubmodule R N)
+  签名: 上确界集 (闭子模 R N)
   定义体: ⟨(⨆ s in S, s.toSubmodule).closure, isClosed_closure⟩
 
 @[simp]
@@ -1187,7 +1187,7 @@ lemma toSubmodule_sSup
 
 中文:
 引理 toSubmodule_sSup
-  条件: (S : Set (ClosedSubmodule R N))
+  条件: (S : 集合 (闭子模 R N))
   证明: rfl
 
 @[simp]
@@ -1209,7 +1209,7 @@ lemma toSubmodule_iSup
 
 中文:
 引理 toSubmodule_iSup
-  条件: (f : ι -> ClosedSubmodule R N)
+  条件: (f : ι -> 闭子模 R N)
   证明: by
   rw [iSup]; rw [toSubmodule_sSup]; rw [iSup_range]
 
@@ -1236,7 +1236,7 @@ lemma coe_sSup
 
 中文:
 引理 coe_sSup
-  条件: (S : Set (ClosedSubmodule R N))
+  条件: (S : 集合 (闭子模 R N))
   证明: by
   simp only [← coe_toSubmodule, toSubmodule_sSup]
   simp only [coe_toSubmodule, Submodule.coe_closure, Submodule.carrier_eq_coe]
@@ -1263,7 +1263,7 @@ lemma coe_iSup
 
 中文:
 引理 coe_iSup
-  条件: (f : ι -> ClosedSubmodule R N)
+  条件: (f : ι -> 闭子模 R N)
   证明: by
   simp only [← coe_toSubmodule, toSubmodule_iSup, Submodule.carrier_eq_coe]
   rfl
@@ -1285,7 +1285,7 @@ lemma mem_sSup
 
 中文:
 引理 mem_sSup
-  条件: {S : Set (ClosedSubmodule R N)}
+  条件: {S : 集合 (闭子模 R N)}
   证明: Iff.rfl
 -/
 @[simp] lemma mem_sSup {S : Set (ClosedSubmodule R N)} :
@@ -1302,7 +1302,7 @@ lemma mem_iSup
 
 中文:
 引理 mem_iSup
-  条件: {f : ι -> ClosedSubmodule R N}
+  条件: {f : ι -> 闭子模 R N}
   证明: by
   simp [← SetLike.mem_coe]
 -/
@@ -1323,7 +1323,7 @@ sup_le _ _ _ ha hb := Submodule.closure_le.mpr sup_le_iff.mpr ⟨ha, hb⟩
 
 中文:
 实例 :
-  签名: SemilatticeSup (ClosedSubmodule R N)
+  签名: SemilatticeSup (闭子模 R N)
   定义体: s ⊔ t
 le_sup_left _ _ _ hx := subset_closure Submodule.mem_sup_left hx
 le_sup_right _ _ _ hx := subset_closure Submodule.mem_sup_right hx
@@ -1351,7 +1351,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeSup (ClosedSubmodule R N)
+  签名: 余mpleteSemilatticeSup (闭子模 R N)
   定义体: by
     refine ⟨fun a ha x hx => ?_, fun a h x => ?_⟩
 · exact subset_closure Submodule.mem_iSup_of_mem _ Submodule.mem_iSup_of_mem ha hx
@@ -1382,7 +1382,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (ClosedSubmodule R N)
+  签名: 格 (闭子模 R N)
 -/
 instance : Lattice (ClosedSubmodule R N) where
 
@@ -1394,8 +1394,8 @@ instance [T1Space
   signature: N] : CompleteLattice (ClosedSubmodule R N) where
 
 中文:
-实例 [T1Space
-  签名: N] : CompleteLattice (ClosedSubmodule R N) where
+实例 [T1空间
+  签名: N] : 完备格 (闭子模 R N) where
 -/
 instance [T1Space N] : CompleteLattice (ClosedSubmodule R N) where
 
@@ -1418,7 +1418,7 @@ definition mapEquiv
 
 中文:
 定义 mapEquiv
-  签名: : ClosedSubmodule R M ≃ ClosedSubmodule R N where
+  签名: : 闭子模 R M ≃ 闭子模 R N where
   定义体: ⟨s.toSubmodule.map f.toLinearMap, by simpa using s.isClosed⟩
   invFun t := ⟨t.toSubmodule.map f.symm.toLinearMap, by simpa using t.isClosed⟩
   left_inv := by intro _; ext _; simp
@@ -1534,8 +1534,8 @@ lemma mapEquiv_bot_eq_bot
 
 中文:
 引理 mapEquiv_bot_eq_bot
-  条件: [T1Space M] [T1Space N]
-  结论: ((⊥ : ClosedSubmodule R M).mapEquiv f) = ⊥
+  条件: [T1空间 M] [T1空间 N]
+  结论: ((⊥ : 闭子模 R M).mapEquiv f) = ⊥
   证明: by
   ext x; simp
 
@@ -1558,7 +1558,7 @@ lemma mapEquiv_top_eq_top
 
 中文:
 引理 mapEquiv_top_eq_top
-  结论: ((⊤ : ClosedSubmodule R M).mapEquiv f) = ⊤
+  结论: ((⊤ : 闭子模 R M).mapEquiv f) = ⊤
   证明: by
   ext x; simp
 
@@ -1581,7 +1581,7 @@ lemma mapEquiv_inf_eq
 
 中文:
 引理 mapEquiv_inf_eq
-  条件: (f : M ≃L[R] N) {s t : ClosedSubmodule R M}
+  条件: (f : M ≃L[R] N) {s t : 闭子模 R M}
   证明: by
   ext x
   simp only [Submodule.carrier_eq_coe, coe_toSubmodule, SetLike.mem_coe, toSubmodule_inf,
@@ -1615,7 +1615,7 @@ lemma closure_map_eq_mapEquiv_closure
 
 中文:
 引理 closure_map_eq_mapEquiv_closure
-  条件: (s : Submodule R M)
+  条件: (s : 子模 R M)
   证明: by
   ext x
   simp only [Submodule.carrier_eq_coe, coe_toSubmodule, Submodule.coe_closure, Submodule.map_coe,
@@ -1652,7 +1652,7 @@ lemma mapEquiv_sup_eq
 
 中文:
 引理 mapEquiv_sup_eq
-  条件: (f : M ≃L[R] N) {s t : ClosedSubmodule R M}
+  条件: (f : M ≃L[R] N) {s t : 闭子模 R M}
   证明: by
   ext x
   simp only [mapEquiv_apply, toSubmodule_sup, Submodule.carrier_eq_coe, Submodule.map_coe,

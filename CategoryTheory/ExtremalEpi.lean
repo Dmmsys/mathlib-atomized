@@ -46,11 +46,11 @@ class ExtremalEpi
     - isIso((f) {Z : C} (p : X ⟶ Z) (i : Z ⟶ Y) (fac : p ≫ i = f) [Mono i]) : IsIso i
 
 中文:
-类 ExtremalEpi
+类 极端满态射
   参数: (f : X ⟶ Y)
-  继承: Epi f
+  继承: 满态射 f
   公理与运算 (1 个):
-    - isIso((f) {Z : C} (p : X ⟶ Z) (i : Z ⟶ Y) (fac : p ≫ i = f) [Mono i]) : IsIso i
+    - isIso((f) {Z : C} (p : X ⟶ Z) (i : Z ⟶ Y) (fac : p ≫ i = f) [单态射 i]) : 是同构 i
 -/
 class ExtremalEpi (f : X ⟶ Y) : Prop extends Epi f where
   isIso (f) {Z : C} (p : X ⟶ Z) (i : Z ⟶ Y) (fac : p ≫ i = f) [Mono i] : IsIso i
@@ -68,8 +68,8 @@ lemma ExtremalEpi.subobject_eq_top
   exact isIso f (Subobject.factorThru A f hA) _ (by simp)
 
 中文:
-引理 ExtremalEpi.subobject_eq_top
-  结论: [ExtremalEpi f]
+引理 极端满态射.subobject_eq_top
+  结论: [极端满态射 f]
   证明: by
   rw [← Subobject.isIso_arrow_iff_eq_top]
   exact isIso f (Subobject.factorThru A f hA) _ (by simp)
@@ -94,7 +94,7 @@ lemma ExtremalEpi.mk_of_hasEqualizers
   isIso := by tauto
 
 中文:
-引理 ExtremalEpi.mk_of_hasEqualizers
+引理 极端满态射.mk_of_hasEqualizers
   结论: [HasEqualizers C]
   证明: by
     have := hf (equalizer.lift f h) (equalizer.ι p q) (by simp)
@@ -122,8 +122,8 @@ instance [StrongEpi
     exact ⟨sq.lift, by simp [← cancel_mono i], by simp⟩
 
 中文:
-实例 [StrongEpi
-  签名: f] : ExtremalEpi f where
+实例 [强满态射
+  签名: f] : 极端满态射 f where
   定义体: by
     have sq : CommSq p f i (𝟙 Y) := { }
     exact ⟨sq.lift, by simp [← cancel_mono i], by simp⟩
@@ -154,7 +154,7 @@ lemma extremalEpi_iff_strongEpi_of_hasPullbacks
 
 中文:
 引理 extremalEpi_iff_strongEpi_of_hasPullbacks
-  条件: [HasPullbacks C]
+  条件: [有Pullbacks C]
   证明: by
   refine ⟨fun _ => ⟨inferInstance, fun A B i _ => ⟨fun {t b} sq => ⟨⟨?_⟩⟩⟩⟩,
     fun _ => inferInstance⟩

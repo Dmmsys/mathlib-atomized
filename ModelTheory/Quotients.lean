@@ -47,11 +47,11 @@ class Prestructure
 
 中文:
 类 Prestructure
-  参数: (s : Setoid M)
+  参数: (s : 集合等价关系 M)
   公理与运算 (3 个):
-    - toStructure : L.Structure M
-    - fun_equiv : 对任意 {n} {f : L.Functions n} (x y : Fin n -> M), x ≈ y -> funMap f x ≈ funMap f y
-    - rel_equiv : 对任意 {n} {r : L.Relations n} (x y : Fin n -> M) (_ : x ≈ y), RelMap r x = RelMap r y
+    - toStructure : L.结构 M
+    - fun_equiv : 对任意 {n} {f : L.函数 n} (x y : 有限集 n -> M), x ≈ y -> funMap f x ≈ funMap f y
+    - rel_equiv : 对任意 {n} {r : L.关系 n} (x y : 有限集 n -> M) (_ : x ≈ y), RelMap r x = RelMap r y
 -/
 class Prestructure (s : Setoid M) where
   /-- The underlying first-order structure -/
@@ -74,7 +74,7 @@ instance quotientStructure
 
 中文:
 实例 quotientStructure
-  签名: : L.Structure (Quotient s) where
+  签名: : L.结构 (商 s) where
   定义体: Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice x)
   RelMap {n} r x :=
     Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice x)
@@ -103,7 +103,7 @@ theorem funMap_quotient_mk'
 
 中文:
 定理 funMap_quotient_mk'
-  条件: {n : 自然数} (f : L.Functions n) (x : Fin n -> M)
+  条件: {n : 自然数} (f : L.函数 n) (x : 有限集 n -> M)
   证明: by
   change
     Quotient.map (@funMap L M ps.toStructure n f) Prestructure.fun_equiv (Quotient.finChoice _) =
@@ -133,7 +133,7 @@ theorem relMap_quotient_mk'
 
 中文:
 定理 relMap_quotient_mk'
-  条件: {n : 自然数} (r : L.Relations n) (x : Fin n -> M)
+  条件: {n : 自然数} (r : L.关系 n) (x : 有限集 n -> M)
   证明: by
   change
     Quotient.lift (@RelMap L M ps.toStructure n r) Prestructure.rel_equiv (Quotient.finChoice _) ↔
@@ -161,8 +161,8 @@ theorem Term.realize_quotient_mk'
   | func _ _ ih => simp only [ih, funMap_quotient_mk', Term.realize]
 
 中文:
-定理 Term.realize_quotient_mk'
-  条件: {β : 类型} (t : L.Term β) (x : β -> M)
+定理 项.realize_quotient_mk'
+  条件: {β : 类型} (t : L.项 β) (x : β -> M)
   证明: by
   induction t with
   | var => rfl

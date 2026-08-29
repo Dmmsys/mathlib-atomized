@@ -88,10 +88,10 @@ class EffectiveEpi
     - effectiveEpi : Nonempty (EffectiveEpiStruct f)
 
 中文:
-类 EffectiveEpi
+类 有效满态射
   参数: {X Y : C} (f : Y ⟶ X)
   公理与运算 (1 个):
-    - effectiveEpi : Nonempty (EffectiveEpiStruct f)
+    - effectiveEpi : 非空 (EffectiveEpiStruct f)
 -/
 class EffectiveEpi {X Y : C} (f : Y ⟶ X) : Prop where
   /-- `f` is an effective epimorphism if there exists an `EffectiveEpiStruct` for `f`. -/
@@ -108,8 +108,8 @@ definition EffectiveEpi.getStruct
   body: EffectiveEpi.effectiveEpi.some
 
 中文:
-定义 EffectiveEpi.getStruct
-  签名: {X Y : C} (f : Y ⟶ X) [EffectiveEpi f]
+定义 有效满态射.getStruct
+  签名: {X Y : C} (f : Y ⟶ X) [有效满态射 f]
   定义体: EffectiveEpi.effectiveEpi.some
 
 Depends on / 依赖: EffectiveEpi, EffectiveEpi.effectiveEpi.some, createsLimitsOfShapeOfCreatesFiniteProducts, effectiveEpi
@@ -130,8 +130,8 @@ definition EffectiveEpi.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 EffectiveEpi.desc
-  签名: {X Y W : C} (f : Y ⟶ X) [EffectiveEpi f]
+定义 有效满态射.desc
+  签名: {X Y W : C} (f : Y ⟶ X) [有效满态射 f]
   定义体: (EffectiveEpi.getStruct f).desc e h
 
 @[reassoc (attr := simp)]
@@ -152,8 +152,8 @@ lemma EffectiveEpi.fac
   proof: (EffectiveEpi.getStruct f).fac e h
 
 中文:
-引理 EffectiveEpi.fac
-  结论: {X Y W : C} (f : Y ⟶ X) [EffectiveEpi f]
+引理 有效满态射.fac
+  结论: {X Y W : C} (f : Y ⟶ X) [有效满态射 f]
   证明: (EffectiveEpi.getStruct f).fac e h
 
 Depends on / 依赖: EffectiveEpi, EffectiveEpi.getStruct, getStruct
@@ -172,8 +172,8 @@ lemma EffectiveEpi.uniq
   proof: (EffectiveEpi.getStruct f).uniq e h _ hm
 
 中文:
-引理 EffectiveEpi.uniq
-  结论: {X Y W : C} (f : Y ⟶ X) [EffectiveEpi f]
+引理 有效满态射.uniq
+  结论: {X Y W : C} (f : Y ⟶ X) [有效满态射 f]
   证明: (EffectiveEpi.getStruct f).uniq e h _ hm
 
 Depends on / 依赖: EffectiveEpi, EffectiveEpi.getStruct, getStruct
@@ -198,7 +198,7 @@ instance epi_of_effectiveEpi
 
 中文:
 实例 epi_of_effectiveEpi
-  签名: {X Y : C} (f : Y ⟶ X) [EffectiveEpi f]
+  签名: {X Y : C} (f : Y ⟶ X) [有效满态射 f]
   定义体: by
     rw [show m₂ = desc f (f ≫ m₂) (fun _ _ h => by simp [← assoc]; rw [h]) from uniq _ _ _ _ rfl]
     exact uniq _ _ _ _ h
@@ -270,7 +270,7 @@ class EffectiveEpiFamily
 类 EffectiveEpiFamily
   参数: {B : C} {α : 类型} (X : α -> C) (π : (a : α) -> (X a ⟶ B))
   公理与运算 (1 个):
-    - effectiveEpiFamily : Nonempty (EffectiveEpiFamilyStruct X π)
+    - effectiveEpiFamily : 非空 (EffectiveEpiFamilyStruct X π)
 -/
 class EffectiveEpiFamily {B : C} {α : Type*} (X : α -> C) (π : (a : α) -> (X a ⟶ B)) : Prop where
   /-- `π` is an effective epimorphic family if there exists an `EffectiveEpiFamilyStruct` for `π` -/
@@ -421,7 +421,7 @@ definition effectiveEpiFamilyStructSingletonOfEffectiveEpi
 
 中文:
 定义 effectiveEpiFamilyStructSingletonOfEffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [EffectiveEpi f]
+  签名: {B X : C} (f : X ⟶ B) [有效满态射 f]
   定义体: EffectiveEpi.desc f (e ()) (fun g₁ g₂ hg => h () () g₁ g₂ hg)
   fac e h := fun _ => EffectiveEpi.fac f (e ()) (fun g₁ g₂ hg => h () () g₁ g₂ hg)
   uniq e h m hm := by apply EffectiveEpi.uniq f (e ()) (h () ()); exact hm ()
@@ -568,7 +568,7 @@ definition effectiveEpiStructOfIsIso
 
 中文:
 定义 effectiveEpiStructOfIsIso
-  签名: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  签名: {X Y : C} (f : X ⟶ Y) [是同构 f]
   定义体: inv f ≫ e
   fac _ _ := by simp
   uniq _ _ _ h := by simpa using h

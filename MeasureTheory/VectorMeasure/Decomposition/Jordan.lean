@@ -70,13 +70,13 @@ structure JordanDecomposition
     - mutuallySingular : posPart ⟂ₘ negPart
 
 中文:
-结构 JordanDecomposition
-  参数: (α : 类型) [MeasurableSpace α]
+结构 Jordan分解
+  参数: (α : 类型) [可测空间 α]
   公理与运算 (5 个):
-    - posPart : Measure α
-    - negPart : Measure α
-    - [posPart_finite : IsFiniteMeasure posPart]
-    - [negPart_finite : IsFiniteMeasure negPart]
+    - posPart : 测度 α
+    - negPart : 测度 α
+    - [posPart_finite : 是有限测度 posPart]
+    - [negPart_finite : 是有限测度 negPart]
     - mutuallySingular : posPart ⟂ₘ negPart
 -/
 structure JordanDecomposition (α : Type*) [MeasurableSpace α] where
@@ -108,7 +108,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (JordanDecomposition α) where zero
+  签名: : 零 (Jordan分解 α) where zero
   定义体: ⟨0, 0, MutuallySingular.zero_right⟩
 
 Depends on / 依赖: MutuallySingular, MutuallySingular.zero_right, zero_right
@@ -125,7 +125,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (JordanDecomposition α) where default
+  签名: : 可居 (Jordan分解 α) where default
   定义体: 0
 -/
 instance instInhabited : Inhabited (JordanDecomposition α) where default := 0
@@ -141,7 +141,7 @@ instance instInvolutiveNeg
 
 中文:
 实例 instInvolutiveNeg
-  签名: : InvolutiveNeg (JordanDecomposition α) where
+  签名: : InvolutiveNeg (Jordan分解 α) where
   定义体: ⟨j.negPart, j.posPart, j.mutuallySingular.symm⟩
   neg_neg _ := JordanDecomposition.ext rfl rfl
 
@@ -162,7 +162,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul 实数>=0 (JordanDecomposition α) where
+  签名: : 标量乘法 实数>=0 (Jordan分解 α) where
   定义体: ⟨r • j.posPart, r • j.negPart,
       MutuallySingular.smul _ (MutuallySingular.smul _ j.mutuallySingular.symm).symm⟩
 
@@ -184,8 +184,8 @@ instance instSMulReal
 @[simp]
 
 中文:
-实例 instSMulReal
-  签名: : SMul 实数 (JordanDecomposition α) where
+实例 instSMul实数
+  签名: : 标量乘法 实数 (Jordan分解 α) where
   定义体: if 0 <= r then r.toNNReal • j else -((-r).toNNReal • j)
 
 @[simp]
@@ -208,7 +208,7 @@ theorem zero_posPart
 
 中文:
 定理 zero_posPart
-  结论: (0 : JordanDecomposition α).posPart = 0
+  结论: (0 : Jordan分解 α).posPart = 0
   证明: rfl
 
 @[simp]
@@ -229,7 +229,7 @@ theorem zero_negPart
 
 中文:
 定理 zero_negPart
-  结论: (0 : JordanDecomposition α).negPart = 0
+  结论: (0 : Jordan分解 α).negPart = 0
   证明: rfl
 
 @[simp]
@@ -335,7 +335,7 @@ theorem real_smul_def
 
 中文:
 定理 real_smul_def
-  条件: (r : 实数) (j : JordanDecomposition α)
+  条件: (r : 实数) (j : Jordan分解 α)
   证明: rfl
 
 @[simp]
@@ -501,7 +501,7 @@ definition toSignedMeasure
 
 中文:
 定义 toSignedMeasure
-  签名: : SignedMeasure α
+  签名: : 符号测度 α
   定义体: j.posPart.toSignedMeasure - j.negPart.toSignedMeasure
 
 Depends on / 依赖: j.negPart.toSignedMeasure, j.posPart.toSignedMeasure, negPart, posPart, toSignedMeasure
@@ -521,7 +521,7 @@ theorem toSignedMeasure_zero
 
 中文:
 定理 toSignedMeasure_zero
-  结论: (0 : JordanDecomposition α).toSignedMeasure = 0
+  结论: (0 : Jordan分解 α).toSignedMeasure = 0
   证明: by
   ext1 i hi
   rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hi]; rw [zero_posPart]; rw [zero_negPart]; rw [sub_self]; rw [FunLike.coe_zero]; rw [Pi.zero_apply]
@@ -595,7 +595,7 @@ theorem exists_compl_positive_negative
     rw [toSignedMeasure]; rw [toSignedMeasure_sub_apply hA]; rw [measureReal_def]; rw [show j.posPart A = 0 from nonpos_iff_eq_zero.1 (hS₂ ▸ me
 
 中文:
-定理 exists_compl_positive_negative
+定理 存在_compl_positive_negative
   证明: by
   obtain ⟨S, hS₁, hS₂, hS₃⟩ := j.mutuallySingular
   refine ⟨S, hS₁, ?_, ?_, hS₂, hS₃⟩
@@ -642,7 +642,7 @@ definition toJordanDecomposition
 
 中文:
 定义 toJordanDecomposition
-  签名: (s : SignedMeasure α)
+  签名: (s : 符号测度 α)
   定义体: let i := s.exists_compl_positive_negative.choose
   have hi := s.exists_compl_positive_negative.choose_spec
   { posPart := s.toMeasureOfZeroLE i hi.1 hi.2.1
@@ -678,7 +678,7 @@ theorem toJordanDecomposition_spec
 
 中文:
 定理 toJordanDecomposition_spec
-  条件: (s : SignedMeasure α)
+  条件: (s : 符号测度 α)
   证明: by
   set i := s.exists_compl_positive_negative.choose
   obtain ⟨hi₁, hi₂, hi₃⟩ := s.exists_compl_positive_negative.choose_spec
@@ -718,7 +718,7 @@ theorem toSignedMeasure_toJordanDecomposition
 
 中文:
 定理 toSignedMeasure_toJordanDecomposition
-  条件: (s : SignedMeasure α)
+  条件: (s : 符号测度 α)
   证明: by
   obtain ⟨i, hi₁, hi₂, hi₃, hμ, hν⟩ := s.toJordanDecomposition_spec
   simp only [JordanDecomposition.toSignedMeasure, hμ, hν]
@@ -756,7 +756,7 @@ theorem subset_positive_null_set
 
 中文:
 定理 subset_positive_null_set
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   have : s v + s (w \ v) = 0 := by
     rw [← hw₁]; rw [← of_union Set.disjoint_sdiff_right hv (hw.diff hv)]; rw [Set.union_sdiff_self]; rw [Set.union_eq_self_of_subset_left hwt]
@@ -790,7 +790,7 @@ theorem subset_negative_null_set
 
 中文:
 定理 subset_negative_null_set
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   rw [← s.neg_le_neg_iff _ hu]; rw [neg_zero] at hsu
   have := subset_positive_null_set hu hv hw hsu
@@ -825,7 +825,7 @@ theorem of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
 
 中文:
 定理 of_sdiff_eq_zero_of_symmDiff_eq_zero_positive
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   rw [restrict_le_restrict_iff] at hsu hsv
   on_goal 1 =>
@@ -872,7 +872,7 @@ alias of_diff_eq_zero
 
 中文:
 定理 of_sdiff_eq_zero_of_symmDiff_eq_zero_negative
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   rw [← s.neg_le_neg_iff _ hu]; rw [neg_zero] at hsu
   rw [← s.neg_le_neg_iff _ hv]; rw [neg_zero] at hsv
@@ -912,7 +912,7 @@ theorem of_inter_eq_of_symmDiff_eq_zero_positive
 
 中文:
 定理 of_inter_eq_of_symmDiff_eq_zero_positive
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   have hwuv : s ((w inter u) ∆ (w inter v)) = 0 := by
     refine
@@ -954,7 +954,7 @@ theorem of_inter_eq_of_symmDiff_eq_zero_negative
 
 中文:
 定理 of_inter_eq_of_symmDiff_eq_zero_negative
-  结论: (hu : MeasurableSet u) (hv : MeasurableSet v)
+  结论: (hu : 可测集 u) (hv : 可测集 v)
   证明: by
   rw [← s.neg_le_neg_iff _ hu]; rw [neg_zero] at hsu
   rw [← s.neg_le_neg_iff _ hv]; rw [neg_zero] at hsv
@@ -997,7 +997,7 @@ theorem eq_of_posPart_eq_posPart
 
 中文:
 定理 eq_of_posPart_eq_posPart
-  结论: {j₁ j₂ : JordanDecomposition α}
+  结论: {j₁ j₂ : Jordan分解 α}
   证明: by
   ext1
   · exact hj
@@ -1029,7 +1029,7 @@ theorem toSignedMeasure_injective
 
 中文:
 定理 toSignedMeasure_injective
-  结论: Injective @JordanDecomposition.toSignedMeasure α _
+  结论: 单射 @Jordan分解.toSignedMeasure α _
   证明: by
   /- The main idea is that two Jordan decompositions of a signed measure provide two
     Hahn decompositions for that measure. Then, from `of_symmDiff_compl_positive_negative`,
@@ -1091,7 +1091,7 @@ theorem toJordanDecomposition_toSignedMeasure
 
 中文:
 定理 toJordanDecomposition_toSignedMeasure
-  条件: (j : JordanDecomposition α)
+  条件: (j : Jordan分解 α)
   证明: (@toSignedMeasure_injective _ _ j j.toSignedMeasure.toJordanDecomposition (by simp)).symm
 
 Depends on / 依赖: j.toSignedMeasure.toJordanDecomposition, toJordanDecomposition, toSignedMeasure, toSignedMeasure_injective
@@ -1122,7 +1122,7 @@ definition toJordanDecompositionEquiv
 
 中文:
 定义 toJordanDecompositionEquiv
-  签名: (α : 类型) [MeasurableSpace α]
+  签名: (α : 类型) [可测空间 α]
   定义体: toJordanDecomposition
   invFun := toSignedMeasure
   left_inv := toSignedMeasure_toJordanDecomposition
@@ -1149,7 +1149,7 @@ theorem toJordanDecomposition_zero
 
 中文:
 定理 toJordanDecomposition_zero
-  结论: (0 : SignedMeasure α).toJordanDecomposition = 0
+  结论: (0 : 符号测度 α).toJordanDecomposition = 0
   证明: by
   apply toSignedMeasure_injective
   simp [toSignedMeasure_zero]
@@ -1172,7 +1172,7 @@ theorem toJordanDecomposition_neg
 
 中文:
 定理 toJordanDecomposition_neg
-  条件: (s : SignedMeasure α)
+  条件: (s : 符号测度 α)
   证明: by
   apply toSignedMeasure_injective
   simp [toSignedMeasure_neg]
@@ -1196,7 +1196,7 @@ theorem toJordanDecomposition_smul
 
 中文:
 定理 toJordanDecomposition_smul
-  条件: (s : SignedMeasure α) (r : 实数>=0)
+  条件: (s : 符号测度 α) (r : 实数>=0)
   证明: by
   apply toSignedMeasure_injective
   simp [toSignedMeasure_smul]
@@ -1221,7 +1221,7 @@ theorem toJordanDecomposition_smul_real_nonneg
 
 中文:
 定理 toJordanDecomposition_smul_real_nonneg
-  结论: (s : SignedMeasure α) (r : 实数)
+  结论: (s : 符号测度 α) (r : 实数)
   证明: by
   lift r to Real>=0 using hr
   rw [JordanDecomposition.coe_smul]; rw [← toJordanDecomposition_smul]
@@ -1249,7 +1249,7 @@ theorem toJordanDecomposition_smul_real
 
 中文:
 定理 toJordanDecomposition_smul_real
-  条件: (s : SignedMeasure α) (r : 实数)
+  条件: (s : 符号测度 α) (r : 实数)
   证明: by
   by_cases! hr : 0 <= r
   · exact toJordanDecomposition_smul_real_nonneg s r hr
@@ -1285,7 +1285,7 @@ theorem toJordanDecomposition_eq
 
 中文:
 定理 toJordanDecomposition_eq
-  结论: {s : SignedMeasure α} {j : JordanDecomposition α}
+  结论: {s : 符号测度 α} {j : Jordan分解 α}
   证明: by
   rw [h]; rw [toJordanDecomposition_toSignedMeasure]
 
@@ -1305,7 +1305,7 @@ definition totalVariation
 
 中文:
 定义 totalVariation
-  签名: (s : SignedMeasure α)
+  签名: (s : 符号测度 α)
   定义体: s.toJordanDecomposition.posPart + s.toJordanDecomposition.negPart
 
 Depends on / 依赖: negPart, posPart, s.toJordanDecomposition.negPart, s.toJordanDecomposition.posPart, toJordanDecomposition
@@ -1327,7 +1327,7 @@ theorem totalVariation_zero
 
 中文:
 定理 totalVariation_zero
-  结论: (0 : SignedMeasure α).totalVariation = 0
+  结论: (0 : 符号测度 α).totalVariation = 0
   证明: by
   simp [totalVariation, toJordanDecomposition_zero]
 
@@ -1348,7 +1348,7 @@ theorem totalVariation_neg
 
 中文:
 定理 totalVariation_neg
-  条件: (s : SignedMeasure α)
+  条件: (s : 符号测度 α)
   结论: (-s).totalVariation = s.totalVariation
   证明: by
   simp [totalVariation, toJordanDecomposition_neg, add_comm]
@@ -1369,7 +1369,7 @@ theorem apply_eq_posPart_real_sub_negPart_real
 
 中文:
 定理 apply_eq_posPart_real_sub_negPart_real
-  结论: (s : SignedMeasure α) {i : Set α}
+  结论: (s : 符号测度 α) {i : 集合 α}
   证明: by
   grind [Measure.toSignedMeasure_sub_apply, toSignedMeasure, toSignedMeasure_toJordanDecomposition]
 
@@ -1395,7 +1395,7 @@ theorem null_of_totalVariation_zero
 
 中文:
 定理 null_of_totalVariation_zero
-  结论: (s : SignedMeasure α) {i : Set α}
+  结论: (s : 符号测度 α) {i : 集合 α}
   证明: by
   rw [totalVariation]; rw [Measure.coe_add]; rw [Pi.add_apply]; rw [add_eq_zero] at hs
   by_cases hi : MeasurableSet i
@@ -1427,7 +1427,7 @@ theorem absolutelyContinuous_ennreal_iff
 
 中文:
 定理 absolutelyContinuous_ennreal_iff
-  条件: (s : SignedMeasure α) (μ : VectorMeasure α 实数>=0∞)
+  条件: (s : 符号测度 α) (μ : 向量测度 α 实数>=0∞)
   证明: by
   constructor <;> intro h
   · refine Measure.AbsolutelyContinuous.mk fun S hS₁ hS₂ => ?_
@@ -1467,7 +1467,7 @@ theorem totalVariation_absolutelyContinuous_iff
 
 中文:
 定理 totalVariation_absolutelyContinuous_iff
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: by
   constructor <;> intro h
   · constructor
@@ -1510,7 +1510,7 @@ theorem mutuallySingular_iff
 
 中文:
 定理 mutuallySingular_iff
-  条件: (s t : SignedMeasure α)
+  条件: (s t : 符号测度 α)
   证明: by
   constructor
   · rintro ⟨u, hmeas, hu₁, hu₂⟩
@@ -1557,7 +1557,7 @@ theorem mutuallySingular_ennreal_iff
 
 中文:
 定理 mutuallySingular_ennreal_iff
-  条件: (s : SignedMeasure α) (μ : VectorMeasure α 实数>=0∞)
+  条件: (s : 符号测度 α) (μ : 向量测度 α 实数>=0∞)
   证明: by
   constructor
   · rintro ⟨u, hmeas, hu₁, hu₂⟩
@@ -1598,7 +1598,7 @@ theorem totalVariation_mutuallySingular_iff
 
 中文:
 定理 totalVariation_mutuallySingular_iff
-  条件: (s : SignedMeasure α) (μ : Measure α)
+  条件: (s : 符号测度 α) (μ : 测度 α)
   证明: Measure.MutuallySingular.add_left_iff
 
 Depends on / 依赖: Measure, Measure.MutuallySingular.add_left_iff, MutuallySingular, add_left_iff

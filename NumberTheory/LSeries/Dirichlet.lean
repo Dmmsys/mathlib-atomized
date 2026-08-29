@@ -50,7 +50,7 @@ lemma ArithmeticFunction.one_eq_delta
 
 中文:
 引理 ArithmeticFunction.one_eq_delta
-  结论: ↗(1 : ArithmeticFunction Complex) = δ
+  结论: ↗(1 : ArithmeticFunction 复形) = δ
   证明: by
   ext
   simp [one_apply, LSeries.delta]
@@ -126,7 +126,7 @@ exact not_LSeriesSummable_moebius_at_one LSeriesSummable.of_re_le_re (by simpa) 
 
 中文:
 引理 LSeriesSummable_moebius_iff
-  条件: {s : Complex}
+  条件: {s : 复形}
   结论: LSeriesSummable ↗μ s ↔ 1 < s.re
   证明: by
   refine ⟨fun H => ?_, LSeriesSummable_of_bounded_of_one_lt_re (m := 1) fun n _ => ?_⟩
@@ -190,7 +190,7 @@ lemma ArithmeticFunction.const_one_eq_zeta
 
 中文:
 引理 ArithmeticFunction.const_one_eq_zeta
-  条件: {R : 类型} [AddMonoidWithOne R] {n : 自然数} (hn : n != 0)
+  条件: {R : 类型} [加法带幺幺半群 R] {n : 自然数} (hn : n != 0)
   证明: by
   simp [hn]
 -/
@@ -208,7 +208,7 @@ lemma LSeries.one_convolution_eq_zeta_convolution
 
 中文:
 引理 LSeries.one_convolution_eq_zeta_convolution
-  条件: {R : 类型} [Semiring R] (f : 自然数 -> R)
+  条件: {R : 类型} [半环 R] (f : 自然数 -> R)
   证明: convolution_congr ArithmeticFunction.const_one_eq_zeta fun _ => rfl
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.const_one_eq_zeta, const_one_eq_zeta, convolution_congr
@@ -227,7 +227,7 @@ lemma LSeries.convolution_one_eq_convolution_zeta
 
 中文:
 引理 LSeries.convolution_one_eq_convolution_zeta
-  条件: {R : 类型} [Semiring R] (f : 自然数 -> R)
+  条件: {R : 类型} [半环 R] (f : 自然数 -> R)
   证明: convolution_congr (fun _ => rfl) ArithmeticFunction.const_one_eq_zeta
 
 Depends on / 依赖: ArithmeticFunction, ArithmeticFunction.const_one_eq_zeta, const_one_eq_zeta, convolution_congr
@@ -255,7 +255,7 @@ lemma isMultiplicative_toArithmeticFunction
 
 中文:
 引理 isMultiplicative_toArithmeticFunction
-  结论: {N : 自然数} {R : 类型} [CommMonoidWithZero R]
+  结论: {N : 自然数} {R : 类型} [带零交换幺半群 R]
   证明: by
   refine IsMultiplicative.iff_ne_zero.mpr ⟨?_, fun {m} {n} hm hn _ => ?_⟩
   · simp [toArithmeticFunction]
@@ -281,7 +281,7 @@ lemma apply_eq_toArithmeticFunction_apply
 
 中文:
 引理 apply_eq_toArithmeticFunction_apply
-  结论: {N : 自然数} {R : 类型} [CommMonoidWithZero R]
+  结论: {N : 自然数} {R : 类型} [带零交换幺半群 R]
   证明: by
   simp [toArithmeticFunction, hn]
 
@@ -309,7 +309,7 @@ lemma mul_convolution_distrib
 
 中文:
 引理 mul_convolution_distrib
-  结论: {R : 类型} [CommSemiring R] {n : 自然数} (χ : DirichletCharacter R n)
+  结论: {R : 类型} [交换半环 R] {n : 自然数} (χ : DirichletCharacter R n)
   证明: by
   ext n
   simp only [Pi.mul_apply, LSeries.convolution_def, Finset.mul_sum]
@@ -339,7 +339,7 @@ lemma mul_delta
 
 中文:
 引理 mul_delta
-  条件: {n : 自然数} (χ : DirichletCharacter Complex n)
+  条件: {n : 自然数} (χ : DirichletCharacter 复形 n)
   结论: ↗χ * δ = δ
   证明: LSeries.mul_delta by rw [cast_one, map_one]
 
@@ -359,7 +359,7 @@ lemma delta_mul
 
 中文:
 引理 delta_mul
-  条件: {n : 自然数} (χ : DirichletCharacter Complex n)
+  条件: {n : 自然数} (χ : DirichletCharacter 复形 n)
   结论: δ * ↗χ = δ
   证明: mul_comm δ _ ▸ mul_delta ..
 
@@ -386,7 +386,7 @@ lemma convolution_mul_moebius
 
 中文:
 引理 convolution_mul_moebius
-  条件: {n : 自然数} (χ : DirichletCharacter Complex n)
+  条件: {n : 自然数} (χ : DirichletCharacter 复形 n)
   结论: ↗χ ⍟ (↗χ * ↗μ) = δ
   证明: by
   have : (1 : Nat -> Complex) ⍟ (μ ·) = δ := by
@@ -422,7 +422,7 @@ have : ¬ IsUnit (n : ZMod 0) := fun h => hn' ZMod.eq_one_of_isUnit_natCast h
 
 中文:
 引理 modZero_eq_delta
-  条件: {χ : DirichletCharacter Complex 0}
+  条件: {χ : DirichletCharacter 复形 0}
   结论: ↗χ = δ
   证明: by
   ext n
@@ -456,7 +456,7 @@ lemma modOne_eq_one
 
 中文:
 引理 modOne_eq_one
-  条件: {R : 类型} [CommMonoidWithZero R] {χ : DirichletCharacter R 1}
+  条件: {R : 类型} [带零交换幺半群 R] {χ : DirichletCharacter R 1}
   证明: by
   ext
   rw [χ.level_one]; rw [MulChar.one_apply (isUnit_of_subsingleton _)]; rw [Pi.one_apply]
@@ -504,7 +504,7 @@ lemma not_LSeriesSummable_at_one
 
 中文:
 引理 not_LSeriesSummable_at_one
-  条件: {N : 自然数} (hN : N != 0) (χ : DirichletCharacter Complex N)
+  条件: {N : 自然数} (hN : N != 0) (χ : DirichletCharacter 复形 N)
   证明: by
   refine fun h => (Real.not_summable_indicator_one_div_natCast hN 1) ?_
   refine h.norm.of_nonneg_of_le (fun m => Set.indicator_apply_nonneg (fun _ => by positivity))
@@ -537,7 +537,7 @@ lemma LSeriesSummable_of_one_lt_re
 
 中文:
 引理 LSeriesSummable_of_one_lt_re
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < s.re)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < s.re)
   证明: LSeriesSummable_of_bounded_of_one_lt_re (fun _ _ => χ.norm_le_one _) hs
 
 Depends on / 依赖: LSeriesSummable_of_bounded_of_one_lt_re, norm_le_one
@@ -559,7 +559,7 @@ exact not_LSeriesSummable_at_one hN χ LSeriesSummable.of_re_le_re (by simp [h])
 
 中文:
 引理 LSeriesSummable_iff
-  条件: {N : 自然数} (hN : N != 0) (χ : DirichletCharacter Complex N) {s : Complex}
+  条件: {N : 自然数} (hN : N != 0) (χ : DirichletCharacter 复形 N) {s : 复形}
   证明: by
   refine ⟨fun H => ?_, LSeriesSummable_of_one_lt_re χ⟩
   by_contra! h
@@ -585,7 +585,7 @@ using csInf_Ioo EReal.coe_lt_top 1
 
 中文:
 引理 absicssaOfAbsConv_eq_one
-  条件: {N : 自然数} (hn : N != 0) (χ : DirichletCharacter Complex N)
+  条件: {N : 自然数} (hn : N != 0) (χ : DirichletCharacter 复形 N)
   证明: by
   simpa [abscissaOfAbsConv, LSeriesSummable_iff hn χ, Set.Ioi_def, EReal.image_coe_Ioi]
 using csInf_Ioo EReal.coe_lt_top 1
@@ -609,7 +609,7 @@ simpa using mul_le_of_le_one_left (norm_nonneg <| f n) χ.norm_le_one n
 
 中文:
 引理 LSeriesSummable_mul
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N) {f : 自然数 -> Complex} {s : Complex}
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N) {f : 自然数 -> 复形} {s : 复形}
   证明: by
 refine .of_norm h.norm.of_nonneg_of_le (fun _ => norm_nonneg _) fun n => norm_term_le s ?_
 simpa using mul_le_of_le_one_left (norm_nonneg <| f n) χ.norm_le_one n
@@ -635,7 +635,7 @@ LSeriesSummable_mul χ ArithmeticFunction.LSeriesSummable_moebius_iff.mpr hs]; r
 
 中文:
 引理 LSeries.mul_mu_eq_one
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N) {s : Complex}
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N) {s : 复形}
   证明: by
   rw [← LSeries_convolution' (LSeriesSummable_of_one_lt_re χ hs) <|
 LSeriesSummable_mul χ ArithmeticFunction.LSeriesSummable_moebius_iff.mpr hs]; rw [convolution_mul_moebius]; rw [LSeries_delta]; rw [Pi.one_apply]
@@ -662,7 +662,7 @@ lemma LSeries_ne_zero_of_one_lt_re
 
 中文:
 引理 LSeries_ne_zero_of_one_lt_re
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < s.re)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < s.re)
   证明: fun h => by simpa [h] using LSeries.mul_mu_eq_one χ hs
 
 Depends on / 依赖: LSeries, LSeries.mul_mu_eq_one, mul_mu_eq_one
@@ -715,7 +715,7 @@ theorem LSeriesSummable_one_iff
 
 中文:
 定理 LSeriesSummable_one_iff
-  条件: {s : Complex}
+  条件: {s : 复形}
   结论: LSeriesSummable 1 s ↔ 1 < s.re
   证明: modOne_eq_one (χ := χ₁) ▸ LSeriesSummable_iff one_ne_zero χ₁
 
@@ -764,7 +764,7 @@ theorem LSeriesSummable_zeta_iff
 
 中文:
 定理 LSeriesSummable_zeta_iff
-  条件: {s : Complex}
+  条件: {s : 复形}
   结论: LSeriesSummable (ζ ·) s ↔ 1 < s.re
   证明: (LSeriesSummable_congr s const_one_eq_zeta).symm.trans LSeriesSummable_one_iff
 
@@ -809,7 +809,7 @@ lemma LSeries_zeta_eq_riemannZeta
 
 中文:
 引理 LSeries_zeta_eq_riemannZeta
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L ↗ζ s = riemannZeta s
   证明: by
   suffices ∑' n, term (fun n => if n = 0 then 0 else 1) s n = ∑' n : Nat, 1 / (n : Complex) ^ s by
@@ -838,7 +838,7 @@ lemma LSeriesHasSum_zeta
 
 中文:
 引理 LSeriesHasSum_zeta
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: LSeriesHasSum ↗ζ s (riemannZeta s)
   证明: LSeries_zeta_eq_riemannZeta hs ▸ (LSeriesSummable_zeta_iff.mpr hs).LSeriesHasSum
 
@@ -861,7 +861,7 @@ lemma LSeries_zeta_mul_Lseries_moebius
 
 中文:
 引理 LSeries_zeta_mul_Lseries_moebius
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L ↗ζ s * L ↗μ s = 1
   证明: by
   rw [← LSeries_convolution' (LSeriesSummable_zeta_iff.mpr hs)
@@ -886,7 +886,7 @@ lemma LSeries_zeta_ne_zero_of_one_lt_re
 
 中文:
 引理 LSeries_zeta_ne_zero_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L ↗ζ s != 0
   证明: fun h => by simpa [h, -zeta_apply] using LSeries_zeta_mul_Lseries_moebius hs
 
@@ -910,7 +910,7 @@ lemma LSeries_one_eq_riemannZeta
 
 中文:
 引理 LSeries_one_eq_riemannZeta
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L 1 s = riemannZeta s
   证明: LSeries_zeta_eq ▸ LSeries_zeta_eq_riemannZeta hs
 
@@ -930,7 +930,7 @@ lemma LSeriesHasSum_one
 
 中文:
 引理 LSeriesHasSum_one
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: LSeriesHasSum 1 s (riemannZeta s)
   证明: LSeries_one_eq_riemannZeta hs ▸ (LSeriesSummable_one_iff.mpr hs).LSeriesHasSum
 
@@ -951,7 +951,7 @@ lemma LSeries_one_mul_Lseries_moebius
 
 中文:
 引理 LSeries_one_mul_Lseries_moebius
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L 1 s * L ↗μ s = 1
   证明: LSeries_zeta_eq ▸ LSeries_zeta_mul_Lseries_moebius hs
 
@@ -971,7 +971,7 @@ lemma LSeries_one_ne_zero_of_one_lt_re
 
 中文:
 引理 LSeries_one_ne_zero_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L 1 s != 0
   证明: LSeries_zeta_eq ▸ LSeries_zeta_ne_zero_of_one_lt_re hs
 
@@ -991,7 +991,7 @@ lemma riemannZeta_ne_zero_of_one_lt_re
 
 中文:
 引理 riemannZeta_ne_zero_of_one_lt_re
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: riemannZeta s != 0
   证明: LSeries_one_eq_riemannZeta hs ▸ LSeries_one_ne_zero_of_one_lt_re hs
 
@@ -1106,7 +1106,7 @@ lemma convolution_vonMangoldt_zeta
 
 中文:
 引理 convolution_vonMangoldt_zeta
-  结论: ↗Λ ⍟ ↗ζ = ↗Complex.log
+  结论: ↗Λ ⍟ ↗ζ = ↗复形.log
   证明: by
   ext n
   simpa [apply_ite, LSeries.convolution_def, -vonMangoldt_mul_zeta]
@@ -1129,7 +1129,7 @@ lemma convolution_vonMangoldt_const_one
 
 中文:
 引理 convolution_vonMangoldt_const_one
-  结论: ↗Λ ⍟ 1 = ↗Complex.log
+  结论: ↗Λ ⍟ 1 = ↗复形.log
   证明: (convolution_one_eq_convolution_zeta _).trans convolution_vonMangoldt_zeta
 
 Depends on / 依赖: convolution_one_eq_convolution_zeta, convolution_vonMangoldt_zeta
@@ -1153,7 +1153,7 @@ lemma LSeriesSummable_vonMangoldt
 
 中文:
 引理 LSeriesSummable_vonMangoldt
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: LSeriesSummable ↗Λ s
   证明: by
   have hf := LSeriesSummable_logMul_of_lt_re
@@ -1189,7 +1189,7 @@ lemma convolution_twist_vonMangoldt
 
 中文:
 引理 convolution_twist_vonMangoldt
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N)
   证明: by
   rw [← convolution_vonMangoldt_const_one]; rw [← χ.mul_convolution_distrib]; rw [mul_one]
 
@@ -1209,7 +1209,7 @@ lemma LSeriesSummable_twist_vonMangoldt
 
 中文:
 引理 LSeriesSummable_twist_vonMangoldt
-  结论: {N : 自然数} (χ : DirichletCharacter Complex N) {s : Complex}
+  结论: {N : 自然数} (χ : DirichletCharacter 复形 N) {s : 复形}
   证明: LSeriesSummable_mul χ LSeriesSummable_vonMangoldt hs
 
 Depends on / 依赖: LSeriesSummable_mul, LSeriesSummable_vonMangoldt
@@ -1235,7 +1235,7 @@ lemma LSeries_twist_vonMangoldt_eq
 
 中文:
 引理 LSeries_twist_vonMangoldt_eq
-  条件: {N : 自然数} (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < s.re)
+  条件: {N : 自然数} (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < s.re)
   证明: by
   rcases eq_or_ne N 0 with rfl | hN
   · simp [modZero_eq_delta, delta_mul_eq_smul_delta, LSeries_delta]
@@ -1277,7 +1277,7 @@ refine (LSeries_congr (fun {n} _ => ?_) s).trans
 
 中文:
 引理 LSeries_vonMangoldt_eq
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   结论: L ↗Λ s = - deriv (L 1) s / L 1 s
   证明: by
 refine (LSeries_congr (fun {n} _ => ?_) s).trans
@@ -1306,7 +1306,7 @@ refine Filter.EventuallyEq.deriv_eq Filter.eventuallyEq_iff_exists_mem.mpr ?_
 
 中文:
 引理 LSeries_vonMangoldt_eq_deriv_riemannZeta_div
-  条件: {s : Complex} (hs : 1 < s.re)
+  条件: {s : 复形} (hs : 1 < s.re)
   证明: by
   suffices deriv (L 1) s = deriv riemannZeta s by
     rw [LSeries_vonMangoldt_eq hs]; rw [← LSeries_one_eq_riemannZeta hs]; rw [this]

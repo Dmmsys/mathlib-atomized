@@ -62,7 +62,7 @@ lemma isClosedEmbedding_natUnionInftyEmbedding
 
 中文:
 引理 isClosedEmbedding_natUnionInftyEmbedding
-  结论: IsClosedEmbedding natUnionInftyEmbedding
+  结论: 是闭嵌入 natUnionInftyEmbedding
   证明: by
   refine .of_continuous_injective_isClosedMap
     natUnionInftyEmbedding.continuous ?_ ?_
@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetrizableSpace (OnePoint 自然数)
+  签名: Metrizable空间 (OnePoint 自然数)
   定义体: isClosedEmbedding_natUnionInftyEmbedding.metrizableSpace
 
 Depends on / 依赖: isClosedEmbedding_natUnionInftyEmbedding, isClosedEmbedding_natUnionInftyEmbedding.metrizableSpace, metrizableSpace
@@ -117,7 +117,7 @@ abbreviation NatUnionInfty
 scoped notation "Natunion{∞}" => NatUnionInfty
 
 中文:
-缩写 NatUnionInfty
+缩写 自然数UnionInfty
   签名: : LightProfinite
   定义体: of (OnePoint Nat)
 
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Countable 自然数union{∞}
+  签名: 可数 自然数union{∞}
   定义体: (inferInstance : Countable <| Option _)
 
 Depends on / 依赖: Countable
@@ -177,7 +177,7 @@ lemma continuous_iff_convergent
 
 中文:
 引理 continuous_iff_convergent
-  条件: {Y : 类型} [TopologicalSpace Y] (f : 自然数union{∞} -> Y)
+  条件: {Y : 类型} [拓扑空间 Y] (f : 自然数union{∞} -> Y)
   证明: continuous_iff_from_nat f
 
 Depends on / 依赖: continuous_iff_from_nat

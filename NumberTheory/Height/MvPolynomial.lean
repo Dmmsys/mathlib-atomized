@@ -39,8 +39,8 @@ lemma Height.iSup_fun_eq_max
 
 中文:
 引理 Height.iSup_fun_eq_max
-  条件: (f : Fin 2 -> 实数)
-  结论: iSup f = max (f 0) (f 1)
+  条件: (f : 有限集 2 -> 实数)
+  结论: iSup f = 最大值 (f 0) (f 1)
   证明: by
   rw [show f = ![f 0]; rw [f 1] from List.ofFn_inj.mp rfl]
   exact (max_eq_iSup ..).symm
@@ -77,7 +77,7 @@ lemma apply_sum_le
 
 中文:
 引理 apply_sum_le
-  条件: (hv : IsNonarchimedean v) {s : Finset α}
+  条件: (hv : IsNonarchimedean v) {s : 有限集 α}
   证明: by
   classical
   induction s using Finset.induction with
@@ -118,7 +118,7 @@ lemma apply_sum_univ_le
 
 中文:
 引理 apply_sum_univ_le
-  条件: [Fintype α] (hv : IsNonarchimedean v)
+  条件: [有限类型 α] (hv : IsNonarchimedean v)
   证明: by
   grw [hv.apply_sum_le, ← cbiSup_eq_of_forall (by grind)]
   simp
@@ -160,8 +160,8 @@ lemma AbsoluteValue.iSup_abv_linearMap_apply_le
     · exact Finite.le_ciS
 
 中文:
-引理 AbsoluteValue.iSup_abv_linearMap_apply_le
-  结论: (v : AbsoluteValue K 实数) (A : ι' × ι -> K)
+引理 绝对值.iSup_abv_linearMap_apply_le
+  结论: (v : 绝对值 K 实数) (A : ι' × ι -> K)
   证明: by
   rcases isEmpty_or_nonempty ι'
   · simp
@@ -212,7 +212,7 @@ lemma IsNonarchimedean.iSup_abv_linearMap_apply_le
 
 中文:
 引理 IsNonarchimedean.iSup_abv_linearMap_apply_le
-  结论: {v : AbsoluteValue K 实数} (hv : IsNonarchimedean v)
+  结论: {v : 绝对值 K 实数} (hv : IsNonarchimedean v)
   证明: by
   rcases isEmpty_or_nonempty ι
   · simp
@@ -270,7 +270,7 @@ theorem mulHeight_linearMap_apply_le
 
 中文:
 定理 mulHeight_linearMap_apply_le
-  条件: [Nonempty ι] (A : ι' × ι -> K) (x : ι -> K)
+  条件: [非空 ι] (A : ι' × ι -> K) (x : ι -> K)
   证明: by
   have H₀ : 1 <= Nat.card ι ^ totalWeight K * mulHeight A * mulHeight x := by
     rw [show (1 : Real) = 1 * 1 * 1 by ring]
@@ -390,8 +390,8 @@ lemma AbsoluteValue.eval_mvPolynomial_le
   exact Finite.le_ciSup (fun j =
 
 中文:
-引理 AbsoluteValue.eval_mvPolynomial_le
-  结论: [Finite ι] (v : AbsoluteValue K 实数)
+引理 绝对值.eval_mvPolynomial_le
+  结论: [有限 ι] (v : 绝对值 K 实数)
   证明: by
   rw [eval_eq]; rw [sum_def]; rw [Finset.sum_mul]
   grw [AbsoluteValue.sum_le]
@@ -437,7 +437,7 @@ lemma IsNonarchimedean.eval_mvPolynomial_le
 
 中文:
 引理 IsNonarchimedean.eval_mvPolynomial_le
-  结论: [Finite ι] {v : AbsoluteValue K 实数}
+  结论: [有限 ι] {v : 绝对值 K 实数}
   证明: by
   rcases eq_or_ne p 0 with rfl | hp₀
   · simp_all
@@ -491,7 +491,7 @@ definition mulHeightBound
 
 中文:
 定义 mulHeightBound
-  签名: (p : ι' -> MvPolynomial ι K)
+  签名: (p : ι' -> 多元多项式 ι K)
   定义体: (archAbsVal.map fun v => ⨆ j, (AddMonoidAlgebra.coeff <| p j).sum (fun _ c => v c)).prod *
     ∏ᶠ v : nonarchAbsVal, ⨆ j, max (⨆ s : (p j).support, v.val (coeff s (p j))) 1
 
@@ -511,7 +511,7 @@ lemma mulHeightBound_eq
 
 中文:
 引理 mulHeightBound_eq
-  条件: (p : ι' -> MvPolynomial ι K)
+  条件: (p : ι' -> 多元多项式 ι K)
   证明: rfl
 -/
 lemma mulHeightBound_eq (p : ι' -> MvPolynomial ι K) :
@@ -574,7 +574,7 @@ lemma hasFiniteMulSupport_iSup_max_iSup_one
 
 中文:
 引理 hasFiniteMulSupport_iSup_max_iSup_one
-  条件: (h : Nonempty ι') (p : ι' -> MvPolynomial ι K)
+  条件: (h : 非空 ι') (p : ι' -> 多元多项式 ι K)
   证明: by
   refine HasFiniteMulSupport.iSup fun j => ?_
   rcases isEmpty_or_nonempty (p j).support with hs₀ | hs₀
@@ -608,7 +608,7 @@ lemma mulHeight_constantCoeff_le_mulHeightBound
 
 中文:
 引理 mulHeight_constantCoeff_le_mulHeightBound
-  结论: {p : ι' -> MvPolynomial ι K}
+  结论: {p : ι' -> 多元多项式 ι K}
   证明: by
   simp only [mulHeight_eq h, mulHeightBound_eq]
   gcongr
@@ -658,7 +658,7 @@ simpa [h₀, mulHeight_zer
 
 中文:
 定理 mulHeight_eval_le
-  结论: {N : 自然数} {p : ι' -> MvPolynomial ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
+  结论: {N : 自然数} {p : ι' -> 多元多项式 ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · rcases eq_or_ne (fun j => constantCoeff (p j)) 0 with h | h
@@ -731,7 +731,7 @@ theorem mulHeight_eval_le'
 
 中文:
 定理 mulHeight_eval_le'
-  条件: {N : 自然数} {p : ι' -> MvPolynomial ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
+  条件: {N : 自然数} {p : ι' -> 多元多项式 ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
   证明: ⟨_, by positivity, mulHeight_eval_le hp⟩
 
 Depends on / 依赖: mulHeight_eval_le
@@ -754,7 +754,7 @@ exact (log_le_log <| by positivity) mulHeight_eval_le hp x
 
 中文:
 定理 logHeight_eval_le
-  结论: {N : 自然数} {p : ι' -> MvPolynomial ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
+  结论: {N : 自然数} {p : ι' -> 多元多项式 ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
   证明: by
   simp_rw [logHeight_eq_log_mulHeight]
   pull (disch := positivity) log
@@ -779,7 +779,7 @@ theorem logHeight_eval_le'
 
 中文:
 定理 logHeight_eval_le'
-  条件: {N : 自然数} {p : ι' -> MvPolynomial ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
+  条件: {N : 自然数} {p : ι' -> 多元多项式 ι K} (hp : 对任意 i, (p i).IsHomogeneous N)
   证明: ⟨_, logHeight_eval_le hp⟩
 
 Depends on / 依赖: logHeight_eval_le
@@ -831,7 +831,7 @@ exact eq_zero_of_pow_eq_zero (h i).symm
 
 中文:
 引理 mulHeight_eval_ge_aux
-  结论: {M N : 自然数} {q : ι × ι' -> MvPolynomial ι K} [IsEmpty ι']
+  结论: {M N : 自然数} {q : ι × ι' -> 多元多项式 ι K} [是空 ι']
   证明: by
   ext i
   simp only [Finset.univ_eq_empty, Finset.sum_empty] at h
@@ -867,7 +867,7 @@ theorem mulHeight_eval_ge
 
 中文:
 定理 mulHeight_eval_ge
-  结论: {M N : 自然数} {q : ι × ι' -> MvPolynomial ι K}
+  结论: {M N : 自然数} {q : ι × ι' -> 多元多项式 ι K}
   证明: by
   rcases isEmpty_or_nonempty ι'
   · simp [show q = 0 from Subsingleton.elim .., max_mulHeightBound_zero_one_eq_one K ι (ι × ι'),
@@ -916,7 +916,7 @@ theorem mulHeight_eval_ge'
 
 中文:
 定理 mulHeight_eval_ge'
-  结论: {M N : 自然数} {q : ι × ι' -> MvPolynomial ι K}
+  结论: {M N : 自然数} {q : ι × ι' -> 多元多项式 ι K}
   证明: by
   rcases isEmpty_or_nonempty ι'
   · exact ⟨1, zero_lt_one, fun p _ h => by simp [mulHeight_eval_ge_aux p h]⟩
@@ -952,7 +952,7 @@ theorem logHeight_eval_ge
 
 中文:
 定理 logHeight_eval_ge
-  结论: {M N : 自然数} {q : ι × ι' -> MvPolynomial ι K}
+  结论: {M N : 自然数} {q : ι × ι' -> 多元多项式 ι K}
   证明: by
   simp only [logHeight_eq_log_mulHeight]
   rcases isEmpty_or_nonempty ι'
@@ -986,7 +986,7 @@ theorem logHeight_eval_ge'
 
 中文:
 定理 logHeight_eval_ge'
-  结论: {M N : 自然数} {q : ι × ι' -> MvPolynomial ι K}
+  结论: {M N : 自然数} {q : ι × ι' -> 多元多项式 ι K}
   证明: ⟨_, logHeight_eval_ge hq⟩
 
 Depends on / 依赖: le_antisymm, le_refl, le_sup, logHeight_eval_ge, mem_Iic

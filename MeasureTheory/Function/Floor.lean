@@ -37,9 +37,9 @@ theorem Int.measurable_floor
 @[fun_prop]
 
 中文:
-定理 Int.measurable_floor
-  条件: [OpensMeasurableSpace R]
-  结论: Measurable (整数.floor : R -> 整数)
+定理 整数.measurable_floor
+  条件: [OpensMeasurable空间 R]
+  结论: 可测 (整数.floor : R -> 整数)
   证明: measurable_to_countable fun x => by
     simpa only [Int.preimage_floor_singleton] using measurableSet_Ico
 
@@ -61,8 +61,8 @@ theorem Measurable.floor
   proof: Int.measurable_floor.comp hf
 
 中文:
-定理 Measurable.floor
-  条件: [OpensMeasurableSpace R] {f : α -> R} (hf : Measurable f)
+定理 可测.floor
+  条件: [OpensMeasurable空间 R] {f : α -> R} (hf : 可测 f)
   证明: Int.measurable_floor.comp hf
 
 Depends on / 依赖: Int.measurable_floor.comp, measurable_floor
@@ -84,9 +84,9 @@ theorem Int.measurable_ceil
 @[fun_prop]
 
 中文:
-定理 Int.measurable_ceil
-  条件: [OpensMeasurableSpace R]
-  结论: Measurable (整数.ceil : R -> 整数)
+定理 整数.measurable_ceil
+  条件: [OpensMeasurable空间 R]
+  结论: 可测 (整数.ceil : R -> 整数)
   证明: measurable_to_countable fun x => by
     simpa only [Int.preimage_ceil_singleton] using measurableSet_Ioc
 
@@ -108,8 +108,8 @@ theorem Measurable.ceil
   proof: Int.measurable_ceil.comp hf
 
 中文:
-定理 Measurable.ceil
-  条件: [OpensMeasurableSpace R] {f : α -> R} (hf : Measurable f)
+定理 可测.ceil
+  条件: [OpensMeasurable空间 R] {f : α -> R} (hf : 可测 f)
   证明: Int.measurable_ceil.comp hf
 
 Depends on / 依赖: Int.measurable_ceil.comp, measurable_ceil
@@ -133,7 +133,7 @@ theorem measurable_fract
 
 中文:
 定理 measurable_fract
-  条件: [IsStrictOrderedRing R] [BorelSpace R]
+  条件: [是StrictOrdered环 R] [Borel空间 R]
   证明: by
   intro s hs
   rw [Int.preimage_fract]
@@ -159,8 +159,8 @@ theorem Measurable.fract
   proof: measurable_fract.comp hf
 
 中文:
-定理 Measurable.fract
-  条件: [IsStrictOrderedRing R] [BorelSpace R] {f : α -> R} (hf : Measurable f)
+定理 可测.fract
+  条件: [是StrictOrdered环 R] [Borel空间 R] {f : α -> R} (hf : 可测 f)
   证明: measurable_fract.comp hf
 
 Depends on / 依赖: measurable_fract, measurable_fract.comp
@@ -180,8 +180,8 @@ theorem MeasurableSet.image_fract
   exact MeasurableSet.iUnion fun m => (measurable_add_const _ hs).inter measurableSet_Ico
 
 中文:
-定理 MeasurableSet.image_fract
-  结论: [IsStrictOrderedRing R] [BorelSpace R]
+定理 可测集.image_fract
+  结论: [是StrictOrdered环 R] [Borel空间 R]
   证明: by
   simp only [Int.image_fract, sub_eq_add_neg, image_add_right']
   exact MeasurableSet.iUnion fun m => (measurable_add_const _ hs).inter measurableSet_Ico
@@ -214,9 +214,9 @@ theorem Nat.measurable_floor
 @[fun_prop]
 
 中文:
-定理 Nat.measurable_floor
-  条件: [IsStrictOrderedRing R]
-  结论: Measurable (自然数.floor : R -> 自然数)
+定理 自然数.measurable_floor
+  条件: [是StrictOrdered环 R]
+  结论: 可测 (自然数.floor : R -> 自然数)
   证明: measurable_to_countable fun n => by
     rcases eq_or_ne ⌊n⌋₊ 0 with h | h <;> simp [h, Nat.preimage_floor_of_ne_zero, -floor_eq_zero]
 
@@ -238,8 +238,8 @@ theorem Measurable.nat_floor
   proof: Nat.measurable_floor.comp hf
 
 中文:
-定理 Measurable.nat_floor
-  条件: [IsStrictOrderedRing R] (hf : Measurable f)
+定理 可测.nat_floor
+  条件: [是StrictOrdered环 R] (hf : 可测 f)
   证明: Nat.measurable_floor.comp hf
 
 Depends on / 依赖: Nat.measurable_floor.comp, measurable_floor
@@ -260,8 +260,8 @@ theorem Nat.measurable_ceil
 @[fun_prop]
 
 中文:
-定理 Nat.measurable_ceil
-  结论: Measurable (自然数.ceil : R -> 自然数)
+定理 自然数.measurable_ceil
+  结论: 可测 (自然数.ceil : R -> 自然数)
   证明: measurable_to_countable fun n => by
     rcases eq_or_ne ⌈n⌉₊ 0 with h | h <;> simp_all [Nat.preimage_ceil_of_ne_zero, -ceil_eq_zero]
 
@@ -284,9 +284,9 @@ theorem Measurable.nat_ceil
   proof: Nat.measurable_ceil.comp hf
 
 中文:
-定理 Measurable.nat_ceil
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => ⌈f x⌉₊
+定理 可测.nat_ceil
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => ⌈f x⌉₊
   证明: Nat.measurable_ceil.comp hf
 
 Depends on / 依赖: Nat.measurable_ceil.comp, measurable_ceil

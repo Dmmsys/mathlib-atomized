@@ -49,7 +49,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: (f : α -> β -> γ) (a : Option α) (b : Option β)
+  签名: (f : α -> β -> γ) (a : 选项类型 α) (b : 选项类型 β)
   定义体: a.bind fun a => b.map f a
 
 Depends on / 依赖: a.bind, b.map
@@ -70,7 +70,7 @@ theorem map₂_def
 
 中文:
 定理 map₂_def
-  条件: {α β γ : 类型u} (f : α -> β -> γ) (a : Option α) (b : Option β)
+  条件: {α β γ : 类型u} (f : α -> β -> γ) (a : 选项类型 α) (b : 选项类型 β)
   证明: by
   cases a <;> rfl
 
@@ -133,7 +133,7 @@ theorem map₂_none_left
 
 中文:
 定理 map₂_none_left
-  条件: (f : α -> β -> γ) (b : Option β)
+  条件: (f : α -> β -> γ) (b : 选项类型 β)
   结论: map₂ f none b = none
   证明: rfl
 
@@ -155,7 +155,7 @@ theorem map₂_none_right
 
 中文:
 定理 map₂_none_right
-  条件: (f : α -> β -> γ) (a : Option α)
+  条件: (f : α -> β -> γ) (a : 选项类型 α)
   结论: map₂ f a none = none
   证明: by cases a <;> rfl
 
@@ -177,7 +177,7 @@ theorem map₂_coe_left
 
 中文:
 定理 map₂_coe_left
-  条件: (f : α -> β -> γ) (a : α) (b : Option β)
+  条件: (f : α -> β -> γ) (a : α) (b : 选项类型 β)
   结论: map₂ f a b = b.map fun b => f a b
   证明: rfl
 
@@ -197,7 +197,7 @@ theorem map₂_coe_right
 
 中文:
 定理 map₂_coe_right
-  条件: (f : α -> β -> γ) (a : Option α) (b : β)
+  条件: (f : α -> β -> γ) (a : 选项类型 α) (b : β)
   证明: by grind
 -/
 theorem map₂_coe_right (f : α -> β -> γ) (a : Option α) (b : β) :
@@ -277,7 +277,7 @@ theorem map₂_swap
 
 中文:
 定理 map₂_swap
-  条件: (f : α -> β -> γ) (a : Option α) (b : Option β)
+  条件: (f : α -> β -> γ) (a : 选项类型 α) (b : 选项类型 β)
   证明: by grind
 -/
 theorem map₂_swap (f : α -> β -> γ) (a : Option α) (b : Option β) :
@@ -348,7 +348,7 @@ theorem map₂_curry
 
 中文:
 定理 map₂_curry
-  条件: (f : α × β -> γ) (a : Option α) (b : Option β)
+  条件: (f : α × β -> γ) (a : 选项类型 α) (b : 选项类型 β)
   证明: by grind
 
 @[simp]
@@ -367,7 +367,7 @@ theorem map_uncurry
 
 中文:
 定理 map_uncurry
-  条件: (f : α -> β -> γ) (x : Option (α × β))
+  条件: (f : α -> β -> γ) (x : 选项类型 (α × β))
   证明: by grind
 -/
 theorem map_uncurry (f : α -> β -> γ) (x : Option (α × β)) :
@@ -644,7 +644,7 @@ lemma map₂_left_identity
 
 中文:
 引理 map₂_left_identity
-  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (o : Option β)
+  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (o : 选项类型 β)
   证明: by grind
 -/
 lemma map₂_left_identity {f : α -> β -> β} {a : α} (h : forall b, f a b = b) (o : Option β) :
@@ -660,7 +660,7 @@ lemma map₂_right_identity
 
 中文:
 引理 map₂_right_identity
-  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (o : Option α)
+  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (o : 选项类型 α)
   证明: by grind
 -/
 lemma map₂_right_identity {f : α -> β -> α} {b : β} (h : forall a, f a b = a) (o : Option α) :

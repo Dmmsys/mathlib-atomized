@@ -178,8 +178,8 @@ theorem restrict_empty
 
 中文:
 定理 restrict_empty
-  条件: (M : Matroid α)
-  结论: M ↾ (∅ : Set α) = emptyOn α
+  条件: (M : 拟阵 α)
+  结论: M ↾ (∅ : 集合 α) = emptyOn α
   证明: by
   simp [← ground_eq_empty_iff]
 -/
@@ -199,8 +199,8 @@ theorem eq_emptyOn_or_nonempty
 
 中文:
 定理 eq_emptyOn_or_nonempty
-  条件: (M : Matroid α)
-  结论: M = emptyOn α ∨ Matroid.Nonempty M
+  条件: (M : 拟阵 α)
+  结论: M = emptyOn α ∨ 拟阵.非空 M
   证明: by
   rw [← ground_eq_empty_iff]
   exact M.E.eq_empty_or_nonempty.elim Or.inl (fun h => Or.inr ⟨h⟩)
@@ -224,7 +224,7 @@ theorem eq_emptyOn
 
 中文:
 定理 eq_emptyOn
-  条件: [IsEmpty α] (M : Matroid α)
+  条件: [是空 α] (M : 拟阵 α)
   结论: M = emptyOn α
   证明: by
   rw [← ground_eq_empty_iff]
@@ -268,7 +268,7 @@ definition loopyOn
 
 中文:
 定义 loopyOn
-  签名: (E : Set α)
+  签名: (E : 集合 α)
   定义体: emptyOn α ↾ E
 
 Depends on / 依赖: emptyOn
@@ -286,7 +286,7 @@ theorem loopyOn_ground
 
 中文:
 定理 loopyOn_ground
-  条件: (E : Set α)
+  条件: (E : 集合 α)
   结论: (loopyOn E).E = E
   证明: rfl
 -/
@@ -305,7 +305,7 @@ theorem loopyOn_empty
 中文:
 定理 loopyOn_empty
   条件: (α : 类型)
-  结论: loopyOn (∅ : Set α) = emptyOn α
+  结论: loopyOn (∅ : 集合 α) = emptyOn α
   证明: by
   rw [← ground_eq_empty_iff]; rw [loopyOn_ground]
 -/
@@ -388,7 +388,7 @@ theorem loopyOn_isBasis_iff
 
 中文:
 定理 loopyOn_isBasis_iff
-  结论: (loopyOn E).IsBasis I X ↔ I = ∅ ∧ X subseteq E
+  结论: (loopyOn E).是基 I X ↔ I = ∅ ∧ X subseteq E
   证明: ⟨fun h => ⟨loopyOn_indep_iff.mp h.indep, h.subset_ground⟩,
     by rintro ⟨rfl, hX⟩; rw [isBasis_iff]; simp⟩
 -/
@@ -422,9 +422,9 @@ theorem Finite.loopyOn_finite
   proof: ⟨hE⟩
 
 中文:
-定理 Finite.loopyOn_finite
-  条件: (hE : E.Finite)
-  结论: Matroid.Finite (loopyOn E)
+定理 有限.loopyOn_finite
+  条件: (hE : E.有限)
+  结论: 拟阵.有限 (loopyOn E)
   证明: ⟨hE⟩
 -/
 theorem Finite.loopyOn_finite (hE : E.Finite) : Matroid.Finite (loopyOn E) :=
@@ -444,7 +444,7 @@ theorem loopyOn_restrict
 
 中文:
 定理 loopyOn_restrict
-  条件: (E R : Set α)
+  条件: (E R : 集合 α)
   结论: (loopyOn E) ↾ R = loopyOn R
   证明: by
   refine ext_indep rfl ?_
@@ -497,7 +497,7 @@ theorem eq_loopyOn_or_rankPos
 
 中文:
 定理 eq_loopyOn_or_rankPos
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M = loopyOn M.E ∨ RankPos M
   证明: by
   rw [← empty_isBase_iff]; rw [rankPos_iff]; apply em
@@ -541,7 +541,7 @@ definition freeOn
 
 中文:
 定义 freeOn
-  签名: (E : Set α)
+  签名: (E : 集合 α)
   定义体: (loopyOn E)✶
 
 Depends on / 依赖: loopyOn
@@ -609,7 +609,7 @@ theorem freeOn_empty
 中文:
 定理 freeOn_empty
   条件: (α : 类型)
-  结论: freeOn (∅ : Set α) = emptyOn α
+  结论: freeOn (∅ : 集合 α) = emptyOn α
   证明: by
   simp [freeOn]
 -/
@@ -688,7 +688,7 @@ theorem freeOn_isBasis_iff
 
 中文:
 定理 freeOn_isBasis_iff
-  结论: (freeOn E).IsBasis I X ↔ I = X ∧ X subseteq E
+  结论: (freeOn E).是基 I X ↔ I = X ∧ X subseteq E
   证明: by
   use fun h => ⟨(freeOn_indep h.subset_ground).eq_of_isBasis h, h.subset_ground⟩
   rintro ⟨rfl, hIE⟩
@@ -710,7 +710,7 @@ theorem freeOn_isBasis'_iff
 
 中文:
 定理 freeOn_isBasis'_iff
-  结论: (freeOn E).IsBasis' I X ↔ I = X inter E
+  结论: (freeOn E).是基' I X ↔ I = X inter E
   证明: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [freeOn_isBasis_iff]; rw [freeOn_ground]; rw [and_iff_left inter_subset_right]
 -/
@@ -865,7 +865,7 @@ lemma freeOn_rankPos
 
 中文:
 引理 freeOn_rankPos
-  条件: (hE : E.Nonempty)
+  条件: (hE : E.非空)
   结论: RankPos (freeOn E)
   证明: by
   simp [rankPos_iff, hE.ne_empty.symm]
@@ -889,7 +889,7 @@ definition uniqueBaseOn
 
 中文:
 定义 uniqueBaseOn
-  签名: (I E : Set α)
+  签名: (I E : 集合 α)
   定义体: freeOn I ↾ E
 
 Depends on / 依赖: freeOn
@@ -946,7 +946,7 @@ theorem uniqueBaseOn_inter_ground_eq
 
 中文:
 定理 uniqueBaseOn_inter_ground_eq
-  条件: (I E : Set α)
+  条件: (I E : 集合 α)
   证明: by
   simp only [uniqueBaseOn, restrict_eq_restrict_iff, freeOn_indep_iff, subset_inter_iff]
   tauto
@@ -1016,7 +1016,7 @@ theorem uniqueBaseOn_isBasis_iff
 中文:
 定理 uniqueBaseOn_isBasis_iff
   条件: (hX : X subseteq E)
-  结论: (uniqueBaseOn I E).IsBasis J X ↔ J = X inter I
+  结论: (uniqueBaseOn I E).是基 J X ↔ J = X inter I
   证明: by
   rw [isBasis_iff_maximal]
   exact maximal_iff_eq (by simp [inter_subset_left.trans hX])
@@ -1042,7 +1042,7 @@ theorem uniqueBaseOn_inter_isBasis
 中文:
 定理 uniqueBaseOn_inter_isBasis
   条件: (hX : X subseteq E)
-  结论: (uniqueBaseOn I E).IsBasis (X inter I) X
+  结论: (uniqueBaseOn I E).是基 (X inter I) X
   证明: by
   rw [uniqueBaseOn_isBasis_iff hX]
 
@@ -1065,7 +1065,7 @@ theorem uniqueBaseOn_dual_eq
 
 中文:
 定理 uniqueBaseOn_dual_eq
-  条件: (I E : Set α)
+  条件: (I E : 集合 α)
   证明: by
   rw [← uniqueBaseOn_inter_ground_eq]
   refine ext_isBase rfl (fun B (hB : B subseteq E) => ?_)
@@ -1092,7 +1092,7 @@ theorem uniqueBaseOn_self
 
 中文:
 定理 uniqueBaseOn_self
-  条件: (I : Set α)
+  条件: (I : 集合 α)
   结论: uniqueBaseOn I I = freeOn I
   证明: by
   rw [uniqueBaseOn]; rw [freeOn_restrict rfl.subset]
@@ -1112,7 +1112,7 @@ theorem uniqueBaseOn_empty
 
 中文:
 定理 uniqueBaseOn_empty
-  条件: (I : Set α)
+  条件: (I : 集合 α)
   结论: uniqueBaseOn ∅ I = loopyOn I
   证明: by
   rw [← dual_inj]; rw [uniqueBaseOn_dual_eq]; rw [sdiff_empty]; rw [uniqueBaseOn_self]; rw [loopyOn_dual_eq]
@@ -1133,7 +1133,7 @@ theorem uniqueBaseOn_restrict'
 
 中文:
 定理 uniqueBaseOn_restrict'
-  条件: (I E R : Set α)
+  条件: (I E R : 集合 α)
   证明: by
   simp_rw [ext_iff_indep, restrict_ground_eq, uniqueBaseOn_ground, true_and,
     restrict_indep_iff, uniqueBaseOn_indep_iff', subset_inter_iff]
@@ -1158,7 +1158,7 @@ theorem uniqueBaseOn_restrict
 
 中文:
 定理 uniqueBaseOn_restrict
-  条件: (h : I subseteq E) (R : Set α)
+  条件: (h : I subseteq E) (R : 集合 α)
   证明: by
   rw [uniqueBaseOn_restrict']; rw [inter_right_comm]; rw [inter_eq_self_of_subset_left h]
 
@@ -1183,7 +1183,7 @@ lemma uniqueBaseOn_rankFinite
 
 中文:
 引理 uniqueBaseOn_rankFinite
-  条件: (hI : I.Finite)
+  条件: (hI : I.有限)
   结论: RankFinite (uniqueBaseOn I E)
   证明: by
   rw [← uniqueBaseOn_inter_ground_eq]
@@ -1236,7 +1236,7 @@ lemma uniqueBaseOn_rankPos
 
 中文:
 引理 uniqueBaseOn_rankPos
-  条件: (hIE : I subseteq E) (hI : I.Nonempty)
+  条件: (hIE : I subseteq E) (hI : I.非空)
   结论: RankPos (uniqueBaseOn I E) where
   证明: by simpa [uniqueBaseOn_isBase_iff hIE] using Ne.symm hI.ne_empty
 

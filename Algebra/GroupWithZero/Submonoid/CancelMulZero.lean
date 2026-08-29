@@ -29,7 +29,7 @@ instance isLeftCancelMulZero
 
 中文:
 实例 isLeftCancelMulZero
-  签名: [IsLeftCancelMulZero M₀]
+  签名: [是左消去MulZero M₀]
   定义体: Subtype.coe_injective.isLeftCancelMulZero Subtype.val rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.isLeftCancelMulZero, Subtype.val, coe_injective, isLeftCancelMulZero
@@ -47,7 +47,7 @@ instance isRightCancelMulZero
 
 中文:
 实例 isRightCancelMulZero
-  签名: [IsRightCancelMulZero M₀]
+  签名: [是右消去MulZero M₀]
   定义体: Subtype.coe_injective.isRightCancelMulZero Subtype.val rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.isRightCancelMulZero, Subtype.val, coe_injective, infer_instance, isRightCancelMulZero
@@ -64,7 +64,7 @@ instance isCancelMulZero
 
 中文:
 实例 isCancelMulZero
-  签名: [IsCancelMulZero M₀]
+  签名: [是乘零消去 M₀]
 -/
 instance isCancelMulZero [IsCancelMulZero M₀] : IsCancelMulZero s where
 

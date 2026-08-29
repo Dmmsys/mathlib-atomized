@@ -199,7 +199,7 @@ theorem eLpNorm'_le_eLpNormEssSup
 
 中文:
 定理 eLpNorm'_le_eLpNormEssSup
-  条件: {q : 实数} (hq_pos : 0 < q) [IsProbabilityMeasure μ]
+  条件: {q : 实数} (hq_pos : 0 < q) [是概率测度 μ]
   证明: (eLpNorm'_le_eLpNormEssSup_mul_rpow_measure_univ hq_pos).trans_eq (by simp [measure_univ])
 -/
 theorem eLpNorm'_le_eLpNormEssSup {q : Real} (hq_pos : 0 < q) [IsProbabilityMeasure μ] :
@@ -216,7 +216,7 @@ theorem eLpNorm_le_eLpNorm_of_exponent_le
 
 中文:
 定理 eLpNorm_le_eLpNorm_of_exponent_le
-  结论: {p q : 实数>=0∞} (hpq : p <= q) [IsProbabilityMeasure μ]
+  结论: {p q : 实数>=0∞} (hpq : p <= q) [是概率测度 μ]
   证明: (eLpNorm_le_eLpNorm_mul_rpow_measure_univ hpq hf).trans (le_of_eq (by simp [measure_univ]))
 
 Depends on / 依赖: eLpNorm_le_eLpNorm_mul_rpow_measure_univ, le_of_eq, measure_univ
@@ -243,7 +243,7 @@ theorem eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le
 
 中文:
 定理 eLpNorm'_lt_top_of_eLpNorm'_lt_top_of_exponent_le
-  结论: {p q : 实数} [IsFiniteMeasure μ]
+  结论: {p q : 实数} [是有限测度 μ]
   证明: by
   rcases le_or_gt p 0 with hp_nonpos | hp_pos
   · rw [le_antisymm hp_nonpos hp_nonneg]
@@ -289,7 +289,7 @@ theorem MemLp.mono_exponent
 
 中文:
 定理 MemLp.mono_exponent
-  结论: {p q : 实数>=0∞} [IsFiniteMeasure μ] (hfq : MemLp f q μ)
+  结论: {p q : 实数>=0∞} [是有限测度 μ] (hfq : MemLp f q μ)
   证明: by
   obtain ⟨hfq_m, hfq_lt_top⟩ := hfq
   by_cases hp0 : p = 0
@@ -837,7 +837,7 @@ lemma MemLp.prod
     exact (ih <| forall_of_forall_cons hf).mul (hf i <| mem_cons_self ..) (hpqr := ⟨by simp
 
 中文:
-引理 MemLp.prod
+引理 MemLp.乘积
   条件: (hf : 对任意 i in s, MemLp (f i) (p i) μ)
   证明: by
   induction s using cons_induction with
@@ -868,7 +868,7 @@ lemma MemLp.prod'
   simpa [Finset.prod_fn] using MemLp.prod hf
 
 中文:
-引理 MemLp.prod'
+引理 MemLp.乘积'
   条件: (hf : 对任意 i in s, MemLp (f i) (p i) μ)
   证明: by
   simpa [Finset.prod_fn] using MemLp.prod hf

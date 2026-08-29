@@ -36,7 +36,7 @@ lemma ker_def
 
 中文:
 引理 ker_def
-  条件: (f : Filter α)
+  条件: (f : 滤子 α)
   结论: f.ker = ⋂ s in f, s
   证明: sInter_eq_biInter
 
@@ -87,7 +87,7 @@ alias gi_principal_ker := giPrincipalKer
 
 中文:
 定义 giPrincipalKer
-  签名: : GaloisCoinsertion (𝓟 : Set α -> Filter α) ker
+  签名: : Galois余嵌入 (𝓟 : 集合 α -> 滤子 α) ker
   定义体: GaloisConnection.toGaloisCoinsertion (fun s f => by simp [principal_le_iff]) by
     simp only [subset_def, mem_ker, mem_principal]; aesop
 
@@ -113,7 +113,7 @@ lemma ker_mono
 
 中文:
 引理 ker_mono
-  结论: Monotone (ker : Filter α -> Set α)
+  结论: 递增 (ker : 滤子 α -> 集合 α)
   证明: giPrincipalKer.gc.monotone_u
 
 Depends on / 依赖: giPrincipalKer, giPrincipalKer.gc.monotone_u, monotone_u
@@ -129,7 +129,7 @@ lemma ker_surjective
 
 中文:
 引理 ker_surjective
-  结论: Surjective (ker : Filter α -> Set α)
+  结论: 满射 (ker : 滤子 α -> 集合 α)
   证明: giPrincipalKer.u_surjective
 
 Depends on / 依赖: giPrincipalKer, giPrincipalKer.u_surjective, u_surjective
@@ -146,7 +146,7 @@ lemma ker_bot
 
 中文:
 引理 ker_bot
-  结论: ker (⊥ : Filter α) = ∅
+  结论: ker (⊥ : 滤子 α) = ∅
   证明: sInter_eq_empty_iff.2 fun _ => ⟨∅, trivial, id⟩
 -/
 @[simp] lemma ker_bot : ker (⊥ : Filter α) = ∅ := sInter_eq_empty_iff.2 fun _ => ⟨∅, trivial, id⟩
@@ -160,7 +160,7 @@ lemma ker_top
 
 中文:
 引理 ker_top
-  结论: ker (⊤ : Filter α) = univ
+  结论: ker (⊤ : 滤子 α) = univ
   证明: giPrincipalKer.gc.u_top
 -/
 @[simp] lemma ker_top : ker (⊤ : Filter α) = univ := giPrincipalKer.gc.u_top
@@ -189,7 +189,7 @@ lemma ker_inf
 
 中文:
 引理 ker_inf
-  条件: (f g : Filter α)
+  条件: (f g : 滤子 α)
   结论: ker (f ⊓ g) = ker f inter ker g
   证明: giPrincipalKer.gc.u_inf
 -/
@@ -205,7 +205,7 @@ lemma ker_iInf
 
 中文:
 引理 ker_iInf
-  条件: (f : ι -> Filter α)
+  条件: (f : ι -> 滤子 α)
   结论: ker (⨅ i, f i) = ⋂ i, ker (f i)
   证明: giPrincipalKer.gc.u_iInf
 -/
@@ -222,7 +222,7 @@ lemma ker_sInf
 
 中文:
 引理 ker_sInf
-  条件: (S : Set (Filter α))
+  条件: (S : 集合 (滤子 α))
   结论: ker (sInf S) = ⋂ f in S, ker f
   证明: giPrincipalKer.gc.u_sInf
 -/
@@ -239,7 +239,7 @@ lemma ker_principal
 
 中文:
 引理 ker_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: ker (𝓟 s) = s
   证明: giPrincipalKer.u_l_eq _
 
@@ -280,7 +280,7 @@ lemma ker_comap
 
 中文:
 引理 ker_comap
-  条件: (m : α -> β) (f : Filter β)
+  条件: (m : α -> β) (f : 滤子 β)
   结论: ker (comap m f) = m ⁻¹' ker f
   证明: by
   ext a
@@ -314,7 +314,7 @@ theorem ker_iSup
 
 中文:
 定理 ker_iSup
-  条件: (f : ι -> Filter α)
+  条件: (f : ι -> 滤子 α)
   结论: ker (⨆ i, f i) = ⋃ i, ker (f i)
   证明: by
   refine subset_antisymm (fun x hx => ?_) ker_mono.le_map_iSup
@@ -351,7 +351,7 @@ theorem ker_sSup
 
 中文:
 定理 ker_sSup
-  条件: (S : Set (Filter α))
+  条件: (S : 集合 (滤子 α))
   结论: ker (sSup S) = ⋃ f in S, ker f
   证明: by
   simp [sSup_eq_iSup]
@@ -378,7 +378,7 @@ theorem ker_sup
 
 中文:
 定理 ker_sup
-  条件: (f g : Filter α)
+  条件: (f g : 滤子 α)
   结论: ker (f ⊔ g) = ker f union ker g
   证明: by
   rw [← sSup_pair]; rw [ker_sSup]; rw [biUnion_pair]
@@ -405,7 +405,7 @@ lemma ker_prod
 
 中文:
 引理 ker_prod
-  条件: (f : Filter α) (g : Filter β)
+  条件: (f : 滤子 α) (g : 滤子 β)
   结论: ker (f ×ˢ g) = ker f ×ˢ ker g
   证明: by
   simp [Set.prod_eq, Filter.prod_eq_inf]
@@ -429,7 +429,7 @@ lemma ker_pi
 
 中文:
 引理 ker_pi
-  条件: {ι : 类型} {α : ι -> 类型} (f : (i : ι) -> Filter (α i))
+  条件: {ι : 类型} {α : ι -> 类型} (f : (i : ι) -> 滤子 (α i))
   证明: by
   simp [Set.pi_def, Filter.pi]
 

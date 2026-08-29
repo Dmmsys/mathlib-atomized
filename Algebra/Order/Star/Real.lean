@@ -27,8 +27,8 @@ instance Real.instStarOrderedRing
     exact mul_self_nonneg s
 
 中文:
-实例 Real.instStarOrderedRing
-  签名: : StarOrderedRing 实数
+实例 实数.instStarOrderedRing
+  签名: : StarOrdered环 实数
   定义体: StarOrderedRing.of_nonneg_iff' add_le_add_right fun r => by
     refine ⟨fun hr => ⟨√r, (mul_self_sqrt hr).symm⟩, ?_⟩
     rintro ⟨s, rfl⟩
@@ -57,8 +57,8 @@ instance NNReal.instStarOrderedRing
     exact le_self_add
 
 中文:
-实例 NNReal.instStarOrderedRing
-  签名: : StarOrderedRing 实数>=0
+实例 非负实数.instStarOrderedRing
+  签名: : StarOrdered环 实数>=0
   定义体: by
   refine .of_le_iff fun x y => ⟨fun h => ?_, ?_⟩
   · obtain ⟨d, rfl⟩ := exists_add_of_le h

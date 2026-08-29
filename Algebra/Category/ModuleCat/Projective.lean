@@ -35,8 +35,8 @@ instance ModuleCat.projective_of_categoryTheory_projective
   exact ⟨ofHom f, hom_ext h⟩
 
 中文:
-实例 ModuleCat.projective_of_categoryTheory_projective
-  签名: [Module.Projective R P]
+实例 模范畴.projective_of_categoryTheory_projective
+  签名: [模.投射 R P]
   定义体: by
   refine ⟨fun E X epi => ?_⟩
   obtain ⟨f, h⟩ := Module.projective_lifting_property X.hom E.hom
@@ -66,8 +66,8 @@ instance ModuleCat.projective_of_module_projective
 ModuleCat.hom_ext_iff.mp Projective.factorThru_comp (↟g) (↟f)⟩
 
 中文:
-实例 ModuleCat.projective_of_module_projective
-  签名: [Small.{v} R] [Projective P]
+实例 模范畴.projective_of_module_projective
+  签名: [Small.{v} R] [投射 P]
   定义体: by
   refine Module.Projective.of_lifting_property ?_
   intro _ _ _ _ _ _ f g s
@@ -96,7 +96,7 @@ theorem IsProjective.iff_projective
 
 中文:
 定理 IsProjective.iff_projective
-  条件: [Small.{v} R] (P : 类型v) [AddCommGroup P] [Module R P]
+  条件: [Small.{v} R] (P : 类型v) [加法交换群 P] [模 R P]
   证明: ⟨fun _ => (of R P).projective_of_categoryTheory_projective,
     fun _ => (of R P).projective_of_module_projective⟩
 
@@ -124,8 +124,8 @@ theorem projective_of_free
 
 中文:
 定理 projective_of_free
-  条件: {ι : Type w} (b : Basis ι R M)
-  结论: Projective M
+  条件: {ι : 类型 w} (b : 基 ι R M)
+  结论: 投射 M
   证明: have : Module.Projective R M := Module.Projective.of_basis b
   M.projective_of_categoryTheory_projective
 

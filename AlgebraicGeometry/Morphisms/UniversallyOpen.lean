@@ -49,10 +49,10 @@ class UniversallyOpen
     - universally_isOpenMap : universally (topologically @IsOpenMap) f
 
 中文:
-类 UniversallyOpen
+类 普遍开
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - universally_isOpenMap : universally (topologically @IsOpenMap) f
+    - universally_isOpenMap : universally (topologically @是开映射) f
 -/
 class UniversallyOpen (f : X ⟶ Y) : Prop where
   universally_isOpenMap : universally (topologically @IsOpenMap) f
@@ -69,8 +69,8 @@ lemma Scheme.Hom.isOpenMap
   proof: UniversallyOpen.universally_isOpenMap _ _ _ IsPullback.of_id_snd
 
 中文:
-引理 Scheme.Hom.isOpenMap
-  条件: {X Y : Scheme} (f : X ⟶ Y) [UniversallyOpen f]
+引理 概形.态射.isOpenMap
+  条件: {X Y : 概形} (f : X ⟶ Y) [普遍开 f]
   证明: UniversallyOpen.universally_isOpenMap _ _ _ IsPullback.of_id_snd
 
 Depends on / 依赖: IsPullback, IsPullback.of_id_snd, UniversallyOpen, UniversallyOpen.universally_isOpenMap, of_id_snd, universally_isOpenMap
@@ -91,7 +91,7 @@ theorem eq
 
 中文:
 定理 eq
-  结论: @UniversallyOpen = universally (topologically @IsOpenMap)
+  结论: @普遍开 = universally (topologically @是开映射)
   证明: by
   ext X Y f; rw [universallyOpen_iff]
 
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: RespectsIso @UniversallyOpen
+  签名: RespectsIso @普遍开
   定义体: eq.symm ▸ inferInstance
 
 Depends on / 依赖: eq.symm
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @UniversallyOpen
+  签名: 是StableUnderBaseChange @普遍开
   定义体: eq.symm ▸ inferInstance
 
 Depends on / 依赖: eq.symm
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderComposition (topologically @IsOpenMap)
+  签名: 是StableUnderComposition (topologically @是开映射)
   定义体: IsOpenMap.comp (f := f) (g := g) hg hf
 
 Depends on / 依赖: IsOpenMap, IsOpenMap.comp
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderComposition @UniversallyOpen
+  签名: 是StableUnderComposition @普遍开
   定义体: by
   rw [eq]
   infer_instance
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @UniversallyOpen
+  签名: MorphismProperty.是Multiplicative @普遍开
   定义体: inferInstance
 -/
 instance : MorphismProperty.IsMultiplicative @UniversallyOpen where
@@ -214,7 +214,7 @@ instance fst
 
 中文:
 实例 fst
-  签名: {X Y Z : Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [hg : UniversallyOpen g]
+  签名: {X Y Z : 概形} (f : X ⟶ Z) (g : Y ⟶ Z) [hg : 普遍开 g]
   定义体: MorphismProperty.pullback_fst f g hg
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -234,7 +234,7 @@ instance snd
 
 中文:
 实例 snd
-  签名: {X Y Z : Scheme} (f : X ⟶ Z) (g : Y ⟶ Z) [hf : UniversallyOpen f]
+  签名: {X Y Z : 概形} (f : X ⟶ Z) (g : Y ⟶ Z) [hf : 普遍开 f]
   定义体: MorphismProperty.pullback_snd f g hf
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget @UniversallyOpen
+  签名: IsZariskiLocalAtTarget @普遍开
   定义体: by
   rw [eq]
   apply universally_isZariskiLocalAtTarget
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtSource @UniversallyOpen
+  签名: IsZariskiLocalAtSource @普遍开
   定义体: by
   rw [eq]
   exact universally_isZariskiLocalAtSource _
@@ -322,7 +322,7 @@ lemma isOpenMap_of_generalizingMap
 
 中文:
 引理 isOpenMap_of_generalizingMap
-  结论: [LocallyOfFinitePresentation f]
+  结论: [局部有限呈现 f]
   证明: by
   change topologically IsOpenMap f
   wlog hY : exists R, Y = Spec R
@@ -374,8 +374,8 @@ lemma Flat.generalizingMap
   apply Algeb
 
 中文:
-引理 Flat.generalizingMap
-  条件: [Flat f]
+引理 平坦.generalizingMap
+  条件: [平坦 f]
   结论: GeneralizingMap f
   证明: by
   have := HasRingHomProperty.of_isZariskiLocalAtSource_of_isZariskiLocalAtTarget.{u}

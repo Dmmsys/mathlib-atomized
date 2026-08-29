@@ -69,7 +69,7 @@ theorem sym2_coe
 
 中文:
 定理 sym2_coe
-  条件: (xs : List α)
+  条件: (xs : 列表 α)
   结论: (xs : Multiset α).sym2 = xs.sym2
   证明: rfl
 
@@ -277,7 +277,7 @@ theorem monotone_sym2
 
 中文:
 定理 monotone_sym2
-  结论: Monotone (Multiset.sym2 : Multiset α -> _)
+  结论: 递增 (Multiset.sym2 : Multiset α -> _)
   证明: fun _ _ => sym2_mono
 
 Depends on / 依赖: sym2_mono

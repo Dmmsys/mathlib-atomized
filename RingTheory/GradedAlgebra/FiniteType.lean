@@ -41,7 +41,7 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous
   rw
 
 中文:
-定理 exists_finset_adjoin_eq_top_and_homogeneous
+定理 存在_finset_adjoin_eq_top_and_homogeneous
   证明: by
   classical
   obtain ⟨F, hF⟩ := Algebra.FiniteType.out (R := 𝒜 0) (A := S)
@@ -78,7 +78,7 @@ theorem exists_finset_adjoin_eq_top_and_homogeneous_ne_zero
   · exact Subalgeb
 
 中文:
-定理 exists_finset_adjoin_eq_top_and_homogeneous_ne_zero
+定理 存在_finset_adjoin_eq_top_and_homogeneous_ne_zero
   证明: by
   obtain ⟨s, h₁, h₂⟩ := exists_finset_adjoin_eq_top_and_homogeneous 𝒜
   choose! n hn using h₂

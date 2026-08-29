@@ -37,7 +37,7 @@ lemma pi_lex_lt_cons_cons
 
 中文:
 引理 pi_lex_lt_cons_cons
-  结论: {x₀ y₀ : α 0} {x y : 对任意 i : Fin n, α i.succ}
+  结论: {x₀ y₀ : α 0} {x y : 对任意 i : 有限集 n, α i.succ}
   证明: by
   simp_rw [Pi.Lex, Fin.exists_fin_succ, Fin.cons_succ, Fin.cons_zero, Fin.forall_iff_succ]
   simp [and_assoc, exists_and_left]
@@ -64,7 +64,7 @@ lemma insertNth_mem_Icc
 
 中文:
 引理 insertNth_mem_Icc
-  结论: {i : Fin (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)}
+  结论: {i : 有限集 (n + 1)} {x : α i} {p : 对任意 j, α (i.succAbove j)}
   证明: by
   simp only [mem_Icc, insertNth_le_iff, le_insertNth_iff, and_assoc, @and_left_comm (x <= q₂ i)]
 
@@ -86,7 +86,7 @@ lemma preimage_insertNth_Icc_of_mem
 
 中文:
 引理 preimage_insertNth_Icc_of_mem
-  结论: {i : Fin (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
+  结论: {i : 有限集 (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
   证明: Set.ext fun p => by simp only [mem_preimage, insertNth_mem_Icc, hx, true_and]
 
 Depends on / 依赖: Set.ext, insertNth_mem_Icc, mem_preimage, true_and
@@ -107,7 +107,7 @@ lemma preimage_insertNth_Icc_of_notMem
 
 中文:
 引理 preimage_insertNth_Icc_of_notMem
-  结论: {i : Fin (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
+  结论: {i : 有限集 (n + 1)} {x : α i} {q₁ q₂ : 对任意 j, α j}
   证明: Set.ext fun p => by
     simp only [mem_preimage, insertNth_mem_Icc, hx, false_and, mem_empty_iff_false]
 
@@ -137,7 +137,7 @@ lemma liftFun_vecCons
 
 中文:
 引理 liftFun_vecCons
-  条件: {n : 自然数} (r : α -> α -> 命题) [IsTrans α r] {f : Fin (n + 1) -> α} {a : α}
+  条件: {n : 自然数} (r : α -> α -> 命题) [是Trans α r] {f : 有限集 (n + 1) -> α} {a : α}
   证明: by
   simp only [liftFun_iff_succ r, forall_iff_succ, cons_val_succ, cons_val_zero, ← succ_castSucc,
     castSucc_zero]
@@ -166,8 +166,8 @@ lemma Fin.liftFun_cons
     exact _root_.trans r0 (h (by grind))
 
 中文:
-引理 Fin.liftFun_cons
-  条件: {n : 自然数} (r : α -> α -> 命题) [IsTrans α r] {f : Fin n -> α} {a : α}
+引理 有限集.liftFun_cons
+  条件: {n : 自然数} (r : α -> α -> 命题) [是Trans α r] {f : 有限集 n -> α} {a : α}
   证明: by
   match n with
   | 0 => simp [Relator.LiftFun]
@@ -205,8 +205,8 @@ lemma Fin.strictMono_insertNth_iff
   · have : q < q.succAbove i := by simp [succAbove_of_le
 
 中文:
-引理 Fin.strictMono_insertNth_iff
-  条件: (q : Fin (n + 1)) (x : α) (f : Fin n -> α)
+引理 有限集.strictMono_insertNth_iff
+  条件: (q : 有限集 (n + 1)) (x : α) (f : 有限集 n -> α)
   证明: by
   refine ⟨fun h => ⟨fun a b hab => ?_, ⟨fun i hlt => ?_, fun i hlt => ?_⟩⟩, ?_⟩
   · simpa [hab] using h (a := q.succAbove a) (b := q.succAbove b)
@@ -245,8 +245,8 @@ lemma Fin.strictMono_cons
   proof: liftFun_cons (· < ·)
 
 中文:
-引理 Fin.strictMono_cons
-  条件: {f : Fin n -> α} {a : α}
+引理 有限集.strictMono_cons
+  条件: {f : 有限集 n -> α} {a : α}
   证明: liftFun_cons (· < ·)
 
 Depends on / 依赖: liftFun_cons
@@ -268,8 +268,8 @@ lemma Fin.strictMono_cons_zero_succ
     refine funext fun x => le_antisymm ?_ (hg.id_le x
 
 中文:
-引理 Fin.strictMono_cons_zero_succ
-  条件: {f : Fin n -> Fin (n + 1)}
+引理 有限集.strictMono_cons_zero_succ
+  条件: {f : 有限集 n -> 有限集 (n + 1)}
   证明: by
   refine ⟨fun h => funext fun i => ?_, fun h => by simp [h, strictMono_id]⟩
   have key (g : Fin (n + 1) -> Fin (n + 1)) (hg : StrictMono g) : g = id := by
@@ -299,7 +299,7 @@ lemma strictMono_vecCons
 
 中文:
 引理 strictMono_vecCons
-  结论: StrictMono (vecCons a f) ↔ a < f 0 ∧ StrictMono f
+  结论: 严格递增 (vecCons a f) ↔ a < f 0 ∧ 严格递增 f
   证明: liftFun_vecCons (· < ·)
 
 @[simp]
@@ -319,7 +319,7 @@ lemma monotone_vecCons
 
 中文:
 引理 monotone_vecCons
-  结论: Monotone (vecCons a f) ↔ a <= f 0 ∧ Monotone f
+  结论: 递增 (vecCons a f) ↔ a <= f 0 ∧ 递增 f
   证明: by
   simpa only [monotone_iff_forall_lt] using! @liftFun_vecCons α n (· <= ·) _ f a
 
@@ -337,7 +337,7 @@ lemma monotone_vecEmpty
 
 中文:
 引理 monotone_vecEmpty
-  结论: Monotone ![a]
+  结论: 递增 ![a]
 -/
 @[simp] lemma monotone_vecEmpty : Monotone ![a]
   | ⟨0, _⟩, ⟨0, _⟩, _ => le_refl _
@@ -351,7 +351,7 @@ lemma strictMono_vecEmpty
 
 中文:
 引理 strictMono_vecEmpty
-  结论: StrictMono ![a]
+  结论: 严格递增 ![a]
 -/
 @[simp] lemma strictMono_vecEmpty : StrictMono ![a]
   | ⟨0, _⟩, ⟨0, _⟩, h => (irrefl _ h).elim
@@ -366,7 +366,7 @@ lemma strictAnti_vecCons
 
 中文:
 引理 strictAnti_vecCons
-  结论: StrictAnti (vecCons a f) ↔ f 0 < a ∧ StrictAnti f
+  结论: 严格递减 (vecCons a f) ↔ f 0 < a ∧ 严格递减 f
   证明: liftFun_vecCons (· > ·)
 -/
 @[simp] lemma strictAnti_vecCons : StrictAnti (vecCons a f) ↔ f 0 < a ∧ StrictAnti f :=
@@ -382,7 +382,7 @@ lemma antitone_vecCons
 
 中文:
 引理 antitone_vecCons
-  结论: Antitone (vecCons a f) ↔ f 0 <= a ∧ Antitone f
+  结论: 递减 (vecCons a f) ↔ f 0 <= a ∧ 递减 f
   证明: monotone_vecCons (α := αᵒᵈ)
 -/
 @[simp] lemma antitone_vecCons : Antitone (vecCons a f) ↔ f 0 <= a ∧ Antitone f :=
@@ -397,7 +397,7 @@ lemma antitone_vecEmpty
 
 中文:
 引理 antitone_vecEmpty
-  结论: Antitone (vecCons a vecEmpty)
+  结论: 递减 (vecCons a vecEmpty)
 -/
 @[simp] lemma antitone_vecEmpty : Antitone (vecCons a vecEmpty)
   | ⟨0, _⟩, ⟨0, _⟩, _ => le_rfl
@@ -411,7 +411,7 @@ lemma strictAnti_vecEmpty
 
 中文:
 引理 strictAnti_vecEmpty
-  结论: StrictAnti (vecCons a vecEmpty)
+  结论: 严格递减 (vecCons a vecEmpty)
 -/
 @[simp] lemma strictAnti_vecEmpty : StrictAnti (vecCons a vecEmpty)
   | ⟨0, _⟩, ⟨0, _⟩, h => (irrefl _ h).elim
@@ -426,9 +426,9 @@ lemma StrictMono.vecCons
   proof: strictMono_vecCons.2 ⟨ha, hf⟩
 
 中文:
-引理 StrictMono.vecCons
-  条件: (hf : StrictMono f) (ha : a < f 0)
-  结论: StrictMono (vecCons a f)
+引理 严格递增.vecCons
+  条件: (hf : 严格递增 f) (ha : a < f 0)
+  结论: 严格递增 (vecCons a f)
   证明: strictMono_vecCons.2 ⟨ha, hf⟩
 
 Depends on / 依赖: strictMono_vecCons
@@ -446,9 +446,9 @@ lemma StrictMono.removeNth
   proof: hf.comp (Fin.strictMono_succAbove i)
 
 中文:
-引理 StrictMono.removeNth
-  条件: (hf : StrictMono f) (i : Fin (n + 1))
-  结论: StrictMono (i.removeNth f)
+引理 严格递增.removeNth
+  条件: (hf : 严格递增 f) (i : 有限集 (n + 1))
+  结论: 严格递增 (i.removeNth f)
   证明: hf.comp (Fin.strictMono_succAbove i)
 
 Depends on / 依赖: Fin.strictMono_succAbove, hf.comp, strictMono_succAbove
@@ -466,9 +466,9 @@ lemma StrictAnti.vecCons
   proof: strictAnti_vecCons.2 ⟨ha, hf⟩
 
 中文:
-引理 StrictAnti.vecCons
-  条件: (hf : StrictAnti f) (ha : f 0 < a)
-  结论: StrictAnti (vecCons a f)
+引理 严格递减.vecCons
+  条件: (hf : 严格递减 f) (ha : f 0 < a)
+  结论: 严格递减 (vecCons a f)
   证明: strictAnti_vecCons.2 ⟨ha, hf⟩
 
 Depends on / 依赖: strictAnti_vecCons
@@ -486,9 +486,9 @@ lemma Monotone.vecCons
   proof: monotone_vecCons.2 ⟨ha, hf⟩
 
 中文:
-引理 Monotone.vecCons
-  条件: (hf : Monotone f) (ha : a <= f 0)
-  结论: Monotone (vecCons a f)
+引理 递增.vecCons
+  条件: (hf : 递增 f) (ha : a <= f 0)
+  结论: 递增 (vecCons a f)
   证明: monotone_vecCons.2 ⟨ha, hf⟩
 
 Depends on / 依赖: monotone_vecCons
@@ -508,9 +508,9 @@ lemma Antitone.vecCons
 example : Monotone ![1, 2, 2, 3] := by decide
 
 中文:
-引理 Antitone.vecCons
-  条件: (hf : Antitone f) (ha : f 0 <= a)
-  结论: Antitone (vecCons a f)
+引理 递减.vecCons
+  条件: (hf : 递减 f) (ha : f 0 <= a)
+  结论: 递减 (vecCons a f)
   证明: antitone_vecCons.2 ⟨ha, hf⟩
 
 example : Monotone ![1, 2, 2, 3] := by decide
@@ -536,7 +536,7 @@ definition OrderIso.piFinTwoIso
 
 中文:
 定义 OrderIso.piFinTwoIso
-  签名: (α : Fin 2 -> 类型) [对任意 i, Preorder (α i)]
+  签名: (α : 有限集 2 -> 类型) [对任意 i, 预序 (α i)]
   定义体: piFinTwoEquiv α
   map_rel_iff' := Iff.symm Fin.forall_fin_two
 
@@ -556,7 +556,7 @@ definition OrderIso.finTwoArrowIso
 
 中文:
 定义 OrderIso.finTwoArrowIso
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: { OrderIso.piFinTwoIso fun _ => α with toEquiv := finTwoArrowEquiv α }
 
 Depends on / 依赖: OrderIso, OrderIso.piFinTwoIso, finTwoArrowEquiv, piFinTwoIso, toEquiv
@@ -582,7 +582,7 @@ definition consOrderIso
 
 中文:
 定义 consOrderIso
-  签名: (α : Fin (n + 1) -> 类型) [对任意 i, LE (α i)]
+  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
   定义体: consEquiv α
   map_rel_iff' := forall_iff_succ
 
@@ -609,7 +609,7 @@ definition snocOrderIso
 
 中文:
 定义 snocOrderIso
-  签名: (α : Fin (n + 1) -> 类型) [对任意 i, LE (α i)]
+  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
   定义体: snocEquiv α
   map_rel_iff' := by simp [Pi.le_def, Prod.le_def, forall_iff_castSucc]
 
@@ -636,7 +636,7 @@ definition insertNthOrderIso
 
 中文:
 定义 insertNthOrderIso
-  签名: (α : Fin (n + 1) -> 类型) [对任意 i, LE (α i)] (p : Fin (n + 1))
+  签名: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)] (p : 有限集 (n + 1))
   定义体: insertNthEquiv α p
   map_rel_iff' := by simp [Pi.le_def, Prod.le_def, p.forall_iff_succAbove]
 
@@ -658,7 +658,7 @@ lemma insertNthOrderIso_zero
 
 中文:
 引理 insertNthOrderIso_zero
-  条件: (α : Fin (n + 1) -> 类型) [对任意 i, LE (α i)]
+  条件: (α : 有限集 (n + 1) -> 类型) [对任意 i, LE (α i)]
   证明: by ext; simp [insertNthOrderIso]
 -/
 @[simp] lemma insertNthOrderIso_zero (α : Fin (n + 1) -> Type*) [forall i, LE (α i)] :
@@ -693,7 +693,7 @@ definition finSuccAboveOrderIso
 
 中文:
 定义 finSuccAboveOrderIso
-  签名: (p : Fin (n + 1))
+  签名: (p : 有限集 (n + 1))
   定义体: finSuccAboveEquiv p
   map_rel_iff' := p.succAboveOrderEmb.map_rel_iff'
 
@@ -713,7 +713,7 @@ lemma finSuccAboveOrderIso_apply
 
 中文:
 引理 finSuccAboveOrderIso_apply
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: rfl
 -/
 lemma finSuccAboveOrderIso_apply (p : Fin (n + 1)) (i : Fin n) :
@@ -731,7 +731,7 @@ lemma finSuccAboveOrderIso_symm_apply_last
 
 中文:
 引理 finSuccAboveOrderIso_symm_apply_last
-  条件: (x : { x : Fin (n + 1) // x != Fin.last n })
+  条件: (x : { x : 有限集 (n + 1) // x != 有限集.last n })
   证明: by
   rw [← Option.some_inj]
   simp [finSuccAboveOrderIso, finSuccAboveEquiv, OrderIso.symm]
@@ -755,7 +755,7 @@ lemma finSuccAboveOrderIso_symm_apply_ne_last
 
 中文:
 引理 finSuccAboveOrderIso_symm_apply_ne_last
-  结论: {p : Fin (n + 1)} (h : p != Fin.last n)
+  结论: {p : 有限集 (n + 1)} (h : p != 有限集.last n)
   证明: by
   rw [← Option.some_inj]
   simpa [finSuccAboveEquiv, OrderIso.symm] using finSuccEquiv'_ne_last_apply h x.property
@@ -785,7 +785,7 @@ definition Fin.castLEOrderIso
   map_rel_iff' := by simp [(strictMono_castLE h).le_iff_le]
 
 中文:
-定义 Fin.castLEOrderIso
+定义 有限集.castLEOrderIso
   签名: {n m : 自然数} (h : n <= m)
   定义体: ⟨Fin.castLE h i, by simp⟩
   invFun i := ⟨i, i.prop⟩

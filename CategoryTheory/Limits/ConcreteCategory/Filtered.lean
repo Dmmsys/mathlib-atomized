@@ -36,8 +36,8 @@ lemma IsColimit.eq_iff
   proof: Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (forget C) ht)
 
 中文:
-引理 IsColimit.eq_iff
-  结论: {t : Cocone F} (ht : IsColimit t) {i j : J} {xi : ToType <| F.obj i}
+引理 是余极限.eq_iff
+  结论: {t : 余锥 F} (ht : 是余极限 t) {i j : J} {xi : ToType <| F.obj i}
   证明: Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (forget C) ht)
 
 Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, forget, isColimitOfPreserves, isColimit_eq_iff
@@ -57,8 +57,8 @@ lemma IsColimit.eq_iff'
   proof: Types.FilteredColimit.isColimit_eq_iff' (isColimitOfPreserves (forget C) ht) x y
 
 中文:
-引理 IsColimit.eq_iff'
-  条件: {t : Cocone F} (ht : IsColimit t) {i : J} (x y : ToType <| F.obj i)
+引理 是余极限.eq_iff'
+  条件: {t : 余锥 F} (ht : 是余极限 t) {i : J} (x y : ToType <| F.obj i)
   证明: Types.FilteredColimit.isColimit_eq_iff' (isColimitOfPreserves (forget C) ht) x y
 
 Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, forget, isColimitOfPreserves, isColimit_eq_iff
@@ -77,7 +77,7 @@ lemma colimit_eq_iff
 
 中文:
 引理 colimit_eq_iff
-  条件: [HasColimit F] {i j : J} {xi : ToType <| F.obj i} {xj : ToType <| F.obj j}
+  条件: [有余极限 F] {i j : J} {xi : ToType <| F.obj i} {xj : ToType <| F.obj j}
   证明: (colimit.isColimit F).eq_iff _
 
 Depends on / 依赖: colimit, colimit.isColimit, eq_iff, isColimit

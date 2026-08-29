@@ -52,10 +52,10 @@ class Full
     - map_surjective({X Y : C}) : Function.Surjective (F.map (X := X) (Y := Y))
 
 中文:
-类 Full
+类 满
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - map_surjective({X Y : C}) : Function.Surjective (F.map (X := X) (Y := Y))
+    - map_surjective({X Y : C}) : 函数.满射 (F.map (X := X) (Y := Y))
 -/
 class Full (F : C ⥤ D) : Prop where
   map_surjective {X Y : C} : Function.Surjective (F.map (X := X) (Y := Y))
@@ -74,10 +74,10 @@ class Faithful
     - map_injective : forall {X Y : C}, Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))  [default: by cat_disch]
 
 中文:
-类 Faithful
+类 忠实
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - map_injective : 对任意 {X Y : C}, Function.Injective (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))  [默认: by cat_disch]
+    - map_injective : 对任意 {X Y : C}, 函数.单射 (F.map : (X ⟶ Y) -> (F.obj X ⟶ F.obj Y))  [默认: by cat_disch]
 
 Depends on / 依赖: HasImage, cat_disch, mono_hasImage
 -/
@@ -101,7 +101,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (F : C ⥤ D) [Faithful F]
+  条件: (F : C ⥤ D) [忠实 F]
   证明: Faithful.map_injective
 
 Depends on / 依赖: Faithful, Faithful.map_injective, map_injective
@@ -120,7 +120,7 @@ lemma map_injective_iff
 
 中文:
 引理 map_injective_iff
-  条件: (F : C ⥤ D) [Faithful F] {X Y : C} (f g : X ⟶ Y)
+  条件: (F : C ⥤ D) [忠实 F] {X Y : C} (f g : X ⟶ Y)
   证明: ⟨fun h => F.map_injective h, fun h => by rw [h]⟩
 
 Depends on / 依赖: F.map_injective, map_injective
@@ -140,7 +140,7 @@ theorem mapIso_injective
 
 中文:
 定理 mapIso_injective
-  条件: (F : C ⥤ D) [Faithful F]
+  条件: (F : C ⥤ D) [忠实 F]
   证明: fun _ _ h =>
   Iso.ext (map_injective F (congr_arg Iso.hom h :))
 -/
@@ -158,7 +158,7 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (F : C ⥤ D) [Full F]
+  条件: (F : C ⥤ D) [满 F]
   证明: Full.map_surjective
 
 Depends on / 依赖: Full.map_surjective, map_surjective
@@ -178,8 +178,8 @@ definition preimage
   body: (F.map_surjective f).choose
 
 中文:
-定义 preimage
-  签名: (F : C ⥤ D) [Full F] (f : F.obj X ⟶ F.obj Y)
+定义 原像
+  签名: (F : C ⥤ D) [满 F] (f : F.obj X ⟶ F.obj Y)
   定义体: (F.map_surjective f).choose
 
 Depends on / 依赖: F.map_surjective, Image.monoFactorisation, map_surjective, monoFactorisation
@@ -201,7 +201,7 @@ theorem map_preimage
 
 中文:
 定理 map_preimage
-  条件: (F : C ⥤ D) [Full F] {X Y : C} (f : F.obj X ⟶ F.obj Y)
+  条件: (F : C ⥤ D) [满 F] {X Y : C} (f : F.obj X ⟶ F.obj Y)
   证明: (F.map_surjective f).choose_spec
 
 Depends on / 依赖: F.map_surjective, choose_spec, map_surjective
@@ -228,7 +228,7 @@ theorem preimage_id
 
 中文:
 定理 preimage_id
-  结论: F.preimage (𝟙 (F.obj X)) = 𝟙 X
+  结论: F.原像 (𝟙 (F.obj X)) = 𝟙 X
   证明: F.map_injective (by simp)
 
 @[simp, to_dual self]
@@ -275,7 +275,7 @@ theorem preimage_map
 中文:
 定理 preimage_map
   条件: (f : X ⟶ Y)
-  结论: F.preimage (F.map f) = f
+  结论: F.原像 (F.map f) = f
   证明: F.map_injective (by simp)
 
 Depends on / 依赖: F.map_injective, map_injective
@@ -360,12 +360,12 @@ structure FullyFaithful
     - preimage_map({X Y : C} (f : X ⟶ Y)) : preimage (F.map f) = f  [default: by cat_disch]
 
 中文:
-结构 FullyFaithful
+结构 满忠实
   参数: where
   公理与运算 (3 个):
     - preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : X ⟶ Y
-    - map_preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : F.map (preimage f) = f  [默认: by cat_disch]
-    - preimage_map({X Y : C} (f : X ⟶ Y)) : preimage (F.map f) = f  [默认: by cat_disch]
+    - map_preimage({X Y : C} (f : F.obj X ⟶ F.obj Y)) : F.map (原像 f) = f  [默认: by cat_disch]
+    - preimage_map({X Y : C} (f : X ⟶ Y)) : 原像 (F.map f) = f  [默认: by cat_disch]
 
 Depends on / 依赖: F.map, Image.isImage, cat_disch, isImage, lift_fac, preimage, preimage_map
 -/
@@ -390,7 +390,7 @@ definition ofFullyFaithful
 
 中文:
 定义 ofFullyFaithful
-  签名: [F.Full] [F.Faithful]
+  签名: [F.满] [F.忠实]
   定义体: F.preimage
 
 Depends on / 依赖: F.preimage, preimage
@@ -412,7 +412,7 @@ definition id
 
 中文:
 定义 id
-  签名: : (𝟭 C).FullyFaithful where
+  签名: : (𝟭 C).满忠实 where
   定义体: f
 -/
 def id : (𝟭 C).FullyFaithful where
@@ -568,7 +568,7 @@ lemma full
 
 中文:
 引理 full
-  结论: F.Full where
+  结论: F.满 where
   证明: hF.map_surjective
 
 Depends on / 依赖: hF.map_surjective, map_surjective
@@ -586,7 +586,7 @@ lemma faithful
 
 中文:
 引理 faithful
-  结论: F.Faithful where
+  结论: F.忠实 where
   证明: hF.map_injective
 
 Depends on / 依赖: hF.map_injective, map_injective
@@ -610,7 +610,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton F.FullyFaithful
+  签名: 子单例 F.满忠实
   定义体: by
     have := h₁.faithful
     cases h₁ with | mk f₁ hf₁ _ => cases h₂ with | mk f₂ hf₂ _ =>
@@ -671,7 +671,7 @@ lemma isIso_of_isIso_map
 
 中文:
 引理 isIso_of_isIso_map
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso (F.map f)]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 (F.map f)]
   证明: by
   simpa using (hF.preimageIso (asIso (F.map f))).isIso_hom
 
@@ -722,7 +722,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {G : D ⥤ E} (hG : G.FullyFaithful)
+  签名: {G : D ⥤ E} (hG : G.满忠实)
   定义体: hF.preimage (hG.preimage f)
 
 Depends on / 依赖: hF.preimage, hG.preimage, preimage
@@ -792,7 +792,7 @@ definition ofCompFaithful
 
 中文:
 定义 ofCompFaithful
-  签名: {G : D ⥤ E} [G.Faithful] (hFG : (F ⋙ G).FullyFaithful)
+  签名: {G : D ⥤ E} [G.忠实] (hFG : (F ⋙ G).满忠实)
   定义体: hFG.preimage (G.map f)
   map_preimage f := G.map_injective (hFG.map_preimage (G.map f))
   preimage_map f := hFG.preimage_map f
@@ -825,8 +825,8 @@ theorem isIso_of_fully_faithful
 
 中文:
 定理 isIso_of_fully_faithful
-  条件: (f : X ⟶ Y) [IsIso (F.map f)]
-  结论: IsIso f
+  条件: (f : X ⟶ Y) [是同构 (F.map f)]
+  结论: 是同构 f
   证明: ⟨⟨F.preimage (inv (F.map f)), ⟨F.map_injective (by simp), F.map_injective (by simp)⟩⟩⟩
 
 Depends on / 依赖: F.map, F.map_injective, F.preimage, map_injective, preimage
@@ -854,8 +854,8 @@ instance Full.id
   body: Function.surjective_id
 
 中文:
-实例 Full.id
-  签名: : Full (𝟭 C) where map_surjective
+实例 满.id
+  签名: : 满 (𝟭 C) where map_surjective
   定义体: Function.surjective_id
 
 Depends on / 依赖: Function, Function.surjective_id, surjective_id
@@ -871,8 +871,8 @@ instance Faithful.id
   body: { }
 
 中文:
-实例 Faithful.id
-  签名: : Functor.Faithful (𝟭 C)
+实例 忠实.id
+  签名: : 函子.忠实 (𝟭 C)
   定义体: { }
 -/
 instance Faithful.id : Functor.Faithful (𝟭 C) := { }
@@ -889,8 +889,8 @@ instance Faithful.comp
   body: F.map_injective (G.map_injective p)
 
 中文:
-实例 Faithful.comp
-  签名: [F.Faithful] [G.Faithful]
+实例 忠实.comp
+  签名: [F.忠实] [G.忠实]
   定义体: F.map_injective (G.map_injective p)
 
 Depends on / 依赖: F.map_injective, G.map_injective, map_injective
@@ -909,9 +909,9 @@ theorem Faithful.of_comp
   { map_injective := fun {_ _} => Function.Injective.of_comp (F ⋙ G).map_injective }
 
 中文:
-定理 Faithful.of_comp
-  条件: [(F ⋙ G).Faithful]
-  结论: F.Faithful
+定理 忠实.of_comp
+  条件: [(F ⋙ G).忠实]
+  结论: F.忠实
   证明: -- Porting note: (F ⋙ G).map_injective.of_comp has the incorrect type
   { map_injective := fun {_ _} => Function.Injective.of_comp (F ⋙ G).map_injective }
 -/
@@ -935,9 +935,9 @@ lemma Full.of_iso
   proof: ⟨F.preimage ((α.app X).hom ≫ f ≫ (α.app Y).inv), by simp [← NatIso.naturality_1 α]⟩
 
 中文:
-引理 Full.of_iso
-  条件: [Full F] (α : F ≅ F')
-  结论: Full F' where
+引理 满.of_iso
+  条件: [满 F] (α : F ≅ F')
+  结论: 满 F' where
   证明: ⟨F.preimage ((α.app X).hom ≫ f ≫ (α.app Y).inv), by simp [← NatIso.naturality_1 α]⟩
 
 Depends on / 依赖: F.preimage, NatIso, NatIso.naturality_1, naturality_1, preimage
@@ -957,9 +957,9 @@ theorem Faithful.of_iso
       F.map_injective (by rw [← NatIso.naturality_1 α.symm, h, NatIso.naturality_1 α.symm]) }
 
 中文:
-定理 Faithful.of_iso
-  条件: [F.Faithful] (α : F ≅ F')
-  结论: F'.Faithful
+定理 忠实.of_iso
+  条件: [F.忠实] (α : F ≅ F')
+  结论: F'.忠实
   证明: { map_injective := fun h =>
       F.map_injective (by rw [← NatIso.naturality_1 α.symm, h, NatIso.naturality_1 α.symm]) }
 
@@ -985,9 +985,9 @@ theorem Faithful.of_comp_iso
 alias _root_.CategoryTheory.Iso.faithful_of_comp := Faithful.of_comp_iso
 
 中文:
-定理 Faithful.of_comp_iso
-  条件: {H : C ⥤ E} [H.Faithful] (h : F ⋙ G ≅ H)
-  结论: F.Faithful
+定理 忠实.of_comp_iso
+  条件: {H : C ⥤ E} [H.忠实] (h : F ⋙ G ≅ H)
+  结论: F.忠实
   证明: @Faithful.of_comp _ _ _ _ _ _ F G (Faithful.of_iso h.symm)
 
 alias _root_.CategoryTheory.Iso.faithful_of_comp := Faithful.of_comp_iso
@@ -1013,9 +1013,9 @@ theorem Faithful.of_comp_eq
 alias _root_.Eq.faithful_of_comp := Faithful.of_comp_eq
 
 中文:
-定理 Faithful.of_comp_eq
-  条件: {H : C ⥤ E} [ℋ : H.Faithful] (h : F ⋙ G = H)
-  结论: F.Faithful
+定理 忠实.of_comp_eq
+  条件: {H : C ⥤ E} [ℋ : H.忠实] (h : F ⋙ G = H)
+  结论: F.忠实
   证明: @Faithful.of_comp _ _ _ _ _ _ F G (h.symm ▸ ℋ)
 
 alias _root_.Eq.faithful_of_comp := Faithful.of_comp_eq
@@ -1042,8 +1042,8 @@ definition Faithful.div
     map_comp := by grind }
 
 中文:
-定义 Faithful.div
-  签名: (F : C ⥤ E) (G : D ⥤ E) [G.Faithful] (obj : C -> D)
+定义 忠实.div
+  签名: (F : C ⥤ E) (G : D ⥤ E) [G.忠实] (obj : C -> D)
   定义体: { obj, map := @map,
     map_id := by
       intro X
@@ -1082,8 +1082,8 @@ theorem Faithful.div_comp
   exact h_map
 
 中文:
-定理 Faithful.div_comp
-  结论: (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
+定理 忠实.div_comp
+  结论: (F : C ⥤ E) [F.忠实] (G : D ⥤ E) [G.忠实] (obj : C -> D)
   证明: by
   obtain ⟨F_obj, _, _, _⟩ := F; obtain ⟨G_obj, _, _, _⟩ := G
   unfold Faithful.div Functor.comp
@@ -1118,8 +1118,8 @@ theorem Faithful.div_faithful
   proof: (Faithful.div_comp F G _ h_obj _ @h_map).faithful_of_comp
 
 中文:
-定理 Faithful.div_faithful
-  结论: (F : C ⥤ E) [F.Faithful] (G : D ⥤ E) [G.Faithful] (obj : C -> D)
+定理 忠实.div_faithful
+  结论: (F : C ⥤ E) [F.忠实] (G : D ⥤ E) [G.忠实] (obj : C -> D)
   证明: (Faithful.div_comp F G _ h_obj _ @h_map).faithful_of_comp
 
 Depends on / 依赖: Faithful, Faithful.div_comp, div_comp, faithful_of_comp, h_map, h_obj
@@ -1139,8 +1139,8 @@ instance Full.comp
   body: ⟨F.preimage (G.preimage f), by simp⟩
 
 中文:
-实例 Full.comp
-  签名: [Full F] [Full G]
+实例 满.comp
+  签名: [满 F] [满 G]
   定义体: ⟨F.preimage (G.preimage f), by simp⟩
 
 Depends on / 依赖: F.preimage, G.preimage, preimage
@@ -1158,9 +1158,9 @@ lemma Full.of_comp_faithful
   proof: ⟨(F ⋙ G).preimage (G.map f), G.map_injective ((F ⋙ G).map_preimage _)⟩
 
 中文:
-引理 Full.of_comp_faithful
-  条件: [Full <| F ⋙ G] [G.Faithful]
-  结论: Full F where
+引理 满.of_comp_faithful
+  条件: [满 <| F ⋙ G] [G.忠实]
+  结论: 满 F where
   证明: ⟨(F ⋙ G).preimage (G.map f), G.map_injective ((F ⋙ G).map_preimage _)⟩
 
 Depends on / 依赖: G.map, G.map_injective, HasImage, map_injective, map_preimage, preimage
@@ -1179,8 +1179,8 @@ lemma Full.of_comp_faithful_iso
   exact Full.of_comp_faithful F G
 
 中文:
-引理 Full.of_comp_faithful_iso
-  结论: {F : C ⥤ D} {G : D ⥤ E} {H : C ⥤ E} [Full H] [G.Faithful]
+引理 满.of_comp_faithful_iso
+  结论: {F : C ⥤ D} {G : D ⥤ E} {H : C ⥤ E} [满 H] [G.忠实]
   证明: by
   have := Full.of_iso h.symm
   exact Full.of_comp_faithful F G
@@ -1205,7 +1205,7 @@ definition fullyFaithfulCancelRight
 
 中文:
 定义 fullyFaithfulCancelRight
-  签名: {F G : C ⥤ D} (H : D ⥤ E) [Full H] [H.Faithful]
+  签名: {F G : C ⥤ D} (H : D ⥤ E) [满 H] [H.忠实]
   定义体: NatIso.ofComponents (fun X => H.preimageIso (comp_iso.app X)) fun f =>
     H.map_injective (by simpa using! comp_iso.hom.naturality f)
 
@@ -1231,7 +1231,7 @@ theorem fullyFaithfulCancelRight_hom_app
 
 中文:
 定理 fullyFaithfulCancelRight_hom_app
-  结论: {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
+  结论: {F G : C ⥤ D} {H : D ⥤ E} [满 H] [H.忠实]
   证明: rfl
 
 @[simp]
@@ -1252,7 +1252,7 @@ theorem fullyFaithfulCancelRight_inv_app
 
 中文:
 定理 fullyFaithfulCancelRight_inv_app
-  结论: {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]
+  结论: {F G : C ⥤ D} {H : D ⥤ E} [满 H] [H.忠实]
   证明: rfl
 -/
 theorem fullyFaithfulCancelRight_inv_app {F G : C ⥤ D} {H : D ⥤ E} [Full H] [H.Faithful]

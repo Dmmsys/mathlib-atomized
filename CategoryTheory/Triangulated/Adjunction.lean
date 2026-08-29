@@ -70,8 +70,8 @@ lemma isTriangulated_rightAdjoint
 
 中文:
 引理 isTriangulated_rightAdjoint
-  条件: [F.IsTriangulated]
-  结论: G.IsTriangulated where
+  条件: [F.是三角]
+  结论: G.是三角 where
   证明: by
     have : G.Additive := adj.right_adjoint_additive
     obtain ⟨Z, f, g, mem⟩ := distinguished_cocone_triangle (G.map T.mor₁)
@@ -161,8 +161,8 @@ lemma isTriangulated_leftAdjoint
 
 中文:
 引理 isTriangulated_leftAdjoint
-  条件: [G.IsTriangulated]
-  结论: F.IsTriangulated
+  条件: [G.是三角]
+  结论: F.是三角
   证明: by
   have := isTriangulated_rightAdjoint adj.op
   exact F.isTriangulated_of_op
@@ -185,12 +185,12 @@ class IsTriangulated
     - rightAdjoint_isTriangulated : G.IsTriangulated  [default: by infer_instance]
 
 中文:
-类 IsTriangulated
+类 是三角
   参数: : 命题 where
   公理与运算 (3 个):
-    - commShift : adj.CommShift 整数  [默认: by infer_instance]
-    - leftAdjoint_isTriangulated : F.IsTriangulated  [默认: by infer_instance]
-    - rightAdjoint_isTriangulated : G.IsTriangulated  [默认: by infer_instance]
+    - commShift : adj.交换Shift 整数  [默认: by infer_instance]
+    - leftAdjoint_isTriangulated : F.是三角  [默认: by infer_instance]
+    - rightAdjoint_isTriangulated : G.是三角  [默认: by infer_instance]
 
 Depends on / 依赖: F.IsTriangulated, G.IsTriangulated, IsTriangulated, infer_instance, leftAdjoint_isTriangulated, rightAdjoint_isTriangulated
 -/
@@ -214,8 +214,8 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: [F.IsTriangulated]
-  结论: adj.IsTriangulated where
+  条件: [F.是三角]
+  结论: adj.是三角 where
   证明: adj.isTriangulated_rightAdjoint
 
 Depends on / 依赖: adj.isTriangulated_rightAdjoint, isTriangulated_rightAdjoint
@@ -234,8 +234,8 @@ lemma mk''
 
 中文:
 引理 mk''
-  条件: [G.IsTriangulated]
-  结论: adj.IsTriangulated where
+  条件: [G.是三角]
+  结论: adj.是三角 where
   证明: adj.isTriangulated_leftAdjoint
 
 Depends on / 依赖: adj.isTriangulated_leftAdjoint, isTriangulated_leftAdjoint
@@ -252,7 +252,7 @@ instance id
 
 中文:
 实例 id
-  签名: : (Adjunction.id (C := C)).IsTriangulated where
+  签名: : (伴随.id (C := C)).是三角 where
 
 Depends on / 依赖: IsTriangulated
 -/
@@ -271,7 +271,7 @@ instance comp
 
 中文:
 实例 comp
-  签名: [adj.IsTriangulated] [adj'.IsTriangulated]
+  签名: [adj.是三角] [adj'.是三角]
 -/
 instance comp [adj.IsTriangulated] [adj'.IsTriangulated] : (adj.comp adj').IsTriangulated where
 
@@ -292,7 +292,7 @@ abbreviation IsTriangulated
   body: E.toAdjunction.IsTriangulated
 
 中文:
-缩写 IsTriangulated
+缩写 是三角
   签名: : 命题
   定义体: E.toAdjunction.IsTriangulated
 
@@ -311,8 +311,8 @@ instance [E.IsTriangulated]
   body: inferInstance
 
 中文:
-实例 [E.IsTriangulated]
-  签名: : E.functor.IsTriangulated
+实例 [E.是三角]
+  签名: : E.functor.是三角
   定义体: inferInstance
 -/
 instance [E.IsTriangulated] : E.functor.IsTriangulated := inferInstance
@@ -325,8 +325,8 @@ instance [E.IsTriangulated]
   body: inferInstance
 
 中文:
-实例 [E.IsTriangulated]
-  签名: : E.inverse.IsTriangulated
+实例 [E.是三角]
+  签名: : E.inverse.是三角
   定义体: inferInstance
 -/
 instance [E.IsTriangulated] : E.inverse.IsTriangulated := inferInstance
@@ -341,7 +341,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : E.functor.IsTriangulated] : E.symm.inverse.IsTriangulated
+  签名: : E.functor.是三角] : E.symm.inverse.是三角
   定义体: h
 -/
 instance [h : E.functor.IsTriangulated] : E.symm.inverse.IsTriangulated := h
@@ -355,7 +355,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : E.inverse.IsTriangulated] : E.symm.functor.IsTriangulated
+  签名: : E.inverse.是三角] : E.symm.functor.是三角
   定义体: h
 -/
 instance [h : E.inverse.IsTriangulated] : E.symm.functor.IsTriangulated := h
@@ -372,8 +372,8 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: (h : E.functor.IsTriangulated)
-  结论: E.IsTriangulated where
+  条件: (h : E.functor.是三角)
+  结论: E.是三角 where
   证明: E.toAdjunction.isTriangulated_rightAdjoint
 
 Depends on / 依赖: E.toAdjunction.isTriangulated_rightAdjoint, isTriangulated_rightAdjoint, toAdjunction
@@ -393,8 +393,8 @@ lemma mk''
 
 中文:
 引理 mk''
-  条件: (h : E.inverse.IsTriangulated)
-  结论: E.IsTriangulated where
+  条件: (h : E.inverse.是三角)
+  结论: E.是三角 where
   证明: (mk' E.symm h).rightAdjoint_isTriangulated
 
 Depends on / 依赖: E.symm, rightAdjoint_isTriangulated
@@ -416,7 +416,7 @@ instance refl
 
 中文:
 实例 refl
-  签名: : (Equivalence.refl (C := C)).IsTriangulated
+  签名: : (等价.refl (C := C)).是三角
   定义体: by
   dsimp [Equivalence.IsTriangulated]
   rw [refl_toAdjunction]
@@ -438,7 +438,7 @@ instance symm
 
 中文:
 实例 symm
-  签名: [E.IsTriangulated]
+  签名: [E.是三角]
 -/
 instance symm [E.IsTriangulated] : E.symm.IsTriangulated where
 
@@ -460,7 +460,7 @@ instance trans
 
 中文:
 实例 trans
-  签名: [E.IsTriangulated] [E'.IsTriangulated]
+  签名: [E.是三角] [E'.是三角]
   定义体: by
   dsimp [Equivalence.IsTriangulated]
   rw [trans_toAdjunction]

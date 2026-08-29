@@ -203,7 +203,7 @@ theorem hasEqualizers_of_hasPullbacks_and_binary_products
 
 中文:
 定理 hasEqualizers_of_hasPullbacks_and_binary_products
-  条件: [HasBinaryProducts C] [HasPullbacks C]
+  条件: [HasBinaryProducts C] [有Pullbacks C]
   证明: { has_limit := fun F =>
       HasLimit.mk
         { cone := equalizerCone F

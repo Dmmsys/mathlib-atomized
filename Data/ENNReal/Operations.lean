@@ -64,7 +64,7 @@ lemma pow_right_strictMono
 中文:
 引理 pow_right_strictMono
   条件: {n : 自然数} (hn : n != 0)
-  结论: StrictMono fun a : 实数>=0∞ => a ^ n
+  结论: 严格递增 fun a : 实数>=0∞ => a ^ n
   证明: WithTop.pow_right_strictMono hn
 -/
 protected lemma pow_right_strictMono {n : Nat} (hn : n != 0) : StrictMono fun a : Real>=0∞ => a ^ n :=
@@ -139,7 +139,7 @@ lemma mul_left_strictMono
 中文:
 引理 mul_left_strictMono
   条件: (h₀ : a != 0) (hinf : a != ∞)
-  结论: StrictMono (· * a)
+  结论: 严格递增 (· * a)
   证明: WithTop.mul_left_strictMono (pos_iff_ne_zero.2 h₀) hinf
 
 Depends on / 依赖: WithTop, WithTop.mul_left_strictMono, mul_left_strictMono, pos_iff_ne_zero
@@ -159,7 +159,7 @@ lemma mul_right_strictMono
 中文:
 引理 mul_right_strictMono
   条件: (h₀ : a != 0) (hinf : a != ∞)
-  结论: StrictMono (a * ·)
+  结论: 严格递增 (a * ·)
   证明: WithTop.mul_right_strictMono (pos_iff_ne_zero.2 h₀) hinf
 
 Depends on / 依赖: WithTop, WithTop.mul_right_strictMono, mul_right_strictMono, pos_iff_ne_zero
@@ -656,7 +656,7 @@ theorem toNNReal_add
   rfl
 
 中文:
-定理 toNNReal_add
+定理 toNN实数_add
   条件: {r₁ r₂ : 实数>=0∞} (h₁ : r₁ != ∞) (h₂ : r₂ != ∞)
   证明: by
   lift r₁ to Real>=0 using h₁
@@ -680,7 +680,7 @@ theorem toReal_le_add'
   simpa only [add_eq_top, or_imp] using And.intro hb hc
 
 中文:
-定理 toReal_le_add'
+定理 to实数_le_add'
   条件: (hle : a <= b + c) (hb : b = ∞ -> a = ∞) (hc : c = ∞ -> a = ∞)
   证明: by
   refine le_trans (toReal_mono' hle ?_) toReal_add_le
@@ -702,7 +702,7 @@ theorem toReal_le_add
   proof: toReal_le_add' hle (flip absurd hb) (flip absurd hc)
 
 中文:
-定理 toReal_le_add
+定理 to实数_le_add
   条件: (hle : a <= b + c) (hb : b != ∞) (hc : c != ∞)
   证明: toReal_le_add' hle (flip absurd hb) (flip absurd hc)
 
@@ -2122,7 +2122,7 @@ theorem le_toReal_sub
 @[simp]
 
 中文:
-定理 le_toReal_sub
+定理 le_to实数_sub
   条件: {a b : 实数>=0∞} (hb : b != ∞)
   结论: a.to实数 - b.to实数 <= (a - b).to实数
   证明: by
@@ -2157,7 +2157,7 @@ lemma toNNReal_sub
 @[simp]
 
 中文:
-引理 toNNReal_sub
+引理 toNN实数_sub
   条件: (hb : b != ∞)
   结论: (a - b).toNN实数 = a.toNN实数 - b.toNN实数
   证明: by
@@ -2182,7 +2182,7 @@ lemma toReal_sub_of_le
   simp [ENNReal.toReal, ne_top_of_le_ne_top ha hba, toNNReal_mono ha hba]
 
 中文:
-引理 toReal_sub_of_le
+引理 to实数_sub_of_le
   条件: (hba : b <= a) (ha : a != ∞)
   结论: (a - b).to实数 = a.to实数 - b.to实数
   证明: by
@@ -2206,7 +2206,7 @@ theorem ofReal_sub
   rw [← ofReal_add (sub_nonneg_of_le h) hq]; rw [sub_add_cancel]
 
 中文:
-定理 ofReal_sub
+定理 of实数_sub
   条件: (p : 实数) {q : 实数} (hq : 0 <= q)
   证明: by
   obtain h | h := le_total p q
@@ -2282,7 +2282,7 @@ theorem Ico_eq_Iio
 
 中文:
 定理 Ico_eq_Iio
-  结论: Ico 0 y = Iio y
+  结论: 左闭右开区间 0 y = 左无界右开区间 y
   证明: Ico_bot
 
 Depends on / 依赖: AddMonoidHom, blockDiagonal, map_neg
@@ -2300,7 +2300,7 @@ theorem mem_Iio_self_add
 
 中文:
 定理 mem_Iio_self_add
-  结论: x != ∞ -> ε != 0 -> x in Iio (x + ε)
+  结论: x != ∞ -> ε != 0 -> x in 左无界右开区间 (x + ε)
   证明: fun xt ε0 => lt_add_right xt ε0
 
 Depends on / 依赖: AddMonoidHom, blockDiagonal, lt_add_right, map_sub
@@ -2319,7 +2319,7 @@ theorem mem_Ioo_self_sub_add
 
 中文:
 定理 mem_Ioo_self_sub_add
-  结论: x != ∞ -> x != 0 -> ε₁ != 0 -> ε₂ != 0 -> x in Ioo (x - ε₁) (x + ε₂)
+  结论: x != ∞ -> x != 0 -> ε₁ != 0 -> ε₂ != 0 -> x in 开区间 (x - ε₁) (x + ε₂)
   证明: fun xt x0 ε0 ε0' => ⟨ENNReal.sub_lt_self xt x0 ε0, lt_add_right xt ε0'⟩
 
 @[simp]
@@ -2344,7 +2344,7 @@ theorem image_coe_Iic
 中文:
 定理 image_coe_Iic
   条件: (x : 实数>=0)
-  结论: (↑) '' Iic x = Iic (x : 实数>=0∞)
+  结论: (↑) '' 左无界右闭区间 x = 左无界右闭区间 (x : 实数>=0∞)
   证明: WithTop.image_coe_Iic
 
 @[simp]
@@ -2368,7 +2368,7 @@ theorem image_coe_Ici
 中文:
 定理 image_coe_Ici
   条件: (x : 实数>=0)
-  结论: (↑) '' Ici x = Ico ↑x ∞
+  结论: (↑) '' 左闭右无界区间 x = 左闭右开区间 ↑x ∞
   证明: WithTop.image_coe_Ici
 
 @[simp]
@@ -2392,7 +2392,7 @@ theorem image_coe_Iio
 中文:
 定理 image_coe_Iio
   条件: (x : 实数>=0)
-  结论: (↑) '' Iio x = Iio (x : 实数>=0∞)
+  结论: (↑) '' 左无界右开区间 x = 左无界右开区间 (x : 实数>=0∞)
   证明: WithTop.image_coe_Iio
 
 @[simp]
@@ -2416,7 +2416,7 @@ theorem image_coe_Ioi
 中文:
 定理 image_coe_Ioi
   条件: (x : 实数>=0)
-  结论: (↑) '' Ioi x = Ioo ↑x ∞
+  结论: (↑) '' 左开右无界区间 x = 开区间 ↑x ∞
   证明: WithTop.image_coe_Ioi
 
 @[simp]
@@ -2440,7 +2440,7 @@ theorem image_coe_Icc
 中文:
 定理 image_coe_Icc
   条件: (x y : 实数>=0)
-  结论: (↑) '' Icc x y = Icc (x : 实数>=0∞) y
+  结论: (↑) '' 闭区间 x y = 闭区间 (x : 实数>=0∞) y
   证明: WithTop.image_coe_Icc
 
 @[simp]
@@ -2464,7 +2464,7 @@ theorem image_coe_Ico
 中文:
 定理 image_coe_Ico
   条件: (x y : 实数>=0)
-  结论: (↑) '' Ico x y = Ico (x : 实数>=0∞) y
+  结论: (↑) '' 左闭右开区间 x y = 左闭右开区间 (x : 实数>=0∞) y
   证明: WithTop.image_coe_Ico
 
 @[simp]
@@ -2488,7 +2488,7 @@ theorem image_coe_Ioc
 中文:
 定理 image_coe_Ioc
   条件: (x y : 实数>=0)
-  结论: (↑) '' Ioc x y = Ioc (x : 实数>=0∞) y
+  结论: (↑) '' 左开右闭区间 x y = 左开右闭区间 (x : 实数>=0∞) y
   证明: WithTop.image_coe_Ioc
 
 @[simp]
@@ -2512,7 +2512,7 @@ theorem image_coe_Ioo
 中文:
 定理 image_coe_Ioo
   条件: (x y : 实数>=0)
-  结论: (↑) '' Ioo x y = Ioo (x : 实数>=0∞) y
+  结论: (↑) '' 开区间 x y = 开区间 (x : 实数>=0∞) y
   证明: WithTop.image_coe_Ioo
 
 @[simp]
@@ -2608,7 +2608,7 @@ theorem toNNReal_iInf
     simp_rw [← coe_iInf, toNNReal_coe]
 
 中文:
-定理 toNNReal_iInf
+定理 toNN实数_iInf
   条件: (hf : 对任意 i, f i != ∞)
   结论: (iInf f).toNN实数 = ⨅ i, (f i).toNN实数
   证明: by
@@ -2636,8 +2636,8 @@ theorem toNNReal_sInf
   simpa only [← sInf_range, ← image_eq_range, Subtype.range_coe_subtype] using! (toNNReal_iInf hf)
 
 中文:
-定理 toNNReal_sInf
-  条件: (s : Set 实数>=0∞) (hs : 对任意 r in s, r != ∞)
+定理 toNN实数_sInf
+  条件: (s : 集合 实数>=0∞) (hs : 对任意 r in s, r != ∞)
   证明: by
   have hf : forall i, ((↑) : s -> Real>=0∞) i != ∞ := fun ⟨r, rs⟩ => hs r rs
   simpa only [← sInf_range, ← image_eq_range, Subtype.range_coe_subtype] using! (toNNReal_iInf hf)
@@ -2660,7 +2660,7 @@ theorem toReal_iInf
   simp only [ENNReal.toReal, toNNReal_iInf hf, NNReal.coe_iInf]
 
 中文:
-定理 toReal_iInf
+定理 to实数_iInf
   条件: (hf : 对任意 i, f i != ∞)
   结论: (iInf f).to实数 = ⨅ i, (f i).to实数
   证明: by
@@ -2682,8 +2682,8 @@ theorem toReal_sInf
   simp only [ENNReal.toReal, toNNReal_sInf s hf, NNReal.coe_sInf, Set.image_image]
 
 中文:
-定理 toReal_sInf
-  条件: (s : Set 实数>=0∞) (hf : 对任意 r in s, r != ∞)
+定理 to实数_sInf
+  条件: (s : 集合 实数>=0∞) (hf : 对任意 r in s, r != ∞)
   证明: by
   simp only [ENNReal.toReal, toNNReal_sInf s hf, NNReal.coe_sInf, Set.image_image]
 
@@ -2709,8 +2709,8 @@ lemma ofReal_iInf
   · si
 
 中文:
-引理 ofReal_iInf
-  条件: [Nonempty ι] (f : ι -> 实数)
+引理 of实数_iInf
+  条件: [非空 ι] (f : ι -> 实数)
   证明: by
   obtain ⟨i, hi⟩ | h := em (exists i, f i <= 0)
   · rw [iInf_eq_bot.2 fun _ _ => ⟨i, by simpa [ofReal_of_nonpos hi]⟩]
@@ -2793,7 +2793,7 @@ theorem sInf_add
 
 中文:
 定理 sInf_add
-  条件: {s : Set 实数>=0∞}
+  条件: {s : 集合 实数>=0∞}
   结论: sInf s + a = ⨅ b in s, b + a
   证明: by simp [sInf_eq_iInf, iInf_add]
 
@@ -2868,7 +2868,7 @@ lemma iInf_add_iInf_of_monotone
 
 中文:
 引理 iInf_add_iInf_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsCodirectedOrder ι] {f g : ι -> 实数>=0∞}
+  结论: {ι : 类型} [预序 ι] [IsCodirectedOrder ι] {f g : ι -> 实数>=0∞}
   证明: iInf_add_iInf fun i j => (exists_le_le i j).imp fun _k ⟨hi, hj⟩ => by gcongr <;> apply_rules
 
 Depends on / 依赖: apply_rules, exists_le_le, iInf_add_iInf
@@ -2888,7 +2888,7 @@ lemma add_iInf₂
 
 中文:
 引理 add_iInf₂
-  条件: {κ : ι -> Sort*} (f : (i : ι) -> κ i -> 实数>=0∞)
+  条件: {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 实数>=0∞)
   证明: by
   simp [add_iInf]
 
@@ -2909,7 +2909,7 @@ lemma iInf₂_add
 
 中文:
 引理 iInf₂_add
-  条件: {κ : ι -> Sort*} (f : (i : ι) -> κ i -> 实数>=0∞)
+  条件: {κ : ι -> 类型层*} (f : (i : ι) -> κ i -> 实数>=0∞)
   证明: by
   simp only [add_comm, add_iInf₂]
 
@@ -2931,7 +2931,7 @@ lemma add_sInf
 
 中文:
 引理 add_sInf
-  条件: {s : Set 实数>=0∞}
+  条件: {s : 集合 实数>=0∞}
   结论: a + sInf s = ⨅ b in s, a + b
   证明: by
   rw [sInf_eq_iInf]; rw [add_iInf₂]
@@ -2976,7 +2976,7 @@ lemma le_iInf₂_add_iInf₂
 
 中文:
 引理 le_iInf₂_add_iInf₂
-  结论: {q₁ : ι -> Sort*} {q₂ : κ -> Sort*}
+  结论: {q₁ : ι -> 类型层*} {q₂ : κ -> 类型层*}
   证明: by
   simp_rw [iInf₂_add, add_iInf₂]
   exact le_iInf₂ fun i hi => le_iInf₂ (h i hi)
@@ -3030,7 +3030,7 @@ lemma exists_add_lt_of_add_lt
   simpa using le_iInf₂_add_iInf₂ h
 
 中文:
-引理 exists_add_lt_of_add_lt
+引理 存在_add_lt_of_add_lt
   条件: {x y z : 实数>=0∞} (h : y + z < x)
   证明: by
   contrapose! h
@@ -3064,7 +3064,7 @@ theorem toNNReal_iSup
   · rw [NNReal.iSup_of_not_bddAbove h, iSup_coe_eq_top.2 h, toNNReal_top]
 
 中文:
-定理 toNNReal_iSup
+定理 toNN实数_iSup
   条件: (hf : 对任意 i, f i != ∞)
   结论: (iSup f).toNN实数 = ⨆ i, (f i).toNN实数
   证明: by
@@ -3094,8 +3094,8 @@ theorem toNNReal_sSup
   simpa only [← sSup_range, ← image_eq_range, Subtype.range_coe_subtype] using! (toNNReal_iSup hf)
 
 中文:
-定理 toNNReal_sSup
-  条件: (s : Set 实数>=0∞) (hs : 对任意 r in s, r != ∞)
+定理 toNN实数_sSup
+  条件: (s : 集合 实数>=0∞) (hs : 对任意 r in s, r != ∞)
   证明: by
   have hf : forall i, ((↑) : s -> Real>=0∞) i != ∞ := fun ⟨r, rs⟩ => hs r rs
   simpa only [← sSup_range, ← image_eq_range, Subtype.range_coe_subtype] using! (toNNReal_iSup hf)
@@ -3118,7 +3118,7 @@ theorem toReal_iSup
   simp only [ENNReal.toReal, toNNReal_iSup hf, NNReal.coe_iSup]
 
 中文:
-定理 toReal_iSup
+定理 to实数_iSup
   条件: (hf : 对任意 i, f i != ∞)
   结论: (iSup f).to实数 = ⨆ i, (f i).to实数
   证明: by
@@ -3140,8 +3140,8 @@ theorem toReal_sSup
   simp only [ENNReal.toReal, toNNReal_sSup s hf, NNReal.coe_sSup, Set.image_image]
 
 中文:
-定理 toReal_sSup
-  条件: (s : Set 实数>=0∞) (hf : 对任意 r in s, r != ∞)
+定理 to实数_sSup
+  条件: (s : 集合 实数>=0∞) (hf : 对任意 r in s, r != ∞)
   证明: by
   simp only [ENNReal.toReal, toNNReal_sSup s hf, NNReal.coe_sSup, Set.image_image]
 
@@ -3236,7 +3236,7 @@ exact iSup_le fun i => ENNReal.le_sub_of_add_le_left ha le_iSup (a + f ·) i
 
 中文:
 引理 add_iSup
-  条件: [Nonempty ι] (f : ι -> 实数>=0∞)
+  条件: [非空 ι] (f : ι -> 实数>=0∞)
   结论: a + ⨆ i, f i = ⨆ i, a + f i
   证明: by
   obtain rfl | ha := eq_or_ne a ∞
@@ -3266,7 +3266,7 @@ lemma iSup_add
 
 中文:
 引理 iSup_add
-  条件: [Nonempty ι] (f : ι -> 实数>=0∞)
+  条件: [非空 ι] (f : ι -> 实数>=0∞)
   结论: (⨆ i, f i) + a = ⨆ i, f i + a
   证明: by
   simp [add_comm, add_iSup]
@@ -3328,7 +3328,7 @@ lemma add_biSup
 
 中文:
 引理 add_biSup
-  条件: {ι : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> 实数>=0∞)
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 实数>=0∞)
   证明: add_biSup' hs _
 
 Depends on / 依赖: add_biSup
@@ -3346,7 +3346,7 @@ lemma biSup_add
 
 中文:
 引理 biSup_add
-  条件: {ι : 类型} {s : Set ι} (hs : s.Nonempty) (f : ι -> 实数>=0∞)
+  条件: {ι : 类型} {s : 集合 ι} (hs : s.非空) (f : ι -> 实数>=0∞)
   证明: biSup_add' hs _
 
 Depends on / 依赖: biSup_add
@@ -3366,7 +3366,7 @@ lemma add_sSup
 
 中文:
 引理 add_sSup
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: a + sSup s = ⨆ b in s, a + b
   证明: by
   rw [sSup_eq_iSup]; rw [add_biSup hs]
@@ -3388,7 +3388,7 @@ lemma sSup_add
 
 中文:
 引理 sSup_add
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: sSup s + a = ⨆ b in s, b + a
   证明: by
   rw [sSup_eq_iSup]; rw [biSup_add hs]
@@ -3408,7 +3408,7 @@ lemma iSup_add_iSup_le
 
 中文:
 引理 iSup_add_iSup_le
-  条件: [Nonempty ι] [Nonempty κ] {g : κ -> 实数>=0∞} (h : 对任意 i j, f i + g j <= a)
+  条件: [非空 ι] [非空 κ] {g : κ -> 实数>=0∞} (h : 对任意 i j, f i + g j <= a)
   证明: by simp_rw [iSup_add, add_iSup]; exact iSup₂_le h
 
 Depends on / 依赖: add_iSup, iSup_add, simp_rw
@@ -3451,7 +3451,7 @@ lemma biSup_add_biSup_le
 
 中文:
 引理 biSup_add_biSup_le
-  结论: {ι κ : 类型} {s : Set ι} {t : Set κ} (hs : s.Nonempty) (ht : t.Nonempty)
+  结论: {ι κ : 类型} {s : 集合 ι} {t : 集合 κ} (hs : s.非空) (ht : t.非空)
   证明: biSup_add_biSup_le' hs ht h
 
 Depends on / 依赖: biSup_add_biSup_le
@@ -3507,7 +3507,7 @@ lemma iSup_add_iSup_of_monotone
 
 中文:
 引理 iSup_add_iSup_of_monotone
-  结论: {ι : 类型} [Preorder ι] [IsDirectedOrder ι] {f g : ι -> 实数>=0∞}
+  结论: {ι : 类型} [预序 ι] [IsDirectedOrder ι] {f g : ι -> 实数>=0∞}
   证明: iSup_add_iSup fun i j => (exists_ge_ge i j).imp fun _k ⟨hi, hj⟩ => by gcongr <;> apply_rules
 
 Depends on / 依赖: apply_rules, exists_ge_ge, iSup_add_iSup
@@ -3532,7 +3532,7 @@ refine le_antisymm (le_iInf fun i => tsub_le_tsub_left (le_iSup ..
 
 中文:
 引理 sub_iSup
-  条件: [Nonempty ι] (ha : a != ∞)
+  条件: [非空 ι] (ha : a != ∞)
   结论: a - ⨆ i, f i = ⨅ i, a - f i
   证明: by
   obtain ⟨i, hi⟩ | h := em (exists i, a < f i)
@@ -3596,7 +3596,7 @@ lemma exists_lt_add_of_lt_add
   simpa using biSup_add_biSup_le' (by exact ⟨0, hy.bot_lt⟩) (by exact ⟨0, hz.bot_lt⟩) h
 
 中文:
-引理 exists_lt_add_of_lt_add
+引理 存在_lt_add_of_lt_add
   条件: {x y z : 实数>=0∞} (h : x < y + z) (hy : y != 0) (hz : z != 0)
   证明: by
   contrapose! h

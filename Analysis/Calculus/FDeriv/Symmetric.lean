@@ -86,7 +86,7 @@ definition IsSymmSndFDerivWithinAt
 
 中文:
 定义 IsSymmSndFDerivWithinAt
-  签名: (f : E -> F) (s : Set E) (x : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E)
   定义体: forall v w, fderivWithin 𝕜 (fderivWithin 𝕜 f s) s x v w = fderivWithin 𝕜 (fderivWithin 𝕜 f s) s x w v
 
 Depends on / 依赖: fderivWithin
@@ -227,7 +227,7 @@ lemma fderivWithin_fderivWithin_eq_of_mem_nhds
 
 中文:
 引理 fderivWithin_fderivWithin_eq_of_mem_nhds
-  结论: {f : E -> F} {x : E} {s : Set E}
+  结论: {f : E -> F} {x : E} {s : 集合 E}
   证明: by
   simp only [← fderivWithin_univ]
   apply fderivWithin_fderivWithin_eq_of_eventuallyEq
@@ -545,7 +545,7 @@ theorem Convex.taylor_approx_two_segment
   -- consider a ball of radius `δ` ar
 
 中文:
-定理 Convex.taylor_approx_two_segment
+定理 凸.taylor_approx_two_segment
   结论: {v w : E} (hv : x + v in interior s)
   证明: by
   -- it suffices to check that the expression is bounded by `ε * ((‖v‖ + ‖w‖) * ‖w‖) * h^2` for
@@ -673,7 +673,7 @@ theorem Convex.isLittleO_alternate_sum_square
   have 
 
 中文:
-定理 Convex.isLittleO_alternate_sum_square
+定理 凸.isLittleO_alternate_sum_square
   结论: {v w : E} (h4v : x + (4 : 实数) • v in interior s)
   证明: by
   have A : (1 : Real) / 2 in Ioc (0 : Real) 1 := ⟨by simp, by norm_num⟩
@@ -737,7 +737,7 @@ theorem Convex.second_derivative_within_at_symmetric_of_mem_interior
 
 
 中文:
-定理 Convex.second_derivative_within_at_symmetric_of_mem_interior
+定理 凸.second_derivative_within_at_symmetric_of_mem_interior
   结论: {v w : E}
   证明: by
   have A : (fun h : Real => h ^ 2 • (f'' w v - f'' v w)) =o[𝓝[>] 0] fun h => h ^ 2 := by
@@ -787,8 +787,8 @@ theorem Convex.second_derivative_within_at_symmetric
     that `f''` is sym
 
 中文:
-定理 Convex.second_derivative_within_at_symmetric
-  结论: {s : Set E} (s_conv : Convex 实数 s)
+定理 凸.second_derivative_within_at_symmetric
+  结论: {s : 集合 E} (s_conv : 凸 实数 s)
   证明: by
   /- we work around a point `x + 4 z` in the interior of `s`. For any vector `m`,
     then `x + 4 (z + t m)` also belongs to the interior of `s` for small enough `t`. This means that
@@ -900,7 +900,7 @@ theorem second_derivative_symmetric_of_eventually
 
 中文:
 定理 second_derivative_symmetric_of_eventually
-  结论: [IsRCLikeNormedField 𝕜]
+  结论: [是RCLikeNormedField 𝕜]
   证明: by
   let _ := IsRCLikeNormedField.rclike 𝕜
   let _ : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 E
@@ -937,7 +937,7 @@ theorem second_derivative_symmetric
 
 中文:
 定理 second_derivative_symmetric
-  结论: [IsRCLikeNormedField 𝕜]
+  结论: [是RCLikeNormedField 𝕜]
   证明: second_derivative_symmetric_of_eventually (Filter.Eventually.of_forall hf) hx v w
 
 Depends on / 依赖: Eventually, Filter, Filter.Eventually.of_forall, of_forall, second_derivative_symmetric_of_eventually
@@ -966,7 +966,7 @@ lemma minSmoothness_of_isRCLikeNormedField
 
 中文:
 引理 minSmoothness_of_isRCLikeNormedField
-  条件: [h : IsRCLikeNormedField 𝕜] {n : 自然数∞ω}
+  条件: [h : 是RCLikeNormedField 𝕜] {n : 自然数∞ω}
   证明: by
   simp [minSmoothness, h]
 -/
@@ -1037,7 +1037,7 @@ lemma minSmoothness_monotone
 
 中文:
 引理 minSmoothness_monotone
-  结论: Monotone (minSmoothness 𝕜)
+  结论: 递增 (minSmoothness 𝕜)
   证明: by
   intro m n hmn
   simp only [minSmoothness]

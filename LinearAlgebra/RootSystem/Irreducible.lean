@@ -47,7 +47,7 @@ definition invtRootSubmodule
 
 中文:
 定义 invtRootSubmodule
-  签名: : Sublattice (Submodule R M)
+  签名: : 子格 (子模 R M)
   定义体: ⨅ i, invtSubmodule (P.reflection i)
 
 Depends on / 依赖: P.reflection, invtSubmodule, reflection
@@ -66,7 +66,7 @@ lemma mem_invtRootSubmodule_iff
 
 中文:
 引理 mem_invtRootSubmodule_iff
-  条件: {q : Submodule R M}
+  条件: {q : 子模 R M}
   证明: by
   simp [invtRootSubmodule]
 
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder P.invtRootSubmodule
+  签名: 有界序 P.invtRootSubmodule
   定义体: ⟨⊤, invtRootSubmodule.top_mem P⟩
   bot := ⟨⊥, invtRootSubmodule.bot_mem P⟩
   le_top := fun ⟨p, hp⟩ => by simp
@@ -148,8 +148,8 @@ instance [Nontrivial
   body: ⟨⊥, ⊤, by rw [ne_eq, Subtype.ext_iff]; exact bot_ne_top⟩
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nontrivial P.invtRootSubmodule where
+实例 [非平凡
+  签名: M] : 非平凡 P.invtRootSubmodule where
   定义体: ⟨⊥, ⊤, by rw [ne_eq, Subtype.ext_iff]; exact bot_ne_top⟩
 
 Depends on / 依赖: Subtype, Subtype.ext_iff, bot_ne_top, ext_iff, ne_eq
@@ -167,7 +167,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ((⊥ : P.invtRootSubmodule) : Submodule R M) = ⊥
+  结论: ((⊥ : P.invtRootSubmodule) : 子模 R M) = ⊥
   证明: rfl
 -/
 @[simp] lemma coe_bot : ((⊥ : P.invtRootSubmodule) : Submodule R M) = ⊥ := rfl
@@ -182,7 +182,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ((⊤ : P.invtRootSubmodule) : Submodule R M) = ⊤
+  结论: ((⊤ : P.invtRootSubmodule) : 子模 R M) = ⊤
   证明: rfl
 -/
 @[simp] lemma coe_top : ((⊤ : P.invtRootSubmodule) : Submodule R M) = ⊤ := rfl
@@ -199,8 +199,8 @@ lemma eq_zero_iff_forall_coroot'_eq_zero
   simpa [← P.corootSpan_dualAnnihilator_map_eq_iInf_ker_coroot'] using h
 
 中文:
-引理 eq_zero_iff_forall_coroot'_eq_zero
-  条件: [P.IsRootSystem] {x : M}
+引理 eq_zero_iff_对任意_coroot'_eq_zero
+  条件: [P.是RootSystem] {x : M}
   证明: by
   refine ⟨fun h => by simp [h], fun h => ?_⟩
   replace h : x in ⨅ i, ker (P.coroot' i) := by aesop
@@ -226,7 +226,7 @@ lemma invtRootSubmodule.le_ker_coroot'
 
 中文:
 引理 invtRootSubmodule.le_ker_coroot'
-  结论: {K : 类型} [Field K] [NeZero (2 : K)]
+  结论: {K : 类型} [域 K] [NeZero (2 : K)]
   证明: (Submodule.mem_invtSubmodule_reflection_iff (P.flip.root_coroot_two k)
     (Submodule.disjoint_span_singleton_of_notMem hk)).mp
     (P.mem_invtRootSubmodule_iff.mp q.property k)
@@ -255,7 +255,7 @@ lemma invtRootSubmodule.eq_bot_iff
 
 中文:
 引理 invtRootSubmodule.eq_bot_iff
-  结论: {K : 类型} [Field K] [NeZero (2 : K)]
+  结论: {K : 类型} [域 K] [NeZero (2 : K)]
   证明: by
   refine ⟨fun h => by simp [h, P.ne_zero], fun h => ?_⟩
   simp_rw [Subtype.mk_eq_bot_iff (invtRootSubmodule.bot_mem P), Submodule.eq_bot_iff,
@@ -283,7 +283,7 @@ lemma invtRootSubmodule.eq_top_iff
 
 中文:
 引理 invtRootSubmodule.eq_top_iff
-  结论: {K : 类型} [Field K] [Module K M] [Module K N]
+  结论: {K : 类型} [域 K] [模 K M] [模 K N]
   证明: ⟨fun h => by simp [h], fun h => by simpa using Submodule.span_mono h (R := K)⟩
 
 Depends on / 依赖: SigmaFinite, SigmaFinite.of_isFiniteMeasureOnCompacts, Submodule, Submodule.span_mono, TopologicalSpace, of_isFiniteMeasureOnCompacts, span_mono
@@ -310,7 +310,7 @@ lemma invtRootSubmodule.eq_span_root
 
 中文:
 引理 invtRootSubmodule.eq_span_root
-  结论: {K : 类型} [Field K] [NeZero (2 : K)]
+  结论: {K : 类型} [域 K] [NeZero (2 : K)]
   证明: by
   set Q := (q : Submodule K M)
   have hSQ : span K (P.root '' {i | P.root i in Q}) <= Q :=
@@ -366,7 +366,7 @@ lemma isSimpleModule_weylGroupRootRep_iff
 
 中文:
 引理 isSimpleModule_weylGroupRootRep_iff
-  条件: [Nontrivial M]
+  条件: [非平凡 M]
   证明: by
   rw [isSimpleModule_iff]; rw [← P.weylGroupRootRep.mapSubmodule.isSimpleOrder_iff]
   refine ⟨fun h q hq₁ hq₂ => ?_, fun h => ⟨fun q => ?_⟩⟩
@@ -410,13 +410,13 @@ class IsIrreducible
     - eq_top_of_invtSubmodule_coreflection((q : Submodule R N)) : (forall i, q in invtSubmodule (P.coreflection i)) -> q != ⊥ -> q = ⊤
 
 中文:
-类 IsIrreducible
+类 是不可约
   参数: : 命题 where
   公理与运算 (4 个):
-    - nontrivial : Nontrivial M
-    - nontrivial' : Nontrivial N
-    - eq_top_of_invtSubmodule_reflection((q : Submodule R M)) : (对任意 i, q in invtSubmodule (P.reflection i)) -> q != ⊥ -> q = ⊤
-    - eq_top_of_invtSubmodule_coreflection((q : Submodule R N)) : (对任意 i, q in invtSubmodule (P.coreflection i)) -> q != ⊥ -> q = ⊤
+    - nontrivial : 非平凡 M
+    - nontrivial' : 非平凡 N
+    - eq_top_of_invtSubmodule_reflection((q : 子模 R M)) : (对任意 i, q in invtSubmodule (P.reflection i)) -> q != ⊥ -> q = ⊤
+    - eq_top_of_invtSubmodule_coreflection((q : 子模 R N)) : (对任意 i, q in invtSubmodule (P.coreflection i)) -> q != ⊥ -> q = ⊤
 -/
 @[mk_iff] class IsIrreducible : Prop where
   nontrivial : Nontrivial M
@@ -438,8 +438,8 @@ instance [P.IsIrreducible]
   eq_top_of_invtSubmodule_coreflection := IsIrreducible.eq_top_of_invtSubmodule_reflection (P := P)
 
 中文:
-实例 [P.IsIrreducible]
-  签名: : P.flip.IsIrreducible where
+实例 [P.是不可约]
+  签名: : P.flip.是不可约 where
   定义体: IsIrreducible.nontrivial' P
   nontrivial' := IsIrreducible.nontrivial P
   eq_top_of_invtSubmodule_reflection := IsIrreducible.eq_top_of_invtSubmodule_coreflection (P := P)
@@ -466,7 +466,7 @@ lemma isSimpleModule_weylGroupRootRep
 
 中文:
 引理 isSimpleModule_weylGroupRootRep
-  条件: [P.IsIrreducible]
+  条件: [P.是不可约]
   证明: have := IsIrreducible.nontrivial P
   P.isSimpleModule_weylGroupRootRep_iff.mpr IsIrreducible.eq_top_of_invtSubmodule_reflection
 
@@ -490,7 +490,7 @@ lemma not_isIrreducible_of_subsingleton
 
 中文:
 引理 not_isIrreducible_of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   证明: fun contra => not_nontrivial _ contra.nontrivial
 
 Depends on / 依赖: contra, contra.nontrivial, nontrivial, not_nontrivial
@@ -511,8 +511,8 @@ instance [Nonempty
     (P.corootSpan R) P.corootSpan_mem_invtSubmodule_coreflection (P.corootSpan_ne_bot R)
 
 中文:
-实例 [Nonempty
-  签名: ι] [NeZero (2 : R)] [P.IsIrreducible] : P.IsRootSystem where
+实例 [非空
+  签名: ι] [NeZero (2 : R)] [P.是不可约] : P.是RootSystem where
   定义体: IsIrreducible.eq_top_of_invtSubmodule_reflection
     (P.rootSpan R) P.rootSpan_mem_invtSubmodule_reflection (P.rootSpan_ne_bot R)
   span_coroot_eq_top := IsIrreducible.eq_top_of_invtSubmodule_coreflection
@@ -538,7 +538,7 @@ exact (Submodule.dualAnnihilator_map_dualMap_le _ _).trans Submodule.dualAnnihil
 
 中文:
 引理 invtSubmodule_reflection_of_invtSubmodule_coreflection
-  结论: (i : ι) (q : Submodule R N)
+  结论: (i : ι) (q : 子模 R N)
   证明: by
   rw [LinearEquiv.map_mem_invtSubmodule_iff]; rw [LinearEquiv.symm_symm]; rw [toPerfPair_conj_reflection]; rw [Module.End.mem_invtSubmodule]; rw [← Submodule.map_le_iff_le_comap]
 exact (Submodule.dualAnnihilator_map_dualMap_le _ _).trans Submodule.dualAnnihilator_anti hq
@@ -566,8 +566,8 @@ lemma IsIrreducible.mk'
       fun i => invtSubmodule_reflection_of_inv
 
 中文:
-引理 IsIrreducible.mk'
-  结论: {K : 类型} [Field K] [Module K M] [Module K N] [Nontrivial M]
+引理 是不可约.mk'
+  结论: {K : 类型} [域 K] [模 K M] [模 K N] [非平凡 M]
   证明: inferInstance
   nontrivial' := (Module.nontrivial_dual_iff K).mp P.toPerfPair.symm.nontrivial
   eq_top_of_invtSubmodule_reflection := h
@@ -703,8 +703,8 @@ B.apply_root_ne_zero i by simpa [span_orbit_eq_top] using this
   simp only [P.weylGroup_apply_root, SetLike.mem_coe, Li
 
 中文:
-引理 exists_form_eq_form_and_form_ne_zero
-  条件: (B : P.InvariantForm) (i j : ι)
+引理 存在_form_eq_form_and_form_ne_zero
+  条件: (B : P.不变形式) (i j : ι)
   证明: by
   by_contra! contra
   suffices span R (orbit P.weylGroup (P.root j)) <= ker (B.form (P.root i)) from
@@ -741,8 +741,8 @@ lemma span_root_image_eq_top_of_forall_orthogonal
       rwa [Submodule.mem
 
 中文:
-引理 span_root_image_eq_top_of_forall_orthogonal
-  结论: (s : Set ι)
+引理 span_root_image_eq_top_of_对任意_orthogonal
+  结论: (s : 集合 ι)
   证明: by
   have hq (j : ι) : span R (P.root '' s) in Module.End.invtSubmodule (P.reflection j) := by
     by_cases hj : P.root j in span R (P.root '' s)
@@ -777,7 +777,7 @@ lemma eq_top_of_mem_invtSubmodule_of_forall_eq_univ
   · repl
 
 中文:
-引理 eq_top_of_mem_invtSubmodule_of_forall_eq_univ
+引理 eq_top_of_mem_invtSubmodule_of_对任意_eq_univ
   证明: by
   obtain ⟨Φ, b, c⟩ := P.exist_set_root_not_disjoint_and_le_ker_coroot'_of_invtSubmodule q h₁
   rcases Φ.eq_empty_or_nonempty with rfl | hΦ

@@ -79,7 +79,7 @@ theorem atImInfty_basis
 
 中文:
 定理 atImInfty_basis
-  结论: atImInfty.HasBasis (fun _ => True) fun i : 实数 => im ⁻¹' Set.Ici i
+  结论: atImInfty.有基 (fun _ => 真) fun i : 实数 => im ⁻¹' 集合.左闭右无界区间 i
   证明: Filter.HasBasis.comap UpperHalfPlane.im Filter.atTop_basis
 
 Depends on / 依赖: Filter, Filter.HasBasis.comap, Filter.atTop_basis, HasBasis, UpperHalfPlane, UpperHalfPlane.im, atTop_basis
@@ -99,7 +99,7 @@ theorem atImInfty_mem
 
 中文:
 定理 atImInfty_mem
-  条件: (S : Set ℍ)
+  条件: (S : 集合 ℍ)
   结论: S in atImInfty ↔ 存在 A : 实数, 对任意 z : ℍ, A <= im z -> z in S
   证明: by
   simp only [atImInfty_basis.mem_iff, true_and]; rfl
@@ -119,7 +119,7 @@ definition IsBoundedAtImInfty
 
 中文:
 定义 IsBoundedAtImInfty
-  签名: {α : 类型} [Norm α] (f : ℍ -> α)
+  签名: {α : 类型} [范数 α] (f : ℍ -> α)
   定义体: BoundedAtFilter atImInfty f
 
 Depends on / 依赖: BoundedAtFilter, atImInfty
@@ -137,7 +137,7 @@ definition IsZeroAtImInfty
 
 中文:
 定义 IsZeroAtImInfty
-  签名: {α : 类型} [Zero α] [TopologicalSpace α] (f : ℍ -> α)
+  签名: {α : 类型} [零 α] [拓扑空间 α] (f : ℍ -> α)
   定义体: ZeroAtFilter atImInfty f
 
 Depends on / 依赖: ZeroAtFilter, atImInfty
@@ -155,7 +155,7 @@ theorem zero_form_isBoundedAtImInfty
 
 中文:
 定理 zero_form_isBoundedAtImInfty
-  条件: {α : 类型} [NormedField α]
+  条件: {α : 类型} [赋范域 α]
   证明: const_boundedAtFilter atImInfty (0 : α)
 
 Depends on / 依赖: atImInfty, const_boundedAtFilter
@@ -174,7 +174,7 @@ definition zeroAtImInftySubmodule
 
 中文:
 定义 zeroAtImInftySubmodule
-  签名: (α : 类型) [NormedField α]
+  签名: (α : 类型) [赋范域 α]
   定义体: zeroAtFilterSubmodule _ atImInfty
 
 Depends on / 依赖: atImInfty, zeroAtFilterSubmodule
@@ -192,7 +192,7 @@ definition boundedAtImInftySubalgebra
 
 中文:
 定义 boundedAtImInftySubalgebra
-  签名: (α : 类型) [NormedField α]
+  签名: (α : 类型) [赋范域 α]
   定义体: boundedFilterSubalgebra _ atImInfty
 
 Depends on / 依赖: atImInfty, boundedFilterSubalgebra
@@ -212,7 +212,7 @@ theorem isBoundedAtImInfty_iff
 
 中文:
 定理 isBoundedAtImInfty_iff
-  条件: {α : 类型} [Norm α] {f : ℍ -> α}
+  条件: {α : 类型} [范数 α] {f : ℍ -> α}
   证明: by
   simp [IsBoundedAtImInfty, BoundedAtFilter, Asymptotics.isBigO_iff, Filter.Eventually,
     atImInfty_mem]
@@ -234,7 +234,7 @@ theorem isZeroAtImInfty_iff
 
 中文:
 定理 isZeroAtImInfty_iff
-  条件: {α : 类型} [SeminormedAddGroup α] {f : ℍ -> α}
+  条件: {α : 类型} [半赋范加群 α] {f : ℍ -> α}
   证明: (atImInfty_basis.tendsto_iff Metric.nhds_basis_closedBall).trans by simp
 
 Depends on / 依赖: Metric, Metric.nhds_basis_closedBall, atImInfty_basis, atImInfty_basis.tendsto_iff, nhds_basis_closedBall, tendsto_iff
@@ -253,7 +253,7 @@ theorem IsZeroAtImInfty.isBoundedAtImInfty
 
 中文:
 定理 IsZeroAtImInfty.isBoundedAtImInfty
-  结论: {α : 类型} [SeminormedAddGroup α] {f : ℍ -> α}
+  结论: {α : 类型} [半赋范加群 α] {f : ℍ -> α}
   证明: hf.boundedAtFilter
 
 Depends on / 依赖: boundedAtFilter, hf.boundedAtFilter
@@ -328,7 +328,7 @@ lemma tendsto_smul_atImInfty
 
 中文:
 引理 tendsto_smul_atImInfty
-  条件: {g : GL (Fin 2) 实数} (hg : g 1 0 = 0)
+  条件: {g : GL (有限集 2) 实数} (hg : g 1 0 = 0)
   证明: by
   suffices Tendsto (fun τ => |g 0 0 / g 1 1| * τ.im) atImInfty atTop by
     simpa [atImInfty, Function.comp_def, im_smul, num, denom, hg, abs_div, abs_mul,

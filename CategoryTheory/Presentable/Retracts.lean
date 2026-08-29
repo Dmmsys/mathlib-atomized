@@ -38,7 +38,7 @@ lemma Retract.isCardinalPresentable
       exac
 
 中文:
-引理 Retract.isCardinalPresentable
+引理 收缩.isCardinalPresentable
   证明: ⟨fun {F} => ⟨fun {c} hc => ⟨by
     have := essentiallySmallSelf J
     have := isFiltered_of_isCardinalFiltered J κ

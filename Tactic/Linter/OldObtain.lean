@@ -67,7 +67,7 @@ definition isObtainWithoutProof
 
 中文:
 定义 isObtainWithoutProof
-  签名: : Syntax -> 布尔
+  签名: : Syntax -> 布尔值
 -/
 def isObtainWithoutProof : Syntax -> Bool
   -- Using the `obtain` tactic without a proof requires proving a type;

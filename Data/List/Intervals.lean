@@ -39,7 +39,7 @@ definition Ico
   body: range' n (m - n)
 
 中文:
-定义 Ico
+定义 左闭右开区间
   签名: (n m : 自然数)
   定义体: range' n (m - n)
 -/
@@ -62,7 +62,7 @@ theorem zero_bot
 中文:
 定理 zero_bot
   条件: (n : 自然数)
-  结论: Ico 0 n = range n
+  结论: 左闭右开区间 0 n = range n
   证明: by rw [Ico, Nat.sub_zero, range_eq_range']
 
 @[simp]
@@ -86,7 +86,7 @@ theorem length
 中文:
 定理 length
   条件: (n m : 自然数)
-  结论: length (Ico n m) = m - n
+  结论: length (左闭右开区间 n m) = m - n
   证明: by
   dsimp [Ico]
   simp [length_range']
@@ -111,7 +111,7 @@ theorem pairwise_lt
 中文:
 定理 pairwise_lt
   条件: (n m : 自然数)
-  结论: Pairwise (· < ·) (Ico n m)
+  结论: 两两 (· < ·) (左闭右开区间 n m)
   证明: by
   dsimp [Ico]
   simp [pairwise_lt_range']
@@ -138,7 +138,7 @@ theorem nodup
 中文:
 定理 nodup
   条件: (n m : 自然数)
-  结论: Nodup (Ico n m)
+  结论: Nodup (左闭右开区间 n m)
   证明: by
   dsimp [Ico]
   simp [nodup_range']
@@ -166,7 +166,7 @@ theorem mem
 中文:
 定理 mem
   条件: {n m l : 自然数}
-  结论: l in Ico n m ↔ n <= l ∧ l < m
+  结论: l in 左闭右开区间 n m ↔ n <= l ∧ l < m
   证明: by
   suffices n <= l ∧ l < n + (m - n) ↔ n <= l ∧ l < m by simp [Ico, this]
   lia
@@ -188,7 +188,7 @@ theorem eq_nil_of_le
 中文:
 定理 eq_nil_of_le
   条件: {n m : 自然数} (h : m <= n)
-  结论: Ico n m = []
+  结论: 左闭右开区间 n m = []
   证明: by
   simp [Ico, Nat.sub_eq_zero_iff_le.mpr h]
 
@@ -210,7 +210,7 @@ theorem map_add
 中文:
 定理 map_add
   条件: (n m k : 自然数)
-  结论: (Ico n m).map (k + ·) = Ico (n + k) (m + k)
+  结论: (左闭右开区间 n m).map (k + ·) = 左闭右开区间 (n + k) (m + k)
   证明: by
   rw [Ico]; rw [Ico]; rw [map_add_range']; rw [Nat.add_sub_add_right m k]; rw [Nat.add_comm n k]
 
@@ -259,7 +259,7 @@ theorem self_empty
 中文:
 定理 self_empty
   条件: {n : 自然数}
-  结论: Ico n n = []
+  结论: 左闭右开区间 n n = []
   证明: eq_nil_of_le (le_refl n)
 
 @[simp]
@@ -282,7 +282,7 @@ theorem eq_empty_iff
 中文:
 定理 eq_empty_iff
   条件: {n m : 自然数}
-  结论: Ico n m = [] ↔ m <= n
+  结论: 左闭右开区间 n m = [] ↔ m <= n
   证明: Iff.intro (fun h => Nat.sub_eq_zero_iff_le.mp <| by rw [← length, h, List.length]) eq_nil_of_le
 
 Depends on / 依赖: Iff.intro, List.length, Nat.sub_eq_zero_iff_le.mp, eq_nil_of_le, length, sub_eq_zero_iff_le
@@ -345,7 +345,7 @@ theorem inter_consecutive
 中文:
 定理 inter_consecutive
   条件: (n m l : 自然数)
-  结论: Ico n m inter Ico m l = []
+  结论: 左闭右开区间 n m inter 左闭右开区间 m l = []
   证明: by
   apply eq_nil_iff_forall_not_mem.2
   intro a
@@ -378,7 +378,7 @@ theorem bagInter_consecutive
 @[simp]
 
 中文:
-定理 bagInter_consecutive
+定理 bag整数er_consecutive
   条件: (n m l : 自然数)
   证明: (bagInter_nil_iff_inter_nil _ _).2 (by convert! inter_consecutive n m l)
 
@@ -405,7 +405,7 @@ theorem succ_singleton
 中文:
 定理 succ_singleton
   条件: {n : 自然数}
-  结论: Ico n (n + 1) = [n]
+  结论: 左闭右开区间 n (n + 1) = [n]
   证明: by
   dsimp [Ico]
   simp [Nat.add_sub_cancel_left]
@@ -430,7 +430,7 @@ theorem succ_top
 中文:
 定理 succ_top
   条件: {n m : 自然数} (h : n <= m)
-  结论: Ico n (m + 1) = Ico n m ++ [m]
+  结论: 左闭右开区间 n (m + 1) = 左闭右开区间 n m ++ [m]
   证明: by
   rwa [← succ_singleton, append_consecutive]
   exact Nat.le_succ _
@@ -457,7 +457,7 @@ theorem eq_cons
 中文:
 定理 eq_cons
   条件: {n m : 自然数} (h : n < m)
-  结论: Ico n m = n :: Ico (n + 1) m
+  结论: 左闭右开区间 n m = n :: 左闭右开区间 (n + 1) m
   证明: by
   rw [← append_consecutive (Nat.le_succ n) h]; rw [succ_singleton]
   rfl
@@ -484,7 +484,7 @@ theorem pred_singleton
 中文:
 定理 pred_singleton
   条件: {m : 自然数} (h : 0 < m)
-  结论: Ico (m - 1) m = [m - 1]
+  结论: 左闭右开区间 (m - 1) m = [m - 1]
   证明: by
   simp [Ico, Nat.sub_sub_self (succ_le_of_lt h)]
 
@@ -511,7 +511,7 @@ theorem isChain_succ
 中文:
 定理 isChain_succ
   条件: (n m : 自然数)
-  结论: IsChain (fun a b => b = succ a) (Ico n m)
+  结论: IsChain (fun a b => b = succ a) (左闭右开区间 n m)
   证明: by
   by_cases! h : n < m
   · rw [eq_cons h]
@@ -542,7 +542,7 @@ theorem notMem_top
 中文:
 定理 notMem_top
   条件: {n m : 自然数}
-  结论: m ∉ Ico n m
+  结论: m ∉ 左闭右开区间 n m
   证明: by simp
 -/
 theorem notMem_top {n m : Nat} : m ∉ Ico n m := by simp
@@ -584,7 +584,7 @@ theorem filter_lt_of_le_bot
 中文:
 定理 filter_lt_of_le_bot
   条件: {n m l : 自然数} (hln : l <= n)
-  结论: ((Ico n m).filter fun x => x < l) = []
+  结论: ((左闭右开区间 n m).filter fun x => x < l) = []
   证明: filter_eq_nil_iff.2 fun k hk => by
      simp only [decide_eq_true_eq, not_lt]
      apply le_trans hln
@@ -699,7 +699,7 @@ theorem filter_le_of_top_le
 中文:
 定理 filter_le_of_top_le
   条件: {n m l : 自然数} (hml : m <= l)
-  结论: ((Ico n m).filter fun x => l <= x) = []
+  结论: ((左闭右开区间 n m).filter fun x => l <= x) = []
   证明: filter_eq_nil_iff.2 fun k hk => by
     rw [decide_eq_true_eq]
     exact not_le_of_gt (lt_of_lt_of_le (mem.1 hk).2 hml)
@@ -761,7 +761,7 @@ theorem filter_le
 中文:
 定理 filter_le
   条件: (n m l : 自然数)
-  结论: ((Ico n m).filter fun x => l <= x) = Ico (max n l) m
+  结论: ((左闭右开区间 n m).filter fun x => l <= x) = 左闭右开区间 (最大值 n l) m
   证明: by
   rcases le_total n l with hnl | hln
   · rw [max_eq_right hnl, filter_le_of_le hnl]
@@ -818,7 +818,7 @@ theorem filter_le_of_bot
 中文:
 定理 filter_le_of_bot
   条件: {n m : 自然数} (hnm : n < m)
-  结论: ((Ico n m).filter fun x => x <= n) = [n]
+  结论: ((左闭右开区间 n m).filter fun x => x <= n) = [n]
   证明: by
   rw [← filter_lt_of_succ_bot hnm]
   exact filter_congr fun _ _ => by
@@ -844,7 +844,7 @@ theorem trichotomy
 中文:
 定理 trichotomy
   条件: (n a b : 自然数)
-  结论: n < a ∨ b <= n ∨ n in Ico a b
+  结论: n < a ∨ b <= n ∨ n in 左闭右开区间 a b
   证明: by
   grind [mem]
 -/

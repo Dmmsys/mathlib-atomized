@@ -181,7 +181,7 @@ definition Prime
   body: Nat.Prime n
 
 中文:
-定义 Prime
+定义 素
   签名: (n : PosNum)
   定义体: Nat.Prime n
 
@@ -202,7 +202,7 @@ instance decidablePrime
 
 中文:
 实例 decidablePrime
-  签名: : DecidablePred PosNum.Prime
+  签名: : DecidablePred PosNum.素
   定义体: to_nat_pos n
           lia
         rw [← minFac_to_nat]; rw [to_nat_inj]; rfl
@@ -272,7 +272,7 @@ definition Prime
   body: Nat.Prime n
 
 中文:
-定义 Prime
+定义 素
   签名: (n : Num)
   定义体: Nat.Prime n
 
@@ -290,7 +290,7 @@ instance decidablePrime
 
 中文:
 实例 decidablePrime
-  签名: : DecidablePred Num.Prime
+  签名: : DecidablePred Num.素
 -/
 instance decidablePrime : DecidablePred Num.Prime
   | 0 => Decidable.isFalse Nat.not_prime_zero

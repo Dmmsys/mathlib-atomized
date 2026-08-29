@@ -56,10 +56,10 @@ class CompactIccSpace
     - isCompact_Icc : forall {a b : α}, IsCompact (Icc a b)
 
 中文:
-类 CompactIccSpace
-  参数: (α : 类型) [TopologicalSpace α] [Preorder α]
+类 余mpactIcc空间
+  参数: (α : 类型) [拓扑空间 α] [预序 α]
   公理与运算 (1 个):
-    - isCompact_Icc : 对任意 {a b : α}, IsCompact (Icc a b)
+    - isCompact_Icc : 对任意 {a b : α}, 是紧集 (闭区间 a b)
 -/
 class CompactIccSpace (α : Type*) [TopologicalSpace α] [Preorder α] : Prop where
   /-- A closed interval `Set.Icc a b` is a compact set for all `a` and `b`. -/
@@ -80,8 +80,8 @@ lemma CompactIccSpace.mk'
   proof: by_cases h fun hab => by rw [Icc_eq_empty hab]; exact isCompact_empty
 
 中文:
-引理 CompactIccSpace.mk'
-  结论: [TopologicalSpace α] [Preorder α]
+引理 余mpactIcc空间.mk'
+  结论: [拓扑空间 α] [预序 α]
   证明: by_cases h fun hab => by rw [Icc_eq_empty hab]; exact isCompact_empty
 
 Depends on / 依赖: Icc_eq_empty, isCompact_empty
@@ -100,8 +100,8 @@ lemma CompactIccSpace.mk''
   proof: .mk' fun hab => hab.eq_or_lt.elim (by rintro rfl; simp) h
 
 中文:
-引理 CompactIccSpace.mk''
-  结论: [TopologicalSpace α] [PartialOrder α]
+引理 余mpactIcc空间.mk''
+  结论: [拓扑空间 α] [偏序 α]
   证明: .mk' fun hab => hab.eq_or_lt.elim (by rintro rfl; simp) h
 
 Depends on / 依赖: eq_or_lt, hab.eq_or_lt.elim
@@ -122,8 +122,8 @@ instance [TopologicalSpace
     exact Icc_toDual (α := α)
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Preorder α] [CompactIccSpace α] : CompactIccSpace (αᵒᵈ) where
+实例 [拓扑空间
+  签名: α] [预序 α] [余mpactIcc空间 α] : 余mpactIcc空间 (αᵒᵈ) where
   定义体: by
     intro a b
     convert! isCompact_Icc (α := α) (a := b) (b := a) using 1
@@ -155,8 +155,8 @@ instance Pi.compact_Icc_space'
   body: inferInstance
 
 中文:
-实例 Pi.compact_Icc_space'
-  签名: {α β : 类型} [Preorder β] [TopologicalSpace β]
+实例 依赖函数类型.compact_Icc_space'
+  签名: {α β : 类型} [预序 β] [拓扑空间 β]
   定义体: inferInstance
 -/
 instance Pi.compact_Icc_space' {α β : Type*} [Preorder β] [TopologicalSpace β]
@@ -179,7 +179,7 @@ theorem isCompact_uIcc
 
 中文:
 定理 isCompact_uIcc
-  结论: {α : 类型} [LinearOrder α] [TopologicalSpace α] [CompactIccSpace α]
+  结论: {α : 类型} [线性序 α] [拓扑空间 α] [余mpactIcc空间 α]
   证明: isCompact_Icc
 
 Depends on / 依赖: isCompact_Icc
@@ -239,7 +239,7 @@ theorem isCompact_Ico_iff
 中文:
 定理 isCompact_Ico_iff
   条件: {a b : α}
-  结论: IsCompact (Set.Ico a b) ↔ b <= a
+  结论: 是紧集 (集合.左闭右开区间 a b) ↔ b <= a
   证明: ⟨fun h => isClosed_Ico_iff.mp h.isClosed, by simp_all⟩
 
 Depends on / 依赖: h.isClosed, isClosed, isClosed_Ico_iff, isClosed_Ico_iff.mp
@@ -261,7 +261,7 @@ theorem isCompact_Ioc_iff
 中文:
 定理 isCompact_Ioc_iff
   条件: {a b : α}
-  结论: IsCompact (Set.Ioc a b) ↔ b <= a
+  结论: 是紧集 (集合.左开右闭区间 a b) ↔ b <= a
   证明: ⟨fun h => isClosed_Ioc_iff.mp h.isClosed, by simp_all⟩
 
 Depends on / 依赖: h.isClosed, isClosed, isClosed_Ioc_iff, isClosed_Ioc_iff.mp
@@ -283,7 +283,7 @@ theorem isCompact_Ioo_iff
 中文:
 定理 isCompact_Ioo_iff
   条件: {a b : α}
-  结论: IsCompact (Set.Ioo a b) ↔ b <= a
+  结论: 是紧集 (集合.开区间 a b) ↔ b <= a
   证明: ⟨fun h => isClosed_Ioo_iff.mp h.isClosed, by simp_all⟩
 
 Depends on / 依赖: h.isClosed, isClosed, isClosed_Ioo_iff, isClosed_Ioo_iff.mp
@@ -318,8 +318,8 @@ theorem IsCompact.exists_isLeast
   rcases hs.elim_directed_family_closed (fun x : s => Iic
 
 中文:
-定理 IsCompact.exists_isLeast
-  结论: [ClosedIicTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.存在_isLeast
+  结论: [ClosedIic拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: by
   have : Nonempty s := ne_s.to_subtype
   suffices (s inter ⋂ x in s, Iic x).Nonempty from
@@ -352,8 +352,8 @@ theorem IsCompact.exists_isGreatest
   proof: IsCompact.exists_isLeast (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.exists_isGreatest
-  结论: [ClosedIciTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.存在_isGreatest
+  结论: [ClosedIci拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.exists_isLeast (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.exists_isLeast, exists_isLeast, ne_s
@@ -371,8 +371,8 @@ theorem IsCompact.exists_isGLB
   proof: (hs.exists_isLeast ne_s).imp (fun x (hx : IsLeast s x) => ⟨hx.1, hx.isGLB⟩)
 
 中文:
-定理 IsCompact.exists_isGLB
-  结论: [ClosedIicTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.存在_isGLB
+  结论: [ClosedIic拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: (hs.exists_isLeast ne_s).imp (fun x (hx : IsLeast s x) => ⟨hx.1, hx.isGLB⟩)
 
 Depends on / 依赖: IsLeast, exists_isLeast, hs.exists_isLeast, hx.isGLB, ne_s
@@ -390,8 +390,8 @@ theorem IsCompact.exists_isLUB
   proof: IsCompact.exists_isGLB (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.exists_isLUB
-  结论: [ClosedIciTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.存在_isLUB
+  结论: [ClosedIci拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.exists_isGLB (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.exists_isGLB, exists_isGLB, ne_s
@@ -416,7 +416,7 @@ refine fun s hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
 
 中文:
 定理 cocompact_le_atBot_atTop
-  条件: [CompactIccSpace α]
+  条件: [余mpactIcc空间 α]
   证明: by
 refine fun s hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> intro
   · exact ⟨∅, isCompact_empty, fun x _ => (IsEmpty.false x).elim⟩
@@ -451,7 +451,7 @@ refine fun _ hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> 
 
 中文:
 定理 cocompact_le_atBot
-  条件: [OrderTop α] [CompactIccSpace α]
+  条件: [有顶序 α] [余mpactIcc空间 α]
   证明: by
 refine fun _ hs => mem_cocompact.mpr (isEmpty_or_nonempty α).casesOn ?_ ?_ <;> intro
   · exact ⟨∅, isCompact_empty, fun x _ => (IsEmpty.false x).elim⟩
@@ -479,7 +479,7 @@ theorem cocompact_le_atTop
 
 中文:
 定理 cocompact_le_atTop
-  条件: [OrderBot α] [CompactIccSpace α]
+  条件: [有底序 α] [余mpactIcc空间 α]
   证明: cocompact_le_atBot (α := αᵒᵈ)
 
 Depends on / 依赖: cocompact_le_atBot
@@ -505,7 +505,7 @@ theorem atBot_le_cocompact
 
 中文:
 定理 atBot_le_cocompact
-  条件: [NoMinOrder α] [ClosedIicTopology α]
+  条件: [NoMin序 α] [ClosedIic拓扑 α]
   证明: by
   refine fun s hs => ?_
   obtain ⟨t, ht, hts⟩ := mem_cocompact.mp hs
@@ -540,7 +540,7 @@ theorem atTop_le_cocompact
 
 中文:
 定理 atTop_le_cocompact
-  条件: [NoMaxOrder α] [ClosedIciTopology α]
+  条件: [NoMax序 α] [ClosedIci拓扑 α]
   证明: atBot_le_cocompact (α := αᵒᵈ)
 
 Depends on / 依赖: atBot_le_cocompact
@@ -561,7 +561,7 @@ theorem atBot_atTop_le_cocompact
 
 中文:
 定理 atBot_atTop_le_cocompact
-  结论: [NoMinOrder α] [NoMaxOrder α]
+  结论: [NoMin序 α] [NoMax序 α]
   证明: sup_le atBot_le_cocompact atTop_le_cocompact
 
 @[simp 900]
@@ -585,7 +585,7 @@ theorem cocompact_eq_atBot_atTop
 
 中文:
 定理 cocompact_eq_atBot_atTop
-  结论: [NoMaxOrder α] [NoMinOrder α]
+  结论: [NoMax序 α] [NoMin序 α]
   证明: cocompact_le_atBot_atTop.antisymm atBot_atTop_le_cocompact
 
 @[simp]
@@ -609,7 +609,7 @@ theorem cocompact_eq_atBot
 
 中文:
 定理 cocompact_eq_atBot
-  结论: [NoMinOrder α] [OrderTop α]
+  结论: [NoMin序 α] [有顶序 α]
   证明: cocompact_le_atBot.antisymm atBot_le_cocompact
 
 @[simp]
@@ -631,7 +631,7 @@ theorem cocompact_eq_atTop
 
 中文:
 定理 cocompact_eq_atTop
-  结论: [NoMaxOrder α] [OrderBot α]
+  结论: [NoMax序 α] [有底序 α]
   证明: cocompact_le_atTop.antisymm atTop_le_cocompact
 
 Depends on / 依赖: antisymm, atTop_le_cocompact, cocompact_le_atTop, cocompact_le_atTop.antisymm
@@ -652,8 +652,8 @@ theorem IsCompact.exists_isMinOn
   rwa [(image_id' s).symm]
 
 中文:
-定理 IsCompact.exists_isMinOn
-  结论: [ClosedIicTopology α] {s : Set β} (hs : IsCompact s)
+定理 是紧集.存在_isMinOn
+  结论: [ClosedIic拓扑 α] {s : 集合 β} (hs : 是紧集 s)
   证明: by
   rcases (hs.image_of_continuousOn hf).exists_isLeast (ne_s.image f) with ⟨_, ⟨x, hxs, rfl⟩, hx⟩
   refine ⟨x, hxs, forall_mem_image.1 (fun _ hb => hx <| mem_image_of_mem f ?_)⟩
@@ -681,8 +681,8 @@ theorem IsCompact.exists_forall_le'
     exact ⟨f x, hf' x hx, hx'⟩
 
 中文:
-定理 IsCompact.exists_forall_le'
-  结论: [ClosedIicTopology α] [NoMaxOrder α] {f : β -> α}
+定理 是紧集.存在_对任意_le'
+  结论: [ClosedIic拓扑 α] [NoMax序 α] {f : β -> α}
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hs')
   · obtain ⟨a', ha'⟩ := exists_gt a
@@ -710,8 +710,8 @@ theorem IsCompact.exists_isMaxOn
   proof: IsCompact.exists_isMinOn (α := αᵒᵈ) hs ne_s hf
 
 中文:
-定理 IsCompact.exists_isMaxOn
-  结论: [ClosedIciTopology α] {s : Set β} (hs : IsCompact s)
+定理 是紧集.存在_isMaxOn
+  结论: [ClosedIci拓扑 α] {s : 集合 β} (hs : 是紧集 s)
   证明: IsCompact.exists_isMinOn (α := αᵒᵈ) hs ne_s hf
 
 Depends on / 依赖: IsCompact, IsCompact.exists_isMinOn, exists_isMinOn, ne_s
@@ -733,8 +733,8 @@ theorem ContinuousOn.exists_isMinOn'
     ((hK.i
 
 中文:
-定理 ContinuousOn.exists_isMinOn'
-  结论: [ClosedIicTopology α] {s : Set β} {f : β -> α}
+定理 ContinuousOn.存在_isMinOn'
+  结论: [ClosedIic拓扑 α] {s : 集合 β} {f : β -> α}
   证明: by
   rcases (hasBasis_cocompact.inf_principal _).eventually_iff.1 hc with ⟨K, hK, hKf⟩
   have hsub : insert x₀ (K inter s) subseteq s := insert_subset_iff.2 ⟨h₀, inter_subset_right⟩
@@ -763,8 +763,8 @@ theorem ContinuousOn.exists_isMaxOn'
   proof: ContinuousOn.exists_isMinOn' (α := αᵒᵈ) hf hsc h₀ hc
 
 中文:
-定理 ContinuousOn.exists_isMaxOn'
-  结论: [ClosedIciTopology α] {s : Set β} {f : β -> α}
+定理 ContinuousOn.存在_isMaxOn'
+  结论: [ClosedIci拓扑 α] {s : 集合 β} {f : β -> α}
   证明: ContinuousOn.exists_isMinOn' (α := αᵒᵈ) hf hsc h₀ hc
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.exists_isMinOn, exists_isMinOn
@@ -785,8 +785,8 @@ theorem Continuous.exists_forall_le'
   ⟨x, fun y => hx (mem_univ y)⟩
 
 中文:
-定理 Continuous.exists_forall_le'
-  结论: [ClosedIicTopology α] {f : β -> α} (hf : Continuous f)
+定理 连续.存在_对任意_le'
+  结论: [ClosedIic拓扑 α] {f : β -> α} (hf : 连续 f)
   证明: let ⟨x, _, hx⟩ := hf.continuousOn.exists_isMinOn' isClosed_univ (mem_univ x₀)
     (by rwa [principal_univ, inf_top_eq])
   ⟨x, fun y => hx (mem_univ y)⟩
@@ -808,8 +808,8 @@ theorem Continuous.exists_forall_ge'
   proof: Continuous.exists_forall_le' (α := αᵒᵈ) hf x₀ h
 
 中文:
-定理 Continuous.exists_forall_ge'
-  结论: [ClosedIciTopology α] {f : β -> α} (hf : Continuous f)
+定理 连续.存在_对任意_ge'
+  结论: [ClosedIci拓扑 α] {f : β -> α} (hf : 连续 f)
   证明: Continuous.exists_forall_le' (α := αᵒᵈ) hf x₀ h
 
 Depends on / 依赖: Continuous, Continuous.exists_forall_le, exists_forall_le
@@ -829,8 +829,8 @@ theorem Continuous.exists_forall_le
   exact hf.exists_forall_le' default (hlim.eventually <| eventually_ge_atTop _)
 
 中文:
-定理 Continuous.exists_forall_le
-  结论: [ClosedIicTopology α] [Nonempty β] {f : β -> α}
+定理 连续.存在_对任意_le
+  结论: [ClosedIic拓扑 α] [非空 β] {f : β -> α}
   证明: by
   inhabit β
   exact hf.exists_forall_le' default (hlim.eventually <| eventually_ge_atTop _)
@@ -851,8 +851,8 @@ theorem Continuous.exists_forall_ge
   proof: Continuous.exists_forall_le (α := αᵒᵈ) hf hlim
 
 中文:
-定理 Continuous.exists_forall_ge
-  结论: [ClosedIciTopology α] [Nonempty β] {f : β -> α}
+定理 连续.存在_对任意_ge
+  结论: [ClosedIci拓扑 α] [非空 β] {f : β -> α}
   证明: Continuous.exists_forall_le (α := αᵒᵈ) hf hlim
 
 Depends on / 依赖: Continuous, Continuous.exists_forall_le, exists_forall_le
@@ -875,8 +875,8 @@ theorem Continuous.exists_forall_le_of_hasCompactMulSupport
   exact ⟨x, hx⟩
 
 中文:
-定理 Continuous.exists_forall_le_of_hasCompactMulSupport
-  结论: [ClosedIicTopology α] [Nonempty β]
+定理 连续.存在_对任意_le_of_hasCompactMulSupport
+  结论: [ClosedIic拓扑 α] [非空 β]
   证明: by
   obtain ⟨_, ⟨x, rfl⟩, hx⟩ := (h.isCompact_range hf).exists_isLeast (range_nonempty _)
   rw [mem_lowerBounds]; rw [forall_mem_range] at hx
@@ -902,8 +902,8 @@ theorem Continuous.exists_forall_ge_of_hasCompactMulSupport
   proof: Continuous.exists_forall_le_of_hasCompactMulSupport (α := αᵒᵈ) hf h
 
 中文:
-定理 Continuous.exists_forall_ge_of_hasCompactMulSupport
-  结论: [ClosedIciTopology α] [Nonempty β]
+定理 连续.存在_对任意_ge_of_hasCompactMulSupport
+  结论: [ClosedIci拓扑 α] [非空 β]
   证明: Continuous.exists_forall_le_of_hasCompactMulSupport (α := αᵒᵈ) hf h
 
 Depends on / 依赖: Continuous, Continuous.exists_forall_le_of_hasCompactMulSupport, exists_forall_le_of_hasCompactMulSupport
@@ -926,8 +926,8 @@ theorem IsCompact.bddBelow
     exact ⟨a, has⟩
 
 中文:
-定理 IsCompact.bddBelow
-  条件: [ClosedIicTopology α] [Nonempty α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.bddBelow
+  条件: [ClosedIic拓扑 α] [非空 α] {s : 集合 α} (hs : 是紧集 s)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hne
   · exact bddBelow_empty
@@ -952,8 +952,8 @@ theorem IsCompact.bddAbove
   proof: IsCompact.bddBelow (α := αᵒᵈ) hs
 
 中文:
-定理 IsCompact.bddAbove
-  条件: [ClosedIciTopology α] [Nonempty α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.bddAbove
+  条件: [ClosedIci拓扑 α] [非空 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.bddBelow (α := αᵒᵈ) hs
 
 Depends on / 依赖: IsCompact, IsCompact.bddBelow, bddBelow
@@ -971,8 +971,8 @@ theorem IsCompact.bddBelow_image
   proof: (hK.image_of_continuousOn hf).bddBelow
 
 中文:
-定理 IsCompact.bddBelow_image
-  结论: [ClosedIicTopology α] [Nonempty α] {f : β -> α} {K : Set β}
+定理 是紧集.bddBelow_image
+  结论: [ClosedIic拓扑 α] [非空 α] {f : β -> α} {K : 集合 β}
   证明: (hK.image_of_continuousOn hf).bddBelow
 
 Depends on / 依赖: bddBelow, hK.image_of_continuousOn, image_of_continuousOn
@@ -990,8 +990,8 @@ theorem IsCompact.bddAbove_image
   proof: IsCompact.bddBelow_image (α := αᵒᵈ) hK hf
 
 中文:
-定理 IsCompact.bddAbove_image
-  结论: [ClosedIciTopology α] [Nonempty α] {f : β -> α} {K : Set β}
+定理 是紧集.bddAbove_image
+  结论: [ClosedIci拓扑 α] [非空 α] {f : β -> α} {K : 集合 β}
   证明: IsCompact.bddBelow_image (α := αᵒᵈ) hK hf
 
 Depends on / 依赖: IsCompact, IsCompact.bddBelow_image, bddBelow_image
@@ -1011,8 +1011,8 @@ theorem Continuous.bddBelow_range_of_hasCompactMulSupport
   proof: (h.isCompact_range hf).bddBelow
 
 中文:
-定理 Continuous.bddBelow_range_of_hasCompactMulSupport
-  结论: [ClosedIicTopology α] [One α]
+定理 连续.bddBelow_range_of_hasCompactMulSupport
+  结论: [ClosedIic拓扑 α] [幺 α]
   证明: (h.isCompact_range hf).bddBelow
 
 Depends on / 依赖: bddBelow, h.isCompact_range, isCompact_range
@@ -1032,8 +1032,8 @@ theorem Continuous.bddAbove_range_of_hasCompactMulSupport
   proof: Continuous.bddBelow_range_of_hasCompactMulSupport (α := αᵒᵈ) hf h
 
 中文:
-定理 Continuous.bddAbove_range_of_hasCompactMulSupport
-  结论: [ClosedIciTopology α] [One α]
+定理 连续.bddAbove_range_of_hasCompactMulSupport
+  结论: [ClosedIci拓扑 α] [幺 α]
   证明: Continuous.bddBelow_range_of_hasCompactMulSupport (α := αᵒᵈ) hf h
 
 Depends on / 依赖: Continuous, Continuous.bddBelow_range_of_hasCompactMulSupport, bddBelow_range_of_hasCompactMulSupport
@@ -1063,8 +1063,8 @@ theorem IsCompact.sSup_lt_iff_of_continuous
   rintro _ ⟨x', hx', rfl⟩; exact h2x hx'
 
 中文:
-定理 IsCompact.sSup_lt_iff_of_continuous
-  结论: [ClosedIciTopology α] {f : β -> α} {K : Set β}
+定理 是紧集.sSup_lt_iff_of_continuous
+  结论: [ClosedIci拓扑 α] {f : β -> α} {K : 集合 β}
   证明: by
   refine ⟨fun h x hx => (le_csSup (hK.bddAbove_image hf) <| mem_image_of_mem f hx).trans_lt h,
     fun h => ?_⟩
@@ -1092,8 +1092,8 @@ theorem IsCompact.lt_sInf_iff_of_continuous
   proof: IsCompact.sSup_lt_iff_of_continuous (α := αᵒᵈ) hK h0K hf y
 
 中文:
-定理 IsCompact.lt_sInf_iff_of_continuous
-  结论: [ClosedIicTopology α] {f : β -> α} {K : Set β}
+定理 是紧集.lt_sInf_iff_of_continuous
+  结论: [ClosedIic拓扑 α] {f : β -> α} {K : 集合 β}
   证明: IsCompact.sSup_lt_iff_of_continuous (α := αᵒᵈ) hK h0K hf y
 
 Depends on / 依赖: IsCompact, IsCompact.sSup_lt_iff_of_continuous, sSup_lt_iff_of_continuous
@@ -1124,8 +1124,8 @@ theorem IsCompact.sInf_mem
   ha.csInf_mem
 
 中文:
-定理 IsCompact.sInf_mem
-  结论: [ClosedIicTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.sInf_mem
+  结论: [ClosedIic拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: let ⟨_a, ha⟩ := hs.exists_isLeast ne_s
   ha.csInf_mem
 
@@ -1145,8 +1145,8 @@ theorem IsCompact.sSup_mem
   proof: IsCompact.sInf_mem (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.sSup_mem
-  结论: [ClosedIciTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.sSup_mem
+  结论: [ClosedIci拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.sInf_mem (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.sInf_mem, ne_s, sInf_mem
@@ -1164,8 +1164,8 @@ theorem IsCompact.isGLB_sInf
   proof: isGLB_csInf ne_s hs.bddBelow
 
 中文:
-定理 IsCompact.isGLB_sInf
-  结论: [ClosedIicTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.isGLB_sInf
+  结论: [ClosedIic拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: isGLB_csInf ne_s hs.bddBelow
 
 Depends on / 依赖: bddBelow, hs.bddBelow, isGLB_csInf, ne_s
@@ -1183,8 +1183,8 @@ theorem IsCompact.isLUB_sSup
   proof: IsCompact.isGLB_sInf (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.isLUB_sSup
-  结论: [ClosedIciTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.isLUB_sSup
+  结论: [ClosedIci拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.isGLB_sInf (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.isGLB_sInf, isGLB_sInf, ne_s
@@ -1202,8 +1202,8 @@ theorem IsCompact.isLeast_sInf
   proof: ⟨hs.sInf_mem ne_s, (hs.isGLB_sInf ne_s).1⟩
 
 中文:
-定理 IsCompact.isLeast_sInf
-  结论: [ClosedIicTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.isLeast_sInf
+  结论: [ClosedIic拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: ⟨hs.sInf_mem ne_s, (hs.isGLB_sInf ne_s).1⟩
 
 Depends on / 依赖: hs.isGLB_sInf, hs.sInf_mem, isGLB_sInf, ne_s, sInf_mem
@@ -1221,8 +1221,8 @@ theorem IsCompact.isGreatest_sSup
   proof: IsCompact.isLeast_sInf (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.isGreatest_sSup
-  结论: [ClosedIciTopology α] {s : Set α} (hs : IsCompact s)
+定理 是紧集.isGreatest_sSup
+  结论: [ClosedIci拓扑 α] {s : 集合 α} (hs : 是紧集 s)
   证明: IsCompact.isLeast_sInf (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.isLeast_sInf, isLeast_sInf, ne_s
@@ -1242,8 +1242,8 @@ theorem IsCompact.exists_sInf_image_eq_and_le
 hx.trans_le csInf_le (hs.image_of_continuousOn hf).bddBelow mem_image_of_mem f hy⟩
 
 中文:
-定理 IsCompact.exists_sInf_image_eq_and_le
-  结论: [ClosedIicTopology α] {s : Set β}
+定理 是紧集.存在_sInf_image_eq_and_le
+  结论: [ClosedIic拓扑 α] {s : 集合 β}
   证明: let ⟨x, hxs, hx⟩ := (hs.image_of_continuousOn hf).sInf_mem (ne_s.image f)
   ⟨x, hxs, hx.symm, fun _y hy =>
 hx.trans_le csInf_le (hs.image_of_continuousOn hf).bddBelow mem_image_of_mem f hy⟩
@@ -1266,8 +1266,8 @@ theorem IsCompact.exists_sSup_image_eq_and_ge
   proof: IsCompact.exists_sInf_image_eq_and_le (α := αᵒᵈ) hs ne_s hf
 
 中文:
-定理 IsCompact.exists_sSup_image_eq_and_ge
-  结论: [ClosedIciTopology α] {s : Set β}
+定理 是紧集.存在_sSup_image_eq_and_ge
+  结论: [ClosedIci拓扑 α] {s : 集合 β}
   证明: IsCompact.exists_sInf_image_eq_and_le (α := αᵒᵈ) hs ne_s hf
 
 Depends on / 依赖: IsCompact, IsCompact.exists_sInf_image_eq_and_le, exists_sInf_image_eq_and_le, ne_s
@@ -1287,8 +1287,8 @@ theorem IsCompact.exists_sInf_image_eq
   ⟨x, hxs, hx⟩
 
 中文:
-定理 IsCompact.exists_sInf_image_eq
-  结论: [ClosedIicTopology α] {s : Set β} (hs : IsCompact s)
+定理 是紧集.存在_sInf_image_eq
+  结论: [ClosedIic拓扑 α] {s : 集合 β} (hs : 是紧集 s)
   证明: let ⟨x, hxs, hx, _⟩ := hs.exists_sInf_image_eq_and_le ne_s hf
   ⟨x, hxs, hx⟩
 
@@ -1308,8 +1308,8 @@ theorem IsCompact.exists_sSup_image_eq
   proof: IsCompact.exists_sInf_image_eq (α := αᵒᵈ) hs ne_s
 
 中文:
-定理 IsCompact.exists_sSup_image_eq
-  结论: [ClosedIciTopology α] {s : Set β} (hs : IsCompact s)
+定理 是紧集.存在_sSup_image_eq
+  结论: [ClosedIci拓扑 α] {s : 集合 β} (hs : 是紧集 s)
   证明: IsCompact.exists_sInf_image_eq (α := αᵒᵈ) hs ne_s
 
 Depends on / 依赖: IsCompact, IsCompact.exists_sInf_image_eq, exists_sInf_image_eq, ne_s
@@ -1334,8 +1334,8 @@ theorem IsCompact.exists_isMinOn_mem_subset
   ⟨x, by_contra fun hxs => (hfz x ⟨hxt, hxs⟩).not_ge (hfx hz), hfx⟩
 
 中文:
-定理 IsCompact.exists_isMinOn_mem_subset
-  结论: [ClosedIicTopology α] {f : β -> α} {s t : Set β}
+定理 是紧集.存在_isMinOn_mem_subset
+  结论: [ClosedIic拓扑 α] {f : β -> α} {s t : 集合 β}
   证明: let ⟨x, hxt, hfx⟩ := ht.exists_isMinOn ⟨z, hz⟩ hf
   ⟨x, by_contra fun hxs => (hfz x ⟨hxt, hxs⟩).not_ge (hfx hz), hfx⟩
 
@@ -1357,8 +1357,8 @@ theorem IsCompact.exists_isMaxOn_mem_subset
   ⟨x, by_contra fun hxs => (hfz x ⟨hxt, hxs⟩).not_ge (hfx hz), hfx⟩
 
 中文:
-定理 IsCompact.exists_isMaxOn_mem_subset
-  结论: [ClosedIciTopology α] {f : β -> α} {s t : Set β}
+定理 是紧集.存在_isMaxOn_mem_subset
+  结论: [ClosedIci拓扑 α] {f : β -> α} {s t : 集合 β}
   证明: let ⟨x, hxt, hfx⟩ := ht.exists_isMaxOn ⟨z, hz⟩ hf
   ⟨x, by_contra fun hxs => (hfz x ⟨hxt, hxs⟩).not_ge (hfx hz), hfx⟩
 
@@ -1381,8 +1381,8 @@ theorem IsCompact.exists_isLocalMin_mem_open
 ⟨x, hxs, h.isLocalMin mem_nhds_iff.2 ⟨s, hst, hs, hxs⟩⟩
 
 中文:
-定理 IsCompact.exists_isLocalMin_mem_open
-  结论: [ClosedIicTopology α] {f : β -> α} {s t : Set β}
+定理 是紧集.存在_isLocalMin_mem_open
+  结论: [ClosedIic拓扑 α] {f : β -> α} {s t : 集合 β}
   证明: let ⟨x, hxs, h⟩ := ht.exists_isMinOn_mem_subset hf hz hfz
 ⟨x, hxs, h.isLocalMin mem_nhds_iff.2 ⟨s, hst, hs, hxs⟩⟩
 
@@ -1404,8 +1404,8 @@ theorem IsCompact.exists_isLocalMax_mem_open
 ⟨x, hxs, h.isLocalMax mem_nhds_iff.2 ⟨s, hst, hs, hxs⟩⟩
 
 中文:
-定理 IsCompact.exists_isLocalMax_mem_open
-  结论: [ClosedIciTopology α] {f : β -> α} {s t : Set β}
+定理 是紧集.存在_isLocalMax_mem_open
+  结论: [ClosedIci拓扑 α] {f : β -> α} {s t : 集合 β}
   证明: let ⟨x, hxs, h⟩ := ht.exists_isMaxOn_mem_subset hf hz hfz
 ⟨x, hxs, h.isLocalMax mem_nhds_iff.2 ⟨s, hst, hs, hxs⟩⟩
 
@@ -1432,7 +1432,7 @@ theorem eq_Icc_of_connected_compact
 
 中文:
 定理 eq_Icc_of_connected_compact
-  条件: {s : Set α} (h₁ : IsConnected s) (h₂ : IsCompact s)
+  条件: {s : 集合 α} (h₁ : 是连通 s) (h₂ : 是紧集 s)
   证明: eq_Icc_csInf_csSup_of_connected_bdd_closed h₁ h₂.bddBelow h₂.bddAbove h₂.isClosed
 
 Depends on / 依赖: bddAbove, bddBelow, eq_Icc_csInf_csSup_of_connected_bdd_closed, isClosed
@@ -1462,8 +1462,8 @@ theorem IsCompact.continuous_sSup
   rw [
 
 中文:
-定理 IsCompact.continuous_sSup
-  结论: {f : γ -> β -> α} {K : Set β} (hK : IsCompact K)
+定理 是紧集.continuous_sSup
+  结论: {f : γ -> β -> α} {K : 集合 β} (hK : 是紧集 K)
   证明: by
   rcases eq_empty_or_nonempty K with (rfl | h0K)
   · simp_rw [image_empty]
@@ -1513,8 +1513,8 @@ theorem IsCompact.continuous_sInf
   proof: IsCompact.continuous_sSup (α := αᵒᵈ) hK hf
 
 中文:
-定理 IsCompact.continuous_sInf
-  结论: {f : γ -> β -> α} {K : Set β} (hK : IsCompact K)
+定理 是紧集.continuous_sInf
+  结论: {f : γ -> β -> α} {K : 集合 β} (hK : 是紧集 K)
   证明: IsCompact.continuous_sSup (α := αᵒᵈ) hK hf
 
 Depends on / 依赖: IsCompact, IsCompact.continuous_sSup, continuous_sSup
@@ -1545,7 +1545,7 @@ theorem image_Icc
 
 中文:
 定理 image_Icc
-  条件: (hab : a <= b) (h : ContinuousOn f <| Icc a b)
+  条件: (hab : a <= b) (h : ContinuousOn f <| 闭区间 a b)
   证明: eq_Icc_of_connected_compact ⟨(nonempty_Icc.2 hab).image f, isPreconnected_Icc.image f h⟩
     (isCompact_Icc.image_of_continuousOn h)
 
@@ -1615,7 +1615,7 @@ theorem sInf_image_Icc_le
 
 中文:
 定理 sInf_image_Icc_le
-  条件: (h : ContinuousOn f <| Icc a b) (hc : c in Icc a b)
+  条件: (h : ContinuousOn f <| 闭区间 a b) (hc : c in 闭区间 a b)
   证明: by
   have := mem_image_of_mem f hc
   rw [h.image_Icc (hc.1.trans hc.2)] at this
@@ -1642,7 +1642,7 @@ theorem le_sSup_image_Icc
 
 中文:
 定理 le_sSup_image_Icc
-  条件: (h : ContinuousOn f <| Icc a b) (hc : c in Icc a b)
+  条件: (h : ContinuousOn f <| 闭区间 a b) (hc : c in 闭区间 a b)
   证明: by
   have := mem_image_of_mem f hc
   rw [h.image_Icc (hc.1.trans hc.2)] at this

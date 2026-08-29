@@ -84,7 +84,7 @@ lemma presieve₀_sigma
 
 中文:
 引理 presieve₀_sigma
-  条件: {S : Scheme.{u}} (𝒰 : Cover.{v} (precoverage P) S)
+  条件: {S : 概形.{u}} (𝒰 : Cover.{v} (precoverage P) S)
   证明: by
   refine le_antisymm ?_ fun T g ⟨⟩ => ⟨⟨⟩⟩
   rw [Presieve.ofArrows_le_iff]
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique 𝒰.sigma.I₀
+  签名: 唯一 𝒰.sigma.I₀
   定义体: inferInstanceAs Unique PUnit.{v + 1}
 
 Depends on / 依赖: Unique
@@ -156,7 +156,7 @@ definition Hom.sigma
   w₀ _ := Sigma.hom_ext _ _ (by simp)
 
 中文:
-定义 Hom.sigma
+定义 态射.sigma
   签名: (f : 𝒰 ⟶ 𝒱)
   定义体: default
   h₀ _ := Sigma.desc fun j => f.h₀ j ≫ Sigma.ι _ (f.s₀ j)

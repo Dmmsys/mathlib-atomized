@@ -72,7 +72,7 @@ definition obj'
 
 中文:
 定义 obj'
-  签名: : ModuleCat R
+  签名: : 模范畴 R
   定义体: let _ := Module.compHom M f
   of R M
 
@@ -95,7 +95,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: {M M' : ModuleCat.{v} S} (g : M ⟶ M')
+  签名: {M M' : 模范畴.{v} S} (g : M ⟶ M')
   定义体: -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)` and `(Y := ...)`.
   -- This suggests `RestrictScalars.obj'` needs to be redesigned.
   ofHom (X := obj' f M) (Y := obj' f M')
@@ -122,7 +122,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   定义体: RestrictScalars.obj' f
   map := RestrictScalars.map' f
 
@@ -146,7 +146,7 @@ lemma smul_restrictScalars
 
 中文:
 引理 smul_restrictScalars
-  结论: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S) (r : R)
+  结论: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S) (r : R)
   证明: rfl
 
 Depends on / 依赖: FGModuleCat, ModuleCat, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -166,7 +166,7 @@ lemma forget₂_map_restrictScalars
 
 中文:
 引理 forget₂_map_restrictScalars
-  结论: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  结论: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   证明: rfl
 -/
 lemma forget₂_map_restrictScalars {R : Type u₁} {S : Type u₂} [Ring R] [Ring S] (f : R ->+* S)
@@ -211,7 +211,7 @@ theorem restrictScalars.map_apply
 
 中文:
 定理 restrictScalars.map_apply
-  结论: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  结论: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   证明: rfl
 
 @[simp]
@@ -231,7 +231,7 @@ theorem restrictScalars.smul_def
 
 中文:
 定理 restrictScalars.smul_def
-  结论: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  结论: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   证明: rfl
 -/
 theorem restrictScalars.smul_def {R : Type u₁} {S : Type u₂} [Ring R] [Ring S] (f : R ->+* S)
@@ -248,7 +248,7 @@ theorem restrictScalars.smul_def'
 
 中文:
 定理 restrictScalars.smul_def'
-  结论: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  结论: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   证明: rfl
 -/
 theorem restrictScalars.smul_def' {R : Type u₁} {S : Type u₂} [Ring R] [Ring S] (f : R ->+* S)
@@ -286,7 +286,7 @@ definition semilinearMapAddEquiv
 
 中文:
 定义 semilinearMapAddEquiv
-  签名: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   定义体: ofHom (Y := (ModuleCat.restrictScalars f).obj N)
     { toFun := g
       map_add' := by simp
@@ -417,7 +417,7 @@ definition restrictScalarsId'App
 
 中文:
 定义 restrictScalarsId'App
-  签名: (hf : f = RingHom.id R) (M : ModuleCat R)
+  签名: (hf : f = 环态射.id R) (M : 模范畴 R)
   定义体: LinearEquiv.toModuleIso
     @AddEquiv.toLinearEquiv _ _ _ _ _ _ (((restrictScalars f).obj M).isModule) _
       (by rfl) (fun r x => by subst hf; rfl)
@@ -442,7 +442,7 @@ lemma restrictScalarsId'App_hom_apply
 
 中文:
 引理 restrictScalarsId'App_hom_apply
-  条件: (M : ModuleCat R) (x : M)
+  条件: (M : 模范畴 R) (x : M)
   证明: rfl
 -/
 @[simp] lemma restrictScalarsId'App_hom_apply (M : ModuleCat R) (x : M) :
@@ -459,7 +459,7 @@ lemma restrictScalarsId'App_inv_apply
 
 中文:
 引理 restrictScalarsId'App_inv_apply
-  条件: (M : ModuleCat R) (x : M)
+  条件: (M : 模范畴 R) (x : M)
   证明: rfl
 -/
 @[simp] lemma restrictScalarsId'App_inv_apply (M : ModuleCat R) (x : M) :
@@ -481,7 +481,7 @@ definition restrictScalarsId'
 
 中文:
 定义 restrictScalarsId'
-  签名: : ModuleCat.restrictScalars.{v} f ≅ 𝟭 _
+  签名: : 模范畴.restrictScalars.{v} f ≅ 𝟭 _
   定义体: NatIso.ofComponents fun M => restrictScalarsId'App f hf M
 
 @[reassoc]
@@ -504,7 +504,7 @@ lemma restrictScalarsId'App_hom_naturality
 
 中文:
 引理 restrictScalarsId'App_hom_naturality
-  条件: {M N : ModuleCat R} (φ : M ⟶ N)
+  条件: {M N : 模范畴 R} (φ : M ⟶ N)
   证明: (restrictScalarsId' f hf).hom.naturality φ
 
 @[reassoc]
@@ -527,7 +527,7 @@ lemma restrictScalarsId'App_inv_naturality
 
 中文:
 引理 restrictScalarsId'App_inv_naturality
-  条件: {M N : ModuleCat R} (φ : M ⟶ N)
+  条件: {M N : 模范畴 R} (φ : M ⟶ N)
   证明: (restrictScalarsId' f hf).inv.naturality φ
 -/
 lemma restrictScalarsId'App_inv_naturality {M N : ModuleCat R} (φ : M ⟶ N) :
@@ -573,7 +573,7 @@ definition restrictScalarsComp'App
 
 中文:
 定义 restrictScalarsComp'App
-  签名: (hgf : gf = g.comp f) (M : ModuleCat R₃)
+  签名: (hgf : gf = g.comp f) (M : 模范畴 R₃)
   定义体: (AddEquiv.toLinearEquiv
     (M := ↑((restrictScalars gf).obj M))
     (M₂ := ↑((restrictScalars f).obj ((restrictScalars g).obj M)))
@@ -602,7 +602,7 @@ lemma restrictScalarsComp'App_hom_apply
 
 中文:
 引理 restrictScalarsComp'App_hom_apply
-  条件: (M : ModuleCat R₃) (x : M)
+  条件: (M : 模范畴 R₃) (x : M)
   证明: rfl
 -/
 @[simp] lemma restrictScalarsComp'App_hom_apply (M : ModuleCat R₃) (x : M) :
@@ -619,7 +619,7 @@ lemma restrictScalarsComp'App_inv_apply
 
 中文:
 引理 restrictScalarsComp'App_inv_apply
-  条件: (M : ModuleCat R₃) (x : M)
+  条件: (M : 模范畴 R₃) (x : M)
   证明: rfl
 -/
 @[simp] lemma restrictScalarsComp'App_inv_apply (M : ModuleCat R₃) (x : M) :
@@ -666,7 +666,7 @@ lemma restrictScalarsComp'App_hom_naturality
 
 中文:
 引理 restrictScalarsComp'App_hom_naturality
-  条件: {M N : ModuleCat R₃} (φ : M ⟶ N)
+  条件: {M N : 模范畴 R₃} (φ : M ⟶ N)
   证明: (restrictScalarsComp' f g gf hgf).hom.naturality φ
 
 @[reassoc]
@@ -688,7 +688,7 @@ lemma restrictScalarsComp'App_inv_naturality
 
 中文:
 引理 restrictScalarsComp'App_inv_naturality
-  条件: {M N : ModuleCat R₃} (φ : M ⟶ N)
+  条件: {M N : 模范畴 R₃} (φ : M ⟶ N)
   证明: (restrictScalarsComp' f g gf hgf).inv.naturality φ
 -/
 lemma restrictScalarsComp'App_inv_naturality {M N : ModuleCat R₃} (φ : M ⟶ N) :
@@ -731,7 +731,7 @@ definition restrictScalarsEquivalenceOfRingEquiv
 
 中文:
 定义 restrictScalarsEquivalenceOfRingEquiv
-  签名: {R S : 类型} [Ring R] [Ring S] (e : R ≃+* S)
+  签名: {R S : 类型} [环 R] [环 S] (e : R ≃+* S)
   定义体: ModuleCat.restrictScalars e.toRingHom
   inverse := ModuleCat.restrictScalars e.symm
   unitIso := (restrictScalarsId S).symm ≪≫
@@ -760,7 +760,7 @@ instance restrictScalars_isEquivalence_of_ringEquiv
 
 中文:
 实例 restrictScalars_isEquivalence_of_ringEquiv
-  签名: {R S : 类型} [Ring R] [Ring S] (e : R ≃+* S)
+  签名: {R S : 类型} [环 R] [环 S] (e : R ≃+* S)
   定义体: (restrictScalarsEquivalenceOfRingEquiv e).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, restrictScalarsEquivalenceOfRingEquiv
@@ -784,7 +784,7 @@ definition restrictScalarsIsoOfEquiv
 
 中文:
 定义 restrictScalarsIsoOfEquiv
-  签名: {R S : 类型v} [Ring R] [Ring S] (e : R ≃+* S)
+  签名: {R S : 类型v} [环 R] [环 S] (e : R ≃+* S)
   定义体: letI : Module R (ModuleCat.of S S) := e.toRingHom.toModule
   LinearEquiv.toModuleIso
     { __ := e.symm
@@ -814,7 +814,7 @@ lemma restrictScalarsIsoOfEquiv_hom_apply
 
 中文:
 引理 restrictScalarsIsoOfEquiv_hom_apply
-  条件: {R S : 类型v} [Ring R] [Ring S] (e : R ≃+* S) (x : S)
+  条件: {R S : 类型v} [环 R] [环 S] (e : R ≃+* S) (x : S)
   证明: rfl
 
 @[simp]
@@ -834,7 +834,7 @@ lemma restrictScalarsIsoOfEquiv_inv_apply
 
 中文:
 引理 restrictScalarsIsoOfEquiv_inv_apply
-  条件: {R S : 类型v} [Ring R] [Ring S] (e : R ≃+* S) (x : R)
+  条件: {R S : 类型v} [环 R] [环 S] (e : R ≃+* S) (x : R)
   证明: rfl
 -/
 lemma restrictScalarsIsoOfEquiv_inv_apply {R S : Type v} [Ring R] [Ring S] (e : R ≃+* S) (x : R) :
@@ -852,7 +852,7 @@ instance restrictScalarsEquivalenceOfRingEquiv_additive
 
 中文:
 实例 restrictScalarsEquivalenceOfRingEquiv_additive
-  签名: {R S : 类型} [Ring R] [Ring S]
+  签名: {R S : 类型} [环 R] [环 S]
 -/
 instance restrictScalarsEquivalenceOfRingEquiv_additive {R S : Type*} [Ring R] [Ring S]
     (e : R ≃+* S) :
@@ -919,7 +919,7 @@ definition obj'
 
 中文:
 定义 obj'
-  签名: : ModuleCat S
+  签名: : 模范畴 S
   定义体: of _ (TensorProduct R ((restrictScalars f).obj (of _ S)) M)
 
 Depends on / 依赖: TensorProduct, restrictScalars
@@ -938,7 +938,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: {M1 M2 : ModuleCat.{v} R} (l : M1 ⟶ M2)
+  签名: {M1 M2 : 模范畴.{v} R} (l : M1 ⟶ M2)
   定义体: ofHom (@LinearMap.baseChange R S M1 M2 _ _ ((algebraMap S _).comp f).toAlgebra _ _ _ _ l.hom)
 
 Depends on / 依赖: LinearMap, LinearMap.baseChange, algebraMap, baseChange, l.hom, toAlgebra
@@ -959,7 +959,7 @@ theorem map'_id
 
 中文:
 定理 map'_id
-  条件: {M : ModuleCat.{v} R}
+  条件: {M : 模范畴.{v} R}
   结论: map' f (𝟙 M) = 𝟙 _
   证明: by
   simp [map', obj']
@@ -982,7 +982,7 @@ theorem map'_comp
 
 中文:
 定理 map'_comp
-  条件: {M₁ M₂ M₃ : ModuleCat.{v} R} (l₁₂ : M₁ ⟶ M₂) (l₂₃ : M₂ ⟶ M₃)
+  条件: {M₁ M₂ M₃ : 模范畴.{v} R} (l₁₂ : M₁ ⟶ M₂) (l₂₃ : M₂ ⟶ M₃)
   证明: by
   ext x
   induction x using TensorProduct.induction_on with
@@ -1013,7 +1013,7 @@ definition extendScalars
 
 中文:
 定义 extendScalars
-  签名: {R : 类型u₁} {S : 类型u₂} [CommRing R] [CommRing S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: ExtendScalars.obj' f M
   map l := ExtendScalars.map' f l
   map_id _ := ExtendScalars.map'_id f
@@ -1046,7 +1046,7 @@ theorem smul_tmul
 
 中文:
 定理 smul_tmul
-  条件: {M : ModuleCat.{v} R} (s s' : S) (m : M)
+  条件: {M : 模范畴.{v} R} (s s' : S) (m : M)
   证明: rfl
 
 @[simp]
@@ -1066,7 +1066,7 @@ theorem map_tmul
 
 中文:
 定理 map_tmul
-  条件: {M M' : ModuleCat.{v} R} (g : M ⟶ M') (s : S) (m : M)
+  条件: {M M' : 模范畴.{v} R} (g : M ⟶ M') (s : S) (m : M)
   证明: rfl
 -/
 theorem map_tmul {M M' : ModuleCat.{v} R} (g : M ⟶ M') (s : S) (m : M) :
@@ -1096,7 +1096,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {M : ModuleCat R} {N : ModuleCat S}
+  结论: {M : 模范畴 R} {N : 模范畴 S}
   证明: by
   apply (restrictScalars f).map_injective
   let := f.toAlgebra
@@ -1153,7 +1153,7 @@ instance hasSMul
 
 中文:
 实例 hasSMul
-  签名: : SMul S (restrictScalars f).obj (of _ S) ->ₗ[R] M where
+  签名: : 标量乘法 S (restrictScalars f).obj (of _ S) ->ₗ[R] M where
   定义体: { toFun := fun s' : S => g (s' * s : S)
       map_add' := fun x y : S => by rw [add_mul, map_add]
       map_smul' := fun r (t : S) => by
@@ -1200,7 +1200,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: : MulAction S (restrictScalars f).obj (of _ S) ->ₗ[R] M
+  签名: : 乘法作用 S (restrictScalars f).obj (of _ S) ->ₗ[R] M
   定义体: { CoextendScalars.hasSMul f _ with
     one_smul := fun g => LinearMap.ext fun s : S => by simp
     mul_smul := fun (s t : S) g => LinearMap.ext fun x : S => by simp [mul_assoc] }
@@ -1225,7 +1225,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: : DistribMulAction S (restrictScalars f).obj (of _ S) ->ₗ[R] M
+  签名: : 分配乘法作用 S (restrictScalars f).obj (of _ S) ->ₗ[R] M
   定义体: { CoextendScalars.mulAction f _ with
     smul_add := fun s g h => LinearMap.ext fun _ : S => by simp
     smul_zero := fun _ => LinearMap.ext fun _ : S => by simp }
@@ -1250,7 +1250,7 @@ instance isModule
 
 中文:
 实例 isModule
-  签名: : Module S (restrictScalars f).obj (of _ S) ->ₗ[R] M
+  签名: : 模 S (restrictScalars f).obj (of _ S) ->ₗ[R] M
   定义体: { CoextendScalars.distribMulAction f _ with
     add_smul := fun s1 s2 g => LinearMap.ext fun x : S => by simp [mul_add, map_add]
     zero_smul := fun g => LinearMap.ext fun x : S => by simp [map_zero] }
@@ -1276,7 +1276,7 @@ definition obj'
 
 中文:
 定义 obj'
-  签名: : ModuleCat S
+  签名: : 模范畴 S
   定义体: of _ ((restrictScalars f).obj (of _ S) ->ₗ[R] M)
 
 Depends on / 依赖: restrictScalars
@@ -1301,7 +1301,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: {M M' : ModuleCat R} (g : M ⟶ M')
+  签名: {M M' : 模范畴 R} (g : M ⟶ M')
   定义体: ofHom
   { toFun := fun h => g.hom.comp h
     map_add' := fun _ _ => LinearMap.comp_add _ _ _
@@ -1330,7 +1330,7 @@ definition coextendScalars
 
 中文:
 定义 coextendScalars
-  签名: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   定义体: CoextendScalars.obj' f
   map := CoextendScalars.map' f
   map_id _ := by ext; rfl
@@ -1362,7 +1362,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: (M : ModuleCat R)
+  签名: (M : 模范畴 R)
   定义体: f
   invFun f := f
   map_add' _ _ := rfl
@@ -1389,7 +1389,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {M : ModuleCat R} {g g' : (coextendScalars f).obj M}
+  结论: {M : 模范畴 R} {g g' : (coextendScalars f).obj M}
   证明: (CoextendScalars.equiv f M).injective h
 -/
 @[ext] lemma ext {M : ModuleCat R} {g g' : (coextendScalars f).obj M}
@@ -1408,7 +1408,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (M : ModuleCat R) (g : (coextendScalars f).obj M) (s s' : S)
+  条件: (M : 模范畴 R) (g : (coextendScalars f).obj M) (s s' : S)
   证明: rfl
 
 @[simp]
@@ -1428,7 +1428,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  条件: {M M' : ModuleCat R} (g : M ⟶ M') (x) (s : S)
+  条件: {M M' : 模范畴 R} (g : M ⟶ M') (x) (s : S)
   证明: rfl
 -/
 theorem map_apply {M M' : ModuleCat R} (g : M ⟶ M') (x) (s : S) :
@@ -1457,8 +1457,8 @@ definition HomEquiv.fromRestriction
           simp [ModuleCat.restrictScalars.smul_def (M := Mo
 
 中文:
-定义 HomEquiv.fromRestriction
-  签名: {X : ModuleCat R} {Y : ModuleCat S}
+定义 态射等价.fromRestriction
+  签名: {X : 模范畴 R} {Y : 模范畴 S}
   定义体: ofHom
   { toFun := fun y : Y => (CoextendScalars.equiv _ _).symm
       { toFun := fun s : S => g <| (s • y : Y)
@@ -1492,8 +1492,8 @@ lemma HomEquiv.fromRestriction_hom_apply_apply
   proof: rfl
 
 中文:
-引理 HomEquiv.fromRestriction_hom_apply_apply
-  结论: {X : ModuleCat R} {Y : ModuleCat S}
+引理 态射等价.fromRestriction_hom_apply_apply
+  结论: {X : 模范畴 R} {Y : 模范畴 S}
   证明: rfl
 -/
 @[simp] lemma HomEquiv.fromRestriction_hom_apply_apply {X : ModuleCat R} {Y : ModuleCat S}
@@ -1516,8 +1516,8 @@ definition HomEquiv.toRestriction
       
 
 中文:
-定义 HomEquiv.toRestriction
-  签名: {X : ModuleCat R} {Y : ModuleCat S} (g : Y ⟶ (coextendScalars f).obj X)
+定义 态射等价.toRestriction
+  签名: {X : 模范畴 R} {Y : 模范畴 S} (g : Y ⟶ (coextendScalars f).obj X)
   定义体: -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(X := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (X := (restrictScalars f).obj Y)
@@ -1546,8 +1546,8 @@ lemma HomEquiv.toRestriction_hom_apply
   proof: rfl
 
 中文:
-引理 HomEquiv.toRestriction_hom_apply
-  结论: {X : ModuleCat R} {Y : ModuleCat S}
+引理 态射等价.toRestriction_hom_apply
+  结论: {X : 模范畴 R} {Y : 模范畴 S}
   证明: rfl
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, GrpCat
@@ -1573,7 +1573,7 @@ map_add' y1 y2 := (CoextendScalars.equiv _ _).injective
 
 中文:
 定义 app'
-  签名: (Y : ModuleCat S)
+  签名: (Y : 模范畴 S)
   定义体: { toFun y := (CoextendScalars.equiv _ _).symm
       { toFun (s : S) := s • y
         map_add' _ _ := add_smul _ _ _
@@ -1700,7 +1700,7 @@ definition restrictCoextendScalarsAdj
 
 中文:
 定义 restrictCoextendScalarsAdj
-  签名: {R : 类型u₁} {S : 类型u₂} [Ring R] [Ring S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [环 R] [环 S] (f : R ->+* S)
   定义体: Adjunction.mk' {
     homEquiv := fun X Y =>
       { toFun := RestrictionCoextensionAdj.HomEquiv.fromRestriction.{u₁, u₂, v} f
@@ -1760,8 +1760,8 @@ definition HomEquiv.toRestrictScalars
     map_add' := fun _ _ => by dsimp; rw [tm
 
 中文:
-定义 HomEquiv.toRestrictScalars
-  签名: {X : ModuleCat R} {Y : ModuleCat S}
+定义 态射等价.toRestrictScalars
+  签名: {X : 模范畴 R} {Y : 模范畴 S}
   定义体: -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (restrictScalars f).obj Y)
@@ -1807,8 +1807,8 @@ definition HomEquiv.evalAt
       rw [AddHom.toFun_eq_coe]; rw [AddHom.coe_mk]; rw 
 
 中文:
-定义 HomEquiv.evalAt
-  签名: {X : ModuleCat R} {Y : ModuleCat S} (s : S)
+定义 态射等价.evalAt
+  签名: {X : 模范畴 R} {Y : 模范畴 S} (s : S)
   定义体: Module.compHom Y f
     X ->ₗ[R] Y :=
   @LinearMap.mk _ _ _ _ (RingHom.id R) X Y _ _ _ (_)
@@ -1859,8 +1859,8 @@ definition HomEquiv.fromExtendScalars
       map_smul' 
 
 中文:
-定义 HomEquiv.fromExtendScalars
-  签名: {X : ModuleCat R} {Y : ModuleCat S}
+定义 态射等价.fromExtendScalars
+  签名: {X : 模范畴 R} {Y : 模范畴 S}
   定义体: by
   letI m1 : Module R S := Module.compHom S f; letI m2 : Module R Y := Module.compHom Y f
   refine ofHom
@@ -1915,7 +1915,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: {X : ModuleCat R} {Y : ModuleCat S}
+  签名: {X : 模范畴 R} {Y : 模范畴 S}
   定义体: HomEquiv.toRestrictScalars.{u₁, u₂, v} f
   invFun := HomEquiv.fromExtendScalars.{u₁, u₂, v} f
   left_inv g := by
@@ -1970,8 +1970,8 @@ definition Unit.map
     map_add' := fun x x' => by
 
 中文:
-定义 Unit.map
-  签名: {X : ModuleCat R}
+定义 单元.map
+  签名: {X : 模范畴 R}
   定义体: -- TODO: after https://github.com/leanprover-community/mathlib4/pull/19511 we need to hint `(Y := ...)`.
   -- This suggests `restrictScalars` needs to be redesigned.
   ofHom (Y := (extendScalars f ⋙ restrictScalars f).obj X)
@@ -2003,7 +2003,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: : 𝟭 (ModuleCat R) ⟶ extendScalars f ⋙ restrictScalars.{max v u₂, u₁, u₂} f where
+  签名: : 𝟭 (模范畴 R) ⟶ extendScalars f ⋙ restrictScalars.{最大值 v u₂, u₁, u₂} f where
   定义体: Unit.map.{u₁, u₂, v} f
 
 Depends on / 依赖: Unit.map
@@ -2034,7 +2034,7 @@ definition Counit.map
 
 中文:
 定义 Counit.map
-  签名: {Y : ModuleCat S}
+  签名: {Y : 模范畴 S}
   定义体: ofHom
   { toFun :=
       letI m1 : Module R S := Module.compHom S f
@@ -2089,7 +2089,7 @@ lemma Counit.map_apply_one_tmul
 
 中文:
 引理 Counit.map_apply_one_tmul
-  条件: {Y : ModuleCat S} (y : Y)
+  条件: {Y : 模范畴 S} (y : Y)
   证明: by
   change (1 : S) • y = y
   simp
@@ -2122,7 +2122,7 @@ definition counit
 
 中文:
 定义 counit
-  签名: : restrictScalars.{max v u₂, u₁, u₂} f ⋙ extendScalars f ⟶ 𝟭 (ModuleCat S) where
+  签名: : restrictScalars.{最大值 v u₂, u₁, u₂} f ⋙ extendScalars f ⟶ 𝟭 (模范畴 S) where
   定义体: Counit.map.{u₁, u₂, v} f
   naturality Y Y' g := by
     -- Porting note: this is very annoying; fix instances in concrete categories
@@ -2173,7 +2173,7 @@ homE
 
 中文:
 定义 extendRestrictScalarsAdj
-  签名: {R : 类型u₁} {S : 类型u₂} [CommRing R] [CommRing S] (f : R ->+* S)
+  签名: {R : 类型u₁} {S : 类型u₂} [交换环 R] [交换环 S] (f : R ->+* S)
   定义体: Adjunction.mk' {
     homEquiv := fun _ _ => ExtendRestrictScalarsAdj.homEquiv.{v, u₁, u₂} f
     unit := ExtendRestrictScalarsAdj.unit.{v, u₁, u₂} f
@@ -2253,7 +2253,7 @@ lemma extendRestrictScalarsAdj_counit_app_apply_one_tmul
 
 中文:
 引理 extendRestrictScalarsAdj_counit_app_apply_one_tmul
-  条件: (M : ModuleCat S) (m : M)
+  条件: (M : 模范畴 S) (m : M)
   证明: by
   apply ExtendRestrictScalarsAdj.Counit.map_apply_one_tmul
 
@@ -2310,7 +2310,7 @@ instance preservesColimit_restrictScalars
 
 中文:
 实例 preservesColimit_restrictScalars
-  签名: {R S : 类型} [Ring R] [Ring S]
+  签名: {R S : 类型} [环 R] [环 S]
   定义体: by
   have : HasColimit ((F ⋙ restrictScalars f) ⋙ forget₂ (ModuleCat R) AddCommGrpCat) :=
     inferInstanceAs (HasColimit (F ⋙ forget₂ _ AddCommGrpCat))
@@ -2342,7 +2342,7 @@ definition extendScalarsId
 
 中文:
 定义 extendScalarsId
-  签名: : extendScalars (RingHom.id R) ≅ 𝟭 _
+  签名: : extendScalars (环态射.id R) ≅ 𝟭 _
   定义体: ((conjugateIsoEquiv (extendRestrictScalarsAdj (RingHom.id R)) Adjunction.id).symm
     (restrictScalarsId R)).symm
 
@@ -2362,7 +2362,7 @@ lemma extendScalarsId_inv_app_apply
 
 中文:
 引理 extendScalarsId_inv_app_apply
-  条件: (M : ModuleCat R) (m : M)
+  条件: (M : 模范畴 R) (m : M)
   证明: rfl
 -/
 lemma extendScalarsId_inv_app_apply (M : ModuleCat R) (m : M) :
@@ -2382,7 +2382,7 @@ lemma homEquiv_extendScalarsId
 
 中文:
 引理 homEquiv_extendScalarsId
-  条件: (M : ModuleCat R)
+  条件: (M : 模范畴 R)
   证明: by
   ext m
   rw [extendRestrictScalarsAdj_homEquiv_apply]; rw [← extendScalarsId_inv_app_apply]; rw [← comp_apply]
@@ -2411,7 +2411,7 @@ lemma extendScalarsId_hom_app_one_tmul
 
 中文:
 引理 extendScalarsId_hom_app_one_tmul
-  条件: (M : ModuleCat R) (m : M)
+  条件: (M : 模范畴 R) (m : M)
   证明: by
   rw [← extendRestrictScalarsAdj_homEquiv_apply]; rw [homEquiv_extendScalarsId]
   dsimp
@@ -2470,7 +2470,7 @@ lemma homEquiv_extendScalarsComp
 
 中文:
 引理 homEquiv_extendScalarsComp
-  条件: (M : ModuleCat R₁)
+  条件: (M : 模范畴 R₁)
   证明: by
   dsimp [extendScalarsComp, conjugateIsoEquiv, conjugateEquiv]
   simp only [Functor.comp_obj, Category.assoc, Category.id_comp,
@@ -2506,7 +2506,7 @@ lemma extendScalarsComp_hom_app_one_tmul
 
 中文:
 引理 extendScalarsComp_hom_app_one_tmul
-  条件: (M : ModuleCat R₁) (m : M)
+  条件: (M : 模范畴 R₁) (m : M)
   证明: by
   rw [← extendRestrictScalarsAdj_homEquiv_apply]; rw [homEquiv_extendScalarsComp]
   rfl

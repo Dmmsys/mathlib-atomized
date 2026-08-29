@@ -79,7 +79,7 @@ lemma localizedModule_hasProjectiveDimensionLE
 
 中文:
 引理 localizedModule_hasProjectiveDimensionLE
-  结论: [Small.{v, u} R] (n : 自然数) (S : Submonoid R)
+  结论: [Small.{v, u} R] (n : 自然数) (S : 子幺半群 R)
   证明: by
   have : Small.{v} (Localization S) := small_of_surjective Localization.mkHom_surjective
   induction n generalizing M with
@@ -175,7 +175,7 @@ lemma hasProjectiveDimensionLE_iff_forall_maximalSpectrum
         small_of_surjective Localization.mkHom_surje
 
 中文:
-引理 hasProjectiveDimensionLE_iff_forall_maximalSpectrum
+引理 hasProjectiveDimensionLE_iff_对任意_maximalSpectrum
   结论: (n : 自然数) [Small.{v} R]
   证明: by
   induction n generalizing M with
@@ -236,7 +236,7 @@ lemma hasProjectiveDimensionLE_iff_forall_primeSpectrum
     fun m => h ⟨m.1, Ideal.IsMaximal.isPrime' m.1⟩⟩
 
 中文:
-引理 hasProjectiveDimensionLE_iff_forall_primeSpectrum
+引理 hasProjectiveDimensionLE_iff_对任意_primeSpectrum
   结论: (n : 自然数) [Small.{v} R]
   证明: ⟨fun _ p => M.localizedModule_hasProjectiveDimensionLE n p.1.primeCompl,
     fun h => (M.hasProjectiveDimensionLE_iff_forall_maximalSpectrum n).mpr

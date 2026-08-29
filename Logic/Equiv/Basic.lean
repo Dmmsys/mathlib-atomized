@@ -53,7 +53,7 @@ definition piOptionEquivProd
 
 中文:
 定义 piOptionEquivProd
-  签名: {α} {β : Option α -> 类型}
+  签名: {α} {β : 选项类型 α -> 类型}
   定义体: (f none, fun a => f (some a))
   invFun x a := Option.casesOn a x.fst x.snd
   left_inv f := funext fun a => by cases a <;> rfl
@@ -97,8 +97,8 @@ definition Perm.subtypeCongr
   body: permCongr (sumCompl p) (sumCongr ep en)
 
 中文:
-定义 Perm.subtypeCongr
-  签名: : Equiv.Perm ε
+定义 置换.subtypeCongr
+  签名: : 等价.置换 ε
   定义体: permCongr (sumCompl p) (sumCongr ep en)
 
 Depends on / 依赖: permCongr, sumCompl, sumCongr
@@ -119,7 +119,7 @@ theorem Perm.subtypeCongr.apply
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.apply
+定理 置换.subtypeCongr.apply
   条件: (a : ε)
   结论: ep.subtypeCongr en a =
   证明: by
@@ -147,7 +147,7 @@ theorem Perm.subtypeCongr.left_apply
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.left_apply
+定理 置换.subtypeCongr.left_apply
   条件: {a : ε} (h : p a)
   结论: ep.subtypeCongr en a = ep ⟨a, h⟩
   证明: by
@@ -173,7 +173,7 @@ theorem Perm.subtypeCongr.left_apply_subtype
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.left_apply_subtype
+定理 置换.subtypeCongr.left_apply_subtype
   条件: (a : { a // p a })
   结论: ep.subtypeCongr en a = ep a
   证明: Perm.subtypeCongr.left_apply ep en a.property
@@ -199,7 +199,7 @@ theorem Perm.subtypeCongr.right_apply
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.right_apply
+定理 置换.subtypeCongr.right_apply
   条件: {a : ε} (h : ¬p a)
   结论: ep.subtypeCongr en a = en ⟨a, h⟩
   证明: by
@@ -225,7 +225,7 @@ theorem Perm.subtypeCongr.right_apply_subtype
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.right_apply_subtype
+定理 置换.subtypeCongr.right_apply_subtype
   条件: (a : { a // ¬p a })
   结论: ep.subtypeCongr en a = en a
   证明: Perm.subtypeCongr.right_apply ep en a.property
@@ -250,7 +250,7 @@ theorem Perm.subtypeCongr.refl
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.refl
+定理 置换.subtypeCongr.refl
   证明: by
   ext x
   by_cases h : p x <;> simp [h]
@@ -274,8 +274,8 @@ theorem Perm.subtypeCongr.symm
 @[simp]
 
 中文:
-定理 Perm.subtypeCongr.symm
-  结论: (ep.subtypeCongr en).symm = Perm.subtypeCongr ep.symm en.symm
+定理 置换.subtypeCongr.symm
+  结论: (ep.subtypeCongr en).symm = 置换.subtypeCongr ep.symm en.symm
   证明: rfl
 
 @[simp]
@@ -293,7 +293,7 @@ theorem Perm.subtypeCongr.trans
   grind [eq_def, coe_trans]
 
 中文:
-定理 Perm.subtypeCongr.trans
+定理 置换.subtypeCongr.trans
   证明: by
   grind [eq_def, coe_trans]
 
@@ -334,7 +334,7 @@ Subtype.val_injective
 
 中文:
 定义 subtypePreimage
-  签名: : { x : α -> β // x ∘ Subtype.val = x₀ } ≃ ({ a // ¬p a } -> β) where
+  签名: : { x : α -> β // x ∘ 子类型.val = x₀ } ≃ ({ a // ¬p a } -> β) where
   定义体: (x : α -> β) a
   invFun x := ⟨fun a => if h : p a then x₀ ⟨a, h⟩ else x ⟨a, h⟩, funext fun ⟨_, h⟩ => dif_pos h⟩
   left_inv := fun ⟨x, hx⟩ =>
@@ -421,7 +421,7 @@ fun H => funext by simp⟩
 
 中文:
 定义 piCongrRight
-  签名: {β₁ β₂ : α -> Sort*} (F : 对任意 a, β₁ a ≃ β₂ a)
+  签名: {β₁ β₂ : α -> 类型层*} (F : 对任意 a, β₁ a ≃ β₂ a)
   定义体: ⟨Pi.map fun a => F a, Pi.map fun a => (F a).symm, fun H => funext by simp,
 fun H => funext by simp⟩
 
@@ -445,7 +445,7 @@ lemma piCongrRight_refl
 
 中文:
 引理 piCongrRight_refl
-  条件: {β : α -> Sort*}
+  条件: {β : α -> 类型层*}
   结论: piCongrRight (fun a => .refl (β a)) = .refl (对任意 a, β a)
   证明: rfl
 
@@ -469,7 +469,7 @@ definition piComm
 
 中文:
 定义 piComm
-  签名: (φ : α -> β -> Sort*)
+  签名: (φ : α -> β -> 类型层*)
   定义体: ⟨swap, swap, fun _ => rfl, fun _ => rfl⟩
 
 @[simp]
@@ -489,7 +489,7 @@ theorem piComm_symm
 
 中文:
 定理 piComm_symm
-  条件: {φ : α -> β -> Sort*}
+  条件: {φ : α -> β -> 类型层*}
   结论: (piComm φ).symm = (piComm <| swap φ)
   证明: rfl
 -/
@@ -626,7 +626,7 @@ definition sigmaNatSucc
     Sum.elim (Sigma.mk 0) (Sigma.map Nat.succ fun _ => id), by ri
 
 中文:
-定义 sigmaNatSucc
+定义 sigma自然数Succ
   签名: (f : 自然数 -> 类型u)
   定义体: ⟨fun x =>
     @Sigma.casesOn Nat f (fun _ => f 0 oplus Σ n, f (n + 1)) x fun n =>
@@ -662,8 +662,8 @@ definition natEquivNatSumPUnit
   right_inv := by rintro (_ | _) <;> rfl
 
 中文:
-定义 natEquivNatSumPUnit
-  签名: : 自然数 ≃ 自然数 oplus PUnit where
+定义 natEquiv自然数SumPUnit
+  签名: : 自然数 ≃ 自然数 oplus 命题单元 where
   定义体: Nat.casesOn n (inr PUnit.unit) inl
   invFun := Sum.elim Nat.succ fun _ => 0
   left_inv n := by cases n <;> rfl
@@ -686,8 +686,8 @@ definition natSumPUnitEquivNat
   body: natEquivNatSumPUnit.symm
 
 中文:
-定义 natSumPUnitEquivNat
-  签名: : 自然数 oplus PUnit ≃ 自然数
+定义 natSumPUnitEquiv自然数
+  签名: : 自然数 oplus 命题单元 ≃ 自然数
   定义体: natEquivNatSumPUnit.symm
 
 Depends on / 依赖: natEquivNatSumPUnit, natEquivNatSumPUnit.symm
@@ -707,7 +707,7 @@ definition intEquivNatSumNat
   right_inv := by rintro (m | n) <;> rfl
 
 中文:
-定义 intEquivNatSumNat
+定义 intEquiv自然数Sum自然数
   签名: : 整数 ≃ 自然数 oplus 自然数 where
   定义体: Int.casesOn z inl inr
   invFun := Sum.elim Int.ofNat Int.negSucc
@@ -763,7 +763,7 @@ theorem isEmpty_congr
 中文:
 定理 isEmpty_congr
   条件: (e : α ≃ β)
-  结论: IsEmpty α ↔ IsEmpty β
+  结论: 是空 α ↔ 是空 β
   证明: ⟨fun h => @Function.isEmpty _ _ h e.symm, fun h => @Function.isEmpty _ _ h e⟩
 
 Depends on / 依赖: Function, Function.isEmpty, e.symm, isEmpty
@@ -782,8 +782,8 @@ theorem isEmpty
 
 中文:
 定理 isEmpty
-  条件: (e : α ≃ β) [IsEmpty β]
-  结论: IsEmpty α
+  条件: (e : α ≃ β) [是空 β]
+  结论: 是空 α
   证明: e.isEmpty_congr.mpr ‹_›
 -/
 protected theorem isEmpty (e : α ≃ β) [IsEmpty β] : IsEmpty α :=
@@ -859,7 +859,7 @@ theorem subtypeEquiv_refl
 
 中文:
 定理 subtypeEquiv_refl
-  条件: {p : α -> 命题} (h : 对任意 a, p a ↔ p (Equiv.refl _ a) := fun _ => Iff.rfl)
+  条件: {p : α -> 命题} (h : 对任意 a, p a ↔ p (等价.refl _ a) := fun _ => 当且仅当.rfl)
   证明: by
   ext
   rfl
@@ -1039,7 +1039,7 @@ definition subtypeSubtypeEquivSubtypeExists
 
 中文:
 定义 subtypeSubtypeEquivSubtypeExists
-  签名: (p : α -> 命题) (q : Subtype p -> 命题)
+  签名: (p : α -> 命题) (q : 子类型 p -> 命题)
   定义体: ⟨fun a =>
     ⟨a.1, a.1.2, by
       rcases a with ⟨⟨a, hap⟩, haq⟩
@@ -1066,7 +1066,7 @@ definition subtypeSubtypeEquivSubtypeInter
     subtypeEquivRight fun x => @exists_prop (q x) (p x)
 
 中文:
-定义 subtypeSubtypeEquivSubtypeInter
+定义 subtypeSubtypeEquivSubtype整数er
   签名: {α : 类型u} (p q : α -> 命题)
   定义体: (subtypeSubtypeEquivSubtypeExists p _).trans
     subtypeEquivRight fun x => @exists_prop (q x) (p x)
@@ -1244,7 +1244,7 @@ definition sigmaOptionEquivOfSome
 
 中文:
 定义 sigmaOptionEquivOfSome
-  签名: {α} (p : Option α -> 类型v) (h : p none -> False)
+  签名: {α} (p : 选项类型 α -> 类型v) (h : p none -> 假)
   定义体: haveI h' : forall x, p x -> x.isSome := by
     intro x
     cases x
@@ -1316,7 +1316,7 @@ definition subtypePiEquivPi
 
 中文:
 定义 subtypePiEquivPi
-  签名: {β : α -> Sort v} {p : 对任意 a, β a -> 命题}
+  签名: {β : α -> 类型层 v} {p : 对任意 a, β a -> 命题}
   定义体: fun f a => ⟨f.1 a, f.2 a⟩
   invFun := fun f => ⟨fun a => (f a).1, fun a => (f a).2⟩
   left_inv := by
@@ -1719,7 +1719,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (α -> β) (α ≃ β) (↑) Bijective
+  签名: CanLift (α -> β) (α ≃ β) (↑) 双射
   定义体: ⟨ofBijective f hf, rfl⟩
 
 Depends on / 依赖: ofBijective
@@ -1741,8 +1741,8 @@ definition Perm.extendDomain
 @[simp]
 
 中文:
-定义 Perm.extendDomain
-  签名: : Perm β'
+定义 置换.extendDomain
+  签名: : 置换 β'
   定义体: (permCongr f e).subtypeCongr (Equiv.refl _)
 
 @[simp]
@@ -1764,7 +1764,7 @@ theorem Perm.extendDomain_apply_image
   simp [Perm.extendDomain]
 
 中文:
-定理 Perm.extendDomain_apply_image
+定理 置换.extendDomain_apply_image
   条件: (a : α')
   结论: e.extendDomain f (f a) = f (e a)
   证明: by
@@ -1785,7 +1785,7 @@ theorem Perm.extendDomain_apply_subtype
   simp [Perm.extendDomain, h]
 
 中文:
-定理 Perm.extendDomain_apply_subtype
+定理 置换.extendDomain_apply_subtype
   条件: {b : β'} (h : p b)
   证明: by
   simp [Perm.extendDomain, h]
@@ -1809,7 +1809,7 @@ theorem Perm.extendDomain_apply_not_subtype
 @[simp]
 
 中文:
-定理 Perm.extendDomain_apply_not_subtype
+定理 置换.extendDomain_apply_not_subtype
   条件: {b : β'} (h : ¬p b)
   结论: e.extendDomain f b = b
   证明: by
@@ -1835,8 +1835,8 @@ theorem Perm.extendDomain_refl
 @[simp]
 
 中文:
-定理 Perm.extendDomain_refl
-  结论: Perm.extendDomain (Equiv.refl _) f = Equiv.refl _
+定理 置换.extendDomain_refl
+  结论: 置换.extendDomain (等价.refl _) f = 等价.refl _
   证明: by
   simp [Perm.extendDomain]
 
@@ -1857,8 +1857,8 @@ theorem Perm.extendDomain_symm
   proof: rfl
 
 中文:
-定理 Perm.extendDomain_symm
-  结论: (e.extendDomain f).symm = Perm.extendDomain e.symm f
+定理 置换.extendDomain_symm
+  结论: (e.extendDomain f).symm = 置换.extendDomain e.symm f
   证明: rfl
 -/
 theorem Perm.extendDomain_symm : (e.extendDomain f).symm = Perm.extendDomain e.symm f :=
@@ -1874,8 +1874,8 @@ theorem Perm.extendDomain_trans
   simp [Perm.extendDomain, permCongr_trans]
 
 中文:
-定理 Perm.extendDomain_trans
-  条件: (e e' : Perm α')
+定理 置换.extendDomain_trans
+  条件: (e e' : 置换 α')
   证明: by
   simp [Perm.extendDomain, permCongr_trans]
 
@@ -1903,7 +1903,7 @@ definition subtypeQuotientEquivQuotientSubtype
 
 中文:
 定义 subtypeQuotientEquivQuotientSubtype
-  签名: (p₁ : α -> 命题) {s₁ : Setoid α} {s₂ : Setoid (Subtype p₁)}
+  签名: (p₁ : α -> 命题) {s₁ : 集合等价关系 α} {s₂ : 集合等价关系 (子类型 p₁)}
   定义体: Quotient.hrecOn a.1 (fun a h => ⟦⟨a, (hp₂ _).2 h⟩⟧)
       (fun a b hab => hfunext (by rw [Quotient.sound hab]) fun _ _ _ =>
         heq_of_eq (Quotient.sound ((h _ _).2 hab)))
@@ -2102,7 +2102,7 @@ theorem swap_self
 中文:
 定理 swap_self
   条件: (a : α)
-  结论: swap a a = Equiv.refl _
+  结论: swap a a = 等价.refl _
   证明: ext fun r => swapCore_self r a
 
 Depends on / 依赖: swapCore_self
@@ -2267,7 +2267,7 @@ theorem swap_swap
 中文:
 定理 swap_swap
   条件: (a b : α)
-  结论: (swap a b).trans (swap a b) = Equiv.refl _
+  结论: (swap a b).trans (swap a b) = 等价.refl _
   证明: ext fun _ => swapCore_swapCore _ _ _
 
 @[simp]
@@ -2313,7 +2313,7 @@ theorem swap_eq_refl_iff
 中文:
 定理 swap_eq_refl_iff
   条件: {x y : α}
-  结论: swap x y = Equiv.refl _ ↔ x = y
+  结论: swap x y = 等价.refl _ ↔ x = y
   证明: ⟨fun h => (Equiv.refl _).injective (by grind), by grind⟩
 
 Depends on / 依赖: Equiv.refl, injective
@@ -2333,7 +2333,7 @@ theorem swap_comp_apply
 
 中文:
 定理 swap_comp_apply
-  条件: {a b x : α} (π : Perm α)
+  条件: {a b x : α} (π : 置换 α)
   证明: by
   cases π
   rfl
@@ -2356,7 +2356,7 @@ theorem swap_eq_update
 中文:
 定理 swap_eq_update
   条件: (i j : α)
-  结论: (Equiv.swap i j : α -> α) = update (update id j i) i j
+  结论: (等价.swap i j : α -> α) = update (update id j i) i j
   证明: by
   grind
 -/
@@ -2583,7 +2583,7 @@ lemma image_swap_of_mem_of_notMem
 
 中文:
 引理 image_swap_of_mem_of_notMem
-  结论: {α : 类型} [DecidableEq α] {s : Set α} {i j : α}
+  结论: {α : 类型} [DecidableEq α] {s : 集合 α} {i j : α}
   证明: Set.ext fun a => by
     constructor
     · rintro ⟨a, ha, rfl⟩
@@ -2622,7 +2622,7 @@ theorem sumCongr_swap_refl
 
 中文:
 定理 sumCongr_swap_refl
-  条件: {α β : Sort _} [DecidableEq α] [DecidableEq β] (i j : α)
+  条件: {α β : 类型层 _} [DecidableEq α] [DecidableEq β] (i j : α)
   证明: by
   aesop
 
@@ -2644,7 +2644,7 @@ theorem sumCongr_refl_swap
 
 中文:
 定理 sumCongr_refl_swap
-  条件: {α β : Sort _} [DecidableEq α] [DecidableEq β] (i j : β)
+  条件: {α β : 类型层 _} [DecidableEq α] [DecidableEq β] (i j : β)
   证明: by
   aesop
 -/
@@ -2717,7 +2717,7 @@ definition toPerm
 
 中文:
 定义 toPerm
-  签名: (f : α -> α) (h : Involutive f)
+  签名: (f : α -> α) (h : 对合 f)
   定义体: ⟨f, f, h.leftInverse, h.rightInverse⟩
 
 @[simp]
@@ -2741,7 +2741,7 @@ theorem coe_toPerm
 
 中文:
 定理 coe_toPerm
-  条件: {f : α -> α} (h : Involutive f)
+  条件: {f : α -> α} (h : 对合 f)
   结论: (h.toPerm f : α -> α) = f
   证明: rfl
 
@@ -2762,7 +2762,7 @@ theorem toPerm_symm
 
 中文:
 定理 toPerm_symm
-  条件: {f : α -> α} (h : Involutive f)
+  条件: {f : α -> α} (h : 对合 f)
   结论: (h.toPerm f).symm = h.toPerm f
   证明: rfl
 -/
@@ -2780,8 +2780,8 @@ theorem toPerm_involutive
 
 中文:
 定理 toPerm_involutive
-  条件: {f : α -> α} (h : Involutive f)
-  结论: Involutive (h.toPerm f)
+  条件: {f : α -> α} (h : 对合 f)
+  结论: 对合 (h.toPerm f)
   证明: h
 -/
 theorem toPerm_involutive {f : α -> α} (h : Involutive f) : Involutive (h.toPerm f) :=
@@ -2798,7 +2798,7 @@ theorem symm_eq_self_of_involutive
 
 中文:
 定理 symm_eq_self_of_involutive
-  条件: (f : Equiv.Perm α) (h : Involutive f)
+  条件: (f : 等价.置换 α) (h : 对合 f)
   结论: f.symm = f
   证明: DFunLike.coe_injective (h.leftInverse_iff.mp f.left_inv)
 
@@ -2819,9 +2819,9 @@ theorem PLift.eq_up_iff_down_eq
   proof: Equiv.plift.eq_symm_apply
 
 中文:
-定理 PLift.eq_up_iff_down_eq
-  条件: {x : PLift α} {y : α}
-  结论: x = PLift.up y ↔ x.down = y
+定理 命题层提升.eq_up_iff_down_eq
+  条件: {x : 命题层提升 α} {y : α}
+  结论: x = 命题层提升.up y ↔ x.down = y
   证明: Equiv.plift.eq_symm_apply
 
 Depends on / 依赖: Equiv.plift.eq_symm_apply, eq_symm_apply
@@ -2839,7 +2839,7 @@ theorem Function.Injective.map_swap
   grind
 
 中文:
-定理 Function.Injective.map_swap
+定理 函数.单射.map_swap
   结论: [DecidableEq α] [DecidableEq β] {f : α -> β}
   证明: by
   grind
@@ -2869,7 +2869,7 @@ definition piCongrLeft'
 
 中文:
 定义 piCongrLeft'
-  签名: (P : α -> Sort*) (e : α ≃ β)
+  签名: (P : α -> 类型层*) (e : α ≃ β)
   定义体: f (e.symm x)
   invFun f x := (e.symm_apply_apply x).ndrec (f (e x))
   left_inv f := by grind
@@ -2901,7 +2901,7 @@ theorem piCongrLeft'_symm
 
 中文:
 定理 piCongrLeft'_symm
-  条件: (P : Sort*) (e : α ≃ β)
+  条件: (P : 类型层*) (e : α ≃ β)
   证明: by ext; simp [piCongrLeft']
 -/
 theorem piCongrLeft'_symm (P : Sort*) (e : α ≃ β) :
@@ -2926,7 +2926,7 @@ lemma piCongrLeft'_symm_apply_apply
 
 中文:
 引理 piCongrLeft'_symm_apply_apply
-  条件: (P : α -> Sort*) (e : α ≃ β) (g : 对任意 b, P (e.symm b)) (b : β)
+  条件: (P : α -> 类型层*) (e : α ≃ β) (g : 对任意 b, P (e.symm b)) (b : β)
   证明: by
   rw [piCongrLeft'_symm_apply]; rw [← heq_iff_eq]; rw [eqRec_heq_iff]
   exact congr_arg_heq _ (e.apply_symm_apply _)
@@ -2950,7 +2950,7 @@ lemma piCongrLeft'_refl
 
 中文:
 引理 piCongrLeft'_refl
-  条件: (P : α -> Sort*)
+  条件: (P : α -> 类型层*)
   结论: piCongrLeft' P (.refl α) = .refl (对任意 a, P a)
   证明: rfl
 -/
@@ -3037,7 +3037,7 @@ lemma piCongrLeft_refl
 
 中文:
 引理 piCongrLeft_refl
-  条件: (P : α -> Sort*)
+  条件: (P : α -> 类型层*)
   结论: piCongrLeft P (.refl α) = .refl (对任意 a, P a)
   证明: rfl
 -/
@@ -3080,7 +3080,7 @@ lemma piCongrLeft_apply_eq_cast
 
 中文:
 引理 piCongrLeft_apply_eq_cast
-  结论: {P : β -> Sort v} {e : α ≃ β}
+  结论: {P : β -> 类型层 v} {e : α ≃ β}
   证明: eqRec_eq_cast _ _
 
 Depends on / 依赖: eqRec_eq_cast
@@ -3325,7 +3325,7 @@ definition piCongrSigmaFiber
 
 中文:
 定义 piCongrSigmaFiber
-  签名: {γ₁ γ₂ : α -> Sort*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
+  签名: {γ₁ γ₂ : α -> 类型层*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
   定义体: .trans (piCongrRight e) piCongrLeft γ₁ (sigmaFiberEquiv f)
 
 @[simp]
@@ -3349,7 +3349,7 @@ theorem piCongrSigmaFiber_apply
 
 中文:
 定理 piCongrSigmaFiber_apply
-  结论: {γ₁ γ₂ : α -> Sort*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
+  结论: {γ₁ γ₂ : α -> 类型层*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
   证明: rfl
 
 @[simp]
@@ -3369,7 +3369,7 @@ theorem piCongrSigmaFiber_symm_apply
 
 中文:
 定理 piCongrSigmaFiber_symm_apply
-  结论: {γ₁ γ₂ : α -> Sort*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
+  结论: {γ₁ γ₂ : α -> 类型层*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
   证明: rfl
 -/
 theorem piCongrSigmaFiber_symm_apply {γ₁ γ₂ : α -> Sort*} (e : (a : α) -> γ₁ a ≃ γ₂ a)
@@ -3457,7 +3457,7 @@ definition piCongrSet
 
 中文:
 定义 piCongrSet
-  签名: {α} {W : α -> Sort w} {s t : Set α} (h : s = t)
+  签名: {α} {W : α -> 类型层 w} {s t : 集合 α} (h : s = t)
   定义体: f ⟨i, h ▸ i.2⟩
   invFun f i := f ⟨i, h.symm ▸ i.2⟩
 -/
@@ -3477,7 +3477,7 @@ lemma eq_conj
 
 中文:
 引理 eq_conj
-  结论: {α α' β β' : Sort*} (ε₁ : α ≃ α') (ε₂ : β' ≃ β)
+  结论: {α α' β β' : 类型层*} (ε₁ : α ≃ α') (ε₂ : β' ≃ β)
   证明: by
   rw [Equiv.symm_comp_eq]; rw [Equiv.comp_symm_eq]; rw [Function.comp_assoc]
 
@@ -3534,8 +3534,8 @@ instance [Std.Associative
   body: (e.semiconj₂_conj f).isAssociative_right e.surjective
 
 中文:
-实例 [Std.Associative
-  签名: f] : Std.Associative (e.arrowCongr (e.arrowCongr e) f)
+实例 [Std.结合
+  签名: f] : Std.结合 (e.arrowCongr (e.arrowCongr e) f)
   定义体: (e.semiconj₂_conj f).isAssociative_right e.surjective
 
 Depends on / 依赖: e.semiconj, e.surjective, isAssociative_right, surjective
@@ -3578,7 +3578,7 @@ theorem ulift_symm_down
 中文:
 定理 ulift_symm_down
   条件: {α} (x : α)
-  结论: (Equiv.ulift.{u, v}.symm x).down = x
+  结论: (等价.ulift.{u, v}.symm x).down = x
   证明: rfl
 -/
 theorem ulift_symm_down {α} (x : α) : (Equiv.ulift.{u, v}.symm x).down = x :=
@@ -3596,7 +3596,7 @@ theorem Function.Injective.swap_apply
   proof: Eq.symm (map_swap hf x y z)
 
 中文:
-定理 Function.Injective.swap_apply
+定理 函数.单射.swap_apply
   证明: Eq.symm (map_swap hf x y z)
 
 Depends on / 依赖: Eq.symm, map_swap
@@ -3614,7 +3614,7 @@ theorem Function.Injective.swap_comp
   proof: funext fun _ => hf.swap_apply _ _ _
 
 中文:
-定理 Function.Injective.swap_comp
+定理 函数.单射.swap_comp
   证明: funext fun _ => hf.swap_apply _ _ _
 
 Depends on / 依赖: hf.swap_apply, swap_apply
@@ -3637,7 +3637,7 @@ definition equivOfSubsingletonOfSubsingleton
 
 中文:
 定义 equivOfSubsingletonOfSubsingleton
-  签名: [Subsingleton α] [Subsingleton β] (f : α -> β) (g : β -> α)
+  签名: [子单例 α] [子单例 β] (f : α -> β) (g : β -> α)
   定义体: f
   invFun := g
   left_inv _ := Subsingleton.elim _ _
@@ -3659,8 +3659,8 @@ definition Equiv.punitOfNonemptyOfSubsingleton
   body: equivOfSubsingletonOfSubsingleton (fun _ => PUnit.unit) fun _ => h.some
 
 中文:
-定义 Equiv.punitOfNonemptyOfSubsingleton
-  签名: [h : Nonempty α] [Subsingleton α]
+定义 等价.punitOfNonemptyOfSubsingleton
+  签名: [h : 非空 α] [子单例 α]
   定义体: equivOfSubsingletonOfSubsingleton (fun _ => PUnit.unit) fun _ => h.some
 
 Depends on / 依赖: PUnit.unit, equivOfSubsingletonOfSubsingleton, h.some
@@ -3680,7 +3680,7 @@ definition uniqueUniqueEquiv
 
 中文:
 定义 uniqueUniqueEquiv
-  签名: : Unique (Unique α) ≃ Unique α
+  签名: : 唯一 (唯一 α) ≃ 唯一 α
   定义体: equivOfSubsingletonOfSubsingleton (fun h => h.default) fun h =>
     { default := h, uniq := fun _ => Subsingleton.elim _ _ }
 
@@ -3700,7 +3700,7 @@ definition uniqueEquivEquivUnique
 
 中文:
 定义 uniqueEquivEquivUnique
-  签名: (α : Sort u) (β : Sort v) [Unique β]
+  签名: (α : 类型层 u) (β : 类型层 v) [唯一 β]
   定义体: equivOfSubsingletonOfSubsingleton (fun _ => Equiv.ofUnique _ _) Equiv.unique
 
 Depends on / 依赖: Equiv.ofUnique, Equiv.unique, equivOfSubsingletonOfSubsingleton, ofUnique, unique
@@ -3765,7 +3765,7 @@ theorem piCongrLeft'_update
 
 中文:
 定理 piCongrLeft'_update
-  结论: [DecidableEq α] [DecidableEq β] (P : α -> Sort*) (e : α ≃ β)
+  结论: [DecidableEq α] [DecidableEq β] (P : α -> 类型层*) (e : α ≃ β)
   证明: by
   ext b'
   rcases eq_or_ne b' b with (rfl | h) <;> simp_all
@@ -3789,7 +3789,7 @@ theorem piCongrLeft'_symm_update
 
 中文:
 定理 piCongrLeft'_symm_update
-  结论: [DecidableEq α] [DecidableEq β] (P : α -> Sort*) (e : α ≃ β)
+  结论: [DecidableEq α] [DecidableEq β] (P : α -> 类型层*) (e : α ≃ β)
   证明: by
   simp [(e.piCongrLeft' P).symm_apply_eq, piCongrLeft'_update]
 -/

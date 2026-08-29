@@ -124,7 +124,7 @@ definition isNatProp
   let (_, _, .const ``Nat [], _, _) ← e.ineqOrNotIneq? | failure
 
 中文:
-定义 isNatProp
+定义 is自然数Prop
   签名: (e : Expr)
   定义体: succeeds do
   let (_, _, .const ``Nat [], _, _) ← e.ineqOrNotIneq? | failure
@@ -143,7 +143,7 @@ definition isNatCoe
   | _ => none
 
 中文:
-定义 isNatCoe
+定义 is自然数Coe
   签名: (e : Expr)
   定义体: match e.getAppFnArgs with
   | (``Nat.cast, #[target, _, n]) => some ⟨n, target⟩
@@ -170,7 +170,7 @@ definition getNatComparisons
     | (``HSub.hSub, #[_, _, _, _, a, b]) => getN
 
 中文:
-定义 getNatComparisons
+定义 get自然数Comparisons
   签名: (e : Expr)
   定义体: match isNatCoe e with
   | some x => [x]
@@ -204,7 +204,7 @@ definition mkNatCastNonnegProof?
 @[deprecated (since := "2026-05-27")] alias mk_natCast_nonneg_prf := mkNatCastNonnegProof?
 
 中文:
-定义 mkNatCastNonnegProof?
+定义 mk自然数CastNonnegProof?
   签名: (p : Expr × Expr)
   定义体: match p with
   | ⟨e, target⟩ => try commitIfNoEx (mkAppM ``natCast_nonneg #[target, e])
@@ -241,7 +241,7 @@ definition natToInt
        
 
 中文:
-定义 natToInt
+定义 natTo整数
   签名: : GlobalBranchingPreprocessor where
   定义体: "move nats to ints"
   transform g l := do
@@ -303,7 +303,7 @@ definition mkNonstrictIntProof?
     return mkApp (← mkAppM ``Iff.mpr #[← mkAppOptM ``Int.add_one_le_iff 
 
 中文:
-定义 mkNonstrictIntProof?
+定义 mkNonstrict整数Proof?
   签名: (pf : Expr)
   定义体: do
   match ← (← inferType pf).ineqOrNotIneq? with
@@ -333,7 +333,7 @@ definition strengthenStrictInt
   transform h := return [(← mkNonstrictIntProof? h).getD h]
 
 中文:
-定义 strengthenStrictInt
+定义 strengthenStrict整数
   签名: : Preprocessor where
   定义体: "strengthen strict inequalities over int"
   transform h := return [(← mkNonstrictIntProof? h).getD h]
@@ -418,7 +418,7 @@ theorem without_one_mul
 
 中文:
 定理 without_one_mul
-  条件: {M : 类型} [MulOneClass M] {a b : M} (h : 1 * a = b)
+  条件: {M : 类型} [MulOne类 M] {a b : M} (h : 1 * a = b)
   结论: a = b
   证明: by
   rwa [one_mul] at h
@@ -522,7 +522,7 @@ definition findSquares
 
 中文:
 定义 findSquares
-  签名: (s : TreeSet (自然数 × 布尔) lexOrd.compare) (e : Expr)
+  签名: (s : TreeSet (自然数 × 布尔值) lexOrd.compare) (e : Expr)
   定义体: -- Completely traversing the expression is non-ideal,
   -- as we can descend into expressions that could not possibly be seen by `linarith`.
   -- As a result we visit expressions with bvars, which then cause panics.
@@ -567,7 +567,7 @@ definition nlinarithGetSquareProofs
 
 中文:
 定义 nlinarithGetSquareProofs
-  签名: (ls : List Expr)
+  签名: (ls : 列表 Expr)
   定义体: withTraceNode `linarith (fun _ => return m!" finding squares") do
   -- find the squares in `AtomM` to ensure deterministic behavior
   let s ← AtomM.run .reducible do
@@ -604,7 +604,7 @@ definition nlinarithGetProductsProofs
 
 中文:
 定义 nlinarithGetProductsProofs
-  签名: (ls : List Expr)
+  签名: (ls : 列表 Expr)
   定义体: withTraceNode `linarith (fun _ => return m!" adding product terms") do
   let with_comps ← ls.mapM (fun e => do
     let tp ← inferType e
@@ -686,7 +686,7 @@ definition removeNeAux
 
 中文:
 定义 removeNeAux
-  签名: : MVarId -> List Expr -> MetaM (List Branch)
+  签名: : MVarId -> 列表 Expr -> MetaM (列表 Branch)
   定义体: fun g hs => do
   let some (e, α, a, b) ← hs.findSomeM? (fun e : Expr => do
     let some (α, a, b) := (← instantiateMVars (← inferType e)).ne?' | return none
@@ -743,7 +743,7 @@ definition nnrealToReal
   transform l := do (← nnrealToRealTransform.get) l
 
 中文:
-定义 nnrealToReal
+定义 nnrealTo实数
   签名: : GlobalPreprocessor where
   定义体: "move nnreals to reals"
   transform l := do (← nnrealToRealTransform.get) l
@@ -765,7 +765,7 @@ definition defaultPreprocessors
 
 中文:
 定义 defaultPreprocessors
-  签名: : List GlobalBranchingPreprocessor
+  签名: : 列表 GlobalBranchingPreprocessor
   定义体: [filterComparisons, nnrealToReal, natToInt, strengthenStrictInt,
     compWithZero, cancelDenoms]
 
@@ -789,7 +789,7 @@ g.withContext
 
 中文:
 定义 preprocess
-  签名: (pps : List GlobalBranchingPreprocessor) (g : MVarId) (l : List Expr)
+  签名: (pps : 列表 GlobalBranchingPreprocessor) (g : MVarId) (l : 列表 Expr)
   定义体: do
 withTraceNode `linarith (fun _ => return m!"Running preprocessors")
 g.withContext

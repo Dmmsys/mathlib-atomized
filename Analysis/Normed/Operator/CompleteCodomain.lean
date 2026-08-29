@@ -45,7 +45,7 @@ lemma completeSpace_of_completeSpace_continuousLinearMap
 
 中文:
 引理 completeSpace_of_completeSpace_continuousLinearMap
-  条件: [CompleteSpace (E ->L[𝕜] F)]
+  条件: [完备空间 (E ->L[𝕜] F)]
   证明: by
   refine Metric.complete_of_cauchySeq_tendsto fun f hf => ?_
   obtain ⟨v, hv⟩ : exists (v : E), v != 0 := exists_ne 0

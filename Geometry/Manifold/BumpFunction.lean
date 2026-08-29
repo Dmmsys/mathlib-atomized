@@ -64,9 +64,9 @@ structure SmoothBumpFunction
     - closedBall_subset : closedBall (extChartAt I c c) rOut inter range I subseteq (extChartAt I c).target
 
 中文:
-结构 SmoothBumpFunction
+结构 光滑凸函数
   参数: (c : M)
-  继承: ContDiffBump (extChartAt I c c)
+  继承: 余ntDiffBump (extChartAt I c c)
   公理与运算 (1 个):
     - closedBall_subset : closedBall (extChartAt I c c) rOut inter range I subseteq (extChartAt I c).target
 -/
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (SmoothBumpFunction I c) fun _ => M -> 实数
+  签名: CoeFun (光滑凸函数 I c) fun _ => M -> 实数
   定义体: ⟨toFun⟩
 -/
 instance : CoeFun (SmoothBumpFunction I c) fun _ => M -> Real :=
@@ -283,7 +283,7 @@ theorem isOpen_support
 
 中文:
 定理 isOpen_support
-  结论: IsOpen (support f)
+  结论: 是开集 (support f)
   证明: by
   rw [support_eq_inter_preimage]
   exact isOpen_extChartAt_preimage c isOpen_ball
@@ -349,7 +349,7 @@ theorem image_eq_inter_preimage_of_subset_support
 
 中文:
 定理 image_eq_inter_preimage_of_subset_support
-  条件: {s : Set M} (hs : s subseteq support f)
+  条件: {s : 集合 M} (hs : s subseteq support f)
   证明: by
   rw [support_eq_inter_preimage]; rw [subset_inter_iff]; rw [← extChartAt_source I]; rw [← image_subset_iff] at hs
   obtain ⟨hse, hsf⟩ := hs
@@ -386,7 +386,7 @@ theorem mem_Icc
 
 中文:
 定理 mem_Icc
-  结论: f x in Icc (0 : 实数) 1
+  结论: f x in 闭区间 (0 : 实数) 1
   证明: by
   have : f x = 0 ∨ f x = _ := indicator_eq_zero_or_self _ _ _
   rcases this with h | h <;> rw [h]
@@ -567,7 +567,7 @@ theorem nonempty_support
 
 中文:
 定理 nonempty_support
-  结论: (support f).Nonempty
+  结论: (support f).非空
   证明: ⟨c, f.c_mem_support⟩
 
 Depends on / 依赖: c_mem_support, f.c_mem_support
@@ -646,7 +646,7 @@ theorem isClosed_image_of_isClosed
 
 中文:
 定理 isClosed_image_of_isClosed
-  条件: {s : Set M} (hsc : IsClosed s) (hs : s subseteq support f)
+  条件: {s : 集合 M} (hsc : 是闭集 s) (hs : s subseteq support f)
   证明: by
   rw [f.image_eq_inter_preimage_of_subset_support hs]
   refine ContinuousOn.preimage_isClosed_of_isClosed
@@ -676,8 +676,8 @@ theorem exists_r_pos_lt_subset_ball
   exact ⟨r, hrR, subset_inter hs.1 (image_su
 
 中文:
-定理 exists_r_pos_lt_subset_ball
-  条件: {s : Set M} (hsc : IsClosed s) (hs : s subseteq support f)
+定理 存在_r_pos_lt_subset_ball
+  条件: {s : 集合 M} (hsc : 是闭集 s) (hs : s subseteq support f)
   证明: by
   set e := extChartAt I c
   have : IsClosed (e '' s) := f.isClosed_image_of_isClosed hsc hs
@@ -710,7 +710,7 @@ definition updateRIn
 
 中文:
 定义 updateRIn
-  签名: (r : 实数) (hr : r in Ioo 0 f.rOut)
+  签名: (r : 实数) (hr : r in 开区间 0 f.rOut)
   定义体: ⟨⟨r, f.rOut, hr.1, hr.2⟩, f.closedBall_subset⟩
 
 @[simp]
@@ -732,7 +732,7 @@ theorem support_updateRIn
 
 中文:
 定理 support_updateRIn
-  条件: {r : 实数} (hr : r in Ioo 0 f.rOut)
+  条件: {r : 实数} (hr : r in 开区间 0 f.rOut)
   证明: by
   simp only [support_eq_inter_preimage, updateRIn_rOut]
 
@@ -752,7 +752,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (SmoothBumpFunction I c)
+  签名: 非空 (光滑凸函数 I c)
   定义体: nhdsWithin_range_basis.nonempty
 
 Depends on / 依赖: nhdsWithin_range_basis, nhdsWithin_range_basis.nonempty, nonempty
@@ -919,7 +919,7 @@ theorem nhds_basis_support
 
 中文:
 定理 nhds_basis_support
-  条件: {s : Set M} (hs : s in 𝓝 c)
+  条件: {s : 集合 M} (hs : s in 𝓝 c)
   证明: ((nhds_basis_tsupport c).restrict_subset hs).to_hasBasis'
     (fun f hf => ⟨f, hf.2, subset_closure⟩) fun f _ => f.support_mem_nhds
 
@@ -990,7 +990,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: f.contMDiff.continuous
 -/
 protected theorem continuous : Continuous f :=
@@ -1013,7 +1013,7 @@ theorem contMDiff_smul
 
 中文:
 定理 contMDiff_smul
-  结论: {G} [NormedAddCommGroup G] [NormedSpace 实数 G] {g : M -> G}
+  结论: {G} [赋范交换加群 G] [赋范空间 实数 G] {g : M -> G}
   证明: by
   refine contMDiff_of_tsupport fun x hx => ?_
   -- Porting note: was a more readable `calc`

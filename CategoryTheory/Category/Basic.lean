@@ -134,9 +134,9 @@ class CategoryStruct
 中文:
 类 CategoryStruct
   参数: (obj : 类型u)
-  继承: Quiver.{v} obj
+  继承: 箭图.{v} obj
   公理与运算 (2 个):
-    - id : 对任意 X : obj, Hom X X
+    - id : 对任意 X : obj, 态射 X X
     - comp : 对任意 {X Y Z : obj}, (X ⟶ Y) -> (Y ⟶ Z) -> (X ⟶ Z)
 
 Depends on / 依赖: CategoryStruct, CategoryStruct.comp
@@ -265,7 +265,7 @@ class Category
     - assoc : forall {W X Y Z : obj} (f : W ⟶ X) (g : X ⟶ Y) (h : Y ⟶ Z), (f ≫ g) ≫ h = f ≫ g ≫ h  [default: by cat_disch]
 
 中文:
-类 Category
+类 范畴
   参数: (obj : 类型u)
   继承: CategoryStruct.{v} obj
   公理与运算 (3 个):
@@ -302,7 +302,7 @@ abbreviation Category.mk'
 example {C} [Category C] {X Y : C} (f : X ⟶ Y) : f ≫ 𝟙 Y = f := by simp
 
 中文:
-缩写 Category.mk'
+缩写 范畴.mk'
   签名: {obj : 类型u} [CategoryStruct.{v} obj]
   定义体: by simp
 example {C} [Category C] {X Y : C} (f : X ⟶ Y) : f ≫ 𝟙 Y = f := by simp
@@ -327,8 +327,8 @@ abbreviation LargeCategory
   body: Category.{u} C
 
 中文:
-缩写 LargeCategory
-  签名: (C : Type (u + 1))
+缩写 大范畴
+  签名: (C : 类型 (u + 1))
   定义体: Category.{u} C
 
 Depends on / 依赖: Category
@@ -344,7 +344,7 @@ abbreviation SmallCategory
   body: Category.{u} C
 
 中文:
-缩写 SmallCategory
+缩写 小范畴
   签名: (C : 类型u)
   定义体: Category.{u} C
 
@@ -366,7 +366,7 @@ lemma Category.assoc'
   proof: (Category.assoc h g f).symm
 
 中文:
-引理 Category.assoc'
+引理 范畴.assoc'
   条件: {W X Y Z : C} (f : X ⟶ W) (g : Y ⟶ X) (h : Z ⟶ Y)
   证明: (Category.assoc h g f).symm
 
@@ -500,7 +500,7 @@ theorem comp_ite
 
 中文:
 定理 comp_ite
-  条件: {P : 命题} [Decidable P] {X Y Z : C} (f : X ⟶ Y) (g g' : Y ⟶ Z)
+  条件: {P : 命题} [可判定 P] {X Y Z : C} (f : X ⟶ Y) (g g' : Y ⟶ Z)
   证明: by aesop
 
 @[to_dual (reorder := f g' g) dite_comp]
@@ -521,7 +521,7 @@ theorem comp_dite
 
 中文:
 定理 comp_dite
-  结论: {P : 命题} [Decidable P]
+  结论: {P : 命题} [可判定 P]
   证明: by aesop
 
 Depends on / 依赖: Category
@@ -540,7 +540,7 @@ class Epi
     - left_cancellation : forall {Z : C} (g h : Y ⟶ Z), f ≫ g = f ≫ h -> g = h
 
 中文:
-类 Epi
+类 满态射
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
     - left_cancellation : 对任意 {Z : C} (g h : Y ⟶ Z), f ≫ g = f ≫ h -> g = h
@@ -562,7 +562,7 @@ class Mono
     - right_cancellation : forall {Z : C} (g h : Z ⟶ X), g ≫ f = h ≫ f -> g = h
 
 中文:
-类 Mono
+类 单态射
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
     - right_cancellation : 对任意 {Z : C} (g h : Z ⟶ X), g ≫ f = h ≫ f -> g = h
@@ -589,7 +589,7 @@ theorem cancel_epi
 
 中文:
 定理 cancel_epi
-  条件: (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z}
+  条件: (f : X ⟶ Y) [满态射 f] {g h : Y ⟶ Z}
   结论: f ≫ g = f ≫ h ↔ g = h
   证明: ⟨fun p => Epi.left_cancellation g h p, congr_arg _⟩
 
@@ -613,7 +613,7 @@ theorem cancel_epi_assoc_iff
 
 中文:
 定理 cancel_epi_assoc_iff
-  条件: (f : X ⟶ Y) [Epi f] {g h : Y ⟶ Z} {W : C} {k l : Z ⟶ W}
+  条件: (f : X ⟶ Y) [满态射 f] {g h : Y ⟶ Z} {W : C} {k l : Z ⟶ W}
   证明: ⟨fun p => (cancel_epi f).1 by simpa using p, fun p => by simp only [Category.assoc, p]⟩
 
 @[to_dual]
@@ -638,7 +638,7 @@ theorem cancel_epi_id
 
 中文:
 定理 cancel_epi_id
-  条件: (f : X ⟶ Y) [Epi f] {h : Y ⟶ Y}
+  条件: (f : X ⟶ Y) [满态射 f] {h : Y ⟶ Y}
   结论: f ≫ h = f ↔ h = 𝟙 Y
   证明: by
   convert! cancel_epi f
@@ -666,7 +666,7 @@ instance epi_comp
 
 中文:
 实例 epi_comp
-  签名: (f : X ⟶ Y) [Epi f] (g : Y ⟶ Z) [Epi g]
+  签名: (f : X ⟶ Y) [满态射 f] (g : Y ⟶ Z) [满态射 g]
   定义体: ⟨fun _ _ w => (cancel_epi g).1 (cancel_epi_assoc_iff f).1 w⟩
 
 Depends on / 依赖: cancel_epi, cancel_epi_assoc_iff
@@ -693,8 +693,8 @@ theorem epi_comp'
 
 中文:
 定理 epi_comp'
-  条件: {f : X ⟶ Y} {g : Y ⟶ Z} (hf : Epi f) (hg : Epi g)
-  结论: Epi (f ≫ g)
+  条件: {f : X ⟶ Y} {g : Y ⟶ Z} (hf : 满态射 f) (hg : 满态射 g)
+  结论: 满态射 (f ≫ g)
   证明: inferInstance
 
 @[to_dual (reorder := f g)]
@@ -716,8 +716,8 @@ theorem epi_of_epi
 
 中文:
 定理 epi_of_epi
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [Epi (f ≫ g)]
-  结论: Epi g
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [满态射 (f ≫ g)]
+  结论: 满态射 g
   证明: ⟨fun _ _ w => (cancel_epi (f ≫ g)).1 by simp only [Category.assoc, w]⟩
 
 @[to_dual]
@@ -740,8 +740,8 @@ theorem epi_of_epi_fac
 
 中文:
 定理 epi_of_epi_fac
-  条件: {f : X ⟶ Y} {g : Y ⟶ Z} {h : X ⟶ Z} [Epi h] (w : f ≫ g = h)
-  结论: Epi g
+  条件: {f : X ⟶ Y} {g : Y ⟶ Z} {h : X ⟶ Z} [满态射 h] (w : f ≫ g = h)
+  结论: 满态射 g
   证明: by
   subst h; exact epi_of_epi f g
 
@@ -767,9 +767,9 @@ lemma epi_iff_forall_injective
 @[to_dual]
 
 中文:
-引理 epi_iff_forall_injective
+引理 epi_iff_对任意_injective
   条件: (f : X ⟶ Y)
-  结论: Epi f ↔ 对任意 Z, (fun g : Y ⟶ Z => f ≫ g).Injective
+  结论: 满态射 f ↔ 对任意 Z, (fun g : Y ⟶ Z => f ≫ g).单射
   证明: ⟨fun _ _ _ _ hg => (cancel_epi f).1 hg, fun h => ⟨fun _ _ hg => h _ hg⟩⟩
 
 @[to_dual]
@@ -789,7 +789,7 @@ instance [Quiver.IsThin
   body: Subsingleton.elim _ _
 
 中文:
-实例 [Quiver.IsThin
+实例 [箭图.IsThin
   签名: C] (f
   定义体: Subsingleton.elim _ _
 
@@ -823,7 +823,7 @@ definition uliftCategory
 
 中文:
 定义 uliftCategory
-  签名: : Category.{v} (ULift.{u'} C) where
+  签名: : 范畴.{v} (类型层提升.{u'} C) where
   定义体: X.down ⟶ Y.down
   id X := 𝟙 X.down
   comp f g := f ≫ g

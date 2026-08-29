@@ -173,7 +173,7 @@ theorem pderivFun_coe
 
 中文:
 定理 pderivFun_coe
-  条件: {i : σ} (f : MvPolynomial σ R)
+  条件: {i : σ} (f : 多元多项式 σ R)
   证明: by
   ext
   rw [coeff_pderivFun]; rw [coeff_coe]; rw [coeff_coe]; rw [coeff_pderiv]
@@ -226,7 +226,7 @@ theorem pderivFun_coe_mul_coe
 
 中文:
 定理 pderivFun_coe_mul_coe
-  条件: {i : σ} (f g : MvPolynomial σ R)
+  条件: {i : σ} (f g : 多元多项式 σ R)
   证明: by
   rw [← coe_mul]; rw [pderivFun_coe]; rw [pderiv_mul]; rw [add_comm]; rw [mul_comm _ g]; rw [← coe_mul]; rw [← coe_mul]; rw [MvPolynomial.coe_add]
 -/
@@ -391,7 +391,7 @@ theorem pderiv_coe
 
 中文:
 定理 pderiv_coe
-  条件: {i : σ} (f : MvPolynomial σ R)
+  条件: {i : σ} (f : 多元多项式 σ R)
   证明: pderivFun_coe f
 
 @[simp]
@@ -556,7 +556,7 @@ theorem pderiv.ext
 
 中文:
 定理 pderiv.ext
-  结论: [CommRing R] [IsAddTorsionFree R] {f g : MvPowerSeries σ R}
+  结论: [交换环 R] [是加法无挠 R] {f g : MvPowerSeries σ R}
   证明: by
   ext n
   by_cases h : n = 0
@@ -595,7 +595,7 @@ theorem pderiv_inv
 
 中文:
 定理 pderiv_inv
-  条件: {i : σ} [CommRing R] (f : (MvPowerSeries σ R)ˣ)
+  条件: {i : σ} [交换环 R] (f : (MvPowerSeries σ R)ˣ)
   证明: (pderiv R i).leibniz_of_mul_eq_one f.inv_mul
 
 @[simp]
@@ -617,7 +617,7 @@ theorem pderiv_invOf
 
 中文:
 定理 pderiv_invOf
-  条件: {i : σ} [CommRing R] (f : MvPowerSeries σ R) [Invertible f]
+  条件: {i : σ} [交换环 R] (f : MvPowerSeries σ R) [可逆 f]
   证明: (pderiv R i).leibniz_invOf f
 
 Depends on / 依赖: leibniz_invOf, pderiv
@@ -648,7 +648,7 @@ theorem pderiv_inv'
 
 中文:
 定理 pderiv_inv'
-  条件: {i : σ} [Field R] (f : MvPowerSeries σ R)
+  条件: {i : σ} [域 R] (f : MvPowerSeries σ R)
   证明: by
   by_cases h : constantCoeff f = 0
   · suffices f⁻¹ = 0 by

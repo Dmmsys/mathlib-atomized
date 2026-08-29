@@ -109,8 +109,8 @@ definition TensorProduct
 deriving Zero, Add, AddZeroClass, AddSemigroup
 
 中文:
-定义 TensorProduct
-  签名: : Type _
+定义 张量积
+  签名: : 类型 _
   定义体: (addConGen (TensorProduct.Eqv R M N)).Quotient
 deriving Zero, Add, AddZeroClass, AddSemigroup
 
@@ -141,7 +141,7 @@ Quotient.sound' AddConGen.Rel.of _ _ Eqv.add_comm _ _
 
 中文:
 实例 addCommSemigroup
-  签名: : AddCommSemigroup (M otimes[R] N) where
+  签名: : 加法交换半群 (M otimes[R] N) where
   定义体: fun x y =>
     AddCon.induction_on₂ x y fun _ _ =>
 Quotient.sound' AddConGen.Rel.of _ _ Eqv.add_comm _ _
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M otimes[R] N)
+  签名: 可居 (M otimes[R] N)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (M otimes[R] N) :=
@@ -331,7 +331,7 @@ uniq z := z.induction_on rfl (fun x y => by rw [Subsingleton.elim x 0, zero_tmul
 
 中文:
 实例 uniqueLeft
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: 0
 uniq z := z.induction_on rfl (fun x y => by rw [Subsingleton.elim x 0, zero_tmul]) by
     rintro _ _ rfl rfl; apply add_zero
@@ -353,7 +353,7 @@ uniq z := z.induction_on rfl (fun x y => by rw [Subsingleton.elim y 0, tmul_zero
 
 中文:
 实例 uniqueRight
-  签名: [Subsingleton N]
+  签名: [子单例 N]
   定义体: 0
 uniq z := z.induction_on rfl (fun x y => by rw [Subsingleton.elim y 0, tmul_zero]) by
     rintro _ _ rfl rfl; apply add_zero
@@ -377,8 +377,8 @@ class CompatibleSMul
     - smul_tmul : forall (r : R') (m : M) (n : N), (r • m) otimesₜ n = m otimesₜ[R] (r • n)
 
 中文:
-类 CompatibleSMul
-  参数: [DistribMulAction R' N]
+类 余mpatibleSMul
+  参数: [分配乘法作用 R' N]
   公理与运算 (1 个):
     - smul_tmul : 对任意 (r : R') (m : M) (n : N), (r • m) otimesₜ n = m otimesₜ[R] (r • n)
 -/
@@ -407,7 +407,7 @@ theorem smul_tmul
 
 中文:
 定理 smul_tmul
-  条件: [DistribMulAction R' N] [CompatibleSMul R R' M N] (r : R') (m : M) (n : N)
+  条件: [分配乘法作用 R' N] [余mpatibleSMul R R' M N] (r : R') (m : M) (n : N)
   证明: CompatibleSMul.smul_tmul _ _ _
 
 Depends on / 依赖: CompatibleSMul, CompatibleSMul.smul_tmul, smul_tmul
@@ -428,7 +428,7 @@ definition addMonoidWithWrongNSMul
 
 中文:
 定义 addMonoidWithWrongNSMul
-  签名: : AddMonoid (M otimes[R] N)
+  签名: : 加法幺半群 (M otimes[R] N)
   定义体: { (addConGen (TensorProduct.Eqv R M N)).addMonoid with }
 -/
 private def addMonoidWithWrongNSMul : AddMonoid (M otimes[R] N) :=
@@ -444,8 +444,8 @@ definition SMul.aux
   body: FreeAddMonoid.lift fun p : M × N => (r • p.1) otimesₜ p.2
 
 中文:
-定义 SMul.aux
-  签名: {R' : 类型} [SMul R' M] (r : R')
+定义 标量乘法.aux
+  签名: {R' : 类型} [标量乘法 R' M] (r : R')
   定义体: FreeAddMonoid.lift fun p : M × N => (r • p.1) otimesₜ p.2
 
 Depends on / 依赖: FreeAddMonoid, FreeAddMonoid.lift
@@ -462,8 +462,8 @@ theorem SMul.aux_of
   proof: rfl
 
 中文:
-定理 SMul.aux_of
-  条件: {R' : 类型} [SMul R' M] (r : R') (m : M) (n : N)
+定理 标量乘法.aux_of
+  条件: {R' : 类型} [标量乘法 R' M] (r : R') (m : M) (n : N)
   证明: rfl
 -/
 theorem SMul.aux_of {R' : Type*} [SMul R' M] (r : R') (m : M) (n : N) :
@@ -488,7 +488,7 @@ instance leftHasSMul
 
 中文:
 实例 leftHasSMul
-  签名: : SMul R' (M otimes[R] N)
+  签名: : 标量乘法 R' (M otimes[R] N)
   定义体: id ⟨fun r =>
 (addConGen (TensorProduct.Eqv R M N)).lift (SMul.aux r : _ ->+ M otimes[R] N)
       AddCon.addConGen_le.2 fun x y hxy =>
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (M otimes[R] N)
+  签名: 标量乘法 R (M otimes[R] N)
   定义体: TensorProduct.leftHasSMul
 
 Depends on / 依赖: TensorProduct, TensorProduct.leftHasSMul, leftHasSMul
@@ -666,7 +666,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid (M otimes[R] N) where
+  签名: : 加法幺半群 (M otimes[R] N) where
   定义体: by simp [TensorProduct.zero_smul]
   nsmul_succ := by simp only [TensorProduct.one_smul, TensorProduct.add_smul, forall_const]
 
@@ -685,7 +685,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (M otimes[R] N) where
+  签名: : 加法交换幺半群 (M otimes[R] N) where
 -/
 instance addCommMonoid : AddCommMonoid (M otimes[R] N) where
 
@@ -763,7 +763,7 @@ instance leftDistribMulAction
 
 中文:
 实例 leftDistribMulAction
-  签名: : DistribMulAction R' (M otimes[R] N)
+  签名: : 分配乘法作用 R' (M otimes[R] N)
   定义体: have : forall (r : R') (m : M) (n : N), r • m otimesₜ[R] n = (r • m) otimesₜ n := fun _ _ _ => rfl
   { smul_add := fun r x y => TensorProduct.smul_add r x y
     mul_smul := fun r s x =>
@@ -793,7 +793,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction R (M otimes[R] N)
+  签名: 分配乘法作用 R (M otimes[R] N)
   定义体: TensorProduct.leftDistribMulAction
 
 Depends on / 依赖: TensorProduct, TensorProduct.leftDistribMulAction, leftDistribMulAction
@@ -834,7 +834,7 @@ theorem tmul_smul
 
 中文:
 定理 tmul_smul
-  条件: [DistribMulAction R' N] [CompatibleSMul R R' M N] (r : R') (x : M) (y : N)
+  条件: [分配乘法作用 R' N] [余mpatibleSMul R R' M N] (r : R') (x : M) (y : N)
   证明: (smul_tmul _ _ _).symm
 
 Depends on / 依赖: smul_tmul
@@ -876,7 +876,7 @@ theorem tmul_eq_smul_one_tmul
 
 中文:
 定理 tmul_eq_smul_one_tmul
-  结论: {S : 类型} [Semiring S] [Module R S] [SMulCommClass R S S]
+  结论: {S : 类型} [半环 S] [模 R S] [标量交换类 R S S]
   证明: by
   nth_rw 1 [← mul_one s, ← smul_eq_mul, smul_tmul']
 
@@ -897,7 +897,7 @@ instance leftModule
 
 中文:
 实例 leftModule
-  签名: : Module R'' (M otimes[R] N)
+  签名: : 模 R'' (M otimes[R] N)
   定义体: { add_smul := TensorProduct.add_smul
     zero_smul := TensorProduct.zero_smul }
 
@@ -917,7 +917,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (M otimes[R] N)
+  签名: 模 R (M otimes[R] N)
   定义体: TensorProduct.leftModule
 
 Depends on / 依赖: TensorProduct, TensorProduct.leftModule, leftModule
@@ -936,8 +936,8 @@ instance [Module
       rw [smul_add]; rw [smul_add]; rw [hx]; rw [hy]
 
 中文:
-实例 [Module
-  签名: R''ᵐᵒᵖ M] [IsCentralScalar R'' M] : IsCentralScalar R'' (M otimes[R] N) where
+实例 [模
+  签名: R''ᵐᵒᵖ M] [中心标量 R'' M] : 中心标量 R'' (M otimes[R] N) where
   定义体: x.induction_on (by rw [smul_zero, smul_zero])
       (fun x y => by rw [smul_tmul', smul_tmul', op_smul_eq_smul]) fun x y hx hy => by
       rw [smul_add]; rw [smul_add]; rw [hx]; rw [hy]
@@ -968,7 +968,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMulCommClass R' R'₂ M]
+  签名: [标量交换类 R' R'₂ M]
   定义体: TensorProduct.induction_on x (by simp_rw [TensorProduct.smul_zero])
       (fun m n => by simp_rw [smul_tmul', smul_comm]) fun x y ihx ihy => by
       simp_rw [TensorProduct.smul_add]; rw [ihx, ihy]
@@ -996,7 +996,7 @@ instance isScalarTower_left
 
 中文:
 实例 isScalarTower_left
-  签名: [IsScalarTower R'₂ R' M]
+  签名: [标量塔 R'₂ R' M]
   定义体: ⟨fun s r x =>
     x.induction_on (by simp)
       (fun m n => by rw [smul_tmul', smul_tmul', smul_tmul', smul_assoc]) fun x y ihx ihy => by
@@ -1026,7 +1026,7 @@ instance isScalarTower_right
 
 中文:
 实例 isScalarTower_right
-  签名: [IsScalarTower R'₂ R' N]
+  签名: [标量塔 R'₂ R' N]
   定义体: ⟨fun s r x =>
     x.induction_on (by simp)
       (fun m n => by rw [← tmul_smul, ← tmul_smul, ← tmul_smul, smul_assoc]) fun x y ihx ihy => by
@@ -1052,7 +1052,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R' R] [IsScalarTower R' R M]
+  签名: [标量乘法 R' R] [标量塔 R' R M]
   定义体: TensorProduct.isScalarTower_left
 
 Depends on / 依赖: TensorProduct, TensorProduct.isScalarTower_left, isScalarTower_left
@@ -1116,7 +1116,7 @@ theorem ite_tmul
 
 中文:
 定理 ite_tmul
-  条件: (x₁ : M) (x₂ : N) (P : 命题) [Decidable P]
+  条件: (x₁ : M) (x₂ : N) (P : 命题) [可判定 P]
   证明: by split_ifs <;> simp
 
 Depends on / 依赖: split_ifs
@@ -1134,7 +1134,7 @@ theorem tmul_ite
 
 中文:
 定理 tmul_ite
-  条件: (x₁ : M) (x₂ : N) (P : 命题) [Decidable P]
+  条件: (x₁ : M) (x₂ : N) (P : 命题) [可判定 P]
   证明: by split_ifs <;> simp
 
 Depends on / 依赖: split_ifs
@@ -1153,7 +1153,7 @@ lemma tmul_single
 
 中文:
 引理 tmul_single
-  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [对任意 i, AddCommMonoid (M i)]
+  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [对任意 i, 加法交换幺半群 (M i)]
   证明: by
   by_cases h : i = j <;> aesop
 -/
@@ -1173,7 +1173,7 @@ lemma single_tmul
 
 中文:
 引理 single_tmul
-  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [对任意 i, AddCommMonoid (M i)]
+  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [对任意 i, 加法交换幺半群 (M i)]
   证明: by
   by_cases h : i = j <;> aesop
 -/
@@ -1198,7 +1198,7 @@ theorem sum_tmul
 
 中文:
 定理 sum_tmul
-  条件: {α : 类型} (s : Finset α) (m : α -> M) (n : N)
+  条件: {α : 类型} (s : 有限集 α) (m : α -> M) (n : N)
   证明: by
   classical
     induction s using Finset.induction with
@@ -1228,7 +1228,7 @@ theorem tmul_sum
 
 中文:
 定理 tmul_sum
-  条件: (m : M) {α : 类型} (s : Finset α) (n : α -> N)
+  条件: (m : M) {α : 类型} (s : 有限集 α) (n : α -> N)
   证明: by
   classical
     induction s using Finset.induction with
@@ -1268,7 +1268,7 @@ theorem span_tmul_eq_top
 
 中文:
 定理 span_tmul_eq_top
-  结论: Submodule.span R { t : M otimes[R] N | 存在 m n, m otimesₜ n = t } = ⊤
+  结论: 子模.span R { t : M otimes[R] N | 存在 m n, m otimesₜ n = t } = ⊤
   证明: by
   ext t; simp only [Submodule.mem_top, iff_true]
   refine t.induction_on ?_ ?_ ?_
@@ -1306,7 +1306,7 @@ theorem map₂_mk_top_top_eq_top
 
 中文:
 定理 map₂_mk_top_top_eq_top
-  结论: Submodule.map₂ (mk R M N) ⊤ ⊤ = ⊤
+  结论: 子模.map₂ (mk R M N) ⊤ ⊤ = ⊤
   证明: by
   rw [← top_le_iff]; rw [← span_tmul_eq_top]; rw [Submodule.map₂_eq_span_image2]
   exact Submodule.span_mono fun _ ⟨m, n, h⟩ => ⟨m, trivial, n, trivial, h⟩
@@ -1335,8 +1335,8 @@ theorem exists_eq_tmul_of_forall
     apply h
 
 中文:
-定理 exists_eq_tmul_of_forall
-  结论: (x : TensorProduct R M N)
+定理 存在_eq_tmul_of_对任意
+  结论: (x : 张量积 R M N)
   证明: by
   induction x with
   | zero =>

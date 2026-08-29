@@ -35,7 +35,7 @@ instance measurableSpace
 
 中文:
 实例 measurableSpace
-  签名: : MeasurableSpace (WithLp p X)
+  签名: : 可测空间 (WithLp p X)
   定义体: MeasurableSpace.comap ofLp inferInstance
 
 @[fun_prop]
@@ -58,7 +58,7 @@ lemma measurable_ofLp
 
 中文:
 引理 measurable_ofLp
-  结论: Measurable (@ofLp p X)
+  结论: 可测 (@ofLp p X)
   证明: comap_measurable _
 
 @[fun_prop]
@@ -80,7 +80,7 @@ lemma measurable_toLp
 
 中文:
 引理 measurable_toLp
-  结论: Measurable (@toLp p X)
+  结论: 可测 (@toLp p X)
   证明: fun s hs => by
   obtain ⟨t, ht, rfl⟩ := hs
   simpa [Set.preimage_preimage]
@@ -105,7 +105,7 @@ instance borelSpace
 
 中文:
 实例 borelSpace
-  签名: : BorelSpace (WithLp p (X × Y)) where
+  签名: : Borel空间 (WithLp p (X × Y)) where
   定义体: by
     rw [instProdTopologicalSpace]; rw [borel_comap]; rw [measurableSpace]; rw [BorelSpace.measurable_eq (α := X × Y)]
 
@@ -133,7 +133,7 @@ instance borelSpace
 
 中文:
 实例 borelSpace
-  签名: : BorelSpace (PiLp p X) where
+  签名: : Borel空间 (PiLp p X) where
   定义体: by
     rw [topologicalSpace]; rw [borel_comap]; rw [WithLp.measurableSpace]; rw [BorelSpace.measurable_eq (α := Π i]; rw [X i)]
 
@@ -179,7 +179,7 @@ lemma coe_toLp
 
 中文:
 引理 coe_toLp
-  结论: ⇑(MeasurableEquiv.toLp p X) = WithLp.toLp p
+  结论: ⇑(可测等价.toLp p X) = WithLp.toLp p
   证明: rfl
 -/
 lemma coe_toLp : ⇑(MeasurableEquiv.toLp p X) = WithLp.toLp p := rfl
@@ -196,7 +196,7 @@ lemma coe_toLp_symm
 
 中文:
 引理 coe_toLp_symm
-  结论: ⇑(MeasurableEquiv.toLp p X).symm = WithLp.ofLp
+  结论: ⇑(可测等价.toLp p X).symm = WithLp.ofLp
   证明: rfl
 
 @[simp]
@@ -218,7 +218,7 @@ lemma toLp_apply
 中文:
 引理 toLp_apply
   条件: (x : X)
-  结论: MeasurableEquiv.toLp p X x = WithLp.toLp p x
+  结论: 可测等价.toLp p X x = WithLp.toLp p x
   证明: rfl
 
 @[simp]

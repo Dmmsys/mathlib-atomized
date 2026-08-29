@@ -47,7 +47,7 @@ definition quotientRel
 
 中文:
 定义 quotientRel
-  签名: : Setoid M
+  签名: : 集合等价关系 M
   定义体: QuotientAddGroup.leftRel p.toAddSubgroup
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.leftRel, leftRel, p.toAddSubgroup, toAddSubgroup
@@ -97,7 +97,7 @@ instance hasQuotient
 
 中文:
 实例 hasQuotient
-  签名: : HasQuotient M (Submodule R M)
+  签名: : 有商 M (子模 R M)
   定义体: ⟨fun p => Quotient (quotientRel p)⟩
 
 Depends on / 依赖: Quotient, quotientRel
@@ -116,7 +116,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: {p : Submodule R M}
+  签名: {p : 子模 R M}
   定义体: Quotient.mk''
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -134,7 +134,7 @@ theorem mk'_eq_mk'
 
 中文:
 定理 mk'_eq_mk'
-  条件: {p : Submodule R M} (x : M)
+  条件: {p : 子模 R M} (x : M)
   证明: rfl
 -/
 theorem mk'_eq_mk' {p : Submodule R M} (x : M) :
@@ -152,8 +152,8 @@ theorem mk''_eq_mk
 
 中文:
 定理 mk''_eq_mk
-  条件: {p : Submodule R M} (x : M)
-  结论: (Quotient.mk'' x : M ⧸ p) = mk x
+  条件: {p : 子模 R M} (x : M)
+  结论: (商.mk'' x : M ⧸ p) = mk x
   证明: rfl
 -/
 theorem mk''_eq_mk {p : Submodule R M} (x : M) : (Quotient.mk'' x : M ⧸ p) = mk x :=
@@ -170,8 +170,8 @@ theorem quot_mk_eq_mk
 
 中文:
 定理 quot_mk_eq_mk
-  条件: {p : Submodule R M} (x : M)
-  结论: (Quot.mk _ x : M ⧸ p) = mk x
+  条件: {p : 子模 R M} (x : M)
+  结论: (商.mk _ x : M ⧸ p) = mk x
   证明: rfl
 -/
 theorem quot_mk_eq_mk {p : Submodule R M} (x : M) : (Quot.mk _ x : M ⧸ p) = mk x :=
@@ -187,7 +187,7 @@ theorem quotientAddGroupMk_eq_mk
 
 中文:
 定理 quotientAddGroupMk_eq_mk
-  条件: {p : Submodule R M} (x : M)
+  条件: {p : 子模 R M} (x : M)
   证明: rfl
 -/
 theorem quotientAddGroupMk_eq_mk {p : Submodule R M} (x : M) :
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ⧸ p)
+  签名: 零 (M ⧸ p)
   定义体: Quotient.mk'' 0
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ⧸ p)
+  签名: 可居 (M ⧸ p)
   定义体: ⟨0⟩
 
 @[simp]
@@ -326,7 +326,7 @@ leftRel_apply.mpr by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_a
 
 中文:
 实例 instSMul'
-  签名: : SMul S (M ⧸ P)
+  签名: : 标量乘法 S (M ⧸ P)
   定义体: ⟨fun a =>
     Quotient.map' (a • ·) fun x y h =>
 leftRel_apply.mpr by simpa using Submodule.smul_mem P (a • (1 : R)) (leftRel_apply.mp h)⟩
@@ -350,7 +350,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R (M ⧸ P)
+  签名: : 标量乘法 R (M ⧸ P)
   定义体: Quotient.instSMul' P
 
 @[simp]
@@ -389,7 +389,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: (T : 类型) [SMul T R] [SMul T M] [IsScalarTower T R M]
+  签名: (T : 类型) [标量乘法 T R] [标量乘法 T M] [标量塔 T R M]
   定义体: Quotient.ind' fun _z => congr_arg mk (smul_comm _ _ _)
 
 Depends on / 依赖: Quotient, Quotient.ind, congr_arg, smul_comm
@@ -408,7 +408,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: (T : 类型) [SMul T R] [SMul T M] [IsScalarTower T R M] [SMul S T]
+  签名: (T : 类型) [标量乘法 T R] [标量乘法 T M] [标量塔 T R M] [标量乘法 S T]
   定义体: Quotient.ind' fun _z => congr_arg mk (smul_assoc _ _ _)
 
 Depends on / 依赖: Quotient, Quotient.ind, congr_arg, smul_assoc
@@ -427,7 +427,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
+  签名: [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M] [标量塔 Sᵐᵒᵖ R M]
   定义体: Quotient.ind' fun _z => congr_arg mk op_smul_eq_smul _ _
 
 Depends on / 依赖: Quotient, Quotient.ind, congr_arg, op_smul_eq_smul
@@ -448,7 +448,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid (M ⧸ p)
+  签名: : 加法幺半群 (M ⧸ p)
   定义体: inferInstanceAs AddMonoid (M ⧸ p.toAddSubgroup)
 
 Depends on / 依赖: AddMonoid, p.toAddSubgroup, toAddSubgroup
@@ -466,7 +466,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (M ⧸ p)
+  签名: : 加法交换幺半群 (M ⧸ p)
   定义体: inferInstanceAs AddCommMonoid (M ⧸ p.toAddSubgroup)
 
 Depends on / 依赖: AddCommMonoid, p.toAddSubgroup, toAddSubgroup
@@ -486,7 +486,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (M ⧸ p)
+  签名: : 加法交换群 (M ⧸ p)
   定义体: inferInstanceAs AddCommGroup (M ⧸ p.toAddSubgroup)
 
 @[simp]
@@ -571,7 +571,7 @@ protected nonrec lemma «forall» {P : M ⧸ p -> Prop} : (forall a, P a) ↔ fo
 中文:
 定理 mk_out
   条件: (m : M ⧸ p)
-  结论: Submodule.Quotient.mk (Quotient.out m) = m
+  结论: 子模.商.mk (商.out m) = m
   证明: Quotient.out_eq m
 
 protected nonrec lemma «forall» {P : M ⧸ p -> Prop} : (forall a, P a) ↔ forall a, P (mk a) := Quotient.forall
@@ -598,7 +598,7 @@ Function.Surjective.mulAction mk Quot.mk_surjective Submodule.Quotient.mk_smul P
 
 中文:
 实例 mulAction'
-  签名: [Monoid S] [SMul S R] [MulAction S M] [IsScalarTower S R M]
+  签名: [幺半群 S] [标量乘法 S R] [乘法作用 S M] [标量塔 S R M]
   定义体: fast_instance%
 Function.Surjective.mulAction mk Quot.mk_surjective Submodule.Quotient.mk_smul P
 
@@ -618,7 +618,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: (P : Submodule R M)
+  签名: (P : 子模 R M)
   定义体: Quotient.mulAction' P
 
 Depends on / 依赖: Quotient, Quotient.mulAction, mulAction
@@ -636,7 +636,7 @@ instance smulZeroClass'
 
 中文:
 实例 smulZeroClass'
-  签名: [SMul S R] [SMulZeroClass S M] [IsScalarTower S R M] (P : Submodule R M)
+  签名: [标量乘法 S R] [SMulZero类 S M] [标量塔 S R M] (P : 子模 R M)
   定义体: ZeroHom.smulZeroClass ⟨mk, mk_zero _⟩ Submodule.Quotient.mk_smul P
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk_smul, ZeroHom, ZeroHom.smulZeroClass, mk_smul, mk_zero, smulZeroClass
@@ -655,7 +655,7 @@ instance smulZeroClass
 
 中文:
 实例 smulZeroClass
-  签名: (P : Submodule R M)
+  签名: (P : 子模 R M)
   定义体: Quotient.smulZeroClass' P
 
 Depends on / 依赖: Quotient, Quotient.smulZeroClass, smulZeroClass
@@ -675,7 +675,7 @@ instance distribSMul'
 
 中文:
 实例 distribSMul'
-  签名: [SMul S R] [DistribSMul S M] [IsScalarTower S R M] (P : Submodule R M)
+  签名: [标量乘法 S R] [分配标量乘法 S M] [标量塔 S R M] (P : 子模 R M)
   定义体: fast_instance%
   Function.Surjective.distribSMul { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
@@ -697,7 +697,7 @@ instance distribSMul
 
 中文:
 实例 distribSMul
-  签名: (P : Submodule R M)
+  签名: (P : 子模 R M)
   定义体: Quotient.distribSMul' P
 
 Depends on / 依赖: Quotient, Quotient.distribSMul, distribSMul
@@ -717,7 +717,7 @@ instance distribMulAction'
 
 中文:
 实例 distribMulAction'
-  签名: [Monoid S] [SMul S R] [DistribMulAction S M] [IsScalarTower S R M]
+  签名: [幺半群 S] [标量乘法 S R] [分配乘法作用 S M] [标量塔 S R M]
   定义体: fast_instance%
   Function.Surjective.distribMulAction { toFun := mk, map_zero' := rfl, map_add' := fun _ _ => rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
@@ -739,7 +739,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: (P : Submodule R M)
+  签名: (P : 子模 R M)
   定义体: Quotient.distribMulAction' P
 
 Depends on / 依赖: Quotient, Quotient.distribMulAction, distribMulAction
@@ -759,7 +759,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M] (P : Submodule R M)
+  签名: [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M] (P : 子模 R M)
   定义体: fast_instance%
   Function.Surjective.module _ { toFun := mk, map_zero' := by rfl, map_add' := fun _ _ => by rfl }
     Quot.mk_surjective (Submodule.Quotient.mk_smul P)
@@ -781,7 +781,7 @@ instance module
 
 中文:
 实例 module
-  签名: (P : Submodule R M)
+  签名: (P : 子模 R M)
   定义体: Quotient.module' P
 
 Depends on / 依赖: Quotient, Quotient.module, module
@@ -802,7 +802,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  条件: {C : M ⧸ p -> 命题} (x : M ⧸ p) (H : 对任意 z, C (Submodule.Quotient.mk z))
+  条件: {C : M ⧸ p -> 命题} (x : M ⧸ p) (H : 对任意 z, C (子模.商.mk z))
   证明: Quotient.inductionOn' x H
 
 Depends on / 依赖: Quotient, Quotient.inductionOn, inductionOn
@@ -824,7 +824,7 @@ universe u in
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (@mk _ _ _ _ _ p)
+  结论: 函数.满射 (@mk _ _ _ _ _ p)
   证明: by
   rintro ⟨x⟩
   exact ⟨x, rfl⟩
@@ -856,7 +856,7 @@ theorem quot_hom_ext
 
 中文:
 定理 quot_hom_ext
-  条件: (f g : (M ⧸ p) ->ₗ[R] M₂) (h : 对任意 x : M, f (Quotient.mk x) = g (Quotient.mk x))
+  条件: (f g : (M ⧸ p) ->ₗ[R] M₂) (h : 对任意 x : M, f (商.mk x) = g (商.mk x))
   证明: LinearMap.ext fun x => Submodule.Quotient.induction_on _ x h
 
 Depends on / 依赖: LinearMap, LinearMap.ext, Quotient, Submodule, Submodule.Quotient.induction_on, induction_on
@@ -906,7 +906,7 @@ theorem mkQ_apply
 中文:
 定理 mkQ_apply
   条件: (x : M)
-  结论: p.mkQ x = Quotient.mk x
+  结论: p.mkQ x = 商.mk x
   证明: rfl
 -/
 theorem mkQ_apply (x : M) : p.mkQ x = Quotient.mk x :=
@@ -923,7 +923,7 @@ theorem mkQ_surjective
 
 中文:
 定理 mkQ_surjective
-  结论: Function.Surjective p.mkQ
+  结论: 函数.满射 p.mkQ
   证明: by
   rintro ⟨x⟩; exact ⟨x, rfl⟩
 -/

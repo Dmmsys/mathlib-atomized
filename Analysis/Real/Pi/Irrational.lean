@@ -469,7 +469,7 @@ lemma not_irrational_exists_rep
   exact ⟨q.num, q.den, q.pos, by exact_mod_cast (Rat.num_div_den _).symm⟩
 
 中文:
-引理 not_irrational_exists_rep
+引理 not_irrational_存在_rep
   条件: {x : 实数}
   证明: by
   rw [Irrational]; rw [not_not]; rw [mem_range]

@@ -56,7 +56,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (Action V G) where
+  签名: : 幺半群范畴 (作用 V G) where
   定义体: Action.mk (X.V otimes Y.V) _
   tensorUnit := Action.mk (𝟙_ _) _
   __ := Monoidal.transport (Action.functorCategoryEquivalence _ _).symm
@@ -103,7 +103,7 @@ theorem tensor_ρ
 
 中文:
 定理 tensor_ρ
-  条件: {X Y : Action V G} {g : G}
+  条件: {X Y : 作用 V G} {g : G}
   证明: rfl
 -/
 theorem tensor_ρ {X Y : Action V G} {g : G} :
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Action.forget V G).Monoidal
+  签名: (作用.forget V G).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -169,7 +169,7 @@ lemma forget_ε
 
 中文:
 引理 forget_ε
-  结论: ε (Action.forget V G) = 𝟙 _
+  结论: ε (作用.forget V G) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma forget_ε : ε (Action.forget V G) = 𝟙 _ := rfl
@@ -184,7 +184,7 @@ lemma forget_η
 
 中文:
 引理 forget_η
-  结论: η (Action.forget V G) = 𝟙 _
+  结论: η (作用.forget V G) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma forget_η : η (Action.forget V G) = 𝟙 _ := rfl
@@ -203,8 +203,8 @@ lemma forget_μ
 
 中文:
 引理 forget_μ
-  条件: (X Y : Action V G)
-  结论: μ (Action.forget V G) X Y = 𝟙 _
+  条件: (X Y : 作用 V G)
+  结论: μ (作用.forget V G) X Y = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma forget_μ (X Y : Action V G) : μ (Action.forget V G) X Y = 𝟙 _ := rfl
@@ -220,8 +220,8 @@ lemma forget_δ
 
 中文:
 引理 forget_δ
-  条件: (X Y : Action V G)
-  结论: δ (Action.forget V G) X Y = 𝟙 _
+  条件: (X Y : 作用 V G)
+  结论: δ (作用.forget V G) X Y = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma forget_δ (X Y : Action V G) : δ (Action.forget V G) X Y = 𝟙 _ := rfl
@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (Action V G)
+  签名: 辫范畴 (作用 V G)
   定义体: .ofFaithful (Action.forget V G) fun X Y => mkIso (β_ _ _) fun g => by simp
 
 @[simp]
@@ -270,7 +270,7 @@ theorem β_hom_hom
 
 中文:
 定理 β_hom_hom
-  条件: {X Y : Action V G}
+  条件: {X Y : 作用 V G}
   结论: (β_ X Y).hom.hom = (β_ X.V Y.V).hom
   证明: rfl
 
@@ -290,7 +290,7 @@ theorem β_inv_hom
 
 中文:
 定理 β_inv_hom
-  条件: {X Y : Action V G}
+  条件: {X Y : 作用 V G}
   结论: (β_ X Y).inv.hom = (β_ X.V Y.V).inv
   证明: rfl
 -/
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Action.forget V G).Braided
+  签名: (作用.forget V G).辫
 -/
 instance : (Action.forget V G).Braided where
 
@@ -323,8 +323,8 @@ instance [SymmetricCategory
   body: .ofFaithful (Action.forget V G)
 
 中文:
-实例 [SymmetricCategory
-  签名: V] : SymmetricCategory (Action V G)
+实例 [对称范畴
+  签名: V] : 对称范畴 (作用 V G)
   定义体: .ofFaithful (Action.forget V G)
 
 Depends on / 依赖: Action, Action.forget, forget, ofFaithful
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalPreadditive (Action V G)
+  签名: 幺半群预加性 (作用 V G)
 -/
 instance : MonoidalPreadditive (Action V G) where
 
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalLinear R (Action V G)
+  签名: 幺半群线性 R (作用 V G)
 -/
 instance : MonoidalLinear R (Action V G) where
 
@@ -509,7 +509,7 @@ lemma FunctorCategoryEquivalence.functor_μ
 
 中文:
 引理 FunctorCategoryEquivalence.functor_μ
-  条件: (A B : Action V G)
+  条件: (A B : 作用 V G)
   证明: rfl
 
 @[simp]
@@ -528,7 +528,7 @@ lemma FunctorCategoryEquivalence.functor_δ
 
 中文:
 引理 FunctorCategoryEquivalence.functor_δ
-  条件: (A B : Action V G)
+  条件: (A B : 作用 V G)
   证明: rfl
 -/
 lemma FunctorCategoryEquivalence.functor_δ (A B : Action V G) :
@@ -547,8 +547,8 @@ instance [RightRigidCategory
   infer_instance
 
 中文:
-实例 [RightRigidCategory
-  签名: V] : RightRigidCategory (SingleObj H ⥤ V)
+实例 [RightRigid范畴
+  签名: V] : RightRigid范畴 (SingleObj H ⥤ V)
   定义体: by
   infer_instance
 
@@ -567,8 +567,8 @@ instance [RightRigidCategory
     (functorCategoryEquivalence V H).toAdjunction
 
 中文:
-实例 [RightRigidCategory
-  签名: V] : RightRigidCategory (Action V H)
+实例 [RightRigid范畴
+  签名: V] : RightRigid范畴 (作用 V H)
   定义体: rightRigidCategoryOfEquivalence
     (functorCategoryEquivalence V H).toAdjunction
 
@@ -588,8 +588,8 @@ instance [LeftRigidCategory
   infer_instance
 
 中文:
-实例 [LeftRigidCategory
-  签名: V] : LeftRigidCategory (SingleObj H ⥤ V)
+实例 [LeftRigid范畴
+  签名: V] : LeftRigid范畴 (SingleObj H ⥤ V)
   定义体: by
   infer_instance
 
@@ -607,8 +607,8 @@ instance [LeftRigidCategory
   body: leftRigidCategoryOfEquivalence (functorCategoryEquivalence V H).toAdjunction
 
 中文:
-实例 [LeftRigidCategory
-  签名: V] : LeftRigidCategory (Action V H)
+实例 [LeftRigid范畴
+  签名: V] : LeftRigid范畴 (作用 V H)
   定义体: leftRigidCategoryOfEquivalence (functorCategoryEquivalence V H).toAdjunction
 
 Depends on / 依赖: functorCategoryEquivalence, leftRigidCategoryOfEquivalence, toAdjunction
@@ -626,8 +626,8 @@ instance [RigidCategory
   infer_instance
 
 中文:
-实例 [RigidCategory
-  签名: V] : RigidCategory (SingleObj H ⥤ V)
+实例 [Rigid范畴
+  签名: V] : Rigid范畴 (SingleObj H ⥤ V)
   定义体: by
   infer_instance
 
@@ -645,8 +645,8 @@ instance [RigidCategory
   body: rigidCategoryOfEquivalence (functorCategoryEquivalence V H).toAdjunction
 
 中文:
-实例 [RigidCategory
-  签名: V] : RigidCategory (Action V H)
+实例 [Rigid范畴
+  签名: V] : Rigid范畴 (作用 V H)
   定义体: rigidCategoryOfEquivalence (functorCategoryEquivalence V H).toAdjunction
 
 Depends on / 依赖: functorCategoryEquivalence, rigidCategoryOfEquivalence, toAdjunction
@@ -671,7 +671,7 @@ theorem rightDual_v
 
 中文:
 定理 rightDual_v
-  条件: [RightRigidCategory V]
+  条件: [RightRigid范畴 V]
   结论: Xᘁ.V = X.Vᘁ
   证明: rfl
 
@@ -694,7 +694,7 @@ theorem leftDual_v
 
 中文:
 定理 leftDual_v
-  条件: [LeftRigidCategory V]
+  条件: [LeftRigid范畴 V]
   结论: (ᘁX).V = ᘁX.V
   证明: rfl
 -/
@@ -713,7 +713,7 @@ theorem rightDual_ρ
 
 中文:
 定理 rightDual_ρ
-  条件: [RightRigidCategory V] (h : H)
+  条件: [RightRigid范畴 V] (h : H)
   结论: Xᘁ.ρ h = (X.ρ (h⁻¹ : H))ᘁ
   证明: by
   rw [← SingleObj.inv_as_inv]; rfl
@@ -735,7 +735,7 @@ theorem leftDual_ρ
 
 中文:
 定理 leftDual_ρ
-  条件: [LeftRigidCategory V] (h : H)
+  条件: [LeftRigid范畴 V] (h : H)
   结论: (ᘁX).ρ h = ᘁX.ρ (h⁻¹ : H)
   证明: by
   rw [← SingleObj.inv_as_inv]; rfl
@@ -768,7 +768,7 @@ definition diagonalSuccIsoTensorDiagonal
 
 中文:
 定义 diagonalSuccIsoTensorDiagonal
-  签名: [Monoid G] (n : 自然数)
+  签名: [幺半群 G] (n : 自然数)
   定义体: mkIso (Fin.consEquiv _).symm.toIso fun _ => rfl
 
 Depends on / 依赖: Fin.consEquiv, consEquiv, symm.toIso
@@ -803,7 +803,7 @@ right_inv _ := Prod.ext rfl by simp }) <| fun _ => by
 
 中文:
 定义 leftRegularTensorIso
-  签名: (X : Action (类型u) G)
+  签名: (X : 作用 (类型u) G)
   定义体: mkIso (Equiv.toIso {
     toFun g := ⟨g.1, (X.ρ (g.1⁻¹ : G) g.2 : X.V)⟩
     invFun g := ⟨g.1, X.ρ g.1 g.2⟩
@@ -873,7 +873,7 @@ theorem diagonalSuccIsoTensorTrivial_hom_hom_apply
 
 中文:
 定理 diagonalSuccIsoTensorTrivial_hom_hom_apply
-  条件: {n : 自然数} (f : Fin (n + 1) -> G)
+  条件: {n : 自然数} (f : 有限集 (n + 1) -> G)
   证明: by
   induction n with
   | zero => exact Prod.ext rfl (funext fun x => Fin.elim0 x)
@@ -918,7 +918,7 @@ theorem diagonalSuccIsoTensorTrivial_inv_hom_apply
 
 中文:
 定理 diagonalSuccIsoTensorTrivial_inv_hom_apply
-  条件: {n : 自然数} (g : G) (f : Fin n -> G)
+  条件: {n : 自然数} (g : G) (f : 有限集 n -> G)
   证明: by
   induction n generalizing g with
   | zero =>
@@ -979,8 +979,8 @@ instance [F.LaxMonoidal]
   μ_natural_left _ _ := by ext; 
 
 中文:
-实例 [F.LaxMonoidal]
-  签名: : (F.mapAction G).LaxMonoidal where
+实例 [F.松弛幺半群]
+  签名: : (F.mapAction G).松弛幺半群 where
   定义体: { hom := ε F
       comm := fun g => by
         dsimp [FunctorCategoryEquivalence.inverse, Functor.mapAction]
@@ -1020,7 +1020,7 @@ lemma mapAction_ε_hom
 
 中文:
 引理 mapAction_ε_hom
-  条件: [F.LaxMonoidal]
+  条件: [F.松弛幺半群]
   结论: (ε (F.mapAction G)).hom = ε F
   证明: rfl
 -/
@@ -1038,7 +1038,7 @@ lemma mapAction_μ_hom
 
 中文:
 引理 mapAction_μ_hom
-  条件: [F.LaxMonoidal] (X Y : Action V G)
+  条件: [F.松弛幺半群] (X Y : 作用 V G)
   证明: rfl
 -/
 lemma mapAction_μ_hom [F.LaxMonoidal] (X Y : Action V G) :
@@ -1062,8 +1062,8 @@ instance [F.OplaxMonoidal]
   δ_natural_left _ _ := by 
 
 中文:
-实例 [F.OplaxMonoidal]
-  签名: : (F.mapAction G).OplaxMonoidal where
+实例 [F.反松弛幺半群]
+  签名: : (F.mapAction G).反松弛幺半群 where
   定义体: { hom := η F
       comm := fun g => by
         dsimp [FunctorCategoryEquivalence.inverse, Functor.mapAction]
@@ -1103,7 +1103,7 @@ lemma mapAction_η_hom
 
 中文:
 引理 mapAction_η_hom
-  条件: [F.OplaxMonoidal]
+  条件: [F.反松弛幺半群]
   结论: (η (F.mapAction G)).hom = η F
   证明: rfl
 -/
@@ -1121,7 +1121,7 @@ lemma mapAction_δ_hom
 
 中文:
 引理 mapAction_δ_hom
-  条件: [F.OplaxMonoidal] (X Y : Action V G)
+  条件: [F.反松弛幺半群] (X Y : 作用 V G)
   证明: rfl
 -/
 lemma mapAction_δ_hom [F.OplaxMonoidal] (X Y : Action V G) :
@@ -1141,8 +1141,8 @@ instance [F.Monoidal]
   δ_μ _ _ := by ext; dsimp; rw [δ_μ]
 
 中文:
-实例 [F.Monoidal]
-  签名: : (F.mapAction G).Monoidal where
+实例 [F.幺半群]
+  签名: : (F.mapAction G).幺半群 where
   定义体: by ext; dsimp; rw [η_ε]
   ε_η := by ext; dsimp; rw [ε_η]
   μ_δ _ _ := by ext; dsimp; rw [μ_δ]

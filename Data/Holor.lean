@@ -50,7 +50,7 @@ definition HolorIndex
 
 中文:
 定义 HolorIndex
-  签名: (ds : List 自然数)
+  签名: (ds : 列表 自然数)
   定义体: { is : List Nat // Forall₂ (· < ·) is ds }
 -/
 def HolorIndex (ds : List Nat) : Type :=
@@ -69,7 +69,7 @@ definition take
 
 中文:
 定义 take
-  签名: : 对任意 {ds₁ : List 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
+  签名: : 对任意 {ds₁ : 列表 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
 -/
 def take : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₁
   | ds, is => ⟨List.take (length ds) is.1, forall₂_take_append is.1 ds ds₂ is.2⟩
@@ -83,7 +83,7 @@ definition drop
 
 中文:
 定义 drop
-  签名: : 对任意 {ds₁ : List 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
+  签名: : 对任意 {ds₁ : 列表 自然数}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
 -/
 def drop : forall {ds₁ : List Nat}, HolorIndex (ds₁ ++ ds₂) -> HolorIndex ds₂
   | ds, is => ⟨List.drop (length ds) is.1, forall₂_drop_append is.1 ds ds₂ is.2⟩
@@ -98,7 +98,7 @@ theorem cast_type
 
 中文:
 定理 cast_type
-  条件: (is : List 自然数) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁)
+  条件: (is : 列表 自然数) (eq : ds₁ = ds₂) (h : Forall₂ (· < ·) is ds₁)
   证明: by subst eq; rfl
 
 Depends on / 依赖: Set.ext
@@ -198,7 +198,7 @@ definition Holor
 
 中文:
 定义 Holor
-  签名: (α : 类型u) (ds : List 自然数)
+  签名: (α : 类型u) (ds : 列表 自然数)
   定义体: HolorIndex ds -> α
 
 Depends on / 依赖: HolorIndex
@@ -219,8 +219,8 @@ instance [Inhabited
   body: ⟨fun _ => default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Holor α ds)
+实例 [可居
+  签名: α] : 可居 (Holor α ds)
   定义体: ⟨fun _ => default⟩
 -/
 instance [Inhabited α] : Inhabited (Holor α ds) :=
@@ -235,8 +235,8 @@ instance [Zero
   body: ⟨fun _ => 0⟩
 
 中文:
-实例 [Zero
-  签名: α] : Zero (Holor α ds)
+实例 [零
+  签名: α] : 零 (Holor α ds)
   定义体: ⟨fun _ => 0⟩
 -/
 instance [Zero α] : Zero (Holor α ds) :=
@@ -251,8 +251,8 @@ instance [Add
   body: ⟨fun x y t => x t + y t⟩
 
 中文:
-实例 [Add
-  签名: α] : Add (Holor α ds)
+实例 [加法
+  签名: α] : 加法 (Holor α ds)
   定义体: ⟨fun x y t => x t + y t⟩
 -/
 instance [Add α] : Add (Holor α ds) :=
@@ -267,8 +267,8 @@ instance [Neg
   body: ⟨fun a t => -a t⟩
 
 中文:
-实例 [Neg
-  签名: α] : Neg (Holor α ds)
+实例 [取负
+  签名: α] : 取负 (Holor α ds)
   定义体: ⟨fun a t => -a t⟩
 -/
 instance [Neg α] : Neg (Holor α ds) :=
@@ -283,8 +283,8 @@ instance [AddSemigroup
   body: inferInstanceAs AddSemigroup (HolorIndex ds -> α)
 
 中文:
-实例 [AddSemigroup
-  签名: α] : AddSemigroup (Holor α ds)
+实例 [加法半群
+  签名: α] : 加法半群 (Holor α ds)
   定义体: inferInstanceAs AddSemigroup (HolorIndex ds -> α)
 
 Depends on / 依赖: AddSemigroup, HolorIndex
@@ -301,8 +301,8 @@ instance [AddCommSemigroup
   body: inferInstanceAs AddCommSemigroup (HolorIndex ds -> α)
 
 中文:
-实例 [AddCommSemigroup
-  签名: α] : AddCommSemigroup (Holor α ds)
+实例 [加法交换半群
+  签名: α] : 加法交换半群 (Holor α ds)
   定义体: inferInstanceAs AddCommSemigroup (HolorIndex ds -> α)
 
 Depends on / 依赖: AddCommSemigroup, HolorIndex
@@ -319,8 +319,8 @@ instance [AddMonoid
   body: inferInstanceAs AddMonoid (HolorIndex ds -> α)
 
 中文:
-实例 [AddMonoid
-  签名: α] : AddMonoid (Holor α ds)
+实例 [加法幺半群
+  签名: α] : 加法幺半群 (Holor α ds)
   定义体: inferInstanceAs AddMonoid (HolorIndex ds -> α)
 
 Depends on / 依赖: AddMonoid, HolorIndex
@@ -337,8 +337,8 @@ instance [AddCommMonoid
   body: inferInstanceAs AddCommMonoid (HolorIndex ds -> α)
 
 中文:
-实例 [AddCommMonoid
-  签名: α] : AddCommMonoid (Holor α ds)
+实例 [加法交换幺半群
+  签名: α] : 加法交换幺半群 (Holor α ds)
   定义体: inferInstanceAs AddCommMonoid (HolorIndex ds -> α)
 
 Depends on / 依赖: AddCommMonoid, HolorIndex
@@ -355,8 +355,8 @@ instance [AddGroup
   body: inferInstanceAs AddGroup (HolorIndex ds -> α)
 
 中文:
-实例 [AddGroup
-  签名: α] : AddGroup (Holor α ds)
+实例 [加法群
+  签名: α] : 加法群 (Holor α ds)
   定义体: inferInstanceAs AddGroup (HolorIndex ds -> α)
 
 Depends on / 依赖: AddGroup, HolorIndex
@@ -373,8 +373,8 @@ instance [AddCommGroup
   body: inferInstanceAs AddCommGroup (HolorIndex ds -> α)
 
 中文:
-实例 [AddCommGroup
-  签名: α] : AddCommGroup (Holor α ds)
+实例 [加法交换群
+  签名: α] : 加法交换群 (Holor α ds)
   定义体: inferInstanceAs AddCommGroup (HolorIndex ds -> α)
 
 Depends on / 依赖: AddCommGroup, HolorIndex
@@ -392,8 +392,8 @@ instance [Mul
   body: ⟨fun a x => fun t => a * x t⟩
 
 中文:
-实例 [Mul
-  签名: α] : SMul α (Holor α ds)
+实例 [乘法
+  签名: α] : 标量乘法 α (Holor α ds)
   定义体: ⟨fun a x => fun t => a * x t⟩
 -/
 instance [Mul α] : SMul α (Holor α ds) :=
@@ -408,8 +408,8 @@ instance [Semiring
   body: inferInstanceAs Module α (HolorIndex ds -> α)
 
 中文:
-实例 [Semiring
-  签名: α] : Module α (Holor α ds)
+实例 [半环
+  签名: α] : 模 α (Holor α ds)
   定义体: inferInstanceAs Module α (HolorIndex ds -> α)
 
 Depends on / 依赖: HolorIndex, Module
@@ -430,7 +430,7 @@ local infixl:70 " otimes " => mul
 
 中文:
 定义 mul
-  签名: [Mul α] (x : Holor α ds₁) (y : Holor α ds₂)
+  签名: [乘法 α] (x : Holor α ds₁) (y : Holor α ds₂)
   定义体: fun t =>
   x t.take * y t.drop
 
@@ -512,7 +512,7 @@ theorem mul_assoc0
 
 中文:
 定理 mul_assoc0
-  条件: [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
+  条件: [半群 α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
   证明: funext fun t : HolorIndex (ds₁ ++ ds₂ ++ ds₃) => by
     rw [assocLeft]
     unfold mul
@@ -541,7 +541,7 @@ theorem mul_assoc
 
 中文:
 定理 mul_assoc
-  条件: [Semigroup α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
+  条件: [半群 α] (x : Holor α ds₁) (y : Holor α ds₂) (z : Holor α ds₃)
   证明: by simp [cast_heq, mul_assoc0, assocLeft]
 
 Depends on / 依赖: assocLeft, cast_heq, mul_assoc0
@@ -620,7 +620,7 @@ theorem mul_scalar_mul
 
 中文:
 定理 mul_scalar_mul
-  条件: [Mul α] (x : Holor α []) (y : Holor α ds)
+  条件: [乘法 α] (x : Holor α []) (y : Holor α ds)
   证明: by
   simp +unfoldPartialApp [mul, SMul.smul, HolorIndex.take, HolorIndex.drop,
     HSMul.hSMul]
@@ -664,7 +664,7 @@ definition unitVec
 
 中文:
 定义 unitVec
-  签名: [Monoid α] [AddMonoid α] (d : 自然数) (j : 自然数)
+  签名: [幺半群 α] [加法幺半群 α] (d : 自然数) (j : 自然数)
   定义体: fun ti =>
   if ti.1 = [j] then 1 else 0
 -/
@@ -737,7 +737,7 @@ theorem slice_unitVec_mul
 
 中文:
 定理 slice_unitVec_mul
-  条件: [Semiring α] {i : 自然数} {j : 自然数} (hid : i < d) (x : Holor α ds)
+  条件: [半环 α] {i : 自然数} {j : 自然数} (hid : i < d) (x : Holor α ds)
   证明: funext fun t : HolorIndex ds =>
     if h : i = j then by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]
     else by simp [slice, mul, HolorIndex.take, unitVec, HolorIndex.drop, h]; rfl
@@ -760,7 +760,7 @@ theorem slice_add
 
 中文:
 定理 slice_add
-  条件: [Add α] (i : 自然数) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds))
+  条件: [加法 α] (i : 自然数) (hid : i < d) (x : Holor α (d :: ds)) (y : Holor α (d :: ds))
   证明: funext fun t => by simp [slice, (· + ·), Add.add]
 
 Depends on / 依赖: Add.add
@@ -780,7 +780,7 @@ theorem slice_zero
 
 中文:
 定理 slice_zero
-  条件: [Zero α] (i : 自然数) (hid : i < d)
+  条件: [零 α] (i : 自然数) (hid : i < d)
   结论: slice (0 : Holor α (d :: ds)) i hid = 0
   证明: rfl
 -/
@@ -802,7 +802,7 @@ theorem slice_sum
 
 中文:
 定理 slice_sum
-  结论: [AddCommMonoid α] {β : Type} (i : 自然数) (hid : i < d) (s : Finset β)
+  结论: [加法交换幺半群 α] {β : 类型} (i : 自然数) (hid : i < d) (s : 有限集 β)
   证明: by
   let := Classical.decEq β
   refine Finset.induction_on s ?_ ?_
@@ -842,7 +842,7 @@ theorem sum_unitVec_mul_slice
 
 中文:
 定理 sum_unitVec_mul_slice
-  条件: [Semiring α] (x : Holor α (d :: ds))
+  条件: [半环 α] (x : Holor α (d :: ds))
   证明: by
   apply slice_eq _ _ _
   ext i hid
@@ -885,10 +885,10 @@ inductive CPRankMax1
 
 中文:
 归纳类型 CPRankMax1
-  参数: [Mul α]
+  参数: [乘法 α]
   构造子 (2 个):
     - nil: (x : Holor α []) : CPRankMax1 x
-    - cons: {d : 自然数} {ds : List 自然数} (x : Holor α [d]) (y : Holor α ds) : CPRankMax1 y -> CPRankMax1 (x otimes y)
+    - cons: {d : 自然数} {ds : 列表 自然数} (x : Holor α [d]) (y : Holor α ds) : CPRankMax1 y -> CPRankMax1 (x otimes y)
 -/
 inductive CPRankMax1 [Mul α] : forall {ds}, Holor α ds -> Prop
   | nil (x : Holor α []) : CPRankMax1 x
@@ -907,10 +907,10 @@ inductive CPRankMax
 
 中文:
 归纳类型 CPRankMax
-  参数: [Mul α] [AddMonoid α]
+  参数: [乘法 α] [加法幺半群 α]
   构造子 (2 个):
-    - zero: {ds : List 自然数} : CPRankMax 0 (0 : Holor α ds)
-    - succ: (n : 自然数) {ds : List 自然数} (x : Holor α ds) (y : Holor α ds) : CPRankMax1 x -> CPRankMax n y -> CPRankMax (n + 1) (x + y)
+    - zero: {ds : 列表 自然数} : CPRankMax 0 (0 : Holor α ds)
+    - succ: (n : 自然数) {ds : 列表 自然数} (x : Holor α ds) (y : Holor α ds) : CPRankMax1 x -> CPRankMax n y -> CPRankMax (n + 1) (x + y)
 -/
 inductive CPRankMax [Mul α] [AddMonoid α] : Nat -> forall {ds}, Holor α ds -> Prop
   | zero {ds : List Nat} : CPRankMax 0 (0 : Holor α ds)
@@ -930,7 +930,7 @@ theorem cprankMax_nil
 
 中文:
 定理 cprankMax_nil
-  条件: [Mul α] [AddMonoid α] (x : Holor α nil)
+  条件: [乘法 α] [加法幺半群 α] (x : Holor α nil)
   结论: CPRankMax 1 x
   证明: by
   have h := CPRankMax.succ 0 x 0 (CPRankMax1.nil x) CPRankMax.zero
@@ -954,7 +954,7 @@ theorem cprankMax_1
 
 中文:
 定理 cprankMax_1
-  条件: [Mul α] [AddMonoid α] {x : Holor α ds} (h : CPRankMax1 x)
+  条件: [乘法 α] [加法幺半群 α] {x : Holor α ds} (h : CPRankMax1 x)
   证明: by
   have h' := CPRankMax.succ 0 x 0 h CPRankMax.zero
   rwa [zero_add, add_zero] at h'
@@ -975,7 +975,7 @@ theorem cprankMax_add
 
 中文:
 定理 cprankMax_add
-  条件: [Mul α] [AddMonoid α]
+  条件: [乘法 α] [加法幺半群 α]
 -/
 theorem cprankMax_add [Mul α] [AddMonoid α] :
     forall {m : Nat} {n : Nat} {x : Holor α ds} {y : Holor α ds},
@@ -1000,7 +1000,7 @@ theorem cprankMax_mul
 
 中文:
 定理 cprankMax_mul
-  条件: [NonUnitalNonAssocSemiring α]
+  条件: [非幺非结合半环 α]
 -/
 theorem cprankMax_mul [NonUnitalNonAssocSemiring α] :
     forall (n : Nat) (x : Holor α [d]) (y : Holor α ds), CPRankMax n y -> CPRankMax n (x otimes y)
@@ -1029,7 +1029,7 @@ theorem cprankMax_sum
 
 中文:
 定理 cprankMax_sum
-  结论: [NonUnitalNonAssocSemiring α] {β} {n : 自然数} (s : Finset β)
+  结论: [非幺非结合半环 α] {β} {n : 自然数} (s : 有限集 β)
   证明: letI := Classical.decEq β
   Finset.induction_on s (by simp [CPRankMax.zero])
     (by
@@ -1069,8 +1069,8 @@ theorem cprankMax_upper_bound
 
 中文:
 定理 cprankMax_upper_bound
-  条件: [Semiring α]
-  结论: 对任意 {ds}, 对任意 x : Holor α ds, CPRankMax ds.prod x
+  条件: [半环 α]
+  结论: 对任意 {ds}, 对任意 x : Holor α ds, CPRankMax ds.乘积 x
   证明: fun i => cprankMax_mul _ _ _ (cprankMax_upper_bound (slice x i.1 (mem_range.1 i.2)))
     have h_dds_prod : (List.cons d ds).prod = Finset.card (Finset.range d) * prod ds := by
       simp [Finset.card_range]
@@ -1112,7 +1112,7 @@ definition cprank
 
 中文:
 定义 cprank
-  签名: [Ring α] (x : Holor α ds)
+  签名: [环 α] (x : Holor α ds)
   定义体: @Nat.find (fun n => CPRankMax n x) (Classical.decPred _) ⟨ds.prod, cprankMax_upper_bound x⟩
 
 Depends on / 依赖: CPRankMax, Classical, Classical.decPred, Nat.find, cprankMax_upper_bound, decPred, ds.prod
@@ -1134,8 +1134,8 @@ theorem cprank_upper_bound
 
 中文:
 定理 cprank_upper_bound
-  条件: [Ring α]
-  结论: 对任意 {ds}, 对任意 x : Holor α ds, cprank x <= ds.prod
+  条件: [环 α]
+  结论: 对任意 {ds}, 对任意 x : Holor α ds, cprank x <= ds.乘积
   证明: fun {ds} x =>
   letI := Classical.decPred fun n : Nat => CPRankMax n x
   Nat.find_min' ⟨ds.prod, show (fun n => CPRankMax n x) ds.prod from cprankMax_upper_bound x⟩

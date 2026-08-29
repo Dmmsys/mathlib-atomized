@@ -44,8 +44,8 @@ theorem exists_partition_int
     fun _ => floor_nonneg.mpr (div_nonneg (cast_nonneg (emod_non
 
 中文:
-定理 exists_partition_int
-  条件: (n : 自然数) {ε : 实数} (hε : 0 < ε) {b : 整数} (hb : b != 0) (A : Fin n -> 整数)
+定理 存在_partition_int
+  条件: (n : 自然数) {ε : 实数} (hε : 0 < ε) {b : 整数} (hb : b != 0) (A : 有限集 n -> 整数)
   证明: by
   have hb' : (0 : Real) < ↑(abs b) := Int.cast_pos.mpr (abs_pos.mpr hb)
   have hbε : 0 < abs b • ε := by
@@ -91,7 +91,7 @@ definition absIsAdmissible
 
 中文:
 定义 absIsAdmissible
-  签名: : IsAdmissible AbsoluteValue.abs
+  签名: : 是Admissible 绝对值.abs
   定义体: { AbsoluteValue.abs_isEuclidean with
     card := fun ε => ⌈1 / ε⌉₊
     exists_partition' := fun n _ hε _ hb => exists_partition_int n hε hb }
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (IsAdmissible AbsoluteValue.abs)
+  签名: 可居 (是Admissible 绝对值.abs)
   定义体: ⟨absIsAdmissible⟩
 
 Depends on / 依赖: absIsAdmissible

@@ -126,7 +126,7 @@ theorem map_add_eq_sum_add_integral_iteratedFDeriv
 
 中文:
 定理 map_add_eq_sum_add_integral_iteratedFDeriv
-  结论: (hf : 对任意 (t : 实数) (_ht : t in Set.Icc 0 1),
+  结论: (hf : 对任意 (t : 实数) (_ht : t in 集合.闭区间 0 1),
   证明: by
   simp_rw [← Set.uIcc_of_le zero_le_one] at hf
   induction n with

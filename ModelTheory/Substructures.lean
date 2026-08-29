@@ -93,7 +93,7 @@ theorem closedUnder_univ
 
 中文:
 定理 closedUnder_univ
-  结论: ClosedUnder f (univ : Set M)
+  结论: ClosedUnder f (univ : 集合 M)
   证明: fun _ _ => mem_univ _
 
 Depends on / 依赖: mem_univ
@@ -134,7 +134,7 @@ theorem inf
   proof: hs.inter ht
 
 中文:
-定理 inf
+定理 下确界
   条件: (hs : ClosedUnder f s) (ht : ClosedUnder f t)
   结论: ClosedUnder f (s ⊓ t)
   证明: hs.inter ht
@@ -183,11 +183,11 @@ structure Substructure
     - fun_mem : forall {n}, forall f : L.Functions n, ClosedUnder f carrier
 
 中文:
-结构 Substructure
+结构 子结构
   参数: where
   公理与运算 (2 个):
-    - carrier : Set M
-    - fun_mem : 对任意 {n}, 对任意 f : L.Functions n, ClosedUnder f carrier
+    - carrier : 集合 M
+    - fun_mem : 对任意 {n}, 对任意 f : L.函数 n, ClosedUnder f carrier
 -/
 structure Substructure where
   /-- The underlying set of this substructure -/
@@ -210,7 +210,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (L.Substructure M) M
+  签名: : 集合状 (L.子结构 M) M
   定义体: ⟨Substructure.carrier, fun p q h => by cases p; cases q; congr⟩
 
 Depends on / 依赖: Substructure, Substructure.carrier, carrier
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (L.Substructure M)
+  签名: 偏序 (L.子结构 M)
   定义体: .ofSetLike (L.Substructure M) M
 
 Depends on / 依赖: L.Substructure, Substructure, ofSetLike
@@ -249,7 +249,7 @@ initialize_simps_projections Substructure (carrier -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: (S : L.Substructure M)
+  签名: (S : L.子结构 M)
   定义体: S
 
 initialize_simps_projections Substructure (carrier -> coe, as_prefix coe)
@@ -273,7 +273,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : L.Substructure M} {x : M}
+  条件: {s : L.子结构 M} {x : M}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -295,7 +295,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : L.Substructure M} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : L.子结构 M} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -315,7 +315,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : L.Substructure M) (s : Set M) (hs : s = S)
+  签名: (S : L.子结构 M) (s : 集合 M) (hs : s = S)
   定义体: s
   fun_mem _ f := hs.symm ▸ S.fun_mem _ f
 -/
@@ -339,8 +339,8 @@ theorem Term.realize_mem
   | func f ts ih => exact Substructure.fun_mem _ _ _ ih
 
 中文:
-定理 Term.realize_mem
-  条件: {α : 类型} (t : L.Term α) (xs : α -> M) (h : 对任意 a, xs a in S)
+定理 项.realize_mem
+  条件: {α : 类型} (t : L.项 α) (xs : α -> M) (h : 对任意 a, xs a in S)
   证明: by
   induction t with
   | var a => exact h a
@@ -368,8 +368,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: {s : Set M} (hs : s = S)
-  结论: (S.copy s hs : Set M) = s
+  条件: {s : 集合 M} (hs : s = S)
+  结论: (S.copy s hs : 集合 M) = s
   证明: rfl
 -/
 theorem coe_copy {s : Set M} (hs : s = S) : (S.copy s hs : Set M) = s :=
@@ -386,7 +386,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: {s : Set M} (hs : s = S)
+  条件: {s : 集合 M} (hs : s = S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -426,7 +426,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (L.Substructure M)
+  签名: : 顶元素 (L.子结构 M)
   定义体: ⟨{ carrier := Set.univ
       fun_mem := fun {_} _ _ _ => Set.mem_univ _ }⟩
 
@@ -448,7 +448,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (L.Substructure M)
+  签名: : 可居 (L.子结构 M)
   定义体: ⟨⊤⟩
 
 @[simp]
@@ -471,7 +471,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : M)
-  结论: x in (⊤ : L.Substructure M)
+  结论: x in (⊤ : L.子结构 M)
   证明: Set.mem_univ x
 
 @[simp]
@@ -492,7 +492,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : L.Substructure M) : Set M) = Set.univ
+  结论: ((⊤ : L.子结构 M) : 集合 M) = 集合.univ
   证明: rfl
 -/
 theorem coe_top : ((⊤ : L.Substructure M) : Set M) = Set.univ :=
@@ -512,7 +512,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (L.Substructure M)
+  签名: : 最小值 (L.子结构 M)
   定义体: ⟨fun S₁ S₂ =>
     { carrier := (S₁ : Set M) inter (S₂ : Set M)
       fun_mem := fun {_} f => (S₁.fun_mem f).inf (S₂.fun_mem f) }⟩
@@ -539,7 +539,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : L.Substructure M)
+  条件: (p p' : L.子结构 M)
   证明: rfl
 
 @[simp]
@@ -560,7 +560,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : L.Substructure M} {x : M}
+  条件: {p p' : L.子结构 M} {x : M}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -589,7 +589,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet (L.Substructure M)
+  签名: : 下确界集 (L.子结构 M)
   定义体: ⟨fun s =>
     { carrier := ⋂ t in s, (t : Set M)
       fun_mem := fun {n} f =>
@@ -626,7 +626,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (L.Substructure M))
+  条件: (S : 集合 (L.子结构 M))
   证明: rfl
 -/
 theorem coe_sInf (S : Set (L.Substructure M)) :
@@ -644,7 +644,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (L.Substructure M)} {x : M}
+  条件: {S : 集合 (L.子结构 M)} {x : M}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -665,7 +665,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> L.Substructure M} {x : M}
+  条件: {ι : 类型层*} {S : ι -> L.子结构 M} {x : M}
   证明: by simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 @[simp, norm_cast]
@@ -687,7 +687,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> L.Substructure M}
+  条件: {ι : 类型层*} {S : ι -> L.子结构 M}
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -715,7 +715,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: : CompleteLattice (L.Substructure M)
+  签名: : 完备格 (L.子结构 M)
   定义体: { completeLatticeOfInf (L.Substructure M) fun _ =>
       IsGLB.of_image
         (fun {S T : L.Substructure M} => show (S : Set M) <= T ↔ S <= T from SetLike.coe_subset_coe)
@@ -756,7 +756,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: : LowerAdjoint ((↑) : L.Substructure M -> Set M)
+  签名: : LowerAdjoint ((↑) : L.子结构 M -> 集合 M)
   定义体: ⟨fun s => sInf { S | s subseteq S }, fun _ _ =>
     ⟨Set.Subset.trans fun _x hx => mem_sInf.2 fun _S hS => hS hx, fun h => sInf_le h⟩⟩
 
@@ -780,7 +780,7 @@ theorem mem_closure
 中文:
 定理 mem_closure
   条件: {x : M}
-  结论: x in closure L s ↔ 对任意 S : L.Substructure M, s subseteq S -> x in S
+  结论: x in closure L s ↔ 对任意 S : L.子结构 M, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -844,8 +844,8 @@ theorem closed
 
 中文:
 定理 closed
-  条件: (S : L.Substructure M)
-  结论: (S : Set M) in (closure L).closed
+  条件: (S : L.子结构 M)
+  结论: (S : 集合 M) in (closure L).closed
   证明: congr rfl ((closure L).eq_of_le Set.Subset.rfl fun _x xS => mem_closure.2 fun _T hT => hT xS)
 
 Depends on / 依赖: Set.Subset.rfl, Subset, closure, eq_of_le, mem_closure
@@ -890,7 +890,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set M⦄ (h : s subseteq t) : closure L s <= closure L t
+  结论: 集合 M⦄ (h : s subseteq t) : closure L s <= closure L t
   证明: (closure L).monotone h
 
 Depends on / 依赖: closure, monotone
@@ -988,7 +988,7 @@ theorem mem_closure_iff_exists_term
   rw [← SetLike.mem_coe]; rw [coe_closure_eq_range_term_realize]; rw [mem_range]
 
 中文:
-定理 mem_closure_iff_exists_term
+定理 mem_closure_iff_存在_term
   条件: {x : M}
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_closure_eq_range_term_realize]; rw [mem_range]
@@ -1012,7 +1012,7 @@ theorem lift_card_closure_le_card_term
 
 中文:
 定理 lift_card_closure_le_card_term
-  结论: Cardinal.lift.{max u w} #(closure L s) <= #(L.Term s)
+  结论: 基数.lift.{最大值 u w} #(closure L s) <= #(L.项 s)
   证明: by
   rw [← SetLike.coe_sort_coe]; rw [coe_closure_eq_range_term_realize]
   rw [← Cardinal.lift_id'.{w]; rw [max u w} #(L.Term s)]
@@ -1066,7 +1066,7 @@ lemma mem_closed_iff
 
 中文:
 引理 mem_closed_iff
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   refine ⟨fun h n f => ?_, fun h => ?_⟩
   · rw [← h]
@@ -1099,7 +1099,7 @@ lemma mem_closed_of_isRelational
 
 中文:
 引理 mem_closed_of_isRelational
-  条件: [L.IsRelational] (s : Set M)
+  条件: [L.IsRelational] (s : 集合 M)
   结论: s in (closure L).closed
   证明: (mem_closed_iff s).2 isEmptyElim
 
@@ -1124,7 +1124,7 @@ lemma closure_eq_of_isRelational
 
 中文:
 引理 closure_eq_of_isRelational
-  条件: [L.IsRelational] (s : Set M)
+  条件: [L.IsRelational] (s : 集合 M)
   结论: closure L s = s
   证明: LowerAdjoint.closure_eq_self_of_mem_closed _ (mem_closed_of_isRelational L s)
 
@@ -1147,7 +1147,7 @@ lemma mem_closure_iff_of_isRelational
 
 中文:
 引理 mem_closure_iff_of_isRelational
-  条件: [L.IsRelational] (s : Set M) (m : M)
+  条件: [L.IsRelational] (s : 集合 M) (m : M)
   证明: by
   rw [← SetLike.mem_coe]; rw [closure_eq_of_isRelational]
 
@@ -1168,7 +1168,7 @@ theorem _root_.Set.Countable.substructure_closure
   exact lift_card_closure_le_card_term.trans mk_le_aleph0
 
 中文:
-定理 _root_.Set.Countable.substructure_closure
+定理 _root_.集合.可数.substructure_closure
   证明: by
   have : Countable s := h.to_subtype
   rw [← mk_le_aleph0_iff]; rw [← lift_le_aleph0]
@@ -1222,7 +1222,7 @@ theorem dense_induction
 
 中文:
 定理 dense_induction
-  结论: {p : M -> 命题} (x : M) {s : Set M} (hs : closure L s = ⊤)
+  结论: {p : M -> 命题} (x : M) {s : 集合 M} (hs : closure L s = ⊤)
   证明: by
   have : forall x in closure L s, p x := fun x hx => closure_induction hx Hs fun {n} => Hfun
   simpa [hs] using this x
@@ -1250,7 +1250,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure L M _) (↑) where
+  签名: : Galois嵌入 (@closure L M _) (↑) where
   定义体: closure L s
   gc := (closure L).gc
   le_l_u _ := subset_closure
@@ -1278,7 +1278,7 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  结论: closure L (S : Set M) = S
+  结论: closure L (S : 集合 M) = S
   证明: (Substructure.gi L M).l_u_eq S
 
 @[simp]
@@ -1301,7 +1301,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure L (∅ : Set M) = ⊥
+  结论: closure L (∅ : 集合 M) = ⊥
   证明: (Substructure.gi L M).gc.l_bot
 
 @[simp]
@@ -1322,7 +1322,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure L (univ : Set M) = ⊤
+  结论: closure L (univ : 集合 M) = ⊤
   证明: @coe_top L M _ ▸ closure_eq ⊤
 
 Depends on / 依赖: closure_eq, coe_top
@@ -1341,7 +1341,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: closure L (s union t) = closure L s ⊔ closure L t
   证明: (Substructure.gi L M).gc.l_sup
 
@@ -1361,7 +1361,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set M)
+  条件: {ι} (s : ι -> 集合 M)
   结论: closure L (⋃ i, s i) = ⨆ i, closure L (s i)
   证明: (Substructure.gi L M).gc.l_iSup
 
@@ -1381,7 +1381,7 @@ theorem closure_insert
 
 中文:
 定理 closure_insert
-  条件: (s : Set M) (m : M)
+  条件: (s : 集合 M) (m : M)
   结论: closure L (insert m s) = closure L {m} ⊔ closure L s
   证明: closure_union {m} s
 
@@ -1403,7 +1403,7 @@ instance small_bot
 
 中文:
 实例 small_bot
-  签名: : Small.{u} (⊥ : L.Substructure M)
+  签名: : Small.{u} (⊥ : L.子结构 M)
   定义体: by
   rw [← closure_empty]
   have : Small.{u} (∅ : Set M) := small_subsingleton _
@@ -1426,7 +1426,7 @@ theorem iSup_eq_closure
 
 中文:
 定理 iSup_eq_closure
-  条件: {ι : Sort*} (S : ι -> L.Substructure M)
+  条件: {ι : 类型层*} (S : ι -> L.子结构 M)
   证明: by simp_rw [closure_iUnion, closure_eq]
 
 Depends on / 依赖: closure_eq, closure_iUnion, simp_rw
@@ -1451,7 +1451,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  结论: {ι : 类型} [hι : Nonempty ι] {S : ι -> L.Substructure M}
+  结论: {ι : 类型} [hι : 非空 ι] {S : ι -> L.子结构 M}
   证明: by
   refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
   suffices x in closure L (⋃ i, (S i : Set M)) -> exists i, x in S i by
@@ -1486,7 +1486,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {S : Set (L.Substructure M)} (Sne : S.Nonempty)
+  结论: {S : 集合 (L.子结构 M)} (Sne : S.非空)
   证明: by
   have : Nonempty S := Sne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, Subtype.exists, exists_prop]
@@ -1519,8 +1519,8 @@ instance [IsEmpty
   rw [← closure_empty]; rw [← SetLike.mem_coe]; rw
 
 中文:
-实例 [IsEmpty
-  签名: L.Constants] : IsEmpty (⊥
+实例 [是空
+  签名: L.Constants] : 是空 (⊥
   定义体: by
   refine (isEmpty_subtype _).2 (fun x => ?_)
   have h : (∅ : Set M) in (closure L).closed := by
@@ -1570,7 +1570,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (φ : M ->[L] N) (S : L.Substructure N)
+  签名: (φ : M ->[L] N) (S : L.子结构 N)
   定义体: φ ⁻¹' S
   fun_mem {n} f x hx := by
     rw [mem_preimage]; rw [φ.map_fun]
@@ -1596,7 +1596,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {S : L.Substructure N} {f : M ->[L] N} {x : M}
+  条件: {S : L.子结构 N} {f : M ->[L] N} {x : M}
   结论: x in S.comap f ↔ f x in S
   证明: Iff.rfl
 
@@ -1617,7 +1617,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (S : L.Substructure P) (g : N ->[L] P) (f : M ->[L] N)
+  条件: (S : L.子结构 P) (g : N ->[L] P) (f : M ->[L] N)
   证明: rfl
 
 @[simp]
@@ -1638,8 +1638,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (S : L.Substructure P)
-  结论: S.comap (Hom.id _ _) = S
+  条件: (S : L.子结构 P)
+  结论: S.comap (态射.id _ _) = S
   证明: ext (by simp)
 -/
 theorem comap_id (S : L.Substructure P) : S.comap (Hom.id _ _) = S :=
@@ -1665,7 +1665,7 @@ definition map
 
 中文:
 定义 map
-  签名: (φ : M ->[L] N) (S : L.Substructure M)
+  签名: (φ : M ->[L] N) (S : L.子结构 M)
   定义体: φ '' S
   fun_mem {n} f x hx :=
     (mem_image _ _ _).1
@@ -1696,7 +1696,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : M ->[L] N} {S : L.Substructure M} {y : N}
+  条件: {f : M ->[L] N} {S : L.子结构 M} {y : N}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1716,7 +1716,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: (f : M ->[L] N) {S : L.Substructure M} {x : M} (hx : x in S)
+  条件: (f : M ->[L] N) {S : L.子结构 M} {x : M} (hx : x in S)
   结论: f x in S.map f
   证明: mem_image_of_mem f hx
 
@@ -1736,7 +1736,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : M ->[L] N) (S : L.Substructure M) (x : S)
+  条件: (f : M ->[L] N) (S : L.子结构 M) (x : S)
   结论: f x in S.map f
   证明: mem_map_of_mem f x.prop
 
@@ -1775,7 +1775,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : M ->[L] N} {S : L.Substructure M} {T : L.Substructure N}
+  条件: {f : M ->[L] N} {S : L.子结构 M} {T : L.子结构 N}
   证明: image_subset_iff
 
 Depends on / 依赖: image_subset_iff
@@ -1815,7 +1815,7 @@ theorem map_le_of_le_comap
 
 中文:
 定理 map_le_of_le_comap
-  条件: {T : L.Substructure N} {f : M ->[L] N}
+  条件: {T : L.子结构 N} {f : M ->[L] N}
   结论: S <= T.comap f -> S.map f <= T
   证明: (gc_map_comap f).l_le
 
@@ -1835,7 +1835,7 @@ theorem le_comap_of_map_le
 
 中文:
 定理 le_comap_of_map_le
-  条件: {T : L.Substructure N} {f : M ->[L] N}
+  条件: {T : L.子结构 N} {f : M ->[L] N}
   结论: S.map f <= T -> S <= T.comap f
   证明: (gc_map_comap f).le_u
 
@@ -1875,7 +1875,7 @@ theorem map_comap_le
 
 中文:
 定理 map_comap_le
-  条件: {S : L.Substructure N} {f : M ->[L] N}
+  条件: {S : L.子结构 N} {f : M ->[L] N}
   结论: (S.comap f).map f <= S
   证明: (gc_map_comap f).l_u_le _
 
@@ -1896,7 +1896,7 @@ theorem monotone_map
 中文:
 定理 monotone_map
   条件: {f : M ->[L] N}
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: (gc_map_comap f).monotone_l
 
 Depends on / 依赖: gc_map_comap, monotone_l
@@ -1918,7 +1918,7 @@ theorem monotone_comap
 中文:
 定理 monotone_comap
   条件: {f : M ->[L] N}
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: (gc_map_comap f).monotone_u
 
 @[simp]
@@ -1964,7 +1964,7 @@ theorem comap_map_comap
 
 中文:
 定理 comap_map_comap
-  条件: {S : L.Substructure N} {f : M ->[L] N}
+  条件: {S : L.子结构 N} {f : M ->[L] N}
   证明: (gc_map_comap f).u_l_u_eq_u _
 
 Depends on / 依赖: gc_map_comap, u_l_u_eq_u
@@ -1984,7 +1984,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (S T : L.Substructure M) (f : M ->[L] N)
+  条件: (S T : L.子结构 M) (f : M ->[L] N)
   结论: (S ⊔ T).map f = S.map f ⊔ T.map f
   证明: (gc_map_comap f).l_sup
 
@@ -2003,7 +2003,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : M ->[L] N) (s : ι -> L.Substructure M)
+  条件: {ι : 类型层*} (f : M ->[L] N) (s : ι -> L.子结构 M)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -2022,7 +2022,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (S T : L.Substructure N) (f : M ->[L] N)
+  条件: (S T : L.子结构 N) (f : M ->[L] N)
   证明: (gc_map_comap f).u_inf
 
 Depends on / 依赖: gc_map_comap, u_inf
@@ -2043,7 +2043,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : M ->[L] N) (s : ι -> L.Substructure N)
+  条件: {ι : 类型层*} (f : M ->[L] N) (s : ι -> L.子结构 N)
   证明: (gc_map_comap f).u_iInf
 
 @[simp]
@@ -2069,7 +2069,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : M ->[L] N)
-  结论: (⊥ : L.Substructure M).map f = ⊥
+  结论: (⊥ : L.子结构 M).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[simp]
@@ -2094,7 +2094,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : M ->[L] N)
-  结论: (⊤ : L.Substructure N).comap f = ⊤
+  结论: (⊤ : L.子结构 N).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 @[simp]
@@ -2116,8 +2116,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : L.Substructure M)
-  结论: S.map (Hom.id L M) = S
+  条件: (S : L.子结构 M)
+  结论: S.map (态射.id L M) = S
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -2140,7 +2140,7 @@ map_le_iff_le_comap.2 closure_le.2 fun x hx => subset_closure ⟨x, hx, rfl⟩
 
 中文:
 定理 map_closure
-  条件: (f : M ->[L] N) (s : Set M)
+  条件: (f : M ->[L] N) (s : 集合 M)
   结论: (closure L s).map f = closure L (f '' s)
   证明: Eq.symm
 closure_eq_of_le (Set.image_mono subset_closure)
@@ -2190,7 +2190,7 @@ definition gciMapComap
 
 中文:
 定义 gciMapComap
-  签名: (hf : Function.Injective f)
+  签名: (hf : 函数.单射 f)
   定义体: (gc_map_comap f).toGaloisCoinsertion fun S x => by simp [mem_comap, mem_map, hf.eq_iff]
 
 Depends on / 依赖: eq_iff, gc_map_comap, hf.eq_iff, mem_comap, mem_map, toGaloisCoinsertion
@@ -2212,7 +2212,7 @@ theorem comap_map_eq_of_injective
 
 中文:
 定理 comap_map_eq_of_injective
-  条件: (S : L.Substructure M)
+  条件: (S : L.子结构 M)
   结论: (S.map f).comap f = S
   证明: (gciMapComap hf).u_l_eq _
 
@@ -2231,7 +2231,7 @@ theorem comap_surjective_of_injective
 
 中文:
 定理 comap_surjective_of_injective
-  结论: Function.Surjective (comap f)
+  结论: 函数.满射 (comap f)
   证明: (gciMapComap hf).u_surjective
 
 Depends on / 依赖: gciMapComap, u_surjective
@@ -2249,7 +2249,7 @@ theorem map_injective_of_injective
 
 中文:
 定理 map_injective_of_injective
-  结论: Function.Injective (map f)
+  结论: 函数.单射 (map f)
   证明: (gciMapComap hf).l_injective
 
 Depends on / 依赖: gciMapComap, l_injective
@@ -2268,7 +2268,7 @@ theorem comap_inf_map_of_injective
 
 中文:
 定理 comap_inf_map_of_injective
-  条件: (S T : L.Substructure M)
+  条件: (S T : L.子结构 M)
   结论: (S.map f ⊓ T.map f).comap f = S ⊓ T
   证明: (gciMapComap hf).u_inf_l _ _
 
@@ -2287,7 +2287,7 @@ theorem comap_iInf_map_of_injective
 
 中文:
 定理 comap_iInf_map_of_injective
-  条件: (S : ι -> L.Substructure M)
+  条件: (S : ι -> L.子结构 M)
   证明: (gciMapComap hf).u_iInf_l _
 
 Depends on / 依赖: gciMapComap, u_iInf_l
@@ -2307,7 +2307,7 @@ theorem comap_sup_map_of_injective
 
 中文:
 定理 comap_sup_map_of_injective
-  条件: (S T : L.Substructure M)
+  条件: (S T : L.子结构 M)
   结论: (S.map f ⊔ T.map f).comap f = S ⊔ T
   证明: (gciMapComap hf).u_sup_l _ _
 
@@ -2326,7 +2326,7 @@ theorem comap_iSup_map_of_injective
 
 中文:
 定理 comap_iSup_map_of_injective
-  条件: (S : ι -> L.Substructure M)
+  条件: (S : ι -> L.子结构 M)
   证明: (gciMapComap hf).u_iSup_l _
 
 Depends on / 依赖: gciMapComap, u_iSup_l
@@ -2346,7 +2346,7 @@ theorem map_le_map_iff_of_injective
 
 中文:
 定理 map_le_map_iff_of_injective
-  条件: {S T : L.Substructure M}
+  条件: {S T : L.子结构 M}
   结论: S.map f <= T.map f ↔ S <= T
   证明: (gciMapComap hf).l_le_l_iff
 
@@ -2365,7 +2365,7 @@ theorem map_strictMono_of_injective
 
 中文:
 定理 map_strictMono_of_injective
-  结论: StrictMono (map f)
+  结论: 严格递增 (map f)
   证明: (gciMapComap hf).strictMono_l
 
 Depends on / 依赖: gciMapComap, strictMono_l
@@ -2392,7 +2392,7 @@ definition giMapComap
 
 中文:
 定义 giMapComap
-  签名: : GaloisInsertion (map f) (comap f)
+  签名: : Galois嵌入 (map f) (comap f)
   定义体: (gc_map_comap f).toGaloisInsertion fun S x h =>
     let ⟨y, hy⟩ := hf x
     mem_map.2 ⟨y, by simp [hy, h]⟩
@@ -2415,7 +2415,7 @@ theorem map_comap_eq_of_surjective
 
 中文:
 定理 map_comap_eq_of_surjective
-  条件: (S : L.Substructure N)
+  条件: (S : L.子结构 N)
   结论: (S.comap f).map f = S
   证明: (giMapComap hf).l_u_eq _
 
@@ -2434,7 +2434,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  结论: Function.Surjective (map f)
+  结论: 函数.满射 (map f)
   证明: (giMapComap hf).l_surjective
 
 Depends on / 依赖: giMapComap, l_surjective
@@ -2452,7 +2452,7 @@ theorem comap_injective_of_surjective
 
 中文:
 定理 comap_injective_of_surjective
-  结论: Function.Injective (comap f)
+  结论: 函数.单射 (comap f)
   证明: (giMapComap hf).u_injective
 
 Depends on / 依赖: giMapComap, u_injective
@@ -2470,7 +2470,7 @@ theorem map_inf_comap_of_surjective
 
 中文:
 定理 map_inf_comap_of_surjective
-  条件: (S T : L.Substructure N)
+  条件: (S T : L.子结构 N)
   证明: (giMapComap hf).l_inf_u _ _
 
 Depends on / 依赖: giMapComap, l_inf_u
@@ -2489,7 +2489,7 @@ theorem map_iInf_comap_of_surjective
 
 中文:
 定理 map_iInf_comap_of_surjective
-  条件: (S : ι -> L.Substructure N)
+  条件: (S : ι -> L.子结构 N)
   证明: (giMapComap hf).l_iInf_u _
 
 Depends on / 依赖: giMapComap, l_iInf_u
@@ -2508,7 +2508,7 @@ theorem map_sup_comap_of_surjective
 
 中文:
 定理 map_sup_comap_of_surjective
-  条件: (S T : L.Substructure N)
+  条件: (S T : L.子结构 N)
   证明: (giMapComap hf).l_sup_u _ _
 
 Depends on / 依赖: giMapComap, l_sup_u
@@ -2527,7 +2527,7 @@ theorem map_iSup_comap_of_surjective
 
 中文:
 定理 map_iSup_comap_of_surjective
-  条件: (S : ι -> L.Substructure N)
+  条件: (S : ι -> L.子结构 N)
   证明: (giMapComap hf).l_iSup_u _
 
 Depends on / 依赖: giMapComap, l_iSup_u
@@ -2547,7 +2547,7 @@ theorem comap_le_comap_iff_of_surjective
 
 中文:
 定理 comap_le_comap_iff_of_surjective
-  条件: {S T : L.Substructure N}
+  条件: {S T : L.子结构 N}
   结论: S.comap f <= T.comap f ↔ S <= T
   证明: (giMapComap hf).u_le_u_iff
 
@@ -2566,7 +2566,7 @@ theorem comap_strictMono_of_surjective
 
 中文:
 定理 comap_strictMono_of_surjective
-  结论: StrictMono (comap f)
+  结论: 严格递增 (comap f)
   证明: (giMapComap hf).strictMono_u
 
 Depends on / 依赖: giMapComap, strictMono_u
@@ -2587,7 +2587,7 @@ instance inducedStructure
 
 中文:
 实例 inducedStructure
-  签名: {S : L.Substructure M}
+  签名: {S : L.子结构 M}
   定义体: ⟨funMap f fun i => x i, S.fun_mem f (fun i => x i) fun i => (x i).2⟩
   RelMap {_} r x := RelMap r fun i => (x i : M)
 
@@ -2610,7 +2610,7 @@ definition subtype
 
 中文:
 定义 subtype
-  签名: (S : L.Substructure M)
+  签名: (S : L.子结构 M)
   定义体: (↑)
   inj' := Subtype.coe_injective
 
@@ -2632,7 +2632,7 @@ theorem subtype_apply
 
 中文:
 定理 subtype_apply
-  条件: {S : L.Substructure M} {x : S}
+  条件: {S : L.子结构 M} {x : S}
   结论: subtype S x = x
   证明: rfl
 -/
@@ -2652,8 +2652,8 @@ theorem subtype_injective
 
 中文:
 定理 subtype_injective
-  条件: (S : L.Substructure M)
-  结论: Function.Injective (subtype S)
+  条件: (S : L.子结构 M)
+  结论: 函数.单射 (subtype S)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -2694,7 +2694,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : L.Substructure M) ≃[L] M where
+  签名: : (⊤ : L.子结构 M) ≃[L] M where
   定义体: subtype ⊤
   invFun m := ⟨m, mem_top m⟩
   left_inv m := by simp
@@ -2771,7 +2771,7 @@ theorem realize_formula_top
 
 中文:
 定理 realize_formula_top
-  条件: {α : 类型} {φ : L.Formula α} {v : α -> (⊤ : L.Substructure M)}
+  条件: {α : 类型} {φ : L.公式 α} {v : α -> (⊤ : L.子结构 M)}
   证明: by
   rw [← StrongHomClass.realize_formula Substructure.topEquiv φ]
   simp
@@ -2797,7 +2797,7 @@ theorem closure_induction'
 
 中文:
 定理 closure_induction'
-  结论: (s : Set M) {p : 对任意 x, x in closure L s -> 命题}
+  结论: (s : 集合 M) {p : 对任意 x, x in closure L s -> 命题}
   证明: by
   refine Exists.elim ?_ fun (hx : x in closure L s) (hc : p x hx) => hc
   exact closure_induction hx (fun x hx => ⟨subset_closure hx, Hs x hx⟩) @Hfun
@@ -2838,7 +2838,7 @@ definition substructureReduct
 
 中文:
 定义 substructureReduct
-  签名: (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+  签名: (φ : L ->ᴸ L') [φ.是ExpansionOn M]
   定义体: { carrier := S
       fun_mem := fun {n} f x hx => by
         have h := S.fun_mem (φ.onFunction f) x hx
@@ -2879,7 +2879,7 @@ theorem mem_substructureReduct
 
 中文:
 定理 mem_substructureReduct
-  条件: {x : M} {S : L'.Substructure M}
+  条件: {x : M} {S : L'.子结构 M}
   证明: Iff.rfl
 
 @[simp]
@@ -2902,8 +2902,8 @@ theorem coe_substructureReduct
 
 中文:
 定理 coe_substructureReduct
-  条件: {S : L'.Substructure M}
-  结论: (φ.substructureReduct S : Set M) = ↑S
+  条件: {S : L'.子结构 M}
+  结论: (φ.substructureReduct S : 集合 M) = ↑S
   证明: rfl
 -/
 theorem coe_substructureReduct {S : L'.Substructure M} : (φ.substructureReduct S : Set M) = ↑S :=
@@ -2929,7 +2929,7 @@ definition withConstants
 
 中文:
 定义 withConstants
-  签名: (S : L.Substructure M) {A : Set M} (h : A subseteq S)
+  签名: (S : L.子结构 M) {A : 集合 M} (h : A subseteq S)
   定义体: S
   fun_mem {n} f := by
     obtain f | f := f
@@ -2987,7 +2987,7 @@ theorem coe_withConstants
 
 中文:
 定理 coe_withConstants
-  结论: (S.withConstants h : Set M) = ↑S
+  结论: (S.withConstants h : 集合 M) = ↑S
   证明: rfl
 
 @[simp]
@@ -3093,7 +3093,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : M ->[L] N) (p : L.Substructure M)
+  签名: (f : M ->[L] N) (p : L.子结构 M)
   定义体: f.comp p.subtype.toHom
 
 Depends on / 依赖: f.comp, p.subtype.toHom, subtype
@@ -3118,7 +3118,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (p : L.Substructure N) (f : M ->[L] N) (h : 对任意 c, f c in p)
+  签名: (p : L.子结构 N) (f : M ->[L] N) (h : 对任意 c, f c in p)
   定义体: ⟨f c, h c⟩
   map_fun' {n} f x := by aesop
   map_rel' {_} R x h := f.map_rel R x h
@@ -3143,7 +3143,7 @@ theorem comp_codRestrict
 
 中文:
 定理 comp_codRestrict
-  条件: (f : M ->[L] N) (g : N ->[L] P) (p : L.Substructure P) (h : 对任意 b, g b in p)
+  条件: (f : M ->[L] N) (g : N ->[L] P) (p : L.子结构 P) (h : 对任意 b, g b in p)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -3165,7 +3165,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: (f : M ->[L] N) (p : L.Substructure N) (h : 对任意 b, f b in p)
+  条件: (f : M ->[L] N) (p : L.子结构 N) (h : 对任意 b, f b in p)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -3185,7 +3185,7 @@ theorem domRestrict_comp_codRestrict
 
 中文:
 定理 domRestrict_comp_codRestrict
-  结论: (g : N ->[L] P) (f : M ->[L] N) (p : L.Substructure N)
+  结论: (g : N ->[L] P) (f : M ->[L] N) (p : L.子结构 N)
   证明: rfl
 -/
 theorem domRestrict_comp_codRestrict (g : N ->[L] P) (f : M ->[L] N) (p : L.Substructure N)
@@ -3225,7 +3225,7 @@ theorem range_coe
 中文:
 定理 range_coe
   条件: (f : M ->[L] N)
-  结论: (range f : Set N) = Set.range f
+  结论: (range f : 集合 N) = 集合.range f
   证明: rfl
 
 @[simp]
@@ -3371,7 +3371,7 @@ theorem range_eq_top
 中文:
 定理 range_eq_top
   条件: {f : M ->[L] N}
-  结论: range f = ⊤ ↔ Function.Surjective f
+  结论: range f = ⊤ ↔ 函数.满射 f
   证明: by
   rw [SetLike.ext'_iff]; rw [range_coe]; rw [coe_top]; rw [Set.range_eq_univ]
 
@@ -3392,7 +3392,7 @@ theorem range_le_iff_comap
 
 中文:
 定理 range_le_iff_comap
-  条件: {f : M ->[L] N} {p : L.Substructure N}
+  条件: {f : M ->[L] N} {p : L.子结构 N}
   结论: range f <= p ↔ comap f p = ⊤
   证明: by
   rw [range_eq_map]; rw [map_le_iff_le_comap]; rw [eq_top_iff]
@@ -3413,7 +3413,7 @@ theorem map_le_range
 
 中文:
 定理 map_le_range
-  条件: {f : M ->[L] N} {p : L.Substructure M}
+  条件: {f : M ->[L] N} {p : L.子结构 M}
   结论: map f p <= range f
   证明: SetLike.coe_mono (Set.image_subset_range f p)
 
@@ -3490,7 +3490,7 @@ theorem eqOn_closure
 
 中文:
 定理 eqOn_closure
-  条件: {f g : M ->[L] N} {s : Set M} (h : Set.EqOn f g s)
+  条件: {f g : M ->[L] N} {s : 集合 M} (h : 集合.EqOn f g s)
   证明: show closure L s <= f.eqLocus g from closure_le.2 h
 
 Depends on / 依赖: closure, closure_le, eqLocus, f.eqLocus
@@ -3510,7 +3510,7 @@ theorem eq_of_eqOn_top
 
 中文:
 定理 eq_of_eqOn_top
-  条件: {f g : M ->[L] N} (h : Set.EqOn f g (⊤ : Substructure L M))
+  条件: {f g : M ->[L] N} (h : 集合.EqOn f g (⊤ : 子结构 L M))
   结论: f = g
   证明: ext fun _ => h trivial
 -/
@@ -3555,7 +3555,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : M ↪[L] N) (p : L.Substructure M)
+  签名: (f : M ↪[L] N) (p : L.子结构 M)
   定义体: f.comp p.subtype
 
 @[simp]
@@ -3577,7 +3577,7 @@ theorem domRestrict_apply
 
 中文:
 定理 domRestrict_apply
-  条件: (f : M ↪[L] N) (p : L.Substructure M) (x : p)
+  条件: (f : M ↪[L] N) (p : L.子结构 M) (x : p)
   结论: f.domRestrict p x = f x
   证明: rfl
 -/
@@ -3601,7 +3601,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (p : L.Substructure N) (f : M ↪[L] N) (h : 对任意 c, f c in p)
+  签名: (p : L.子结构 N) (f : M ↪[L] N) (h : 对任意 c, f c in p)
   定义体: f.toHom.codRestrict p h
   inj' _ _ ab := f.injective (Subtype.mk_eq_mk.1 ab)
   map_fun' {_} F x := (f.toHom.codRestrict p h).map_fun' F x
@@ -3635,7 +3635,7 @@ theorem codRestrict_apply
 
 中文:
 定理 codRestrict_apply
-  条件: (p : L.Substructure N) (f : M ↪[L] N) {h} (x : M)
+  条件: (p : L.子结构 N) (f : M ↪[L] N) {h} (x : M)
   证明: rfl
 
 @[simp]
@@ -3657,7 +3657,7 @@ theorem codRestrict_apply'
 
 中文:
 定理 codRestrict_apply'
-  条件: (p : L.Substructure N) (f : M ↪[L] N) {h} (x : M)
+  条件: (p : L.子结构 N) (f : M ↪[L] N) {h} (x : M)
   证明: rfl
 
 @[simp]
@@ -3679,7 +3679,7 @@ theorem comp_codRestrict
 
 中文:
 定理 comp_codRestrict
-  条件: (f : M ↪[L] N) (g : N ↪[L] P) (p : L.Substructure P) (h : 对任意 b, g b in p)
+  条件: (f : M ↪[L] N) (g : N ↪[L] P) (p : L.子结构 P) (h : 对任意 b, g b in p)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -3699,7 +3699,7 @@ theorem subtype_comp_codRestrict
 
 中文:
 定理 subtype_comp_codRestrict
-  条件: (f : M ↪[L] N) (p : L.Substructure N) (h : 对任意 b, f b in p)
+  条件: (f : M ↪[L] N) (p : L.子结构 N) (h : 对任意 b, f b in p)
   证明: ext fun _ => rfl
 -/
 theorem subtype_comp_codRestrict (f : M ↪[L] N) (p : L.Substructure N) (h : forall b, f b in p) :
@@ -3722,7 +3722,7 @@ definition substructureEquivMap
 
 中文:
 定义 substructureEquivMap
-  签名: (f : M ↪[L] N) (s : L.Substructure M)
+  签名: (f : M ↪[L] N) (s : L.子结构 M)
   定义体: codRestrict (s.map f.toHom) (f.domRestrict s) fun ⟨m, hm⟩ => ⟨m, hm, rfl⟩
   invFun n := ⟨Classical.choose n.2, (Classical.choose_spec n.2).1⟩
   left_inv := fun ⟨m, hm⟩ =>
@@ -3760,7 +3760,7 @@ theorem substructureEquivMap_apply
 
 中文:
 定理 substructureEquivMap_apply
-  条件: (f : M ↪[L] N) (p : L.Substructure M) (x : p)
+  条件: (f : M ↪[L] N) (p : L.子结构 M) (x : p)
   证明: rfl
 
 @[simp]
@@ -3781,7 +3781,7 @@ theorem subtype_substructureEquivMap
 
 中文:
 定理 subtype_substructureEquivMap
-  条件: (f : M ↪[L] N) (s : L.Substructure M)
+  条件: (f : M ↪[L] N) (s : L.子结构 M)
   证明: by
   ext; rfl
 -/
@@ -3913,7 +3913,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : L.Substructure M} (h : S <= T)
+  签名: {S T : L.子结构 M} (h : S <= T)
   定义体: S.subtype.codRestrict _ fun x => h x.2
 
 @[simp]
@@ -3937,8 +3937,8 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  条件: (S : L.Substructure M)
-  结论: inclusion (le_refl S) = Embedding.refl L S
+  条件: (S : L.子结构 M)
+  结论: inclusion (le_refl S) = 嵌入.refl L S
   证明: rfl
 
 @[simp]
@@ -3956,7 +3956,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  条件: {S T : L.Substructure M} (h : S <= T)
+  条件: {S T : L.子结构 M} (h : S <= T)
   证明: rfl
 -/
 theorem coe_inclusion {S T : L.Substructure M} (h : S <= T) :
@@ -3981,7 +3981,7 @@ theorem range_subtype
 
 中文:
 定理 range_subtype
-  条件: (S : L.Substructure M)
+  条件: (S : L.子结构 M)
   结论: S.subtype.toHom.range = S
   证明: by
   ext x
@@ -4012,7 +4012,7 @@ lemma subtype_comp_inclusion
 
 中文:
 引理 subtype_comp_inclusion
-  条件: {S T : L.Substructure M} (h : S <= T)
+  条件: {S T : L.子结构 M} (h : S <= T)
   证明: rfl
 -/
 lemma subtype_comp_inclusion {S T : L.Substructure M} (h : S <= T) :

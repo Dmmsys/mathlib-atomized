@@ -56,16 +56,16 @@ structure Algebra.Extension
     - algebraMap_σ : forall x, algebraMap Ring S (σ x) = x
 
 中文:
-结构 Algebra.Extension
+结构 代数.扩张
   参数: where
   公理与运算 (7 个):
-    - Ring : Type w
-    - [commRing : CommRing Ring]
-    - [algebra₁ : Algebra R Ring]
-    - [algebra₂ : Algebra Ring S]
-    - [isScalarTower : IsScalarTower R Ring S]
-    - σ : S -> Ring
-    - algebraMap_σ : 对任意 x, algebraMap Ring S (σ x) = x
+    - Ring : 类型 w
+    - [commRing : 交换环 环]
+    - [algebra₁ : 代数 R 环]
+    - [algebra₂ : 代数 环 S]
+    - [isScalarTower : 标量塔 R 环 S]
+    - σ : S -> 环
+    - algebraMap_σ : 对任意 x, algebraMap 环 S (σ x) = x
 -/
 structure Algebra.Extension where
   /-- The underlying algebra of an extension. -/
@@ -140,7 +140,7 @@ lemma σ_injective
 
 中文:
 引理 σ_injective
-  结论: P.σ.Injective
+  结论: P.σ.单射
   证明: by
   intro x y e
   rw [← P.algebraMap_σ x]; rw [← P.algebraMap_σ y]; rw [e]
@@ -161,7 +161,7 @@ lemma algebraMap_surjective
 
 中文:
 引理 algebraMap_surjective
-  结论: Function.Surjective (algebraMap P.Ring S)
+  结论: 函数.满射 (algebraMap P.环 S)
   证明: (⟨_, P.algebraMap_σ ·⟩)
 
 Depends on / 依赖: P.algebraMap_
@@ -187,7 +187,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: {P : Type w} [CommRing P] [Algebra R P] (f : P ->ₐ[R] S)
+  签名: {P : 类型 w} [交换环 P] [代数 R P] (f : P ->ₐ[R] S)
   定义体: P
   algebra₂ := f.toAlgebra
   isScalarTower := letI := f.toAlgebra; IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
@@ -218,7 +218,7 @@ definition self
 
 中文:
 定义 self
-  签名: : Extension R S where
+  签名: : 扩张 R S where
   定义体: S
   σ := _root_.id
   algebraMap_σ _ := rfl
@@ -238,7 +238,7 @@ abbreviation ker
 
 中文:
 缩写 ker
-  签名: : Ideal P.Ring
+  签名: : 理想 P.环
   定义体: RingHom.ker (algebraMap P.Ring S)
 
 Depends on / 依赖: P.Ring, RingHom, RingHom.ker, algebraMap
@@ -270,7 +270,7 @@ definition localization
 
 中文:
 定义 localization
-  签名: (P : Extension.{w} R S)
+  签名: (P : 扩张.{w} R S)
   定义体: Localization (M.comap (algebraMap P.Ring S))
   algebra₂ := (IsLocalization.lift (M := (M.comap (algebraMap P.Ring S)))
       (g := (algebraMap S S').comp (algebraMap P.Ring S))
@@ -316,7 +316,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: {T} [CommRing T] [Algebra R T] (P : Extension R S)
+  签名: {T} [交换环 T] [代数 R T] (P : 扩张 R S)
   定义体: T otimes[R] P.Ring
   __ := ofSurjective (P := T otimes[R] P.Ring) (Algebra.TensorProduct.map (AlgHom.id T T)
     (IsScalarTower.toAlgHom _ _ _)) (LinearMap.lTensor_surjective T
@@ -368,7 +368,7 @@ definition algebraBaseChange
 
 中文:
 定义 algebraBaseChange
-  签名: : Algebra P.Ring (P.baseChange (T := T)).Ring
+  签名: : 代数 P.环 (P.baseChange (T := T)).环
   定义体: fast_instance% TensorProduct.rightAlgebra
 -/
 noncomputable def algebraBaseChange : Algebra P.Ring (P.baseChange (T := T)).Ring :=
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R P.Ring (P.baseChange (T := T)).Ring
+  签名: 标量塔 R P.环 (P.baseChange (T := T)).环
   定义体: .of_algebraMap_eq fun x => by simp [baseChange, RingHom.algebraMap_toAlgebra]; rfl
 -/
 instance : IsScalarTower R P.Ring (P.baseChange (T := T)).Ring :=
@@ -426,12 +426,12 @@ structure Hom
     - algebraMap_toRingHom : forall x, (algebraMap P'.Ring S' (toRingHom x)) = algebraMap S S' (algebraMap P.Ring S x)
 
 中文:
-结构 Hom
+结构 态射
   参数: where
   公理与运算 (3 个):
-    - toRingHom : P.Ring ->+* P'.Ring
-    - toRingHom_algebraMap : 对任意 x, toRingHom (algebraMap R P.Ring x) = algebraMap R' P'.Ring (algebraMap R R' x)
-    - algebraMap_toRingHom : 对任意 x, (algebraMap P'.Ring S' (toRingHom x)) = algebraMap S S' (algebraMap P.Ring S x)
+    - toRingHom : P.环 ->+* P'.环
+    - toRingHom_algebraMap : 对任意 x, toRingHom (algebraMap R P.环 x) = algebraMap R' P'.环 (algebraMap R R' x)
+    - algebraMap_toRingHom : 对任意 x, (algebraMap P'.环 S' (toRingHom x)) = algebraMap S S' (algebraMap P.环 S x)
 -/
 structure Hom where
   /-- The underlying ring homomorphism of a hom between extensions. -/
@@ -459,8 +459,8 @@ definition Hom.toAlgHom
 @[simp]
 
 中文:
-定义 Hom.toAlgHom
-  签名: [Algebra R S'] [IsScalarTower R R' S'] (f : Hom P P')
+定义 态射.toAlgHom
+  签名: [代数 R S'] [标量塔 R R' S'] (f : 态射 P P')
   定义体: f.toRingHom
   commutes' := by simp [← IsScalarTower.algebraMap_apply]
 
@@ -483,8 +483,8 @@ lemma Hom.toAlgHom_apply
   proof: rfl
 
 中文:
-引理 Hom.toAlgHom_apply
-  条件: [Algebra R S'] [IsScalarTower R R' S'] (f : Hom P P') (x)
+引理 态射.toAlgHom_apply
+  条件: [代数 R S'] [标量塔 R R' S'] (f : 态射 P P') (x)
   证明: rfl
 -/
 lemma Hom.toAlgHom_apply [Algebra R S'] [IsScalarTower R R' S'] (f : Hom P P') (x) :
@@ -506,8 +506,8 @@ definition Hom.ofAlgHom
 @[simp]
 
 中文:
-定义 Hom.ofAlgHom
-  签名: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
+定义 态射.ofAlgHom
+  签名: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S']
   定义体: f.toRingHom
   toRingHom_algebraMap := f.commutes'
   algebraMap_toRingHom x := congr($H x)
@@ -535,8 +535,8 @@ lemma Hom.toAlgHom_ofAlgHom
   proof: rfl
 
 中文:
-引理 Hom.toAlgHom_ofAlgHom
-  结论: [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
+引理 态射.toAlgHom_ofAlgHom
+  结论: [代数 R S'] [标量塔 R R' S'] [标量塔 R S S']
   证明: rfl
 -/
 lemma Hom.toAlgHom_ofAlgHom [Algebra R S'] [IsScalarTower R R' S'] [IsScalarTower R S S']
@@ -562,7 +562,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Hom.id
+  签名: def 态射.id
   定义体: ⟨RingHom.id _, by simp, by simp⟩
 
 @[simp]
@@ -579,8 +579,8 @@ lemma Hom.toAlgHom_id
   proof: by ext1; simp
 
 中文:
-引理 Hom.toAlgHom_id
-  结论: Hom.toAlgHom (.id P) = AlgHom.id _ _
+引理 态射.toAlgHom_id
+  结论: 态射.toAlgHom (.id P) = 代数态射.id _ _
   证明: by ext1; simp
 -/
 lemma Hom.toAlgHom_id : Hom.toAlgHom (.id P) = AlgHom.id _ _ := by ext1; simp
@@ -603,8 +603,8 @@ definition Hom.comp
 @[simp]
 
 中文:
-定义 Hom.comp
-  签名: (f : Hom P' P'') (g : Hom P P')
+定义 态射.comp
+  签名: (f : 态射 P' P'') (g : 态射 P P')
   定义体: f.toRingHom.comp g.toRingHom
   toRingHom_algebraMap := by simp [← IsScalarTower.algebraMap_apply]
   algebraMap_toRingHom := by simp [← IsScalarTower.algebraMap_apply]
@@ -629,9 +629,9 @@ lemma Hom.comp_id
 @[simp]
 
 中文:
-引理 Hom.comp_id
-  条件: (f : Hom P P')
-  结论: f.comp (Hom.id P) = f
+引理 态射.comp_id
+  条件: (f : 态射 P P')
+  结论: f.comp (态射.id P) = f
   证明: by ext; simp
 
 @[simp]
@@ -650,9 +650,9 @@ lemma Hom.id_comp
   ext; simp [Hom.id]
 
 中文:
-引理 Hom.id_comp
-  条件: (f : Hom P P')
-  结论: (Hom.id P').comp f = f
+引理 态射.id_comp
+  条件: (f : 态射 P P')
+  结论: (态射.id P').comp f = f
   证明: by
   ext; simp [Hom.id]
 
@@ -674,8 +674,8 @@ definition Hom.mapKer
   map_smul' := by simp [Algebra.smul_def, ← halg]
 
 中文:
-定义 Hom.mapKer
-  签名: (f : P.Hom P')
+定义 态射.mapKer
+  签名: (f : P.态射 P')
   定义体: ⟨f.toRingHom x, by simp [show algebraMap P.Ring S x = 0 from x.2]⟩
   map_add' _ _ := Subtype.ext (map_add _ _ _)
   map_smul' := by simp [Algebra.smul_def, ← halg]
@@ -705,7 +705,7 @@ definition toBaseChange
 
 中文:
 定义 toBaseChange
-  签名: (T : 类型) [CommRing T] [Algebra R T]
+  签名: (T : 类型) [交换环 T] [代数 R T]
   定义体: TensorProduct.includeRight.toRingHom
   toRingHom_algebraMap x := by simp [baseChange]
   algebraMap_toRingHom x := rfl
@@ -741,7 +741,7 @@ definition infinitesimal
 
 中文:
 定义 infinitesimal
-  签名: (P : Extension R S)
+  签名: (P : 扩张 R S)
   定义体: P.Ring ⧸ P.ker ^ 2
   σ := Ideal.Quotient.mk _ ∘ P.σ
   algebraMap_σ x := by dsimp; exact P.algebraMap_σ x
@@ -767,7 +767,7 @@ definition toInfinitesimal
 
 中文:
 定义 toInfinitesimal
-  签名: (P : Extension R S)
+  签名: (P : 扩张 R S)
   定义体: Ideal.Quotient.mk _
   toRingHom_algebraMap _ := rfl
   algebraMap_toRingHom _ := rfl
@@ -789,7 +789,7 @@ lemma ker_infinitesimal
 
 中文:
 引理 ker_infinitesimal
-  条件: (P : Extension R S)
+  条件: (P : 扩张 R S)
   证明: AlgHom.ker_kerSquareLift _
 
 Depends on / 依赖: AlgHom, AlgHom.ker_kerSquareLift, ker_kerSquareLift
@@ -813,8 +813,8 @@ definition Cotangent
 noncomputable
 
 中文:
-定义 Cotangent
-  签名: : Type _
+定义 余切
+  签名: : 类型 _
   定义体: P.ker.Cotangent
 
 noncomputable
@@ -834,7 +834,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup P.Cotangent
+  签名: 加法交换群 P.余切
   定义体: inferInstanceAs (AddCommGroup P.ker.Cotangent)
 
 Depends on / 依赖: AddCommGroup, Cotangent, P.ker.Cotangent
@@ -852,8 +852,8 @@ definition Cotangent.of
   body: x
 
 中文:
-定义 Cotangent.of
-  签名: (x : P.ker.Cotangent)
+定义 余切.of
+  签名: (x : P.ker.余切)
   定义体: x
 -/
 def Cotangent.of (x : P.ker.Cotangent) : P.Cotangent := x
@@ -869,8 +869,8 @@ definition Cotangent.val
 @[ext]
 
 中文:
-定义 Cotangent.val
-  签名: (x : P.Cotangent)
+定义 余切.val
+  签名: (x : P.余切)
   定义体: x
 
 @[ext]
@@ -888,8 +888,8 @@ lemma Cotangent.ext
   proof: e
 
 中文:
-引理 Cotangent.ext
-  条件: {x y : P.Cotangent} (e : x.val = y.val)
+引理 余切.ext
+  条件: {x y : P.余切} (e : x.val = y.val)
   结论: x = y
   证明: e
 -/
@@ -923,7 +923,7 @@ lemma val_zero
 
 中文:
 引理 val_zero
-  结论: (0 : P.Cotangent).val = 0
+  结论: (0 : P.余切).val = 0
   证明: rfl
 -/
 @[simp] lemma val_zero : (0 : P.Cotangent).val = 0 := rfl
@@ -951,7 +951,7 @@ lemma of_zero
 
 中文:
 引理 of_zero
-  结论: (of 0 : P.Cotangent) = 0
+  结论: (of 0 : P.余切) = 0
   证明: rfl
 -/
 @[simp] lemma of_zero : (of 0 : P.Cotangent) = 0 := rfl
@@ -1009,8 +1009,8 @@ lemma Cotangent.smul_eq_zero_of_mem
   proof: Ideal.Cotangent.smul_eq_zero_of_mem hp m
 
 中文:
-引理 Cotangent.smul_eq_zero_of_mem
-  条件: (p : P.Ring) (hp : p in P.ker) (m : P.ker.Cotangent)
+引理 余切.smul_eq_zero_of_mem
+  条件: (p : P.环) (hp : p in P.ker) (m : P.ker.余切)
   证明: Ideal.Cotangent.smul_eq_zero_of_mem hp m
 
 Depends on / 依赖: Cotangent, Ideal.Cotangent.smul_eq_zero_of_mem, smul_eq_zero_of_mem
@@ -1037,8 +1037,8 @@ instance Cotangent.module
     simpa only [sub_smul, add_smul, sub_eq_z
 
 中文:
-实例 Cotangent.module
-  签名: : Module S P.Cotangent where
+实例 余切.module
+  签名: : 模 S P.余切 where
   定义体: fun r s => .of (P.σ r • s.val)
   smul_zero := fun r => ext (smul_zero (P.σ r))
   smul_add := fun r x y => ext (smul_add (P.σ r) x.val y.val)
@@ -1085,8 +1085,8 @@ lemma Cotangent.val_smul'''
   proof: rfl
 
 中文:
-引理 Cotangent.val_smul'''
-  条件: {R₀} [CommRing R₀] [Algebra R₀ S] (r : R₀) (x : P.Cotangent)
+引理 余切.val_smul'''
+  条件: {R₀} [交换环 R₀] [代数 R₀ S] (r : R₀) (x : P.余切)
   证明: rfl
 -/
 lemma Cotangent.val_smul''' {R₀} [CommRing R₀] [Algebra R₀ S] (r : R₀) (x : P.Cotangent) :
@@ -1105,8 +1105,8 @@ lemma Cotangent.val_smul
   proof: rfl
 
 中文:
-引理 Cotangent.val_smul
-  条件: (r : S) (x : P.Cotangent)
+引理 余切.val_smul
+  条件: (r : S) (x : P.余切)
   结论: (r • x).val = P.σ r • x.val
   证明: rfl
 -/
@@ -1126,8 +1126,8 @@ lemma Cotangent.val_smul'
   exact Cotangent.smul_eq_zero_of_mem _ (by simp) _
 
 中文:
-引理 Cotangent.val_smul'
-  条件: (r : P.Ring) (x : P.Cotangent)
+引理 余切.val_smul'
+  条件: (r : P.环) (x : P.余切)
   结论: (r • x).val = r • x.val
   证明: by
   rw [val_smul''']; rw [← sub_eq_zero]; rw [← sub_smul]
@@ -1152,8 +1152,8 @@ lemma Cotangent.val_smul''
   rw [← algebraMap_smul P.Ring]; rw [val_smul']; rw [algebraMap_smul]
 
 中文:
-引理 Cotangent.val_smul''
-  条件: (r : R) (x : P.Cotangent)
+引理 余切.val_smul''
+  条件: (r : R) (x : P.余切)
   结论: (r • x).val = r • x.val
   证明: by
   rw [← algebraMap_smul P.Ring]; rw [val_smul']; rw [algebraMap_smul]
@@ -1178,7 +1178,7 @@ definition cotangentEquivCotangentKer
 
 中文:
 定义 cotangentEquivCotangentKer
-  签名: : P.Cotangent ≃ₗ[P.Ring] P.ker.Cotangent where
+  签名: : P.余切 ≃ₗ[P.环] P.ker.余切 where
   定义体: Cotangent.val
   invFun := Cotangent.of
   map_add' x y := by simp
@@ -1205,8 +1205,8 @@ map_smul' x y := ext by simp
 @[simp]
 
 中文:
-定义 Cotangent.mk
-  签名: : P.ker ->ₗ[P.Ring] P.Cotangent where
+定义 余切.mk
+  签名: : P.ker ->ₗ[P.环] P.余切 where
   定义体: .of (Ideal.toCotangent _ x)
   map_add' x y := by simp
 map_smul' x y := ext by simp
@@ -1231,9 +1231,9 @@ lemma Cotangent.val_mk
   proof: rfl
 
 中文:
-引理 Cotangent.val_mk
+引理 余切.val_mk
   条件: (x : P.ker)
-  结论: (mk x).val = Ideal.toCotangent _ x
+  结论: (mk x).val = 理想.toCotangent _ x
   证明: rfl
 -/
 lemma Cotangent.val_mk (x : P.ker) : (mk x).val = Ideal.toCotangent _ x := rfl
@@ -1247,8 +1247,8 @@ lemma Cotangent.mk_surjective
   proof: fun x => Ideal.toCotangent_surjective P.ker x.val
 
 中文:
-引理 Cotangent.mk_surjective
-  结论: Function.Surjective (mk (P := P))
+引理 余切.mk_surjective
+  结论: 函数.满射 (mk (P := P))
   证明: fun x => Ideal.toCotangent_surjective P.ker x.val
 -/
 lemma Cotangent.mk_surjective : Function.Surjective (mk (P := P)) :=
@@ -1264,8 +1264,8 @@ lemma Cotangent.mk_eq_zero_iff
   simp [Cotangent.ext_iff, Ideal.toCotangent_eq_zero]
 
 中文:
-引理 Cotangent.mk_eq_zero_iff
-  条件: {P : Extension R S} (x : P.ker)
+引理 余切.mk_eq_zero_iff
+  条件: {P : 扩张 R S} (x : P.ker)
   证明: by
   simp [Cotangent.ext_iff, Ideal.toCotangent_eq_zero]
 
@@ -1285,7 +1285,7 @@ lemma Cotangent.mk_eq_mk_iff_sub_mem
   simp [Extension.Cotangent.ext_iff, Ideal.toCotangent_eq]
 
 中文:
-引理 Cotangent.mk_eq_mk_iff_sub_mem
+引理 余切.mk_eq_mk_iff_sub_mem
   条件: (x y : P.ker)
   证明: by
   simp [Extension.Cotangent.ext_iff, Ideal.toCotangent_eq]
@@ -1308,8 +1308,8 @@ lemma Cotangent.ker_mk
   simp [LinearMap.mem_ker, mk_eq_zero_iff, Submodule.mem_smul_top_iff, sq]
 
 中文:
-引理 Cotangent.ker_mk
-  结论: LinearMap.ker (mk (P := P)) = P.ker • ⊤
+引理 余切.ker_mk
+  结论: 线性映射.ker (mk (P := P)) = P.ker • ⊤
   证明: by
   ext ⟨x, hx⟩
   simp [LinearMap.mem_ker, mk_eq_zero_iff, Submodule.mem_smul_top_iff, sq]
@@ -1332,8 +1332,8 @@ lemma Cotangent.span_eq_top_of_span_eq_ker
     rw [← Function.comp_def]; rw [Set.range_comp]; rw [← Submodule.map_span]; rw [hs]; rw [Submodule.map_top]; rw [LinearMap.range_eq_top_of_surjective _ mk_surject
 
 中文:
-引理 Cotangent.span_eq_top_of_span_eq_ker
-  结论: {ι : 类型} (s : ι -> P.Ring)
+引理 余切.span_eq_top_of_span_eq_ker
+  结论: {ι : 类型} (s : ι -> P.环)
   证明: by
   rw [Ideal.span]; rw [← Submodule.span_range_subtype_eq_top_iff] at hs
   · apply Submodule.span_eq_top_of_span_eq_top (R := P.Ring)
@@ -1371,8 +1371,8 @@ definition Cotangent.map
     obtain ⟨r, rfl⟩ := P.algebraMap_surjective r
 
 中文:
-定义 Cotangent.map
-  签名: (f : Hom P P')
+定义 余切.map
+  签名: (f : 态射 P P')
   定义体: .of (Ideal.mapCotangent (R := R) _ _ f.toAlgHom
     (fun x hx => by simpa using RingHom.congr_arg (algebraMap S S') hx) x.val)
   map_add' x y := ext (map_add _ x.val y.val)
@@ -1411,8 +1411,8 @@ lemma Cotangent.map_mk
 @[simp]
 
 中文:
-引理 Cotangent.map_mk
-  条件: (f : Hom P P') (x)
+引理 余切.map_mk
+  条件: (f : 态射 P P') (x)
   证明: rfl
 
 @[simp]
@@ -1435,7 +1435,7 @@ lemma Cotangent.map_id
     LinearMap.id_coe]
 
 中文:
-引理 Cotangent.map_id
+引理 余切.map_id
   证明: by
   ext x
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
@@ -1467,8 +1467,8 @@ lemma Cotangent.map_comp
     val_mk, LinearMap.coe_comp, LinearMap.coe_restrictScalars]
 
 中文:
-引理 Cotangent.map_comp
-  条件: (f : Hom P P') (g : Hom P' P'')
+引理 余切.map_comp
+  条件: (f : 态射 P P') (g : 态射 P' P'')
   证明: by
   ext x
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
@@ -1496,7 +1496,7 @@ lemma Cotangent.finite
   exact ((Submodule.fg_top P.ker).mpr hP).map _
 
 中文:
-引理 Cotangent.finite
+引理 余切.finite
   条件: (hP : P.ker.FG)
   证明: by
   refine ⟨.of_restrictScalars (R := P.Ring) ?_⟩
@@ -1523,8 +1523,8 @@ lemma Cotangent.map_surjective_of_comap_eq
   exact ⟨Cotangent.mk ⟨y, y_in⟩, by simp [hy]⟩
 
 中文:
-引理 Cotangent.map_surjective_of_comap_eq
-  结论: {P P' : Extension R S} {f : P.Hom P'}
+引理 余切.map_surjective_of_comap_eq
+  结论: {P P' : 扩张 R S} {f : P.态射 P'}
   证明: fun x => by
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
   obtain ⟨y, y_in, hy⟩ := Ideal.exists_of_comap_eq_ker_sup _ h eq x.prop
@@ -1554,8 +1554,8 @@ lemma Cotangent.map_ker_of_surjective
     rw [eq_map]
 
 中文:
-引理 Cotangent.map_ker_of_surjective
-  结论: {P P' : Extension R S} {f : P.Hom P'}
+引理 余切.map_ker_of_surjective
+  结论: {P P' : 扩张 R S} {f : P.态射 P'}
   证明: by
   have eq_map := Ideal.eq_map_of_comap_eq_ker_sup _ h eq
   refine le_antisymm (fun x hx => ?_) (fun x hx => ?_)
@@ -1604,7 +1604,7 @@ definition cotangentEquiv
 
 中文:
 定义 cotangentEquiv
-  签名: : S otimes[P.Ring] P.ker ≃ₗ[S] P.Cotangent
+  签名: : S otimes[P.环] P.ker ≃ₗ[S] P.余切
   定义体: by
   refine .ofBijective (Cotangent.mk.liftBaseChange _) ⟨?_, ?_⟩
   · refine (injective_iff_map_eq_zero _).mpr fun x hx => ?_

@@ -34,7 +34,7 @@ theorem range_sigmaMk
 中文:
 定理 range_sigmaMk
   条件: (i : ι)
-  结论: range (Sigma.mk i : α i -> Sigma α) = Sigma.fst ⁻¹' {i}
+  结论: range (依赖和类型.mk i : α i -> 依赖和类型 α) = 依赖和类型.fst ⁻¹' {i}
   证明: by grind
 -/
 theorem range_sigmaMk (i : ι) : range (Sigma.mk i : α i -> Sigma α) = Sigma.fst ⁻¹' {i} := by grind
@@ -49,7 +49,7 @@ theorem preimage_image_sigmaMk_of_ne
 
 中文:
 定理 preimage_image_sigmaMk_of_ne
-  条件: (h : i != j) (s : Set (α j))
+  条件: (h : i != j) (s : 集合 (α j))
   证明: by grind
 -/
 theorem preimage_image_sigmaMk_of_ne (h : i != j) (s : Set (α j)) :
@@ -89,7 +89,7 @@ theorem image_sigmaMk_preimage_sigmaMap
 
 中文:
 定理 image_sigmaMk_preimage_sigmaMap
-  结论: {β : ι' -> 类型} {f : ι -> ι'} (hf : Function.Injective f)
+  结论: {β : ι' -> 类型} {f : ι -> ι'} (hf : 函数.单射 f)
   证明: by
   refine (image_sigmaMk_preimage_sigmaMap_subset f g i s).antisymm ?_
   rintro ⟨j, x⟩ ⟨y, hys, hxy⟩
@@ -116,7 +116,7 @@ definition sigma
 
 中文:
 定义 sigma
-  签名: (s : Set ι) (t : 对任意 i, Set (α i))
+  签名: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
   定义体: {x | x.1 in s ∧ x.2 in t x.1}
 -/
 protected def sigma (s : Set ι) (t : forall i, Set (α i)) : Set (Σ i, α i) := {x | x.1 in s ∧ x.2 in t x.1}
@@ -213,7 +213,7 @@ theorem forall_sigma_iff
   proof: by grind
 
 中文:
-定理 forall_sigma_iff
+定理 对任意_sigma_iff
   条件: {p : (Σ i, α i) -> 命题}
   证明: by grind
 -/
@@ -229,7 +229,7 @@ theorem exists_sigma_iff
   proof: by grind
 
 中文:
-定理 exists_sigma_iff
+定理 存在_sigma_iff
   条件: {p : (Σ i, α i) -> 命题}
   证明: by grind
 -/
@@ -246,7 +246,7 @@ theorem sigma_empty
 
 中文:
 定理 sigma_empty
-  结论: s.sigma (fun i => (∅ : Set (α i))) = ∅
+  结论: s.sigma (fun i => (∅ : 集合 (α i))) = ∅
   证明: by grind
 -/
 @[simp] theorem sigma_empty : s.sigma (fun i => (∅ : Set (α i))) = ∅ := by grind
@@ -261,7 +261,7 @@ theorem empty_sigma
 
 中文:
 定理 empty_sigma
-  结论: (∅ : Set ι).sigma t = ∅
+  结论: (∅ : 集合 ι).sigma t = ∅
   证明: by grind
 -/
 @[simp] theorem empty_sigma : (∅ : Set ι).sigma t = ∅ := by grind
@@ -296,7 +296,7 @@ theorem sigma_univ
 
 中文:
 定理 sigma_univ
-  结论: s.sigma (fun _ => univ : 对任意 i, Set (α i)) = Sigma.fst ⁻¹' s
+  结论: s.sigma (fun _ => univ : 对任意 i, 集合 (α i)) = 依赖和类型.fst ⁻¹' s
   证明: by grind
 -/
 theorem sigma_univ : s.sigma (fun _ => univ : forall i, Set (α i)) = Sigma.fst ⁻¹' s := by grind
@@ -313,7 +313,7 @@ theorem univ_sigma_preimage_mk
 
 中文:
 定理 univ_sigma_preimage_mk
-  条件: (s : Set (Σ i, α i))
+  条件: (s : 集合 (Σ i, α i))
   证明: by grind
 
 @[simp]
@@ -334,7 +334,7 @@ theorem singleton_sigma
 
 中文:
 定理 singleton_sigma
-  结论: ({i} : Set ι).sigma t = Sigma.mk i '' t i
+  结论: ({i} : 集合 ι).sigma t = 依赖和类型.mk i '' t i
   证明: by grind
 
 @[simp]
@@ -444,7 +444,7 @@ theorem _root_.biSup_sigma
 
 中文:
 定理 _root_.biSup_sigma
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : Sigma α -> β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 依赖和类型 α -> β)
   证明: eq_of_forall_ge_iff fun _ => ⟨by simp_all, by simp_all⟩
 
 Depends on / 依赖: eq_of_forall_ge_iff
@@ -463,7 +463,7 @@ theorem _root_.biSup_sigma'
 
 中文:
 定理 _root_.biSup_sigma'
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : 对任意 i, α i -> β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 对任意 i, α i -> β)
   证明: Eq.symm (biSup_sigma _ _ _)
 
 Depends on / 依赖: Eq.symm, biSup_sigma
@@ -482,7 +482,7 @@ theorem _root_.biInf_sigma
 
 中文:
 定理 _root_.biInf_sigma
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : Sigma α -> β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 依赖和类型 α -> β)
   证明: biSup_sigma (β := βᵒᵈ) _ _ _
 
 Depends on / 依赖: biSup_sigma
@@ -501,7 +501,7 @@ theorem _root_.biInf_sigma'
 
 中文:
 定理 _root_.biInf_sigma'
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : 对任意 i, α i -> β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 对任意 i, α i -> β)
   证明: Eq.symm (biInf_sigma _ _ _)
 
 Depends on / 依赖: Eq.symm, biInf_sigma
@@ -522,7 +522,7 @@ theorem biUnion_sigma
 
 中文:
 定理 biUnion_sigma
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : Sigma α -> Set β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 依赖和类型 α -> 集合 β)
   证明: biSup_sigma _ _ _
 
 Depends on / 依赖: biSup_sigma
@@ -541,7 +541,7 @@ theorem biUnion_sigma'
 
 中文:
 定理 biUnion_sigma'
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : 对任意 i, α i -> Set β)
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 对任意 i, α i -> 集合 β)
   证明: biSup_sigma' _ _ _
 
 Depends on / 依赖: biSup_sigma
@@ -559,8 +559,8 @@ theorem biInter_sigma
   proof: biInf_sigma _ _ _
 
 中文:
-定理 biInter_sigma
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : Sigma α -> Set β)
+定理 bi整数er_sigma
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 依赖和类型 α -> 集合 β)
   证明: biInf_sigma _ _ _
 
 Depends on / 依赖: biInf_sigma
@@ -578,8 +578,8 @@ theorem biInter_sigma'
   proof: biInf_sigma' _ _ _
 
 中文:
-定理 biInter_sigma'
-  条件: (s : Set ι) (t : 对任意 i, Set (α i)) (f : 对任意 i, α i -> Set β)
+定理 bi整数er_sigma'
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i)) (f : 对任意 i, α i -> 集合 β)
   证明: biInf_sigma' _ _ _
 
 Depends on / 依赖: biInf_sigma
@@ -600,7 +600,7 @@ theorem insert_sigma
 
 中文:
 定理 insert_sigma
-  结论: (insert i s).sigma t = Sigma.mk i '' t i union s.sigma t
+  结论: (insert i s).sigma t = 依赖和类型.mk i '' t i union s.sigma t
   证明: by grind
 -/
 theorem insert_sigma : (insert i s).sigma t = Sigma.mk i '' t i union s.sigma t := by grind
@@ -708,7 +708,7 @@ theorem mk_preimage_sigma
 中文:
 定理 mk_preimage_sigma
   条件: (hi : i in s)
-  结论: Sigma.mk i ⁻¹' s.sigma t = t i
+  结论: 依赖和类型.mk i ⁻¹' s.sigma t = t i
   证明: by grind
 
 @[simp]
@@ -728,7 +728,7 @@ theorem mk_preimage_sigma_eq_empty
 中文:
 定理 mk_preimage_sigma_eq_empty
   条件: (hi : i ∉ s)
-  结论: Sigma.mk i ⁻¹' s.sigma t = ∅
+  结论: 依赖和类型.mk i ⁻¹' s.sigma t = ∅
   证明: by grind
 -/
 theorem mk_preimage_sigma_eq_empty (hi : i ∉ s) : Sigma.mk i ⁻¹' s.sigma t = ∅ := by grind
@@ -794,7 +794,7 @@ theorem Nonempty.sigma
   ⟨⟨i, a⟩, hi, ha⟩
 
 中文:
-定理 Nonempty.sigma
+定理 非空.sigma
   证明: fun ⟨i, hi⟩ h =>
   let ⟨a, ha⟩ := h i
   ⟨⟨i, a⟩, hi, ha⟩
@@ -813,8 +813,8 @@ theorem Nonempty.sigma_fst
   proof: fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
 
 中文:
-定理 Nonempty.sigma_fst
-  结论: (s.sigma t).Nonempty -> s.Nonempty
+定理 非空.sigma_fst
+  结论: (s.sigma t).非空 -> s.非空
   证明: fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
 -/
 theorem Nonempty.sigma_fst : (s.sigma t).Nonempty -> s.Nonempty := fun ⟨x, hx⟩ => ⟨x.1, hx.1⟩
@@ -828,8 +828,8 @@ theorem Nonempty.sigma_snd
   proof: fun ⟨x, hx⟩ => ⟨x.1, hx.1, x.2, hx.2⟩
 
 中文:
-定理 Nonempty.sigma_snd
-  结论: (s.sigma t).Nonempty -> 存在 i in s, (t i).Nonempty
+定理 非空.sigma_snd
+  结论: (s.sigma t).非空 -> 存在 i in s, (t i).非空
   证明: fun ⟨x, hx⟩ => ⟨x.1, hx.1, x.2, hx.2⟩
 -/
 theorem Nonempty.sigma_snd : (s.sigma t).Nonempty -> exists i in s, (t i).Nonempty :=
@@ -845,7 +845,7 @@ theorem sigma_nonempty_iff
 
 中文:
 定理 sigma_nonempty_iff
-  结论: (s.sigma t).Nonempty ↔ 存在 i in s, (t i).Nonempty
+  结论: (s.sigma t).非空 ↔ 存在 i in s, (t i).非空
   证明: ⟨Nonempty.sigma_snd, fun ⟨i, hi, a, ha⟩ => ⟨⟨i, a⟩, hi, ha⟩⟩
 
 Depends on / 依赖: Nonempty, Nonempty.sigma_snd, sigma_snd
@@ -908,7 +908,7 @@ theorem image_sigmaMk_subset_sigma_right
 中文:
 定理 image_sigmaMk_subset_sigma_right
   条件: (hi : i in s)
-  结论: Sigma.mk i '' t i subseteq s.sigma t
+  结论: 依赖和类型.mk i '' t i subseteq s.sigma t
   证明: image_subset_iff.2 fun _ => And.intro hi
 
 Depends on / 依赖: And.intro, image_subset_iff
@@ -927,8 +927,8 @@ theorem sigma_subset_preimage_fst
 
 中文:
 定理 sigma_subset_preimage_fst
-  条件: (s : Set ι) (t : 对任意 i, Set (α i))
-  结论: s.sigma t subseteq Sigma.fst ⁻¹' s
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
+  结论: s.sigma t subseteq 依赖和类型.fst ⁻¹' s
   证明: fun _ => And.left
 
 Depends on / 依赖: And.left
@@ -947,8 +947,8 @@ theorem fst_image_sigma_subset
 
 中文:
 定理 fst_image_sigma_subset
-  条件: (s : Set ι) (t : 对任意 i, Set (α i))
-  结论: Sigma.fst '' s.sigma t subseteq s
+  条件: (s : 集合 ι) (t : 对任意 i, 集合 (α i))
+  结论: 依赖和类型.fst '' s.sigma t subseteq s
   证明: image_subset_iff.2 fun _ => And.left
 
 Depends on / 依赖: And.left, image_subset_iff
@@ -988,8 +988,8 @@ theorem fst_image_sigma
 
 中文:
 定理 fst_image_sigma
-  条件: (s : Set ι) (ht : 对任意 i, (t i).Nonempty)
-  结论: Sigma.fst '' s.sigma t = s
+  条件: (s : 集合 ι) (ht : 对任意 i, (t i).非空)
+  结论: 依赖和类型.fst '' s.sigma t = s
   证明: (fst_image_sigma_subset _ _).antisymm fun i hi =>
     let ⟨a, ha⟩ := ht i
     ⟨⟨i, a⟩, ⟨hi, ha⟩, rfl⟩
@@ -1039,7 +1039,7 @@ lemma sigma_eq_biUnion
 
 中文:
 引理 sigma_eq_biUnion
-  结论: s.sigma t = ⋃ i in s, Sigma.mk i '' t i
+  结论: s.sigma t = ⋃ i in s, 依赖和类型.mk i '' t i
   证明: by
   aesop
 -/
@@ -1059,7 +1059,7 @@ lemma uncurry_preimage_sigma_pi
 
 中文:
 引理 uncurry_preimage_sigma_pi
-  结论: {β : (i : ι) -> α i -> 类型} (s : Set ι) (t : (i : ι) -> Set (α i))
+  结论: {β : (i : ι) -> α i -> 类型} (s : 集合 ι) (t : (i : ι) -> 集合 (α i))
   证明: by
   ext x
   simp only [mem_preimage, mem_pi, mem_sigma_iff, and_imp]

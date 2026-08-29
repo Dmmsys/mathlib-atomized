@@ -56,7 +56,7 @@ definition MulSaturated
 
 中文:
 定义 MulSaturated
-  签名: {M : 类型} [MulOneClass M] (s : Submonoid M)
+  签名: {M : 类型} [MulOne类 M] (s : 子幺半群 M)
   定义体: forall ⦃x y⦄, x * y in s -> x in s ∧ y in s
 -/
 def MulSaturated {M : Type*} [MulOneClass M] (s : Submonoid M) : Prop :=
@@ -106,7 +106,7 @@ include h₁ h₂ in
 
 中文:
 定理 top
-  结论: MulSaturated (⊤ : Submonoid M)
+  结论: MulSaturated (⊤ : 子幺半群 M)
   证明: fun _ _ _ => ⟨trivial, trivial⟩
 
 include h₁ h₂ in
@@ -127,7 +127,7 @@ theorem inf
 @[to_additive]
 
 中文:
-定理 inf
+定理 下确界
   结论: MulSaturated (s₁ ⊓ s₂)
   证明: fun _ _ hxy => ⟨⟨(h₁ hxy.1).1, (h₂ hxy.2).1⟩, (h₁ hxy.1).2, (h₂ hxy.2).2⟩
 
@@ -151,7 +151,7 @@ theorem sInf
 
 中文:
 定理 sInf
-  条件: {f : Set (Submonoid M)} (hf : 对任意 s in f, s.MulSaturated)
+  条件: {f : 集合 (子幺半群 M)} (hf : 对任意 s in f, s.MulSaturated)
   证明: fun _ _ hxy => by
   simp_rw [mem_sInf] at hxy ⊢
   exact ⟨fun s hs => (hf s hs <| hxy s hs).1, fun s hs => (hf s hs <| hxy s hs).2⟩
@@ -176,7 +176,7 @@ theorem iInf
 
 中文:
 定理 iInf
-  条件: {ι : Sort*} {f : ι -> Submonoid M} (hf : 对任意 i, (f i).MulSaturated)
+  条件: {ι : 类型层*} {f : ι -> 子幺半群 M} (hf : 对任意 i, (f i).MulSaturated)
   证明: sInf Set.forall_mem_range.mpr hf
 
 Depends on / 依赖: Set.forall_mem_range.mpr, forall_mem_range
@@ -197,7 +197,7 @@ theorem of_left
 
 中文:
 定理 of_left
-  结论: {M : 类型} [CommMonoid M] {s : Submonoid M}
+  结论: {M : 类型} [交换幺半群 M] {s : 子幺半群 M}
   证明: fun x y hxy => ⟨h hxy, h mul_comm x y ▸ hxy⟩
 
 Depends on / 依赖: mul_comm
@@ -218,7 +218,7 @@ theorem of_right
 
 中文:
 定理 of_right
-  结论: {M : 类型} [CommMonoid M] {s : Submonoid M}
+  结论: {M : 类型} [交换幺半群 M] {s : 子幺半群 M}
   证明: of_left fun x y => mul_comm x y ▸ @h y x
 
 Depends on / 依赖: mul_comm, of_left
@@ -243,9 +243,9 @@ structure SaturatedAddSubmonoid
     - addSaturated : toAddSubmonoid.AddSaturated
 
 中文:
-结构 SaturatedAddSubmonoid
-  参数: (M : 类型) [AddZeroClass M]
-  继承: AddSubmonoid M
+结构 SaturatedAdd子幺半群
+  参数: (M : 类型) [加法零类 M]
+  继承: 加法子幺半群 M
   公理与运算 (1 个):
     - addSaturated : toAddSubmonoid.AddSaturated
 -/
@@ -263,9 +263,9 @@ structure SaturatedSubmonoid
     - mulSaturated : toSubmonoid.MulSaturated
 
 中文:
-结构 SaturatedSubmonoid
-  参数: (M : 类型) [MulOneClass M]
-  继承: Submonoid M
+结构 饱和子幺半群
+  参数: (M : 类型) [MulOne类 M]
+  继承: 子幺半群 M
   公理与运算 (1 个):
     - mulSaturated : toSubmonoid.MulSaturated
 -/
@@ -290,7 +290,7 @@ theorem toSubmonoid_injective
 
 中文:
 定理 toSubmonoid_injective
-  结论: (toSubmonoid (M := M)).Injective
+  结论: (toSubmonoid (M := M)).单射
   证明: fun ⟨s₁, h₁⟩ ⟨s₂, h₂⟩ eq => by congr
 
 @[to_additive (attr := ext)]
@@ -312,7 +312,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {s₁ s₂ : SaturatedSubmonoid M} (h : s₁.toSubmonoid = s₂.toSubmonoid)
+  条件: {s₁ s₂ : 饱和子幺半群 M} (h : s₁.toSubmonoid = s₂.toSubmonoid)
   结论: s₁ = s₂
   证明: toSubmonoid_injective h
 
@@ -336,7 +336,7 @@ coe_injective _ _ h := toSubmonoid_injective SetLike.coe_injective h
 
 中文:
 实例 :
-  签名: SetLike (SaturatedSubmonoid M) M
+  签名: 集合状 (饱和子幺半群 M) M
   定义体: (·.carrier)
 coe_injective _ _ h := toSubmonoid_injective SetLike.coe_injective h
 
@@ -361,7 +361,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SaturatedSubmonoid M)
+  签名: 偏序 (饱和子幺半群 M)
   定义体: .ofSetLike ..
 
 @[to_additive]
@@ -382,7 +382,7 @@ lemma ext'
 
 中文:
 引理 ext'
-  条件: {s₁ s₂ : SaturatedSubmonoid M} (h : 对任意 x, x in s₁ ↔ x in s₂)
+  条件: {s₁ s₂ : 饱和子幺半群 M} (h : 对任意 x, x in s₁ ↔ x in s₂)
   结论: s₁ = s₂
   证明: SetLike.ext h
 
@@ -406,7 +406,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubmonoidClass (SaturatedSubmonoid M) M
+  签名: 子幺半群类 (饱和子幺半群 M) M
   定义体: s.mul_mem
   one_mem {s} := s.one_mem
 
@@ -432,7 +432,7 @@ lemma mem_toSubmonoid
 
 中文:
 引理 mem_toSubmonoid
-  条件: {s : SaturatedSubmonoid M} {x : M}
+  条件: {s : 饱和子幺半群 M} {x : M}
   结论: x in s.toSubmonoid ↔ x in s
   证明: Iff.rfl
 
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (SaturatedSubmonoid M)
+  签名: 顶元素 (饱和子幺半群 M)
   定义体: { (⊤ : Submonoid M) with mulSaturated := .top }
 
 @[to_additive (attr := simp)]
@@ -479,7 +479,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : M}
-  结论: x in (⊤ : SaturatedSubmonoid M)
+  结论: x in (⊤ : 饱和子幺半群 M)
   证明: trivial
 -/
 theorem mem_top {x : M} : x in (⊤ : SaturatedSubmonoid M) := trivial
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (SaturatedSubmonoid M)
+  签名: 最小值 (饱和子幺半群 M)
   定义体: { s₁.toSubmonoid ⊓ s₂.toSubmonoid with mulSaturated := .inf s₁.2 s₂.2 }
 
 Depends on / 依赖: mulSaturated, toSubmonoid
@@ -521,7 +521,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (SaturatedSubmonoid M)
+  签名: 下确界集 (饱和子幺半群 M)
   定义体: { carrier := ⋂ s in f, s
     mul_mem' hx hy := by rw [Set.mem_iInter₂] at *; exact fun s hs => mul_mem (hx s hs) (hy s hs)
     one_mem' := Set.mem_iInter₂.mpr fun _ _ => one_mem _
@@ -552,7 +552,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {f : Set (SaturatedSubmonoid M)} {x : M}
+  条件: {f : 集合 (饱和子幺半群 M)} {x : M}
   结论: x in sInf f ↔ 对任意 s in f, x in s
   证明: Set.mem_iInter₂
 
@@ -573,7 +573,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (SaturatedSubmonoid M)
+  签名: 余mpleteSemilatticeInf (饱和子幺半群 M)
   定义体: .of_image SetLike.coe_subset_coe isGLB_biInf
 
 Depends on / 依赖: SetLike, SetLike.coe_subset_coe, coe_subset_coe, isGLB_biInf, of_image
@@ -604,7 +604,7 @@ definition saturation
 
 中文:
 定义 saturation
-  签名: {M : 类型} [MulOneClass M] (s : Submonoid M)
+  签名: {M : 类型} [MulOne类 M] (s : 子幺半群 M)
   定义体: sInf {t | s <= t.toSubmonoid}
 
 Depends on / 依赖: t.toSubmonoid, toSubmonoid
@@ -661,7 +661,7 @@ definition giSaturation
 
 中文:
 定义 giSaturation
-  签名: : GaloisInsertion (saturation (M := M)) (·.toSubmonoid) where
+  签名: : Galois嵌入 (saturation (M := M)) (·.toSubmonoid) where
   定义体: { s with mulSaturated := le_antisymm ((gc_saturation M).le_u_l s) hs ▸ by simp }
   gc := gc_saturation M
   le_l_u s := (gc_saturation M).le_u_l s.toSubmonoid
@@ -769,7 +769,7 @@ one_mem' := ⟨_ , mem 1 one_mem s⟩
 
 中文:
 定理 saturation_induction
-  结论: {s : Submonoid M}
+  结论: {s : 子幺半群 M}
   证明: by
   let s' : SaturatedSubmonoid M :=
   { carrier := { x | exists hx, p x hx }
@@ -871,7 +871,7 @@ theorem mem_saturation_iff_exists_dvd
   simp_rw [dvd_def, existsAndEq, and_true, mem_saturation_iff]
 
 中文:
-定理 mem_saturation_iff_exists_dvd
+定理 mem_saturation_iff_存在_dvd
   结论: x in s.saturation ↔ 存在 m in s, x ∣ m
   证明: by
   simp_rw [dvd_def, existsAndEq, and_true, mem_saturation_iff]
@@ -914,7 +914,7 @@ theorem bot_def
 
 中文:
 定理 bot_def
-  结论: (⊥ : SaturatedSubmonoid M) = Submonoid.saturation ⊥
+  结论: (⊥ : 饱和子幺半群 M) = 子幺半群.saturation ⊥
   证明: rfl
 
 @[to_additive]
@@ -934,7 +934,7 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: {s₁ s₂ : SaturatedSubmonoid M}
+  条件: {s₁ s₂ : 饱和子幺半群 M}
   证明: rfl
 
 @[to_additive]
@@ -955,7 +955,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: {f : Set (SaturatedSubmonoid M)}
+  条件: {f : 集合 (饱和子幺半群 M)}
   证明: rfl
 
 @[to_additive]
@@ -974,7 +974,7 @@ theorem iSup_def
 
 中文:
 定理 iSup_def
-  条件: {ι : Sort*} {f : ι -> SaturatedSubmonoid M}
+  条件: {ι : 类型层*} {f : ι -> 饱和子幺半群 M}
   证明: .symm (Submonoid.giSaturation M).l_iSup_u f
 
 Depends on / 依赖: Submonoid, Submonoid.giSaturation, giSaturation, l_iSup_u
@@ -1002,7 +1002,7 @@ theorem mem_bot_iff
 中文:
 定理 mem_bot_iff
   条件: {x : M}
-  结论: x in (⊥ : SaturatedSubmonoid M) ↔ IsUnit x
+  结论: x in (⊥ : 饱和子幺半群 M) ↔ 是单位 x
   证明: by
   simp_rw [bot_def, Submonoid.mem_saturation_iff, Submonoid.mem_bot, isUnit_iff_exists_inv]
 
@@ -1031,7 +1031,7 @@ theorem saturation_bot
 
 中文:
 定理 saturation_bot
-  结论: (⊥ : Submonoid M).saturation = ⊥
+  结论: (⊥ : 子幺半群 M).saturation = ⊥
   证明: (gc_saturation M).l_bot
 
 @[to_additive (attr := simp)]
@@ -1053,7 +1053,7 @@ theorem saturation_top
 
 中文:
 定理 saturation_top
-  结论: (⊤ : Submonoid M).saturation = ⊤
+  结论: (⊤ : 子幺半群 M).saturation = ⊤
   证明: (giSaturation M).l_top
 
 @[to_additive (attr := simp)]
@@ -1073,7 +1073,7 @@ theorem saturation_sup
 
 中文:
 定理 saturation_sup
-  条件: {s₁ s₂ : Submonoid M}
+  条件: {s₁ s₂ : 子幺半群 M}
   证明: (gc_saturation M).l_sup
 
 Depends on / 依赖: gc_saturation, l_sup
@@ -1099,7 +1099,7 @@ theorem saturation_sSup
 
 中文:
 定理 saturation_sSup
-  条件: {f : Set (Submonoid M)}
+  条件: {f : 集合 (子幺半群 M)}
   证明: (gc_saturation M).l_sSup
 
 @[to_additive (attr := simp)]
@@ -1120,7 +1120,7 @@ theorem saturation_iSup
 
 中文:
 定理 saturation_iSup
-  条件: {ι : Sort*} {f : ι -> Submonoid M}
+  条件: {ι : 类型层*} {f : ι -> 子幺半群 M}
   证明: (gc_saturation M).l_iSup
 
 Depends on / 依赖: gc_saturation, l_iSup

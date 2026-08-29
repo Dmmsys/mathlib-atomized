@@ -62,7 +62,7 @@ definition extendScalars
 
 中文:
 定义 extendScalars
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S] [Algebra R S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S] [代数 R S]
   定义体: P.Ring
   σ := P.σ
   algebraMap_σ := P.algebraMap_σ
@@ -92,7 +92,7 @@ definition toExtendScalars
 
 中文:
 定义 toExtendScalars
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S] [Algebra R S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S] [代数 R S]
   定义体: .ofAlgHom (IsScalarTower.toAlgHom R P.Ring P.extendScalars.Ring)
     (by dsimp; ext; simp)
 
@@ -117,7 +117,7 @@ definition cotangentExtendScalarsEquiv
 
 中文:
 定义 cotangentExtendScalarsEquiv
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S]
   定义体: LinearEquiv.refl _ _
 
 @[simp]
@@ -143,7 +143,7 @@ lemma cotangentExtendScalarsEquiv_symm_toLinearMap
 
 中文:
 引理 cotangentExtendScalarsEquiv_symm_toLinearMap
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: by
   ext x
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
@@ -169,7 +169,7 @@ theorem H1Cotangent.map_toExtendScalars_injective
 
 中文:
 定理 H1Cotangent.map_toExtendScalars_injective
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: by
   rw [← LinearMap.ker_eq_bot]; rw [H1Cotangent.map]; rw [LinearMap.ker_restrict]; rw [← cotangentExtendScalarsEquiv_symm_toLinearMap]; rw [LinearEquiv.ker]; rw [Submodule.comap_bot]; rw [Submodule.ker_subtype]
 
@@ -196,7 +196,7 @@ definition h1CotangentExtendScalarsEquiv
 
 中文:
 定义 h1CotangentExtendScalarsEquiv
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S]
   定义体: Extension.H1Cotangent.equiv
     (.ofAlgHom (Algebra.ofId _ _) (by ext)) P.extendScalars.defaultHom
 
@@ -221,7 +221,7 @@ lemma h1CotangentExtendScalarsEquiv_symm_toLinearMap
 
 中文:
 引理 h1CotangentExtendScalarsEquiv_symm_toLinearMap
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: rfl
 -/
 lemma h1CotangentExtendScalarsEquiv_symm_toLinearMap (P : Extension.{w} R S) :
@@ -244,7 +244,7 @@ definition h1CotangentEquivOfSurjective
 
 中文:
 定义 h1CotangentEquivOfSurjective
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S]
   定义体: P.h1Cotangentι
   invFun x := ⟨x, by
     have : Subsingleton Ω[P.Ring⁄R] := subsingleton_of_surjective R P.Ring h
@@ -276,7 +276,7 @@ definition h1CotangentEquivCotangent
 
 中文:
 定义 h1CotangentEquivCotangent
-  签名: {R : 类型u} {S : 类型v} [CommRing R] [CommRing S]
+  签名: {R : 类型u} {S : 类型v} [交换环 R] [交换环 S]
   定义体: P.h1CotangentExtendScalarsEquiv.symm ≪≫ₗ
     P.extendScalars.h1CotangentEquivOfSurjective Function.surjective_id ≪≫ₗ
     P.cotangentExtendScalarsEquiv
@@ -302,7 +302,7 @@ theorem cotangentComplex_comp_h1CotangentEquivCotangent
 
 中文:
 定理 cotangentComplex_comp_h1CotangentEquivCotangent
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: by
   rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [LinearEquiv.comp_toLinearMap_symm_eq]; rw [LinearMap.comp_assoc]; rw [h1CotangentExtendScalarsEqui
 
@@ -333,7 +333,7 @@ theorem h1CotangentEquivCotangent_comp_map
 
 中文:
 定理 h1CotangentEquivCotangent_comp_map
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: by
   rw [h1CotangentEquivCotangent]; rw [LinearEquiv.coe_trans]; rw [LinearEquiv.coe_trans]; rw [h1CotangentExtendScalarsEquiv_symm_toLinearMap]; rw [h1CotangentEquivOfSurjective_toLinearMap]; rw [LinearMap.comp_assoc]; rw [LinearMap.comp_assoc]; rw [Algebra.H1Cotangent.map]; rw [← (H1Cotangent.map 
 
@@ -355,7 +355,7 @@ theorem H1Cotangent.map_defaultHom_surjective
 
 中文:
 定理 H1Cotangent.map_defaultHom_surjective
-  条件: (P : Extension.{w} R S)
+  条件: (P : 扩张.{w} R S)
   证明: by
   rw [← LinearMap.range_eq_top]; rw [← (Submodule.map_injective_of_injective h1Cotangentι_injective).eq_iff]; rw [← LinearMap.range_comp]; rw [← P.h1CotangentEquivCotangent_comp_map]; rw [LinearMap.range_comp]; rw [← (Algebra.H1Cotangent.exact_map_δ R P.Ring S).linearMap_ker_eq]; rw [Submodule.ma
 

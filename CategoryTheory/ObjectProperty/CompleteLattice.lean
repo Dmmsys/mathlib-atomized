@@ -68,7 +68,7 @@ instance nonempty_sup_left
 
 中文:
 实例 nonempty_sup_left
-  签名: [P.Nonempty]
+  签名: [P.非空]
   定义体: nonempty_of_prop (Or.inl P.prop_arbitrary)
 
 Depends on / 依赖: Or.inl, P.prop_arbitrary, nonempty_of_prop, prop_arbitrary
@@ -86,7 +86,7 @@ instance nonempty_sup_right
 
 中文:
 实例 nonempty_sup_right
-  签名: [Q.Nonempty]
+  签名: [Q.非空]
   定义体: nonempty_of_prop (Or.inr Q.prop_arbitrary)
 
 Depends on / 依赖: Or.inr, Q.prop_arbitrary, nonempty_of_prop, prop_arbitrary
@@ -104,7 +104,7 @@ instance nonempty_top
 
 中文:
 实例 nonempty_top
-  签名: [Nonempty C]
+  签名: [非空 C]
   定义体: nonempty_of_prop (X := Classical.arbitrary C) (by trivial)
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, nonempty_of_prop
@@ -172,8 +172,8 @@ instance [P.IsClosedUnderIsomorphisms]
   simp only [isClosedUnderIsomorphisms_iff_isoClosure_eq_self, isoClosure_sup, isoClosure_eq_self]
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
-  签名: [Q.IsClosedUnderIsomorphisms]
+实例 [P.在同构下封闭]
+  签名: [Q.在同构下封闭]
   定义体: by
   simp only [isClosedUnderIsomorphisms_iff_isoClosure_eq_self, isoClosure_sup, isoClosure_eq_self]
 
@@ -192,8 +192,8 @@ instance [P.IsClosedUnderIsomorphisms]
   body: ⟨IsClosedUnderIsomorphisms.of_iso e h.1, IsClosedUnderIsomorphisms.of_iso e h.2⟩
 
 中文:
-实例 [P.IsClosedUnderIsomorphisms]
-  签名: [Q.IsClosedUnderIsomorphisms]
+实例 [P.在同构下封闭]
+  签名: [Q.在同构下封闭]
   定义体: ⟨IsClosedUnderIsomorphisms.of_iso e h.1, IsClosedUnderIsomorphisms.of_iso e h.2⟩
 
 Depends on / 依赖: IsClosedUnderIsomorphisms, IsClosedUnderIsomorphisms.of_iso, of_iso
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderIsomorphisms (⊥ : Object命题erty C)
+  签名: 在同构下封闭 (⊥ : ObjectProperty C)
   定义体: h
 -/
 instance : IsClosedUnderIsomorphisms (⊥ : ObjectProperty C) where
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsClosedUnderIsomorphisms (⊤ : Object命题erty C)
+  签名: 在同构下封闭 (⊤ : ObjectProperty C)
   定义体: by simp
 -/
 instance : IsClosedUnderIsomorphisms (⊤ : ObjectProperty C) where
@@ -267,8 +267,8 @@ lemma nonempty_iSup
 
 中文:
 引理 nonempty_iSup
-  条件: (a : α) [(P a).Nonempty]
-  结论: (⨆ a, P a).Nonempty
+  条件: (a : α) [(P a).非空]
+  结论: (⨆ a, P a).非空
   证明: nonempty_of_prop ((prop_iSup_iff P _).mpr ⟨a, (P a).prop_arbitrary⟩)
 
 Depends on / 依赖: isGE_of_isZero, isZero_zero, nonempty_of_prop, prop_arbitrary, prop_iSup_iff, t.isGE_of_isZero
@@ -330,8 +330,8 @@ instance [forall
     isoClosure_iSup, isoClosure_eq_self]
 
 中文:
-实例 [forall
-  签名: a, (P a).IsClosedUnderIsomorphisms] :
+实例 [对任意
+  签名: a, (P a).在同构下封闭] :
   定义体: by
   simp only [isClosedUnderIsomorphisms_iff_isoClosure_eq_self,
     isoClosure_iSup, isoClosure_eq_self]
@@ -355,8 +355,8 @@ instance [forall
     exact (P a).prop_of_iso e (h a)
 
 中文:
-实例 [forall
-  签名: a, (P a).IsClosedUnderIsomorphisms] :
+实例 [对任意
+  签名: a, (P a).在同构下封闭] :
   定义体: by
     simp only [iInf_apply, iInf_Prop_eq] at h ⊢
     intro a
@@ -385,8 +385,8 @@ lemma ne_bot_iff_exists
   simp [← le_bot_iff, not_le_iff_exists]
 
 中文:
-引理 ne_bot_iff_exists
-  条件: (P : Object命题erty C)
+引理 ne_bot_iff_存在
+  条件: (P : ObjectProperty C)
   结论: ¬ P = ⊥ ↔ 存在 X, P X
   证明: by
   simp [← le_bot_iff, not_le_iff_exists]
@@ -410,8 +410,8 @@ lemma nonempty_iff_ne_bot
 
 中文:
 引理 nonempty_iff_ne_bot
-  条件: (P : Object命题erty C)
-  结论: P.Nonempty ↔ ¬ P = ⊥
+  条件: (P : ObjectProperty C)
+  结论: P.非空 ↔ ¬ P = ⊥
   证明: by
   rw [ne_bot_iff_exists]; rw [nonempty_iff]
 
@@ -437,8 +437,8 @@ lemma not_nonempty_iff_eq_bot
 
 中文:
 引理 not_nonempty_iff_eq_bot
-  条件: (P : Object命题erty C)
-  结论: ¬ P.Nonempty ↔ P = ⊥
+  条件: (P : ObjectProperty C)
+  结论: ¬ P.非空 ↔ P = ⊥
   证明: by
   rw [P.nonempty_iff_ne_bot]; rw [not_not]
 
@@ -466,7 +466,7 @@ lemma ι_map_top
 
 中文:
 引理 ι_map_top
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   ext X
   constructor

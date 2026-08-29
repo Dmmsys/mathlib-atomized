@@ -128,7 +128,7 @@ class UnitalShelf
 中文:
 类 UnitalShelf
   参数: (α : 类型u)
-  继承: Shelf α, One α
+  继承: Shelf α, 幺 α
   公理与运算 (2 个):
     - one_act : 对任意 a : α, act 1 a = a
     - act_one : 对任意 a : α, act a 1 = a
@@ -154,7 +154,7 @@ structure ShelfHom
     - map_act' : forall {x y : S₁}, toFun (Shelf.act x y) = Shelf.act (toFun x) (toFun y)
 
 中文:
-结构 ShelfHom
+结构 Shelf态射
   参数: (S₁ : 类型) (S₂ : 类型) [Shelf S₁] [Shelf S₂]
   公理与运算 (2 个):
     - toFun : S₁ -> S₂
@@ -184,8 +184,8 @@ class Rack
   继承: Shelf α
   公理与运算 (3 个):
     - invAct : α -> α -> α
-    - left_inv : 对任意 x, Function.LeftInverse (invAct x) (act x)
-    - right_inv : 对任意 x, Function.RightInverse (invAct x) (act x)
+    - left_inv : 对任意 x, 函数.左逆 (invAct x) (act x)
+    - right_inv : 对任意 x, 函数.右逆 (invAct x) (act x)
 -/
 class Rack (α : Type u) extends Shelf α where
   /-- The inverse actions of the elements -/
@@ -913,7 +913,7 @@ definition IsAbelian
   body: forall x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
 
 中文:
-定义 IsAbelian
+定义 是交换
   签名: (R : 类型) [Rack R]
   定义体: forall x y z w : R, (x ◃ y) ◃ z ◃ w = (x ◃ z) ◃ y ◃ w
 -/
@@ -962,7 +962,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (S₁ ->◃ S₂) S₁ S₂
+  签名: 函数状 (S₁ ->◃ S₂) S₁ S₂
   定义体: toFun
   coe_injective | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
 -/
@@ -1210,7 +1210,7 @@ instance Conj.quandle
 
 中文:
 实例 Conj.quandle
-  签名: (G : 类型) [Group G]
+  签名: (G : 类型) [群 G]
   定义体: @MulAut.conj G _ x
   self_distrib := by
     intro x y z
@@ -1251,7 +1251,7 @@ theorem conj_act_eq_conj
 
 中文:
 定理 conj_act_eq_conj
-  条件: {G : 类型} [Group G] (x y : Conj G)
+  条件: {G : 类型} [群 G] (x y : Conj G)
   证明: rfl
 -/
 theorem conj_act_eq_conj {G : Type*} [Group G] (x y : Conj G) :
@@ -1270,7 +1270,7 @@ theorem conj_swap
 
 中文:
 定理 conj_swap
-  条件: {G : 类型} [Group G] (x y : Conj G)
+  条件: {G : 类型} [群 G] (x y : Conj G)
   结论: x ◃ y = y ↔ y ◃ x = x
   证明: by
   grind [eq_mul_inv_iff_mul_eq]
@@ -1291,7 +1291,7 @@ definition Conj.map
 
 中文:
 定义 Conj.map
-  签名: {G : 类型} {H : 类型} [Group G] [Group H] (f : G ->* H)
+  签名: {G : 类型} {H : 类型} [群 G] [群 H] (f : G ->* H)
   定义体: f
   map_act' := by simp
 
@@ -1349,7 +1349,7 @@ theorem dihedralAct.inv
 中文:
 定理 dihedralAct.inv
   条件: (n : 自然数) (a : ZMod n)
-  结论: Function.Involutive (dihedralAct n a)
+  结论: 函数.对合 (dihedralAct n a)
   证明: by
   intro b
   dsimp only [dihedralAct]
@@ -1480,13 +1480,13 @@ inductive PreEnvelGroup
     - inv: (a : PreEnvelGroup R) : PreEnvelGroup R
 
 中文:
-归纳类型 PreEnvelGroup
+归纳类型 PreEnvel群
   参数: (R : 类型u)
   构造子 (4 个):
-    - unit: PreEnvelGroup R
-    - incl: (x : R) : PreEnvelGroup R
-    - mul: (a b : PreEnvelGroup R) : PreEnvelGroup R
-    - inv: (a : PreEnvelGroup R) : PreEnvelGroup R
+    - unit: PreEnvel群 R
+    - incl: (x : R) : PreEnvel群 R
+    - mul: (a b : PreEnvel群 R) : PreEnvel群 R
+    - inv: (a : PreEnvel群 R) : PreEnvel群 R
 -/
 inductive PreEnvelGroup (R : Type u) : Type u
   | unit : PreEnvelGroup R
@@ -1503,7 +1503,7 @@ instance PreEnvelGroup.inhabited
   body: ⟨PreEnvelGroup.unit⟩
 
 中文:
-实例 PreEnvelGroup.inhabited
+实例 PreEnvel群.inhabited
   签名: (R : 类型u)
   定义体: ⟨PreEnvelGroup.unit⟩
 
@@ -1536,15 +1536,15 @@ inductive PreEnvelGroupRel'
 归纳类型 PreEnvelGroupRel'
   参数: (R : 类型u) [Rack R]
   构造子 (10 个):
-    - refl: {a : PreEnvelGroup R} : PreEnvelGroupRel' R a a
-    - symm: {a b : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b) : PreEnvelGroupRel' R b a
-    - trans: {a b c : PreEnvelGroup R} (hab : PreEnvelGroupRel' R a b) (hbc : PreEnvelGroupRel' R b c) : PreEnvelGroupRel' R a c
-    - congr_mul: {a b a' b' : PreEnvelGroup R} (ha : PreEnvelGroupRel' R a a') (hb : PreEnvelGroupRel' R b b') : PreEnvelGroupRel' R (mul a b) (mul a' b')
-    - congr_inv: {a a' : PreEnvelGroup R} (ha : PreEnvelGroupRel' R a a') : PreEnvelGroupRel' R (inv a) (inv a')
-    - assoc: (a b c : PreEnvelGroup R) : PreEnvelGroupRel' R (mul (mul a b) c) (mul a (mul b c))
-    - one_mul: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul unit a) a
-    - mul_one: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul a unit) a
-    - inv_mul_cancel: (a : PreEnvelGroup R) : PreEnvelGroupRel' R (mul (inv a) a) unit
+    - refl: {a : PreEnvel群 R} : PreEnvelGroupRel' R a a
+    - symm: {a b : PreEnvel群 R} (hab : PreEnvelGroupRel' R a b) : PreEnvelGroupRel' R b a
+    - trans: {a b c : PreEnvel群 R} (hab : PreEnvelGroupRel' R a b) (hbc : PreEnvelGroupRel' R b c) : PreEnvelGroupRel' R a c
+    - congr_mul: {a b a' b' : PreEnvel群 R} (ha : PreEnvelGroupRel' R a a') (hb : PreEnvelGroupRel' R b b') : PreEnvelGroupRel' R (mul a b) (mul a' b')
+    - congr_inv: {a a' : PreEnvel群 R} (ha : PreEnvelGroupRel' R a a') : PreEnvelGroupRel' R (inv a) (inv a')
+    - assoc: (a b c : PreEnvel群 R) : PreEnvelGroupRel' R (mul (mul a b) c) (mul a (mul b c))
+    - one_mul: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul unit a) a
+    - mul_one: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul a unit) a
+    - inv_mul_cancel: (a : PreEnvel群 R) : PreEnvelGroupRel' R (mul (inv a) a) unit
     - act_incl: (x y : R) : PreEnvelGroupRel' R (mul (mul (incl x) (incl y)) (inv (incl x))) (incl (x ◃ y))
 -/
 inductive PreEnvelGroupRel' (R : Type u) [Rack R] : PreEnvelGroup R -> PreEnvelGroup R -> Type u
@@ -1595,7 +1595,7 @@ inductive PreEnvelGroupRel
 归纳类型 PreEnvelGroupRel
   参数: (R : 类型u) [Rack R]
   构造子 (1 个):
-    - rel: {a b : PreEnvelGroup R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
+    - rel: {a b : PreEnvel群 R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
 -/
 inductive PreEnvelGroupRel (R : Type u) [Rack R] : PreEnvelGroup R -> PreEnvelGroup R -> Prop
   | rel {a b : PreEnvelGroup R} (r : PreEnvelGroupRel' R a b) : PreEnvelGroupRel R a b
@@ -1612,7 +1612,7 @@ theorem PreEnvelGroupRel'.rel
 
 中文:
 定理 PreEnvelGroupRel'.rel
-  条件: {R : 类型u} [Rack R] {a b : PreEnvelGroup R}
+  条件: {R : 类型u} [Rack R] {a b : PreEnvel群 R}
   证明: PreEnvelGroupRel.rel
 
 @[refl]
@@ -1633,7 +1633,7 @@ theorem PreEnvelGroupRel.refl
 
 中文:
 定理 PreEnvelGroupRel.refl
-  条件: {R : 类型u} [Rack R] {a : PreEnvelGroup R}
+  条件: {R : 类型u} [Rack R] {a : PreEnvel群 R}
   证明: PreEnvelGroupRel.rel PreEnvelGroupRel'.refl
 
 @[symm]
@@ -1654,7 +1654,7 @@ theorem PreEnvelGroupRel.symm
 
 中文:
 定理 PreEnvelGroupRel.symm
-  条件: {R : 类型u} [Rack R] {a b : PreEnvelGroup R}
+  条件: {R : 类型u} [Rack R] {a b : PreEnvel群 R}
 -/
 theorem PreEnvelGroupRel.symm {R : Type u} [Rack R] {a b : PreEnvelGroup R} :
     PreEnvelGroupRel R a b -> PreEnvelGroupRel R b a
@@ -1670,7 +1670,7 @@ theorem PreEnvelGroupRel.trans
 
 中文:
 定理 PreEnvelGroupRel.trans
-  条件: {R : 类型u} [Rack R] {a b c : PreEnvelGroup R}
+  条件: {R : 类型u} [Rack R] {a b c : PreEnvel群 R}
 
 Depends on / 依赖: e.symm
 -/
@@ -1692,7 +1692,7 @@ instance PreEnvelGroup.setoid
     · apply PreEnvelGroupRel.trans
 
 中文:
-实例 PreEnvelGroup.setoid
+实例 PreEnvel群.setoid
   签名: (R : 类型) [Rack R]
   定义体: PreEnvelGroupRel R
   iseqv := by
@@ -1791,7 +1791,7 @@ definition toEnvelGroup.mapAux
 
 中文:
 定义 toEnvelGroup.mapAux
-  签名: {R : 类型} [Rack R] {G : 类型} [Group G] (f : R ->◃ Quandle.Conj G)
+  签名: {R : 类型} [Rack R] {G : 类型} [群 G] (f : R ->◃ Quandle.Conj G)
 -/
 def toEnvelGroup.mapAux {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G) :
     PreEnvelGroup R -> G
@@ -1813,7 +1813,7 @@ theorem well_def
 
 中文:
 定理 well_def
-  条件: {R : 类型} [Rack R] {G : 类型} [Group G] (f : R ->◃ Quandle.Conj G)
+  条件: {R : 类型} [Rack R] {G : 类型} [群 G] (f : R ->◃ Quandle.Conj G)
 -/
 theorem well_def {R : Type*} [Rack R] {G : Type*} [Group G] (f : R ->◃ Quandle.Conj G) :
     forall {a b : PreEnvelGroup R},
@@ -1849,7 +1849,7 @@ definition toEnvelGroup.map
 
 中文:
 定义 toEnvelGroup.map
-  签名: {R : 类型} [Rack R] {G : 类型} [Group G]
+  签名: {R : 类型} [Rack R] {G : 类型} [群 G]
   定义体: { toFun := fun x =>
         Quotient.liftOn x (toEnvelGroup.mapAux f) fun _ _ ⟨hab⟩ =>
           toEnvelGroup.mapAux.well_def f hab
@@ -1901,7 +1901,7 @@ theorem toEnvelGroup.univ
 
 中文:
 定理 toEnvelGroup.univ
-  条件: (R : 类型) [Rack R] (G : 类型) [Group G] (f : R ->◃ Quandle.Conj G)
+  条件: (R : 类型) [Rack R] (G : 类型) [群 G] (f : R ->◃ Quandle.Conj G)
   证明: toEnvelGroup.map.symm_apply_apply f
 
 Depends on / 依赖: symm_apply_apply, toEnvelGroup, toEnvelGroup.map.symm_apply_apply
@@ -1920,7 +1920,7 @@ theorem toEnvelGroup.univ_uniq
 
 中文:
 定理 toEnvelGroup.univ_uniq
-  结论: (R : 类型) [Rack R] (G : 类型) [Group G]
+  结论: (R : 类型) [Rack R] (G : 类型) [群 G]
   证明: h.symm ▸ (toEnvelGroup.map.apply_symm_apply g).symm
 
 Depends on / 依赖: apply_symm_apply, h.symm, toEnvelGroup, toEnvelGroup.map.apply_symm_apply

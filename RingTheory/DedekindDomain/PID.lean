@@ -51,8 +51,8 @@ theorem Ideal.eq_span_singleton_of_mem_of_notMem_sq_of_notMem_prime_ne
   refine Multiset.
 
 中文:
-定理 Ideal.eq_span_singleton_of_mem_of_notMem_sq_of_notMem_prime_ne
-  结论: {P : Ideal R}
+定理 理想.eq_span_singleton_of_mem_of_notMem_sq_of_notMem_prime_ne
+  结论: {P : 理想 R}
   证明: by
   by_cases hP0 : P = ⊥
   · subst hP0
@@ -151,7 +151,7 @@ theorem FractionalIdeal.isPrincipal.of_finite_maximals_of_inv
 
 中文:
 定理 FractionalIdeal.isPrincipal.of_finite_maximals_of_inv
-  结论: {A : 类型} [CommRing A]
+  结论: {A : 类型} [交换环 A]
   证明: by
   have hinv' := hinv
   rw [coe_ext_iff]; rw [coe_mul] at hinv
@@ -233,8 +233,8 @@ theorem Ideal.IsPrincipal.of_finite_maximals_of_isUnit
       (↑hI.unit⁻¹ : FractionalIdeal R⁰ (FractionRing R)) hI.unit.mul_inv)
 
 中文:
-定理 Ideal.IsPrincipal.of_finite_maximals_of_isUnit
-  结论: (hf : {I : Ideal R | I.IsMaximal}.Finite)
+定理 理想.是Principal.of_finite_maximals_of_isUnit
+  结论: (hf : {I : 理想 R | I.是极大}.有限)
   证明: (IsLocalization.coeSubmodule_isPrincipal _ le_rfl).mp
     (FractionalIdeal.isPrincipal.of_finite_maximals_of_inv le_rfl hf I
       (↑hI.unit⁻¹ : FractionalIdeal R⁰ (FractionRing R)) hI.unit.mul_inv)
@@ -260,8 +260,8 @@ theorem IsPrincipalIdealRing.of_finite_maximals
     exact .of_mul_eq_one _ (FractionalIdeal.coe_ideal_mul_inv I hI)⟩
 
 中文:
-定理 IsPrincipalIdealRing.of_finite_maximals
-  结论: [IsDedekindDomain R]
+定理 是主理想环.of_finite_maximals
+  结论: [是Dedekind整环 R]
   证明: ⟨fun I => by
     obtain rfl | hI := eq_or_ne I ⊥
     · exact bot_isPrincipal
@@ -287,8 +287,8 @@ theorem IsPrincipalIdealRing.of_finite_primes
   proof: IsPrincipalIdealRing.of_finite_maximals h.subset fun _ hi => hi.isPrime
 
 中文:
-定理 IsPrincipalIdealRing.of_finite_primes
-  结论: [IsDedekindDomain R]
+定理 是主理想环.of_finite_primes
+  结论: [是Dedekind整环 R]
   证明: IsPrincipalIdealRing.of_finite_maximals h.subset fun _ hi => hi.isPrime
 
 Depends on / 依赖: IsPrincipalIdealRing, IsPrincipalIdealRing.of_finite_maximals, h.subset, hi.isPrime, isPrime, of_finite_maximals, subset
@@ -325,8 +325,8 @@ theorem IsLocalization.OverPrime.mem_normalizedFactors_of_isPrime
   have : IsScalarTowe
 
 中文:
-定理 IsLocalization.OverPrime.mem_normalizedFactors_of_isPrime
-  结论: [IsDomain S]
+定理 是Localization.OverPrime.mem_normalizedFactors_of_isPrime
+  结论: [是整环 S]
   证明: by
   have non_zero_div : Algebra.algebraMapSubmonoid S p.primeCompl <= S⁰ :=
     map_le_nonZeroDivisors_of_injective _ (FaithfulSMul.algebraMap_injective _ _)
@@ -388,8 +388,8 @@ theorem IsDedekindDomain.isPrincipalIdealRing_localization_over_prime
   rw [F
 
 中文:
-定理 IsDedekindDomain.isPrincipalIdealRing_localization_over_prime
-  条件: [IsDomain S]
+定理 是Dedekind整环.isPrincipalIdealRing_localization_over_prime
+  条件: [是整环 S]
   证明: by
   let := Classical.decEq (Ideal Sₚ)
   let := Classical.decPred fun P : Ideal Sₚ => P.IsPrime
@@ -432,7 +432,7 @@ exact (Ring.DimensionLeOne.prime_le_prime_iff_eq (by aesop)).mp
     P.span_si
 
 中文:
-定理 IsPrincipalIdealRing.of_isDedekindDomain_of_uniqueFactorizationMonoid
+定理 是主理想环.of_isDedekindDomain_of_uniqueFactorizationMonoid
   证明: by
   refine .of_prime_ne_bot fun P hp hp₀ => ?_
   obtain ⟨x, hx₁, hx₂⟩ := hp.exists_mem_prime_of_ne_bot hp₀

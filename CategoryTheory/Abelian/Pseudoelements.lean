@@ -274,7 +274,7 @@ definition objectToSort
 
 中文:
 定义 objectToSort
-  签名: : CoeSort C (Type max u v)
+  签名: : CoeSort C (类型 最大值 u v)
   定义体: ⟨fun P => Pseudoelement P⟩
 
 Depends on / 依赖: Pseudoelement
@@ -765,8 +765,8 @@ exact ⟨R, p, q, ep, Eq, (
 
 中文:
 定理 pseudo_injective_of_mono
-  条件: {P Q : C} (f : P ⟶ Q) [Mono f]
-  结论: Function.Injective f
+  条件: {P Q : C} (f : P ⟶ Q) [单态射 f]
+  结论: 函数.单射 f
   证明: by
   intro abar abar'
   induction abar, abar' using Quotient.inductionOn₂ with | _ a a'
@@ -803,7 +803,7 @@ theorem zero_of_map_zero
 中文:
 定理 zero_of_map_zero
   条件: {P Q : C} (f : P ⟶ Q)
-  结论: Function.Injective f -> 对任意 a, f a = 0 -> a = 0
+  结论: 函数.单射 f -> 对任意 a, f a = 0 -> a = 0
   证明: fun h a ha => by
   rw [← apply_zero f] at ha
   exact h ha
@@ -829,7 +829,7 @@ h _ show f g = 0 from (pseudoZero_iff (g ≫ f : Over Q)).2 hg
 中文:
 定理 mono_of_zero_of_map_zero
   条件: {P Q : C} (f : P ⟶ Q)
-  结论: (对任意 a, f a = 0 -> a = 0) -> Mono f
+  结论: (对任意 a, f a = 0 -> a = 0) -> 单态射 f
   证明: fun h => (mono_iff_cancel_zero _).2 fun _ g hg =>
 (pseudoZero_iff (g : Over P)).1
 h _ show f g = 0 from (pseudoZero_iff (g ≫ f : Over Q)).2 hg
@@ -860,8 +860,8 @@ Quotient.sound
 
 中文:
 定理 pseudo_surjective_of_epi
-  条件: {P Q : C} (f : P ⟶ Q) [Epi f]
-  结论: Function.Surjective f
+  条件: {P Q : C} (f : P ⟶ Q) [满态射 f]
+  结论: 函数.满射 f
   证明: fun qbar =>
   Quotient.inductionOn qbar fun q =>
     ⟨(pullback.fst f q.hom : Over P),
@@ -902,7 +902,7 @@ theorem epi_of_pseudo_surjective
 中文:
 定理 epi_of_pseudo_surjective
   条件: {P Q : C} (f : P ⟶ Q)
-  结论: Function.Surjective f -> Epi f
+  结论: 函数.满射 f -> 满态射 f
   证明: by
   intro h
   have ⟨pbar, hpbar⟩ := h (𝟙 Q)
@@ -946,7 +946,7 @@ theorem pseudo_exact_of_exact
 
 中文:
 定理 pseudo_exact_of_exact
-  条件: {S : ShortComplex C} (hS : S.Exact)
+  条件: {S : 短复形 C} (hS : S.正合)
   证明: fun b' =>
     Quotient.inductionOn b' fun b hb => by
       have hb' : b.hom ≫ S.g = 0 := (pseudoZero_iff _).1 hb
@@ -1023,7 +1023,7 @@ theorem exact_of_pseudo_exact
 
 中文:
 定理 exact_of_pseudo_exact
-  结论: (S : ShortComplex C)
+  结论: (S : 短复形 C)
   证明: (S.exact_iff_kernel_ι_comp_cokernel_π_zero).2 (by
       -- If we apply `g` to the pseudoelement induced by its kernel, we get 0 (of course!).
       have : S.g (kernel.ι S.g) = 0 := apply_eq_zero_of_comp_eq_zero _ _ (kernel.condition _)
@@ -1171,8 +1171,8 @@ theorem ModuleCat.eq_range_of_pseudoequal
     rw [← LinearMap.comp_apply]; rw [← ModuleCat.hom_comp]; rw [←
 
 中文:
-定理 ModuleCat.eq_range_of_pseudoequal
-  结论: {R : 类型} [Ring R] {G : ModuleCat R} {x y : Over G}
+定理 模范畴.eq_range_of_pseudoequal
+  结论: {R : 类型} [环 R] {G : 模范畴 R} {x y : Over G}
   证明: by
   obtain ⟨P, p, q, hp, hq, H⟩ := h
   refine Submodule.ext fun a => ⟨fun ha => ?_, fun ha => ?_⟩

@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space X
+  签名: T0空间 X
   定义体: T0Space.of_open_cover fun x => ⟨_, X.affineCover.covers x,
     (X.affineCover.f _).opensRange.2, IsEmbedding.t0Space (Y := PrimeSpectrum _)
     (isAffineOpen_opensRange (X.affineCover.f _)).isoSpec.schemeIsoToHomeo.isEmbedding⟩
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiSober X
+  签名: 拟醇 X
   定义体: by
   apply +allowSynthFailures
     quasiSober_of_open_cover (Set.range fun x => Set.range <| (X.affineCover.f x))
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.IsClosedUnderIsomorphisms (C := Scheme) (IrreducibleSpace ·)
+  签名: ObjectProperty.在同构下封闭 (C := 概形) (不可约空间 ·)
   定义体: ⟨fun e => e.hom.homeomorph.irreducibleSpace_iff.mp⟩
 
 Depends on / 依赖: IrreducibleSpace, Scheme
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.IsClosedUnderIsomorphisms (C := Scheme) (ConnectedSpace ·)
+  签名: ObjectProperty.在同构下封闭 (C := 概形) (连通空间 ·)
   定义体: ⟨fun e => e.hom.homeomorph.connectedSpace_iff.mp⟩
 
 Depends on / 依赖: ConnectedSpace, Scheme
@@ -151,10 +151,10 @@ class IsReduced
     - component_reduced : forall U, _root_.IsReduced Γ(X, U)  [default: by infer_instance]
 
 中文:
-类 IsReduced
+类 是既约
   参数: : 命题 where
   公理与运算 (1 个):
-    - component_reduced : 对任意 U, _root_.IsReduced Γ(X, U)  [默认: by infer_instance]
+    - component_reduced : 对任意 U, _root_.是既约 Γ(X, U)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -180,7 +180,7 @@ theorem isReduced_of_isReduced_stalk
 
 中文:
 定理 isReduced_of_isReduced_stalk
-  条件: [对任意 x : X, _root_.IsReduced (X.presheaf.stalk x)]
+  条件: [对任意 x : X, _root_.是既约 (X.presheaf.stalk x)]
   证明: by
   refine ⟨fun U => ⟨fun s hs => ?_⟩⟩
   apply Presheaf.section_ext X.sheaf U s 0
@@ -218,7 +218,7 @@ instance isReduced_stalk_of_isReduced
 
 中文:
 实例 isReduced_stalk_of_isReduced
-  签名: [IsReduced X] (x : X)
+  签名: [是既约 X] (x : X)
   定义体: by
   constructor
   rintro g ⟨n, e⟩
@@ -256,7 +256,7 @@ theorem isReduced_of_isOpenImmersion
 
 中文:
 定理 isReduced_of_isOpenImmersion
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
+  结论: {X Y : 概形} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   constructor
   intro U
@@ -290,7 +290,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.IsClosedUnderIsomorphisms (C := Scheme) (IsReduced ·)
+  签名: ObjectProperty.在同构下封闭 (C := 概形) (是既约 ·)
   定义体: ⟨fun e _ => isReduced_of_isOpenImmersion e.inv⟩
 
 Depends on / 依赖: IsReduced, Scheme
@@ -321,7 +321,7 @@ theorem affine_isReduced_iff
 
 中文:
 定理 affine_isReduced_iff
-  条件: (R : CommRingCat)
+  条件: (R : 交换环范畴)
   证明: by
   refine ⟨?_, fun h => inferInstance⟩
   intro h
@@ -347,7 +347,7 @@ theorem isReduced_of_isAffine_isReduced
 
 中文:
 定理 isReduced_of_isAffine_isReduced
-  条件: [IsAffine X] [_root_.IsReduced Γ(X, ⊤)]
+  条件: [是仿射 X] [_root_.是既约 Γ(X, ⊤)]
   证明: isReduced_of_isOpenImmersion X.isoSpec.hom
 
 Depends on / 依赖: X.isoSpec.hom, isReduced_of_isOpenImmersion, isoSpec
@@ -371,9 +371,9 @@ theorem IsReduced.of_openCover
   exact isReduced_of_isReduced_stalk _
 
 中文:
-定理 IsReduced.of_openCover
-  条件: (𝒰 : X.OpenCover) [对任意 i, IsReduced (𝒰.X i)]
-  结论: IsReduced X
+定理 是既约.of_openCover
+  条件: (𝒰 : X.OpenCover) [对任意 i, 是既约 (𝒰.X i)]
+  结论: 是既约 X
   证明: by
   have (x : X) : _root_.IsReduced (X.presheaf.stalk x) := by
     obtain ⟨i, x, rfl⟩ := 𝒰.exists_eq x
@@ -400,9 +400,9 @@ theorem IsReduced.iff_of_openCover
   proof: ⟨fun _ => inferInstance, fun _ => of_openCover X 𝒰⟩
 
 中文:
-定理 IsReduced.iff_of_openCover
+定理 是既约.iff_of_openCover
   条件: (𝒰 : X.OpenCover)
-  结论: IsReduced X ↔ 对任意 i, IsReduced (𝒰.X i)
+  结论: 是既约 X ↔ 对任意 i, 是既约 (𝒰.X i)
   证明: ⟨fun _ => inferInstance, fun _ => of_openCover X 𝒰⟩
 
 Depends on / 依赖: of_openCover
@@ -435,7 +435,7 @@ theorem reduce_to_affine_global
 
 中文:
 定理 reduce_to_affine_global
-  结论: (P : 对任意 {X : Scheme} (_ : X.Opens), 命题)
+  结论: (P : 对任意 {X : 概形} (_ : X.Opens), 命题)
   证明: by
   apply h₁
   intro x
@@ -481,7 +481,7 @@ theorem reduce_to_affine_nbhd
 
 中文:
 定理 reduce_to_affine_nbhd
-  结论: (P : 对任意 (X : Scheme) (_ : X), 命题)
+  结论: (P : 对任意 (X : 概形) (_ : X), 命题)
   证明: by
   intro X x
   obtain ⟨y, e⟩ := X.affineCover.covers x
@@ -520,7 +520,7 @@ theorem eq_zero_of_basicOpen_eq_bot
 
 中文:
 定理 eq_zero_of_basicOpen_eq_bot
-  结论: {X : Scheme} [hX : IsReduced X] {U : X.Opens}
+  结论: {X : 概形} [hX : 是既约 X] {U : X.Opens}
   证明: by
   apply TopCat.Presheaf.section_ext X.sheaf U
   intro x hx
@@ -578,7 +578,7 @@ theorem basicOpen_eq_bot_iff
 
 中文:
 定理 basicOpen_eq_bot_iff
-  结论: {X : Scheme} [IsReduced X] {U : X.Opens}
+  结论: {X : 概形} [是既约 X] {U : X.Opens}
   证明: by
   refine ⟨eq_zero_of_basicOpen_eq_bot s, ?_⟩
   rintro rfl
@@ -645,11 +645,11 @@ class IsIntegral
     - component_integral : forall (U : X.Opens) [Nonempty U], IsDomain Γ(X, U)  [default: by infer_instance]
 
 中文:
-类 IsIntegral
+类 是整
   参数: : 命题 where
   公理与运算 (2 个):
-    - nonempty : Nonempty X  [默认: by infer_instance]
-    - component_integral : 对任意 (U : X.Opens) [Nonempty U], IsDomain Γ(X, U)  [默认: by infer_instance]
+    - nonempty : 非空 X  [默认: by infer_instance]
+    - component_integral : 对任意 (U : X.Opens) [非空 U], 是整环 Γ(X, U)  [默认: by infer_instance]
 
 Depends on / 依赖: IsDomain, Nonempty, X.Opens, component_integral, infer_instance
 -/
@@ -668,8 +668,8 @@ instance [IsIntegral
   body: @IsIntegral.component_integral _ _ _ ⟨Nonempty.some inferInstance, trivial⟩
 
 中文:
-实例 [IsIntegral
-  签名: X] : IsDomain Γ(X, ⊤)
+实例 [是整
+  签名: X] : 是整环 Γ(X, ⊤)
   定义体: @IsIntegral.component_integral _ _ _ ⟨Nonempty.some inferInstance, trivial⟩
 
 Depends on / 依赖: IsIntegral, IsIntegral.component_integral, Nonempty, Nonempty.some, component_integral
@@ -697,8 +697,8 @@ instance Scheme.component_nontrivial
   body: LocallyRingedSpace.component_nontrivial (hU := ‹_›)
 
 中文:
-实例 Scheme.component_nontrivial
-  签名: (X : Scheme.{u}) (U : X.Opens) [Nonempty U]
+实例 概形.component_nontrivial
+  签名: (X : 概形.{u}) (U : X.Opens) [非空 U]
   定义体: LocallyRingedSpace.component_nontrivial (hU := ‹_›)
 
 Depends on / 依赖: LocallyRingedSpace, LocallyRingedSpace.component_nontrivial, component_nontrivial
@@ -723,8 +723,8 @@ instance irreducibleSpace_of_isIntegral
   rw [Set.not_univ_subset] at h₂ 
 
 中文:
-实例 irreducibleSpace_of_isIntegral
-  签名: [Is整数egral X]
+实例 irreducibleSpace_of_is整数egral
+  签名: [是整 X]
   定义体: by
   by_contra H
   replace H : ¬IsPreirreducible .univ := fun h =>
@@ -776,8 +776,8 @@ theorem isIntegral_of_irreducibleSpace_of_isReduced
     simp_rw [← basicOpen
 
 中文:
-定理 isIntegral_of_irreducibleSpace_of_isReduced
-  条件: [IsReduced X] [H : IrreducibleSpace X]
+定理 is整数egral_of_irreducibleSpace_of_isReduced
+  条件: [是既约 X] [H : 不可约空间 X]
   证明: by
   constructor; · infer_instance
   intro U hU
@@ -817,7 +817,7 @@ theorem isIntegral_iff_irreducibleSpace_and_isReduced
     isIntegral_of_irreducibleSpace_of_isReduced X⟩
 
 中文:
-定理 isIntegral_iff_irreducibleSpace_and_isReduced
+定理 is整数egral_iff_irreducibleSpace_and_isReduced
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ =>
     isIntegral_of_irreducibleSpace_of_isReduced X⟩
 
@@ -845,8 +845,8 @@ theorem isIntegral_of_isOpenImmersion
     Γ(Y, f ''ᵁ U) ≅ _).symm.commRingCatIsoToRingE
 
 中文:
-定理 isIntegral_of_isOpenImmersion
-  结论: {X Y : Scheme} (f : X ⟶ Y) [IsOpenImmersion f]
+定理 is整数egral_of_isOpenImmersion
+  结论: {X Y : 概形} (f : X ⟶ Y) [是开浸入 f]
   证明: by
   constructor; · infer_instance
   intro U hU
@@ -881,8 +881,8 @@ lemma IsIntegral.of_isIso
   exact Nonempty.map f inferInstance
 
 中文:
-引理 IsIntegral.of_isIso
-  条件: {X Y : Scheme.{u}} [h : Is整数egral X] (f : X ⟶ Y) [IsIso f]
+引理 是整.of_isIso
+  条件: {X Y : 概形.{u}} [h : 是整 X] (f : X ⟶ Y) [是同构 f]
   证明: by
   suffices Nonempty Y from isIntegral_of_isOpenImmersion (inv f)
   exact Nonempty.map f inferInstance
@@ -910,8 +910,8 @@ theorem affine_isIntegral_iff
     (Scheme.ΓSpecIso R).symm.commRingCatIsoToRingEquiv.toMulEquiv, fun _ => inferInstance⟩
 
 中文:
-定理 affine_isIntegral_iff
-  条件: (R : CommRingCat)
+定理 affine_is整数egral_iff
+  条件: (R : 交换环范畴)
   证明: ⟨fun _ => MulEquiv.isDomain Γ(Spec R, ⊤)
     (Scheme.ΓSpecIso R).symm.commRingCatIsoToRingEquiv.toMulEquiv, fun _ => inferInstance⟩
 
@@ -931,8 +931,8 @@ theorem isIntegral_of_isAffine_of_isDomain
   proof: isIntegral_of_isOpenImmersion X.isoSpec.hom
 
 中文:
-定理 isIntegral_of_isAffine_of_isDomain
-  条件: [IsAffine X] [Nonempty X] [IsDomain Γ(X, ⊤)]
+定理 is整数egral_of_isAffine_of_isDomain
+  条件: [是仿射 X] [非空 X] [是整环 Γ(X, ⊤)]
   证明: isIntegral_of_isOpenImmersion X.isoSpec.hom
 
 Depends on / 依赖: X.isoSpec.hom, isIntegral_of_isOpenImmersion, isoSpec
@@ -959,8 +959,8 @@ theorem map_injective_of_isIntegral
   si
 
 中文:
-定理 map_injective_of_isIntegral
-  结论: [Is整数egral X] {U V : X.Opens} (i : U ⟶ V)
+定理 map_injective_of_is整数egral
+  结论: [是整 X] {U V : X.Opens} (i : U ⟶ V)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro x hx
@@ -997,8 +997,8 @@ instance [IsIntegral
   le_top a := genericPoint_specializes a
 
 中文:
-实例 [IsIntegral
-  签名: X] : OrderTop X where
+实例 [是整
+  签名: X] : 有顶序 X where
   定义体: genericPoint X
   le_top a := genericPoint_specializes a
 
@@ -1020,7 +1020,7 @@ lemma coheight_eq_of_isOpenImmersion
 
 中文:
 引理 coheight_eq_of_isOpenImmersion
-  条件: {U X : Scheme} {x : U} (f : U ⟶ X) [IsOpenImmersion f]
+  条件: {U X : 概形} {x : U} (f : U ⟶ X) [是开浸入 f]
   证明: f.isOpenEmbedding.coheight_eq
 
 Depends on / 依赖: coheight_eq, f.isOpenEmbedding.coheight_eq, isOpenEmbedding
@@ -1041,7 +1041,7 @@ lemma idealHeight_eq_coheight
 
 中文:
 引理 idealHeight_eq_coheight
-  条件: (R : CommRingCat) (x : Spec R)
+  条件: (R : 交换环范畴) (x : Spec R)
   证明: by
   rw [PrimeSpectrum.height_eq_orderHeight]; rw [← Order.coheight_orderIso (specOrderIsoPrimeSpectrum R)]; rw [← height_ofDual]; rw [specOrderIsoPrimeSpectrum_apply]; rw [OrderDual.ofDual_toDual]
 
@@ -1070,7 +1070,7 @@ lemma ringKrullDim_stalk_eq_coheight
 
 中文:
 引理 ringKrullDim_stalk_eq_coheight
-  条件: {X : Scheme} (x : X)
+  条件: {X : 概形} (x : X)
   证明: by
   wlog h : exists R, X = Spec R
   · obtain ⟨R, f, hf, hsub⟩ := Scheme.exists_affine_mem_range_and_range_subset
@@ -1133,8 +1133,8 @@ lemma isField_of_isIntegral_of_subsingleton
   apply X.isoSpec.hom.homeomorph.t1Space
 
 中文:
-引理 isField_of_isIntegral_of_subsingleton
-  条件: (X : Scheme.{u}) [Is整数egral X] [Subsingleton X]
+引理 isField_of_is整数egral_of_subsingleton
+  条件: (X : 概形.{u}) [是整 X] [子单例 X]
   证明: by
   rw [← PrimeSpectrum.t1Space_iff_isField]
   apply X.isoSpec.hom.homeomorph.t1Space

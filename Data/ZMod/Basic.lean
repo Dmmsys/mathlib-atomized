@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain (ZMod 0)
+  签名: 是整环 (ZMod 0)
   定义体: inferInstanceAs (IsDomain Int)
 
 Depends on / 依赖: IsDomain
@@ -65,7 +65,7 @@ definition finEquiv
 
 中文:
 定义 finEquiv
-  签名: : 对任意 (n : 自然数) [NeZero n], Fin n ≃+* ZMod n
+  签名: : 对任意 (n : 自然数) [NeZero n], 有限集 n ≃+* ZMod n
 -/
 def finEquiv : forall (n : Nat) [NeZero n], Fin n ≃+* ZMod n
   | 0, h => (h.ne _ rfl).elim
@@ -81,7 +81,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: : CharZero (ZMod 0)
+  签名: : 特征零 (ZMod 0)
   定义体: inferInstanceAs (CharZero Int)
 
 Depends on / 依赖: CharZero
@@ -312,7 +312,7 @@ lemma val_ofNat
   proof: val_natCast ..
 
 中文:
-引理 val_ofNat
+引理 val_of自然数
   条件: (n a : 自然数) [a.AtLeastTwo]
   结论: (of自然数(a) : ZMod n).val = of自然数(a) % n
   证明: val_natCast ..
@@ -331,7 +331,7 @@ lemma val_ofNat_of_lt
   proof: val_natCast_of_lt han
 
 中文:
-引理 val_ofNat_of_lt
+引理 val_of自然数_of_lt
   条件: {n a : 自然数} [a.AtLeastTwo] (han : a < n)
   结论: (of自然数(a) : ZMod n).val = of自然数(a)
   证明: val_natCast_of_lt han
@@ -356,7 +356,7 @@ theorem val_unit'
 中文:
 定理 val_unit'
   条件: {n : ZMod 0}
-  结论: IsUnit n ↔ n.val = 1
+  结论: 是单位 n ↔ n.val = 1
   证明: by
   simp only [val]
   rw [Int.isUnit_iff]; rw [Int.natAbs_eq_iff]; rw [Nat.cast_one]
@@ -379,7 +379,7 @@ lemma eq_one_of_isUnit_natCast
 
 中文:
 引理 eq_one_of_isUnit_natCast
-  条件: {n : 自然数} (h : IsUnit (n : ZMod 0))
+  条件: {n : 自然数} (h : 是单位 (n : ZMod 0))
   结论: n = 1
   证明: by
   rw [← Nat.mod_zero n]; rw [← val_natCast]; rw [val_unit'.mp h]
@@ -462,7 +462,7 @@ theorem addOrderOf_coe
 中文:
 定理 addOrderOf_coe
   条件: (a : 自然数) {n : 自然数} (n0 : n != 0)
-  结论: addOrderOf (a : ZMod n) = n / n.gcd a
+  结论: addOrderOf (a : ZMod n) = n / n.最大公约数 a
   证明: by
   rcases a with - | a
   · simp only [Nat.cast_zero, addOrderOf_zero, Nat.gcd_zero_right,
@@ -493,7 +493,7 @@ theorem addOrderOf_coe'
 中文:
 定理 addOrderOf_coe'
   条件: {a : 自然数} (n : 自然数) (a0 : a != 0)
-  结论: addOrderOf (a : ZMod n) = n / n.gcd a
+  结论: addOrderOf (a : ZMod n) = n / n.最大公约数 a
   证明: by
   rw [← Nat.smul_one_eq_cast]; rw [addOrderOf_nsmul' _ a0]; rw [ZMod.addOrderOf_one]
 
@@ -706,7 +706,7 @@ theorem _root_.Prod.fst_zmod_cast
 @[simp]
 
 中文:
-定理 _root_.Prod.fst_zmod_cast
+定理 _root_.积类型.fst_zmod_cast
   条件: (a : ZMod n)
   结论: (cast a : R × S).fst = cast a
   证明: by
@@ -737,7 +737,7 @@ theorem _root_.Prod.snd_zmod_cast
   · simp [ZMod.cast]
 
 中文:
-定理 _root_.Prod.snd_zmod_cast
+定理 _root_.积类型.snd_zmod_cast
   条件: (a : ZMod n)
   结论: (cast a : R × S).snd = cast a
   证明: by
@@ -794,7 +794,7 @@ theorem natCast_rightInverse
 中文:
 定理 natCast_rightInverse
   条件: [NeZero n]
-  结论: Function.RightInverse val ((↑) : 自然数 -> ZMod n)
+  结论: 函数.右逆 val ((↑) : 自然数 -> ZMod n)
   证明: natCast_zmod_val
 
 Depends on / 依赖: natCast_zmod_val
@@ -814,7 +814,7 @@ theorem natCast_zmod_surjective
 中文:
 定理 natCast_zmod_surjective
   条件: [NeZero n]
-  结论: Function.Surjective ((↑) : 自然数 -> ZMod n)
+  结论: 函数.满射 ((↑) : 自然数 -> ZMod n)
   证明: natCast_rightInverse.surjective
 
 Depends on / 依赖: natCast_rightInverse, natCast_rightInverse.surjective, surjective
@@ -867,7 +867,7 @@ theorem intCast_rightInverse
 
 中文:
 定理 intCast_rightInverse
-  结论: Function.RightInverse (cast : ZMod n -> 整数) ((↑) : 整数 -> ZMod n)
+  结论: 函数.右逆 (cast : ZMod n -> 整数) ((↑) : 整数 -> ZMod n)
   证明: intCast_zmod_cast
 
 Depends on / 依赖: intCast_zmod_cast
@@ -885,7 +885,7 @@ theorem intCast_surjective
 
 中文:
 定理 intCast_surjective
-  结论: Function.Surjective ((↑) : 整数 -> ZMod n)
+  结论: 函数.满射 ((↑) : 整数 -> ZMod n)
   证明: intCast_rightInverse.surjective
 
 Depends on / 依赖: intCast_rightInverse, intCast_rightInverse.surjective, surjective
@@ -903,7 +903,7 @@ lemma «forall»
   proof: intCast_surjective.forall
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {P : ZMod n -> 命题}
   结论: (对任意 x, P x) ↔ 对任意 x : 整数, P x
   证明: intCast_surjective.forall
@@ -919,7 +919,7 @@ lemma «exists»
   proof: intCast_surjective.exists
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {P : ZMod n -> 命题}
   结论: (存在 x, P x) ↔ 存在 x : 整数, P x
   证明: intCast_surjective.exists
@@ -1272,7 +1272,7 @@ definition castHom
 
 中文:
 定义 castHom
-  签名: (h : m ∣ n) (R : 类型) [Ring R] [CharP R m]
+  签名: (h : m ∣ n) (R : 类型) [环 R] [特征p R m]
   定义体: cast
   map_zero' := cast_zero
   map_one' := cast_one h
@@ -1444,7 +1444,7 @@ theorem castHom_surjective
 中文:
 定理 castHom_surjective
   条件: (h : m ∣ n)
-  结论: Function.Surjective (castHom h (ZMod m))
+  结论: 函数.满射 (castHom h (ZMod m))
   证明: fun a => by obtain ⟨a, rfl⟩ := intCast_surjective a; exact ⟨a, map_intCast ..⟩
 
 Depends on / 依赖: intCast_surjective, map_intCast
@@ -1607,7 +1607,7 @@ theorem castHom_injective
 
 中文:
 定理 castHom_injective
-  结论: Function.Injective (ZMod.castHom (dvd_refl n) R)
+  结论: 函数.单射 (ZMod.castHom (dvd_refl n) R)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro x
@@ -1641,7 +1641,7 @@ theorem castHom_bijective
 
 中文:
 定理 castHom_bijective
-  条件: [Fintype R] (h : Fintype.card R = n)
+  条件: [有限类型 R] (h : 有限类型.card R = n)
   证明: by
   have : NeZero n :=
     ⟨by
@@ -1673,7 +1673,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: [Fintype R] (h : Fintype.card R = n)
+  签名: [有限类型 R] (h : 有限类型.card R = n)
   定义体: RingEquiv.ofBijective _ (ZMod.castHom_bijective R h)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofBijective, ZMod.castHom_bijective, castHom_bijective, ofBijective
@@ -1697,7 +1697,7 @@ definition ringEquivOfPrime
 
 中文:
 定义 ringEquivOfPrime
-  签名: [Fintype R] {p : 自然数} (hp : p.Prime) (hR : Fintype.card R = p)
+  签名: [有限类型 R] {p : 自然数} (hp : p.素) (hR : 有限类型.card R = p)
   定义体: have : Nontrivial R := Fintype.one_lt_card_iff_nontrivial.1 (hR ▸ hp.one_lt)
   -- The following line exists as `charP_of_card_eq_prime` in
   -- `Mathlib/Algebra/CharP/CharAndCard.lean`.
@@ -1727,7 +1727,7 @@ lemma ringEquivOfPrime_eq_ringEquiv
 
 中文:
 引理 ringEquivOfPrime_eq_ringEquiv
-  结论: [Fintype R] {p : 自然数} [CharP R p] (hp : p.Prime)
+  结论: [有限类型 R] {p : 自然数} [特征p R p] (hp : p.素)
   证明: rfl
 -/
 lemma ringEquivOfPrime_eq_ringEquiv [Fintype R] {p : Nat} [CharP R p] (hp : p.Prime)
@@ -2317,7 +2317,7 @@ theorem cast_neg_one
 
 中文:
 定理 cast_neg_one
-  条件: {R : 类型} [Ring R] (n : 自然数)
+  条件: {R : 类型} [环 R] (n : 自然数)
   结论: cast (-1 : ZMod n) = (n - 1 : R)
   证明: by
   rcases n with - | n
@@ -2351,7 +2351,7 @@ theorem cast_sub_one
 
 中文:
 定理 cast_sub_one
-  条件: {R : 类型} [Ring R] {n : 自然数} (k : ZMod n)
+  条件: {R : 类型} [环 R] {n : 自然数} (k : ZMod n)
   证明: by
   split_ifs with hk
   · rw [hk, zero_sub, ZMod.cast_neg_one]
@@ -2584,7 +2584,7 @@ theorem natCast_toNat
   statement: forall {z : Int} (_h : 0 <= z), (z.toNat : ZMod p) = z
 
 中文:
-定理 natCast_toNat
+定理 natCast_to自然数
   条件: (p : 自然数)
   结论: 对任意 {z : 整数} (_h : 0 <= z), (z.to自然数 : ZMod p) = z
 -/
@@ -2610,7 +2610,7 @@ theorem val_injective
 中文:
 定理 val_injective
   条件: (n : 自然数) [NeZero n]
-  结论: Function.Injective (val : ZMod n -> 自然数)
+  结论: 函数.单射 (val : ZMod n -> 自然数)
   证明: by
   cases n
   · cases NeZero.ne 0 rfl
@@ -3002,7 +3002,7 @@ instance nontrivial'
 
 中文:
 实例 nontrivial'
-  签名: : Nontrivial (ZMod 0)
+  签名: : 非平凡 (ZMod 0)
   定义体: by
   delta ZMod; infer_instance
 
@@ -3089,7 +3089,7 @@ theorem mul_inv_eq_gcd
 中文:
 定理 mul_inv_eq_gcd
   条件: {n : 自然数} (a : ZMod n)
-  结论: a * a⁻¹ = 自然数.gcd a.val n
+  结论: a * a⁻¹ = 自然数.最大公约数 a.val n
   证明: by
   rcases n with - | n
   · dsimp [ZMod] at a ⊢
@@ -3477,7 +3477,7 @@ lemma isUnit_iff_coprime
 中文:
 引理 isUnit_iff_coprime
   条件: (m n : 自然数)
-  结论: IsUnit (m : ZMod n) ↔ m.Coprime n
+  结论: 是单位 (m : ZMod n) ↔ m.Coprime n
   证明: by
   refine ⟨fun H => ?_, fun H => (unitOfCoprime m H).isUnit⟩
   have H' := val_coe_unit_coprime H.unit
@@ -3534,8 +3534,8 @@ lemma isUnit_prime_iff_not_dvd
 
 中文:
 引理 isUnit_prime_iff_not_dvd
-  条件: {n p : 自然数} (hp : p.Prime)
-  结论: IsUnit (p : ZMod n) ↔ ¬p ∣ n
+  条件: {n p : 自然数} (hp : p.素)
+  结论: 是单位 (p : ZMod n) ↔ ¬p ∣ n
   证明: by
   rw [isUnit_iff_coprime]; rw [Nat.Prime.coprime_iff_not_dvd hp]
 
@@ -3555,8 +3555,8 @@ lemma isUnit_prime_of_not_dvd
 
 中文:
 引理 isUnit_prime_of_not_dvd
-  条件: {n p : 自然数} (hp : p.Prime) (h : ¬ p ∣ n)
-  结论: IsUnit (p : ZMod n)
+  条件: {n p : 自然数} (hp : p.素) (h : ¬ p ∣ n)
+  结论: 是单位 (p : ZMod n)
   证明: (isUnit_prime_iff_not_dvd hp).mpr h
 
 Depends on / 依赖: isUnit_prime_iff_not_dvd
@@ -3575,7 +3575,7 @@ theorem isUnit_natCast_iff_not_dvd_pow
 
 中文:
 定理 isUnit_natCast_iff_not_dvd_pow
-  条件: {p d a : 自然数} (hp : p.Prime) (hd : 0 < d)
+  条件: {p d a : 自然数} (hp : p.素) (hd : 0 < d)
   证明: by
   rw [isUnit_iff_coprime]; rw [Nat.coprime_pow_right_iff hd]; rw [Nat.coprime_comm]; rw [hp.coprime_iff_not_dvd]
 
@@ -3599,7 +3599,7 @@ theorem prime_natCast_not_isUnit_pow
 
 中文:
 定理 prime_natCast_not_isUnit_pow
-  条件: {p d : 自然数} (hp : p.Prime) (hd : 0 < d)
+  条件: {p d : 自然数} (hp : p.素) (hd : 0 < d)
   证明: by
   simp [isUnit_prime_iff_not_dvd hp]
   lia
@@ -3655,7 +3655,7 @@ theorem mul_inv_of_unit
 
 中文:
 定理 mul_inv_of_unit
-  条件: {n : 自然数} (a : ZMod n) (h : IsUnit a)
+  条件: {n : 自然数} (a : ZMod n) (h : 是单位 a)
   结论: a * a⁻¹ = 1
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -3679,7 +3679,7 @@ theorem inv_mul_of_unit
 
 中文:
 定理 inv_mul_of_unit
-  条件: {n : 自然数} (a : ZMod n) (h : IsUnit a)
+  条件: {n : 自然数} (a : ZMod n) (h : 是单位 a)
   结论: a⁻¹ * a = 1
   证明: by
   rw [mul_comm]; rw [mul_inv_of_unit a h]
@@ -3749,7 +3749,7 @@ lemma inv_mul_eq_one_of_isUnit
 
 中文:
 引理 inv_mul_eq_one_of_isUnit
-  条件: {n : 自然数} {a : ZMod n} (ha : IsUnit a) (b : ZMod n)
+  条件: {n : 自然数} {a : ZMod n} (ha : 是单位 a) (b : ZMod n)
   证明: by
   -- ideally, this would be `ha.inv_mul_eq_one`, but `ZMod n` is not a `DivisionMonoid`...
   -- (see the "TODO" above)
@@ -3878,7 +3878,7 @@ lemma subsingleton_iff
 中文:
 引理 subsingleton_iff
   条件: {n : 自然数}
-  结论: Subsingleton (ZMod n) ↔ n = 1
+  结论: 子单例 (ZMod n) ↔ n = 1
   证明: by
   constructor
   · obtain (_ | _ | n) := n
@@ -3912,7 +3912,7 @@ lemma nontrivial_iff
 中文:
 引理 nontrivial_iff
   条件: {n : 自然数}
-  结论: Nontrivial (ZMod n) ↔ n != 1
+  结论: 非平凡 (ZMod n) ↔ n != 1
   证明: by
   rw [← not_subsingleton_iff_nontrivial]; rw [subsingleton_iff]
 
@@ -3934,7 +3934,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (ZMod 2)ˣ
+  签名: 唯一 (ZMod 2)ˣ
   定义体: 1
   uniq := by decide
 
@@ -4589,8 +4589,8 @@ theorem RingHom.ext_zmod
   rw [φ.ext_int ψ]
 
 中文:
-定理 RingHom.ext_zmod
-  条件: {n : 自然数} {R : 类型} [NonAssocSemiring R] (f g : ZMod n ->+* R)
+定理 环态射.ext_zmod
+  条件: {n : 自然数} {R : 类型} [非结合半环 R] (f g : ZMod n ->+* R)
   结论: f = g
   证明: by
   ext a
@@ -4624,7 +4624,7 @@ instance subsingleton_ringHom
 
 中文:
 实例 subsingleton_ringHom
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: ⟨RingHom.ext_zmod⟩
 
 Depends on / 依赖: RingHom, RingHom.ext_zmod, ext_zmod
@@ -4644,7 +4644,7 @@ instance subsingleton_ringEquiv
 
 中文:
 实例 subsingleton_ringEquiv
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: ⟨fun f g => by
     rw [RingEquiv.coe_ringHom_inj_iff]
     apply RingHom.ext_zmod _ _⟩
@@ -4674,7 +4674,7 @@ theorem ringHom_map_cast
 
 中文:
 定理 ringHom_map_cast
-  条件: [NonAssocRing R] (f : R ->+* ZMod n) (k : ZMod n)
+  条件: [非结合环 R] (f : R ->+* ZMod n) (k : ZMod n)
   结论: f (cast k) = k
   证明: by
   cases n
@@ -4702,7 +4702,7 @@ theorem ringHom_rightInverse
 
 中文:
 定理 ringHom_rightInverse
-  条件: [NonAssocRing R] (f : R ->+* ZMod n)
+  条件: [非结合环 R] (f : R ->+* ZMod n)
   证明: ringHom_map_cast f
 
 Depends on / 依赖: ringHom_map_cast
@@ -4724,8 +4724,8 @@ theorem ringHom_surjective
 
 中文:
 定理 ringHom_surjective
-  条件: [NonAssocRing R] (f : R ->+* ZMod n)
-  结论: Function.Surjective f
+  条件: [非结合环 R] (f : R ->+* ZMod n)
+  结论: 函数.满射 f
   证明: (ringHom_rightInverse f).surjective
 
 @[simp]
@@ -4748,7 +4748,7 @@ lemma castHom_self
 
 中文:
 引理 castHom_self
-  结论: ZMod.castHom dvd_rfl (ZMod n) = RingHom.id (ZMod n)
+  结论: ZMod.castHom dvd_rfl (ZMod n) = 环态射.id (ZMod n)
   证明: Subsingleton.elim _ _
 
 @[simp]
@@ -4994,7 +4994,7 @@ lemma smulMemClass
 
 中文:
 引理 smulMemClass
-  结论: SMulMemClass S (ZMod n) G where smul_mem _ _ {_x} hx
+  结论: SMulMem类 S (ZMod n) G where smul_mem _ _ {_x} hx
   证明: zmod_smul_mem hx _
 
 Depends on / 依赖: zmod_smul_mem
@@ -5013,7 +5013,7 @@ instance instZModSMul
 
 中文:
 实例 instZModSMul
-  签名: : SMul (ZMod n) K where smul a x
+  签名: : 标量乘法 (ZMod n) K where smul a x
   定义体: ⟨a • x, zmod_smul_mem x.2 _⟩
 
 Depends on / 依赖: zmod_smul_mem
@@ -5048,7 +5048,7 @@ instance instZModModule
 
 中文:
 实例 instZModModule
-  签名: : Module (ZMod n) K
+  签名: : 模 (ZMod n) K
   定义体: fast_instance%
   Subtype.coe_injective.module _ (AddSubmonoidClass.subtype K) coe_zmod_smul
 
@@ -5098,7 +5098,7 @@ exact hx by simpa using char_nsmul_eq_zero 1 x
 
 中文:
 引理 ZModModule.char_ne_one
-  条件: [Nontrivial G]
+  条件: [非平凡 G]
   结论: n != 1
   证明: by
   rintro rfl
@@ -5127,7 +5127,7 @@ lemma ZModModule.two_le_char
 
 中文:
 引理 ZModModule.two_le_char
-  条件: [NeZero n] [Nontrivial G]
+  条件: [NeZero n] [非平凡 G]
   结论: 2 <= n
   证明: by
   have := NeZero.ne n
@@ -5272,7 +5272,7 @@ lemma pow_zmod_val_inv_pow
 
 中文:
 引理 pow_zmod_val_inv_pow
-  条件: (hn : (自然数.card α).gcd n = 1) (a : α)
+  条件: (hn : (自然数.card α).最大公约数 n = 1) (a : α)
   证明: by
   replace hn : (Nat.card α).Coprime n := hn
   rw [← pow_mul']; rw [← pow_mod_natCard]; rw [← ZMod.val_natCast]; rw [Nat.cast_mul]; rw [ZMod.mul_val_inv hn.symm]; rw [ZMod.val_one_eq_one_mod]; rw [pow_mod_natCard]; rw [pow_one]
@@ -5297,7 +5297,7 @@ lemma pow_pow_zmod_val_inv
 
 中文:
 引理 pow_pow_zmod_val_inv
-  条件: (hn : (自然数.card α).gcd n = 1) (a : α)
+  条件: (hn : (自然数.card α).最大公约数 n = 1) (a : α)
   证明: by rw [pow_right_comm, pow_zmod_val_inv_pow hn]
 
 Depends on / 依赖: pow_right_comm, pow_zmod_val_inv_pow
@@ -5325,7 +5325,7 @@ lemma Nat.range_mul_add
     simp only
 
 中文:
-引理 Nat.range_mul_add
+引理 自然数.range_mul_add
   条件: (m k : 自然数)
   证明: by
   ext n
@@ -5366,7 +5366,7 @@ definition Nat.residueClassesEquiv
     · simp only [add_comm p.1.val,
 
 中文:
-定义 Nat.residueClassesEquiv
+定义 自然数.residueClassesEquiv
   签名: (N : 自然数) [NeZero N]
   定义体: (↑n, n / N)
   invFun p := p.1.val + N * p.2
@@ -5404,7 +5404,7 @@ instance ZMod.instSubsingletonModule
 
 中文:
 实例 ZMod.instSubsingletonModule
-  签名: (n : 自然数) (M : 类型) [AddCommMonoid M]
+  签名: (n : 自然数) (M : 类型) [加法交换幺半群 M]
   定义体: by
   obtain _ | n := n
   · exact inferInstanceAs (Subsingleton (Module Int M))

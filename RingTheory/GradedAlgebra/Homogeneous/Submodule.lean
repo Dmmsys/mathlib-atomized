@@ -54,8 +54,8 @@ definition Submodule.IsHomogeneous
   body: SetLike.IsHomogeneous ℳ p
 
 中文:
-定义 Submodule.IsHomogeneous
-  签名: (p : Submodule A M) (ℳ : ιM -> σM)
+定义 子模.IsHomogeneous
+  签名: (p : 子模 A M) (ℳ : ιM -> σM)
   定义体: SetLike.IsHomogeneous ℳ p
 
 Depends on / 依赖: IsHomogeneous, SetLike, SetLike.IsHomogeneous
@@ -73,8 +73,8 @@ theorem Submodule.IsHomogeneous.mem_iff
   proof: AddSubmonoidClass.IsHomogeneous.mem_iff ℳ _ hp
 
 中文:
-定理 Submodule.IsHomogeneous.mem_iff
-  结论: {p : Submodule A M}
+定理 子模.IsHomogeneous.mem_iff
+  结论: {p : 子模 A M}
   证明: AddSubmonoidClass.IsHomogeneous.mem_iff ℳ _ hp
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.IsHomogeneous.mem_iff, IsHomogeneous, mem_iff
@@ -97,9 +97,9 @@ structure HomogeneousSubmodule
     - is_homogeneous' : toSubmodule.IsHomogeneous ℳ
 
 中文:
-结构 HomogeneousSubmodule
+结构 齐次子模
   参数: (𝒜 : ιA -> σA) (ℳ : ιM -> σM)
-  继承: Submodule A M
+  继承: 子模 A M
   公理与运算 (1 个):
     - is_homogeneous' : toSubmodule.IsHomogeneous ℳ
 -/
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (HomogeneousSubmodule 𝒜 ℳ) M
+  签名: 集合状 (齐次子模 𝒜 ℳ) M
   定义体: X.toSubmodule
   coe_injective := by
     rintro ⟨p, hp⟩ ⟨q, hq⟩ (h : (p : Set M) = q)
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (HomogeneousSubmodule 𝒜 ℳ)
+  签名: 偏序 (齐次子模 𝒜 ℳ)
   定义体: .ofSetLike (HomogeneousSubmodule 𝒜 ℳ) M
 
 Depends on / 依赖: HomogeneousSubmodule, ofSetLike
@@ -170,7 +170,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSubmonoidClass (HomogeneousSubmodule 𝒜 ℳ) M
+  签名: 加法子幺半群类 (齐次子模 𝒜 ℳ) M
   定义体: p.toSubmodule.zero_mem
   add_mem hx hy := Submodule.add_mem _ hx hy
 
@@ -192,7 +192,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (HomogeneousSubmodule 𝒜 ℳ) A M
+  签名: SMulMem类 (齐次子模 𝒜 ℳ) A M
   定义体: by
     intro x r m hm
     exact Submodule.smul_mem x.toSubmodule r hm
@@ -214,8 +214,8 @@ theorem HomogeneousSubmodule.isHomogeneous
   proof: p.is_homogeneous'
 
 中文:
-定理 HomogeneousSubmodule.isHomogeneous
-  条件: (p : HomogeneousSubmodule 𝒜 ℳ)
+定理 齐次子模.isHomogeneous
+  条件: (p : 齐次子模 𝒜 ℳ)
   证明: p.is_homogeneous'
 
 Depends on / 依赖: is_homogeneous, p.is_homogeneous
@@ -232,7 +232,7 @@ theorem HomogeneousSubmodule.toSubmodule_injective
   proof: fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (h : x = y) => by simp [h]
 
 中文:
-定理 HomogeneousSubmodule.toSubmodule_injective
+定理 齐次子模.toSubmodule_injective
   证明: fun ⟨x, hx⟩ ⟨y, hy⟩ => fun (h : x = y) => by simp [h]
 -/
 theorem HomogeneousSubmodule.toSubmodule_injective :
@@ -250,8 +250,8 @@ instance HomogeneousSubmodule.setLike
 coe_injective _ _ h := HomogeneousSubmodule.toSubmodule_injective 𝒜 ℳ SetLike.coe_injective h
 
 中文:
-实例 HomogeneousSubmodule.setLike
-  签名: : SetLike (HomogeneousSubmodule 𝒜 ℳ) M where
+实例 齐次子模.setLike
+  签名: : 集合状 (齐次子模 𝒜 ℳ) M where
   定义体: p.toSubmodule
 coe_injective _ _ h := HomogeneousSubmodule.toSubmodule_injective 𝒜 ℳ SetLike.coe_injective h
 
@@ -273,7 +273,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (HomogeneousSubmodule 𝒜 ℳ)
+  签名: 偏序 (齐次子模 𝒜 ℳ)
   定义体: .ofSetLike (HomogeneousSubmodule 𝒜 ℳ) M
 
 @[ext]
@@ -291,7 +291,7 @@ theorem HomogeneousSubmodule.ext
   proof: HomogeneousSubmodule.toSubmodule_injective _ _ h
 
 中文:
-定理 HomogeneousSubmodule.ext
+定理 齐次子模.ext
   证明: HomogeneousSubmodule.toSubmodule_injective _ _ h
 
 Depends on / 依赖: HomogeneousSubmodule, HomogeneousSubmodule.toSubmodule_injective, toSubmodule_injective
@@ -315,8 +315,8 @@ theorem HomogeneousSubmodule.ext'
 @[simp]
 
 中文:
-定理 HomogeneousSubmodule.ext'
-  结论: {I J : HomogeneousSubmodule 𝒜 ℳ}
+定理 齐次子模.ext'
+  结论: {I J : 齐次子模 𝒜 ℳ}
   证明: by
   ext
   rw [I.isHomogeneous.mem_iff]; rw [J.isHomogeneous.mem_iff]
@@ -345,8 +345,8 @@ theorem HomogeneousSubmodule.mem_toSubmodule_iff
   proof: Iff.rfl
 
 中文:
-定理 HomogeneousSubmodule.mem_toSubmodule_iff
-  条件: {I : HomogeneousSubmodule 𝒜 ℳ} {x : M}
+定理 齐次子模.mem_toSubmodule_iff
+  条件: {I : 齐次子模 𝒜 ℳ} {x : M}
   证明: Iff.rfl
 -/
 theorem HomogeneousSubmodule.mem_toSubmodule_iff {I : HomogeneousSubmodule 𝒜 ℳ} {x : M} :

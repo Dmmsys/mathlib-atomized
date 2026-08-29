@@ -74,10 +74,10 @@ class QuasiFinite
     - finite_fiber((P : Ideal R) [P.IsPrime]) : Module.Finite P.ResidueField (P.Fiber S)  [default: by infer_instance]
 
 中文:
-类 QuasiFinite
+类 拟有限
   参数: : 命题 where
   公理与运算 (1 个):
-    - finite_fiber((P : Ideal R) [P.IsPrime]) : Module.Finite P.ResidueField (P.Fiber S)  [默认: by infer_instance]
+    - finite_fiber((P : 理想 R) [P.是素]) : 模.有限 P.ResidueField (P.Fiber S)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -100,7 +100,7 @@ instance [QuasiFinite
   body: .of_finite P.ResidueField _
 
 中文:
-实例 [QuasiFinite
+实例 [拟有限
   签名: R S] (P
   定义体: .of_finite P.ResidueField _
 
@@ -119,7 +119,7 @@ lemma finite_comap_preimage_singleton
 
 中文:
 引理 finite_comap_preimage_singleton
-  条件: [QuasiFinite R S] (P : PrimeSpectrum R)
+  条件: [拟有限 R S] (P : 素谱 R)
   证明: (PrimeSpectrum.preimageEquivFiber R S P).finite_iff.mpr finite_of_compact_of_discrete
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.preimageEquivFiber, finite_iff, finite_iff.mpr, finite_of_compact_of_discrete, preimageEquivFiber
@@ -146,8 +146,8 @@ lemma finite_primesOver
 
 中文:
 引理 finite_primesOver
-  条件: [QuasiFinite R S] (I : Ideal R)
-  结论: (I.primesOver S).Finite
+  条件: [拟有限 R S] (I : 理想 R)
+  结论: (I.primesOver S).有限
   证明: by
   by_cases h : I.IsPrime
   · refine ((finite_comap_preimage_singleton ⟨I, h⟩).image PrimeSpectrum.asIdeal).subset ?_
@@ -178,7 +178,7 @@ lemma finite_comap_preimage
 
 中文:
 引理 finite_comap_preimage
-  条件: [QuasiFinite R S] {s : Set (PrimeSpectrum R)} (hs : s.Finite)
+  条件: [拟有限 R S] {s : 集合 (素谱 R)} (hs : s.有限)
   证明: hs.preimage' fun _ _ => finite_comap_preimage_singleton _
 
 Depends on / 依赖: finite_comap_preimage_singleton, hs.preimage, preimage
@@ -197,7 +197,7 @@ lemma isDiscrete_comap_preimage_singleton
 
 中文:
 引理 isDiscrete_comap_preimage_singleton
-  条件: [QuasiFinite R S] (P : PrimeSpectrum R)
+  条件: [拟有限 R S] (P : 素谱 R)
   证明: ⟨(PrimeSpectrum.preimageHomeomorphFiber R S P).symm.discreteTopology⟩
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.preimageHomeomorphFiber, discreteTopology, preimageHomeomorphFiber, symm.discreteTopology
@@ -217,7 +217,7 @@ lemma isDiscrete_comap_preimage
 
 中文:
 引理 isDiscrete_comap_preimage
-  结论: [QuasiFinite R S] {s : Set (PrimeSpectrum R)}
+  结论: [拟有限 R S] {s : 集合 (素谱 R)}
   证明: hs.preimage' (PrimeSpectrum.continuous_comap _).continuousOn
     fun _ => isDiscrete_comap_preimage_singleton _
 
@@ -248,7 +248,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [QuasiFinite R S] {A : 类型} [CommRing A] [Algebra R A]
+  签名: [拟有限 R S] {A : 类型} [交换环 A] [代数 R A]
   定义体: by
   refine ⟨fun P hP => ?_⟩
   let p := P.under R
@@ -326,8 +326,8 @@ lemma _root_.Module.Finite.of_quasiFinite
   let e' : S ≃ₐ[R] Π p : PrimeSpectrum R, Locali
 
 中文:
-引理 _root_.Module.Finite.of_quasiFinite
-  条件: [IsArtinianRing R] [QuasiFinite R S]
+引理 _root_.模.有限.of_quasiFinite
+  条件: [是Artin环 R] [拟有限 R S]
   证明: by
   classical
   let e : R ≃ₐ[R] PrimeSpectrum.PiLocalization R :=
@@ -368,7 +368,7 @@ lemma iff_of_isArtinianRing
 
 中文:
 引理 iff_of_isArtinianRing
-  条件: [IsArtinianRing R]
+  条件: [是Artin环 R]
   证明: ⟨fun _ => .of_quasiFinite, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_quasiFinite
@@ -398,8 +398,8 @@ lemma trans
 
 中文:
 引理 trans
-  条件: [QuasiFinite R S] [QuasiFinite S T]
-  结论: QuasiFinite R T
+  条件: [拟有限 R S] [拟有限 S T]
+  结论: 拟有限 R T
   证明: by
   refine ⟨fun P hP => ?_⟩
   have : Module.Finite (P.Fiber S) ((P.Fiber S) otimes[S] T) :=
@@ -442,7 +442,7 @@ lemma of_surjective_algHom
 
 中文:
 引理 of_surjective_algHom
-  条件: [QuasiFinite R S] (f : S ->ₐ[R] T) (hf : Function.Surjective f)
+  条件: [拟有限 R S] (f : S ->ₐ[R] T) (hf : 函数.满射 f)
   证明: let := f.toRingHom.toAlgebra
   let := IsScalarTower.of_algebraMap_eq' f.comp_algebraMap.symm
   have : Module.Finite S T := .of_surjective (Algebra.linearMap _ _) hf
@@ -496,7 +496,7 @@ lemma of_isLocalization
 
 中文:
 引理 of_isLocalization
-  条件: (M : Submonoid S) [IsLocalization M T] [QuasiFinite R S]
+  条件: (M : 子幺半群 S) [是Localization M T] [拟有限 R S]
   证明: letI : QuasiFinite S T := by
     refine ⟨fun P hP => .of_surjective (Algebra.linearMap P.ResidueField (P.Fiber T)) ?_⟩
     rw [← LinearMap.coe_restrictScalars (R := S)]; rw [← LinearMap.range_eq_top]; rw [← top_le_iff]; rw [← TensorProduct.span_tmul_eq_top]; rw [Submodule.span_le]
@@ -535,7 +535,7 @@ instance [QuasiFinite
   body: .of_quasiFinite
 
 中文:
-实例 [QuasiFinite
+实例 [拟有限
   签名: R S] (p
   定义体: .of_quasiFinite
 
@@ -566,8 +566,8 @@ lemma of_restrictScalars
 
 中文:
 引理 of_restrictScalars
-  条件: [QuasiFinite R T]
-  结论: QuasiFinite S T
+  条件: [拟有限 R T]
+  结论: 拟有限 S T
   证明: by
   refine ⟨fun P hP => ?_⟩
   let f : P.ResidueField otimes[R] T ->ₐ[P.ResidueField] P.Fiber T :=
@@ -602,7 +602,7 @@ lemma discreteTopology_primeSpectrum
 
 中文:
 引理 discreteTopology_primeSpectrum
-  条件: [DiscreteTopology (PrimeSpectrum R)] [QuasiFinite R S]
+  条件: [离散拓扑 (素谱 R)] [拟有限 R S]
   证明: isDiscrete_univ_iff.mp
     (isDiscrete_comap_preimage (R := R) (S := S) (isDiscrete_univ_iff.mpr ‹_›))
 
@@ -627,7 +627,7 @@ omit [Algebra S T] in
 
 中文:
 引理 finite_primeSpectrum
-  条件: [Finite (PrimeSpectrum R)] [QuasiFinite R S]
+  条件: [有限 (素谱 R)] [拟有限 R S]
   证明: Set.finite_univ_iff.mp
     (finite_comap_preimage (Set.finite_univ (α := PrimeSpectrum R)))
 
@@ -657,8 +657,8 @@ lemma of_forall_exists_mul_mem_range
   ref
 
 中文:
-引理 of_forall_exists_mul_mem_range
-  结论: [QuasiFinite R S] (f : S ->ₐ[R] T)
+引理 of_对任意_存在_mul_mem_range
+  结论: [拟有限 R S] (f : S ->ₐ[R] T)
   证明: by
   let φ : Localization ((IsUnit.submonoid T).comap f) ->ₐ[R] T :=
     IsLocalization.liftAlgHom (M := (IsUnit.submonoid T).comap f) (f := f)
@@ -695,7 +695,7 @@ lemma eq_of_le_of_under_eq
 
 中文:
 引理 eq_of_le_of_under_eq
-  结论: [QuasiFinite R S] (P Q : Ideal S) [P.IsPrime] [Q.IsPrime]
+  结论: [拟有限 R S] (P Q : 理想 S) [P.是素] [Q.是素]
   证明: congr($((isDiscrete_comap_preimage_singleton ⟨_, inferInstance⟩).eq_of_specializes
     (a := ⟨P, ‹_›⟩) (b := ⟨Q, ‹_›⟩) (by simpa [← PrimeSpectrum.le_iff_specializes]) rfl
     (PrimeSpectrum.ext h₂.symm)).1)
@@ -718,7 +718,7 @@ instance [QuasiFinite
   .of_quasiFinite
 
 中文:
-实例 [QuasiFinite
+实例 [拟有限
   签名: R S] (P
   定义体: have : QuasiFinite P.ResidueField Q.ResidueField := .of_restrictScalars R _ _
   .of_quasiFinite
@@ -748,7 +748,7 @@ lemma iff_finite_comap_preimage_singleton
 
 中文:
 引理 iff_finite_comap_preimage_singleton
-  条件: [FiniteType R S]
+  条件: [有限型 R S]
   证明: by
   refine ⟨fun H _ => finite_comap_preimage_singleton _, fun H => ⟨fun P _ => ?_⟩⟩
   rw [Module.finite_iff_isArtinianRing]; rw [isArtinianRing_iff_isNoetherianRing_krullDimLE_zero]
@@ -784,7 +784,7 @@ lemma iff_finite_primesOver
 
 中文:
 引理 iff_finite_primesOver
-  条件: [FiniteType R S]
+  条件: [有限型 R S]
   证明: by
   rw [iff_finite_comap_preimage_singleton]; rw [(PrimeSpectrum.equivSubtype R).forall_congr_left]; rw [Subtype.forall]
   refine forall₂_congr fun I hI => ?_
@@ -821,8 +821,8 @@ lemma of_isIntegral_of_finiteType
   let : Algebra A (Localization.Away sA) := OreLocaliz
 
 中文:
-引理 of_isIntegral_of_finiteType
-  结论: [Algebra.Is整数egral R S] [Algebra.FiniteType R T]
+引理 of_is整数egral_of_finiteType
+  结论: [代数.是整 R S] [代数.有限型 R T]
   证明: by
   let A := Algebra.adjoin R {s}
   let sA : A := ⟨s, Algebra.subset_adjoin (by simp)⟩
@@ -885,7 +885,7 @@ abbreviation QuasiFiniteAt
 
 中文:
 缩写 QuasiFiniteAt
-  签名: (p : Ideal S) [p.IsPrime]
+  签名: (p : 理想 S) [p.是素]
   定义体: QuasiFinite R (Localization.AtPrime p)
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, QuasiFinite
@@ -907,7 +907,7 @@ lemma QuasiFiniteAt.baseChange
 
 中文:
 引理 QuasiFiniteAt.baseChange
-  结论: (p : Ideal S) [p.IsPrime] [QuasiFiniteAt R p]
+  结论: (p : 理想 S) [p.是素] [QuasiFiniteAt R p]
   证明: by
   let f : A otimes[R] Localization.AtPrime p ->ₐ[A] Localization.AtPrime q :=
     Algebra.TensorProduct.lift (Algebra.ofId _ _) ⟨Localization.localRingHom _ _ _ hq, by
@@ -950,7 +950,7 @@ lemma QuasiFiniteAt.of_surjectiveOnStalks
 
 中文:
 引理 QuasiFiniteAt.of_surjectiveOnStalks
-  结论: (p : Ideal S) [p.IsPrime] [QuasiFiniteAt R p]
+  结论: (p : 理想 S) [p.是素] [QuasiFiniteAt R p]
   证明: by
   subst hq
   refine .of_surjective_algHom ⟨Localization.localRingHom _ q f.toRingHom rfl, ?_⟩ (hf q ‹_›)
@@ -978,7 +978,7 @@ lemma QuasiFiniteAt.of_surjectiveOnStalks_of_liesOver
 
 中文:
 引理 QuasiFiniteAt.of_surjectiveOnStalks_of_liesOver
-  结论: (p : Ideal S) [p.IsPrime]
+  结论: (p : 理想 S) [p.是素]
   证明: .of_surjectiveOnStalks p (IsScalarTower.toAlgHom R S T) hf _ (q.over_def p)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.toAlgHom, of_surjectiveOnStalks, over_def, q.over_def, toAlgHom
@@ -1001,7 +1001,7 @@ omit [Algebra S T] in
 
 中文:
 实例 QuasiFiniteAt.comap_algEquiv
-  签名: (p : Ideal S) [p.IsPrime] [Algebra.QuasiFiniteAt R p]
+  签名: (p : 理想 S) [p.是素] [代数.QuasiFiniteAt R p]
   定义体: .of_surjectiveOnStalks p f.symm.toAlgHom
     (RingHom.surjectiveOnStalks_of_surjective f.symm.surjective) _ (by ext; simp)
 
@@ -1029,7 +1029,7 @@ IsLocalization.liftAlgHom (M := Q.primeCompl) (f := IsScalarTower.toAlgHom _ _ _
 
 中文:
 引理 QuasiFiniteAt.of_le
-  结论: {P Q : Ideal S} [P.IsPrime] [Q.IsPrime]
+  结论: {P Q : 理想 S} [P.是素] [Q.是素]
   证明: by
   let f : Localization.AtPrime Q ->ₐ[R] Localization.AtPrime P :=
 IsLocalization.liftAlgHom (M := Q.primeCompl) (f := IsScalarTower.toAlgHom _ _ _) by
@@ -1066,7 +1066,7 @@ lemma QuasiFiniteAt.eq_of_le_of_under_eq
 
 中文:
 引理 QuasiFiniteAt.eq_of_le_of_under_eq
-  结论: {P Q : Ideal S} [P.IsPrime] [Q.IsPrime]
+  结论: {P Q : 理想 S} [P.是素] [Q.是素]
   证明: by
   have := Q.isPrime_map_of_isLocalizationAtPrime h₁ (S := Localization.AtPrime Q)
   have H := QuasiFinite.eq_of_le_of_under_eq (R := R)
@@ -1114,7 +1114,7 @@ lemma QuasiFiniteAt.exists_basicOpen_eq_singleton
   have : Module.Finite R (Localization.AtPrime p) :=
 
 中文:
-引理 QuasiFiniteAt.exists_basicOpen_eq_singleton
+引理 QuasiFiniteAt.存在_basicOpen_eq_singleton
   证明: by
   have : IsLocalizedModule p.primeCompl (.id (R := S) (M := Localization.AtPrime p)) :=
     ⟨IsLocalizedModule.map_units (Algebra.linearMap S (Localization.AtPrime p)),
@@ -1255,7 +1255,7 @@ lemma _root_.Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver
     congr($(e.symm_apply_apply ⟨⟨q, ‹_›⟩, PrimeSpectrum.e
 
 中文:
-引理 _root_.Ideal.exists_not_mem_forall_mem_of_ne_of_liesOver
+引理 _root_.理想.存在_not_mem_对任意_mem_of_ne_of_liesOver
   证明: by
   let e := PrimeSpectrum.preimageHomeomorphFiber _ S ⟨p, inferInstance⟩
   let qF : PrimeSpectrum (p.Fiber S) := e ⟨⟨q, ‹_›⟩, PrimeSpectrum.ext (q.over_def p).symm⟩
@@ -1305,8 +1305,8 @@ lemma _root_.Ideal.Fiber.lift_residueField_surjective
   have : Algebra.QuasiFin
 
 中文:
-引理 _root_.Ideal.Fiber.lift_residueField_surjective
-  结论: [Algebra.FiniteType R S]
+引理 _root_.理想.Fiber.lift_residueField_surjective
+  结论: [代数.有限型 R S]
   证明: by
   let q' : Ideal (p.Fiber S) := (PrimeSpectrum.primesOverOrderIsoFiber R S p ⟨q, ‹_›, ‹_›⟩).asIdeal
   have hq' : q = q'.comap Algebra.TensorProduct.includeRight.toRingHom :=

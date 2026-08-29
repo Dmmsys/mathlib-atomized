@@ -79,7 +79,7 @@ definition iteratedDerivWithin
 
 中文:
 定义 iteratedDerivWithin
-  签名: (n : 自然数) (f : 𝕜 -> F) (s : Set 𝕜) (x : 𝕜)
+  签名: (n : 自然数) (f : 𝕜 -> F) (s : 集合 𝕜) (x : 𝕜)
   定义体: (iteratedFDerivWithin 𝕜 n f s x : (Fin n -> 𝕜) -> F) fun _ : Fin n => 1
 
 Depends on / 依赖: iteratedFDerivWithin
@@ -204,7 +204,7 @@ theorem iteratedFDerivWithin_apply_eq_iteratedDerivWithin_mul_prod
 
 中文:
 定理 iteratedFDerivWithin_apply_eq_iteratedDerivWithin_mul_prod
-  条件: {m : Fin n -> 𝕜}
+  条件: {m : 有限集 n -> 𝕜}
   证明: by
   rw [iteratedDerivWithin_eq_iteratedFDerivWithin]; rw [← ContinuousMultilinearMap.map_smul_univ]
   simp
@@ -665,7 +665,7 @@ theorem iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod
 
 中文:
 定理 iteratedFDeriv_apply_eq_iteratedDeriv_mul_prod
-  条件: {m : Fin n -> 𝕜}
+  条件: {m : 有限集 n -> 𝕜}
   证明: by
   rw [iteratedDeriv_eq_iteratedFDeriv]; rw [← ContinuousMultilinearMap.map_smul_univ]; simp
 
@@ -752,7 +752,7 @@ theorem contDiff_iff_iteratedDeriv
 中文:
 定理 contDiff_iff_iteratedDeriv
   条件: {n : 自然数∞}
-  结论: ContDiff 𝕜 n f ↔
+  结论: 连续可微 𝕜 n f ↔
   证明: by
   simp only [contDiff_iff_continuous_differentiable, iteratedFDeriv_eq_equiv_comp,
     LinearIsometryEquiv.comp_continuous_iff, LinearIsometryEquiv.comp_differentiable_iff]
@@ -779,7 +779,7 @@ theorem contDiff_nat_iff_iteratedDeriv
 中文:
 定理 contDiff_nat_iff_iteratedDeriv
   条件: {n : 自然数}
-  结论: ContDiff 𝕜 n f ↔
+  结论: 连续可微 𝕜 n f ↔
   证明: by
   rw [← WithTop.coe_natCast]; rw [contDiff_iff_iteratedDeriv]
   simp
@@ -822,8 +822,8 @@ theorem ContDiff.continuous_iteratedDeriv
 @[fun_prop]
 
 中文:
-定理 ContDiff.continuous_iteratedDeriv
-  结论: {n : 自然数∞ω} (m : 自然数) (h : ContDiff 𝕜 n f)
+定理 连续可微.continuous_iteratedDeriv
+  结论: {n : 自然数∞ω} (m : 自然数) (h : 连续可微 𝕜 n f)
   证明: (contDiff_iff_iteratedDeriv.1 (h.of_le hmn)).1 m le_rfl
 
 @[fun_prop]
@@ -844,8 +844,8 @@ theorem ContDiff.continuous_iteratedDeriv'
   proof: ContDiff.continuous_iteratedDeriv m h (le_refl _)
 
 中文:
-定理 ContDiff.continuous_iteratedDeriv'
-  条件: (m : 自然数) (h : ContDiff 𝕜 m f)
+定理 连续可微.continuous_iteratedDeriv'
+  条件: (m : 自然数) (h : 连续可微 𝕜 m f)
   证明: ContDiff.continuous_iteratedDeriv m h (le_refl _)
 
 Depends on / 依赖: ContDiff, ContDiff.continuous_iteratedDeriv, continuous_iteratedDeriv, le_refl
@@ -866,8 +866,8 @@ theorem ContDiff.differentiable_iteratedDeriv
 @[fun_prop]
 
 中文:
-定理 ContDiff.differentiable_iteratedDeriv
-  结论: {n : 自然数∞ω} (m : 自然数) (h : ContDiff 𝕜 n f)
+定理 连续可微.differentiable_iteratedDeriv
+  结论: {n : 自然数∞ω} (m : 自然数) (h : 连续可微 𝕜 n f)
   证明: (contDiff_iff_iteratedDeriv.1 (h.of_le (ENat.add_one_natCast_le_withTop_of_lt hmn))).2 m
     (mod_cast (lt_add_one m))
 
@@ -890,8 +890,8 @@ theorem ContDiff.differentiable_iteratedDeriv'
   proof: h.differentiable_iteratedDeriv m (Nat.cast_lt.mpr m.lt_succ_self)
 
 中文:
-定理 ContDiff.differentiable_iteratedDeriv'
-  条件: (m : 自然数) (h : ContDiff 𝕜 (m + 1) f)
+定理 连续可微.differentiable_iteratedDeriv'
+  条件: (m : 自然数) (h : 连续可微 𝕜 (m + 1) f)
   证明: h.differentiable_iteratedDeriv m (Nat.cast_lt.mpr m.lt_succ_self)
 
 Depends on / 依赖: Nat.cast_lt.mpr, cast_lt, differentiable_iteratedDeriv, h.differentiable_iteratedDeriv, lt_succ_self, m.lt_succ_self
@@ -964,7 +964,7 @@ theorem iteratedDerivWithin_of_isOpen
 
 中文:
 定理 iteratedDerivWithin_of_isOpen
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   intro x hx
   simp_rw [iteratedDerivWithin, iteratedDeriv, iteratedFDerivWithin_of_isOpen n hs hx]
@@ -988,7 +988,7 @@ theorem iteratedDerivWithin_congr_right_of_isOpen
 
 中文:
 定理 iteratedDerivWithin_congr_right_of_isOpen
-  结论: (f : 𝕜 -> F) (n : 自然数) {s t : Set 𝕜} (hs : IsOpen s)
+  结论: (f : 𝕜 -> F) (n : 自然数) {s t : 集合 𝕜} (hs : 是开集 s)
   证明: by
   intro r hr
   rw [iteratedDerivWithin_of_isOpen hs hr.1]; rw [iteratedDerivWithin_of_isOpen ht hr.2]
@@ -1013,7 +1013,7 @@ theorem iteratedDerivWithin_of_isOpen_eq_iterate
 
 中文:
 定理 iteratedDerivWithin_of_isOpen_eq_iterate
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   证明: by
   apply Set.EqOn.trans (iteratedDerivWithin_of_isOpen hs)
   rw [iteratedDeriv_eq_iterate]
@@ -1065,7 +1065,7 @@ lemma AnalyticAt.hasFPowerSeriesAt
 
 中文:
 引理 AnalyticAt.hasFPowerSeriesAt
-  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [CompleteSpace 𝕜]
+  结论: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [完备空间 𝕜]
   证明: by
   obtain ⟨p, hp⟩ := h
   convert! hp
@@ -1138,7 +1138,7 @@ theorem iteratedDerivWithin_const
 
 中文:
 定理 iteratedDerivWithin_const
-  条件: {n : 自然数} {c : F} {s : Set 𝕜} {x : 𝕜}
+  条件: {n : 自然数} {c : F} {s : 集合 𝕜} {x : 𝕜}
   证明: by
   induction n generalizing c with
   | zero => simp
@@ -1218,7 +1218,7 @@ lemma iteratedDerivWithin_fun_const_zero
 
 中文:
 引理 iteratedDerivWithin_fun_const_zero
-  条件: {s : Set 𝕜}
+  条件: {s : 集合 𝕜}
   证明: by
   simpa using @iteratedDerivWithin_const 𝕜 _ F _ _ n 0
 
@@ -1242,7 +1242,7 @@ lemma iteratedDerivWithin_const_zero
 
 中文:
 引理 iteratedDerivWithin_const_zero
-  条件: {s : Set 𝕜}
+  条件: {s : 集合 𝕜}
   证明: by
   simp [Pi.zero_def]
 
@@ -1266,7 +1266,7 @@ theorem contDiff_nat_succ_iff_contDiff_one_iteratedDeriv
 中文:
 定理 contDiff_nat_succ_iff_contDiff_one_iteratedDeriv
   条件: {n : 自然数}
-  结论: ContDiff 𝕜 (n + 1 : 自然数) f ↔
+  结论: 连续可微 𝕜 (n + 1 : 自然数) f ↔
   证明: by
   simp only [contDiff_nat_iff_iteratedDeriv, contDiff_one_iff_deriv, ← iteratedDeriv_succ]
   grind

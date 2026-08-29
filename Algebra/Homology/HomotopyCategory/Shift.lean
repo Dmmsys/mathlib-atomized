@@ -115,7 +115,7 @@ definition shiftFunctorObjXIso
 
 中文:
 定义 shiftFunctorObjXIso
-  签名: (K : CochainComplex C 整数) (n i m : 整数) (hm : m = i + n)
+  签名: (K : 上链复形 C 整数) (n i m : 整数) (hm : m = i + n)
   定义体: K.XIsoOfEq hm.symm
 
 Depends on / 依赖: K.XIsoOfEq, XIsoOfEq, hm.symm
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (CochainComplex C 整数) 整数
+  签名: 有Shift (上链复形 C 整数) 整数
   定义体: hasShiftMk _ _
   { F := shiftFunctor C
     zero := shiftFunctorZero' C _ rfl
@@ -254,7 +254,7 @@ lemma shiftFunctor_obj_X'
 
 中文:
 引理 shiftFunctor_obj_X'
-  条件: (K : CochainComplex C 整数) (n p : 整数)
+  条件: (K : 上链复形 C 整数) (n p : 整数)
   证明: rfl
 -/
 lemma shiftFunctor_obj_X' (K : CochainComplex C Int) (n p : Int) :
@@ -272,7 +272,7 @@ lemma shiftFunctor_map_f'
 
 中文:
 引理 shiftFunctor_map_f'
-  条件: {K L : CochainComplex C 整数} (φ : K ⟶ L) (n p : 整数)
+  条件: {K L : 上链复形 C 整数} (φ : K ⟶ L) (n p : 整数)
   证明: rfl
 -/
 lemma shiftFunctor_map_f' {K L : CochainComplex C Int} (φ : K ⟶ L) (n p : Int) :
@@ -290,7 +290,7 @@ lemma shiftFunctor_obj_d'
 
 中文:
 引理 shiftFunctor_obj_d'
-  条件: (K : CochainComplex C 整数) (n i j : 整数)
+  条件: (K : 上链复形 C 整数) (n i j : 整数)
   证明: rfl
 -/
 lemma shiftFunctor_obj_d' (K : CochainComplex C Int) (n i j : Int) :
@@ -308,7 +308,7 @@ lemma shiftFunctorAdd_inv_app_f
 
 中文:
 引理 shiftFunctorAdd_inv_app_f
-  条件: (K : CochainComplex C 整数) (a b n : 整数)
+  条件: (K : 上链复形 C 整数) (a b n : 整数)
   证明: rfl
 -/
 lemma shiftFunctorAdd_inv_app_f (K : CochainComplex C Int) (a b n : Int) :
@@ -327,7 +327,7 @@ lemma shiftFunctorAdd_hom_app_f
 
 中文:
 引理 shiftFunctorAdd_hom_app_f
-  条件: (K : CochainComplex C 整数) (a b n : 整数)
+  条件: (K : 上链复形 C 整数) (a b n : 整数)
   证明: by
   tauto
 -/
@@ -348,7 +348,7 @@ lemma shiftFunctorAdd'_inv_app_f'
 
 中文:
 引理 shiftFunctorAdd'_inv_app_f'
-  条件: (K : CochainComplex C 整数) (a b ab : 整数) (h : a + b = ab) (n : 整数)
+  条件: (K : 上链复形 C 整数) (a b ab : 整数) (h : a + b = ab) (n : 整数)
   证明: by
   subst h
   rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftFunctorAdd_inv_app_f]
@@ -371,7 +371,7 @@ lemma shiftFunctorAdd'_hom_app_f'
 
 中文:
 引理 shiftFunctorAdd'_hom_app_f'
-  条件: (K : CochainComplex C 整数) (a b ab : 整数) (h : a + b = ab) (n : 整数)
+  条件: (K : 上链复形 C 整数) (a b ab : 整数) (h : a + b = ab) (n : 整数)
   证明: by
   subst h
   rw [shiftFunctorAdd'_eq_shiftFunctorAdd]; rw [shiftFunctorAdd_hom_app_f]
@@ -392,7 +392,7 @@ lemma shiftFunctorZero_inv_app_f
 
 中文:
 引理 shiftFunctorZero_inv_app_f
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: rfl
 -/
 lemma shiftFunctorZero_inv_app_f (K : CochainComplex C Int) (n : Int) :
@@ -410,7 +410,7 @@ lemma shiftFunctorZero_hom_app_f
 
 中文:
 引理 shiftFunctorZero_hom_app_f
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: by
   tauto
 -/
@@ -429,7 +429,7 @@ lemma XIsoOfEq_shift
 
 中文:
 引理 XIsoOfEq_shift
-  条件: (K : CochainComplex C 整数) (n : 整数) {p q : 整数} (hpq : p = q)
+  条件: (K : 上链复形 C 整数) (n : 整数) {p q : 整数} (hpq : p = q)
   证明: rfl
 
 Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.id, leftHomologyMap
@@ -525,7 +525,7 @@ lemma shiftFunctorComm_hom_app_f
 
 中文:
 引理 shiftFunctorComm_hom_app_f
-  条件: (K : CochainComplex C 整数) (a b p : 整数)
+  条件: (K : 上链复形 C 整数) (a b p : 整数)
   证明: by
   rw [shiftFunctorComm_eq _ _ _ _ rfl]
   dsimp
@@ -702,7 +702,7 @@ lemma mapHomologicalComplex_commShiftIso_hom_app_f
 
 中文:
 引理 mapHomologicalComplex_commShiftIso_hom_app_f
-  条件: (K : CochainComplex C 整数) (n i : 整数)
+  条件: (K : 上链复形 C 整数) (n i : 整数)
   证明: rfl
 
 @[simp]
@@ -723,7 +723,7 @@ lemma mapHomologicalComplex_commShiftIso_inv_app_f
 
 中文:
 引理 mapHomologicalComplex_commShiftIso_inv_app_f
-  条件: (K : CochainComplex C 整数) (n i : 整数)
+  条件: (K : 上链复形 C 整数) (n i : 整数)
   证明: rfl
 -/
 lemma mapHomologicalComplex_commShiftIso_inv_app_f (K : CochainComplex C Int) (n i : Int) :
@@ -758,7 +758,7 @@ definition shift
 
 中文:
 定义 shift
-  签名: {K L : CochainComplex C 整数} {φ₁ φ₂ : K ⟶ L} (h : Homotopy φ₁ φ₂) (n : 整数)
+  签名: {K L : 上链复形 C 整数} {φ₁ φ₂ : K ⟶ L} (h : 同伦 φ₁ φ₂) (n : 整数)
   定义体: n.negOnePow • h.hom _ _
   zero i j hij := by
     dsimp
@@ -804,7 +804,7 @@ instance :
 
 中文:
 实例 :
-  签名: (homotopic C (ComplexShape.up 整数)).IsCompatibleWithShift 整数
+  签名: (homotopic C (余mplexShape.up 整数)).是余mpatibleWithShift 整数
   定义体: ⟨fun n _ _ _ _ ⟨h⟩ => ⟨h.shift n⟩⟩
 
 Depends on / 依赖: h.shift
@@ -848,7 +848,7 @@ lemma shift_quotient_obj
 
 中文:
 引理 shift_quotient_obj
-  条件: (K : HomologicalComplex C (.up 整数)) (n : 整数)
+  条件: (K : 同调复形 C (.up 整数)) (n : 整数)
   证明: Quotient.functor_obj_shift ..
 
 Depends on / 依赖: Quotient, Quotient.functor_obj_shift, functor_obj_shift
@@ -909,7 +909,7 @@ instance :
 
 中文:
 实例 :
-  签名: (F.mapHomotopyCategory (ComplexShape.up 整数)).CommShift 整数
+  签名: (F.mapHomotopyCategory (余mplexShape.up 整数)).交换Shift 整数
   定义体: Quotient.liftCommShift _ _ _ _
 
 Depends on / 依赖: Quotient, Quotient.liftCommShift, liftCommShift
@@ -927,7 +927,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift (F.mapHomotopyCategoryFactors (ComplexShape.up 整数)).hom 整数
+  签名: 自然变换.交换Shift (F.mapHomotopyCategoryFactors (余mplexShape.up 整数)).hom 整数
   定义体: Quotient.liftCommShift_compatibility _ _ _ _
 
 Depends on / 依赖: Quotient, Quotient.liftCommShift_compatibility, liftCommShift_compatibility

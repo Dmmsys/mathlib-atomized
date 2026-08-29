@@ -97,7 +97,7 @@ lemma TensorProduct.map_comp_assoc
 @[coassoc_simps← ]
 
 中文:
-引理 TensorProduct.map_comp_assoc
+引理 张量积.map_comp_assoc
   证明: by
   rw [← LinearMap.comp_assoc]; rw [TensorProduct.map_comp]
 
@@ -122,7 +122,7 @@ lemma TensorProduct.map_map_comp_assoc_eq_assoc
 @[coassoc_simps← ]
 
 中文:
-引理 TensorProduct.map_map_comp_assoc_eq_assoc
+引理 张量积.map_map_comp_assoc_eq_assoc
   证明: by
   rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [TensorProduct.map_map_comp_assoc_eq]
 
@@ -147,7 +147,7 @@ lemma TensorProduct.map_map_comp_assoc_symm_eq_assoc
 @[coassoc_simps]
 
 中文:
-引理 TensorProduct.map_map_comp_assoc_symm_eq_assoc
+引理 张量积.map_map_comp_assoc_symm_eq_assoc
   证明: by
   rw [← LinearMap.comp_assoc]; rw [← LinearMap.comp_assoc]; rw [TensorProduct.map_map_comp_assoc_symm_eq]
 
@@ -1280,7 +1280,7 @@ lemma coassoc_left
 
 中文:
 引理 coassoc_left
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M')
+  条件: [余algebra R M] (f : M ->ₗ[R] M')
   证明: by
   simp_rw [← LinearMap.lTensor_def, ← coassoc, ← LinearMap.comp_assoc, LinearMap.lTensor_def,
     map_map_comp_assoc_eq]
@@ -1312,7 +1312,7 @@ lemma coassoc_left_assoc
 
 中文:
 引理 coassoc_left_assoc
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M') (g : N ->ₗ[R] M)
+  条件: [余algebra R M] (f : M ->ₗ[R] M') (g : N ->ₗ[R] M)
   证明: by
   simp only [← LinearMap.comp_assoc]
   congr 1
@@ -1344,7 +1344,7 @@ lemma coassoc_right
 
 中文:
 引理 coassoc_right
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M')
+  条件: [余algebra R M] (f : M ->ₗ[R] M')
   证明: by
   simp_rw [← LinearMap.rTensor_def, ← coassoc_symm, ← LinearMap.comp_assoc, LinearMap.rTensor_def,
     map_map_comp_assoc_symm_eq]
@@ -1374,7 +1374,7 @@ lemma coassoc_right_assoc
 
 中文:
 引理 coassoc_right_assoc
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M') (g : N ->ₗ[R] M)
+  条件: [余algebra R M] (f : M ->ₗ[R] M') (g : N ->ₗ[R] M)
   证明: by
   simp only [← LinearMap.comp_assoc]
   congr 1
@@ -1400,7 +1400,7 @@ lemma map_counit_comp_comul_left
 
 中文:
 引理 map_counit_comp_comul_left
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M')
+  条件: [余algebra R M] (f : M ->ₗ[R] M')
   证明: by
   rw [← LinearMap.lTensor_comp_rTensor]; rw [LinearMap.comp_assoc]; rw [Coalgebra.rTensor_counit_comp_comul]
   rfl
@@ -1423,7 +1423,7 @@ lemma map_counit_comp_comul_left_assoc
 
 中文:
 引理 map_counit_comp_comul_left_assoc
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M') (g : P ->ₗ[R] M)
+  条件: [余algebra R M] (f : M ->ₗ[R] M') (g : P ->ₗ[R] M)
   证明: by
   simp_rw [← LinearMap.comp_assoc, map_counit_comp_comul_left]
 
@@ -1445,7 +1445,7 @@ lemma map_counit_comp_comul_right
 
 中文:
 引理 map_counit_comp_comul_right
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M')
+  条件: [余algebra R M] (f : M ->ₗ[R] M')
   证明: by
   rw [← LinearMap.rTensor_comp_lTensor]; rw [LinearMap.comp_assoc]; rw [Coalgebra.lTensor_counit_comp_comul]
   rfl
@@ -1470,7 +1470,7 @@ lemma map_counit_comp_comul_right_assoc
 
 中文:
 引理 map_counit_comp_comul_right_assoc
-  条件: [Coalgebra R M] (f : M ->ₗ[R] M') (g : P ->ₗ[R] M)
+  条件: [余algebra R M] (f : M ->ₗ[R] M') (g : P ->ₗ[R] M)
   证明: by
   simp_rw [← LinearMap.comp_assoc, map_counit_comp_comul_right]
 
@@ -1500,7 +1500,7 @@ lemma assoc_comp_map_comm_comp_comul_comp_comul
 
 中文:
 引理 assoc_comp_map_comm_comp_comul_comp_comul
-  条件: [Coalgebra R M] (f : M ->ₗ[R] N)
+  条件: [余algebra R M] (f : M ->ₗ[R] N)
   证明: by
   rw [← symm_comp_map_assoc]; rw [← LinearMap.lTensor_def]; rw [← LinearMap.lTensor_def]; rw [← LinearMap.lTensor_def]; rw [← Coalgebra.coassoc]; rw [← f.comp_id]; rw [TensorProduct.map_comp]; rw [← LinearMap.rTensor_def]
   simp only [← LinearMap.comp_assoc]

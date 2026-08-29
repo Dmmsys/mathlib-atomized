@@ -54,7 +54,7 @@ theorem summable_of_summable_hasFDerivAt_of_isPreconnected
 
 中文:
 定理 summable_of_summable_hasFDerivAt_of_isPreconnected
-  结论: (hu : Summable u) (hs : IsOpen s)
+  结论: (hu : Summable u) (hs : 是开集 s)
   证明: by
   have := Classical.decEq α
   rw [summable_iff_cauchySeq_finset] at hf0 ⊢
@@ -89,7 +89,7 @@ theorem summable_of_summable_hasDerivAt_of_isPreconnected
 
 中文:
 定理 summable_of_summable_hasDerivAt_of_isPreconnected
-  结论: (hu : Summable u) (ht : IsOpen t)
+  结论: (hu : Summable u) (ht : 是开集 t)
   证明: by
   simp_rw [hasDerivAt_iff_hasFDerivAt] at hg
   refine summable_of_summable_hasFDerivAt_of_isPreconnected hu ht h't hg ?_ hy₀ hg0 hy
@@ -121,7 +121,7 @@ theorem hasFDerivAt_tsum_of_isPreconnected
 
 中文:
 定理 hasFDerivAt_tsum_of_isPreconnected
-  结论: (hu : Summable u) (hs : IsOpen s)
+  结论: (hu : Summable u) (hs : 是开集 s)
   证明: by
   have A :
     forall x : E, x in s -> Tendsto (fun t : Finset α => ∑ n in t, f n x) atTop (𝓝 (∑' n, f n x)) := by
@@ -160,7 +160,7 @@ theorem hasDerivAt_tsum_of_isPreconnected
 
 中文:
 定理 hasDerivAt_tsum_of_isPreconnected
-  结论: (hu : Summable u) (ht : IsOpen t)
+  结论: (hu : Summable u) (ht : 是开集 t)
   证明: by
   simp_rw [hasDerivAt_iff_hasFDerivAt] at hg ⊢
   convert! hasFDerivAt_tsum_of_isPreconnected hu ht h't hg ?_ hy₀ hg0 hy
@@ -250,7 +250,7 @@ theorem hasFDerivAt_tsum
 
 中文:
 定理 hasFDerivAt_tsum
-  结论: (hu : Summable u) (hf : 对任意 n x, HasFDerivAt (f n) (f' n x) x)
+  结论: (hu : Summable u) (hf : 对任意 n x, 在点处Fréchet可导 (f n) (f' n x) x)
   证明: by
   let : RCLike 𝕜 := IsRCLikeNormedField.rclike 𝕜
   let A : NormedSpace Real E := NormedSpace.restrictScalars Real 𝕜 _
@@ -279,7 +279,7 @@ theorem hasDerivAt_tsum
 
 中文:
 定理 hasDerivAt_tsum
-  结论: (hu : Summable u) (hg : 对任意 n y, HasDerivAt (g n) (g' n y) y)
+  结论: (hu : Summable u) (hg : 对任意 n y, 在点处可导 (g n) (g' n y) y)
   证明: by
   exact hasDerivAt_tsum_of_isPreconnected hu isOpen_univ isPreconnected_univ
     (fun n y _ => hg n y) (fun n y _ => hg' n y) (mem_univ _) hg0 (mem_univ _)
@@ -309,7 +309,7 @@ theorem differentiable_tsum
 
 中文:
 定理 differentiable_tsum
-  结论: (hu : Summable u) (hf : 对任意 n x, HasFDerivAt (f n) (f' n x) x)
+  结论: (hu : Summable u) (hf : 对任意 n x, 在点处Fréchet可导 (f n) (f' n x) x)
   证明: by
   by_cases! h : exists x₀, Summable fun n => f n x₀
   · rcases h with ⟨x₀, hf0⟩
@@ -344,7 +344,7 @@ theorem differentiable_tsum'
 
 中文:
 定理 differentiable_tsum'
-  结论: (hu : Summable u) (hg : 对任意 n y, HasDerivAt (g n) (g' n y) y)
+  结论: (hu : Summable u) (hg : 对任意 n y, 在点处可导 (g n) (g' n y) y)
   证明: by
   simp_rw [hasDerivAt_iff_hasFDerivAt] at hg
   refine differentiable_tsum hu hg ?_
@@ -368,7 +368,7 @@ theorem fderiv_tsum_apply
 
 中文:
 定理 fderiv_tsum_apply
-  结论: (hu : Summable u) (hf : 对任意 n, Differentiable 𝕜 (f n))
+  结论: (hu : Summable u) (hf : 对任意 n, 可微 𝕜 (f n))
   证明: (hasFDerivAt_tsum hu (fun n x => (hf n x).hasFDerivAt) hf' hf0 _).fderiv
 
 Depends on / 依赖: fderiv, hasFDerivAt, hasFDerivAt_tsum
@@ -388,7 +388,7 @@ theorem deriv_tsum_apply
 
 中文:
 定理 deriv_tsum_apply
-  结论: (hu : Summable u) (hg : 对任意 n, Differentiable 𝕜 (g n))
+  结论: (hu : Summable u) (hg : 对任意 n, 可微 𝕜 (g n))
   证明: (hasDerivAt_tsum hu (fun n y => (hg n y).hasDerivAt) hg' hg0 _).deriv
 
 Depends on / 依赖: hasDerivAt, hasDerivAt_tsum
@@ -410,7 +410,7 @@ theorem fderiv_tsum
 
 中文:
 定理 fderiv_tsum
-  结论: (hu : Summable u) (hf : 对任意 n, Differentiable 𝕜 (f n))
+  结论: (hu : Summable u) (hf : 对任意 n, 可微 𝕜 (f n))
   证明: by
   ext1 x
   exact fderiv_tsum_apply hu hf hf' hf0 x
@@ -435,7 +435,7 @@ theorem deriv_tsum
 
 中文:
 定理 deriv_tsum
-  结论: (hu : Summable u) (hg : 对任意 n, Differentiable 𝕜 (g n))
+  结论: (hu : Summable u) (hg : 对任意 n, 可微 𝕜 (g n))
   证明: by
   ext1 x
   exact deriv_tsum_apply hu hg hg' hg0 x
@@ -468,7 +468,7 @@ theorem iteratedFDeriv_tsum
 
 中文:
 定理 iteratedFDeriv_tsum
-  结论: (hf : 对任意 i, ContDiff 𝕜 N (f i))
+  结论: (hf : 对任意 i, 连续可微 𝕜 N (f i))
   证明: by
   induction k with
   | zero =>
@@ -516,7 +516,7 @@ theorem iteratedFDeriv_tsum_apply
 
 中文:
 定理 iteratedFDeriv_tsum_apply
-  结论: (hf : 对任意 i, ContDiff 𝕜 N (f i))
+  结论: (hf : 对任意 i, 连续可微 𝕜 N (f i))
   证明: by
   rw [iteratedFDeriv_tsum hf hv h'f hk]
 
@@ -549,7 +549,7 @@ theorem contDiff_tsum
 
 中文:
 定理 contDiff_tsum
-  结论: (hf : 对任意 i, ContDiff 𝕜 N (f i)) (hv : 对任意 k : 自然数, (k : 自然数∞) <= N -> Summable (v k))
+  结论: (hf : 对任意 i, 连续可微 𝕜 N (f i)) (hv : 对任意 k : 自然数, (k : 自然数∞) <= N -> Summable (v k))
   证明: by
   rw [contDiff_iff_continuous_differentiable]
   constructor
@@ -604,7 +604,7 @@ theorem contDiff_tsum_of_eventually
 
 中文:
 定理 contDiff_tsum_of_eventually
-  结论: (hf : 对任意 i, ContDiff 𝕜 N (f i))
+  结论: (hf : 对任意 i, 连续可微 𝕜 N (f i))
   证明: by
   refine contDiff_iff_forall_nat_le.2 fun m hm => ?_
   let t : Set α :=

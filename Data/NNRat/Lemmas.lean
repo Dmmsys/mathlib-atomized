@@ -37,7 +37,7 @@ lemma coe_indicator
 
 中文:
 引理 coe_indicator
-  条件: (s : Set α) (f : α -> Rat>=0) (a : α)
+  条件: (s : 集合 α) (f : α -> 有理数>=0) (a : α)
   证明: map_indicator coeHom _ _ _
 
 Depends on / 依赖: coeHom, map_indicator
@@ -69,7 +69,7 @@ lemma toNNRat_inv
 
 中文:
 引理 toNNRat_inv
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: toNNRat q⁻¹ = (toNNRat q)⁻¹
   证明: by
   obtain hq | hq := le_total q 0
@@ -148,7 +148,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {α : Rat>=0 -> Sort*} (h : 对任意 m n : 自然数, α (m / n)) (q : Rat>=0)
+  签名: {α : 有理数>=0 -> 类型层*} (h : 对任意 m n : 自然数, α (m / n)) (q : 有理数>=0)
   定义体: by
   rw [← num_div_den q]; apply h
 -/
@@ -167,7 +167,7 @@ theorem mul_num
 
 中文:
 定理 mul_num
-  条件: (q₁ q₂ : Rat>=0)
+  条件: (q₁ q₂ : 有理数>=0)
   证明: by
   zify
   convert! Rat.mul_num q₁ q₂ <;> norm_cast
@@ -191,7 +191,7 @@ theorem mul_den
 
 中文:
 定理 mul_den
-  条件: (q₁ q₂ : Rat>=0)
+  条件: (q₁ q₂ : 有理数>=0)
   证明: by
   convert! Rat.mul_den q₁ q₂
   norm_cast
@@ -215,7 +215,7 @@ theorem den_mul_den_eq_den_mul_gcd
 
 中文:
 定理 den_mul_den_eq_den_mul_gcd
-  条件: (q₁ q₂ : Rat>=0)
+  条件: (q₁ q₂ : 有理数>=0)
   证明: by
   convert! Rat.den_mul_den_eq_den_mul_gcd q₁ q₂
   norm_cast
@@ -239,7 +239,7 @@ theorem num_mul_num_eq_num_mul_gcd
 
 中文:
 定理 num_mul_num_eq_num_mul_gcd
-  条件: (q₁ q₂ : Rat>=0)
+  条件: (q₁ q₂ : 有理数>=0)
   证明: by
   zify
   convert! Rat.num_mul_num_eq_num_mul_gcd q₁ q₂ <;> norm_cast

@@ -68,8 +68,8 @@ class HopfAlgebraStruct
 
 中文:
 类 HopfAlgebraStruct
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A]
-  继承: Bialgebra R A
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
+  继承: 双代数 R A
   公理与运算 (1 个):
     - antipode((R)) : A ->ₗ[R] A
 -/
@@ -89,11 +89,11 @@ class HopfAlgebra
     - mul_antipode_lTensor_comul : LinearMap.mul' R A ∘ₗ antipode.lTensor A ∘ₗ comul = (Algebra.linearMap R A) ∘ₗ counit
 
 中文:
-类 HopfAlgebra
-  参数: (R : 类型u) (A : 类型v) [CommSemiring R] [Semiring A]
+类 Hopf代数
+  参数: (R : 类型u) (A : 类型v) [交换半环 R] [半环 A]
   公理与运算 (2 个):
-    - mul_antipode_rTensor_comul : LinearMap.mul' R A ∘ₗ antipode.rTensor A ∘ₗ comul = (Algebra.linearMap R A) ∘ₗ counit
-    - mul_antipode_lTensor_comul : LinearMap.mul' R A ∘ₗ antipode.lTensor A ∘ₗ comul = (Algebra.linearMap R A) ∘ₗ counit
+    - mul_antipode_rTensor_comul : 线性映射.mul' R A ∘ₗ antipode.rTensor A ∘ₗ comul = (代数.linearMap R A) ∘ₗ counit
+    - mul_antipode_lTensor_comul : 线性映射.mul' R A ∘ₗ antipode.lTensor A ∘ₗ comul = (代数.linearMap R A) ∘ₗ counit
 -/
 class HopfAlgebra (R : Type u) (A : Type v) [CommSemiring R] [Semiring A] extends
     HopfAlgebraStruct R A where
@@ -344,7 +344,7 @@ instance toHopfAlgebra
 
 中文:
 实例 toHopfAlgebra
-  签名: : HopfAlgebra R R where
+  签名: : Hopf代数 R R where
   定义体: .id
   mul_antipode_rTensor_comul := by ext; simp
   mul_antipode_lTensor_comul := by ext; simp
@@ -392,7 +392,7 @@ abbreviation ofConvInverse
 
 中文:
 缩写 ofConvInverse
-  签名: [CommSemiring R] [Semiring A] [Bialgebra R A]
+  签名: [交换半环 R] [半环 A] [双代数 R A]
   定义体: antipode
   mul_antipode_rTensor_comul := by simpa using! congr(($antipode_convMul_id).ofConv)
   mul_antipode_lTensor_comul := by simpa using! congr(($id_convMul_antipode).ofConv)
@@ -424,7 +424,7 @@ abbreviation ofAlgHom
 
 中文:
 缩写 ofAlgHom
-  签名: [CommSemiring R] [CommSemiring A] [Bialgebra R A]
+  签名: [交换半环 R] [交换半环 A] [双代数 R A]
   定义体: ofConvInverse antipode.toLinearMap
     (WithConv.ext <| by
       simpa [← Algebra.TensorProduct.lmul'_comp_map]

@@ -46,7 +46,7 @@ lemma exists_of_isFiltered
       exists (D : Type u) (_ : Sm
 
 中文:
-引理 exists_of_isFiltered
+引理 存在_of_isFiltered
   证明: by
   /- First, under the assumption `Category.{w}` (instead of `LocallySmall.{w}`),
   we get most of the conclusion but instead of `D : Type w`,
@@ -114,7 +114,7 @@ definition FilteredFinalModel
 
 中文:
 定义 FilteredFinalModel
-  签名: : Type w
+  签名: : 类型 w
   定义体: (exists_of_isFiltered.{w} C).choose
 
 Depends on / 依赖: exists_of_isFiltered
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (FilteredFinalModel.{w} C)
+  签名: 范畴 (FilteredFinalModel.{w} C)
   定义体: (exists_of_isFiltered.{w} C).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, exists_of_isFiltered
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsFiltered (FilteredFinalModel.{w} C)
+  签名: 是Filtered (FilteredFinalModel.{w} C)
   定义体: (exists_of_isFiltered.{w} C).choose_spec.choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose, exists_of_isFiltered
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromFilteredFinalModel.{w} C).Final
+  签名: (fromFilteredFinalModel.{w} C).终
   定义体: (exists_of_isFiltered.{w} C).choose_spec.choose_spec.choose_spec.choose_spec
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose_spec.choose_spec, exists_of_isFiltered
@@ -232,7 +232,7 @@ lemma exists_of_isCofiltered
   exact ⟨Dᵒᵖ, inferInstance, inferInstance, F.leftOp, inferInstance⟩
 
 中文:
-引理 exists_of_isCofiltered
+引理 存在_of_isCofiltered
   证明: by
   obtain ⟨D, _, _, F, _⟩ := FinallySmall.exists_of_isFiltered.{w} Cᵒᵖ
   exact ⟨Dᵒᵖ, inferInstance, inferInstance, F.leftOp, inferInstance⟩
@@ -254,7 +254,7 @@ definition CofilteredInitialModel
 
 中文:
 定义 CofilteredInitialModel
-  签名: : Type w
+  签名: : 类型 w
   定义体: (exists_of_isCofiltered.{w} C).choose
 
 Depends on / 依赖: exists_of_isCofiltered
@@ -271,7 +271,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CofilteredInitialModel.{w} C)
+  签名: 范畴 (CofilteredInitialModel.{w} C)
   定义体: (exists_of_isCofiltered.{w} C).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, exists_of_isCofiltered
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCofiltered (CofilteredInitialModel.{w} C)
+  签名: 是余filtered (CofilteredInitialModel.{w} C)
   定义体: (exists_of_isCofiltered.{w} C).choose_spec.choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose, exists_of_isCofiltered
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromCofilteredInitialModel.{w} C).Initial
+  签名: (fromCofilteredInitialModel.{w} C).初始
   定义体: (exists_of_isCofiltered.{w} C).choose_spec.choose_spec.choose_spec.choose_spec
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.choose_spec.choose_spec, exists_of_isCofiltered

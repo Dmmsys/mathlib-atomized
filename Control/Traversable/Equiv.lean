@@ -70,7 +70,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Functor t' where map
+  签名: : 函子 t' where map
   定义体: Equiv.map eqv
 -/
 protected def functor : Functor t' where map := Equiv.map eqv
@@ -90,7 +90,7 @@ theorem id_map
 中文:
 定理 id_map
   条件: {α : 类型u} (x : t' α)
-  结论: Equiv.map eqv id x = x
+  结论: 等价.map eqv id x = x
   证明: by
   simp [Equiv.map, id_map]
 -/
@@ -130,7 +130,7 @@ theorem lawfulFunctor
 
 中文:
 定理 lawfulFunctor
-  结论: @LawfulFunctor _ (Equiv.functor eqv)
+  结论: @Lawful函子 _ (等价.functor eqv)
   证明: -- Add the instance to the local context (since `Equiv.functor` is not an instance).
   -- Although it can be found by unification, Lean prefers to synthesize instances and
   -- then check that they are defeq to the instance found by unification.
@@ -162,7 +162,7 @@ theorem lawfulFunctor'
 
 中文:
 定理 lawfulFunctor'
-  结论: [F : Functor t']
+  结论: [F : 函子 t']
   证明: by
   have : F = Equiv.functor eqv := by
     cases F
@@ -238,7 +238,7 @@ definition traversable
 
 中文:
 定义 traversable
-  签名: : Traversable t' where
+  签名: : 可遍历 t' where
   定义体: Equiv.functor eqv
   traverse := Equiv.traverse eqv
 -/
@@ -274,7 +274,7 @@ theorem id_traverse
 中文:
 定理 id_traverse
   条件: (x : t' α)
-  结论: Equiv.traverse eqv (pure : α -> Id α) x = pure x
+  结论: 等价.traverse eqv (pure : α -> Id α) x = pure x
   证明: by
   rw [Equiv.traverse]; rw [id_traverse]; rw [map_pure]; rw [apply_symm_apply]
 -/
@@ -357,7 +357,7 @@ theorem isLawfulTraversable
 
 中文:
 定理 isLawfulTraversable
-  结论: @LawfulTraversable t' (Equiv.traversable eqv)
+  结论: @合法可遍历 t' (等价.traversable eqv)
   证明: let _inst := Equiv.traversable eqv
   { toLawfulFunctor := Equiv.lawfulFunctor eqv
     id_traverse := Equiv.id_traverse eqv
@@ -387,7 +387,7 @@ theorem isLawfulTraversable'
 
 中文:
 定理 isLawfulTraversable'
-  结论: [Traversable t']
+  结论: [可遍历 t']
   证明: Equiv.lawfulFunctor' eqv @h₀ @h₁
   id_traverse _ := by rw [h₂, Equiv.id_traverse]
   comp_traverse _ _ _ := by rw [h₂, Equiv.comp_traverse, h₂]; congr; rw [h₂]

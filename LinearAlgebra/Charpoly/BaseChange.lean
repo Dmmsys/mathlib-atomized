@@ -35,7 +35,7 @@ lemma LinearMap.charpoly_baseChange
  
 
 中文:
-引理 LinearMap.charpoly_baseChange
+引理 线性映射.charpoly_baseChange
   证明: by
   nontriviality A
   have := (algebraMap R A).domain_nontrivial
@@ -68,7 +68,7 @@ lemma LinearMap.det_eq_sign_charpoly_coeff
   rw [← LinearMap.det_toMatrix (Module.Free.chooseBasis R M)]; rw [Matrix.det_eq_sign_charpoly_coeff]; rw [← Module.finrank_eq_card_chooseBasisIndex]; rw [charpoly_def]
 
 中文:
-引理 LinearMap.det_eq_sign_charpoly_coeff
+引理 线性映射.det_eq_sign_charpoly_coeff
   证明: by
   nontriviality R
   rw [← LinearMap.det_toMatrix (Module.Free.chooseBasis R M)]; rw [Matrix.det_eq_sign_charpoly_coeff]; rw [← Module.finrank_eq_card_chooseBasisIndex]; rw [charpoly_def]
@@ -93,7 +93,7 @@ lemma LinearMap.det_baseChange
   simp
 
 中文:
-引理 LinearMap.det_baseChange
+引理 线性映射.det_baseChange
   证明: by
   nontriviality A
   have := (algebraMap R A).domain_nontrivial
@@ -120,7 +120,7 @@ lemma LinearEquiv.det_baseChange
   simp [LinearMap.det_baseChange]
 
 中文:
-引理 LinearEquiv.det_baseChange
+引理 线性等价.det_baseChange
   条件: (f : M ≃ₗ[R] M)
   证明: by
   ext

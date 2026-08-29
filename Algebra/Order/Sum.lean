@@ -33,7 +33,7 @@ lemma one_le_elim_iff
 
 中文:
 引理 one_le_elim_iff
-  结论: 1 <= Sum.elim v₁ v₂ ↔ 1 <= v₁ ∧ 1 <= v₂
+  结论: 1 <= 和.elim v₁ v₂ ↔ 1 <= v₁ ∧ 1 <= v₂
   证明: const_le_elim_iff
 
 @[to_additive]
@@ -54,7 +54,7 @@ lemma elim_le_one_iff
 
 中文:
 引理 elim_le_one_iff
-  结论: Sum.elim v₁ v₂ <= 1 ↔ v₁ <= 1 ∧ v₂ <= 1
+  结论: 和.elim v₁ v₂ <= 1 ↔ v₁ <= 1 ∧ v₂ <= 1
   证明: elim_le_const_iff
 
 Depends on / 依赖: elim_le_const_iff

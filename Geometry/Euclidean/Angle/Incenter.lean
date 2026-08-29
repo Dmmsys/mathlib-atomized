@@ -41,7 +41,7 @@ lemma ExcenterExists.angle_excenter_touchpoint_eq
 
 中文:
 引理 ExcenterExists.angle_excenter_touchpoint_eq
-  结论: {signs : Finset (Fin (n + 1))}
+  结论: {signs : 有限集 (有限集 (n + 1))}
   证明: (dist_orthogonalProjection_eq_iff_angle_eq hp₁ hp₂).1 (h.dist_excenter_eq_dist_excenter i₁ i₂)
 
 Depends on / 依赖: dist_excenter_eq_dist_excenter, dist_orthogonalProjection_eq_iff_angle_eq, h.dist_excenter_eq_dist_excenter
@@ -65,7 +65,7 @@ lemma angle_incenter_touchpoint_eq
 
 中文:
 引理 angle_incenter_touchpoint_eq
-  结论: {p : P} {i₁ i₂ : Fin (n + 1)}
+  结论: {p : P} {i₁ i₂ : 有限集 (n + 1)}
   证明: s.excenterExists_empty.angle_excenter_touchpoint_eq hp₁ hp₂
 
 Depends on / 依赖: angle_excenter_touchpoint_eq, excenterExists_empty, s.excenterExists_empty.angle_excenter_touchpoint_eq
@@ -94,7 +94,7 @@ lemma exists_excenterExists_and_eq_excenter_of_forall_angle_orthogonalProjection
   exact ((dist_orthogonalProjection_eq_iff_angle_eq hp'₁ hp'₂).
 
 中文:
-引理 exists_excenterExists_and_eq_excenter_of_forall_angle_orthogonalProjectionSpan_eq
+引理 存在_excenterExists_and_eq_excenter_of_对任意_angle_orthogonalProjectionSpan_eq
   结论: {p : P}
   证明: by
   rw [← s.exists_forall_dist_eq_iff_exists_excenterExists_and_eq_excenter hp]
@@ -196,7 +196,7 @@ lemma two_zsmul_oangle_excenter_eq
 
 中文:
 引理 two_zsmul_oangle_excenter_eq
-  条件: (signs : Finset (Fin 3))
+  条件: (signs : 有限集 (有限集 3))
   证明: by
   rw [← dist_orthogonalProjectionSpan_faceOpposite_eq_iff_two_zsmul_oangle_eq h₁₂ h₁₃ h₂₃]; rw [← touchpoint]; rw [← touchpoint]; rw [(t.excenterExists signs).dist_excenter_eq_dist_excenter]
 
@@ -371,7 +371,7 @@ lemma eq_incenter_or_eq_excenter_singleton_of_oangle_eq
 
 中文:
 引理 eq_incenter_or_eq_excenter_singleton_of_oangle_eq
-  结论: {signs : Finset (Fin 3)}
+  结论: {signs : 有限集 (有限集 3)}
   证明: by
   have hs := t.excenter_eq_incenter_or_excenter_singleton_of_ne signs h₁₂ h₁₃ h₂₃
   rcases hs with hs | hs | hs | hs
@@ -414,7 +414,7 @@ lemma eq_excenter_singleton_of_oangle_eq_add_pi
 
 中文:
 引理 eq_excenter_singleton_of_oangle_eq_add_pi
-  结论: {signs : Finset (Fin 3)}
+  结论: {signs : 有限集 (有限集 3)}
   证明: by
   have hs := t.excenter_eq_incenter_or_excenter_singleton_of_ne signs h₁₂ h₁₃ h₂₃
   rcases hs with hs | hs | hs | hs

@@ -66,8 +66,8 @@ definition IsPrincipal
 alias Principal := IsPrincipal
 
 中文:
-定义 IsPrincipal
-  签名: (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal)
+定义 是Principal
+  签名: (op : 序数 -> 序数 -> 序数) (o : 序数)
   定义体: forall ⦃a b⦄, a < o -> b < o -> op a b < o
 
 @[deprecated (since := "2026-03-17")]
@@ -93,7 +93,7 @@ alias principal_swap_iff := isPrincipal_swap_iff
 
 中文:
 定理 isPrincipal_swap_iff
-  结论: IsPrincipal (Function.swap op) o ↔ IsPrincipal op o
+  结论: 是Principal (函数.swap op) o ↔ 是Principal op o
   证明: by
   constructor <;> exact fun h a b ha hb => h hb ha
 
@@ -120,7 +120,7 @@ alias not_principal_iff := not_isPrincipal_iff
 
 中文:
 定理 not_isPrincipal_iff
-  结论: ¬ IsPrincipal op o ↔ 存在 a < o, 存在 b < o, o <= op a b
+  结论: ¬ 是Principal op o ↔ 存在 a < o, 存在 b < o, o <= op a b
   证明: by
   simp [IsPrincipal]
 
@@ -218,7 +218,7 @@ alias principal_zero := isPrincipal_zero
 
 中文:
 引理 isPrincipal_zero
-  结论: IsPrincipal op 0
+  结论: 是Principal op 0
   证明: by simp [IsPrincipal]
 
 @[deprecated (since := "2026-03-17")]
@@ -242,7 +242,7 @@ alias principal_one_iff := isPrincipal_one_iff
 
 中文:
 定理 isPrincipal_one_iff
-  结论: IsPrincipal op 1 ↔ op 0 0 = 0
+  结论: 是Principal op 1 ↔ op 0 0 = 0
   证明: by simp [IsPrincipal]
 
 @[deprecated (since := "2026-03-17")]
@@ -270,8 +270,8 @@ theorem IsPrincipal.iterate_lt
 alias Principal.iterate_lt := IsPrincipal.iterate_lt
 
 中文:
-定理 IsPrincipal.iterate_lt
-  条件: (hao : a < o) (ho : IsPrincipal op o) (n : 自然数)
+定理 是Principal.iterate_lt
+  条件: (hao : a < o) (ho : 是Principal op o) (n : 自然数)
   证明: by
   induction n with
   | zero => rwa [Function.iterate_zero]
@@ -311,7 +311,7 @@ alias op_eq_self_of_principal := op_eq_self_of_isPrincipal
 
 中文:
 定理 op_eq_self_of_isPrincipal
-  结论: (hao : a < o) (H : IsNormal (op a))
+  结论: (hao : a < o) (H : 是正规 (op a))
   证明: by
   apply H.strictMono.le_apply.antisymm'
   rw [H.apply_of_isSuccLimit ho']; rw [Ordinal.iSup_le_iff]
@@ -345,7 +345,7 @@ alias nfp_le_of_principal := nfp_le_of_isPrincipal
 
 中文:
 定理 nfp_le_of_isPrincipal
-  条件: (hao : a < o) (ho : IsPrincipal op o)
+  条件: (hao : a < o) (ho : 是Principal op o)
   结论: nfp (op a) a <= o
   证明: nfp_le fun n => (ho.iterate_lt hao n).le
 
@@ -377,8 +377,8 @@ theorem IsPrincipal.sSup
    
 
 中文:
-定理 IsPrincipal.sSup
-  条件: {s : Set Ordinal} (H : 对任意 x in s, IsPrincipal op x)
+定理 是Principal.sSup
+  条件: {s : 集合 序数} (H : 对任意 x in s, 是Principal op x)
   证明: by
   have : IsPrincipal op (sSup ∅) := by simp
   by_cases hs : BddAbove s
@@ -416,8 +416,8 @@ theorem IsPrincipal.iSup
 protected alias Principal.iSup := IsPrincipal.iSup
 
 中文:
-定理 IsPrincipal.iSup
-  条件: {ι} {f : ι -> Ordinal} (H : 对任意 i, IsPrincipal op (f i))
+定理 是Principal.iSup
+  条件: {ι} {f : ι -> 序数} (H : 对任意 i, 是Principal op (f i))
   证明: IsPrincipal.sSup (by simpa)
 
 @[deprecated (since := "2026-03-17")]
@@ -450,7 +450,7 @@ theorem isPrincipal_nfp_iSup
 
 中文:
 定理 isPrincipal_nfp_iSup
-  条件: (op : Ordinal -> Ordinal -> Ordinal) (o : Ordinal)
+  条件: (op : 序数 -> 序数 -> 序数) (o : 序数)
   证明: by
   intro a b ha hb
   rw [lt_nfp_iff] at *
@@ -500,7 +500,7 @@ alias not_bddAbove_principal := not_bdd
 
 中文:
 定理 not_bddAbove_setOfPred_isPrincipal
-  条件: (op : Ordinal -> Ordinal -> Ordinal)
+  条件: (op : 序数 -> 序数 -> 序数)
   证明: by
   rintro ⟨a, ha⟩
   exact ((le_nfp _ _).trans (ha (isPrincipal_nfp_iSup op (succ a)))).not_gt (lt_succ a)
@@ -536,7 +536,7 @@ theorem isPrincipal_add_iff_add_self_lt
 
 中文:
 定理 isPrincipal_add_iff_add_self_lt
-  结论: IsPrincipal (· + ·) a ↔ 对任意 b < a, b + b < a
+  结论: 是Principal (· + ·) a ↔ 对任意 b < a, b + b < a
   证明: isPrincipal_iff_of_monotone
     (fun x _ _ h => add_le_add_right h x) (fun x _ _ h => add_le_add_left h x)
 
@@ -560,8 +560,8 @@ theorem IsPrincipal.mul_natCast_lt
     exact ho h ha
 
 中文:
-定理 IsPrincipal.mul_natCast_lt
-  条件: (ho : IsPrincipal (· + ·) o) (ha : a < o) (n : 自然数)
+定理 是Principal.mul_natCast_lt
+  条件: (ho : 是Principal (· + ·) o) (ha : a < o) (n : 自然数)
   证明: by
   induction n with
   | zero => simpa using ha.pos
@@ -592,7 +592,7 @@ alias principal_add_one := isPrincipal_add_one
 
 中文:
 定理 isPrincipal_add_one
-  结论: IsPrincipal (· + ·) 1
+  结论: 是Principal (· + ·) 1
   证明: by simp
 
 @[deprecated (since := "2026-03-17")]
@@ -621,7 +621,7 @@ alias principal_add_of_le_one := isPrincipal_add_of_le_one
 中文:
 定理 isPrincipal_add_of_le_one
   条件: (ho : o <= 1)
-  结论: IsPrincipal (· + ·) o
+  结论: 是Principal (· + ·) o
   证明: by
   rcases le_one_iff.1 ho with (rfl | rfl)
   · exact isPrincipal_zero
@@ -655,7 +655,7 @@ alias isSuccLimit_of_principal_add := isSuccLimit_of_isPrincipal_add
 
 中文:
 定理 isSuccLimit_of_isPrincipal_add
-  条件: (ho₁ : 1 < o) (ho : IsPrincipal (· + ·) o)
+  条件: (ho₁ : 1 < o) (ho : 是Principal (· + ·) o)
   证明: by
   rw [isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_lt]
   exact ⟨ho₁.ne_bot, fun _ ha => ho ha ho₁⟩
@@ -690,7 +690,7 @@ theorem isPrincipal_add_iff_add_left_eq_self
 
 中文:
 定理 isPrincipal_add_iff_add_left_eq_self
-  结论: IsPrincipal (· + ·) o ↔ 对任意 a < o, a + o = o
+  结论: 是Principal (· + ·) o ↔ 对任意 a < o, a + o = o
   证明: by
   refine ⟨fun ho a hao => ?_, fun h a b hao hbo => ?_⟩
   · rcases lt_or_ge 1 o with ho₁ | ho₁
@@ -724,8 +724,8 @@ theorem IsPrincipal.add_eq_right
   proof: isPrincipal_add_iff_add_left_eq_self.1 ho a ha
 
 中文:
-定理 IsPrincipal.add_eq_right
-  条件: (ho : IsPrincipal (· + ·) o) (ha : a < o)
+定理 是Principal.add_eq_right
+  条件: (ho : 是Principal (· + ·) o) (ha : a < o)
   结论: a + o = o
   证明: isPrincipal_add_iff_add_left_eq_self.1 ho a ha
 
@@ -744,8 +744,8 @@ theorem IsPrincipal.add_eq_right_of_le
   rw [← Ordinal.add_sub_cancel_of_le hbc]; rw [← add_assoc]; rw [hb.add_eq_right hab]; rw [Ordinal.add_sub_cancel_of_le hbc]
 
 中文:
-定理 IsPrincipal.add_eq_right_of_le
-  结论: (hb : IsPrincipal (· + ·) b)
+定理 是Principal.add_eq_right_of_le
+  结论: (hb : 是Principal (· + ·) b)
   证明: by
   rw [← Ordinal.add_sub_cancel_of_le hbc]; rw [← add_assoc]; rw [hb.add_eq_right hab]; rw [Ordinal.add_sub_cancel_of_le hbc]
 
@@ -773,8 +773,8 @@ theorem exists_lt_add_of_not_isPrincipal_add
 alias exists_lt_add_of_not_prin
 
 中文:
-定理 exists_lt_add_of_not_isPrincipal_add
-  条件: (ha : ¬ IsPrincipal (· + ·) a)
+定理 存在_lt_add_of_not_isPrincipal_add
+  条件: (ha : ¬ 是Principal (· + ·) a)
   证明: by
   rw [not_isPrincipal_iff] at ha
   rcases ha with ⟨b, hb, c, hc, H⟩
@@ -816,7 +816,7 @@ alias principal_add_iff_add_lt_ne_self := isPrincipal_add_iff_add_lt_ne_self
 
 中文:
 定理 isPrincipal_add_iff_add_lt_ne_self
-  结论: IsPrincipal (· + ·) a ↔ 对任意 b < a, 对任意 c < a, b + c != a
+  结论: 是Principal (· + ·) a ↔ 对任意 b < a, 对任意 c < a, b + c != a
   证明: ⟨fun ha _ hb _ hc => (ha hb hc).ne, fun H => by
     by_contra ha
     rcases exists_lt_add_of_not_isPrincipal_add ha with ⟨b, hb, c, hc, rfl⟩
@@ -849,7 +849,7 @@ alias principal_add_omega0 := isPrincipal_add_omega0
 
 中文:
 定理 isPrincipal_add_omega0
-  结论: IsPrincipal (· + ·) ω
+  结论: 是Principal (· + ·) ω
   证明: isPrincipal_add_iff_add_left_eq_self.2 fun _ => add_omega0
 
 @[deprecated (since := "2026-03-17")]
@@ -902,8 +902,8 @@ theorem isPrincipal_add_omega0_opow
 
 中文:
 定理 isPrincipal_add_omega0_opow
-  条件: (o : Ordinal)
-  结论: IsPrincipal (· + ·) (ω ^ o)
+  条件: (o : 序数)
+  结论: 是Principal (· + ·) (ω ^ o)
   证明: by
   obtain rfl | ha' := eq_or_ne o 0
   · rw [opow_zero, isPrincipal_one_iff, add_zero]
@@ -1066,7 +1066,7 @@ alia
 
 中文:
 定理 isPrincipal_add_opow_of_isPrincipal_add
-  条件: {a} (ha : IsPrincipal (· + ·) a) (b : Ordinal)
+  条件: {a} (ha : 是Principal (· + ·) a) (b : 序数)
   证明: by
   rcases isPrincipal_add_iff_zero_or_omega0_opow.1 ha with (rfl | ⟨c, rfl⟩)
   · rcases eq_or_ne b 0 with (rfl | hb)
@@ -1114,7 +1114,7 @@ theorem isPrincipal_add_mul_of_isPrincipal_add
 
 中文:
 定理 isPrincipal_add_mul_of_isPrincipal_add
-  结论: (a : Ordinal.{u}) {b : Ordinal.{u}} (hb₁ : b != 1)
+  结论: (a : 序数.{u}) {b : 序数.{u}} (hb₁ : b != 1)
   证明: by
   rcases eq_zero_or_pos a with (rfl | _)
   · rw [zero_mul]
@@ -1164,7 +1164,7 @@ alias principal_mul_one := isPrincipal_mul_one
 
 中文:
 定理 isPrincipal_mul_one
-  结论: IsPrincipal (· * ·) 1
+  结论: 是Principal (· * ·) 1
   证明: by simp
 
 @[deprecated (since := "2026-03-17")]
@@ -1191,7 +1191,7 @@ alias principal_mul_two := isPrincipal_mul_two
 
 中文:
 定理 isPrincipal_mul_two
-  结论: IsPrincipal (· * ·) 2
+  结论: 是Principal (· * ·) 2
   证明: by
   intro a b ha hb
   rw [lt_two_iff] at *
@@ -1227,7 +1227,7 @@ alias principal_mul_of_le_two := isPrincipal_mul_of_le_two
 中文:
 定理 isPrincipal_mul_of_le_two
   条件: (ho : o <= 2)
-  结论: IsPrincipal (· * ·) o
+  结论: 是Principal (· * ·) o
   证明: by
   obtain rfl | rfl | rfl := le_two_iff.1 ho
   exacts [isPrincipal_zero, isPrincipal_mul_one, isPrincipal_mul_two]
@@ -1261,7 +1261,7 @@ alias principal_add_of_principal_mul := isPrincipal_add_of_isPrinc
 
 中文:
 定理 isPrincipal_add_of_isPrincipal_mul
-  条件: (ho : IsPrincipal (· * ·) o) (ho₂ : o != 2)
+  条件: (ho : 是Principal (· * ·) o) (ho₂ : o != 2)
   证明: by
   rcases lt_or_gt_of_ne ho₂ with ho₁ | ho₂
 · exact isPrincipal_add_of_le_one lt_two_iff.mp ho₁
@@ -1298,8 +1298,8 @@ alias isSuccLimit_of_principal_mul := isSuccLimit_of_isPrincipal_mul
 
 中文:
 定理 isSuccLimit_of_isPrincipal_mul
-  条件: (ho₂ : 2 < o) (ho : IsPrincipal (· * ·) o)
-  结论: IsSuccLimit o
+  条件: (ho₂ : 2 < o) (ho : 是Principal (· * ·) o)
+  结论: 是SuccLimit o
   证明: isSuccLimit_of_isPrincipal_add (one_lt_two.trans ho₂)
     (isPrincipal_add_of_isPrincipal_mul ho (ne_of_gt ho₂))
 
@@ -1381,7 +1381,7 @@ alias principal_mul_omega0 := isPrincipal_mul_omega0
 
 中文:
 定理 isPrincipal_mul_omega0
-  结论: IsPrincipal (· * ·) ω
+  结论: 是Principal (· * ·) ω
   证明: fun a b ha hb =>
   match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by
@@ -1545,8 +1545,8 @@ alias principal_mul_omega0_opow_opow := isPrincipal_mul_omega0_opow_opow
 
 中文:
 定理 isPrincipal_mul_omega0_opow_opow
-  条件: (o : Ordinal)
-  结论: IsPrincipal (· * ·) (ω ^ ω ^ o)
+  条件: (o : 序数)
+  结论: 是Principal (· * ·) (ω ^ ω ^ o)
   证明: isPrincipal_mul_iff_mul_left_eq.2 fun _ => mul_omega0_opow_opow
 
 @[deprecated (since := "2026-03-17")]
@@ -1577,7 +1577,7 @@ alias principal_add_of_principal_mul_opow := isPrincipal_add_of_isPrincipal_mul_
 
 中文:
 定理 isPrincipal_add_of_isPrincipal_mul_opow
-  条件: (hb : 1 < b) (ho : IsPrincipal (· * ·) (b ^ o))
+  条件: (hb : 1 < b) (ho : 是Principal (· * ·) (b ^ o))
   证明: by
   intro x y hx hy
   have := ho ((opow_lt_opow_iff_right hb).2 hx) ((opow_lt_opow_iff_right hb).2 hy)
@@ -1677,7 +1677,7 @@ theorem mul_eq_opow_log_succ
 
 中文:
 定理 mul_eq_opow_log_succ
-  条件: (ha : a != 0) (hb : IsPrincipal (· * ·) b) (hb₂ : 2 < b)
+  条件: (ha : a != 0) (hb : 是Principal (· * ·) b) (hb₂ : 2 < b)
   证明: by
   apply le_antisymm
   · have hbl := isSuccLimit_of_isPrincipal_mul hb₂ hb
@@ -1720,7 +1720,7 @@ alias principal_opow_omega0 := isPrincipal_opow_omega0
 
 中文:
 定理 isPrincipal_opow_omega0
-  结论: IsPrincipal (· ^ ·) ω
+  结论: 是Principal (· ^ ·) ω
   证明: fun a b ha hb =>
   match a, b, lt_omega0.1 ha, lt_omega0.1 hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by simp [← natCast_pow]

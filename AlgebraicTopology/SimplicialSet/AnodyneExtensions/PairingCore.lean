@@ -57,7 +57,7 @@ structure PairingCore
     - ι : 类型v
     - dim((s : ι)) : 自然数
     - simplex((s : ι)) : X _⦋dim s + 1⦌
-    - index((s : ι)) : Fin (dim s + 2)
+    - index((s : ι)) : 有限集 (dim s + 2)
     - nonDegenerate₁((s : ι)) : simplex s in X.nonDegenerate _
     - nonDegenerate₂((s : ι)) : X.δ (index s) (simplex s) in X.nonDegenerate _
     - notMem₁((s : ι)) : simplex s ∉ A.obj _
@@ -106,7 +106,7 @@ definition Pairing.pairingCore
 
 中文:
 定义 Pairing.pairingCore
-  签名: (P : A.Pairing) [P.Is命题er]
+  签名: (P : A.Pairing) [P.是真]
   定义体: P.II
   dim s := s.val.dim
   simplex s := ((P.p s).val.cast (P.isUniquelyCodimOneFace s).dim_eq).simplex
@@ -208,7 +208,7 @@ lemma injective_type₁
 
 中文:
 引理 injective_type₁
-  结论: Function.Injective h.type₁
+  结论: 函数.单射 h.type₁
   证明: fun _ _ hst => h.injective_type₁' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
 
 Depends on / 依赖: SSet.N.ext_iff, Subcomplex, Subcomplex.N.ext_iff, ext_iff, h.injective_type
@@ -226,7 +226,7 @@ lemma injective_type₂
 
 中文:
 引理 injective_type₂
-  结论: Function.Injective h.type₂
+  结论: 函数.单射 h.type₂
   证明: fun s t hst => h.injective_type₂' (by rwa [Subcomplex.N.ext_iff, SSet.N.ext_iff] at hst)
 
 Depends on / 依赖: SSet.N.ext_iff, Subcomplex, Subcomplex.N.ext_iff, ext_iff, h.injective_type
@@ -293,7 +293,7 @@ definition I
 
 中文:
 定义 I
-  签名: : Set A.N
+  签名: : 集合 A.N
   定义体: Set.range h.type₁
 
 Depends on / 依赖: Set.range, h.type
@@ -310,7 +310,7 @@ definition II
 
 中文:
 定义 II
-  签名: : Set A.N
+  签名: : 集合 A.N
   定义体: Set.range h.type₂
 
 Depends on / 依赖: Set.range, h.type
@@ -488,7 +488,7 @@ class IsProper
     - isUniquelyCodimOneFace((s : h.ι)) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS
 
 中文:
-类 IsProper
+类 是真
   参数: : 命题 where
   公理与运算 (1 个):
     - isUniquelyCodimOneFace((s : h.ι)) : S.IsUniquelyCodimOneFace (h.type₂ s).toS (h.type₁ s).toS
@@ -507,7 +507,7 @@ lemma isUniquelyCodimOneFace
 
 中文:
 引理 isUniquelyCodimOneFace
-  条件: [h.Is命题er] (s : h.ι)
+  条件: [h.是真] (s : h.ι)
   证明: IsProper.isUniquelyCodimOneFace _
 
 Depends on / 依赖: IsProper, IsProper.isUniquelyCodimOneFace, isUniquelyCodimOneFace
@@ -528,8 +528,8 @@ instance [X.Nonsingular]
           (h.nonDegenerate₁ s) _ _ (hi.trans hj.symm)))
 
 中文:
-实例 [X.Nonsingular]
-  签名: : h.Is命题er where
+实例 [X.非奇异]
+  签名: : h.是真 where
   定义体: (S.IsUniquelyCodimOneFace.iff _ _).2
       (existsUnique_of_exists_of_unique ⟨_, rfl⟩
         (fun _ _ hi hj => Nonsingular.δ_injective _
@@ -557,8 +557,8 @@ instance [h.IsProper]
     simpa using h.isUniquelyCodimOneFace s
 
 中文:
-实例 [h.IsProper]
-  签名: : h.pairing.Is命题er where
+实例 [h.是真]
+  签名: : h.pairing.是真 where
   定义体: by
     obtain ⟨s, rfl⟩ := h.equivII.surjective x
     simpa using h.isUniquelyCodimOneFace s
@@ -606,7 +606,7 @@ lemma isUniquelyCodimOneFace_index
 
 中文:
 引理 isUniquelyCodimOneFace_index
-  条件: [h.Is命题er] (s : h.ι)
+  条件: [h.是真] (s : h.ι)
   证明: by
   symm
   simp [← (h.isUniquelyCodimOneFace s).δ_eq_iff]
@@ -651,11 +651,11 @@ class IsInner
     - ne_last((s : h.ι)) : h.index s != Fin.last _
 
 中文:
-类 IsInner
+类 是内积
   参数: where
   公理与运算 (2 个):
     - ne_zero((s : h.ι)) : h.index s != 0
-    - ne_last((s : h.ι)) : h.index s != Fin.last _
+    - ne_last((s : h.ι)) : h.index s != 有限集.last _
 -/
 class IsInner where
   ne_zero (s : h.ι) : h.index s != 0
@@ -679,8 +679,8 @@ instance [h.IsInner]
     simpa using IsInner.ne_last s
 
 中文:
-实例 [h.IsInner]
-  签名: [h.Is命题er]
+实例 [h.是内积]
+  签名: [h.是真]
   定义体: by
     obtain ⟨s, rfl⟩ := h.equivII.surjective x
     rintro _ rfl
@@ -754,11 +754,11 @@ class IsRegular
     - wf((h)) : WellFounded h.AncestralRel
 
 中文:
-类 IsRegular
+类 是正则
   参数: (h : A.PairingCore)
-  继承: h.IsProper
+  继承: h.是真
   公理与运算 (1 个):
-    - wf((h)) : WellFounded h.AncestralRel
+    - wf((h)) : 良基 h.AncestralRel
 -/
 class IsRegular (h : A.PairingCore) extends h.IsProper where
   wf (h) : WellFounded h.AncestralRel
@@ -777,8 +777,8 @@ instance [h.IsRegular]
       ⟨fun n => h.equivII.symm (f n), fun n => by simpa [ancestralRel_iff] using hf n⟩⟩
 
 中文:
-实例 [h.IsRegular]
-  签名: : h.pairing.IsRegular where
+实例 [h.是正则]
+  签名: : h.pairing.是正则 where
   定义体: by
     have := IsRegular.wf h
     rw [wellFounded_iff_isEmpty_descending_chain] at this ⊢

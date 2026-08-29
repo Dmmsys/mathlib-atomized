@@ -30,7 +30,7 @@ definition Locale
   body: Frmᵒᵖ deriving LargeCategory
 
 中文:
-定义 Locale
+定义 景
   定义体: Frmᵒᵖ deriving LargeCategory
 
 Depends on / 依赖: LargeCategory, deriving
@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort Locale 类型
+  签名: CoeSort 景 类型
   定义体: ⟨fun X => X.unop⟩
 
 Depends on / 依赖: X.unop
@@ -73,7 +73,7 @@ definition of
 
 中文:
 定义 of
-  签名: (α : 类型) [Frame α]
+  签名: (α : 类型) [框架 α]
   定义体: op Frm.of α
 
 @[simp]
@@ -95,7 +95,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [Frame α]
+  条件: (α : 类型) [框架 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Locale
+  签名: 可居 景
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited Locale :=
@@ -133,7 +133,7 @@ definition topToLocale
 
 中文:
 定义 topToLocale
-  签名: : TopCat ⥤ Locale
+  签名: : 顶元素范畴 ⥤ 景
   定义体: topCatOpToFrm.rightOp
 
 Depends on / 依赖: rightOp, topCatOpToFrm, topCatOpToFrm.rightOp
@@ -155,7 +155,7 @@ instance CompHausToLocale.faithful
 
 中文:
 实例 CompHausToLocale.faithful
-  签名: : (compHausToTop ⋙ topToLocale.{u}).Faithful
+  签名: : (compHausToTop ⋙ topToLocale.{u}).忠实
   定义体: ⟨fun h => by
     dsimp at h
     exact ConcreteCategory.ext (Opens.comap_injective (congr_arg Frm.Hom.hom

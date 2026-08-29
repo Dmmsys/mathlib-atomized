@@ -45,7 +45,7 @@ definition createsLimitFullSubcategoryInclusion'
 
 中文:
 定义 createsLimitFullSubcategoryInclusion'
-  签名: (F : J ⥤ P.FullSubcategory)
+  签名: (F : J ⥤ P.满子范畴)
   定义体: createsLimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, createsLimitOfFullyFaithfulOfIso
@@ -68,7 +68,7 @@ definition createsLimitFullSubcategoryInclusion
 
 中文:
 定义 createsLimitFullSubcategoryInclusion
-  签名: (F : J ⥤ P.FullSubcategory)
+  签名: (F : J ⥤ P.满子范畴)
   定义体: createsLimitFullSubcategoryInclusion' F (limit.isLimit _) h
 
 Depends on / 依赖: createsLimitFullSubcategoryInclusion, isLimit, limit.isLimit
@@ -91,7 +91,7 @@ definition createsColimitFullSubcategoryInclusion'
 
 中文:
 定义 createsColimitFullSubcategoryInclusion'
-  签名: (F : J ⥤ P.FullSubcategory)
+  签名: (F : J ⥤ P.满子范畴)
   定义体: createsColimitOfFullyFaithfulOfIso' hc ⟨_, h⟩ (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, createsColimitOfFullyFaithfulOfIso
@@ -114,7 +114,7 @@ definition createsColimitFullSubcategoryInclusion
 
 中文:
 定义 createsColimitFullSubcategoryInclusion
-  签名: (F : J ⥤ P.FullSubcategory)
+  签名: (F : J ⥤ P.满子范畴)
   定义体: createsColimitFullSubcategoryInclusion' F (colimit.isColimit _) h
 
 Depends on / 依赖: colimit, colimit.isColimit, createsColimitFullSubcategoryInclusion, isColimit
@@ -139,7 +139,7 @@ definition createsLimitFullSubcategoryInclusionOfClosed
 
 中文:
 定义 createsLimitFullSubcategoryInclusionOfClosed
-  签名: [P.IsClosedUnderLimitsOfShape J]
+  签名: [P.是ClosedUnderLimitsOfShape J]
   定义体: createsLimitFullSubcategoryInclusion F (P.prop_limit _ fun j => (F.obj j).property)
 
 Depends on / 依赖: F.obj, P.prop_limit, createsLimitFullSubcategoryInclusion, prop_limit, property
@@ -159,7 +159,7 @@ instance createsLimitsOfShapeFullSubcategoryInclusion
 
 中文:
 实例 createsLimitsOfShapeFullSubcategoryInclusion
-  签名: [P.IsClosedUnderLimitsOfShape J]
+  签名: [P.是ClosedUnderLimitsOfShape J]
   定义体: @fun F => createsLimitFullSubcategoryInclusionOfClosed J P F
 
 Depends on / 依赖: createsLimitFullSubcategoryInclusionOfClosed
@@ -180,7 +180,7 @@ theorem hasLimit_of_closedUnderLimits
 
 中文:
 定理 hasLimit_of_closedUnderLimits
-  结论: [P.IsClosedUnderLimitsOfShape J]
+  结论: [P.是ClosedUnderLimitsOfShape J]
   证明: have : CreatesLimit F P.ι :=
     createsLimitFullSubcategoryInclusionOfClosed J P F
   hasLimit_of_created F P.ι
@@ -203,7 +203,7 @@ instance hasLimitsOfShape_of_closedUnderLimits
 
 中文:
 实例 hasLimitsOfShape_of_closedUnderLimits
-  签名: [P.IsClosedUnderLimitsOfShape J]
+  签名: [P.是ClosedUnderLimitsOfShape J]
   定义体: { has_limit := fun F => hasLimit_of_closedUnderLimits J P F }
 
 Depends on / 依赖: hasLimit_of_closedUnderLimits, has_limit
@@ -224,7 +224,7 @@ definition createsColimitFullSubcategoryInclusionOfClosed
 
 中文:
 定义 createsColimitFullSubcategoryInclusionOfClosed
-  签名: [P.IsClosedUnderColimitsOfShape J]
+  签名: [P.是ClosedUnderColimitsOfShape J]
   定义体: createsColimitFullSubcategoryInclusion F (P.prop_colimit _ fun j => (F.obj j).property)
 
 Depends on / 依赖: F.obj, P.prop_colimit, createsColimitFullSubcategoryInclusion, prop_colimit, property
@@ -244,7 +244,7 @@ instance createsColimitsOfShapeFullSubcategoryInclusion
 
 中文:
 实例 createsColimitsOfShapeFullSubcategoryInclusion
-  签名: [P.IsClosedUnderColimitsOfShape J]
+  签名: [P.是ClosedUnderColimitsOfShape J]
   定义体: @fun F => createsColimitFullSubcategoryInclusionOfClosed J P F
 
 Depends on / 依赖: createsColimitFullSubcategoryInclusionOfClosed
@@ -265,7 +265,7 @@ theorem hasColimit_of_closedUnderColimits
 
 中文:
 定理 hasColimit_of_closedUnderColimits
-  结论: [P.IsClosedUnderColimitsOfShape J]
+  结论: [P.是ClosedUnderColimitsOfShape J]
   证明: have : CreatesColimit F P.ι :=
     createsColimitFullSubcategoryInclusionOfClosed J P F
   hasColimit_of_created F P.ι
@@ -288,7 +288,7 @@ instance hasColimitsOfShape_of_closedUnderColimits
 
 中文:
 实例 hasColimitsOfShape_of_closedUnderColimits
-  签名: [P.IsClosedUnderColimitsOfShape J]
+  签名: [P.是ClosedUnderColimitsOfShape J]
   定义体: { has_colimit := fun F => hasColimit_of_closedUnderColimits J P F }
 
 Depends on / 依赖: hasColimit_of_closedUnderColimits, has_colimit
@@ -390,8 +390,8 @@ instance [HasLimitsOfShape
         (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
 
 中文:
-实例 [HasLimitsOfShape
-  签名: J C] [PreservesLimitsOfShape J F] [F.Full] [F.Faithful] :
+实例 [有形状极限
+  签名: J C] [保持形状极限 J F] [F.满] [F.忠实] :
   定义体: .mk' (by
     rintro _ ⟨G, hG⟩
     exact ⟨limit (Functor.essImage.liftFunctor G F hG),
@@ -424,8 +424,8 @@ instance [HasColimitsOfShape
         (Functor.essImage.liftFunctorCompIso _ _ _)⟩⟩)
 
 中文:
-实例 [HasColimitsOfShape
-  签名: J C] [PreservesColimitsOfShape J F] [F.Full] [F.Faithful] :
+实例 [有形状余极限
+  签名: J C] [保持形状余极限 J F] [F.满] [F.忠实] :
   定义体: .mk' (by
     rintro _ ⟨G, hG⟩
     exact ⟨colimit (Functor.essImage.liftFunctor G F hG),

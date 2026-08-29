@@ -47,8 +47,8 @@ definition ofENat
   signature: : Nat∞ -> Cardinal
 
 中文:
-定义 ofENat
-  签名: : 自然数∞ -> Cardinal
+定义 ofE自然数
+  签名: : 自然数∞ -> 基数
 -/
 @[coe] def ofENat : Nat∞ -> Cardinal
   | (n : Nat) => n
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe E自然数 Cardinal
+  签名: Coe E自然数 基数
   定义体: ⟨Cardinal.ofENat⟩
 
 Depends on / 依赖: Cardinal, Cardinal.ofENat, ofENat
@@ -80,7 +80,7 @@ lemma ofENat_top
   proof: rfl
 
 中文:
-引理 ofENat_top
+引理 ofE自然数_top
   结论: ofE自然数 ⊤ = ℵ₀
   证明: rfl
 -/
@@ -95,7 +95,7 @@ lemma ofENat_nat
   proof: rfl
 
 中文:
-引理 ofENat_nat
+引理 ofE自然数_nat
   条件: (n : 自然数)
   结论: ofE自然数 n = n
   证明: rfl
@@ -110,7 +110,7 @@ lemma ofENat_zero
   proof: rfl
 
 中文:
-引理 ofENat_zero
+引理 ofE自然数_zero
   结论: ofE自然数 0 = 0
   证明: rfl
 -/
@@ -124,7 +124,7 @@ lemma ofENat_one
   proof: rfl
 
 中文:
-引理 ofENat_one
+引理 ofE自然数_one
   结论: ofE自然数 1 = 1
   证明: rfl
 -/
@@ -139,7 +139,7 @@ lemma ofENat_ofNat
   proof: rfl
 
 中文:
-引理 ofENat_ofNat
+引理 ofE自然数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -158,8 +158,8 @@ lemma ofENat_strictMono
 @[simp, norm_cast]
 
 中文:
-引理 ofENat_strictMono
-  结论: StrictMono ofE自然数
+引理 ofE自然数_strictMono
+  结论: 严格递增 ofE自然数
   证明: WithTop.strictMono_iff.2 ⟨Nat.strictMono_cast, fun _ => natCast_lt_aleph0⟩
 
 @[simp, norm_cast]
@@ -184,9 +184,9 @@ lemma ofENat_lt_ofENat
 @[simp, norm_cast]
 
 中文:
-引理 ofENat_lt_ofENat
+引理 ofE自然数_lt_ofE自然数
   条件: {m n : 自然数∞}
-  结论: (m : Cardinal) < n ↔ m < n
+  结论: (m : 基数) < n ↔ m < n
   证明: ofENat_strictMono.lt_iff_lt
 
 @[gcongr, mono] alias ⟨_, ofENat_lt_ofENat_of_lt⟩ := ofENat_lt_ofENat
@@ -211,9 +211,9 @@ lemma ofENat_lt_aleph0
   proof: ofENat_lt_ofENat (n := ⊤)
 
 中文:
-引理 ofENat_lt_aleph0
+引理 ofE自然数_lt_aleph0
   条件: {m : 自然数∞}
-  结论: (m : Cardinal) < ℵ₀ ↔ m < ⊤
+  结论: (m : 基数) < ℵ₀ ↔ m < ⊤
   证明: ofENat_lt_ofENat (n := ⊤)
 
 Depends on / 依赖: ofENat_lt_ofENat
@@ -231,7 +231,7 @@ lemma ofENat_lt_nat
   proof: by norm_cast
 
 中文:
-引理 ofENat_lt_nat
+引理 ofE自然数_lt_nat
   条件: {m : 自然数∞} {n : 自然数}
   结论: ofE自然数 m < n ↔ m < n
   证明: by norm_cast
@@ -247,7 +247,7 @@ lemma ofENat_lt_ofNat
   proof: ofENat_lt_nat
 
 中文:
-引理 ofENat_lt_ofNat
+引理 ofE自然数_lt_of自然数
   条件: {m : 自然数∞} {n : 自然数} [n.AtLeastTwo]
   证明: ofENat_lt_nat
 -/
@@ -264,9 +264,9 @@ lemma nat_lt_ofENat
   proof: by norm_cast
 
 中文:
-引理 nat_lt_ofENat
+引理 nat_lt_ofE自然数
   条件: {m : 自然数} {n : 自然数∞}
-  结论: (m : Cardinal) < n ↔ m < n
+  结论: (m : 基数) < n ↔ m < n
   证明: by norm_cast
 -/
 @[simp] lemma nat_lt_ofENat {m : Nat} {n : Nat∞} : (m : Cardinal) < n ↔ m < n := by norm_cast
@@ -280,9 +280,9 @@ lemma ofENat_pos
   proof: by norm_cast
 
 中文:
-引理 ofENat_pos
+引理 ofE自然数_pos
   条件: {m : 自然数∞}
-  结论: 0 < (m : Cardinal) ↔ 0 < m
+  结论: 0 < (m : 基数) ↔ 0 < m
   证明: by norm_cast
 -/
 @[simp] lemma ofENat_pos {m : Nat∞} : 0 < (m : Cardinal) ↔ 0 < m := by norm_cast
@@ -296,9 +296,9 @@ lemma one_lt_ofENat
   proof: by norm_cast
 
 中文:
-引理 one_lt_ofENat
+引理 one_lt_ofE自然数
   条件: {m : 自然数∞}
-  结论: 1 < (m : Cardinal) ↔ 1 < m
+  结论: 1 < (m : 基数) ↔ 1 < m
   证明: by norm_cast
 -/
 @[simp] lemma one_lt_ofENat {m : Nat∞} : 1 < (m : Cardinal) ↔ 1 < m := by norm_cast
@@ -312,7 +312,7 @@ lemma ofNat_lt_ofENat
   proof: nat_lt_ofENat
 
 中文:
-引理 ofNat_lt_ofENat
+引理 of自然数_lt_ofE自然数
   条件: {m : 自然数} [m.AtLeastTwo] {n : 自然数∞}
   证明: nat_lt_ofENat
 -/
@@ -330,8 +330,8 @@ lemma ofENat_mono
 @[simp, norm_cast]
 
 中文:
-引理 ofENat_mono
-  结论: Monotone ofE自然数
+引理 ofE自然数_mono
+  结论: 递增 ofE自然数
   证明: ofENat_strictMono.monotone
 
 @[simp, norm_cast]
@@ -353,9 +353,9 @@ lemma ofENat_le_ofENat
 @[gcongr, mono] alias ⟨_, ofENat_le_ofENat_of_le⟩ := ofENat_le_ofENat
 
 中文:
-引理 ofENat_le_ofENat
+引理 ofE自然数_le_ofE自然数
   条件: {m n : 自然数∞}
-  结论: (m : Cardinal) <= n ↔ m <= n
+  结论: (m : 基数) <= n ↔ m <= n
   证明: ofENat_strictMono.le_iff_le
 
 @[gcongr, mono] alias ⟨_, ofENat_le_ofENat_of_le⟩ := ofENat_le_ofENat
@@ -376,7 +376,7 @@ lemma ofENat_le_aleph0
   proof: ofENat_le_ofENat.2 le_top
 
 中文:
-引理 ofENat_le_aleph0
+引理 ofE自然数_le_aleph0
   条件: (n : 自然数∞)
   结论: ↑n <= ℵ₀
   证明: ofENat_le_ofENat.2 le_top
@@ -392,7 +392,7 @@ lemma ofENat_le_nat
   proof: by norm_cast
 
 中文:
-引理 ofENat_le_nat
+引理 ofE自然数_le_nat
   条件: {m : 自然数∞} {n : 自然数}
   结论: ofE自然数 m <= n ↔ m <= n
   证明: by norm_cast
@@ -408,7 +408,7 @@ lemma ofENat_le_one
   proof: by norm_cast
 
 中文:
-引理 ofENat_le_one
+引理 ofE自然数_le_one
   条件: {m : 自然数∞}
   结论: ofE自然数 m <= 1 ↔ m <= 1
   证明: by norm_cast
@@ -424,7 +424,7 @@ lemma ofENat_le_ofNat
   proof: ofENat_le_nat
 
 中文:
-引理 ofENat_le_ofNat
+引理 ofE自然数_le_of自然数
   条件: {m : 自然数∞} {n : 自然数} [n.AtLeastTwo]
   证明: ofENat_le_nat
 -/
@@ -441,9 +441,9 @@ lemma nat_le_ofENat
   proof: by norm_cast
 
 中文:
-引理 nat_le_ofENat
+引理 nat_le_ofE自然数
   条件: {m : 自然数} {n : 自然数∞}
-  结论: (m : Cardinal) <= n ↔ m <= n
+  结论: (m : 基数) <= n ↔ m <= n
   证明: by norm_cast
 -/
 @[simp] lemma nat_le_ofENat {m : Nat} {n : Nat∞} : (m : Cardinal) <= n ↔ m <= n := by norm_cast
@@ -459,9 +459,9 @@ lemma one_le_ofENat
 @[simp]
 
 中文:
-引理 one_le_ofENat
+引理 one_le_ofE自然数
   条件: {n : 自然数∞}
-  结论: 1 <= (n : Cardinal) ↔ 1 <= n
+  结论: 1 <= (n : 基数) ↔ 1 <= n
   证明: by norm_cast
 
 @[simp]
@@ -478,7 +478,7 @@ lemma ofNat_le_ofENat
   proof: nat_le_ofENat
 
 中文:
-引理 ofNat_le_ofENat
+引理 of自然数_le_ofE自然数
   条件: {m : 自然数} [m.AtLeastTwo] {n : 自然数∞}
   证明: nat_le_ofENat
 
@@ -498,8 +498,8 @@ lemma ofENat_injective
 @[simp, norm_cast]
 
 中文:
-引理 ofENat_injective
-  结论: Injective ofE自然数
+引理 ofE自然数_injective
+  结论: 单射 ofE自然数
   证明: ofENat_strictMono.injective
 
 @[simp, norm_cast]
@@ -519,9 +519,9 @@ lemma ofENat_inj
   proof: ofENat_injective.eq_iff
 
 中文:
-引理 ofENat_inj
+引理 ofE自然数_inj
   条件: {m n : 自然数∞}
-  结论: (m : Cardinal) = n ↔ m = n
+  结论: (m : 基数) = n ↔ m = n
   证明: ofENat_injective.eq_iff
 
 Depends on / 依赖: eq_iff, ofENat_injective, ofENat_injective.eq_iff
@@ -538,9 +538,9 @@ lemma ofENat_eq_nat
   proof: by norm_cast
 
 中文:
-引理 ofENat_eq_nat
+引理 ofE自然数_eq_nat
   条件: {m : 自然数∞} {n : 自然数}
-  结论: (m : Cardinal) = n ↔ m = n
+  结论: (m : 基数) = n ↔ m = n
   证明: by norm_cast
 -/
 @[simp] lemma ofENat_eq_nat {m : Nat∞} {n : Nat} : (m : Cardinal) = n ↔ m = n := by norm_cast
@@ -554,9 +554,9 @@ lemma nat_eq_ofENat
   proof: by norm_cast
 
 中文:
-引理 nat_eq_ofENat
+引理 nat_eq_ofE自然数
   条件: {m : 自然数} {n : 自然数∞}
-  结论: (m : Cardinal) = n ↔ m = n
+  结论: (m : 基数) = n ↔ m = n
   证明: by norm_cast
 -/
 @[simp] lemma nat_eq_ofENat {m : Nat} {n : Nat∞} : (m : Cardinal) = n ↔ m = n := by norm_cast
@@ -571,9 +571,9 @@ lemma ofENat_eq_zero
   proof: by norm_cast
 
 中文:
-引理 ofENat_eq_zero
+引理 ofE自然数_eq_zero
   条件: {m : 自然数∞}
-  结论: (m : Cardinal) = 0 ↔ m = 0
+  结论: (m : 基数) = 0 ↔ m = 0
   证明: by norm_cast
 -/
 @[simp] lemma ofENat_eq_zero {m : Nat∞} : (m : Cardinal) = 0 ↔ m = 0 := by norm_cast
@@ -587,9 +587,9 @@ lemma zero_eq_ofENat
   proof: by norm_cast; apply eq_comm
 
 中文:
-引理 zero_eq_ofENat
+引理 zero_eq_ofE自然数
   条件: {m : 自然数∞}
-  结论: 0 = (m : Cardinal) ↔ m = 0
+  结论: 0 = (m : 基数) ↔ m = 0
   证明: by norm_cast; apply eq_comm
 -/
 @[simp] lemma zero_eq_ofENat {m : Nat∞} : 0 = (m : Cardinal) ↔ m = 0 := by norm_cast; apply eq_comm
@@ -604,9 +604,9 @@ lemma ofENat_eq_one
   proof: by norm_cast
 
 中文:
-引理 ofENat_eq_one
+引理 ofE自然数_eq_one
   条件: {m : 自然数∞}
-  结论: (m : Cardinal) = 1 ↔ m = 1
+  结论: (m : 基数) = 1 ↔ m = 1
   证明: by norm_cast
 -/
 @[simp] lemma ofENat_eq_one {m : Nat∞} : (m : Cardinal) = 1 ↔ m = 1 := by norm_cast
@@ -620,9 +620,9 @@ lemma one_eq_ofENat
   proof: by norm_cast; apply eq_comm
 
 中文:
-引理 one_eq_ofENat
+引理 one_eq_ofE自然数
   条件: {m : 自然数∞}
-  结论: 1 = (m : Cardinal) ↔ m = 1
+  结论: 1 = (m : 基数) ↔ m = 1
   证明: by norm_cast; apply eq_comm
 -/
 @[simp] lemma one_eq_ofENat {m : Nat∞} : 1 = (m : Cardinal) ↔ m = 1 := by norm_cast; apply eq_comm
@@ -636,7 +636,7 @@ lemma ofENat_eq_ofNat
   proof: ofENat_eq_nat
 
 中文:
-引理 ofENat_eq_ofNat
+引理 ofE自然数_eq_of自然数
   条件: {m : 自然数∞} {n : 自然数} [n.AtLeastTwo]
   证明: ofENat_eq_nat
 -/
@@ -652,7 +652,7 @@ lemma ofNat_eq_ofENat
   proof: nat_eq_ofENat
 
 中文:
-引理 ofNat_eq_ofENat
+引理 of自然数_eq_ofE自然数
   条件: {m : 自然数} {n : 自然数∞} [m.AtLeastTwo]
   证明: nat_eq_ofENat
 -/
@@ -667,7 +667,7 @@ lemma lift_ofENat
   statement: forall m : Nat∞, lift.{u, v} m = m
 
 中文:
-引理 lift_ofENat
+引理 lift_ofE自然数
   结论: 对任意 m : 自然数∞, lift.{u, v} m = m
 -/
 @[simp, norm_cast] lemma lift_ofENat : forall m : Nat∞, lift.{u, v} m = m
@@ -685,8 +685,8 @@ lemma lift_lt_ofENat
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_lt]
 
 中文:
-引理 lift_lt_ofENat
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 lift_lt_ofE自然数
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: lift.{u} x < m ↔ x < m
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_lt]
@@ -705,8 +705,8 @@ lemma lift_le_ofENat
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_le]
 
 中文:
-引理 lift_le_ofENat
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 lift_le_ofE自然数
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: lift.{u} x <= m ↔ x <= m
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_le]
@@ -725,8 +725,8 @@ lemma lift_eq_ofENat
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_inj]
 
 中文:
-引理 lift_eq_ofENat
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 lift_eq_ofE自然数
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: lift.{u} x = m ↔ x = m
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_inj]
@@ -745,8 +745,8 @@ lemma ofENat_lt_lift
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_lt]
 
 中文:
-引理 ofENat_lt_lift
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 ofE自然数_lt_lift
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: m < lift.{u} x ↔ m < x
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_lt]
@@ -765,8 +765,8 @@ lemma ofENat_le_lift
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_le]
 
 中文:
-引理 ofENat_le_lift
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 ofE自然数_le_lift
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: m <= lift.{u} x ↔ m <= x
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_le]
@@ -787,8 +787,8 @@ lemma ofENat_eq_lift
 @[simp]
 
 中文:
-引理 ofENat_eq_lift
-  条件: {x : Cardinal.{v}} {m : 自然数∞}
+引理 ofE自然数_eq_lift
+  条件: {x : 基数.{v}} {m : 自然数∞}
   结论: m = lift.{u} x ↔ m = x
   证明: by
   rw [← lift_ofENat.{u]; rw [v}]; rw [lift_inj]
@@ -813,8 +813,8 @@ lemma range_ofENat
   · exact mem_range_self (⊤ : Nat∞)
 
 中文:
-引理 range_ofENat
-  结论: range ofE自然数 = Iic ℵ₀
+引理 range_ofE自然数
+  结论: range ofE自然数 = 左无界右闭区间 ℵ₀
   证明: by
   refine (range_subset_iff.2 ofENat_le_aleph0).antisymm fun x (hx : x <= ℵ₀) => ?_
   rcases hx.lt_or_eq with hlt | rfl
@@ -841,7 +841,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift Cardinal 自然数∞ (↑) (· <= ℵ₀)
+  签名: CanLift 基数 自然数∞ (↑) (· <= ℵ₀)
   定义体: (Set.ext_iff.1 range_ofENat x).2
 
 Depends on / 依赖: Set.ext_iff, ext_iff, range_ofENat
@@ -858,8 +858,8 @@ definition toENatAux
   body: extend Nat.cast Nat.cast fun _ => ⊤
 
 中文:
-定义 toENatAux
-  签名: : Cardinal.{u} -> 自然数∞
+定义 toE自然数Aux
+  签名: : 基数.{u} -> 自然数∞
   定义体: extend Nat.cast Nat.cast fun _ => ⊤
 
 Depends on / 依赖: Nat.cast, extend
@@ -876,7 +876,7 @@ lemma toENatAux_nat
   proof: Nat.cast_injective.extend_apply ..
 
 中文:
-引理 toENatAux_nat
+引理 toE自然数Aux_nat
   条件: (n : 自然数)
   结论: toE自然数Aux n = n
   证明: Nat.cast_injective.extend_apply ..
@@ -893,7 +893,7 @@ lemma toENatAux_zero
   proof: toENatAux_nat 0
 
 中文:
-引理 toENatAux_zero
+引理 toE自然数Aux_zero
   结论: toE自然数Aux 0 = 0
   证明: toENatAux_nat 0
 
@@ -911,8 +911,8 @@ lemma toENatAux_eq_top
   proof: extend_apply' _ _ _ fun ⟨_n, hn⟩ => ha.not_gt hn ▸ natCast_lt_aleph0
 
 中文:
-引理 toENatAux_eq_top
-  条件: {a : Cardinal} (ha : ℵ₀ <= a)
+引理 toE自然数Aux_eq_top
+  条件: {a : 基数} (ha : ℵ₀ <= a)
   结论: toE自然数Aux a = ⊤
   证明: extend_apply' _ _ _ fun ⟨_n, hn⟩ => ha.not_gt hn ▸ natCast_lt_aleph0
 
@@ -929,7 +929,7 @@ lemma toENatAux_ofENat
   statement: forall n : Nat∞, toENatAux n = n
 
 中文:
-引理 toENatAux_ofENat
+引理 toE自然数Aux_ofE自然数
   结论: 对任意 n : 自然数∞, toE自然数Aux n = n
 -/
 lemma toENatAux_ofENat : forall n : Nat∞, toENatAux n = n
@@ -950,7 +950,7 @@ lemma toENatAux_gc
   | inr hx => simp [toENatAux_eq_top hx, (ofENat_le_aleph0 n).trans hx]
 
 中文:
-引理 toENatAux_gc
+引理 toE自然数Aux_gc
   结论: GaloisConnection (↑) toE自然数Aux
   证明: fun n x => by
   cases lt_or_ge x ℵ₀ with
@@ -977,8 +977,8 @@ theorem toENatAux_le_nat
   | inr hx => simp [toENatAux_eq_top hx, natCast_lt_aleph0.trans_le hx]
 
 中文:
-定理 toENatAux_le_nat
-  条件: {x : Cardinal} {n : 自然数}
+定理 toE自然数Aux_le_nat
+  条件: {x : 基数} {n : 自然数}
   结论: toE自然数Aux x <= n ↔ x <= n
   证明: by
   cases lt_or_ge x ℵ₀ with
@@ -1003,8 +1003,8 @@ lemma toENatAux_eq_nat
   simp only [le_antisymm_iff, toENatAux_le_nat, ← toENatAux_gc _, ofENat_nat]
 
 中文:
-引理 toENatAux_eq_nat
-  条件: {x : Cardinal} {n : 自然数}
+引理 toE自然数Aux_eq_nat
+  条件: {x : 基数} {n : 自然数}
   结论: toE自然数Aux x = n ↔ x = n
   证明: by
   simp only [le_antisymm_iff, toENatAux_le_nat, ← toENatAux_gc _, ofENat_nat]
@@ -1024,8 +1024,8 @@ lemma toENatAux_eq_zero
   proof: toENatAux_eq_nat
 
 中文:
-引理 toENatAux_eq_zero
-  条件: {x : Cardinal}
+引理 toE自然数Aux_eq_zero
+  条件: {x : 基数}
   结论: toE自然数Aux x = 0 ↔ x = 0
   证明: toENatAux_eq_nat
 
@@ -1050,8 +1050,8 @@ definition toENat
   
 
 中文:
-定义 toENat
-  签名: : Cardinal.{u} ->+*o 自然数∞ where
+定义 toE自然数
+  签名: : 基数.{u} ->+*o 自然数∞ where
   定义体: toENatAux
   map_one' := toENatAux_nat 1
   map_mul' x y := by
@@ -1119,7 +1119,7 @@ lemma toENat_ofENat
   proof: toENatAux_ofENat n
 
 中文:
-引理 toENat_ofENat
+引理 toE自然数_ofE自然数
   条件: (n : 自然数∞)
   结论: toE自然数 n = n
   证明: toENatAux_ofENat n
@@ -1134,7 +1134,7 @@ lemma toENat_comp_ofENat
   proof: funext toENat_ofENat
 
 中文:
-引理 toENat_comp_ofENat
+引理 toE自然数_comp_ofE自然数
   结论: toE自然数 ∘ (↑) = id
   证明: funext toENat_ofENat
 -/
@@ -1149,8 +1149,8 @@ definition gciENat
   body: enat_gc.toGaloisCoinsertion fun n => (toENat_ofENat n).le
 
 中文:
-定义 gciENat
-  签名: : GaloisCoinsertion (↑) toE自然数
+定义 gciE自然数
+  签名: : Galois余嵌入 (↑) toE自然数
   定义体: enat_gc.toGaloisCoinsertion fun n => (toENat_ofENat n).le
 
 Depends on / 依赖: enat_gc, enat_gc.toGaloisCoinsertion, toENat_ofENat, toGaloisCoinsertion
@@ -1169,8 +1169,8 @@ lemma toENat_strictMonoOn
   exact fun _ _ => id
 
 中文:
-引理 toENat_strictMonoOn
-  结论: StrictMonoOn toE自然数 (Iic ℵ₀)
+引理 toE自然数_strictMonoOn
+  结论: StrictMonoOn toE自然数 (左无界右闭区间 ℵ₀)
   证明: by
   simp only [← range_ofENat, StrictMonoOn, forall_mem_range, toENat_ofENat, ofENat_lt_ofENat]
   exact fun _ _ => id
@@ -1190,8 +1190,8 @@ lemma toENat_injOn
   proof: toENat_strictMonoOn.injOn
 
 中文:
-引理 toENat_injOn
-  结论: InjOn toE自然数 (Iic ℵ₀)
+引理 toE自然数_injOn
+  结论: 单射限制 toE自然数 (左无界右闭区间 ℵ₀)
   证明: toENat_strictMonoOn.injOn
 
 Depends on / 依赖: toENat_strictMonoOn, toENat_strictMonoOn.injOn
@@ -1210,8 +1210,8 @@ lemma ofENat_toENat_le
 @[simp]
 
 中文:
-引理 ofENat_toENat_le
-  条件: (a : Cardinal)
+引理 ofE自然数_toE自然数_le
+  条件: (a : 基数)
   结论: ↑(toE自然数 a) <= a
   证明: enat_gc.l_u_le _
 
@@ -1236,8 +1236,8 @@ lemma ofENat_toENat_eq_self
 @[simp] alias ⟨_, ofENat_toENat⟩ := ofENat_toENat_eq_self
 
 中文:
-引理 ofENat_toENat_eq_self
-  条件: {a : Cardinal}
+引理 ofE自然数_toE自然数_eq_self
+  条件: {a : 基数}
   结论: toE自然数 a = a ↔ a <= ℵ₀
   证明: by
   rw [eq_comm]; rw [← enat_gc.exists_eq_l]
@@ -1263,7 +1263,7 @@ lemma toENat_nat
   proof: map_natCast _ n
 
 中文:
-引理 toENat_nat
+引理 toE自然数_nat
   条件: (n : 自然数)
   结论: toE自然数 n = n
   证明: map_natCast _ n
@@ -1282,7 +1282,7 @@ lemma toENat_ofNat
   proof: toENat_nat _
 
 中文:
-引理 toENat_ofNat
+引理 toE自然数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: toE自然数 of自然数(n) = of自然数(n)
   证明: toENat_nat _
@@ -1300,7 +1300,7 @@ lemma toENat_le_natCast
   proof: toENatAux_le_nat
 
 中文:
-引理 toENat_le_natCast
+引理 toE自然数_le_natCast
   结论: toE自然数 c <= n ↔ c <= n
   证明: toENatAux_le_nat
 -/
@@ -1314,7 +1314,7 @@ lemma toENat_le_one
   proof: toENat_le_natCast
 
 中文:
-引理 toENat_le_one
+引理 toE自然数_le_one
   结论: toE自然数 c <= 1 ↔ c <= 1
   证明: toENat_le_natCast
 -/
@@ -1331,7 +1331,7 @@ lemma toENat_le_ofNat
 @[deprecated (since := "2026-01-13")] alias toENat_le_nat := toENat_le_natCast
 
 中文:
-引理 toENat_le_ofNat
+引理 toE自然数_le_of自然数
   条件: [n.AtLeastTwo]
   结论: toE自然数 c <= of自然数(n) ↔ c <= of自然数(n)
   证明: toENat_le_natCast
@@ -1354,7 +1354,7 @@ lemma toENat_le_iff_of_le_aleph0
   lift c to Nat∞ using hc; simp_rw [toENat_ofENat, enat_gc _]
 
 中文:
-引理 toENat_le_iff_of_le_aleph0
+引理 toE自然数_le_iff_of_le_aleph0
   条件: (hc : c <= ℵ₀)
   结论: toE自然数 c <= toE自然数 c' ↔ c <= c'
   证明: by
@@ -1376,7 +1376,7 @@ lemma toENat_le_iff_of_lt_aleph0
   lift c' to Nat using hc'; simp_rw [toENat_nat, ← toENat_le_natCast]
 
 中文:
-引理 toENat_le_iff_of_lt_aleph0
+引理 toE自然数_le_iff_of_lt_aleph0
   条件: (hc' : c' < ℵ₀)
   结论: toE自然数 c <= toE自然数 c' ↔ c <= c'
   证明: by
@@ -1397,7 +1397,7 @@ lemma toENat_eq_iff_of_le_aleph0
   proof: toENat_strictMonoOn.injOn.eq_iff hc hc'
 
 中文:
-引理 toENat_eq_iff_of_le_aleph0
+引理 toE自然数_eq_iff_of_le_aleph0
   条件: (hc : c <= ℵ₀) (hc' : c' <= ℵ₀)
   结论: toE自然数 c = toE自然数 c' ↔ c = c'
   证明: toENat_strictMonoOn.injOn.eq_iff hc hc'
@@ -1417,7 +1417,7 @@ lemma natCast_le_toENat
   rw [← toENat_nat n]; rw [toENat_le_iff_of_le_aleph0 natCast_le_aleph0]
 
 中文:
-引理 natCast_le_toENat
+引理 natCast_le_toE自然数
   结论: n <= toE自然数 c ↔ n <= c
   证明: by
   rw [← toENat_nat n]; rw [toENat_le_iff_of_le_aleph0 natCast_le_aleph0]
@@ -1434,7 +1434,7 @@ lemma one_le_toENat
   proof: natCast_le_toENat
 
 中文:
-引理 one_le_toENat
+引理 one_le_toE自然数
   结论: 1 <= toE自然数 c ↔ 1 <= c
   证明: natCast_le_toENat
 -/
@@ -1449,7 +1449,7 @@ lemma ofNat_le_toENat
   proof: natCast_le_toENat
 
 中文:
-引理 ofNat_le_toENat
+引理 of自然数_le_toE自然数
   条件: [n.AtLeastTwo]
   结论: of自然数(n) <= toE自然数 c ↔ of自然数(n) <= c
   证明: natCast_le_toENat
@@ -1466,7 +1466,7 @@ lemma toENat_lt_natCast
   proof: by simp [← not_le]
 
 中文:
-引理 toENat_lt_natCast
+引理 toE自然数_lt_natCast
   结论: toE自然数 c < n ↔ c < n
   证明: by simp [← not_le]
 -/
@@ -1481,7 +1481,7 @@ lemma toENat_lt_ofNat
   proof: toENat_lt_natCast
 
 中文:
-引理 toENat_lt_ofNat
+引理 toE自然数_lt_of自然数
   条件: [n.AtLeastTwo]
   结论: toE自然数 c < of自然数(n) ↔ c < of自然数(n)
   证明: toENat_lt_natCast
@@ -1498,7 +1498,7 @@ lemma natCast_lt_toENat
   proof: by simp [← not_le]
 
 中文:
-引理 natCast_lt_toENat
+引理 natCast_lt_toE自然数
   结论: n < toE自然数 c ↔ n < c
   证明: by simp [← not_le]
 -/
@@ -1512,7 +1512,7 @@ lemma one_lt_toENat
   proof: natCast_lt_toENat
 
 中文:
-引理 one_lt_toENat
+引理 one_lt_toE自然数
   结论: 1 < toE自然数 c ↔ 1 < c
   证明: natCast_lt_toENat
 -/
@@ -1527,7 +1527,7 @@ lemma ofNat_lt_toENat
   proof: natCast_lt_toENat
 
 中文:
-引理 ofNat_lt_toENat
+引理 of自然数_lt_toE自然数
   条件: [n.AtLeastTwo]
   结论: of自然数(n) < toE自然数 c ↔ of自然数(n) < c
   证明: natCast_lt_toENat
@@ -1544,7 +1544,7 @@ lemma toENat_eq_natCast
   proof: toENatAux_eq_nat
 
 中文:
-引理 toENat_eq_natCast
+引理 toE自然数_eq_natCast
   结论: toE自然数 c = n ↔ c = n
   证明: toENatAux_eq_nat
 -/
@@ -1558,7 +1558,7 @@ lemma toENat_eq_zero
   proof: toENat_eq_natCast
 
 中文:
-引理 toENat_eq_zero
+引理 toE自然数_eq_zero
   结论: toE自然数 c = 0 ↔ c = 0
   证明: toENat_eq_natCast
 -/
@@ -1572,7 +1572,7 @@ lemma toENat_eq_one
   proof: toENat_eq_natCast
 
 中文:
-引理 toENat_eq_one
+引理 toE自然数_eq_one
   结论: toE自然数 c = 1 ↔ c = 1
   证明: toENat_eq_natCast
 -/
@@ -1589,7 +1589,7 @@ lemma toENat_eq_ofNat
 @[deprecated toENat_eq_zero (since := "2026-05-25")]
 
 中文:
-引理 toENat_eq_ofNat
+引理 toE自然数_eq_of自然数
   条件: [n.AtLeastTwo]
   结论: toE自然数 c = of自然数(n) ↔ c = of自然数(n)
   证明: toENat_eq_natCast
@@ -1611,7 +1611,7 @@ lemma toENat_lt_one
 @[deprecated (since := "2026-01-13")] alias toENat_eq_nat := toENat_eq_natCast
 
 中文:
-引理 toENat_lt_one
+引理 toE自然数_lt_one
   结论: toE自然数 c < 1 ↔ c < 1
   证明: by simp
 
@@ -1630,7 +1630,7 @@ lemma natCast_eq_toENat
   proof: by simp [eq_comm (a := Nat.cast _)]
 
 中文:
-引理 natCast_eq_toENat
+引理 natCast_eq_toE自然数
   结论: n = toE自然数 c ↔ n = c
   证明: by simp [eq_comm (a := Nat.cast _)]
 -/
@@ -1645,7 +1645,7 @@ lemma ofNat_eq_toENat
   proof: natCast_eq_toENat
 
 中文:
-引理 ofNat_eq_toENat
+引理 of自然数_eq_toE自然数
   条件: [n.AtLeastTwo]
   结论: of自然数(n) = toE自然数 c ↔ of自然数(n) = c
   证明: natCast_eq_toENat
@@ -1662,7 +1662,7 @@ lemma toENat_eq_top
   proof: enat_gc.u_eq_top
 
 中文:
-引理 toENat_eq_top
+引理 toE自然数_eq_top
   结论: toE自然数 c = ⊤ ↔ ℵ₀ <= c
   证明: enat_gc.u_eq_top
 -/
@@ -1677,7 +1677,7 @@ lemma toENat_ne_top
   proof: by simp
 
 中文:
-引理 toENat_ne_top
+引理 toE自然数_ne_top
   结论: toE自然数 c != ⊤ ↔ c < ℵ₀
   证明: by simp
 -/
@@ -1694,7 +1694,7 @@ lemma toENat_lt_top
 @[simp]
 
 中文:
-引理 toENat_lt_top
+引理 toE自然数_lt_top
   结论: toE自然数 c < ⊤ ↔ c < ℵ₀
   证明: by simp [lt_top_iff_ne_top]
 
@@ -1715,7 +1715,7 @@ theorem toENat_lift
   | inr ha => simp [toENat_eq_top.2, ha]
 
 中文:
-定理 toENat_lift
+定理 toE自然数_lift
   结论: toE自然数 (lift.{v} c) = toE自然数 c
   证明: by
   cases le_total c ℵ₀ with
@@ -1742,7 +1742,7 @@ theorem toENat_congr
 @[simp, norm_cast]
 
 中文:
-定理 toENat_congr
+定理 toE自然数_congr
   条件: {α : 类型u} {β : 类型v} (e : α ≃ β)
   结论: toE自然数 #α = toE自然数 #β
   证明: by
@@ -1766,7 +1766,7 @@ lemma ofENat_add
   proof: by apply toENat_injOn <;> simp
 
 中文:
-引理 ofENat_add
+引理 ofE自然数_add
   条件: (m n : 自然数∞)
   结论: ofE自然数 (m + n) = m + n
   证明: by apply toENat_injOn <;> simp
@@ -1785,7 +1785,7 @@ lemma aleph0_add_ofENat
   proof: (ofENat_add ⊤ m).symm
 
 中文:
-引理 aleph0_add_ofENat
+引理 aleph0_add_ofE自然数
   条件: (m : 自然数∞)
   结论: ℵ₀ + m = ℵ₀
   证明: (ofENat_add ⊤ m).symm
@@ -1802,7 +1802,7 @@ lemma ofENat_add_aleph0
   proof: by rw [add_comm, aleph0_add_ofENat]
 
 中文:
-引理 ofENat_add_aleph0
+引理 ofE自然数_add_aleph0
   条件: (m : 自然数∞)
   结论: m + ℵ₀ = ℵ₀
   证明: by rw [add_comm, aleph0_add_ofENat]
@@ -1822,7 +1822,7 @@ lemma ofENat_mul_aleph0
   | coe m => rw [ofENat_nat, nat_mul_aleph0 (mod_cast hm)]
 
 中文:
-引理 ofENat_mul_aleph0
+引理 ofE自然数_mul_aleph0
   条件: {m : 自然数∞} (hm : m != 0)
   结论: ↑m * ℵ₀ = ℵ₀
   证明: by
@@ -1846,7 +1846,7 @@ lemma aleph0_mul_ofENat
   rw [mul_comm]; rw [ofENat_mul_aleph0 hm]
 
 中文:
-引理 aleph0_mul_ofENat
+引理 aleph0_mul_ofE自然数
   条件: {m : 自然数∞} (hm : m != 0)
   结论: ℵ₀ * m = ℵ₀
   证明: by
@@ -1866,7 +1866,7 @@ lemma ofENat_mul
     (aleph0_mul_aleph0 ▸ mul_le_mul' (ofENat_le_aleph0 _) (ofENat_le_aleph0 _)) (by simp)
 
 中文:
-引理 ofENat_mul
+引理 ofE自然数_mul
   条件: (m n : 自然数∞)
   结论: ofE自然数 (m * n) = m * n
   证明: toENat_injOn (by simp)
@@ -1890,8 +1890,8 @@ definition ofENatHom
   monotone' := ofENat_mono
 
 中文:
-定义 ofENatHom
-  签名: : 自然数∞ ->+*o Cardinal where
+定义 ofE自然数Hom
+  签名: : 自然数∞ ->+*o 基数 where
   定义体: (↑)
   map_one' := ofENat_one
   map_mul' := ofENat_mul

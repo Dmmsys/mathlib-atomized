@@ -154,7 +154,7 @@ lemma whiskerLeft_w
 
 中文:
 引理 whiskerLeft_w
-  条件: (hP : IsPushout f g inl inr) {Q : C}
+  条件: (hP : 是推出 f g inl inr) {Q : C}
   证明: by
   simp [← MonoidalCategory.whiskerLeft_comp, hP.w]
 
@@ -180,7 +180,7 @@ lemma w_whiskerRight
 
 中文:
 引理 w_whiskerRight
-  条件: (hP : IsPushout f g inl inr) {Q : C}
+  条件: (hP : 是推出 f g inl inr) {Q : C}
   证明: by
   simp [← MonoidalCategory.comp_whiskerRight, hP.w]
 

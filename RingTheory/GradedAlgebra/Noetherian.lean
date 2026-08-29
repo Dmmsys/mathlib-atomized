@@ -36,7 +36,7 @@ instance GradeZero.isNoetherianRing
 
 中文:
 实例 GradeZero.isNoetherianRing
-  签名: : IsNoetherianRing (𝒜 0)
+  签名: : 是Noether环 (𝒜 0)
   定义体: isNoetherianRing_of_surjective
     A (𝒜 0) (GradedRing.projZeroRingHom' 𝒜) (GradedRing.projZeroRingHom'_surjective 𝒜)
 

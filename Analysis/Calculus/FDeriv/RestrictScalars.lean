@@ -54,8 +54,8 @@ theorem HasFDerivAtFilter.restrictScalars
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.restrictScalars
-  条件: {L} (h : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.restrictScalars
+  条件: {L} (h : 有FDerivAtFilter f f' L)
   证明: .of_isLittleO h.isLittleO
 
 @[fun_prop]
@@ -102,8 +102,8 @@ theorem HasFDerivAt.restrictScalars
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.restrictScalars
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.restrictScalars
+  条件: (h : 在点处Fréchet可导 f f' x)
   证明: HasFDerivAtFilter.restrictScalars 𝕜 h
 
 @[fun_prop]
@@ -226,9 +226,9 @@ theorem Differentiable.restrictScalars
 @[fun_prop]
 
 中文:
-定理 Differentiable.restrictScalars
-  条件: (h : Differentiable 𝕜' f)
-  结论: Differentiable 𝕜 f
+定理 可微.restrictScalars
+  条件: (h : 可微 𝕜' f)
+  结论: 可微 𝕜 f
   证明: fun x =>
   (h x).restrictScalars 𝕜
 
@@ -279,7 +279,7 @@ theorem hasFDerivAt_of_restrictScalars
 
 中文:
 定理 hasFDerivAt_of_restrictScalars
-  结论: {g' : E ->L[𝕜] F} (h : HasFDerivAt f g' x)
+  结论: {g' : E ->L[𝕜] F} (h : 在点处Fréchet可导 f g' x)
   证明: by
   rw [← H] at h
   exact .of_isLittleO h.isLittleO

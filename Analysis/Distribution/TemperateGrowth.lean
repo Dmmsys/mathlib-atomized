@@ -46,7 +46,7 @@ definition HasTemperateGrowth
   body: ContDiff Real ∞ f ∧ forall n : Nat, exists (k : Nat) (C : Real), forall x, ‖iteratedFDeriv Real n f x‖ <= C * (1 + ‖x‖) ^ k
 
 中文:
-定义 HasTemperateGrowth
+定义 有TemperateGrowth
   签名: (f : E -> F)
   定义体: ContDiff Real ∞ f ∧ forall n : Nat, exists (k : Nat) (C : Real), forall x, ‖iteratedFDeriv Real n f x‖ <= C * (1 + ‖x‖) ^ k
 
@@ -92,7 +92,7 @@ theorem HasTemperateGrowth.isBigO
   proof: .2 n Function.hasTemperateGrowth_iff_isBigO.mp hf_temperate
 
 中文:
-定理 HasTemperateGrowth.isBigO
+定理 有TemperateGrowth.isBigO
   结论: {f : E -> F}
   证明: .2 n Function.hasTemperateGrowth_iff_isBigO.mp hf_temperate
 
@@ -120,7 +120,7 @@ theorem HasTemperateGrowth.isBigO_uniform
   · exact Finset.le_sup (by simpa using hn)
 
 中文:
-定理 HasTemperateGrowth.isBigO_uniform
+定理 有TemperateGrowth.isBigO_uniform
   结论: {f : E -> F}
   证明: by
   choose k hk using hf_temperate.isBigO
@@ -162,7 +162,7 @@ theorem HasTemperateGrowth.norm_iteratedFDeriv_le_uniform
   simp (d
 
 中文:
-定理 HasTemperateGrowth.norm_iteratedFDeriv_le_uniform
+定理 有TemperateGrowth.norm_iteratedFDeriv_le_uniform
   结论: {f : E -> F}
   证明: by
   rcases hf_temperate.isBigO_uniform n with ⟨k, hk⟩
@@ -205,7 +205,7 @@ lemma HasTemperateGrowth.of_fderiv
 @[fun_prop]
 
 中文:
-引理 HasTemperateGrowth.of_fderiv
+引理 有TemperateGrowth.of_fderiv
   结论: {f : E -> F}
   证明: by
   refine ⟨contDiff_succ_iff_fderiv.2 ⟨hf, by simp, h'f.1⟩, fun n => ?_⟩
@@ -243,7 +243,7 @@ lemma HasTemperateGrowth.zero
 @[fun_prop, simp]
 
 中文:
-引理 HasTemperateGrowth.zero
+引理 有TemperateGrowth.zero
   证明: by
   refine ⟨contDiff_const, fun n => ⟨0, 0, fun x => ?_⟩⟩
   simp
@@ -269,7 +269,7 @@ lemma HasTemperateGrowth.const
 @[fun_prop]
 
 中文:
-引理 HasTemperateGrowth.const
+引理 有TemperateGrowth.const
   条件: (c : F)
   证明: .of_fderiv (by simpa using .zero) (differentiable_const c) (k := 0) (C := ‖c‖) (fun x => by simp)
 
@@ -332,8 +332,8 @@ theorem HasTemperateGrowth.comp'
   set C₃ := ∑ k in Finset.range (k₂ + 1), C₂ * (k₂.choose k
 
 中文:
-定理 HasTemperateGrowth.comp'
-  结论: [NormedAddCommGroup D] [NormedSpace 实数 D] {g : E -> F} {f : D -> E}
+定理 有TemperateGrowth.comp'
+  结论: [赋范交换加群 D] [赋范空间 实数 D] {g : E -> F} {f : D -> E}
   证明: by
   refine ⟨hg₁.comp_contDiff hf.1 (ht ⟨·, rfl⟩), fun n => ?_⟩
   obtain ⟨k₁, C₁, hC₁, h₁⟩ := hf.norm_iteratedFDeriv_le_uniform n
@@ -399,8 +399,8 @@ theorem HasTemperateGrowth.comp
   · simpa [iteratedFDerivWithin_univ] using hg.norm_iteratedFDeriv_le_uniform
 
 中文:
-定理 HasTemperateGrowth.comp
-  结论: [NormedAddCommGroup D] [NormedSpace 实数 D] {g : E -> F} {f : D -> E}
+定理 有TemperateGrowth.comp
+  结论: [赋范交换加群 D] [赋范空间 实数 D] {g : E -> F} {f : D -> E}
   证明: by
   apply hf.comp' (t := Set.univ)
   · simp
@@ -440,9 +440,9 @@ theorem HasTemperateGrowth.neg
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasTemperateGrowth.neg
-  条件: (hf : f.HasTemperateGrowth)
-  结论: (-f).HasTemperateGrowth
+定理 有TemperateGrowth.neg
+  条件: (hf : f.有TemperateGrowth)
+  结论: (-f).有TemperateGrowth
   证明: by
   refine ⟨hf.1.neg, fun n => ?_⟩
   obtain ⟨k, C, h⟩ := hf.2 n
@@ -475,8 +475,8 @@ theorem HasTemperateGrowth.add
     filt
 
 中文:
-定理 HasTemperateGrowth.add
-  条件: (hf : f.HasTemperateGrowth) (hg : g.HasTemperateGrowth)
+定理 有TemperateGrowth.add
+  条件: (hf : f.有TemperateGrowth) (hg : g.有TemperateGrowth)
   证明: by
   rw [hasTemperateGrowth_iff_isBigO] at *
   refine ⟨hf.1.add hg.1, fun n => ?_⟩
@@ -516,8 +516,8 @@ theorem HasTemperateGrowth.sub
 @[fun_prop]
 
 中文:
-定理 HasTemperateGrowth.sub
-  条件: (hf : f.HasTemperateGrowth) (hg : g.HasTemperateGrowth)
+定理 有TemperateGrowth.sub
+  条件: (hf : f.有TemperateGrowth) (hg : g.有TemperateGrowth)
   证明: by
   convert hf.add hg.neg
   grind
@@ -547,8 +547,8 @@ theorem HasTemperateGrowth.sum
     simpa [has] using! hf.add (ih h)
 
 中文:
-定理 HasTemperateGrowth.sum
-  结论: {f : ι -> E -> F} {s : Finset ι}
+定理 有TemperateGrowth.求和
+  结论: {f : ι -> E -> F} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -598,8 +598,8 @@ theorem _root_.ContinuousLinearMap.bilinear_hasTemperateGrowth
   have estimate (x : D) : ‖ite
 
 中文:
-定理 _root_.ContinuousLinearMap.bilinear_hasTemperateGrowth
-  结论: [NormedSpace 𝕜 E]
+定理 _root_.连续线性映射.bilinear_hasTemperateGrowth
+  结论: [赋范空间 𝕜 E]
   证明: by
   rw [Function.hasTemperateGrowth_iff_isBigO]
   constructor
@@ -647,8 +647,8 @@ lemma HasTemperateGrowth.id
 @[fun_prop]
 
 中文:
-引理 HasTemperateGrowth.id
-  结论: Function.HasTemperateGrowth (id : E -> E)
+引理 有TemperateGrowth.id
+  结论: 函数.有TemperateGrowth (id : E -> E)
   证明: by
   apply Function.HasTemperateGrowth.of_fderiv (k := 1) (C := 1)
   · convert Function.HasTemperateGrowth.const (ContinuousLinearMap.id Real E)
@@ -677,8 +677,8 @@ lemma HasTemperateGrowth.id'
   proof: Function.HasTemperateGrowth.id
 
 中文:
-引理 HasTemperateGrowth.id'
-  结论: Function.HasTemperateGrowth (fun (x : E) => x)
+引理 有TemperateGrowth.id'
+  结论: 函数.有TemperateGrowth (fun (x : E) => x)
   证明: Function.HasTemperateGrowth.id
 
 Depends on / 依赖: Function, Function.HasTemperateGrowth.id, HasTemperateGrowth
@@ -699,8 +699,8 @@ theorem HasTemperateGrowth.smul
   proof: (ContinuousLinearMap.lsmul Real 𝕜).bilinear_hasTemperateGrowth hf hg
 
 中文:
-定理 HasTemperateGrowth.smul
-  结论: {f : E -> 𝕜} {g : E -> F} (hf : f.HasTemperateGrowth)
+定理 有TemperateGrowth.smul
+  结论: {f : E -> 𝕜} {g : E -> F} (hf : f.有TemperateGrowth)
   证明: (ContinuousLinearMap.lsmul Real 𝕜).bilinear_hasTemperateGrowth hf hg
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.lsmul, bilinear_hasTemperateGrowth
@@ -724,8 +724,8 @@ theorem HasTemperateGrowth.mul
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 HasTemperateGrowth.mul
-  结论: {f g : E -> R} (hf : f.HasTemperateGrowth)
+定理 有TemperateGrowth.mul
+  结论: {f g : E -> R} (hf : f.有TemperateGrowth)
   证明: (ContinuousLinearMap.mul Real R).bilinear_hasTemperateGrowth hf hg
 
 @[to_fun (attr := fun_prop)]
@@ -749,8 +749,8 @@ theorem HasTemperateGrowth.pow
   | succ k IH => rw [pow_succ]; fun_prop
 
 中文:
-定理 HasTemperateGrowth.pow
-  条件: {f : E -> R} (hf : f.HasTemperateGrowth) (k : 自然数)
+定理 有TemperateGrowth.pow
+  条件: {f : E -> R} (hf : f.有TemperateGrowth) (k : 自然数)
   证明: by
   induction k with
   | zero => simpa only [pow_zero] using! HasTemperateGrowth.const 1
@@ -782,7 +782,7 @@ lemma _root_.ContinuousLinearMap.hasTemperateGrowth
 @[fun_prop]
 
 中文:
-引理 _root_.ContinuousLinearMap.hasTemperateGrowth
+引理 _root_.连续线性映射.hasTemperateGrowth
   条件: (f : E ->L[实数] F)
   证明: by
   apply Function.HasTemperateGrowth.of_fderiv ?_ f.differentiable (k := 1) (C := ‖f‖) (fun x => ?_)
@@ -813,7 +813,7 @@ lemma _root_.ContinuousLinearEquiv.hasTemperateGrowth
 @[fun_prop]
 
 中文:
-引理 _root_.ContinuousLinearEquiv.hasTemperateGrowth
+引理 _root_.连续线性等价.hasTemperateGrowth
   条件: (f : E ≃L[实数] F)
   证明: f.toContinuousLinearMap.hasTemperateGrowth
 
@@ -835,8 +835,8 @@ theorem Complex.hasTemperateGrowth_ofReal
   proof: (Complex.ofRealCLM).hasTemperateGrowth
 
 中文:
-定理 Complex.hasTemperateGrowth_ofReal
-  结论: Complex.of实数.HasTemperateGrowth
+定理 复形.hasTemperateGrowth_of实数
+  结论: 复形.of实数.有TemperateGrowth
   证明: (Complex.ofRealCLM).hasTemperateGrowth
 
 Depends on / 依赖: Complex.ofRealCLM, hasTemperateGrowth, ofRealCLM
@@ -856,9 +856,9 @@ theorem RCLike.hasTemperateGrowth_ofReal
   proof: (RCLike.ofRealCLM (K := 𝕜)).hasTemperateGrowth
 
 中文:
-定理 RCLike.hasTemperateGrowth_ofReal
+定理 RCLike.hasTemperateGrowth_of实数
   条件: [RCLike 𝕜]
-  结论: (RCLike.of实数 (K := 𝕜)).HasTemperateGrowth
+  结论: (RCLike.of实数 (K := 𝕜)).有TemperateGrowth
   证明: (RCLike.ofRealCLM (K := 𝕜)).hasTemperateGrowth
 
 Depends on / 依赖: HasTemperateGrowth
@@ -883,7 +883,7 @@ theorem hasTemperateGrowth_inner_left
 中文:
 定理 hasTemperateGrowth_inner_left
   条件: (c : H)
-  结论: (inner 实数 · c).HasTemperateGrowth
+  结论: (inner 实数 · c).有TemperateGrowth
   证明: ((innerSL Real).flip c).hasTemperateGrowth
 
 @[fun_prop]
@@ -906,7 +906,7 @@ theorem hasTemperateGrowth_inner_right
 中文:
 定理 hasTemperateGrowth_inner_right
   条件: (c : H)
-  结论: (inner 实数 c ·).HasTemperateGrowth
+  结论: (inner 实数 c ·).有TemperateGrowth
   证明: (innerSL Real c).hasTemperateGrowth
 
 Depends on / 依赖: hasTemperateGrowth, innerSL
@@ -933,7 +933,7 @@ theorem hasTemperateGrowth_norm_sq
 
 中文:
 定理 hasTemperateGrowth_norm_sq
-  结论: (fun (x : H) => ‖x‖ ^ 2).HasTemperateGrowth
+  结论: (fun (x : H) => ‖x‖ ^ 2).有TemperateGrowth
   证明: by
   apply _root_.Function.HasTemperateGrowth.of_fderiv (C := 1) (k := 2)
   · rw [fderiv_norm_sq]
@@ -1070,10 +1070,10 @@ class HasTemperateGrowth
     - exists_integrable : exists (n : Nat), Integrable (fun x => (1 + ‖x‖) ^ (- (n : Real))) μ
 
 中文:
-类 HasTemperateGrowth
-  参数: (μ : Measure E)
+类 有TemperateGrowth
+  参数: (μ : 测度 E)
   公理与运算 (1 个):
-    - exists_integrable : 存在 (n : 自然数), 整数egrable (fun x => (1 + ‖x‖) ^ (- (n : 实数))) μ
+    - exists_integrable : 存在 (n : 自然数), 可积 (fun x => (1 + ‖x‖) ^ (- (n : 实数))) μ
 -/
 class HasTemperateGrowth (μ : Measure E) : Prop where
   exists_integrable : exists (n : Nat), Integrable (fun x => (1 + ‖x‖) ^ (- (n : Real))) μ
@@ -1089,7 +1089,7 @@ definition integrablePower
 
 中文:
 定义 integrablePower
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: if h : μ.HasTemperateGrowth then h.exists_integrable.choose else 0
 
 Depends on / 依赖: HasTemperateGrowth, exists_integrable, h.exists_integrable.choose
@@ -1126,8 +1126,8 @@ instance _root_.MeasureTheory.IsFiniteMeasure.instHasTemperateGrowth
   body: ⟨⟨0, by simp⟩⟩
 
 中文:
-实例 _root_.MeasureTheory.IsFiniteMeasure.instHasTemperateGrowth
-  签名: {μ : Measure E}
+实例 _root_.测度论.是有限测度.instHasTemperateGrowth
+  签名: {μ : 测度 E}
   定义体: ⟨⟨0, by simp⟩⟩
 -/
 instance _root_.MeasureTheory.IsFiniteMeasure.instHasTemperateGrowth {μ : Measure E}
@@ -1143,8 +1143,8 @@ instance IsAddHaarMeasure.instHasTemperateGrowth
   body: ⟨⟨finrank Real E + 1, by apply integrable_one_add_norm; norm_num⟩⟩
 
 中文:
-实例 IsAddHaarMeasure.instHasTemperateGrowth
-  签名: {μ : Measure E}
+实例 是加法Haar测度.instHasTemperateGrowth
+  签名: {μ : 测度 E}
   定义体: ⟨⟨finrank Real E + 1, by apply integrable_one_add_norm; norm_num⟩⟩
 
 Depends on / 依赖: finrank, integrable_one_add_norm
@@ -1226,7 +1226,7 @@ lemma _root_.integrable_of_le_of_pow_mul_le
 
 中文:
 引理 _root_.integrable_of_le_of_pow_mul_le
-  结论: {μ : Measure E} [μ.HasTemperateGrowth] {f : E -> F}
+  结论: {μ : 测度 E} [μ.有TemperateGrowth] {f : E -> F}
   证明: by
   apply ((integrable_pow_neg_integrablePower μ).const_mul (2 ^ μ.integrablePower * (C₁ + C₂))).mono'
   · exact AEStronglyMeasurable.mul (aestronglyMeasurable_id.norm.pow _) h''f.norm
@@ -1301,7 +1301,7 @@ theorem HasTemperateGrowth.exists_eLpNorm_lt_top
     
 
 中文:
-定理 HasTemperateGrowth.exists_eLpNorm_lt_top
+定理 有TemperateGrowth.存在_eLpNorm_lt_top
   结论: (p : 实数>=0∞)
   证明: by
   cases p with

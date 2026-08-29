@@ -63,9 +63,9 @@ structure LaxFunctor
     - map₂_rightUnitor : forall {a b : B} (f : a ⟶ b), map₂ (ρ_ f).inv = (ρ_ (map f)).inv ≫ map f ◁ mapId b ≫ mapComp f (𝟙 b)  [default: by cat_disch]
 
 中文:
-结构 LaxFunctor
-  参数: (B : 类型u₁) [Bicategory.{w₁, v₁} B] (C : 类型u₂) [Bicategory.{w₂, v₂} C]
-  继承: PrelaxFunctor B C
+结构 松弛函子
+  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂) [双范畴.{w₂, v₂} C]
+  继承: 预松弛函子 B C
   公理与运算 (7 个):
     - mapId((a : B)) : 𝟙 (obj a) ⟶ map (𝟙 a)
     - mapComp({a b c : B} (f : a ⟶ b) (g : b ⟶ c)) : map f ≫ map g ⟶ map (f ≫ g)
@@ -261,7 +261,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B]
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
   定义体: PrelaxFunctor.id B
   mapId := fun a => 𝟙 (𝟙 a)
   mapComp := fun f g => 𝟙 (f ≫ g)
@@ -283,7 +283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (B ⥤ᴸ B)
+  签名: 可居 (B ⥤ᴸ B)
   定义体: ⟨id B⟩
 -/
 instance : Inhabited (B ⥤ᴸ B) :=
@@ -385,7 +385,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {D : 类型u₃} [Bicategory.{w₃, v₃} D] (F : B ⥤ᴸ C) (G : C ⥤ᴸ D)
+  签名: {D : 类型u₃} [双范畴.{w₃, v₃} D] (F : B ⥤ᴸ C) (G : C ⥤ᴸ D)
   定义体: PrelaxFunctor.comp F.toPrelaxFunctor G.toPrelaxFunctor
   mapId := fun a => G.mapId (F.obj a) ≫ G.map₂ (F.mapId a)
   mapComp := fun f g => G.mapComp (F.map f) (F.map g) ≫ G.map₂ (F.mapComp f g)

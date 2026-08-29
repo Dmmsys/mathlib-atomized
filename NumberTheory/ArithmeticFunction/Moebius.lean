@@ -363,7 +363,7 @@ theorem moebius_apply_prime
 
 中文:
 定理 moebius_apply_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: μ p = -1
   证明: by
   rw [moebius_apply_of_squarefree hp.squarefree]; rw [cardFactors_apply_prime hp]; rw [pow_one]
@@ -388,7 +388,7 @@ theorem moebius_apply_prime_pow
 
 中文:
 定理 moebius_apply_prime_pow
-  条件: {p k : 自然数} (hp : p.Prime) (hk : k != 0)
+  条件: {p k : 自然数} (hp : p.素) (hk : k != 0)
   证明: by
   split_ifs with h
   · rw [h, pow_one, moebius_apply_prime hp]
@@ -422,7 +422,7 @@ theorem moebius_apply_isPrimePow_not_prime
 
 中文:
 定理 moebius_apply_isPrimePow_not_prime
-  条件: {n : 自然数} (hn : IsPrimePow n) (hn' : ¬n.Prime)
+  条件: {n : 自然数} (hn : IsPrimePow n) (hn' : ¬n.素)
   证明: by
   obtain ⟨p, k, hp, hk, rfl⟩ := (isPrimePow_nat_iff _).1 hn
   rw [moebius_apply_prime_pow hp hk.ne']; rw [if_neg]
@@ -455,7 +455,7 @@ theorem isMultiplicative_moebius
 
 中文:
 定理 isMultiplicative_moebius
-  结论: IsMultiplicative μ
+  结论: 是Multiplicative μ
   证明: by
   rw [IsMultiplicative.iff_ne_zero]
   refine ⟨by simp, fun {n m} hn hm hnm => ?_⟩
@@ -484,8 +484,8 @@ theorem IsMultiplicative.prodPrimeFactors_one_add_of_squarefree
   rw [isMultiplicative_zeta
 
 中文:
-定理 IsMultiplicative.prodPrimeFactors_one_add_of_squarefree
-  结论: [CommSemiring R]
+定理 是Multiplicative.prodPrimeFactors_one_add_of_squarefree
+  结论: [交换半环 R]
   证明: by
   trans (∏ᵖ p ∣ n, ((ζ : ArithmeticFunction R) + f) p)
   · simp_rw [prodPrimeFactors_apply hn.ne_zero, add_apply, natCoe_apply]
@@ -519,8 +519,8 @@ theorem IsMultiplicative.prodPrimeFactors_one_sub_of_squarefree
   · r
 
 中文:
-定理 IsMultiplicative.prodPrimeFactors_one_sub_of_squarefree
-  结论: [CommRing R]
+定理 是Multiplicative.prodPrimeFactors_one_sub_of_squarefree
+  结论: [交换环 R]
   证明: by
   trans (∏ p in n.primeFactors, (1 + (ArithmeticFunction.pmul (μ : ArithmeticFunction R) f) p))
   · apply prod_congr rfl; intro p hp
@@ -628,7 +628,7 @@ theorem coe_moebius_mul_coe_zeta
 
 中文:
 定理 coe_moebius_mul_coe_zeta
-  条件: [Ring R]
+  条件: [环 R]
   结论: (μ * ζ : ArithmeticFunction R) = 1
   证明: by
   rw [← coe_coe]; rw [← intCoe_mul]; rw [moebius_mul_coe_zeta]; rw [intCoe_one]
@@ -653,7 +653,7 @@ theorem coe_zeta_mul_coe_moebius
 
 中文:
 定理 coe_zeta_mul_coe_moebius
-  条件: [Ring R]
+  条件: [环 R]
   结论: (ζ * μ : ArithmeticFunction R) = 1
   证明: by
   rw [← coe_coe]; rw [← intCoe_mul]; rw [coe_zeta_mul_moebius]; rw [intCoe_one]
@@ -679,7 +679,7 @@ instance :
 
 中文:
 实例 :
-  签名: Invertible (ζ : ArithmeticFunction R)
+  签名: 可逆 (ζ : ArithmeticFunction R)
   定义体: μ
   invOf_mul_self := coe_moebius_mul_coe_zeta
   mul_invOf_self := coe_zeta_mul_coe_moebius
@@ -769,7 +769,7 @@ theorem sum_eq_iff_sum_smul_moebius_eq
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq
-  条件: [AddCommGroup R] {f g : 自然数 -> R}
+  条件: [加法交换群 R] {f g : 自然数 -> R}
   证明: by
   let f' : ArithmeticFunction R := ⟨fun x => if x = 0 then 0 else f x, if_pos rfl⟩
   let g' : ArithmeticFunction R := ⟨fun x => if x = 0 then 0 else g x, if_pos rfl⟩
@@ -824,7 +824,7 @@ theorem sum_eq_iff_sum_mul_moebius_eq
 
 中文:
 定理 sum_eq_iff_sum_mul_moebius_eq
-  条件: [NonAssocRing R] {f g : 自然数 -> R}
+  条件: [非结合环 R] {f g : 自然数 -> R}
   证明: by
   rw [sum_eq_iff_sum_smul_moebius_eq]
   apply forall_congr'
@@ -851,7 +851,7 @@ theorem prod_eq_iff_prod_pow_moebius_eq
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq
-  条件: [CommGroup R] {f g : 自然数 -> R}
+  条件: [交换群 R] {f g : 自然数 -> R}
   证明: @sum_eq_iff_sum_smul_moebius_eq (Additive R) _ _ _
 
 Depends on / 依赖: Additive, sum_eq_iff_sum_smul_moebius_eq
@@ -878,7 +878,7 @@ theorem prod_eq_iff_prod_pow_moebius_eq_of_nonzero
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq_of_nonzero
-  结论: [CommGroupWithZero R] {f g : 自然数 -> R}
+  结论: [带零交换群 R] {f g : 自然数 -> R}
   证明: by
   refine
       Iff.trans
@@ -929,7 +929,7 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq_on
-  结论: [AddCommGroup R] {f g : 自然数 -> R}
+  结论: [加法交换群 R] {f g : 自然数 -> R}
   证明: by
   constructor
   · intro h
@@ -982,7 +982,7 @@ theorem sum_eq_iff_sum_smul_moebius_eq_on'
 
 中文:
 定理 sum_eq_iff_sum_smul_moebius_eq_on'
-  结论: [AddCommGroup R] {f g : 自然数 -> R}
+  结论: [加法交换群 R] {f g : 自然数 -> R}
   证明: by
   have : forall P : Nat -> Prop, ((forall n in s, P n) ↔ (forall n > 0, n in s -> P n)) := fun P => by
     refine forall_congr' (fun n => ⟨fun h _ => h, fun h hn => h ?_ hn⟩)
@@ -1017,7 +1017,7 @@ theorem sum_eq_iff_sum_mul_moebius_eq_on
 
 中文:
 定理 sum_eq_iff_sum_mul_moebius_eq_on
-  结论: [NonAssocRing R] {f g : 自然数 -> R}
+  结论: [非结合环 R] {f g : 自然数 -> R}
   证明: by
   rw [sum_eq_iff_sum_smul_moebius_eq_on s hs]
   apply forall_congr'
@@ -1048,7 +1048,7 @@ theorem prod_eq_iff_prod_pow_moebius_eq_on
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq_on
-  结论: [CommGroup R] {f g : 自然数 -> R}
+  结论: [交换群 R] {f g : 自然数 -> R}
   证明: @sum_eq_iff_sum_smul_moebius_eq_on (Additive R) _ _ _ s hs
 
 Depends on / 依赖: Additive, sum_eq_iff_sum_smul_moebius_eq_on
@@ -1077,7 +1077,7 @@ theorem prod_eq_iff_prod_pow_moebius_eq_on_of_nonzero
 
 中文:
 定理 prod_eq_iff_prod_pow_moebius_eq_on_of_nonzero
-  结论: [CommGroupWithZero R]
+  结论: [带零交换群 R]
   证明: by
   refine
       Iff.trans

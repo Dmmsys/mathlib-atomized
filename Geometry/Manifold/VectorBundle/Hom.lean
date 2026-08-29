@@ -114,7 +114,7 @@ theorem contMDiffWithinAt_hom_bundle
 
 中文:
 定理 contMDiffWithinAt_hom_bundle
-  条件: (f : M -> LE₁E₂) {s : Set M} {x₀ : M}
+  条件: (f : M -> LE₁E₂) {s : 集合 M} {x₀ : M}
   证明: contMDiffWithinAt_totalSpace
 
 Depends on / 依赖: contMDiffWithinAt_totalSpace
@@ -192,7 +192,7 @@ theorem mdifferentiableWithinAt_hom_bundle
 
 中文:
 定理 mdifferentiableWithinAt_hom_bundle
-  条件: (f : M -> LE₁E₂) {s : Set M} {x₀ : M}
+  条件: (f : M -> LE₁E₂) {s : 集合 M} {x₀ : M}
   证明: mdifferentiableWithinAt_totalSpace IB ..
 
 Depends on / 依赖: mdifferentiableWithinAt_totalSpace
@@ -243,7 +243,7 @@ instance Bundle.ContinuousLinearMap.vectorPrebundle.isContMDiff
       continuousLinearMapCoordChange_apply (RingHom.id 𝕜) e₁ e₁' e₂ e₂'⟩
 
 中文:
-实例 Bundle.ContinuousLinearMap.vectorPrebundle.isContMDiff
+实例 Bundle.连续线性映射.vectorPrebundle.isContMDiff
   签名: :
   定义体: by
     rintro _ ⟨e₁, e₂, he₁, he₂, rfl⟩ _ ⟨e₁', e₂', he₁', he₂', rfl⟩
@@ -270,7 +270,7 @@ instance ContMDiffVectorBundle.continuousLinearMap
   body: (Bundle.ContinuousLinearMap.vectorPrebundle (RingHom.id 𝕜) F₁ E₁ F₂ E₂).contMDiffVectorBundle IB
 
 中文:
-实例 ContMDiffVectorBundle.continuousLinearMap
+实例 余ntMDiffVectorBundle.continuousLinearMap
   签名: :
   定义体: (Bundle.ContinuousLinearMap.vectorPrebundle (RingHom.id 𝕜) F₁ E₁ F₂ E₂).contMDiffVectorBundle IB
 
@@ -308,7 +308,7 @@ lemma Bundle.Trivialization.contMDiffAt_symmL
 
 中文:
 引理 Bundle.Trivialization.contMDiffAt_symmL
-  结论: [ContMDiffVectorBundle n F₁ E₁ IB]
+  结论: [余ntMDiffVectorBundle n F₁ E₁ IB]
   证明: by
   have hx' : x in (trivializationAt F₁ E₁ x).baseSet := mem_baseSet_trivializationAt F₁ E₁ x
   refine contMDiffAt_totalSpace.mpr ⟨contMDiffAt_id, ?_⟩
@@ -343,7 +343,7 @@ lemma Bundle.Trivialization.contMDiffOn_symmL
 
 中文:
 引理 Bundle.Trivialization.contMDiffOn_symmL
-  结论: [ContMDiffVectorBundle n F₁ E₁ IB]
+  结论: [余ntMDiffVectorBundle n F₁ E₁ IB]
   证明: fun _ hx => (e.contMDiffAt_symmL hx).contMDiffWithinAt
 
 Depends on / 依赖: contMDiffAt_symmL, contMDiffWithinAt, e.contMDiffAt_symmL

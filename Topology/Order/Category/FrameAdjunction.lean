@@ -81,7 +81,7 @@ definition openOfElementHom
 
 中文:
 定义 openOfElementHom
-  签名: : FrameHom L (Set (PT L)) where
+  签名: : 框架态射 L (集合 (PT L)) where
   定义体: {x | x u}
   map_inf' a b := by simp [Set.ofPred_and]
   map_top' := by simp
@@ -111,7 +111,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (PT L) where
+  签名: : 拓扑空间 (PT L) where
   定义体: exists u, {x | x u} = s
   isOpen_univ := ⟨⊤, by simp⟩
   isOpen_inter := by rintro s t ⟨u, rfl⟩ ⟨v, rfl⟩; use u ⊓ v; simp_rw [map_inf]; rfl
@@ -140,8 +140,8 @@ lemma isOpen_iff
 
 中文:
 引理 isOpen_iff
-  条件: (U : Set (PT L))
-  结论: IsOpen U ↔ 存在 u : L, {x | x u} = U
+  条件: (U : 集合 (PT L))
+  结论: 是开集 U ↔ 存在 u : L, {x | x u} = U
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -162,7 +162,7 @@ continuous_def.2 by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
 
 中文:
 定义 pt
-  签名: : Locale ⥤ TopCat where
+  签名: : 景 ⥤ 顶元素范畴 where
   定义体: .of (PT L.unop)
   map f := TopCat.ofHom ⟨fun p => p.comp f.unop.hom,
 continuous_def.2 by rintro s ⟨u, rfl⟩; use f.unop u; rfl⟩
@@ -221,7 +221,7 @@ definition counitAppCont
 
 中文:
 定义 counitAppCont
-  签名: : FrameHom L (Opens <| PT L) where
+  签名: : 框架态射 L (Opens <| PT L) where
   定义体: ⟨openOfElementHom L u, u, rfl⟩
   map_inf' a b := by simp
   map_top' := by simp

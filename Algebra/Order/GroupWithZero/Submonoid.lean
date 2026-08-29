@@ -33,7 +33,7 @@ definition pos
 
 中文:
 定义 pos
-  签名: : Submonoid α where
+  签名: : 子幺半群 α where
   定义体: Set.Ioi 0
   one_mem' := zero_lt_one
   mul_mem' := mul_pos

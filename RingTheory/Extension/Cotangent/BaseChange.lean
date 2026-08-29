@@ -60,7 +60,7 @@ definition tensorCotangentSpace
 
 中文:
 定义 tensorCotangentSpace
-  签名: (P : Extension.{u} R S) (T : 类型) [CommRing T] [Algebra R T]
+  签名: (P : 扩张.{u} R S) (T : 类型) [交换环 T] [代数 R T]
   定义体: letI := P.algebraBaseChange T
   letI : Algebra S (T otimes[R] S) := TensorProduct.rightAlgebra
   letI : Algebra P.Ring (T otimes[R] S) := Algebra.compHom _ (algebraMap P.Ring S)
@@ -108,7 +108,7 @@ lemma tensorCotangentSpace_tmul_tmul
 
 中文:
 引理 tensorCotangentSpace_tmul_tmul
-  条件: (t : T) (s : S) (x : Ω[P.Ring⁄R])
+  条件: (t : T) (s : S) (x : Ω[P.环⁄R])
   证明: by
   simp only [tensorCotangentSpace, LinearEquiv.trans_apply, LinearEquiv.restrictScalars_apply,
     ← mk_apply s x, IsTensorProduct.assocOfMapSMul_symm_tmul]
@@ -190,7 +190,7 @@ definition tensorCotangentOfFlat
 
 中文:
 定义 tensorCotangentOfFlat
-  签名: [Module.Flat R T]
+  签名: [模.平坦 R T]
   定义体: AlgebraTensorModule.congr (.refl T T) (P.cotangentEquivCotangentKer.restrictScalars R) ≪≫ₗ
     P.ker.tensorCotangentEquiv R T ≪≫ₗ
     (Ideal.Cotangent.equivOfEq _ _ (P.ker_baseChange T).symm).restrictScalars T ≪≫ₗ
@@ -222,7 +222,7 @@ lemma tensorCotangentOfFlat_tmul
 
 中文:
 引理 tensorCotangentOfFlat_tmul
-  条件: [Module.Flat R T] (t : T) (x : P.Cotangent)
+  条件: [模.平坦 R T] (t : T) (x : P.余切)
   证明: by
   obtain ⟨x, rfl⟩ := Cotangent.mk_surjective x
   simp only [tensorCotangentOfFlat, LinearEquiv.trans_apply, AlgebraTensorModule.congr_tmul,
@@ -303,7 +303,7 @@ lemma tensorToH1Cotangent_bijective_of_flat
 
 中文:
 引理 tensorToH1Cotangent_bijective_of_flat
-  条件: [Module.Flat R T]
+  条件: [模.平坦 R T]
   证明: by
   -- We apply the five lemma.
   apply LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective (M₁ := Unit)
@@ -366,7 +366,7 @@ definition tensorH1CotangentOfFlat
 
 中文:
 定义 tensorH1CotangentOfFlat
-  签名: [Module.Flat R T]
+  签名: [模.平坦 R T]
   定义体: LinearEquiv.ofBijective (P.tensorToH1Cotangent T)
     (P.tensorToH1Cotangent_bijective_of_flat T)
 
@@ -388,7 +388,7 @@ lemma tensorH1CotangentOfFlat_tmul
 
 中文:
 引理 tensorH1CotangentOfFlat_tmul
-  条件: [Module.Flat R T] (t : T) (x : P.H1Cotangent)
+  条件: [模.平坦 R T] (t : T) (x : P.H1Cotangent)
   证明: rfl
 -/
 lemma tensorH1CotangentOfFlat_tmul [Module.Flat R T] (t : T) (x : P.H1Cotangent) :
@@ -411,7 +411,7 @@ definition tensorH1CotangentOfFlat
 
 中文:
 定义 tensorH1CotangentOfFlat
-  签名: (T : 类型) [CommRing T] [Algebra R T] [Module.Flat R T]
+  签名: (T : 类型) [交换环 T] [代数 R T] [模.平坦 R T]
   定义体: (Generators.self R S).toExtension.tensorH1CotangentOfFlat T ≪≫ₗ
     (Extension.H1Cotangent.equiv
       ((Generators.self R S).baseChangeFromBaseChange T)
@@ -445,7 +445,7 @@ lemma tensorH1CotangentOfFlat_tmul
 
 中文:
 引理 tensorH1CotangentOfFlat_tmul
-  结论: (T : 类型) [CommRing T] [Algebra R T] [Module.Flat R T]
+  结论: (T : 类型) [交换环 T] [代数 R T] [模.平坦 R T]
   证明: by
   simp only [tensorH1CotangentOfFlat, LinearEquiv.trans_apply,
     Extension.tensorH1CotangentOfFlat_tmul, map_smul, LinearEquiv.restrictScalars_apply,

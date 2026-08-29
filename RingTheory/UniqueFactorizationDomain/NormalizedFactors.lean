@@ -65,7 +65,7 @@ theorem factors_eq_normalizedFactors
 
 中文:
 定理 factors_eq_normalizedFactors
-  结论: {M : 类型} [CommMonoidWithZero M]
+  结论: {M : 类型} [带零交换幺半群 M]
   证明: by
   unfold normalizedFactors
   convert (Multiset.map_id (factors x)).symm with p
@@ -129,7 +129,7 @@ theorem prod_normalizedFactors_eq
 
 中文:
 定理 prod_normalizedFactors_eq
-  结论: {α} [CommMonoidWithZero α] [StrongNormalizationMonoid α]
+  结论: {α} [带零交换幺半群 α] [StrongNormalization幺半群 α]
   证明: by
   trans normalize (normalizedFactors a).prod
   · rw [normalizedFactors, ← coe_normalizeHom, ← map_multiset_prod, coe_normalizeHom,
@@ -163,7 +163,7 @@ theorem prime_of_normalized_factor
 中文:
 定理 prime_of_normalized_factor
   条件: {a : α}
-  结论: 对任意 x : α, x in normalizedFactors a -> Prime x
+  结论: 对任意 x : α, x in normalizedFactors a -> 素 x
   证明: by
   rw [normalizedFactors]; rw [factors]
   split_ifs with ane0; · simp
@@ -249,7 +249,7 @@ theorem normalizedFactors_irreducible
 
 中文:
 定理 normalizedFactors_irreducible
-  条件: {a : α} (ha : Irreducible a)
+  条件: {a : α} (ha : 不可约 a)
   证明: by
   obtain ⟨p, a_assoc, hp⟩ :=
     prime_factors_irreducible ha ⟨prime_of_normalized_factor, prod_normalizedFactors ha.ne_zero⟩
@@ -322,8 +322,8 @@ theorem exists_mem_normalizedFactors_of_dvd
       irreducibl
 
 中文:
-定理 exists_mem_normalizedFactors_of_dvd
-  条件: {a p : α} (ha0 : a != 0) (hp : Irreducible p)
+定理 存在_mem_normalizedFactors_of_dvd
+  条件: {a p : α} (ha0 : a != 0) (hp : 不可约 p)
   证明: fun ⟨b, hb⟩ =>
   have hb0 : b != 0 := fun hb0 => by simp_all
   have : Multiset.Rel Associated (p ::ₘ normalizedFactors b) (normalizedFactors a) :=
@@ -363,8 +363,8 @@ theorem exists_mem_normalizedFactors
 @[simp]
 
 中文:
-定理 exists_mem_normalizedFactors
-  条件: {x : α} (hx : x != 0) (h : ¬IsUnit x)
+定理 存在_mem_normalizedFactors
+  条件: {x : α} (hx : x != 0) (h : ¬是单位 x)
   证明: by
   obtain ⟨p', hp', hp'x⟩ := WfDvdMonoid.exists_irreducible_factor h hx
   obtain ⟨p, hp, _⟩ := exists_mem_normalizedFactors_of_dvd hx hp' hp'x
@@ -544,8 +544,8 @@ theorem _root_.Irreducible.normalizedFactors_pow
   rw [UniqueFactorizationMonoid.normalizedFactors_pow]; rw [normalizedFactors_irreducible hp]; rw [Multiset.nsmul_singleton]
 
 中文:
-定理 _root_.Irreducible.normalizedFactors_pow
-  条件: {p : α} (hp : Irreducible p) (k : 自然数)
+定理 _root_.不可约.normalizedFactors_pow
+  条件: {p : α} (hp : 不可约 p) (k : 自然数)
   证明: by
   rw [UniqueFactorizationMonoid.normalizedFactors_pow]; rw [normalizedFactors_irreducible hp]; rw [Multiset.nsmul_singleton]
 
@@ -571,7 +571,7 @@ theorem normalizedFactors_prod_eq
 
 中文:
 定理 normalizedFactors_prod_eq
-  条件: (s : Multiset α) (hs : 对任意 a in s, Irreducible a)
+  条件: (s : Multiset α) (hs : 对任意 a in s, 不可约 a)
   证明: by
   induction s using Multiset.induction with
   | empty => rw [Multiset.prod_zero, normalizedFactors_one, Multiset.map_zero]
@@ -691,7 +691,7 @@ theorem normalizedFactors_of_irreducible_pow
 
 中文:
 定理 normalizedFactors_of_irreducible_pow
-  条件: {p : α} (hp : Irreducible p) (k : 自然数)
+  条件: {p : α} (hp : 不可约 p) (k : 自然数)
   证明: by
   rw [normalizedFactors_pow]; rw [normalizedFactors_irreducible hp]; rw [Multiset.nsmul_singleton]
 
@@ -788,7 +788,7 @@ theorem mem_normalizedFactors_iff
 
 中文:
 定理 mem_normalizedFactors_iff
-  条件: [Subsingleton αˣ] {p x : α} (hx : x != 0)
+  条件: [子单例 αˣ] {p x : α} (hx : x != 0)
   证明: by
   constructor
   · intro h
@@ -888,7 +888,7 @@ theorem exists_associated_prime_pow_of_unique_normalized_factor
   rwa [Multiset.eq_replicate_of_mem fun b => h, Multiset.prod_replicate] at this
 
 中文:
-定理 exists_associated_prime_pow_of_unique_normalized_factor
+定理 存在_associated_prime_pow_of_unique_normalized_factor
   结论: {p r : α}
   证明: by
   use (normalizedFactors r).card
@@ -920,7 +920,7 @@ theorem normalizedFactors_prod_of_prime
 
 中文:
 定理 normalizedFactors_prod_of_prime
-  结论: [Subsingleton αˣ] {m : Multiset α}
+  结论: [子单例 αˣ] {m : Multiset α}
   证明: by
   cases subsingleton_or_nontrivial α
   · obtain rfl : m = 0 := by
@@ -994,7 +994,7 @@ theorem normalizedFactors_pos
 中文:
 定理 normalizedFactors_pos
   条件: (x : α) (hx : x != 0)
-  结论: 0 < normalizedFactors x ↔ ¬IsUnit x
+  结论: 0 < normalizedFactors x ↔ ¬是单位 x
   证明: by
   constructor
   · intro h hx
@@ -1056,7 +1056,7 @@ theorem normalizedFactors_of_isUnit
 
 中文:
 定理 normalizedFactors_of_isUnit
-  条件: {x : α} (hx : IsUnit x)
+  条件: {x : α} (hx : 是单位 x)
   证明: by
   obtain rfl | hx₀ := eq_or_ne x 0
   · simp
@@ -1337,7 +1337,7 @@ lemma normalizedFactors_prod_eq_self_of_subset
 
 中文:
 引理 normalizedFactors_prod_eq_self_of_subset
-  结论: [Subsingleton αˣ] {a : α} {m : Multiset α}
+  结论: [子单例 αˣ] {a : α} {m : Multiset α}
   证明: normalizedFactors_prod_of_prime fun _ h => prime_of_normalized_factor _ (mem_of_subset hm h)
 
 Depends on / 依赖: mem_of_subset, normalizedFactors_prod_of_prime, prime_of_normalized_factor
@@ -1357,7 +1357,7 @@ lemma prod_ne_zero_of_subset_normalizedFactors
 
 中文:
 引理 prod_ne_zero_of_subset_normalizedFactors
-  结论: [NormalizationMonoid α] [Nontrivial α] {a : α}
+  结论: [Normalization幺半群 α] [非平凡 α] {a : α}
   证明: prod_ne_zero_of_prime _ fun _ h => prime_of_normalized_factor _ (mem_of_subset hm h)
 
 Depends on / 依赖: mem_of_subset, prime_of_normalized_factor, prod_ne_zero_of_prime
@@ -1379,7 +1379,7 @@ lemma normalizedFactors_prod_inter_eq_inter
 
 中文:
 引理 normalizedFactors_prod_inter_eq_inter
-  条件: [Subsingleton αˣ] (a b : α)
+  条件: [子单例 αˣ] (a b : α)
   证明: normalizedFactors_prod_eq_self_of_subset fun _ h => (mem_inter.mp h).left
 
 Depends on / 依赖: mem_inter, mem_inter.mp, normalizedFactors_prod_eq_self_of_subset
@@ -1399,7 +1399,7 @@ lemma prod_inter_normalizedFactors_ne_zero
 
 中文:
 引理 prod_inter_normalizedFactors_ne_zero
-  条件: [NormalizationMonoid α] [Nontrivial α] (a b : α)
+  条件: [Normalization幺半群 α] [非平凡 α] (a b : α)
   证明: prod_ne_zero_of_subset_normalizedFactors fun _ h => (mem_inter.mp h).left
 
 Depends on / 依赖: mem_inter, mem_inter.mp, prod_ne_zero_of_subset_normalizedFactors

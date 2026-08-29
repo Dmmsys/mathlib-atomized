@@ -26,8 +26,8 @@ definition Prod.Lex.toLexOrderHom
   monotone' := Prod.Lex.toLex_mono
 
 中文:
-定义 Prod.Lex.toLexOrderHom
-  签名: {α β : 类型} [PartialOrder α] [Preorder β]
+定义 积类型.Lex.toLexOrderHom
+  签名: {α β : 类型} [偏序 α] [预序 β]
   定义体: toLex
   monotone' := Prod.Lex.toLex_mono
 

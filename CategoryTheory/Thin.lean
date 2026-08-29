@@ -46,7 +46,7 @@ definition thin_category
 
 中文:
 定义 thin_category
-  签名: : Category C where
+  签名: : 范畴 C where
 -/
 def thin_category : Category C where
 
@@ -69,7 +69,7 @@ instance functor_thin
 
 中文:
 实例 functor_thin
-  签名: : Quiver.IsThin (D ⥤ C)
+  签名: : 箭图.IsThin (D ⥤ C)
   定义体: fun _ _ =>
   ⟨fun α β => NatTrans.ext (by subsingleton)⟩
 -/

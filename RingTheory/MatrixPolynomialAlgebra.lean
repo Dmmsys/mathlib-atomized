@@ -54,7 +54,7 @@ definition matPolyEquiv
 
 中文:
 定义 matPolyEquiv
-  签名: : Matrix n n R[X] ≃ₐ[R] (Matrix n n R)[X]
+  签名: : 矩阵 n n R[X] ≃ₐ[R] (矩阵 n n R)[X]
   定义体: ((matrixEquivTensor n R R[X]).trans (Algebra.TensorProduct.comm R _ _)).trans
     (polyEquivTensor R (Matrix n n R)).symm
 
@@ -76,7 +76,7 @@ theorem matPolyEquiv_symm_C
 
 中文:
 定理 matPolyEquiv_symm_C
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: matPolyEquiv.symm (C M) = M.map C
   证明: by
   simp [matPolyEquiv]
@@ -96,7 +96,7 @@ theorem matPolyEquiv_map_C
 
 中文:
 定理 matPolyEquiv_map_C
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: matPolyEquiv (M.map C) = C M
   证明: by
   rw [← matPolyEquiv_symm_C]; rw [AlgEquiv.apply_symm_apply]
@@ -251,7 +251,7 @@ theorem matPolyEquiv_coeff_apply
 
 中文:
 定理 matPolyEquiv_coeff_apply
-  条件: (m : Matrix n n R[X]) (k : 自然数) (i j : n)
+  条件: (m : 矩阵 n n R[X]) (k : 自然数) (i j : n)
   证明: by
   refine Matrix.induction_on' m ?_ ?_ ?_
   · simp
@@ -295,7 +295,7 @@ theorem matPolyEquiv_symm_apply_coeff
 
 中文:
 定理 matPolyEquiv_symm_apply_coeff
-  条件: (p : (Matrix n n R)[X]) (i j : n) (k : 自然数)
+  条件: (p : (矩阵 n n R)[X]) (i j : n) (k : 自然数)
   证明: by
   have t : p = matPolyEquiv (matPolyEquiv.symm p) := by simp
   conv_rhs => rw [t]
@@ -358,7 +358,7 @@ lemma matPolyEquiv_map_smul
 
 中文:
 引理 matPolyEquiv_map_smul
-  条件: (p : R[X]) (M : Matrix n n R[X])
+  条件: (p : R[X]) (M : 矩阵 n n R[X])
   证明: by
   rw [← one_mul M]; rw [← smul_mul_assoc]; rw [map_mul]; rw [matPolyEquiv_smul_one]; rw [one_mul]
 
@@ -386,7 +386,7 @@ theorem matPolyEquiv_symm_map_eval
 
 中文:
 定理 matPolyEquiv_symm_map_eval
-  条件: (M : (Matrix n n R)[X]) (r : R)
+  条件: (M : (矩阵 n n R)[X]) (r : R)
   证明: by
   suffices ((aeval r).mapMatrix.comp matPolyEquiv.symm.toAlgHom : (Matrix n n R)[X] ->ₐ[R] _) =
       (eval₂AlgHom (AlgHom.id R _) (scalar n r)
@@ -421,7 +421,7 @@ theorem matPolyEquiv_eval_eq_map
 
 中文:
 定理 matPolyEquiv_eval_eq_map
-  条件: (M : Matrix n n R[X]) (r : R)
+  条件: (M : 矩阵 n n R[X]) (r : R)
   证明: by
   simpa only [AlgEquiv.symm_apply_apply] using (matPolyEquiv_symm_map_eval (matPolyEquiv M) r).symm
 
@@ -443,7 +443,7 @@ theorem matPolyEquiv_eval
 
 中文:
 定理 matPolyEquiv_eval
-  条件: (M : Matrix n n R[X]) (r : R) (i j : n)
+  条件: (M : 矩阵 n n R[X]) (r : R) (i j : n)
   证明: by
   rw [matPolyEquiv_eval_eq_map]; rw [map_apply]
 
@@ -468,7 +468,7 @@ theorem support_subset_support_matPolyEquiv
 
 中文:
 定理 support_subset_support_matPolyEquiv
-  条件: (m : Matrix n n R[X]) (i j : n)
+  条件: (m : 矩阵 n n R[X]) (i j : n)
   证明: by
   intro k
   contrapose
@@ -498,7 +498,7 @@ exact congr_arg det .symm ext fun _ _ => matPolyEquiv_eval _ _ _ _
 
 中文:
 定理 eval_det
-  条件: {R : 类型} [CommRing R] (M : Matrix n n R[X]) (r : R)
+  条件: {R : 类型} [交换环 R] (M : 矩阵 n n R[X]) (r : R)
   证明: by
   rw [Polynomial.eval]; rw [← coe_eval₂RingHom]; rw [RingHom.map_det]
 exact congr_arg det .symm ext fun _ _ => matPolyEquiv_eval _ _ _ _
@@ -523,7 +523,7 @@ lemma eval_det_add_X_smul
 
 中文:
 引理 eval_det_add_X_smul
-  条件: {R : 类型} [CommRing R] (A : Matrix n n R[X]) (M : Matrix n n R)
+  条件: {R : 类型} [交换环 R] (A : 矩阵 n n R[X]) (M : 矩阵 n n R)
   证明: by
   simp only [eval_det, map_zero, map_add, eval_add, Algebra.smul_def, map_mul]
   simp only [Algebra.algebraMap_eq_smul_one, matPolyEquiv_smul_one, map_X, X_mul, eval_mul_X,
@@ -547,8 +547,8 @@ definition RingHom.polyToMatrix
   body: matPolyEquiv.symm.toRingHom.comp (mapRingHom f)
 
 中文:
-定义 RingHom.polyToMatrix
-  签名: (f : A ->+* Matrix n n R)
+定义 环态射.polyToMatrix
+  签名: (f : A ->+* 矩阵 n n R)
   定义体: matPolyEquiv.symm.toRingHom.comp (mapRingHom f)
 
 Depends on / 依赖: mapRingHom, matPolyEquiv, matPolyEquiv.symm.toRingHom.comp, toRingHom
@@ -588,7 +588,7 @@ lemma evalRingHom_mapMatrix_comp_compRingEquiv
 
 中文:
 引理 evalRingHom_mapMatrix_comp_compRingEquiv
-  条件: {m} [Fintype m] [DecidableEq m]
+  条件: {m} [有限类型 m] [DecidableEq m]
   证明: by
   ext; simp
 -/

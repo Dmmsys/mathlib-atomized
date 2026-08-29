@@ -57,7 +57,7 @@ definition Set
   body: α -> Prop
 
 中文:
-定义 Set
+定义 集合
   签名: (α : 类型u)
   定义体: α -> Prop
 -/
@@ -88,7 +88,7 @@ definition Set.ofPred
 @[deprecated (since := "2026-07-09")] alias setOf := Set.ofPred
 
 中文:
-定义 Set.ofPred
+定义 集合.ofPred
   签名: {α : 类型u} (p : α -> 命题)
   定义体: p
 
@@ -113,7 +113,7 @@ definition Mem
 
 中文:
 定义 Mem
-  签名: (s : Set α) (a : α)
+  签名: (s : 集合 α) (a : α)
   定义体: s a
 -/
 protected def Mem (s : Set α) (a : α) : Prop :=
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership α (Set α)
+  签名: Membership α (集合 α)
   定义体: ⟨Set.Mem⟩
 
 @[ext, grind ext]
@@ -153,7 +153,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {a b : Set α} (h : 对任意 (x : α), x in a ↔ x in b)
+  条件: {a b : 集合 α} (h : 对任意 (x : α), x in a ↔ x in b)
   结论: a = b
   证明: funext (fun x => propext (h x))
 
@@ -171,8 +171,8 @@ definition Subset
   body: forall ⦃a⦄, a in s₁ -> a in s₂
 
 中文:
-定义 Subset
-  签名: (s₁ s₂ : Set α)
+定义 子集
+  签名: (s₁ s₂ : 集合 α)
   定义体: forall ⦃a⦄, a in s₁ -> a in s₂
 -/
 protected def Subset (s₁ s₂ : Set α) :=
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (Set α)
+  签名: LE (集合 α)
   定义体: ⟨Set.Subset⟩
 
 Depends on / 依赖: Set.Subset, Subset
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection (Set α)
+  签名: EmptyCollection (集合 α)
   定义体: ⟨fun _ => False⟩
 -/
 instance : EmptyCollection (Set α) :=
@@ -332,7 +332,7 @@ definition univ
 
 中文:
 定义 univ
-  签名: : Set α
+  签名: : 集合 α
   定义体: {_a | True}
 -/
 def univ : Set α := {_a | True}
@@ -347,7 +347,7 @@ definition insert
 
 中文:
 定义 insert
-  签名: (a : α) (s : Set α)
+  签名: (a : α) (s : 集合 α)
   定义体: {b | b = a ∨ b in s}
 -/
 protected def insert (a : α) (s : Set α) : Set α := {b | b = a ∨ b in s}
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: Insert α (Set α)
+  签名: Insert α (集合 α)
   定义体: ⟨Set.insert⟩
 
 Depends on / 依赖: Set.insert, insert
@@ -394,7 +394,7 @@ instance instSingletonSet
 
 中文:
 实例 instSingletonSet
-  签名: : Singleton α (Set α)
+  签名: : 单例 α (集合 α)
   定义体: ⟨Set.singleton⟩
 
 Depends on / 依赖: Set.singleton, singleton
@@ -411,7 +411,7 @@ definition union
 
 中文:
 定义 union
-  签名: (s₁ s₂ : Set α)
+  签名: (s₁ s₂ : 集合 α)
   定义体: {a | a in s₁ ∨ a in s₂}
 -/
 protected def union (s₁ s₂ : Set α) : Set α := {a | a in s₁ ∨ a in s₂}
@@ -426,7 +426,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union (Set α)
+  签名: 并集 (集合 α)
   定义体: ⟨Set.union⟩
 
 Depends on / 依赖: Set.union
@@ -443,7 +443,7 @@ definition inter
 
 中文:
 定义 inter
-  签名: (s₁ s₂ : Set α)
+  签名: (s₁ s₂ : 集合 α)
   定义体: {a | a in s₁ ∧ a in s₂}
 -/
 protected def inter (s₁ s₂ : Set α) : Set α := {a | a in s₁ ∧ a in s₂}
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数er (Set α)
+  签名: 交集 (集合 α)
   定义体: ⟨Set.inter⟩
 
 Depends on / 依赖: Set.inter
@@ -475,7 +475,7 @@ definition compl
 
 中文:
 定义 compl
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {a | a ∉ s}
 -/
 protected def compl (s : Set α) : Set α := {a | a ∉ s}
@@ -490,7 +490,7 @@ definition diff
 
 中文:
 定义 diff
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: {a in s | a ∉ t}
 -/
 protected def diff (s t : Set α) : Set α := {a in s | a ∉ t}
@@ -505,7 +505,7 @@ instance :
 
 中文:
 实例 :
-  签名: SDiff (Set α)
+  签名: 对称差 (集合 α)
   定义体: ⟨Set.diff⟩
 
 Depends on / 依赖: Set.diff
@@ -526,7 +526,7 @@ universe v in
 
 中文:
 定义 powerset
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {t | t subseteq s}
 
 @[inherit_doc] prefix:100 "𝒫 " => powerset
@@ -549,8 +549,8 @@ definition image
   body: {f a | a in s}
 
 中文:
-定义 image
-  签名: {β : 类型v} (f : α -> β) (s : Set α)
+定义 像
+  签名: {β : 类型v} (f : α -> β) (s : 集合 α)
   定义体: {f a | a in s}
 -/
 def image {β : Type v} (f : α -> β) (s : Set α) : Set β := {f a | a in s}
@@ -565,7 +565,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor Set
+  签名: 函子 集合
   定义体: @Set.image
 
 Depends on / 依赖: Set.image
@@ -586,7 +586,7 @@ comp_map g h _ := funext fun c => propext
 
 中文:
 实例 :
-  签名: LawfulFunctor Set
+  签名: Lawful函子 集合
   定义体: funext fun _ => propext ⟨fun ⟨_, sb, rfl⟩ => sb, fun sb => ⟨_, sb, rfl⟩⟩
 comp_map g h _ := funext fun c => propext
     ⟨fun ⟨a, ⟨h₁, h₂⟩⟩ => ⟨g a, ⟨⟨a, ⟨h₁, rfl⟩⟩, h₂⟩⟩,
@@ -611,8 +611,8 @@ definition Nonempty
   body: exists x, x in s
 
 中文:
-定义 Nonempty
-  签名: (s : Set α)
+定义 非空
+  签名: (s : 集合 α)
   定义体: exists x, x in s
 -/
 protected def Nonempty (s : Set α) : Prop :=

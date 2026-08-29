@@ -51,7 +51,7 @@ definition prod
 @[to_additive]
 
 中文:
-定义 prod
+定义 乘积
   签名: : Multiset M -> M
   定义体: foldr (· * ·) 1
 
@@ -120,8 +120,8 @@ theorem prod_coe
 
 中文:
 定理 prod_coe
-  条件: (l : List M)
-  结论: prod ↑l = l.prod
+  条件: (l : 列表 M)
+  结论: 乘积 ↑l = l.乘积
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -145,7 +145,7 @@ theorem prod_toList
 中文:
 定理 prod_toList
   条件: (s : Multiset M)
-  结论: s.toList.prod = s.prod
+  结论: s.toList.乘积 = s.乘积
   证明: by
   conv_rhs => rw [← coe_toList s]
   rw [prod_coe]
@@ -174,7 +174,7 @@ theorem prod_map_toList
 中文:
 定理 prod_map_toList
   条件: (s : Multiset ι) (f : ι -> M)
-  结论: (s.toList.map f).prod = (s.map f).prod
+  结论: (s.toList.map f).乘积 = (s.map f).乘积
   证明: by
   rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [coe_toList]
 
@@ -198,7 +198,7 @@ theorem prod_zero
 
 中文:
 定理 prod_zero
-  结论: @prod M _ 0 = 1
+  结论: @乘积 M _ 0 = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -221,7 +221,7 @@ theorem prod_cons
 中文:
 定理 prod_cons
   条件: (a : M) (s)
-  结论: prod (a ::ₘ s) = a * prod s
+  结论: 乘积 (a ::ₘ s) = a * 乘积 s
   证明: foldr_cons _ _ _ _
 
 @[to_additive (attr := simp)]
@@ -247,7 +247,7 @@ theorem prod_singleton
 中文:
 定理 prod_singleton
   条件: (a : M)
-  结论: prod {a} = a
+  结论: 乘积 {a} = a
   证明: by
   simp only [mul_one, prod_cons, ← cons_zero, prod_zero]
 
@@ -274,7 +274,7 @@ theorem prod_pair
 中文:
 定理 prod_pair
   条件: (a b : M)
-  结论: ({a, b} : Multiset M).prod = a * b
+  结论: ({a, b} : Multiset M).乘积 = a * b
   证明: by
   rw [insert_eq_cons]; rw [prod_cons]; rw [prod_singleton]
 
@@ -301,7 +301,7 @@ theorem prod_replicate
 中文:
 定理 prod_replicate
   条件: (n : 自然数) (a : M)
-  结论: (replicate n a).prod = a ^ n
+  结论: (replicate n a).乘积 = a ^ n
   证明: by
   simp [replicate, List.prod_replicate]
 
@@ -328,7 +328,7 @@ theorem pow_count
 中文:
 定理 pow_count
   条件: [DecidableEq M] (a : M)
-  结论: a ^ s.count a = (s.filter (Eq a)).prod
+  结论: a ^ s.count a = (s.filter (相等 a)).乘积
   证明: by
   rw [filter_eq]; rw [prod_replicate]
 
@@ -381,7 +381,7 @@ theorem prod_map_one
 
 中文:
 定理 prod_map_one
-  结论: prod (m.map fun _ => (1 : M)) = 1
+  结论: 乘积 (m.map fun _ => (1 : M)) = 1
   证明: by
   rw [map_const']; rw [prod_replicate]; rw [one_pow]
 

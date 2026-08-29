@@ -57,8 +57,8 @@ lemma map_eq_one_of_forall_lt
    
 
 中文:
-引理 map_eq_one_of_forall_lt
-  结论: [MulArchimedean Γ₀] {v : Valuation K Γ₀} {r : Γ₀} (hr : r != 0)
+引理 map_eq_one_of_对任意_lt
+  结论: [MulArchimedean Γ₀] {v : 赋值 K Γ₀} {r : Γ₀} (hr : r != 0)
   证明: by
   lift r to Γ₀ˣ using IsUnit.mk0 _ hr
   rcases lt_trichotomy (Units.mk0 _ hx) 1 with H | H | H
@@ -188,12 +188,12 @@ class Valued
     - is_topological_valuation : forall s, s in 𝓝 (0 : R) ↔ exists γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass v))ˣ, { x : R | v.restrict x < γ.1 } subseteq s
 
 中文:
-类 Valued
-  参数: (R : 类型u) [Ring R] (Γ₀ : outParam (类型v))
-  继承: UniformSpace R, IsUniformAddGroup R
+类 赋值
+  参数: (R : 类型u) [环 R] (Γ₀ : outParam (类型v))
+  继承: 一致空间 R, 是UniformAdd群 R
   公理与运算 (2 个):
-    - v : Valuation R Γ₀
-    - is_topological_valuation : 对任意 s, s in 𝓝 (0 : R) ↔ 存在 γ : (MonoidWithZeroHom.ValueGroup₀ (.ofClass v))ˣ, { x : R | v.restrict x < γ.1 } subseteq s
+    - v : 赋值 R Γ₀
+    - is_topological_valuation : 对任意 s, s in 𝓝 (0 : R) ↔ 存在 γ : (带零幺半群态射.ValueGroup₀ (.ofClass v))ˣ, { x : R | v.restrict x < γ.1 } subseteq s
 -/
 class Valued (R : Type u) [Ring R] (Γ₀ : outParam (Type v))
   [LinearOrderedCommGroupWithZero Γ₀] extends UniformSpace R, IsUniformAddGroup R where
@@ -219,7 +219,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (v : Valuation R Γ₀)
+  签名: (v : 赋值 R Γ₀)
   定义体: { v
     toUniformSpace := @IsTopologicalAddGroup.rightUniformSpace R _ v.subgroups_basis.topology _
     toIsUniformAddGroup := @isUniformAddGroup_of_addCommGroup _ _ v.subgroups_basis.topology _
@@ -275,7 +275,7 @@ theorem hasBasis_uniformity
 
 中文:
 定理 hasBasis_uniformity
-  结论: (𝓤 R).HasBasis (fun _ => True)
+  结论: (𝓤 R).有基 (fun _ => 真)
   证明: by
   rw [uniformity_eq_comap_nhds_zero]
   exact (hasBasis_nhds_zero R Γ₀).comap _
@@ -333,7 +333,7 @@ theorem mem_nhds
 
 中文:
 定理 mem_nhds
-  条件: {s : Set R} {x : R}
+  条件: {s : 集合 R} {x : R}
   结论: s in 𝓝 x ↔
   证明: by
   simp only [← nhds_translation_add_neg x, ← sub_eq_add_neg, preimage_ofPred_eq, true_and,
@@ -359,7 +359,7 @@ theorem mem_nhds_zero
 
 中文:
 定理 mem_nhds_zero
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   结论: s in 𝓝 (0 : R) ↔
   证明: by
   simp only [mem_nhds, sub_zero]
@@ -429,7 +429,7 @@ lemma discreteTopology_of_forall_map_eq_one
   exac
 
 中文:
-引理 discreteTopology_of_forall_map_eq_one
+引理 discreteTopology_of_对任意_map_eq_one
   条件: (h : 对任意 x : R, x != 0 -> v x = 1)
   证明: by
   simp only [discreteTopology_iff_isOpen_singleton_zero, isOpen_iff_mem_nhds, mem_singleton_iff,
@@ -461,8 +461,8 @@ lemma discreteTopology_of_forall_lt
   proof: discreteTopology_of_forall_map_eq_one (by simpa using Valued.v.map_eq_one_of_forall_lt hr h)
 
 中文:
-引理 discreteTopology_of_forall_lt
-  结论: [MulArchimedean Γ₀] [Valued K Γ₀] {r : Γ₀} (hr : r != 0)
+引理 discreteTopology_of_对任意_lt
+  结论: [MulArchimedean Γ₀] [赋值 K Γ₀] {r : Γ₀} (hr : r != 0)
   证明: discreteTopology_of_forall_map_eq_one (by simpa using Valued.v.map_eq_one_of_forall_lt hr h)
 
 Depends on / 依赖: Valued, Valued.v.map_eq_one_of_forall_lt, discreteTopology_of_forall_map_eq_one, map_eq_one_of_forall_lt
@@ -493,7 +493,7 @@ theorem cauchy_iff
 
 中文:
 定理 cauchy_iff
-  条件: {F : Filter R}
+  条件: {F : 滤子 R}
   结论: Cauchy F ↔
   证明: by
   rw [toUniformSpace_eq]; rw [AddGroupFilterBasis.cauchy_iff]
@@ -802,7 +802,7 @@ theorem isOpen_integer
 
 中文:
 定理 isOpen_integer
-  结论: IsOpen (_i.v.integer : Set R)
+  结论: 是开集 (_i.v.integer : 集合 R)
   证明: by
   simp only [integer, Subring.coe_set_mk, Subsemiring.coe_set_mk, Submonoid.coe_set_mk,
     Subsemigroup.coe_set_mk, ← v.restrict_le_one_iff]
@@ -828,7 +828,7 @@ theorem isClosed_integer
 
 中文:
 定理 isClosed_integer
-  结论: IsClosed (_i.v.integer : Set R)
+  结论: 是闭集 (_i.v.integer : 集合 R)
   证明: by
   simp only [integer, Subring.coe_set_mk, Subsemiring.coe_set_mk, Submonoid.coe_set_mk,
     Subsemigroup.coe_set_mk, ← v.restrict_le_one_iff]
@@ -851,7 +851,7 @@ theorem isClopen_integer
 
 中文:
 定理 isClopen_integer
-  结论: IsClopen (_i.v.integer : Set R)
+  结论: IsClopen (_i.v.integer : 集合 R)
   证明: ⟨isClosed_integer _, isOpen_integer _⟩
 
 Depends on / 依赖: isClosed_integer, isOpen_integer
@@ -869,7 +869,7 @@ theorem isOpen_valuationSubring
 
 中文:
 定理 isOpen_valuationSubring
-  条件: (K : 类型u) [Field K] [hv : Valued K Γ₀]
+  条件: (K : 类型u) [域 K] [hv : 赋值 K Γ₀]
   证明: isOpen_integer K
 
 Depends on / 依赖: isOpen_integer
@@ -888,7 +888,7 @@ theorem isClosed_valuationSubring
 
 中文:
 定理 isClosed_valuationSubring
-  条件: (K : 类型u) [Field K] [hv : Valued K Γ₀]
+  条件: (K : 类型u) [域 K] [hv : 赋值 K Γ₀]
   证明: isClosed_integer K
 
 Depends on / 依赖: isClosed_integer
@@ -907,7 +907,7 @@ theorem isClopen_valuationSubring
 
 中文:
 定理 isClopen_valuationSubring
-  条件: (K : 类型u) [Field K] [hv : Valued K Γ₀]
+  条件: (K : 类型u) [域 K] [hv : 赋值 K Γ₀]
   证明: isClopen_integer K
 
 Depends on / 依赖: isClopen_integer

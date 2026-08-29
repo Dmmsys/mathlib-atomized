@@ -59,8 +59,8 @@ lemma Continuous.mulIndicator
 @[to_additive]
 
 中文:
-引理 Continuous.mulIndicator
-  条件: (hs : 对任意 a in frontier s, f a = 1) (hf : Continuous f)
+引理 连续.mulIndicator
+  条件: (hs : 对任意 a in frontier s, f a = 1) (hf : 连续 f)
   证明: by
   classical exact hf.piecewise hs continuous_const
 
@@ -118,7 +118,7 @@ lemma IsClopen.continuous_mulIndicator
 
 中文:
 引理 IsClopen.continuous_mulIndicator
-  条件: (hs : IsClopen s) (hf : Continuous f)
+  条件: (hs : IsClopen s) (hf : 连续 f)
   证明: hf.mulIndicator (by simp [isClopen_iff_frontier_eq_empty.mp hs])
 
 Depends on / 依赖: hf.mulIndicator, isClopen_iff_frontier_eq_empty, isClopen_iff_frontier_eq_empty.mp, mulIndicator

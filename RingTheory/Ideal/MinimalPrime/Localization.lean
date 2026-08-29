@@ -53,7 +53,7 @@ theorem Ideal.iUnion_minimalPrimes
       ri
 
 中文:
-定理 Ideal.iUnion_minimalPrimes
+定理 理想.iUnion_minimalPrimes
   证明: by
   ext x
   simp only [Set.mem_iUnion, SetLike.mem_coe, exists_prop, Set.mem_ofPred_eq]
@@ -108,7 +108,7 @@ theorem Ideal.exists_mul_mem_of_mem_minimalPrimes
   refine ⟨x ^ (Nat.find H
 
 中文:
-定理 Ideal.exists_mul_mem_of_mem_minimalPrimes
+定理 理想.存在_mul_mem_of_mem_minimalPrimes
   证明: by
   classical
   obtain ⟨y, hy, n, hx⟩ := Ideal.iUnion_minimalPrimes.subset (Set.mem_biUnion hp hx)
@@ -172,8 +172,8 @@ lemma Ideal.disjoint_nonZeroDivisors_of_mem_minimalPrimes
   exact fun _ => Ideal.exists_mul_mem_of_mem_minimalPrimes hp
 
 中文:
-引理 Ideal.disjoint_nonZeroDivisors_of_mem_minimalPrimes
-  条件: {p : Ideal R} (hp : p in minimalPrimes R)
+引理 理想.disjoint_nonZeroDivisors_of_mem_minimalPrimes
+  条件: {p : 理想 R} (hp : p in minimalPrimes R)
   证明: by
   simp_rw [Set.disjoint_left, SetLike.mem_coe, mem_nonZeroDivisors_iff_right, not_forall,
     exists_prop, @and_comm (_ * _ = _), ← mul_comm]
@@ -216,8 +216,8 @@ theorem Ideal.exists_comap_eq_of_mem_minimalPrimes
   ⟨p', hp', hIp', le.antisymm (H.2 ⟨inferInstance, comap_mono hIp'⟩ le)⟩
 
 中文:
-定理 Ideal.exists_comap_eq_of_mem_minimalPrimes
-  结论: {I : Ideal S} (f : R ->+* S) (p)
+定理 理想.存在_comap_eq_of_mem_minimalPrimes
+  结论: {I : 理想 S} (f : R ->+* S) (p)
   证明: have := H.isPrime
   have ⟨p', hIp', hp', le⟩ := exists_ideal_comap_le_prime p I H.le
   ⟨p', hp', hIp', le.antisymm (H.2 ⟨inferInstance, comap_mono hIp'⟩ le)⟩
@@ -241,7 +241,7 @@ theorem Ideal.exists_comap_eq_of_mem_minimalPrimes_of_injective
   ⟨p', hp', eq⟩
 
 中文:
-定理 Ideal.exists_comap_eq_of_mem_minimalPrimes_of_injective
+定理 理想.存在_comap_eq_of_mem_minimalPrimes_of_injective
   结论: {f : R ->+* S}
   证明: have ⟨p', hp', _, eq⟩ := exists_comap_eq_of_mem_minimalPrimes f (I := ⊥) p by
     rwa [comap_bot_of_injective f hf]
@@ -269,8 +269,8 @@ theorem Ideal.exists_minimalPrimes_comap_eq
   exact (H.2 ⟨inferInstance, Ideal.comap_mono hq.le⟩ this).antisym
 
 中文:
-定理 Ideal.exists_minimalPrimes_comap_eq
-  结论: {I : Ideal S} (f : R ->+* S) (p)
+定理 理想.存在_minimalPrimes_comap_eq
+  结论: {I : 理想 S} (f : R ->+* S) (p)
   证明: by
   obtain ⟨p', h₁, h₂, h₃⟩ := Ideal.exists_comap_eq_of_mem_minimalPrimes f p H
   obtain ⟨q, hq, hq'⟩ := Ideal.exists_minimalPrimes_le h₂
@@ -299,8 +299,8 @@ theorem Ideal.minimalPrimes_comap_subset
   proof: fun p hp => Ideal.exists_minimalPrimes_comap_eq f p hp
 
 中文:
-定理 Ideal.minimalPrimes_comap_subset
-  条件: (f : R ->+* S) (J : Ideal S)
+定理 理想.minimalPrimes_comap_subset
+  条件: (f : R ->+* S) (J : 理想 S)
   证明: fun p hp => Ideal.exists_minimalPrimes_comap_eq f p hp
 
 Depends on / 依赖: Ideal.exists_minimalPrimes_comap_eq, exists_minimalPrimes_comap_eq
@@ -331,8 +331,8 @@ theorem Ideal.minimalPrimes_comap_of_surjective
   a
 
 中文:
-定理 Ideal.minimalPrimes_comap_of_surjective
-  结论: {f : R ->+* S} (hf : Function.Surjective f)
+定理 理想.minimalPrimes_comap_of_surjective
+  结论: {f : R ->+* S} (hf : 函数.满射 f)
   证明: by
   have := h.isPrime
   refine ⟨⟨inferInstance, Ideal.comap_mono h.le⟩, ?_⟩
@@ -375,8 +375,8 @@ theorem Ideal.comap_minimalPrimes_eq_of_surjective
     exact Ideal.minimalPrimes_comap_of_surjective hf hJ
 
 中文:
-定理 Ideal.comap_minimalPrimes_eq_of_surjective
-  结论: {f : R ->+* S} (hf : Function.Surjective f)
+定理 理想.comap_minimalPrimes_eq_of_surjective
+  结论: {f : R ->+* S} (hf : 函数.满射 f)
   证明: by
   ext J
   constructor
@@ -411,8 +411,8 @@ lemma Ideal.minimalPrimes_map_of_surjective
   exact (Ideal.comap_map_of_sur
 
 中文:
-引理 Ideal.minimalPrimes_map_of_surjective
-  结论: {S : 类型} [CommRing S] {f : R ->+* S}
+引理 理想.minimalPrimes_map_of_surjective
+  结论: {S : 类型} [交换环 S] {f : R ->+* S}
   证明: by
   apply Set.image_injective.mpr (Ideal.comap_injective_of_surjective f hf)
   rw [← Ideal.comap_minimalPrimes_eq_of_surjective hf]; rw [← Set.image_comp]; rw [Ideal.comap_map_of_surjective f hf]; rw [Set.image_congr]; rw [Set.image_id]; rw [RingHom.ker]
@@ -438,7 +438,7 @@ theorem Ideal.minimalPrimes_eq_comap
   rw [minimalPrimes]; rw [← Ideal.comap_minimalPrimes_eq_of_surjective Ideal.Quotient.mk_surjective]; rw [← RingHom.ker_eq_comap_bot]; rw [Ideal.mk_ker]
 
 中文:
-定理 Ideal.minimalPrimes_eq_comap
+定理 理想.minimalPrimes_eq_comap
   证明: by
   rw [minimalPrimes]; rw [← Ideal.comap_minimalPrimes_eq_of_surjective Ideal.Quotient.mk_surjective]; rw [← RingHom.ker_eq_comap_bot]; rw [Ideal.mk_ker]
 
@@ -471,8 +471,8 @@ theorem IsLocalization.minimalPrimes_map
       ((IsLocalization.isPrime_iff_isPrime_disjoint S A _).mp hp.isPrime
 
 中文:
-定理 IsLocalization.minimalPrimes_map
-  条件: [IsLocalization S A] (J : Ideal R)
+定理 是Localization.minimalPrimes_map
+  条件: [是Localization S A] (J : 理想 R)
   证明: by
   ext p
   constructor
@@ -522,8 +522,8 @@ theorem IsLocalization.minimalPrimes_comap
   exact subset_trans (Ideal.minimalPrimes_comap_subset (algebraMap R A) J) (by simp)
 
 中文:
-定理 IsLocalization.minimalPrimes_comap
-  条件: [IsLocalization S A] (J : Ideal A)
+定理 是Localization.minimalPrimes_comap
+  条件: [是Localization S A] (J : 理想 A)
   证明: by
   conv_rhs => rw [← map_under S A J, minimalPrimes_map S]
   refine (Set.image_preimage_eq_iff.mpr ?_).symm
@@ -550,7 +550,7 @@ theorem IsLocalization.AtPrime.radical_map_of_mem_minimalPrimes
   · rw [← IsLocalizati
 
 中文:
-定理 IsLocalization.AtPrime.radical_map_of_mem_minimalPrimes
+定理 是Localization.AtPrime.radical_map_of_mem_minimalPrimes
   证明: by
   have : IsLocalRing A := AtPrime.isLocalRing A q
   rw [← Ideal.sInf_minimalPrimes]; rw [IsLocalization.minimalPrimes_map q.primeCompl A I]

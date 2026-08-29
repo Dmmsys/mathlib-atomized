@@ -47,10 +47,10 @@ class GeometricallyIntegral
     - geometrically_isIntegral : geometrically IsIntegral f
 
 中文:
-类 GeometricallyIntegral
+类 几何整
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - geometrically_isIntegral : geometrically Is整数egral f
+    - geometrically_isIntegral : geometrically 是整 f
 -/
 class GeometricallyIntegral (f : X ⟶ Y) : Prop where
   geometrically_isIntegral : geometrically IsIntegral f
@@ -64,7 +64,7 @@ lemma GeometricallyIntegral.eq_geometrically
   ext; exact geometricallyIntegral_iff _
 
 中文:
-引理 GeometricallyIntegral.eq_geometrically
+引理 几何整.eq_geometrically
   证明: by
   ext; exact geometricallyIntegral_iff _
 
@@ -85,7 +85,7 @@ lemma GeometricallyIntegral.eq_geometricallyReduced_inf_geometricallyIrreducible
   simp [isIntegral_iff_irreducibleSpace_and_isReduced, and_comm]
 
 中文:
-引理 GeometricallyIntegral.eq_geometricallyReduced_inf_geometricallyIrreducible
+引理 几何整.eq_geometricallyReduced_inf_geometricallyIrreducible
   证明: by
   rw [eq_geometrically]; rw [GeometricallyReduced.eq_geometrically]; rw [GeometricallyIrreducible.eq_geometrically]; rw [← geometrically_inf]
   eta_expand
@@ -114,7 +114,7 @@ lemma GeometricallyIntegral.of_geometricallyReduced_of_geometricallyIrreducible
   proof: GeometricallyIntegral.eq_geometricallyReduced_inf_geometricallyIrreducible.ge _ _ _ ⟨‹_›, ‹_›⟩
 
 中文:
-引理 GeometricallyIntegral.of_geometricallyReduced_of_geometricallyIrreducible
+引理 几何整.of_geometricallyReduced_of_geometricallyIrreducible
   证明: GeometricallyIntegral.eq_geometricallyReduced_inf_geometricallyIrreducible.ge _ _ _ ⟨‹_›, ‹_›⟩
 
 Depends on / 依赖: GeometricallyIntegral, GeometricallyIntegral.eq_geometricallyReduced_inf_geometricallyIrreducible.ge, eq_geometricallyReduced_inf_geometricallyIrreducible
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @Geometrically整数egral
+  签名: 是StableUnderBaseChange @几何整
   定义体: GeometricallyIntegral.eq_geometrically ▸ inferInstance
 
 Depends on / 依赖: GeometricallyIntegral, GeometricallyIntegral.eq_geometrically, eq_geometrically
@@ -152,8 +152,8 @@ instance [GeometricallyIntegral
   body: MorphismProperty.pullback_fst f g inferInstance
 
 中文:
-实例 [GeometricallyIntegral
-  签名: g] : Geometrically整数egral (pullback.fst f g)
+实例 [几何整
+  签名: g] : 几何整 (pullback.fst f g)
   定义体: MorphismProperty.pullback_fst f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -171,8 +171,8 @@ instance [GeometricallyIntegral
   body: MorphismProperty.pullback_snd f g inferInstance
 
 中文:
-实例 [GeometricallyIntegral
-  签名: f] : Geometrically整数egral (pullback.snd f g)
+实例 [几何整
+  签名: f] : 几何整 (pullback.snd f g)
   定义体: MorphismProperty.pullback_snd f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
@@ -205,7 +205,7 @@ lemma GeometricallyIntegral.isIntegral_of_isLocallyNoetherian
     GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian f⟩
 
 中文:
-引理 GeometricallyIntegral.isIntegral_of_isLocallyNoetherian
+引理 几何整.is整数egral_of_isLocallyNoetherian
   证明: by
   rw [isIntegral_iff_irreducibleSpace_and_isReduced]
   exact ⟨GeometricallyIrreducible.irreducibleSpace f f.isOpenMap,
@@ -231,7 +231,7 @@ lemma GeometricallyIntegral.isIntegral_of_subsingleton
     GeometricallyReduced.isReduced_of_flat_of_isLocallyNoetherian f⟩
 
 中文:
-引理 GeometricallyIntegral.isIntegral_of_subsingleton
+引理 几何整.is整数egral_of_subsingleton
   证明: by
   rw [isIntegral_iff_irreducibleSpace_and_isReduced]
   refine ⟨GeometricallyIrreducible.irreducibleSpace_of_subsingleton f,
@@ -254,8 +254,8 @@ instance [GeometricallyIntegral
   body: GeometricallyIntegral.isIntegral_of_isLocallyNoetherian (pullback.snd _ _)
 
 中文:
-实例 [GeometricallyIntegral
-  签名: f] [Flat f] [UniversallyOpen f] [Is整数egral Y]
+实例 [几何整
+  签名: f] [平坦 f] [普遍开 f] [是整 Y]
   定义体: GeometricallyIntegral.isIntegral_of_isLocallyNoetherian (pullback.snd _ _)
 
 Depends on / 依赖: GeometricallyIntegral, GeometricallyIntegral.isIntegral_of_isLocallyNoetherian, isIntegral_of_isLocallyNoetherian, pullback, pullback.snd
@@ -273,8 +273,8 @@ instance [GeometricallyIntegral
   body: GeometricallyIntegral.isIntegral_of_isLocallyNoetherian (pullback.fst _ _)
 
 中文:
-实例 [GeometricallyIntegral
-  签名: g] [Flat g] [UniversallyOpen g]
+实例 [几何整
+  签名: g] [平坦 g] [普遍开 g]
   定义体: GeometricallyIntegral.isIntegral_of_isLocallyNoetherian (pullback.fst _ _)
 
 Depends on / 依赖: GeometricallyIntegral, GeometricallyIntegral.isIntegral_of_isLocallyNoetherian, isIntegral_of_isLocallyNoetherian, pullback, pullback.fst
@@ -294,7 +294,7 @@ lemma GeometricallyIntegral.iff_geometricallyIntegral_fiber
     ← geometrically_iff_forall_fiberToSpecResidueField]
 
 中文:
-引理 GeometricallyIntegral.iff_geometricallyIntegral_fiber
+引理 几何整.iff_geometrically整数egral_fiber
   证明: by
   simp only [GeometricallyIntegral.eq_geometrically,
     ← geometrically_iff_forall_fiberToSpecResidueField]

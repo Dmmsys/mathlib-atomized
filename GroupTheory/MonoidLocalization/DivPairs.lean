@@ -39,7 +39,7 @@ definition divPairs
 
 中文:
 定义 divPairs
-  签名: : Submonoid (M × M)
+  签名: : 子幺半群 (M × M)
   定义体: s.comap divMonoidHom.comp .prodMap f f
 
 Depends on / 依赖: divMonoidHom, divMonoidHom.comp, prodMap, s.comap

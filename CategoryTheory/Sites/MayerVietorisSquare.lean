@@ -76,7 +76,7 @@ lemma Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
     (((sheafificationA
 
 中文:
-引理 Sheaf.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
+引理 层.isPullback_square_op_map_yoneda_presheafToSheaf_yoneda_iff
   证明: by
   refine Square.IsPullback.iff_of_equiv _ _
     (((sheafificationAdjunction J (Type v)).homEquiv _ _).trans yonedaEquiv)
@@ -120,8 +120,8 @@ structure MayerVietorisSquare
   参数: [HasWeakSheafify J (类型v)]
   继承: Square C
   公理与运算 (2 个):
-    - mono_f₁₃ : Mono toSquare.f₁₃  [默认: by infer_instance]
-    - isPushout : (toSquare.map (yoneda ⋙ presheafToSheaf J _)).IsPushout
+    - mono_f₁₃ : 单态射 toSquare.f₁₃  [默认: by infer_instance]
+    - isPushout : (toSquare.map (yoneda ⋙ presheafToSheaf J _)).是推出
 
 Depends on / 依赖: infer_instance
 -/
@@ -158,7 +158,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (sq : Square C) [Mono sq.f₁₃]
+  签名: (sq : Square C) [单态射 sq.f₁₃]
   定义体: sq
   isPushout := by
     rw [Square.isPushout_iff_op_map_yoneda_isPullback]
@@ -197,7 +197,7 @@ definition mk_of_isPullback
 
 中文:
 定义 mk_of_isPullback
-  签名: (sq : Square C) [Mono sq.f₂₄] [Mono sq.f₃₄]
+  签名: (sq : Square C) [单态射 sq.f₂₄] [单态射 sq.f₃₄]
   定义体: have : Mono sq.f₁₃ := h₁.mono_f₁₃
   mk' sq (fun F => by
     apply Square.IsPullback.mk
@@ -253,7 +253,7 @@ lemma isPushoutAddCommGrpFreeSheaf
 
 中文:
 引理 isPushoutAddCommGrpFreeSheaf
-  条件: [HasWeakSheafify J AddCommGrpCat.{v}]
+  条件: [HasWeakSheafify J 加法交换群范畴.{v}]
   证明: (S.isPushout.map (Sheaf.composeAndSheafify J AddCommGrpCat.free)).of_iso
     ((Square.mapFunctor.mapIso
       (presheafToSheafCompComposeAndSheafifyIso J AddCommGrpCat.free)).app
@@ -278,8 +278,8 @@ definition SheafCondition
   body: (S.toSquare.op.map P).IsPullback
 
 中文:
-定义 SheafCondition
-  签名: {A : 类型u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A)
+定义 层条件
+  签名: {A : 类型u'} [范畴.{v'} A] (P : Cᵒᵖ ⥤ A)
   定义体: (S.toSquare.op.map P).IsPullback
 
 Depends on / 依赖: IsPullback, S.toSquare.op.map, toSquare
@@ -297,7 +297,7 @@ lemma sheafCondition_iff_comp_coyoneda
 
 中文:
 引理 sheafCondition_iff_comp_coyoneda
-  条件: {A : 类型u'} [Category.{v'} A] (P : Cᵒᵖ ⥤ A)
+  条件: {A : 类型u'} [范畴.{v'} A] (P : Cᵒᵖ ⥤ A)
   证明: Square.isPullback_iff_map_coyoneda_isPullback (S.op.map P)
 
 Depends on / 依赖: S.op.map, Square, Square.isPullback_iff_map_coyoneda_isPullback, isPullback_iff_map_coyoneda_isPullback
@@ -366,7 +366,7 @@ lemma bijective_toPullbackObj
 
 中文:
 引理 bijective_toPullbackObj
-  结论: Function.Bijective (S.toPullbackObj P)
+  结论: 函数.双射 (S.toPullbackObj P)
   证明: by
   rwa [← sheafCondition_iff_bijective_toPullbackObj]
 
@@ -479,7 +479,7 @@ lemma sheafCondition_of_sheaf
 
 中文:
 引理 sheafCondition_of_sheaf
-  结论: {A : 类型u'} [Category.{v} A]
+  结论: {A : 类型u'} [范畴.{v} A]
   证明: by
   rw [sheafCondition_iff_comp_coyoneda]
   intro X
@@ -565,7 +565,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono S.shortComplex.f
+  签名: 单态射 S.shortComplex.f
   定义体: by
   have : Mono (S.shortComplex.f ≫ biprod.snd) := by
     dsimp
@@ -593,7 +593,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi S.shortComplex.g
+  签名: 满态射 S.shortComplex.g
   定义体: (S.shortComplex.exact_and_epi_g_iff_g_is_cokernel.2
     ⟨S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork⟩).2
 
@@ -614,7 +614,7 @@ lemma shortComplex_exact
 
 中文:
 引理 shortComplex_exact
-  结论: S.shortComplex.Exact
+  结论: S.shortComplex.正合
   证明: ShortComplex.exact_of_g_is_cokernel _
     S.isPushoutAddCommGrpFreeSheaf.isColimitCokernelCofork
 
@@ -634,7 +634,7 @@ lemma shortComplex_shortExact
 
 中文:
 引理 shortComplex_shortExact
-  结论: S.shortComplex.ShortExact where
+  结论: S.shortComplex.短正合 where
   证明: S.shortComplex_exact
 
 Depends on / 依赖: S.shortComplex_exact, shortComplex_exact

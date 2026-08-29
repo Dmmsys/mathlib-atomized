@@ -280,8 +280,8 @@ instance [PathConnectedSpace
   exact ⟨zerothHomotopyEquiv.symm.unique⟩
 
 中文:
-实例 [PathConnectedSpace
-  签名: X] : (toSSet.obj X).IsConnected
+实例 [道路连通空间
+  签名: X] : (toSSet.obj X).是连通
   定义体: by
   let : Unique (ZerothHomotopy X) := Nonempty.some (by
     rw [unique_iff_subsingleton_and_nonempty]

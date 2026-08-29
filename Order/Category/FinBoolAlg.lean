@@ -46,11 +46,11 @@ structure FinBoolAlg
     - [isFintype : Fintype toBoolAlg]
 
 中文:
-结构 FinBoolAlg
+结构 Fin布尔Alg
   参数: extends 布尔Alg
-  继承: BoolAlg
+  继承: 布尔Alg
   公理与运算 (1 个):
-    - [isFintype : Fintype to布尔Alg]
+    - [isFintype : 有限类型 to布尔Alg]
 -/
 structure FinBoolAlg extends BoolAlg where
   [isFintype : Fintype toBoolAlg]
@@ -87,7 +87,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (α : 类型) [布尔eanAlgebra α] [Fintype α]
+  签名: (α : 类型) [布尔代数 α] [有限类型 α]
   定义体: α
 -/
 abbrev of (α : Type*) [BooleanAlgebra α] [Fintype α] : FinBoolAlg where
@@ -104,7 +104,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (α : 类型) [布尔eanAlgebra α] [Fintype α]
+  条件: (α : 类型) [布尔代数 α] [有限类型 α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Fin布尔Alg
+  签名: 可居 Fin布尔Alg
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited FinBoolAlg :=
@@ -137,7 +137,7 @@ instance largeCategory
 
 中文:
 实例 largeCategory
-  签名: : LargeCategory Fin布尔Alg
+  签名: : 大范畴 Fin布尔Alg
   定义体: inferInstanceAs Category (InducedCategory _ toBoolAlg)
 
 Depends on / 依赖: Category, InducedCategory, toBoolAlg
@@ -155,7 +155,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory Fin布尔Alg (BoundedLatticeHom · ·)
+  签名: : 余ncrete范畴 Fin布尔Alg (有界格态射 · ·)
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toBoolAlg) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory, toBoolAlg
@@ -172,8 +172,8 @@ instance hasForgetToBoolAlg
   body: inferInstanceAs HasForget₂ (InducedCategory _ toBoolAlg) _
 
 中文:
-实例 hasForgetToBoolAlg
-  签名: : HasForget₂ Fin布尔Alg 布尔Alg
+实例 hasForgetTo布尔Alg
+  签名: : 有Forget₂ Fin布尔Alg 布尔Alg
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toBoolAlg) _
 
 Depends on / 依赖: InducedCategory, toBoolAlg
@@ -192,7 +192,7 @@ instance hasForgetToFinBddDistLat
 
 中文:
 实例 hasForgetToFinBddDistLat
-  签名: : HasForget₂ Fin布尔Alg FinBddDistLat where
+  签名: : 有Forget₂ Fin布尔Alg FinBddDistLat where
   定义体: .of X
   forget₂.map f := FinBddDistLat.ofHom f.hom.hom
 -/
@@ -209,8 +209,8 @@ instance forgetToBoolAlg_full
   body: InducedCategory.full _
 
 中文:
-实例 forgetToBoolAlg_full
-  签名: : (forget₂ Fin布尔Alg 布尔Alg).Full
+实例 forgetTo布尔Alg_full
+  签名: : (forget₂ Fin布尔Alg 布尔Alg).满
   定义体: InducedCategory.full _
 
 Depends on / 依赖: AddCommGroup, InducedCategory, InducedCategory.full
@@ -229,8 +229,8 @@ instance forgetToBoolAlgFaithful
 @[simps]
 
 中文:
-实例 forgetToBoolAlgFaithful
-  签名: : (forget₂ Fin布尔Alg 布尔Alg).Faithful
+实例 forgetTo布尔AlgFaithful
+  签名: : (forget₂ Fin布尔Alg 布尔Alg).忠实
   定义体: InducedCategory.faithful _
 
 @[simps]
@@ -252,7 +252,7 @@ instance hasForgetToFinPartOrd
 
 中文:
 实例 hasForgetToFinPartOrd
-  签名: : HasForget₂ Fin布尔Alg FinPartOrd where
+  签名: : 有Forget₂ Fin布尔Alg 有限偏序 where
   定义体: .of X
   forget₂.map {X Y} f := InducedCategory.homMk (PartOrd.ofHom f.hom.hom)
 -/
@@ -272,7 +272,7 @@ instance forgetToFinPartOrdFaithful
 
 中文:
 实例 forgetToFinPartOrdFaithful
-  签名: : (forget₂ Fin布尔Alg FinPartOrd).Faithful where
+  签名: : (forget₂ Fin布尔Alg 有限偏序).忠实 where
   定义体: by
     ext x
     exact CategoryTheory.congr_fun h x
@@ -299,7 +299,7 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : Fin布尔Alg.{u}} (e : α ≃o β)
   定义体: InducedCategory.homMk (BoolAlg.ofHom e)
   inv := InducedCategory.homMk (BoolAlg.ofHom e.symm)
@@ -370,7 +370,7 @@ theorem finBoolAlg_dual_comp_forget_to_finBddDistLat
   proof: rfl
 
 中文:
-定理 finBoolAlg_dual_comp_forget_to_finBddDistLat
+定理 fin布尔Alg_dual_comp_forget_to_finBddDistLat
   证明: rfl
 -/
 theorem finBoolAlg_dual_comp_forget_to_finBddDistLat :
@@ -393,7 +393,7 @@ Quiver.Hom.op InducedCategory.homMk
 BoolAlg.ofHom CompleteLatticeHom.setPreimage f
 
 中文:
-定义 fintypeToFinBoolAlgOp
+定义 fintypeToFin布尔AlgOp
   签名: : FintypeCat ⥤ Fin布尔Algᵒᵖ where
   定义体: op .of (Set X)
   map {X Y} f :=

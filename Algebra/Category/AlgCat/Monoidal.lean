@@ -44,7 +44,7 @@ abbreviation tensorObj
 
 中文:
 缩写 tensorObj
-  签名: (X Y : AlgCat.{u} R)
+  签名: (X Y : Alg范畴.{u} R)
   定义体: of R (X otimes[R] Y)
 
 Depends on / 依赖: otimes
@@ -62,7 +62,7 @@ abbreviation tensorHom
 
 中文:
 缩写 tensorHom
-  签名: {W X Y Z : AlgCat.{u} R} (f : W ⟶ X) (g : Y ⟶ Z)
+  签名: {W X Y Z : Alg范畴.{u} R} (f : W ⟶ X) (g : Y ⟶ Z)
   定义体: ofHom Algebra.TensorProduct.map f.hom g.hom
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.map, TensorProduct, f.hom, g.hom
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalCategoryStruct (AlgCat.{u} R)
+  签名: 幺半群范畴结构 (Alg范畴.{u} R)
   定义体: instMonoidalCategory.tensorObj
   whiskerLeft X _ _ f := tensorHom (𝟙 X) f
   whiskerRight {X₁ X₂} (f : X₁ ⟶ X₂) Y := tensorHom f (𝟙 Y)
@@ -122,7 +122,7 @@ theorem hom_tensorHom
 
 中文:
 定理 hom_tensorHom
-  条件: {K L M N : AlgCat.{u} R} (f : K ⟶ L) (g : M ⟶ N)
+  条件: {K L M N : Alg范畴.{u} R} (f : K ⟶ L) (g : M ⟶ N)
   证明: rfl
 -/
 theorem hom_tensorHom {K L M N : AlgCat.{u} R} (f : K ⟶ L) (g : M ⟶ N) :
@@ -139,7 +139,7 @@ theorem hom_whiskerLeft
 
 中文:
 定理 hom_whiskerLeft
-  条件: (L : AlgCat.{u} R) {M N : AlgCat.{u} R} (f : M ⟶ N)
+  条件: (L : Alg范畴.{u} R) {M N : Alg范畴.{u} R} (f : M ⟶ N)
   证明: rfl
 -/
 theorem hom_whiskerLeft (L : AlgCat.{u} R) {M N : AlgCat.{u} R} (f : M ⟶ N) :
@@ -156,7 +156,7 @@ theorem hom_whiskerRight
 
 中文:
 定理 hom_whiskerRight
-  条件: {L M : AlgCat.{u} R} (f : L ⟶ M) (N : AlgCat.{u} R)
+  条件: {L M : Alg范畴.{u} R} (f : L ⟶ M) (N : Alg范畴.{u} R)
   证明: rfl
 -/
 theorem hom_whiskerRight {L M : AlgCat.{u} R} (f : L ⟶ M) (N : AlgCat.{u} R) :
@@ -173,7 +173,7 @@ theorem hom_hom_leftUnitor
 
 中文:
 定理 hom_hom_leftUnitor
-  条件: {M : AlgCat.{u} R}
+  条件: {M : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_leftUnitor {M : AlgCat.{u} R} :
@@ -190,7 +190,7 @@ theorem hom_inv_leftUnitor
 
 中文:
 定理 hom_inv_leftUnitor
-  条件: {M : AlgCat.{u} R}
+  条件: {M : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_leftUnitor {M : AlgCat.{u} R} :
@@ -207,7 +207,7 @@ theorem hom_hom_rightUnitor
 
 中文:
 定理 hom_hom_rightUnitor
-  条件: {M : AlgCat.{u} R}
+  条件: {M : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_rightUnitor {M : AlgCat.{u} R} :
@@ -224,7 +224,7 @@ theorem hom_inv_rightUnitor
 
 中文:
 定理 hom_inv_rightUnitor
-  条件: {M : AlgCat.{u} R}
+  条件: {M : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_rightUnitor {M : AlgCat.{u} R} :
@@ -241,7 +241,7 @@ theorem hom_hom_associator
 
 中文:
 定理 hom_hom_associator
-  条件: {M N K : AlgCat.{u} R}
+  条件: {M N K : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_hom_associator {M N K : AlgCat.{u} R} :
@@ -258,7 +258,7 @@ theorem hom_inv_associator
 
 中文:
 定理 hom_inv_associator
-  条件: {M N K : AlgCat.{u} R}
+  条件: {M N K : Alg范畴.{u} R}
   证明: rfl
 -/
 theorem hom_inv_associator {M N K : AlgCat.{u} R} :
@@ -282,7 +282,7 @@ ri
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (AlgCat.{u} R)
+  签名: : 幺半群范畴 (Alg范畴.{u} R)
   定义体: Monoidal.induced
     (forget₂ (AlgCat R) (ModuleCat R))
     { μIso := fun _ _ => Iso.refl _

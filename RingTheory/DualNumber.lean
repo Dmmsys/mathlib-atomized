@@ -88,7 +88,7 @@ lemma isNilpotent_inl_iff
 中文:
 引理 isNilpotent_inl_iff
   条件: (r : R)
-  结论: IsNilpotent (.inl r : TrivSqZeroExt R M) ↔ IsNilpotent r
+  结论: 是幂零 (.inl r : TrivSqZeroExt R M) ↔ 是幂零 r
   证明: by
   rw [isNilpotent_iff_isNilpotent_fst]; rw [fst_inl]
 
@@ -113,7 +113,7 @@ lemma isNilpotent_inr
 中文:
 引理 isNilpotent_inr
   条件: (x : M)
-  结论: IsNilpotent (.inr x : TrivSqZeroExt R M)
+  结论: 是幂零 (.inr x : TrivSqZeroExt R M)
   证明: by
   refine ⟨2, by simp [pow_two]⟩
 
@@ -139,7 +139,7 @@ lemma isUnit_or_isNilpotent_of_isMaximal_isNilpotent
 
 中文:
 引理 isUnit_or_isNilpotent_of_isMaximal_isNilpotent
-  结论: [CommSemiring R] [AddCommGroup M]
+  结论: [交换半环 R] [加法交换群 M]
   证明: by
   rw [isUnit_iff_isUnit_fst]; rw [isNilpotent_iff_isNilpotent_fst]
   refine (em _).imp_right fun ha => ?_
@@ -171,7 +171,7 @@ lemma isUnit_or_isNilpotent
 
 中文:
 引理 isUnit_or_isNilpotent
-  结论: [DivisionSemiring R] [AddCommGroup M]
+  结论: [除半环 R] [加法交换群 M]
   证明: by
   simp [isUnit_iff_isUnit_fst, isNilpotent_iff_isNilpotent_fst, em']
 
@@ -203,7 +203,7 @@ lemma fst_eq_zero_iff_eps_dvd
 
 中文:
 引理 fst_eq_zero_iff_eps_dvd
-  条件: [Semiring R] {x : R[ε]}
+  条件: [半环 R] {x : R[ε]}
   证明: by
   simp_rw [dvd_def, TrivSqZeroExt.ext_iff, TrivSqZeroExt.fst_mul, TrivSqZeroExt.snd_mul,
     fst_eps, snd_eps, zero_mul, zero_smul, zero_add, MulOpposite.smul_eq_mul_unop,
@@ -231,7 +231,7 @@ lemma isNilpotent_eps
 
 中文:
 引理 isNilpotent_eps
-  条件: [Semiring R]
+  条件: [半环 R]
   证明: TrivSqZeroExt.isNilpotent_inr 1
 
 Depends on / 依赖: TrivSqZeroExt, TrivSqZeroExt.isNilpotent_inr, isNilpotent_inr
@@ -253,7 +253,7 @@ lemma isNilpotent_iff_eps_dvd
 
 中文:
 引理 isNilpotent_iff_eps_dvd
-  条件: [DivisionSemiring R] {x : R[ε]}
+  条件: [除半环 R] {x : R[ε]}
   证明: by
   simp only [isNilpotent_iff_isNilpotent_fst, isNilpotent_iff_eq_zero, fst_eq_zero_iff_eps_dvd]
 
@@ -279,8 +279,8 @@ instance [DivisionRing
     simp [isUnit_iff_isUnit_fst, h, ha]
 
 中文:
-实例 [DivisionRing
-  签名: K] : IsLocalRing K[ε] where
+实例 [除环
+  签名: K] : 是局部环 K[ε] where
   定义体: by
     rw [add_comm]; rw [← eq_sub_iff_add_eq] at h
     rcases eq_or_ne (fst a) 0 with ha | ha <;>
@@ -311,7 +311,7 @@ lemma ideal_trichotomy
 
 中文:
 引理 ideal_trichotomy
-  条件: [DivisionRing K] (I : Ideal K[ε])
+  条件: [除环 K] (I : 理想 K[ε])
   证明: by
   refine (eq_or_ne I ⊥).imp_right fun hb => ?_
   refine (eq_or_ne I ⊤).symm.imp_left fun ht => ?_
@@ -367,7 +367,7 @@ lemma isMaximal_span_singleton_eps
 
 中文:
 引理 isMaximal_span_singleton_eps
-  条件: [DivisionRing K]
+  条件: [除环 K]
   证明: by
   refine ⟨?_, fun I hI => ?_⟩
   · simp [ne_eq, Ideal.eq_top_iff_one, Ideal.mem_span_singleton', TrivSqZeroExt.ext_iff]
@@ -393,7 +393,7 @@ lemma maximalIdeal_eq_span_singleton_eps
 
 中文:
 引理 maximalIdeal_eq_span_singleton_eps
-  条件: [Field K]
+  条件: [域 K]
   证明: (IsLocalRing.eq_maximalIdeal isMaximal_span_singleton_eps).symm
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.eq_maximalIdeal, eq_maximalIdeal, isMaximal_span_singleton_eps
@@ -415,8 +415,8 @@ instance [DivisionRing
     · exact top_isPrincipal
 
 中文:
-实例 [DivisionRing
-  签名: K] : IsPrincipalIdealRing K[ε] where
+实例 [除环
+  签名: K] : 是主理想环 K[ε] where
   定义体: by
     rcases ideal_trichotomy I with rfl | rfl | rfl
     · exact bot_isPrincipal
@@ -451,8 +451,8 @@ lemma exists_mul_left_or_mul_right
  
 
 中文:
-引理 exists_mul_left_or_mul_right
-  条件: [DivisionRing K] (a b : K[ε])
+引理 存在_mul_left_or_mul_right
+  条件: [除环 K] (a b : K[ε])
   证明: by
   rcases isUnit_or_isNilpotent a with ha | ha
   · lift a to K[ε]ˣ using ha

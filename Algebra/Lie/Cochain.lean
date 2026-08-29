@@ -65,7 +65,7 @@ definition twoCochain
 
 中文:
 定义 twoCochain
-  签名: : Submodule R (L ->ₗ[R] L ->ₗ[R] M) where
+  签名: : 子模 R (L ->ₗ[R] L ->ₗ[R] M) where
   定义体: {c | forall x, c x x = 0}
   add_mem' {a b} ha hb x := by simp [ha x, hb x]
   zero_mem' := by simp
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (twoCochain R L M) L (L ->ₗ[R] M)
+  签名: 函数状 (twoCochain R L M) L (L ->ₗ[R] M)
   定义体: fun a x => a.1 x
   coe_injective _ _ h := by
     ext
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (twoCochain R L M) R L (L ->ₗ[R] M)
+  签名: 线性映射类 (twoCochain R L M) R L (L ->ₗ[R] M)
   定义体: a.1.map_add
   map_smulₛₗ a := a.1.map_smul
 
@@ -349,7 +349,7 @@ lemma d₁₂_apply_apply_ofTrivial
 
 中文:
 引理 d₁₂_apply_apply_ofTrivial
-  条件: [LieModule.IsTrivial L M] (f : oneCochain R L M) (x y : L)
+  条件: [Lie模.是平凡 L M] (f : oneCochain R L M) (x y : L)
   证明: by
   simp [trivial_lie_zero]
 
@@ -468,7 +468,7 @@ definition twoCocycle
 
 中文:
 定义 twoCocycle
-  签名: : Submodule R (twoCochain R L M)
+  签名: : 子模 R (twoCochain R L M)
   定义体: LinearMap.ker (d₂₃ R L M)
 
 Depends on / 依赖: LinearMap, LinearMap.ker
@@ -514,7 +514,7 @@ lemma mem_twoCocycle_iff_of_trivial
 
 中文:
 引理 mem_twoCocycle_iff_of_trivial
-  条件: [LieModule.IsTrivial L M] (a : twoCochain R L M)
+  条件: [Lie模.是平凡 L M] (a : twoCochain R L M)
   证明: by
   constructor
   · intro h x y z

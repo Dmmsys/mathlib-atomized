@@ -68,7 +68,7 @@ definition bind₁
 
 中文:
 定义 bind₁
-  签名: (f : σ -> MvPolynomial τ R)
+  签名: (f : σ -> 多元多项式 τ R)
   定义体: aeval f
 -/
 def bind₁ (f : σ -> MvPolynomial τ R) : MvPolynomial σ R ->ₐ[R] MvPolynomial τ R :=
@@ -84,7 +84,7 @@ definition bind₂
 
 中文:
 定义 bind₂
-  签名: (f : R ->+* MvPolynomial σ S)
+  签名: (f : R ->+* 多元多项式 σ S)
   定义体: eval₂Hom f X
 -/
 def bind₂ (f : R ->+* MvPolynomial σ S) : MvPolynomial σ R ->+* MvPolynomial σ S :=
@@ -100,7 +100,7 @@ definition join₁
 
 中文:
 定义 join₁
-  签名: : MvPolynomial (MvPolynomial σ R) R ->ₐ[R] MvPolynomial σ R
+  签名: : 多元多项式 (多元多项式 σ R) R ->ₐ[R] 多元多项式 σ R
   定义体: aeval id
 -/
 def join₁ : MvPolynomial (MvPolynomial σ R) R ->ₐ[R] MvPolynomial σ R :=
@@ -118,7 +118,7 @@ definition join₂
 
 中文:
 定义 join₂
-  签名: : MvPolynomial σ (MvPolynomial σ R) ->+* MvPolynomial σ R
+  签名: : 多元多项式 σ (多元多项式 σ R) ->+* 多元多项式 σ R
   定义体: eval₂Hom (RingHom.id _) X
 
 @[simp]
@@ -142,7 +142,7 @@ theorem aeval_eq_bind₁
 
 中文:
 定理 aeval_eq_bind₁
-  条件: (f : σ -> MvPolynomial τ R)
+  条件: (f : σ -> 多元多项式 τ R)
   结论: aeval f = bind₁ f
   证明: rfl
 
@@ -165,7 +165,7 @@ theorem eval₂Hom_C_eq_bind₁
 
 中文:
 定理 eval₂Hom_C_eq_bind₁
-  条件: (f : σ -> MvPolynomial τ R)
+  条件: (f : σ -> 多元多项式 τ R)
   结论: eval₂Hom C f = bind₁ f
   证明: rfl
 
@@ -186,7 +186,7 @@ theorem eval₂Hom_eq_bind₂
 
 中文:
 定理 eval₂Hom_eq_bind₂
-  条件: (f : R ->+* MvPolynomial σ S)
+  条件: (f : R ->+* 多元多项式 σ S)
   结论: eval₂Hom f X = bind₂ f
   证明: rfl
 -/
@@ -226,7 +226,7 @@ theorem eval₂Hom_C_id_eq_join₁
 
 中文:
 定理 eval₂Hom_C_id_eq_join₁
-  条件: (φ : MvPolynomial (MvPolynomial σ R) R)
+  条件: (φ : 多元多项式 (多元多项式 σ R) R)
   证明: rfl
 
 @[simp]
@@ -246,7 +246,7 @@ theorem eval₂Hom_id_X_eq_join₂
 
 中文:
 定理 eval₂Hom_id_X_eq_join₂
-  结论: eval₂Hom (RingHom.id _) X = @join₂ σ R _
+  结论: eval₂Hom (环态射.id _) X = @join₂ σ R _
   证明: rfl
 -/
 theorem eval₂Hom_id_X_eq_join₂ : eval₂Hom (RingHom.id _) X = @join₂ σ R _ :=
@@ -274,7 +274,7 @@ theorem bind₁_X_right
 
 中文:
 定理 bind₁_X_right
-  条件: (f : σ -> MvPolynomial τ R) (i : σ)
+  条件: (f : σ -> 多元多项式 τ R) (i : σ)
   结论: bind₁ f (X i) = f i
   证明: aeval_X f i
 
@@ -299,7 +299,7 @@ theorem bind₂_X_right
 
 中文:
 定理 bind₂_X_right
-  条件: (f : R ->+* MvPolynomial σ S) (i : σ)
+  条件: (f : R ->+* 多元多项式 σ S) (i : σ)
   结论: bind₂ f (X i) = X i
   证明: eval₂Hom_X' f X i
 
@@ -321,7 +321,7 @@ theorem bind₁_X_left
 
 中文:
 定理 bind₁_X_left
-  结论: bind₁ (X : σ -> MvPolynomial σ R) = AlgHom.id R _
+  结论: bind₁ (X : σ -> 多元多项式 σ R) = 代数态射.id R _
   证明: by
   ext1 i
   simp
@@ -345,7 +345,7 @@ theorem bind₁_C_right
 
 中文:
 定理 bind₁_C_right
-  条件: (f : σ -> MvPolynomial τ R) (x)
+  条件: (f : σ -> 多元多项式 τ R) (x)
   结论: bind₁ f (C x) = C x
   证明: algHom_C _ _
 
@@ -369,7 +369,7 @@ theorem bind₂_C_right
 
 中文:
 定理 bind₂_C_right
-  条件: (f : R ->+* MvPolynomial σ S) (r : R)
+  条件: (f : R ->+* 多元多项式 σ S) (r : R)
   结论: bind₂ f (C r) = f r
   证明: eval₂Hom_C f X r
 
@@ -391,7 +391,7 @@ theorem bind₂_C_left
 
 中文:
 定理 bind₂_C_left
-  结论: bind₂ (C : R ->+* MvPolynomial σ R) = RingHom.id _
+  结论: bind₂ (C : R ->+* 多元多项式 σ R) = 环态射.id _
   证明: by ext : 2 <;> simp
 
 @[simp]
@@ -412,7 +412,7 @@ theorem bind₂_comp_C
 
 中文:
 定理 bind₂_comp_C
-  条件: (f : R ->+* MvPolynomial σ S)
+  条件: (f : R ->+* 多元多项式 σ S)
   结论: (bind₂ f).comp C = f
   证明: RingHom.ext bind₂_C_right _
 
@@ -436,7 +436,7 @@ theorem join₂_map
 
 中文:
 定理 join₂_map
-  条件: (f : R ->+* MvPolynomial σ S) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* 多元多项式 σ S) (φ : 多元多项式 σ R)
   证明: by simp only [join₂, bind₂, eval₂Hom_map_hom, RingHom.id_comp]
 
 @[simp]
@@ -458,7 +458,7 @@ theorem join₂_comp_map
 
 中文:
 定理 join₂_comp_map
-  条件: (f : R ->+* MvPolynomial σ S)
+  条件: (f : R ->+* 多元多项式 σ S)
   结论: join₂.comp (map f) = bind₂ f
   证明: RingHom.ext join₂_map _
 
@@ -479,7 +479,7 @@ theorem aeval_id_rename
 
 中文:
 定理 aeval_id_rename
-  条件: (f : σ -> MvPolynomial τ R) (p : MvPolynomial σ R)
+  条件: (f : σ -> 多元多项式 τ R) (p : 多元多项式 σ R)
   证明: by rw [aeval_rename, Function.id_comp]
 
 @[simp]
@@ -502,7 +502,7 @@ theorem join₁_rename
 
 中文:
 定理 join₁_rename
-  条件: (f : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: (f : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: aeval_id_rename _ _
 
 @[simp]
@@ -526,7 +526,7 @@ theorem bind₁_id
 
 中文:
 定理 bind₁_id
-  结论: bind₁ (@id (MvPolynomial σ R)) = join₁
+  结论: bind₁ (@id (多元多项式 σ R)) = join₁
   证明: rfl
 
 @[simp]
@@ -545,7 +545,7 @@ theorem bind₂_id
 
 中文:
 定理 bind₂_id
-  结论: bind₂ (RingHom.id (MvPolynomial σ R)) = join₂
+  结论: bind₂ (环态射.id (多元多项式 σ R)) = join₂
   证明: rfl
 -/
 theorem bind₂_id : bind₂ (RingHom.id (MvPolynomial σ R)) = join₂ :=
@@ -562,7 +562,7 @@ theorem bind₁_bind₁
 
 中文:
 定理 bind₁_bind₁
-  结论: {υ : 类型} (f : σ -> MvPolynomial τ R) (g : τ -> MvPolynomial υ R)
+  结论: {υ : 类型} (f : σ -> 多元多项式 τ R) (g : τ -> 多元多项式 υ R)
   证明: by
   simp [bind₁, ← comp_aeval]
 
@@ -584,7 +584,7 @@ theorem bind₁_comp_bind₁
 
 中文:
 定理 bind₁_comp_bind₁
-  条件: {υ : 类型} (f : σ -> MvPolynomial τ R) (g : τ -> MvPolynomial υ R)
+  条件: {υ : 类型} (f : σ -> 多元多项式 τ R) (g : τ -> 多元多项式 υ R)
   证明: by
   ext1
   apply bind₁_bind₁
@@ -604,7 +604,7 @@ theorem bind₂_comp_bind₂
 
 中文:
 定理 bind₂_comp_bind₂
-  条件: (f : R ->+* MvPolynomial σ S) (g : S ->+* MvPolynomial σ T)
+  条件: (f : R ->+* 多元多项式 σ S) (g : S ->+* 多元多项式 σ T)
   证明: by ext : 2 <;> simp
 -/
 theorem bind₂_comp_bind₂ (f : R ->+* MvPolynomial σ S) (g : S ->+* MvPolynomial σ T) :
@@ -620,7 +620,7 @@ theorem bind₂_bind₂
 
 中文:
 定理 bind₂_bind₂
-  结论: (f : R ->+* MvPolynomial σ S) (g : S ->+* MvPolynomial σ T)
+  结论: (f : R ->+* 多元多项式 σ S) (g : S ->+* 多元多项式 σ T)
   证明: RingHom.congr_fun (bind₂_comp_bind₂ f g) φ
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun
@@ -641,7 +641,7 @@ theorem rename_comp_bind₁
 
 中文:
 定理 rename_comp_bind₁
-  条件: {υ : 类型} (f : σ -> MvPolynomial τ R) (g : τ -> υ)
+  条件: {υ : 类型} (f : σ -> 多元多项式 τ R) (g : τ -> υ)
   证明: by
   ext1 i
   simp
@@ -661,7 +661,7 @@ theorem rename_bind₁
 
 中文:
 定理 rename_bind₁
-  条件: {υ : 类型} (f : σ -> MvPolynomial τ R) (g : τ -> υ) (φ : MvPolynomial σ R)
+  条件: {υ : 类型} (f : σ -> 多元多项式 τ R) (g : τ -> υ) (φ : 多元多项式 σ R)
   证明: AlgHom.congr_fun (rename_comp_bind₁ f g) φ
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, congr_fun
@@ -683,7 +683,7 @@ theorem map_bind₂
 
 中文:
 定理 map_bind₂
-  条件: (f : R ->+* MvPolynomial σ S) (g : S ->+* T) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* 多元多项式 σ S) (g : S ->+* T) (φ : 多元多项式 σ R)
   证明: by
   simp only [bind₂, eval₂_comp_right, coe_eval₂Hom, eval₂_map]
   congr 1 with : 1
@@ -709,7 +709,7 @@ theorem bind₁_comp_rename
 
 中文:
 定理 bind₁_comp_rename
-  条件: {υ : 类型} (f : τ -> MvPolynomial υ R) (g : σ -> τ)
+  条件: {υ : 类型} (f : τ -> 多元多项式 υ R) (g : σ -> τ)
   证明: by
   ext1 i
   simp
@@ -729,7 +729,7 @@ theorem bind₁_rename
 
 中文:
 定理 bind₁_rename
-  条件: {υ : 类型} (f : τ -> MvPolynomial υ R) (g : σ -> τ) (φ : MvPolynomial σ R)
+  条件: {υ : 类型} (f : τ -> 多元多项式 υ R) (g : σ -> τ) (φ : 多元多项式 σ R)
   证明: AlgHom.congr_fun (bind₁_comp_rename f g) φ
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, congr_fun
@@ -750,7 +750,7 @@ theorem bind₂_map
 
 中文:
 定理 bind₂_map
-  条件: (f : S ->+* MvPolynomial σ T) (g : R ->+* S) (φ : MvPolynomial σ R)
+  条件: (f : S ->+* 多元多项式 σ T) (g : R ->+* S) (φ : 多元多项式 σ R)
   证明: by simp [bind₂]
 
 @[simp]
@@ -773,7 +773,7 @@ theorem map_comp_C
 中文:
 定理 map_comp_C
   条件: (f : R ->+* S)
-  结论: (map f).comp (C : R ->+* MvPolynomial σ R) = C.comp f
+  结论: (map f).comp (C : R ->+* 多元多项式 σ R) = C.comp f
   证明: by
   ext1
   apply map_C
@@ -796,7 +796,7 @@ theorem hom_bind₁
 
 中文:
 定理 hom_bind₁
-  条件: (f : MvPolynomial τ R ->+* S) (g : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: (f : 多元多项式 τ R ->+* S) (g : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: by
   rw [bind₁]; rw [map_aeval]; rw [algebraMap_eq]
 
@@ -820,7 +820,7 @@ theorem map_bind₁
 
 中文:
 定理 map_bind₁
-  条件: (f : R ->+* S) (g : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* S) (g : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: by
   rw [hom_bind₁]; rw [map_comp_C]; rw [← eval₂Hom_map_hom]
   rfl
@@ -869,7 +869,7 @@ theorem eval₂Hom_bind₁
 
 中文:
 定理 eval₂Hom_bind₁
-  条件: (f : R ->+* S) (g : τ -> S) (h : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: (f : R ->+* S) (g : τ -> S) (h : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: by
   rw [hom_bind₁]; rw [eval₂Hom_comp_C]
 -/
@@ -887,7 +887,7 @@ theorem aeval_bind₁
 
 中文:
 定理 aeval_bind₁
-  条件: [Algebra R S] (f : τ -> S) (g : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: [代数 R S] (f : τ -> S) (g : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: eval₂Hom_bind₁ _ _ _ _
 -/
 theorem aeval_bind₁ [Algebra R S] (f : τ -> S) (g : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R) :
@@ -906,7 +906,7 @@ theorem aeval_comp_bind₁
 
 中文:
 定理 aeval_comp_bind₁
-  条件: [Algebra R S] (f : τ -> S) (g : σ -> MvPolynomial τ R)
+  条件: [代数 R S] (f : τ -> S) (g : σ -> 多元多项式 τ R)
   证明: by
   ext1
   apply aeval_bind₁
@@ -926,7 +926,7 @@ theorem eval₂Hom_comp_bind₂
 
 中文:
 定理 eval₂Hom_comp_bind₂
-  条件: (f : S ->+* T) (g : σ -> T) (h : R ->+* MvPolynomial σ S)
+  条件: (f : S ->+* T) (g : σ -> T) (h : R ->+* 多元多项式 σ S)
   证明: by ext : 2 <;> simp
 -/
 theorem eval₂Hom_comp_bind₂ (f : S ->+* T) (g : σ -> T) (h : R ->+* MvPolynomial σ S) :
@@ -942,7 +942,7 @@ theorem eval₂Hom_bind₂
 
 中文:
 定理 eval₂Hom_bind₂
-  结论: (f : S ->+* T) (g : σ -> T) (h : R ->+* MvPolynomial σ S)
+  结论: (f : S ->+* T) (g : σ -> T) (h : R ->+* 多元多项式 σ S)
   证明: RingHom.congr_fun (eval₂Hom_comp_bind₂ f g h) φ
 
 Depends on / 依赖: RingHom, RingHom.congr_fun, congr_fun
@@ -963,7 +963,7 @@ alias eval₂Hom_C_left := eval₂Hom_C_eq_bind₁
 
 中文:
 定理 aeval_bind₂
-  条件: [Algebra S T] (f : σ -> T) (g : R ->+* MvPolynomial σ S) (φ : MvPolynomial σ R)
+  条件: [代数 S T] (f : σ -> T) (g : R ->+* 多元多项式 σ S) (φ : 多元多项式 σ R)
   证明: eval₂Hom_bind₂ _ _ _ _
 
 alias eval₂Hom_C_left := eval₂Hom_C_eq_bind₁
@@ -986,7 +986,7 @@ theorem bind₁_monomial
 
 中文:
 定理 bind₁_monomial
-  条件: (f : σ -> MvPolynomial τ R) (d : σ ->₀ 自然数) (r : R)
+  条件: (f : σ -> 多元多项式 τ R) (d : σ ->₀ 自然数) (r : R)
   证明: by
   simp only [monomial_eq, map_mul, bind₁_C_right, Finsupp.prod, map_prod,
     map_pow, bind₁_X_right]
@@ -1012,7 +1012,7 @@ theorem bind₂_monomial
 
 中文:
 定理 bind₂_monomial
-  条件: (f : R ->+* MvPolynomial σ S) (d : σ ->₀ 自然数) (r : R)
+  条件: (f : R ->+* 多元多项式 σ S) (d : σ ->₀ 自然数) (r : R)
   证明: by
   simp only [monomial_eq, map_mul, bind₂_C_right, Finsupp.prod, map_prod,
     map_pow, bind₂_X_right, C_1, one_mul]
@@ -1037,7 +1037,7 @@ theorem bind₂_monomial_one
 
 中文:
 定理 bind₂_monomial_one
-  条件: (f : R ->+* MvPolynomial σ S) (d : σ ->₀ 自然数)
+  条件: (f : R ->+* 多元多项式 σ S) (d : σ ->₀ 自然数)
   证明: by rw [bind₂_monomial, f.map_one, one_mul]
 
 Depends on / 依赖: f.map_one, map_one, one_mul
@@ -1063,7 +1063,7 @@ theorem vars_bind₁
 
 中文:
 定理 vars_bind₁
-  条件: [DecidableEq τ] (f : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R)
+  条件: [DecidableEq τ] (f : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R)
   证明: by
   calc (bind₁ f φ).vars
     _ = (φ.support.sum fun x : σ ->₀ Nat => (bind₁ f) (monomial x (coeff x φ))).vars := by
@@ -1119,7 +1119,7 @@ theorem mem_vars_bind₁
 
 中文:
 定理 mem_vars_bind₁
-  结论: (f : σ -> MvPolynomial τ R) (φ : MvPolynomial σ R) {j : τ}
+  结论: (f : σ -> 多元多项式 τ R) (φ : 多元多项式 σ R) {j : τ}
   证明: by
   classical
   simpa only [exists_prop, Finset.mem_biUnion, mem_support_iff, Ne] using vars_bind₁ f φ h
@@ -1143,7 +1143,7 @@ instance monad
 
 中文:
 实例 monad
-  签名: : Monad fun σ => MvPolynomial σ R where
+  签名: : 单子 fun σ => 多元多项式 σ R where
   定义体: rename f p
   pure := X
   bind p f := bind₁ f p
@@ -1165,7 +1165,7 @@ instance lawfulFunctor
 
 中文:
 实例 lawfulFunctor
-  签名: : LawfulFunctor fun σ => MvPolynomial σ R where
+  签名: : Lawful函子 fun σ => 多元多项式 σ R where
   定义体: by intros; rfl
   id_map := by intros; simp [(· <$> ·)]
   comp_map := by intros; simp [(· <$> ·)]
@@ -1192,7 +1192,7 @@ instance lawfulMonad
 
 中文:
 实例 lawfulMonad
-  签名: : LawfulMonad fun σ => MvPolynomial σ R where
+  签名: : 合法单子 fun σ => 多元多项式 σ R where
   定义体: by intros; simp [pure, bind]
   bind_assoc := by intros; simp [bind, ← bind₁_comp_bind₁]
   seqLeft_eq _ _ := by

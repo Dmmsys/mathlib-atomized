@@ -35,7 +35,7 @@ theorem FG.map
 
 中文:
 定理 FG.map
-  条件: {R S : 类型} [Semiring R] [Semiring S] {I : Ideal R} (h : I.FG) (f : R ->+* S)
+  条件: {R S : 类型} [半环 R] [半环 S] {I : 理想 R} (h : I.FG) (f : R ->+* S)
   证明: by
   classical
     obtain ⟨s, hs⟩ := h
@@ -65,7 +65,7 @@ theorem fg_ker_comp
 
 中文:
 定理 fg_ker_comp
-  结论: {R S A : 类型} [CommRing R] [CommRing S] [CommRing A] (f : R ->+* S)
+  结论: {R S A : 类型} [交换环 R] [交换环 S] [交换环 A] (f : R ->+* S)
   证明: by
   let : Algebra R S := RingHom.toAlgebra f
   let : Algebra R A := RingHom.toAlgebra (g.comp f)
@@ -103,7 +103,7 @@ theorem fg_of_fg_map_of_fg_inf_ker_of_surjective
 
 中文:
 定理 fg_of_fg_map_of_fg_inf_ker_of_surjective
-  结论: {R S : 类型} [CommRing R] [CommRing S]
+  结论: {R S : 类型} [交换环 R] [交换环 S]
   证明: by
   algebraize [f]
   refine Submodule.fg_of_fg_map_of_fg_inf_ker (Module.compHom.toLinearMap f) ?_ hk
@@ -136,8 +136,8 @@ theorem exists_radical_pow_le_of_fg
     exact ⟨n, by rwa [← 
 
 中文:
-定理 exists_radical_pow_le_of_fg
-  条件: {R : 类型} [CommSemiring R] (I : Ideal R) (h : I.radical.FG)
+定理 存在_radical_pow_le_of_fg
+  条件: {R : 类型} [交换半环 R] (I : 理想 R) (h : I.radical.FG)
   证明: by
   suffices hJ : forall J : Ideal R, J.FG -> J <= I.radical -> exists n : Nat, J ^ n <= I by
     simpa using hJ I.radical h
@@ -179,8 +179,8 @@ theorem exists_pow_le_of_le_radical_of_fg_radical
   exact ⟨k, (pow_right_mono hIJ k).trans hk⟩
 
 中文:
-定理 exists_pow_le_of_le_radical_of_fg_radical
-  结论: {R : 类型} [CommSemiring R] {I J : Ideal R}
+定理 存在_pow_le_of_le_radical_of_fg_radical
+  结论: {R : 类型} [交换半环 R] {I J : 理想 R}
   证明: by
   obtain ⟨k, hk⟩ := J.exists_radical_pow_le_of_fg hJ
   exact ⟨k, (pow_right_mono hIJ k).trans hk⟩
@@ -209,8 +209,8 @@ lemma exists_pow_le_of_le_radical_of_fg
     obtain ⟨n₁, hn₁⟩ := h₁ (
 
 中文:
-引理 exists_pow_le_of_le_radical_of_fg
-  结论: {R : 类型} [CommSemiring R] {I J : Ideal R}
+引理 存在_pow_le_of_le_radical_of_fg
+  结论: {R : 类型} [交换半环 R] {I J : 理想 R}
   证明: by
   induction I, h using Submodule.fg_induction with
   | singleton x =>
@@ -249,8 +249,8 @@ theorem _root_.Submodule.FG.smul
   exact ⟨_, rfl⟩
 
 中文:
-定理 _root_.Submodule.FG.smul
-  结论: {I : Ideal R} [I.IsTwoSided] {N : Submodule R M}
+定理 _root_.子模.FG.smul
+  结论: {I : 理想 R} [I.是TwoSided] {N : 子模 R M}
   证明: by
   obtain ⟨s, rfl⟩ := hI
   obtain ⟨t, rfl⟩ := hN
@@ -277,7 +277,7 @@ theorem FG.mul
 
 中文:
 定理 FG.mul
-  条件: {I J : Ideal R} [I.IsTwoSided] (hI : I.FG) (hJ : J.FG)
+  条件: {I J : 理想 R} [I.是TwoSided] (hI : I.FG) (hJ : J.FG)
   结论: (I * J).FG
   证明: Submodule.FG.smul hI hJ
 
@@ -299,7 +299,7 @@ theorem FG.pow
 
 中文:
 定理 FG.pow
-  条件: {I : Ideal R} [I.IsTwoSided] {n : 自然数} (hI : I.FG)
+  条件: {I : 理想 R} [I.是TwoSided] {n : 自然数} (hI : I.FG)
   结论: (I ^ n).FG
   证明: n.rec (by rw [I.pow_zero, one_eq_top]; exact fg_top R) fun n ih => by
     rw [IsTwoSided.pow_succ]

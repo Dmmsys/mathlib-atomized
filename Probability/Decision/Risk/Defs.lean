@@ -54,7 +54,7 @@ definition avgRisk
 
 中文:
 定义 avgRisk
-  签名: {m𝓨 : MeasurableSpace 𝓨}
+  签名: {m𝓨 : 可测空间 𝓨}
   定义体: ∫⁻ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ) ∂π
 -/
 def avgRisk {m𝓨 : MeasurableSpace 𝓨}
@@ -74,7 +74,7 @@ definition bayesRisk
 
 中文:
 定义 bayesRisk
-  签名: [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ)
+  签名: [可测空间 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (π : 测度 Θ)
   定义体: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), avgRisk ℓ P κ π
 
 Depends on / 依赖: IsMarkovKernel, Kernel, avgRisk
@@ -95,7 +95,7 @@ definition minimaxRisk
 
 中文:
 定义 minimaxRisk
-  签名: [MeasurableSpace 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  签名: [可测空间 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   定义体: ⨅ (κ : Kernel 𝓧 𝓨) (_ : IsMarkovKernel κ), ⨆ θ, ∫⁻ y, ℓ θ y ∂((κ ∘ₖ P) θ)
 
 Depends on / 依赖: IsMarkovKernel, Kernel
@@ -121,7 +121,7 @@ lemma avgRisk_zero_left
 
 中文:
 引理 avgRisk_zero_left
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (κ : Kernel 𝓧 𝓨) (π : Measure Θ)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (κ : 核 𝓧 𝓨) (π : 测度 Θ)
   证明: by simp [avgRisk]
 
 @[simp]
@@ -144,7 +144,7 @@ lemma avgRisk_zero_right
 
 中文:
 引理 avgRisk_zero_right
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (π : Measure Θ)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (π : 测度 Θ)
   证明: by simp [avgRisk]
 
 @[simp]
@@ -167,7 +167,7 @@ lemma avgRisk_zero_prior
 
 中文:
 引理 avgRisk_zero_prior
-  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨)
+  条件: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨)
   证明: by simp [avgRisk]
 
 @[simp]
@@ -190,7 +190,7 @@ lemma bayesRisk_zero_left
 
 中文:
 引理 bayesRisk_zero_left
-  条件: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (π : Measure Θ)
+  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (π : 测度 Θ)
   证明: by simp [bayesRisk, iInf_subtype']
 
 @[simp]
@@ -213,7 +213,7 @@ lemma bayesRisk_zero_right
 
 中文:
 引理 bayesRisk_zero_right
-  条件: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧)
+  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧)
   证明: by simp [bayesRisk, iInf_subtype']
 
 @[simp]
@@ -234,7 +234,7 @@ lemma minimaxRisk_zero
 
 中文:
 引理 minimaxRisk_zero
-  条件: [Nonempty 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞)
+  条件: [非空 𝓨] (ℓ : Θ -> 𝓨 -> 实数>=0∞)
   证明: by simp [minimaxRisk, iInf_subtype']
 
 Depends on / 依赖: iInf_subtype, minimaxRisk
@@ -261,7 +261,7 @@ lemma avgRisk_of_isEmpty
 
 中文:
 引理 avgRisk_of_isEmpty
-  条件: [IsEmpty 𝓧]
+  条件: [是空 𝓧]
   结论: avgRisk ℓ P κ π = 0
   证明: by
   simp [Subsingleton.elim P 0]
@@ -288,7 +288,7 @@ lemma avgRisk_of_isEmpty'
 
 中文:
 引理 avgRisk_of_isEmpty'
-  条件: [IsEmpty 𝓨]
+  条件: [是空 𝓨]
   结论: avgRisk ℓ P κ π = 0
   证明: by
   simp [Subsingleton.elim κ 0]
@@ -315,7 +315,7 @@ lemma avgRisk_of_isEmpty''
 
 中文:
 引理 avgRisk_of_isEmpty''
-  条件: [IsEmpty Θ]
+  条件: [是空 Θ]
   结论: avgRisk ℓ P κ π = 0
   证明: by
   simp [avgRisk]
@@ -342,7 +342,7 @@ lemma bayesRisk_of_isEmpty
 
 中文:
 引理 bayesRisk_of_isEmpty
-  条件: [IsEmpty 𝓧]
+  条件: [是空 𝓧]
   结论: bayesRisk ℓ P π = 0
   证明: by
   simp [bayesRisk]
@@ -371,7 +371,7 @@ lemma bayesRisk_of_isEmpty'
 
 中文:
 引理 bayesRisk_of_isEmpty'
-  条件: [Nonempty 𝓧] [IsEmpty 𝓨]
+  条件: [非空 𝓧] [是空 𝓨]
   证明: by
   have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
     simp only [isEmpty_subtype]
@@ -403,7 +403,7 @@ lemma bayesRisk_of_isEmpty''
 
 中文:
 引理 bayesRisk_of_isEmpty''
-  条件: [IsEmpty Θ] [Nonempty 𝓨]
+  条件: [是空 Θ] [非空 𝓨]
   证明: by
   simp [bayesRisk, iInf_subtype']
 
@@ -430,7 +430,7 @@ lemma minimaxRisk_of_isEmpty
 
 中文:
 引理 minimaxRisk_of_isEmpty
-  条件: [IsEmpty 𝓧]
+  条件: [是空 𝓧]
   结论: minimaxRisk ℓ P = 0
   证明: by
   simp [minimaxRisk, Subsingleton.elim P 0]
@@ -460,7 +460,7 @@ lemma minimaxRisk_of_isEmpty'
 
 中文:
 引理 minimaxRisk_of_isEmpty'
-  条件: [Nonempty 𝓧] [IsEmpty 𝓨]
+  条件: [非空 𝓧] [是空 𝓨]
   结论: minimaxRisk ℓ P = ∞
   证明: by
   have : IsEmpty (Subtype (@IsMarkovKernel 𝓧 𝓨 m𝓧 m𝓨)) := by
@@ -491,7 +491,7 @@ lemma minimaxRisk_of_isEmpty''
 
 中文:
 引理 minimaxRisk_of_isEmpty''
-  条件: [Nonempty 𝓨] [IsEmpty Θ]
+  条件: [非空 𝓨] [是空 Θ]
   结论: minimaxRisk ℓ P = 0
   证明: by
   simp [minimaxRisk, iInf_subtype']

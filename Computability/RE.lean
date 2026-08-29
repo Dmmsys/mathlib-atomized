@@ -208,7 +208,7 @@ nonrec theorem sumCasesOn {f : α
 
 中文:
 定理 cond
-  结论: {c : α -> 布尔} {f : α ->. σ} {g : α ->. σ} (hc : Computable c) (hf : Partrec f)
+  结论: {c : α -> 布尔值} {f : α ->. σ} {g : α ->. σ} (hc : 可计算 c) (hf : Partrec f)
   证明: let ⟨cf, ef⟩ := exists_code.1 hf
   let ⟨cg, eg⟩ := exists_code.1 hg
   ((eval_part.comp (Computable.cond hc (const cf) (const cg)) Computable.encode).bind
@@ -287,7 +287,7 @@ lemma Computable.computablePred
   proof: ⟨inferInstance, hp⟩
 
 中文:
-引理 Computable.computablePred
+引理 可计算.computablePred
   结论: {p : α -> 命题} [DecidablePred p]
   证明: ⟨inferInstance, hp⟩
 -/
@@ -501,7 +501,7 @@ theorem ite
 
 中文:
 定理 ite
-  结论: {f₁ f₂ : 自然数 -> 自然数} (hf₁ : Computable f₁) (hf₂ : Computable f₂)
+  结论: {f₁ f₂ : 自然数 -> 自然数} (hf₁ : 可计算 f₁) (hf₂ : 可计算 f₂)
   证明: by
   simpa [Bool.cond_decide] using hc.decide.cond hf₁ hf₂
 

@@ -41,7 +41,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (⨂[R] i, A i) where
+  签名: : 幺 (⨂[R] i, A i) where
   定义体: tprod R 1
 -/
 instance instOne : One (⨂[R] i, A i) where
@@ -73,7 +73,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: : AddCommMonoidWithOne (⨂[R] i, A i) where
+  签名: : 加法交换带幺幺半群 (⨂[R] i, A i) where
   定义体: (inferInstance : AddCommMonoid (⨂[R] i, A i))
   __ := instOne
 
@@ -138,7 +138,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (⨂[R] i, A i) where
+  签名: : 乘法 (⨂[R] i, A i) where
   定义体: mul x y
 -/
 instance instMul : Mul (⨂[R] i, A i) where
@@ -249,7 +249,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring (⨂[R] i, A i) where
+  签名: : 非幺非结合半环 (⨂[R] i, A i) where
   定义体: instMul
   __ := (inferInstance : AddCommMonoid (⨂[R] i, A i))
   left_distrib _ _ _ := (mul _).map_add _ _
@@ -338,7 +338,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: : NonAssocSemiring (⨂[R] i, A i) where
+  签名: : 非结合半环 (⨂[R] i, A i) where
   定义体: instNonUnitalNonAssocSemiring
   one_mul := PiTensorProduct.one_mul
   mul_one := PiTensorProduct.mul_one
@@ -428,7 +428,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: : NonUnitalSemiring (⨂[R] i, A i) where
+  签名: : 非幺半环 (⨂[R] i, A i) where
   定义体: instNonUnitalNonAssocSemiring
   mul_assoc := PiTensorProduct.mul_assoc
 
@@ -457,7 +457,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (⨂[R] i, A i) where
+  签名: : 半环 (⨂[R] i, A i) where
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
 
@@ -484,7 +484,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R' (⨂[R] i, A i) where
+  签名: : 代数 R' (⨂[R] i, A i) where
   定义体: hasSMul'
   algebraMap :=
   { toFun := (· • 1)
@@ -607,7 +607,7 @@ definition liftAlgHom
 
 中文:
 定义 liftAlgHom
-  签名: {S : 类型} [Semiring S] [Algebra R S]
+  签名: {S : 类型} [半环 S] [代数 R S]
   定义体: AlgHom.ofLinearMap (lift f) (show lift f (tprod R 1) = 1 by simp [one])
 .mpr by aesop LinearMap.map_mul_iff _
 
@@ -629,7 +629,7 @@ lemma tprod_noncommProd
 
 中文:
 引理 tprod_noncommProd
-  条件: {κ : 类型} (s : Finset κ) (x : κ -> Π i, A i) (hx)
+  条件: {κ : 类型} (s : 有限集 κ) (x : κ -> Π i, A i) (hx)
   证明: Finset.map_noncommProd s x _ (tprodMonoidHom R)
 -/
 @[simp] lemma tprod_noncommProd {κ : Type*} (s : Finset κ) (x : κ -> Π i, A i) (hx) :
@@ -653,7 +653,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: {S : 类型} [Finite ι] [DecidableEq ι] [Semiring S] [Algebra R S]
+  结论: {S : 类型} [有限 ι] [DecidableEq ι] [半环 S] [代数 R S]
   证明: AlgHom.toLinearMap_injective PiTensorProduct.ext MultilinearMap.ext fun x =>
     suffices f.toMonoidHom.comp (tprodMonoidHom R) = g.toMonoidHom.comp (tprodMonoidHom R) from
       DFunLike.congr_fun this x
@@ -686,7 +686,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring (⨂[R] i, A i) where
+  签名: : 环 (⨂[R] i, A i) where
   定义体: instSemiring
   __ := (inferInstance : AddCommGroup (⨂[R] i, A i))
 
@@ -746,7 +746,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring (⨂[R] i, A i) where
+  签名: : 交换半环 (⨂[R] i, A i) where
   定义体: instSemiring
   __ := (inferInstance : AddCommMonoid (⨂[R] i, A i))
   mul_comm := PiTensorProduct.mul_comm
@@ -768,7 +768,7 @@ lemma tprod_prod
 
 中文:
 引理 tprod_prod
-  条件: {κ : 类型} (s : Finset κ) (x : κ -> Π i, A i)
+  条件: {κ : 类型} (s : 有限集 κ) (x : κ -> Π i, A i)
   证明: map_prod (tprodMonoidHom R) x s
 -/
 @[simp] lemma tprod_prod {κ : Type*} (s : Finset κ) (x : κ -> Π i, A i) :
@@ -894,7 +894,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing (⨂[R] i, A i) where
+  签名: : 交换环 (⨂[R] i, A i) where
   定义体: instCommSemiring
   __ := (inferInstance : AddCommGroup (⨂[R] i, A i))
 

@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (FGModuleCat k)
+  签名: 交换 (FGModuleCat k)
   定义体: Abelian.ofCoimageImageComparisonIsIso
 
 Depends on / 依赖: Abelian, Abelian.ofCoimageImageComparisonIsIso, ofCoimageImageComparisonIsIso

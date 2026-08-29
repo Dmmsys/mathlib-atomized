@@ -50,7 +50,7 @@ definition Separable
   body: IsCoprime f (derivative f)
 
 中文:
-定义 Separable
+定义 可分
   签名: (f : R[X])
   定义体: IsCoprime f (derivative f)
 
@@ -71,7 +71,7 @@ theorem separable_def
 中文:
 定理 separable_def
   条件: (f : R[X])
-  结论: f.Separable ↔ IsCoprime f (derivative f)
+  结论: f.可分 ↔ IsCoprime f (derivative f)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -91,7 +91,7 @@ theorem separable_def'
 中文:
 定理 separable_def'
   条件: (f : R[X])
-  结论: f.Separable ↔ 存在 a b : R[X], a * f + b * (derivative f) = 1
+  结论: f.可分 ↔ 存在 a b : R[X], a * f + b * (derivative f) = 1
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -112,8 +112,8 @@ theorem not_separable_zero
 
 中文:
 定理 not_separable_zero
-  条件: [Nontrivial R]
-  结论: ¬Separable (0 : R[X])
+  条件: [非平凡 R]
+  结论: ¬可分 (0 : R[X])
   证明: by
   rintro ⟨x, y, h⟩
   simp only [derivative_zero, mul_zero, add_zero, zero_ne_one] at h
@@ -136,8 +136,8 @@ theorem Separable.ne_zero
 @[simp]
 
 中文:
-定理 Separable.ne_zero
-  条件: [Nontrivial R] {f : R[X]} (h : f.Separable)
+定理 可分.ne_zero
+  条件: [非平凡 R] {f : R[X]} (h : f.可分)
   结论: f != 0
   证明: (not_separable_zero <| · ▸ h)
 
@@ -161,7 +161,7 @@ theorem separable_one
 
 中文:
 定理 separable_one
-  结论: (1 : R[X]).Separable
+  结论: (1 : R[X]).可分
   证明: isCoprime_one_left
 
 @[nontriviality]
@@ -184,8 +184,8 @@ theorem separable_of_subsingleton
 
 中文:
 定理 separable_of_subsingleton
-  条件: [Subsingleton R] (f : R[X])
-  结论: f.Separable
+  条件: [子单例 R] (f : R[X])
+  结论: f.可分
   证明: by
   simp [Separable, IsCoprime, eq_iff_true_of_subsingleton]
 
@@ -208,7 +208,7 @@ theorem separable_X_add_C
 中文:
 定理 separable_X_add_C
   条件: (a : R)
-  结论: (X + C a).Separable
+  结论: (X + C a).可分
   证明: by
   rw [separable_def]; rw [derivative_add]; rw [derivative_X]; rw [derivative_C]; rw [add_zero]
   exact isCoprime_one_right
@@ -231,7 +231,7 @@ theorem separable_X
 
 中文:
 定理 separable_X
-  结论: (X : R[X]).Separable
+  结论: (X : R[X]).可分
   证明: by
   rw [separable_def]; rw [derivative_X]
   exact isCoprime_one_right
@@ -255,7 +255,7 @@ theorem separable_C
 中文:
 定理 separable_C
   条件: (r : R)
-  结论: (C r).Separable ↔ IsUnit r
+  结论: (C r).可分 ↔ 是单位 r
   证明: by
   rw [separable_def]; rw [derivative_C]; rw [isCoprime_zero_right]; rw [isUnit_C]
 
@@ -276,9 +276,9 @@ theorem Separable.of_mul_left
   exact IsCoprime.of_mul_right_left (IsCoprime.of_add_mul_left_right this)
 
 中文:
-定理 Separable.of_mul_left
-  条件: {f g : R[X]} (h : (f * g).Separable)
-  结论: f.Separable
+定理 可分.of_mul_left
+  条件: {f g : R[X]} (h : (f * g).可分)
+  结论: f.可分
   证明: by
   have := h.of_mul_left_left; rw [derivative_mul] at this
   exact IsCoprime.of_mul_right_left (IsCoprime.of_add_mul_left_right this)
@@ -301,9 +301,9 @@ theorem Separable.of_mul_right
   exact h.of_mul_left
 
 中文:
-定理 Separable.of_mul_right
-  条件: {f g : R[X]} (h : (f * g).Separable)
-  结论: g.Separable
+定理 可分.of_mul_right
+  条件: {f g : R[X]} (h : (f * g).可分)
+  结论: g.可分
   证明: by
   rw [mul_comm] at h
   exact h.of_mul_left
@@ -326,9 +326,9 @@ theorem Separable.of_dvd
   exact Separable.of_mul_left hf
 
 中文:
-定理 Separable.of_dvd
-  条件: {f g : R[X]} (hf : f.Separable) (hfg : g ∣ f)
-  结论: g.Separable
+定理 可分.of_dvd
+  条件: {f g : R[X]} (hf : f.可分) (hfg : g ∣ f)
+  结论: g.可分
   证明: by
   rcases hfg with ⟨f', rfl⟩
   exact Separable.of_mul_left hf
@@ -349,7 +349,7 @@ theorem separable_gcd_left
 
 中文:
 定理 separable_gcd_left
-  结论: {F : 类型} [Field F] [DecidableEq F[X]]
+  结论: {F : 类型} [域 F] [DecidableEq F[X]]
   证明: Separable.of_dvd hf (EuclideanDomain.gcd_dvd_left f g)
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.gcd_dvd_left, Separable, Separable.of_dvd, gcd_dvd_left, of_dvd
@@ -369,7 +369,7 @@ theorem separable_gcd_right
 
 中文:
 定理 separable_gcd_right
-  结论: {F : 类型} [Field F] [DecidableEq F[X]]
+  结论: {F : 类型} [域 F] [DecidableEq F[X]]
   证明: Separable.of_dvd hg (EuclideanDomain.gcd_dvd_right f g)
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.gcd_dvd_right, Separable, Separable.of_dvd, gcd_dvd_right, of_dvd
@@ -391,8 +391,8 @@ theorem Separable.isCoprime
   exact IsCoprime.of_mul_right_right (IsCoprime.of_add_mul_left_right this)
 
 中文:
-定理 Separable.isCoprime
-  条件: {f g : R[X]} (h : (f * g).Separable)
+定理 可分.isCoprime
+  条件: {f g : R[X]} (h : (f * g).可分)
   结论: IsCoprime f g
   证明: by
   have := h.of_mul_left_left; rw [derivative_mul] at this
@@ -412,7 +412,7 @@ theorem Separable.of_pow'
   given: {f : R[X]}
 
 中文:
-定理 Separable.of_pow'
+定理 可分.of_pow'
   条件: {f : R[X]}
 -/
 theorem Separable.of_pow' {f : R[X]} :
@@ -432,8 +432,8 @@ theorem Separable.of_pow
   proof: (hfs.of_pow'.resolve_left hf).resolve_right hn
 
 中文:
-定理 Separable.of_pow
-  结论: {f : R[X]} (hf : ¬IsUnit f) {n : 自然数} (hn : n != 0)
+定理 可分.of_pow
+  结论: {f : R[X]} (hf : ¬是单位 f) {n : 自然数} (hn : n != 0)
   证明: (hfs.of_pow'.resolve_left hf).resolve_right hn
 
 Depends on / 依赖: hfs.of_pow, of_pow, resolve_left, resolve_right
@@ -454,9 +454,9 @@ theorem Separable.map
     rw [derivative_map]; rw [← Polynomial.map_mul]; rw [← Polynomial.map_mul]; rw [← Polynomial.map_add]; rw [H]; rw [Polynomial.map_one]⟩
 
 中文:
-定理 Separable.map
-  条件: {p : R[X]} (h : p.Separable) {f : R ->+* S}
-  结论: (p.map f).Separable
+定理 可分.map
+  条件: {p : R[X]} (h : p.可分) {f : R ->+* S}
+  结论: (p.map f).可分
   证明: let ⟨a, b, H⟩ := h
   ⟨a.map f, b.map f, by
     rw [derivative_map]; rw [← Polynomial.map_mul]; rw [← Polynomial.map_mul]; rw [← Polynomial.map_add]; rw [H]; rw [Polynomial.map_one]⟩
@@ -517,9 +517,9 @@ theorem Separable.mul_unit
   proof: (associated_mul_unit_right f g hg).separable hf
 
 中文:
-定理 Separable.mul_unit
-  条件: {f g : R[X]} (hf : f.Separable) (hg : IsUnit g)
-  结论: (f * g).Separable
+定理 可分.mul_unit
+  条件: {f g : R[X]} (hf : f.可分) (hg : 是单位 g)
+  结论: (f * g).可分
   证明: (associated_mul_unit_right f g hg).separable hf
 
 Depends on / 依赖: associated_mul_unit_right, separable
@@ -537,9 +537,9 @@ theorem Separable.unit_mul
   proof: (associated_unit_mul_right g f hf).separable hg
 
 中文:
-定理 Separable.unit_mul
-  条件: {f g : R[X]} (hf : IsUnit f) (hg : g.Separable)
-  结论: (f * g).Separable
+定理 可分.unit_mul
+  条件: {f g : R[X]} (hf : 是单位 f) (hg : g.可分)
+  结论: (f * g).可分
   证明: (associated_unit_mul_right g f hf).separable hg
 
 Depends on / 依赖: associated_unit_mul_right, separable
@@ -560,8 +560,8 @@ theorem Separable.eval₂_derivative_ne_zero
   simp only [eval₂_add, eval₂_mul, hx, mul_zero, hx', add_zero, eval₂_one, zero_ne_one] at e
 
 中文:
-定理 Separable.eval₂_derivative_ne_zero
-  结论: [Nontrivial S] (f : R ->+* S) {p : R[X]}
+定理 可分.eval₂_derivative_ne_zero
+  结论: [非平凡 S] (f : R ->+* S) {p : R[X]}
   证明: by
   intro hx'
   obtain ⟨a, b, e⟩ := h
@@ -587,8 +587,8 @@ theorem Separable.aeval_derivative_ne_zero
   proof: h.eval₂_derivative_ne_zero (algebraMap R S) hx
 
 中文:
-定理 Separable.aeval_derivative_ne_zero
-  结论: [Nontrivial S] [Algebra R S] {p : R[X]}
+定理 可分.aeval_derivative_ne_zero
+  结论: [非平凡 S] [代数 R S] {p : R[X]}
   证明: h.eval₂_derivative_ne_zero (algebraMap R S) hx
 
 Depends on / 依赖: algebraMap, h.eval
@@ -619,7 +619,7 @@ theorem isUnit_of_self_mul_dvd_separable
 
 中文:
 定理 isUnit_of_self_mul_dvd_separable
-  条件: {p q : R[X]} (hp : p.Separable) (hq : q * q ∣ p)
+  条件: {p q : R[X]} (hp : p.可分) (hq : q * q ∣ p)
   证明: by
   obtain ⟨p, rfl⟩ := hq
   apply isCoprime_self.mp
@@ -661,7 +661,7 @@ theorem emultiplicity_le_one_of_separable
 
 中文:
 定理 emultiplicity_le_one_of_separable
-  条件: {p q : R[X]} (hq : ¬IsUnit q) (hsep : Separable p)
+  条件: {p q : R[X]} (hq : ¬是单位 q) (hsep : 可分 p)
   证明: by
   contrapose! hq
   apply isUnit_of_self_mul_dvd_separable hsep
@@ -691,8 +691,8 @@ theorem Separable.squarefree
   exact fun f => or_iff_not_imp_right.mpr fun hunit => emultiplicity_le_one_of_separable hunit hsep
 
 中文:
-定理 Separable.squarefree
-  条件: {p : R[X]} (hsep : Separable p)
+定理 可分.squarefree
+  条件: {p : R[X]} (hsep : 可分 p)
   结论: Squarefree p
   证明: by
   rw [squarefree_iff_emultiplicity_le_one p]
@@ -723,7 +723,7 @@ theorem separable_X_sub_C
 中文:
 定理 separable_X_sub_C
   条件: {x : R}
-  结论: Separable (X - C x)
+  结论: 可分 (X - C x)
   证明: by
   simpa only [sub_eq_add_neg, C_neg] using separable_X_add_C (-x)
 
@@ -744,8 +744,8 @@ theorem Separable.mul
     ((hf.mul_right h).add_mul_left_right _).mul_left ((h.symm.mul_right hg).mul_add_right_right _)
 
 中文:
-定理 Separable.mul
-  条件: {f g : R[X]} (hf : f.Separable) (hg : g.Separable) (h : IsCoprime f g)
+定理 可分.mul
+  条件: {f g : R[X]} (hf : f.可分) (hg : g.可分) (h : IsCoprime f g)
   证明: by
   rw [separable_def]; rw [derivative_mul]
   exact
@@ -775,7 +775,7 @@ theorem separable_prod'
 
 中文:
 定理 separable_prod'
-  条件: {ι : Sort _} {f : ι -> R[X]} {s : Finset ι}
+  条件: {ι : 类型层 _} {f : ι -> R[X]} {s : 有限集 ι}
   证明: by
   classical
   exact Finset.induction_on s (fun _ _ => separable_one) fun a s has ih h1 h2 => by
@@ -807,7 +807,7 @@ theorem separable_prod
 
 中文:
 定理 separable_prod
-  结论: {ι : Sort _} [Fintype ι] {f : ι -> R[X]} (h1 : Pairwise (IsCoprime on f))
+  结论: {ι : 类型层 _} [有限类型 ι] {f : ι -> R[X]} (h1 : 两两 (IsCoprime on f))
   证明: separable_prod' (fun _x _hx _y _hy hxy => h1 hxy) fun x _hx => h2 x
 
 Depends on / 依赖: separable_prod
@@ -831,8 +831,8 @@ theorem Separable.inj_of_prod_X_sub_C
   cases (hfs.of_mul_left.of_pow (not_isUnit_X_sub_C 
 
 中文:
-定理 Separable.inj_of_prod_X_sub_C
-  结论: [Nontrivial R] {ι : Sort _} {f : ι -> R} {s : Finset ι}
+定理 可分.inj_of_prod_X_sub_C
+  结论: [非平凡 R] {ι : 类型层 _} {f : ι -> R} {s : 有限集 ι}
   证明: by
   classical
   by_contra hxy
@@ -863,8 +863,8 @@ theorem Separable.injective_of_prod_X_sub_C
   hfs.inj_of_prod_X_sub_C (mem_univ _) (mem_univ _) hfxy
 
 中文:
-定理 Separable.injective_of_prod_X_sub_C
-  结论: [Nontrivial R] {ι : Sort _} [Fintype ι] {f : ι -> R}
+定理 可分.injective_of_prod_X_sub_C
+  结论: [非平凡 R] {ι : 类型层 _} [有限类型 ι] {f : ι -> R}
   证明: fun _x _y hfxy =>
   hfs.inj_of_prod_X_sub_C (mem_univ _) (mem_univ _) hfxy
 -/
@@ -886,7 +886,7 @@ theorem nodup_of_separable_prod
 
 中文:
 定理 nodup_of_separable_prod
-  结论: [Nontrivial R] {s : Multiset R}
+  结论: [非平凡 R] {s : Multiset R}
   证明: by
   rw [Multiset.nodup_iff_ne_cons_cons]
   rintro a t rfl
@@ -919,7 +919,7 @@ theorem separable_X_pow_sub_C_unit
 
 中文:
 定理 separable_X_pow_sub_C_unit
-  条件: {n : 自然数} (u : Rˣ) (hn : IsUnit (n : R))
+  条件: {n : 自然数} (u : Rˣ) (hn : 是单位 (n : R))
   证明: by
   nontriviality R
   rcases n.eq_zero_or_pos with (rfl | hpos)
@@ -1017,7 +1017,7 @@ theorem rootMultiplicity_le_one_of_separable
 
 中文:
 定理 rootMultiplicity_le_one_of_separable
-  结论: [Nontrivial R] {p : R[X]} (hsep : Separable p)
+  结论: [非平凡 R] {p : R[X]} (hsep : 可分 p)
   证明: by
   classical
   by_cases hp : p = 0
@@ -1053,7 +1053,7 @@ theorem count_roots_le_one
 
 中文:
 定理 count_roots_le_one
-  条件: [DecidableEq R] {p : R[X]} (hsep : Separable p) (x : R)
+  条件: [DecidableEq R] {p : R[X]} (hsep : 可分 p) (x : R)
   证明: by
   rw [count_roots p]
   exact rootMultiplicity_le_one_of_separable hsep x
@@ -1078,7 +1078,7 @@ theorem nodup_roots
 
 中文:
 定理 nodup_roots
-  条件: {p : R[X]} (hsep : Separable p)
+  条件: {p : R[X]} (hsep : 可分 p)
   结论: p.roots.Nodup
   证明: by
   classical
@@ -1111,7 +1111,7 @@ theorem separable_iff_derivative_ne_zero
 
 中文:
 定理 separable_iff_derivative_ne_zero
-  条件: {f : F[X]} (hf : Irreducible f)
+  条件: {f : F[X]} (hf : 不可约 f)
   证明: ⟨fun h1 h2 => hf.not_isUnit isCoprime_zero_right.1 h2 ▸ h1, fun h =>
     EuclideanDomain.isCoprime_of_dvd (mt And.right h) fun g hg1 _hg2 ⟨p, hg3⟩ hg4 =>
       let ⟨u, hu⟩ := (hf.isUnit_or_isUnit hg3).resolve_left hg1
@@ -1147,7 +1147,7 @@ theorem separable_map
 
 中文:
 定理 separable_map
-  条件: {S} [CommRing S] [Nontrivial S] (f : F ->+* S) {p : F[X]}
+  条件: {S} [交换环 S] [非平凡 S] (f : F ->+* S) {p : F[X]}
   证明: by
   refine ⟨fun H => ?_, fun H => H.map⟩
   obtain ⟨m, hm⟩ := Ideal.exists_maximal S
@@ -1179,7 +1179,7 @@ theorem separable_prod_X_sub_C_iff'
 
 中文:
 定理 separable_prod_X_sub_C_iff'
-  条件: {ι : Sort _} {f : ι -> F} {s : Finset ι}
+  条件: {ι : 类型层 _} {f : ι -> F} {s : 有限集 ι}
   证明: ⟨fun hfs _ hx _ hy hfxy => hfs.inj_of_prod_X_sub_C hx hy hfxy, fun H => by
     rw [← prod_attach]
     exact
@@ -1211,7 +1211,7 @@ theorem separable_prod_X_sub_C_iff
 
 中文:
 定理 separable_prod_X_sub_C_iff
-  条件: {ι : Sort _} [Fintype ι] {f : ι -> F}
+  条件: {ι : 类型层 _} [有限类型 ι] {f : ι -> F}
   证明: separable_prod_X_sub_C_iff'.trans by simp_rw [mem_univ, true_imp_iff, Function.Injective]
 
 Depends on / 依赖: Function, Function.Injective, Injective, mem_univ, separable_prod_X_sub_C_iff, simp_rw, true_imp_iff
@@ -1242,7 +1242,7 @@ theorem separable_or
 
 中文:
 定理 separable_or
-  条件: {f : F[X]} (hf : Irreducible f)
+  条件: {f : F[X]} (hf : 不可约 f)
   证明: by
   classical
   exact if H : derivative f = 0 then by
@@ -1287,8 +1287,8 @@ theorem exists_separable_of_irreducible
   · rcases N with
 
 中文:
-定理 exists_separable_of_irreducible
-  条件: {f : F[X]} (hf : Irreducible f) (hp : p != 0)
+定理 存在_separable_of_irreducible
+  条件: {f : F[X]} (hf : 不可约 f) (hp : p != 0)
   证明: by
   replace hp : p.Prime := (CharP.char_is_prime_or_zero F p).resolve_right hp
   induction hn : f.natDegree using Nat.strong_induction_on generalizing f with | _ N ih
@@ -1378,7 +1378,7 @@ theorem unique_separable_of_irreducible
 
 中文:
 定理 unique_separable_of_irreducible
-  结论: {f : F[X]} (hf : Irreducible f) (hp : 0 < p) (n₁ : 自然数)
+  结论: {f : F[X]} (hf : 不可约 f) (hp : 0 < p) (n₁ : 自然数)
   证明: by
   revert g₁ g₂
   wlog hn : n₁ <= n₂
@@ -1443,7 +1443,7 @@ theorem separable_X_pow_sub_C'
 
 中文:
 定理 separable_X_pow_sub_C'
-  条件: (p n : 自然数) (a : F) [CharP F p] (hn : ¬p ∣ n) (ha : a != 0)
+  条件: (p n : 自然数) (a : F) [特征p F p] (hn : ¬p ∣ n) (ha : a != 0)
   证明: separable_X_pow_sub_C a (by rwa [← CharP.cast_eq_zero_iff F p n] at hn) ha
 
 Depends on / 依赖: CharP.cast_eq_zero_iff, cast_eq_zero_iff, separable_X_pow_sub_C
@@ -1496,7 +1496,7 @@ theorem X_pow_sub_one_separable_iff
 中文:
 定理 X_pow_sub_one_separable_iff
   条件: {n : 自然数}
-  结论: (X ^ n - 1 : F[X]).Separable ↔ (n : F) != 0
+  结论: (X ^ n - 1 : F[X]).可分 ↔ (n : F) != 0
   证明: by
   rcases (Nat.eq_zero_or_pos n) with (hz | hpos)
   · simp_all [not_separable_zero]
@@ -1524,7 +1524,7 @@ theorem card_rootSet_eq_natDegree
 
 中文:
 定理 card_rootSet_eq_natDegree
-  结论: [Algebra F K] {p : F[X]} (hsep : p.Separable)
+  结论: [代数 F K] {p : F[X]} (hsep : p.可分)
   证明: by
   classical
   simp_rw [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe]
@@ -1588,7 +1588,7 @@ theorem nodup_aroots_iff_of_splits
 
 中文:
 定理 nodup_aroots_iff_of_splits
-  结论: [Algebra F K] {f : F[X]} (hf : f != 0)
+  结论: [代数 F K] {f : F[X]} (hf : f != 0)
   证明: by
   rw [nodup_roots_iff_of_splits (map_ne_zero hf) h]; rw [separable_map]
 
@@ -1612,7 +1612,7 @@ theorem card_rootSet_eq_natDegree_iff_of_splits
 
 中文:
 定理 card_rootSet_eq_natDegree_iff_of_splits
-  结论: [Algebra F K] {f : F[X]} (hf : f != 0)
+  结论: [代数 F K] {f : F[X]} (hf : f != 0)
   证明: by
   classical
   simp_rw [rootSet_def, Finset.coe_sort_coe, Fintype.card_coe,
@@ -1649,7 +1649,7 @@ theorem eq_X_sub_C_of_separable_of_root_eq
 
 中文:
 定理 eq_X_sub_C_of_separable_of_root_eq
-  结论: {x : F} {h : F[X]} (h_sep : h.Separable)
+  结论: {x : F} {h : F[X]} (h_sep : h.可分)
   证明: by
   have h_ne_zero : h != 0 := by
     rintro rfl
@@ -1698,8 +1698,8 @@ theorem exists_finset_of_splits
   exact sep.map
 
 中文:
-定理 exists_finset_of_splits
-  结论: (i : F ->+* K) {f : F[X]} (sep : Separable f)
+定理 存在_finset_of_splits
+  结论: (i : F ->+* K) {f : F[X]} (sep : 可分 f)
   证明: by
   classical
   obtain ⟨s, h⟩ := splits_iff_exists_multiset.1 sp
@@ -1738,8 +1738,8 @@ theorem _root_.Irreducible.separable
   exact hf.natDegree_pos.ne'
 
 中文:
-定理 _root_.Irreducible.separable
-  条件: [CharZero F] {f : F[X]} (hf : Irreducible f)
+定理 _root_.不可约.separable
+  条件: [特征零 F] {f : F[X]} (hf : 不可约 f)
   证明: by
   rw [separable_iff_derivative_ne_zero hf]; rw [Ne]; rw [← degree_eq_bot]; rw [degree_derivative]
   · rintro ⟨⟩
@@ -1785,7 +1785,7 @@ definition IsSeparable
   body: Polynomial.Separable (minpoly F x)
 
 中文:
-定义 IsSeparable
+定义 是可分
   签名: (x : K)
   定义体: Polynomial.Separable (minpoly F x)
 
@@ -1811,10 +1811,10 @@ class Algebra.IsSeparable
     - isSeparable' : forall x : K, IsSeparable F x
 
 中文:
-类 Algebra.IsSeparable
+类 代数.是可分
   参数: : 命题 where
   公理与运算 (1 个):
-    - isSeparable' : 对任意 x : K, IsSeparable F x
+    - isSeparable' : 对任意 x : K, 是可分 F x
 -/
 protected class Algebra.IsSeparable : Prop where
   isSeparable' : forall x : K, IsSeparable F x
@@ -1831,9 +1831,9 @@ theorem Algebra.IsSeparable.isSeparable
   proof: Algebra.IsSeparable.isSeparable'
 
 中文:
-定理 Algebra.IsSeparable.isSeparable
-  条件: [Algebra.IsSeparable F K]
-  结论: 对任意 x : K, IsSeparable F x
+定理 代数.是可分.isSeparable
+  条件: [代数.是可分 F K]
+  结论: 对任意 x : K, 是可分 F x
   证明: Algebra.IsSeparable.isSeparable'
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, isSeparable
@@ -1856,9 +1856,9 @@ theorem IsSeparable.isIntegral
   · exact of_not_not (h.ne_zero <| minpoly.eq_zero ·)
 
 中文:
-定理 IsSeparable.isIntegral
-  条件: {x : K} (h : IsSeparable F x)
-  结论: Is整数egral F x
+定理 是可分.is整数egral
+  条件: {x : K} (h : 是可分 F x)
+  结论: 是整 F x
   证明: by
   cases subsingleton_or_nontrivial F
   · have := Module.subsingleton F K
@@ -1883,9 +1883,9 @@ theorem Algebra.IsSeparable.isIntegral
   proof: fun x => _root_.IsSeparable.isIntegral (Algebra.IsSeparable.isSeparable F x)
 
 中文:
-定理 Algebra.IsSeparable.isIntegral
-  条件: [Algebra.IsSeparable F K]
-  结论: 对任意 x : K, Is整数egral F x
+定理 代数.是可分.is整数egral
+  条件: [代数.是可分 F K]
+  结论: 对任意 x : K, 是整 F x
   证明: fun x => _root_.IsSeparable.isIntegral (Algebra.IsSeparable.isSeparable F x)
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, _root_, _root_.IsSeparable.isIntegral, isIntegral, isSeparable
@@ -1903,8 +1903,8 @@ instance Algebra.IsSeparable.isAlgebraic
   body: ⟨fun x => (Algebra.IsSeparable.isIntegral F x).isAlgebraic⟩
 
 中文:
-实例 Algebra.IsSeparable.isAlgebraic
-  签名: [Nontrivial F] [Algebra.IsSeparable F K]
+实例 代数.是可分.isAlgebraic
+  签名: [非平凡 F] [代数.是可分 F K]
   定义体: ⟨fun x => (Algebra.IsSeparable.isIntegral F x).isAlgebraic⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isIntegral, IsSeparable, isAlgebraic, isIntegral
@@ -1924,7 +1924,7 @@ theorem Algebra.isSeparable_iff
     fun h => ⟨fun x => (h x).2⟩⟩
 
 中文:
-定理 Algebra.isSeparable_iff
+定理 代数.isSeparable_iff
   证明: ⟨fun _ x => ⟨Algebra.IsSeparable.isIntegral F x, Algebra.IsSeparable.isSeparable F x⟩,
     fun h => ⟨fun x => (h x).2⟩⟩
 
@@ -1948,7 +1948,7 @@ lemma isSeparable_map_iff
 
 中文:
 引理 isSeparable_map_iff
-  结论: [Ring L] [Algebra F L] {x : K} (f : K ->ₐ[F] L)
+  结论: [环 L] [代数 F L] {x : K} (f : K ->ₐ[F] L)
   证明: by
   simp_rw [IsSeparable, minpoly.algHom_eq _ hf]
 
@@ -1967,8 +1967,8 @@ lemma IsSeparable.map
   proof: (isSeparable_map_iff f hf).mpr H
 
 中文:
-引理 IsSeparable.map
-  结论: [Ring L] [Algebra F L] {x : K} (f : K ->ₐ[F] L) (hf : Function.Injective f)
+引理 是可分.map
+  结论: [环 L] [代数 F L] {x : K} (f : K ->ₐ[F] L) (hf : 函数.单射 f)
   证明: (isSeparable_map_iff f hf).mpr H
 
 Depends on / 依赖: isSeparable_map_iff
@@ -1988,8 +1988,8 @@ lemma Subalgebra.isSeparable_iff
     ← isSeparable_map_iff S.val Subtype.val_injective, coe_val]
 
 中文:
-引理 Subalgebra.isSeparable_iff
-  条件: [Ring L] [Algebra F L] {S : Subalgebra F L}
+引理 子代数.isSeparable_iff
+  条件: [环 L] [代数 F L] {S : 子代数 F L}
   证明: by
   simp_rw [Algebra.isSeparable_def, Subtype.forall,
     ← isSeparable_map_iff S.val Subtype.val_injective, coe_val]
@@ -2019,9 +2019,9 @@ theorem AlgEquiv.isSeparable_iff
   simp only [IsSeparable, minpoly.algEquiv_eq e x]
 
 中文:
-定理 AlgEquiv.isSeparable_iff
+定理 代数等价.isSeparable_iff
   条件: {x : K}
-  结论: IsSeparable F (e x) ↔ IsSeparable F x
+  结论: 是可分 F (e x) ↔ 是可分 F x
   证明: by
   simp only [IsSeparable, minpoly.algEquiv_eq e x]
 
@@ -2040,9 +2040,9 @@ theorem AlgEquiv.Algebra.isSeparable
   proof: ⟨fun _ => e.symm.isSeparable_iff.mp (Algebra.IsSeparable.isSeparable _ _)⟩
 
 中文:
-定理 AlgEquiv.Algebra.isSeparable
-  条件: [Algebra.IsSeparable F K]
-  结论: Algebra.IsSeparable F E
+定理 代数等价.代数.isSeparable
+  条件: [代数.是可分 F K]
+  结论: 代数.是可分 F E
   证明: ⟨fun _ => e.symm.isSeparable_iff.mp (Algebra.IsSeparable.isSeparable _ _)⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, e.symm.isSeparable_iff.mp, isSeparable, isSeparable_iff
@@ -2059,8 +2059,8 @@ theorem AlgEquiv.Algebra.isSeparable_iff
   proof: ⟨fun _ => AlgEquiv.Algebra.isSeparable e, fun _ => AlgEquiv.Algebra.isSeparable e.symm⟩
 
 中文:
-定理 AlgEquiv.Algebra.isSeparable_iff
-  结论: Algebra.IsSeparable F K ↔ Algebra.IsSeparable F E
+定理 代数等价.代数.isSeparable_iff
+  结论: 代数.是可分 F K ↔ 代数.是可分 F E
   证明: ⟨fun _ => AlgEquiv.Algebra.isSeparable e, fun _ => AlgEquiv.Algebra.isSeparable e.symm⟩
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.Algebra.isSeparable, Algebra, e.symm, isSeparable
@@ -2086,7 +2086,7 @@ theorem IsSeparable.tower_top
   proof: .of_dvd (.map h) (minpoly.dvd_map_of_isScalarTower ..)
 
 中文:
-定理 IsSeparable.tower_top
+定理 是可分.tower_top
   证明: .of_dvd (.map h) (minpoly.dvd_map_of_isScalarTower ..)
 
 Depends on / 依赖: dvd_map_of_isScalarTower, minpoly, minpoly.dvd_map_of_isScalarTower, of_dvd
@@ -2108,8 +2108,8 @@ theorem Algebra.isSeparable_tower_top_of_isSeparable
   proof: ⟨fun x => IsSeparable.tower_top _ (Algebra.IsSeparable.isSeparable F x)⟩
 
 中文:
-定理 Algebra.isSeparable_tower_top_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+定理 代数.isSeparable_tower_top_of_isSeparable
+  条件: [代数.是可分 F E]
   证明: ⟨fun x => IsSeparable.tower_top _ (Algebra.IsSeparable.isSeparable F x)⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, IsSeparable.tower_top, isSeparable, tower_top
@@ -2144,7 +2144,7 @@ theorem isSeparable_algebraMap
 中文:
 定理 isSeparable_algebraMap
   条件: (x : F)
-  结论: IsSeparable F (algebraMap F K x)
+  结论: 是可分 F (algebraMap F K x)
   证明: Polynomial.Separable.of_dvd (Polynomial.separable_X_sub_C (x := x))
     (minpoly.dvd F (algebraMap F K x) (by simp))
 
@@ -2163,8 +2163,8 @@ instance Algebra.isSeparable_self
   body: ⟨isSeparable_algebraMap⟩
 
 中文:
-实例 Algebra.isSeparable_self
-  签名: : Algebra.IsSeparable F F
+实例 代数.isSeparable_self
+  签名: : 代数.是可分 F F
   定义体: ⟨isSeparable_algebraMap⟩
 
 Depends on / 依赖: isSeparable_algebraMap
@@ -2184,9 +2184,9 @@ theorem IsSeparable.of_integral
   proof: (minpoly.irreducible <| Algebra.IsIntegral.isIntegral x).separable
 
 中文:
-定理 IsSeparable.of_integral
+定理 是可分.of_integral
   条件: (x : K)
-  结论: IsSeparable F x
+  结论: 是可分 F x
   证明: (minpoly.irreducible <| Algebra.IsIntegral.isIntegral x).separable
 
 Depends on / 依赖: Algebra, Algebra.IsIntegral.isIntegral, IsIntegral, irreducible, isIntegral, minpoly, minpoly.irreducible, separable
@@ -2221,9 +2221,9 @@ theorem IsSeparable.tower_bot
     (Eq.mp (congrArg Separable hq) h).of_mul_left
 
 中文:
-定理 IsSeparable.tower_bot
-  条件: {x : K} (h : IsSeparable F (algebraMap K E x))
-  结论: IsSeparable F x
+定理 是可分.tower_bot
+  条件: {x : K} (h : 是可分 F (algebraMap K E x))
+  结论: 是可分 F x
   证明: have ⟨_q, hq⟩ :=
       minpoly.dvd F x
         ((aeval_algebraMap_eq_zero_iff _ _ _).mp (minpoly.aeval F ((algebraMap K E) x)))
@@ -2247,8 +2247,8 @@ theorem Algebra.isSeparable_tower_bot_of_isSeparable
   proof: ⟨fun _ => IsSeparable.tower_bot (h.isSeparable _ _)⟩
 
 中文:
-定理 Algebra.isSeparable_tower_bot_of_isSeparable
-  条件: [h : Algebra.IsSeparable F E]
+定理 代数.isSeparable_tower_bot_of_isSeparable
+  条件: [h : 代数.是可分 F E]
   证明: ⟨fun _ => IsSeparable.tower_bot (h.isSeparable _ _)⟩
 
 Depends on / 依赖: IsSeparable, IsSeparable.tower_bot, h.isSeparable, isSeparable, tower_bot
@@ -2279,9 +2279,9 @@ theorem IsSeparable.of_algHom
   exact h.tower_bot
 
 中文:
-定理 IsSeparable.of_algHom
-  条件: {x : E} (h : IsSeparable F (f x))
-  结论: IsSeparable F x
+定理 是可分.of_algHom
+  条件: {x : E} (h : 是可分 F (f x))
+  结论: 是可分 F x
   证明: by
   let _ : Algebra E E' := RingHom.toAlgebra f.toRingHom
   have : IsScalarTower F E E' := IsScalarTower.of_algebraMap_eq fun x => (f.commutes x).symm
@@ -2306,9 +2306,9 @@ theorem Algebra.IsSeparable.of_algHom
   proof: ⟨fun x => (Algebra.IsSeparable.isSeparable F (f x)).of_algHom⟩
 
 中文:
-定理 Algebra.IsSeparable.of_algHom
-  条件: [Algebra.IsSeparable F E']
-  结论: Algebra.IsSeparable F E
+定理 代数.是可分.of_algHom
+  条件: [代数.是可分 F E']
+  结论: 代数.是可分 F E
   证明: ⟨fun x => (Algebra.IsSeparable.isSeparable F (f x)).of_algHom⟩
 
 Depends on / 依赖: Algebra, Algebra.IsSeparable.isSeparable, IsSeparable, isSeparable, of_algHom
@@ -2332,7 +2332,7 @@ instance isSeparable_tower_bot
 
 中文:
 实例 isSeparable_tower_bot
-  签名: [Algebra.IsSeparable F K]
+  签名: [代数.是可分 F K]
   定义体: Algebra.isSeparable_tower_bot_of_isSeparable F M K
 
 Depends on / 依赖: Algebra, Algebra.isSeparable_tower_bot_of_isSeparable, isSeparable_tower_bot_of_isSeparable
@@ -2350,7 +2350,7 @@ instance isSeparable_tower_top
 
 中文:
 实例 isSeparable_tower_top
-  签名: [Algebra.IsSeparable F K]
+  签名: [代数.是可分 F K]
   定义体: Algebra.isSeparable_tower_top_of_isSeparable F M K
 
 Depends on / 依赖: Algebra, Algebra.isSeparable_tower_top_of_isSeparable, isSeparable_tower_top_of_isSeparable
@@ -2386,9 +2386,9 @@ lemma IsSeparable.of_equiv_equiv
         commutes' := fun r x => (Algebra.commutes
 
 中文:
-引理 IsSeparable.of_equiv_equiv
-  条件: {x : B₁} (h : IsSeparable A₁ x)
-  结论: IsSeparable A₂ (e₂ x)
+引理 是可分.of_equiv_equiv
+  条件: {x : B₁} (h : 是可分 A₁ x)
+  结论: 是可分 A₂ (e₂ x)
   证明: letI := e₁.toRingHom.toAlgebra
   letI : Algebra A₂ B₁ :=
     { (algebraMap A₁ B₁).comp e₁.symm.toRingHom with
@@ -2425,9 +2425,9 @@ lemma Algebra.IsSeparable.of_equiv_equiv
     (Algebra.IsSeparable.isSeparable _ _)⟩
 
 中文:
-引理 Algebra.IsSeparable.of_equiv_equiv
-  条件: [Algebra.IsSeparable A₁ B₁]
-  结论: Algebra.IsSeparable A₂ B₂
+引理 代数.是可分.of_equiv_equiv
+  条件: [代数.是可分 A₁ B₁]
+  结论: 代数.是可分 A₂ B₂
   证明: ⟨fun x => (e₂.apply_symm_apply x) ▸ _root_.IsSeparable.of_equiv_equiv e₁ e₂ he
     (Algebra.IsSeparable.isSeparable _ _)⟩
 
@@ -2448,7 +2448,7 @@ lemma Algebra.IsSeparable.iff_of_equiv_equiv
       simpa [RingEquiv.eq_symm_apply] using (RingHom.ext_iff.mp he (e₁.symm x)).symm)⟩
 
 中文:
-引理 Algebra.IsSeparable.iff_of_equiv_equiv
+引理 代数.是可分.iff_of_equiv_equiv
   证明: ⟨fun _ => Algebra.IsSeparable.of_equiv_equiv e₁ e₂ he,
     fun _ => Algebra.IsSeparable.of_equiv_equiv e₁.symm e₂.symm (by
       ext x
@@ -2483,8 +2483,8 @@ theorem AlgHom.natCard_of_powerBasis
   exact nodup_roots ((separable_map (algebraMa
 
 中文:
-定理 AlgHom.natCard_of_powerBasis
-  结论: (pb : PowerBasis K S) (h_sep : IsSeparable K pb.gen)
+定理 代数态射.natCard_of_powerBasis
+  结论: (pb : PowerBasis K S) (h_sep : 是可分 K pb.gen)
   证明: by
   classical
   rw [Nat.card_congr pb.liftEquiv']; rw [Nat.subtype_card _ (fun x => Multiset.mem_toFinset)]; rw [← pb.natDegree_minpoly]; rw [← natDegree_map (algebraMap K L)]; rw [h_splits.natDegree_eq_card_roots]; rw [Multiset.toFinset_card_of_nodup]
@@ -2509,8 +2509,8 @@ theorem AlgHom.card_of_powerBasis
   rw [Fintype.card_eq_nat_card]; rw [AlgHom.natCard_of_powerBasis pb h_sep h_splits]
 
 中文:
-定理 AlgHom.card_of_powerBasis
-  结论: (pb : PowerBasis K S) (h_sep : IsSeparable K pb.gen)
+定理 代数态射.card_of_powerBasis
+  结论: (pb : PowerBasis K S) (h_sep : 是可分 K pb.gen)
   证明: by
   rw [Fintype.card_eq_nat_card]; rw [AlgHom.natCard_of_powerBasis pb h_sep h_splits]
 

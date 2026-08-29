@@ -55,7 +55,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨_, s.2.filter p⟩
 
 Depends on / 依赖: filter
@@ -138,7 +138,7 @@ theorem filter_val
 
 中文:
 定理 filter_val
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (filter p s).1 = s.1.filter p
   证明: rfl
 
@@ -159,7 +159,7 @@ theorem filter_subset
 
 中文:
 定理 filter_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.filter p subseteq s
   证明: Multiset.filter_subset _ _
 
@@ -182,7 +182,7 @@ theorem mem_filter
 
 中文:
 定理 mem_filter
-  条件: {s : Finset α} {a : α}
+  条件: {s : 有限集 α} {a : α}
   结论: a in s.filter p ↔ a in s ∧ p a
   证明: Multiset.mem_filter
 
@@ -202,7 +202,7 @@ theorem mem_of_mem_filter
 
 中文:
 定理 mem_of_mem_filter
-  条件: {s : Finset α} (x : α) (h : x in s.filter p)
+  条件: {s : 有限集 α} (x : α) (h : x in s.filter p)
   结论: x in s
   证明: Multiset.mem_of_mem_filter h
 
@@ -222,7 +222,7 @@ theorem filter_ssubset
 
 中文:
 定理 filter_ssubset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s.filter p ⊂ s ↔ 存在 x in s, ¬p x
   证明: by grind
 -/
@@ -242,7 +242,7 @@ theorem filter_filter
 
 中文:
 定理 filter_filter
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.filter p).filter q = s.filter fun a => p a ∧ q a
   证明: by
   grind
@@ -262,7 +262,7 @@ theorem filter_comm
 
 中文:
 定理 filter_comm
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.filter p).filter q = (s.filter q).filter p
   证明: by
   grind
@@ -283,7 +283,7 @@ theorem filter_congr_decidable
 
 中文:
 定理 filter_congr_decidable
-  结论: (s : Finset α) (p : α -> 命题) (h : DecidablePred p)
+  结论: (s : 有限集 α) (p : α -> 命题) (h : DecidablePred p)
   证明: by congr
 
 @[simp]
@@ -305,8 +305,8 @@ theorem filter_true
 
 中文:
 定理 filter_true
-  条件: {h} (s : Finset α)
-  结论: @filter _ (fun _ => True) h s = s
+  条件: {h} (s : 有限集 α)
+  结论: @filter _ (fun _ => 真) h s = s
   证明: by ext; simp
 
 @[simp]
@@ -325,8 +325,8 @@ theorem filter_false
 
 中文:
 定理 filter_false
-  条件: {h} (s : Finset α)
-  结论: @filter _ (fun _ => False) h s = ∅
+  条件: {h} (s : 有限集 α)
+  结论: @filter _ (fun _ => 假) h s = ∅
   证明: by ext; simp
 -/
 theorem filter_false {h} (s : Finset α) : @filter _ (fun _ => False) h s = ∅ := by ext; simp
@@ -385,7 +385,7 @@ theorem filter_nonempty_iff
 
 中文:
 定理 filter_nonempty_iff
-  结论: (s.filter p).Nonempty ↔ 存在 a in s, p a
+  结论: (s.filter p).非空 ↔ 存在 a in s, p a
   证明: by
   simp only [nonempty_iff_ne_empty, Ne, filter_eq_empty_iff, Classical.not_not, not_forall,
     exists_prop]
@@ -451,7 +451,7 @@ theorem filter_const
 
 中文:
 定理 filter_const
-  条件: (p : 命题) [Decidable p] (s : Finset α)
+  条件: (p : 命题) [可判定 p] (s : 有限集 α)
   证明: by split_ifs <;> simp [*]
 
 @[congr]
@@ -473,7 +473,7 @@ theorem filter_congr
 
 中文:
 定理 filter_congr
-  条件: {s : Finset α} (H : 对任意 x in s, p x ↔ q x)
+  条件: {s : 有限集 α} (H : 对任意 x in s, p x ↔ q x)
   结论: filter p s = filter q s
   证明: eq_of_veq Multiset.filter_congr H
 
@@ -520,7 +520,7 @@ theorem filter_subset_filter
 
 中文:
 定理 filter_subset_filter
-  条件: {s t : Finset α} (h : s subseteq t)
+  条件: {s t : 有限集 α} (h : s subseteq t)
   结论: s.filter p subseteq t.filter p
   证明: fun _a ha =>
   mem_filter.2 ⟨h (mem_filter.1 ha).1, (mem_filter.1 ha).2⟩
@@ -540,7 +540,7 @@ theorem monotone_filter_left
 
 中文:
 定理 monotone_filter_left
-  结论: Monotone (filter p)
+  结论: 递增 (filter p)
   证明: fun _ _ => filter_subset_filter p
 
 @[gcongr]
@@ -563,7 +563,7 @@ theorem monotone_filter_right
 
 中文:
 定理 monotone_filter_right
-  条件: (s : Finset α) ⦃p q
+  条件: (s : 有限集 α) ⦃p q
   结论: α -> 命题⦄ [DecidablePred p] [DecidablePred q]
   证明: by simp +contextual [subset_iff, h]
 
@@ -586,8 +586,8 @@ theorem coe_filter
 
 中文:
 定理 coe_filter
-  条件: (s : Finset α)
-  结论: ↑(s.filter p) = ({ x in ↑s | p x } : Set α)
+  条件: (s : 有限集 α)
+  结论: ↑(s.filter p) = ({ x in ↑s | p x } : 集合 α)
   证明: Set.ext fun _ => mem_filter
 
 Depends on / 依赖: Set.ext, mem_filter
@@ -604,8 +604,8 @@ theorem subset_coe_filter_of_subset_forall
   proof: fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
 
 中文:
-定理 subset_coe_filter_of_subset_forall
-  结论: (s : Finset α) {t : Set α} (h₁ : t subseteq s)
+定理 subset_coe_filter_of_subset_对任意
+  结论: (s : 有限集 α) {t : 集合 α} (h₁ : t subseteq s)
   证明: fun x hx => (s.coe_filter p).symm ▸ ⟨h₁ hx, h₂ x hx⟩
 
 Depends on / 依赖: coe_filter, s.coe_filter
@@ -623,7 +623,7 @@ theorem disjoint_filter_filter
 
 中文:
 定理 disjoint_filter_filter
-  结论: {s t : Finset α}
+  结论: {s t : 有限集 α}
   证明: Disjoint.mono (filter_subset _ _) (filter_subset _ _)
 
 Depends on / 依赖: Disjoint, Disjoint.mono, filter_subset
@@ -646,8 +646,8 @@ lemma _root_.Set.pairwiseDisjoint_filter
   contradiction
 
 中文:
-引理 _root_.Set.pairwiseDisjoint_filter
-  条件: [DecidableEq β] (f : α -> β) (s : Set β) (t : Finset α)
+引理 _root_.集合.pairwiseDisjoint_filter
+  条件: [DecidableEq β] (f : α -> β) (s : 集合 β) (t : 有限集 α)
   证明: by
   rintro i - j - h u hi hj x hx
   obtain ⟨-, rfl⟩ : x in t ∧ f x = i := by simpa using hi hx

@@ -34,8 +34,8 @@ class IsOrderedAddMonoid
     - add_le_add_right((a b : α)) : a <= b -> forall c, c + a <= c + b  [default: fun h c => by rw [add_comm c]; rw [add_comm c]; exact add_le]
 
 中文:
-类 IsOrderedAddMonoid
-  参数: (α : 类型) [AddCommMonoid α] [Preorder α]
+类 是OrderedAdd幺半群
+  参数: (α : 类型) [加法交换幺半群 α] [预序 α]
   公理与运算 (2 个):
     - add_le_add_left((a b : α)) : a <= b -> 对任意 c, a + c <= b + c
     - add_le_add_right((a b : α)) : a <= b -> 对任意 c, c + a <= c + b  [默认: fun h c => by rw [add_comm c]; rw [add_comm c]; exact add_le]
@@ -60,8 +60,8 @@ class IsOrderedMonoid
     - mul_le_mul_right((a b : α)) : a <= b -> forall c, c * a <= c * b  [default: fun h c => by rw [mul_comm c]; rw [mul_comm c]; exact mul_le]
 
 中文:
-类 IsOrderedMonoid
-  参数: (α : 类型) [CommMonoid α] [Preorder α]
+类 是Ordered幺半群
+  参数: (α : 类型) [交换幺半群 α] [预序 α]
   公理与运算 (2 个):
     - mul_le_mul_left((a b : α)) : a <= b -> 对任意 c, a * c <= b * c
     - mul_le_mul_right((a b : α)) : a <= b -> 对任意 c, c * a <= c * b  [默认: fun h c => by rw [mul_comm c]; rw [mul_comm c]; exact mul_le]
@@ -97,8 +97,8 @@ class IsOrderedCancelAddMonoid
     - le_of_add_le_add_right : forall a b c : α, b + a <= c + a -> b <= c  [default: fun a b c h => by rw [add_comm _ a]; rw [add_comm _ a] at h;]
 
 中文:
-类 IsOrderedCancelAddMonoid
-  参数: (α : 类型) [AddCommMonoid α] [Preorder α]
+类 是OrderedCancelAdd幺半群
+  参数: (α : 类型) [加法交换幺半群 α] [预序 α]
   公理与运算 (2 个):
     - le_of_add_le_add_left : 对任意 a b c : α, a + b <= a + c -> b <= c
     - le_of_add_le_add_right : 对任意 a b c : α, b + a <= c + a -> b <= c  [默认: fun a b c h => by rw [add_comm _ a]; rw [add_comm _ a] at h;]
@@ -125,8 +125,8 @@ class IsOrderedCancelMonoid
     - le_of_mul_le_mul_right : forall a b c : α, b * a <= c * a -> b <= c  [default: fun a b c h => by rw [mul_comm _ a]; rw [mul_comm _ a] at h;]
 
 中文:
-类 IsOrderedCancelMonoid
-  参数: (α : 类型) [CommMonoid α] [Preorder α]
+类 是OrderedCancel幺半群
+  参数: (α : 类型) [交换幺半群 α] [预序 α]
   公理与运算 (2 个):
     - le_of_mul_le_mul_left : 对任意 a b c : α, a * b <= a * c -> b <= c
     - le_of_mul_le_mul_right : 对任意 a b c : α, b * a <= c * a -> b <= c  [默认: fun a b c h => by rw [mul_comm _ a]; rw [mul_comm _ a] at h;]
@@ -150,8 +150,8 @@ instance [AddCommMonoid
     IsOrderedCancelAddMonoid.le_of_add_le_add_right c a b⟩
 
 中文:
-实例 [AddCommMonoid
-  签名: α] [PartialOrder α] [IsOrderedCancelAddMonoid α] :
+实例 [加法交换幺半群
+  签名: α] [偏序 α] [是OrderedCancelAdd幺半群 α] :
   定义体: ⟨
     fun h => IsOrderedAddMonoid.add_le_add_left a b h c,
     IsOrderedCancelAddMonoid.le_of_add_le_add_right c a b⟩
@@ -185,7 +185,7 @@ theorem IsOrderedCancelMonoid.toMulRightReflectLT
   proof: inferInstance
 
 中文:
-定理 IsOrderedCancelMonoid.toMulRightReflectLT
+定理 是OrderedCancel幺半群.toMulRightReflectLT
   结论: MulRightReflectLT α
   证明: inferInstance
 -/
@@ -216,8 +216,8 @@ theorem IsOrderedCancelMonoid.of_mul_lt_mul_left
     exact hmul _ _ _ h
 
 中文:
-定理 IsOrderedCancelMonoid.of_mul_lt_mul_left
-  结论: {α : 类型} [CommMonoid α] [LinearOrder α]
+定理 是OrderedCancel幺半群.of_mul_lt_mul_left
+  结论: {α : 类型} [交换幺半群 α] [线性序 α]
   证明: by
     obtain rfl | h := eq_or_lt_of_le h
     · simp

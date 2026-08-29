@@ -95,7 +95,7 @@ theorem iSup_eq_of_mem_grothendieck
 
 中文:
 定理 iSup_eq_of_mem_grothendieck
-  条件: (hR : Sieve.generate R in Opens.grothendieckTopology X U)
+  条件: (hR : 筛.generate R in Opens.grothendieckTopology X U)
   证明: by
   apply le_antisymm
   · refine iSup_le ?_
@@ -292,7 +292,7 @@ theorem coverDense_iff_isBasis
 
 中文:
 定理 coverDense_iff_isBasis
-  条件: [Category* ι] (B : ι ⥤ Opens X)
+  条件: [范畴* ι] (B : ι ⥤ Opens X)
   证明: by
   rw [Opens.isBasis_iff_nbhd]
   constructor
@@ -322,7 +322,7 @@ theorem coverDense_inducedFunctor
 
 中文:
 定理 coverDense_inducedFunctor
-  条件: {B : ι -> Opens X} (h : Opens.IsBasis (Set.range B))
+  条件: {B : ι -> Opens X} (h : Opens.是基 (集合.range B))
   证明: (coverDense_iff_isBasis _).2 h
 
 Depends on / 依赖: coverDense_iff_isBasis
@@ -355,8 +355,8 @@ refine ⟨(Opens.map f).obj V, eqToIso Opens.ext Set.image_preimage_eq_of_subset
   exact ⟨_, rfl⟩
 
 中文:
-定理 Topology.IsOpenEmbedding.compatiblePreserving
-  条件: (hf : IsOpenEmbedding f)
+定理 拓扑.是开嵌入.compatiblePreserving
+  条件: (hf : 是开嵌入 f)
   证明: by
   have : Mono f := (TopCat.mono_iff_injective f).mpr hf.injective
   apply compatiblePreservingOfDownwardsClosed
@@ -389,8 +389,8 @@ theorem IsOpenMap.coverPreserving
   exact ⟨_, hf.functor.map i, ⟨_, i, 𝟙 _, hV, rfl⟩, Set.mem_image_of_mem f hxV⟩
 
 中文:
-定理 IsOpenMap.coverPreserving
-  条件: (hf : IsOpenMap f)
+定理 是开映射.coverPreserving
+  条件: (hf : 是开映射 f)
   证明: by
   constructor
   rintro U S hU _ ⟨x, hx, rfl⟩
@@ -419,8 +419,8 @@ lemma Topology.IsOpenEmbedding.functor_isContinuous
   · exact h.isOpenMap.coverPreserving
 
 中文:
-引理 Topology.IsOpenEmbedding.functor_isContinuous
-  条件: (h : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.functor_isContinuous
+  条件: (h : 是开嵌入 f)
   证明: by
   apply Functor.isContinuous_of_coverPreserving
   · exact h.compatiblePreserving
@@ -446,8 +446,8 @@ theorem TopCat.Presheaf.isSheaf_of_isOpenEmbedding
   exact Functor.op_comp_isSheaf _ _ _ ⟨_, hF⟩
 
 中文:
-定理 TopCat.Presheaf.isSheaf_of_isOpenEmbedding
-  条件: (h : IsOpenEmbedding f) (hF : F.IsSheaf)
+定理 顶元素范畴.预层.isSheaf_of_isOpenEmbedding
+  条件: (h : 是开嵌入 f) (hF : F.是层)
   证明: by
   have := h.functor_isContinuous
   exact Functor.op_comp_isSheaf _ _ _ ⟨_, hF⟩
@@ -473,7 +473,7 @@ definition TopologicalSpace.Opens.sheafRestrict
   H.isOpenMap.functor.sheafPushforwardContinuous C _ _
 
 中文:
-定义 TopologicalSpace.Opens.sheafRestrict
+定义 拓扑空间.Opens.sheafRestrict
   签名: (U : Opens X)
   定义体: haveI H : IsOpenEmbedding (TopCat.Hom.hom (TopCat.ofHom ⟨_, continuous_subtype_val⟩)) :=
     U.isOpenEmbedding
@@ -567,7 +567,7 @@ theorem coverPreserving_opens_map
 
 中文:
 定理 coverPreserving_opens_map
-  结论: CoverPreserving (Opens.grothendieckTopology Y)
+  结论: 余verPreserving (Opens.grothendieckTopology Y)
   证明: by
   constructor
   intro U S hS x hx
@@ -596,7 +596,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Opens.map f).IsContinuous (Opens.grothendieckTopology Y)
+  签名: (Opens.map f).是连续 (Opens.grothendieckTopology Y)
   定义体: by
   apply Functor.isContinuous_of_coverPreserving
   · exact compatiblePreserving_opens_map f
@@ -630,7 +630,7 @@ definition isTerminalOfEmpty
 
 中文:
 定义 isTerminalOfEmpty
-  签名: (F : Sheaf C X)
+  签名: (F : 层 C X)
   定义体: F.isTerminalOfBotCover ⊥ (fun _ h => h.elim)
 
 Depends on / 依赖: F.isTerminalOfBotCover, h.elim, isTerminalOfBotCover
@@ -649,7 +649,7 @@ definition isTerminalOfEqEmpty
 
 中文:
 定义 isTerminalOfEqEmpty
-  签名: (F : X.Sheaf C) {U : Opens X} (h : U = ⊥)
+  签名: (F : X.层 C) {U : Opens X} (h : U = ⊥)
   定义体: by
   convert! F.isTerminalOfEmpty
 
@@ -672,7 +672,7 @@ definition restrictHomEquivHom
 
 中文:
 定义 restrictHomEquivHom
-  签名: (h : Opens.IsBasis (Set.range B))
+  签名: (h : Opens.是基 (集合.range B))
   定义体: @Functor.IsCoverDense.restrictHomEquivHom _ _ _ _ _ _ _ _
     (Opens.coverDense_inducedFunctor h) _ F F'
 
@@ -698,7 +698,7 @@ theorem extend_hom_app
 
 中文:
 定理 extend_hom_app
-  结论: (h : Opens.IsBasis (Set.range B))
+  结论: (h : Opens.是基 (集合.range B))
   证明: by
   nth_rw 2 [← (restrictHomEquivHom F F' h).left_inv α]
   rfl
@@ -724,7 +724,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: (h : Opens.IsBasis (Set.range B))
+  结论: (h : Opens.是基 (集合.range B))
   证明: by
   apply (restrictHomEquivHom F F' h).symm.injective
   ext i
@@ -753,7 +753,7 @@ theorem isIso_iff_isIso_basis
 
 中文:
 定理 isIso_iff_isIso_basis
-  结论: {F G : Sheaf C X} (h : Opens.IsBasis (Set.range B))
+  结论: {F G : 层 C X} (h : Opens.是基 (集合.range B))
   证明: by
   have : (inducedFunctor B).IsCoverDense (Opens.grothendieckTopology X) :=
     Opens.coverDense_inducedFunctor h

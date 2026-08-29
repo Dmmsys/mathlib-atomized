@@ -47,7 +47,7 @@ theorem commutator_pi_pi_of_finite
 
 中文:
 定理 commutator_pi_pi_of_finite
-  结论: {η : 类型} [Finite η] {Gs : η -> 类型} [对任意 i, Group (Gs i)]
+  结论: {η : 类型} [有限 η] {Gs : η -> 类型} [对任意 i, 群 (Gs i)]
   证明: by
   classical
     apply le_antisymm (commutator_pi_pi_le H K)
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group.FG (_root_.commutator G)
+  签名: 群.FG (_root_.commutator G)
   定义体: by
   rw [commutator_eq_closure]; apply Group.closure_finite_fg
 
@@ -117,7 +117,7 @@ lemma rank_commutator_le_card
 
 中文:
 引理 rank_commutator_le_card
-  结论: Group.rank (_root_.commutator G) <= 自然数.card (commutatorSet G)
+  结论: 群.rank (_root_.commutator G) <= 自然数.card (commutatorSet G)
   证明: by
   rw [Subgroup.rank_congr (commutator_eq_closure G)]
   apply Subgroup.rank_closure_finite_le_nat_card
@@ -167,7 +167,7 @@ lemma index_center_le_pow
 
 中文:
 引理 index_center_le_pow
-  结论: (center G).index <= 自然数.card (commutatorSet G) ^ Group.rank G
+  结论: (center G).index <= 自然数.card (commutatorSet G) ^ 群.rank G
   证明: by
   obtain ⟨S, hS1, hS2⟩ := Group.rank_spec G
   rw [← hS1]; rw [← Fintype.card_coe]; rw [← Nat.card_eq_fintype_card]; rw [← Finset.coe_sort_coe]; rw [← Nat.card_fun]
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (commutatorRepresentatives G)
+  签名: 有限 (commutatorRepresentatives G)
   定义体: Set.finite_coe_iff.mpr (Set.finite_range _)
 
 Depends on / 依赖: Set.finite_coe_iff.mpr, Set.finite_range, finite_coe_iff, finite_range
@@ -262,7 +262,7 @@ instance closureCommutatorRepresentatives_fg
 
 中文:
 实例 closureCommutatorRepresentatives_fg
-  签名: : Group.FG (closureCommutatorRepresentatives G)
+  签名: : 群.FG (closureCommutatorRepresentatives G)
   定义体: Group.closure_finite_fg _
 
 Depends on / 依赖: Group.closure_finite_fg, closure_finite_fg
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (commutatorSet (closureCommutatorRepresentatives G))
+  签名: 有限 (commutatorSet (closureCommutatorRepresentatives G))
   定义体: by
   apply Nat.finite_of_card_ne_zero
   rw [card_commutatorSet_closureCommutatorRepresentatives]

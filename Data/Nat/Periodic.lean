@@ -35,7 +35,7 @@ theorem periodic_gcd
 中文:
 定理 periodic_gcd
   条件: (a : 自然数)
-  结论: Periodic (gcd a) a
+  结论: 周期 (最大公约数 a) a
   证明: a.gcd_add_self_right
 
 Depends on / 依赖: a.gcd_add_self_right, gcd_add_self_right
@@ -55,7 +55,7 @@ theorem periodic_coprime
 中文:
 定理 periodic_coprime
   条件: (a : 自然数)
-  结论: Periodic (Coprime a) a
+  结论: 周期 (Coprime a) a
   证明: fun _ => eq_iff_iff.mpr coprime_add_self_right
 
 Depends on / 依赖: coprime_add_self_right, eq_iff_iff, eq_iff_iff.mpr
@@ -75,7 +75,7 @@ theorem periodic_mod
 中文:
 定理 periodic_mod
   条件: (a : 自然数)
-  结论: Periodic (fun n => n % a) a
+  结论: 周期 (fun n => n % a) a
   证明: (add_mod_right · a)
 
 Depends on / 依赖: add_mod_right
@@ -93,8 +93,8 @@ theorem _root_.Function.Periodic.map_mod_nat
   conv_rhs => rw [← n.mod_add_div a, mul_comm, ← Nat.nsmul_eq_mul, hf.nsmul]
 
 中文:
-定理 _root_.Function.Periodic.map_mod_nat
-  条件: {α : 类型} {f : 自然数 -> α} {a : 自然数} (hf : Periodic f a)
+定理 _root_.函数.周期.map_mod_nat
+  条件: {α : 类型} {f : 自然数 -> α} {a : 自然数} (hf : 周期 f a)
   证明: fun n => by
   conv_rhs => rw [← n.mod_add_div a, mul_comm, ← Nat.nsmul_eq_mul, hf.nsmul]
 

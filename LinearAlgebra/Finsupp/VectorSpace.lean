@@ -47,7 +47,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: {η : ι -> 类型} (b : 对任意 i, Basis (η i) R (M i))
+  签名: {η : ι -> 类型} (b : 对任意 i, 基 (η i) R (M i))
   定义体: .ofRepr
     ((mapRange.linearEquiv fun i => (b i).repr).trans (sigmaFinsuppLequivDFinsupp R).symm)
 
@@ -68,8 +68,8 @@ instance _root_.Module.Free.dfinsupp
   body: .of_basis DFinsupp.basis fun i => Module.Free.chooseBasis R (M i)
 
 中文:
-实例 _root_.Module.Free.dfinsupp
-  签名: [对任意 i : ι, Module.Free R (M i)]
+实例 _root_.模.自由.dfinsupp
+  签名: [对任意 i : ι, 模.自由 R (M i)]
   定义体: .of_basis DFinsupp.basis fun i => Module.Free.chooseBasis R (M i)
 
 Depends on / 依赖: DFinsupp, DFinsupp.basis, Module, Module.Free.chooseBasis, chooseBasis, of_basis
@@ -211,7 +211,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: {φ : ι -> 类型} (b : 对任意 i, Basis (φ i) R M)
+  签名: {φ : ι -> 类型} (b : 对任意 i, 基 (φ i) R M)
   定义体: .ofRepr (finsuppLequivDFinsupp R).trans
     (DFinsupp.mapRange.linearEquiv fun i => (b i).repr).trans (sigmaFinsuppLequivDFinsupp R).symm
 
@@ -234,7 +234,7 @@ theorem basis_repr
 
 中文:
 定理 basis_repr
-  条件: {φ : ι -> 类型} (b : 对任意 i, Basis (φ i) R M) (g : ι ->₀ M) (ix)
+  条件: {φ : ι -> 类型} (b : 对任意 i, 基 (φ i) R M) (g : ι ->₀ M) (ix)
   证明: rfl
 
 @[simp]
@@ -260,7 +260,7 @@ Basis.apply_eq_iff.mpr by
 
 中文:
 定理 coe_basis
-  条件: {φ : ι -> 类型} (b : 对任意 i, Basis (φ i) R M)
+  条件: {φ : ι -> 类型} (b : 对任意 i, 基 (φ i) R M)
   证明: funext fun ⟨i, x⟩ =>
 Basis.apply_eq_iff.mpr by
       ext ⟨j, y⟩
@@ -291,8 +291,8 @@ instance _root_.Module.Free.finsupp
   body: .of_basis (Finsupp.basis fun _ => Module.Free.chooseBasis R M)
 
 中文:
-实例 _root_.Module.Free.finsupp
-  签名: [Module.Free R M]
+实例 _root_.模.自由.finsupp
+  签名: [模.自由 R M]
   定义体: .of_basis (Finsupp.basis fun _ => Module.Free.chooseBasis R M)
 
 Depends on / 依赖: Finsupp, Finsupp.basis, Module, Module.Free.chooseBasis, chooseBasis, of_basis
@@ -314,7 +314,7 @@ definition basisSingleOne
 
 中文:
 定义 basisSingleOne
-  签名: : Basis ι R (ι ->₀ R)
+  签名: : 基 ι R (ι ->₀ R)
   定义体: Basis.ofRepr (LinearEquiv.refl _ _)
 
 @[simp]
@@ -333,7 +333,7 @@ theorem coe_basisSingleOne
 
 中文:
 定理 coe_basisSingleOne
-  结论: (Finsupp.basisSingleOne : ι -> ι ->₀ R) = fun i => Finsupp.single i 1
+  结论: (有限支撑.basisSingleOne : ι -> ι ->₀ R) = fun i => 有限支撑.single i 1
   证明: funext fun _ => Basis.apply_eq_iff.mpr rfl
 
 Depends on / 依赖: Basis.apply_eq_iff.mpr, apply_eq_iff
@@ -408,7 +408,7 @@ exact linearIndependent_single (f := fun i (_ : Unit) => v i) by simp +contextua
 
 中文:
 引理 linearIndependent_single_of_ne_zero
-  结论: [IsDomain R] [Module R M] [IsTorsionFree R M] {v : ι -> M}
+  结论: [是整环 R] [模 R M] [是无挠 R M] {v : ι -> M}
   证明: by
   rw [← linearIndependent_equiv (Equiv.sigmaPUnit ι)]
 exact linearIndependent_single (f := fun i (_ : Unit) => v i) by simp +contextual [hv]
@@ -482,8 +482,8 @@ lemma Module.Free.trans
   .of_equiv e.symm
 
 中文:
-引理 Module.Free.trans
-  结论: {R S M : 类型} [CommSemiring R] [Semiring S] [Algebra R S]
+引理 模.自由.trans
+  结论: {R S M : 类型} [交换半环 R] [半环 S] [代数 R S]
   证明: let e : (ChooseBasisIndex S M ->₀ S) ≃ₗ[R] ChooseBasisIndex S M ->₀ (ChooseBasisIndex R S ->₀ R) :=
     Finsupp.mapRange.linearEquiv (chooseBasis R S).repr
   let e : M ≃ₗ[R] ChooseBasisIndex S M ->₀ (ChooseBasisIndex R S ->₀ R) :=
@@ -523,8 +523,8 @@ theorem _root_.Finset.sum_single_ite
 @[simp]
 
 中文:
-定理 _root_.Finset.sum_single_ite
-  条件: [Fintype n] (a : R) (i : n)
+定理 _root_.有限集.sum_single_ite
+  条件: [有限类型 n] (a : R) (i : n)
   证明: by
   simp only [apply_ite (Finsupp.single _), Finsupp.single_zero, Finset.sum_ite_eq,
     if_pos (Finset.mem_univ _)]
@@ -551,7 +551,7 @@ theorem equivFun_symm_single
 
 中文:
 定理 equivFun_symm_single
-  条件: [Finite n] (b : Basis n R M) (i : n)
+  条件: [有限 n] (b : 基 n R M) (i : n)
   证明: by
   cases nonempty_fintype n
   simp [Pi.single_apply]
@@ -579,7 +579,7 @@ theorem Module.Basis.repr_smul'
   rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [algebraMap_smul]; rw [map_smul]; rw [Finsupp.smul_apply]
 
 中文:
-定理 Module.Basis.repr_smul'
+定理 模.基.repr_smul'
   条件: (i : ι) (r : R) (s : S)
   证明: by
   rw [← smul_eq_mul]; rw [← smul_eq_mul]; rw [algebraMap_smul]; rw [map_smul]; rw [Finsupp.smul_apply]
@@ -612,7 +612,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R S[M]
+  签名: 模.自由 R S[M]
   定义体: .of_equiv (coeffLinearEquiv _).symm
 
 Depends on / 依赖: coeffLinearEquiv, of_equiv
@@ -634,7 +634,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R S[M]
+  签名: 模.自由 R S[M]
   定义体: .of_equiv (coeffLinearEquiv _).symm
 
 Depends on / 依赖: coeffLinearEquiv, of_equiv
@@ -656,7 +656,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R R[X]
+  签名: 模.自由 R R[X]
   定义体: .of_equiv (Polynomial.toFinsuppIsoLinear _).symm
 
 Depends on / 依赖: Polynomial, Polynomial.toFinsuppIsoLinear, of_equiv, toFinsuppIsoLinear

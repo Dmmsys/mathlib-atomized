@@ -31,7 +31,7 @@ lemma finite_smul_set
 
 中文:
 引理 finite_smul_set
-  结论: (a • s).Finite ↔ s.Finite
+  结论: (a • s).有限 ↔ s.有限
   证明: finite_image_iff (MulAction.injective _).injOn
 
 @[to_additive (attr := simp)]
@@ -54,7 +54,7 @@ lemma infinite_smul_set
 
 中文:
 引理 infinite_smul_set
-  结论: (a • s).Infinite ↔ s.Infinite
+  结论: (a • s).无限 ↔ s.无限
   证明: infinite_image_iff (MulAction.injective _).injOn
 
 @[to_additive] alias ⟨Finite.of_smul_set, _⟩ := finite_smul_set

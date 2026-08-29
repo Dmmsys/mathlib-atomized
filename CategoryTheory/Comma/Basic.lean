@@ -80,7 +80,7 @@ structure Comma
     - hom : L.obj left ⟶ R.obj right
 
 中文:
-结构 Comma
+结构 交换a
   参数: (L : A ⥤ T) (R : B ⥤ T)
   公理与运算 (3 个):
     - left : A
@@ -110,8 +110,8 @@ instance Comma.inhabited
       hom := 𝟙 default }
 
 中文:
-实例 Comma.inhabited
-  签名: [Inhabited T]
+实例 交换a.inhabited
+  签名: [可居 T]
   定义体: { left := default
       right := default
       hom := 𝟙 default }
@@ -141,8 +141,8 @@ structure CommaMorphism
     - w : L.map left ≫ Y.hom = X.hom ≫ R.map right  [default: by cat_disch]
 
 中文:
-结构 CommaMorphism
-  参数: (X Y : Comma L R)
+结构 交换a态射
+  参数: (X Y : 交换a L R)
   公理与运算 (3 个):
     - left : X.left ⟶ Y.left
     - right : X.right ⟶ Y.right
@@ -169,8 +169,8 @@ theorem CommaMorphism.w'
   proof: self.w.symm
 
 中文:
-定理 CommaMorphism.w'
-  条件: {X Y : Comma R L} (self : CommaMorphism Y X)
+定理 交换a态射.w'
+  条件: {X Y : 交换a R L} (self : 交换a态射 Y X)
   证明: self.w.symm
 
 Depends on / 依赖: self.w.symm
@@ -191,8 +191,8 @@ abbreviation CommaMorphism.mk'
   body: w.symm
 
 中文:
-缩写 CommaMorphism.mk'
-  签名: {X Y : Comma R L}
+缩写 交换a态射.mk'
+  签名: {X Y : 交换a R L}
   定义体: w.symm
 
 Depends on / 依赖: w.symm
@@ -213,8 +213,8 @@ instance CommaMorphism.inhabited
   body: ⟨{ left := 𝟙 _, right := 𝟙 _}⟩
 
 中文:
-实例 CommaMorphism.inhabited
-  签名: [Inhabited (Comma L R)]
+实例 交换a态射.inhabited
+  签名: [可居 (交换a L R)]
   定义体: ⟨{ left := 𝟙 _, right := 𝟙 _}⟩
 -/
 instance CommaMorphism.inhabited [Inhabited (Comma L R)] :
@@ -240,7 +240,7 @@ instance commaCategory
 
 中文:
 实例 commaCategory
-  签名: : Category (Comma L R) where
+  签名: : 范畴 (交换a L R) where
   定义体: CommaMorphism X Y
   id X :=
     { left := 𝟙 X.left
@@ -304,7 +304,7 @@ theorem id_left
 
 中文:
 定理 id_left
-  结论: (𝟙 X : CommaMorphism X X).left = 𝟙 X.left
+  结论: (𝟙 X : 交换a态射 X X).left = 𝟙 X.left
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -348,7 +348,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: : Comma L R ⥤ A where
+  签名: : 交换a L R ⥤ A where
   定义体: X.left
   map f := f.left
 
@@ -402,7 +402,7 @@ theorem eqToHom_left
 
 中文:
 定理 eqToHom_left
-  条件: (X Y : Comma L R) (H : X = Y)
+  条件: (X Y : 交换a L R) (H : X = Y)
   证明: by
   cases H
   rfl
@@ -427,7 +427,7 @@ theorem eqToHom_right
 
 中文:
 定理 eqToHom_right
-  条件: (X Y : Comma L R) (H : X = Y)
+  条件: (X Y : 交换a L R) (H : X = Y)
   证明: by
   cases H
   rfl
@@ -455,8 +455,8 @@ instance [IsIso
 @[to_dual (attr := simp, push ←)]
 
 中文:
-实例 [IsIso
-  签名: e] : IsIso e.left
+实例 [是同构
+  签名: e] : 是同构 e.left
   定义体: (Comma.fst L R).map_isIso e
 
 @[to_dual (attr := simp, push ←)]
@@ -482,7 +482,7 @@ lemma inv_left
 
 中文:
 引理 inv_left
-  条件: [IsIso e]
+  条件: [是同构 e]
   结论: (inv e).left = inv e.left
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -509,7 +509,7 @@ lemma left_hom_inv_right
 
 中文:
 引理 left_hom_inv_right
-  条件: [IsIso e]
+  条件: [是同构 e]
   结论: L.map (e.left) ≫ Y.hom ≫ R.map (inv e.right) = X.hom
   证明: by
   simp
@@ -537,7 +537,7 @@ definition leftIso
 
 中文:
 定义 leftIso
-  签名: {X Y : Comma L₁ R₁} (α : X ≅ Y)
+  签名: {X Y : 交换a L₁ R₁} (α : X ≅ Y)
   定义体: (fst L₁ R₁).mapIso α
 
 Depends on / 依赖: mapIso
@@ -569,7 +569,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : Comma L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right)
+  签名: {X Y : 交换a L₁ R₁} (l : X.left ≅ Y.left) (r : X.right ≅ Y.right)
   定义体: { left := l.hom
       right := r.hom
       w := h }
@@ -624,7 +624,7 @@ definition map
 
 中文:
 定义 map
-  签名: : Comma L R ⥤ Comma L' R' where
+  签名: : 交换a L R ⥤ 交换a L' R' where
   定义体: { left := F₁.obj X.left
       right := F₂.obj X.right
       hom := α.app X.left ≫ F.map X.hom ≫ β.app X.right }
@@ -668,7 +668,7 @@ theorem map_obj_hom'
 
 中文:
 定理 map_obj_hom'
-  条件: (X : Comma L R)
+  条件: (X : 交换a L R)
   证明: by simp
 
 @[to_dual self (reorder := A B, 2 4, A' B', 8 10, L R, L' R', F₁ F₂, α β, 22 23)]
@@ -692,7 +692,7 @@ instance faithful_map
 
 中文:
 实例 faithful_map
-  签名: [F₁.Faithful] [F₂.Faithful]
+  签名: [F₁.忠实] [F₂.忠实]
   定义体: by
     ext
     · exact F₁.map_injective (congr_arg CommaMorphism.left h)
@@ -724,7 +724,7 @@ instance full_map
 
 中文:
 实例 full_map
-  签名: [F.Faithful] [F₁.Full] [F₂.Full] [IsIso α] [IsIso β]
+  签名: [F.忠实] [F₁.满] [F₂.满] [是同构 α] [是同构 β]
   定义体: ⟨{left := F₁.preimage φ.left
       right := F₂.preimage φ.right
       w := F.map_injective (by
@@ -765,7 +765,7 @@ instance essSurj_map
 
 中文:
 实例 essSurj_map
-  签名: [F₁.EssSurj] [F₂.EssSurj] [F.Full] [IsIso α] [IsIso β]
+  签名: [F₁.本质满射] [F₂.本质满射] [F.满] [是同构 α] [是同构 β]
   定义体: ⟨{left := F₁.objPreimage X.left
       right := F₂.objPreimage X.right
       hom := F.preimage ((inv α).app _ ≫ L'.map (F₁.objObjPreimageIso X.left).hom ≫
@@ -1097,7 +1097,7 @@ instance isEquivalence_preLeft
 
 中文:
 实例 isEquivalence_preLeft
-  签名: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.IsEquivalence]
+  签名: (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.是等价]
 -/
 instance isEquivalence_preLeft (F : C ⥤ A) (L : A ⥤ T) (R : B ⥤ T) [F.IsEquivalence] :
     (preLeft F L R).IsEquivalence where
@@ -1192,7 +1192,7 @@ instance isEquivalence_post
 
 中文:
 实例 isEquivalence_post
-  签名: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.IsEquivalence]
+  签名: (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.是等价]
 -/
 instance isEquivalence_post (L : A ⥤ T) (R : B ⥤ T) (F : T ⥤ C) [F.IsEquivalence] :
     (post L R F).IsEquivalence where
@@ -1215,7 +1215,7 @@ definition fromProd
 
 中文:
 定义 fromProd
-  签名: (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
+  签名: (L : A ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
   定义体: { left := X.1
       right := X.2
       hom := Discrete.eqToHom rfl }
@@ -1252,7 +1252,7 @@ definition equivProd
 
 中文:
 定义 equivProd
-  签名: (L : A ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
+  签名: (L : A ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
   定义体: (fst L R).prod' (snd L R)
   inverse := fromProd L R
   unitIso := Iso.refl _
@@ -1277,7 +1277,7 @@ definition toPUnitIdEquiv
 
 中文:
 定义 toPUnitIdEquiv
-  签名: (L : A ⥤ Discrete PUnit) (R : Discrete PUnit ⥤ Discrete PUnit)
+  签名: (L : A ⥤ 离散 命题单元) (R : 离散 命题单元 ⥤ 离散 命题单元)
   定义体: (equivProd L _).trans (prod.rightUnitorEquivalence A)
 
 @[simp]
@@ -1299,7 +1299,7 @@ theorem toPUnitIdEquiv_functor_iso
 
 中文:
 定理 toPUnitIdEquiv_functor_iso
-  结论: {L : A ⥤ Discrete PUnit}
+  结论: {L : A ⥤ 离散 命题单元}
   证明: rfl
 -/
 theorem toPUnitIdEquiv_functor_iso {L : A ⥤ Discrete PUnit}
@@ -1319,7 +1319,7 @@ definition toIdPUnitEquiv
 
 中文:
 定义 toIdPUnitEquiv
-  签名: (L : Discrete PUnit ⥤ Discrete PUnit) (R : B ⥤ Discrete PUnit)
+  签名: (L : 离散 命题单元 ⥤ 离散 命题单元) (R : B ⥤ 离散 命题单元)
   定义体: (equivProd _ R).trans (prod.leftUnitorEquivalence B)
 
 @[simp]
@@ -1341,7 +1341,7 @@ theorem toIdPUnitEquiv_functor_iso
 
 中文:
 定理 toIdPUnitEquiv_functor_iso
-  结论: {L : Discrete PUnit ⥤ Discrete PUnit}
+  结论: {L : 离散 命题单元 ⥤ 离散 命题单元}
   证明: rfl
 
 Depends on / 依赖: IsThin, Quiver, Quiver.IsThin
@@ -1371,7 +1371,7 @@ definition opFunctor
 
 中文:
 定义 opFunctor
-  签名: : Comma L R ⥤ (Comma R.op L.op)ᵒᵖ where
+  签名: : 交换a L R ⥤ (交换a R.op L.op)ᵒᵖ where
   定义体: ⟨op X.right, op X.left, op X.hom⟩
   map f := ⟨op f.right, op f.left, Quiver.Hom.unop_inj (by simp)⟩
 
@@ -1436,7 +1436,7 @@ definition unopFunctor
 
 中文:
 定义 unopFunctor
-  签名: : Comma L.op R.op ⥤ (Comma R L)ᵒᵖ where
+  签名: : 交换a L.op R.op ⥤ (交换a R L)ᵒᵖ where
   定义体: ⟨X.right.unop, X.left.unop, X.hom.unop⟩
   map f := ⟨f.right.unop, f.left.unop, Quiver.Hom.op_inj (by simpa using! f.w.symm)⟩
 
@@ -1501,7 +1501,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Comma L R ≌ (Comma R.op L.op)ᵒᵖ where
+  签名: : 交换a L R ≌ (交换a R.op L.op)ᵒᵖ where
   定义体: opFunctor L R
   inverse := (unopFunctor R L).leftOp
   unitIso := NatIso.ofComponents (fun X => Iso.refl _)

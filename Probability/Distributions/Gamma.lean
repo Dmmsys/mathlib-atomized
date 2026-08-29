@@ -73,7 +73,7 @@ definition gammaPDFReal
   body: if 0 <= x then r ^ a / (Gamma a) * x ^ (a - 1) * exp (-(r * x)) else 0
 
 中文:
-定义 gammaPDFReal
+定义 gammaPDF实数
   签名: (a r x : 实数)
   定义体: if 0 <= x then r ^ a / (Gamma a) * x ^ (a - 1) * exp (-(r * x)) else 0
 -/
@@ -207,9 +207,9 @@ lemma measurable_gammaPDFReal
     (measurable_id'.const_mul _).neg.exp) measurable_const
 
 中文:
-引理 measurable_gammaPDFReal
+引理 measurable_gammaPDF实数
   条件: (a r : 实数)
-  结论: Measurable (gammaPDF实数 a r)
+  结论: 可测 (gammaPDF实数 a r)
   证明: Measurable.ite measurableSet_Ici (((measurable_id'.pow_const _).const_mul _).mul
     (measurable_id'.const_mul _).neg.exp) measurable_const
 
@@ -230,7 +230,7 @@ lemma stronglyMeasurable_gammaPDFReal
   proof: (measurable_gammaPDFReal a r).stronglyMeasurable
 
 中文:
-引理 stronglyMeasurable_gammaPDFReal
+引理 stronglyMeasurable_gammaPDF实数
   条件: (a r : 实数)
   证明: (measurable_gammaPDFReal a r).stronglyMeasurable
 
@@ -251,7 +251,7 @@ lemma gammaPDFReal_pos
   positivity
 
 中文:
-引理 gammaPDFReal_pos
+引理 gammaPDF实数_pos
   条件: {x a r : 实数} (ha : 0 < a) (hr : 0 < r) (hx : 0 < x)
   证明: by
   simp only [gammaPDFReal, if_pos hx.le]
@@ -275,7 +275,7 @@ lemma gammaPDFReal_nonneg
   split_ifs <;> positivity
 
 中文:
-引理 gammaPDFReal_nonneg
+引理 gammaPDF实数_nonneg
   条件: {a r : 实数} (ha : 0 < a) (hr : 0 < r) (x : 实数)
   证明: by
   unfold gammaPDFReal

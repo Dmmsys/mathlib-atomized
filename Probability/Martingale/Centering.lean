@@ -55,7 +55,7 @@ definition predictablePart
 
 中文:
 定义 predictablePart
-  签名: {m0 : MeasurableSpace Ω} (f : 自然数 -> Ω -> E) (ℱ : Filtration 自然数 m0)
+  签名: {m0 : 可测空间 Ω} (f : 自然数 -> Ω -> E) (ℱ : 滤子 自然数 m0)
   定义体: fun n => ∑ i in Finset.range n, μ[f (i + 1) - f i | ℱ i]
 
 @[simp]
@@ -121,7 +121,7 @@ lemma predictablePart_smul
 
 中文:
 引理 predictablePart_smul
-  条件: [CompleteSpace E] (c : 实数) (n : 自然数)
+  条件: [完备空间 E] (c : 实数) (n : 自然数)
   证明: by
   simp only [predictablePart, Finset.smul_sum]
   refine eventuallyEq_sum fun i hi => ?_
@@ -150,7 +150,7 @@ lemma predictablePart_add
 
 中文:
 引理 predictablePart_add
-  结论: [CompleteSpace E] (hfint : 对任意 n, 整数egrable (f n) μ)
+  结论: [完备空间 E] (hfint : 对任意 n, 可积 (f n) μ)
   证明: by
   simp only [predictablePart, ← Finset.sum_add_distrib]
   refine eventuallyEq_sum fun i hi => ?_
@@ -184,8 +184,8 @@ lemma Martingale.predictablePart_eq_zero
   _ =ᵐ[μ] f i - f i := (hf.condExp_ae_eq (Nat.le_succ
 
 中文:
-引理 Martingale.predictablePart_eq_zero
-  条件: [CompleteSpace E] (hf : Martingale f ℱ μ) (n : 自然数)
+引理 鞅.predictablePart_eq_zero
+  条件: [完备空间 E] (hf : 鞅 f ℱ μ) (n : 自然数)
   证明: by
   rw [predictablePart]; rw [← Finset.sum_const_zero (s := Finset.range n)]
   refine eventuallyEq_sum fun i hi => ?_
@@ -324,7 +324,7 @@ lemma isPredictable_predictablePart
 
 中文:
 引理 isPredictable_predictablePart
-  条件: [SecondCountableTopology E] [MeasurableSpace E] [BorelSpace E]
+  条件: [第二可数拓扑 E] [可测空间 E] [Borel空间 E]
   证明: IsStronglyPredictable.of_measurable_add_one (by measurability)
     fun n => (stronglyAdapted_predictablePart n)
 
@@ -368,7 +368,7 @@ definition martingalePart
 
 中文:
 定义 martingalePart
-  签名: {m0 : MeasurableSpace Ω} (f : 自然数 -> Ω -> E) (ℱ : Filtration 自然数 m0)
+  签名: {m0 : 可测空间 Ω} (f : 自然数 -> Ω -> E) (ℱ : 滤子 自然数 m0)
   定义体: fun n => f n - predictablePart f ℱ μ n
 
 @[simp]
@@ -411,7 +411,7 @@ lemma martingalePart_smul
 
 中文:
 引理 martingalePart_smul
-  条件: [CompleteSpace E] (c : 实数) (n : 自然数)
+  条件: [完备空间 E] (c : 实数) (n : 自然数)
   证明: by
   filter_upwards [predictablePart_smul (f := f) c n] with ω hω
   simpa [martingalePart, smul_sub]
@@ -436,7 +436,7 @@ lemma martingalePart_add
 
 中文:
 引理 martingalePart_add
-  结论: [CompleteSpace E] (hfint : 对任意 n, 整数egrable (f n) μ)
+  结论: [完备空间 E] (hfint : 对任意 n, 可积 (f n) μ)
   证明: by
   filter_upwards [predictablePart_add (ℱ := ℱ) hfint hgint n] with ω hω
   simp_all [martingalePart]
@@ -462,8 +462,8 @@ lemma Martingale.martingalePart_eq
   simp [martingalePart, hω]
 
 中文:
-引理 Martingale.martingalePart_eq
-  条件: [CompleteSpace E] (hf : Martingale f ℱ μ) (n : 自然数)
+引理 鞅.martingalePart_eq
+  条件: [完备空间 E] (hf : 鞅 f ℱ μ) (n : 自然数)
   证明: by
   filter_upwards [hf.predictablePart_eq_zero n] with ω hω
   simp [martingalePart, hω]
@@ -487,7 +487,7 @@ lemma IsPredictable.martingalePart_eq
 
 中文:
 引理 IsPredictable.martingalePart_eq
-  结论: [SigmaFiniteFiltration μ ℱ] (hf : IsStronglyPredictable ℱ f)
+  结论: [σ有限滤子 μ ℱ] (hf : IsStronglyPredictable ℱ f)
   证明: by
   filter_upwards [hf.predictablePart_eq (μ := μ) hfint n] with ω hω
   simp [martingalePart, hω, sub_eq_add_neg]
@@ -510,7 +510,7 @@ theorem martingalePart_add_predictablePart
 
 中文:
 定理 martingalePart_add_predictablePart
-  条件: (ℱ : Filtration 自然数 m0) (μ : Measure Ω) (f : 自然数 -> Ω -> E)
+  条件: (ℱ : 滤子 自然数 m0) (μ : 测度 Ω) (f : 自然数 -> Ω -> E)
   证明: sub_add_cancel _ _
 
 Depends on / 依赖: sub_add_cancel
@@ -576,7 +576,7 @@ theorem integrable_martingalePart
 
 中文:
 定理 integrable_martingalePart
-  条件: [CompleteSpace E] (hf_int : 对任意 n, 整数egrable (f n) μ) (n : 自然数)
+  条件: [完备空间 E] (hf_int : 对任意 n, 可积 (f n) μ) (n : 自然数)
   证明: by
   rw [martingalePart_eq_sum]
   fun_prop
@@ -603,7 +603,7 @@ theorem martingale_martingalePart
 
 中文:
 定理 martingale_martingalePart
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   refine ⟨stronglyAdapted_martingalePart hf, fun i j hij => ?_⟩
   -- ⊢ μ[martingalePart f ℱ μ j | ℱ i] =ᵐ[μ] martingalePart f ℱ μ i
@@ -669,7 +669,7 @@ theorem martingalePart_add_ae_eq
 
 中文:
 定理 martingalePart_add_ae_eq
-  结论: [CompleteSpace E] [SigmaFiniteFiltration μ ℱ] {f g : 自然数 -> Ω -> E}
+  结论: [完备空间 E] [σ有限滤子 μ ℱ] {f g : 自然数 -> Ω -> E}
   证明: by
   set h := f - martingalePart (f + g) ℱ μ with hhdef
   have hh : h = predictablePart (f + g) ℱ μ - g := by
@@ -711,7 +711,7 @@ theorem predictablePart_add_ae_eq
 
 中文:
 定理 predictablePart_add_ae_eq
-  结论: [CompleteSpace E] [SigmaFiniteFiltration μ ℱ] {f g : 自然数 -> Ω -> E}
+  结论: [完备空间 E] [σ有限滤子 μ ℱ] {f g : 自然数 -> Ω -> E}
   证明: by
   filter_upwards [martingalePart_add_ae_eq hf hg hg0 hgint n] with ω hω
   rw [← add_right_inj (f n ω)]
@@ -742,7 +742,7 @@ exact ae_all_iff.2 fun i => ae_bdd_norm_condExp_of_ae_bdd_norm ae_all_iff.1 hbdd
 
 中文:
 定理 predictablePart_bdd_difference
-  结论: [CompleteSpace E] {R : 实数} {f : 自然数 -> Ω -> E}
+  结论: [完备空间 E] {R : 实数} {f : 自然数 -> Ω -> E}
   证明: by
   simp_rw [predictablePart, Finset.sum_apply, Finset.sum_range_succ_sub_sum]
 exact ae_all_iff.2 fun i => ae_bdd_norm_condExp_of_ae_bdd_norm ae_all_iff.1 hbdd i
@@ -768,7 +768,7 @@ theorem martingalePart_bdd_difference
 
 中文:
 定理 martingalePart_bdd_difference
-  结论: [CompleteSpace E] {R : 实数} {f : 自然数 -> Ω -> E}
+  结论: [完备空间 E] {R : 实数} {f : 自然数 -> Ω -> E}
   证明: by
   filter_upwards [hbdd, predictablePart_bdd_difference ℱ hbdd] with ω hω₁ hω₂ i
   simpa [two_mul, martingalePart, sub_sub_sub_comm] using

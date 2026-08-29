@@ -62,9 +62,9 @@ theorem IsSimpleRing.tfae
     have := isSimpleModule_iff_isA
 
 中文:
-定理 IsSimpleRing.tfae
-  条件: [IsSimpleRing R]
-  结论: List.TFAE
+定理 是单环.tfae
+  条件: [是单环 R]
+  结论: 列表.TFAE
   证明: by
   tfae_have 1 -> 2 := fun _ => inferInstance
   tfae_have 2 -> 3 := fun _ => IsAtomic.exists_atom _
@@ -97,8 +97,8 @@ theorem IsSimpleRing.isSemisimpleRing_iff_isArtinianRing
   proof: tfae.out 0 1
 
 中文:
-定理 IsSimpleRing.isSemisimpleRing_iff_isArtinianRing
-  条件: [IsSimpleRing R]
+定理 是单环.isSemisimpleRing_iff_isArtinianRing
+  条件: [是单环 R]
   证明: tfae.out 0 1
 
 Depends on / 依赖: tfae.out
@@ -156,7 +156,7 @@ theorem isIsotypic
 
 中文:
 定理 isIsotypic
-  条件: (M) [AddCommGroup M] [Module R M]
+  条件: (M) [加法交换群 M] [模 R M]
   结论: IsIsotypic R M
   证明: (isSimpleRing_isArtinianRing_iff.mp ⟨‹_›, ‹_›⟩).2.1.of_self M
 
@@ -176,7 +176,7 @@ refine ⟨n, hn, S, hS, ⟨.trans (.opOp R) .trans (.op ?_) (.symm .mopMatrix)�
 exact .trans (.moduleEndSelf R) .trans e.conjRingEquiv (endVecRingEquivMatrixEnd ..)
 
 中文:
-定理 exists_ringEquiv_matrix_end_mulOpposite
+定理 存在_ringEquiv_matrix_end_mulOpposite
   证明: by
   have ⟨n, hn, S, hS, ⟨e⟩⟩ := (isIsotypic R R).linearEquiv_fun
 refine ⟨n, hn, S, hS, ⟨.trans (.opOp R) .trans (.op ?_) (.symm .mopMatrix)⟩⟩
@@ -201,7 +201,7 @@ theorem exists_ringEquiv_matrix_divisionRing
   classical exact ⟨n, hn, _, _, ⟨e⟩⟩
 
 中文:
-定理 exists_ringEquiv_matrix_divisionRing
+定理 存在_ringEquiv_matrix_divisionRing
   证明: by
   have ⟨n, hn, I, _, ⟨e⟩⟩ := exists_ringEquiv_matrix_end_mulOpposite R
   classical exact ⟨n, hn, _, _, ⟨e⟩⟩
@@ -225,7 +225,7 @@ refine ⟨n, hn, S, hS, ⟨.trans (.opOp R₀ R) .trans (.op ?_) (.symm .mopMatr
 exact .trans (.moduleEndSelf R₀) .trans (e.conjAlgEquiv R₀) (endVecAlgEquivMatrixEnd ..)
 
 中文:
-定理 exists_algEquiv_matrix_end_mulOpposite
+定理 存在_algEquiv_matrix_end_mulOpposite
   证明: by
   have ⟨n, hn, S, hS, ⟨e⟩⟩ := (isIsotypic R R).linearEquiv_fun
 refine ⟨n, hn, S, hS, ⟨.trans (.opOp R₀ R) .trans (.op ?_) (.symm .mopMatrix)⟩⟩
@@ -250,7 +250,7 @@ theorem exists_algEquiv_matrix_divisionRing
   classical exact ⟨n, hn, _, _, _, ⟨e⟩⟩
 
 中文:
-定理 exists_algEquiv_matrix_divisionRing
+定理 存在_algEquiv_matrix_divisionRing
   证明: by
   have ⟨n, hn, I, _, ⟨e⟩⟩ := exists_algEquiv_matrix_end_mulOpposite R₀ R
   classical exact ⟨n, hn, _, _, _, ⟨e⟩⟩
@@ -276,8 +276,8 @@ theorem exists_algEquiv_matrix_divisionRing_finite
     (Matrix.entryLinearMap R₀ _ (0 : Fin n) (0 : Fin n)) fun f => ⟨fun _ _ => f, rfl⟩, ⟨e⟩⟩
 
 中文:
-定理 exists_algEquiv_matrix_divisionRing_finite
-  条件: [Module.Finite R₀ R]
+定理 存在_algEquiv_matrix_divisionRing_finite
+  条件: [模.有限 R₀ R]
   证明: by
   have ⟨n, hn, I, _, ⟨e⟩⟩ := exists_algEquiv_matrix_end_mulOpposite R₀ R
   have := Module.Finite.equiv e.toLinearEquiv
@@ -316,7 +316,7 @@ exact ⟨_, _, _, fun _ => simple _, fun _ => pos _, ⟨.trans (endAlgEquiv R₀
 (.piCongrRight fun c => ((e c).some.conjAlgEquiv R₀).trans (endVecAlgEquivMa
 
 中文:
-定理 exists_end_algEquiv_pi_matrix_end
+定理 存在_end_algEquiv_pi_matrix_end
   证明: by
   choose d pos S _ simple e using fun c : isotypicComponents R M =>
     (IsIsotypic.isotypicComponents c.2).submodule_linearEquiv_fun
@@ -343,7 +343,7 @@ theorem exists_end_ringEquiv_pi_matrix_end
   proof: have ⟨n, S, d, hS, hd, ⟨e⟩⟩ := exists_end_algEquiv_pi_matrix_end Nat R M; ⟨n, S, d, hS, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_end_ringEquiv_pi_matrix_end
+定理 存在_end_ringEquiv_pi_matrix_end
   证明: have ⟨n, S, d, hS, hd, ⟨e⟩⟩ := exists_end_algEquiv_pi_matrix_end Nat R M; ⟨n, S, d, hS, hd, ⟨e⟩⟩
 
 Depends on / 依赖: exists_end_algEquiv_pi_matrix_end
@@ -365,7 +365,7 @@ theorem exists_end_algEquiv_pi_matrix_divisionRing
   classical exact ⟨n, _, d, inferInstance, inferInstance, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_end_algEquiv_pi_matrix_divisionRing
+定理 存在_end_algEquiv_pi_matrix_divisionRing
   证明: by
   have ⟨n, S, d, _, hd, ⟨e⟩⟩ := exists_end_algEquiv_pi_matrix_end R₀ R M
   classical exact ⟨n, _, d, inferInstance, inferInstance, hd, ⟨e⟩⟩
@@ -388,7 +388,7 @@ theorem exists_end_ringEquiv_pi_matrix_divisionRing
   ⟨n, D, d, _, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_end_ringEquiv_pi_matrix_divisionRing
+定理 存在_end_ringEquiv_pi_matrix_divisionRing
   证明: have ⟨n, D, d, _, _, hd, ⟨e⟩⟩ := exists_end_algEquiv_pi_matrix_divisionRing Nat R M
   ⟨n, D, d, _, hd, ⟨e⟩⟩
 
@@ -411,7 +411,7 @@ theorem _root_.IsSemisimpleRing.moduleEnd
 
 中文:
 定理 _root_.IsSemisimpleRing.moduleEnd
-  结论: IsSemisimpleRing (Module.End R M)
+  结论: IsSemisimpleRing (模.End R M)
   证明: have ⟨_, _, _, _, _, ⟨e⟩⟩ := exists_end_ringEquiv_pi_matrix_divisionRing R M
   e.symm.isSemisimpleRing
 
@@ -437,7 +437,7 @@ theorem exists_algEquiv_pi_matrix_end_mulOpposite
     .trans (.piMulOpposite _ _) (.piCongrRight fun _ => .symm .mopMatrix)⟩⟩
 
 中文:
-定理 exists_algEquiv_pi_matrix_end_mulOpposite
+定理 存在_algEquiv_pi_matrix_end_mulOpposite
   证明: have ⟨n, S, d, hS, hd, ⟨e⟩⟩ := IsSemisimpleModule.exists_end_algEquiv_pi_matrix_end R₀ R R
 ⟨n, S, d, hS, hd, ⟨.trans (.opOp R₀ R) .trans (.op <| .trans (.moduleEndSelf R₀) e)
     .trans (.piMulOpposite _ _) (.piCongrRight fun _ => .symm .mopMatrix)⟩⟩
@@ -462,7 +462,7 @@ theorem exists_algEquiv_pi_matrix_divisionRing
   classical exact ⟨n, _, d, inferInstance, inferInstance, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_algEquiv_pi_matrix_divisionRing
+定理 存在_algEquiv_pi_matrix_divisionRing
   证明: by
   have ⟨n, S, d, _, hd, ⟨e⟩⟩ := exists_algEquiv_pi_matrix_end_mulOpposite R₀ R
   classical exact ⟨n, _, d, inferInstance, inferInstance, hd, ⟨e⟩⟩
@@ -492,8 +492,8 @@ theorem exists_algEquiv_pi_matrix_divisionRing_finite
   exact .of_sur
 
 中文:
-定理 exists_algEquiv_pi_matrix_divisionRing_finite
-  条件: [Module.Finite R₀ R]
+定理 存在_algEquiv_pi_matrix_divisionRing_finite
+  条件: [模.有限 R₀ R]
   证明: by
   have ⟨n, D, d, _, _, hd, ⟨e⟩⟩ := exists_algEquiv_pi_matrix_divisionRing R₀ R
   have := Module.Finite.equiv e.toLinearEquiv
@@ -524,7 +524,7 @@ theorem exists_ringEquiv_pi_matrix_end_mulOpposite
   ⟨n, S, d, hS, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_ringEquiv_pi_matrix_end_mulOpposite
+定理 存在_ringEquiv_pi_matrix_end_mulOpposite
   证明: have ⟨n, S, d, hS, hd, ⟨e⟩⟩ := exists_algEquiv_pi_matrix_end_mulOpposite Nat R
   ⟨n, S, d, hS, hd, ⟨e⟩⟩
 
@@ -546,7 +546,7 @@ theorem exists_ringEquiv_pi_matrix_divisionRing
   ⟨n, D, d, _, hd, ⟨e⟩⟩
 
 中文:
-定理 exists_ringEquiv_pi_matrix_divisionRing
+定理 存在_ringEquiv_pi_matrix_divisionRing
   证明: have ⟨n, D, d, _, _, hd, ⟨e⟩⟩ := exists_algEquiv_pi_matrix_divisionRing Nat R
   ⟨n, D, d, _, hd, ⟨e⟩⟩
 

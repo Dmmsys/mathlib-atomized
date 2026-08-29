@@ -36,7 +36,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def matrix (b : Basis ι R M)
+  签名: def matrix (b : 基 ι R M)
   定义体: Basis.reindex (Pi.basis fun _ : m => Pi.basis fun _ : n => b)
     ((Equiv.sigmaEquivProd _ _).trans <| .prodCongr (.refl _) (Equiv.sigmaEquivProd _ _))
 .map (Matrix.ofLinearEquiv R)
@@ -61,7 +61,7 @@ theorem matrix_apply
 
 中文:
 定理 matrix_apply
-  条件: (b : Basis ι R M) (i : m) (j : n) (k : ι) [DecidableEq m] [DecidableEq n]
+  条件: (b : 基 ι R M) (i : m) (j : n) (k : ι) [DecidableEq m] [DecidableEq n]
   证明: by
   simp [Basis.matrix, Matrix.single_eq_of_single_single]
 
@@ -88,7 +88,7 @@ definition stdBasis
 
 中文:
 定义 stdBasis
-  签名: : Basis (m × n) R (Matrix m n R)
+  签名: : 基 (m × n) R (矩阵 m n R)
   定义体: Basis.reindex (Pi.basis fun _ : m => Pi.basisFun R n) (Equiv.sigmaEquivProd _ _)
 .map (ofLinearEquiv R)
 
@@ -137,7 +137,7 @@ instance matrix
 
 中文:
 实例 matrix
-  签名: {m n : 类型} [Finite m] [Finite n]
+  签名: {m n : 类型} [有限 m] [有限 n]
   定义体: Module.Free.pi R _
 
 Depends on / 依赖: Module, Module.Free.pi

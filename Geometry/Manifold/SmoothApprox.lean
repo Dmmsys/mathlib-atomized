@@ -93,7 +93,7 @@ theorem Continuous.exists_contMDiff_approx_and_eqOn
    
 
 中文:
-定理 Continuous.exists_contMDiff_approx_and_eqOn
+定理 连续.存在_contMDiff_approx_and_eqOn
   结论: (n : 自然数∞)
   证明: by
   have dist_f_f : forall x, dist (f x) (f x) < ε x := by simpa only [dist_self] using ε_pos
@@ -141,7 +141,7 @@ theorem Continuous.exists_contMDiff_approx
   exact ⟨g, g_approx, g_supp⟩
 
 中文:
-定理 Continuous.exists_contMDiff_approx
+定理 连续.存在_contMDiff_approx
   结论: (n : 自然数∞)
   证明: by
   obtain ⟨g, g_approx, -, g_supp⟩ := f_cont.exists_contMDiff_approx_and_eqOn I n ε_cont ε_pos
@@ -179,7 +179,7 @@ theorem Continuous.exists_contDiff_approx_and_eqOn
   exact ⟨g, g.contMDiff.contDiff, g_approx, g_eqOn, g_supp⟩
 
 中文:
-定理 Continuous.exists_contDiff_approx_and_eqOn
+定理 连续.存在_contDiff_approx_and_eqOn
   结论: (n : 自然数∞)
   证明: by
   obtain ⟨g, g_approx, g_eqOn, g_supp⟩ := f_cont.exists_contMDiff_approx_and_eqOn 𝓘(Real, E) n
@@ -209,7 +209,7 @@ theorem Continuous.exists_contDiff_approx
   exact ⟨g, g_contDiff, g_approx, g_supp⟩
 
 中文:
-定理 Continuous.exists_contDiff_approx
+定理 连续.存在_contDiff_approx
   结论: (n : 自然数∞)
   证明: by
   obtain ⟨g, g_contDiff, g_approx, -, g_supp⟩ := f_cont.exists_contDiff_approx_and_eqOn n

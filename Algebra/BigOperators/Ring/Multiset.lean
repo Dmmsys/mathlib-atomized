@@ -33,7 +33,7 @@ lemma prod_map_neg
 中文:
 引理 prod_map_neg
   条件: (s : Multiset M)
-  结论: (s.map Neg.neg).prod = (-1) ^ card s * s.prod
+  结论: (s.map 取负.neg).乘积 = (-1) ^ card s * s.乘积
   证明: Quotient.inductionOn s (by simp)
 -/
 @[simp] lemma prod_map_neg (s : Multiset M) : (s.map Neg.neg).prod = (-1) ^ card s * s.prod :=
@@ -57,7 +57,7 @@ lemma prod_eq_zero
 中文:
 引理 prod_eq_zero
   条件: (h : (0 : M₀) in s)
-  结论: s.prod = 0
+  结论: s.乘积 = 0
   证明: by
   rcases Multiset.exists_cons_of_mem h with ⟨s', hs'⟩; simp [hs', Multiset.prod_cons]
 
@@ -78,7 +78,7 @@ lemma prod_eq_zero_iff
 
 中文:
 引理 prod_eq_zero_iff
-  结论: s.prod = 0 ↔ (0 : M₀) in s
+  结论: s.乘积 = 0 ↔ (0 : M₀) in s
   证明: Quotient.inductionOn s fun l => by rw [quot_mk_to_coe, prod_coe]; exact List.prod_eq_zero_iff
 -/
 @[simp] lemma prod_eq_zero_iff : s.prod = 0 ↔ (0 : M₀) in s :=
@@ -96,7 +96,7 @@ lemma prod_ne_zero
 中文:
 引理 prod_ne_zero
   条件: (h : (0 : M₀) ∉ s)
-  结论: s.prod != 0
+  结论: s.乘积 != 0
   证明: mt prod_eq_zero_iff.1 h
 
 Depends on / 依赖: prod_eq_zero_iff
@@ -118,7 +118,7 @@ lemma sum_map_mul_left
 
 中文:
 引理 sum_map_mul_left
-  结论: sum (s.map fun i => a * f i) = a * sum (s.map f)
+  结论: 求和 (s.map fun i => a * f i) = a * 求和 (s.map f)
   证明: Multiset.induction_on s (by simp) fun i s ih => by simp [ih, mul_add]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, induction_on, mul_add
@@ -136,7 +136,7 @@ lemma sum_map_mul_right
 
 中文:
 引理 sum_map_mul_right
-  结论: sum (s.map fun i => f i * a) = sum (s.map f) * a
+  结论: 求和 (s.map fun i => f i * a) = 求和 (s.map f) * a
   证明: Multiset.induction_on s (by simp) fun a s ih => by simp [ih, add_mul]
 
 Depends on / 依赖: Multiset, Multiset.induction_on, add_mul, induction_on
@@ -161,7 +161,7 @@ lemma dvd_sum
 
 中文:
 引理 dvd_sum
-  结论: (对任意 x in s, a ∣ x) -> a ∣ s.sum
+  结论: (对任意 x in s, a ∣ x) -> a ∣ s.求和
   证明: Multiset.induction_on s (fun _ => dvd_zero _) fun x s ih h => by
     rw [sum_cons]
     exact dvd_add (h _ (mem_cons_self _ _)) (ih fun y hy => h _ <| mem_cons.2 <| Or.inr hy)
@@ -257,7 +257,7 @@ theorem multiset_sum_right
 中文:
 定理 multiset_sum_right
   条件: (a : R) (h : 对任意 b in s, Commute a b)
-  结论: Commute a s.sum
+  结论: Commute a s.求和
   证明: by
   induction s using Quotient.inductionOn
   rw [quot_mk_to_coe]; rw [sum_coe]
@@ -282,7 +282,7 @@ theorem multiset_sum_left
 中文:
 定理 multiset_sum_left
   条件: (b : R) (h : 对任意 a in s, Commute a b)
-  结论: Commute s.sum b
+  结论: Commute s.求和 b
   证明: ((Commute.multiset_sum_right _ _) fun _ ha => (h _ ha).symm).symm
 
 Depends on / 依赖: Commute, Commute.multiset_sum_right, multiset_sum_right

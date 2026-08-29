@@ -38,7 +38,7 @@ structure MvPFunctor
     - B : A -> TypeVec.{u} n
 
 中文:
-结构 MvPFunctor
+结构 MvP函子
   参数: (n : 自然数)
   公理与运算 (2 个):
     - A : 类型u
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (MvPFunctor.{u} n) (fun _ => TypeVec.{u} n -> 类型u)
+  签名: CoeFun (MvP函子.{u} n) (fun _ => TypeVec.{u} n -> 类型u)
   定义体: Obj
 -/
 instance : CoeFun (MvPFunctor.{u} n) (fun _ => TypeVec.{u} n -> Type u) where
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MvPFunctor n)
+  签名: 可居 (MvP函子 n)
   定义体: ⟨⟨default, default⟩⟩
 -/
 instance : Inhabited (MvPFunctor n) :=
@@ -133,7 +133,7 @@ instance Obj.inhabited
 
 中文:
 实例 Obj.inhabited
-  签名: {α : TypeVec n} [Inhabited P.A] [对任意 i, Inhabited (α i)]
+  签名: {α : TypeVec n} [可居 P.A] [对任意 i, 可居 (α i)]
   定义体: ⟨⟨default, fun _ _ => default⟩⟩
 -/
 instance Obj.inhabited {α : TypeVec n} [Inhabited P.A] [forall i, Inhabited (α i)] :
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: MvFunctor.{u} P.Obj
+  签名: Mv函子.{u} P.Obj
   定义体: ⟨@MvPFunctor.map n P⟩
 
 Depends on / 依赖: MvPFunctor, MvPFunctor.map
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMvFunctor.{u} P.Obj
+  签名: LawfulMv函子.{u} P.Obj
   定义体: @id_map _ P
   comp_map := @comp_map _ P
 
@@ -384,7 +384,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (P : MvPFunctor.{u} n) (Q : Fin2 n -> MvPFunctor.{u} m)
+  签名: (P : MvP函子.{u} n) (Q : Fin2 n -> MvP函子.{u} m)
   定义体: Σ a₂ : P.1, forall i, P.2 a₂ i -> (Q i).1
   B a i := Σ (j : _) (b : P.2 a.1 j), (Q j).2 (a.snd j b) i
 -/
@@ -709,7 +709,7 @@ definition drop
 
 中文:
 定义 drop
-  签名: : MvPFunctor n where
+  签名: : MvP函子 n where
   定义体: P.A
   B a := (P.B a).drop
 -/
@@ -728,7 +728,7 @@ definition last
 
 中文:
 定义 last
-  签名: : PFunctor where
+  签名: : P函子 where
   定义体: P.A
   B a := (P.B a).last
 -/

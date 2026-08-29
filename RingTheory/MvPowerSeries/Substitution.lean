@@ -86,11 +86,11 @@ structure HasSubst
     - coeff_zero(d) : {s | (a s).coeff d != 0}.Finite
 
 中文:
-结构 HasSubst
+结构 有Subst
   参数: (a : σ -> MvPowerSeries τ S)
   公理与运算 (2 个):
-    - const_coeff(s) : IsNilpotent (constantCoeff (a s))
-    - coeff_zero(d) : {s | (a s).coeff d != 0}.Finite
+    - const_coeff(s) : 是幂零 (constantCoeff (a s))
+    - coeff_zero(d) : {s | (a s).coeff d != 0}.有限
 -/
 structure HasSubst (a : σ -> MvPowerSeries τ S) : Prop where
   const_coeff s : IsNilpotent (constantCoeff (a s))
@@ -109,7 +109,7 @@ lemma coeff_zero_iff
 
 中文:
 引理 coeff_zero_iff
-  条件: [TopologicalSpace S] [DiscreteTopology S]
+  条件: [拓扑空间 S] [离散拓扑 S]
   证明: by
   simp [tendsto_iff_coeff_tendsto, coeff_zero, nhds_discrete]
 
@@ -132,7 +132,7 @@ lemma hasSubst_iff_hasEval_of_discreteTopology
 
 中文:
 引理 hasSubst_iff_hasEval_of_discreteTopology
-  条件: [TopologicalSpace S] [DiscreteTopology S]
+  条件: [拓扑空间 S] [离散拓扑 S]
   证明: by
   simp_rw [hasSubst_def, hasEval_def, coeff_zero_iff,
     isTopologicallyNilpotent_iff_constantCoeff_isNilpotent]
@@ -154,8 +154,8 @@ theorem HasSubst.hasEval
   (@hasSubst_iff_hasEval_of_discreteTopology σ τ _ _ a ⊥ (@DiscreteTopology.mk S ⊥ rfl)).mp ha
 
 中文:
-定理 HasSubst.hasEval
-  条件: [TopologicalSpace S] (ha : HasSubst a)
+定理 有Subst.hasEval
+  条件: [拓扑空间 S] (ha : 有Subst a)
   证明: HasEval.mono (instTopologicalSpace_mono τ bot_le)
   (@hasSubst_iff_hasEval_of_discreteTopology σ τ _ _ a ⊥ (@DiscreteTopology.mk S ⊥ rfl)).mp ha
 
@@ -176,8 +176,8 @@ theorem HasSubst.zero
   simpa [hasSubst_iff_hasEval_of_discreteTopology] using! HasEval.zero
 
 中文:
-定理 HasSubst.zero
-  结论: HasSubst (fun (_ : σ) => (0 : MvPowerSeries τ S))
+定理 有Subst.zero
+  结论: 有Subst (fun (_ : σ) => (0 : MvPowerSeries τ S))
   证明: by
   let : UniformSpace S := ⊥
   simpa [hasSubst_iff_hasEval_of_discreteTopology] using! HasEval.zero
@@ -200,8 +200,8 @@ theorem HasSubst.add
   exact ha.add hb
 
 中文:
-定理 HasSubst.add
-  条件: {a b : σ -> MvPowerSeries τ S} (ha : HasSubst a) (hb : HasSubst b)
+定理 有Subst.add
+  条件: {a b : σ -> MvPowerSeries τ S} (ha : 有Subst a) (hb : 有Subst b)
   证明: by
   let : UniformSpace S := ⊥
   rw [hasSubst_iff_hasEval_of_discreteTopology] at ha hb ⊢
@@ -227,7 +227,7 @@ theorem HasSubst.mul_left
   exact ha.mul_left b
 
 中文:
-定理 HasSubst.mul_left
+定理 有Subst.mul_left
   结论: (b : σ -> MvPowerSeries τ S)
   证明: by
   let : UniformSpace S := ⊥
@@ -252,7 +252,7 @@ theorem HasSubst.mul_right
   proof: mul_comm a b ▸ ha.mul_left b
 
 中文:
-定理 HasSubst.mul_right
+定理 有Subst.mul_right
   结论: (b : σ -> MvPowerSeries τ S)
   证明: mul_comm a b ▸ ha.mul_left b
 
@@ -272,8 +272,8 @@ theorem HasSubst.smul
   proof: ha.mul_left _
 
 中文:
-定理 HasSubst.smul
-  条件: (r : MvPowerSeries τ S) {a : σ -> MvPowerSeries τ S} (ha : HasSubst a)
+定理 有Subst.smul
+  条件: (r : MvPowerSeries τ S) {a : σ -> MvPowerSeries τ S} (ha : 有Subst a)
   证明: ha.mul_left _
 
 Depends on / 依赖: ha.mul_left, mul_left
@@ -294,8 +294,8 @@ theorem HasSubst.X
 omit [Algebra R S] in
 
 中文:
-定理 HasSubst.X
-  结论: HasSubst (fun (s : σ) => (X s : MvPowerSeries σ S))
+定理 有Subst.X
+  结论: 有Subst (fun (s : σ) => (X s : MvPowerSeries σ S))
   证明: by
   let : UniformSpace S := ⊥
   simpa [hasSubst_iff_hasEval_of_discreteTopology] using HasEval.X
@@ -317,8 +317,8 @@ theorem HasSubst.map
   coeff_zero d := (ha.coeff_zero d).subset (by grind [coeff_map])
 
 中文:
-定理 HasSubst.map
-  条件: {a : σ -> MvPowerSeries τ R} (ha : HasSubst a) (h : R ->+* S)
+定理 有Subst.map
+  条件: {a : σ -> MvPowerSeries τ R} (ha : 有Subst a) (h : R ->+* S)
   证明: (ha.const_coeff s).map h
   coeff_zero d := (ha.coeff_zero d).subset (by grind [coeff_map])
 -/
@@ -338,7 +338,7 @@ theorem HasSubst.smul_X
   simp [funext_iff, algebra_compatible_smul (MvPowerSeries σ R)]
 
 中文:
-定理 HasSubst.smul_X
+定理 有Subst.smul_X
   条件: (a : σ -> R)
   证明: by
   convert! HasSubst.X.mul_left (fun s => algebraMap R (MvPowerSeries σ R) (a s))
@@ -364,7 +364,7 @@ definition hasSubstIdeal
 
 中文:
 定义 hasSubstIdeal
-  签名: : Ideal (σ -> MvPowerSeries τ S)
+  签名: : 理想 (σ -> MvPowerSeries τ S)
   定义体: { carrier := Set.ofPred HasSubst
     add_mem' := HasSubst.add
     zero_mem' := HasSubst.zero
@@ -389,7 +389,7 @@ theorem hasSubst_of_constantCoeff_nilpotent
 
 中文:
 定理 hasSubst_of_constantCoeff_nilpotent
-  结论: [Finite σ]
+  结论: [有限 σ]
   证明: ha
   coeff_zero _ := Set.toFinite _
 -/
@@ -409,7 +409,7 @@ theorem hasSubst_of_constantCoeff_zero
 
 中文:
 定理 hasSubst_of_constantCoeff_zero
-  结论: [Finite σ]
+  结论: [有限 σ]
   证明: hasSubst_of_constantCoeff_nilpotent (fun s => by simp only [ha s, IsNilpotent.zero])
 
 Depends on / 依赖: IsNilpotent, IsNilpotent.zero, hasSubst_of_constantCoeff_nilpotent
@@ -429,9 +429,9 @@ lemma HasSubst.X_X
   proof: hasSubst_of_constantCoeff_zero (by simp)
 
 中文:
-引理 HasSubst.X_X
+引理 有Subst.X_X
   条件: {i j : σ}
-  结论: HasSubst (S := R) ![X i, X j]
+  结论: 有Subst (S := R) ![X i, X j]
   证明: hasSubst_of_constantCoeff_zero (by simp)
 -/
 lemma HasSubst.X_X {i j : σ} : HasSubst (S := R) ![X i, X j] :=
@@ -447,9 +447,9 @@ lemma HasSubst.X_zero
   proof: hasSubst_of_constantCoeff_zero (by simp)
 
 中文:
-引理 HasSubst.X_zero
+引理 有Subst.X_zero
   条件: {i : σ}
-  结论: HasSubst ![X i (R := R), 0]
+  结论: 有Subst ![X i (R := R), 0]
   证明: hasSubst_of_constantCoeff_zero (by simp)
 -/
 lemma HasSubst.X_zero {i : σ} : HasSubst ![X i (R := R), 0] :=
@@ -465,9 +465,9 @@ lemma HasSubst.zero_X
   proof: hasSubst_of_constantCoeff_zero (by simp)
 
 中文:
-引理 HasSubst.zero_X
+引理 有Subst.zero_X
   条件: {i : σ}
-  结论: HasSubst ![0, X i (R := R)]
+  结论: 有Subst ![0, X i (R := R)]
   证明: hasSubst_of_constantCoeff_zero (by simp)
 -/
 lemma HasSubst.zero_X {i : σ} : HasSubst ![0, X i (R := R)] :=
@@ -482,8 +482,8 @@ lemma HasSubst.pow
   proof: hasSubstIdeal.pow_mem_of_mem h _ (by lia)
 
 中文:
-引理 HasSubst.pow
-  条件: {n : 自然数} (hn : n != 0) {a : σ -> MvPowerSeries τ S} (h : HasSubst a)
+引理 有Subst.pow
+  条件: {n : 自然数} (hn : n != 0) {a : σ -> MvPowerSeries τ S} (h : 有Subst a)
   证明: hasSubstIdeal.pow_mem_of_mem h _ (by lia)
 -/
 protected lemma HasSubst.pow {n : Nat} (hn : n != 0) {a : σ -> MvPowerSeries τ S} (h : HasSubst a) :
@@ -499,7 +499,7 @@ theorem HasSubst.X_pow
   proof: HasSubst.X.pow (by lia)
 
 中文:
-定理 HasSubst.X_pow
+定理 有Subst.X_pow
   条件: {n : 自然数} (hn : n != 0)
   证明: HasSubst.X.pow (by lia)
 -/
@@ -520,8 +520,8 @@ lemma HasSubst.truncTotal
     (ha.coeff_zero d).subset fun i => by contrapose; simp +contextual [coeff_truncTotal
 
 中文:
-引理 HasSubst.truncTotal
-  结论: {a : σ -> MvPowerSeries τ S} {x : σ -> 自然数} [Finite τ]
+引理 有Subst.truncTotal
+  结论: {a : σ -> MvPowerSeries τ S} {x : σ -> 自然数} [有限 τ]
   证明: by
     rw [← coeff_zero_eq_constantCoeff_apply]; rw [MvPolynomial.coeff_coe]; rw [← MvPolynomial.constantCoeff_eq]; rw [constantCoeff_truncTotal_eq_ite]
     split_ifs <;> simp [ha.const_coeff i]
@@ -596,7 +596,7 @@ theorem subst_coe
 
 中文:
 定理 subst_coe
-  条件: (p : MvPolynomial σ R)
+  条件: (p : 多元多项式 σ R)
   证明: by
   let : UniformSpace R := ⊥
   let : UniformSpace S := ⊥
@@ -624,7 +624,7 @@ definition substAlgHom
 
 中文:
 定义 substAlgHom
-  签名: (ha : HasSubst a)
+  签名: (ha : 有Subst a)
   定义体: letI : UniformSpace R := ⊥
   letI : UniformSpace S := ⊥
   MvPowerSeries.aeval ha.hasEval
@@ -682,7 +682,7 @@ theorem coe_substAlgHom
 
 中文:
 定理 coe_substAlgHom
-  条件: (ha : HasSubst a)
+  条件: (ha : 有Subst a)
   证明: by
   let : UniformSpace R := ⊥
   let : UniformSpace S := ⊥
@@ -750,7 +750,7 @@ theorem substAlgHom_apply
 
 中文:
 定理 substAlgHom_apply
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R)
   证明: by
   rw [coe_substAlgHom]
 
@@ -771,7 +771,7 @@ theorem subst_add
 
 中文:
 定理 subst_add
-  条件: (ha : HasSubst a) (f g : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f g : MvPowerSeries σ R)
   证明: by
   simp only [← substAlgHom_apply ha, map_add]
 
@@ -792,7 +792,7 @@ theorem subst_sub
 
 中文:
 定理 subst_sub
-  条件: (ha : HasSubst a) (f g : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f g : MvPowerSeries σ R)
   证明: by
   simp_rw [← substAlgHom_apply ha, map_sub]
 
@@ -813,7 +813,7 @@ theorem subst_mul
 
 中文:
 定理 subst_mul
-  条件: (ha : HasSubst a) (f g : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f g : MvPowerSeries σ R)
   证明: by
   simp only [← substAlgHom_apply ha, map_mul]
 
@@ -834,7 +834,7 @@ theorem subst_pow
 
 中文:
 定理 subst_pow
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R) (n : 自然数)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R) (n : 自然数)
   证明: by
   simp only [← substAlgHom_apply ha, map_pow]
 
@@ -855,7 +855,7 @@ theorem subst_smul
 
 中文:
 定理 subst_smul
-  条件: (ha : HasSubst a) (r : A) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (r : A) (f : MvPowerSeries σ R)
   证明: by
   simp only [← substAlgHom_apply ha, AlgHom.map_smul_of_tower]
 
@@ -876,7 +876,7 @@ theorem substAlgHom_coe
 
 中文:
 定理 substAlgHom_coe
-  条件: (ha : HasSubst a) (p : MvPolynomial σ R)
+  条件: (ha : 有Subst a) (p : 多元多项式 σ R)
   证明: by
   simp [substAlgHom]
 
@@ -897,7 +897,7 @@ theorem substAlgHom_X
 
 中文:
 定理 substAlgHom_X
-  条件: (ha : HasSubst a) (s : σ)
+  条件: (ha : 有Subst a) (s : σ)
   证明: by
   rw [← MvPolynomial.coe_X]; rw [substAlgHom_coe ha]; rw [MvPolynomial.aeval_X]
 
@@ -920,7 +920,7 @@ theorem substAlgHom_monomial
 
 中文:
 定理 substAlgHom_monomial
-  条件: (ha : HasSubst a) (e : σ ->₀ 自然数) (r : R)
+  条件: (ha : 有Subst a) (e : σ ->₀ 自然数) (r : R)
   证明: by
   rw [← MvPolynomial.coe_monomial]; rw [substAlgHom_coe]; rw [MvPolynomial.aeval_monomial]
 
@@ -971,7 +971,7 @@ theorem subst_X
 
 中文:
 定理 subst_X
-  条件: (ha : HasSubst a) (s : σ)
+  条件: (ha : 有Subst a) (s : σ)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_X]
 
@@ -992,7 +992,7 @@ theorem subst_monomial
 
 中文:
 定理 subst_monomial
-  条件: (ha : HasSubst a) (e : σ ->₀ 自然数) (r : R)
+  条件: (ha : 有Subst a) (e : σ ->₀ 自然数) (r : R)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_monomial]
 
@@ -1015,7 +1015,7 @@ theorem continuous_subst
 
 中文:
 定理 continuous_subst
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   rw [subst_eq_eval₂]
   exact continuous_eval₂ (continuous_algebraMap _ _) ha.hasEval
@@ -1041,7 +1041,7 @@ theorem coeff_subst_finite
 
 中文:
 定理 coeff_subst_finite
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R) (e : τ ->₀ 自然数)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R) (e : τ ->₀ 自然数)
   证明: letI : UniformSpace R := ⊥
   letI : UniformSpace S := ⊥
   Summable.hasFiniteSupport_of_discreteTopology _
@@ -1071,7 +1071,7 @@ theorem coeff_subst
 
 中文:
 定理 coeff_subst
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R) (e : τ ->₀ 自然数)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R) (e : τ ->₀ 自然数)
   证明: by
   let : UniformSpace R := ⊥
   let : UniformSpace S := ⊥
@@ -1101,7 +1101,7 @@ theorem constantCoeff_subst
 
 中文:
 定理 constantCoeff_subst
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R)
   证明: by
   simp only [← coeff_zero_eq_constantCoeff_apply, coeff_subst ha f 0]
 
@@ -1131,7 +1131,7 @@ exact hd Finsupp.ext hc
 
 中文:
 定理 constantCoeff_subst_eq_zero
-  结论: (ha : HasSubst a) (ha' : 对任意 i, (a i).constantCoeff = 0)
+  结论: (ha : 有Subst a) (ha' : 对任意 i, (a i).constantCoeff = 0)
   证明: by
   rw [constantCoeff_subst ha]; rw [finsum_eq_zero_of_forall_eq_zero]
   intro d
@@ -1213,7 +1213,7 @@ theorem map_subst
 
 中文:
 定理 map_subst
-  结论: {a : σ -> MvPowerSeries τ R} (ha : HasSubst a) {h : R ->+* S}
+  结论: {a : σ -> MvPowerSeries τ R} (ha : 有Subst a) {h : R ->+* S}
   证明: by
   ext n
   have {r : R} : h r = h.toAddMonoidHom r := rfl
@@ -1310,8 +1310,8 @@ lemma HasSubst.cons_subst_zero_left
     fin_cases s <;> simp_all [constantCoeff_subst_eq_zero .X_X]
 
 中文:
-引理 HasSubst.cons_subst_zero_left
-  结论: {f : MvPowerSeries (Fin 2) R} (i j k : σ)
+引理 有Subst.cons_subst_zero_left
+  结论: {f : MvPowerSeries (有限集 2) R} (i j k : σ)
   证明: hasSubst_of_constantCoeff_zero fun s => by
     fin_cases s <;> simp_all [constantCoeff_subst_eq_zero .X_X]
 -/
@@ -1330,8 +1330,8 @@ lemma HasSubst.cons_subst_zero_right
     fin_cases s <;> simp_all [constantCoeff_subst_eq_zero .X_X]
 
 中文:
-引理 HasSubst.cons_subst_zero_right
-  结论: {f : MvPowerSeries (Fin 2) R} (i j k : σ)
+引理 有Subst.cons_subst_zero_right
+  结论: {f : MvPowerSeries (有限集 2) R} (i j k : σ)
   证明: hasSubst_of_constantCoeff_zero fun s => by
     fin_cases s <;> simp_all [constantCoeff_subst_eq_zero .X_X]
 -/
@@ -1384,7 +1384,7 @@ theorem comp_subst
 
 中文:
 定理 comp_subst
-  结论: [UniformSpace R] [DiscreteUniformity R] [UniformSpace S] [DiscreteUniformity S]
+  结论: [一致空间 R] [DiscreteUniformity R] [一致空间 S] [DiscreteUniformity S]
   证明: by
   rw [← comp_substAlgHom ha hε]; rw [AlgHom.coe_comp]; rw [coe_substAlgHom]
 
@@ -1472,7 +1472,7 @@ lemma IsNilpotent_subst
 
 中文:
 引理 IsNilpotent_subst
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   classical
   rw [constantCoeff_subst ha]
@@ -1511,7 +1511,7 @@ theorem IsNilpotent_substAlgHom
 
 中文:
 定理 IsNilpotent_substAlgHom
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   simpa using IsNilpotent_subst ha hf
 
@@ -1537,8 +1537,8 @@ theorem HasSubst.comp
     simpa [← map_zero (substAlgHom (R := S) hb)] using! (continuous_subst hb).continuousAt
 
 中文:
-定理 HasSubst.comp
-  条件: (ha : HasSubst a) (hb : HasSubst b)
+定理 有Subst.comp
+  条件: (ha : 有Subst a) (hb : 有Subst b)
   证明: IsNilpotent_substAlgHom hb (ha.const_coeff s)
   coeff_zero := by
     let : UniformSpace S := ⊥
@@ -1574,7 +1574,7 @@ theorem substAlgHom_comp_substAlgHom
 
 中文:
 定理 substAlgHom_comp_substAlgHom
-  条件: (ha : HasSubst a) (hb : HasSubst b)
+  条件: (ha : 有Subst a) (hb : 有Subst b)
   证明: by
   let : UniformSpace R := ⊥
   let : UniformSpace S := ⊥
@@ -1602,7 +1602,7 @@ theorem substAlgHom_comp_substAlgHom_apply
 
 中文:
 定理 substAlgHom_comp_substAlgHom_apply
-  结论: (ha : HasSubst a) (hb : HasSubst b)
+  结论: (ha : 有Subst a) (hb : 有Subst b)
   证明: DFunLike.congr_fun (substAlgHom_comp_substAlgHom ha hb) f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, substAlgHom_comp_substAlgHom
@@ -1623,7 +1623,7 @@ theorem subst_comp_subst
 
 中文:
 定理 subst_comp_subst
-  条件: (ha : HasSubst a) (hb : HasSubst b)
+  条件: (ha : 有Subst a) (hb : 有Subst b)
   证明: by
   simpa [funext_iff, DFunLike.ext_iff] using substAlgHom_comp_substAlgHom (R := R) ha hb
 
@@ -1643,7 +1643,7 @@ theorem subst_comp_subst_apply
 
 中文:
 定理 subst_comp_subst_apply
-  条件: (ha : HasSubst a) (hb : HasSubst b) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (hb : 有Subst b) (f : MvPowerSeries σ R)
   证明: congr_fun (subst_comp_subst (R := R) ha hb) f
 
 Depends on / 依赖: congr_fun, subst_comp_subst
@@ -1674,7 +1674,7 @@ theorem le_weightedOrder_subst
 
 中文:
 定理 le_weightedOrder_subst
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R)
   证明: by
   apply MvPowerSeries.le_weightedOrder
   intro d hd
@@ -1713,7 +1713,7 @@ theorem le_weightedOrder_subst_of_forall_ne_zero
   simp [Finsupp.weight_apply, Finsupp.sum, (ne_zero_iff_weightedOrder_finite _).mp (ha0 _)]
 
 中文:
-定理 le_weightedOrder_subst_of_forall_ne_zero
+定理 le_weightedOrder_subst_of_对任意_ne_zero
   证明: by
   refine .trans ?_ (le_weightedOrder_subst w ha f)
   simp only [ne_eq, le_iInf_iff]
@@ -1747,7 +1747,7 @@ theorem le_order_subst
 
 中文:
 定理 le_order_subst
-  条件: (ha : HasSubst a) (f : MvPowerSeries σ R)
+  条件: (ha : 有Subst a) (f : MvPowerSeries σ R)
   证明: by
   refine .trans ?_ (MvPowerSeries.le_weightedOrder_subst _ ha _)
   simp only [ne_eq, le_iInf_iff]
@@ -1797,7 +1797,7 @@ theorem truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   classical
   ext d
@@ -1847,7 +1847,7 @@ theorem truncTotal_subst_eq_truncTotal_subst_sum
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_subst_sum
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   ext d
   by_cases hd : d.degree < k
@@ -1903,7 +1903,7 @@ theorem truncTotal_subst_eq_truncTotal_sum_subst
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_sum_subst
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   rw [truncTotal_subst_eq_truncTotal_subst_sum ha ha₁]; rw [← substAlgHom_apply ha]; rw [map_sum]
   simp
@@ -1928,7 +1928,7 @@ theorem truncTotal_subst_eq_truncTotal_truncTotal_subst
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_truncTotal_subst
-  结论: [Finite σ]
+  结论: [有限 σ]
   证明: by
   rw [truncTotal_subst_eq_truncTotal_subst_sum (hasSubst_of_constantCoeff_zero h) h]; rw [truncTotal_eq_sum]
 
@@ -1952,7 +1952,7 @@ theorem truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: by
   rw [truncTotal_subst_eq_truncTotal_subst_truncTotal_of_le ha hx]
   exact truncTotal_subst_eq_truncTotal_sum_subst ha.truncTotal fun i => by
@@ -1982,7 +1982,7 @@ theorem truncTotal_subst_of_le
 
 中文:
 定理 truncTotal_subst_of_le
-  条件: [Finite σ] (h : 对任意 i, (a i).constantCoeff = 0) (hx : 对任意 i, k <= x i)
+  条件: [有限 σ] (h : 对任意 i, (a i).constantCoeff = 0) (hx : 对任意 i, k <= x i)
   证明: by
   rw [truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
       (hasSubst_of_constantCoeff_zero h) h hx]; rw [truncTotal_eq_sum]; rw [← substAlgHom_apply
@@ -2009,7 +2009,7 @@ theorem truncTotal_subst
 
 中文:
 定理 truncTotal_subst
-  条件: [Finite σ] (h : 对任意 i, (a i).constantCoeff = 0)
+  条件: [有限 σ] (h : 对任意 i, (a i).constantCoeff = 0)
   证明: truncTotal_subst_of_le h fun _ => le_refl k
 
 Depends on / 依赖: le_refl, truncTotal_subst_of_le
@@ -2029,7 +2029,7 @@ theorem truncTotal_subst_eq_truncTotal_sum_subst_truncTotal
 
 中文:
 定理 truncTotal_subst_eq_truncTotal_sum_subst_truncTotal
-  结论: (ha : HasSubst a)
+  结论: (ha : 有Subst a)
   证明: truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le ha h fun _ => le_refl k
 
 Depends on / 依赖: le_refl, truncTotal_subst_eq_truncTotal_sum_subst_truncTotal_of_le
@@ -2226,7 +2226,7 @@ theorem rescale_one
 
 中文:
 定理 rescale_one
-  结论: rescale 1 = RingHom.id (MvPowerSeries σ R)
+  结论: rescale 1 = 环态射.id (MvPowerSeries σ R)
   证明: by
   ext f n
   simp [coeff_rescale, Finsupp.prod]
@@ -2509,7 +2509,7 @@ lemma subst_tsum
 
 中文:
 引理 subst_tsum
-  条件: (hx : Summable x) (ha : HasSubst a)
+  条件: (hx : Summable x) (ha : 有Subst a)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_eq_aeval ha]; rw [hx.map_tsum _ <| continuous_aeval _]
 
@@ -2531,7 +2531,7 @@ exact hx.map _ continuous_aeval ha.hasEval
 
 中文:
 引理 summable_subst
-  条件: (hx : Summable x) (ha : HasSubst a)
+  条件: (hx : Summable x) (ha : 有Subst a)
   证明: by
   rw [← coe_substAlgHom ha]; rw [substAlgHom_eq_aeval ha]
 exact hx.map _ continuous_aeval ha.hasEval

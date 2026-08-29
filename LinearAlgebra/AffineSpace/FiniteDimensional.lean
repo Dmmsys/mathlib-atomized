@@ -55,7 +55,7 @@ theorem finiteDimensional_vectorSpan_of_finite
 
 中文:
 定理 finiteDimensional_vectorSpan_of_finite
-  条件: {s : Set P} (h : Set.Finite s)
+  条件: {s : 集合 P} (h : 集合.有限 s)
   证明: .span_of_finite k h.vsub h
 
 Depends on / 依赖: h.vsub, span_of_finite
@@ -93,7 +93,7 @@ instance finiteDimensional_vectorSpan_range
 
 中文:
 实例 finiteDimensional_vectorSpan_range
-  签名: [Finite ι] (p : ι -> P)
+  签名: [有限 ι] (p : ι -> P)
   定义体: finiteDimensional_vectorSpan_of_finite k (Set.finite_range _)
 
 Depends on / 依赖: Set.finite_range, finiteDimensional_vectorSpan_of_finite, finite_range
@@ -112,7 +112,7 @@ instance finiteDimensional_vectorSpan_image_of_finite
 
 中文:
 实例 finiteDimensional_vectorSpan_image_of_finite
-  签名: [Finite ι] (p : ι -> P) (s : Set ι)
+  签名: [有限 ι] (p : ι -> P) (s : 集合 ι)
   定义体: finiteDimensional_vectorSpan_of_finite k (Set.toFinite _)
 
 Depends on / 依赖: Set.toFinite, finiteDimensional_vectorSpan_of_finite, toFinite
@@ -131,7 +131,7 @@ theorem finiteDimensional_direction_affineSpan_of_finite
 
 中文:
 定理 finiteDimensional_direction_affineSpan_of_finite
-  条件: {s : Set P} (h : Set.Finite s)
+  条件: {s : 集合 P} (h : 集合.有限 s)
   证明: (direction_affineSpan k s).symm ▸ finiteDimensional_vectorSpan_of_finite k h
 
 Depends on / 依赖: direction_affineSpan, finiteDimensional_vectorSpan_of_finite
@@ -174,7 +174,7 @@ instance finiteDimensional_direction_affineSpan_range
 
 中文:
 实例 finiteDimensional_direction_affineSpan_range
-  签名: [Finite ι] (p : ι -> P)
+  签名: [有限 ι] (p : ι -> P)
   定义体: finiteDimensional_direction_affineSpan_of_finite k (Set.finite_range _)
 
 Depends on / 依赖: Set.finite_range, finiteDimensional_direction_affineSpan_of_finite, finite_range
@@ -193,7 +193,7 @@ instance finiteDimensional_direction_affineSpan_image_of_finite
 
 中文:
 实例 finiteDimensional_direction_affineSpan_image_of_finite
-  签名: [Finite ι] (p : ι -> P) (s : Set ι)
+  签名: [有限 ι] (p : ι -> P) (s : 集合 ι)
   定义体: finiteDimensional_direction_affineSpan_of_finite k (Set.toFinite _)
 
 Depends on / 依赖: Set.toFinite, finiteDimensional_direction_affineSpan_of_finite, toFinite
@@ -217,7 +217,7 @@ theorem finite_of_fin_dim_affineIndependent
 
 中文:
 定理 finite_of_fin_dim_affineIndependent
-  结论: [FiniteDimensional k V] {p : ι -> P}
+  结论: [有限维 k V] {p : ι -> P}
   证明: by
   nontriviality ι; inhabit ι
   rw [affineIndependent_iff_linearIndependent_vsub k p default] at hi
@@ -245,7 +245,7 @@ theorem finite_set_of_fin_dim_affineIndependent
 
 中文:
 定理 finite_set_of_fin_dim_affineIndependent
-  结论: [FiniteDimensional k V] {s : Set ι} {f : s -> P}
+  结论: [有限维 k V] {s : 集合 ι} {f : s -> P}
   证明: @Set.toFinite _ s (finite_of_fin_dim_affineIndependent k hi)
 
 Depends on / 依赖: Set.toFinite, finite_of_fin_dim_affineIndependent, toFinite
@@ -271,8 +271,8 @@ instance AffineSubspace.finiteDimensional_sup
   infer_instance
 
 中文:
-实例 AffineSubspace.finiteDimensional_sup
-  签名: (s₁ s₂ : AffineSubspace k P)
+实例 仿射子空间.finiteDimensional_sup
+  签名: (s₁ s₂ : 仿射子空间 k P)
   定义体: by
   rcases eq_bot_or_nonempty s₁ with rfl | ⟨p₁, hp₁⟩
   · rwa [bot_sup_eq]
@@ -305,7 +305,7 @@ instance finiteDimensional_direction_map
 
 中文:
 实例 finiteDimensional_direction_map
-  签名: {V₂ P₂ : 类型} [AddCommGroup V₂] [Module k V₂]
+  签名: {V₂ P₂ : 类型} [加法交换群 V₂] [模 k V₂]
   定义体: by
   rw [map_direction]
   infer_instance
@@ -375,7 +375,7 @@ theorem AffineIndependent.finrank_vectorSpan
 
 中文:
 定理 AffineIndependent.finrank_vectorSpan
-  结论: [Fintype ι] {p : ι -> P} (hi : AffineIndependent k p)
+  结论: [有限类型 ι] {p : ι -> P} (hi : AffineIndependent k p)
   证明: by
   classical
   rw [← Finset.card_univ] at hc
@@ -403,7 +403,7 @@ lemma AffineIndependent.finrank_vectorSpan_add_one
 
 中文:
 引理 AffineIndependent.finrank_vectorSpan_add_one
-  结论: [Fintype ι] [Nonempty ι] {p : ι -> P}
+  结论: [有限类型 ι] [非空 ι] {p : ι -> P}
   证明: by
   rw [hi.finrank_vectorSpan (tsub_add_cancel_of_le _).symm]; rw [tsub_add_cancel_of_le] <;>
     exact Fintype.card_pos
@@ -425,7 +425,7 @@ theorem AffineIndependent.vectorSpan_eq_top_of_card_eq_finrank_add_one
 
 中文:
 定理 AffineIndependent.vectorSpan_eq_top_of_card_eq_finrank_add_one
-  结论: [FiniteDimensional k V]
+  结论: [有限维 k V]
   证明: Submodule.eq_top_of_finrank_eq hi.finrank_vectorSpan hc
 
 Depends on / 依赖: Submodule, Submodule.eq_top_of_finrank_eq, eq_top_of_finrank_eq, finrank_vectorSpan, hi.finrank_vectorSpan
@@ -454,7 +454,7 @@ theorem finrank_vectorSpan_image_finset_le
 
 中文:
 定理 finrank_vectorSpan_image_finset_le
-  结论: [DecidableEq P] (p : ι -> P) (s : Finset ι) {n : 自然数}
+  结论: [DecidableEq P] (p : ι -> P) (s : 有限集 ι) {n : 自然数}
   证明: by
   classical
   have hn : (s.image p).Nonempty := by
@@ -492,7 +492,7 @@ theorem finrank_vectorSpan_range_le
 
 中文:
 定理 finrank_vectorSpan_range_le
-  条件: [Fintype ι] (p : ι -> P) {n : 自然数} (hc : Fintype.card ι = n + 1)
+  条件: [有限类型 ι] (p : ι -> P) {n : 自然数} (hc : 有限类型.card ι = n + 1)
   证明: by
   classical
   rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [← Finset.coe_image]
@@ -519,7 +519,7 @@ lemma finrank_vectorSpan_range_add_one_le
 
 中文:
 引理 finrank_vectorSpan_range_add_one_le
-  条件: [Fintype ι] [Nonempty ι] (p : ι -> P)
+  条件: [有限类型 ι] [非空 ι] (p : ι -> P)
   证明: (le_tsub_iff_right <| Nat.succ_le_iff.2 Fintype.card_pos).1 finrank_vectorSpan_range_le _ _
     (tsub_add_cancel_of_le <| Nat.succ_le_iff.2 Fintype.card_pos).symm
 
@@ -545,7 +545,7 @@ theorem affineIndependent_iff_finrank_vectorSpan_eq
 
 中文:
 定理 affineIndependent_iff_finrank_vectorSpan_eq
-  结论: [Fintype ι] (p : ι -> P) {n : 自然数}
+  结论: [有限类型 ι] (p : ι -> P) {n : 自然数}
   证明: by
   classical
   have hn : Nonempty ι := by simp [← Fintype.card_pos_iff, hc]
@@ -581,7 +581,7 @@ theorem affineIndependent_iff_le_finrank_vectorSpan
 
 中文:
 定理 affineIndependent_iff_le_finrank_vectorSpan
-  结论: [Fintype ι] (p : ι -> P) {n : 自然数}
+  结论: [有限类型 ι] (p : ι -> P) {n : 自然数}
   证明: by
   rw [affineIndependent_iff_finrank_vectorSpan_eq k p hc]
   constructor
@@ -611,7 +611,7 @@ theorem affineIndependent_iff_not_finrank_vectorSpan_le
 
 中文:
 定理 affineIndependent_iff_not_finrank_vectorSpan_le
-  结论: [Fintype ι] (p : ι -> P) {n : 自然数}
+  结论: [有限类型 ι] (p : ι -> P) {n : 自然数}
   证明: by
   rw [affineIndependent_iff_le_finrank_vectorSpan k p hc]; rw [← Nat.lt_iff_add_one_le]; rw [lt_iff_not_ge]
 
@@ -632,7 +632,7 @@ theorem finrank_vectorSpan_le_iff_not_affineIndependent
 
 中文:
 定理 finrank_vectorSpan_le_iff_not_affineIndependent
-  结论: [Fintype ι] (p : ι -> P) {n : 自然数}
+  结论: [有限类型 ι] (p : ι -> P) {n : 自然数}
   证明: (not_iff_comm.1 (affineIndependent_iff_not_finrank_vectorSpan_le k p hc).symm).symm
 
 Depends on / 依赖: affineIndependent_iff_not_finrank_vectorSpan_le, not_iff_comm
@@ -659,7 +659,7 @@ lemma AffineIndependent.card_le_finrank_succ
 
 中文:
 引理 AffineIndependent.card_le_finrank_succ
-  条件: [Fintype ι] {p : ι -> P} (hp : AffineIndependent k p)
+  条件: [有限类型 ι] {p : ι -> P} (hp : AffineIndependent k p)
   证明: by
   cases isEmpty_or_nonempty ι
   · simp [Fintype.card_eq_zero]
@@ -696,7 +696,7 @@ lemma AffineIndependent.card_le_card_of_subset_affineSpan
 
 中文:
 引理 AffineIndependent.card_le_card_of_subset_affineSpan
-  结论: {s t : Finset V}
+  结论: {s t : 有限集 V}
   证明: by
   obtain rfl | hs' := s.eq_empty_or_nonempty
   · simp
@@ -744,7 +744,7 @@ have dir_lt := AffineSubspace.direction_lt_of_nonempty (k := k) hst hs'.to_set.a
 
 中文:
 引理 AffineIndependent.card_lt_card_of_affineSpan_lt_affineSpan
-  结论: {s t : Finset V}
+  结论: {s t : 有限集 V}
   证明: by
   obtain rfl | hs' := s.eq_empty_or_nonempty
   · simpa [card_pos] using hst
@@ -803,7 +803,7 @@ theorem AffineIndependent.vectorSpan_eq_of_le_of_card_eq_finrank_add_one
 
 中文:
 定理 AffineIndependent.vectorSpan_eq_of_le_of_card_eq_finrank_add_one
-  结论: [Fintype ι] {p : ι -> P}
+  结论: [有限类型 ι] {p : ι -> P}
   证明: Submodule.eq_of_le_of_finrank_eq hle hi.finrank_vectorSpan hc
 
 Depends on / 依赖: Submodule, Submodule.eq_of_le_of_finrank_eq, eq_of_le_of_finrank_eq, finrank_vectorSpan, hi.finrank_vectorSpan
@@ -868,7 +868,7 @@ theorem AffineIndependent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
 
 中文:
 定理 AffineIndependent.affineSpan_eq_of_le_of_card_eq_finrank_add_one
-  结论: [Fintype ι] {p : ι -> P}
+  结论: [有限类型 ι] {p : ι -> P}
   证明: by
   classical
   rw [← Finset.card_univ] at hc
@@ -902,7 +902,7 @@ theorem AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one
 
 中文:
 定理 AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one
-  结论: [FiniteDimensional k V]
+  结论: [有限维 k V]
   证明: by
   constructor
   · intro h_tot
@@ -936,8 +936,8 @@ theorem Affine.Simplex.span_eq_top
   rw [AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one T.independent]; rw [Fintype.card_fin]; rw [hrank]
 
 中文:
-定理 Affine.Simplex.span_eq_top
-  结论: [FiniteDimensional k V] {n : 自然数} (T : Affine.Simplex k V n)
+定理 仿射.单纯形.span_eq_top
+  结论: [有限维 k V] {n : 自然数} (T : 仿射.单纯形 k V n)
   证明: by
   rw [AffineIndependent.affineSpan_eq_top_iff_card_eq_finrank_add_one T.independent]; rw [Fintype.card_fin]; rw [hrank]
 
@@ -963,7 +963,7 @@ instance finiteDimensional_vectorSpan_insert
 
 中文:
 实例 finiteDimensional_vectorSpan_insert
-  签名: (s : AffineSubspace k P)
+  签名: (s : 仿射子空间 k P)
   定义体: by
   rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]
   rcases (s : Set P).eq_empty_or_nonempty with (hs | ⟨p₀, hp₀⟩)
@@ -995,7 +995,7 @@ instance finiteDimensional_direction_affineSpan_insert
 
 中文:
 实例 finiteDimensional_direction_affineSpan_insert
-  签名: (s : AffineSubspace k P)
+  签名: (s : 仿射子空间 k P)
   定义体: (direction_affineSpan k (insert p (s : Set P))).symm ▸ finiteDimensional_vectorSpan_insert s p
 
 Depends on / 依赖: direction_affineSpan, finiteDimensional_vectorSpan_insert, insert
@@ -1021,7 +1021,7 @@ instance finiteDimensional_vectorSpan_insert_set
 
 中文:
 实例 finiteDimensional_vectorSpan_insert_set
-  签名: (s : Set P) [FiniteDimensional k (vectorSpan k s)]
+  签名: (s : 集合 P) [有限维 k (vectorSpan k s)]
   定义体: by
   have : FiniteDimensional k (affineSpan k s).direction :=
     (direction_affineSpan k s).symm ▸ inferInstance
@@ -1050,7 +1050,7 @@ instance finiteDimensional_direction_affineSpan_insert_set
 
 中文:
 实例 finiteDimensional_direction_affineSpan_insert_set
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: by
   have : FiniteDimensional k (vectorSpan k s) := (direction_affineSpan k s) ▸ inferInstance
   rw [direction_affineSpan]
@@ -1075,7 +1075,7 @@ definition Collinear
 
 中文:
 定义 Collinear
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: Module.rank k (vectorSpan k s) <= 1
 
 Depends on / 依赖: Module, Module.rank, vectorSpan
@@ -1093,7 +1093,7 @@ theorem collinear_iff_rank_le_one
 
 中文:
 定理 collinear_iff_rank_le_one
-  条件: (s : Set P)
+  条件: (s : 集合 P)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1118,7 +1118,7 @@ alias ⟨Collinear.finrank_le_one, _⟩ := collinear_iff_finrank_le_one
 
 中文:
 定理 collinear_iff_finrank_le_one
-  条件: {s : Set P} [FiniteDimensional k (vectorSpan k s)]
+  条件: {s : 集合 P} [有限维 k (vectorSpan k s)]
   证明: by
   have h := collinear_iff_rank_le_one k s
   rw [← finrank_eq_rank] at h
@@ -1147,7 +1147,7 @@ theorem Collinear.subset
 
 中文:
 定理 Collinear.subset
-  条件: {s₁ s₂ : Set P} (hs : s₁ subseteq s₂) (h : Collinear k s₂)
+  条件: {s₁ s₂ : 集合 P} (hs : s₁ subseteq s₂) (h : Collinear k s₂)
   结论: Collinear k s₁
   证明: (Submodule.rank_mono (vectorSpan_mono k hs)).trans h
 
@@ -1167,7 +1167,7 @@ theorem Collinear.finiteDimensional_vectorSpan
 
 中文:
 定理 Collinear.finiteDimensional_vectorSpan
-  条件: {s : Set P} (h : Collinear k s)
+  条件: {s : 集合 P} (h : Collinear k s)
   证明: IsNoetherian.iff_fg.1
     (IsNoetherian.iff_rank_lt_aleph0.2 (lt_of_le_of_lt h Cardinal.one_lt_aleph0))
 
@@ -1188,7 +1188,7 @@ theorem Collinear.finiteDimensional_direction_affineSpan
 
 中文:
 定理 Collinear.finiteDimensional_direction_affineSpan
-  条件: {s : Set P} (h : Collinear k s)
+  条件: {s : 集合 P} (h : Collinear k s)
   证明: (direction_affineSpan k s).symm ▸ h.finiteDimensional_vectorSpan
 
 Depends on / 依赖: direction_affineSpan, finiteDimensional_vectorSpan, h.finiteDimensional_vectorSpan
@@ -1211,7 +1211,7 @@ theorem collinear_empty
 
 中文:
 定理 collinear_empty
-  结论: Collinear k (∅ : Set P)
+  结论: Collinear k (∅ : 集合 P)
   证明: by
   rw [collinear_iff_rank_le_one]; rw [vectorSpan_empty]
   simp
@@ -1238,7 +1238,7 @@ theorem collinear_singleton
 中文:
 定理 collinear_singleton
   条件: (p : P)
-  结论: Collinear k ({p} : Set P)
+  结论: Collinear k ({p} : 集合 P)
   证明: by
   rw [collinear_iff_rank_le_one]; rw [vectorSpan_singleton]
   simp
@@ -1271,7 +1271,7 @@ theorem collinear_iff_of_mem
 
 中文:
 定理 collinear_iff_of_mem
-  条件: {s : Set P} {p₀ : P} (h : p₀ in s)
+  条件: {s : 集合 P} {p₀ : P} (h : p₀ in s)
   证明: by
   simp_rw [collinear_iff_rank_le_one, rank_submodule_le_one_iff', Submodule.le_span_singleton_iff]
   constructor
@@ -1332,8 +1332,8 @@ theorem collinear_iff_exists_forall_eq_smul_vadd
 
 
 中文:
-定理 collinear_iff_exists_forall_eq_smul_vadd
-  条件: (s : Set P)
+定理 collinear_iff_存在_对任意_eq_smul_vadd
+  条件: (s : 集合 P)
   证明: by
   rcases Set.eq_empty_or_nonempty s with (rfl | ⟨⟨p₁, hp₁⟩⟩)
   · simp [collinear_empty]
@@ -1386,7 +1386,7 @@ theorem collinear_pair
 中文:
 定理 collinear_pair
   条件: (p₁ p₂ : P)
-  结论: Collinear k ({p₁, p₂} : Set P)
+  结论: Collinear k ({p₁, p₂} : 集合 P)
   证明: by
   rw [collinear_iff_exists_forall_eq_smul_vadd]
   use p₁, p₂ -ᵥ p₁
@@ -1422,7 +1422,7 @@ theorem affineIndependent_iff_not_collinear
 
 中文:
 定理 affineIndependent_iff_not_collinear
-  条件: {p : Fin 3 -> P}
+  条件: {p : 有限集 3 -> P}
   证明: by
   rw [collinear_iff_finrank_le_one]; rw [affineIndependent_iff_not_finrank_vectorSpan_le k p (Fintype.card_fin 3)]
 
@@ -1443,7 +1443,7 @@ theorem collinear_iff_not_affineIndependent
 
 中文:
 定理 collinear_iff_not_affineIndependent
-  条件: {p : Fin 3 -> P}
+  条件: {p : 有限集 3 -> P}
   证明: by
   rw [collinear_iff_finrank_le_one]; rw [finrank_vectorSpan_le_iff_not_affineIndependent k p (Fintype.card_fin 3)]
 
@@ -1508,7 +1508,7 @@ theorem affineIndependent_iff_not_collinear_of_ne
 
 中文:
 定理 affineIndependent_iff_not_collinear_of_ne
-  结论: {p : Fin 3 -> P} {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {p : 有限集 3 -> P} {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   have hu : (Finset.univ : Finset (Fin 3)) = {i₁, i₂, i₃} := by decide +revert
   rw [affineIndependent_iff_not_collinear]; rw [← Set.image_univ]; rw [← Finset.coe_univ]; rw [hu]; rw [Finset.coe_insert]; rw [Finset.coe_insert]; rw [Finset.coe_singleton]; rw [Set.image_insert_eq]; rw [Set.image_pai
@@ -1531,7 +1531,7 @@ theorem collinear_iff_not_affineIndependent_of_ne
 
 中文:
 定理 collinear_iff_not_affineIndependent_of_ne
-  结论: {p : Fin 3 -> P} {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {p : 有限集 3 -> P} {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: (affineIndependent_iff_not_collinear_of_ne h₁₂ h₁₃ h₂₃).not_left.symm
 
 Depends on / 依赖: affineIndependent_iff_not_collinear_of_ne, not_left, not_left.symm
@@ -1553,7 +1553,7 @@ theorem ne₁₂_of_not_collinear
 
 中文:
 定理 ne₁₂_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : 集合 P))
   证明: by
   rintro rfl
   simp [collinear_pair] at h
@@ -1577,7 +1577,7 @@ theorem ne₁₃_of_not_collinear
 
 中文:
 定理 ne₁₃_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : 集合 P))
   证明: by
   rintro rfl
   simp [collinear_pair] at h
@@ -1601,7 +1601,7 @@ theorem ne₂₃_of_not_collinear
 
 中文:
 定理 ne₂₃_of_not_collinear
-  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : Set P))
+  条件: {p₁ p₂ p₃ : P} (h : ¬Collinear k ({p₁, p₂, p₃} : 集合 P))
   证明: by
   rintro rfl
   simp [collinear_pair] at h
@@ -1633,7 +1633,7 @@ theorem Collinear.mem_affineSpan_of_mem_of_ne
 
 中文:
 定理 Collinear.mem_affineSpan_of_mem_of_ne
-  结论: {s : Set P} (h : Collinear k s) {p₁ p₂ p₃ : P}
+  结论: {s : 集合 P} (h : Collinear k s) {p₁ p₂ p₃ : P}
   证明: by
   rw [collinear_iff_of_mem hp₁] at h
   rcases h with ⟨v, h⟩
@@ -1672,7 +1672,7 @@ theorem Collinear.affineSpan_eq_of_ne
 
 中文:
 定理 Collinear.affineSpan_eq_of_ne
-  结论: {s : Set P} (h : Collinear k s) {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 集合 P} (h : Collinear k s) {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: le_antisymm (affineSpan_mono _ (Set.insert_subset_iff.2 ⟨hp₁, Set.singleton_subset_iff.2 hp₂⟩))
     (affineSpan_le.2 fun _ hp => h.mem_affineSpan_of_mem_of_ne hp₁ hp₂ hp hp₁p₂)
 
@@ -1697,7 +1697,7 @@ theorem Collinear.collinear_insert_iff_of_ne
 
 中文:
 定理 Collinear.collinear_insert_iff_of_ne
-  结论: {s : Set P} (h : Collinear k s) {p₁ p₂ p₃ : P}
+  结论: {s : 集合 P} (h : Collinear k s) {p₁ p₂ p₃ : P}
   证明: by
   have hv : vectorSpan k (insert p₁ s) = vectorSpan k ({p₁, p₂, p₃} : Set P) := by
     conv_rhs => rw [← direction_affineSpan, ← affineSpan_insert_affineSpan]
@@ -1725,7 +1725,7 @@ theorem collinear_insert_iff_of_mem_affineSpan
 
 中文:
 定理 collinear_insert_iff_of_mem_affineSpan
-  条件: {s : Set P} {p : P} (h : p in affineSpan k s)
+  条件: {s : 集合 P} {p : P} (h : p in affineSpan k s)
   证明: by
   rw [Collinear]; rw [Collinear]; rw [vectorSpan_insert_eq_vectorSpan h]
 
@@ -1950,7 +1950,7 @@ definition Coplanar
 
 中文:
 定义 Coplanar
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: Module.rank k (vectorSpan k s) <= 2
 
 Depends on / 依赖: Module, Module.rank, vectorSpan
@@ -1970,7 +1970,7 @@ theorem Coplanar.finiteDimensional_vectorSpan
 
 中文:
 定理 Coplanar.finiteDimensional_vectorSpan
-  条件: {s : Set P} (h : Coplanar k s)
+  条件: {s : 集合 P} (h : Coplanar k s)
   证明: by
   refine IsNoetherian.iff_fg.1 (IsNoetherian.iff_rank_lt_aleph0.2 (lt_of_le_of_lt h ?_))
   exact Cardinal.lt_aleph0.2 ⟨2, rfl⟩
@@ -1992,7 +1992,7 @@ theorem Coplanar.finiteDimensional_direction_affineSpan
 
 中文:
 定理 Coplanar.finiteDimensional_direction_affineSpan
-  条件: {s : Set P} (h : Coplanar k s)
+  条件: {s : 集合 P} (h : Coplanar k s)
   证明: (direction_affineSpan k s).symm ▸ h.finiteDimensional_vectorSpan
 
 Depends on / 依赖: direction_affineSpan, finiteDimensional_vectorSpan, h.finiteDimensional_vectorSpan
@@ -2016,7 +2016,7 @@ alias ⟨Coplanar.finrank_le_two, _⟩ := coplanar_iff_finrank_le_two
 
 中文:
 定理 coplanar_iff_finrank_le_two
-  条件: {s : Set P} [FiniteDimensional k (vectorSpan k s)]
+  条件: {s : 集合 P} [有限维 k (vectorSpan k s)]
   证明: by
   have h : Coplanar k s ↔ Module.rank k (vectorSpan k s) <= 2 := Iff.rfl
   rw [← finrank_eq_rank] at h
@@ -2045,7 +2045,7 @@ theorem Coplanar.subset
 
 中文:
 定理 Coplanar.subset
-  条件: {s₁ s₂ : Set P} (hs : s₁ subseteq s₂) (h : Coplanar k s₂)
+  条件: {s₁ s₂ : 集合 P} (hs : s₁ subseteq s₂) (h : Coplanar k s₂)
   结论: Coplanar k s₁
   证明: (Submodule.rank_mono (vectorSpan_mono k hs)).trans h
 
@@ -2065,7 +2065,7 @@ theorem Collinear.coplanar
 
 中文:
 定理 Collinear.coplanar
-  条件: {s : Set P} (h : Collinear k s)
+  条件: {s : 集合 P} (h : Collinear k s)
   结论: Coplanar k s
   证明: le_trans h one_le_two
 
@@ -2086,7 +2086,7 @@ theorem coplanar_empty
 
 中文:
 定理 coplanar_empty
-  结论: Coplanar k (∅ : Set P)
+  结论: Coplanar k (∅ : 集合 P)
   证明: (collinear_empty k P).coplanar
 
 Depends on / 依赖: collinear_empty, coplanar
@@ -2108,7 +2108,7 @@ theorem coplanar_singleton
 中文:
 定理 coplanar_singleton
   条件: (p : P)
-  结论: Coplanar k ({p} : Set P)
+  结论: Coplanar k ({p} : 集合 P)
   证明: (collinear_singleton k p).coplanar
 
 Depends on / 依赖: collinear_singleton, coplanar
@@ -2128,7 +2128,7 @@ theorem coplanar_pair
 中文:
 定理 coplanar_pair
   条件: (p₁ p₂ : P)
-  结论: Coplanar k ({p₁, p₂} : Set P)
+  结论: Coplanar k ({p₁, p₂} : 集合 P)
   证明: (collinear_pair k p₁ p₂).coplanar
 
 Depends on / 依赖: collinear_pair, coplanar
@@ -2149,7 +2149,7 @@ theorem coplanar_insert_iff_of_mem_affineSpan
 
 中文:
 定理 coplanar_insert_iff_of_mem_affineSpan
-  条件: {s : Set P} {p : P} (h : p in affineSpan k s)
+  条件: {s : 集合 P} {p : P} (h : p in affineSpan k s)
   证明: by
   rw [Coplanar]; rw [Coplanar]; rw [vectorSpan_insert_eq_vectorSpan h]
 
@@ -2185,7 +2185,7 @@ theorem finrank_vectorSpan_insert_le
 
 中文:
 定理 finrank_vectorSpan_insert_le
-  条件: (s : AffineSubspace k P) (p : P)
+  条件: (s : 仿射子空间 k P) (p : P)
   证明: by
   by_cases hf : FiniteDimensional k s.direction; swap
   · have hf' : ¬FiniteDimensional k (vectorSpan k (insert p (s : Set P))) := by
@@ -2238,7 +2238,7 @@ theorem finrank_vectorSpan_insert_le_set
 
 中文:
 定理 finrank_vectorSpan_insert_le_set
-  条件: (s : Set P) (p : P)
+  条件: (s : 集合 P) (p : P)
   证明: by
   rw [← direction_affineSpan]; rw [← affineSpan_insert_affineSpan]; rw [direction_affineSpan]; rw [← direction_affineSpan _ s]
   exact finrank_vectorSpan_insert_le ..
@@ -2262,7 +2262,7 @@ theorem Collinear.coplanar_insert
 
 中文:
 定理 Collinear.coplanar_insert
-  条件: {s : Set P} (h : Collinear k s) (p : P)
+  条件: {s : 集合 P} (h : Collinear k s) (p : P)
   证明: by
   have : FiniteDimensional k { x // x in vectorSpan k s } := h.finiteDimensional_vectorSpan
   grw [coplanar_iff_finrank_le_two, finrank_vectorSpan_insert_le_set, h.finrank_le_one]
@@ -2288,7 +2288,7 @@ theorem coplanar_of_finrank_eq_two
 
 中文:
 定理 coplanar_of_finrank_eq_two
-  条件: (s : Set P) (h : finrank k V = 2)
+  条件: (s : 集合 P) (h : finrank k V = 2)
   结论: Coplanar k s
   证明: by
   have : FiniteDimensional k V := .of_finrank_eq_succ h
@@ -2313,7 +2313,7 @@ theorem coplanar_of_fact_finrank_eq_two
 
 中文:
 定理 coplanar_of_fact_finrank_eq_two
-  条件: (s : Set P) [h : Fact (finrank k V = 2)]
+  条件: (s : 集合 P) [h : Fact (finrank k V = 2)]
   结论: Coplanar k s
   证明: coplanar_of_finrank_eq_two s h.out
 
@@ -2336,7 +2336,7 @@ theorem coplanar_triple
 中文:
 定理 coplanar_triple
   条件: (p₁ p₂ p₃ : P)
-  结论: Coplanar k ({p₁, p₂, p₃} : Set P)
+  结论: Coplanar k ({p₁, p₂, p₃} : 集合 P)
   证明: (collinear_pair k p₂ p₃).coplanar_insert p₁
 
 Depends on / 依赖: collinear_pair, coplanar_insert
@@ -2358,8 +2358,8 @@ theorem Affine.Simplex.collinear_point_centroid_faceOppositeCentroid
   exact smul_vsub_vadd_mem_affineSpa
 
 中文:
-定理 Affine.Simplex.collinear_point_centroid_faceOppositeCentroid
-  结论: [CharZero k] {n : 自然数} [NeZero n]
+定理 仿射.单纯形.collinear_point_centroid_faceOppositeCentroid
+  结论: [特征零 k] {n : 自然数} [NeZero n]
   证明: by
   apply collinear_insert_of_mem_affineSpan_pair
   have h : s.points i = (-n : k) • (s.faceOppositeCentroid i -ᵥ s.centroid) +ᵥ s.centroid := by
@@ -2403,8 +2403,8 @@ theorem finiteDimensional
 
 中文:
 定理 finiteDimensional
-  条件: [Finite ι] (b : AffineBasis ι k P)
-  结论: FiniteDimensional k V
+  条件: [有限 ι] (b : 仿射基 ι k P)
+  结论: 有限维 k V
   证明: let ⟨i⟩ := b.nonempty
   (b.basisOf i).finiteDimensional_of_finite
 -/
@@ -2423,8 +2423,8 @@ theorem finite
 
 中文:
 定理 finite
-  条件: [FiniteDimensional k V] (b : AffineBasis ι k P)
-  结论: Finite ι
+  条件: [有限维 k V] (b : 仿射基 ι k P)
+  结论: 有限 ι
   证明: finite_of_fin_dim_affineIndependent k b.ind
 -/
 protected theorem finite [FiniteDimensional k V] (b : AffineBasis ι k P) : Finite ι :=
@@ -2440,7 +2440,7 @@ theorem finite_set
 
 中文:
 定理 finite_set
-  条件: [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P)
+  条件: [有限维 k V] {s : 集合 ι} (b : 仿射基 s k P)
   证明: finite_set_of_fin_dim_affineIndependent k b.ind
 -/
 protected theorem finite_set [FiniteDimensional k V] {s : Set ι} (b : AffineBasis s k P) :
@@ -2458,7 +2458,7 @@ theorem card_eq_finrank_add_one
 
 中文:
 定理 card_eq_finrank_add_one
-  条件: [Fintype ι] (b : AffineBasis ι k P)
+  条件: [有限类型 ι] (b : 仿射基 ι k P)
   证明: have : FiniteDimensional k V := b.finiteDimensional
   b.ind.affineSpan_eq_top_iff_card_eq_finrank_add_one.mp b.tot
 
@@ -2482,8 +2482,8 @@ refine ⟨b.reindex Fintype.equivOfCardEq ?_⟩
   rw [h]; rw [← b.card_eq_finrank_add_one]
 
 中文:
-定理 exists_affineBasis_of_finiteDimensional
-  结论: [Fintype ι] [FiniteDimensional k V]
+定理 存在_affineBasis_of_finiteDimensional
+  结论: [有限类型 ι] [有限维 k V]
   证明: by
   obtain ⟨s, b, hb⟩ := AffineBasis.exists_affineBasis k V P
   lift s to Finset P using b.finite_set
@@ -2520,7 +2520,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite S (P ->ᵃ[R] W)
+  签名: 模.有限 S (P ->ᵃ[R] W)
   定义体: have ⟨p⟩ : Nonempty P := inferInstance
 .equiv (AffineMap.toConstProdLinearMap S).symm ≪≫ₗ (AffineEquiv.vaddConst R p).congrLeftₗ S W
 
@@ -2545,7 +2545,7 @@ theorem finrank_eq
 
 中文:
 定理 finrank_eq
-  条件: [Module.Free S W] [StrongRankCondition R] [StrongRankCondition S]
+  条件: [模.自由 S W] [StrongRankCondition R] [StrongRankCondition S]
   证明: calc
     _ = Module.finrank S (V ->ᵃ[R] W) :=
       have ⟨p⟩ : Nonempty P := inferInstance

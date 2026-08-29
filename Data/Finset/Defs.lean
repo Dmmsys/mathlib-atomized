@@ -83,7 +83,7 @@ structure Finset
     - nodup : Nodup val
 
 中文:
-结构 Finset
+结构 有限集
   参数: (α : 类型)
   公理与运算 (2 个):
     - val : Multiset α
@@ -122,7 +122,7 @@ theorem eq_of_veq
 
 中文:
 定理 eq_of_veq
-  结论: 对任意 {s t : Finset α}, s.1 = t.1 -> s = t
+  结论: 对任意 {s t : 有限集 α}, s.1 = t.1 -> s = t
 -/
 theorem eq_of_veq : forall {s t : Finset α}, s.1 = t.1 -> s = t
   | ⟨s, _⟩, ⟨t, _⟩, h => by cases h; rfl
@@ -139,7 +139,7 @@ theorem val_injective
 
 中文:
 定理 val_injective
-  结论: Injective (val : Finset α -> Multiset α)
+  结论: 单射 (val : 有限集 α -> Multiset α)
   证明: fun _ _ => eq_of_veq
 
 @[simp]
@@ -160,7 +160,7 @@ theorem val_inj
 
 中文:
 定理 val_inj
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s.1 = t.1 ↔ s = t
   证明: val_injective.eq_iff
 
@@ -196,7 +196,7 @@ coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2
 
 中文:
 实例 :
-  签名: SetLike (Finset α) α
+  签名: 集合状 (有限集 α) α
   定义体: {a | a in s.1}
 coe_injective s₁ s₂ h := (val_inj.symm.trans <| s₁.nodup.ext s₂.nodup).2 Set.ext_iff.mp h
 -/
@@ -215,7 +215,7 @@ theorem mem_def
 
 中文:
 定理 mem_def
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: a in s ↔ a in s.1
   证明: Iff.rfl
 
@@ -240,7 +240,7 @@ theorem mem_val
 
 中文:
 定理 mem_val
-  条件: {a : α} {s : Finset α}
+  条件: {a : α} {s : 有限集 α}
   结论: (a in s.1) = (a in s)
   证明: rfl
 
@@ -261,7 +261,7 @@ theorem mem_mk
 中文:
 定理 mem_mk
   条件: {a : α} {s nd}
-  结论: a in @Finset.mk α s nd ↔ a in s
+  结论: a in @有限集.mk α s nd ↔ a in s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -279,7 +279,7 @@ instance decidableMem
 
 中文:
 实例 decidableMem
-  签名: [_h : DecidableEq α] (a : α) (s : Finset α)
+  签名: [_h : DecidableEq α] (a : α) (s : 有限集 α)
   定义体: Multiset.decidableMem _ _
 
 Depends on / 依赖: Multiset, Multiset.decidableMem, decidableMem
@@ -297,8 +297,8 @@ lemma forall_mem_not_eq
   proof: by grind
 
 中文:
-引理 forall_mem_not_eq
-  条件: {s : Finset α} {a : α}
+引理 对任意_mem_not_eq
+  条件: {s : 有限集 α} {a : α}
   结论: (对任意 b in s, ¬ a = b) ↔ a ∉ s
   证明: by grind
 -/
@@ -313,8 +313,8 @@ lemma forall_mem_not_eq'
   proof: by grind
 
 中文:
-引理 forall_mem_not_eq'
-  条件: {s : Finset α} {a : α}
+引理 对任意_mem_not_eq'
+  条件: {s : 有限集 α} {a : α}
   结论: (对任意 b in s, ¬ b = a) ↔ a ∉ s
   证明: by grind
 -/
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Finset α)
+  签名: 偏序 (有限集 α)
   定义体: .ofSetLike (Finset α) α
 
 @[norm_cast, grind =]
@@ -355,8 +355,8 @@ theorem mem_coe
 
 中文:
 定理 mem_coe
-  条件: {a : α} {s : Finset α}
-  结论: a in (s : Set α) ↔ a in (s : Finset α)
+  条件: {a : α} {s : 有限集 α}
+  结论: a in (s : 集合 α) ↔ a in (s : 有限集 α)
   证明: Iff.rfl
 
 @[simp]
@@ -380,7 +380,7 @@ theorem setOfPred_mem
 
 中文:
 定理 setOfPred_mem
-  条件: {α} {s : Finset α}
+  条件: {α} {s : 有限集 α}
   结论: { a | a in s } = s
   证明: rfl
 
@@ -402,7 +402,7 @@ theorem coe_mem
 
 中文:
 定理 coe_mem
-  条件: {s : Finset α} (x : (s : Set α))
+  条件: {s : 有限集 α} (x : (s : 集合 α))
   结论: ↑x in s
   证明: x.2
 -/
@@ -420,8 +420,8 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: {s : Finset α} (x : (s : Set α)) {h}
-  结论: (⟨x, h⟩ : (s : Set α)) = x
+  条件: {s : 有限集 α} (x : (s : 集合 α)) {h}
+  结论: (⟨x, h⟩ : (s : 集合 α)) = x
   证明: Subtype.coe_eta _ _
 
 Depends on / 依赖: Subtype, Subtype.coe_eta, coe_eta
@@ -439,7 +439,7 @@ instance decidableMem'
 
 中文:
 实例 decidableMem'
-  签名: [DecidableEq α] (a : α) (s : Finset α)
+  签名: [DecidableEq α] (a : α) (s : 有限集 α)
   定义体: s.decidableMem _
 
 Depends on / 依赖: decidableMem, s.decidableMem
@@ -463,7 +463,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s₁ s₂ : Finset α} (h : 对任意 a, a in s₁ ↔ a in s₂)
+  条件: {s₁ s₂ : 有限集 α} (h : 对任意 a, a in s₁ ↔ a in s₂)
   结论: s₁ = s₂
   证明: SetLike.ext h
 
@@ -488,8 +488,8 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {s₁ s₂ : Finset α}
-  结论: (s₁ : Set α) = s₂ ↔ s₁ = s₂
+  条件: {s₁ s₂ : 有限集 α}
+  结论: (s₁ : 集合 α) = s₂ ↔ s₁ = s₂
   证明: SetLike.coe_set_eq
 
 @[grind inj]
@@ -512,7 +512,7 @@ theorem coe_injective
 中文:
 定理 coe_injective
   条件: {α}
-  结论: Injective ((↑) : Finset α -> Set α)
+  结论: 单射 ((↑) : 有限集 α -> 集合 α)
   证明: fun _s _t => coe_inj.1
 
 Depends on / 依赖: coe_inj
@@ -530,8 +530,8 @@ theorem forall_coe
   proof: Subtype.forall
 
 中文:
-定理 forall_coe
-  条件: {α : 类型} (s : Finset α) (p : s -> 命题)
+定理 对任意_coe
+  条件: {α : 类型} (s : 有限集 α) (p : s -> 命题)
   证明: Subtype.forall
 -/
 protected theorem forall_coe {α : Type*} (s : Finset α) (p : s -> Prop) :
@@ -547,8 +547,8 @@ theorem exists_coe
   proof: Subtype.exists
 
 中文:
-定理 exists_coe
-  条件: {α : 类型} (s : Finset α) (p : s -> 命题)
+定理 存在_coe
+  条件: {α : 类型} (s : 有限集 α) (p : s -> 命题)
   证明: Subtype.exists
 -/
 protected theorem exists_coe {α : Type*} (s : Finset α) (p : s -> Prop) :
@@ -565,7 +565,7 @@ instance PiFinsetCoe.canLift
 
 中文:
 实例 PiFinsetCoe.canLift
-  签名: (ι : 类型) (α : ι -> 类型) [_ne : 对任意 i, Nonempty (α i)]
+  签名: (ι : 类型) (α : ι -> 类型) [_ne : 对任意 i, 非空 (α i)]
   定义体: PiSubtype.canLift ι α (· in s)
 
 Depends on / 依赖: PiSubtype, PiSubtype.canLift, canLift
@@ -584,7 +584,7 @@ instance PiFinsetCoe.canLift'
 
 中文:
 实例 PiFinsetCoe.canLift'
-  签名: (ι α : 类型) [_ne : Nonempty α] (s : Finset ι)
+  签名: (ι α : 类型) [_ne : 非空 α] (s : 有限集 ι)
   定义体: PiFinsetCoe.canLift ι (fun _ => α) s
 
 Depends on / 依赖: PiFinsetCoe, PiFinsetCoe.canLift, canLift
@@ -605,7 +605,7 @@ instance FinsetCoe.canLift
 
 中文:
 实例 FinsetCoe.canLift
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: ⟨⟨a, ha⟩, rfl⟩
 
 @[norm_cast]
@@ -625,8 +625,8 @@ theorem coe_sort_coe
 
 中文:
 定理 coe_sort_coe
-  条件: (s : Finset α)
-  结论: ((s : Set α) : Sort _) = s
+  条件: (s : 有限集 α)
+  结论: ((s : 集合 α) : 类型层 _) = s
   证明: rfl
 -/
 theorem coe_sort_coe (s : Finset α) : ((s : Set α) : Sort _) = s :=
@@ -701,8 +701,8 @@ theorem Subset.refl
   proof: Multiset.Subset.refl _
 
 中文:
-定理 Subset.refl
-  条件: (s : Finset α)
+定理 子集.refl
+  条件: (s : 有限集 α)
   结论: s subseteq s
   证明: Multiset.Subset.refl _
 
@@ -721,8 +721,8 @@ theorem Subset.rfl
   proof: Subset.refl _
 
 中文:
-定理 Subset.rfl
-  条件: {s : Finset α}
+定理 子集.rfl
+  条件: {s : 有限集 α}
   结论: s subseteq s
   证明: Subset.refl _
 -/
@@ -740,7 +740,7 @@ theorem subset_of_eq
 
 中文:
 定理 subset_of_eq
-  条件: {s t : Finset α} (h : s = t)
+  条件: {s t : 有限集 α} (h : s = t)
   结论: s subseteq t
   证明: h ▸ Subset.refl _
 -/
@@ -757,8 +757,8 @@ theorem Subset.trans
   proof: Multiset.Subset.trans
 
 中文:
-定理 Subset.trans
-  条件: {s₁ s₂ s₃ : Finset α}
+定理 子集.trans
+  条件: {s₁ s₂ s₃ : 有限集 α}
   结论: s₁ subseteq s₂ -> s₂ subseteq s₃ -> s₁ subseteq s₃
   证明: Multiset.Subset.trans
 
@@ -779,7 +779,7 @@ theorem Superset.trans
 
 中文:
 定理 Superset.trans
-  条件: {s₁ s₂ s₃ : Finset α}
+  条件: {s₁ s₂ s₃ : 有限集 α}
   结论: s₁ ⊇ s₂ -> s₂ ⊇ s₃ -> s₁ ⊇ s₃
   证明: fun h' h =>
   Subset.trans h h'
@@ -798,7 +798,7 @@ theorem mem_of_subset
 
 中文:
 定理 mem_of_subset
-  条件: {s₁ s₂ : Finset α} {a : α}
+  条件: {s₁ s₂ : 有限集 α} {a : α}
   结论: s₁ subseteq s₂ -> a in s₁ -> a in s₂
   证明: Multiset.mem_of_subset
 
@@ -820,7 +820,7 @@ alias not_mem_subset := notMem_mono
 
 中文:
 定理 notMem_mono
-  条件: {s t : Finset α} (h : s subseteq t) {a : α}
+  条件: {s t : 有限集 α} (h : s subseteq t) {a : α}
   结论: a ∉ t -> a ∉ s
   证明: mt @h _
 
@@ -843,8 +843,8 @@ theorem Subset.antisymm
 @[grind =]
 
 中文:
-定理 Subset.antisymm
-  条件: {s₁ s₂ : Finset α} (H₁ : s₁ subseteq s₂) (H₂ : s₂ subseteq s₁)
+定理 子集.antisymm
+  条件: {s₁ s₂ : 有限集 α} (H₁ : s₁ subseteq s₂) (H₂ : s₂ subseteq s₁)
   结论: s₁ = s₂
   证明: ext fun a => ⟨@H₁ a, @H₂ a⟩
 
@@ -865,7 +865,7 @@ theorem subset_iff
 
 中文:
 定理 subset_iff
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁ subseteq s₂ ↔ 对任意 ⦃x⦄, x in s₁ -> x in s₂
   证明: Iff.rfl
 
@@ -912,8 +912,8 @@ theorem coe_subset
 
 中文:
 定理 coe_subset
-  条件: {s₁ s₂ : Finset α}
-  结论: (s₁ : Set α) subseteq s₂ ↔ s₁ subseteq s₂
+  条件: {s₁ s₂ : 有限集 α}
+  结论: (s₁ : 集合 α) subseteq s₂ ↔ s₁ subseteq s₂
   证明: Iff.rfl
 
 @[simp]
@@ -935,7 +935,7 @@ theorem val_le_iff
 
 中文:
 定理 val_le_iff
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁.1 <= s₂.1 ↔ s₁ subseteq s₂
   证明: le_iff_subset s₁.2
 
@@ -954,8 +954,8 @@ theorem Subset.antisymm_iff
   proof: le_antisymm_iff
 
 中文:
-定理 Subset.antisymm_iff
-  条件: {s₁ s₂ : Finset α}
+定理 子集.antisymm_iff
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁ = s₂ ↔ s₁ subseteq s₂ ∧ s₂ subseteq s₁
   证明: le_antisymm_iff
 
@@ -998,7 +998,7 @@ theorem le_eq_subset
 
 中文:
 定理 le_eq_subset
-  结论: ((· <= ·) : Finset α -> Finset α -> 命题) = (· subseteq ·)
+  结论: ((· <= ·) : 有限集 α -> 有限集 α -> 命题) = (· subseteq ·)
   证明: rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
@@ -1019,7 +1019,7 @@ theorem lt_eq_subset
 
 中文:
 定理 lt_eq_subset
-  结论: ((· < ·) : Finset α -> Finset α -> 命题) = (· ⊂ ·)
+  结论: ((· < ·) : 有限集 α -> 有限集 α -> 命题) = (· ⊂ ·)
   证明: rfl
 
 @[deprecated "This is now a syntactic equality" (since := "2026-05-24"), nolint synTaut]
@@ -1041,7 +1041,7 @@ theorem le_iff_subset
 
 中文:
 定理 le_iff_subset
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁ <= s₂ ↔ s₁ subseteq s₂
   证明: Iff.rfl
 
@@ -1066,7 +1066,7 @@ theorem lt_iff_ssubset
 
 中文:
 定理 lt_iff_ssubset
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁ < s₂ ↔ s₁ ⊂ s₂
   证明: Iff.rfl
 
@@ -1092,8 +1092,8 @@ theorem coe_ssubset
 
 中文:
 定理 coe_ssubset
-  条件: {s₁ s₂ : Finset α}
-  结论: (s₁ : Set α) ⊂ s₂ ↔ s₁ ⊂ s₂
+  条件: {s₁ s₂ : 有限集 α}
+  结论: (s₁ : 集合 α) ⊂ s₂ ↔ s₁ ⊂ s₂
   证明: by
   simp
 
@@ -1114,7 +1114,7 @@ theorem val_lt_iff
 
 中文:
 定理 val_lt_iff
-  条件: {s₁ s₂ : Finset α}
+  条件: {s₁ s₂ : 有限集 α}
   结论: s₁.1 < s₂.1 ↔ s₁ ⊂ s₂
   证明: and_congr val_le_iff not_congr val_le_iff
 
@@ -1135,7 +1135,7 @@ lemma val_strictMono
 
 中文:
 引理 val_strictMono
-  结论: StrictMono (val : Finset α -> Multiset α)
+  结论: 严格递增 (val : 有限集 α -> Multiset α)
   证明: fun _ _ => val_lt_iff.2
 
 @[grind =]
@@ -1156,7 +1156,7 @@ theorem ssubset_iff_subset_ne
 
 中文:
 定理 ssubset_iff_subset_ne
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s ⊂ t ↔ s subseteq t ∧ s != t
   证明: @lt_iff_le_and_ne _ _ s t
 
@@ -1176,7 +1176,7 @@ theorem ssubset_iff_of_subset
 
 中文:
 定理 ssubset_iff_of_subset
-  条件: {s₁ s₂ : Finset α} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 有限集 α} (h : s₁ subseteq s₂)
   结论: s₁ ⊂ s₂ ↔ 存在 x in s₂, x ∉ s₁
   证明: Set.ssubset_iff_of_subset h
 
@@ -1195,7 +1195,7 @@ theorem ssubset_of_ssubset_of_subset
 
 中文:
 定理 ssubset_of_ssubset_of_subset
-  条件: {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ subseteq s₃)
+  条件: {s₁ s₂ s₃ : 有限集 α} (hs₁s₂ : s₁ ⊂ s₂) (hs₂s₃ : s₂ subseteq s₃)
   证明: Set.ssubset_of_ssubset_of_subset hs₁s₂ hs₂s₃
 
 Depends on / 依赖: Set.ssubset_of_ssubset_of_subset, ssubset_of_ssubset_of_subset
@@ -1214,7 +1214,7 @@ theorem ssubset_of_subset_of_ssubset
 
 中文:
 定理 ssubset_of_subset_of_ssubset
-  条件: {s₁ s₂ s₃ : Finset α} (hs₁s₂ : s₁ subseteq s₂) (hs₂s₃ : s₂ ⊂ s₃)
+  条件: {s₁ s₂ s₃ : 有限集 α} (hs₁s₂ : s₁ subseteq s₂) (hs₂s₃ : s₂ ⊂ s₃)
   证明: Set.ssubset_of_subset_of_ssubset hs₁s₂ hs₂s₃
 
 Depends on / 依赖: Set.ssubset_of_subset_of_ssubset, ssubset_of_subset_of_ssubset
@@ -1233,8 +1233,8 @@ theorem exists_of_ssubset
   proof: Set.exists_of_ssubset h
 
 中文:
-定理 exists_of_ssubset
-  条件: {s₁ s₂ : Finset α} (h : s₁ ⊂ s₂)
+定理 存在_of_ssubset
+  条件: {s₁ s₂ : 有限集 α} (h : s₁ ⊂ s₂)
   结论: 存在 x in s₂, x ∉ s₁
   证明: Set.exists_of_ssubset h
 
@@ -1253,7 +1253,7 @@ instance isWellFounded_ssubset
 
 中文:
 实例 isWellFounded_ssubset
-  签名: : IsWellFounded (Finset α) (· ⊂ ·)
+  签名: : 是良基 (有限集 α) (· ⊂ ·)
   定义体: Subrelation.isWellFounded (InvImage _ _) val_lt_iff.2
 
 Depends on / 依赖: InvImage, Subrelation, Subrelation.isWellFounded, isWellFounded, val_lt_iff
@@ -1271,7 +1271,7 @@ instance wellFoundedLT
 
 中文:
 实例 wellFoundedLT
-  签名: : WellFoundedLT (Finset α)
+  签名: : WellFoundedLT (有限集 α)
   定义体: Finset.isWellFounded_ssubset
 
 Depends on / 依赖: Finset, Finset.isWellFounded_ssubset, isWellFounded_ssubset
@@ -1299,7 +1299,7 @@ definition coeEmb
 
 中文:
 定义 coeEmb
-  签名: : Finset α ↪o Set α
+  签名: : 有限集 α ↪o 集合 α
   定义体: ⟨⟨(↑), coe_injective⟩, coe_subset⟩
 
 @[simp]
@@ -1320,7 +1320,7 @@ theorem coe_coeEmb
 
 中文:
 定理 coe_coeEmb
-  结论: ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α -> Set α)
+  结论: ⇑(coeEmb : 有限集 α ↪o 集合 α) = ((↑) : 有限集 α -> 集合 α)
   证明: rfl
 -/
 theorem coe_coeEmb : ⇑(coeEmb : Finset α ↪o Set α) = ((↑) : Finset α -> Set α) :=
@@ -1345,8 +1345,8 @@ instance decidableDforallFinset
   body: Multiset.decidableDforallMultiset
 
 中文:
-实例 decidableDforallFinset
-  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), Decidable (p a h)]
+实例 decidableD对任意Finset
+  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), 可判定 (p a h)]
   定义体: Multiset.decidableDforallMultiset
 
 Depends on / 依赖: Multiset, Multiset.decidableDforallMultiset, decidableDforallMultiset
@@ -1438,7 +1438,7 @@ instance decidableDExistsFinset
 
 中文:
 实例 decidableDExistsFinset
-  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), Decidable (p a h)]
+  签名: {p : 对任意 a in s, 命题} [_hp : 对任意 (a) (h : a in s), 可判定 (p a h)]
   定义体: Multiset.decidableDexistsMultiset
 
 Depends on / 依赖: Multiset, Multiset.decidableDexistsMultiset, decidableDexistsMultiset
@@ -1457,7 +1457,7 @@ instance decidableExistsAndFinset
 
 中文:
 实例 decidableExistsAndFinset
-  签名: {p : α -> 命题} [_hp : 对任意 (a), Decidable (p a)]
+  签名: {p : α -> 命题} [_hp : 对任意 (a), 可判定 (p a)]
   定义体: decidable_of_iff (exists (a : _) (_ : a in s), p a) (by simp)
 
 Depends on / 依赖: decidable_of_iff
@@ -1521,7 +1521,7 @@ instance [DecidablePred
 
 中文:
 实例 [DecidablePred
-  签名: (· in t)] : Decidable (Set.MapsTo f s t)
+  签名: (· in t)] : 可判定 (集合.映射到 f s t)
   定义体: inferInstanceAs (Decidable (forall x in s, f x in t))
 
 Depends on / 依赖: Decidable
@@ -1539,7 +1539,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: β] : Decidable (Set.SurjOn f s t')
+  签名: β] : 可判定 (集合.满射限制 f s t')
   定义体: inferInstanceAs (Decidable (forall x in t', exists y in s, f y = x))
 
 Depends on / 依赖: Decidable

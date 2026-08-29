@@ -86,8 +86,8 @@ theorem Subsingleton.convexIndependent
   rwa [Subsingleton.mem_iff_nonempty]
 
 中文:
-定理 Subsingleton.convexIndependent
-  条件: [Subsingleton ι] (p : ι -> E)
+定理 子单例.convexIndependent
+  条件: [子单例 ι] (p : ι -> E)
   结论: ConvexIndependent 𝕜 p
   证明: by
   intro s x hx
@@ -165,7 +165,7 @@ theorem ConvexIndependent.subtype
 
 中文:
 定理 ConvexIndependent.subtype
-  条件: {p : ι -> E} (hc : ConvexIndependent 𝕜 p) (s : Set ι)
+  条件: {p : ι -> E} (hc : ConvexIndependent 𝕜 p) (s : 集合 ι)
   证明: hc.comp_embedding (Embedding.subtype _)
 -/
 protected theorem ConvexIndependent.subtype {p : ι -> E} (hc : ConvexIndependent 𝕜 p) (s : Set ι) :
@@ -217,7 +217,7 @@ theorem ConvexIndependent.mono
 
 中文:
 定理 ConvexIndependent.mono
-  结论: {s t : Set E} (hc : ConvexIndependent 𝕜 ((↑) : t -> E))
+  结论: {s t : 集合 E} (hc : ConvexIndependent 𝕜 ((↑) : t -> E))
   证明: hc.comp_embedding (s.embeddingOfSubset t hs)
 -/
 protected theorem ConvexIndependent.mono {s t : Set E} (hc : ConvexIndependent 𝕜 ((↑) : t -> E))
@@ -237,8 +237,8 @@ theorem Function.Injective.convexIndependent_iff_set
     ConvexIndependent.range⟩
 
 中文:
-定理 Function.Injective.convexIndependent_iff_set
-  条件: {p : ι -> E} (hi : Function.Injective p)
+定理 函数.单射.convexIndependent_iff_set
+  条件: {p : ι -> E} (hi : 函数.单射 p)
   证明: ⟨fun hc =>
     hc.comp_embedding
       (⟨fun i => ⟨p i, Set.mem_range_self _⟩, fun _ _ h => hi (Subtype.mk_eq_mk.1 h)⟩ :
@@ -341,7 +341,7 @@ theorem convexIndependent_set_iff_inter_convexHull_subset
 
 中文:
 定理 convexIndependent_set_iff_inter_convexHull_subset
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   constructor
   · rintro hc t h x ⟨hxs, hxt⟩
@@ -384,7 +384,7 @@ theorem convexIndependent_set_iff_notMem_convexHull_sdiff
 
 中文:
 定理 convexIndependent_set_iff_notMem_convexHull_sdiff
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   rw [convexIndependent_set_iff_inter_convexHull_subset]
   constructor
@@ -486,8 +486,8 @@ theorem Convex.convexIndependent_extremePoints
       (Set.mem_singleton _)
 
 中文:
-定理 Convex.convexIndependent_extremePoints
-  条件: (hs : Convex 𝕜 s)
+定理 凸.convexIndependent_extremePoints
+  条件: (hs : 凸 𝕜 s)
   证明: convexIndependent_set_iff_notMem_convexHull_sdiff.2 fun _ hx h =>
     (extremePoints_convexHull_subset
           (inter_extremePoints_subset_extremePoints_of_subset

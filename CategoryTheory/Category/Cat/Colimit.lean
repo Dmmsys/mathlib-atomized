@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits Cat.{v, v}
+  签名: 有余极限 Cat.{v, v}
   定义体: hasColimits_of_reflective nerveFunctor
 
 Depends on / 依赖: hasColimits_of_reflective, nerveFunctor

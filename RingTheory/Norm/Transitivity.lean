@@ -51,7 +51,7 @@ definition auxMat
 
 中文:
 定义 auxMat
-  签名: : Matrix m m S
+  签名: : 矩阵 m m S
   定义体: of fun i j =>
     if j = k then
       if i = k then 1 else 0
@@ -104,7 +104,7 @@ lemma auxMat_toSquareBlock_ne
 
 中文:
 引理 auxMat_toSquareBlock_ne
-  结论: (auxMat M k).toSquareBlock (· != k) True = M k k • 1
+  结论: (auxMat M k).toSquareBlock (· != k) 真 = M k k • 1
   证明: by
   ext i j
   simp [auxMat, toSquareBlock_def, if_neg (of_eq_true i.2), if_neg (of_eq_true j.2),
@@ -130,7 +130,7 @@ lemma auxMat_toSquareBlock_eq
 
 中文:
 引理 auxMat_toSquareBlock_eq
-  结论: (auxMat M k).toSquareBlock (· != k) False = 1
+  结论: (auxMat M k).toSquareBlock (· != k) 假 = 1
   证明: by
   ext ⟨i, hi⟩ ⟨j, hj⟩
   rw [eq_iff_iff]; rw [iff_false]; rw [not_not] at hi hj
@@ -264,7 +264,7 @@ definition cornerAddX
 
 中文:
 定义 cornerAddX
-  签名: : Matrix m m S[X]
+  签名: : 矩阵 m m S[X]
   定义体: (diagonal fun i => if i = k then X else 0) + M.map C
 
 Depends on / 依赖: M.map, diagonal
@@ -431,8 +431,8 @@ theorem Matrix.det_det
     let M' := cornerAddX M k
 
 中文:
-定理 Matrix.det_det
-  条件: [Fintype m] [Fintype n] (f : S ->+* Matrix n n R)
+定理 矩阵.det_det
+  条件: [有限类型 m] [有限类型 n] (f : S ->+* 矩阵 n n R)
   证明: by
   induction l : Fintype.card m generalizing R S m with
   | zero =>
@@ -484,8 +484,8 @@ theorem LinearMap.det_restrictScalars
   · 
 
 中文:
-定理 LinearMap.det_restrictScalars
-  结论: [AddCommGroup A] [Module R A] [Module S A]
+定理 线性映射.det_restrictScalars
+  结论: [加法交换群 A] [模 R A] [模 S A]
   证明: by
   classical
   nontriviality R
@@ -529,8 +529,8 @@ theorem Algebra.norm_norm
   rw [norm_apply S]; rw [norm_apply R a]; rw [← LinearMap.det_restrictScalars]; rfl
 
 中文:
-定理 Algebra.norm_norm
-  结论: {A} [Ring A] [Algebra R A] [Algebra S A]
+定理 代数.norm_norm
+  结论: {A} [环 A] [代数 R A] [代数 S A]
   证明: by
   rw [norm_apply S]; rw [norm_apply R a]; rw [← LinearMap.det_restrictScalars]; rfl
 
@@ -561,8 +561,8 @@ theorem isIntegral_norm
   rw [← norm_norm (S := F)]; rw [← coe_gen K x]; rw [← IntermediateField.algebraMap_apply]; rw [norm_algebraMap_of_basis (Module.Free.chooseBasis F L) (gen K x)]; rw [ma
 
 中文:
-定理 isIntegral_norm
-  结论: [Algebra R L] [Algebra R K] [IsScalarTower R K L] {x : L}
+定理 is整数egral_norm
+  结论: [代数 R L] [代数 R K] [标量塔 R K L] {x : L}
   证明: by
   by_cases h : FiniteDimensional K L
   swap
@@ -677,7 +677,7 @@ theorem norm_eq_prod_embeddings
 
 中文:
 定理 norm_eq_prod_embeddings
-  结论: [Algebra.IsSeparable K L] [IsAlgClosed E]
+  结论: [代数.是可分 K L] [是代数闭 E]
   证明: by
   have hx := Algebra.IsSeparable.isIntegral K x
   rw [norm_eq_norm_adjoin K x]; rw [map_pow]; rw [← adjoin.powerBasis_gen hx]; rw [norm_eq_prod_embeddings_gen E (adjoin.powerBasis hx) (IsAlgClosed.splits _)]
@@ -710,7 +710,7 @@ theorem norm_eq_prod_automorphisms
 
 中文:
 定理 norm_eq_prod_automorphisms
-  条件: [IsGalois K L] (x : L)
+  条件: [是Galois K L] (x : L)
   证明: by
   apply FaithfulSMul.algebraMap_injective L (AlgebraicClosure L)
   rw [map_prod (algebraMap L (AlgebraicClosure L))]

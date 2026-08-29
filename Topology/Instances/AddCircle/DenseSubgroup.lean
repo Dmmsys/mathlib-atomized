@@ -137,7 +137,7 @@ theorem dense_addSubgroup_iff_ne_zmultiples
 
 中文:
 定理 dense_addSubgroup_iff_ne_zmultiples
-  条件: {p : 实数} [Fact (0 < p)] {s : AddSubgroup (AddCircle p)}
+  条件: {p : 实数} [Fact (0 < p)] {s : 加法子群 (AddCircle p)}
   证明: by
   constructor
   · rintro hd a ha rfl

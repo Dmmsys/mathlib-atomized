@@ -43,7 +43,7 @@ definition mulCayley
 
 中文:
 定义 mulCayley
-  签名: {M : 类型} (s : Set M) [Mul M]
+  签名: {M : 类型} (s : 集合 M) [乘法 M]
   定义体: fromRel (exists g in s, · * g = ·)
 
 Depends on / 依赖: fromRel
@@ -104,7 +104,7 @@ lemma mulCayley_le_iff
 
 中文:
 引理 mulCayley_le_iff
-  条件: (G : SimpleGraph M)
+  条件: (G : 简单图 M)
   证明: by
   rw [SimpleGraph.le_iff_adj]
   simp only [mulCayley_adj', ne_eq, and_imp, forall_exists_index]
@@ -141,7 +141,7 @@ instance [Fintype
   decidable_of_iff (u != v ∧ exists g in s, u * g = v ∨ u = v * g) (mulCayley_adj' s u v).symm
 
 中文:
-实例 [Fintype
+实例 [有限类型
   签名: M] [DecidableEq M] [DecidablePred (· in s)] :
   定义体: fun u v =>
   decidable_of_iff (u != v ∧ exists g in s, u * g = v ∨ u = v * g) (mulCayley_adj' s u v).symm
@@ -192,7 +192,7 @@ theorem mulCayley_monotone
 
 中文:
 定理 mulCayley_monotone
-  结论: Monotone (mulCayley (M := M) ·)
+  结论: 递增 (mulCayley (M := M) ·)
   证明: (mulCayley_gc M).monotone_l
 
 @[to_additive (attr := gcongr)]
@@ -214,7 +214,7 @@ theorem mulCayley_mono
 
 中文:
 定理 mulCayley_mono
-  条件: {U V : Set M} (hUV : U subseteq V)
+  条件: {U V : 集合 M} (hUV : U subseteq V)
   结论: mulCayley U <= mulCayley V
   证明: mulCayley_monotone hUV
 
@@ -238,7 +238,7 @@ theorem mulCayley_empty
 
 中文:
 定理 mulCayley_empty
-  结论: mulCayley (∅ : Set M) = ⊥
+  结论: mulCayley (∅ : 集合 M) = ⊥
   证明: (mulCayley_gc M).l_bot
 
 @[to_additive (attr := simp)]
@@ -259,7 +259,7 @@ theorem mulCayley_union
 
 中文:
 定理 mulCayley_union
-  条件: (s₁ s₂ : Set M)
+  条件: (s₁ s₂ : 集合 M)
   结论: mulCayley (s₁ union s₂) = mulCayley s₁ ⊔ mulCayley s₂
   证明: (mulCayley_gc M).l_sup
 
@@ -285,7 +285,7 @@ theorem mulCayley_adj_mul_iff_right
 
 中文:
 定理 mulCayley_adj_mul_iff_right
-  条件: [IsLeftCancelMul M] {s : Set M} {u v d : M}
+  条件: [左乘消去 M] {s : 集合 M} {u v d : M}
   证明: by
   simp [mulCayley_adj', mul_assoc]
 
@@ -371,7 +371,7 @@ theorem mulCayley_singleton_one
 
 中文:
 定理 mulCayley_singleton_one
-  结论: mulCayley ({1} : Set M) = ⊥
+  结论: mulCayley ({1} : 集合 M) = ⊥
   证明: by
   rw [← mulCayley_erase_one]; rw [Set.sdiff_self]; rw [mulCayley_empty]
 
@@ -454,7 +454,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: M] [DecidablePred (· in s)] : DecidableRel (mulCayley s).Adj
+  签名: M] [DecidablePred (· in s)] : DecidableRel (mulCayley s).伴随
   定义体: fun u v => decidable_of_iff (u != v ∧ (u⁻¹ * v in s ∨ v⁻¹ * u in s)) (mulCayley_adj s u v).symm
 
 @[to_additive (attr := simp)]
@@ -479,7 +479,7 @@ theorem mulCayley_univ
 
 中文:
 定理 mulCayley_univ
-  结论: mulCayley (Set.univ : Set M) = ⊤
+  结论: mulCayley (集合.univ : 集合 M) = ⊤
   证明: by
   ext _ _
   simp [mulCayley_adj]
@@ -504,7 +504,7 @@ theorem mulCayley_compl_singleton_one
 
 中文:
 定理 mulCayley_compl_singleton_one
-  结论: mulCayley ({1}ᶜ : Set M) = ⊤
+  结论: mulCayley ({1}ᶜ : 集合 M) = ⊤
   证明: by
   simp [Set.compl_eq_univ_sdiff]
 

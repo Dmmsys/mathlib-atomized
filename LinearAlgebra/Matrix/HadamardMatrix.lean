@@ -50,12 +50,12 @@ structure IsHadamard
     - conjTranspose_mul : Aᴴ * A = (Fintype.card n : R) • (1 : Matrix n n R)
 
 中文:
-结构 IsHadamard
-  参数: (A : Matrix n n R)
+结构 是Hadamard
+  参数: (A : 矩阵 n n R)
   公理与运算 (3 个):
     - apply_mem((i j : n)) : A i j in unitary R
-    - mul_conjTranspose : A * Aᴴ = (Fintype.card n : R) • (1 : Matrix n n R)
-    - conjTranspose_mul : Aᴴ * A = (Fintype.card n : R) • (1 : Matrix n n R)
+    - mul_conjTranspose : A * Aᴴ = (有限类型.card n : R) • (1 : 矩阵 n n R)
+    - conjTranspose_mul : Aᴴ * A = (有限类型.card n : R) • (1 : 矩阵 n n R)
 -/
 @[mk_iff] structure IsHadamard (A : Matrix n n R) : Prop where
   apply_mem (i j : n) : A i j in unitary R
@@ -75,9 +75,9 @@ theorem IsHadamard.isStarNormal
     rw [commute_iff_eq]; rw [star_eq_conjTranspose]; rw [hA.conjTranspose_mul]; rw [hA.mul_conjTranspose]
 
 中文:
-定理 IsHadamard.isStarNormal
-  条件: (hA : A.IsHadamard)
-  结论: IsStarNormal A where
+定理 是Hadamard.isStarNormal
+  条件: (hA : A.是Hadamard)
+  结论: 是StarNormal A where
   证明: by
     rw [commute_iff_eq]; rw [star_eq_conjTranspose]; rw [hA.conjTranspose_mul]; rw [hA.mul_conjTranspose]
 
@@ -102,9 +102,9 @@ theorem IsHadamard.conjTranspose
 @[simp]
 
 中文:
-定理 IsHadamard.conjTranspose
-  条件: (hA : A.IsHadamard)
-  结论: Aᴴ.IsHadamard
+定理 是Hadamard.conjTranspose
+  条件: (hA : A.是Hadamard)
+  结论: Aᴴ.是Hadamard
   证明: by
   exact ⟨fun i j => Unitary.star_mem (hA.apply_mem j i),
     by simpa using hA.conjTranspose_mul,
@@ -130,7 +130,7 @@ theorem isHadamard_conjTranspose_iff
 
 中文:
 定理 isHadamard_conjTranspose_iff
-  结论: Aᴴ.IsHadamard ↔ A.IsHadamard
+  结论: Aᴴ.是Hadamard ↔ A.是Hadamard
   证明: ⟨fun hA => by simpa using hA.conjTranspose, (·.conjTranspose)⟩
 
 Depends on / 依赖: conjTranspose, hA.conjTranspose
@@ -152,8 +152,8 @@ theorem IsHadamard.reindex
 @[simp]
 
 中文:
-定理 IsHadamard.reindex
-  条件: (e₁ e₂ : n ≃ m) (hA : A.IsHadamard)
+定理 是Hadamard.reindex
+  条件: (e₁ e₂ : n ≃ m) (hA : A.是Hadamard)
   证明: by
   refine ⟨fun i j => hA.apply_mem _ _, ?_, ?_⟩ <;>
     simp [reindex_apply, submatrix_mul_equiv, hA.mul_conjTranspose, hA.conjTranspose_mul,
@@ -206,8 +206,8 @@ theorem IsHadamard.kronecker
       _ = if i' = j' then ∑ x, A i 
 
 中文:
-定理 IsHadamard.kronecker
-  结论: {A : Matrix m m R} {B : Matrix n n R}
+定理 是Hadamard.kronecker
+  结论: {A : 矩阵 m m R} {B : 矩阵 n n R}
   证明: by
   refine ⟨fun _ _ => mul_mem (hA.apply_mem _ _) (hB.apply_mem _ _), ?_, ?_⟩ <;> ext ⟨i, i'⟩ ⟨j, j'⟩
   · calc
@@ -256,7 +256,7 @@ theorem IsHadamard.card_eq_mul_star_of_const_col_sum
   have hleft : (1 : n -> R) ᵥ* (A * Aᴴ) ⬝ᵥ 1 = (Fintype.card n : R
 
 中文:
-定理 IsHadamard.card_eq_mul_star_of_const_col_sum
+定理 是Hadamard.card_eq_mul_star_of_const_col_sum
   结论: {s : R}
   证明: by
   have hvcol : (1 : n -> R) ᵥ* A = s • 1 := by
@@ -300,7 +300,7 @@ theorem IsHadamard.card_eq_star_mul_of_const_row_sum
   simpa using hA.conjTranspose.card_eq_mul_star_of_const_col_sum hcard hcol
 
 中文:
-定理 IsHadamard.card_eq_star_mul_of_const_row_sum
+定理 是Hadamard.card_eq_star_mul_of_const_row_sum
   结论: {s : R}
   证明: by
   have hcol : forall j, ∑ i, Aᴴ i j = star s := fun j => by
@@ -335,9 +335,9 @@ theorem IsHadamard.transpose
     rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]
 
 中文:
-定理 IsHadamard.transpose
-  条件: (hA : A.IsHadamard)
-  结论: Aᵀ.IsHadamard where
+定理 是Hadamard.transpose
+  条件: (hA : A.是Hadamard)
+  结论: Aᵀ.是Hadamard where
   证明: hA.apply_mem j i
   mul_conjTranspose := by
     rw [conjTranspose_transpose_eq_transpose_conjTranspose]; rw [← transpose_mul]; rw [hA.conjTranspose_mul]; rw [transpose_smul]; rw [transpose_one]
@@ -364,7 +364,7 @@ theorem isHadamard_transpose_iff
 
 中文:
 定理 isHadamard_transpose_iff
-  结论: Aᵀ.IsHadamard ↔ A.IsHadamard
+  结论: Aᵀ.是Hadamard ↔ A.是Hadamard
   证明: ⟨fun hA => by simpa using hA.transpose, (·.transpose)⟩
 
 Depends on / 依赖: hA.transpose, transpose
@@ -388,9 +388,9 @@ theorem IsHadamard.neg
   simpa [isHadamard_iff, Unitary.mem_iff] using hA
 
 中文:
-定理 IsHadamard.neg
-  条件: (hA : A.IsHadamard)
-  结论: (-A).IsHadamard
+定理 是Hadamard.neg
+  条件: (hA : A.是Hadamard)
+  结论: (-A).是Hadamard
   证明: by
   simpa [isHadamard_iff, Unitary.mem_iff] using hA
 
@@ -410,8 +410,8 @@ theorem IsHadamard.neg_iff
   proof: ⟨fun hA => by simpa using hA.neg, (·.neg)⟩
 
 中文:
-定理 IsHadamard.neg_iff
-  结论: (-A).IsHadamard ↔ A.IsHadamard
+定理 是Hadamard.neg_iff
+  结论: (-A).是Hadamard ↔ A.是Hadamard
   证明: ⟨fun hA => by simpa using hA.neg, (·.neg)⟩
 
 Depends on / 依赖: hA.neg
@@ -435,8 +435,8 @@ theorem IsHadamard.det_mul_star_det
   rwa [det_mul, det_conjTranspose, det_smul, det_one, mul_one] at this
 
 中文:
-定理 IsHadamard.det_mul_star_det
-  条件: (hA : A.IsHadamard)
+定理 是Hadamard.det_mul_star_det
+  条件: (hA : A.是Hadamard)
   证明: by
   have := congr_arg det hA.mul_conjTranspose
   rwa [det_mul, det_conjTranspose, det_smul, det_one, mul_one] at this
@@ -458,8 +458,8 @@ theorem IsHadamard.star_det_mul_det
   rw [mul_comm]; rw [hA.det_mul_star_det]
 
 中文:
-定理 IsHadamard.star_det_mul_det
-  条件: (hA : A.IsHadamard)
+定理 是Hadamard.star_det_mul_det
+  条件: (hA : A.是Hadamard)
   证明: by
   rw [mul_comm]; rw [hA.det_mul_star_det]
 
@@ -479,8 +479,8 @@ theorem IsHadamard.det_ne_zero
 pow_ne_zero _ hcard by rw [← hA.det_mul_star_det, h, star_zero, zero_mul]
 
 中文:
-定理 IsHadamard.det_ne_zero
-  结论: [IsReduced R] (hA : A.IsHadamard)
+定理 是Hadamard.det_ne_zero
+  结论: [是既约 R] (hA : A.是Hadamard)
   证明: fun h =>
 pow_ne_zero _ hcard by rw [← hA.det_mul_star_det, h, star_zero, zero_mul]
 -/
@@ -501,8 +501,8 @@ theorem IsHadamard.isRegular_det
   exact this.of_mul_left
 
 中文:
-定理 IsHadamard.isRegular_det
-  结论: (hA : A.IsHadamard)
+定理 是Hadamard.isRegular_det
+  结论: (hA : A.是Hadamard)
   证明: by
   have : IsRegular (A.det * star A.det) := by
     rw [hA.det_mul_star_det]
@@ -534,7 +534,7 @@ theorem IsHadamard.of_mul_conjTranspose
     (isRegular_of_isLeftRe
 
 中文:
-定理 IsHadamard.of_mul_conjTranspose
+定理 是Hadamard.of_mul_conjTranspose
   证明: by
   refine ⟨hentry, hmul, ?_⟩
   have hdet : IsRegular (A.det * star A.det) := by
@@ -601,8 +601,8 @@ theorem IsHadamard.four_dvd_card
     simpa [Matrix.mul_apply, hik]
 
 中文:
-定理 IsHadamard.four_dvd_card
-  结论: {A : Matrix n n 整数}
+定理 是Hadamard.four_dvd_card
+  结论: {A : 矩阵 n n 整数}
   证明: by
   have hpm : forall i j, A i j = 1 ∨ A i j = -1 := fun i j =>
     Unitary.mem_iff_eq_one_or_eq_neg_one.mp (hA.apply_mem i j)

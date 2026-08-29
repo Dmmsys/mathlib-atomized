@@ -72,7 +72,7 @@ definition lower
 
 中文:
 定义 lower
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: generateFrom {s | exists a, (Ici a)ᶜ = s}
 
 Depends on / 依赖: generateFrom
@@ -94,7 +94,7 @@ definition upper
 
 中文:
 定义 upper
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: generateFrom {s | exists a, (Iic a)ᶜ = s}
 
 Depends on / 依赖: generateFrom
@@ -264,7 +264,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : WithLower α -> Sort*} (toLower : 对任意 a, motive (toLower a))
+  签名: {motive : WithLower α -> 类型层*} (toLower : 对任意 a, motive (toLower a))
   定义体: fun a =>
   toLower (ofLower a)
 -/
@@ -281,8 +281,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithLower α)
+实例 [非空
+  签名: α] : 非空 (WithLower α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -297,8 +297,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithLower α)
+实例 [可居
+  签名: α] : 可居 (WithLower α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithLower α)
+  签名: 预序 (WithLower α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (WithLower α)
+  签名: 拓扑空间 (WithLower α)
   定义体: lower (WithLower α)
 
 Depends on / 依赖: WithLower
@@ -417,7 +417,7 @@ lemma isOpen_preimage_ofLower
 
 中文:
 引理 isOpen_preimage_ofLower
-  结论: IsOpen (ofLower ⁻¹' s) ↔ IsOpen[lower α] s
+  结论: 是开集 (ofLower ⁻¹' s) ↔ 是开集[lower α] s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -435,8 +435,8 @@ lemma isOpen_def
 
 中文:
 引理 isOpen_def
-  条件: (T : Set (WithLower α))
-  结论: IsOpen T ↔ IsOpen[lower α] (WithLower.toLower ⁻¹' T)
+  条件: (T : 集合 (WithLower α))
+  结论: 是开集 T ↔ 是开集[lower α] (WithLower.toLower ⁻¹' T)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -454,7 +454,7 @@ theorem continuous_toLower
 
 中文:
 定理 continuous_toLower
-  条件: [TopologicalSpace α] [ClosedIciTopology α]
+  条件: [拓扑空间 α] [ClosedIci拓扑 α]
   证明: continuous_generateFrom_iff.mpr by rintro _ ⟨a, rfl⟩; exact isClosed_Ici.isOpen_compl
 
 Depends on / 依赖: continuous_generateFrom_iff, continuous_generateFrom_iff.mpr, isClosed_Ici, isClosed_Ici.isOpen_compl, isOpen_compl
@@ -474,8 +474,8 @@ instance [PartialOrder
   body: ‹PartialOrder α›
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (WithLower α)
+实例 [偏序
+  签名: α] : 偏序 (WithLower α)
   定义体: ‹PartialOrder α›
 
 Depends on / 依赖: PartialOrder
@@ -490,8 +490,8 @@ instance [LinearOrder
   body: ‹LinearOrder α›
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (WithLower α)
+实例 [线性序
+  签名: α] : 线性序 (WithLower α)
   定义体: ‹LinearOrder α›
 
 Depends on / 依赖: LinearOrder
@@ -658,7 +658,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : WithUpper α -> Sort*} (toUpper : 对任意 a, motive (toUpper a))
+  签名: {motive : WithUpper α -> 类型层*} (toUpper : 对任意 a, motive (toUpper a))
   定义体: fun a =>
   toUpper (ofUpper a)
 -/
@@ -675,8 +675,8 @@ instance [Nonempty
   body: ‹Nonempty α›
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (WithUpper α)
+实例 [非空
+  签名: α] : 非空 (WithUpper α)
   定义体: ‹Nonempty α›
 
 Depends on / 依赖: Nonempty
@@ -691,8 +691,8 @@ instance [Inhabited
   body: ‹Inhabited α›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WithUpper α)
+实例 [可居
+  签名: α] : 可居 (WithUpper α)
   定义体: ‹Inhabited α›
 
 Depends on / 依赖: Inhabited
@@ -713,7 +713,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithUpper α)
+  签名: 预序 (WithUpper α)
   定义体: ‹Preorder α›
 
 Depends on / 依赖: Preorder
@@ -729,7 +729,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (WithUpper α)
+  签名: 拓扑空间 (WithUpper α)
   定义体: upper (WithUpper α)
 
 Depends on / 依赖: WithUpper
@@ -811,7 +811,7 @@ lemma isOpen_preimage_ofUpper
 
 中文:
 引理 isOpen_preimage_ofUpper
-  结论: IsOpen (ofUpper ⁻¹' s) ↔ (upper α).IsOpen s
+  结论: 是开集 (ofUpper ⁻¹' s) ↔ (upper α).是开集 s
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -829,8 +829,8 @@ lemma isOpen_def
 
 中文:
 引理 isOpen_def
-  条件: {s : Set (WithUpper α)}
-  结论: IsOpen s ↔ (upper α).IsOpen (toUpper ⁻¹' s)
+  条件: {s : 集合 (WithUpper α)}
+  结论: 是开集 s ↔ (upper α).是开集 (toUpper ⁻¹' s)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -847,7 +847,7 @@ theorem continuous_toUpper
 
 中文:
 定理 continuous_toUpper
-  条件: [TopologicalSpace α] [ClosedIicTopology α]
+  条件: [拓扑空间 α] [ClosedIic拓扑 α]
   证明: continuous_generateFrom_iff.mpr by rintro _ ⟨a, rfl⟩; exact isClosed_Iic.isOpen_compl
 
 Depends on / 依赖: continuous_generateFrom_iff, continuous_generateFrom_iff.mpr, isClosed_Iic, isClosed_Iic.isOpen_compl, isOpen_compl
@@ -867,8 +867,8 @@ instance [PartialOrder
   body: ‹PartialOrder α›
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (WithUpper α)
+实例 [偏序
+  签名: α] : 偏序 (WithUpper α)
   定义体: ‹PartialOrder α›
 
 Depends on / 依赖: PartialOrder
@@ -883,8 +883,8 @@ instance [LinearOrder
   body: ‹LinearOrder α›
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (WithUpper α)
+实例 [线性序
+  签名: α] : 线性序 (WithUpper α)
   定义体: ‹LinearOrder α›
 
 Depends on / 依赖: LinearOrder
@@ -903,8 +903,8 @@ class IsLower
     - topology_eq_lowerTopology : t = lower α
 
 中文:
-类 IsLower
-  参数: (α : 类型) [t : TopologicalSpace α] [Preorder α]
+类 是Lower
+  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
   公理与运算 (1 个):
     - topology_eq_lowerTopology : t = lower α
 -/
@@ -923,8 +923,8 @@ class IsUpper
     - topology_eq_upperTopology : t = upper α
 
 中文:
-类 IsUpper
-  参数: (α : 类型) [t : TopologicalSpace α] [Preorder α]
+类 是Upper
+  参数: (α : 类型) [t : 拓扑空间 α] [预序 α]
   公理与运算 (1 个):
     - topology_eq_upperTopology : t = upper α
 -/
@@ -941,8 +941,8 @@ instance [Preorder
   body: ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : IsLower (WithLower α)
+实例 [预序
+  签名: α] : 是Lower (WithLower α)
   定义体: ⟨rfl⟩
 -/
 instance [Preorder α] : IsLower (WithLower α) := ⟨rfl⟩
@@ -955,8 +955,8 @@ instance [Preorder
   body: ⟨rfl⟩
 
 中文:
-实例 [Preorder
-  签名: α] : IsUpper (WithUpper α)
+实例 [预序
+  签名: α] : 是Upper (WithUpper α)
   定义体: ⟨rfl⟩
 -/
 instance [Preorder α] : IsUpper (WithUpper α) := ⟨rfl⟩
@@ -976,7 +976,7 @@ definition WithLower.toDualHomeomorph
 
 中文:
 定义 WithLower.toDualHomeomorph
-  签名: [Preorder α]
+  签名: [预序 α]
   定义体: OrderDual.toDual
   invFun := OrderDual.ofDual
   left_inv := OrderDual.toDual_ofDual
@@ -1006,7 +1006,7 @@ definition lowerBasis
 
 中文:
 定义 lowerBasis
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: { s : Set α | exists t : Set α, t.Finite ∧ (upperClosure t : Set α)ᶜ = s }
 
 Depends on / 依赖: Finite, t.Finite, upperClosure
@@ -1067,7 +1067,7 @@ theorem isOpen_iff_generate_Ici_compl
 
 中文:
 定理 isOpen_iff_generate_Ici_compl
-  结论: IsOpen s ↔ GenerateOpen { t | 存在 a, (Ici a)ᶜ = t } s
+  结论: 是开集 s ↔ GenerateOpen { t | 存在 a, (左闭右无界区间 a)ᶜ = t } s
   证明: by
   rw [topology_eq α]; rfl
 
@@ -1086,7 +1086,7 @@ instance _root_.OrderDual.instIsUpper
 
 中文:
 实例 _root_.OrderDual.instIsUpper
-  签名: : IsUpper αᵒᵈ where
+  签名: : 是Upper αᵒᵈ where
   定义体: topology_eq_lowerTopology (α := α)
 
 Depends on / 依赖: topology_eq_lowerTopology
@@ -1104,7 +1104,7 @@ instance :
 
 中文:
 实例 :
-  签名: ClosedIciTopology α
+  签名: ClosedIci拓扑 α
   定义体: ⟨fun a => isOpen_compl_iff.1 isOpen_iff_generate_Ici_compl.2 GenerateOpen.basic _ ⟨a, rfl⟩⟩
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic, isOpen_compl_iff, isOpen_iff_generate_Ici_compl
@@ -1125,8 +1125,8 @@ theorem isClosed_upperClosure
 
 中文:
 定理 isClosed_upperClosure
-  条件: (h : s.Finite)
-  结论: IsClosed (upperClosure s : Set α)
+  条件: (h : s.有限)
+  结论: 是闭集 (upperClosure s : 集合 α)
   证明: by
   simp only [← UpperSet.iInf_Ici, UpperSet.coe_iInf]
   exact h.isClosed_biUnion fun _ _ => isClosed_Ici
@@ -1154,8 +1154,8 @@ theorem isLowerSet_of_isOpen
 
 中文:
 定理 isLowerSet_of_isOpen
-  条件: (h : IsOpen s)
-  结论: IsLowerSet s
+  条件: (h : 是开集 s)
+  结论: 是下集 s
   证明: by
   replace h := isOpen_iff_generate_Ici_compl.1 h
   induction h with
@@ -1185,8 +1185,8 @@ theorem isUpperSet_of_isClosed
 
 中文:
 定理 isUpperSet_of_isClosed
-  条件: (h : IsClosed s)
-  结论: IsUpperSet s
+  条件: (h : 是闭集 s)
+  结论: 是上集 s
   证明: isLowerSet_compl.1 isLowerSet_of_isOpen h.isOpen_compl
 
 Depends on / 依赖: h.isOpen_compl, isLowerSet_compl, isLowerSet_of_isOpen, isOpen_compl
@@ -1206,7 +1206,7 @@ theorem tendsto_nhds_iff_not_le
 
 中文:
 定理 tendsto_nhds_iff_not_le
-  条件: {β : 类型} {f : β -> α} {l : Filter β} {x : α}
+  条件: {β : 类型} {f : β -> α} {l : 滤子 β} {x : α}
   证明: by
   simp +instances [topology_eq_lowerTopology, tendsto_nhds_generateFrom_iff, Filter.Eventually, Ici,
     compl_ofPred]
@@ -1236,7 +1236,7 @@ theorem closure_singleton
 中文:
 定理 closure_singleton
   条件: (a : α)
-  结论: closure {a} = Ici a
+  结论: closure {a} = 左闭右无界区间 a
   证明: Subset.antisymm ((closure_minimal fun _ h => h.ge) <| isClosed_Ici)
 (isUpperSet_of_isClosed isClosed_closure).Ici_subset subset_closure rfl
 
@@ -1264,7 +1264,7 @@ theorem isTopologicalBasis
 
 中文:
 定理 isTopologicalBasis
-  结论: IsTopologicalBasis (lowerBasis α)
+  结论: 是TopologicalBasis (lowerBasis α)
   证明: by
   convert! isTopologicalBasis_of_subbasis (topology_eq α)
   simp_rw [lowerBasis, coe_upperClosure, compl_iUnion]
@@ -1301,7 +1301,7 @@ lemma continuous_iff_Ici
 
 中文:
 引理 continuous_iff_Ici
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: by
   obtain rfl := IsLower.topology_eq α
   simp [continuous_generateFrom_iff]
@@ -1368,7 +1368,7 @@ theorem tendsto_nhds_iff_lt
 
 中文:
 定理 tendsto_nhds_iff_lt
-  条件: {β : 类型} {f : β -> α} {l : Filter β} {x : α}
+  条件: {β : 类型} {f : β -> α} {l : 滤子 β} {x : α}
   证明: by
   simp only [tendsto_nhds_iff_not_le, not_le]
 
@@ -1405,8 +1405,8 @@ lemma isTopologicalSpace_basis
 
 中文:
 引理 isTopologicalSpace_basis
-  条件: (U : Set α)
-  结论: IsOpen U ↔ U = univ ∨ 存在 a, (Ici a)ᶜ = U
+  条件: (U : 集合 α)
+  结论: 是开集 U ↔ U = univ ∨ 存在 a, (左闭右无界区间 a)ᶜ = U
   证明: by
   by_cases hU : U = univ
   · simp only [hU, isOpen_univ, compl_Ici, true_or]
@@ -1474,7 +1474,7 @@ definition upperBasis
 
 中文:
 定义 upperBasis
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: { s : Set α | exists t : Set α, t.Finite ∧ (lowerClosure t : Set α)ᶜ = s }
 
 Depends on / 依赖: Finite, lowerClosure, t.Finite
@@ -1535,7 +1535,7 @@ theorem isOpen_iff_generate_Iic_compl
 
 中文:
 定理 isOpen_iff_generate_Iic_compl
-  结论: IsOpen s ↔ GenerateOpen { t | 存在 a, (Iic a)ᶜ = t } s
+  结论: 是开集 s ↔ GenerateOpen { t | 存在 a, (左无界右闭区间 a)ᶜ = t } s
   证明: by
   rw [topology_eq α]; rfl
 
@@ -1554,7 +1554,7 @@ instance _root_.OrderDual.instIsLower
 
 中文:
 实例 _root_.OrderDual.instIsLower
-  签名: : IsLower αᵒᵈ where
+  签名: : 是Lower αᵒᵈ where
   定义体: topology_eq_upperTopology (α := α)
 
 Depends on / 依赖: topology_eq_upperTopology
@@ -1572,7 +1572,7 @@ instance :
 
 中文:
 实例 :
-  签名: ClosedIicTopology α
+  签名: ClosedIic拓扑 α
   定义体: ⟨fun a => isOpen_compl_iff.1 isOpen_iff_generate_Iic_compl.2 GenerateOpen.basic _ ⟨a, rfl⟩⟩
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic, isOpen_compl_iff, isOpen_iff_generate_Iic_compl
@@ -1591,8 +1591,8 @@ theorem isClosed_lowerClosure
 
 中文:
 定理 isClosed_lowerClosure
-  条件: (h : s.Finite)
-  结论: IsClosed (lowerClosure s : Set α)
+  条件: (h : s.有限)
+  结论: 是闭集 (lowerClosure s : 集合 α)
   证明: IsLower.isClosed_upperClosure (α := αᵒᵈ) h
 
 Depends on / 依赖: IsLower, IsLower.isClosed_upperClosure, isClosed_upperClosure
@@ -1611,8 +1611,8 @@ theorem isUpperSet_of_isOpen
 
 中文:
 定理 isUpperSet_of_isOpen
-  条件: (h : IsOpen s)
-  结论: IsUpperSet s
+  条件: (h : 是开集 s)
+  结论: 是上集 s
   证明: IsLower.isLowerSet_of_isOpen (α := αᵒᵈ) h
 
 Depends on / 依赖: IsLower, IsLower.isLowerSet_of_isOpen, isLowerSet_of_isOpen
@@ -1631,8 +1631,8 @@ theorem isLowerSet_of_isClosed
 
 中文:
 定理 isLowerSet_of_isClosed
-  条件: (h : IsClosed s)
-  结论: IsLowerSet s
+  条件: (h : 是闭集 s)
+  结论: 是下集 s
   证明: isUpperSet_compl.1 isUpperSet_of_isOpen h.isOpen_compl
 
 Depends on / 依赖: h.isOpen_compl, isOpen_compl, isUpperSet_compl, isUpperSet_of_isOpen
@@ -1650,7 +1650,7 @@ theorem tendsto_nhds_iff_not_le
 
 中文:
 定理 tendsto_nhds_iff_not_le
-  条件: {β : 类型} {f : β -> α} {l : Filter β} {x : α}
+  条件: {β : 类型} {f : β -> α} {l : 滤子 β} {x : α}
   证明: IsLower.tendsto_nhds_iff_not_le (α := αᵒᵈ)
 
 Depends on / 依赖: IsLower, IsLower.tendsto_nhds_iff_not_le, tendsto_nhds_iff_not_le
@@ -1676,7 +1676,7 @@ theorem closure_singleton
 中文:
 定理 closure_singleton
   条件: (a : α)
-  结论: closure {a} = Iic a
+  结论: closure {a} = 左无界右闭区间 a
   证明: IsLower.closure_singleton (α := αᵒᵈ) _
 
 Depends on / 依赖: IsLower, IsLower.closure_singleton, closure_singleton
@@ -1694,7 +1694,7 @@ theorem isTopologicalBasis
 
 中文:
 定理 isTopologicalBasis
-  结论: IsTopologicalBasis (upperBasis α)
+  结论: 是TopologicalBasis (upperBasis α)
   证明: IsLower.isTopologicalBasis (α := αᵒᵈ)
 -/
 protected theorem isTopologicalBasis : IsTopologicalBasis (upperBasis α) :=
@@ -1710,7 +1710,7 @@ lemma continuous_iff_Iic
 
 中文:
 引理 continuous_iff_Iic
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: IsLower.continuous_iff_Ici (α := αᵒᵈ)
 
 Depends on / 依赖: IsLower, IsLower.continuous_iff_Ici, continuous_iff_Ici
@@ -1764,7 +1764,7 @@ theorem tendsto_nhds_iff_lt
 
 中文:
 定理 tendsto_nhds_iff_lt
-  条件: {β : 类型} {f : β -> α} {l : Filter β} {x : α}
+  条件: {β : 类型} {f : β -> α} {l : 滤子 β} {x : α}
   证明: IsLower.tendsto_nhds_iff_lt (α := αᵒᵈ)
 
 Depends on / 依赖: IsLower, IsLower.tendsto_nhds_iff_lt, tendsto_nhds_iff_lt
@@ -1790,8 +1790,8 @@ lemma isTopologicalSpace_basis
 
 中文:
 引理 isTopologicalSpace_basis
-  条件: (U : Set α)
-  结论: IsOpen U ↔ U = univ ∨ 存在 a, (Iic a)ᶜ = U
+  条件: (U : 集合 α)
+  结论: 是开集 U ↔ U = univ ∨ 存在 a, (左无界右闭区间 a)ᶜ = U
   证明: IsLower.isTopologicalSpace_basis (α := αᵒᵈ) U
 
 Depends on / 依赖: IsLower, IsLower.isTopologicalSpace_basis, isTopologicalSpace_basis
@@ -1819,7 +1819,7 @@ instance instIsLowerProd
 
 中文:
 实例 instIsLowerProd
-  签名: [Preorder α] [TopologicalSpace α] [IsLower α]
+  签名: [预序 α] [拓扑空间 α] [是Lower α]
   定义体: by
     refine le_antisymm (le_generateFrom ?_) ?_
     · rintro _ ⟨x, rfl⟩
@@ -1860,7 +1860,7 @@ instance instIsUpperProd
 
 中文:
 实例 instIsUpperProd
-  签名: [Preorder α] [TopologicalSpace α] [IsUpper α]
+  签名: [预序 α] [拓扑空间 α] [是Upper α]
   定义体: by
     suffices IsLower (α × β)ᵒᵈ from IsLower.topology_eq_lowerTopology (α := (α × β)ᵒᵈ)
     exact instIsLowerProd (α := αᵒᵈ) (β := βᵒᵈ)
@@ -1895,9 +1895,9 @@ refine Subset.antisymm (fun a => sInf_le) fun a ha => le_trans ?_
   simp
 
 中文:
-引理 _root_.sInfHom.continuous
-  条件: (f : sInfHom α β)
-  结论: Continuous f
+引理 _root_.sInf态射.continuous
+  条件: (f : sInf态射 α β)
+  结论: 连续 f
   证明: by
   refine IsLower.continuous_iff_Ici.2 fun b => ?_
   convert! isClosed_Ici (a := sInf <| f ⁻¹' Ici b)
@@ -1935,9 +1935,9 @@ lemma _root_.sSupHom.continuous
   proof: sInfHom.continuous (α := αᵒᵈ) (β := βᵒᵈ) (sSupHom.dual.toFun f)
 
 中文:
-引理 _root_.sSupHom.continuous
-  条件: (f : sSupHom α β)
-  结论: Continuous f
+引理 _root_.sSup态射.continuous
+  条件: (f : sSup态射 α β)
+  结论: 连续 f
   证明: sInfHom.continuous (α := αᵒᵈ) (β := βᵒᵈ) (sSupHom.dual.toFun f)
 -/
 protected lemma _root_.sSupHom.continuous (f : sSupHom α β) : Continuous f :=
@@ -1963,8 +1963,8 @@ lemma isUpper_orderDual
 
 中文:
 引理 isUpper_orderDual
-  条件: [Preorder α] [TopologicalSpace α]
-  结论: IsUpper αᵒᵈ ↔ IsLower α
+  条件: [预序 α] [拓扑空间 α]
+  结论: 是Upper αᵒᵈ ↔ 是Lower α
   证明: by
   constructor
   · apply OrderDual.instIsLower
@@ -1988,8 +1988,8 @@ lemma isLower_orderDual
 
 中文:
 引理 isLower_orderDual
-  条件: [Preorder α] [TopologicalSpace α]
-  结论: IsLower αᵒᵈ ↔ IsUpper α
+  条件: [预序 α] [拓扑空间 α]
+  结论: 是Lower αᵒᵈ ↔ 是Upper α
   证明: isUpper_orderDual.symm
 
 Depends on / 依赖: isUpper_orderDual, isUpper_orderDual.symm
@@ -2018,7 +2018,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUpper 命题
+  签名: 是Upper 命题
   定义体: by
     rw [Topology.upper]; rw [sierpinskiSpace]; rw [← generateFrom_insert_empty]
     congr

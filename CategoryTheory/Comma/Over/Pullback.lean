@@ -73,7 +73,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: {X Y : C} (f : X ⟶ Y) [HasPullbacksAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PullbacksAlong f]
   定义体: Over.mk (pullback.snd g.hom f)
   map := fun g {h} {k} =>
     Over.homMk (pullback.lift (pullback.fst _ _ ≫ k.left) (pullback.snd _ _)
@@ -109,7 +109,7 @@ invFun := fun v => Over.homMk (v.left ≫ pullback.fst _ _) by
 
 中文:
 定义 mapPullbackAdj
-  签名: {X Y : C} (f : X ⟶ Y) [HasPullbacksAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PullbacksAlong f]
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun x y =>
         { toFun := fun u =>
@@ -157,7 +157,7 @@ instance faithful_pullback
 
 中文:
 实例 faithful_pullback
-  签名: {X Y : C} (f : X ⟶ Y) [HasPullbacksAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PullbacksAlong f]
   定义体: by
   have (Z : Over Y) : Epi ((mapPullbackAdj f).counit.app Z) := by
     simp only [Functor.comp_obj, Functor.id_obj, mapPullbackAdj_counit_app]; infer_instance
@@ -200,7 +200,7 @@ definition pullbackComp
 
 中文:
 定义 pullbackComp
-  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [HasPullbacksAlong f] [HasPullbacksAlong g]
+  签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [有PullbacksAlong f] [有PullbacksAlong g]
   定义体: conjugateIsoEquiv (mapPullbackAdj _) ((mapPullbackAdj _).comp (mapPullbackAdj _))
     (Over.mapComp _ _).symm
 
@@ -221,7 +221,7 @@ instance pullbackIsRightAdjoint
 
 中文:
 实例 pullbackIsRightAdjoint
-  签名: {X Y : C} (f : X ⟶ Y) [HasPullbacksAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PullbacksAlong f]
   定义体: ⟨_, ⟨mapPullbackAdj f⟩⟩
 
 Depends on / 依赖: mapPullbackAdj
@@ -250,7 +250,7 @@ definition postAdjunctionLeft
 
 中文:
 定义 postAdjunctionLeft
-  签名: [HasPullbacks C] {X : C} {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G)
+  签名: [有Pullbacks C] {X : C} {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G)
   定义体: ((mapPullbackAdj (a.unit.app X)).comp (postAdjunctionRight a)).ofNatIsoLeft
     NatIso.ofComponents fun Y => isoMk (.refl _)
 
@@ -271,7 +271,7 @@ instance isLeftAdjoint_post
 
 中文:
 实例 isLeftAdjoint_post
-  签名: [HasPullbacks C] {F : C ⥤ D} [F.IsLeftAdjoint]
+  签名: [有Pullbacks C] {F : C ⥤ D} [F.是左伴随]
   定义体: let ⟨G, ⟨a⟩⟩ := ‹F.IsLeftAdjoint›; ⟨_, ⟨postAdjunctionLeft a⟩⟩
 
 Depends on / 依赖: IsLeftAdjoint
@@ -295,7 +295,7 @@ definition forgetMapTerminal
 
 中文:
 定义 forgetMapTerminal
-  签名: {T : C} (hT : IsTerminal T)
+  签名: {T : C} (hT : 是终止 T)
   定义体: NatIso.ofComponents fun X => .refl _
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, ofComponents
@@ -361,7 +361,7 @@ lemma forgetAdjStar_counit_app
 中文:
 引理 forgetAdjStar_counit_app
   条件: (X Y : C)
-  结论: (Over.forgetAdjStar X).counit.app Y = prod.snd
+  结论: (Over.forgetAdjStar X).counit.app Y = 乘积.snd
   证明: by
   simp [Over.forgetAdjStar, CategoryTheory.coalgebraEquivOver]
 
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: (star X).IsRightAdjoint
+  签名: (star X).是右伴随
   定义体: ⟨_, ⟨forgetAdjStar X⟩⟩
 
 Depends on / 依赖: forgetAdjStar
@@ -421,7 +421,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget X).IsLeftAdjoint
+  签名: (forget X).是左伴随
   定义体: ⟨_, ⟨forgetAdjStar X⟩⟩
 
 Depends on / 依赖: forgetAdjStar
@@ -445,7 +445,7 @@ definition starPullbackIsoStar
 
 中文:
 定义 starPullbackIsoStar
-  签名: [HasPullbacks C] {X Y : C} (f : X ⟶ Y)
+  签名: [有Pullbacks C] {X Y : C} (f : X ⟶ Y)
   定义体: NatIso.ofComponents
     (fun Z =>
       Over.isoMk
@@ -486,7 +486,7 @@ definition pushout
 
 中文:
 定义 pushout
-  签名: {X Y : C} (f : X ⟶ Y) [HasPushoutsAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PushoutsAlong f]
   定义体: Under.mk (pushout.inr x.hom f)
   map := fun x {x'} {u} =>
     Under.homMk (pushout.desc (u.right ≫ pushout.inl _ _) (pushout.inr _ _)
@@ -521,7 +521,7 @@ toFun := fun u => Under.homMk (pushout.inl _ _ ≫ u.right) by
 
 中文:
 定义 mapPushoutAdj
-  签名: {X Y : C} (f : X ⟶ Y) [HasPushoutsAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PushoutsAlong f]
   定义体: Adjunction.mkOfHomEquiv {
     homEquiv := fun x y => {
 toFun := fun u => Under.homMk (pushout.inl _ _ ≫ u.right) by
@@ -567,7 +567,7 @@ instance faithful_pushout
 
 中文:
 实例 faithful_pushout
-  签名: {X Y : C} (f : X ⟶ Y) [HasPushoutsAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PushoutsAlong f]
   定义体: by
   have (Z : Under X) : Mono ((mapPushoutAdj f).unit.app Z) := by simp; infer_instance
   exact (mapPushoutAdj f).faithful_L_of_mono_unit_app
@@ -633,7 +633,7 @@ instance pushoutIsLeftAdjoint
 
 中文:
 实例 pushoutIsLeftAdjoint
-  签名: {X Y : C} (f : X ⟶ Y) [HasPushoutsAlong f]
+  签名: {X Y : C} (f : X ⟶ Y) [有PushoutsAlong f]
   定义体: ⟨_, ⟨mapPushoutAdj f⟩⟩
 
 Depends on / 依赖: mapPushoutAdj
@@ -661,7 +661,7 @@ definition postAdjunctionRight
 
 中文:
 定义 postAdjunctionRight
-  签名: [HasPushouts D] {Y : D} {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G)
+  签名: [有Pushouts D] {Y : D} {F : C ⥤ D} {G : D ⥤ C} (a : F ⊣ G)
   定义体: ((postAdjunctionLeft a).comp (mapPushoutAdj (a.counit.app Y))).ofNatIsoRight
     NatIso.ofComponents fun Y => isoMk (.refl _)
 
@@ -683,7 +683,7 @@ instance isRightAdjoint_post
 
 中文:
 实例 isRightAdjoint_post
-  签名: [HasPushouts D] {Y : D} {G : D ⥤ C} [G.IsRightAdjoint]
+  签名: [有Pushouts D] {Y : D} {G : D ⥤ C} [G.是右伴随]
   定义体: let ⟨F, ⟨a⟩⟩ := ‹G.IsRightAdjoint›; ⟨_, ⟨postAdjunctionRight a⟩⟩
 
 Depends on / 依赖: IsRightAdjoint
@@ -762,7 +762,7 @@ instance :
 
 中文:
 实例 :
-  签名: (costar X).IsLeftAdjoint
+  签名: (costar X).是左伴随
   定义体: ⟨_, ⟨costarAdjForget X⟩⟩
 
 Depends on / 依赖: costarAdjForget
@@ -779,7 +779,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget X).IsRightAdjoint
+  签名: (forget X).是右伴随
   定义体: ⟨_, ⟨costarAdjForget X⟩⟩
 
 Depends on / 依赖: costarAdjForget

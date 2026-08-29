@@ -89,7 +89,7 @@ lemma isIso_map
 中文:
 引理 isIso_map
   条件: {i j : J} (φ : i ⟶ j) (π : j ⟶ i₀)
-  结论: IsIso (F.map φ)
+  结论: 是同构 (F.map φ)
   证明: by
   have := h π
   have := h (φ ≫ π)
@@ -293,7 +293,7 @@ definition cone
 
 中文:
 定义 cone
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: F.obj i₀
   π :=
     { app := h.coneπApp
@@ -336,7 +336,7 @@ definition isLimitCone
 
 中文:
 定义 isLimitCone
-  签名: : IsLimit h.cone where
+  签名: : 是极限 h.cone where
   定义体: s.π.app i₀
   fac s j := by
     dsimp [coneπApp]
@@ -360,7 +360,7 @@ lemma hasLimit
 
 中文:
 引理 hasLimit
-  结论: HasLimit F
+  结论: 有极限 F
   证明: ⟨_, h.isLimitCone⟩
 
 Depends on / 依赖: h.isLimitCone, isLimitCone
@@ -383,7 +383,7 @@ lemma isIso_π_of_isLimit
 
 中文:
 引理 isIso_π_of_isLimit
-  条件: {c : Cone F} (hc : IsLimit c)
+  条件: {c : 锥 F} (hc : 是极限 c)
   证明: by
   simp only [← IsLimit.conePointUniqueUpToIso_hom_comp hc h.isLimitCone i₀,
     cone_π_app, coneπApp_eq_id, cone_pt, comp_id]
@@ -407,7 +407,7 @@ lemma isIso_π_of_isLimit'
 
 中文:
 引理 isIso_π_of_isLimit'
-  条件: {c : Cone F} (hc : IsLimit c) (j : J) (π : j ⟶ i₀)
+  条件: {c : 锥 F} (hc : 是极限 c) (j : J) (π : j ⟶ i₀)
   证明: (h.precomp π).isIso_π_of_isLimit hc
 
 Depends on / 依赖: h.precomp, precomp
@@ -433,7 +433,7 @@ definition isLimitOfIsIso
 
 中文:
 定义 isLimitOfIsIso
-  签名: (c : Cone F) [IsIso (c.π.app i₀)]
+  签名: (c : 锥 F) [是同构 (c.π.app i₀)]
   定义体: IsLimit.ofIsoLimit h.isLimitCone (by
     refine Cone.ext (asIso (c.π.app i₀)).symm (fun j => ?_)
     let i := IsCofiltered.min i₀ j
@@ -476,7 +476,7 @@ lemma isIso_map
 中文:
 引理 isIso_map
   条件: {i j : J} (φ : i ⟶ j) (ι : i₀ ⟶ i)
-  结论: IsIso (F.map φ)
+  结论: 是同构 (F.map φ)
   证明: by
   have := h ι
   have := h (ι ≫ φ)
@@ -680,7 +680,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: F.obj i₀
   ι :=
     { app := h.coconeιApp
@@ -722,7 +722,7 @@ definition isColimitCocone
 
 中文:
 定义 isColimitCocone
-  签名: : IsColimit h.cocone where
+  签名: : 是余极限 h.cocone where
   定义体: s.ι.app i₀
   fac s j := by
     dsimp [coconeιApp]
@@ -746,7 +746,7 @@ lemma hasColimit
 
 中文:
 引理 hasColimit
-  结论: HasColimit F
+  结论: 有余极限 F
   证明: ⟨_, h.isColimitCocone⟩
 
 Depends on / 依赖: h.isColimitCocone, isColimitCocone
@@ -767,7 +767,7 @@ lemma isIso_ι_of_isColimit
 
 中文:
 引理 isIso_ι_of_isColimit
-  条件: {c : Cocone F} (hc : IsColimit c)
+  条件: {c : 余锥 F} (hc : 是余极限 c)
   证明: by
   simp only [← IsColimit.comp_coconePointUniqueUpToIso_inv hc h.isColimitCocone i₀,
     cocone_ι_app, coconeιApp_eq_id, id_comp]
@@ -791,7 +791,7 @@ lemma isIso_ι_of_isColimit'
 
 中文:
 引理 isIso_ι_of_isColimit'
-  条件: {c : Cocone F} (hc : IsColimit c) (j : J) (ι : i₀ ⟶ j)
+  条件: {c : 余锥 F} (hc : 是余极限 c) (j : J) (ι : i₀ ⟶ j)
   证明: (h.postcomp ι).isIso_ι_of_isColimit hc
 
 Depends on / 依赖: h.postcomp, postcomp
@@ -818,7 +818,7 @@ definition isColimitOfIsIso
 
 中文:
 定义 isColimitOfIsIso
-  签名: (c : Cocone F) [IsIso (c.ι.app i₀)]
+  签名: (c : 余锥 F) [是同构 (c.ι.app i₀)]
   定义体: IsColimit.ofIsoColimit h.isColimitCocone (by
     refine Cocone.ext (asIso (c.ι.app i₀)) (fun j => ?_)
     let i := IsFiltered.max i₀ j
@@ -854,7 +854,7 @@ class IsEventuallyConstant
     - exists_isEventuallyConstantTo : exists (j : J), F.IsEventuallyConstantTo j
 
 中文:
-类 IsEventuallyConstant
+类 是EventuallyConstant
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_isEventuallyConstantTo : 存在 (j : J), F.IsEventuallyConstantTo j
@@ -874,7 +874,7 @@ instance [hF
 
 中文:
 实例 [hF
-  签名: : IsEventuallyConstant F] [IsCofiltered J] : HasLimit F
+  签名: : 是EventuallyConstant F] [是余filtered J] : 有极限 F
   定义体: by
   obtain ⟨j, h⟩ := hF.exists_isEventuallyConstantTo
   exact h.hasLimit
@@ -899,7 +899,7 @@ class IsEventuallyConstant
     - exists_isEventuallyConstantFrom : exists (i : J), F.IsEventuallyConstantFrom i
 
 中文:
-类 IsEventuallyConstant
+类 是EventuallyConstant
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_isEventuallyConstantFrom : 存在 (i : J), F.IsEventuallyConstantFrom i
@@ -919,7 +919,7 @@ instance [hF
 
 中文:
 实例 [hF
-  签名: : IsEventuallyConstant F] [IsFiltered J] : HasColimit F
+  签名: : 是EventuallyConstant F] [是Filtered J] : 有余极限 F
   定义体: by
   obtain ⟨j, h⟩ := hF.exists_isEventuallyConstantFrom
   exact h.hasColimit

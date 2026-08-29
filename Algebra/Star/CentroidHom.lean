@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (CentroidHom α)
+  签名: 对合 (Centroid态射 α)
   定义体: { toFun := fun a => star (f (star a))
     map_zero' := by
       simp only [star_zero, map_zero]
@@ -77,7 +77,7 @@ lemma star_apply
 
 中文:
 引理 star_apply
-  条件: (f : CentroidHom α) (a : α)
+  条件: (f : Centroid态射 α) (a : α)
   结论: (star f) a = star (f (star a))
   证明: rfl
 -/
@@ -95,7 +95,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: : StarAddMonoid (CentroidHom α) where
+  签名: : StarAdd幺半群 (Centroid态射 α) where
   定义体: ext (fun _ => by
     rw [star_apply]; rw [star_apply]; rw [star_star]; rw [star_star])
   star_add _ _ := ext fun _ => star_add _ _
@@ -122,7 +122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (Subsemiring.center (CentroidHom α))
+  签名: 对合 (子半环.center (Centroid态射 α))
   定义体: ⟨star (f : CentroidHom α), Subsemiring.mem_center_iff.mpr (fun g => ext (fun a =>
     calc
       g (star (f (star a))) = star (star g (f (star a))) := by rw [star_apply, star_star]
@@ -152,7 +152,7 @@ instance instStarAddMonoidCenter
 
 中文:
 实例 instStarAddMonoidCenter
-  签名: : StarAddMonoid (Subsemiring.center (CentroidHom α)) where
+  签名: : StarAdd幺半群 (子半环.center (Centroid态射 α)) where
   定义体: SetCoe.ext (star_involutive f.val)
   star_add f g := SetCoe.ext (star_add f.val g.val)
 
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (Subsemiring.center (CentroidHom α))
+  签名: 对合环 (子半环.center (Centroid态射 α))
   定义体: instStarAddMonoidCenter
   star_mul f g := by
     ext a
@@ -212,7 +212,7 @@ definition centerStarEmbedding
 
 中文:
 定义 centerStarEmbedding
-  签名: : Subsemiring.center (CentroidHom α) ->⋆ₙ+* CentroidHom α where
+  签名: : 子半环.center (Centroid态射 α) ->⋆ₙ+* Centroid态射 α where
   定义体: (SubsemiringClass.subtype (Subsemiring.center (CentroidHom α))).toNonUnitalRingHom
   map_star' _ := rfl
 
@@ -240,7 +240,7 @@ theorem star_centerToCentroidCenter
 
 中文:
 定理 star_centerToCentroidCenter
-  条件: (z : NonUnitalStarSubsemiring.center α)
+  条件: (z : 非幺对合子半环.center α)
   证明: by
   ext a
   calc
@@ -295,7 +295,7 @@ definition starCenterToCentroid
 
 中文:
 定义 starCenterToCentroid
-  签名: : NonUnitalStarSubsemiring.center α ->⋆ₙ+* CentroidHom α
+  签名: : 非幺对合子半环.center α ->⋆ₙ+* Centroid态射 α
   定义体: NonUnitalStarRingHom.comp (centerStarEmbedding) (starCenterToCentroidCenter)
 
 Depends on / 依赖: NonUnitalStarRingHom, NonUnitalStarRingHom.comp, centerStarEmbedding, starCenterToCentroidCenter
@@ -313,7 +313,7 @@ lemma starCenterToCentroid_apply
 
 中文:
 引理 starCenterToCentroid_apply
-  条件: (z : NonUnitalStarSubsemiring.center α) (a : α)
+  条件: (z : 非幺对合子半环.center α) (a : α)
   证明: rfl
 -/
 lemma starCenterToCentroid_apply (z : NonUnitalStarSubsemiring.center α) (a : α) :
@@ -334,7 +334,7 @@ definition starRingOfCommCentroidHom
 
 中文:
 定义 starRingOfCommCentroidHom
-  签名: (mul_comm : IsMulCommutative (CentroidHom α))
+  签名: (mul_comm : 是MulCommutative (Centroid态射 α))
   定义体: instStarAddMonoid
   star_mul _ _ := ext fun _ => by simp [mul_comm']
 
@@ -367,7 +367,7 @@ left_inv z := Subtype.ext by simp only [MulHom.toFun_eq_coe,
 
 中文:
 定义 starCenterIsoCentroid
-  签名: : StarSubsemiring.center α ≃⋆+* CentroidHom α where
+  签名: : 对合子半环.center α ≃⋆+* Centroid态射 α where
   定义体: starCenterToCentroid
   invFun T :=
     ⟨T 1, by constructor <;> simp [commute_iff_eq, ← map_mul_left, ← map_mul_right]⟩
@@ -400,7 +400,7 @@ lemma starCenterIsoCentroid_apply
 
 中文:
 引理 starCenterIsoCentroid_apply
-  条件: (a : ↥(NonUnitalStarSubsemiring.center α))
+  条件: (a : ↥(非幺对合子半环.center α))
   证明: rfl
 
 @[simp]
@@ -419,7 +419,7 @@ lemma starCenterIsoCentroid_symm_apply_coe
 
 中文:
 引理 starCenterIsoCentroid_symm_apply_coe
-  条件: (T : CentroidHom α)
+  条件: (T : Centroid态射 α)
   证明: rfl
 -/
 lemma starCenterIsoCentroid_symm_apply_coe (T : CentroidHom α) :

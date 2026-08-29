@@ -144,7 +144,7 @@ theorem laverage_zero_measure
 中文:
 定理 laverage_zero_measure
   条件: (f : α -> 实数>=0∞)
-  结论: ⨍⁻ x, f x ∂(0 : Measure α) = 0
+  结论: ⨍⁻ x, f x ∂(0 : 测度 α) = 0
   证明: by simp [laverage]
 
 Depends on / 依赖: laverage
@@ -202,7 +202,7 @@ theorem laverage_eq_lintegral
 
 中文:
 定理 laverage_eq_lintegral
-  条件: [IsProbabilityMeasure μ] (f : α -> 实数>=0∞)
+  条件: [是概率测度 μ] (f : α -> 实数>=0∞)
   证明: by rw [laverage, measure_univ, inv_one, one_smul]
 
 @[simp]
@@ -226,7 +226,7 @@ theorem measure_mul_laverage
 
 中文:
 定理 measure_mul_laverage
-  条件: [IsFiniteMeasure μ] (f : α -> 实数>=0∞)
+  条件: [是有限测度 μ] (f : α -> 实数>=0∞)
   证明: by
   rcases eq_or_ne μ 0 with hμ | hμ
   · rw [hμ, lintegral_zero_measure, laverage_zero_measure, mul_zero]
@@ -250,7 +250,7 @@ theorem setLAverage_eq
 
 中文:
 定理 setLAverage_eq
-  条件: (f : α -> 实数>=0∞) (s : Set α)
+  条件: (f : α -> 实数>=0∞) (s : 集合 α)
   证明: by rw [laverage_eq, restrict_apply_univ]
 
 Depends on / 依赖: laverage_eq, restrict_apply_univ
@@ -269,7 +269,7 @@ theorem setLAverage_eq'
 
 中文:
 定理 setLAverage_eq'
-  条件: (f : α -> 实数>=0∞) (s : Set α)
+  条件: (f : α -> 实数>=0∞) (s : 集合 α)
   证明: by
   simp only [laverage_eq', restrict_apply_univ]
 
@@ -336,7 +336,7 @@ theorem setLAverage_congr_fun_ae
 
 中文:
 定理 setLAverage_congr_fun_ae
-  条件: (hs : MeasurableSet s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
+  条件: (hs : 可测集 s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
   证明: by
   simp only [laverage_eq, setLIntegral_congr_fun_ae hs h]
 
@@ -357,7 +357,7 @@ theorem setLAverage_congr_fun
 
 中文:
 定理 setLAverage_congr_fun
-  条件: (hs : MeasurableSet s) (h : EqOn f g s)
+  条件: (hs : 可测集 s) (h : EqOn f g s)
   证明: by
   simp only [laverage_eq, setLIntegral_congr_fun hs h]
 
@@ -590,7 +590,7 @@ theorem laverage_mem_openSegment_compl_self
 
 中文:
 定理 laverage_mem_openSegment_compl_self
-  结论: [IsFiniteMeasure μ] (hs : NullMeasurableSet s μ)
+  结论: [是有限测度 μ] (hs : NullMeasurableSet s μ)
   证明: by
   simpa only [union_compl_self, restrict_univ] using
     laverage_union_mem_openSegment aedisjoint_compl_right hs.compl hs₀ hsc₀ (measure_ne_top _ _)
@@ -619,7 +619,7 @@ theorem laverage_const
 
 中文:
 定理 laverage_const
-  条件: (μ : Measure α) [IsFiniteMeasure μ] [h : NeZero μ] (c : 实数>=0∞)
+  条件: (μ : 测度 α) [是有限测度 μ] [h : NeZero μ] (c : 实数>=0∞)
   证明: by
   simp only [laverage, lintegral_const, measure_univ, mul_one]
 
@@ -665,7 +665,7 @@ theorem laverage_one
 
 中文:
 定理 laverage_one
-  条件: [IsFiniteMeasure μ] [NeZero μ]
+  条件: [是有限测度 μ] [NeZero μ]
   结论: ⨍⁻ _x, (1 : 实数>=0∞) ∂μ = 1
   证明: laverage_const _ _
 
@@ -712,7 +712,7 @@ theorem laverage_mul_measure_univ
 
 中文:
 定理 laverage_mul_measure_univ
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> 实数>=0∞)
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> 实数>=0∞)
   证明: by
   obtain rfl | hμ := eq_or_ne μ 0
   · simp
@@ -737,7 +737,7 @@ theorem lintegral_laverage
 
 中文:
 定理 lintegral_laverage
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> 实数>=0∞)
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> 实数>=0∞)
   证明: by
   simp
 -/
@@ -756,8 +756,8 @@ theorem setLIntegral_setLAverage
 @[gcongr]
 
 中文:
-定理 setLIntegral_setLAverage
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> 实数>=0∞) (s : Set α)
+定理 setL整数egral_setLAverage
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> 实数>=0∞) (s : 集合 α)
   证明: lintegral_laverage _ _
 
 @[gcongr]
@@ -803,7 +803,7 @@ theorem setLAverage_mono_ae
 
 中文:
 定理 setLAverage_mono_ae
-  条件: (s : Set α) (h : f <=ᶠ[ae μ] g)
+  条件: (s : 集合 α) (h : f <=ᶠ[ae μ] g)
   证明: laverage_mono_ae h.filter_mono ae_mono Measure.restrict_le_self
 
 Depends on / 依赖: Measure, Measure.restrict_le_self, ae_mono, filter_mono, h.filter_mono, laverage_mono_ae, restrict_le_self
@@ -829,7 +829,7 @@ theorem setLAverage_le_essSup
 
 中文:
 定理 setLAverage_le_essSup
-  条件: (s : Set α) (f : α -> 实数>=0∞)
+  条件: (s : 集合 α) (f : α -> 实数>=0∞)
   结论: ⨍⁻ x in s, f x ∂μ <= essSup f μ
   证明: by
   by_cases hμ : IsFiniteMeasure (μ.restrict s); swap
@@ -972,7 +972,7 @@ theorem average_zero_measure
 中文:
 定理 average_zero_measure
   条件: (f : α -> E)
-  结论: ⨍ x, f x ∂(0 : Measure α) = 0
+  结论: ⨍ x, f x ∂(0 : 测度 α) = 0
   证明: by
   rw [average]; rw [smul_zero]; rw [integral_zero_measure]
 
@@ -1058,7 +1058,7 @@ theorem average_eq_integral
 
 中文:
 定理 average_eq_integral
-  条件: [IsProbabilityMeasure μ] (f : α -> E)
+  条件: [是概率测度 μ] (f : α -> E)
   结论: ⨍ x, f x ∂μ = ∫ x, f x ∂μ
   证明: by
   rw [average]; rw [measure_univ]; rw [inv_one]; rw [one_smul]
@@ -1086,7 +1086,7 @@ theorem measure_smul_average
 
 中文:
 定理 measure_smul_average
-  条件: [IsFiniteMeasure μ] (f : α -> E)
+  条件: [是有限测度 μ] (f : α -> E)
   证明: by
   rcases eq_or_ne μ 0 with hμ | hμ
   · rw [hμ, integral_zero_measure, average_zero_measure, smul_zero]
@@ -1115,7 +1115,7 @@ theorem setAverage_eq
 
 中文:
 定理 setAverage_eq
-  条件: (f : α -> E) (s : Set α)
+  条件: (f : α -> E) (s : 集合 α)
   证明: by
   rw [average_eq]; rw [measureReal_restrict_apply_univ]
 
@@ -1136,7 +1136,7 @@ theorem setAverage_eq'
 
 中文:
 定理 setAverage_eq'
-  条件: (f : α -> E) (s : Set α)
+  条件: (f : α -> E) (s : 集合 α)
   证明: by
   simp only [average_eq', restrict_apply_univ]
 
@@ -1202,7 +1202,7 @@ theorem setAverage_congr_fun
 
 中文:
 定理 setAverage_congr_fun
-  条件: (hs : MeasurableSet s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
+  条件: (hs : 可测集 s) (h : 对任意ᵐ x ∂μ, x in s -> f x = g x)
   证明: by simp only [average_eq, setIntegral_congr_ae hs h]
 
 Depends on / 依赖: average_eq, setIntegral_congr_ae
@@ -1223,7 +1223,7 @@ theorem average_add_measure
 
 中文:
 定理 average_add_measure
-  结论: [IsFiniteMeasure μ] {ν : Measure α} [IsFiniteMeasure ν] {f : α -> E}
+  结论: [是有限测度 μ] {ν : 测度 α} [是有限测度 ν] {f : α -> E}
   证明: by
   simp only [div_eq_inv_mul, mul_smul, measure_smul_average, ← smul_add,
     ← integral_add_measure hμ hν]
@@ -1250,7 +1250,7 @@ theorem average_pair
 
 中文:
 定理 average_pair
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: integral_pair hfi.to_average hgi.to_average
 
 Depends on / 依赖: hfi.to_average, hgi.to_average, integral_pair, to_average
@@ -1272,7 +1272,7 @@ theorem measure_smul_setAverage
 
 中文:
 定理 measure_smul_setAverage
-  条件: (f : α -> E) {s : Set α} (h : μ s != ∞)
+  条件: (f : α -> E) {s : 集合 α} (h : μ s != ∞)
   证明: by
   have := Fact.mk h.lt_top
   rw [← measure_smul_average]; rw [measureReal_restrict_apply_univ]
@@ -1296,7 +1296,7 @@ theorem average_union
 
 中文:
 定理 average_union
-  结论: {f : α -> E} {s t : Set α} (hd : AEDisjoint μ s t) (ht : NullMeasurableSet t μ)
+  结论: {f : α -> E} {s t : 集合 α} (hd : AEDisjoint μ s t) (ht : NullMeasurableSet t μ)
   证明: by
   have := Fact.mk hsμ.lt_top; have := Fact.mk htμ.lt_top
   rw [restrict_union₀ hd ht]; rw [average_add_measure hfs hft]; rw [measureReal_restrict_apply_univ]; rw [measureReal_restrict_apply_univ]
@@ -1325,7 +1325,7 @@ theorem average_union_mem_openSegment
 
 中文:
 定理 average_union_mem_openSegment
-  结论: {f : α -> E} {s t : Set α} (hd : AEDisjoint μ s t)
+  结论: {f : α -> E} {s t : 集合 α} (hd : AEDisjoint μ s t)
   证明: by
   replace hs₀ : 0 < μ.real s := ENNReal.toReal_pos hs₀ hsμ
   replace ht₀ : 0 < μ.real t := ENNReal.toReal_pos ht₀ htμ
@@ -1362,7 +1362,7 @@ theorem average_union_mem_segment
 
 中文:
 定理 average_union_mem_segment
-  结论: {f : α -> E} {s t : Set α} (hd : AEDisjoint μ s t)
+  结论: {f : α -> E} {s t : 集合 α} (hd : AEDisjoint μ s t)
   证明: by
   by_cases hse : μ s = 0
   · rw [← ae_eq_empty] at hse
@@ -1404,7 +1404,7 @@ theorem average_mem_openSegment_compl_self
 
 中文:
 定理 average_mem_openSegment_compl_self
-  结论: [IsFiniteMeasure μ] {f : α -> E} {s : Set α}
+  结论: [是有限测度 μ] {f : α -> E} {s : 集合 α}
   证明: by
   simpa only [union_compl_self, restrict_univ] using
     average_union_mem_openSegment aedisjoint_compl_right hs.compl hs₀ hsc₀ (measure_ne_top _ _)
@@ -1433,7 +1433,7 @@ theorem average_const
 
 中文:
 定理 average_const
-  条件: (μ : Measure α) [IsFiniteMeasure μ] [h : NeZero μ] (c : E)
+  条件: (μ : 测度 α) [是有限测度 μ] [h : NeZero μ] (c : E)
   证明: by
   rw [average]; rw [integral_const]; rw [measureReal_def]; rw [measure_univ]; rw [ENNReal.toReal_one]; rw [one_smul]
 
@@ -1453,7 +1453,7 @@ theorem setAverage_const
 
 中文:
 定理 setAverage_const
-  条件: {s : Set α} (hs₀ : μ s != 0) (hs : μ s != ∞) (c : E)
+  条件: {s : 集合 α} (hs₀ : μ s != 0) (hs : μ s != ∞) (c : E)
   证明: have := NeZero.mk hs₀; have := Fact.mk hs.lt_top; average_const _ _
 
 Depends on / 依赖: Fact.mk, NeZero, NeZero.mk, average_const, hs.lt_top, lt_top
@@ -1472,7 +1472,7 @@ theorem integral_average
 
 中文:
 定理 integral_average
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> E)
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> E)
   证明: by simp
 -/
 theorem integral_average (μ : Measure α) [IsFiniteMeasure μ] (f : α -> E) :
@@ -1487,8 +1487,8 @@ theorem setIntegral_setAverage
   proof: integral_average _ _
 
 中文:
-定理 setIntegral_setAverage
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> E) (s : Set α)
+定理 set整数egral_setAverage
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> E) (s : 集合 α)
   证明: integral_average _ _
 
 Depends on / 依赖: integral_average
@@ -1512,7 +1512,7 @@ theorem integral_sub_average
 
 中文:
 定理 integral_sub_average
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (f : α -> E)
+  条件: (μ : 测度 α) [是有限测度 μ] (f : α -> E)
   证明: by
   by_cases hf : Integrable f μ
   · rw [integral_sub hf (integrable_const _), integral_average, sub_self]
@@ -1563,7 +1563,7 @@ theorem integral_average_sub
 
 中文:
 定理 integral_average_sub
-  条件: [IsFiniteMeasure μ] (hf : 整数egrable f μ)
+  条件: [是有限测度 μ] (hf : 可积 f μ)
   证明: by
   rw [integral_sub (integrable_const _) hf]; rw [integral_average]; rw [sub_self]
 
@@ -1583,7 +1583,7 @@ theorem setIntegral_setAverage_sub
   integral_average_sub hf
 
 中文:
-定理 setIntegral_setAverage_sub
+定理 set整数egral_setAverage_sub
   条件: (hs : μ s != ∞) (hf : 整数egrableOn f s μ)
   证明: haveI : Fact (μ s < ∞) := ⟨lt_top_iff_ne_top.2 hs⟩
   integral_average_sub hf
@@ -1611,8 +1611,8 @@ theorem ofReal_average
       ofReal_integral_eq_lintegral_ofReal hf hf₀, ENNReal.div_eq_inv_mul]
 
 中文:
-定理 ofReal_average
-  条件: {f : α -> 实数} (hf : 整数egrable f μ) (hf₀ : 0 <=ᵐ[μ] f)
+定理 of实数_average
+  条件: {f : α -> 实数} (hf : 可积 f μ) (hf₀ : 0 <=ᵐ[μ] f)
   证明: by
   obtain rfl | hμ := eq_or_ne μ 0
   · simp
@@ -1640,7 +1640,7 @@ theorem ofReal_setAverage
   simpa using ofReal_average hf hf₀
 
 中文:
-定理 ofReal_setAverage
+定理 of实数_setAverage
   条件: {f : α -> 实数} (hf : 整数egrableOn f s μ) (hf₀ : 0 <=ᵐ[μ.restrict s] f)
   证明: by
   simpa using ofReal_average hf hf₀
@@ -1662,8 +1662,8 @@ theorem toReal_laverage
       integral_toReal hf (hf'.mono fun _ => lt_top_iff_ne_top.2)]; rw [measureReal_def]
 
 中文:
-定理 toReal_laverage
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (hf' : 对任意ᵐ x ∂μ, f x != ∞)
+定理 to实数_laverage
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (hf' : 对任意ᵐ x ∂μ, f x != ∞)
   证明: by
     rw [average_eq]; rw [laverage_eq]; rw [smul_eq_mul]; rw [toReal_div]; rw [div_eq_inv_mul]; rw [←
       integral_toReal hf (hf'.mono fun _ => lt_top_iff_ne_top.2)]; rw [measureReal_def]
@@ -1685,8 +1685,8 @@ theorem toReal_setLAverage
   simpa [laverage_eq] using toReal_laverage hf hf'
 
 中文:
-定理 toReal_setLAverage
-  结论: {f : α -> 实数>=0∞} (hf : AEMeasurable f (μ.restrict s))
+定理 to实数_setLAverage
+  结论: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f (μ.restrict s))
   证明: by
   simpa [laverage_eq] using toReal_laverage hf hf'
 
@@ -1778,7 +1778,7 @@ theorem exists_le_setAverage
   ⟨x, hx, h⟩
 
 中文:
-定理 exists_le_setAverage
+定理 存在_le_setAverage
   条件: (hμ : μ s != 0) (hμ₁ : μ s != ∞) (hf : 整数egrableOn f s μ)
   证明: let ⟨x, hx, h⟩ := nonempty_of_measure_ne_zero (measure_le_setAverage_pos hμ hμ₁ hf).ne'
   ⟨x, hx, h⟩
@@ -1800,7 +1800,7 @@ theorem exists_setAverage_le
   ⟨x, hx, h⟩
 
 中文:
-定理 exists_setAverage_le
+定理 存在_setAverage_le
   条件: (hμ : μ s != 0) (hμ₁ : μ s != ∞) (hf : 整数egrableOn f s μ)
   证明: let ⟨x, hx, h⟩ := nonempty_of_measure_ne_zero (measure_setAverage_le_pos hμ hμ₁ hf).ne'
   ⟨x, hx, h⟩
@@ -1828,7 +1828,7 @@ theorem measure_le_average_pos
 
 中文:
 定理 measure_le_average_pos
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ)
+  条件: (hμ : μ != 0) (hf : 可积 f μ)
   证明: by
   simpa using measure_le_setAverage_pos (Measure.measure_univ_ne_zero.2 hμ) (measure_ne_top _ _)
     hf.integrableOn
@@ -1852,7 +1852,7 @@ theorem measure_average_le_pos
 
 中文:
 定理 measure_average_le_pos
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ)
+  条件: (hμ : μ != 0) (hf : 可积 f μ)
   证明: by
   simpa using measure_setAverage_le_pos (Measure.measure_univ_ne_zero.2 hμ) (measure_ne_top _ _)
     hf.integrableOn
@@ -1875,8 +1875,8 @@ theorem exists_le_average
   ⟨x, hx⟩
 
 中文:
-定理 exists_le_average
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ)
+定理 存在_le_average
+  条件: (hμ : μ != 0) (hf : 可积 f μ)
   结论: 存在 x, f x <= ⨍ a, f a ∂μ
   证明: let ⟨x, hx⟩ := nonempty_of_measure_ne_zero (measure_le_average_pos hμ hf).ne'
   ⟨x, hx⟩
@@ -1898,8 +1898,8 @@ theorem exists_average_le
   ⟨x, hx⟩
 
 中文:
-定理 exists_average_le
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ)
+定理 存在_average_le
+  条件: (hμ : μ != 0) (hf : 可积 f μ)
   结论: 存在 x, ⨍ a, f a ∂μ <= f x
   证明: let ⟨x, hx⟩ := nonempty_of_measure_ne_zero (measure_average_le_pos hμ hf).ne'
   ⟨x, hx⟩
@@ -1923,8 +1923,8 @@ theorem exists_notMem_null_le_average
   exact ⟨x, hxN, hx⟩
 
 中文:
-定理 exists_notMem_null_le_average
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_le_average
+  条件: (hμ : μ != 0) (hf : 可积 f μ) (hN : μ N = 0)
   证明: by
   have := measure_le_average_pos hμ hf
   rw [← measure_sdiff_null hN] at this
@@ -1950,8 +1950,8 @@ theorem exists_notMem_null_average_le
   simpa [integral_neg, neg_div] using exists_notMem_null_le_average hμ hf.neg hN
 
 中文:
-定理 exists_notMem_null_average_le
-  条件: (hμ : μ != 0) (hf : 整数egrable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_average_le
+  条件: (hμ : μ != 0) (hf : 可积 f μ) (hN : μ N = 0)
   证明: by
   simpa [integral_neg, neg_div] using exists_notMem_null_le_average hμ hf.neg hN
 
@@ -1980,7 +1980,7 @@ theorem measure_le_integral_pos
 
 中文:
 定理 measure_le_integral_pos
-  条件: (hf : 整数egrable f μ)
+  条件: (hf : 可积 f μ)
   结论: 0 < μ {x | f x <= ∫ a, f a ∂μ}
   证明: by
   simpa only [average_eq_integral] using
@@ -2005,7 +2005,7 @@ theorem measure_integral_le_pos
 
 中文:
 定理 measure_integral_le_pos
-  条件: (hf : 整数egrable f μ)
+  条件: (hf : 可积 f μ)
   结论: 0 < μ {x | ∫ a, f a ∂μ <= f x}
   证明: by
   simpa only [average_eq_integral] using
@@ -2028,8 +2028,8 @@ theorem exists_le_integral
   simpa only [average_eq_integral] using exists_le_average (IsProbabilityMeasure.ne_zero μ) hf
 
 中文:
-定理 exists_le_integral
-  条件: (hf : 整数egrable f μ)
+定理 存在_le_integral
+  条件: (hf : 可积 f μ)
   结论: 存在 x, f x <= ∫ a, f a ∂μ
   证明: by
   simpa only [average_eq_integral] using exists_le_average (IsProbabilityMeasure.ne_zero μ) hf
@@ -2050,8 +2050,8 @@ theorem exists_integral_le
   simpa only [average_eq_integral] using exists_average_le (IsProbabilityMeasure.ne_zero μ) hf
 
 中文:
-定理 exists_integral_le
-  条件: (hf : 整数egrable f μ)
+定理 存在_integral_le
+  条件: (hf : 可积 f μ)
   结论: 存在 x, ∫ a, f a ∂μ <= f x
   证明: by
   simpa only [average_eq_integral] using exists_average_le (IsProbabilityMeasure.ne_zero μ) hf
@@ -2072,8 +2072,8 @@ theorem exists_notMem_null_le_integral
     exists_notMem_null_le_average (IsProbabilityMeasure.ne_zero μ) hf hN
 
 中文:
-定理 exists_notMem_null_le_integral
-  条件: (hf : 整数egrable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_le_integral
+  条件: (hf : 可积 f μ) (hN : μ N = 0)
   证明: by
   simpa only [average_eq_integral] using
     exists_notMem_null_le_average (IsProbabilityMeasure.ne_zero μ) hf hN
@@ -2096,8 +2096,8 @@ theorem exists_notMem_null_integral_le
     exists_notMem_null_average_le (IsProbabilityMeasure.ne_zero μ) hf hN
 
 中文:
-定理 exists_notMem_null_integral_le
-  条件: (hf : 整数egrable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_integral_le
+  条件: (hf : 可积 f μ) (hN : μ N = 0)
   证明: by
   simpa only [average_eq_integral] using
     exists_notMem_null_average_le (IsProbabilityMeasure.ne_zero μ) hf hN
@@ -2215,8 +2215,8 @@ theorem exists_le_setLAverage
   ⟨x, hx, h⟩
 
 中文:
-定理 exists_le_setLAverage
-  条件: (hμ : μ s != 0) (hμ₁ : μ s != ∞) (hf : AEMeasurable f (μ.restrict s))
+定理 存在_le_setLAverage
+  条件: (hμ : μ s != 0) (hμ₁ : μ s != ∞) (hf : 几乎处处可测 f (μ.restrict s))
   证明: let ⟨x, hx, h⟩ := nonempty_of_measure_ne_zero (measure_le_setLAverage_pos hμ hμ₁ hf).ne'
   ⟨x, hx, h⟩
 
@@ -2237,7 +2237,7 @@ theorem exists_setLAverage_le
   ⟨x, hx, h⟩
 
 中文:
-定理 exists_setLAverage_le
+定理 存在_setLAverage_le
   结论: (hμ : μ s != 0) (hs : NullMeasurableSet s μ)
   证明: let ⟨x, hx, h⟩ := nonempty_of_measure_ne_zero (measure_setLAverage_le_pos hμ hs hint).ne'
   ⟨x, hx, h⟩
@@ -2284,7 +2284,7 @@ theorem exists_laverage_le
   ⟨x, hx⟩
 
 中文:
-定理 exists_laverage_le
+定理 存在_laverage_le
   条件: (hμ : μ != 0) (hint : ∫⁻ a, f a ∂μ != ∞)
   结论: 存在 x, ⨍⁻ a, f a ∂μ <= f x
   证明: let ⟨x, hx⟩ := nonempty_of_measure_ne_zero (measure_laverage_le_pos hμ hint).ne'
@@ -2309,7 +2309,7 @@ theorem exists_notMem_null_laverage_le
   exact ⟨x, hxN, hx⟩
 
 中文:
-定理 exists_notMem_null_laverage_le
+定理 存在_notMem_null_laverage_le
   条件: (hμ : μ != 0) (hint : ∫⁻ a : α, f a ∂μ != ∞) (hN : μ N = 0)
   证明: by
   have := measure_laverage_le_pos hμ hint
@@ -2341,7 +2341,7 @@ theorem measure_le_laverage_pos
 
 中文:
 定理 measure_le_laverage_pos
-  条件: (hμ : μ != 0) (hf : AEMeasurable f μ)
+  条件: (hμ : μ != 0) (hf : 几乎处处可测 f μ)
   证明: by
   simpa using
     measure_le_setLAverage_pos (measure_univ_ne_zero.2 hμ) (measure_ne_top _ _) hf.restrict
@@ -2364,8 +2364,8 @@ theorem exists_le_laverage
   ⟨x, hx⟩
 
 中文:
-定理 exists_le_laverage
-  条件: (hμ : μ != 0) (hf : AEMeasurable f μ)
+定理 存在_le_laverage
+  条件: (hμ : μ != 0) (hf : 几乎处处可测 f μ)
   结论: 存在 x, f x <= ⨍⁻ a, f a ∂μ
   证明: let ⟨x, hx⟩ := nonempty_of_measure_ne_zero (measure_le_laverage_pos hμ hf).ne'
   ⟨x, hx⟩
@@ -2389,8 +2389,8 @@ theorem exists_notMem_null_le_laverage
   exact ⟨x, hxN, hx⟩
 
 中文:
-定理 exists_notMem_null_le_laverage
-  条件: (hμ : μ != 0) (hf : AEMeasurable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_le_laverage
+  条件: (hμ : μ != 0) (hf : 几乎处处可测 f μ) (hN : μ N = 0)
   证明: by
   have := measure_le_laverage_pos hμ hf
   rw [← measure_sdiff_null hN] at this
@@ -2425,7 +2425,7 @@ theorem measure_le_lintegral_pos
 
 中文:
 定理 measure_le_lintegral_pos
-  条件: (hf : AEMeasurable f μ)
+  条件: (hf : 几乎处处可测 f μ)
   结论: 0 < μ {x | f x <= ∫⁻ a, f a ∂μ}
   证明: by
   simpa only [laverage_eq_lintegral] using
@@ -2473,8 +2473,8 @@ theorem exists_le_lintegral
   simpa only [laverage_eq_lintegral] using exists_le_laverage (IsProbabilityMeasure.ne_zero μ) hf
 
 中文:
-定理 exists_le_lintegral
-  条件: (hf : AEMeasurable f μ)
+定理 存在_le_lintegral
+  条件: (hf : 几乎处处可测 f μ)
   结论: 存在 x, f x <= ∫⁻ a, f a ∂μ
   证明: by
   simpa only [laverage_eq_lintegral] using exists_le_laverage (IsProbabilityMeasure.ne_zero μ) hf
@@ -2496,7 +2496,7 @@ theorem exists_lintegral_le
     exists_laverage_le (IsProbabilityMeasure.ne_zero μ) hint
 
 中文:
-定理 exists_lintegral_le
+定理 存在_lintegral_le
   条件: (hint : ∫⁻ a, f a ∂μ != ∞)
   结论: 存在 x, ∫⁻ a, f a ∂μ <= f x
   证明: by
@@ -2520,8 +2520,8 @@ theorem exists_notMem_null_le_lintegral
     exists_notMem_null_le_laverage (IsProbabilityMeasure.ne_zero μ) hf hN
 
 中文:
-定理 exists_notMem_null_le_lintegral
-  条件: (hf : AEMeasurable f μ) (hN : μ N = 0)
+定理 存在_notMem_null_le_lintegral
+  条件: (hf : 几乎处处可测 f μ) (hN : μ N = 0)
   证明: by
   simpa only [laverage_eq_lintegral] using
     exists_notMem_null_le_laverage (IsProbabilityMeasure.ne_zero μ) hf hN
@@ -2544,7 +2544,7 @@ theorem exists_notMem_null_lintegral_le
     exists_notMem_null_laverage_le (IsProbabilityMeasure.ne_zero μ) hint hN
 
 中文:
-定理 exists_notMem_null_lintegral_le
+定理 存在_notMem_null_lintegral_le
   条件: (hint : ∫⁻ a, f a ∂μ != ∞) (hN : μ N = 0)
   证明: by
   simpa only [laverage_eq_lintegral] using
@@ -2654,7 +2654,7 @@ theorem exists_eq_setAverage
   rcases nonempty_of_measure_ne_zero hS₁.ne
 
 中文:
-定理 exists_eq_setAverage
+定理 存在_eq_setAverage
   证明: by
   let ave := ⨍ x in s, f x ∂μ
   let S₁ : Set α := {x | x in s ∧ f x <= ave}

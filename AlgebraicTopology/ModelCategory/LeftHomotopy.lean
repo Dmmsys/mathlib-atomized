@@ -176,7 +176,7 @@ definition fullSubcategoryEquiv
 
 中文:
 定义 fullSubcategoryEquiv
-  签名: {P : Object命题erty C} {X Y : P.FullSubcategory}
+  签名: {P : ObjectProperty C} {X Y : P.满子范畴}
   定义体: { h := h.h.hom
       h₀ := by
         dsimp
@@ -225,7 +225,7 @@ abbreviation LeftHomotopy
 
 中文:
 缩写 LeftHomotopy
-  签名: [CategoryWithWeakEquivalences C] (P : Cylinder X) (f g : X ⟶ Y)
+  签名: [带弱等价范畴 C] (P : 柱 X) (f g : X ⟶ Y)
   定义体: P.toPrecylinder.LeftHomotopy f g
 
 Depends on / 依赖: LeftHomotopy, P.toPrecylinder.LeftHomotopy, toPrecylinder
@@ -307,7 +307,7 @@ lemma weakEquivalence_iff
 
 中文:
 引理 weakEquivalence_iff
-  结论: [(weakEquivalences C).HasTwoOutOfThree命题erty]
+  结论: [(weakEquivalences C).有TwoOutOfThreeProperty]
   证明: by
   induction h
   grind [weakEquivalence_precomp_iff]
@@ -366,7 +366,7 @@ lemma exists_good_cylinder
         aesop⟩, ⟨{ h := d.p ≫ h.h }⟩⟩
 
 中文:
-引理 exists_good_cylinder
+引理 存在_good_cylinder
   条件: {f g : X ⟶ Y} (h : P.LeftHomotopy f g)
   证明: by
   let d := MorphismProperty.factorizationData (cofibrations C) (trivialFibrations C) P.i
@@ -404,7 +404,7 @@ lemma covering_homotopy
 
 中文:
 引理 covering_homotopy
-  结论: {A E B : C} {P : Cylinder A} {f₀ f₁ : A ⟶ B}
+  结论: {A E B : C} {P : 柱 A} {f₀ f₁ : A ⟶ B}
   证明: have sq : CommSq l₀ P.i₀ p h.h := { }
   ⟨P.i₁ ≫ sq.lift, { h := sq.lift }, by simp⟩
 
@@ -434,7 +434,7 @@ definition LeftHomotopyRel
 
 中文:
 定义 LeftHomotopyRel
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: fun X _ f g => exists (P : Cylinder X), Nonempty (P.LeftHomotopy f g)
 
 Depends on / 依赖: Cylinder, LeftHomotopy, Nonempty, P.LeftHomotopy
@@ -451,8 +451,8 @@ lemma Cylinder.LeftHomotopy.leftHomotopyRel
   proof: ⟨_, ⟨h⟩⟩
 
 中文:
-引理 Cylinder.LeftHomotopy.leftHomotopyRel
-  结论: [CategoryWithWeakEquivalences C]
+引理 柱.LeftHomotopy.leftHomotopyRel
+  结论: [带弱等价范畴 C]
   证明: ⟨_, ⟨h⟩⟩
 -/
 lemma Cylinder.LeftHomotopy.leftHomotopyRel [CategoryWithWeakEquivalences C]
@@ -482,7 +482,7 @@ lemma factorsThroughLocalization
 
 中文:
 引理 factorsThroughLocalization
-  条件: [CategoryWithWeakEquivalences C]
+  条件: [带弱等价范畴 C]
   证明: by
   rintro X Y f g ⟨P, ⟨h⟩⟩
   let L := (weakEquivalences C).Q
@@ -520,7 +520,7 @@ lemma refl
 
 中文:
 引理 refl
-  条件: [ModelCategory C] (f : X ⟶ Y)
+  条件: [模型范畴 C] (f : X ⟶ Y)
   结论: LeftHomotopyRel f f
   证明: ⟨Classical.arbitrary _, ⟨Cylinder.LeftHomotopy.refl _ _⟩⟩
 
@@ -541,7 +541,7 @@ lemma postcomp
 
 中文:
 引理 postcomp
-  结论: [CategoryWithWeakEquivalences C]
+  结论: [带弱等价范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact (h.postcomp p).leftHomotopyRel
@@ -565,8 +565,8 @@ lemma exists_good_cylinder
   exact h.exists_good_cylinder
 
 中文:
-引理 exists_good_cylinder
-  条件: [ModelCategory C] {f g : X ⟶ Y} (h : LeftHomotopyRel f g)
+引理 存在_good_cylinder
+  条件: [模型范畴 C] {f g : X ⟶ Y} (h : LeftHomotopyRel f g)
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact h.exists_good_cylinder
@@ -595,8 +595,8 @@ lemma exists_very_good_cylinder
       weakEquivalence_π := weakEquivalence_of_prec
 
 中文:
-引理 exists_very_good_cylinder
-  结论: [ModelCategory C] {f g : X ⟶ Y} [IsFibrant Y]
+引理 存在_very_good_cylinder
+  结论: [模型范畴 C] {f g : X ⟶ Y} [IsFibrant Y]
   证明: by
   obtain ⟨P, _, ⟨h⟩⟩ := h.exists_good_cylinder
   let fac := MorphismProperty.factorizationData (trivialCofibrations C) (fibrations C) P.π
@@ -638,7 +638,7 @@ lemma symm
 
 中文:
 引理 symm
-  结论: [CategoryWithWeakEquivalences C]
+  结论: [带弱等价范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   exact h.symm.leftHomotopyRel
@@ -663,7 +663,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: [ModelCategory C]
+  结论: [模型范畴 C]
   证明: by
   obtain ⟨P, ⟨h⟩⟩ := h
   obtain ⟨P', _, ⟨h'⟩⟩ := h'.exists_good_cylinder
@@ -690,7 +690,7 @@ lemma equivalence
 
 中文:
 引理 equivalence
-  条件: [ModelCategory C] (X Y : C) [IsCofibrant X]
+  条件: [模型范畴 C] (X Y : C) [IsCofibrant X]
   证明: .refl
   symm h := h.symm
   trans h h' := h.trans h'
@@ -720,7 +720,7 @@ lemma precomp
 
 中文:
 引理 precomp
-  结论: [ModelCategory C] {f g : X ⟶ Y} [IsFibrant Y] (h : LeftHomotopyRel f g)
+  结论: [模型范畴 C] {f g : X ⟶ Y} [IsFibrant Y] (h : LeftHomotopyRel f g)
   证明: by
   obtain ⟨P, _, ⟨h⟩⟩ := h.exists_very_good_cylinder
   obtain ⟨Q, _⟩ := Cylinder.exists_very_good Z
@@ -763,7 +763,7 @@ definition LeftHomotopyClass
 
 中文:
 定义 LeftHomotopyClass
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: _root_.Quot (LeftHomotopyRel (X := X) (Y := Y))
 
 Depends on / 依赖: LeftHomotopyRel, _root_, _root_.Quot
@@ -783,7 +783,7 @@ definition LeftHomotopyClass.mk
 
 中文:
 定义 LeftHomotopyClass.mk
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: Quot.mk _
 
 Depends on / 依赖: Quot.mk
@@ -801,7 +801,7 @@ lemma LeftHomotopyClass.mk_surjective
 
 中文:
 引理 LeftHomotopyClass.mk_surjective
-  条件: [CategoryWithWeakEquivalences C]
+  条件: [带弱等价范畴 C]
   证明: Quot.mk_surjective
 
 Depends on / 依赖: Quot.mk_surjective, mk_surjective
@@ -822,7 +822,7 @@ lemma sound
 
 中文:
 引理 sound
-  条件: [CategoryWithWeakEquivalences C] {f g : X ⟶ Y} (h : LeftHomotopyRel f g)
+  条件: [带弱等价范畴 C] {f g : X ⟶ Y} (h : LeftHomotopyRel f g)
   证明: Quot.sound h
 
 Depends on / 依赖: Quot.sound
@@ -842,7 +842,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: [CategoryWithWeakEquivalences C]
+  签名: [带弱等价范畴 C]
   定义体: fun f g => Quot.lift (fun f => mk (f ≫ g)) (fun _ _ h => sound (h.postcomp g)) f
 
 @[simp]
@@ -864,7 +864,7 @@ lemma postcomp_mk
 
 中文:
 引理 postcomp_mk
-  条件: [CategoryWithWeakEquivalences C] (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: [带弱等价范畴 C] (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma postcomp_mk [CategoryWithWeakEquivalences C] (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -882,7 +882,7 @@ lemma mk_eq_mk_iff
 
 中文:
 引理 mk_eq_mk_iff
-  条件: [ModelCategory C] [IsCofibrant X] (f g : X ⟶ Y)
+  条件: [模型范畴 C] [IsCofibrant X] (f g : X ⟶ Y)
   证明: by
   rw [← (LeftHomotopyRel.equivalence X Y).eqvGen_iff]
   exact Quot.eq

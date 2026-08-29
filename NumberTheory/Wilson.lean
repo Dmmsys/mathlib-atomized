@@ -113,7 +113,7 @@ theorem prod_Ico_one_prime
 
 中文:
 定理 prod_Ico_one_prime
-  结论: ∏ x in Ico 1 p, (x : ZMod p) = -1
+  结论: ∏ x in 左闭右开区间 1 p, (x : ZMod p) = -1
   证明: by
   -- Porting note: was `conv in Ico 1 p =>`
   conv =>
@@ -155,7 +155,7 @@ theorem prime_of_fac_equiv_neg_one
 中文:
 定理 prime_of_fac_equiv_neg_one
   条件: (h : ((n - 1)! : ZMod n) = -1) (h1 : n != 1)
-  结论: Prime n
+  结论: 素 n
   证明: by
   rcases eq_or_ne n 0 with (rfl | h0)
   · norm_num at h
@@ -192,7 +192,7 @@ theorem prime_iff_fac_equiv_neg_one
 中文:
 定理 prime_iff_fac_equiv_neg_one
   条件: (h : n != 1)
-  结论: Prime n ↔ ((n - 1)! : ZMod n) = -1
+  结论: 素 n ↔ ((n - 1)! : ZMod n) = -1
   证明: by
   refine ⟨fun h1 => ?_, fun h2 => prime_of_fac_equiv_neg_one h2 h⟩
   have := Fact.mk h1

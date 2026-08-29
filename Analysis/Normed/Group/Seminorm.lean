@@ -69,8 +69,8 @@ structure AddGroupSeminorm
     - neg' : forall r, toFun (-r) = toFun r
 
 中文:
-结构 AddGroupSeminorm
-  参数: (G : 类型) [AddGroup G]
+结构 加法群半范数
+  参数: (G : 类型) [加法群 G]
   公理与运算 (4 个):
     - toFun : G -> 实数
     - map_zero' : toFun 0 = 0
@@ -105,8 +105,8 @@ structure GroupSeminorm
     - inv' : forall x, toFun x⁻¹ = toFun x
 
 中文:
-结构 GroupSeminorm
-  参数: (G : 类型) [Group G]
+结构 群半范数
+  参数: (G : 类型) [群 G]
   公理与运算 (4 个):
     - toFun : G -> 实数
     - map_one' : toFun 1 = 0
@@ -136,11 +136,11 @@ structure NonarchAddGroupSeminorm
     - neg' : forall r, toFun (-r) = toFun r
 
 中文:
-结构 NonarchAddGroupSeminorm
-  参数: (G : 类型) [AddGroup G]
-  继承: ZeroHom G Real
+结构 NonarchAdd群半范数
+  参数: (G : 类型) [加法群 G]
+  继承: 保零态射 G 实数
   公理与运算 (2 个):
-    - add_le_max' : 对任意 r s, toFun (r + s) <= max (toFun r) (toFun s)
+    - add_le_max' : 对任意 r s, toFun (r + s) <= 最大值 (toFun r) (toFun s)
     - neg' : 对任意 r, toFun (-r) = toFun r
 -/
 structure NonarchAddGroupSeminorm (G : Type*) [AddGroup G] extends ZeroHom G Real where
@@ -166,9 +166,9 @@ structure AddGroupNorm
     - eq_zero_of_map_eq_zero' : forall x, toFun x = 0 -> x = 0
 
 中文:
-结构 AddGroupNorm
-  参数: (G : 类型) [AddGroup G]
-  继承: AddGroupSeminorm G
+结构 加法群范数
+  参数: (G : 类型) [加法群 G]
+  继承: 加法群半范数 G
   公理与运算 (1 个):
     - eq_zero_of_map_eq_zero' : 对任意 x, toFun x = 0 -> x = 0
 -/
@@ -190,9 +190,9 @@ structure GroupNorm
     - eq_one_of_map_eq_zero' : forall x, toFun x = 0 -> x = 1
 
 中文:
-结构 GroupNorm
-  参数: (G : 类型) [Group G]
-  继承: GroupSeminorm G
+结构 群范数
+  参数: (G : 类型) [群 G]
+  继承: 群半范数 G
   公理与运算 (1 个):
     - eq_one_of_map_eq_zero' : 对任意 x, toFun x = 0 -> x = 1
 -/
@@ -211,9 +211,9 @@ structure NonarchAddGroupNorm
     - eq_zero_of_map_eq_zero' : forall x, toFun x = 0 -> x = 0
 
 中文:
-结构 NonarchAddGroupNorm
-  参数: (G : 类型) [AddGroup G]
-  继承: NonarchAddGroupSeminorm G
+结构 NonarchAdd群范数
+  参数: (G : 类型) [加法群 G]
+  继承: NonarchAdd群半范数 G
   公理与运算 (1 个):
     - eq_zero_of_map_eq_zero' : 对任意 x, toFun x = 0 -> x = 0
 -/
@@ -233,9 +233,9 @@ class NonarchAddGroupSeminormClass
     - map_neg_eq_map'((f : F) (a : α)) : f (-a) = f a
 
 中文:
-类 NonarchAddGroupSeminormClass
+类 NonarchAdd群半范数类
   参数: (F : 类型) (α : outParam 类型)
-  继承: NonarchimedeanHomClass F α Real
+  继承: Nonarchimedean态射类 F α 实数
   公理与运算 (2 个):
     - map_zero((f : F)) : f 0 = 0
     - map_neg_eq_map'((f : F) (a : α)) : f (-a) = f a
@@ -259,9 +259,9 @@ class NonarchAddGroupNormClass
     - eq_zero_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 0
 
 中文:
-类 NonarchAddGroupNormClass
-  参数: (F : 类型) (α : outParam 类型) [AddGroup α] [FunLike F α 实数]
-  继承: NonarchAddGroupSeminormClass F α
+类 NonarchAdd群范数类
+  参数: (F : 类型) (α : outParam 类型) [加法群 α] [函数状 F α 实数]
+  继承: NonarchAdd群半范数类 F α
   公理与运算 (1 个):
     - eq_zero_of_map_eq_zero((f : F) {a : α}) : f a = 0 -> a = 0
 -/
@@ -286,7 +286,7 @@ theorem map_sub_le_max
 
 中文:
 定理 map_sub_le_max
-  结论: f (x - y) <= max (f x) (f y)
+  结论: f (x - y) <= 最大值 (f x) (f y)
   证明: by
   rw [sub_eq_add_neg]; rw [← NonarchAddGroupSeminormClass.map_neg_eq_map' f y]
   exact map_add_le_max _ _ _
@@ -342,7 +342,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (GroupSeminorm E) E 实数 where
+  签名: : 函数状 (群半范数 E) E 实数 where
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -369,7 +369,7 @@ instance groupSeminormClass
 
 中文:
 实例 groupSeminormClass
-  签名: : GroupSeminormClass (GroupSeminorm E) E 实数 where
+  签名: : 群半范数类 (群半范数 E) E 实数 where
   定义体: f.map_one'
   map_mul_le_add f := f.mul_le'
   map_inv_eq_map f := f.inv'
@@ -440,7 +440,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (GroupSeminorm E)
+  签名: 偏序 (群半范数 E)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 @[to_additive]
@@ -556,7 +556,7 @@ instance instZeroGroupSeminorm
 
 中文:
 实例 instZeroGroupSeminorm
-  签名: : Zero (GroupSeminorm E)
+  签名: : 零 (群半范数 E)
   定义体: ⟨{ toFun := 0
       map_one' := Pi.zero_apply _
       mul_le' := fun _ _ => (zero_add _).ge
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (GroupSeminorm E) E 实数
+  签名: 是ZeroApply (群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias _root_.GroupSeminorm.coe_zero := FunLike.coe_zero
@@ -624,7 +624,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (GroupSeminorm E)
+  签名: 可居 (群半范数 E)
   定义体: ⟨0⟩
 
 @[to_additive]
@@ -649,7 +649,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (GroupSeminorm E)
+  签名: 加法 (群半范数 E)
   定义体: ⟨fun p q =>
     { toFun := fun x => p x + q x
       map_one' := by simp_rw [map_one_eq_zero p, map_one_eq_zero q, zero_add]
@@ -687,7 +687,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (GroupSeminorm E) E 实数
+  签名: 是加法Apply (群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias _root_.GroupSeminorm.coe_add := FunLike.coe_add
@@ -728,7 +728,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (GroupSeminorm E)
+  签名: 上确界集 (群半范数 E)
   定义体: if h : BddAbove s then
       { toFun x := ⨆ p : s, p.1 x
         map_one' := by simp
@@ -772,7 +772,7 @@ lemma sSup_of_not_bddAbove
 
 中文:
 引理 sSup_of_not_bddAbove
-  条件: {s : Set (GroupSeminorm E)} (hs : ¬BddAbove s)
+  条件: {s : 集合 (群半范数 E)} (hs : ¬BddAbove s)
   证明: by
   simp [SupSet.sSup, hs]
 
@@ -799,7 +799,7 @@ lemma coe_sSup_apply
 
 中文:
 引理 coe_sSup_apply
-  条件: {s : Set (GroupSeminorm E)} (hs : BddAbove s) {x : E}
+  条件: {s : 集合 (群半范数 E)} (hs : BddAbove s) {x : E}
   证明: by
   simp [SupSet.sSup, hs]
   rfl
@@ -830,7 +830,7 @@ lemma coe_sSup_apply'
 
 中文:
 引理 coe_sSup_apply'
-  条件: {s : Set (GroupSeminorm E)} (hs : BddAbove s) {x : E}
+  条件: {s : 集合 (群半范数 E)} (hs : BddAbove s) {x : E}
   证明: by
   rw [coe_sSup_apply hs]; rw [← sSup_range]
   congr
@@ -863,7 +863,7 @@ lemma coe_iSup_apply
 
 中文:
 引理 coe_iSup_apply
-  条件: {ι : 类型} (f : ι -> GroupSeminorm E) (h : BddAbove (range f)) {x : E}
+  条件: {ι : 类型} (f : ι -> 群半范数 E) (h : BddAbove (range f)) {x : E}
   证明: by
   rw [← sSup_range]; rw [coe_sSup_apply h]
 .symm exact (Set.rangeFactorization_surjective.iSup_congr _ (by simp))
@@ -894,7 +894,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (GroupSeminorm E)
+  签名: 最大值 (群半范数 E)
   定义体: ⟨fun p q =>
     { toFun := p ⊔ q
       map_one' := by
@@ -970,7 +970,7 @@ instance semilatticeSup
 
 中文:
 实例 semilatticeSup
-  签名: : SemilatticeSup (GroupSeminorm E)
+  签名: : SemilatticeSup (群半范数 E)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, coe_sup, semilatticeSup
@@ -996,7 +996,7 @@ mul_le' _ _ := (congr_arg p <| f.map_mul _ _).trans_le map_mul_le_add p _ _
 
 中文:
 定义 comp
-  签名: (p : GroupSeminorm E) (f : F ->* E)
+  签名: (p : 群半范数 E) (f : F ->* E)
   定义体: p (f x)
   map_one' := by simp_rw [f.map_one, map_one_eq_zero p]
 mul_le' _ _ := (congr_arg p <| f.map_mul _ _).trans_le map_mul_le_add p _ _
@@ -1067,7 +1067,7 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  结论: p.comp (MonoidHom.id _) = p
+  结论: p.comp (幺半群态射.id _) = p
   证明: ext fun _ => rfl
 
 @[to_additive (attr := simp)]
@@ -1111,7 +1111,7 @@ theorem zero_comp
 
 中文:
 定理 zero_comp
-  结论: (0 : GroupSeminorm E).comp f = 0
+  结论: (0 : 群半范数 E).comp f = 0
   证明: ext fun _ => rfl
 
 @[to_additive]
@@ -1228,7 +1228,7 @@ theorem mul_bddBelow_range_add
 
 中文:
 定理 mul_bddBelow_range_add
-  条件: {p q : GroupSeminorm E} {x : E}
+  条件: {p q : 群半范数 E} {x : E}
   证明: ⟨0, by
     rintro _ ⟨x, rfl⟩
     dsimp
@@ -1261,7 +1261,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (GroupSeminorm E)
+  签名: 最小值 (群半范数 E)
   定义体: ⟨fun p q =>
     { toFun := fun x => ⨅ y, p y + q (x / y)
       map_one' :=
@@ -1327,7 +1327,7 @@ ciInf_le_of_le mul_bddBelow_range_add (1 : E) by
 
 中文:
 实例 :
-  签名: Lattice (GroupSeminorm E)
+  签名: 格 (群半范数 E)
   定义体: { GroupSeminorm.semilatticeSup with
     inf := (· ⊓ ·)
     inf_le_left := fun p q x =>
@@ -1411,7 +1411,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: [DecidableEq E] (x : E)
-  结论: (1 : AddGroupSeminorm E) x = if x = 0 then 0 else 1
+  结论: (1 : 加法群半范数 E) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one [DecidableEq E] (x : E) : (1 : AddGroupSeminorm E) x = if x = 0 then 0 else 1 :=
@@ -1432,7 +1432,7 @@ instance toSMul
 
 中文:
 实例 toSMul
-  签名: : SMul R (AddGroupSeminorm E)
+  签名: : 标量乘法 R (加法群半范数 E)
   定义体: ⟨fun r p =>
     { toFun := fun x => r • p x
       map_zero' := by
@@ -1467,7 +1467,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R (AddGroupSeminorm E) E 实数
+  签名: 是SMulApply R (加法群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -1491,7 +1491,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul R' 实数] [SMul R' 实数>=0] [IsScalarTower R' 实数>=0 实数] [SMul R R']
+  签名: [标量乘法 R' 实数] [标量乘法 R' 实数>=0] [标量塔 R' 实数>=0 实数] [标量乘法 R R']
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -1510,7 +1510,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (AddGroupSeminorm E)
+  签名: 加法交换幺半群 (加法群半范数 E)
   定义体: fast_instance% FunLike.addCommMonoid
 
 Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
@@ -1531,7 +1531,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (r : R) (p q : AddGroupSeminorm E)
+  条件: (r : R) (p q : 加法群半范数 E)
   结论: r • (p ⊔ q) = r • p ⊔ r • q
   证明: have Real.smul_max : forall x y : Real, r • max x y = max (r • x) (r • y) := fun x y => by
     simpa only [← smul_eq_mul, ← NNReal.smul_def, smul_one_smul Real>=0 r (_ : Real)] using
@@ -1565,7 +1565,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (NonarchAddGroupSeminorm E) E 实数 where
+  签名: : 函数状 (NonarchAdd群半范数 E) E 实数 where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _, _⟩ := f; cases g; congr
 
@@ -1656,7 +1656,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonarchAddGroupSeminorm E)
+  签名: 偏序 (NonarchAdd群半范数 E)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -1761,7 +1761,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (NonarchAddGroupSeminorm E)
+  签名: 零 (NonarchAdd群半范数 E)
   定义体: ⟨{ toFun := 0
       map_zero' := Pi.zero_apply _
       add_le_max' := fun r s => by simp only [Pi.zero_apply]; rw [max_eq_right]; rfl
@@ -1789,7 +1789,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (NonarchAddGroupSeminorm E) E 实数
+  签名: 是ZeroApply (NonarchAdd群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_zero := FunLike.coe_zero
@@ -1813,7 +1813,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NonarchAddGroupSeminorm E)
+  签名: 可居 (NonarchAdd群半范数 E)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (NonarchAddGroupSeminorm E) :=
@@ -1837,7 +1837,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (NonarchAddGroupSeminorm E)
+  签名: 上确界集 (NonarchAdd群半范数 E)
   定义体: if h : BddAbove s then
       { toFun x := ⨆ p : s, p.1 x
         map_zero' := by simp
@@ -1877,7 +1877,7 @@ lemma sSup_of_not_bddAbove
 
 中文:
 引理 sSup_of_not_bddAbove
-  条件: {s : Set (NonarchAddGroupSeminorm E)} (hs : ¬BddAbove s)
+  条件: {s : 集合 (NonarchAdd群半范数 E)} (hs : ¬BddAbove s)
   证明: by
   simp [SupSet.sSup, hs]
 
@@ -1899,7 +1899,7 @@ lemma coe_sSup_apply
 
 中文:
 引理 coe_sSup_apply
-  条件: {s : Set (NonarchAddGroupSeminorm E)} (hs : BddAbove s) {x : E}
+  条件: {s : 集合 (NonarchAdd群半范数 E)} (hs : BddAbove s) {x : E}
   证明: by
   simp [SupSet.sSup, hs]
   rfl
@@ -1925,7 +1925,7 @@ lemma coe_sSup_apply'
 
 中文:
 引理 coe_sSup_apply'
-  条件: {s : Set (NonarchAddGroupSeminorm E)} (hs : BddAbove s) {x : E}
+  条件: {s : 集合 (NonarchAdd群半范数 E)} (hs : BddAbove s) {x : E}
   证明: by
   rw [coe_sSup_apply hs]; rw [← sSup_range]
   congr
@@ -1953,7 +1953,7 @@ lemma coe_iSup_apply
 
 中文:
 引理 coe_iSup_apply
-  结论: {ι : 类型} (f : ι -> NonarchAddGroupSeminorm E) (h : BddAbove (range f))
+  结论: {ι : 类型} (f : ι -> NonarchAdd群半范数 E) (h : BddAbove (range f))
   证明: by
   rw [← sSup_range]; rw [coe_sSup_apply h]
 .symm exact (Set.rangeFactorization_surjective.iSup_congr _ (by simp))
@@ -1980,7 +1980,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (NonarchAddGroupSeminorm E)
+  签名: 最大值 (NonarchAdd群半范数 E)
   定义体: ⟨fun p q =>
     { toFun := p ⊔ q
       map_zero' := by rw [Pi.sup_apply, ← map_zero p, sup_eq_left, map_zero p, map_zero q]
@@ -2049,7 +2049,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (NonarchAddGroupSeminorm E)
+  签名: SemilatticeSup (NonarchAdd群半范数 E)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, coe_sup, semilatticeSup
@@ -2076,7 +2076,7 @@ theorem add_bddBelow_range_add
 
 中文:
 定理 add_bddBelow_range_add
-  条件: {p q : NonarchAddGroupSeminorm E} {x : E}
+  条件: {p q : NonarchAdd群半范数 E} {x : E}
   证明: ⟨0, by
     rintro _ ⟨x, rfl⟩
     dsimp
@@ -2149,7 +2149,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: [DecidableEq E] (x : E)
-  结论: (1 : GroupSeminorm E) x = if x = 1 then 0 else 1
+  结论: (1 : 群半范数 E) x = if x = 1 then 0 else 1
   证明: rfl
 -/
 theorem apply_one [DecidableEq E] (x : E) : (1 : GroupSeminorm E) x = if x = 1 then 0 else 1 :=
@@ -2171,7 +2171,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (GroupSeminorm E)
+  签名: 标量乘法 R (群半范数 E)
   定义体: ⟨fun r p =>
     { toFun := fun x => r • p x
       map_one' := by
@@ -2208,7 +2208,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R (GroupSeminorm E) E 实数
+  签名: 是SMulApply R (群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -2231,8 +2231,8 @@ instance [SMul
   body: FunLike.isScalarTower
 
 中文:
-实例 [SMul
-  签名: R' 实数] [SMul R' 实数>=0] [IsScalarTower R' 实数>=0 实数] [SMul R R'] [IsScalarTower R R' 实数] :
+实例 [标量乘法
+  签名: R' 实数] [标量乘法 R' 实数>=0] [标量塔 R' 实数>=0 实数] [标量乘法 R R'] [标量塔 R R' 实数] :
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -2251,7 +2251,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (GroupSeminorm E)
+  签名: 加法交换幺半群 (群半范数 E)
   定义体: fast_instance% FunLike.addCommMonoid
 
 Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
@@ -2272,7 +2272,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (r : R) (p q : GroupSeminorm E)
+  条件: (r : R) (p q : 群半范数 E)
   结论: r • (p ⊔ q) = r • p ⊔ r • q
   证明: have Real.smul_max : forall x y : Real, r • max x y = max (r • x) (r • y) := fun x y => by
     simpa only [← smul_eq_mul, ← NNReal.smul_def, smul_one_smul Real>=0 r (_ : Real)] using
@@ -2311,7 +2311,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: E] : One (NonarchAddGroupSeminorm E)
+  签名: E] : 幺 (NonarchAdd群半范数 E)
   定义体: ⟨{ toFun := fun x => if x = 0 then 0 else 1
       map_zero' := if_pos rfl
       add_le_max' := fun x y => by
@@ -2369,7 +2369,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (NonarchAddGroupSeminorm E)
+  签名: 标量乘法 R (NonarchAdd群半范数 E)
   定义体: ⟨fun r p =>
     { toFun := fun x => r • p x
       map_zero' := by
@@ -2407,7 +2407,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply R (NonarchAddGroupSeminorm E) E 实数
+  签名: 是SMulApply R (NonarchAdd群半范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -2430,8 +2430,8 @@ instance [SMul
   body: FunLike.isScalarTower
 
 中文:
-实例 [SMul
-  签名: R' 实数] [SMul R' 实数>=0] [IsScalarTower R' 实数>=0 实数] [SMul R R'] [IsScalarTower R R' 实数] :
+实例 [标量乘法
+  签名: R' 实数] [标量乘法 R' 实数>=0] [标量塔 R' 实数>=0 实数] [标量乘法 R R'] [标量塔 R R' 实数] :
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -2453,7 +2453,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: (r : R) (p q : NonarchAddGroupSeminorm E)
+  条件: (r : R) (p q : NonarchAdd群半范数 E)
   结论: r • (p ⊔ q) = r • p ⊔ r • q
   证明: have Real.smul_max : forall x y : Real, r • max x y = max (r • x) (r • y) := fun x y => by
     simpa only [← smul_eq_mul, ← NNReal.smul_def, smul_one_smul Real>=0 r (_ : Real)] using
@@ -2493,7 +2493,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (GroupNorm E) E 实数 where
+  签名: : 函数状 (群范数 E) E 实数 where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨_, _, _, _⟩, _⟩ := f; cases g; congr
 
@@ -2521,7 +2521,7 @@ instance groupNormClass
 
 中文:
 实例 groupNormClass
-  签名: : GroupNormClass (GroupNorm E) E 实数 where
+  签名: : 群范数类 (群范数 E) E 实数 where
   定义体: f.map_one'
   map_mul_le_add f := f.mul_le'
   map_inv_eq_map f := f.inv'
@@ -2594,7 +2594,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (GroupNorm E)
+  签名: 偏序 (群范数 E)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 @[to_additive]
@@ -2710,7 +2710,7 @@ of_not_not fun h => hx.not_gt add_pos (map_pos_of_ne_one p h) (map_pos_of_ne_one
 
 中文:
 实例 :
-  签名: Add (GroupNorm E)
+  签名: 加法 (群范数 E)
   定义体: ⟨fun p q =>
     { p.toGroupSeminorm + q.toGroupSeminorm with
       eq_one_of_map_eq_zero' := fun _x hx =>
@@ -2743,7 +2743,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (GroupNorm E) E 实数
+  签名: 是加法Apply (群范数 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias _root_.GroupNorm.coe_add := FunLike.coe_add
@@ -2780,7 +2780,7 @@ of_not_not fun h => hx.not_gt lt_sup_iff.2 Or.inl map_pos_of_ne_one p h }⟩
 
 中文:
 实例 :
-  签名: Max (GroupNorm E)
+  签名: 最大值 (群范数 E)
   定义体: ⟨fun p q =>
     { p.toGroupSeminorm ⊔ q.toGroupSeminorm with
       eq_one_of_map_eq_zero' := fun _x hx =>
@@ -2851,7 +2851,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (GroupNorm E)
+  签名: SemilatticeSup (群范数 E)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, coe_sup, semilatticeSup
@@ -2880,7 +2880,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (AddGroupNorm E)
+  签名: 幺 (加法群范数 E)
   定义体: ⟨{ (1 : AddGroupSeminorm E) with
       eq_zero_of_map_eq_zero' := fun _x => zero_ne_one.ite_eq_left_iff.1 }⟩
 
@@ -2905,7 +2905,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: (x : E)
-  结论: (1 : AddGroupNorm E) x = if x = 0 then 0 else 1
+  结论: (1 : 加法群范数 E) x = if x = 0 then 0 else 1
   证明: rfl
 -/
 theorem apply_one (x : E) : (1 : AddGroupNorm E) x = if x = 0 then 0 else 1 :=
@@ -2921,7 +2921,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AddGroupNorm E)
+  签名: 可居 (加法群范数 E)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (AddGroupNorm E) :=
@@ -2941,8 +2941,8 @@ instance _root_.AddGroupNorm.toOne
     eq_zero_of_map_eq_zero' := fun _ => zero_ne_one.ite_eq_left_iff.1 }⟩
 
 中文:
-实例 _root_.AddGroupNorm.toOne
-  签名: [AddGroup E] [DecidableEq E]
+实例 _root_.加法群范数.toOne
+  签名: [加法群 E] [DecidableEq E]
   定义体: ⟨{ (1 : AddGroupSeminorm E) with
     eq_zero_of_map_eq_zero' := fun _ => zero_ne_one.ite_eq_left_iff.1 }⟩
 
@@ -2966,7 +2966,7 @@ instance toOne
 
 中文:
 实例 toOne
-  签名: : One (GroupNorm E)
+  签名: : 幺 (群范数 E)
   定义体: ⟨{ (1 : GroupSeminorm E) with eq_one_of_map_eq_zero' := fun _ => zero_ne_one.ite_eq_left_iff.1 }⟩
 
 @[simp]
@@ -2991,7 +2991,7 @@ theorem apply_one
 中文:
 定理 apply_one
   条件: (x : E)
-  结论: (1 : GroupNorm E) x = if x = 1 then 0 else 1
+  结论: (1 : 群范数 E) x = if x = 1 then 0 else 1
   证明: rfl
 
 @[to_additive existing]
@@ -3010,7 +3010,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (GroupNorm E)
+  签名: 可居 (群范数 E)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (GroupNorm E) :=
@@ -3035,7 +3035,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (NonarchAddGroupNorm E) E 实数 where
+  签名: : 函数状 (NonarchAdd群范数 E) E 实数 where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _, _⟩, _⟩ := f; cases g; congr
 
@@ -3060,7 +3060,7 @@ instance nonarchAddGroupNormClass
 
 中文:
 实例 nonarchAddGroupNormClass
-  签名: : NonarchAddGroupNormClass (NonarchAddGroupNorm E) E where
+  签名: : NonarchAdd群范数类 (NonarchAdd群范数 E) E where
   定义体: f.add_le_max'
   map_zero f := f.map_zero'
   map_neg_eq_map' f := f.neg'
@@ -3126,7 +3126,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonarchAddGroupNorm E)
+  签名: 偏序 (NonarchAdd群范数 E)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -3233,7 +3233,7 @@ of_not_not fun h => hx.not_gt lt_sup_iff.2 Or.inl map_pos_of_ne_zero p h }⟩
 
 中文:
 实例 :
-  签名: Max (NonarchAddGroupNorm E)
+  签名: 最大值 (NonarchAdd群范数 E)
   定义体: ⟨fun p q =>
     { p.toNonarchAddGroupSeminorm ⊔ q.toNonarchAddGroupSeminorm with
       eq_zero_of_map_eq_zero' := fun _x hx =>
@@ -3299,7 +3299,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (NonarchAddGroupNorm E)
+  签名: SemilatticeSup (NonarchAdd群范数 E)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, coe_sup, semilatticeSup
@@ -3320,7 +3320,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: E] : One (NonarchAddGroupNorm E)
+  签名: E] : 幺 (NonarchAdd群范数 E)
   定义体: ⟨{ (1 : NonarchAddGroupSeminorm E) with
       eq_zero_of_map_eq_zero' := fun _ => zero_ne_one.ite_eq_left_iff.1 }⟩
 
@@ -3360,7 +3360,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: E] : Inhabited (NonarchAddGroupNorm E)
+  签名: E] : 可居 (NonarchAdd群范数 E)
   定义体: ⟨1⟩
 -/
 instance [DecidableEq E] : Inhabited (NonarchAddGroupNorm E) :=

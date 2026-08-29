@@ -55,8 +55,8 @@ class NatPowAssoc
     - npow_one : forall (x : M), x ^ 1 = x
 
 中文:
-类 NatPowAssoc
-  参数: (M : 类型) [MulOneClass M] [Pow M 自然数]
+类 自然数PowAssoc
+  参数: (M : 类型) [MulOne类 M] [幂 M 自然数]
   公理与运算 (3 个):
     - npow_add : 对任意 (k n : 自然数) (x : M), x ^ (k + n) = x ^ k * x ^ n
     - npow_zero : 对任意 (x : M), x ^ 0 = 1
@@ -255,7 +255,7 @@ theorem neg_npow_assoc
 
 中文:
 定理 neg_npow_assoc
-  条件: {R : 类型} [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R] (a b : R) (k : 自然数)
+  条件: {R : 类型} [非结合环 R] [幂 R 自然数] [自然数PowAssoc R] (a b : R) (k : 自然数)
   证明: by
   induction k with
   | zero => simp only [npow_zero, one_mul]
@@ -286,8 +286,8 @@ instance Pi.instNatPowAssoc
     npow_one _ := by ext; simp
 
 中文:
-实例 Pi.instNatPowAssoc
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, MulOneClass <| α i] [对任意 i, Pow (α i) 自然数]
+实例 依赖函数类型.inst自然数PowAssoc
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, MulOne类 <| α i] [对任意 i, 幂 (α i) 自然数]
   定义体: by ext; simp [npow_add]
     npow_zero _ := by ext; simp
     npow_one _ := by ext; simp
@@ -311,8 +311,8 @@ instance Prod.instNatPowAssoc
   npow_one _ := by ext <;> simp
 
 中文:
-实例 Prod.instNatPowAssoc
-  签名: {N : 类型} [MulOneClass M] [Pow M 自然数] [自然数PowAssoc M] [MulOneClass N]
+实例 积类型.inst自然数PowAssoc
+  签名: {N : 类型} [MulOne类 M] [幂 M 自然数] [自然数PowAssoc M] [MulOne类 N]
   定义体: by ext <;> simp [npow_add]
   npow_zero _ := by ext <;> simp
   npow_one _ := by ext <;> simp
@@ -342,7 +342,7 @@ instance Monoid.PowAssoc
 @[simp, norm_cast]
 
 中文:
-实例 Monoid.PowAssoc
+实例 幺半群.PowAssoc
   签名: : 自然数PowAssoc M where
   定义体: pow_add _ _ _
   npow_zero _ := pow_zero _
@@ -372,8 +372,8 @@ theorem Nat.cast_npow
 @[simp, norm_cast]
 
 中文:
-定理 Nat.cast_npow
-  条件: (R : 类型) [NonAssocSemiring R] [Pow R 自然数] [自然数PowAssoc R] (n m : 自然数)
+定理 自然数.cast_npow
+  条件: (R : 类型) [非结合半环 R] [幂 R 自然数] [自然数PowAssoc R] (n m : 自然数)
   证明: by
   induction m with
   | zero => simp only [pow_zero, Nat.cast_one, npow_zero]
@@ -398,8 +398,8 @@ theorem Int.cast_npow
   statement: (R : Type*) [NonAssocRing R] [Pow R Nat] [NatPowAssoc R]
 
 中文:
-定理 Int.cast_npow
-  结论: (R : 类型) [NonAssocRing R] [Pow R 自然数] [自然数PowAssoc R]
+定理 整数.cast_npow
+  结论: (R : 类型) [非结合环 R] [幂 R 自然数] [自然数PowAssoc R]
 -/
 theorem Int.cast_npow (R : Type*) [NonAssocRing R] [Pow R Nat] [NatPowAssoc R]
     (n : Int) : forall (m : Nat), @Int.cast R NonAssocRing.toIntCast (n ^ m) = (n : R) ^ m

@@ -45,8 +45,8 @@ structure SkewMonoidAlgebra
     - coeff : G ->₀ k
 
 中文:
-结构 SkewMonoidAlgebra
-  参数: (k : 类型) (G : 类型) [Zero k]
+结构 斜幺半群代数
+  参数: (k : 类型) (G : 类型) [零 k]
   公理与运算 (2 个):
     - ofCoeff : :
     - coeff : G ->₀ k
@@ -82,7 +82,7 @@ lemma eta
 
 中文:
 引理 eta
-  条件: (f : SkewMonoidAlgebra k G)
+  条件: (f : 斜幺半群代数 k G)
   结论: ofCoeff f.coeff = f
   证明: rfl
 -/
@@ -131,7 +131,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: {S : 类型} [SMulZeroClass S k]
+  签名: {S : 类型} [SMulZero类 S k]
 -/
 private def smul {S : Type*} [SMulZeroClass S k] :
     S -> SkewMonoidAlgebra k G -> SkewMonoidAlgebra k G
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (SkewMonoidAlgebra k G)
+  签名: 零 (斜幺半群代数 k G)
   定义体: ⟨⟨0⟩⟩
 -/
 instance : Zero (SkewMonoidAlgebra k G) := ⟨⟨0⟩⟩
@@ -164,7 +164,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (SkewMonoidAlgebra k G)
+  签名: 加法 (斜幺半群代数 k G)
   定义体: ⟨add⟩
 -/
 instance : Add (SkewMonoidAlgebra k G) := ⟨add⟩
@@ -191,7 +191,7 @@ theorem ofCoeff_zero
 
 中文:
 定理 ofCoeff_zero
-  结论: (⟨0⟩ : SkewMonoidAlgebra k G) = 0
+  结论: (⟨0⟩ : 斜幺半群代数 k G) = 0
   证明: rfl
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_zero := ofCoeff_zero
@@ -219,7 +219,7 @@ theorem ofCoeff_add
 中文:
 定理 ofCoeff_add
   条件: {a b}
-  结论: (⟨a + b⟩ : SkewMonoidAlgebra k G) = ⟨a⟩ + ⟨b⟩
+  结论: (⟨a + b⟩ : 斜幺半群代数 k G) = ⟨a⟩ + ⟨b⟩
   证明: show _ = add _ _ by rw [add]
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_add := ofCoeff_add
@@ -246,7 +246,7 @@ theorem ofCoeff_smul
 
 中文:
 定理 ofCoeff_smul
-  条件: {S : 类型} [SMulZeroClass S k] (a : S) (b : G ->₀ k)
+  条件: {S : 类型} [SMulZero类 S k] (a : S) (b : G ->₀ k)
   证明: show _ = smul _ _ by rw [smul]
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_smul := ofCoeff_smul
@@ -274,7 +274,7 @@ theorem coeff_zero
 
 中文:
 定理 coeff_zero
-  结论: (0 : SkewMonoidAlgebra k G).coeff = 0
+  结论: (0 : 斜幺半群代数 k G).coeff = 0
   证明: rfl
 
 @[deprecated (since := "2026-07-04")] alias toFinsupp_zero := coeff_zero
@@ -301,7 +301,7 @@ theorem coeff_add
 
 中文:
 定理 coeff_add
-  条件: (a b : SkewMonoidAlgebra k G)
+  条件: (a b : 斜幺半群代数 k G)
   证明: by
   rw [← ofCoeff_add]
 
@@ -331,7 +331,7 @@ theorem coeff_smul
 
 中文:
 定理 coeff_smul
-  条件: {S : 类型} [SMulZeroClass S k] (a : S) (b : SkewMonoidAlgebra k G)
+  条件: {S : 类型} [SMulZero类 S k] (a : S) (b : 斜幺半群代数 k G)
   证明: by
   rw [← ofCoeff_smul]
 
@@ -354,7 +354,7 @@ theorem _root_.IsSMulRegular.skewMonoidAlgebra
 
 中文:
 定理 _root_.IsSMulRegular.skewMonoidAlgebra
-  结论: {S : 类型} [Monoid S] [DistribMulAction S k] {a : S}
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S k] {a : S}
 -/
 theorem _root_.IsSMulRegular.skewMonoidAlgebra {S : Type*} [Monoid S] [DistribMulAction S k] {a : S}
     (ha : IsSMulRegular k a) : IsSMulRegular (SkewMonoidAlgebra k G) a
@@ -402,7 +402,7 @@ theorem coeff_inj
 
 中文:
 定理 coeff_inj
-  条件: {a b : SkewMonoidAlgebra k G}
+  条件: {a b : 斜幺半群代数 k G}
   结论: a.coeff = b.coeff ↔ a = b
   证明: coeff_injective.eq_iff
 
@@ -454,7 +454,7 @@ theorem ofCoeff_inj
 中文:
 定理 ofCoeff_inj
   条件: {a b}
-  结论: (⟨a⟩ : SkewMonoidAlgebra k G) = ⟨b⟩ ↔ a = b
+  结论: (⟨a⟩ : 斜幺半群代数 k G) = ⟨b⟩ ↔ a = b
   证明: ofCoeff_injective.eq_iff
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_inj := ofCoeff_inj
@@ -484,7 +484,7 @@ theorem coeff_eq_zero
 
 中文:
 定理 coeff_eq_zero
-  条件: {a : SkewMonoidAlgebra k G}
+  条件: {a : 斜幺半群代数 k G}
   结论: a.coeff = 0 ↔ a = 0
   证明: coeff_inj
 
@@ -514,7 +514,7 @@ theorem ofCoeff_eq_zero
 中文:
 定理 ofCoeff_eq_zero
   条件: {a}
-  结论: (⟨a⟩ : SkewMonoidAlgebra k G) = 0 ↔ a = 0
+  结论: (⟨a⟩ : 斜幺半群代数 k G) = 0 ↔ a = 0
   证明: ofCoeff_inj
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_eq_zero := ofCoeff_eq_zero
@@ -536,7 +536,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SkewMonoidAlgebra k G)
+  签名: 可居 (斜幺半群代数 k G)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (SkewMonoidAlgebra k G) := ⟨0⟩
@@ -550,8 +550,8 @@ instance [Nontrivial
   body: Function.Injective.nontrivial ofCoeff_injective
 
 中文:
-实例 [Nontrivial
-  签名: k] [Nonempty G] :
+实例 [非平凡
+  签名: k] [非空 G] :
   定义体: Function.Injective.nontrivial ofCoeff_injective
 
 Depends on / 依赖: Function, Function.Injective.nontrivial, Injective, nontrivial, ofCoeff_injective
@@ -568,8 +568,8 @@ instance [Subsingleton
   body: Function.Injective.unique coeff_injective
 
 中文:
-实例 [Subsingleton
-  签名: k] : Unique (SkewMonoidAlgebra k G)
+实例 [子单例
+  签名: k] : 唯一 (斜幺半群代数 k G)
   定义体: Function.Injective.unique coeff_injective
 
 Depends on / 依赖: Function, Function.Injective.unique, Injective, coeff_injective, unique
@@ -588,7 +588,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (SkewMonoidAlgebra k G)
+  签名: 加法幺半群 (斜幺半群代数 k G)
   定义体: coeff_injective.addMonoid _ coeff_zero coeff_add
     (fun _ _ => coeff_smul _ _)
 
@@ -612,7 +612,7 @@ definition support
 
 中文:
 定义 support
-  签名: (p : SkewMonoidAlgebra k G)
+  签名: (p : 斜幺半群代数 k G)
   定义体: p.coeff.support
 
 @[simp]
@@ -637,7 +637,7 @@ theorem support_ofCoeff
 中文:
 定理 support_ofCoeff
   条件: (p)
-  结论: support (⟨p⟩ : SkewMonoidAlgebra k G) = p.support
+  结论: support (⟨p⟩ : 斜幺半群代数 k G) = p.support
   证明: by
   rw [support]
 
@@ -666,7 +666,7 @@ theorem support_coeff
 
 中文:
 定理 support_coeff
-  条件: (p : SkewMonoidAlgebra k G)
+  条件: (p : 斜幺半群代数 k G)
   结论: p.coeff.support = p.support
   证明: by
   rw [support]
@@ -695,7 +695,7 @@ theorem support_zero
 
 中文:
 定理 support_zero
-  结论: (0 : SkewMonoidAlgebra k G).support = ∅
+  结论: (0 : 斜幺半群代数 k G).support = ∅
   证明: rfl
 
 @[simp]
@@ -717,7 +717,7 @@ theorem support_eq_empty
 中文:
 定理 support_eq_empty
   条件: {p}
-  结论: p.support = ∅ ↔ (p : SkewMonoidAlgebra k G) = 0
+  结论: p.support = ∅ ↔ (p : 斜幺半群代数 k G) = 0
   证明: by
   rcases p
   simp only [support, Finsupp.support_eq_empty, ofCoeff_eq_zero]
@@ -739,7 +739,7 @@ lemma support_add
 
 中文:
 引理 support_add
-  条件: [DecidableEq G] {p q : SkewMonoidAlgebra k G}
+  条件: [DecidableEq G] {p q : 斜幺半群代数 k G}
   证明: by
   simpa [support] using Finsupp.support_add
 
@@ -769,7 +769,7 @@ theorem toFinsupp_apply
 
 中文:
 定理 toFinsupp_apply
-  条件: (f : SkewMonoidAlgebra k G) (g)
+  条件: (f : 斜幺半群代数 k G) (g)
   结论: f.coeff g = f.coeff g
   证明: rfl
 
@@ -791,7 +791,7 @@ theorem mem_support_iff
 
 中文:
 定理 mem_support_iff
-  条件: {f : SkewMonoidAlgebra k G} {a : G}
+  条件: {f : 斜幺半群代数 k G} {a : G}
   结论: a in f.support ↔ f.coeff a != 0
   证明: by
   rcases f with ⟨⟩
@@ -814,7 +814,7 @@ theorem notMem_support_iff
 
 中文:
 定理 notMem_support_iff
-  条件: {f : SkewMonoidAlgebra k G} {a : G}
+  条件: {f : 斜幺半群代数 k G} {a : G}
   证明: by
   simp only [mem_support_iff, ne_eq, not_not]
 
@@ -840,7 +840,7 @@ theorem ext_iff
 
 中文:
 定理 ext_iff
-  条件: {p q : SkewMonoidAlgebra k G}
+  条件: {p q : 斜幺半群代数 k G}
   结论: p = q ↔ 对任意 n, coeff p n = coeff q n
   证明: by
   rcases p with ⟨f : G ->₀ k⟩
@@ -868,7 +868,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : SkewMonoidAlgebra k G}
+  条件: {p q : 斜幺半群代数 k G}
   结论: (对任意 a, coeff p a = coeff q a) -> p = q
   证明: ext_iff.2
 
@@ -918,7 +918,7 @@ theorem coeff_single
 中文:
 定理 coeff_single
   条件: (a : G) (b : k)
-  结论: (single a b).coeff = Finsupp.single a b
+  结论: (single a b).coeff = 有限支撑.single a b
   证明: rfl
 
 @[deprecated (since := "2026-07-04")] alias toFinsupp_single := coeff_single
@@ -944,7 +944,7 @@ theorem ofCoeff_single
 中文:
 定理 ofCoeff_single
   条件: (a : G) (b : k)
-  结论: ⟨Finsupp.single a b⟩ = single a b
+  结论: ⟨有限支撑.single a b⟩ = single a b
   证明: rfl
 
 @[deprecated (since := "2026-07-06")] alias ofFinsupp_single := ofCoeff_single
@@ -964,7 +964,7 @@ theorem coeff_single_apply
 
 中文:
 定理 coeff_single_apply
-  条件: {a a' : G} {b : k} [Decidable (a = a')]
+  条件: {a a' : G} {b : k} [可判定 (a = a')]
   证明: by
   simp [Finsupp.single_apply]
 
@@ -1041,7 +1041,7 @@ theorem single_zero
 中文:
 定理 single_zero
   条件: (a : G)
-  结论: (single a 0 : SkewMonoidAlgebra k G) = 0
+  结论: (single a 0 : 斜幺半群代数 k G) = 0
   证明: by
   simp [← coeff_inj]
 
@@ -1092,7 +1092,7 @@ alias toFinsuppAddEquiv_symm_apply := coe
 
 中文:
 定义 coeffAddEquiv
-  签名: : SkewMonoidAlgebra k G ≃+ (G ->₀ k) where
+  签名: : 斜幺半群代数 k G ≃+ (G ->₀ k) where
   定义体: coeff
   invFun := ofCoeff
   map_add' := coeff_add
@@ -1122,7 +1122,7 @@ theorem smul_single
 
 中文:
 定理 smul_single
-  条件: {S} [SMulZeroClass S k] (s : S) (a : G) (b : k)
+  条件: {S} [SMulZero类 S k] (s : S) (a : G) (b : k)
   证明: coeff_injective by simp;
 
 Depends on / 依赖: coeff_injective
@@ -1143,7 +1143,7 @@ theorem single_injective
 中文:
 定理 single_injective
   条件: (a : G)
-  结论: Function.Injective (single a : k -> SkewMonoidAlgebra k G)
+  结论: 函数.单射 (single a : k -> 斜幺半群代数 k G)
   证明: coeffAddEquiv.symm.injective.comp (Finsupp.single_injective a)
 
 Depends on / 依赖: Finsupp, Finsupp.single_injective, coeffAddEquiv, coeffAddEquiv.symm.injective.comp, injective, single_injective
@@ -1190,7 +1190,7 @@ theorem _root_.IsSMulRegular.skewMonoidAlgebra_iff
 
 中文:
 定理 _root_.IsSMulRegular.skewMonoidAlgebra_iff
-  结论: {S : 类型} [Monoid S] [DistribMulAction S k]
+  结论: {S : 类型} [幺半群 S] [分配乘法作用 S k]
   证明: by
   inhabit G
   refine ⟨IsSMulRegular.skewMonoidAlgebra, fun ha b₁ b₂ inj => ?_⟩
@@ -1226,7 +1226,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (SkewMonoidAlgebra k G)
+  签名: 幺 (斜幺半群代数 k G)
   定义体: single 1 1
 
 Depends on / 依赖: IsMinimal, IsMinimal.val_, single
@@ -1243,7 +1243,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoidWithOne (SkewMonoidAlgebra k G)
+  签名: 加法带幺幺半群 (斜幺半群代数 k G)
 -/
 instance : AddMonoidWithOne (SkewMonoidAlgebra k G) where
 
@@ -1261,7 +1261,7 @@ theorem ofCoeff_one
 
 中文:
 定理 ofCoeff_one
-  结论: (⟨Finsupp.single 1 1⟩ : SkewMonoidAlgebra k G) = 1
+  结论: (⟨有限支撑.single 1 1⟩ : 斜幺半群代数 k G) = 1
   证明: rfl
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_one := ofCoeff_one
@@ -1287,7 +1287,7 @@ theorem coeff_one
 
 中文:
 定理 coeff_one
-  结论: (1 : SkewMonoidAlgebra k G).coeff = Finsupp.single 1 1
+  结论: (1 : 斜幺半群代数 k G).coeff = 有限支撑.single 1 1
   证明: rfl
 
 @[deprecated (since := "2026-07-04")] alias toFinsupp_one := coeff_one
@@ -1317,7 +1317,7 @@ alias toFinsupp_eq_single_one_one_iff := coeff_eq_single_one_one_iff
 
 中文:
 定理 coeff_eq_single_one_one_iff
-  条件: {a : SkewMonoidAlgebra k G}
+  条件: {a : 斜幺半群代数 k G}
   证明: by
   simp [← coeff_inj]
 
@@ -1395,7 +1395,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : SkewMonoidAlgebra k G) = single 1 1
+  结论: (1 : 斜幺半群代数 k G) = single 1 1
   证明: rfl
 
 @[deprecated coeff_one (since := "2026-07-04")]
@@ -1413,7 +1413,7 @@ theorem coeff_one_one
 
 中文:
 定理 coeff_one_one
-  结论: coeff (1 : SkewMonoidAlgebra k G) 1 = 1
+  结论: coeff (1 : 斜幺半群代数 k G) 1 = 1
   证明: by simp
 -/
 theorem coeff_one_one : coeff (1 : SkewMonoidAlgebra k G) 1 = 1 := by simp
@@ -1433,7 +1433,7 @@ theorem natCast_def
 中文:
 定理 natCast_def
   条件: (n : 自然数)
-  结论: (n : SkewMonoidAlgebra k G) = single (1 : G) (n : k)
+  结论: (n : 斜幺半群代数 k G) = single (1 : G) (n : k)
   证明: by
   induction n <;> simp_all
 
@@ -1455,7 +1455,7 @@ lemma single_nat
 中文:
 引理 single_nat
   条件: (n : 自然数)
-  结论: (single 1 n : SkewMonoidAlgebra k G) = n
+  结论: (single 1 n : 斜幺半群代数 k G) = n
   证明: (natCast_def _).symm
 
 Depends on / 依赖: natCast_def
@@ -1481,7 +1481,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (SkewMonoidAlgebra k G)
+  签名: 加法交换幺半群 (斜幺半群代数 k G)
   定义体: coeff_injective.addCommMonoid _ coeff_zero coeff_add
     (fun _ _ => coeff_smul _ _)
 
@@ -1503,7 +1503,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: G] [DecidableEq k] : DecidableEq (SkewMonoidAlgebra k G)
+  签名: G] [DecidableEq k] : DecidableEq (斜幺半群代数 k G)
   定义体: Equiv.decidableEq coeffAddEquiv.toEquiv
 
 Depends on / 依赖: Equiv.decidableEq, coeffAddEquiv, coeffAddEquiv.toEquiv, decidableEq, toEquiv
@@ -1520,8 +1520,8 @@ definition sum
   body: f.coeff.sum g
 
 中文:
-定义 sum
-  签名: {N : 类型} [AddCommMonoid N] (f : SkewMonoidAlgebra k G) (g : G -> k -> N)
+定义 求和
+  签名: {N : 类型} [加法交换幺半群 N] (f : 斜幺半群代数 k G) (g : G -> k -> N)
   定义体: f.coeff.sum g
 
 Depends on / 依赖: f.coeff.sum
@@ -1539,7 +1539,7 @@ theorem sum_def
 
 中文:
 定理 sum_def
-  条件: {N : 类型} [AddCommMonoid N] (f : SkewMonoidAlgebra k G) (g : G -> k -> N)
+  条件: {N : 类型} [加法交换幺半群 N] (f : 斜幺半群代数 k G) (g : G -> k -> N)
   证明: rfl
 -/
 theorem sum_def {N : Type*} [AddCommMonoid N] (f : SkewMonoidAlgebra k G) (g : G -> k -> N) :
@@ -1557,7 +1557,7 @@ theorem sum_def'
 
 中文:
 定理 sum_def'
-  条件: {N : 类型} [AddCommMonoid N] (f : SkewMonoidAlgebra k G) (g : G -> k -> N)
+  条件: {N : 类型} [加法交换幺半群 N] (f : 斜幺半群代数 k G) (g : G -> k -> N)
   证明: rfl
 
 @[simp]
@@ -1576,7 +1576,7 @@ theorem sum_single_index
 
 中文:
 定理 sum_single_index
-  结论: {N} [AddCommMonoid N] {a : G} {b : k} {h : G -> k -> N}
+  结论: {N} [加法交换幺半群 N] {a : G} {b : k} {h : G -> k -> N}
   证明: Finsupp.sum_single_index h_zero
 
 Depends on / 依赖: Finsupp, Finsupp.sum_single_index, h_zero, sum_single_index
@@ -1595,7 +1595,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  结论: {N P : 类型} [AddCommMonoid N] [AddCommMonoid P] {H : 类型} [FunLike H N P]
+  结论: {N P : 类型} [加法交换幺半群 N] [加法交换幺半群 P] {H : 类型} [函数状 H N P]
   证明: _root_.map_sum h _ _
 
 Depends on / 依赖: _root_, _root_.map_sum, map_sum
@@ -1617,7 +1617,7 @@ theorem coeff_sum'
 
 中文:
 定理 coeff_sum'
-  结论: {k' G' : 类型} [AddCommMonoid k'] (f : SkewMonoidAlgebra k G)
+  结论: {k' G' : 类型} [加法交换幺半群 k'] (f : 斜幺半群代数 k G)
   证明: _root_.map_sum coeffAddEquiv (fun a => g a (f.coeff a)) f.coeff.support
 
 @[deprecated (since := "2026-07-04")] alias toFinsupp_sum' := coeff_sum'
@@ -1644,7 +1644,7 @@ theorem ofCoeff_sum
 
 中文:
 定理 ofCoeff_sum
-  结论: {k' G' : 类型} [AddCommMonoid k'] (f : G ->₀ k)
+  结论: {k' G' : 类型} [加法交换幺半群 k'] (f : G ->₀ k)
   证明: by
   apply coeff_injective; simp only [coeff_sum']
 
@@ -1671,8 +1671,8 @@ theorem sum_single
 
 中文:
 定理 sum_single
-  条件: (f : SkewMonoidAlgebra k G)
-  结论: f.sum single = f
+  条件: (f : 斜幺半群代数 k G)
+  结论: f.求和 single = f
   证明: by
   apply coeff_injective; simp only [coeff_sum', coeff_single, Finsupp.sum_single]
 
@@ -1693,7 +1693,7 @@ theorem sum_add_index'
 
 中文:
 定理 sum_add_index'
-  结论: {S : 类型} [AddCommMonoid S] {f g : SkewMonoidAlgebra k G} {h : G -> k -> S}
+  结论: {S : 类型} [加法交换幺半群 S] {f g : 斜幺半群代数 k G} {h : G -> k -> S}
   证明: by
   rw [show f + g = ⟨f.coeff + g.coeff⟩ by rw [ofCoeff_add]; rw [eta]]
   exact Finsupp.sum_add_index' hf h_add
@@ -1720,7 +1720,7 @@ theorem sum_add_index
 
 中文:
 定理 sum_add_index
-  结论: {S : 类型} [DecidableEq G] [AddCommMonoid S]
+  结论: {S : 类型} [DecidableEq G] [加法交换幺半群 S]
   证明: by
   rw [show f + g = ⟨f.coeff + g.coeff⟩ by rw [ofCoeff_add]; rw [eta]]
   exact Finsupp.sum_add_index h_zero h_add
@@ -1749,7 +1749,7 @@ theorem sum_add
 
 中文:
 定理 sum_add
-  条件: {S : 类型} [AddCommMonoid S] (p : SkewMonoidAlgebra k G) (f g : G -> k -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : 斜幺半群代数 k G) (f g : G -> k -> S)
   证明: Finsupp.sum_add
 
 @[simp]
@@ -1772,7 +1772,7 @@ theorem sum_zero_index
 
 中文:
 定理 sum_zero_index
-  条件: {S : 类型} [AddCommMonoid S] {f : G -> k -> S}
+  条件: {S : 类型} [加法交换幺半群 S] {f : G -> k -> S}
   证明: by simp [sum]
 
 @[simp]
@@ -1791,7 +1791,7 @@ theorem sum_zero
 
 中文:
 定理 sum_zero
-  条件: {N : 类型} [AddCommMonoid N] {f : SkewMonoidAlgebra k G}
+  条件: {N : 类型} [加法交换幺半群 N] {f : 斜幺半群代数 k G}
   证明: Finset.sum_const_zero
 
 Depends on / 依赖: Finset, Finset.sum_const_zero, sum_const_zero
@@ -1812,7 +1812,7 @@ theorem sum_sum_index
 
 中文:
 定理 sum_sum_index
-  结论: {α β M N P : 类型} [AddCommMonoid M] [AddCommMonoid N] [AddCommMonoid P]
+  结论: {α β M N P : 类型} [加法交换幺半群 M] [加法交换幺半群 N] [加法交换幺半群 P]
   证明: by
   rw [sum_def]; rw [coeff_sum' f g]; rw [Finsupp.sum_sum_index h_zero h_add]; simp [sum_def]
 
@@ -1839,7 +1839,7 @@ theorem coeff_sum
 
 中文:
 定理 coeff_sum
-  结论: {k' G' : 类型} [AddCommMonoid k'] {f : SkewMonoidAlgebra k G}
+  结论: {k' G' : 类型} [加法交换幺半群 k'] {f : 斜幺半群代数 k G}
   证明: by
   simp_rw [coeff_sum', sum_def, Finsupp.sum_apply]
 
@@ -1861,7 +1861,7 @@ theorem sum_mul
 
 中文:
 定理 sum_mul
-  结论: {S : 类型} [NonUnitalNonAssocSemiring S] (b : S) (s : SkewMonoidAlgebra k G)
+  结论: {S : 类型} [非幺非结合半环 S] (b : S) (s : 斜幺半群代数 k G)
   证明: by
   simp only [sum, Finsupp.sum, Finset.sum_mul]
 
@@ -1882,7 +1882,7 @@ theorem mul_sum
 
 中文:
 定理 mul_sum
-  结论: {S : 类型} [NonUnitalNonAssocSemiring S] (b : S) (s : SkewMonoidAlgebra k G)
+  结论: {S : 类型} [非幺非结合半环 S] (b : S) (s : 斜幺半群代数 k G)
   证明: by
   simp only [sum, Finsupp.sum, Finset.mul_sum]
 
@@ -1906,7 +1906,7 @@ theorem sum_ite_eq'
 
 中文:
 定理 sum_ite_eq'
-  结论: {N : 类型} [AddCommMonoid N] [DecidableEq G] (f : SkewMonoidAlgebra k G)
+  结论: {N : 类型} [加法交换幺半群 N] [DecidableEq G] (f : 斜幺半群代数 k G)
   证明: by
   simp only [sum_def', f.coeff.support.sum_ite_eq', support]
 
@@ -1927,7 +1927,7 @@ theorem smul_sum
 
 中文:
 定理 smul_sum
-  结论: {M : 类型} {R : 类型} [AddCommMonoid M] [DistribSMul R M]
+  结论: {M : 类型} {R : 类型} [加法交换幺半群 M] [分配标量乘法 R M]
   证明: Finsupp.smul_sum
 
 Depends on / 依赖: Finsupp, Finsupp.smul_sum, smul_sum
@@ -1948,7 +1948,7 @@ theorem sum_congr
 
 中文:
 定理 sum_congr
-  结论: {f : SkewMonoidAlgebra k G} {M : 类型} [AddCommMonoid M] {g₁ g₂ : G -> k -> M}
+  结论: {f : 斜幺半群代数 k G} {M : 类型} [加法交换幺半群 M] {g₁ g₂ : G -> k -> M}
   证明: Finset.sum_congr rfl h
 
 @[elab_as_elim]
@@ -1972,7 +1972,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {p : SkewMonoidAlgebra k G -> 命题} (f : SkewMonoidAlgebra k G)
+  结论: {p : 斜幺半群代数 k G -> 命题} (f : 斜幺半群代数 k G)
   证明: by
   rw [← sum_single f]; rw [sum_def']
   exact Finset.sum_induction _ _ add zero (by simp_all)
@@ -1997,7 +1997,7 @@ theorem induction_on'
 
 中文:
 定理 induction_on'
-  结论: [instNonempty : Nonempty G] {p : SkewMonoidAlgebra k G -> 命题}
+  结论: [instNonempty : 非空 G] {p : 斜幺半群代数 k G -> 命题}
   证明: induction_on f (by simpa using single (Classical.choice instNonempty) 0) single add
 
 Depends on / 依赖: Classical, Classical.choice, choice, induction_on, instNonempty, single
@@ -2021,7 +2021,7 @@ theorem addHom_ext
 
 中文:
 定理 addHom_ext
-  结论: {M : 类型} [AddZeroClass M] {f g : SkewMonoidAlgebra k G ->+ M}
+  结论: {M : 类型} [加法零类 M] {f g : 斜幺半群代数 k G ->+ M}
   证明: by
   ext p; induction p using SkewMonoidAlgebra.induction_on <;> simp_all
 
@@ -2144,7 +2144,7 @@ theorem sum_mapDomain_index
 
 中文:
 定理 sum_mapDomain_index
-  结论: {k' : 类型} [AddCommMonoid k'] {h : G' -> k -> k'}
+  结论: {k' : 类型} [加法交换幺半群 k'] {h : G' -> k -> k'}
   证明: (sum_sum_index h_zero h_add).trans sum_congr fun _ _ => sum_single_index (h_zero _)
 
 Depends on / 依赖: h_add, h_zero, sum_congr, sum_single_index, sum_sum_index
@@ -2187,7 +2187,7 @@ theorem mapDomain_smul
 
 中文:
 定理 mapDomain_smul
-  条件: {R : 类型} [Monoid R] [DistribMulAction R k] {b : R}
+  条件: {R : 类型} [幺半群 R] [分配乘法作用 R k] {b : R}
   证明: by
   simp_rw [← coeff_inj, coeff_smul, coeff_mapDomain]
   simp [Finsupp.mapDomain_smul]
@@ -2210,7 +2210,7 @@ definition liftNC
 
 中文:
 定义 liftNC
-  签名: {R : 类型} [NonUnitalNonAssocSemiring R] (f : k ->+ R) (g : G -> R)
+  签名: {R : 类型} [非幺非结合半环 R] (f : k ->+ R) (g : G -> R)
   定义体: (Finsupp.liftAddHom fun x => (AddMonoidHom.mulRight (g x)).comp f).comp
     (AddEquiv.toAddMonoidHom coeffAddEquiv)
 
@@ -2231,7 +2231,7 @@ theorem liftNC_single
 
 中文:
 定理 liftNC_single
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] (f : k ->+ R)
+  结论: {R : 类型} [非幺非结合半环 R] (f : k ->+ R)
   证明: Finsupp.liftAddHom_apply_single _ _ _
 -/
 @[simp] theorem liftNC_single {R : Type*} [NonUnitalNonAssocSemiring R] (f : k ->+ R)
@@ -2249,7 +2249,7 @@ theorem eq_liftNC
 
 中文:
 定理 eq_liftNC
-  结论: {R : 类型} [NonUnitalNonAssocSemiring R] (f : k ->+ R) (g : G -> R)
+  结论: {R : 类型} [非幺非结合半环 R] (f : k ->+ R) (g : G -> R)
   证明: by
   ext a b; simp_all
 -/
@@ -2277,7 +2277,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (SkewMonoidAlgebra k G)
+  签名: 取负 (斜幺半群代数 k G)
   定义体: ⟨fun ⟨a⟩ => ⟨-a⟩⟩
 
 @[simp]
@@ -2300,7 +2300,7 @@ theorem ofCoeff_neg
 中文:
 定理 ofCoeff_neg
   条件: {a}
-  结论: (⟨-a⟩ : SkewMonoidAlgebra k G) = -⟨a⟩
+  结论: (⟨-a⟩ : 斜幺半群代数 k G) = -⟨a⟩
   证明: (rfl)
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_neg := ofCoeff_neg
@@ -2323,7 +2323,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup (SkewMonoidAlgebra k G)
+  签名: 加法群 (斜幺半群代数 k G)
   定义体: zsmulRec
   neg_add_cancel a := by cases a; simp [← ofCoeff_neg, ← ofCoeff_add]
 
@@ -2351,7 +2351,7 @@ theorem coeff_neg
 
 中文:
 定理 coeff_neg
-  条件: (a : SkewMonoidAlgebra k G)
+  条件: (a : 斜幺半群代数 k G)
   结论: (-a).coeff = -a.coeff
   证明: coeffAddEquiv.map_neg a
 
@@ -2383,7 +2383,7 @@ theorem ofCoeff_sub
 中文:
 定理 ofCoeff_sub
   条件: {a b}
-  结论: (⟨a - b⟩ : SkewMonoidAlgebra k G) = ⟨a⟩ - ⟨b⟩
+  结论: (⟨a - b⟩ : 斜幺半群代数 k G) = ⟨a⟩ - ⟨b⟩
   证明: coeffAddEquiv.symm.map_sub a b
 
 @[deprecated (since := "2026-07-04")] alias ofFinsupp_sub := ofCoeff_sub
@@ -2412,7 +2412,7 @@ theorem coeff_sub
 
 中文:
 定理 coeff_sub
-  条件: (a b : SkewMonoidAlgebra k G)
+  条件: (a b : 斜幺半群代数 k G)
   证明: coeffAddEquiv.map_sub a b
 
 @[deprecated (since := "2026-07-04")] alias toFinsupp_sub := coeff_sub
@@ -2465,7 +2465,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (SkewMonoidAlgebra k G)
+  签名: 加法交换群 (斜幺半群代数 k G)
 -/
 instance : AddCommGroup (SkewMonoidAlgebra k G) where
   add_comm
@@ -2486,7 +2486,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroupWithOne (SkewMonoidAlgebra k G)
+  签名: 加法带幺群 (斜幺半群代数 k G)
   定义体: instAddGroup
 
 Depends on / 依赖: instAddGroup
@@ -2507,7 +2507,7 @@ theorem intCast_def
 中文:
 定理 intCast_def
   条件: (z : 整数)
-  结论: (z : SkewMonoidAlgebra k G) = single (1 : G) (z : k)
+  结论: (z : 斜幺半群代数 k G) = single (1 : G) (z : k)
   证明: by
   cases z <;> simp
 -/
@@ -2529,7 +2529,7 @@ theorem sum_smul_index
 
 中文:
 定理 sum_smul_index
-  结论: {N : 类型} [AddCommMonoid N] [NonUnitalNonAssocSemiring k]
+  结论: {N : 类型} [加法交换幺半群 N] [非幺非结合半环 k]
   证明: by
   simp [sum_def, Finsupp.sum_smul_index' h0]
 
@@ -2553,7 +2553,7 @@ theorem sum_smul_index'
 
 中文:
 定理 sum_smul_index'
-  结论: {N R : 类型} [AddCommMonoid k]
+  结论: {N R : 类型} [加法交换幺半群 k]
   证明: by
   simp only [sum_def, coeff_smul, Finsupp.sum_smul_index' h0]
 
@@ -2579,7 +2579,7 @@ theorem liftNC_one
 
 中文:
 定理 liftNC_one
-  结论: {g_hom R : 类型} [NonAssocSemiring k] [One G] [Semiring R] [FunLike g_hom G R]
+  结论: {g_hom R : 类型} [非结合半环 k] [幺 G] [半环 R] [函数状 g_hom G R]
   证明: by
   simp only [one_def, liftNC_single, AddMonoidHom.coe_coe, map_one, mul_one]
 
@@ -2609,7 +2609,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (SkewMonoidAlgebra k G)
+  签名: 乘法 (斜幺半群代数 k G)
   定义体: ⟨fun f g => f.sum fun a₁ b₁ => g.sum fun a₂ b₂ => single (a₁ * a₂) (b₁ * (a₁ • b₂))⟩
 
 Depends on / 依赖: f.sum, g.sum, single
@@ -2627,7 +2627,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: {f g : SkewMonoidAlgebra k G}
+  条件: {f g : 斜幺半群代数 k G}
   证明: rfl
 -/
 theorem mul_def {f g : SkewMonoidAlgebra k G} :
@@ -2656,7 +2656,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring k] [DistribSMul G k]
+  签名: [非幺非结合半环 k] [分配标量乘法 G k]
   定义体: by
     classical
     simp only [mul_def]
@@ -2702,7 +2702,7 @@ theorem liftNC_mul
 
 中文:
 定理 liftNC_mul
-  结论: {g_hom : 类型} [FunLike g_hom G R]
+  结论: {g_hom : 类型} [函数状 g_hom G R]
   证明: by
   conv_rhs => rw [← sum_single a, ← sum_single b]
   simp_rw [mul_def, map_sum, liftNC_single, sum_mul, mul_sum]
@@ -2751,7 +2751,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalSemiring (SkewMonoidAlgebra k G)
+  签名: 非幺半环 (斜幺半群代数 k G)
   定义体: by
     induction f with
     | single x a => induction g with
@@ -2790,7 +2790,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonAssocSemiring (SkewMonoidAlgebra k G)
+  签名: 非结合半环 (斜幺半群代数 k G)
   定义体: by
     induction f with
     | single g a => rw [one_def, mul_def, sum_single_index] <;> simp
@@ -2823,7 +2823,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (SkewMonoidAlgebra k G)
+  签名: 半环 (斜幺半群代数 k G)
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
 
@@ -2877,7 +2877,7 @@ instance instNonUnitalNonAssocRing
 
 中文:
 实例 instNonUnitalNonAssocRing
-  签名: [Ring k] [Monoid G] [MulSemiringAction G k]
+  签名: [环 k] [幺半群 G] [MulSemiring作用 G k]
   定义体: instAddCommGroup
   __ := instNonUnitalNonAssocSemiring
 
@@ -2899,7 +2899,7 @@ instance instNonUnitalRing
 
 中文:
 实例 instNonUnitalRing
-  签名: [Ring k] [Monoid G] [MulSemiringAction G k]
+  签名: [环 k] [幺半群 G] [MulSemiring作用 G k]
   定义体: instAddCommGroup
   __ := instNonUnitalSemiring
 
@@ -2921,7 +2921,7 @@ instance instNonAssocRing
 
 中文:
 实例 instNonAssocRing
-  签名: [Ring k] [Monoid G] [MulSemiringAction G k]
+  签名: [环 k] [幺半群 G] [MulSemiring作用 G k]
   定义体: instAddCommGroup
   __ := instNonAssocSemiring
 
@@ -2948,7 +2948,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: [CommSemiring k] [CommMonoid G] [MulSemiringAction G k]
+  签名: [交换半环 k] [交换幺半群 G] [MulSemiring作用 G k]
   定义体: by
     have hgk (g : G) (r : k) : g • r = r := by
       rw [← Algebra.algebraMap_self_apply r]; rw [smul_algebraMap g r]
@@ -2980,7 +2980,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [Ring k] [Monoid G] [MulSemiringAction G k]
+  签名: [环 k] [幺半群 G] [MulSemiring作用 G k]
   定义体: instNonAssocRing
   __ := instSemiring
 
@@ -3002,8 +3002,8 @@ instance [AddMonoid
     coeff_smul
 
 中文:
-实例 [AddMonoid
-  签名: k] [DistribSMul S k] :
+实例 [加法幺半群
+  签名: k] [分配标量乘法 S k] :
   定义体: coeff_injective.distribSMul ⟨⟨coeff, coeff_zero⟩, coeff_add⟩
     coeff_smul
 
@@ -3024,8 +3024,8 @@ instance [Monoid
       coeff_smul
 
 中文:
-实例 [Monoid
-  签名: S] [AddMonoid k] [DistribMulAction S k] :
+实例 [幺半群
+  签名: S] [加法幺半群 k] [分配乘法作用 S k] :
   定义体: coeff_injective.distribMulAction ⟨⟨coeff, coeff_zero (k := k)⟩, coeff_add⟩
       coeff_smul
 
@@ -3045,8 +3045,8 @@ instance [Semiring
   body: coeff_injective.module _ ⟨⟨coeff, coeff_zero⟩, coeff_add⟩ coeff_smul
 
 中文:
-实例 [Semiring
-  签名: S] [AddCommMonoid k] [Module S k] :
+实例 [半环
+  签名: S] [加法交换幺半群 k] [模 S k] :
   定义体: coeff_injective.module _ ⟨⟨coeff, coeff_zero⟩, coeff_add⟩ coeff_smul
 
 Depends on / 依赖: coeff_add, coeff_injective, coeff_injective.module, coeff_smul, coeff_zero, module
@@ -3068,7 +3068,7 @@ instance instFaithfulSMul
 
 中文:
 实例 instFaithfulSMul
-  签名: [AddMonoid k] [SMulZeroClass S k] [FaithfulSMul S k] [Nonempty G]
+  签名: [加法幺半群 k] [SMulZero类 S k] [忠实标量乘法 S k] [非空 G]
   定义体: by
     apply eq_of_smul_eq_smul fun a : G ->₀ k => congr_arg coeff _
     intro a
@@ -3092,8 +3092,8 @@ instance [AddMonoid
   body: ⟨fun _ _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, smul_assoc]⟩
 
 中文:
-实例 [AddMonoid
-  签名: k] [SMul S₁ S₂] [SMulZeroClass S₁ k] [SMulZeroClass S₂ k]
+实例 [加法幺半群
+  签名: k] [标量乘法 S₁ S₂] [SMulZero类 S₁ k] [SMulZero类 S₂ k]
   定义体: ⟨fun _ _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, smul_assoc]⟩
 
 Depends on / 依赖: ofCoeff_smul, simp_rw, smul_assoc
@@ -3111,8 +3111,8 @@ instance [AddMonoid
   body: ⟨fun _ _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, smul_comm]⟩
 
 中文:
-实例 [AddMonoid
-  签名: k] [SMulZeroClass S₁ k] [SMulZeroClass S₂ k] [SMulCommClass S₁ S₂ k] :
+实例 [加法幺半群
+  签名: k] [SMulZero类 S₁ k] [SMulZero类 S₂ k] [标量交换类 S₁ S₂ k] :
   定义体: ⟨fun _ _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, smul_comm]⟩
 
 Depends on / 依赖: ofCoeff_smul, simp_rw, smul_comm
@@ -3130,8 +3130,8 @@ instance [AddMonoid
   body: ⟨fun _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, op_smul_eq_smul]⟩
 
 中文:
-实例 [AddMonoid
-  签名: k] [SMulZeroClass S k] [SMulZeroClass Sᵐᵒᵖ k] [IsCentralScalar S k] :
+实例 [加法幺半群
+  签名: k] [SMulZero类 S k] [SMulZero类 Sᵐᵒᵖ k] [中心标量 S k] :
   定义体: ⟨fun _ ⟨_⟩ => by simp_rw [← ofCoeff_smul, op_smul_eq_smul]⟩
 
 Depends on / 依赖: ofCoeff_smul, op_smul_eq_smul, simp_rw
@@ -3156,7 +3156,7 @@ definition coeffLinearEquiv
 
 中文:
 定义 coeffLinearEquiv
-  签名: [AddCommMonoid k] [Module S k]
+  签名: [加法交换幺半群 k] [模 S k]
   定义体: AddEquiv.toLinearEquiv coeffAddEquiv (by simp)
 
 @[deprecated (since := "2026-07-04")] alias toFinsuppLinearEquiv := coeffLinearEquiv
@@ -3178,7 +3178,7 @@ definition basisSingleOne
 
 中文:
 定义 basisSingleOne
-  签名: [Semiring k]
+  签名: [半环 k]
   定义体: coeffLinearEquiv
 
 Depends on / 依赖: coeffLinearEquiv
@@ -3195,8 +3195,8 @@ instance [Semiring
   body: Module.Free.of_basis basisSingleOne
 
 中文:
-实例 [Semiring
-  签名: k] : Module.Free k (SkewMonoidAlgebra k G)
+实例 [半环
+  签名: k] : 模.自由 k (斜幺半群代数 k G)
   定义体: Module.Free.of_basis basisSingleOne
 
 Depends on / 依赖: Module, Module.Free.of_basis, basisSingleOne, of_basis
@@ -3223,7 +3223,7 @@ definition comapSMul
 
 中文:
 定义 comapSMul
-  签名: : SMul G (SkewMonoidAlgebra M α) where smul g
+  签名: : 标量乘法 G (斜幺半群代数 M α) where smul g
   定义体: mapDomain (g • ·)
 
 Depends on / 依赖: mapDomain
@@ -3245,7 +3245,7 @@ theorem comapSMul_def
 
 中文:
 定理 comapSMul_def
-  条件: (g : G) (f : SkewMonoidAlgebra M α)
+  条件: (g : G) (f : 斜幺半群代数 M α)
   结论: g • f = mapDomain (g • ·) f
   证明: rfl
 
@@ -3288,7 +3288,7 @@ definition comapMulAction
 
 中文:
 定义 comapMulAction
-  签名: : MulAction G (SkewMonoidAlgebra M α) where
+  签名: : 乘法作用 G (斜幺半群代数 M α) where
   定义体: by rw [comapSMul_def, one_smul_eq_id, mapDomain_id]
   mul_smul g g' f := by
     rw [comapSMul_def]; rw [comapSMul_def]; rw [comapSMul_def]; rw [← comp_smul_left]; rw [mapDomain_comp]
@@ -3319,7 +3319,7 @@ definition comapDistribMulActionSelf
 
 中文:
 定义 comapDistribMulActionSelf
-  签名: [AddCommMonoid k]
+  签名: [加法交换幺半群 k]
   定义体: by
     ext
     simp [comapSMul_def, mapDomain]
@@ -3361,7 +3361,7 @@ theorem coeff_mul
 
 中文:
 定理 coeff_mul
-  结论: [DecidableEq G] (f g : SkewMonoidAlgebra k G)
+  结论: [DecidableEq G] (f g : 斜幺半群代数 k G)
   证明: by
   rw [mul_def]; rw [coeff_sum]; congr; ext
   rw [coeff_sum]; congr; ext
@@ -3392,7 +3392,7 @@ theorem coeff_mul_antidiagonal_of_finset
 
 中文:
 定理 coeff_mul_antidiagonal_of_finset
-  结论: (f g : SkewMonoidAlgebra k G) (x : G)
+  结论: (f g : 斜幺半群代数 k G) (x : G)
   证明: by
   classical
   let F : G × G -> k := fun p => if p.1 * p.2 = x then f.coeff p.1 * p.1 • g.coeff p.2 else 0
@@ -3438,7 +3438,7 @@ theorem coeff_mul_antidiagonal_finsum
 
 中文:
 定理 coeff_mul_antidiagonal_finsum
-  条件: (f g : SkewMonoidAlgebra k G) (x : G)
+  条件: (f g : 斜幺半群代数 k G) (x : G)
   证明: by
   have : ({p : G × G | p.1 * p.2 = x}
       inter Function.support fun p => f.coeff p.1 * p.1 • g.coeff p.2).Finite := by
@@ -3491,7 +3491,7 @@ fun a₁ b₁ => sum_single_index by simp
 
 中文:
 定理 coeff_mul_single_aux
-  结论: (f : SkewMonoidAlgebra k G) {r : k} {x y z : G}
+  结论: (f : 斜幺半群代数 k G) {r : k} {x y z : G}
   证明: by
   classical
   have A : forall a₁ b₁, ((single x r).sum fun a₂ b₂ => ite (a₁ * a₂ = z) (b₁ * a₁ • b₂) 0) =
@@ -3531,8 +3531,8 @@ theorem coeff_mul_single_of_not_exists_mul
   exact False.elim (h _ rfl)
 
 中文:
-定理 coeff_mul_single_of_not_exists_mul
-  结论: (r : k) {g g' : G} (x : SkewMonoidAlgebra k G)
+定理 coeff_mul_single_of_not_存在_mul
+  结论: (r : k) {g g' : G} (x : 斜幺半群代数 k G)
   证明: by
   classical
   simp only [coeff_mul, smul_zero, mul_zero, ite_self, sum_single_index]
@@ -3570,7 +3570,7 @@ theorem coeff_single_mul_aux
 
 中文:
 定理 coeff_single_mul_aux
-  结论: (f : SkewMonoidAlgebra k G) {r : k} {x y z : G}
+  结论: (f : 斜幺半群代数 k G) {r : k} {x y z : G}
   证明: by
   classical
   have : (f.sum fun a b => ite (x * a = y) (0 * x • b) 0) = 0 := by simp
@@ -3611,8 +3611,8 @@ theorem coeff_single_mul_of_not_exists_mul
   · simp
 
 中文:
-定理 coeff_single_mul_of_not_exists_mul
-  结论: (r : k) {g g' : G} (x : SkewMonoidAlgebra k G)
+定理 coeff_single_mul_of_not_存在_mul
+  结论: (r : k) {g g' : G} (x : 斜幺半群代数 k G)
   证明: by
   classical
   rw [coeff_mul]; rw [sum_single_index]
@@ -3650,7 +3650,7 @@ theorem coeff_mul_single_one
 
 中文:
 定理 coeff_mul_single_one
-  条件: (f : SkewMonoidAlgebra k G) (r : k) (x : G)
+  条件: (f : 斜幺半群代数 k G) (r : k) (x : G)
   证明: f.coeff_mul_single_aux fun a => by rw [mul_one]
 
 Depends on / 依赖: coeff_mul_single_aux, f.coeff_mul_single_aux, mul_one
@@ -3670,7 +3670,7 @@ theorem coeff_single_one_mul
 
 中文:
 定理 coeff_single_one_mul
-  条件: (f : SkewMonoidAlgebra k G) (r : k) (x : G)
+  条件: (f : 斜幺半群代数 k G) (r : k) (x : G)
   证明: by
   simp [coeff_single_mul_aux, one_smul]
 
@@ -3700,7 +3700,7 @@ theorem coeff_mul_single
 
 中文:
 定理 coeff_mul_single
-  条件: (f : SkewMonoidAlgebra k G) (r : k) (x y : G)
+  条件: (f : 斜幺半群代数 k G) (r : k) (x y : G)
   证明: f.coeff_mul_single_aux fun _a => eq_mul_inv_iff_mul_eq.symm
 
 @[simp]
@@ -3722,7 +3722,7 @@ theorem coeff_single_mul
 
 中文:
 定理 coeff_single_mul
-  条件: (r : k) (x : G) (f : SkewMonoidAlgebra k G) (y : G)
+  条件: (r : k) (x : G) (f : 斜幺半群代数 k G) (y : G)
   证明: f.coeff_single_mul_aux fun _z => eq_inv_mul_iff_mul_eq.symm
 
 Depends on / 依赖: coeff_single_mul_aux, eq_inv_mul_iff_mul_eq, eq_inv_mul_iff_mul_eq.symm, f.coeff_single_mul_aux
@@ -3744,7 +3744,7 @@ theorem coeff_mul_left
 
 中文:
 定理 coeff_mul_left
-  条件: (f g : SkewMonoidAlgebra k G) (x : G)
+  条件: (f g : 斜幺半群代数 k G) (x : G)
   证明: calc
     (f * g).coeff x = sum f fun a b => (single a b * g).coeff x := by
       rw [← coeff_sum]; rw [← sum_mul g f]; rw [f.sum_single]
@@ -3772,7 +3772,7 @@ theorem coeff_mul_right
 
 中文:
 定理 coeff_mul_right
-  条件: (f g : SkewMonoidAlgebra k G) (x : G)
+  条件: (f g : 斜幺半群代数 k G) (x : G)
   证明: calc
     (f * g).coeff x = sum g fun a b => (f * single a b).coeff x := by
       rw [← coeff_sum]; rw [← mul_sum f g]; rw [g.sum_single]
@@ -3839,8 +3839,8 @@ theorem addHom_ext'
 
 中文:
 定理 addHom_ext'
-  条件: {N : 类型} [AddZeroClass N] ⦃f g
-  结论: SkewMonoidAlgebra k G ->+ N⦄
+  条件: {N : 类型} [加法零类 N] ⦃f g
+  结论: 斜幺半群代数 k G ->+ N⦄
   证明: addHom_ext fun x => DFunLike.congr_fun (H x)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, addHom_ext, congr_fun
@@ -3895,7 +3895,7 @@ definition singleOneRingHom
 
 中文:
 定义 singleOneRingHom
-  签名: : k ->+* SkewMonoidAlgebra k G where
+  签名: : k ->+* 斜幺半群代数 k G where
   定义体: singleAddHom 1
   map_one' := rfl
   map_mul' x y := by simp [ZeroHom.toFun_eq_coe, AddMonoidHom.toZeroHom_coe, singleAddHom_apply,
@@ -3923,7 +3923,7 @@ RingHom.coe_addMonoidHom_injective
 
 中文:
 定理 ringHom_ext
-  结论: {f g : SkewMonoidAlgebra k G ->+* k} (h₁ : 对任意 b, f (single 1 b) = g (single 1 b))
+  结论: {f g : 斜幺半群代数 k G ->+* k} (h₁ : 对任意 b, f (single 1 b) = g (single 1 b))
   证明: have {a : G} {b₁ b₂ : k} : (single 1 b₁) * (single a b₂) = single a (b₁ * b₂) := by
     simp [single_mul_single, one_mul, one_smul]
 RingHom.coe_addMonoidHom_injective
@@ -3957,7 +3957,7 @@ theorem mapDomain_one
 
 中文:
 定理 mapDomain_one
-  条件: [MonoidHomClass F α α₂] (f : F)
+  条件: [幺半群态射类 F α α₂] (f : F)
   证明: by
   simp_rw [one_def, mapDomain_single, map_one]
 
@@ -3984,7 +3984,7 @@ theorem mapDomain_mul
 
 中文:
 定理 mapDomain_mul
-  结论: [MulSemiringAction α β] [MulSemiringAction α₂ β]
+  结论: [MulSemiring作用 α β] [MulSemiring作用 α₂ β]
   证明: by
   rw [mul_def]; rw [map_sum]
   have : (sum x fun a b => sum y fun a₂ b₂ => mapDomain (↑f) (single (a * a₂) (b * a • b₂))) =
@@ -4024,7 +4024,7 @@ definition mapDomainRingHom
 
 中文:
 定义 mapDomainRingHom
-  签名: [MulSemiringAction α β] [MulSemiringAction α₂ β]
+  签名: [MulSemiring作用 α β] [MulSemiring作用 α₂ β]
   定义体: (mapDomain f : SkewMonoidAlgebra β α ->+ SkewMonoidAlgebra β α₂)
   map_one' := mapDomain_one f
   map_mul' x y := mapDomain_mul x y hf
@@ -4061,7 +4061,7 @@ definition of
 
 中文:
 定义 of
-  签名: : G ->* SkewMonoidAlgebra k G where
+  签名: : G ->* 斜幺半群代数 k G where
   定义体: single a 1
   map_one' := rfl
   map_mul' a b := by simp
@@ -4132,7 +4132,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: [Nontrivial k]
+  条件: [非平凡 k]
   证明: fun a b h => by
   simp_rw [of_apply, ← coeff_inj] at h
   simpa using (Finsupp.single_eq_single_iff _ _ _ _).mp h
@@ -4159,7 +4159,7 @@ theorem ringHom_ext'
 
 中文:
 定理 ringHom_ext'
-  结论: {f g : SkewMonoidAlgebra k G ->+* k}
+  结论: {f g : 斜幺半群代数 k G ->+* k}
   证明: ringHom_ext (RingHom.congr_fun h₁) (DFunLike.congr_fun h_of)
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, RingHom, RingHom.congr_fun, congr_fun, h_of, ringHom_ext
@@ -4191,7 +4191,7 @@ theorem liftNC_smul
 
 中文:
 定理 liftNC_smul
-  结论: [MulOneClass G] {R : 类型} [Semiring R] (f : k ->+* R) (g : G ->* R) (c : k)
+  结论: [MulOne类 G] {R : 类型} [半环 R] (f : k ->+* R) (g : G ->* R) (c : k)
   证明: by
   suffices this :
     (liftNC ↑f g).comp (smulAddHom k (SkewMonoidAlgebra k G) c) =
@@ -4226,7 +4226,7 @@ instance isScalarTower_self
 
 中文:
 实例 isScalarTower_self
-  签名: [IsScalarTower k k k]
+  签名: [标量塔 k k k]
   定义体: ⟨fun t a b => by
     simp only [smul_eq_mul]
     refine Eq.trans (sum_smul_index' (g := a) (b := t) ?_) ?_ <;>
@@ -4265,8 +4265,8 @@ definition DistribMulActionHom.single
   map_smul' k m := by simp [singleAddHom, smul_single, MonoidHom.id_apply]
 
 中文:
-定义 DistribMulActionHom.single
-  签名: [DistribMulAction R M] {α : 类型} (a : α)
+定义 分配乘法作用态射.single
+  签名: [分配乘法作用 R M] {α : 类型} (a : α)
   定义体: singleAddHom a
   map_smul' k m := by simp [singleAddHom, smul_single, MonoidHom.id_apply]
 
@@ -4287,7 +4287,7 @@ theorem distribMulActionHom_ext
 
 中文:
 定理 distribMulActionHom_ext
-  结论: [DistribMulAction R M] [DistribMulAction R N] {α : 类型}
+  结论: [分配乘法作用 R M] [分配乘法作用 R N] {α : 类型}
   证明: DistribMulActionHom.toAddMonoidHom_injective addHom_ext h
 
 Depends on / 依赖: DistribMulActionHom, DistribMulActionHom.toAddMonoidHom_injective, addHom_ext, toAddMonoidHom_injective
@@ -4309,7 +4309,7 @@ theorem distribMulActionHom_ext'
 
 中文:
 定理 distribMulActionHom_ext'
-  结论: [DistribMulAction R M] [DistribMulAction R N] {α : 类型}
+  结论: [分配乘法作用 R M] [分配乘法作用 R N] {α : 类型}
   证明: distribMulActionHom_ext fun a => DistribMulActionHom.congr_fun (h a)
 
 Depends on / 依赖: DistribMulActionHom, DistribMulActionHom.congr_fun, congr_fun, distribMulActionHom_ext
@@ -4332,7 +4332,7 @@ definition lsingle
 
 中文:
 定义 lsingle
-  签名: {α : 类型} (a : α) [Module R M]
+  签名: {α : 类型} (a : α) [模 R M]
   定义体: singleAddHom a
   map_smul' _ _ := (smul_single _ _ _).symm
 
@@ -4352,7 +4352,7 @@ lemma lsingle_apply
 
 中文:
 引理 lsingle_apply
-  条件: {α : 类型} (a : α) [Module R M] (m : M)
+  条件: {α : 类型} (a : α) [模 R M] (m : M)
   证明: rfl
 -/
 lemma lsingle_apply {α : Type*} (a : α) [Module R M] (m : M) :
@@ -4371,8 +4371,8 @@ theorem lhom_ext
 
 中文:
 定理 lhom_ext
-  条件: {α : 类型} [Module R M] [Module R N] ⦃φ ψ
-  结论: SkewMonoidAlgebra M α ->ₗ[R] N⦄
+  条件: {α : 类型} [模 R M] [模 R N] ⦃φ ψ
+  结论: 斜幺半群代数 M α ->ₗ[R] N⦄
   证明: LinearMap.toAddMonoidHom_injective addHom_ext h
 
 @[ext high]
@@ -4395,8 +4395,8 @@ theorem lhom_ext'
 
 中文:
 定理 lhom_ext'
-  条件: {α : 类型} [Module R M] [Module R N] ⦃φ ψ
-  结论: SkewMonoidAlgebra M α ->ₗ[R] N⦄
+  条件: {α : 类型} [模 R M] [模 R N] ⦃φ ψ
+  结论: 斜幺半群代数 M α ->ₗ[R] N⦄
   证明: lhom_ext fun a => LinearMap.congr_fun (h a)
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, congr_fun, lhom_ext
@@ -4423,7 +4423,7 @@ theorem nonUnitalAlgHom_ext
 
 中文:
 定理 nonUnitalAlgHom_ext
-  结论: [DistribMulAction k A] {φ₁ φ₂ : SkewMonoidAlgebra k G ->ₙₐ[k] A}
+  结论: [分配乘法作用 k A] {φ₁ φ₂ : 斜幺半群代数 k G ->ₙₐ[k] A}
   证明: by
   apply NonUnitalAlgHom.to_distribMulActionHom_injective
   apply distribMulActionHom_ext'
@@ -4453,7 +4453,7 @@ theorem nonUnitalAlgHom_ext'
 
 中文:
 定理 nonUnitalAlgHom_ext'
-  结论: [DistribMulAction k A] {φ₁ φ₂ : SkewMonoidAlgebra k G ->ₙₐ[k] A}
+  结论: [分配乘法作用 k A] {φ₁ φ₂ : 斜幺半群代数 k G ->ₙₐ[k] A}
   证明: nonUnitalAlgHom_ext DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, nonUnitalAlgHom_ext
@@ -4483,7 +4483,7 @@ instance [MulSemiringAction
       MonoidHom.coe_mk, OneHom.coe_mk, 
 
 中文:
-实例 [MulSemiringAction
+实例 [MulSemiring作用
   签名: G A]
   定义体: singleOneRingHom.comp (algebraMap k A)
   smul_def' r a := by ext; simp [Algebra.smul_def, singleOneRingHom, coeff_single_one_mul]
@@ -4515,7 +4515,7 @@ theorem coe_algebraMap
 
 中文:
 定理 coe_algebraMap
-  条件: [MulSemiringAction G A] [SMulCommClass G k A]
+  条件: [MulSemiring作用 G A] [标量交换类 G k A]
   证明: rfl
 -/
 theorem coe_algebraMap [MulSemiringAction G A] [SMulCommClass G k A] :
@@ -4533,7 +4533,7 @@ theorem single_eq_algebraMap_mul_of
 
 中文:
 定理 single_eq_algebraMap_mul_of
-  条件: [MulSemiringAction G k] [SMulCommClass G k k] (a : G) (b : k)
+  条件: [MulSemiring作用 G k] [标量交换类 G k k] (a : G) (b : k)
   证明: by
   simp [coe_algebraMap, comp_apply, of_apply, single_mul_single, one_mul, smul_one, mul_one]
 
@@ -4554,7 +4554,7 @@ theorem single_algebraMap_eq_algebraMap_mul_of
 
 中文:
 定理 single_algebraMap_eq_algebraMap_mul_of
-  结论: (a : G) (b : k) [MulSemiringAction G A]
+  结论: (a : G) (b : k) [MulSemiring作用 G A]
   证明: by
   simp [coe_algebraMap, comp_apply, of_apply, single_mul_single, one_mul, smul_one, mul_one]
 
@@ -4582,7 +4582,7 @@ theorem algHom_ext
 中文:
 定理 algHom_ext
   条件: ⦃φ₁ φ₂
-  结论: AlgHom k (SkewMonoidAlgebra k G) A⦄
+  结论: 代数态射 k (斜幺半群代数 k G) A⦄
   证明: AlgHom.toLinearMap_injective (lhom_ext' fun a => (LinearMap.ext_ring (h a)))
 
 @[ext high]
@@ -4606,7 +4606,7 @@ theorem algHom_ext'
 中文:
 定理 algHom_ext'
   条件: ⦃φ₁ φ₂
-  结论: AlgHom k (SkewMonoidAlgebra k G) A⦄
+  结论: 代数态射 k (斜幺半群代数 k G) A⦄
   证明: algHom_ext DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, algHom_ext, congr_fun

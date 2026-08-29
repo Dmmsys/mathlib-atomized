@@ -42,7 +42,7 @@ abbreviation asOverProp
 
 中文:
 缩写 asOverProp
-  签名: (X : Scheme.{u}) (S : Scheme.{u}) [X.Over S] (h : P (X ↘ S))
+  签名: (X : 概形.{u}) (S : 概形.{u}) [X.Over S] (h : P (X ↘ S))
   定义体: ⟨X.asOver S, h⟩
 
 Depends on / 依赖: X.asOver, asOver
@@ -59,8 +59,8 @@ abbreviation Hom.asOverProp
   body: ⟨f.asOver S, trivial, trivial⟩
 
 中文:
-缩写 Hom.asOverProp
-  签名: {X Y : Scheme.{u}} (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S]
+缩写 态射.asOverProp
+  签名: {X Y : 概形.{u}} (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S]
   定义体: ⟨f.asOver S, trivial, trivial⟩
 
 Depends on / 依赖: asOver, f.asOver
@@ -81,10 +81,10 @@ class Cover.Over
 
 中文:
 类 Cover.Over
-  参数: {P : Morphism命题erty Scheme.{u}} [P.IsStableUnderBaseChange]
+  参数: {P : MorphismProperty 概形.{u}} [P.是StableUnderBaseChange]
   公理与运算 (2 个):
     - over((j : 𝒰.I₀)) : (𝒰.X j).Over S  [默认: by infer_instance]
-    - isOver_map((j : 𝒰.I₀)) : (𝒰.f j).IsOver S  [默认: by infer_instance]
+    - isOver_map((j : 𝒰.I₀)) : (𝒰.f j).是Over S  [默认: by infer_instance]
 -/
 protected class Cover.Over {P : MorphismProperty Scheme.{u}} [P.IsStableUnderBaseChange]
     [IsJointlySurjectivePreserving P] {X : Scheme.{u}} [X.Over S]
@@ -107,8 +107,8 @@ instance [P.ContainsIdentities]
 isOver_map _ := inferInstanceAs f.IsOver S
 
 中文:
-实例 [P.ContainsIdentities]
-  签名: [P.RespectsIso] {X Y : Scheme.{u}} (f : X ⟶ Y) [X.Over S] [Y.Over S]
+实例 [P.余ntainsIdentities]
+  签名: [P.RespectsIso] {X Y : 概形.{u}} (f : X ⟶ Y) [X.Over S] [Y.Over S]
   定义体: inferInstanceAs X.Over S
 isOver_map _ := inferInstanceAs f.IsOver S
 -/
@@ -338,7 +338,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝒰.pullbackCoverOver命题 S f hX hW hQ).Over S
+  签名: (𝒰.pullbackCoverOverProp S f hX hW hQ).Over S
   定义体: { comp_over := by exact (pullback.fst (f.asOverProp S) ((𝒰.f j).asOverProp S)).w }
 
 Depends on / 依赖: asOverProp, comp_over, f.asOverProp, pullback, pullback.fst
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝒰.pullbackCoverOver命题' S f hX hW hQ).Over S
+  签名: (𝒰.pullbackCoverOverProp' S f hX hW hQ).Over S
   定义体: { comp_over := by exact (pullback.snd ((𝒰.f j).asOverProp S) (f.asOverProp S)).w }
 
 Depends on / 依赖: asOverProp, comp_over, f.asOverProp, pullback, pullback.snd

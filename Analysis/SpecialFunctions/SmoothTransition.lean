@@ -171,7 +171,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone expNegInvGlue
+  结论: 递增 expNegInvGlue
   证明: by
   intro x y hxy
   rcases le_or_gt x 0 with hx | hx
@@ -406,7 +406,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: {n : 自然数∞}
-  结论: ContDiff 实数 n expNegInvGlue
+  结论: 连续可微 实数 n expNegInvGlue
   证明: by
   simpa using contDiff_polynomial_eval_inv_mul 1
 -/
@@ -424,7 +424,7 @@ definition Real.smoothTransition
   body: expNegInvGlue x / (expNegInvGlue x + expNegInvGlue (1 - x))
 
 中文:
-定义 Real.smoothTransition
+定义 实数.smoothTransition
   签名: (x : 实数)
   定义体: expNegInvGlue x / (expNegInvGlue x + expNegInvGlue (1 - x))
 
@@ -711,7 +711,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: {n : 自然数∞}
-  结论: ContDiff 实数 n smoothTransition
+  结论: 连续可微 实数 n smoothTransition
   证明: expNegInvGlue.contDiff.div
     (expNegInvGlue.contDiff.add <| expNegInvGlue.contDiff.comp <| contDiff_const.sub contDiff_id)
     fun x => (pos_denom x).ne'
@@ -759,7 +759,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous smoothTransition
+  结论: 连续 smoothTransition
   证明: (@smoothTransition.contDiff 0).continuous
 
 @[fun_prop]
@@ -802,7 +802,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: Monotone smoothTransition
+  结论: 递增 smoothTransition
   证明: by
   intro x y hxy
   simp only [smoothTransition]

@@ -71,7 +71,7 @@ theorem zero_rootSpace_eq_top_of_nilpotent
 
 中文:
 定理 zero_rootSpace_eq_top_of_nilpotent
-  条件: [LieRing.IsNilpotent L]
+  条件: [Lie环.是幂零 L]
   证明: zero_genWeightSpace_eq_top_of_nilpotent L
 
 @[simp]
@@ -197,7 +197,7 @@ lemma mem_biSup_genWeightSpace_of
 
 中文:
 引理 mem_biSup_genWeightSpace_of
-  结论: {s : Set (H -> R)} (hs : 对任意ᵉ (χ₁ in s) (χ₂ in s), χ₁ + χ₂ in s)
+  结论: {s : 集合 (H -> R)} (hs : 对任意ᵉ (χ₁ in s) (χ₂ in s), χ₁ + χ₂ in s)
   证明: by
   induction hx using LieSubmodule.iSup_induction' with
   | zero => simp
@@ -450,7 +450,7 @@ definition zeroRootSubalgebra
 
 中文:
 定义 zeroRootSubalgebra
-  签名: : LieSubalgebra R L
+  签名: : Lie子代数 R L
   定义体: { toSubmodule := (rootSpace H 0 : Submodule R L)
     lie_mem' := fun {x y hx hy} => by
       let xy : rootSpace H 0 otimes[R] rootSpace H 0 := ⟨x, hx⟩ otimesₜ ⟨y, hy⟩
@@ -478,7 +478,7 @@ theorem coe_zeroRootSubalgebra
 
 中文:
 定理 coe_zeroRootSubalgebra
-  结论: (zeroRootSubalgebra R L H : Submodule R L) = rootSpace H 0
+  结论: (zeroRootSubalgebra R L H : 子模 R L) = rootSpace H 0
   证明: rfl
 -/
 theorem coe_zeroRootSubalgebra : (zeroRootSubalgebra R L H : Submodule R L) = rootSpace H 0 := rfl
@@ -570,8 +570,8 @@ instance [Nontrivial
     ⟨y, toLieSubmodule_le_rootSpace_zero R L H hy⟩, by simpa using e⟩
 
 中文:
-实例 [Nontrivial
-  签名: H] : Nontrivial (genWeightSpace L (0 : H -> R))
+实例 [非平凡
+  签名: H] : 非平凡 (genWeightSpace L (0 : H -> R))
   定义体: by
   obtain ⟨⟨x, hx⟩, ⟨y, hy⟩, e⟩ := exists_pair_ne H
   exact ⟨⟨x, toLieSubmodule_le_rootSpace_zero R L H hx⟩,
@@ -698,7 +698,7 @@ theorem zeroRootSubalgebra_eq_of_is_cartan
 
 中文:
 定理 zeroRootSubalgebra_eq_of_is_cartan
-  结论: (H : LieSubalgebra R L) [H.IsCartanSubalgebra]
+  结论: (H : Lie子代数 R L) [H.是Cartan子代数]
   证明: by
   refine le_antisymm ?_ (le_zeroRootSubalgebra R L H)
   suffices rootSpace H 0 <= H.toLieSubmodule by exact fun x hx => this hx
@@ -724,7 +724,7 @@ theorem zeroRootSubalgebra_eq_iff_is_cartan
 
 中文:
 定理 zeroRootSubalgebra_eq_iff_is_cartan
-  条件: [IsNoetherian R L]
+  条件: [是Noether R L]
   证明: ⟨is_cartan_of_zeroRootSubalgebra_eq R L H, by intros; simp⟩
 
 Depends on / 依赖: intros, is_cartan_of_zeroRootSubalgebra_eq
@@ -747,7 +747,7 @@ theorem eq_rootSpace_zero_iff_isCartan
 
 中文:
 定理 eq_rootSpace_zero_iff_isCartan
-  条件: [IsNoetherian R L]
+  条件: [是Noether R L]
   证明: by
   rw [← zeroRootSubalgebra_eq_iff_is_cartan]; rw [← LieSubalgebra.toSubmodule_inj]; rw [← LieSubmodule.toSubmodule_inj]
   aesop
@@ -773,7 +773,7 @@ theorem rootSpace_zero_eq
 
 中文:
 定理 rootSpace_zero_eq
-  条件: (H : LieSubalgebra R L) [H.IsCartanSubalgebra] [IsNoetherian R L]
+  条件: (H : Lie子代数 R L) [H.是Cartan子代数] [是Noether R L]
   证明: by
   rw [← LieSubmodule.toSubmodule_inj]; rw [← coe_zeroRootSubalgebra]; rw [zeroRootSubalgebra_eq_of_is_cartan R L H]; rw [LieSubalgebra.coe_toLieSubmodule]
 

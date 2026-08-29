@@ -53,7 +53,7 @@ lemma lintegral_condKernel_mem
 
 中文:
 引理 lintegral_condKernel_mem
-  条件: (a : α) {s : Set (β × Ω)} (hs : MeasurableSet s)
+  条件: (a : α) {s : 集合 (β × Ω)} (hs : 可测集 s)
   证明: by
   conv_rhs => rw [← κ.disintegrate κ.condKernel]
   simp_rw [Kernel.compProd_apply hs]
@@ -77,8 +77,8 @@ lemma setLIntegral_condKernel_eq_measure_prod
   simpa [this] using (Kernel.compProd_apply_prod hs ht).symm
 
 中文:
-引理 setLIntegral_condKernel_eq_measure_prod
-  结论: (a : α) {s : Set β} (hs : MeasurableSet s)
+引理 setL整数egral_condKernel_eq_measure_prod
+  结论: (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by
   have : κ a (s ×ˢ t) = (Kernel.fst κ otimesₖ Kernel.condKernel κ) a (s ×ˢ t) := by
     congr; exact (κ.disintegrate _).symm
@@ -105,7 +105,7 @@ lemma lintegral_condKernel
 
 中文:
 引理 lintegral_condKernel
-  条件: (hf : Measurable f) (a : α)
+  条件: (hf : 可测 f) (a : α)
   证明: by
   conv_rhs => rw [← κ.disintegrate κ.condKernel]
   rw [Kernel.lintegral_compProd _ _ _ hf]
@@ -128,8 +128,8 @@ lemma setLIntegral_condKernel
   rw [Kernel.setLIntegral_compProd _ _ _ hf hs ht]
 
 中文:
-引理 setLIntegral_condKernel
-  结论: (hf : Measurable f) (a : α) {s : Set β}
+引理 setL整数egral_condKernel
+  结论: (hf : 可测 f) (a : α) {s : 集合 β}
   证明: by
   conv_rhs => rw [← κ.disintegrate κ.condKernel]
   rw [Kernel.setLIntegral_compProd _ _ _ hf hs ht]
@@ -153,8 +153,8 @@ lemma setLIntegral_condKernel_univ_right
   rw [← setLIntegral_condKernel hf a hs MeasurableSet.univ]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setLIntegral_condKernel_univ_right
-  结论: (hf : Measurable f) (a : α) {s : Set β}
+引理 setL整数egral_condKernel_univ_right
+  结论: (hf : 可测 f) (a : α) {s : 集合 β}
   证明: by
   rw [← setLIntegral_condKernel hf a hs MeasurableSet.univ]; simp_rw [Measure.restrict_univ]
 
@@ -176,8 +176,8 @@ lemma setLIntegral_condKernel_univ_left
   rw [← setLIntegral_condKernel hf a MeasurableSet.univ ht]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setLIntegral_condKernel_univ_left
-  结论: (hf : Measurable f) (a : α) {t : Set Ω}
+引理 setL整数egral_condKernel_univ_left
+  结论: (hf : 可测 f) (a : α) {t : 集合 Ω}
   证明: by
   rw [← setLIntegral_condKernel hf a MeasurableSet.univ ht]; simp_rw [Measure.restrict_univ]
 
@@ -207,7 +207,7 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_condKernel
   exact AEStronglyMeasurable.integral_kernel_compProd hf
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.integral_kernel_condKernel
+引理 _root_.测度论.AEStronglyMeasurable.integral_kernel_condKernel
   结论: (a : α)
   证明: by
   rw [← κ.disintegrate κ.condKernel] at hf
@@ -235,7 +235,7 @@ lemma integral_condKernel
 
 中文:
 引理 integral_condKernel
-  条件: (a : α) (hf : 整数egrable f (κ a))
+  条件: (a : α) (hf : 可积 f (κ a))
   证明: by
   conv_rhs => rw [← κ.disintegrate κ.condKernel]
   rw [← κ.disintegrate κ.condKernel] at hf
@@ -261,8 +261,8 @@ lemma setIntegral_condKernel
   rw [setIntegral_compProd hs ht hf]
 
 中文:
-引理 setIntegral_condKernel
-  结论: (a : α) {s : Set β} (hs : MeasurableSet s)
+引理 set整数egral_condKernel
+  结论: (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by
   conv_rhs => rw [← κ.disintegrate κ.condKernel]
   rw [← κ.disintegrate κ.condKernel] at hf
@@ -288,8 +288,8 @@ lemma setIntegral_condKernel_univ_right
   rw [← setIntegral_condKernel a hs MeasurableSet.univ hf]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setIntegral_condKernel_univ_right
-  结论: (a : α) {s : Set β} (hs : MeasurableSet s)
+引理 set整数egral_condKernel_univ_right
+  结论: (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [← setIntegral_condKernel a hs MeasurableSet.univ hf]; simp_rw [Measure.restrict_univ]
 
@@ -311,8 +311,8 @@ lemma setIntegral_condKernel_univ_left
   rw [← setIntegral_condKernel a MeasurableSet.univ ht hf]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setIntegral_condKernel_univ_left
-  结论: (a : α) {t : Set Ω} (ht : MeasurableSet t)
+引理 set整数egral_condKernel_univ_left
+  结论: (a : α) {t : 集合 Ω} (ht : 可测集 t)
   证明: by
   rw [← setIntegral_condKernel a MeasurableSet.univ ht hf]; simp_rw [Measure.restrict_univ]
 
@@ -351,7 +351,7 @@ lemma lintegral_condKernel_mem
 
 中文:
 引理 lintegral_condKernel_mem
-  条件: {s : Set (β × Ω)} (hs : MeasurableSet s)
+  条件: {s : 集合 (β × Ω)} (hs : 可测集 s)
   证明: by
   conv_rhs => rw [← ρ.disintegrate ρ.condKernel]
   simp_rw [compProd_apply hs]
@@ -377,8 +377,8 @@ lemma setLIntegral_condKernel_eq_measure_prod
   simpa [this] using (compProd_apply_prod hs ht).symm
 
 中文:
-引理 setLIntegral_condKernel_eq_measure_prod
-  结论: {s : Set β} (hs : MeasurableSet s) {t : Set Ω}
+引理 setL整数egral_condKernel_eq_measure_prod
+  结论: {s : 集合 β} (hs : 可测集 s) {t : 集合 Ω}
   证明: by
   have : ρ (s ×ˢ t) = (ρ.fst otimesₘ ρ.condKernel) (s ×ˢ t) := by
     congr; exact (ρ.disintegrate _).symm
@@ -405,7 +405,7 @@ lemma lintegral_condKernel
 
 中文:
 引理 lintegral_condKernel
-  条件: (hf : Measurable f)
+  条件: (hf : 可测 f)
   证明: by
   conv_rhs => rw [← ρ.disintegrate ρ.condKernel]
   rw [lintegral_compProd hf]
@@ -428,8 +428,8 @@ lemma setLIntegral_condKernel
   rw [setLIntegral_compProd hf hs ht]
 
 中文:
-引理 setLIntegral_condKernel
-  结论: (hf : Measurable f) {s : Set β}
+引理 setL整数egral_condKernel
+  结论: (hf : 可测 f) {s : 集合 β}
   证明: by
   conv_rhs => rw [← ρ.disintegrate ρ.condKernel]
   rw [setLIntegral_compProd hf hs ht]
@@ -453,8 +453,8 @@ lemma setLIntegral_condKernel_univ_right
   rw [← setLIntegral_condKernel hf hs MeasurableSet.univ]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setLIntegral_condKernel_univ_right
-  结论: (hf : Measurable f) {s : Set β}
+引理 setL整数egral_condKernel_univ_right
+  结论: (hf : 可测 f) {s : 集合 β}
   证明: by
   rw [← setLIntegral_condKernel hf hs MeasurableSet.univ]; simp_rw [Measure.restrict_univ]
 
@@ -476,8 +476,8 @@ lemma setLIntegral_condKernel_univ_left
   rw [← setLIntegral_condKernel hf MeasurableSet.univ ht]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setLIntegral_condKernel_univ_left
-  结论: (hf : Measurable f) {t : Set Ω}
+引理 setL整数egral_condKernel_univ_left
+  结论: (hf : 可测 f) {t : 集合 Ω}
   证明: by
   rw [← setLIntegral_condKernel hf MeasurableSet.univ ht]; simp_rw [Measure.restrict_univ]
 
@@ -506,7 +506,7 @@ lemma _root_.MeasureTheory.AEStronglyMeasurable.integral_condKernel
   exact AEStronglyMeasurable.integral_kernel_compProd hf
 
 中文:
-引理 _root_.MeasureTheory.AEStronglyMeasurable.integral_condKernel
+引理 _root_.测度论.AEStronglyMeasurable.integral_condKernel
   证明: by
   rw [← ρ.disintegrate ρ.condKernel] at hf
   exact AEStronglyMeasurable.integral_kernel_compProd hf
@@ -532,7 +532,7 @@ lemma integral_condKernel
 
 中文:
 引理 integral_condKernel
-  条件: (hf : 整数egrable f ρ)
+  条件: (hf : 可积 f ρ)
   证明: by
   conv_rhs => rw [← ρ.disintegrate ρ.condKernel]
   rw [← ρ.disintegrate ρ.condKernel] at hf
@@ -558,8 +558,8 @@ lemma setIntegral_condKernel
   rw [setIntegral_compProd hs ht hf]
 
 中文:
-引理 setIntegral_condKernel
-  结论: {s : Set β} (hs : MeasurableSet s)
+引理 set整数egral_condKernel
+  结论: {s : 集合 β} (hs : 可测集 s)
   证明: by
   conv_rhs => rw [← ρ.disintegrate ρ.condKernel]
   rw [← ρ.disintegrate ρ.condKernel] at hf
@@ -584,8 +584,8 @@ lemma setIntegral_condKernel_univ_right
   rw [← setIntegral_condKernel hs MeasurableSet.univ hf]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setIntegral_condKernel_univ_right
-  结论: {s : Set β} (hs : MeasurableSet s)
+引理 set整数egral_condKernel_univ_right
+  结论: {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [← setIntegral_condKernel hs MeasurableSet.univ hf]; simp_rw [Measure.restrict_univ]
 
@@ -606,8 +606,8 @@ lemma setIntegral_condKernel_univ_left
   rw [← setIntegral_condKernel MeasurableSet.univ ht hf]; simp_rw [Measure.restrict_univ]
 
 中文:
-引理 setIntegral_condKernel_univ_left
-  结论: {t : Set Ω} (ht : MeasurableSet t)
+引理 set整数egral_condKernel_univ_left
+  结论: {t : 集合 Ω} (ht : 可测集 t)
   证明: by
   rw [← setIntegral_condKernel MeasurableSet.univ ht hf]; simp_rw [Measure.restrict_univ]
 
@@ -675,8 +675,8 @@ theorem Integrable.condKernel_ae
   exact hf_int.1
 
 中文:
-定理 Integrable.condKernel_ae
-  条件: {f : α × Ω -> F} (hf_int : 整数egrable f ρ)
+定理 可积.condKernel_ae
+  条件: {f : α × Ω -> F} (hf_int : 可积 f ρ)
   证明: by
   have hf_ae : AEStronglyMeasurable f ρ := hf_int.1
   rw [← hf_ae.ae_integrable_condKernel_iff] at hf_int
@@ -702,8 +702,8 @@ theorem Integrable.integral_norm_condKernel
   exact hf_int.2
 
 中文:
-定理 Integrable.integral_norm_condKernel
-  条件: {f : α × Ω -> F} (hf_int : 整数egrable f ρ)
+定理 可积.integral_norm_condKernel
+  条件: {f : α × Ω -> F} (hf_int : 可积 f ρ)
   证明: by
   have hf_ae : AEStronglyMeasurable f ρ := hf_int.1
   rw [← hf_ae.ae_integrable_condKernel_iff] at hf_int
@@ -731,8 +731,8 @@ theorem Integrable.norm_integral_condKernel
   exact integral_nonneg_of_ae (Filter.Eventually.of_forall fun y 
 
 中文:
-定理 Integrable.norm_integral_condKernel
-  条件: {f : α × Ω -> E} (hf_int : 整数egrable f ρ)
+定理 可积.norm_integral_condKernel
+  条件: {f : α × Ω -> E} (hf_int : 可积 f ρ)
   证明: by
   refine hf_int.integral_norm_condKernel.mono hf_int.1.integral_condKernel.norm ?_
   refine Filter.Eventually.of_forall fun x => ?_
@@ -759,8 +759,8 @@ theorem Integrable.integral_condKernel
   proof: (integrable_norm_iff hf_int.1.integral_condKernel).mp hf_int.norm_integral_condKernel
 
 中文:
-定理 Integrable.integral_condKernel
-  条件: {f : α × Ω -> E} (hf_int : 整数egrable f ρ)
+定理 可积.integral_condKernel
+  条件: {f : α × Ω -> E} (hf_int : 可积 f ρ)
   证明: (integrable_norm_iff hf_int.1.integral_condKernel).mp hf_int.norm_integral_condKernel
 
 Depends on / 依赖: hf_int, hf_int.norm_integral_condKernel, integrable_norm_iff, integral_condKernel, norm_integral_condKernel

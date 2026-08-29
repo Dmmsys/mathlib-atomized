@@ -29,8 +29,8 @@ instance Finsupp.fintype
   body: Fintype.ofEquiv _ Finsupp.equivFunOnFinite.symm
 
 中文:
-实例 Finsupp.fintype
-  签名: : Fintype (ι ->₀ α)
+实例 有限支撑.fintype
+  签名: : 有限类型 (ι ->₀ α)
   定义体: Fintype.ofEquiv _ Finsupp.equivFunOnFinite.symm
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite.symm, Fintype, Fintype.ofEquiv, equivFunOnFinite, ofEquiv
@@ -48,8 +48,8 @@ instance Finsupp.infinite_of_left
 Infinite.of_injective _ Finsupp.single_left_injective hm
 
 中文:
-实例 Finsupp.infinite_of_left
-  签名: [Nontrivial α] [Infinite ι]
+实例 有限支撑.infinite_of_left
+  签名: [非平凡 α] [无限 ι]
   定义体: let ⟨_, hm⟩ := exists_ne (0 : α)
 Infinite.of_injective _ Finsupp.single_left_injective hm
 
@@ -69,8 +69,8 @@ instance Finsupp.infinite_of_right
     (Finsupp.single_injective (Classical.arbitrary ι))
 
 中文:
-实例 Finsupp.infinite_of_right
-  签名: [Infinite α] [Nonempty ι]
+实例 有限支撑.infinite_of_right
+  签名: [无限 α] [非空 ι]
   定义体: Infinite.of_injective (fun i => Finsupp.single (Classical.arbitrary ι) i)
     (Finsupp.single_injective (Classical.arbitrary ι))
 
@@ -91,7 +91,7 @@ lemma Fintype.card_finsupp
   simp [card_congr Finsupp.equivFunOnFinite]
 
 中文:
-引理 Fintype.card_finsupp
+引理 有限类型.card_finsupp
   结论: card (ι ->₀ α) = card α ^ card ι
   证明: by
   simp [card_congr Finsupp.equivFunOnFinite]

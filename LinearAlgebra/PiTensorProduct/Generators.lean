@@ -240,7 +240,7 @@ lemma _root_.MultilinearMap.ext_of_span_eq_top
   exact PiTensorProduct.ext_of_span_eq_top hg (fun j => by simpa using h j)
 
 中文:
-引理 _root_.MultilinearMap.ext_of_span_eq_top
+引理 _root_.多重线性映射.ext_of_span_eq_top
   证明: by
   suffices lift φ = lift φ' by
     ext m

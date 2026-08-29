@@ -70,8 +70,8 @@ theorem Prime.pow_minFac
   rw [Nat.pow_minFac hk]; rw [hp.minFac_eq]
 
 中文:
-定理 Prime.pow_minFac
-  条件: {p k : 自然数} (hp : p.Prime) (hk : k != 0)
+定理 素.pow_minFac
+  条件: {p k : 自然数} (hp : p.素) (hk : k != 0)
   结论: (p ^ k).minFac = p
   证明: by
   rw [Nat.pow_minFac hk]; rw [hp.minFac_eq]

@@ -63,7 +63,7 @@ definition wf_lbp
 
 中文:
 定义 wf_lbp
-  签名: : WellFounded (@lbp p)
+  签名: : 良基 (@lbp p)
   定义体: ⟨let ⟨n, pn⟩ := H
     suffices forall m k, n <= k + m -> Acc lbp k from fun _ => this _ _ (Nat.le_add_left _ _)
     fun m =>

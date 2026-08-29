@@ -81,8 +81,8 @@ theorem TensorProduct.isTensorProduct
   · exact Function.bijective_id
 
 中文:
-定理 TensorProduct.isTensorProduct
-  结论: IsTensorProduct (TensorProduct.mk R M N)
+定理 张量积.isTensorProduct
+  结论: IsTensorProduct (张量积.mk R M N)
   证明: by
   delta IsTensorProduct
   convert_to Function.Bijective (LinearMap.id : M otimes[R] N ->ₗ[R] M otimes[R] N) using 2
@@ -616,7 +616,7 @@ definition assoc
 
 中文:
 定义 assoc
-  签名: {T : 类型} [CommSemiring T] [Algebra R T] [Module T M₁]
+  签名: {T : 类型} [交换半环 T] [代数 R T] [模 T M₁]
   定义体: IsTensorProduct.assocAux (f.restrictScalars₁₂ R S) hf g hg
   map_smul' t x := by
     induction x with
@@ -1012,7 +1012,7 @@ theorem IsBaseChange.algHom_ext'
 
 中文:
 定理 IsBaseChange.algHom_ext'
-  结论: [Module R Q] [IsScalarTower R S Q] (g₁ g₂ : N ->ₗ[S] Q)
+  结论: [模 R Q] [标量塔 R S Q] (g₁ g₂ : N ->ₗ[S] Q)
   证明: h.algHom_ext g₁ g₂ (LinearMap.congr_fun e)
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, algHom_ext, congr_fun, h.algHom_ext
@@ -1041,8 +1041,8 @@ theorem TensorProduct.isBaseChange
   exact mul_one _
 
 中文:
-定理 TensorProduct.isBaseChange
-  结论: IsBaseChange S (TensorProduct.mk R S M 1)
+定理 张量积.isBaseChange
+  结论: IsBaseChange S (张量积.mk R S M 1)
   证明: by
   delta IsBaseChange
   convert! TensorProduct.isTensorProduct R S M using 1
@@ -1164,7 +1164,7 @@ theorem IsBaseChange.linearMap
 
 中文:
 定理 IsBaseChange.linearMap
-  结论: IsBaseChange S (Algebra.linearMap R S)
+  结论: IsBaseChange S (代数.linearMap R S)
   证明: of_equiv (AlgebraTensorModule.rid R S S) fun x => by
     simpa using (Algebra.algebraMap_eq_smul_one x).symm
 
@@ -1631,7 +1631,7 @@ class Algebra.IsPushout
     - out : IsBaseChange S (toAlgHom R R' S').toLinearMap
 
 中文:
-类 Algebra.IsPushout
+类 代数.是推出
   参数: : 命题 where
   公理与运算 (1 个):
     - out : IsBaseChange S (toAlgHom R R' S').toLinearMap
@@ -1660,8 +1660,8 @@ definition Algebra.IsPushout.equiv
       | tmul x y => simp [IsBaseChange.equiv_tmul, Algebra.smul_def, mul_mu
 
 中文:
-定义 Algebra.IsPushout.equiv
-  签名: [h : Algebra.IsPushout R S R' S']
+定义 代数.是推出.equiv
+  签名: [h : 代数.是推出 R S R' S']
   定义体: h.out.equiv
   map_mul' x y := by
     dsimp
@@ -1699,8 +1699,8 @@ lemma Algebra.IsPushout.equiv_tmul
   proof: (h.out.equiv_tmul _ _).trans (Algebra.smul_def _ _)
 
 中文:
-引理 Algebra.IsPushout.equiv_tmul
-  条件: [h : Algebra.IsPushout R S R' S'] (a : S) (b : R')
+引理 代数.是推出.equiv_tmul
+  条件: [h : 代数.是推出 R S R' S'] (a : S) (b : R')
   证明: (h.out.equiv_tmul _ _).trans (Algebra.smul_def _ _)
 
 Depends on / 依赖: Algebra, Algebra.smul_def, equiv_tmul, h.out.equiv_tmul, smul_def
@@ -1719,8 +1719,8 @@ lemma Algebra.IsPushout.equiv_symm_algebraMap_left
   rw [(equiv R S R' S').symm_apply_eq]; rw [equiv_tmul]; rw [map_one]; rw [mul_one]
 
 中文:
-引理 Algebra.IsPushout.equiv_symm_algebraMap_left
-  条件: [Algebra.IsPushout R S R' S'] (a : S)
+引理 代数.是推出.equiv_symm_algebraMap_left
+  条件: [代数.是推出 R S R' S'] (a : S)
   证明: by
   rw [(equiv R S R' S').symm_apply_eq]; rw [equiv_tmul]; rw [map_one]; rw [mul_one]
 
@@ -1740,8 +1740,8 @@ lemma Algebra.IsPushout.equiv_symm_algebraMap_right
   rw [(equiv R S R' S').symm_apply_eq]; rw [equiv_tmul]; rw [map_one]; rw [one_mul]
 
 中文:
-引理 Algebra.IsPushout.equiv_symm_algebraMap_right
-  条件: [Algebra.IsPushout R S R' S'] (a : R')
+引理 代数.是推出.equiv_symm_algebraMap_right
+  条件: [代数.是推出 R S R' S'] (a : R')
   证明: by
   rw [(equiv R S R' S').symm_apply_eq]; rw [equiv_tmul]; rw [map_one]; rw [one_mul]
 
@@ -1768,9 +1768,9 @@ theorem Algebra.IsPushout.symm
     fun _ => by simp [equiv_tmul]
 
 中文:
-定理 Algebra.IsPushout.symm
-  条件: (h : Algebra.IsPushout R S R' S')
-  结论: Algebra.IsPushout R R' S S' where
+定理 代数.是推出.symm
+  条件: (h : 代数.是推出 R S R' S')
+  结论: 代数.是推出 R R' S S' where
   证明: .of_equiv
     { __ := (TensorProduct.comm R ..).toAddEquiv.trans (equiv R S R' S').toAddEquiv,
       map_smul' _ x := x.induction_on (by simp) (fun _ _ => by
@@ -1797,8 +1797,8 @@ theorem Algebra.IsPushout.comm
   proof: ⟨Algebra.IsPushout.symm, Algebra.IsPushout.symm⟩
 
 中文:
-定理 Algebra.IsPushout.comm
-  结论: Algebra.IsPushout R S R' S' ↔ Algebra.IsPushout R R' S S'
+定理 代数.是推出.comm
+  结论: 代数.是推出 R S R' S' ↔ 代数.是推出 R R' S S'
   证明: ⟨Algebra.IsPushout.symm, Algebra.IsPushout.symm⟩
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.symm, IsPushout
@@ -1816,7 +1816,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R R S S
+  签名: 代数.是推出 R R S S
   定义体: .of_equiv (TensorProduct.lid R S) fun _ => by simp
 
 Depends on / 依赖: TensorProduct, TensorProduct.lid, of_equiv
@@ -1834,7 +1834,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R S R S
+  签名: 代数.是推出 R S R S
   定义体: .symm inferInstance
 -/
 instance : Algebra.IsPushout R S R S := .symm inferInstance
@@ -1852,8 +1852,8 @@ instance TensorProduct.isPushout
   body: ⟨TensorProduct.isBaseChange R T S⟩
 
 中文:
-实例 TensorProduct.isPushout
-  签名: {R S T : 类型} [CommSemiring R] [CommSemiring S] [CommSemiring T]
+实例 张量积.isPushout
+  签名: {R S T : 类型} [交换半环 R] [交换半环 S] [交换半环 T]
   定义体: ⟨TensorProduct.isBaseChange R T S⟩
 
 Depends on / 依赖: TensorProduct, TensorProduct.isBaseChange, isBaseChange
@@ -1871,8 +1871,8 @@ instance TensorProduct.isPushout'
   body: Algebra.IsPushout.symm inferInstance
 
 中文:
-实例 TensorProduct.isPushout'
-  签名: {R S T : 类型} [CommSemiring R] [CommSemiring S] [CommSemiring T]
+实例 张量积.isPushout'
+  签名: {R S T : 类型} [交换半环 R] [交换半环 S] [交换半环 T]
   定义体: Algebra.IsPushout.symm inferInstance
 
 Depends on / 依赖: Algebra, Algebra.IsPushout.symm, IsPushout
@@ -1893,7 +1893,7 @@ lemma Algebra.IsPushout.tensorProduct_tensorProduct
   simpa using congr($H s)
 
 中文:
-引理 Algebra.IsPushout.tensorProduct_tensorProduct
+引理 代数.是推出.tensorProduct_tensorProduct
   证明: by
   constructor
   convert! isBaseChange_tensorProduct_map (R := R) (P := S) _ (IsBaseChange.linearMap A B)
@@ -1928,8 +1928,8 @@ definition Algebra.pushoutDesc
     ((Algebra.IsPushout.equiv R S R' S').symm.toAlgHom.restrictScalars R)
 
 中文:
-定义 Algebra.pushoutDesc
-  签名: [H : Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定义 代数.pushoutDesc
+  签名: [H : 代数.是推出 R S R' S'] {A : 类型} [半环 A]
   定义体: (Algebra.TensorProduct.lift f g hf).comp
     ((Algebra.IsPushout.equiv R S R' S').symm.toAlgHom.restrictScalars R)
 
@@ -1953,8 +1953,8 @@ theorem Algebra.pushoutDesc_left
   simp [Algebra.pushoutDesc_apply]
 
 中文:
-定理 Algebra.pushoutDesc_left
-  结论: [Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定理 代数.pushoutDesc_left
+  结论: [代数.是推出 R S R' S'] {A : 类型} [半环 A]
   证明: by
   simp [Algebra.pushoutDesc_apply]
 
@@ -1974,8 +1974,8 @@ theorem Algebra.lift_algHom_comp_left
   proof: AlgHom.ext fun x => (Algebra.pushoutDesc_left S' f g H x :)
 
 中文:
-定理 Algebra.lift_algHom_comp_left
-  结论: [Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定理 代数.lift_algHom_comp_left
+  结论: [代数.是推出 R S R' S'] {A : 类型} [半环 A]
   证明: AlgHom.ext fun x => (Algebra.pushoutDesc_left S' f g H x :)
 
 Depends on / 依赖: AlgHom, AlgHom.ext, Algebra, Algebra.pushoutDesc_left, pushoutDesc_left
@@ -1997,8 +1997,8 @@ theorem Algebra.pushoutDesc_right
   simp [Algebra.pushoutDesc_apply, Algebra.IsPushout.equiv_symm_algebraMap_right]
 
 中文:
-定理 Algebra.pushoutDesc_right
-  结论: [Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定理 代数.pushoutDesc_right
+  结论: [代数.是推出 R S R' S'] {A : 类型} [半环 A]
   证明: by
   simp [Algebra.pushoutDesc_apply, Algebra.IsPushout.equiv_symm_algebraMap_right]
 
@@ -2020,8 +2020,8 @@ theorem Algebra.lift_algHom_comp_right
 @[ext (iff := false)]
 
 中文:
-定理 Algebra.lift_algHom_comp_right
-  结论: [Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定理 代数.lift_algHom_comp_right
+  结论: [代数.是推出 R S R' S'] {A : 类型} [半环 A]
   证明: AlgHom.ext fun x => (Algebra.pushoutDesc_right S' f g H x :)
 
 @[ext (iff := false)]
@@ -2053,8 +2053,8 @@ theorem Algebra.IsPushout.algHom_ext
     rw [map_add]; rw [map_add]; rw [e₁]; rw 
 
 中文:
-定理 Algebra.IsPushout.algHom_ext
-  结论: [H : Algebra.IsPushout R S R' S'] {A : 类型} [Semiring A]
+定理 代数.是推出.algHom_ext
+  结论: [H : 代数.是推出 R S R' S'] {A : 类型} [半环 A]
   证明: by
   ext x
   refine H.1.inductionOn x _ ?_ ?_ ?_ ?_
@@ -2097,8 +2097,8 @@ lemma Algebra.IsPushout.comp_iff
   have heq : (toAlgHom S S' T').toLinearMap.restrictScalars R ∘ₗ f
 
 中文:
-引理 Algebra.IsPushout.comp_iff
-  结论: {T' : 类型} [CommSemiring T'] [Algebra R T']
+引理 代数.是推出.comp_iff
+  结论: {T' : 类型} [交换半环 T'] [代数 R T']
   证明: by
   let f : R' ->ₗ[R] S' := (IsScalarTower.toAlgHom R R' S').toLinearMap
   have : IsScalarTower R S T' := .of_algebraMap_eq fun x => by
@@ -2136,8 +2136,8 @@ lemma Algebra.IsPushout.of_equiv
   simpa [h.equiv_tmul] using DFunLike.congr_fun he x
 
 中文:
-引理 Algebra.IsPushout.of_equiv
-  结论: [h : IsPushout R R' S S']
+引理 代数.是推出.of_equiv
+  结论: [h : 是推出 R R' S S']
   证明: by
   rw [isPushout_iff] at h ⊢
   refine IsBaseChange.of_equiv (h.equiv ≪≫ₗ e.toLinearEquiv) fun x => ?_
@@ -2177,7 +2177,7 @@ definition IsPushout.cancelBaseChangeAux
     (AlgebraTensorModule.cancelBaseChange _ _ A _ _).re
 
 中文:
-定义 IsPushout.cancelBaseChangeAux
+定义 是推出.cancelBaseChangeAux
   签名: : B otimes[A] M ≃ₗ[R] S otimes[R] M
   定义体: have : IsPushout R A S B := IsPushout.symm inferInstance
   (AlgebraTensorModule.congr ((IsPushout.equiv R A S B).toLinearEquiv).symm
@@ -2206,7 +2206,7 @@ lemma IsPushout.cancelBaseChangeAux_symm_tmul
   simp [IsPushout.cancelBaseChangeAux, IsPushout.equiv_tmul]
 
 中文:
-引理 IsPushout.cancelBaseChangeAux_symm_tmul
+引理 是推出.cancelBaseChangeAux_symm_tmul
   条件: (s : S) (m : M)
   证明: by
   simp [IsPushout.cancelBaseChangeAux, IsPushout.equiv_tmul]
@@ -2238,7 +2238,7 @@ AddEquiv.toLinearEquiv (IsPushout.cancelBaseChangeAux R S A B M).symm by
 @[simp]
 
 中文:
-定义 IsPushout.cancelBaseChange
+定义 是推出.cancelBaseChange
   签名: : B otimes[A] M ≃ₗ[S] S otimes[R] M
   定义体: LinearEquiv.symm
 AddEquiv.toLinearEquiv (IsPushout.cancelBaseChangeAux R S A B M).symm by
@@ -2275,7 +2275,7 @@ lemma IsPushout.cancelBaseChange_tmul
 @[simp]
 
 中文:
-引理 IsPushout.cancelBaseChange_tmul
+引理 是推出.cancelBaseChange_tmul
   条件: (m : M)
   证明: by
   change ((cancelBaseChangeAux R S A B M).symm).symm (1 otimesₜ[A] m) = 1 otimesₜ[R] m
@@ -2300,7 +2300,7 @@ lemma IsPushout.cancelBaseChange_symm_tmul
   proof: IsPushout.cancelBaseChangeAux_symm_tmul R S A B M s m
 
 中文:
-引理 IsPushout.cancelBaseChange_symm_tmul
+引理 是推出.cancelBaseChange_symm_tmul
   条件: (s : S) (m : M)
   证明: IsPushout.cancelBaseChangeAux_symm_tmul R S A B M s m
 
@@ -2328,7 +2328,7 @@ definition IsPushout.cancelBaseChangeAlg
 @[simp]
 
 中文:
-定义 IsPushout.cancelBaseChangeAlg
+定义 是推出.cancelBaseChangeAlg
   签名: : B otimes[A] C ≃ₐ[S] S otimes[R] C
   定义体: by
   refine AlgEquiv.symm
@@ -2360,7 +2360,7 @@ lemma IsPushout.toLinearEquiv_cancelBaseChangeAlg
 @[simp]
 
 中文:
-引理 IsPushout.toLinearEquiv_cancelBaseChangeAlg
+引理 是推出.toLinearEquiv_cancelBaseChangeAlg
   证明: by
   rfl
 
@@ -2382,7 +2382,7 @@ lemma IsPushout.cancelBaseChangeAlg_tmul
   simp [cancelBaseChangeAlg]
 
 中文:
-引理 IsPushout.cancelBaseChangeAlg_tmul
+引理 是推出.cancelBaseChangeAlg_tmul
   条件: (c : C)
   证明: by
   simp [cancelBaseChangeAlg]
@@ -2405,7 +2405,7 @@ lemma IsPushout.cancelBaseChangeAlg_symm_tmul
   simp [cancelBaseChangeAlg]
 
 中文:
-引理 IsPushout.cancelBaseChangeAlg_symm_tmul
+引理 是推出.cancelBaseChangeAlg_symm_tmul
   条件: (s : S) (c : C)
   证明: by
   simp [cancelBaseChangeAlg]
@@ -2430,7 +2430,7 @@ lemma IsPushout.cancelBaseChange_symm_comp_lTensor
   simp [← TensorProduct.one_def, ← TensorProduct.tmul_one_eq_one_tmul, RingHom.algebraMap_toAlgebra]
 
 中文:
-引理 IsPushout.cancelBaseChange_symm_comp_lTensor
+引理 是推出.cancelBaseChange_symm_comp_lTensor
   证明: by
   ext
   simp [← TensorProduct.one_def, ← TensorProduct.tmul_one_eq_one_tmul, RingHom.algebraMap_toAlgebra]

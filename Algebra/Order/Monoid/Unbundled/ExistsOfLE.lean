@@ -33,7 +33,7 @@ class ExistsAddOfLE
 
 中文:
 类 ExistsAddOfLE
-  参数: (α : 类型u) [Add α] [LE α]
+  参数: (α : 类型u) [加法 α] [LE α]
   公理与运算 (1 个):
     - exists_add_of_le : 对任意 {a b : α}, a <= b -> 存在 c : α, b = a + c
 -/
@@ -56,7 +56,7 @@ class ExistsMulOfLE
 
 中文:
 类 ExistsMulOfLE
-  参数: (α : 类型u) [Mul α] [LE α]
+  参数: (α : 类型u) [乘法 α] [LE α]
   公理与运算 (1 个):
     - exists_mul_of_le : 对任意 {a b : α}, a <= b -> 存在 c : α, b = a * c
 -/
@@ -85,7 +85,7 @@ lemma exists_one_le_mul_of_le
   obtain ⟨c, rfl⟩ := exists_mul_of_le h; exact ⟨c, one_le_of_le_mul_right h, rfl⟩
 
 中文:
-引理 exists_one_le_mul_of_le
+引理 存在_one_le_mul_of_le
   条件: [MulLeftReflectLE α] (h : a <= b)
   证明: by
   obtain ⟨c, rfl⟩ := exists_mul_of_le h; exact ⟨c, one_le_of_le_mul_right h, rfl⟩
@@ -104,7 +104,7 @@ lemma exists_one_lt_mul_of_lt'
   obtain ⟨c, rfl⟩ := exists_mul_of_le h.le; exact ⟨c, one_lt_of_lt_mul_right h, rfl⟩
 
 中文:
-引理 exists_one_lt_mul_of_lt'
+引理 存在_one_lt_mul_of_lt'
   条件: [MulLeftReflectLT α] (h : a < b)
   证明: by
   obtain ⟨c, rfl⟩ := exists_mul_of_le h.le; exact ⟨c, one_lt_of_lt_mul_right h, rfl⟩
@@ -122,7 +122,7 @@ lemma le_iff_exists_one_le_mul
   proof: ⟨exists_one_le_mul_of_le, by rintro ⟨c, hc, rfl⟩; exact le_mul_of_one_le_right' hc⟩
 
 中文:
-引理 le_iff_exists_one_le_mul
+引理 le_iff_存在_one_le_mul
   结论: [MulLeftMono α]
   证明: ⟨exists_one_le_mul_of_le, by rintro ⟨c, hc, rfl⟩; exact le_mul_of_one_le_right' hc⟩
 -/
@@ -139,7 +139,7 @@ lemma lt_iff_exists_one_lt_mul
   proof: ⟨exists_one_lt_mul_of_lt', by rintro ⟨c, hc, rfl⟩; exact lt_mul_of_one_lt_right' _ hc⟩
 
 中文:
-引理 lt_iff_exists_one_lt_mul
+引理 lt_iff_存在_one_lt_mul
   结论: [MulLeftStrictMono α]
   证明: ⟨exists_one_lt_mul_of_lt', by rintro ⟨c, hc, rfl⟩; exact lt_mul_of_one_lt_right' _ hc⟩
 -/
@@ -169,7 +169,7 @@ theorem le_of_forall_one_lt_le_mul
 @[to_additive]
 
 中文:
-定理 le_of_forall_one_lt_le_mul
+定理 le_of_对任意_one_lt_le_mul
   条件: (h : 对任意 ε : α, 1 < ε -> a <= b * ε)
   结论: a <= b
   证明: le_of_forall_gt_imp_ge_of_dense fun x hxb => by
@@ -198,7 +198,7 @@ theorem le_of_forall_one_lt_lt_mul'
 @[to_additive]
 
 中文:
-定理 le_of_forall_one_lt_lt_mul'
+定理 le_of_对任意_one_lt_lt_mul'
   条件: (h : 对任意 ε : α, 1 < ε -> a < b * ε)
   结论: a <= b
   证明: le_of_forall_one_lt_le_mul fun ε hε => (h ε hε).le
@@ -222,7 +222,7 @@ theorem le_iff_forall_one_lt_lt_mul'
 @[to_additive]
 
 中文:
-定理 le_iff_forall_one_lt_lt_mul'
+定理 le_iff_对任意_one_lt_lt_mul'
   条件: [MulLeftStrictMono α]
   证明: ⟨fun h _ => lt_mul_of_le_of_one_lt h, le_of_forall_one_lt_lt_mul'⟩
 
@@ -244,7 +244,7 @@ theorem le_iff_forall_one_lt_le_mul
   proof: .le, le_of_forall_one_lt_le_mul⟩ ⟨fun h _ hε => lt_mul_of_le_of_one_lt h hε
 
 中文:
-定理 le_iff_forall_one_lt_le_mul
+定理 le_iff_对任意_one_lt_le_mul
   条件: [MulLeftStrictMono α]
   证明: .le, le_of_forall_one_lt_le_mul⟩ ⟨fun h _ hε => lt_mul_of_le_of_one_lt h hε
 

@@ -193,7 +193,7 @@ theorem toAlgEquiv_conjStarAlgAut
 
 中文:
 定理 toAlgEquiv_conjStarAlgAut
-  条件: {S : 类型} [CommSemiring S] [Algebra S R] (u : unitary R)
+  条件: {S : 类型} [交换半环 S] [代数 S R] (u : unitary R)
   证明: rfl
 
 Depends on / 依赖: IsAffineHom
@@ -218,7 +218,7 @@ theorem conjStarAlgAut_ext_iff
 
 中文:
 定理 conjStarAlgAut_ext_iff
-  结论: {S : 类型} [CommSemiring S] [Algebra S R] [Algebra.IsCentral S R]
+  结论: {S : 类型} [交换半环 S] [代数 S R] [代数.是中心 S R]
   证明: by
   conv_lhs => rw [eq_comm]
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,
@@ -253,7 +253,7 @@ theorem conjStarAlgAut_ext_iff'
 
 中文:
 定理 conjStarAlgAut_ext_iff'
-  结论: {R S : 类型} [Ring R] [StarMul R] [CommRing S] [StarMul S]
+  结论: {R S : 类型} [环 R] [StarMul R] [交换环 S] [StarMul S]
   证明: by
   conv_lhs => rw [eq_comm]
   simp_rw [StarAlgEquiv.ext_iff, conjStarAlgAut_apply, ← coe_star, star_eq_inv,

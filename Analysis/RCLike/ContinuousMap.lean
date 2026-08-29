@@ -107,7 +107,7 @@ lemma realToRCLike_monotone
 
 中文:
 引理 realToRCLike_monotone
-  结论: Monotone (realToRCLike (X := X) 𝕜)
+  结论: 递增 (realToRCLike (X := X) 𝕜)
   证明: .monotone realToRCLikeOrderEmbedding X 𝕜
 -/
 lemma realToRCLike_monotone : Monotone (realToRCLike (X := X) 𝕜) :=
@@ -124,7 +124,7 @@ lemma realToRCLike_strictMono
 
 中文:
 引理 realToRCLike_strictMono
-  结论: StrictMono (realToRCLike (X := X) 𝕜)
+  结论: 严格递增 (realToRCLike (X := X) 𝕜)
   证明: .strictMono realToRCLikeOrderEmbedding X 𝕜
 -/
 lemma realToRCLike_strictMono : StrictMono (realToRCLike (X := X) 𝕜) :=
@@ -141,7 +141,7 @@ lemma realToRCLike_injective
 
 中文:
 引理 realToRCLike_injective
-  结论: (realToRCLike (X := X) 𝕜).Injective
+  结论: (realToRCLike (X := X) 𝕜).单射
   证明: .injective realToRCLikeOrderEmbedding X 𝕜
 -/
 @[simp] lemma realToRCLike_injective : (realToRCLike (X := X) 𝕜).Injective :=
@@ -210,8 +210,8 @@ theorem isometry_realToRCLike
 
 中文:
 定理 isometry_realToRCLike
-  条件: [CompactSpace X]
-  结论: Isometry (realToRCLike 𝕜 (X := X))
+  条件: [紧空间 X]
+  结论: 等距 (realToRCLike 𝕜 (X := X))
   证明: .of_dist_eq fun f g => by simp [dist_eq_norm, norm_eq_iSup_norm, ← map_sub]
 -/
 @[simp] theorem isometry_realToRCLike [CompactSpace X] : Isometry (realToRCLike 𝕜 (X := X)) :=
@@ -228,7 +228,7 @@ lemma continuous_realToRCLike
 
 中文:
 引理 continuous_realToRCLike
-  结论: Continuous (realToRCLike 𝕜 (X := X))
+  结论: 连续 (realToRCLike 𝕜 (X := X))
   证明: continuous_postcomp { toFun x := RCLike.ofReal x }
 -/
 @[simp, fun_prop] lemma continuous_realToRCLike : Continuous (realToRCLike 𝕜 (X := X)) :=
@@ -316,7 +316,7 @@ definition rclikeToReal
   body: RCLike.re (f x)
 
 中文:
-定义 rclikeToReal
+定义 rclikeTo实数
   签名: (f : C(X, 𝕜))
   定义体: RCLike.re (f x)
 -/
@@ -333,8 +333,8 @@ lemma rclikeToReal_monotone
   intro a b; simp_all [le_def, RCLike.le_iff_re_im (K := 𝕜)]
 
 中文:
-引理 rclikeToReal_monotone
-  结论: Monotone (rclikeTo实数 (X := X) (𝕜 := 𝕜))
+引理 rclikeTo实数_monotone
+  结论: 递增 (rclikeTo实数 (X := X) (𝕜 := 𝕜))
   证明: by
   intro a b; simp_all [le_def, RCLike.le_iff_re_im (K := 𝕜)]
 
@@ -353,8 +353,8 @@ lemma continuous_rclikeToReal
   proof: continuous_postcomp { toFun x := RCLike.re x }
 
 中文:
-引理 continuous_rclikeToReal
-  结论: Continuous (rclikeTo实数 (X := X) (𝕜 := 𝕜))
+引理 continuous_rclikeTo实数
+  结论: 连续 (rclikeTo实数 (X := X) (𝕜 := 𝕜))
   证明: continuous_postcomp { toFun x := RCLike.re x }
 -/
 @[simp, fun_prop] lemma continuous_rclikeToReal : Continuous (rclikeToReal (X := X) (𝕜 := 𝕜)) :=
@@ -369,7 +369,7 @@ theorem rclikeToReal_realToRCLike
   proof: by ext; simp
 
 中文:
-定理 rclikeToReal_realToRCLike
+定理 rclikeTo实数_realToRCLike
   条件: (f : C(X, 实数))
   证明: by ext; simp
 -/
@@ -391,7 +391,7 @@ theorem IsSelfAdjoint.realToRCLike_rclikeToReal
   simp
 
 中文:
-定理 IsSelfAdjoint.realToRCLike_rclikeToReal
+定理 IsSelfAdjoint.realToRCLike_rclikeTo实数
   条件: {f : C(X, 𝕜)} (hf : IsSelfAdjoint f)
   证明: by
   ext

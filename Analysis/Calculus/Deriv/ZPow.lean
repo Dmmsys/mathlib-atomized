@@ -113,7 +113,7 @@ theorem hasDerivWithinAt_zpow
 
 中文:
 定理 hasDerivWithinAt_zpow
-  条件: (m : 整数) (x : 𝕜) (h : x != 0 ∨ 0 <= m) (s : Set 𝕜)
+  条件: (m : 整数) (x : 𝕜) (h : x != 0 ∨ 0 <= m) (s : 集合 𝕜)
   证明: (hasDerivAt_zpow m x h).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt_zpow, hasDerivWithinAt
@@ -173,7 +173,7 @@ differentiableWithinAt_zpow m x h.imp_left ne_of_mem_of_not_mem hxs
 
 中文:
 定理 differentiableOn_zpow
-  条件: (m : 整数) (s : Set 𝕜) (h : (0 : 𝕜) ∉ s ∨ 0 <= m)
+  条件: (m : 整数) (s : 集合 𝕜) (h : (0 : 𝕜) ∉ s ∨ 0 <= m)
   证明: fun x hxs =>
 differentiableWithinAt_zpow m x h.imp_left ne_of_mem_of_not_mem hxs
 -/
@@ -598,8 +598,8 @@ theorem Differentiable.zpow
   proof: fun x => (hf x).zpow h.imp_left fun h => h x
 
 中文:
-定理 Differentiable.zpow
-  条件: (hf : Differentiable 𝕜 f) (h : (对任意 x, f x != 0) ∨ 0 <= m)
+定理 可微.zpow
+  条件: (hf : 可微 𝕜 f) (h : (对任意 x, f x != 0) ∨ 0 <= m)
   证明: fun x => (hf x).zpow h.imp_left fun h => h x
 
 Depends on / 依赖: h.imp_left, imp_left

@@ -46,8 +46,8 @@ theorem univ_option
 
 中文:
 定理 univ_option
-  条件: (α : 类型) [Fintype α]
-  结论: (univ : Finset (Option α)) = insertNone univ
+  条件: (α : 类型) [有限类型 α]
+  结论: (univ : 有限集 (选项类型 α)) = insertNone univ
   证明: rfl
 
 @[simp]
@@ -65,8 +65,8 @@ theorem Fintype.card_option
   proof: (Finset.card_cons (by simp)).trans congr_arg₂ _ (card_map _) rfl
 
 中文:
-定理 Fintype.card_option
-  条件: {α : 类型} [Fintype α]
+定理 有限类型.card_option
+  条件: {α : 类型} [有限类型 α]
   证明: (Finset.card_cons (by simp)).trans congr_arg₂ _ (card_map _) rfl
 
 Depends on / 依赖: Finset, Finset.card_cons, card_cons, card_map
@@ -88,7 +88,7 @@ definition fintypeOfOption
 
 中文:
 定义 fintypeOfOption
-  签名: {α : 类型} [Fintype (Option α)]
+  签名: {α : 类型} [有限类型 (选项类型 α)]
   定义体: ⟨Finset.eraseNone (Fintype.elems (α := Option α)), fun x =>
     mem_eraseNone.mpr (Fintype.complete (some x))⟩
 
@@ -111,7 +111,7 @@ definition fintypeOfOptionEquiv
 
 中文:
 定义 fintypeOfOptionEquiv
-  签名: [Fintype α] (f : α ≃ Option β)
+  签名: [有限类型 α] (f : α ≃ 选项类型 β)
   定义体: haveI := Fintype.ofEquiv _ f
   fintypeOfOption
 
@@ -143,7 +143,7 @@ definition truncRecEmptyOption
 
 中文:
 定义 truncRecEmptyOption
-  签名: {P : 类型u -> Sort v} (of_equiv : 对任意 {α β}, α ≃ β -> P α -> P β)
+  签名: {P : 类型u -> 类型层 v} (of_equiv : 对任意 {α β}, α ≃ β -> P α -> P β)
   定义体: by
   suffices forall n : Nat, Trunc (P (ULift <| Fin n)) by
     apply Trunc.bind (this (Fintype.card α))
@@ -205,7 +205,7 @@ theorem induction_empty_option
 
 中文:
 定理 induction_empty_option
-  结论: {P : 对任意 (α : 类型u) [Fintype α], 命题}
+  结论: {P : 对任意 (α : 类型u) [有限类型 α], 命题}
   证明: by
   obtain ⟨p⟩ :=
     let f_empty := fun i => by convert! h_empty
@@ -246,7 +246,7 @@ theorem Finite.induction_empty_option
   exacts [fun α β _ => of_equiv, h_empty, @h_option]
 
 中文:
-定理 Finite.induction_empty_option
+定理 有限.induction_empty_option
   结论: {P : 类型u -> 命题} (of_equiv : 对任意 {α β}, α ≃ β -> P α -> P β)
   证明: by
   cases nonempty_fintype α

@@ -301,7 +301,7 @@ lemma primeFactors_of_isUnit
 
 中文:
 引理 primeFactors_of_isUnit
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: primeFactors a = ∅
   证明: by
   classical
@@ -327,7 +327,7 @@ theorem primeFactors_eq_empty_iff
 中文:
 定理 primeFactors_eq_empty_iff
   条件: (ha : a != 0)
-  结论: primeFactors a = ∅ ↔ IsUnit a
+  结论: primeFactors a = ∅ ↔ 是单位 a
   证明: by
   classical
   rw [primeFactors]; rw [Multiset.toFinset_eq_empty]; rw [normalizedFactors_eq_zero_iff ha]
@@ -576,7 +576,7 @@ theorem radical_of_isUnit
 
 中文:
 定理 radical_of_isUnit
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: radical a = 1
   证明: (radical_eq_of_associated (associated_one_iff_isUnit.mpr h)).trans radical_one
 
@@ -596,7 +596,7 @@ theorem radical_mul_of_isUnit_left
 
 中文:
 定理 radical_mul_of_isUnit_left
-  条件: (h : IsUnit u)
+  条件: (h : 是单位 u)
   结论: radical (u * a) = radical a
   证明: radical_eq_of_associated (associated_unit_mul_left _ _ h)
 
@@ -616,7 +616,7 @@ theorem radical_mul_of_isUnit_right
 
 中文:
 定理 radical_mul_of_isUnit_right
-  条件: (h : IsUnit u)
+  条件: (h : 是单位 u)
   结论: radical (a * u) = radical a
   证明: radical_eq_of_associated (associated_mul_unit_left _ _ h)
 
@@ -730,7 +730,7 @@ theorem radical_of_prime
 
 中文:
 定理 radical_of_prime
-  条件: (ha : Prime a)
+  条件: (ha : 素 a)
   结论: radical a = normalize a
   证明: by
   rw [radical]; rw [primeFactors]
@@ -756,7 +756,7 @@ theorem radical_pow_of_prime
 
 中文:
 定理 radical_pow_of_prime
-  条件: (ha : Prime a) {n : 自然数} (hn : n != 0)
+  条件: (ha : 素 a) {n : 自然数} (hn : n != 0)
   证明: by
   rw [radical_pow a hn]
   exact radical_of_prime ha
@@ -784,7 +784,7 @@ theorem radical_ne_zero
 
 中文:
 定理 radical_ne_zero
-  条件: [Nontrivial M]
+  条件: [非平凡 M]
   结论: radical a != 0
   证明: by
   rw [radical]; rw [← Finset.prod_val]
@@ -816,7 +816,7 @@ lemma dvd_radical_iff_of_irreducible
 
 中文:
 引理 dvd_radical_iff_of_irreducible
-  条件: (ha : Irreducible a) (hb : b != 0)
+  条件: (ha : 不可约 a) (hb : b != 0)
   证明: by
   constructor
   · intro ha
@@ -980,7 +980,7 @@ theorem radical_eq_one_iff
 
 中文:
 定理 radical_eq_one_iff
-  结论: radical a = 1 ↔ a = 0 ∨ IsUnit a
+  结论: radical a = 1 ↔ a = 0 ∨ 是单位 a
   证明: by
   refine ⟨?_, (Or.elim · (by simp +contextual) radical_of_isUnit)⟩
   intro h
@@ -1175,7 +1175,7 @@ theorem exists_dvd_pow_iff_radical_dvd
     grw [radical_dvd_radical hdv
 
 中文:
-定理 exists_dvd_pow_iff_radical_dvd
+定理 存在_dvd_pow_iff_radical_dvd
   条件: (ha : a != 0)
   结论: (存在 n, a ∣ b ^ n) ↔ radical a ∣ b
   证明: by
@@ -1212,7 +1212,7 @@ theorem exists_dvd_radical_self_pow
   rw [exists_dvd_pow_iff_radical_dvd ha]
 
 中文:
-定理 exists_dvd_radical_self_pow
+定理 存在_dvd_radical_self_pow
   条件: (ha : a != 0)
   结论: 存在 n, a ∣ radical a ^ n
   证明: by
@@ -1264,7 +1264,7 @@ theorem radical_prod
 
 中文:
 定理 radical_prod
-  结论: {ι : 类型} {f : ι -> M} (s : Finset ι)
+  结论: {ι : 类型} {f : ι -> M} (s : 有限集 ι)
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1343,7 +1343,7 @@ theorem radical_prod_dvd
 
 中文:
 定理 radical_prod_dvd
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> M}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> M}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1510,8 +1510,8 @@ theorem divRadical_isUnit
 
 中文:
 定理 divRadical_isUnit
-  条件: (hu : IsUnit u)
-  结论: IsUnit (divRadical u)
+  条件: (hu : 是单位 u)
+  结论: 是单位 (divRadical u)
   证明: by
   rwa [divRadical, radical_of_isUnit hu, EuclideanDomain.div_one]
 

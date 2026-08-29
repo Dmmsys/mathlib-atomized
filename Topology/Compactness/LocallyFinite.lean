@@ -36,7 +36,7 @@ theorem finite_nonempty_inter_compact
 
 中文:
 定理 finite_nonempty_inter_compact
-  结论: {f : ι -> Set X}
+  结论: {f : ι -> 集合 X}
   证明: by
   choose U hxU hUf using hf
   rcases hs.elim_nhds_subcover U fun x _ => hxU x with ⟨t, -, hsU⟩
@@ -67,7 +67,7 @@ theorem finite_nonempty_of_compact
 
 中文:
 定理 finite_nonempty_of_compact
-  结论: [CompactSpace X] {f : ι -> Set X}
+  结论: [紧空间 X] {f : ι -> 集合 X}
   证明: by
   simpa only [inter_univ] using hf.finite_nonempty_inter_compact isCompact_univ
 
@@ -88,7 +88,7 @@ theorem finite_of_compact
 
 中文:
 定理 finite_of_compact
-  结论: [CompactSpace X] {f : ι -> Set X}
+  结论: [紧空间 X] {f : ι -> 集合 X}
   证明: by
   simpa only [hne] using! hf.finite_nonempty_of_compact
 
@@ -111,7 +111,7 @@ definition fintypeOfCompact
 
 中文:
 定义 fintypeOfCompact
-  签名: [CompactSpace X] {f : ι -> Set X}
+  签名: [紧空间 X] {f : ι -> 集合 X}
   定义体: fintypeOfFiniteUniv (hf.finite_of_compact hne)
 
 Depends on / 依赖: finite_of_compact, fintypeOfFiniteUniv, hf.finite_of_compact

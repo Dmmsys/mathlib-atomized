@@ -66,7 +66,7 @@ theorem mem_leftCoset
 
 中文:
 定理 mem_leftCoset
-  条件: {s : Set α} {x : α} (a : α) (hxS : x in s)
+  条件: {s : 集合 α} {x : α} (a : α) (hxS : x in s)
   结论: a * x in a • s
   证明: mem_image_of_mem (fun b : α => a * b) hxS
 
@@ -89,7 +89,7 @@ theorem mem_rightCoset
 
 中文:
 定理 mem_rightCoset
-  条件: {s : Set α} {x : α} (a : α) (hxS : x in s)
+  条件: {s : 集合 α} {x : α} (a : α) (hxS : x in s)
   结论: x * a in op a • s
   证明: mem_image_of_mem (fun b : α => b * a) hxS
 
@@ -112,7 +112,7 @@ definition LeftCosetEquivalence
 
 中文:
 定义 LeftCosetEquivalence
-  签名: (s : Set α) (a b : α)
+  签名: (s : 集合 α) (a b : α)
   定义体: a • s = b • s
 
 @[to_additive leftAddCosetEquivalence_rel]
@@ -132,8 +132,8 @@ theorem leftCosetEquivalence_rel
 
 中文:
 定理 leftCosetEquivalence_rel
-  条件: (s : Set α)
-  结论: Equivalence (LeftCosetEquivalence s)
+  条件: (s : 集合 α)
+  结论: 等价 (LeftCosetEquivalence s)
   证明: @Equivalence.mk _ (LeftCosetEquivalence s) (fun _ => rfl) Eq.symm Eq.trans
 
 Depends on / 依赖: Eq.symm, Eq.trans, Equivalence, Equivalence.mk, LeftCosetEquivalence
@@ -155,7 +155,7 @@ definition RightCosetEquivalence
 
 中文:
 定义 RightCosetEquivalence
-  签名: (s : Set α) (a b : α)
+  签名: (s : 集合 α) (a b : α)
   定义体: op a • s = op b • s
 
 @[to_additive rightAddCosetEquivalence_rel]
@@ -175,8 +175,8 @@ theorem rightCosetEquivalence_rel
 
 中文:
 定理 rightCosetEquivalence_rel
-  条件: (s : Set α)
-  结论: Equivalence (RightCosetEquivalence s)
+  条件: (s : 集合 α)
+  结论: 等价 (RightCosetEquivalence s)
   证明: @Equivalence.mk _ (RightCosetEquivalence s) (fun _a => rfl) Eq.symm Eq.trans
 
 Depends on / 依赖: Eq.symm, Eq.trans, Equivalence, Equivalence.mk, RightCosetEquivalence
@@ -205,7 +205,7 @@ theorem leftCoset_assoc
 
 中文:
 定理 leftCoset_assoc
-  条件: (s : Set α) (a b : α)
+  条件: (s : 集合 α) (a b : α)
   结论: a • (b • s) = (a * b) • s
   证明: by
   simp [← image_smul, (image_comp _ _ _).symm, Function.comp, mul_assoc]
@@ -232,7 +232,7 @@ theorem rightCoset_assoc
 
 中文:
 定理 rightCoset_assoc
-  条件: (s : Set α) (a b : α)
+  条件: (s : 集合 α) (a b : α)
   结论: op b • op a • s = op (a * b) • s
   证明: by
   simp [← image_smul, (image_comp _ _ _).symm, Function.comp, mul_assoc]
@@ -257,7 +257,7 @@ theorem leftCoset_rightCoset
 
 中文:
 定理 leftCoset_rightCoset
-  条件: (s : Set α) (a b : α)
+  条件: (s : 集合 α) (a b : α)
   结论: op b • a • s = a • (op b • s)
   证明: by
   simp [← image_smul, (image_comp _ _ _).symm, Function.comp, mul_assoc]
@@ -339,7 +339,7 @@ theorem mem_own_leftCoset
 中文:
 定理 mem_own_leftCoset
   条件: (a : α)
-  结论: a in a • (s : Set α)
+  结论: a in a • (s : 集合 α)
   证明: suffices a * 1 in a • (s : Set α) by simpa
   mem_leftCoset a (one_mem s : 1 in s)
 
@@ -367,7 +367,7 @@ theorem mem_own_rightCoset
 中文:
 定理 mem_own_rightCoset
   条件: (a : α)
-  结论: a in op a • (s : Set α)
+  结论: a in op a • (s : 集合 α)
   证明: suffices 1 * a in op a • (s : Set α) by simpa
   mem_rightCoset a (one_mem s : 1 in s)
 
@@ -394,7 +394,7 @@ theorem mem_leftCoset_leftCoset
 
 中文:
 定理 mem_leftCoset_leftCoset
-  条件: {a : α} (ha : a • (s : Set α) = s)
+  条件: {a : α} (ha : a • (s : 集合 α) = s)
   结论: a in s
   证明: by
   rw [← SetLike.mem_coe]; rw [← ha]; exact mem_own_leftCoset s a
@@ -419,7 +419,7 @@ theorem mem_rightCoset_rightCoset
 
 中文:
 定理 mem_rightCoset_rightCoset
-  条件: {a : α} (ha : op a • (s : Set α) = s)
+  条件: {a : α} (ha : op a • (s : 集合 α) = s)
   结论: a in s
   证明: by
   rw [← SetLike.mem_coe]; rw [← ha]; exact mem_own_rightCoset s a
@@ -504,7 +504,7 @@ theorem leftCoset_mem_leftCoset
 中文:
 定理 leftCoset_mem_leftCoset
   条件: {a : α} (ha : a in s)
-  结论: a • (s : Set α) = s
+  结论: a • (s : 集合 α) = s
   证明: Set.ext by simp [mem_leftCoset_iff, mul_mem_cancel_left (s.inv_mem ha)]
 
 @[to_additive rightAddCoset_mem_rightAddCoset]
@@ -529,7 +529,7 @@ theorem rightCoset_mem_rightCoset
 中文:
 定理 rightCoset_mem_rightCoset
   条件: {a : α} (ha : a in s)
-  结论: op a • (s : Set α) = s
+  结论: op a • (s : 集合 α) = s
   证明: Set.ext fun b => by simp [mem_rightCoset_iff, mul_mem_cancel_right (s.inv_mem ha)]
 
 @[to_additive]
@@ -554,7 +554,7 @@ theorem orbit_subgroup_eq_rightCoset
 中文:
 定理 orbit_subgroup_eq_rightCoset
   条件: (a : α)
-  结论: MulAction.orbit s a = op a • s
+  结论: 乘法作用.orbit s a = op a • s
   证明: Set.ext fun _b => ⟨fun ⟨c, d⟩ => ⟨c, c.2, d⟩, fun ⟨c, d, e⟩ => ⟨⟨c, d⟩, e⟩⟩
 
 @[to_additive]
@@ -579,7 +579,7 @@ theorem orbit_subgroup_eq_self_of_mem
 中文:
 定理 orbit_subgroup_eq_self_of_mem
   条件: {a : α} (ha : a in s)
-  结论: MulAction.orbit s a = s
+  结论: 乘法作用.orbit s a = s
   证明: (orbit_subgroup_eq_rightCoset s a).trans (rightCoset_mem_rightCoset s ha)
 
 @[to_additive]
@@ -602,7 +602,7 @@ theorem orbit_subgroup_one_eq_self
 
 中文:
 定理 orbit_subgroup_one_eq_self
-  结论: MulAction.orbit s (1 : α) = s
+  结论: 乘法作用.orbit s (1 : α) = s
   证明: orbit_subgroup_eq_self_of_mem s s.one_mem
 
 @[to_additive eq_addCosets_of_normal]
@@ -626,8 +626,8 @@ theorem eq_cosets_of_normal
 
 中文:
 定理 eq_cosets_of_normal
-  条件: (N : s.Normal) (g : α)
-  结论: g • (s : Set α) = op g • s
+  条件: (N : s.正规) (g : α)
+  结论: g • (s : 集合 α) = op g • s
   证明: Set.ext fun a => by simp [mem_leftCoset_iff, mem_rightCoset_iff, N.mem_comm_iff]
 
 @[to_additive normal_of_eq_addCosets]
@@ -652,8 +652,8 @@ theorem normal_of_eq_cosets
 
 中文:
 定理 normal_of_eq_cosets
-  条件: (h : 对任意 g : α, g • (s : Set α) = op g • s)
-  结论: s.Normal
+  条件: (h : 对任意 g : α, g • (s : 集合 α) = op g • s)
+  结论: s.正规
   证明: ⟨fun a ha g =>
     show g * a * g⁻¹ in (s : Set α) by rw [← mem_rightCoset_iff, ← h]; exact mem_leftCoset g ha⟩
 
@@ -678,7 +678,7 @@ theorem normal_iff_eq_cosets
 
 中文:
 定理 normal_iff_eq_cosets
-  结论: s.Normal ↔ 对任意 g : α, g • (s : Set α) = op g • s
+  结论: s.正规 ↔ 对任意 g : α, g • (s : 集合 α) = op g • s
   证明: ⟨@eq_cosets_of_normal _ _ s, normal_of_eq_cosets s⟩
 
 @[to_additive leftAddCoset_eq_iff]
@@ -714,7 +714,7 @@ theorem leftCoset_eq_iff
 中文:
 定理 leftCoset_eq_iff
   条件: {x y : α}
-  结论: x • (s : Set α) = y • s ↔ x⁻¹ * y in s
+  结论: x • (s : 集合 α) = y • s ↔ x⁻¹ * y in s
   证明: by
   rw [Set.ext_iff]
   simp_rw [mem_leftCoset_iff, SetLike.mem_coe]
@@ -769,7 +769,7 @@ theorem rightCoset_eq_iff
 中文:
 定理 rightCoset_eq_iff
   条件: {x y : α}
-  结论: op x • (s : Set α) = op y • s ↔ y * x⁻¹ in s
+  结论: op x • (s : 集合 α) = op y • s ↔ y * x⁻¹ in s
   证明: by
   rw [Set.ext_iff]
   simp_rw [mem_rightCoset_iff, SetLike.mem_coe]
@@ -850,7 +850,7 @@ lemma leftRel_prod
 
 中文:
 引理 leftRel_prod
-  条件: {β : 类型} [Group β] (s' : Subgroup β)
+  条件: {β : 类型} [群 β] (s' : 子群 β)
   证明: by
   refine Setoid.ext fun x y => ?_
   rw [Setoid.prod_apply]
@@ -881,7 +881,7 @@ lemma leftRel_pi
 
 中文:
 引理 leftRel_pi
-  条件: {ι : 类型} {β : ι -> 类型} [对任意 i, Group (β i)] (s' : 对任意 i, Subgroup (β i))
+  条件: {ι : 类型} {β : ι -> 类型} [对任意 i, 群 (β i)] (s' : 对任意 i, 子群 (β i))
   证明: by
   refine Setoid.ext fun x y => ?_
   simp [Setoid.piSetoid_apply, leftRel_apply, Subgroup.mem_pi]
@@ -939,7 +939,7 @@ lemma rightRel_prod
 
 中文:
 引理 rightRel_prod
-  条件: {β : 类型} [Group β] (s' : Subgroup β)
+  条件: {β : 类型} [群 β] (s' : 子群 β)
   证明: by
   refine Setoid.ext fun x y => ?_
   rw [Setoid.prod_apply]
@@ -970,7 +970,7 @@ lemma rightRel_pi
 
 中文:
 引理 rightRel_pi
-  条件: {ι : 类型} {β : ι -> 类型} [对任意 i, Group (β i)] (s' : 对任意 i, Subgroup (β i))
+  条件: {ι : 类型} {β : ι -> 类型} [对任意 i, 群 (β i)] (s' : 对任意 i, 子群 (β i))
   证明: by
   refine Setoid.ext fun x y => ?_
   simp [Setoid.piSetoid_apply, rightRel_apply, Subgroup.mem_pi]
@@ -1042,7 +1042,7 @@ theorem eq_class_eq_leftCoset
 
 中文:
 定理 eq_class_eq_leftCoset
-  条件: (s : Subgroup α) (g : α)
+  条件: (s : 子群 α) (g : α)
   证明: Set.ext fun z => by
     rw [mem_leftCoset_iff]; rw [Set.mem_ofPred_eq]; rw [eq_comm]; rw [QuotientGroup.eq]; rw [SetLike.mem_coe]
 
@@ -1072,7 +1072,7 @@ lemma orbit_mk_eq_smul
 中文:
 引理 orbit_mk_eq_smul
   条件: (x : α)
-  结论: MulAction.orbitRel.Quotient.orbit (x : α ⧸ s) = x • s
+  结论: 乘法作用.orbitRel.商.orbit (x : α ⧸ s) = x • s
   证明: by
   ext
   rw [orbitRel.Quotient.mem_orbit]
@@ -1102,7 +1102,7 @@ lemma orbit_eq_out_smul
 中文:
 引理 orbit_eq_out_smul
   条件: (x : α ⧸ s)
-  结论: MulAction.orbitRel.Quotient.orbit x = x.out • s
+  结论: 乘法作用.orbitRel.商.orbit x = x.out • s
   证明: by
   induction x using QuotientGroup.induction_on
   simp only [orbit_mk_eq_smul, ← eq_class_eq_leftCoset, Quotient.out_eq']
@@ -1313,7 +1313,7 @@ Quotient.ind₂' by
 
 中文:
 定义 quotientSubgroupOfEmbeddingOfLE
-  签名: (H : Subgroup α) (h : s <= t)
+  签名: (H : 子群 α) (h : s <= t)
   定义体: Quotient.map' (inclusion h) fun a b => by
       simp_rw [leftRel_eq]
       exact id
@@ -1348,7 +1348,7 @@ theorem quotientSubgroupOfEmbeddingOfLE_apply_mk
 
 中文:
 定理 quotientSubgroupOfEmbeddingOfLE_apply_mk
-  条件: (H : Subgroup α) (h : s <= t) (g : s)
+  条件: (H : 子群 α) (h : s <= t) (g : s)
   证明: rfl
 -/
 theorem quotientSubgroupOfEmbeddingOfLE_apply_mk (H : Subgroup α) (h : s <= t) (g : s) :
@@ -1372,7 +1372,7 @@ definition quotientSubgroupOfMapOfLE
 
 中文:
 定义 quotientSubgroupOfMapOfLE
-  签名: (H : Subgroup α) (h : s <= t)
+  签名: (H : 子群 α) (h : s <= t)
   定义体: Quotient.map' id fun a b => by
     simp_rw [leftRel_eq]
     apply h
@@ -1398,7 +1398,7 @@ theorem quotientSubgroupOfMapOfLE_apply_mk
 
 中文:
 定理 quotientSubgroupOfMapOfLE_apply_mk
-  条件: (H : Subgroup α) (h : s <= t) (g : H)
+  条件: (H : 子群 α) (h : s <= t) (g : H)
   证明: rfl
 -/
 theorem quotientSubgroupOfMapOfLE_apply_mk (H : Subgroup α) (h : s <= t) (g : H) :
@@ -1472,7 +1472,7 @@ Quotient.ind₂' by
 
 中文:
 定义 quotientiInfSubgroupOfEmbedding
-  签名: {ι : 类型} (f : ι -> Subgroup α) (H : Subgroup α)
+  签名: {ι : 类型} (f : ι -> 子群 α) (H : 子群 α)
   定义体: quotientSubgroupOfMapOfLE H (iInf_le f i) q
   inj' :=
 Quotient.ind₂' by
@@ -1502,7 +1502,7 @@ theorem quotientiInfSubgroupOfEmbedding_apply_mk
 
 中文:
 定理 quotientiInfSubgroupOfEmbedding_apply_mk
-  结论: {ι : 类型} (f : ι -> Subgroup α) (H : Subgroup α)
+  结论: {ι : 类型} (f : ι -> 子群 α) (H : 子群 α)
   证明: rfl
 -/
 theorem quotientiInfSubgroupOfEmbedding_apply_mk {ι : Type*} (f : ι -> Subgroup α) (H : Subgroup α)
@@ -1528,7 +1528,7 @@ Quotient.ind₂' by
 
 中文:
 定义 quotientiInfEmbedding
-  签名: {ι : 类型} (f : ι -> Subgroup α)
+  签名: {ι : 类型} (f : ι -> 子群 α)
   定义体: quotientMapOfLE (iInf_le f i) q
   inj' :=
 Quotient.ind₂' by
@@ -1557,7 +1557,7 @@ theorem quotientiInfEmbedding_apply_mk
 
 中文:
 定理 quotientiInfEmbedding_apply_mk
-  条件: {ι : 类型} (f : ι -> Subgroup α) (g : α) (i : ι)
+  条件: {ι : 类型} (f : ι -> 子群 α) (g : α) (i : ι)
   证明: rfl
 -/
 theorem quotientiInfEmbedding_apply_mk {ι : Type*} (f : ι -> Subgroup α) (g : α) (i : ι) :
@@ -1658,7 +1658,7 @@ definition fiberEquivKerOfSurjective
 
 中文:
 定义 fiberEquivKerOfSurjective
-  签名: {f : α ->* H} (hf : Function.Surjective f) (h : H)
+  签名: {f : α ->* H} (hf : 函数.满射 f) (h : H)
   定义体: (hf h).choose_spec ▸ f.fiberEquivKer (hf h).choose
 
 Depends on / 依赖: choose_spec, f.fiberEquivKer, fiberEquivKer
@@ -1743,7 +1743,7 @@ definition fiberEquivOfSurjective
 
 中文:
 定义 fiberEquivOfSurjective
-  签名: {f : α ->* H} (hf : Function.Surjective f) (h h' : H)
+  签名: {f : α ->* H} (hf : 函数.满射 f) (h h' : H)
   定义体: (fiberEquivKerOfSurjective hf h).trans (fiberEquivKerOfSurjective hf h').symm
 
 Depends on / 依赖: fiberEquivKerOfSurjective
@@ -1780,7 +1780,7 @@ definition preimageMkEquivSubgroupProdSet
 
 中文:
 定义 preimageMkEquivSubgroupProdSet
-  签名: (s : Subgroup α) (t : Set (α ⧸ s))
+  签名: (s : 子群 α) (t : 集合 (α ⧸ s))
   定义体: ⟨⟨((Quotient.out (QuotientGroup.mk a)) : α)⁻¹ * a,
         leftRel_apply.mp (@Quotient.exact' _ (leftRel s) _ _ <| Quotient.out_eq' _)⟩,
       ⟨QuotientGroup.mk a, a.2⟩⟩
@@ -1821,7 +1821,7 @@ lemma univ_eq_iUnion_smul
 
 中文:
 引理 univ_eq_iUnion_smul
-  条件: (H : Subgroup α)
+  条件: (H : 子群 α)
   证明: by
   simp_rw [univ_eq_iUnion_orbit H.op, orbit_eq_out_smul]
   rfl
@@ -1852,7 +1852,7 @@ eq_of_inv_mul_eq_one by rwa [leftRel_apply, Subgroup.mem_bot] at h
 
 中文:
 定义 quotientEquivSelf
-  签名: : α ⧸ (⊥ : Subgroup α) ≃ α where
+  签名: : α ⧸ (⊥ : 子群 α) ≃ α where
   定义体: Quotient.lift id fun x y (h : leftRel ⊥ x y) =>
 eq_of_inv_mul_eq_one by rwa [leftRel_apply, Subgroup.mem_bot] at h
   invFun := QuotientGroup.mk

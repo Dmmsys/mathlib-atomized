@@ -67,7 +67,7 @@ lemma mem_upperBounds_iff_subset_Iic
 
 中文:
 引理 mem_upperBounds_iff_subset_Iic
-  结论: a in upperBounds s ↔ s subseteq Iic a
+  结论: a in upperBounds s ↔ s subseteq 左无界右闭区间 a
   证明: Iff.rfl
 
 @[to_dual]
@@ -113,7 +113,7 @@ theorem top_mem_upperBounds
 
 中文:
 定理 top_mem_upperBounds
-  条件: [OrderTop α] (s : Set α)
+  条件: [有顶序 α] (s : 集合 α)
   结论: ⊤ in upperBounds s
   证明: fun _ _ => le_top
 
@@ -135,7 +135,7 @@ theorem isLeast_bot_iff
 
 中文:
 定理 isLeast_bot_iff
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: IsLeast s ⊥ ↔ ⊥ in s
   证明: and_iff_left bot_mem_lowerBounds _
 
@@ -189,7 +189,7 @@ theorem not_bddAbove_iff
 
 中文:
 定理 not_bddAbove_iff
-  条件: {α : 类型} [LinearOrder α] {s : Set α}
+  条件: {α : 类型} [线性序 α] {s : 集合 α}
   证明: by
   simp only [not_bddAbove_iff', not_le]
 
@@ -215,7 +215,7 @@ lemma bddAbove_preimage_ofDual
 
 中文:
 引理 bddAbove_preimage_ofDual
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: BddAbove (ofDual ⁻¹' s) ↔ BddBelow s
   证明: Iff.rfl
 
@@ -239,7 +239,7 @@ lemma bddAbove_preimage_toDual
 
 中文:
 引理 bddAbove_preimage_toDual
-  条件: {s : Set αᵒᵈ}
+  条件: {s : 集合 αᵒᵈ}
   结论: BddAbove (toDual ⁻¹' s) ↔ BddBelow s
   证明: Iff.rfl
 
@@ -509,7 +509,7 @@ lemma DirectedOn.isCofinalFor_fst_image_prod_snd_image
 
 中文:
 引理 DirectedOn.isCofinalFor_fst_image_prod_snd_image
-  结论: {β : 类型} [Preorder β] {s : Set (α × β)}
+  结论: {β : 类型} [预序 β] {s : 集合 (α × β)}
   证明: by
   rintro ⟨_, _⟩ ⟨⟨x, hx, rfl⟩, y, hy, rfl⟩
   obtain ⟨z, hz, hxz, hyz⟩ := hs _ hx _ hy
@@ -535,8 +535,8 @@ lemma IsCofinalFor.nonempty
 
 中文:
 引理 IsCofinalFor.nonempty
-  条件: (h : IsCofinalFor s t) (hs : s.Nonempty)
-  结论: t.Nonempty
+  条件: (h : IsCofinalFor s t) (hs : s.非空)
+  结论: t.非空
   证明: let ⟨_, ha⟩ := hs; let ⟨b, hb, _⟩ := h ha; ⟨b, hb⟩
 -/
 lemma IsCofinalFor.nonempty (h : IsCofinalFor s t) (hs : s.Nonempty) : t.Nonempty :=
@@ -786,7 +786,7 @@ theorem upperBounds_mono_set
 中文:
 定理 upperBounds_mono_set
   条件: ⦃s t
-  结论: Set α⦄ (hst : s subseteq t) : upperBounds t subseteq upperBounds s
+  结论: 集合 α⦄ (hst : s subseteq t) : upperBounds t subseteq upperBounds s
   证明: fun _ hb _ h => hb hst h
 
 @[to_dual (attr := gcongr)]
@@ -858,7 +858,7 @@ upperBounds_mono_set hst upperBounds_mono_mem hab ha
 中文:
 定理 upperBounds_mono
   条件: ⦃s t
-  结论: Set α⦄ (hst : s subseteq t) ⦃a b⦄ (hab : a <= b) :
+  结论: 集合 α⦄ (hst : s subseteq t) ⦃a b⦄ (hab : a <= b) :
   证明: fun ha =>
 upperBounds_mono_set hst upperBounds_mono_mem hab ha
 -/
@@ -880,7 +880,7 @@ theorem BddAbove.mono
 中文:
 定理 BddAbove.mono
   条件: ⦃s t
-  结论: Set α⦄ (h : s subseteq t) : BddAbove t -> BddAbove s
+  结论: 集合 α⦄ (h : s subseteq t) : BddAbove t -> BddAbove s
   证明: Nonempty.mono upperBounds_mono_set h
 
 Depends on / 依赖: Nonempty, Nonempty.mono, upperBounds_mono_set
@@ -925,7 +925,7 @@ theorem IsLUB.of_subset_of_superset
 
 中文:
 定理 IsLUB.of_subset_of_superset
-  结论: {s t p : Set α} (hs : IsLUB s a) (hp : IsLUB p a) (hst : s subseteq t)
+  结论: {s t p : 集合 α} (hs : IsLUB s a) (hp : IsLUB p a) (hst : s subseteq t)
   证明: ⟨upperBounds_mono_set htp hp.1, lowerBounds_mono_set (upperBounds_mono_set hst) hs.2⟩
 
 Depends on / 依赖: lowerBounds_mono_set, upperBounds_mono_set
@@ -949,7 +949,7 @@ theorem IsLUB.of_isCofinalFor
 
 中文:
 定理 IsLUB.of_isCofinalFor
-  结论: {s t : Set α} (hs : IsLUB s a) (hts : t subseteq s)
+  结论: {s t : 集合 α} (hs : IsLUB s a) (hts : t subseteq s)
   证明: ⟨upperBounds_mono_set hts hs.1, fun _b hb => hs.2 (upperBounds_mono_of_isCofinalFor hst hb)⟩
 
 @[to_dual]
@@ -1022,7 +1022,7 @@ theorem subset_lowerBounds_upperBounds
 
 中文:
 定理 subset_lowerBounds_upperBounds
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s subseteq lowerBounds (upperBounds s)
   证明: fun _ hx _ hy => hy hx
 
@@ -1042,8 +1042,8 @@ theorem Set.Nonempty.bddAbove_lowerBounds
   proof: hs.mono (subset_upperBounds_lowerBounds s)
 
 中文:
-定理 Set.Nonempty.bddAbove_lowerBounds
-  条件: (hs : s.Nonempty)
+定理 集合.非空.bddAbove_lowerBounds
+  条件: (hs : s.非空)
   结论: BddAbove (lowerBounds s)
   证明: hs.mono (subset_upperBounds_lowerBounds s)
 
@@ -1095,7 +1095,7 @@ theorem IsLUB.upperBounds_eq
 中文:
 定理 IsLUB.upperBounds_eq
   条件: (h : IsLUB s a)
-  结论: upperBounds s = Ici a
+  结论: upperBounds s = 左闭右无界区间 a
   证明: Set.ext fun _ => ⟨fun hb => h.2 hb, fun hb => upperBounds_mono_mem hb h.1⟩
 
 @[to_dual]
@@ -1120,7 +1120,7 @@ theorem IsLeast.lowerBounds_eq
 中文:
 定理 IsLeast.lowerBounds_eq
   条件: (h : IsLeast s a)
-  结论: lowerBounds s = Iic a
+  结论: lowerBounds s = 左无界右闭区间 a
   证明: h.isGLB.lowerBounds_eq
 
 @[to_dual]
@@ -1261,7 +1261,7 @@ theorem IsLeast.nonempty
 中文:
 定理 IsLeast.nonempty
   条件: (h : IsLeast s a)
-  结论: s.Nonempty
+  结论: s.非空
   证明: ⟨a, h.1⟩
 -/
 theorem IsLeast.nonempty (h : IsLeast s a) : s.Nonempty :=
@@ -1334,7 +1334,7 @@ theorem isLeast_union_iff
 
 中文:
 定理 isLeast_union_iff
-  条件: {a : α} {s t : Set α}
+  条件: {a : α} {s t : 集合 α}
   证明: by
   simp [IsLeast, lowerBounds_union, or_and_right, and_comm (a := a in t), and_assoc]
 
@@ -1404,7 +1404,7 @@ theorem BddAbove.union
 
 中文:
 定理 BddAbove.union
-  条件: [IsDirectedOrder α] {s t : Set α}
+  条件: [IsDirectedOrder α] {s t : 集合 α}
   证明: by
   rintro ⟨a, ha⟩ ⟨b, hb⟩
   obtain ⟨c, hca, hcb⟩ := exists_ge_ge a b
@@ -1436,7 +1436,7 @@ theorem bddAbove_union
 
 中文:
 定理 bddAbove_union
-  条件: [IsDirectedOrder α] {s t : Set α}
+  条件: [IsDirectedOrder α] {s t : 集合 α}
   证明: ⟨fun h => ⟨h.mono subset_union_left, h.mono subset_union_right⟩, fun h =>
     h.1.union h.2⟩
 
@@ -1465,7 +1465,7 @@ theorem bbdAbove_range_sup
 
 中文:
 定理 bbdAbove_range_sup
-  结论: {ι : Sort*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
+  结论: {ι : 类型层*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
   证明: by
   have ⟨af, haf⟩ := hf
   have ⟨ag, hag⟩ := hg
@@ -1497,7 +1497,7 @@ theorem bbdAbove_range_left_of_sup
 
 中文:
 定理 bbdAbove_range_left_of_sup
-  结论: {ι : Sort*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
+  结论: {ι : 类型层*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
   证明: by
   have ⟨b, hb⟩ := h
   exact ⟨b, fun a ⟨i, ha⟩ => ha ▸ le_sup_left.trans (hb ⟨i, rfl⟩)⟩
@@ -1526,7 +1526,7 @@ theorem bbdAbove_range_right_of_sup
 
 中文:
 定理 bbdAbove_range_right_of_sup
-  结论: {ι : Sort*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
+  结论: {ι : 类型层*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
   证明: by
   have ⟨b, hb⟩ := h
   exact ⟨b, fun a ⟨i, ha⟩ => ha ▸ le_sup_right.trans (hb ⟨i, rfl⟩)⟩
@@ -1552,7 +1552,7 @@ theorem bbdAbove_range_sup_iff
 
 中文:
 定理 bbdAbove_range_sup_iff
-  条件: {ι : Sort*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
+  条件: {ι : 类型层*} {α : 类型} [SemilatticeSup α] {f g : ι -> α}
   证明: ⟨bbdAbove_range_left_of_sup h, bbdAbove_range_right_of_sup h⟩
   mpr := fun ⟨hf, hg⟩ => bbdAbove_range_sup hf hg
 
@@ -1580,7 +1580,7 @@ h.casesOn (fun h => le_sup_of_le_left <| hs.left h) fun h => le_sup_of_le_right 
 
 中文:
 定理 IsLUB.union
-  条件: [SemilatticeSup γ] {a b : γ} {s t : Set γ} (hs : IsLUB s a) (ht : IsLUB t b)
+  条件: [SemilatticeSup γ] {a b : γ} {s t : 集合 γ} (hs : IsLUB s a) (ht : IsLUB t b)
   证明: ⟨fun _ h =>
 h.casesOn (fun h => le_sup_of_le_left <| hs.left h) fun h => le_sup_of_le_right ht.left h,
     fun _ hc =>
@@ -1611,7 +1611,7 @@ theorem IsLeast.union
 
 中文:
 定理 IsLeast.union
-  结论: [LinearOrder γ] {a b : γ} {s t : Set γ} (ha : IsLeast s a)
+  结论: [线性序 γ] {a b : γ} {s t : 集合 γ} (ha : IsLeast s a)
   证明: ⟨by rcases le_total a b with h | h <;> simp [h, ha.1, hb.1], (ha.isGLB.union hb.isGLB).1⟩
 
 @[to_dual]
@@ -1635,7 +1635,7 @@ theorem IsLUB.inter_Ici_of_mem
 
 中文:
 定理 IsLUB.inter_Ici_of_mem
-  条件: [LinearOrder γ] {s : Set γ} {a b : γ} (ha : IsLUB s a) (hb : b in s)
+  条件: [线性序 γ] {s : 集合 γ} {a b : γ} (ha : IsLUB s a) (hb : b in s)
   证明: ⟨fun _ hx => ha.1 hx.1, fun c hc =>
     have hbc : b <= c := hc ⟨hb, le_rfl⟩
     ha.2 fun x hx => ((le_total x b).elim fun hxb => hxb.trans hbc) fun hbx => hc ⟨hx, hbx⟩⟩
@@ -1661,8 +1661,8 @@ theorem bddAbove_iff_exists_ge
 @[to_dual existing bddAbove_iff_exists_ge]
 
 中文:
-定理 bddAbove_iff_exists_ge
-  条件: [SemilatticeSup γ] {s : Set γ} (x₀ : γ)
+定理 bddAbove_iff_存在_ge
+  条件: [SemilatticeSup γ] {s : 集合 γ} (x₀ : γ)
   证明: by
   rw [bddAbove_def]; rw [exists_ge_and_iff_exists]
   exact Monotone.ball fun x _ => monotone_le
@@ -1688,8 +1688,8 @@ theorem bddBelow_iff_exists_le
 @[to_dual exists_le]
 
 中文:
-定理 bddBelow_iff_exists_le
-  条件: [SemilatticeInf γ] {s : Set γ} (x₀ : γ)
+定理 bddBelow_iff_存在_le
+  条件: [SemilatticeInf γ] {s : 集合 γ} (x₀ : γ)
   证明: bddAbove_iff_exists_ge (toDual x₀)
 
 @[to_dual exists_le]
@@ -1710,8 +1710,8 @@ theorem BddAbove.exists_ge
   proof: (bddAbove_iff_exists_ge x₀).mp hs
 
 中文:
-定理 BddAbove.exists_ge
-  条件: [SemilatticeSup γ] {s : Set γ} (hs : BddAbove s) (x₀ : γ)
+定理 BddAbove.存在_ge
+  条件: [SemilatticeSup γ] {s : 集合 γ} (hs : BddAbove s) (x₀ : γ)
   证明: (bddAbove_iff_exists_ge x₀).mp hs
 
 Depends on / 依赖: bddAbove_iff_exists_ge
@@ -1740,7 +1740,7 @@ theorem isLeast_Ici
 
 中文:
 定理 isLeast_Ici
-  结论: IsLeast (Ici a) a
+  结论: IsLeast (左闭右无界区间 a) a
   证明: ⟨self_mem_Ici, fun _ => id⟩
 
 @[to_dual]
@@ -1763,7 +1763,7 @@ theorem isLUB_Iic
 
 中文:
 定理 isLUB_Iic
-  结论: IsLUB (Iic a) a
+  结论: IsLUB (左无界右闭区间 a) a
   证明: isGreatest_Iic.isLUB
 
 @[to_dual]
@@ -1786,7 +1786,7 @@ theorem upperBounds_Iic
 
 中文:
 定理 upperBounds_Iic
-  结论: upperBounds (Iic a) = Ici a
+  结论: upperBounds (左无界右闭区间 a) = 左闭右无界区间 a
   证明: isLUB_Iic.upperBounds_eq
 
 @[to_dual]
@@ -1809,7 +1809,7 @@ theorem bddAbove_Iic
 
 中文:
 定理 bddAbove_Iic
-  结论: BddAbove (Iic a)
+  结论: BddAbove (左无界右闭区间 a)
   证明: isLUB_Iic.bddAbove
 
 @[to_dual]
@@ -1832,7 +1832,7 @@ theorem bddAbove_Iio
 
 中文:
 定理 bddAbove_Iio
-  结论: BddAbove (Iio a)
+  结论: BddAbove (左无界右开区间 a)
   证明: ⟨a, fun _ hx => le_of_lt hx⟩
 
 @[to_dual]
@@ -1859,7 +1859,7 @@ theorem le_of_isLUB_Iio
 
 中文:
 定理 le_of_isLUB_Iio
-  条件: (a : α) (hb : IsLUB (Iio a) b)
+  条件: (a : α) (hb : IsLUB (左无界右开区间 a) b)
   结论: b <= a
   证明: (isLUB_le_iff hb).mpr fun _ hk => le_of_lt hk
 
@@ -1891,7 +1891,7 @@ theorem lub_Iio_eq_self_or_Iio_eq_Iic
 
 中文:
 定理 lub_Iio_eq_self_or_Iio_eq_Iic
-  条件: [PartialOrder γ] {j : γ} (i : γ) (hj : IsLUB (Iio i) j)
+  条件: [偏序 γ] {j : γ} (i : γ) (hj : IsLUB (左无界右开区间 i) j)
   证明: by
   rcases eq_or_lt_of_le (le_of_isLUB_Iio i hj) with hj_eq_i | hj_lt_i
   · exact Or.inl hj_eq_i
@@ -1927,9 +1927,9 @@ theorem exists_lub_Iio
     exact h_exists_lt
 
 中文:
-定理 exists_lub_Iio
+定理 存在_lub_Iio
   条件: (i : γ)
-  结论: 存在 j, IsLUB (Iio i) j
+  结论: 存在 j, IsLUB (左无界右开区间 i) j
   证明: by
   by_cases! h_exists_lt : exists j, j in upperBounds (Iio i) ∧ j < i
   · obtain ⟨j, hj_ub, hj_lt_i⟩ := h_exists_lt
@@ -1965,7 +1965,7 @@ theorem isLUB_Iio
 中文:
 定理 isLUB_Iio
   条件: {a : γ}
-  结论: IsLUB (Iio a) a
+  结论: IsLUB (左无界右开区间 a) a
   证明: ⟨fun _ hx => le_of_lt hx, fun _ hy => le_of_forall_lt_imp_le_of_dense hy⟩
 
 @[to_dual]
@@ -1988,7 +1988,7 @@ theorem upperBounds_Iio
 中文:
 定理 upperBounds_Iio
   条件: {a : γ}
-  结论: upperBounds (Iio a) = Ici a
+  结论: upperBounds (左无界右开区间 a) = 左闭右无界区间 a
   证明: isLUB_Iio.upperBounds_eq
 
 Depends on / 依赖: isLUB_Iio, isLUB_Iio.upperBounds_eq, upperBounds_eq
@@ -2062,7 +2062,7 @@ lemma bddAbove_singleton
 
 中文:
 引理 bddAbove_singleton
-  结论: BddAbove ({a} : Set α)
+  结论: BddAbove ({a} : 集合 α)
   证明: isLUB_singleton.bddAbove
 
 @[to_dual (attr := simp)]
@@ -2082,7 +2082,7 @@ theorem upperBounds_singleton
 
 中文:
 定理 upperBounds_singleton
-  结论: upperBounds {a} = Ici a
+  结论: upperBounds {a} = 左闭右无界区间 a
   证明: isLUB_singleton.upperBounds_eq
 
 Depends on / 依赖: isLUB_singleton, isLUB_singleton.upperBounds_eq, upperBounds_eq
@@ -2107,7 +2107,7 @@ lemma bddAbove_Icc
 
 中文:
 引理 bddAbove_Icc
-  结论: BddAbove (Icc a b)
+  结论: BddAbove (闭区间 a b)
   证明: ⟨b, fun _ => And.right⟩
 @[to_dual (attr := simp)]
 
@@ -2126,7 +2126,7 @@ lemma bddAbove_Ico
 
 中文:
 引理 bddAbove_Ico
-  结论: BddAbove (Ico a b)
+  结论: BddAbove (左闭右开区间 a b)
   证明: bddAbove_Icc.mono Ico_subset_Icc_self
 @[to_dual (attr := simp)]
 
@@ -2145,7 +2145,7 @@ lemma bddBelow_Ico
 
 中文:
 引理 bddBelow_Ico
-  结论: BddBelow (Ico a b)
+  结论: BddBelow (左闭右开区间 a b)
   证明: bddBelow_Icc.mono Ico_subset_Icc_self
 @[to_dual (attr := simp)]
 
@@ -2165,7 +2165,7 @@ lemma bddAbove_Ioo
 
 中文:
 引理 bddAbove_Ioo
-  结论: BddAbove (Ioo a b)
+  结论: BddAbove (开区间 a b)
   证明: bddAbove_Icc.mono Ioo_subset_Icc_self
 
 @[to_dual]
@@ -2189,7 +2189,7 @@ theorem isGreatest_Icc
 中文:
 定理 isGreatest_Icc
   条件: (h : a <= b)
-  结论: IsGreatest (Icc a b) b
+  结论: IsGreatest (闭区间 a b) b
   证明: ⟨right_mem_Icc.2 h, fun _ => And.right⟩
 
 @[to_dual]
@@ -2214,7 +2214,7 @@ theorem isLUB_Icc
 中文:
 定理 isLUB_Icc
   条件: (h : a <= b)
-  结论: IsLUB (Icc a b) b
+  结论: IsLUB (闭区间 a b) b
   证明: (isGreatest_Icc h).isLUB
 
 @[to_dual]
@@ -2239,7 +2239,7 @@ theorem upperBounds_Icc
 中文:
 定理 upperBounds_Icc
   条件: (h : a <= b)
-  结论: upperBounds (Icc a b) = Ici b
+  结论: upperBounds (闭区间 a b) = 左闭右无界区间 b
   证明: (isLUB_Icc h).upperBounds_eq
 
 @[to_dual]
@@ -2264,7 +2264,7 @@ theorem isGreatest_Ioc
 中文:
 定理 isGreatest_Ioc
   条件: (h : a < b)
-  结论: IsGreatest (Ioc a b) b
+  结论: IsGreatest (左开右闭区间 a b) b
   证明: ⟨right_mem_Ioc.2 h, fun _ => And.right⟩
 
 @[to_dual]
@@ -2289,7 +2289,7 @@ theorem isLUB_Ioc
 中文:
 定理 isLUB_Ioc
   条件: (h : a < b)
-  结论: IsLUB (Ioc a b) b
+  结论: IsLUB (左开右闭区间 a b) b
   证明: (isGreatest_Ioc h).isLUB
 
 @[to_dual]
@@ -2312,7 +2312,7 @@ theorem upperBounds_Ioc
 中文:
 定理 upperBounds_Ioc
   条件: (h : a < b)
-  结论: upperBounds (Ioc a b) = Ici b
+  结论: upperBounds (左开右闭区间 a b) = 左闭右无界区间 b
   证明: (isLUB_Ioc h).upperBounds_eq
 
 Depends on / 依赖: isLUB_Ioc, upperBounds_eq
@@ -2342,7 +2342,7 @@ theorem isGLB_Ioo
 中文:
 定理 isGLB_Ioo
   条件: {a b : γ} (h : a < b)
-  结论: IsGLB (Ioo a b) a
+  结论: IsGLB (开区间 a b) a
   证明: ⟨fun _ hx => hx.1.le, fun x hx => by
     rcases eq_or_lt_of_le (le_sup_right : a <= x ⊔ a) with h₁ | h₂
     · exact h₁.symm ▸ le_sup_left
@@ -2376,7 +2376,7 @@ theorem lowerBounds_Ioo
 中文:
 定理 lowerBounds_Ioo
   条件: {a b : γ} (hab : a < b)
-  结论: lowerBounds (Ioo a b) = Iic a
+  结论: lowerBounds (开区间 a b) = 左无界右闭区间 a
   证明: (isGLB_Ioo hab).lowerBounds_eq
 
 @[to_dual]
@@ -2401,7 +2401,7 @@ theorem isGLB_Ioc
 中文:
 定理 isGLB_Ioc
   条件: {a b : γ} (hab : a < b)
-  结论: IsGLB (Ioc a b) a
+  结论: IsGLB (左开右闭区间 a b) a
   证明: (isGLB_Ioo hab).of_subset_of_superset (isGLB_Icc hab.le) Ioo_subset_Ioc_self Ioc_subset_Icc_self
 
 @[to_dual]
@@ -2424,7 +2424,7 @@ theorem lowerBounds_Ioc
 中文:
 定理 lowerBounds_Ioc
   条件: {a b : γ} (hab : a < b)
-  结论: lowerBounds (Ioc a b) = Iic a
+  结论: lowerBounds (左开右闭区间 a b) = 左无界右闭区间 a
   证明: (isGLB_Ioc hab).lowerBounds_eq
 
 Depends on / 依赖: isGLB_Ioc, lowerBounds_eq
@@ -2447,7 +2447,7 @@ theorem bddBelow_iff_subset_Ici
 
 中文:
 定理 bddBelow_iff_subset_Ici
-  结论: BddBelow s ↔ 存在 a, s subseteq Ici a
+  结论: BddBelow s ↔ 存在 a, s subseteq 左闭右无界区间 a
   证明: Iff.rfl
 
 @[to_dual none]
@@ -2470,7 +2470,7 @@ theorem bddBelow_bddAbove_iff_subset_Icc
 
 中文:
 定理 bddBelow_bddAbove_iff_subset_Icc
-  结论: BddBelow s ∧ BddAbove s ↔ 存在 a b, s subseteq Icc a b
+  结论: BddBelow s ∧ BddAbove s ↔ 存在 a b, s subseteq 闭区间 a b
   证明: by
   simp [Ici_inter_Iic.symm, subset_inter_iff, bddBelow_iff_subset_Ici,
     bddAbove_iff_subset_Iic, exists_and_left, exists_and_right]
@@ -2518,8 +2518,8 @@ theorem isGreatest_univ
 
 中文:
 定理 isGreatest_univ
-  条件: [OrderTop α]
-  结论: IsGreatest (univ : Set α) ⊤
+  条件: [有顶序 α]
+  结论: IsGreatest (univ : 集合 α) ⊤
   证明: isGreatest_univ_iff.2 isTop_top
 
 @[to_dual (attr := simp)]
@@ -2541,8 +2541,8 @@ theorem OrderTop.upperBounds_univ
 @[to_dual]
 
 中文:
-定理 OrderTop.upperBounds_univ
-  条件: [PartialOrder γ] [OrderTop γ]
+定理 有顶序.upperBounds_univ
+  条件: [偏序 γ] [有顶序 γ]
   证明: by rw [isGreatest_univ.upperBounds_eq, Ici_top]
 
 @[to_dual]
@@ -2566,8 +2566,8 @@ theorem isLUB_univ
 
 中文:
 定理 isLUB_univ
-  条件: [OrderTop α]
-  结论: IsLUB (univ : Set α) ⊤
+  条件: [有顶序 α]
+  结论: IsLUB (univ : 集合 α) ⊤
   证明: isGreatest_univ.isLUB
 
 @[to_dual (attr := simp)]
@@ -2591,9 +2591,9 @@ theorem NoTopOrder.upperBounds_univ
 @[to_dual (attr := simp)]
 
 中文:
-定理 NoTopOrder.upperBounds_univ
-  条件: [NoTopOrder α]
-  结论: upperBounds (univ : Set α) = ∅
+定理 无顶序.upperBounds_univ
+  条件: [无顶序 α]
+  结论: upperBounds (univ : 集合 α) = ∅
   证明: eq_empty_of_subset_empty fun b hb =>
     not_isTop b fun x => hb (mem_univ x)
 
@@ -2617,8 +2617,8 @@ theorem not_bddAbove_univ
 
 中文:
 定理 not_bddAbove_univ
-  条件: [NoTopOrder α]
-  结论: ¬BddAbove (univ : Set α)
+  条件: [无顶序 α]
+  结论: ¬BddAbove (univ : 集合 α)
   证明: by simp [BddAbove]
 
 Depends on / 依赖: BddAbove
@@ -2644,7 +2644,7 @@ theorem upperBounds_empty
 
 中文:
 定理 upperBounds_empty
-  结论: upperBounds (∅ : Set α) = univ
+  结论: upperBounds (∅ : 集合 α) = univ
   证明: by
   simp only [upperBounds, eq_univ_iff_forall, mem_ofPred_eq, forall_mem_empty, forall_true_iff]
 
@@ -2668,8 +2668,8 @@ theorem bddAbove_empty
 
 中文:
 定理 bddAbove_empty
-  条件: [Nonempty α]
-  结论: BddAbove (∅ : Set α)
+  条件: [非空 α]
+  结论: BddAbove (∅ : 集合 α)
   证明: by
   simp only [BddAbove, upperBounds_empty, univ_nonempty]
 
@@ -2714,7 +2714,7 @@ theorem isGLB_empty
 
 中文:
 定理 isGLB_empty
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   结论: IsGLB ∅ (⊤ : α)
   证明: isGLB_empty_iff.2 isTop_top
 
@@ -2740,8 +2740,8 @@ not_isBot a fun _ => hs.right by rw [h, upperBounds_empty]; exact mem_univ _
 
 中文:
 定理 IsLUB.nonempty
-  条件: [NoBotOrder α] (hs : IsLUB s a)
-  结论: s.Nonempty
+  条件: [无底序 α] (hs : IsLUB s a)
+  结论: s.非空
   证明: nonempty_iff_ne_empty.2 fun h =>
 not_isBot a fun _ => hs.right by rw [h, upperBounds_empty]; exact mem_univ _
 
@@ -2765,8 +2765,8 @@ theorem nonempty_of_not_bddAbove
 
 中文:
 定理 nonempty_of_not_bddAbove
-  条件: [ha : Nonempty α] (h : ¬BddAbove s)
-  结论: s.Nonempty
+  条件: [ha : 非空 α] (h : ¬BddAbove s)
+  结论: s.非空
   证明: (Nonempty.elim ha) fun x => (not_bddAbove_iff'.1 h x).imp fun _ ha => ha.1
 
 Depends on / 依赖: Nonempty, Nonempty.elim, not_bddAbove_iff
@@ -2794,7 +2794,7 @@ theorem bddAbove_insert
 
 中文:
 定理 bddAbove_insert
-  条件: [IsDirectedOrder α] {s : Set α} {a : α}
+  条件: [IsDirectedOrder α] {s : 集合 α} {a : α}
   证明: by
   simp only [insert_eq, bddAbove_union, bddAbove_singleton, true_and]
 
@@ -2819,7 +2819,7 @@ theorem BddAbove.insert
 
 中文:
 定理 BddAbove.insert
-  条件: [IsDirectedOrder α] {s : Set α} (a : α)
+  条件: [IsDirectedOrder α] {s : 集合 α} (a : α)
   证明: bddAbove_insert.2
 
 @[to_dual]
@@ -2843,7 +2843,7 @@ theorem IsLUB.insert
 
 中文:
 定理 IsLUB.insert
-  条件: [SemilatticeSup γ] (a) {b} {s : Set γ} (hs : IsLUB s b)
+  条件: [SemilatticeSup γ] (a) {b} {s : 集合 γ} (hs : IsLUB s b)
   证明: by
   rw [insert_eq]
   exact isLUB_singleton.union hs
@@ -2870,7 +2870,7 @@ theorem IsGreatest.insert
 
 中文:
 定理 IsGreatest.insert
-  条件: [LinearOrder γ] (a) {b} {s : Set γ} (hs : IsGreatest s b)
+  条件: [线性序 γ] (a) {b} {s : 集合 γ} (hs : IsGreatest s b)
   证明: by
   rw [insert_eq]
   exact isGreatest_singleton.union hs
@@ -2894,7 +2894,7 @@ theorem upperBounds_insert
 
 中文:
 定理 upperBounds_insert
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   证明: by
   rw [insert_eq]; rw [upperBounds_union]; rw [upperBounds_singleton]
 
@@ -2916,8 +2916,8 @@ theorem OrderTop.bddAbove
   proof: ⟨⊤, fun a _ => OrderTop.le_top a⟩
 
 中文:
-定理 OrderTop.bddAbove
-  条件: [OrderTop α] (s : Set α)
+定理 有顶序.bddAbove
+  条件: [有顶序 α] (s : 集合 α)
   结论: BddAbove s
   证明: ⟨⊤, fun a _ => OrderTop.le_top a⟩
 -/
@@ -2975,8 +2975,8 @@ theorem isGreatest_pair
 
 中文:
 定理 isGreatest_pair
-  条件: [LinearOrder γ] {a b : γ}
-  结论: IsGreatest {a, b} (max a b)
+  条件: [线性序 γ] {a b : γ}
+  结论: IsGreatest {a, b} (最大值 a b)
   证明: isGreatest_singleton.insert _
 
 Depends on / 依赖: insert, isGreatest_singleton, isGreatest_singleton.insert
@@ -3029,7 +3029,7 @@ theorem DirectedOn.le_of_minimal
 
 中文:
 定理 DirectedOn.le_of_minimal
-  结论: (h : DirectedOn (fun x y => y <= x) s) (hMin : Minimal (· in s) a)
+  结论: (h : DirectedOn (fun x y => y <= x) s) (hMin : 极小 (· in s) a)
   证明: by
   obtain ⟨z, hz, hza, hzb⟩ := h a hMin.1 b hb
   exact (hMin.2 hz hza).trans hzb
@@ -3074,7 +3074,7 @@ theorem minimal_iff_isLeast
 
 中文:
 定理 minimal_iff_isLeast
-  条件: [LinearOrder α] {s : Set α} {a : α}
+  条件: [线性序 α] {s : 集合 α} {a : α}
   证明: (Std.Total.directedOn s).minimal_iff_isLeast
 
 Depends on / 依赖: Std.Total.directedOn, directedOn, minimal_iff_isLeast
@@ -3123,7 +3123,7 @@ theorem lowerBounds_le_upperBounds_of_nonempty_inter
 
 中文:
 定理 lowerBounds_le_upperBounds_of_nonempty_inter
-  结论: (h : (s inter s').Nonempty)
+  结论: (h : (s inter s').非空)
   证明: by
   have ⟨x, hx, hx'⟩ := h
   exact le_trans (ha hx) (hb hx')
@@ -3151,7 +3151,7 @@ theorem isGLB_le_isLUB
 
 中文:
 定理 isGLB_le_isLUB
-  条件: (ha : IsGLB s a) (hb : IsLUB s b) (hs : s.Nonempty)
+  条件: (ha : IsGLB s a) (hb : IsLUB s b) (hs : s.非空)
   结论: a <= b
   证明: lowerBounds_le_upperBounds ha.1 hb.1 hs
 
@@ -3175,7 +3175,7 @@ theorem isGLB_le_isLUB_of_nonempty_inter
 
 中文:
 定理 isGLB_le_isLUB_of_nonempty_inter
-  结论: (h : (s inter s').Nonempty) (ha : IsGLB s a)
+  结论: (h : (s inter s').非空) (ha : IsGLB s a)
   证明: lowerBounds_le_upperBounds_of_nonempty_inter h ha.left hb.left
 
 @[to_dual lt_isGLB_iff]
@@ -3256,7 +3256,7 @@ lemma upperBounds_prod
 
 中文:
 引理 upperBounds_prod
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
+  条件: (hs : s.非空) (ht : t.非空)
   证明: by
   ext; rw [← nonempty_coe_sort] at hs ht; aesop (add simp [upperBounds, Prod.le_def, forall_and])
 
@@ -3278,8 +3278,8 @@ lemma IsLUB.prod
   proof: by simp_all +contextual [IsLUB, IsLeast, lowerBounds]
 
 中文:
-引理 IsLUB.prod
-  条件: {b : β} (hs : s.Nonempty) (ht : t.Nonempty) (ha : IsLUB s a) (hb : IsLUB t b)
+引理 IsLUB.乘积
+  条件: {b : β} (hs : s.非空) (ht : t.非空) (ha : IsLUB s a) (hb : IsLUB t b)
   证明: by simp_all +contextual [IsLUB, IsLeast, lowerBounds]
 
 Depends on / 依赖: IsLeast, contextual, lowerBounds
@@ -3424,7 +3424,7 @@ theorem Set.subsingleton_of_isLUB_le_isGLB
 @[to_dual self (reorder := a b, Ha Hb)]
 
 中文:
-定理 Set.subsingleton_of_isLUB_le_isGLB
+定理 集合.subsingleton_of_isLUB_le_isGLB
   条件: (Ha : IsGLB s a) (Hb : IsLUB s b) (hab : b <= a)
   证明: fun _ hx _ hy =>
   le_antisymm (le_of_isLUB_le_isGLB Ha Hb hab hx hy) (le_of_isLUB_le_isGLB Ha Hb hab hy hx)
@@ -3508,7 +3508,7 @@ theorem IsLUB.exists_between
 @[to_dual none]
 
 中文:
-定理 IsLUB.exists_between
+定理 IsLUB.存在_between
   条件: (h : IsLUB s a) (hb : b < a)
   结论: 存在 c in s, b < c ∧ c <= a
   证明: let ⟨c, hcs, hbc⟩ := (lt_isLUB_iff h).1 hb
@@ -3536,7 +3536,7 @@ theorem IsLUB.exists_between'
 @[to_dual none]
 
 中文:
-定理 IsLUB.exists_between'
+定理 IsLUB.存在_between'
   条件: (h : IsLUB s a) (h' : a ∉ s) (hb : b < a)
   结论: 存在 c in s, b < c ∧ c < a
   证明: let ⟨c, hcs, hbc, hca⟩ := h.exists_between hb
@@ -3564,7 +3564,7 @@ theorem IsGLB.exists_between
 @[to_dual none]
 
 中文:
-定理 IsGLB.exists_between
+定理 IsGLB.存在_between
   条件: (h : IsGLB s a) (hb : a < b)
   结论: 存在 c in s, a <= c ∧ c < b
   证明: let ⟨c, hcs, hbc⟩ := (isGLB_lt_iff h).1 hb
@@ -3590,7 +3590,7 @@ theorem IsGLB.exists_between'
 ⟨c, hcs, hac.lt_of_ne fun hac => h' hac.symm ▸ hcs, hcb⟩
 
 中文:
-定理 IsGLB.exists_between'
+定理 IsGLB.存在_between'
   条件: (h : IsGLB s a) (h' : a ∉ s) (hb : a < b)
   结论: 存在 c in s, a < c ∧ c < b
   证明: let ⟨c, hcs, hac, hcb⟩ := h.exists_between hb
@@ -3615,7 +3615,7 @@ theorem isGreatest_himp
 
 中文:
 定理 isGreatest_himp
-  条件: [GeneralizedHeytingAlgebra α] (a b : α)
+  条件: [GeneralizedHeyting代数 α] (a b : α)
   证明: by
   simp [IsGreatest, mem_upperBounds]
 
@@ -3636,7 +3636,7 @@ theorem isLeast_sdiff
 
 中文:
 定理 isLeast_sdiff
-  条件: [GeneralizedCoheytingAlgebra α] (a b : α)
+  条件: [GeneralizedCoheyting代数 α] (a b : α)
   证明: by
   simp [IsLeast, mem_lowerBounds]
 
@@ -3657,7 +3657,7 @@ theorem isGreatest_compl
 
 中文:
 定理 isGreatest_compl
-  条件: [HeytingAlgebra α] (a : α)
+  条件: [Heyting代数 α] (a : α)
   证明: by
   simpa only [himp_bot, disjoint_iff_inf_le] using isGreatest_himp a ⊥
 
@@ -3678,7 +3678,7 @@ theorem isLeast_hnot
 
 中文:
 定理 isLeast_hnot
-  条件: [CoheytingAlgebra α] (a : α)
+  条件: [余heyting代数 α] (a : α)
   证明: by
   simpa only [CoheytingAlgebra.top_sdiff, codisjoint_iff_le_sup] using isLeast_sdiff ⊤ a
 
@@ -3698,7 +3698,7 @@ instance Nat.instDecidableIsLeast
     simp [mem_lowerBounds, @imp_not_comm _ (p _)]
 
 中文:
-实例 Nat.instDecidableIsLeast
+实例 自然数.instDecidableIsLeast
   签名: (p : 自然数 -> 命题) (n : 自然数) [DecidablePred p]
   定义体: decidable_of_iff (p n ∧ forall k < n, ¬p k) .and .rfl by
     simp [mem_lowerBounds, @imp_not_comm _ (p _)]
@@ -3726,7 +3726,7 @@ definition SemilatticeSup.ofIsLUB
 
 中文:
 定义 SemilatticeSup.ofIsLUB
-  签名: [PartialOrder α] (sup : α -> α -> α)
+  签名: [偏序 α] (上确界 : α -> α -> α)
   定义体: sup
   le_sup_left a b := (isLUB_pair a b).1 (mem_insert _ _)
   le_sup_right a b := (isLUB_pair a b).1 (mem_insert_of_mem _ (mem_singleton _))
@@ -3752,8 +3752,8 @@ definition Lattice.ofIsLUBofIsGLB
   __ := SemilatticeInf.ofIsGLB inf isGLB_pair
 
 中文:
-定义 Lattice.ofIsLUBofIsGLB
-  签名: [PartialOrder α] (sup inf : α -> α -> α)
+定义 格.ofIsLUBofIsGLB
+  签名: [偏序 α] (上确界 下确界 : α -> α -> α)
   定义体: SemilatticeSup.ofIsLUB sup isLUB_pair
   __ := SemilatticeInf.ofIsGLB inf isGLB_pair
 

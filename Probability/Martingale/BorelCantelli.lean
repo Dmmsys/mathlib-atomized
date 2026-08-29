@@ -58,7 +58,7 @@ definition leastGE
 
 中文:
 定义 leastGE
-  签名: [Preorder ι] [OrderBot ι] [InfSet ι] [Preorder β]
+  签名: [预序 ι] [有底序 ι] [下确界集 ι] [预序 β]
   定义体: hittingAfter f (Set.Ici r) ⊥
 
 Depends on / 依赖: Set.Ici, hittingAfter
@@ -77,7 +77,7 @@ theorem StronglyAdapted.isStoppingTime_leastGE
 
 中文:
 定理 StronglyAdapted.isStoppingTime_leastGE
-  结论: [ConditionallyCompleteLinearOrderBot ι]
+  结论: [余nditionallyCompleteLinearOrderBot ι]
   证明: hf.adapted.isStoppingTime_hittingAfter measurableSet_Ici
 
 Depends on / 依赖: adapted, hf.adapted.isStoppingTime_hittingAfter, isStoppingTime_hittingAfter, measurableSet_Ici
@@ -100,7 +100,7 @@ definition stoppedAbove
 
 中文:
 定义 stoppedAbove
-  签名: [LinearOrder ι] [OrderBot ι] [InfSet ι] [Preorder β]
+  签名: [线性序 ι] [有底序 ι] [下确界集 ι] [预序 β]
   定义体: stoppedProcess f (leastGE f r)
 
 Depends on / 依赖: leastGE, stoppedProcess
@@ -121,7 +121,7 @@ lemma Submartingale.stoppedAbove
 
 中文:
 引理 Submartingale.stoppedAbove
-  条件: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ) (r : 实数)
+  条件: [是有限测度 μ] (hf : Submartingale f ℱ μ) (r : 实数)
   证明: hf.stoppedProcess (hf.stronglyAdapted.isStoppingTime_leastGE r)
 -/
 protected lemma Submartingale.stoppedAbove [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ) (r : Real) :
@@ -195,7 +195,7 @@ theorem Submartingale.eLpNorm_stoppedAbove_le
 
 中文:
 定理 Submartingale.eLpNorm_stoppedAbove_le
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   refine eLpNorm_one_le_of_le' ((hf.stoppedAbove r).integrable _) ?_
     (stoppedAbove_le hr hf0 hbdd i)
@@ -226,7 +226,7 @@ theorem Submartingale.eLpNorm_stoppedAbove_le'
 
 中文:
 定理 Submartingale.eLpNorm_stoppedAbove_le'
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   refine (hf.eLpNorm_stoppedAbove_le hr hf0 hbdd i).trans ?_
   simp [ENNReal.coe_toNNReal (measure_ne_top μ _), ENNReal.coe_toNNReal]
@@ -255,8 +255,8 @@ theorem Submartingale.exists_tendsto_of_abs_bddAbove_aux
   filter_upwards [ht] with ω h
 
 中文:
-定理 Submartingale.exists_tendsto_of_abs_bddAbove_aux
-  结论: [IsFiniteMeasure μ]
+定理 Submartingale.存在_tendsto_of_abs_bddAbove_aux
+  结论: [是有限测度 μ]
   证明: by
   have ht : forallᵐ ω ∂μ, forall i : Nat, exists c, Tendsto (fun n => stoppedAbove f i n ω) atTop (𝓝 c) := by
     rw [ae_all_iff]
@@ -298,8 +298,8 @@ theorem Submartingale.bddAbove_iff_exists_tendsto_aux
     ⟨hω, fun ⟨c, hc⟩ => hc.bddAbove_range⟩
 
 中文:
-定理 Submartingale.bddAbove_iff_exists_tendsto_aux
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+定理 Submartingale.bddAbove_iff_存在_tendsto_aux
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   filter_upwards [hf.exists_tendsto_of_abs_bddAbove_aux hf0 hbdd] with ω hω using
     ⟨hω, fun ⟨c, hc⟩ => hc.bddAbove_range⟩
@@ -328,8 +328,8 @@ theorem Submartingale.bddAbove_iff_exists_tendsto
   have hgbdd : forallᵐ ω ∂μ, forall i
 
 中文:
-定理 Submartingale.bddAbove_iff_exists_tendsto
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+定理 Submartingale.bddAbove_iff_存在_tendsto
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   set g : Nat -> Ω -> Real := fun n ω => f n ω - f 0 ω
   have hg : Submartingale g ℱ μ :=
@@ -383,8 +383,8 @@ theorem Martingale.bddAbove_range_iff_bddBelow_range
   filte
 
 中文:
-定理 Martingale.bddAbove_range_iff_bddBelow_range
-  结论: [IsFiniteMeasure μ] (hf : Martingale f ℱ μ)
+定理 鞅.bddAbove_range_iff_bddBelow_range
+  结论: [是有限测度 μ] (hf : 鞅 f ℱ μ)
   证明: by
   have hbdd' : forallᵐ ω ∂μ, forall i, |(-f) (i + 1) ω - (-f) i ω| <= R := by
     filter_upwards [hbdd] with ω hω i
@@ -434,8 +434,8 @@ theorem Martingale.ae_not_tendsto_atTop_atTop
     not_bddAbove_of_tendsto_atTop htop (hω.2 <| bddBelow_range_of_tendsto_atTop_atTop htop)
 
 中文:
-定理 Martingale.ae_not_tendsto_atTop_atTop
-  结论: [IsFiniteMeasure μ] (hf : Martingale f ℱ μ)
+定理 鞅.ae_not_tendsto_atTop_atTop
+  结论: [是有限测度 μ] (hf : 鞅 f ℱ μ)
   证明: by
   filter_upwards [hf.bddAbove_range_iff_bddBelow_range hbdd] with ω hω htop using
     not_bddAbove_of_tendsto_atTop htop (hω.2 <| bddBelow_range_of_tendsto_atTop_atTop htop)
@@ -459,8 +459,8 @@ theorem Martingale.ae_not_tendsto_atTop_atBot
     not_bddBelow_of_tendsto_atBot htop (hω.1 <| bddAbove_range_of_tendsto_atTop_atBot htop)
 
 中文:
-定理 Martingale.ae_not_tendsto_atTop_atBot
-  结论: [IsFiniteMeasure μ] (hf : Martingale f ℱ μ)
+定理 鞅.ae_not_tendsto_atTop_atBot
+  结论: [是有限测度 μ] (hf : 鞅 f ℱ μ)
   证明: by
   filter_upwards [hf.bddAbove_range_iff_bddBelow_range hbdd] with ω hω htop using
     not_bddBelow_of_tendsto_atBot htop (hω.1 <| bddAbove_range_of_tendsto_atTop_atBot htop)
@@ -485,7 +485,7 @@ definition process
 
 中文:
 定义 process
-  签名: (s : 自然数 -> Set Ω) (n : 自然数)
+  签名: (s : 自然数 -> 集合 Ω) (n : 自然数)
   定义体: ∑ k in Finset.range n, (s (k + 1)).indicator 1
 
 Depends on / 依赖: Finset, Finset.range, indicator
@@ -523,7 +523,7 @@ stronglyMeasurable_one.indicator ℱ.mono (Finset.mem_range.1 hk) _ hs _
 
 中文:
 定理 stronglyAdapted_process
-  条件: (hs : 对任意 n, MeasurableSet[ℱ n] (s n))
+  条件: (hs : 对任意 n, 可测集[ℱ n] (s n))
   证明: fun _ => Finset.stronglyMeasurable_sum _ fun _ hk =>
 stronglyMeasurable_one.indicator ℱ.mono (Finset.mem_range.1 hk) _ hs _
 
@@ -547,7 +547,7 @@ theorem martingalePart_process_ae_eq
 
 中文:
 定理 martingalePart_process_ae_eq
-  条件: (ℱ : Filtration 自然数 m0) (μ : Measure Ω) (s : 自然数 -> Set Ω) (n : 自然数)
+  条件: (ℱ : 滤子 自然数 m0) (μ : 测度 Ω) (s : 自然数 -> 集合 Ω) (n : 自然数)
   证明: by
   simp only [martingalePart_eq_sum, process_zero, zero_add]
   refine Finset.sum_congr rfl fun k _ => ?_
@@ -575,7 +575,7 @@ theorem predictablePart_process_ae_eq
 
 中文:
 定理 predictablePart_process_ae_eq
-  结论: (ℱ : Filtration 自然数 m0) (μ : Measure Ω) (s : 自然数 -> Set Ω)
+  结论: (ℱ : 滤子 自然数 m0) (μ : 测度 Ω) (s : 自然数 -> 集合 Ω)
   证明: by
   have := martingalePart_process_ae_eq ℱ μ s n
   simp_rw [martingalePart, process, Finset.sum_sub_distrib] at this
@@ -604,7 +604,7 @@ theorem process_difference_le
 
 中文:
 定理 process_difference_le
-  条件: (s : 自然数 -> Set Ω) (ω : Ω) (n : 自然数)
+  条件: (s : 自然数 -> 集合 Ω) (ω : Ω) (n : 自然数)
   证明: by
   norm_cast
   rw [process]; rw [process]; rw [Finset.sum_apply]; rw [Finset.sum_apply]; rw [Finset.sum_range_succ_sub_sum]; rw [← Real.norm_eq_abs]; rw [norm_indicator_eq_indicator_norm]
@@ -631,7 +631,7 @@ IntegrableOn.integrable_indicator (integrable_const 1) ℱ.le _ _ hs _
 
 中文:
 定理 integrable_process
-  结论: (μ : Measure Ω) [IsFiniteMeasure μ] (hs : 对任意 n, MeasurableSet[ℱ n] (s n))
+  结论: (μ : 测度 Ω) [是有限测度 μ] (hs : 对任意 n, 可测集[ℱ n] (s n))
   证明: integrable_finsetSum' _ fun _ _ =>
 IntegrableOn.integrable_indicator (integrable_const 1) ℱ.le _ _ hs _
 
@@ -661,7 +661,7 @@ theorem tendsto_sum_indicator_atTop_iff
 
 中文:
 定理 tendsto_sum_indicator_atTop_iff
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: by
   simp only [← Real.norm_eq_abs] at hbdd
   have h₀ := martingalePart_bdd_difference ℱ hbdd
@@ -718,7 +718,7 @@ theorem tendsto_sum_indicator_atTop_iff'
 
 中文:
 定理 tendsto_sum_indicator_atTop_iff'
-  结论: [IsFiniteMeasure μ] {s : 自然数 -> Set Ω}
+  结论: [是有限测度 μ] {s : 自然数 -> 集合 Ω}
   证明: by
   have := tendsto_sum_indicator_atTop_iff (Eventually.of_forall fun ω n => ?_)
     (stronglyAdapted_process hs) (integrable_process μ hs)
@@ -757,7 +757,7 @@ theorem ae_mem_limsup_atTop_iff
 
 中文:
 定理 ae_mem_limsup_atTop_iff
-  结论: (μ : Measure Ω) [IsFiniteMeasure μ] {s : 自然数 -> Set Ω}
+  结论: (μ : 测度 Ω) [是有限测度 μ] {s : 自然数 -> 集合 Ω}
   证明: by
   rw [← limsup_nat_add s 1]; rw [Set.limsup_eq_tendsto_sum_indicator_atTop (zero_lt_one (α := Real)) (fun n => s (n + 1))]
   exact tendsto_sum_indicator_atTop_iff' hs

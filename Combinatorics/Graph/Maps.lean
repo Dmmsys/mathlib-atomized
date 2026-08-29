@@ -53,7 +53,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> α') (G : Graph α β)
+  签名: (f : α -> α') (G : 图 α β)
   定义体: f '' V(G)
   edgeSet := E(G)
   IsLink e := Relation.Map (G.IsLink e) f f
@@ -210,7 +210,7 @@ lemma map_adj
 中文:
 引理 map_adj
   条件: (f : α -> α')
-  结论: (G.map f).Adj x y ↔ Relation.Map G.Adj f f x y
+  结论: (G.map f).伴随 x y ↔ 关系.Map G.伴随 f f x y
   证明: by
   simp only [Adj, map_isLink, map_apply]
   tauto
@@ -233,9 +233,9 @@ lemma Adj.map
   exact ⟨e, h.map f⟩
 
 中文:
-引理 Adj.map
-  条件: (f : α -> α') (h : G.Adj u v)
-  结论: (G.map f).Adj (f u) (f v)
+引理 伴随.map
+  条件: (f : α -> α') (h : G.伴随 u v)
+  结论: (G.map f).伴随 (f u) (f v)
   证明: by
   obtain ⟨e, h⟩ := h
   exact ⟨e, h.map f⟩
@@ -305,7 +305,7 @@ alias map_mono := IsSubgraph.map
 @[gcongr]
 
 中文:
-引理 IsSubgraph.map
+引理 是子图.map
   条件: (f : α -> α') (h : G <= H)
   结论: G.map f <= H.map f where
   证明: by grind [h.vertexSet_mono]
@@ -333,7 +333,7 @@ lemma IsSpanningSubgraph.map
 @[gcongr only]
 
 中文:
-引理 IsSpanningSubgraph.map
+引理 是SpanningSubgraph.map
   条件: (f : α -> α') (hsle : G <=s H)
   结论: G.map f <=s H.map f where
   证明: hsle.le.map f

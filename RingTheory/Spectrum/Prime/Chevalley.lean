@@ -107,7 +107,7 @@ lemma isConstructible_range_comap
 
 中文:
 引理 isConstructible_range_comap
-  条件: {f : R ->+* S} (hf : f.FinitePresentation)
+  条件: {f : R ->+* S} (hf : f.有限呈现)
   证明: Set.image_univ ▸ isConstructible_comap_image hf .univ
 
 @[stacks 00I1]

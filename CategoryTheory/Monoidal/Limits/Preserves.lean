@@ -72,7 +72,7 @@ lemma preservesCoLimit_curriedTensor
 
 中文:
 引理 preservesCoLimit_curriedTensor
-  条件: [h : 对任意 c : C, PreservesColimit F (tensorRight c)]
+  条件: [h : 对任意 c : C, 保持余极限 F (tensorRight c)]
   证明: preservesColimit_of_evaluation _ _
     (fun c => inferInstanceAs (PreservesColimit F (tensorRight c)))
 
@@ -135,7 +135,7 @@ lemma preservesLimit_curriedTensor
 
 中文:
 引理 preservesLimit_curriedTensor
-  条件: [h : 对任意 c : C, PreservesLimit F (tensorRight c)]
+  条件: [h : 对任意 c : C, 保持极限 F (tensorRight c)]
   证明: preservesLimit_of_evaluation _ _ fun c => inferInstanceAs (PreservesLimit F (tensorRight c))
 
 Depends on / 依赖: PreservesLimit, preservesLimit_of_evaluation, tensorRight

@@ -56,7 +56,7 @@ definition Γ₀NondegComplexIso
 
 中文:
 定义 Γ₀NondegComplexIso
-  签名: (K : ChainComplex C 自然数)
+  签名: (K : 链复形 C 自然数)
   定义体: HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _)
     (by
       rintro _ n (rfl : n + 1 = _)
@@ -102,7 +102,7 @@ definition Γ₀'CompNondegComplexFunctor
 
 中文:
 定义 Γ₀'CompNondegComplexFunctor
-  签名: : Γ₀' ⋙ Split.nondegComplexFunctor ≅ 𝟭 (ChainComplex C 自然数)
+  签名: : Γ₀' ⋙ 分裂.nondegComplexFunctor ≅ 𝟭 (链复形 C 自然数)
   定义体: NatIso.ofComponents Γ₀NondegComplexIso
 -/
 def Γ₀'CompNondegComplexFunctor : Γ₀' ⋙ Split.nondegComplexFunctor ≅ 𝟭 (ChainComplex C Nat) :=
@@ -123,7 +123,7 @@ definition N₁Γ₀
 
 中文:
 定义 N₁Γ₀
-  签名: : Γ₀ ⋙ N₁ ≅ toKaroubi (ChainComplex C 自然数)
+  签名: : Γ₀ ⋙ N₁ ≅ toKaroubi (链复形 C 自然数)
   定义体: calc
     Γ₀ ⋙ N₁ ≅ Γ₀' ⋙ Split.forget C ⋙ N₁ := Functor.associator _ _ _
     _ ≅ Γ₀' ⋙ Split.nondegComplexFunctor ⋙ toKaroubi _ :=
@@ -156,7 +156,7 @@ theorem N₁Γ₀_app
 
 中文:
 定理 N₁Γ₀_app
-  条件: (K : ChainComplex C 自然数)
+  条件: (K : 链复形 C 自然数)
   证明: by
   ext
   simp [N₁Γ₀, Γ₀'CompNondegComplexFunctor]
@@ -182,7 +182,7 @@ theorem N₁Γ₀_hom_app
 
 中文:
 定理 N₁Γ₀_hom_app
-  条件: (K : ChainComplex C 自然数)
+  条件: (K : 链复形 C 自然数)
   证明: by
   change (N₁Γ₀.app K).hom = _
   simp only [N₁Γ₀_app]
@@ -210,7 +210,7 @@ theorem N₁Γ₀_inv_app
 
 中文:
 定理 N₁Γ₀_inv_app
-  条件: (K : ChainComplex C 自然数)
+  条件: (K : 链复形 C 自然数)
   证明: by
   change (N₁Γ₀.app K).inv = _
   simp only [N₁Γ₀_app]
@@ -240,7 +240,7 @@ theorem N₁Γ₀_hom_app_f_f
 
 中文:
 定理 N₁Γ₀_hom_app_f_f
-  条件: (K : ChainComplex C 自然数) (n : 自然数)
+  条件: (K : 链复形 C 自然数) (n : 自然数)
   证明: by
   rw [N₁Γ₀_hom_app]
   apply comp_id
@@ -267,7 +267,7 @@ theorem N₁Γ₀_inv_app_f_f
 
 中文:
 定理 N₁Γ₀_inv_app_f_f
-  条件: (K : ChainComplex C 自然数) (n : 自然数)
+  条件: (K : 链复形 C 自然数) (n : 自然数)
   证明: by
   rw [N₁Γ₀_inv_app]
   apply id_comp
@@ -294,7 +294,7 @@ definition N₂Γ₂ToKaroubiIso
 
 中文:
 定义 N₂Γ₂ToKaroubiIso
-  签名: : toKaroubi (ChainComplex C 自然数) ⋙ Γ₂ ⋙ N₂ ≅ Γ₀ ⋙ N₁
+  签名: : toKaroubi (链复形 C 自然数) ⋙ Γ₂ ⋙ N₂ ≅ Γ₀ ⋙ N₁
   定义体: calc
     toKaroubi (ChainComplex C Nat) ⋙ Γ₂ ⋙ N₂ ≅
       toKaroubi (ChainComplex C Nat) ⋙ (Γ₂ ⋙ N₂) := (Functor.associator _ _ _).symm
@@ -337,7 +337,7 @@ lemma N₂Γ₂ToKaroubiIso_hom_app
 
 中文:
 引理 N₂Γ₂ToKaroubiIso_hom_app
-  条件: (X : ChainComplex C 自然数)
+  条件: (X : 链复形 C 自然数)
   证明: by
   ext n
   dsimp [N₂Γ₂ToKaroubiIso]
@@ -386,7 +386,7 @@ lemma N₂Γ₂ToKaroubiIso_inv_app
 
 中文:
 引理 N₂Γ₂ToKaroubiIso_inv_app
-  条件: (X : ChainComplex C 自然数)
+  条件: (X : 链复形 C 自然数)
   证明: by
   ext n
   dsimp [N₂Γ₂ToKaroubiIso]
@@ -421,7 +421,7 @@ definition N₂Γ₂
 
 中文:
 定义 N₂Γ₂
-  签名: : Γ₂ ⋙ N₂ ≅ 𝟭 (Karoubi (ChainComplex C 自然数))
+  签名: : Γ₂ ⋙ N₂ ≅ 𝟭 (Karoubi (链复形 C 自然数))
   定义体: ((whiskeringLeft _ _ _).obj (toKaroubi (ChainComplex C Nat))).preimageIso
       (N₂Γ₂ToKaroubiIso ≪≫ N₁Γ₀)
 
@@ -449,7 +449,7 @@ theorem N₂Γ₂_inv_app_f_f
 
 中文:
 定理 N₂Γ₂_inv_app_f_f
-  条件: (X : Karoubi (ChainComplex C 自然数)) (n : 自然数)
+  条件: (X : Karoubi (链复形 C 自然数)) (n : 自然数)
   证明: by
   dsimp [N₂Γ₂]
   simp only [whiskeringLeft_obj_preimage_app, NatTrans.comp_app, Functor.comp_map,
@@ -512,7 +512,7 @@ theorem N₂Γ₂_compatible_with_N₁Γ₀
 
 中文:
 定理 N₂Γ₂_compatible_with_N₁Γ₀
-  条件: (K : ChainComplex C 自然数)
+  条件: (K : 链复形 C 自然数)
   证明: congr_app whiskerLeft_toKaroubi_N₂Γ₂_hom K
 
 Depends on / 依赖: congr_app

@@ -86,7 +86,7 @@ theorem coeff_mul_mul_of_uniqueMul
 
 中文:
 定理 coeff_mul_mul_of_uniqueMul
-  结论: [Mul A] {f g : R[A]} {a0 b0 : A}
+  结论: [乘法 A] {f g : R[A]} {a0 b0 : A}
   证明: by
   classical
   simp_rw [coeff_mul, sum, ← Finset.sum_product']
@@ -132,8 +132,8 @@ instance [NoZeroDivisors
 @[to
 
 中文:
-实例 [NoZeroDivisors
-  签名: R] [Mul A] [UniqueProds A] : NoZeroDivisors R[A] where
+实例 [无零因子
+  签名: R] [乘法 A] [UniqueProds A] : 无零因子 R[A] where
   定义体: by
     contrapose! hab
     simp only [ne_eq, ← coeff_eq_zero, ← support_nonempty_iff] at hab ⊢
@@ -173,8 +173,8 @@ instance [IsCancelAdd
     obtain 
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsLeftCancelMulZero R] [Mul A] [UniqueProds A] :
+实例 [是消去加法
+  签名: R] [是左消去MulZero R] [乘法 A] [UniqueProds A] :
   定义体: by
     classical
     induction hg : g₁.coeff.support union g₂.coeff.support
@@ -220,8 +220,8 @@ instance [IsCancelAdd
 @[to_additive (dont_translate := R)]
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsRightCancelMulZero R] [Mul A] [UniqueProds A] :
+实例 [是消去加法
+  签名: R] [是右消去MulZero R] [乘法 A] [UniqueProds A] :
   定义体: MulOpposite.isLeftCancelMulZero_iff.mp
     MonoidAlgebra.opRingEquiv.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
 
@@ -243,8 +243,8 @@ instance [IsCancelAdd
   signature: R] [IsCancelMulZero R] [Mul A] [UniqueProds A] : IsCancelMulZero R[A] where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsCancelMulZero R] [Mul A] [UniqueProds A] : IsCancelMulZero R[A] where
+实例 [是消去加法
+  签名: R] [是乘零消去 R] [乘法 A] [UniqueProds A] : 是乘零消去 R[A] where
 -/
 instance [IsCancelAdd R] [IsCancelMulZero R] [Mul A] [UniqueProds A] : IsCancelMulZero R[A] where
 
@@ -257,8 +257,8 @@ instance [IsCancelAdd
   signature: R] [IsDomain R] [Monoid A] [UniqueProds A] : IsDomain R[A] where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsDomain R] [Monoid A] [UniqueProds A] : IsDomain R[A] where
+实例 [是消去加法
+  签名: R] [是整环 R] [幺半群 A] [UniqueProds A] : 是整环 R[A] where
 -/
 instance [IsCancelAdd R] [IsDomain R] [Monoid A] [UniqueProds A] : IsDomain R[A] where
 

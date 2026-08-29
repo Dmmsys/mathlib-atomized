@@ -57,7 +57,7 @@ lemma tendsto_ite
 
 中文:
 引理 tendsto_ite
-  结论: {β : 类型} {p : ι -> 命题} [DecidablePred p] {q : 命题} [Decidable q]
+  结论: {β : 类型} {p : ι -> 命题} [DecidablePred p] {q : 命题} [可判定 q]
   证明: by
   constructor <;> intro h
   · by_cases hq : q
@@ -152,7 +152,7 @@ lemma tendsto_indicator_const_iff_forall_eventually'
   exact tendsto_indicator_const_apply_iff_eventually' L b nhds_b nhds_o
 
 中文:
-引理 tendsto_indicator_const_iff_forall_eventually'
+引理 tendsto_indicator_const_iff_对任意_eventually'
   证明: by
   simp_rw [tendsto_pi_nhds]
   apply forall_congr'
@@ -181,7 +181,7 @@ lemma tendsto_indicator_const_apply_iff_eventually
 
 中文:
 引理 tendsto_indicator_const_apply_iff_eventually
-  结论: [T1Space β] (b : β) [NeZero b]
+  结论: [T1空间 β] (b : β) [NeZero b]
   证明: by
   apply tendsto_indicator_const_apply_iff_eventually' _ b
   · simp only [compl_singleton_mem_nhds_iff, ne_eq, NeZero.ne, not_false_eq_true]
@@ -207,8 +207,8 @@ lemma tendsto_indicator_const_iff_forall_eventually
   · simp only [compl_singleton_mem_nhds_iff, ne_eq, (NeZero.ne b).symm, not_false_eq_true]
 
 中文:
-引理 tendsto_indicator_const_iff_forall_eventually
-  条件: [T1Space β] (b : β) [NeZero b]
+引理 tendsto_indicator_const_iff_对任意_eventually
+  条件: [T1空间 β] (b : β) [NeZero b]
   证明: by
   apply tendsto_indicator_const_iff_forall_eventually' _ b
   · simp only [compl_singleton_mem_nhds_iff, ne_eq, NeZero.ne, not_false_eq_true]
@@ -261,7 +261,7 @@ lemma tendsto_indicator_const_iff_tendsto_pi_pure
 
 中文:
 引理 tendsto_indicator_const_iff_tendsto_pi_pure
-  条件: [T1Space β] (b : β) [NeZero b]
+  条件: [T1空间 β] (b : β) [NeZero b]
   证明: by
   rw [tendsto_indicator_const_iff_forall_eventually _ b]; rw [tendsto_pi]
   simp_rw [tendsto_pure]

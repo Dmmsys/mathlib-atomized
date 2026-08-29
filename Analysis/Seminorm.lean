@@ -57,8 +57,8 @@ structure Seminorm
     - smul' : forall (a : 𝕜) (x : E), toFun (a • x) = ‖a‖ * toFun x
 
 中文:
-结构 Seminorm
-  参数: (𝕜 : 类型) (E : 类型) [SeminormedRing 𝕜] [AddGroup E] [SMul 𝕜 E]
+结构 半范数
+  参数: (𝕜 : 类型) (E : 类型) [Seminormed环 𝕜] [加法群 E] [标量乘法 𝕜 E]
   公理与运算 (1 个):
     - smul' : 对任意 (a : 𝕜) (x : E), toFun (a • x) = ‖a‖ * toFun x
 -/
@@ -81,9 +81,9 @@ class SeminormClass
     - map_smul_eq_mul((f : F) (a : 𝕜) (x : E)) : f (a • x) = ‖a‖ * f x
 
 中文:
-类 SeminormClass
-  参数: (F : 类型) (𝕜 E : outParam 类型) [SeminormedRing 𝕜] [AddGroup E]
-  继承: AddGroupSeminormClass F E Real
+类 半范数类
+  参数: (F : 类型) (𝕜 E : outParam 类型) [Seminormed环 𝕜] [加法群 E]
+  继承: 加法群半范数类 F E 实数
   公理与运算 (1 个):
     - map_smul_eq_mul((f : F) (a : 𝕜) (x : E)) : f (a • x) = ‖a‖ * f x
 -/
@@ -110,8 +110,8 @@ definition Seminorm.of
   neg' x := by rw [← neg_one_smul 𝕜, smul, norm_neg, ← smul, one_smul]
 
 中文:
-定义 Seminorm.of
-  签名: [SeminormedRing 𝕜] [AddCommGroup E] [Module 𝕜 E] (f : E -> 实数)
+定义 半范数.of
+  签名: [Seminormed环 𝕜] [加法交换群 E] [模 𝕜 E] (f : E -> 实数)
   定义体: f
   map_zero' := by rw [← zero_smul 𝕜 (0 : E), smul, norm_zero, zero_mul]
   add_le' := add_le
@@ -143,8 +143,8 @@ definition Seminorm.ofSMulLE
     rw [norm_inv] a
 
 中文:
-定义 Seminorm.ofSMulLE
-  签名: [NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E] (f : E -> 实数) (map_zero : f 0 = 0)
+定义 半范数.ofSMulLE
+  签名: [赋范域 𝕜] [加法交换群 E] [模 𝕜 E] (f : E -> 实数) (map_zero : f 0 = 0)
   定义体: Seminorm.of f add_le fun r x => by
     refine le_antisymm (smul_le r x) ?_
     by_cases h : r = 0
@@ -200,7 +200,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Seminorm 𝕜 E) E 实数 where
+  签名: : 函数状 (半范数 𝕜 E) E 实数 where
   定义体: f.toFun
   coe_injective f g h := by
     rcases f with ⟨⟨_⟩⟩
@@ -231,7 +231,7 @@ instance instSeminormClass
 
 中文:
 实例 instSeminormClass
-  签名: : SeminormClass (Seminorm 𝕜 E) 𝕜 E where
+  签名: : 半范数类 (半范数 𝕜 E) 𝕜 E where
   定义体: f.map_zero'
   map_add_le_add f := f.add_le'
   map_neg_eq_map f := f.neg'
@@ -259,7 +259,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : Seminorm 𝕜 E} (h : 对任意 x, (p : E -> 实数) x = q x)
+  条件: {p q : 半范数 𝕜 E} (h : 对任意 x, (p : E -> 实数) x = q x)
   结论: p = q
   证明: DFunLike.ext p q h
 
@@ -279,7 +279,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (Seminorm 𝕜 E)
+  签名: : 零 (半范数 𝕜 E)
   定义体: ⟨{ AddGroupSeminorm.instZeroAddGroupSeminorm.zero with
     smul' := fun _ _ => (mul_zero _).symm }⟩
 
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (Seminorm 𝕜 E) E 实数
+  签名: 是ZeroApply (半范数 𝕜 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-06-22")] alias coe_zero := FunLike.coe_zero
@@ -327,7 +327,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Seminorm 𝕜 E)
+  签名: 可居 (半范数 𝕜 E)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (Seminorm 𝕜 E) :=
@@ -349,7 +349,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数]
+  签名: [标量乘法 R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数]
   定义体: { r • p.toAddGroupSeminorm with
       toFun := fun x => r • p x
       smul' := fun _ _ => by
@@ -375,8 +375,8 @@ instance [SMul
   body: rfl
 
 中文:
-实例 [SMul
-  签名: R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数] : IsSMulApply R (Seminorm 𝕜 E) E 实数 where
+实例 [标量乘法
+  签名: R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数] : 是SMulApply R (半范数 𝕜 E) E 实数 where
   定义体: rfl
 -/
 instance [SMul R Real] [SMul R Real>=0] [IsScalarTower R Real>=0 Real] : IsSMulApply R (Seminorm 𝕜 E) E Real where
@@ -395,8 +395,8 @@ instance [SMul
 @[deprecated (since := "2026-06-22")] protected alias smul_apply := smul_apply
 
 中文:
-实例 [SMul
-  签名: R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数] [SMul R' 实数] [SMul R' 实数>=0]
+实例 [标量乘法
+  签名: R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数] [标量乘法 R' 实数] [标量乘法 R' 实数>=0]
   定义体: FunLike.isScalarTower
 
 @[deprecated (since := "2026-06-22")] alias coe_smul := FunLike.coe_smul
@@ -425,7 +425,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (Seminorm 𝕜 E) where
+  签名: : 加法 (半范数 𝕜 E) where
   定义体: { p.toAddGroupSeminorm + q.toAddGroupSeminorm with
       toFun := fun x => p x + q x
       smul' := fun a x => by simp only [map_smul_eq_mul, map_smul_eq_mul, mul_add] }
@@ -452,7 +452,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (Seminorm 𝕜 E) E 实数
+  签名: 是加法Apply (半范数 𝕜 E) E 实数
   定义体: rfl
 
 @[deprecated (since := "2026-06-22")] alias coe_add := FunLike.coe_add
@@ -476,7 +476,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid (Seminorm 𝕜 E)
+  签名: : 加法幺半群 (半范数 𝕜 E)
   定义体: fast_instance% FunLike.addMonoid
 
 Depends on / 依赖: FunLike, FunLike.addMonoid, addMonoid, fast_instance
@@ -493,7 +493,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (Seminorm 𝕜 E)
+  签名: : 加法交换幺半群 (半范数 𝕜 E)
   定义体: fast_instance% FunLike.addCommMonoid
 
 Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
@@ -510,7 +510,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Seminorm 𝕜 E)
+  签名: : 偏序 (半范数 𝕜 E)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, PartialOrder, PartialOrder.lift, coe_injective
@@ -528,7 +528,7 @@ instance instIsOrderedCancelAddMonoid
 
 中文:
 实例 instIsOrderedCancelAddMonoid
-  签名: : IsOrderedCancelAddMonoid (Seminorm 𝕜 E)
+  签名: : 是OrderedCancelAdd幺半群 (半范数 𝕜 E)
   定义体: Function.Injective.isOrderedCancelAddMonoid DFunLike.coe FunLike.coe_add .rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe, FunLike, FunLike.coe_add, Function, Function.Injective.isOrderedCancelAddMonoid, Injective, coe_add, isOrderedCancelAddMonoid
@@ -546,7 +546,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: [Monoid R] [MulAction R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数]
+  签名: [幺半群 R] [乘法作用 R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数]
   定义体: fast_instance% FunLike.mulAction
 
 Depends on / 依赖: FunLike, FunLike.mulAction, fast_instance, mulAction
@@ -576,7 +576,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid R] [DistribMulAction R 实数] [SMul R 实数>=0]
+  签名: [幺半群 R] [分配乘法作用 R 实数] [标量乘法 R 实数>=0]
   定义体: fast_instance%
   FunLike.distribMulAction
 
@@ -596,7 +596,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [Module R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数]
+  签名: [半环 R] [模 R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数]
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -620,7 +620,7 @@ instance instSup
 
 中文:
 实例 instSup
-  签名: : Max (Seminorm 𝕜 E) where
+  签名: : 最大值 (半范数 𝕜 E) where
   定义体: { p.toAddGroupSeminorm ⊔ q.toAddGroupSeminorm with
       toFun := p ⊔ q
       smul' := fun x v =>
@@ -651,7 +651,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (p q : Seminorm 𝕜 E)
+  条件: (p q : 半范数 𝕜 E)
   结论: ⇑(p ⊔ q) = (p : E -> 实数) ⊔ (q : E -> 实数)
   证明: rfl
 -/
@@ -669,7 +669,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: (p q : Seminorm 𝕜 E) (x : E)
+  条件: (p q : 半范数 𝕜 E) (x : E)
   结论: (p ⊔ q) x = p x ⊔ q x
   证明: rfl
 
@@ -693,7 +693,7 @@ theorem smul_sup
 
 中文:
 定理 smul_sup
-  条件: [SMul R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数] (r : R) (p q : Seminorm 𝕜 E)
+  条件: [标量乘法 R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数] (r : R) (p q : 半范数 𝕜 E)
   证明: have real.smul_max : forall x y : Real, r • max x y = max (r • x) (r • y) := fun x y => by
     simpa only [← smul_eq_mul, ← NNReal.smul_def, smul_one_smul Real>=0 r (_ : Real)] using
       mul_max_of_nonneg x y (r • (1 : Real>=0) : Real>=0).coe_nonneg
@@ -724,7 +724,7 @@ theorem coe_le_coe
 
 中文:
 定理 coe_le_coe
-  条件: {p q : Seminorm 𝕜 E}
+  条件: {p q : 半范数 𝕜 E}
   结论: (p : E -> 实数) <= q ↔ p <= q
   证明: Iff.rfl
 
@@ -747,7 +747,7 @@ theorem coe_lt_coe
 
 中文:
 定理 coe_lt_coe
-  条件: {p q : Seminorm 𝕜 E}
+  条件: {p q : 半范数 𝕜 E}
   结论: (p : E -> 实数) < q ↔ p < q
   证明: Iff.rfl
 
@@ -767,7 +767,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {p q : Seminorm 𝕜 E}
+  条件: {p q : 半范数 𝕜 E}
   结论: p <= q ↔ 对任意 x, p x <= q x
   证明: Iff.rfl
 
@@ -787,7 +787,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: {p q : Seminorm 𝕜 E}
+  条件: {p q : 半范数 𝕜 E}
   结论: p < q ↔ p <= q ∧ 存在 x, p x < q x
   证明: @Pi.lt_def _ _ _ p q
 
@@ -806,7 +806,7 @@ instance instSemilatticeSup
 
 中文:
 实例 instSemilatticeSup
-  签名: : SemilatticeSup (Seminorm 𝕜 E)
+  签名: : SemilatticeSup (半范数 𝕜 E)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.semilatticeSup, coe_injective, coe_sup, semilatticeSup
@@ -827,8 +827,8 @@ instance [SMul
     grw [smul_apply, hab, smul_apply]
 
 中文:
-实例 [SMul
-  签名: R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数] [Preorder R] [Zero R]
+实例 [标量乘法
+  签名: R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数] [预序 R] [零 R]
   定义体: calc
     _ <= (c • (1 : Real>=0)) • p x := by simp
     _ <= _ := by grw [hpq x]; simp
@@ -870,7 +870,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
+  签名: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
   定义体: { p.toAddGroupSeminorm.comp f.toAddMonoidHom with
     toFun := fun x => p (f x)
     -- Note: https://github.com/leanprover-community/mathlib4/pull/8386 had to change `map_smulₛₗ` to `map_smulₛₗ _`
@@ -897,7 +897,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
   结论: ⇑(p.comp f) = p ∘ f
   证明: rfl
 
@@ -920,7 +920,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E)
   结论: (p.comp f) x = p (f x)
   证明: rfl
 
@@ -943,8 +943,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (p : Seminorm 𝕜 E)
-  结论: p.comp LinearMap.id = p
+  条件: (p : 半范数 𝕜 E)
+  结论: p.comp 线性映射.id = p
   证明: ext fun _ => rfl
 
 @[simp]
@@ -966,7 +966,7 @@ theorem comp_zero
 
 中文:
 定理 comp_zero
-  条件: (p : Seminorm 𝕜₂ E₂)
+  条件: (p : 半范数 𝕜₂ E₂)
   结论: p.comp (0 : E ->ₛₗ[σ₁₂] E₂) = 0
   证明: ext fun _ => map_zero p
 
@@ -990,7 +990,7 @@ theorem zero_comp
 中文:
 定理 zero_comp
   条件: (f : E ->ₛₗ[σ₁₂] E₂)
-  结论: (0 : Seminorm 𝕜₂ E₂).comp f = 0
+  结论: (0 : 半范数 𝕜₂ E₂).comp f = 0
   证明: ext fun _ => rfl
 -/
 theorem zero_comp (f : E ->ₛₗ[σ₁₂] E₂) : (0 : Seminorm 𝕜₂ E₂).comp f = 0 :=
@@ -1006,7 +1006,7 @@ theorem comp_comp
 
 中文:
 定理 comp_comp
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (p : Seminorm 𝕜₃ E₃) (g : E₂ ->ₛₗ[σ₂₃] E₃)
+  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (p : 半范数 𝕜₃ E₃) (g : E₂ ->ₛₗ[σ₂₃] E₃)
   证明: ext fun _ => rfl
 -/
 theorem comp_comp [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] (p : Seminorm 𝕜₃ E₃) (g : E₂ ->ₛₗ[σ₂₃] E₃)
@@ -1023,7 +1023,7 @@ theorem add_comp
 
 中文:
 定理 add_comp
-  条件: (p q : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
+  条件: (p q : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂)
   证明: ext fun _ => rfl
 -/
 theorem add_comp (p q : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) :
@@ -1040,7 +1040,7 @@ theorem comp_add_le
 
 中文:
 定理 comp_add_le
-  条件: (p : Seminorm 𝕜₂ E₂) (f g : E ->ₛₗ[σ₁₂] E₂)
+  条件: (p : 半范数 𝕜₂ E₂) (f g : E ->ₛₗ[σ₁₂] E₂)
   证明: fun _ => map_add_le_add p _ _
 
 Depends on / 依赖: map_add_le_add
@@ -1058,7 +1058,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : R)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : R)
   证明: ext fun _ => rfl
 -/
 theorem smul_comp (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : R) :
@@ -1076,7 +1076,7 @@ theorem comp_mono
 
 中文:
 定理 comp_mono
-  条件: {p q : Seminorm 𝕜₂ E₂} (f : E ->ₛₗ[σ₁₂] E₂) (hp : p <= q)
+  条件: {p q : 半范数 𝕜₂ E₂} (f : E ->ₛₗ[σ₁₂] E₂) (hp : p <= q)
   结论: p.comp f <= q.comp f
   证明: fun _ => hp _
 -/
@@ -1122,7 +1122,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (Seminorm 𝕜 E) where
+  签名: : 有底序 (半范数 𝕜 E) where
   定义体: 0
   bot_le := apply_nonneg
 
@@ -1143,7 +1143,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ⇑(⊥ : Seminorm 𝕜 E) = 0
+  结论: ⇑(⊥ : 半范数 𝕜 E) = 0
   证明: rfl
 -/
 theorem coe_bot : ⇑(⊥ : Seminorm 𝕜 E) = 0 :=
@@ -1161,7 +1161,7 @@ theorem bot_eq_zero
 
 中文:
 定理 bot_eq_zero
-  结论: (⊥ : Seminorm 𝕜 E) = 0
+  结论: (⊥ : 半范数 𝕜 E) = 0
   证明: rfl
 
 @[deprecated IsOrderedSMul.smul_le_smul (since := "2026-07-31")]
@@ -1183,7 +1183,7 @@ theorem smul_le_smul
 
 中文:
 定理 smul_le_smul
-  条件: {p q : Seminorm 𝕜 E} {a b : 实数>=0} (hpq : p <= q) (hab : a <= b)
+  条件: {p q : 半范数 𝕜 E} {a b : 实数>=0} (hpq : p <= q) (hab : a <= b)
   证明: by
   simp_rw [le_def]
   intro x
@@ -1211,7 +1211,7 @@ theorem finset_sup_apply
 
 中文:
 定理 finset_sup_apply
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E)
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E)
   证明: by
   induction s using Finset.cons_induction_on with
   | empty =>
@@ -1243,8 +1243,8 @@ theorem exists_apply_eq_finset_sup
   exact ⟨i, hi, congr_arg _ hix⟩
 
 中文:
-定理 exists_apply_eq_finset_sup
-  条件: (p : ι -> Seminorm 𝕜 E) {s : Finset ι} (hs : s.Nonempty) (x : E)
+定理 存在_apply_eq_finset_sup
+  条件: (p : ι -> 半范数 𝕜 E) {s : 有限集 ι} (hs : s.非空) (x : E)
   证明: by
   rcases Finset.exists_mem_eq_sup s hs (fun i => (⟨p i x, apply_nonneg _ _⟩ : Real>=0)) with ⟨i, hi, hix⟩
   rw [finset_sup_apply]
@@ -1270,8 +1270,8 @@ theorem zero_or_exists_apply_eq_finset_sup
   · right; exact exists_apply_eq_finset_sup p hs x
 
 中文:
-定理 zero_or_exists_apply_eq_finset_sup
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E)
+定理 zero_or_存在_apply_eq_finset_sup
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E)
   证明: by
   rcases Finset.eq_empty_or_nonempty s with (rfl | hs)
   · left; rfl
@@ -1299,7 +1299,7 @@ theorem finset_sup_smul
 
 中文:
 定理 finset_sup_smul
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (C : 实数>=0)
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (C : 实数>=0)
   证明: by
   ext x
   rw [smul_apply]; rw [finset_sup_apply]; rw [finset_sup_apply]
@@ -1331,8 +1331,8 @@ theorem finset_sup_le_sum
 
 中文:
 定理 finset_sup_le_sum
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι)
-  结论: s.sup p <= ∑ i in s, p i
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι)
+  结论: s.上确界 p <= ∑ i in s, p i
   证明: by
   classical
   refine Finset.sup_le_iff.mpr ?_
@@ -1362,7 +1362,7 @@ theorem finset_sup_apply_le
 
 中文:
 定理 finset_sup_apply_le
-  结论: {p : ι -> Seminorm 𝕜 E} {s : Finset ι} {x : E} {a : 实数} (ha : 0 <= a)
+  结论: {p : ι -> 半范数 𝕜 E} {s : 有限集 ι} {x : E} {a : 实数} (ha : 0 <= a)
   证明: by
   lift a to Real>=0 using ha
   rw [finset_sup_apply]; rw [NNReal.coe_le_coe]
@@ -1386,7 +1386,7 @@ theorem le_finset_sup_apply
 
 中文:
 定理 le_finset_sup_apply
-  结论: {p : ι -> Seminorm 𝕜 E} {s : Finset ι} {x : E} {i : ι}
+  结论: {p : ι -> 半范数 𝕜 E} {s : 有限集 ι} {x : E} {i : ι}
   证明: (Finset.le_sup hi : p i <= s.sup p) x
 
 Depends on / 依赖: Finset, Finset.le_sup, le_sup, s.sup
@@ -1409,7 +1409,7 @@ theorem finset_sup_apply_lt
 
 中文:
 定理 finset_sup_apply_lt
-  结论: {p : ι -> Seminorm 𝕜 E} {s : Finset ι} {x : E} {a : 实数} (ha : 0 < a)
+  结论: {p : ι -> 半范数 𝕜 E} {s : 有限集 ι} {x : E} {a : 实数} (ha : 0 < a)
   证明: by
   lift a to Real>=0 using ha.le
   rw [finset_sup_apply]; rw [NNReal.coe_lt_coe]; rw [Finset.sup_lt_iff]
@@ -1436,7 +1436,7 @@ theorem norm_sub_map_le_sub
 
 中文:
 定理 norm_sub_map_le_sub
-  条件: (p : Seminorm 𝕜 E) (x y : E)
+  条件: (p : 半范数 𝕜 E) (x y : E)
   结论: ‖p x - p y‖ <= p (x - y)
   证明: abs_sub_map_le_sub p x y
 
@@ -1466,7 +1466,7 @@ theorem comp_smul
 
 中文:
 定理 comp_smul
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : 𝕜₂)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : 𝕜₂)
   证明: by
   ext; simp [NNReal.smul_def, map_smul_eq_mul]
 
@@ -1486,7 +1486,7 @@ theorem comp_smul_apply
 
 中文:
 定理 comp_smul_apply
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : 𝕜₂) (x : E)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (c : 𝕜₂) (x : E)
   证明: map_smul_eq_mul p _ _
 
 Depends on / 依赖: map_smul_eq_mul
@@ -1541,7 +1541,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (Seminorm 𝕜 E) where
+  签名: : 最小值 (半范数 𝕜 E) where
   定义体: { p.toAddGroupSeminorm ⊓ q.toAddGroupSeminorm with
       toFun := fun x => ⨅ u : E, p u + q (x - u)
       smul' := by
@@ -1585,7 +1585,7 @@ theorem inf_apply
 
 中文:
 定理 inf_apply
-  条件: (p q : Seminorm 𝕜 E) (x : E)
+  条件: (p q : 半范数 𝕜 E) (x : E)
   结论: (p ⊓ q) x = ⨅ u : E, p u + q (x - u)
   证明: rfl
 -/
@@ -1609,7 +1609,7 @@ ciInf_le_of_le bddBelow_range_add 0 by
 
 中文:
 实例 instLattice
-  签名: : Lattice (Seminorm 𝕜 E)
+  签名: : 格 (半范数 𝕜 E)
   定义体: { Seminorm.instSemilatticeSup with
     inf := (· ⊓ ·)
     inf_le_left := fun p q x =>
@@ -1646,7 +1646,7 @@ theorem smul_inf
 
 中文:
 定理 smul_inf
-  条件: [SMul R 实数] [SMul R 实数>=0] [IsScalarTower R 实数>=0 实数] (r : R) (p q : Seminorm 𝕜 E)
+  条件: [标量乘法 R 实数] [标量乘法 R 实数>=0] [标量塔 R 实数>=0 实数] (r : R) (p q : 半范数 𝕜 E)
   证明: by
   ext
   simp_rw [smul_apply, inf_apply, smul_apply, ← smul_one_smul Real>=0 r (_ : Real), NNReal.smul_def,
@@ -1681,7 +1681,7 @@ instance instSupSet
 
 中文:
 实例 instSupSet
-  签名: : SupSet (Seminorm 𝕜 E) where
+  签名: : 上确界集 (半范数 𝕜 E) where
   定义体: if h : BddAbove ((↑) '' s : Set (E -> Real)) then
       { toFun := ⨆ p : s, ((p : Seminorm 𝕜 E) : E -> Real)
         map_zero' := by
@@ -1740,7 +1740,7 @@ theorem coe_sSup_eq'
 
 中文:
 定理 coe_sSup_eq'
-  结论: {s : Set <| Seminorm 𝕜 E}
+  结论: {s : 集合 <| 半范数 𝕜 E}
   证明: congr_arg _ (dif_pos hs)
 -/
 protected theorem coe_sSup_eq' {s : Set <| Seminorm 𝕜 E}
@@ -1763,7 +1763,7 @@ theorem bddAbove_iff
 
 中文:
 定理 bddAbove_iff
-  条件: {s : Set <| Seminorm 𝕜 E}
+  条件: {s : 集合 <| 半范数 𝕜 E}
   证明: ⟨fun ⟨q, hq⟩ => ⟨q, forall_mem_image.2 fun _ hp => hq hp⟩, fun H =>
     ⟨sSup s, fun p hp x => by
       dsimp
@@ -1793,7 +1793,7 @@ theorem bddAbove_range_iff
 
 中文:
 定理 bddAbove_range_iff
-  条件: {ι : Sort*} {p : ι -> Seminorm 𝕜 E}
+  条件: {ι : 类型层*} {p : ι -> 半范数 𝕜 E}
   证明: by
   rw [Seminorm.bddAbove_iff]; rw [← range_comp]; rw [bddAbove_range_pi]; rfl
 -/
@@ -1811,7 +1811,7 @@ theorem coe_sSup_eq
 
 中文:
 定理 coe_sSup_eq
-  条件: {s : Set <| Seminorm 𝕜 E} (hs : BddAbove s)
+  条件: {s : 集合 <| 半范数 𝕜 E} (hs : BddAbove s)
   证明: Seminorm.coe_sSup_eq' (Seminorm.bddAbove_iff.mp hs)
 -/
 protected theorem coe_sSup_eq {s : Set <| Seminorm 𝕜 E} (hs : BddAbove s) :
@@ -1830,7 +1830,7 @@ theorem coe_iSup_eq
 
 中文:
 定理 coe_iSup_eq
-  条件: {ι : Sort*} {p : ι -> Seminorm 𝕜 E} (hp : BddAbove (range p))
+  条件: {ι : 类型层*} {p : ι -> 半范数 𝕜 E} (hp : BddAbove (range p))
   证明: by
   rw [← sSup_range]; rw [Seminorm.coe_sSup_eq hp]
   exact iSup_range' (fun p : Seminorm 𝕜 E => (p : E -> Real)) p
@@ -1851,7 +1851,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: {s : Set (Seminorm 𝕜 E)} (hp : BddAbove s) {x : E}
+  条件: {s : 集合 (半范数 𝕜 E)} (hp : BddAbove s) {x : E}
   证明: by
   rw [Seminorm.coe_sSup_eq hp]; rw [iSup_apply]
 -/
@@ -1870,7 +1870,7 @@ theorem iSup_apply
 
 中文:
 定理 iSup_apply
-  结论: {ι : Sort*} {p : ι -> Seminorm 𝕜 E}
+  结论: {ι : 类型层*} {p : ι -> 半范数 𝕜 E}
   证明: by
   rw [Seminorm.coe_iSup_eq hp]; rw [iSup_apply]
 -/
@@ -1891,7 +1891,7 @@ theorem sSup_empty
 
 中文:
 定理 sSup_empty
-  结论: sSup (∅ : Set (Seminorm 𝕜 E)) = ⊥
+  结论: sSup (∅ : 集合 (半范数 𝕜 E)) = ⊥
   证明: by
   ext
   rw [Seminorm.sSup_apply bddAbove_empty]; rw [Real.iSup_of_isEmpty]
@@ -1918,7 +1918,7 @@ theorem isLUB_sSup
 
 中文:
 定理 isLUB_sSup
-  条件: (s : Set (Seminorm 𝕜 E)) (hs₁ : BddAbove s) (hs₂ : s.Nonempty)
+  条件: (s : 集合 (半范数 𝕜 E)) (hs₁ : BddAbove s) (hs₂ : s.非空)
   证明: by
   refine ⟨fun p hp x => ?_, fun p hp x => ?_⟩ <;> have : Nonempty ↑s := hs₂.coe_sort <;>
     dsimp <;> rw [Seminorm.coe_sSup_eq hs₁, iSup_apply]
@@ -2193,7 +2193,7 @@ theorem closedBall_eq_biInter_ball
 @[simp]
 
 中文:
-定理 closedBall_eq_biInter_ball
+定理 closedBall_eq_bi整数er_ball
   条件: (x r)
   结论: closedBall p x r = ⋂ ρ > r, ball p x ρ
   证明: by
@@ -2223,7 +2223,7 @@ theorem ball_zero'
 中文:
 定理 ball_zero'
   条件: (x : E) (hr : 0 < r)
-  结论: ball (0 : Seminorm 𝕜 E) x r = Set.univ
+  结论: ball (0 : 半范数 𝕜 E) x r = 集合.univ
   证明: by
   rw [Set.eq_univ_iff_forall]; rw [ball]
   simp [hr]
@@ -2249,7 +2249,7 @@ theorem closedBall_zero'
 中文:
 定理 closedBall_zero'
   条件: (x : E) (hr : 0 < r)
-  结论: closedBall (0 : Seminorm 𝕜 E) x r = Set.univ
+  结论: closedBall (0 : 半范数 𝕜 E) x r = 集合.univ
   证明: eq_univ_of_subset (ball_subset_closedBall _ _ _) (ball_zero' x hr)
 
 Depends on / 依赖: ball_subset_closedBall, ball_zero, eq_univ_of_subset
@@ -2269,7 +2269,7 @@ theorem ball_smul
 
 中文:
 定理 ball_smul
-  条件: (p : Seminorm 𝕜 E) {c : NN实数} (hc : 0 < c) (r : 实数) (x : E)
+  条件: (p : 半范数 𝕜 E) {c : 非负实数} (hc : 0 < c) (r : 实数) (x : E)
   证明: by
   ext
   rw [mem_ball]; rw [mem_ball]; rw [smul_apply]; rw [NNReal.smul_def]; rw [smul_eq_mul]; rw [mul_comm]; rw [lt_div_iff₀ (NNReal.coe_pos.mpr hc)]
@@ -2293,7 +2293,7 @@ theorem closedBall_smul
 
 中文:
 定理 closedBall_smul
-  条件: (p : Seminorm 𝕜 E) {c : NN实数} (hc : 0 < c) (r : 实数) (x : E)
+  条件: (p : 半范数 𝕜 E) {c : 非负实数} (hc : 0 < c) (r : 实数) (x : E)
   证明: by
   ext
   rw [mem_closedBall]; rw [mem_closedBall]; rw [smul_apply]; rw [NNReal.smul_def]; rw [smul_eq_mul]; rw [mul_comm]; rw [le_div_iff₀ (NNReal.coe_pos.mpr hc)]
@@ -2316,7 +2316,7 @@ theorem ball_sup
 
 中文:
 定理 ball_sup
-  条件: (p : Seminorm 𝕜 E) (q : Seminorm 𝕜 E) (e : E) (r : 实数)
+  条件: (p : 半范数 𝕜 E) (q : 半范数 𝕜 E) (e : E) (r : 实数)
   证明: by
   simp_rw [ball, ← Set.ofPred_and, coe_sup, Pi.sup_apply, sup_lt_iff]
 
@@ -2337,7 +2337,7 @@ theorem closedBall_sup
 
 中文:
 定理 closedBall_sup
-  条件: (p : Seminorm 𝕜 E) (q : Seminorm 𝕜 E) (e : E) (r : 实数)
+  条件: (p : 半范数 𝕜 E) (q : 半范数 𝕜 E) (e : E) (r : 实数)
   证明: by
   simp_rw [closedBall, ← Set.ofPred_and, coe_sup, Pi.sup_apply, sup_le_iff]
 
@@ -2361,7 +2361,7 @@ theorem ball_finset_sup'
 
 中文:
 定理 ball_finset_sup'
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (H : s.Nonempty) (e : E) (r : 实数)
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (H : s.非空) (e : E) (r : 实数)
   证明: by
   induction H using Finset.Nonempty.cons_induction with
   | singleton => simp
@@ -2393,7 +2393,7 @@ theorem closedBall_finset_sup'
 
 中文:
 定理 closedBall_finset_sup'
-  结论: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (H : s.Nonempty) (e : E)
+  结论: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (H : s.非空) (e : E)
   证明: by
   induction H using Finset.Nonempty.cons_induction with
   | singleton => simp
@@ -2425,7 +2425,7 @@ theorem ball_mono
 
 中文:
 定理 ball_mono
-  条件: {p : Seminorm 𝕜 E} {r₁ r₂ : 实数} (h : r₁ <= r₂)
+  条件: {p : 半范数 𝕜 E} {r₁ r₂ : 实数} (h : r₁ <= r₂)
   结论: p.ball x r₁ subseteq p.ball x r₂
   证明: fun _ (hx : _ < _) => hx.trans_le h
 
@@ -2447,7 +2447,7 @@ theorem closedBall_mono
 
 中文:
 定理 closedBall_mono
-  条件: {p : Seminorm 𝕜 E} {r₁ r₂ : 实数} (h : r₁ <= r₂)
+  条件: {p : 半范数 𝕜 E} {r₁ r₂ : 实数} (h : r₁ <= r₂)
   证明: fun _ (hx : _ <= _) => hx.trans h
 
 Depends on / 依赖: hx.trans
@@ -2467,7 +2467,7 @@ theorem ball_antitone
 
 中文:
 定理 ball_antitone
-  条件: {p q : Seminorm 𝕜 E} (h : q <= p)
+  条件: {p q : 半范数 𝕜 E} (h : q <= p)
   结论: p.ball x r subseteq q.ball x r
   证明: fun _ =>
   (h _).trans_lt
@@ -2485,7 +2485,7 @@ theorem closedBall_antitone
 
 中文:
 定理 closedBall_antitone
-  条件: {p q : Seminorm 𝕜 E} (h : q <= p)
+  条件: {p q : 半范数 𝕜 E} (h : q <= p)
   证明: fun _ => (h _).trans
 -/
 theorem closedBall_antitone {p q : Seminorm 𝕜 E} (h : q <= p) :
@@ -2504,7 +2504,7 @@ theorem ball_add_ball_subset
 
 中文:
 定理 ball_add_ball_subset
-  条件: (p : Seminorm 𝕜 E) (r₁ r₂ : 实数) (x₁ x₂ : E)
+  条件: (p : 半范数 𝕜 E) (r₁ r₂ : 实数) (x₁ x₂ : E)
   证明: by
   rintro x ⟨y₁, hy₁, y₂, hy₂, rfl⟩
   rw [mem_ball]; rw [add_sub_add_comm]
@@ -2531,7 +2531,7 @@ theorem closedBall_add_closedBall_subset
 
 中文:
 定理 closedBall_add_closedBall_subset
-  条件: (p : Seminorm 𝕜 E) (r₁ r₂ : 实数) (x₁ x₂ : E)
+  条件: (p : 半范数 𝕜 E) (r₁ r₂ : 实数) (x₁ x₂ : E)
   证明: by
   rintro x ⟨y₁, hy₁, y₂, hy₂, rfl⟩
   rw [mem_closedBall]; rw [add_sub_add_comm]
@@ -2555,7 +2555,7 @@ theorem sub_mem_ball
 
 中文:
 定理 sub_mem_ball
-  条件: (p : Seminorm 𝕜 E) (x₁ x₂ y : E) (r : 实数)
+  条件: (p : 半范数 𝕜 E) (x₁ x₂ y : E) (r : 实数)
   证明: by simp_rw [mem_ball, sub_sub]
 
 Depends on / 依赖: mem_ball, simp_rw, sub_sub
@@ -2574,7 +2574,7 @@ theorem sub_mem_closedBall
 
 中文:
 定理 sub_mem_closedBall
-  条件: (p : Seminorm 𝕜 E) (x₁ x₂ y : E) (r : 实数)
+  条件: (p : 半范数 𝕜 E) (x₁ x₂ y : E) (r : 实数)
   证明: by
   simp_rw [mem_closedBall, sub_sub]
 
@@ -2653,7 +2653,7 @@ theorem vadd_ball
 
 中文:
 定理 vadd_ball
-  条件: (p : Seminorm 𝕜 E)
+  条件: (p : 半范数 𝕜 E)
   结论: x +ᵥ p.ball y r = p.ball (x +ᵥ y) r
   证明: by
   let := AddGroupSeminorm.toSeminormedAddCommGroup p.toAddGroupSeminorm
@@ -2678,7 +2678,7 @@ theorem vadd_closedBall
 
 中文:
 定理 vadd_closedBall
-  条件: (p : Seminorm 𝕜 E)
+  条件: (p : 半范数 𝕜 E)
   结论: x +ᵥ p.closedBall y r = p.closedBall (x +ᵥ y) r
   证明: by
   let := AddGroupSeminorm.toSeminormedAddCommGroup p.toAddGroupSeminorm
@@ -2710,7 +2710,7 @@ theorem ball_comp
 
 中文:
 定理 ball_comp
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E) (r : 实数)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E) (r : 实数)
   证明: by
   ext
   simp_rw [ball, mem_preimage, comp_apply, Set.mem_ofPred_eq, map_sub]
@@ -2734,7 +2734,7 @@ theorem closedBall_comp
 
 中文:
 定理 closedBall_comp
-  条件: (p : Seminorm 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E) (r : 实数)
+  条件: (p : 半范数 𝕜₂ E₂) (f : E ->ₛₗ[σ₁₂] E₂) (x : E) (r : 实数)
   证明: by
   ext
   simp_rw [closedBall, mem_preimage, comp_apply, Set.mem_ofPred_eq, map_sub]
@@ -2863,7 +2863,7 @@ theorem ball_bot
 中文:
 定理 ball_bot
   条件: {r : 实数} (x : E) (hr : 0 < r)
-  结论: ball (⊥ : Seminorm 𝕜 E) x r = Set.univ
+  结论: ball (⊥ : 半范数 𝕜 E) x r = 集合.univ
   证明: ball_zero' x hr
 
 @[simp]
@@ -2973,8 +2973,8 @@ theorem ball_finset_sup_eq_iInter
     Finset.sup_lt_iff (show ⊥ < r from hr), ← NNReal.coe_lt_coe, NNReal.coe_mk]
 
 中文:
-定理 ball_finset_sup_eq_iInter
-  结论: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E) {r : 实数}
+定理 ball_finset_sup_eq_i整数er
+  结论: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E) {r : 实数}
   证明: by
   lift r to NNReal using hr.le
   simp_rw [ball, iInter_ofPred, finset_sup_apply, NNReal.coe_lt_coe,
@@ -3000,8 +3000,8 @@ theorem closedBall_finset_sup_eq_iInter
     NNReal.coe_le_coe, NNReal.coe_mk]
 
 中文:
-定理 closedBall_finset_sup_eq_iInter
-  结论: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E) {r : 实数}
+定理 closedBall_finset_sup_eq_i整数er
+  结论: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E) {r : 实数}
   证明: by
   lift r to NNReal using hr
   simp_rw [closedBall, iInter_ofPred, finset_sup_apply, NNReal.coe_le_coe, Finset.sup_le_iff, ←
@@ -3027,7 +3027,7 @@ theorem ball_finset_sup
 
 中文:
 定理 ball_finset_sup
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E) {r : 实数} (hr : 0 < r)
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E) {r : 实数} (hr : 0 < r)
   证明: by
   rw [Finset.inf_eq_iInf]
   exact ball_finset_sup_eq_iInter _ _ _ hr
@@ -3053,7 +3053,7 @@ theorem closedBall_finset_sup
 
 中文:
 定理 closedBall_finset_sup
-  条件: (p : ι -> Seminorm 𝕜 E) (s : Finset ι) (x : E) {r : 实数} (hr : 0 <= r)
+  条件: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι) (x : E) {r : 实数} (hr : 0 <= r)
   证明: by
   rw [Finset.inf_eq_iInf]
   exact closedBall_finset_sup_eq_iInter _ _ _ hr
@@ -3084,7 +3084,7 @@ theorem ball_eq_emptyset
 
 中文:
 定理 ball_eq_emptyset
-  条件: (p : Seminorm 𝕜 E) {x : E} {r : 实数} (hr : r <= 0)
+  条件: (p : 半范数 𝕜 E) {x : E} {r : 实数} (hr : r <= 0)
   结论: p.ball x r = ∅
   证明: by
   ext
@@ -3114,7 +3114,7 @@ theorem closedBall_eq_emptyset
 
 中文:
 定理 closedBall_eq_emptyset
-  条件: (p : Seminorm 𝕜 E) {x : E} {r : 实数} (hr : r < 0)
+  条件: (p : 半范数 𝕜 E) {x : E} {r : 实数} (hr : r < 0)
   证明: by
   ext
   rw [Seminorm.mem_closedBall]; rw [Set.mem_empty_iff_false]; rw [iff_false]; rw [not_le]
@@ -3141,7 +3141,7 @@ exact hr₁.lt_or_gt.resolve_left ((norm_nonneg a).trans ha).not_gt
 
 中文:
 定理 closedBall_smul_ball
-  条件: (p : Seminorm 𝕜 E) {r₁ : 实数} (hr₁ : r₁ != 0) (r₂ : 实数)
+  条件: (p : 半范数 𝕜 E) {r₁ : 实数} (hr₁ : r₁ != 0) (r₂ : 实数)
   证明: by
   simp only [smul_subset_iff, mem_ball_zero, mem_closedBall_zero_iff, map_smul_eq_mul]
   refine fun a ha b hb => mul_lt_mul' ha hb (apply_nonneg _ _) ?_
@@ -3171,7 +3171,7 @@ theorem ball_smul_closedBall
 
 中文:
 定理 ball_smul_closedBall
-  条件: (p : Seminorm 𝕜 E) (r₁ : 实数) {r₂ : 实数} (hr₂ : r₂ != 0)
+  条件: (p : 半范数 𝕜 E) (r₁ : 实数) {r₂ : 实数} (hr₂ : r₂ != 0)
   证明: by
   simp only [smul_subset_iff, mem_ball_zero, mem_closedBall_zero, mem_ball_zero_iff,
     map_smul_eq_mul]
@@ -3205,7 +3205,7 @@ theorem ball_smul_ball
 
 中文:
 定理 ball_smul_ball
-  条件: (p : Seminorm 𝕜 E) (r₁ r₂ : 实数)
+  条件: (p : 半范数 𝕜 E) (r₁ r₂ : 实数)
   证明: by
   rcases eq_or_ne r₂ 0 with rfl | hr₂
   · simp
@@ -3235,7 +3235,7 @@ theorem closedBall_smul_closedBall
 
 中文:
 定理 closedBall_smul_closedBall
-  条件: (p : Seminorm 𝕜 E) (r₁ r₂ : 实数)
+  条件: (p : 半范数 𝕜 E) (r₁ r₂ : 实数)
   证明: by
   simp only [smul_subset_iff, mem_closedBall_zero, mem_closedBall_zero_iff, map_smul_eq_mul]
   intro a ha b hb
@@ -3315,7 +3315,7 @@ theorem neg_ball
 
 中文:
 定理 neg_ball
-  条件: (p : Seminorm 𝕜 E) (r : 实数) (x : E)
+  条件: (p : 半范数 𝕜 E) (r : 实数) (x : E)
   结论: -ball p x r = ball p (-x) r
   证明: by
   ext
@@ -3342,7 +3342,7 @@ theorem neg_closedBall
 
 中文:
 定理 neg_closedBall
-  条件: (p : Seminorm 𝕜 E) (r : 实数) (x : E)
+  条件: (p : 半范数 𝕜 E) (r : 实数) (x : E)
   证明: by
   ext
   rw [Set.mem_neg]; rw [mem_closedBall]; rw [mem_closedBall]; rw [← neg_add']; rw [sub_neg_eq_add]; rw [map_neg_eq_map]
@@ -3382,7 +3382,7 @@ mul_lt_m
 
 中文:
 定理 ball_norm_mul_subset
-  条件: {p : Seminorm 𝕜 E} {k : 𝕜} {r : 实数}
+  条件: {p : 半范数 𝕜 E} {k : 𝕜} {r : 实数}
   证明: by
   rcases eq_or_ne k 0 with (rfl | hk)
   · rw [norm_zero, zero_mul, ball_eq_emptyset _ le_rfl]
@@ -3420,7 +3420,7 @@ theorem smul_ball_zero
 
 中文:
 定理 smul_ball_zero
-  条件: {p : Seminorm 𝕜 E} {k : 𝕜} {r : 实数} (hk : k != 0)
+  条件: {p : 半范数 𝕜 E} {k : 𝕜} {r : 实数} (hk : k != 0)
   证明: by
   ext
   rw [mem_smul_set_iff_inv_smul_mem₀ hk]; rw [p.mem_ball_zero]; rw [p.mem_ball_zero]; rw [map_smul_eq_mul]; rw [norm_inv]; rw [← div_eq_inv_mul]; rw [div_lt_iff₀ (norm_pos_iff.2 hk)]; rw [mul_comm]
@@ -3446,7 +3446,7 @@ theorem smul_closedBall_subset
 
 中文:
 定理 smul_closedBall_subset
-  条件: {p : Seminorm 𝕜 E} {k : 𝕜} {r : 实数}
+  条件: {p : 半范数 𝕜 E} {k : 𝕜} {r : 实数}
   证明: by
   rintro x ⟨y, hy, h⟩
   rw [Seminorm.mem_closedBall_zero]; rw [← h]; rw [map_smul_eq_mul]
@@ -3478,7 +3478,7 @@ theorem smul_closedBall_zero
 
 中文:
 定理 smul_closedBall_zero
-  条件: {p : Seminorm 𝕜 E} {k : 𝕜} {r : 实数} (hk : 0 < ‖k‖)
+  条件: {p : 半范数 𝕜 E} {k : 𝕜} {r : 实数} (hk : 0 < ‖k‖)
   证明: by
   refine subset_antisymm smul_closedBall_subset ?_
   intro x
@@ -3513,7 +3513,7 @@ theorem ball_zero_absorbs_ball_zero
 
 中文:
 定理 ball_zero_absorbs_ball_zero
-  条件: (p : Seminorm 𝕜 E) {r₁ r₂ : 实数} (hr₁ : 0 < r₁)
+  条件: (p : 半范数 𝕜 E) {r₁ r₂ : 实数} (hr₁ : 0 < r₁)
   证明: by
   rcases exists_pos_lt_mul hr₁ r₂ with ⟨r, hr₀, hr⟩
   refine .of_norm ⟨r, fun a ha x hx => ?_⟩
@@ -3644,7 +3644,7 @@ theorem smul_ball_preimage
 
 中文:
 定理 smul_ball_preimage
-  条件: (p : Seminorm 𝕜 E) (y : E) (r : 实数) (a : 𝕜) (ha : a != 0)
+  条件: (p : 半范数 𝕜 E) (y : E) (r : 实数) (a : 𝕜) (ha : a != 0)
   证明: Set.ext fun _ => by
     rw [mem_preimage]; rw [mem_ball]; rw [mem_ball]; rw [lt_div_iff₀ (norm_pos_iff.mpr ha)]; rw [mul_comm]; rw [←
       map_smul_eq_mul p]; rw [smul_sub]; rw [smul_inv_smul₀ ha]
@@ -3672,7 +3672,7 @@ theorem smul_closedBall_preimage
 
 中文:
 定理 smul_closedBall_preimage
-  条件: (p : Seminorm 𝕜 E) (y : E) (r : 实数) (a : 𝕜) (ha : a != 0)
+  条件: (p : 半范数 𝕜 E) (y : E) (r : 实数) (a : 𝕜) (ha : a != 0)
   证明: Set.ext fun _ => by
     rw [mem_preimage]; rw [mem_closedBall]; rw [mem_closedBall]; rw [le_div_iff₀ (norm_pos_iff.mpr ha)]; rw [mul_comm]; rw [←
       map_smul_eq_mul p]; rw [smul_sub]; rw [smul_inv_smul₀ ha]
@@ -3707,7 +3707,7 @@ theorem closedBall_iSup
 
 中文:
 定理 closedBall_iSup
-  结论: {ι : Sort*} {p : ι -> Seminorm 𝕜 E} (hp : BddAbove (range p)) (e : E)
+  结论: {ι : 类型层*} {p : ι -> 半范数 𝕜 E} (hp : BddAbove (range p)) (e : E)
   证明: by
   cases isEmpty_or_nonempty ι
   · rw [iSup_of_empty', iInter_of_empty, Seminorm.sSup_empty]
@@ -3791,7 +3791,7 @@ theorem convex_ball
 
 中文:
 定理 convex_ball
-  结论: Convex 实数 (ball p x r)
+  结论: 凸 实数 (ball p x r)
   证明: by
   convert! (p.convexOn.translate_left (-x)).convex_lt r
   ext y
@@ -3818,7 +3818,7 @@ theorem convex_closedBall
 
 中文:
 定理 convex_closedBall
-  结论: Convex 实数 (closedBall p x r)
+  结论: 凸 实数 (closedBall p x r)
   证明: by
   rw [closedBall_eq_biInter_ball]
   exact convex_iInter₂ fun _ _ => convex_ball _ _ _
@@ -3851,7 +3851,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (p : Seminorm 𝕜' E)
+  签名: (p : 半范数 𝕜' E)
   定义体: { p with
     smul' := fun a x => by rw [← smul_one_smul 𝕜' a x, p.smul', norm_smul, norm_one, mul_one] }
 
@@ -3875,7 +3875,7 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: (p : Seminorm 𝕜' E)
+  条件: (p : 半范数 𝕜' E)
   结论: (p.restrictScalars 𝕜 : E -> 实数) = p
   证明: rfl
 
@@ -3898,7 +3898,7 @@ theorem restrictScalars_ball
 
 中文:
 定理 restrictScalars_ball
-  条件: (p : Seminorm 𝕜' E)
+  条件: (p : 半范数 𝕜' E)
   结论: (p.restrictScalars 𝕜).ball = p.ball
   证明: rfl
 
@@ -3918,7 +3918,7 @@ theorem restrictScalars_closedBall
 
 中文:
 定理 restrictScalars_closedBall
-  条件: (p : Seminorm 𝕜' E)
+  条件: (p : 半范数 𝕜' E)
   证明: rfl
 -/
 theorem restrictScalars_closedBall (p : Seminorm 𝕜' E) :
@@ -3946,8 +3946,8 @@ theorem continuousAt_zero_of_forall'
   rwa [ContinuousAt, Metric.nhds_basis_closedBall.tendsto_right_iff, map_zero]
 
 中文:
-定理 continuousAt_zero_of_forall'
-  结论: [TopologicalSpace E] {p : Seminorm 𝕝 E}
+定理 continuousAt_zero_of_对任意'
+  结论: [拓扑空间 E] {p : 半范数 𝕝 E}
   证明: by
   simp_rw [Seminorm.closedBall_zero_eq_preimage_closedBall] at hp
   rwa [ContinuousAt, Metric.nhds_basis_closedBall.tendsto_right_iff, map_zero]
@@ -3977,7 +3977,7 @@ theorem continuousAt_zero'
 
 中文:
 定理 continuousAt_zero'
-  结论: [TopologicalSpace E] [ContinuousConstSMul 𝕜 E] {p : Seminorm 𝕜 E}
+  结论: [拓扑空间 E] [连续常数标量乘法 𝕜 E] {p : 半范数 𝕜 E}
   证明: by
   refine continuousAt_zero_of_forall' fun ε hε => ?_
   obtain ⟨k, hk₀, hk⟩ : exists k : 𝕜, 0 < ‖k‖ ∧ ‖k‖ * r < ε := by
@@ -4009,8 +4009,8 @@ theorem continuousAt_zero_of_forall
     (fun r hr => Filter.mem_of_superset (hp r hr) <| p.ball_subset_closedBall _ _)
 
 中文:
-定理 continuousAt_zero_of_forall
-  结论: [TopologicalSpace E] {p : Seminorm 𝕝 E}
+定理 continuousAt_zero_of_对任意
+  结论: [拓扑空间 E] {p : 半范数 𝕝 E}
   证明: continuousAt_zero_of_forall'
     (fun r hr => Filter.mem_of_superset (hp r hr) <| p.ball_subset_closedBall _ _)
 
@@ -4032,7 +4032,7 @@ theorem continuousAt_zero
 
 中文:
 定理 continuousAt_zero
-  结论: [TopologicalSpace E] [ContinuousConstSMul 𝕜 E] {p : Seminorm 𝕜 E} {r : 实数}
+  结论: [拓扑空间 E] [连续常数标量乘法 𝕜 E] {p : 半范数 𝕜 E} {r : 实数}
   证明: continuousAt_zero' (Filter.mem_of_superset hp <| p.ball_subset_closedBall _ _)
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, ball_subset_closedBall, continuousAt_zero, mem_of_superset, p.ball_subset_closedBall
@@ -4055,7 +4055,7 @@ theorem uniformContinuous_of_continuousAt_zero
 
 中文:
 定理 uniformContinuous_of_continuousAt_zero
-  结论: [UniformSpace E] [IsUniformAddGroup E]
+  结论: [一致空间 E] [是UniformAdd群 E]
   证明: by
   have hp : Filter.Tendsto p (𝓝 0) (𝓝 0) := map_zero p ▸ hp
   rw [UniformContinuous]; rw [uniformity_eq_comap_nhds_zero_swapped]; rw [Metric.uniformity_eq_comap_nhds_zero]; rw [Filter.tendsto_comap_iff]
@@ -4083,7 +4083,7 @@ theorem continuous_of_continuousAt_zero
 
 中文:
 定理 continuous_of_continuousAt_zero
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: by
   let := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
@@ -4104,8 +4104,8 @@ theorem uniformContinuous_of_forall
   proof: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero_of_forall hp)
 
 中文:
-定理 uniformContinuous_of_forall
-  结论: [UniformSpace E] [IsUniformAddGroup E]
+定理 uniformContinuous_of_对任意
+  结论: [一致空间 E] [是UniformAdd群 E]
   证明: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero_of_forall hp)
 -/
 protected theorem uniformContinuous_of_forall [UniformSpace E] [IsUniformAddGroup E]
@@ -4123,7 +4123,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  结论: [UniformSpace E] [IsUniformAddGroup E]
+  结论: [一致空间 E] [是UniformAdd群 E]
   证明: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero hp)
 -/
 protected theorem uniformContinuous [UniformSpace E] [IsUniformAddGroup E]
@@ -4140,8 +4140,8 @@ theorem uniformContinuous_of_forall'
   proof: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero_of_forall' hp)
 
 中文:
-定理 uniformContinuous_of_forall'
-  结论: [UniformSpace E] [IsUniformAddGroup E]
+定理 uniformContinuous_of_对任意'
+  结论: [一致空间 E] [是UniformAdd群 E]
   证明: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero_of_forall' hp)
 -/
 protected theorem uniformContinuous_of_forall' [UniformSpace E] [IsUniformAddGroup E]
@@ -4159,7 +4159,7 @@ theorem uniformContinuous'
 
 中文:
 定理 uniformContinuous'
-  结论: [UniformSpace E] [IsUniformAddGroup E]
+  结论: [一致空间 E] [是UniformAdd群 E]
   证明: Seminorm.uniformContinuous_of_continuousAt_zero (continuousAt_zero' hp)
 -/
 protected theorem uniformContinuous' [UniformSpace E] [IsUniformAddGroup E]
@@ -4176,8 +4176,8 @@ theorem continuous_of_forall
   proof: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero_of_forall hp)
 
 中文:
-定理 continuous_of_forall
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+定理 continuous_of_对任意
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero_of_forall hp)
 -/
 protected theorem continuous_of_forall [TopologicalSpace E] [IsTopologicalAddGroup E]
@@ -4195,7 +4195,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero hp)
 -/
 protected theorem continuous [TopologicalSpace E] [IsTopologicalAddGroup E]
@@ -4213,7 +4213,7 @@ theorem continuous_iff
 
 中文:
 定理 continuous_iff
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: ⟨fun H => p.ball_zero_eq ▸ (H.tendsto' 0 0 (map_zero p)).eventually_lt_const hr, p.continuous⟩
 -/
 protected theorem continuous_iff [TopologicalSpace E] [IsTopologicalAddGroup E]
@@ -4230,8 +4230,8 @@ theorem continuous_of_forall'
   proof: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero_of_forall' hp)
 
 中文:
-定理 continuous_of_forall'
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+定理 continuous_of_对任意'
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero_of_forall' hp)
 -/
 protected theorem continuous_of_forall' [TopologicalSpace E] [IsTopologicalAddGroup E]
@@ -4249,7 +4249,7 @@ theorem continuous'
 
 中文:
 定理 continuous'
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: Seminorm.continuous_of_continuousAt_zero (continuousAt_zero' hp)
 -/
 protected theorem continuous' [TopologicalSpace E] [IsTopologicalAddGroup E]
@@ -4271,7 +4271,7 @@ theorem continuous_of_le
 
 中文:
 定理 continuous_of_le
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: by
   refine Seminorm.continuous_of_forall (fun r hr => Filter.mem_of_superset
     (IsOpen.mem_nhds ?_ <| q.mem_ball_self hr) (ball_antitone hpq))
@@ -4300,7 +4300,7 @@ theorem continuous_finsetSum
 
 中文:
 定理 continuous_finsetSum
-  结论: [TopologicalSpace E]
+  结论: [拓扑空间 E]
   证明: by
   change Continuous (fun x => FunLike.coeAddMonoidHom _ _ _ (∑ i in s, p i) x)
   simp_rw [map_sum, Finset.sum_apply]
@@ -4326,7 +4326,7 @@ theorem continuous_finsetSup
 
 中文:
 定理 continuous_finsetSup
-  结论: [TopologicalSpace E] [IsTopologicalAddGroup E]
+  结论: [拓扑空间 E] [是拓扑加群 E]
   证明: by
   exact continuous_of_le (continuous_finsetSum hp) (finset_sup_le_sum p s)
 
@@ -4349,7 +4349,7 @@ lemma ball_mem_nhds
 
 中文:
 引理 ball_mem_nhds
-  结论: [TopologicalSpace E] {p : Seminorm 𝕝 E} (hp : Continuous p) {r : 实数}
+  结论: [拓扑空间 E] {p : 半范数 𝕝 E} (hp : 连续 p) {r : 实数}
   证明: by
   have : Tendsto p (𝓝 0) (𝓝 0) := map_zero p ▸ hp.tendsto 0
   simpa only [p.ball_zero_eq] using! this (Iio_mem_nhds hr)
@@ -4452,7 +4452,7 @@ lemma rescale_to_shell_zpow
 
 中文:
 引理 rescale_to_shell_zpow
-  结论: (p : Seminorm 𝕜 E) {c : 𝕜} (hc : 1 < ‖c‖) {ε : 实数}
+  结论: (p : 半范数 𝕜 E) {c : 𝕜} (hc : 1 < ‖c‖) {ε : 实数}
   证明: by
   have xεpos : 0 < (p x) / ε := by positivity
   rcases exists_mem_Ico_zpow xεpos hc with ⟨n, hn⟩
@@ -4493,7 +4493,7 @@ lemma rescale_to_shell
 
 中文:
 引理 rescale_to_shell
-  结论: (p : Seminorm 𝕜 E) {c : 𝕜} (hc : 1 < ‖c‖) {ε : 实数} (εpos : 0 < ε) {x : E}
+  结论: (p : 半范数 𝕜 E) {c : 𝕜} (hc : 1 < ‖c‖) {ε : 实数} (εpos : 0 < ε) {x : E}
   证明: let ⟨_, hn⟩ := p.rescale_to_shell_zpow hc εpos hx; ⟨_, hn⟩
 
 Depends on / 依赖: p.rescale_to_shell_zpow, rescale_to_shell_zpow
@@ -4565,7 +4565,7 @@ lemma bound_of_shell_sup
 
 中文:
 引理 bound_of_shell_sup
-  结论: (p : ι -> Seminorm 𝕜 E) (s : Finset ι)
+  结论: (p : ι -> 半范数 𝕜 E) (s : 有限集 ι)
   证明: by
   rcases hx with ⟨j, hj, hjx⟩
   have : (s.sup p) x != 0 :=
@@ -4612,7 +4612,7 @@ lemma bddAbove_of_absorbent
 
 中文:
 引理 bddAbove_of_absorbent
-  结论: {ι : Sort*} {p : ι -> Seminorm 𝕜 E} {s : Set E} (hs : Absorbent 𝕜 s)
+  结论: {ι : 类型层*} {p : ι -> 半范数 𝕜 E} {s : 集合 E} (hs : Absorbent 𝕜 s)
   证明: by
   rw [Seminorm.bddAbove_range_iff]
   intro x
@@ -4657,7 +4657,7 @@ definition normSeminorm
 
 中文:
 定义 normSeminorm
-  签名: : Seminorm 𝕜 E
+  签名: : 半范数 𝕜 E
   定义体: { normAddGroupSeminorm E with smul' := norm_smul }
 
 @[simp]
@@ -4889,7 +4889,7 @@ lemma rescale_to_shell_zpow
 
 中文:
 引理 rescale_to_shell_zpow
-  结论: [NormedAddCommGroup F] [NormedSpace 𝕜 F] {c : 𝕜} (hc : 1 < ‖c‖)
+  结论: [赋范交换加群 F] [赋范空间 𝕜 F] {c : 𝕜} (hc : 1 < ‖c‖)
   证明: rescale_to_shell_semi_normed_zpow hc εpos (norm_ne_zero_iff.mpr hx)
 
 Depends on / 依赖: norm_ne_zero_iff, norm_ne_zero_iff.mpr, rescale_to_shell_semi_normed_zpow
@@ -4910,7 +4910,7 @@ lemma rescale_to_shell
 
 中文:
 引理 rescale_to_shell
-  结论: [NormedAddCommGroup F] [NormedSpace 𝕜 F] {c : 𝕜} (hc : 1 < ‖c‖)
+  结论: [赋范交换加群 F] [赋范空间 𝕜 F] {c : 𝕜} (hc : 1 < ‖c‖)
   证明: rescale_to_shell_semi_normed hc εpos (norm_ne_zero_iff.mpr hx)
 
 Depends on / 依赖: norm_ne_zero_iff, norm_ne_zero_iff.mpr, rescale_to_shell_semi_normed

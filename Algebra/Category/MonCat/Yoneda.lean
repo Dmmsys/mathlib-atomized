@@ -34,8 +34,8 @@ definition CommMonCat.coyoneda
   map f := { app N := ofHom (.compHom' f.unop.hom) }
 
 中文:
-定义 CommMonCat.coyoneda
-  签名: : CommMonCatᵒᵖ ⥤ CommMonCat ⥤ CommMonCat where
+定义 交换幺半群范畴.coyoneda
+  签名: : CommMonCatᵒᵖ ⥤ 交换幺半群范畴 ⥤ 交换幺半群范畴 where
   定义体: { obj N := of (M.unop ->* N), map f := ofHom (.compHom f.hom) }
   map f := { app N := ofHom (.compHom' f.unop.hom) }
 
@@ -62,7 +62,7 @@ definition CommMonCat.coyonedaForget
     inv := ↾fun f => f.hom }
 
 中文:
-定义 CommMonCat.coyonedaForget
+定义 交换幺半群范畴.coyonedaForget
   签名: :
   定义体: dsimp% NatIso.ofComponents fun X => NatIso.ofComponents fun Y => {
     hom := ↾fun f => ofHom f
@@ -98,8 +98,8 @@ map f := ofHom MonoidHom.pi fun i => f.hom.comp Pi.evalMonoidHom _ i }
   map f := { app N := ofHom <| MonoidHom.pi fun i => Pi.evalMonoidHom _ <| f.unop i }
 
 中文:
-定义 CommMonCat.coyonedaType
-  签名: : 类型uᵒᵖ ⥤ CommMonCat.{u} ⥤ CommMonCat.{u} where
+定义 交换幺半群范畴.coyonedaType
+  签名: : 类型uᵒᵖ ⥤ 交换幺半群范畴.{u} ⥤ 交换幺半群范畴.{u} where
   定义体: { obj M := of <| X.unop -> M
 map f := ofHom MonoidHom.pi fun i => f.hom.comp Pi.evalMonoidHom _ i }
   map f := { app N := ofHom <| MonoidHom.pi fun i => Pi.evalMonoidHom _ <| f.unop i }

@@ -39,7 +39,7 @@ theorem limsup_lintegral_le
 
 中文:
 定理 limsup_lintegral_le
-  结论: {f : 自然数 -> α -> 实数>=0∞} (g : α -> 实数>=0∞) (hf_meas : 对任意 n, Measurable (f n))
+  结论: {f : 自然数 -> α -> 实数>=0∞} (g : α -> 实数>=0∞) (hf_meas : 对任意 n, 可测 (f n))
   证明: calc
     limsup (fun n => ∫⁻ a, f n a ∂μ) atTop = ⨅ n : Nat, ⨆ i >= n, ∫⁻ a, f i a ∂μ :=
       limsup_eq_iInf_iSup_of_nat
@@ -174,7 +174,7 @@ theorem tendsto_lintegral_filter_of_dominated_convergence'
 
 中文:
 定理 tendsto_lintegral_filter_of_dominated_convergence'
-  结论: {ι} {l : Filter ι}
+  结论: {ι} {l : 滤子 ι}
   证明: by
   rw [tendsto_iff_seq_tendsto]
   intro x xl
@@ -231,7 +231,7 @@ theorem tendsto_lintegral_filter_of_dominated_convergence
 
 中文:
 定理 tendsto_lintegral_filter_of_dominated_convergence
-  结论: {ι} {l : Filter ι}
+  结论: {ι} {l : 滤子 ι}
   证明: by
   refine tendsto_lintegral_filter_of_dominated_convergence' bound ?_ h_bound h_fin h_lim
   filter_upwards [hF_meas] using by fun_prop
@@ -261,7 +261,7 @@ lemma tendsto_of_lintegral_tendsto_of_monotone_aux
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_monotone_aux
-  结论: {α : 类型} {mα : MeasurableSpace α}
+  结论: {α : 类型} {mα : 可测空间 α}
   证明: by
   have h_bound_finite : forallᵐ a ∂μ, F a != ∞ := by
     filter_upwards [ae_lt_top' hF_meas h_int_finite] with a ha using ha.ne
@@ -322,7 +322,7 @@ lemma tendsto_of_lintegral_tendsto_of_monotone
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_monotone
-  结论: {α : 类型} {mα : MeasurableSpace α}
+  结论: {α : 类型} {mα : 可测空间 α}
   证明: by
   have : forall n, exists g : α -> Real>=0∞, Measurable g ∧ g <= f n ∧ ∫⁻ a, f n a ∂μ = ∫⁻ a, g a ∂μ :=
     fun n => exists_measurable_le_lintegral_eq _ _
@@ -387,7 +387,7 @@ lemma tendsto_of_lintegral_tendsto_of_antitone
 
 中文:
 引理 tendsto_of_lintegral_tendsto_of_antitone
-  结论: {α : 类型} {mα : MeasurableSpace α}
+  结论: {α : 类型} {mα : 可测空间 α}
   证明: by
   have h_int_finite : ∫⁻ a, F a ∂μ != ∞ := by
     refine ((lintegral_mono_ae ?_).trans_lt h0.lt_top).ne

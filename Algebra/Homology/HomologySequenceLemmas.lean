@@ -59,7 +59,7 @@ definition mapSnakeInput
 
 中文:
 定义 mapSnakeInput
-  签名: (i j : ι) (hij : c.Rel i j)
+  签名: (i j : ι) (hij : c.关系 i j)
   定义体: (homologyFunctor C c i).mapShortComplex.map φ
   f₁ := (opcyclesFunctor C c i).mapShortComplex.map φ
   f₂ := (cyclesFunctor C c j).mapShortComplex.map φ
@@ -86,7 +86,7 @@ lemma δ_naturality
 
 中文:
 引理 δ_naturality
-  条件: (i j : ι) (hij : c.Rel i j)
+  条件: (i j : ι) (hij : c.关系 i j)
   证明: ShortComplex.SnakeInput.naturality_δ (mapSnakeInput φ hS₁ hS₂ i j hij)
 
 Depends on / 依赖: ShortComplex, ShortComplex.SnakeInput.naturality_, SnakeInput, mapSnakeInput
@@ -128,7 +128,7 @@ lemma composableArrows₂_exact
 
 中文:
 引理 composableArrows₂_exact
-  条件: (hS₁ : S₁.ShortExact) (i : ι)
+  条件: (hS₁ : S₁.短正合) (i : ι)
   证明: (hS₁.homology_exact₂ i).exact_toComposableArrows
 
 Depends on / 依赖: exact_toComposableArrows
@@ -152,7 +152,7 @@ definition composableArrows₅
 
 中文:
 定义 composableArrows₅
-  签名: (i j : ι) (hij : c.Rel i j)
+  签名: (i j : ι) (hij : c.关系 i j)
   定义体: mk₅ (homologyMap S₁.f i) (homologyMap S₁.g i) (hS₁.δ i j hij)
     (homologyMap S₁.f j) (homologyMap S₁.g j)
 
@@ -175,7 +175,7 @@ lemma composableArrows₅_exact
 
 中文:
 引理 composableArrows₅_exact
-  条件: (i j : ι) (hij : c.Rel i j)
+  条件: (i j : ι) (hij : c.关系 i j)
   证明: exact_of_δ₀ (hS₁.homology_exact₂ i).exact_toComposableArrows
     (exact_of_δ₀ (hS₁.homology_exact₃ i j hij).exact_toComposableArrows
       (exact_of_δ₀ (hS₁.homology_exact₁ i j hij).exact_toComposableArrows
@@ -244,7 +244,7 @@ definition mapComposableArrows₅
 
 中文:
 定义 mapComposableArrows₅
-  签名: (i j : ι) (hij : c.Rel i j)
+  签名: (i j : ι) (hij : c.关系 i j)
   定义体: homMk₅ (homologyMap φ.τ₁ i) (homologyMap φ.τ₂ i) (homologyMap φ.τ₃ i)
     (homologyMap φ.τ₁ j) (homologyMap φ.τ₂ j) (homologyMap φ.τ₃ j)
     (naturality' (mapComposableArrows₂ φ i) 0 1)
@@ -422,7 +422,7 @@ lemma quasiIso_τ₃
 
 中文:
 引理 quasiIso_τ₃
-  条件: (h₁ : QuasiIso φ.τ₁) (h₂ : QuasiIso φ.τ₂)
+  条件: (h₁ : 拟同构 φ.τ₁) (h₂ : 拟同构 φ.τ₂)
   证明: by
   rw [quasiIso_iff]
   intro i
@@ -465,7 +465,7 @@ lemma exactAt_X₁
 
 中文:
 引理 exactAt_X₁
-  结论: (hS : S.ShortExact) (j : ι)
+  结论: (hS : S.短正合) (j : ι)
   证明: by
   rw [exactAt_iff_isZero_homology]
   by_cases! hj : exists i, c.Rel i j
@@ -506,7 +506,7 @@ lemma exactAt_X₂
 
 中文:
 引理 exactAt_X₂
-  条件: (hS : S.ShortExact) (i : ι) (h₁ : S.X₁.ExactAt i) (h₃ : S.X₃.ExactAt i)
+  条件: (hS : S.短正合) (i : ι) (h₁ : S.X₁.ExactAt i) (h₃ : S.X₃.ExactAt i)
   证明: by
   rw [exactAt_iff_isZero_homology] at h₁ h₃ ⊢
   exact (hS.homology_exact₂ i).isZero_X₂ (h₁.eq_of_src _ _) (h₃.eq_of_tgt _ _)
@@ -536,7 +536,7 @@ lemma exactAt_X₃
 
 中文:
 引理 exactAt_X₃
-  结论: (hS : S.ShortExact) (i : ι)
+  结论: (hS : S.短正合) (i : ι)
   证明: by
   rw [exactAt_iff_isZero_homology]
   by_cases! hi : exists j, c.Rel i j
@@ -577,8 +577,8 @@ lemma acyclic_X₁
 
 中文:
 引理 acyclic_X₁
-  条件: (hS : S.ShortExact) (hg : _root_.QuasiIso S.g)
-  结论: S.X₁.Acyclic
+  条件: (hS : S.短正合) (hg : _root_.拟同构 S.g)
+  结论: S.X₁.非循环
   证明: fun j => hS.exactAt_X₁ j
 
 Depends on / 依赖: hS.exactAt_X
@@ -596,7 +596,7 @@ lemma acyclic_X₂
 
 中文:
 引理 acyclic_X₂
-  条件: (hS : S.ShortExact) (h₁ : S.X₁.Acyclic) (h₃ : S.X₃.Acyclic)
+  条件: (hS : S.短正合) (h₁ : S.X₁.非循环) (h₃ : S.X₃.非循环)
   证明: fun i => hS.exactAt_X₂ i (h₁ _) (h₃ _)
 
 Depends on / 依赖: hS.exactAt_X
@@ -616,8 +616,8 @@ lemma acyclic_X₃
 
 中文:
 引理 acyclic_X₃
-  条件: (hS : S.ShortExact) (h : _root_.QuasiIso S.f)
-  结论: S.X₃.Acyclic
+  条件: (hS : S.短正合) (h : _root_.拟同构 S.f)
+  结论: S.X₃.非循环
   证明: fun i => hS.exactAt_X₃ i
 
 Depends on / 依赖: hS.exactAt_X

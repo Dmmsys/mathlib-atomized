@@ -42,7 +42,7 @@ definition isOrderedSubsetOf
 
 中文:
 定义 isOrderedSubsetOf
-  签名: {α} [Inhabited α] [DecidableEq α] (a b : Array α)
+  签名: {α} [可居 α] [DecidableEq α] (a b : 数组 α)
   定义体: Id.run do
   if a.size > b.size then
     return false
@@ -128,7 +128,7 @@ definition mkProdElem
 
 中文:
 定义 mkProdElem
-  签名: (xs : Array Expr)
+  签名: (xs : 数组 Expr)
   定义体: do
   match h : xs.size with
   | 0 => return default
@@ -290,7 +290,7 @@ definition betaThroughLetAux
 
 中文:
 定义 betaThroughLetAux
-  签名: (f : Expr) (args : List Expr)
+  签名: (f : Expr) (args : 列表 Expr)
   定义体: match f, args with
   | f, [] => f
   | .lam _ _ b _, a :: as => (betaThroughLetAux (b.instantiate1 a) as)
@@ -316,7 +316,7 @@ definition betaThroughLet
 
 中文:
 定义 betaThroughLet
-  签名: (f : Expr) (args : Array Expr)
+  签名: (f : Expr) (args : 数组 Expr)
   定义体: betaThroughLetAux f args.toList
 
 Depends on / 依赖: IsScottHausdorff, IsScottHausdorff.mk, args.toList, betaThroughLetAux, scottHausdorff, toList

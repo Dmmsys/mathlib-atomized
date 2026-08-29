@@ -39,8 +39,8 @@ instance [Inhabited
   body: ⟨ofFn default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Vector α n)
+实例 [可居
+  签名: α] : 可居 (Vector α n)
   定义体: ⟨ofFn default⟩
 -/
 instance [Inhabited α] : Inhabited (Vector α n) :=
@@ -56,7 +56,7 @@ theorem toList_injective
 
 中文:
 定理 toList_injective
-  结论: Function.Injective (@toList α n)
+  结论: 函数.单射 (@toList α n)
   证明: Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
@@ -75,7 +75,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: 对任意 {v w : Vector α n} (_ : 对任意 m : Fin n, Vector.get v m = Vector.get w m), v = w
+  结论: 对任意 {v w : Vector α n} (_ : 对任意 m : 有限集 n, Vector.get v m = Vector.get w m), v = w
 -/
 theorem ext : forall {v w : Vector α n} (_ : forall m : Fin n, Vector.get v m = Vector.get w m), v = w
   | ⟨v, hv⟩, ⟨w, hw⟩, h =>
@@ -93,7 +93,7 @@ instance zero_subsingleton
 
 中文:
 实例 zero_subsingleton
-  签名: : Subsingleton (Vector α 0)
+  签名: : 子单例 (Vector α 0)
   定义体: ⟨fun _ _ => Vector.ext fun m => Fin.elim0 m⟩
 
 @[simp]
@@ -173,7 +173,7 @@ theorem exists_eq_cons
 @[simp]
 
 中文:
-定理 exists_eq_cons
+定理 存在_eq_cons
   条件: (v : Vector α n.succ)
   结论: 存在 (a : α) (as : Vector α n), v = a ::ᵥ as
   证明: ⟨v.head, v.tail, (eq_cons_iff v.head v v.tail).2 ⟨rfl, rfl⟩⟩
@@ -195,7 +195,7 @@ theorem toList_ofFn
 
 中文:
 定理 toList_ofFn
-  结论: 对任意 {n} (f : Fin n -> α), toList (ofFn f) = List.ofFn f
+  结论: 对任意 {n} (f : 有限集 n -> α), toList (ofFn f) = 列表.ofFn f
 -/
 theorem toList_ofFn : forall {n} (f : Fin n -> α), toList (ofFn f) = List.ofFn f
   | 0, f => by rw [ofFn, List.ofFn_zero, toList, nil]
@@ -498,7 +498,7 @@ theorem get_eq_get_toList
 
 中文:
 定理 get_eq_get_toList
-  条件: (v : Vector α n) (i : Fin n)
+  条件: (v : Vector α n) (i : 有限集 n)
   证明: rfl
 
 @[simp]
@@ -520,7 +520,7 @@ theorem get_replicate
 
 中文:
 定理 get_replicate
-  条件: (a : α) (i : Fin n)
+  条件: (a : α) (i : 有限集 n)
   结论: (Vector.replicate n a).get i = a
   证明: by
   apply List.getElem_replicate
@@ -545,7 +545,7 @@ theorem get_map
 
 中文:
 定理 get_map
-  条件: {β : 类型} (v : Vector α n) (f : α -> β) (i : Fin n)
+  条件: {β : 类型} (v : Vector α n) (f : α -> β) (i : 有限集 n)
   证明: by
   cases v; simp [Vector.map, get_eq_get_toList]
 
@@ -617,7 +617,7 @@ theorem get_ofFn
 
 中文:
 定理 get_ofFn
-  条件: {n} (f : Fin n -> α) (i)
+  条件: {n} (f : 有限集 n -> α) (i)
   结论: get (ofFn f) i = f i
   证明: by
   simp [get_eq_get_toList]
@@ -664,7 +664,7 @@ definition _root_.Equiv.vectorEquivFin
   body: ⟨Vector.get, Vector.ofFn, Vector.ofFn_get, fun f => funext Vector.get_ofFn f⟩
 
 中文:
-定义 _root_.Equiv.vectorEquivFin
+定义 _root_.等价.vectorEquivFin
   签名: (α : 类型) (n : 自然数)
   定义体: ⟨Vector.get, Vector.ofFn, Vector.ofFn_get, fun f => funext Vector.get_ofFn f⟩
 
@@ -721,7 +721,7 @@ theorem get_tail_succ
 
 中文:
 定理 get_tail_succ
-  结论: 对任意 (v : Vector α n.succ) (i : Fin n), get (tail v) i = get v i.succ
+  结论: 对任意 (v : Vector α n.succ) (i : 有限集 n), get (tail v) i = get v i.succ
 -/
 theorem get_tail_succ : forall (v : Vector α n.succ) (i : Fin n), get (tail v) i = get v i.succ
   | ⟨a :: l, e⟩, ⟨i, h⟩ => by simp [get_eq_get_toList]; rfl
@@ -791,7 +791,7 @@ theorem tail_ofFn
 
 中文:
 定理 tail_ofFn
-  条件: {n : 自然数} (f : Fin n.succ -> α)
+  条件: {n : 自然数} (f : 有限集 n.succ -> α)
   结论: tail (ofFn f) = ofFn fun i => f i.succ
   证明: (ofFn_get _).symm.trans by
     congr
@@ -956,7 +956,7 @@ theorem nodup_iff_injective_get
 中文:
 定理 nodup_iff_injective_get
   条件: {v : Vector α n}
-  结论: v.toList.Nodup ↔ Function.Injective v.get
+  结论: v.toList.Nodup ↔ 函数.单射 v.get
   证明: by
   obtain ⟨l, rfl⟩ := v
   exact List.nodup_iff_injective_get
@@ -1076,7 +1076,7 @@ theorem head_ofFn
 
 中文:
 定理 head_ofFn
-  条件: {n : 自然数} (f : Fin n.succ -> α)
+  条件: {n : 自然数} (f : 有限集 n.succ -> α)
   结论: head (ofFn f) = f 0
   证明: by
   rw [← get_zero]; rw [get_ofFn]
@@ -1117,7 +1117,7 @@ theorem get_cons_nil
 
 中文:
 定理 get_cons_nil
-  结论: 对任意 {ix : Fin 1} (x : α), get (x ::ᵥ nil) ix = x
+  结论: 对任意 {ix : 有限集 1} (x : α), get (x ::ᵥ nil) ix = x
 -/
 theorem get_cons_nil : forall {ix : Fin 1} (x : α), get (x ::ᵥ nil) ix = x
   | ⟨0, _⟩, _ => rfl
@@ -1136,7 +1136,7 @@ theorem get_cons_succ
 
 中文:
 定理 get_cons_succ
-  条件: (a : α) (v : Vector α n) (i : Fin n)
+  条件: (a : α) (v : Vector α n) (i : 有限集 n)
   结论: get (a ::ᵥ v) i.succ = get v i
   证明: by
   rw [← get_tail_succ]; rw [tail_cons]
@@ -1176,7 +1176,7 @@ theorem last_def
 中文:
 定理 last_def
   条件: {v : Vector α (n + 1)}
-  结论: v.last = v.get (Fin.last n)
+  结论: v.last = v.get (有限集.last n)
   证明: rfl
 -/
 theorem last_def {v : Vector α (n + 1)} : v.last = v.get (Fin.last n) :=
@@ -1298,7 +1298,7 @@ theorem scanl_val
 
 中文:
 定理 scanl_val
-  结论: 对任意 {v : Vector α n}, (scanl f b v).val = List.scanl f b v.val
+  结论: 对任意 {v : Vector α n}, (scanl f b v).val = 列表.scanl f b v.val
 -/
 theorem scanl_val : forall {v : Vector α n}, (scanl f b v).val = List.scanl f b v.val
   | _ => rfl
@@ -1317,7 +1317,7 @@ theorem toList_scanl
 
 中文:
 定理 toList_scanl
-  结论: (scanl f b v).toList = List.scanl f b v.toList
+  结论: (scanl f b v).toList = 列表.scanl f b v.toList
   证明: rfl
 -/
 theorem toList_scanl : (scanl f b v).toList = List.scanl f b v.toList :=
@@ -1417,7 +1417,7 @@ theorem scanl_get
 
 中文:
 定理 scanl_get
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   证明: by
   rcases n with - | n
   · exact i.elim0
@@ -1457,7 +1457,7 @@ definition mOfFn
 
 中文:
 定义 mOfFn
-  签名: {m} [Monad m] {α : 类型u}
+  签名: {m} [单子 m] {α : 类型u}
 -/
 def mOfFn {m} [Monad m] {α : Type u} : forall {n}, (Fin n -> m α) -> m (Vector α n)
   | 0, _ => pure nil
@@ -1475,7 +1475,7 @@ theorem mOfFn_pure
 
 中文:
 定理 mOfFn_pure
-  条件: {m} [Monad m] [LawfulMonad m] {α}
+  条件: {m} [单子 m] [合法单子 m] {α}
 -/
 theorem mOfFn_pure {m} [Monad m] [LawfulMonad m] {α} :
     forall {n} (f : Fin n -> α), (@mOfFn m _ _ _ fun i => pure (f i)) = pure (ofFn f)
@@ -1493,7 +1493,7 @@ definition mmap
 
 中文:
 定义 mmap
-  签名: {m} [Monad m] {α} {β : 类型u} (f : α -> m β)
+  签名: {m} [单子 m] {α} {β : 类型u} (f : α -> m β)
 -/
 def mmap {m} [Monad m] {α} {β : Type u} (f : α -> m β) : forall {n}, Vector α n -> m (Vector β n)
   | 0, _ => pure nil
@@ -1516,7 +1516,7 @@ theorem mmap_nil
 
 中文:
 定理 mmap_nil
-  条件: {m} [Monad m] {α β} (f : α -> m β)
+  条件: {m} [单子 m] {α β} (f : α -> m β)
   结论: mmap f nil = pure nil
   证明: rfl
 
@@ -1535,7 +1535,7 @@ theorem mmap_cons
 
 中文:
 定理 mmap_cons
-  条件: {m} [Monad m] {α β} (f : α -> m β) (a)
+  条件: {m} [单子 m] {α β} (f : α -> m β) (a)
 -/
 theorem mmap_cons {m} [Monad m] {α β} (f : α -> m β) (a) :
     forall {n} (v : Vector α n),
@@ -1574,7 +1574,7 @@ definition inductionOn
 
 中文:
 定义 inductionOn
-  签名: {C : 对任意 {n : 自然数}, Vector α n -> Sort*} {n : 自然数} (v : Vector α n)
+  签名: {C : 对任意 {n : 自然数}, Vector α n -> 类型层*} {n : 自然数} (v : Vector α n)
   定义体: by
   induction n with
   | zero =>
@@ -1613,7 +1613,7 @@ theorem inductionOn_nil
 
 中文:
 定理 inductionOn_nil
-  结论: {C : 对任意 {n : 自然数}, Vector α n -> Sort*}
+  结论: {C : 对任意 {n : 自然数}, Vector α n -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -1634,7 +1634,7 @@ theorem inductionOn_cons
 
 中文:
 定理 inductionOn_cons
-  结论: {C : 对任意 {n : 自然数}, Vector α n -> Sort*} {n : 自然数} (x : α) (v : Vector α n)
+  结论: {C : 对任意 {n : 自然数}, Vector α n -> 类型层*} {n : 自然数} (x : α) (v : Vector α n)
   证明: rfl
 -/
 theorem inductionOn_cons {C : forall {n : Nat}, Vector α n -> Sort*} {n : Nat} (x : α) (v : Vector α n)
@@ -1667,7 +1667,7 @@ definition inductionOn₂
 
 中文:
 定义 inductionOn₂
-  签名: {C : 对任意 {n}, Vector α n -> Vector β n -> Sort*}
+  签名: {C : 对任意 {n}, Vector α n -> Vector β n -> 类型层*}
   定义体: by
   induction n with
   | zero =>
@@ -1724,7 +1724,7 @@ definition inductionOn₃
 
 中文:
 定义 inductionOn₃
-  签名: {C : 对任意 {n}, Vector α n -> Vector β n -> Vector γ n -> Sort*}
+  签名: {C : 对任意 {n}, Vector α n -> Vector β n -> Vector γ n -> 类型层*}
   定义体: by
   induction n with
   | zero =>
@@ -1772,7 +1772,7 @@ definition casesOn
 
 中文:
 定义 casesOn
-  签名: {motive : 对任意 {n}, Vector α n -> Sort*} (v : Vector α m)
+  签名: {motive : 对任意 {n}, Vector α n -> 类型层*} (v : Vector α m)
   定义体: inductionOn (C := motive) v nil @fun _ hd tl _ => cons hd tl
 
 Depends on / 依赖: inductionOn, motive
@@ -1793,7 +1793,7 @@ definition casesOn₂
 
 中文:
 定义 casesOn₂
-  签名: {motive : 对任意 {n}, Vector α n -> Vector β n -> Sort*} (v₁ : Vector α m) (v₂ : Vector β m)
+  签名: {motive : 对任意 {n}, Vector α n -> Vector β n -> 类型层*} (v₁ : Vector α m) (v₂ : Vector β m)
   定义体: inductionOn₂ (C := motive) v₁ v₂ nil @fun _ x y xs ys _ => cons x y xs ys
 
 Depends on / 依赖: motive
@@ -1815,7 +1815,7 @@ definition casesOn₃
 
 中文:
 定义 casesOn₃
-  签名: {motive : 对任意 {n}, Vector α n -> Vector β n -> Vector γ n -> Sort*} (v₁ : Vector α m)
+  签名: {motive : 对任意 {n}, Vector α n -> Vector β n -> Vector γ n -> 类型层*} (v₁ : Vector α m)
   定义体: inductionOn₃ (C := motive) v₁ v₂ v₃ nil @fun _ x y z xs ys zs _ => cons x y z xs ys zs
 
 Depends on / 依赖: motive
@@ -1836,7 +1836,7 @@ definition toArray
 
 中文:
 定义 toArray
-  签名: : Vector α n -> Array α
+  签名: : Vector α n -> 数组 α
 -/
 def toArray : Vector α n -> Array α
   | ⟨xs, _⟩ => xs.toArray
@@ -1857,7 +1857,7 @@ definition insertIdx
 
 中文:
 定义 insertIdx
-  签名: (a : α) (i : Fin (n + 1)) (v : Vector α n)
+  签名: (a : α) (i : 有限集 (n + 1)) (v : Vector α n)
   定义体: ⟨v.1.insertIdx i a, by
     rw [List.length_insertIdx]; rw [v.2]
     split <;> lia⟩
@@ -1881,7 +1881,7 @@ theorem insertIdx_val
 
 中文:
 定理 insertIdx_val
-  条件: {i : Fin (n + 1)} {v : Vector α n}
+  条件: {i : 有限集 (n + 1)} {v : Vector α n}
   证明: rfl
 
 @[simp]
@@ -1901,7 +1901,7 @@ theorem eraseIdx_val
 
 中文:
 定理 eraseIdx_val
-  条件: {i : Fin n}
+  条件: {i : 有限集 n}
   结论: 对任意 {v : Vector α n}, (eraseIdx i v).val = v.val.eraseIdx i
 -/
 theorem eraseIdx_val {i : Fin n} : forall {v : Vector α n}, (eraseIdx i v).val = v.val.eraseIdx i
@@ -1917,7 +1917,7 @@ theorem eraseIdx_insertIdx_self
 
 中文:
 定理 eraseIdx_insertIdx_self
-  条件: {v : Vector α n} {i : Fin (n + 1)}
+  条件: {v : Vector α n} {i : 有限集 (n + 1)}
   证明: Subtype.ext (List.eraseIdx_insertIdx_self ..)
 
 Depends on / 依赖: List.eraseIdx_insertIdx_self, Subtype, Subtype.ext, eraseIdx_insertIdx_self
@@ -1967,7 +1967,7 @@ theorem insertIdx_comm
 
 中文:
 定理 insertIdx_comm
-  条件: (a b : α) (i j : Fin (n + 1)) (h : i <= j)
+  条件: (a b : α) (i j : 有限集 (n + 1)) (h : i <= j)
 -/
 theorem insertIdx_comm (a b : α) (i j : Fin (n + 1)) (h : i <= j) :
     forall v : Vector α n,
@@ -1996,7 +1996,7 @@ definition set
 
 中文:
 定义 set
-  签名: (v : Vector α n) (i : Fin n) (a : α)
+  签名: (v : Vector α n) (i : 有限集 n) (a : α)
   定义体: ⟨v.1.set i.1 a, by simp⟩
 
 @[simp]
@@ -2015,7 +2015,7 @@ theorem toList_set
 
 中文:
 定理 toList_set
-  条件: (v : Vector α n) (i : Fin n) (a : α)
+  条件: (v : Vector α n) (i : 有限集 n) (a : α)
   证明: rfl
 -/
 theorem toList_set (v : Vector α n) (i : Fin n) (a : α) :
@@ -2036,7 +2036,7 @@ theorem get_set_same
 
 中文:
 定理 get_set_same
-  条件: (v : Vector α n) (i : Fin n) (a : α)
+  条件: (v : Vector α n) (i : 有限集 n) (a : α)
   结论: (v.set i a).get i = a
   证明: by
   cases v; cases i; simp [Vector.set, get_eq_get_toList]
@@ -2061,7 +2061,7 @@ theorem get_set_of_ne
 
 中文:
 定理 get_set_of_ne
-  条件: {v : Vector α n} {i j : Fin n} (h : i != j) (a : α)
+  条件: {v : Vector α n} {i j : 有限集 n} (h : i != j) (a : α)
   证明: by
   cases v; cases i; cases j
   simp only [get_eq_get_toList, toList_set, toList_mk, Fin.cast_mk, List.get_eq_getElem]
@@ -2090,7 +2090,7 @@ theorem get_set_eq_if
 
 中文:
 定理 get_set_eq_if
-  条件: {v : Vector α n} {i j : Fin n} (a : α)
+  条件: {v : Vector α n} {i j : 有限集 n} (a : α)
   证明: by
   split_ifs <;> (try simp [*]); rwa [get_set_of_ne]
 
@@ -2115,7 +2115,7 @@ theorem prod_set
 
 中文:
 定理 prod_set
-  条件: [Monoid α] (v : Vector α n) (i : Fin n) (a : α)
+  条件: [幺半群 α] (v : Vector α n) (i : 有限集 n) (a : α)
   证明: by
   refine (List.prod_set v.toList i a).trans ?_
   simp_all
@@ -2142,7 +2142,7 @@ theorem prod_set'
 
 中文:
 定理 prod_set'
-  条件: [CommGroup α] (v : Vector α n) (i : Fin n) (a : α)
+  条件: [交换群 α] (v : Vector α n) (i : 有限集 n) (a : α)
   证明: by
   refine (List.prod_set' v.toList i a).trans ?_
   simp [get_eq_get_toList, mul_assoc]
@@ -2369,7 +2369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable.{u} (flip Vector n)
+  签名: 可遍历.{u} (flip Vector n)
   定义体: @Vector.traverse n
   map {α β} := @Vector.map.{u, u} α β n
 
@@ -2396,7 +2396,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable.{u} (flip Vector n)
+  签名: 合法可遍历.{u} (flip Vector n)
   定义体: @Vector.id_traverse n
   comp_traverse := Vector.comp_traverse
   traverse_eq_map_id := @Vector.traverse_eq_map_id n
@@ -2471,7 +2471,7 @@ theorem get_append_cons_succ
 
 中文:
 定理 get_append_cons_succ
-  条件: {i : Fin (n + m)} {h}
+  条件: {i : 有限集 (n + m)} {h}
   证明: rfl
 -/
 theorem get_append_cons_succ {i : Fin (n + m)} {h} :
@@ -2525,7 +2525,7 @@ theorem get_map₂
 
 中文:
 定理 get_map₂
-  条件: (v₁ : Vector α n) (v₂ : Vector β n) (f : α -> β -> γ) (i : Fin n)
+  条件: (v₁ : Vector α n) (v₂ : Vector β n) (f : α -> β -> γ) (i : 有限集 n)
   证明: by
   induction v₁, v₂ using inductionOn₂ with
   | nil =>

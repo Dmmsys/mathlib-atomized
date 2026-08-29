@@ -107,7 +107,7 @@ theorem hasSum
 
 中文:
 定理 hasSum
-  结论: HasSum f (⨆ s : Finset α, ∑ a in s, f a)
+  结论: HasSum f (⨆ s : 有限集 α, ∑ a in s, f a)
   证明: tendsto_atTop_iSup fun _ _ => Finset.sum_le_sum_of_subset
 
 @[simp]
@@ -182,7 +182,7 @@ theorem tsum_eq_iSup_sum
 
 中文:
 定理 tsum_eq_iSup_sum
-  结论: ∑' a, f a = ⨆ s : Finset α, ∑ a in s, f a
+  结论: ∑' a, f a = ⨆ s : 有限集 α, ∑ a in s, f a
   证明: ENNReal.hasSum.tsum_eq
 -/
 protected theorem tsum_eq_iSup_sum : ∑' a, f a = ⨆ s : Finset α, ∑ a in s, f a :=
@@ -202,7 +202,7 @@ theorem tsum_eq_iSup_sum'
 
 中文:
 定理 tsum_eq_iSup_sum'
-  条件: {ι : 类型} (s : ι -> Finset α) (hs : 对任意 t, 存在 i, t subseteq s i)
+  条件: {ι : 类型} (s : ι -> 有限集 α) (hs : 对任意 t, 存在 i, t subseteq s i)
   证明: by
   rw [ENNReal.tsum_eq_iSup_sum]
   symm
@@ -261,7 +261,7 @@ theorem tsum_biUnion'
 
 中文:
 定理 tsum_biUnion'
-  结论: {ι : 类型} {S : Set ι} {f : α -> ENN实数} {t : ι -> Set α}
+  结论: {ι : 类型} {S : 集合 ι} {f : α -> 广义非负实数} {t : ι -> 集合 α}
   证明: by
   simp [← ENNReal.tsum_sigma, ← (Set.biUnionEqSigmaOfDisjoint h).tsum_eq]
 -/
@@ -281,7 +281,7 @@ theorem tsum_biUnion
 
 中文:
 定理 tsum_biUnion
-  结论: {ι : 类型} {f : α -> ENN实数} {t : ι -> Set α}
+  结论: {ι : 类型} {f : α -> 广义非负实数} {t : ι -> 集合 α}
   证明: by
   nth_rw 2 [← tsum_univ]
   rw [← ENNReal.tsum_biUnion' h]; rw [Set.biUnion_univ]
@@ -373,7 +373,7 @@ lemma sum_add_tsum_compl
 
 中文:
 引理 sum_add_tsum_compl
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> 实数>=0∞)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 实数>=0∞)
   证明: by
   rw [tsum_subtype]; rw [sum_eq_tsum_indicator]
   simp [← ENNReal.tsum_add]
@@ -412,7 +412,7 @@ theorem sum_le_tsum
 
 中文:
 定理 sum_le_tsum
-  条件: {f : α -> 实数>=0∞} (s : Finset α)
+  条件: {f : α -> 实数>=0∞} (s : 有限集 α)
   结论: ∑ x in s, f x <= ∑' x, f x
   证明: ENNReal.summable.sum_le_tsum s (fun _ _ => zero_le)
 -/
@@ -430,7 +430,7 @@ lemma le_tsum_of_forall_lt_exists_sum
   exact lt_of_lt_of_le hI (ENNReal.sum_le_tsum I)
 
 中文:
-引理 le_tsum_of_forall_lt_exists_sum
+引理 le_tsum_of_对任意_lt_存在_sum
   证明: by
   refine le_of_forall_lt fun b hb => ?_
   obtain ⟨I, hI⟩ := h b hb
@@ -455,7 +455,7 @@ theorem tsum_eq_iSup_nat'
 
 中文:
 定理 tsum_eq_iSup_nat'
-  条件: {f : 自然数 -> 实数>=0∞} {N : 自然数 -> 自然数} (hN : Tendsto N atTop atTop)
+  条件: {f : 自然数 -> 实数>=0∞} {N : 自然数 -> 自然数} (hN : 收敛 N atTop atTop)
   证明: ENNReal.tsum_eq_iSup_sum' _ fun t =>
     let ⟨n, hn⟩ := t.exists_nat_subset_range
     let ⟨k, _, hk⟩ := exists_le_of_tendsto_atTop hN 0 n
@@ -611,7 +611,7 @@ theorem tsum_top
 
 中文:
 定理 tsum_top
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: ∑' _ : α, ∞ = ∞
   证明: let ⟨a⟩ := ‹Nonempty α›
   ENNReal.tsum_eq_top_of_eq_top ⟨a, rfl⟩
@@ -635,7 +635,7 @@ theorem tsum_const_eq_top_of_ne_zero
 
 中文:
 定理 tsum_const_eq_top_of_ne_zero
-  条件: {α : 类型} [Infinite α] {c : 实数>=0∞} (hc : c != 0)
+  条件: {α : 类型} [无限 α] {c : 实数>=0∞} (hc : c != 0)
   证明: by
   have A : Tendsto (fun n : Nat => (n : Real>=0∞) * c) atTop (𝓝 (∞ * c)) := by
     apply ENNReal.Tendsto.mul_const tendsto_nat_nhds_top
@@ -742,7 +742,7 @@ theorem tsum_const_smul
 
 中文:
 定理 tsum_const_smul
-  条件: {R} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (a : R)
+  条件: {R} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (a : R)
   证明: by
   simpa only [smul_one_mul] using @ENNReal.tsum_mul_left _ (a • (1 : Real>=0∞)) _
 
@@ -836,7 +836,7 @@ theorem toNNReal_apply_of_tsum_ne_top
   proof: coe_toNNReal ENNReal.ne_top_of_tsum_ne_top hf _
 
 中文:
-定理 toNNReal_apply_of_tsum_ne_top
+定理 toNN实数_apply_of_tsum_ne_top
   条件: {α : 类型} {f : α -> 实数>=0∞} (hf : ∑' i, f i != ∞) (x : α)
   证明: coe_toNNReal ENNReal.ne_top_of_tsum_ne_top hf _
 
@@ -856,7 +856,7 @@ theorem summable_toNNReal_of_tsum_ne_top
   simpa only [← tsum_coe_ne_top_iff_summable, toNNReal_apply_of_tsum_ne_top hf] using hf
 
 中文:
-定理 summable_toNNReal_of_tsum_ne_top
+定理 summable_toNN实数_of_tsum_ne_top
   条件: {α : 类型} {f : α -> 实数>=0∞} (hf : ∑' i, f i != ∞)
   证明: by
   simpa only [← tsum_coe_ne_top_iff_summable, toNNReal_apply_of_tsum_ne_top hf] using hf
@@ -1004,7 +1004,7 @@ theorem tsum_comp_le_tsum_of_injective
 
 中文:
 定理 tsum_comp_le_tsum_of_injective
-  条件: {f : α -> β} (hf : Injective f) (g : β -> 实数>=0∞)
+  条件: {f : α -> β} (hf : 单射 f) (g : β -> 实数>=0∞)
   证明: ENNReal.summable.tsum_le_tsum_of_inj f hf (fun _ _ => zero_le) (fun _ => le_rfl)
     ENNReal.summable
 
@@ -1026,7 +1026,7 @@ theorem tsum_le_tsum_comp_of_surjective
 
 中文:
 定理 tsum_le_tsum_comp_of_surjective
-  条件: {f : α -> β} (hf : Surjective f) (g : β -> 实数>=0∞)
+  条件: {f : α -> β} (hf : 满射 f) (g : β -> 实数>=0∞)
   证明: calc ∑' y, g y = ∑' y, g (f (surjInv hf y)) := by simp only [surjInv_eq hf]
   _ <= ∑' x, g (f x) := tsum_comp_le_tsum_of_injective (injective_surjInv hf) _
 
@@ -1047,7 +1047,7 @@ theorem tsum_mono_subtype
 
 中文:
 定理 tsum_mono_subtype
-  条件: (f : α -> 实数>=0∞) {s t : Set α} (h : s subseteq t)
+  条件: (f : α -> 实数>=0∞) {s t : 集合 α} (h : s subseteq t)
   证明: tsum_comp_le_tsum_of_injective (inclusion_injective h) _
 
 Depends on / 依赖: inclusion_injective, tsum_comp_le_tsum_of_injective
@@ -1068,7 +1068,7 @@ theorem tsum_iUnion_le_tsum
 
 中文:
 定理 tsum_iUnion_le_tsum
-  条件: {ι : 类型} (f : α -> 实数>=0∞) (t : ι -> Set α)
+  条件: {ι : 类型} (f : α -> 实数>=0∞) (t : ι -> 集合 α)
   证明: calc ∑' x : ⋃ i, t i, f x <= ∑' x : Σ i, t i, f x.2 :=
     tsum_le_tsum_comp_of_surjective (sigmaToiUnion_surjective t) _
   _ = ∑' i, ∑' x : t i, f x := ENNReal.tsum_sigma' _
@@ -1092,7 +1092,7 @@ theorem tsum_biUnion_le_tsum
 
 中文:
 定理 tsum_biUnion_le_tsum
-  条件: {ι : 类型} (f : α -> 实数>=0∞) (s : Set ι) (t : ι -> Set α)
+  条件: {ι : 类型} (f : α -> 实数>=0∞) (s : 集合 ι) (t : ι -> 集合 α)
   证明: calc ∑' x : ⋃ i in s, t i, f x = ∑' x : ⋃ i : s, t i, f x := tsum_congr_set_coe _ by simp
   _ <= ∑' i : s, ∑' x : t i, f x := tsum_iUnion_le_tsum _ _
 
@@ -1113,7 +1113,7 @@ theorem tsum_biUnion_le
 
 中文:
 定理 tsum_biUnion_le
-  条件: {ι : 类型} (f : α -> 实数>=0∞) (s : Finset ι) (t : ι -> Set α)
+  条件: {ι : 类型} (f : α -> 实数>=0∞) (s : 有限集 ι) (t : ι -> 集合 α)
   证明: (tsum_biUnion_le_tsum f s t).trans_eq (Finset.tsum_subtype s fun i => ∑' x : t i, f x)
 
 Depends on / 依赖: Finset, Finset.tsum_subtype, trans_eq, tsum_biUnion_le_tsum, tsum_subtype
@@ -1134,7 +1134,7 @@ theorem tsum_iUnion_le
 
 中文:
 定理 tsum_iUnion_le
-  条件: {ι : 类型} [Fintype ι] (f : α -> 实数>=0∞) (t : ι -> Set α)
+  条件: {ι : 类型} [有限类型 ι] (f : α -> 实数>=0∞) (t : ι -> 集合 α)
   证明: by
   rw [← tsum_fintype (L := SummationFilter.unconditional _)]
   exact tsum_iUnion_le_tsum f t
@@ -1157,7 +1157,7 @@ theorem tsum_union_le
 
 中文:
 定理 tsum_union_le
-  条件: (f : α -> 实数>=0∞) (s t : Set α)
+  条件: (f : α -> 实数>=0∞) (s t : 集合 α)
   证明: calc ∑' x : ↑(s union t), f x = ∑' x : ⋃ b, cond b s t, f x := tsum_congr_set_coe _ union_eq_iUnion
   _ <= _ := by simpa using tsum_iUnion_le f (cond · s t)
 
@@ -1369,7 +1369,7 @@ theorem hasSum_toReal
   exact (tsum_coe_ne_top_iff_summable.1 hsum).hasSum
 
 中文:
-定理 hasSum_toReal
+定理 hasSum_to实数
   条件: {f : α -> 实数>=0∞} (hsum : ∑' x, f x != ∞)
   证明: by
   lift f to α -> Real>=0 using ENNReal.ne_top_of_tsum_ne_top hsum
@@ -1394,7 +1394,7 @@ theorem summable_toReal
   proof: (hasSum_toReal hsum).summable
 
 中文:
-定理 summable_toReal
+定理 summable_to实数
   条件: {f : α -> 实数>=0∞} (hsum : ∑' x, f x != ∞)
   结论: Summable fun x => (f x).to实数
   证明: (hasSum_toReal hsum).summable
@@ -1424,7 +1424,7 @@ theorem tsum_eq_toNNReal_tsum
     simp only [h, ENNReal.toNNReal_top, A]
 
 中文:
-定理 tsum_eq_toNNReal_tsum
+定理 tsum_eq_toNN实数_tsum
   条件: {f : β -> 实数>=0}
   结论: ∑' b, f b = (∑' b, (f b : 实数>=0∞)).toNN实数
   证明: by
@@ -1456,7 +1456,7 @@ theorem exists_le_hasSum_of_le
 ⟨p, hpr, ENNReal.hasSum_coe.1 Eq ▸ ENNReal.summable.hasSum⟩
 
 中文:
-定理 exists_le_hasSum_of_le
+定理 存在_le_hasSum_of_le
   条件: {f g : β -> 实数>=0} {r : 实数>=0} (hgf : 对任意 b, g b <= f b) (hfr : HasSum f r)
   证明: have : (∑' b, (g b : Real>=0∞)) <= r := by
     refine hasSum_le (fun b => ?_) ENNReal.summable.hasSum (ENNReal.hasSum_coe.2 hfr)
@@ -1722,7 +1722,7 @@ theorem indicator_summable
 
 中文:
 定理 indicator_summable
-  条件: {f : α -> 实数>=0} (hf : Summable f) (s : Set α)
+  条件: {f : α -> 实数>=0} (hf : Summable f) (s : 集合 α)
   证明: by
   classical
   refine NNReal.summable_of_le (fun a => le_trans (le_of_eq (s.indicator_apply f a)) ?_) hf
@@ -1753,7 +1753,7 @@ theorem tsum_indicator_ne_zero
 
 中文:
 定理 tsum_indicator_ne_zero
-  条件: {f : α -> 实数>=0} (hf : Summable f) {s : Set α} (h : 存在 a in s, f a != 0)
+  条件: {f : α -> 实数>=0} (hf : Summable f) {s : 集合 α} (h : 存在 a in s, f a != 0)
   证明: fun h' =>
   let ⟨a, ha, hap⟩ := h
   hap ((Set.indicator_apply_eq_self.mpr (absurd ha)).symm.trans
@@ -1786,7 +1786,7 @@ nonrec theorem hasSum_lt {f g : α -> Real>=0} {sf sg : Real>=0} {i : α} (h : f
 中文:
 定理 tendsto_sum_nat_add
   条件: (f : 自然数 -> 实数>=0)
-  结论: Tendsto (fun i => ∑' k, f (k + i)) atTop (𝓝 0)
+  结论: 收敛 (fun i => ∑' k, f (k + i)) atTop (𝓝 0)
   证明: by
   rw [← tendsto_coe]
   convert! _root_.tendsto_sum_nat_add fun i => (f i : Real)
@@ -1943,7 +1943,7 @@ theorem tsum_toNNReal_eq
     NNReal.tsum_eq_toNNReal_tsum.symm
 
 中文:
-定理 tsum_toNNReal_eq
+定理 tsum_toNN实数_eq
   条件: {f : α -> 实数>=0∞} (hf : 对任意 a, f a != ∞)
   证明: (congr_arg ENNReal.toNNReal (tsum_congr fun x => (coe_toNNReal (hf x)).symm)).trans
     NNReal.tsum_eq_toNNReal_tsum.symm
@@ -1965,7 +1965,7 @@ theorem tsum_toReal_eq
   simp only [ENNReal.toReal, tsum_toNNReal_eq hf, NNReal.coe_tsum]
 
 中文:
-定理 tsum_toReal_eq
+定理 tsum_to实数_eq
   条件: {f : α -> 实数>=0∞} (hf : 对任意 a, f a != ∞)
   证明: by
   simp only [ENNReal.toReal, tsum_toNNReal_eq hf, NNReal.coe_tsum]
@@ -2156,7 +2156,7 @@ theorem Summable.toNNReal
   simp only [le_abs_self, Real.coe_toNNReal', max_le_iff, abs_nonneg, and_self_iff]
 
 中文:
-定理 Summable.toNNReal
+定理 Summable.toNN实数
   条件: {f : α -> 实数} (hf : Summable f)
   结论: Summable fun n => (f n).toNN实数
   证明: by
@@ -2184,7 +2184,7 @@ lemma Summable.tsum_ofReal_lt_top
   exact hf.toNNReal
 
 中文:
-引理 Summable.tsum_ofReal_lt_top
+引理 Summable.tsum_of实数_lt_top
   条件: {f : α -> 实数} (hf : Summable f)
   结论: ∑' i, .of实数 (f i) < ∞
   证明: by
@@ -2209,7 +2209,7 @@ lemma Summable.tsum_ofReal_ne_top
   proof: hf.tsum_ofReal_lt_top.ne
 
 中文:
-引理 Summable.tsum_ofReal_ne_top
+引理 Summable.tsum_of实数_ne_top
   条件: {f : α -> 实数} (hf : Summable f)
   结论: ∑' i, .of实数 (f i) != ∞
   证明: hf.tsum_ofReal_lt_top.ne
@@ -2280,7 +2280,7 @@ theorem ENNReal.ofReal_tsum_of_nonneg
   simp_rw [ENNReal.ofReal, ENNReal.tsum_coe_eq (NNReal.hasSum_real_toNNReal_of_nonneg hf_nonneg hf)]
 
 中文:
-定理 ENNReal.ofReal_tsum_of_nonneg
+定理 广义非负实数.of实数_tsum_of_nonneg
   条件: {f : α -> 实数} (hf_nonneg : 对任意 n, 0 <= f n) (hf : Summable f)
   证明: by
   simp_rw [ENNReal.ofReal, ENNReal.tsum_coe_eq (NNReal.hasSum_real_toNNReal_of_nonneg hf_nonneg hf)]
@@ -2302,7 +2302,7 @@ theorem ENNReal.multipliable_of_le_one
   proof: ⟨_, _root_.hasProd_of_isGLB_of_le_one _ h₀ (isGLB_sInf _)⟩
 
 中文:
-定理 ENNReal.multipliable_of_le_one
+定理 广义非负实数.multipliable_of_le_one
   条件: {f : α -> 实数>=0∞} (h₀ : 对任意 i, f i <= 1)
   证明: ⟨_, _root_.hasProd_of_isGLB_of_le_one _ h₀ (isGLB_sInf _)⟩
 
@@ -2321,7 +2321,7 @@ theorem ENNReal.hasProd_iInf_prod
   proof: tendsto_atTop_iInf (Finset.prod_anti_set_of_le_one' h₀)
 
 中文:
-定理 ENNReal.hasProd_iInf_prod
+定理 广义非负实数.hasProd_iInf_prod
   条件: {f : α -> 实数>=0∞} (h₀ : 对任意 i, f i <= 1)
   证明: tendsto_atTop_iInf (Finset.prod_anti_set_of_le_one' h₀)
 
@@ -2340,7 +2340,7 @@ theorem ENNReal.tprod_eq_iInf_prod
   proof: (hasProd_iInf_prod h₀).tprod_eq
 
 中文:
-定理 ENNReal.tprod_eq_iInf_prod
+定理 广义非负实数.tprod_eq_iInf_prod
   条件: {f : α -> 实数>=0∞} (h₀ : 对任意 i, f i <= 1)
   证明: (hasProd_iInf_prod h₀).tprod_eq
 

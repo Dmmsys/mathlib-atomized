@@ -95,7 +95,7 @@ theorem _root_.isRoot_of_unity_iff
 
 中文:
 定理 _root_.isRoot_of_unity_iff
-  条件: (h : 0 < n) (R : 类型) [CommRing R] [IsDomain R] {ζ : R}
+  条件: (h : 0 < n) (R : 类型) [交换环 R] [是整环 R] {ζ : R}
   证明: by
   rw [← mem_nthRoots h]; rw [nthRoots]; rw [mem_roots <| X_pow_sub_C_ne_zero h _]; rw [C_1]; rw [←
       prod_cyclotomic_eq_X_pow_sub_one h]; rw [isRoot_prod]
@@ -118,8 +118,8 @@ theorem _root_.IsPrimitiveRoot.isRoot_cyclotomic
   rwa [← mem_primitiveRoots hpos] at h
 
 中文:
-定理 _root_.IsPrimitiveRoot.isRoot_cyclotomic
-  条件: (hpos : 0 < n) {μ : R} (h : IsPrimitiveRoot μ n)
+定理 _root_.是PrimitiveRoot.isRoot_cyclotomic
+  条件: (hpos : 0 < n) {μ : R} (h : 是PrimitiveRoot μ n)
   证明: by
   rw [← mem_roots (cyclotomic_ne_zero n R)]; rw [cyclotomic_eq_prod_X_sub_primitiveRoots h]; rw [roots_prod_X_sub_C]; rw [← Finset.mem_def]
   rwa [← mem_primitiveRoots hpos] at h
@@ -148,7 +148,7 @@ theorem isRoot_cyclotomic_iff'
 
 中文:
 定理 isRoot_cyclotomic_iff'
-  条件: {n : 自然数} {K : 类型} [Field K] {μ : K} [NeZero (n : K)]
+  条件: {n : 自然数} {K : 类型} [域 K] {μ : K} [NeZero (n : K)]
   证明: by
   -- in this proof, `o` stands for `orderOf μ`
   have hnpos : 0 < n := (NeZero.of_neZero_natCast K).out.bot_lt
@@ -313,7 +313,7 @@ theorem isRoot_cyclotomic_iff_charZero
 
 中文:
 定理 isRoot_cyclotomic_iff_charZero
-  结论: {n : 自然数} {R : 类型} [CommRing R] [IsDomain R] [CharZero R]
+  结论: {n : 自然数} {R : 类型} [交换环 R] [是整环 R] [特征零 R]
   证明: letI := NeZero.of_gt hn
   isRoot_cyclotomic_iff
 
@@ -345,8 +345,8 @@ theorem cyclotomic_injective
 
 中文:
 定理 cyclotomic_injective
-  条件: [CharZero R]
-  结论: Function.Injective fun n => cyclotomic n R
+  条件: [特征零 R]
+  结论: 函数.单射 fun n => cyclotomic n R
   证明: by
   intro n m hnm
   simp only at hnm
@@ -390,8 +390,8 @@ theorem _root_.IsPrimitiveRoot.minpoly_dvd_cyclotomic
   simpa [aeval_def, eval₂_eq_eval_map, IsRoot.def] using h.isRoot_cyclotomic hpos
 
 中文:
-定理 _root_.IsPrimitiveRoot.minpoly_dvd_cyclotomic
-  结论: {n : 自然数} {K : 类型} [Field K] {μ : K}
+定理 _root_.是PrimitiveRoot.minpoly_dvd_cyclotomic
+  结论: {n : 自然数} {K : 类型} [域 K] {μ : K}
   证明: by
   apply minpoly.isIntegrallyClosed_dvd (h.isIntegral hpos)
   simpa [aeval_def, eval₂_eq_eval_map, IsRoot.def] using h.isRoot_cyclotomic hpos
@@ -419,8 +419,8 @@ theorem _root_.IsPrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible
   rwa [aeval_def, eval₂_eq_eval_map, map_cyclotomic, ← IsRoot.def, isRoot_cyclotomic_iff]
 
 中文:
-定理 _root_.IsPrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible
-  结论: {K : 类型} [Field K]
+定理 _root_.是PrimitiveRoot.minpoly_eq_cyclotomic_of_irreducible
+  结论: {K : 类型} [域 K]
   证明: by
   have := NeZero.of_faithfulSMul K R n
   refine minpoly.eq_of_irreducible_of_monic h ?_ (cyclotomic.monic n K)
@@ -448,7 +448,7 @@ theorem cyclotomic_eq_minpoly
 
 中文:
 定理 cyclotomic_eq_minpoly
-  结论: {n : 自然数} {K : 类型} [Field K] {μ : K} (h : IsPrimitiveRoot μ n)
+  结论: {n : 自然数} {K : 类型} [域 K] {μ : K} (h : 是PrimitiveRoot μ n)
   证明: by
   refine eq_of_monic_of_dvd_of_natDegree_le (minpoly.monic (IsPrimitiveRoot.isIntegral h hpos))
     (cyclotomic.monic n Int) (h.minpoly_dvd_cyclotomic hpos) ?_
@@ -474,7 +474,7 @@ theorem cyclotomic_eq_minpoly_rat
 
 中文:
 定理 cyclotomic_eq_minpoly_rat
-  结论: {n : 自然数} {K : 类型} [Field K] {μ : K} (h : IsPrimitiveRoot μ n)
+  结论: {n : 自然数} {K : 类型} [域 K] {μ : K} (h : 是PrimitiveRoot μ n)
   证明: by
   rw [← map_cyclotomic_int]; rw [cyclotomic_eq_minpoly h hpos]
   exact (minpoly.isIntegrallyClosed_eq_field_fractions' _ (IsPrimitiveRoot.isIntegral h hpos)).symm
@@ -501,7 +501,7 @@ theorem cyclotomic.irreducible
 中文:
 定理 cyclotomic.irreducible
   条件: {n : 自然数} (hpos : 0 < n)
-  结论: Irreducible (cyclotomic n 整数)
+  结论: 不可约 (cyclotomic n 整数)
   证明: by
   rw [cyclotomic_eq_minpoly (isPrimitiveRoot_exp n hpos.ne') hpos]
   apply minpoly.irreducible
@@ -529,7 +529,7 @@ theorem cyclotomic.irreducible_rat
 中文:
 定理 cyclotomic.irreducible_rat
   条件: {n : 自然数} (hpos : 0 < n)
-  结论: Irreducible (cyclotomic n Rat)
+  结论: 不可约 (cyclotomic n 有理数)
   证明: by
   rw [← map_cyclotomic_int]
   exact (IsPrimitive.irreducible_iff_irreducible_map_fraction_map (cyclotomic.isPrimitive n Int)).1
@@ -609,8 +609,8 @@ lemma sum_eq_zero_iff_forall_eq
   trans aeval ζ P
 
 中文:
-引理 sum_eq_zero_iff_forall_eq
-  条件: (hp : p.Prime) (hζ : IsPrimitiveRoot ζ p) (α : Fin p -> Rat)
+引理 sum_eq_zero_iff_对任意_eq
+  条件: (hp : p.素) (hζ : 是PrimitiveRoot ζ p) (α : 有限集 p -> 有理数)
   证明: by
   have : Fact p.Prime := ⟨hp⟩
   let P : Rat[X] := ∑ i, C (α i) * X ^ i.1
@@ -648,8 +648,8 @@ lemma sum_eq_zero_iff_forall_eq_int
   simpa using sum_eq_zero_iff_forall_eq hp hζ (Int.cast ∘ α)
 
 中文:
-引理 sum_eq_zero_iff_forall_eq_int
-  条件: (hp : p.Prime) (hζ : IsPrimitiveRoot ζ p) (α : Fin p -> 整数)
+引理 sum_eq_zero_iff_对任意_eq_int
+  条件: (hp : p.素) (hζ : 是PrimitiveRoot ζ p) (α : 有限集 p -> 整数)
   证明: by
   simpa using sum_eq_zero_iff_forall_eq hp hζ (Int.cast ∘ α)
 

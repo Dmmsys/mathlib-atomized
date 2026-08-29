@@ -53,8 +53,8 @@ lemma IsOpenMap.enatCard_connectedComponents_le_encard_preimage_singleton
     · case
 
 中文:
-引理 IsOpenMap.enatCard_connectedComponents_le_encard_preimage_singleton
-  结论: [ConnectedSpace Y]
+引理 是开映射.enatCard_connectedComponents_le_encard_preimage_singleton
+  结论: [连通空间 Y]
   证明: by
   suffices h : forall {n : Nat} (U : Fin n -> Set X) (hU₁ : forall i, IsClopen (U i)) (hU₂ : forall i, (U i).Nonempty)
       (hU₃ : Pairwise (Disjoint on U)) (hU₄ : ⋃ i, U i = Set.univ),
@@ -103,7 +103,7 @@ lemma IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton_of_conne
     hy.encard_lt_top
 
 中文:
-引理 IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton_of_connectedSpace
+引理 是开映射.finite_connectedComponents_of_finite_preimage_singleton_of_connectedSpace
   证明: by
   rw [← ENat.card_lt_top]
   exact lt_of_le_of_lt (hf₁.enatCard_connectedComponents_le_encard_preimage_singleton hf₂ y)
@@ -130,7 +130,7 @@ lemma IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton
     · exact fun i j hij => 
 
 中文:
-引理 IsOpenMap.finite_connectedComponents_of_finite_preimage_singleton
+引理 是开映射.finite_connectedComponents_of_finite_preimage_singleton
   证明: by
   suffices h : forall (y : ConnectedComponents Y), Finite (ConnectedComponents (f ⁻¹' mk ⁻¹' {y})) by
     refine .of_equiv _ (equivOfIsClopen (U := fun y => f ⁻¹' mk ⁻¹' {y}) ?_ ?_ ?_).symm

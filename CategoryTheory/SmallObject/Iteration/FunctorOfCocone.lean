@@ -218,7 +218,7 @@ definition ofCocone
 
 中文:
 定义 ofCocone
-  签名: : Set.Iic j ⥤ C where
+  签名: : 集合.左无界右闭区间 j ⥤ C where
   定义体: ofCocone.obj c i.1
   map {_ j} f := ofCocone.map c _ _ (leOfHom f) j.2
   map_id i := ofCocone.map_id _ _ i.2
@@ -432,7 +432,7 @@ definition isColimitCoconeOfLEOfCocone
 
 中文:
 定义 isColimitCoconeOfLEOfCocone
-  签名: (hc : IsColimit c)
+  签名: (hc : 是余极限 c)
   定义体: (IsColimit.precomposeInvEquiv (restrictionLTOfCoconeIso c) _).1
     (IsColimit.ofIsoColimit hc
       (Cocone.ext (ofCoconeObjIsoPt c).symm (fun ⟨i, hi⟩ => by

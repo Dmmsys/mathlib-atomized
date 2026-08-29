@@ -33,7 +33,7 @@ theorem polynomial_eval_eval₂
 
 中文:
 定理 polynomial_eval_eval₂
-  结论: [CommSemiring R] [CommSemiring S]
+  结论: [交换半环 R] [交换半环 S]
   证明: by
   apply induction_on p
   · simp
@@ -73,7 +73,7 @@ theorem eval_polynomial_eval_finSuccEquiv
 
 中文:
 定理 eval_polynomial_eval_finSuccEquiv
-  结论: {n : 自然数} {x : Fin n -> R}
+  结论: {n : 自然数} {x : 有限集 n -> R}
   证明: by
   simp only [finSuccEquiv_apply, coe_eval₂Hom, polynomial_eval_eval₂, eval_eval₂]
   conv in RingHom.comp _ _ =>

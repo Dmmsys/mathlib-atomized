@@ -41,7 +41,7 @@ theorem inv_mem_Icc_iff
 
 中文:
 定理 inv_mem_Icc_iff
-  结论: a⁻¹ in Set.Icc c d ↔ a in Set.Icc d⁻¹ c⁻¹
+  结论: a⁻¹ in 集合.闭区间 c d ↔ a in 集合.闭区间 d⁻¹ c⁻¹
   证明: and_comm.trans and_congr inv_le' le_inv'
 
 @[to_additive]
@@ -64,7 +64,7 @@ theorem inv_mem_Ico_iff
 
 中文:
 定理 inv_mem_Ico_iff
-  结论: a⁻¹ in Set.Ico c d ↔ a in Set.Ioc d⁻¹ c⁻¹
+  结论: a⁻¹ in 集合.左闭右开区间 c d ↔ a in 集合.左开右闭区间 d⁻¹ c⁻¹
   证明: and_comm.trans and_congr inv_lt' le_inv'
 
 @[to_additive]
@@ -87,7 +87,7 @@ theorem inv_mem_Ioc_iff
 
 中文:
 定理 inv_mem_Ioc_iff
-  结论: a⁻¹ in Set.Ioc c d ↔ a in Set.Ico d⁻¹ c⁻¹
+  结论: a⁻¹ in 集合.左开右闭区间 c d ↔ a in 集合.左闭右开区间 d⁻¹ c⁻¹
   证明: and_comm.trans and_congr inv_le' lt_inv'
 
 @[to_additive]
@@ -108,7 +108,7 @@ theorem inv_mem_Ioo_iff
 
 中文:
 定理 inv_mem_Ioo_iff
-  结论: a⁻¹ in Set.Ioo c d ↔ a in Set.Ioo d⁻¹ c⁻¹
+  结论: a⁻¹ in 集合.开区间 c d ↔ a in 集合.开区间 d⁻¹ c⁻¹
   证明: and_comm.trans and_congr inv_lt' lt_inv'
 
 Depends on / 依赖: and_comm, and_comm.trans, and_congr, inv_lt, lt_inv
@@ -133,7 +133,7 @@ theorem add_mem_Icc_iff_left
 
 中文:
 定理 add_mem_Icc_iff_left
-  结论: a + b in Set.Icc c d ↔ a in Set.Icc (c - b) (d - b)
+  结论: a + b in 集合.闭区间 c d ↔ a in 集合.闭区间 (c - b) (d - b)
   证明: (and_congr sub_le_iff_le_add le_sub_iff_add_le).symm
 
 Depends on / 依赖: and_congr, le_sub_iff_add_le, sub_le_iff_le_add
@@ -151,7 +151,7 @@ theorem add_mem_Ico_iff_left
 
 中文:
 定理 add_mem_Ico_iff_left
-  结论: a + b in Set.Ico c d ↔ a in Set.Ico (c - b) (d - b)
+  结论: a + b in 集合.左闭右开区间 c d ↔ a in 集合.左闭右开区间 (c - b) (d - b)
   证明: (and_congr sub_le_iff_le_add lt_sub_iff_add_lt).symm
 
 Depends on / 依赖: and_congr, lt_sub_iff_add_lt, sub_le_iff_le_add
@@ -169,7 +169,7 @@ theorem add_mem_Ioc_iff_left
 
 中文:
 定理 add_mem_Ioc_iff_left
-  结论: a + b in Set.Ioc c d ↔ a in Set.Ioc (c - b) (d - b)
+  结论: a + b in 集合.左开右闭区间 c d ↔ a in 集合.左开右闭区间 (c - b) (d - b)
   证明: (and_congr sub_lt_iff_lt_add le_sub_iff_add_le).symm
 
 Depends on / 依赖: and_congr, le_sub_iff_add_le, sub_lt_iff_lt_add
@@ -187,7 +187,7 @@ theorem add_mem_Ioo_iff_left
 
 中文:
 定理 add_mem_Ioo_iff_left
-  结论: a + b in Set.Ioo c d ↔ a in Set.Ioo (c - b) (d - b)
+  结论: a + b in 集合.开区间 c d ↔ a in 集合.开区间 (c - b) (d - b)
   证明: (and_congr sub_lt_iff_lt_add lt_sub_iff_add_lt).symm
 
 Depends on / 依赖: and_congr, lt_sub_iff_add_lt, sub_lt_iff_lt_add
@@ -206,7 +206,7 @@ theorem add_mem_Icc_iff_right
 
 中文:
 定理 add_mem_Icc_iff_right
-  结论: a + b in Set.Icc c d ↔ b in Set.Icc (c - a) (d - a)
+  结论: a + b in 集合.闭区间 c d ↔ b in 集合.闭区间 (c - a) (d - a)
   证明: (and_congr sub_le_iff_le_add' le_sub_iff_add_le').symm
 
 Depends on / 依赖: and_congr, le_sub_iff_add_le, sub_le_iff_le_add
@@ -224,7 +224,7 @@ theorem add_mem_Ico_iff_right
 
 中文:
 定理 add_mem_Ico_iff_right
-  结论: a + b in Set.Ico c d ↔ b in Set.Ico (c - a) (d - a)
+  结论: a + b in 集合.左闭右开区间 c d ↔ b in 集合.左闭右开区间 (c - a) (d - a)
   证明: (and_congr sub_le_iff_le_add' lt_sub_iff_add_lt').symm
 
 Depends on / 依赖: StarOrderedRing, StarOrderedRing.lt_iff, StarOrderedRing.pos_iff, add_smul, and_congr, lt_iff, lt_sub_iff_add_lt, pos_iff, smul_mem_closure_star_mul, smul_ne_zero, sub_le_iff_le_add
@@ -242,7 +242,7 @@ theorem add_mem_Ioc_iff_right
 
 中文:
 定理 add_mem_Ioc_iff_right
-  结论: a + b in Set.Ioc c d ↔ b in Set.Ioc (c - a) (d - a)
+  结论: a + b in 集合.左开右闭区间 c d ↔ b in 集合.左开右闭区间 (c - a) (d - a)
   证明: (and_congr sub_lt_iff_lt_add' le_sub_iff_add_le').symm
 
 Depends on / 依赖: and_congr, le_sub_iff_add_le, sub_lt_iff_lt_add
@@ -260,7 +260,7 @@ theorem add_mem_Ioo_iff_right
 
 中文:
 定理 add_mem_Ioo_iff_right
-  结论: a + b in Set.Ioo c d ↔ b in Set.Ioo (c - a) (d - a)
+  结论: a + b in 集合.开区间 c d ↔ b in 集合.开区间 (c - a) (d - a)
   证明: (and_congr sub_lt_iff_lt_add' lt_sub_iff_add_lt').symm
 
 Depends on / 依赖: FunLike, StarRingHomClass, StarRingHomClass.instOrderHomClass, and_congr, instOrderHomClass, lt_sub_iff_add_lt, sub_lt_iff_lt_add
@@ -279,7 +279,7 @@ theorem sub_mem_Icc_iff_left
 
 中文:
 定理 sub_mem_Icc_iff_left
-  结论: a - b in Set.Icc c d ↔ a in Set.Icc (c + b) (d + b)
+  结论: a - b in 集合.闭区间 c d ↔ a in 集合.闭区间 (c + b) (d + b)
   证明: and_congr le_sub_iff_add_le sub_le_iff_le_add
 
 Depends on / 依赖: EquivLike, StarRingEquivClass, StarRingEquivClass.instOrderIsoClass, and_congr, instOrderIsoClass, le_sub_iff_add_le, sub_le_iff_le_add
@@ -297,7 +297,7 @@ theorem sub_mem_Ico_iff_left
 
 中文:
 定理 sub_mem_Ico_iff_left
-  结论: a - b in Set.Ico c d ↔ a in Set.Ico (c + b) (d + b)
+  结论: a - b in 集合.左闭右开区间 c d ↔ a in 集合.左闭右开区间 (c + b) (d + b)
   证明: and_congr le_sub_iff_add_le sub_lt_iff_lt_add
 
 Depends on / 依赖: and_congr, le_sub_iff_add_le, sub_lt_iff_lt_add
@@ -315,7 +315,7 @@ theorem sub_mem_Ioc_iff_left
 
 中文:
 定理 sub_mem_Ioc_iff_left
-  结论: a - b in Set.Ioc c d ↔ a in Set.Ioc (c + b) (d + b)
+  结论: a - b in 集合.左开右闭区间 c d ↔ a in 集合.左开右闭区间 (c + b) (d + b)
   证明: and_congr lt_sub_iff_add_lt sub_le_iff_le_add
 
 Depends on / 依赖: and_congr, lt_sub_iff_add_lt, sub_le_iff_le_add
@@ -333,7 +333,7 @@ theorem sub_mem_Ioo_iff_left
 
 中文:
 定理 sub_mem_Ioo_iff_left
-  结论: a - b in Set.Ioo c d ↔ a in Set.Ioo (c + b) (d + b)
+  结论: a - b in 集合.开区间 c d ↔ a in 集合.开区间 (c + b) (d + b)
   证明: and_congr lt_sub_iff_add_lt sub_lt_iff_lt_add
 
 Depends on / 依赖: and_congr, lt_sub_iff_add_lt, sub_lt_iff_lt_add
@@ -352,7 +352,7 @@ theorem sub_mem_Icc_iff_right
 
 中文:
 定理 sub_mem_Icc_iff_right
-  结论: a - b in Set.Icc c d ↔ b in Set.Icc (a - d) (a - c)
+  结论: a - b in 集合.闭区间 c d ↔ b in 集合.闭区间 (a - d) (a - c)
   证明: and_comm.trans and_congr sub_le_comm le_sub_comm
 
 Depends on / 依赖: and_comm, and_comm.trans, and_congr, le_sub_comm, sub_le_comm
@@ -370,7 +370,7 @@ theorem sub_mem_Ico_iff_right
 
 中文:
 定理 sub_mem_Ico_iff_right
-  结论: a - b in Set.Ico c d ↔ b in Set.Ioc (a - d) (a - c)
+  结论: a - b in 集合.左闭右开区间 c d ↔ b in 集合.左开右闭区间 (a - d) (a - c)
   证明: and_comm.trans and_congr sub_lt_comm le_sub_comm
 
 Depends on / 依赖: and_comm, and_comm.trans, and_congr, le_sub_comm, sub_lt_comm
@@ -388,7 +388,7 @@ theorem sub_mem_Ioc_iff_right
 
 中文:
 定理 sub_mem_Ioc_iff_right
-  结论: a - b in Set.Ioc c d ↔ b in Set.Ico (a - d) (a - c)
+  结论: a - b in 集合.左开右闭区间 c d ↔ b in 集合.左闭右开区间 (a - d) (a - c)
   证明: and_comm.trans and_congr sub_le_comm lt_sub_comm
 
 Depends on / 依赖: and_comm, and_comm.trans, and_congr, lt_sub_comm, sub_le_comm
@@ -406,7 +406,7 @@ theorem sub_mem_Ioo_iff_right
 
 中文:
 定理 sub_mem_Ioo_iff_right
-  结论: a - b in Set.Ioo c d ↔ b in Set.Ioo (a - d) (a - c)
+  结论: a - b in 集合.开区间 c d ↔ b in 集合.开区间 (a - d) (a - c)
   证明: and_comm.trans and_congr sub_lt_comm lt_sub_comm
 
 Depends on / 依赖: and_comm, and_comm.trans, and_congr, lt_sub_comm, sub_lt_comm
@@ -448,7 +448,7 @@ theorem sub_mem_Icc_zero_iff_right
 
 中文:
 定理 sub_mem_Icc_zero_iff_right
-  结论: b - a in Icc 0 b ↔ a in Icc 0 b
+  结论: b - a in 闭区间 0 b ↔ a in 闭区间 0 b
   证明: by
   simp only [sub_mem_Icc_iff_right, sub_self, sub_zero]
 
@@ -468,7 +468,7 @@ theorem sub_mem_Ico_zero_iff_right
 
 中文:
 定理 sub_mem_Ico_zero_iff_right
-  结论: b - a in Ico 0 b ↔ a in Ioc 0 b
+  结论: b - a in 左闭右开区间 0 b ↔ a in 左开右闭区间 0 b
   证明: by
   simp only [sub_mem_Ico_iff_right, sub_self, sub_zero]
 
@@ -488,7 +488,7 @@ theorem sub_mem_Ioc_zero_iff_right
 
 中文:
 定理 sub_mem_Ioc_zero_iff_right
-  结论: b - a in Ioc 0 b ↔ a in Ico 0 b
+  结论: b - a in 左开右闭区间 0 b ↔ a in 左闭右开区间 0 b
   证明: by
   simp only [sub_mem_Ioc_iff_right, sub_self, sub_zero]
 
@@ -508,7 +508,7 @@ theorem sub_mem_Ioo_zero_iff_right
 
 中文:
 定理 sub_mem_Ioo_zero_iff_right
-  结论: b - a in Ioo 0 b ↔ a in Ioo 0 b
+  结论: b - a in 开区间 0 b ↔ a in 开区间 0 b
   证明: by
   simp only [sub_mem_Ioo_iff_right, sub_self, sub_zero]
 

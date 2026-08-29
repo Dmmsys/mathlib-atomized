@@ -40,7 +40,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (对任意 i, α i)
+  签名: : 局部有限序 (对任意 i, α i)
   定义体: LocallyFiniteOrder.ofIcc _ (fun a b => piFinset fun i => Icc (a i) (b i)) fun a b x => by
     simp_rw [mem_piFinset, mem_Icc, le_def, forall_and]
 
@@ -62,7 +62,7 @@ theorem Icc_eq
 
 中文:
 定理 Icc_eq
-  结论: Icc a b = piFinset fun i => Icc (a i) (b i)
+  结论: 闭区间 a b = piFinset fun i => 闭区间 (a i) (b i)
   证明: rfl
 -/
 theorem Icc_eq : Icc a b = piFinset fun i => Icc (a i) (b i) :=
@@ -78,7 +78,7 @@ theorem card_Icc
 
 中文:
 定理 card_Icc
-  结论: #(Icc a b) = ∏ i, #(Icc (a i) (b i))
+  结论: #(闭区间 a b) = ∏ i, #(闭区间 (a i) (b i))
   证明: card_piFinset _
 
 Depends on / 依赖: card_piFinset
@@ -97,7 +97,7 @@ theorem card_Ico
 
 中文:
 定理 card_Ico
-  结论: #(Ico a b) = ∏ i, #(Icc (a i) (b i)) - 1
+  结论: #(左闭右开区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 1
   证明: by
   rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -117,7 +117,7 @@ theorem card_Ioc
 
 中文:
 定理 card_Ioc
-  结论: #(Ioc a b) = ∏ i, #(Icc (a i) (b i)) - 1
+  结论: #(左开右闭区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 1
   证明: by
   rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -137,7 +137,7 @@ theorem card_Ioo
 
 中文:
 定理 card_Ioo
-  结论: #(Ioo a b) = ∏ i, #(Icc (a i) (b i)) - 2
+  结论: #(开区间 a b) = ∏ i, #(闭区间 (a i) (b i)) - 2
   证明: by
   rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
 
@@ -182,7 +182,7 @@ lemma card_Iic
 
 中文:
 引理 card_Iic
-  结论: #(Iic b) = ∏ i, #(Iic (b i))
+  结论: #(左无界右闭区间 b) = ∏ i, #(左无界右闭区间 (b i))
   证明: card_piFinset _
 
 Depends on / 依赖: card_piFinset
@@ -198,7 +198,7 @@ lemma card_Iio
 
 中文:
 引理 card_Iio
-  结论: #(Iio b) = ∏ i, #(Iic (b i)) - 1
+  结论: #(左无界右开区间 b) = ∏ i, #(左无界右闭区间 (b i)) - 1
   证明: by rw [card_Iio_eq_card_Iic_sub_one, card_Iic]
 
 Depends on / 依赖: card_Iic, card_Iio_eq_card_Iic_sub_one
@@ -241,7 +241,7 @@ lemma card_Ici
 
 中文:
 引理 card_Ici
-  结论: #(Ici a) = ∏ i, #(Ici (a i))
+  结论: #(左闭右无界区间 a) = ∏ i, #(左闭右无界区间 (a i))
   证明: card_piFinset _
 
 Depends on / 依赖: card_piFinset
@@ -257,7 +257,7 @@ lemma card_Ioi
 
 中文:
 引理 card_Ioi
-  结论: #(Ioi a) = ∏ i, #(Ici (a i)) - 1
+  结论: #(左开右无界区间 a) = ∏ i, #(左闭右无界区间 (a i)) - 1
   证明: by rw [card_Ioi_eq_card_Ici_sub_one, card_Ici]
 
 Depends on / 依赖: card_Ici, card_Ioi_eq_card_Ici_sub_one

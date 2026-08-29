@@ -39,8 +39,8 @@ lemma LinearIsometryEquiv.strictConvex_preimage
 @[simp]
 
 中文:
-引理 LinearIsometryEquiv.strictConvex_preimage
-  条件: {s : Set F} (e : E ≃ₗᵢ[𝕜] F)
+引理 线性等距等价.strictConvex_preimage
+  条件: {s : 集合 F} (e : E ≃ₗᵢ[𝕜] F)
   证明: e.toContinuousLinearEquiv.strictConvex_preimage
 
 @[simp]
@@ -61,8 +61,8 @@ lemma LinearIsometryEquiv.strictConvex_image
   proof: e.toContinuousLinearEquiv.strictConvex_image
 
 中文:
-引理 LinearIsometryEquiv.strictConvex_image
-  条件: {s : Set E} (e : E ≃ₗᵢ[𝕜] F)
+引理 线性等距等价.strictConvex_image
+  条件: {s : 集合 E} (e : E ≃ₗᵢ[𝕜] F)
   证明: e.toContinuousLinearEquiv.strictConvex_image
 
 Depends on / 依赖: e.toContinuousLinearEquiv.strictConvex_image, strictConvex_image, toContinuousLinearEquiv
@@ -84,8 +84,8 @@ lemma StrictConvex.linearIsometry_preimage
   proof: hs.linear_preimage _ e.continuous e.injective
 
 中文:
-引理 StrictConvex.linearIsometry_preimage
-  结论: [NormedAddCommGroup E] [NormedSpace 𝕜 E]
+引理 严格凸.linearIsometry_preimage
+  结论: [赋范交换加群 E] [赋范空间 𝕜 E]
   证明: hs.linear_preimage _ e.continuous e.injective
 
 Depends on / 依赖: continuous, e.continuous, e.injective, hs.linear_preimage, injective, linear_preimage
@@ -107,7 +107,7 @@ lemma LinearIsometryEquiv.strictConvexSpace_iff
   simp only [strictConvexSpace_iff, ← map_zero e, ← e.image_closedBall, e.strictConvex_image]
 
 中文:
-引理 LinearIsometryEquiv.strictConvexSpace_iff
+引理 线性等距等价.strictConvexSpace_iff
   条件: (e : E ≃ₗᵢ[𝕜] F)
   证明: by
   simp only [strictConvexSpace_iff, ← map_zero e, ← e.image_closedBall, e.strictConvex_image]
@@ -125,7 +125,7 @@ lemma LinearIsometry.strictConvexSpace_range_iff
   proof: e.equivRange.strictConvexSpace_iff.symm
 
 中文:
-引理 LinearIsometry.strictConvexSpace_range_iff
+引理 线性等距.strictConvexSpace_range_iff
   条件: (e : E ->ₗᵢ[𝕜] F)
   证明: e.equivRange.strictConvexSpace_iff.symm
 
@@ -144,8 +144,8 @@ instance LinearIsometry.strictConvexSpace_range
   body: e.strictConvexSpace_range_iff.mpr ‹_›
 
 中文:
-实例 LinearIsometry.strictConvexSpace_range
-  签名: [StrictConvexSpace 𝕜 E] (e : E ->ₗᵢ[𝕜] F)
+实例 线性等距.strictConvexSpace_range
+  签名: [严格凸空间 𝕜 E] (e : E ->ₗᵢ[𝕜] F)
   定义体: e.strictConvexSpace_range_iff.mpr ‹_›
 
 Depends on / 依赖: e.strictConvexSpace_range_iff.mpr, strictConvexSpace_range_iff
@@ -165,8 +165,8 @@ lemma LinearIsometry.strictConvexSpace
     exact (strictConvex_closedBall _ _ _).linearIsometry_preimage _
 
 中文:
-引理 LinearIsometry.strictConvexSpace
-  条件: [StrictConvexSpace 𝕜 F] (f : E ->ₗᵢ[𝕜] F)
+引理 线性等距.strictConvexSpace
+  条件: [严格凸空间 𝕜 F] (f : E ->ₗᵢ[𝕜] F)
   证明: by
     rw [← f.isometry.preimage_closedBall]
     exact (strictConvex_closedBall _ _ _).linearIsometry_preimage _

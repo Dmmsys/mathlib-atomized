@@ -52,7 +52,7 @@ lemma apply_le_of_isSelfAdjoint
 
 中文:
 引理 apply_le_of_isSelfAdjoint
-  条件: (f : B₁ ->ₚ[Complex] B₂) (x : B₁) (hx : IsSelfAdjoint x)
+  条件: (f : B₁ ->ₚ[复形] B₂) (x : B₁) (hx : IsSelfAdjoint x)
   证明: by
   gcongr
   exact IsSelfAdjoint.le_algebraMap_norm_self hx
@@ -82,7 +82,7 @@ exact IsSelfAdjoin
 
 中文:
 引理 norm_apply_le_of_nonneg
-  条件: [StarOrderedRing B₂] (f : B₁ ->ₚ[Complex] B₂) (x : B₁) (hx : 0 <= x)
+  条件: [StarOrdered环 B₂] (f : B₁ ->ₚ[复形] B₂) (x : B₁) (hx : 0 <= x)
   证明: by
   have h : ‖‖x‖‖ = ‖x‖ := by simp
   rw [mul_comm]; rw [← h]; rw [← norm_smul ‖x‖ (f 1)]
@@ -123,8 +123,8 @@ lemma exists_norm_apply_le
     
 
 中文:
-引理 exists_norm_apply_le
-  条件: (f : A₁ ->ₚ[Complex] A₂)
+引理 存在_norm_apply_le
+  条件: (f : A₁ ->ₚ[复形] A₂)
   结论: 存在 C : 实数>=0, 对任意 a, ‖f a‖ <= C * ‖a‖
   证明: by
   /- It suffices to only consider for positive `a`, by decomposing `a` into positive and negative

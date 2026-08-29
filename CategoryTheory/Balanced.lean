@@ -41,7 +41,7 @@ class Balanced
 类 Balanced
   参数: : 命题 where
   公理与运算 (1 个):
-    - isIso_of_mono_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [Mono f] [Epi f], IsIso f
+    - isIso_of_mono_of_epi : 对任意 {X Y : C} (f : X ⟶ Y) [单态射 f] [满态射 f], 是同构 f
 
 Depends on / 依赖: Balanced, Balanced.isIso_of_mono_of_epi, isIso_of_mono_of_epi
 -/
@@ -65,8 +65,8 @@ theorem isIso_of_mono_of_epi
 
 中文:
 定理 isIso_of_mono_of_epi
-  条件: [Balanced C] {X Y : C} (f : X ⟶ Y) [Mono f] [Epi f]
-  结论: IsIso f
+  条件: [Balanced C] {X Y : C} (f : X ⟶ Y) [单态射 f] [满态射 f]
+  结论: 是同构 f
   证明: Balanced.isIso_of_mono_of_epi _
 
 @[to_dual isIso_iff_epi_and_mono]
@@ -89,7 +89,7 @@ theorem isIso_iff_mono_and_epi
 中文:
 定理 isIso_iff_mono_and_epi
   条件: [Balanced C] {X Y : C} (f : X ⟶ Y)
-  结论: IsIso f ↔ Mono f ∧ Epi f
+  结论: 是同构 f ↔ 单态射 f ∧ 满态射 f
   证明: ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => isIso_of_mono_of_epi _⟩
 
 Depends on / 依赖: isIso_of_mono_of_epi

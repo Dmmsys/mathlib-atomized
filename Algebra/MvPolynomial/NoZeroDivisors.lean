@@ -84,7 +84,7 @@ lemma degreeOf_prod_eq
 
 中文:
 引理 degreeOf_prod_eq
-  结论: {ι : 类型} (s : Finset ι) (f : ι -> MvPolynomial σ R)
+  结论: {ι : 类型} (s : 有限集 ι) (f : ι -> 多元多项式 σ R)
   证明: by
   rcases subsingleton_or_nontrivial (MvPolynomial σ R) with nontrivial | nontrivial
   · simp [Subsingleton.eq_zero (α := MvPolynomial σ R)]
@@ -122,7 +122,7 @@ theorem degreeOf_pow_eq
 
 中文:
 定理 degreeOf_pow_eq
-  条件: (i : σ) (p : MvPolynomial σ R) (n : 自然数) (hp : p != 0)
+  条件: (i : σ) (p : 多元多项式 σ R) (n : 自然数) (hp : p != 0)
   证明: by
   rw [pow_eq_prod_const]; rw [degreeOf_prod_eq (range n) (fun _ => p) (fun _ _ => hp)]
   simp
@@ -179,7 +179,7 @@ theorem totalDegree_mul_of_isDomain
 
 中文:
 定理 totalDegree_mul_of_isDomain
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   cases exists_wellFoundedGT σ
   simp [← degree_degLexDegree, MonomialOrder.degree_mul hf hg]
@@ -205,7 +205,7 @@ theorem totalDegree_le_of_dvd_of_isDomain
 
 中文:
 定理 totalDegree_le_of_dvd_of_isDomain
-  结论: {f g : MvPolynomial σ R}
+  结论: {f g : 多元多项式 σ R}
   证明: by
   obtain ⟨r, rfl⟩ := h
   rw [totalDegree_mul_of_isDomain (by aesop) (by aesop)]
@@ -239,8 +239,8 @@ theorem dvd_C_iff_exists
     simpa using totalDegree_le_of_dvd_of_i
 
 中文:
-定理 dvd_C_iff_exists
-  条件: {f : MvPolynomial σ R} {a : R} (ha : a != 0)
+定理 dvd_C_iff_存在
+  条件: {f : 多元多项式 σ R} {a : R} (ha : a != 0)
   证明: by
   constructor
   · intro hf
@@ -355,7 +355,7 @@ theorem dvd_monomial_iff_exists
     rw [h];
 
 中文:
-定理 dvd_monomial_iff_exists
+定理 dvd_monomial_iff_存在
   条件: {n : σ ->₀ 自然数} {a : R} (ha : a != 0)
   证明: by
   rw [show monomial n a = monomial n 1 * C a by rw [mul_comm]; rw [C_mul_monomial]; rw [mul_one],
@@ -403,7 +403,7 @@ theorem dvd_monomial_one_iff_exists
   simp_rw [isUnit_iff_dvd_one]
 
 中文:
-定理 dvd_monomial_one_iff_exists
+定理 dvd_monomial_one_iff_存在
   条件: {n : σ ->₀ 自然数}
   证明: by
   rcases subsingleton_or_nontrivial R with hR | hR
@@ -443,7 +443,7 @@ theorem dvd_smul_X_iff_exists
       apply this.imp <;> simp +cont
 
 中文:
-定理 dvd_smul_X_iff_exists
+定理 dvd_smul_X_iff_存在
   条件: {i : σ} {r : R} (hr : r != 0)
   证明: by
   rw [X]; rw [smul_monomial]; rw [smul_eq_mul]; rw [mul_one]; rw [dvd_monomial_iff_exists hr]; rw [exists_comm]
@@ -499,7 +499,7 @@ theorem dvd_X_iff_exists
   rw [isUnit_iff_dvd_one]; rw [one_smul]
 
 中文:
-定理 dvd_X_iff_exists
+定理 dvd_X_iff_存在
   条件: {i : σ}
   证明: by
   nontriviality R

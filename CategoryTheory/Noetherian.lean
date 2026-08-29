@@ -44,7 +44,7 @@ class Noetherian
     - isNoetherianObject : forall X : C, IsNoetherianObject X
 
 中文:
-类 Noetherian
+类 Noether
   参数: : 命题 extends EssentiallySmall C where
   继承: EssentiallySmall C
   公理与运算 (1 个):
@@ -66,7 +66,7 @@ class Artinian
     - isArtinianObject : forall X : C, IsArtinianObject X
 
 中文:
-类 Artinian
+类 Artin
   参数: : 命题 extends EssentiallySmall C where
   继承: EssentiallySmall C
   公理与运算 (1 个):

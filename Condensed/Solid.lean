@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: (profiniteSolid R).IsRightKanExtension (profiniteSolidCounit R)
+  签名: (profiniteSolid R).是RightKanExtension (profiniteSolidCounit R)
   定义体: by
   dsimp only [profiniteSolidCounit, profiniteSolid]
   infer_instance
@@ -181,10 +181,10 @@ class CondensedMod.IsSolid
     - isIso_solidification_map : forall X : Profinite.{u}, IsIso ((yoneda.obj A).map ((profiniteSolidification R).app X).op)
 
 中文:
-类 CondensedMod.IsSolid
+类 CondensedMod.是Solid
   参数: (A : CondensedMod.{u} R)
   公理与运算 (1 个):
-    - isIso_solidification_map : 对任意 X : Profinite.{u}, IsIso ((yoneda.obj A).map ((profiniteSolidification R).app X).op)
+    - isIso_solidification_map : 对任意 X : Profinite.{u}, 是同构 ((yoneda.obj A).map ((profiniteSolidification R).app X).op)
 -/
 class CondensedMod.IsSolid (A : CondensedMod.{u} R) : Prop where
   isIso_solidification_map : forall X : Profinite.{u}, IsIso ((yoneda.obj A).map

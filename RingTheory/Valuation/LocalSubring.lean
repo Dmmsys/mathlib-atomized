@@ -48,8 +48,8 @@ definition ValuationSubring.toLocalSubring
   isLocalRing := A.isLocalRing
 
 中文:
-定义 ValuationSubring.toLocalSubring
-  签名: (A : ValuationSubring K)
+定义 赋值子环.toLocalSubring
+  签名: (A : 赋值子环 K)
   定义体: A.toSubring
   isLocalRing := A.isLocalRing
 
@@ -67,7 +67,7 @@ lemma ValuationSubring.toLocalSubring_injective
   proof: fun _ _ h => ValuationSubring.toSubring_injective congr(($h).toSubring)
 
 中文:
-引理 ValuationSubring.toLocalSubring_injective
+引理 赋值子环.toLocalSubring_injective
   证明: fun _ _ h => ValuationSubring.toSubring_injective congr(($h).toSubring)
 -/
 lemma ValuationSubring.toLocalSubring_injective :
@@ -89,8 +89,8 @@ lemma LocalSubring.map_maximalIdeal_eq_top_of_isMax
     refine ⟨hS.le.trans (LocalSubring.le_of
 
 中文:
-引理 LocalSubring.map_maximalIdeal_eq_top_of_isMax
-  结论: {R : LocalSubring K}
+引理 Local子环.map_maximalIdeal_eq_top_of_isMax
+  结论: {R : Local子环 K}
   证明: by
   set mR := (maximalIdeal R.toSubring).map (Subring.inclusion hS.le)
   by_contra h_is_not_top
@@ -131,8 +131,8 @@ lemma LocalSubring.mem_of_isMax_of_isIntegral
   have : R = .ofPrime S.toSubrin
 
 中文:
-引理 LocalSubring.mem_of_isMax_of_isIntegral
-  结论: {R : LocalSubring K}
+引理 Local子环.mem_of_isMax_of_is整数egral
+  结论: {R : Local子环 K}
   证明: by
   let S := R.toSubring[x]
   have : Algebra.IsIntegral R.toSubring S := Algebra.IsIntegral.adjoin (by simpa)
@@ -173,8 +173,8 @@ lemma ValuationSubring.isMax_toLocalSubring
     isUnit_iff_exists_inv.mpr ⟨⟨x, hx⟩, Subtype.ext (in
 
 中文:
-引理 ValuationSubring.isMax_toLocalSubring
-  条件: (R : ValuationSubring K)
+引理 赋值子环.isMax_toLocalSubring
+  条件: (R : 赋值子环 K)
   证明: by
   intro S hS
   refine (LocalSubring.toSubring_injective (hS.1.antisymm fun x hx => (R.2 x).elim id fun h => ?_)).ge
@@ -215,8 +215,8 @@ lemma LocalSubring.exists_valuationRing_of_isMax
   hav
 
 中文:
-引理 LocalSubring.exists_valuationRing_of_isMax
-  条件: {R : LocalSubring K} (hR : IsMax R)
+引理 Local子环.存在_valuationRing_of_isMax
+  条件: {R : Local子环 K} (hR : IsMax R)
   证明: by
   suffices forall x ∉ R.toSubring, x⁻¹ in R.toSubring from
     ⟨⟨R.toSubring, fun x => or_iff_not_imp_left.mpr (this x)⟩, rfl⟩
@@ -255,8 +255,8 @@ lemma LocalSubring.isMax_iff
 @[stacks 00IA]
 
 中文:
-引理 LocalSubring.isMax_iff
-  条件: {A : LocalSubring K}
+引理 Local子环.isMax_iff
+  条件: {A : Local子环 K}
   证明: ⟨exists_valuationRing_of_isMax, fun ⟨B, e⟩ => e ▸ B.isMax_toLocalSubring⟩
 
 @[stacks 00IA]
@@ -285,8 +285,8 @@ lemma LocalSubring.exists_le_valuationSubring
   have hdir := H.directed.mono_comp _ Loca
 
 中文:
-引理 LocalSubring.exists_le_valuationSubring
-  条件: (A : LocalSubring K)
+引理 Local子环.存在_le_valuationSubring
+  条件: (A : Local子环 K)
   证明: by
   suffices exists B, A <= B ∧ IsMax B by
     obtain ⟨B, hB, hB'⟩ := this
@@ -341,8 +341,8 @@ lemma Ideal.image_subset_nonunits_valuationSubring
   rw [← IsLocali
 
 中文:
-引理 Ideal.image_subset_nonunits_valuationSubring
-  条件: {A : Subring K} (I : Ideal A) (hI : I != ⊤)
+引理 理想.image_subset_nonunits_valuationSubring
+  条件: {A : 子环 K} (I : 理想 A) (hI : I != ⊤)
   证明: by
   have ⟨M, hM, le⟩ := I.exists_le_maximal hI
   have ⟨V, hV⟩ := (LocalSubring.ofPrime A M).exists_le_valuationSubring
@@ -381,7 +381,7 @@ have : Ideal.span {xinv} != ⊤ := fun eq => hxR
     have ⟨p, hp, hpx⟩ := exists_aeval_invOf_eq_zero_of_idealMap_adjoin_sup_span
 
 中文:
-引理 Subring.exists_le_valuationSubring_of_isIntegrallyClosedIn
+引理 子环.存在_le_valuationSubring_of_is整数egrallyClosedIn
   证明: by
   obtain rfl | hx0 := eq_or_ne x 0
   · exact (hxR R.zero_mem).elim
@@ -424,7 +424,7 @@ have : (maximalIdeal R.toSubring).map (algebraMap _ B) + .span {xinv} != ⊤ := 
     have ⟨p, h
 
 中文:
-引理 LocalSubring.exists_le_valuationSubring_of_isIntegrallyClosedIn
+引理 Local子环.存在_le_valuationSubring_of_is整数egrallyClosedIn
   证明: by
   obtain rfl | hx0 := eq_or_ne x 0
   · exact (hxR R.toSubring.zero_mem).elim
@@ -467,8 +467,8 @@ lemma Subring.eq_iInf_of_isIntegrallyClosedIn
     hV.2 (iInf_le_of_le (α := Subring K) ⟨V, hV.1⟩ le_rfl h)
 
 中文:
-引理 Subring.eq_iInf_of_isIntegrallyClosedIn
-  条件: {R : Subring K} [Is整数egrallyClosedIn R K]
+引理 子环.eq_iInf_of_is整数egrallyClosedIn
+  条件: {R : 子环 K} [Is整数egrallyClosedIn R K]
   证明: le_antisymm (le_iInf fun V => V.2) fun _ h => of_not_not fun hxR =>
     have ⟨V, hV⟩ := R.exists_le_valuationSubring_of_isIntegrallyClosedIn hxR
     hV.2 (iInf_le_of_le (α := Subring K) ⟨V, hV.1⟩ le_rfl h)
@@ -492,8 +492,8 @@ lemma LocalSubring.eq_iInf_of_isIntegrallyClosedIn
     hV.2 (iInf_le_of_le (α := Subring K) ⟨V, hV.1⟩ le_rfl h)
 
 中文:
-引理 LocalSubring.eq_iInf_of_isIntegrallyClosedIn
-  结论: {R : LocalSubring K}
+引理 Local子环.eq_iInf_of_is整数egrallyClosedIn
+  结论: {R : Local子环 K}
   证明: le_antisymm (le_iInf fun V => V.2.1) fun _ h => of_not_not fun hxR =>
     have ⟨V, hV⟩ := R.exists_le_valuationSubring_of_isIntegrallyClosedIn hxR
     hV.2 (iInf_le_of_le (α := Subring K) ⟨V, hV.1⟩ le_rfl h)
@@ -523,7 +523,7 @@ lemma iInf_valuationSubring_superset
 
 中文:
 引理 iInf_valuationSubring_superset
-  条件: {s : Set K}
+  条件: {s : 集合 K}
   证明: by
   refine .trans ?_ Subring.eq_iInf_of_isIntegrallyClosedIn.symm
   simp_rw [iInf_subtype]
@@ -561,7 +561,7 @@ lemma bijective_rangeRestrict_comp_of_valuationRing
 
 中文:
 引理 bijective_rangeRestrict_comp_of_valuationRing
-  结论: [IsDomain R] [ValuationRing R]
+  结论: [是整环 R] [赋值环 R]
   证明: by
   refine ⟨?_, ?_⟩
   · exact .of_comp (f := Subtype.val) (by convert! (IsFractionRing.injective R K); rw [← h]; rfl)
@@ -606,8 +606,8 @@ lemma IsLocalRing.exists_factor_valuationRing
   exact @RingHom.isLocalHom_comp _ _ _ _ _ _ _ _ hB.2 (.of_surjective _ f.rangeRestrict_surjective)
 
 中文:
-引理 IsLocalRing.exists_factor_valuationRing
-  条件: [IsLocalRing R] (f : R ->+* K)
+引理 是局部环.存在_factor_valuationRing
+  条件: [是局部环 R] (f : R ->+* K)
   证明: by
   obtain ⟨B, hB⟩ := (LocalSubring.range f).exists_le_valuationSubring
   refine ⟨B, fun x => hB.1 ⟨x, rfl⟩, ?_⟩

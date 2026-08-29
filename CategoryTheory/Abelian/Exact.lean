@@ -69,7 +69,7 @@ theorem exact_iff_epi_imageToKernel'
 
 中文:
 定理 exact_iff_epi_imageToKernel'
-  结论: S.Exact ↔ Epi (imageToKernel' S.f S.g S.zero)
+  结论: S.正合 ↔ 满态射 (imageToKernel' S.f S.g S.zero)
   证明: by
   rw [S.exact_iff_epi_kernel_lift]
   have : factorThruImage S.f ≫ imageToKernel' S.f S.g S.zero = kernel.lift S.g S.f S.zero := by
@@ -108,7 +108,7 @@ theorem exact_iff_epi_imageToKernel
 
 中文:
 定理 exact_iff_epi_imageToKernel
-  结论: S.Exact ↔ Epi (imageToKernel S.f S.g S.zero)
+  结论: S.正合 ↔ 满态射 (imageToKernel S.f S.g S.zero)
   证明: by
   rw [S.exact_iff_epi_imageToKernel']
   apply (MorphismProperty.epimorphisms C).arrow_mk_iso_iff
@@ -134,7 +134,7 @@ lemma exact_iff_isIso_imageToKernel'
 
 中文:
 引理 exact_iff_isIso_imageToKernel'
-  结论: S.Exact ↔ IsIso (imageToKernel' S.f S.g S.zero)
+  结论: S.正合 ↔ 是同构 (imageToKernel' S.f S.g S.zero)
   证明: by
   simp only [S.exact_iff_epi_imageToKernel', isIso_iff_mono_and_epi, iff_and_self]
   intro
@@ -163,7 +163,7 @@ theorem exact_iff_isIso_imageToKernel
 
 中文:
 定理 exact_iff_isIso_imageToKernel
-  结论: S.Exact ↔ IsIso (imageToKernel S.f S.g S.zero)
+  结论: S.正合 ↔ 是同构 (imageToKernel S.f S.g S.zero)
   证明: by
   rw [S.exact_iff_epi_imageToKernel]
   constructor
@@ -192,9 +192,9 @@ lemma Exact.isIso_imageToKernel
   proof: S.exact_iff_isIso_imageToKernel.1 hS
 
 中文:
-引理 Exact.isIso_imageToKernel
-  条件: (hS : S.Exact)
-  结论: IsIso (imageToKernel S.f S.g S.zero)
+引理 正合.isIso_imageToKernel
+  条件: (hS : S.正合)
+  结论: 是同构 (imageToKernel S.f S.g S.zero)
   证明: S.exact_iff_isIso_imageToKernel.1 hS
 
 Depends on / 依赖: S.exact_iff_isIso_imageToKernel, exact_iff_isIso_imageToKernel
@@ -212,9 +212,9 @@ lemma Exact.isIso_imageToKernel'
   proof: S.exact_iff_isIso_imageToKernel'.1 hS
 
 中文:
-引理 Exact.isIso_imageToKernel'
-  条件: (hS : S.Exact)
-  结论: IsIso (imageToKernel' S.f S.g S.zero)
+引理 正合.isIso_imageToKernel'
+  条件: (hS : S.正合)
+  结论: 是同构 (imageToKernel' S.f S.g S.zero)
   证明: S.exact_iff_isIso_imageToKernel'.1 hS
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, InducedCategory, InducedCategory.homEquiv.symm, S.exact_iff_isIso_imageToKernel, exact_iff_isIso_imageToKernel, homEquiv, ofEquiv
@@ -238,7 +238,7 @@ theorem exact_iff_image_eq_kernel
 
 中文:
 定理 exact_iff_image_eq_kernel
-  结论: S.Exact ↔ imageSubobject S.f = kernelSubobject S.g
+  结论: S.正合 ↔ imageSubobject S.f = kernelSubobject S.g
   证明: by
   rw [exact_iff_isIso_imageToKernel]
   constructor
@@ -273,7 +273,7 @@ theorem exact_iff_of_forks
 
 中文:
 定理 exact_iff_of_forks
-  结论: {cg : KernelFork S.g} (hg : IsLimit cg) {cf : CokernelCofork S.f}
+  结论: {cg : 核叉 S.g} (hg : 是极限 cg) {cf : 余核余叉 S.f}
   证明: by
   rw [exact_iff_kernel_ι_comp_cokernel_π_zero]
   let e₁ := IsLimit.conePointUniqueUpToIso (kernelIsKernel S.g) hg
@@ -311,8 +311,8 @@ definition Exact.isLimitImage
     (fun _ _ _ hm => by rw [← cancel_mono (Abelian.image.ι S.f), hm, kernel.lift
 
 中文:
-定义 Exact.isLimitImage
-  签名: (h : S.Exact)
+定义 正合.isLimitImage
+  签名: (h : S.正合)
   定义体: by
   rw [exact_iff_kernel_ι_comp_cokernel_π_zero] at h
   exact KernelFork.IsLimit.ofι _ _
@@ -340,8 +340,8 @@ definition Exact.isLimitImage'
   body: IsKernel.isoKernel _ _ h.isLimitImage (Abelian.imageIsoImage S.f).symm IsImage.lift_fac _ _
 
 中文:
-定义 Exact.isLimitImage'
-  签名: (h : S.Exact)
+定义 正合.isLimitImage'
+  签名: (h : S.正合)
   定义体: IsKernel.isoKernel _ _ h.isLimitImage (Abelian.imageIsoImage S.f).symm IsImage.lift_fac _ _
 
 Depends on / 依赖: Abelian, Abelian.imageIsoImage, IsImage, IsImage.lift_fac, IsKernel, IsKernel.isoKernel, h.isLimitImage, imageIsoImage, isLimitImage, isoKernel, lift_fac
@@ -368,8 +368,8 @@ definition Exact.isColimitCoimage
   rw [hm]; rw [cokernel.π_desc]
 
 中文:
-定义 Exact.isColimitCoimage
-  签名: (h : S.Exact)
+定义 正合.isColimitCoimage
+  签名: (h : S.正合)
   定义体: by
   rw [exact_iff_kernel_ι_comp_cokernel_π_zero] at h
   refine CokernelCofork.IsColimit.ofπ _ _
@@ -406,8 +406,8 @@ definition Exact.isColimitImage
 (cancel_mono (Limits.image.ι S.g)).1 by simp
 
 中文:
-定义 Exact.isColimitImage
-  签名: (h : S.Exact)
+定义 正合.isColimitImage
+  签名: (h : S.正合)
   定义体: IsCokernel.cokernelIso _ _ h.isColimitCoimage (Abelian.coimageIsoImage' S.g)
 (cancel_mono (Limits.image.ι S.g)).1 by simp
 
@@ -537,7 +537,7 @@ theorem Abelian.tfae_mono
   tfae_finish
 
 中文:
-定理 Abelian.tfae_mono
+定理 交换.tfae_mono
   条件: {X Y : C} (f : X ⟶ Y) (Z : C)
   证明: by
   tfae_have 2 -> 1 := mono_of_kernel_ι_eq_zero _
@@ -571,7 +571,7 @@ theorem Abelian.tfae_epi
   tfae_finish
 
 中文:
-定理 Abelian.tfae_epi
+定理 交换.tfae_epi
   条件: {X Y : C} (f : X ⟶ Y) (Z : C)
   证明: by
   tfae_have 2 -> 1 := epi_of_cokernel_π_eq_zero _
@@ -619,7 +619,7 @@ lemma reflects_exact_of_faithful
 
 中文:
 引理 reflects_exact_of_faithful
-  条件: [F.Faithful] (S : ShortComplex C) (hS : (S.map F).Exact)
+  条件: [F.忠实] (S : 短复形 C) (hS : (S.map F).正合)
   证明: by
   rw [ShortComplex.exact_iff_kernel_ι_comp_cokernel_π_zero] at hS ⊢
   dsimp at hS
@@ -679,7 +679,7 @@ theorem preservesMonomorphisms_of_map_exact
 
 中文:
 定理 preservesMonomorphisms_of_map_exact
-  结论: L.PreservesMonomorphisms where
+  结论: L.保持Monomorphisms where
   证明: by
     apply ((Abelian.tfae_mono (L.map f) (L.obj 0)).out 2 0).mp
     refine ShortComplex.exact_of_iso ?_ (hL _ (((tfae_mono f 0).out 0 2).mp hf))
@@ -707,7 +707,7 @@ theorem preservesEpimorphisms_of_map_exact
 
 中文:
 定理 preservesEpimorphisms_of_map_exact
-  结论: L.PreservesEpimorphisms where
+  结论: L.保持Epimorphisms where
   证明: by
     apply ((Abelian.tfae_epi (L.map f) (L.obj 0)).out 2 0).mp
     refine ShortComplex.exact_of_iso ?_ (hL _ (((tfae_epi f 0).out 0 2).mp hf))
@@ -739,7 +739,7 @@ lemma preservesHomology_of_map_exact
 
 中文:
 引理 preservesHomology_of_map_exact
-  结论: L.PreservesHomology where
+  结论: L.保持同调 where
   证明: by
     have := preservesEpimorphisms_of_map_exact _ hL
     apply preservesColimit_of_preserves_colimit_cocone (cokernelIsCokernel f)
@@ -796,7 +796,7 @@ lemma preservesHomology_of_preservesMonos_and_cokernels
 
 中文:
 引理 preservesHomology_of_preservesMonos_and_cokernels
-  结论: [PreservesZeroMorphisms L]
+  结论: [保持ZeroMorphisms L]
   证明: by
   apply preservesHomology_of_map_exact
   intro S hS
@@ -847,7 +847,7 @@ lemma preservesHomology_of_preservesEpis_and_kernels
 
 中文:
 引理 preservesHomology_of_preservesEpis_and_kernels
-  结论: [PreservesZeroMorphisms L]
+  结论: [保持ZeroMorphisms L]
   证明: by
   apply preservesHomology_of_map_exact
   intro S hS

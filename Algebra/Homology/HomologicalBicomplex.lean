@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toGradedObjectFunctor C c₁ c₂).Faithful
+  签名: (toGradedObjectFunctor C c₁ c₂).忠实
   定义体: by
     ext i₁ i₂
     exact congr_fun h ⟨i₁, i₂⟩
@@ -291,7 +291,7 @@ lemma shape_f
 
 中文:
 引理 shape_f
-  条件: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.Rel i₁ i₁') (i₂ : I₂)
+  条件: (K : HomologicalComplex₂ C c₁ c₂) (i₁ i₁' : I₁) (h : ¬ c₁.关系 i₁ i₁') (i₂ : I₂)
   证明: by
   rw [K.shape _ _ h]; rw [zero_f]
 

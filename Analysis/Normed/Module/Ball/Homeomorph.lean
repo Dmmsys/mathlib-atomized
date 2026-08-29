@@ -167,7 +167,7 @@ definition Homeomorph.unitBall
 @[simp]
 
 中文:
-定义 Homeomorph.unitBall
+定义 同胚.unitBall
   签名: : E ≃ₜ ball (0 : E) 1
   定义体: (Homeomorph.Set.univ _).symm.trans OpenPartialHomeomorph.univUnitBall.toHomeomorphSourceTarget
 
@@ -187,7 +187,7 @@ theorem Homeomorph.coe_unitBall_apply_zero
   proof: OpenPartialHomeomorph.univUnitBall_apply_zero
 
 中文:
-定理 Homeomorph.coe_unitBall_apply_zero
+定理 同胚.coe_unitBall_apply_zero
   证明: OpenPartialHomeomorph.univUnitBall_apply_zero
 
 Depends on / 依赖: OpenPartialHomeomorph, OpenPartialHomeomorph.univUnitBall_apply_zero, univUnitBall_apply_zero
@@ -407,7 +407,7 @@ theorem continuous_univBall
 中文:
 定理 continuous_univBall
   条件: (c : P) (r : 实数)
-  结论: Continuous (univBall c r)
+  结论: 连续 (univBall c r)
   证明: by
   simpa [continuousOn_univ] using (univBall c r).continuousOn
 

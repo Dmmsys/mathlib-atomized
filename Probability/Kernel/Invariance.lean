@@ -43,8 +43,8 @@ definition Invariant
   body: μ.bind κ = μ
 
 中文:
-定义 Invariant
-  签名: (κ : Kernel α α) (μ : Measure α)
+定义 不变
+  签名: (κ : 核 α α) (μ : 测度 α)
   定义体: μ.bind κ = μ
 -/
 def Invariant (κ : Kernel α α) (μ : Measure α) : Prop :=
@@ -65,8 +65,8 @@ nonrec theorem Invariant.comp_const (hκ : Invariant κ μ) : κ ∘ₖ const α
   rw [comp_const κ μ]; rw [hκ.def]
 
 中文:
-定理 Invariant.def
-  条件: (hκ : Invariant κ μ)
+定理 不变.def
+  条件: (hκ : 不变 κ μ)
   结论: μ.bind κ = μ
   证明: hκ
 
@@ -91,8 +91,8 @@ theorem Invariant.comp
   · rw [Invariant, ← Measure.comp_assoc, hη, hκ]
 
 中文:
-定理 Invariant.comp
-  条件: (hκ : Invariant κ μ) (hη : Invariant η μ)
+定理 不变.comp
+  条件: (hκ : 不变 κ μ) (hη : 不变 η μ)
   证明: by
   rcases isEmpty_or_nonempty α with _ | hα
   · exact Subsingleton.elim _ _
@@ -119,7 +119,7 @@ definition IsReversible
 
 中文:
 定义 IsReversible
-  签名: (κ : Kernel α α) (π : Measure α)
+  签名: (κ : 核 α α) (π : 测度 α)
   定义体: forall ⦃A B⦄, MeasurableSet A -> MeasurableSet B ->
     ∫⁻ x in A, κ x B ∂π = ∫⁻ x in B, κ x A ∂π
 

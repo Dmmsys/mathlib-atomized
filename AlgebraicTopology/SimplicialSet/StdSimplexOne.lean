@@ -40,7 +40,7 @@ definition objMk₁
 
 中文:
 定义 objMk₁
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: objMk
     { toFun j := if j.castSucc < i then 0 else 1
       monotone' j₁ j₂ h := by
@@ -66,7 +66,7 @@ lemma objMk₁_apply
 
 中文:
 引理 objMk₁_apply
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1))
   证明: rfl
 -/
 lemma objMk₁_apply {n : Nat} (i : Fin (n + 2)) (j : Fin (n + 1)) :
@@ -82,7 +82,7 @@ lemma objMk₁_apply_eq_zero_iff
 
 中文:
 引理 objMk₁_apply_eq_zero_iff
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1))
   证明: SimplexCategory.toMk₁_apply_eq_zero_iff ..
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.toMk
@@ -101,7 +101,7 @@ lemma objMk₁_of_castSucc_lt
 
 中文:
 引理 objMk₁_of_castSucc_lt
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : j.castSucc < i)
   证明: SimplexCategory.toMk₁_of_castSucc_lt _ _ h
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.toMk
@@ -120,7 +120,7 @@ lemma objMk₁_apply_eq_one_iff
 
 中文:
 引理 objMk₁_apply_eq_one_iff
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1))
   证明: SimplexCategory.toMk₁_apply_eq_one_iff ..
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.toMk
@@ -139,7 +139,7 @@ lemma objMk₁_of_le_castSucc
 
 中文:
 引理 objMk₁_of_le_castSucc
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : i <= j.castSucc)
   证明: SimplexCategory.toMk₁_of_le_castSucc _ _ h
 
 Depends on / 依赖: SimplexCategory, SimplexCategory.toMk
@@ -160,7 +160,7 @@ lemma δ_objMk₁_of_le
 
 中文:
 引理 δ_objMk₁_of_le
-  条件: {n : 自然数} (i : Fin (n + 3)) (j : Fin (n + 2)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 3)) (j : 有限集 (n + 2)) (h : i <= j.castSucc)
   证明: by
   ext k : 1
   exact ConcreteCategory.congr_hom (SimplexCategory.δ_comp_toMk₁_of_le _ _ h) k
@@ -185,7 +185,7 @@ lemma δ_objMk₁_of_lt
 
 中文:
 引理 δ_objMk₁_of_lt
-  条件: {n : 自然数} (i : Fin (n + 3)) (j : Fin (n + 2)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 3)) (j : 有限集 (n + 2)) (h : j.castSucc < i)
   证明: by
   ext k : 1
   exact ConcreteCategory.congr_hom (SimplexCategory.δ_comp_toMk₁_of_lt _ _ h) k
@@ -209,7 +209,7 @@ lemma σ_objMk₁_of_le
 
 中文:
 引理 σ_objMk₁_of_le
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : i <= j.castSucc)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : i <= j.castSucc)
   证明: by
   ext k : 1
   exact ConcreteCategory.congr_hom (SimplexCategory.σ_comp_toMk₁_of_le _ _ h) k
@@ -233,7 +233,7 @@ lemma σ_objMk₁_of_lt
 
 中文:
 引理 σ_objMk₁_of_lt
-  条件: {n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (h : j.castSucc < i)
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (h : j.castSucc < i)
   证明: by
   ext k : 1
   exact ConcreteCategory.congr_hom (SimplexCategory.σ_comp_toMk₁_of_lt _ _ h) k
@@ -257,7 +257,7 @@ lemma objMk₁_bijective
 中文:
 引理 objMk₁_bijective
   条件: {n : 自然数}
-  结论: Function.Bijective (objMk₁.{u} (n := n))
+  结论: 函数.双射 (objMk₁.{u} (n := n))
   证明: ((SimplexCategory.toMk₁Equiv (n := n)).trans objEquiv.symm).bijective
 -/
 lemma objMk₁_bijective {n : Nat} : Function.Bijective (objMk₁.{u} (n := n)) :=
@@ -275,7 +275,7 @@ lemma objMk₁_injective
 中文:
 引理 objMk₁_injective
   条件: {n : 自然数}
-  结论: Function.Injective (objMk₁.{u} (n := n))
+  结论: 函数.单射 (objMk₁.{u} (n := n))
   证明: objMk₁_bijective.injective
 -/
 lemma objMk₁_injective {n : Nat} : Function.Injective (objMk₁.{u} (n := n)) :=
@@ -293,7 +293,7 @@ lemma objMk₁_surjective
 中文:
 引理 objMk₁_surjective
   条件: {n : 自然数}
-  结论: Function.Surjective (objMk₁.{u} (n := n))
+  结论: 函数.满射 (objMk₁.{u} (n := n))
   证明: objMk₁_bijective.surjective
 -/
 lemma objMk₁_surjective {n : Nat} : Function.Surjective (objMk₁.{u} (n := n)) :=

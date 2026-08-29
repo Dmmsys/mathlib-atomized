@@ -145,7 +145,7 @@ theorem tendsto_closedBall_filterAt
 
 中文:
 定理 tendsto_closedBall_filterAt
-  结论: {K : 实数} {x : α} {ι : 类型} {l : Filter ι} (w : ι -> α)
+  结论: {K : 实数} {x : α} {ι : 类型} {l : 滤子 ι} (w : ι -> α)
   证明: by
   refine (vitaliFamily μ K).tendsto_filterAt_iff.mpr ⟨?_, fun ε hε => ?_⟩
   · filter_upwards [xmem, δlim self_mem_nhdsWithin] with j hj h'j
@@ -199,7 +199,7 @@ theorem ae_tendsto_measure_inter_div
 
 中文:
 定理 ae_tendsto_measure_inter_div
-  条件: (S : Set α) (K : 实数)
+  条件: (S : 集合 α) (K : 实数)
   结论: 对任意ᵐ x ∂μ.restrict S,
   证明: by
   filter_upwards [(vitaliFamily μ K).ae_tendsto_measure_inter_div S] with x hx ι l w δ δlim
@@ -254,7 +254,7 @@ theorem ae_tendsto_average
 
 中文:
 定理 ae_tendsto_average
-  结论: [NormedSpace 实数 E] [CompleteSpace E]
+  结论: [赋范空间 实数 E] [完备空间 E]
   证明: by
   filter_upwards [(vitaliFamily μ K).ae_tendsto_average hf] with x hx ι l w δ δlim xmem using
     hx.comp (tendsto_closedBall_filterAt μ _ _ δlim xmem)

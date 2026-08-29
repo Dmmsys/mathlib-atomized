@@ -65,7 +65,7 @@ class AddMonObj
     - add_assoc((X)) : (add ▷ X) ≫ add = (α_ X X X).hom ≫ (X ◁ add) ≫ add  [default: by cat_disch]
 
 中文:
-类 AddMonObj
+类 加法MonObj
   参数: (X : C)
   公理与运算 (5 个):
     - zero : 𝟙_ C ⟶ X
@@ -510,7 +510,7 @@ class _root_.CategoryTheory.IsAddMonHom
     - add_hom((f)) : σ ≫ f = (f otimesₘ f) ≫ σ  [default: by cat_disch]
 
 中文:
-类 _root_.CategoryTheory.IsAddMonHom
+类 _root_.范畴论.是加法幺半群态射
   公理与运算 (2 个):
     - zero_hom((f)) : ζ ≫ f = ζ  [默认: by cat_disch]
     - add_hom((f)) : σ ≫ f = (f otimesₘ f) ≫ σ  [默认: by cat_disch]
@@ -535,7 +535,7 @@ class IsMonHom
     - mul_hom((f)) : μ ≫ f = (f otimesₘ f) ≫ μ  [default: by cat_disch]
 
 中文:
-类 IsMonHom
+类 是幺半群态射
   参数: (f : M ⟶ N)
   公理与运算 (2 个):
     - one_hom((f)) : η ≫ f = η  [默认: by cat_disch]
@@ -560,7 +560,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (𝟙 M)
+  签名: 是幺半群态射 (𝟙 M)
 -/
 instance : IsMonHom (𝟙 M) where
 
@@ -573,7 +573,7 @@ instance instIsAddMonHomComp
 
 中文:
 实例 instIsAddMonHomComp
-  签名: {M N O : C} [AddMonObj M] [AddMonObj N] [AddMonObj O]
+  签名: {M N O : C} [加法MonObj M] [加法MonObj N] [加法MonObj O]
 -/
 instance instIsAddMonHomComp {M N O : C} [AddMonObj M] [AddMonObj N] [AddMonObj O]
     (f : M ⟶ N) (g : N ⟶ O)
@@ -589,7 +589,7 @@ instance instIsMonHomComp
 
 中文:
 实例 instIsMonHomComp
-  签名: (f : M ⟶ N) (g : N ⟶ O) [IsMonHom f] [IsMonHom g]
+  签名: (f : M ⟶ N) (g : N ⟶ O) [是幺半群态射 f] [是幺半群态射 g]
 -/
 instance instIsMonHomComp (f : M ⟶ N) (g : N ⟶ O) [IsMonHom f] [IsMonHom g] : IsMonHom (f ≫ g) where
 
@@ -639,11 +639,11 @@ structure AddMon
     - [addMon : AddMonObj X]
 
 中文:
-结构 AddMon
+结构 加法幺半群
   参数: where
   公理与运算 (2 个):
     - X : C
-    - [addMon : AddMonObj X]
+    - [addMon : 加法MonObj X]
 -/
 structure AddMon where
   /-- The underlying object in the ambient monoidal category -/
@@ -667,7 +667,7 @@ structure Mon
     - [mon : MonObj X]
 
 中文:
-结构 Mon
+结构 幺半群
   参数: where
   公理与运算 (2 个):
     - X : C
@@ -699,7 +699,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : Mon C
+  签名: : 幺半群 C
   定义体: mk (𝟙_ C)
 
 @[to_additive]
@@ -717,7 +717,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Mon C)
+  签名: 可居 (幺半群 C)
   定义体: ⟨trivial C⟩
 -/
 instance : Inhabited (Mon C) :=
@@ -1210,7 +1210,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (𝟙 X)
+  签名: 是幺半群态射 (𝟙 X)
 -/
 instance : IsMonHom (𝟙 X) where
 
@@ -1237,7 +1237,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (α_ X Y Z).hom
+  签名: 是幺半群态射 (α_ X Y Z).hom
   定义体: ⟨one_associator, mul_associator⟩
 
 @[to_additive]
@@ -1260,7 +1260,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (fun_ X).hom
+  签名: 是幺半群态射 (fun_ X).hom
   定义体: ⟨one_leftUnitor, mul_leftUnitor⟩
 
 @[to_additive]
@@ -1283,7 +1283,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (ρ_ X).hom
+  签名: 是幺半群态射 (ρ_ X).hom
   定义体: ⟨one_rightUnitor, mul_rightUnitor⟩
 
 @[to_additive]
@@ -1341,11 +1341,11 @@ structure Hom
     - [isAddMonHom_hom : IsAddMonHom hom]
 
 中文:
-结构 Hom
-  参数: (M N : AddMon C)
+结构 态射
+  参数: (M N : 加法幺半群 C)
   公理与运算 (2 个):
     - hom : M.X ⟶ N.X
-    - [isAddMonHom_hom : IsAddMonHom hom]
+    - [isAddMonHom_hom : 是加法幺半群态射 hom]
 -/
 structure Hom (M N : AddMon C) where
   /-- The underlying morphism -/
@@ -1371,11 +1371,11 @@ structure Hom
     - [isMonHom_hom : IsMonHom hom]
 
 中文:
-结构 Hom
-  参数: (M N : Mon C)
+结构 态射
+  参数: (M N : 幺半群 C)
   公理与运算 (2 个):
     - hom : M.X ⟶ N.X
-    - [isMonHom_hom : IsMonHom hom]
+    - [isMonHom_hom : 是幺半群态射 hom]
 -/
 structure Hom (M N : Mon C) where
   /-- The underlying morphism -/
@@ -1399,8 +1399,8 @@ abbreviation Hom.mk'
   .mk f
 
 中文:
-缩写 Hom.mk'
-  签名: {M N : Mon C} (f : M.X ⟶ N.X)
+缩写 态射.mk'
+  签名: {M N : 幺半群 C} (f : M.X ⟶ N.X)
   定义体: have : IsMonHom f := ⟨one_f, mul_f⟩
   .mk f
 -/
@@ -1425,7 +1425,7 @@ definition id
 
 中文:
 定义 id
-  签名: (M : Mon C)
+  签名: (M : 幺半群 C)
   定义体: ⟨𝟙 M.X⟩
 
 @[to_additive]
@@ -1443,7 +1443,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: (M : Mon C)
+  签名: (M : 幺半群 C)
   定义体: ⟨id M⟩
 -/
 instance homInhabited (M : Mon C) : Inhabited (Hom M M) :=
@@ -1464,7 +1464,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N O : Mon C} (f : Hom M N) (g : Hom N O)
+  签名: {M N O : 幺半群 C} (f : 态射 M N) (g : 态射 N O)
   定义体: f.hom ≫ g.hom
 
 @[to_additive]
@@ -1487,7 +1487,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Mon C)
+  签名: 范畴 (幺半群 C)
   定义体: Hom M N
   id := id
   comp f g := comp f g
@@ -1514,7 +1514,7 @@ definition ofHom
 
 中文:
 定义 ofHom
-  签名: {A B : C} [MonObj A] [MonObj B] (f : A ⟶ B) [IsMonHom f]
+  签名: {A B : C} [MonObj A] [MonObj B] (f : A ⟶ B) [是幺半群态射 f]
   定义体: .mk f
 
 @[to_additive]
@@ -1538,8 +1538,8 @@ lemma Hom.ext'
 @[to_additive]
 
 中文:
-引理 Hom.ext'
-  条件: {M N : Mon C} {f g : M ⟶ N} (w : f.hom = g.hom)
+引理 态射.ext'
+  条件: {M N : 幺半群 C} {f g : M ⟶ N} (w : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext w
 
@@ -1562,8 +1562,8 @@ lemma hom_injective
 
 中文:
 引理 hom_injective
-  条件: {M N : Mon C}
-  结论: Injective (Hom.hom : (M ⟶ N) -> (M.X ⟶ N.X))
+  条件: {M N : 幺半群 C}
+  结论: 单射 (态射.hom : (M ⟶ N) -> (M.X ⟶ N.X))
   证明: fun _ _ => Hom.ext
 
 @[to_additive (attr := simp)]
@@ -1587,8 +1587,8 @@ theorem id_hom'
 
 中文:
 定理 id_hom'
-  条件: (M : Mon C)
-  结论: (𝟙 M : Hom M M).hom = 𝟙 M.X
+  条件: (M : 幺半群 C)
+  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.X
   证明: rfl
 
 @[to_additive (attr := simp, reassoc)]
@@ -1607,7 +1607,7 @@ theorem comp_hom'
 
 中文:
 定理 comp_hom'
-  条件: {M N K : Mon C} (f : M ⟶ N) (g : N ⟶ K)
+  条件: {M N K : 幺半群 C} (f : M ⟶ N) (g : N ⟶ K)
   证明: rfl
 -/
 theorem comp_hom' {M N K : Mon C} (f : M ⟶ N) (g : N ⟶ K) :
@@ -1632,7 +1632,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Mon C ⥤ C where
+  签名: : 幺半群 C ⥤ C where
   定义体: A.X
   map f := f.hom
 -/
@@ -1652,7 +1652,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget C).Faithful where
+  签名: : (forget C).忠实 where
 -/
 instance forget_faithful : (forget C).Faithful where
 
@@ -1675,7 +1675,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).ReflectsIsomorphisms
+  签名: (forget C).反映同构
   定义体: ⟨⟨.mk' (inv f.hom), by cat_disch⟩⟩
 
 @[to_additive]
@@ -1705,7 +1705,7 @@ definition mkIso'
 
 中文:
 定义 mkIso'
-  签名: {M N : C} [MonObj M] [MonObj N] (e : M ≅ N) [IsMonHom e.hom]
+  签名: {M N : C} [MonObj M] [MonObj N] (e : M ≅ N) [是幺半群态射 e.hom]
   定义体: Hom.mk e.hom
   inv := Hom.mk e.inv
 
@@ -1732,7 +1732,7 @@ abbreviation mkIso
 
 中文:
 缩写 mkIso
-  签名: {M N : Mon C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
+  签名: {M N : 幺半群 C} (e : M.X ≅ N.X) (one_f : η[M.X] ≫ e.hom = η[N.X] := by cat_disch)
   定义体: have : IsMonHom e.hom := ⟨one_f, mul_f⟩
   mkIso' e
 
@@ -1762,7 +1762,7 @@ instance uniqueHomFromTrivial
 
 中文:
 实例 uniqueHomFromTrivial
-  签名: (A : Mon C)
+  签名: (A : 幺半群 C)
   定义体: η[A.X]
   default.isMonHom_hom.mul_hom := by simp [unitors_equal]
   uniq f := by
@@ -1793,7 +1793,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInitial (Mon C)
+  签名: HasInitial (幺半群 C)
   定义体: hasInitial_of_unique (Mon.trivial C)
 
 Depends on / 依赖: Mon.trivial, hasInitial_of_unique
@@ -1822,7 +1822,7 @@ rightUnitor M := mkIso' rightUnitor
 
 中文:
 实例 monMonoidalStruct
-  签名: : MonoidalCategoryStruct (Mon C) where
+  签名: : 幺半群范畴结构 (幺半群 C) where
   定义体: ⟨M.X otimes N.X⟩
   tensorHom f g := Hom.mk (f.hom otimesₘ g.hom)
   whiskerRight f Y := Hom.mk (f.hom ▷ Y.X)
@@ -1857,7 +1857,7 @@ lemma tensorUnit_X
 
 中文:
 引理 tensorUnit_X
-  结论: (𝟙_ (Mon C)).X = 𝟙_ C
+  结论: (𝟙_ (幺半群 C)).X = 𝟙_ C
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1877,7 +1877,7 @@ lemma tensorUnit_one
 
 中文:
 引理 tensorUnit_one
-  结论: η[(𝟙_ (Mon C)).X] = 𝟙 (𝟙_ C)
+  结论: η[(𝟙_ (幺半群 C)).X] = 𝟙 (𝟙_ C)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1897,7 +1897,7 @@ lemma tensorUnit_mul
 
 中文:
 引理 tensorUnit_mul
-  结论: μ[(𝟙_ (Mon C)).X] = (fun_ (𝟙_ C)).hom
+  结论: μ[(𝟙_ (幺半群 C)).X] = (fun_ (𝟙_ C)).hom
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1918,7 +1918,7 @@ lemma tensorObj_one
 
 中文:
 引理 tensorObj_one
-  条件: (X Y : Mon C)
+  条件: (X Y : 幺半群 C)
   结论: η[(X otimes Y).X] = (fun_ (𝟙_ C)).inv ≫ (η[X.X] otimesₘ η[Y.X])
   证明: rfl
 
@@ -1939,7 +1939,7 @@ lemma tensorObj_mul
 
 中文:
 引理 tensorObj_mul
-  条件: (X Y : Mon C)
+  条件: (X Y : 幺半群 C)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1961,7 +1961,7 @@ lemma whiskerLeft_hom
 
 中文:
 引理 whiskerLeft_hom
-  条件: {X Y : Mon C} (f : X ⟶ Y) (Z : Mon C)
+  条件: {X Y : 幺半群 C} (f : X ⟶ Y) (Z : 幺半群 C)
   结论: (f ▷ Z).hom = f.hom ▷ Z.X
   证明: rfl
 
@@ -1983,7 +1983,7 @@ lemma whiskerRight_hom
 
 中文:
 引理 whiskerRight_hom
-  条件: (X : Mon C) {Y Z : Mon C} (f : Y ⟶ Z)
+  条件: (X : 幺半群 C) {Y Z : 幺半群 C} (f : Y ⟶ Z)
   结论: (X ◁ f).hom = X.X ◁ f.hom
   证明: rfl
 
@@ -2005,7 +2005,7 @@ lemma leftUnitor_hom_hom
 
 中文:
 引理 leftUnitor_hom_hom
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: (fun_ X).hom.hom = (fun_ X.X).hom
   证明: rfl
 
@@ -2027,7 +2027,7 @@ lemma leftUnitor_inv_hom
 
 中文:
 引理 leftUnitor_inv_hom
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: (fun_ X).inv.hom = (fun_ X.X).inv
   证明: rfl
 
@@ -2049,7 +2049,7 @@ lemma rightUnitor_hom_hom
 
 中文:
 引理 rightUnitor_hom_hom
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: (ρ_ X).hom.hom = (ρ_ X.X).hom
   证明: rfl
 
@@ -2071,7 +2071,7 @@ lemma rightUnitor_inv_hom
 
 中文:
 引理 rightUnitor_inv_hom
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: (ρ_ X).inv.hom = (ρ_ X.X).inv
   证明: rfl
 
@@ -2093,7 +2093,7 @@ lemma associator_hom_hom
 
 中文:
 引理 associator_hom_hom
-  条件: (X Y Z : Mon C)
+  条件: (X Y Z : 幺半群 C)
   结论: (α_ X Y Z).hom.hom = (α_ X.X Y.X Z.X).hom
   证明: rfl
 
@@ -2115,7 +2115,7 @@ lemma associator_inv_hom
 
 中文:
 引理 associator_inv_hom
-  条件: (X Y Z : Mon C)
+  条件: (X Y Z : 幺半群 C)
   结论: (α_ X Y Z).inv.hom = (α_ X.X Y.X Z.X).inv
   证明: rfl
 
@@ -2137,7 +2137,7 @@ lemma tensor_one
 
 中文:
 引理 tensor_one
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: η[(M otimes N).X] = (fun_ (𝟙_ C)).inv ≫ (η[M.X] otimesₘ η[N.X])
   证明: rfl
 
@@ -2159,7 +2159,7 @@ lemma tensor_mul
 
 中文:
 引理 tensor_mul
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: μ[(M otimes N).X] = tensorμ M.X N.X M.X N.X ≫ (μ[M.X] otimesₘ μ[N.X])
   证明: rfl
 
@@ -2178,7 +2178,7 @@ instance monMonoidal
 
 中文:
 实例 monMonoidal
-  签名: : MonoidalCategory (Mon C) where
+  签名: : 幺半群范畴 (幺半群 C) where
   定义体: by intros; ext; simp [tensorHom_def]
 
 Depends on / 依赖: intros, tensorHom_def
@@ -2211,7 +2211,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Monoidal
+  签名: (forget C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso _ _ := Iso.refl _ }
@@ -2279,7 +2279,7 @@ lemma forget_μ
 
 中文:
 引理 forget_μ
-  条件: (X Y : Mon C)
+  条件: (X Y : 幺半群 C)
   结论: «μ» (forget C) X Y = 𝟙 (X.X otimes Y.X)
   证明: rfl
 
@@ -2299,7 +2299,7 @@ lemma forget_δ
 
 中文:
 引理 forget_δ
-  条件: (X Y : Mon C)
+  条件: (X Y : 幺半群 C)
   结论: δ (forget C) X Y = 𝟙 (X.X otimes Y.X)
   证明: rfl
 -/
@@ -2394,7 +2394,7 @@ instance :
 
 中文:
 实例 :
-  签名: SymmetricCategory (Mon C)
+  签名: 对称范畴 (幺半群 C)
   定义体: mkIso' (β_ X.X Y.X)
 
 @[to_additive (attr := simp)]
@@ -2416,7 +2416,7 @@ lemma braiding_hom_hom
 
 中文:
 引理 braiding_hom_hom
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: (β_ M N).hom.hom = (β_ M.X N.X).hom
   证明: rfl
 
@@ -2436,7 +2436,7 @@ lemma braiding_inv_hom
 
 中文:
 引理 braiding_inv_hom
-  条件: (M N : Mon C)
+  条件: (M N : 幺半群 C)
   结论: (β_ M N).inv.hom = (β_ M.X N.X).inv
   证明: rfl
 -/
@@ -2540,7 +2540,7 @@ lemma obj.μ_def
 
 中文:
 引理 obj.μ_def
-  结论: μ = LaxMonoidal.μ F X X ≫ F.map μ
+  结论: μ = 松弛幺半群.μ F X X ≫ F.map μ
   证明: rfl
 
 @[to_additive]
@@ -2559,7 +2559,7 @@ instance map.instIsMonHom
 
 中文:
 实例 map.instIsMonHom
-  签名: : IsMonHom (F.map f) where
+  签名: : 是幺半群态射 (F.map f) where
   定义体: by simp [← map_comp]
   mul_hom := by simp [← map_comp]
 
@@ -2595,7 +2595,7 @@ definition mapMon
 
 中文:
 定义 mapMon
-  签名: : Mon C ⥤ Mon D where
+  签名: : 幺半群 C ⥤ 幺半群 D where
   定义体: .mk (F.obj A.X)
   map f := .mk (F.map f.hom)
 
@@ -2621,7 +2621,7 @@ theorem id_mapMon_one
 
 中文:
 定理 id_mapMon_one
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: η[((𝟭 C).mapMon.obj X).X] = 𝟙 _ ≫ η[X.X]
   证明: rfl
 
@@ -2643,7 +2643,7 @@ theorem id_mapMon_mul
 
 中文:
 定理 id_mapMon_mul
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   结论: μ[((𝟭 C).mapMon.obj X).X] = 𝟙 _ ≫ μ[X.X]
   证明: rfl
 
@@ -2664,7 +2664,7 @@ theorem comp_mapMon_one
 
 中文:
 定理 comp_mapMon_one
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2684,7 +2684,7 @@ theorem comp_mapMon_mul
 
 中文:
 定理 comp_mapMon_mul
-  条件: (X : Mon C)
+  条件: (X : 幺半群 C)
   证明: rfl
 -/
 theorem comp_mapMon_mul (X : Mon C) :
@@ -2705,7 +2705,7 @@ definition mapMonIdIso
 
 中文:
 定义 mapMonIdIso
-  签名: : mapMon (𝟭 C) ≅ 𝟭 (Mon C)
+  签名: : mapMon (𝟭 C) ≅ 𝟭 (幺半群 C)
   定义体: NatIso.ofComponents fun X => Mon.mkIso (.refl _)
 
 Depends on / 依赖: Mon.mkIso, NatIso, NatIso.ofComponents, ofComponents
@@ -2749,8 +2749,8 @@ instance Faithful.mapMon
   body: Mon.Hom.ext map_injective congr(($hfg).hom)
 
 中文:
-实例 Faithful.mapMon
-  签名: [F.Faithful]
+实例 忠实.mapMon
+  签名: [F.忠实]
   定义体: Mon.Hom.ext map_injective congr(($hfg).hom)
 -/
 protected instance Faithful.mapMon [F.Faithful] : F.mapMon.Faithful where
@@ -2769,8 +2769,8 @@ definition mapMonNatTrans
   body: .mk' (f.app _)
 
 中文:
-定义 mapMonNatTrans
-  签名: (f : F ⟶ F') [自然数Trans.IsMonoidal f]
+定义 mapMon自然数Trans
+  签名: (f : F ⟶ F') [自然变换.是幺半群 f]
   定义体: .mk' (f.app _)
 
 Depends on / 依赖: f.app
@@ -2792,8 +2792,8 @@ definition mapMonNatIso
   body: NatIso.ofComponents fun X => Mon.mkIso (e.app _)
 
 中文:
-定义 mapMonNatIso
-  签名: (e : F ≅ F') [自然数Trans.IsMonoidal e.hom]
+定义 mapMon自然数Iso
+  签名: (e : F ≅ F') [自然变换.是幺半群 e.hom]
   定义体: NatIso.ofComponents fun X => Mon.mkIso (e.app _)
 
 Depends on / 依赖: Mon.mkIso, NatIso, NatIso.ofComponents, e.app, ofComponents
@@ -2812,7 +2812,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMonHom (ε F)
+  签名: 是幺半群态射 (ε F)
 -/
 instance : IsMonHom (ε F) where
 
@@ -2838,8 +2838,8 @@ mul_one := hF.map_injective by simp [← δ_natural_right_assoc]
 mul_assoc := hF.map_injective by simp [← δ_natural_left_assoc, ← δ_natural_right
 
 中文:
-缩写 FullyFaithful.monObj
-  签名: (hF : F.FullyFaithful) (X : C) [MonObj (F.obj X)]
+缩写 满忠实.monObj
+  签名: (hF : F.满忠实) (X : C) [MonObj (F.obj X)]
   定义体: hF.preimage OplaxMonoidal.η F ≫ η[F.obj X]
 mul := hF.preimage OplaxMonoidal.δ F X X ≫ μ[F.obj X]
 one_mul := hF.map_injective by simp [← δ_natural_left_assoc]
@@ -2880,8 +2880,8 @@ F.map_injective by simpa [← hg, cancel_epi] using IsMonHom.mul_hom f.hom },
       Mon.Hom.ext hg⟩
 
 中文:
-实例 Full.mapMon
-  签名: [F.Full] [F.Faithful]
+实例 满.mapMon
+  签名: [F.满] [F.忠实]
   定义体: let ⟨g, hg⟩ := F.map_surjective f.hom
     ⟨{
       hom := g
@@ -2915,8 +2915,8 @@ instance FullyFaithful.isAddMonHom_preimage
 @[to_additive existing]
 
 中文:
-实例 FullyFaithful.isAddMonHom_preimage
-  签名: (hF : F.FullyFaithful) {X Y : C}
+实例 满忠实.isAddMonHom_preimage
+  签名: (hF : F.满忠实) {X Y : C}
   定义体: hF.map_injective (by simp [← cancel_epi (ε F), ← obj.ζ_def_assoc, ← obj.ζ_def])
   add_hom := hF.map_injective (by
     simp [← obj.σ_def_assoc, ← obj.σ_def, ← μ_natural_assoc, ← cancel_epi (LaxMonoidal.μ F ..)])
@@ -2944,8 +2944,8 @@ mul_hom := hF.map_injective by
     simp [← obj.μ_def_assoc, ← obj.μ_def, ← μ_natural_assoc, ← cancel_epi (LaxMonoidal.μ F ..)]
 
 中文:
-实例 FullyFaithful.isMonHom_preimage
-  签名: (hF : F.FullyFaithful) {X Y : C}
+实例 满忠实.isMonHom_preimage
+  签名: (hF : F.满忠实) {X Y : C}
   定义体: hF.map_injective by simp [← obj.η_def_assoc, ← obj.η_def, ← cancel_epi (ε F)]
 mul_hom := hF.map_injective by
     simp [← obj.μ_def_assoc, ← obj.μ_def, ← μ_natural_assoc, ← cancel_epi (LaxMonoidal.μ F ..)]
@@ -2974,8 +2974,8 @@ definition FullyFaithful.mapMon
   body: .mk' hF.preimage f.hom
 
 中文:
-定义 FullyFaithful.mapMon
-  签名: (hF : F.FullyFaithful)
+定义 满忠实.mapMon
+  签名: (hF : F.满忠实)
   定义体: .mk' hF.preimage f.hom
 -/
 protected def FullyFaithful.mapMon (hF : F.FullyFaithful) : F.mapMon.FullyFaithful where
@@ -3004,7 +3004,7 @@ lemma essImage_mapMon
 
 中文:
 引理 essImage_mapMon
-  条件: [F.Full] [F.Faithful] {M : Mon D}
+  条件: [F.满] [F.忠实] {M : 幺半群 D}
   证明: by rintro ⟨N, ⟨e⟩⟩; exact ⟨N.X, ⟨(Mon.forget _).mapIso e⟩⟩
   mpr := by
     rintro ⟨N, ⟨e⟩⟩
@@ -3044,7 +3044,7 @@ instance [F.LaxBraided]
   body: by simp [← Functor.map_comp, leftUnitor_inv_comp_tensorHom_assoc]
 
 中文:
-实例 [F.LaxBraided]
+实例 [F.松弛辫]
   签名: (M N : C) [MonObj M] [MonObj N]
   定义体: by simp [← Functor.map_comp, leftUnitor_inv_comp_tensorHom_assoc]
 
@@ -3069,8 +3069,8 @@ instance [F.LaxBraided]
   «μ» M N := .mk («μ» F M.X N.X)
 
 中文:
-实例 [F.LaxBraided]
-  签名: : F.mapMon.LaxMonoidal where
+实例 [F.松弛辫]
+  签名: : F.mapMon.松弛幺半群 where
   定义体: .mk (ε F)
   «μ» M N := .mk («μ» F M.X N.X)
 -/
@@ -3097,8 +3097,8 @@ instance [F.Braided]
   }
 
 中文:
-实例 [F.Braided]
-  签名: : F.mapMon.Monoidal
+实例 [F.辫]
+  签名: : F.mapMon.幺半群
   定义体: CoreMonoidal.toMonoidal {
     εIso := Mon.mkIso (Monoidal.εIso F)
 μIso M N := Mon.mkIso (Monoidal.μIso F M.X N.X) by simp [← Functor.map_comp]
@@ -3128,8 +3128,8 @@ instance [F.LaxBraided]
 @[to_additive]
 
 中文:
-实例 [F.LaxBraided]
-  签名: : F.mapMon.LaxBraided where
+实例 [F.松弛辫]
+  签名: : F.mapMon.松弛辫 where
   定义体: by ext; exact Functor.LaxBraided.braided ..
 
 @[to_additive]
@@ -3148,8 +3148,8 @@ instance [F.Braided]
   signature: : F.mapMon.Braided where
 
 中文:
-实例 [F.Braided]
-  签名: : F.mapMon.Braided where
+实例 [F.辫]
+  签名: : F.mapMon.辫 where
 -/
 instance [F.Braided] : F.mapMon.Braided where
 
@@ -3170,7 +3170,7 @@ definition mapMonFunctor
 
 中文:
 定义 mapMonFunctor
-  签名: : LaxMonoidalFunctor C D ⥤ Mon C ⥤ Mon D where
+  签名: : 松弛幺半群函子 C D ⥤ 幺半群 C ⥤ 幺半群 D where
   定义体: F.mapMon
   map α := { app A := .mk' (α.hom.app A.X) }
   map_comp _ _ := rfl
@@ -3237,7 +3237,7 @@ definition mapMon
 
 中文:
 定义 mapMon
-  签名: (e : C ≌ D) [e.functor.Monoidal] [e.inverse.Monoidal] [e.IsMonoidal]
+  签名: (e : C ≌ D) [e.functor.幺半群] [e.inverse.幺半群] [e.是幺半群]
   定义体: e.functor.mapMon
   inverse := e.inverse.mapMon
   unitIso := mapMonIdIso.symm ≪≫ mapMonNatIso e.unitIso ≪≫ mapMonCompIso
@@ -3273,7 +3273,7 @@ definition laxMonoidalToMon
 
 中文:
 定义 laxMonoidalToMon
-  签名: : LaxMonoidalFunctor (Discrete PUnit.{w + 1}) C ⥤ Mon C where
+  签名: : 松弛幺半群函子 (离散 命题单元.{w + 1}) C ⥤ 幺半群 C where
   定义体: (F.mapMon : Mon _ ⥤ Mon C).obj (trivial (Discrete PUnit))
   map α := ((Functor.mapMonFunctor (Discrete PUnit) C).map α).app _
 
@@ -3296,7 +3296,7 @@ definition monToLaxMonoidalObj
 
 中文:
 定义 monToLaxMonoidalObj
-  签名: (A : Mon C)
+  签名: (A : 幺半群 C)
   定义体: (Functor.const _).obj A.X
 
 Depends on / 依赖: Functor, Functor.const
@@ -3323,7 +3323,7 @@ lemma monToLaxMonoidalObj_ε
 
 中文:
 引理 monToLaxMonoidalObj_ε
-  条件: (A : Mon C)
+  条件: (A : 幺半群 C)
   证明: rfl
 
 @[to_additive (attr := simp) addMonToLaxMonoidalObj_μ]
@@ -3342,7 +3342,7 @@ lemma monToLaxMonoidalObj_μ
 
 中文:
 引理 monToLaxMonoidalObj_μ
-  条件: (A : Mon C) (X Y)
+  条件: (A : 幺半群 C) (X Y)
   证明: rfl
 -/
 lemma monToLaxMonoidalObj_μ (A : Mon C) (X Y) :
@@ -3368,7 +3368,7 @@ definition monToLaxMonoidal
 
 中文:
 定义 monToLaxMonoidal
-  签名: : Mon C ⥤ LaxMonoidalFunctor (Discrete PUnit.{w + 1}) C where
+  签名: : 幺半群 C ⥤ 松弛幺半群函子 (离散 命题单元.{w + 1}) C where
   定义体: LaxMonoidalFunctor.of (monToLaxMonoidalObj A)
   map f :=
     { hom := { app _ := f.hom }
@@ -3433,7 +3433,7 @@ definition counitIsoAux
 
 中文:
 定义 counitIsoAux
-  签名: (F : Mon C)
+  签名: (F : 幺半群 C)
   定义体: Iso.refl _
 
 @[to_additive (attr := simp) addMonToLaxMonoidal_laxMonoidalToAddMon_obj_zero]
@@ -3457,7 +3457,7 @@ theorem monToLaxMonoidal_laxMonoidalToMon_obj_one
 
 中文:
 定理 monToLaxMonoidal_laxMonoidalToMon_obj_one
-  条件: (F : Mon C)
+  条件: (F : 幺半群 C)
   证明: rfl
 
 @[to_additive (attr := simp) addMonToLaxMonoidal_laxMonoidalToAddMon_obj_add]
@@ -3477,7 +3477,7 @@ theorem monToLaxMonoidal_laxMonoidalToMon_obj_mul
 
 中文:
 定理 monToLaxMonoidal_laxMonoidalToMon_obj_mul
-  条件: (F : Mon C)
+  条件: (F : 幺半群 C)
   证明: rfl
 -/
 theorem monToLaxMonoidal_laxMonoidalToMon_obj_mul (F : Mon C) :
@@ -3496,7 +3496,7 @@ theorem isMonHom_counitIsoAux
 
 中文:
 定理 isMonHom_counitIsoAux
-  条件: (F : Mon C)
+  条件: (F : 幺半群 C)
 -/
 theorem isMonHom_counitIsoAux (F : Mon C) :
     IsMonHom (counitIsoAux C F).hom where
@@ -3518,7 +3518,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: : monToLaxMonoidal.{w} C ⋙ laxMonoidalToMon C ≅ 𝟭 (Mon C)
+  签名: : monToLaxMonoidal.{w} C ⋙ laxMonoidalToMon C ≅ 𝟭 (幺半群 C)
   定义体: NatIso.ofComponents fun F =>
     letI : IsMonHom (counitIsoAux.{w} C F).hom := isMonHom_counitIsoAux C F
     mkIso (counitIsoAux.{w} C F)
@@ -3559,7 +3559,7 @@ definition equivLaxMonoidalFunctorPUnit
 
 中文:
 定义 equivLaxMonoidalFunctorPUnit
-  签名: : LaxMonoidalFunctor (Discrete PUnit.{w + 1}) C ≌ Mon C where
+  签名: : 松弛幺半群函子 (离散 命题单元.{w + 1}) C ≌ 幺半群 C where
   定义体: laxMonoidalToMon C
   inverse := monToLaxMonoidal C
   unitIso := unitIso C
@@ -3590,8 +3590,8 @@ class IsCommAddMonObj
     - add_comm((X)) : (β_ X X).hom ≫ σ = σ  [default: by cat_disch]
 
 中文:
-类 IsCommAddMonObj
-  参数: (X : C) [AddMonObj X]
+类 是交换加法MonObj
+  参数: (X : C) [加法MonObj X]
   公理与运算 (1 个):
     - add_comm((X)) : (β_ X X).hom ≫ σ = σ  [默认: by cat_disch]
 
@@ -3612,7 +3612,7 @@ class IsCommMonObj
     - mul_comm((X)) : (β_ X X).hom ≫ μ = μ  [default: by cat_disch]
 
 中文:
-类 IsCommMonObj
+类 是交换MonObj
   参数: (X : C) [MonObj X]
   公理与运算 (1 个):
     - mul_comm((X)) : (β_ X X).hom ≫ μ = μ  [默认: by cat_disch]
@@ -3643,7 +3643,7 @@ lemma mul_comm'
 
 中文:
 引理 mul_comm'
-  条件: [IsCommMonObj M]
+  条件: [是交换MonObj M]
   结论: (β_ M M).inv ≫ μ = μ
   证明: by simp [← cancel_epi (β_ M M).hom]
 
@@ -3664,7 +3664,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCommMonObj (𝟙_ C)
+  签名: 是交换MonObj (𝟙_ C)
   定义体: by dsimp; rw [braiding_leftUnitor, unitors_equal]
 
 Depends on / 依赖: braiding_leftUnitor, unitors_equal
@@ -3686,7 +3686,7 @@ lemma MonObj.mul_mul_mul_comm
 
 中文:
 引理 MonObj.mul_mul_mul_comm
-  条件: [IsCommMonObj M]
+  条件: [是交换MonObj M]
   证明: by simp only [mon_tauto]
 
 Depends on / 依赖: mon_tauto
@@ -3706,7 +3706,7 @@ lemma MonObj.mul_mul_mul_comm'
 
 中文:
 引理 MonObj.mul_mul_mul_comm'
-  条件: [IsCommMonObj M]
+  条件: [是交换MonObj M]
   证明: by simp only [mon_tauto]
 
 Depends on / 依赖: mon_tauto
@@ -3733,8 +3733,8 @@ instance [IsCommMonObj
       ← MonoidalCategor
 
 中文:
-实例 [IsCommMonObj
-  签名: M] [IsCommMonObj N] : IsCommMonObj (M otimes N) where
+实例 [是交换MonObj
+  签名: M] [是交换MonObj N] : 是交换MonObj (M otimes N) where
   定义体: by
     simp [← IsIso.inv_comp_eq, tensorμ, ← associator_inv_naturality_left_assoc,
       ← associator_naturality_right_assoc, SymmetricCategory.braiding_swap_eq_inv_braiding M N,

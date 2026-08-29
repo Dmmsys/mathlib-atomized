@@ -50,7 +50,7 @@ definition isLimitOfEval
 
 中文:
 定义 isLimitOfEval
-  签名: (s : Cone F)
+  签名: (s : 锥 F)
   定义体: { f := fun i => (hs i).lift ((eval C c i).mapCone t)
       comm' := fun i i' _ => by
         apply IsLimit.hom_ext (hs i')
@@ -107,7 +107,7 @@ definition coneOfHasLimitEval
 
 中文:
 定义 coneOfHasLimitEval
-  签名: : Cone F where
+  签名: : 锥 F where
   定义体: { X := fun n => limit (F ⋙ eval C c n)
       d := fun n m => limMap { app := fun j => (F.obj j).d n m }
       shape := fun {n m} h => by
@@ -147,7 +147,7 @@ definition isLimitConeOfHasLimitEval
 
 中文:
 定义 isLimitConeOfHasLimitEval
-  签名: : IsLimit (coneOfHasLimitEval F)
+  签名: : 是极限 (coneOfHasLimitEval F)
   定义体: isLimitOfEval _ _ (fun _ => limit.isLimit _)
 
 Depends on / 依赖: isLimit, isLimitOfEval, limit.isLimit
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimit F
+  签名: 有极限 F
   定义体: ⟨⟨⟨_, isLimitConeOfHasLimitEval F⟩⟩⟩
 
 Depends on / 依赖: isLimitConeOfHasLimitEval
@@ -186,8 +186,8 @@ instance [HasLimitsOfShape
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasLimitsOfShape
-  签名: J C] : HasLimitsOfShape J (HomologicalComplex C c)
+实例 [有形状极限
+  签名: J C] : 有形状极限 J (同调复形 C c)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasLimitsOfShape J C] : HasLimitsOfShape J (HomologicalComplex C c) := ⟨inferInstance⟩
@@ -201,7 +201,7 @@ instance [HasLimitsOfShape
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: J C] (n
   定义体: ⟨inferInstance⟩
 -/
@@ -217,8 +217,8 @@ instance [HasFiniteLimits
   body: ⟨fun _ _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteLimits
-  签名: C] : HasFiniteLimits (HomologicalComplex C c)
+实例 [有有限极限
+  签名: C] : 有有限极限 (同调复形 C c)
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance [HasFiniteLimits C] : HasFiniteLimits (HomologicalComplex C c) :=
@@ -233,7 +233,7 @@ instance [HasFiniteLimits
   body: ⟨fun _ _ _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteLimits
+实例 [有有限极限
   签名: C] (n
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
@@ -251,7 +251,7 @@ instance [HasFiniteLimits
   infer_instance
 
 中文:
-实例 [HasFiniteLimits
+实例 [有有限极限
   签名: C] {K L
   定义体: by
   change Mono ((HomologicalComplex.eval C c n).map φ)
@@ -286,7 +286,7 @@ definition isColimitOfEval
 
 中文:
 定义 isColimitOfEval
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
   定义体: { f := fun i => (hs i).desc ((eval C c i).mapCocone t)
       comm' := fun i i' _ => by
         apply IsColimit.hom_ext (hs i)
@@ -344,7 +344,7 @@ definition coconeOfHasColimitEval
 
 中文:
 定义 coconeOfHasColimitEval
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: { X := fun n => colimit (F ⋙ eval C c n)
       d := fun n m => colimMap { app := fun j => (F.obj j).d n m }
       shape := fun {n m} h => by
@@ -384,7 +384,7 @@ definition isColimitCoconeOfHasColimitEval
 
 中文:
 定义 isColimitCoconeOfHasColimitEval
-  签名: : IsColimit (coconeOfHasColimitEval F)
+  签名: : 是余极限 (coconeOfHasColimitEval F)
   定义体: isColimitOfEval _ _ (fun _ => colimit.isColimit _)
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimitOfEval
@@ -402,7 +402,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimit F
+  签名: 有余极限 F
   定义体: ⟨⟨⟨_, isColimitCoconeOfHasColimitEval F⟩⟩⟩
 
 Depends on / 依赖: isColimitCoconeOfHasColimitEval
@@ -424,8 +424,8 @@ instance [HasColimitsOfShape
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimitsOfShape
-  签名: J C] : HasColimitsOfShape J (HomologicalComplex C c)
+实例 [有形状余极限
+  签名: J C] : 有形状余极限 J (同调复形 C c)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasColimitsOfShape J C] : HasColimitsOfShape J (HomologicalComplex C c) := ⟨inferInstance⟩
@@ -439,7 +439,7 @@ instance [HasColimitsOfShape
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimitsOfShape
+实例 [有形状余极限
   签名: J C] (n
   定义体: ⟨inferInstance⟩
 -/
@@ -455,8 +455,8 @@ instance [HasFiniteColimits
   body: ⟨fun _ _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteColimits
-  签名: C] : HasFiniteColimits (HomologicalComplex C c)
+实例 [有有限余极限
+  签名: C] : 有有限余极限 (同调复形 C c)
   定义体: ⟨fun _ _ => inferInstance⟩
 -/
 instance [HasFiniteColimits C] : HasFiniteColimits (HomologicalComplex C c) :=
@@ -471,7 +471,7 @@ instance [HasFiniteColimits
   body: ⟨fun _ _ _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteColimits
+实例 [有有限余极限
   签名: C] (n
   定义体: ⟨fun _ _ _ => inferInstance⟩
 -/
@@ -489,7 +489,7 @@ instance [HasFiniteColimits
   infer_instance
 
 中文:
-实例 [HasFiniteColimits
+实例 [有有限余极限
   签名: C] {K L
   定义体: by
   change Epi ((HomologicalComplex.eval C c n).map φ)
@@ -513,7 +513,7 @@ lemma preservesLimitsOfShape_of_eval
 
 中文:
 引理 preservesLimitsOfShape_of_eval
-  结论: {D : 类型} [Category* D]
+  结论: {D : 类型} [范畴* D]
   证明: ⟨fun {_} => ⟨fun hs => ⟨isLimitOfEval _ _
     (fun i => isLimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
 
@@ -537,7 +537,7 @@ lemma preservesColimitsOfShape_of_eval
 
 中文:
 引理 preservesColimitsOfShape_of_eval
-  结论: {D : 类型} [Category* D]
+  结论: {D : 类型} [范畴* D]
   证明: ⟨fun {_} => ⟨fun hs => ⟨isColimitOfEval _ _
     (fun i => isColimitOfPreserves (G ⋙ eval C c i) hs)⟩⟩⟩
 
@@ -568,7 +568,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (single C c i)
+  签名: 保持形状极限 J (single C c i)
   定义体: preservesLimitsOfShape_of_eval _ (fun j => by
     by_cases h : j = i
     · subst h
@@ -598,7 +598,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (single C c i)
+  签名: 保持形状余极限 J (single C c i)
   定义体: preservesColimitsOfShape_of_eval _ (fun j => by
     by_cases h : j = i
     · subst h
@@ -624,7 +624,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (single C c i)
+  签名: 保持FiniteLimits (single C c i)
   定义体: ⟨by intros; infer_instance⟩
 
 Depends on / 依赖: infer_instance, intros
@@ -641,7 +641,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (single C c i)
+  签名: 保持FiniteColimits (single C c i)
   定义体: ⟨by intros; infer_instance⟩
 
 Depends on / 依赖: infer_instance, intros

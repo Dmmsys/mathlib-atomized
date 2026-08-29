@@ -33,7 +33,7 @@ definition FactorsHelper
 
 中文:
 定义 FactorsHelper
-  签名: (n p : 自然数) (l : List 自然数)
+  签名: (n p : 自然数) (l : 列表 自然数)
   定义体: p.Prime -> (p :: l).IsChain (· <= ·) ∧ (forall a in l, Nat.Prime a) ∧ l.prod = n
 
 Depends on / 依赖: IsChain, Nat.Prime, l.prod, p.Prime
@@ -120,7 +120,7 @@ theorem FactorsHelper.singleton
 
 中文:
 定理 FactorsHelper.singleton
-  条件: (n : 自然数) {a : 自然数} (h₁ : 自然数.blt a n) (h₂ : Is自然数 (minFac n) n)
+  条件: (n : 自然数) {a : 自然数} (h₁ : 自然数.blt a n) (h₂ : 是自然数 (minFac n) n)
   证明: FactorsHelper.nil.cons _ ⟨mul_one _⟩ h₁ h₂
 
 Depends on / 依赖: FactorsHelper, FactorsHelper.nil.cons, mul_one
@@ -140,7 +140,7 @@ theorem FactorsHelper.cons_self
 
 中文:
 定理 FactorsHelper.cons_self
-  结论: {n m : 自然数} (a : 自然数) {l : List 自然数}
+  结论: {n m : 自然数} (a : 自然数) {l : 列表 自然数}
   证明: fun pa =>
   H.cons_of_le _ h le_rfl (Nat.prime_def_minFac.1 pa).2 pa
 -/
@@ -182,7 +182,7 @@ theorem FactorsHelper.primeFactorsList_eq
 
 中文:
 定理 FactorsHelper.primeFactorsList_eq
-  条件: {n : 自然数} {l : List 自然数} (H : FactorsHelper n 2 l)
+  条件: {n : 自然数} {l : 列表 自然数} (H : FactorsHelper n 2 l)
   证明: let ⟨h₁, h₂, h₃⟩ := H Nat.prime_two
   have := List.isChain_iff_pairwise.1 (@List.IsChain.tail _ _ (_ :: _) h₁)
   ((Nat.primeFactorsList_unique h₃ h₂).eq_of_pairwise'

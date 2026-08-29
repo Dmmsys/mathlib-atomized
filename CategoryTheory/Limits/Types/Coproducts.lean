@@ -183,7 +183,7 @@ lemma isColimit_sigma
 
 中文:
 引理 isColimit_sigma
-  结论: Functor.CoconeTypes.IsColimit (sigma F)
+  结论: 函子.余coneTypes.是余极限 (sigma F)
   证明: isColimit_mk _ (by aesop)
     (fun _ _ _ h => by rw [Sigma.ext_iff] at h; simpa using h)
     (fun _ _ _ _ h => congr_arg Sigma.fst h)
@@ -515,7 +515,7 @@ lemma inj_jointly_surjective_of_isColimit
 
 中文:
 引理 inj_jointly_surjective_of_isColimit
-  条件: (hc : IsColimit c) (x : c.pt)
+  条件: (hc : 是余极限 c) (x : c.pt)
   证明: CofanTypes.inj_jointly_surjective_of_isColimit
     ((isColimit_cofanTypes_iff c).2 ⟨hc⟩) x
 
@@ -536,7 +536,7 @@ lemma inj_injective_of_isColimit
 
 中文:
 引理 inj_injective_of_isColimit
-  条件: (hc : IsColimit c) (i : C)
+  条件: (hc : 是余极限 c) (i : C)
   证明: CofanTypes.inj_injective_of_isColimit ((isColimit_cofanTypes_iff c).2 ⟨hc⟩) i
 
 Depends on / 依赖: CofanTypes, CofanTypes.inj_injective_of_isColimit, inj_injective_of_isColimit, isColimit_cofanTypes_iff
@@ -555,7 +555,7 @@ lemma eq_of_inj_apply_eq_of_isColimit
 
 中文:
 引理 eq_of_inj_apply_eq_of_isColimit
-  结论: (hc : IsColimit c)
+  结论: (hc : 是余极限 c)
   证明: CofanTypes.eq_of_inj_apply_eq_of_isColimit ((isColimit_cofanTypes_iff c).2 ⟨hc⟩) _ _ h
 
 Depends on / 依赖: CofanTypes, CofanTypes.eq_of_inj_apply_eq_of_isColimit, eq_of_inj_apply_eq_of_isColimit, isColimit_cofanTypes_iff
@@ -575,7 +575,7 @@ lemma inj_apply_eq_iff_of_isColimit
 
 中文:
 引理 inj_apply_eq_iff_of_isColimit
-  条件: (hc : IsColimit c) {i j : C} (x : F i) (y : F j)
+  条件: (hc : 是余极限 c) {i j : C} (x : F i) (y : F j)
   证明: CofanTypes.inj_apply_eq_iff_of_isColimit ((isColimit_cofanTypes_iff c).2 ⟨hc⟩) _ _
 
 Depends on / 依赖: CofanTypes, CofanTypes.inj_apply_eq_iff_of_isColimit, inj_apply_eq_iff_of_isColimit, isColimit_cofanTypes_iff
@@ -603,7 +603,7 @@ definition initialColimitCocone
 
 中文:
 定义 initialColimitCocone
-  签名: : Limits.ColimitCocone (Functor.empty (类型u)) where
+  签名: : Limits.余极限余锥 (函子.empty (类型u)) where
   定义体: { pt := PEmpty
       ι := (Functor.uniqueFromEmpty _).inv }
   isColimit :=
@@ -633,7 +633,7 @@ definition initialIso
 
 中文:
 定义 initialIso
-  签名: : ⊥_ 类型u ≅ PEmpty
+  签名: : ⊥_ 类型u ≅ 命题空
   定义体: colimit.isoColimitCocone initialColimitCocone.{u, 0}
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, initialColimitCocone, isoColimitCocone
@@ -653,7 +653,7 @@ definition isInitialPEmpty
 
 中文:
 定义 isInitialPEmpty
-  签名: : IsInitial (PEmpty : 类型u)
+  签名: : IsInitial (命题空 : 类型u)
   定义体: initialIsInitial.ofIso initialIso
 
 @[deprecated (since := "2026-02-08")] alias isInitialPunit := isInitialPEmpty
@@ -682,7 +682,7 @@ exact ⟨IsInitial.ofIso Types.isInitialPEmpty Equiv.toIso Equiv.equivOfIsEmpty 
 中文:
 引理 initial_iff_empty
   条件: (X : 类型u)
-  结论: Nonempty (IsInitial X) ↔ IsEmpty X
+  结论: 非空 (IsInitial X) ↔ 是空 X
   证明: by
   constructor
   · intro ⟨h⟩
@@ -981,7 +981,7 @@ definition isCoprodOfMono
 
 中文:
 定义 isCoprodOfMono
-  签名: {X Y : 类型u} (f : X ⟶ Y) [Mono f]
+  签名: {X Y : 类型u} (f : X ⟶ Y) [单态射 f]
   定义体: by
   apply Nonempty.some
   rw [binaryCofan_isColimit_iff]
@@ -1017,7 +1017,7 @@ definition coproductColimitCocone
 
 中文:
 定义 coproductColimitCocone
-  签名: {J : 类型v} (F : J -> Type (max v u))
+  签名: {J : 类型v} (F : J -> 类型 (最大值 v u))
   定义体: { pt := Σ j, F j
       ι := Discrete.natTrans (fun ⟨j⟩ => ↾fun x => ⟨j, x⟩) }
   isColimit :=
@@ -1051,7 +1051,7 @@ definition coproductIso
 
 中文:
 定义 coproductIso
-  签名: {J : 类型v} (F : J -> Type (max v u))
+  签名: {J : 类型v} (F : J -> 类型 (最大值 v u))
   定义体: colimit.isoColimitCocone (coproductColimitCocone F)
 
 @[elementwise (attr := simp)]
@@ -1075,7 +1075,7 @@ theorem coproductIso_ι_comp_hom
 
 中文:
 定理 coproductIso_ι_comp_hom
-  条件: {J : 类型v} (F : J -> Type (max v u)) (j : J)
+  条件: {J : 类型v} (F : J -> 类型 (最大值 v u)) (j : J)
   证明: colimit.isoColimitCocone_ι_hom (coproductColimitCocone F) ⟨j⟩
 
 @[elementwise (attr := simp)]
@@ -1097,7 +1097,7 @@ theorem coproductIso_mk_comp_inv
 
 中文:
 定理 coproductIso_mk_comp_inv
-  条件: {J : 类型v} (F : J -> Type (max v u)) (j : J)
+  条件: {J : 类型v} (F : J -> 类型 (最大值 v u)) (j : J)
   证明: rfl
 -/
 theorem coproductIso_mk_comp_inv {J : Type v} (F : J -> Type (max v u)) (j : J) :

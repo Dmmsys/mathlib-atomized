@@ -29,10 +29,10 @@ class HasEnoughRootsOfUnity
     - prim : exists m : M, IsPrimitiveRoot m n
 
 中文:
-类 HasEnoughRootsOfUnity
-  参数: (M : 类型) [CommMonoid M] (n : 自然数)
+类 有EnoughRootsOfUnity
+  参数: (M : 类型) [交换幺半群 M] (n : 自然数)
   公理与运算 (1 个):
-    - prim : 存在 m : M, IsPrimitiveRoot m n
+    - prim : 存在 m : M, 是PrimitiveRoot m n
 -/
 class HasEnoughRootsOfUnity (M : Type*) [CommMonoid M] (n : Nat) where
   prim : exists m : M, IsPrimitiveRoot m n
@@ -49,8 +49,8 @@ lemma exists_primitiveRoot
   proof: HasEnoughRootsOfUnity.prim
 
 中文:
-引理 exists_primitiveRoot
-  条件: (M : 类型) [CommMonoid M] (n : 自然数) [HasEnoughRootsOfUnity M n]
+引理 存在_primitiveRoot
+  条件: (M : 类型) [交换幺半群 M] (n : 自然数) [有EnoughRootsOfUnity M n]
   证明: HasEnoughRootsOfUnity.prim
 
 Depends on / 依赖: HasEnoughRootsOfUnity, HasEnoughRootsOfUnity.prim
@@ -69,7 +69,7 @@ instance rootsOfUnity_isCyclic
 
 中文:
 实例 rootsOfUnity_isCyclic
-  签名: (M : 类型) [CommMonoid M] (n : 自然数) [HasEnoughRootsOfUnity M n]
+  签名: (M : 类型) [交换幺半群 M] (n : 自然数) [有EnoughRootsOfUnity M n]
   定义体: HasEnoughRootsOfUnity.cyc
 
 Depends on / 依赖: HasEnoughRootsOfUnity, HasEnoughRootsOfUnity.cyc
@@ -91,7 +91,7 @@ cyc := Subgroup.isCyclic_of_le rootsOfUnity_le_of_dvd hmn
 
 中文:
 引理 of_dvd
-  结论: (M : 类型) [CommMonoid M] {m n : 自然数} [NeZero n] (hmn : m ∣ n)
+  结论: (M : 类型) [交换幺半群 M] {m n : 自然数} [NeZero n] (hmn : m ∣ n)
   证明: have ⟨ζ, hζ⟩ := exists_primitiveRoot M n
     have ⟨k, hk⟩ := hmn
     ⟨ζ ^ k, IsPrimitiveRoot.pow (NeZero.pos n) hζ (mul_comm m k ▸ hk)⟩
@@ -124,7 +124,7 @@ obtain ⟨k, hk⟩ := Subgroup.
 
 中文:
 实例 finite_rootsOfUnity
-  签名: (M : 类型) [CommMonoid M] (n : 自然数) [NeZero n]
+  签名: (M : 类型) [交换幺半群 M] (n : 自然数) [NeZero n]
   定义体: by
   have := rootsOfUnity_isCyclic M n
   obtain ⟨g, hg⟩ := IsCyclic.exists_generator (α := rootsOfUnity n M)
@@ -164,7 +164,7 @@ lemma natCard_rootsOfUnity
 
 中文:
 引理 natCard_rootsOfUnity
-  结论: (M : 类型) [CommMonoid M] (n : 自然数) [NeZero n]
+  结论: (M : 类型) [交换幺半群 M] (n : 自然数) [NeZero n]
   证明: by
   obtain ⟨ζ, h⟩ := exists_primitiveRoot M n
   rw [← IsCyclic.exponent_eq_card]
@@ -202,7 +202,7 @@ lemma of_card_le
 
 中文:
 引理 of_card_le
-  结论: {R : 类型} [CommRing R] [IsDomain R] {n : 自然数} [NeZero n]
+  结论: {R : 类型} [交换环 R] [是整环 R] {n : 自然数} [NeZero n]
   证明: card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot.mp (le_antisymm (card_rootsOfUnity R n) h)
   cyc := rootsOfUnity.isCyclic R n
 
@@ -230,8 +230,8 @@ lemma MulEquiv.hasEnoughRootsOfUnity
   cyc := isCyclic
 
 中文:
-引理 MulEquiv.hasEnoughRootsOfUnity
-  结论: {n : 自然数} [NeZero n] {M N : 类型} [CommMonoid M]
+引理 乘法等价.hasEnoughRootsOfUnity
+  结论: {n : 自然数} [NeZero n] {M N : 类型} [交换幺半群 M]
   证明: by
     obtain ⟨m, hm⟩ := hm.prim
     use (e hm.toRootsOfUnity).val.val
@@ -267,8 +267,8 @@ lemma IsCyclic.monoidHom_equiv_self
 .trans (mulEquivOfCyclicCardEq hord)⟩ exact ⟨e.trans (rootsOfUnityUnitsMulEquiv M (Nat.card G))
 
 中文:
-引理 IsCyclic.monoidHom_equiv_self
-  结论: (G M : 类型) [CommGroup G] [Finite G]
+引理 是循环.monoidHom_equiv_self
+  结论: (G M : 类型) [交换群 G] [有限 G]
   证明: by
   have hord := HasEnoughRootsOfUnity.natCard_rootsOfUnity M (Nat.card G)
   let e := (IsCyclic.monoidHom_mulEquiv_rootsOfUnity G Mˣ).some

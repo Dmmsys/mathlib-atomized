@@ -57,14 +57,14 @@ class GAlgebra
     - smul_def : forall (r) (x : GradedMonoid A), r • x = .mk _ (toFun r) * x
 
 中文:
-类 GAlgebra
+类 G代数
   参数: where
   公理与运算 (5 个):
     - toFun : R ->+ A 0
-    - map_one : toFun 1 = GradedMonoid.GOne.one
-    - map_mul : 对任意 r s, GradedMonoid.mk _ (toFun (r * s)) = .mk _ (GradedMonoid.GMul.mul (toFun r) (toFun s))
-    - commutes : 对任意 (r) (x : GradedMonoid A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
-    - smul_def : 对任意 (r) (x : GradedMonoid A), r • x = .mk _ (toFun r) * x
+    - map_one : toFun 1 = 分次幺半群.GOne.one
+    - map_mul : 对任意 r s, 分次幺半群.mk _ (toFun (r * s)) = .mk _ (分次幺半群.GMul.mul (toFun r) (toFun s))
+    - commutes : 对任意 (r) (x : 分次幺半群 A), .mk _ (toFun r) * x = x * .mk _ (toFun r)
+    - smul_def : 对任意 (r) (x : 分次幺半群 A), r • x = .mk _ (toFun r) * x
 -/
 class GAlgebra where
   toFun : R ->+ A 0
@@ -89,7 +89,7 @@ instance _root_.GradedMonoid.smulCommClass_right
     rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]; rw [GAlgebra.commutes]; rw [mul_assoc]
 
 中文:
-实例 _root_.GradedMonoid.smulCommClass_right
+实例 _root_.分次幺半群.smulCommClass_right
   签名: :
   定义体: by
     dsimp
@@ -114,7 +114,7 @@ instance _root_.GradedMonoid.isScalarTower_right
     rw [GAlgebra.smul_def]; rw [GAlgebra.smul_def]; rw [← mul_assoc]
 
 中文:
-实例 _root_.GradedMonoid.isScalarTower_right
+实例 _root_.分次幺半群.isScalarTower_right
   签名: :
   定义体: by
     dsimp
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (⨁ i, A i)
+  签名: 代数 R (⨁ i, A i)
   定义体: { toFun := (DirectSum.of A 0).comp GAlgebra.toFun
     map_zero' := map_zero _
     map_add' := map_add _
@@ -240,7 +240,7 @@ definition toAlgebra
 
 中文:
 定义 toAlgebra
-  签名: (f : 对任意 i, A i ->ₗ[R] B) (hone : f _ GradedMonoid.GOne.one = 1)
+  签名: (f : 对任意 i, A i ->ₗ[R] B) (hone : f _ 分次幺半群.GOne.one = 1)
   定义体: { toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul with
     toFun := toSemiring (fun i => (f i).toAddMonoidHom) hone @hmul
     commutes' := fun r => by
@@ -363,8 +363,8 @@ instance Algebra.directSumGAlgebra
   smul_def := fun _ ⟨_
 
 中文:
-实例 Algebra.directSumGAlgebra
-  签名: {R A : 类型} [AddMonoid ι] [CommSemiring R]
+实例 代数.directSumGAlgebra
+  签名: {R A : 类型} [加法幺半群 ι] [交换半环 R]
   定义体: (algebraMap R A).toAddMonoidHom
   map_one := (algebraMap R A).map_one
   map_mul a b := Sigma.ext (zero_add _).symm (heq_of_eq <| (algebraMap R A).map_mul a b)

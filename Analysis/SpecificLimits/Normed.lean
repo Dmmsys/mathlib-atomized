@@ -213,7 +213,7 @@ theorem TFAE_exists_lt_isLittleO_pow
   tfae_have 1 -> 3 := fun
 
 中文:
-定理 TFAE_exists_lt_isLittleO_pow
+定理 TFAE_存在_lt_isLittleO_pow
   条件: (f : 自然数 -> 实数) (R : 实数)
   证明: by
   have A : Ico 0 R subseteq Ioo (-R) R :=
@@ -288,7 +288,7 @@ theorem isLittleO_pow_const_const_pow_of_one_lt
 
 中文:
 定理 isLittleO_pow_const_const_pow_of_one_lt
-  结论: {R : 类型} [NormedRing R] (k : 自然数) {r : 实数}
+  结论: {R : 类型} [赋范环 R] (k : 自然数) {r : 实数}
   证明: by
   have : Tendsto (fun x : Real => x ^ k) (𝓝[>] 1) (𝓝 1) :=
     ((continuous_id.pow k).tendsto' (1 : Real) 1 (one_pow _)).mono_left inf_le_left
@@ -326,7 +326,7 @@ theorem isLittleO_coe_const_pow_of_one_lt
 
 中文:
 定理 isLittleO_coe_const_pow_of_one_lt
-  条件: {R : 类型} [NormedRing R] {r : 实数} (hr : 1 < r)
+  条件: {R : 类型} [赋范环 R] {r : 实数} (hr : 1 < r)
   证明: by
   simpa only [pow_one] using @isLittleO_pow_const_const_pow_of_one_lt R _ 1 _ hr
 
@@ -352,7 +352,7 @@ theorem isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt
 
 中文:
 定理 isLittleO_pow_const_mul_const_pow_const_pow_of_norm_lt
-  结论: {R : 类型} [NormedRing R] (k : 自然数)
+  结论: {R : 类型} [赋范环 R] (k : 自然数)
   证明: by
   by_cases h0 : r₁ = 0
   · refine (isLittleO_zero _ _).congr' (mem_atTop_sets.2 <| ⟨1, fun n hn => ?_⟩) EventuallyEq.rfl
@@ -528,7 +528,7 @@ theorem tendsto_pow_atTop_nhds_zero_of_norm_lt_one
 
 中文:
 定理 tendsto_pow_atTop_nhds_zero_of_norm_lt_one
-  结论: {R : 类型} [SeminormedRing R] {x : R}
+  结论: {R : 类型} [Seminormed环 R] {x : R}
   证明: by
   apply squeeze_zero_norm' (eventually_norm_pow_le x)
   exact tendsto_pow_atTop_nhds_zero_of_lt_one (norm_nonneg _) h
@@ -575,7 +575,7 @@ lemma tendsto_pow_atTop_nhds_zero_iff_norm_lt_one
 
 中文:
 引理 tendsto_pow_atTop_nhds_zero_iff_norm_lt_one
-  结论: {R : 类型} [SeminormedRing R] [NormMulClass R]
+  结论: {R : 类型} [Seminormed环 R] [NormMul类 R]
   证明: by
   -- this proof is slightly fiddly since `‖x ^ n‖ = ‖x‖ ^ n` might not hold for `n = 0`
   refine ⟨?_, tendsto_pow_atTop_nhds_zero_of_norm_lt_one⟩
@@ -611,8 +611,8 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_one
   exact tendsto_of_
 
 中文:
-定理 AbsoluteValue.tendsto_div_one_add_pow_nhds_one
-  结论: {v : AbsoluteValue R S} {a : R}
+定理 绝对值.tendsto_div_one_add_pow_nhds_one
+  结论: {v : 绝对值 R S} {a : R}
   证明: by
   simp_rw [map_div₀ v, v.map_one]
   apply one_div_one (G := S) ▸ Tendsto.div tendsto_const_nhds _ one_ne_zero
@@ -645,8 +645,8 @@ theorem AbsoluteValue.tendsto_div_one_add_pow_nhds_zero
     (fun _ => le_rfl)).congr fun n => (sub_eq_add_neg (v a 
 
 中文:
-定理 AbsoluteValue.tendsto_div_one_add_pow_nhds_zero
-  结论: {v : AbsoluteValue R S} {a : R}
+定理 绝对值.tendsto_div_one_add_pow_nhds_zero
+  结论: {v : 绝对值 R S} {a : R}
   证明: by
   simp_rw [div_eq_mul_inv, one_mul, map_inv₀, fun n => add_comm 1 (a ^ n)]
   refine (tendsto_atTop_mono (fun n => v.le_add _ _) ?_).inv_tendsto_atTop
@@ -674,8 +674,8 @@ class HasSummableGeomSeries
     - summable_geometric_of_norm_lt_one : forall (ξ : K), ‖ξ‖ < 1 -> Summable (fun n => ξ ^ n)
 
 中文:
-类 HasSummableGeomSeries
-  参数: (K : 类型) [NormedRing K]
+类 有SummableGeomSeries
+  参数: (K : 类型) [赋范环 K]
   公理与运算 (1 个):
     - summable_geometric_of_norm_lt_one : 对任意 (ξ : K), ‖ξ‖ < 1 -> Summable (fun n => ξ ^ n)
 -/
@@ -692,7 +692,7 @@ lemma summable_geometric_of_norm_lt_one
 
 中文:
 引理 summable_geometric_of_norm_lt_one
-  结论: {K : 类型} [NormedRing K] [HasSummableGeomSeries K]
+  结论: {K : 类型} [赋范环 K] [有SummableGeomSeries K]
   证明: HasSummableGeomSeries.summable_geometric_of_norm_lt_one x h
 
 Depends on / 依赖: HasSummableGeomSeries, HasSummableGeomSeries.summable_geometric_of_norm_lt_one, summable_geometric_of_norm_lt_one
@@ -880,7 +880,7 @@ definition Units.oneSub
   inv_val := geom_series_mul_neg t h
 
 中文:
-定义 Units.oneSub
+定义 单位群.oneSub
   签名: (t : R) (h : ‖t‖ < 1)
   定义体: 1 - t
   inv := ∑' n : Nat, t ^ n
@@ -956,7 +956,7 @@ lemma isUnit_one_sub_of_norm_lt_one
 中文:
 引理 isUnit_one_sub_of_norm_lt_one
   条件: {x : R} (h : ‖x‖ < 1)
-  结论: IsUnit (1 - x)
+  结论: 是单位 (1 - x)
   证明: ⟨Units.oneSub x h, rfl⟩
 
 Depends on / 依赖: Units.oneSub, oneSub
@@ -1019,7 +1019,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSummableGeomSeries K
+  签名: 有SummableGeomSeries K
   定义体: ⟨fun _ h => (hasSum_geometric_of_norm_lt_one h).summable⟩
 
 Depends on / 依赖: hasSum_geometric_of_norm_lt_one, infer_instance, map_id, p.map_id, summable
@@ -1730,7 +1730,7 @@ theorem NormedAddCommGroup.cauchy_series_of_le_geometric'
   proof: (cauchy_series_of_le_geometric hr h).comp_tendsto tendsto_add_atTop_nat 1
 
 中文:
-定理 NormedAddCommGroup.cauchy_series_of_le_geometric'
+定理 赋范交换加群.cauchy_series_of_le_geometric'
   结论: {C : 实数} {u : 自然数 -> α} {r : 实数} (hr : r < 1)
   证明: (cauchy_series_of_le_geometric hr h).comp_tendsto tendsto_add_atTop_nat 1
 
@@ -1756,7 +1756,7 @@ theorem NormedAddCommGroup.cauchy_series_of_le_geometric''
   apply cauchySeq_sum_of_even
 
 中文:
-定理 NormedAddCommGroup.cauchy_series_of_le_geometric''
+定理 赋范交换加群.cauchy_series_of_le_geometric''
   结论: {C : 实数} {u : 自然数 -> α} {N : 自然数} {r : 实数}
   证明: by
   set v : Nat -> α := fun n => if n < N then 0 else u n
@@ -1801,7 +1801,7 @@ lemma exists_norm_le_of_cauchySeq
   simpa only [dist_partial_sum'] using key n (n + 1) 0 zero_le zero_le
 
 中文:
-引理 exists_norm_le_of_cauchySeq
+引理 存在_norm_le_of_cauchySeq
   条件: (h : CauchySeq fun n => ∑ k in range n, f k)
   证明: by
   obtain ⟨b, ⟨_, key, _⟩⟩ := cauchySeq_iff_le_tendsto_0.mp h
@@ -1836,7 +1836,7 @@ theorem summable_of_ratio_norm_eventually_le
 
 中文:
 定理 summable_of_ratio_norm_eventually_le
-  结论: {α : 类型} [SeminormedAddCommGroup α]
+  结论: {α : 类型} [SeminormedAddComm群 α]
   证明: by
   by_cases! hr₀ : 0 <= r
   · rw [eventually_atTop] at h
@@ -1880,7 +1880,7 @@ theorem summable_of_ratio_test_tendsto_lt_one
 
 中文:
 定理 summable_of_ratio_test_tendsto_lt_one
-  结论: {α : 类型} [NormedAddCommGroup α] [CompleteSpace α]
+  结论: {α : 类型} [赋范交换加群 α] [完备空间 α]
   证明: by
   rcases exists_between hl₁ with ⟨r, hr₀, hr₁⟩
   refine summable_of_ratio_norm_eventually_le hr₁ ?_
@@ -1915,7 +1915,7 @@ theorem not_summable_of_ratio_norm_eventually_ge
 
 中文:
 定理 not_summable_of_ratio_norm_eventually_ge
-  结论: {α : 类型} [SeminormedAddCommGroup α] {f : 自然数 -> α}
+  结论: {α : 类型} [SeminormedAddComm群 α] {f : 自然数 -> α}
   证明: by
   rw [eventually_atTop] at h
   rcases h with ⟨N₀, hN₀⟩
@@ -1963,7 +1963,7 @@ theorem not_summable_of_ratio_test_tendsto_gt_one
 
 中文:
 定理 not_summable_of_ratio_test_tendsto_gt_one
-  结论: {α : 类型} [SeminormedAddCommGroup α]
+  结论: {α : 类型} [SeminormedAddComm群 α]
   证明: by
   have key : forallᶠ n in atTop, ‖f n‖ != 0 := by
     filter_upwards [h.eventually_const_le hl] with _ hn hc
@@ -2076,8 +2076,8 @@ theorem Monotone.cauchySeq_series_mul_of_tendsto_zero_of_bounded
   refine 
 
 中文:
-定理 Monotone.cauchySeq_series_mul_of_tendsto_zero_of_bounded
-  结论: (hfa : Monotone f)
+定理 递增.cauchySeq_series_mul_of_tendsto_zero_of_bounded
+  结论: (hfa : 递增 f)
   证明: by
   rw [← cauchySeq_shift 1]
   simp_rw [Finset.sum_range_by_parts _ _ (Nat.succ _), sub_eq_add_neg, Nat.succ_sub_succ_eq_sub,
@@ -2121,8 +2121,8 @@ have hfa' : Monotone fun n => -f n := fun _ _ hab => neg_le_neg hfa hab
   simp
 
 中文:
-定理 Antitone.cauchySeq_series_mul_of_tendsto_zero_of_bounded
-  结论: (hfa : Antitone f)
+定理 递减.cauchySeq_series_mul_of_tendsto_zero_of_bounded
+  结论: (hfa : 递减 f)
   证明: by
 have hfa' : Monotone fun n => -f n := fun _ _ hab => neg_le_neg hfa hab
   have hf0' : Tendsto (fun n => -f n) atTop (𝓝 0) := by
@@ -2179,8 +2179,8 @@ theorem Monotone.cauchySeq_alternating_series_of_tendsto_zero
   exact hfa.cauchySeq_series_mul_of_tendsto_zero_of_bounded hf0 norm_sum_neg_one_pow_le
 
 中文:
-定理 Monotone.cauchySeq_alternating_series_of_tendsto_zero
-  结论: (hfa : Monotone f)
+定理 递增.cauchySeq_alternating_series_of_tendsto_zero
+  结论: (hfa : 递增 f)
   证明: by
   simp_rw [mul_comm]
   exact hfa.cauchySeq_series_mul_of_tendsto_zero_of_bounded hf0 norm_sum_neg_one_pow_le
@@ -2201,8 +2201,8 @@ theorem Monotone.tendsto_alternating_series_of_tendsto_zero
   proof: cauchySeq_tendsto_of_complete hfa.cauchySeq_alternating_series_of_tendsto_zero hf0
 
 中文:
-定理 Monotone.tendsto_alternating_series_of_tendsto_zero
-  结论: (hfa : Monotone f)
+定理 递增.tendsto_alternating_series_of_tendsto_zero
+  结论: (hfa : 递增 f)
   证明: cauchySeq_tendsto_of_complete hfa.cauchySeq_alternating_series_of_tendsto_zero hf0
 
 Depends on / 依赖: cauchySeq_alternating_series_of_tendsto_zero, cauchySeq_tendsto_of_complete, hfa.cauchySeq_alternating_series_of_tendsto_zero
@@ -2223,8 +2223,8 @@ theorem Antitone.cauchySeq_alternating_series_of_tendsto_zero
   exact hfa.cauchySeq_series_mul_of_tendsto_zero_of_bounded hf0 norm_sum_neg_one_pow_le
 
 中文:
-定理 Antitone.cauchySeq_alternating_series_of_tendsto_zero
-  结论: (hfa : Antitone f)
+定理 递减.cauchySeq_alternating_series_of_tendsto_zero
+  结论: (hfa : 递减 f)
   证明: by
   simp_rw [mul_comm]
   exact hfa.cauchySeq_series_mul_of_tendsto_zero_of_bounded hf0 norm_sum_neg_one_pow_le
@@ -2245,8 +2245,8 @@ theorem Antitone.tendsto_alternating_series_of_tendsto_zero
   proof: cauchySeq_tendsto_of_complete hfa.cauchySeq_alternating_series_of_tendsto_zero hf0
 
 中文:
-定理 Antitone.tendsto_alternating_series_of_tendsto_zero
-  结论: (hfa : Antitone f)
+定理 递减.tendsto_alternating_series_of_tendsto_zero
+  结论: (hfa : 递减 f)
   证明: cauchySeq_tendsto_of_complete hfa.cauchySeq_alternating_series_of_tendsto_zero hf0
 
 Depends on / 依赖: SemilatticeSup, cauchySeq_alternating_series_of_tendsto_zero, cauchySeq_tendsto_of_complete, hfa.cauchySeq_alternating_series_of_tendsto_zero, isFilteredOrEmpty_of_semilatticeSup
@@ -2278,7 +2278,7 @@ theorem Monotone.tendsto_le_alternating_series
     simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
 
 中文:
-定理 Monotone.tendsto_le_alternating_series
+定理 递增.tendsto_le_alternating_series
   证明: by
   have ha : Antitone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
@@ -2311,7 +2311,7 @@ theorem Monotone.alternating_series_le_tendsto
     simp_rw [_root_.pow_succ', show (-1 : E) 
 
 中文:
-定理 Monotone.alternating_series_le_tendsto
+定理 递增.alternating_series_le_tendsto
   证明: by
   have hm : Monotone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
@@ -2344,7 +2344,7 @@ theorem Antitone.alternating_series_le_tendsto
     simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_mul, 
 
 中文:
-定理 Antitone.alternating_series_le_tendsto
+定理 递减.alternating_series_le_tendsto
   证明: by
   have hm : Monotone (fun n => ∑ i in range (2 * n), (-1) ^ i * f i) := by
     refine monotone_nat_of_le_succ (fun n => ?_)
@@ -2377,7 +2377,7 @@ theorem Antitone.tendsto_le_alternating_series
     simp_rw [_root_.pow_succ', show (-1 : E) ^ (2 * n) = 1 by simp, neg_one_m
 
 中文:
-定理 Antitone.tendsto_le_alternating_series
+定理 递减.tendsto_le_alternating_series
   证明: by
   have ha : Antitone (fun n => ∑ i in range (2 * n + 1), (-1) ^ i * f i) := by
     refine antitone_nat_of_succ_le (fun n => ?_)
@@ -2498,7 +2498,7 @@ theorem Real.summable_pow_div_factorial
   suffices forall n >= ⌊‖x‖⌋₊, ‖x ^ (n +
 
 中文:
-定理 Real.summable_pow_div_factorial
+定理 实数.summable_pow_div_factorial
   条件: (x : 实数)
   结论: Summable (fun n => x ^ n / n ! : 自然数 -> 实数)
   证明: by
@@ -2633,7 +2633,7 @@ lemma tendsto_smul_comp_nat_floor_of_tendsto_nsmul
 
 中文:
 引理 tendsto_smul_comp_nat_floor_of_tendsto_nsmul
-  结论: [NormSMulClass 整数 K] [LinearOrder K]
+  结论: [NormSMul类 整数 K] [线性序 K]
   证明: by
   replace hg : Tendsto (fun n : Nat => (n : K) • g n) atTop (𝓝 t) := mod_cast hg
   apply tendsto_smul_congr_of_tendsto_left_cobounded_of_isBoundedUnder
@@ -2667,7 +2667,7 @@ lemma tendsto_smul_comp_nat_floor_of_tendsto_mul
 
 中文:
 引理 tendsto_smul_comp_nat_floor_of_tendsto_mul
-  结论: [NormedRing K] [NormedRing R]
+  结论: [赋范环 K] [赋范环 R]
   证明: tendsto_smul_comp_nat_floor_of_tendsto_nsmul (by simpa only [nsmul_eq_mul] using hg)
 
 Depends on / 依赖: nsmul_eq_mul, tendsto_smul_comp_nat_floor_of_tendsto_nsmul

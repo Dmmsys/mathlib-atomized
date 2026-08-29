@@ -38,7 +38,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid Rat where
+  签名: : 是OrderedAdd幺半群 有理数 where
   定义体: fun _ _ ab _ => Rat.add_le_add_right.2 ab
 
 Depends on / 依赖: Rat.add_le_add_right, add_le_add_right
@@ -57,7 +57,7 @@ instance instIsStrictOrderedRing
 
 中文:
 实例 instIsStrictOrderedRing
-  签名: : IsStrictOrderedRing Rat
+  签名: : 是StrictOrdered环 有理数
   定义体: .of_mul_pos fun _ _ ha hb =>
   (Rat.mul_nonneg ha.le hb.le).lt_of_ne' (mul_ne_zero ha.ne' hb.ne')
 

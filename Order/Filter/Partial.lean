@@ -72,7 +72,7 @@ definition rmap
 
 中文:
 定义 rmap
-  签名: (r : SetRel α β) (l : Filter α)
+  签名: (r : SetRel α β) (l : 滤子 α)
   定义体: { s | r.core s in l }
   univ_sets := by simp
   sets_of_superset hs st := mem_of_superset hs (SetRel.core_mono st)
@@ -105,7 +105,7 @@ theorem rmap_sets
 
 中文:
 定理 rmap_sets
-  条件: (r : SetRel α β) (l : Filter α)
+  条件: (r : SetRel α β) (l : 滤子 α)
   结论: (l.rmap r).sets = r.core ⁻¹' l.sets
   证明: rfl
 
@@ -128,7 +128,7 @@ theorem mem_rmap
 
 中文:
 定理 mem_rmap
-  条件: (r : SetRel α β) (l : Filter α) (s : Set β)
+  条件: (r : SetRel α β) (l : 滤子 α) (s : 集合 β)
   结论: s in l.rmap r ↔ r.core s in l
   证明: Iff.rfl
 
@@ -152,7 +152,7 @@ theorem rmap_rmap
 
 中文:
 定理 rmap_rmap
-  条件: (r : SetRel α β) (s : SetRel β γ) (l : Filter α)
+  条件: (r : SetRel α β) (s : SetRel β γ) (l : 滤子 α)
   证明: filter_eq by simp [rmap_sets, Set.preimage, SetRel.core_comp]
 
 @[simp]
@@ -194,7 +194,7 @@ definition RTendsto
 
 中文:
 定义 RTendsto
-  签名: (r : SetRel α β) (l₁ : Filter α) (l₂ : Filter β)
+  签名: (r : SetRel α β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   定义体: l₁.rmap r <= l₂
 
 Depends on / 依赖: e.symm
@@ -212,7 +212,7 @@ theorem rtendsto_def
 
 中文:
 定理 rtendsto_def
-  条件: (r : SetRel α β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (r : SetRel α β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -235,7 +235,7 @@ definition rcomap
 
 中文:
 定义 rcomap
-  签名: (r : SetRel α β) (f : Filter β)
+  签名: (r : SetRel α β) (f : 滤子 β)
   定义体: SetRel.image {(s, t) : _ × _ | r.core s subseteq t} f.sets
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
@@ -261,7 +261,7 @@ theorem rcomap_sets
 
 中文:
 定理 rcomap_sets
-  条件: (r : SetRel α β) (f : Filter β)
+  条件: (r : SetRel α β) (f : 滤子 β)
   证明: rfl
 -/
 theorem rcomap_sets (r : SetRel α β) (f : Filter β) :
@@ -285,7 +285,7 @@ theorem rcomap_rcomap
 
 中文:
 定理 rcomap_rcomap
-  条件: (r : SetRel α β) (s : SetRel β γ) (l : Filter γ)
+  条件: (r : SetRel α β) (s : SetRel β γ) (l : 滤子 γ)
   证明: filter_eq by
     ext t
     simp only [rcomap_sets, SetRel.image, Filter.mem_sets, Set.mem_ofPred_eq, SetRel.core_comp]
@@ -346,7 +346,7 @@ theorem rtendsto_iff_le_rcomap
 
 中文:
 定理 rtendsto_iff_le_rcomap
-  条件: (r : SetRel α β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (r : SetRel α β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: by
   rw [rtendsto_def]
   simp_rw [← l₂.mem_sets]
@@ -385,7 +385,7 @@ definition rcomap'
 
 中文:
 定义 rcomap'
-  签名: (r : SetRel α β) (f : Filter β)
+  签名: (r : SetRel α β) (f : 滤子 β)
   定义体: SetRel.image {(s, t) : _ × _ | r.preimage s subseteq t} f.sets
   univ_sets := ⟨Set.univ, univ_mem, Set.subset_univ _⟩
   sets_of_superset := fun ⟨a', ha', ma'a⟩ ab => ⟨a', ha', ma'a.trans ab⟩
@@ -412,7 +412,7 @@ theorem mem_rcomap'
 
 中文:
 定理 mem_rcomap'
-  条件: (r : SetRel α β) (l : Filter β) (s : Set α)
+  条件: (r : SetRel α β) (l : 滤子 β) (s : 集合 α)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -433,7 +433,7 @@ theorem rcomap'_sets
 
 中文:
 定理 rcomap'_sets
-  条件: (r : SetRel α β) (f : Filter β)
+  条件: (r : SetRel α β) (f : 滤子 β)
   证明: rfl
 
 @[simp]
@@ -461,7 +461,7 @@ theorem rcomap'_rcomap'
 
 中文:
 定理 rcomap'_rcomap'
-  条件: (r : SetRel α β) (s : SetRel β γ) (l : Filter γ)
+  条件: (r : SetRel α β) (s : SetRel β γ) (l : 滤子 γ)
   证明: Filter.ext fun t => by
     simp only [mem_rcomap', SetRel.preimage_comp]
     constructor
@@ -510,7 +510,7 @@ definition RTendsto'
 
 中文:
 定义 RTendsto'
-  签名: (r : SetRel α β) (l₁ : Filter α) (l₂ : Filter β)
+  签名: (r : SetRel α β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   定义体: l₁ <= l₂.rcomap' r
 
 Depends on / 依赖: rcomap
@@ -532,7 +532,7 @@ theorem rtendsto'_def
 
 中文:
 定理 rtendsto'_def
-  条件: (r : SetRel α β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (r : SetRel α β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: by
   unfold RTendsto' rcomap'; constructor
   · simpa [le_def, SetRel.mem_image] using fun h s hs => h _ _ hs Set.Subset.rfl
@@ -557,7 +557,7 @@ theorem tendsto_iff_rtendsto
 
 中文:
 定理 tendsto_iff_rtendsto
-  条件: (l₁ : Filter α) (l₂ : Filter β) (f : α -> β)
+  条件: (l₁ : 滤子 α) (l₂ : 滤子 β) (f : α -> β)
   证明: by
   simp [tendsto_def, Function.graph, rtendsto_def, SetRel.core, Set.preimage]
 
@@ -578,7 +578,7 @@ theorem tendsto_iff_rtendsto'
 
 中文:
 定理 tendsto_iff_rtendsto'
-  条件: (l₁ : Filter α) (l₂ : Filter β) (f : α -> β)
+  条件: (l₁ : 滤子 α) (l₂ : 滤子 β) (f : α -> β)
   证明: by
   simp [tendsto_def, Function.graph, rtendsto'_def, SetRel.preimage, Set.preimage]
 
@@ -603,7 +603,7 @@ definition pmap
 
 中文:
 定义 pmap
-  签名: (f : α ->. β) (l : Filter α)
+  签名: (f : α ->. β) (l : 滤子 α)
   定义体: Filter.rmap f.graph' l
 
 @[simp]
@@ -625,7 +625,7 @@ theorem mem_pmap
 
 中文:
 定理 mem_pmap
-  条件: (f : α ->. β) (l : Filter α) (s : Set β)
+  条件: (f : α ->. β) (l : 滤子 α) (s : 集合 β)
   结论: s in l.pmap f ↔ f.core s in l
   证明: Iff.rfl
 
@@ -644,7 +644,7 @@ definition PTendsto
 
 中文:
 定义 PTendsto
-  签名: (f : α ->. β) (l₁ : Filter α) (l₂ : Filter β)
+  签名: (f : α ->. β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   定义体: l₁.pmap f <= l₂
 -/
 def PTendsto (f : α ->. β) (l₁ : Filter α) (l₂ : Filter β) :=
@@ -660,7 +660,7 @@ theorem ptendsto_def
 
 中文:
 定理 ptendsto_def
-  条件: (f : α ->. β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (f : α ->. β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -679,7 +679,7 @@ theorem ptendsto_iff_rtendsto
 
 中文:
 定理 ptendsto_iff_rtendsto
-  条件: (l₁ : Filter α) (l₂ : Filter β) (f : α ->. β)
+  条件: (l₁ : 滤子 α) (l₂ : 滤子 β) (f : α ->. β)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -701,7 +701,7 @@ theorem pmap_res
 
 中文:
 定理 pmap_res
-  条件: (l : Filter α) (s : Set α) (f : α -> β)
+  条件: (l : 滤子 α) (s : 集合 α) (f : α -> β)
   证明: by
   ext t
   simp only [PFun.core_res, mem_pmap, mem_map, mem_inf_principal, imp_iff_not_or]
@@ -726,7 +726,7 @@ theorem tendsto_iff_ptendsto
 
 中文:
 定理 tendsto_iff_ptendsto
-  条件: (l₁ : Filter α) (l₂ : Filter β) (s : Set α) (f : α -> β)
+  条件: (l₁ : 滤子 α) (l₂ : 滤子 β) (s : 集合 α) (f : α -> β)
   证明: by
   simp only [Tendsto, PTendsto, pmap_res]
 
@@ -748,7 +748,7 @@ theorem tendsto_iff_ptendsto_univ
 
 中文:
 定理 tendsto_iff_ptendsto_univ
-  条件: (l₁ : Filter α) (l₂ : Filter β) (f : α -> β)
+  条件: (l₁ : 滤子 α) (l₂ : 滤子 β) (f : α -> β)
   证明: by
   rw [← tendsto_iff_ptendsto]
   simp [principal_univ]
@@ -770,7 +770,7 @@ definition pcomap'
 
 中文:
 定义 pcomap'
-  签名: (f : α ->. β) (l : Filter β)
+  签名: (f : α ->. β) (l : 滤子 β)
   定义体: Filter.rcomap' f.graph' l
 
 Depends on / 依赖: Filter, Filter.rcomap, f.graph, rcomap
@@ -788,7 +788,7 @@ definition PTendsto'
 
 中文:
 定义 PTendsto'
-  签名: (f : α ->. β) (l₁ : Filter α) (l₂ : Filter β)
+  签名: (f : α ->. β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   定义体: l₁ <= l₂.rcomap' f.graph'
 
 Depends on / 依赖: f.graph, rcomap
@@ -806,7 +806,7 @@ theorem ptendsto'_def
 
 中文:
 定理 ptendsto'_def
-  条件: (f : α ->. β) (l₁ : Filter α) (l₂ : Filter β)
+  条件: (f : α ->. β) (l₁ : 滤子 α) (l₂ : 滤子 β)
   证明: rtendsto'_def _ _ _
 
 Depends on / 依赖: _def, rtendsto
@@ -827,7 +827,7 @@ theorem ptendsto_of_ptendsto'
 
 中文:
 定理 ptendsto_of_ptendsto'
-  条件: {f : α ->. β} {l₁ : Filter α} {l₂ : Filter β}
+  条件: {f : α ->. β} {l₁ : 滤子 α} {l₂ : 滤子 β}
   证明: by
   rw [ptendsto_def]; rw [ptendsto'_def]
   exact fun h s sl₂ => mem_of_superset (h s sl₂) (PFun.preimage_subset_core _ _)
@@ -853,7 +853,7 @@ theorem ptendsto'_of_ptendsto
 
 中文:
 定理 ptendsto'_of_ptendsto
-  条件: {f : α ->. β} {l₁ : Filter α} {l₂ : Filter β} (h : f.Dom in l₁)
+  条件: {f : α ->. β} {l₁ : 滤子 α} {l₂ : 滤子 β} (h : f.Dom in l₁)
   证明: by
   rw [ptendsto_def]; rw [ptendsto'_def]
   intro h' s sl₂

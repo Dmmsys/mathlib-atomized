@@ -66,7 +66,7 @@ theorem induction_lon
 
 中文:
 定理 induction_lon
-  结论: {R : 类型} [Semiring R] {ι : 类型} [DecidableEq ι]
+  结论: {R : 类型} [半环 R] {ι : 类型} [DecidableEq ι]
   证明: by
   induction x using DirectSum.induction_on with
   | zero => exact zero
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (⨁ i, A i)
+  签名: 模 R (⨁ i, A i)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -280,7 +280,7 @@ definition asPowersEquiv
 
 中文:
 定义 asPowersEquiv
-  签名: : asPowers R A ≃ₐ[R] FreeProduct R A
+  签名: : asPowers R A ≃ₐ[R] 自由积 R A
   定义体: RingCon.congrₐ _
     (powerAlgebraEquivFreeTensorAlgebra R A |>.symm) (by
       rw [ringCon']; rw [ringCon]; rw [rel']
@@ -316,7 +316,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (FreeProduct R A)
+  签名: : 半环 (自由积 R A)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -332,7 +332,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R (FreeProduct R A)
+  签名: : 代数 R (自由积 R A)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -349,7 +349,7 @@ abbreviation mkAlgHom
 
 中文:
 缩写 mkAlgHom
-  签名: : FreeTensorAlgebra R A ->ₐ[R] FreeProduct R A
+  签名: : FreeTensorAlgebra R A ->ₐ[R] 自由积 R A
   定义体: RingCon.mkₐ _ _
 
 Depends on / 依赖: RingCon, RingCon.mk
@@ -367,7 +367,7 @@ definition ι'
 
 中文:
 定义 ι'
-  签名: : (⨁ i, A i) ->ₗ[R] FreeProduct R A
+  签名: : (⨁ i, A i) ->ₗ[R] 自由积 R A
   定义体: (mkAlgHom R A).toLinearMap ∘ₗ TensorAlgebra.ι R (M := ⨁ i, A i)
 
 Depends on / 依赖: TensorAlgebra, mkAlgHom, toLinearMap
@@ -408,7 +408,7 @@ exact Quotient.sound RingCon.le_ringConGen _ _ rel_id R A (i := i)
 中文:
 定理 identify_one
   条件: (i : I)
-  结论: ι' R A (DirectSum.lof R I A i 1) = 1
+  结论: ι' R A (直和.lof R I A i 1) = 1
   证明: by
   suffices ι' R A (DirectSum.lof R I A i 1) = mkAlgHom R A 1 by simpa [← ι_apply]
 exact Quotient.sound RingCon.le_ringConGen _ _ rel_id R A (i := i)
@@ -519,7 +519,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : ({i : I} -> A i ->ₐ[R] B) ≃ (FreeProduct R A ->ₐ[R] B) where
+  签名: : ({i : I} -> A i ->ₐ[R] B) ≃ (自由积 R A ->ₐ[R] B) where
   定义体: RingCon.liftₐ _
       (TensorAlgebra.lift R <| DirectSum.toModule R I B <| (@maps · |>.toLinearMap))
  RingCon.ringConGen_le.2 fun x y r => by

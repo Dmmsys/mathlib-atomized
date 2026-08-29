@@ -68,7 +68,7 @@ definition subMulAction
 
 中文:
 定义 subMulAction
-  签名: : SubMulAction G (Finset α) where
+  签名: : SubMul作用 G (有限集 α) where
   定义体: powersetCard α n
   smul_mem' g s := (card_smul_finset g s).trans
 
@@ -91,7 +91,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (powersetCard α n)
+  签名: 乘法作用 G (powersetCard α n)
   定义体: inferInstanceAs MulAction G (subMulAction G α n)
 
 Depends on / 依赖: MulAction, subMulAction
@@ -168,7 +168,7 @@ theorem addAction_faithful
 
 中文:
 定理 addAction_faithful
-  结论: {G : 类型} [AddGroup G] [AddAction G α] {n : 自然数}
+  结论: {G : 类型} [加法群 G] [加法作用 G α] {n : 自然数}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · contrapose h with h
@@ -213,7 +213,7 @@ theorem faithfulVAdd
 
 中文:
 定理 faithfulVAdd
-  结论: {G : 类型} [AddGroup G] [AddAction G α] {n : 自然数}
+  结论: {G : 类型} [加法群 G] [加法作用 G α] {n : 自然数}
   证明: by
   rw [faithfulVAdd_iff]
   intro g hg
@@ -294,7 +294,7 @@ theorem faithfulSMul
 
 中文:
 定理 faithfulSMul
-  条件: (hn : 1 <= n) (hα : n < E自然数.card α) [FaithfulSMul G α]
+  条件: (hn : 1 <= n) (hα : n < E自然数.card α) [忠实标量乘法 G α]
   证明: by
   rw [faithfulSMul_iff]
   intro g hg
@@ -336,7 +336,7 @@ definition mulActionHom_of_embedding
 
 中文:
 定义 mulActionHom_of_embedding
-  签名: : (Fin n ↪ α) ->[G] powersetCard α n where
+  签名: : (有限集 n ↪ α) ->[G] powersetCard α n where
   定义体: ofFinEmb n α
   map_smul' g f := by
     rw [← Subtype.coe_inj]; rw [coe_smul]; rw [f.smul_def]; rw [val_ofFinEmb]; rw [val_ofFinEmb]; rw [smul_finset_def]; rw [← map_map]; rw [map_eq_image]
@@ -365,7 +365,7 @@ theorem coe_mulActionHom_of_embedding
 
 中文:
 定理 coe_mulActionHom_of_embedding
-  条件: (f : Fin n ↪ α)
+  条件: (f : 有限集 n ↪ α)
   证明: rfl
 
 @[to_additive]
@@ -437,7 +437,7 @@ theorem isPretransitive
 
 中文:
 定理 isPretransitive
-  结论: IsPretransitive (Perm α) (powersetCard α n)
+  结论: 是Pretransitive (置换 α) (powersetCard α n)
   证明: isPretransitive_of_isMultiplyPretransitive _ (isMultiplyPretransitive α n)
 
 Depends on / 依赖: isMultiplyPretransitive, isPretransitive_of_isMultiplyPretransitive
@@ -727,7 +727,7 @@ theorem isPretransitive_alternatingGroup
 
 中文:
 定理 isPretransitive_alternatingGroup
-  条件: [Fintype α] (hα : 3 <= 自然数.card α)
+  条件: [有限类型 α] (hα : 3 <= 自然数.card α)
   证明: by
   wlog! hn : 2 * n <= Nat.card α
   · have : IsPretransitive (alternatingGroup α) (powersetCard α (Nat.card α - n)) := by
@@ -778,7 +778,7 @@ theorem isPreprimitive_alternatingGroup
 
 中文:
 定理 isPreprimitive_alternatingGroup
-  结论: [Fintype α] {n : 自然数}
+  结论: [有限类型 α] {n : 自然数}
   证明: by
   have : IsPretransitive (alternatingGroup α) (powersetCard α n) :=
     isPretransitive_alternatingGroup (le_trans h_three_le hn.le)

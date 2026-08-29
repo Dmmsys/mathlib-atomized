@@ -40,13 +40,13 @@ structure CFilter
 
 中文:
 结构 CFilter
-  参数: (α σ : 类型) [PartialOrder α]
+  参数: (α σ : 类型) [偏序 α]
   公理与运算 (5 个):
     - f : σ -> α
     - pt : σ
     - inf : σ -> σ -> σ
-    - inf_le_left : 对任意 a b : σ, f (inf a b) <= f a
-    - inf_le_right : 对任意 a b : σ, f (inf a b) <= f b
+    - inf_le_left : 对任意 a b : σ, f (下确界 a b) <= f a
+    - inf_le_right : 对任意 a b : σ, f (下确界 a b) <= f b
 
 Depends on / 依赖: Nat.le_refl, _eq_none, getElem, l.length, le_refl, length, mem_iff_getElem
 -/
@@ -72,8 +72,8 @@ instance [Inhabited
       inf_le_right := fun _ _ => inf_le_right }⟩
 
 中文:
-实例 [Inhabited
-  签名: α] [SemilatticeInf α] : Inhabited (CFilter α α)
+实例 [可居
+  签名: α] [SemilatticeInf α] : 可居 (CFilter α α)
   定义体: ⟨{ f := id
       pt := default
       inf := (· ⊓ ·)
@@ -124,8 +124,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (f pt inf h₁ h₂ a)
-  结论: (@CFilter.mk α σ _ f pt inf h₁ h₂) a = f a
+  条件: (f pt 下确界 h₁ h₂ a)
+  结论: (@CFilter.mk α σ _ f pt 下确界 h₁ h₂) a = f a
   证明: rfl
 -/
 theorem coe_mk (f pt inf h₁ h₂ a) : (@CFilter.mk α σ _ f pt inf h₁ h₂) a = f a :=
@@ -191,7 +191,7 @@ definition toFilter
 
 中文:
 定义 toFilter
-  签名: (F : CFilter (Set α) σ)
+  签名: (F : CFilter (集合 α) σ)
   定义体: { a | exists b, F b subseteq a }
   univ_sets := ⟨F.pt, subset_univ _⟩
   sets_of_superset := fun ⟨b, h⟩ s => ⟨b, Subset.trans h s⟩
@@ -221,7 +221,7 @@ theorem mem_toFilter_sets
 
 中文:
 定理 mem_toFilter_sets
-  条件: (F : CFilter (Set α) σ) {a : Set α}
+  条件: (F : CFilter (集合 α) σ) {a : 集合 α}
   结论: a in F.toFilter ↔ 存在 b, F b subseteq a
   证明: Iff.rfl
 
@@ -245,11 +245,11 @@ structure Filter.Realizer
     - eq : F.toFilter = f
 
 中文:
-结构 Filter.Realizer
-  参数: (f : Filter α)
+结构 滤子.实数izer
+  参数: (f : 滤子 α)
   公理与运算 (3 个):
     - σ : 类型
-    - F : CFilter (Set α) σ
+    - F : CFilter (集合 α) σ
     - eq : F.toFilter = f
 -/
 structure Filter.Realizer (f : Filter α) where
@@ -266,8 +266,8 @@ definition CFilter.toRealizer
   body: ⟨σ, F, rfl⟩
 
 中文:
-定义 CFilter.toRealizer
-  签名: (F : CFilter (Set α) σ)
+定义 CFilter.to实数izer
+  签名: (F : CFilter (集合 α) σ)
   定义体: ⟨σ, F, rfl⟩
 -/
 protected def CFilter.toRealizer (F : CFilter (Set α) σ) : F.toFilter.Realizer :=
@@ -287,7 +287,7 @@ theorem mem_sets
 
 中文:
 定理 mem_sets
-  条件: {f : Filter α} (F : f.实数izer) {a : Set α}
+  条件: {f : 滤子 α} (F : f.实数izer) {a : 集合 α}
   结论: a in f ↔ 存在 b, F.F b subseteq a
   证明: by
   cases F; subst f; rfl
@@ -305,7 +305,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: {f g : Filter α} (e : f = g) (F : f.实数izer)
+  签名: {f g : 滤子 α} (e : f = g) (F : f.实数izer)
   定义体: ⟨F.σ, F.F, F.eq.trans e⟩
 
 Depends on / 依赖: F.eq.trans
@@ -329,7 +329,7 @@ filter_eq Set.ext fun _ => by simp [exists_mem_subset_iff
 
 中文:
 定义 ofFilter
-  签名: (f : Filter α)
+  签名: (f : 滤子 α)
   定义体: ⟨f.sets,
     { f := Subtype.val
       pt := ⟨univ, univ_mem⟩
@@ -364,7 +364,7 @@ definition ofEquiv
 
 中文:
 定义 ofEquiv
-  签名: {f : Filter α} (F : f.实数izer) (E : F.σ ≃ τ)
+  签名: {f : 滤子 α} (F : f.实数izer) (E : F.σ ≃ τ)
   定义体: ⟨τ, F.F.ofEquiv E, by
     refine Eq.trans ?_ F.eq
     exact filter_eq (Set.ext fun _ =>
@@ -394,7 +394,7 @@ theorem ofEquiv_σ
 
 中文:
 定理 ofEquiv_σ
-  条件: {f : Filter α} (F : f.实数izer) (E : F.σ ≃ τ)
+  条件: {f : 滤子 α} (F : f.实数izer) (E : F.σ ≃ τ)
   结论: (F.ofEquiv E).σ = τ
   证明: rfl
 
@@ -414,7 +414,7 @@ theorem ofEquiv_F
 
 中文:
 定理 ofEquiv_F
-  条件: {f : Filter α} (F : f.实数izer) (E : F.σ ≃ τ) (s : τ)
+  条件: {f : 滤子 α} (F : f.实数izer) (E : F.σ ≃ τ) (s : τ)
   证明: rfl
 -/
 theorem ofEquiv_F {f : Filter α} (F : f.Realizer) (E : F.σ ≃ τ) (s : τ) :
@@ -438,7 +438,7 @@ filter_eq Set.ext fun _ => ⟨fun ⟨_, s⟩ => s, fun h => ⟨(), h⟩⟩⟩
 
 中文:
 定义 principal
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ⟨Unit,
     { f := fun _ => s
       pt := ()
@@ -472,8 +472,8 @@ theorem principal_σ
 
 中文:
 定理 principal_σ
-  条件: (s : Set α)
-  结论: (实数izer.principal s).σ = Unit
+  条件: (s : 集合 α)
+  结论: (实数izer.principal s).σ = 单元
   证明: rfl
 
 @[simp]
@@ -493,7 +493,7 @@ theorem principal_F
 
 中文:
 定理 principal_F
-  条件: (s : Set α) (u : Unit)
+  条件: (s : 集合 α) (u : 单元)
   结论: (实数izer.principal s).F u = s
   证明: rfl
 -/
@@ -515,7 +515,7 @@ definition top
 
 中文:
 定义 top
-  签名: : (⊤ : Filter α).实数izer
+  签名: : (⊤ : 滤子 α).实数izer
   定义体: (Realizer.principal _).ofEq principal_univ
 
 @[simp]
@@ -536,7 +536,7 @@ theorem top_σ
 
 中文:
 定理 top_σ
-  结论: (@实数izer.top α).σ = Unit
+  结论: (@实数izer.top α).σ = 单元
   证明: rfl
 
 @[simp]
@@ -556,7 +556,7 @@ theorem top_F
 
 中文:
 定理 top_F
-  条件: (u : Unit)
+  条件: (u : 单元)
   结论: (@实数izer.top α).F u = univ
   证明: rfl
 -/
@@ -575,7 +575,7 @@ definition bot
 
 中文:
 定义 bot
-  签名: : (⊥ : Filter α).实数izer
+  签名: : (⊥ : 滤子 α).实数izer
   定义体: (Realizer.principal _).ofEq principal_empty
 
 @[simp]
@@ -596,7 +596,7 @@ theorem bot_σ
 
 中文:
 定理 bot_σ
-  结论: (@实数izer.bot α).σ = Unit
+  结论: (@实数izer.bot α).σ = 单元
   证明: rfl
 
 @[simp]
@@ -618,7 +618,7 @@ theorem bot_F
 
 中文:
 定理 bot_F
-  条件: (u : Unit)
+  条件: (u : 单元)
   结论: (@实数izer.bot α).F u = ∅
   证明: rfl
 -/
@@ -642,7 +642,7 @@ filter_eq Set.ext fun _ => by
 
 中文:
 定义 map
-  签名: (m : α -> β) {f : Filter α} (F : f.实数izer)
+  签名: (m : α -> β) {f : 滤子 α} (F : f.实数izer)
   定义体: ⟨F.σ,
     { f := fun s => image m (F.F s)
       pt := F.F.pt
@@ -677,7 +677,7 @@ theorem map_σ
 
 中文:
 定理 map_σ
-  条件: (m : α -> β) {f : Filter α} (F : f.实数izer)
+  条件: (m : α -> β) {f : 滤子 α} (F : f.实数izer)
   结论: (F.map m).σ = F.σ
   证明: rfl
 
@@ -698,8 +698,8 @@ theorem map_F
 
 中文:
 定理 map_F
-  条件: (m : α -> β) {f : Filter α} (F : f.实数izer) (s)
-  结论: (F.map m).F s = image m (F.F s)
+  条件: (m : α -> β) {f : 滤子 α} (F : f.实数izer) (s)
+  结论: (F.map m).F s = 像 m (F.F s)
   证明: rfl
 -/
 theorem map_F (m : α -> β) {f : Filter α} (F : f.Realizer) (s) : (F.map m).F s = image m (F.F s) :=
@@ -723,7 +723,7 @@ filter_eq Set.ext fun _ => by
 
 中文:
 定义 comap
-  签名: (m : α -> β) {f : Filter β} (F : f.实数izer)
+  签名: (m : α -> β) {f : 滤子 β} (F : f.实数izer)
   定义体: ⟨F.σ,
     { f := fun s => preimage m (F.F s)
       pt := F.F.pt
@@ -763,8 +763,8 @@ definition sup
       inf_le_right := fun _ _ => union_subset_union (F.F
 
 中文:
-定义 sup
-  签名: {f g : Filter α} (F : f.实数izer) (G : g.实数izer)
+定义 上确界
+  签名: {f g : 滤子 α} (F : f.实数izer) (G : g.实数izer)
   定义体: ⟨F.σ × G.σ,
     { f := fun ⟨s, t⟩ => F.F s union G.F t
       pt := (F.F.pt, G.F.pt)
@@ -797,8 +797,8 @@ definition inf
       inf_le_right := fun _ _ => inter_subset_inter (F.F
 
 中文:
-定义 inf
-  签名: {f g : Filter α} (F : f.实数izer) (G : g.实数izer)
+定义 下确界
+  签名: {f g : 滤子 α} (F : f.实数izer) (G : g.实数izer)
   定义体: ⟨F.σ × G.σ,
     { f := fun ⟨s, t⟩ => F.F s inter G.F t
       pt := (F.F.pt, G.F.pt)
@@ -882,7 +882,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: {f : Filter α} {m : α -> Filter β} (F : f.实数izer) (G : 对任意 i, (m i).实数izer)
+  签名: {f : 滤子 α} {m : α -> 滤子 β} (F : f.实数izer) (G : 对任意 i, (m i).实数izer)
   定义体: ⟨Σ s : F.σ, forall i in F.F s, (G i).σ,
     { f := fun ⟨s, f⟩ => ⋃ i in F.F s, (G i).F (f i (by assumption))
       pt := ⟨F.F.pt, fun i _ => (G i).F.pt⟩
@@ -929,7 +929,7 @@ F'.ofEquiv
 
 中文:
 定义 iSup
-  签名: {f : α -> Filter β} (F : 对任意 i, (f i).实数izer)
+  签名: {f : α -> 滤子 β} (F : 对任意 i, (f i).实数izer)
   定义体: let F' : (⨆ i, f i).Realizer :=
 (Realizer.bind Realizer.top F).ofEq
 filter_eq Set.ext by simp [Filter.bind, iSup_sets_eq]
@@ -954,8 +954,8 @@ definition prod
   body: (F.comap _).inf (G.comap _)
 
 中文:
-定义 prod
-  签名: {f g : Filter α} (F : f.实数izer) (G : g.实数izer)
+定义 乘积
+  签名: {f g : 滤子 α} (F : f.实数izer) (G : g.实数izer)
   定义体: (F.comap _).inf (G.comap _)
 -/
 protected def prod {f g : Filter α} (F : f.Realizer) (G : g.Realizer) : (f ×ˢ g).Realizer :=
@@ -975,7 +975,7 @@ F.mem_sets.2
 
 中文:
 定理 le_iff
-  条件: {f g : Filter α} (F : f.实数izer) (G : g.实数izer)
+  条件: {f g : 滤子 α} (F : f.实数izer) (G : g.实数izer)
   证明: ⟨fun H t => F.mem_sets.1 (H (G.mem_sets.2 ⟨t, Subset.refl _⟩)), fun H _ h =>
 F.mem_sets.2
       let ⟨s, h₁⟩ := G.mem_sets.1 h
@@ -1002,7 +1002,7 @@ theorem tendsto_iff
 
 中文:
 定理 tendsto_iff
-  结论: (f : α -> β) {l₁ : Filter α} {l₂ : Filter β} (L₁ : l₁.实数izer)
+  结论: (f : α -> β) {l₁ : 滤子 α} {l₂ : 滤子 β} (L₁ : l₁.实数izer)
   证明: (le_iff (L₁.map f) L₂).trans forall_congr' fun _ => exists_congr fun _ => image_subset_iff
 
 Depends on / 依赖: exists_congr, forall_congr, image_subset_iff, le_iff
@@ -1027,8 +1027,8 @@ theorem ne_bot_iff
 
 中文:
 定理 ne_bot_iff
-  条件: {f : Filter α} (F : f.实数izer)
-  结论: f != ⊥ ↔ 对任意 a : F.σ, (F.F a).Nonempty
+  条件: {f : 滤子 α} (F : f.实数izer)
+  结论: f != ⊥ ↔ 对任意 a : F.σ, (F.F a).非空
   证明: by
   rw [not_iff_comm]; rw [← le_bot_iff]; rw [F.le_iff Realizer.bot]; rw [not_forall]
   simp only [Set.not_nonempty_iff_eq_empty]

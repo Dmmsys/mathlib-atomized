@@ -34,8 +34,8 @@ instance NonUnitalNonAssocSemiring.toDistribSMul
   body: mul_add
 
 中文:
-实例 NonUnitalNonAssocSemiring.toDistribSMul
-  签名: [NonUnitalNonAssocSemiring R]
+实例 非幺非结合半环.toDistribSMul
+  签名: [非幺非结合半环 R]
   定义体: mul_add
 
 Depends on / 依赖: mul_add
@@ -55,8 +55,8 @@ instance NonUnitalNonAssocSemiring.nat_isScalarTower
     | succ n ih => simp_rw [succ_nsmul, ← ih, smul_eq_mul, add_mul]
 
 中文:
-实例 NonUnitalNonAssocSemiring.nat_isScalarTower
-  签名: [NonUnitalNonAssocSemiring R]
+实例 非幺非结合半环.nat_isScalarTower
+  签名: [非幺非结合半环 R]
   定义体: by
     induction n with
     | zero => simp
@@ -82,8 +82,8 @@ instance NonUnitalNonAssocRing.int_isScalarTower
     | -[n+1] => by simp_rw [negSucc_zsmul, smul_eq_mul, neg_mul, smul_mul_assoc]
 
 中文:
-实例 NonUnitalNonAssocRing.int_isScalarTower
-  签名: [NonUnitalNonAssocRing R]
+实例 非幺非结合环.int_isScalarTower
+  签名: [非幺非结合环 R]
   定义体: match n with
     | (n : Nat) => by simp_rw [natCast_zsmul, smul_assoc]
     | -[n+1] => by simp_rw [negSucc_zsmul, smul_eq_mul, neg_mul, smul_mul_assoc]

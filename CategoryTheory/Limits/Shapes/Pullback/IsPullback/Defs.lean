@@ -57,11 +57,11 @@ structure IsPullback
     - isLimit' : Nonempty (IsLimit (PullbackCone.mk _ _ w))
 
 中文:
-结构 IsPullback
+结构 是拉回
   参数: {P X Y Z : C} (fst : P ⟶ X) (snd : P ⟶ Y) (f : X ⟶ Z) (g : Y ⟶ Z)
-  继承: CommSq fst snd f g
+  继承: 交换Sq fst snd f g
   公理与运算 (1 个):
-    - isLimit' : Nonempty (IsLimit (PullbackCone.mk _ _ w))
+    - isLimit' : 非空 (是极限 (PullbackCone.mk _ _ w))
 -/
 structure IsPullback {P X Y Z : C} (fst : P ⟶ X) (snd : P ⟶ Y) (f : X ⟶ Z) (g : Y ⟶ Z) : Prop
     extends CommSq fst snd f g where
@@ -79,11 +79,11 @@ structure IsPushout
     - isColimit' : Nonempty (IsColimit (PushoutCocone.mk _ _ w))
 
 中文:
-结构 IsPushout
+结构 是推出
   参数: {Z X Y P : C} (f : Z ⟶ X) (g : Z ⟶ Y) (inl : X ⟶ P) (inr : Y ⟶ P)
-  继承: CommSq f g inl inr
+  继承: 交换Sq f g inl inr
   公理与运算 (1 个):
-    - isColimit' : Nonempty (IsColimit (PushoutCocone.mk _ _ w))
+    - isColimit' : 非空 (是余极限 (PushoutCocone.mk _ _ w))
 -/
 structure IsPushout {Z X Y P : C} (f : Z ⟶ X) (g : Z ⟶ Y) (inl : X ⟶ P) (inr : Y ⟶ P) : Prop
     extends CommSq f g inl inr where
@@ -105,7 +105,7 @@ definition cone
 
 中文:
 定义 cone
-  签名: (h : IsPullback fst snd f g)
+  签名: (h : 是拉回 fst snd f g)
   定义体: h.toCommSq.cone
 
 @[simp]
@@ -129,7 +129,7 @@ theorem cone_fst
 
 中文:
 定理 cone_fst
-  条件: (h : IsPullback fst snd f g)
+  条件: (h : 是拉回 fst snd f g)
   结论: h.cone.fst = fst
   证明: rfl
 
@@ -150,7 +150,7 @@ theorem cone_snd
 
 中文:
 定理 cone_snd
-  条件: (h : IsPullback fst snd f g)
+  条件: (h : 是拉回 fst snd f g)
   结论: h.cone.snd = snd
   证明: rfl
 -/
@@ -167,7 +167,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: (h : IsPullback fst snd f g)
+  签名: (h : 是拉回 fst snd f g)
   定义体: h.isLimit'.some
 
 Depends on / 依赖: h.isLimit, isLimit
@@ -187,7 +187,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (hP : IsPullback fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+  签名: (hP : 是拉回 fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   定义体: PullbackCone.IsLimit.lift hP.isLimit h k w
 
 @[reassoc (attr := simp)]
@@ -211,7 +211,7 @@ lemma lift_fst
 
 中文:
 引理 lift_fst
-  结论: (hP : IsPullback fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+  结论: (hP : 是拉回 fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   证明: PullbackCone.IsLimit.lift_fst hP.isLimit h k w
 
 @[reassoc (attr := simp)]
@@ -233,7 +233,7 @@ lemma lift_snd
 
 中文:
 引理 lift_snd
-  结论: (hP : IsPullback fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+  结论: (hP : 是拉回 fst snd f g) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   证明: PullbackCone.IsLimit.lift_snd hP.isLimit h k w
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.lift_snd, hP.isLimit, isLimit, lift_snd
@@ -251,8 +251,8 @@ lemma exists_lift
   proof: ⟨hP.lift h k w, by simp, by simp⟩
 
 中文:
-引理 exists_lift
-  结论: (hP : IsPullback fst snd f g)
+引理 存在_lift
+  结论: (hP : 是拉回 fst snd f g)
   证明: ⟨hP.lift h k w, by simp, by simp⟩
 
 Depends on / 依赖: hP.lift
@@ -272,7 +272,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: (hP : IsPullback fst snd f g) {W : C} {k l : W ⟶ P}
+  结论: (hP : 是拉回 fst snd f g) {W : C} {k l : W ⟶ P}
   证明: PullbackCone.IsLimit.hom_ext hP.isLimit h₀ h₁
 
 Depends on / 依赖: IsLimit, PullbackCone, PullbackCone.IsLimit.hom_ext, hP.isLimit, hom_ext, isLimit
@@ -295,8 +295,8 @@ theorem of_isLimit
 
 中文:
 定理 of_isLimit
-  条件: {c : PullbackCone f g} (h : Limits.IsLimit c)
-  结论: IsPullback c.fst c.snd f g
+  条件: {c : PullbackCone f g} (h : Limits.是极限 c)
+  结论: 是拉回 c.fst c.snd f g
   证明: { w := c.condition
     isLimit' := ⟨IsLimit.ofIsoLimit h (Limits.PullbackCone.ext (Iso.refl _)
       (by simp) (by simp))⟩ }
@@ -318,7 +318,7 @@ theorem of_isLimit'
 
 中文:
 定理 of_isLimit'
-  条件: (w : CommSq fst snd f g) (h : Limits.IsLimit w.cone)
+  条件: (w : 交换Sq fst snd f g) (h : Limits.是极限 w.cone)
   证明: of_isLimit h
 
 Depends on / 依赖: of_isLimit
@@ -339,7 +339,7 @@ lemma of_isLimit_cone
 
 中文:
 引理 of_isLimit_cone
-  条件: {D : WalkingCospan ⥤ C} {c : Cone D} (hc : IsLimit c)
+  条件: {D : WalkingCospan ⥤ C} {c : 锥 D} (hc : 是极限 c)
   证明: by simp_rw [Cone.w]
   isLimit' := ⟨IsLimit.equivOfNatIsoOfIso _ _ _ (PullbackCone.isoMk c) hc⟩
 
@@ -362,7 +362,7 @@ lemma hasPullback
 
 中文:
 引理 hasPullback
-  条件: (h : IsPullback fst snd f g)
+  条件: (h : 是拉回 fst snd f g)
   结论: HasPullback f g where
   证明: ⟨⟨h.cone, h.isLimit⟩⟩
 
@@ -409,7 +409,7 @@ definition isoIsPullback
 
 中文:
 定义 isoIsPullback
-  签名: (h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g)
+  签名: (h : 是拉回 fst snd f g) (h' : 是拉回 fst' snd' f g)
   定义体: IsLimit.conePointUniqueUpToIso h.isLimit h'.isLimit
 
 @[reassoc (attr := simp)]
@@ -433,7 +433,7 @@ theorem isoIsPullback_hom_fst
 
 中文:
 定理 isoIsPullback_hom_fst
-  条件: (h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g)
+  条件: (h : 是拉回 fst snd f g) (h' : 是拉回 fst' snd' f g)
   证明: IsLimit.conePointUniqueUpToIso_hom_comp h.isLimit h'.isLimit WalkingCospan.left
 
 @[reassoc (attr := simp)]
@@ -457,7 +457,7 @@ theorem isoIsPullback_hom_snd
 
 中文:
 定理 isoIsPullback_hom_snd
-  条件: (h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g)
+  条件: (h : 是拉回 fst snd f g) (h' : 是拉回 fst' snd' f g)
   证明: IsLimit.conePointUniqueUpToIso_hom_comp h.isLimit h'.isLimit WalkingCospan.right
 
 @[reassoc (attr := simp)]
@@ -482,7 +482,7 @@ theorem isoIsPullback_inv_fst
 
 中文:
 定理 isoIsPullback_inv_fst
-  条件: (h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g)
+  条件: (h : 是拉回 fst snd f g) (h' : 是拉回 fst' snd' f g)
   证明: by
   simp only [Iso.inv_comp_eq, isoIsPullback_hom_fst]
 
@@ -506,7 +506,7 @@ theorem isoIsPullback_inv_snd
 
 中文:
 定理 isoIsPullback_inv_snd
-  条件: (h : IsPullback fst snd f g) (h' : IsPullback fst' snd' f g)
+  条件: (h : 是拉回 fst snd f g) (h' : 是拉回 fst' snd' f g)
   证明: by
   simp only [Iso.inv_comp_eq, isoIsPullback_hom_snd]
 
@@ -528,7 +528,7 @@ definition isoPullback
 
 中文:
 定义 isoPullback
-  签名: (h : IsPullback fst snd f g) [HasPullback f g]
+  签名: (h : 是拉回 fst snd f g) [HasPullback f g]
   定义体: (limit.isoLimitCone ⟨_, h.isLimit⟩).symm
 
 Depends on / 依赖: h.isLimit, isLimit, isoLimitCone, limit.isoLimitCone
@@ -551,7 +551,7 @@ theorem isoPullback_hom_fst
 
 中文:
 定理 isoPullback_hom_fst
-  条件: (h : IsPullback fst snd f g) [HasPullback f g]
+  条件: (h : 是拉回 fst snd f g) [HasPullback f g]
   证明: by
   dsimp [isoPullback, cone, CommSq.cone]
   simp
@@ -579,7 +579,7 @@ theorem isoPullback_hom_snd
 
 中文:
 定理 isoPullback_hom_snd
-  条件: (h : IsPullback fst snd f g) [HasPullback f g]
+  条件: (h : 是拉回 fst snd f g) [HasPullback f g]
   证明: by
   dsimp [isoPullback, cone, CommSq.cone]
   simp
@@ -606,7 +606,7 @@ theorem isoPullback_inv_fst
 
 中文:
 定理 isoPullback_inv_fst
-  条件: (h : IsPullback fst snd f g) [HasPullback f g]
+  条件: (h : 是拉回 fst snd f g) [HasPullback f g]
   证明: by simp [Iso.inv_comp_eq]
 
 @[reassoc (attr := simp)]
@@ -627,7 +627,7 @@ theorem isoPullback_inv_snd
 
 中文:
 定理 isoPullback_inv_snd
-  条件: (h : IsPullback fst snd f g) [HasPullback f g]
+  条件: (h : 是拉回 fst snd f g) [HasPullback f g]
   证明: by simp [Iso.inv_comp_eq]
 
 Depends on / 依赖: Iso.inv_comp_eq, inv_comp_eq
@@ -653,7 +653,7 @@ definition cocone
 
 中文:
 定义 cocone
-  签名: (h : IsPushout f g inl inr)
+  签名: (h : 是推出 f g inl inr)
   定义体: h.toCommSq.cocone
 
 @[simp]
@@ -677,7 +677,7 @@ theorem cocone_inl
 
 中文:
 定理 cocone_inl
-  条件: (h : IsPushout f g inl inr)
+  条件: (h : 是推出 f g inl inr)
   结论: h.cocone.inl = inl
   证明: rfl
 
@@ -698,7 +698,7 @@ theorem cocone_inr
 
 中文:
 定理 cocone_inr
-  条件: (h : IsPushout f g inl inr)
+  条件: (h : 是推出 f g inl inr)
   结论: h.cocone.inr = inr
   证明: rfl
 -/
@@ -715,7 +715,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: (h : IsPushout f g inl inr)
+  签名: (h : 是推出 f g inl inr)
   定义体: h.isColimit'.some
 
 Depends on / 依赖: h.isColimit, isColimit
@@ -735,7 +735,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (hP : IsPushout f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
+  签名: (hP : 是推出 f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
   定义体: PushoutCocone.IsColimit.desc hP.isColimit h k w
 
 @[reassoc (attr := simp)]
@@ -759,7 +759,7 @@ lemma inl_desc
 
 中文:
 引理 inl_desc
-  结论: (hP : IsPushout f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
+  结论: (hP : 是推出 f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
   证明: PushoutCocone.IsColimit.inl_desc hP.isColimit h k w
 
 @[reassoc (attr := simp)]
@@ -781,7 +781,7 @@ lemma inr_desc
 
 中文:
 引理 inr_desc
-  结论: (hP : IsPushout f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
+  结论: (hP : 是推出 f g inl inr) {W : C} (h : X ⟶ W) (k : Y ⟶ W)
   证明: PushoutCocone.IsColimit.inr_desc hP.isColimit h k w
 
 Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.inr_desc, hP.isColimit, inr_desc, isColimit
@@ -799,8 +799,8 @@ lemma exists_desc
   proof: ⟨hP.desc h k w, by simp, by simp⟩
 
 中文:
-引理 exists_desc
-  结论: (hP : IsPushout f g inl inr)
+引理 存在_desc
+  结论: (hP : 是推出 f g inl inr)
   证明: ⟨hP.desc h k w, by simp, by simp⟩
 
 Depends on / 依赖: hP.desc
@@ -820,7 +820,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: (hP : IsPushout f g inl inr) {W : C} {k l : P ⟶ W}
+  结论: (hP : 是推出 f g inl inr) {W : C} {k l : P ⟶ W}
   证明: PushoutCocone.IsColimit.hom_ext hP.isColimit h₀ h₁
 
 Depends on / 依赖: IsColimit, PushoutCocone, PushoutCocone.IsColimit.hom_ext, hP.isColimit, hom_ext, isColimit
@@ -844,8 +844,8 @@ theorem of_isColimit
 
 中文:
 定理 of_isColimit
-  条件: {c : PushoutCocone f g} (h : Limits.IsColimit c)
-  结论: IsPushout f g c.inl c.inr
+  条件: {c : PushoutCocone f g} (h : Limits.是余极限 c)
+  结论: 是推出 f g c.inl c.inr
   证明: { w := c.condition
     isColimit' :=
       ⟨IsColimit.ofIsoColimit h (Limits.PushoutCocone.ext (Iso.refl _)
@@ -869,7 +869,7 @@ theorem of_isColimit'
 
 中文:
 定理 of_isColimit'
-  条件: (w : CommSq f g inl inr) (h : Limits.IsColimit w.cocone)
+  条件: (w : 交换Sq f g inl inr) (h : Limits.是余极限 w.cocone)
   证明: of_isColimit h
 
 Depends on / 依赖: of_isColimit
@@ -890,7 +890,7 @@ lemma of_isColimit_cocone
 
 中文:
 引理 of_isColimit_cocone
-  条件: {D : WalkingSpan ⥤ C} {c : Cocone D} (hc : IsColimit c)
+  条件: {D : WalkingSpan ⥤ C} {c : 余锥 D} (hc : 是余极限 c)
   证明: by simp_rw [Cocone.w]
   isColimit' := ⟨IsColimit.equivOfNatIsoOfIso _ _ _ (PushoutCocone.isoMk c) hc⟩
 
@@ -913,7 +913,7 @@ lemma hasPushout
 
 中文:
 引理 hasPushout
-  条件: (h : IsPushout f g inl inr)
+  条件: (h : 是推出 f g inl inr)
   结论: HasPushout f g where
   证明: ⟨⟨h.cocone, h.isColimit⟩⟩
 
@@ -958,7 +958,7 @@ definition isoIsPushout
 
 中文:
 定义 isoIsPushout
-  签名: (h : IsPushout f g inl inr) (h' : IsPushout f g inl' inr')
+  签名: (h : 是推出 f g inl inr) (h' : 是推出 f g inl' inr')
   定义体: IsColimit.coconePointUniqueUpToIso h.isColimit h'.isColimit
 
 @[reassoc (attr := simp)]
@@ -982,7 +982,7 @@ theorem inl_isoIsPushout_hom
 
 中文:
 定理 inl_isoIsPushout_hom
-  条件: (h : IsPushout f g inl inr) (h' : IsPushout f g inl' inr')
+  条件: (h : 是推出 f g inl inr) (h' : 是推出 f g inl' inr')
   证明: IsColimit.comp_coconePointUniqueUpToIso_hom h.isColimit h'.isColimit WalkingSpan.left
 
 @[reassoc (attr := simp)]
@@ -1006,7 +1006,7 @@ theorem inr_isoIsPushout_hom
 
 中文:
 定理 inr_isoIsPushout_hom
-  条件: (h : IsPushout f g inl inr) (h' : IsPushout f g inl' inr')
+  条件: (h : 是推出 f g inl inr) (h' : 是推出 f g inl' inr')
   证明: IsColimit.comp_coconePointUniqueUpToIso_hom h.isColimit h'.isColimit WalkingSpan.right
 
 @[reassoc (attr := simp)]
@@ -1031,7 +1031,7 @@ theorem inl_isoIsPushout_inv
 
 中文:
 定理 inl_isoIsPushout_inv
-  条件: (h : IsPushout f g inl inr) (h' : IsPushout f g inl' inr')
+  条件: (h : 是推出 f g inl inr) (h' : 是推出 f g inl' inr')
   证明: by
   simp only [Iso.comp_inv_eq, inl_isoIsPushout_hom]
 
@@ -1055,7 +1055,7 @@ theorem inr_isoIsPushout_inv
 
 中文:
 定理 inr_isoIsPushout_inv
-  条件: (h : IsPushout f g inl inr) (h' : IsPushout f g inl' inr')
+  条件: (h : 是推出 f g inl inr) (h' : 是推出 f g inl' inr')
   证明: by
   simp only [Iso.comp_inv_eq, inr_isoIsPushout_hom]
 
@@ -1077,7 +1077,7 @@ definition isoPushout
 
 中文:
 定义 isoPushout
-  签名: (h : IsPushout f g inl inr) [HasPushout f g]
+  签名: (h : 是推出 f g inl inr) [HasPushout f g]
   定义体: (colimit.isoColimitCocone ⟨_, h.isColimit⟩).symm
 
 Depends on / 依赖: colimit, colimit.isoColimitCocone, h.isColimit, isColimit, isoColimitCocone
@@ -1099,7 +1099,7 @@ theorem inl_isoPushout_inv
 
 中文:
 定理 inl_isoPushout_inv
-  条件: (h : IsPushout f g inl inr) [HasPushout f g]
+  条件: (h : 是推出 f g inl inr) [HasPushout f g]
   证明: by
   dsimp [isoPushout, cocone, CommSq.cocone]
   simp
@@ -1127,7 +1127,7 @@ theorem inr_isoPushout_inv
 
 中文:
 定理 inr_isoPushout_inv
-  条件: (h : IsPushout f g inl inr) [HasPushout f g]
+  条件: (h : 是推出 f g inl inr) [HasPushout f g]
   证明: by
   dsimp [isoPushout, cocone, CommSq.cocone]
   simp
@@ -1154,7 +1154,7 @@ theorem inl_isoPushout_hom
 
 中文:
 定理 inl_isoPushout_hom
-  条件: (h : IsPushout f g inl inr) [HasPushout f g]
+  条件: (h : 是推出 f g inl inr) [HasPushout f g]
   证明: by simp [← Iso.eq_comp_inv]
 
 @[reassoc (attr := simp)]
@@ -1175,7 +1175,7 @@ theorem inr_isoPushout_hom
 
 中文:
 定理 inr_isoPushout_hom
-  条件: (h : IsPushout f g inl inr) [HasPushout f g]
+  条件: (h : 是推出 f g inl inr) [HasPushout f g]
   证明: by simp [← Iso.eq_comp_inv]
 
 Depends on / 依赖: Iso.eq_comp_inv, eq_comp_inv
@@ -1199,8 +1199,8 @@ theorem flip
 
 中文:
 定理 flip
-  条件: (h : IsPullback fst snd f g)
-  结论: IsPullback snd fst g f
+  条件: (h : 是拉回 fst snd f g)
+  结论: 是拉回 snd fst g f
   证明: of_isLimit (PullbackCone.flipIsLimit h.isLimit)
 
 Depends on / 依赖: PullbackCone, PullbackCone.flipIsLimit, flipIsLimit, h.isLimit, isLimit, of_isLimit
@@ -1218,7 +1218,7 @@ theorem flip_iff
 
 中文:
 定理 flip_iff
-  结论: IsPullback fst snd f g ↔ IsPullback snd fst g f
+  结论: 是拉回 fst snd f g ↔ 是拉回 snd fst g f
   证明: ⟨flip, flip⟩
 
 Depends on / 依赖: of_retract
@@ -1240,8 +1240,8 @@ theorem op
 
 中文:
 定理 op
-  条件: (h : IsPullback fst snd f g)
-  结论: IsPushout g.op f.op snd.op fst.op
+  条件: (h : 是拉回 fst snd f g)
+  结论: 是推出 g.op f.op snd.op fst.op
   证明: IsPushout.of_isColimit
     (IsColimit.ofIsoColimit (Limits.PullbackCone.isLimitEquivIsColimitOp h.flip.cone h.flip.isLimit)
       h.toCommSq.flip.coneOp)
@@ -1297,8 +1297,8 @@ theorem flip
 
 中文:
 定理 flip
-  条件: (h : IsPushout f g inl inr)
-  结论: IsPushout g f inr inl
+  条件: (h : 是推出 f g inl inr)
+  结论: 是推出 g f inr inl
   证明: of_isColimit (PushoutCocone.flipIsColimit h.isColimit)
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.flipIsColimit, flipIsColimit, h.isColimit, isColimit, of_isColimit
@@ -1316,7 +1316,7 @@ theorem flip_iff
 
 中文:
 定理 flip_iff
-  结论: IsPushout f g inl inr ↔ IsPushout g f inr inl
+  结论: 是推出 f g inl inr ↔ 是推出 g f inr inl
   证明: ⟨flip, flip⟩
 
 Depends on / 依赖: P.of_retract, of_retract
@@ -1338,8 +1338,8 @@ theorem op
 
 中文:
 定理 op
-  条件: (h : IsPushout f g inl inr)
-  结论: IsPullback inr.op inl.op g.op f.op
+  条件: (h : 是推出 f g inl inr)
+  结论: 是拉回 inr.op inl.op g.op f.op
   证明: IsPullback.of_isLimit
     (IsLimit.ofIsoLimit
       (Limits.PushoutCocone.isColimitEquivIsLimitOp h.flip.cocone h.flip.isColimit)
@@ -1392,7 +1392,7 @@ lemma IsPullback.op_iff
   proof: ⟨fun h => h.unop, fun h => h.op⟩
 
 中文:
-引理 IsPullback.op_iff
+引理 是拉回.op_iff
   条件: {X Y Z P : C} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
   证明: ⟨fun h => h.unop, fun h => h.op⟩
 
@@ -1411,7 +1411,7 @@ lemma IsPullback.unop_iff
   proof: ⟨fun h => h.op, fun h => h.unop⟩
 
 中文:
-引理 IsPullback.unop_iff
+引理 是拉回.unop_iff
   条件: {X Y Z P : Cᵒᵖ} {f : Z ⟶ X} {g : Z ⟶ Y} {inl : X ⟶ P} {inr : Y ⟶ P}
   证明: ⟨fun h => h.op, fun h => h.unop⟩
 
@@ -1430,7 +1430,7 @@ lemma IsPushout.op_iff
   proof: ⟨fun h => h.unop, fun h => h.op⟩
 
 中文:
-引理 IsPushout.op_iff
+引理 是推出.op_iff
   条件: {P X Y Z : C} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
   证明: ⟨fun h => h.unop, fun h => h.op⟩
 
@@ -1449,7 +1449,7 @@ lemma IsPushout.unop_iff
   proof: ⟨fun h => h.op, fun h => h.unop⟩
 
 中文:
-引理 IsPushout.unop_iff
+引理 是推出.unop_iff
   条件: {P X Y Z : Cᵒᵖ} {fst : P ⟶ X} {snd : P ⟶ Y} {f : X ⟶ Z} {g : Y ⟶ Z}
   证明: ⟨fun h => h.op, fun h => h.unop⟩
 

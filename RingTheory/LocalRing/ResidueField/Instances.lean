@@ -42,7 +42,7 @@ instance [Algebra.IsSeparable
   simp [RingHom.algebraMap_toAlgebra, ← IsScalarTower.algebraMap_apply]
 
 中文:
-实例 [Algebra.IsSeparable
+实例 [代数.是可分
   签名: (A ⧸ p) (B ⧸ q)] :
   定义体: by
   refine Algebra.IsSeparable.of_equiv_equiv
@@ -77,7 +77,7 @@ instance [Algebra.IsSeparable
     (RingEquiv.ofBijective _ p.bijective_algebr
 
 中文:
-实例 [Algebra.IsSeparable
+实例 [代数.是可分
   签名: p.ResidueField q.ResidueField] :
   定义体: by
   refine Algebra.IsSeparable.of_equiv_equiv
@@ -112,7 +112,7 @@ lemma Algebra.isSeparable_residueField_iff
   proof: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 
 中文:
-引理 Algebra.isSeparable_residueField_iff
+引理 代数.isSeparable_residueField_iff
   证明: ⟨fun _ => inferInstance, fun _ => inferInstance⟩
 -/
 lemma Algebra.isSeparable_residueField_iff :
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsAlgebraic (A ⧸ p) p.ResidueField
+  签名: 代数.是代数 (A ⧸ p) p.ResidueField
   定义体: IsLocalization.isAlgebraic _ (nonZeroDivisors (A ⧸ p))
 
 Depends on / 依赖: IsLocalization, IsLocalization.isAlgebraic, isAlgebraic, nonZeroDivisors
@@ -159,7 +159,7 @@ instance [Algebra.IsIntegral
   have : Algebra.IsAlgebraic (A ⧸ p) q.ResidueField := .trans 
 
 中文:
-实例 [Algebra.IsIntegral
+实例 [代数.是整
   签名: A B] :
   定义体: by
   have : Algebra.IsIntegral (A ⧸ p) (B ⧸ q) :=
@@ -199,8 +199,8 @@ instance ResidueField.algebraOfIsIntegral
     (by simp [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)])).toAlgebra
 
 中文:
-实例 ResidueField.algebraOfIsIntegral
-  签名: [Algebra.Is整数egral R k]
+实例 ResidueField.algebraOfIs整数egral
+  签名: [代数.是整 R k]
   定义体: fast_instance% (Ideal.Quotient.lift (maximalIdeal R) (algebraMap R k)
     (by simp [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)])).toAlgebra
 
@@ -219,8 +219,8 @@ instance ResidueField.isScalarTowerOfIsIntegral
   body: .of_algebraMap_eq fun _ => rfl
 
 中文:
-实例 ResidueField.isScalarTowerOfIsIntegral
-  签名: [Algebra.Is整数egral R k]
+实例 ResidueField.isScalarTowerOfIs整数egral
+  签名: [代数.是整 R k]
   定义体: .of_algebraMap_eq fun _ => rfl
 
 Depends on / 依赖: of_algebraMap_eq
@@ -241,8 +241,8 @@ instance [Module.Finite
   (RingEquiv.quotientBot k) (by ext; rfl)
 
 中文:
-实例 [Module.Finite
-  签名: R k] : Module.Finite (ResidueField R) k
+实例 [模.有限
+  签名: R k] : 模.有限 (ResidueField R) k
   定义体: .of_equiv_equiv
   (Ideal.quotEquivOfEq (show Ideal.comap (algebraMap R k) ⊥ = maximalIdeal R by
     rw [← eq_maximalIdeal (Algebra.ker_algebraMap_isMaximal_of_isIntegral R k)]; rw [RingHom.ker]))

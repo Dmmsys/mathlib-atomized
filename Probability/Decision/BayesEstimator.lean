@@ -181,7 +181,7 @@ definition IsBayesEstimator
 
 中文:
 定义 IsBayesEstimator
-  签名: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : Kernel Θ 𝓧) (κ : Kernel 𝓧 𝓨) (π : Measure Θ)
+  签名: (ℓ : Θ -> 𝓨 -> 实数>=0∞) (P : 核 Θ 𝓧) (κ : 核 𝓧 𝓨) (π : 测度 Θ)
   定义体: avgRisk ℓ P κ π = bayesRisk ℓ P π
 
 Depends on / 依赖: avgRisk, bayesRisk
@@ -202,10 +202,10 @@ structure IsArgminEstimator
     - property : forallᵐ x ∂(P ∘ₘ π), ∫⁻ θ, ℓ θ (f x) ∂(P†π) x = ⨅ y, ∫⁻ θ, ℓ θ y ∂(P†π) x
 
 中文:
-结构 IsArgminEstimator
-  参数: {𝓨 : 类型} [MeasurableSpace 𝓨]
+结构 是ArgminEstimator
+  参数: {𝓨 : 类型} [可测空间 𝓨]
   公理与运算 (2 个):
-    - measurable : Measurable f
+    - measurable : 可测 f
     - property : 对任意ᵐ x ∂(P ∘ₘ π), ∫⁻ θ, ℓ θ (f x) ∂(P†π) x = ⨅ y, ∫⁻ θ, ℓ θ y ∂(P†π) x
 -/
 structure IsArgminEstimator {𝓨 : Type*} [MeasurableSpace 𝓨]
@@ -225,8 +225,8 @@ abbreviation IsArgminEstimator.kernel
   body: Kernel.deterministic f h.measurable
 
 中文:
-缩写 IsArgminEstimator.kernel
-  签名: (h : IsArgminEstimator ℓ P π f)
+缩写 是ArgminEstimator.kernel
+  签名: (h : 是ArgminEstimator ℓ P π f)
   定义体: Kernel.deterministic f h.measurable
 
 Depends on / 依赖: Kernel, Kernel.deterministic, deterministic, h.measurable, measurable
@@ -247,8 +247,8 @@ lemma IsArgminEstimator.avgRisk_eq_lintegral_iInf
   rwa [Kernel.lintegral_deterministic' _ (by fun_prop)]
 
 中文:
-引理 IsArgminEstimator.avgRisk_eq_lintegral_iInf
-  结论: (hf : IsArgminEstimator ℓ P π f)
+引理 是ArgminEstimator.avgRisk_eq_lintegral_iInf
+  结论: (hf : 是ArgminEstimator ℓ P π f)
   证明: by
   rw [avgRisk_eq_lintegral_lintegral_lintegral hl]
   refine lintegral_congr_ae ?_
@@ -277,8 +277,8 @@ lemma IsArgminEstimator.isBayesEstimator
   exact lintegral_iInf_posterior_le_bayesRisk hl _ _
 
 中文:
-引理 IsArgminEstimator.isBayesEstimator
-  结论: (hf : IsArgminEstimator ℓ P π f)
+引理 是ArgminEstimator.isBayesEstimator
+  结论: (hf : 是ArgminEstimator ℓ P π f)
   证明: by
   refine le_antisymm ?_ (bayesRisk_le_avgRisk _ _ _ _)
   rw [hf.avgRisk_eq_lintegral_iInf hl]
@@ -303,10 +303,10 @@ structure HasArgminEstimator
     - exists_isArgminEstimator : exists f : 𝓧 -> 𝓨, IsArgminEstimator ℓ P π f
 
 中文:
-结构 HasArgminEstimator
-  参数: {𝓨 : 类型} [MeasurableSpace 𝓨]
+结构 有ArgminEstimator
+  参数: {𝓨 : 类型} [可测空间 𝓨]
   公理与运算 (1 个):
-    - exists_isArgminEstimator : 存在 f : 𝓧 -> 𝓨, IsArgminEstimator ℓ P π f
+    - exists_isArgminEstimator : 存在 f : 𝓧 -> 𝓨, 是ArgminEstimator ℓ P π f
 -/
 structure HasArgminEstimator {𝓨 : Type*} [MeasurableSpace 𝓨]
     (ℓ : Θ -> 𝓨 -> Real>=0∞) (P : Kernel Θ 𝓧) [IsFiniteKernel P] (π : Measure Θ) [IsFiniteMeasure π] :
@@ -328,7 +328,7 @@ definition argminEstimator
 
 中文:
 定义 argminEstimator
-  签名: (h : HasArgminEstimator ℓ P π)
+  签名: (h : 有ArgminEstimator ℓ P π)
   定义体: h.exists_isArgminEstimator.choose
 
 Depends on / 依赖: exists_isArgminEstimator, h.exists_isArgminEstimator.choose
@@ -346,7 +346,7 @@ lemma isArgminEstimator_argminEstimator
 
 中文:
 引理 isArgminEstimator_argminEstimator
-  条件: (h : HasArgminEstimator ℓ P π)
+  条件: (h : 有ArgminEstimator ℓ P π)
   证明: h.exists_isArgminEstimator.choose_spec
 
 Depends on / 依赖: choose_spec, exists_isArgminEstimator, h.exists_isArgminEstimator.choose_spec
@@ -366,7 +366,7 @@ lemma bayesRisk_eq
 
 中文:
 引理 bayesRisk_eq
-  条件: (hl : Measurable (Function.uncurry ℓ)) (h : HasArgminEstimator ℓ P π)
+  条件: (hl : 可测 (函数.uncurry ℓ)) (h : 有ArgminEstimator ℓ P π)
   证明: by
   rw [← h.isArgminEstimator_argminEstimator.isBayesEstimator hl]; rw [h.isArgminEstimator_argminEstimator.avgRisk_eq_lintegral_iInf hl]
 

@@ -49,7 +49,7 @@ definition hadamard
 
 中文:
 定义 hadamard
-  签名: [Mul α] (A : Matrix m n α) (B : Matrix m n α)
+  签名: [乘法 α] (A : 矩阵 m n α) (B : 矩阵 m n α)
   定义体: of fun i j => A i j * B i j
 -/
 def hadamard [Mul α] (A : Matrix m n α) (B : Matrix m n α) : Matrix m n α :=
@@ -69,7 +69,7 @@ theorem hadamard_apply
 
 中文:
 定理 hadamard_apply
-  条件: [Mul α] (A : Matrix m n α) (B : Matrix m n α) (i j)
+  条件: [乘法 α] (A : 矩阵 m n α) (B : 矩阵 m n α) (i j)
   证明: rfl
 
 @[inherit_doc] scoped infixl:100 " ⊙ " => Matrix.hadamard
@@ -96,7 +96,7 @@ theorem hadamard_comm
 
 中文:
 定理 hadamard_comm
-  条件: [CommMagma α]
+  条件: [交换原群 α]
   结论: A ⊙ B = B ⊙ A
   证明: ext fun _ _ => mul_comm _ _
 
@@ -117,7 +117,7 @@ theorem hadamard_assoc
 
 中文:
 定理 hadamard_assoc
-  条件: [Semigroup α]
+  条件: [半群 α]
   结论: A ⊙ B ⊙ C = A ⊙ (B ⊙ C)
   证明: ext fun _ _ => mul_assoc _ _ _
 
@@ -184,7 +184,7 @@ theorem smul_hadamard
 
 中文:
 定理 smul_hadamard
-  条件: [Mul α] [SMul R α] [IsScalarTower R α α] (k : R)
+  条件: [乘法 α] [标量乘法 R α] [标量塔 R α α] (k : R)
   结论: (k • A) ⊙ B = k • A ⊙ B
   证明: ext fun _ _ => smul_mul_assoc _ _ _
 
@@ -207,7 +207,7 @@ theorem hadamard_smul
 
 中文:
 定理 hadamard_smul
-  条件: [Mul α] [SMul R α] [SMulCommClass R α α] (k : R)
+  条件: [乘法 α] [标量乘法 R α] [标量交换类 R α α] (k : R)
   结论: A ⊙ (k • B) = k • A ⊙ B
   证明: ext fun _ _ => mul_smul_comm _ _ _
 
@@ -235,7 +235,7 @@ theorem hadamard_zero
 
 中文:
 定理 hadamard_zero
-  结论: A ⊙ (0 : Matrix m n α) = 0
+  结论: A ⊙ (0 : 矩阵 m n α) = 0
   证明: ext fun _ _ => mul_zero _
 
 @[simp]
@@ -256,7 +256,7 @@ theorem zero_hadamard
 
 中文:
 定理 zero_hadamard
-  结论: (0 : Matrix m n α) ⊙ A = 0
+  结论: (0 : 矩阵 m n α) ⊙ A = 0
   证明: ext fun _ _ => zero_mul _
 
 Depends on / 依赖: zero_mul
@@ -335,7 +335,7 @@ theorem diagonal_hadamard_eq_diagonal_iff
 
 中文:
 定理 diagonal_hadamard_eq_diagonal_iff
-  条件: {A : Matrix n n α} {d e}
+  条件: {A : 矩阵 n n α} {d e}
   证明: by
   simp [diagonal_hadamard, diagonal_eq_diagonal_iff, funext_iff]
 
@@ -356,7 +356,7 @@ theorem hadamard_diagonal_eq_diagonal_iff
 
 中文:
 定理 hadamard_diagonal_eq_diagonal_iff
-  条件: {A : Matrix n n α} {d e}
+  条件: {A : 矩阵 n n α} {d e}
   证明: by
   simp [hadamard_diagonal, diagonal_eq_diagonal_iff, funext_iff]
 
@@ -419,7 +419,7 @@ theorem one_hadamard_eq_diagonal_iff
 
 中文:
 定理 one_hadamard_eq_diagonal_iff
-  条件: {A : Matrix n n α} {d}
+  条件: {A : 矩阵 n n α} {d}
   结论: 1 ⊙ A = diagonal d ↔ A.diag = d
   证明: by
   simpa using diagonal_hadamard_eq_diagonal_iff (A := A) (d := 1)
@@ -441,7 +441,7 @@ theorem hadamard_one_eq_diagonal_iff
 
 中文:
 定理 hadamard_one_eq_diagonal_iff
-  条件: {A : Matrix n n α} {d}
+  条件: {A : 矩阵 n n α} {d}
   结论: A ⊙ 1 = diagonal d ↔ A.diag = d
   证明: by
   simpa using hadamard_diagonal_eq_diagonal_iff (A := A) (d := 1)
@@ -463,7 +463,7 @@ theorem one_hadamard_eq_zero_iff
 
 中文:
 定理 one_hadamard_eq_zero_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: 1 ⊙ A = 0 ↔ A.diag = 0
   证明: by
   simpa using one_hadamard_eq_diagonal_iff (A := A) (d := 0)
@@ -485,7 +485,7 @@ theorem hadamard_one_eq_zero_iff
 
 中文:
 定理 hadamard_one_eq_zero_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: A ⊙ 1 = 0 ↔ A.diag = 0
   证明: by
   simpa using hadamard_one_eq_diagonal_iff (A := A) (d := 0)
@@ -506,7 +506,7 @@ theorem one_hadamard_eq_one_iff
 
 中文:
 定理 one_hadamard_eq_one_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: 1 ⊙ A = 1 ↔ A.diag = 1
   证明: one_hadamard_eq_diagonal_iff
 
@@ -526,7 +526,7 @@ theorem hadamard_one_eq_one_iff
 
 中文:
 定理 hadamard_one_eq_one_iff
-  条件: {A : Matrix n n α}
+  条件: {A : 矩阵 n n α}
   结论: A ⊙ 1 = 1 ↔ A.diag = 1
   证明: hadamard_one_eq_diagonal_iff
 
@@ -547,7 +547,7 @@ theorem hadamard_of_one
 
 中文:
 定理 hadamard_of_one
-  条件: [MulOneClass α] (A : Matrix m n α)
+  条件: [MulOne类 α] (A : 矩阵 m n α)
   证明: by ext; simp
 -/
 @[simp] theorem hadamard_of_one [MulOneClass α] (A : Matrix m n α) :
@@ -563,7 +563,7 @@ theorem of_one_hadamard
 
 中文:
 定理 of_one_hadamard
-  条件: [MulOneClass α] (A : Matrix m n α)
+  条件: [MulOne类 α] (A : 矩阵 m n α)
   证明: by ext; simp
 -/
 @[simp] theorem of_one_hadamard [MulOneClass α] (A : Matrix m n α) :
@@ -579,7 +579,7 @@ theorem hadamard_self_eq_self_iff
 
 中文:
 定理 hadamard_self_eq_self_iff
-  条件: [Mul α] {A : Matrix m n α}
+  条件: [乘法 α] {A : 矩阵 m n α}
   证明: ext_iff.symm
 
 Depends on / 依赖: ext_iff, ext_iff.symm
@@ -597,7 +597,7 @@ theorem submatrix_hadamard
 
 中文:
 定理 submatrix_hadamard
-  结论: {l o : 类型} [Mul α]
+  结论: {l o : 类型} [乘法 α]
   证明: rfl
 -/
 theorem submatrix_hadamard {l o : Type*} [Mul α]
@@ -615,7 +615,7 @@ theorem transpose_hadamard
 
 中文:
 定理 transpose_hadamard
-  条件: [Mul α] (A B : Matrix m n α)
+  条件: [乘法 α] (A B : 矩阵 m n α)
   结论: (A ⊙ B)ᵀ = Aᵀ ⊙ Bᵀ
   证明: ext fun _ _ => rfl
 -/
@@ -633,7 +633,7 @@ theorem conjTranspose_hadamard
 
 中文:
 定理 conjTranspose_hadamard
-  条件: [Mul α] [StarMul α] (A B : Matrix m n α)
+  条件: [乘法 α] [StarMul α] (A B : 矩阵 m n α)
   结论: (A ⊙ B)ᴴ = Bᴴ ⊙ Aᴴ
   证明: ext fun _ _ => StarMul.star_mul _ _
 

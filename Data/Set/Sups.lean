@@ -47,7 +47,7 @@ class HasSups
     - sups : α -> α -> α
 
 中文:
-类 HasSups
+类 有Sups
   参数: (α : 类型)
   公理与运算 (1 个):
     - sups : α -> α -> α
@@ -66,7 +66,7 @@ class HasInfs
     - infs : α -> α -> α
 
 中文:
-类 HasInfs
+类 有Infs
   参数: (α : 类型)
   公理与运算 (1 个):
     - infs : α -> α -> α
@@ -103,7 +103,7 @@ scoped[SetFamily] attribute [instance] Set.hasSups
 
 中文:
 定义 hasSups
-  签名: : HasSups (Set α)
+  签名: : 有Sups (集合 α)
   定义体: ⟨image2 (· ⊔ ·)⟩
 
 scoped[SetFamily] attribute [instance] Set.hasSups
@@ -253,7 +253,7 @@ theorem forall_sups_iff
 @[simp]
 
 中文:
-定理 forall_sups_iff
+定理 对任意_sups_iff
   条件: {p : α -> 命题}
   结论: (对任意 c in s ⊻ t, p c) ↔ 对任意 a in s, 对任意 b in t, p (a ⊔ b)
   证明: forall_mem_image2
@@ -299,7 +299,7 @@ theorem sups_nonempty
 
 中文:
 定理 sups_nonempty
-  结论: (s ⊻ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ⊻ t).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 Depends on / 依赖: image2_nonempty_iff
@@ -316,8 +316,8 @@ theorem Nonempty.sups
   proof: Nonempty.image2
 
 中文:
-定理 Nonempty.sups
-  结论: s.Nonempty -> t.Nonempty -> (s ⊻ t).Nonempty
+定理 非空.sups
+  结论: s.非空 -> t.非空 -> (s ⊻ t).非空
   证明: Nonempty.image2
 -/
 protected theorem Nonempty.sups : s.Nonempty -> t.Nonempty -> (s ⊻ t).Nonempty :=
@@ -332,8 +332,8 @@ theorem Nonempty.of_sups_left
   proof: Nonempty.of_image2_left
 
 中文:
-定理 Nonempty.of_sups_left
-  结论: (s ⊻ t).Nonempty -> s.Nonempty
+定理 非空.of_sups_left
+  结论: (s ⊻ t).非空 -> s.非空
   证明: Nonempty.of_image2_left
 -/
 theorem Nonempty.of_sups_left : (s ⊻ t).Nonempty -> s.Nonempty :=
@@ -350,8 +350,8 @@ theorem Nonempty.of_sups_right
 @[simp]
 
 中文:
-定理 Nonempty.of_sups_right
-  结论: (s ⊻ t).Nonempty -> t.Nonempty
+定理 非空.of_sups_right
+  结论: (s ⊻ t).非空 -> t.非空
   证明: Nonempty.of_image2_right
 
 @[simp]
@@ -441,7 +441,7 @@ theorem singleton_sups
 
 中文:
 定理 singleton_sups
-  结论: {a} ⊻ t = t.image fun b => a ⊔ b
+  结论: {a} ⊻ t = t.像 fun b => a ⊔ b
   证明: image2_singleton_left
 
 @[simp]
@@ -462,7 +462,7 @@ theorem sups_singleton
 
 中文:
 定理 sups_singleton
-  结论: s ⊻ {b} = s.image fun a => a ⊔ b
+  结论: s ⊻ {b} = s.像 fun a => a ⊔ b
   证明: image2_singleton_right
 
 Depends on / 依赖: image2_singleton_right
@@ -480,7 +480,7 @@ theorem singleton_sups_singleton
 
 中文:
 定理 singleton_sups_singleton
-  结论: ({a} ⊻ {b} : Set α) = {a ⊔ b}
+  结论: ({a} ⊻ {b} : 集合 α) = {a ⊔ b}
   证明: image2_singleton
 
 Depends on / 依赖: image2_singleton
@@ -571,7 +571,7 @@ lemma image_sups
 
 中文:
 引理 image_sups
-  条件: (f : F) (s t : Set α)
+  条件: (f : F) (s t : 集合 α)
   结论: f '' (s ⊻ t) = f '' s ⊻ f '' t
   证明: image_image2_distrib map_sup f
 
@@ -639,7 +639,7 @@ lemma sep_sups_le
 
 中文:
 引理 sep_sups_le
-  条件: (s t : Set α) (a : α)
+  条件: (s t : 集合 α) (a : α)
   证明: by ext; aesop
 -/
 lemma sep_sups_le (s t : Set α) (a : α) :
@@ -699,8 +699,8 @@ theorem image_sup_prod
 
 中文:
 定理 image_sup_prod
-  条件: (s t : Set α)
-  结论: Set.image2 (· ⊔ ·) s t = s ⊻ t
+  条件: (s t : 集合 α)
+  结论: 集合.image2 (· ⊔ ·) s t = s ⊻ t
   证明: rfl
 -/
 theorem image_sup_prod (s t : Set α) : Set.image2 (· ⊔ ·) s t = s ⊻ t := rfl
@@ -814,7 +814,7 @@ scoped[SetFamily] attribute [instance] Set.hasInfs
 
 中文:
 定义 hasInfs
-  签名: : HasInfs (Set α)
+  签名: : 有Infs (集合 α)
   定义体: ⟨image2 (· ⊓ ·)⟩
 
 scoped[SetFamily] attribute [instance] Set.hasInfs
@@ -964,7 +964,7 @@ theorem forall_infs_iff
 @[simp]
 
 中文:
-定理 forall_infs_iff
+定理 对任意_infs_iff
   条件: {p : α -> 命题}
   结论: (对任意 c in s ⊼ t, p c) ↔ 对任意 a in s, 对任意 b in t, p (a ⊓ b)
   证明: forall_mem_image2
@@ -1010,7 +1010,7 @@ theorem infs_nonempty
 
 中文:
 定理 infs_nonempty
-  结论: (s ⊼ t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (s ⊼ t).非空 ↔ s.非空 ∧ t.非空
   证明: image2_nonempty_iff
 
 Depends on / 依赖: image2_nonempty_iff
@@ -1027,8 +1027,8 @@ theorem Nonempty.infs
   proof: Nonempty.image2
 
 中文:
-定理 Nonempty.infs
-  结论: s.Nonempty -> t.Nonempty -> (s ⊼ t).Nonempty
+定理 非空.infs
+  结论: s.非空 -> t.非空 -> (s ⊼ t).非空
   证明: Nonempty.image2
 -/
 protected theorem Nonempty.infs : s.Nonempty -> t.Nonempty -> (s ⊼ t).Nonempty :=
@@ -1043,8 +1043,8 @@ theorem Nonempty.of_infs_left
   proof: Nonempty.of_image2_left
 
 中文:
-定理 Nonempty.of_infs_left
-  结论: (s ⊼ t).Nonempty -> s.Nonempty
+定理 非空.of_infs_left
+  结论: (s ⊼ t).非空 -> s.非空
   证明: Nonempty.of_image2_left
 -/
 theorem Nonempty.of_infs_left : (s ⊼ t).Nonempty -> s.Nonempty :=
@@ -1061,8 +1061,8 @@ theorem Nonempty.of_infs_right
 @[simp]
 
 中文:
-定理 Nonempty.of_infs_right
-  结论: (s ⊼ t).Nonempty -> t.Nonempty
+定理 非空.of_infs_right
+  结论: (s ⊼ t).非空 -> t.非空
   证明: Nonempty.of_image2_right
 
 @[simp]
@@ -1152,7 +1152,7 @@ theorem singleton_infs
 
 中文:
 定理 singleton_infs
-  结论: {a} ⊼ t = t.image fun b => a ⊓ b
+  结论: {a} ⊼ t = t.像 fun b => a ⊓ b
   证明: image2_singleton_left
 
 @[simp]
@@ -1173,7 +1173,7 @@ theorem infs_singleton
 
 中文:
 定理 infs_singleton
-  结论: s ⊼ {b} = s.image fun a => a ⊓ b
+  结论: s ⊼ {b} = s.像 fun a => a ⊓ b
   证明: image2_singleton_right
 
 Depends on / 依赖: image2_singleton_right
@@ -1191,7 +1191,7 @@ theorem singleton_infs_singleton
 
 中文:
 定理 singleton_infs_singleton
-  结论: ({a} ⊼ {b} : Set α) = {a ⊓ b}
+  结论: ({a} ⊼ {b} : 集合 α) = {a ⊓ b}
   证明: image2_singleton
 
 Depends on / 依赖: Finite, Finset, Finset.coe_univ, Finset.univ, Group.FG, Group.fg_of_finite, Subgroup, Subgroup.closure_univ, closure_univ, coe_univ, fg_of_finite, image2_singleton, nonempty_fintype
@@ -1282,7 +1282,7 @@ lemma image_infs
 
 中文:
 引理 image_infs
-  条件: (f : F) (s t : Set α)
+  条件: (f : F) (s t : 集合 α)
   结论: f '' (s ⊼ t) = f '' s ⊼ f '' t
   证明: image_image2_distrib map_inf f
 
@@ -1350,7 +1350,7 @@ lemma sep_infs_le
 
 中文:
 引理 sep_infs_le
-  条件: (s t : Set α) (a : α)
+  条件: (s t : 集合 α) (a : α)
   证明: by ext; aesop
 -/
 lemma sep_infs_le (s t : Set α) (a : α) :
@@ -1410,8 +1410,8 @@ theorem image_inf_prod
 
 中文:
 定理 image_inf_prod
-  条件: (s t : Set α)
-  结论: Set.image2 (fun x x_1 => x ⊓ x_1) s t = s ⊼ t
+  条件: (s t : 集合 α)
+  结论: 集合.image2 (fun x x_1 => x ⊓ x_1) s t = s ⊼ t
   证明: rfl
 -/
 theorem image_inf_prod (s t : Set α) : Set.image2 (fun x x_1 => x ⊓ x_1) s t = s ⊼ t := rfl
@@ -1609,7 +1609,7 @@ theorem upperClosure_sups
 
 中文:
 定理 upperClosure_sups
-  条件: [SemilatticeSup α] (s t : Set α)
+  条件: [SemilatticeSup α] (s t : 集合 α)
   证明: by
   ext a
   simp only [SetLike.mem_coe, mem_upperClosure, Set.mem_sups,
@@ -1651,7 +1651,7 @@ theorem lowerClosure_infs
 
 中文:
 定理 lowerClosure_infs
-  条件: [SemilatticeInf α] (s t : Set α)
+  条件: [SemilatticeInf α] (s t : 集合 α)
   证明: by
   ext a
   simp only [SetLike.mem_coe, mem_lowerClosure, Set.mem_infs]

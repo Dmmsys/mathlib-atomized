@@ -107,7 +107,7 @@ theorem isOfFinAddOrder_ofMul_iff
 
 中文:
 定理 isOfFinAddOrder_ofMul_iff
-  结论: IsOfFinAddOrder (Additive.ofMul x) ↔ IsOfFinOrder x
+  结论: IsOfFinAddOrder (加性.ofMul x) ↔ IsOfFinOrder x
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -127,7 +127,7 @@ theorem isOfFinOrder_ofAdd_iff
 
 中文:
 定理 isOfFinOrder_ofAdd_iff
-  条件: {α : 类型} [AddMonoid α] {x : α}
+  条件: {α : 类型} [加法幺半群 α] {x : α}
   证明: Iff.rfl
 
 @[to_additive]
@@ -185,7 +185,7 @@ lemma isOfFinOrder_iff_zpow_eq_one
 
 中文:
 引理 isOfFinOrder_iff_zpow_eq_one
-  条件: {G} [DivisionMonoid G] {x : G}
+  条件: {G} [Division幺半群 G] {x : G}
   证明: by
   rw [isOfFinOrder_iff_pow_eq_one]
   refine ⟨fun ⟨n, hn, hn'⟩ => ⟨n, Int.natCast_ne_zero_iff_pos.mpr hn, zpow_natCast x n ▸ hn'⟩,
@@ -222,7 +222,7 @@ theorem not_isOfFinOrder_of_injective_pow
 
 中文:
 定理 not_isOfFinOrder_of_injective_pow
-  条件: {x : G} (h : Injective fun n : 自然数 => x ^ n)
+  条件: {x : G} (h : 单射 fun n : 自然数 => x ^ n)
   证明: by
   simp_rw [isOfFinOrder_iff_pow_eq_one, not_exists, not_and]
   intro n hn_pos hnx
@@ -379,7 +379,7 @@ exact ha pow_left_injective hn.ne' by simpa using han
 
 中文:
 引理 not_isOfFinOrder_of_isMulTorsionFree
-  条件: [IsMulTorsionFree G] (ha : a != 1)
+  条件: [是MulTorsionFree G] (ha : a != 1)
   证明: by
   rw [isOfFinOrder_iff_pow_eq_one]
   rintro ⟨n, hn, han⟩
@@ -410,7 +410,7 @@ lemma IsOfFinOrder.eq_one'
 
 中文:
 引理 IsOfFinOrder.eq_one'
-  条件: [IsMulTorsionFree G] {a : G} (ha : IsOfFinOrder a)
+  条件: [是MulTorsionFree G] {a : G} (ha : IsOfFinOrder a)
   证明: by
   contrapose! ha
   apply not_isOfFinOrder_of_isMulTorsionFree ha
@@ -436,7 +436,7 @@ lemma isOfFinOrder_iff_eq_one
 
 中文:
 引理 isOfFinOrder_iff_eq_one
-  条件: [IsMulTorsionFree G] (a : G)
+  条件: [是MulTorsionFree G] (a : G)
   结论: IsOfFinOrder a ↔ a = 1
   证明: ⟨IsOfFinOrder.eq_one', fun h => h.symm ▸ IsOfFinOrder.one⟩
 
@@ -458,8 +458,8 @@ theorem Submonoid.isOfFinOrder_coe
   norm_cast
 
 中文:
-定理 Submonoid.isOfFinOrder_coe
-  条件: {H : Submonoid G} {x : H}
+定理 子幺半群.isOfFinOrder_coe
+  条件: {H : 子幺半群 G} {x : H}
   证明: by
   rw [isOfFinOrder_iff_pow_eq_one]; rw [isOfFinOrder_iff_pow_eq_one]
   norm_cast
@@ -512,8 +512,8 @@ theorem MonoidHom.isOfFinOrder
     exact ⟨n, npos, by rw [← f.map_pow, hn, f.map_one]⟩
 
 中文:
-定理 MonoidHom.isOfFinOrder
-  条件: [Monoid H] (f : G ->* H) {x : G} (h : IsOfFinOrder x)
+定理 幺半群态射.isOfFinOrder
+  条件: [幺半群 H] (f : G ->* H) {x : G} (h : IsOfFinOrder x)
   证明: isOfFinOrder_iff_pow_eq_one.mpr by
     obtain ⟨n, npos, hn⟩ := h.exists_pow_eq_one
     exact ⟨n, npos, by rw [← f.map_pow, hn, f.map_one]⟩
@@ -540,7 +540,7 @@ theorem IsOfFinOrder.apply
 
 中文:
 定理 IsOfFinOrder.apply
-  结论: {η : 类型} {Gs : η -> 类型} [对任意 i, Monoid (Gs i)] {x : 对任意 i, Gs i}
+  结论: {η : 类型} {Gs : η -> 类型} [对任意 i, 幺半群 (Gs i)] {x : 对任意 i, Gs i}
   证明: by
   obtain ⟨n, npos, hn⟩ := h.exists_pow_eq_one
   exact fun _ => isOfFinOrder_iff_pow_eq_one.mpr ⟨n, npos, (congr_fun hn.symm _).symm⟩
@@ -622,8 +622,8 @@ theorem Subsingleton.orderOf_eq
 @[simp]
 
 中文:
-定理 Subsingleton.orderOf_eq
-  条件: [Subsingleton G] (x : G)
+定理 子单例.orderOf_eq
+  条件: [子单例 G] (x : G)
   结论: orderOf x = 1
   证明: by
   simp [orderOf, nontriviality]
@@ -650,7 +650,7 @@ theorem addOrderOf_ofMul_eq_orderOf
 中文:
 定理 addOrderOf_ofMul_eq_orderOf
   条件: (x : G)
-  结论: addOrderOf (Additive.ofMul x) = orderOf x
+  结论: addOrderOf (加性.ofMul x) = orderOf x
   证明: rfl
 
 @[simp]
@@ -671,7 +671,7 @@ lemma orderOf_ofAdd_eq_addOrderOf
 
 中文:
 引理 orderOf_ofAdd_eq_addOrderOf
-  条件: {α : 类型} [AddMonoid α] (a : α)
+  条件: {α : 类型} [加法幺半群 α] (a : α)
   证明: rfl
 
 @[to_additive]
@@ -840,7 +840,7 @@ lemma orderOf_zero
 
 中文:
 引理 orderOf_zero
-  条件: (M₀ : 类型) [MonoidWithZero M₀] [Nontrivial M₀]
+  条件: (M₀ : 类型) [带零幺半群 M₀] [非平凡 M₀]
   结论: orderOf (0 : M₀) = 0
   证明: by
   rw [orderOf_eq_zero_iff]; rw [isOfFinOrder_iff_pow_eq_one]
@@ -936,7 +936,7 @@ theorem IsOfFinOrder.mono
 
 中文:
 定理 IsOfFinOrder.mono
-  条件: [Monoid β] {y : β} (hx : IsOfFinOrder x) (h : orderOf y ∣ orderOf x)
+  条件: [幺半群 β] {y : β} (hx : IsOfFinOrder x) (h : orderOf y ∣ orderOf x)
   证明: by rw [← orderOf_pos_iff] at hx ⊢; exact Nat.pos_of_dvd_of_pos h hx
 
 @[to_additive]
@@ -1145,7 +1145,7 @@ theorem exists_pow_eq_pow_two_mul
 @[to_additive addOrderOf_smul_dvd]
 
 中文:
-定理 exists_pow_eq_pow_two_mul
+定理 存在_pow_eq_pow_two_mul
   条件: {p : 自然数} (hx : x ^ p = 1) (hp : Odd p) (n : 自然数)
   证明: by
   obtain ⟨r, rfl⟩ := hp
@@ -1208,7 +1208,7 @@ lemma pow_injOn_Iio_orderOf
 
 中文:
 引理 pow_injOn_Iio_orderOf
-  结论: (Set.Iio <| orderOf x).InjOn (x ^ ·)
+  结论: (集合.左无界右开区间 <| orderOf x).单射限制 (x ^ ·)
   证明: by
   simpa only [mul_left_iterate_apply_one]
     using! iterate_injOn_Iio_minimalPeriod (f := (x * ·)) (x := 1)
@@ -1346,7 +1346,7 @@ theorem orderOf_map_dvd
 
 中文:
 定理 orderOf_map_dvd
-  条件: {H : 类型} [Monoid H] (ψ : G ->* H) (x : G)
+  条件: {H : 类型} [幺半群 H] (ψ : G ->* H) (x : G)
   证明: by
   apply orderOf_dvd_of_pow_eq_one
   rw [← map_pow]; rw [pow_orderOf_eq_one]
@@ -1380,7 +1380,7 @@ theorem exists_pow_eq_self_of_coprime
   exact ⟨m, by rw [← pow_
 
 中文:
-定理 exists_pow_eq_self_of_coprime
+定理 存在_pow_eq_self_of_coprime
   条件: (h : n.Coprime (orderOf x))
   结论: 存在 m : 自然数, (x ^ n) ^ m = x
   证明: by
@@ -1464,7 +1464,7 @@ theorem orderOf_eq_orderOf_iff
 
 中文:
 定理 orderOf_eq_orderOf_iff
-  条件: {H : 类型} [Monoid H] {y : H}
+  条件: {H : 类型} [幺半群 H] {y : H}
   证明: by
   simp_rw [← isPeriodicPt_mul_iff_pow_eq_one, ← minimalPeriod_eq_minimalPeriod_iff, orderOf]
 
@@ -1487,7 +1487,7 @@ theorem orderOf_injective
 
 中文:
 定理 orderOf_injective
-  条件: {H : 类型} [Monoid H] (f : G ->* H) (hf : Function.Injective f) (x : G)
+  条件: {H : 类型} [幺半群 H] (f : G ->* H) (hf : 函数.单射 f) (x : G)
   证明: by
   simp_rw [orderOf_eq_orderOf_iff, ← f.map_pow, ← f.map_one, hf.eq_iff, forall_const]
 
@@ -1510,8 +1510,8 @@ lemma MulEquiv.orderOf_eq
 @[to_additive]
 
 中文:
-引理 MulEquiv.orderOf_eq
-  条件: {H : 类型} [Monoid H] (e : G ≃* H) (x : G)
+引理 乘法等价.orderOf_eq
+  条件: {H : 类型} [幺半群 H] (e : G ≃* H) (x : G)
   证明: orderOf_injective e.toMonoidHom e.injective x
 
 @[to_additive]
@@ -1535,8 +1535,8 @@ theorem Function.Injective.isOfFinOrder_iff
 @[to_additive (attr := norm_cast, simp)]
 
 中文:
-定理 Function.Injective.isOfFinOrder_iff
-  条件: [Monoid H] {f : G ->* H} (hf : Injective f)
+定理 函数.单射.isOfFinOrder_iff
+  条件: [幺半群 H] {f : G ->* H} (hf : 单射 f)
   证明: by
   rw [← orderOf_pos_iff]; rw [orderOf_injective f hf x]; rw [← orderOf_pos_iff]
 
@@ -1562,7 +1562,7 @@ theorem orderOf_submonoid
 
 中文:
 定理 orderOf_submonoid
-  条件: {H : Submonoid G} (y : H)
+  条件: {H : 子幺半群 G} (y : H)
   结论: orderOf (y : G) = orderOf y
   证明: orderOf_injective H.subtype Subtype.coe_injective y
 
@@ -1611,8 +1611,8 @@ lemma IsUnit.orderOf_eq_one
 @[to_additive (attr := norm_cast)]
 
 中文:
-引理 IsUnit.orderOf_eq_one
-  条件: [Subsingleton Gˣ] {x : G} (h : IsUnit x)
+引理 是单位.orderOf_eq_one
+  条件: [子单例 Gˣ] {x : G} (h : 是单位 x)
   证明: by
   simp [isUnit_iff_eq_one.mp h]
 
@@ -1635,7 +1635,7 @@ theorem Units.isOfFinOrder_val
   proof: Units.coeHom_injective.isOfFinOrder_iff
 
 中文:
-定理 Units.isOfFinOrder_val
+定理 单位群.isOfFinOrder_val
   条件: {u : Gˣ}
   结论: IsOfFinOrder (u : G) ↔ IsOfFinOrder u
   证明: Units.coeHom_injective.isOfFinOrder_iff
@@ -1662,7 +1662,7 @@ definition IsOfFinOrder.unit
 
 中文:
 定义 IsOfFinOrder.unit
-  签名: {M} [Monoid M] {x : M} (hx : IsOfFinOrder x)
+  签名: {M} [幺半群 M] {x : M} (hx : IsOfFinOrder x)
   定义体: ⟨x, x ^ (orderOf x - 1),
     by rw [← _root_.pow_succ', tsub_add_cancel_of_le (by exact hx.orderOf_pos), pow_orderOf_eq_one],
     by rw [← _root_.pow_succ, tsub_add_cancel_of_le (by exact hx.orderOf_pos), pow_orderOf_eq_one]⟩
@@ -1688,8 +1688,8 @@ lemma IsOfFinOrder.isUnit
 
 中文:
 引理 IsOfFinOrder.isUnit
-  条件: {M} [Monoid M] {x : M} (hx : IsOfFinOrder x)
-  结论: IsUnit x
+  条件: {M} [幺半群 M] {x : M} (hx : IsOfFinOrder x)
+  结论: 是单位 x
   证明: ⟨hx.unit, rfl⟩
 
 Depends on / 依赖: hx.unit
@@ -1715,7 +1715,7 @@ theorem orderOf_pow'
 中文:
 定理 orderOf_pow'
   条件: (h : n != 0)
-  结论: orderOf (x ^ n) = orderOf x / 自然数.gcd (orderOf x) n
+  结论: orderOf (x ^ n) = orderOf x / 自然数.最大公约数 (orderOf x) n
   证明: by
   unfold orderOf
   rw [← minimalPeriod_iterate_eq_div_gcd h]; rw [mul_left_iterate]
@@ -1821,7 +1821,7 @@ lemma Nat.Coprime.orderOf_pow
 @[to_additive]
 
 中文:
-引理 Nat.Coprime.orderOf_pow
+引理 自然数.Coprime.orderOf_pow
   条件: (h : (orderOf y).Coprime m)
   结论: orderOf (y ^ m) = orderOf y
   证明: by
@@ -1884,7 +1884,7 @@ lemma IsOfFinOrder.finite_powers
 中文:
 引理 IsOfFinOrder.finite_powers
   条件: (ha : IsOfFinOrder a)
-  结论: (powers a : Set G).Finite
+  结论: (powers a : 集合 G).有限
   证明: by
   classical rw [ha.powers_eq_image_range_orderOf]; exact Finset.finite_toSet _
 
@@ -2061,7 +2061,7 @@ theorem orderOf_mul_eq_right_of_forall_prime_mul_dvd
   rw [← Nat.dvd_one
 
 中文:
-定理 orderOf_mul_eq_right_of_forall_prime_mul_dvd
+定理 orderOf_mul_eq_right_of_对任意_prime_mul_dvd
   结论: (h : Commute x y) (hy : IsOfFinOrder y)
   证明: by
   have hoy := hy.orderOf_pos
@@ -2103,7 +2103,7 @@ theorem orderOf_mul_eq_left_of_forall_prime_mul_dvd
     orderOf_mul_eq_right_of_forall_prime_mul_dvd (x := y) (y := x) h.symm hx hdvd
 
 中文:
-定理 orderOf_mul_eq_left_of_forall_prime_mul_dvd
+定理 orderOf_mul_eq_left_of_对任意_prime_mul_dvd
   结论: (h : Commute x y) (hx : IsOfFinOrder x)
   证明: by
   simpa [h.eq] using
@@ -2208,7 +2208,7 @@ theorem exists_orderOf_eq_prime_pow_iff
 @[simp]
 
 中文:
-定理 exists_orderOf_eq_prime_pow_iff
+定理 存在_orderOf_eq_prime_pow_iff
   证明: ⟨fun ⟨k, hk⟩ => ⟨k, by rw [← hk, pow_orderOf_eq_one]⟩, fun ⟨_, hm⟩ => by
     obtain ⟨k, _, hk⟩ := (Nat.dvd_prime_pow hp.elim).mp (orderOf_dvd_of_pow_eq_one hm)
     exact ⟨k, hk⟩⟩
@@ -2239,7 +2239,7 @@ theorem orderOf_neg_one
 
 中文:
 定理 orderOf_neg_one
-  条件: {R} [Ring R] [Nontrivial R]
+  条件: {R} [环 R] [非平凡 R]
   证明: by
   split_ifs with h
   · rw [neg_one_eq_one_iff.2 h, orderOf_one]
@@ -2270,8 +2270,8 @@ lemma CharP.orderOf_eq_two_iff
   exact fun h => hp ((ringChar.eq R p) ▸ (neg_one_eq_one_iff.1 h))
 
 中文:
-引理 CharP.orderOf_eq_two_iff
-  结论: {R} [Ring R] [Nontrivial R] [NoZeroDivisors R] (p : 自然数)
+引理 特征p.orderOf_eq_two_iff
+  结论: {R} [环 R] [非平凡 R] [无零因子 R] (p : 自然数)
   证明: by
   simp only [orderOf_eq_prime_iff, sq_eq_one_iff, ne_eq, or_and_right, and_not_self, false_or,
     and_iff_left_iff_imp]
@@ -2331,7 +2331,7 @@ lemma finEquivPowers_apply
 
 中文:
 引理 finEquivPowers_apply
-  条件: {x : G} (hx : IsOfFinOrder x) {n : Fin (orderOf x)}
+  条件: {x : G} (hx : IsOfFinOrder x) {n : 有限集 (orderOf x)}
   证明: rfl
 -/
 lemma finEquivPowers_apply {x : G} (hx : IsOfFinOrder x) {n : Fin (orderOf x)} :
@@ -2470,7 +2470,7 @@ lemma injective_pow_iff_not_isOfFinOrder
 
 中文:
 引理 injective_pow_iff_not_isOfFinOrder
-  结论: Injective (fun n : 自然数 => x ^ n) ↔ ¬IsOfFinOrder x
+  结论: 单射 (fun n : 自然数 => x ^ n) ↔ ¬IsOfFinOrder x
   证明: by
   refine ⟨fun h => not_isOfFinOrder_of_injective_pow h, fun h n m hnm => ?_⟩
   rwa [pow_eq_pow_iff_modEq, orderOf_eq_zero_iff.mpr h, modEq_zero_iff] at hnm
@@ -2597,7 +2597,7 @@ lemma finite_powers
 
 中文:
 引理 finite_powers
-  结论: (powers a : Set G).Finite ↔ IsOfFinOrder a
+  结论: (powers a : 集合 G).有限 ↔ IsOfFinOrder a
   证明: by
   refine ⟨fun h => ?_, IsOfFinOrder.finite_powers⟩
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
@@ -2625,7 +2625,7 @@ lemma infinite_powers
 
 中文:
 引理 infinite_powers
-  结论: (powers a : Set G).Infinite ↔ ¬ IsOfFinOrder a
+  结论: (powers a : 集合 G).无限 ↔ ¬ IsOfFinOrder a
   证明: finite_powers.not
 
 Depends on / 依赖: finite_powers, finite_powers.not
@@ -2647,7 +2647,7 @@ lemma Nat.card_submonoidPowers
     rw [orderOf_eq_zero ha]; rw [Nat.card_eq_zero_of_infinite]
 
 中文:
-引理 Nat.card_submonoidPowers
+引理 自然数.card_submonoidPowers
   结论: 自然数.card (powers a) = orderOf a
   证明: by
   by_cases ha : IsOfFinOrder a
@@ -2741,7 +2741,7 @@ lemma injective_pow_iff_not_isOfFinOrder
 
 中文:
 引理 injective_pow_iff_not_isOfFinOrder
-  结论: Function.Injective (fun n : 自然数 => x ^ n) ↔
+  结论: 函数.单射 (fun n : 自然数 => x ^ n) ↔
   证明: by
   refine ⟨fun h => not_isOfFinOrder_of_injective_pow h, fun h n m hnm => ?_⟩
   rwa [pow_eq_pow_iff_modEq, orderOf_eq_zero_iff.mpr h, Nat.modEq_zero_iff] at hnm
@@ -2870,7 +2870,7 @@ lemma finite_powers
 
 中文:
 引理 finite_powers
-  结论: (powers a : Set G).Finite ↔ IsOfFinOrder a
+  结论: (powers a : 集合 G).有限 ↔ IsOfFinOrder a
   证明: by
   refine ⟨fun h => ?_, IsOfFinOrder.finite_powers⟩
   obtain ⟨m, n, hmn, ha⟩ := h.exists_lt_map_eq_of_forall_mem (f := fun n : Nat => a ^ n)
@@ -2903,7 +2903,7 @@ lemma infinite_powers
 
 中文:
 引理 infinite_powers
-  结论: (powers a : Set G).Infinite ↔ ¬ IsOfFinOrder a
+  结论: (powers a : 集合 G).无限 ↔ ¬ IsOfFinOrder a
   证明: finite_powers.not
 
 Depends on / 依赖: finite_powers, finite_powers.not
@@ -2925,7 +2925,7 @@ lemma Nat.card_submonoidPowers
     rw [orderOf_eq_zero ha]; rw [Nat.card_eq_zero_of_infinite]
 
 中文:
-引理 Nat.card_submonoidPowers
+引理 自然数.card_submonoidPowers
   结论: 自然数.card (powers a) = orderOf a
   证明: by
   by_cases ha : IsOfFinOrder a
@@ -3218,7 +3218,7 @@ theorem IsOfFinOrder.of_mem_zpowers
 
 中文:
 定理 IsOfFinOrder.of_mem_zpowers
-  条件: (h : IsOfFinOrder x) (h' : y in Subgroup.zpowers x)
+  条件: (h : IsOfFinOrder x) (h' : y in 子群.zpowers x)
   证明: by
   obtain ⟨k, rfl⟩ := Subgroup.mem_zpowers_iff.mp h'
   exact h.zpow
@@ -3247,7 +3247,7 @@ theorem orderOf_dvd_of_mem_zpowers
 
 中文:
 定理 orderOf_dvd_of_mem_zpowers
-  条件: (h : y in Subgroup.zpowers x)
+  条件: (h : y in 子群.zpowers x)
   结论: orderOf y ∣ orderOf x
   证明: by
   obtain ⟨k, rfl⟩ := Subgroup.mem_zpowers_iff.mp h
@@ -3274,7 +3274,7 @@ theorem smul_eq_self_of_mem_zpowers
 
 中文:
 定理 smul_eq_self_of_mem_zpowers
-  结论: {α : 类型} [MulAction G α] (hx : x in Subgroup.zpowers y)
+  结论: {α : 类型} [乘法作用 G α] (hx : x in 子群.zpowers y)
   证明: by
   obtain ⟨k, rfl⟩ := Subgroup.mem_zpowers_iff.mp hx
   rw [← MulAction.toPerm_apply]; rw [← MulAction.toPermHom_apply]; rw [map_zpow _ y k]; rw [MulAction.toPermHom_apply]
@@ -3298,7 +3298,7 @@ theorem vadd_eq_self_of_mem_zmultiples
 
 中文:
 定理 vadd_eq_self_of_mem_zmultiples
-  结论: {G : 类型} [AddGroup G] {x y : G} {α : 类型}
+  结论: {G : 类型} [加法群 G] {x y : G} {α : 类型}
   证明: @smul_eq_self_of_mem_zpowers (Multiplicative G) _ _ _ α _ hx a hs
 
 Depends on / 依赖: Multiplicative, smul_eq_self_of_mem_zpowers
@@ -3357,7 +3357,7 @@ lemma IsOfFinOrder.powers_eq_zpowers
 中文:
 引理 IsOfFinOrder.powers_eq_zpowers
   条件: (hx : IsOfFinOrder x)
-  结论: (powers x : Set G) = zpowers x
+  结论: (powers x : 集合 G) = zpowers x
   证明: Set.ext fun _ => hx.mem_powers_iff_mem_zpowers
 
 @[to_additive]
@@ -3405,8 +3405,8 @@ refine Submonoid.closure_le.mpr Set.union_subset Submonoid.subset_closure
   simp [(hs _ hx).mem_powers_iff_mem_zpowers]
 
 中文:
-引理 Subgroup.closure_toSubmonoid_of_isOfFinOrder
-  条件: {s : Set G} (hs : 对任意 x in s, IsOfFinOrder x)
+引理 子群.closure_toSubmonoid_of_isOfFinOrder
+  条件: {s : 集合 G} (hs : 对任意 x in s, IsOfFinOrder x)
   证明: by
   refine le_antisymm ?_ (le_closure_toSubmonoid s)
   rw [closure_toSubmonoid]
@@ -3465,7 +3465,7 @@ lemma finEquivZPowers_apply
 
 中文:
 引理 finEquivZPowers_apply
-  条件: (hx : IsOfFinOrder x) {n : Fin (orderOf x)}
+  条件: (hx : IsOfFinOrder x) {n : 有限集 (orderOf x)}
   证明: rfl
 
 @[to_additive]
@@ -3513,7 +3513,7 @@ lemma pow_finEquivZPowers_symm_apply
 
 中文:
 引理 pow_finEquivZPowers_symm_apply
-  条件: (hx : IsOfFinOrder x) (a : Subgroup.zpowers x)
+  条件: (hx : IsOfFinOrder x) (a : 子群.zpowers x)
   证明: by
   simpa only [finEquivZPowers_apply] using
     congr_arg Subtype.val ((finEquivZPowers hx).apply_symm_apply a)
@@ -3639,7 +3639,7 @@ lemma zpowers_mabs
 
 中文:
 引理 zpowers_mabs
-  条件: [LinearOrder G] [IsOrderedMonoid G] (g : G)
+  条件: [线性序 G] [是Ordered幺半群 G] (g : G)
   结论: zpowers |g|ₘ = zpowers g
   证明: by
   rcases mabs_cases g with h | h <;> simp only [h, zpowers_inv]
@@ -3665,8 +3665,8 @@ lemma IsMulTorsionFree.orderOf_le_one
     simp [ha]
 
 中文:
-引理 IsMulTorsionFree.orderOf_le_one
-  条件: [IsMulTorsionFree G] (g : G)
+引理 是MulTorsionFree.orderOf_le_one
+  条件: [是MulTorsionFree G] (g : G)
   证明: by
   obtain rfl | ha := eq_or_ne g 1
   · simp
@@ -3704,7 +3704,7 @@ theorem sum_card_orderOf_eq_card_pow_eq_one
 
 中文:
 定理 sum_card_orderOf_eq_card_pow_eq_one
-  条件: [Fintype G] [DecidableEq G] (hn : n != 0)
+  条件: [有限类型 G] [DecidableEq G] (hn : n != 0)
   证明: by
   refine (Finset.card_biUnion ?_).symm.trans ?_
   · simp +contextual [Set.PairwiseDisjoint, Set.Pairwise, disjoint_iff, Finset.ext_iff]
@@ -3734,8 +3734,8 @@ theorem orderOf_le_card_univ
 
 中文:
 定理 orderOf_le_card_univ
-  条件: [Fintype G]
-  结论: orderOf x <= Fintype.card G
+  条件: [有限类型 G]
+  结论: orderOf x <= 有限类型.card G
   证明: Finset.le_card_of_inj_on_range (x ^ ·) (fun _ _ => Finset.mem_univ _) pow_injOn_Iio_orderOf
 
 @[to_additive]
@@ -3759,7 +3759,7 @@ theorem orderOf_le_card
 
 中文:
 定理 orderOf_le_card
-  条件: [Finite G]
+  条件: [有限 G]
   结论: orderOf x <= 自然数.card G
   证明: by
   obtain ⟨⟩ := nonempty_fintype G
@@ -3817,8 +3817,8 @@ definition LeftCancelMonoid.groupOfFinite
     exact (isOfFinOrder_of_finite x).orderOf_pos
 
 中文:
-定义 LeftCancelMonoid.groupOfFinite
-  签名: : Group G where
+定义 左消去幺半群.groupOfFinite
+  签名: : 群 G where
   定义体: x ^ (orderOf x - 1)
   inv_mul_cancel x := by
     rw [← pow_succ]; rw [tsub_add_cancel_of_le]; rw [pow_orderOf_eq_one]
@@ -3847,8 +3847,8 @@ definition RightCancelMonoid.groupOfFinite
   exact (MulEquiv.opOp H).toEquiv.group
 
 中文:
-定义 RightCancelMonoid.groupOfFinite
-  签名: {H : 类型} [RightCancelMonoid H] [Finite H]
+定义 右消去幺半群.groupOfFinite
+  签名: {H : 类型} [右消去幺半群 H] [有限 H]
   定义体: by
   letI : Finite Hᵐᵒᵖ := Finite.of_equiv H MulOpposite.opEquiv
   letI : Group Hᵐᵒᵖ := LeftCancelMonoid.groupOfFinite (G := Hᵐᵒᵖ)
@@ -3904,7 +3904,7 @@ theorem orderOf_pow
 中文:
 定理 orderOf_pow
   条件: (x : G)
-  结论: orderOf (x ^ n) = orderOf x / 自然数.gcd (orderOf x) n
+  结论: orderOf (x ^ n) = orderOf x / 自然数.最大公约数 (orderOf x) n
   证明: (isOfFinOrder_of_finite _).orderOf_pow ..
 
 @[to_additive]
@@ -4008,7 +4008,7 @@ Fintype.card_eq.2 ⟨finEquivPowers isOfFinOrder_of_finite _⟩
 
 中文:
 引理 orderOf_eq_card_powers
-  结论: orderOf x = Fintype.card (powers x : Submonoid G)
+  结论: orderOf x = 有限类型.card (powers x : 子幺半群 G)
   证明: (Fintype.card_fin (orderOf x)).symm.trans
 Fintype.card_eq.2 ⟨finEquivPowers isOfFinOrder_of_finite _⟩
 
@@ -4037,8 +4037,8 @@ alias ⟨_, IsUnit.isOfFinOrder⟩ := isOfFinOrder_iff_isUnit
 
 中文:
 引理 isOfFinOrder_iff_isUnit
-  条件: [Monoid G] [Finite Gˣ] {x : G}
-  结论: IsOfFinOrder x ↔ IsUnit x
+  条件: [幺半群 G] [有限 Gˣ] {x : G}
+  结论: IsOfFinOrder x ↔ 是单位 x
   证明: by
   use IsOfFinOrder.isUnit
   rintro ⟨u, rfl⟩
@@ -4071,7 +4071,7 @@ lemma orderOf_eq_zero_iff_eq_zero
 
 中文:
 引理 orderOf_eq_zero_iff_eq_zero
-  条件: {G₀ : 类型} [GroupWithZero G₀] [Finite G₀] {a : G₀}
+  条件: {G₀ : 类型} [带零群 G₀] [有限 G₀] {a : G₀}
   证明: by
   -- Prove an instance inline to avoid extra imports.
   -- TODO: move this instance elsewhere?
@@ -4163,7 +4163,7 @@ theorem injective_zpow_iff_not_isOfFinOrder
 
 中文:
 定理 injective_zpow_iff_not_isOfFinOrder
-  结论: (Injective fun n : 整数 => x ^ n) ↔ ¬IsOfFinOrder x
+  结论: (单射 fun n : 整数 => x ^ n) ↔ ¬IsOfFinOrder x
   证明: by
   refine ⟨?_, fun h n m hnm => ?_⟩
   · simp_rw [isOfFinOrder_iff_pow_eq_one]
@@ -4199,7 +4199,7 @@ lemma Subgroup.zpowers_eq_zpowers_iff
   nth_rewrite 2 [← zpow_one x] 
 
 中文:
-引理 Subgroup.zpowers_eq_zpowers_iff
+引理 子群.zpowers_eq_zpowers_iff
   条件: {x y : G} (hx : ¬IsOfFinOrder x)
   证明: by
   refine ⟨fun h => ?_, by rintro (rfl | rfl) <;> simp⟩
@@ -4295,7 +4295,7 @@ theorem exists_zpow_eq_one
 @[to_additive]
 
 中文:
-定理 exists_zpow_eq_one
+定理 存在_zpow_eq_one
   条件: (x : G)
   结论: 存在 (i : 整数) (_ : i != 0), x ^ (i : 整数) = 1
   证明: by
@@ -4352,7 +4352,7 @@ lemma powers_eq_zpowers
 中文:
 引理 powers_eq_zpowers
   条件: (x : G)
-  结论: (powers x : Set G) = zpowers x
+  结论: (powers x : 集合 G) = zpowers x
   证明: (isOfFinOrder_of_finite _).powers_eq_zpowers
 
 @[to_additive]
@@ -4454,8 +4454,8 @@ lemma Subgroup.closure_toSubmonoid_of_finite
   proof: closure_toSubmonoid_of_isOfFinOrder by simp [isOfFinOrder_of_finite]
 
 中文:
-引理 Subgroup.closure_toSubmonoid_of_finite
-  条件: {s : Set G}
+引理 子群.closure_toSubmonoid_of_finite
+  条件: {s : 集合 G}
   证明: closure_toSubmonoid_of_isOfFinOrder by simp [isOfFinOrder_of_finite]
 
 Depends on / 依赖: closure_toSubmonoid_of_isOfFinOrder, isOfFinOrder_of_finite
@@ -4482,8 +4482,8 @@ theorem Fintype.card_zpowers
 @[to_additive]
 
 中文:
-定理 Fintype.card_zpowers
-  结论: Fintype.card (zpowers x) = orderOf x
+定理 有限类型.card_zpowers
+  结论: 有限类型.card (zpowers x) = orderOf x
   证明: (Fintype.card_eq.2 ⟨finEquivZPowers <| isOfFinOrder_of_finite _⟩).symm.trans
     Fintype.card_fin (orderOf x)
 
@@ -4537,7 +4537,7 @@ theorem orderOf_dvd_card
 
 中文:
 定理 orderOf_dvd_card
-  结论: orderOf x ∣ Fintype.card G
+  结论: orderOf x ∣ 有限类型.card G
   证明: by
   use Fintype.card (G ⧸ zpowers x)
   rw [← card_zpowers]; rw [mul_comm]; rw [← Fintype.card_prod]; rw [← Fintype.card_congr groupEquivQuotientProdSubgroup]
@@ -4569,7 +4569,7 @@ nonrec lemma Subgroup.orderOf_dvd_natCard {G : Type*} [Group G] (s : Subgroup G)
 
 中文:
 定理 orderOf_dvd_natCard
-  条件: {G : 类型} [Group G] (x : G)
+  条件: {G : 类型} [群 G] (x : G)
   结论: orderOf x ∣ 自然数.card G
   证明: by
   obtain h | h := fintypeOrInfinite G
@@ -4605,8 +4605,8 @@ lemma Subgroup.orderOf_le_card
 @[to_additive]
 
 中文:
-引理 Subgroup.orderOf_le_card
-  结论: {G : 类型} [Group G] (s : Subgroup G) (hs : (s : Set G).Finite)
+引理 子群.orderOf_le_card
+  结论: {G : 类型} [群 G] (s : 子群 G) (hs : (s : 集合 G).有限)
   证明: le_of_dvd (Nat.card_pos_iff.2 <| ⟨(OneMemClass.coe_nonempty s).to_subtype, hs.to_subtype⟩)
     s.orderOf_dvd_natCard hx
 
@@ -4632,8 +4632,8 @@ rw [← Nat.card_submonoidPowers]; exact Nat.card_mono hs powers_le.2 hx
 @[to_additive (attr := simp) card_nsmul_eq_zero']
 
 中文:
-引理 Submonoid.orderOf_le_card
-  结论: {G : 类型} [Group G] (s : Submonoid G) (hs : (s : Set G).Finite)
+引理 子幺半群.orderOf_le_card
+  结论: {G : 类型} [群 G] (s : 子幺半群 G) (hs : (s : 集合 G).有限)
   证明: by
 rw [← Nat.card_submonoidPowers]; exact Nat.card_mono hs powers_le.2 hx
 
@@ -4657,7 +4657,7 @@ theorem pow_card_eq_one'
 
 中文:
 定理 pow_card_eq_one'
-  条件: {G : 类型} [Group G] {x : G}
+  条件: {G : 类型} [群 G] {x : G}
   结论: x ^ 自然数.card G = 1
   证明: orderOf_dvd_iff_pow_eq_one.mp orderOf_dvd_natCard _
 
@@ -4681,7 +4681,7 @@ theorem pow_card_eq_one
 
 中文:
 定理 pow_card_eq_one
-  结论: x ^ Fintype.card G = 1
+  结论: x ^ 有限类型.card G = 1
   证明: by
   rw [← Nat.card_eq_fintype_card]; rw [pow_card_eq_one']
 
@@ -4704,8 +4704,8 @@ theorem Subgroup.pow_index_mem
 @[to_additive]
 
 中文:
-定理 Subgroup.pow_index_mem
-  条件: {G : 类型} [Group G] (H : Subgroup G) [Normal H] (g : G)
+定理 子群.pow_index_mem
+  条件: {G : 类型} [群 G] (H : 子群 G) [正规 H] (g : G)
   证明: by rw [← eq_one_iff, QuotientGroup.mk_pow H, index, pow_card_eq_one']
 
 @[to_additive]
@@ -4727,8 +4727,8 @@ lemma Subgroup.pow_relIndex_mem
 @[to_additive (attr := simp) mod_card_nsmul]
 
 中文:
-引理 Subgroup.pow_relIndex_mem
-  结论: {G : 类型} [Group G] (H : Subgroup G) [H.Normal] {K : Subgroup G}
+引理 子群.pow_relIndex_mem
+  结论: {G : 类型} [群 G] (H : 子群 G) [H.正规] {K : 子群 G}
   证明: pow_index_mem (H.subgroupOf K) ⟨g, hg⟩
 
 @[to_additive (attr := simp) mod_card_nsmul]
@@ -4783,7 +4783,7 @@ theorem zpow_mod_card
 中文:
 定理 zpow_mod_card
   条件: (a : G) (n : 整数)
-  结论: a ^ (n % Fintype.card G : 整数) = a ^ n
+  结论: a ^ (n % 有限类型.card G : 整数) = a ^ n
   证明: by
   rw [eq_comm]; rw [← zpow_mod_orderOf]; rw [← Int.emod_emod_of_dvd n
     (Int.natCast_dvd_natCast.2 orderOf_dvd_card)]; rw [zpow_mod_orderOf]
@@ -4811,7 +4811,7 @@ lemma pow_mod_natCard
 
 中文:
 引理 pow_mod_natCard
-  条件: {G} [Group G] (a : G) (n : 自然数)
+  条件: {G} [群 G] (a : G) (n : 自然数)
   结论: a ^ (n % 自然数.card G) = a ^ n
   证明: by
   rw [eq_comm]; rw [← pow_mod_orderOf]; rw [← Nat.mod_mod_of_dvd n <| orderOf_dvd_natCard _]; rw [pow_mod_orderOf]
@@ -4837,7 +4837,7 @@ Int.natCast_dvd_natCast.2 orderOf_dvd_natCard _]; rw [zpow_mod_orderOf]
 
 中文:
 引理 zpow_mod_natCard
-  条件: {G} [Group G] (a : G) (n : 整数)
+  条件: {G} [群 G] (a : G) (n : 整数)
   结论: a ^ (n % 自然数.card G : 整数) = a ^ n
   证明: by
   rw [eq_comm]; rw [← zpow_mod_orderOf]; rw [← Int.emod_emod_of_dvd n <|
@@ -4867,7 +4867,7 @@ definition powCoprime
 
 中文:
 定义 powCoprime
-  签名: {G : 类型} [Group G] (h : (自然数.card G).Coprime n)
+  签名: {G : 类型} [群 G] (h : (自然数.card G).Coprime n)
   定义体: g ^ n
   invFun g := g ^ (Nat.card G).gcdB n
   left_inv g := by
@@ -4902,7 +4902,7 @@ theorem powCoprime_one
 
 中文:
 定理 powCoprime_one
-  条件: {G : 类型} [Group G] (h : (自然数.card G).Coprime n)
+  条件: {G : 类型} [群 G] (h : (自然数.card G).Coprime n)
   结论: powCoprime h 1 = 1
   证明: one_pow n
 
@@ -4926,7 +4926,7 @@ theorem powCoprime_inv
 
 中文:
 定理 powCoprime_inv
-  条件: {G : 类型} [Group G] (h : (自然数.card G).Coprime n) {g : G}
+  条件: {G : 类型} [群 G] (h : (自然数.card G).Coprime n) {g : G}
   证明: inv_pow g n
 
 @[to_additive Nat.Coprime.nsmul_right_bijective]
@@ -4947,8 +4947,8 @@ lemma Nat.Coprime.pow_left_bijective
   proof: (powCoprime hn).bijective
 
 中文:
-引理 Nat.Coprime.pow_left_bijective
-  条件: {G} [Group G] (hn : (自然数.card G).Coprime n)
+引理 自然数.Coprime.pow_left_bijective
+  条件: {G} [群 G] (hn : (自然数.card G).Coprime n)
   证明: (powCoprime hn).bijective
 
 Depends on / 依赖: bijective, powCoprime
@@ -5067,7 +5067,7 @@ definition submonoidOfIdempotent
 
 中文:
 定义 submonoidOfIdempotent
-  签名: {M : 类型} [LeftCancelMonoid M] [Finite M] (S : Set M)
+  签名: {M : 类型} [左消去幺半群 M] [有限 M] (S : 集合 M)
   定义体: have pow_mem (a : M) (ha : a in S) (n : Nat) : a ^ (n + 1) in S := by
     induction n with
     | zero => rwa [zero_add, pow_one]
@@ -5112,7 +5112,7 @@ definition subgroupOfIdempotent
 
 中文:
 定义 subgroupOfIdempotent
-  签名: {G : 类型} [Group G] [Finite G] (S : Set G) (hS1 : S.Nonempty)
+  签名: {G : 类型} [群 G] [有限 G] (S : 集合 G) (hS1 : S.非空)
   定义体: { submonoidOfIdempotent S hS1 hS2 with
     carrier := S
     inv_mem' := fun {a} ha => show a⁻¹ in submonoidOfIdempotent S hS1 hS2 by
@@ -5149,7 +5149,7 @@ subgroupOfIdempotent (S ^ Fintype.card G) ⟨1, one_mem⟩ by
 
 中文:
 定义 powCardSubgroup
-  签名: {G : 类型} [Group G] [Fintype G] (S : Set G) (hS : S.Nonempty)
+  签名: {G : 类型} [群 G] [有限类型 G] (S : 集合 G) (hS : S.非空)
   定义体: have one_mem : (1 : G) in S ^ Fintype.card G := by
     obtain ⟨a, ha⟩ := hS
     rw [← pow_card_eq_one]
@@ -5315,9 +5315,9 @@ theorem Prod.orderOf
 @[to_additive]
 
 中文:
-定理 Prod.orderOf
+定理 积类型.orderOf
   条件: (x : α × β)
-  结论: orderOf x = (orderOf x.1).lcm (orderOf x.2)
+  结论: orderOf x = (orderOf x.1).最小公倍数 (orderOf x.2)
   证明: minimalPeriod_prodMap _ _ _
 
 @[to_additive]
@@ -5479,8 +5479,8 @@ lemma Prod.orderOf_mk
   proof: (a, b).orderOf
 
 中文:
-引理 Prod.orderOf_mk
-  结论: orderOf (a, b) = 自然数.lcm (orderOf a) (orderOf b)
+引理 积类型.orderOf_mk
+  结论: orderOf (a, b) = 自然数.最小公倍数 (orderOf a) (orderOf b)
   证明: (a, b).orderOf
 
 Depends on / 依赖: orderOf
@@ -5507,7 +5507,7 @@ lemma Pi.orderOf_eq_sInf
 @[to_additive]
 
 中文:
-引理 Pi.orderOf_eq_sInf
+引理 依赖函数类型.orderOf_eq_sInf
   条件: (x : 对任意 i, α i)
   结论: orderOf x = sInf { n > 0 | 对任意 i, orderOf (x i) ∣ n }
   证明: minimalPeriod_piMap
@@ -5531,8 +5531,8 @@ lemma Pi.orderOf
 @[to_additive]
 
 中文:
-引理 Pi.orderOf
-  条件: [Fintype ι] (x : 对任意 i, α i)
+引理 依赖函数类型.orderOf
+  条件: [有限类型 ι] (x : 对任意 i, α i)
   证明: minimalPeriod_piMap_fintype
 
 @[to_additive]
@@ -5579,7 +5579,7 @@ theorem IsOfFinOrder.pi
 
 中文:
 定理 IsOfFinOrder.pi
-  条件: [Finite ι]
+  条件: [有限 ι]
   结论: (对任意 i, IsOfFinOrder (x i)) -> IsOfFinOrder x
   证明: by
   have := Fintype.ofFinite ι
@@ -5605,9 +5605,9 @@ lemma Nat.cast_card_eq_zero
   rw [← nsmul_one]; rw [card_nsmul_eq_zero]
 
 中文:
-引理 Nat.cast_card_eq_zero
-  条件: (R) [AddGroupWithOne R] [Fintype R]
-  结论: (Fintype.card R : R) = 0
+引理 自然数.cast_card_eq_zero
+  条件: (R) [加法带幺群 R] [有限类型 R]
+  结论: (有限类型.card R : R) = 0
   证明: by
   rw [← nsmul_one]; rw [card_nsmul_eq_zero]
 
@@ -5628,8 +5628,8 @@ lemma CharP.addOrderOf_one
   proof: by rw [← Nat.smul_one_eq_cast, addOrderOf_dvd_iff_nsmul_eq_zero]
 
 中文:
-引理 CharP.addOrderOf_one
-  结论: CharP R (addOrderOf (1 : R)) where
+引理 特征p.addOrderOf_one
+  结论: 特征p R (addOrderOf (1 : R)) where
   证明: by rw [← Nat.smul_one_eq_cast, addOrderOf_dvd_iff_nsmul_eq_zero]
 
 Depends on / 依赖: Nat.smul_one_eq_cast, addOrderOf_dvd_iff_nsmul_eq_zero, smul_one_eq_cast
@@ -5659,7 +5659,7 @@ lemma charP_of_ne_zero
 中文:
 引理 charP_of_ne_zero
   条件: (hn : card R = p) (hR : 对任意 i < p, (i : R) = 0 -> i = 0)
-  结论: CharP R p where
+  结论: 特征p R p where
   证明: by
     have H : (p : R) = 0 := by rw [← hn, Nat.cast_card_eq_zero]
     constructor
@@ -5701,7 +5701,7 @@ obtain rfl : i = n := hR i hi by rw [← Nat.cast_pow, CharP.cast_eq_zero]
 
 中文:
 引理 charP_of_prime_pow_injective
-  结论: (R) [Ring R] [Fintype R] (p n : 自然数) [hp : Fact p.Prime]
+  结论: (R) [环 R] [有限类型 R] (p n : 自然数) [hp : Fact p.素]
   证明: by
   obtain ⟨c, hc⟩ := CharP.exists R
   have hcpn : c ∣ p ^ n := by rw [← CharP.cast_eq_zero_iff R c, ← hn, Nat.cast_card_eq_zero]
@@ -5736,7 +5736,7 @@ lemma orderOf_eq
 
 中文:
 引理 orderOf_eq
-  条件: [Group G] (a : G) {x y : G} (h : SemiconjBy a x y)
+  条件: [群 G] (a : G) {x y : G} (h : SemiconjBy a x y)
   结论: orderOf x = orderOf y
   证明: by
   rw [orderOf_eq_orderOf_iff]
@@ -5764,7 +5764,7 @@ lemma orderOf_piMulSingle
 
 中文:
 引理 orderOf_piMulSingle
-  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [(i : ι) -> Monoid (M i)]
+  结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型} [(i : ι) -> 幺半群 (M i)]
   证明: orderOf_injective (MonoidHom.mulSingle M i) (Pi.mulSingle_injective i) g
 
 Depends on / 依赖: MonoidHom, MonoidHom.mulSingle, Pi.mulSingle_injective, mulSingle, mulSingle_injective, orderOf_injective

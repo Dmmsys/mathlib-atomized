@@ -125,7 +125,7 @@ theorem condLExp_of_not_sigmaFinite
 
 中文:
 定理 condLExp_of_not_sigmaFinite
-  条件: (hm : mΩ <= mΩ₀) (hμm_not : ¬SigmaFinite (P.trim hm))
+  条件: (hm : mΩ <= mΩ₀) (hμm_not : ¬σ有限 (P.trim hm))
   证明: by simp [condLExp, dif_pos hm, hμm_not]
 
 Depends on / 依赖: condLExp, dif_pos
@@ -144,7 +144,7 @@ theorem condLExp_eq_self
 
 中文:
 定理 condLExp_eq_self
-  结论: (hm : mΩ <= mΩ₀) (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)]
+  结论: (hm : mΩ <= mΩ₀) (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)]
   证明: by
   simp [condLExp, hm, hσ, hX]
 
@@ -167,7 +167,7 @@ theorem condLExp_of_not_sub_sigma_measurable
 
 中文:
 定理 condLExp_of_not_sub_sigma_measurable
-  结论: (hm : mΩ <= mΩ₀) (P : Measure[mΩ₀] Ω)
+  结论: (hm : mΩ <= mΩ₀) (P : 测度[mΩ₀] Ω)
   证明: by
   simp [condLExp, hm, hσ, hX]
 
@@ -198,7 +198,7 @@ theorem measurable_condLExp
 
 中文:
 定理 measurable_condLExp
-  条件: (mΩ : MeasurableSpace Ω) (P : Measure[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
+  条件: (mΩ : 可测空间 Ω) (P : 测度[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
   证明: by
   by_cases hm : mΩ <= mΩ₀
   · by_cases hσ : SigmaFinite (P.trim hm)
@@ -234,7 +234,7 @@ theorem measurable_condLExp'
 
 中文:
 定理 measurable_condLExp'
-  条件: (mΩ : MeasurableSpace Ω) (P : Measure[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
+  条件: (mΩ : 可测空间 Ω) (P : 测度[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
   证明: by
   by_cases hm : mΩ <= mΩ₀
   · exact (measurable_condLExp _ _ _).mono hm (le_refl _)
@@ -264,8 +264,8 @@ theorem setLIntegral_condLExp
   rw [condLExp_of_not_sub_sigma_measurable hm _ hX]; rw [← lintegr
 
 中文:
-定理 setLIntegral_condLExp
-  结论: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)]
+定理 setL整数egral_condLExp
+  结论: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)]
   证明: by
   by_cases hX : Measurable[mΩ] X
   · simp [condLExp_eq_self hm _ hX]
@@ -294,8 +294,8 @@ theorem setLIntegral_condLExp_trim
   rw [setLIntegral_trim hm (measurable_condLExp _ _ _) hs]; rw [setLIntegral_condLExp _ _ _ hs]
 
 中文:
-定理 setLIntegral_condLExp_trim
-  结论: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)]
+定理 setL整数egral_condLExp_trim
+  结论: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)]
   证明: by
   rw [setLIntegral_trim hm (measurable_condLExp _ _ _) hs]; rw [setLIntegral_condLExp _ _ _ hs]
 
@@ -317,7 +317,7 @@ theorem lintegral_condLExp
 
 中文:
 定理 lintegral_condLExp
-  条件: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)] (X : Ω -> 实数>=0∞)
+  条件: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)] (X : Ω -> 实数>=0∞)
   证明: by
   simpa [← setLIntegral_univ] using setLIntegral_condLExp _ _ _ .univ
 
@@ -398,7 +398,7 @@ theorem ae_eq_condLExp₀
 
 中文:
 定理 ae_eq_condLExp₀
-  结论: {P : Measure[mΩ₀] Ω} [hσ : SigmaFinite (P.trim hm)]
+  结论: {P : 测度[mΩ₀] Ω} [hσ : σ有限 (P.trim hm)]
   证明: by
   apply ae_eq_of_ae_eq_trim
   apply ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hY (by fun_prop)
@@ -428,7 +428,7 @@ theorem ae_eq_condLExp
 
 中文:
 定理 ae_eq_condLExp
-  结论: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)]
+  结论: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)]
   证明: ae_eq_condLExp₀ _ _ hY.aemeasurable hXY
 
 Depends on / 依赖: aemeasurable, hY.aemeasurable
@@ -450,7 +450,7 @@ theorem condLExp_const
 
 中文:
 定理 condLExp_const
-  条件: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)] (c : 实数>=0∞)
+  条件: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)] (c : 实数>=0∞)
   证明: condLExp_eq_self _ _ (measurable_const)
 
 @[gcongr]
@@ -478,7 +478,7 @@ theorem condLExp_congr_ae
 
 中文:
 定理 condLExp_congr_ae
-  结论: {P : Measure[mΩ₀] Ω}
+  结论: {P : 测度[mΩ₀] Ω}
   证明: by
   by_cases hm : mΩ <= mΩ₀
   · by_cases hσ : SigmaFinite (P.trim hm)
@@ -520,7 +520,7 @@ theorem condLExp_zero
 
 中文:
 定理 condLExp_zero
-  条件: (P : Measure[mΩ₀] Ω)
+  条件: (P : 测度[mΩ₀] Ω)
   结论: P⁻[0|mΩ] = 0
   证明: by
   by_cases hm : mΩ <= mΩ₀
@@ -553,7 +553,7 @@ theorem condLExp_one
 
 中文:
 定理 condLExp_one
-  条件: (P : Measure[mΩ₀] Ω) [hσ : SigmaFinite (P.trim hm)]
+  条件: (P : 测度[mΩ₀] Ω) [hσ : σ有限 (P.trim hm)]
   证明: condLExp_const hm P 1
 
 @[gcongr]
@@ -576,7 +576,7 @@ theorem condLExp_congr_ae_trim
 
 中文:
 定理 condLExp_congr_ae_trim
-  条件: {P : Measure[mΩ₀] Ω} {X Y : Ω -> 实数>=0∞} (hXY : X =ᵐ[P] Y)
+  条件: {P : 测度[mΩ₀] Ω} {X Y : Ω -> 实数>=0∞} (hXY : X =ᵐ[P] Y)
   证明: by
   apply ae_eq_trim_of_measurable hm (measurable_condLExp _ _ X) (measurable_condLExp _ _ Y)
   exact condLExp_congr_ae hXY
@@ -604,7 +604,7 @@ theorem condLExp_bot'
 
 中文:
 定理 condLExp_bot'
-  条件: (P : Measure[mΩ₀] Ω) [NeZero P] (X : Ω -> 实数>=0∞)
+  条件: (P : 测度[mΩ₀] Ω) [NeZero P] (X : Ω -> 实数>=0∞)
   证明: by
   by_cases hP : IsFiniteMeasure P; swap
   · have hσ : ¬SigmaFinite (P.trim bot_le) := by rwa [sigmaFinite_trim_bot_iff]
@@ -641,7 +641,7 @@ exact ae_of_all P congr_fun (condLExp_bot' P X)
 
 中文:
 定理 condLExp_bot_ae_eq
-  条件: (P : Measure[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
+  条件: (P : 测度[mΩ₀] Ω) (X : Ω -> 实数>=0∞)
   证明: by
   rcases eq_zero_or_neZero P with rfl | hP
   · rw [ae_zero]; exact Filter.eventually_bot
@@ -665,7 +665,7 @@ theorem condLExp_bot
 
 中文:
 定理 condLExp_bot
-  条件: (P : Measure[mΩ₀] Ω) [IsProbabilityMeasure P] (X : Ω -> 实数>=0∞)
+  条件: (P : 测度[mΩ₀] Ω) [是概率测度 P] (X : Ω -> 实数>=0∞)
   证明: (condLExp_bot' P X).trans (by simp)
 
 Depends on / 依赖: condLExp_bot
@@ -774,7 +774,7 @@ theorem condLExp_add_left
 
 中文:
 定理 condLExp_add_left
-  条件: {X : Ω -> 实数>=0∞} (Y : Ω -> 实数>=0∞) (hX : AEMeasurable[mΩ₀] X P)
+  条件: {X : Ω -> 实数>=0∞} (Y : Ω -> 实数>=0∞) (hX : 几乎处处可测[mΩ₀] X P)
   证明: by
   by_cases hm : mΩ <= mΩ₀
   swap; · simp_rw [condLExp_of_not_le hm]; simp
@@ -812,7 +812,7 @@ theorem condLExp_add_right
 
 中文:
 定理 condLExp_add_right
-  条件: (X : Ω -> 实数>=0∞) {Y : Ω -> 实数>=0∞} (hY : AEMeasurable[mΩ₀] Y P)
+  条件: (X : Ω -> 实数>=0∞) {Y : Ω -> 实数>=0∞} (hY : 几乎处处可测[mΩ₀] Y P)
   证明: by
   rw [add_comm]; rw [add_comm P⁻[X|mΩ]]
   exact condLExp_add_left X hY
@@ -842,7 +842,7 @@ theorem condLExp_smul
 
 中文:
 定理 condLExp_smul
-  条件: (X : Ω -> 实数>=0∞) (hX : AEMeasurable[mΩ₀] X P) (c : 实数>=0∞)
+  条件: (X : Ω -> 实数>=0∞) (hX : 几乎处处可测[mΩ₀] X P) (c : 实数>=0∞)
   证明: by
   by_cases hm : mΩ <= mΩ₀
   swap; · simp [condLExp_of_not_le hm]
@@ -969,7 +969,7 @@ theorem condLExp_tsum
 
 中文:
 定理 condLExp_tsum
-  结论: [Countable ι] {X : ι -> Ω -> 实数>=0∞}
+  结论: [可数 ι] {X : ι -> Ω -> 实数>=0∞}
   证明: by
   by_cases hm : mΩ <= mΩ₀; swap
   · simp_rw [condLExp_of_not_le hm]; filter_upwards; simp
@@ -1010,7 +1010,7 @@ theorem condLExp_finsetSum
 
 中文:
 定理 condLExp_finsetSum
-  结论: (s : Finset ι) {X : ι -> Ω -> 实数>=0∞}
+  结论: (s : 有限集 ι) {X : ι -> Ω -> 实数>=0∞}
   证明: by
   convert! condLExp_tsum mΩ (fun i : s => hX i)
   · simp [Finset.sum_attach]

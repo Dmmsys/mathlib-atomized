@@ -27,7 +27,7 @@ theorem ConGen.Rel.star
   statement: (hr : forall a b, r a b -> r (star a) (star b))
 
 中文:
-定理 ConGen.Rel.star
+定理 ConGen.关系.star
   结论: (hr : 对任意 a b, r a b -> r (star a) (star b))
 
 Depends on / 依赖: AddHom, AddHom.coe_mk, Finsupp, Finsupp.sum_fintype, LinearEquiv, LinearEquiv.coe_mk, LinearMap, LinearMap.coe_mk, LinearMap.compl, LinearMap.sum_repr_mul_repr_mul, LinearMap.toMatrix, Matrix, Matrix.mul_apply, Pi.basisFun, Pi.basisFun_repr, _apply, basisFun, basisFun_repr, coe_mk, conv_lhs
@@ -75,7 +75,7 @@ theorem AddConGen.Rel.star
   statement: (hr : forall a b, r a b -> r (star a) (star b))
 
 中文:
-定理 AddConGen.Rel.star
+定理 AddConGen.关系.star
   结论: (hr : 对任意 a b, r a b -> r (star a) (star b))
 
 Depends on / 依赖: LinearMap, LinearMap.comp_id, LinearMap.compl, comp_id

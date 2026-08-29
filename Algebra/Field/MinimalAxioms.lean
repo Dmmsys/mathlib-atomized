@@ -41,7 +41,7 @@ abbreviation Field.ofMinimalAxioms
     qsmul_def := fun _ _
 
 中文:
-缩写 Field.ofMinimalAxioms
+缩写 域.ofMinimalAxioms
   签名: (K : 类型u)
   定义体: letI := CommRing.ofMinimalAxioms add_assoc zero_add
     neg_add_cancel mul_assoc mul_comm one_mul left_distrib

@@ -74,7 +74,7 @@ theorem isBigO_sub_exp_exp
 
 中文:
 定理 isBigO_sub_exp_exp
-  结论: {a : 实数} {f g : Complex -> E} {l : Filter Complex} {u : Complex -> 实数}
+  结论: {a : 实数} {f g : 复形 -> E} {l : 滤子 复形} {u : 复形 -> 实数}
   证明: by
   have : forall {c₁ c₂ B₁ B₂}, c₁ <= c₂ -> 0 <= B₂ -> B₁ <= B₂ -> forall z,
       ‖expR (B₁ * expR (c₁ * |u z|))‖ <= ‖expR (B₂ * expR (c₂ * |u z|))‖ := fun hc hB₀ hB z => by
@@ -110,7 +110,7 @@ fun z => expR (B₂ * ‖z‖ ^ c₂) := fun hc hB₀ hB => .of_norm_eventuallyL
 
 中文:
 定理 isBigO_sub_exp_rpow
-  结论: {a : 实数} {f g : Complex -> E} {l : Filter Complex}
+  结论: {a : 实数} {f g : 复形 -> E} {l : 滤子 复形}
   证明: by
   have : forall {c₁ c₂ B₁ B₂ : Real}, c₁ <= c₂ -> 0 <= B₂ -> B₁ <= B₂ ->
       (fun z : Complex => expR (B₁ * ‖z‖ ^ c₁)) =O[cobounded Complex ⊓ l]
@@ -157,7 +157,7 @@ theorem horizontal_strip
 
 中文:
 定理 horizontal_strip
-  结论: (hfd : DiffContOnCl Complex f (im ⁻¹' Ioo a b))
+  结论: (hfd : DiffContOnCl 复形 f (im ⁻¹' 开区间 a b))
   证明: by
   -- If `im z = a` or `im z = b`, then we apply `hle_a` or `hle_b`, otherwise `im z ∈ Ioo a b`.
   rw [le_iff_eq_or_lt] at hza hzb
@@ -287,7 +287,7 @@ norm_le_zero_iff.1 horizontal_strip hd hB (fun z hz => (ha z hz).symm ▸ norm_z
 
 中文:
 定理 eq_zero_on_horizontal_strip
-  结论: (hd : DiffContOnCl Complex f (im ⁻¹' Ioo a b))
+  结论: (hd : DiffContOnCl 复形 f (im ⁻¹' 开区间 a b))
   证明: fun _z hz =>
 norm_le_zero_iff.1 horizontal_strip hd hB (fun z hz => (ha z hz).symm ▸ norm_zero.le)
     (fun z hz => (hb z hz).symm ▸ norm_zero.le) hz.1 hz.2
@@ -312,7 +312,7 @@ theorem eqOn_horizontal_strip
 
 中文:
 定理 eqOn_horizontal_strip
-  结论: {g : Complex -> E} (hdf : DiffContOnCl Complex f (im ⁻¹' Ioo a b))
+  结论: {g : 复形 -> E} (hdf : DiffContOnCl 复形 f (im ⁻¹' 开区间 a b))
   证明: fun _z hz =>
   sub_eq_zero.1 (eq_zero_on_horizontal_strip (hdf.sub hdg) (isBigO_sub_exp_exp hBf hBg)
     (fun w hw => sub_eq_zero.2 (ha w hw)) (fun w hw => sub_eq_zero.2 (hb w hw)) hz)
@@ -346,7 +346,7 @@ theorem vertical_strip
 
 中文:
 定理 vertical_strip
-  结论: (hfd : DiffContOnCl Complex f (re ⁻¹' Ioo a b))
+  结论: (hfd : DiffContOnCl 复形 f (re ⁻¹' 开区间 a b))
   证明: by
   suffices ‖f (z * I * -I)‖ <= C by simpa [mul_assoc] using this
   have H : MapsTo (· * -I) (im ⁻¹' Ioo a b) (re ⁻¹' Ioo a b) := fun z hz => by simpa using hz
@@ -386,7 +386,7 @@ norm_le_zero_iff.1 vertical_strip hd hB (fun z hz => (ha z hz).symm ▸ norm_zer
 
 中文:
 定理 eq_zero_on_vertical_strip
-  结论: (hd : DiffContOnCl Complex f (re ⁻¹' Ioo a b))
+  结论: (hd : DiffContOnCl 复形 f (re ⁻¹' 开区间 a b))
   证明: fun _z hz =>
 norm_le_zero_iff.1 vertical_strip hd hB (fun z hz => (ha z hz).symm ▸ norm_zero.le)
     (fun z hz => (hb z hz).symm ▸ norm_zero.le) hz.1 hz.2
@@ -411,7 +411,7 @@ theorem eqOn_vertical_strip
 
 中文:
 定理 eqOn_vertical_strip
-  结论: {g : Complex -> E} (hdf : DiffContOnCl Complex f (re ⁻¹' Ioo a b))
+  结论: {g : 复形 -> E} (hdf : DiffContOnCl 复形 f (re ⁻¹' 开区间 a b))
   证明: fun _z hz =>
   sub_eq_zero.1 (eq_zero_on_vertical_strip (hdf.sub hdg) (isBigO_sub_exp_exp hBf hBg)
     (fun w hw => sub_eq_zero.2 (ha w hw)) (fun w hw => sub_eq_zero.2 (hb w hw)) hz)
@@ -508,7 +508,7 @@ norm_le_zero_iff.1
 
 中文:
 定理 eq_zero_on_quadrant_I
-  结论: (hd : DiffContOnCl Complex f (Ioi 0 ×Complex Ioi 0))
+  结论: (hd : DiffContOnCl 复形 f (左开右无界区间 0 ×复形 左开右无界区间 0))
   证明: fun _z hz =>
 norm_le_zero_iff.1
     quadrant_I hd hB (fun x hx => norm_le_zero_iff.2 <| hre x hx)
@@ -536,7 +536,7 @@ sub_eq_zero.1
 
 中文:
 定理 eqOn_quadrant_I
-  结论: (hdf : DiffContOnCl Complex f (Ioi 0 ×Complex Ioi 0))
+  结论: (hdf : DiffContOnCl 复形 f (左开右无界区间 0 ×复形 左开右无界区间 0))
   证明: fun _z hz =>
 sub_eq_zero.1
     eq_zero_on_quadrant_I (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
@@ -569,7 +569,7 @@ theorem quadrant_II
 
 中文:
 定理 quadrant_II
-  结论: (hd : DiffContOnCl Complex f (Iio 0 ×Complex Ioi 0))
+  结论: (hd : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左开右无界区间 0))
   证明: by
   obtain ⟨z, rfl⟩ : exists z', z' * I = z := ⟨z / I, div_mul_cancel₀ _ I_ne_zero⟩
   simp only [mul_I_re, mul_I_im, neg_nonpos] at hz_re hz_im
@@ -610,7 +610,7 @@ norm_le_zero_iff.1
 
 中文:
 定理 eq_zero_on_quadrant_II
-  结论: (hd : DiffContOnCl Complex f (Iio 0 ×Complex Ioi 0))
+  结论: (hd : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左开右无界区间 0))
   证明: fun _z hz =>
 norm_le_zero_iff.1
     quadrant_II hd hB (fun x hx => norm_le_zero_iff.2 <| hre x hx)
@@ -637,7 +637,7 @@ sub_eq_zero.1 eq_zero_on_quadrant_II (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
 
 中文:
 定理 eqOn_quadrant_II
-  结论: (hdf : DiffContOnCl Complex f (Iio 0 ×Complex Ioi 0))
+  结论: (hdf : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左开右无界区间 0))
   证明: fun _z hz =>
 sub_eq_zero.1 eq_zero_on_quadrant_II (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
     (fun x hx => sub_eq_zero.2 <| hre x hx) (fun x hx => sub_eq_zero.2 <| him x hx) hz
@@ -669,7 +669,7 @@ theorem quadrant_III
 
 中文:
 定理 quadrant_III
-  结论: (hd : DiffContOnCl Complex f (Iio 0 ×Complex Iio 0))
+  结论: (hd : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左无界右开区间 0))
   证明: by
   obtain ⟨z, rfl⟩ : exists z', -z' = z := ⟨-z, neg_neg z⟩
   simp only [neg_re, neg_im, neg_nonpos] at hz_re hz_im
@@ -715,7 +715,7 @@ norm_le_zero_iff.1 quadrant_III hd hB (fun x hx => norm_le_zero_iff.2 <| hre x h
 
 中文:
 定理 eq_zero_on_quadrant_III
-  结论: (hd : DiffContOnCl Complex f (Iio 0 ×Complex Iio 0))
+  结论: (hd : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左无界右开区间 0))
   证明: fun _z hz =>
 norm_le_zero_iff.1 quadrant_III hd hB (fun x hx => norm_le_zero_iff.2 <| hre x hx)
     (fun x hx => norm_le_zero_iff.2 <| him x hx) hz.1 hz.2
@@ -740,7 +740,7 @@ sub_eq_zero.1 eq_zero_on_quadrant_III (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg
 
 中文:
 定理 eqOn_quadrant_III
-  结论: (hdf : DiffContOnCl Complex f (Iio 0 ×Complex Iio 0))
+  结论: (hdf : DiffContOnCl 复形 f (左无界右开区间 0 ×复形 左无界右开区间 0))
   证明: fun _z hz =>
 sub_eq_zero.1 eq_zero_on_quadrant_III (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
     (fun x hx => sub_eq_zero.2 <| hre x hx) (fun x hx => sub_eq_zero.2 <| him x hx) hz
@@ -771,7 +771,7 @@ theorem quadrant_IV
 
 中文:
 定理 quadrant_IV
-  结论: (hd : DiffContOnCl Complex f (Ioi 0 ×Complex Iio 0))
+  结论: (hd : DiffContOnCl 复形 f (左开右无界区间 0 ×复形 左无界右开区间 0))
   证明: by
   obtain ⟨z, rfl⟩ : exists z', -z' = z := ⟨-z, neg_neg z⟩
   simp only [neg_re, neg_im, neg_nonpos, neg_nonneg] at hz_re hz_im
@@ -815,7 +815,7 @@ norm_le_zero_iff.1
 
 中文:
 定理 eq_zero_on_quadrant_IV
-  结论: (hd : DiffContOnCl Complex f (Ioi 0 ×Complex Iio 0))
+  结论: (hd : DiffContOnCl 复形 f (左开右无界区间 0 ×复形 左无界右开区间 0))
   证明: fun _z hz =>
 norm_le_zero_iff.1
     quadrant_IV hd hB (fun x hx => norm_le_zero_iff.2 <| hre x hx)
@@ -842,7 +842,7 @@ sub_eq_zero.1 eq_zero_on_quadrant_IV (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
 
 中文:
 定理 eqOn_quadrant_IV
-  结论: (hdf : DiffContOnCl Complex f (Ioi 0 ×Complex Iio 0))
+  结论: (hdf : DiffContOnCl 复形 f (左开右无界区间 0 ×复形 左无界右开区间 0))
   证明: fun _z hz =>
 sub_eq_zero.1 eq_zero_on_quadrant_IV (hdf.sub hdg) (isBigO_sub_exp_rpow hBf hBg)
     (fun x hx => sub_eq_zero.2 <| hre x hx) (fun x hx => sub_eq_zero.2 <| him x hx) hz
@@ -878,7 +878,7 @@ theorem right_half_plane_of_tendsto_zero_on_real
 
 中文:
 定理 right_half_plane_of_tendsto_zero_on_real
-  结论: (hd : DiffContOnCl Complex f {z | 0 < z.re})
+  结论: (hd : DiffContOnCl 复形 f {z | 0 < z.re})
   证明: by
   /- We are going to apply the Phragmen-Lindelöf principle in the first and fourth quadrants.
     The lemmas immediately imply that for any upper estimate `C'` on `‖f x‖`, `x : ℝ`, `0 ≤ x`,
@@ -960,7 +960,7 @@ theorem right_half_plane_of_bounded_on_real
 
 中文:
 定理 right_half_plane_of_bounded_on_real
-  结论: (hd : DiffContOnCl Complex f {z | 0 < z.re})
+  结论: (hd : DiffContOnCl 复形 f {z | 0 < z.re})
   证明: by
   -- For each `ε < 0`, the function `fun z ↦ exp (ε * z) • f z` satisfies assumptions of
   -- `right_half_plane_of_tendsto_zero_on_real`, hence `‖exp (ε * z) • f z‖ ≤ C` for all `ε < 0`.
@@ -1014,7 +1014,7 @@ theorem eq_zero_on_right_half_plane_of_superexponential_decay
 
 中文:
 定理 eq_zero_on_right_half_plane_of_superexponential_decay
-  结论: (hd : DiffContOnCl Complex f {z | 0 < z.re})
+  结论: (hd : DiffContOnCl 复形 f {z | 0 < z.re})
   证明: by
   rcases him with ⟨C, hC⟩
   -- Due to continuity, it suffices to prove the equality on the open right half-plane.
@@ -1079,7 +1079,7 @@ theorem eqOn_right_half_plane_of_superexponential_decay
 
 中文:
 定理 eqOn_right_half_plane_of_superexponential_decay
-  结论: {g : Complex -> E}
+  结论: {g : 复形 -> E}
   证明: by
   suffices EqOn (f - g) 0 {z : Complex | 0 <= z.re} by
     simpa only [EqOn, Pi.sub_apply, Pi.zero_apply, sub_eq_zero] using this

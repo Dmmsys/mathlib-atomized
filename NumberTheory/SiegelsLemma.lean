@@ -211,7 +211,7 @@ lemma card_S_eq
 中文:
 引理 card_S_eq
   条件: [DecidableEq α]
-  结论: #(Finset.Icc N P) = ∏ i : α, (P i - N i + 1)
+  结论: #(有限集.闭区间 N P) = ∏ i : α, (P i - N i + 1)
   证明: by
   rw [Pi.card_Icc N P]; rw [Nat.cast_prod]
   congr
@@ -358,7 +358,7 @@ theorem exists_ne_zero_int_vec_norm_le
   refine ⟨x - y, sub_ne_zero.mpr hneq, by simp only [mulVec_sub, sub_eq_z
 
 中文:
-定理 exists_ne_zero_int_vec_norm_le
+定理 存在_ne_zero_int_vec_norm_le
   证明: by
   classical
   -- Pigeonhole
@@ -414,7 +414,7 @@ theorem exists_ne_zero_int_vec_norm_le'
   exact Int.Matrix.one_le_norm_A_of_ne_zero _ hA
 
 中文:
-定理 exists_ne_zero_int_vec_norm_le'
+定理 存在_ne_zero_int_vec_norm_le'
   证明: by
   have := exists_ne_zero_int_vec_norm_le A hn hm
   rwa [max_eq_right] at this

@@ -51,7 +51,7 @@ theorem eq_of_mem_eqv_class
 
 中文:
 定理 eq_of_mem_eqv_class
-  结论: {c : Set (Set α)} (H : 对任意 a, 存在! b in c, a in b) {x b b'}
+  结论: {c : 集合 (集合 α)} (H : 对任意 a, 存在! b in c, a in b) {x b b'}
   证明: (H x).unique ⟨hc, hb⟩ ⟨hc', hb'⟩
 
 Depends on / 依赖: unique
@@ -77,7 +77,7 @@ definition mkClasses
 
 中文:
 定义 mkClasses
-  签名: (c : Set (Set α)) (H : 对任意 a, 存在! b in c, a in b)
+  签名: (c : 集合 (集合 α)) (H : 对任意 a, 存在! b in c, a in b)
   定义体: forall s in c, x in s -> y in s
   iseqv.refl := fun _ _ _ hx => hx
   iseqv.symm := fun {x _y} h s hs hy => by
@@ -103,7 +103,7 @@ definition classes
 
 中文:
 定义 classes
-  签名: (r : Setoid α)
+  签名: (r : 集合等价关系 α)
   定义体: { s | exists y, s = { x | r x y } }
 -/
 def classes (r : Setoid α) : Set (Set α) :=
@@ -120,7 +120,7 @@ theorem mem_classes
 
 中文:
 定理 mem_classes
-  条件: (r : Setoid α) (y)
+  条件: (r : 集合等价关系 α) (y)
   结论: { x | r x y } in r.classes
   证明: ⟨y, rfl⟩
 -/
@@ -165,8 +165,8 @@ theorem finite_classes_ker
 
 中文:
 定理 finite_classes_ker
-  条件: {α β : 类型} [Finite β] (f : α -> β)
-  结论: (Setoid.ker f).classes.Finite
+  条件: {α β : 类型} [有限 β] (f : α -> β)
+  结论: (集合等价关系.ker f).classes.有限
   证明: (Set.finite_range _).subset classes_ker_subset_fiber_set f
 
 Depends on / 依赖: Set.finite_range, classes_ker_subset_fiber_set, finite_range, subset
@@ -186,7 +186,7 @@ theorem card_classes_ker_le
 
 中文:
 定理 card_classes_ker_le
-  结论: {α β : 类型} [Fintype β] (f : α -> β)
+  结论: {α β : 类型} [有限类型 β] (f : α -> β)
   证明: by
   exact
       le_trans (Set.card_le_card (classes_ker_subset_fiber_set f)) (Fintype.card_range_le _)
@@ -208,7 +208,7 @@ theorem eq_iff_classes_eq
 
 中文:
 定理 eq_iff_classes_eq
-  条件: {r₁ r₂ : Setoid α}
+  条件: {r₁ r₂ : 集合等价关系 α}
   证明: ⟨fun h _x => h ▸ rfl, fun h => ext fun x => Set.ext_iff.1 h x⟩
 
 Depends on / 依赖: Set.ext_iff, ext_iff
@@ -229,8 +229,8 @@ theorem rel_iff_exists_classes
     exact r.trans' hx (r.symm' hy)⟩
 
 中文:
-定理 rel_iff_exists_classes
-  条件: (r : Setoid α) {x y}
+定理 rel_iff_存在_classes
+  条件: (r : 集合等价关系 α) {x y}
   结论: r x y ↔ 存在 c in r.classes, x in c ∧ y in c
   证明: ⟨fun h => ⟨_, r.mem_classes y, h, r.refl' y⟩, fun ⟨c, ⟨z, hz⟩, hx, hy⟩ => by
     subst c
@@ -254,7 +254,7 @@ theorem classes_inj
 
 中文:
 定理 classes_inj
-  条件: {r₁ r₂ : Setoid α}
+  条件: {r₁ r₂ : 集合等价关系 α}
   结论: r₁ = r₂ ↔ r₁.classes = r₂.classes
   证明: ⟨fun h => h ▸ rfl, fun h => ext fun a b => by simp only [rel_iff_exists_classes, h]⟩
 
@@ -275,7 +275,7 @@ Set.notMem_empty y hy.symm ▸ r.refl' y
 
 中文:
 定理 empty_notMem_classes
-  条件: {r : Setoid α}
+  条件: {r : 集合等价关系 α}
   结论: ∅ ∉ r.classes
   证明: fun ⟨y, hy⟩ =>
 Set.notMem_empty y hy.symm ▸ r.refl' y
@@ -297,7 +297,7 @@ theorem classes_eqv_classes
 
 中文:
 定理 classes_eqv_classes
-  条件: {r : Setoid α} (a)
+  条件: {r : 集合等价关系 α} (a)
   结论: 存在! b in r.classes, a in b
   证明: ExistsUnique.intro { x | r x a } ⟨r.mem_classes a, r.refl' _⟩ by
     rintro y ⟨⟨_, rfl⟩, ha⟩
@@ -322,7 +322,7 @@ theorem eq_of_mem_classes
 
 中文:
 定理 eq_of_mem_classes
-  结论: {r : Setoid α} {x b} (hc : b in r.classes) (hb : x in b) {b'}
+  结论: {r : 集合等价关系 α} {x b} (hc : b in r.classes) (hb : x in b) {b'}
   证明: eq_of_mem_eqv_class classes_eqv_classes hc hb hc' hb'
 
 Depends on / 依赖: classes_eqv_classes, eq_of_mem_eqv_class
@@ -348,7 +348,7 @@ theorem eq_eqv_class_of_mem
 
 中文:
 定理 eq_eqv_class_of_mem
-  结论: {c : Set (Set α)} (H : 对任意 a, 存在! b in c, a in b) {s y}
+  结论: {c : 集合 (集合 α)} (H : 对任意 a, 存在! b in c, a in b) {s y}
   证明: by
   ext x
   constructor
@@ -380,7 +380,7 @@ theorem eqv_class_mem
 
 中文:
 定理 eqv_class_mem
-  条件: {c : Set (Set α)} (H : 对任意 a, 存在! b in c, a in b) {y}
+  条件: {c : 集合 (集合 α)} (H : 对任意 a, 存在! b in c, a in b) {y}
   证明: (H y).elim fun _ hc _ => eq_eqv_class_of_mem H hc.1 hc.2 ▸ hc.1
 
 Depends on / 依赖: eq_eqv_class_of_mem
@@ -401,7 +401,7 @@ theorem eqv_class_mem'
 
 中文:
 定理 eqv_class_mem'
-  条件: {c : Set (Set α)} (H : 对任意 a, 存在! b in c, a in b) {x}
+  条件: {c : 集合 (集合 α)} (H : 对任意 a, 存在! b in c, a in b) {x}
   证明: by
   convert! @Setoid.eqv_class_mem _ _ H x using 3
   rw [Setoid.comm']
@@ -425,7 +425,7 @@ theorem eqv_classes_disjoint
 
 中文:
 定理 eqv_classes_disjoint
-  条件: {c : Set (Set α)} (H : 对任意 a, 存在! b in c, a in b)
+  条件: {c : 集合 (集合 α)} (H : 对任意 a, 存在! b in c, a in b)
   证明: fun _b₁ h₁ _b₂ h₂ h =>
   Set.disjoint_left.2 fun x hx1 hx2 =>
 (H x).elim fun _b _hc _hx => h eq_of_mem_eqv_class H h₁ hx1 h₂ hx2
@@ -446,7 +446,7 @@ theorem eqv_classes_of_disjoint_union
 
 中文:
 定理 eqv_classes_of_disjoint_union
-  结论: {c : Set (Set α)} (hu : Set.sUnion c = @Set.univ α)
+  结论: {c : 集合 (集合 α)} (hu : 集合.集合并集 c = @集合.univ α)
   证明: let ⟨b, hc, ha⟩ := Set.mem_sUnion.1 show a in _ by rw [hu]; exact Set.mem_univ a
   ExistsUnique.intro b ⟨hc, ha⟩ fun _ hc' => H.elim_set hc'.1 hc _ hc'.2 ha
 
@@ -469,7 +469,7 @@ definition setoidOfDisjointUnion
 
 中文:
 定义 setoidOfDisjointUnion
-  签名: {c : Set (Set α)} (hu : Set.sUnion c = @Set.univ α)
+  签名: {c : 集合 (集合 α)} (hu : 集合.集合并集 c = @集合.univ α)
   定义体: Setoid.mkClasses c eqv_classes_of_disjoint_union hu H
 
 Depends on / 依赖: Setoid, Setoid.mkClasses, eqv_classes_of_disjoint_union, mkClasses
@@ -493,7 +493,7 @@ theorem mkClasses_classes
 
 中文:
 定理 mkClasses_classes
-  条件: (r : Setoid α)
+  条件: (r : 集合等价关系 α)
   结论: mkClasses r.classes classes_eqv_classes = r
   证明: ext fun x _y =>
     ⟨fun h => r.symm' (h { z | r z x } (r.mem_classes x) <| r.refl' x), fun h _b hb hx =>
@@ -520,8 +520,8 @@ theorem sUnion_classes
 
 中文:
 定理 sUnion_classes
-  条件: (r : Setoid α)
-  结论: ⋃₀ r.classes = Set.univ
+  条件: (r : 集合等价关系 α)
+  结论: ⋃₀ r.classes = 集合.univ
   证明: Set.eq_univ_of_forall fun x => Set.mem_sUnion.2 ⟨{ y | r y x }, ⟨x, rfl⟩, Setoid.refl _⟩
 
 Depends on / 依赖: Set.eq_univ_of_forall, Set.mem_sUnion, Setoid, Setoid.refl, eq_univ_of_forall, mem_sUnion
@@ -544,7 +544,7 @@ definition quotientEquivClasses
 
 中文:
 定义 quotientEquivClasses
-  签名: (r : Setoid α)
+  签名: (r : 集合等价关系 α)
   定义体: by
   let f (a : α) : Setoid.classes r := ⟨{ x | r x a }, Setoid.mem_classes r a⟩
   have f_respects_relation (a b : α) (a_rel_b : r a b) : f a = f b := by
@@ -585,7 +585,7 @@ lemma quotientEquivClasses_mk_eq
 
 中文:
 引理 quotientEquivClasses_mk_eq
-  条件: (r : Setoid α) (a : α)
+  条件: (r : 集合等价关系 α) (a : α)
   证明: (@Subtype.ext_iff _ _ _ ⟨{ x | r x a }, Setoid.mem_classes r a⟩).mp rfl
 
 Depends on / 依赖: Setoid, Setoid.mem_classes, Subtype, Subtype.ext_iff, ext_iff, mem_classes
@@ -606,7 +606,7 @@ definition IsPartition
 
 中文:
 定义 IsPartition
-  签名: (c : Set (Set α))
+  签名: (c : 集合 (集合 α))
   定义体: ∅ ∉ c ∧ forall a, exists! b in c, a in b
 -/
 def IsPartition (c : Set (Set α)) := ∅ ∉ c ∧ forall a, exists! b in c, a in b
@@ -621,7 +621,7 @@ theorem nonempty_of_mem_partition
 
 中文:
 定理 nonempty_of_mem_partition
-  条件: {c : Set (Set α)} (hc : IsPartition c) {s} (h : s in c)
+  条件: {c : 集合 (集合 α)} (hc : IsPartition c) {s} (h : s in c)
   证明: Set.nonempty_iff_ne_empty.2 fun hs0 => hc.1 hs0 ▸ h
 
 Depends on / 依赖: Set.nonempty_iff_ne_empty, nonempty_iff_ne_empty
@@ -641,7 +641,7 @@ theorem isPartition_classes
 
 中文:
 定理 isPartition_classes
-  条件: (r : Setoid α)
+  条件: (r : 集合等价关系 α)
   结论: IsPartition r.classes
   证明: ⟨empty_notMem_classes, classes_eqv_classes⟩
 
@@ -660,7 +660,7 @@ theorem IsPartition.pairwiseDisjoint
 
 中文:
 定理 IsPartition.pairwiseDisjoint
-  条件: {c : Set (Set α)} (hc : IsPartition c)
+  条件: {c : 集合 (集合 α)} (hc : IsPartition c)
   证明: eqv_classes_disjoint hc.2
 
 Depends on / 依赖: eqv_classes_disjoint
@@ -683,8 +683,8 @@ lemma _root_.Set.PairwiseDisjoint.isPartition_of_exists_of_ne_empty
   exact ⟨a, hb₁.2, hb₂.2⟩
 
 中文:
-引理 _root_.Set.PairwiseDisjoint.isPartition_of_exists_of_ne_empty
-  结论: {α : 类型} {s : Set (Set α)}
+引理 _root_.集合.PairwiseDisjoint.isPartition_of_存在_of_ne_empty
+  结论: {α : 类型} {s : 集合 (集合 α)}
   证明: by
   refine ⟨h₃, fun a => existsUnique_of_exists_of_unique (h₂ a) ?_⟩
   intro b₁ b₂ hb₁ hb₂
@@ -719,8 +719,8 @@ Set.mem_sUnion.2
 
 中文:
 定理 IsPartition.sUnion_eq_univ
-  条件: {c : Set (Set α)} (hc : IsPartition c)
-  结论: ⋃₀ c = Set.univ
+  条件: {c : 集合 (集合 α)} (hc : IsPartition c)
+  结论: ⋃₀ c = 集合.univ
   证明: Set.eq_univ_of_forall fun x =>
 Set.mem_sUnion.2
       let ⟨t, ht⟩ := hc.2 x
@@ -748,8 +748,8 @@ theorem exists_of_mem_partition
   ⟨y, eq_eqv_class_of_mem hc.2 hs hy⟩
 
 中文:
-定理 exists_of_mem_partition
-  条件: {c : Set (Set α)} (hc : IsPartition c) {s} (hs : s in c)
+定理 存在_of_mem_partition
+  条件: {c : 集合 (集合 α)} (hc : IsPartition c) {s} (hs : s in c)
   证明: let ⟨y, hy⟩ := nonempty_of_mem_partition hc hs
   ⟨y, eq_eqv_class_of_mem hc.2 hs hy⟩
 
@@ -776,7 +776,7 @@ theorem classes_mkClasses
 
 中文:
 定理 classes_mkClasses
-  条件: (c : Set (Set α)) (hc : IsPartition c)
+  条件: (c : 集合 (集合 α)) (hc : IsPartition c)
   证明: by
   ext s
   constructor
@@ -877,7 +877,7 @@ instance Partition.le
   body: ⟨fun x y => mkClasses x.toSet x.isPartition.2 <= mkClasses y.toSet y.isPartition.2⟩
 
 中文:
-实例 Partition.le
+实例 分拆.le
   签名: : LE (Partitions α)
   定义体: ⟨fun x y => mkClasses x.toSet x.isPartition.2 <= mkClasses y.toSet y.isPartition.2⟩
 
@@ -901,8 +901,8 @@ instance Partition.partialOrder
     rw [Partitions.ext_iff]; rw [← classes_mkClasses x.toSet x.isPartition]; rw [←
 
 中文:
-实例 Partition.partialOrder
-  签名: : PartialOrder (Partitions α) where
+实例 分拆.partialOrder
+  签名: : 偏序 (Partitions α) where
   定义体: x <= y ∧ ¬y <= x
   le_refl _ := @le_refl (Setoid α) _ _
   le_trans _ _ _ := @le_trans (Setoid α) _ _ _ _
@@ -938,8 +938,8 @@ definition Partition.orderIso
     conv_rhs => rw [← mkClasses_classes r, ← mkC
 
 中文:
-定义 Partition.orderIso
-  签名: : Setoid α ≃o Partitions α where
+定义 分拆.orderIso
+  签名: : 集合等价关系 α ≃o Partitions α where
   定义体: ⟨r.classes, empty_notMem_classes, classes_eqv_classes⟩
   invFun C := mkClasses C.1 C.2.2
   left_inv := mkClasses_classes
@@ -971,8 +971,8 @@ instance Partition.completeLattice
       Partition.orderIso α
 
 中文:
-实例 Partition.completeLattice
-  签名: : CompleteLattice (Partitions α)
+实例 分拆.completeLattice
+  签名: : 完备格 (Partitions α)
   定义体: GaloisInsertion.liftCompleteLattice
 @OrderIso.toGaloisInsertion _ (Partitions α) _ (PartialOrder.toPreorder)
       Partition.orderIso α
@@ -1001,7 +1001,7 @@ supIndep := Finset.supIndep_iff_pairwiseDisjoint.mpr eqv_classes_disjoint hc.2
 
 中文:
 定义 IsPartition.finpartition
-  签名: {c : Finset (Set α)} (hc : Setoid.IsPartition (c : Set (Set α)))
+  签名: {c : 有限集 (集合 α)} (hc : 集合等价关系.IsPartition (c : 集合 (集合 α)))
   定义体: c
 supIndep := Finset.supIndep_iff_pairwiseDisjoint.mpr eqv_classes_disjoint hc.2
   sup_parts := c.sup_id_set_eq_sUnion.trans hc.sUnion_eq_univ
@@ -1027,8 +1027,8 @@ theorem Finpartition.isPartition_parts
       f.supIndep.pairwiseDisjoint⟩
 
 中文:
-定理 Finpartition.isPartition_parts
-  条件: {α} (f : Finpartition (Set.univ : Set α))
+定理 有限分拆.isPartition_parts
+  条件: {α} (f : 有限分拆 (集合.univ : 集合 α))
   证明: ⟨f.bot_notMem,
     Setoid.eqv_classes_of_disjoint_union (f.parts.sup_id_set_eq_sUnion.symm.trans f.sup_parts)
       f.supIndep.pairwiseDisjoint⟩
@@ -1056,7 +1056,7 @@ structure IndexedPartition
 
 中文:
 结构 IndexedPartition
-  参数: {ι α : 类型} (s : ι -> Set α)
+  参数: {ι α : 类型} (s : ι -> 集合 α)
   公理与运算 (5 个):
     - eq_of_mem : 对任意 {x i j}, x in s i -> x in s j -> i = j
     - some : ι -> α
@@ -1092,7 +1092,7 @@ definition IndexedPartition.mk'
 
 中文:
 定义 IndexedPartition.mk'
-  签名: {ι α : 类型} (s : ι -> Set α)
+  签名: {ι α : 类型} (s : ι -> 集合 α)
   定义体: by_contradiction fun h => (dis h).le_bot ⟨hxi, hxj⟩
   some i := (nonempty i).some
   some_mem i := (nonempty i).choose_spec
@@ -1129,8 +1129,8 @@ instance [Unique
       mem_index := Set.mem_univ }⟩
 
 中文:
-实例 [Unique
-  签名: ι] [Inhabited α] : Inhabited (IndexedPartition fun _i
+实例 [唯一
+  签名: ι] [可居 α] : 可居 (IndexedPartition fun _i
   定义体: ⟨{ eq_of_mem := fun {_x _i _j} _hi _hj => Subsingleton.elim _ _
       some := default
       some_mem := Set.mem_univ
@@ -1163,7 +1163,7 @@ theorem exists_mem
 include hs in
 
 中文:
-定理 exists_mem
+定理 存在_mem
   条件: (x : α)
   结论: 存在 i, x in s i
   证明: ⟨hs.index x, hs.mem_index x⟩
@@ -1215,7 +1215,7 @@ theorem disjoint
 
 中文:
 定理 disjoint
-  结论: Pairwise (Disjoint on s)
+  结论: 两两 (Disjoint on s)
   证明: fun {_i _j} h =>
   disjoint_left.mpr fun {_x} hxi hxj => h (hs.eq_of_mem hxi hxj)
 -/
@@ -1331,7 +1331,7 @@ definition Quotient
   body: Quotient hs.setoid
 
 中文:
-定义 Quotient
+定义 商
   定义体: Quotient hs.setoid
 -/
 protected def Quotient :=
@@ -1347,7 +1347,7 @@ definition proj
 
 中文:
 定义 proj
-  签名: : α -> hs.Quotient
+  签名: : α -> hs.商
   定义体: Quotient.mk''
 
 Depends on / 依赖: Quotient, Quotient.mk
@@ -1364,8 +1364,8 @@ instance [Inhabited
   body: ⟨hs.proj default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited hs.Quotient
+实例 [可居
+  签名: α] : 可居 hs.商
   定义体: ⟨hs.proj default⟩
 
 Depends on / 依赖: hs.proj
@@ -1430,7 +1430,7 @@ definition equivQuotient
 
 中文:
 定义 equivQuotient
-  签名: : ι ≃ hs.Quotient
+  签名: : ι ≃ hs.商
   定义体: (Setoid.quotientKerEquivOfRightInverse hs.index hs.some <| hs.index_some).symm
 
 @[simp]
@@ -1512,7 +1512,7 @@ definition out
 
 中文:
 定义 out
-  签名: : hs.Quotient ↪ α
+  签名: : hs.商 ↪ α
   定义体: hs.equivQuotient.symm.toEmbedding.trans ⟨hs.some, Function.LeftInverse.injective hs.index_some⟩
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, equivQuotient, hs.equivQuotient.symm.toEmbedding.trans, hs.index_some, hs.some, index_some, injective, toEmbedding
@@ -1551,7 +1551,7 @@ theorem index_out
 
 中文:
 定理 index_out
-  条件: (x : hs.Quotient)
+  条件: (x : hs.商)
   结论: hs.index x.out = hs.index (hs.out x)
   证明: Quotient.inductionOn' x fun x => (Setoid.ker_apply_mk_out x).trans (hs.index_some _).symm
 
@@ -1573,7 +1573,7 @@ theorem proj_out
 
 中文:
 定理 proj_out
-  条件: (x : hs.Quotient)
+  条件: (x : hs.商)
   结论: hs.proj (hs.out x) = x
   证明: Quotient.inductionOn' x fun x => Quotient.sound' hs.some_index x
 
@@ -1594,7 +1594,7 @@ theorem class_of
 中文:
 定理 class_of
   条件: {x : α}
-  结论: Set.ofPred (hs.setoid x) = s (hs.index x)
+  结论: 集合.ofPred (hs.setoid x) = s (hs.index x)
   证明: Set.ext fun _y => eq_comm.trans hs.mem_iff_index_eq.symm
 
 Depends on / 依赖: Set.ext, eq_comm, eq_comm.trans, hs.mem_iff_index_eq.symm, mem_iff_index_eq
@@ -1616,7 +1616,7 @@ theorem proj_fiber
 
 中文:
 定理 proj_fiber
-  条件: (x : hs.Quotient)
+  条件: (x : hs.商)
   结论: hs.proj ⁻¹' {x} = s (hs.equivQuotient.symm x)
   证明: Quotient.inductionOn' x fun x => by
     ext y
@@ -1687,7 +1687,7 @@ theorem piecewise_inj
 
 中文:
 定理 piecewise_inj
-  结论: (h_injOn : 对任意 i, InjOn (f i) (s i))
+  结论: (h_injOn : 对任意 i, 单射限制 (f i) (s i))
   证明: by
   intro x y h
   suffices hs.index x = hs.index y by
@@ -1726,7 +1726,7 @@ theorem piecewise_bij
 
 中文:
 定理 piecewise_bij
-  结论: {t : ι -> Set β} (ht : IndexedPartition t)
+  结论: {t : ι -> 集合 β} (ht : IndexedPartition t)
   证明: by
   set g := piecewise hs f with hg
   have hg_bij (i) : BijOn g (s i) (t i) := by
@@ -1767,7 +1767,7 @@ theorem piecewise_preimage
 
 中文:
 定理 piecewise_preimage
-  条件: (f : ι -> α -> β) (t : Set β)
+  条件: (f : ι -> α -> β) (t : 集合 β)
   证明: by
   refine ext fun x => ⟨fun hx => ?_, fun ⟨a, ⟨i, hi⟩, ha⟩ => ?_⟩
   · rw [mem_preimage, piecewise_apply, ← mem_preimage] at hx

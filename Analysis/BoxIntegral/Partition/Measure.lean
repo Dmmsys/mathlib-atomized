@@ -54,8 +54,8 @@ theorem measure_Icc_lt_top
 
 中文:
 定理 measure_Icc_lt_top
-  条件: (μ : Measure (ι -> 实数)) [IsLocallyFiniteMeasure μ]
-  结论: μ (Box.Icc I) < ∞
+  条件: (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
+  结论: μ (Box.闭区间 I) < ∞
   证明: show μ (Icc I.lower I.upper) < ∞ from I.isCompact_Icc.measure_lt_top
 
 Depends on / 依赖: I.isCompact_Icc.measure_lt_top, I.lower, I.upper, isCompact_Icc, measure_lt_top
@@ -74,7 +74,7 @@ theorem measure_coe_lt_top
 
 中文:
 定理 measure_coe_lt_top
-  条件: (μ : Measure (ι -> 实数)) [IsLocallyFiniteMeasure μ]
+  条件: (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
   结论: μ I < ∞
   证明: (measure_mono <| coe_subset_Icc).trans_lt (I.measure_Icc_lt_top μ)
 
@@ -99,7 +99,7 @@ theorem measurableSet_coe
 
 中文:
 定理 measurableSet_coe
-  结论: MeasurableSet (I : Set (ι -> 实数))
+  结论: 可测集 (I : 集合 (ι -> 实数))
   证明: by
   rw [coe_eq_pi]
   exact MeasurableSet.univ_pi fun i => measurableSet_Ioc
@@ -120,7 +120,7 @@ theorem measurableSet_Icc
 
 中文:
 定理 measurableSet_Icc
-  结论: MeasurableSet (Box.Icc I)
+  结论: 可测集 (Box.闭区间 I)
   证明: _root_.measurableSet_Icc
 
 Depends on / 依赖: _root_, _root_.measurableSet_Icc, measurableSet_Icc
@@ -138,7 +138,7 @@ theorem measurableSet_Ioo
 
 中文:
 定理 measurableSet_Ioo
-  结论: MeasurableSet (Box.Ioo I)
+  结论: 可测集 (Box.开区间 I)
   证明: MeasurableSet.univ_pi fun _ => _root_.measurableSet_Ioo
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ_pi, _root_, _root_.measurableSet_Ioo, measurableSet_Ioo, univ_pi
@@ -162,7 +162,7 @@ theorem coe_ae_eq_Icc
 
 中文:
 定理 coe_ae_eq_Icc
-  结论: (I : Set (ι -> 实数)) =ᵐ[volume] Box.Icc I
+  结论: (I : 集合 (ι -> 实数)) =ᵐ[volume] Box.闭区间 I
   证明: by
   rw [coe_eq_pi]
   exact Measure.univ_pi_Ioc_ae_eq_Icc
@@ -183,7 +183,7 @@ theorem Ioo_ae_eq_Icc
 
 中文:
 定理 Ioo_ae_eq_Icc
-  结论: Box.Ioo I =ᵐ[volume] Box.Icc I
+  结论: Box.开区间 I =ᵐ[volume] Box.闭区间 I
   证明: Measure.univ_pi_Ioo_ae_eq_Icc
 
 Depends on / 依赖: Measure, Measure.univ_pi_Ioo_ae_eq_Icc, univ_pi_Ioo_ae_eq_Icc
@@ -207,8 +207,8 @@ theorem Prepartition.measure_iUnion_toReal
   exact fun J _ => J.measurableSet_coe
 
 中文:
-定理 Prepartition.measure_iUnion_toReal
-  结论: [Finite ι] {I : Box ι} (π : Prepartition I)
+定理 预分拆.measure_iUnion_to实数
+  结论: [有限 ι] {I : Box ι} (π : 预分拆 I)
   证明: by
   simp only [measureReal_def]
   rw [← ENNReal.toReal_sum (fun J _ => (J.measure_coe_lt_top μ).ne)]; rw [π.iUnion_def]
@@ -249,7 +249,7 @@ definition toBoxAdditive
 
 中文:
 定义 toBoxAdditive
-  签名: [Finite ι] (μ : Measure (ι -> 实数)) [IsLocallyFiniteMeasure μ]
+  签名: [有限 ι] (μ : 测度 (ι -> 实数)) [是局部有限测度 μ]
   定义体: μ.real J
   sum_partition_boxes' J _ π hπ := by rw [← π.measure_iUnion_toReal, hπ.iUnion_eq]
 -/
@@ -329,7 +329,7 @@ theorem volume_face_mul
 
 中文:
 定理 volume_face_mul
-  条件: {n} (i : Fin (n + 1)) (I : Box (Fin (n + 1)))
+  条件: {n} (i : 有限集 (n + 1)) (I : Box (有限集 (n + 1)))
   证明: by
   simp only [face_lower, face_upper, Fin.prod_univ_succAbove _ i, mul_comm]
 
@@ -356,7 +356,7 @@ definition volume
 
 中文:
 定义 volume
-  签名: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  签名: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   定义体: (volume : Measure (ι -> Real)).toBoxAdditive.toSMul
 -/
 protected def volume {E : Type*} [NormedAddCommGroup E] [NormedSpace Real E] : ι ->ᵇᵃ E ->L[Real] E :=
@@ -374,7 +374,7 @@ theorem volume_apply
 
 中文:
 定理 volume_apply
-  条件: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E] (I : Box ι) (x : E)
+  条件: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E] (I : Box ι) (x : E)
   证明: by
   rw [BoxAdditiveMap.volume]; rw [toSMul_apply]
   exact congr_arg₂ (· • ·) I.volume_apply rfl

@@ -104,7 +104,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : Inhabited M] : Inhabited (RestrictScalars R S M)
+  签名: : 可居 M] : 可居 (RestrictScalars R S M)
   定义体: I
 -/
 instance [I : Inhabited M] : Inhabited (RestrictScalars R S M) := I
@@ -119,7 +119,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : AddCommMonoid M] : AddCommMonoid (RestrictScalars R S M)
+  签名: : 加法交换幺半群 M] : 加法交换幺半群 (RestrictScalars R S M)
   定义体: I
 -/
 instance [I : AddCommMonoid M] : AddCommMonoid (RestrictScalars R S M) := I
@@ -134,7 +134,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : AddCommGroup M] : AddCommGroup (RestrictScalars R S M)
+  签名: : 加法交换群 M] : 加法交换群 (RestrictScalars R S M)
   定义体: I
 -/
 instance [I : AddCommGroup M] : AddCommGroup (RestrictScalars R S M) := I
@@ -157,7 +157,7 @@ definition RestrictScalars.moduleOrig
 
 中文:
 定义 RestrictScalars.moduleOrig
-  签名: [I : Module S M]
+  签名: [I : 模 S M]
   定义体: I
 -/
 def RestrictScalars.moduleOrig [I : Module S M] : Module S (RestrictScalars R S M) := I
@@ -177,8 +177,8 @@ abbreviation Module.restrictScalars
   body: Module.compHom M (algebraMap R S)
 
 中文:
-缩写 Module.restrictScalars
-  签名: [Module S M]
+缩写 模.restrictScalars
+  签名: [模 S M]
   定义体: Module.compHom M (algebraMap R S)
 
 Depends on / 依赖: Module, Module.compHom, algebraMap, compHom
@@ -196,7 +196,7 @@ instance RestrictScalars.module
 
 中文:
 实例 RestrictScalars.module
-  签名: [Module S M]
+  签名: [模 S M]
   定义体: Module.restrictScalars R S M
 
 Depends on / 依赖: Module, Module.restrictScalars, restrictScalars
@@ -215,8 +215,8 @@ theorem IsScalarTower.restrictScalars
   IsScalarTower.of_compHom R S M
 
 中文:
-定理 IsScalarTower.restrictScalars
-  条件: [Module S M]
+定理 标量塔.restrictScalars
+  条件: [模 S M]
   证明: Module.restrictScalars R S M
     IsScalarTower R S M :=
   IsScalarTower.of_compHom R S M
@@ -238,7 +238,7 @@ instance RestrictScalars.isScalarTower
 
 中文:
 实例 RestrictScalars.isScalarTower
-  签名: [Module S M]
+  签名: [模 S M]
   定义体: IsScalarTower.restrictScalars R S M
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.restrictScalars, restrictScalars
@@ -259,7 +259,7 @@ instance RestrictScalars.opModule
 
 中文:
 实例 RestrictScalars.opModule
-  签名: [Module Sᵐᵒᵖ M]
+  签名: [模 Sᵐᵒᵖ M]
   定义体: letI : Module Sᵐᵒᵖ (RestrictScalars R S M) := ‹Module Sᵐᵒᵖ M›
   Module.compHom M (RingHom.op <| algebraMap R S)
 
@@ -279,7 +279,7 @@ instance RestrictScalars.isCentralScalar
 
 中文:
 实例 RestrictScalars.isCentralScalar
-  签名: [Module S M] [Module Sᵐᵒᵖ M] [IsCentralScalar S M]
+  签名: [模 S M] [模 Sᵐᵒᵖ M] [中心标量 S M]
   定义体: (op_smul_eq_smul (algebraMap R S r) (_ : M) :)
 
 Depends on / 依赖: algebraMap, op_smul_eq_smul
@@ -301,7 +301,7 @@ definition RestrictScalars.lsmul
 
 中文:
 定义 RestrictScalars.lsmul
-  签名: [Module S M]
+  签名: [模 S M]
   定义体: -- We use `RestrictScalars.moduleOrig` in the implementation,
   -- but not in the type.
   letI : Module S (RestrictScalars R S M) := RestrictScalars.moduleOrig R S M
@@ -452,7 +452,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : Semiring A] : Semiring (RestrictScalars R S A)
+  签名: : 半环 A] : 半环 (RestrictScalars R S A)
   定义体: I
 -/
 instance [I : Semiring A] : Semiring (RestrictScalars R S A) := I
@@ -467,7 +467,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : Ring A] : Ring (RestrictScalars R S A)
+  签名: : 环 A] : 环 (RestrictScalars R S A)
   定义体: I
 -/
 instance [I : Ring A] : Ring (RestrictScalars R S A) := I
@@ -482,7 +482,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : CommSemiring A] : CommSemiring (RestrictScalars R S A)
+  签名: : 交换半环 A] : 交换半环 (RestrictScalars R S A)
   定义体: I
 -/
 instance [I : CommSemiring A] : CommSemiring (RestrictScalars R S A) := I
@@ -497,7 +497,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : CommRing A] : CommRing (RestrictScalars R S A)
+  签名: : 交换环 A] : 交换环 (RestrictScalars R S A)
   定义体: I
 
 Depends on / 依赖: Subring, Subring.mem_center_iff, Subtype, Subtype.val, commutes, map_add, map_mul, map_one, map_zero, mem_center_iff, smul_def
@@ -554,8 +554,8 @@ abbreviation Algebra.restrictScalars
   body: Algebra.compHom A (algebraMap R S)
 
 中文:
-缩写 Algebra.restrictScalars
-  签名: : Algebra R A
+缩写 代数.restrictScalars
+  签名: : 代数 R A
   定义体: Algebra.compHom A (algebraMap R S)
 
 Depends on / 依赖: Algebra, Algebra.compHom, algebraMap, compHom
@@ -575,7 +575,7 @@ instance RestrictScalars.algebra
 
 中文:
 实例 RestrictScalars.algebra
-  签名: : Algebra R (RestrictScalars R S A)
+  签名: : 代数 R (RestrictScalars R S A)
   定义体: Algebra.restrictScalars R S A
 
 @[simp]

@@ -39,8 +39,8 @@ abbreviation ModuleCat.projectiveShortComplex
   (e.constr Nat id).shortComplexKer
 
 中文:
-缩写 ModuleCat.projectiveShortComplex
-  签名: [Small.{v} R] (M : ModuleCat.{v} R)
+缩写 模范畴.projectiveShortComplex
+  签名: [Small.{v} R] (M : 模范畴.{v} R)
   定义体: let e : Module.Basis M R (M ->₀ Shrink.{v} R) :=
     ⟨Finsupp.mapRange.linearEquiv (Shrink.linearEquiv.{v} R R)⟩
   (e.constr Nat id).shortComplexKer
@@ -65,8 +65,8 @@ theorem ModuleCat.shortExact_projectiveShortComplex
   simp [Module.Basis.constr_apply]
 
 中文:
-定理 ModuleCat.shortExact_projectiveShortComplex
-  条件: [Small.{v} R] (M : ModuleCat.{v} R)
+定理 模范畴.shortExact_projectiveShortComplex
+  条件: [Small.{v} R] (M : 模范畴.{v} R)
   证明: by
   apply LinearMap.shortExact_shortComplexKer
   refine fun m => ⟨Finsupp.single m 1, ?_⟩

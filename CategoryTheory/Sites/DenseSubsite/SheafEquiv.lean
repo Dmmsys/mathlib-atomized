@@ -57,7 +57,7 @@ lemma isIso_ranCounit_app_of_isDenseSubsite
 
 中文:
 引理 isIso_ranCounit_app_of_isDenseSubsite
-  条件: (Y : Sheaf J A) (U X)
+  条件: (Y : 层 J A) (U X)
   证明: by
   rw [isIso_iff_bijective]
   constructor
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: (G.sheafPushforwardContinuous A J K).IsEquivalence
+  签名: (G.sheafPushforwardContinuous A J K).是等价
   定义体: (G.sheafAdjunctionCocontinuous A J K).toEquivalence.isEquivalence_functor
 
 Depends on / 依赖: G.sheafAdjunctionCocontinuous, isEquivalence_functor, sheafAdjunctionCocontinuous, toEquivalence, toEquivalence.isEquivalence_functor

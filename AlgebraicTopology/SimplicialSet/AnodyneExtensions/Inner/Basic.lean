@@ -53,7 +53,7 @@ deriving IsMultiplicative, RespectsIso, IsStableUnderCobaseChange,
 
 中文:
 定义 innerAnodyneExtensions
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: innerFibrations.llp
 deriving IsMultiplicative, RespectsIso, IsStableUnderCobaseChange,
   IsStableUnderRetracts, IsStableUnderTransfiniteComposition,
@@ -76,7 +76,7 @@ lemma innerAnodyneExtensions.of_isIso
 
 中文:
 引理 innerAnodyneExtensions.of_isIso
-  条件: {X Y : SSet.{u}} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : SSet.{u}} (f : X ⟶ Y) [是同构 f]
   证明: MorphismProperty.of_isIso innerAnodyneExtensions f
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_isIso, innerAnodyneExtensions, of_isIso
@@ -112,7 +112,7 @@ lemma innerAnodyneExtensions.horn_ι
 
 中文:
 引理 innerAnodyneExtensions.horn_ι
-  结论: {n : 自然数} {i : Fin (n + 1)}
+  结论: {n : 自然数} {i : 有限集 (n + 1)}
   证明: by
   rw [innerAnodyneExtensions_eq_llp_rlp]
   exact le_llp_rlp _ _ (horn_ι_mem_innerHornInclusions h0 hn)
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsSmall.{u} innerHornInclusions.{u}
+  签名: MorphismProperty.是Small.{u} innerHornInclusions.{u}
   定义体: by
   rw [innerHornInclusions_eq_iSup]
   have (n : Nat) : MorphismProperty.IsSmall.{u}
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalForSmallObjectArgument innerHornInclusions.{u} Cardinal.aleph0.{u}
+  签名: 是CardinalForSmallObjectArgument innerHornInclusions.{u} 基数.aleph0.{u}
   定义体: by
     have : IsFinitelyPresentable.{u} A := by
       simp only [innerHornInclusions_eq_iSup, iSup_iff] at hi
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSmallObjectArgument.{u} innerHornInclusions.{u}
+  签名: 有SmallObjectArgument.{u} innerHornInclusions.{u}
   定义体: ⟨.aleph0, inferInstance, inferInstance, inferInstance⟩
 
 Depends on / 依赖: aleph0
@@ -287,7 +287,7 @@ definition strongInnerAnodyneExtensions
 
 中文:
 定义 strongInnerAnodyneExtensions
-  签名: : Morphism命题erty SSet.{u}
+  签名: : MorphismProperty SSet.{u}
   定义体: fun _ _ f => Mono f ∧ exists (P : (Subcomplex.range f).Pairing) (_ : P.IsRegular), P.IsInner
 
 Depends on / 依赖: IsInner, IsRegular, P.IsInner, P.IsRegular, Pairing, Subcomplex, Subcomplex.range
@@ -336,8 +336,8 @@ lemma Subcomplex.Pairing.strongInnerAnodyneExtensions
     (by simp only [Iso.refl_hom, preimage_id, Subfunctor.range_ι]), inferInstance, inferInstance⟩
 
 中文:
-引理 Subcomplex.Pairing.strongInnerAnodyneExtensions
-  结论: {X : SSet.{u}} {A : X.Subcomplex}
+引理 子复形.Pairing.strongInnerAnodyneExtensions
+  结论: {X : SSet.{u}} {A : X.子复形}
   证明: ⟨inferInstance, Pairing.ofIso P (Iso.refl _)
     (by simp only [Iso.refl_hom, preimage_id, Subfunctor.range_ι]), inferInstance, inferInstance⟩
 
@@ -365,7 +365,7 @@ lemma strongInnerAnodyneExtensions_ι_iff
 
 中文:
 引理 strongInnerAnodyneExtensions_ι_iff
-  条件: {X : SSet.{u}} (A : X.Subcomplex)
+  条件: {X : SSet.{u}} (A : X.子复形)
   证明: ⟨fun hA => by
     obtain ⟨_, P, _, ⟨_, rfl⟩⟩ :
         exists (B : X.Subcomplex) (P : B.Pairing) (h : P.IsRegular), P.IsInner ∧ B = A := by
@@ -399,8 +399,8 @@ lemma Subcomplex.Pairing.innerAnodyneExtensions
       simp only [pushouts_le_iff, cop
 
 中文:
-引理 Subcomplex.Pairing.innerAnodyneExtensions
-  结论: {X : SSet.{u}} {A : X.Subcomplex}
+引理 子复形.Pairing.innerAnodyneExtensions
+  结论: {X : SSet.{u}} {A : X.子复形}
   证明: transfiniteCompositionsOfShape_le _ _ _
     ⟨P.rankFunction.relativeCellComplex.toTransfiniteCompositionOfShape, fun j hj => by
       refine (?_ : (_ : MorphismProperty _) <= _ ) _

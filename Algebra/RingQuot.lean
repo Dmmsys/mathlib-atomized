@@ -48,13 +48,13 @@ inductive Rel
     - mul_right: ⦃a b c⦄ : Rel r b c -> Rel r (a * b) (a * c)
 
 中文:
-归纳类型 Rel
+归纳类型 关系
   参数: (r : R -> R -> 命题)
   构造子 (4 个):
-    - of: ⦃x y : R⦄ (h : r x y) : Rel r x y
-    - add_left: ⦃a b c⦄ : Rel r a b -> Rel r (a + c) (b + c)
-    - mul_left: ⦃a b c⦄ : Rel r a b -> Rel r (a * c) (b * c)
-    - mul_right: ⦃a b c⦄ : Rel r b c -> Rel r (a * b) (a * c)
+    - of: ⦃x y : R⦄ (h : r x y) : 关系 r x y
+    - add_left: ⦃a b c⦄ : 关系 r a b -> 关系 r (a + c) (b + c)
+    - mul_left: ⦃a b c⦄ : 关系 r a b -> 关系 r (a * c) (b * c)
+    - mul_right: ⦃a b c⦄ : 关系 r b c -> 关系 r (a * b) (a * c)
 -/
 inductive Rel (r : R -> R -> Prop) : R -> R -> Prop
   | of ⦃x y : R⦄ (h : r x y) : Rel r x y
@@ -74,9 +74,9 @@ theorem Rel.add_right
   exact Rel.add_left h
 
 中文:
-定理 Rel.add_right
+定理 关系.add_right
   条件: {r : R -> R -> 命题} ⦃a b c
-  结论: R⦄ (h : Rel r b c) : Rel r (a + b) (a + c)
+  结论: R⦄ (h : 关系 r b c) : 关系 r (a + b) (a + c)
   证明: by
   rw [add_comm a b]; rw [add_comm a c]
   exact Rel.add_left h
@@ -97,9 +97,9 @@ theorem Rel.neg
   proof: by simp only [neg_eq_neg_one_mul a, neg_eq_neg_one_mul b, Rel.mul_right h]
 
 中文:
-定理 Rel.neg
-  条件: {R : 类型uR} [Ring R] {r : R -> R -> 命题} ⦃a b
-  结论: R⦄ (h : Rel r a b) :
+定理 关系.neg
+  条件: {R : 类型uR} [环 R] {r : R -> R -> 命题} ⦃a b
+  结论: R⦄ (h : 关系 r a b) :
   证明: by simp only [neg_eq_neg_one_mul a, neg_eq_neg_one_mul b, Rel.mul_right h]
 
 Depends on / 依赖: Rel.mul_right, mul_right, neg_eq_neg_one_mul
@@ -117,9 +117,9 @@ theorem Rel.sub_left
   proof: by simp only [sub_eq_add_neg, h.add_left]
 
 中文:
-定理 Rel.sub_left
-  条件: {R : 类型uR} [Ring R] {r : R -> R -> 命题} ⦃a b c
-  结论: R⦄ (h : Rel r a b) :
+定理 关系.sub_left
+  条件: {R : 类型uR} [环 R] {r : R -> R -> 命题} ⦃a b c
+  结论: R⦄ (h : 关系 r a b) :
   证明: by simp only [sub_eq_add_neg, h.add_left]
 
 Depends on / 依赖: add_left, h.add_left, sub_eq_add_neg
@@ -137,9 +137,9 @@ theorem Rel.sub_right
   proof: by simp only [sub_eq_add_neg, h.neg.add_right]
 
 中文:
-定理 Rel.sub_right
-  条件: {R : 类型uR} [Ring R] {r : R -> R -> 命题} ⦃a b c
-  结论: R⦄ (h : Rel r b c) :
+定理 关系.sub_right
+  条件: {R : 类型uR} [环 R] {r : R -> R -> 命题} ⦃a b c
+  结论: R⦄ (h : 关系 r b c) :
   证明: by simp only [sub_eq_add_neg, h.neg.add_right]
 
 Depends on / 依赖: add_right, h.neg.add_right, sub_eq_add_neg
@@ -158,9 +158,9 @@ theorem Rel.smul
   simp only [Algebra.smul_def, Rel.mul_right h]
 
 中文:
-定理 Rel.smul
+定理 关系.smul
   条件: {r : A -> A -> 命题} (k : S) ⦃a b
-  结论: A⦄ (h : Rel r a b) : Rel r (k • a) (k • b)
+  结论: A⦄ (h : 关系 r a b) : 关系 r (k • a) (k • b)
   证明: by
   simp only [Algebra.smul_def, Rel.mul_right h]
 
@@ -255,7 +255,7 @@ theorem eqvGen_rel_eq
 中文:
 定理 eqvGen_rel_eq
   条件: (r : R -> R -> 命题)
-  结论: Relation.EqvGen (Rel r) = RingConGen.Rel r
+  结论: 关系.EqvGen (关系 r) = RingConGen.关系 r
   证明: by
   ext x₁ x₂
   constructor
@@ -306,7 +306,7 @@ structure RingQuot
 结构 RingQuot
   参数: (r : R -> R -> 命题)
   公理与运算 (1 个):
-    - toQuot : Quot (RingQuot.Rel r)
+    - toQuot : 商 (RingQuot.关系 r)
 -/
 structure RingQuot (r : R -> R -> Prop) where
   toQuot : Quot (RingQuot.Rel r)
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (RingQuot r)
+  签名: 自然数嵌入 (RingQuot r)
   定义体: ⟨natCast r⟩
 
 Depends on / 依赖: natCast
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (RingQuot r)
+  签名: 零 (RingQuot r)
   定义体: ⟨⟨Quot.mk _ 0⟩⟩
 -/
 @[no_expose] instance : Zero (RingQuot r) :=
@@ -378,7 +378,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (RingQuot r)
+  签名: 幺 (RingQuot r)
   定义体: ⟨⟨Quot.mk _ 1⟩⟩
 -/
 @[no_expose] instance : One (RingQuot r) :=
@@ -394,7 +394,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (RingQuot r)
+  签名: 加法 (RingQuot r)
   定义体: ⟨fun ⟨a⟩ ⟨b⟩ => ⟨Quot.map₂ (· + ·) Rel.add_right Rel.add_left a b⟩⟩
 -/
 @[no_expose] instance : Add (RingQuot r) :=
@@ -410,7 +410,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (RingQuot r)
+  签名: 乘法 (RingQuot r)
   定义体: ⟨fun ⟨a⟩ ⟨b⟩ => ⟨Quot.map₂ (· * ·) Rel.mul_right Rel.mul_left a b⟩⟩
 -/
 @[no_expose] instance : Mul (RingQuot r) :=
@@ -468,7 +468,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: [Algebra S R] (n : S)
+  签名: [代数 S R] (n : S)
 -/
 def smul [Algebra S R] (n : S) : RingQuot r -> RingQuot r
   | ⟨a⟩ => ⟨Quot.map (fun a => n • a) (Rel.smul n) a⟩
@@ -482,8 +482,8 @@ instance [Algebra
   body: ⟨smul r⟩
 
 中文:
-实例 [Algebra
-  签名: S R] : SMul S (RingQuot r)
+实例 [代数
+  签名: S R] : 标量乘法 S (RingQuot r)
   定义体: ⟨smul r⟩
 -/
 instance [Algebra S R] : SMul S (RingQuot r) :=
@@ -499,7 +499,7 @@ theorem zero_quot
 
 中文:
 定理 zero_quot
-  结论: (⟨Quot.mk _ 0⟩ : RingQuot r) = 0
+  结论: (⟨商.mk _ 0⟩ : RingQuot r) = 0
   证明: (rfl)
 -/
 theorem zero_quot : (⟨Quot.mk _ 0⟩ : RingQuot r) = 0 :=
@@ -515,7 +515,7 @@ theorem one_quot
 
 中文:
 定理 one_quot
-  结论: (⟨Quot.mk _ 1⟩ : RingQuot r) = 1
+  结论: (⟨商.mk _ 1⟩ : RingQuot r) = 1
   证明: (rfl)
 -/
 theorem one_quot : (⟨Quot.mk _ 1⟩ : RingQuot r) = 1 :=
@@ -533,7 +533,7 @@ theorem add_quot
 中文:
 定理 add_quot
   条件: {a b}
-  结论: (⟨Quot.mk _ a⟩ + ⟨Quot.mk _ b⟩ : RingQuot r) = ⟨Quot.mk _ (a + b)⟩
+  结论: (⟨商.mk _ a⟩ + ⟨商.mk _ b⟩ : RingQuot r) = ⟨商.mk _ (a + b)⟩
   证明: (rfl)
 -/
 theorem add_quot {a b} : (⟨Quot.mk _ a⟩ + ⟨Quot.mk _ b⟩ : RingQuot r) = ⟨Quot.mk _ (a + b)⟩ :=
@@ -551,7 +551,7 @@ theorem mul_quot
 中文:
 定理 mul_quot
   条件: {a b}
-  结论: (⟨Quot.mk _ a⟩ * ⟨Quot.mk _ b⟩ : RingQuot r) = ⟨Quot.mk _ (a * b)⟩
+  结论: (⟨商.mk _ a⟩ * ⟨商.mk _ b⟩ : RingQuot r) = ⟨商.mk _ (a * b)⟩
   证明: (rfl)
 -/
 theorem mul_quot {a b} : (⟨Quot.mk _ a⟩ * ⟨Quot.mk _ b⟩ : RingQuot r) = ⟨Quot.mk _ (a * b)⟩ :=
@@ -569,7 +569,7 @@ theorem pow_quot
 中文:
 定理 pow_quot
   条件: {a} {n : 自然数}
-  结论: (⟨Quot.mk _ a⟩ ^ n : RingQuot r) = ⟨Quot.mk _ (a ^ n)⟩
+  结论: (⟨商.mk _ a⟩ ^ n : RingQuot r) = ⟨商.mk _ (a ^ n)⟩
   证明: (rfl)
 -/
 theorem pow_quot {a} {n : Nat} : (⟨Quot.mk _ a⟩ ^ n : RingQuot r) = ⟨Quot.mk _ (a ^ n)⟩ :=
@@ -585,7 +585,7 @@ theorem neg_quot
 
 中文:
 定理 neg_quot
-  条件: {R : 类型uR} [Ring R] (r : R -> R -> 命题) {a}
+  条件: {R : 类型uR} [环 R] (r : R -> R -> 命题) {a}
   证明: (rfl)
 -/
 theorem neg_quot {R : Type uR} [Ring R] (r : R -> R -> Prop) {a} :
@@ -602,7 +602,7 @@ theorem sub_quot
 
 中文:
 定理 sub_quot
-  条件: {R : 类型uR} [Ring R] (r : R -> R -> 命题) {a b}
+  条件: {R : 类型uR} [环 R] (r : R -> R -> 命题) {a b}
   证明: (rfl)
 -/
 theorem sub_quot {R : Type uR} [Ring R] (r : R -> R -> Prop) {a b} :
@@ -619,7 +619,7 @@ theorem smul_quot
 
 中文:
 定理 smul_quot
-  条件: [Algebra S R] {n : S} {a : R}
+  条件: [代数 S R] {n : S} {a : R}
   证明: (rfl)
 -/
 theorem smul_quot [Algebra S R] {n : S} {a : R} :
@@ -636,7 +636,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [CommSemiring T] [SMul S T] [Algebra S R] [Algebra T R]
+  签名: [交换半环 T] [标量乘法 S T] [代数 S R] [代数 T R]
   定义体: ⟨fun s t ⟨a⟩ => Quot.inductionOn a fun a' => by simp only [RingQuot.smul_quot, smul_assoc]⟩
 
 Depends on / 依赖: Quot.inductionOn, RingQuot, RingQuot.smul_quot, inductionOn, smul_assoc, smul_quot
@@ -655,7 +655,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [CommSemiring T] [Algebra S R] [Algebra T R] [SMulCommClass S T R]
+  签名: [交换半环 T] [代数 S R] [代数 T R] [标量交换类 S T R]
   定义体: ⟨fun s t ⟨a⟩ => Quot.inductionOn a fun a' => by simp only [RingQuot.smul_quot, smul_comm s t]⟩
 
 Depends on / 依赖: Quot.inductionOn, RingQuot, RingQuot.smul_quot, inductionOn, smul_comm, smul_quot
@@ -836,7 +836,7 @@ definition intCast
 
 中文:
 定义 intCast
-  签名: {R : 类型uR} [Ring R] (r : R -> R -> 命题) (z : 整数)
+  签名: {R : 类型uR} [环 R] (r : R -> R -> 命题) (z : 整数)
   定义体: ⟨Quot.mk _ z⟩
 
 Depends on / 依赖: Quot.mk
@@ -865,7 +865,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: {R : 类型uR} [Ring R] (r : R -> R -> 命题)
+  签名: {R : 类型uR} [环 R] (r : R -> R -> 命题)
   定义体: by
     rintro ⟨⟨⟩⟩
     simp [neg_quot, add_quot, ← zero_quot]
@@ -915,7 +915,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: {R : 类型uR} [CommSemiring R] (r : R -> R -> 命题)
+  签名: {R : 类型uR} [交换半环 R] (r : R -> R -> 命题)
   定义体: by
     rintro ⟨⟨⟩⟩ ⟨⟨⟩⟩
     simp [mul_quot, mul_comm]
@@ -966,7 +966,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: [Algebra S R] (r : R -> R -> 命题)
+  签名: [代数 S R] (r : R -> R -> 命题)
   定义体: { toFun r := ⟨Quot.mk _ (algebraMap S R r)⟩
     map_one' := by simp [← one_quot]
     map_mul' := by simp [mul_quot]
@@ -1042,7 +1042,7 @@ theorem mkRingHom_surjective
 中文:
 定理 mkRingHom_surjective
   条件: (r : R -> R -> 命题)
-  结论: Function.Surjective (mkRingHom r)
+  结论: 函数.满射 (mkRingHom r)
   证明: by
   simp only [mkRingHom_def, RingHom.coe_mk, MonoidHom.coe_mk, OneHom.coe_mk]
   rintro ⟨⟨⟩⟩
@@ -1071,7 +1071,7 @@ theorem ringQuot_ext
 
 中文:
 定理 ringQuot_ext
-  结论: [NonAssocSemiring T] {r : R -> R -> 命题} (f g : RingQuot r ->+* T)
+  结论: [非结合半环 T] {r : R -> R -> 命题} (f g : RingQuot r ->+* T)
   证明: by
   ext x
   rcases mkRingHom_surjective r x with ⟨x, rfl⟩
@@ -1429,7 +1429,7 @@ theorem mkAlgHom_surjective
 中文:
 定理 mkAlgHom_surjective
   条件: (s : A -> A -> 命题)
-  结论: Function.Surjective (mkAlgHom S s)
+  结论: 函数.满射 (mkAlgHom S s)
   证明: by
   suffices Function.Surjective fun x => (⟨.mk (Rel s) x⟩ : RingQuot s) by
     simpa [mkAlgHom_def, mkRingHom_def]

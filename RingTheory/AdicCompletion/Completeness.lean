@@ -86,7 +86,7 @@ theorem ofPowSMul_val_apply
 
 中文:
 定理 ofPowSMul_val_apply
-  条件: (h : c = b + a) {x : AdicCompletion I ↥(I ^ a • ⊤ : Submodule R M)}
+  条件: (h : c = b + a) {x : AdicCompletion I ↥(I ^ a • ⊤ : 子模 R M)}
   证明: by
   rw [← x.prop (show b <= c by lia)]; rw [map_val_apply]
   refine Quotient.induction_on _ (x.val c) fun z => ?_
@@ -146,7 +146,7 @@ theorem ofPowSMul_injective
 中文:
 定理 ofPowSMul_injective
   条件: (n : 自然数)
-  结论: Function.Injective (ofPowSMul I M n)
+  结论: 函数.单射 (ofPowSMul I M n)
   证明: by
   rw [← LinearMap.ker_eq_bot]; rw [LinearMap.ker_eq_bot']
   intro x hx; ext i
@@ -178,7 +178,7 @@ lemma ofValEqZeroAux_exists
     (val_apply_mem_smul_top_iff I (show a <= c by lia)).mpr ha
 
 中文:
-引理 ofValEqZeroAux_exists
+引理 ofValEqZeroAux_存在
   结论: {x : AdicCompletion I M} (h : c = b + a)
   证明: by
   simpa [← LinearMap.mem_range, range_powSMulQuotInclusion] using
@@ -336,7 +336,7 @@ lemma lsum_smul_comp_finsuppLEquivDirectSum_symm
 
 中文:
 引理 lsum_smul_comp_finsuppLEquivDirectSum_symm
-  结论: {ι : 类型} [DecidableEq ι] [Fintype ι]
+  结论: {ι : 类型} [DecidableEq ι] [有限类型 ι]
   证明: by
   ext
   -- simp [-algebraMap_smul, algebraMap_apply, -smul_eq_mul]
@@ -435,7 +435,7 @@ theorem isAdicComplete
 中文:
 定理 isAdicComplete
   条件: (h : I.FG)
-  结论: IsAdicComplete I (AdicCompletion I M) where
+  结论: 是AdicComplete I (AdicCompletion I M) where
   证明: by
     let L : AdicCompletion I M := {
       val i := (x i).val i
@@ -530,7 +530,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAdicComplete (.span {X} : Ideal (PowerSeries R)) (PowerSeries R)
+  签名: 是AdicComplete (.span {X} : 理想 (幂级数 R)) (幂级数 R)
   定义体: by
   have : IsAdicComplete (.span (.range MvPowerSeries.X) : Ideal (MvPowerSeries Unit R))
     (MvPowerSeries Unit R) := inferInstance

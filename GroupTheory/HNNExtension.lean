@@ -51,7 +51,7 @@ definition HNNExtension.con
 
 中文:
 定义 HNNExtension.con
-  签名: (G : 类型) [Group G] (A B : Subgroup G) (φ : A ≃* B)
+  签名: (G : 类型) [群 G] (A B : 子群 G) (φ : A ≃* B)
   定义体: conGen (fun x y => exists (a : A),
     x = inr (ofAdd 1) * inl (a : G) ∧
     y = inl (φ a : G) * inr (ofAdd 1))
@@ -74,7 +74,7 @@ definition HNNExtension
 
 中文:
 定义 HNNExtension
-  签名: (G : 类型) [Group G] (A B : Subgroup G) (φ : A ≃* B)
+  签名: (G : 类型) [群 G] (A B : 子群 G) (φ : A ≃* B)
   定义体: (HNNExtension.con G A B φ).Quotient
 
 Depends on / 依赖: HNNExtension, HNNExtension.con, Quotient
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (HNNExtension G A B φ)
+  签名: 群 (HNNExtension G A B φ)
   定义体: by
   delta HNNExtension; infer_instance
 
@@ -586,11 +586,11 @@ structure TransversalPair
     - compl : forall u, IsComplement (toSubgroup A B u : Subgroup G) (set u)
 
 中文:
-结构 TransversalPair
-  参数: : Type _ where
+结构 横截对
+  参数: : 类型 _ where
   公理与运算 (2 个):
-    - set : 整数ˣ -> Set G
-    - compl : 对任意 u, IsComplement (toSubgroup A B u : Subgroup G) (set u)
+    - set : 整数ˣ -> 集合 G
+    - compl : 对任意 u, IsComplement (toSubgroup A B u : 子群 G) (set u)
 -/
 structure TransversalPair : Type _ where
   /-- The transversal of each subgroup -/
@@ -609,8 +609,8 @@ instance TransversalPair.nonempty
   exact ⟨⟨t, fun i => (ht i).1⟩⟩
 
 中文:
-实例 TransversalPair.nonempty
-  签名: : Nonempty (TransversalPair G A B)
+实例 横截对.nonempty
+  签名: : 非空 (横截对 G A B)
   定义体: by
   choose t ht using fun u => (toSubgroup A B u).exists_isComplement_right 1
   exact ⟨⟨t, fun i => (ht i).1⟩⟩
@@ -634,10 +634,10 @@ structure ReducedWord
 
 中文:
 结构 ReducedWord
-  参数: : Type _ where
+  参数: : 类型 _ where
   公理与运算 (3 个):
     - head : G
-    - toList : List (整数ˣ × G)
+    - toList : 列表 (整数ˣ × G)
     - chain : toList.IsChain (fun a b => a.2 in toSubgroup A B a.1 -> a.1 = b.1)
 -/
 structure ReducedWord : Type _ where
@@ -686,7 +686,7 @@ definition ReducedWord.prod
   body: fun w => of w.head * (w.toList.map (fun x => t ^ (x.1 : Int) * of x.2)).prod
 
 中文:
-定义 ReducedWord.prod
+定义 ReducedWord.乘积
   签名: : ReducedWord G A B -> HNNExtension G A B φ
   定义体: fun w => of w.head * (w.toList.map (fun x => t ^ (x.1 : Int) * of x.2)).prod
 
@@ -707,7 +707,7 @@ structure _root_.HNNExtension.NormalWord
 
 中文:
 结构 _root_.HNNExtension.NormalWord
-  参数: (d : TransversalPair G A B)
+  参数: (d : 横截对 G A B)
   继承: ReducedWord G A B
   公理与运算 (1 个):
     - mem_set : 对任意 (u : 整数ˣ) (g : G), (u, g) in toList -> g in d.set u
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NormalWord d)
+  签名: 可居 (NormalWord d)
   定义体: ⟨empty⟩
 -/
 instance : Inhabited (NormalWord d) := ⟨empty⟩
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction G (NormalWord d)
+  签名: 乘法作用 G (NormalWord d)
   定义体: { smul := fun g w => { w with head := g * w.head }
     one_smul := by simp +instances [instHSMul]
     mul_smul := by simp +instances [instHSMul, mul_assoc] }
@@ -909,7 +909,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul G (NormalWord d)
+  签名: 忠实标量乘法 G (NormalWord d)
   定义体: ⟨by simp [group_smul_def]⟩
 
 Depends on / 依赖: group_smul_def
@@ -992,7 +992,7 @@ definition consRecOn
 
 中文:
 定义 consRecOn
-  签名: {motive : NormalWord d -> Sort*} (w : NormalWord d)
+  签名: {motive : NormalWord d -> 类型层*} (w : NormalWord d)
   定义体: by
   rcases w with ⟨⟨g, l, chain⟩, mem_set⟩
   induction l generalizing g with
@@ -1038,7 +1038,7 @@ theorem consRecOn_ofGroup
 
 中文:
 定理 consRecOn_ofGroup
-  结论: {motive : NormalWord d -> Sort*}
+  结论: {motive : NormalWord d -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -1064,7 +1064,7 @@ theorem consRecOn_cons
 
 中文:
 定理 consRecOn_cons
-  结论: {motive : NormalWord d -> Sort*}
+  结论: {motive : NormalWord d -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -1502,7 +1502,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (HNNExtension G A B φ) (NormalWord d)
+  签名: 乘法作用 (HNNExtension G A B φ) (NormalWord d)
   定义体: MulAction.ofEndHom (MulAction.toEndHom (M := Equiv.Perm (NormalWord d))).comp
     (HNNExtension.lift (MulAction.toPermHom _ _) (unitsSMulEquiv φ) <| by
       intro a
@@ -1715,7 +1715,7 @@ theorem prod_empty
 
 中文:
 定理 prod_empty
-  结论: (empty : NormalWord d).prod φ = 1
+  结论: (empty : NormalWord d).乘积 φ = 1
   证明: by
   simp [ReducedWord.prod]
 
@@ -1849,7 +1849,7 @@ theorem prod_injective
 
 中文:
 定理 prod_injective
-  结论: Injective
+  结论: 单射
   证明: (equiv φ d).symm.injective
 
 Depends on / 依赖: injective, symm.injective
@@ -1868,7 +1868,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul (HNNExtension G A B φ) (NormalWord d)
+  签名: 忠实标量乘法 (HNNExtension G A B φ) (NormalWord d)
   定义体: ⟨fun h => by simpa using congr_arg (fun w => w.prod φ) (h empty)⟩
 
 Depends on / 依赖: congr_arg, w.prod
@@ -1896,7 +1896,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: Function.Injective (of : G -> HNNExtension G A B φ)
+  结论: 函数.单射 (of : G -> HNNExtension G A B φ)
   证明: by
   rcases TransversalPair.nonempty G A B with ⟨d⟩
   refine Function.Injective.of_comp
@@ -1932,7 +1932,7 @@ theorem exists_normalWord_prod_eq
     · simp only
 
 中文:
-定理 exists_normalWord_prod_eq
+定理 存在_normalWord_prod_eq
   证明: by
   suffices forall w : ReducedWord G A B,
       w.head = 1 -> exists w' : NormalWord d, w'.prod φ = w.prod φ ∧

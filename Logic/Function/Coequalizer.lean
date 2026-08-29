@@ -33,10 +33,10 @@ inductive Coequalizer.Rel
     - intro: (x : α) : Rel f g (f x) (g x)
 
 中文:
-归纳类型 Coequalizer.Rel
+归纳类型 Coequalizer.关系
   参数: {α β : 类型} (f g : α -> β)
   构造子 (1 个):
-    - intro: (x : α) : Rel f g (f x) (g x)
+    - intro: (x : α) : 关系 f g (f x) (g x)
 -/
 inductive Coequalizer.Rel {α β : Type*} (f g : α -> β) : β -> β -> Prop where
   | intro (x : α) : Rel f g (f x) (g x)
@@ -111,7 +111,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk f g)
+  结论: 函数.满射 (mk f g)
   证明: Quot.exists_rep
 
 Depends on / 依赖: Quot.exists_rep, exists_rep

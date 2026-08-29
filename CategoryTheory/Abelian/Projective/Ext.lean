@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: R.cochainComplex.IsKProjective
+  签名: R.cochainComplex.是KProjective
   定义体: isKProjective_of_projective _ 0
 
 Depends on / 依赖: isKProjective_of_projective

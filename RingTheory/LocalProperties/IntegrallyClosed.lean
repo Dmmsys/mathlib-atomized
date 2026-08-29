@@ -42,8 +42,8 @@ theorem IsIntegrallyClosed.iInf
   have : IsScalarTower ↥(⨅ i, S i) (S i) K := Subalgebra.inclusion.isScala
 
 中文:
-定理 IsIntegrallyClosed.iInf
-  结论: {ι : 类型} (S : ι -> Subalgebra R K)
+定理 是整闭.iInf
+  结论: {ι : 类型} (S : ι -> 子代数 R K)
   证明: by
   refine (isIntegrallyClosed_iff K).mpr (fun {x} hx => CanLift.prf x (Algebra.mem_iInf.mpr ?_))
   intro i
@@ -75,8 +75,8 @@ theorem IsIntegrallyClosed.of_iInf_eq_bot
   (IsIntegrallyClosed.iInf S h).of_equiv (hs ▸ f).toRingEquiv
 
 中文:
-定理 IsIntegrallyClosed.of_iInf_eq_bot
-  结论: {ι : 类型} (S : ι -> Subalgebra R K)
+定理 是整闭.of_iInf_eq_bot
+  结论: {ι : 类型} (S : ι -> 子代数 R K)
   证明: have f : (⊥ : Subalgebra R K) ≃ₐ[R] R :=
     Algebra.botEquivOfInjective (FaithfulSMul.algebraMap_injective R K)
   (IsIntegrallyClosed.iInf S h).of_equiv (hs ▸ f).toRingEquiv
@@ -99,8 +99,8 @@ theorem IsIntegrallyClosed.of_localization_submonoid
     (fun i => (hi i).of_equiv (IsLocalization.algEquiv (S i) (Localization (S i)) _).toRingEquiv) hs
 
 中文:
-定理 IsIntegrallyClosed.of_localization_submonoid
-  结论: [IsDomain R] {ι : 类型} (S : ι -> Submonoid R)
+定理 是整闭.of_localization_submonoid
+  结论: [是整环 R] {ι : 类型} (S : ι -> 子幺半群 R)
   证明: IsIntegrallyClosed.of_iInf_eq_bot (fun i => Localization.subalgebra (FractionRing R) (S i) (h i))
     (fun i => (hi i).of_equiv (IsLocalization.algEquiv (S i) (Localization (S i)) _).toRingEquiv) hs
 
@@ -126,8 +126,8 @@ theorem IsIntegrallyClosed.of_localization
   simp only [← hs, Algebra.mem_iInf, Subtype.forall]
 
 中文:
-定理 IsIntegrallyClosed.of_localization
-  结论: [IsDomain R] (S : Set (PrimeSpectrum R))
+定理 是整闭.of_localization
+  结论: [是整环 R] (S : 集合 (素谱 R))
   证明: by
   apply IsIntegrallyClosed.of_localization_submonoid (fun p : S => p.1.1.primeCompl)
     (fun p => p.1.1.primeCompl_le_nonZeroDivisors) (fun p => h p.1 p.2)
@@ -161,8 +161,8 @@ theorem IsIntegrallyClosed.of_localization_maximal
     convert! MaximalSpect
 
 中文:
-定理 IsIntegrallyClosed.of_localization_maximal
-  结论: [IsDomain R]
+定理 是整闭.of_localization_maximal
+  结论: [是整环 R]
   证明: by
   by_cases hf : IsField R
   · exact hf.toField.instIsIntegrallyClosed
@@ -194,7 +194,7 @@ theorem isIntegrallyClosed_ofLocalizationMaximal
   proof: fun _ _ h _ => IsIntegrallyClosed.of_localization_maximal fun p _ hpm => h p hpm
 
 中文:
-定理 isIntegrallyClosed_ofLocalizationMaximal
+定理 is整数egrallyClosed_ofLocalizationMaximal
   证明: fun _ _ h _ => IsIntegrallyClosed.of_localization_maximal fun p _ hpm => h p hpm
 
 Depends on / 依赖: IsIntegrallyClosed, IsIntegrallyClosed.of_localization_maximal, of_localization_maximal
@@ -219,8 +219,8 @@ theorem IsIntegrallyClosed.of_isLocalization_maximal
   (fun P _ _ => .of_equiv <| ringEquivOfRingEquiv (Rₚ P) _ (RingEquiv.refl R) P.primeCompl.map_id)
 
 中文:
-定理 IsIntegrallyClosed.of_isLocalization_maximal
-  结论: [IsDomain R]
+定理 是整闭.of_isLocalization_maximal
+  结论: [是整环 R]
   证明: .of_localization_maximal
   (fun P _ _ => .of_equiv <| ringEquivOfRingEquiv (Rₚ P) _ (RingEquiv.refl R) P.primeCompl.map_id)
 

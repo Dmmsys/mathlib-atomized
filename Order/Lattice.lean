@@ -77,12 +77,12 @@ class SemilatticeSup
 中文:
 类 SemilatticeSup
   参数: (α : 类型u)
-  继承: PartialOrder α
+  继承: 偏序 α
   公理与运算 (4 个):
     - sup : α -> α -> α
-    - le_sup_left : 对任意 a b : α, a <= sup a b
-    - le_sup_right : 对任意 a b : α, b <= sup a b
-    - sup_le : 对任意 a b c : α, a <= c -> b <= c -> sup a b <= c
+    - le_sup_left : 对任意 a b : α, a <= 上确界 a b
+    - le_sup_right : 对任意 a b : α, b <= 上确界 a b
+    - sup_le : 对任意 a b c : α, a <= c -> b <= c -> 上确界 a b <= c
 -/
 class SemilatticeSup (α : Type u) extends PartialOrder α where
   /-- The binary supremum, used to derive `Max α` -/
@@ -114,12 +114,12 @@ class SemilatticeInf
 中文:
 类 SemilatticeInf
   参数: (α : 类型u)
-  继承: PartialOrder α
+  继承: 偏序 α
   公理与运算 (4 个):
     - inf : α -> α -> α
-    - inf_le_left : 对任意 a b : α, inf a b <= a
-    - inf_le_right : 对任意 a b : α, inf a b <= b
-    - le_inf : 对任意 a b c : α, a <= b -> a <= c -> a <= inf b c
+    - inf_le_left : 对任意 a b : α, 下确界 a b <= a
+    - inf_le_right : 对任意 a b : α, 下确界 a b <= b
+    - le_inf : 对任意 a b c : α, a <= b -> a <= c -> a <= 下确界 b c
 -/
 class SemilatticeInf (α : Type u) extends PartialOrder α where
   /-- The binary infimum, used to derive `Min α` -/
@@ -176,7 +176,7 @@ definition SemilatticeSup.mk'
 
 中文:
 定义 SemilatticeSup.mk'
-  签名: {α : 类型} [Max α] (sup_comm : 对任意 a b : α, a ⊔ b = b ⊔ a)
+  签名: {α : 类型} [最大值 α] (sup_comm : 对任意 a b : α, a ⊔ b = b ⊔ a)
   定义体: (· ⊔ ·)
   le a b := a ⊔ b = b
   le_refl := sup_idem
@@ -222,7 +222,7 @@ definition SemilatticeInf.mk'
 
 中文:
 定义 SemilatticeInf.mk'
-  签名: {α : 类型} [Min α] (inf_comm : 对任意 a b : α, a ⊓ b = b ⊓ a)
+  签名: {α : 类型} [最小值 α] (inf_comm : 对任意 a b : α, a ⊓ b = b ⊓ a)
   定义体: (· ⊓ ·)
   le b a := a ⊓ b = b
   le_refl := inf_idem
@@ -635,7 +635,7 @@ theorem le_iff_exists_sup
 @[to_dual (attr := gcongr)]
 
 中文:
-定理 le_iff_exists_sup
+定理 le_iff_存在_sup
   结论: a <= b ↔ 存在 c, b = a ⊔ c
   证明: by
   constructor
@@ -810,7 +810,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Commutative (α := α) (· ⊔ ·)
+  签名: Std.交换 (α := α) (· ⊔ ·)
   定义体: ⟨sup_comm⟩
 
 @[to_dual]
@@ -857,7 +857,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Associative (α := α) (· ⊔ ·)
+  签名: Std.结合 (α := α) (· ⊔ ·)
   定义体: ⟨sup_assoc⟩
 
 @[to_dual]
@@ -1232,7 +1232,7 @@ theorem Ne.lt_sup_or_lt_sup
 @[to_dual inf_le_ite]
 
 中文:
-定理 Ne.lt_sup_or_lt_sup
+定理 不等.lt_sup_or_lt_sup
   条件: (hab : a != b)
   结论: a < a ⊔ b ∨ b < a ⊔ b
   证明: hab.symm.not_le_or_not_ge.imp left_lt_sup.2 right_lt_sup.2
@@ -1258,7 +1258,7 @@ theorem ite_le_sup
 
 中文:
 定理 ite_le_sup
-  条件: (a b : α) (P : 命题) [Decidable P]
+  条件: (a b : α) (P : 命题) [可判定 P]
   结论: ite P a b <= a ⊔ b
   证明: if h : P then (if_pos h).trans_le le_sup_left else (if_neg h).trans_le le_sup_right
 
@@ -1399,7 +1399,7 @@ class Lattice
   (no additional axioms)
 
 中文:
-类 Lattice
+类 格
   参数: (α : 类型u)
   继承: SemilatticeSup α, SemilatticeInf α
   (无附加公理)
@@ -1417,7 +1417,7 @@ instance OrderDual.instLattice
 
 中文:
 实例 OrderDual.instLattice
-  签名: (α) [Lattice α]
+  签名: (α) [格 α]
 -/
 instance OrderDual.instLattice (α) [Lattice α] : Lattice αᵒᵈ where
 
@@ -1472,8 +1472,8 @@ definition Lattice.mk'
       _ = b := by rw [inf_sup_se
 
 中文:
-定义 Lattice.mk'
-  签名: {α : 类型} [Max α] [Min α] (sup_comm : 对任意 a b : α, a ⊔ b = b ⊔ a)
+定义 格.mk'
+  签名: {α : 类型} [最大值 α] [最小值 α] (sup_comm : 对任意 a b : α, a ⊔ b = b ⊔ a)
   定义体: have sup_idem : forall b : α, b ⊔ b = b := fun b =>
     calc
       b ⊔ b = b ⊔ b ⊓ (b ⊔ b) := by rw [inf_sup_self]
@@ -1779,8 +1779,8 @@ theorem Lattice.ext
   congr
 
 中文:
-定理 Lattice.ext
-  条件: {α} {A B : Lattice α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
+定理 格.ext
+  条件: {α} {A B : 格 α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
   证明: by
   cases A
   cases B
@@ -1814,9 +1814,9 @@ class DistribLattice
     - le_sup_inf : forall x y z : α, (x ⊔ y) ⊓ (x ⊔ z) <= x ⊔ y ⊓ z
 
 中文:
-类 DistribLattice
+类 Distrib格
   参数: (α)
-  继承: Lattice α
+  继承: 格 α
   公理与运算 (1 个):
     - le_sup_inf : 对任意 x y z : α, (x ⊔ y) ⊓ (x ⊔ z) <= x ⊔ y ⊓ z
 -/
@@ -1969,7 +1969,7 @@ instance OrderDual.instDistribLattice
 
 中文:
 实例 OrderDual.instDistribLattice
-  签名: (α : 类型) [DistribLattice α]
+  签名: (α : 类型) [Distrib格 α]
   定义体: inf_sup_le
 
 @[to_dual existing]
@@ -2087,7 +2087,7 @@ abbreviation DistribLattice.ofInfSupLe
       le_sup_inf := inf_sup_le }).le_sup_inf
 
 中文:
-缩写 DistribLattice.ofInfSupLe
+缩写 Distrib格.ofInfSupLe
   定义体: (@OrderDual.instDistribLattice αᵒᵈ { (inferInstance : Lattice αᵒᵈ) with
       le_sup_inf := inf_sup_le }).le_sup_inf
 
@@ -2222,7 +2222,7 @@ theorem max_max_max_comm
 
 中文:
 定理 max_max_max_comm
-  结论: max (max a b) (max c d) = max (max a c) (max b d)
+  结论: 最大值 (最大值 a b) (最大值 c d) = 最大值 (最大值 a c) (最大值 b d)
   证明: sup_sup_sup_comm _ _ _ _
 
 Depends on / 依赖: sup_sup_sup_comm
@@ -2246,7 +2246,7 @@ theorem sup_eq_maxDefault
 
 中文:
 定理 sup_eq_maxDefault
-  条件: [SemilatticeSup α] [DecidableLE α] [@Std.Total α (· <= ·)]
+  条件: [SemilatticeSup α] [DecidableLE α] [@Std.全 α (· <= ·)]
   证明: by
   ext x y
   unfold maxDefault
@@ -2276,7 +2276,7 @@ theorem inf_eq_minDefault
 
 中文:
 定理 inf_eq_minDefault
-  条件: [SemilatticeInf α] [DecidableLE α] [@Std.Total α (· <= ·)]
+  条件: [SemilatticeInf α] [DecidableLE α] [@Std.全 α (· <= ·)]
   证明: by
   ext x y
   unfold minDefault
@@ -2306,8 +2306,8 @@ abbreviation Lattice.toLinearOrder
   min_def := by exact congr_fun₂ inf_eq_minDefault
 
 中文:
-缩写 Lattice.toLinearOrder
-  签名: (α : 类型u) [Lattice α] [DecidableEq α]
+缩写 格.toLinearOrder
+  签名: (α : 类型u) [格 α] [DecidableEq α]
   定义体: ‹_›
   toDecidableEq := ‹_›
   toDecidableLT := ‹_›
@@ -2341,7 +2341,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice 自然数
+  签名: Distrib格 自然数
   定义体: inferInstance
 -/
 instance : DistribLattice Nat := inferInstance
@@ -2355,7 +2355,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice 整数
+  签名: 格 整数
   定义体: inferInstance
 -/
 instance : Lattice Int := inferInstance
@@ -2379,7 +2379,7 @@ theorem ofDual_sup
 
 中文:
 定理 ofDual_sup
-  条件: [Min α] (a b : αᵒᵈ)
+  条件: [最小值 α] (a b : αᵒᵈ)
   结论: ofDual (a ⊔ b) = ofDual a ⊓ ofDual b
   证明: rfl
 
@@ -2400,7 +2400,7 @@ theorem toDual_sup
 
 中文:
 定理 toDual_sup
-  条件: [Max α] (a b : α)
+  条件: [最大值 α] (a b : α)
   结论: toDual (a ⊔ b) = toDual a ⊓ toDual b
   证明: rfl
 -/
@@ -2423,7 +2423,7 @@ theorem ofDual_max
 中文:
 定理 ofDual_max
   条件: (a b : αᵒᵈ)
-  结论: ofDual (max a b) = min (ofDual a) (ofDual b)
+  结论: ofDual (最大值 a b) = 最小值 (ofDual a) (ofDual b)
   证明: rfl
 -/
 @[to_dual] theorem ofDual_max (a b : αᵒᵈ) : ofDual (max a b) = min (ofDual a) (ofDual b) :=
@@ -2441,7 +2441,7 @@ theorem toDual_max
 中文:
 定理 toDual_max
   条件: (a b : α)
-  结论: toDual (max a b) = min (toDual a) (toDual b)
+  结论: toDual (最大值 a b) = 最小值 (toDual a) (toDual b)
   证明: rfl
 -/
 @[to_dual] theorem toDual_max (a b : α) : toDual (max a b) = min (toDual a) (toDual b) :=
@@ -2468,8 +2468,8 @@ instance [forall
 @[to_dual (attr := simp)]
 
 中文:
-实例 [forall
-  签名: i, Max (α' i)] : Max (对任意 i, α' i)
+实例 [对任意
+  签名: i, 最大值 (α' i)] : 最大值 (对任意 i, α' i)
   定义体: ⟨fun f g i => f i ⊔ g i⟩
 
 @[to_dual (attr := simp)]
@@ -2491,7 +2491,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: [对任意 i, Max (α' i)] (f g : 对任意 i, α' i) (i : ι)
+  条件: [对任意 i, 最大值 (α' i)] (f g : 对任意 i, α' i) (i : ι)
   结论: (f ⊔ g) i = f i ⊔ g i
   证明: rfl
 
@@ -2514,7 +2514,7 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: [对任意 i, Max (α' i)] (f g : 对任意 i, α' i)
+  条件: [对任意 i, 最大值 (α' i)] (f g : 对任意 i, α' i)
   结论: f ⊔ g = fun i => f i ⊔ g i
   证明: rfl
 
@@ -2558,7 +2558,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [对任意 i, Lattice (α' i)]
+  签名: [对任意 i, 格 (α' i)]
 -/
 instance instLattice [forall i, Lattice (α' i)] : Lattice (forall i, α' i) where
 
@@ -2572,7 +2572,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: [对任意 i, DistribLattice (α' i)]
+  签名: [对任意 i, Distrib格 (α' i)]
   定义体: le_sup_inf
 
 Depends on / 依赖: le_sup_inf
@@ -2627,8 +2627,8 @@ theorem sup
   proof: fun _ _ h => sup_le_sup (hf h) (hg h)
 
 中文:
-定理 sup
-  结论: [Preorder α] [SemilatticeSup β] {f g : α -> β} (hf : Monotone f)
+定理 上确界
+  结论: [预序 α] [SemilatticeSup β] {f g : α -> β} (hf : 递增 f)
   证明: fun _ _ h => sup_le_sup (hf h) (hg h)
 -/
 protected theorem sup [Preorder α] [SemilatticeSup β] {f g : α -> β} (hf : Monotone f)
@@ -2648,8 +2648,8 @@ theorem max
 @[to_dual map_inf_le]
 
 中文:
-定理 max
-  结论: [Preorder α] [LinearOrder β] {f g : α -> β} (hf : Monotone f)
+定理 最大值
+  结论: [预序 α] [线性序 β] {f g : α -> β} (hf : 递增 f)
   证明: hf.sup hg
 
 @[to_dual map_inf_le]
@@ -2672,7 +2672,7 @@ theorem le_map_sup
 
 中文:
 定理 le_map_sup
-  条件: [SemilatticeSup α] [SemilatticeSup β] {f : α -> β} (h : Monotone f) (x y : α)
+  条件: [SemilatticeSup α] [SemilatticeSup β] {f : α -> β} (h : 递增 f) (x y : α)
   证明: sup_le (h le_sup_left) (h le_sup_right)
 
 @[to_dual of_map_inf_le_left]
@@ -2699,7 +2699,7 @@ theorem of_left_le_map_sup
 
 中文:
 定理 of_left_le_map_sup
-  结论: [SemilatticeSup α] [Preorder β] {f : α -> β}
+  结论: [SemilatticeSup α] [预序 β] {f : α -> β}
   证明: by
   intro x y hxy
   rw [← sup_eq_right.2 hxy]
@@ -2773,7 +2773,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: [SemilatticeSup β] {f : α -> β} (hf : Monotone f) (x y : α)
+  条件: [SemilatticeSup β] {f : α -> β} (hf : 递增 f) (x y : α)
   证明: (Std.Total.total x y).elim (fun h : x <= y => by simp only [h, hf h, sup_of_le_right]) fun h => by
     simp only [h, hf h, sup_of_le_left]
 
@@ -2795,8 +2795,8 @@ theorem exists_ge_and_iff_exists
   proof: ⟨fun h => h.imp fun _ h => h.2, fun ⟨x, hx⟩ => ⟨x ⊔ x₀, le_sup_right, hP le_sup_left hx⟩⟩
 
 中文:
-定理 exists_ge_and_iff_exists
-  条件: [SemilatticeSup α] {P : α -> 命题} {x₀ : α} (hP : Monotone P)
+定理 存在_ge_and_iff_存在
+  条件: [SemilatticeSup α] {P : α -> 命题} {x₀ : α} (hP : 递增 P)
   证明: ⟨fun h => h.imp fun _ h => h.2, fun ⟨x, hx⟩ => ⟨x ⊔ x₀, le_sup_right, hP le_sup_left hx⟩⟩
 
 Depends on / 依赖: h.imp, le_sup_left, le_sup_right
@@ -2815,7 +2815,7 @@ theorem exists_and_iff_of_monotone
     fun ⟨x, hPx, hQx⟩ => ⟨⟨x, hPx⟩, ⟨x, hQx⟩⟩⟩
 
 中文:
-定理 exists_and_iff_of_monotone
+定理 存在_and_iff_of_monotone
   结论: [SemilatticeSup α] {P Q : α -> 命题}
   证明: ⟨fun ⟨⟨x, hPx⟩, ⟨y, hQx⟩⟩ => ⟨x ⊔ y, ⟨hP le_sup_left hPx, hQ le_sup_right hQx⟩⟩,
     fun ⟨x, hPx, hQx⟩ => ⟨⟨x, hPx⟩, ⟨x, hQx⟩⟩⟩
@@ -2842,8 +2842,8 @@ theorem sup
   proof: fun _ hx _ hy h => sup_le_sup (hf hx hy h) (hg hx hy h)
 
 中文:
-定理 sup
-  结论: [Preorder α] [SemilatticeSup β] {f g : α -> β} {s : Set α}
+定理 上确界
+  结论: [预序 α] [SemilatticeSup β] {f g : α -> β} {s : 集合 α}
   证明: fun _ hx _ hy h => sup_le_sup (hf hx hy h) (hg hx hy h)
 -/
 protected theorem sup [Preorder α] [SemilatticeSup β] {f g : α -> β} {s : Set α}
@@ -2863,8 +2863,8 @@ theorem max
 @[to_dual]
 
 中文:
-定理 max
-  结论: [Preorder α] [LinearOrder β] {f g : α -> β} {s : Set α} (hf : MonotoneOn f s)
+定理 最大值
+  结论: [预序 α] [线性序 β] {f g : α -> β} {s : 集合 α} (hf : MonotoneOn f s)
   证明: hf.sup hg
 
 @[to_dual]
@@ -2941,8 +2941,8 @@ theorem sup
   proof: fun _ _ h => sup_le_sup (hf h) (hg h)
 
 中文:
-定理 sup
-  结论: [Preorder α] [SemilatticeSup β] {f g : α -> β} (hf : Antitone f)
+定理 上确界
+  结论: [预序 α] [SemilatticeSup β] {f g : α -> β} (hf : 递减 f)
   证明: fun _ _ h => sup_le_sup (hf h) (hg h)
 -/
 protected theorem sup [Preorder α] [SemilatticeSup β] {f g : α -> β} (hf : Antitone f)
@@ -2962,8 +2962,8 @@ theorem max
 @[to_dual le_map_inf]
 
 中文:
-定理 max
-  结论: [Preorder α] [LinearOrder β] {f g : α -> β} (hf : Antitone f)
+定理 最大值
+  结论: [预序 α] [线性序 β] {f g : α -> β} (hf : 递减 f)
   证明: hf.sup hg
 
 @[to_dual le_map_inf]
@@ -2984,7 +2984,7 @@ theorem map_sup_le
 
 中文:
 定理 map_sup_le
-  条件: [SemilatticeSup α] [SemilatticeInf β] {f : α -> β} (h : Antitone f) (x y : α)
+  条件: [SemilatticeSup α] [SemilatticeInf β] {f : α -> β} (h : 递减 f) (x y : α)
   证明: h.dual_right.le_map_sup x y
 
 Depends on / 依赖: dual_right, h.dual_right.le_map_sup, le_map_sup
@@ -3006,7 +3006,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: [SemilatticeInf β] {f : α -> β} (hf : Antitone f) (x y : α)
+  条件: [SemilatticeInf β] {f : α -> β} (hf : 递减 f) (x y : α)
   证明: hf.dual_right.map_sup x y
 
 Depends on / 依赖: Ideal.mul_mem_left, dual_right, hf.dual_right.map_sup, map_sup, mul_mem_left
@@ -3026,8 +3026,8 @@ theorem exists_le_and_iff_exists
   proof: exists_ge_and_iff_exists hP.dual_left
 
 中文:
-定理 exists_le_and_iff_exists
-  条件: [SemilatticeInf α] {P : α -> 命题} {x₀ : α} (hP : Antitone P)
+定理 存在_le_and_iff_存在
+  条件: [SemilatticeInf α] {P : α -> 命题} {x₀ : α} (hP : 递减 P)
   证明: exists_ge_and_iff_exists hP.dual_left
 
 Depends on / 依赖: dual_left, exists_ge_and_iff_exists, hP.dual_left
@@ -3046,7 +3046,7 @@ theorem exists_and_iff_of_antitone
     fun ⟨x, hPx, hQx⟩ => ⟨⟨x, hPx⟩, ⟨x, hQx⟩⟩⟩
 
 中文:
-定理 exists_and_iff_of_antitone
+定理 存在_and_iff_of_antitone
   结论: [SemilatticeInf α] {P Q : α -> 命题}
   证明: ⟨fun ⟨⟨x, hPx⟩, ⟨y, hQx⟩⟩ => ⟨x ⊓ y, ⟨hP inf_le_left hPx, hQ inf_le_right hQx⟩⟩,
     fun ⟨x, hPx, hQx⟩ => ⟨⟨x, hPx⟩, ⟨x, hQx⟩⟩⟩
@@ -3072,8 +3072,8 @@ theorem sup
   proof: fun _ hx _ hy h => sup_le_sup (hf hx hy h) (hg hx hy h)
 
 中文:
-定理 sup
-  结论: [Preorder α] [SemilatticeSup β] {f g : α -> β} {s : Set α}
+定理 上确界
+  结论: [预序 α] [SemilatticeSup β] {f g : α -> β} {s : 集合 α}
   证明: fun _ hx _ hy h => sup_le_sup (hf hx hy h) (hg hx hy h)
 -/
 protected theorem sup [Preorder α] [SemilatticeSup β] {f g : α -> β} {s : Set α}
@@ -3093,8 +3093,8 @@ theorem max
 @[to_dual]
 
 中文:
-定理 max
-  结论: [Preorder α] [LinearOrder β] {f g : α -> β} {s : Set α} (hf : AntitoneOn f s)
+定理 最大值
+  结论: [预序 α] [线性序 β] {f g : α -> β} {s : 集合 α} (hf : AntitoneOn f s)
   证明: hf.sup hg
 
 @[to_dual]
@@ -3179,8 +3179,8 @@ instance [Max
 @[to_dual (attr := simp)]
 
 中文:
-实例 [Max
-  签名: α] [Max β] : Max (α × β)
+实例 [最大值
+  签名: α] [最大值 β] : 最大值 (α × β)
   定义体: ⟨fun p q => ⟨p.1 ⊔ q.1, p.2 ⊔ q.2⟩⟩
 
 @[to_dual (attr := simp)]
@@ -3201,7 +3201,7 @@ theorem mk_sup_mk
 
 中文:
 定理 mk_sup_mk
-  条件: [Max α] [Max β] (a₁ a₂ : α) (b₁ b₂ : β)
+  条件: [最大值 α] [最大值 β] (a₁ a₂ : α) (b₁ b₂ : β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -3224,7 +3224,7 @@ theorem fst_sup
 
 中文:
 定理 fst_sup
-  条件: [Max α] [Max β] (p q : α × β)
+  条件: [最大值 α] [最大值 β] (p q : α × β)
   结论: (p ⊔ q).fst = p.fst ⊔ q.fst
   证明: rfl
 
@@ -3247,7 +3247,7 @@ theorem snd_sup
 
 中文:
 定理 snd_sup
-  条件: [Max α] [Max β] (p q : α × β)
+  条件: [最大值 α] [最大值 β] (p q : α × β)
   结论: (p ⊔ q).snd = p.snd ⊔ q.snd
   证明: rfl
 
@@ -3270,7 +3270,7 @@ theorem swap_sup
 
 中文:
 定理 swap_sup
-  条件: [Max α] [Max β] (p q : α × β)
+  条件: [最大值 α] [最大值 β] (p q : α × β)
   结论: (p ⊔ q).swap = p.swap ⊔ q.swap
   证明: rfl
 
@@ -3293,7 +3293,7 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: [Max α] [Max β] (p q : α × β)
+  条件: [最大值 α] [最大值 β] (p q : α × β)
   结论: p ⊔ q = (p.fst ⊔ q.fst, p.snd ⊔ q.snd)
   证明: rfl
 
@@ -3337,7 +3337,7 @@ instance instLattice
 
 中文:
 实例 instLattice
-  签名: [Lattice α] [Lattice β]
+  签名: [格 α] [格 β]
 -/
 instance instLattice [Lattice α] [Lattice β] : Lattice (α × β) where
 
@@ -3351,7 +3351,7 @@ instance instDistribLattice
 
 中文:
 实例 instDistribLattice
-  签名: [DistribLattice α] [DistribLattice β]
+  签名: [Distrib格 α] [Distrib格 β]
   定义体: ⟨le_sup_inf, le_sup_inf⟩
 
 Depends on / 依赖: le_sup_inf
@@ -3413,7 +3413,7 @@ abbreviation lattice
 
 中文:
 缩写 lattice
-  签名: [Lattice α] {P : α -> 命题} (Psup : 对任意 ⦃x y⦄, P x -> P y -> P (x ⊔ y))
+  签名: [格 α] {P : α -> 命题} (Psup : 对任意 ⦃x y⦄, P x -> P y -> P (x ⊔ y))
   定义体: Subtype.semilatticeInf Pinf
   __ := Subtype.semilatticeSup Psup
 
@@ -3501,8 +3501,8 @@ abbreviation Function.Injective.semilatticeSup
     exact sup_le ha hb
 
 中文:
-缩写 Function.Injective.semilatticeSup
-  签名: [Max α] [LE α] [LT α] [SemilatticeSup β]
+缩写 函数.单射.semilatticeSup
+  签名: [最大值 α] [LE α] [LT α] [SemilatticeSup β]
   定义体: hf_inj.partialOrder f le lt
   sup a b := max a b
   le_sup_left a b := by
@@ -3548,8 +3548,8 @@ abbreviation Function.Injective.lattice
   __ := hf_inj.semilatticeInf f le lt map_inf
 
 中文:
-缩写 Function.Injective.lattice
-  签名: [Max α] [Min α] [LE α] [LT α] [Lattice β]
+缩写 函数.单射.lattice
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [格 β]
   定义体: hf_inj.semilatticeSup f le lt map_sup
   __ := hf_inj.semilatticeInf f le lt map_inf
 -/
@@ -3577,8 +3577,8 @@ abbreviation Function.Injective.distribLattice
     exact le_sup_inf
 
 中文:
-缩写 Function.Injective.distribLattice
-  签名: [Max α] [Min α] [LE α] [LT α] [DistribLattice β]
+缩写 函数.单射.distribLattice
+  签名: [最大值 α] [最小值 α] [LE α] [LT α] [Distrib格 β]
   定义体: hf_inj.lattice f le lt map_sup map_inf
   le_sup_inf a b c := by
     rw [← le]; rw [map_inf]; rw [map_sup]; rw [map_sup]; rw [map_sup]; rw [map_inf]
@@ -3604,8 +3604,8 @@ abbreviation Subtype.distribLattice
   Subtype.coe_injective.distribLattice _ coe_le_coe coe_lt_coe (coe_sup Psup) (coe_inf Pinf)
 
 中文:
-缩写 Subtype.distribLattice
-  签名: [DistribLattice α] {P : α -> 命题}
+缩写 子类型.distribLattice
+  签名: [Distrib格 α] {P : α -> 命题}
   定义体: letI := Subtype.lattice Psup Pinf
   Subtype.coe_injective.distribLattice _ coe_le_coe coe_lt_coe (coe_sup Psup) (coe_inf Pinf)
 -/
@@ -3632,7 +3632,7 @@ abbreviation preorder
 
 中文:
 缩写 preorder
-  签名: [Preorder β]
+  签名: [预序 β]
   定义体: by
   let le := e.le
   let lt := e.lt
@@ -3655,7 +3655,7 @@ abbreviation partialOrder
 
 中文:
 缩写 partialOrder
-  签名: [PartialOrder β]
+  签名: [偏序 β]
   定义体: by
   let preorder := e.preorder
   apply e.injective.partialOrder <;> intros <;> rfl
@@ -3679,7 +3679,7 @@ abbreviation linearOrder
 
 中文:
 缩写 linearOrder
-  签名: [LinearOrder β] [DecidableEq α]
+  签名: [线性序 β] [DecidableEq α]
   定义体: by
   let max := e.max
   let min := e.min
@@ -3755,7 +3755,7 @@ abbreviation lattice
 
 中文:
 缩写 lattice
-  签名: [Lattice β]
+  签名: [格 β]
   定义体: by
   let semilatticeSup := e.semilatticeSup
   let semilatticeInf := e.semilatticeInf
@@ -3778,7 +3778,7 @@ abbreviation distribLattice
 
 中文:
 缩写 distribLattice
-  签名: [DistribLattice β]
+  签名: [Distrib格 β]
   定义体: by
   let lattice := e.lattice
   apply e.injective.distribLattice <;> intros <;> first | rfl | exact e.apply_symm_apply _
@@ -3804,7 +3804,7 @@ instance [SemilatticeSup
 
 中文:
 实例 [SemilatticeSup
-  签名: α] : SemilatticeSup (ULift.{v} α)
+  签名: α] : SemilatticeSup (类型层提升.{v} α)
   定义体: ULift.down_injective.semilatticeSup _ .rfl .rfl down_sup
 
 Depends on / 依赖: ULift.down_injective.semilatticeSup, down_injective, down_sup, semilatticeSup
@@ -3820,8 +3820,8 @@ instance [Lattice
   signature: α] : Lattice (ULift.{v} α) where
 
 中文:
-实例 [Lattice
-  签名: α] : Lattice (ULift.{v} α) where
+实例 [格
+  签名: α] : 格 (类型层提升.{v} α) where
 -/
 instance [Lattice α] : Lattice (ULift.{v} α) where
 
@@ -3834,8 +3834,8 @@ instance [DistribLattice
   body: ULift.down_injective.distribLattice _ .rfl .rfl down_sup down_inf
 
 中文:
-实例 [DistribLattice
-  签名: α] : DistribLattice (ULift.{v} α)
+实例 [Distrib格
+  签名: α] : Distrib格 (类型层提升.{v} α)
   定义体: ULift.down_injective.distribLattice _ .rfl .rfl down_sup down_inf
 
 Depends on / 依赖: ULift.down_injective.distribLattice, distribLattice, down_inf, down_injective, down_sup
@@ -3852,8 +3852,8 @@ instance [LinearOrder
   body: ULift.down_injective.linearOrder _ down_le down_lt down_inf down_sup down_compare
 
 中文:
-实例 [LinearOrder
-  签名: α] : LinearOrder (ULift.{v} α)
+实例 [线性序
+  签名: α] : 线性序 (类型层提升.{v} α)
   定义体: ULift.down_injective.linearOrder _ down_le down_lt down_inf down_sup down_compare
 
 Depends on / 依赖: ULift.down_injective.linearOrder, down_compare, down_inf, down_injective, down_le, down_lt, down_sup, linearOrder
@@ -3873,8 +3873,8 @@ instance Bool.instPartialOrder
   body: inferInstance
 
 中文:
-实例 Bool.instPartialOrder
-  签名: : PartialOrder 布尔
+实例 布尔值.instPartialOrder
+  签名: : 偏序 布尔值
   定义体: inferInstance
 -/
 instance Bool.instPartialOrder : PartialOrder Bool := inferInstance
@@ -3887,8 +3887,8 @@ instance Bool.instDistribLattice
   body: inferInstance
 
 中文:
-实例 Bool.instDistribLattice
-  签名: : DistribLattice 布尔
+实例 布尔值.instDistribLattice
+  签名: : Distrib格 布尔值
   定义体: inferInstance
 -/
 instance Bool.instDistribLattice : DistribLattice Bool := inferInstance
@@ -3908,7 +3908,7 @@ simpa [Pairwise, ← lt_or_lt_iff_ne, or_imp, forall_and] using fun h a b hab =>
 中文:
 引理 pairwise_iff_lt
   条件: [Std.Symm p]
-  结论: Pairwise p ↔ 对任意 ⦃a b⦄, a < b -> p a b
+  结论: 两两 p ↔ 对任意 ⦃a b⦄, a < b -> p a b
   证明: by
 simpa [Pairwise, ← lt_or_lt_iff_ne, or_imp, forall_and] using fun h a b hab => symm h _ _ hab
 
@@ -3933,7 +3933,7 @@ alias ⟨_, Pairwise.of_gt⟩ := pairwise_iff_gt
 中文:
 引理 pairwise_iff_gt
   条件: [Std.Symm p]
-  结论: Pairwise p ↔ 对任意 ⦃a b⦄, b < a -> p a b
+  结论: 两两 p ↔ 对任意 ⦃a b⦄, b < a -> p a b
   证明: by
 simpa [Pairwise, ← lt_or_lt_iff_ne, or_imp, forall_and] using fun h a b hab => symm h _ _ hab
 

@@ -60,7 +60,7 @@ fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
 
 中文:
 定理 cfc_tsub
-  结论: {A : 类型} [TopologicalSpace A] [Ring A] [PartialOrder A] [StarRing A]
+  结论: {A : 类型} [拓扑空间 A] [环 A] [偏序 A] [对合环 A]
   证明: by
   have ha' := SpectrumRestricts.nnreal_of_nonneg ha
   have : (spectrum Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
@@ -103,7 +103,7 @@ fun x hx => NNReal.coe_sub hfg _ ha'.apply_mem hx
 
 中文:
 定理 cfcₙ_tsub
-  结论: {A : 类型} [TopologicalSpace A] [NonUnitalRing A] [PartialOrder A] [StarRing A]
+  结论: {A : 类型} [拓扑空间 A] [非幺环 A] [偏序 A] [对合环 A]
   证明: by
   have ha' := QuasispectrumRestricts.nnreal_of_nonneg ha
   have : (σₙ Real a).EqOn (fun x => ((f x.toNNReal - g x.toNNReal : Real>=0) : Real))
@@ -145,7 +145,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder A⁺¹
+  签名: : 偏序 A⁺¹
   定义体: CStarAlgebra.spectralOrder _
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.spectralOrder, spectralOrder
@@ -163,7 +163,7 @@ instance instStarOrderedRing
 
 中文:
 实例 instStarOrderedRing
-  签名: : StarOrderedRing A⁺¹
+  签名: : StarOrdered环 A⁺¹
   定义体: CStarAlgebra.spectralOrderedRing _
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.spectralOrderedRing, spectralOrderedRing
@@ -251,7 +251,7 @@ lemma convexOn_of_convexOn_inr_comp
 
 中文:
 引理 convexOn_of_convexOn_inr_comp
-  结论: {f : A -> A} {s : Set A}
+  结论: {f : A -> A} {s : 集合 A}
   证明: by
   refine ⟨hf₂.1, ?_⟩
   intro x hx y hy a b ha hb hab
@@ -284,7 +284,7 @@ alias ⟨LE.le.of_inr, LE.le.inr⟩ := inr_nonneg_iff
 
 中文:
 引理 concaveOn_of_concaveOn_inr_comp
-  结论: {f : A -> A} {s : Set A}
+  结论: {f : A -> A} {s : 集合 A}
   证明: by
   refine ⟨hf₂.1, ?_⟩
   intro x hx y hy a b ha hb hab
@@ -371,7 +371,7 @@ have hg' := hg.ofReal_map_toNNReal ha_spec.image ▸ Set.mapsTo_image ..
 
 中文:
 引理 cfc_nnreal_le_iff
-  结论: {A : 类型} [TopologicalSpace A] [Ring A] [StarRing A] [PartialOrder A]
+  结论: {A : 类型} [拓扑空间 A] [环 A] [对合环 A] [偏序 A]
   证明: by
 have hf' := hf.ofReal_map_toNNReal ha_spec.image ▸ Set.mapsTo_image ..
 have hg' := hg.ofReal_map_toNNReal ha_spec.image ▸ Set.mapsTo_image ..
@@ -411,8 +411,8 @@ lemma CFC.exists_pos_algebraMap_le_iff
       (Conti
 
 中文:
-引理 CFC.exists_pos_algebraMap_le_iff
-  结论: {A : 类型} [TopologicalSpace A] [Ring A] [StarRing A]
+引理 CFC.存在_pos_algebraMap_le_iff
+  结论: {A : 类型} [拓扑空间 A] [环 A] [对合环 A]
   证明: by
   have h_cpct : IsCompact (spectrum Real a) := isCompact_iff_compactSpace.mpr inferInstance
   simp_rw [algebraMap_le_iff_le_spectrum (a := a)]
@@ -514,7 +514,7 @@ lemma CStarAlgebra.mul_star_le_algebraMap_norm_sq
   rwa [CStarRing.norm_self_mul_star, ← pow_two] at this
 
 中文:
-引理 CStarAlgebra.mul_star_le_algebraMap_norm_sq
+引理 CStar代数.mul_star_le_algebraMap_norm_sq
   条件: {a : A}
   证明: by
   have : a * star a <= algebraMap Real A ‖a * star a‖ := IsSelfAdjoint.le_algebraMap_norm_self
@@ -538,7 +538,7 @@ lemma CStarAlgebra.star_mul_le_algebraMap_norm_sq
   rwa [CStarRing.norm_star_mul_self, ← pow_two] at this
 
 中文:
-引理 CStarAlgebra.star_mul_le_algebraMap_norm_sq
+引理 CStar代数.star_mul_le_algebraMap_norm_sq
   条件: {a : A}
   证明: by
   have : star a * a <= algebraMap Real A ‖star a * a‖ := IsSelfAdjoint.le_algebraMap_norm_self
@@ -563,7 +563,7 @@ lemma IsSelfAdjoint.toReal_spectralRadius_eq_norm
   simp [ha.spectrumRestricts.spectralRadius_eq, ha.spectralRadius_eq_nnnorm]
 
 中文:
-引理 IsSelfAdjoint.toReal_spectralRadius_eq_norm
+引理 IsSelfAdjoint.to实数_spectralRadius_eq_norm
   条件: {a : A} (ha : IsSelfAdjoint a)
   证明: by
   simp [ha.spectrumRestricts.spectralRadius_eq, ha.spectralRadius_eq_nnnorm]
@@ -589,7 +589,7 @@ lemma norm_or_neg_norm_mem_spectrum
 
 中文:
 引理 norm_or_neg_norm_mem_spectrum
-  结论: [Nontrivial A] {a : A}
+  结论: [非平凡 A] {a : A}
   证明: by
   have ha' : SpectrumRestricts a Complex.reCLM := ha.spectrumRestricts
   rw [← ha.toReal_spectralRadius_eq_norm]
@@ -619,7 +619,7 @@ lemma nnnorm_mem_spectrum_of_nonneg
 
 中文:
 引理 nnnorm_mem_spectrum_of_nonneg
-  条件: [Nontrivial A] {a : A} (ha : 0 <= a := by cfc_tac)
+  条件: [非平凡 A] {a : A} (ha : 0 <= a := by cfc_tac)
   证明: by
   have : IsSelfAdjoint a := .of_nonneg ha
   convert! NNReal.spectralRadius_mem_spectrum (a := a) ?_ (.nnreal_of_nonneg ha)
@@ -646,7 +646,7 @@ simpa using spectrum.algebraMap_mem Real nnnorm_mem_spectrum_of_nonneg ha
 
 中文:
 引理 norm_mem_spectrum_of_nonneg
-  条件: [Nontrivial A] {a : A} (ha : 0 <= a := by cfc_tac)
+  条件: [非平凡 A] {a : A} (ha : 0 <= a := by cfc_tac)
   证明: by
 simpa using spectrum.algebraMap_mem Real nnnorm_mem_spectrum_of_nonneg ha
 
@@ -946,7 +946,7 @@ exact fun h0 => not_le_of_gt hr (algebraMap_le_iff_le_spectrum <| .of_nonneg <|
     h.n
 
 中文:
-引理 CStarAlgebra.isUnit_of_le
+引理 CStar代数.isUnit_of_le
   结论: (a : A) {b : A} (hab : a <= b)
   证明: by
   nontriviality A
@@ -1371,7 +1371,7 @@ lemma antitoneOn_ringInverse
 
 中文:
 引理 antitoneOn_ringInverse
-  结论: AntitoneOn Ring.inverse {a : A | IsStrictlyPositive a}
+  结论: AntitoneOn 环.inverse {a : A | IsStrictlyPositive a}
   证明: by
   intro a (apos : IsStrictlyPositive a) b (bpos : IsStrictlyPositive b) hab
   rw [Ring.inverse_of_isUnit (by grind)]; rw [Ring.inverse_of_isUnit (by grind)]
@@ -1430,7 +1430,7 @@ instance instNonnegSpectrumClassComplexNonUnital
 
 中文:
 实例 instNonnegSpectrumClassComplexNonUnital
-  签名: : NonnegSpectrumClass Complex A where
+  签名: : NonnegSpectrum类 复形 A where
   定义体: by
     rw [Unitization.quasispectrum_eq_spectrum_inr' Complex Complex a] at hx
     exact spectrum_nonneg_of_nonneg (Unitization.inr_nonneg_iff.mpr ha) hx
@@ -1575,7 +1575,7 @@ convert! this.inter (Unitization.isometry_inr (𝕜 := Complex)).isClosedEmbeddi
 
 中文:
 引理 isClosed_nonneg
-  结论: IsClosed {a : A | 0 <= a}
+  结论: 是闭集 {a : A | 0 <= a}
   证明: by
   suffices IsClosed {a : A⁺¹ | 0 <= a} by
     rw [Unitization.isometry_inr (𝕜 := Complex) |>.isClosedEmbedding.isClosed_iff_image_isClosed]
@@ -1609,7 +1609,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderClosedTopology A
+  签名: OrderClosed拓扑 A
   定义体: isClosed_le_of_isClosed_nonneg isClosed_nonneg
 
 Depends on / 依赖: isClosed_le_of_isClosed_nonneg, isClosed_nonneg
@@ -1637,7 +1637,7 @@ lemma convexOn_cfcₙ_of_convexOn_cfc
 
 中文:
 引理 convexOn_cfcₙ_of_convexOn_cfc
-  结论: {f : 实数 -> 实数} {s : Set A}
+  结论: {f : 实数 -> 实数} {s : 集合 A}
   证明: by
   let inrl : A ->ₗ[Real] A⁺¹ := inrHom Real Complex A
   by_cases hf₀ : f 0 = 0
@@ -1689,7 +1689,7 @@ lemma concaveOn_cfcₙ_of_concaveOn_cfc
 
 中文:
 引理 concaveOn_cfcₙ_of_concaveOn_cfc
-  结论: {f : 实数 -> 实数} {s : Set A}
+  结论: {f : 实数 -> 实数} {s : 集合 A}
   证明: by
   have : ConcaveOn Real s (- -cfcₙ f) := by
     rw [← cfcₙ_neg' f]
@@ -1793,7 +1793,7 @@ lemma inr_map_Ici_zero
 
 中文:
 引理 inr_map_Ici_zero
-  结论: inr '' (Ici (0 : A)) subseteq Ici (0 : A⁺¹)
+  结论: inr '' (左闭右无界区间 (0 : A)) subseteq 左闭右无界区间 (0 : A⁺¹)
   证明: by
   rintro - ⟨a, ha, rfl⟩
   exact Unitization.inr_nonneg_iff.mpr ha
@@ -1824,7 +1824,7 @@ lemma IsStarProjection.mul_right_and_mul_left_of_nonneg_of_le
   suffices sqrt
 
 中文:
-引理 IsStarProjection.mul_right_and_mul_left_of_nonneg_of_le
+引理 是StarProjection.mul_right_and_mul_left_of_nonneg_of_le
   结论: {a e : A}
   证明: by
   suffices a * e = a from
@@ -1860,8 +1860,8 @@ lemma IsStarProjection.conjugate_of_nonneg_of_le
   grind [he.mul_right_and_mul_left_of_nonneg_of_le ha hae]
 
 中文:
-引理 IsStarProjection.conjugate_of_nonneg_of_le
-  结论: {a e : A} (he : IsStarProjection e)
+引理 是StarProjection.conjugate_of_nonneg_of_le
+  结论: {a e : A} (he : 是StarProjection e)
   证明: by
   grind [he.mul_right_and_mul_left_of_nonneg_of_le ha hae]
 
@@ -1924,7 +1924,7 @@ lemma pow_monotone
 中文:
 引理 pow_monotone
   条件: {a : A} (ha : 1 <= a)
-  结论: Monotone (a ^ · : 自然数 -> A)
+  结论: 递增 (a ^ · : 自然数 -> A)
   证明: by
   have ha' : 0 <= a := zero_le_one.trans ha
   intro n m hnm

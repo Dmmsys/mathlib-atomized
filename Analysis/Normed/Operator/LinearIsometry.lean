@@ -57,8 +57,8 @@ structure LinearIsometry
     - norm_map' : forall x, ‖toLinearMap x‖ = ‖x‖
 
 中文:
-结构 LinearIsometry
-  参数: (σ₁₂ : R ->+* R₂) (E E₂ : 类型) [SeminormedAddCommGroup E]
+结构 线性等距
+  参数: (σ₁₂ : R ->+* R₂) (E E₂ : 类型) [SeminormedAddComm群 E]
   继承: E ->ₛₗ[σ₁₂] E₂
   公理与运算 (1 个):
     - norm_map' : 对任意 x, ‖toLinearMap x‖ = ‖x‖
@@ -87,9 +87,9 @@ class SemilinearIsometryClass
     - norm_map : forall (f : 𝓕) (x : E), ‖f x‖ = ‖x‖
 
 中文:
-类 SemilinearIsometryClass
-  参数: (𝓕 : 类型) {R R₂ : outParam 类型} [Semiring R] [Semiring R₂]
-  继承: SemilinearMapClass 𝓕 σ₁₂ E E₂
+类 SemilinearIsometry类
+  参数: (𝓕 : 类型) {R R₂ : outParam 类型} [半环 R] [半环 R₂]
+  继承: 半线性映射类 𝓕 σ₁₂ E E₂
   公理与运算 (1 个):
     - norm_map : 对任意 (f : 𝓕) (x : E), ‖f x‖ = ‖x‖
 -/
@@ -109,7 +109,7 @@ abbreviation LinearIsometryClass
 
 中文:
 缩写 LinearIsometryClass
-  签名: (𝓕 : 类型) (R E E₂ : outParam 类型) [Semiring R]
+  签名: (𝓕 : 类型) (R E E₂ : outParam 类型) [半环 R]
   定义体: SemilinearIsometryClass 𝓕 (RingHom.id R) E E₂
 
 Depends on / 依赖: RingHom, RingHom.id, SemilinearIsometryClass
@@ -136,8 +136,8 @@ theorem isometry
 
 中文:
 定理 isometry
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
-  结论: Isometry f
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  结论: 等距 f
   证明: AddMonoidHomClass.isometry_of_norm _ (norm_map _)
 
 @[continuity]
@@ -157,8 +157,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
-  结论: Continuous f
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  结论: 连续 f
   证明: (SemilinearIsometryClass.isometry f).continuous
 -/
 protected theorem continuous [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) : Continuous f :=
@@ -176,7 +176,7 @@ theorem nnnorm_map
 
 中文:
 定理 nnnorm_map
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) (x : E)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕) (x : E)
   结论: ‖f x‖₊ = ‖x‖₊
   证明: NNReal.eq norm_map f x
 
@@ -196,7 +196,7 @@ theorem lipschitz
 
 中文:
 定理 lipschitz
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
   结论: LipschitzWith 1 f
   证明: (SemilinearIsometryClass.isometry f).lipschitz
 -/
@@ -213,7 +213,7 @@ theorem antilipschitz
 
 中文:
 定理 antilipschitz
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
   证明: (SemilinearIsometryClass.isometry f).antilipschitz
 -/
 protected theorem antilipschitz [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) :
@@ -230,7 +230,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) (s : Set E)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕) (s : 集合 E)
   证明: (SemilinearIsometryClass.isometry f).ediam_image s
 
 Depends on / 依赖: SemilinearIsometryClass, SemilinearIsometryClass.isometry, ediam_image, isometry
@@ -249,7 +249,7 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
   证明: (SemilinearIsometryClass.isometry f).ediam_range
 
 Depends on / 依赖: SemilinearIsometryClass, SemilinearIsometryClass.isometry, ediam_range, isometry
@@ -268,7 +268,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) (s : Set E)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕) (s : 集合 E)
   证明: (SemilinearIsometryClass.isometry f).diam_image s
 
 Depends on / 依赖: SemilinearIsometryClass, SemilinearIsometryClass.isometry, diam_image, isometry
@@ -287,7 +287,7 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕)
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕)
   证明: (SemilinearIsometryClass.isometry f).diam_range
 
 Depends on / 依赖: SemilinearIsometryClass, SemilinearIsometryClass.isometry, diam_range, isometry
@@ -319,7 +319,7 @@ theorem toLinearMap_injective
 
 中文:
 定理 toLinearMap_injective
-  结论: Injective (toLinearMap : (E ->ₛₗᵢ[σ₁₂] E₂) -> E ->ₛₗ[σ₁₂] E₂)
+  结论: 单射 (toLinearMap : (E ->ₛₗᵢ[σ₁₂] E₂) -> E ->ₛₗ[σ₁₂] E₂)
 -/
 theorem toLinearMap_injective : Injective (toLinearMap : (E ->ₛₗᵢ[σ₁₂] E₂) -> E ->ₛₗ[σ₁₂] E₂)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -356,7 +356,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (E ->ₛₗᵢ[σ₁₂] E₂) E E₂ where
+  签名: : 函数状 (E ->ₛₗᵢ[σ₁₂] E₂) E E₂ where
   定义体: f.toFun
   coe_injective _ _ h := toLinearMap_injective (DFunLike.coe_injective h)
 
@@ -380,7 +380,7 @@ instance instSemilinearIsometryClass
 
 中文:
 实例 instSemilinearIsometryClass
-  签名: : SemilinearIsometryClass (E ->ₛₗᵢ[σ₁₂] E₂) σ₁₂ E E₂ where
+  签名: : SemilinearIsometry类 (E ->ₛₗᵢ[σ₁₂] E₂) σ₁₂ E E₂ where
   定义体: map_add f.toLinearMap
   map_smulₛₗ f := map_smulₛₗ f.toLinearMap
   norm_map f := f.norm_map'
@@ -446,7 +446,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Injective (E ->ₛₗᵢ[σ₁₂] E₂) (E -> E₂) (fun f => f)
+  结论: @单射 (E ->ₛₗᵢ[σ₁₂] E₂) (E -> E₂) (fun f => f)
   证明: by
   rintro ⟨_⟩ ⟨_⟩
   simp
@@ -469,7 +469,7 @@ initialize_simps_projections LinearIsometry (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: (σ₁₂ : R ->+* R₂) (E E₂ : 类型) [SeminormedAddCommGroup E]
+  签名: (σ₁₂ : R ->+* R₂) (E E₂ : 类型) [SeminormedAddComm群 E]
   定义体: h
 
 initialize_simps_projections LinearIsometry (toFun -> apply)
@@ -604,7 +604,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [Module R E₂] (f : E ->ₗᵢ[R] E₂) (c : R) (x : E)
+  条件: [模 R E₂] (f : E ->ₗᵢ[R] E₂) (c : R) (x : E)
   结论: f (c • x) = c • f x
   证明: f.toLinearMap.map_smul c x
 -/
@@ -670,7 +670,7 @@ theorem isometry
 
 中文:
 定理 isometry
-  结论: Isometry f
+  结论: 等距 f
   证明: AddMonoidHomClass.isometry_of_norm f.toLinearMap f.norm_map
 -/
 protected theorem isometry : Isometry f :=
@@ -690,7 +690,7 @@ lemma isEmbedding
 中文:
 引理 isEmbedding
   条件: (f : F ->ₛₗᵢ[σ₁₂] E₂)
-  结论: IsEmbedding f
+  结论: 是嵌入 f
   证明: f.isometry.isEmbedding
 
 @[simp]
@@ -710,7 +710,7 @@ theorem isComplete_image_iff
 
 中文:
 定理 isComplete_image_iff
-  条件: [SemilinearIsometryClass 𝓕 σ₁₂ E E₂] (f : 𝓕) {s : Set E}
+  条件: [SemilinearIsometry类 𝓕 σ₁₂ E E₂] (f : 𝓕) {s : 集合 E}
   证明: _root_.isComplete_image_iff (SemilinearIsometryClass.isometry f).isUniformInducing
 
 Depends on / 依赖: SemilinearIsometryClass, SemilinearIsometryClass.isometry, _root_, _root_.isComplete_image_iff, isComplete_image_iff, isUniformInducing, isometry
@@ -729,7 +729,7 @@ theorem isComplete_map_iff
 
 中文:
 定理 isComplete_map_iff
-  条件: [RingHomSurjective σ₁₂] {p : Submodule R E}
+  条件: [RingHomSurjective σ₁₂] {p : 子模 R E}
   证明: isComplete_image_iff f
 
 Depends on / 依赖: isComplete_image_iff
@@ -750,7 +750,7 @@ instance completeSpace_map
 
 中文:
 实例 completeSpace_map
-  签名: [RingHomSurjective σ₁₂] (p : Submodule R E) [CompleteSpace p]
+  签名: [RingHomSurjective σ₁₂] (p : 子模 R E) [完备空间 p]
   定义体: ((isComplete_map_iff f).2 <| completeSpace_coe_iff_isComplete.1 ‹_›).completeSpace_coe
 
 @[simp]
@@ -819,7 +819,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective f₁
+  结论: 单射 f₁
   证明: Isometry.injective (LinearIsometry.isometry f₁)
 
 @[simp]
@@ -917,7 +917,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: f.isometry.continuous
 
 @[simp]
@@ -1006,7 +1006,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Metric.ediam (f '' s) = Metric.ediam s
   证明: f.isometry.ediam_image s
 
@@ -1025,7 +1025,7 @@ theorem ediam_range
 
 中文:
 定理 ediam_range
-  结论: Metric.ediam (range f) = Metric.ediam (univ : Set E)
+  结论: Metric.ediam (range f) = Metric.ediam (univ : 集合 E)
   证明: f.isometry.ediam_range
 
 Depends on / 依赖: ediam_range, f.isometry.ediam_range, isometry
@@ -1044,7 +1044,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Metric.diam (f '' s) = Metric.diam s
   证明: Isometry.diam_image (LinearIsometry.isometry f) s
 
@@ -1063,7 +1063,7 @@ theorem diam_range
 
 中文:
 定理 diam_range
-  结论: Metric.diam (range f) = Metric.diam (univ : Set E)
+  结论: Metric.diam (range f) = Metric.diam (univ : 集合 E)
   证明: Isometry.diam_range (LinearIsometry.isometry f)
 
 Depends on / 依赖: Isometry, Isometry.diam_range, LinearIsometry, LinearIsometry.isometry, diam_range, isometry
@@ -1182,7 +1182,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] {g : α -> E}
+  条件: {α : 类型} [拓扑空间 α] {g : α -> E}
   证明: f.isometry.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, f.isometry.comp_continuous_iff, isometry
@@ -1270,7 +1270,7 @@ theorem id_toLinearMap
 
 中文:
 定理 id_toLinearMap
-  结论: (id.toLinearMap : E ->ₗ[R] E) = LinearMap.id
+  结论: (id.toLinearMap : E ->ₗ[R] E) = 线性映射.id
   证明: rfl
 
 @[simp]
@@ -1289,7 +1289,7 @@ theorem id_toContinuousLinearMap
 
 中文:
 定理 id_toContinuousLinearMap
-  结论: id.toContinuousLinearMap = ContinuousLinearMap.id R E
+  结论: id.toContinuousLinearMap = 连续线性映射.id R E
   证明: rfl
 -/
 theorem id_toContinuousLinearMap : id.toContinuousLinearMap = ContinuousLinearMap.id R E :=
@@ -1305,7 +1305,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (E ->ₗᵢ[R] E)
+  签名: : 可居 (E ->ₗᵢ[R] E)
   定义体: ⟨id⟩
 -/
 instance instInhabited : Inhabited (E ->ₗᵢ[R] E) := ⟨id⟩
@@ -1426,7 +1426,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (E ->ₗᵢ[R] E) where
+  签名: : 幺半群 (E ->ₗᵢ[R] E) where
   定义体: id
   mul := comp
   mul_assoc := comp_assoc
@@ -1557,7 +1557,7 @@ definition submoduleMap
 
 中文:
 定义 submoduleMap
-  签名: (p : Submodule R M) (e : M ->ₗᵢ[R] M₁)
+  签名: (p : 子模 R M) (e : M ->ₗᵢ[R] M₁)
   定义体: { e.toLinearMap.submoduleMap p with norm_map' x := e.norm_map' x }
 
 Depends on / 依赖: e.norm_map, e.toLinearMap.submoduleMap, norm_map, submoduleMap, toLinearMap
@@ -1582,8 +1582,8 @@ definition LinearMap.toLinearIsometry
       simpa using (hf.dist_eq · 0) }
 
 中文:
-定义 LinearMap.toLinearIsometry
-  签名: (f : E ->ₛₗ[σ₁₂] E₂) (hf : Isometry f)
+定义 线性映射.toLinearIsometry
+  签名: (f : E ->ₛₗ[σ₁₂] E₂) (hf : 等距 f)
   定义体: { f with
     norm_map' := by
       simp_rw [← dist_zero_right]
@@ -1695,7 +1695,7 @@ structure LinearIsometryEquiv
     - norm_map' : forall x, ‖toLinearEquiv x‖ = ‖x‖
 
 中文:
-结构 LinearIsometryEquiv
+结构 线性等距等价
   参数: (σ₁₂ : R ->+* R₂) {σ₂₁ : R₂ ->+* R} [RingHomInvPair σ₁₂ σ₂₁]
   继承: E ≃ₛₗ[σ₁₂] E₂
   公理与运算 (1 个):
@@ -1726,9 +1726,9 @@ class SemilinearIsometryEquivClass
     - norm_map : forall (f : 𝓕) (x : E), ‖f x‖ = ‖x‖
 
 中文:
-类 SemilinearIsometryEquivClass
-  参数: (𝓕 : 类型) {R R₂ : outParam 类型} [Semiring R]
-  继承: SemilinearEquivClass 𝓕 σ₁₂ E E₂
+类 SemilinearIsometry等价类
+  参数: (𝓕 : 类型) {R R₂ : outParam 类型} [半环 R]
+  继承: 半线性等价类 𝓕 σ₁₂ E E₂
   公理与运算 (1 个):
     - norm_map : 对任意 (f : 𝓕) (x : E), ‖f x‖ = ‖x‖
 -/
@@ -1749,7 +1749,7 @@ abbreviation LinearIsometryEquivClass
 
 中文:
 缩写 LinearIsometryEquivClass
-  签名: (𝓕 : 类型) (R E E₂ : outParam 类型) [Semiring R]
+  签名: (𝓕 : 类型) (R E E₂ : outParam 类型) [半环 R]
   定义体: SemilinearIsometryEquivClass 𝓕 (RingHom.id R) E E₂
 
 Depends on / 依赖: RingHom, RingHom.id, SemilinearIsometryEquivClass
@@ -1783,7 +1783,7 @@ theorem toLinearEquiv_injective
 
 中文:
 定理 toLinearEquiv_injective
-  结论: Injective (toLinearEquiv : (E ≃ₛₗᵢ[σ₁₂] E₂) -> E ≃ₛₗ[σ₁₂] E₂)
+  结论: 单射 (toLinearEquiv : (E ≃ₛₗᵢ[σ₁₂] E₂) -> E ≃ₛₗ[σ₁₂] E₂)
 -/
 theorem toLinearEquiv_injective : Injective (toLinearEquiv : (E ≃ₛₗᵢ[σ₁₂] E₂) -> E ≃ₛₗ[σ₁₂] E₂)
   | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
@@ -1823,7 +1823,7 @@ coe_injective' _ _ h _ := toLinearEquiv_injective DFunLike.ext' h
 
 中文:
 实例 instEquivLike
-  签名: : EquivLike (E ≃ₛₗᵢ[σ₁₂] E₂) E E₂ where
+  签名: : 等价状 (E ≃ₛₗᵢ[σ₁₂] E₂) E E₂ where
   定义体: e.toFun
   inv e := e.invFun
 coe_injective' _ _ h _ := toLinearEquiv_injective DFunLike.ext' h
@@ -1893,7 +1893,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (E ≃ₛₗᵢ[σ₁₂] E₂) (E -> E₂) (↑)
+  结论: @函数.单射 (E ≃ₛₗᵢ[σ₁₂] E₂) (E -> E₂) (↑)
   证明: DFunLike.coe_injective
 
 @[simp]
@@ -2100,7 +2100,7 @@ theorem toLinearIsometry_injective
 
 中文:
 定理 toLinearIsometry_injective
-  结论: Function.Injective (toLinearIsometry : _ -> E ->ₛₗᵢ[σ₁₂] E₂)
+  结论: 函数.单射 (toLinearIsometry : _ -> E ->ₛₗᵢ[σ₁₂] E₂)
   证明: fun x _ h => coe_injective (congr_arg _ h : ⇑x.toLinearIsometry = _)
 
 @[simp]
@@ -2161,7 +2161,7 @@ theorem isometry
 
 中文:
 定理 isometry
-  结论: Isometry e
+  结论: 等距 e
   证明: e.toLinearIsometry.isometry
 -/
 protected theorem isometry : Isometry e :=
@@ -2261,7 +2261,7 @@ theorem range_eq_univ
 中文:
 定理 range_eq_univ
   条件: (e : E ≃ₛₗᵢ[σ₁₂] E₂)
-  结论: Set.range e = Set.univ
+  结论: 集合.range e = 集合.univ
   证明: by
   rw [← coe_toIsometryEquiv]
   exact IsometryEquiv.range_eq_univ _
@@ -2302,7 +2302,7 @@ theorem toHomeomorph_injective
 
 中文:
 定理 toHomeomorph_injective
-  结论: Function.Injective (toHomeomorph : (E ≃ₛₗᵢ[σ₁₂] E₂) -> E ≃ₜ E₂)
+  结论: 函数.单射 (toHomeomorph : (E ≃ₛₗᵢ[σ₁₂] E₂) -> E ≃ₜ E₂)
   证明: fun x _ h => coe_injective (congr_arg _ h : ⇑x.toHomeomorph = _)
 
 @[simp]
@@ -2364,7 +2364,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous e
+  结论: 连续 e
   证明: e.isometry.continuous
 -/
 protected theorem continuous : Continuous e :=
@@ -2536,7 +2536,7 @@ definition ulift
 
 中文:
 定义 ulift
-  签名: : ULift E ≃ₗᵢ[R] E
+  签名: : 类型层提升 E ≃ₗᵢ[R] E
   定义体: { ContinuousLinearEquiv.ulift with norm_map' := fun _ => rfl }
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.ulift, norm_map
@@ -2558,7 +2558,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (E ≃ₗᵢ[R] E)
+  签名: : 可居 (E ≃ₗᵢ[R] E)
   定义体: ⟨refl R E⟩
 
 @[simp]
@@ -2775,7 +2775,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (E₂ ≃ₛₗᵢ[σ₂₁] E) -> _)
+  结论: 函数.双射 (symm : (E₂ ≃ₛₗᵢ[σ₂₁] E) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -3341,7 +3341,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: : Group (E ≃ₗᵢ[R] E) where
+  签名: : 群 (E ≃ₗᵢ[R] E) where
   定义体: e₂.trans e₁
   one := refl _ _
   inv := symm
@@ -3792,7 +3792,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [Module R E₂] {e : E ≃ₗᵢ[R] E₂} (c : R) (x : E)
+  条件: [模 R E₂] {e : E ≃ₗᵢ[R] E₂} (c : R) (x : E)
   结论: e (c • x) = c • e x
   证明: e.1.map_smul c x
 
@@ -3861,7 +3861,7 @@ theorem bijective
 
 中文:
 定理 bijective
-  结论: Bijective e
+  结论: 双射 e
   证明: e.1.bijective
 -/
 protected theorem bijective : Bijective e :=
@@ -3877,7 +3877,7 @@ theorem injective
 
 中文:
 定理 injective
-  结论: Injective e
+  结论: 单射 e
   证明: e.1.injective
 -/
 protected theorem injective : Injective e :=
@@ -3893,7 +3893,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: Surjective e
+  结论: 满射 e
   证明: e.1.surjective
 -/
 protected theorem surjective : Surjective e :=
@@ -3984,7 +3984,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toLinearEquiv.image_eq_preimage_symm s
 
@@ -4009,7 +4009,7 @@ theorem ediam_image
 
 中文:
 定理 ediam_image
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Metric.ediam (e '' s) = Metric.ediam s
   证明: e.isometry.ediam_image s
 
@@ -4034,7 +4034,7 @@ theorem diam_image
 
 中文:
 定理 diam_image
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: Metric.diam (e '' s) = Metric.diam s
   证明: e.isometry.diam_image s
 
@@ -4206,7 +4206,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  条件: {f : α -> E} {s : Set α}
+  条件: {f : α -> E} {s : 集合 α}
   结论: ContinuousOn (e ∘ f) s ↔ ContinuousOn f s
   证明: e.isometry.comp_continuousOn_iff
 
@@ -4230,7 +4230,7 @@ theorem comp_continuous_iff
 中文:
 定理 comp_continuous_iff
   条件: {f : α -> E}
-  结论: Continuous (e ∘ f) ↔ Continuous f
+  结论: 连续 (e ∘ f) ↔ 连续 f
   证明: e.isometry.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, e.isometry.comp_continuous_iff, isometry
@@ -4248,7 +4248,7 @@ instance completeSpace_map
 
 中文:
 实例 completeSpace_map
-  签名: (p : Submodule R E) [CompleteSpace p]
+  签名: (p : 子模 R E) [完备空间 p]
   定义体: e.toLinearIsometry.completeSpace_map p
 
 Depends on / 依赖: completeSpace_map, e.toLinearIsometry.completeSpace_map, toLinearIsometry
@@ -4269,7 +4269,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: (f : F ->ₛₗᵢ[σ₁₂] E₂) (hfr : Function.Surjective f)
+  签名: (f : F ->ₛₗᵢ[σ₁₂] E₂) (hfr : 函数.满射 f)
   定义体: { LinearEquiv.ofBijective f.toLinearMap ⟨f.injective, hfr⟩ with norm_map' := f.norm_map }
 
 @[simp]
@@ -4293,7 +4293,7 @@ theorem coe_ofSurjective
 
 中文:
 定理 coe_ofSurjective
-  条件: (f : F ->ₛₗᵢ[σ₁₂] E₂) (hfr : Function.Surjective f)
+  条件: (f : F ->ₛₗᵢ[σ₁₂] E₂) (hfr : 函数.满射 f)
   证明: by
   ext
   rfl
@@ -4449,7 +4449,7 @@ definition prodComm
 
 中文:
 定义 prodComm
-  签名: [Module R E₂]
+  签名: [模 R E₂]
   定义体: ⟨LinearEquiv.prodComm R E E₂, by intro; simp [norm, sup_comm]⟩
 
 @[simp]
@@ -4471,7 +4471,7 @@ theorem symm_prodComm
 
 中文:
 定理 symm_prodComm
-  条件: [Module R E₂]
+  条件: [模 R E₂]
   结论: (prodComm R E E₂).symm = prodComm R E₂ E
   证明: rfl
 -/
@@ -4497,7 +4497,7 @@ definition prodAssoc
 
 中文:
 定义 prodAssoc
-  签名: [Module R E₂] [Module R E₃]
+  签名: [模 R E₂] [模 R E₃]
   定义体: { LinearEquiv.prodAssoc R E E₂ E₃ with
     norm_map' := by
       rintro ⟨⟨e, f⟩, g⟩
@@ -4530,7 +4530,7 @@ theorem coe_prodAssoc
 
 中文:
 定理 coe_prodAssoc
-  条件: [Module R E₂] [Module R E₃]
+  条件: [模 R E₂] [模 R E₃]
   证明: rfl
 
 @[simp]
@@ -4550,7 +4550,7 @@ theorem coe_prodAssoc_symm
 
 中文:
 定理 coe_prodAssoc_symm
-  条件: [Module R E₂] [Module R E₃]
+  条件: [模 R E₂] [模 R E₃]
   证明: rfl
 -/
 theorem coe_prodAssoc_symm [Module R E₂] [Module R E₃] :
@@ -4570,7 +4570,7 @@ definition ofTop
 
 中文:
 定义 ofTop
-  签名: {R : 类型} [Ring R] [Module R E] (p : Submodule R E) (hp : p = ⊤)
+  签名: {R : 类型} [环 R] [模 R E] (p : 子模 R E) (hp : p = ⊤)
   定义体: { p.subtypeₗᵢ with toLinearEquiv := LinearEquiv.ofTop p hp }
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofTop, p.subtype, toLinearEquiv
@@ -4658,7 +4658,7 @@ theorem ofEq_rfl
 
 中文:
 定理 ofEq_rfl
-  结论: ofEq p p rfl = LinearIsometryEquiv.refl R' p
+  结论: ofEq p p rfl = 线性等距等价.refl R' p
   证明: rfl
 -/
 theorem ofEq_rfl : ofEq p p rfl = LinearIsometryEquiv.refl R' p := rfl
@@ -4686,7 +4686,7 @@ definition submoduleMap
 
 中文:
 定义 submoduleMap
-  签名: (p : Submodule R M) (e : M ≃ₛₗᵢ[σ₁₂] M₂)
+  签名: (p : 子模 R M) (e : M ≃ₛₗᵢ[σ₁₂] M₂)
   定义体: { e.toLinearEquiv.submoduleMap p with norm_map' x := e.norm_map' x }
 
 Depends on / 依赖: e.norm_map, e.toLinearEquiv.submoduleMap, norm_map, submoduleMap, toLinearEquiv
@@ -4708,8 +4708,8 @@ theorem Module.Basis.ext_linearIsometry
   proof: LinearIsometry.toLinearMap_injective b.ext h
 
 中文:
-定理 Module.Basis.ext_linearIsometry
-  结论: {ι : 类型} (b : Basis ι R E) {f₁ f₂ : E ->ₛₗᵢ[σ₁₂] E₂}
+定理 模.基.ext_linearIsometry
+  结论: {ι : 类型} (b : 基 ι R E) {f₁ f₂ : E ->ₛₗᵢ[σ₁₂] E₂}
   证明: LinearIsometry.toLinearMap_injective b.ext h
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.toLinearMap_injective, b.ext, toLinearMap_injective
@@ -4727,8 +4727,8 @@ theorem Module.Basis.ext_linearIsometryEquiv
   proof: LinearIsometryEquiv.toLinearEquiv_injective b.ext' h
 
 中文:
-定理 Module.Basis.ext_linearIsometryEquiv
-  结论: {ι : 类型} (b : Basis ι R E) {f₁ f₂ : E ≃ₛₗᵢ[σ₁₂] E₂}
+定理 模.基.ext_linearIsometryEquiv
+  结论: {ι : 类型} (b : 基 ι R E) {f₁ f₂ : E ≃ₛₗᵢ[σ₁₂] E₂}
   证明: LinearIsometryEquiv.toLinearEquiv_injective b.ext' h
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.toLinearEquiv_injective, b.ext, toLinearEquiv_injective
@@ -4748,8 +4748,8 @@ definition LinearIsometry.equivRange
   body: { f with toLinearEquiv := LinearEquiv.ofInjective f.toLinearMap f.injective }
 
 中文:
-定义 LinearIsometry.equivRange
-  签名: {R S : 类型} [Semiring R] [Ring S] [Module S E]
+定义 线性等距.equivRange
+  签名: {R S : 类型} [半环 R] [环 S] [模 S E]
   定义体: { f with toLinearEquiv := LinearEquiv.ofInjective f.toLinearMap f.injective }
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, f.injective, f.toLinearMap, injective, ofInjective, toLinearEquiv, toLinearMap
@@ -4772,7 +4772,7 @@ theorem isometry_opLinearEquiv
 
 中文:
 定理 isometry_opLinearEquiv
-  结论: Isometry (opLinearEquiv R (M := H))
+  结论: 等距 (opLinearEquiv R (M := H))
   证明: fun _ _ => rfl
 -/
 theorem isometry_opLinearEquiv : Isometry (opLinearEquiv R (M := H)) := fun _ _ => rfl

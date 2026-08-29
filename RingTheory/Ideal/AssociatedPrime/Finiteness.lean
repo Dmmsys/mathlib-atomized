@@ -55,8 +55,8 @@ definition Submodule.IsQuotientEquivQuotientPrime
   body: N₁ <= N₂ ∧ exists (p : PrimeSpectrum A), Nonempty ((↥N₂ ⧸ N₁.submoduleOf N₂) ≃ₗ[A] A ⧸ p.1)
 
 中文:
-定义 Submodule.IsQuotientEquivQuotientPrime
-  签名: (N₁ N₂ : Submodule A M)
+定义 子模.IsQuotientEquivQuotientPrime
+  签名: (N₁ N₂ : 子模 A M)
   定义体: N₁ <= N₂ ∧ exists (p : PrimeSpectrum A), Nonempty ((↥N₂ ⧸ N₁.submoduleOf N₂) ≃ₗ[A] A ⧸ p.1)
 
 Depends on / 依赖: Nonempty, PrimeSpectrum, submoduleOf
@@ -79,8 +79,8 @@ theorem Submodule.isQuotientEquivQuotientPrime_iff
   refine ⟨fun ⟨h, p, ⟨e⟩⟩ => ?_, fun ⟨x, hx, hx'⟩ => ⟨le_sup_left.trans_eq
 
 中文:
-定理 Submodule.isQuotientEquivQuotientPrime_iff
-  条件: {N₁ N₂ : Submodule A M}
+定理 子模.isQuotientEquivQuotientPrime_iff
+  条件: {N₁ N₂ : 子模 A M}
   证明: by
   let f := mapQ (N₁.submoduleOf N₂) N₁ N₂.subtype le_rfl
   have hf₁ : ker f = ⊥ := ker_liftQ_eq_bot _ _ _ (by simp [ker_comp, submoduleOf])
@@ -138,7 +138,7 @@ theorem IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime
   obtain ⟨hp, x, rfl⟩ := h
 
 中文:
-定理 IsNoetherianRing.exists_relSeries_isQuotientEquivQuotientPrime
+定理 是Noether环.存在_relSeries_isQuotientEquivQuotientPrime
   证明: by
   refine WellFoundedGT.induction_top ⟨⊥, .singleton _ ⊥, rfl, rfl⟩ ?_
   rintro N hN ⟨s, hs₁, hs₂⟩
@@ -187,7 +187,7 @@ theorem IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime
    
 
 中文:
-定理 IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime
+定理 是Noether环.induction_on_isQuotientEquivQuotientPrime
   证明: by
   have equiv (N₁ : Type v) [AddCommGroup N₁] [Module A N₁] [Module.Finite A N₁]
       (N₂ : Type v) [AddCommGroup N₂] [Module A N₂] [Module.Finite A N₂]
@@ -252,7 +252,7 @@ theorem associatedPrimes.finite
 
 中文:
 定理 associatedPrimes.finite
-  结论: (associatedPrimes A M).Finite
+  结论: (associatedPrimes A M).有限
   证明: by
   induction ‹Module.Finite A M› using
     IsNoetherianRing.induction_on_isQuotientEquivQuotientPrime A with
@@ -286,7 +286,7 @@ exact fun x hx h => hI.ne_top I.eq_top_of_isUnit_mem hx
       (IsFractionRing.self_iff_nonZeroDivi
 
 中文:
-定理 Ideal.IsMaximal.mem_associatedPrimes_of_isFractionRing
+定理 理想.是极大.mem_associatedPrimes_of_isFractionRing
   结论: [IsFractionRing A A]
   证明: have fin := associatedPrimes.finite A A
 have ⟨P, hP⟩ := (I.subset_union_prime_finite fin (f := id) 0 0 fun _ h _ _ => h.isPrime).1 by
@@ -316,7 +316,7 @@ instance [IsFractionRing
 
 中文:
 实例 [IsFractionRing
-  签名: A A] : Finite (MaximalSpectrum A)
+  签名: A A] : 有限 (极大谱 A)
   定义体: (MaximalSpectrum.equivSubtype A).finite_iff.mpr Set.finite_coe_iff.mpr
     (associatedPrimes.finite A A).subset fun _ => (·.mem_associatedPrimes_of_isFractionRing)
 
@@ -341,8 +341,8 @@ theorem Ideal.bot_lt_annihilator_of_disjoint_nonZeroDivisors
   rw [AssociatedPrimes.mem_iff]; rw [isAssociatedPrime_iff
 
 中文:
-定理 Ideal.bot_lt_annihilator_of_disjoint_nonZeroDivisors
-  结论: {I : Ideal A}
+定理 理想.bot_lt_annihilator_of_disjoint_nonZeroDivisors
+  结论: {I : 理想 A}
   证明: by
   obtain ⟨P, h, hP⟩ : exists P in associatedPrimes A A, I <= P :=
 (I.subset_union_prime_finite (associatedPrimes.finite ..) (f := id) 0 0 fun _ h _ _ => h.1).1
@@ -374,8 +374,8 @@ theorem Ideal.nonempty_inter_nonZeroDivisors_of_faithfulSMul
     (Set.disjoint_iff_inter_eq_empty.mpr this)).ne' <| by rwa [Module.annihilator_eq_bot]
 
 中文:
-定理 Ideal.nonempty_inter_nonZeroDivisors_of_faithfulSMul
-  条件: {I : Ideal A} [FaithfulSMul A I]
+定理 理想.nonempty_inter_nonZeroDivisors_of_faithfulSMul
+  条件: {I : 理想 A} [忠实标量乘法 A I]
   证明: by
   by_contra!
   exact (bot_lt_annihilator_of_disjoint_nonZeroDivisors

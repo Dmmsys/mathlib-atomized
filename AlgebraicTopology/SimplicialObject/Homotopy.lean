@@ -63,16 +63,16 @@ structure Homotopy
     - h_comp_σ_succ_of_lt({n : Nat} (i j : Fin (n + 1)) (hji : j <= i)) : h j ≫ Y.σ i.succ = X.σ i ≫ h j.castSucc
 
 中文:
-结构 Homotopy
+结构 同伦
   公理与运算 (8 个):
-    - h({n : 自然数} (i : Fin (n + 1))) : X _⦋n⦌ ⟶ Y _⦋n + 1⦌
+    - h({n : 自然数} (i : 有限集 (n + 1))) : X _⦋n⦌ ⟶ Y _⦋n + 1⦌
     - h_zero_comp_δ_zero((n : 自然数)) : h 0 ≫ Y.δ 0 = g.app (op ⦋n⦌)
-    - h_last_comp_δ_last((n : 自然数)) : h (Fin.last n) ≫ Y.δ (Fin.last (n + 1)) = f.app (op ⦋n⦌)
-    - h_succ_comp_δ_castSucc_of_lt({n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (hij : i <= j.castSucc)) : h j.succ ≫ Y.δ i.castSucc = X.δ i ≫ h j
-    - h_succ_comp_δ_castSucc_succ({n : 自然数} (j : Fin (n + 1))) : h j.succ ≫ Y.δ j.castSucc.succ = h j.castSucc ≫ Y.δ j.castSucc.succ
-    - h_castSucc_comp_δ_succ_of_lt({n : 自然数} (i : Fin (n + 2)) (j : Fin (n + 1)) (hji : j.castSucc < i)) : h j.castSucc ≫ Y.δ i.succ = X.δ i ≫ h j
-    - h_comp_σ_castSucc_of_le({n : 自然数} (i j : Fin (n + 1)) (hij : i <= j)) : h j ≫ Y.σ i.castSucc = X.σ i ≫ h j.succ
-    - h_comp_σ_succ_of_lt({n : 自然数} (i j : Fin (n + 1)) (hji : j <= i)) : h j ≫ Y.σ i.succ = X.σ i ≫ h j.castSucc
+    - h_last_comp_δ_last((n : 自然数)) : h (有限集.last n) ≫ Y.δ (有限集.last (n + 1)) = f.app (op ⦋n⦌)
+    - h_succ_comp_δ_castSucc_of_lt({n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (hij : i <= j.castSucc)) : h j.succ ≫ Y.δ i.castSucc = X.δ i ≫ h j
+    - h_succ_comp_δ_castSucc_succ({n : 自然数} (j : 有限集 (n + 1))) : h j.succ ≫ Y.δ j.castSucc.succ = h j.castSucc ≫ Y.δ j.castSucc.succ
+    - h_castSucc_comp_δ_succ_of_lt({n : 自然数} (i : 有限集 (n + 2)) (j : 有限集 (n + 1)) (hji : j.castSucc < i)) : h j.castSucc ≫ Y.δ i.succ = X.δ i ≫ h j
+    - h_comp_σ_castSucc_of_le({n : 自然数} (i j : 有限集 (n + 1)) (hij : i <= j)) : h j ≫ Y.σ i.castSucc = X.σ i ≫ h j.succ
+    - h_comp_σ_succ_of_lt({n : 自然数} (i j : 有限集 (n + 1)) (hji : j <= i)) : h j ≫ Y.σ i.succ = X.σ i ≫ h j.castSucc
 -/
 structure Homotopy
     {X Y : SimplicialObject C} (f g : X ⟶ Y) where
@@ -173,7 +173,7 @@ definition whiskerRight
 
 中文:
 定义 whiskerRight
-  签名: (H : Homotopy f g) {D : 类型u'} [Category.{v'} D] (F : C ⥤ D)
+  签名: (H : 同伦 f g) {D : 类型u'} [范畴.{v'} D] (F : C ⥤ D)
   定义体: F.map (H.h i)
   h_zero_comp_δ_zero n := by
     simpa [SimplicialObject.δ] using!
@@ -230,7 +230,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: (H : Homotopy f g) {Y' : SimplicialObject C} (p : Y ⟶ Y')
+  签名: (H : 同伦 f g) {Y' : SimplicialObject C} (p : Y ⟶ Y')
   定义体: H.h i ≫ p.app _
   h_zero_comp_δ_zero n := by
     simpa [-h_zero_comp_δ_zero] using H.h_zero_comp_δ_zero n =≫ p.app _
@@ -277,7 +277,7 @@ definition precomp
 
 中文:
 定义 precomp
-  签名: (H : Homotopy f g) {X' : SimplicialObject C} (p : X' ⟶ X)
+  签名: (H : 同伦 f g) {X' : SimplicialObject C} (p : X' ⟶ X)
   定义体: p.app _ ≫ H.h i
   h_zero_comp_δ_zero n := by
     simpa [-h_zero_comp_δ_zero] using p.app _ ≫= H.h_zero_comp_δ_zero n

@@ -51,7 +51,7 @@ theorem _zpow_trick
 
 中文:
 定理 _zpow_trick
-  条件: {G : 类型} [Group G] (a b : G) (n m : 整数)
+  条件: {G : 类型} [群 G] (a b : G) (n m : 整数)
   证明: by rw [mul_assoc, ← zpow_add]
 
 @[to_additive _zsmul_trick_one]
@@ -74,7 +74,7 @@ theorem _zpow_trick_one
 
 中文:
 定理 _zpow_trick_one
-  条件: {G : 类型} [Group G] (a b : G) (m : 整数)
+  条件: {G : 类型} [群 G] (a b : G) (m : 整数)
   证明: by rw [mul_assoc, mul_self_zpow]
 
 @[to_additive _zsmul_trick_one']
@@ -95,7 +95,7 @@ theorem _zpow_trick_one'
 
 中文:
 定理 _zpow_trick_one'
-  条件: {G : 类型} [Group G] (a b : G) (n : 整数)
+  条件: {G : 类型} [群 G] (a b : G) (n : 整数)
   证明: by rw [mul_assoc, mul_zpow_self]
 
 Depends on / 依赖: mul_assoc, mul_zpow_self

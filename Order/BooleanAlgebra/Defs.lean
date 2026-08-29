@@ -84,9 +84,9 @@ class GeneralizedBooleanAlgebra
     - inf_inf_sdiff : forall a b : α, a ⊓ b ⊓ a \ b = ⊥
 
 中文:
-类 GeneralizedBooleanAlgebra
+类 Generalized布尔ean代数
   参数: (α : 类型u)
-  继承: DistribLattice α, SDiff α, Bot α
+  继承: Distrib格 α, 对称差 α, 底元素 α
   公理与运算 (2 个):
     - sup_inf_sdiff : 对任意 a b : α, a ⊓ b ⊔ a \ b = a
     - inf_inf_sdiff : 对任意 a b : α, a ⊓ b ⊓ a \ b = ⊥
@@ -119,7 +119,7 @@ class BooleanAlgebra
     - himp_eq : forall x y : α, x ⇨ y = y ⊔ xᶜ  [default: by aesop]
 
 中文:
-类 BooleanAlgebra
+类 布尔代数
   参数: (α : 类型u)
   公理与运算 (8 个):
     - inf_compl_le_bot : 对任意 x : α, x ⊓ xᶜ <= ⊥
@@ -168,8 +168,8 @@ instance Prop.instBooleanAlgebra
   top_le_sup_compl p _ := Classical.em p
 
 中文:
-实例 Prop.instBooleanAlgebra
-  签名: : 布尔eanAlgebra 命题 where
+实例 命题.inst布尔eanAlgebra
+  签名: : 布尔代数 命题 where
   定义体: Prop.instHeytingAlgebra
   __ := GeneralizedHeytingAlgebra.toDistribLattice
   compl := Not
@@ -199,8 +199,8 @@ instance Bool.instBooleanAlgebra
   top_le_sup_compl a := a.or_not_self.ge
 
 中文:
-实例 Bool.instBooleanAlgebra
-  签名: : 布尔eanAlgebra 布尔 where
+实例 布尔值.inst布尔eanAlgebra
+  签名: : 布尔代数 布尔值 where
   定义体: instBoundedOrder
   compl := not
   inf_compl_le_bot a := a.and_not_self.le
@@ -223,7 +223,7 @@ theorem Bool.sup_eq_bor
   proof: by dsimp
 
 中文:
-定理 Bool.sup_eq_bor
+定理 布尔值.sup_eq_bor
   结论: (· ⊔ ·) = or
   证明: by dsimp
 -/
@@ -240,7 +240,7 @@ theorem Bool.inf_eq_band
 @[simp]
 
 中文:
-定理 Bool.inf_eq_band
+定理 布尔值.inf_eq_band
   结论: (· ⊓ ·) = and
   证明: by dsimp
 
@@ -258,8 +258,8 @@ theorem Bool.compl_eq_bnot
   proof: rfl
 
 中文:
-定理 Bool.compl_eq_bnot
-  结论: Compl.compl = not
+定理 布尔值.compl_eq_bnot
+  结论: 补集.compl = not
   证明: rfl
 -/
 theorem Bool.compl_eq_bnot : Compl.compl = not :=
@@ -277,8 +277,8 @@ instance PUnit.instBooleanAlgebra
   top_le_sup_compl _ := trivial
 
 中文:
-实例 PUnit.instBooleanAlgebra
-  签名: : 布尔eanAlgebra PUnit where
+实例 命题单元.inst布尔eanAlgebra
+  签名: : 布尔代数 命题单元 where
   定义体: PUnit.instBiheytingAlgebra
   le_sup_inf := by simp
   inf_compl_le_bot _ := trivial
@@ -317,7 +317,7 @@ compl a := Classical.choose exists_isCompl a
 
 中文:
 定义 booleanAlgebraOfComplemented
-  签名: [BoundedOrder α] [ComplementedLattice α]
+  签名: [有界序 α] [有补格 α]
   定义体: ((inferInstance : BoundedOrder α))
 compl a := Classical.choose exists_isCompl a
   inf_compl_le_bot a := (Classical.choose_spec (exists_isCompl a)).disjoint.le_bot

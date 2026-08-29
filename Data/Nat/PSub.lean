@@ -36,7 +36,7 @@ definition ppred
 
 中文:
 定义 ppred
-  签名: : 自然数 -> Option 自然数
+  签名: : 自然数 -> 选项类型 自然数
 -/
 def ppred : Nat -> Option Nat
   | 0 => none

@@ -33,8 +33,8 @@ theorem continuous_toENNReal
   · simpa using isOpen_Iio
 
 中文:
-定理 continuous_toENNReal
-  结论: Continuous toENN实数
+定理 continuous_toENN实数
+  结论: 连续 toENN实数
   证明: by
   refine OrderTopology.continuous_iff.mpr fun a => ⟨?_, ?_⟩
   · simpa using isOpen_Ioi
@@ -56,8 +56,8 @@ theorem isClosedEmbedding_toENNReal
   proof: continuous_toENNReal.isClosedEmbedding toENNReal_strictMono.injective
 
 中文:
-定理 isClosedEmbedding_toENNReal
-  结论: Topology.IsClosedEmbedding toENN实数
+定理 isClosedEmbedding_toENN实数
+  结论: 拓扑.是闭嵌入 toENN实数
   证明: continuous_toENNReal.isClosedEmbedding toENNReal_strictMono.injective
 
 Depends on / 依赖: continuous_toENNReal, continuous_toENNReal.isClosedEmbedding, injective, isClosedEmbedding, toENNReal_strictMono, toENNReal_strictMono.injective

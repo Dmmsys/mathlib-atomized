@@ -216,7 +216,7 @@ definition continuousFunctionalCalculus
 
 中文:
 定义 continuousFunctionalCalculus
-  签名: [CStarAlgebra A] (a : A) [IsStarNormal a]
+  签名: [CStar代数 A] (a : A) [是StarNormal a]
   定义体: ((characterSpaceHomeo a).compStarAlgEquiv' Complex Complex).trans
     (gelfandStarTransform (elemental Complex a)).symm
 
@@ -237,7 +237,7 @@ theorem continuousFunctionalCalculus_map_id
 
 中文:
 定理 continuousFunctionalCalculus_map_id
-  条件: [CStarAlgebra A] (a : A) [IsStarNormal a]
+  条件: [CStar代数 A] (a : A) [是StarNormal a]
   证明: (gelfandStarTransform (elemental Complex a)).symm_apply_apply _
 
 Depends on / 依赖: elemental, gelfandStarTransform, symm_apply_apply
@@ -272,7 +272,7 @@ theorem IsStarNormal.instContinuousFunctionalCalculus
 isometry_subtype_coe.comp StarAlgEquiv.isometry
 
 中文:
-定理 IsStarNormal.instContinuousFunctionalCalculus
+定理 是StarNormal.instContinuousFunctionalCalculus
   证明: .zero
   spectrum_nonempty a _ := spectrum.nonempty a
   exists_cfc_of_predicate a ha := by
@@ -312,7 +312,7 @@ lemma cfcHom_eq_of_isStarNormal
 
 中文:
 引理 cfcHom_eq_of_isStarNormal
-  条件: (a : A) [ha : IsStarNormal a]
+  条件: (a : A) [ha : 是StarNormal a]
   证明: by
   refine cfcHom_eq_of_continuous_of_map_id ha _ ?_ ?_
 · exact continuous_subtype_val.comp
@@ -339,7 +339,7 @@ instance IsStarNormal.instIsometricContinuousFunctionalCalculus
 exact isometry_subtype_coe.comp StarAlgEquiv.isometry (continuousFunctionalCalculus a)
 
 中文:
-实例 IsStarNormal.instIsometricContinuousFunctionalCalculus
+实例 是StarNormal.instIsometricContinuousFunctionalCalculus
   签名: :
   定义体: by
     rw [cfcHom_eq_of_isStarNormal]
@@ -391,7 +391,7 @@ theorem IsStarNormal.instNonUnitalContinuousFunctionalCalculus
   proof: RCLike.nonUnitalContinuousFunctionalCalculusIsClosedEmbedding Unitization.isStarNormal_inr
 
 中文:
-定理 IsStarNormal.instNonUnitalContinuousFunctionalCalculus
+定理 是StarNormal.instNonUnitalContinuousFunctionalCalculus
   证明: RCLike.nonUnitalContinuousFunctionalCalculusIsClosedEmbedding Unitization.isStarNormal_inr
 
 Depends on / 依赖: RCLike, RCLike.nonUnitalContinuousFunctionalCalculusIsClosedEmbedding, Unitization, Unitization.isStarNormal_inr, isStarNormal_inr, nonUnitalContinuousFunctionalCalculusIsClosedEmbedding
@@ -413,7 +413,7 @@ lemma inr_comp_cfcₙHom_eq_cfcₙAux
 
 中文:
 引理 inr_comp_cfcₙHom_eq_cfcₙAux
-  条件: (a : A) [ha : IsStarNormal a]
+  条件: (a : A) [ha : 是StarNormal a]
   证明: inrNonUnitalStarAlgHom_comp_cfcₙHom_eq_cfcₙAux isStarNormal_inr a ha
 -/
 lemma inr_comp_cfcₙHom_eq_cfcₙAux (a : A) [ha : IsStarNormal a] :
@@ -433,7 +433,7 @@ instance IsStarNormal.instNonUnitalIsometricContinuousFunctionalCalculus
     simp only [NonUnitalStarAlgHom.comp_assoc, NonUnitalStarAlgHom.comp_appl
 
 中文:
-实例 IsStarNormal.instNonUnitalIsometricContinuousFunctionalCalculus
+实例 是StarNormal.instNonUnitalIsometricContinuousFunctionalCalculus
   签名: :
   定义体: by
     refine AddMonoidHomClass.isometry_of_norm _ fun f => ?_
@@ -635,7 +635,7 @@ lemma SpectrumRestricts.smul_of_nonneg
 
 中文:
 引理 SpectrumRestricts.smul_of_nonneg
-  结论: {A : 类型} [Ring A] [Algebra 实数 A] {a : A}
+  结论: {A : 类型} [环 A] [代数 实数 A] {a : A}
   证明: by
   rw [SpectrumRestricts.nnreal_iff] at ha ⊢
   nontriviality A
@@ -737,7 +737,7 @@ lemma IsSelfAdjoint.coe_mem_spectrum_complex
 
 中文:
 引理 IsSelfAdjoint.coe_mem_spectrum_complex
-  结论: {A : 类型} [TopologicalSpace A] [Ring A]
+  结论: {A : 类型} [拓扑空间 A] [环 A]
   证明: by
   simp [← ha.spectrumRestricts.algebraMap_image]
 
@@ -773,8 +773,8 @@ instance CStarAlgebra.instNonnegSpectrumClass
     | add x y x_mem y_mem hx 
 
 中文:
-实例 CStarAlgebra.instNonnegSpectrumClass
-  签名: : NonnegSpectrumClass 实数 A
+实例 CStar代数.instNonnegSpectrumClass
+  签名: : NonnegSpectrum类 实数 A
   定义体: .of_spectrum_nonneg fun a ha => by
     rw [StarOrderedRing.nonneg_iff] at ha
     induction ha using AddSubmonoid.closure_induction with
@@ -817,8 +817,8 @@ instance CStarAlgebra.instNonnegSpectrumClassComplexUnital
     simpa using spectrum_nonneg_of_nonneg ha hy
 
 中文:
-实例 CStarAlgebra.instNonnegSpectrumClassComplexUnital
-  签名: : NonnegSpectrumClass Complex A where
+实例 CStar代数.instNonnegSpectrumClassComplexUnital
+  签名: : NonnegSpectrum类 复形 A where
   定义体: by
     rw [mem_quasispectrum_iff]
     refine (Or.elim · ge_of_eq fun hx => ?_)
@@ -864,8 +864,8 @@ definition CStarAlgebra.spectralOrder
   
 
 中文:
-定义 CStarAlgebra.spectralOrder
-  签名: : PartialOrder A where
+定义 CStar代数.spectralOrder
+  签名: : 偏序 A where
   定义体: IsSelfAdjoint (y - x) ∧ QuasispectrumRestricts (y - x) ContinuousMap.realToNNReal
   le_refl := by
     simp only [sub_self, IsSelfAdjoint.zero, true_and, forall_const]
@@ -912,8 +912,8 @@ lemma CStarAlgebra.spectralOrderedRing
         exa
 
 中文:
-引理 CStarAlgebra.spectralOrderedRing
-  结论: @StarOrderedRing A _ (CStarAlgebra.spectralOrder A) _
+引理 CStar代数.spectralOrderedRing
+  结论: @StarOrdered环 A _ (CStar代数.spectralOrder A) _
   证明: let _ := CStarAlgebra.spectralOrder A
   { le_iff := by
       intro x y
@@ -975,8 +975,8 @@ instance CStarAlgebra.instNonnegSpectrumClass'
     rw [StarOrderedRing
 
 中文:
-实例 CStarAlgebra.instNonnegSpectrumClass'
-  签名: : NonnegSpectrumClass 实数 A where
+实例 CStar代数.instNonnegSpectrumClass'
+  签名: : NonnegSpectrum类 实数 A where
   定义体: by
     rw [Unitization.quasispectrum_eq_spectrum_inr' _ Complex]
     -- should this actually be an instance on the `Unitization`? (probably scoped)
@@ -1027,7 +1027,7 @@ lemma Unitization.cfcₙ_eq_cfc_inr
 
 中文:
 引理 Unitization.cfcₙ_eq_cfc_inr
-  结论: {R : 类型} [Semifield R] [StarRing R] [MetricSpace R]
+  结论: {R : 类型} [半域 R] [对合环 R] [度量空间 R]
   证明: by
   by_cases h : ContinuousOn f (σₙ R a) ∧ p a
   · obtain ⟨hf, ha⟩ := h
@@ -1067,7 +1067,7 @@ lemma Unitization.complex_cfcₙ_eq_cfc_inr
 
 中文:
 引理 Unitization.complex_cfcₙ_eq_cfc_inr
-  条件: (a : A) (f : Complex -> Complex) (hf₀ : f 0 = 0 := by cfc_zero_tac)
+  条件: (a : A) (f : 复形 -> 复形) (hf₀ : f 0 = 0 := by cfc_zero_tac)
   证明: Unitization.cfcₙ_eq_cfc_inr isStarNormal_inr ..
 
 Depends on / 依赖: Unitization, Unitization.cfc, cfc_zero_tac, isStarNormal_inr

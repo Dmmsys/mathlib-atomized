@@ -76,7 +76,7 @@ lemma aemeasurable
 中文:
 引理 aemeasurable
   条件: (hX : IsGaussianProcess X P) (t : T)
-  结论: AEMeasurable (X t) P
+  结论: 几乎处处可测 (X t) P
   证明: AEMeasurable.of_map_ne_zero
 .eval ⟨t, by simp⟩ (hX.hasGaussianLaw {t}).isGaussian_map.toIsProbabilityMeasure.ne_zero
 
@@ -258,7 +258,7 @@ lemma hasGaussianLaw_sum
 
 中文:
 引理 hasGaussianLaw_sum
-  条件: (hX : IsGaussianProcess X P) {I : Finset T}
+  条件: (hX : IsGaussianProcess X P) {I : 有限集 T}
   证明: by
   convert! (hX.hasGaussianLaw I).sum
   simp [I.sum_attach X]
@@ -282,7 +282,7 @@ lemma hasGaussianLaw_fun_sum
 
 中文:
 引理 hasGaussianLaw_fun_sum
-  条件: (hX : IsGaussianProcess X P) {I : Finset T}
+  条件: (hX : IsGaussianProcess X P) {I : 有限集 T}
   证明: by
   convert! hX.hasGaussianLaw_sum (I := I)
   simp
@@ -310,7 +310,7 @@ lemma hasGaussianLaw_increments
 
 中文:
 引理 hasGaussianLaw_increments
-  条件: (hX : IsGaussianProcess X P) {n : 自然数} {t : Fin (n + 1) -> T}
+  条件: (hX : IsGaussianProcess X P) {n : 自然数} {t : 有限集 (n + 1) -> T}
   证明: by
   classical
   let L : ((univ.image t) -> E) ->L[Real] Fin n -> E :=
@@ -482,7 +482,7 @@ lemma shift
 
 中文:
 引理 shift
-  条件: [Add T] (h : IsGaussianProcess X P) (t₀ : T)
+  条件: [加法 T] (h : IsGaussianProcess X P) (t₀ : T)
   证明: by
   classical
   exact h.of_isGaussianProcess fun t => ⟨{t₀, t₀ + t},
@@ -512,7 +512,7 @@ lemma restrict
 
 中文:
 引理 restrict
-  条件: (h : IsGaussianProcess X P) (s : Set T)
+  条件: (h : IsGaussianProcess X P) (s : 集合 T)
   证明: h.comp_right Subtype.val
 
 Depends on / 依赖: Subtype, Subtype.val, comp_right, h.comp_right

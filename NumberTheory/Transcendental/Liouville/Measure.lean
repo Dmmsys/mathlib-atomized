@@ -237,7 +237,7 @@ theorem Real.disjoint_residual_ae
   proof: disjoint_of_disjoint_of_mem disjoint_compl_right eventually_residual_liouville ae_not_liouville
 
 中文:
-定理 Real.disjoint_residual_ae
+定理 实数.disjoint_residual_ae
   结论: Disjoint (residual 实数) (ae volume)
   证明: disjoint_of_disjoint_of_mem disjoint_compl_right eventually_residual_liouville ae_not_liouville
 

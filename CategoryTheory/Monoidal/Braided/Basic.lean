@@ -56,8 +56,8 @@ class BraidedCategory
     - hexagon_reverse : forall X Y Z : C, (α_ X Y Z).inv ≫ (braiding (X otimes Y) Z).hom ≫ (α_ Z X Y).inv = (X ◁ (braiding Y Z).hom) ≫ (α_ X Z Y).inv ≫ ((braiding X Z).hom ▷ Y)  [default: by cat_disch]
 
 中文:
-类 BraidedCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 辫范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   公理与运算 (5 个):
     - braiding : 对任意 X Y : C, X otimes Y ≅ Y otimes X
     - braiding_naturality_right : 对任意 (X : C) {Y Z : C} (f : Y ⟶ Z), X ◁ f ≫ (braiding X Z).hom = (braiding X Y).hom ≫ f ▷ X  [默认: by cat_disch]
@@ -362,7 +362,7 @@ definition curriedBraidingNatIso
 @[reassoc]
 
 中文:
-定义 curriedBraidingNatIso
+定义 curriedBraiding自然数Iso
   签名: : curriedTensor C ≅ (curriedTensor C).flip
   定义体: NatIso.ofComponents (fun X => NatIso.ofComponents (fun Y => β_ X Y))
 
@@ -568,8 +568,8 @@ definition BraidedCategory.ofFaithful
   braiding_naturality_
 
 中文:
-定义 BraidedCategory.ofFaithful
-  签名: {C D : 类型} [Category* C] [Category* D] [MonoidalCategory C]
+定义 辫范畴.ofFaithful
+  签名: {C D : 类型} [范畴* C] [范畴* D] [幺半群范畴 C]
   定义体: β
   braiding_naturality_left := by
     intros
@@ -623,8 +623,8 @@ definition BraidedCategory.ofFullyFaithful
   body: .ofFaithful F fun X Y => F.preimageIso ((μIso F _ _).symm ≪≫ β_ (F.obj X) (F.obj Y) ≪≫ μIso F _ _)
 
 中文:
-定义 BraidedCategory.ofFullyFaithful
-  签名: {C D : 类型} [Category* C] [Category* D]
+定义 辫范畴.ofFullyFaithful
+  签名: {C D : 类型} [范畴* C] [范畴* D]
   定义体: .ofFaithful F fun X Y => F.preimageIso ((μIso F _ _).symm ≪≫ β_ (F.obj X) (F.obj Y) ≪≫ μIso F _ _)
 
 Depends on / 依赖: F.obj, F.preimageIso, ofFaithful, preimageIso
@@ -1016,8 +1016,8 @@ class SymmetricCategory
     - symmetry : forall X Y : C, (β_ X Y).hom ≫ (β_ Y X).hom = 𝟙 (X otimes Y)  [default: by cat_disch]
 
 中文:
-类 SymmetricCategory
-  参数: (C : 类型u) [Category.{v} C] [MonoidalCategory.{v} C]
+类 对称范畴
+  参数: (C : 类型u) [范畴.{v} C] [幺半群范畴.{v} C]
   公理与运算 (1 个):
     - symmetry : 对任意 X Y : C, (β_ X Y).hom ≫ (β_ Y X).hom = 𝟙 (X otimes Y)  [默认: by cat_disch]
 
@@ -1039,7 +1039,7 @@ lemma SymmetricCategory.braiding_swap_eq_inv_braiding
   proof: Iso.inv_ext' (symmetry X Y)
 
 中文:
-引理 SymmetricCategory.braiding_swap_eq_inv_braiding
+引理 对称范畴.braiding_swap_eq_inv_braiding
   结论: {C : 类型u₁}
   证明: Iso.inv_ext' (symmetry X Y)
 
@@ -1064,9 +1064,9 @@ class Functor.LaxBraided
     - braided : forall X Y : C, μ X Y ≫ F.map (β_ X Y).hom = (β_ (F.obj X) (F.obj Y)).hom ≫ μ Y X  [default: by cat_disch]
 
 中文:
-类 Functor.LaxBraided
+类 函子.松弛辫
   参数: (F : C ⥤ D)
-  继承: F.LaxMonoidal
+  继承: F.松弛幺半群
   公理与运算 (1 个):
     - braided : 对任意 X Y : C, μ X Y ≫ F.map (β_ X Y).hom = (β_ (F.obj X) (F.obj Y)).hom ≫ μ Y X  [默认: by cat_disch]
 
@@ -1089,7 +1089,7 @@ instance id
 
 中文:
 实例 id
-  签名: : (𝟭 C).LaxBraided where
+  签名: : (𝟭 C).松弛辫 where
 -/
 instance id : (𝟭 C).LaxBraided where
 
@@ -1120,8 +1120,8 @@ definition ofNatIso
     simp
 
 中文:
-定义 ofNatIso
-  签名: {F G : C ⥤ D} (i : F ≅ G) [F.LaxBraided] [G.LaxMonoidal]
+定义 of自然数Iso
+  签名: {F G : C ⥤ D} (i : F ≅ G) [F.松弛辫] [G.松弛幺半群]
   定义体: by
     have (X Y : C) : μ G X Y = (i.inv.app X otimesₘ i.inv.app Y) ≫ μ F X Y ≫ i.hom.app _ := by
       simp [NatTrans.IsMonoidal.tensor X Y, tensorHom_comp_tensorHom_assoc]
@@ -1154,7 +1154,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : C ⥤ D} (hF : F.LaxBraided) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
+  签名: {F : C ⥤ D} (hF : F.松弛辫) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
   定义体: hF.toLaxMonoidal.copy ε' μ' hε hμ
   braided X Y := hμ ▸ hF.braided X Y
 
@@ -1183,11 +1183,11 @@ structure LaxBraidedFunctor
     - laxBraided : toFunctor.LaxBraided  [default: by infer_instance]
 
 中文:
-结构 LaxBraidedFunctor
+结构 松弛辫函子
   参数: extends C ⥤ D
   继承: C ⥤ D
   公理与运算 (1 个):
-    - laxBraided : toFunctor.LaxBraided  [默认: by infer_instance]
+    - laxBraided : toFunctor.松弛辫  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -1212,7 +1212,7 @@ definition of
 
 中文:
 定义 of
-  签名: (F : C ⥤ D) [F.LaxBraided]
+  签名: (F : C ⥤ D) [F.松弛辫]
   定义体: F
 -/
 def of (F : C ⥤ D) [F.LaxBraided] : LaxBraidedFunctor C D where
@@ -1230,7 +1230,7 @@ definition toLaxMonoidalFunctor
 
 中文:
 定义 toLaxMonoidalFunctor
-  签名: (F : LaxBraidedFunctor C D)
+  签名: (F : 松弛辫函子 C D)
   定义体: F.toFunctor
 
 Depends on / 依赖: F.toFunctor, J.superset_covering, Subtype, Subtype.ext, superset_covering, toFunctor
@@ -1250,7 +1250,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (LaxBraidedFunctor C D)
+  签名: 范畴 (松弛辫函子 C D)
   定义体: inferInstanceAs (Category (InducedCategory _ toLaxMonoidalFunctor))
 
 @[simp]
@@ -1273,7 +1273,7 @@ lemma id_hom
 
 中文:
 引理 id_hom
-  条件: (F : LaxBraidedFunctor C D)
+  条件: (F : 松弛辫函子 C D)
   证明: rfl
 
 @[reassoc, simp]
@@ -1294,7 +1294,7 @@ lemma comp_hom
 
 中文:
 引理 comp_hom
-  条件: {F G H : LaxBraidedFunctor C D} (α : F ⟶ G) (β : G ⟶ H)
+  条件: {F G H : 松弛辫函子 C D} (α : F ⟶ G) (β : G ⟶ H)
   证明: rfl
 
 @[ext]
@@ -1313,7 +1313,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {F G : LaxBraidedFunctor C D} {α β : F ⟶ G} (h : α.hom.hom = β.hom.hom)
+  条件: {F G : 松弛辫函子 C D} {α β : F ⟶ G} (h : α.hom.hom = β.hom.hom)
   证明: InducedCategory.hom_ext (LaxMonoidalFunctor.hom_ext h)
 
 Depends on / 依赖: InducedCategory, InducedCategory.hom_ext, LaxMonoidalFunctor, LaxMonoidalFunctor.hom_ext, hom_ext
@@ -1335,7 +1335,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {F G : LaxBraidedFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [自然数Trans.IsMonoidal f]
+  签名: {F G : 松弛辫函子 C D} (f : F.toFunctor ⟶ G.toFunctor) [自然变换.是幺半群 f]
   定义体: ⟨f, inferInstance⟩
 -/
 def homMk {F G : LaxBraidedFunctor C D} (f : F.toFunctor ⟶ G.toFunctor) [NatTrans.IsMonoidal f] :
@@ -1355,7 +1355,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {F G : LaxBraidedFunctor C D} (e : F.toFunctor ≅ G.toFunctor)
+  签名: {F G : 松弛辫函子 C D} (e : F.toFunctor ≅ G.toFunctor)
   定义体: homMk e.hom
   inv := homMk e.inv
 
@@ -1379,7 +1379,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : LaxBraidedFunctor C D ⥤ LaxMonoidalFunctor C D
+  签名: : 松弛辫函子 C D ⥤ 松弛幺半群函子 C D
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor
@@ -1397,7 +1397,7 @@ definition fullyFaithfulForget
 
 中文:
 定义 fullyFaithfulForget
-  签名: : (forget (C := C) (D := D)).FullyFaithful
+  签名: : (forget (C := C) (D := D)).满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: FullyFaithful
@@ -1494,9 +1494,9 @@ class Functor.Braided
     - @[simp, : reassoc]
 
 中文:
-类 Functor.Braided
+类 函子.辫
   参数: (F : C ⥤ D)
-  继承: F.Monoidal, F.LaxBraided
+  继承: F.幺半群, F.松弛辫
   公理与运算 (1 个):
     - @[simp, : reassoc]
 -/
@@ -1513,8 +1513,8 @@ lemma Functor.map_braiding
   rw [← Functor.Braided.braided]; rw [δ_μ_assoc]
 
 中文:
-引理 Functor.map_braiding
-  条件: (F : C ⥤ D) (X Y : C) [F.Braided]
+引理 函子.map_braiding
+  条件: (F : C ⥤ D) (X Y : C) [F.辫]
   证明: by
   rw [← Functor.Braided.braided]; rw [δ_μ_assoc]
 
@@ -1538,8 +1538,8 @@ definition SymmetricCategory.ofFaithful
   body: F.map_injective (by simp)
 
 中文:
-定义 SymmetricCategory.ofFaithful
-  签名: {C D : 类型} [Category* C] [Category* D] [MonoidalCategory C]
+定义 对称范畴.ofFaithful
+  签名: {C D : 类型} [范畴* C] [范畴* D] [幺半群范畴 C]
   定义体: F.map_injective (by simp)
 
 Depends on / 依赖: F.map_injective, map_injective
@@ -1564,8 +1564,8 @@ definition SymmetricCategory.ofFullyFaithful
   .ofFaithful F
 
 中文:
-定义 SymmetricCategory.ofFullyFaithful
-  签名: {C D : 类型} [Category* C] [Category* D]
+定义 对称范畴.ofFullyFaithful
+  签名: {C D : 类型} [范畴* C] [范畴* D]
   定义体: let h : BraidedCategory C := BraidedCategory.ofFullyFaithful F
   let _ : F.Braided := {
     braided X Y := by
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: (𝟭 C).Braided
+  签名: (𝟭 C).辫
 -/
 instance : (𝟭 C).Braided where
 
@@ -1612,7 +1612,7 @@ lemma toMonoidal_injective
 中文:
 引理 toMonoidal_injective
   条件: (F : C ⥤ D)
-  结论: Function.Injective
+  结论: 函数.单射
   证明: by rintro ⟨⟩ ⟨⟩ rfl; rfl
 -/
 lemma toMonoidal_injective (F : C ⥤ D) : Function.Injective
@@ -1634,7 +1634,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: {F : C ⥤ D} (hF : F.Braided) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
+  签名: {F : C ⥤ D} (hF : F.辫) (ε' : 𝟙_ D ⟶ F.obj (𝟙_ C))
   定义体: hF.toMonoidal.copy ε' μ' η' δ' hε hμ hη hδ
   braided X Y := hμ ▸ hF.braided X Y
 
@@ -1664,7 +1664,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory (Discrete M)
+  签名: 辫范畴 (离散 M)
   定义体: Discrete.eqToIso (mul_comm X.as Y.as)
 
 Depends on / 依赖: Discrete, Discrete.eqToIso, X.as, Y.as, eqToIso, mul_comm
@@ -1682,7 +1682,7 @@ instance Discrete.monoidalFunctorBraided
   signature: (F : M ->* N)
 
 中文:
-实例 Discrete.monoidalFunctorBraided
+实例 离散.monoidalFunctorBraided
   签名: (F : M ->* N)
 -/
 instance Discrete.monoidalFunctorBraided (F : M ->* N) :
@@ -2077,7 +2077,7 @@ instance tensorMonoidal
 
 中文:
 实例 tensorMonoidal
-  签名: : (tensor C).Monoidal
+  签名: : (tensor C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
       { εIso := (fun_ (𝟙_ C)).symm
         μIso := fun X Y =>
@@ -2316,7 +2316,7 @@ lemma tensorμ_comp_μ_tensorHom_μ_comp_μ
 
 中文:
 引理 tensorμ_comp_μ_tensorHom_μ_comp_μ
-  条件: (F : C ⥤ D) [F.LaxBraided] (W X Y Z : C)
+  条件: (F : C ⥤ D) [F.松弛辫] (W X Y Z : C)
   证明: by
   rw [tensorHom_def]
   simp only [tensorμ, Category.assoc]
@@ -2348,7 +2348,7 @@ theorem SymmetricCategory.tensorμ_braid_swap
   simp [tensorμ, SymmetricCategory.braiding_swap_eq_inv_braiding Y X, tensorHom_def]
 
 中文:
-定理 SymmetricCategory.tensorμ_braid_swap
+定理 对称范畴.tensorμ_braid_swap
   证明: by
   simp [tensorμ, SymmetricCategory.braiding_swap_eq_inv_braiding Y X, tensorHom_def]
 
@@ -2373,7 +2373,7 @@ braiding_naturality_left {_ _} f Z := Quiver.Hom.unop_inj by simp
 
 中文:
 实例 :
-  签名: BraidedCategory Cᵒᵖ
+  签名: 辫范畴 Cᵒᵖ
   定义体: (β_ Y.unop X.unop).op
 braiding_naturality_right X {_ _} f := Quiver.Hom.unop_inj by simp
 braiding_naturality_left {_ _} f Z := Quiver.Hom.unop_inj by simp
@@ -2504,7 +2504,7 @@ braiding_naturality_left {_ _} f Z := Quiver.Hom.unmop_inj by simp
 
 中文:
 实例 instBraiding
-  签名: : BraidedCategory Cᴹᵒᵖ where
+  签名: : 辫范畴 Cᴹᵒᵖ where
   定义体: (β_ Y.unmop X.unmop).mop
 braiding_naturality_right X {_ _} f := Quiver.Hom.unmop_inj by simp
 braiding_naturality_left {_ _} f Z := Quiver.Hom.unmop_inj by simp
@@ -2639,7 +2639,7 @@ instance :
 
 中文:
 实例 :
-  签名: (mopFunctor C).Monoidal
+  签名: (mopFunctor C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun X Y => β_ (mop X) (mop Y)
@@ -2728,7 +2728,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unmopFunctor C).Monoidal
+  签名: (unmopFunctor C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun X Y => β_ (unmop X) (unmop Y)
@@ -2810,7 +2810,7 @@ instance :
 
 中文:
 实例 :
-  签名: (mopFunctor C).Braided
+  签名: (mopFunctor C).辫
 -/
 instance : (mopFunctor C).Braided where
 
@@ -2823,7 +2823,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unmopFunctor C).Braided
+  签名: (unmopFunctor C).辫
 -/
 instance : (unmopFunctor C).Braided where
 
@@ -2843,7 +2843,7 @@ abbreviation reverseBraiding
 
 中文:
 缩写 reverseBraiding
-  签名: : BraidedCategory C where
+  签名: : 辫范畴 C where
   定义体: (β_ Y X).symm
   braiding_naturality_right X {_ _} f := by simp
   braiding_naturality_left {_ _} f Z := by simp
@@ -2866,8 +2866,8 @@ lemma SymmetricCategory.reverseBraiding_eq
   exact Iso.ext (braiding_swap_eq_inv_braiding Y X).symm
 
 中文:
-引理 SymmetricCategory.reverseBraiding_eq
-  结论: (C : 类型u₁) [Category.{v₁} C]
+引理 对称范畴.reverseBraiding_eq
+  结论: (C : 类型u₁) [范畴.{v₁} C]
   证明: by
   dsimp only [reverseBraiding]
   congr
@@ -2897,8 +2897,8 @@ definition SymmetricCategory.equivReverseBraiding
     simp +instances [reverseBraiding, braiding_swap_eq_inv_braiding]
 
 中文:
-定义 SymmetricCategory.equivReverseBraiding
-  签名: (C : 类型u₁) [Category.{v₁} C]
+定义 对称范畴.equivReverseBraiding
+  签名: (C : 类型u₁) [范畴.{v₁} C]
   定义体: @Functor.Braided.mk C _ _ _ C _ _ (reverseBraiding C) (𝟭 C) _ by
     simp +instances [reverseBraiding, braiding_swap_eq_inv_braiding]
 

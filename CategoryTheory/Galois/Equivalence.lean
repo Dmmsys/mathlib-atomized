@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorToContAction F).Faithful
+  签名: (functorToContAction F).忠实
   定义体: inferInstanceAs (ObjectProperty.lift _ _ _).Faithful
 
 Depends on / 依赖: Faithful, ObjectProperty, ObjectProperty.lift, cat_disch
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorToContAction F).Full
+  签名: (functorToContAction F).满
   定义体: inferInstanceAs (ObjectProperty.lift _ _ _).Full
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.lift
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorToContAction F).EssSurj
+  签名: (functorToContAction F).本质满射
   定义体: by
   let F' : C ⥤ FintypeCat.{u₁} := F ⋙ FintypeCat.uSwitch.{w, u₁}
   let : FiberFunctor F' := FiberFunctor.comp_right _
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functorToContAction F).IsEquivalence
+  签名: (functorToContAction F).是等价
 -/
 instance : (functorToContAction F).IsEquivalence where
 

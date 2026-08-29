@@ -162,7 +162,7 @@ lemma integrable_exp_mul_of_nonneg_of_le
 
 中文:
 引理 integrable_exp_mul_of_nonneg_of_le
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: integrable_exp_mul_of_le_of_le (by simp) hu h_nonneg htu
 
 Depends on / 依赖: h_nonneg, integrable_exp_mul_of_le_of_le
@@ -182,7 +182,7 @@ lemma integrable_exp_mul_of_nonpos_of_ge
 
 中文:
 引理 integrable_exp_mul_of_nonpos_of_ge
-  结论: [IsFiniteMeasure μ]
+  结论: [是有限测度 μ]
   证明: integrable_exp_mul_of_le_of_le hu (by simp) htu h_nonpos
 
 Depends on / 依赖: h_nonpos, integrable_exp_mul_of_le_of_le
@@ -206,7 +206,7 @@ definition integrableExpSet
 
 中文:
 定义 integrableExpSet
-  签名: (X : Ω -> 实数) (μ : Measure Ω)
+  签名: (X : Ω -> 实数) (μ : 测度 Ω)
   定义体: {t | Integrable (fun ω => exp (t * X ω)) μ}
 
 Depends on / 依赖: Integrable
@@ -249,7 +249,7 @@ lemma convex_integrableExpSet
 
 中文:
 引理 convex_integrableExpSet
-  结论: Convex 实数 (integrableExpSet X μ)
+  结论: 凸 实数 (integrableExpSet X μ)
   证明: by
   rintro t₁ ht₁ t₂ ht₂ a b ha hb hab
   wlog! h_le : t₁ <= t₂
@@ -330,7 +330,7 @@ ht_int_pos.add by simpa using ht_int_neg
 
 中文:
 引理 integrable_exp_mul_abs_add
-  结论: (ht_int_pos : 整数egrable (fun ω => exp ((v + t) * X ω)) μ)
+  结论: (ht_int_pos : 可积 (fun ω => exp ((v + t) * X ω)) μ)
   证明: by
   have h_int_add : Integrable (fun a => exp ((v + t) * X a) + exp ((v - t) * X a)) μ :=
 ht_int_pos.add by simpa using ht_int_neg
@@ -378,7 +378,7 @@ lemma integrable_exp_mul_abs
 
 中文:
 引理 integrable_exp_mul_abs
-  结论: (ht_int_pos : 整数egrable (fun ω => exp (t * X ω)) μ)
+  结论: (ht_int_pos : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   have h := integrable_exp_mul_abs_add (t := t) (μ := μ) (X := X) (v := 0) ?_ ?_
   · simpa using h
@@ -410,7 +410,7 @@ lemma integrable_exp_abs_mul_abs_add
 
 中文:
 引理 integrable_exp_abs_mul_abs_add
-  结论: (ht_int_pos : 整数egrable (fun ω => exp ((v + t) * X ω)) μ)
+  结论: (ht_int_pos : 可积 (fun ω => exp ((v + t) * X ω)) μ)
   证明: by
   rcases le_total 0 t with ht_nonneg | ht_nonpos
   · simp_rw [abs_of_nonneg ht_nonneg]
@@ -444,7 +444,7 @@ lemma integrable_exp_abs_mul_abs
 
 中文:
 引理 integrable_exp_abs_mul_abs
-  结论: (ht_int_pos : 整数egrable (fun ω => exp (t * X ω)) μ)
+  结论: (ht_int_pos : 可积 (fun ω => exp (t * X ω)) μ)
   证明: by
   rcases le_total 0 t with ht_nonneg | ht_nonpos
   · simp_rw [abs_of_nonneg ht_nonneg]
@@ -1007,7 +1007,7 @@ lemma add_half_inf_sub_mem_Ioo
 
 中文:
 引理 add_half_inf_sub_mem_Ioo
-  条件: {l u v : 实数} (hv : v in Set.Ioo l u)
+  条件: {l u v : 实数} (hv : v in 集合.开区间 l u)
   证明: by
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hv.1, hv.2]
   constructor
@@ -1046,7 +1046,7 @@ lemma sub_half_inf_sub_mem_Ioo
 
 中文:
 引理 sub_half_inf_sub_mem_Ioo
-  条件: {l u v : 实数} (hv : v in Set.Ioo l u)
+  条件: {l u v : 实数} (hv : v in 集合.开区间 l u)
   证明: by
   have h_pos : 0 < (v - l) ⊓ (u - v) := by simp [hv.1, hv.2]
   constructor
@@ -1417,7 +1417,7 @@ lemma integrable_cexp_mul_of_re_mem_integrableExpSet
 
 中文:
 引理 integrable_cexp_mul_of_re_mem_integrableExpSet
-  结论: (hX : AEMeasurable X μ)
+  结论: (hX : 几乎处处可测 X μ)
   证明: by
   rw [← integrable_norm_iff]
   · simpa [Complex.norm_exp] using! hz

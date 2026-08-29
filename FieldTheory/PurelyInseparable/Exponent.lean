@@ -61,7 +61,7 @@ class HasExponent
     - has_exponent : exists e, forall a, a ^ ringExpChar K ^ e in (algebraMap K L).range
 
 中文:
-类 HasExponent
+类 有Exponent
   参数: : 命题 where
   公理与运算 (1 个):
     - has_exponent : 存在 e, 对任意 a, a ^ ringExpChar K ^ e in (algebraMap K L).range
@@ -99,7 +99,7 @@ definition exponent
 
 中文:
 定义 exponent
-  签名: [HasExponent K L]
+  签名: [有Exponent K L]
   定义体: Nat.find ‹HasExponent K L›.has_exponent
 
 Depends on / 依赖: HasExponent, Nat.find, has_exponent
@@ -121,7 +121,7 @@ theorem exponent_def
 
 中文:
 定理 exponent_def
-  条件: [HasExponent K L] (a : L)
+  条件: [有Exponent K L] (a : L)
   证明: by
   classical
   exact Nat.find_spec ‹HasExponent K L›.has_exponent a
@@ -143,7 +143,7 @@ theorem exponent_def'
 
 中文:
 定理 exponent_def'
-  条件: [HasExponent K L] (p : 自然数) [ExpChar K p] (a : L)
+  条件: [有Exponent K L] (p : 自然数) [ExpChar K p] (a : L)
   证明: ringExpChar.eq K p ▸ exponent_def K a
 
 Depends on / 依赖: exponent_def, ringExpChar, ringExpChar.eq
@@ -166,7 +166,7 @@ exact not_forall.mp Nat.find_min ‹HasExponent K L›.has_exponent h
 
 中文:
 定理 exponent_min
-  条件: [HasExponent K L] {e : 自然数} (h : e < exponent K L)
+  条件: [有Exponent K L] {e : 自然数} (h : e < exponent K L)
   证明: by
   classical
 exact not_forall.mp Nat.find_min ‹HasExponent K L›.has_exponent h
@@ -188,7 +188,7 @@ theorem exponent_min'
 
 中文:
 定理 exponent_min'
-  条件: [HasExponent K L] (p : 自然数) [ExpChar K p] {e : 自然数} (h : e < exponent K L)
+  条件: [有Exponent K L] (p : 自然数) [ExpChar K p] {e : 自然数} (h : e < exponent K L)
   证明: ringExpChar.eq K p ▸ exponent_min h
 
 Depends on / 依赖: exponent_min, ringExpChar, ringExpChar.eq
@@ -213,8 +213,8 @@ instance [HasExponent
   (isPurelyInseparable_iff_pow_mem K (ringExpChar K)).mpr fun x => ⟨n, h x⟩
 
 中文:
-实例 [HasExponent
-  签名: K L] : IsPurelyInseparable K L
+实例 [有Exponent
+  签名: K L] : 是纯不可分 K L
   定义体: let ⟨n, h⟩ := ‹HasExponent K L›.has_exponent
   (isPurelyInseparable_iff_pow_mem K (ringExpChar K)).mpr fun x => ⟨n, h x⟩
 
@@ -296,7 +296,7 @@ theorem elemExponent_eq_zero_of_charZero
 
 中文:
 定理 elemExponent_eq_zero_of_charZero
-  条件: (a : L) [CharZero K]
+  条件: (a : L) [特征零 K]
   证明: elemExponent_eq_zero_of_mem_range surjective_algebraMap_of_isSeparable K L a
 
 Depends on / 依赖: elemExponent_eq_zero_of_mem_range, surjective_algebraMap_of_isSeparable
@@ -600,7 +600,7 @@ theorem elemExponent_le_exponent
 
 中文:
 定理 elemExponent_le_exponent
-  条件: [HasExponent K L] (a : L)
+  条件: [有Exponent K L] (a : L)
   证明: elemExponent_le_of_pow_mem exponent_def K a
 
 Depends on / 依赖: elemExponent_le_of_pow_mem, exponent_def
@@ -626,7 +626,7 @@ instance hasExponent_of_finiteDimensional
 
 中文:
 实例 hasExponent_of_finiteDimensional
-  签名: [FiniteDimensional K L]
+  签名: [有限维 K L]
   定义体: by
   let ⟨p, _⟩ := ExpChar.exists K
   rcases ‹ExpChar K p› with _ | ⟨hp⟩

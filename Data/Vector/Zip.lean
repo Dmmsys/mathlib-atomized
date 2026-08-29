@@ -134,7 +134,7 @@ theorem prod_mul_prod_eq_prod_zipWith
 
 中文:
 定理 prod_mul_prod_eq_prod_zipWith
-  条件: [CommMonoid α] (x y : Vector α n)
+  条件: [交换幺半群 α] (x y : Vector α n)
   证明: List.prod_mul_prod_eq_prod_zipWith_of_length_eq x.toList y.toList
     ((toList_length x).trans (toList_length y).symm)
 

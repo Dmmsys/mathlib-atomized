@@ -35,7 +35,7 @@ lemma intervalIntegral_pow_mul_exp_neg_le
   calc ∫
 
 中文:
-引理 intervalIntegral_pow_mul_exp_neg_le
+引理 interval整数egral_pow_mul_exp_neg_le
   条件: {k : 自然数} {M c : 实数} (hM : 0 <= M) (hc : 0 < c)
   证明: by
   have hk : (0 : Real) < ↑k + 1 := by positivity

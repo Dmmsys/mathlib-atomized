@@ -156,7 +156,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: : Setoid (Σ i, F i) where
+  签名: : 集合等价关系 (Σ i, F i) where
   定义体: existsᵉ (i) (hx : x.1 <= i) (hy : y.1 <= i), f _ _ hx x.2 = f _ _ hy y.2
   iseqv := ⟨fun x => ⟨x.1, le_rfl, le_rfl, rfl⟩, fun ⟨i, hx, hy, eq⟩ => ⟨i, hy, hx, eq.symm⟩,
     fun ⟨j, hx, _, jeq⟩ ⟨k, _, hz, keq⟩ =>
@@ -203,7 +203,7 @@ abbreviation _root_.DirectLimit
 
 中文:
 缩写 _root_.DirectLimit
-  签名: : Type _
+  签名: : 类型 _
   定义体: Quotient (setoid f)
 
 Depends on / 依赖: Quotient, setoid
@@ -278,7 +278,7 @@ theorem exists_eq_mk
   proof: by rcases z; exact ⟨_, _, rfl⟩
 
 中文:
-定理 exists_eq_mk
+定理 存在_eq_mk
   条件: (z : DirectLimit F f)
   结论: 存在 i x, z = ⟦⟨i, x⟩⟧
   证明: by rcases z; exact ⟨_, _, rfl⟩
@@ -297,7 +297,7 @@ theorem exists_eq_mk₂
     ⟨i, _, _, eq_of_le x i hxi, eq_of_le y i hyi⟩
 
 中文:
-定理 exists_eq_mk₂
+定理 存在_eq_mk₂
   条件: (z w : DirectLimit F f)
   结论: 存在 i x y, z = ⟦⟨i, x⟩⟧ ∧ w = ⟦⟨i, y⟩⟧
   证明: z.inductionOn₂ w fun x y =>
@@ -322,7 +322,7 @@ theorem exists_eq_mk₃
     ⟨i, _, _, _, eq_of_le x i hxi, eq_of_le y i hyi, eq_of_le z i hzi⟩
 
 中文:
-定理 exists_eq_mk₃
+定理 存在_eq_mk₃
   条件: (w u v : DirectLimit F f)
   证明: w.inductionOn₃ u v fun x y z =>
     have ⟨i, hxi, hyi, hzi⟩ := directed_of₃ (· <= ·) x.1 y.1 z.1
@@ -383,7 +383,7 @@ theorem mk_injective
 
 中文:
 定理 mk_injective
-  条件: (h : 对任意 i j hij, Function.Injective (f i j hij)) (i)
+  条件: (h : 对任意 i j hij, 函数.单射 (f i j hij)) (i)
   证明: fun _ _ eq => have ⟨_, _, _, eq⟩ := Quotient.eq.mp eq; h _ _ _ eq
 
 Depends on / 依赖: Quotient, Quotient.eq.mp
@@ -493,7 +493,7 @@ theorem lift_injective
 
 中文:
 定理 lift_injective
-  条件: (h : 对任意 i, Function.Injective (ih i))
+  条件: (h : 对任意 i, 函数.单射 (ih i))
   证明: DirectLimit.induction₂ _ fun i x y eq => by simp_rw [lift_def] at eq; rw [h i eq]
 
 Depends on / 依赖: DirectLimit, DirectLimit.induction, lift_def, simp_rw
@@ -816,7 +816,7 @@ theorem piLTProj_intro
 
 中文:
 定理 piLTProj_intro
-  条件: {l : Iio j} {f : piLT X j} (hl : l < i)
+  条件: {l : 左无界右开区间 j} {f : piLT X j} (hl : l < i)
   证明: rfl
 -/
 theorem piLTProj_intro {l : Iio j} {f : piLT X j} (hl : l < i) :
@@ -832,8 +832,8 @@ definition IsNatEquiv
     equiv ⟨k, hk⟩ (f h x) = piLTProj h (equiv ⟨j, hj⟩ x)
 
 中文:
-定义 IsNatEquiv
-  签名: {s : Set ι} (equiv : 对任意 j : s, F j ≃ piLT X j)
+定义 Is自然数Equiv
+  签名: {s : 集合 ι} (equiv : 对任意 j : s, F j ≃ piLT X j)
   定义体: forall ⦃j k⦄ (hj : j in s) (hk : k in s) (h : k <= j) (x : F j),
     equiv ⟨k, hk⟩ (f h x) = piLTProj h (equiv ⟨j, hj⟩ x)
 
@@ -891,7 +891,7 @@ theorem piLTLim_symm_apply
 
 中文:
 定理 piLTLim_symm_apply
-  条件: {f} (k : Iio i) {l : Iio i} (hl : l.1 < k.1)
+  条件: {f} (k : 左无界右开区间 i) {l : 左无界右开区间 i} (hl : l.1 < k.1)
   证明: by
   conv_rhs => rw [← (piLTLim hi).right_inv f]
   rfl
@@ -924,7 +924,7 @@ definition piSplitLE
 
 中文:
 定义 piSplitLE
-  签名: : piLT X i × X i ≃ 对任意 j : Iic i, X j where
+  签名: : piLT X i × X i ≃ 对任意 j : 左无界右闭区间 i, X j where
   定义体: if h : j = i then h.symm ▸ f.2 else f.1 ⟨j, j.2.lt_of_ne h⟩
   invFun f := (fun j => f ⟨j, j.2.le⟩, f ⟨i, le_rfl⟩)
   left_inv f := by ext j; exacts [dif_neg j.2.ne, dif_pos rfl]
@@ -997,7 +997,7 @@ Equiv.piCongrSet Set.ext fun _ => (lt_succ_iff_of_not_isMax hi).symm)
 
 中文:
 定义 piEquivSucc
-  签名: : 对任意 j : Iic i⁺, F j ≃ piLT X j
+  签名: : 对任意 j : 左无界右闭区间 i⁺, F j ≃ piLT X j
   定义体: piSplitLE (X := fun i => F i ≃ piLT X i)
   (fun j => equiv ⟨j, (lt_succ_iff_of_not_isMax hi).mp j.2⟩,
 e.trans ((equiv ⟨i, le_rfl⟩).prodCongr <| Equiv.refl _).trans piSplitLE.trans
@@ -1050,7 +1050,7 @@ theorem isNatEquiv_piEquivSucc
       rw [piEquivSucc]; rw [piSplitLE_lt (lt_succ hk)]; rw [← 
 
 中文:
-定理 isNatEquiv_piEquivSucc
+定理 is自然数Equiv_piEquivSucc
   结论: [InverseSystem f] (H : 对任意 x, (e x).1 = f (le_succ i) x)
   证明: fun j k hj hk h x => by
   have lt_succ {j} := (lt_succ_iff_of_not_isMax (b := j) hi).mpr
@@ -1120,7 +1120,7 @@ definition piEquivLim
 
 中文:
 定义 piEquivLim
-  签名: : 对任意 j : Iic i, F j ≃ piLT X j
+  签名: : 对任意 j : 左无界右闭区间 i, F j ≃ piLT X j
   定义体: piSplitLE (X := fun j => F j ≃ piLT X j)
     (equiv, equivLim.trans <| (invLimEquiv nat).trans (piLTLim hi).symm)
 
@@ -1146,7 +1146,7 @@ theorem isNatEquiv_piEquivLim
       rw [piLTProj]; rw [piLTLim_symm_apply hi ⟨k]; rw [hk⟩ (by exact l.2)]; rw 
 
 中文:
-定理 isNatEquiv_piEquivLim
+定理 is自然数Equiv_piEquivLim
   条件: [InverseSystem f] (H : 对任意 x l, (equivLim x).1 l = f l.2.le x)
   证明: fun j k hj hk h t => by
   obtain rfl | hj := hj.eq_or_lt
@@ -1187,7 +1187,7 @@ structure PEquivOn
 
 中文:
 结构 PEquivOn
-  参数: (s : Set ι)
+  参数: (s : 集合 ι)
   公理与运算 (3 个):
     - equiv((i : s)) : F i ≃ piLT X i
     - nat : Is自然数Equiv f equiv
@@ -1245,7 +1245,7 @@ theorem unique_pEquivOn
 
 中文:
 定理 unique_pEquivOn
-  条件: (hs : IsLowerSet s) {e₁ e₂ : PEquivOn f equivSucc s}
+  条件: (hs : 是下集 s) {e₁ e₂ : PEquivOn f equivSucc s}
   结论: e₁ = e₂
   证明: by
   obtain ⟨e₁, nat₁, compat₁⟩ := e₁
@@ -1286,7 +1286,7 @@ theorem pEquivOn_apply_eq
 
 中文:
 定理 pEquivOn_apply_eq
-  结论: (h : IsLowerSet (s inter t))
+  结论: (h : 是下集 (s inter t))
   证明: show (e₁.restrict inter_subset_left).equiv ⟨i, his, hit⟩ =
        (e₂.restrict inter_subset_right).equiv ⟨i, his, hit⟩ from
   congr_fun (congr_arg _ <| unique_pEquivOn h) _
@@ -1316,7 +1316,7 @@ definition pEquivOnSucc
 
 中文:
 定义 pEquivOnSucc
-  签名: [InverseSystem f] (hi : ¬IsMax i) (e : PEquivOn f equivSucc (Iic i))
+  签名: [InverseSystem f] (hi : ¬IsMax i) (e : PEquivOn f equivSucc (左无界右闭区间 i))
   定义体: piEquivSucc e.equiv (equivSucc hi) hi
   nat := isNatEquiv_piEquivSucc hi (H hi) e.nat
   compat hsj hj x := by
@@ -1351,7 +1351,7 @@ definition pEquivOnGlue
 
 中文:
 定义 pEquivOnGlue
-  签名: : PEquivOn f equivSucc (Iio i) where
+  签名: : PEquivOn f equivSucc (左无界右开区间 i) where
   定义体: (piLTLim (X := fun j => F j ≃ piLT X j) hi).symm
     ⟨fun j => ((e j).restrict fun _ h => h.le).equiv, fun _ _ h => funext fun _ =>
       pEquivOn_apply_eq ((isLowerSet_Iio _).inter <| isLowerSet_Iio _)⟩

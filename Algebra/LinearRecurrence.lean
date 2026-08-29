@@ -62,10 +62,10 @@ structure LinearRecurrence
 
 中文:
 结构 LinearRecurrence
-  参数: (R : 类型) [CommSemiring R]
+  参数: (R : 类型) [交换半环 R]
   公理与运算 (2 个):
     - order : 自然数
-    - coeffs : Fin order -> R
+    - coeffs : 有限集 order -> R
 -/
 structure LinearRecurrence (R : Type*) [CommSemiring R] where
   /-- Order of the linear recurrence -/
@@ -111,7 +111,7 @@ definition mkSol
 
 中文:
 定义 mkSol
-  签名: (init : Fin E.order -> R)
+  签名: (init : 有限集 E.order -> R)
   定义体: by lia
         E.coeffs k * mkSol init (n - E.order + k)
 
@@ -139,7 +139,7 @@ theorem is_sol_mkSol
 
 中文:
 定理 is_sol_mkSol
-  条件: (init : Fin E.order -> R)
+  条件: (init : 有限集 E.order -> R)
   结论: E.IsSolution (E.mkSol init)
   证明: by
   intro n
@@ -165,8 +165,8 @@ theorem mkSol_eq_init
 
 中文:
 定理 mkSol_eq_init
-  条件: (init : Fin E.order -> R)
-  结论: 对任意 n : Fin E.order, E.mkSol init n = init n
+  条件: (init : 有限集 E.order -> R)
+  结论: 对任意 n : 有限集 E.order, E.mkSol init n = init n
   证明: by
   intro n
   rw [mkSol]
@@ -198,7 +198,7 @@ theorem eq_mk_of_is_sol_of_eq_init
 
 中文:
 定理 eq_mk_of_is_sol_of_eq_init
-  结论: {u : 自然数 -> R} {init : Fin E.order -> R} (h : E.IsSolution u)
+  结论: {u : 自然数 -> R} {init : 有限集 E.order -> R} (h : E.IsSolution u)
   证明: by
   intro n
   rw [mkSol]
@@ -234,7 +234,7 @@ theorem eq_mk_of_is_sol_of_eq_init'
 
 中文:
 定理 eq_mk_of_is_sol_of_eq_init'
-  结论: {u : 自然数 -> R} {init : Fin E.order -> R} (h : E.IsSolution u)
+  结论: {u : 自然数 -> R} {init : 有限集 E.order -> R} (h : E.IsSolution u)
   证明: funext (E.eq_mk_of_is_sol_of_eq_init h heq)
 
 Depends on / 依赖: E.eq_mk_of_is_sol_of_eq_init, eq_mk_of_is_sol_of_eq_init
@@ -256,7 +256,7 @@ definition solSpace
 
 中文:
 定义 solSpace
-  签名: : Submodule R (自然数 -> R) where
+  签名: : 子模 R (自然数 -> R) where
   定义体: { u | E.IsSolution u }
   zero_mem' n := by simp
   add_mem' {u v} hu hv n := by simp [mul_add, sum_add_distrib, hu n, hv n]
@@ -309,7 +309,7 @@ definition toInit
 
 中文:
 定义 toInit
-  签名: : E.solSpace ≃ₗ[R] Fin E.order -> R where
+  签名: : E.solSpace ≃ₗ[R] 有限集 E.order -> R where
   定义体: (u : Nat -> R) x
   map_add' u v := by
     ext
@@ -343,7 +343,7 @@ theorem mkSol_injective
 
 中文:
 定理 mkSol_injective
-  结论: E.mkSol.Injective
+  结论: E.mkSol.单射
   证明: Subtype.val_injective.comp E.toInit.symm.injective
 
 Depends on / 依赖: E.toInit.symm.injective, Subtype, Subtype.val_injective.comp, injective, toInit, val_injective
@@ -361,7 +361,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Module.Basis (Fin E.order) R E.solSpace
+  签名: : 模.基 (有限集 E.order) R E.solSpace
   定义体: .ofEquivFun E.toInit
 
 Depends on / 依赖: E.toInit, ofEquivFun, toInit
@@ -399,7 +399,7 @@ theorem repr_basis_apply
 
 中文:
 定理 repr_basis_apply
-  条件: (u : E.solSpace) (n : Fin E.order)
+  条件: (u : E.solSpace) (n : 有限集 E.order)
   结论: E.basis.repr u n = u.val n
   证明: rfl
 -/
@@ -465,7 +465,7 @@ definition tupleSucc
 
 中文:
 定义 tupleSucc
-  签名: : (Fin E.order -> R) ->ₗ[R] Fin E.order -> R where
+  签名: : (有限集 E.order -> R) ->ₗ[R] 有限集 E.order -> R where
   定义体: if h : (i : Nat) + 1 < E.order then X ⟨i + 1, h⟩ else ∑ i, E.coeffs i * X i
   map_add' x y := by
     ext i
@@ -507,7 +507,7 @@ theorem solSpace_rank
 
 中文:
 定理 solSpace_rank
-  结论: Module.rank R E.solSpace = E.order
+  结论: 模.rank R E.solSpace = E.order
   证明: by
   simp [rank_eq_card_basis E.basis]
 
@@ -564,7 +564,7 @@ theorem charPoly_degree_eq_order
 
 中文:
 定理 charPoly_degree_eq_order
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (charPoly E).degree = E.order
   证明: by
   rw [charPoly]; rw [degree_sub_eq_left_of_degree_lt]

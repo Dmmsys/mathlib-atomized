@@ -57,7 +57,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: : SheafOfModules.{v} S ⥤ SheafOfModules.{v} R
+  签名: : 模层.{v} S ⥤ 模层.{v} R
   定义体: (pushforward.{v} φ).leftAdjoint
 
 Depends on / 依赖: leftAdjoint, pushforward
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pullback.{v} φ).IsLeftAdjoint
+  签名: (pullback.{v} φ).是左伴随
   定义体: (pullbackPushforwardAdjunction φ).isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward.{v} φ).IsRightAdjoint
+  签名: (pushforward.{v} φ).是右伴随
   定义体: (PullbackConstruction.adjunction.{v} φ).isRightAdjoint
 
 Depends on / 依赖: PullbackConstruction, PullbackConstruction.adjunction, adjunction, isRightAdjoint
@@ -250,7 +250,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).IsRightAdjoint
+  签名: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).是右伴随
   定义体: Functor.isRightAdjoint_of_iso (pushforwardId S).symm
 
 Depends on / 依赖: IsRightAdjoint

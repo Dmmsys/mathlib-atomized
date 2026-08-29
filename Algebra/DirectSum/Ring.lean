@@ -108,7 +108,7 @@ class GNonUnitalNonAssocSemiring
 
 中文:
 类 GNonUnitalNonAssocSemiring
-  参数: [Add ι] [对任意 i, AddCommMonoid (A i)]
+  参数: [加法 ι] [对任意 i, 加法交换幺半群 (A i)]
   公理与运算 (4 个):
     - mul_zero : 对任意 {i j} (a : A i), mul a (0 : A j) = 0
     - zero_mul : 对任意 {i j} (b : A j), mul (0 : A i) b = 0
@@ -148,12 +148,12 @@ class GSemiring
 
 中文:
 类 GSemiring
-  参数: [AddMonoid ι] [对任意 i, AddCommMonoid (A i)]
+  参数: [加法幺半群 ι] [对任意 i, 加法交换幺半群 (A i)]
   继承: GNonUnitalNonAssocSemiring A, 
   公理与运算 (3 个):
     - natCast : 自然数 -> A 0
     - natCast_zero : natCast 0 = 0
-    - natCast_succ : 对任意 n : 自然数, natCast (n + 1) = natCast n + GradedMonoid.GOne.one
+    - natCast_succ : 对任意 n : 自然数, natCast (n + 1) = natCast n + 分次幺半群.GOne.one
 -/
 class GSemiring [AddMonoid ι] [forall i, AddCommMonoid (A i)] extends GNonUnitalNonAssocSemiring A,
   GradedMonoid.GMonoid A where
@@ -175,7 +175,7 @@ class GCommSemiring
 
 中文:
 类 GCommSemiring
-  参数: [AddCommMonoid ι] [对任意 i, AddCommMonoid (A i)]
+  参数: [加法交换幺半群 ι] [对任意 i, 加法交换幺半群 (A i)]
   继承: GSemiring A, 
   (无附加公理)
 -/
@@ -195,8 +195,8 @@ class GRing
     - intCast_negSucc_ofNat : forall n : Nat, intCast (Int.negSucc n) = -natCast (n + 1 : Nat)
 
 中文:
-类 GRing
-  参数: [AddMonoid ι] [对任意 i, AddCommGroup (A i)]
+类 G环
+  参数: [加法幺半群 ι] [对任意 i, 加法交换群 (A i)]
   继承: GSemiring A
   公理与运算 (3 个):
     - intCast : 整数 -> A 0
@@ -224,9 +224,9 @@ class GCommRing
   (no additional axioms)
 
 中文:
-类 GCommRing
-  参数: [AddCommMonoid ι] [对任意 i, AddCommGroup (A i)]
-  继承: GRing A, GCommSemiring A
+类 GComm环
+  参数: [加法交换幺半群 ι] [对任意 i, 加法交换群 (A i)]
+  继承: G环 A, GCommSemiring A
   (无附加公理)
 -/
 class GCommRing [AddCommMonoid ι] [forall i, AddCommGroup (A i)] extends GRing A, GCommSemiring A
@@ -243,7 +243,7 @@ theorem of_eq_of_gradedMonoid_eq
 
 中文:
 定理 of_eq_of_gradedMonoid_eq
-  结论: {A : ι -> 类型} [对任意 i : ι, AddCommMonoid (A i)] {i j : ι} {a : A i}
+  结论: {A : ι -> 类型} [对任意 i : ι, 加法交换幺半群 (A i)] {i j : ι} {a : A i}
   证明: DFinsupp.single_eq_of_sigma_eq h
 
 Depends on / 依赖: DFinsupp, DFinsupp.single_eq_of_sigma_eq, single_eq_of_sigma_eq
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (⨁ i, A i)
+  签名: 幺 (⨁ i, A i)
   定义体: DirectSum.of A 0 GradedMonoid.GOne.one
 
 Depends on / 依赖: DirectSum, DirectSum.of, GradedMonoid, GradedMonoid.GOne.one
@@ -289,7 +289,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: 1 = DirectSum.of A 0 GradedMonoid.GOne.one
+  结论: 1 = 直和.of A 0 分次幺半群.GOne.one
   证明: rfl
 -/
 theorem one_def : 1 = DirectSum.of A 0 GradedMonoid.GOne.one := rfl
@@ -375,7 +375,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (⨁ i, A i) where
+  签名: : 乘法 (⨁ i, A i) where
   定义体: fun a b => mulHom A a b
 
 Depends on / 依赖: mulHom
@@ -397,7 +397,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalNonAssocSemiring (⨁ i, A i)
+  签名: 非幺非结合半环 (⨁ i, A i)
   定义体: fun _ => by simp only [Mul.mul, HMul.hMul, map_zero, AddMonoidHom.zero_apply]
   mul_zero := fun _ => by simp only [Mul.mul, HMul.hMul, map_zero]
   left_distrib := fun _ _ _ => by simp only [Mul.mul, HMul.hMul, map_add]
@@ -536,8 +536,8 @@ instance instNatCast
   body: fun n => of _ _ (GSemiring.natCast n)
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast (⨁ i, A i) where
+实例 inst自然数Cast
+  签名: : 自然数嵌入 (⨁ i, A i) where
   定义体: fun n => of _ _ (GSemiring.natCast n)
 
 Depends on / 依赖: GSemiring, GSemiring.natCast, natCast
@@ -563,7 +563,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring (⨁ i, A i) where
+  签名: : 半环 (⨁ i, A i) where
   定义体: private one_mul A
   mul_one := private mul_one A
   mul_assoc := private mul_assoc A
@@ -637,7 +637,7 @@ theorem ofList_dProd
 
 中文:
 定理 ofList_dProd
-  条件: {α} (l : List α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
+  条件: {α} (l : 列表 α) (fι : α -> ι) (fA : 对任意 a, A (fι a))
   证明: by
   induction l with
   | nil => simp only [List.map_nil, List.prod_nil, List.dProd_nil]; rfl
@@ -670,7 +670,7 @@ theorem list_prod_ofFn_of_eq_dProd
 
 中文:
 定理 list_prod_ofFn_of_eq_dProd
-  条件: (n : 自然数) (fι : Fin n -> ι) (fA : 对任意 a, A (fι a))
+  条件: (n : 自然数) (fι : 有限集 n -> ι) (fA : 对任意 a, A (fι a))
   证明: by
   rw [List.ofFn_eq_map]; rw [ofList_dProd]
 
@@ -695,7 +695,7 @@ theorem mul_eq_dfinsuppSum
 
 中文:
 定理 mul_eq_dfinsuppSum
-  条件: [对任意 (i : ι) (x : A i), Decidable (x != 0)] (a a' : ⨁ i, A i)
+  条件: [对任意 (i : ι) (x : A i), 可判定 (x != 0)] (a a' : ⨁ i, A i)
   证明: by
   change mulHom _ a a' = _
   -- Porting note: I have no idea how the proof from ml3 worked it used to be
@@ -730,7 +730,7 @@ theorem mul_eq_sum_support_ghas_mul
 
 中文:
 定理 mul_eq_sum_support_ghas_mul
-  条件: [对任意 (i : ι) (x : A i), Decidable (x != 0)] (a a' : ⨁ i, A i)
+  条件: [对任意 (i : ι) (x : A i), 可判定 (x != 0)] (a a' : ⨁ i, A i)
   证明: by
   simp only [mul_eq_dfinsuppSum, DFinsupp.sum, Finset.sum_product]
 
@@ -790,7 +790,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring (⨁ i, A i) where
+  签名: : 交换半环 (⨁ i, A i) where
   定义体: private mul_comm A
 
 Depends on / 依赖: mul_comm, private
@@ -813,7 +813,7 @@ instance nonAssocRing
 
 中文:
 实例 nonAssocRing
-  签名: : NonUnitalNonAssocRing (⨁ i, A i) where
+  签名: : 非幺非结合环 (⨁ i, A i) where
 -/
 instance nonAssocRing : NonUnitalNonAssocRing (⨁ i, A i) where
 
@@ -837,7 +837,7 @@ intCast_ofNat _ := congrArg (of A 0) GRing.intCast_ofNat _
 
 中文:
 实例 ring
-  签名: : Ring (⨁ i, A i) where
+  签名: : 环 (⨁ i, A i) where
   定义体: of A 0 (GRing.intCast z)
 intCast_ofNat _ := congrArg (of A 0) GRing.intCast_ofNat _
   intCast_negSucc _ :=
@@ -866,7 +866,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing (⨁ i, A i) where
+  签名: : 交换环 (⨁ i, A i) where
 -/
 instance commRing : CommRing (⨁ i, A i) where
 
@@ -1042,7 +1042,7 @@ theorem of_zero_ofNat
   proof: of_natCast A n
 
 中文:
-定理 of_zero_ofNat
+定理 of_zero_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: of A 0 of自然数(n) = of自然数(n)
   证明: of_natCast A n
@@ -1244,7 +1244,7 @@ definition toSemiring
 
 中文:
 定义 toSemiring
-  签名: (f : 对任意 i, A i ->+ R) (hone : f _ GradedMonoid.GOne.one = 1)
+  签名: (f : 对任意 i, A i ->+ R) (hone : f _ 分次幺半群.GOne.one = 1)
   定义体: { toAddMonoid f with
     toFun := toAddMonoid f
     map_one' := by
@@ -1404,8 +1404,8 @@ instance NonUnitalNonAssocSemiring.directSumGNonUnitalNonAssocSemiring
   add_mul := add_mul
 
 中文:
-实例 NonUnitalNonAssocSemiring.directSumGNonUnitalNonAssocSemiring
-  签名: {R : 类型} [AddMonoid ι]
+实例 非幺非结合半环.directSumGNonUnitalNonAssocSemiring
+  签名: {R : 类型} [加法幺半群 ι]
   定义体: mul_zero
   zero_mul := zero_mul
   mul_add := mul_add
@@ -1431,8 +1431,8 @@ instance Semiring.directSumGSemiring
   natCast_succ := Nat.cast_succ
 
 中文:
-实例 Semiring.directSumGSemiring
-  签名: {R : 类型} [AddMonoid ι] [Semiring R]
+实例 半环.directSumGSemiring
+  签名: {R : 类型} [加法幺半群 ι] [半环 R]
   定义体: n
   natCast_zero := Nat.cast_zero
   natCast_succ := Nat.cast_succ
@@ -1454,8 +1454,8 @@ instance Ring.directSumGRing
   intCast_negSucc_ofNat := Int.cast_negSucc
 
 中文:
-实例 Ring.directSumGRing
-  签名: {R : 类型} [AddMonoid ι] [Ring R]
+实例 环.directSumGRing
+  签名: {R : 类型} [加法幺半群 ι] [环 R]
   定义体: z
   intCast_ofNat := Int.cast_natCast
   intCast_negSucc_ofNat := Int.cast_negSucc
@@ -1481,8 +1481,8 @@ instance CommSemiring.directSumGCommSemiring
   signature: {R : Type*} [AddCommMonoid ι] [CommSemiring R]
 
 中文:
-实例 CommSemiring.directSumGCommSemiring
-  签名: {R : 类型} [AddCommMonoid ι] [CommSemiring R]
+实例 交换半环.directSumGCommSemiring
+  签名: {R : 类型} [加法交换幺半群 ι] [交换半环 R]
 -/
 instance CommSemiring.directSumGCommSemiring {R : Type*} [AddCommMonoid ι] [CommSemiring R] :
     DirectSum.GCommSemiring fun _ : ι => R where
@@ -1495,8 +1495,8 @@ instance CommRing.directSumGCommRing
   signature: {R : Type*} [AddCommMonoid ι] [CommRing R]
 
 中文:
-实例 CommRing.directSumGCommRing
-  签名: {R : 类型} [AddCommMonoid ι] [CommRing R]
+实例 交换环.directSumGCommRing
+  签名: {R : 类型} [加法交换幺半群 ι] [交换环 R]
 -/
 instance CommRing.directSumGCommRing {R : Type*} [AddCommMonoid ι] [CommRing R] :
     DirectSum.GCommRing fun _ : ι => R where

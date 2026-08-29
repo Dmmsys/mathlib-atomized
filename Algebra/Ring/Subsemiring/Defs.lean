@@ -32,9 +32,9 @@ class AddSubmonoidWithOneClass
   (no additional axioms)
 
 中文:
-类 AddSubmonoidWithOneClass
-  参数: (S : 类型) (R : outParam 类型) [AddMonoidWithOne R]
-  继承: AddSubmonoidClass S R, OneMemClass S R
+类 加法带幺子幺半群类
+  参数: (S : 类型) (R : outParam 类型) [加法带幺幺半群 R]
+  继承: 加法子幺半群类 S R, OneMem类 S R
   (无附加公理)
 -/
 class AddSubmonoidWithOneClass (S : Type*) (R : outParam Type*) [AddMonoidWithOne R]
@@ -57,7 +57,7 @@ theorem natCast_mem
 
 中文:
 定理 natCast_mem
-  条件: [AddSubmonoidWithOneClass S R] (n : 自然数)
+  条件: [加法带幺子幺半群类 S R] (n : 自然数)
   结论: (n : R) in s
   证明: by
   induction n <;> simp [zero_mem, add_mem, one_mem, *]
@@ -80,8 +80,8 @@ lemma ofNat_mem
   rw [← Nat.cast_ofNat]; exact natCast_mem s n
 
 中文:
-引理 ofNat_mem
-  条件: [AddSubmonoidWithOneClass S R] (s : S) (n : 自然数) [n.AtLeastTwo]
+引理 of自然数_mem
+  条件: [加法带幺子幺半群类 S R] (s : S) (n : 自然数) [n.AtLeastTwo]
   证明: by
   rw [← Nat.cast_ofNat]; exact natCast_mem s n
 
@@ -115,9 +115,9 @@ class SubsemiringClass
   (no additional axioms)
 
 中文:
-类 SubsemiringClass
-  参数: (S : 类型) (R : outParam (类型u)) [NonAssocSemiring R]
-  继承: SubmonoidClass S R, AddSubmonoidClass S R
+类 子半环类
+  参数: (S : 类型) (R : outParam (类型u)) [非结合半环 R]
+  继承: 子幺半群类 S R, 加法子幺半群类 S R
   (无附加公理)
 -/
 class SubsemiringClass (S : Type*) (R : outParam (Type u)) [NonAssocSemiring R]
@@ -160,7 +160,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: nontrivial_of_ne 0 1 fun H => zero_ne_one (congr_arg Subtype.val H)
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg, nontrivial_of_ne, zero_ne_one
@@ -178,7 +178,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: [NoZeroDivisors R]
+  签名: [无零因子 R]
   定义体: Subtype.coe_injective.noZeroDivisors _ rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.noZeroDivisors, coe_injective, noZeroDivisors
@@ -281,7 +281,7 @@ instance toCommSemiring
 
 中文:
 实例 toCommSemiring
-  签名: {R} [CommSemiring R] [SetLike S R] [SubsemiringClass S R]
+  签名: {R} [交换半环 R] [集合状 S R] [子半环类 S R]
   定义体: fast_instance%
   Subtype.coe_injective.commSemiring Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) (fun _ _ => rfl) fun _ => rfl
@@ -309,9 +309,9 @@ structure Subsemiring
   (no additional axioms)
 
 中文:
-结构 Subsemiring
-  参数: (R : 类型u) [NonAssocSemiring R]
-  继承: Submonoid R, AddSubmonoid R
+结构 子半环
+  参数: (R : 类型u) [非结合半环 R]
+  继承: 子幺半群 R, 加法子幺半群 R
   (无附加公理)
 -/
 structure Subsemiring (R : Type u) [NonAssocSemiring R] extends Submonoid R, AddSubmonoid R
@@ -335,7 +335,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subsemiring R) R
+  签名: 集合状 (子半环 R) R
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -357,7 +357,7 @@ initialize_simps_projections Subsemiring (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subsemiring R)
+  签名: 偏序 (子半环 R)
   定义体: .ofSetLike (Subsemiring R) R
 
 initialize_simps_projections Subsemiring (carrier -> coe, as_prefix coe)
@@ -384,7 +384,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R : 类型} [NonAssocSemiring R] [SetLike S R] [SubsemiringClass S R]
+  签名: {S R : 类型} [非结合半环 R] [集合状 S R] [子半环类 S R]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -423,7 +423,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubsemiringClass (Subsemiring R) R
+  签名: 子半环类 (子半环 R) R
   定义体: zero_mem'
   add_mem {s} := AddSubsemigroup.add_mem' s.toAddSubmonoid.toAddSubsemigroup
   one_mem {s} := Submonoid.one_mem' s.toSubmonoid
@@ -451,7 +451,7 @@ definition toNonUnitalSubsemiring
 
 中文:
 定义 toNonUnitalSubsemiring
-  签名: (S : Subsemiring R)
+  签名: (S : 子半环 R)
   定义体: S
 
 @[simp]
@@ -472,7 +472,7 @@ theorem mem_toSubmonoid
 
 中文:
 定理 mem_toSubmonoid
-  条件: {s : Subsemiring R} {x : R}
+  条件: {s : 子半环 R} {x : R}
   结论: x in s.toSubmonoid ↔ x in s
   证明: Iff.rfl
 
@@ -494,7 +494,7 @@ lemma mem_toNonUnitalSubsemiring
 
 中文:
 引理 mem_toNonUnitalSubsemiring
-  条件: {S : Subsemiring R} {x : R}
+  条件: {S : 子半环 R} {x : R}
   证明: .rfl
 -/
 lemma mem_toNonUnitalSubsemiring {S : Subsemiring R} {x : R} :
@@ -513,7 +513,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subsemiring R} {x : R}
+  条件: {s : 子半环 R} {x : R}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -538,8 +538,8 @@ lemma coe_toNonUnitalSubsemiring
 
 中文:
 引理 coe_toNonUnitalSubsemiring
-  条件: (S : Subsemiring R)
-  结论: (S.toNonUnitalSubsemiring : Set R) = S
+  条件: (S : 子半环 R)
+  结论: (S.toNonUnitalSubsemiring : 集合 R) = S
   证明: rfl
 
 @[simp]
@@ -559,7 +559,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {toSubmonoid : Submonoid R} (add_mem zero_mem) {x : R}
+  条件: {toSubmonoid : 子幺半群 R} (add_mem zero_mem) {x : R}
   证明: .rfl
 
 @[simp]
@@ -578,7 +578,7 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: {toSubmonoid : Submonoid R} (add_mem zero_mem)
+  条件: {toSubmonoid : 子幺半群 R} (add_mem zero_mem)
   证明: rfl
 -/
 theorem coe_set_mk {toSubmonoid : Submonoid R} (add_mem zero_mem) :
@@ -597,7 +597,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : Subsemiring R} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : 子半环 R} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -619,7 +619,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : Subsemiring R) (s : Set R) (hs : s = ↑S)
+  签名: (S : 子半环 R) (s : 集合 R) (hs : s = ↑S)
   定义体: { S.toAddSubmonoid.copy s hs, S.toSubmonoid.copy s hs with carrier := s }
 -/
 protected def copy (S : Subsemiring R) (s : Set R) (hs : s = ↑S) : Subsemiring R :=
@@ -636,7 +636,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : Subsemiring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : 子半环 R) (s : 集合 R) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -654,7 +654,7 @@ theorem toSubmonoid_injective
 
 中文:
 定理 toSubmonoid_injective
-  结论: Function.Injective (toSubmonoid : Subsemiring R -> Submonoid R)
+  结论: 函数.单射 (toSubmonoid : 子半环 R -> 子幺半群 R)
 -/
 theorem toSubmonoid_injective : Function.Injective (toSubmonoid : Subsemiring R -> Submonoid R)
   | _, _, h => ext (SetLike.ext_iff.mp h :)
@@ -702,7 +702,7 @@ lemma toNonUnitalSubsemiring_inj
 
 中文:
 引理 toNonUnitalSubsemiring_inj
-  条件: {S₁ S₂ : Subsemiring R}
+  条件: {S₁ S₂ : 子半环 R}
   证明: toNonUnitalSubsemiring_injective.eq_iff
 
 Depends on / 依赖: eq_iff, toNonUnitalSubsemiring_injective, toNonUnitalSubsemiring_injective.eq_iff
@@ -722,7 +722,7 @@ lemma one_mem_toNonUnitalSubsemiring
 
 中文:
 引理 one_mem_toNonUnitalSubsemiring
-  条件: (S : Subsemiring R)
+  条件: (S : 子半环 R)
   结论: (1 : R) in S.toNonUnitalSubsemiring
   证明: S.one_mem
 
@@ -750,7 +750,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (s : Set R) (sm : Submonoid R) (hm : ↑sm = s) (sa : AddSubmonoid R)
+  签名: (s : 集合 R) (sm : 子幺半群 R) (hm : ↑sm = s) (sa : 加法子幺半群 R)
   定义体: s
   zero_mem' := by exact ha ▸ sa.zero_mem
   one_mem' := by exact hm ▸ sm.one_mem
@@ -780,7 +780,7 @@ theorem mem_mk'
 
 中文:
 定理 mem_mk'
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubmonoid R} (ha : ↑sa = s)
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子幺半群 R} (ha : ↑sa = s)
   证明: Iff.rfl
 
 @[simp]
@@ -804,7 +804,7 @@ theorem mk'_toSubmonoid
 
 中文:
 定理 mk'_toSubmonoid
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubmonoid R}
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子幺半群 R}
   证明: SetLike.coe_injective hm.symm
 
 @[simp]
@@ -826,7 +826,7 @@ theorem mk'_toAddSubmonoid
 
 中文:
 定理 mk'_toAddSubmonoid
-  结论: {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubmonoid R}
+  结论: {s : 集合 R} {sm : 子幺半群 R} (hm : ↑sm = s) {sa : 加法子幺半群 R}
   证明: SetLike.coe_injective ha.symm
 -/
 theorem mk'_toAddSubmonoid {s : Set R} {sm : Submonoid R} (hm : ↑sm = s) {sa : AddSubmonoid R}
@@ -919,7 +919,7 @@ instance toNonAssocSemiring
 
 中文:
 实例 toNonAssocSemiring
-  签名: : NonAssocSemiring s
+  签名: : 非结合半环 s
   定义体: SubsemiringClass.toNonAssocSemiring _
 
 @[simp, norm_cast]
@@ -1023,7 +1023,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: nontrivial_of_ne 0 1 fun H => zero_ne_one (congr_arg Subtype.val H)
 
 Depends on / 依赖: Subtype, Subtype.val, congr_arg, nontrivial_of_ne, zero_ne_one
@@ -1041,7 +1041,7 @@ theorem pow_mem
 
 中文:
 定理 pow_mem
-  结论: {R : 类型} [Semiring R] (s : Subsemiring R) {x : R} (hx : x in s)
+  结论: {R : 类型} [半环 R] (s : 子半环 R) {x : R} (hx : x in s)
   证明: pow_mem hx n
 -/
 protected theorem pow_mem {R : Type*} [Semiring R] (s : Subsemiring R) {x : R} (hx : x in s)
@@ -1058,7 +1058,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: [NoZeroDivisors R]
+  签名: [无零因子 R]
   定义体: (eq_zero_or_eq_zero_of_mul_eq_zero <| Subtype.ext_iff.mp h).imp Subtype.ext Subtype.ext
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.ext_iff.mp, eq_zero_or_eq_zero_of_mul_eq_zero, ext_iff
@@ -1079,7 +1079,7 @@ instance toSemiring
 
 中文:
 实例 toSemiring
-  签名: {R} [Semiring R] (s : Subsemiring R)
+  签名: {R} [半环 R] (s : 子半环 R)
   定义体: { s.toNonAssocSemiring, s.toSubmonoid.toMonoid with }
 
 @[simp, norm_cast]
@@ -1100,7 +1100,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: {R} [Semiring R] (s : Subsemiring R) (x : s) (n : 自然数)
+  条件: {R} [半环 R] (s : 子半环 R) (x : s) (n : 自然数)
   证明: rfl
 -/
 theorem coe_pow {R} [Semiring R] (s : Subsemiring R) (x : s) (n : Nat) :
@@ -1116,7 +1116,7 @@ instance toCommSemiring
 
 中文:
 实例 toCommSemiring
-  签名: {R} [CommSemiring R] (s : Subsemiring R)
+  签名: {R} [交换半环 R] (s : 子半环 R)
   定义体: { s.toSemiring with mul_comm := fun _ _ => Subtype.ext <| mul_comm _ _ }
 
 Depends on / 依赖: Subtype, Subtype.ext, mul_comm, s.toSemiring, toSemiring
@@ -1234,8 +1234,8 @@ theorem coe_toSubmonoid
 
 中文:
 定理 coe_toSubmonoid
-  条件: (s : Subsemiring R)
-  结论: (s.toSubmonoid : Set R) = s
+  条件: (s : 子半环 R)
+  结论: (s.toSubmonoid : 集合 R) = s
   证明: rfl
 
 @[simp]
@@ -1255,8 +1255,8 @@ theorem coe_carrier_toSubmonoid
 
 中文:
 定理 coe_carrier_toSubmonoid
-  条件: (s : Subsemiring R)
-  结论: (s.toSubmonoid.carrier : Set R) = s
+  条件: (s : 子半环 R)
+  结论: (s.toSubmonoid.carrier : 集合 R) = s
   证明: rfl
 -/
 theorem coe_carrier_toSubmonoid (s : Subsemiring R) : (s.toSubmonoid.carrier : Set R) = s :=
@@ -1273,7 +1273,7 @@ theorem mem_toAddSubmonoid
 
 中文:
 定理 mem_toAddSubmonoid
-  条件: {s : Subsemiring R} {x : R}
+  条件: {s : 子半环 R} {x : R}
   结论: x in s.toAddSubmonoid ↔ x in s
   证明: Iff.rfl
 
@@ -1293,8 +1293,8 @@ theorem coe_toAddSubmonoid
 
 中文:
 定理 coe_toAddSubmonoid
-  条件: (s : Subsemiring R)
-  结论: (s.toAddSubmonoid : Set R) = s
+  条件: (s : 子半环 R)
+  结论: (s.toAddSubmonoid : 集合 R) = s
   证明: rfl
 -/
 theorem coe_toAddSubmonoid (s : Subsemiring R) : (s.toAddSubmonoid : Set R) = s :=
@@ -1312,7 +1312,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Subsemiring R)
+  签名: 顶元素 (子半环 R)
   定义体: ⟨{ (⊤ : Submonoid R), (⊤ : AddSubmonoid R) with }⟩
 
 @[simp]
@@ -1337,7 +1337,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : R)
-  结论: x in (⊤ : Subsemiring R)
+  结论: x in (⊤ : 子半环 R)
   证明: Set.mem_univ x
 
 @[simp, norm_cast]
@@ -1358,7 +1358,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Subsemiring R) : Set R) = Set.univ
+  结论: ((⊤ : 子半环 R) : 集合 R) = 集合.univ
   证明: rfl
 -/
 theorem coe_top : ((⊤ : Subsemiring R) : Set R) = Set.univ :=
@@ -1381,7 +1381,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Subsemiring R)
+  签名: 最小值 (子半环 R)
   定义体: ⟨fun s t =>
     { s.toSubmonoid ⊓ t.toSubmonoid, s.toAddSubmonoid ⊓ t.toAddSubmonoid with carrier := s inter t }⟩
 
@@ -1407,8 +1407,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : Subsemiring R)
-  结论: ((p ⊓ p' : Subsemiring R) : Set R) = (p : Set R) inter p'
+  条件: (p p' : 子半环 R)
+  结论: ((p ⊓ p' : 子半环 R) : 集合 R) = (p : 集合 R) inter p'
   证明: rfl
 
 @[simp]
@@ -1428,7 +1428,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : Subsemiring R} {x : R}
+  条件: {p p' : 子半环 R} {x : R}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -1572,8 +1572,8 @@ definition NonUnitalSubsemiring.toSubsemiring
   one_mem' := h1
 
 中文:
-定义 NonUnitalSubsemiring.toSubsemiring
-  签名: (S : NonUnitalSubsemiring R) (h1 : 1 in S)
+定义 NonUnital子半环.toSubsemiring
+  签名: (S : NonUnital子半环 R) (h1 : 1 in S)
   定义体: S
   one_mem' := h1
 -/
@@ -1591,8 +1591,8 @@ lemma Subsemiring.toNonUnitalSubsemiring_toSubsemiring
   proof: rfl
 
 中文:
-引理 Subsemiring.toNonUnitalSubsemiring_toSubsemiring
-  条件: (S : Subsemiring R)
+引理 子半环.toNonUnitalSubsemiring_toSubsemiring
+  条件: (S : 子半环 R)
   证明: rfl
 -/
 lemma Subsemiring.toNonUnitalSubsemiring_toSubsemiring (S : Subsemiring R) :
@@ -1607,8 +1607,8 @@ lemma NonUnitalSubsemiring.toSubsemiring_toNonUnitalSubsemiring
   proof: rfl
 
 中文:
-引理 NonUnitalSubsemiring.toSubsemiring_toNonUnitalSubsemiring
-  条件: (S : NonUnitalSubsemiring R) (h1)
+引理 NonUnital子半环.toSubsemiring_toNonUnitalSubsemiring
+  条件: (S : NonUnital子半环 R) (h1)
   证明: rfl
 -/
 lemma NonUnitalSubsemiring.toSubsemiring_toNonUnitalSubsemiring (S : NonUnitalSubsemiring R) (h1) :

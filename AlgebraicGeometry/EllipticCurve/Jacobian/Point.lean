@@ -97,7 +97,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: (P : Fin 3 -> R)
+  签名: (P : 有限集 3 -> R)
   定义体: ![P x, W'.negY P, P z]
 -/
 def neg (P : Fin 3 -> R) : Fin 3 -> R :=
@@ -114,7 +114,7 @@ lemma neg_X
 
 中文:
 引理 neg_X
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.neg P x = P x
   证明: rfl
 -/
@@ -132,7 +132,7 @@ lemma neg_Y
 
 中文:
 引理 neg_Y
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.neg P y = W'.negY P
   证明: rfl
 -/
@@ -150,7 +150,7 @@ lemma neg_Z
 
 中文:
 引理 neg_Z
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.neg P z = P z
   证明: rfl
 -/
@@ -170,7 +170,7 @@ lemma neg_smul
 
 中文:
 引理 neg_smul
-  条件: (P : Fin 3 -> R) (u : R)
+  条件: (P : 有限集 3 -> R) (u : R)
   结论: W'.neg (u • P) = u • W'.neg P
   证明: by
   rw [neg]; rw [negY_smul]
@@ -191,7 +191,7 @@ lemma neg_smul_equiv
 
 中文:
 引理 neg_smul_equiv
-  条件: (P : Fin 3 -> R) {u : R} (hu : IsUnit u)
+  条件: (P : 有限集 3 -> R) {u : R} (hu : 是单位 u)
   结论: W'.neg (u • P) ≈ W'.neg P
   证明: ⟨hu.unit, (W'.neg_smul ..).symm⟩
 
@@ -213,7 +213,7 @@ lemma neg_equiv
 
 中文:
 引理 neg_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
   结论: W'.neg P ≈ W'.neg Q
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -237,7 +237,7 @@ lemma neg_of_Z_eq_zero'
 
 中文:
 引理 neg_of_Z_eq_zero'
-  条件: {P : Fin 3 -> R} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> R} (hPz : P z = 0)
   结论: W'.neg P = ![P x, -P y, 0]
   证明: by
   rw [neg]; rw [negY_of_Z_eq_zero hPz]; rw [hPz]
@@ -261,7 +261,7 @@ pow_succ, hX.mul_div_cancel_left, mul_one, Odd.neg_pow by decide, div_pow, pow_s
 
 中文:
 引理 neg_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
   证明: by
 have hX {n : Nat} : IsUnit P x ^ n := (isUnit_X_of_Z_eq_zero hP hPz).pow n
   erw [neg_of_Z_eq_zero' hPz, smul_fin3, neg_sq, div_pow, (equation_of_Z_eq_zero hPz).mp hP.left,
@@ -290,7 +290,7 @@ lemma neg_of_Z_ne_zero
 
 中文:
 引理 neg_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   rw [neg]; rw [smul_fin3]
   simp only [fin3_def_ext]
@@ -315,7 +315,7 @@ lemma nonsingular_neg_of_Z_ne_zero
 
 中文:
 引理 nonsingular_neg_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0)
   证明: (nonsingular_some ..).mpr (Affine.nonsingular_neg ..).mpr
     (nonsingular_of_Z_ne_zero hPz).mp hP
 -/
@@ -340,8 +340,8 @@ lemma nonsingular_neg
 
 中文:
 引理 nonsingular_neg
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P)
-  结论: W.Nonsingular W.neg P
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P)
+  结论: W.非奇异 W.neg P
   证明: by
   by_cases hPz : P z = 0
   · simp only [neg_of_Z_eq_zero hP hPz, nonsingular_smul _
@@ -369,7 +369,7 @@ lemma addZ_neg
 
 中文:
 引理 addZ_neg
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: addZ P (W'.neg P) = 0
   证明: addZ_of_X_eq rfl
 
@@ -391,7 +391,7 @@ lemma addX_neg
 
 中文:
 引理 addX_neg
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   结论: W'.addX P (W'.neg P) = W'.dblZ P ^ 2
   证明: by
   linear_combination (norm := (rw [addX, neg_X, neg_Y, neg_Z, dblZ, negY]; ring1))
@@ -415,7 +415,7 @@ lemma negAddY_neg
 
 中文:
 引理 negAddY_neg
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   证明: by
   linear_combination (norm := (rw [negAddY, neg_X, neg_Y, neg_Z, dblZ, negY]; ring1))
     -2 * P z ^ 3 * (P y - W'.negY P) * (equation_iff _).mp hP
@@ -440,7 +440,7 @@ lemma addY_neg
 
 中文:
 引理 addY_neg
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   结论: W'.addY P (W'.neg P) = -W'.dblZ P ^ 3
   证明: by
   rw [addY]; rw [addX_neg hP]; rw [negAddY_neg hP]; rw [addZ_neg]; rw [negY_of_Z_eq_zero rfl]
@@ -464,7 +464,7 @@ lemma addXYZ_neg
 
 中文:
 引理 addXYZ_neg
-  条件: {P : Fin 3 -> R} (hP : W'.Equation P)
+  条件: {P : 有限集 3 -> R} (hP : W'.方程 P)
   证明: by
   rw [addXYZ]; rw [addX_neg hP]; rw [addY_neg hP]; rw [addZ_neg]; rw [smul_fin3]
   simp +decide [fin3_def_ext, Odd.neg_pow]
@@ -506,7 +506,7 @@ lemma negMap_eq
 
 中文:
 引理 negMap_eq
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.negMap ⟦P⟧ = ⟦W'.neg P⟧
   证明: rfl
 -/
@@ -524,7 +524,7 @@ lemma negMap_of_Z_eq_zero
 
 中文:
 引理 negMap_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z = 0)
   证明: by
   rw [negMap_eq]; rw [neg_of_Z_eq_zero hP hPz]; rw [smul_eq _ ((isUnit_Y_of_Z_eq_zero hP hPz).div <| isUnit_X_of_Z_eq_zero hP hPz).neg]
 
@@ -545,7 +545,7 @@ lemma negMap_of_Z_ne_zero
 
 中文:
 引理 negMap_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z != 0)
   证明: by
   rw [negMap_eq]; rw [neg_of_Z_ne_zero hPz]; rw [smul_eq _ <| Ne.isUnit hPz]
 
@@ -593,7 +593,7 @@ definition add
 
 中文:
 定义 add
-  签名: (P Q : Fin 3 -> R)
+  签名: (P Q : 有限集 3 -> R)
   定义体: if P ≈ Q then W'.dblXYZ P else W'.addXYZ P Q
 
 Depends on / 依赖: addXYZ, dblXYZ
@@ -612,7 +612,7 @@ lemma add_of_equiv
 
 中文:
 引理 add_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q)
   结论: W'.add P Q = W'.dblXYZ P
   证明: if_pos h
 
@@ -632,7 +632,7 @@ lemma add_smul_of_equiv
 
 中文:
 引理 add_smul_of_equiv
-  条件: {P Q : Fin 3 -> R} (h : P ≈ Q) {u v : R} (hu : IsUnit u) (hv : IsUnit v)
+  条件: {P Q : 有限集 3 -> R} (h : P ≈ Q) {u v : R} (hu : 是单位 u) (hv : 是单位 v)
   证明: by
   rw [add_of_equiv <| (smul_equiv_smul P Q hu hv).mpr h]; rw [dblXYZ_smul]; rw [add_of_equiv h]
 
@@ -653,7 +653,7 @@ lemma add_self
 
 中文:
 引理 add_self
-  条件: (P : Fin 3 -> R)
+  条件: (P : 有限集 3 -> R)
   结论: W'.add P P = W'.dblXYZ P
   证明: add_of_equiv Setoid.refl _
 
@@ -673,7 +673,7 @@ lemma add_of_eq
 
 中文:
 引理 add_of_eq
-  条件: {P Q : Fin 3 -> R} (h : P = Q)
+  条件: {P Q : 有限集 3 -> R} (h : P = Q)
   结论: W'.add P Q = W'.dblXYZ P
   证明: h ▸ add_self P
 
@@ -693,7 +693,7 @@ lemma add_of_not_equiv
 
 中文:
 引理 add_of_not_equiv
-  条件: {P Q : Fin 3 -> R} (h : ¬P ≈ Q)
+  条件: {P Q : 有限集 3 -> R} (h : ¬P ≈ Q)
   结论: W'.add P Q = W'.addXYZ P Q
   证明: if_neg h
 
@@ -713,7 +713,7 @@ lemma add_smul_of_not_equiv
 
 中文:
 引理 add_smul_of_not_equiv
-  结论: {P Q : Fin 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : IsUnit u)
+  结论: {P Q : 有限集 3 -> R} (h : ¬P ≈ Q) {u v : R} (hu : 是单位 u)
   证明: by
   rw [add_of_not_equiv <| h.comp (smul_equiv_smul P Q hu hv).mp]; rw [addXYZ_smul]; rw [add_of_not_equiv h]
 
@@ -736,7 +736,7 @@ lemma add_smul_equiv
 
 中文:
 引理 add_smul_equiv
-  条件: (P Q : Fin 3 -> R) {u v : R} (hu : IsUnit u) (hv : IsUnit v)
+  条件: (P Q : 有限集 3 -> R) {u v : R} (hu : 是单位 u) (hv : 是单位 v)
   证明: by
   by_cases h : P ≈ Q
   · exact ⟨hu.unit ^ 4, by convert! (add_smul_of_equiv h hu hv).symm⟩
@@ -762,7 +762,7 @@ lemma add_equiv
 
 中文:
 引理 add_equiv
-  条件: {P P' Q Q' : Fin 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q')
+  条件: {P P' Q Q' : 有限集 3 -> R} (hP : P ≈ P') (hQ : Q ≈ Q')
   证明: by
   rcases hP, hQ with ⟨⟨u, rfl⟩, ⟨v, rfl⟩⟩
   exact add_smul_equiv P' Q' u.isUnit v.isUnit
@@ -785,7 +785,7 @@ lemma add_of_Z_eq_zero
 
 中文:
 引理 add_of_Z_eq_zero
-  结论: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
+  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
   证明: by
   rw [add_of_equiv <| equiv_of_Z_eq_zero hP hQ hPz hQz]; rw [dblXYZ_of_Z_eq_zero hP.left hPz]
 
@@ -806,7 +806,7 @@ lemma add_of_Z_eq_zero_left
 
 中文:
 引理 add_of_Z_eq_zero_left
-  条件: {P Q : Fin 3 -> R} (hP : W'.Equation P) (hPz : P z = 0) (hQz : Q z != 0)
+  条件: {P Q : 有限集 3 -> R} (hP : W'.方程 P) (hPz : P z = 0) (hQz : Q z != 0)
   证明: by
   rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_left hPz hQz]; rw [addXYZ_of_Z_eq_zero_left hP hPz]
 
@@ -827,7 +827,7 @@ lemma add_of_Z_eq_zero_right
 
 中文:
 引理 add_of_Z_eq_zero_right
-  结论: {P Q : Fin 3 -> R} (hQ : W'.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> R} (hQ : W'.方程 Q) (hPz : P z != 0)
   证明: by
   rw [add_of_not_equiv <| not_equiv_of_Z_eq_zero_right hPz hQz]; rw [addXYZ_of_Z_eq_zero_right hQ hQz]
 
@@ -848,7 +848,7 @@ lemma add_of_Y_eq
 
 中文:
 引理 add_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
+  结论: {P Q : 有限集 3 -> F} (hPz : P z != 0) (hQz : Q z != 0)
   证明: by
   rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx hy]; rw [dblXYZ_of_Y_eq hQz hx hy hy']
 
@@ -870,7 +870,7 @@ lemma add_of_Y_ne
 
 中文:
 引理 add_of_Y_ne
-  结论: {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   rw [add_of_not_equiv <| not_equiv_of_Y_ne hy]; rw [addXYZ_of_X_eq hP hQ hPz hQz hx]
 
@@ -892,7 +892,7 @@ lemma add_of_Y_ne'
 
 中文:
 引理 add_of_Y_ne'
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   rw [add_of_equiv <| equiv_of_X_eq_of_Y_eq hPz hQz hx <| Y_eq_of_Y_ne' hP hQ hx hy]; rw [dblXYZ_of_Z_ne_zero hP hQ hPz hQz hx hy]
 
@@ -920,7 +920,7 @@ lemma add_of_X_ne
 
 中文:
 引理 add_of_X_ne
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Equation P) (hQ : W.Equation Q)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.方程 P) (hQ : W.方程 Q)
   证明: by
   rw [add_of_not_equiv <| not_equiv_of_X_ne hx]; rw [addXYZ_of_Z_ne_zero hP hQ hPz hQz hx]
 
@@ -946,7 +946,7 @@ lemma nonsingular_add_of_Z_ne_zero
 
 中文:
 引理 nonsingular_add_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P)
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.非奇异 P)
   证明: (nonsingular_some ..).mpr Affine.nonsingular_add ((nonsingular_of_Z_ne_zero hPz).mp hP)
 ((nonsingular_of_Z_ne_zero hQz).mp hQ) by rwa [← X_eq_iff hPz hQz, ← Y_eq_iff' hPz hQz]
 -/
@@ -976,7 +976,7 @@ nonsingular_smul _ (isUnit_X_of_Z_eq_zero hP hPz).mul Ne.isUnit
 
 中文:
 引理 nonsingular_add
-  条件: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
+  条件: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
   证明: by
   by_cases hPz : P z = 0
   · by_cases hQz : Q z = 0
@@ -1042,7 +1042,7 @@ lemma addMap_eq
 
 中文:
 引理 addMap_eq
-  条件: (P Q : Fin 3 -> R)
+  条件: (P Q : 有限集 3 -> R)
   结论: W'.addMap ⟦P⟧ ⟦Q⟧ = ⟦W'.add P Q⟧
   证明: rfl
 -/
@@ -1066,7 +1066,7 @@ exact Setoid.symm equiv_zero_of_Z_eq_zero hQ hQz
 
 中文:
 引理 addMap_of_Z_eq_zero_left
-  结论: {P : Fin 3 -> F} {Q : PointClass F} (hP : W.Nonsingular P)
+  结论: {P : 有限集 3 -> F} {Q : PointClass F} (hP : W.非奇异 P)
   证明: by
   revert hQ
   refine Q.inductionOn (motive := fun Q => _ -> W.addMap _ Q = Q) fun Q hQ => ?_
@@ -1106,7 +1106,7 @@ exact Setoid.symm equiv_zero_of_Z_eq_zero hP hPz
 
 中文:
 引理 addMap_of_Z_eq_zero_right
-  结论: {P : PointClass F} {Q : Fin 3 -> F} (hP : W.NonsingularLift P)
+  结论: {P : PointClass F} {Q : 有限集 3 -> F} (hP : W.NonsingularLift P)
   证明: by
   revert hP
   refine P.inductionOn (motive := fun P => _ -> W.addMap P _ = P) fun P hP => ?_
@@ -1144,7 +1144,7 @@ smul_eq _ isUnit_addU_of_Y_ne hPz hQz hy]
 
 中文:
 引理 addMap_of_Y_eq
-  结论: {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Equation Q) (hPz : P z != 0)
+  结论: {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.方程 Q) (hPz : P z != 0)
   证明: by
   by_cases hy : P y * Q z ^ 3 = Q y * P z ^ 3
   · rw [addMap_eq, add_of_Y_eq hPz hQz hx hy hy',
@@ -1177,7 +1177,7 @@ smul_eq _ isUnit_dblZ_of_Y_ne' hP hQ hPz hx not_and.mp hxy hx]
 
 中文:
 引理 addMap_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   by_cases hx : P x * Q z ^ 2 = Q x * P z ^ 2
   · rw [addMap_eq, add_of_Y_ne' hP hQ hPz hQz hx <| not_and.mp hxy hx,
@@ -1281,8 +1281,8 @@ instance [Nontrivial
   body: ⟨⟨nonsingularLift_zero⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Zero W'.Point
+实例 [非平凡
+  签名: R] : 零 W'.Point
   定义体: ⟨⟨nonsingularLift_zero⟩⟩
 
 Depends on / 依赖: nonsingularLift_zero
@@ -1301,7 +1301,7 @@ lemma zero_def
 
 中文:
 引理 zero_def
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (0 : W'.Point) = ⟨nonsingularLift_zero⟩
   证明: rfl
 -/
@@ -1319,7 +1319,7 @@ lemma zero_point
 
 中文:
 引理 zero_point
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: (0 : W'.Point).point = ⟦![1, 1, 0]⟧
   证明: rfl
 -/
@@ -1337,7 +1337,7 @@ lemma mk_ne_zero
 
 中文:
 引理 mk_ne_zero
-  条件: [Nontrivial R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧)
+  条件: [非平凡 R] {X Y : R} (h : W'.NonsingularLift ⟦![X, Y, 1]⟧)
   结论: mk h != 0
   证明: (not_equiv_of_Z_eq_zero_right one_ne_zero rfl).comp Quotient.eq.mp.comp Point.ext_iff.mp
 
@@ -1355,7 +1355,7 @@ definition fromAffine
 
 中文:
 定义 fromAffine
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
 -/
 def fromAffine [Nontrivial R] : W'.toAffine.Point -> W'.Point
   | 0 => 0
@@ -1372,7 +1372,7 @@ lemma fromAffine_zero
 
 中文:
 引理 fromAffine_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: fromAffine 0 = (0 : W'.Point)
   证明: rfl
 -/
@@ -1389,7 +1389,7 @@ lemma fromAffine_some
 
 中文:
 引理 fromAffine_some
-  条件: [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y)
+  条件: [非平凡 R] {X Y : R} (h : W'.toAffine.非奇异 X Y)
   证明: rfl
 -/
 lemma fromAffine_some [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y) :
@@ -1406,7 +1406,7 @@ lemma fromAffine_some_ne_zero
 
 中文:
 引理 fromAffine_some_ne_zero
-  条件: [Nontrivial R] {X Y : R} (h : W'.toAffine.Nonsingular X Y)
+  条件: [非平凡 R] {X Y : R} (h : W'.toAffine.非奇异 X Y)
   证明: mk_ne_zero (nonsingularLift_some ..).mpr h
 
 Depends on / 依赖: mk_ne_zero, nonsingularLift_some
@@ -1443,7 +1443,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg W.Point
+  签名: 取负 W.Point
   定义体: ⟨neg⟩
 -/
 instance : Neg W.Point :=
@@ -1513,7 +1513,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add W.Point
+  签名: 加法 W.Point
   定义体: ⟨add⟩
 -/
 noncomputable instance : Add W.Point :=
@@ -1569,7 +1569,7 @@ definition toAffine
 
 中文:
 定义 toAffine
-  签名: (P : Fin 3 -> F)
+  签名: (P : 有限集 3 -> F)
   定义体: if hP : W.Nonsingular P ∧ P z != 0 then .some _ _ (nonsingular_of_Z_ne_zero hP.2).mp hP.1 else 0
 
 Depends on / 依赖: Nonsingular, W.Nonsingular, nonsingular_of_Z_ne_zero
@@ -1589,7 +1589,7 @@ lemma toAffine_of_singular
 
 中文:
 引理 toAffine_of_singular
-  条件: {P : Fin 3 -> F} (hP : ¬W.Nonsingular P)
+  条件: {P : 有限集 3 -> F} (hP : ¬W.非奇异 P)
   结论: toAffine W P = 0
   证明: by
   rw [toAffine]; rw [dif_neg <| not_and_of_not_left _ hP]
@@ -1611,7 +1611,7 @@ lemma toAffine_of_Z_eq_zero
 
 中文:
 引理 toAffine_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hPz : P z = 0)
+  条件: {P : 有限集 3 -> F} (hPz : P z = 0)
   结论: toAffine W P = 0
   证明: by
   rw [toAffine]; rw [dif_neg <| not_and_not_right.mpr fun _ => hPz]
@@ -1650,7 +1650,7 @@ lemma toAffine_of_Z_ne_zero
 
 中文:
 引理 toAffine_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P) (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P) (hPz : P z != 0)
   证明: by
   rw [toAffine]; rw [dif_pos ⟨hP]; rw [hPz⟩]
 
@@ -1671,7 +1671,7 @@ lemma toAffine_some
 
 中文:
 引理 toAffine_some
-  条件: {X Y : F} (h : W.Nonsingular ![X, Y, 1])
+  条件: {X Y : F} (h : W.非奇异 ![X, Y, 1])
   证明: by
   simp only [toAffine_of_Z_ne_zero h one_ne_zero, fin3_def_ext, one_pow, div_one]
 
@@ -1696,7 +1696,7 @@ lemma toAffine_smul
 
 中文:
 引理 toAffine_smul
-  条件: (P : Fin 3 -> F) {u : F} (hu : IsUnit u)
+  条件: (P : 有限集 3 -> F) {u : F} (hu : 是单位 u)
   证明: by
   by_cases hP : W.Nonsingular P
   · by_cases hPz : P z = 0
@@ -1729,7 +1729,7 @@ lemma toAffine_of_equiv
 
 中文:
 引理 toAffine_of_equiv
-  条件: {P Q : Fin 3 -> F} (h : P ≈ Q)
+  条件: {P Q : 有限集 3 -> F} (h : P ≈ Q)
   结论: toAffine W P = toAffine W Q
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -1756,7 +1756,7 @@ lemma toAffine_neg
 
 中文:
 引理 toAffine_neg
-  条件: {P : Fin 3 -> F} (hP : W.Nonsingular P)
+  条件: {P : 有限集 3 -> F} (hP : W.非奇异 P)
   证明: by
   by_cases hPz : P z = 0
   · rw [neg_of_Z_eq_zero hP hPz,
@@ -1787,7 +1787,7 @@ lemma toAffine_add_of_Z_ne_zero
 
 中文:
 引理 toAffine_add_of_Z_ne_zero
-  结论: [DecidableEq F] {P Q : Fin 3 -> F}
+  结论: [DecidableEq F] {P Q : 有限集 3 -> F}
   证明: by
   rw [toAffine_some <| nonsingular_add_of_Z_ne_zero hP hQ hPz hQz hxy]; rw [toAffine_of_Z_ne_zero hP hPz]; rw [toAffine_of_Z_ne_zero hQ hQz]; rw [Affine.Point.add_some by rwa [← X_eq_iff hPz hQz]; rw [← Y_eq_iff' hPz hQz]]
 -/
@@ -1818,7 +1818,7 @@ to
 
 中文:
 引理 toAffine_add
-  条件: [DecidableEq F] {P Q : Fin 3 -> F} (hP : W.Nonsingular P) (hQ : W.Nonsingular Q)
+  条件: [DecidableEq F] {P Q : 有限集 3 -> F} (hP : W.非奇异 P) (hQ : W.非奇异 Q)
   证明: by
   by_cases hPz : P z = 0
   · rw [toAffine_of_Z_eq_zero hPz, zero_add]
@@ -1885,7 +1885,7 @@ lemma toAffineLift_eq
 
 中文:
 引理 toAffineLift_eq
-  条件: {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧)
+  条件: {P : 有限集 3 -> F} (hP : W.NonsingularLift ⟦P⟧)
   证明: rfl
 -/
 lemma toAffineLift_eq {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) :
@@ -1902,7 +1902,7 @@ lemma toAffineLift_of_Z_eq_zero
 
 中文:
 引理 toAffineLift_of_Z_eq_zero
-  条件: {P : Fin 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0)
+  条件: {P : 有限集 3 -> F} (hP : W.NonsingularLift ⟦P⟧) (hPz : P z = 0)
   证明: toAffine_of_Z_eq_zero hPz
 
 Depends on / 依赖: toAffine_of_Z_eq_zero
@@ -1939,7 +1939,7 @@ lemma toAffineLift_of_Z_ne_zero
 
 中文:
 引理 toAffineLift_of_Z_ne_zero
-  条件: {P : Fin 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z != 0)
+  条件: {P : 有限集 3 -> F} {hP : W.NonsingularLift ⟦P⟧} (hPz : P z != 0)
   证明: toAffine_of_Z_ne_zero hP hPz
 
 Depends on / 依赖: toAffine_of_Z_ne_zero
@@ -2085,7 +2085,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup W.Point
+  签名: 加法交换群 W.Point
   定义体: nsmulRec
   zsmul := zsmulRec
   zero_add _ := by
@@ -2143,7 +2143,7 @@ lemma map_neg
 
 中文:
 引理 map_neg
-  条件: (f : R ->+* S) (P : Fin 3 -> R)
+  条件: (f : R ->+* S) (P : 有限集 3 -> R)
   结论: (W'.map f).neg (f ∘ P) = f ∘ W'.neg P
   证明: by
   simp only [neg, map_negY, comp_fin3]
@@ -2169,7 +2169,7 @@ lemma map_add
 
 中文:
 引理 map_add
-  结论: (f : F ->+* K) {P Q : Fin 3 -> F} (hP : W.Nonsingular P)
+  结论: (f : F ->+* K) {P Q : 有限集 3 -> F} (hP : W.非奇异 P)
   证明: by
   by_cases h : P ≈ Q
   · rw [add_of_equiv <| (comp_equiv_comp f hP hQ).mpr h, add_of_equiv h, map_dblXYZ]
@@ -2194,7 +2194,7 @@ lemma baseChange_neg
 
 中文:
 引理 baseChange_neg
-  结论: [Algebra R S] [Algebra R A] [Algebra S A] [IsScalarTower R S A] [Algebra R B]
+  结论: [代数 R S] [代数 R A] [代数 S A] [标量塔 R S A] [代数 R B]
   证明: by
   rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Jacobian.map_neg]; rw [map_baseChange]
 
@@ -2216,7 +2216,7 @@ lemma baseChange_add
 
 中文:
 引理 baseChange_add
-  结论: [Algebra R S] [Algebra R F] [Algebra S F] [IsScalarTower R S F] [Algebra R K]
+  结论: [代数 R S] [代数 R F] [代数 S F] [标量塔 R S F] [代数 R K]
   证明: by
   rw [← RingHom.coe_coe]; rw [← WeierstrassCurve.Jacobian.map_add _ hP hQ]; rw [map_baseChange]
 
@@ -2239,8 +2239,8 @@ abbreviation Affine.Point.toJacobian
   body: Jacobian.Point.fromAffine P
 
 中文:
-缩写 Affine.Point.toJacobian
-  签名: [Nontrivial R] {W : Affine R} (P : W.Point)
+缩写 仿射.Point.toJacobian
+  签名: [非平凡 R] {W : 仿射 R} (P : W.Point)
   定义体: Jacobian.Point.fromAffine P
 
 Depends on / 依赖: Jacobian, Jacobian.Point.fromAffine, X.property, fromAffine, property

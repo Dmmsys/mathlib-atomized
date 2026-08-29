@@ -39,7 +39,7 @@ definition kernelCone
 
 中文:
 定义 kernelCone
-  签名: : KernelFork f
+  签名: : 核叉 f
   定义体: KernelFork.ofι (ofHom (LinearMap.ker f.hom).subtype) by aesop
 
 Depends on / 依赖: KernelFork, KernelFork.of, LinearMap, LinearMap.ker, f.hom, subtype
@@ -62,7 +62,7 @@ hom_ext LinearMap.ext fun x => Subtype.ext_iff.2 (by sim
 
 中文:
 定义 kernelIsLimit
-  签名: : IsLimit (kernelCone f)
+  签名: : 是极限 (kernelCone f)
   定义体: Fork.IsLimit.mk _
     (fun s => ofHom <|
       LinearMap.codRestrict f.hom.ker (Fork.ι s).hom fun c =>
@@ -98,7 +98,7 @@ refine IsLimit.ofIsoLimit (kernelIsLimit g)
 
 中文:
 定义 isLimitKernelFork
-  签名: (f : M ⟶ N) (g : N ⟶ P) (H : Function.Exact f.hom g.hom)
+  签名: (f : M ⟶ N) (g : N ⟶ P) (H : 函数.正合 f.hom g.hom)
   定义体: by
 refine IsLimit.ofIsoLimit (kernelIsLimit g)
     Cone.ext ((LinearEquiv.ofInjective _ H₂).trans
@@ -125,7 +125,7 @@ definition cokernelCocone
 
 中文:
 定义 cokernelCocone
-  签名: : CokernelCofork f
+  签名: : 余核余叉 f
   定义体: CokernelCofork.ofπ (ofHom (LinearMap.range f.hom).mkQ) hom_ext LinearMap.range_mkQ_comp _
 
 Depends on / 依赖: CokernelCofork, CokernelCofork.of, LinearMap, LinearMap.range, LinearMap.range_mkQ_comp, f.hom, hom_ext, range_mkQ_comp
@@ -147,7 +147,7 @@ LinearMap.range_le_ker_iff.2 ModuleCat.hom_ext_iff.mp CokernelCofork.condition s
 
 中文:
 定义 cokernelIsColimit
-  签名: : IsColimit (cokernelCocone f)
+  签名: : 是余极限 (cokernelCocone f)
   定义体: Cofork.IsColimit.mk _
     (fun s => ofHom <| (LinearMap.range f.hom).liftQ (Cofork.π s).hom <|
 LinearMap.range_le_ker_iff.2 ModuleCat.hom_ext_iff.mp CokernelCofork.condition s)
@@ -183,7 +183,7 @@ refine IsColimit.ofIsoColimit (ModuleCat.cokernelIsColimit f)
 
 中文:
 定义 isColimitCokernelCofork
-  签名: (f : M ⟶ N) (g : N ⟶ P) (H : Function.Exact f.hom g.hom)
+  签名: (f : M ⟶ N) (g : N ⟶ P) (H : 函数.正合 f.hom g.hom)
   定义体: by
 refine IsColimit.ofIsoColimit (ModuleCat.cokernelIsColimit f)
     Cocone.ext (((Submodule.quotEquivOfEq _ _ (LinearMap.exact_iff.mp H)).toModuleIso).symm
@@ -215,7 +215,7 @@ theorem hasKernels_moduleCat
 
 中文:
 定理 hasKernels_moduleCat
-  结论: HasKernels (ModuleCat R)
+  结论: 有Kernels (模范畴 R)
   证明: ⟨fun f => HasLimit.mk ⟨_, kernelIsLimit f⟩⟩
 
 Depends on / 依赖: HasLimit, HasLimit.mk, kernelIsLimit
@@ -233,7 +233,7 @@ theorem hasCokernels_moduleCat
 
 中文:
 定理 hasCokernels_moduleCat
-  结论: HasCokernels (ModuleCat R)
+  结论: 有余kernels (模范畴 R)
   证明: ⟨fun f => HasColimit.mk ⟨_, cokernelIsColimit f⟩⟩
 
 Depends on / 依赖: HasColimit, HasColimit.mk, cokernelIsColimit
@@ -259,7 +259,7 @@ definition kernelIsoKer
 
 中文:
 定义 kernelIsoKer
-  签名: {G H : ModuleCat.{v} R} (f : G ⟶ H)
+  签名: {G H : 模范畴.{v} R} (f : G ⟶ H)
   定义体: limit.isoLimitCone ⟨_, kernelIsLimit f⟩
 
 Depends on / 依赖: isoLimitCone, kernelIsLimit, limit.isoLimitCone
@@ -320,7 +320,7 @@ definition cokernelIsoRangeQuotient
 
 中文:
 定义 cokernelIsoRangeQuotient
-  签名: {G H : ModuleCat.{v} R} (f : G ⟶ H)
+  签名: {G H : 模范畴.{v} R} (f : G ⟶ H)
   定义体: colimit.isoColimitCocone ⟨_, cokernelIsColimit f⟩
 
 Depends on / 依赖: cokernelIsColimit, colimit, colimit.isoColimitCocone, isoColimitCocone
@@ -382,7 +382,7 @@ theorem cokernel_π_ext
 
 中文:
 定理 cokernel_π_ext
-  条件: {M N : ModuleCat.{u} R} (f : M ⟶ N) {x y : N} (m : M) (w : x = y + f m)
+  条件: {M N : 模范畴.{u} R} (f : M ⟶ N) {x y : N} (m : M) (w : x = y + f m)
   证明: by
   subst w
   simpa only [map_add, add_eq_left] using! cokernel.condition_apply f m

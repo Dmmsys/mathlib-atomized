@@ -79,7 +79,7 @@ theorem smoothingSeminormSeq_exists_pnat
   proof: exists_lt_of_ciInf_lt (lt_add_of_le_of_pos (le_refl _) (half_pos hε))
 
 中文:
-定理 smoothingSeminormSeq_exists_pnat
+定理 smoothingSeminormSeq_存在_pnat
   条件: (x : R) {ε : 实数} (hε : 0 < ε)
   证明: exists_lt_of_ciInf_lt (lt_add_of_le_of_pos (le_refl _) (half_pos hε))
 -/
@@ -487,7 +487,7 @@ theorem smoothingFun_le
 
 中文:
 定理 smoothingFun_le
-  条件: (x : R) (n : P自然数)
+  条件: (x : R) (n : 正自然数)
   证明: ciInf_le (smoothingSeminormSeq_bddBelow μ x) _
 
 Depends on / 依赖: ciInf_le, smoothingSeminormSeq_bddBelow
@@ -599,7 +599,7 @@ theorem mu_bdd
 中文:
 定理 mu_bdd
   条件: (n : 自然数)
-  结论: (mu μ hn n : 实数) / n in Set.Icc (0 : 实数) 1
+  结论: (mu μ hn n : 实数) / n in 集合.闭区间 (0 : 实数) 1
   证明: by
   refine Set.mem_Icc.mpr ⟨div_nonneg (cast_nonneg (mu μ hn n)) (cast_nonneg n), ?_⟩
   by_cases hn0 : n = 0

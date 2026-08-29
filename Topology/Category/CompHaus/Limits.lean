@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitPullbacks (fun _ => True)
+  签名: 有ExplicitPullbacks (fun _ => 真)
   定义体: inferInstance
 -/
 instance : HasExplicitPullbacks (fun _ => True) where
@@ -51,7 +51,7 @@ example : FinitaryExtensive CompHaus.{u} := inferInstance
 
 中文:
 实例 :
-  签名: HasExplicitFiniteCoproducts.{w, u} (fun _ => True)
+  签名: 有ExplicitFiniteCoproducts.{w, u} (fun _ => 真)
   定义体: inferInstance
 
 example : FinitaryExtensive CompHaus.{u} := inferInstance
@@ -71,7 +71,7 @@ abbreviation isTerminalPUnit
 
 中文:
 缩写 isTerminalPUnit
-  签名: : IsTerminal (CompHaus.of PUnit.{u + 1})
+  签名: : 是终止 (CompHaus.of 命题单元.{u + 1})
   定义体: CompHausLike.isTerminalPUnit
 
 Depends on / 依赖: CompHausLike, CompHausLike.isTerminalPUnit, isTerminalPUnit
@@ -90,7 +90,7 @@ noncomputable example : PreservesFiniteCoproducts compHausToTop := inferInstance
 
 中文:
 定义 terminalIsoPUnit
-  签名: : ⊤_ CompHaus.{u} ≅ CompHaus.of PUnit
+  签名: : ⊤_ CompHaus.{u} ≅ CompHaus.of 命题单元
   定义体: terminalIsTerminal.uniqueUpToIso CompHaus.isTerminalPUnit
 
 noncomputable example : PreservesFiniteCoproducts compHausToTop := inferInstance

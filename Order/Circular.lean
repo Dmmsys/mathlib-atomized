@@ -154,7 +154,7 @@ class CircularPreorder
     - sbtw_trans_left({a b c d : α}) : sbtw a b c -> sbtw b d c -> sbtw a d c
 
 中文:
-类 CircularPreorder
+类 循环预序
   参数: (α : 类型)
   继承: Btw α, SBtw α
   公理与运算 (5 个):
@@ -195,9 +195,9 @@ class CircularPartialOrder
     - btw_antisymm({a b c : α}) : btw a b c -> btw c b a -> a = b ∨ b = c ∨ c = a
 
 中文:
-类 CircularPartialOrder
+类 CircularPartial序
   参数: (α : 类型)
-  继承: CircularPreorder α
+  继承: 循环预序 α
   公理与运算 (1 个):
     - btw_antisymm({a b c : α}) : btw a b c -> btw c b a -> a = b ∨ b = c ∨ c = a
 -/
@@ -219,9 +219,9 @@ class CircularOrder
     - btw_total : forall a b c : α, btw a b c ∨ btw c b a
 
 中文:
-类 CircularOrder
+类 Circular序
   参数: (α : 类型)
-  继承: CircularPartialOrder α
+  继承: CircularPartial序 α
   公理与运算 (1 个):
     - btw_total : 对任意 a b c : α, btw a b c ∨ btw c b a
 -/
@@ -1160,8 +1160,8 @@ abbreviation Preorder.toCircularPreorder
     rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hbd, hdc⟩ | ⟨hdc, hcb⟩ | 
 
 中文:
-缩写 Preorder.toCircularPreorder
-  签名: (α : 类型) [Preorder α]
+缩写 预序.toCircularPreorder
+  签名: (α : 类型) [预序 α]
   定义体: a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
   sbtw a b c := a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
   btw_refl _ := .inl ⟨le_rfl, le_rfl⟩
@@ -1199,8 +1199,8 @@ abbreviation PartialOrder.toCircularPartialOrder
     
 
 中文:
-缩写 PartialOrder.toCircularPartialOrder
-  签名: (α : 类型) [PartialOrder α]
+缩写 偏序.toCircularPartialOrder
+  签名: (α : 类型) [偏序 α]
   定义体: { Preorder.toCircularPreorder α with
     btw_antisymm := fun {a b c} => by
       rintro (⟨hab, hbc⟩ | ⟨hbc, hca⟩ | ⟨hca, hab⟩) (⟨hcb, hba⟩ | ⟨hba, hac⟩ | ⟨hac, hcb⟩)
@@ -1240,8 +1240,8 @@ abbreviation LinearOrder.toCircularOrder
       · exact
 
 中文:
-缩写 LinearOrder.toCircularOrder
-  签名: (α : 类型) [LinearOrder α]
+缩写 线性序.toCircularOrder
+  签名: (α : 类型) [线性序 α]
   定义体: { PartialOrder.toCircularPartialOrder α with
     btw_total := fun a b c => by
       rcases le_total a b with hab | hba <;> rcases le_total b c with hbc | hcb <;>
@@ -1320,7 +1320,7 @@ instance circularPreorder
 
 中文:
 实例 circularPreorder
-  签名: (α : 类型) [CircularPreorder α]
+  签名: (α : 类型) [循环预序 α]
   定义体: btw_refl _
   btw_cyclic_left {_ _ _} := @btw_cyclic_right α _ _ _ _
   sbtw_trans_left {_ _ _ _} habc hbdc := hbdc.trans_right habc
@@ -1344,7 +1344,7 @@ instance circularPartialOrder
 
 中文:
 实例 circularPartialOrder
-  签名: (α : 类型) [CircularPartialOrder α]
+  签名: (α : 类型) [CircularPartial序 α]
   定义体: fun {_ _ _} habc hcba => @btw_antisymm α _ _ _ _ hcba habc
 
 Depends on / 依赖: btw_antisymm

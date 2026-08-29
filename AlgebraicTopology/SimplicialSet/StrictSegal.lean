@@ -53,7 +53,7 @@ structure StrictSegal
 结构 StrictSegal
   参数: where
   公理与运算 (3 个):
-    - spineToSimplex((m : 自然数) (h : m <= n + 1 := by lia)) : Path X m -> X _⦋m⦌ₙ₊₁
+    - spineToSimplex((m : 自然数) (h : m <= n + 1 := by lia)) : 道路 X m -> X _⦋m⦌ₙ₊₁
     - spine_spineToSimplex((m : 自然数) (h : m <= n + 1)) : spine X m ∘ spineToSimplex m = id
     - spineToSimplex_spine((m : 自然数) (h : m <= n + 1)) : spineToSimplex m ∘ spine X m = id
 -/
@@ -77,10 +77,10 @@ class IsStrictSegal
     - spine_bijective((X) (m : Nat) (h : m <= n + 1 := by grind)) : Function.Bijective (X.spine m)
 
 中文:
-类 IsStrictSegal
+类 是StrictSegal
   参数: (X : SSet.Truncated.{u} (n + 1))
   公理与运算 (1 个):
-    - spine_bijective((X) (m : 自然数) (h : m <= n + 1 := by grind)) : Function.Bijective (X.spine m)
+    - spine_bijective((X) (m : 自然数) (h : m <= n + 1 := by grind)) : 函数.双射 (X.spine m)
 
 Depends on / 依赖: Bijective, Function, Function.Bijective, X.spine
 -/
@@ -99,7 +99,7 @@ lemma spine_injective
 
 中文:
 引理 spine_injective
-  结论: (X : SSet.Truncated.{u} (n + 1)) [X.IsStrictSegal]
+  结论: (X : SSet.Truncated.{u} (n + 1)) [X.是StrictSegal]
   证明: (spine_bijective X m).injective
 
 Depends on / 依赖: injective, spine_bijective
@@ -119,7 +119,7 @@ lemma spine_surjective
 
 中文:
 引理 spine_surjective
-  结论: (X : SSet.Truncated.{u} (n + 1)) [X.IsStrictSegal]
+  结论: (X : SSet.Truncated.{u} (n + 1)) [X.是StrictSegal]
   证明: (spine_bijective X m).surjective p
 
 Depends on / 依赖: X.spine, spine_bijective, surjective
@@ -139,8 +139,8 @@ lemma IsStrictSegal.ext
   proof: X.spine_injective (by ext i; apply h)
 
 中文:
-引理 IsStrictSegal.ext
-  结论: [X.IsStrictSegal] {d : 自然数} {hd} {x y : X _⦋d + 1⦌ₙ₊₁}
+引理 是StrictSegal.ext
+  结论: [X.是StrictSegal] {d : 自然数} {hd} {x y : X _⦋d + 1⦌ₙ₊₁}
   证明: X.spine_injective (by ext i; apply h)
 
 Depends on / 依赖: X.spine_injective, spine_injective
@@ -171,8 +171,8 @@ lemma IsStrictSegal.hom_ext
  
 
 中文:
-引理 IsStrictSegal.hom_ext
-  结论: {Y : SSet.Truncated.{u} (n + 1)} [Y.IsStrictSegal]
+引理 是StrictSegal.hom_ext
+  结论: {Y : SSet.Truncated.{u} (n + 1)} [Y.是StrictSegal]
   证明: by
   ext ⟨⟨m, hm⟩⟩ x
   induction m using SimplexCategory.rec with | _ m
@@ -216,7 +216,7 @@ funext .left_inv Equiv.ofBijective (X.spine m) _
 
 中文:
 定义 ofIsStrictSegal
-  签名: [IsStrictSegal X]
+  签名: [是StrictSegal X]
   定义体: .invFun Equiv.ofBijective (X.spine m) (X.spine_bijective m h)
   spine_spineToSimplex m _ :=
 funext .right_inv Equiv.ofBijective (X.spine m) _
@@ -250,7 +250,7 @@ lemma spine_spineToSimplex_apply
 
 中文:
 引理 spine_spineToSimplex_apply
-  条件: (m : 自然数) (h : m <= n + 1) (f : Path X m)
+  条件: (m : 自然数) (h : m <= n + 1) (f : 道路 X m)
   证明: congr_fun (sx.spine_spineToSimplex m h) f
 
 @[simp]
@@ -299,7 +299,7 @@ definition spineEquiv
 
 中文:
 定义 spineEquiv
-  签名: : X _⦋m⦌ₙ₊₁ ≃ Path X m where
+  签名: : X _⦋m⦌ₙ₊₁ ≃ 道路 X m where
   定义体: X.spine m
   invFun := sx.spineToSimplex m h
   left_inv := sx.spineToSimplex_spine_apply m h
@@ -324,7 +324,7 @@ theorem spineInjective
 
 中文:
 定理 spineInjective
-  结论: Function.Injective (sx.spineEquiv m h)
+  结论: 函数.单射 (sx.spineEquiv m h)
   证明: Equiv.injective _
 
 Depends on / 依赖: Equiv.injective, injective
@@ -343,7 +343,7 @@ definition spineToDiagonal
 
 中文:
 定义 spineToDiagonal
-  签名: : Path X m -> X _⦋1⦌ₙ₊₁
+  签名: : 道路 X m -> X _⦋1⦌ₙ₊₁
   定义体: X.map (tr (diag m)).op ∘ sx.spineToSimplex m h
 
 Depends on / 依赖: X.map, spineToSimplex, sx.spineToSimplex
@@ -365,7 +365,7 @@ lemma isStrictSegal
 中文:
 引理 isStrictSegal
   条件: (sx : StrictSegal X)
-  结论: IsStrictSegal X where
+  结论: 是StrictSegal X where
   证明: sx.spineEquiv m h
 
 Depends on / 依赖: spineEquiv, sx.spineEquiv
@@ -389,7 +389,7 @@ theorem spineToSimplex_vertex
 
 中文:
 定理 spineToSimplex_vertex
-  条件: (i : Fin (m + 1)) (f : Path X m)
+  条件: (i : 有限集 (m + 1)) (f : 道路 X m)
   证明: by
   rw [← spine_vertex]; rw [spine_spineToSimplex_apply]
 
@@ -414,7 +414,7 @@ theorem spineToSimplex_arrow
 
 中文:
 定理 spineToSimplex_arrow
-  条件: (i : Fin m) (f : Path X m)
+  条件: (i : 有限集 m) (f : 道路 X m)
   证明: by
   rw [← spine_arrow]; rw [spine_spineToSimplex_apply]
 
@@ -441,7 +441,7 @@ convert! spine_map_subinterval X m h j l hjl sx.spineToSimplex m h f
 
 中文:
 定理 spineToSimplex_interval
-  条件: (f : Path X m) (j l : 自然数) (hjl : j + l <= m)
+  条件: (f : 道路 X m) (j l : 自然数) (hjl : j + l <= m)
   证明: by
   apply sx.spineInjective l
   dsimp only [spineEquiv, Equiv.coe_fn_mk]
@@ -472,7 +472,7 @@ theorem spineToSimplex_edge
 
 中文:
 定理 spineToSimplex_edge
-  条件: (f : Path X m) (j l : 自然数) (hjl : j + l <= m)
+  条件: (f : 道路 X m) (j l : 自然数) (hjl : j + l <= m)
   证明: by
   dsimp only [spineToDiagonal, Function.comp_apply]
   rw [← spineToSimplex_interval]; rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [← tr_comp]; rw [diag_subinterval_eq]
@@ -686,7 +686,7 @@ structure StrictSegal
 结构 StrictSegal
   参数: where
   公理与运算 (3 个):
-    - spineToSimplex({n : 自然数}) : Path X n -> X _⦋n⦌
+    - spineToSimplex({n : 自然数}) : 道路 X n -> X _⦋n⦌
     - spine_spineToSimplex((n : 自然数)) : spine X n ∘ spineToSimplex = id
     - spineToSimplex_spine((n : 自然数)) : spineToSimplex ∘ spine X n = id
 -/
@@ -708,10 +708,10 @@ class IsStrictSegal
     - segal((n : Nat)) : Function.Bijective (spine X n)
 
 中文:
-类 IsStrictSegal
+类 是StrictSegal
   参数: : 命题 where
   公理与运算 (1 个):
-    - segal((n : 自然数)) : Function.Bijective (spine X n)
+    - segal((n : 自然数)) : 函数.双射 (spine X n)
 -/
 class IsStrictSegal : Prop where
   segal (n : Nat) : Function.Bijective (spine X n)
@@ -732,7 +732,7 @@ funext .left_inv Equiv.ofBijective (X.spine n) _
 
 中文:
 定义 ofIsStrictSegal
-  签名: [IsStrictSegal X]
+  签名: [是StrictSegal X]
   定义体: .invFun Equiv.ofBijective (X.spine n) (IsStrictSegal.segal n)
   spine_spineToSimplex n :=
 funext .right_inv Equiv.ofBijective (X.spine n) _
@@ -769,7 +769,7 @@ instance [X.IsStrictSegal]
 @[simp]
 
 中文:
-实例 [X.IsStrictSegal]
+实例 [X.是StrictSegal]
   签名: (n : 自然数)
   定义体: ((ofIsStrictSegal X).truncation n).isStrictSegal
 
@@ -794,7 +794,7 @@ lemma spine_spineToSimplex_apply
 
 中文:
 引理 spine_spineToSimplex_apply
-  条件: {n : 自然数} (f : Path X n)
+  条件: {n : 自然数} (f : 道路 X n)
   证明: congr_fun (sx.spine_spineToSimplex n) f
 
 @[simp]
@@ -864,7 +864,7 @@ theorem spineInjective
 
 中文:
 定理 spineInjective
-  结论: Function.Injective (sx.spineEquiv n)
+  结论: 函数.单射 (sx.spineEquiv n)
   证明: Equiv.injective _
 
 Depends on / 依赖: Equiv.injective, injective
@@ -886,7 +886,7 @@ lemma isStrictSegal
 中文:
 引理 isStrictSegal
   条件: (sx : StrictSegal X)
-  结论: IsStrictSegal X where
+  结论: 是StrictSegal X where
   证明: sx.spineEquiv n
 
 @[simp]
@@ -910,7 +910,7 @@ theorem spineToSimplex_vertex
 
 中文:
 定理 spineToSimplex_vertex
-  条件: (i : Fin (n + 1)) (f : Path X n)
+  条件: (i : 有限集 (n + 1)) (f : 道路 X n)
   证明: by
   rw [← spine_vertex]; rw [spine_spineToSimplex_apply]
 
@@ -935,7 +935,7 @@ theorem spineToSimplex_arrow
 
 中文:
 定理 spineToSimplex_arrow
-  条件: (i : Fin n) (f : Path X n)
+  条件: (i : 有限集 n) (f : 道路 X n)
   证明: by
   rw [← spine_arrow]; rw [spine_spineToSimplex_apply]
 
@@ -955,7 +955,7 @@ definition spineToDiagonal
 
 中文:
 定义 spineToDiagonal
-  签名: (f : Path X n)
+  签名: (f : 道路 X n)
   定义体: SimplicialObject.diagonal X (sx.spineToSimplex f)
 
 Depends on / 依赖: SimplicialObject, SimplicialObject.diagonal, diagonal, spineToSimplex, sx.spineToSimplex
@@ -1224,7 +1224,7 @@ structure StrictSegalCore
 结构 StrictSegalCore
   参数: (n : 自然数)
   公理与运算 (4 个):
-    - concat((x : X _⦋1⦌) (s : X _⦋n⦌) (h : X.δ 0 x = X.map (SimplexCategory.const _ _ 0).op s)) : X _⦋n + 1⦌
+    - concat((x : X _⦋1⦌) (s : X _⦋n⦌) (h : X.δ 0 x = X.map (单纯形范畴.const _ _ 0).op s)) : X _⦋n + 1⦌
     - map_mkOfSucc_zero_concat(x s h) : X.map (mkOfSucc 0).op (concat x s h) = x
     - δ₀_concat(x s h) : X.δ 0 (concat x s h) = s
     - injective({x y : X _⦋n + 1⦌} (h : X.map (mkOfSucc 0).op x = X.map (mkOfSucc 0).op y) (h₀ : X.δ 0 x = X.δ 0 y)) : x = y
@@ -1340,7 +1340,7 @@ lemma spineToSimplex_zero
 
 中文:
 引理 spineToSimplex_zero
-  条件: (p : X.Path 0)
+  条件: (p : X.道路 0)
   结论: spineToSimplex h p = p.vertex 0
   证明: rfl
 -/
@@ -1356,7 +1356,7 @@ lemma spineToSimplex_succ
 
 中文:
 引理 spineToSimplex_succ
-  条件: (p : X.Path (n + 1))
+  条件: (p : X.道路 (n + 1))
   证明: rfl
 -/
 lemma spineToSimplex_succ (p : X.Path (n + 1)) :
@@ -1376,7 +1376,7 @@ lemma map_mkOfSucc_zero_spineToSimplex
 
 中文:
 引理 map_mkOfSucc_zero_spineToSimplex
-  条件: (p : X.Path (n + 1))
+  条件: (p : X.道路 (n + 1))
   证明: by
   rw [spineToSimplex_succ]; rw [map_mkOfSucc_zero_concat]
 
@@ -1399,7 +1399,7 @@ lemma δ₀_spineToSimplex
 
 中文:
 引理 δ₀_spineToSimplex
-  条件: (p : X.Path (n + 1))
+  条件: (p : X.道路 (n + 1))
   证明: by
   rw [spineToSimplex_succ]; rw [δ₀_concat]
 
@@ -1530,7 +1530,7 @@ instance isStrictSegal
 
 中文:
 实例 isStrictSegal
-  签名: : IsStrictSegal (nerve C)
+  签名: : 是StrictSegal (nerve C)
   定义体: .isStrictSegal strictSegal C
 
 Depends on / 依赖: isStrictSegal, strictSegal

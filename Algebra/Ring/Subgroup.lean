@@ -41,7 +41,7 @@ scoped[Pointwise] attribute [
 
 中文:
 定义 mul
-  签名: : Mul (AddSubgroup R) where
+  签名: : 乘法 (加法子群 R) where
   定义体: { __ := M.toAddSubmonoid * N.toAddSubmonoid
     neg_mem' := fun h => AddSubmonoid.mul_induction_on h
       (fun m hm n hn => by rw [← neg_mul]; exact AddSubmonoid.mul_mem_mul (M.neg_mem hm) hn)
@@ -68,7 +68,7 @@ lemma mul_toAddSubmonoid
 
 中文:
 引理 mul_toAddSubmonoid
-  条件: (M N : AddSubgroup R)
+  条件: (M N : 加法子群 R)
   证明: rfl
 -/
 lemma mul_toAddSubmonoid (M N : AddSubgroup R) :
@@ -91,7 +91,7 @@ lemma zero_smul
 
 中文:
 引理 zero_smul
-  条件: (s : AddSubgroup M)
+  条件: (s : 加法子群 M)
   结论: (0 : R) • s = ⊥
   证明: by
   simp [eq_bot_iff_forall, pointwise_smul_def]

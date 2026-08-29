@@ -62,7 +62,7 @@ definition polar
 
 中文:
 定义 polar
-  签名: (s : Set E)
+  签名: (s : 集合 E)
   定义体: { y : F | forall x in s, ‖B x y‖ <= 1 }
 -/
 def polar (s : Set E) : Set F :=
@@ -79,7 +79,7 @@ theorem polar_mem_iff
 
 中文:
 定理 polar_mem_iff
-  条件: (s : Set E) (y : F)
+  条件: (s : 集合 E) (y : F)
   结论: y in B.polar s ↔ 对任意 x in s, ‖B x y‖ <= 1
   证明: Iff.rfl
 
@@ -99,7 +99,7 @@ theorem polar_mem
 
 中文:
 定理 polar_mem
-  条件: (s : Set E) (y : F) (hy : y in B.polar s)
+  条件: (s : 集合 E) (y : F) (hy : y in B.polar s)
   结论: 对任意 x in s, ‖B x y‖ <= 1
   证明: hy
 -/
@@ -115,8 +115,8 @@ theorem polar_eq_biInter_preimage
   proof: by aesop
 
 中文:
-定理 polar_eq_biInter_preimage
-  条件: (s : Set E)
+定理 polar_eq_bi整数er_preimage
+  条件: (s : 集合 E)
   证明: by aesop
 -/
 theorem polar_eq_biInter_preimage (s : Set E) :
@@ -139,8 +139,8 @@ theorem polar_isClosed
 
 中文:
 定理 polar_isClosed
-  条件: (s : Set E)
-  结论: IsClosed (X := WeakBilin B.flip) (B.polar s)
+  条件: (s : 集合 E)
+  结论: 是闭集 (X := WeakBilin B.flip) (B.polar s)
   证明: by
   rw [polar_eq_biInter_preimage]
   exact isClosed_biInter
@@ -168,7 +168,7 @@ theorem zero_mem_polar
 
 中文:
 定理 zero_mem_polar
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: (0 : F) in B.polar s
   证明: fun _ _ => by
   simp only [map_zero, norm_zero, zero_le_one]
@@ -191,8 +191,8 @@ theorem polar_nonempty
 
 中文:
 定理 polar_nonempty
-  条件: (s : Set E)
-  结论: Set.Nonempty (B.polar s)
+  条件: (s : 集合 E)
+  结论: 集合.非空 (B.polar s)
   证明: by
   use 0
   exact zero_mem_polar B s
@@ -215,8 +215,8 @@ theorem polar_eq_iInter
   simp only [polar_mem_iff, Set.mem_iInter, Set.mem_ofPred_eq]
 
 中文:
-定理 polar_eq_iInter
-  条件: {s : Set E}
+定理 polar_eq_i整数er
+  条件: {s : 集合 E}
   结论: B.polar s = ⋂ x in s, { y : F | ‖B x y‖ <= 1 }
   证明: by
   ext
@@ -263,7 +263,7 @@ theorem polar_iUnion
 
 中文:
 定理 polar_iUnion
-  条件: {ι} {s : ι -> Set E}
+  条件: {ι} {s : ι -> 集合 E}
   结论: B.polar (⋃ i, s i) = ⋂ i, B.polar (s i)
   证明: B.polar_gc.l_iSup
 
@@ -286,7 +286,7 @@ theorem polar_union
 
 中文:
 定理 polar_union
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   结论: B.polar (s union t) = B.polar s inter B.polar t
   证明: B.polar_gc.l_sup
 
@@ -307,7 +307,7 @@ theorem polar_antitone
 
 中文:
 定理 polar_antitone
-  结论: Antitone (B.polar : Set E -> Set F)
+  结论: 递减 (B.polar : 集合 E -> 集合 F)
   证明: B.polar_gc.monotone_l
 
 @[simp]
@@ -330,7 +330,7 @@ theorem polar_empty
 
 中文:
 定理 polar_empty
-  结论: B.polar ∅ = Set.univ
+  结论: B.polar ∅ = 集合.univ
   证明: B.polar_gc.l_bot
 
 @[simp]
@@ -399,7 +399,7 @@ theorem polar_zero
 
 中文:
 定理 polar_zero
-  结论: B.polar ({0} : Set E) = Set.univ
+  结论: B.polar ({0} : 集合 E) = 集合.univ
   证明: by
   simp only [polar_singleton, map_zero, zero_apply, norm_zero, zero_le_one, Set.ofPred_true]
 
@@ -423,7 +423,7 @@ theorem subset_bipolar
 
 中文:
 定理 subset_bipolar
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: s subseteq B.flip.polar (B.polar s)
   证明: fun x hx y hy => by
   rw [B.flip_apply]
@@ -449,7 +449,7 @@ theorem tripolar_eq_polar
 
 中文:
 定理 tripolar_eq_polar
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: B.polar (B.flip.polar (B.polar s)) = B.polar s
   证明: (B.polar_antitone (B.subset_bipolar s)).antisymm (subset_bipolar B.flip (B.polar s))
 
@@ -471,8 +471,8 @@ theorem sInter_polar_finite_subset_eq_polar
   simpa [mem_polar_singleton] using hx _ (Set.finite_singleton a) (Set.singleton_subset_iff.mpr ha)
 
 中文:
-定理 sInter_polar_finite_subset_eq_polar
-  条件: (s : Set E)
+定理 s整数er_polar_finite_subset_eq_polar
+  条件: (s : 集合 E)
   证明: by
   ext x
   simp only [Set.sInter_image, Set.mem_ofPred_eq, Set.mem_iInter, and_imp]
@@ -517,7 +517,7 @@ theorem polar_univ
 中文:
 定理 polar_univ
   条件: (h : SeparatingRight B)
-  结论: B.polar Set.univ = {(0 : F)}
+  结论: B.polar 集合.univ = {(0 : F)}
   证明: by
   rw [Set.eq_singleton_iff_unique_mem]
   refine ⟨by simp only [zero_mem_polar], fun y hy => h _ fun x => ?_⟩
@@ -559,7 +559,7 @@ theorem polar_subMulAction
 
 中文:
 定理 polar_subMulAction
-  条件: {S : 类型} [SetLike S E] [SMulMemClass S 𝕜 E] (m : S)
+  条件: {S : 类型} [集合状 S E] [SMulMem类 S 𝕜 E] (m : S)
   证明: by
   ext y
   constructor
@@ -595,7 +595,7 @@ definition polarSubmodule
 
 中文:
 定义 polarSubmodule
-  签名: {S : 类型} [SetLike S E] [SMulMemClass S 𝕜 E] (m : S)
+  签名: {S : 类型} [集合状 S E] [SMulMem类 S 𝕜 E] (m : S)
   定义体: .copy (⨅ x in m, LinearMap.ker (B x)) (B.polar m) by ext; simp [polar_subMulAction]
 
 Depends on / 依赖: B.polar, LinearMap, LinearMap.ker, polar_subMulAction
@@ -650,7 +650,7 @@ definition polar
 
 中文:
 定义 polar
-  签名: (R : 类型) [NormedCommRing R] {M : 类型} [AddCommMonoid M]
+  签名: (R : 类型) [NormedComm环 R] {M : 类型} [加法交换幺半群 M]
   定义体: (topDualPairing R M).flip.polar
 
 Depends on / 依赖: flip.polar, topDualPairing
@@ -669,7 +669,7 @@ definition polarSubmodule
 
 中文:
 定义 polarSubmodule
-  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] {M : 类型} [AddCommMonoid M]
+  签名: (𝕜 : 类型) [NontriviallyNormedField 𝕜] {M : 类型} [加法交换幺半群 M]
   定义体: (topDualPairing 𝕜 M).flip.polarSubmodule m
 
 Depends on / 依赖: flip.polarSubmodule, polarSubmodule, topDualPairing
@@ -691,7 +691,7 @@ lemma polarSubmodule_eq_polar
 
 中文:
 引理 polarSubmodule_eq_polar
-  条件: (m : SubMulAction 𝕜 E)
+  条件: (m : SubMul作用 𝕜 E)
   证明: rfl
 -/
 lemma polarSubmodule_eq_polar (m : SubMulAction 𝕜 E) :
@@ -708,7 +708,7 @@ theorem mem_polar_iff
 
 中文:
 定理 mem_polar_iff
-  条件: {x' : StrongDual 𝕜 E} (s : Set E)
+  条件: {x' : StrongDual 𝕜 E} (s : 集合 E)
   结论: x' in polar 𝕜 s ↔ 对任意 z in s, ‖x' z‖ <= 1
   证明: Iff.rfl
 
@@ -730,7 +730,7 @@ alias polarSubmodule_eq_setOf := polarSubmodule_eq_setOfPred
 
 中文:
 引理 polarSubmodule_eq_setOfPred
-  条件: {S : 类型} [SetLike S E] [SMulMemClass S 𝕜 E] (m : S)
+  条件: {S : 类型} [集合状 S E] [SMulMem类 S 𝕜 E] (m : S)
   证明: (topDualPairing 𝕜 E).flip.polar_subMulAction _
 
 @[deprecated (since := "2026-07-09")]
@@ -757,7 +757,7 @@ lemma mem_polarSubmodule
 
 中文:
 引理 mem_polarSubmodule
-  结论: {S : 类型} [SetLike S E] [SMulMemClass S 𝕜 E] (m : S)
+  结论: {S : 类型} [集合状 S E] [SMulMem类 S 𝕜 E] (m : S)
   证明: propext_iff.mp congr($(polarSubmodule_eq_setOfPred 𝕜 m) y)
 
 @[simp]
@@ -780,7 +780,7 @@ theorem zero_mem_polar
 
 中文:
 定理 zero_mem_polar
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: (0 : StrongDual 𝕜 E) in polar 𝕜 s
   证明: LinearMap.zero_mem_polar _ s
 
@@ -800,8 +800,8 @@ theorem polar_nonempty
 
 中文:
 定理 polar_nonempty
-  条件: (s : Set E)
-  结论: Set.Nonempty (polar 𝕜 s)
+  条件: (s : 集合 E)
+  结论: 集合.非空 (polar 𝕜 s)
   证明: LinearMap.polar_nonempty _ _
 
 Depends on / 依赖: LinearMap, LinearMap.polar_nonempty, polar_nonempty
@@ -824,7 +824,7 @@ theorem polar_empty
 
 中文:
 定理 polar_empty
-  结论: polar 𝕜 (∅ : Set E) = Set.univ
+  结论: polar 𝕜 (∅ : 集合 E) = 集合.univ
   证明: LinearMap.polar_empty _
 
 @[simp]
@@ -889,7 +889,7 @@ theorem polar_zero
 
 中文:
 定理 polar_zero
-  结论: polar 𝕜 ({0} : Set E) = Set.univ
+  结论: polar 𝕜 ({0} : 集合 E) = 集合.univ
   证明: LinearMap.polar_zero _
 
 Depends on / 依赖: LinearMap, LinearMap.polar_zero, polar_zero
@@ -918,7 +918,7 @@ theorem polar_univ
 
 中文:
 定理 polar_univ
-  结论: polar 𝕜 (univ : Set E) = {(0 : StrongDual 𝕜 E)}
+  结论: polar 𝕜 (univ : 集合 E) = {(0 : StrongDual 𝕜 E)}
   证明: (topDualPairing 𝕜 E).flip.polar_univ
     (LinearMap.flip_separatingRight.mpr (dualPairing_separatingLeft 𝕜 E))
 

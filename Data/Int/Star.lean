@@ -86,7 +86,7 @@ instance instStarOrderedRing
 
 中文:
 实例 instStarOrderedRing
-  签名: : StarOrderedRing 整数 where
+  签名: : StarOrdered环 整数 where
   定义体: by simp [eq_comm, le_iff_exists_nonneg_add (a := a)]
 
 Depends on / 依赖: eq_comm, le_iff_exists_nonneg_add

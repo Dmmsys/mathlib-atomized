@@ -575,7 +575,7 @@ theorem fibRec_charPoly_eq
 
 中文:
 定理 fibRec_charPoly_eq
-  条件: {β : 类型} [CommRing β]
+  条件: {β : 类型} [交换环 β]
   证明: by
   rw [fibRec]; rw [LinearRecurrence.charPoly]
   simp [Finset.sum_fin_eq_sum_range, Finset.sum_range_succ', ← smul_X_eq_monomial]

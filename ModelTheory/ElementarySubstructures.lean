@@ -45,8 +45,8 @@ definition Substructure.IsElementary
   body: forall ⦃n⦄ (φ : L.Formula (Fin n)) (x : Fin n -> S), φ.Realize (((↑) : _ -> M) ∘ x) ↔ φ.Realize x
 
 中文:
-定义 Substructure.IsElementary
-  签名: (S : L.Substructure M)
+定义 子结构.IsElementary
+  签名: (S : L.子结构 M)
   定义体: forall ⦃n⦄ (φ : L.Formula (Fin n)) (x : Fin n -> S), φ.Realize (((↑) : _ -> M) ∘ x) ↔ φ.Realize x
 
 Depends on / 依赖: Formula, L.Formula, Realize
@@ -70,7 +70,7 @@ structure ElementarySubstructure
 结构 ElementarySubstructure
   参数: where
   公理与运算 (2 个):
-    - toSubstructure : L.Substructure M
+    - toSubstructure : L.子结构 M
     - isElementary' : toSubstructure.IsElementary
 -/
 structure ElementarySubstructure where
@@ -94,7 +94,7 @@ instance instCoe
 
 中文:
 实例 instCoe
-  签名: : Coe (L.ElementarySubstructure M) (L.Substructure M)
+  签名: : Coe (L.ElementarySubstructure M) (L.子结构 M)
   定义体: ⟨ElementarySubstructure.toSubstructure⟩
 
 Depends on / 依赖: ElementarySubstructure, ElementarySubstructure.toSubstructure, toSubstructure
@@ -113,7 +113,7 @@ instance instSetLike
 
 中文:
 实例 instSetLike
-  签名: : SetLike (L.ElementarySubstructure M) M
+  签名: : 集合状 (L.ElementarySubstructure M) M
   定义体: ⟨fun x => x.toSubstructure.carrier, fun ⟨⟨s, hs1⟩, hs2⟩ ⟨⟨t, ht1⟩, _⟩ _ => by
     congr⟩
 
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (L.ElementarySubstructure M)
+  签名: 偏序 (L.ElementarySubstructure M)
   定义体: .ofSetLike (L.ElementarySubstructure M) M
 
 Depends on / 依赖: ElementarySubstructure, L.ElementarySubstructure, ofSetLike
@@ -175,7 +175,7 @@ theorem isElementary
 中文:
 定理 isElementary
   条件: (S : L.ElementarySubstructure M)
-  结论: (S : L.Substructure M).IsElementary
+  结论: (S : L.子结构 M).IsElementary
   证明: S.isElementary'
 
 Depends on / 依赖: S.isElementary, isElementary
@@ -239,7 +239,7 @@ theorem subtype_injective
 中文:
 定理 subtype_injective
   条件: (S : L.ElementarySubstructure M)
-  结论: Function.Injective (subtype S)
+  结论: 函数.单射 (subtype S)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -262,7 +262,7 @@ theorem coe_subtype
 中文:
 定理 coe_subtype
   条件: (S : L.ElementarySubstructure M)
-  结论: ⇑S.subtype = Subtype.val
+  结论: ⇑S.subtype = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype (S : L.ElementarySubstructure M) : ⇑S.subtype = Subtype.val :=
@@ -278,7 +278,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (L.ElementarySubstructure M)
+  签名: : 顶元素 (L.ElementarySubstructure M)
   定义体: ⟨⟨⊤, fun _ _ _ => Substructure.realize_formula_top.symm⟩⟩
 
 Depends on / 依赖: Substructure, Substructure.realize_formula_top.symm, realize_formula_top
@@ -298,7 +298,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (L.ElementarySubstructure M)
+  签名: : 可居 (L.ElementarySubstructure M)
   定义体: ⟨⊤⟩
 
 @[simp]
@@ -346,7 +346,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : L.ElementarySubstructure M) : Set M) = Set.univ
+  结论: ((⊤ : L.ElementarySubstructure M) : 集合 M) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -430,7 +430,7 @@ instance instNonempty
 
 中文:
 实例 instNonempty
-  签名: [Nonempty M] {S : L.ElementarySubstructure M}
+  签名: [非空 M] {S : L.ElementarySubstructure M}
   定义体: (model_nonemptyTheory_iff L).1 inferInstance
 
 Depends on / 依赖: model_nonemptyTheory_iff
@@ -471,8 +471,8 @@ theorem isElementary_of_exists
   proof: fun _ => S.subtype.isElementary_of_exists htv
 
 中文:
-定理 isElementary_of_exists
-  结论: (S : L.Substructure M)
+定理 isElementary_of_存在
+  结论: (S : L.子结构 M)
   证明: fun _ => S.subtype.isElementary_of_exists htv
 
 Depends on / 依赖: S.subtype.isElementary_of_exists, isElementary_of_exists, subtype
@@ -496,7 +496,7 @@ definition toElementarySubstructure
 
 中文:
 定义 toElementarySubstructure
-  签名: (S : L.Substructure M)
+  签名: (S : L.子结构 M)
   定义体: ⟨S, S.isElementary_of_exists htv⟩
 
 Depends on / 依赖: S.isElementary_of_exists, isElementary_of_exists
@@ -521,7 +521,7 @@ definition MeetsDefinable
 
 中文:
 定义 MeetsDefinable
-  签名: (A : Set M)
+  签名: (A : 集合 M)
   定义体: forall (D : Set M), D.Nonempty -> A.Definable₁ L D -> (D inter A).Nonempty
 
 Depends on / 依赖: A.Definable, D.Nonempty, Nonempty
@@ -675,7 +675,7 @@ theorem meetsDefinable
 中文:
 定理 meetsDefinable
   条件: (S : L.ElementarySubstructure M)
-  结论: L.MeetsDefinable (S : Set M)
+  结论: L.MeetsDefinable (S : 集合 M)
   证明: by
   rintro D ⟨x, hx⟩ ⟨φ, hφ⟩
   have hφx : φ.Realize ![x] := by

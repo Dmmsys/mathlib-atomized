@@ -177,7 +177,7 @@ definition elabSubsetLike
 
 中文:
 定义 elabSubsetLike
-  签名: (x y : Term) (le leCls sub subCls : Name) (expectedType? : Option Expr)
+  签名: (x y : 项) (le leCls sub subCls : Name) (expectedType? : 选项类型 Expr)
   定义体: do
   let rel ← `(SubsetElabAux $x $y)
   let e ← elabApp rel expectedType?
@@ -330,7 +330,7 @@ definition nameDict
 
 中文:
 定义 nameDict
-  签名: : Std.HashMap String (List String)
+  签名: : Std.HashMap String (列表 String)
   定义体: .ofList [
   ("le", ["Subset"]),
   ("ge", ["Superset"]),

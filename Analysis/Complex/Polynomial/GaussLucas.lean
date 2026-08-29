@@ -31,7 +31,7 @@ definition derivRootWeight
 
 中文:
 定义 derivRootWeight
-  签名: (P : Complex[X]) (z w : Complex)
+  签名: (P : 复形[X]) (z w : 复形)
   定义体: if P.eval z = 0 then (Pi.single z 1 : Complex -> Real) w
   else P.rootMultiplicity w / ‖z - w‖ ^ 2
 
@@ -54,7 +54,7 @@ theorem derivRootWeight_nonneg
 
 中文:
 定理 derivRootWeight_nonneg
-  条件: (P : Complex[X]) (z w : Complex)
+  条件: (P : 复形[X]) (z w : 复形)
   结论: 0 <= derivRootWeight P z w
   证明: by
   simp only [derivRootWeight, Pi.single, Function.update_apply]
@@ -87,7 +87,7 @@ theorem sum_derivRootWeight_pos
 
 中文:
 定理 sum_derivRootWeight_pos
-  条件: (hP : 0 < degree P) (z : Complex)
+  条件: (hP : 0 < degree P) (z : 复形)
   证明: by
   have hP₀ : P != 0 := by rintro rfl; simp at hP
   by_cases hPz : P.eval z = 0

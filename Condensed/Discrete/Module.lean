@@ -52,7 +52,7 @@ definition functorToPresheaves
 
 中文:
 定义 functorToPresheaves
-  签名: : ModuleCat.{max u w} R ⥤ ((CompHausLike.{u} P)ᵒᵖ ⥤ ModuleCat R) where
+  签名: : 模范畴.{最大值 u w} R ⥤ ((余mpHausLike.{u} P)ᵒᵖ ⥤ 模范畴 R) where
   定义体: {
     obj := fun ⟨S⟩ => ModuleCat.of R (LocallyConstant S X)
     map := fun f => ModuleCat.ofHom (comapₗ R f.unop.hom.hom) }
@@ -122,7 +122,7 @@ abbreviation functorToPresheaves
 
 中文:
 缩写 functorToPresheaves
-  签名: : ModuleCat.{u + 1} R ⥤ (CompHaus.{u}ᵒᵖ ⥤ ModuleCat R)
+  签名: : 模范畴.{u + 1} R ⥤ (CompHaus.{u}ᵒᵖ ⥤ 模范畴 R)
   定义体: CompHausLike.LocallyConstantModule.functorToPresheaves.{u + 1, u} R
 
 Depends on / 依赖: CompHausLike, CompHausLike.LocallyConstantModule.functorToPresheaves, EmbeddingLike, LocallyConstantModule, functorToPresheaves, toEmbeddingLike
@@ -141,7 +141,7 @@ abbreviation functor
 
 中文:
 缩写 functor
-  签名: : ModuleCat R ⥤ CondensedMod.{u} R
+  签名: : 模范畴 R ⥤ CondensedMod.{u} R
   定义体: CompHausLike.LocallyConstantModule.functor.{u + 1, u} R
     (fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
@@ -162,7 +162,7 @@ definition functorIsoDiscreteAux₁
 
 中文:
 定义 functorIsoDiscreteAux₁
-  签名: (M : ModuleCat.{u + 1} R)
+  签名: (M : 模范畴.{u + 1} R)
   定义体: ModuleCat.ofHom (constₗ R)
   inv := ModuleCat.ofHom (evalₗ R PUnit.unit)
 
@@ -183,7 +183,7 @@ definition functorIsoDiscreteAux₂
 
 中文:
 定义 functorIsoDiscreteAux₂
-  签名: (M : ModuleCat R)
+  签名: (M : 模范畴 R)
   定义体: (discrete _).mapIso (functorIsoDiscreteAux₁ R M)
 
 Depends on / 依赖: discrete, mapIso
@@ -224,7 +224,7 @@ definition functorIsoDiscreteComponents
 
 中文:
 定义 functorIsoDiscreteComponents
-  签名: (M : ModuleCat R)
+  签名: (M : 模范畴 R)
   定义体: have : (Condensed.forget R).ReflectsIsomorphisms :=
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
@@ -289,7 +289,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: : functor R ⊣ underlying (ModuleCat R)
+  签名: : functor R ⊣ underlying (模范畴 R)
   定义体: Adjunction.ofNatIsoLeft (discreteUnderlyingAdj _) (functorIsoDiscrete R).symm
 
 Depends on / 依赖: Adjunction, Adjunction.ofNatIsoLeft, discreteUnderlyingAdj, functorIsoDiscrete, ofNatIsoLeft
@@ -308,7 +308,7 @@ definition fullyFaithfulFunctor
 
 中文:
 定义 fullyFaithfulFunctor
-  签名: : (functor R).FullyFaithful
+  签名: : (functor R).满忠实
   定义体: (adjunction R).fullyFaithfulLOfCompIsoId
     (NatIso.ofComponents fun M => (functorIsoDiscreteAux₁ R _).symm)
 
@@ -328,7 +328,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor R).Faithful
+  签名: (functor R).忠实
   定义体: (fullyFaithfulFunctor R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulFunctor
@@ -345,7 +345,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor R).Full
+  签名: (functor R).满
   定义体: (fullyFaithfulFunctor R).full
 
 Depends on / 依赖: fullyFaithfulFunctor
@@ -362,7 +362,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete (ModuleCat R)).Faithful
+  签名: (discrete (模范畴 R)).忠实
   定义体: Functor.Faithful.of_iso (functorIsoDiscrete R)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, functorIsoDiscrete, of_iso
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology CompHaus) (ModuleCat.{u + 1} R)).Faithful
+  签名: (constantSheaf (coherentTopology CompHaus) (模范畴.{u + 1} R)).忠实
   定义体: inferInstanceAs (discrete (ModuleCat R)).Faithful
 
 Depends on / 依赖: Faithful, ModuleCat, discrete
@@ -398,7 +398,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete (ModuleCat R)).Full
+  签名: (discrete (模范畴 R)).满
   定义体: Functor.Full.of_iso (functorIsoDiscrete R)
 
 Depends on / 依赖: Functor, Functor.Full.of_iso, functorIsoDiscrete, of_iso
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology CompHaus) (ModuleCat.{u + 1} R)).Full
+  签名: (constantSheaf (coherentTopology CompHaus) (模范畴.{u + 1} R)).满
   定义体: inferInstanceAs (discrete (ModuleCat R)).Full
 
 Depends on / 依赖: ModuleCat, discrete
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology CompHaus) (Type (u + 1))).Faithful
+  签名: (constantSheaf (coherentTopology CompHaus) (类型 (u + 1))).忠实
   定义体: inferInstanceAs (discrete (Type (u + 1))).Faithful
 
 Depends on / 依赖: Faithful, discrete
@@ -452,7 +452,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology CompHaus) (Type (u + 1))).Full
+  签名: (constantSheaf (coherentTopology CompHaus) (类型 (u + 1))).满
   定义体: inferInstanceAs (discrete (Type (u + 1))).Full
 
 Depends on / 依赖: FunLike, FunLike.toDecidableEq, discrete, toDecidableEq
@@ -478,7 +478,7 @@ abbreviation functorToPresheaves
 
 中文:
 缩写 functorToPresheaves
-  签名: : ModuleCat.{u} R ⥤ (LightProfinite.{u}ᵒᵖ ⥤ ModuleCat R)
+  签名: : 模范畴.{u} R ⥤ (LightProfinite.{u}ᵒᵖ ⥤ 模范畴 R)
   定义体: CompHausLike.LocallyConstantModule.functorToPresheaves.{u, u} R
 
 Depends on / 依赖: CompHausLike, CompHausLike.LocallyConstantModule.functorToPresheaves, LocallyConstantModule, functorToPresheaves
@@ -497,7 +497,7 @@ abbreviation functor
 
 中文:
 缩写 functor
-  签名: : ModuleCat R ⥤ LightCondMod.{u} R
+  签名: : 模范畴 R ⥤ LightCondMod.{u} R
   定义体: CompHausLike.LocallyConstantModule.functor.{u, u} R
     (fun _ _ _ => (LightProfinite.effectiveEpi_iff_surjective _).mp)
 
@@ -518,7 +518,7 @@ definition functorIsoDiscreteAux₁
 
 中文:
 定义 functorIsoDiscreteAux₁
-  签名: (M : ModuleCat.{u} R)
+  签名: (M : 模范畴.{u} R)
   定义体: ModuleCat.ofHom (constₗ R)
   inv := ModuleCat.ofHom (evalₗ R PUnit.unit)
 
@@ -539,7 +539,7 @@ definition functorIsoDiscreteAux₂
 
 中文:
 定义 functorIsoDiscreteAux₂
-  签名: (M : ModuleCat.{u} R)
+  签名: (M : 模范畴.{u} R)
   定义体: (discrete _).mapIso (functorIsoDiscreteAux₁ R M)
 
 Depends on / 依赖: discrete, mapIso
@@ -560,7 +560,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasSheafify (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)
+  签名: 有Sheafify (coherentTopology LightProfinite.{u}) (模范畴.{u} R)
   定义体: inferInstance
 -/
 instance : HasSheafify (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R) :=
@@ -599,7 +599,7 @@ definition functorIsoDiscreteComponents
 
 中文:
 定义 functorIsoDiscreteComponents
-  签名: (M : ModuleCat R)
+  签名: (M : 模范畴 R)
   定义体: have : (LightCondensed.forget R).ReflectsIsomorphisms :=
     inferInstanceAs (sheafCompose _ _).ReflectsIsomorphisms
   have : IsIso ((discreteUnderlyingAdj (ModuleCat R)).counit.app ((functor R).obj M)) :=
@@ -664,7 +664,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: : functor R ⊣ underlying (ModuleCat R)
+  签名: : functor R ⊣ underlying (模范畴 R)
   定义体: Adjunction.ofNatIsoLeft (discreteUnderlyingAdj _) (functorIsoDiscrete R).symm
 
 Depends on / 依赖: Adjunction, Adjunction.ofNatIsoLeft, discreteUnderlyingAdj, functorIsoDiscrete, ofNatIsoLeft
@@ -683,7 +683,7 @@ definition fullyFaithfulFunctor
 
 中文:
 定义 fullyFaithfulFunctor
-  签名: : (functor R).FullyFaithful
+  签名: : (functor R).满忠实
   定义体: (adjunction R).fullyFaithfulLOfCompIsoId
     (NatIso.ofComponents fun M => (functorIsoDiscreteAux₁ R _).symm)
 
@@ -703,7 +703,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor R).Faithful
+  签名: (functor R).忠实
   定义体: (fullyFaithfulFunctor R).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulFunctor
@@ -720,7 +720,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor R).Full
+  签名: (functor R).满
   定义体: (fullyFaithfulFunctor R).full
 
 Depends on / 依赖: fullyFaithfulFunctor
@@ -737,7 +737,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete.{u} (ModuleCat R)).Faithful
+  签名: (discrete.{u} (模范畴 R)).忠实
   定义体: Functor.Faithful.of_iso (functorIsoDiscrete R)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, functorIsoDiscrete, of_iso
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Faithful
+  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (模范畴.{u} R)).忠实
   定义体: inferInstanceAs (discrete.{u} (ModuleCat R)).Faithful
 
 Depends on / 依赖: Faithful, ModuleCat, discrete
@@ -772,7 +772,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete (ModuleCat.{u} R)).Full
+  签名: (discrete (模范畴.{u} R)).满
   定义体: Functor.Full.of_iso (functorIsoDiscrete R)
 
 Depends on / 依赖: Functor, Functor.Full.of_iso, functorIsoDiscrete, of_iso
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (ModuleCat.{u} R)).Full
+  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (模范畴.{u} R)).满
   定义体: inferInstanceAs (discrete.{u} (ModuleCat.{u} R)).Full
 
 Depends on / 依赖: Finset, Finset.induction_on, ModuleCat, discrete, induction_on, insert
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (类型u)).Faithful
+  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (类型u)).忠实
   定义体: inferInstanceAs (discrete (Type u)).Faithful
 
 Depends on / 依赖: Faithful, discrete
@@ -826,7 +826,7 @@ instance :
 
 中文:
 实例 :
-  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (类型u)).Full
+  签名: (constantSheaf (coherentTopology LightProfinite.{u}) (类型u)).满
   定义体: inferInstanceAs (discrete (Type u)).Full
 
 Depends on / 依赖: discrete

@@ -110,7 +110,7 @@ definition _root_.QuadraticMap.Isometry.tmul
 @[simp]
 
 中文:
-定义 _root_.QuadraticMap.Isometry.tmul
+定义 _root_.二次映射.等距.tmul
   定义体: TensorProduct.map f.toLinearMap g.toLinearMap
   map_app' := tmul_tensorMap_apply f g
 
@@ -134,7 +134,7 @@ theorem _root_.QuadraticMap.Isometry.tmul_apply
   proof: rfl
 
 中文:
-定理 _root_.QuadraticMap.Isometry.tmul_apply
+定理 _root_.二次映射.等距.tmul_apply
   证明: rfl
 -/
 theorem _root_.QuadraticMap.Isometry.tmul_apply

@@ -71,8 +71,8 @@ instance [Zero
   body: single 0 1
 
 中文:
-实例 [Zero
-  签名: R] [One R] : One R⟦Γ⟧ where one
+实例 [零
+  签名: R] [幺 R] : 幺 R⟦Γ⟧ where one
   定义体: single 0 1
 
 Depends on / 依赖: single
@@ -87,8 +87,8 @@ instance [Zero
   body: single 0 n
 
 中文:
-实例 [Zero
-  签名: R] [自然数Cast R] : 自然数Cast R⟦Γ⟧ where natCast n
+实例 [零
+  签名: R] [自然数嵌入 R] : 自然数嵌入 R⟦Γ⟧ where natCast n
   定义体: single 0 n
 
 Depends on / 依赖: single
@@ -103,8 +103,8 @@ instance [Zero
   body: single 0 z
 
 中文:
-实例 [Zero
-  签名: R] [整数Cast R] : 整数Cast R⟦Γ⟧ where intCast z
+实例 [零
+  签名: R] [整数嵌入 R] : 整数嵌入 R⟦Γ⟧ where intCast z
   定义体: single 0 z
 
 Depends on / 依赖: single
@@ -119,8 +119,8 @@ instance [Zero
   body: single 0 q
 
 中文:
-实例 [Zero
-  签名: R] [NNRatCast R] : NNRatCast R⟦Γ⟧ where nnratCast q
+实例 [零
+  签名: R] [非负有理数嵌入 R] : 非负有理数嵌入 R⟦Γ⟧ where nnratCast q
   定义体: single 0 q
 
 Depends on / 依赖: single
@@ -135,8 +135,8 @@ instance [Zero
   body: single 0 q
 
 中文:
-实例 [Zero
-  签名: R] [RatCast R] : RatCast R⟦Γ⟧ where ratCast q
+实例 [零
+  签名: R] [有理数嵌入 R] : 有理数嵌入 R⟦Γ⟧ where ratCast q
   定义体: single 0 q
 
 Depends on / 依赖: single
@@ -156,7 +156,7 @@ theorem coeff_one
 
 中文:
 定理 coeff_one
-  条件: [Zero R] [One R] {a : Γ}
+  条件: [零 R] [幺 R] {a : Γ}
   结论: (1 : R⟦Γ⟧).coeff a = if a = 0 then 1 else 0
   证明: coeff_single
 
@@ -176,7 +176,7 @@ theorem single_zero_one
 
 中文:
 定理 single_zero_one
-  条件: [Zero R] [One R]
+  条件: [零 R] [幺 R]
   结论: single (0 : Γ) (1 : R) = 1
   证明: rfl
 -/
@@ -192,7 +192,7 @@ theorem single_zero_natCast
 
 中文:
 定理 single_zero_natCast
-  条件: [Zero R] [自然数Cast R] (n : 自然数)
+  条件: [零 R] [自然数嵌入 R] (n : 自然数)
   结论: single (0 : Γ) (n : R) = n
   证明: rfl
 -/
@@ -208,7 +208,7 @@ theorem single_zero_intCast
 
 中文:
 定理 single_zero_intCast
-  条件: [Zero R] [整数Cast R] (z : 整数)
+  条件: [零 R] [整数嵌入 R] (z : 整数)
   结论: single (0 : Γ) (z : R) = z
   证明: rfl
 -/
@@ -224,7 +224,7 @@ theorem single_zero_nnratCast
 
 中文:
 定理 single_zero_nnratCast
-  条件: [Zero R] [NNRatCast R] (q : Rat>=0)
+  条件: [零 R] [非负有理数嵌入 R] (q : 有理数>=0)
   结论: single (0 : Γ) (q : R) = q
   证明: rfl
 -/
@@ -240,7 +240,7 @@ theorem single_zero_ratCast
 
 中文:
 定理 single_zero_ratCast
-  条件: [Zero R] [RatCast R] (q : Rat)
+  条件: [零 R] [有理数嵌入 R] (q : 有理数)
   结论: single (0 : Γ) (q : R) = q
   证明: rfl
 -/
@@ -257,8 +257,8 @@ theorem single_zero_ofNat
 @[simp]
 
 中文:
-定理 single_zero_ofNat
-  条件: [Zero R] [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 single_zero_of自然数
+  条件: [零 R] [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -280,7 +280,7 @@ theorem support_one
 
 中文:
 定理 support_one
-  条件: [MulZeroOneClass R] [Nontrivial R]
+  条件: [乘零幺类 R] [非平凡 R]
   结论: support (1 : R⟦Γ⟧) = {0}
   证明: support_single_of_ne one_ne_zero
 
@@ -306,7 +306,7 @@ theorem orderTop_one
 
 中文:
 定理 orderTop_one
-  条件: [Zero R] [One R] [NeZero (1 : R)]
+  条件: [零 R] [幺 R] [NeZero (1 : R)]
   结论: orderTop (1 : R⟦Γ⟧) = 0
   证明: by
   rw [← single_zero_one]; rw [orderTop_single one_ne_zero]; rw [WithTop.coe_eq_zero]
@@ -335,7 +335,7 @@ theorem order_one
 
 中文:
 定理 order_one
-  条件: [MulZeroOneClass R]
+  条件: [乘零幺类 R]
   结论: order (1 : R⟦Γ⟧) = 0
   证明: by
   cases subsingleton_or_nontrivial R
@@ -366,7 +366,7 @@ theorem leadingCoeff_one
 
 中文:
 定理 leadingCoeff_one
-  条件: [MulZeroOneClass R]
+  条件: [乘零幺类 R]
   结论: (1 : R⟦Γ⟧).leadingCoeff = 1
   证明: by
   simp [leadingCoeff_eq]
@@ -389,7 +389,7 @@ lemma map_one
 
 中文:
 引理 map_one
-  条件: [MonoidWithZero R] [MonoidWithZero S] (f : R ->*₀ S)
+  条件: [带零幺半群 R] [带零幺半群 S] (f : R ->*₀ S)
   证明: .trans congrArg _ f.map_one HahnSeries.map_single (a := (0 : Γ)) f.toZeroHom
 -/
 protected lemma map_one [MonoidWithZero R] [MonoidWithZero S] (f : R ->*₀ S) :
@@ -406,8 +406,8 @@ instance [AddCommMonoidWithOne
   natCast_succ n := by simp [← single_zero_natCast]
 
 中文:
-实例 [AddCommMonoidWithOne
-  签名: R] : AddCommMonoidWithOne R⟦Γ⟧ where
+实例 [加法交换带幺幺半群
+  签名: R] : 加法交换带幺幺半群 R⟦Γ⟧ where
   定义体: by simp [← single_zero_natCast]
   natCast_succ n := by simp [← single_zero_natCast]
 
@@ -427,8 +427,8 @@ instance [AddCommGroupWithOne
   intCast_negSucc n := by simp [← single_zero_natCast, ← single_zero_intCast]
 
 中文:
-实例 [AddCommGroupWithOne
-  签名: R] : AddCommGroupWithOne R⟦Γ⟧ where
+实例 [加法交换带幺群
+  签名: R] : 加法交换带幺群 R⟦Γ⟧ where
   定义体: by simp [← single_zero_natCast, ← single_zero_intCast]
   intCast_negSucc n := by simp [← single_zero_natCast, ← single_zero_intCast]
 
@@ -455,7 +455,7 @@ definition HahnModule
 
 中文:
 定义 HahnModule
-  签名: (Γ R V : 类型) [PartialOrder Γ] [Zero V] [SMul R V]
+  签名: (Γ R V : 类型) [偏序 Γ] [零 V] [标量乘法 R V]
   定义体: V⟦Γ⟧
 
 Depends on / 依赖: e.symm
@@ -479,7 +479,7 @@ definition of
 
 中文:
 定义 of
-  签名: (R : 类型) [SMul R V]
+  签名: (R : 类型) [标量乘法 R V]
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -501,7 +501,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : HahnModule Γ R V -> Sort*} (h : 对任意 x : V⟦Γ⟧, motive (of R x))
+  签名: {motive : HahnModule Γ R V -> 类型层*} (h : 对任意 x : V⟦Γ⟧, motive (of R x))
   定义体: fun x => h (of R).symm x
 
 @[ext]
@@ -547,7 +547,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: [Zero V]
+  签名: [零 V]
   定义体: inferInstanceAs Zero V⟦Γ⟧
 
 Depends on / 依赖: e.symm
@@ -564,7 +564,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid V]
+  签名: [加法交换幺半群 V]
   定义体: inferInstanceAs AddCommMonoid V⟦Γ⟧
 
 Depends on / 依赖: AddCommMonoid
@@ -581,7 +581,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup V]
+  签名: [加法交换群 V]
   定义体: inferInstanceAs AddCommGroup V⟦Γ⟧
 
 Depends on / 依赖: AddCommGroup
@@ -598,7 +598,7 @@ instance instBaseSMul
 
 中文:
 实例 instBaseSMul
-  签名: {V} [Monoid R] [AddMonoid V] [DistribMulAction R V]
+  签名: {V} [幺半群 R] [加法幺半群 V] [分配乘法作用 R V]
   定义体: inferInstanceAs SMul R V⟦Γ⟧
 -/
 instance instBaseSMul {V} [Monoid R] [AddMonoid V] [DistribMulAction R V] :
@@ -616,7 +616,7 @@ theorem of_zero
 
 中文:
 定理 of_zero
-  条件: [Zero V]
+  条件: [零 V]
   结论: of R (0 : V⟦Γ⟧) = 0
   证明: rfl
 -/
@@ -631,7 +631,7 @@ theorem of_add
 
 中文:
 定理 of_add
-  条件: [AddCommMonoid V] (x y : V⟦Γ⟧)
+  条件: [加法交换幺半群 V] (x y : V⟦Γ⟧)
   证明: rfl
 -/
 @[simp] theorem of_add [AddCommMonoid V] (x y : V⟦Γ⟧) :
@@ -646,7 +646,7 @@ theorem of_sub
 
 中文:
 定理 of_sub
-  条件: [AddCommGroup V] (x y : V⟦Γ⟧)
+  条件: [加法交换群 V] (x y : V⟦Γ⟧)
   证明: rfl
 -/
 @[simp] theorem of_sub [AddCommGroup V] (x y : V⟦Γ⟧) :
@@ -663,7 +663,7 @@ theorem of_symm_zero
 
 中文:
 定理 of_symm_zero
-  条件: [Zero V]
+  条件: [零 V]
   结论: (of R).symm (0 : HahnModule Γ R V) = 0
   证明: rfl
 -/
@@ -678,7 +678,7 @@ theorem of_symm_add
 
 中文:
 定理 of_symm_add
-  条件: [AddCommMonoid V] (x y : HahnModule Γ R V)
+  条件: [加法交换幺半群 V] (x y : HahnModule Γ R V)
   证明: rfl
 -/
 @[simp] theorem of_symm_add [AddCommMonoid V] (x y : HahnModule Γ R V) :
@@ -693,7 +693,7 @@ theorem of_symm_sub
 
 中文:
 定理 of_symm_sub
-  条件: [AddCommGroup V] (x y : HahnModule Γ R V)
+  条件: [加法交换群 V] (x y : HahnModule Γ R V)
   证明: rfl
 -/
 @[simp] theorem of_symm_sub [AddCommGroup V] (x y : HahnModule Γ R V) :
@@ -718,7 +718,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul R⟦Γ⟧ (HahnModule Γ' R V) where
+  签名: : 标量乘法 R⟦Γ⟧ (HahnModule Γ' R V) where
   定义体: (of R) {
     coeff := fun a =>
       ∑ ij in VAddAntidiagonal a
@@ -783,7 +783,7 @@ instance instBaseSMulZeroClass
 
 中文:
 实例 instBaseSMulZeroClass
-  签名: [SMulZeroClass R V]
+  签名: [SMulZero类 R V]
   定义体: inferInstanceAs SMulZeroClass R V⟦Γ⟧
 
 Depends on / 依赖: SMulZeroClass
@@ -802,7 +802,7 @@ theorem of_smul
 
 中文:
 定理 of_smul
-  条件: [SMulZeroClass R V] (r : R) (x : V⟦Γ⟧)
+  条件: [SMulZero类 R V] (r : R) (x : V⟦Γ⟧)
   证明: rfl
 -/
 @[simp] theorem of_smul [SMulZeroClass R V] (r : R) (x : V⟦Γ⟧) :
@@ -817,7 +817,7 @@ theorem of_symm_smul
 
 中文:
 定理 of_symm_smul
-  条件: [SMulZeroClass R V] (r : R) (x : HahnModule Γ R V)
+  条件: [SMulZero类 R V] (r : R) (x : HahnModule Γ R V)
   证明: rfl
 -/
 @[simp] theorem of_symm_smul [SMulZeroClass R V] (r : R) (x : HahnModule Γ R V) :
@@ -837,7 +837,7 @@ instance instSMulZeroClass
 
 中文:
 实例 instSMulZeroClass
-  签名: [SMulZeroClass R V]
+  签名: [SMulZero类 R V]
   定义体: by
     ext
     simp [coeff_smul]
@@ -866,7 +866,7 @@ theorem coeff_smul_right
 
 中文:
 定理 coeff_smul_right
-  结论: [SMulZeroClass R V] {x : R⟦Γ⟧} {y : HahnModule Γ' R V} {a : Γ'}
+  结论: [SMulZero类 R V] {x : R⟦Γ⟧} {y : HahnModule Γ' R V} {a : Γ'}
   证明: by
   classical
   rw [coeff_smul]
@@ -905,7 +905,7 @@ theorem coeff_smul_left
 
 中文:
 定理 coeff_smul_left
-  结论: [SMulWithZero R V] {x : R⟦Γ⟧}
+  结论: [带零标量乘法 R V] {x : R⟦Γ⟧}
   证明: by
   classical
   rw [coeff_smul]
@@ -951,7 +951,7 @@ theorem smul_add
 
 中文:
 定理 smul_add
-  条件: [Zero R] [DistribSMul R V] (x : R⟦Γ⟧) (y z : HahnModule Γ' R V)
+  条件: [零 R] [分配标量乘法 R V] (x : R⟦Γ⟧) (y z : HahnModule Γ' R V)
   证明: by
   ext k
   have hwf := ((of R).symm y).isPWO_support.union ((of R).symm z).isPWO_support
@@ -986,7 +986,7 @@ instance instDistribSMul
 
 中文:
 实例 instDistribSMul
-  签名: [MonoidWithZero R] [DistribSMul R V]
+  签名: [带零幺半群 R] [分配标量乘法 R V]
   定义体: smul_add
 
 Depends on / 依赖: notation_class, ppSpace, smul_add
@@ -1011,7 +1011,7 @@ theorem add_smul
 
 中文:
 定理 add_smul
-  结论: [AddCommMonoid R] [SMulWithZero R V] {x y : R⟦Γ⟧}
+  结论: [加法交换幺半群 R] [带零标量乘法 R V] {x y : R⟦Γ⟧}
   证明: by
   ext a
   have hwf := x.isPWO_support.union y.isPWO_support
@@ -1049,7 +1049,7 @@ theorem coeff_single_smul_vadd
 
 中文:
 定理 coeff_single_smul_vadd
-  结论: [MulZeroClass R] [SMulWithZero R V] {r : R} {x : HahnModule Γ' R V}
+  结论: [乘零类 R] [带零标量乘法 R V] {r : R} {x : HahnModule Γ' R V}
   证明: by
   by_cases hr : r = 0
   · simp_all only [map_zero, zero_smul, coeff_smul, HahnSeries.support_zero, HahnSeries.coeff_zero,
@@ -1102,7 +1102,7 @@ theorem coeff_single_zero_smul
 
 中文:
 定理 coeff_single_zero_smul
-  结论: {Γ} [AddCommMonoid Γ] [PartialOrder Γ] [AddAction Γ Γ']
+  结论: {Γ} [加法交换幺半群 Γ] [偏序 Γ] [加法作用 Γ Γ']
   证明: by
   nth_rw 1 [← zero_vadd Γ a]
   exact coeff_single_smul_vadd
@@ -1134,7 +1134,7 @@ theorem single_zero_smul_eq_smul
 
 中文:
 定理 single_zero_smul_eq_smul
-  结论: (Γ) [AddCommMonoid Γ] [PartialOrder Γ] [AddAction Γ Γ']
+  结论: (Γ) [加法交换幺半群 Γ] [偏序 Γ] [加法作用 Γ Γ']
   证明: by
   ext
   exact coeff_single_zero_smul
@@ -1166,7 +1166,7 @@ theorem zero_smul'
 
 中文:
 定理 zero_smul'
-  条件: [Zero R] [SMulWithZero R V] {x : HahnModule Γ' R V}
+  条件: [零 R] [带零标量乘法 R V] {x : HahnModule Γ' R V}
   结论: (0 : R⟦Γ⟧) • x = 0
   证明: by
   ext
@@ -1193,7 +1193,7 @@ theorem one_smul'
 
 中文:
 定理 one_smul'
-  结论: {Γ} [AddCommMonoid Γ] [PartialOrder Γ] [AddAction Γ Γ'] [IsOrderedCancelVAdd Γ Γ']
+  结论: {Γ} [加法交换幺半群 Γ] [偏序 Γ] [加法作用 Γ Γ'] [是OrderedCancelVAdd Γ Γ']
   证明: by
   ext g
   exact coeff_single_zero_smul.trans (one_smul R (x.coeff g))
@@ -1220,7 +1220,7 @@ theorem support_smul_subset_vadd_support'
 
 中文:
 定理 support_smul_subset_vadd_support'
-  结论: [MulZeroClass R] [SMulWithZero R V] {x : R⟦Γ⟧}
+  结论: [乘零类 R] [带零标量乘法 R V] {x : R⟦Γ⟧}
   证明: by
   refine Set.Subset.trans (fun x hx => ?_) (support_vaddAntidiagonal_subset_vadd
     fun a => Set.VAddAntidiagonal.finite_of_isPWO x.isPWO_support ((of R).symm y).isPWO_support a)
@@ -1250,7 +1250,7 @@ theorem support_smul_subset_vadd_support
 
 中文:
 定理 support_smul_subset_vadd_support
-  结论: [MulZeroClass R] [SMulWithZero R V] {x : R⟦Γ⟧}
+  结论: [乘零类 R] [带零标量乘法 R V] {x : R⟦Γ⟧}
   证明: by
   exact support_smul_subset_vadd_support'
 
@@ -1277,7 +1277,7 @@ theorem orderTop_vAdd_le_orderTop_smul
 
 中文:
 定理 orderTop_vAdd_le_orderTop_smul
-  结论: {Γ Γ'} [LinearOrder Γ] [LinearOrder Γ'] [VAdd Γ Γ']
+  结论: {Γ Γ'} [线性序 Γ] [线性序 Γ'] [向量加法 Γ Γ']
   证明: by
   by_cases hx : x = 0; · simp_all
   by_cases hy : y = 0; · simp_all
@@ -1353,8 +1353,8 @@ instance [NonUnitalNonAssocSemiring
   body: (HahnModule.of R).symm (x • HahnModule.of R y)
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] : Mul R⟦Γ⟧ where
+实例 [非幺非结合半环
+  签名: R] : 乘法 R⟦Γ⟧ where
   定义体: (HahnModule.of R).symm (x • HahnModule.of R y)
 
 Depends on / 依赖: HahnModule, HahnModule.of
@@ -1372,7 +1372,7 @@ theorem of_symm_smul_of_eq_mul
 
 中文:
 定理 of_symm_smul_of_eq_mul
-  条件: [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧}
+  条件: [非幺非结合半环 R] {x y : R⟦Γ⟧}
   证明: rfl
 -/
 theorem of_symm_smul_of_eq_mul [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧} :
@@ -1388,7 +1388,7 @@ theorem coeff_mul
 
 中文:
 定理 coeff_mul
-  条件: [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧} {a : Γ}
+  条件: [非幺非结合半环 R] {x y : R⟦Γ⟧} {a : Γ}
   证明: rfl
 -/
 theorem coeff_mul [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧} {a : Γ} :
@@ -1411,7 +1411,7 @@ lemma map_mul
 
 中文:
 引理 map_mul
-  结论: [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S] (f : R ->ₙ+* S)
+  结论: [非幺非结合半环 R] [非幺非结合半环 S] (f : R ->ₙ+* S)
   证明: by
   ext
   simp only [map_coeff, coeff_mul, map_sum, map_mul]
@@ -1442,7 +1442,7 @@ theorem coeff_mul_left'
 
 中文:
 定理 coeff_mul_left'
-  结论: [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧} {a : Γ} {s : Set Γ}
+  结论: [非幺非结合半环 R] {x y : R⟦Γ⟧} {a : Γ} {s : 集合 Γ}
   证明: HahnModule.coeff_smul_left hs hxs
 
 Depends on / 依赖: HahnModule, HahnModule.coeff_smul_left, coeff_smul_left
@@ -1463,7 +1463,7 @@ theorem coeff_mul_right'
 
 中文:
 定理 coeff_mul_right'
-  结论: [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧} {a : Γ} {s : Set Γ}
+  结论: [非幺非结合半环 R] {x y : R⟦Γ⟧} {a : Γ} {s : 集合 Γ}
   证明: HahnModule.coeff_smul_right hs hys
 
 Depends on / 依赖: HahnModule, HahnModule.coeff_smul_right, coeff_smul_right
@@ -1490,7 +1490,7 @@ instance [NonUnitalNonAssocSemiring
     exact add_mul
 
 中文:
-实例 [NonUnitalNonAssocSemiring
+实例 [非幺非结合半环
   签名: R] : Distrib R⟦Γ⟧ where
   定义体: by
     simp only [← of_symm_smul_of_eq_mul]
@@ -1525,7 +1525,7 @@ theorem coeff_single_mul_add
 
 中文:
 定理 coeff_single_mul_add
-  结论: [NonUnitalNonAssocSemiring R] {r : R} {x : R⟦Γ⟧} {a : Γ}
+  结论: [非幺非结合半环 R] {r : R} {x : R⟦Γ⟧} {a : Γ}
   证明: by
   rw [← of_symm_smul_of_eq_mul]; rw [add_comm]; rw [← vadd_eq_add]
   exact HahnModule.coeff_single_smul_vadd
@@ -1555,7 +1555,7 @@ theorem coeff_mul_single_add
 
 中文:
 定理 coeff_mul_single_add
-  结论: [NonUnitalNonAssocSemiring R] {r : R} {x : R⟦Γ⟧} {a : Γ}
+  结论: [非幺非结合半环 R] {r : R} {x : R⟦Γ⟧} {a : Γ}
   证明: by
   by_cases hr : r = 0
   · simp [hr, coeff_mul]
@@ -1604,7 +1604,7 @@ theorem coeff_single_mul
 
 中文:
 定理 coeff_single_mul
-  结论: [NonUnitalNonAssocSemiring R] [PartialOrder Γ'] [AddCommGroup Γ']
+  结论: [非幺非结合半环 R] [偏序 Γ'] [加法交换群 Γ']
   证明: by
   simpa using coeff_single_mul_add (a := a - b) (b := b)
 
@@ -1628,7 +1628,7 @@ theorem coeff_mul_single
 
 中文:
 定理 coeff_mul_single
-  结论: [NonUnitalNonAssocSemiring R] [PartialOrder Γ'] [AddCommGroup Γ']
+  结论: [非幺非结合半环 R] [偏序 Γ'] [加法交换群 Γ']
   证明: by
   simpa using coeff_mul_single_add (a := a - b) (b := b)
 
@@ -1652,7 +1652,7 @@ theorem coeff_mul_single_zero
 
 中文:
 定理 coeff_mul_single_zero
-  条件: [NonUnitalNonAssocSemiring R] {r : R} {x : R⟦Γ⟧} {a : Γ}
+  条件: [非幺非结合半环 R] {r : R} {x : R⟦Γ⟧} {a : Γ}
   证明: by rw [← add_zero a, coeff_mul_single_add, add_zero]
 
 Depends on / 依赖: add_zero, coeff_mul_single_add
@@ -1673,7 +1673,7 @@ theorem coeff_single_zero_mul
 
 中文:
 定理 coeff_single_zero_mul
-  条件: [NonUnitalNonAssocSemiring R] {r : R} {x : R⟦Γ⟧} {a : Γ}
+  条件: [非幺非结合半环 R] {r : R} {x : R⟦Γ⟧} {a : Γ}
   证明: by
   rw [← add_zero a]; rw [coeff_single_mul_add]; rw [add_zero]
 
@@ -1699,7 +1699,7 @@ theorem single_zero_mul_eq_smul
 
 中文:
 定理 single_zero_mul_eq_smul
-  条件: [Semiring R] {r : R} {x : R⟦Γ⟧}
+  条件: [半环 R] {r : R} {x : R⟦Γ⟧}
   结论: single 0 r * x = r • x
   证明: by
   ext
@@ -1723,7 +1723,7 @@ theorem support_mul_subset
 
 中文:
 定理 support_mul_subset
-  条件: [NonUnitalNonAssocSemiring R] {x y : R⟦Γ⟧}
+  条件: [非幺非结合半环 R] {x y : R⟦Γ⟧}
   证明: by
   rw [← of_symm_smul_of_eq_mul]; rw [← vadd_eq_add]
   exact HahnModule.support_smul_subset_vadd_support
@@ -1749,8 +1749,8 @@ instance [NonUnitalNonAssocSemiring
     simp [coeff_mul]
 
 中文:
-实例 [NonUnitalNonAssocSemiring
-  签名: R] : NonUnitalNonAssocSemiring R⟦Γ⟧ where
+实例 [非幺非结合半环
+  签名: R] : 非幺非结合半环 R⟦Γ⟧ where
   定义体: by
     ext
     simp [coeff_mul]
@@ -1853,7 +1853,7 @@ theorem orderTop_mul
 
 中文:
 定理 orderTop_mul
-  条件: (x y : R⟦Γ⟧) [NoZeroDivisors R]
+  条件: (x y : R⟦Γ⟧) [无零因子 R]
   证明: by
   by_cases hx : x = 0; · simp [hx]
   by_cases hy : y = 0; · simp [hy]
@@ -1984,7 +1984,7 @@ theorem leadingCoeff_mul
 
 中文:
 定理 leadingCoeff_mul
-  条件: (x y : R⟦Γ⟧) [NoZeroDivisors R]
+  条件: (x y : R⟦Γ⟧) [无零因子 R]
   证明: by
   by_cases hx : x = 0; · simp [hx]
   by_cases hy : y = 0; · simp [hy]
@@ -2015,7 +2015,7 @@ theorem order_single_mul_of_isRegular
 
 中文:
 定理 order_single_mul_of_isRegular
-  结论: {g : Γ} {r : R} (hr : IsRegular r)
+  结论: {g : Γ} {r : R} (hr : 是正则 r)
   证明: by
   obtain _ | _ := subsingleton_or_nontrivial R
   · exact (hx <| Subsingleton.eq_zero x).elim
@@ -2056,7 +2056,7 @@ theorem mul_assoc'
 
 中文:
 定理 mul_assoc'
-  条件: [NonUnitalSemiring R] (x y z : R⟦Γ⟧)
+  条件: [非幺半环 R] (x y z : R⟦Γ⟧)
   结论: x * y * z = x * (y * z)
   证明: by
   ext b
@@ -2084,8 +2084,8 @@ instance [NonUnitalSemiring
   body: mul_assoc'
 
 中文:
-实例 [NonUnitalSemiring
-  签名: R] : NonUnitalSemiring R⟦Γ⟧ where
+实例 [非幺半环
+  签名: R] : 非幺半环 R⟦Γ⟧ where
   定义体: mul_assoc'
 
 Depends on / 依赖: mul_assoc
@@ -2107,8 +2107,8 @@ instance [NonAssocSemiring
     exact coeff_mul_single_zero.trans (mul_one _)
 
 中文:
-实例 [NonAssocSemiring
-  签名: R] : NonAssocSemiring R⟦Γ⟧ where
+实例 [非结合半环
+  签名: R] : 非结合半环 R⟦Γ⟧ where
   定义体: by
     ext
     exact coeff_single_zero_mul.trans (one_mul _)
@@ -2134,8 +2134,8 @@ instance [Semiring
   signature: R] : Semiring R⟦Γ⟧ where
 
 中文:
-实例 [Semiring
-  签名: R] : Semiring R⟦Γ⟧ where
+实例 [半环
+  签名: R] : 半环 R⟦Γ⟧ where
 -/
 instance [Semiring R] : Semiring R⟦Γ⟧ where
 
@@ -2152,8 +2152,8 @@ instance [NonUnitalCommSemiring
 exact Finset.sum_equiv (Equiv.prodComm _ _) (fun _ => swap_mem_antidiagonal.symm) by simp
 
 中文:
-实例 [NonUnitalCommSemiring
-  签名: R] : NonUnitalCommSemiring R⟦Γ⟧ where
+实例 [非幺交换半环
+  签名: R] : 非幺交换半环 R⟦Γ⟧ where
   定义体: inferInstance
   mul_comm x y := by
     ext
@@ -2175,8 +2175,8 @@ instance [CommSemiring
   signature: R] : CommSemiring R⟦Γ⟧ where
 
 中文:
-实例 [CommSemiring
-  签名: R] : CommSemiring R⟦Γ⟧ where
+实例 [交换半环
+  签名: R] : 交换半环 R⟦Γ⟧ where
 -/
 instance [CommSemiring R] : CommSemiring R⟦Γ⟧ where
 /--
@@ -2187,8 +2187,8 @@ instance [NonUnitalNonAssocRing
   signature: R] : NonUnitalNonAssocRing R⟦Γ⟧ where
 
 中文:
-实例 [NonUnitalNonAssocRing
-  签名: R] : NonUnitalNonAssocRing R⟦Γ⟧ where
+实例 [非幺非结合环
+  签名: R] : 非幺非结合环 R⟦Γ⟧ where
 -/
 instance [NonUnitalNonAssocRing R] : NonUnitalNonAssocRing R⟦Γ⟧ where
 /--
@@ -2199,8 +2199,8 @@ instance [NonUnitalRing
   signature: R] : NonUnitalRing R⟦Γ⟧ where
 
 中文:
-实例 [NonUnitalRing
-  签名: R] : NonUnitalRing R⟦Γ⟧ where
+实例 [非幺环
+  签名: R] : 非幺环 R⟦Γ⟧ where
 -/
 instance [NonUnitalRing R] : NonUnitalRing R⟦Γ⟧ where
 /--
@@ -2211,8 +2211,8 @@ instance [NonAssocRing
   signature: R] : NonAssocRing R⟦Γ⟧ where
 
 中文:
-实例 [NonAssocRing
-  签名: R] : NonAssocRing R⟦Γ⟧ where
+实例 [非结合环
+  签名: R] : 非结合环 R⟦Γ⟧ where
 -/
 instance [NonAssocRing R] : NonAssocRing R⟦Γ⟧ where
 /--
@@ -2223,8 +2223,8 @@ instance [Ring
   signature: R] : Ring R⟦Γ⟧ where
 
 中文:
-实例 [Ring
-  签名: R] : Ring R⟦Γ⟧ where
+实例 [环
+  签名: R] : 环 R⟦Γ⟧ where
 -/
 instance [Ring R] : Ring R⟦Γ⟧ where
 /--
@@ -2235,8 +2235,8 @@ instance [NonUnitalCommRing
   signature: R] : NonUnitalCommRing R⟦Γ⟧ where
 
 中文:
-实例 [NonUnitalCommRing
-  签名: R] : NonUnitalCommRing R⟦Γ⟧ where
+实例 [非幺交换环
+  签名: R] : 非幺交换环 R⟦Γ⟧ where
 -/
 instance [NonUnitalCommRing R] : NonUnitalCommRing R⟦Γ⟧ where
 /--
@@ -2247,8 +2247,8 @@ instance [CommRing
   signature: R] : CommRing R⟦Γ⟧ where
 
 中文:
-实例 [CommRing
-  签名: R] : CommRing R⟦Γ⟧ where
+实例 [交换环
+  签名: R] : 交换环 R⟦Γ⟧ where
 -/
 instance [CommRing R] : CommRing R⟦Γ⟧ where
 
@@ -2275,7 +2275,7 @@ theorem orderTop_nsmul_le_orderTop_pow
 
 中文:
 定理 orderTop_nsmul_le_orderTop_pow
-  结论: [AddCommMonoid Γ] [LinearOrder Γ]
+  结论: [加法交换幺半群 Γ] [线性序 Γ]
   证明: by
   induction n with
   | zero =>
@@ -2326,7 +2326,7 @@ theorem orderTop_self_sub_one_pos_iff
 
 中文:
 定理 orderTop_self_sub_one_pos_iff
-  结论: [LinearOrder Γ] [Zero Γ] [NonAssocRing R] [Nontrivial R]
+  结论: [线性序 Γ] [零 Γ] [非结合环 R] [非平凡 R]
   证明: by
   constructor
   · intro hx
@@ -2365,7 +2365,7 @@ theorem orderTop_sub_pos
 
 中文:
 定理 orderTop_sub_pos
-  结论: [PartialOrder Γ] [Zero Γ] [AddCommGroup R] [One R] {g : Γ} (hg : 0 < g)
+  结论: [偏序 Γ] [零 Γ] [加法交换群 R] [幺 R] {g : Γ} (hg : 0 < g)
   证明: by
   by_cases hr : r = 0 <;> simp [hr, hg]
 -/
@@ -2390,7 +2390,7 @@ definition orderTopSubOnePos
 
 中文:
 定义 orderTopSubOnePos
-  签名: (Γ R) [LinearOrder Γ] [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ]
+  签名: (Γ R) [线性序 Γ] [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ]
   定义体: { x : R⟦Γ⟧ˣ | 0 < (x.val - 1).orderTop}
   mul_mem' := by
     intro x y hx hy
@@ -2438,7 +2438,7 @@ theorem mem_orderTopSubOnePos_iff
 
 中文:
 定理 mem_orderTopSubOnePos_iff
-  结论: [LinearOrder Γ] [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ]
+  结论: [线性序 Γ] [加法交换幺半群 Γ] [是OrderedCancelAdd幺半群 Γ]
   证明: .rfl
 -/
 theorem mem_orderTopSubOnePos_iff [LinearOrder Γ] [AddCommMonoid Γ] [IsOrderedCancelAddMonoid Γ]
@@ -2468,7 +2468,7 @@ theorem mul_smul'
 
 中文:
 定理 mul_smul'
-  结论: [Semiring R] [Module R V] (x y : R⟦Γ⟧)
+  结论: [半环 R] [模 R V] (x y : R⟦Γ⟧)
   证明: by
   ext b
   rw [coeff_smul_left (x.isPWO_support.add y.isPWO_support)
@@ -2498,7 +2498,7 @@ instance instBaseModule
 
 中文:
 实例 instBaseModule
-  签名: [Semiring R] [Module R V]
+  签名: [半环 R] [模 R V]
   定义体: inferInstanceAs Module R V⟦Γ'⟧
 
 Depends on / 依赖: Module
@@ -2523,7 +2523,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: [Semiring R] [Module R V]
+  签名: [半环 R] [模 R V]
   定义体: {
   (inferInstance : DistribSMul R⟦Γ⟧ (HahnModule Γ' R V)) with
   mul_smul := mul_smul'
@@ -2550,7 +2550,7 @@ instance [Zero
     simp
 
 中文:
-实例 [Zero
+实例 [零
   签名: R] {S
   定义体: by
     ext
@@ -2573,8 +2573,8 @@ instance [Semiring
     rw [← HahnSeries.single_zero_mul_eq_smul]; rw [mul_smul']; rw [← single_zero_smul_eq_smul Γ]
 
 中文:
-实例 [Semiring
-  签名: R] [Module R V] : IsScalarTower R R⟦Γ⟧ (HahnModule Γ' R V) where
+实例 [半环
+  签名: R] [模 R V] : 标量塔 R R⟦Γ⟧ (HahnModule Γ' R V) where
   定义体: by
     rw [← HahnSeries.single_zero_mul_eq_smul]; rw [mul_smul']; rw [← single_zero_smul_eq_smul Γ]
 
@@ -2595,8 +2595,8 @@ instance SMulCommClass
     rw [← single_zero_smul_eq_smul Γ]; rw [← mul_smul']; rw [mul_comm]; rw [mul_smul']; rw [single_zero_smul_eq_smul Γ]
 
 中文:
-实例 SMulCommClass
-  签名: [CommSemiring R] [Module R V]
+实例 标量交换类
+  签名: [交换半环 R] [模 R V]
   定义体: by
     rw [← single_zero_smul_eq_smul Γ]; rw [← mul_smul']; rw [mul_comm]; rw [mul_smul']; rw [single_zero_smul_eq_smul Γ]
 
@@ -2620,7 +2620,7 @@ instance instIsTorsionFree
 
 中文:
 实例 instIsTorsionFree
-  签名: {Γ V : 类型} [Ring R] [IsDomain R] [AddCommGroup V] [AddCommMonoid Γ]
+  签名: {Γ V : 类型} [环 R] [是整环 R] [加法交换群 V] [加法交换幺半群 Γ]
   定义体: .of_smul_eq_zero fun x y hxy => by
     contrapose! hxy
     rw [ne_eq]; rw [HahnModule.ext_iff]; rw [funext_iff]; rw [not_forall]
@@ -2820,7 +2820,7 @@ theorem map_C
 
 中文:
 定理 map_C
-  条件: [NonAssocSemiring S] (a : R) (f : R ->+* S)
+  条件: [非结合半环 S] (a : R) (f : R ->+* S)
   证明: by
   ext g
   by_cases h : g = 0 <;> simp [h]
@@ -2844,7 +2844,7 @@ theorem C_injective
 
 中文:
 定理 C_injective
-  结论: Function.Injective (C : R -> R⟦Γ⟧)
+  结论: 函数.单射 (C : R -> R⟦Γ⟧)
   证明: by
   intro r s rs
   rw [HahnSeries.ext_iff]; rw [funext_iff] at rs
@@ -2958,7 +2958,7 @@ theorem embDomain_mul
 
 中文:
 定理 embDomain_mul
-  结论: [NonUnitalNonAssocSemiring R] (f : Γ ↪o Γ')
+  结论: [非幺非结合半环 R] (f : Γ ↪o Γ')
   证明: by
   ext g
   by_cases hg : g in Set.range f
@@ -3018,7 +3018,7 @@ theorem embDomain_one
 
 中文:
 定理 embDomain_one
-  条件: [NonAssocSemiring R] (f : Γ ↪o Γ') (hf : f 0 = 0)
+  条件: [非结合半环 R] (f : Γ ↪o Γ') (hf : f 0 = 0)
   证明: embDomain_single.trans hf.symm ▸ rfl
 
 Depends on / 依赖: embDomain_single, embDomain_single.trans, hf.symm
@@ -3043,7 +3043,7 @@ definition embDomainRingHom
 
 中文:
 定义 embDomainRingHom
-  签名: [NonAssocSemiring R] (f : Γ ->+ Γ') (hfi : Function.Injective f)
+  签名: [非结合半环 R] (f : Γ ->+ Γ') (hfi : 函数.单射 f)
   定义体: embDomain ⟨⟨f, hfi⟩, hf _ _⟩
   map_one' := embDomain_one _ f.map_zero
   map_mul' := embDomain_mul _ f.map_add
@@ -3070,7 +3070,7 @@ theorem embDomainRingHom_C
 
 中文:
 定理 embDomainRingHom_C
-  结论: [NonAssocSemiring R] {f : Γ ->+ Γ'} {hfi : Function.Injective f}
+  结论: [非结合半环 R] {f : Γ ->+ Γ'} {hfi : 函数.单射 f}
   证明: embDomain_single.trans (by simp)
 
 Depends on / 依赖: embDomain_single, embDomain_single.trans
@@ -3103,7 +3103,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R A⟦Γ⟧
+  签名: 代数 R A⟦Γ⟧
   定义体: C.comp (algebraMap R A)
   smul_def' r x := by
     ext
@@ -3176,8 +3176,8 @@ instance [Nontrivial
       rw [HahnSeries.ext_iff]; rw [funext_iff]; rw [not_forall
 
 中文:
-实例 [Nontrivial
-  签名: Γ] [Nontrivial R] : Nontrivial (Subalgebra R R⟦Γ⟧)
+实例 [非平凡
+  签名: Γ] [非平凡 R] : 非平凡 (子代数 R R⟦Γ⟧)
   定义体: ⟨⟨⊥, ⊤, by
       rw [Ne]; rw [SetLike.ext_iff]; rw [not_forall]
       obtain ⟨a, ha⟩ := exists_ne (0 : Γ)
@@ -3216,7 +3216,7 @@ definition embDomainAlgHom
 
 中文:
 定义 embDomainAlgHom
-  签名: (f : Γ ->+ Γ') (hfi : Function.Injective f)
+  签名: (f : Γ ->+ Γ') (hfi : 函数.单射 f)
   定义体: { embDomainRingHom f hfi hf with commutes' := fun _ => embDomainRingHom_C (hf := hf) }
 
 Depends on / 依赖: commutes, embDomainRingHom, embDomainRingHom_C
@@ -3251,8 +3251,8 @@ instance [IsCancelAdd
     have ha : y
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsCancelMulZero R] : IsCancelMulZero R⟦Γ⟧ where
+实例 [是消去加法
+  签名: R] [是乘零消去 R] : 是乘零消去 R⟦Γ⟧ where
   定义体: by
     let : AddCancelCommMonoid R := ⟨⟩
     contrapose! hyz
@@ -3329,7 +3329,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors R⟦Γ⟧
+  签名: 无零因子 R⟦Γ⟧
   定义体: by
     contrapose! hxy
     simp only [ne_eq, HahnSeries.ext_iff, funext_iff, not_forall]
@@ -3396,7 +3396,7 @@ lemma order_pow
 
 中文:
 引理 order_pow
-  条件: [NoZeroDivisors R] (x : R⟦Γ⟧)
+  条件: [无零因子 R] (x : R⟦Γ⟧)
   结论: 对任意 n, (x ^ n).order = n • x.order
   证明: eq_or_ne x 0 <;> simp [pow_succ, succ_nsmul, order_pow, pow_ne_zero, *]
 -/
@@ -3413,8 +3413,8 @@ instance [IsCancelAdd
   signature: R] [IsDomain R] : IsDomain R⟦Γ⟧ where
 
 中文:
-实例 [IsCancelAdd
-  签名: R] [IsDomain R] : IsDomain R⟦Γ⟧ where
+实例 [是消去加法
+  签名: R] [是整环 R] : 是整环 R⟦Γ⟧ where
 -/
 instance [IsCancelAdd R] [IsDomain R] : IsDomain R⟦Γ⟧ where
 

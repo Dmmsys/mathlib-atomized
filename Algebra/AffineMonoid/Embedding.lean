@@ -60,7 +60,7 @@ definition embedding
 
 中文:
 定义 embedding
-  签名: : M ->+ FreeAbelianGroup (Fin (dim M))
+  签名: : M ->+ 自由交换群 (有限集 (dim M))
   定义体: .comp (FreeAbelianGroup.equivFinsupp _).symm.toAddMonoidHom
     .comp (Module.finBasis Int _).repr.toAddMonoidHom
       (addMonoidOf ⊤).toAddMonoidHom
@@ -83,7 +83,7 @@ lemma embedding_injective
 
 中文:
 引理 embedding_injective
-  结论: Injective (embedding M)
+  结论: 单射 (embedding M)
   证明: by
   simpa [embedding] using! mk_left_injective 0
 

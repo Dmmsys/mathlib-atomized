@@ -49,7 +49,7 @@ theorem int_floor_nonneg
 
 中文:
 定理 int_floor_nonneg
-  条件: [Ring α] [LinearOrder α] [FloorRing α] {a : α} (ha : 0 <= a)
+  条件: [环 α] [线性序 α] [Floor环 α] {a : α} (ha : 0 <= a)
   证明: Int.floor_nonneg.2 ha
 
 Depends on / 依赖: Int.floor_nonneg, floor_nonneg
@@ -68,7 +68,7 @@ theorem int_floor_nonneg_of_pos
 
 中文:
 定理 int_floor_nonneg_of_pos
-  结论: [Ring α] [LinearOrder α] [FloorRing α] {a : α}
+  结论: [环 α] [线性序 α] [Floor环 α] {a : α}
   证明: int_floor_nonneg ha.le
 
 Depends on / 依赖: ha.le, int_floor_nonneg
@@ -104,7 +104,7 @@ theorem nat_ceil_pos
 
 中文:
 定理 nat_ceil_pos
-  条件: [Semiring α] [LinearOrder α] [FloorSemiring α] {a : α}
+  条件: [半环 α] [线性序 α] [FloorSemiring α] {a : α}
   证明: Nat.ceil_pos.2
 
 Depends on / 依赖: Nat.ceil_pos, ceil_pos
@@ -140,7 +140,7 @@ theorem int_ceil_pos
 
 中文:
 定理 int_ceil_pos
-  条件: [Ring α] [LinearOrder α] [FloorRing α] {a : α}
+  条件: [环 α] [线性序 α] [Floor环 α] {a : α}
   结论: 0 < a -> 0 < ⌈a⌉
   证明: Int.ceil_pos.2
 
@@ -263,7 +263,7 @@ theorem floor_mono
 
 中文:
 定理 floor_mono
-  结论: Monotone (floor : R -> 整数)
+  结论: 递增 (floor : R -> 整数)
   证明: gc_coe_floor.monotone_u
 
 Depends on / 依赖: gc_coe_floor, gc_coe_floor.monotone_u, monotone_u
@@ -343,7 +343,7 @@ theorem floor_eq_zero_iff
 
 中文:
 定理 floor_eq_zero_iff
-  结论: ⌊a⌋ = 0 ↔ a in Ico (0 : R) 1
+  结论: ⌊a⌋ = 0 ↔ a in 左闭右开区间 (0 : R) 1
   证明: by simp [floor_eq_iff]
 
 Depends on / 依赖: floor_eq_iff
@@ -363,7 +363,7 @@ theorem floor_eq_on_Ico
 中文:
 定理 floor_eq_on_Ico
   条件: (n : 整数)
-  结论: 对任意 a in Set.Ico (n : R) (n + 1), ⌊a⌋ = n
+  结论: 对任意 a in 集合.左闭右开区间 (n : R) (n + 1), ⌊a⌋ = n
   证明: fun _ ⟨h₀, h₁⟩ =>
   floor_eq_iff.mpr ⟨h₀, h₁⟩
 -/
@@ -385,7 +385,7 @@ congr_arg _ floor_eq_on_Ico n a ha
 中文:
 定理 floor_eq_on_Ico'
   条件: (n : 整数)
-  结论: 对任意 a in Set.Ico (n : R) (n + 1), (⌊a⌋ : R) = n
+  结论: 对任意 a in 集合.左闭右开区间 (n : R) (n + 1), (⌊a⌋ : R) = n
   证明: fun a ha =>
 congr_arg _ floor_eq_on_Ico n a ha
 
@@ -407,7 +407,7 @@ theorem preimage_floor_singleton
 中文:
 定理 preimage_floor_singleton
   条件: (m : 整数)
-  结论: (floor : R -> 整数) ⁻¹' {m} = Ico (m : R) (m + 1)
+  结论: (floor : R -> 整数) ⁻¹' {m} = 左闭右开区间 (m : R) (m + 1)
   证明: ext fun _ => floor_eq_iff
 
 Depends on / 依赖: floor_eq_iff
@@ -544,7 +544,7 @@ theorem floor_ofNat
 @[simp, push]
 
 中文:
-定理 floor_ofNat
+定理 floor_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌊(of自然数(n) : R)⌋ = of自然数(n)
   证明: floor_natCast n
@@ -741,7 +741,7 @@ theorem floor_add_ofNat
 @[simp, push]
 
 中文:
-定理 floor_add_ofNat
+定理 floor_add_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: floor_add_natCast a n
 
@@ -792,7 +792,7 @@ theorem floor_ofNat_add
 @[simp]
 
 中文:
-定理 floor_ofNat_add
+定理 floor_of自然数_add
   条件: (n : 自然数) [n.AtLeastTwo] (a : R)
   证明: floor_natCast_add n a
 
@@ -883,7 +883,7 @@ theorem floor_sub_ofNat
   proof: floor_sub_natCast a n
 
 中文:
-定理 floor_sub_ofNat
+定理 floor_sub_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: floor_sub_natCast a n
 
@@ -949,7 +949,7 @@ lemma floor_eq_self_iff_mem
 中文:
 引理 floor_eq_self_iff_mem
   条件: (a : R)
-  结论: ⌊a⌋ = a ↔ a in Set.range 整数.cast
+  结论: ⌊a⌋ = a ↔ a in 集合.range 整数.cast
   证明: by
   aesop
 -/
@@ -1042,7 +1042,7 @@ theorem mul_fract_eq_one_iff_exists_int
   simp [mul_add, hk]
 
 中文:
-定理 mul_fract_eq_one_iff_exists_int
+定理 mul_fract_eq_one_iff_存在_int
   条件: {x : R} {k : R} (hk : 1 < k)
   证明: by
   rw [fract]; rw [mul_sub]; rw [sub_eq_iff_eq_add']
@@ -1400,7 +1400,7 @@ theorem fract_add_ofNat
 @[simp]
 
 中文:
-定理 fract_add_ofNat
+定理 fract_add_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: fract_add_natCast a n
 
@@ -1496,7 +1496,7 @@ theorem fract_ofNat_add
 @[simp]
 
 中文:
-定理 fract_ofNat_add
+定理 fract_of自然数_add
   条件: (n : 自然数) [n.AtLeastTwo] (a : R)
   证明: fract_natCast_add n a
 
@@ -1592,7 +1592,7 @@ theorem fract_sub_ofNat
   proof: fract_sub_natCast a n
 
 中文:
-定理 fract_sub_ofNat
+定理 fract_sub_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: fract_sub_natCast a n
 
@@ -1869,7 +1869,7 @@ theorem fract_ofNat
   proof: fract_natCast n
 
 中文:
-定理 fract_ofNat
+定理 fract_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: fract_natCast n
 
@@ -2226,7 +2226,7 @@ theorem preimage_fract
 
 中文:
 定理 preimage_fract
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   ext x
   simp only [mem_preimage, mem_iUnion, mem_inter_iff]
@@ -2264,8 +2264,8 @@ theorem image_fract
 
 中文:
 定理 image_fract
-  条件: (s : Set R)
-  结论: fract '' s = ⋃ m : 整数, (fun x : R => x - m) '' s inter Ico 0 1
+  条件: (s : 集合 R)
+  结论: fract '' s = ⋃ m : 整数, (fun x : R => x - m) '' s inter 左闭右开区间 0 1
   证明: by
   ext x
   simp only [mem_image, mem_inter_iff, mem_iUnion]; constructor
@@ -2305,7 +2305,7 @@ omit [IsOrderedRing k] in
 中文:
 定理 fract_div_mul_self_mem_Ico
   条件: (a b : k) (ha : 0 < a)
-  结论: fract (b / a) * a in Ico 0 a
+  结论: fract (b / a) * a in 左闭右开区间 0 a
   证明: ⟨(mul_nonneg_iff_of_pos_right ha).2 (fract_nonneg (b / a)),
     (mul_lt_iff_lt_one_left ha).2 (fract_lt_one (b / a))⟩
 
@@ -2558,7 +2558,7 @@ theorem ceil_mono
 
 中文:
 定理 ceil_mono
-  结论: Monotone (ceil : R -> 整数)
+  结论: 递增 (ceil : R -> 整数)
   证明: gc_ceil_coe.monotone_l
 
 Depends on / 依赖: gc_ceil_coe, gc_ceil_coe.monotone_l, monotone_l
@@ -2640,7 +2640,7 @@ theorem ceil_eq_zero_iff
 
 中文:
 定理 ceil_eq_zero_iff
-  结论: ⌈a⌉ = 0 ↔ a in Ioc (-1 : R) 0
+  结论: ⌈a⌉ = 0 ↔ a in 左开右闭区间 (-1 : R) 0
   证明: by simp [ceil_eq_iff]
 
 Depends on / 依赖: ceil_eq_iff
@@ -2662,7 +2662,7 @@ theorem ceil_eq_on_Ioc
 中文:
 定理 ceil_eq_on_Ioc
   条件: (z : 整数)
-  结论: 对任意 a in Set.Ioc (z - 1 : R) z, ⌈a⌉ = z
+  结论: 对任意 a in 集合.左开右闭区间 (z - 1 : R) z, ⌈a⌉ = z
   证明: fun _ ⟨h₀, h₁⟩ =>
   ceil_eq_iff.mpr ⟨h₀, h₁⟩
 
@@ -2684,7 +2684,7 @@ theorem preimage_ceil_singleton
 中文:
 定理 preimage_ceil_singleton
   条件: (m : 整数)
-  结论: (ceil : R -> 整数) ⁻¹' {m} = Ioc ((m : R) - 1) m
+  结论: (ceil : R -> 整数) ⁻¹' {m} = 左开右闭区间 ((m : R) - 1) m
   证明: ext fun _ => ceil_eq_iff
 
 Depends on / 依赖: ceil_eq_iff
@@ -2797,7 +2797,7 @@ theorem ceil_ofNat
 @[simp]
 
 中文:
-定理 ceil_ofNat
+定理 ceil_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ⌈(of自然数(n) : R)⌉ = of自然数(n)
   证明: ceil_natCast n
@@ -2978,7 +2978,7 @@ theorem ceil_add_ofNat
 @[simp]
 
 中文:
-定理 ceil_add_ofNat
+定理 ceil_add_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: ceil_add_natCast a n
 
@@ -3002,7 +3002,7 @@ theorem ceil_ofNat_add
 @[simp]
 
 中文:
-定理 ceil_ofNat_add
+定理 ceil_of自然数_add
   条件: (n : 自然数) [n.AtLeastTwo] (a : R)
   证明: ceil_natCast_add n a
 
@@ -3108,7 +3108,7 @@ theorem ceil_sub_ofNat
 @[bound]
 
 中文:
-定理 ceil_sub_ofNat
+定理 ceil_sub_of自然数
   条件: (a : R) (n : 自然数) [n.AtLeastTwo]
   证明: ceil_sub_natCast a n
 
@@ -3273,7 +3273,7 @@ theorem ceil_eq_on_Ioc'
 中文:
 定理 ceil_eq_on_Ioc'
   条件: (z : 整数)
-  结论: 对任意 a in Set.Ioc (z - 1 : R) z, (⌈a⌉ : R) = z
+  结论: 对任意 a in 集合.左开右闭区间 (z - 1 : R) z, (⌈a⌉ : R) = z
   证明: fun a ha => congrArg Int.cast (ceil_eq_on_Ioc z a ha)
 
 Depends on / 依赖: Int.cast, ceil_eq_on_Ioc
@@ -3296,7 +3296,7 @@ lemma ceil_eq_self_iff_mem
 中文:
 引理 ceil_eq_self_iff_mem
   条件: (a : R)
-  结论: ⌈a⌉ = a ↔ a in Set.range 整数.cast
+  结论: ⌈a⌉ = a ↔ a in 集合.range 整数.cast
   证明: by
   aesop
 
@@ -3369,7 +3369,7 @@ lemma ceil_eq_floor_add_one_iff_notMem
 中文:
 引理 ceil_eq_floor_add_one_iff_notMem
   条件: (a : R)
-  结论: ⌈a⌉ = ⌊a⌋ + 1 ↔ a ∉ Set.range 整数.cast
+  结论: ⌈a⌉ = ⌊a⌋ + 1 ↔ a ∉ 集合.range 整数.cast
   证明: by
   refine ⟨fun h ht => ?_, fun h => ?_⟩
   · have h0 := ((floor_eq_self_iff_mem _).mpr ht).trans ((ceil_eq_self_iff_mem _).mpr ht).symm
@@ -3724,7 +3724,7 @@ theorem preimage_Ioo
 中文:
 定理 preimage_Ioo
   条件: {a b : R}
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Ioo a b = Set.Ioo ⌊a⌋ ⌈b⌉
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.开区间 a b = 集合.开区间 ⌊a⌋ ⌈b⌉
   证明: by
   ext
   simp [floor_lt, lt_ceil]
@@ -3754,7 +3754,7 @@ theorem preimage_Ico
 中文:
 定理 preimage_Ico
   条件: {a b : R}
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Ico a b = Set.Ico ⌈a⌉ ⌈b⌉
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左闭右开区间 a b = 集合.左闭右开区间 ⌈a⌉ ⌈b⌉
   证明: by
   ext
   simp [ceil_le, lt_ceil]
@@ -3784,7 +3784,7 @@ theorem preimage_Ioc
 中文:
 定理 preimage_Ioc
   条件: {a b : R}
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Ioc a b = Set.Ioc ⌊a⌋ ⌊b⌋
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左开右闭区间 a b = 集合.左开右闭区间 ⌊a⌋ ⌊b⌋
   证明: by
   ext
   simp [floor_lt, le_floor]
@@ -3814,7 +3814,7 @@ theorem preimage_Icc
 中文:
 定理 preimage_Icc
   条件: {a b : R}
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Icc a b = Set.Icc ⌈a⌉ ⌊b⌋
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.闭区间 a b = 集合.闭区间 ⌈a⌉ ⌊b⌋
   证明: by
   ext
   simp [ceil_le, le_floor]
@@ -3842,7 +3842,7 @@ theorem preimage_Ioi
 
 中文:
 定理 preimage_Ioi
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Ioi a = Set.Ioi ⌊a⌋
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左开右无界区间 a = 集合.左开右无界区间 ⌊a⌋
   证明: by
   ext
   simp [floor_lt]
@@ -3870,7 +3870,7 @@ theorem preimage_Ici
 
 中文:
 定理 preimage_Ici
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Ici a = Set.Ici ⌈a⌉
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左闭右无界区间 a = 集合.左闭右无界区间 ⌈a⌉
   证明: by
   ext
   simp [ceil_le]
@@ -3898,7 +3898,7 @@ theorem preimage_Iio
 
 中文:
 定理 preimage_Iio
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Iio a = Set.Iio ⌈a⌉
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左无界右开区间 a = 集合.左无界右开区间 ⌈a⌉
   证明: by
   ext
   simp [lt_ceil]
@@ -3924,7 +3924,7 @@ theorem preimage_Iic
 
 中文:
 定理 preimage_Iic
-  结论: ((↑) : 整数 -> R) ⁻¹' Set.Iic a = Set.Iic ⌊a⌋
+  结论: ((↑) : 整数 -> R) ⁻¹' 集合.左无界右闭区间 a = 集合.左无界右闭区间 ⌊a⌋
   证明: by
   ext
   simp [le_floor]
@@ -3993,7 +3993,7 @@ theorem map_floor
 
 中文:
 定理 map_floor
-  条件: (f : F) (hf : StrictMono f) (a : R)
+  条件: (f : F) (hf : 严格递增 f) (a : R)
   结论: ⌊f a⌋ = ⌊a⌋
   证明: floor_congr fun n => by rw [← map_intCast f, hf.le_iff_le]
 
@@ -4013,7 +4013,7 @@ theorem map_ceil
 
 中文:
 定理 map_ceil
-  条件: (f : F) (hf : StrictMono f) (a : R)
+  条件: (f : F) (hf : 严格递增 f) (a : R)
   结论: ⌈f a⌉ = ⌈a⌉
   证明: ceil_congr fun n => by rw [← map_intCast f, hf.le_iff_le]
 
@@ -4034,7 +4034,7 @@ theorem map_fract
 
 中文:
 定理 map_fract
-  条件: (f : F) (hf : StrictMono f) (a : R)
+  条件: (f : F) (hf : 严格递增 f) (a : R)
   结论: fract (f a) = f (fract a)
   证明: by
   simp_rw [fract, map_sub, map_intCast, map_floor _ hf]
@@ -4104,7 +4104,7 @@ theorem Int.natCast_floor_eq_floor
   rw [← Int.floor_toNat]; rw [Int.toNat_of_nonneg (Int.floor_nonneg.2 ha)]
 
 中文:
-定理 Int.natCast_floor_eq_floor
+定理 整数.natCast_floor_eq_floor
   条件: (ha : 0 <= a)
   结论: (⌊a⌋₊ : 整数) = ⌊a⌋
   证明: by
@@ -4126,7 +4126,7 @@ theorem Int.natCast_ceil_eq_ceil
   rw [← Int.ceil_toNat]; rw [Int.toNat_of_nonneg (Int.ceil_nonneg ha)]
 
 中文:
-定理 Int.natCast_ceil_eq_ceil
+定理 整数.natCast_ceil_eq_ceil
   条件: (ha : 0 <= a)
   结论: (⌈a⌉₊ : 整数) = ⌈a⌉
   证明: by
@@ -4148,7 +4148,7 @@ theorem Int.natCast_ceil_eq_ceil_of_neg_one_lt
   rw [← Int.ceil_toNat]; rw [Int.toNat_of_nonneg (Int.ceil_nonneg_of_neg_one_lt ha)]
 
 中文:
-定理 Int.natCast_ceil_eq_ceil_of_neg_one_lt
+定理 整数.natCast_ceil_eq_ceil_of_neg_one_lt
   条件: (ha : -1 < a)
   结论: (⌈a⌉₊ : 整数) = ⌈a⌉
   证明: by
@@ -4243,8 +4243,8 @@ theorem subsingleton_floorRing
 
 中文:
 定理 subsingleton_floorRing
-  条件: {R} [Ring R] [LinearOrder R]
-  结论: Subsingleton (FloorRing R)
+  条件: {R} [环 R] [线性序 R]
+  结论: 子单例 (Floor环 R)
   证明: by
   refine ⟨fun H₁ H₂ => ?_⟩
   have : H₁.floor = H₂.floor :=

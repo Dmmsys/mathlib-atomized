@@ -68,7 +68,7 @@ structure StrictlyUnitaryLaxFunctor
     - mapId_eq_eqToHom((X : B)) : (mapId X) = eqToHom (map_id X).symm  [default: by cat_disch]
 
 中文:
-结构 StrictlyUnitaryLaxFunctor
+结构 StrictlyUnitaryLax函子
   参数: extends B ⥤ᴸ C
   继承: B ⥤ᴸ C
   公理与运算 (2 个):
@@ -237,7 +237,7 @@ instance mapId_isIso
 
 中文:
 实例 mapId_isIso
-  签名: (F : StrictlyUnitaryLaxFunctor B C) (x : B)
+  签名: (F : StrictlyUnitaryLax函子 B C) (x : B)
   定义体: by
   rw [mapId_eq_eqToHom]
   infer_instance
@@ -265,7 +265,7 @@ definition mapIdIso
 
 中文:
 定义 mapIdIso
-  签名: (F : StrictlyUnitaryLaxFunctor B C) (x : B)
+  签名: (F : StrictlyUnitaryLax函子 B C) (x : B)
   定义体: F.mapId x
   inv := eqToHom (F.map_id x)
   hom_inv_id := by simp [F.mapId_eq_eqToHom]
@@ -295,7 +295,7 @@ definition id
 
 中文:
 定义 id
-  签名: : StrictlyUnitaryLaxFunctor B B where
+  签名: : StrictlyUnitaryLax函子 B B where
   定义体: LaxFunctor.id B
   map_id _ := rfl
   mapId_eq_eqToHom _ := rfl
@@ -325,7 +325,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (F : StrictlyUnitaryLaxFunctor B C)
+  签名: (F : StrictlyUnitaryLax函子 B C)
   定义体: LaxFunctor.comp F.toLaxFunctor G.toLaxFunctor
   map_id _ := by simp [StrictlyUnitaryLaxFunctor.map_id]
   mapId_eq_eqToHom _ := by
@@ -364,7 +364,7 @@ lemma comp_id
 
 中文:
 引理 comp_id
-  条件: (F : StrictlyUnitaryLaxFunctor B C)
+  条件: (F : StrictlyUnitaryLax函子 B C)
   证明: by
   ext
   · simp
@@ -402,7 +402,7 @@ lemma id_comp
 
 中文:
 引理 id_comp
-  条件: (F : StrictlyUnitaryLaxFunctor B C)
+  条件: (F : StrictlyUnitaryLax函子 B C)
   证明: by
   ext
   · simp
@@ -440,7 +440,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  结论: {E : 类型u₄} [Bicategory.{w₄, v₄} E]
+  结论: {E : 类型u₄} [双范畴.{w₄, v₄} E]
   证明: by
   ext
   · simp

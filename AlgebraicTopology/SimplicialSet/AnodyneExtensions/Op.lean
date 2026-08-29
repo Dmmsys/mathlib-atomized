@@ -110,8 +110,8 @@ instance [P.IsProper]
   body: (P.isUniquelyCodimOneFace ⟨_, x.2⟩).op
 
 中文:
-实例 [P.IsProper]
-  签名: : P.op.Is命题er where
+实例 [P.是真]
+  签名: : P.op.是真 where
   定义体: (P.isUniquelyCodimOneFace ⟨_, x.2⟩).op
 
 Depends on / 依赖: P.isUniquelyCodimOneFace, isUniquelyCodimOneFace
@@ -134,8 +134,8 @@ instance [P.IsRegular]
     simpa [← P.op_ancestralRel_iff] using hf n
 
 中文:
-实例 [P.IsRegular]
-  签名: : P.op.IsRegular where
+实例 [P.是正则]
+  签名: : P.op.是正则 where
   定义体: by
     have hP := P.wf
     rw [wellFounded_iff_isEmpty_descending_chain] at hP ⊢

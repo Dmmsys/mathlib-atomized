@@ -79,7 +79,7 @@ theorem aevalEquivField_apply_coe
 
 中文:
 定理 aevalEquivField_apply_coe
-  条件: (a : FractionRing (MvPolynomial ι F))
+  条件: (a : FractionRing (多元多项式 ι F))
   证明: rfl
 -/
 theorem aevalEquivField_apply_coe (a : FractionRing (MvPolynomial ι F)) :
@@ -97,7 +97,7 @@ theorem aevalEquivField_algebraMap_apply_coe
 
 中文:
 定理 aevalEquivField_algebraMap_apply_coe
-  条件: (a : MvPolynomial ι F)
+  条件: (a : 多元多项式 ι F)
   证明: by
   simp
 -/
@@ -117,7 +117,7 @@ definition reprField
 
 中文:
 定义 reprField
-  签名: : 整数ermediateField.adjoin F (range x) ->ₐ[F] FractionRing (MvPolynomial ι F)
+  签名: : 中间域.adjoin F (range x) ->ₐ[F] FractionRing (多元多项式 ι F)
   定义体: hx.aevalEquivField.symm
 
 @[simp]

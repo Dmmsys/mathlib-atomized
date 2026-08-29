@@ -44,7 +44,7 @@ inductive limitsClosure
 
 中文:
 归纳类型 limitsClosure
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (3 个):
     - of_mem: (X : C) (hX : P X) : limitsClosure X
     - of_isoClosure: {X Y : C} (e : X ≅ Y) (hX : limitsClosure X) : limitsClosure Y
@@ -84,8 +84,8 @@ instance [P.Nonempty]
   body: .mono (P.le_limitsClosure J)
 
 中文:
-实例 [P.Nonempty]
-  签名: : (P.limitsClosure J).Nonempty
+实例 [P.非空]
+  签名: : (P.limitsClosure J).非空
   定义体: .mono (P.le_limitsClosure J)
 
 Depends on / 依赖: P.le_limitsClosure, le_limitsClosure
@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: (P.limitsClosure J).IsClosedUnderIsomorphisms
+  签名: (P.limitsClosure J).在同构下封闭
   定义体: .of_isoClosure e hX
 
 Depends on / 依赖: of_isoClosure
@@ -131,7 +131,7 @@ lemma limitsClosure_le
 
 中文:
 引理 limitsClosure_le
-  结论: {Q : Object命题erty C} [Q.IsClosedUnderIsomorphisms]
+  结论: {Q : ObjectProperty C} [Q.在同构下封闭]
   证明: by
   intro X hX
   induction hX with
@@ -161,7 +161,7 @@ lemma limitsClosure_monotone
 
 中文:
 引理 limitsClosure_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: limitsClosure_le (h.trans (Q.le_limitsClosure J))
 
 Depends on / 依赖: Q.le_limitsClosure, h.trans, le_limitsClosure, limitsClosure_le
@@ -182,7 +182,7 @@ lemma limitsClosure_eq_self
 
 中文:
 引理 limitsClosure_eq_self
-  结论: [P.IsClosedUnderIsomorphisms]
+  结论: [P.在同构下封闭]
   证明: le_antisymm (limitsClosure_le (le_refl P)) (P.le_limitsClosure J)
 
 @[simp]
@@ -206,7 +206,7 @@ lemma limitsClosure_bot
 
 中文:
 引理 limitsClosure_bot
-  条件: [对任意 (a : α), Nonempty (J a)]
+  条件: [对任意 (a : α), 非空 (J a)]
   证明: limitsClosure_eq_self _ _
 
 @[simp]
@@ -228,7 +228,7 @@ lemma limitsClosure_top
 
 中文:
 引理 limitsClosure_top
-  结论: limitsClosure (⊤ : Object命题erty C) J = ⊤
+  结论: limitsClosure (⊤ : ObjectProperty C) J = ⊤
   证明: limitsClosure_eq_self _ _
 
 Depends on / 依赖: limitsClosure_eq_self
@@ -274,7 +274,7 @@ abbreviation limitClosure
 
 中文:
 缩写 limitClosure
-  签名: (J : 类型) [Category* J]
+  签名: (J : 类型) [范畴* J]
   定义体: P.limitsClosure (fun (_ : Unit) => J)
 
 Depends on / 依赖: P.limitsClosure, limitsClosure
@@ -297,7 +297,7 @@ definition strictLimitsClosureStep
 
 中文:
 定义 strictLimitsClosureStep
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: P ⊔ (⨆ (a : α), P.strictLimitsOfShape (J a))
 
 @[simp]
@@ -334,8 +334,8 @@ instance [P.Nonempty]
   body: .mono (P.le_strictLimitsClosureStep J)
 
 中文:
-实例 [P.Nonempty]
-  签名: : (P.strictLimitsClosureStep J).Nonempty
+实例 [P.非空]
+  签名: : (P.strictLimitsClosureStep J).非空
   定义体: .mono (P.le_strictLimitsClosureStep J)
 
 Depends on / 依赖: P.le_strictLimitsClosureStep, le_strictLimitsClosureStep
@@ -359,7 +359,7 @@ lemma strictLimitsClosureStep_monotone
 
 中文:
 引理 strictLimitsClosureStep_monotone
-  条件: {Q : Object命题erty C} (h : P <= Q)
+  条件: {Q : ObjectProperty C} (h : P <= Q)
   证明: by
   dsimp [strictLimitsClosureStep]
   simp only [sup_le_iff, iSup_le_iff]

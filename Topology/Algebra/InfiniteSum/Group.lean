@@ -48,9 +48,9 @@ theorem HasProd.inv
 @[to_additive]
 
 中文:
-定理 HasProd.inv
-  条件: (h : HasProd f a L)
-  结论: HasProd (fun b => (f b)⁻¹) a⁻¹ L
+定理 有积类型.inv
+  条件: (h : 有积类型 f a L)
+  结论: 有积类型 (fun b => (f b)⁻¹) a⁻¹ L
   证明: by
   simpa only using! h.map (MonoidHom.id α)⁻¹ continuous_inv
 
@@ -150,8 +150,8 @@ theorem HasProd.div
 @[to_additive]
 
 中文:
-定理 HasProd.div
-  条件: (hf : HasProd f a₁ L) (hg : HasProd g a₂ L)
+定理 有积类型.div
+  条件: (hf : 有积类型 f a₁ L) (hg : 有积类型 g a₂ L)
   证明: by
   simp only [div_eq_mul_inv]
   exact hf.mul hg.inv
@@ -256,8 +256,8 @@ theorem HasProd.update
 @[to_additive]
 
 中文:
-定理 HasProd.update
-  条件: [L.LeAtTop] (hf : HasProd f a₁ L) (b : β) [DecidableEq β] (a : α)
+定理 有积类型.update
+  条件: [L.LeAtTop] (hf : 有积类型 f a₁ L) (b : β) [DecidableEq β] (a : α)
   证明: by
   convert! (hasProd_ite_eq b (a / f b) (L := L)).mul hf with b'
   by_cases h : b' = b
@@ -317,8 +317,8 @@ theorem HasProd.hasProd_compl_iff
 @[to_additive]
 
 中文:
-定理 HasProd.hasProd_compl_iff
-  条件: {s : Set β} (hf : HasProd (f ∘ (↑) : s -> α) a₁)
+定理 有积类型.hasProd_compl_iff
+  条件: {s : 集合 β} (hf : 有积类型 (f ∘ (↑) : s -> α) a₁)
   证明: by
   refine ⟨fun h => hf.mul_compl h, fun h => ?_⟩
   rw [hasProd_subtype_iff_mulIndicator] at hf ⊢
@@ -348,8 +348,8 @@ theorem HasProd.hasProd_iff_compl
 @[to_additive]
 
 中文:
-定理 HasProd.hasProd_iff_compl
-  条件: {s : Set β} (hf : HasProd (f ∘ (↑) : s -> α) a₁)
+定理 有积类型.hasProd_iff_compl
+  条件: {s : 集合 β} (hf : 有积类型 (f ∘ (↑) : s -> α) a₁)
   证明: Iff.symm hf.hasProd_compl_iff.trans by rw [mul_div_cancel]
 
 @[to_additive]
@@ -374,7 +374,7 @@ theorem Multipliable.multipliable_compl_iff
 
 中文:
 定理 Multipliable.multipliable_compl_iff
-  条件: {s : Set β} (hf : Multipliable (f ∘ (↑) : s -> α))
+  条件: {s : 集合 β} (hf : Multipliable (f ∘ (↑) : s -> α))
   证明: fun ⟨_, ha⟩ => (hf.hasProd.hasProd_compl_iff.1 ha).multipliable
   mpr := fun ⟨_, ha⟩ => (hf.hasProd.hasProd_iff_compl.1 ha).multipliable
 
@@ -399,8 +399,8 @@ theorem Finset.hasProd_compl_iff
 @[to_additive]
 
 中文:
-定理 Finset.hasProd_compl_iff
-  条件: (s : Finset β)
+定理 有限集.hasProd_compl_iff
+  条件: (s : 有限集 β)
   证明: (s.hasProd f).hasProd_compl_iff.trans by rw [mul_comm]
 
 @[to_additive]
@@ -421,8 +421,8 @@ theorem Finset.hasProd_iff_compl
 @[to_additive]
 
 中文:
-定理 Finset.hasProd_iff_compl
-  条件: (s : Finset β)
+定理 有限集.hasProd_iff_compl
+  条件: (s : 有限集 β)
   证明: (s.hasProd f).hasProd_iff_compl
 
 @[to_additive]
@@ -443,8 +443,8 @@ theorem Finset.multipliable_compl_iff
 @[to_additive]
 
 中文:
-定理 Finset.multipliable_compl_iff
-  条件: (s : Finset β)
+定理 有限集.multipliable_compl_iff
+  条件: (s : 有限集 β)
   证明: (s.multipliable f).multipliable_compl_iff
 
 @[to_additive]
@@ -465,8 +465,8 @@ theorem Set.Finite.multipliable_compl_iff
 @[to_additive]
 
 中文:
-定理 Set.Finite.multipliable_compl_iff
-  条件: {s : Set β} (hs : s.Finite)
+定理 集合.有限.multipliable_compl_iff
+  条件: {s : 集合 β} (hs : s.有限)
   证明: (hs.multipliable f).multipliable_compl_iff
 
 @[to_additive]
@@ -492,7 +492,7 @@ theorem hasProd_ite_div_hasProd
 
 中文:
 定理 hasProd_ite_div_hasProd
-  条件: [L.LeAtTop] [DecidableEq β] (hf : HasProd f a L) (b : β)
+  条件: [L.LeAtTop] [DecidableEq β] (hf : 有积类型 f a L) (b : β)
   证明: by
   convert! hf.update b 1 using 1
   · ext n
@@ -665,7 +665,7 @@ theorem Multipliable.prod_mul_tprod_compl
 
 中文:
 定理 Multipliable.prod_mul_tprod_compl
-  条件: {s : Finset β} (hf : Multipliable f)
+  条件: {s : 有限集 β} (hf : Multipliable f)
   证明: ((s.hasProd f).mul_compl (s.multipliable_compl_iff.2 hf).hasProd).tprod_eq.symm
 -/
 protected theorem Multipliable.prod_mul_tprod_compl {s : Finset β} (hf : Multipliable f) :
@@ -722,7 +722,7 @@ theorem multipliable_iff_cauchySeq_finset
 
 中文:
 定理 multipliable_iff_cauchySeq_finset
-  条件: [CommMonoid α] [CompleteSpace α] {f : β -> α}
+  条件: [交换幺半群 α] [完备空间 α] {f : β -> α}
   证明: by
   exact cauchy_map_iff_exists_tendsto.symm
 
@@ -950,7 +950,7 @@ theorem Multipliable.mulIndicator
 
 中文:
 定理 Multipliable.mulIndicator
-  条件: (hf : Multipliable f) (s : Set β)
+  条件: (hf : Multipliable f) (s : 集合 β)
   证明: hf.multipliable_of_eq_one_or_self Set.mulIndicator_eq_one_or_self _ _
 
 @[to_additive]
@@ -975,7 +975,7 @@ theorem Multipliable.comp_injective
 
 中文:
 定理 Multipliable.comp_injective
-  条件: {i : γ -> β} (hf : Multipliable f) (hi : Injective i)
+  条件: {i : γ -> β} (hf : Multipliable f) (hi : 单射 i)
   证明: by
   simpa only [Set.mulIndicator_range_comp] using
     (hi.multipliable_iff (fun x hx => Set.mulIndicator_of_notMem hx _)).2
@@ -1028,7 +1028,7 @@ theorem multipliable_subtype_and_compl
 
 中文:
 定理 multipliable_subtype_and_compl
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   证明: ⟨and_imp.2 Multipliable.mul_compl, fun h => ⟨h.subtype (· in s), h.subtype (· in sᶜ)⟩⟩
 
 @[to_additive]
@@ -1052,7 +1052,7 @@ theorem Multipliable.tprod_subtype_mul_tprod_subtype_compl
 
 中文:
 定理 Multipliable.tprod_subtype_mul_tprod_subtype_compl
-  结论: [T2Space α] {f : β -> α}
+  结论: [T2空间 α] {f : β -> α}
   证明: ((hf.subtype _).hasProd.mul_compl (hf.subtype _).hasProd).unique hf.hasProd
 
 @[to_additive]
@@ -1075,7 +1075,7 @@ theorem Multipliable.prod_mul_tprod_subtype_compl
 
 中文:
 定理 Multipliable.prod_mul_tprod_subtype_compl
-  结论: [T2Space α] {f : β -> α}
+  结论: [T2空间 α] {f : β -> α}
   证明: by
   rw [← hf.tprod_subtype_mul_tprod_subtype_compl s]
   simp only [Finset.tprod_subtype', mul_right_inj]
@@ -1113,7 +1113,7 @@ theorem Multipliable.vanishing
 中文:
 定理 Multipliable.vanishing
   条件: (hf : Multipliable f) ⦃e
-  结论: Set G⦄ (he : e in 𝓝 (1 : G)) :
+  结论: 集合 G⦄ (he : e in 𝓝 (1 : G)) :
   证明: by
   classical
   let : UniformSpace G := IsTopologicalGroup.rightUniformSpace G
@@ -1148,7 +1148,7 @@ theorem Multipliable.tprod_vanishing
 中文:
 定理 Multipliable.tprod_vanishing
   条件: (hf : Multipliable f) ⦃e
-  结论: Set G⦄ (he : e in 𝓝 1) :
+  结论: 集合 G⦄ (he : e in 𝓝 1) :
   证明: by
   classical
   let : UniformSpace G := IsTopologicalGroup.rightUniformSpace G
@@ -1230,7 +1230,7 @@ theorem Multipliable.tendsto_cofinite_one
 中文:
 定理 Multipliable.tendsto_cofinite_one
   条件: (hf : Multipliable f)
-  结论: Tendsto f cofinite (𝓝 1)
+  结论: 收敛 f cofinite (𝓝 1)
   证明: by
   intro e he
   rw [Filter.mem_map]
@@ -1305,7 +1305,7 @@ theorem Multipliable.countable_mulSupport
 
 中文:
 定理 Multipliable.countable_mulSupport
-  结论: [FirstCountableTopology G] [T1Space G]
+  结论: [第一可数拓扑 G] [T1空间 G]
   证明: by
   simpa only [ker_nhds] using! hf.tendsto_cofinite_one.countable_compl_preimage_ker
 
@@ -1338,7 +1338,7 @@ theorem multipliable_const_iff
 
 中文:
 定理 multipliable_const_iff
-  条件: [Infinite β] [T2Space G] (a : G)
+  条件: [无限 β] [T2空间 G] (a : G)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · by_contra ha
@@ -1382,7 +1382,7 @@ theorem tprod_const
 
 中文:
 定理 tprod_const
-  条件: [T2Space G] (a : G)
+  条件: [T2空间 G] (a : G)
   结论: ∏' _ : β, a = a ^ (自然数.card β)
   证明: by
   rcases finite_or_infinite β with hβ | hβ
@@ -1439,8 +1439,8 @@ lemma HasProd.congr_cofinite₀
     conv_lhs => rw [← union_sdiff_of_subset h
 
 中文:
-引理 HasProd.congr_cofinite₀
-  结论: {c : K} (hc : HasProd f c) {s : Finset α}
+引理 有积类型.congr_cofinite₀
+  结论: {c : K} (hc : 有积类型 f c) {s : 有限集 α}
   证明: by
   classical
   refine (Tendsto.mul_const ((∏ i in s, g i) / ∏ i in s, f i) hc).congr' ?_
@@ -1477,7 +1477,7 @@ lemma Multipliable.tsum_congr_cofinite₀
 
 中文:
 引理 Multipliable.tsum_congr_cofinite₀
-  结论: [T2Space K] (hc : Multipliable f) {s : Finset α}
+  结论: [T2空间 K] (hc : Multipliable f) {s : 有限集 α}
   证明: (hc.hasProd.congr_cofinite₀ hs hs').tprod_eq
 -/
 protected lemma Multipliable.tsum_congr_cofinite₀ [T2Space K] (hc : Multipliable f) {s : Finset α}
@@ -1527,8 +1527,8 @@ theorem HasProd.inv₀
   exact Tendsto.inv₀ h ha
 
 中文:
-定理 HasProd.inv₀
-  条件: {a : K} [ContinuousInv₀ K] (h : HasProd f a L) (ha : a != 0)
+定理 有积类型.inv₀
+  条件: {a : K} [余ntinuousInv₀ K] (h : 有积类型 f a L) (ha : a != 0)
   证明: by
   simp_rw [HasProd, Finset.prod_inv_distrib]
   exact Tendsto.inv₀ h ha
@@ -1550,7 +1550,7 @@ theorem Multipliable.inv₀
 
 中文:
 定理 Multipliable.inv₀
-  条件: [ContinuousInv₀ K] (h : Multipliable f L) (ne_zero : ∏'[L] x, f x != 0)
+  条件: [余ntinuousInv₀ K] (h : Multipliable f L) (ne_zero : ∏'[L] x, f x != 0)
   证明: .multipliable h.hasProd.inv₀ ne_zero
 
 Depends on / 依赖: h.hasProd.inv, hasProd, multipliable, ne_zero
@@ -1569,7 +1569,7 @@ theorem Multipliable.tprod_inv₀
 
 中文:
 定理 Multipliable.tprod_inv₀
-  结论: [ContinuousInv₀ K] [T2Space K] [L.NeBot]
+  结论: [余ntinuousInv₀ K] [T2空间 K] [L.NeBot]
   证明: .tprod_eq h.hasProd.inv₀ ne_zero
 
 Depends on / 依赖: h.hasProd.inv, hasProd, ne_zero, tprod_eq
@@ -1590,8 +1590,8 @@ theorem HasProd.div₀
 exact hf.mul hg.inv₀ hb
 
 中文:
-定理 HasProd.div₀
-  结论: [ContinuousInv₀ K] [ContinuousMul K] {a b : K}
+定理 有积类型.div₀
+  结论: [余ntinuousInv₀ K] [连续乘法 K] {a b : K}
   证明: by
   simp only [div_eq_mul_inv]
 exact hf.mul hg.inv₀ hb
@@ -1614,7 +1614,7 @@ theorem Multipliable.div₀
 
 中文:
 定理 Multipliable.div₀
-  结论: [ContinuousInv₀ K] [ContinuousMul K]
+  结论: [余ntinuousInv₀ K] [连续乘法 K]
   证明: .multipliable hf.hasProd.div₀ hg.hasProd ne_zero
 
 Depends on / 依赖: hasProd, hf.hasProd.div, hg.hasProd, multipliable, ne_zero
@@ -1634,7 +1634,7 @@ theorem Multipliable.tprod_div₀
 
 中文:
 定理 Multipliable.tprod_div₀
-  结论: [ContinuousInv₀ K] [ContinuousMul K] [T2Space K] [L.NeBot]
+  结论: [余ntinuousInv₀ K] [连续乘法 K] [T2空间 K] [L.NeBot]
   证明: .tprod_eq hf.hasProd.div₀ hg.hasProd ne_zero
 
 Depends on / 依赖: hasProd, hf.hasProd.div, hg.hasProd, ne_zero, tprod_eq

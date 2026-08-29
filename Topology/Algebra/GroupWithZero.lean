@@ -62,8 +62,8 @@ theorem Filter.Tendsto.div_const
   simpa only [div_eq_mul_inv] using hf.mul_const _
 
 中文:
-定理 Filter.Tendsto.div_const
-  条件: {x : G₀} (hf : Tendsto f l (𝓝 x)) (y : G₀)
+定理 滤子.收敛.div_const
+  条件: {x : G₀} (hf : 收敛 f l (𝓝 x)) (y : G₀)
   证明: by
   simpa only [div_eq_mul_inv] using hf.mul_const _
 
@@ -120,9 +120,9 @@ theorem Continuous.div_const
   simpa only [div_eq_mul_inv] using hf.mul_const _
 
 中文:
-定理 Continuous.div_const
-  条件: (hf : Continuous f) (y : G₀)
-  结论: Continuous fun x => f x / y
+定理 连续.div_const
+  条件: (hf : 连续 f) (y : G₀)
+  结论: 连续 fun x => f x / y
   证明: by
   simpa only [div_eq_mul_inv] using hf.mul_const _
 
@@ -143,10 +143,10 @@ class ContinuousInv₀
     - continuousAt_inv₀ : forall ⦃x : G₀⦄, x != 0 -> ContinuousAt Inv.inv x
 
 中文:
-类 ContinuousInv₀
-  参数: (G₀ : 类型) [Zero G₀] [Inv G₀] [TopologicalSpace G₀]
+类 余ntinuousInv₀
+  参数: (G₀ : 类型) [零 G₀] [取逆 G₀] [拓扑空间 G₀]
   公理与运算 (1 个):
-    - continuousAt_inv₀ : 对任意 ⦃x : G₀⦄, x != 0 -> ContinuousAt Inv.inv x
+    - continuousAt_inv₀ : 对任意 ⦃x : G₀⦄, x != 0 -> ContinuousAt 取逆.inv x
 -/
 class ContinuousInv₀ (G₀ : Type*) [Zero G₀] [Inv G₀] [TopologicalSpace G₀] : Prop where
   /-- The map `fun x ↦ x⁻¹` is continuous at all nonzero points. -/
@@ -172,7 +172,7 @@ theorem tendsto_inv₀
 中文:
 定理 tendsto_inv₀
   条件: {x : G₀} (hx : x != 0)
-  结论: Tendsto Inv.inv (𝓝 x) (𝓝 x⁻¹)
+  结论: 收敛 取逆.inv (𝓝 x) (𝓝 x⁻¹)
   证明: continuousAt_inv₀ hx
 -/
 theorem tendsto_inv₀ {x : G₀} (hx : x != 0) : Tendsto Inv.inv (𝓝 x) (𝓝 x⁻¹) :=
@@ -189,7 +189,7 @@ theorem continuousOn_inv₀
 
 中文:
 定理 continuousOn_inv₀
-  结论: ContinuousOn (Inv.inv : G₀ -> G₀) {0}ᶜ
+  结论: ContinuousOn (取逆.inv : G₀ -> G₀) {0}ᶜ
   证明: fun _x hx =>
   (continuousAt_inv₀ hx).continuousWithinAt
 -/
@@ -205,8 +205,8 @@ theorem Filter.Tendsto.inv₀
   proof: (tendsto_inv₀ ha).comp hf
 
 中文:
-定理 Filter.Tendsto.inv₀
-  条件: {a : G₀} (hf : Tendsto f l (𝓝 a)) (ha : a != 0)
+定理 滤子.收敛.inv₀
+  条件: {a : G₀} (hf : 收敛 f l (𝓝 a)) (ha : a != 0)
   证明: (tendsto_inv₀ ha).comp hf
 -/
 theorem Filter.Tendsto.inv₀ {a : G₀} (hf : Tendsto f l (𝓝 a)) (ha : a != 0) :
@@ -238,9 +238,9 @@ theorem Continuous.inv₀
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 Continuous.inv₀
-  条件: (hf : Continuous f) (h0 : 对任意 x, f x != 0)
-  结论: Continuous f⁻¹
+定理 连续.inv₀
+  条件: (hf : 连续 f) (h0 : 对任意 x, f x != 0)
+  结论: 连续 f⁻¹
   证明: continuous_iff_continuousAt.2 fun x => (hf.tendsto x).inv₀ (h0 x)
 
 @[to_fun (attr := fun_prop)]
@@ -282,8 +282,8 @@ theorem Units.isEmbedding_val₀
   proof: embedding_val_mk (continuousOn_inv₀ (G₀ := G₀)).mono fun _ => IsUnit.ne_zero
 
 中文:
-定理 Units.isEmbedding_val₀
-  结论: IsEmbedding (val : G₀ˣ -> G₀)
+定理 单位群.isEmbedding_val₀
+  结论: 是嵌入 (val : G₀ˣ -> G₀)
   证明: embedding_val_mk (continuousOn_inv₀ (G₀ := G₀)).mono fun _ => IsUnit.ne_zero
 
 Depends on / 依赖: IsUnit, IsUnit.ne_zero, embedding_val_mk, ne_zero
@@ -327,7 +327,7 @@ definition Homeomorph.inv₀
   continuous_invFun := continuous_induced_rng.mpr continuousOn_inv₀.domRestrict
 
 中文:
-定义 Homeomorph.inv₀
+定义 同胚.inv₀
   签名: : {g : G₀ // g != 0} ≃ₜ {g : G₀ // g != 0} where
   定义体: ⟨g⁻¹, inv_ne_zero g.2⟩
   invFun g := ⟨g⁻¹, inv_ne_zero g.2⟩
@@ -390,7 +390,7 @@ lemma tendsto_inv_iff₀
 
 中文:
 引理 tendsto_inv_iff₀
-  条件: {l : Filter α} {f : α -> G₀} (hx : x != 0)
+  条件: {l : 滤子 α} {f : α -> G₀} (hx : x != 0)
   证明: by
   simp only [nhds_inv₀ hx, ← Filter.comap_inv, tendsto_comap_iff, Function.comp_def, inv_inv]
 
@@ -424,8 +424,8 @@ theorem Filter.Tendsto.div
   simpa only [div_eq_mul_inv] using! hf.mul (hg.inv₀ hy)
 
 中文:
-定理 Filter.Tendsto.div
-  结论: {l : Filter α} {a b : G₀} (hf : Tendsto f l (𝓝 a))
+定理 滤子.收敛.div
+  结论: {l : 滤子 α} {a b : G₀} (hf : 收敛 f l (𝓝 a))
   证明: by
   simpa only [div_eq_mul_inv] using! hf.mul (hg.inv₀ hy)
 
@@ -476,8 +476,8 @@ theorem Filter.tendsto_mul_iff_of_ne_zero
   exact (hg.eventually_ne hy).mono fun n hn => mul_div_cancel_right₀ _ hn
 
 中文:
-定理 Filter.tendsto_mul_iff_of_ne_zero
-  结论: [T1Space G₀] {f g : α -> G₀} {l : Filter α} {x y : G₀}
+定理 滤子.tendsto_mul_iff_of_ne_zero
+  结论: [T1空间 G₀] {f g : α -> G₀} {l : 滤子 α} {x y : G₀}
   证明: by
   refine ⟨fun hfg => ?_, fun hf => hf.mul hg⟩
   rw [← mul_div_cancel_right₀ x hy]
@@ -532,8 +532,8 @@ theorem Continuous.div
   proof: by simpa only [div_eq_mul_inv] using! hf.mul (hg.inv₀ h₀)
 
 中文:
-定理 Continuous.div
-  条件: (hf : Continuous f) (hg : Continuous g) (h₀ : 对任意 x, g x != 0)
+定理 连续.div
+  条件: (hf : 连续 f) (hg : 连续 g) (h₀ : 对任意 x, g x != 0)
   证明: by simpa only [div_eq_mul_inv] using! hf.mul (hg.inv₀ h₀)
 
 Depends on / 依赖: div_eq_mul_inv, hf.mul, hg.inv
@@ -576,8 +576,8 @@ theorem Continuous.div₀
 @[fun_prop]
 
 中文:
-定理 Continuous.div₀
-  条件: (hf : Continuous f) (hg : Continuous g) (h₀ : 对任意 x, g x != 0)
+定理 连续.div₀
+  条件: (hf : 连续 f) (hg : 连续 g) (h₀ : 对任意 x, g x != 0)
   证明: by
   simpa only [div_eq_mul_inv] using! hf.mul (hg.inv₀ h₀)
 
@@ -679,8 +679,8 @@ theorem Continuous.comp_div_cases
     hf.continuousAt.comp_div_cases _ hg.continuousAt (hh a) (h2h a)
 
 中文:
-定理 Continuous.comp_div_cases
-  结论: {f g : α -> G₀} (h : α -> G₀ -> β) (hf : Continuous f)
+定理 连续.comp_div_cases
+  结论: {f g : α -> G₀} (h : α -> G₀ -> β) (hf : 连续 f)
   证明: continuous_iff_continuousAt.mpr fun a =>
     hf.continuousAt.comp_div_cases _ hg.continuousAt (hh a) (h2h a)
 
@@ -765,7 +765,7 @@ theorem coe_mulLeft₀
 中文:
 定理 coe_mulLeft₀
   条件: (c : α) (hc : c != 0)
-  结论: ⇑(Homeomorph.mulLeft₀ c hc) = (c * ·)
+  结论: ⇑(同胚.mulLeft₀ c hc) = (c * ·)
   证明: rfl
 
 @[simp]
@@ -810,7 +810,7 @@ theorem coe_mulRight₀
 中文:
 定理 coe_mulRight₀
   条件: (c : α) (hc : c != 0)
-  结论: ⇑(Homeomorph.mulRight₀ c hc) = (· * c)
+  结论: ⇑(同胚.mulRight₀ c hc) = (· * c)
   证明: rfl
 
 @[simp]
@@ -958,8 +958,8 @@ theorem ContinuousInv₀.of_nhds_one
     simpa only [Function.comp_def, mul_inv_rev, mul_inv_cancel_right₀ hx']
 
 中文:
-定理 ContinuousInv₀.of_nhds_one
-  条件: (h : Tendsto Inv.inv (𝓝 (1 : G₀)) (𝓝 1))
+定理 余ntinuousInv₀.of_nhds_one
+  条件: (h : 收敛 取逆.inv (𝓝 (1 : G₀)) (𝓝 1))
   证明: by
     have hx' := inv_ne_zero hx
     rw [ContinuousAt]; rw [← map_mul_left_nhds_one₀ hx]; rw [← nhds_translation_mul_inv₀ hx']; rw [tendsto_map'_iff]; rw [tendsto_comap_iff]
@@ -1042,8 +1042,8 @@ theorem Filter.Tendsto.zpow₀
   proof: (continuousAt_zpow₀ _ m h).tendsto.comp hf
 
 中文:
-定理 Filter.Tendsto.zpow₀
-  结论: {f : α -> G₀} {l : Filter α} {a : G₀} (hf : Tendsto f l (𝓝 a)) (m : 整数)
+定理 滤子.收敛.zpow₀
+  结论: {f : α -> G₀} {l : 滤子 α} {a : G₀} (hf : 收敛 f l (𝓝 a)) (m : 整数)
   证明: (continuousAt_zpow₀ _ m h).tendsto.comp hf
 
 Depends on / 依赖: tendsto, tendsto.comp
@@ -1094,8 +1094,8 @@ theorem Continuous.zpow₀
   proof: continuous_iff_continuousAt.2 fun x => (hf.tendsto x).zpow₀ m (h0 x)
 
 中文:
-定理 Continuous.zpow₀
-  条件: (hf : Continuous f) (m : 整数) (h0 : 对任意 a, f a != 0 ∨ 0 <= m)
+定理 连续.zpow₀
+  条件: (hf : 连续 f) (m : 整数) (h0 : 对任意 a, f a != 0 ∨ 0 <= m)
   证明: continuous_iff_continuousAt.2 fun x => (hf.tendsto x).zpow₀ m (h0 x)
 
 Depends on / 依赖: continuous_iff_continuousAt, hf.tendsto, tendsto

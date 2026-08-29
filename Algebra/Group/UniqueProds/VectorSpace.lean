@@ -25,8 +25,8 @@ instance [AddCommGroup
   body: TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace Rat G).repr.injective inferInstance
 
 中文:
-实例 [AddCommGroup
-  签名: G] [Module Rat G] : TwoUniqueSums G
+实例 [加法交换群
+  签名: G] [模 有理数 G] : TwoUniqueSums G
   定义体: TwoUniqueSums.of_injective_addHom _ (Module.Basis.ofVectorSpace Rat G).repr.injective inferInstance
 
 Depends on / 依赖: Module, Module.Basis.ofVectorSpace, TwoUniqueSums, TwoUniqueSums.of_injective_addHom, injective, ofVectorSpace, of_injective_addHom, repr.injective

@@ -332,7 +332,7 @@ lemma instIsIrreducible_aux₀
 
 中文:
 引理 instIsIrreducible_aux₀
-  结论: {U : LieSubmodule K H (b.support oplus ι -> K)}
+  结论: {U : Lie子模 K H (b.support oplus ι -> K)}
   证明: by
   suffices forall {w : b.support oplus ι -> K} (hw₀ : w != 0) (hw : w in genWeightSpace (b.support oplus ι -> K) χ),
       exists (i : ι) (t : K), t • w = v b i by
@@ -424,7 +424,7 @@ lemma instIsIrreducible_aux₁
 
 中文:
 引理 instIsIrreducible_aux₁
-  结论: (U : LieSubmodule K H (b.support oplus ι -> K))
+  结论: (U : Lie子模 K H (b.support oplus ι -> K))
   证明: by
   suffices exists χ : H -> K, χ != 0 ∧ genWeightSpace U χ != ⊥ by
     obtain ⟨χ, hχ₀, hχ⟩ := this
@@ -464,7 +464,7 @@ lemma instIsIrreducible_aux₂
 
 中文:
 引理 instIsIrreducible_aux₂
-  结论: [P.IsReduced] [P.IsIrreducible]
+  结论: [P.是既约] [P.是不可约]
   证明: by
   let _i := P.indexNeg
   have hωu (i : b.support) : ω b *ᵥ (u i) = u i := by
@@ -597,7 +597,7 @@ instance instIsIrreducible
 
 中文:
 实例 instIsIrreducible
-  签名: [Nonempty ι]
+  签名: [非空 ι]
   定义体: by
   refine LieModule.IsIrreducible.mk fun U hU => ?_
   suffices exists i, v b i in U by obtain ⟨i, hi⟩ := this; exact instIsIrreducible_aux₂ hi
@@ -653,7 +653,7 @@ instance instHasTrivialRadical
 
 中文:
 实例 instHasTrivialRadical
-  签名: [IsAlgClosed K]
+  签名: [是代数闭 K]
   定义体: by
   cases isEmpty_or_nonempty ι
   · infer_instance

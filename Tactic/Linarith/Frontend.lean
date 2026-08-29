@@ -169,15 +169,15 @@ structure LinarithConfig
 
 中文:
 结构 LinarithConfig
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (8 个):
-    - discharger : TacticM Unit  [默认: do evalTactic (← `(tactic| ring1))]
-    - exfalso : 布尔  [默认: true]
+    - discharger : TacticM 单元  [默认: do evalTactic (← `(tactic| ring1))]
+    - exfalso : 布尔值  [默认: true]
     - transparency : TransparencyMode  [默认: .reducible]
-    - splitHypotheses : 布尔  [默认: true]
-    - splitNe : 布尔  [默认: false]
-    - minimize : 布尔  [默认: true]
-    - preprocessors : List GlobalBranchingPreprocessor  [默认: defaultPreprocessors]
+    - splitHypotheses : 布尔值  [默认: true]
+    - splitNe : 布尔值  [默认: false]
+    - minimize : 布尔值  [默认: true]
+    - preprocessors : 列表 GlobalBranchingPreprocessor  [默认: defaultPreprocessors]
     - oracle : CertificateOracle  [默认: .simplexAlgorithmSparse]
 
 Depends on / 依赖: notation
@@ -221,7 +221,7 @@ definition LinarithConfig.updateReducibility
 
 中文:
 定义 LinarithConfig.updateReducibility
-  签名: (cfg : LinarithConfig) (reduce_default : 布尔)
+  签名: (cfg : LinarithConfig) (reduce_default : 布尔值)
   定义体: if reduce_default then
     { cfg with transparency := .default, discharger := do evalTactic (← `(tactic| ring1!)) }
   else cfg
@@ -331,7 +331,7 @@ definition ExprMultiMap.find
 
 中文:
 定义 ExprMultiMap.find
-  签名: {α : Type} (self : ExprMultiMap α) (k : Expr)
+  签名: {α : 类型} (self : ExprMultiMap α) (k : Expr)
   定义体: do
   for h : i in [:self.size] do
     let (k', vs) := self[i]
@@ -360,7 +360,7 @@ definition ExprMultiMap.insert
 
 中文:
 定义 ExprMultiMap.insert
-  签名: {α : Type} (self : ExprMultiMap α) (k : Expr) (v : α)
+  签名: {α : 类型} (self : ExprMultiMap α) (k : Expr) (v : α)
   定义体: do
   for h : i in [:self.size] do
     if ← isDefEq self[i].1 k then
@@ -384,7 +384,7 @@ definition partitionByTypeIdx
 
 中文:
 定义 partitionByTypeIdx
-  签名: (l : List (Expr × 自然数))
+  签名: (l : 列表 (Expr × 自然数))
   定义体: l.foldlM (fun m ⟨h, i⟩ => do m.insert (← typeOfIneqProof h) (h, i)) #[]
 
 Depends on / 依赖: foldlM, insert, l.foldlM, m.insert, typeOfIneqProof
@@ -449,7 +449,7 @@ definition runLinarith
 
 中文:
 定义 runLinarith
-  签名: (cfg : LinarithConfig) (prefType : Option Expr) (g : MVarId)
+  签名: (cfg : LinarithConfig) (prefType : 选项类型 Expr) (g : MVarId)
   定义体: do
   let singleProcess (g : MVarId) (hyps : List (Expr × Nat)) : MetaM (Expr × List Nat) :=
     g.withContext do
@@ -523,7 +523,7 @@ let h
 
 中文:
 定义 linarithUsedHyps
-  签名: (only_on : 布尔) (hyps : List Expr)
+  签名: (only_on : 布尔值) (hyps : 列表 Expr)
   定义体: g.withContext do
   -- if the target is an equality, we run `linarith` twice, to prove ≤ and ≥.
   if (← whnfR (← instantiateMVars (← g.getType))).isEq then
@@ -589,7 +589,7 @@ discard linarithUsedHyps only_on hyps cfg g
 
 中文:
 定义 linarith
-  签名: (only_on : 布尔) (hyps : List Expr) (cfg : LinarithConfig := {})
+  签名: (only_on : 布尔值) (hyps : 列表 Expr) (cfg : LinarithConfig := {})
   定义体: do
 discard linarithUsedHyps only_on hyps cfg g
 -/

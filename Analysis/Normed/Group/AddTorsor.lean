@@ -40,8 +40,8 @@ class NormedAddTorsor
 
 中文:
 类 NormedAddTorsor
-  参数: (V : outParam 类型) (P : 类型) [SeminormedAddCommGroup V]
-  继承: AddTorsor V P
+  参数: (V : outParam 类型) (P : 类型) [SeminormedAddComm群 V]
+  继承: 加法Torsor V P
   公理与运算 (1 个):
     - dist_eq_norm' : 对任意 x y : P, dist x y = ‖(x -ᵥ y : V)‖
 -/
@@ -76,8 +76,8 @@ instance AffineSubspace.toNormedAddTorsor
     dist_eq_norm' := fun x y => NormedAddTorsor.dist_eq_norm' x.val y.val }
 
 中文:
-实例 AffineSubspace.toNormedAddTorsor
-  签名: {R : 类型} [Ring R] [Module R V]
+实例 仿射子空间.toNormedAddTorsor
+  签名: {R : 类型} [环 R] [模 R V]
   定义体: { AffineSubspace.toAddTorsor s with
     dist_eq_norm' := fun x y => NormedAddTorsor.dist_eq_norm' x.val y.val }
 
@@ -407,7 +407,7 @@ definition IsometryEquiv.vaddConst
 @[simp]
 
 中文:
-定义 IsometryEquiv.vaddConst
+定义 等距等价.vaddConst
   签名: (x : P)
   定义体: Equiv.vaddConst x
   isometry_toFun := Isometry.of_dist_eq fun _ _ => dist_vadd_cancel_right _ _ _
@@ -483,7 +483,7 @@ definition IsometryEquiv.constVSub
 @[simp]
 
 中文:
-定义 IsometryEquiv.constVSub
+定义 等距等价.constVSub
   签名: (x : P)
   定义体: Equiv.constVSub x
   isometry_toFun := Isometry.of_dist_eq fun _ _ => dist_vsub_cancel_left _ _ _
@@ -699,7 +699,7 @@ definition pseudoMetricSpaceOfNormedAddCommGroupOfAddTorsor
 
 中文:
 定义 pseudoMetricSpaceOfNormedAddCommGroupOfAddTorsor
-  签名: (V P : 类型) [SeminormedAddCommGroup V]
+  签名: (V P : 类型) [SeminormedAddComm群 V]
   定义体: ‖(x -ᵥ y : V)‖
   dist_self x := by simp
   dist_comm x y := by simp only [← neg_vsub_eq_vsub_rev y x, norm_neg]
@@ -735,7 +735,7 @@ definition metricSpaceOfNormedAddCommGroupOfAddTorsor
 
 中文:
 定义 metricSpaceOfNormedAddCommGroupOfAddTorsor
-  签名: (V P : 类型) [NormedAddCommGroup V]
+  签名: (V P : 类型) [赋范交换加群 V]
   定义体: ‖(x -ᵥ y : V)‖
   dist_self x := by simp
   eq_of_dist_eq_zero h := by simpa using h
@@ -769,7 +769,7 @@ theorem LipschitzWith.vadd
 
 中文:
 定理 LipschitzWith.vadd
-  结论: [PseudoEMetricSpace α] {f : α -> V} {g : α -> P} {Kf Kg : 实数>=0}
+  结论: [PseudoEMetric空间 α] {f : α -> V} {g : α -> P} {Kf Kg : 实数>=0}
   证明: fun x y =>
   calc
     edist (f x +ᵥ g x) (f y +ᵥ g y) <= edist (f x) (f y) + edist (g x) (g y) :=
@@ -805,7 +805,7 @@ theorem LipschitzWith.vsub
 
 中文:
 定理 LipschitzWith.vsub
-  结论: [PseudoEMetricSpace α] {f g : α -> P} {Kf Kg : 实数>=0}
+  结论: [PseudoEMetric空间 α] {f g : α -> P} {Kf Kg : 实数>=0}
   证明: fun x y =>
   calc
     edist (f x -ᵥ g x) (f y -ᵥ g y) <= edist (f x) (f y) + edist (g x) (g y) :=
@@ -839,7 +839,7 @@ theorem uniformContinuous_vadd
 
 中文:
 定理 uniformContinuous_vadd
-  结论: UniformContinuous fun x : V × P => x.1 +ᵥ x.2
+  结论: 一致连续 fun x : V × P => x.1 +ᵥ x.2
   证明: (LipschitzWith.prod_fst.vadd LipschitzWith.prod_snd).uniformContinuous
 
 @[fun_prop]
@@ -860,7 +860,7 @@ theorem uniformContinuous_vsub
 
 中文:
 定理 uniformContinuous_vsub
-  结论: UniformContinuous fun x : P × P => x.1 -ᵥ x.2
+  结论: 一致连续 fun x : P × P => x.1 -ᵥ x.2
   证明: (LipschitzWith.prod_fst.vsub LipschitzWith.prod_snd).uniformContinuous
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.prod_fst.vsub, LipschitzWith.prod_snd, prod_fst, prod_snd, uniformContinuous
@@ -879,7 +879,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTopologicalAddTorsor P
+  签名: 是TopologicalAddTorsor P
   定义体: uniformContinuous_vadd.continuous
   continuous_vsub := uniformContinuous_vsub.continuous
 
@@ -899,8 +899,8 @@ abbreviation Function.Injective.normedAddTorsor
   dist_eq_norm' x y := by simp [norm, NormedAddTorsor.dist_eq_norm', vsub]
 
 中文:
-缩写 Function.Injective.normedAddTorsor
-  签名: {Q : 类型} [VAdd V Q] [VSub V Q]
+缩写 函数.单射.normedAddTorsor
+  签名: {Q : 类型} [向量加法 V Q] [向量减法 V Q]
   定义体: hf.addTorsor f vadd vsub
   dist_eq_norm' x y := by simp [norm, NormedAddTorsor.dist_eq_norm', vsub]
 
@@ -923,7 +923,7 @@ abbreviation Function.Surjective.normedAddTorsor
   dist_eq_norm' := by simp [hf.forall, ← norm, NormedAddTorsor.dist_eq_norm', ← vsub]
 
 中文:
-缩写 Function.Surjective.normedAddTorsor
+缩写 函数.满射.normedAddTorsor
   定义体: hf.addTorsor f vadd vsub
   dist_eq_norm' := by simp [hf.forall, ← norm, NormedAddTorsor.dist_eq_norm', ← vsub]
 

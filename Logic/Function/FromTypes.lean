@@ -35,7 +35,7 @@ definition FromTypes
 
 中文:
 定义 FromTypes
-  签名: : {n : 自然数} -> (Fin n -> 类型u) -> 类型u -> 类型u
+  签名: : {n : 自然数} -> (有限集 n -> 类型u) -> 类型u -> 类型u
 -/
 def FromTypes : {n : Nat} -> (Fin n -> Type u) -> Type u -> Type u
   | 0 , _, τ => τ
@@ -52,7 +52,7 @@ theorem fromTypes_zero
 
 中文:
 定理 fromTypes_zero
-  条件: (p : Fin 0 -> 类型u) (τ : 类型u)
+  条件: (p : 有限集 0 -> 类型u) (τ : 类型u)
   结论: FromTypes p τ = τ
   证明: rfl
 -/
@@ -88,7 +88,7 @@ theorem fromTypes_succ
 
 中文:
 定理 fromTypes_succ
-  条件: {n} (p : Fin (n + 1) -> 类型u) (τ : 类型u)
+  条件: {n} (p : 有限集 (n + 1) -> 类型u) (τ : 类型u)
   证明: rfl
 -/
 theorem fromTypes_succ {n} (p : Fin (n + 1) -> Type u) (τ : Type u) :
@@ -104,7 +104,7 @@ theorem fromTypes_cons
 
 中文:
 定理 fromTypes_cons
-  条件: {n} (α : 类型u) (p : Fin n -> 类型u) (τ : 类型u)
+  条件: {n} (α : 类型u) (p : 有限集 n -> 类型u) (τ : 类型u)
   证明: fromTypes_succ _ τ
 
 Depends on / 依赖: fromTypes_succ
@@ -124,7 +124,7 @@ definition fromTypes_zero_equiv
 
 中文:
 定义 fromTypes_zero_equiv
-  签名: (p : Fin 0 -> 类型u) (τ : 类型u)
+  签名: (p : 有限集 0 -> 类型u) (τ : 类型u)
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -165,7 +165,7 @@ definition fromTypes_succ_equiv
 
 中文:
 定义 fromTypes_succ_equiv
-  签名: {n} (p : Fin (n + 1) -> 类型u) (τ : 类型u)
+  签名: {n} (p : 有限集 (n + 1) -> 类型u) (τ : 类型u)
   定义体: Equiv.refl _
 
 Depends on / 依赖: Equiv.refl
@@ -186,7 +186,7 @@ definition fromTypes_cons_equiv
 
 中文:
 定义 fromTypes_cons_equiv
-  签名: {n} (α : 类型u) (p : Fin n -> 类型u) (τ : 类型u)
+  签名: {n} (α : 类型u) (p : 有限集 n -> 类型u) (τ : 类型u)
   定义体: fromTypes_succ_equiv _ _
 
 Depends on / 依赖: fromTypes_succ_equiv
@@ -206,7 +206,7 @@ definition const
 
 中文:
 定义 const
-  签名: : {n : 自然数} -> (p : Fin n -> 类型u) -> {τ : 类型u} -> (t : τ) -> FromTypes p τ
+  签名: : {n : 自然数} -> (p : 有限集 n -> 类型u) -> {τ : 类型u} -> (t : τ) -> FromTypes p τ
 -/
 def const : {n : Nat} -> (p : Fin n -> Type u) -> {τ : Type u} -> (t : τ) -> FromTypes p τ
   | 0, _, _, t => t
@@ -226,7 +226,7 @@ theorem const_zero
 
 中文:
 定理 const_zero
-  条件: (p : Fin 0 -> 类型u) {τ : 类型u} (t : τ)
+  条件: (p : 有限集 0 -> 类型u) {τ : 类型u} (t : τ)
   结论: const p t = t
   证明: rfl
 
@@ -246,7 +246,7 @@ theorem const_succ
 
 中文:
 定理 const_succ
-  条件: {n} (p : Fin (n + 1) -> 类型u) {τ : 类型u} (t : τ)
+  条件: {n} (p : 有限集 (n + 1) -> 类型u) {τ : 类型u} (t : τ)
   证明: rfl
 -/
 theorem const_succ {n} (p : Fin (n + 1) -> Type u) {τ : Type u} (t : τ) :
@@ -262,7 +262,7 @@ theorem const_succ_apply
 
 中文:
 定理 const_succ_apply
-  结论: {n} (p : Fin (n + 1) -> 类型u) {τ : 类型u} (t : τ)
+  结论: {n} (p : 有限集 (n + 1) -> 类型u) {τ : 类型u} (t : τ)
   证明: rfl
 -/
 theorem const_succ_apply {n} (p : Fin (n + 1) -> Type u) {τ : Type u} (t : τ)
@@ -278,7 +278,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: {n} {p : Fin n -> 类型u} {τ} [Inhabited τ]
+  签名: {n} {p : 有限集 n -> 类型u} {τ} [可居 τ]
   定义体: ⟨const p default⟩
 -/
 instance inhabited {n} {p : Fin n -> Type u} {τ} [Inhabited τ] :

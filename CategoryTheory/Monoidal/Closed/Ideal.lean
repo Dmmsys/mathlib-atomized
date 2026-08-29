@@ -57,7 +57,7 @@ class ExponentialIdeal
     - exp_closed : forall {B}, i.essImage B -> forall A, i.essImage (A ⟹ B)
 
 中文:
-类 ExponentialIdeal
+类 指数理想
   参数: : 命题 where
   公理与运算 (1 个):
     - exp_closed : 对任意 {B}, i.essImage B -> 对任意 A, i.essImage (A ⟹ B)
@@ -77,7 +77,7 @@ theorem ExponentialIdeal.mk'
     exact Functor.essImage.ofIso ((ihom A).mapIso iB') (h B' A)⟩
 
 中文:
-定理 ExponentialIdeal.mk'
+定理 指数理想.mk'
   条件: (h : 对任意 (B : D) (A : C), i.essImage (A ⟹ i.obj B))
   证明: ⟨fun hB A => by
     rcases hB with ⟨B', ⟨iB'⟩⟩
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: ExponentialIdeal (𝟭 C)
+  签名: 指数理想 (𝟭 C)
   定义体: ExponentialIdeal.mk' _ fun _ _ => ⟨_, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: ExponentialIdeal, ExponentialIdeal.mk, Iso.refl
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: ExponentialIdeal (subterminalInclusion C)
+  签名: 指数理想 (subterminalInclusion C)
   定义体: by
   apply ExponentialIdeal.mk'
   intro B A
@@ -157,7 +157,7 @@ definition exponentialIdealReflective
 
 中文:
 定义 exponentialIdealReflective
-  签名: (A : C) [Reflective i] [ExponentialIdeal i]
+  签名: (A : C) [反射 i] [指数理想 i]
   定义体: by
   symm
   apply NatIso.ofComponents _ _
@@ -189,8 +189,8 @@ theorem ExponentialIdeal.mk_of_iso
   exact ⟨_, ⟨(h A).app B⟩⟩
 
 中文:
-定理 ExponentialIdeal.mk_of_iso
-  结论: [Reflective i]
+定理 指数理想.mk_of_iso
+  结论: [反射 i]
   证明: by
   apply ExponentialIdeal.mk'
   intro B A
@@ -221,7 +221,7 @@ theorem reflective_products
 
 中文:
 定理 reflective_products
-  条件: [Limits.HasFiniteProducts C] [Reflective i]
+  条件: [Limits.有FiniteProducts C] [反射 i]
   证明: ⟨fun _ => hasLimitsOfShape_of_reflective i⟩
 
 Depends on / 依赖: hasLimitsOfShape_of_reflective
@@ -251,8 +251,8 @@ abbreviation CartesianMonoidalCategory.ofReflective
            have := reflecti
 
 中文:
-缩写 CartesianMonoidalCategory.ofReflective
-  签名: [CartesianMonoidalCategory C] [Reflective i]
+缩写 CartesianMonoidal范畴.ofReflective
+  签名: [CartesianMonoidal范畴 C] [反射 i]
   定义体: .ofChosenFiniteProducts
     ({ cone := Limits.asEmptyCone <| (reflector i).obj (𝟙_ C)
        isLimit := by
@@ -404,7 +404,7 @@ definition cartesianClosedOfReflective
 
 中文:
 定义 cartesianClosedOfReflective
-  签名: : MonoidalClosed D
+  签名: : 幺半群闭 D
   定义体: cartesianClosedOfReflective' i (i.essImage.ι ⋙ reflector i)
     (NatIso.ofComponents (fun X =>
       have := Functor.essImage.unit_isIso X.2
@@ -563,7 +563,7 @@ theorem prodComparison_iso
 中文:
 定理 prodComparison_iso
   条件: (A B : C)
-  结论: IsIso
+  结论: 是同构
   证明: ⟨⟨bijection i _ _ _ (𝟙 _), by
       rw [← (bijection i _ _ _).injective.eq_iff]; rw [bijection_natural]; rw [← bijection_symm_apply_id]; rw [Equiv.apply_symm_apply]; rw [Category.id_comp],
       by rw [← bijection_natural, Category.id_comp, ← bijection_symm_apply_id,
@@ -617,8 +617,8 @@ lemma Limits.PreservesFiniteProducts.of_exponentialIdeal
   .of_preserves_binary_and_terminal _
 
 中文:
-引理 Limits.PreservesFiniteProducts.of_exponentialIdeal
-  结论: PreservesFiniteProducts (reflector i)
+引理 Limits.保持FiniteProducts.of_exponentialIdeal
+  结论: 保持FiniteProducts (reflector i)
   证明: have := preservesBinaryProducts_of_exponentialIdeal i
   have : PreservesLimitsOfShape _ (reflector i) := leftAdjoint_preservesTerminal_of_reflective.{0} i
   .of_preserves_binary_and_terminal _

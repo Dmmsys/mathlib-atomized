@@ -169,7 +169,7 @@ lemma HasExt.standard
 
 中文:
 引理 HasExt.standard
-  结论: HasExt.{max u v} C
+  结论: HasExt.{最大值 u v} C
   证明: by
   let := HasDerivedCategory.standard
   exact hasExt_of_hasDerivedCategory _
@@ -572,7 +572,7 @@ lemma mk₀_bijective
 
 中文:
 引理 mk₀_bijective
-  结论: Function.Bijective (mk₀ (X := X) (Y := Y))
+  结论: 函数.双射 (mk₀ (X := X) (Y := Y))
   证明: by
   let := HasDerivedCategory.standard C
   have h : (singleFunctor C 0).FullyFaithful := Functor.FullyFaithful.ofFullyFaithful _
@@ -658,7 +658,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (Ext X Y n)
+  签名: 加法交换群 (Ext X Y n)
   定义体: letI := HasDerivedCategory.standard C
   homEquiv.addCommGroup
 
@@ -1476,7 +1476,7 @@ lemma Ext.comp_sum
 
 中文:
 引理 Ext.comp_sum
-  结论: {X Y Z : C} {p : 自然数} (α : Ext X Y p) {ι : 类型} [Fintype ι] {q : 自然数}
+  结论: {X Y Z : C} {p : 自然数} (α : Ext X Y p) {ι : 类型} [有限类型 ι] {q : 自然数}
   证明: map_sum (α.precomp Z h) _ _
 
 Depends on / 依赖: map_sum, precomp
@@ -1496,7 +1496,7 @@ lemma Ext.sum_comp
 
 中文:
 引理 Ext.sum_comp
-  结论: {X Y Z : C} {p : 自然数} {ι : 类型} [Fintype ι] (α : ι -> Ext X Y p) {q : 自然数}
+  结论: {X Y Z : C} {p : 自然数} {ι : 类型} [有限类型 ι] (α : ι -> Ext X Y p) {q : 自然数}
   证明: map_sum (β.postcomp X h) _ _
 
 Depends on / 依赖: map_sum, postcomp
@@ -1516,7 +1516,7 @@ lemma Ext.mk₀_sum
 
 中文:
 引理 Ext.mk₀_sum
-  条件: {X Y : C} {ι : 类型} [Fintype ι] (f : ι -> (X ⟶ Y))
+  条件: {X Y : C} {ι : 类型} [有限类型 ι] (f : ι -> (X ⟶ Y))
   证明: map_sum addEquiv₀.symm _ _
 
 Depends on / 依赖: map_sum
@@ -1541,7 +1541,7 @@ definition Ext.biproductAddEquiv
 
 中文:
 定义 Ext.biproductAddEquiv
-  签名: {J : 类型} [Fintype J] {X : J -> C} {c : Bicone X}
+  签名: {J : 类型} [有限类型 J] {X : J -> C} {c : Bicone X}
   定义体: (Ext.mk₀ (c.ι i)).comp e (zero_add n)
   invFun e := ∑ (i : J), (Ext.mk₀ (c.π i)).comp (e i) (zero_add n)
   left_inv x := by
@@ -1585,7 +1585,7 @@ definition Ext.addEquivBiproduct
 
 中文:
 定义 Ext.addEquivBiproduct
-  签名: (X : C) {J : 类型} [Fintype J] {Y : J -> C} {c : Bicone Y}
+  签名: (X : C) {J : 类型} [有限类型 J] {Y : J -> C} {c : Bicone Y}
   定义体: e.comp (Ext.mk₀ (c.π i)) (add_zero n)
   invFun e := ∑ (i : J), (e i).comp (Ext.mk₀ (c.ι i)) (add_zero n)
   left_inv _ := by

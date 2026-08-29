@@ -105,7 +105,7 @@ lemma IsConservativeFamilyOfPoints.over
   
 
 中文:
-引理 IsConservativeFamilyOfPoints.over
+引理 是余nservativeFamilyOfPoints.over
   证明: mk' (fun Y S hS => by
     obtain ⟨Y, f, rfl⟩ := Over.mk_surjective Y
     obtain ⟨S, rfl⟩ := (Sieve.overEquiv _).symm.surjective S
@@ -152,8 +152,8 @@ instance [HasEnoughPoints.{w}
   exact ⟨_, inferInstance, hP.over X⟩
 
 中文:
-实例 [HasEnoughPoints.{w}
-  签名: J] [J.WEqualsLocallyBijective (Type w)]
+实例 [有EnoughPoints.{w}
+  签名: J] [J.WEqualsLocallyBijective (类型 w)]
   定义体: by
   obtain ⟨P, _, hP⟩ := HasEnoughPoints.exists_objectProperty J
   exact ⟨_, inferInstance, hP.over X⟩

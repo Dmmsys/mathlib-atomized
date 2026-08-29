@@ -245,8 +245,8 @@ definition forallMetaTelescopeReducing
   signature: : Premise -> MetaM (Expr × Array Expr × Array BinderInfo × Expr)
 
 中文:
-定义 forallMetaTelescopeReducing
-  签名: : Premise -> MetaM (Expr × Array Expr × Array BinderInfo × Expr)
+定义 对任意MetaTelescopeReducing
+  签名: : Premise -> MetaM (Expr × 数组 Expr × 数组 BinderInfo × Expr)
 -/
 def forallMetaTelescopeReducing : Premise -> MetaM (Expr × Array Expr × Array BinderInfo × Expr)
   | .const name => do
@@ -324,8 +324,8 @@ structure State
   参数: where
   公理与运算 (3 个):
     - status : Std.HashMap String 自然数  [默认: {}]
-    - progress : 布尔  [默认: false]
-    - solvedSuggestions : Array Html  [默认: #[]]
+    - progress : 布尔值  [默认: false]
+    - solvedSuggestions : 数组 Html  [默认: #[]]
 -/
 structure State where
   /-- The ongoing computations. -/
@@ -355,18 +355,18 @@ structure Context
     - pos : SubExpr.Pos
 
 中文:
-结构 Context
+结构 余ntext
   参数: where
   公理与运算 (10 个):
     - «meta» : DocumentMeta
     - cursorPos : Lsp.Position
-    - onGoal : Option 自然数
-    - stx : Option (TSyntax `tactic)
+    - onGoal : 选项类型 自然数
+    - stx : 选项类型 (TSyntax `tactic)
     - masterToken : RefreshToken
     - statusToken : RefreshToken
     - solvedToken : RefreshToken
     - goal : MVarId
-    - hyp? : Option FVarId
+    - hyp? : 选项类型 FVarId
     - pos : SubExpr.Pos
 -/
 structure Context where
@@ -446,7 +446,7 @@ definition markProgress
 
 中文:
 定义 markProgress
-  签名: : ClickSuggestionsM Unit
+  签名: : ClickSuggestionsM 单元
   定义体: do
   if !(← get).progress then
     modify ({ · with progress := true })
@@ -468,7 +468,7 @@ definition checkProgress
 
 中文:
 定义 checkProgress
-  签名: : ClickSuggestionsM Unit
+  签名: : ClickSuggestionsM 单元
   定义体: do
   if !(← get).progress then
     if ((← get).status).isEmpty then
@@ -491,7 +491,7 @@ definition getHypIdent?
 
 中文:
 定义 getHypIdent?
-  签名: : ClickSuggestionsM (Option Ident)
+  签名: : ClickSuggestionsM (选项类型 Ident)
   定义体: do
   let some fvarId := (← read).hyp? | return none
   return mkIdent (← fvarId.getUserName)
@@ -665,7 +665,7 @@ inductive RwKind
   参数: where
   构造子 (2 个):
     - hasBVars: 
-    - valid: (motiveTypeCorrect : 布尔) (occ : Option 自然数)
+    - valid: (motiveTypeCorrect : 布尔值) (occ : 选项类型 自然数)
 
 Depends on / 依赖: instead, suggest
 -/
@@ -693,7 +693,7 @@ definition mkRewrite
 
 中文:
 定义 mkRewrite
-  签名: (kind : RwKind) (symm : 布尔) (e : Term) (loc : Option Ident)
+  签名: (kind : RwKind) (symm : 布尔值) (e : 项) (loc : 选项类型 Ident)
   定义体: do
   let rule ← if symm then `(Parser.Tactic.rwRule| ← $e) else `(Parser.Tactic.rwRule| $e:term)
   if grw then
@@ -738,7 +738,7 @@ definition mergeTactics?
 
 中文:
 定义 mergeTactics?
-  签名: {m} [Monad m] [MonadQuotation m] (stx₁ stx₂ : TSyntax `tactic)
+  签名: {m} [单子 m] [MonadQuotation m] (stx₁ stx₂ : TSyntax `tactic)
   定义体: do
   match stx₁, stx₂ with
   | `(tactic| on_goal $n₁ => $tac₁:tactic), `(tactic| on_goal $n₂ => $tac₂:tactic) =>

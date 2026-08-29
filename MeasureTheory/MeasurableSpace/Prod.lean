@@ -42,7 +42,7 @@ theorem generateFrom_prod_eq
 
 中文:
 定理 generateFrom_prod_eq
-  结论: {α β} {C : Set (Set α)} {D : Set (Set β)} (hC : IsCountablySpanning C)
+  结论: {α β} {C : 集合 (集合 α)} {D : 集合 (集合 β)} (hC : IsCountablySpanning C)
   证明: by
   apply le_antisymm
   · refine sup_le ?_ ?_ <;> rw [comap_generateFrom] <;> apply generateFrom_le <;>
@@ -93,7 +93,7 @@ theorem generateFrom_eq_prod
 
 中文:
 定理 generateFrom_eq_prod
-  结论: {C : Set (Set α)} {D : Set (Set β)} (hC : generateFrom C = ‹_›)
+  结论: {C : 集合 (集合 α)} {D : 集合 (集合 β)} (hC : generateFrom C = ‹_›)
   证明: by
   rw [← hC]; rw [← hD]; rw [generateFrom_prod_eq h2C h2D]
 
@@ -153,8 +153,8 @@ lemma MeasurableSpace.comap_prodMk
   rfl
 
 中文:
-引理 MeasurableSpace.comap_prodMk
-  结论: {α β γ : 类型} {mβ : MeasurableSpace β} {mγ : MeasurableSpace γ}
+引理 可测空间.comap_prodMk
+  结论: {α β γ : 类型} {mβ : 可测空间 β} {mγ : 可测空间 γ}
   证明: by
   simp_rw [MeasurableSpace.prod, comap_sup, comap_comp]
   rfl
@@ -178,7 +178,7 @@ lemma MeasurableSpace.comap_prodMap
   rfl
 
 中文:
-引理 MeasurableSpace.comap_prodMap
+引理 可测空间.comap_prodMap
   结论: {α β γ δ : 类型}
   证明: by
   simp_rw [MeasurableSpace.prod, comap_sup, comap_comp]
@@ -207,8 +207,8 @@ lemma MeasurableEmbedding.prodMap
     exact hg.measurableSet_range.prod hf.measurableSet_ran
 
 中文:
-引理 MeasurableEmbedding.prodMap
-  结论: {α β γ δ : 类型} {mα : MeasurableSpace α}
+引理 可测嵌入.prodMap
+  结论: {α β γ δ : 类型} {mα : 可测空间 α}
   证明: by
   rw [MeasurableEmbedding.iff_comap_eq]
   refine ⟨hg.injective.prodMap hf.injective, ?_, ?_⟩
@@ -248,8 +248,8 @@ lemma MeasurableEmbedding.prodMk_left
     simp [P
 
 中文:
-引理 MeasurableEmbedding.prodMk_left
-  结论: {β γ : 类型} [MeasurableSingletonClass α]
+引理 可测嵌入.prodMk_left
+  结论: {β γ : 类型} [MeasurableSingleton类 α]
   证明: by
     intro y y'
     simp only [Prod.mk.injEq, true_and]
@@ -288,7 +288,7 @@ lemma measurableEmbedding_prodMk_left
 
 中文:
 引理 measurableEmbedding_prodMk_left
-  条件: [MeasurableSingletonClass α] (x : α)
+  条件: [MeasurableSingleton类 α] (x : α)
   证明: MeasurableEmbedding.prodMk_left x MeasurableEmbedding.id
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.id, MeasurableEmbedding.prodMk_left, prodMk_left
@@ -306,8 +306,8 @@ lemma MeasurableEmbedding.prodMk_right
   proof: MeasurableEquiv.prodComm.measurableEmbedding.comp (hf.prodMk_left _)
 
 中文:
-引理 MeasurableEmbedding.prodMk_right
-  结论: {β γ : 类型} [MeasurableSingletonClass α]
+引理 可测嵌入.prodMk_right
+  结论: {β γ : 类型} [MeasurableSingleton类 α]
   证明: MeasurableEquiv.prodComm.measurableEmbedding.comp (hf.prodMk_left _)
 
 Depends on / 依赖: MeasurableEquiv, MeasurableEquiv.prodComm.measurableEmbedding.comp, hf.prodMk_left, measurableEmbedding, prodComm, prodMk_left
@@ -328,7 +328,7 @@ lemma measurableEmbedding_prod_mk_right
 
 中文:
 引理 measurableEmbedding_prod_mk_right
-  条件: [MeasurableSingletonClass α] (x : α)
+  条件: [MeasurableSingleton类 α] (x : α)
   证明: MeasurableEmbedding.prodMk_right MeasurableEmbedding.id x
 
 Depends on / 依赖: MeasurableEmbedding, MeasurableEmbedding.id, MeasurableEmbedding.prodMk_right, prodMk_right

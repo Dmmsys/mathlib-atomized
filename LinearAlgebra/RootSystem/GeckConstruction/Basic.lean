@@ -146,7 +146,7 @@ lemma linearIndependent_h
 
 中文:
 引理 linearIndependent_h
-  条件: [Finite ι] [CharZero R] [IsDomain R] [P.IsRootSystem]
+  条件: [有限 ι] [特征零 R] [是整环 R] [P.是RootSystem]
   证明: by
   classical
   have : Matrix.diagLinearMap (b.support oplus ι) R R ∘ h =
@@ -285,7 +285,7 @@ lemma lie_h_h
 
 中文:
 引理 lie_h_h
-  条件: [Fintype ι] (i j : b.support)
+  条件: [有限类型 ι] (i j : b.support)
   证明: by
   classical
   simpa only [h_eq_diagonal, ← commute_iff_lie_eq] using Matrix.commute_diagonal _ _
@@ -406,7 +406,7 @@ definition lieAlgebra
 
 中文:
 定义 lieAlgebra
-  签名: [Fintype ι] [DecidableEq ι]
+  签名: [有限类型 ι] [DecidableEq ι]
   定义体: LieSubalgebra.lieSpan R _ (range h union range e union range f)
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.lieSpan, lieSpan
@@ -430,7 +430,7 @@ definition cartanSubalgebra
 
 中文:
 定义 cartanSubalgebra
-  签名: [Fintype ι] [DecidableEq ι]
+  签名: [有限类型 ι] [DecidableEq ι]
   定义体: Submodule.span R (range h)
   lie_mem' {x y} hx hy := by
     have aux : (forall u in range (h (b := b)), forall v in range (h (b := b)), ⁅u, v⁆ = 0) := by
@@ -462,7 +462,7 @@ omit [Finite ι] [IsDomain R] [CharZero R] in
 
 中文:
 定义 cartanSubalgebra'
-  签名: [Fintype ι] [DecidableEq ι]
+  签名: [有限类型 ι] [DecidableEq ι]
   定义体: (cartanSubalgebra b).comap (lieAlgebra b).incl
 
 omit [Finite ι] [IsDomain R] [CharZero R] in
@@ -487,7 +487,7 @@ lemma cartanSubalgebra_eq_lieSpan
 
 中文:
 引理 cartanSubalgebra_eq_lieSpan
-  条件: [Fintype ι] [DecidableEq ι]
+  条件: [有限类型 ι] [DecidableEq ι]
   证明: by
   refine le_antisymm LieSubalgebra.submodule_span_le_lieSpan ?_
   rw [LieSubalgebra.lieSpan_le]; rw [cartanSubalgebra]
@@ -514,7 +514,7 @@ lemma h_mem_cartanSubalgebra
 
 中文:
 引理 h_mem_cartanSubalgebra
-  条件: [Fintype ι] [DecidableEq ι] (i : b.support)
+  条件: [有限类型 ι] [DecidableEq ι] (i : b.support)
   证明: Submodule.subset_span mem_range_self i
 -/
 @[simp] lemma h_mem_cartanSubalgebra [Fintype ι] [DecidableEq ι] (i : b.support) :
@@ -532,7 +532,7 @@ lemma h_mem_cartanSubalgebra'
 
 中文:
 引理 h_mem_cartanSubalgebra'
-  条件: [Fintype ι] [DecidableEq ι] (i : b.support) (hi)
+  条件: [有限类型 ι] [DecidableEq ι] (i : b.support) (hi)
   证明: by
   simp [cartanSubalgebra']
 
@@ -552,7 +552,7 @@ lemma h_mem_lieAlgebra
 
 中文:
 引理 h_mem_lieAlgebra
-  条件: [Fintype ι] [DecidableEq ι] (i : b.support)
+  条件: [有限类型 ι] [DecidableEq ι] (i : b.support)
   证明: LieSubalgebra.subset_lieSpan by simp
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.subset_lieSpan, subset_lieSpan
@@ -571,7 +571,7 @@ lemma e_mem_lieAlgebra
 
 中文:
 引理 e_mem_lieAlgebra
-  条件: [Fintype ι] [DecidableEq ι] (i : b.support)
+  条件: [有限类型 ι] [DecidableEq ι] (i : b.support)
   证明: LieSubalgebra.subset_lieSpan by simp
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.subset_lieSpan, subset_lieSpan
@@ -590,7 +590,7 @@ lemma f_mem_lieAlgebra
 
 中文:
 引理 f_mem_lieAlgebra
-  条件: [Fintype ι] [DecidableEq ι] (i : b.support)
+  条件: [有限类型 ι] [DecidableEq ι] (i : b.support)
   证明: LieSubalgebra.subset_lieSpan by simp
 
 Depends on / 依赖: LieSubalgebra, LieSubalgebra.subset_lieSpan, subset_lieSpan
@@ -609,7 +609,7 @@ definition h'
 
 中文:
 定义 h'
-  签名: [Fintype ι] [DecidableEq ι] (i : b.support)
+  签名: [有限类型 ι] [DecidableEq ι] (i : b.support)
   定义体: ⟨⟨h i, h_mem_lieAlgebra i⟩, h_mem_cartanSubalgebra' i (h_mem_lieAlgebra i)⟩
 
 Depends on / 依赖: h_mem_cartanSubalgebra, h_mem_lieAlgebra
@@ -635,7 +635,7 @@ lemma span_range_h'_eq_top
 
 中文:
 引理 span_range_h'_eq_top
-  条件: [Fintype ι] [DecidableEq ι]
+  条件: [有限类型 ι] [DecidableEq ι]
   证明: by
   rw [eq_top_iff]
   rintro ⟨⟨x, -⟩, hx : x in span R (range h)⟩ -
@@ -672,7 +672,7 @@ omit [Finite ι] [IsDomain R] in
 
 中文:
 引理 ω_mul_ω
-  条件: [DecidableEq ι] [Fintype ι]
+  条件: [DecidableEq ι] [有限类型 ι]
   证明: by
   ext (k | k) (l | l) <;>
   simp [ω, -indexNeg_neg]
@@ -702,7 +702,7 @@ lemma ω_mul_h
 
 中文:
 引理 ω_mul_h
-  条件: [Fintype ι] (i : b.support)
+  条件: [有限类型 ι] (i : b.support)
   证明: by
   classical
   ext (k | k) (l | l)
@@ -741,7 +741,7 @@ lemma ω_mul_e
 
 中文:
 引理 ω_mul_e
-  条件: [Fintype ι] (i : b.support)
+  条件: [有限类型 ι] (i : b.support)
   证明: by
   let := P.indexNeg
   classical
@@ -783,7 +783,7 @@ lemma ω_mul_f
 
 中文:
 引理 ω_mul_f
-  条件: [Fintype ι] (i : b.support)
+  条件: [有限类型 ι] (i : b.support)
   证明: by
   classical
   have := congr_arg (· * ω b) (congr_arg (ω b * ·) (ω_mul_e i))
@@ -813,7 +813,7 @@ lemma lie_e_f_mul_ω
 
 中文:
 引理 lie_e_f_mul_ω
-  条件: [Fintype ι] (i j : b.support)
+  条件: [有限类型 ι] (i j : b.support)
   证明: by
   calc ⁅e i, f j⁆ * ω b = e i * f j * ω b - f j * e i * ω b := by rw [Ring.lie_def, sub_mul]
                       _ = e i * (f j * ω b) - f j * (e i * ω b) := by rw [mul_assoc, mul_assoc]
@@ -919,7 +919,7 @@ lemma lie_e_lie_f_apply
 
 中文:
 引理 lie_e_lie_f_apply
-  条件: [Fintype ι] (i j : b.support)
+  条件: [有限类型 ι] (i j : b.support)
   证明: by
   ext (k | k)
   · simp [e, f, Matrix.mulVec, dotProduct, Pi.single_apply]
@@ -1007,7 +1007,7 @@ span_range_h_le_range_diagonal by simpa using! hx
 
 中文:
 实例 :
-  签名: LieModule.IsTriangularizable R (cartanSubalgebra' b) (b.support oplus ι -> R)
+  签名: Lie模.是Triangularizable R (cartanSubalgebra' b) (b.support oplus ι -> R)
   定义体: by
   refine ⟨fun ⟨⟨x, hx'⟩, hx⟩ => ?_⟩
   obtain ⟨d, rfl⟩ : exists d : b.support oplus ι -> R, Matrix.diagonal d = x :=

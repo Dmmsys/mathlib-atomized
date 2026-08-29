@@ -44,7 +44,7 @@ structure IntervalCasesSubgoal
     - goal : MVarId
 
 中文:
-结构 IntervalCasesSubgoal
+结构 整数ervalCasesSubgoal
   参数: where
   公理与运算 (3 个):
     - rhs : Expr
@@ -223,7 +223,7 @@ theorem of_not_lt_left
 
 中文:
 定理 of_not_lt_left
-  条件: [LinearOrder α] (h : ¬(a : α) < b) (eq : a = a')
+  条件: [线性序 α] (h : ¬(a : α) < b) (eq : a = a')
   结论: b <= a'
   证明: eq ▸ not_lt.1 h
 
@@ -241,7 +241,7 @@ theorem of_not_lt_right
 
 中文:
 定理 of_not_lt_right
-  条件: [LinearOrder α] (h : ¬(a : α) < b) (eq : b = b')
+  条件: [线性序 α] (h : ¬(a : α) < b) (eq : b = b')
   结论: b' <= a
   证明: eq ▸ not_lt.1 h
 
@@ -291,7 +291,7 @@ theorem of_lt_left
 
 中文:
 定理 of_lt_left
-  条件: [LinearOrder α] (h : (a : α) < b) (eq : a = a')
+  条件: [线性序 α] (h : (a : α) < b) (eq : a = a')
   结论: ¬b <= a'
   证明: eq ▸ not_le.2 h
 
@@ -309,7 +309,7 @@ theorem of_lt_right
 
 中文:
 定理 of_lt_right
-  条件: [LinearOrder α] (h : (a : α) < b) (eq : b = b')
+  条件: [线性序 α] (h : (a : α) < b) (eq : b = b')
   结论: ¬b' <= a
   证明: eq ▸ not_le.2 h
 
@@ -364,7 +364,7 @@ definition Methods.getBound
 
 中文:
 定义 Methods.getBound
-  签名: (m : Methods) (e : Expr) (pf : Expr) (lb : 布尔)
+  签名: (m : Methods) (e : Expr) (pf : Expr) (lb : 布尔值)
   定义体: do
   let (e', c) ← match ← parseBound (← inferType pf), lb with
     | (b, a, false, false), false =>
@@ -404,7 +404,7 @@ theorem le_of_not_le_of_le
 
 中文:
 定理 le_of_not_le_of_le
-  条件: {hi n lo : α} [LinearOrder α] (h1 : ¬hi <= n) (h2 : hi <= lo)
+  条件: {hi n lo : α} [线性序 α] (h1 : ¬hi <= n) (h2 : hi <= lo)
   证明: le_trans (le_of_not_ge h1) h2
 
 Depends on / 依赖: le_of_not_ge, le_trans
@@ -560,7 +560,7 @@ theorem _root_.Int.add_one_le_of_not_le
   proof: Int.add_one_le_iff.2 (Int.not_le.1 h)
 
 中文:
-定理 _root_.Int.add_one_le_of_not_le
+定理 _root_.整数.add_one_le_of_not_le
   条件: {a b : 整数} (h : ¬b <= a)
   结论: a + 1 <= b
   证明: Int.add_one_le_iff.2 (Int.not_le.1 h)
@@ -579,7 +579,7 @@ theorem _root_.Int.le_sub_one_of_not_le
   proof: Int.le_sub_one_iff.2 (Int.not_le.1 h)
 
 中文:
-定理 _root_.Int.le_sub_one_of_not_le
+定理 _root_.整数.le_sub_one_of_not_le
   条件: {a b : 整数} (h : ¬b <= a)
   结论: a <= b - 1
   证明: Int.le_sub_one_iff.2 (Int.not_le.1 h)
@@ -641,7 +641,7 @@ definition intervalCases
 
 中文:
 定义 intervalCases
-  签名: (g : MVarId) (e e' : Expr) (lbs ubs : Array Expr) (mustUseBounds := false)
+  签名: (g : MVarId) (e e' : Expr) (lbs ubs : 数组 Expr) (mustUseBounds := false)
   定义体: g.withContext do
   let α ← whnfR (← inferType e)
   let m ←

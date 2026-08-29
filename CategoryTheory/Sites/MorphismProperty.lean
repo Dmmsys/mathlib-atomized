@@ -48,7 +48,7 @@ definition precoverage
 
 中文:
 定义 precoverage
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: {S | forall ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> P f}
 
 @[simp]
@@ -109,7 +109,7 @@ instance [P.ContainsIdentities]
   body: fun ⟨⟩ => P.of_isIso f
 
 中文:
-实例 [P.ContainsIdentities]
+实例 [P.余ntainsIdentities]
   签名: [P.RespectsIso]
   定义体: fun ⟨⟩ => P.of_isIso f
 
@@ -129,8 +129,8 @@ instance [P.IsStableUnderBaseChange]
     exact P.of_isPullback (h i).flip (hf ⟨i⟩)
 
 中文:
-实例 [P.IsStableUnderBaseChange]
-  签名: : P.precoverage.IsStableUnderBaseChange where
+实例 [P.是StableUnderBaseChange]
+  签名: : P.precoverage.是StableUnderBaseChange where
   定义体: by
     obtain ⟨i⟩ := hg
     exact P.of_isPullback (h i).flip (hf ⟨i⟩)
@@ -153,8 +153,8 @@ instance [P.IsStableUnderComposition]
     exact P.comp_mem _ _ (hg _ ⟨i.2⟩) (hf ⟨i.1⟩)
 
 中文:
-实例 [P.IsStableUnderComposition]
-  签名: : P.precoverage.IsStableUnderComposition where
+实例 [P.是StableUnderComposition]
+  签名: : P.precoverage.是StableUnderComposition where
   定义体: by
     intro ⟨i⟩
     exact P.comp_mem _ _ (hg _ ⟨i.2⟩) (hf ⟨i.1⟩)
@@ -276,7 +276,7 @@ lemma comap_precoverage
 
 中文:
 引理 comap_precoverage
-  条件: {D : 类型} [Category* D] (P : Morphism命题erty D) (F : C ⥤ D)
+  条件: {D : 类型} [范畴* D] (P : MorphismProperty D) (F : C ⥤ D)
   证明: by
   ext X R
   obtain ⟨ι, Y, f, rfl⟩ := R.exists_eq_ofArrows
@@ -309,7 +309,7 @@ definition coverage
 
 中文:
 定义 coverage
-  签名: (P : Morphism命题erty C) [P.IsStableUnderBaseChange] [P.HasPullbacks]
+  签名: (P : MorphismProperty C) [P.是StableUnderBaseChange] [P.有Pullbacks]
   定义体: precoverage P
   pullback X Y f S hS := by
     have : S.HasPullbacks f := ⟨fun {W} h hh => P.hasPullback _ (hS hh)⟩
@@ -340,7 +340,7 @@ abbreviation grothendieckTopology
 
 中文:
 缩写 grothendieckTopology
-  签名: (P : Morphism命题erty C) [P.IsStableUnderBaseChange] [P.HasPullbacks]
+  签名: (P : MorphismProperty C) [P.是StableUnderBaseChange] [P.有Pullbacks]
   定义体: P.coverage.toGrothendieck
 
 Depends on / 依赖: P.coverage.toGrothendieck, coverage, toGrothendieck
@@ -367,7 +367,7 @@ definition pretopology
 
 中文:
 定义 pretopology
-  签名: (P : Morphism命题erty C) [P.IsMultiplicative] [P.IsStableUnderBaseChange]
+  签名: (P : MorphismProperty C) [P.是Multiplicative] [P.是StableUnderBaseChange]
   定义体: (precoverage P).toPretopology
 
 Depends on / 依赖: precoverage, toPretopology
@@ -386,7 +386,7 @@ lemma coverage_eq_toCoverage_pretopology
 
 中文:
 引理 coverage_eq_toCoverage_pretopology
-  条件: [P.IsMultiplicative]
+  条件: [P.是Multiplicative]
   证明: rfl
 -/
 lemma coverage_eq_toCoverage_pretopology [P.IsMultiplicative] :
@@ -403,7 +403,7 @@ lemma grothendieckTopology_eq_toGrothendieck_pretopology
 
 中文:
 引理 grothendieckTopology_eq_toGrothendieck_pretopology
-  条件: [P.IsMultiplicative]
+  条件: [P.是Multiplicative]
   证明: by
   rw [grothendieckTopology]; rw [coverage_eq_toCoverage_pretopology]; rw [Pretopology.toGrothendieck_toCoverage]
 
@@ -505,7 +505,7 @@ lemma MorphismProperty.morphismProperty_precoverage
 
 中文:
 引理 MorphismProperty.morphismProperty_precoverage
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: by
   ext X Y f
   exact ⟨fun ⟨R, hR, hf⟩ => hR hf, fun hf => ⟨.singleton f, by simpa⟩⟩
@@ -563,7 +563,7 @@ lemma monotone_morphismProperty
 
 中文:
 引理 monotone_morphismProperty
-  结论: Monotone (Precoverage.morphism命题erty (C := C))
+  结论: 递增 (Precoverage.morphismProperty (C := C))
   证明: Precoverage.galoisConnection_morphismProperty_precoverage.monotone_l
 -/
 lemma monotone_morphismProperty : Monotone (Precoverage.morphismProperty (C := C)) :=
@@ -581,7 +581,7 @@ lemma le_precoverage_morphismProperty
 
 中文:
 引理 le_precoverage_morphismProperty
-  结论: K <= K.morphism命题erty.precoverage
+  结论: K <= K.morphismProperty.precoverage
   证明: galoisConnection_morphismProperty_precoverage.le_u_l _
 
 @[simp]
@@ -604,7 +604,7 @@ lemma morphismProperty_bot
 
 中文:
 引理 morphismProperty_bot
-  结论: (⊥ : Precoverage C).morphism命题erty = ⊥
+  结论: (⊥ : Precoverage C).morphismProperty = ⊥
   证明: Precoverage.galoisConnection_morphismProperty_precoverage.l_bot
 
 @[simp]
@@ -625,7 +625,7 @@ lemma morphismProperty_sup
 
 中文:
 引理 morphismProperty_sup
-  结论: (K ⊔ L).morphism命题erty = K.morphism命题erty ⊔ L.morphism命题erty
+  结论: (K ⊔ L).morphismProperty = K.morphismProperty ⊔ L.morphismProperty
   证明: Precoverage.galoisConnection_morphismProperty_precoverage.l_sup
 
 Depends on / 依赖: Precoverage, Precoverage.galoisConnection_morphismProperty_precoverage.l_sup, galoisConnection_morphismProperty_precoverage, l_sup
@@ -644,8 +644,8 @@ instance [K.HasIsos]
 @[simp, grind .]
 
 中文:
-实例 [K.HasIsos]
-  签名: : K.morphism命题erty.ContainsIdentities where
+实例 [K.有是os]
+  签名: : K.morphismProperty.余ntainsIdentities where
   定义体: ⟨.singleton (𝟙 X), K.mem_coverings_of_isIso _, by simp⟩
 
 @[simp, grind .]
@@ -688,7 +688,7 @@ lemma MorphismProperty.precoverage_top
 
 中文:
 引理 MorphismProperty.precoverage_top
-  结论: (⊤ : Morphism命题erty C).precoverage = ⊤
+  结论: (⊤ : MorphismProperty C).precoverage = ⊤
   证明: Precoverage.galoisConnection_morphismProperty_precoverage.u_top
 
 Depends on / 依赖: Precoverage, Precoverage.galoisConnection_morphismProperty_precoverage.u_top, galoisConnection_morphismProperty_precoverage, u_top

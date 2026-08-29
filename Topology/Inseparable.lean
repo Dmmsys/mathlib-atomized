@@ -196,8 +196,8 @@ theorem specializes_iff_forall_open
 omit [TopologicalSpace X] in
 
 中文:
-定理 specializes_iff_forall_open
-  结论: x ⤳ y ↔ 对任意 s : Set X, IsOpen s -> y in s -> x in s
+定理 specializes_iff_对任意_open
+  结论: x ⤳ y ↔ 对任意 s : 集合 X, 是开集 s -> y in s -> x in s
   证明: (specializes_TFAE x y).out 0 2
 
 omit [TopologicalSpace X] in
@@ -220,8 +220,8 @@ theorem Tendsto.specializes
   exact mem_preimage.2 (hl x s ho (mem_preimage.1 hx))
 
 中文:
-定理 Tendsto.specializes
-  条件: {l : Filter X} {y : Y} (h : Tendsto g l (𝓝 y)) (hl : 对任意 x, f x ⤳ g x)
+定理 收敛.specializes
+  条件: {l : 滤子 X} {y : Y} (h : 收敛 g l (𝓝 y)) (hl : 对任意 x, f x ⤳ g x)
   证明: by
   simp_all only [specializes_iff_forall_open, tendsto_nhds]
   refine fun s ho hy => mem_of_superset (h s ho hy) fun x hx => ?_
@@ -246,7 +246,7 @@ theorem Specializes.mem_open
 
 中文:
 定理 Specializes.mem_open
-  条件: (h : x ⤳ y) (hs : IsOpen s) (hy : y in s)
+  条件: (h : x ⤳ y) (hs : 是开集 s) (hy : y in s)
   结论: x in s
   证明: specializes_iff_forall_open.1 h s hs hy
 
@@ -266,8 +266,8 @@ theorem IsOpen.not_specializes
 hx h.mem_open hs hy
 
 中文:
-定理 IsOpen.not_specializes
-  条件: (hs : IsOpen s) (hx : x ∉ s) (hy : y in s)
+定理 是开集.not_specializes
+  条件: (hs : 是开集 s) (hx : x ∉ s) (hy : y in s)
   结论: ¬x ⤳ y
   证明: fun h =>
 hx h.mem_open hs hy
@@ -284,8 +284,8 @@ theorem specializes_iff_forall_closed
   proof: (specializes_TFAE x y).out 0 3
 
 中文:
-定理 specializes_iff_forall_closed
-  结论: x ⤳ y ↔ 对任意 s : Set X, IsClosed s -> x in s -> y in s
+定理 specializes_iff_对任意_closed
+  结论: x ⤳ y ↔ 对任意 s : 集合 X, 是闭集 s -> x in s -> y in s
   证明: (specializes_TFAE x y).out 0 3
 
 Depends on / 依赖: specializes_TFAE
@@ -304,7 +304,7 @@ theorem Specializes.mem_closed
 
 中文:
 定理 Specializes.mem_closed
-  条件: (h : x ⤳ y) (hs : IsClosed s) (hx : x in s)
+  条件: (h : x ⤳ y) (hs : 是闭集 s) (hx : x in s)
   结论: y in s
   证明: specializes_iff_forall_closed.1 h s hs hx
 
@@ -324,8 +324,8 @@ theorem IsClosed.not_specializes
 hy h.mem_closed hs hx
 
 中文:
-定理 IsClosed.not_specializes
-  条件: (hs : IsClosed s) (hx : x in s) (hy : y ∉ s)
+定理 是闭集.not_specializes
+  条件: (hs : 是闭集 s) (hx : x in s) (hy : y ∉ s)
   结论: ¬x ⤳ y
   证明: fun h =>
 hy h.mem_closed hs hx
@@ -345,7 +345,7 @@ alias ⟨Specializes.mem_closure, _⟩ := specializes_iff_mem_closure
 
 中文:
 定理 specializes_iff_mem_closure
-  结论: x ⤳ y ↔ y in closure ({x} : Set X)
+  结论: x ⤳ y ↔ y in closure ({x} : 集合 X)
   证明: (specializes_TFAE x y).out 0 4
 
 alias ⟨Specializes.mem_closure, _⟩ := specializes_iff_mem_closure
@@ -369,7 +369,7 @@ alias ⟨Specializes.closure_subset, _⟩ := specializes_iff_closure_subset
 
 中文:
 定理 specializes_iff_closure_subset
-  结论: x ⤳ y ↔ closure ({y} : Set X) subseteq closure {x}
+  结论: x ⤳ y ↔ closure ({y} : 集合 X) subseteq closure {x}
   证明: (specializes_TFAE x y).out 0 5
 
 alias ⟨Specializes.closure_subset, _⟩ := specializes_iff_closure_subset
@@ -408,8 +408,8 @@ theorem Filter.HasBasis.specializes_iff
   proof: specializes_iff_pure.trans h.ge_iff
 
 中文:
-定理 Filter.HasBasis.specializes_iff
-  结论: {ι} {p : ι -> 命题} {s : ι -> Set X}
+定理 滤子.有基.specializes_iff
+  结论: {ι} {p : ι -> 命题} {s : ι -> 集合 X}
   证明: specializes_iff_pure.trans h.ge_iff
 
 Depends on / 依赖: ge_iff, h.ge_iff, specializes_iff_pure, specializes_iff_pure.trans
@@ -557,7 +557,7 @@ theorem Specializes.map_of_continuousWithinAt
 
 中文:
 定理 Specializes.map_of_continuousWithinAt
-  结论: {s : Set X} (h : x ⤳ y)
+  结论: {s : 集合 X} (h : x ⤳ y)
   证明: by
   rw [specializes_iff_pure] at h ⊢
   calc pure (f x)
@@ -587,7 +587,7 @@ theorem Specializes.map_of_continuousOn
 
 中文:
 定理 Specializes.map_of_continuousOn
-  结论: {s : Set X} (h : x ⤳ y)
+  结论: {s : 集合 X} (h : x ⤳ y)
   证明: h.map_of_continuousWithinAt (hf.continuousWithinAt hy) hx
 
 Depends on / 依赖: continuousWithinAt, h.map_of_continuousWithinAt, hf.continuousWithinAt, map_of_continuousWithinAt
@@ -627,7 +627,7 @@ theorem Specializes.map
 
 中文:
 定理 Specializes.map
-  条件: (h : x ⤳ y) (hf : Continuous f)
+  条件: (h : x ⤳ y) (hf : 连续 f)
   结论: f x ⤳ f y
   证明: h.map_of_continuousAt hf.continuousAt
 
@@ -648,8 +648,8 @@ theorem Topology.IsInducing.specializes_iff
     mem_preimage]
 
 中文:
-定理 Topology.IsInducing.specializes_iff
-  条件: (hf : IsInducing f)
+定理 拓扑.是Inducing.specializes_iff
+  条件: (hf : 是Inducing f)
   结论: f x ⤳ f y ↔ x ⤳ y
   证明: by
   simp only [specializes_iff_mem_closure, hf.closure_eq_preimage_closure_image, image_singleton,
@@ -674,7 +674,7 @@ theorem subtype_specializes_iff
 
 中文:
 定理 subtype_specializes_iff
-  条件: {p : X -> 命题} (x y : Subtype p)
+  条件: {p : X -> 命题} (x y : 子类型 p)
   结论: x ⤳ y ↔ (x : X) ⤳ y
   证明: IsInducing.subtypeVal.specializes_iff.symm
 
@@ -717,7 +717,7 @@ theorem Specializes.prod
   proof: specializes_prod.2 ⟨hx, hy⟩
 
 中文:
-定理 Specializes.prod
+定理 Specializes.乘积
   条件: {x₁ x₂ : X} {y₁ y₂ : Y} (hx : x₁ ⤳ x₂) (hy : y₁ ⤳ y₂)
   证明: specializes_prod.2 ⟨hx, hy⟩
 
@@ -803,8 +803,8 @@ theorem not_specializes_iff_exists_open
   rfl
 
 中文:
-定理 not_specializes_iff_exists_open
-  结论: ¬x ⤳ y ↔ 存在 S : Set X, IsOpen S ∧ y in S ∧ x ∉ S
+定理 not_specializes_iff_存在_open
+  结论: ¬x ⤳ y ↔ 存在 S : 集合 X, 是开集 S ∧ y in S ∧ x ∉ S
   证明: by
   rw [specializes_iff_forall_open]
   push Not
@@ -829,8 +829,8 @@ theorem not_specializes_iff_exists_closed
   rfl
 
 中文:
-定理 not_specializes_iff_exists_closed
-  结论: ¬x ⤳ y ↔ 存在 S : Set X, IsClosed S ∧ x in S ∧ y ∉ S
+定理 not_specializes_iff_存在_closed
+  结论: ¬x ⤳ y ↔ 存在 S : 集合 X, 是闭集 S ∧ x in S ∧ y ∉ S
   证明: by
   rw [specializes_iff_forall_closed]
   push Not
@@ -857,8 +857,8 @@ theorem IsOpen.continuous_piecewise_of_specializes
 .union (hU.preimage hg) .inter hs exact hU.preimage hf
 
 中文:
-定理 IsOpen.continuous_piecewise_of_specializes
-  结论: [DecidablePred (· in s)] (hs : IsOpen s)
+定理 是开集.continuous_piecewise_of_specializes
+  结论: [DecidablePred (· in s)] (hs : 是开集 s)
   证明: by
   have : forall U, IsOpen U -> g ⁻¹' U subseteq f ⁻¹' U := fun U hU x hx => (hspec x).mem_open hU hx
   rw [continuous_def]
@@ -887,8 +887,8 @@ theorem IsClosed.continuous_piecewise_of_specializes
   simpa only [piecewise_compl] using hs.isOpen_compl.continuous_piecewise_of_specializes hg hf hspec
 
 中文:
-定理 IsClosed.continuous_piecewise_of_specializes
-  结论: [DecidablePred (· in s)] (hs : IsClosed s)
+定理 是闭集.continuous_piecewise_of_specializes
+  结论: [DecidablePred (· in s)] (hs : 是闭集 s)
   证明: by
   simpa only [piecewise_compl] using hs.isOpen_compl.continuous_piecewise_of_specializes hg hf hspec
 
@@ -909,7 +909,7 @@ theorem Specializes.clusterPt
 
 中文:
 定理 Specializes.clusterPt
-  条件: {f : Filter X} (h : x ⤳ y) (hx : ClusterPt x f)
+  条件: {f : 滤子 X} (h : x ⤳ y) (hx : ClusterPt x f)
   证明: Filter.NeBot.mono hx inf_le_inf_right _ h
 
 Depends on / 依赖: Filter, Filter.NeBot.mono, inf_le_inf_right
@@ -931,8 +931,8 @@ obtain ⟨x, hxs, hxf⟩ := hs hf.trans Filter.monotone_principal hts
   exact ⟨y, hyt, hxy.clusterPt hxf⟩
 
 中文:
-定理 IsCompact.of_subset_of_specializes
-  结论: {s t : Set X} (hs : IsCompact s) (hts : t subseteq s)
+定理 是紧集.of_subset_of_specializes
+  结论: {s t : 集合 X} (hs : 是紧集 s) (hts : t subseteq s)
   证明: by
   intro f _ hf
 obtain ⟨x, hxs, hxf⟩ := hs hf.trans Filter.monotone_principal hts
@@ -960,9 +960,9 @@ theorem Continuous.specialization_monotone
   proof: fun _ _ h => h.map hf
 
 中文:
-定理 Continuous.specialization_monotone
-  条件: (hf : Continuous f)
-  结论: Monotone f
+定理 连续.specialization_monotone
+  条件: (hf : 连续 f)
+  结论: 递增 f
   证明: fun _ _ h => h.map hf
 
 Depends on / 依赖: h.map
@@ -982,7 +982,7 @@ lemma closure_singleton_eq_Iic
 中文:
 引理 closure_singleton_eq_Iic
   条件: (x : X)
-  结论: closure {x} = Iic x
+  结论: closure {x} = 左无界右闭区间 x
   证明: Set.ext fun _ => specializes_iff_mem_closure.symm
 
 Depends on / 依赖: Set.ext, specializes_iff_mem_closure, specializes_iff_mem_closure.symm
@@ -1000,7 +1000,7 @@ definition StableUnderSpecialization
 
 中文:
 定义 StableUnderSpecialization
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃x y⦄, x ⤳ y -> x in s -> y in s
 -/
 def StableUnderSpecialization (s : Set X) : Prop :=
@@ -1019,7 +1019,7 @@ example {s : Set X} : StableUnderGeneralization s ↔ IsUpperSet s := Iff.rfl
 
 中文:
 定义 StableUnderGeneralization
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: forall ⦃x y⦄, y ⤳ x -> x in s -> y in s
 
 example {s : Set X} : StableUnderSpecialization s ↔ IsLowerSet s := Iff.rfl
@@ -1040,8 +1040,8 @@ lemma IsClosed.stableUnderSpecialization
   proof: fun _ _ e => e.mem_closed hs
 
 中文:
-引理 IsClosed.stableUnderSpecialization
-  条件: {s : Set X} (hs : IsClosed s)
+引理 是闭集.stableUnderSpecialization
+  条件: {s : 集合 X} (hs : 是闭集 s)
   证明: fun _ _ e => e.mem_closed hs
 
 Depends on / 依赖: e.mem_closed, mem_closed
@@ -1061,8 +1061,8 @@ lemma IsOpen.stableUnderGeneralization
 @[simp]
 
 中文:
-引理 IsOpen.stableUnderGeneralization
-  条件: {s : Set X} (hs : IsOpen s)
+引理 是开集.stableUnderGeneralization
+  条件: {s : 集合 X} (hs : 是开集 s)
   证明: fun _ _ e => e.mem_open hs
 
 @[simp]
@@ -1086,7 +1086,7 @@ lemma stableUnderSpecialization_compl_iff
 
 中文:
 引理 stableUnderSpecialization_compl_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: isLowerSet_compl
 
 @[simp]
@@ -1111,7 +1111,7 @@ alias ⟨_, StableUnderSpecialization.compl⟩ := stableUnderGeneralization_comp
 
 中文:
 引理 stableUnderGeneralization_compl_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: isUpperSet_compl
 
 alias ⟨_, StableUnderGeneralization.compl⟩ := stableUnderSpecialization_compl_iff
@@ -1136,7 +1136,7 @@ lemma stableUnderSpecialization_univ
 
 中文:
 引理 stableUnderSpecialization_univ
-  结论: StableUnderSpecialization (univ : Set X)
+  结论: StableUnderSpecialization (univ : 集合 X)
   证明: isLowerSet_univ
 
 Depends on / 依赖: isLowerSet_univ
@@ -1152,7 +1152,7 @@ lemma stableUnderSpecialization_empty
 
 中文:
 引理 stableUnderSpecialization_empty
-  结论: StableUnderSpecialization (∅ : Set X)
+  结论: StableUnderSpecialization (∅ : 集合 X)
   证明: isLowerSet_empty
 
 Depends on / 依赖: isLowerSet_empty
@@ -1168,7 +1168,7 @@ lemma stableUnderGeneralization_univ
 
 中文:
 引理 stableUnderGeneralization_univ
-  结论: StableUnderGeneralization (univ : Set X)
+  结论: StableUnderGeneralization (univ : 集合 X)
   证明: isUpperSet_univ
 
 Depends on / 依赖: isUpperSet_univ
@@ -1184,7 +1184,7 @@ lemma stableUnderGeneralization_empty
 
 中文:
 引理 stableUnderGeneralization_empty
-  结论: StableUnderGeneralization (∅ : Set X)
+  结论: StableUnderGeneralization (∅ : 集合 X)
   证明: isUpperSet_empty
 
 Depends on / 依赖: isUpperSet_empty
@@ -1201,7 +1201,7 @@ lemma stableUnderSpecialization_sUnion
 
 中文:
 引理 stableUnderSpecialization_sUnion
-  结论: (S : Set (Set X))
+  结论: (S : 集合 (集合 X))
   证明: isLowerSet_sUnion H
 
 Depends on / 依赖: isLowerSet_sUnion
@@ -1219,8 +1219,8 @@ lemma stableUnderSpecialization_sInter
   proof: isLowerSet_sInter H
 
 中文:
-引理 stableUnderSpecialization_sInter
-  结论: (S : Set (Set X))
+引理 stableUnderSpecialization_s整数er
+  结论: (S : 集合 (集合 X))
   证明: isLowerSet_sInter H
 
 Depends on / 依赖: isLowerSet_sInter
@@ -1239,7 +1239,7 @@ lemma stableUnderGeneralization_sUnion
 
 中文:
 引理 stableUnderGeneralization_sUnion
-  结论: (S : Set (Set X))
+  结论: (S : 集合 (集合 X))
   证明: isUpperSet_sUnion H
 
 Depends on / 依赖: isUpperSet_sUnion
@@ -1257,8 +1257,8 @@ lemma stableUnderGeneralization_sInter
   proof: isUpperSet_sInter H
 
 中文:
-引理 stableUnderGeneralization_sInter
-  结论: (S : Set (Set X))
+引理 stableUnderGeneralization_s整数er
+  结论: (S : 集合 (集合 X))
   证明: isUpperSet_sInter H
 
 Depends on / 依赖: isUpperSet_sInter
@@ -1277,7 +1277,7 @@ lemma stableUnderSpecialization_iUnion
 
 中文:
 引理 stableUnderSpecialization_iUnion
-  结论: {ι : Sort*} (S : ι -> Set X)
+  结论: {ι : 类型层*} (S : ι -> 集合 X)
   证明: isLowerSet_iUnion H
 
 Depends on / 依赖: isLowerSet_iUnion
@@ -1295,8 +1295,8 @@ lemma stableUnderSpecialization_iInter
   proof: isLowerSet_iInter H
 
 中文:
-引理 stableUnderSpecialization_iInter
-  结论: {ι : Sort*} (S : ι -> Set X)
+引理 stableUnderSpecialization_i整数er
+  结论: {ι : 类型层*} (S : ι -> 集合 X)
   证明: isLowerSet_iInter H
 
 Depends on / 依赖: isLowerSet_iInter
@@ -1315,7 +1315,7 @@ lemma stableUnderGeneralization_iUnion
 
 中文:
 引理 stableUnderGeneralization_iUnion
-  结论: {ι : Sort*} (S : ι -> Set X)
+  结论: {ι : 类型层*} (S : ι -> 集合 X)
   证明: isUpperSet_iUnion H
 
 Depends on / 依赖: isUpperSet_iUnion
@@ -1333,8 +1333,8 @@ lemma stableUnderGeneralization_iInter
   proof: isUpperSet_iInter H
 
 中文:
-引理 stableUnderGeneralization_iInter
-  结论: {ι : Sort*} (S : ι -> Set X)
+引理 stableUnderGeneralization_i整数er
+  结论: {ι : 类型层*} (S : ι -> 集合 X)
   证明: isUpperSet_iInter H
 
 Depends on / 依赖: isUpperSet_iInter
@@ -1353,7 +1353,7 @@ lemma Union_closure_singleton_eq_iff
 
 中文:
 引理 Union_closure_singleton_eq_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: show _ ↔ IsLowerSet s by simp only [closure_singleton_eq_Iic, ← lowerClosure_eq, coe_lowerClosure]
 
 Depends on / 依赖: IsLowerSet, closure_singleton_eq_Iic, coe_lowerClosure, lowerClosure_eq
@@ -1374,7 +1374,7 @@ alias ⟨StableUnderSpecialization.Union_eq, _⟩ := stableUnderSpecialization_i
 
 中文:
 引理 stableUnderSpecialization_iff_Union_eq
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: Union_closure_singleton_eq_iff.symm
 
 alias ⟨StableUnderSpecialization.Union_eq, _⟩ := stableUnderSpecialization_iff_Union_eq
@@ -1401,8 +1401,8 @@ lemma stableUnderSpecialization_iff_exists_sUnion_eq
     simp
 
 中文:
-引理 stableUnderSpecialization_iff_exists_sUnion_eq
-  条件: {s : Set X}
+引理 stableUnderSpecialization_iff_存在_sUnion_eq
+  条件: {s : 集合 X}
   证明: by
   refine ⟨fun H => ⟨(fun x : X => closure {x}) '' s, ?_, ?_⟩, fun ⟨S, hS, e⟩ => e ▸
     stableUnderSpecialization_sUnion S (fun x hx => (hS x hx).stableUnderSpecialization)⟩
@@ -1433,8 +1433,8 @@ lemma stableUnderGeneralization_iff_exists_sInter_eq
   exact fun ⟨S, h₁, h₂⟩ => ⟨(·ᶜ) '' S, fun s ⟨t, ht, e⟩ => e ▸ (h₁ t ht).
 
 中文:
-引理 stableUnderGeneralization_iff_exists_sInter_eq
-  条件: {s : Set X}
+引理 stableUnderGeneralization_iff_存在_s整数er_eq
+  条件: {s : 集合 X}
   证明: by
   refine ⟨?_, fun ⟨S, hS, e⟩ => e ▸
     stableUnderGeneralization_sInter S (fun x hx => (hS x hx).stableUnderGeneralization)⟩
@@ -1460,8 +1460,8 @@ lemma StableUnderSpecialization.preimage
   proof: IsLowerSet.preimage hs hf.specialization_monotone
 
 中文:
-引理 StableUnderSpecialization.preimage
-  结论: {s : Set Y}
+引理 StableUnderSpecialization.原像
+  结论: {s : 集合 Y}
   证明: IsLowerSet.preimage hs hf.specialization_monotone
 
 Depends on / 依赖: IsLowerSet, IsLowerSet.preimage, hf.specialization_monotone, preimage, specialization_monotone
@@ -1480,8 +1480,8 @@ lemma StableUnderGeneralization.preimage
   proof: IsUpperSet.preimage hs hf.specialization_monotone
 
 中文:
-引理 StableUnderGeneralization.preimage
-  结论: {s : Set Y}
+引理 StableUnderGeneralization.原像
+  结论: {s : 集合 Y}
   证明: IsUpperSet.preimage hs hf.specialization_monotone
 
 Depends on / 依赖: IsUpperSet, IsUpperSet.preimage, hf.specialization_monotone, preimage, specialization_monotone
@@ -1625,7 +1625,7 @@ lemma specializingMap_iff_closure_singleton
 
 中文:
 引理 specializingMap_iff_closure_singleton
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   simpa only [closure_singleton_eq_Iic] using!
     Relation.fibration_iff_image_Iic hf.specialization_monotone
@@ -1651,7 +1651,7 @@ lemma specializingMap_iff_isClosed_image_closure_singleton
 
 中文:
 引理 specializingMap_iff_isClosed_image_closure_singleton
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   refine ⟨fun h x => ?_, fun h => specializingMap_iff_stableUnderSpecialization_image_singleton.mpr
     (fun x => (h x).stableUnderSpecialization)⟩
@@ -1703,8 +1703,8 @@ lemma IsClosedMap.specializingMap
     fun _ => (hf _ isClosed_closure).stableUnderSpecialization
 
 中文:
-引理 IsClosedMap.specializingMap
-  条件: (hf : IsClosedMap f)
+引理 是闭映射.specializingMap
+  条件: (hf : 是闭映射 f)
   结论: SpecializingMap f
   证明: specializingMap_iff_stableUnderSpecialization_image_singleton.mpr
     fun _ => (hf _ isClosed_closure).stableUnderSpecialization
@@ -1727,8 +1727,8 @@ lemma Topology.IsInducing.specializingMap
   exact ⟨_, hf.specializes_iff.mp e, rfl⟩
 
 中文:
-引理 Topology.IsInducing.specializingMap
-  结论: (hf : IsInducing f)
+引理 拓扑.是Inducing.specializingMap
+  结论: (hf : 是Inducing f)
   证明: by
   intro x y e
   obtain ⟨y, rfl⟩ := h e ⟨x, rfl⟩
@@ -1754,8 +1754,8 @@ lemma Topology.IsInducing.generalizingMap
   exact ⟨_, hf.specializes_iff.mp e, rfl⟩
 
 中文:
-引理 Topology.IsInducing.generalizingMap
-  结论: (hf : IsInducing f)
+引理 拓扑.是Inducing.generalizingMap
+  结论: (hf : 是Inducing f)
   证明: by
   intro x y e
   obtain ⟨y, rfl⟩ := h e ⟨x, rfl⟩
@@ -1779,8 +1779,8 @@ lemma Topology.IsOpenEmbedding.generalizingMap
   proof: hf.isInducing.generalizingMap hf.isOpen_range.stableUnderGeneralization
 
 中文:
-引理 Topology.IsOpenEmbedding.generalizingMap
-  条件: (hf : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.generalizingMap
+  条件: (hf : 是开嵌入 f)
   结论: GeneralizingMap f
   证明: hf.isInducing.generalizingMap hf.isOpen_range.stableUnderGeneralization
 
@@ -1818,7 +1818,7 @@ lemma GeneralizingMap.stableUnderGeneralization_image
 
 中文:
 引理 GeneralizingMap.stableUnderGeneralization_image
-  结论: (hf : GeneralizingMap f) {s : Set X}
+  结论: (hf : GeneralizingMap f) {s : 集合 X}
   证明: IsUpperSet.image_fibration hf hs
 
 Depends on / 依赖: IsUpperSet, IsUpperSet.image_fibration, image_fibration
@@ -1946,7 +1946,7 @@ theorem Inseparable.specializes
   proof: h.le
 
 中文:
-定理 Inseparable.specializes
+定理 不可分.specializes
   条件: (h : x ~ᵢ y)
   结论: x ⤳ y
   证明: h.le
@@ -1965,7 +1965,7 @@ theorem Inseparable.specializes'
   proof: h.ge
 
 中文:
-定理 Inseparable.specializes'
+定理 不可分.specializes'
   条件: (h : x ~ᵢ y)
   结论: y ⤳ x
   证明: h.ge
@@ -2005,8 +2005,8 @@ theorem inseparable_iff_forall_isOpen
     Iff.comm]
 
 中文:
-定理 inseparable_iff_forall_isOpen
-  结论: (x ~ᵢ y) ↔ 对任意 s : Set X, IsOpen s -> (x in s ↔ y in s)
+定理 inseparable_iff_对任意_isOpen
+  结论: (x ~ᵢ y) ↔ 对任意 s : 集合 X, 是开集 s -> (x in s ↔ y in s)
   证明: by
   simp only [inseparable_iff_specializes_and, specializes_iff_forall_open, ← forall_and, ← iff_def,
     Iff.comm]
@@ -2026,7 +2026,7 @@ theorem not_inseparable_iff_exists_open
   simp [inseparable_iff_forall_isOpen, ← xor_iff_not_iff]
 
 中文:
-定理 not_inseparable_iff_exists_open
+定理 not_inseparable_iff_存在_open
   证明: by
   simp [inseparable_iff_forall_isOpen, ← xor_iff_not_iff]
 
@@ -2047,8 +2047,8 @@ theorem inseparable_iff_forall_isClosed
     iff_def]
 
 中文:
-定理 inseparable_iff_forall_isClosed
-  结论: (x ~ᵢ y) ↔ 对任意 s : Set X, IsClosed s -> (x in s ↔ y in s)
+定理 inseparable_iff_对任意_isClosed
+  结论: (x ~ᵢ y) ↔ 对任意 s : 集合 X, 是闭集 s -> (x in s ↔ y in s)
   证明: by
   simp only [inseparable_iff_specializes_and, specializes_iff_forall_closed, ← forall_and, ←
     iff_def]
@@ -2088,7 +2088,7 @@ theorem inseparable_iff_closure_eq
 
 中文:
 定理 inseparable_iff_closure_eq
-  结论: (x ~ᵢ y) ↔ closure ({x} : Set X) = closure {y}
+  结论: (x ~ᵢ y) ↔ closure ({x} : 集合 X) = closure {y}
   证明: by
   simp only [inseparable_iff_specializes_and, specializes_iff_closure_subset, ← subset_antisymm_iff,
     eq_comm]
@@ -2130,8 +2130,8 @@ theorem Topology.IsInducing.inseparable_iff
   simp only [inseparable_iff_specializes_and, hf.specializes_iff]
 
 中文:
-定理 Topology.IsInducing.inseparable_iff
-  条件: (hf : IsInducing f)
+定理 拓扑.是Inducing.inseparable_iff
+  条件: (hf : 是Inducing f)
   结论: (f x ~ᵢ f y) ↔ (x ~ᵢ y)
   证明: by
   simp only [inseparable_iff_specializes_and, hf.specializes_iff]
@@ -2152,7 +2152,7 @@ theorem subtype_inseparable_iff
 
 中文:
 定理 subtype_inseparable_iff
-  条件: {p : X -> 命题} (x y : Subtype p)
+  条件: {p : X -> 命题} (x y : 子类型 p)
   结论: (x ~ᵢ y) ↔ ((x : X) ~ᵢ y)
   证明: IsInducing.subtypeVal.inseparable_iff.symm
 
@@ -2191,7 +2191,7 @@ theorem Inseparable.prod
 @[simp]
 
 中文:
-定理 Inseparable.prod
+定理 不可分.乘积
   条件: {x₁ x₂ : X} {y₁ y₂ : Y} (hx : x₁ ~ᵢ x₂) (hy : y₁ ~ᵢ y₂)
   证明: inseparable_prod.2 ⟨hx, hy⟩
 
@@ -2283,7 +2283,7 @@ nonrec theorem trans (h₁ : x ~ᵢ y) (h₂ : y ~ᵢ z) : x ~ᵢ z := h₁.tran
 中文:
 定理 of_eq
   条件: (e : x = y)
-  结论: Inseparable x y
+  结论: 不可分 x y
   证明: e ▸ refl x
 
 @[symm]
@@ -2329,7 +2329,7 @@ theorem mem_open_iff
 
 中文:
 定理 mem_open_iff
-  条件: (h : x ~ᵢ y) (hs : IsOpen s)
+  条件: (h : x ~ᵢ y) (hs : 是开集 s)
   结论: x in s ↔ y in s
   证明: inseparable_iff_forall_isOpen.1 h s hs
 
@@ -2349,7 +2349,7 @@ theorem mem_closed_iff
 
 中文:
 定理 mem_closed_iff
-  条件: (h : x ~ᵢ y) (hs : IsClosed s)
+  条件: (h : x ~ᵢ y) (hs : 是闭集 s)
   结论: x in s ↔ y in s
   证明: inseparable_iff_forall_isClosed.1 h s hs
 
@@ -2369,7 +2369,7 @@ theorem map_of_continuousWithinAt
 
 中文:
 定理 map_of_continuousWithinAt
-  结论: {s t : Set X} (h : x ~ᵢ y)
+  结论: {s t : 集合 X} (h : x ~ᵢ y)
   证明: (h.specializes.map_of_continuousWithinAt hfy hx).antisymm
     (h.specializes'.map_of_continuousWithinAt hfx hy)
 
@@ -2391,7 +2391,7 @@ theorem map_of_continuousOn
 
 中文:
 定理 map_of_continuousOn
-  结论: {s : Set X} (h : x ~ᵢ y)
+  结论: {s : 集合 X} (h : x ~ᵢ y)
   证明: h.map_of_continuousWithinAt (hf.continuousWithinAt hx) (hf.continuousWithinAt hy) hx hy
 
 Depends on / 依赖: continuousWithinAt, h.map_of_continuousWithinAt, hf.continuousWithinAt, map_of_continuousWithinAt
@@ -2430,7 +2430,7 @@ theorem map
 
 中文:
 定理 map
-  条件: (h : x ~ᵢ y) (hf : Continuous f)
+  条件: (h : x ~ᵢ y) (hf : 连续 f)
   结论: f x ~ᵢ f y
   证明: h.map_of_continuousAt hf.continuousAt hf.continuousAt
 
@@ -2452,8 +2452,8 @@ theorem IsClosed.not_inseparable
 hy (h.mem_closed_iff hs).1 hx
 
 中文:
-定理 IsClosed.not_inseparable
-  条件: (hs : IsClosed s) (hx : x in s) (hy : y ∉ s)
+定理 是闭集.not_inseparable
+  条件: (hs : 是闭集 s) (hx : x in s) (hy : y ∉ s)
   结论: ¬(x ~ᵢ y)
   证明: fun h =>
 hy (h.mem_closed_iff hs).1 hx
@@ -2472,8 +2472,8 @@ theorem IsOpen.not_inseparable
 hy (h.mem_open_iff hs).1 hx
 
 中文:
-定理 IsOpen.not_inseparable
-  条件: (hs : IsOpen s) (hx : x in s) (hy : y ∉ s)
+定理 是开集.not_inseparable
+  条件: (hs : 是开集 s) (hx : x in s) (hy : y ∉ s)
   结论: ¬(x ~ᵢ y)
   证明: fun h =>
 hy (h.mem_open_iff hs).1 hx
@@ -2498,7 +2498,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (SeparationQuotient X)
+  签名: 拓扑空间 (SeparationQuotient X)
   定义体: inferInstanceAs TopologicalSpace (Quotient _)
 
 Depends on / 依赖: Quotient, TopologicalSpace
@@ -2539,7 +2539,7 @@ theorem isQuotientMap_mk
 
 中文:
 定理 isQuotientMap_mk
-  结论: IsQuotientMap (mk : X -> SeparationQuotient X)
+  结论: 是商映射 (mk : X -> SeparationQuotient X)
   证明: isQuotientMap_quot_mk
 
 @[fun_prop, continuity]
@@ -2562,7 +2562,7 @@ theorem continuous_mk
 
 中文:
 定理 continuous_mk
-  结论: Continuous (mk : X -> SeparationQuotient X)
+  结论: 连续 (mk : X -> SeparationQuotient X)
   证明: continuous_quot_mk
 
 @[simp]
@@ -2601,7 +2601,7 @@ theorem «forall»
   proof: Quotient.forall
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {P : SeparationQuotient X -> 命题}
   结论: (对任意 x, P x) ↔ 对任意 x, P (.mk x)
   证明: Quotient.forall
@@ -2619,7 +2619,7 @@ theorem «exists»
   proof: Quotient.exists
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {P : SeparationQuotient X -> 命题}
   结论: (存在 x, P x) ↔ 存在 x, P (.mk x)
   证明: Quotient.exists
@@ -2639,7 +2639,7 @@ theorem surjective_mk
 
 中文:
 定理 surjective_mk
-  结论: Surjective (mk : X -> SeparationQuotient X)
+  结论: 满射 (mk : X -> SeparationQuotient X)
   证明: Quot.mk_surjective
 
 @[simp]
@@ -2677,8 +2677,8 @@ instance [Nonempty
   body: Nonempty.map mk ‹_›
 
 中文:
-实例 [Nonempty
-  签名: X] : Nonempty (SeparationQuotient X)
+实例 [非空
+  签名: X] : 非空 (SeparationQuotient X)
   定义体: Nonempty.map mk ‹_›
 
 Depends on / 依赖: Nonempty, Nonempty.map
@@ -2695,8 +2695,8 @@ instance [Inhabited
   body: ⟨mk default⟩
 
 中文:
-实例 [Inhabited
-  签名: X] : Inhabited (SeparationQuotient X)
+实例 [可居
+  签名: X] : 可居 (SeparationQuotient X)
   定义体: ⟨mk default⟩
 -/
 instance [Inhabited X] : Inhabited (SeparationQuotient X) :=
@@ -2713,8 +2713,8 @@ instance [Subsingleton
 @[simp]
 
 中文:
-实例 [Subsingleton
-  签名: X] : Subsingleton (SeparationQuotient X)
+实例 [子单例
+  签名: X] : 子单例 (SeparationQuotient X)
   定义体: surjective_mk.subsingleton
 
 @[simp]
@@ -2735,7 +2735,7 @@ theorem inseparableSetoid_eq_top_iff
 
 中文:
 定理 inseparableSetoid_eq_top_iff
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: Setoid.eq_top_iff.trans TopologicalSpace.indiscrete_iff_forall_inseparable.symm
 
 Depends on / 依赖: Setoid, Setoid.eq_top_iff.trans, TopologicalSpace, TopologicalSpace.indiscrete_iff_forall_inseparable.symm, eq_top_iff, indiscrete_iff_forall_inseparable
@@ -2754,7 +2754,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: Quotient.subsingleton_iff.trans inseparableSetoid_eq_top_iff
 
 Depends on / 依赖: Quotient, Quotient.subsingleton_iff.trans, inseparableSetoid_eq_top_iff, subsingleton_iff
@@ -2772,8 +2772,8 @@ instance [TopologicalSpace
   body: subsingleton_iff.2 ‹_›
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [IndiscreteTopology α] : Subsingleton (SeparationQuotient α)
+实例 [拓扑空间
+  签名: α] [Indiscrete拓扑 α] : 子单例 (SeparationQuotient α)
   定义体: subsingleton_iff.2 ‹_›
 
 Depends on / 依赖: subsingleton_iff
@@ -2791,8 +2791,8 @@ instance [TopologicalSpace
   simp [TopologicalSpace.indiscrete_iff_forall_inseparable, subtype_inseparable_iff]
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [IndiscreteTopology α] {p
+实例 [拓扑空间
+  签名: α] [Indiscrete拓扑 α] {p
   定义体: by
   simp [TopologicalSpace.indiscrete_iff_forall_inseparable, subtype_inseparable_iff]
 
@@ -2813,7 +2813,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   simpa [not_subsingleton_iff_nontrivial] using subsingleton_iff.not
 
@@ -2832,8 +2832,8 @@ instance [TopologicalSpace
   body: nontrivial_iff.2 ‹_›
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [NontrivialTopology α] : Nontrivial (SeparationQuotient α)
+实例 [拓扑空间
+  签名: α] [非平凡拓扑 α] : 非平凡 (SeparationQuotient α)
   定义体: nontrivial_iff.2 ‹_›
 
 Depends on / 依赖: nontrivial_iff
@@ -2850,8 +2850,8 @@ instance [One
   body: ⟨mk 1⟩
 
 中文:
-实例 [One
-  签名: X] : One (SeparationQuotient X)
+实例 [幺
+  签名: X] : 幺 (SeparationQuotient X)
   定义体: ⟨mk 1⟩
 -/
 @[to_additive] instance [One X] : One (SeparationQuotient X) := ⟨mk 1⟩
@@ -2867,7 +2867,7 @@ theorem mk_one
 
 中文:
 定理 mk_one
-  条件: [One X]
+  条件: [幺 X]
   结论: mk (1 : X) = 1
   证明: rfl
 -/
@@ -2887,7 +2887,7 @@ theorem preimage_image_mk_open
 
 中文:
 定理 preimage_image_mk_open
-  条件: (hs : IsOpen s)
+  条件: (hs : 是开集 s)
   结论: mk ⁻¹' mk '' s = s
   证明: by
   refine Subset.antisymm ?_ (subset_preimage_image _ _)
@@ -2912,7 +2912,7 @@ isQuotientMap_mk.isOpen_preimage.1 by rwa [preimage_image_mk_open hs]
 
 中文:
 定理 isOpenMap_mk
-  结论: IsOpenMap (mk : X -> SeparationQuotient X)
+  结论: 是开映射 (mk : X -> SeparationQuotient X)
   证明: fun s hs =>
 isQuotientMap_mk.isOpen_preimage.1 by rwa [preimage_image_mk_open hs]
 -/
@@ -2929,7 +2929,7 @@ theorem isOpenQuotientMap_mk
 
 中文:
 定理 isOpenQuotientMap_mk
-  结论: IsOpenQuotientMap (mk : X -> SeparationQuotient X)
+  结论: 是OpenQuotient映射 (mk : X -> SeparationQuotient X)
   证明: ⟨surjective_mk, continuous_mk, isOpenMap_mk⟩
 
 Depends on / 依赖: continuous_mk, isOpenMap_mk, surjective_mk
@@ -2951,7 +2951,7 @@ theorem preimage_image_mk_closed
 
 中文:
 定理 preimage_image_mk_closed
-  条件: (hs : IsClosed s)
+  条件: (hs : 是闭集 s)
   结论: mk ⁻¹' mk '' s = s
   证明: by
   refine Subset.antisymm ?_ (subset_preimage_image _ _)
@@ -2976,7 +2976,7 @@ theorem isInducing_mk
 
 中文:
 定理 isInducing_mk
-  结论: IsInducing (mk : X -> SeparationQuotient X)
+  结论: 是Inducing (mk : X -> SeparationQuotient X)
   证明: ⟨le_antisymm (continuous_iff_le_induced.1 continuous_mk) fun s hs =>
       ⟨mk '' s, isOpenMap_mk s hs, preimage_image_mk_open hs⟩⟩
 
@@ -2998,7 +2998,7 @@ theorem isClosedMap_mk
 
 中文:
 定理 isClosedMap_mk
-  结论: IsClosedMap (mk : X -> SeparationQuotient X)
+  结论: 是闭映射 (mk : X -> SeparationQuotient X)
   证明: isInducing_mk.isClosedMap by rw [range_mk]; exact isClosed_univ
 
 @[simp]
@@ -3217,7 +3217,7 @@ theorem map_mk_nhdsWithin_preimage
 
 中文:
 定理 map_mk_nhdsWithin_preimage
-  条件: (s : Set (SeparationQuotient X)) (x : X)
+  条件: (s : 集合 (SeparationQuotient X)) (x : X)
   证明: by
   rw [nhdsWithin]; rw [← comap_principal]; rw [Filter.push_pull]; rw [nhdsWithin]; rw [map_mk_nhds]
 
@@ -3237,7 +3237,7 @@ theorem isQuotientMap_prodMap_mk
 
 中文:
 定理 isQuotientMap_prodMap_mk
-  结论: IsQuotientMap (Prod.map mk mk : X × Y -> _)
+  结论: 是商映射 (积类型.map mk mk : X × Y -> _)
   证明: (isOpenQuotientMap_mk.prodMap isOpenQuotientMap_mk).isQuotientMap
 
 Depends on / 依赖: isOpenQuotientMap_mk, isOpenQuotientMap_mk.prodMap, isQuotientMap, prodMap
@@ -3327,7 +3327,7 @@ theorem tendsto_lift_nhds_mk
 
 中文:
 定理 tendsto_lift_nhds_mk
-  条件: {f : X -> α} {hf : 对任意 x y, (x ~ᵢ y) -> f x = f y} {l : Filter α}
+  条件: {f : X -> α} {hf : 对任意 x y, (x ~ᵢ y) -> f x = f y} {l : 滤子 α}
   证明: by
   simp only [← map_mk_nhds, tendsto_map'_iff, lift_comp_mk]
 
@@ -3429,7 +3429,7 @@ theorem continuousOn_lift
 
 中文:
 定理 continuousOn_lift
-  条件: {hf : 对任意 x y, (x ~ᵢ y) -> f x = f y} {s : Set (SeparationQuotient X)}
+  条件: {hf : 对任意 x y, (x ~ᵢ y) -> f x = f y} {s : 集合 (SeparationQuotient X)}
   证明: by
   simp only [ContinuousOn, surjective_mk.forall, continuousWithinAt_lift, mem_preimage]
 

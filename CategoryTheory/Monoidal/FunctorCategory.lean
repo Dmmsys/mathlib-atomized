@@ -168,7 +168,7 @@ instance functorCategoryMonoidalStruct
 
 中文:
 实例 functorCategoryMonoidalStruct
-  签名: : MonoidalCategoryStruct (C ⥤ D) where
+  签名: : 幺半群范畴结构 (C ⥤ D) where
   定义体: tensorObj F G
   tensorHom α β := tensorHom α β
   whiskerLeft F _ _ α := FunctorCategory.whiskerLeft F α
@@ -492,7 +492,7 @@ instance functorCategoryMonoidal
 
 中文:
 实例 functorCategoryMonoidal
-  签名: : MonoidalCategory (C ⥤ D) where
+  签名: : 幺半群范畴 (C ⥤ D) where
   定义体: by intros; ext; simp [tensorHom_def]
   pentagon F G H K := by ext X; dsimp; rw [pentagon]
 
@@ -521,7 +521,7 @@ instance functorCategoryBraided
 
 中文:
 实例 functorCategoryBraided
-  签名: : BraidedCategory (C ⥤ D) where
+  签名: : 辫范畴 (C ⥤ D) where
   定义体: NatIso.ofComponents fun _ => β_ _ _
   hexagon_forward F G H := by ext X; apply hexagon_forward
   hexagon_reverse F G H := by ext X; apply hexagon_reverse
@@ -556,7 +556,7 @@ instance functorCategorySymmetric
 
 中文:
 实例 functorCategorySymmetric
-  签名: : SymmetricCategory (C ⥤ D) where
+  签名: : 对称范畴 (C ⥤ D) where
   定义体: by ext X; apply symmetry
 
 Depends on / 依赖: symmetry
@@ -579,7 +579,7 @@ instance Functor.LaxMonoidal.whiskeringRight
   μ F G := { app X := Functor.LaxMonoidal.μ L (F.obj X) (G.obj X) }
 
 中文:
-实例 Functor.LaxMonoidal.whiskeringRight
+实例 函子.松弛幺半群.whiskeringRight
   定义体: { app X := Functor.LaxMonoidal.ε L }
   μ F G := { app X := Functor.LaxMonoidal.μ L (F.obj X) (G.obj X) }
 
@@ -605,7 +605,7 @@ instance Functor.OplaxMonoidal.whiskeringRight
   oplax_right_unitality := by aesop
 
 中文:
-实例 Functor.OplaxMonoidal.whiskeringRight
+实例 函子.反松弛幺半群.whiskeringRight
   定义体: { app X := Functor.OplaxMonoidal.η L }
   δ F G := { app X := Functor.OplaxMonoidal.δ L (F.obj X) (G.obj X) }
   oplax_left_unitality := by aesop
@@ -639,7 +639,7 @@ instance Functor.Monoidal.whiskeringLeft
   body: CoreMonoidal.toMonoidal { εIso := Iso.refl _, μIso _ _ := Iso.refl _ }
 
 中文:
-实例 Functor.Monoidal.whiskeringLeft
+实例 函子.幺半群.whiskeringLeft
   定义体: CoreMonoidal.toMonoidal { εIso := Iso.refl _, μIso _ _ := Iso.refl _ }
 
 Depends on / 依赖: CoreMonoidal, CoreMonoidal.toMonoidal, Iso.refl, toMonoidal

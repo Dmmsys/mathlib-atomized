@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited SSet
+  签名: 可居 SSet
   定义体: ⟨Δ[0]⟩
 -/
 instance : Inhabited SSet :=
@@ -92,7 +92,7 @@ abbreviation fullyFaithful
 
 中文:
 缩写 fullyFaithful
-  签名: : stdSimplex.{u}.FullyFaithful
+  签名: : stdSimplex.{u}.满忠实
   定义体: ULiftYoneda.fullyFaithful SimplexCategory
 
 Depends on / 依赖: SimplexCategory, ULiftYoneda, ULiftYoneda.fullyFaithful, fullyFaithful
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: stdSimplex.{u}.Full
+  签名: stdSimplex.{u}.满
   定义体: fullyFaithful.full
 
 Depends on / 依赖: fullyFaithful, fullyFaithful.full
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: stdSimplex.{u}.Faithful
+  签名: stdSimplex.{u}.忠实
   定义体: fullyFaithful.faithful
 
 @[simp]
@@ -148,7 +148,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (n : SimplexCategory)
+  条件: (n : 单纯形范畴)
   证明: CategoryTheory.Functor.map_id _ _
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Functor.map_id, Functor, map_id
@@ -167,7 +167,7 @@ definition objEquiv
 
 中文:
 定义 objEquiv
-  签名: {n : SimplexCategory} {m : SimplexCategoryᵒᵖ}
+  签名: {n : 单纯形范畴} {m : SimplexCategoryᵒᵖ}
   定义体: Equiv.ulift.{u, 0}
 
 Depends on / 依赖: Equiv.ulift
@@ -222,7 +222,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {n d : 自然数} (x y : Δ[n] _⦋d⦌) (h : 对任意 (i : Fin (d + 1)), x i = y i)
+  条件: {n d : 自然数} (x y : Δ[n] _⦋d⦌) (h : 对任意 (i : 有限集 (d + 1)), x i = y i)
   结论: x = y
   证明: DFunLike.ext _ _ h
 
@@ -264,7 +264,7 @@ lemma objEquiv_symm_comp
 
 中文:
 引理 objEquiv_symm_comp
-  结论: {n n' : SimplexCategory} {m : SimplexCategoryᵒᵖ}
+  结论: {n n' : 单纯形范畴} {m : SimplexCategoryᵒᵖ}
   证明: rfl
 -/
 lemma objEquiv_symm_comp {n n' : SimplexCategory} {m : SimplexCategoryᵒᵖ}
@@ -284,7 +284,7 @@ lemma map_objEquiv_symm
 
 中文:
 引理 map_objEquiv_symm
-  结论: {n : SimplexCategory} {m m' : SimplexCategoryᵒᵖ}
+  结论: {n : 单纯形范畴} {m m' : SimplexCategoryᵒᵖ}
   证明: rfl
 
 @[simp]
@@ -308,7 +308,7 @@ lemma objEquiv_symm_apply
 
 中文:
 引理 objEquiv_symm_apply
-  条件: {n m : 自然数} (f : ⦋m⦌ ⟶ ⦋n⦌) (i : Fin (m + 1))
+  条件: {n m : 自然数} (f : ⦋m⦌ ⟶ ⦋n⦌) (i : 有限集 (m + 1))
   证明: rfl
 
 @[simp]
@@ -376,7 +376,7 @@ abbreviation objMk
 
 中文:
 缩写 objMk
-  签名: {n : SimplexCategory} {m : SimplexCategoryᵒᵖ}
+  签名: {n : 单纯形范畴} {m : SimplexCategoryᵒᵖ}
   定义体: objEquiv.symm (Hom.mk f)
 
 @[simp]
@@ -399,7 +399,7 @@ lemma objMk_apply
 
 中文:
 引理 objMk_apply
-  条件: {n m : 自然数} (f : Fin (m + 1) ->o Fin (n + 1)) (i : Fin (m + 1))
+  条件: {n m : 自然数} (f : 有限集 (m + 1) ->o 有限集 (n + 1)) (i : 有限集 (m + 1))
   证明: rfl
 -/
 lemma objMk_apply {n m : Nat} (f : Fin (m + 1) ->o Fin (n + 1)) (i : Fin (m + 1)) :
@@ -416,7 +416,7 @@ lemma objMk_bijective
 
 中文:
 引理 objMk_bijective
-  条件: {n : SimplexCategory} {m : SimplexCategoryᵒᵖ}
+  条件: {n : 单纯形范畴} {m : SimplexCategoryᵒᵖ}
   证明: (objEquiv.trans homEquivOrderHom).symm.bijective
 -/
 lemma objMk_bijective {n : SimplexCategory} {m : SimplexCategoryᵒᵖ} :
@@ -454,7 +454,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  结论: {m₁ m₂ : SimplexCategoryᵒᵖ} (f : m₁ ⟶ m₂) {n : SimplexCategory}
+  结论: {m₁ m₂ : SimplexCategoryᵒᵖ} (f : m₁ ⟶ m₂) {n : 单纯形范畴}
   证明: by
   rfl
 
@@ -494,7 +494,7 @@ definition yonedaEquiv
 
 中文:
 定义 yonedaEquiv
-  签名: {X : SSet.{u}} {n : SimplexCategory}
+  签名: {X : SSet.{u}} {n : 单纯形范畴}
   定义体: uliftYonedaEquiv
 
 Depends on / 依赖: uliftYonedaEquiv
@@ -518,7 +518,7 @@ lemma _root_.SSet.yonedaEquiv_symm_comp
 
 中文:
 引理 _root_.SSet.yonedaEquiv_symm_comp
-  结论: {X Y : SSet.{u}} {n : SimplexCategory} (x : X.obj (op n))
+  结论: {X Y : SSet.{u}} {n : 单纯形范畴} (x : X.obj (op n))
   证明: uliftYonedaEquiv_symm_comp ..
 
 Depends on / 依赖: uliftYonedaEquiv_symm_comp
@@ -593,7 +593,7 @@ lemma yonedaEquiv_map
 
 中文:
 引理 yonedaEquiv_map
-  条件: {n m : SimplexCategory} (f : n ⟶ m)
+  条件: {n m : 单纯形范畴} (f : n ⟶ m)
   证明: yonedaEquiv.symm.injective rfl
 
 @[deprecated (since := "2026-03-21")] alias stdSimplex.yonedaEquiv_map := yonedaEquiv_map
@@ -621,7 +621,7 @@ lemma yonedaEquiv_symm_app
 
 中文:
 引理 yonedaEquiv_symm_app
-  结论: {S : SSet} (n : SimplexCategory) (x : S.obj (op n))
+  结论: {S : SSet} (n : 单纯形范畴) (x : S.obj (op n))
   证明: rfl
 
 @[simp]
@@ -641,7 +641,7 @@ lemma yonedaEquiv_symm_stdSimplex_id
 
 中文:
 引理 yonedaEquiv_symm_stdSimplex_id
-  条件: (n : SimplexCategory)
+  条件: (n : 单纯形范畴)
   证明: yonedaEquiv.symm_apply_eq.mpr rfl
 
 Depends on / 依赖: stdSimplex, stdSimplex.obj
@@ -662,7 +662,7 @@ lemma yonedaEquiv_symm_app_objEquiv_symm
 
 中文:
 引理 yonedaEquiv_symm_app_objEquiv_symm
-  结论: {X : SSet.{u}} {n : SimplexCategory}
+  结论: {X : SSet.{u}} {n : 单纯形范畴}
   证明: rfl
 -/
 lemma yonedaEquiv_symm_app_objEquiv_symm {X : SSet.{u}} {n : SimplexCategory}
@@ -681,7 +681,7 @@ lemma opObjEquiv_yonedaEquiv_const
 
 中文:
 引理 opObjEquiv_yonedaEquiv_const
-  条件: {X : SSet.{u}} {n : SimplexCategory} (x : X.op _⦋0⦌)
+  条件: {X : SSet.{u}} {n : 单纯形范畴} (x : X.op _⦋0⦌)
   证明: rfl
 
 Depends on / 依赖: yonedaEquiv
@@ -700,7 +700,7 @@ lemma opObjEquiv_symm_yonedaEquiv_const
 
 中文:
 引理 opObjEquiv_symm_yonedaEquiv_const
-  条件: {X : SSet.{u}} {n : SimplexCategory} (x : X _⦋0⦌)
+  条件: {X : SSet.{u}} {n : 单纯形范畴} (x : X _⦋0⦌)
   证明: rfl
 
 Depends on / 依赖: yonedaEquiv
@@ -721,7 +721,7 @@ lemma δ_apply
 
 中文:
 引理 δ_apply
-  条件: {n d : 自然数} (x : (Δ[n] _⦋d + 1⦌ : 类型u)) (i : Fin (d + 2)) (j : Fin (d + 1))
+  条件: {n d : 自然数} (x : (Δ[n] _⦋d + 1⦌ : 类型u)) (i : 有限集 (d + 2)) (j : 有限集 (d + 1))
   证明: rfl
 -/
 lemma δ_apply {n d : Nat} (x : (Δ[n] _⦋d + 1⦌ : Type u)) (i : Fin (d + 2)) (j : Fin (d + 1)) :
@@ -739,7 +739,7 @@ lemma σ_apply
 
 中文:
 引理 σ_apply
-  条件: {n d : 自然数} (x : (Δ[n] _⦋d⦌ : 类型u)) (i : Fin (d + 1)) (j : Fin (d + 2))
+  条件: {n d : 自然数} (x : (Δ[n] _⦋d⦌ : 类型u)) (i : 有限集 (d + 1)) (j : 有限集 (d + 2))
   证明: rfl
 
 @[simp]
@@ -795,7 +795,7 @@ definition const
 
 中文:
 定义 const
-  签名: (n : 自然数) (k : Fin (n + 1)) (m : SimplexCategoryᵒᵖ)
+  签名: (n : 自然数) (k : 有限集 (n + 1)) (m : SimplexCategoryᵒᵖ)
   定义体: objMk (OrderHom.const _ k)
 
 @[simp]
@@ -816,7 +816,7 @@ lemma const_down_toOrderHom
 
 中文:
 引理 const_down_toOrderHom
-  条件: (n : 自然数) (k : Fin (n + 1)) (m : SimplexCategoryᵒᵖ)
+  条件: (n : 自然数) (k : 有限集 (n + 1)) (m : SimplexCategoryᵒᵖ)
   证明: rfl
 -/
 lemma const_down_toOrderHom (n : Nat) (k : Fin (n + 1)) (m : SimplexCategoryᵒᵖ) :
@@ -858,7 +858,7 @@ lemma δ_one_eq_const
 
 中文:
 引理 δ_one_eq_const
-  结论: stdSimplex.{u}.δ (1 : Fin 2) = SSet.const (obj₀Equiv.symm 0)
+  结论: stdSimplex.{u}.δ (1 : 有限集 2) = SSet.const (obj₀Equiv.symm 0)
   证明: by
   decide
 -/
@@ -876,7 +876,7 @@ lemma δ_zero_eq_const
 
 中文:
 引理 δ_zero_eq_const
-  结论: stdSimplex.{u}.δ (0 : Fin 2) = SSet.const (obj₀Equiv.symm 1)
+  结论: stdSimplex.{u}.δ (0 : 有限集 2) = SSet.const (obj₀Equiv.symm 1)
   证明: by
   decide
 -/
@@ -897,7 +897,7 @@ definition edge
 
 中文:
 定义 edge
-  签名: (n : 自然数) (a b : Fin (n + 1)) (hab : a <= b)
+  签名: (n : 自然数) (a b : 有限集 (n + 1)) (hab : a <= b)
   定义体: by
   refine objMk ⟨![a, b], ?_⟩
   rw [Fin.monotone_iff_le_succ]
@@ -922,7 +922,7 @@ lemma coe_edge_down_toOrderHom
 
 中文:
 引理 coe_edge_down_toOrderHom
-  条件: (n : 自然数) (a b : Fin (n + 1)) (hab : a <= b)
+  条件: (n : 自然数) (a b : 有限集 (n + 1)) (hab : a <= b)
   证明: rfl
 -/
 lemma coe_edge_down_toOrderHom (n : Nat) (a b : Fin (n + 1)) (hab : a <= b) :
@@ -944,7 +944,7 @@ definition triangle
 
 中文:
 定义 triangle
-  签名: {n : 自然数} (a b c : Fin (n + 1)) (hab : a <= b) (hbc : b <= c)
+  签名: {n : 自然数} (a b c : 有限集 (n + 1)) (hab : a <= b) (hbc : b <= c)
   定义体: by
   refine objMk ⟨![a, b, c], ?_⟩
   rw [Fin.monotone_iff_le_succ]
@@ -971,7 +971,7 @@ lemma coe_triangle_down_toOrderHom
 
 中文:
 引理 coe_triangle_down_toOrderHom
-  条件: {n : 自然数} (a b c : Fin (n + 1)) (hab : a <= b) (hbc : b <= c)
+  条件: {n : 自然数} (a b c : 有限集 (n + 1)) (hab : a <= b) (hbc : b <= c)
   证明: rfl
 -/
 lemma coe_triangle_down_toOrderHom {n : Nat} (a b c : Fin (n + 1)) (hab : a <= b) (hbc : b <= c) :
@@ -994,7 +994,7 @@ definition face
 
 中文:
 定义 face
-  签名: {n : 自然数} (S : Finset (Fin (n + 1)))
+  签名: {n : 自然数} (S : 有限集 (有限集 (n + 1)))
   定义体: Set.ofPred (fun f => Finset.image (objEquiv f).toOrderHom ⊤ <= S)
   map {U V} i := by aesop
 
@@ -1018,7 +1018,7 @@ lemma mem_face_iff
 
 中文:
 引理 mem_face_iff
-  条件: {n : 自然数} (S : Finset (Fin (n + 1))) {d : 自然数} (x : (Δ[n] : SSet.{u}) _⦋d⦌)
+  条件: {n : 自然数} (S : 有限集 (有限集 (n + 1))) {d : 自然数} (x : (Δ[n] : SSet.{u}) _⦋d⦌)
   证明: by
   simp
 -/
@@ -1039,7 +1039,7 @@ lemma face_inter_face
 
 中文:
 引理 face_inter_face
-  条件: {n : 自然数} (S₁ S₂ : Finset (Fin (n + 1)))
+  条件: {n : 自然数} (S₁ S₂ : 有限集 (有限集 (n + 1)))
   证明: by
   aesop
 
@@ -1120,7 +1120,7 @@ lemma yonedaEquiv_comp
 
 中文:
 引理 yonedaEquiv_comp
-  结论: {X Y : SSet.{u}} {n : SimplexCategory}
+  结论: {X Y : SSet.{u}} {n : 单纯形范畴}
   证明: rfl
 
 @[simp high]
@@ -1161,7 +1161,7 @@ lemma yonedaEquiv_naturality
 
 中文:
 引理 yonedaEquiv_naturality
-  结论: {X : SSet} {m n : SimplexCategory}
+  结论: {X : SSet} {m n : 单纯形范畴}
   证明: uliftYonedaEquiv_naturality _ _
 
 @[reassoc]
@@ -1185,7 +1185,7 @@ lemma yonedaEquiv_symm_naturality_left
 
 中文:
 引理 yonedaEquiv_symm_naturality_left
-  结论: {X : SSet} {m n : SimplexCategory}
+  结论: {X : SSet} {m n : 单纯形范畴}
   证明: by
   rw [yonedaEquiv.eq_symm_apply]; rw [← yonedaEquiv_naturality]; rw [yonedaEquiv.apply_symm_apply]
 
@@ -1302,7 +1302,7 @@ lemma yonedaEquiv_coe
 
 中文:
 引理 yonedaEquiv_coe
-  结论: {A : X.Subcomplex} {n : SimplexCategory}
+  结论: {A : X.子复形} {n : 单纯形范畴}
   证明: by
   rfl
 -/
@@ -1344,7 +1344,7 @@ lemma face_le_face_iff
 
 中文:
 引理 face_le_face_iff
-  条件: {n : 自然数} (S₁ S₂ : Finset (Fin (n + 1)))
+  条件: {n : 自然数} (S₁ S₂ : 有限集 (有限集 (n + 1)))
   证明: by
   refine ⟨fun h i hi => ?_, fun h d a ha => ha.trans h⟩
   simp only [← obj₀Equiv_symm_mem_face_iff.{u}] at hi ⊢
@@ -1377,7 +1377,7 @@ lemma face_eq_ofSimplex
 
 中文:
 引理 face_eq_ofSimplex
-  条件: {n : 自然数} (S : Finset (Fin (n + 1))) (m : 自然数) (e : Fin (m + 1) ≃o S)
+  条件: {n : 自然数} (S : 有限集 (有限集 (n + 1))) (m : 自然数) (e : 有限集 (m + 1) ≃o S)
   证明: by
   apply le_antisymm
   · rintro ⟨k⟩ x hx
@@ -1422,7 +1422,7 @@ definition faceRepresentableBy
 
 中文:
 定义 faceRepresentableBy
-  签名: {n : 自然数} (S : Finset (Fin (n + 1)))
+  签名: {n : 自然数} (S : 有限集 (有限集 (n + 1)))
   定义体: { toFun f := ⟨objMk ((OrderHom.Subtype.val (· in S)).comp
           (e.toOrderEmbedding.toOrderHom.comp f.toOrderHom)), fun _ => by aesop⟩
       invFun := fun ⟨x, hx⟩ => SimplexCategory.Hom.mk
@@ -1464,7 +1464,7 @@ definition isoOfRepresentableBy
 
 中文:
 定义 isoOfRepresentableBy
-  签名: {X : SSet.{u}} {m : 自然数} (h : X.RepresentableBy ⦋m⦌)
+  签名: {X : SSet.{u}} {m : 自然数} (h : X.可表示 ⦋m⦌)
   定义体: NatIso.ofComponents (fun n => Equiv.toIso (objEquiv.trans h.homEquiv))
     (fun _ => by ext; apply h.homEquiv_comp)
 
@@ -1487,7 +1487,7 @@ lemma ofSimplex_yonedaEquiv_δ
 
 中文:
 引理 ofSimplex_yonedaEquiv_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: (face_eq_ofSimplex _ _ (Fin.succAboveOrderIso i)).symm
 
 @[simp]
@@ -1511,7 +1511,7 @@ lemma range_δ
 
 中文:
 引理 range_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: by
   rw [Subcomplex.range_eq_ofSimplex]
   exact ofSimplex_yonedaEquiv_δ i
@@ -1742,7 +1742,7 @@ definition finSuccAboveOrderIsoFinset
 
 中文:
 定义 finSuccAboveOrderIsoFinset
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: (finSuccAboveEquiv (p := i)).trans
     { toFun := fun ⟨x, hx⟩ => ⟨x, by simpa using hx⟩
       invFun := fun ⟨x, hx⟩ => ⟨x, by simpa using hx⟩ }
@@ -1767,7 +1767,7 @@ lemma face_singleton_compl
 
 中文:
 引理 face_singleton_compl
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: face_eq_ofSimplex _ _ (finSuccAboveOrderIsoFinset i)
 
 Depends on / 依赖: face_eq_ofSimplex, finSuccAboveOrderIsoFinset
@@ -1789,7 +1789,7 @@ definition faceSingletonComplIso
 
 中文:
 定义 faceSingletonComplIso
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: isoOfRepresentableBy (faceRepresentableBy _ _ (finSuccAboveOrderIsoFinset i))
 
 @[reassoc (attr := simp)]
@@ -1811,7 +1811,7 @@ lemma faceSingletonComplIso_hom_ι
 
 中文:
 引理 faceSingletonComplIso_hom_ι
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: rfl
 -/
 lemma faceSingletonComplIso_hom_ι {n : Nat} (i : Fin (n + 2)) :
@@ -1833,7 +1833,7 @@ definition finOrderIsoPairCompl
 
 中文:
 定义 finOrderIsoPairCompl
-  签名: {n : 自然数} (i j : Fin (n + 2)) (h : i < j)
+  签名: {n : 自然数} (i j : 有限集 (n + 2)) (h : i < j)
   定义体: by
     refine Equiv.ofBijective
       (fun k => ⟨j.succAbove ((i.castPred (Fin.ne_last_of_lt h)).succAbove k), ?_⟩)
@@ -1871,7 +1871,7 @@ lemma finOrderIsoPairCompl_apply_val
 
 中文:
 引理 finOrderIsoPairCompl_apply_val
-  条件: {n : 自然数} (i j : Fin (n + 2)) (h : i < j) (k : Fin n)
+  条件: {n : 自然数} (i j : 有限集 (n + 2)) (h : i < j) (k : 有限集 n)
   证明: rfl
 -/
 lemma finOrderIsoPairCompl_apply_val {n : Nat} (i j : Fin (n + 2)) (h : i < j) (k : Fin n) :
@@ -1890,7 +1890,7 @@ definition facePairComplIso
 
 中文:
 定义 facePairComplIso
-  签名: {n : 自然数} (i j : Fin (n + 3)) (h : i < j)
+  签名: {n : 自然数} (i j : 有限集 (n + 3)) (h : i < j)
   定义体: isoOfRepresentableBy (faceRepresentableBy _ _ (finOrderIsoPairCompl i j h))
 
 @[reassoc]
@@ -1914,7 +1914,7 @@ lemma facePairComplIso_hom_ι
 
 中文:
 引理 facePairComplIso_hom_ι
-  条件: {n : 自然数} (i j : Fin (n + 3)) (h : i < j)
+  条件: {n : 自然数} (i j : 有限集 (n + 3)) (h : i < j)
   证明: rfl
 
 @[reassoc]
@@ -1942,7 +1942,7 @@ lemma facePairComplIso_hom_ι'
 
 中文:
 引理 facePairComplIso_hom_ι'
-  条件: {n : 自然数} (i j : Fin (n + 3)) (h : i < j)
+  条件: {n : 自然数} (i j : 有限集 (n + 3)) (h : i < j)
   证明: by
   rw [facePairComplIso_hom_ι]
   obtain ⟨i, rfl⟩ := i.eq_castSucc_of_ne_last (Fin.ne_last_of_lt h)
@@ -2040,7 +2040,7 @@ definition faceSingletonIso
 
 中文:
 定义 faceSingletonIso
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: stdSimplex.isoOfRepresentableBy
     (stdSimplex.faceRepresentableBy.{u} _ _ (Fin.orderIsoSingleton i))
 
@@ -2104,7 +2104,7 @@ definition facePairIso
 
 中文:
 定义 facePairIso
-  签名: {n : 自然数} (i j : Fin (n + 1)) (hij : i < j)
+  签名: {n : 自然数} (i j : 有限集 (n + 1)) (hij : i < j)
   定义体: stdSimplex.isoOfRepresentableBy
     (stdSimplex.faceRepresentableBy.{u} _ _ (Fin.orderIsoPair i j hij))
 
@@ -2200,7 +2200,7 @@ lemma nonDegenerateEquiv'_iff
 
 中文:
 引理 nonDegenerateEquiv'_iff
-  条件: {n d : 自然数} (x : (Δ[n] : SSet.{u}).nonDegenerate d) (j : Fin (n + 1))
+  条件: {n d : 自然数} (x : (Δ[n] : SSet.{u}).nonDegenerate d) (j : 有限集 (n + 1))
   证明: by
   unfold nonDegenerateEquiv'
   simp
@@ -2371,7 +2371,7 @@ lemma hasDimensionLT_face
 
 中文:
 引理 hasDimensionLT_face
-  结论: {n : 自然数} (S : Finset (Fin (n + 1)))
+  结论: {n : 自然数} (S : 有限集 (有限集 (n + 1)))
   证明: by
   generalize hm : S.card = m
   obtain _ | m := m
@@ -2501,7 +2501,7 @@ lemma not_hasDimensionLT
 
 中文:
 引理 not_hasDimensionLT
-  条件: (n : 自然数) (_ : HasDimensionLT.{u} Δ[n] n := by infer_instance)
+  条件: (n : 自然数) (_ : 有DimensionLT.{u} Δ[n] n := by infer_instance)
   证明: (lt_self_iff_false n).1 (Δ[n].dim_lt_of_nonDegenerate
     (nonDegenerateEquiv.2 (.refl _)) n)
 
@@ -2523,7 +2523,7 @@ definition opObjEquiv
 
 中文:
 定义 opObjEquiv
-  签名: {n : SimplexCategory} {d : SimplexCategoryᵒᵖ}
+  签名: {n : 单纯形范畴} {d : SimplexCategoryᵒᵖ}
   定义体: SSet.opObjEquiv.trans (objEquiv.trans
     (SimplexCategory.revEquivalence.fullyFaithfulFunctor.homEquiv.trans objEquiv.symm))
 -/
@@ -2542,7 +2542,7 @@ lemma opObjEquiv_apply
 
 中文:
 引理 opObjEquiv_apply
-  条件: {d n : 自然数} (f : Δ[n].op _⦋d⦌) (i : Fin (d + 1))
+  条件: {d n : 自然数} (f : Δ[n].op _⦋d⦌) (i : 有限集 (d + 1))
   证明: rfl
 -/
 protected lemma opObjEquiv_apply {d n : Nat} (f : Δ[n].op _⦋d⦌) (i : Fin (d + 1)) :
@@ -2558,7 +2558,7 @@ lemma opObjEquiv_opObjEquiv_symm_apply
 
 中文:
 引理 opObjEquiv_opObjEquiv_symm_apply
-  条件: {d n : 自然数} (f : (Δ[n] _⦋d⦌)) (i : Fin (d + 1))
+  条件: {d n : 自然数} (f : (Δ[n] _⦋d⦌)) (i : 有限集 (d + 1))
   证明: rfl
 -/
 lemma opObjEquiv_opObjEquiv_symm_apply {d n : Nat} (f : (Δ[n] _⦋d⦌)) (i : Fin (d + 1)) :
@@ -2576,7 +2576,7 @@ lemma map_rev_map_op_apply
 
 中文:
 引理 map_rev_map_op_apply
-  条件: {n d d' : 自然数} (f : ⦋d⦌ ⟶ ⦋d'⦌) (g : Δ[n] _⦋d'⦌) (i : Fin (d + 1))
+  条件: {n d d' : 自然数} (f : ⦋d⦌ ⟶ ⦋d'⦌) (g : Δ[n] _⦋d'⦌) (i : 有限集 (d + 1))
   证明: rfl
 -/
 lemma map_rev_map_op_apply {n d d' : Nat} (f : ⦋d⦌ ⟶ ⦋d'⦌) (g : Δ[n] _⦋d'⦌) (i : Fin (d + 1)) :
@@ -2604,7 +2604,7 @@ definition opIso
 
 中文:
 定义 opIso
-  签名: (n : SimplexCategory)
+  签名: (n : 单纯形范畴)
   定义体: NatIso.ofComponents (fun d => stdSimplex.opObjEquiv.toIso) (fun {d d'} f => by
     ext g
     refine stdSimplex.ext _ _ (fun i => ?_)
@@ -2680,7 +2680,7 @@ definition stdSimplex
 
 中文:
 定义 stdSimplex
-  签名: : SimplexCategory ⥤ SSet.Augmented.{u} where
+  签名: : 单纯形范畴 ⥤ SSet.Augmented.{u} where
   定义体: { left := SSet.stdSimplex.obj Δ
       right := terminal _
       hom := { app := fun _ => terminal.from _ } }
@@ -2785,7 +2785,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (toOfSimplex x)
+  签名: 满态射 (toOfSimplex x)
   定义体: by
   rw [← range_eq_top_iff]
   ext m ⟨_, u, rfl⟩

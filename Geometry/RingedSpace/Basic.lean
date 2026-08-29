@@ -50,7 +50,7 @@ abbreviation RingedSpace
 
 中文:
 缩写 RingedSpace
-  签名: : Type max (u + 1) (v + 1)
+  签名: : 类型 最大值 (u + 1) (v + 1)
   定义体: SheafedSpace.{v + 1, v, u} CommRingCat.{v}
 
 Depends on / 依赖: CommRingCat, SheafedSpace
@@ -73,7 +73,7 @@ lemma res_zero
 
 中文:
 引理 res_zero
-  结论: {X : RingedSpace.{u}} {U V : TopologicalSpace.Opens X}
+  结论: {X : RingedSpace.{u}} {U V : 拓扑空间.Opens X}
   证明: map_zero _
 
 Depends on / 依赖: map_zero
@@ -116,7 +116,7 @@ lemma exists_res_eq_zero_of_germ_eq_zero
   simpa using hv4
 
 中文:
-引理 exists_res_eq_zero_of_germ_eq_zero
+引理 存在_res_eq_zero_of_germ_eq_zero
   结论: (U : Opens X) (f : X.presheaf.obj (op U)) (x : U)
   证明: by
   have h1 : X.presheaf.germ U x.val x.property f = X.presheaf.germ U x.val x.property 0 := by simpa
@@ -465,7 +465,7 @@ theorem basicOpen_res_eq
 
 中文:
 定理 basicOpen_res_eq
-  条件: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) [IsIso i] (f : X.presheaf.obj U)
+  条件: {U V : (Opens X)ᵒᵖ} (i : U ⟶ V) [是同构 i] (f : X.presheaf.obj U)
   证明: by
   apply le_antisymm
   · rw [X.basicOpen_res i f]; exact inf_le_right
@@ -566,7 +566,7 @@ theorem basicOpen_of_isUnit
 
 中文:
 定理 basicOpen_of_isUnit
-  条件: {U : Opens X} {f : X.presheaf.obj (op U)} (hf : IsUnit f)
+  条件: {U : Opens X} {f : X.presheaf.obj (op U)} (hf : 是单位 f)
   证明: by
   apply le_antisymm
   · exact X.basicOpen_le f
@@ -594,7 +594,7 @@ definition zeroLocus
 
 中文:
 定义 zeroLocus
-  签名: {U : Opens X} (s : Set (X.presheaf.obj (op U)))
+  签名: {U : Opens X} (s : 集合 (X.presheaf.obj (op U)))
   定义体: ⋂ f in s, (X.basicOpen f)ᶜ
 
 Depends on / 依赖: X.basicOpen, basicOpen
@@ -616,7 +616,7 @@ lemma zeroLocus_isClosed
 
 中文:
 引理 zeroLocus_isClosed
-  条件: {U : Opens X} (s : Set (X.presheaf.obj (op U)))
+  条件: {U : Opens X} (s : 集合 (X.presheaf.obj (op U)))
   证明: by
   apply isClosed_biInter
   intro i _
@@ -695,7 +695,7 @@ lemma mem_zeroLocus_iff
 
 中文:
 引理 mem_zeroLocus_iff
-  条件: {U : Opens X} (s : Set (X.presheaf.obj (op U))) (x : X)
+  条件: {U : Opens X} (s : 集合 (X.presheaf.obj (op U))) (x : X)
   证明: by
   simp [zeroLocus]
 

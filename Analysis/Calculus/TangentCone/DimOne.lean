@@ -40,7 +40,7 @@ theorem tangentConeAt_eq_univ
 
 中文:
 定理 tangentConeAt_eq_univ
-  条件: {s : Set 𝕜} {x : 𝕜} (hx : AccPt x (𝓟 s))
+  条件: {s : 集合 𝕜} {x : 𝕜} (hx : 聚点 x (𝓟 s))
   证明: by
   refine eq_univ_of_forall fun y => ?_
   apply mem_tangentConeAt_of_frequently (𝓝[!=] x) (fun z => y / (z - x)) (· - x)
@@ -75,7 +75,7 @@ alias ⟨_, AccPt.uniqueDiffWithinAt⟩ := uniqueDiffWithinAt_iff_accPt
 
 中文:
 定理 uniqueDiffWithinAt_iff_accPt
-  条件: {s : Set 𝕜} {x : 𝕜}
+  条件: {s : 集合 𝕜} {x : 𝕜}
   证明: ⟨UniqueDiffWithinAt.accPt, fun h =>
     ⟨by simp [tangentConeAt_eq_univ h], mem_closure_iff_clusterPt.mpr h.clusterPt⟩⟩
 

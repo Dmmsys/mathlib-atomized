@@ -151,7 +151,7 @@ local instance : BoundedSpace (Seq α) :=
 
 中文:
 定理 dist_le_one
-  条件: (s t : Seq α)
+  条件: (s t : 序列 α)
   结论: dist s t <= 1
   证明: PiNat.dist_le_one _ _
 
@@ -185,7 +185,7 @@ theorem dist_eq_two_inv_pow
 
 中文:
 定理 dist_eq_two_inv_pow
-  条件: {s t : Seq α} (h : s != t)
+  条件: {s t : 序列 α} (h : s != t)
   结论: 存在 n, dist s t = 2⁻¹ ^ n
   证明: by
   rw [Subtype.dist_eq]; rw [PiNat.dist_eq_of_ne (Subtype.coe_ne_coe.mpr h)]
@@ -218,7 +218,7 @@ theorem dist_cons_cons
 
 中文:
 定理 dist_cons_cons
-  条件: (x : α) (s t : Seq α)
+  条件: (x : α) (s t : 序列 α)
   结论: dist (cons x s) (cons x t) = 2⁻¹ * dist s t
   证明: by
   by_cases! h : s = t
@@ -259,7 +259,7 @@ theorem dist_eq_half_of_head
 
 中文:
 定理 dist_eq_half_of_head
-  条件: {s t : Seq α} (h : s.head = t.head)
+  条件: {s t : 序列 α} (h : s.head = t.head)
   证明: by
   cases s <;> cases t <;> simp at h <;> simp [h]
 -/
@@ -288,7 +288,7 @@ theorem dist_eq_one_of_head
 
 中文:
 定理 dist_eq_one_of_head
-  条件: {s t : Seq α} (h : s.head != t.head)
+  条件: {s t : 序列 α} (h : s.head != t.head)
   结论: dist s t = 1
   证明: by
   rw [Subtype.dist_eq]; rw [PiNat.dist_eq_of_ne]
@@ -328,7 +328,7 @@ theorem dist_cons_cons_eq_one
 
 中文:
 定理 dist_cons_cons_eq_one
-  条件: {x y : α} {s t : Seq α} (h : x != y)
+  条件: {x y : α} {s t : 序列 α} (h : x != y)
   证明: by
   apply dist_eq_one_of_head
   simpa
@@ -358,7 +358,7 @@ theorem dist_cons_nil
 
 中文:
 定理 dist_cons_nil
-  条件: (x : α) (s : Seq α)
+  条件: (x : α) (s : 序列 α)
   结论: dist (cons x s) nil = 1
   证明: by
   apply dist_eq_one_of_head
@@ -386,7 +386,7 @@ theorem dist_nil_cons
 
 中文:
 定理 dist_nil_cons
-  条件: (x : α) (s : Seq α)
+  条件: (x : α) (s : 序列 α)
   结论: dist nil (cons x s) = 1
   证明: by
   rw [dist_comm]
@@ -412,7 +412,7 @@ theorem dist_le_half_iff
 
 中文:
 定理 dist_le_half_iff
-  条件: {s t : Seq α}
+  条件: {s t : 序列 α}
   证明: by
     cases s <;> cases t <;> norm_num at h <;> simp
     grind [dist_cons_cons_eq_one]
@@ -439,7 +439,7 @@ definition FriendlyOperation
 
 中文:
 定义 FriendlyOperation
-  签名: (op : Seq α -> Seq α)
+  签名: (op : 序列 α -> 序列 α)
   定义体: LipschitzWith 1 op
 
 Depends on / 依赖: LipschitzWith
@@ -456,8 +456,8 @@ class FriendlyOperationClass
     - friend : forall c : γ, FriendlyOperation (F c)
 
 中文:
-类 FriendlyOperationClass
-  参数: (F : γ -> Seq α -> Seq α)
+类 FriendlyOperation类
+  参数: (F : γ -> 序列 α -> 序列 α)
   公理与运算 (1 个):
     - friend : 对任意 c : γ, FriendlyOperation (F c)
 -/
@@ -475,7 +475,7 @@ theorem friendlyOperation_iff_dist_le_dist
 
 中文:
 定理 friendlyOperation_iff_dist_le_dist
-  条件: (op : Seq α -> Seq α)
+  条件: (op : 序列 α -> 序列 α)
   证明: by
   simp [FriendlyOperation, lipschitzWith_iff_dist_le_mul]
 
@@ -495,7 +495,7 @@ theorem FriendlyOperation.id
 
 中文:
 定理 FriendlyOperation.id
-  结论: FriendlyOperation (id : Seq α -> Seq α)
+  结论: FriendlyOperation (id : 序列 α -> 序列 α)
   证明: LipschitzWith.id
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.id
@@ -516,7 +516,7 @@ theorem FriendlyOperation.comp
 
 中文:
 定理 FriendlyOperation.comp
-  结论: {op op' : Seq α -> Seq α}
+  结论: {op op' : 序列 α -> 序列 α}
   证明: by
   rw [FriendlyOperation] at h h' ⊢
   convert! h.comp h'
@@ -543,7 +543,7 @@ theorem FriendlyOperation.const
 
 中文:
 定理 FriendlyOperation.const
-  条件: {s : Seq α}
+  条件: {s : 序列 α}
   结论: FriendlyOperation (fun _ => s)
   证明: by
   simp [friendlyOperation_iff_dist_le_dist]
@@ -563,8 +563,8 @@ theorem FriendlyOperationClass.comp
   grind [FriendlyOperationClass]
 
 中文:
-定理 FriendlyOperationClass.comp
-  结论: (F : γ -> Seq α -> Seq α) (g : γ' -> γ)
+定理 FriendlyOperation类.comp
+  结论: (F : γ -> 序列 α -> 序列 α) (g : γ' -> γ)
   证明: by
   grind [FriendlyOperationClass]
 
@@ -589,7 +589,7 @@ theorem FriendlyOperation.ite
 
 中文:
 定理 FriendlyOperation.ite
-  结论: {op₁ op₂ : Seq α -> Seq α}
+  结论: {op₁ op₂ : 序列 α -> 序列 α}
   证明: by
   rw [friendlyOperation_iff_dist_le_dist] at h₁ h₂ ⊢
   intro s t
@@ -621,7 +621,7 @@ theorem FriendlyOperation.dist_le
 
 中文:
 定理 FriendlyOperation.dist_le
-  结论: {op : Seq α -> Seq α} (h : FriendlyOperation op)
+  结论: {op : 序列 α -> 序列 α} (h : FriendlyOperation op)
   证明: by
   rw [FriendlyOperation]; rw [lipschitzWith_iff_dist_le_mul] at h
   simpa using h s t
@@ -649,8 +649,8 @@ theorem exists_fixed_point_of_contractible
   exact hF.fixedPoint_isFixedPt
 
 中文:
-定理 exists_fixed_point_of_contractible
-  结论: (F : (β ->ᵤ Seq α) -> (β ->ᵤ Seq α))
+定理 存在_fixed_point_of_contractible
+  结论: (F : (β ->ᵤ 序列 α) -> (β ->ᵤ 序列 α))
   证明: by
   have hF : ContractingWith 2⁻¹ F := by
     constructor
@@ -693,8 +693,8 @@ theorem FriendlyOperation.exists_fixed_point
     simp
 
 中文:
-定理 FriendlyOperation.exists_fixed_point
-  结论: (F : β -> Option (α × γ × β)) (op : γ -> Seq α -> Seq α)
+定理 FriendlyOperation.存在_fixed_point
+  结论: (F : β -> 选项类型 (α × γ × β)) (op : γ -> 序列 α -> 序列 α)
   证明: by
   let T : (β ->ᵤ Seq α) -> (β ->ᵤ Seq α) := fun f b =>
     match F b with
@@ -772,7 +772,7 @@ definition gcorec
 
 中文:
 定义 gcorec
-  签名: (F : β -> Option (α × γ × β)) (op : γ -> Seq α -> Seq α)
+  签名: (F : β -> 选项类型 (α × γ × β)) (op : γ -> 序列 α -> 序列 α)
   定义体: (FriendlyOperation.exists_fixed_point F op).choose
 
 Depends on / 依赖: FriendlyOperation, FriendlyOperation.exists_fixed_point, exists_fixed_point
@@ -793,7 +793,7 @@ theorem gcorec_nil
 
 中文:
 定理 gcorec_nil
-  结论: {F : β -> Option (α × γ × β)} {op : γ -> Seq α -> Seq α}
+  结论: {F : β -> 选项类型 (α × γ × β)} {op : γ -> 序列 α -> 序列 α}
   证明: by
   have := (FriendlyOperation.exists_fixed_point F op).choose_spec b
   simpa [h] using! this
@@ -819,7 +819,7 @@ theorem gcorec_some
 
 中文:
 定理 gcorec_some
-  结论: {F : β -> Option (α × γ × β)} {op : γ -> Seq α -> Seq α}
+  结论: {F : β -> 选项类型 (α × γ × β)} {op : γ -> 序列 α -> 序列 α}
   证明: by
   have := (FriendlyOperation.exists_fixed_point F op).choose_spec b
   simpa [h] using! this
@@ -903,7 +903,7 @@ theorem FriendlyOperation.cons_tail
 
 中文:
 定理 FriendlyOperation.cons_tail
-  条件: {op : Seq α -> Seq α} {hd : α} (h : FriendlyOperation op)
+  条件: {op : 序列 α -> 序列 α} {hd : α} (h : FriendlyOperation op)
   证明: by
   simp_rw [friendlyOperation_iff_dist_le_dist] at h ⊢
   intro x y
@@ -938,7 +938,7 @@ theorem FriendlyOperation.op_cons_head_eq
 
 中文:
 定理 FriendlyOperation.op_cons_head_eq
-  结论: {op : Seq α -> Seq α} (h : FriendlyOperation op) {a : α}
+  结论: {op : 序列 α -> 序列 α} (h : FriendlyOperation op) {a : α}
   证明: by
   rw [friendlyOperation_iff_dist_le_dist] at h
   specialize h (.cons a s) (.cons a t)
@@ -985,7 +985,7 @@ definition FriendlyOperation.unfold
 
 中文:
 定义 FriendlyOperation.unfold
-  签名: {op : Seq α -> Seq α} (h : FriendlyOperation op) (hd? : Option α)
+  签名: {op : 序列 α -> 序列 α} (h : FriendlyOperation op) (hd? : 选项类型 α)
   定义体: match hd? with
   | none =>
     match (op nil).destruct with
@@ -1036,7 +1036,7 @@ theorem FriendlyOperation.destruct_apply_eq_unfold
 
 中文:
 定理 FriendlyOperation.destruct_apply_eq_unfold
-  结论: {op : Seq α -> Seq α} (h : FriendlyOperation op)
+  结论: {op : 序列 α -> 序列 α} (h : FriendlyOperation op)
   证明: by
   unfold unfold
   cases s with
@@ -1091,7 +1091,7 @@ theorem FriendlyOperation.op_head_eq
 
 中文:
 定理 FriendlyOperation.op_head_eq
-  结论: {op : Seq α -> Seq α} (h : FriendlyOperation op) {s t : Seq α}
+  结论: {op : 序列 α -> 序列 α} (h : FriendlyOperation op) {s t : 序列 α}
   证明: by
   simp only [head_eq_destruct, Option.map_eq_map, h.destruct_apply_eq_unfold, Option.map_map]
     at h_head ⊢
@@ -1123,7 +1123,7 @@ theorem FriendlyOperation.of_dist_le_pow
 
 中文:
 定理 FriendlyOperation.of_dist_le_pow
-  结论: {op : Seq α -> Seq α}
+  结论: {op : 序列 α -> 序列 α}
   证明: by
   rw [friendlyOperation_iff_dist_le_dist]
   intro s t
@@ -1165,7 +1165,7 @@ theorem FriendlyOperation.coind
 
 中文:
 定理 FriendlyOperation.coind
-  结论: (motive : (Seq α -> Seq α) -> 命题)
+  结论: (motive : (序列 α -> 序列 α) -> 命题)
   证明: by
   apply of_dist_le_pow
   intro s t n hn
@@ -1231,7 +1231,7 @@ theorem FriendlyOperation.coind_comp_friend_left
 
 中文:
 定理 FriendlyOperation.coind_comp_friend_left
-  结论: {op : Seq α -> Seq α}
+  结论: {op : 序列 α -> 序列 α}
   证明: by
   let motive' (op : Seq α -> Seq α) : Prop :=
     exists opf op', op = opf ∘ op' ∧ FriendlyOperation opf ∧ motive op'
@@ -1303,7 +1303,7 @@ theorem FriendlyOperation.coind_comp_friend_right
 
 中文:
 定理 FriendlyOperation.coind_comp_friend_right
-  结论: {op : Seq α -> Seq α}
+  结论: {op : 序列 α -> 序列 α}
   证明: by
   let motive' (op : Seq α -> Seq α) : Prop :=
     exists opf op', op = op' ∘ opf ∧ FriendlyOperation opf ∧ motive op'
@@ -1380,8 +1380,8 @@ theorem FriendlyOperationClass.eq_of_bisim
   | ze
 
 中文:
-定理 FriendlyOperationClass.eq_of_bisim
-  结论: {s t : Seq α} {op : γ -> Seq α -> Seq α}
+定理 FriendlyOperation类.eq_of_bisim
+  结论: {s t : 序列 α} {op : γ -> 序列 α -> 序列 α}
   证明: by
   suffices dist s t = 0 by simpa using this
   suffices forall n, dist s t <= (2⁻¹ : Real) ^ n by

@@ -65,9 +65,9 @@ class GradedRing
   (no additional axioms)
 
 中文:
-类 GradedRing
+类 分次环
   参数: (𝒜 : ι -> σ)
-  继承: SetLike.GradedMonoid 𝒜, DirectSum.Decomposition 𝒜
+  继承: 集合状.分次幺半群 𝒜, 直和.分解 𝒜
   (无附加公理)
 -/
 class GradedRing (𝒜 : ι -> σ) extends SetLike.GradedMonoid 𝒜, DirectSum.Decomposition 𝒜
@@ -210,7 +210,7 @@ RingHom.toAddMonoidHom RingEquiv.toRingHom DirectSum.decomposeRingEquiv 𝒜
 @[simp]
 
 中文:
-定义 GradedRing.proj
+定义 分次环.proj
   签名: (i : ι)
   定义体: (AddSubmonoidClass.subtype (𝒜 i)).comp
 (DFinsupp.evalAddMonoidHom i).comp
@@ -235,7 +235,7 @@ theorem GradedRing.proj_apply
   proof: rfl
 
 中文:
-定理 GradedRing.proj_apply
+定理 分次环.proj_apply
   条件: (i : ι) (r : A)
   证明: rfl
 -/
@@ -253,7 +253,7 @@ theorem GradedRing.proj_recompose
   rw [GradedRing.proj_apply]; rw [decompose_symm_of]; rw [Equiv.apply_symm_apply]
 
 中文:
-定理 GradedRing.proj_recompose
+定理 分次环.proj_recompose
   条件: (a : ⨁ i, 𝒜 i) (i : ι)
   证明: by
   rw [GradedRing.proj_apply]; rw [decompose_symm_of]; rw [Equiv.apply_symm_apply]
@@ -273,8 +273,8 @@ theorem GradedRing.mem_support_iff
   proof: DFinsupp.mem_support_iff.trans ZeroMemClass.coe_eq_zero.not.symm
 
 中文:
-定理 GradedRing.mem_support_iff
-  条件: [对任意 (i) (x : 𝒜 i), Decidable (x != 0)] (r : A) (i : ι)
+定理 分次环.mem_support_iff
+  条件: [对任意 (i) (x : 𝒜 i), 可判定 (x != 0)] (r : A) (i : ι)
   证明: DFinsupp.mem_support_iff.trans ZeroMemClass.coe_eq_zero.not.symm
 
 Depends on / 依赖: DFinsupp, DFinsupp.mem_support_iff.trans, ZeroMemClass, ZeroMemClass.coe_eq_zero.not.symm, coe_eq_zero, mem_support_iff
@@ -306,7 +306,7 @@ theorem coe_decompose_mul_add_of_left_mem
 
 中文:
 定理 coe_decompose_mul_add_of_left_mem
-  结论: [AddLeftCancelMonoid ι] [GradedRing 𝒜] {a b : A}
+  结论: [加法左消去幺半群 ι] [分次环 𝒜] {a b : A}
   证明: by
   lift a to 𝒜 i using a_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_of_mul_apply_add]
@@ -330,7 +330,7 @@ theorem coe_decompose_mul_add_of_right_mem
 
 中文:
 定理 coe_decompose_mul_add_of_right_mem
-  结论: [AddRightCancelMonoid ι] [GradedRing 𝒜] {a b : A}
+  结论: [加法右消去幺半群 ι] [分次环 𝒜] {a b : A}
   证明: by
   lift b to 𝒜 j using b_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_mul_of_apply_add]
@@ -352,7 +352,7 @@ theorem decompose_mul_add_left
 
 中文:
 定理 decompose_mul_add_left
-  条件: [AddLeftCancelMonoid ι] [GradedRing 𝒜] (a : 𝒜 i) {b : A}
+  条件: [加法左消去幺半群 ι] [分次环 𝒜] (a : 𝒜 i) {b : A}
   证明: Subtype.ext coe_decompose_mul_add_of_left_mem 𝒜 a.2
 
 Depends on / 依赖: Subtype, Subtype.ext, coe_decompose_mul_add_of_left_mem
@@ -372,7 +372,7 @@ theorem decompose_mul_add_right
 
 中文:
 定理 decompose_mul_add_right
-  条件: [AddRightCancelMonoid ι] [GradedRing 𝒜] {a : A} (b : 𝒜 j)
+  条件: [加法右消去幺半群 ι] [分次环 𝒜] {a : A} (b : 𝒜 j)
   证明: Subtype.ext coe_decompose_mul_add_of_right_mem 𝒜 b.2
 
 Depends on / 依赖: Subtype, Subtype.ext, coe_decompose_mul_add_of_right_mem
@@ -394,7 +394,7 @@ theorem coe_decompose_mul_of_left_mem_zero
 
 中文:
 定理 coe_decompose_mul_of_left_mem_zero
-  结论: [AddMonoid ι] [GradedRing 𝒜] {a b : A}
+  结论: [加法幺半群 ι] [分次环 𝒜] {a b : A}
   证明: by
   lift a to 𝒜 0 using a_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_of_mul_apply_of_mem_zero]
@@ -418,7 +418,7 @@ theorem coe_decompose_mul_of_right_mem_zero
 
 中文:
 定理 coe_decompose_mul_of_right_mem_zero
-  结论: [AddMonoid ι] [GradedRing 𝒜] {a b : A}
+  结论: [加法幺半群 ι] [分次环 𝒜] {a b : A}
   证明: by
   lift b to 𝒜 0 using b_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_mul_of_apply_of_mem_zero]
@@ -447,7 +447,7 @@ abbreviation GradedAlgebra
   body: GradedRing 𝒜
 
 中文:
-缩写 GradedAlgebra
+缩写 分次代数
   定义体: GradedRing 𝒜
 
 Depends on / 依赖: GradedRing
@@ -469,8 +469,8 @@ abbreviation GradedAlgebra.ofAlgHom
     exact (decompose.congr_arg <| DirectSum.coeAlgHom_of _ _ _).trans (left_inv i x)
 
 中文:
-缩写 GradedAlgebra.ofAlgHom
-  签名: [SetLike.GradedMonoid 𝒜] (decompose : A ->ₐ[R] ⨁ i, 𝒜 i)
+缩写 分次代数.ofAlgHom
+  签名: [集合状.分次幺半群 𝒜] (decompose : A ->ₐ[R] ⨁ i, 𝒜 i)
   定义体: decompose
   left_inv := AlgHom.congr_fun right_inv
   right_inv := by
@@ -632,8 +632,8 @@ definition GradedAlgebra.proj
 @[simp]
 
 中文:
-定义 GradedAlgebra.proj
-  签名: (𝒜 : ι -> Submodule R A) [GradedAlgebra 𝒜] (i : ι)
+定义 分次代数.proj
+  签名: (𝒜 : ι -> 子模 R A) [分次代数 𝒜] (i : ι)
   定义体: (𝒜 i).subtype.comp (DFinsupp.lapply i).comp (decomposeAlgEquiv 𝒜).toAlgHom.toLinearMap
 
 @[simp]
@@ -653,7 +653,7 @@ theorem GradedAlgebra.proj_apply
   proof: rfl
 
 中文:
-定理 GradedAlgebra.proj_apply
+定理 分次代数.proj_apply
   条件: (i : ι) (r : A)
   证明: rfl
 -/
@@ -671,7 +671,7 @@ theorem GradedAlgebra.proj_recompose
   rw [GradedAlgebra.proj_apply]; rw [decompose_symm_of]; rw [Equiv.apply_symm_apply]
 
 中文:
-定理 GradedAlgebra.proj_recompose
+定理 分次代数.proj_recompose
   条件: (a : ⨁ i, 𝒜 i) (i : ι)
   证明: by
   rw [GradedAlgebra.proj_apply]; rw [decompose_symm_of]; rw [Equiv.apply_symm_apply]
@@ -691,7 +691,7 @@ theorem GradedAlgebra.mem_support_iff
   proof: DFinsupp.mem_support_iff.trans Submodule.coe_eq_zero.not.symm
 
 中文:
-定理 GradedAlgebra.mem_support_iff
+定理 分次代数.mem_support_iff
   条件: [DecidableEq A] (r : A) (i : ι)
   证明: DFinsupp.mem_support_iff.trans Submodule.coe_eq_zero.not.symm
 
@@ -729,7 +729,7 @@ definition GradedRing.projZeroRingHom
     refine DirectSum.Decomposition.inductionOn 𝒜 (fun x =>
 
 中文:
-定义 GradedRing.projZeroRingHom
+定义 分次环.projZeroRingHom
   签名: : A ->+* A where
   定义体: decompose 𝒜 a 0
   map_one' := decompose_of_mem_same 𝒜 SetLike.GradedOne.one_mem
@@ -779,7 +779,7 @@ definition GradedRing.projZeroRingHom'
   A ->+* SetLike.GradeZero.subsemiring 𝒜)
 
 中文:
-定义 GradedRing.projZeroRingHom'
+定义 分次环.projZeroRingHom'
   签名: : A ->+* 𝒜 0
   定义体: ((GradedRing.projZeroRingHom 𝒜).codRestrict _ fun _x => SetLike.coe_mem _ :
   A ->+* SetLike.GradeZero.subsemiring 𝒜)
@@ -799,7 +799,7 @@ lemma GradedRing.coe_projZeroRingHom'_apply
   proof: rfl
 
 中文:
-引理 GradedRing.coe_projZeroRingHom'_apply
+引理 分次环.coe_projZeroRingHom'_apply
   条件: (a : A)
   证明: rfl
 -/
@@ -816,7 +816,7 @@ lemma GradedRing.projZeroRingHom'_apply_coe
   ext; simp only [coe_projZeroRingHom'_apply, projZeroRingHom_apply, decompose_coe, of_eq_same]
 
 中文:
-引理 GradedRing.projZeroRingHom'_apply_coe
+引理 分次环.projZeroRingHom'_apply_coe
   条件: (a : 𝒜 0)
   证明: by
   ext; simp only [coe_projZeroRingHom'_apply, projZeroRingHom_apply, decompose_coe, of_eq_same]
@@ -833,7 +833,7 @@ lemma GradedRing.projZeroRingHom'_surjective
   proof: Function.RightInverse.surjective (GradedRing.projZeroRingHom'_apply_coe 𝒜)
 
 中文:
-引理 GradedRing.projZeroRingHom'_surjective
+引理 分次环.projZeroRingHom'_surjective
   证明: Function.RightInverse.surjective (GradedRing.projZeroRingHom'_apply_coe 𝒜)
 -/
 lemma GradedRing.projZeroRingHom'_surjective :
@@ -956,7 +956,7 @@ theorem coe_decompose_mul_of_left_mem
 
 中文:
 定理 coe_decompose_mul_of_left_mem
-  条件: (n) [Decidable (i <= n)] (a_mem : a in 𝒜 i)
+  条件: (n) [可判定 (i <= n)] (a_mem : a in 𝒜 i)
   证明: by
   lift a to 𝒜 i using a_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_of_mul_apply]
@@ -980,7 +980,7 @@ theorem coe_decompose_mul_of_right_mem
 
 中文:
 定理 coe_decompose_mul_of_right_mem
-  条件: (n) [Decidable (i <= n)] (b_mem : b in 𝒜 i)
+  条件: (n) [可判定 (i <= n)] (b_mem : b in 𝒜 i)
   证明: by
   lift b to 𝒜 i using b_mem
   rw [decompose_mul]; rw [decompose_coe]; rw [coe_mul_of_apply]
@@ -1014,7 +1014,7 @@ definition coeAlgEquiv
 
 中文:
 定义 coeAlgEquiv
-  签名: (hM : DirectSum.Is整数ernal M)
+  签名: (hM : 直和.Is整数ernal M)
   定义体: { RingEquiv.ofBijective (DirectSum.coeAlgHom M) hM with commutes' := fun r => by simp }
 
 Depends on / 依赖: DirectSum, DirectSum.coeAlgHom, RingEquiv, RingEquiv.ofBijective, coeAlgHom, commutes, ofBijective
@@ -1043,7 +1043,7 @@ definition gradedAlgebra
 
 中文:
 定义 gradedAlgebra
-  签名: (hM : DirectSum.Is整数ernal M)
+  签名: (hM : 直和.Is整数ernal M)
   定义体: { (inferInstance : SetLike.GradedMonoid M) with
     decompose' := hM.coeAlgEquiv.symm
     left_inv := hM.coeAlgEquiv.symm.left_inv

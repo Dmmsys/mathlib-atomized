@@ -46,12 +46,12 @@ class ConditionallyCompleteLattice
     - isGLB_csInf : forall s : Set α, s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
 
 中文:
-类 ConditionallyCompleteLattice
+类 条件完备格
   参数: (α : 类型)
-  继承: Lattice α, SupSet α, InfSet α
+  继承: 格 α, 上确界集 α, 下确界集 α
   公理与运算 (2 个):
-    - isLUB_csSup : 对任意 s : Set α, s.Nonempty -> BddAbove s -> IsLUB s (sSup s)
-    - isGLB_csInf : 对任意 s : Set α, s.Nonempty -> BddBelow s -> IsGLB s (sInf s)
+    - isLUB_csSup : 对任意 s : 集合 α, s.非空 -> BddAbove s -> IsLUB s (sSup s)
+    - isGLB_csInf : 对任意 s : 集合 α, s.非空 -> BddBelow s -> IsGLB s (sInf s)
 
 Depends on / 依赖: ConditionallyCompleteLattice, ConditionallyCompleteLattice.mk
 -/
@@ -83,16 +83,16 @@ class ConditionallyCompleteLinearOrder
     - compare_eq_compareOfLessAndEq : forall a b, compare a b = compareOfLessAndEq a b  [default: by compareOfLessAndEq_rfl]
 
 中文:
-类 ConditionallyCompleteLinearOrder
+类 条件完备线性序
   参数: (α : 类型)
-  继承: ConditionallyCompleteLattice α, Ord α
+  继承: 条件完备格 α, 序 α
   公理与运算 (8 个):
     - le_total((a b : α)) : a <= b ∨ b <= a
     - toDecidableLE : DecidableLE α
     - toDecidableEq : DecidableEq α  [默认: @decidableEqOfDecidableLE _ _ toDecidableLE]
     - toDecidableLT : DecidableLT α  [默认: @decidableLTOfDecidableLE _ _ toDecidableLE]
-    - csSup_of_not_bddAbove : 对任意 s, ¬BddAbove s -> sSup s = sSup (∅ : Set α)
-    - csInf_of_not_bddBelow : 对任意 s, ¬BddBelow s -> sInf s = sInf (∅ : Set α)
+    - csSup_of_not_bddAbove : 对任意 s, ¬BddAbove s -> sSup s = sSup (∅ : 集合 α)
+    - csInf_of_not_bddBelow : 对任意 s, ¬BddBelow s -> sInf s = sInf (∅ : 集合 α)
     - compare(a b) : = compareOfLessAndEq a b
     - compare_eq_compareOfLessAndEq : 对任意 a b, compare a b = compareOfLessAndEq a b  [默认: by compareOfLessAndEq_rfl]
 
@@ -130,9 +130,9 @@ class ConditionallyCompleteLinearOrderBot
     - csSup_empty : sSup ∅ = ⊥
 
 中文:
-类 ConditionallyCompleteLinearOrderBot
+类 余nditionallyCompleteLinearOrderBot
   参数: (α : 类型)
-  继承: ConditionallyCompleteLinearOrder α, 
+  继承: 条件完备线性序 α, 
   公理与运算 (1 个):
     - csSup_empty : sSup ∅ = ⊥
 -/
@@ -188,7 +188,7 @@ definition conditionallyCompleteLatticeOfsSup
 
 中文:
 定义 conditionallyCompleteLatticeOfsSup
-  签名: (α : 类型) [H1 : PartialOrder α] [H2 : SupSet α]
+  签名: (α : 类型) [H1 : 偏序 α] [H2 : 上确界集 α]
   定义体: Lattice.ofIsLUBofIsGLB (fun a b => sSup {a, b}) (fun a b => sSup (lowerBounds {a, b}))
     (fun a b => isLUB_sSup {a, b} (bddAbove_pair a b) (insert_nonempty _ _))
     (fun a b => isLUB_lowerBounds.mp <| isLUB_sSup (lowerBounds {a, b})
@@ -231,7 +231,7 @@ definition conditionallyCompleteLatticeOfLatticeOfsSup
 
 中文:
 定义 conditionallyCompleteLatticeOfLatticeOfsSup
-  签名: (α : 类型) [H1 : Lattice α] [SupSet α]
+  签名: (α : 类型) [H1 : 格 α] [上确界集 α]
   定义体: { H1,
     conditionallyCompleteLatticeOfsSup α
       (fun a b => ⟨a ⊔ b, forall_insert_of_forall (forall_eq.mpr le_sup_right) le_sup_left⟩)

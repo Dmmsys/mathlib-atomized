@@ -51,7 +51,7 @@ theorem small_of_injective
 
 中文:
 定理 small_of_injective
-  结论: {α : 类型v} {β : Type w} [Small.{u} β] {f : α -> β}
+  结论: {α : 类型v} {β : 类型 w} [Small.{u} β] {f : α -> β}
   证明: small_map (Equiv.ofInjective f hf)
 
 Depends on / 依赖: Equiv.ofInjective, ofInjective, small_map
@@ -70,7 +70,7 @@ theorem small_of_surjective
 
 中文:
 定理 small_of_surjective
-  结论: {α : 类型v} {β : Type w} [Small.{u} α] {f : α -> β}
+  结论: {α : 类型v} {β : 类型 w} [Small.{u} α] {f : α -> β}
   证明: small_of_injective (Function.injective_surjInv hf)
 
 Depends on / 依赖: Function, Function.injective_surjInv, injective_surjInv, small_of_injective
@@ -99,8 +99,8 @@ theorem small_of_injective_of_exists
     infer_instance
 
 中文:
-定理 small_of_injective_of_exists
-  结论: {α : 类型v} {β : Type w} {γ : 类型v'} [Small.{u} α]
+定理 small_of_injective_of_存在
+  结论: {α : 类型v} {β : 类型 w} {γ : 类型v'} [Small.{u} α]
   证明: by
   by_cases hβ : Nonempty β
   · refine small_of_surjective (f := Function.invFun g ∘ f) (fun b => ?_)
@@ -226,7 +226,7 @@ instance small_quotient
 
 中文:
 实例 small_quotient
-  签名: {α : 类型u} [Small.{v} α] (s : Setoid α)
+  签名: {α : 类型u} [Small.{v} α] (s : 集合等价关系 α)
   定义体: small_of_surjective Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective, small_of_surjective

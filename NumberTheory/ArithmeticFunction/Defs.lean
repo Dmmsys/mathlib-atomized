@@ -53,7 +53,7 @@ definition ArithmeticFunction
 
 中文:
 定义 ArithmeticFunction
-  签名: [Zero R]
+  签名: [零 R]
   定义体: ZeroHom Nat R
 
 Depends on / 依赖: ZeroHom
@@ -71,7 +71,7 @@ instance ArithmeticFunction.zero
 
 中文:
 实例 ArithmeticFunction.zero
-  签名: [Zero R]
+  签名: [零 R]
   定义体: inferInstanceAs (Zero (ZeroHom Nat R))
 
 Depends on / 依赖: ZeroHom
@@ -88,8 +88,8 @@ instance [Zero
   body: inferInstanceAs (Inhabited (ZeroHom Nat R))
 
 中文:
-实例 [Zero
-  签名: R] : Inhabited (ArithmeticFunction R)
+实例 [零
+  签名: R] : 可居 (ArithmeticFunction R)
   定义体: inferInstanceAs (Inhabited (ZeroHom Nat R))
 
 Depends on / 依赖: Inhabited, ZeroHom
@@ -116,7 +116,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (ArithmeticFunction R) 自然数 R
+  签名: 函数状 (ArithmeticFunction R) 自然数 R
   定义体: inferInstanceAs (FunLike (ZeroHom Nat R) Nat R)
 
 @[simp]
@@ -163,7 +163,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : 自然数 -> R) (hf)
-  结论: @DFunLike.coe (ArithmeticFunction R) _ _ _
+  结论: @依赖函数状.coe (ArithmeticFunction R) _ _ _
   证明: rfl
 
 @[simp]
@@ -226,7 +226,7 @@ theorem range_coe
 
 中文:
 定理 range_coe
-  结论: Set.range ((↑) : ArithmeticFunction R -> (自然数 -> R)) = {f | f 0 = 0}
+  结论: 集合.range ((↑) : ArithmeticFunction R -> (自然数 -> R)) = {f | f 0 = 0}
   证明: by
   ext f
   exact ⟨by rintro ⟨f, rfl⟩; simp, fun hf => ⟨⟨f, hf⟩, rfl⟩⟩
@@ -295,7 +295,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (ArithmeticFunction R)
+  签名: : 幺 (ArithmeticFunction R)
   定义体: ⟨⟨fun x => ite (x = 1) 1 0, rfl⟩⟩
 -/
 instance one : One (ArithmeticFunction R) :=
@@ -382,7 +382,7 @@ definition natToArithmeticFunction
 
 中文:
 定义 natToArithmeticFunction
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: fun f => ⟨fun n => ↑(f n), by simp⟩
 -/
 def natToArithmeticFunction [AddMonoidWithOne R] :
@@ -401,7 +401,7 @@ instance natCoe
 
 中文:
 实例 natCoe
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: ⟨natToArithmeticFunction⟩
 
 @[simp]
@@ -447,7 +447,7 @@ theorem natCoe_apply
 
 中文:
 定理 natCoe_apply
-  条件: [AddMonoidWithOne R] {f : ArithmeticFunction 自然数} {x : 自然数}
+  条件: [加法带幺幺半群 R] {f : ArithmeticFunction 自然数} {x : 自然数}
   证明: rfl
 -/
 theorem natCoe_apply [AddMonoidWithOne R] {f : ArithmeticFunction Nat} {x : Nat} :
@@ -466,8 +466,8 @@ definition ofInt
   body: fun f => ⟨fun n => ↑(f n), by simp⟩
 
 中文:
-定义 ofInt
-  签名: [AddGroupWithOne R]
+定义 of整数
+  签名: [加法带幺群 R]
   定义体: fun f => ⟨fun n => ↑(f n), by simp⟩
 -/
 def ofInt [AddGroupWithOne R] :
@@ -486,7 +486,7 @@ instance intCoe
 
 中文:
 实例 intCoe
-  签名: [AddGroupWithOne R]
+  签名: [加法带幺群 R]
   定义体: ⟨ofInt⟩
 
 @[simp]
@@ -532,7 +532,7 @@ theorem intCoe_apply
 
 中文:
 定理 intCoe_apply
-  条件: [AddGroupWithOne R] {f : ArithmeticFunction 整数} {x : 自然数}
+  条件: [加法带幺群 R] {f : ArithmeticFunction 整数} {x : 自然数}
   证明: rfl
 
 @[simp]
@@ -555,7 +555,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: [AddGroupWithOne R] {f : ArithmeticFunction 自然数}
+  条件: [加法带幺群 R] {f : ArithmeticFunction 自然数}
   证明: by
   ext
   simp
@@ -582,7 +582,7 @@ theorem natCoe_one
 
 中文:
 定理 natCoe_one
-  条件: [AddMonoidWithOne R]
+  条件: [加法带幺幺半群 R]
   证明: by
   ext n
   simp [one_apply]
@@ -610,7 +610,7 @@ theorem intCoe_one
 
 中文:
 定理 intCoe_one
-  条件: [AddGroupWithOne R]
+  条件: [加法带幺群 R]
   结论: ((1 : ArithmeticFunction 整数) :
   证明: by
   ext n
@@ -639,7 +639,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (ArithmeticFunction R) where
+  签名: : 加法 (ArithmeticFunction R) where
   定义体: ⟨f + g, by simp⟩
 
 @[simp]
@@ -679,7 +679,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid (ArithmeticFunction R) where
+  签名: : 加法幺半群 (ArithmeticFunction R) where
   定义体: ext fun _ => add_assoc _ _ _
   zero_add _ := ext fun _ => zero_add _
   add_zero _ := ext fun _ => add_zero _
@@ -708,7 +708,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: ⟨fun x => if x = 1 then (n : R) else 0, by simp⟩
   natCast_zero := by ext; simp
   natCast_succ n := by ext x; by_cases h : x = 1 <;> simp [h]
@@ -728,7 +728,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: [AddCommMonoid R]
+  签名: [加法交换幺半群 R]
   定义体: ext fun _ => add_comm _ _
 
 Depends on / 依赖: add_comm
@@ -747,8 +747,8 @@ instance [NegZeroClass
 @[simp]
 
 中文:
-实例 [NegZeroClass
-  签名: R] : Neg (ArithmeticFunction R) where
+实例 [NegZero类
+  签名: R] : 取负 (ArithmeticFunction R) where
   定义体: ⟨-f, by simp⟩
 
 @[simp]
@@ -769,7 +769,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [NegZeroClass R] {f : ArithmeticFunction R} {n : 自然数}
+  条件: [NegZero类 R] {f : ArithmeticFunction R} {n : 自然数}
   结论: (-f) n = -f n
   证明: by
   rfl
@@ -787,8 +787,8 @@ instance [AddGroup
   zsmul := zsmulRec
 
 中文:
-实例 [AddGroup
-  签名: R] : AddGroup (ArithmeticFunction R) where
+实例 [加法群
+  签名: R] : 加法群 (ArithmeticFunction R) where
   定义体: ext fun _ => neg_add_cancel _
   zsmul := zsmulRec
 
@@ -807,8 +807,8 @@ instance [AddCommGroup
   body: fun _ _ => add_comm _ _
 
 中文:
-实例 [AddCommGroup
-  签名: R] : AddCommGroup (ArithmeticFunction R) where
+实例 [加法交换群
+  签名: R] : 加法交换群 (ArithmeticFunction R) where
   定义体: fun _ _ => add_comm _ _
 
 Depends on / 依赖: add_comm
@@ -832,7 +832,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (ArithmeticFunction R) (ArithmeticFunction M)
+  签名: 标量乘法 (ArithmeticFunction R) (ArithmeticFunction M)
   定义体: ⟨fun n => ∑ x in divisorsAntidiagonal n, f x.fst • g x.snd, by simp⟩
 
 @[simp]
@@ -873,8 +873,8 @@ instance [Semiring
 @[simp]
 
 中文:
-实例 [Semiring
-  签名: R] : Mul (ArithmeticFunction R) where
+实例 [半环
+  签名: R] : 乘法 (ArithmeticFunction R) where
   定义体: f • g
 
 @[simp]
@@ -893,7 +893,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [Semiring R] {f g : ArithmeticFunction R} {n : 自然数}
+  条件: [半环 R] {f g : ArithmeticFunction R} {n : 自然数}
   证明: rfl
 -/
 theorem mul_apply [Semiring R] {f g : ArithmeticFunction R} {n : Nat} :
@@ -913,7 +913,7 @@ theorem mul_apply_one
 
 中文:
 定理 mul_apply_one
-  条件: [Semiring R] {f g : ArithmeticFunction R}
+  条件: [半环 R] {f g : ArithmeticFunction R}
   结论: (f * g) 1 = f 1 * g 1
   证明: by simp
 
@@ -936,7 +936,7 @@ theorem natCoe_mul
 
 中文:
 定理 natCoe_mul
-  条件: [Semiring R] {f g : ArithmeticFunction 自然数}
+  条件: [半环 R] {f g : ArithmeticFunction 自然数}
   证明: by
   ext n
   simp
@@ -961,7 +961,7 @@ theorem intCoe_mul
 
 中文:
 定理 intCoe_mul
-  条件: [Ring R] {f g : ArithmeticFunction 整数}
+  条件: [环 R] {f g : ArithmeticFunction 整数}
   证明: by
   ext n
   simp
@@ -1052,7 +1052,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (ArithmeticFunction R) where
+  签名: : 幺半群 (ArithmeticFunction R) where
   定义体: one_smul'
   mul_one f := by
     ext x
@@ -1081,7 +1081,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring (ArithmeticFunction R) where
+  签名: : 半环 (ArithmeticFunction R) where
   定义体: by ext; simp
   mul_zero f := by ext; simp
   left_distrib a b c := by ext; simp [← sum_add_distrib, mul_add]
@@ -1109,8 +1109,8 @@ instance [CommSemiring
     simp [mul_comm]
 
 中文:
-实例 [CommSemiring
-  签名: R] : CommSemiring (ArithmeticFunction R) where
+实例 [交换半环
+  签名: R] : 交换半环 (ArithmeticFunction R) where
   定义体: by
     ext
     rw [mul_apply]; rw [← map_swap_divisorsAntidiagonal]; rw [sum_map]
@@ -1134,8 +1134,8 @@ instance [CommRing
   mul_comm := mul_comm
 
 中文:
-实例 [CommRing
-  签名: R] : CommRing (ArithmeticFunction R) where
+实例 [交换环
+  签名: R] : 交换环 (ArithmeticFunction R) where
   定义体: neg_add_cancel
   mul_comm := mul_comm
 
@@ -1169,7 +1169,7 @@ theorem smul_map
 
 中文:
 定理 smul_map
-  结论: {S : 类型} [Semiring R] [AddCommMonoid S] [Module R S]
+  结论: {S : 类型} [半环 R] [加法交换幺半群 S] [模 R S]
   证明: by
   rfl
 -/
@@ -1196,7 +1196,7 @@ theorem algebraMap_apply_one
 
 中文:
 定理 algebraMap_apply_one
-  条件: {S : 类型} [CommSemiring R] [Semiring S] [Algebra R S] (x : R)
+  条件: {S : 类型} [交换半环 R] [半环 S] [代数 R S] (x : R)
   证明: by
   simp [Algebra.algebraMap_eq_smul_one]
 
@@ -1379,7 +1379,7 @@ theorem self_mul_dirichletInverse
 
 中文:
 定理 self_mul_dirichletInverse
-  条件: (f : ArithmeticFunction R) (hf : Invertible (f 1))
+  条件: (f : ArithmeticFunction R) (hf : 可逆 (f 1))
   证明: by
   ext n
   by_cases hn0 : n = 0
@@ -1419,7 +1419,7 @@ theorem dirichletInverse_mul_self
 
 中文:
 定理 dirichletInverse_mul_self
-  条件: (hf : Invertible (f 1))
+  条件: (hf : 可逆 (f 1))
   结论: dirichletInverse f hf * f = 1
   证明: by
   rw [mul_comm]; rw [self_mul_dirichletInverse]
@@ -1446,7 +1446,7 @@ theorem isUnit_iff_isUnit_apply_one
 
 中文:
 定理 isUnit_iff_isUnit_apply_one
-  结论: IsUnit f ↔ IsUnit (f 1)
+  结论: 是单位 f ↔ 是单位 (f 1)
   证明: by
   constructor
   · rintro ⟨f, rfl⟩
@@ -1479,8 +1479,8 @@ definition IsMultiplicative
   body: f 1 = 1 ∧ forall {m n : Nat}, m.Coprime n -> f (m * n) = f m * f n
 
 中文:
-定义 IsMultiplicative
-  签名: [MonoidWithZero R] (f : ArithmeticFunction R)
+定义 是Multiplicative
+  签名: [带零幺半群 R] (f : ArithmeticFunction R)
   定义体: f 1 = 1 ∧ forall {m n : Nat}, m.Coprime n -> f (m * n) = f m * f n
 
 Depends on / 依赖: Coprime, m.Coprime
@@ -1508,7 +1508,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: {f : ArithmeticFunction R} (h : f.IsMultiplicative)
+  条件: {f : ArithmeticFunction R} (h : f.是Multiplicative)
   结论: f 1 = 1
   证明: h.1
 
@@ -1528,7 +1528,7 @@ theorem map_mul_of_coprime
 
 中文:
 定理 map_mul_of_coprime
-  结论: {f : ArithmeticFunction R} (hf : f.IsMultiplicative) {m n : 自然数}
+  结论: {f : ArithmeticFunction R} (hf : f.是Multiplicative) {m n : 自然数}
   证明: hf.2 h
 -/
 theorem map_mul_of_coprime {f : ArithmeticFunction R} (hf : f.IsMultiplicative) {m n : Nat}
@@ -1555,7 +1555,7 @@ theorem map_prod
 
 中文:
 定理 map_prod
-  结论: {ι : 类型} [CommMonoidWithZero R] (g : ι -> 自然数) {f : ArithmeticFunction R}
+  结论: {ι : 类型} [带零交换幺半群 R] (g : ι -> 自然数) {f : ArithmeticFunction R}
   证明: by
   classical
     induction s using Finset.induction_on with
@@ -1588,7 +1588,7 @@ theorem map_prod_of_prime
 
 中文:
 定理 map_prod_of_prime
-  结论: [CommMonoidWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换幺半群 R] {f : ArithmeticFunction R}
   证明: map_prod _ h_mult t fun x hx y hy hxy => (coprime_primes (ht x hx) (ht y hy)).mpr hxy
 
 Depends on / 依赖: coprime_primes, h_mult, map_prod
@@ -1609,7 +1609,7 @@ theorem map_prod_of_subset_primeFactors
 
 中文:
 定理 map_prod_of_subset_primeFactors
-  结论: [CommMonoidWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换幺半群 R] {f : ArithmeticFunction R}
   证明: map_prod_of_prime h_mult t fun _ a => prime_of_mem_primeFactors (ht a)
 
 Depends on / 依赖: h_mult, map_prod_of_prime, prime_of_mem_primeFactors
@@ -1631,7 +1631,7 @@ theorem prod_primeFactors
 
 中文:
 定理 prod_primeFactors
-  结论: [CommMonoidWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换幺半群 R] {f : ArithmeticFunction R}
   证明: by
   rw [← h_mult.map_prod_of_subset_primeFactors l _ Subset.rfl]; rw [prod_primeFactors_of_squarefree hl]
 
@@ -1656,7 +1656,7 @@ theorem map_div_of_coprime
 
 中文:
 定理 map_div_of_coprime
-  结论: [GroupWithZero R] {f : ArithmeticFunction R}
+  结论: [带零群 R] {f : ArithmeticFunction R}
   证明: by
   apply (div_eq_of_eq_mul hd ..).symm
   rw [← hf.right hl]; rw [Nat.div_mul_cancel hdl]
@@ -1684,7 +1684,7 @@ theorem natCast
 
 中文:
 定理 natCast
-  条件: {f : ArithmeticFunction 自然数} [Semiring R] (h : f.IsMultiplicative)
+  条件: {f : ArithmeticFunction 自然数} [半环 R] (h : f.是Multiplicative)
   证明: ⟨by simp [h], fun cop => by simp [h.2 cop]⟩
 
 @[arith_mult]
@@ -1706,7 +1706,7 @@ theorem intCast
 
 中文:
 定理 intCast
-  条件: {f : ArithmeticFunction 整数} [Ring R] (h : f.IsMultiplicative)
+  条件: {f : ArithmeticFunction 整数} [环 R] (h : f.是Multiplicative)
   证明: ⟨by simp [h], fun cop => by simp [h.2 cop]⟩
 
 @[arith_mult]
@@ -1735,7 +1735,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [CommSemiring R] {f g : ArithmeticFunction R} (hf : f.IsMultiplicative)
+  结论: [交换半环 R] {f g : ArithmeticFunction R} (hf : f.是Multiplicative)
   证明: by
   refine ⟨by simp [hf.1, hg.1], ?_⟩
   simp only [mul_apply]
@@ -1809,7 +1809,7 @@ theorem multiplicative_factorization
 
 中文:
 定理 multiplicative_factorization
-  结论: [CommMonoidWithZero R] (f : ArithmeticFunction R)
+  结论: [带零交换幺半群 R] (f : ArithmeticFunction R)
   证明: Nat.multiplicative_factorization f (fun _ _ => hf.2) hf.1 hn
 
 Depends on / 依赖: Nat.multiplicative_factorization, multiplicative_factorization
@@ -1835,7 +1835,7 @@ theorem iff_ne_zero
 
 中文:
 定理 iff_ne_zero
-  条件: [MonoidWithZero R] {f : ArithmeticFunction R}
+  条件: [带零幺半群 R] {f : ArithmeticFunction R}
   证明: by
   refine and_congr_right' (forall₂_congr fun m n => ⟨fun h _ _ => h, fun h hmn => ?_⟩)
   rcases eq_or_ne m 0 with (rfl | hm)
@@ -1873,7 +1873,7 @@ theorem eq_iff_eq_on_prime_powers
 
 中文:
 定理 eq_iff_eq_on_prime_powers
-  结论: [CommMonoidWithZero R] (f : ArithmeticFunction R)
+  结论: [带零交换幺半群 R] (f : ArithmeticFunction R)
   证明: by
   constructor <;> intro h
   · simp [h]
@@ -1912,7 +1912,7 @@ theorem lcm_apply_mul_gcd_apply
 
 中文:
 定理 lcm_apply_mul_gcd_apply
-  结论: [CommMonoidWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换幺半群 R] {f : ArithmeticFunction R}
   证明: by
   by_cases hx : x = 0
   · simp only [hx, f.map_zero, zero_mul, lcm_zero_left, gcd_zero_left]
@@ -1961,7 +1961,7 @@ theorem map_gcd
 
 中文:
 定理 map_gcd
-  结论: [CommGroupWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换群 R] {f : ArithmeticFunction R}
   证明: by
   rw [← hf.lcm_apply_mul_gcd_apply]; rw [mul_div_cancel_left₀ _ hf_lcm]
 
@@ -1983,7 +1983,7 @@ theorem map_lcm
 
 中文:
 定理 map_lcm
-  结论: [CommGroupWithZero R] {f : ArithmeticFunction R}
+  结论: [带零交换群 R] {f : ArithmeticFunction R}
   证明: by
   rw [← hf.lcm_apply_mul_gcd_apply]; rw [mul_div_cancel_right₀ _ hf_gcd]
 
@@ -2006,7 +2006,7 @@ theorem eq_zero_of_squarefree_of_dvd_eq_zero
 
 中文:
 定理 eq_zero_of_squarefree_of_dvd_eq_zero
-  结论: [MonoidWithZero R] {f : ArithmeticFunction R}
+  结论: [带零幺半群 R] {f : ArithmeticFunction R}
   证明: by
   rcases hmn with ⟨k, rfl⟩
   simp only [zero_mul, hf.map_mul_of_coprime (coprime_of_squarefree_mul hn), h_zero]
@@ -2038,8 +2038,8 @@ theorem isMultiplicative_one
 
 中文:
 定理 isMultiplicative_one
-  条件: [MonoidWithZero R]
-  结论: IsMultiplicative (1 : ArithmeticFunction R)
+  条件: [带零幺半群 R]
+  结论: 是Multiplicative (1 : ArithmeticFunction R)
   证明: IsMultiplicative.iff_ne_zero.2 ⟨by simp, by
     intro m n hm hn hmn
     by_cases h : m = 1 <;> aesop⟩
@@ -2071,7 +2071,7 @@ theorem isMultiplicative_finsetProd
 
 中文:
 定理 isMultiplicative_finsetProd
-  结论: [CommSemiring R] {ι : 类型}
+  结论: [交换半环 R] {ι : 类型}
   证明: by
   induction s using Finset.cons_induction
   case empty => simp
@@ -2107,8 +2107,8 @@ theorem IsMultiplicative.pow
     exact hk.mul hf
 
 中文:
-定理 IsMultiplicative.pow
-  结论: [CommSemiring R] {f : ArithmeticFunction R}
+定理 是Multiplicative.pow
+  结论: [交换半环 R] {f : ArithmeticFunction R}
   证明: by
   induction k
   case zero => simp

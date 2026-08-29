@@ -42,7 +42,7 @@ lemma smul_dvd_smul
 
 中文:
 引理 smul_dvd_smul
-  结论: [Monoid α] [Monoid β] [SMul α β] [IsScalarTower α β β]
+  结论: [幺半群 α] [幺半群 β] [标量乘法 α β] [标量塔 α β β]
   证明: by
   obtain ⟨⟨x, rfl⟩, ⟨y, rfl⟩⟩ := hab, hcd
   exact ⟨x • y, mul_smul_mul_comm a x c y⟩
@@ -111,7 +111,7 @@ theorem const
 
 中文:
 定理 const
-  条件: [Dvd α] [Monoid β] (b : β)
+  条件: [Dvd α] [幺半群 β] (b : β)
   结论: IsDvdSequence (fun _ : α => b)
   证明: by
   simp [IsDvdSequence]
@@ -129,7 +129,7 @@ theorem smul'
 
 中文:
 定理 smul'
-  结论: [Dvd α] [Monoid β] [Monoid γ] {f : α -> β} {g : α -> γ} [SMul β γ]
+  结论: [Dvd α] [幺半群 β] [幺半群 γ] {f : α -> β} {g : α -> γ} [标量乘法 β γ]
   证明: fun a b hab => smul_dvd_smul (hf a b hab) (hg a b hab)
 -/
 protected theorem smul' [Dvd α] [Monoid β] [Monoid γ] {f : α -> β} {g : α -> γ} [SMul β γ]
@@ -147,7 +147,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [Dvd α] [CommMonoid β] {f g : α -> β} (hf : IsDvdSequence f)
+  结论: [Dvd α] [交换幺半群 β] {f g : α -> β} (hf : IsDvdSequence f)
   证明: .smul' hf hg
 -/
 protected theorem mul [Dvd α] [CommMonoid β] {f g : α -> β} (hf : IsDvdSequence f)
@@ -164,7 +164,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: [Dvd α] [Monoid β] [Monoid γ] {f : α -> γ} [SMul β γ] [IsScalarTower β γ γ]
+  结论: [Dvd α] [幺半群 β] [幺半群 γ] {f : α -> γ} [标量乘法 β γ] [标量塔 β γ γ]
   证明: .smul' (.const α b) hg
 -/
 protected theorem smul [Dvd α] [Monoid β] [Monoid γ] {f : α -> γ} [SMul β γ] [IsScalarTower β γ γ]

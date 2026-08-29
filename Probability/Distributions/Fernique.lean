@@ -96,8 +96,8 @@ lemma StrictMono.exists_between_of_tendsto_atTop
   exact ⟨Nat.find h - 1, h' _ (by simp [hx]), by simp [Nat.find_spec h, hx]⟩
 
 中文:
-引理 StrictMono.exists_between_of_tendsto_atTop
-  结论: {β : 类型} [LinearOrder β] {t : 自然数 -> β}
+引理 严格递增.存在_between_of_tendsto_atTop
+  结论: {β : 类型} [线性序 β] {t : 自然数 -> β}
   证明: by
   have h : exists n, x <= t n := by
     simp only [tendsto_atTop_atTop_iff_of_monotone ht_mono.monotone] at ht_tendsto
@@ -139,7 +139,7 @@ definition _root_.ContinuousLinearMap.rotation
   map_smul' c x := by simp [smul_comm c]
 
 中文:
-定义 _root_.ContinuousLinearMap.rotation
+定义 _root_.连续线性映射.rotation
   签名: (θ : 实数)
   定义体: fun x => (Real.cos θ • x.1 + Real.sin θ • x.2, - Real.sin θ • x.1 + Real.cos θ • x.2)
   map_add' x y := by
@@ -165,7 +165,7 @@ lemma _root_.ContinuousLinearMap.rotation_apply
   proof: rfl
 
 中文:
-引理 _root_.ContinuousLinearMap.rotation_apply
+引理 _root_.连续线性映射.rotation_apply
   条件: (θ : 实数) (x : E × E)
   证明: rfl
 -/
@@ -370,7 +370,7 @@ lemma normThreshold_strictMono
 中文:
 引理 normThreshold_strictMono
   条件: (ha_pos : 0 < a)
-  结论: StrictMono (normThreshold a)
+  结论: 严格递增 (normThreshold a)
   证明: arithGeom_strictMono Real.one_lt_sqrt_two (lt_normThreshold_zero ha_pos)
 
 Depends on / 依赖: Real.one_lt_sqrt_two, arithGeom_strictMono, ha_pos, lt_normThreshold_zero, one_lt_sqrt_two
@@ -390,7 +390,7 @@ lemma tendsto_normThreshold_atTop
 中文:
 引理 tendsto_normThreshold_atTop
   条件: (ha_pos : 0 < a)
-  结论: Tendsto (normThreshold a) atTop atTop
+  结论: 收敛 (normThreshold a) atTop atTop
   证明: tendsto_arithGeom_atTop_of_one_lt Real.one_lt_sqrt_two (lt_normThreshold_zero ha_pos)
 
 Depends on / 依赖: Real.one_lt_sqrt_two, ha_pos, lt_normThreshold_zero, one_lt_sqrt_two, tendsto_arithGeom_atTop_of_one_lt
@@ -486,7 +486,7 @@ lemma measure_gt_normThreshold_le_rpow
 
 中文:
 引理 measure_gt_normThreshold_le_rpow
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   let c := μ {x | ‖x‖ <= a}
   replace hc_gt : 2⁻¹ < c := ha_gt
@@ -544,7 +544,7 @@ lemma measure_gt_normThreshold_le_exp
 
 中文:
 引理 measure_gt_normThreshold_le_exp
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   let c := μ {x | ‖x‖ <= a}
   have hc_pos : 0 < c := lt_of_lt_of_le (by simp) ha_gt.le
@@ -783,7 +783,7 @@ lemma lintegral_closedBall_sdiff_exp_logRatio_mul_sq_le
 
 中文:
 引理 lintegral_closedBall_sdiff_exp_logRatio_mul_sq_le
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: let t := normThreshold a
   let c := μ {x | ‖x‖ <= a}
   let C := logRatio c * a⁻¹ ^ 2
@@ -861,7 +861,7 @@ lemma lintegral_exp_mul_sq_norm_le_mul
 
 中文:
 引理 lintegral_exp_mul_sq_norm_le_mul
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   let t := normThreshold a
   let c := μ {x | ‖x‖ <= a}
@@ -995,7 +995,7 @@ theorem lintegral_exp_mul_sq_norm_le_of_map_rotation_eq_self
 
 中文:
 定理 lintegral_exp_mul_sq_norm_le_of_map_rotation_eq_self
-  结论: [IsProbabilityMeasure μ]
+  结论: [是概率测度 μ]
   证明: by
   have ha : 0 <= a := by
     by_contra! h_neg
@@ -1054,8 +1054,8 @@ lemma exists_integrable_exp_sq_of_map_rotation_eq_self'
   
 
 中文:
-引理 exists_integrable_exp_sq_of_map_rotation_eq_self'
-  结论: [IsProbabilityMeasure μ]
+引理 存在_integrable_exp_sq_of_map_rotation_eq_self'
+  结论: [是概率测度 μ]
   证明: by
   let c := μ {x | ‖x‖ <= a}
   replace hc_lt : c < 1 := ha_lt
@@ -1106,7 +1106,7 @@ lemma exists_integrable_exp_sq_of_map_rotation_eq_self_of_isProbabilityMeasure
    
 
 中文:
-引理 exists_integrable_exp_sq_of_map_rotation_eq_self_of_isProbabilityMeasure
+引理 存在_integrable_exp_sq_of_map_rotation_eq_self_of_isProbabilityMeasure
   证明: by
   -- If there exists `a > 0` such that `2⁻¹ < μ {x | ‖x‖ ≤ a} < 1`, we can call the previous lemma.
   by_cases h_meas_Ioo : exists a, 0 < a ∧ 2⁻¹ < μ {x | ‖x‖ <= a} ∧ μ {x | ‖x‖ <= a} < 1
@@ -1175,8 +1175,8 @@ have hμ' : IsProbabilityMeasure μ' := cond_isProbabilityMeasure by simp [hμ_z
   have h_rot : (μ'.prod μ').map (ContinuousLinearMap.rot
 
 中文:
-定理 exists_integrable_exp_sq_of_map_rotation_eq_self
-  结论: [IsFiniteMeasure μ]
+定理 存在_integrable_exp_sq_of_map_rotation_eq_self
+  结论: [是有限测度 μ]
   证明: by
   by_cases hμ_zero : μ = 0
   · exact ⟨1, by positivity, by simp [hμ_zero]⟩

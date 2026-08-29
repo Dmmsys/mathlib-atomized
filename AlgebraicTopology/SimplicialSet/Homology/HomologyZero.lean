@@ -339,8 +339,8 @@ instance [X.IsConnected]
   simp
 
 中文:
-实例 [X.IsConnected]
-  签名: : IsIso (X.homology₀ε R)
+实例 [X.是连通]
+  签名: : 是同构 (X.homology₀ε R)
   定义体: by
   dsimp [homology₀ε]
   simp only [isIso_comp_left_iff]

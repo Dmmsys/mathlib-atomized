@@ -138,7 +138,7 @@ definition cHole
 
 中文:
 定义 cHole
-  签名: {α : Sort u} (val : α) {p : 命题} (_pf : p)
+  签名: {α : 类型层 u} (val : α) {p : 命题} (_pf : p)
   定义体: val
 -/
 def cHole {α : Sort u} (val : α) {p : Prop} (_pf : p) : α := val
@@ -174,7 +174,7 @@ return Expr.mdata d ← mkAppM ``cHole #[val, pf]
 
 中文:
 定义 mkCHole
-  签名: (forLhs : 布尔) (val pf : Expr)
+  签名: (forLhs : 布尔值) (val pf : Expr)
   定义体: do
   -- Create a metavariable to bump the mvarCounter.
 discard mkFreshTypeMVar
@@ -209,7 +209,7 @@ guard mvarCounterSaved <= mvarCounter
 
 中文:
 定义 cHole?
-  签名: (e : Expr) (mvarCounterSaved? : Option 自然数 := none)
+  签名: (e : Expr) (mvarCounterSaved? : 选项类型 自然数 := none)
   定义体: do
   match e with
   | .mdata d e' =>
@@ -284,7 +284,7 @@ definition elabCHole
 
 中文:
 定义 elabCHole
-  签名: (h : Syntax) (forLhs : 布尔) (expectedType? : Option Expr)
+  签名: (h : Syntax) (forLhs : 布尔值) (expectedType? : 选项类型 Expr)
   定义体: do
   let pf ← Term.elabTerm h none
   let pfTy ← inferType pf
@@ -331,7 +331,7 @@ definition elabCHoleExpand
 
 中文:
 定义 elabCHoleExpand
-  签名: : Term.TermElab
+  签名: : 项.TermElab
   定义体: fun stx expectedType? =>
   match stx with
   | `(cHole% lhs $h) => elabCHole h true expectedType?
@@ -366,7 +366,7 @@ definition processAntiquot
 
 中文:
 定义 processAntiquot
-  签名: (t : Term) (expand : Term -> Term.TermElabM Term)
+  签名: (t : 项) (expand : 项 -> 项.TermElabM 项)
   定义体: do
   let t' ← t.raw.replaceM fun s => do
     if s.isAntiquots then
@@ -403,7 +403,7 @@ definition elaboratePattern
 
 中文:
 定义 elaboratePattern
-  签名: (t : Term) (expectedType? : Option Expr) (forLhs : 布尔)
+  签名: (t : 项) (expectedType? : 选项类型 Expr) (forLhs : 布尔值)
   定义体: Term.withoutErrToSorry do
     let t' ← processAntiquot t (fun h => if forLhs then `(cHole% lhs $h) else `(cHole% rhs $h))
     Term.elabTermEnsuringType t' expectedType?
@@ -434,7 +434,7 @@ definition mkEqForExpectedType
 
 中文:
 定义 mkEqForExpectedType
-  签名: (expectedType? : Option Expr)
+  签名: (expectedType? : 选项类型 Expr)
   定义体: do
   let u ← mkFreshLevelMVar
   let ty ← mkFreshExprMVar (mkSort u)
@@ -469,7 +469,7 @@ definition mkHEqForExpectedType
 
 中文:
 定义 mkHEqForExpectedType
-  签名: (expectedType? : Option Expr)
+  签名: (expectedType? : 选项类型 Expr)
   定义体: do
   let u ← mkFreshLevelMVar
   let tya ← mkFreshExprMVar (mkSort u)
@@ -505,7 +505,7 @@ definition mkIffForExpectedType
 
 中文:
 定义 mkIffForExpectedType
-  签名: (expectedType? : Option Expr)
+  签名: (expectedType? : 选项类型 Expr)
   定义体: do
   let a ← mkFreshExprMVar (Expr.sort .zero)
   let b ← mkFreshExprMVar (Expr.sort .zero)
@@ -553,7 +553,7 @@ inductive CongrType
     - eq: | heq
 
 中文:
-归纳类型 CongrType
+归纳类型 余ngrType
   构造子 (1 个):
     - eq: | heq
 
@@ -574,12 +574,12 @@ structure CongrResult
     - (pf? : Option (CongrType -> MetaM Expr))
 
 中文:
-结构 CongrResult
+结构 余ngrResult
   参数: where
   公理与运算 (3 个):
     - lhs : Expr
     - rhs : Expr
-    - (pf? : Option (CongrType -> MetaM Expr))
+    - (pf? : 选项类型 (余ngrType -> MetaM Expr))
 
 Depends on / 依赖: SkyscraperPresheafFunctor, SkyscraperPresheafFunctor.map, _app, cat_disch, split_ifs
 -/
@@ -605,8 +605,8 @@ definition CongrResult.isRfl
   body: res.pf?.isNone
 
 中文:
-定义 CongrResult.isRfl
-  签名: (res : CongrResult)
+定义 余ngrResult.isRfl
+  签名: (res : 余ngrResult)
   定义体: res.pf?.isNone
 
 Depends on / 依赖: isNone, res.pf
@@ -628,8 +628,8 @@ definition CongrResult.eq
   | none => mkEqRefl res.lhs
 
 中文:
-定义 CongrResult.eq
-  签名: (res : CongrResult)
+定义 余ngrResult.eq
+  签名: (res : 余ngrResult)
   定义体: do
   unless ← isDefEq (← inferType res.lhs) (← inferType res.rhs) do
     throwError "Expecting{indentD res.lhs}\nand{indentD res.rhs}\n\
@@ -658,8 +658,8 @@ definition CongrResult.heq
   | none => mkHEqRefl res.lhs
 
 中文:
-定义 CongrResult.heq
-  签名: (res : CongrResult)
+定义 余ngrResult.heq
+  签名: (res : 余ngrResult)
   定义体: do
   match res.pf? with
   | some pf => pf .heq
@@ -682,8 +682,8 @@ definition CongrResult.iff
   return mkApp3 (.const ``iff_of_eq []) res.lhs res.rhs (← res.eq)
 
 中文:
-定义 CongrResult.iff
-  签名: (res : CongrResult)
+定义 余ngrResult.iff
+  签名: (res : 余ngrResult)
   定义体: do
   unless ← Meta.isProp res.lhs do
     throwError "Expecting{indentD res.lhs}\nto be a proposition."
@@ -713,8 +713,8 @@ definition CongrResult.trans
         | .heq => do mkHEqTrans (← res1.heq) (← res2.heq)
 
 中文:
-定义 CongrResult.trans
-  签名: (res1 res2 : CongrResult)
+定义 余ngrResult.trans
+  签名: (res1 res2 : 余ngrResult)
   定义体: res1.lhs
   rhs := res2.rhs
   pf? :=
@@ -759,7 +759,7 @@ definition CongrResult.mk'
       | .heq => do ensureSidesDefeq (← toHEqPf)
 
 中文:
-定义 CongrResult.mk'
+定义 余ngrResult.mk'
   签名: (lhs rhs : Expr) (pf : Expr)
   定义体: lhs
   rhs := rhs
@@ -847,8 +847,8 @@ discard res.eq
    
 
 中文:
-定义 CongrResult.defeq
-  签名: (res : CongrResult)
+定义 余ngrResult.defeq
+  签名: (res : 余ngrResult)
   定义体: do
   if res.isRfl then
     return res
@@ -886,7 +886,7 @@ definition CongrResult.mkDefault
     return CongrResult.mk' lhs
 
 中文:
-定义 CongrResult.mkDefault
+定义 余ngrResult.mkDefault
   签名: (lhs rhs : Expr)
   定义体: do
   if ← isDefEq lhs rhs then
@@ -919,7 +919,7 @@ definition CongrResult.mkDefault'
   CongrResult.mkDe
 
 中文:
-定义 CongrResult.mkDefault'
+定义 余ngrResult.mkDefault'
   签名: (mvarCounterSaved : 自然数) (lhs rhs : Expr)
   定义体: do
   if let some h := hasCHole mvarCounterSaved lhs then
@@ -947,7 +947,7 @@ definition throwCongrEx
 
 中文:
 定义 throwCongrEx
-  签名: {α : Type} (lhs rhs : Expr) (msg : MessageData)
+  签名: {α : 类型} (lhs rhs : Expr) (msg : MessageData)
   定义体: do
   throwError "congr(...) failed with left-hand side{indentD lhs}\n\
     and right-hand side {indentD rhs}\n{msg}"
@@ -1349,7 +1349,7 @@ definition elabTermCongr
 
 中文:
 定义 elabTermCongr
-  签名: : Term.TermElab
+  签名: : 项.TermElab
   定义体: fun stx expectedType? => do
   match stx with
   | `(congr($t)) =>

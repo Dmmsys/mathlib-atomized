@@ -113,7 +113,7 @@ theorem isInducing_inducingFn
 
 中文:
 定理 isInducing_inducingFn
-  结论: Topology.IsInducing (inducingFn σ E F)
+  结论: 拓扑.是Inducing (inducingFn σ E F)
   证明: (PointwiseConvergenceCLM.isEmbedding_coeFn σ E F).isInducing
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.isEmbedding_coeFn, isEmbedding_coeFn, isInducing
@@ -160,7 +160,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {f : Filter α} (u : α -> E ->SLₚₜ[σ] F) (y₀ : E ->SLₚₜ[σ] F)
+  条件: {f : 滤子 α} (u : α -> E ->SLₚₜ[σ] F) (y₀ : E ->SLₚₜ[σ] F)
   证明: PointwiseConvergenceCLM.withSeminorms.tendsto_nhds _ _
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.withSeminorms.tendsto_nhds, tendsto_nhds, withSeminorms
@@ -179,7 +179,7 @@ theorem tendsto_nhds_atTop
 
 中文:
 定理 tendsto_nhds_atTop
-  结论: [SemilatticeSup α] [Nonempty α] (u : α -> E ->SLₚₜ[σ] F)
+  结论: [SemilatticeSup α] [非空 α] (u : α -> E ->SLₚₜ[σ] F)
   证明: PointwiseConvergenceCLM.withSeminorms.tendsto_nhds_atTop _ _
 
 Depends on / 依赖: PointwiseConvergenceCLM, PointwiseConvergenceCLM.withSeminorms.tendsto_nhds_atTop, tendsto_nhds_atTop, withSeminorms
@@ -218,7 +218,7 @@ definition mkCLM
 
 中文:
 定义 mkCLM
-  签名: (A : (E ->SL[σ] F) ->ₗ[𝕜₂] D ->SL[τ] G) (hbound : 对任意 (f : D), 存在 (s : Finset E) (C : 实数>=0),
+  签名: (A : (E ->SL[σ] F) ->ₗ[𝕜₂] D ->SL[τ] G) (hbound : 对任意 (f : D), 存在 (s : 有限集 E) (C : 实数>=0),
   定义体: (toUniformConvergenceCLM _ _ _).toLinearMap.comp
     (A.comp (toUniformConvergenceCLM _ _ _).symm.toLinearMap)
   cont := by
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyConvexSpace R (E ->SLₚₜ[σ] F)
+  签名: LocallyConvex空间 R (E ->SLₚₜ[σ] F)
   定义体: UniformConvergenceCLM.locallyConvexSpace R {(s : Set E) | Set.Finite s} ⟨∅, Set.finite_empty⟩
     (directedOn_of_sup_mem fun _ _ => Set.Finite.union)
 

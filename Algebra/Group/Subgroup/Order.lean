@@ -31,7 +31,7 @@ theorem mabs_mem_iff
 
 中文:
 定理 mabs_mem_iff
-  结论: {S G} [Group G] [LinearOrder G] {_ : SetLike S G}
+  结论: {S G} [群 G] [线性序 G] {_ : 集合状 S G}
   证明: by
   cases mabs_choice x <;> simp [*]
 
@@ -60,7 +60,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsModularLattice (Subgroup C)
+  签名: 是Modular格 (子群 C)
   定义体: ⟨fun {x} y z xz a ha => by
     rw [mem_inf]; rw [mem_sup] at ha
     rcases ha with ⟨⟨b, hb, c, hc, rfl⟩, haz⟩
@@ -119,7 +119,7 @@ theorem isCoatom_comap
 
 中文:
 定理 isCoatom_comap
-  条件: {H : 类型} [Group H] (f : G ≃* H) {K : Subgroup H}
+  条件: {H : 类型} [群 H] (f : G ≃* H) {K : 子群 H}
   证明: OrderIso.isCoatom_iff (f.comapSubgroup) K
 
 @[simp]
@@ -141,7 +141,7 @@ theorem isCoatom_map
 
 中文:
 定理 isCoatom_map
-  条件: (f : G ≃* H) {K : Subgroup G}
+  条件: (f : G ≃* H) {K : 子群 G}
   证明: OrderIso.isCoatom_iff (f.mapSubgroup) K
 
 Depends on / 依赖: OrderIso, OrderIso.isCoatom_iff, f.mapSubgroup, isCoatom_iff, mapSubgroup
@@ -206,7 +206,7 @@ instance toIsOrderedMonoid
 
 中文:
 实例 toIsOrderedMonoid
-  签名: [CommGroup G] [Preorder G] [IsOrderedMonoid G] (H : Subgroup G)
+  签名: [交换群 G] [预序 G] [是Ordered幺半群 G] (H : 子群 G)
   定义体: Function.Injective.isOrderedMonoid Subtype.val (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedMonoid, Injective, Subtype, Subtype.val, isOrderedMonoid
@@ -229,8 +229,8 @@ lemma Subsemigroup.strictMono_topEquiv
 @[to_additive]
 
 中文:
-引理 Subsemigroup.strictMono_topEquiv
-  条件: {G : 类型} [CommMonoid G] [Preorder G]
+引理 子半群.strictMono_topEquiv
+  条件: {G : 类型} [交换幺半群 G] [预序 G]
   证明: fun _ _ => id
 
 @[to_additive]
@@ -250,7 +250,7 @@ lemma MulEquiv.strictMono_subsemigroupCongr
 @[to_additive]
 
 中文:
-引理 MulEquiv.strictMono_subsemigroupCongr
+引理 乘法等价.strictMono_subsemigroupCongr
   结论: {G : 类型}
   证明: fun _ _ => id
 
@@ -272,8 +272,8 @@ lemma MulEquiv.strictMono_symm
   simp [← he.lt_iff_lt]
 
 中文:
-引理 MulEquiv.strictMono_symm
-  结论: {G G' : 类型} [CommMonoid G] [LinearOrder G]
+引理 乘法等价.strictMono_symm
+  结论: {G G' : 类型} [交换幺半群 G] [线性序 G]
   证明: by
   intro
   simp [← he.lt_iff_lt]

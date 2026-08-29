@@ -37,7 +37,7 @@ definition op
 
 中文:
 定义 op
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: fun X => P X.unop
 -/
 protected def op (P : ObjectProperty C) : ObjectProperty Cᵒᵖ :=
@@ -55,7 +55,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (P : Object命题erty Cᵒᵖ)
+  签名: (P : ObjectProperty Cᵒᵖ)
   定义体: fun X => P (op X)
 
 @[simp]
@@ -76,7 +76,7 @@ lemma op_iff
 
 中文:
 引理 op_iff
-  条件: (P : Object命题erty C) (X : Cᵒᵖ)
+  条件: (P : ObjectProperty C) (X : Cᵒᵖ)
   证明: Iff.rfl
 
 @[simp]
@@ -97,7 +97,7 @@ lemma unop_iff
 
 中文:
 引理 unop_iff
-  条件: (P : Object命题erty Cᵒᵖ) (X : C)
+  条件: (P : ObjectProperty Cᵒᵖ) (X : C)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -125,7 +125,7 @@ lemma op_unop
 
 中文:
 引理 op_unop
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   结论: P.unop.op = P
   证明: rfl
 
@@ -145,7 +145,7 @@ lemma unop_op
 
 中文:
 引理 unop_op
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   结论: P.op.unop = P
   证明: rfl
 -/
@@ -163,7 +163,7 @@ lemma op_injective
 
 中文:
 引理 op_injective
-  条件: {P Q : Object命题erty C} (h : P.op = Q.op)
+  条件: {P Q : ObjectProperty C} (h : P.op = Q.op)
   结论: P = Q
   证明: by
   rw [← P.unop_op]; rw [← Q.unop_op]; rw [h]
@@ -185,7 +185,7 @@ lemma unop_injective
 
 中文:
 引理 unop_injective
-  条件: {P Q : Object命题erty Cᵒᵖ} (h : P.unop = Q.unop)
+  条件: {P Q : ObjectProperty Cᵒᵖ} (h : P.unop = Q.unop)
   结论: P = Q
   证明: by
   rw [← P.op_unop]; rw [← Q.op_unop]; rw [h]
@@ -205,7 +205,7 @@ lemma op_injective_iff
 
 中文:
 引理 op_injective_iff
-  条件: {P Q : Object命题erty C}
+  条件: {P Q : ObjectProperty C}
   证明: ⟨op_injective, by rintro rfl; rfl⟩
 
 Depends on / 依赖: op_injective
@@ -224,7 +224,7 @@ lemma unop_injective_iff
 
 中文:
 引理 unop_injective_iff
-  条件: {P Q : Object命题erty Cᵒᵖ}
+  条件: {P Q : ObjectProperty Cᵒᵖ}
   证明: ⟨unop_injective, by rintro rfl; rfl⟩
 
 Depends on / 依赖: unop_injective
@@ -244,7 +244,7 @@ lemma op_monotone
 
 中文:
 引理 op_monotone
-  条件: {P Q : Object命题erty C} (h : P <= Q)
+  条件: {P Q : ObjectProperty C} (h : P <= Q)
   结论: P.op <= Q.op
   证明: fun _ hX => h _ hX
 -/
@@ -264,7 +264,7 @@ lemma unop_monotone
 
 中文:
 引理 unop_monotone
-  条件: {P Q : Object命题erty Cᵒᵖ} (h : P <= Q)
+  条件: {P Q : ObjectProperty Cᵒᵖ} (h : P <= Q)
   结论: P.unop <= Q.unop
   证明: fun _ hX => h _ hX
 
@@ -287,7 +287,7 @@ lemma op_monotone_iff
 
 中文:
 引理 op_monotone_iff
-  条件: {P Q : Object命题erty C}
+  条件: {P Q : ObjectProperty C}
   结论: P.op <= Q.op ↔ P <= Q
   证明: ⟨unop_monotone, op_monotone⟩
 
@@ -310,7 +310,7 @@ lemma unop_monotone_iff
 
 中文:
 引理 unop_monotone_iff
-  条件: {P Q : Object命题erty Cᵒᵖ}
+  条件: {P Q : ObjectProperty Cᵒᵖ}
   结论: P.unop <= Q.unop ↔ P <= Q
   证明: ⟨op_monotone, unop_monotone⟩
 
@@ -332,7 +332,7 @@ definition subtypeOpEquiv
 
 中文:
 定义 subtypeOpEquiv
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: ⟨x.1.unop, x.2⟩
   invFun x := ⟨op x.1, x.2⟩
 
@@ -484,7 +484,7 @@ lemma op_isoClosure
 
 中文:
 引理 op_isoClosure
-  条件: (P : Object命题erty C)
+  条件: (P : ObjectProperty C)
   证明: by
   ext ⟨X⟩
   exact ⟨fun ⟨Y, h, ⟨e⟩⟩ => ⟨op Y, h, ⟨e.op.symm⟩⟩,
@@ -509,7 +509,7 @@ lemma unop_isoClosure
 
 中文:
 引理 unop_isoClosure
-  条件: (P : Object命题erty Cᵒᵖ)
+  条件: (P : ObjectProperty Cᵒᵖ)
   证明: by
   rw [← op_injective_iff]; rw [P.unop.op_isoClosure]; rw [op_unop]; rw [op_unop]
 
@@ -540,7 +540,7 @@ definition opEquivalence
 
 中文:
 定义 opEquivalence
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: (P.lift P.op.ι.leftOp (fun X => X.unop.property)).rightOp
   inverse := P.op.lift P.ι.op (fun X => X.unop.property)
   unitIso := Iso.refl _
@@ -572,7 +572,7 @@ lemma op_inf
 
 中文:
 引理 op_inf
-  条件: (P Q : Object命题erty C)
+  条件: (P Q : ObjectProperty C)
   结论: (P ⊓ Q).op = P.op ⊓ Q.op
   证明: rfl
 
@@ -594,7 +594,7 @@ lemma op_sup
 
 中文:
 引理 op_sup
-  条件: (P Q : Object命题erty C)
+  条件: (P Q : ObjectProperty C)
   结论: (P ⊔ Q).op = P.op ⊔ Q.op
   证明: rfl
 
@@ -616,7 +616,7 @@ lemma unop_inf
 
 中文:
 引理 unop_inf
-  条件: (P Q : Object命题erty Cᵒᵖ)
+  条件: (P Q : ObjectProperty Cᵒᵖ)
   结论: (P ⊓ Q).unop = P.unop ⊓ Q.unop
   证明: rfl
 
@@ -636,7 +636,7 @@ lemma unop_sup
 
 中文:
 引理 unop_sup
-  条件: (P Q : Object命题erty Cᵒᵖ)
+  条件: (P Q : ObjectProperty Cᵒᵖ)
   结论: (P ⊔ Q).unop = P.unop ⊔ Q.unop
   证明: rfl
 -/

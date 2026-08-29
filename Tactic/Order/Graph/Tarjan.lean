@@ -40,7 +40,7 @@ structure TarjanState
   公理与运算 (5 个):
     - id : Std.HashMap 自然数 自然数
     - lowlink : Std.HashMap 自然数 自然数
-    - stack : Array 自然数
+    - stack : 数组 自然数
     - onStack : Std.HashSet 自然数
     - time : 自然数
 -/
@@ -80,7 +80,7 @@ definition tarjanDFS
 
 中文:
 定义 tarjanDFS
-  签名: (g : Graph) (v : 自然数)
+  签名: (g : 图) (v : 自然数)
   定义体: do
   modify fun s => {
     visited := s.visited.insert v,
@@ -144,7 +144,7 @@ definition findSCCsImp
 
 中文:
 定义 findSCCsImp
-  签名: (g : Graph)
+  签名: (g : 图)
   定义体: do
   for (v, _) in g do
     if !(← get).visited.contains v then
@@ -173,7 +173,7 @@ definition findSCCs
 
 中文:
 定义 findSCCs
-  签名: (g : Graph)
+  签名: (g : 图)
   定义体: let s : TarjanState := {
     visited := ∅
     id := ∅

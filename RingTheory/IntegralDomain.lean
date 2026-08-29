@@ -52,7 +52,7 @@ theorem mul_right_bijective_of_finite₀
 
 中文:
 定理 mul_right_bijective_of_finite₀
-  条件: [IsLeftCancelMulZero M] {a : M} (ha : a != 0)
+  条件: [是左消去MulZero M] {a : M} (ha : a != 0)
   证明: Finite.injective_iff_bijective.1 mul_right_injective₀ ha
 
 Depends on / 依赖: Finite, Finite.injective_iff_bijective, injective_iff_bijective
@@ -71,7 +71,7 @@ theorem mul_left_bijective_of_finite₀
 
 中文:
 定理 mul_left_bijective_of_finite₀
-  条件: [IsRightCancelMulZero M] {a : M} (ha : a != 0)
+  条件: [是右消去MulZero M] {a : M} (ha : a != 0)
   证明: Finite.injective_iff_bijective.1 mul_left_injective₀ ha
 
 Depends on / 依赖: Finite, Finite.injective_iff_bijective, injective_iff_bijective
@@ -97,8 +97,8 @@ definition Fintype.groupWithZeroOfCancel
     inv_zero := by simp }
 
 中文:
-定义 Fintype.groupWithZeroOfCancel
-  签名: (M : 类型) [MonoidWithZero M] [IsLeftCancelMulZero M]
+定义 有限类型.groupWithZeroOfCancel
+  签名: (M : 类型) [带零幺半群 M] [是左消去MulZero M]
   定义体: { ‹Nontrivial M›,
     ‹MonoidWithZero M› with
     inv := fun a => if h : a = 0 then 0 else Fintype.bijInv (mul_right_bijective_of_finite₀ h) 1
@@ -135,8 +135,8 @@ theorem exists_eq_pow_of_mul_eq_pow_of_coprime
 nonrec
 
 中文:
-定理 exists_eq_pow_of_mul_eq_pow_of_coprime
-  结论: {R : 类型} [CommSemiring R]
+定理 存在_eq_pow_of_mul_eq_pow_of_coprime
+  结论: {R : 类型} [交换半环 R]
   证明: by
   refine exists_eq_pow_of_mul_eq_pow (isUnit_of_dvd_one ?_) h
   obtain ⟨x, y, hxy⟩ := cp
@@ -175,8 +175,8 @@ theorem Finset.exists_eq_pow_of_mul_eq_pow_of_coprime
     exact (s.notMem_erase _)
 
 中文:
-定理 Finset.exists_eq_pow_of_mul_eq_pow_of_coprime
-  结论: {ι R : 类型} [CommSemiring R]
+定理 有限集.存在_eq_pow_of_mul_eq_pow_of_coprime
+  结论: {ι R : 类型} [交换半环 R]
   证明: by
   classical
     intro i hi
@@ -225,8 +225,8 @@ definition Fintype.divisionRingOfIsDomain
   qsmul_def := fun _ _ => rfl
 
 中文:
-定义 Fintype.divisionRingOfIsDomain
-  签名: (R : 类型) [Ring R] [IsDomain R] [DecidableEq R] [Fintype R]
+定义 有限类型.divisionRingOfIsDomain
+  签名: (R : 类型) [环 R] [是整环 R] [DecidableEq R] [有限类型 R]
   定义体: (‹Ring R› :) -- this also works without the `( :)`, but it's slightly slow
   __ := Fintype.groupWithZeroOfCancel R
   nnqsmul := _
@@ -257,8 +257,8 @@ definition Fintype.fieldOfDomain
   body: { Fintype.divisionRingOfIsDomain R, ‹CommRing R› with }
 
 中文:
-定义 Fintype.fieldOfDomain
-  签名: (R) [CommRing R] [IsDomain R] [DecidableEq R] [Fintype R]
+定义 有限类型.fieldOfDomain
+  签名: (R) [交换环 R] [是整环 R] [DecidableEq R] [有限类型 R]
   定义体: { Fintype.divisionRingOfIsDomain R, ‹CommRing R› with }
 
 Depends on / 依赖: CommRing, Fintype, Fintype.divisionRingOfIsDomain, divisionRingOfIsDomain
@@ -278,9 +278,9 @@ theorem Finite.isField_of_domain
   exact @Field.toIsField R (@Fintype.fieldOfDomain R _ _ (Classical.decEq R) _)
 
 中文:
-定理 Finite.isField_of_domain
-  条件: (R) [CommRing R] [IsDomain R] [Finite R]
-  结论: IsField R
+定理 有限.isField_of_domain
+  条件: (R) [交换环 R] [是整环 R] [有限 R]
+  结论: 是域 R
   证明: by
   cases nonempty_fintype R
   exact @Field.toIsField R (@Fintype.fieldOfDomain R _ _ (Classical.decEq R) _)
@@ -310,7 +310,7 @@ theorem card_nthRoots_subgroup_units
 
 中文:
 定理 card_nthRoots_subgroup_units
-  结论: [Fintype G] [DecidableEq G] (f : G ->* R) (hf : Injective f)
+  结论: [有限类型 G] [DecidableEq G] (f : G ->* R) (hf : 单射 f)
   证明: by
   have : DecidableEq R := Classical.decEq _
   calc
@@ -348,8 +348,8 @@ alias isCyclic_of_subgroup_isDomain := isCyclic_of_injective_ringHom
 
 中文:
 定理 isCyclic_of_injective_ringHom
-  条件: [Finite G] (f : G ->* R) (hf : Injective f)
-  结论: IsCyclic G
+  条件: [有限 G] (f : G ->* R) (hf : 单射 f)
+  结论: 是循环 G
   证明: by
   classical
     cases nonempty_fintype G
@@ -381,8 +381,8 @@ instance [Finite
   body: isCyclic_of_injective_ringHom (Units.coeHom R) Units.val_injective
 
 中文:
-实例 [Finite
-  签名: Rˣ] : IsCyclic Rˣ
+实例 [有限
+  签名: Rˣ] : 是循环 Rˣ
   定义体: isCyclic_of_injective_ringHom (Units.coeHom R) Units.val_injective
 
 Depends on / 依赖: Units.coeHom, Units.val_injective, coeHom, isCyclic_of_injective_ringHom, val_injective
@@ -407,7 +407,7 @@ instance isCyclic_subgroup_units
 
 中文:
 实例 isCyclic_subgroup_units
-  签名: : IsCyclic S
+  签名: : 是循环 S
   定义体: isCyclic_of_injective_ringHom { toFun s := (s.val : R), map_one' := rfl, map_mul' := by simp }
     (Units.val_injective.comp Subtype.val_injective)
 
@@ -562,7 +562,7 @@ theorem sum_hom_units
 
 中文:
 定理 sum_hom_units
-  条件: (f : G ->* R) [Decidable (f = 1)]
+  条件: (f : G ->* R) [可判定 (f = 1)]
   证明: by
   split_ifs with h
   · simp [h]

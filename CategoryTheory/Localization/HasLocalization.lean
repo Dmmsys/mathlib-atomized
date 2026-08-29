@@ -62,13 +62,13 @@ class HasLocalization
     - [hL : L.IsLocalization W]
 
 中文:
-类 HasLocalization
+类 有Localization
   参数: where
   公理与运算 (4 个):
     - {D : 类型u}
-    - [hD : Category.{w} D]
+    - [hD : 范畴.{w} D]
     - L : C ⥤ D
-    - [hL : L.IsLocalization W]
+    - [hL : L.是Localization W]
 -/
 class HasLocalization where
   /-- the objects of the localized category. -/
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category W.Localization'
+  签名: 范畴 W.Localization'
   定义体: HasLocalization.hD
 
 Depends on / 依赖: HasLocalization, HasLocalization.hD
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.Q'.IsLocalization W
+  签名: W.Q'.是Localization W
   定义体: HasLocalization.hL
 
 Depends on / 依赖: HasLocalization, HasLocalization.hL
@@ -158,8 +158,8 @@ definition HasLocalization.standard
   body: W.Q
 
 中文:
-定义 HasLocalization.standard
-  签名: : HasLocalization.{max u v} W where
+定义 有Localization.standard
+  签名: : 有Localization.{最大值 u v} W where
   定义体: W.Q
 
 Depends on / 依赖: Iso.inv, NatTrans, NatTrans.congr_app, _add_zero, congr_app, congr_arg, shiftFunctorAdd

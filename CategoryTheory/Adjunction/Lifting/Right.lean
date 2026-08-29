@@ -94,7 +94,7 @@ definition unitEqualises
 
 中文:
 定义 unitEqualises
-  签名: (h : 对任意 X : B, RegularMono (adj₁.unit.app X)) (X : B)
+  签名: (h : 对任意 X : B, 正则单态射 (adj₁.unit.app X)) (X : B)
   定义体: Fork.IsLimit.mk' _ fun s => by
 .mono have := fun Y => h Y
     refine ⟨((h X).lift' s.ι ?_).1, ?_, ?_⟩
@@ -186,7 +186,7 @@ definition constructRightAdjointEquiv
 
 中文:
 定义 constructRightAdjointEquiv
-  签名: (h : 对任意 X : B, RegularMono (adj₁.unit.app X)) (Y : C)
+  签名: (h : 对任意 X : B, 正则单态射 (adj₁.unit.app X)) (Y : C)
   定义体: calc
     (Y ⟶ constructRightAdjointObj _ _ adj₁ adj₂ X) ≃
         { f : Y ⟶ U'.obj (F.obj X) //
@@ -235,7 +235,7 @@ definition constructRightAdjoint
 
 中文:
 定义 constructRightAdjoint
-  签名: (h : 对任意 X : B, RegularMono (adj₁.unit.app X))
+  签名: (h : 对任意 X : B, 正则单态射 (adj₁.unit.app X))
   定义体: by
   refine Adjunction.rightAdjointOfEquiv
     (fun X Y => (constructRightAdjointEquiv L _ adj₁ adj₂ h X Y).symm) ?_
@@ -300,7 +300,7 @@ lemma isLeftAdjoint_triangle_lift_comonadic
 
 中文:
 引理 isLeftAdjoint_triangle_lift_comonadic
-  结论: (F : B ⥤ A) [ComonadicLeftAdjoint F] {L : C ⥤ B}
+  结论: (F : B ⥤ A) [余monadicLeftAdjoint F] {L : C ⥤ B}
   证明: by
   let L' : _ ⥤ _ := L ⋙ Comonad.comparison (comonadicAdjunction F)
   rsuffices : L'.IsLeftAdjoint

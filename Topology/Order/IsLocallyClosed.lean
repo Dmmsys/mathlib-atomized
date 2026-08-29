@@ -28,7 +28,7 @@ theorem isLocallyClosed_Icc
 
 中文:
 定理 isLocallyClosed_Icc
-  条件: [Preorder X] [OrderClosedTopology X]
+  条件: [预序 X] [OrderClosed拓扑 X]
   证明: isClosed_Icc.isLocallyClosed
 
 Depends on / 依赖: isClosed_Icc, isClosed_Icc.isLocallyClosed, isLocallyClosed
@@ -47,7 +47,7 @@ theorem isLocallyClosed_Ioo
 
 中文:
 定理 isLocallyClosed_Ioo
-  条件: [LinearOrder X] [OrderClosedTopology X]
+  条件: [线性序 X] [OrderClosed拓扑 X]
   证明: isOpen_Ioo.isLocallyClosed
 
 Depends on / 依赖: isLocallyClosed, isOpen_Ioo, isOpen_Ioo.isLocallyClosed
@@ -66,7 +66,7 @@ theorem isLocallyClosed_Ici
 
 中文:
 定理 isLocallyClosed_Ici
-  条件: [Preorder X] [ClosedIciTopology X]
+  条件: [预序 X] [ClosedIci拓扑 X]
   证明: isClosed_Ici.isLocallyClosed
 
 Depends on / 依赖: isClosed_Ici, isClosed_Ici.isLocallyClosed, isLocallyClosed
@@ -85,7 +85,7 @@ theorem isLocallyClosed_Iic
 
 中文:
 定理 isLocallyClosed_Iic
-  条件: [Preorder X] [ClosedIicTopology X]
+  条件: [预序 X] [ClosedIic拓扑 X]
   证明: isClosed_Iic.isLocallyClosed
 
 Depends on / 依赖: isClosed_Iic, isClosed_Iic.isLocallyClosed, isLocallyClosed
@@ -104,7 +104,7 @@ theorem isLocallyClosed_Ioi
 
 中文:
 定理 isLocallyClosed_Ioi
-  条件: [LinearOrder X] [ClosedIicTopology X]
+  条件: [线性序 X] [ClosedIic拓扑 X]
   证明: isOpen_Ioi.isLocallyClosed
 
 Depends on / 依赖: isLocallyClosed, isOpen_Ioi, isOpen_Ioi.isLocallyClosed
@@ -123,7 +123,7 @@ theorem isLocallyClosed_Iio
 
 中文:
 定理 isLocallyClosed_Iio
-  条件: [LinearOrder X] [ClosedIciTopology X]
+  条件: [线性序 X] [ClosedIci拓扑 X]
   证明: isOpen_Iio.isLocallyClosed
 
 Depends on / 依赖: isLocallyClosed, isOpen_Iio, isOpen_Iio.isLocallyClosed
@@ -144,7 +144,7 @@ theorem isLocallyClosed_Ioc
 
 中文:
 定理 isLocallyClosed_Ioc
-  条件: [LinearOrder X] [ClosedIicTopology X]
+  条件: [线性序 X] [ClosedIic拓扑 X]
   证明: by
   rw [← Set.Iic_inter_Ioi]
   exact isLocallyClosed_Iic.inter isLocallyClosed_Ioi
@@ -168,7 +168,7 @@ theorem isLocallyClosed_Ico
 
 中文:
 定理 isLocallyClosed_Ico
-  条件: [LinearOrder X] [ClosedIciTopology X]
+  条件: [线性序 X] [ClosedIci拓扑 X]
   证明: by
   rw [← Set.Iio_inter_Ici]
   exact isLocallyClosed_Iio.inter isLocallyClosed_Ici

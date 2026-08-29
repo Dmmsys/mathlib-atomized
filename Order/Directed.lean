@@ -66,7 +66,7 @@ definition DirectedOn
 
 中文:
 定义 DirectedOn
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall x in s, forall y in s, exists z in s, x ≼ z ∧ y ≼ z
 -/
 def DirectedOn (s : Set α) :=
@@ -90,7 +90,7 @@ alias ⟨DirectedOn.directed_val, _⟩ := directedOn_iff_directed
 中文:
 定理 directedOn_iff_directed
   条件: {s}
-  结论: @DirectedOn α r s ↔ Directed r (Subtype.val : s -> α)
+  结论: @DirectedOn α r s ↔ Directed r (子类型.val : s -> α)
   证明: by
   simp only [DirectedOn, Directed, Subtype.exists, exists_and_left, exists_prop, Subtype.forall]
   exact forall₂_congr fun x _ => by simp [And.comm, and_assoc]
@@ -145,7 +145,7 @@ theorem directedOn_image
 
 中文:
 定理 directedOn_image
-  条件: {s : Set β} {f : β -> α}
+  条件: {s : 集合 β} {f : β -> α}
   证明: by
   simp only [DirectedOn, Set.mem_image, exists_exists_and_eq_and, forall_exists_index, and_imp,
     forall_apply_eq_imp_iff₂, Order.Preimage]
@@ -169,7 +169,7 @@ theorem DirectedOn.mono'
 
 中文:
 定理 DirectedOn.mono'
-  结论: {s : Set α} (hs : DirectedOn r s)
+  结论: {s : 集合 α} (hs : DirectedOn r s)
   证明: fun _ hx _ hy =>
   let ⟨z, hz, hxz, hyz⟩ := hs _ hx _ hy
   ⟨z, hz, h hx hz hxz, h hy hz hyz⟩
@@ -189,7 +189,7 @@ theorem DirectedOn.mono
 
 中文:
 定理 DirectedOn.mono
-  条件: {s : Set α} (h : DirectedOn r s) (H : 对任意 ⦃a b⦄, r a b -> r' a b)
+  条件: {s : 集合 α} (h : DirectedOn r s) (H : 对任意 ⦃a b⦄, r a b -> r' a b)
   证明: h.mono' fun _ _ _ _ h => H h
 
 Depends on / 依赖: h.mono
@@ -230,7 +230,7 @@ alias ⟨_, Directed.comp_of_surjective⟩ := directed_comp_iff_of_surjective
 
 中文:
 引理 directed_comp_iff_of_surjective
-  条件: {f : ι -> κ} (hf : f.Surjective) {g : κ -> α}
+  条件: {f : ι -> κ} (hf : f.满射) {g : κ -> α}
   证明: by simp [Directed, hf.forall, hf.exists]
 
 alias ⟨_, Directed.comp_of_surjective⟩ := directed_comp_iff_of_surjective
@@ -293,7 +293,7 @@ theorem DirectedOn.mono_comp
 
 中文:
 定理 DirectedOn.mono_comp
-  结论: {r : α -> α -> 命题} {rb : β -> β -> 命题} {g : α -> β} {s : Set α}
+  结论: {r : α -> α -> 命题} {rb : β -> β -> 命题} {g : α -> β} {s : 集合 α}
   证明: directedOn_image.mpr (hf.mono hg)
 
 Depends on / 依赖: directedOn_image, directedOn_image.mpr, hf.mono
@@ -316,7 +316,7 @@ lemma directedOn_onFun_iff
 
 中文:
 引理 directedOn_onFun_iff
-  条件: {r : α -> α -> 命题} {f : β -> α} {s : Set β}
+  条件: {r : α -> α -> 命题} {f : β -> α} {s : 集合 β}
   证明: by
   refine ⟨DirectedOn.mono_comp (by simp), fun h x hx y hy => ?_⟩
   obtain ⟨_, ⟨z, hz, rfl⟩, hz'⟩ := h (f x) (Set.mem_image_of_mem f hx) (f y)
@@ -343,7 +343,7 @@ theorem directedOn_of_sup_mem
 
 中文:
 定理 directedOn_of_sup_mem
-  结论: [SemilatticeSup α] {S : Set α}
+  结论: [SemilatticeSup α] {S : 集合 α}
   证明: fun a ha b hb =>
   ⟨a ⊔ b, H ha hb, le_sup_left, le_sup_right⟩
 -/
@@ -371,7 +371,7 @@ theorem Directed.extend_bot
 
 中文:
 定理 Directed.extend_bot
-  结论: [Preorder α] [OrderBot α] {e : ι -> β} {f : ι -> α}
+  结论: [预序 α] [有底序 α] {e : ι -> β} {f : ι -> α}
   证明: by
   intro a b
   rcases (em (exists i, e i = a)).symm with (ha | ⟨i, rfl⟩)
@@ -410,7 +410,7 @@ theorem directedOn_of_inf_mem
 
 中文:
 定理 directedOn_of_inf_mem
-  结论: [SemilatticeInf α] {S : Set α}
+  结论: [SemilatticeInf α] {S : 集合 α}
   证明: directedOn_of_sup_mem (α := αᵒᵈ) H
 
 Depends on / 依赖: directedOn_of_sup_mem
@@ -430,8 +430,8 @@ theorem Std.Total.directed
   Or.casesOn (total_of r (f i) (f j)) (fun h => ⟨j, h, refl _⟩) fun h => ⟨i, refl _, h⟩
 
 中文:
-定理 Std.Total.directed
-  条件: [Std.Total r] (f : ι -> α)
+定理 Std.全.directed
+  条件: [Std.全 r] (f : ι -> α)
   结论: Directed r f
   证明: fun i j =>
   Or.casesOn (total_of r (f i) (f j)) (fun h => ⟨j, h, refl _⟩) fun h => ⟨i, refl _, h⟩
@@ -452,8 +452,8 @@ theorem Std.Total.directedOn
 @[simp]
 
 中文:
-定理 Std.Total.directedOn
-  条件: [Std.Total r] (s : Set α)
+定理 Std.全.directedOn
+  条件: [Std.全 r] (s : 集合 α)
   结论: DirectedOn r s
   证明: fun a ha b hb =>
   Or.casesOn (total_of r a b) (fun h => ⟨b, hb, h, refl _⟩) fun h => ⟨a, ha, refl _, h⟩
@@ -475,7 +475,7 @@ theorem DirectedOn.of_linearOrder
 
 中文:
 定理 DirectedOn.of_linearOrder
-  条件: [LinearOrder α] (s : Set α)
+  条件: [线性序 α] (s : 集合 α)
   结论: DirectedOn (· <= ·) s
   证明: Std.Total.directedOn s
 
@@ -494,8 +494,8 @@ class IsDirected
     - directed((a b : α)) : exists c, r a c ∧ r b c
 
 中文:
-类 IsDirected
-  参数: (α : Sort*) (r : α -> α -> 命题)
+类 是Directed
+  参数: (α : 类型层*) (r : α -> α -> 命题)
   公理与运算 (1 个):
     - directed((a b : α)) : 存在 c, r a c ∧ r b c
 -/
@@ -533,7 +533,7 @@ theorem directed_of
 
 中文:
 定理 directed_of
-  条件: (r : α -> α -> 命题) [IsDirected α r] (a b : α)
+  条件: (r : α -> α -> 命题) [是Directed α r] (a b : α)
   结论: 存在 c, r a c ∧ r b c
   证明: IsDirected.directed _ _
 
@@ -554,7 +554,7 @@ theorem directed_of₃
 
 中文:
 定理 directed_of₃
-  条件: (r : α -> α -> 命题) [IsDirected α r] [IsTrans α r] (a b c : α)
+  条件: (r : α -> α -> 命题) [是Directed α r] [是Trans α r] (a b c : α)
   证明: have ⟨e, hae, hbe⟩ := directed_of r a b
   have ⟨f, hef, hcf⟩ := directed_of r e c
   ⟨f, Trans.trans hae hef, Trans.trans hbe hef, hcf⟩
@@ -579,7 +579,7 @@ theorem isDirected_onFun
 中文:
 定理 isDirected_onFun
   条件: {f : ι -> α}
-  结论: IsDirected ι (r on f) ↔ Directed r f
+  结论: 是Directed ι (r on f) ↔ Directed r f
   证明: ⟨(·.directed), (⟨·⟩)⟩
 
 Depends on / 依赖: directed
@@ -598,7 +598,7 @@ theorem directed_id
 
 中文:
 定理 directed_id
-  条件: [IsDirected α r]
+  条件: [是Directed α r]
   结论: Directed r id
   证明: directed_of r
 
@@ -616,7 +616,7 @@ theorem directed_id_iff
 
 中文:
 定理 directed_id_iff
-  结论: Directed r id ↔ IsDirected α r
+  结论: Directed r id ↔ 是Directed α r
   证明: isDirected_onFun.symm
 
 Depends on / 依赖: isDirected_onFun, isDirected_onFun.symm
@@ -637,8 +637,8 @@ theorem directedOn_univ
 
 中文:
 定理 directedOn_univ
-  条件: [IsDirected α r]
-  结论: DirectedOn r Set.univ
+  条件: [是Directed α r]
+  结论: DirectedOn r 集合.univ
   证明: fun a _ b _ =>
   let ⟨c, hc⟩ := directed_of r a b
   ⟨c, trivial, hc⟩
@@ -661,7 +661,7 @@ theorem directedOn_univ_iff
 
 中文:
 定理 directedOn_univ_iff
-  结论: DirectedOn r Set.univ ↔ IsDirected α r
+  结论: DirectedOn r 集合.univ ↔ 是Directed α r
   证明: ⟨fun h =>
     ⟨fun a b =>
       let ⟨c, _, hc⟩ := h a trivial b trivial
@@ -696,8 +696,8 @@ theorem isDirected_mono
 
 中文:
 定理 isDirected_mono
-  条件: [IsDirected α r] (h : 对任意 ⦃a b⦄, r a b -> s a b)
-  结论: IsDirected α s
+  条件: [是Directed α r] (h : 对任意 ⦃a b⦄, r a b -> s a b)
+  结论: 是Directed α s
   证明: ⟨fun a b =>
     let ⟨c, ha, hb⟩ := IsDirected.directed a b
     ⟨c, h ha, h hb⟩⟩
@@ -724,7 +724,7 @@ theorem exists_ge_ge
 @[to_dual isDirected_le]
 
 中文:
-定理 exists_ge_ge
+定理 存在_ge_ge
   条件: [LE α] [IsDirectedOrder α] (a b : α)
   结论: 存在 c, a <= c ∧ b <= c
   证明: directed_of (· <= ·) a b
@@ -793,8 +793,8 @@ theorem Monotone.directed_le
 @[to_dual directed_ge]
 
 中文:
-定理 Monotone.directed_le
-  条件: [Preorder α] [IsDirectedOrder α] [Preorder β] {f : α -> β}
+定理 递增.directed_le
+  条件: [预序 α] [IsDirectedOrder α] [预序 β] {f : α -> β}
   证明: directed_of_isDirected_le
 
 @[to_dual directed_ge]
@@ -817,8 +817,8 @@ theorem Antitone.directed_le
 @[to_dual]
 
 中文:
-定理 Antitone.directed_le
-  结论: [Preorder α] [IsCodirectedOrder α] [Preorder β] {f : α -> β}
+定理 递减.directed_le
+  结论: [预序 α] [IsCodirectedOrder α] [预序 β] {f : α -> β}
   证明: directed_of_isDirected_ge hf
 
 @[to_dual]
@@ -845,7 +845,7 @@ alias ⟨DirectedOn.isDirectedOrder, DirectedOn.of_isDirectedOrder⟩ := directe
 
 中文:
 引理 directedOn_iff_isDirectedOrder
-  条件: [LE α] {s : Set α}
+  条件: [LE α] {s : 集合 α}
   证明: by
   rw [directedOn_iff_directed]; rw [IsDirectedOrder]
   exact ⟨fun h => ⟨h⟩, fun ⟨h⟩ => h⟩
@@ -882,7 +882,7 @@ theorem DirectedOn.insert
 
 中文:
 定理 DirectedOn.insert
-  结论: [Std.Refl r] (a : α) {s : Set α} (hd : DirectedOn r s)
+  结论: [Std.Refl r] (a : α) {s : 集合 α} (hd : DirectedOn r s)
   证明: by
   rintro x (rfl | hx) y (rfl | hy)
   · exact ⟨y, Set.mem_insert _ _, refl _, refl _⟩
@@ -915,7 +915,7 @@ theorem directedOn_singleton
 中文:
 定理 directedOn_singleton
   条件: [Std.Refl r] (a : α)
-  结论: DirectedOn r ({a} : Set α)
+  结论: DirectedOn r ({a} : 集合 α)
   证明: fun x hx _ hy => ⟨x, hx, refl _, hx.symm ▸ hy.symm ▸ refl _⟩
 
 Depends on / 依赖: hx.symm, hy.symm
@@ -935,7 +935,7 @@ theorem directedOn_pair
 中文:
 定理 directedOn_pair
   条件: [Std.Refl r] {a b : α} (hab : a ≼ b)
-  结论: DirectedOn r ({a, b} : Set α)
+  结论: DirectedOn r ({a, b} : 集合 α)
   证明: (directedOn_singleton _).insert _ fun c hc => ⟨c, hc, hc.symm ▸ hab, refl _⟩
 
 Depends on / 依赖: directedOn_singleton, hc.symm, insert
@@ -1016,7 +1016,7 @@ lemma DirectedOn.is_top_of_is_max
 
 中文:
 引理 DirectedOn.is_top_of_is_max
-  结论: {s : Set α} (hd : DirectedOn (· <= ·) s)
+  结论: {s : 集合 α} (hd : DirectedOn (· <= ·) s)
   证明: fun a as =>
   let ⟨x, xs, xm, xa⟩ := hd m hm a as
   xa.trans (hmax x xs xm)
@@ -1041,7 +1041,7 @@ theorem isTop_or_exists_gt
 @[to_dual]
 
 中文:
-定理 isTop_or_exists_gt
+定理 isTop_or_存在_gt
   条件: [IsDirectedOrder α] (a : α)
   结论: IsTop a ∨ 存在 b, a < b
   证明: (em (IsMax a)).imp IsMax.isTop not_isMax_iff.mp
@@ -1088,8 +1088,8 @@ theorem Monotone.forall_le_of_antitone
     _ <= g n := hg hkn
 
 中文:
-定理 Monotone.forall_le_of_antitone
-  结论: [IsDirectedOrder α] [Preorder β] {f g : α -> β}
+定理 递增.对任意_le_of_antitone
+  结论: [IsDirectedOrder α] [预序 β] {f g : α -> β}
   证明: by
   obtain ⟨k, hkm, hkn⟩ := exists_ge_ge m n
   calc
@@ -1133,7 +1133,7 @@ theorem exists_lt_of_directed_ge
 @[to_dual]
 
 中文:
-定理 exists_lt_of_directed_ge
+定理 存在_lt_of_directed_ge
   条件: [IsCodirectedOrder β]
   证明: by
   rcases exists_pair_ne β with ⟨a, b, hne⟩
@@ -1224,7 +1224,7 @@ lemma constant_of_monotone_antitone
 
 中文:
 引理 constant_of_monotone_antitone
-  结论: [IsDirectedOrder α] (hf : Monotone f) (hf' : Antitone f)
+  结论: [IsDirectedOrder α] (hf : 递增 f) (hf' : 递减 f)
   证明: by
   have := hf.forall_le_of_antitone hf' le_rfl
   exact le_antisymm (this a b) (this b a)
@@ -1292,7 +1292,7 @@ lemma proj
 
 中文:
 引理 proj
-  条件: {d : Set (Π i, α i)} (hd : DirectedOn (fun x y => 对任意 i, r i (x i) (y i)) d) (i : ι)
+  条件: {d : 集合 (Π i, α i)} (hd : DirectedOn (fun x y => 对任意 i, r i (x i) (y i)) d) (i : ι)
   证明: DirectedOn.mono_comp (fun _ _ h => h) (mono hd fun ⦃_ _⦄ h => h i)
 
 Depends on / 依赖: DirectedOn, DirectedOn.mono_comp, mono_comp
@@ -1314,7 +1314,7 @@ lemma pi
 
 中文:
 引理 pi
-  条件: {d : (i : ι) -> Set (α i)} (hd : 对任意 (i : ι), DirectedOn (r i) (d i))
+  条件: {d : (i : ι) -> 集合 (α i)} (hd : 对任意 (i : ι), DirectedOn (r i) (d i))
   证明: by
   intro a ha b hb
   choose f hfd haf hbf using fun i => hd i (a i) (ha i trivial) (b i) (hb i trivial)
@@ -1347,7 +1347,7 @@ lemma fst
 
 中文:
 引理 fst
-  条件: {d : Set (α × β)} (hd : DirectedOn (fun p q => p.1 ≼₁ q.1 ∧ p.2 ≼₂ q.2) d)
+  条件: {d : 集合 (α × β)} (hd : DirectedOn (fun p q => p.1 ≼₁ q.1 ∧ p.2 ≼₂ q.2) d)
   证明: DirectedOn.mono_comp (fun ⦃_ _⦄ h => h) (mono hd fun ⦃_ _⦄ h => h.1)
 
 Depends on / 依赖: DirectedOn, DirectedOn.mono_comp, mono_comp
@@ -1366,7 +1366,7 @@ lemma snd
 
 中文:
 引理 snd
-  条件: {d : Set (α × β)} (hd : DirectedOn (fun p q => p.1 ≼₁ q.1 ∧ p.2 ≼₂ q.2) d)
+  条件: {d : 集合 (α × β)} (hd : DirectedOn (fun p q => p.1 ≼₁ q.1 ∧ p.2 ≼₂ q.2) d)
   证明: DirectedOn.mono_comp (fun ⦃_ _⦄ h => h) (mono hd fun ⦃_ _⦄ h => h.2)
 
 Depends on / 依赖: DirectedOn, DirectedOn.mono_comp, mono_comp
@@ -1387,8 +1387,8 @@ lemma prod
   exact ⟨⟨r₁, r₂⟩, ⟨hdr₁, hdr₂⟩, ⟨hpr₁, hpr₂⟩, ⟨hqr₁, hqr₂⟩⟩
 
 中文:
-引理 prod
-  条件: {d₁ : Set α} {d₂ : Set β} (h₁ : DirectedOn (· ≼₁ ·) d₁) (h₂ : DirectedOn (· ≼₂ ·) d₂)
+引理 乘积
+  条件: {d₁ : 集合 α} {d₂ : 集合 β} (h₁ : DirectedOn (· ≼₁ ·) d₁) (h₂ : DirectedOn (· ≼₂ ·) d₂)
   证明: fun _ hpd _ hqd => by
   obtain ⟨r₁, hdr₁, hpr₁, hqr₁⟩ := h₁ _ hpd.1 _ hqd.1
   obtain ⟨r₂, hdr₂, hpr₂, hqr₂⟩ := h₂ _ hpd.2 _ hqd.2

@@ -90,11 +90,11 @@ structure IsTopCompl
     - continuous_projection : Continuous (p.projection q isCompl)
 
 中文:
-结构 IsTopCompl
-  参数: (p q : Submodule R M)
+结构 是TopCompl
+  参数: (p q : 子模 R M)
   公理与运算 (2 个):
-    - isCompl : IsCompl p q
-    - continuous_projection : Continuous (p.projection q isCompl)
+    - isCompl : 是补集 p q
+    - continuous_projection : 连续 (p.projection q isCompl)
 -/
 structure IsTopCompl (p q : Submodule R M) : Prop where
   isCompl : IsCompl p q
@@ -110,7 +110,7 @@ definition ClosedComplemented
 
 中文:
 定义 ClosedComplemented
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: exists f : M ->L[R] p, forall x : p, f x = x
 -/
 def ClosedComplemented (p : Submodule R M) : Prop :=
@@ -129,8 +129,8 @@ theorem IsCompl.isTopCompl_iff
   proof: ⟨IsTopCompl.continuous_projection, fun h' => ⟨h, h'⟩⟩
 
 中文:
-定理 IsCompl.isTopCompl_iff
-  条件: (h : IsCompl p q)
+定理 是补集.isTopCompl_iff
+  条件: (h : 是补集 p q)
   证明: ⟨IsTopCompl.continuous_projection, fun h' => ⟨h, h'⟩⟩
 
 Depends on / 依赖: IsTopCompl, IsTopCompl.continuous_projection, continuous_projection
@@ -153,8 +153,8 @@ theorem IsCompl.isTopCompl_iff_projectionOnto
   IsCompl.isTopCompl_iff_projectionOnto
 
 中文:
-定理 IsCompl.isTopCompl_iff_projectionOnto
-  条件: (h : IsCompl p q)
+定理 是补集.isTopCompl_iff_projectionOnto
+  条件: (h : 是补集 p q)
   证明: by
   rw [h.isTopCompl_iff]; rw [IsInducing.subtypeVal.continuous_iff]
   rfl
@@ -184,8 +184,8 @@ theorem IsTopCompl.continuous_projectionOnto
   IsTopCompl.continuous_projectionOnto
 
 中文:
-定理 IsTopCompl.continuous_projectionOnto
-  条件: (h : IsTopCompl p q)
+定理 是TopCompl.continuous_projectionOnto
+  条件: (h : 是TopCompl p q)
   证明: h.isCompl.isTopCompl_iff_projectionOnto.mp h
 
 @[deprecated (since := "2026-05-05")] alias IsTopCompl.continuous_linearProjOfIsCompl :=
@@ -213,9 +213,9 @@ theorem IsTopCompl.symm
     exact continuous_id.sub h.continuous_projection
 
 中文:
-定理 IsTopCompl.symm
-  条件: [ContinuousSub M] (h : IsTopCompl p q)
-  结论: IsTopCompl q p where
+定理 是TopCompl.symm
+  条件: [余ntinuousSub M] (h : 是TopCompl p q)
+  结论: 是TopCompl q p where
   证明: h.isCompl.symm
   continuous_projection := by
     rw [projection_eq_id_sub_projection h.isCompl]
@@ -238,8 +238,8 @@ theorem isTopCompl_comm
 
 中文:
 定理 isTopCompl_comm
-  条件: [ContinuousSub M]
-  结论: IsTopCompl p q ↔ IsTopCompl q p
+  条件: [余ntinuousSub M]
+  结论: 是TopCompl p q ↔ 是TopCompl q p
   证明: ⟨IsTopCompl.symm, IsTopCompl.symm⟩
 
 Depends on / 依赖: IsTopCompl, IsTopCompl.symm
@@ -258,7 +258,7 @@ theorem _root_.ContinuousLinearMap.IsIdempotentElem.isTopCompl
   continuous_projection := hf.toLinearMap.eq_projection ▸ f.continuous
 
 中文:
-定理 _root_.ContinuousLinearMap.IsIdempotentElem.isTopCompl
+定理 _root_.连续线性映射.IsIdempotentElem.isTopCompl
   结论: {f : M ->L[R] M}
   证明: hf.toLinearMap.isCompl
   continuous_projection := hf.toLinearMap.eq_projection ▸ f.continuous
@@ -329,7 +329,7 @@ have ker_p : p.ker = f₂.ker := ker_comp_of_ker_eq_bot _
   range
 
 中文:
-定理 _root_.ContinuousLinearMap.isTopCompl_range_ker_of_leftInverse
+定理 _root_.连续线性映射.isTopCompl_range_ker_of_leftInverse
   证明: let p := f₁ ∘L f₂
   have p_idem : IsIdempotentElem p := by ext x; simp [p, h (f₂ x)]
 have range_p : p.range = f₁.range := range_comp_of_range_eq_top _
@@ -361,7 +361,7 @@ theorem _root_.ContinuousLinearMap.isTopCompl_of_proj
   simpa using p.subtypeL.isTopCompl_range_ker_of_leftInverse f hf
 
 中文:
-定理 _root_.ContinuousLinearMap.isTopCompl_of_proj
+定理 _root_.连续线性映射.isTopCompl_of_proj
   条件: {f : M ->L[R] p} (hf : 对任意 x : p, f x = x)
   证明: by
   simpa using p.subtypeL.isTopCompl_range_ker_of_leftInverse f hf
@@ -387,7 +387,7 @@ definition projectionOntoL
 
 中文:
 定义 projectionOntoL
-  签名: (h : IsTopCompl p q)
+  签名: (h : 是TopCompl p q)
   定义体: ⟨p.projectionOnto q h.isCompl, h.continuous_projectionOnto⟩
 
 @[simp]
@@ -410,7 +410,7 @@ theorem toLinearMap_projectionOntoL
 
 中文:
 定理 toLinearMap_projectionOntoL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 
 @[simp]
@@ -432,7 +432,7 @@ theorem projectionOntoL_apply_left
 
 中文:
 定理 projectionOntoL_apply_left
-  条件: (h : IsTopCompl p q) (x : p)
+  条件: (h : 是TopCompl p q) (x : p)
   证明: projectionOnto_apply_left h.isCompl x
 
 @[simp]
@@ -454,7 +454,7 @@ theorem coe_projectionOntoL
 
 中文:
 定理 coe_projectionOntoL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 -/
 theorem coe_projectionOntoL (h : IsTopCompl p q) :
@@ -473,7 +473,7 @@ theorem range_projectionOntoL
 
 中文:
 定理 range_projectionOntoL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   结论: (p.projectionOntoL q h).range = ⊤
   证明: by
   simp
@@ -492,8 +492,8 @@ theorem projectionOntoL_surjective
 
 中文:
 定理 projectionOntoL_surjective
-  条件: (h : IsTopCompl p q)
-  结论: Surjective (p.projectionOntoL q h)
+  条件: (h : 是TopCompl p q)
+  结论: 满射 (p.projectionOntoL q h)
   证明: projectionOnto_surjective h.isCompl
 
 Depends on / 依赖: h.isCompl, isCompl, projectionOnto_surjective
@@ -514,7 +514,7 @@ alias ⟨_, projectionOntoL_apply_eq_zero_of_mem_right⟩ :=
 
 中文:
 定理 projectionOntoL_apply_eq_zero_iff
-  条件: (h : IsTopCompl p q) {x : M}
+  条件: (h : 是TopCompl p q) {x : M}
   证明: projectionOnto_apply_eq_zero_iff h.isCompl
 
 alias ⟨_, projectionOntoL_apply_eq_zero_of_mem_right⟩ :=
@@ -539,7 +539,7 @@ theorem projectionOntoL_apply_right
 
 中文:
 定理 projectionOntoL_apply_right
-  条件: (h : IsTopCompl p q) (x : q)
+  条件: (h : 是TopCompl p q) (x : q)
   证明: projectionOntoL_apply_eq_zero_of_mem_right h x.2
 
 Depends on / 依赖: projectionOntoL_apply_eq_zero_of_mem_right
@@ -559,7 +559,7 @@ theorem ker_projectionOntoL
 
 中文:
 定理 ker_projectionOntoL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: by
   simp
 -/
@@ -578,7 +578,7 @@ theorem isQuotientMap_projectionOntoL
 
 中文:
 定理 isQuotientMap_projectionOntoL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: .of_inverse continuous_subtype_val (p.projectionOntoL q h).continuous
     (projectionOntoL_apply_left h)
 
@@ -606,7 +606,7 @@ definition projectionL
 
 中文:
 定义 projectionL
-  签名: (h : IsTopCompl p q)
+  签名: (h : 是TopCompl p q)
   定义体: p.subtypeL ∘L p.projectionOntoL q h
 
 @[simp]
@@ -629,7 +629,7 @@ theorem coe_projectionL
 
 中文:
 定理 coe_projectionL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 
 @[simp]
@@ -649,7 +649,7 @@ theorem toLinearMap_projectionL
 
 中文:
 定理 toLinearMap_projectionL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 -/
 theorem toLinearMap_projectionL (h : IsTopCompl p q) :
@@ -668,7 +668,7 @@ theorem projectionL_apply
 
 中文:
 定理 projectionL_apply
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: rfl
 
 @[simp]
@@ -688,7 +688,7 @@ theorem coe_projectionOntoL_apply
 
 中文:
 定理 coe_projectionOntoL_apply
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: rfl
 -/
 theorem coe_projectionOntoL_apply (h : IsTopCompl p q) (x : M) :
@@ -705,7 +705,7 @@ theorem projectionL_apply_mem
 
 中文:
 定理 projectionL_apply_mem
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: SetLike.coe_mem _
 
 Depends on / 依赖: SetLike, SetLike.coe_mem, coe_mem
@@ -724,7 +724,7 @@ theorem projectionL_apply_left
 
 中文:
 定理 projectionL_apply_left
-  条件: (h : IsTopCompl p q) (x : p)
+  条件: (h : 是TopCompl p q) (x : p)
   证明: projection_apply_left h.isCompl x
 
 Depends on / 依赖: h.isCompl, isCompl, projection_apply_left
@@ -744,7 +744,7 @@ theorem range_projectionL
 
 中文:
 定理 range_projectionL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: by
   simp
 -/
@@ -765,7 +765,7 @@ alias ⟨_, projectionL_apply_eq_zero_of_mem_right⟩ :=
 
 中文:
 定理 projectionL_apply_eq_zero_iff
-  条件: (h : IsTopCompl p q) {x : M}
+  条件: (h : 是TopCompl p q) {x : M}
   证明: projection_apply_eq_zero_iff h.isCompl
 
 alias ⟨_, projectionL_apply_eq_zero_of_mem_right⟩ :=
@@ -790,7 +790,7 @@ theorem projectionL_apply_right
 
 中文:
 定理 projectionL_apply_right
-  条件: (h : IsTopCompl p q) (x : q)
+  条件: (h : 是TopCompl p q) (x : q)
   证明: projectionL_apply_eq_zero_of_mem_right h x.2
 
 Depends on / 依赖: projectionL_apply_eq_zero_of_mem_right
@@ -812,7 +812,7 @@ theorem ker_projectionL
 
 中文:
 定理 ker_projectionL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: by
   simp
 
@@ -834,7 +834,7 @@ theorem isIdempotentElem_projectionL
 
 中文:
 定理 isIdempotentElem_projectionL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: by
   simp [← isIdempotentElem_toLinearMap_iff]
 
@@ -854,7 +854,7 @@ theorem projectionL_add_projectionL_eq_self
 
 中文:
 定理 projectionL_add_projectionL_eq_self
-  结论: [ContinuousSub M]
+  结论: [余ntinuousSub M]
   证明: projection_add_projection_eq_self h.isCompl x
 
 Depends on / 依赖: h.isCompl, isCompl, projection_add_projection_eq_self
@@ -874,7 +874,7 @@ theorem projectionL_add_projectionL_eq_id
 
 中文:
 定理 projectionL_add_projectionL_eq_id
-  条件: [IsTopologicalAddGroup M] (h : IsTopCompl p q)
+  条件: [是拓扑加群 M] (h : 是TopCompl p q)
   证明: ContinuousLinearMap.ext projectionL_add_projectionL_eq_self h
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext, projectionL_add_projectionL_eq_self
@@ -894,7 +894,7 @@ lemma projectionL_eq_self_sub_projectionL
 
 中文:
 引理 projectionL_eq_self_sub_projectionL
-  条件: [ContinuousSub M] (h : IsTopCompl p q) (x : M)
+  条件: [余ntinuousSub M] (h : 是TopCompl p q) (x : M)
   证明: by
   rw [eq_sub_iff_add_eq]; rw [projectionL_add_projectionL_eq_self]
 
@@ -914,7 +914,7 @@ lemma projectionL_eq_id_sub_projectionL
 
 中文:
 引理 projectionL_eq_id_sub_projectionL
-  条件: [IsTopologicalAddGroup M] (h : IsTopCompl p q)
+  条件: [是拓扑加群 M] (h : 是TopCompl p q)
   证明: ContinuousLinearMap.ext projectionL_eq_self_sub_projectionL h
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext, projectionL_eq_self_sub_projectionL
@@ -933,7 +933,7 @@ lemma projectionL_eq_self_iff
 
 中文:
 引理 projectionL_eq_self_iff
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: projection_eq_self_iff h.isCompl x
 
 Depends on / 依赖: h.isCompl, isCompl, projection_eq_self_iff
@@ -950,7 +950,7 @@ theorem _root_.ContinuousLinearMap.IsIdempotentElem.eq_projectionL
   proof: coe_inj.mp LinearMap.IsIdempotentElem.eq_projection hf.toLinearMap
 
 中文:
-定理 _root_.ContinuousLinearMap.IsIdempotentElem.eq_projectionL
+定理 _root_.连续线性映射.IsIdempotentElem.eq_projectionL
   证明: coe_inj.mp LinearMap.IsIdempotentElem.eq_projection hf.toLinearMap
 
 Depends on / 依赖: IsIdempotentElem, LinearMap, LinearMap.IsIdempotentElem.eq_projection, coe_inj, coe_inj.mp, eq_projection, hf.toLinearMap, toLinearMap
@@ -967,7 +967,7 @@ theorem _root_.ContinuousLinearMap.isIdempotentElem_iff_eq_projectionL_range_ker
   proof: ⟨fun h => ⟨_, h.eq_projectionL⟩, fun ⟨hf, h⟩ => h.symm ▸ isIdempotentElem_projectionL hf⟩
 
 中文:
-定理 _root_.ContinuousLinearMap.isIdempotentElem_iff_eq_projectionL_range_ker
+定理 _root_.连续线性映射.isIdempotentElem_iff_eq_projectionL_range_ker
   证明: ⟨fun h => ⟨_, h.eq_projectionL⟩, fun ⟨hf, h⟩ => h.symm ▸ isIdempotentElem_projectionL hf⟩
 
 Depends on / 依赖: eq_projectionL, h.eq_projectionL, h.symm, isIdempotentElem_projectionL
@@ -991,8 +991,8 @@ theorem IsTopCompl.closedComplemented
   proof: ⟨p.projectionOntoL q h, projectionOntoL_apply_left h⟩
 
 中文:
-定理 IsTopCompl.closedComplemented
-  条件: (h : IsTopCompl p q)
+定理 是TopCompl.closedComplemented
+  条件: (h : 是TopCompl p q)
   结论: ClosedComplemented p
   证明: ⟨p.projectionOntoL q h, projectionOntoL_apply_left h⟩
 
@@ -1013,9 +1013,9 @@ theorem IsTopCompl.isClosed'
   exact isClosed_ker _
 
 中文:
-定理 IsTopCompl.isClosed'
-  条件: [T1Space p] (h : IsTopCompl p q)
-  结论: IsClosed (q : Set M)
+定理 是TopCompl.isClosed'
+  条件: [T1空间 p] (h : 是TopCompl p q)
+  结论: 是闭集 (q : 集合 M)
   证明: by
   rw [← ker_projectionOntoL h]
   exact isClosed_ker _
@@ -1035,8 +1035,8 @@ theorem IsTopCompl.isClosed
   proof: h.symm.isClosed'
 
 中文:
-定理 IsTopCompl.isClosed
-  条件: [T1Space q] [ContinuousSub M] (h : IsTopCompl p q)
+定理 是TopCompl.isClosed
+  条件: [T1空间 q] [余ntinuousSub M] (h : 是TopCompl p q)
   证明: h.symm.isClosed'
 -/
 protected theorem IsTopCompl.isClosed [T1Space q] [ContinuousSub M] (h : IsTopCompl p q) :
@@ -1058,8 +1058,8 @@ theorem IsTopCompl.t3Space
   infer_instance
 
 中文:
-定理 IsTopCompl.t3Space
-  结论: [IsTopologicalAddGroup M] (h : IsTopCompl p q)
+定理 是TopCompl.t3Space
+  结论: [是拓扑加群 M] (h : 是TopCompl p q)
   证明: by
   have : IsClosed ({0} : Set p) := by
     rw [← (isQuotientMap_projectionOntoL h).isClosed_preimage]
@@ -1087,8 +1087,8 @@ theorem IsTopCompl.t2Space
   inferInstance
 
 中文:
-定理 IsTopCompl.t2Space
-  结论: [IsTopologicalAddGroup M] (h : IsTopCompl p q)
+定理 是TopCompl.t2Space
+  结论: [是拓扑加群 M] (h : 是TopCompl p q)
   证明: have := h.t3Space hq
   inferInstance
 -/
@@ -1112,7 +1112,7 @@ theorem ClosedComplemented.exists_isTopCompl
   proof: Exists.elim h fun f hf => ⟨_, f.isTopCompl_of_proj hf⟩
 
 中文:
-定理 ClosedComplemented.exists_isTopCompl
+定理 ClosedComplemented.存在_isTopCompl
   条件: (h : ClosedComplemented p)
   证明: Exists.elim h fun f hf => ⟨_, f.isTopCompl_of_proj hf⟩
 
@@ -1130,7 +1130,7 @@ theorem closedComplemented_iff_exists_isTopCompl
   proof: ⟨ClosedComplemented.exists_isTopCompl, fun H => H.elim fun _ hq => hq.closedComplemented⟩
 
 中文:
-定理 closedComplemented_iff_exists_isTopCompl
+定理 closedComplemented_iff_存在_isTopCompl
   证明: ⟨ClosedComplemented.exists_isTopCompl, fun H => H.elim fun _ hq => hq.closedComplemented⟩
 
 Depends on / 依赖: ClosedComplemented, ClosedComplemented.exists_isTopCompl, H.elim, closedComplemented, exists_isTopCompl, hq.closedComplemented
@@ -1148,8 +1148,8 @@ theorem ClosedComplemented.exists_isClosed_isCompl
   proof: Exists.elim h.exists_isTopCompl fun q hq => ⟨q, hq.isClosed', hq.isCompl⟩
 
 中文:
-定理 ClosedComplemented.exists_isClosed_isCompl
-  条件: [T1Space p] (h : ClosedComplemented p)
+定理 ClosedComplemented.存在_isClosed_isCompl
+  条件: [T1空间 p] (h : ClosedComplemented p)
   证明: Exists.elim h.exists_isTopCompl fun q hq => ⟨q, hq.isClosed', hq.isCompl⟩
 
 Depends on / 依赖: Exists, Exists.elim, exists_isTopCompl, h.exists_isTopCompl, hq.isClosed, hq.isCompl, isClosed, isCompl
@@ -1207,7 +1207,7 @@ theorem ClosedComplemented.isCompl_complement
 中文:
 定理 ClosedComplemented.isCompl_complement
   条件: (h : ClosedComplemented p)
-  结论: IsCompl p h.complement
+  结论: 是补集 p h.complement
   证明: h.isTopCompl_complement.isCompl
 
 Depends on / 依赖: h.isTopCompl_complement.isCompl, isCompl, isTopCompl_complement
@@ -1225,7 +1225,7 @@ theorem ClosedComplemented.isClosed_complement
 
 中文:
 定理 ClosedComplemented.isClosed_complement
-  条件: [T1Space p] (h : ClosedComplemented p)
+  条件: [T1空间 p] (h : ClosedComplemented p)
   证明: h.isTopCompl_complement.isClosed'
 
 Depends on / 依赖: h.isTopCompl_complement.isClosed, isClosed, isTopCompl_complement
@@ -1246,7 +1246,7 @@ theorem ClosedComplemented.isClosed
 
 中文:
 定理 ClosedComplemented.isClosed
-  结论: [ContinuousSub M] [T1Space M]
+  结论: [余ntinuousSub M] [T1空间 M]
   证明: h.isTopCompl_complement.isClosed
 
 @[simp]
@@ -1268,7 +1268,7 @@ theorem closedComplemented_bot
 
 中文:
 定理 closedComplemented_bot
-  结论: ClosedComplemented (⊥ : Submodule R M)
+  结论: ClosedComplemented (⊥ : 子模 R M)
   证明: isTopCompl_bot_top.closedComplemented
 
 @[simp]
@@ -1289,7 +1289,7 @@ theorem closedComplemented_top
 
 中文:
 定理 closedComplemented_top
-  结论: ClosedComplemented (⊤ : Submodule R M)
+  结论: ClosedComplemented (⊤ : 子模 R M)
   证明: isTopCompl_top_bot.closedComplemented
 
 Depends on / 依赖: closedComplemented, isTopCompl_top_bot, isTopCompl_top_bot.closedComplemented
@@ -1305,7 +1305,7 @@ theorem _root_.ContinuousLinearMap.closedComplemented_range_of_leftInverse
   proof: .closedComplemented f₁.isTopCompl_range_ker_of_leftInverse f₂ h
 
 中文:
-定理 _root_.ContinuousLinearMap.closedComplemented_range_of_leftInverse
+定理 _root_.连续线性映射.closedComplemented_range_of_leftInverse
   证明: .closedComplemented f₁.isTopCompl_range_ker_of_leftInverse f₂ h
 
 Depends on / 依赖: closedComplemented, isTopCompl_range_ker_of_leftInverse
@@ -1324,8 +1324,8 @@ theorem _root_.ContinuousLinearMap.closedComplemented_ker_of_rightInverse
   proof: .symm.closedComplemented f₂.isTopCompl_range_ker_of_leftInverse f₁ h.leftInverse
 
 中文:
-定理 _root_.ContinuousLinearMap.closedComplemented_ker_of_rightInverse
-  结论: [ContinuousSub M]
+定理 _root_.连续线性映射.closedComplemented_ker_of_rightInverse
+  结论: [余ntinuousSub M]
   证明: .symm.closedComplemented f₂.isTopCompl_range_ker_of_leftInverse f₁ h.leftInverse
 
 Depends on / 依赖: closedComplemented, h.leftInverse, isTopCompl_range_ker_of_leftInverse, leftInverse, symm.closedComplemented
@@ -1347,8 +1347,8 @@ lemma ClosedComplemented.exists_submodule_equiv_prod
     fun _ => by ext <;> simp [hf], fun _ => by ext <;> simp, fun _ => rfl⟩
 
 中文:
-引理 ClosedComplemented.exists_submodule_equiv_prod
-  结论: [IsTopologicalAddGroup M]
+引理 ClosedComplemented.存在_submodule_equiv_prod
+  结论: [是拓扑加群 M]
   证明: let ⟨f, hf⟩ := hp
   ⟨f.ker, .equivOfRightInverse f p.subtypeL hf,
     fun _ => by ext <;> simp [hf], fun _ => by ext <;> simp, fun _ => rfl⟩
@@ -1380,8 +1380,8 @@ theorem IsCompl.isTopCompl_iff_continuous_symm_prodEquivOfIsCompl
 fun hCont => ⟨h, continuous_subtype_val.comp continuous_fst.comp hCont⟩⟩
 
 中文:
-定理 IsCompl.isTopCompl_iff_continuous_symm_prodEquivOfIsCompl
-  条件: (h : IsCompl p q)
+定理 是补集.isTopCompl_iff_continuous_symm_prodEquivOfIsCompl
+  条件: (h : 是补集 p q)
   证明: ⟨fun hTop => ((p.projectionOntoL q hTop).prod (q.projectionOntoL p hTop.symm)).continuous.congr
     fun x => (prodEquivOfIsCompl_symm_apply h x).symm,
 fun hCont => ⟨h, continuous_subtype_val.comp continuous_fst.comp hCont⟩⟩
@@ -1405,8 +1405,8 @@ theorem continuous_prodEquivOfIsCompl
 
 中文:
 定理 continuous_prodEquivOfIsCompl
-  条件: (h : IsCompl p q)
-  结论: Continuous (p.prodEquivOfIsCompl q h)
+  条件: (h : 是补集 p q)
+  结论: 连续 (p.prodEquivOfIsCompl q h)
   证明: (continuous_subtype_val.comp continuous_fst).add (continuous_subtype_val.comp continuous_snd)
 
 Depends on / 依赖: continuous_fst, continuous_snd, continuous_subtype_val, continuous_subtype_val.comp
@@ -1425,8 +1425,8 @@ theorem IsCompl.isTopCompl_iff_isHomeomorph_prodEquivOfIsCompl
   exact continuous_prodEquivOfIsCompl h
 
 中文:
-定理 IsCompl.isTopCompl_iff_isHomeomorph_prodEquivOfIsCompl
-  条件: (h : IsCompl p q)
+定理 是补集.isTopCompl_iff_isHomeomorph_prodEquivOfIsCompl
+  条件: (h : 是补集 p q)
   证明: by
   rw [(p.prodEquivOfIsCompl q h).isHomeomorph_iff]; rw [isTopCompl_iff_continuous_symm_prodEquivOfIsCompl]; rw [and_iff_right]
   exact continuous_prodEquivOfIsCompl h
@@ -1453,7 +1453,7 @@ definition prodEquivOfIsTopCompl
 
 中文:
 定义 prodEquivOfIsTopCompl
-  签名: (h : IsTopCompl p q)
+  签名: (h : 是TopCompl p q)
   定义体: { p.prodEquivOfIsCompl q h.isCompl with
     continuous_toFun := continuous_prodEquivOfIsCompl h.isCompl
     continuous_invFun := h.isCompl.isTopCompl_iff_continuous_symm_prodEquivOfIsCompl.mp h }
@@ -1480,7 +1480,7 @@ theorem toLinearEquiv_prodEquivOfIsTopCompl
 
 中文:
 定理 toLinearEquiv_prodEquivOfIsTopCompl
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 
 @[simp]
@@ -1502,7 +1502,7 @@ theorem coe_prodEquivOfIsTopCompl
 
 中文:
 定理 coe_prodEquivOfIsTopCompl
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 
 @[simp]
@@ -1522,7 +1522,7 @@ theorem coe_symm_prodEquivOfIsTopCompl
 
 中文:
 定理 coe_symm_prodEquivOfIsTopCompl
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 -/
 theorem coe_symm_prodEquivOfIsTopCompl (h : IsTopCompl p q) :
@@ -1539,7 +1539,7 @@ theorem prodEquivOfIsTopCompl_apply
 
 中文:
 定理 prodEquivOfIsTopCompl_apply
-  条件: (h : IsTopCompl p q) (x : p × q)
+  条件: (h : 是TopCompl p q) (x : p × q)
   证明: rfl
 -/
 theorem prodEquivOfIsTopCompl_apply (h : IsTopCompl p q) (x : p × q) :
@@ -1556,7 +1556,7 @@ theorem prodEquivOfIsTopCompl_symm_apply
 
 中文:
 定理 prodEquivOfIsTopCompl_symm_apply
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: prodEquivOfIsCompl_symm_apply h.isCompl x
 
 Depends on / 依赖: h.isCompl, isCompl, prodEquivOfIsCompl_symm_apply
@@ -1577,8 +1577,8 @@ theorem IsCompl.isTopCompl_iff_continuous_quotientEquivOfIsCompl
   exact h.symm.isTopCompl_iff_projectionOnto
 
 中文:
-定理 IsCompl.isTopCompl_iff_continuous_quotientEquivOfIsCompl
-  条件: (h : IsCompl p q)
+定理 是补集.isTopCompl_iff_continuous_quotientEquivOfIsCompl
+  条件: (h : 是补集 p q)
   证明: by
   rw [p.isQuotientMap_mkQL.continuous_iff]; rw [isTopCompl_comm]
   exact h.symm.isTopCompl_iff_projectionOnto
@@ -1605,7 +1605,7 @@ definition quotientEquivOfIsTopCompl
 
 中文:
 定义 quotientEquivOfIsTopCompl
-  签名: (h : IsTopCompl p q)
+  签名: (h : 是TopCompl p q)
   定义体: { p.quotientEquivOfIsCompl q h.isCompl with
     continuous_toFun := h.isCompl.isTopCompl_iff_continuous_quotientEquivOfIsCompl.mp h
     continuous_invFun := (p.mkQL.comp q.subtypeL).continuous }
@@ -1630,7 +1630,7 @@ theorem toLinearEquiv_quotientEquivOfIsTopCompl
 
 中文:
 定理 toLinearEquiv_quotientEquivOfIsTopCompl
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 -/
 theorem toLinearEquiv_quotientEquivOfIsTopCompl (h : IsTopCompl p q) :
@@ -1649,7 +1649,7 @@ theorem quotientEquivOfIsTopCompl_comp_mkQL
 
 中文:
 定理 quotientEquivOfIsTopCompl_comp_mkQL
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   证明: rfl
 
 @[simp]
@@ -1671,7 +1671,7 @@ theorem quotientEquivOfIsTopCompl_apply
 
 中文:
 定理 quotientEquivOfIsTopCompl_apply
-  条件: (h : IsTopCompl p q) (x : M ⧸ p)
+  条件: (h : 是TopCompl p q) (x : M ⧸ p)
   证明: rfl
 
 @[simp]
@@ -1691,7 +1691,7 @@ theorem quotientEquivOfIsTopCompl_symm_apply
 
 中文:
 定理 quotientEquivOfIsTopCompl_symm_apply
-  条件: (h : IsTopCompl p q) (y : q)
+  条件: (h : 是TopCompl p q) (y : q)
   证明: rfl
 -/
 theorem quotientEquivOfIsTopCompl_symm_apply (h : IsTopCompl p q) (y : q) :
@@ -1708,7 +1708,7 @@ theorem quotientEquivOfIsTopCompl_apply_mk
 
 中文:
 定理 quotientEquivOfIsTopCompl_apply_mk
-  条件: (h : IsTopCompl p q) (x : M)
+  条件: (h : 是TopCompl p q) (x : M)
   证明: quotientEquivOfIsCompl_apply_mk h.isCompl x
 
 Depends on / 依赖: h.isCompl, isCompl, quotientEquivOfIsCompl_apply_mk
@@ -1738,7 +1738,7 @@ definition ofIsTopCompl
 
 中文:
 定义 ofIsTopCompl
-  签名: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
+  签名: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
   定义体: φ.coprod ψ ∘L ↑(prodEquivOfIsTopCompl p q h).symm
 
 Depends on / 依赖: coprod, prodEquivOfIsTopCompl
@@ -1759,7 +1759,7 @@ theorem ofIsTopCompl_eq_add
 
 中文:
 定理 ofIsTopCompl_eq_add
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
   证明: by
   ext; simp [ofIsTopCompl]
 
@@ -1784,7 +1784,7 @@ theorem toLinearMap_ofIsTopCompl
 
 中文:
 定理 toLinearMap_ofIsTopCompl
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
   证明: rfl
 
 @[simp]
@@ -1804,7 +1804,7 @@ theorem ofIsTopCompl_apply
 
 中文:
 定理 ofIsTopCompl_apply
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : E)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : E)
   证明: rfl
 -/
 theorem ofIsTopCompl_apply (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : E) :
@@ -1821,7 +1821,7 @@ theorem ofIsTopCompl_apply_left
 
 中文:
 定理 ofIsTopCompl_apply_left
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : p)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : p)
   证明: by simp
 -/
 theorem ofIsTopCompl_apply_left (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : p) :
@@ -1837,7 +1837,7 @@ theorem ofIsTopCompl_apply_right
 
 中文:
 定理 ofIsTopCompl_apply_right
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : q)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : q)
   证明: by simp
 -/
 theorem ofIsTopCompl_apply_right (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) (x : q) :
@@ -1856,7 +1856,7 @@ theorem ofIsTopCompl_eq
 
 中文:
 定理 ofIsTopCompl_eq
-  结论: (h : IsTopCompl p q) {φ : p ->L[R] F} {ψ : q ->L[R] F} {χ : E ->L[R] F}
+  结论: (h : 是TopCompl p q) {φ : p ->L[R] F} {ψ : q ->L[R] F} {χ : E ->L[R] F}
   证明: by
   ext; simp [LinearMap.ofIsCompl_eq h.isCompl hφ, hψ]
 
@@ -1883,7 +1883,7 @@ theorem ofIsTopCompl_zero
 
 中文:
 定理 ofIsTopCompl_zero
-  条件: (h : IsTopCompl p q)
+  条件: (h : 是TopCompl p q)
   结论: (ofIsTopCompl h 0 0 : E ->L[R] F) = 0
   证明: by
   ext; simp
@@ -1905,7 +1905,7 @@ theorem ofIsTopCompl_add
 
 中文:
 定理 ofIsTopCompl_add
-  条件: (h : IsTopCompl p q) (φ₁ φ₂ : p ->L[R] F) (ψ₁ ψ₂ : q ->L[R] F)
+  条件: (h : 是TopCompl p q) (φ₁ φ₂ : p ->L[R] F) (ψ₁ ψ₂ : q ->L[R] F)
   证明: by
   ext; simp
 -/
@@ -1923,7 +1923,7 @@ theorem range_ofIsTopCompl
 
 中文:
 定理 range_ofIsTopCompl
-  条件: (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
+  条件: (h : 是TopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F)
   证明: by simp
 -/
 theorem range_ofIsTopCompl (h : IsTopCompl p q) (φ : p ->L[R] F) (ψ : q ->L[R] F) :

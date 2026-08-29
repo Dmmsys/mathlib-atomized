@@ -33,9 +33,9 @@ theorem List.sum_smul
   proof: map_list_sum ((smulAddHom R M).flip x) l
 
 中文:
-定理 List.sum_smul
-  条件: {l : List R} {x : M}
-  结论: l.sum • x = (l.map fun r => r • x).sum
+定理 列表.sum_smul
+  条件: {l : 列表 R} {x : M}
+  结论: l.求和 • x = (l.map fun r => r • x).求和
   证明: map_list_sum ((smulAddHom R M).flip x) l
 
 Depends on / 依赖: map_list_sum, smulAddHom
@@ -55,7 +55,7 @@ theorem Multiset.sum_smul
 中文:
 定理 Multiset.sum_smul
   条件: {l : Multiset R} {x : M}
-  结论: l.sum • x = (l.map fun r => r • x).sum
+  结论: l.求和 • x = (l.map fun r => r • x).求和
   证明: ((smulAddHom R M).flip x).map_multiset_sum l
 
 Depends on / 依赖: map_multiset_sum, smulAddHom
@@ -99,8 +99,8 @@ theorem Finset.sum_smul
   proof: map_sum ((smulAddHom R M).flip x) f s
 
 中文:
-定理 Finset.sum_smul
-  条件: {f : ι -> R} {s : Finset ι} {x : M}
+定理 有限集.sum_smul
+  条件: {f : ι -> R} {s : 有限集 ι} {x : M}
   证明: map_sum ((smulAddHom R M).flip x) f s
 
 Depends on / 依赖: map_sum, smulAddHom
@@ -118,8 +118,8 @@ lemma Finset.sum_smul_sum
   simp_rw [sum_smul, ← smul_sum]
 
 中文:
-引理 Finset.sum_smul_sum
-  条件: (s : Finset α) (t : Finset β) {f : α -> R} {g : β -> M}
+引理 有限集.sum_smul_sum
+  条件: (s : 有限集 α) (t : 有限集 β) {f : α -> R} {g : β -> M}
   证明: by
   simp_rw [sum_smul, ← smul_sum]
 
@@ -138,8 +138,8 @@ lemma Fintype.sum_smul_sum
   proof: Finset.sum_smul_sum _ _
 
 中文:
-引理 Fintype.sum_smul_sum
-  条件: [Fintype α] [Fintype β] (f : α -> R) (g : β -> M)
+引理 有限类型.sum_smul_sum
+  条件: [有限类型 α] [有限类型 β] (f : α -> R) (g : β -> M)
   证明: Finset.sum_smul_sum _ _
 
 Depends on / 依赖: Finset, Finset.sum_smul_sum, sum_smul_sum
@@ -162,8 +162,8 @@ theorem Finset.cast_card
   rw [Finset.sum_const]; rw [Nat.smul_one_eq_cast]
 
 中文:
-定理 Finset.cast_card
-  条件: [NonAssocSemiring R] (s : Finset α)
+定理 有限集.cast_card
+  条件: [非结合半环 R] (s : 有限集 α)
   结论: (#s : R) = ∑ _ in s, 1
   证明: by
   rw [Finset.sum_const]; rw [Nat.smul_one_eq_cast]
@@ -192,7 +192,7 @@ lemma sum_piFinset_apply
 
 中文:
 引理 sum_piFinset_apply
-  条件: (f : κ -> α) (s : Finset κ) (i : ι)
+  条件: (f : κ -> α) (s : 有限集 κ) (i : ι)
   证明: by
   classical
   rw [Finset.sum_comp]

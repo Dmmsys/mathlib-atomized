@@ -282,7 +282,7 @@ theorem toFun_spec''
 
 中文:
 定理 toFun_spec''
-  条件: (g : L ≃+* L) {n : 自然数} [NeZero n] {t : L} (ht : IsPrimitiveRoot t n)
+  条件: (g : L ≃+* L) {n : 自然数} [NeZero n] {t : L} (ht : 是PrimitiveRoot t n)
   证明: toFun_spec' g (SetLike.coe_mem ht.toRootsOfUnity)
 
 Depends on / 依赖: SetLike, SetLike.coe_mem, coe_mem, ht.toRootsOfUnity, toFun_spec, toRootsOfUnity
@@ -357,7 +357,7 @@ lemma id
 
 中文:
 引理 id
-  结论: χ₀ n (RingEquiv.refl L) = 1
+  结论: χ₀ n (环等价.refl L) = 1
   证明: by
   refine (toFun_unique n (RingEquiv.refl L) 1 <| fun t => ?_).symm
   have : 1 <= Nat.card { x // x in rootsOfUnity n L } := Nat.card_pos
@@ -595,7 +595,7 @@ lemma IsPrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
     Function.comp_a
 
 中文:
-引理 IsPrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
+引理 是PrimitiveRoot.autToPow_eq_modularCyclotomicCharacter
   结论: (n : 自然数) [NeZero n]
   证明: by
   ext
@@ -640,7 +640,7 @@ definition cyclotomicCharacter.toFun
 
 中文:
 定义 cyclotomicCharacter.toFun
-  签名: (p : 自然数) [Fact p.Prime] (g : L ≃+* L)
+  签名: (p : 自然数) [Fact p.素] (g : L ≃+* L)
   定义体: if H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i) then
     haveI _ (i) : HasEnoughRootsOfUnity L (p ^ i) := ⟨H i, rootsOfUnity.isCyclic _ _⟩
     PadicInt.ofIntSeq _ (PadicInt.isCauSeq_padicNorm_of_pow_dvd_sub
@@ -754,7 +754,7 @@ definition cyclotomicCharacter
 
 中文:
 定义 cyclotomicCharacter
-  签名: (p : 自然数) [Fact p.Prime]
+  签名: (p : 自然数) [Fact p.素]
   定义体: .toHomUnits
   { toFun g := cyclotomicCharacter.toFun p g
     map_one' := by
@@ -791,7 +791,7 @@ theorem cyclotomicCharacter.spec
 
 中文:
 定理 cyclotomicCharacter.spec
-  结论: (p : 自然数) [Fact p.Prime] {n : 自然数}
+  结论: (p : 自然数) [Fact p.素] {n : 自然数}
   证明: toFun_spec p g (rootsOfUnity.mkOfPowEq _ ht)
 
 Depends on / 依赖: mkOfPowEq, rootsOfUnity, rootsOfUnity.mkOfPowEq, toFun_spec
@@ -811,7 +811,7 @@ theorem cyclotomicCharacter.toZModPow
 
 中文:
 定理 cyclotomicCharacter.toZModPow
-  结论: (p : 自然数) [Fact p.Prime] {n : 自然数}
+  结论: (p : 自然数) [Fact p.素] {n : 自然数}
   证明: toZModPow_toFun _ _ _
 
 Depends on / 依赖: toZModPow_toFun
@@ -839,7 +839,7 @@ lemma cyclotomicCharacter.continuous
 
 中文:
 引理 cyclotomicCharacter.continuous
-  结论: (p : 自然数) [Fact p.Prime]
+  结论: (p : 自然数) [Fact p.素]
   证明: by
   by_cases H : forall (i : Nat), exists ζ : L, IsPrimitiveRoot ζ (p ^ i); swap
   · simp only [cyclotomicCharacter, cyclotomicCharacter.toFun, dif_neg H, MonoidHom.coe_comp]

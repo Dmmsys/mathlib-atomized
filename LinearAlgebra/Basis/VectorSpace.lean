@@ -87,7 +87,7 @@ theorem extend_apply_self
 中文:
 定理 extend_apply_self
   条件: (hs : LinearIndepOn K id s) (x : hs.extend _)
-  结论: Basis.extend hs x = x
+  结论: 基.extend hs x = x
   证明: Basis.mk_apply _ _ _
 
 @[simp]
@@ -110,7 +110,7 @@ theorem coe_extend
 中文:
 定理 coe_extend
   条件: (hs : LinearIndepOn K id s)
-  结论: ⇑(Basis.extend hs) = ((↑) : _ -> _)
+  结论: ⇑(基.extend hs) = ((↑) : _ -> _)
   证明: funext (extend_apply_self hs)
 
 Depends on / 依赖: extend_apply_self
@@ -211,8 +211,8 @@ theorem subset_extend
 
 中文:
 定理 subset_extend
-  条件: {s : Set V} (hs : LinearIndepOn K id s)
-  结论: s subseteq hs.extend (Set.subset_univ _)
+  条件: {s : 集合 V} (hs : LinearIndepOn K id s)
+  结论: s subseteq hs.extend (集合.subset_univ _)
   证明: hs.subset_extend _
 
 Depends on / 依赖: hs.subset_extend, subset_extend
@@ -466,7 +466,7 @@ definition ofVectorSpaceIndex
 
 中文:
 定义 ofVectorSpaceIndex
-  签名: : Set V
+  签名: : 集合 V
   定义体: (linearIndepOn_empty K id).extend (subset_univ _)
 
 Depends on / 依赖: extend, linearIndepOn_empty, subset_univ
@@ -486,7 +486,7 @@ definition ofVectorSpace
 
 中文:
 定义 ofVectorSpace
-  签名: : Basis (ofVectorSpaceIndex K V) K V
+  签名: : 基 (ofVectorSpaceIndex K V) K V
   定义体: Basis.extend (linearIndependent_empty K V)
 
 @[stacks 09FN "Generalized from fields to division rings."]
@@ -600,8 +600,8 @@ theorem exists_basis
   proof: ⟨ofVectorSpaceIndex K V, ⟨ofVectorSpace K V⟩⟩
 
 中文:
-定理 exists_basis
-  结论: 存在 s : Set V, Nonempty (Basis s K V)
+定理 存在_basis
+  结论: 存在 s : 集合 V, 非空 (基 s K V)
   证明: ⟨ofVectorSpaceIndex K V, ⟨ofVectorSpace K V⟩⟩
 
 Depends on / 依赖: ofVectorSpace, ofVectorSpaceIndex
@@ -632,7 +632,7 @@ theorem VectorSpace.card_fintype
 
 中文:
 定理 VectorSpace.card_fintype
-  条件: [Fintype K] [Fintype V]
+  条件: [有限类型 K] [有限类型 V]
   结论: 存在 n : 自然数, card V = card K ^ n
   证明: by
   classical
@@ -670,7 +670,7 @@ theorem nonzero_span_atom
 中文:
 定理 nonzero_span_atom
   条件: (v : V) (hv : v != 0)
-  结论: IsAtom (span K {v} : Submodule K V)
+  结论: IsAtom (span K {v} : 子模 K V)
   证明: by
   constructor
   · rw [Submodule.ne_bot_iff]
@@ -718,7 +718,7 @@ theorem atom_iff_nonzero_span
 
 中文:
 定理 atom_iff_nonzero_span
-  条件: (W : Submodule K V)
+  条件: (W : 子模 K V)
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · obtain ⟨hbot, h⟩ := h
@@ -757,7 +757,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAtomistic (Submodule K V)
+  签名: 是Atomistic (子模 K V)
   定义体: CompleteLattice.isAtomistic_iff.2 fun W => by
     refine ⟨_, submodule_eq_sSup_le_nonzero_spans W, ?_⟩
     rintro _ ⟨w, ⟨_, ⟨hw, rfl⟩⟩⟩
@@ -790,8 +790,8 @@ theorem LinearMap.exists_leftInverse_of_injective
       LinearIndepOn.image (f 
 
 中文:
-定理 LinearMap.exists_leftInverse_of_injective
-  条件: (f : V ->ₗ[K] V') (hf_inj : LinearMap.ker f = ⊥)
+定理 线性映射.存在_leftInverse_of_injective
+  条件: (f : V ->ₗ[K] V') (hf_inj : 线性映射.ker f = ⊥)
   证明: by
   let B := Basis.ofVectorSpaceIndex K V
   let hB := Basis.ofVectorSpace K V
@@ -839,7 +839,7 @@ definition LinearMap.leftInverse
   else 0
 
 中文:
-定义 LinearMap.leftInverse
+定义 线性映射.leftInverse
   签名: (f : V ->ₗ[K] V')
   定义体: if h_inj : LinearMap.ker f = ⊥ then
   (f.exists_leftInverse_of_injective h_inj).choose
@@ -862,8 +862,8 @@ theorem LinearMap.leftInverse_comp_of_inj
   simpa [leftInverse, h_inj] using (f.exists_leftInverse_of_injective h_inj).choose_spec
 
 中文:
-定理 LinearMap.leftInverse_comp_of_inj
-  条件: {f : V ->ₗ[K] V'} (h_inj : LinearMap.ker f = ⊥)
+定理 线性映射.leftInverse_comp_of_inj
+  条件: {f : V ->ₗ[K] V'} (h_inj : 线性映射.ker f = ⊥)
   证明: by
   simpa [leftInverse, h_inj] using (f.exists_leftInverse_of_injective h_inj).choose_spec
 
@@ -882,8 +882,8 @@ theorem LinearMap.leftInverse_apply_of_inj
   proof: LinearMap.ext_iff.mp (f.leftInverse_comp_of_inj h_inj) x
 
 中文:
-定理 LinearMap.leftInverse_apply_of_inj
-  条件: {f : V ->ₗ[K] V'} (h_inj : LinearMap.ker f = ⊥) (x : V)
+定理 线性映射.leftInverse_apply_of_inj
+  条件: {f : V ->ₗ[K] V'} (h_inj : 线性映射.ker f = ⊥) (x : V)
   证明: LinearMap.ext_iff.mp (f.leftInverse_comp_of_inj h_inj) x
 
 Depends on / 依赖: LinearMap, LinearMap.ext_iff.mp, ext_iff, f.leftInverse_comp_of_inj, h_inj, leftInverse_comp_of_inj
@@ -903,9 +903,9 @@ theorem Submodule.exists_isCompl
 LinearMap.isCompl_of_proj LinearMap.leftInverse_apply_of_inj p.ker_subtype⟩
 
 中文:
-定理 Submodule.exists_isCompl
-  条件: (p : Submodule K V)
-  结论: 存在 q : Submodule K V, IsCompl p q
+定理 子模.存在_isCompl
+  条件: (p : 子模 K V)
+  结论: 存在 q : 子模 K V, 是补集 p q
   证明: ⟨LinearMap.ker p.subtype.leftInverse,
 LinearMap.isCompl_of_proj LinearMap.leftInverse_apply_of_inj p.ker_subtype⟩
 
@@ -924,8 +924,8 @@ instance Submodule.complementedLattice
   body: ⟨Submodule.exists_isCompl⟩
 
 中文:
-实例 Submodule.complementedLattice
-  签名: : ComplementedLattice (Submodule K V)
+实例 子模.complementedLattice
+  签名: : 有补格 (子模 K V)
   定义体: ⟨Submodule.exists_isCompl⟩
 
 Depends on / 依赖: Submodule, Submodule.exists_isCompl, exists_isCompl
@@ -943,8 +943,8 @@ theorem LinearMap.exists_extend
   ⟨f.comp g, by rw [LinearMap.comp_assoc, hg, f.comp_id]⟩
 
 中文:
-定理 LinearMap.exists_extend
-  条件: {p : Submodule K V} (f : p ->ₗ[K] V')
+定理 线性映射.存在_extend
+  条件: {p : 子模 K V} (f : p ->ₗ[K] V')
   证明: let ⟨g, hg⟩ := p.subtype.exists_leftInverse_of_injective p.ker_subtype
   ⟨f.comp g, by rw [LinearMap.comp_assoc, hg, f.comp_id]⟩
 
@@ -971,8 +971,8 @@ theorem LinearMap.exists_extend_of_notMem
     
 
 中文:
-定理 LinearMap.exists_extend_of_notMem
-  结论: {p : Submodule K V} {v : V} (f : p ->ₗ[K] V')
+定理 线性映射.存在_extend_of_notMem
+  结论: {p : 子模 K V} {v : V} (f : p ->ₗ[K] V')
   证明: by
   rcases (LinearPMap.supSpanSingleton ⟨p, f⟩ v y hv).toFun.exists_extend with ⟨g, hg⟩
   refine ⟨g, ?_, ?_⟩
@@ -1008,8 +1008,8 @@ theorem Submodule.exists_le_ker_of_notMem
   simpa using congr($hpf ⟨x, hx⟩)
 
 中文:
-定理 Submodule.exists_le_ker_of_notMem
-  条件: {p : Submodule K V} {v : V} (hv : v ∉ p)
+定理 子模.存在_le_ker_of_notMem
+  条件: {p : 子模 K V} {v : V} (hv : v ∉ p)
   证明: by
   rcases LinearMap.exists_extend_of_notMem (0 : p ->ₗ[K] K) hv 1 with ⟨f, hpf, hfv⟩
   refine ⟨f, by simp [hfv], fun x hx => ?_⟩
@@ -1037,8 +1037,8 @@ instance [Nontrivial
   exact ⟨g, 0, DFunLike.ne_iff.mpr ⟨v, by simp_all⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: V] [Nontrivial V'] : Nontrivial (V ->ₗ[K] V')
+实例 [非平凡
+  签名: V] [非平凡 V'] : 非平凡 (V ->ₗ[K] V')
   定义体: by
   obtain ⟨v, hv⟩ := exists_ne (0 : V)
   obtain ⟨w, hw⟩ := exists_ne (0 : V')
@@ -1067,8 +1067,8 @@ theorem Submodule.exists_le_ker_of_lt_top
   exact ⟨f, ne_of_apply_ne (· v) hfv, hpf⟩
 
 中文:
-定理 Submodule.exists_le_ker_of_lt_top
-  条件: (p : Submodule K V) (hp : p < ⊤)
+定理 子模.存在_le_ker_of_lt_top
+  条件: (p : 子模 K V) (hp : p < ⊤)
   证明: by
   rcases SetLike.exists_of_lt hp with ⟨v, -, hpv⟩
   rcases exists_le_ker_of_notMem hpv with ⟨f, hfv, hpf⟩
@@ -1096,8 +1096,8 @@ Nonempty.intro
 
 中文:
 定理 quotient_prod_linearEquiv
-  条件: (p : Submodule K V)
-  结论: Nonempty (((V ⧸ p) × p) ≃ₗ[K] V)
+  条件: (p : 子模 K V)
+  结论: 非空 (((V ⧸ p) × p) ≃ₗ[K] V)
   证明: let ⟨q, hq⟩ := p.exists_isCompl
 Nonempty.intro
     ((quotientEquivOfIsCompl p q hq).prodCongr (LinearEquiv.refl _ _)).trans
@@ -1139,7 +1139,7 @@ theorem exists_basis_of_pairing_ne_zero
     · apply LinearIndepOn.im
 
 中文:
-定理 exists_basis_of_pairing_ne_zero
+定理 存在_basis_of_pairing_ne_zero
   证明: by
   set b₁ := Basis.ofVectorSpace K (ker f)
   set s : Set V := (ker f).subtype '' Set.range b₁
@@ -1208,7 +1208,7 @@ theorem exists_basis_of_pairing_eq_zero
   s
 
 中文:
-定理 exists_basis_of_pairing_eq_zero
+定理 存在_basis_of_pairing_eq_zero
   证明: by
   lift v to ker f using hfv
   have : LinearIndepOn K _root_.id {v} := by simpa using hv

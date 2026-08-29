@@ -47,7 +47,7 @@ scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseVAdd
 
 中文:
 定义 pointwiseVAdd
-  签名: : VAdd V (AffineSubspace k P) where
+  签名: : 向量加法 V (仿射子空间 k P) where
   定义体: s.map (AffineEquiv.constVAdd k P x)
 
 scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseVAdd
@@ -67,7 +67,7 @@ lemma coe_pointwise_vadd
 
 中文:
 引理 coe_pointwise_vadd
-  条件: (v : V) (s : AffineSubspace k P)
+  条件: (v : V) (s : 仿射子空间 k P)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_pointwise_vadd (v : V) (s : AffineSubspace k P) :
@@ -89,7 +89,7 @@ scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseAddAction
 
 中文:
 定义 pointwiseAddAction
-  签名: : AddAction V (AffineSubspace k P)
+  签名: : 加法作用 V (仿射子空间 k P)
   定义体: SetLike.coe_injective.addAction _ coe_pointwise_vadd
 
 scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseAddAction
@@ -109,7 +109,7 @@ theorem pointwise_vadd_eq_map
 
 中文:
 定理 pointwise_vadd_eq_map
-  条件: (v : V) (s : AffineSubspace k P)
+  条件: (v : V) (s : 仿射子空间 k P)
   证明: rfl
 -/
 theorem pointwise_vadd_eq_map (v : V) (s : AffineSubspace k P) :
@@ -126,7 +126,7 @@ theorem vadd_mem_pointwise_vadd_iff
 
 中文:
 定理 vadd_mem_pointwise_vadd_iff
-  条件: {v : V} {s : AffineSubspace k P} {p : P}
+  条件: {v : V} {s : 仿射子空间 k P} {p : P}
   证明: vadd_mem_vadd_set_iff
 
 Depends on / 依赖: OrderDual, OrderDual.opensMeasurableSpace, TopologicalSpace, opensMeasurableSpace, vadd_mem_vadd_set_iff
@@ -148,7 +148,7 @@ theorem pointwise_vadd_bot
 中文:
 定理 pointwise_vadd_bot
   条件: (v : V)
-  结论: v +ᵥ (⊥ : AffineSubspace k P) = ⊥
+  结论: v +ᵥ (⊥ : 仿射子空间 k P) = ⊥
   证明: by
   ext; simp [pointwise_vadd_eq_map, map_bot]
 
@@ -170,7 +170,7 @@ lemma pointwise_vadd_top
 中文:
 引理 pointwise_vadd_top
   条件: (v : V)
-  结论: v +ᵥ (⊤ : AffineSubspace k P) = ⊤
+  结论: v +ᵥ (⊤ : 仿射子空间 k P) = ⊤
   证明: by
   ext; simp [pointwise_vadd_eq_map, vadd_eq_iff_eq_neg_vadd]
 
@@ -191,7 +191,7 @@ theorem pointwise_vadd_direction
 
 中文:
 定理 pointwise_vadd_direction
-  条件: (v : V) (s : AffineSubspace k P)
+  条件: (v : V) (s : 仿射子空间 k P)
   证明: by
   rw [pointwise_vadd_eq_map]; rw [map_direction]
   exact Submodule.map_id _
@@ -214,7 +214,7 @@ theorem pointwise_vadd_span
 
 中文:
 定理 pointwise_vadd_span
-  条件: (v : V) (s : Set P)
+  条件: (v : V) (s : 集合 P)
   结论: v +ᵥ affineSpan k s = affineSpan k (v +ᵥ s)
   证明: map_span _ s
 
@@ -237,7 +237,7 @@ theorem map_pointwise_vadd
 
 中文:
 定理 map_pointwise_vadd
-  条件: (f : P₁ ->ᵃ[k] P₂) (v : V₁) (s : AffineSubspace k P₁)
+  条件: (f : P₁ ->ᵃ[k] P₂) (v : V₁) (s : 仿射子空间 k P₁)
   证明: by
   rw [pointwise_vadd_eq_map]; rw [pointwise_vadd_eq_map]; rw [map_map]; rw [map_map]
   congr 1
@@ -279,7 +279,7 @@ scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseSMul
 
 中文:
 定义 pointwiseSMul
-  签名: : SMul M (AffineSubspace k V) where
+  签名: : 标量乘法 M (仿射子空间 k V) where
   定义体: s.map (DistribSMul.toLinearMap k _ a).toAffineMap
 
 scoped[Pointwise] attribute [instance] AffineSubspace.pointwiseSMul
@@ -303,8 +303,8 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (a : M) (s : AffineSubspace k V)
-  结论: ↑(a • s) = a • (s : Set V)
+  条件: (a : M) (s : 仿射子空间 k V)
+  结论: ↑(a • s) = a • (s : 集合 V)
   证明: rfl
 
 Depends on / 依赖: BorelSpace, BorelSpace.countablyGenerated, TopologicalSpace, countablyGenerated
@@ -321,7 +321,7 @@ lemma smul_eq_map
 
 中文:
 引理 smul_eq_map
-  条件: (a : M) (s : AffineSubspace k V)
+  条件: (a : M) (s : 仿射子空间 k V)
   证明: rfl
 -/
 lemma smul_eq_map (a : M) (s : AffineSubspace k V) :
@@ -337,7 +337,7 @@ lemma smul_mem_smul_iff
 
 中文:
 引理 smul_mem_smul_iff
-  条件: {G : 类型} [Group G] [DistribMulAction G V] [SMulCommClass G k V] {a : G}
+  条件: {G : 类型} [群 G] [分配乘法作用 G V] [标量交换类 G k V] {a : G}
   证明: smul_mem_smul_set_iff
 
 Depends on / 依赖: smul_mem_smul_set_iff
@@ -358,7 +358,7 @@ lemma smul_bot
 中文:
 引理 smul_bot
   条件: (a : M)
-  结论: a • (⊥ : AffineSubspace k V) = ⊥
+  结论: a • (⊥ : 仿射子空间 k V) = ⊥
   证明: by
   ext; simp [smul_eq_map, map_bot]
 -/
@@ -376,7 +376,7 @@ lemma smul_span
 
 中文:
 引理 smul_span
-  条件: (a : M) (s : Set V)
+  条件: (a : M) (s : 集合 V)
   结论: a • affineSpan k s = affineSpan k (a • s)
   证明: map_span _ s
 
@@ -410,7 +410,7 @@ scoped[Pointwise] attribute [instance] AffineSubspace.mulAction
 
 中文:
 定义 mulAction
-  签名: : MulAction M (AffineSubspace k V)
+  签名: : 乘法作用 M (仿射子空间 k V)
   定义体: SetLike.coe_injective.mulAction _ coe_smul
 
 scoped[Pointwise] attribute [instance] AffineSubspace.mulAction
@@ -431,7 +431,7 @@ lemma smul_mem_smul_iff_of_isUnit
 
 中文:
 引理 smul_mem_smul_iff_of_isUnit
-  条件: (ha : IsUnit a)
+  条件: (ha : 是单位 a)
   结论: a • p in a • s ↔ p in s
   证明: smul_mem_smul_iff (a := ha.unit)
 
@@ -450,7 +450,7 @@ lemma smul_mem_smul_iff₀
 
 中文:
 引理 smul_mem_smul_iff₀
-  结论: {G₀ : 类型} [GroupWithZero G₀] [DistribMulAction G₀ V]
+  结论: {G₀ : 类型} [带零群 G₀] [分配乘法作用 G₀ V]
   证明: smul_mem_smul_iff_of_isUnit ha.isUnit
 
 Depends on / 依赖: ha.isUnit, isUnit, smul_mem_smul_iff_of_isUnit
@@ -471,8 +471,8 @@ lemma smul_top
 
 中文:
 引理 smul_top
-  条件: (ha : IsUnit a)
-  结论: a • (⊤ : AffineSubspace k V) = ⊤
+  条件: (ha : 是单位 a)
+  结论: a • (⊤ : 仿射子空间 k V) = ⊤
   证明: by
   ext x; simpa [smul_eq_map, map_top] using ⟨ha.unit⁻¹ • x, smul_inv_smul ha.unit _⟩
 -/
@@ -501,7 +501,7 @@ lemma direction_smul
 
 中文:
 引理 direction_smul
-  条件: (ha : a != 0) (s : AffineSubspace k V)
+  条件: (ha : a != 0) (s : 仿射子空间 k V)
   结论: (a • s).direction = s.direction
   证明: by
   have : DistribSMul.toLinearMap k V a = a • LinearMap.id := by

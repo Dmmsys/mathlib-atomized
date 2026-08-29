@@ -38,7 +38,7 @@ lemma apply_single
 
 中文:
 引理 apply_single
-  条件: [FunLike F M N] [ZeroHomClass F M N] (e : F) (i : ι) (m : M) (b : ι)
+  条件: [函数状 F M N] [保零态射类 F M N] (e : F) (i : ι) (m : M) (b : ι)
   证明: apply_single' e (map_zero e) i m b
 
 Depends on / 依赖: apply_single, map_zero
@@ -60,7 +60,7 @@ definition mapRange.zeroHom
 
 中文:
 定义 mapRange.zeroHom
-  签名: (f : ZeroHom M N)
+  签名: (f : 保零态射 M N)
   定义体: Finsupp.mapRange f f.map_zero
   map_zero' := mapRange_zero
 
@@ -96,7 +96,7 @@ lemma mapRange.zeroHom_comp
 
 中文:
 引理 mapRange.zeroHom_comp
-  条件: (f : ZeroHom N O) (f₂ : ZeroHom M N)
+  条件: (f : 保零态射 N O) (f₂ : 保零态射 M N)
   证明: by
   ext; simp
 
@@ -121,7 +121,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (ι ->₀ M) where add
+  签名: : 加法 (ι ->₀ M) where add
   定义体: zipWith (· + ·) (add_zero 0)
 
 Depends on / 依赖: add_zero, zipWith
@@ -213,7 +213,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: : AddZeroClass (ι ->₀ M)
+  签名: : 加法零类 (ι ->₀ M)
   定义体: fast_instance% DFunLike.coe_injective.addZeroClass _ coe_zero coe_add
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addZeroClass, addZeroClass, coe_add, coe_injective, coe_zero, fast_instance
@@ -231,7 +231,7 @@ instance instIsLeftCancelAdd
 
 中文:
 实例 instIsLeftCancelAdd
-  签名: [IsLeftCancelAdd M]
+  签名: [是左消去加法 M]
   定义体: ext fun x => add_left_cancel DFunLike.congr_fun h x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_left_cancel, congr_fun
@@ -250,7 +250,7 @@ definition addEquivFunOnFinite
 
 中文:
 定义 addEquivFunOnFinite
-  签名: {ι : 类型} [Finite ι]
+  签名: {ι : 类型} [有限 ι]
   定义体: Finsupp.equivFunOnFinite
   map_add' _ _ := rfl
 
@@ -275,7 +275,7 @@ definition uniqueAddEquiv
 
 中文:
 定义 uniqueAddEquiv
-  签名: (i : ι) [Subsingleton ι]
+  签名: (i : ι) [子单例 ι]
   定义体: uniqueEquiv i
   map_add' _ _ := rfl
 
@@ -296,7 +296,7 @@ lemma uniqueAddEquiv_symm_apply_apply
 
 中文:
 引理 uniqueAddEquiv_symm_apply_apply
-  条件: (i : ι) [Subsingleton ι] (m : M) (j : ι)
+  条件: (i : ι) [子单例 ι] (m : M) (j : ι)
   证明: by simp [Subsingleton.elim j i]
 -/
 @[simp↓ high] lemma uniqueAddEquiv_symm_apply_apply (i : ι) [Subsingleton ι] (m : M) (j : ι) :
@@ -315,8 +315,8 @@ definition _root_.AddEquiv.finsuppUnique
   map_add' _ _ := rfl
 
 中文:
-定义 _root_.AddEquiv.finsuppUnique
-  签名: {ι : 类型} [Unique ι]
+定义 _root_.加法等价.finsuppUnique
+  签名: {ι : 类型} [唯一 ι]
   定义体: .finsuppUnique
   map_add' _ _ := rfl
 
@@ -336,7 +336,7 @@ instance instIsRightCancelAdd
 
 中文:
 实例 instIsRightCancelAdd
-  签名: [IsRightCancelAdd M]
+  签名: [是右消去加法 M]
   定义体: ext fun x => add_right_cancel DFunLike.congr_fun h x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, add_right_cancel, congr_fun
@@ -353,7 +353,7 @@ instance instIsCancelAdd
 
 中文:
 实例 instIsCancelAdd
-  签名: [IsCancelAdd M]
+  签名: [是消去加法 M]
 -/
 instance instIsCancelAdd [IsCancelAdd M] : IsCancelAdd (ι ->₀ M) where
 
@@ -437,7 +437,7 @@ lemma mapRange_add'
 
 中文:
 引理 mapRange_add'
-  条件: [FunLike F M N] [AddMonoidHomClass F M N] {f : F} (g₁ g₂ : ι ->₀ M)
+  条件: [函数状 F M N] [加法幺半群态射类 F M N] {f : F} (g₁ g₂ : ι ->₀ M)
   证明: mapRange_add (map_add f) g₁ g₂
 
 Depends on / 依赖: mapRange_add, map_add
@@ -674,8 +674,8 @@ lemma _root_.AddEquiv.finsuppUnique_symm
   proof: by ext; simp [AddEquiv.finsuppUnique]
 
 中文:
-引理 _root_.AddEquiv.finsuppUnique_symm
-  条件: {M : 类型} [AddZeroClass M] (d : M)
+引理 _root_.加法等价.finsuppUnique_symm
+  条件: {M : 类型} [加法零类 M] (d : M)
   证明: by ext; simp [AddEquiv.finsuppUnique]
 
 Depends on / 依赖: AddEquiv, AddEquiv.finsuppUnique, finsuppUnique
@@ -1215,8 +1215,8 @@ instance instNatSMul
   body: v.mapRange (n • ·) (nsmul_zero _)
 
 中文:
-实例 instNatSMul
-  签名: : SMul 自然数 (ι ->₀ M) where smul n v
+实例 inst自然数SMul
+  签名: : 标量乘法 自然数 (ι ->₀ M) where smul n v
   定义体: v.mapRange (n • ·) (nsmul_zero _)
 
 Depends on / 依赖: mapRange, nsmul_zero, v.mapRange
@@ -1267,7 +1267,7 @@ instance instAddMonoid
 
 中文:
 实例 instAddMonoid
-  签名: : AddMonoid (ι ->₀ M)
+  签名: : 加法幺半群 (ι ->₀ M)
   定义体: fast_instance% DFunLike.coe_injective.addMonoid _ coe_zero coe_add fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addMonoid, addMonoid, coe_add, coe_injective, coe_zero, fast_instance
@@ -1285,7 +1285,7 @@ instance instIsAddTorsionFree
 
 中文:
 实例 instIsAddTorsionFree
-  签名: [IsAddTorsionFree M]
+  签名: [是加法无挠 M]
   定义体: DFunLike.coe_injective.isAddTorsionFree coeFnAddHom
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.isAddTorsionFree, coeFnAddHom, coe_injective, isAddTorsionFree
@@ -1309,7 +1309,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (ι ->₀ M)
+  签名: : 加法交换幺半群 (ι ->₀ M)
   定义体: fast_instance% DFunLike.coe_injective.addCommMonoid
     DFunLike.coe coe_zero coe_add (fun _ _ => rfl)
 
@@ -1579,7 +1579,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: [NegZeroClass G]
+  签名: [NegZero类 G]
   定义体: mapRange Neg.neg neg_zero
 
 Depends on / 依赖: Neg.neg, mapRange, neg_zero
@@ -1597,7 +1597,7 @@ lemma coe_neg
 
 中文:
 引理 coe_neg
-  条件: [NegZeroClass G] (g : ι ->₀ G)
+  条件: [NegZero类 G] (g : ι ->₀ G)
   结论: ⇑(-g) = -g
   证明: rfl
 -/
@@ -1614,7 +1614,7 @@ lemma neg_apply
 
 中文:
 引理 neg_apply
-  条件: [NegZeroClass G] (g : ι ->₀ G) (a : ι)
+  条件: [NegZero类 G] (g : ι ->₀ G) (a : ι)
   结论: (-g) a = -g a
   证明: rfl
 -/
@@ -1631,7 +1631,7 @@ lemma mapRange_neg
 
 中文:
 引理 mapRange_neg
-  结论: [NegZeroClass G] [NegZeroClass H] {f : G -> H} {hf : f 0 = 0}
+  结论: [NegZero类 G] [NegZero类 H] {f : G -> H} {hf : f 0 = 0}
   证明: ext fun _ => by simp only [hf', neg_apply, mapRange_apply]
 
 Depends on / 依赖: mapRange_apply, neg_apply
@@ -1650,7 +1650,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: [SubNegZeroMonoid G]
+  签名: [SubNegZero幺半群 G]
   定义体: ⟨zipWith Sub.sub (sub_zero _)⟩
 
 Depends on / 依赖: Sub.sub, sub_zero, zipWith
@@ -1669,7 +1669,7 @@ lemma coe_sub
 
 中文:
 引理 coe_sub
-  条件: [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G)
+  条件: [SubNegZero幺半群 G] (g₁ g₂ : ι ->₀ G)
   结论: ⇑(g₁ - g₂) = g₁ - g₂
   证明: rfl
 -/
@@ -1686,7 +1686,7 @@ lemma sub_apply
 
 中文:
 引理 sub_apply
-  条件: [SubNegZeroMonoid G] (g₁ g₂ : ι ->₀ G) (a : ι)
+  条件: [SubNegZero幺半群 G] (g₁ g₂ : ι ->₀ G) (a : ι)
   结论: (g₁ - g₂) a = g₁ a - g₂ a
   证明: rfl
 -/
@@ -1702,7 +1702,7 @@ lemma mapRange_sub
 
 中文:
 引理 mapRange_sub
-  结论: [SubNegZeroMonoid G] [SubNegZeroMonoid H] {f : G -> H} {hf : f 0 = 0}
+  结论: [SubNegZero幺半群 G] [SubNegZero幺半群 H] {f : G -> H} {hf : f 0 = 0}
   证明: ext fun _ => by simp only [hf', sub_apply, mapRange_apply]
 
 Depends on / 依赖: mapRange_apply, sub_apply
@@ -1725,7 +1725,7 @@ lemma mapRange_neg'
 
 中文:
 引理 mapRange_neg'
-  结论: [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
+  结论: [Subtraction幺半群 H] [函数状 F G H] [加法幺半群态射类 F G H]
   证明: mapRange_neg (map_neg f) v
 
 Depends on / 依赖: mapRange_neg, map_neg
@@ -1745,7 +1745,7 @@ lemma mapRange_sub'
 
 中文:
 引理 mapRange_sub'
-  结论: [SubtractionMonoid H] [FunLike F G H] [AddMonoidHomClass F G H]
+  结论: [Subtraction幺半群 H] [函数状 F G H] [加法幺半群态射类 F G H]
   证明: mapRange_sub (map_sub f) v₁ v₂
 
 Depends on / 依赖: mapRange_sub, map_sub
@@ -1764,8 +1764,8 @@ instance instIntSMul
   body: ⟨fun n v => v.mapRange (n • ·) (zsmul_zero _)⟩
 
 中文:
-实例 instIntSMul
-  签名: : SMul 整数 (ι ->₀ G)
+实例 inst整数SMul
+  签名: : 标量乘法 整数 (ι ->₀ G)
   定义体: ⟨fun n v => v.mapRange (n • ·) (zsmul_zero _)⟩
 
 Depends on / 依赖: mapRange, v.mapRange, zsmul_zero
@@ -1786,7 +1786,7 @@ instance instAddGroup
 
 中文:
 实例 instAddGroup
-  签名: : AddGroup (ι ->₀ G)
+  签名: : 加法群 (ι ->₀ G)
   定义体: fast_instance% DFunLike.coe_injective.addGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 
@@ -2018,7 +2018,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [AddCommGroup G]
+  签名: [加法交换群 G]
   定义体: fast_instance% DFunLike.coe_injective.addCommGroup DFunLike.coe coe_zero coe_add coe_neg coe_sub
     (fun _ _ => rfl) fun _ _ => rfl
 

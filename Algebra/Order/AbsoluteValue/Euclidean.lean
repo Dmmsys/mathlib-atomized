@@ -44,7 +44,7 @@ structure IsEuclidean
     - map_lt_map_iff' : forall {x y}, abv x < abv y ↔ x ≺ y
 
 中文:
-结构 IsEuclidean
+结构 是Euclidean
   参数: : 命题 where
   公理与运算 (1 个):
     - map_lt_map_iff' : 对任意 {x y}, abv x < abv y ↔ x ≺ y
@@ -70,7 +70,7 @@ theorem map_lt_map_iff
 
 中文:
 定理 map_lt_map_iff
-  条件: {x y : R} (h : abv.IsEuclidean)
+  条件: {x y : R} (h : abv.是Euclidean)
   结论: abv x < abv y ↔ x ≺ y
   证明: map_lt_map_iff' h
 
@@ -92,7 +92,7 @@ theorem sub_mod_lt
 
 中文:
 定理 sub_mod_lt
-  条件: (h : abv.IsEuclidean) (a : R) {b : R} (hb : b != 0)
+  条件: (h : abv.是Euclidean) (a : R) {b : R} (hb : b != 0)
   结论: abv (a % b) < abv b
   证明: h.map_lt_map_iff.mpr (EuclideanDomain.mod_lt a hb)
 
@@ -121,7 +121,7 @@ theorem abs_isEuclidean
 
 中文:
 定理 abs_isEuclidean
-  结论: IsEuclidean (AbsoluteValue.abs : AbsoluteValue 整数 整数)
+  结论: 是Euclidean (绝对值.abs : 绝对值 整数 整数)
   证明: { map_lt_map_iff' := fun {x y} =>
        show abs x < abs y ↔ natAbs x < natAbs y by rw [abs_eq_natAbs, abs_eq_natAbs, ofNat_lt] }
 -/

@@ -442,7 +442,7 @@ theorem derivedSeriesOfIdeal_baseChange
 
 中文:
 定理 derivedSeriesOfIdeal_baseChange
-  条件: {A : 类型} [CommRing A] [Algebra R A] (k : 自然数)
+  条件: {A : 类型} [交换环 A] [代数 R A] (k : 自然数)
   证明: by
   induction k with
   | zero => simp
@@ -467,7 +467,7 @@ theorem derivedSeries_baseChange
 
 中文:
 定理 derivedSeries_baseChange
-  条件: {A : 类型} [CommRing A] [Algebra R A] (k : 自然数)
+  条件: {A : 类型} [交换环 A] [代数 R A] (k : 自然数)
   证明: by
   rw [derivedSeries_def]; rw [derivedSeries_def]; rw [← derivedSeriesOfIdeal_baseChange]; rw [LieSubmodule.baseChange_top]
 -/
@@ -650,7 +650,7 @@ theorem derivedSeries_map_eq
 
 中文:
 定理 derivedSeries_map_eq
-  条件: (k : 自然数) (h : Function.Surjective f)
+  条件: (k : 自然数) (h : 函数.满射 f)
   证明: by
   induction k with
   | zero =>
@@ -758,7 +758,7 @@ theorem coe_derivedSeries_eq_int_aux
 
 中文:
 定理 coe_derivedSeries_eq_int_aux
-  结论: (R₁ R₂ L : 类型) [CommRing R₁] [CommRing R₂]
+  结论: (R₁ R₂ L : 类型) [交换环 R₁] [交换环 R₂]
   证明: derivedSeriesOfIdeal R₂ L k ⊤; let S : Set L := {⁅a, b⁆ | (a in I) (b in I)}
     (Submodule.span R₁ S : Set L) <= (Submodule.span R₂ S : Set L) := by
   intro I S x hx
@@ -843,7 +843,7 @@ class IsSolvable
     - solvable_int : exists k, derivedSeries Int L k = ⊥
 
 中文:
-类 IsSolvable
+类 是可解
   参数: : 命题 where
   公理与运算 (2 个):
     - mk_int : :
@@ -863,7 +863,7 @@ instance isSolvableBot
 
 中文:
 实例 isSolvableBot
-  签名: : IsSolvable (⊥ : LieIdeal R L)
+  签名: : 是可解 (⊥ : LieIdeal R L)
   定义体: ⟨⟨0, Subsingleton.elim _ ⊥⟩⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -882,7 +882,7 @@ lemma isSolvable_iff
 
 中文:
 引理 isSolvable_iff
-  结论: IsSolvable L ↔ 存在 k, derivedSeries R L k = ⊥
+  结论: 是可解 L ↔ 存在 k, derivedSeries R L k = ⊥
   证明: by
   simp [isSolvable_iff_int, SetLike.ext'_iff, LieIdeal.coe_derivedSeries_eq_int]
 
@@ -901,8 +901,8 @@ lemma IsSolvable.solvable
   proof: (isSolvable_iff R L).mp ‹_›
 
 中文:
-引理 IsSolvable.solvable
-  条件: [IsSolvable L]
+引理 是可解.solvable
+  条件: [是可解 L]
   结论: 存在 k, derivedSeries R L k = ⊥
   证明: (isSolvable_iff R L).mp ‹_›
 
@@ -922,9 +922,9 @@ lemma IsSolvable.mk
   proof: (isSolvable_iff R L).mpr ⟨k, h⟩
 
 中文:
-引理 IsSolvable.mk
+引理 是可解.mk
   条件: {k : 自然数} (h : derivedSeries R L k = ⊥)
-  结论: IsSolvable L
+  结论: 是可解 L
   证明: (isSolvable_iff R L).mpr ⟨k, h⟩
 
 Depends on / 依赖: isSolvable_iff
@@ -945,7 +945,7 @@ instance isSolvableAdd
 
 中文:
 实例 isSolvableAdd
-  签名: {I J : LieIdeal R L} [IsSolvable I] [IsSolvable J]
+  签名: {I J : LieIdeal R L} [是可解 I] [是可解 J]
   定义体: by
   obtain ⟨k, hk⟩ := IsSolvable.solvable R I
   obtain ⟨l, hl⟩ := IsSolvable.solvable R J
@@ -974,7 +974,7 @@ theorem derivedSeries_lt_top_of_solvable
 
 中文:
 定理 derivedSeries_lt_top_of_solvable
-  条件: [IsSolvable L] [Nontrivial L]
+  条件: [是可解 L] [非平凡 L]
   证明: by
   obtain ⟨n, hn⟩ := IsSolvable.solvable (R := R) (L := L)
   rw [lt_top_iff_ne_top]
@@ -1021,7 +1021,7 @@ specialize h Submodule.tmul_mem_baseChange_of_mem 1 hx
 
 中文:
 定理 isSolvable_tensorProduct_iff
-  结论: IsSolvable (A otimes[R] L) ↔ IsSolvable L
+  结论: 是可解 (A otimes[R] L) ↔ 是可解 L
   证明: by
   refine ⟨?_, fun _ => inferInstance⟩
   rw [isSolvable_iff A]; rw [isSolvable_iff R]
@@ -1070,8 +1070,8 @@ theorem Injective.lieAlgebra_isSolvable
   apply LieIdeal.derivedSeries_map_le
 
 中文:
-定理 Injective.lieAlgebra_isSolvable
-  条件: [hL : IsSolvable L] (h : Injective f)
+定理 单射.lieAlgebra_isSolvable
+  条件: [hL : 是可解 L] (h : 单射 f)
   证明: by
   rw [isSolvable_iff R] at hL ⊢
   apply hL.imp
@@ -1106,8 +1106,8 @@ theorem Surjective.lieAlgebra_isSolvable
   simp only [LieIdeal.map_eq_bot_iff, bot_le]
 
 中文:
-定理 Surjective.lieAlgebra_isSolvable
-  条件: [hL' : IsSolvable L'] (h : Surjective f)
+定理 满射.lieAlgebra_isSolvable
+  条件: [hL' : 是可解 L'] (h : 满射 f)
   证明: by
   rw [isSolvable_iff R] at hL' ⊢
   apply hL'.imp
@@ -1136,8 +1136,8 @@ instance LieHom.isSolvable_range
   body: f.surjective_rangeRestrict.lieAlgebra_isSolvable
 
 中文:
-实例 LieHom.isSolvable_range
-  签名: (f : L' ->ₗ⁅R⁆ L) [LieAlgebra.IsSolvable L']
+实例 Lie态射.isSolvable_range
+  签名: (f : L' ->ₗ⁅R⁆ L) [Lie代数.是可解 L']
   定义体: f.surjective_rangeRestrict.lieAlgebra_isSolvable
 
 Depends on / 依赖: f.surjective_rangeRestrict.lieAlgebra_isSolvable, lieAlgebra_isSolvable, surjective_rangeRestrict
@@ -1163,7 +1163,7 @@ theorem solvable_iff_equiv_solvable
 中文:
 定理 solvable_iff_equiv_solvable
   条件: (e : L' ≃ₗ⁅R⁆ L)
-  结论: IsSolvable L' ↔ IsSolvable L
+  结论: 是可解 L' ↔ 是可解 L
   证明: by
   constructor <;> intro h
   · exact e.symm.injective.lieAlgebra_isSolvable
@@ -1186,7 +1186,7 @@ theorem le_solvable_ideal_solvable
 
 中文:
 定理 le_solvable_ideal_solvable
-  条件: {I J : LieIdeal R L} (h₁ : I <= J) (_ : IsSolvable J)
+  条件: {I J : LieIdeal R L} (h₁ : I <= J) (_ : 是可解 J)
   证明: (LieIdeal.inclusion_injective h₁).lieAlgebra_isSolvable
 
 Depends on / 依赖: LieIdeal, LieIdeal.inclusion_injective, inclusion_injective, lieAlgebra_isSolvable
@@ -1234,7 +1234,7 @@ instance radicalIsSolvable
 
 中文:
 实例 radicalIsSolvable
-  签名: [IsNoetherian R L]
+  签名: [是Noether R L]
   定义体: by
   have hwf := LieSubmodule.wellFoundedGT_of_noetherian R L L
   rw [← CompleteLattice.isSupClosedCompact_iff_wellFoundedGT] at hwf
@@ -1263,7 +1263,7 @@ theorem LieIdeal.solvable_iff_le_radical
 
 中文:
 定理 LieIdeal.solvable_iff_le_radical
-  条件: [IsNoetherian R L] (I : LieIdeal R L)
+  条件: [是Noether R L] (I : LieIdeal R L)
   证明: ⟨fun h => le_sSup h, fun h => le_solvable_ideal_solvable h inferInstance⟩
 
 Depends on / 依赖: le_sSup, le_solvable_ideal_solvable
@@ -1303,8 +1303,8 @@ instance [IsSolvable
   rwa [solvable_iff_equiv_solvable LieSubalgebra.topEquiv]
 
 中文:
-实例 [IsSolvable
-  签名: L] : IsSolvable (⊤
+实例 [是可解
+  签名: L] : 是可解 (⊤
   定义体: by
   rwa [solvable_iff_equiv_solvable LieSubalgebra.topEquiv]
 
@@ -1326,7 +1326,7 @@ lemma radical_eq_top_of_isSolvable
 
 中文:
 引理 radical_eq_top_of_isSolvable
-  条件: [IsSolvable L]
+  条件: [是可解 L]
   证明: by
   rw [eq_top_iff]
   have h : IsSolvable (⊤ : LieSubalgebra R L) := inferInstance
@@ -1480,7 +1480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique {x // x in (⊥ : LieIdeal R L)}
+  签名: 唯一 {x // x in (⊥ : LieIdeal R L)}
   定义体: inferInstanceAs Unique {x // x in (⊥ : Submodule R L)}
 
 Depends on / 依赖: Submodule, Unique
@@ -1534,7 +1534,7 @@ theorem derivedLength_zero
 
 中文:
 定理 derivedLength_zero
-  条件: (I : LieIdeal R L) [IsSolvable I]
+  条件: (I : LieIdeal R L) [是可解 I]
   证明: by
   let s := { k | derivedSeriesOfIdeal R L k I = ⊥ }
   change sInf s = 0 ↔ _
@@ -1571,7 +1571,7 @@ theorem abelian_of_solvable_ideal_eq_bot_iff
 
 中文:
 定理 abelian_of_solvable_ideal_eq_bot_iff
-  条件: (I : LieIdeal R L) [h : IsSolvable I]
+  条件: (I : LieIdeal R L) [h : 是可解 I]
   证明: by
   dsimp only [derivedAbelianOfIdeal]
   split

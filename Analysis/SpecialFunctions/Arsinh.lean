@@ -244,7 +244,7 @@ theorem sinh_surjective
 
 中文:
 定理 sinh_surjective
-  结论: Surjective sinh
+  结论: 满射 sinh
   证明: LeftInverse.surjective sinh_arsinh
 
 Depends on / 依赖: LeftInverse, LeftInverse.surjective, sinh_arsinh, surjective
@@ -262,7 +262,7 @@ theorem sinh_bijective
 
 中文:
 定理 sinh_bijective
-  结论: Bijective sinh
+  结论: 双射 sinh
   证明: ⟨sinh_injective, sinh_surjective⟩
 
 Depends on / 依赖: sinh_injective, sinh_surjective
@@ -372,7 +372,7 @@ theorem arsinh_bijective
 
 中文:
 定理 arsinh_bijective
-  结论: Bijective arsinh
+  结论: 双射 arsinh
   证明: sinhEquiv.symm.bijective
 
 Depends on / 依赖: bijective, sinhEquiv, sinhEquiv.symm.bijective
@@ -390,7 +390,7 @@ theorem arsinh_injective
 
 中文:
 定理 arsinh_injective
-  结论: Injective arsinh
+  结论: 单射 arsinh
   证明: sinhEquiv.symm.injective
 
 Depends on / 依赖: injective, sinhEquiv, sinhEquiv.symm.injective
@@ -408,7 +408,7 @@ theorem arsinh_surjective
 
 中文:
 定理 arsinh_surjective
-  结论: Surjective arsinh
+  结论: 满射 arsinh
   证明: sinhEquiv.symm.surjective
 
 Depends on / 依赖: sinhEquiv, sinhEquiv.symm.surjective, surjective
@@ -428,7 +428,7 @@ theorem arsinh_strictMono
 
 中文:
 定理 arsinh_strictMono
-  结论: StrictMono arsinh
+  结论: 严格递增 arsinh
   证明: sinhOrderIso.symm.strictMono
 
 @[simp]
@@ -661,7 +661,7 @@ theorem hasDerivAt_arsinh
 中文:
 定理 hasDerivAt_arsinh
   条件: (x : 实数)
-  结论: HasDerivAt arsinh (√(1 + x ^ 2))⁻¹ x
+  结论: 在点处可导 arsinh (√(1 + x ^ 2))⁻¹ x
   证明: (hasStrictDerivAt_arsinh x).hasDerivAt
 
 @[fun_prop]
@@ -685,7 +685,7 @@ theorem differentiable_arsinh
 
 中文:
 定理 differentiable_arsinh
-  结论: Differentiable 实数 arsinh
+  结论: 可微 实数 arsinh
   证明: fun x =>
   (hasDerivAt_arsinh x).differentiableAt
 
@@ -709,7 +709,7 @@ theorem contDiff_arsinh
 中文:
 定理 contDiff_arsinh
   条件: {n : WithTop 自然数∞}
-  结论: ContDiff 实数 n arsinh
+  结论: 连续可微 实数 n arsinh
   证明: sinhHomeomorph.contDiff_symm_deriv (fun x => (cosh_pos x).ne') hasDerivAt_sinh contDiff_sinh
 
 @[continuity]
@@ -730,7 +730,7 @@ theorem continuous_arsinh
 
 中文:
 定理 continuous_arsinh
-  结论: Continuous arsinh
+  结论: 连续 arsinh
   证明: sinhHomeomorph.symm.continuous
 
 Depends on / 依赖: continuous, sinhHomeomorph, sinhHomeomorph.symm.continuous
@@ -769,7 +769,7 @@ lemma analyticWithinAt_arsinh
 
 中文:
 引理 analyticWithinAt_arsinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticWithinAt 实数 arsinh s x
   证明: contDiff_arsinh.contDiffWithinAt.analyticWithinAt
 
@@ -789,7 +789,7 @@ theorem analyticOnNhd_arsinh
 
 中文:
 定理 analyticOnNhd_arsinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOnNhd 实数 arsinh s
   证明: fun _ _ => analyticAt_arsinh
 
@@ -809,7 +809,7 @@ lemma analyticOn_arsinh
 
 中文:
 引理 analyticOn_arsinh
-  条件: {s : Set 实数}
+  条件: {s : 集合 实数}
   结论: AnalyticOn 实数 arsinh s
   证明: contDiff_arsinh.contDiffOn.analyticOn
 
@@ -831,8 +831,8 @@ theorem Filter.Tendsto.arsinh
   proof: (continuous_arsinh.tendsto _).comp h
 
 中文:
-定理 Filter.Tendsto.arsinh
-  结论: {α : 类型} {l : Filter α} {f : α -> 实数} {a : 实数}
+定理 滤子.收敛.arsinh
+  结论: {α : 类型} {l : 滤子 α} {f : α -> 实数} {a : 实数}
   证明: (continuous_arsinh.tendsto _).comp h
 
 Depends on / 依赖: continuous_arsinh, continuous_arsinh.tendsto, tendsto
@@ -883,9 +883,9 @@ theorem Continuous.arsinh
   proof: continuous_arsinh.comp h
 
 中文:
-定理 Continuous.arsinh
-  条件: (h : Continuous f)
-  结论: Continuous fun x => arsinh (f x)
+定理 连续.arsinh
+  条件: (h : 连续 f)
+  结论: 连续 fun x => arsinh (f x)
   证明: continuous_arsinh.comp h
 
 Depends on / 依赖: continuous_arsinh, continuous_arsinh.comp
@@ -928,8 +928,8 @@ theorem HasFDerivAt.arsinh
   proof: (hasDerivAt_arsinh _).comp_hasFDerivAt a hf
 
 中文:
-定理 HasFDerivAt.arsinh
-  条件: (hf : HasFDerivAt f f' a)
+定理 在点处Fréchet可导.arsinh
+  条件: (hf : 在点处Fréchet可导 f f' a)
   证明: (hasDerivAt_arsinh _).comp_hasFDerivAt a hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_arsinh
@@ -1045,9 +1045,9 @@ theorem Differentiable.arsinh
 @[fun_prop]
 
 中文:
-定理 Differentiable.arsinh
-  条件: (h : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => arsinh (f x)
+定理 可微.arsinh
+  条件: (h : 可微 实数 f)
+  结论: 可微 实数 fun x => arsinh (f x)
   证明: differentiable_arsinh.comp h
 
 @[fun_prop]
@@ -1119,9 +1119,9 @@ theorem ContDiff.arsinh
 @[fun_prop]
 
 中文:
-定理 ContDiff.arsinh
-  条件: (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => arsinh (f x)
+定理 连续可微.arsinh
+  条件: (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => arsinh (f x)
   证明: contDiff_arsinh.comp h
 
 @[fun_prop]
@@ -1186,8 +1186,8 @@ theorem HasDerivAt.arsinh
   proof: (hasDerivAt_arsinh _).comp a hf
 
 中文:
-定理 HasDerivAt.arsinh
-  条件: (hf : HasDerivAt f f' a)
+定理 在点处可导.arsinh
+  条件: (hf : 在点处可导 f f' a)
   证明: (hasDerivAt_arsinh _).comp a hf
 
 Depends on / 依赖: hasDerivAt_arsinh

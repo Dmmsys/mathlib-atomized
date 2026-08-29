@@ -44,7 +44,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: [CharZero R]
+  签名: [特征零 R]
   定义体: ⟨Function.Injective.of_comp (f := Subtype.val) (g := Nat.cast (R := s)) Nat.cast_injective⟩
 
 Depends on / 依赖: Function, Function.Injective.of_comp, Injective, Nat.cast, Nat.cast_injective, Subtype, Subtype.val, cast_injective, of_comp
@@ -75,7 +75,7 @@ theorem toSubmonoid_strictMono
 
 中文:
 定理 toSubmonoid_strictMono
-  结论: StrictMono (toSubmonoid : Subsemiring R -> Submonoid R)
+  结论: 严格递增 (toSubmonoid : 子半环 R -> 子幺半群 R)
   证明: fun _ _ => id
 
 @[gcongr, mono]
@@ -96,7 +96,7 @@ theorem toSubmonoid_mono
 
 中文:
 定理 toSubmonoid_mono
-  结论: Monotone (toSubmonoid : Subsemiring R -> Submonoid R)
+  结论: 递增 (toSubmonoid : 子半环 R -> 子幺半群 R)
   证明: toSubmonoid_strictMono.monotone
 
 @[gcongr, mono]
@@ -119,7 +119,7 @@ theorem toAddSubmonoid_strictMono
 
 中文:
 定理 toAddSubmonoid_strictMono
-  结论: StrictMono (toAddSubmonoid : Subsemiring R -> AddSubmonoid R)
+  结论: 严格递增 (toAddSubmonoid : 子半环 R -> 加法子幺半群 R)
   证明: fun _ _ => id
 
 @[gcongr, mono]
@@ -138,7 +138,7 @@ theorem toAddSubmonoid_mono
 
 中文:
 定理 toAddSubmonoid_mono
-  结论: Monotone (toAddSubmonoid : Subsemiring R -> AddSubmonoid R)
+  结论: 递增 (toAddSubmonoid : 子半环 R -> 加法子幺半群 R)
   证明: toAddSubmonoid_strictMono.monotone
 
 Depends on / 依赖: monotone, toAddSubmonoid_strictMono, toAddSubmonoid_strictMono.monotone
@@ -162,8 +162,8 @@ theorem list_sum_mem
 
 中文:
 定理 list_sum_mem
-  条件: {l : List R}
-  结论: (对任意 x in l, x in s) -> l.sum in s
+  条件: {l : 列表 R}
+  结论: (对任意 x in l, x in s) -> l.求和 in s
   证明: list_sum_mem
 -/
 protected theorem list_sum_mem {l : List R} : (forall x in l, x in s) -> l.sum in s :=
@@ -179,7 +179,7 @@ theorem multiset_prod_mem
 
 中文:
 定理 multiset_prod_mem
-  条件: {R} [CommSemiring R] (s : Subsemiring R) (m : Multiset R)
+  条件: {R} [交换半环 R] (s : 子半环 R) (m : Multiset R)
   证明: multiset_prod_mem m
 -/
 protected theorem multiset_prod_mem {R} [CommSemiring R] (s : Subsemiring R) (m : Multiset R) :
@@ -198,7 +198,7 @@ theorem multiset_sum_mem
 中文:
 定理 multiset_sum_mem
   条件: (m : Multiset R)
-  结论: (对任意 a in m, a in s) -> m.sum in s
+  结论: (对任意 a in m, a in s) -> m.求和 in s
   证明: multiset_sum_mem m
 
 Depends on / 依赖: hom.toAlgebra, toAlgebra, toStalk
@@ -216,7 +216,7 @@ theorem prod_mem
 
 中文:
 定理 prod_mem
-  结论: {R : 类型} [CommSemiring R] (s : Subsemiring R) {ι : 类型}
+  结论: {R : 类型} [交换半环 R] (s : 子半环 R) {ι : 类型}
   证明: prod_mem h
 
 Depends on / 依赖: compHom, toStalk
@@ -235,7 +235,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  结论: (s : Subsemiring R) {ι : 类型} {t : Finset ι} {f : ι -> R}
+  结论: (s : 子半环 R) {ι : 类型} {t : 有限集 ι} {f : ι -> R}
   证明: sum_mem h
 -/
 protected theorem sum_mem (s : Subsemiring R) {ι : Type*} {t : Finset ι} {f : ι -> R}
@@ -257,7 +257,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Subsemiring R) ≃+* R where
+  签名: : (⊤ : 子半环 R) ≃+* R where
   定义体: r
   invFun r := ⟨r, Subsemiring.mem_top r⟩
   map_mul' := (⊤ : Subsemiring R).coe_mul
@@ -285,7 +285,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : R ->+* S) (s : Subsemiring S)
+  签名: (f : R ->+* S) (s : 子半环 S)
   定义体: { s.toSubmonoid.comap (f : R ->* S), s.toAddSubmonoid.comap (f : R ->+ S) with carrier := f ⁻¹' s }
 
 @[simp]
@@ -307,7 +307,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {s : Subsemiring S} {f : R ->+* S} {x : R}
+  条件: {s : 子半环 S} {f : R ->+* S} {x : R}
   结论: x in s.comap f ↔ f x in s
   证明: Iff.rfl
 
@@ -326,7 +326,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (s : Subsemiring T) (g : S ->+* T) (f : R ->+* S)
+  条件: (s : 子半环 T) (g : S ->+* T) (f : R ->+* S)
   证明: rfl
 -/
 theorem comap_comap (s : Subsemiring T) (g : S ->+* T) (f : R ->+* S) :
@@ -347,7 +347,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : R ->+* S) (s : Subsemiring R)
+  签名: (f : R ->+* S) (s : 子半环 R)
   定义体: { s.toSubmonoid.map (f : R ->* S), s.toAddSubmonoid.map (f : R ->+ S) with carrier := f '' s }
 
 @[simp]
@@ -371,7 +371,7 @@ lemma mem_map
 
 中文:
 引理 mem_map
-  条件: {f : R ->+* S} {s : Subsemiring R} {y : S}
+  条件: {f : R ->+* S} {s : 子半环 R} {y : S}
   结论: y in s.map f ↔ 存在 x in s, f x = y
   证明: Iff.rfl
 
@@ -392,7 +392,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: s.map (RingHom.id R) = s
+  结论: s.map (环态射.id R) = s
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -430,7 +430,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : R ->+* S} {s : Subsemiring R} {t : Subsemiring S}
+  条件: {f : R ->+* S} {s : 子半环 R} {t : 子半环 S}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -473,7 +473,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (f : R ->+* S) (hf : Function.Injective f)
+  签名: (f : R ->+* S) (hf : 函数.单射 f)
   定义体: { Equiv.Set.image f s hf with
     map_mul' := fun _ _ => Subtype.ext (f.map_mul _ _)
     map_add' := fun _ _ => Subtype.ext (f.map_add _ _) }
@@ -498,7 +498,7 @@ theorem coe_equivMapOfInjective_apply
 
 中文:
 定理 coe_equivMapOfInjective_apply
-  条件: (f : R ->+* S) (hf : Function.Injective f) (x : s)
+  条件: (f : R ->+* S) (hf : 函数.单射 f) (x : s)
   证明: rfl
 -/
 theorem coe_equivMapOfInjective_apply (f : R ->+* S) (hf : Function.Injective f) (x : s) :
@@ -525,7 +525,7 @@ definition rangeS
 
 中文:
 定义 rangeS
-  签名: : Subsemiring S
+  签名: : 子半环 S
   定义体: ((⊤ : Subsemiring R).map f).copy (Set.range f) Set.image_univ.symm
 
 @[simp]
@@ -570,7 +570,7 @@ theorem rangeS_eq_map
 中文:
 定理 rangeS_eq_map
   条件: (f : R ->+* S)
-  结论: f.rangeS = (⊤ : Subsemiring R).map f
+  结论: f.rangeS = (⊤ : 子半环 R).map f
   证明: by
   ext
   simp
@@ -631,7 +631,7 @@ theorem rangeS_eq_top
 
 中文:
 定理 rangeS_eq_top
-  结论: f.rangeS = ⊤ ↔ Function.Surjective f
+  结论: f.rangeS = ⊤ ↔ 函数.满射 f
   证明: by
   simp [← Set.range_eq_univ, SetLike.ext'_iff]
 
@@ -650,7 +650,7 @@ instance fintypeRangeS
 
 中文:
 实例 fintypeRangeS
-  签名: [Fintype R] [DecidableEq S] (f : R ->+* S)
+  签名: [有限类型 R] [DecidableEq S] (f : R ->+* S)
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -672,7 +672,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Subsemiring R)
+  签名: 底元素 (子半环 R)
   定义体: ⟨(Nat.castRingHom R).rangeS⟩
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.of_linearEquiv, LocalizedModule, LocalizedModule.mkLinearMap, Nat.castRingHom, PrimeSpectrum, PrimeSpectrum.basicOpen_one, asIdeal, basicOpen_one, castRingHom, convert, instances, mkLinearMap, of_linearEquiv, primeCompl, rangeS, toLinearEquiv, toLinearEquiv.symm, x.asIdeal.primeCompl
@@ -692,7 +692,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subsemiring R)
+  签名: 可居 (子半环 R)
   定义体: ⟨⊥⟩
 
 @[norm_cast]
@@ -711,7 +711,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Subsemiring R) : Set R) = Set.range ((↑) : 自然数 -> R)
+  结论: ((⊥ : 子半环 R) : 集合 R) = 集合.range ((↑) : 自然数 -> R)
   证明: (Nat.castRingHom R).coe_rangeS
 
 Depends on / 依赖: IsLocalizedModule, IsLocalizedModule.of_linearEquiv, Limits, Limits.colimit.isColimit, Limits.colimit.isoColimitCocone, Limits.isColimitOfPreserves, ModuleCat, Nat.castRingHom, OpenNhds, OpenNhds.inclusion, Presheaf, TopCat, TopCat.Presheaf.stalk, addCommGroupIsoToAddEquiv, addCommGroupIsoToAddEquiv.eq_symm_apply, asIdeal, castRingHom, coe_rangeS, colimit, convert
@@ -731,7 +731,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : R}
-  结论: x in (⊥ : Subsemiring R) ↔ 存在 n : 自然数, ↑n = x
+  结论: x in (⊥ : 子半环 R) ↔ 存在 n : 自然数, ↑n = x
   证明: RingHom.mem_rangeS
 
 Depends on / 依赖: RingHom, RingHom.mem_rangeS, mem_rangeS
@@ -754,7 +754,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Subsemiring R)
+  签名: 下确界集 (子半环 R)
   定义体: ⟨fun s =>
     Subsemiring.mk' (⋂ t in s, ↑t) (⨅ t in s, Subsemiring.toSubmonoid t) (by simp)
       (⨅ t in s, Subsemiring.toAddSubmonoid t)
@@ -784,8 +784,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (Subsemiring R))
-  结论: ((sInf S : Subsemiring R) : Set R) = ⋂ s in S, ↑s
+  条件: (S : 集合 (子半环 R))
+  结论: ((sInf S : 子半环 R) : 集合 R) = ⋂ s in S, ↑s
   证明: rfl
 
 @[simp]
@@ -807,7 +807,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Subsemiring R)} {x : R}
+  条件: {S : 集合 (子半环 R)} {x : R}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -833,8 +833,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Subsemiring R}
-  结论: (↑(⨅ i, S i) : Set R) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子半环 R}
+  结论: (↑(⨅ i, S i) : 集合 R) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -860,7 +860,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Subsemiring R} {x : R}
+  条件: {ι : 类型层*} {S : ι -> 子半环 R} {x : R}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -885,7 +885,7 @@ theorem sInf_toSubmonoid
 
 中文:
 定理 sInf_toSubmonoid
-  条件: (s : Set (Subsemiring R))
+  条件: (s : 集合 (子半环 R))
   证明: mk'_toSubmonoid _ _
 
 @[simp]
@@ -907,7 +907,7 @@ theorem sInf_toAddSubmonoid
 
 中文:
 定理 sInf_toAddSubmonoid
-  条件: (s : Set (Subsemiring R))
+  条件: (s : 集合 (子半环 R))
   证明: mk'_toAddSubmonoid _ _
 
 Depends on / 依赖: _toAddSubmonoid
@@ -934,7 +934,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subsemiring R)
+  签名: 完备格 (子半环 R)
   定义体: { completeLatticeOfInf (Subsemiring R) fun _ =>
       IsGLB.of_image
         (fun {s t : Subsemiring R} => show (s : Set R) subseteq t ↔ s <= t from SetLike.coe_subset_coe)
@@ -974,7 +974,7 @@ theorem eq_top_iff'
 
 中文:
 定理 eq_top_iff'
-  条件: (A : Subsemiring R)
+  条件: (A : 子半环 R)
   结论: A = ⊤ ↔ 对任意 x : R, x in A
   证明: eq_top_iff.trans ⟨fun h m => h mem_top m, fun h m _ => h m⟩
 
@@ -1001,7 +1001,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Subsemiring R
+  签名: : 子半环 R
   定义体: { NonUnitalSubsemiring.center R with
     one_mem' := Set.one_mem_center }
 
@@ -1021,7 +1021,7 @@ abbreviation center.commSemiring'
 
 中文:
 缩写 center.commSemiring'
-  签名: : CommSemiring (center R)
+  签名: : 交换半环 (center R)
   定义体: { Submonoid.center.commMonoid', (center R).toNonAssocSemiring with }
 
 Depends on / 依赖: Submonoid, Submonoid.center.commMonoid, center, commMonoid, toNonAssocSemiring
@@ -1078,7 +1078,7 @@ __ : CommMonoid (center R) := inferInstanceAs CommMonoid (Submonoid.center R)
 
 中文:
 实例 center.commSemiring
-  签名: {R} [Semiring R]
+  签名: {R} [半环 R]
   定义体: (center R).toSemiring
 __ : CommMonoid (center R) := inferInstanceAs CommMonoid (Submonoid.center R)
 
@@ -1104,7 +1104,7 @@ theorem mem_center_iff
 
 中文:
 定理 mem_center_iff
-  条件: {R} [Semiring R] {z : R}
+  条件: {R} [半环 R] {z : R}
   结论: z in center R ↔ 对任意 g, g * z = z * g
   证明: Subsemigroup.mem_center_iff
 
@@ -1125,7 +1125,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: {R} [Semiring R] [DecidableEq R] [Fintype R]
+  签名: {R} [半环 R] [DecidableEq R] [有限类型 R]
   定义体: fun _ => decidable_of_iff' _ mem_center_iff
 
 @[simp]
@@ -1147,7 +1147,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: (R) [CommSemiring R]
+  条件: (R) [交换半环 R]
   结论: center R = ⊤
   证明: SetLike.coe_injective (Set.center_eq_univ R)
 
@@ -1175,7 +1175,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: {R} [Semiring R] (s : Set R)
+  签名: {R} [半环 R] (s : 集合 R)
   定义体: { Submonoid.centralizer s with
     carrier := s.centralizer
     zero_mem' := Set.zero_mem_centralizer
@@ -1203,8 +1203,8 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: {R} [Semiring R] (s : Set R)
-  结论: (centralizer s : Set R) = s.centralizer
+  条件: {R} [半环 R] (s : 集合 R)
+  结论: (centralizer s : 集合 R) = s.centralizer
   证明: rfl
 -/
 theorem coe_centralizer {R} [Semiring R] (s : Set R) : (centralizer s : Set R) = s.centralizer :=
@@ -1220,7 +1220,7 @@ theorem centralizer_toSubmonoid
 
 中文:
 定理 centralizer_toSubmonoid
-  条件: {R} [Semiring R] (s : Set R)
+  条件: {R} [半环 R] (s : 集合 R)
   证明: rfl
 -/
 theorem centralizer_toSubmonoid {R} [Semiring R] (s : Set R) :
@@ -1237,7 +1237,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {R} [Semiring R] {s : Set R} {z : R}
+  条件: {R} [半环 R] {s : 集合 R} {z : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1257,7 +1257,7 @@ theorem center_le_centralizer
 
 中文:
 定理 center_le_centralizer
-  条件: {R} [Semiring R] (s)
+  条件: {R} [半环 R] (s)
   结论: center R <= centralizer s
   证明: s.center_subset_centralizer
 
@@ -1279,7 +1279,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: {R} [Semiring R] (s t : Set R) (h : s subseteq t)
+  条件: {R} [半环 R] (s t : 集合 R) (h : s subseteq t)
   结论: centralizer t <= centralizer s
   证明: Set.centralizer_subset h
 
@@ -1303,7 +1303,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  条件: {R} [Semiring R] {s : Set R}
+  条件: {R} [半环 R] {s : 集合 R}
   证明: SetLike.ext'_iff.trans Set.centralizer_eq_top_iff_subset
 
 @[simp]
@@ -1326,8 +1326,8 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  条件: {R} [Semiring R]
-  结论: centralizer Set.univ = center R
+  条件: {R} [半环 R]
+  结论: centralizer 集合.univ = center R
   证明: SetLike.ext' (Set.centralizer_univ R)
 
 Depends on / 依赖: Set.centralizer_univ, SetLike, SetLike.ext, centralizer_univ
@@ -1347,7 +1347,7 @@ lemma le_centralizer_centralizer
 
 中文:
 引理 le_centralizer_centralizer
-  条件: {R} [Semiring R] {s : Subsemiring R}
+  条件: {R} [半环 R] {s : 子半环 R}
   证明: Set.subset_centralizer_centralizer
 
 @[simp]
@@ -1371,7 +1371,7 @@ lemma centralizer_centralizer_centralizer
 
 中文:
 引理 centralizer_centralizer_centralizer
-  条件: {R} [Semiring R] {s : Set R}
+  条件: {R} [半环 R] {s : 集合 R}
   证明: by
   apply SetLike.coe_injective
   simp only [coe_centralizer, Set.centralizer_centralizer_centralizer]
@@ -1395,7 +1395,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: sInf { S | s subseteq S }
 
 Depends on / 依赖: subseteq
@@ -1414,8 +1414,8 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {x : R} {s : Set R}
-  结论: x in closure s ↔ 对任意 S : Subsemiring R, s subseteq S -> x in S
+  条件: {x : R} {s : 集合 R}
+  结论: x in closure s ↔ 对任意 S : 子半环 R, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -1438,7 +1438,7 @@ theorem subset_closure
 
 中文:
 定理 subset_closure
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   结论: s subseteq closure s
   证明: fun _ hx => mem_closure.2 fun _ hS => hS hx
 
@@ -1460,7 +1460,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set R} {x : R} (hx : x in s)
+  条件: {s : 集合 R} {x : R} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -1480,7 +1480,7 @@ theorem notMem_of_notMem_closure
 
 中文:
 定理 notMem_of_notMem_closure
-  条件: {s : Set R} {P : R} (hP : P ∉ closure s)
+  条件: {s : 集合 R} {P : R} (hP : P ∉ closure s)
   结论: P ∉ s
   证明: fun h =>
   hP (subset_closure h)
@@ -1501,7 +1501,7 @@ theorem closure_le
 
 中文:
 定理 closure_le
-  条件: {s : Set R} {t : Subsemiring R}
+  条件: {s : 集合 R} {t : 子半环 R}
   结论: closure s <= t ↔ s subseteq t
   证明: ⟨Set.Subset.trans subset_closure, fun h => sInf_le h⟩
 
@@ -1525,7 +1525,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set R⦄ (h : s subseteq t) : closure s <= closure t
+  结论: 集合 R⦄ (h : s subseteq t) : closure s <= closure t
   证明: closure_le.2 Set.Subset.trans h subset_closure
 
 Depends on / 依赖: Set.Subset.trans, Subset, closure_le, subset_closure
@@ -1543,7 +1543,7 @@ theorem closure_eq_of_le
 
 中文:
 定理 closure_eq_of_le
-  条件: {s : Set R} {t : Subsemiring R} (h₁ : s subseteq t) (h₂ : t <= closure s)
+  条件: {s : 集合 R} {t : 子半环 R} (h₁ : s subseteq t) (h₂ : t <= closure s)
   证明: le_antisymm (closure_le.2 h₁) h₂
 
 Depends on / 依赖: closure_le, le_antisymm
@@ -1563,7 +1563,7 @@ theorem mem_map_equiv
 
 中文:
 定理 mem_map_equiv
-  条件: {f : R ≃+* S} {K : Subsemiring R} {x : S}
+  条件: {f : R ≃+* S} {K : 子半环 R} {x : S}
   证明: by
   convert! @Set.mem_image_equiv _ _ (↑K) f.toEquiv x using 1
 
@@ -1583,7 +1583,7 @@ theorem map_equiv_eq_comap_symm
 
 中文:
 定理 map_equiv_eq_comap_symm
-  条件: (f : R ≃+* S) (K : Subsemiring R)
+  条件: (f : R ≃+* S) (K : 子半环 R)
   证明: SetLike.coe_injective (f.toEquiv.image_eq_preimage_symm K)
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, isLocalHom_of_isIso, toEquiv
@@ -1602,7 +1602,7 @@ theorem comap_equiv_eq_map_symm
 
 中文:
 定理 comap_equiv_eq_map_symm
-  条件: (f : R ≃+* S) (K : Subsemiring S)
+  条件: (f : R ≃+* S) (K : 子半环 S)
   证明: (map_equiv_eq_comap_symm f.symm K).symm
 
 Depends on / 依赖: f.symm, map_equiv_eq_comap_symm
@@ -1627,7 +1627,7 @@ definition subsemiringClosure
 
 中文:
 定义 subsemiringClosure
-  签名: (M : Submonoid R)
+  签名: (M : 子幺半群 R)
   定义体: { AddSubmonoid.closure (M : Set R) with
     one_mem' := AddSubmonoid.mem_closure.mpr fun _ hy => hy M.one_mem
     mul_mem' := MulMemClass.mul_mem_add_closure }
@@ -1702,7 +1702,7 @@ lemma subsemiringClosure_toNonUnitalSubsemiring
 
 中文:
 引理 subsemiringClosure_toNonUnitalSubsemiring
-  条件: (M : Submonoid R)
+  条件: (M : 子幺半群 R)
   证明: by
   refine Eq.symm (NonUnitalSubsemiring.closure_eq_of_le ?_ fun _ hx => ?_)
   · simp [Submonoid.subsemiringClosure_coe]
@@ -1734,7 +1734,7 @@ theorem subsemiringClosure_eq_closure
 
 中文:
 定理 subsemiringClosure_eq_closure
-  结论: M.subsemiringClosure = Subsemiring.closure (M : Set R)
+  结论: M.subsemiringClosure = 子半环.closure (M : 集合 R)
   证明: by
   ext
   refine
@@ -1776,8 +1776,8 @@ theorem closure_submonoid_closure
 
 中文:
 定理 closure_submonoid_closure
-  条件: (s : Set R)
-  结论: closure ↑(Submonoid.closure s) = closure s
+  条件: (s : 集合 R)
+  结论: closure ↑(子幺半群.closure s) = closure s
   证明: le_antisymm
     (closure_le.mpr fun _ hy =>
       (Submonoid.mem_closure.mp hy) (closure s).toSubmonoid subset_closure)
@@ -1802,7 +1802,7 @@ theorem coe_closure_eq
 
 中文:
 定理 coe_closure_eq
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: by
   simp [← Submonoid.subsemiringClosure_toAddSubmonoid, Submonoid.subsemiringClosure_eq_closure]
 
@@ -1824,7 +1824,7 @@ theorem mem_closure_iff
 
 中文:
 定理 mem_closure_iff
-  条件: {s : Set R} {x}
+  条件: {s : 集合 R} {x}
   证明: Set.ext_iff.mp (coe_closure_eq s) x
 
 @[simp]
@@ -1853,7 +1853,7 @@ theorem closure_addSubmonoid_closure
 
 中文:
 定理 closure_addSubmonoid_closure
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   证明: by
   ext x
   refine ⟨fun hx => ?_, fun hx => closure_mono AddSubmonoid.subset_closure hx⟩
@@ -1895,7 +1895,7 @@ theorem closure_induction
 
 中文:
 定理 closure_induction
-  结论: {s : Set R} {p : (x : R) -> x in closure s -> 命题}
+  结论: {s : 集合 R} {p : (x : R) -> x in closure s -> 命题}
   证明: let K : Subsemiring R :=
     { carrier := { x | exists hx, p x hx }
       mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
@@ -1939,7 +1939,7 @@ theorem closure_induction₂
 
 中文:
 定理 closure_induction₂
-  结论: {s : Set R} {p : (x y : R) -> x in closure s -> y in closure s -> 命题}
+  结论: {s : 集合 R} {p : (x y : R) -> x in closure s -> y in closure s -> 命题}
   证明: by
   induction hy using closure_induction with
   | mem z hz => induction hx using closure_induction with
@@ -1991,8 +1991,8 @@ theorem mem_closure_iff_exists_list
   
 
 中文:
-定理 mem_closure_iff_exists_list
-  条件: {R} [Semiring R] {s : Set R} {x}
+定理 mem_closure_iff_存在_list
+  条件: {R} [半环 R] {s : 集合 R} {x}
   证明: by
   constructor
   · intro hx
@@ -2048,7 +2048,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure R _) (↑) where
+  签名: : Galois嵌入 (@closure R _) (↑) where
   定义体: closure s
   gc _ _ := closure_le
   le_l_u _ := subset_closure
@@ -2075,8 +2075,8 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  条件: (s : Subsemiring R)
-  结论: closure (s : Set R) = s
+  条件: (s : 子半环 R)
+  结论: closure (s : 集合 R) = s
   证明: (Subsemiring.gi R).l_u_eq s
 
 @[simp]
@@ -2099,7 +2099,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set R) = ⊥
+  结论: closure (∅ : 集合 R) = ⊥
   证明: (Subsemiring.gi R).gc.l_bot
 
 @[simp]
@@ -2120,7 +2120,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (Set.univ : Set R) = ⊤
+  结论: closure (集合.univ : 集合 R) = ⊤
   证明: @coe_top R _ ▸ closure_eq ⊤
 
 Depends on / 依赖: closure_eq, coe_top
@@ -2139,7 +2139,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set R)
+  条件: (s t : 集合 R)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (Subsemiring.gi R).gc.l_sup
 
@@ -2159,7 +2159,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set R)
+  条件: {ι} (s : ι -> 集合 R)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (Subsemiring.gi R).gc.l_iSup
 
@@ -2181,7 +2181,7 @@ theorem closure_sUnion
 
 中文:
 定理 closure_sUnion
-  条件: (s : Set (Set R))
+  条件: (s : 集合 (集合 R))
   结论: closure (⋃₀ s) = ⨆ t in s, closure t
   证明: (Subsemiring.gi R).gc.l_sSup
 
@@ -2277,7 +2277,7 @@ theorem closure_insert_natCast
 
 中文:
 定理 closure_insert_natCast
-  条件: (n : 自然数) (s : Set R)
+  条件: (n : 自然数) (s : 集合 R)
   结论: closure (insert (n : R) s) = closure s
   证明: by
   rw [Set.insert_eq]; rw [closure_union]
@@ -2305,7 +2305,7 @@ theorem closure_insert_zero
 
 中文:
 定理 closure_insert_zero
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: closure (insert 0 s) = closure s
   证明: mod_cast closure_insert_natCast 0 s
 
@@ -2328,7 +2328,7 @@ theorem closure_insert_one
 
 中文:
 定理 closure_insert_one
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: closure (insert 1 s) = closure s
   证明: mod_cast closure_insert_natCast 1 s
 
@@ -2348,7 +2348,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (s t : Subsemiring R) (f : R ->+* S)
+  条件: (s t : 子半环 R) (f : R ->+* S)
   结论: (s ⊔ t).map f = s.map f ⊔ t.map f
   证明: (gc_map_comap f).l_sup
 
@@ -2367,7 +2367,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : R ->+* S) (s : ι -> Subsemiring R)
+  条件: {ι : 类型层*} (f : R ->+* S) (s : ι -> 子半环 R)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -2386,7 +2386,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (s t : Subsemiring R) (f : R ->+* S) (hf : Function.Injective f)
+  条件: (s t : 子半环 R) (f : R ->+* S) (hf : 函数.单射 f)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_injective, coe_injective, image_inter
@@ -2406,7 +2406,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : R ->+* S) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : R ->+* S) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -2429,7 +2429,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (s t : Subsemiring S) (f : R ->+* S)
+  条件: (s t : 子半环 S) (f : R ->+* S)
   结论: (s ⊓ t).comap f = s.comap f ⊓ t.comap f
   证明: (gc_map_comap f).u_inf
 
@@ -2450,7 +2450,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : R ->+* S) (s : ι -> Subsemiring S)
+  条件: {ι : 类型层*} (f : R ->+* S) (s : ι -> 子半环 S)
   证明: (gc_map_comap f).u_iInf
 
 @[simp]
@@ -2476,7 +2476,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : R ->+* S)
-  结论: (⊥ : Subsemiring R).map f = ⊥
+  结论: (⊥ : 子半环 R).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[simp]
@@ -2499,7 +2499,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : R ->+* S)
-  结论: (⊤ : Subsemiring S).comap f = ⊤
+  结论: (⊤ : 子半环 S).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 Depends on / 依赖: gc_map_comap, u_top
@@ -2519,8 +2519,8 @@ definition prod
 @[norm_cast]
 
 中文:
-定义 prod
-  签名: (s : Subsemiring R) (t : Subsemiring S)
+定义 乘积
+  签名: (s : 子半环 R) (t : 子半环 S)
   定义体: { s.toSubmonoid.prod t.toSubmonoid, s.toAddSubmonoid.prod t.toAddSubmonoid with
     carrier := s ×ˢ t }
 
@@ -2543,7 +2543,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (s : Subsemiring R) (t : Subsemiring S)
+  条件: (s : 子半环 R) (t : 子半环 S)
   证明: rfl
 -/
 theorem coe_prod (s : Subsemiring R) (t : Subsemiring S) :
@@ -2562,7 +2562,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {s : Subsemiring R} {t : Subsemiring S} {p : R × S}
+  条件: {s : 子半环 R} {t : 子半环 S} {p : R × S}
   证明: Iff.rfl
 
 @[gcongr, mono]
@@ -2586,7 +2586,7 @@ theorem prod_mono
 中文:
 定理 prod_mono
   条件: ⦃s₁ s₂
-  结论: Subsemiring R⦄ (hs : s₁ <= s₂) ⦃t₁ t₂ : Subsemiring S⦄ (ht : t₁ <= t₂) :
+  结论: 子半环 R⦄ (hs : s₁ <= s₂) ⦃t₁ t₂ : 子半环 S⦄ (ht : t₁ <= t₂) :
   证明: Set.prod_mono hs ht
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -2606,8 +2606,8 @@ theorem prod_mono_right
 
 中文:
 定理 prod_mono_right
-  条件: (s : Subsemiring R)
-  结论: Monotone fun t : Subsemiring S => s.prod t
+  条件: (s : 子半环 R)
+  结论: 递增 fun t : 子半环 S => s.乘积 t
   证明: prod_mono (le_refl s)
 
 Depends on / 依赖: le_refl, prod_mono
@@ -2626,8 +2626,8 @@ theorem prod_mono_left
 
 中文:
 定理 prod_mono_left
-  条件: (t : Subsemiring S)
-  结论: Monotone fun s : Subsemiring R => s.prod t
+  条件: (t : 子半环 S)
+  结论: 递增 fun s : 子半环 R => s.乘积 t
   证明: fun _ _ hs => prod_mono hs (le_refl t)
 
 Depends on / 依赖: le_refl, prod_mono
@@ -2646,8 +2646,8 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  条件: (s : Subsemiring R)
-  结论: s.prod (⊤ : Subsemiring S) = s.comap (RingHom.fst R S)
+  条件: (s : 子半环 R)
+  结论: s.乘积 (⊤ : 子半环 S) = s.comap (环态射.fst R S)
   证明: ext fun x => by simp [mem_prod]
 
 Depends on / 依赖: mem_prod
@@ -2668,8 +2668,8 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  条件: (s : Subsemiring S)
-  结论: (⊤ : Subsemiring R).prod s = s.comap (RingHom.snd R S)
+  条件: (s : 子半环 S)
+  结论: (⊤ : 子半环 R).乘积 s = s.comap (环态射.snd R S)
   证明: ext fun x => by simp [mem_prod]
 
 @[simp]
@@ -2692,7 +2692,7 @@ theorem top_prod_top
 
 中文:
 定理 top_prod_top
-  结论: (⊤ : Subsemiring R).prod (⊤ : Subsemiring S) = ⊤
+  结论: (⊤ : 子半环 R).乘积 (⊤ : 子半环 S) = ⊤
   证明: (top_prod _).trans comap_top _
 
 @[simp]
@@ -2712,7 +2712,7 @@ theorem _root_.RingHom.rangeS_prodMap
   proof: SetLike.coe_injective Set.range_prodMap
 
 中文:
-定理 _root_.RingHom.rangeS_prodMap
+定理 _root_.环态射.rangeS_prodMap
   条件: (f : R ->+* S) (g : S ->+* T)
   证明: SetLike.coe_injective Set.range_prodMap
 
@@ -2732,7 +2732,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  结论: center (R × S) = prod (center R) (center S)
+  结论: center (R × S) = 乘积 (center R) (center S)
   证明: SetLike.coe_injective Set.center_prod
 -/
 protected theorem center_prod : center (R × S) = prod (center R) (center S) :=
@@ -2750,7 +2750,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (s : Subsemiring R) (t : Subsemiring S)
+  签名: (s : 子半环 R) (t : 子半环 S)
   定义体: { Equiv.Set.prod (s : Set R) (t : Set S) with
     map_mul' := fun _ _ => rfl
     map_add' := fun _ _ => rfl }
@@ -2778,7 +2778,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  结论: {ι} [hι : Nonempty ι] {S : ι -> Subsemiring R} (hS : Directed (· <= ·) S)
+  结论: {ι} [hι : 非空 ι] {S : ι -> 子半环 R} (hS : Directed (· <= ·) S)
   证明: by
   refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
   let U : Subsemiring R :=
@@ -2809,7 +2809,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: {ι} [hι : Nonempty ι] {S : ι -> Subsemiring R}
+  结论: {ι} [hι : 非空 ι] {S : ι -> 子半环 R}
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 Depends on / 依赖: Set.ext, mem_iSup_of_directed
@@ -2830,7 +2830,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {S : Set (Subsemiring R)} (Sne : S.Nonempty)
+  结论: {S : 集合 (子半环 R)} (Sne : S.非空)
   证明: by
   have : Nonempty S := Sne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists, exists_prop]
@@ -2852,7 +2852,7 @@ theorem coe_sSup_of_directedOn
 
 中文:
 定理 coe_sSup_of_directedOn
-  结论: {S : Set (Subsemiring R)} (Sne : S.Nonempty)
+  结论: {S : 集合 (子半环 R)} (Sne : S.非空)
   证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 Depends on / 依赖: Set.ext, mem_sSup_of_directedOn
@@ -2873,7 +2873,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : Sort*} [Nonempty ι]
+  结论: {ι : 类型层*} [非空 ι]
   证明: by
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, coe_iSup_of_directed dir,
     Subsemigroup.coe_iSup_of_directed dir] using! Subsemigroup.isMulCommutative_iSup dir
@@ -2896,7 +2896,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
@@ -3092,7 +3092,7 @@ theorem domRestrict_comp_codRestrict
 
 中文:
 定理 domRestrict_comp_codRestrict
-  结论: (g : S ->+* T) (f : R ->+* S) (p : Subsemiring S)
+  结论: (g : S ->+* T) (f : R ->+* S) (p : 子半环 S)
   证明: rfl
 -/
 theorem domRestrict_comp_codRestrict (g : S ->+* T) (f : R ->+* S) (p : Subsemiring S)
@@ -3155,7 +3155,7 @@ theorem rangeSRestrict_surjective
 中文:
 定理 rangeSRestrict_surjective
   条件: (f : R ->+* S)
-  结论: Function.Surjective f.rangeSRestrict
+  结论: 函数.满射 f.rangeSRestrict
   证明: fun ⟨_, hy⟩ =>
   let ⟨x, hx⟩ := mem_rangeS.mp hy
   ⟨x, Subtype.ext hx⟩
@@ -3198,7 +3198,7 @@ theorem rangeS_top_of_surjective
 
 中文:
 定理 rangeS_top_of_surjective
-  条件: (f : R ->+* S) (hf : Function.Surjective f)
+  条件: (f : R ->+* S) (hf : 函数.满射 f)
   证明: rangeS_top_iff_surjective.2 hf
 
 Depends on / 依赖: rangeS_top_iff_surjective
@@ -3218,8 +3218,8 @@ theorem eqOn_sclosure
 
 中文:
 定理 eqOn_sclosure
-  条件: {f g : R ->+* S} {s : Set R} (h : Set.EqOn f g s)
-  结论: Set.EqOn f g (closure s)
+  条件: {f g : R ->+* S} {s : 集合 R} (h : 集合.EqOn f g s)
+  结论: 集合.EqOn f g (closure s)
   证明: show closure s <= f.eqLocusS g from closure_le.2 h
 
 Depends on / 依赖: closure, closure_le, eqLocusS, f.eqLocusS
@@ -3238,7 +3238,7 @@ theorem eq_of_eqOn_stop
 
 中文:
 定理 eq_of_eqOn_stop
-  条件: {f g : R ->+* S} (h : Set.EqOn f g (⊤ : Subsemiring R))
+  条件: {f g : R ->+* S} (h : 集合.EqOn f g (⊤ : 子半环 R))
   结论: f = g
   证明: ext fun _ => h (mem_top _)
 
@@ -3257,7 +3257,7 @@ theorem eq_of_eqOn_sdense
 
 中文:
 定理 eq_of_eqOn_sdense
-  条件: {s : Set R} (hs : closure s = ⊤) {f g : R ->+* S} (h : s.EqOn f g)
+  条件: {s : 集合 R} (hs : closure s = ⊤) {f g : R ->+* S} (h : s.EqOn f g)
   证明: eq_of_eqOn_stop hs ▸ eqOn_sclosure h
 
 Depends on / 依赖: eqOn_sclosure, eq_of_eqOn_stop
@@ -3277,7 +3277,7 @@ theorem sclosure_preimage_le
 
 中文:
 定理 sclosure_preimage_le
-  条件: (f : R ->+* S) (s : Set S)
+  条件: (f : R ->+* S) (s : 集合 S)
   结论: closure (f ⁻¹' s) <= (closure s).comap f
   证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
@@ -3300,7 +3300,7 @@ theorem map_closureS
 
 中文:
 定理 map_closureS
-  条件: (f : R ->+* S) (s : Set R)
+  条件: (f : R ->+* S) (s : 集合 R)
   结论: (closure s).map f = closure (f '' s)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subsemiring.gi S).gc (Subsemiring.gi R).gc
     fun _ => coe_comap _ _
@@ -3347,7 +3347,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : Subsemiring R} (h : S <= T)
+  签名: {S T : 子半环 R} (h : S <= T)
   定义体: S.subtype.codRestrict _ fun x => h x.2
 
 Depends on / 依赖: S.subtype.codRestrict, codRestrict, subtype
@@ -3367,7 +3367,7 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {S T : Subsemiring R} (h : S <= T)
+  条件: {S T : 子半环 R} (h : S <= T)
   证明: Set.inclusion_injective h
 
 @[simp]
@@ -3391,7 +3391,7 @@ theorem rangeS_subtype
 
 中文:
 定理 rangeS_subtype
-  条件: (s : Subsemiring R)
+  条件: (s : 子半环 R)
   结论: s.subtype.rangeS = s
   证明: SetLike.coe_injective (coe_rangeS _).trans Subtype.range_coe
 
@@ -3463,7 +3463,7 @@ theorem prod_bot_sup_bot_prod
 
 中文:
 定理 prod_bot_sup_bot_prod
-  条件: (s : Subsemiring R) (t : Subsemiring S)
+  条件: (s : 子半环 R) (t : 子半环 S)
   证明: le_antisymm (sup_le (prod_mono_right s bot_le) (prod_mono_left t bot_le)) fun p hp =>
     Prod.fst_mul_snd p ▸
       mul_mem
@@ -3529,7 +3529,7 @@ Subtype.ext by
 
 中文:
 定义 ofLeftInverseS
-  签名: {g : S -> R} {f : R ->+* S} (h : Function.LeftInverse g f)
+  签名: {g : S -> R} {f : R ->+* S} (h : 函数.左逆 g f)
   定义体: { f.rangeSRestrict with
     toFun := fun x => f.rangeSRestrict x
     invFun := fun x => (g ∘ f.rangeS.subtype) x
@@ -3566,7 +3566,7 @@ theorem ofLeftInverseS_apply
 
 中文:
 定理 ofLeftInverseS_apply
-  条件: {g : S -> R} {f : R ->+* S} (h : Function.LeftInverse g f) (x : R)
+  条件: {g : S -> R} {f : R ->+* S} (h : 函数.左逆 g f) (x : R)
   证明: rfl
 
 @[simp]
@@ -3586,7 +3586,7 @@ theorem ofLeftInverseS_symm_apply
 
 中文:
 定理 ofLeftInverseS_symm_apply
-  结论: {g : S -> R} {f : R ->+* S} (h : Function.LeftInverse g f)
+  结论: {g : S -> R} {f : R ->+* S} (h : 函数.左逆 g f)
   证明: rfl
 -/
 theorem ofLeftInverseS_symm_apply {g : S -> R} {f : R ->+* S} (h : Function.LeftInverse g f)
@@ -3605,7 +3605,7 @@ definition subsemiringMap
 
 中文:
 定义 subsemiringMap
-  签名: (e : R ≃+* S) (s : Subsemiring R)
+  签名: (e : R ≃+* S) (s : 子半环 R)
   定义体: { e.toAddEquiv.addSubmonoidMap s.toAddSubmonoid, e.toMulEquiv.submonoidMap s.toSubmonoid with }
 
 @[simp]
@@ -3628,7 +3628,7 @@ theorem subsemiringMap_apply_coe
 
 中文:
 定理 subsemiringMap_apply_coe
-  条件: (e : R ≃+* S) (s : Subsemiring R) (x : s)
+  条件: (e : R ≃+* S) (s : 子半环 R) (x : s)
   证明: rfl
 
 @[simp]
@@ -3648,7 +3648,7 @@ theorem subsemiringMap_symm_apply_coe
 
 中文:
 定理 subsemiringMap_symm_apply_coe
-  条件: (e : R ≃+* S) (s : Subsemiring R) (x : s.map e.toRingHom)
+  条件: (e : R ≃+* S) (s : 子半环 R) (x : s.map e.toRingHom)
   证明: rfl
 -/
 theorem subsemiringMap_symm_apply_coe (e : R ≃+* S) (s : Subsemiring R) (x : s.map e.toRingHom) :
@@ -3689,7 +3689,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul R' α] (S : Subsemiring R')
+  签名: [标量乘法 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance smul [SMul R' α] (S : Subsemiring R') : SMul S α :=
@@ -3706,7 +3706,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [SMul R' α] {S : Subsemiring R'} (g : S) (m : α)
+  条件: [标量乘法 R' α] {S : 子半环 R'} (g : S) (m : α)
   结论: g • m = (g : R') • m
   证明: rfl
 -/
@@ -3723,7 +3723,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMul R' β] [SMul α β] [SMulCommClass R' α β] (S : Subsemiring R')
+  签名: [标量乘法 R' β] [标量乘法 α β] [标量交换类 R' α β] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance smulCommClass_left [SMul R' β] [SMul α β] [SMulCommClass R' α β] (S : Subsemiring R') :
@@ -3740,7 +3740,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul α β] [SMul R' β] [SMulCommClass α R' β] (S : Subsemiring R')
+  签名: [标量乘法 α β] [标量乘法 R' β] [标量交换类 α R' β] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance smulCommClass_right [SMul α β] [SMul R' β] [SMulCommClass α R' β] (S : Subsemiring R') :
@@ -3765,7 +3765,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul α β] [SMul R' α] [SMul R' β] [IsScalarTower R' α β]
+  签名: [标量乘法 α β] [标量乘法 R' α] [标量乘法 R' β] [标量塔 R' α β]
   定义体: inferInstance
 -/
 instance isScalarTower [SMul α β] [SMul R' α] [SMul R' β] [IsScalarTower R' α β]
@@ -3787,7 +3787,7 @@ instance faithfulSMul
 
 中文:
 实例 faithfulSMul
-  签名: [SMul R' α] [FaithfulSMul R' α] (S : Subsemiring R')
+  签名: [标量乘法 R' α] [忠实标量乘法 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance faithfulSMul [SMul R' α] [FaithfulSMul R' α] (S : Subsemiring R') : FaithfulSMul S α :=
@@ -3807,8 +3807,8 @@ instance [Zero
   body: inferInstance
 
 中文:
-实例 [Zero
-  签名: α] [SMulWithZero R' α] (S
+实例 [零
+  签名: α] [带零标量乘法 R' α] (S
   定义体: inferInstance
 
 Depends on / 依赖: RationalMap, RationalMap.comp_def, comp_def, g.toRationalMap_representative, infer_instance, toRationalMap_representative
@@ -3830,7 +3830,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [MulAction R' α] (S : Subsemiring R')
+  签名: [乘法作用 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance mulAction [MulAction R' α] (S : Subsemiring R') : MulAction S α :=
@@ -3846,7 +3846,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [AddMonoid α] [DistribMulAction R' α] (S : Subsemiring R')
+  签名: [加法幺半群 α] [分配乘法作用 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance distribMulAction [AddMonoid α] [DistribMulAction R' α] (S : Subsemiring R') :
@@ -3863,7 +3863,7 @@ instance mulDistribMulAction
 
 中文:
 实例 mulDistribMulAction
-  签名: [Monoid α] [MulDistribMulAction R' α] (S : Subsemiring R')
+  签名: [幺半群 α] [MulDistribMul作用 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance mulDistribMulAction [Monoid α] [MulDistribMulAction R' α] (S : Subsemiring R') :
@@ -3885,7 +3885,7 @@ instance mulActionWithZero
 
 中文:
 实例 mulActionWithZero
-  签名: [Zero α] [MulActionWithZero R' α] (S : Subsemiring R')
+  签名: [零 α] [带零乘法作用 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance mulActionWithZero [Zero α] [MulActionWithZero R' α] (S : Subsemiring R') :
@@ -3908,7 +3908,7 @@ instance module
 
 中文:
 实例 module
-  签名: [AddCommMonoid α] [Module R' α] (S : Subsemiring R')
+  签名: [加法交换幺半群 α] [模 R' α] (S : 子半环 R')
   定义体: inferInstance
 -/
 instance module [AddCommMonoid α] [Module R' α] (S : Subsemiring R') : Module S α :=
@@ -3923,8 +3923,8 @@ instance [Semiring
   body: inferInstance
 
 中文:
-实例 [Semiring
-  签名: α] [MulSemiringAction R' α] (S
+实例 [半环
+  签名: α] [MulSemiring作用 R' α] (S
   定义体: inferInstance
 -/
 instance [Semiring α] [MulSemiringAction R' α] (S : Subsemiring R') : MulSemiringAction S α :=
@@ -3940,7 +3940,7 @@ instance center.smulCommClass_left
 
 中文:
 实例 center.smulCommClass_left
-  签名: : SMulCommClass (center R') R' R'
+  签名: : 标量交换类 (center R') R' R'
   定义体: Submonoid.center.smulCommClass_left
 -/
 instance center.smulCommClass_left : SMulCommClass (center R') R' R' :=
@@ -3956,7 +3956,7 @@ instance center.smulCommClass_right
 
 中文:
 实例 center.smulCommClass_right
-  签名: : SMulCommClass R' (center R') R'
+  签名: : 标量交换类 R' (center R') R'
   定义体: Submonoid.center.smulCommClass_right
 -/
 instance center.smulCommClass_right : SMulCommClass R' (center R') R' :=
@@ -3972,7 +3972,7 @@ lemma closure_le_centralizer_centralizer
 
 中文:
 引理 closure_le_centralizer_centralizer
-  条件: (s : Set R')
+  条件: (s : 集合 R')
   证明: closure_le.mpr Set.subset_centralizer_centralizer
 
 Depends on / 依赖: Set.subset_centralizer_centralizer, closure_le, closure_le.mpr, subset_centralizer_centralizer
@@ -3993,7 +3993,7 @@ theorem isMulCommutative_closure
 
 中文:
 定理 isMulCommutative_closure
-  条件: {s : Set R'} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  条件: {s : 集合 R'} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   证明: have := closure_le_centralizer_centralizer s
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -4020,7 +4020,7 @@ abbreviation closureCommSemiringOfComm
 
 中文:
 缩写 closureCommSemiringOfComm
-  签名: {s : Set R'} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
+  签名: {s : 集合 R'} (hcomm : 对任意 x in s, 对任意 y in s, x * y = y * x)
   定义体: have := isMulCommutative_closure hcomm
   inferInstance
 
@@ -4041,7 +4041,7 @@ instance instIsMulCommutative_closure
 
 中文:
 实例 instIsMulCommutative_closure
-  签名: {S : 类型} [SetLike S R'] [MulMemClass S R'] (s : S)
+  签名: {S : 类型} [集合状 S R'] [MulMem类 S R'] (s : S)
   定义体: isMulCommutative_closure fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 Depends on / 依赖: f.representative.isDominant_toRationalMap_iff, f.toRationalMap_representative, isDominant_toRationalMap_iff, isMulCommutative_closure, representative, setLike_mul_comm, toRationalMap_representative
@@ -4067,7 +4067,7 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (f : R ->+* S) (t : Subsemiring S)
+  条件: (f : R ->+* S) (t : 子半环 S)
   结论: (t.comap f).map f = t ⊓ f.rangeS
   证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
 

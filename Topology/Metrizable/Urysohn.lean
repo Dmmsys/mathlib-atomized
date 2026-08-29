@@ -48,8 +48,8 @@ theorem exists_isInducing_l_infty
   -- `s` is a countable set.
 
 中文:
-定理 exists_isInducing_l_infty
-  结论: 存在 f : X -> 自然数 ->ᵇ 实数, IsInducing f
+定理 存在_isInducing_l_infty
+  结论: 存在 f : X -> 自然数 ->ᵇ 实数, 是Inducing f
   证明: by
   -- Choose a countable basis, and consider the set `s` of pairs of set `(U, V)` such that `U ∈ B`,
   -- `V ∈ B`, and `closure U ⊆ V`.
@@ -149,8 +149,8 @@ theorem exists_embedding_l_infty
   proof: let ⟨f, hf⟩ := exists_isInducing_l_infty X; ⟨f, hf.isEmbedding⟩
 
 中文:
-定理 exists_embedding_l_infty
-  结论: 存在 f : X -> 自然数 ->ᵇ 实数, IsEmbedding f
+定理 存在_embedding_l_infty
+  结论: 存在 f : X -> 自然数 ->ᵇ 实数, 是嵌入 f
   证明: let ⟨f, hf⟩ := exists_isInducing_l_infty X; ⟨f, hf.isEmbedding⟩
 
 Depends on / 依赖: exists_isInducing_l_infty, hf.isEmbedding, isEmbedding

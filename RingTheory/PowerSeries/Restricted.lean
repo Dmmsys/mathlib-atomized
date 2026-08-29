@@ -149,7 +149,7 @@ lemma isRestricted_zero
 
 中文:
 引理 isRestricted_zero
-  结论: IsRestricted c (0 : PowerSeries R)
+  结论: IsRestricted c (0 : 幂级数 R)
   证明: MvPowerSeries.isRestricted_zero (fun _ => c)
 
 Depends on / 依赖: Limits, Limits.PullbackCone.isLimitAux, MvPowerSeries, MvPowerSeries.isRestricted_zero, PullbackCone, condition, hom_ext, isLimitAux, isRestricted_zero, lift_fst, lift_snd, pullback, pullback.hom_ext, pullback.lift, pullback.lift_fst, pullback.lift_snd, s.condition, s.fst, s.snd
@@ -187,7 +187,7 @@ lemma isRestricted_one
 
 中文:
 引理 isRestricted_one
-  结论: IsRestricted c (1 : PowerSeries R)
+  结论: IsRestricted c (1 : 幂级数 R)
   证明: MvPowerSeries.isRestricted_monomial (fun _ => c) 0 1
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.isRestricted_monomial, isRestricted_monomial
@@ -226,7 +226,7 @@ lemma isRestricted.add
 
 中文:
 引理 isRestricted.add
-  条件: {g : PowerSeries R} (hf : IsRestricted c f) (hg : IsRestricted c g)
+  条件: {g : 幂级数 R} (hf : IsRestricted c f) (hg : IsRestricted c g)
   证明: MvPowerSeries.isRestricted.add (fun _ => c) hf hg
 
 Depends on / 依赖: PreservesLimit, compHausLikeToTop, cospan, preservesLimit_of_reflects_of_preserves, toCompHausLike
@@ -264,7 +264,7 @@ lemma isRestricted.mul
 
 中文:
 引理 isRestricted.mul
-  结论: [IsUltrametricDist R] (c : 实数) {f g : PowerSeries R}
+  结论: [是UltrametricDist R] (c : 实数) {f g : 幂级数 R}
   证明: MvPowerSeries.isRestricted.mul (fun _ => c) hf hg
 -/
 lemma isRestricted.mul [IsUltrametricDist R] (c : Real) {f g : PowerSeries R}

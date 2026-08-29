@@ -42,7 +42,7 @@ definition mconv
 
 中文:
 定义 mconv
-  签名: (μ : Measure M) (ν : Measure M)
+  签名: (μ : 测度 M) (ν : 测度 M)
   定义体: Measure.map (fun x : M × M => x.1 * x.2) (μ.prod ν)
 
 Depends on / 依赖: Measure, Measure.map
@@ -70,7 +70,7 @@ theorem lintegral_mconv_eq_lintegral_prod
 
 中文:
 定理 lintegral_mconv_eq_lintegral_prod
-  结论: [MeasurableMul₂ M] {μ ν : Measure M}
+  结论: [MeasurableMul₂ M] {μ ν : 测度 M}
   证明: by
   rw [mconv]; rw [lintegral_map hf measurable_mul]
 
@@ -97,7 +97,7 @@ theorem lintegral_mconv
 
 中文:
 定理 lintegral_mconv
-  结论: [MeasurableMul₂ M] {μ ν : Measure M} [SFinite ν]
+  结论: [MeasurableMul₂ M] {μ ν : 测度 M} [SFinite ν]
   证明: by
   rw [lintegral_mconv_eq_lintegral_prod hf]; rw [lintegral_prod _ (by fun_prop)]
 
@@ -126,7 +126,7 @@ lemma dirac_mconv
 
 中文:
 引理 dirac_mconv
-  条件: [MeasurableMul₂ M] (x : M) (μ : Measure M) [SFinite μ]
+  条件: [MeasurableMul₂ M] (x : M) (μ : 测度 M) [SFinite μ]
   证明: by
   unfold mconv
   rw [dirac_prod]; rw [map_map (by fun_prop) (by fun_prop)]
@@ -158,7 +158,7 @@ lemma mconv_dirac
 
 中文:
 引理 mconv_dirac
-  条件: [MeasurableMul₂ M] (μ : Measure M) [SFinite μ] (x : M)
+  条件: [MeasurableMul₂ M] (μ : 测度 M) [SFinite μ] (x : M)
   证明: by
   unfold mconv
   rw [prod_dirac]; rw [map_map (by fun_prop) (by fun_prop)]
@@ -210,7 +210,7 @@ theorem dirac_one_mconv
 
 中文:
 定理 dirac_one_mconv
-  条件: [MeasurableMul₂ M] (μ : Measure M) [SFinite μ]
+  条件: [MeasurableMul₂ M] (μ : 测度 M) [SFinite μ]
   证明: by
   simp [dirac_mconv]
 
@@ -260,8 +260,8 @@ theorem zero_mconv
 
 中文:
 定理 zero_mconv
-  条件: (μ : Measure M)
-  结论: (0 : Measure M) ∗ₘ μ = (0 : Measure M)
+  条件: (μ : 测度 M)
+  结论: (0 : 测度 M) ∗ₘ μ = (0 : 测度 M)
   证明: by
   unfold mconv
   simp
@@ -286,8 +286,8 @@ theorem mconv_zero
 
 中文:
 定理 mconv_zero
-  条件: (μ : Measure M)
-  结论: μ ∗ₘ (0 : Measure M) = (0 : Measure M)
+  条件: (μ : 测度 M)
+  结论: μ ∗ₘ (0 : 测度 M) = (0 : 测度 M)
   证明: by
   unfold mconv
   simp
@@ -313,7 +313,7 @@ theorem mconv_smul_left
 
 中文:
 定理 mconv_smul_left
-  条件: (μ : Measure M) (ν : Measure M) [SFinite ν] (s : 实数>=0∞)
+  条件: (μ : 测度 M) (ν : 测度 M) [SFinite ν] (s : 实数>=0∞)
   证明: by
   unfold mconv
   rw [← Measure.map_smul]; rw [Measure.prod_smul_left]
@@ -343,7 +343,7 @@ theorem mconv_add
 
 中文:
 定理 mconv_add
-  结论: [MeasurableMul₂ M] (μ : Measure M) (ν : Measure M) (ρ : Measure M) [SFinite μ]
+  结论: [MeasurableMul₂ M] (μ : 测度 M) (ν : 测度 M) (ρ : 测度 M) [SFinite μ]
   证明: by
   unfold mconv
   rw [prod_add]; rw [Measure.map_add]
@@ -373,7 +373,7 @@ theorem add_mconv
 
 中文:
 定理 add_mconv
-  结论: [MeasurableMul₂ M] (μ : Measure M) (ν : Measure M) (ρ : Measure M) [SFinite μ]
+  结论: [MeasurableMul₂ M] (μ : 测度 M) (ν : 测度 M) (ρ : 测度 M) [SFinite μ]
   证明: by
   unfold mconv
   rw [add_prod]; rw [Measure.map_add]
@@ -403,7 +403,7 @@ theorem mconv_comm
 
 中文:
 定理 mconv_comm
-  结论: {M : 类型} [CommMonoid M] [MeasurableSpace M] [MeasurableMul₂ M] (μ : Measure M)
+  结论: {M : 类型} [交换幺半群 M] [可测空间 M] [MeasurableMul₂ M] (μ : 测度 M)
   证明: by
   unfold mconv
   rw [← prod_swap]; rw [map_map (by fun_prop)]
@@ -433,7 +433,7 @@ instance sfinite_mconv_of_sfinite
 
 中文:
 实例 sfinite_mconv_of_sfinite
-  签名: (μ : Measure M) (ν : Measure M) [SFinite μ] [SFinite ν]
+  签名: (μ : 测度 M) (ν : 测度 M) [SFinite μ] [SFinite ν]
   定义体: inferInstanceAs SFinite ((μ.prod ν).map fun (x : M × M) => x.1 * x.2)
 
 @[to_additive]
@@ -458,7 +458,7 @@ instance finite_of_finite_mconv
 
 中文:
 实例 finite_of_finite_mconv
-  签名: (μ : Measure M) (ν : Measure M) [IsFiniteMeasure μ]
+  签名: (μ : 测度 M) (ν : 测度 M) [是有限测度 μ]
   定义体: by
   have h : (μ ∗ₘ ν) Set.univ < ⊤ := by
     unfold mconv
@@ -494,7 +494,7 @@ theorem mconv_assoc
 
 中文:
 定理 mconv_assoc
-  结论: [MeasurableMul₂ M] (μ ν ρ : Measure M)
+  结论: [MeasurableMul₂ M] (μ ν ρ : 测度 M)
   证明: by
   refine ext_of_lintegral _ fun f hf => ?_
   repeat rw [lintegral_mconv (by fun_prop)]
@@ -530,7 +530,7 @@ instance probabilitymeasure_of_probabilitymeasures_mconv
 
 中文:
 实例 probabilitymeasure_of_probabilitymeasures_mconv
-  签名: (μ : Measure M) (ν : Measure M)
+  签名: (μ : 测度 M) (ν : 测度 M)
   定义体: isProbabilityMeasure_map (by fun_prop)
 
 @[to_additive]
@@ -559,7 +559,7 @@ theorem mconv_absolutelyContinuous
 
 中文:
 定理 mconv_absolutelyContinuous
-  结论: [MeasurableMul₂ M] {μ ν ρ : Measure M}
+  结论: [MeasurableMul₂ M] {μ ν ρ : 测度 M}
   证明: by
   refine AbsolutelyContinuous.mk (fun s hs h => ?_)
   rw [← lintegral_indicator_one hs]; rw [lintegral_mconv (by measurability)]
@@ -599,7 +599,7 @@ lemma map_mconv_monoidHom
 
 中文:
 引理 map_mconv_monoidHom
-  结论: {M M' : 类型} {mM : MeasurableSpace M} [Monoid M] [MeasurableMul₂ M]
+  结论: {M M' : 类型} {mM : 可测空间 M} [幺半群 M] [MeasurableMul₂ M]
   证明: by
   unfold mconv
   rw [map_map (by fun_prop) (by fun_prop)]
@@ -634,7 +634,7 @@ lemma map_conv_continuousLinearMap
 
 中文:
 引理 map_conv_continuousLinearMap
-  结论: {E F : 类型} [AddCommMonoid E] [AddCommMonoid F]
+  结论: {E F : 类型} [加法交换幺半群 E] [加法交换幺半群 F]
   证明: by
   suffices (μ ∗ ν).map (L : E ->+ F) = (μ.map (L : E ->+ F)) ∗ (ν.map (L : E ->+ F)) by simpa
   rw [map_conv_addMonoidHom]

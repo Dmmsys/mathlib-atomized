@@ -42,8 +42,8 @@ abbreviation GroupSeminormClass.toSeminormedGroup
 @[to_additive]
 
 中文:
-缩写 GroupSeminormClass.toSeminormedGroup
-  签名: [Group α] [GroupSeminormClass F α 实数]
+缩写 群半范数类.toSeminormedGroup
+  签名: [群 α] [群半范数类 F α 实数]
   定义体: f
   dist x y := f (x⁻¹ * y)
   dist_eq _ _ := rfl
@@ -72,8 +72,8 @@ lemma GroupSeminormClass.toSeminormedGroup_norm_eq
   proof: rfl
 
 中文:
-引理 GroupSeminormClass.toSeminormedGroup_norm_eq
-  结论: [Group α] [GroupSeminormClass F α 实数]
+引理 群半范数类.toSeminormedGroup_norm_eq
+  结论: [群 α] [群半范数类 F α 实数]
   证明: rfl
 -/
 lemma GroupSeminormClass.toSeminormedGroup_norm_eq [Group α] [GroupSeminormClass F α Real]
@@ -95,8 +95,8 @@ abbreviation GroupSeminormClass.toSeminormedCommGroup
 @[to_additive]
 
 中文:
-缩写 GroupSeminormClass.toSeminormedCommGroup
-  签名: [CommGroup α] [GroupSeminormClass F α 实数]
+缩写 群半范数类.toSeminormedCommGroup
+  签名: [交换群 α] [群半范数类 F α 实数]
   定义体: GroupSeminormClass.toSeminormedGroup f
   __ : CommGroup α := inferInstance
 
@@ -119,8 +119,8 @@ lemma GroupSeminormClass.toSeminormedCommGroup_norm_eq
   proof: rfl
 
 中文:
-引理 GroupSeminormClass.toSeminormedCommGroup_norm_eq
-  结论: [CommGroup α] [GroupSeminormClass F α 实数]
+引理 群半范数类.toSeminormedCommGroup_norm_eq
+  结论: [交换群 α] [群半范数类 F α 实数]
   证明: rfl
 -/
 lemma GroupSeminormClass.toSeminormedCommGroup_norm_eq [CommGroup α] [GroupSeminormClass F α Real]
@@ -142,8 +142,8 @@ abbreviation GroupNormClass.toNormedGroup
 @[to_additive]
 
 中文:
-缩写 GroupNormClass.toNormedGroup
-  签名: [Group α] [GroupNormClass F α 实数]
+缩写 群范数类.toNormedGroup
+  签名: [群 α] [群范数类 F α 实数]
   定义体: GroupSeminormClass.toSeminormedGroup f
   eq_of_dist_eq_zero h := inv_mul_eq_one.mp (eq_one_of_map_eq_zero f h)
 
@@ -166,8 +166,8 @@ lemma GroupNormClass.toNormedGroup_norm_eq
   proof: rfl
 
 中文:
-引理 GroupNormClass.toNormedGroup_norm_eq
-  结论: [Group α] [GroupNormClass F α 实数]
+引理 群范数类.toNormedGroup_norm_eq
+  结论: [群 α] [群范数类 F α 实数]
   证明: rfl
 -/
 lemma GroupNormClass.toNormedGroup_norm_eq [Group α] [GroupNormClass F α Real]
@@ -189,8 +189,8 @@ abbreviation GroupNormClass.toNormedCommGroup
 @[to_additive]
 
 中文:
-缩写 GroupNormClass.toNormedCommGroup
-  签名: [CommGroup α] [GroupNormClass F α 实数]
+缩写 群范数类.toNormedCommGroup
+  签名: [交换群 α] [群范数类 F α 实数]
   定义体: GroupNormClass.toNormedGroup f
   __ : CommGroup α := inferInstance
 
@@ -213,8 +213,8 @@ lemma GroupNormClass.toNormedCommGroup_norm_eq
   proof: rfl
 
 中文:
-引理 GroupNormClass.toNormedCommGroup_norm_eq
-  结论: [CommGroup α] [GroupNormClass F α 实数]
+引理 群范数类.toNormedCommGroup_norm_eq
+  结论: [交换群 α] [群范数类 F α 实数]
   证明: rfl
 -/
 lemma GroupNormClass.toNormedCommGroup_norm_eq [CommGroup α] [GroupNormClass F α Real]

@@ -252,7 +252,7 @@ theorem IsLocalMinOn.on_subset
 
 中文:
 定理 IsLocalMinOn.on_subset
-  条件: {t : Set α} (hf : IsLocalMinOn f t a) (h : s subseteq t)
+  条件: {t : 集合 α} (hf : IsLocalMinOn f t a) (h : s subseteq t)
   证明: hf.filter_mono nhdsWithin_mono a h
 
 Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
@@ -271,7 +271,7 @@ theorem IsLocalMaxOn.on_subset
 
 中文:
 定理 IsLocalMaxOn.on_subset
-  条件: {t : Set α} (hf : IsLocalMaxOn f t a) (h : s subseteq t)
+  条件: {t : 集合 α} (hf : IsLocalMaxOn f t a) (h : s subseteq t)
   证明: hf.filter_mono nhdsWithin_mono a h
 
 Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
@@ -290,7 +290,7 @@ theorem IsLocalExtrOn.on_subset
 
 中文:
 定理 IsLocalExtrOn.on_subset
-  条件: {t : Set α} (hf : IsLocalExtrOn f t a) (h : s subseteq t)
+  条件: {t : 集合 α} (hf : IsLocalExtrOn f t a) (h : s subseteq t)
   证明: hf.filter_mono nhdsWithin_mono a h
 
 Depends on / 依赖: filter_mono, hf.filter_mono, nhdsWithin_mono
@@ -616,7 +616,7 @@ theorem IsLocalMinOn.not_nhds_le_map
 
 中文:
 定理 IsLocalMinOn.not_nhds_le_map
-  结论: [TopologicalSpace β] (hf : IsLocalMinOn f s a)
+  结论: [拓扑空间 β] (hf : IsLocalMinOn f s a)
   证明: fun hle =>
   have : forallᶠ y in 𝓝[<] f a, f a <= y := (eventually_map.2 hf).filter_mono (inf_le_left.trans hle)
   let ⟨_y, hy⟩ := (this.and self_mem_nhdsWithin).exists
@@ -639,7 +639,7 @@ theorem IsLocalMaxOn.not_nhds_le_map
 
 中文:
 定理 IsLocalMaxOn.not_nhds_le_map
-  结论: [TopologicalSpace β] (hf : IsLocalMaxOn f s a)
+  结论: [拓扑空间 β] (hf : IsLocalMaxOn f s a)
   证明: @IsLocalMinOn.not_nhds_le_map α βᵒᵈ _ _ _ _ _ ‹_› hf ‹_›
 
 Depends on / 依赖: IsLocalMinOn, IsLocalMinOn.not_nhds_le_map, not_nhds_le_map
@@ -658,7 +658,7 @@ theorem IsLocalExtrOn.not_nhds_le_map
 
 中文:
 定理 IsLocalExtrOn.not_nhds_le_map
-  结论: [TopologicalSpace β] (hf : IsLocalExtrOn f s a)
+  结论: [拓扑空间 β] (hf : IsLocalExtrOn f s a)
   证明: hf.elim (fun h => h.not_nhds_le_map) fun h => h.not_nhds_le_map
 
 Depends on / 依赖: h.not_nhds_le_map, hf.elim, not_nhds_le_map
@@ -873,7 +873,7 @@ theorem IsLocalMin.comp_continuous
 
 中文:
 定理 IsLocalMin.comp_continuous
-  结论: [TopologicalSpace δ] {g : δ -> α} {b : δ}
+  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
   证明: hg hf
 -/
 theorem IsLocalMin.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ}
@@ -890,7 +890,7 @@ theorem IsLocalMax.comp_continuous
 
 中文:
 定理 IsLocalMax.comp_continuous
-  结论: [TopologicalSpace δ] {g : δ -> α} {b : δ}
+  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
   证明: hg hf
 -/
 theorem IsLocalMax.comp_continuous [TopologicalSpace δ] {g : δ -> α} {b : δ}
@@ -907,7 +907,7 @@ theorem IsLocalExtr.comp_continuous
 
 中文:
 定理 IsLocalExtr.comp_continuous
-  结论: [TopologicalSpace δ] {g : δ -> α} {b : δ}
+  结论: [拓扑空间 δ] {g : δ -> α} {b : δ}
   证明: hf.comp_tendsto hg
 
 Depends on / 依赖: comp_tendsto, hf.comp_tendsto
@@ -926,7 +926,7 @@ theorem IsLocalMin.comp_continuousOn
 
 中文:
 定理 IsLocalMin.comp_continuousOn
-  结论: [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
+  结论: [拓扑空间 δ] {s : 集合 δ} {g : δ -> α} {b : δ}
   证明: hf.comp_tendsto (hg b hb)
 
 Depends on / 依赖: comp_tendsto, hf.comp_tendsto
@@ -945,7 +945,7 @@ theorem IsLocalMax.comp_continuousOn
 
 中文:
 定理 IsLocalMax.comp_continuousOn
-  结论: [TopologicalSpace δ] {s : Set δ} {g : δ -> α} {b : δ}
+  结论: [拓扑空间 δ] {s : 集合 δ} {g : δ -> α} {b : δ}
   证明: hf.comp_tendsto (hg b hb)
 
 Depends on / 依赖: comp_tendsto, hf.comp_tendsto
@@ -965,7 +965,7 @@ theorem IsLocalExtr.comp_continuousOn
 
 中文:
 定理 IsLocalExtr.comp_continuousOn
-  结论: [TopologicalSpace δ] {s : Set δ} (g : δ -> α) {b : δ}
+  结论: [拓扑空间 δ] {s : 集合 δ} (g : δ -> α) {b : δ}
   证明: hf.elim (fun hf => (hf.comp_continuousOn hg hb).isExtr) fun hf =>
     (IsLocalMax.comp_continuousOn hf hg hb).isExtr
 
@@ -988,7 +988,7 @@ theorem IsLocalMinOn.comp_continuousOn
 
 中文:
 定理 IsLocalMinOn.comp_continuousOn
-  结论: [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
+  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} {g : δ -> α}
   证明: hf.comp_tendsto
     (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
       (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
@@ -1014,7 +1014,7 @@ theorem IsLocalMaxOn.comp_continuousOn
 
 中文:
 定理 IsLocalMaxOn.comp_continuousOn
-  结论: [TopologicalSpace δ] {t : Set α} {s : Set δ} {g : δ -> α}
+  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} {g : δ -> α}
   证明: hf.comp_tendsto
     (tendsto_nhdsWithin_mono_right (image_subset_iff.mpr hst)
       (ContinuousWithinAt.tendsto_nhdsWithin_image (hg b hb)))
@@ -1039,7 +1039,7 @@ theorem IsLocalExtrOn.comp_continuousOn
 
 中文:
 定理 IsLocalExtrOn.comp_continuousOn
-  结论: [TopologicalSpace δ] {t : Set α} {s : Set δ} (g : δ -> α)
+  结论: [拓扑空间 δ] {t : 集合 α} {s : 集合 δ} (g : δ -> α)
   证明: hf.elim (fun hf => (hf.comp_continuousOn hst hg hb).isExtr) fun hf =>
     (IsLocalMaxOn.comp_continuousOn hf hst hg hb).isExtr
 
@@ -1231,7 +1231,7 @@ nonrec theorem IsLocalMaxOn.congr {f g : α -> β} {a : α} (h : IsLocalMaxOn f 
 h.congr heq heq.eq_of_nhdsWithin hmem
 
 中文:
-定理 Filter.EventuallyLE.isLocalMaxOn
+定理 滤子.EventuallyLE.isLocalMaxOn
   结论: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝[s] a] f)
   证明: hle.isMaxFilter hfga h
 
@@ -1258,7 +1258,7 @@ theorem Filter.EventuallyEq.isLocalMaxOn_iff
   proof: heq.isMaxFilter_iff heq.eq_of_nhdsWithin hmem
 
 中文:
-定理 Filter.EventuallyEq.isLocalMaxOn_iff
+定理 滤子.EventuallyEq.isLocalMaxOn_iff
   结论: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
   证明: heq.isMaxFilter_iff heq.eq_of_nhdsWithin hmem
 
@@ -1283,7 +1283,7 @@ h.congr heq heq.eq_of_nhdsWithin hmem
 nonrec theorem Filter.EventuallyEq.isLocalMinOn_iff {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝
 
 中文:
-定理 Filter.EventuallyLE.isLocalMinOn
+定理 滤子.EventuallyLE.isLocalMinOn
   结论: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝[s] a] g)
   证明: hle.isMinFilter hfga h
 
@@ -1320,7 +1320,7 @@ theorem Filter.EventuallyEq.isLocalExtrOn_iff
   proof: heq.isExtrFilter_iff heq.eq_of_nhdsWithin hmem
 
 中文:
-定理 Filter.EventuallyEq.isLocalExtrOn_iff
+定理 滤子.EventuallyEq.isLocalExtrOn_iff
   结论: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝[s] a] g)
   证明: heq.isExtrFilter_iff heq.eq_of_nhdsWithin hmem
 
@@ -1343,7 +1343,7 @@ nonrec theorem IsLocalMax.congr {f g : α -> β} {a : α} (h : IsLocalMax f a) (
   h.congr heq heq.eq_of_nhds
 
 中文:
-定理 Filter.EventuallyLE.isLocalMax
+定理 滤子.EventuallyLE.isLocalMax
   结论: {f g : α -> β} {a : α} (hle : g <=ᶠ[𝓝 a] f) (hfga : f a = g a)
   证明: hle.isMaxFilter hfga h
 
@@ -1370,7 +1370,7 @@ theorem Filter.EventuallyEq.isLocalMax_iff
   proof: heq.isMaxFilter_iff heq.eq_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.isLocalMax_iff
+定理 滤子.EventuallyEq.isLocalMax_iff
   条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
   证明: heq.isMaxFilter_iff heq.eq_of_nhds
 
@@ -1393,7 +1393,7 @@ nonrec theorem IsLocalMin.congr {f g : α -> β} {a : α} (h : IsLocalMin f a) (
   h.congr heq heq.eq_of_nhds
 
 中文:
-定理 Filter.EventuallyLE.isLocalMin
+定理 滤子.EventuallyLE.isLocalMin
   结论: {f g : α -> β} {a : α} (hle : f <=ᶠ[𝓝 a] g) (hfga : f a = g a)
   证明: hle.isMinFilter hfga h
 
@@ -1424,7 +1424,7 @@ nonrec theorem IsLocalExtr.congr {f g : α -> β} {a : α} (h : IsLocalExtr f a)
   h.congr heq heq.eq_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.isLocalMin_iff
+定理 滤子.EventuallyEq.isLocalMin_iff
   条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
   证明: heq.isMinFilter_iff heq.eq_of_nhds
 
@@ -1451,7 +1451,7 @@ theorem Filter.EventuallyEq.isLocalExtr_iff
   proof: heq.isExtrFilter_iff heq.eq_of_nhds
 
 中文:
-定理 Filter.EventuallyEq.isLocalExtr_iff
+定理 滤子.EventuallyEq.isLocalExtr_iff
   条件: {f g : α -> β} {a : α} (heq : f =ᶠ[𝓝 a] g)
   证明: heq.isExtrFilter_iff heq.eq_of_nhds
 
@@ -1475,7 +1475,7 @@ lemma isLocalMax_of_mono_anti'
 
 中文:
 引理 isLocalMax_of_mono_anti'
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
   have : b in c := mem_of_mem_nhdsWithin (by simp) hc
   mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)
@@ -1502,7 +1502,7 @@ lemma isLocalMin_of_anti_mono'
 
 中文:
 引理 isLocalMin_of_anti_mono'
-  结论: {α : 类型} [TopologicalSpace α] [LinearOrder α]
+  结论: {α : 类型} [拓扑空间 α] [线性序 α]
   证明: have : b in a := mem_of_mem_nhdsWithin (by simp) ha
   have : b in c := mem_of_mem_nhdsWithin (by simp) hc
   mem_of_superset (nhds_of_Ici_Iic ha hc) (fun x _ => by rcases le_total x b <;> aesop)

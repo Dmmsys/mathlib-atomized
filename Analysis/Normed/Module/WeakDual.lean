@@ -130,7 +130,7 @@ instance instBornology
 
 中文:
 实例 instBornology
-  签名: : Bornology (WeakDual 𝕜 E)
+  签名: : 有界结构 (WeakDual 𝕜 E)
   定义体: inferInstanceAs (Bornology (StrongDual 𝕜 E))
 
 Depends on / 依赖: Bornology, StrongDual
@@ -149,7 +149,7 @@ theorem isBounded_toStrongDual_preimage_iff_isBounded
 
 中文:
 定理 isBounded_toStrongDual_preimage_iff_isBounded
-  条件: {s : Set (StrongDual 𝕜 E)}
+  条件: {s : 集合 (StrongDual 𝕜 E)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -169,7 +169,7 @@ theorem isBounded_toWeakDual_preimage_iff_isBounded
 
 中文:
 定理 isBounded_toWeakDual_preimage_iff_isBounded
-  条件: {s : Set (WeakDual 𝕜 E)}
+  条件: {s : 集合 (WeakDual 𝕜 E)}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -205,7 +205,7 @@ theorem toWeakDual_continuous
 
 中文:
 定理 toWeakDual_continuous
-  结论: Continuous fun x' : StrongDual 𝕜 E => StrongDual.toWeakDual x'
+  结论: 连续 fun x' : StrongDual 𝕜 E => StrongDual.toWeakDual x'
   证明: WeakBilin.continuous_of_continuous_eval _ fun z => (ContinuousLinearMap.apply 𝕜 𝕜 z).continuous
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.apply, WeakBilin, WeakBilin.continuous_of_continuous_eval, continuous, continuous_of_continuous_eval
@@ -349,7 +349,7 @@ theorem isBounded_iff_isVonNBounded
 
 中文:
 定理 isBounded_iff_isVonNBounded
-  条件: [CompleteSpace E] {s : Set (WeakDual 𝕜 E)}
+  条件: [完备空间 E] {s : 集合 (WeakDual 𝕜 E)}
   证明: by
   constructor
   · exact fun h => ((NormedSpace.isVonNBounded_iff 𝕜).mpr h).of_topologicalSpace_le
@@ -390,7 +390,7 @@ theorem isClosed_image_coe_of_bounded_of_closed
 
 中文:
 定理 isClosed_image_coe_of_bounded_of_closed
-  结论: {s : Set (WeakDual 𝕜 E)}
+  结论: {s : 集合 (WeakDual 𝕜 E)}
   证明: ContinuousLinearMap.isClosed_image_coe_of_bounded_of_weak_closed hb (isClosed_induced_iff'.1 hc)
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.isClosed_image_coe_of_bounded_of_weak_closed, isClosed_image_coe_of_bounded_of_weak_closed, isClosed_induced_iff
@@ -412,7 +412,7 @@ ContinuousLinearMap.isCompact_image_coe_of_bounded_of_closed_image hb
 
 中文:
 定理 isCompact_of_bounded_of_closed
-  结论: [命题erSpace 𝕜] {s : Set (WeakDual 𝕜 E)}
+  结论: [真空间 𝕜] {s : 集合 (WeakDual 𝕜 E)}
   证明: DFunLike.coe_injective.isEmbedding_induced.isCompact_iff.mpr
 ContinuousLinearMap.isCompact_image_coe_of_bounded_of_closed_image hb
       isClosed_image_coe_of_bounded_of_closed hb hc
@@ -480,7 +480,7 @@ theorem isBounded_closure
 
 中文:
 定理 isBounded_closure
-  条件: {s : Set (WeakDual 𝕜 E)} (hb : IsBounded s)
+  条件: {s : 集合 (WeakDual 𝕜 E)} (hb : IsBounded s)
   证明: by
   obtain ⟨R, hR⟩ := (Metric.isBounded_iff_subset_closedBall (0 : StrongDual 𝕜 E)).mp hb
   exact (isBounded_closedBall 0 R).subset
@@ -504,7 +504,7 @@ theorem isCompact_closedBall
 
 中文:
 定理 isCompact_closedBall
-  条件: [命题erSpace 𝕜] (x' : StrongDual 𝕜 E) (r : 实数)
+  条件: [真空间 𝕜] (x' : StrongDual 𝕜 E) (r : 实数)
   证明: isCompact_of_bounded_of_closed (isBounded_closedBall x' r) (isClosed_closedBall x' r)
 
 Depends on / 依赖: isBounded_closedBall, isClosed_closedBall, isCompact_of_bounded_of_closed
@@ -531,7 +531,7 @@ definition polar
 
 中文:
 定义 polar
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: toStrongDual ⁻¹' (StrongDual.polar 𝕜) s
 
 Depends on / 依赖: StrongDual, StrongDual.polar, toStrongDual
@@ -549,7 +549,7 @@ theorem polar_def
 
 中文:
 定理 polar_def
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: polar 𝕜 s = { f : WeakDual 𝕜 M | 对任意 x in s, ‖f x‖ <= 1 }
   证明: rfl
 -/
@@ -568,8 +568,8 @@ theorem isClosed_polar
 
 中文:
 定理 isClosed_polar
-  条件: (s : Set M)
-  结论: IsClosed (polar 𝕜 s)
+  条件: (s : 集合 M)
+  结论: 是闭集 (polar 𝕜 s)
   证明: by
   simp only [polar_def, ofPred_forall]
   exact isClosed_biInter fun x hx => isClosed_Iic.preimage (WeakBilin.eval_continuous _ _).norm
@@ -592,7 +592,7 @@ theorem isBounded_polar
 
 中文:
 定理 isBounded_polar
-  条件: {s : Set E} (s_nhds : s in 𝓝 (0 : E))
+  条件: {s : 集合 E} (s_nhds : s in 𝓝 (0 : E))
   结论: IsBounded (polar 𝕜 s)
   证明: isBounded_toStrongDual_preimage_iff_isBounded.mpr
   (NormedSpace.isBounded_polar_of_mem_nhds_zero 𝕜 s_nhds)
@@ -613,7 +613,7 @@ theorem isClosed_image_polar_of_mem_nhds
 
 中文:
 定理 isClosed_image_polar_of_mem_nhds
-  条件: {s : Set E} (s_nhds : s in 𝓝 (0 : E))
+  条件: {s : 集合 E} (s_nhds : s in 𝓝 (0 : E))
   证明: isClosed_image_coe_of_bounded_of_closed (isBounded_polar 𝕜 s_nhds) (isClosed_polar _ _)
 
 Depends on / 依赖: isBounded_polar, isClosed_image_coe_of_bounded_of_closed, isClosed_polar, s_nhds
@@ -631,8 +631,8 @@ theorem _root_.NormedSpace.Dual.isClosed_image_polar_of_mem_nhds
   proof: WeakDual.isClosed_image_polar_of_mem_nhds 𝕜 s_nhds
 
 中文:
-定理 _root_.NormedSpace.Dual.isClosed_image_polar_of_mem_nhds
-  结论: {s : Set E}
+定理 _root_.赋范空间.对偶.isClosed_image_polar_of_mem_nhds
+  结论: {s : 集合 E}
   证明: WeakDual.isClosed_image_polar_of_mem_nhds 𝕜 s_nhds
 
 Depends on / 依赖: WeakDual, WeakDual.isClosed_image_polar_of_mem_nhds, isClosed_image_polar_of_mem_nhds, s_nhds
@@ -652,7 +652,7 @@ theorem isCompact_polar
 
 中文:
 定理 isCompact_polar
-  条件: [命题erSpace 𝕜] {s : Set E} (s_nhds : s in 𝓝 (0 : E))
+  条件: [真空间 𝕜] {s : 集合 E} (s_nhds : s in 𝓝 (0 : E))
   证明: isCompact_of_bounded_of_closed (isBounded_polar 𝕜 s_nhds) (isClosed_polar _ _)
 
 Depends on / 依赖: isBounded_polar, isClosed_polar, isCompact_of_bounded_of_closed, s_nhds
@@ -687,7 +687,7 @@ exact DFunLike.ext'_iff.mpr (map_continuous w).ext_on
       (denseRange_denseSeq E) (map_continuous y) (Set.eqOn_range.mpr (funext w_ne_y))
 
 中文:
-引理 exists_countable_separating
+引理 存在_countable_separating
   结论: 存在 (gs : 自然数 -> (WeakDual 𝕜 E) -> 𝕜),
   证明: by
   use (fun n φ => φ (denseSeq E n))
@@ -726,8 +726,8 @@ fun x y hx
 
 中文:
 引理 metrizable_of_isCompact
-  条件: (K_cpt : IsCompact K)
-  结论: TopologicalSpace.MetrizableSpace K
+  条件: (K_cpt : 是紧集 K)
+  结论: 拓扑空间.Metrizable空间 K
   证明: by
   have : CompactSpace K := isCompact_iff_compactSpace.mp K_cpt
   obtain ⟨gs, gs_cont, gs_sep⟩ := exists_countable_separating 𝕜 E
@@ -761,7 +761,7 @@ metrizable_of_isCompact 𝕜 E s isCompact_of_bounded_of_closed hb hc
 
 中文:
 定理 isSeqCompact_of_isBounded_of_isClosed
-  结论: {s : Set (WeakDual 𝕜 E)}
+  结论: {s : 集合 (WeakDual 𝕜 E)}
   证明: by
   have b_isCompact' : CompactSpace s :=
 isCompact_iff_compactSpace.mp isCompact_of_bounded_of_closed hb hc
@@ -792,7 +792,7 @@ theorem isSeqCompact_polar
 
 中文:
 定理 isSeqCompact_polar
-  条件: {s : Set E} (s_nhd : s in 𝓝 (0 : E))
+  条件: {s : 集合 E} (s_nhd : s in 𝓝 (0 : E))
   证明: isSeqCompact_of_isBounded_of_isClosed 𝕜 _ (isBounded_polar 𝕜 s_nhd) (isClosed_polar _ _)
 
 Depends on / 依赖: isBounded_polar, isClosed_polar, isSeqCompact_of_isBounded_of_isClosed, s_nhd

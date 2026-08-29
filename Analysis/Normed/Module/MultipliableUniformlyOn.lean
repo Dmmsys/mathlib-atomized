@@ -41,7 +41,7 @@ obtain ⟨v, hv⟩ : exists v, forall x in K, (g x).re <= v := hg.imp by simp [m
 
 中文:
 引理 TendstoUniformlyOn.comp_cexp
-  结论: {p : Filter ι} {g : α -> Complex}
+  结论: {p : 滤子 ι} {g : α -> 复形}
   证明: by
 obtain ⟨v, hv⟩ : exists v, forall x in K, (g x).re <= v := hg.imp by simp [mem_upperBounds]
   have : forallᶠ i in p, forall x in K, (f i x).re <= v + 1 := hf.re.eventually_forall_le (lt_add_one v) hv
@@ -101,7 +101,7 @@ lemma Summable.tendstoUniformlyOn_tsum_nat_log_one_add
 
 中文:
 引理 Summable.tendstoUniformlyOn_tsum_nat_log_one_add
-  结论: {f : 自然数 -> α -> Complex} {u : 自然数 -> 实数}
+  结论: {f : 自然数 -> α -> 复形} {u : 自然数 -> 实数}
   证明: by
   rw [← Nat.cofinite_eq_atTop] at h
   exact (hu.hasSumUniformlyOn_log_one_add h).tendstoUniformlyOn_finsetRange
@@ -197,7 +197,7 @@ lemma hasProdUniformlyOn_one_add
 
 中文:
 引理 hasProdUniformlyOn_one_add
-  结论: (hK : IsCompact K) (hu : Summable u)
+  结论: (hK : 是紧集 K) (hu : Summable u)
   证明: by
   simp only [hasProdUniformlyOn_iff_tendstoUniformlyOn,
     tendstoUniformlyOn_iff_tendstoUniformly_comp_coe]
@@ -237,7 +237,7 @@ lemma multipliableUniformlyOn_one_add
 
 中文:
 引理 multipliableUniformlyOn_one_add
-  结论: (hK : IsCompact K) (hu : Summable u)
+  结论: (hK : 是紧集 K) (hu : Summable u)
   证明: ⟨_, hasProdUniformlyOn_one_add hK hu h hcts⟩
 
 Depends on / 依赖: hasProdUniformlyOn_one_add
@@ -257,7 +257,7 @@ lemma hasProdUniformlyOn_nat_one_add
 
 中文:
 引理 hasProdUniformlyOn_nat_one_add
-  结论: {f : 自然数 -> α -> R} (hK : IsCompact K) {u : 自然数 -> 实数}
+  结论: {f : 自然数 -> α -> R} (hK : 是紧集 K) {u : 自然数 -> 实数}
   证明: hasProdUniformlyOn_one_add hK hu (Nat.cofinite_eq_atTop ▸ h) hcts
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, hasProdUniformlyOn_one_add
@@ -278,7 +278,7 @@ lemma multipliableUniformlyOn_nat_one_add
 
 中文:
 引理 multipliableUniformlyOn_nat_one_add
-  结论: {f : 自然数 -> α -> R} (hK : IsCompact K)
+  结论: {f : 自然数 -> α -> R} (hK : 是紧集 K)
   证明: ⟨_, hasProdUniformlyOn_nat_one_add hK hu h hcts⟩
 
 Depends on / 依赖: hasProdUniformlyOn_nat_one_add
@@ -306,7 +306,7 @@ lemma hasProdLocallyUniformlyOn_one_add
 
 中文:
 引理 hasProdLocallyUniformlyOn_one_add
-  结论: (hK : IsOpen K) (hu : Summable u)
+  结论: (hK : 是开集 K) (hu : Summable u)
   证明: by
   apply hasProdLocallyUniformlyOn_of_forall_compact hK
   refine fun S hS hC => hasProdUniformlyOn_one_add hC hu ?_ fun i => (hcts i).mono hS
@@ -331,7 +331,7 @@ lemma multipliableLocallyUniformlyOn_one_add
 
 中文:
 引理 multipliableLocallyUniformlyOn_one_add
-  结论: (hK : IsOpen K) (hu : Summable u)
+  结论: (hK : 是开集 K) (hu : Summable u)
   证明: ⟨_, hasProdLocallyUniformlyOn_one_add hK hu h hcts⟩
 
 Depends on / 依赖: hasProdLocallyUniformlyOn_one_add
@@ -351,7 +351,7 @@ lemma hasProdLocallyUniformlyOn_nat_one_add
 
 中文:
 引理 hasProdLocallyUniformlyOn_nat_one_add
-  结论: {f : 自然数 -> α -> R} (hK : IsOpen K) {u : 自然数 -> 实数}
+  结论: {f : 自然数 -> α -> R} (hK : 是开集 K) {u : 自然数 -> 实数}
   证明: hasProdLocallyUniformlyOn_one_add hK hu (Nat.cofinite_eq_atTop ▸ h) hcts
 
 Depends on / 依赖: Nat.cofinite_eq_atTop, cofinite_eq_atTop, hasProdLocallyUniformlyOn_one_add
@@ -372,7 +372,7 @@ lemma multipliableLocallyUniformlyOn_nat_one_add
 
 中文:
 引理 multipliableLocallyUniformlyOn_nat_one_add
-  结论: {f : 自然数 -> α -> R} (hK : IsOpen K) {u : 自然数 -> 实数}
+  结论: {f : 自然数 -> α -> R} (hK : 是开集 K) {u : 自然数 -> 实数}
   证明: ⟨_, hasProdLocallyUniformlyOn_nat_one_add hK hu h hcts⟩
 
 Depends on / 依赖: hasProdLocallyUniformlyOn_nat_one_add

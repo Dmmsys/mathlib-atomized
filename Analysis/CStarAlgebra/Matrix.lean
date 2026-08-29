@@ -65,7 +65,7 @@ theorem entry_norm_bound_of_unitary
 
 中文:
 定理 entry_norm_bound_of_unitary
-  结论: {U : Matrix n n 𝕜} (hU : U in Matrix.unitaryGroup n 𝕜)
+  结论: {U : 矩阵 n n 𝕜} (hU : U in 矩阵.unitaryGroup n 𝕜)
   证明: by
   -- The norm squared of an entry is at most the L2 norm of its row.
   have norm_sum : ‖U i j‖ ^ 2 <= ∑ x, ‖U i x‖ ^ 2 := by
@@ -122,7 +122,7 @@ theorem entrywise_sup_norm_bound_of_unitary
 
 中文:
 定理 entrywise_sup_norm_bound_of_unitary
-  条件: {U : Matrix n n 𝕜} (hU : U in Matrix.unitaryGroup n 𝕜)
+  条件: {U : 矩阵 n n 𝕜} (hU : U in 矩阵.unitaryGroup n 𝕜)
   证明: by
   simp_rw [pi_norm_le_iff_of_nonneg zero_le_one]
   intros
@@ -186,7 +186,7 @@ lemma coe_toEuclideanCLM_eq_toEuclideanLin
 
 中文:
 引理 coe_toEuclideanCLM_eq_toEuclideanLin
-  条件: (A : Matrix n n 𝕜)
+  条件: (A : 矩阵 n n 𝕜)
   证明: rfl
 
 @[simp]
@@ -210,7 +210,7 @@ lemma toEuclideanCLM_toLp
 
 中文:
 引理 toEuclideanCLM_toLp
-  条件: (A : Matrix n n 𝕜) (x : n -> 𝕜)
+  条件: (A : 矩阵 n n 𝕜) (x : n -> 𝕜)
   证明: rfl
 
 @[simp]
@@ -229,7 +229,7 @@ lemma ofLp_toEuclideanCLM
 
 中文:
 引理 ofLp_toEuclideanCLM
-  条件: (A : Matrix n n 𝕜) (x : EuclideanSpace 𝕜 n)
+  条件: (A : 矩阵 n n 𝕜) (x : EuclideanSpace 𝕜 n)
   证明: rfl
 -/
 lemma ofLp_toEuclideanCLM (A : Matrix n n 𝕜) (x : EuclideanSpace 𝕜 n) :
@@ -250,7 +250,7 @@ lemma inner_toEuclideanCLM
 
 中文:
 引理 inner_toEuclideanCLM
-  条件: (A : Matrix n n 实数) (x y : EuclideanSpace 实数 n)
+  条件: (A : 矩阵 n n 实数) (x y : EuclideanSpace 实数 n)
   证明: by
   simp only [toEuclideanCLM, AddHom.toFun_eq_coe, LinearMap.coe_toAddHom, LinearEquiv.coe_coe,
     LinearEquiv.invFun_eq_symm, LinearMap.coe_toContinuousLinearMap_symm, StarAlgEquiv.trans_apply,
@@ -288,7 +288,7 @@ _ _ _ ContinuousLinearMap.toNormedAddCommGroup.toNormedAddGroup _ _
 
 中文:
 定义 l2OpNormedAddCommGroupAux
-  签名: : NormedAddCommGroup (Matrix m n 𝕜)
+  签名: : 赋范交换加群 (矩阵 m n 𝕜)
   定义体: @NormedAddCommGroup.induced ((Matrix m n 𝕜) ≃ₗ[𝕜] (EuclideanSpace 𝕜 n ->L[𝕜] EuclideanSpace 𝕜 m)) _
 _ _ _ ContinuousLinearMap.toNormedAddCommGroup.toNormedAddGroup _ _
     (toEuclideanLin.trans toContinuousLinearMap).injective
@@ -314,7 +314,7 @@ definition l2OpNormedRingAux
 
 中文:
 定义 l2OpNormedRingAux
-  签名: : NormedRing (Matrix n n 𝕜)
+  签名: : 赋范环 (矩阵 n n 𝕜)
   定义体: @NormedRing.induced ((Matrix n n 𝕜) ≃⋆ₐ[𝕜] (EuclideanSpace 𝕜 n ->L[𝕜] EuclideanSpace 𝕜 n)) _
     _ _ _ ContinuousLinearMap.toNormedRing _ _ toEuclideanCLM.injective
 
@@ -345,7 +345,7 @@ definition instL2OpMetricSpace
 
 中文:
 定义 instL2OpMetricSpace
-  签名: : MetricSpace (Matrix m n 𝕜)
+  签名: : 度量空间 (矩阵 m n 𝕜)
   定义体: by
   /- We first replace the topology so that we can automatically replace the uniformity using
   `IsUniformAddGroup.toUniformSpace_eq`. -/
@@ -387,7 +387,7 @@ scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpNormedAddCom
 
 中文:
 定义 instL2OpNormedAddCommGroup
-  签名: : NormedAddCommGroup (Matrix m n 𝕜) where
+  签名: : 赋范交换加群 (矩阵 m n 𝕜) where
   定义体: l2OpNormedAddCommGroupAux.norm
   dist_eq := l2OpNormedAddCommGroupAux.dist_eq
 
@@ -411,7 +411,7 @@ lemma l2_opNorm_def
 
 中文:
 引理 l2_opNorm_def
-  条件: (A : Matrix m n 𝕜)
+  条件: (A : 矩阵 m n 𝕜)
   证明: rfl
 
 Depends on / 依赖: toContinuousLinearMap
@@ -429,7 +429,7 @@ lemma l2_opNNNorm_def
 
 中文:
 引理 l2_opNNNorm_def
-  条件: (A : Matrix m n 𝕜)
+  条件: (A : 矩阵 m n 𝕜)
   证明: rfl
 
 Depends on / 依赖: toContinuousLinearMap
@@ -450,7 +450,7 @@ lemma l2_opNorm_conjTranspose
 
 中文:
 引理 l2_opNorm_conjTranspose
-  条件: [DecidableEq m] (A : Matrix m n 𝕜)
+  条件: [DecidableEq m] (A : 矩阵 m n 𝕜)
   结论: ‖Aᴴ‖ = ‖A‖
   证明: by
   rw [l2_opNorm_def]; rw [toEuclideanLin_eq_toLin_orthonormal]; rw [LinearEquiv.trans_apply]; rw [toLin_conjTranspose]; rw [adjoint_toContinuousLinearMap]
@@ -473,7 +473,7 @@ lemma l2_opNNNorm_conjTranspose
 
 中文:
 引理 l2_opNNNorm_conjTranspose
-  条件: [DecidableEq m] (A : Matrix m n 𝕜)
+  条件: [DecidableEq m] (A : 矩阵 m n 𝕜)
   结论: ‖Aᴴ‖₊ = ‖A‖₊
   证明: Subtype.ext l2_opNorm_conjTranspose _
 
@@ -496,7 +496,7 @@ lemma l2_opNorm_conjTranspose_mul_self
 
 中文:
 引理 l2_opNorm_conjTranspose_mul_self
-  条件: (A : Matrix m n 𝕜)
+  条件: (A : 矩阵 m n 𝕜)
   结论: ‖Aᴴ * A‖ = ‖A‖ * ‖A‖
   证明: by
   classical
@@ -521,7 +521,7 @@ lemma l2_opNNNorm_conjTranspose_mul_self
 
 中文:
 引理 l2_opNNNorm_conjTranspose_mul_self
-  条件: (A : Matrix m n 𝕜)
+  条件: (A : 矩阵 m n 𝕜)
   结论: ‖Aᴴ * A‖₊ = ‖A‖₊ * ‖A‖₊
   证明: Subtype.ext l2_opNorm_conjTranspose_mul_self _
 
@@ -541,7 +541,7 @@ lemma l2_opNorm_mulVec
 
 中文:
 引理 l2_opNorm_mulVec
-  条件: (A : Matrix m n 𝕜) (x : EuclideanSpace 𝕜 n)
+  条件: (A : 矩阵 m n 𝕜) (x : EuclideanSpace 𝕜 n)
   证明: .le_opNorm x .trans toContinuousLinearMap A toEuclideanLin (n := n) (m := m) (𝕜 := 𝕜)
 
 Depends on / 依赖: le_opNorm, toContinuousLinearMap, toEuclideanLin
@@ -560,7 +560,7 @@ lemma l2_opNNNorm_mulVec
 
 中文:
 引理 l2_opNNNorm_mulVec
-  条件: (A : Matrix m n 𝕜) (x : EuclideanSpace 𝕜 n)
+  条件: (A : 矩阵 m n 𝕜) (x : EuclideanSpace 𝕜 n)
   证明: A.l2_opNorm_mulVec x
 
 Depends on / 依赖: A.l2_opNorm_mulVec, l2_opNorm_mulVec
@@ -585,7 +585,7 @@ lemma l2_opNorm_mul
 
 中文:
 引理 l2_opNorm_mul
-  条件: (A : Matrix m n 𝕜) (B : Matrix n l 𝕜)
+  条件: (A : 矩阵 m n 𝕜) (B : 矩阵 n l 𝕜)
   证明: by
   simp only [l2_opNorm_def]
   have := (toEuclideanLin (n := n) (m := m) (𝕜 := 𝕜) ≪≫ₗ toContinuousLinearMap) A
@@ -616,7 +616,7 @@ lemma l2_opNNNorm_mul
 
 中文:
 引理 l2_opNNNorm_mul
-  条件: (A : Matrix m n 𝕜) (B : Matrix n l 𝕜)
+  条件: (A : 矩阵 m n 𝕜) (B : 矩阵 n l 𝕜)
   结论: ‖A * B‖₊ <= ‖A‖₊ * ‖B‖₊
   证明: l2_opNorm_mul A B
 
@@ -637,7 +637,7 @@ lemma l2_opNorm_toEuclideanCLM
 
 中文:
 引理 l2_opNorm_toEuclideanCLM
-  条件: (A : Matrix n n 𝕜)
+  条件: (A : 矩阵 n n 𝕜)
   证明: rfl
 
 @[simp]
@@ -664,7 +664,7 @@ lemma l2_opNorm_diagonal
 中文:
 引理 l2_opNorm_diagonal
   条件: (v : n -> 𝕜)
-  结论: ‖(diagonal v : Matrix n n 𝕜)‖ = ‖v‖
+  结论: ‖(diagonal v : 矩阵 n n 𝕜)‖ = ‖v‖
   证明: by
   set T := toEuclideanCLM (n := n) (𝕜 := 𝕜) (diagonal v)
   rw [← l2_opNorm_toEuclideanCLM]
@@ -703,7 +703,7 @@ lemma l2_opNNNorm_diagonal
 中文:
 引理 l2_opNNNorm_diagonal
   条件: (v : n -> 𝕜)
-  结论: ‖(diagonal v : Matrix n n 𝕜)‖₊ = ‖v‖₊
+  结论: ‖(diagonal v : 矩阵 n n 𝕜)‖₊ = ‖v‖₊
   证明: Subtype.ext l2_opNorm_diagonal (n := n) (𝕜 := 𝕜) v
 
 Depends on / 依赖: Subtype, Subtype.ext, l2_opNorm_diagonal
@@ -728,7 +728,7 @@ scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpNormedSpace
 
 中文:
 定义 instL2OpNormedSpace
-  签名: : NormedSpace 𝕜 (Matrix m n 𝕜) where
+  签名: : 赋范空间 𝕜 (矩阵 m n 𝕜) where
   定义体: by
     rw [l2_opNorm_def]; rw [map_smul]
     exact norm_smul_le r ((toEuclideanLin (𝕜 := 𝕜) (m := m) (n := n)).trans toContinuousLinearMap x)
@@ -760,7 +760,7 @@ scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpNormedRing
 
 中文:
 定义 instL2OpNormedRing
-  签名: : NormedRing (Matrix n n 𝕜) where
+  签名: : 赋范环 (矩阵 n n 𝕜) where
   定义体: l2OpNormedRingAux.dist_eq
   norm_mul_le := l2OpNormedRingAux.norm_mul_le
 
@@ -785,7 +785,7 @@ lemma cstar_norm_def
 
 中文:
 引理 cstar_norm_def
-  条件: (A : Matrix n n 𝕜)
+  条件: (A : 矩阵 n n 𝕜)
   结论: ‖A‖ = ‖toEuclideanCLM (n := n) (𝕜 := 𝕜) A‖
   证明: rfl
 -/
@@ -802,7 +802,7 @@ lemma cstar_nnnorm_def
 
 中文:
 引理 cstar_nnnorm_def
-  条件: (A : Matrix n n 𝕜)
+  条件: (A : 矩阵 n n 𝕜)
   结论: ‖A‖₊ = ‖toEuclideanCLM (n := n) (𝕜 := 𝕜) A‖₊
   证明: rfl
 -/
@@ -823,7 +823,7 @@ scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpNormedAlgebr
 
 中文:
 定义 instL2OpNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (Matrix n n 𝕜) where
+  签名: : 赋范代数 𝕜 (矩阵 n n 𝕜) where
   定义体: norm_smul_le
 
 scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instL2OpNormedAlgebra
@@ -847,7 +847,7 @@ scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instCStarRing
 
 中文:
 引理 instCStarRing
-  结论: CStarRing (Matrix n n 𝕜) where
+  结论: CStar环 (矩阵 n n 𝕜) where
   证明: le_of_eq Eq.symm l2_opNorm_conjTranspose_mul_self M
 
 scoped[Matrix.Norms.L2Operator] attribute [instance] Matrix.instCStarRing
@@ -868,7 +868,7 @@ definition instCStarAlgebra
 
 中文:
 定义 instCStarAlgebra
-  签名: {n : 类型} [Fintype n] [DecidableEq n]
+  签名: {n : 类型} [有限类型 n] [DecidableEq n]
 -/
 @[instance_reducible] noncomputable def instCStarAlgebra {n : Type*} [Fintype n] [DecidableEq n] :
     CStarAlgebra (Matrix n n Complex) where

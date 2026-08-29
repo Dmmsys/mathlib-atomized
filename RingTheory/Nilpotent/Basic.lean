@@ -52,9 +52,9 @@ theorem IsNilpotent.neg
   rw [neg_pow]; rw [hn]; rw [mul_zero]
 
 中文:
-定理 IsNilpotent.neg
-  条件: [Ring R] (h : IsNilpotent x)
-  结论: IsNilpotent (-x)
+定理 是幂零.neg
+  条件: [环 R] (h : 是幂零 x)
+  结论: 是幂零 (-x)
   证明: by
   obtain ⟨n, hn⟩ := h
   use n
@@ -80,8 +80,8 @@ theorem not_isNilpotent_neg_one
 
 中文:
 定理 not_isNilpotent_neg_one
-  条件: [Ring R] [Nontrivial R]
-  结论: ¬ IsNilpotent (-1 : R)
+  条件: [环 R] [非平凡 R]
+  结论: ¬ 是幂零 (-1 : R)
   证明: by
   intro h
   simpa [not_isNilpotent_one] using h.neg
@@ -107,7 +107,7 @@ theorem neg_one_pow_ne_zero
 
 中文:
 定理 neg_one_pow_ne_zero
-  条件: [Ring R] [Nontrivial R] (n : 自然数)
+  条件: [环 R] [非平凡 R] (n : 自然数)
   结论: (-1 : R) ^ n != 0
   证明: by
   intro h
@@ -133,8 +133,8 @@ theorem isNilpotent_neg_iff
 
 中文:
 定理 isNilpotent_neg_iff
-  条件: [Ring R]
-  结论: IsNilpotent (-x) ↔ IsNilpotent x
+  条件: [环 R]
+  结论: 是幂零 (-x) ↔ 是幂零 x
   证明: ⟨fun h => neg_neg x ▸ h.neg, fun h => h.neg⟩
 
 Depends on / 依赖: h.neg, neg_neg
@@ -154,8 +154,8 @@ lemma IsNilpotent.smul
   rw [smul_pow]; rw [ha]; rw [smul_zero]
 
 中文:
-引理 IsNilpotent.smul
-  结论: [MonoidWithZero R] [MonoidWithZero S] [MulActionWithZero R S]
+引理 是幂零.smul
+  结论: [带零幺半群 R] [带零幺半群 S] [带零乘法作用 R S]
   证明: by
   obtain ⟨k, ha⟩ := ha
   use k
@@ -184,9 +184,9 @@ theorem IsNilpotent.isUnit_sub_one
   · simp [geom_sum_mul, hn]
 
 中文:
-定理 IsNilpotent.isUnit_sub_one
-  条件: [Ring R] {r : R} (hnil : IsNilpotent r)
-  结论: IsUnit (r - 1)
+定理 是幂零.isUnit_sub_one
+  条件: [环 R] {r : R} (hnil : 是幂零 r)
+  结论: 是单位 (r - 1)
   证明: by
   obtain ⟨n, hn⟩ := hnil
   refine ⟨⟨r - 1, -∑ i in Finset.range n, r ^ i, ?_, ?_⟩, rfl⟩
@@ -213,9 +213,9 @@ theorem IsNilpotent.isUnit_one_sub
   exact isUnit_sub_one hnil
 
 中文:
-定理 IsNilpotent.isUnit_one_sub
-  条件: [Ring R] {r : R} (hnil : IsNilpotent r)
-  结论: IsUnit (1 - r)
+定理 是幂零.isUnit_one_sub
+  条件: [环 R] {r : R} (hnil : 是幂零 r)
+  结论: 是单位 (1 - r)
   证明: by
   rw [← IsUnit.neg_iff]; rw [neg_sub]
   exact isUnit_sub_one hnil
@@ -238,9 +238,9 @@ theorem IsNilpotent.isUnit_add_one
   exact isUnit_sub_one hnil.neg
 
 中文:
-定理 IsNilpotent.isUnit_add_one
-  条件: [Ring R] {r : R} (hnil : IsNilpotent r)
-  结论: IsUnit (r + 1)
+定理 是幂零.isUnit_add_one
+  条件: [环 R] {r : R} (hnil : 是幂零 r)
+  结论: 是单位 (r + 1)
   证明: by
   rw [← IsUnit.neg_iff]; rw [neg_add']
   exact isUnit_sub_one hnil.neg
@@ -261,9 +261,9 @@ theorem IsNilpotent.isUnit_one_add
   proof: add_comm r 1 ▸ isUnit_add_one hnil
 
 中文:
-定理 IsNilpotent.isUnit_one_add
-  条件: [Ring R] {r : R} (hnil : IsNilpotent r)
-  结论: IsUnit (1 + r)
+定理 是幂零.isUnit_one_add
+  条件: [环 R] {r : R} (hnil : 是幂零 r)
+  结论: 是单位 (1 + r)
   证明: add_comm r 1 ▸ isUnit_add_one hnil
 
 Depends on / 依赖: add_comm, isUnit_add_one
@@ -284,8 +284,8 @@ theorem IsNilpotent.isUnit_add_left_of_commute
   exact (hu.unit⁻¹.isUnit.isNilpotent_mul_unit_of_commute_iff h_comm).mpr hnil
 
 中文:
-定理 IsNilpotent.isUnit_add_left_of_commute
-  结论: [Ring R] {r u : R}
+定理 是幂零.isUnit_add_left_of_commute
+  结论: [环 R] {r u : R}
   证明: by
   rw [← Units.isUnit_mul_units _ hu.unit⁻¹]; rw [add_mul]; rw [IsUnit.mul_val_inv]
   replace h_comm : Commute r (↑hu.unit⁻¹) := Commute.units_inv_right h_comm
@@ -311,8 +311,8 @@ theorem IsNilpotent.isUnit_add_right_of_commute
   proof: add_comm r u ▸ hnil.isUnit_add_left_of_commute hu h_comm
 
 中文:
-定理 IsNilpotent.isUnit_add_right_of_commute
-  结论: [Ring R] {r u : R}
+定理 是幂零.isUnit_add_right_of_commute
+  结论: [环 R] {r u : R}
   证明: add_comm r u ▸ hnil.isUnit_add_left_of_commute hu h_comm
 
 Depends on / 依赖: add_comm, h_comm, hnil.isUnit_add_left_of_commute, isUnit_add_left_of_commute
@@ -333,8 +333,8 @@ lemma IsUnit.not_isNilpotent
   simpa using H.isUnit_add_right_of_commute hx.neg (by simp)
 
 中文:
-引理 IsUnit.not_isNilpotent
-  条件: [Ring R] [Nontrivial R] {x : R} (hx : IsUnit x)
+引理 是单位.not_isNilpotent
+  条件: [环 R] [非平凡 R] {x : R} (hx : 是单位 x)
   证明: by
   intro H
   simpa using H.isUnit_add_right_of_commute hx.neg (by simp)
@@ -355,8 +355,8 @@ lemma IsNilpotent.not_isUnit
   proof: mt IsUnit.not_isNilpotent (by simpa only [not_not] using hx)
 
 中文:
-引理 IsNilpotent.not_isUnit
-  条件: [Ring R] [Nontrivial R] {x : R} (hx : IsNilpotent x)
+引理 是幂零.not_isUnit
+  条件: [环 R] [非平凡 R] {x : R} (hx : 是幂零 x)
   证明: mt IsUnit.not_isNilpotent (by simpa only [not_not] using hx)
 
 Depends on / 依赖: IsUnit, IsUnit.not_isNilpotent, not_isNilpotent, not_not
@@ -380,7 +380,7 @@ alias IsNilpotent.eq_zero_of_isIdempotentElem := IsIdempotentElem.eq_zero_of_isN
 
 中文:
 引理 IsIdempotentElem.eq_zero_of_isNilpotent
-  结论: [MonoidWithZero R] {e : R}
+  结论: [带零幺半群 R] {e : R}
   证明: by
   obtain ⟨rfl | n, hn⟩ := nilp
   · rw [pow_zero] at hn; rw [← one_mul e, hn, zero_mul]
@@ -408,8 +408,8 @@ instance [Zero
     Prod.ext (IsReduced.eq_zero _ ⟨n, hn.1⟩) (IsReduced.eq_zero _ ⟨n, hn.2⟩)
 
 中文:
-实例 [Zero
-  签名: R] [Pow R 自然数] [Zero S] [Pow S 自然数] [IsReduced R] [IsReduced S] : IsReduced (R × S) where
+实例 [零
+  签名: R] [幂 R 自然数] [零 S] [幂 S 自然数] [是既约 R] [是既约 S] : 是既约 (R × S) where
   定义体: fun ⟨n, hn⟩ => have hn := Prod.ext_iff.1 hn
     Prod.ext (IsReduced.eq_zero _ ⟨n, hn.1⟩) (IsReduced.eq_zero _ ⟨n, hn.2⟩)
 -/
@@ -427,8 +427,8 @@ theorem Prime.isRadical
   proof: fun _ _ => hy.dvd_of_dvd_pow
 
 中文:
-定理 Prime.isRadical
-  条件: [CommMonoidWithZero R] {y : R} (hy : Prime y)
+定理 素.isRadical
+  条件: [带零交换幺半群 R] {y : R} (hy : 素 y)
   结论: IsRadical y
   证明: fun _ _ => hy.dvd_of_dvd_pow
 
@@ -450,8 +450,8 @@ theorem zero_isRadical_iff
 
 中文:
 定理 zero_isRadical_iff
-  条件: [MonoidWithZero R]
-  结论: IsRadical (0 : R) ↔ IsReduced R
+  条件: [带零幺半群 R]
+  结论: IsRadical (0 : R) ↔ 是既约 R
   证明: by
   simp_rw [isReduced_iff, IsNilpotent, exists_imp, ← zero_dvd_iff]
   exact forall_comm
@@ -473,7 +473,7 @@ theorem isReduced_iff_pow_one_lt
 
 中文:
 定理 isReduced_iff_pow_one_lt
-  条件: [MonoidWithZero R] (k : 自然数) (hk : 1 < k)
+  条件: [带零幺半群 R] (k : 自然数) (hk : 1 < k)
   证明: by
   simp_rw [← zero_isRadical_iff, isRadical_iff_pow_one_lt k hk, zero_dvd_iff]
 
@@ -498,7 +498,7 @@ theorem IsRadical.of_dvd
 
 中文:
 定理 IsRadical.of_dvd
-  结论: [CommMonoidWithZero R] [IsCancelMulZero R] {x y : R} (hy : IsRadical y)
+  结论: [带零交换幺半群 R] [是乘零消去 R] {x y : R} (hy : IsRadical y)
   证明: (isRadical_iff_pow_one_lt 2 one_lt_two).2 by
   obtain ⟨z, rfl⟩ := hxy
   refine fun w dvd => ((mul_dvd_mul_iff_right <| right_ne_zero_of_mul h0).mp <| hy 2 _ ?_)
@@ -598,7 +598,7 @@ theorem isNilpotent_add
 
 中文:
 定理 isNilpotent_add
-  条件: (h_comm : Commute x y) (hx : IsNilpotent x) (hy : IsNilpotent y)
+  条件: (h_comm : Commute x y) (hx : 是幂零 x) (hy : 是幂零 y)
   证明: by
   obtain ⟨n, hn⟩ := hx
   obtain ⟨m, hm⟩ := hy
@@ -631,7 +631,7 @@ lemma isNilpotent_sum
 
 中文:
 引理 isNilpotent_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R}
   证明: by
   classical
   induction s using Finset.induction with
@@ -767,7 +767,7 @@ theorem isNilpotent_sub
 
 中文:
 定理 isNilpotent_sub
-  条件: (h_comm : Commute x y) (hx : IsNilpotent x) (hy : IsNilpotent y)
+  条件: (h_comm : Commute x y) (hx : 是幂零 x) (hy : 是幂零 y)
   证明: by
   rw [← neg_right_iff] at h_comm
   rw [← isNilpotent_neg_iff] at hy
@@ -801,7 +801,7 @@ lemma isNilpotent_sum
 
 中文:
 引理 isNilpotent_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R}
   证明: Commute.isNilpotent_sum hnp fun _ _ _ _ => Commute.all _ _
 
 Depends on / 依赖: Commute, Commute.all, Commute.isNilpotent_sum, isNilpotent_sum

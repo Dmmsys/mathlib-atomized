@@ -45,9 +45,9 @@ theorem Prime.dvd_prod_iff
       · obtain ⟨x, hx1, hx2⟩ := L_ih hd
 
 中文:
-定理 Prime.dvd_prod_iff
-  条件: {p : M} {L : List M} (pp : Prime p)
-  结论: p ∣ L.prod ↔ 存在 a in L, p ∣ a
+定理 素.dvd_prod_iff
+  条件: {p : M} {L : 列表 M} (pp : 素 p)
+  结论: p ∣ L.乘积 ↔ 存在 a in L, p ∣ a
   证明: by
   constructor
   · intro h
@@ -87,8 +87,8 @@ theorem Prime.not_dvd_prod
   proof: mt (Prime.dvd_prod_iff pp).1 not_exists.2 fun a => not_and.2 (hL a)
 
 中文:
-定理 Prime.not_dvd_prod
-  条件: {p : M} {L : List M} (pp : Prime p) (hL : 对任意 a in L, ¬p ∣ a)
+定理 素.not_dvd_prod
+  条件: {p : M} {L : 列表 M} (pp : 素 p) (hL : 对任意 a in L, ¬p ∣ a)
   证明: mt (Prime.dvd_prod_iff pp).1 not_exists.2 fun a => not_and.2 (hL a)
 
 Depends on / 依赖: Prime.dvd_prod_iff, dvd_prod_iff, not_and, not_exists
@@ -115,7 +115,7 @@ theorem mem_list_primes_of_dvd_prod
 
 中文:
 定理 mem_list_primes_of_dvd_prod
-  结论: {p : M} (hp : Prime p) {L : List M} (hL : 对任意 q in L, Prime q)
+  结论: {p : M} (hp : 素 p) {L : 列表 M} (hL : 对任意 q in L, 素 q)
   证明: by
   obtain ⟨x, hx1, hx2⟩ := hp.dvd_prod_iff.mp hpL
   rwa [(prime_dvd_prime_iff_eq hp (hL x hx1)).mp hx2]

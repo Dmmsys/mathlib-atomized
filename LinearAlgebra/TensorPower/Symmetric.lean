@@ -51,10 +51,10 @@ inductive SymmetricPower.Rel
     - perm: (e : Perm ι) -> (f : ι -> M) -> Rel (⨂ₜ[R] i, f i) (⨂ₜ[R] i, f (e i))
 
 中文:
-归纳类型 SymmetricPower.Rel
+归纳类型 SymmetricPower.关系
   参数: : (⨂[R] _, M) -> (⨂[R] _, M) -> 命题
   构造子 (1 个):
-    - perm: (e : Perm ι) -> (f : ι -> M) -> Rel (⨂ₜ[R] i, f i) (⨂ₜ[R] i, f (e i))
+    - perm: (e : 置换 ι) -> (f : ι -> M) -> 关系 (⨂ₜ[R] i, f i) (⨂ₜ[R] i, f (e i))
 -/
 inductive SymmetricPower.Rel : (⨂[R] _, M) -> (⨂[R] _, M) -> Prop
   | perm : (e : Perm ι) -> (f : ι -> M) -> Rel (⨂ₜ[R] i, f i) (⨂ₜ[R] i, f (e i))
@@ -73,7 +73,7 @@ scoped[TensorProduct] notation:max "Sym[" R "] " ι:arg M:arg => SymmetricPower 
 
 中文:
 定义 SymmetricPower
-  签名: : Type max u v
+  签名: : 类型 最大值 u v
   定义体: (addConGen (SymmetricPower.Rel R ι M)).Quotient
 deriving AddCommMonoid
 
@@ -119,7 +119,7 @@ SymmetricPower.Rel.perm (R := R) (ι := ι) e Function.up
 
 中文:
 引理 smul
-  条件: (r : R) (x y : ⨂[R] _, M) (h : addConGen (Rel R ι M) x y)
+  条件: (r : R) (x y : ⨂[R] _, M) (h : addConGen (关系 R ι M) x y)
   证明: by
   induction h with
   | of x y h => cases h with
@@ -200,7 +200,7 @@ add_smul r s x := Ad
 
 中文:
 实例 module
-  签名: : Module R (Sym[R] ι M) where
+  签名: : 模 R (Sym[R] ι M) where
   定义体: smul' ι M r x
 one_smul x := AddCon.induction_on x fun x => congr_arg _ one_smul R x
 mul_smul r s x := AddCon.induction_on x fun x => congr_arg _ mul_smul r s x
@@ -251,7 +251,7 @@ notation3:100 "⨂ₛ["R"] "(...)", "r:(scoped f => tprod R f) => r
 
 中文:
 定义 tprod
-  签名: : MultilinearMap R (fun _ : ι => M) Sym[R] ι M
+  签名: : 多重线性映射 R (fun _ : ι => M) Sym[R] ι M
   定义体: (mk R ι M).compMultilinearMap (PiTensorProduct.tprod R)
 
 unsuppress_compilation in
@@ -278,7 +278,7 @@ lemma tprod_equiv
 
 中文:
 引理 tprod_equiv
-  条件: (e : Perm ι) (f : ι -> M)
+  条件: (e : 置换 ι) (f : ι -> M)
   证明: Eq.symm Quot.sound AddConGen.Rel.of _ _ Rel.perm e f
 
 Depends on / 依赖: SignedMeasure, haveLebesgueDecomposition_of_sigmaFinite
@@ -298,7 +298,7 @@ lemma domDomCongr_tprod
 
 中文:
 引理 domDomCongr_tprod
-  条件: (e : Perm ι)
+  条件: (e : 置换 ι)
   证明: MultilinearMap.ext tprod_equiv e
 -/
 @[simp] lemma domDomCongr_tprod (e : Perm ι) :
@@ -315,7 +315,7 @@ theorem range_mk
 
 中文:
 定理 range_mk
-  结论: LinearMap.range (mk R ι M) = ⊤
+  结论: 线性映射.range (mk R ι M) = ⊤
   证明: LinearMap.range_eq_top_of_surjective _ AddCon.mk'_surjective
 
 Depends on / 依赖: AddCon, AddCon.mk, LinearMap, LinearMap.range_eq_top_of_surjective, _surjective, range_eq_top_of_surjective
@@ -334,7 +334,7 @@ theorem span_tprod_eq_top
 
 中文:
 定理 span_tprod_eq_top
-  结论: Submodule.span R (Set.range (tprod R (ι := ι) (M := M))) = ⊤
+  结论: 子模.span R (集合.range (tprod R (ι := ι) (M := M))) = ⊤
   证明: by
   rw [tprod]; rw [LinearMap.coe_compMultilinearMap]; rw [Set.range_comp]; rw [Submodule.span_image]; rw [PiTensorProduct.span_tprod_eq_top]; rw [Submodule.map_top]; rw [range_mk]
 

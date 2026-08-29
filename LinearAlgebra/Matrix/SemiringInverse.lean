@@ -77,8 +77,8 @@ lemma detp_zero
 
 中文:
 引理 detp_zero
-  条件: [Nonempty n]
-  结论: (0 : Matrix n n R).detp s = 0
+  条件: [非空 n]
+  结论: (0 : 矩阵 n n R).detp s = 0
   证明: by simp [detp]
 
 @[simp]
@@ -141,7 +141,7 @@ lemma detp_one_one
 
 中文:
 引理 detp_one_one
-  结论: detp 1 (1 : Matrix n n R) = 1
+  结论: detp 1 (1 : 矩阵 n n R) = 1
   证明: by
   rw [← diagonal_one]; rw [detp_one_diagonal]; rw [prod_const_one]
 
@@ -212,7 +212,7 @@ lemma detp_neg_one_one
 
 中文:
 引理 detp_neg_one_one
-  结论: detp (-1) (1 : Matrix n n R) = 0
+  结论: detp (-1) (1 : 矩阵 n n R) = 0
   证明: by
   rw [← diagonal_one]; rw [detp_neg_one_diagonal]
 
@@ -233,7 +233,7 @@ lemma detp_one_of_isEmpty
 
 中文:
 引理 detp_one_of_isEmpty
-  条件: [IsEmpty n]
+  条件: [是空 n]
   结论: A.detp 1 = 1
   证明: by
   rw [detp]; rw [sum_unique_nonempty _ _ ⟨1]; rw [_⟩] <;> simp
@@ -255,7 +255,7 @@ lemma detp_neg_one_of_isEmpty
 
 中文:
 引理 detp_neg_one_of_isEmpty
-  条件: [IsEmpty n]
+  条件: [是空 n]
   结论: A.detp (-1) = 0
   证明: by
   rw [detp]; rw [ofSign]; rw [univ_unique]
@@ -317,7 +317,7 @@ lemma detp_smul
 中文:
 引理 detp_smul
   条件: (c : R)
-  结论: (c • A).detp s = c ^ Fintype.card n * A.detp s
+  结论: (c • A).detp s = c ^ 有限类型.card n * A.detp s
   证明: by
   simp [detp, Finset.mul_sum, Finset.prod_mul_distrib]
 
@@ -336,7 +336,7 @@ lemma detp_map
 
 中文:
 引理 detp_map
-  条件: {S : 类型} [CommSemiring S] (f : R ->+* S)
+  条件: {S : 类型} [交换半环 S] (f : R ->+* S)
   证明: by simp [detp]
 -/
 lemma detp_map {S : Type*} [CommSemiring S] (f : R ->+* S) :
@@ -448,7 +448,7 @@ lemma IsDetpBalanced.trans
 
 中文:
 引理 IsDetpBalanced.trans
-  结论: [IsCancelAdd R]
+  结论: [是消去加法 R]
   证明: by
   rw [IsDetpBalanced] at *
   apply add_left_cancel (a := b * detp 1 A + b * detp (-1) A)
@@ -598,7 +598,7 @@ definition Nonsingular
   body: forall a b : R, A.IsDetpBalanced a b -> a = b
 
 中文:
-定义 Nonsingular
+定义 非奇异
   签名: : 命题
   定义体: forall a b : R, A.IsDetpBalanced a b -> a = b
 
@@ -615,8 +615,8 @@ lemma Nonsingular.eq_of_IsDetpBalanced
   proof: hA a b hAd
 
 中文:
-引理 Nonsingular.eq_of_IsDetpBalanced
-  条件: (hA : A.Nonsingular) (hAd : A.IsDetpBalanced a b)
+引理 非奇异.eq_of_IsDetpBalanced
+  条件: (hA : A.非奇异) (hAd : A.IsDetpBalanced a b)
   证明: hA a b hAd
 -/
 lemma Nonsingular.eq_of_IsDetpBalanced (hA : A.Nonsingular) (hAd : A.IsDetpBalanced a b) :
@@ -632,7 +632,7 @@ lemma IsDetpBalanced.eq_of_nonsingular
 
 中文:
 引理 IsDetpBalanced.eq_of_nonsingular
-  条件: (hA : A.IsDetpBalanced a b) (hAn : A.Nonsingular)
+  条件: (hA : A.IsDetpBalanced a b) (hAn : A.非奇异)
   证明: hAn.eq_of_IsDetpBalanced hA
 
 Depends on / 依赖: eq_of_IsDetpBalanced, hAn.eq_of_IsDetpBalanced
@@ -650,7 +650,7 @@ lemma nonsingular_one
 
 中文:
 引理 nonsingular_one
-  结论: (1 : Matrix n n R).Nonsingular
+  结论: (1 : 矩阵 n n R).非奇异
   证明: fun a b h => by simpa [IsDetpBalanced] using h
 -/
 @[simp] lemma nonsingular_one : (1 : Matrix n n R).Nonsingular :=
@@ -668,9 +668,9 @@ lemma Nonsingular.of_isEmpty
   simp [Nonsingular, IsDetpBalanced]
 
 中文:
-引理 Nonsingular.of_isEmpty
-  条件: [IsEmpty n]
-  结论: A.Nonsingular
+引理 非奇异.of_isEmpty
+  条件: [是空 n]
+  结论: A.非奇异
   证明: by
   simp [Nonsingular, IsDetpBalanced]
 -/
@@ -689,7 +689,7 @@ alias ⟨Nonsingular.of_transpose, Nonsingular.transpose⟩ := nonsingular_trans
 
 中文:
 引理 nonsingular_transpose_iff
-  结论: Aᵀ.Nonsingular ↔ A.Nonsingular
+  结论: Aᵀ.非奇异 ↔ A.非奇异
   证明: by simp [Nonsingular]
 
 alias ⟨Nonsingular.of_transpose, Nonsingular.transpose⟩ := nonsingular_transpose_iff
@@ -870,7 +870,7 @@ definition adjp
 
 中文:
 定义 adjp
-  签名: : Matrix n n R
+  签名: : 矩阵 n n R
   定义体: of fun i j => ∑ σ in (ofSign s).filter (· j = i), ∏ k in {j}ᶜ, A k (σ k)
 
 Depends on / 依赖: filter, ofSign
@@ -928,7 +928,7 @@ lemma adjp_none_right
 
 中文:
 引理 adjp_none_right
-  条件: (A : Matrix (Option n) (Option n) R) (i : Option n)
+  条件: (A : 矩阵 (选项类型 n) (选项类型 n) R) (i : 选项类型 n)
   证明: by
   rw [adjp]; rw [of_apply]; rw [detp]
   convert sum_image (g := fun σ => decomposeOption.symm (i, σ))
@@ -958,7 +958,7 @@ lemma adjp_none_none
 
 中文:
 引理 adjp_none_none
-  条件: (A : Matrix (Option n) (Option n) R)
+  条件: (A : 矩阵 (选项类型 n) (选项类型 n) R)
   证明: by
   simp [adjp_none_right]
 
@@ -981,7 +981,7 @@ lemma adjp_some_none
 
 中文:
 引理 adjp_some_none
-  条件: (A : Matrix (Option n) (Option n) R)
+  条件: (A : 矩阵 (选项类型 n) (选项类型 n) R)
   证明: by
   rw [adjp_none_right]; congr
   · simp
@@ -1006,7 +1006,7 @@ lemma adjp_none_some
 
 中文:
 引理 adjp_none_some
-  条件: (A : Matrix (Option n) (Option n) R)
+  条件: (A : 矩阵 (选项类型 n) (选项类型 n) R)
   证明: by
   rw [← detp_transpose]; simp [← A.transpose.adjp_some_none, adjp_transpose]
 
@@ -1236,7 +1236,7 @@ lemma detp_option_expand_row_none
 
 中文:
 引理 detp_option_expand_row_none
-  条件: (A : Matrix (Option n) (Option n) R)
+  条件: (A : 矩阵 (选项类型 n) (选项类型 n) R)
   证明: by
   simp_rw [← A.mul_adjp_apply_eq s none, mul_apply,
     Fintype.sum_option, adjp_none_none, adjp_some_none]

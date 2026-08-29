@@ -64,7 +64,7 @@ lemma isZero_iff
 
 中文:
 引理 isZero_iff
-  条件: [HasZeroObject C] {X : C}
+  条件: [有ZeroObject C] {X : C}
   证明: by
   refine ⟨fun hX _ => Functor.map_isZero _ hX, fun hX => ?_⟩
   let φ : 0 ⟶ X := 0
@@ -100,7 +100,7 @@ lemma exact_iff
 
 中文:
 引理 exact_iff
-  条件: [HasZeroObject C] (S : ShortComplex C)
+  条件: [有ZeroObject C] (S : 短复形 C)
   证明: by
   refine ⟨fun hS i => hS.map _, fun hS => ?_⟩
   simp only [ShortComplex.exact_iff_isZero_homology] at hS ⊢
@@ -126,7 +126,7 @@ lemma exactAt_iff
 
 中文:
 引理 exactAt_iff
-  结论: [HasZeroObject C] {α : 类型} {c : ComplexShape α}
+  结论: [有ZeroObject C] {α : 类型} {c : 余mplexShape α}
   证明: hP.exact_iff _
 
 Depends on / 依赖: exact_iff, hP.exact_iff
@@ -163,7 +163,7 @@ lemma shortExact_iff
 
 中文:
 引理 shortExact_iff
-  条件: (S : ShortComplex C)
+  条件: (S : 短复形 C)
   证明: by
   refine ⟨fun hS i => ?_, fun hS => ?_⟩
   · have := hS.mono_f
@@ -208,7 +208,7 @@ lemma shortComplexQuasiIso_iff
 
 中文:
 引理 shortComplexQuasiIso_iff
-  条件: {S₁ S₂ : ShortComplex C} (f : S₁ ⟶ S₂)
+  条件: {S₁ S₂ : 短复形 C} (f : S₁ ⟶ S₂)
   证明: by
   refine ⟨fun hf i => inferInstance, fun hf => ?_⟩
   simp only [ShortComplex.quasiIso_iff] at hf ⊢

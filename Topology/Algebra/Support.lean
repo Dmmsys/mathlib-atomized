@@ -108,7 +108,7 @@ theorem isClosed_mulTSupport
 中文:
 定理 isClosed_mulTSupport
   条件: (f : X -> α)
-  结论: IsClosed (mulTSupport f)
+  结论: 是闭集 (mulTSupport f)
   证明: isClosed_closure
 
 @[to_additive]
@@ -208,7 +208,7 @@ theorem mulTSupport_binop_subset
 
 中文:
 定理 mulTSupport_binop_subset
-  结论: [One β] [One γ] (op : α -> β -> γ)
+  结论: [幺 β] [幺 γ] (op : α -> β -> γ)
   证明: .trans closure_union.subset closure_mono (mulSupport_binop_subset op op1 f g)
 
 @[to_additive]
@@ -233,7 +233,7 @@ lemma mulTSupport_comp_subset
 
 中文:
 引理 mulTSupport_comp_subset
-  条件: [One β] {g : α -> β} (hg : g 1 = 1) (f : X -> α)
+  条件: [幺 β] {g : α -> β} (hg : g 1 = 1) (f : X -> α)
   证明: closure_mono (mulSupport_comp_subset hg f)
 
 @[to_additive]
@@ -257,7 +257,7 @@ lemma mulTSupport_subset_comp
 
 中文:
 引理 mulTSupport_subset_comp
-  条件: [One β] {g : α -> β} (hg : 对任意 {x}, g x = 1 -> x = 1) (f : X -> α)
+  条件: [幺 β] {g : α -> β} (hg : 对任意 {x}, g x = 1 -> x = 1) (f : X -> α)
   证明: closure_mono (mulSupport_subset_comp hg f)
 
 @[to_additive]
@@ -282,7 +282,7 @@ lemma mulTSupport_comp_eq
 
 中文:
 引理 mulTSupport_comp_eq
-  条件: [One β] {g : α -> β} (hg : 对任意 {x}, g x = 1 ↔ x = 1) (f : X -> α)
+  条件: [幺 β] {g : α -> β} (hg : 对任意 {x}, g x = 1 ↔ x = 1) (f : X -> α)
   证明: by
   rw [mulTSupport]; rw [mulTSupport]; rw [mulSupport_comp_eq g hg]
 
@@ -308,7 +308,7 @@ lemma mulTSupport_comp_eq_of_range_subset
 
 中文:
 引理 mulTSupport_comp_eq_of_range_subset
-  结论: [One β] {g : α -> β} {f : X -> α}
+  结论: [幺 β] {g : α -> β} {f : X -> α}
   证明: by
   rw [mulTSupport]; rw [mulTSupport]; rw [mulSupport_comp_eq_of_range_subset hg]
 
@@ -336,7 +336,7 @@ lemma mulTSupport_comp_subset_preimage
 
 中文:
 引理 mulTSupport_comp_subset_preimage
-  结论: {Y : 类型} [TopologicalSpace Y] (g : Y -> α) {f : X -> Y}
+  结论: {Y : 类型} [拓扑空间 Y] (g : Y -> α) {f : X -> Y}
   证明: by
   rw [mulTSupport]; rw [mulTSupport]; rw [mulSupport_comp_eq_preimage]
   exact hf.closure_preimage_subset _
@@ -365,7 +365,7 @@ lemma mulTSupport_comp_eq_preimage
 
 中文:
 引理 mulTSupport_comp_eq_preimage
-  条件: {Y : 类型} [TopologicalSpace Y] (g : Y -> α) (f : X ≃ₜ Y)
+  条件: {Y : 类型} [拓扑空间 Y] (g : Y -> α) (f : X ≃ₜ Y)
   证明: by
   rw [mulTSupport]; rw [mulTSupport]; rw [mulSupport_comp_eq_preimage]; rw [Homeomorph.preimage_closure]
 
@@ -458,7 +458,7 @@ theorem tsupport_mul_subset_left
 
 中文:
 定理 tsupport_mul_subset_left
-  条件: {α : 类型} [MulZeroClass α] {f g : X -> α}
+  条件: {α : 类型} [乘零类 α] {f g : X -> α}
   证明: closure_mono (support_mul_subset_left _ _)
 
 Depends on / 依赖: closure_mono, support_mul_subset_left
@@ -477,7 +477,7 @@ theorem tsupport_mul_subset_right
 
 中文:
 定理 tsupport_mul_subset_right
-  条件: {α : 类型} [MulZeroClass α] {f g : X -> α}
+  条件: {α : 类型} [乘零类 α] {f g : X -> α}
   证明: closure_mono (support_mul_subset_right _ _)
 
 Depends on / 依赖: closure_mono, support_mul_subset_right
@@ -505,7 +505,7 @@ theorem mulTSupport_mul
 
 中文:
 定理 mulTSupport_mul
-  条件: [MulOneClass α] (f g : X -> α)
+  条件: [MulOne类 α] (f g : X -> α)
   证明: mulTSupport_binop_subset (· * ·) (by simp) f g
 
 @[to_additive]
@@ -529,7 +529,7 @@ theorem mulTSupport_pow
 
 中文:
 定理 mulTSupport_pow
-  条件: [Monoid α] (f : X -> α) (n : 自然数)
+  条件: [幺半群 α] (f : X -> α) (n : 自然数)
   证明: closure_mono mulSupport_pow f n
 
 @[to_additive (attr := simp)]
@@ -553,7 +553,7 @@ theorem mulTSupport_fun_inv
 
 中文:
 定理 mulTSupport_fun_inv
-  条件: [DivisionMonoid α] (f : X -> α)
+  条件: [Division幺半群 α] (f : X -> α)
   证明: congrArg closure mulSupport_fun_inv f
 
 @[to_additive (attr := simp)]
@@ -577,7 +577,7 @@ theorem mulTSupport_inv
 
 中文:
 定理 mulTSupport_inv
-  条件: [DivisionMonoid α] (f : X -> α)
+  条件: [Division幺半群 α] (f : X -> α)
   证明: mulTSupport_fun_inv f
 
 @[to_additive]
@@ -601,7 +601,7 @@ theorem mulTSupport_mul_inv
 
 中文:
 定理 mulTSupport_mul_inv
-  条件: [DivisionMonoid α] (f g : X -> α)
+  条件: [Division幺半群 α] (f g : X -> α)
   证明: mulTSupport_binop_subset (· * ·⁻¹) (by simp) f g
 
 @[to_additive]
@@ -623,7 +623,7 @@ theorem mulTSupport_div
 
 中文:
 定理 mulTSupport_div
-  条件: [DivisionMonoid α] (f g : X -> α)
+  条件: [Division幺半群 α] (f g : X -> α)
   证明: mulTSupport_binop_subset (· / ·) one_div_one f g
 
 Depends on / 依赖: mulTSupport_binop_subset, one_div_one
@@ -642,7 +642,7 @@ theorem tsupport_smul_subset_left
 
 中文:
 定理 tsupport_smul_subset_left
-  结论: {M α} [Zero M] [Zero α] [SMulWithZero M α]
+  结论: {M α} [零 M] [零 α] [带零标量乘法 M α]
   证明: closure_mono support_smul_subset_left f g
 
 Depends on / 依赖: closure_mono, support_smul_subset_left
@@ -661,7 +661,7 @@ theorem tsupport_smul_subset_right
 
 中文:
 定理 tsupport_smul_subset_right
-  结论: {M α} [Zero α] [SMulZeroClass M α]
+  结论: {M α} [零 α] [SMulZero类 M α]
   证明: closure_mono support_smul_subset_right f g
 
 Depends on / 依赖: closure_mono, support_smul_subset_right
@@ -720,7 +720,7 @@ theorem continuous_of_mulTSupport
 
 中文:
 定理 continuous_of_mulTSupport
-  结论: [TopologicalSpace β] {f : α -> β}
+  结论: [拓扑空间 β] {f : α -> β}
   证明: continuous_iff_continuousAt.2 fun x => (em _).elim (hf x) fun hx =>
     (@continuousAt_const _ _ _ _ _ 1).congr (notMem_mulTSupport_iff_eventuallyEq.mp hx).symm
 
@@ -744,7 +744,7 @@ lemma ContinuousOn.continuous_of_mulTSupport_subset
 
 中文:
 引理 ContinuousOn.continuous_of_mulTSupport_subset
-  结论: [TopologicalSpace β] {f : α -> β}
+  结论: [拓扑空间 β] {f : α -> β}
   证明: continuous_of_mulTSupport fun _ hx => h's.continuousOn_iff.mp hs h''s hx
 
 Depends on / 依赖: continuousOn_iff, continuous_of_mulTSupport, s.continuousOn_iff.mp
@@ -804,7 +804,7 @@ theorem hasCompactMulSupport_def
 
 中文:
 定理 hasCompactMulSupport_def
-  结论: HasCompactMulSupport f ↔ IsCompact (closure (mulSupport f))
+  结论: HasCompactMulSupport f ↔ 是紧集 (closure (mulSupport f))
   证明: by
   rfl
 
@@ -825,8 +825,8 @@ theorem exists_compact_iff_hasCompactMulSupport
     hasCompactMulSupport_def, exists_isCompact_superset_iff]
 
 中文:
-定理 exists_compact_iff_hasCompactMulSupport
-  条件: [R1Space α]
+定理 存在_compact_iff_hasCompactMulSupport
+  条件: [R1空间 α]
   证明: by
   simp_rw [← notMem_mulSupport, ← mem_compl_iff, ← subset_def, compl_subset_compl,
     hasCompactMulSupport_def, exists_isCompact_superset_iff]
@@ -855,7 +855,7 @@ theorem intro
 
 中文:
 定理 intro
-  条件: [R1Space α] (hK : IsCompact K) (hfK : 对任意 x, x ∉ K -> f x = 1)
+  条件: [R1空间 α] (hK : 是紧集 K) (hfK : 对任意 x, x ∉ K -> f x = 1)
   证明: exists_compact_iff_hasCompactMulSupport.mp ⟨K, hK, hfK⟩
 
 @[to_additive]
@@ -883,7 +883,7 @@ theorem intro'
 
 中文:
 定理 intro'
-  条件: (hK : IsCompact K) (h'K : IsClosed K) (hfK : 对任意 x, x ∉ K -> f x = 1)
+  条件: (hK : 是紧集 K) (h'K : 是闭集 K) (hfK : 对任意 x, x ∉ K -> f x = 1)
   证明: by
   have : mulTSupport f subseteq K := by
     rw [← h'K.closure_eq]
@@ -914,7 +914,7 @@ theorem of_mulSupport_subset_isCompact
 
 中文:
 定理 of_mulSupport_subset_isCompact
-  条件: [R1Space α] (hK : IsCompact K) (h : mulSupport f subseteq K)
+  条件: [R1空间 α] (hK : 是紧集 K) (h : mulSupport f subseteq K)
   证明: hK.closure_of_subset h
 
 @[to_additive]
@@ -940,7 +940,7 @@ theorem isCompact
 中文:
 定理 isCompact
   条件: (hf : HasCompactMulSupport f)
-  结论: IsCompact (mulTSupport f)
+  结论: 是紧集 (mulTSupport f)
   证明: hf
 
 @[to_additive]
@@ -984,7 +984,7 @@ theorem _root_.isCompact_range_of_mulSupport_subset_isCompact
 
 中文:
 定理 _root_.isCompact_range_of_mulSupport_subset_isCompact
-  结论: [TopologicalSpace β]
+  结论: [拓扑空间 β]
   证明: by
   rcases range_eq_image_or_of_mulSupport_subset h'f with h2 | h2 <;> rw [h2]
   exacts [hk.image hf, (hk.image hf).insert 1]
@@ -1012,7 +1012,7 @@ theorem isCompact_range
 
 中文:
 定理 isCompact_range
-  结论: [TopologicalSpace β] (h : HasCompactMulSupport f)
+  结论: [拓扑空间 β] (h : HasCompactMulSupport f)
   证明: isCompact_range_of_mulSupport_subset_isCompact hf h (subset_mulTSupport f)
 
 @[to_additive]
@@ -1203,7 +1203,7 @@ lemma isCompact_preimage
 
 中文:
 引理 isCompact_preimage
-  结论: [TopologicalSpace β] {K : Set β}
+  结论: [拓扑空间 β] {K : 集合 β}
   证明: by
   apply IsCompact.of_isClosed_subset h'f (hk.preimage hf) (fun x hx => ?_)
   apply subset_mulTSupport
@@ -1289,7 +1289,7 @@ theorem mulTSupport_extend_one
 
 中文:
 定理 mulTSupport_extend_one
-  条件: (inj : g.Injective)
+  条件: (inj : g.单射)
   证明: (hf.mulTSupport_extend_one_subset cont).antisymm
     (image_closure_subset_closure_image cont).trans
       (closure_mono (mulSupport_extend_one inj).superset)
@@ -1318,7 +1318,7 @@ theorem continuous_extend_one
 
 中文:
 定理 continuous_extend_one
-  结论: [TopologicalSpace β] {U : Set α'} (hU : IsOpen U) {f : U -> β}
+  结论: [拓扑空间 β] {U : 集合 α'} (hU : 是开集 U) {f : U -> β}
   证明: continuous_of_mulTSupport fun x h => by
     rw [show x = ↑(⟨x]; rw [Subtype.coe_image_subset _ _
       (supp.mulTSupport_extend_one_subset continuous_subtype_val h)⟩ : U) by rfl]; rw [← (hU.isOpenEmbedding_subtypeVal).continuousAt_iff]; rw [extend_comp Subtype.val_injective]
@@ -1353,7 +1353,7 @@ theorem is_one_at_infty
 
 中文:
 定理 is_one_at_infty
-  结论: {f : α -> γ} [TopologicalSpace γ]
+  结论: {f : α -> γ} [拓扑空间 γ]
   证明: by
   intro N hN
   rw [mem_map]; rw [mem_cocompact']
@@ -1451,7 +1451,7 @@ lemma HasCompactMulSupport.one
 
 中文:
 引理 HasCompactMulSupport.one
-  条件: {α β : 类型} [TopologicalSpace α] [One β]
+  条件: {α β : 类型} [拓扑空间 α] [幺 β]
   证明: by
   simp [HasCompactMulSupport]
 -/
@@ -1476,7 +1476,7 @@ definition HasCompactMulSupport.submonoid
 
 中文:
 定义 HasCompactMulSupport.submonoid
-  签名: : Submonoid (α -> β) where
+  签名: : 子幺半群 (α -> β) where
   定义体: {f | HasCompactMulSupport f}
   one_mem' := .one
   mul_mem' := .mul
@@ -1525,7 +1525,7 @@ theorem HasCompactMulSupport.list_prod
 
 中文:
 定理 HasCompactMulSupport.list_prod
-  结论: {α β : 类型} [TopologicalSpace α] [Monoid β]
+  结论: {α β : 类型} [拓扑空间 α] [幺半群 β]
   证明: list_prod_mem (S := HasCompactMulSupport.submonoid α β) hl
 
 Depends on / 依赖: HasCompactMulSupport, HasCompactMulSupport.submonoid, list_prod_mem, submonoid
@@ -1603,7 +1603,7 @@ lemma HasCompactMulSupport.inv
 
 中文:
 引理 HasCompactMulSupport.inv
-  结论: {α β : 类型} [TopologicalSpace α] [DivisionMonoid β]
+  结论: {α β : 类型} [拓扑空间 α] [Division幺半群 β]
   证明: by
   simpa only [HasCompactMulSupport, mulTSupport, mulSupport_inv] using hf
 
@@ -1625,7 +1625,7 @@ theorem HasCompactSupport.div
 
 中文:
 定理 HasCompactSupport.div
-  结论: {α β : 类型} [TopologicalSpace α] [DivisionMonoid β]
+  结论: {α β : 类型} [拓扑空间 α] [Division幺半群 β]
   证明: div_eq_mul_inv f f' ▸ hf.mul hf'.inv
 
 Depends on / 依赖: div_eq_mul_inv, hf.mul
@@ -1811,8 +1811,8 @@ theorem LocallyFinite.exists_finset_nhds_mulSupport_subset
    
 
 中文:
-定理 LocallyFinite.exists_finset_nhds_mulSupport_subset
-  结论: {U : ι -> Set X} [One R] {f : ι -> X -> R}
+定理 局部有限.存在_finset_nhds_mulSupport_subset
+  结论: {U : ι -> 集合 X} [幺 R] {f : ι -> X -> R}
   证明: by
   obtain ⟨n, hn, hnf⟩ := hlf x
   classical
@@ -1866,7 +1866,7 @@ theorem locallyFinite_mulSupport_iff
 
 中文:
 定理 locallyFinite_mulSupport_iff
-  条件: [One M] {f : ι -> X -> M}
+  条件: [幺 M] {f : ι -> X -> M}
   证明: ⟨LocallyFinite.closure, fun H => H.subset fun _ => subset_closure⟩
 
 Depends on / 依赖: H.subset, LocallyFinite, LocallyFinite.closure, closure, subset, subset_closure
@@ -1884,8 +1884,8 @@ theorem LocallyFinite.smul_left
   proof: h.subset fun i x => mt fun h => by rw [Pi.smul_apply', h, zero_smul]
 
 中文:
-定理 LocallyFinite.smul_left
-  结论: [Zero R] [Zero M] [SMulWithZero R M]
+定理 局部有限.smul_left
+  结论: [零 R] [零 M] [带零标量乘法 R M]
   证明: h.subset fun i x => mt fun h => by rw [Pi.smul_apply', h, zero_smul]
 
 Depends on / 依赖: Pi.smul_apply, h.subset, smul_apply, subset, zero_smul
@@ -1904,8 +1904,8 @@ theorem LocallyFinite.smul_right
   proof: h.subset fun i x => mt fun h => by rw [Pi.smul_apply', h, smul_zero]
 
 中文:
-定理 LocallyFinite.smul_right
-  结论: [Zero M] [SMulZeroClass R M]
+定理 局部有限.smul_right
+  结论: [零 M] [SMulZero类 R M]
   证明: h.subset fun i x => mt fun h => by rw [Pi.smul_apply', h, smul_zero]
 
 Depends on / 依赖: Pi.smul_apply, h.subset, smul_apply, smul_zero, subset
@@ -1932,7 +1932,7 @@ theorem HasCompactMulSupport.comp_homeomorph
 
 中文:
 定理 HasCompactMulSupport.comp_homeomorph
-  结论: {M} [One M] {f : Y -> M}
+  结论: {M} [幺 M] {f : Y -> M}
   证明: hf.comp_isClosedEmbedding φ.isClosedEmbedding
 
 Depends on / 依赖: comp_isClosedEmbedding, hf.comp_isClosedEmbedding, isClosedEmbedding

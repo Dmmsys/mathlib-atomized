@@ -34,7 +34,7 @@ inductive Ineq
 
 中文:
 归纳类型 Ineq
-  参数: : Type
+  参数: : 类型
   构造子 (1 个):
     - eq: | le | lt
 -/
@@ -52,7 +52,7 @@ definition max
   signature: : Ineq -> Ineq -> Ineq
 
 中文:
-定义 max
+定义 最大值
   签名: : Ineq -> Ineq -> Ineq
 -/
 def max : Ineq -> Ineq -> Ineq

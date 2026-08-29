@@ -51,7 +51,7 @@ theorem clusterPt_iff_ultrafilter
 
 中文:
 定理 clusterPt_iff_ultrafilter
-  条件: {f : Filter X}
+  条件: {f : 滤子 X}
   结论: ClusterPt x f ↔
   证明: by
   simp_rw [ClusterPt, ← le_inf_iff, exists_ultrafilter_iff, inf_comm]
@@ -133,7 +133,7 @@ theorem isClosed_iff_ultrafilter
 
 中文:
 定理 isClosed_iff_ultrafilter
-  结论: IsClosed s ↔
+  结论: 是闭集 s ↔
   证明: by
   simp [isClosed_iff_clusterPt, ClusterPt, ← exists_ultrafilter_iff]
 

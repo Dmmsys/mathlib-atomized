@@ -99,7 +99,7 @@ abbreviation SkewPolynomial
 
 中文:
 缩写 SkewPolynomial
-  签名: (R : 类型) [AddCommMonoid R]
+  签名: (R : 类型) [加法交换幺半群 R]
   定义体: SkewMonoidAlgebra R (Multiplicative Nat)
 
 Depends on / 依赖: Multiplicative, SkewMonoidAlgebra
@@ -125,7 +125,7 @@ lemma zero_def
 
 中文:
 引理 zero_def
-  结论: (0 : SkewPolynomial R) = (0 : SkewMonoidAlgebra R (Multiplicative 自然数))
+  结论: (0 : SkewPolynomial R) = (0 : 斜幺半群代数 R (Multiplicative 自然数))
   证明: rfl
 -/
 lemma zero_def : (0 : SkewPolynomial R) = (0 : SkewMonoidAlgebra R (Multiplicative Nat)) := rfl
@@ -302,8 +302,8 @@ definition sum
   body: SkewMonoidAlgebra.sum p (fun n r => f (toAdd n : Nat) r)
 
 中文:
-定义 sum
-  签名: {S : 类型} [AddCommMonoid S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
+定义 求和
+  签名: {S : 类型} [加法交换幺半群 S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
   定义体: SkewMonoidAlgebra.sum p (fun n r => f (toAdd n : Nat) r)
 
 Depends on / 依赖: SkewMonoidAlgebra, SkewMonoidAlgebra.sum
@@ -321,7 +321,7 @@ lemma sum_def'
 
 中文:
 引理 sum_def'
-  条件: {S : 类型} [AddCommMonoid S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
   证明: rfl
 -/
 lemma sum_def' {S : Type*} [AddCommMonoid S] (p : SkewPolynomial R) (f : Nat -> R -> S) :
@@ -340,7 +340,7 @@ lemma sum_def
 
 中文:
 引理 sum_def
-  条件: {S : 类型} [AddCommMonoid S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
+  条件: {S : 类型} [加法交换幺半群 S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
   证明: by
   simp only [sum_def', SkewMonoidAlgebra.sum_def, Finsupp.sum]
   apply Finset.sum_of_injOn (toAdd) (Injective.injOn fun ⦃a₁ a₂⦄ a => a) (fun _ => ?_) <;>
@@ -368,7 +368,7 @@ lemma sum_sum_index
 
 中文:
 引理 sum_sum_index
-  结论: {R' P : 类型} [AddCommMonoid P] [Semiring R']
+  结论: {R' P : 类型} [加法交换幺半群 P] [半环 R']
   证明: by
   simp only [sum_def', SkewMonoidAlgebra.sum_sum_index (fun a => h_zero (toAdd a))
     (fun a => h_add (toAdd a))]
@@ -396,7 +396,7 @@ lemma sum_zero
 
 中文:
 引理 sum_zero
-  条件: {N : 类型} [AddCommMonoid N] {f : SkewPolynomial R}
+  条件: {N : 类型} [加法交换幺半群 N] {f : SkewPolynomial R}
   证明: SkewMonoidAlgebra.sum_zero
 
 Depends on / 依赖: SkewMonoidAlgebra, SkewMonoidAlgebra.sum_zero, sum_zero
@@ -507,7 +507,7 @@ lemma smul_monomial
 
 中文:
 引理 smul_monomial
-  条件: {S} [Semiring S] [Module S R] (a : S) (b : R)
+  条件: {S} [半环 S] [模 S R] (a : S) (b : R)
   证明: smul_single ..
 
 @[simp]
@@ -533,7 +533,7 @@ lemma sum_monomial
 中文:
 引理 sum_monomial
   条件: (f : SkewPolynomial R)
-  结论: f.sum (fun (a : 自然数) => monomial a) = f
+  结论: f.求和 (fun (a : 自然数) => monomial a) = f
   证明: SkewMonoidAlgebra.sum_single _
 
 @[simp]
@@ -554,7 +554,7 @@ lemma sum_monomial_index
 
 中文:
 引理 sum_monomial_index
-  结论: {N} [AddCommMonoid N] {n : 自然数} {b : R} {h : 自然数 -> R -> N}
+  结论: {N} [加法交换幺半群 N] {n : 自然数} {b : R} {h : 自然数 -> R -> N}
   证明: SkewMonoidAlgebra.sum_single_index h_zero
 
 Depends on / 依赖: SkewMonoidAlgebra, SkewMonoidAlgebra.sum_single_index, h_zero, sum_single_index
@@ -575,7 +575,7 @@ lemma monomial_injective
 
 中文:
 引理 monomial_injective
-  结论: Function.Injective (monomial n : R -> SkewPolynomial R)
+  结论: 函数.单射 (monomial n : R -> SkewPolynomial R)
   证明: single_injective (ofAdd n)
 
 @[simp]
@@ -688,7 +688,7 @@ theorem φ_def
 
 中文:
 定理 φ_def
-  结论: φ = MulSemiringAction.toRingHom (Multiplicative 自然数) R (ofAdd 1)
+  结论: φ = MulSemiring作用.toRingHom (Multiplicative 自然数) R (ofAdd 1)
   证明: rfl
 -/
 theorem φ_def : φ = MulSemiringAction.toRingHom (Multiplicative Nat) R (ofAdd 1) := rfl
@@ -741,7 +741,7 @@ lemma monomial_mul_monomial
 
 中文:
 引理 monomial_mul_monomial
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (n m : 自然数) (r s : R)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (n m : 自然数) (r s : R)
   证明: by
   rw [φ_iterate_apply]
   exact SkewMonoidAlgebra.single_mul_single
@@ -767,7 +767,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  条件: {f g : SkewPolynomial R} [MulSemiringAction (Multiplicative 自然数) R]
+  条件: {f g : SkewPolynomial R} [MulSemiring作用 (Multiplicative 自然数) R]
   结论: f * g =
   证明: by
   ext
@@ -884,7 +884,7 @@ lemma sum_C_index
 
 中文:
 引理 sum_C_index
-  条件: {β} [AddCommMonoid β] {f : 自然数 -> R -> β} (h : f 0 0 = 0)
+  条件: {β} [加法交换幺半群 β] {f : 自然数 -> R -> β} (h : f 0 0 = 0)
   证明: sum_single_index h
 
 Depends on / 依赖: sum_single_index
@@ -1118,7 +1118,7 @@ lemma X_mul
 
 中文:
 引理 X_mul
-  结论: X * p = sum p (fun a b => monomial a (φ b)) * X
+  结论: X * p = 求和 p (fun a b => monomial a (φ b)) * X
   证明: by
   simp only [X, mul_def]
   rw [sum_monomial_index (by simp)]; rw [sum_sum_index (by simp) (by simp)]
@@ -1148,7 +1148,7 @@ lemma X_pow_mul
 中文:
 引理 X_pow_mul
   条件: {n : 自然数}
-  结论: X ^ n * p = sum p (fun (a : 自然数) b => monomial a (φ^[n] b)) * X ^ n
+  结论: X ^ n * p = 求和 p (fun (a : 自然数) b => monomial a (φ^[n] b)) * X ^ n
   证明: by
   induction n generalizing p with
   | zero => simp only [pow_zero, one_mul, Function.iterate_zero, id_eq, sum_monomial, mul_one]
@@ -1344,7 +1344,7 @@ lemma coeff_one
 
 中文:
 引理 coeff_one
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (n : 自然数)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (n : 自然数)
   证明: by
   have : (1 : SkewPolynomial R) = monomial 0 1 := by simp [← CRingHom_eq_C]
   rw [this]; rw [coeff_monomial]
@@ -1536,7 +1536,7 @@ lemma coeff_natCast_ite
 
 中文:
 引理 coeff_natCast_ite
-  条件: [MulSemiringAction (Multiplicative 自然数) R]
+  条件: [MulSemiring作用 (Multiplicative 自然数) R]
   证明: by
   simp [← C_eq_natCast, coeff_C]
 
@@ -1560,8 +1560,8 @@ lemma coeff_ofNat_zero
 @[simp]
 
 中文:
-引理 coeff_ofNat_zero
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (a : 自然数) [a.AtLeastTwo]
+引理 coeff_of自然数_zero
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (a : 自然数) [a.AtLeastTwo]
   证明: by simp [OfNat.ofNat]
 
 @[simp]
@@ -1583,8 +1583,8 @@ lemma coeff_ofNat_succ
   simp [-Nat.cast_ofNat]
 
 中文:
-引理 coeff_ofNat_succ
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (a n : 自然数) [h : a.AtLeastTwo]
+引理 coeff_of自然数_succ
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (a n : 自然数) [h : a.AtLeastTwo]
   证明: by
   rw [← Nat.cast_ofNat]
   simp [-Nat.cast_ofNat]
@@ -1605,7 +1605,7 @@ lemma C_mul_X_pow_eq_monomial
 
 中文:
 引理 C_mul_X_pow_eq_monomial
-  条件: [MulSemiringAction (Multiplicative 自然数) R]
+  条件: [MulSemiring作用 (Multiplicative 自然数) R]
 -/
 lemma C_mul_X_pow_eq_monomial [MulSemiringAction (Multiplicative Nat) R] :
     forall ⦃n : Nat⦄, C a * X ^ n = monomial n a
@@ -1625,7 +1625,7 @@ lemma C_mul_X_eq_monomial
 
 中文:
 引理 C_mul_X_eq_monomial
-  条件: [MulSemiringAction (Multiplicative 自然数) R]
+  条件: [MulSemiring作用 (Multiplicative 自然数) R]
   结论: C a * X = monomial 1 a
   证明: by
   rw [← C_mul_X_pow_eq_monomial]; rw [pow_one]
@@ -1645,7 +1645,7 @@ lemma C_injective
 
 中文:
 引理 C_injective
-  结论: Injective (C : R -> SkewPolynomial R)
+  结论: 单射 (C : R -> SkewPolynomial R)
   证明: monomial_injective 0
 
 Depends on / 依赖: monomial_injective
@@ -1699,8 +1699,8 @@ lemma Nontrivial.of_polynomial_ne
     by rw [← mul_one p, ← mul_one q, ← C_1, ← h01, C_0, mul_zero, mul_zero] ⟩⟩
 
 中文:
-引理 Nontrivial.of_polynomial_ne
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (h : p != q)
+引理 非平凡.of_polynomial_ne
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (h : p != q)
   证明: ⟨⟨0, 1, fun h01 : 0 = 1 => h
     by rw [← mul_one p, ← mul_one q, ← C_1, ← h01, C_0, mul_zero, mul_zero] ⟩⟩
 -/
@@ -1757,7 +1757,7 @@ lemma addHom_ext'
 
 中文:
 引理 addHom_ext'
-  结论: {M : 类型} [AddMonoid M] {f g : SkewPolynomial R ->+ M}
+  结论: {M : 类型} [加法幺半群 M] {f g : SkewPolynomial R ->+ M}
   证明: SkewMonoidAlgebra.addHom_ext' h
 -/
 @[ext] lemma addHom_ext' {M : Type*} [AddMonoid M] {f g : SkewPolynomial R ->+ M}
@@ -1774,7 +1774,7 @@ lemma addHom_ext
 
 中文:
 引理 addHom_ext
-  结论: {M : 类型} [AddMonoid M] {f g : SkewPolynomial R ->+ M}
+  结论: {M : 类型} [加法幺半群 M] {f g : SkewPolynomial R ->+ M}
   证明: SkewMonoidAlgebra.addHom_ext h
 -/
 @[ext] lemma addHom_ext {M : Type*} [AddMonoid M] {f g : SkewPolynomial R ->+ M}
@@ -1791,7 +1791,7 @@ lemma linearMap_ext'
 
 中文:
 引理 linearMap_ext'
-  结论: {M : 类型} [AddCommMonoid M] [Module R M]
+  结论: {M : 类型} [加法交换幺半群 M] [模 R M]
   证明: SkewMonoidAlgebra.lhom_ext' h
 -/
 @[ext] lemma linearMap_ext' {M : Type*} [AddCommMonoid M] [Module R M]
@@ -1918,7 +1918,7 @@ lemma support_C_mul_X
 
 中文:
 引理 support_C_mul_X
-  条件: [MulSemiringAction (Multiplicative 自然数) R] {c : R} (h : c != 0)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] {c : R} (h : c != 0)
   证明: by
   rw [C_mul_X_eq_monomial]; rw [support_monomial 1 h]
 -/
@@ -1939,7 +1939,7 @@ lemma support_C_mul_X_subset
 
 中文:
 引理 support_C_mul_X_subset
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (c : R)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (c : R)
   证明: by
   simpa [C_mul_X_eq_monomial] using support_monomial_subset 1
 
@@ -1963,7 +1963,7 @@ lemma support_C_mul_X_pow
 
 中文:
 引理 support_C_mul_X_pow
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (n : 自然数) {c : R} (h : c != 0)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (n : 自然数) {c : R} (h : c != 0)
   证明: by
   rw [C_mul_X_pow_eq_monomial]; rw [support_monomial n h]
 
@@ -1984,7 +1984,7 @@ lemma support_C_mul_X_pow_subset
 
 中文:
 引理 support_C_mul_X_pow_subset
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (n : 自然数) (c : R)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (n : 自然数) (c : R)
   证明: by
   simpa [C_mul_X_pow_eq_monomial] using support_monomial_subset n
 
@@ -2009,7 +2009,7 @@ lemma support_binomial_subset
 
 中文:
 引理 support_binomial_subset
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (k m : 自然数) (x y : R)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (k m : 自然数) (x y : R)
   证明: support_add.trans
     (union_subset
       ((support_C_mul_X_pow_subset k x).trans (singleton_subset_iff.mpr (mem_insert_self k {m})))
@@ -2043,7 +2043,7 @@ lemma support_trinomial_subset
 
 中文:
 引理 support_trinomial_subset
-  条件: [MulSemiringAction (Multiplicative 自然数) R] (k m n : 自然数) (x y z : R)
+  条件: [MulSemiring作用 (Multiplicative 自然数) R] (k m n : 自然数) (x y z : R)
   证明: support_add.trans
     (union_subset
       (support_add.trans
@@ -2087,7 +2087,7 @@ lemma X_pow_eq_monomial
 
 中文:
 引理 X_pow_eq_monomial
-  条件: (n) [MulSemiringAction (Multiplicative 自然数) R]
+  条件: (n) [MulSemiring作用 (Multiplicative 自然数) R]
   证明: by
   induction n with
   | zero => simp only [pow_zero, monomial_zero_left, ← CRingHom_eq_C, map_one]
@@ -2122,7 +2122,7 @@ lemma smul_X_eq_monomial
 
 中文:
 引理 smul_X_eq_monomial
-  条件: {n} [MulSemiringAction (Multiplicative 自然数) R]
+  条件: {n} [MulSemiring作用 (Multiplicative 自然数) R]
   证明: by
   rw [eq_comm]
   calc monomial n a = monomial n (a * 1) := by simp only [mul_one]
@@ -2155,7 +2155,7 @@ lemma support_X_pow
 
 中文:
 引理 support_X_pow
-  条件: [Nontrivial R] (n : 自然数) [MulSemiringAction (Multiplicative 自然数) R]
+  条件: [非平凡 R] (n : 自然数) [MulSemiring作用 (Multiplicative 自然数) R]
   证明: by
   convert support_monomial n (NeZero.out (n := (1 : R)))
   exact X_pow_eq_monomial n
@@ -2205,7 +2205,7 @@ lemma support_X
 
 中文:
 引理 support_X
-  条件: [Nontrivial R] [MulSemiringAction (Multiplicative 自然数) R]
+  条件: [非平凡 R] [MulSemiring作用 (Multiplicative 自然数) R]
   证明: by
   rw [← pow_one X]; rw [support_X_pow 1]
 
@@ -2225,7 +2225,7 @@ lemma monomial_left_inj
 
 中文:
 引理 monomial_left_inj
-  条件: {R : 类型} [Semiring R] {a : R} (ha : a != 0) {i j : 自然数}
+  条件: {R : 类型} [半环 R] {a : R} (ha : a != 0) {i j : 自然数}
   证明: SkewMonoidAlgebra.single_left_inj ha
 
 Depends on / 依赖: SkewMonoidAlgebra, SkewMonoidAlgebra.single_left_inj, single_left_inj
@@ -2244,7 +2244,7 @@ lemma nat_cast_mul
 
 中文:
 引理 nat_cast_mul
-  结论: {R : 类型} [Semiring R] (n : 自然数) (p : SkewPolynomial R)
+  结论: {R : 类型} [半环 R] (n : 自然数) (p : SkewPolynomial R)
   证明: (nsmul_eq_mul _ _).symm
 
 Depends on / 依赖: nsmul_eq_mul
@@ -2272,7 +2272,7 @@ lemma sum_eq_of_subset
 
 中文:
 引理 sum_eq_of_subset
-  结论: {p : SkewPolynomial R} (f : 自然数 -> R -> S) (hf : 对任意 i, f i 0 = 0) {s : Finset 自然数}
+  结论: {p : SkewPolynomial R} (f : 自然数 -> R -> S) (hf : 对任意 i, f i 0 = 0) {s : 有限集 自然数}
   证明: by
   rw [sum_def]; rw [Finset.sum_subset hs]
   intro _ _ hx
@@ -2306,7 +2306,7 @@ lemma sum_zero_index
 中文:
 引理 sum_zero_index
   条件: (f : 自然数 -> R -> S)
-  结论: (0 : SkewPolynomial R).sum f = 0
+  结论: (0 : SkewPolynomial R).求和 f = 0
   证明: by
   simp [sum_def', zero_def]
 
@@ -2330,7 +2330,7 @@ lemma sum_X_index
 中文:
 引理 sum_X_index
   条件: {f : 自然数 -> R -> S} (hf : f 1 0 = 0)
-  结论: (X : SkewPolynomial R).sum f = f 1 1
+  结论: (X : SkewPolynomial R).求和 f = f 1 1
   证明: sum_monomial_index hf
 
 Depends on / 依赖: sum_monomial_index
@@ -2378,7 +2378,7 @@ lemma sum_add'
 中文:
 引理 sum_add'
   条件: (p : SkewPolynomial R) (f g : 自然数 -> R -> S)
-  结论: p.sum (f + g) = p.sum f + p.sum g
+  结论: p.求和 (f + g) = p.求和 f + p.求和 g
   证明: by
   simp [sum_def, Finset.sum_add_distrib]
 
@@ -2437,7 +2437,7 @@ lemma sum_smul_index'
 
 中文:
 引理 sum_smul_index'
-  结论: {T : 类型} [DistribSMul T R] (p : SkewPolynomial R) (b : T) (f : 自然数 -> R -> S)
+  结论: {T : 类型} [分配标量乘法 T R] (p : SkewPolynomial R) (b : T) (f : 自然数 -> R -> S)
   证明: Finsupp.sum_smul_index' hf
 
 Depends on / 依赖: Finsupp, Finsupp.sum_smul_index, sum_smul_index
@@ -2456,7 +2456,7 @@ lemma smul_sum
 
 中文:
 引理 smul_sum
-  结论: {T : 类型} [DistribSMul T S] (p : SkewPolynomial R) (b : T)
+  结论: {T : 类型} [分配标量乘法 T S] (p : SkewPolynomial R) (b : T)
   证明: Finsupp.smul_sum
 -/
 protected lemma smul_sum {T : Type*} [DistribSMul T S] (p : SkewPolynomial R) (b : T)
@@ -2503,7 +2503,7 @@ lemma sum_neg
 
 中文:
 引理 sum_neg
-  条件: {S : 类型} [Ring S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
+  条件: {S : 类型} [环 S] (p : SkewPolynomial R) (f : 自然数 -> R -> S)
   证明: by
   simp [sum_def, Finset.sum_neg_distrib]
 -/
@@ -2522,7 +2522,7 @@ lemma sum_sub
 
 中文:
 引理 sum_sub
-  条件: {S : 类型} [Ring S] (p : SkewPolynomial R) (f g : 自然数 -> R -> S)
+  条件: {S : 类型} [环 S] (p : SkewPolynomial R) (f g : 自然数 -> R -> S)
   证明: by
   simp only [sub_eq_add_neg, sum_add, sum_neg]
 -/
@@ -2542,7 +2542,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [MulSemiringAction (Multiplicative 自然数) R]
+  签名: [MulSemiring作用 (Multiplicative 自然数) R]
   定义体: SkewMonoidAlgebra.instRing
 
 @[simp]
@@ -2735,7 +2735,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial (SkewPolynomial R)
+  签名: : 非平凡 (SkewPolynomial R)
   定义体: SkewMonoidAlgebra.instNontrivialOfNonempty
 
 Depends on / 依赖: SkewMonoidAlgebra, SkewMonoidAlgebra.instNontrivialOfNonempty, instNontrivialOfNonempty

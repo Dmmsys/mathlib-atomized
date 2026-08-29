@@ -43,7 +43,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: (Homeomorph.refl X).toPartialHomeomorph
 
 @[simp]
@@ -64,7 +64,7 @@ theorem refl_partialEquiv
 
 中文:
 定理 refl_partialEquiv
-  结论: (PartialHomeomorph.refl X).toPartialEquiv = PartialEquiv.refl X
+  结论: (PartialHomeomorph.refl X).toPartialEquiv = 部分等价.refl X
   证明: rfl
 
 @[simp]
@@ -119,7 +119,7 @@ theorem image_eq_target_inter_inv_preimage
 
 中文:
 定理 image_eq_target_inter_inv_preimage
-  条件: {s : Set X} (h : s subseteq e.source)
+  条件: {s : 集合 X} (h : s subseteq e.source)
   证明: e.toPartialEquiv.image_eq_target_inter_inv_preimage h
 
 Depends on / 依赖: e.toPartialEquiv.image_eq_target_inter_inv_preimage, image_eq_target_inter_inv_preimage, toPartialEquiv
@@ -139,7 +139,7 @@ theorem image_source_inter_eq'
 
 中文:
 定理 image_source_inter_eq'
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: e '' (e.source inter s) = e.target inter e.symm ⁻¹' s
   证明: e.toPartialEquiv.image_source_inter_eq' s
 
@@ -158,7 +158,7 @@ theorem image_source_inter_eq
 
 中文:
 定理 image_source_inter_eq
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: e.toPartialEquiv.image_source_inter_eq s
 
 Depends on / 依赖: e.toPartialEquiv.image_source_inter_eq, image_source_inter_eq, toPartialEquiv
@@ -177,7 +177,7 @@ theorem symm_image_eq_source_inter_preimage
 
 中文:
 定理 symm_image_eq_source_inter_preimage
-  条件: {s : Set Y} (h : s subseteq e.target)
+  条件: {s : 集合 Y} (h : s subseteq e.target)
   证明: e.symm.image_eq_target_inter_inv_preimage h
 
 Depends on / 依赖: e.symm.image_eq_target_inter_inv_preimage, image_eq_target_inter_inv_preimage
@@ -196,7 +196,7 @@ theorem symm_image_target_inter_eq
 
 中文:
 定理 symm_image_target_inter_eq
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: e.symm.image_source_inter_eq _
 
 Depends on / 依赖: e.symm.image_source_inter_eq, image_source_inter_eq
@@ -215,7 +215,7 @@ theorem source_inter_preimage_inv_preimage
 
 中文:
 定理 source_inter_preimage_inv_preimage
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: e.toPartialEquiv.source_inter_preimage_inv_preimage s
 
 Depends on / 依赖: e.toPartialEquiv.source_inter_preimage_inv_preimage, source_inter_preimage_inv_preimage, toPartialEquiv
@@ -234,7 +234,7 @@ theorem target_inter_inv_preimage_preimage
 
 中文:
 定理 target_inter_inv_preimage_preimage
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: e.symm.source_inter_preimage_inv_preimage _
 
 Depends on / 依赖: e.symm.source_inter_preimage_inv_preimage, source_inter_preimage_inv_preimage
@@ -253,7 +253,7 @@ theorem source_inter_preimage_target_inter
 
 中文:
 定理 source_inter_preimage_target_inter
-  条件: (s : Set Y)
+  条件: (s : 集合 Y)
   证明: e.toPartialEquiv.source_inter_preimage_target_inter s
 
 Depends on / 依赖: e.toPartialEquiv.source_inter_preimage_target_inter, source_inter_preimage_target_inter, toPartialEquiv
@@ -315,7 +315,7 @@ definition ofContinuousOpenRestrict
 
 中文:
 定义 ofContinuousOpenRestrict
-  签名: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
+  签名: (e : 部分等价 X Y) (hc : ContinuousOn e e.source)
   定义体: e
   continuousOn_toFun := hc
   continuousOn_invFun := e.image_source_eq_target ▸ ho.continuousOn_image_of_leftInvOn e.leftInvOn
@@ -341,7 +341,7 @@ theorem coe_ofContinuousOpenRestrict
 
 中文:
 定理 coe_ofContinuousOpenRestrict
-  结论: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
+  结论: (e : 部分等价 X Y) (hc : ContinuousOn e e.source)
   证明: rfl
 
 @[simp]
@@ -361,7 +361,7 @@ theorem coe_ofContinuousOpenRestrict_symm
 
 中文:
 定理 coe_ofContinuousOpenRestrict_symm
-  结论: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
+  结论: (e : 部分等价 X Y) (hc : ContinuousOn e e.source)
   证明: rfl
 -/
 theorem coe_ofContinuousOpenRestrict_symm (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
@@ -384,7 +384,7 @@ definition ofContinuousOpen
 
 中文:
 定义 ofContinuousOpen
-  签名: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source) (ho : IsOpenMap e)
+  签名: (e : 部分等价 X Y) (hc : ContinuousOn e e.source) (ho : 是开映射 e)
   定义体: ofContinuousOpenRestrict e hc (ho.domRestrict hs)
 
 @[simp]
@@ -408,7 +408,7 @@ theorem coe_ofContinuousOpen
 
 中文:
 定理 coe_ofContinuousOpen
-  结论: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
+  结论: (e : 部分等价 X Y) (hc : ContinuousOn e e.source)
   证明: rfl
 
 @[simp]
@@ -429,7 +429,7 @@ theorem coe_ofContinuousOpen_symm
 
 中文:
 定理 coe_ofContinuousOpen_symm
-  结论: (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
+  结论: (e : 部分等价 X Y) (hc : ContinuousOn e e.source)
   证明: rfl
 -/
 theorem coe_ofContinuousOpen_symm (e : PartialEquiv X Y) (hc : ContinuousOn e e.source)
@@ -455,7 +455,7 @@ definition homeomorphOfImageSubsetSource
 
 中文:
 定义 homeomorphOfImageSubsetSource
-  签名: {s : Set X} {t : Set Y} (hs : s subseteq e.source) (ht : e '' s = t)
+  签名: {s : 集合 X} {t : 集合 Y} (hs : s subseteq e.source) (ht : e '' s = t)
   定义体: have h₁ : MapsTo e s t := mapsTo_iff_image_subset.2 ht.subset
   have h₂ : t subseteq e.target := ht ▸ e.image_source_eq_target ▸ image_mono hs
   have h₃ : MapsTo e.symm t s := ht ▸ forall_mem_image.2 fun _x hx =>
@@ -508,7 +508,7 @@ theorem secondCountableTopology_source
 
 中文:
 定理 secondCountableTopology_source
-  条件: [SecondCountableTopology Y]
+  条件: [第二可数拓扑 Y]
   证明: e.toHomeomorphSourceTarget.secondCountableTopology
 
 Depends on / 依赖: e.toHomeomorphSourceTarget.secondCountableTopology, secondCountableTopology, toHomeomorphSourceTarget
@@ -544,7 +544,7 @@ e.right_inv by
 
 中文:
 定义 toHomeomorphOfSourceEqUnivTargetEqUniv
-  签名: (h : e.source = (univ : Set X)) (h' : e.target = univ)
+  签名: (h : e.source = (univ : 集合 X)) (h' : e.target = univ)
   定义体: e
   invFun := e.symm
   left_inv x :=
@@ -594,7 +594,7 @@ theorem isEmbedding_restrict
 
 中文:
 定理 isEmbedding_restrict
-  结论: IsEmbedding (e.source.domRestrict e.toFun)
+  结论: 是嵌入 (e.source.domRestrict e.toFun)
   证明: by
   rw [isEmbedding_iff]
   constructor
@@ -627,8 +627,8 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: (h : e.source = Set.univ)
-  结论: IsEmbedding e
+  条件: (h : e.source = 集合.univ)
+  结论: 是嵌入 e
   证明: e.isEmbedding_restrict.comp
     ((Homeomorph.setCongr h).trans <| Homeomorph.Set.univ X).symm.isEmbedding
 
@@ -654,7 +654,7 @@ definition ofIsHomeomorphToEquiv
 
 中文:
 定义 ofIsHomeomorphToEquiv
-  签名: (f : PartialEquiv X Y) (h : IsHomeomorph (f.toEquiv))
+  签名: (f : 部分等价 X Y) (h : 是同胚 (f.toEquiv))
   定义体: f
   continuousOn_toFun := by
     rw [continuousOn_iff_continuous_domRestrict]; rw [← continuous_codRestrict_iff (s := f.target) (by simp)]
@@ -701,7 +701,7 @@ definition toPartialHomeomorph
 
 中文:
 定义 toPartialHomeomorph
-  签名: [Nonempty X]
+  签名: [非空 X]
   定义体: PartialHomeomorph.ofIsHomeomorphToEquiv (h.injective.injOn.toPartialEquiv f univ) (by
     rw [isHomeomorph_iff_isEmbedding_surjective]
     refine ⟨?_, Equiv.surjective _⟩
@@ -758,7 +758,7 @@ lemma toPartialHomeomorph_right_inv
 
 中文:
 引理 toPartialHomeomorph_right_inv
-  条件: {x : Y} (hx : x in Set.range f)
+  条件: {x : Y} (hx : x in 集合.range f)
   证明: by
   rw [← congr_fun (h.toPartialHomeomorph_apply f)]; rw [PartialHomeomorph.right_inv]
   rwa [toPartialHomeomorph_target]

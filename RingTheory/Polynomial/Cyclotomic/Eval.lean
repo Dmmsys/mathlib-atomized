@@ -42,7 +42,7 @@ theorem eval_one_cyclotomic_prime
 
 中文:
 定理 eval_one_cyclotomic_prime
-  条件: {R : 类型} [CommRing R] {p : 自然数} [hn : Fact p.Prime]
+  条件: {R : 类型} [交换环 R] {p : 自然数} [hn : Fact p.素]
   证明: by
   simp only [cyclotomic_prime, eval_X, one_pow, Finset.sum_const, eval_pow, eval_finsetSum,
     Finset.card_range, smul_one_eq_cast]
@@ -66,7 +66,7 @@ theorem eval₂_one_cyclotomic_prime
 
 中文:
 定理 eval₂_one_cyclotomic_prime
-  结论: {R S : 类型} [CommRing R] [Semiring S] (f : R ->+* S) {p : 自然数}
+  结论: {R S : 类型} [交换环 R] [半环 S] (f : R ->+* S) {p : 自然数}
   证明: by simp
 
 @[simp]
@@ -87,7 +87,7 @@ theorem eval_one_cyclotomic_prime_pow
 
 中文:
 定理 eval_one_cyclotomic_prime_pow
-  结论: {R : 类型} [CommRing R] {p : 自然数} (k : 自然数)
+  结论: {R : 类型} [交换环 R] {p : 自然数} (k : 自然数)
   证明: by
   simp only [cyclotomic_prime_pow_eq_geom_sum hn.out, eval_X, one_pow, Finset.sum_const, eval_pow,
     eval_finsetSum, Finset.card_range, smul_one_eq_cast]
@@ -109,7 +109,7 @@ theorem eval₂_one_cyclotomic_prime_pow
 
 中文:
 定理 eval₂_one_cyclotomic_prime_pow
-  结论: {R S : 类型} [CommRing R] [Semiring S] (f : R ->+* S)
+  结论: {R S : 类型} [交换环 R] [半环 S] (f : R ->+* S)
   证明: by simp
 -/
 theorem eval₂_one_cyclotomic_prime_pow {R S : Type*} [CommRing R] [Semiring S] (f : R ->+* S)
@@ -317,7 +317,7 @@ theorem eval_one_cyclotomic_not_prime_pow
 
 中文:
 定理 eval_one_cyclotomic_not_prime_pow
-  结论: {R : 类型} [Ring R] {n : 自然数}
+  结论: {R : 类型} [环 R] {n : 自然数}
   证明: by
   rcases n.eq_zero_or_pos with (rfl | hn')
   · simp

@@ -97,8 +97,8 @@ structure MultilinearMap
     - map_update_smul' : forall [DecidableEq ι] (m : forall i, M₁ i) (i : ι) (c : R) (x : M₁ i), toFun (update m i (c • x)) = c • toFun (update m i x)
 
 中文:
-结构 MultilinearMap
-  参数: (R : 类型uR) {ι : 类型uι} (M₁ : ι -> 类型v₁) (M₂ : 类型v₂) [Semiring R]
+结构 多重线性映射
+  参数: (R : 类型uR) {ι : 类型uι} (M₁ : ι -> 类型v₁) (M₂ : 类型v₂) [半环 R]
   公理与运算 (3 个):
     - toFun : (对任意 i, M₁ i) -> M₂
     - map_update_add' : 对任意 [DecidableEq ι] (m : 对任意 i, M₁ i) (i : ι) (x y : M₁ i), toFun (update m i (x + y)) = toFun (update m i x) + toFun (update m i y)
@@ -138,7 +138,7 @@ initialize_simps_projections MultilinearMap (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 函数状 (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; cases h; rfl
 
@@ -222,7 +222,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (f : (对任意 i, M₁ i) -> M₂) (h₁ h₂)
-  结论: ⇑(⟨f, h₁, h₂⟩ : MultilinearMap R M₁ M₂) = f
+  结论: ⇑(⟨f, h₁, h₂⟩ : 多重线性映射 R M₁ M₂) = f
   证明: rfl
 -/
 theorem coe_mk (f : (forall i, M₁ i) -> M₂) (h₁ h₂) : ⇑(⟨f, h₁, h₂⟩ : MultilinearMap R M₁ M₂) = f :=
@@ -242,7 +242,7 @@ nonrec theorem congr_arg (f : MultilinearMap R M₁ M₂) {x y : forall i, M₁ 
 
 中文:
 定理 congr_fun
-  条件: {f g : MultilinearMap R M₁ M₂} (h : f = g) (x : 对任意 i, M₁ i)
+  条件: {f g : 多重线性映射 R M₁ M₂} (h : f = g) (x : 对任意 i, M₁ i)
   结论: f x = g x
   证明: DFunLike.congr_fun h x
 
@@ -269,7 +269,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : MultilinearMap R M₁ M₂ -> (对任意 i, M₁ i) -> M₂)
+  结论: 单射 ((↑) : 多重线性映射 R M₁ M₂ -> (对任意 i, M₁ i) -> M₂)
   证明: DFunLike.coe_injective
 
 @[norm_cast]
@@ -293,7 +293,7 @@ theorem coe_inj
 
 中文:
 定理 coe_inj
-  条件: {f g : MultilinearMap R M₁ M₂}
+  条件: {f g : 多重线性映射 R M₁ M₂}
   结论: (f : (对任意 i, M₁ i) -> M₂) = g ↔ f = g
   证明: DFunLike.coe_fn_eq
 
@@ -318,7 +318,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f f' : MultilinearMap R M₁ M₂} (H : 对任意 x, f x = f' x)
+  条件: {f f' : 多重线性映射 R M₁ M₂} (H : 对任意 x, f x = f' x)
   结论: f = f'
   证明: DFunLike.ext _ _ H
 
@@ -342,7 +342,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (f : MultilinearMap R M₁ M₂) (h₁ h₂)
+  条件: (f : 多重线性映射 R M₁ M₂) (h₁ h₂)
   证明: rfl
 
 @[simp]
@@ -458,7 +458,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: f 0 = 0
   证明: by
   obtain ⟨i, _⟩ : exists i : ι, i in Set.univ := Set.exists_mem_of_nonempty ι
@@ -482,7 +482,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (MultilinearMap R M₁ M₂)
+  签名: 加法 (多重线性映射 R M₁ M₂)
   定义体: ⟨fun f f' =>
     ⟨fun x => f x + f' x, fun m i x y => by simp [add_left_comm, add_assoc], fun m i c x => by
       simp [smul_add]⟩⟩
@@ -506,7 +506,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是加法Apply (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
@@ -526,7 +526,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (MultilinearMap R M₁ M₂)
+  签名: 零 (多重线性映射 R M₁ M₂)
   定义体: ⟨⟨fun _ => 0, fun _ _ _ _ => by simp, fun _ _ c _ => by simp⟩⟩
 -/
 instance : Zero (MultilinearMap R M₁ M₂) :=
@@ -542,7 +542,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是ZeroApply (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 -/
 instance : IsZeroApply (MultilinearMap R M₁ M₂) (forall i, M₁ i) M₂ where
@@ -560,7 +560,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MultilinearMap R M₁ M₂)
+  签名: 可居 (多重线性映射 R M₁ M₂)
   定义体: ⟨0⟩
 
 @[deprecated (since := "2026-06-10")] protected alias zero_apply := zero_apply
@@ -586,7 +586,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (MultilinearMap R M₁ M₂)
+  签名: 标量乘法 S (多重线性映射 R M₁ M₂)
   定义体: ⟨fun c f =>
     ⟨fun m => c • f m, fun m i x y => by simp [smul_add], fun l i x d => by
       simp [← smul_comm x c (_ : M₂)]⟩⟩
@@ -612,7 +612,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply S (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是SMulApply S (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
@@ -639,7 +639,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (MultilinearMap R M₁ M₂)
+  签名: 加法幺半群 (多重线性映射 R M₁ M₂)
   定义体: fast_instance% FunLike.addMonoid
 
 Depends on / 依赖: FunLike, FunLike.addMonoid, addMonoid, fast_instance
@@ -665,7 +665,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (MultilinearMap R M₁ M₂)
+  签名: : 加法交换幺半群 (多重线性映射 R M₁ M₂)
   定义体: fast_instance%
   FunLike.addCommMonoid
 
@@ -730,8 +730,8 @@ definition prod
   map_update_smul' m i c x := by simp
 
 中文:
-定义 prod
-  签名: (f : MultilinearMap R M₁ M₂) (g : MultilinearMap R M₁ M₃)
+定义 乘积
+  签名: (f : 多重线性映射 R M₁ M₂) (g : 多重线性映射 R M₁ M₃)
   定义体: (f m, g m)
   map_update_add' m i x y := by simp
   map_update_smul' m i c x := by simp
@@ -757,7 +757,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, AddCommMonoid (M' i)] [对任意 i, Module R (M' i)]
+  签名: {ι' : 类型} {M' : ι' -> 类型} [对任意 i, 加法交换幺半群 (M' i)] [对任意 i, 模 R (M' i)]
   定义体: f i m
   map_update_add' _ _ _ _ := funext fun j => (f j).map_update_add _ _ _ _
   map_update_smul' _ _ _ _ := funext fun j => (f j).map_update_smul _ _ _ _
@@ -790,7 +790,7 @@ definition ofSubsingleton
 
 中文:
 定义 ofSubsingleton
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: { toFun := fun x => f (x i)
       map_update_add' := by intros; simp [update_eq_const_of_subsingleton]
       map_update_smul' := by intros; simp [update_eq_const_of_subsingleton] }
@@ -831,7 +831,7 @@ definition constOfIsEmpty
 
 中文:
 定义 constOfIsEmpty
-  签名: [IsEmpty ι] (m : M₂)
+  签名: [是空 ι] (m : M₂)
   定义体: Function.const _ m
   map_update_add' _ := isEmptyElim
   map_update_smul' _ := isEmptyElim
@@ -859,7 +859,7 @@ definition restr
 
 中文:
 定义 restr
-  签名: {k n : 自然数} (f : MultilinearMap R (fun _ : Fin n => M') M₂) (s : Finset (Fin n))
+  签名: {k n : 自然数} (f : 多重线性映射 R (fun _ : 有限集 n => M') M₂) (s : 有限集 (有限集 n))
   定义体: f fun j => if h : j in s then v ((s.orderIsoOfFin hk).symm ⟨j, h⟩) else z
   map_update_add' := by
     simp [dite_comp_equiv_update (s.orderIsoOfFin hk).symm]
@@ -887,7 +887,7 @@ theorem cons_add
 
 中文:
 定理 cons_add
-  条件: (f : MultilinearMap R M M₂) (m : 对任意 i : Fin n, M i.succ) (x y : M 0)
+  条件: (f : 多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (x y : M 0)
   证明: by
   simp_rw [← update_cons_zero x m (x + y), f.map_update_add, update_cons_zero]
 
@@ -908,7 +908,7 @@ theorem cons_smul
 
 中文:
 定理 cons_smul
-  条件: (f : MultilinearMap R M M₂) (m : 对任意 i : Fin n, M i.succ) (c : R) (x : M 0)
+  条件: (f : 多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M i.succ) (c : R) (x : M 0)
   证明: by
   simp_rw [← update_cons_zero x m (c • x), f.map_update_smul, update_cons_zero]
 
@@ -929,7 +929,7 @@ theorem snoc_add
 
 中文:
 定理 snoc_add
-  结论: (f : MultilinearMap R M M₂)
+  结论: (f : 多重线性映射 R M M₂)
   证明: by
   simp_rw [← update_snoc_last x m (x + y), f.map_update_add, update_snoc_last]
 
@@ -951,7 +951,7 @@ theorem snoc_smul
 
 中文:
 定理 snoc_smul
-  结论: (f : MultilinearMap R M M₂) (m : 对任意 i : Fin n, M (castSucc i)) (c : R)
+  结论: (f : 多重线性映射 R M M₂) (m : 对任意 i : 有限集 n, M (castSucc i)) (c : R)
   证明: by
   simp_rw [← update_snoc_last x m (c • x), f.map_update_smul, update_snoc_last]
 
@@ -972,7 +972,7 @@ theorem map_insertNth_add
 
 中文:
 定理 map_insertNth_add
-  结论: (f : MultilinearMap R M M₂) (p : Fin (n + 1)) (m : 对任意 i, M (p.succAbove i))
+  结论: (f : 多重线性映射 R M M₂) (p : 有限集 (n + 1)) (m : 对任意 i, M (p.succAbove i))
   证明: by
   simpa using f.map_update_add (p.insertNth 0 m) p x y
 
@@ -993,7 +993,7 @@ theorem map_insertNth_smul
 
 中文:
 定理 map_insertNth_smul
-  结论: (f : MultilinearMap R M M₂) (p : Fin (n + 1))
+  结论: (f : 多重线性映射 R M M₂) (p : 有限集 (n + 1))
   证明: by
   simpa using f.map_update_smul (p.insertNth 0 m) p c x
 
@@ -1025,7 +1025,7 @@ definition compLinearMap
 
 中文:
 定义 compLinearMap
-  签名: (g : MultilinearMap R M₁' M₂) (f : 对任意 i, M₁ i ->ₗ[R] M₁' i)
+  签名: (g : 多重线性映射 R M₁' M₂) (f : 对任意 i, M₁ i ->ₗ[R] M₁' i)
   定义体: g fun i => f i (m i)
   map_update_add' m i x y := by
     have : forall j z, f j (update m i z j) = update (fun k => f k (m k)) i (f i z) j := fun j z =>
@@ -1057,7 +1057,7 @@ theorem compLinearMap_apply
 
 中文:
 定理 compLinearMap_apply
-  结论: (g : MultilinearMap R M₁' M₂) (f : 对任意 i, M₁ i ->ₗ[R] M₁' i)
+  结论: (g : 多重线性映射 R M₁' M₂) (f : 对任意 i, M₁ i ->ₗ[R] M₁' i)
   证明: rfl
 -/
 theorem compLinearMap_apply (g : MultilinearMap R M₁' M₂) (f : forall i, M₁ i ->ₗ[R] M₁' i)
@@ -1074,7 +1074,7 @@ theorem compLinearMap_assoc
 
 中文:
 定理 compLinearMap_assoc
-  结论: (g : MultilinearMap R M₁'' M₂) (f₁ : 对任意 i, M₁' i ->ₗ[R] M₁'' i)
+  结论: (g : 多重线性映射 R M₁'' M₂) (f₁ : 对任意 i, M₁' i ->ₗ[R] M₁'' i)
   证明: rfl
 -/
 theorem compLinearMap_assoc (g : MultilinearMap R M₁'' M₂) (f₁ : forall i, M₁' i ->ₗ[R] M₁'' i)
@@ -1113,7 +1113,7 @@ theorem compLinearMap_id
 
 中文:
 定理 compLinearMap_id
-  条件: (g : MultilinearMap R M₁' M₂)
+  条件: (g : 多重线性映射 R M₁' M₂)
   证明: ext fun _ => rfl
 -/
 theorem compLinearMap_id (g : MultilinearMap R M₁' M₂) :
@@ -1133,7 +1133,7 @@ theorem compLinearMap_injective
 
 中文:
 定理 compLinearMap_injective
-  条件: (f : 对任意 i, M₁ i ->ₗ[R] M₁' i) (hf : 对任意 i, Surjective (f i))
+  条件: (f : 对任意 i, M₁ i ->ₗ[R] M₁' i) (hf : 对任意 i, 满射 (f i))
   证明: fun g₁ g₂ h =>
   ext fun x => by
     simpa [fun i => surjInv_eq (hf i)]
@@ -1155,7 +1155,7 @@ theorem compLinearMap_inj
 
 中文:
 定理 compLinearMap_inj
-  结论: (f : 对任意 i, M₁ i ->ₗ[R] M₁' i) (hf : 对任意 i, Surjective (f i))
+  结论: (f : 对任意 i, M₁ i ->ₗ[R] M₁' i) (hf : 对任意 i, 满射 (f i))
   证明: (compLinearMap_injective _ hf).eq_iff
 
 Depends on / 依赖: compLinearMap_injective, eq_iff
@@ -1179,7 +1179,7 @@ theorem comp_linearEquiv_eq_zero_iff
 
 中文:
 定理 comp_linearEquiv_eq_zero_iff
-  条件: (g : MultilinearMap R M₁' M₂) (f : 对任意 i, M₁ i ≃ₗ[R] M₁' i)
+  条件: (g : 多重线性映射 R M₁' M₂) (f : 对任意 i, M₁ i ≃ₗ[R] M₁' i)
   证明: by
   set f' := fun i => (f i : M₁ i ->ₗ[R] M₁' i)
   rw [← zero_compLinearMap f']; rw [compLinearMap_inj f' fun i => (f i).surjective]
@@ -1219,7 +1219,7 @@ definition compMultilinearMap
 
 中文:
 定义 compMultilinearMap
-  签名: (g : MultilinearMap R M₁ M₂) (f : (i : ι) -> MultilinearMap R (N i) (M₁ i))
+  签名: (g : 多重线性映射 R M₁ M₂) (f : (i : ι) -> 多重线性映射 R (N i) (M₁ i))
   定义体: g fun i => f i (Sigma.curry m i)
   map_update_add' {hDecEqSigma} := by
     classical
@@ -1264,7 +1264,7 @@ theorem map_piecewise_add
 
 中文:
 定理 map_piecewise_add
-  条件: [DecidableEq ι] (m m' : 对任意 i, M₁ i) (t : Finset ι)
+  条件: [DecidableEq ι] (m m' : 对任意 i, M₁ i) (t : 有限集 ι)
   证明: by
   revert m'
   refine Finset.induction_on t (by simp) ?_
@@ -1318,7 +1318,7 @@ theorem map_add_univ
 
 中文:
 定理 map_add_univ
-  条件: [DecidableEq ι] [Fintype ι] (m m' : 对任意 i, M₁ i)
+  条件: [DecidableEq ι] [有限类型 ι] (m m' : 对任意 i, M₁ i)
   证明: by
   simpa using f.map_piecewise_add m m' Finset.univ
 
@@ -1349,7 +1349,7 @@ theorem map_sum_finset_aux
 
 中文:
 定理 map_sum_finset_aux
-  条件: [DecidableEq ι] [Fintype ι] {n : 自然数} (h : (∑ i, #(A i)) = n)
+  条件: [DecidableEq ι] [有限类型 ι] {n : 自然数} (h : (∑ i, #(A i)) = n)
   证明: by
   let := fun i => Classical.decEq (α i)
   induction n using Nat.strong_induction_on generalizing A with | h n IH =>
@@ -1497,7 +1497,7 @@ theorem map_sum_finset
 
 中文:
 定理 map_sum_finset
-  条件: [DecidableEq ι] [Fintype ι]
+  条件: [DecidableEq ι] [有限类型 ι]
   证明: f.map_sum_finset_aux _ _ rfl
 
 Depends on / 依赖: f.map_sum_finset_aux, map_sum_finset_aux
@@ -1516,7 +1516,7 @@ theorem map_sum
 
 中文:
 定理 map_sum
-  条件: [DecidableEq ι] [Fintype ι] [对任意 i, Fintype (α i)]
+  条件: [DecidableEq ι] [有限类型 ι] [对任意 i, 有限类型 (α i)]
   证明: f.map_sum_finset g fun _ => Finset.univ
 
 Depends on / 依赖: Finset, Finset.univ, f.map_sum_finset, map_sum_finset
@@ -1539,7 +1539,7 @@ theorem map_update_sum
 
 中文:
 定理 map_update_sum
-  结论: {α : 类型} [DecidableEq ι] (t : Finset α) (i : ι) (g : α -> M₁ i)
+  结论: {α : 类型} [DecidableEq ι] (t : 有限集 α) (i : ι) (g : α -> M₁ i)
   证明: by
   classical
     induction t using Finset.induction with
@@ -1573,7 +1573,7 @@ map_update_smul' _ _ _ _ := Subtype.ext MultilinearMap.map_update_smul _ _ _ _ _
 
 中文:
 定义 codRestrict
-  签名: (f : MultilinearMap R M₁ M₂) (p : Submodule R M₂) (h : 对任意 v, f v in p)
+  签名: (f : 多重线性映射 R M₁ M₂) (p : 子模 R M₂) (h : 对任意 v, f v in p)
   定义体: ⟨f v, h v⟩
 map_update_add' _ _ _ _ := Subtype.ext MultilinearMap.map_update_add _ _ _ _ _
 map_update_smul' _ _ _ _ := Subtype.ext MultilinearMap.map_update_smul _ _ _ _ _
@@ -1604,7 +1604,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (f : MultilinearMap A M₁ M₂)
+  签名: (f : 多重线性映射 A M₁ M₂)
   定义体: f
   map_update_add' := f.map_update_add
   map_update_smul' m i := (f.toLinearMap m i).map_smul_of_tower
@@ -1628,7 +1628,7 @@ theorem coe_restrictScalars
 
 中文:
 定理 coe_restrictScalars
-  条件: (f : MultilinearMap A M₁ M₂)
+  条件: (f : 多重线性映射 A M₁ M₂)
   结论: ⇑(f.restrictScalars R) = f
   证明: rfl
 -/
@@ -1664,7 +1664,7 @@ definition domDomCongr
 
 中文:
 定义 domDomCongr
-  签名: (σ : ι₁ ≃ ι₂) (m : MultilinearMap R (fun _ : ι₁ => M₂) M₃)
+  签名: (σ : ι₁ ≃ ι₂) (m : 多重线性映射 R (fun _ : ι₁ => M₂) M₃)
   定义体: m fun i => v (σ i)
   map_update_add' v i a b := by
     let := σ.injective.decidableEq
@@ -1715,7 +1715,7 @@ theorem domDomCongr_mul
 
 中文:
 定理 domDomCongr_mul
-  结论: (σ₁ : Equiv.Perm ι₁) (σ₂ : Equiv.Perm ι₁)
+  结论: (σ₁ : 等价.置换 ι₁) (σ₂ : 等价.置换 ι₁)
   证明: rfl
 -/
 theorem domDomCongr_mul (σ₁ : Equiv.Perm ι₁) (σ₂ : Equiv.Perm ι₁)
@@ -1789,7 +1789,7 @@ theorem domDomCongr_eq_iff
 
 中文:
 定理 domDomCongr_eq_iff
-  条件: (σ : ι₁ ≃ ι₂) (f g : MultilinearMap R (fun _ : ι₁ => M₂) M₃)
+  条件: (σ : ι₁ ≃ ι₂) (f g : 多重线性映射 R (fun _ : ι₁ => M₂) M₃)
   证明: (domDomCongrEquiv σ : _ ≃+ MultilinearMap R (fun _ => M₂) M₃).apply_eq_iff_eq
 
 Depends on / 依赖: MultilinearMap, apply_eq_iff_eq, domDomCongrEquiv
@@ -1862,7 +1862,7 @@ definition domDomRestrict
 
 中文:
 定义 domDomRestrict
-  签名: (f : MultilinearMap R M₁ M₂) (P : ι -> 命题) [DecidablePred P]
+  签名: (f : 多重线性映射 R M₁ M₂) (P : ι -> 命题) [DecidablePred P]
   定义体: f (fun j => if h : P j then x ⟨j, h⟩ else z ⟨j, h⟩)
   map_update_add' x i a b := by
     classical
@@ -1897,7 +1897,7 @@ lemma domDomRestrict_apply
 
 中文:
 引理 domDomRestrict_apply
-  结论: (f : MultilinearMap R M₁ M₂) (P : ι -> 命题)
+  结论: (f : 多重线性映射 R M₁ M₂) (P : ι -> 命题)
   证明: rfl
 -/
 lemma domDomRestrict_apply (f : MultilinearMap R M₁ M₂) (P : ι -> Prop)
@@ -1917,7 +1917,7 @@ definition linearDeriv
 
 中文:
 定义 linearDeriv
-  签名: [DecidableEq ι] [Fintype ι] (f : MultilinearMap R M₁ M₂)
+  签名: [DecidableEq ι] [有限类型 ι] (f : 多重线性映射 R M₁ M₂)
   定义体: ∑ i : ι, (f.toLinearMap x i).comp (LinearMap.proj i)
 
 @[simp]
@@ -1942,7 +1942,7 @@ lemma linearDeriv_apply
 
 中文:
 引理 linearDeriv_apply
-  结论: [DecidableEq ι] [Fintype ι] (f : MultilinearMap R M₁ M₂)
+  结论: [DecidableEq ι] [有限类型 ι] (f : 多重线性映射 R M₁ M₂)
   证明: by
   unfold linearDeriv
   simp only [LinearMap.coe_sum, LinearMap.coe_comp, LinearMap.coe_proj, Finset.sum_apply,
@@ -1983,7 +1983,7 @@ definition compMultilinearMap
 
 中文:
 定义 compMultilinearMap
-  签名: (g : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
+  签名: (g : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂)
   定义体: g ∘ f
   map_update_add' m i x y := by simp
   map_update_smul' m i c x := by simp
@@ -2008,7 +2008,7 @@ theorem coe_compMultilinearMap
 
 中文:
 定理 coe_compMultilinearMap
-  条件: (g : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
+  条件: (g : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 
 @[simp]
@@ -2030,7 +2030,7 @@ theorem compMultilinearMap_apply
 
 中文:
 定理 compMultilinearMap_apply
-  条件: (g : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂) (m : 对任意 i, M₁ i)
+  条件: (g : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂) (m : 对任意 i, M₁ i)
   证明: rfl
 
 @[simp]
@@ -2050,7 +2050,7 @@ theorem id_compMultilinearMap
 
 中文:
 定理 id_compMultilinearMap
-  条件: (f : MultilinearMap R M₁ M₂)
+  条件: (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 -/
 theorem id_compMultilinearMap (f : MultilinearMap R M₁ M₂) :
@@ -2066,7 +2066,7 @@ theorem comp_compMultilinearMap
 
 中文:
 定理 comp_compMultilinearMap
-  条件: (g : M₃ ->ₗ[R] M₄) (g' : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
+  条件: (g : M₃ ->ₗ[R] M₄) (g' : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 -/
 theorem comp_compMultilinearMap (g : M₃ ->ₗ[R] M₄) (g' : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂) :
@@ -2128,7 +2128,7 @@ theorem zero_compMultilinearMap
 
 中文:
 定理 zero_compMultilinearMap
-  条件: (f : MultilinearMap R M₁ M₂)
+  条件: (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 
 @[simp]
@@ -2149,7 +2149,7 @@ theorem compMultilinearMap_add
 
 中文:
 定理 compMultilinearMap_add
-  条件: (g : M₂ ->ₗ[R] M₃) (f₁ f₂ : MultilinearMap R M₁ M₂)
+  条件: (g : M₂ ->ₗ[R] M₃) (f₁ f₂ : 多重线性映射 R M₁ M₂)
   证明: MultilinearMap.ext fun _ => map_add g _ _
 
 @[simp]
@@ -2173,7 +2173,7 @@ theorem add_compMultilinearMap
 
 中文:
 定理 add_compMultilinearMap
-  条件: (g₁ g₂ : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
+  条件: (g₁ g₂ : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 
 @[simp]
@@ -2194,7 +2194,7 @@ theorem compMultilinearMap_smul
 
 中文:
 定理 compMultilinearMap_smul
-  结论: [DistribSMul S M₂] [DistribSMul S M₃]
+  结论: [分配标量乘法 S M₂] [分配标量乘法 S M₃]
   证明: MultilinearMap.ext fun _ => g.map_smul_of_tower _ _
 
 @[simp]
@@ -2218,7 +2218,7 @@ theorem smul_compMultilinearMap
 
 中文:
 定理 smul_compMultilinearMap
-  结论: [Monoid S] [DistribMulAction S M₃] [SMulCommClass R S M₃]
+  结论: [幺半群 S] [分配乘法作用 S M₃] [标量交换类 R S M₃]
   证明: rfl
 -/
 theorem smul_compMultilinearMap [Monoid S] [DistribMulAction S M₃] [SMulCommClass R S M₃]
@@ -2237,7 +2237,7 @@ theorem subtype_compMultilinearMap_codRestrict
 
 中文:
 定理 subtype_compMultilinearMap_codRestrict
-  结论: (f : MultilinearMap R M₁ M₂) (p : Submodule R M₂)
+  结论: (f : 多重线性映射 R M₁ M₂) (p : 子模 R M₂)
   证明: rfl
 -/
 theorem subtype_compMultilinearMap_codRestrict (f : MultilinearMap R M₁ M₂) (p : Submodule R M₂)
@@ -2256,7 +2256,7 @@ theorem compMultilinearMap_codRestrict
 
 中文:
 定理 compMultilinearMap_codRestrict
-  结论: (g : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
+  结论: (g : M₂ ->ₗ[R] M₃) (f : 多重线性映射 R M₁ M₂)
   证明: rfl
 -/
 theorem compMultilinearMap_codRestrict (g : M₂ ->ₗ[R] M₃) (f : MultilinearMap R M₁ M₂)
@@ -2311,8 +2311,8 @@ instance [Monoid
   body: fast_instance% FunLike.distribMulAction
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S M₂] [SMulCommClass R S M₂] :
+实例 [幺半群
+  签名: S] [分配乘法作用 S M₂] [标量交换类 R S M₂] :
   定义体: fast_instance% FunLike.distribMulAction
 
 Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
@@ -2335,7 +2335,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module S (MultilinearMap R M₁ M₂)
+  签名: 模 S (多重线性映射 R M₁ M₂)
   定义体: fast_instance%
   FunLike.module
 
@@ -2353,8 +2353,8 @@ instance [Module.IsTorsionFree
   body: coe_injective.moduleIsTorsionFree _ FunLike.coe_smul
 
 中文:
-实例 [Module.IsTorsionFree
-  签名: S M₂] : Module.IsTorsionFree S (MultilinearMap R M₁ M₂)
+实例 [模.是无挠
+  签名: S M₂] : 模.是无挠 S (多重线性映射 R M₁ M₂)
   定义体: coe_injective.moduleIsTorsionFree _ FunLike.coe_smul
 
 Depends on / 依赖: FunLike, FunLike.coe_smul, coe_injective, coe_injective.moduleIsTorsionFree, coe_smul, moduleIsTorsionFree
@@ -2378,8 +2378,8 @@ definition _root_.LinearMap.compMultilinearMapₗ
   map_smul' := g.compMultilinearMap_smul
 
 中文:
-定义 _root_.LinearMap.compMultilinearMapₗ
-  签名: [LinearMap.CompatibleSMul M₂ M₃ S R] (g : M₂ ->ₗ[R] M₃)
+定义 _root_.线性映射.compMultilinearMapₗ
+  签名: [线性映射.余mpatibleSMul M₂ M₃ S R] (g : M₂ ->ₗ[R] M₃)
   定义体: g.compMultilinearMap
   map_add' := g.compMultilinearMap_add
   map_smul' := g.compMultilinearMap_smul
@@ -2409,7 +2409,7 @@ definition _root_.LinearEquiv.multilinearMapCongrRight
   right_inv _ := by ext; simp
 
 中文:
-定义 _root_.LinearEquiv.multilinearMapCongrRight
+定义 _root_.线性等价.multilinearMapCongrRight
   定义体: g.toLinearMap.compMultilinearMapₗ S
   invFun := g.symm.toLinearMap.compMultilinearMapₗ S
   left_inv _ := by ext; simp
@@ -2444,7 +2444,7 @@ definition ofSubsingletonₗ
 
 中文:
 定义 ofSubsingletonₗ
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: { ofSubsingleton R M₂ M₃ i with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -2546,7 +2546,7 @@ right_inv f := ext fun _ => MultilinearMap.congr_arg f Subsingleton.elim _ _
 
 中文:
 定义 constLinearEquivOfIsEmpty
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: MultilinearMap.constOfIsEmpty R _
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2627,7 +2627,7 @@ definition domDomRestrictₗ
 
 中文:
 定义 domDomRestrictₗ
-  签名: (f : MultilinearMap R M₁ M₂) (P : ι -> 命题) [DecidablePred P]
+  签名: (f : 多重线性映射 R M₁ M₂) (P : ι -> 命题) [DecidablePred P]
   定义体: fun z => domDomRestrict f P z
   map_update_add' := by
     intro h m i x y
@@ -2735,7 +2735,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def iteratedFDeriv [Fintype ι]
+  签名: def iteratedFDeriv [有限类型 ι]
   定义体: ∑ e : Fin k ↪ ι, iteratedFDerivComponent f e.toEquivRange (fun i => x i)
 -/
 protected noncomputable def iteratedFDeriv [Fintype ι]
@@ -2783,7 +2783,7 @@ definition _root_.LinearEquiv.multilinearMapCongrLeft
   right_inv _ := by ext; simp
 
 中文:
-定义 _root_.LinearEquiv.multilinearMapCongrLeft
+定义 _root_.线性等价.multilinearMapCongrLeft
   签名: (e : Π (i : ι), M₁ i ≃ₗ[R] M₁' i)
   定义体: compLinearMapₗ (e · |>.toLinearMap)
   invFun := compLinearMapₗ (e · |>.symm.toLinearMap)
@@ -2897,7 +2897,7 @@ theorem map_piecewise_smul
 
 中文:
 定理 map_piecewise_smul
-  条件: [DecidableEq ι] (c : ι -> R) (m : 对任意 i, M₁ i) (s : Finset ι)
+  条件: [DecidableEq ι] (c : ι -> R) (m : 对任意 i, M₁ i) (s : 有限集 ι)
   证明: by
   refine s.induction_on (by simp) ?_
   intro j s j_notMem_s Hrec
@@ -2941,7 +2941,7 @@ theorem map_smul_univ
 
 中文:
 定理 map_smul_univ
-  条件: [Fintype ι] (c : ι -> R) (m : 对任意 i, M₁ i)
+  条件: [有限类型 ι] (c : ι -> R) (m : 对任意 i, M₁ i)
   证明: by
   classical simpa using map_piecewise_smul f c m Finset.univ
 
@@ -2968,7 +2968,7 @@ theorem map_update_smul_left
 
 中文:
 定理 map_update_smul_left
-  结论: [DecidableEq ι] [Fintype ι]
+  结论: [DecidableEq ι] [有限类型 ι]
   证明: by
   have : f ((Finset.univ.erase i).piecewise (c • update m i x) (update m i x)) =
       (∏ _i in Finset.univ.erase i, c) • f (update m i x) :=
@@ -3005,8 +3005,8 @@ theorem ext_ring
 
 中文:
 定理 ext_ring
-  条件: [Finite ι] ⦃f g
-  结论: MultilinearMap R (fun _ : ι => R) M₂⦄
+  条件: [有限 ι] ⦃f g
+  结论: 多重线性映射 R (fun _ : ι => R) M₂⦄
   证明: by
   ext x
   obtain ⟨_⟩ := nonempty_fintype ι
@@ -3041,7 +3041,7 @@ definition mkPiAlgebra
 
 中文:
 定义 mkPiAlgebra
-  签名: : MultilinearMap R (fun _ : ι => A) A where
+  签名: : 多重线性映射 R (fun _ : ι => A) A where
   定义体: ∏ i, m i
   map_update_add' m i x y := by simp [Finset.prod_update_of_mem, add_mul]
   map_update_smul' m i c x := by simp [Finset.prod_update_of_mem]
@@ -3066,7 +3066,7 @@ theorem mkPiAlgebra_apply
 中文:
 定理 mkPiAlgebra_apply
   条件: (m : ι -> A)
-  结论: MultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i
+  结论: 多重线性映射.mkPiAlgebra R ι A m = ∏ i, m i
   证明: rfl
 -/
 theorem mkPiAlgebra_apply (m : ι -> A) : MultilinearMap.mkPiAlgebra R ι A m = ∏ i, m i :=
@@ -3094,7 +3094,7 @@ definition mkPiAlgebraFin
 
 中文:
 定义 mkPiAlgebraFin
-  签名: : MultilinearMap R (fun _ : Fin n => A) A
+  签名: : 多重线性映射 R (fun _ : 有限集 n => A) A
   定义体: MultilinearMap.mk' (fun m => (List.ofFn m).prod)
     (fun m i x y => by
       simp [List.ofFn_eq_map, (List.nodup_finRange n).map_update, List.prod_set, add_mul,
@@ -3123,7 +3123,7 @@ theorem mkPiAlgebraFin_apply
 
 中文:
 定理 mkPiAlgebraFin_apply
-  条件: (m : Fin n -> A)
+  条件: (m : 有限集 n -> A)
   证明: rfl
 -/
 theorem mkPiAlgebraFin_apply (m : Fin n -> A) :
@@ -3160,7 +3160,7 @@ definition smulRight
 
 中文:
 定义 smulRight
-  签名: (f : MultilinearMap R M₁ R) (z : M₂)
+  签名: (f : 多重线性映射 R M₁ R) (z : M₂)
   定义体: (LinearMap.smulRight LinearMap.id z).compMultilinearMap f
 
 @[simp]
@@ -3181,7 +3181,7 @@ theorem smulRight_apply
 
 中文:
 定理 smulRight_apply
-  条件: (f : MultilinearMap R M₁ R) (z : M₂) (m : 对任意 i, M₁ i)
+  条件: (f : 多重线性映射 R M₁ R) (z : M₂) (m : 对任意 i, M₁ i)
   证明: rfl
 -/
 theorem smulRight_apply (f : MultilinearMap R M₁ R) (z : M₂) (m : forall i, M₁ i) :
@@ -3200,7 +3200,7 @@ definition mkPiRing
 
 中文:
 定义 mkPiRing
-  签名: [Fintype ι] (z : M₂)
+  签名: [有限类型 ι] (z : M₂)
   定义体: (MultilinearMap.mkPiAlgebra R ι R).smulRight z
 -/
 protected def mkPiRing [Fintype ι] (z : M₂) : MultilinearMap R (fun _ : ι => R) M₂ :=
@@ -3219,7 +3219,7 @@ theorem mkPiRing_apply
 
 中文:
 定理 mkPiRing_apply
-  条件: [Fintype ι] (z : M₂) (m : ι -> R)
+  条件: [有限类型 ι] (z : M₂) (m : ι -> R)
   证明: rfl
 -/
 theorem mkPiRing_apply [Fintype ι] (z : M₂) (m : ι -> R) :
@@ -3238,7 +3238,7 @@ theorem mkPiRing_apply_one_eq_self
 
 中文:
 定理 mkPiRing_apply_one_eq_self
-  条件: [Fintype ι] (f : MultilinearMap R (fun _ : ι => R) M₂)
+  条件: [有限类型 ι] (f : 多重线性映射 R (fun _ : ι => R) M₂)
   证明: by
   ext
   simp
@@ -3262,7 +3262,7 @@ theorem mkPiRing_eq_iff
 
 中文:
 定理 mkPiRing_eq_iff
-  条件: [Fintype ι] {z₁ z₂ : M₂}
+  条件: [有限类型 ι] {z₁ z₂ : M₂}
   证明: by
   simp_rw [MultilinearMap.ext_iff, mkPiRing_apply]
   constructor <;> intro h
@@ -3290,8 +3290,8 @@ theorem mkPiRing_zero
 
 中文:
 定理 mkPiRing_zero
-  条件: [Fintype ι]
-  结论: MultilinearMap.mkPiRing R ι (0 : M₂) = 0
+  条件: [有限类型 ι]
+  结论: 多重线性映射.mkPiRing R ι (0 : M₂) = 0
   证明: by
   ext; rw [mkPiRing_apply, smul_zero, zero_apply]
 
@@ -3312,8 +3312,8 @@ theorem mkPiRing_eq_zero_iff
 
 中文:
 定理 mkPiRing_eq_zero_iff
-  条件: [Fintype ι] (z : M₂)
-  结论: MultilinearMap.mkPiRing R ι z = 0 ↔ z = 0
+  条件: [有限类型 ι] (z : M₂)
+  结论: 多重线性映射.mkPiRing R ι z = 0 ↔ z = 0
   证明: by
   rw [← mkPiRing_zero]; rw [mkPiRing_eq_iff]
 
@@ -3339,7 +3339,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (MultilinearMap R M₁ M₂)
+  签名: 取负 (多重线性映射 R M₁ M₂)
   定义体: ⟨fun f => ⟨fun m => -f m, fun m i x y => by simp [add_comm], fun m i c x => by simp⟩⟩
 
 Depends on / 依赖: add_comm
@@ -3359,7 +3359,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是NegApply (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
@@ -3383,7 +3383,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (MultilinearMap R M₁ M₂)
+  签名: 减法 (多重线性映射 R M₁ M₂)
   定义体: ⟨fun f g =>
     ⟨fun m => f m - g m, fun m i x y => by
       simp only [MultilinearMap.map_update_add, sub_eq_add_neg, neg_add]
@@ -3411,7 +3411,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (MultilinearMap R M₁ M₂) (对任意 i, M₁ i) M₂
+  签名: 是SubApply (多重线性映射 R M₁ M₂) (对任意 i, M₁ i) M₂
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
@@ -3431,7 +3431,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (MultilinearMap R M₁ M₂)
+  签名: 加法交换群 (多重线性映射 R M₁ M₂)
   定义体: fast_instance% FunLike.addCommGroup
 
 Depends on / 依赖: FunLike, FunLike.addCommGroup, addCommGroup, fast_instance
@@ -3532,7 +3532,7 @@ lemma map_sub_map_piecewise
 
 中文:
 引理 map_sub_map_piecewise
-  条件: [LinearOrder ι] (a b : (i : ι) -> M₁ i) (s : Finset ι)
+  条件: [线性序 ι] (a b : (i : ι) -> M₁ i) (s : 有限集 ι)
   证明: by
   induction s using induction_on_min with
   | empty => rw [Finset.piecewise_empty, sum_empty, sub_self]
@@ -3580,7 +3580,7 @@ refine Finset.sum_congr rfl fun i hi => congr_arg f funext fun j => ?_
 
 中文:
 引理 map_piecewise_sub_map_piecewise
-  条件: [LinearOrder ι] (a b v : (i : ι) -> M₁ i) (s : Finset ι)
+  条件: [线性序 ι] (a b v : (i : ι) -> M₁ i) (s : 有限集 ι)
   证明: by
   rw [← s.piecewise_idem_right b a]; rw [map_sub_map_piecewise]
 refine Finset.sum_congr rfl fun i hi => congr_arg f funext fun j => ?_
@@ -3620,7 +3620,7 @@ lemma map_add_eq_map_add_linearDeriv_add
 
 中文:
 引理 map_add_eq_map_add_linearDeriv_add
-  条件: [DecidableEq ι] [Fintype ι] (x h : (i : ι) -> M₁ i)
+  条件: [DecidableEq ι] [有限类型 ι] (x h : (i : ι) -> M₁ i)
   证明: by
   rw [add_comm]; rw [map_add_univ]; rw [← Finset.powerset_univ]; rw [← sum_filter_add_sum_filter_not _ (2 <= #·)]
   simp_rw [not_le, Nat.lt_succ_iff, le_iff_lt_or_eq (b := 1), Nat.lt_one_iff, filter_or,
@@ -3650,7 +3650,7 @@ lemma map_add_sub_map_add_sub_linearDeriv
 
 中文:
 引理 map_add_sub_map_add_sub_linearDeriv
-  条件: [DecidableEq ι] [Fintype ι] (x h h' : (i : ι) -> M₁ i)
+  条件: [DecidableEq ι] [有限类型 ι] (x h h' : (i : ι) -> M₁ i)
   证明: by
   simp_rw [map_add_eq_map_add_linearDeriv_add, add_assoc, add_sub_add_comm, sub_self, zero_add,
     ← map_sub, add_sub_cancel_left, sum_sub_distrib]
@@ -3689,7 +3689,7 @@ definition piRingEquiv
 
 中文:
 定义 piRingEquiv
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: MultilinearMap.mkPiRing R ι z
   invFun f := f fun _ => 1
   map_add' z z' := by
@@ -3737,7 +3737,7 @@ definition map
 
 中文:
 定义 map
-  签名: [Nonempty ι] (f : MultilinearMap R M₁ M₂) (p : 对任意 i, Submodule R (M₁ i))
+  签名: [非空 ι] (f : 多重线性映射 R M₁ M₂) (p : 对任意 i, 子模 R (M₁ i))
   定义体: f '' { v | forall i, v i in p i }
   smul_mem' := fun c _ ⟨x, hx, hf⟩ => by
     let ⟨i⟩ := ‹Nonempty ι›
@@ -3770,7 +3770,7 @@ theorem map_nonempty
 
 中文:
 定理 map_nonempty
-  条件: [Nonempty ι] (f : MultilinearMap R M₁ M₂) (p : 对任意 i, Submodule R (M₁ i))
+  条件: [非空 ι] (f : 多重线性映射 R M₁ M₂) (p : 对任意 i, 子模 R (M₁ i))
   证明: ⟨f 0, 0, fun i => (p i).zero_mem, rfl⟩
 
 Depends on / 依赖: zero_mem
@@ -3789,7 +3789,7 @@ definition range
 
 中文:
 定义 range
-  签名: [Nonempty ι] (f : MultilinearMap R M₁ M₂)
+  签名: [非空 ι] (f : 多重线性映射 R M₁ M₂)
   定义体: f.map fun _ => ⊤
 
 Depends on / 依赖: f.map

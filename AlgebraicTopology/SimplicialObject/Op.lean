@@ -134,7 +134,7 @@ lemma opFunctor_obj_δ
 
 中文:
 引理 opFunctor_obj_δ
-  条件: (X : SimplicialObject C) {n : 自然数} (i : Fin (n + 2))
+  条件: (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 2))
   证明: by
   simp [opObjIso, SimplicialObject.δ]
 
@@ -158,7 +158,7 @@ lemma opFunctor_obj_σ
 
 中文:
 引理 opFunctor_obj_σ
-  条件: (X : SimplicialObject C) {n : 自然数} (i : Fin (n + 1))
+  条件: (X : SimplicialObject C) {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   simp [opObjIso, SimplicialObject.σ]
 

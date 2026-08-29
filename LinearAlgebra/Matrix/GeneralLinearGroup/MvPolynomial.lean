@@ -36,7 +36,7 @@ theorem eq_of_eval_eq_on_gl
 
 中文:
 定理 eq_of_eval_eq_on_gl
-  结论: {m k : 类型} [Fintype m] [DecidableEq m] [Field k] [Infinite k]
+  结论: {m k : 类型} [有限类型 m] [DecidableEq m] [域 k] [无限 k]
   证明: by
   have hprod : (p - q) * Matrix.det (Matrix.mvPolynomialX m m k) = 0 := by
     apply MvPolynomial.funext

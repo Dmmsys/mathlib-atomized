@@ -89,8 +89,8 @@ theorem list_sum_mem
 
 中文:
 定理 list_sum_mem
-  条件: {l : List R}
-  结论: (对任意 x in l, x in s) -> l.sum in s
+  条件: {l : 列表 R}
+  结论: (对任意 x in l, x in s) -> l.求和 in s
   证明: list_sum_mem
 -/
 protected theorem list_sum_mem {l : List R} : (forall x in l, x in s) -> l.sum in s :=
@@ -106,7 +106,7 @@ theorem multiset_sum_mem
 
 中文:
 定理 multiset_sum_mem
-  结论: {R} [NonUnitalNonAssocRing R] (s : NonUnitalSubring R)
+  结论: {R} [非幺非结合环 R] (s : NonUnital子环 R)
   证明: multiset_sum_mem _
 -/
 protected theorem multiset_sum_mem {R} [NonUnitalNonAssocRing R] (s : NonUnitalSubring R)
@@ -123,7 +123,7 @@ theorem sum_mem
 
 中文:
 定理 sum_mem
-  结论: {R : 类型} [NonUnitalNonAssocRing R] (s : NonUnitalSubring R)
+  结论: {R : 类型} [非幺非结合环 R] (s : NonUnital子环 R)
   证明: sum_mem h
 -/
 protected theorem sum_mem {R : Type*} [NonUnitalNonAssocRing R] (s : NonUnitalSubring R)
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (NonUnitalSubring R)
+  签名: 顶元素 (NonUnital子环 R)
   定义体: ⟨{ (⊤ : Subsemigroup R), (⊤ : AddSubgroup R) with }⟩
 
 @[simp]
@@ -170,7 +170,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : R)
-  结论: x in (⊤ : NonUnitalSubring R)
+  结论: x in (⊤ : NonUnital子环 R)
   证明: Set.mem_univ x
 
 @[simp]
@@ -193,7 +193,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : NonUnitalSubring R) : Set R) = Set.univ
+  结论: ((⊤ : NonUnital子环 R) : 集合 R) = 集合.univ
   证明: rfl
 
 @[simp]
@@ -212,7 +212,7 @@ lemma toNonUnitalSubsemiring_top
 
 中文:
 引理 toNonUnitalSubsemiring_top
-  结论: (⊤ : NonUnitalSubring R).toNonUnitalSubsemiring = ⊤
+  结论: (⊤ : NonUnital子环 R).toNonUnitalSubsemiring = ⊤
   证明: rfl
 -/
 lemma toNonUnitalSubsemiring_top : (⊤ : NonUnitalSubring R).toNonUnitalSubsemiring = ⊤ := rfl
@@ -229,7 +229,7 @@ lemma toAddSubgroup_top
 
 中文:
 引理 toAddSubgroup_top
-  结论: (⊤ : NonUnitalSubring R).toAddSubgroup = ⊤
+  结论: (⊤ : NonUnital子环 R).toAddSubgroup = ⊤
   证明: rfl
 
 @[simp]
@@ -247,7 +247,7 @@ lemma toNonUnitalSubsemiring_eq_top
 
 中文:
 引理 toNonUnitalSubsemiring_eq_top
-  条件: {S : NonUnitalSubring R}
+  条件: {S : NonUnital子环 R}
   证明: by simp [← SetLike.coe_set_eq]
 
 Depends on / 依赖: SetLike, SetLike.coe_set_eq, coe_set_eq
@@ -267,7 +267,7 @@ lemma toAddSubgroup_eq_top
 
 中文:
 引理 toAddSubgroup_eq_top
-  条件: {S : NonUnitalSubring R}
+  条件: {S : NonUnital子环 R}
   结论: S.toAddSubgroup = ⊤ ↔ S = ⊤
   证明: by
   simp [← SetLike.coe_set_eq]
@@ -287,7 +287,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : NonUnitalSubring R) ≃+* R
+  签名: : (⊤ : NonUnital子环 R) ≃+* R
   定义体: NonUnitalSubsemiring.topEquiv
 
 Depends on / 依赖: NonUnitalSubsemiring, NonUnitalSubsemiring.topEquiv, topEquiv
@@ -322,7 +322,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {F : Type w} {R : 类型u} {S : 类型v} [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
+  签名: {F : 类型 w} {R : 类型u} {S : 类型v} [非幺非结合环 R] [非幺非结合环 S]
   定义体: { s.toSubsemigroup.comap (f : R ->ₙ* S), s.toAddSubgroup.comap (f : R ->+ S) with
     carrier := f ⁻¹' s.carrier }
 
@@ -350,8 +350,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (s : NonUnitalSubring S) (f : F)
-  结论: (s.comap f : Set R) = f ⁻¹' s
+  条件: (s : NonUnital子环 S) (f : F)
+  结论: (s.comap f : 集合 R) = f ⁻¹' s
   证明: rfl
 
 @[simp]
@@ -371,7 +371,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {s : NonUnitalSubring S} {f : F} {x : R}
+  条件: {s : NonUnital子环 S} {f : F} {x : R}
   结论: x in s.comap f ↔ f x in s
   证明: Iff.rfl
 
@@ -390,7 +390,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (s : NonUnitalSubring T) (g : S ->ₙ+* T) (f : R ->ₙ+* S)
+  条件: (s : NonUnital子环 T) (g : S ->ₙ+* T) (f : R ->ₙ+* S)
   证明: rfl
 -/
 theorem comap_comap (s : NonUnitalSubring T) (g : S ->ₙ+* T) (f : R ->ₙ+* S) :
@@ -412,7 +412,7 @@ definition map
 
 中文:
 定义 map
-  签名: {F : Type w} {R : 类型u} {S : 类型v} [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
+  签名: {F : 类型 w} {R : 类型u} {S : 类型v} [非幺非结合环 R] [非幺非结合环 S]
   定义体: { s.toSubsemigroup.map (f : R ->ₙ* S), s.toAddSubgroup.map (f : R ->+ S) with
     carrier := f '' s.carrier }
 
@@ -440,8 +440,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (f : F) (s : NonUnitalSubring R)
-  结论: (s.map f : Set S) = f '' s
+  条件: (f : F) (s : NonUnital子环 R)
+  结论: (s.map f : 集合 S) = f '' s
   证明: rfl
 
 @[simp]
@@ -463,7 +463,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : F} {s : NonUnitalSubring R} {y : S}
+  条件: {f : F} {s : NonUnital子环 R} {y : S}
   结论: y in s.map f ↔ 存在 x in s, f x = y
   证明: Set.mem_image _ _ _
 
@@ -485,7 +485,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: s.map (NonUnitalRingHom.id R) = s
+  结论: s.map (非幺环态射.id R) = s
   证明: SetLike.coe_injective Set.image_id _
 
 Depends on / 依赖: Set.image_id, SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -523,7 +523,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : F} {s : NonUnitalSubring R} {t : NonUnitalSubring S}
+  条件: {f : F} {s : NonUnital子环 R} {t : NonUnital子环 S}
   证明: Set.image_subset_iff
 
 Depends on / 依赖: Set.image_subset_iff, image_subset_iff
@@ -567,7 +567,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (f : F) (hf : Function.Injective (f : R -> S))
+  签名: (f : F) (hf : 函数.单射 (f : R -> S))
   定义体: {
     Equiv.Set.image f s
       hf with
@@ -597,7 +597,7 @@ theorem coe_equivMapOfInjective_apply
 
 中文:
 定理 coe_equivMapOfInjective_apply
-  条件: (f : F) (hf : Function.Injective f) (x : s)
+  条件: (f : F) (hf : 函数.单射 f) (x : s)
   证明: rfl
 -/
 theorem coe_equivMapOfInjective_apply (f : F) (hf : Function.Injective f) (x : s) :
@@ -626,7 +626,7 @@ definition range
 
 中文:
 定义 range
-  签名: {R : 类型u} {S : 类型v} [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
+  签名: {R : 类型u} {S : 类型v} [非幺非结合环 R] [非幺非结合环 S]
   定义体: ((⊤ : NonUnitalSubring R).map f).copy (Set.range f) Set.image_univ.symm
 
 @[simp]
@@ -650,7 +650,7 @@ theorem coe_range
 
 中文:
 定理 coe_range
-  结论: (f.range : Set S) = Set.range f
+  结论: (f.range : 集合 S) = 集合.range f
   证明: rfl
 
 @[simp]
@@ -691,7 +691,7 @@ theorem range_eq_map
 中文:
 定理 range_eq_map
   条件: (f : R ->ₙ+* S)
-  结论: f.range = NonUnitalSubring.map f ⊤
+  结论: f.range = NonUnital子环.map f ⊤
   证明: by ext; simp
 -/
 theorem range_eq_map (f : R ->ₙ+* S) : f.range = NonUnitalSubring.map f ⊤ := by ext; simp
@@ -746,7 +746,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [Fintype R] [DecidableEq S] (f : R ->ₙ+* S)
+  签名: [有限类型 R] [DecidableEq S] (f : R ->ₙ+* S)
   定义体: Set.fintypeRange f
 
 Depends on / 依赖: Set.fintypeRange, fintypeRange
@@ -774,7 +774,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (NonUnitalSubring R)
+  签名: 底元素 (NonUnital子环 R)
   定义体: ⟨(0 : R ->ₙ+* R).range⟩
 -/
 instance : Bot (NonUnitalSubring R) :=
@@ -790,7 +790,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (NonUnitalSubring R)
+  签名: 可居 (NonUnital子环 R)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (NonUnitalSubring R) :=
@@ -806,7 +806,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : NonUnitalSubring R) : Set R) = {0}
+  结论: ((⊥ : NonUnital子环 R) : 集合 R) = {0}
   证明: (NonUnitalRingHom.coe_range (0 : R ->ₙ+* R)).trans (@Set.range_const R R _ 0)
 
 Depends on / 依赖: NonUnitalRingHom, NonUnitalRingHom.coe_range, Set.range_const, coe_range, range_const
@@ -826,7 +826,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : R}
-  结论: x in (⊥ : NonUnitalSubring R) ↔ x = 0
+  结论: x in (⊥ : NonUnital子环 R) ↔ x = 0
   证明: show x in ((⊥ : NonUnitalSubring R) : Set R) ↔ x = 0 by rw [coe_bot, Set.mem_singleton_iff]
 
 Depends on / 依赖: NonUnitalSubring, Set.mem_singleton_iff, coe_bot, mem_singleton_iff
@@ -850,7 +850,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (NonUnitalSubring R)
+  签名: 最小值 (NonUnital子环 R)
   定义体: ⟨fun s t =>
     { s.toSubsemigroup ⊓ t.toSubsemigroup, s.toAddSubgroup ⊓ t.toAddSubgroup with
       carrier := s inter t }⟩
@@ -877,7 +877,7 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : NonUnitalSubring R)
+  条件: (p p' : NonUnital子环 R)
   证明: rfl
 
 @[simp]
@@ -898,7 +898,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : NonUnitalSubring R} {x : R}
+  条件: {p p' : NonUnital子环 R} {x : R}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -921,7 +921,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (NonUnitalSubring R)
+  签名: 下确界集 (NonUnital子环 R)
   定义体: ⟨fun s =>
     NonUnitalSubring.mk' (⋂ t in s, ↑t) (⨅ t in s, NonUnitalSubring.toSubsemigroup t)
       (⨅ t in s, NonUnitalSubring.toAddSubgroup t) (by simp) (by simp)⟩
@@ -948,7 +948,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (NonUnitalSubring R))
+  条件: (S : 集合 (NonUnital子环 R))
   证明: rfl
 
 @[simp]
@@ -971,7 +971,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (NonUnitalSubring R)} {x : R}
+  条件: {S : 集合 (NonUnital子环 R)} {x : R}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -997,8 +997,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalSubring R}
-  结论: (↑(⨅ i, S i) : Set R) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> NonUnital子环 R}
+  结论: (↑(⨅ i, S i) : 集合 R) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -1022,7 +1022,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> NonUnitalSubring R} {x : R}
+  条件: {ι : 类型层*} {S : ι -> NonUnital子环 R} {x : R}
   证明: by simp only [iInf, mem_sInf, Set.forall_mem_range]
 
 @[simp]
@@ -1045,7 +1045,7 @@ theorem sInf_toSubsemigroup
 
 中文:
 定理 sInf_toSubsemigroup
-  条件: (s : Set (NonUnitalSubring R))
+  条件: (s : 集合 (NonUnital子环 R))
   证明: mk'_toSubsemigroup _ _
 
 @[simp]
@@ -1067,7 +1067,7 @@ theorem sInf_toAddSubgroup
 
 中文:
 定理 sInf_toAddSubgroup
-  条件: (s : Set (NonUnitalSubring R))
+  条件: (s : 集合 (NonUnital子环 R))
   证明: mk'_toAddSubgroup _ _
 
 Depends on / 依赖: _toAddSubgroup
@@ -1093,7 +1093,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (NonUnitalSubring R)
+  签名: 完备格 (NonUnital子环 R)
   定义体: { completeLatticeOfInf (NonUnitalSubring R) fun _s =>
       IsGLB.of_image (@fun _ _ : NonUnitalSubring R => SetLike.coe_subset_coe)
         isGLB_biInf with
@@ -1129,7 +1129,7 @@ theorem eq_top_iff'
 
 中文:
 定理 eq_top_iff'
-  条件: (A : NonUnitalSubring R)
+  条件: (A : NonUnital子环 R)
   结论: A = ⊤ ↔ 对任意 x : R, x in A
   证明: eq_top_iff.trans ⟨fun h m => h mem_top m, fun h m _ => h m⟩
 
@@ -1159,7 +1159,7 @@ definition center
 
 中文:
 定义 center
-  签名: : NonUnitalSubring R
+  签名: : NonUnital子环 R
   定义体: { NonUnitalSubsemiring.center R with
     neg_mem' := Set.neg_mem_center }
 
@@ -1181,7 +1181,7 @@ theorem coe_center
 
 中文:
 定理 coe_center
-  结论: ↑(center R) = Set.center R
+  结论: ↑(center R) = 集合.center R
   证明: rfl
 
 @[simp]
@@ -1216,7 +1216,7 @@ instance center.instNonUnitalCommRing
 
 中文:
 实例 center.instNonUnitalCommRing
-  签名: : NonUnitalCommRing (center R) where
+  签名: : 非幺交换环 (center R) where
   定义体: inferInstanceAs NonUnitalCommSemiring (NonUnitalSubsemiring.center R)
   __ := (inferInstance : NonUnitalNonAssocRing (center R))
 -/
@@ -1237,7 +1237,7 @@ definition centerCongr
 
 中文:
 定义 centerCongr
-  签名: {S} [NonUnitalNonAssocRing S] (e : R ≃+* S)
+  签名: {S} [非幺非结合环 S] (e : R ≃+* S)
   定义体: NonUnitalSubsemiring.centerCongr e
 -/
 @[simps!] def centerCongr {S} [NonUnitalNonAssocRing S] (e : R ≃+* S) : center R ≃+* center S :=
@@ -1301,7 +1301,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: [DecidableEq R] [Fintype R]
+  签名: [DecidableEq R] [有限类型 R]
   定义体: fun _ =>
   decidable_of_iff' _ mem_center_iff
 
@@ -1322,7 +1322,7 @@ theorem center_eq_top
 
 中文:
 定理 center_eq_top
-  条件: (R) [NonUnitalCommRing R]
+  条件: (R) [非幺交换环 R]
   结论: center R = ⊤
   证明: SetLike.coe_injective (Set.center_eq_univ R)
 
@@ -1351,7 +1351,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: { NonUnitalSubsemiring.centralizer s with
     carrier := s.centralizer
     neg_mem' := Set.neg_mem_centralizer }
@@ -1376,7 +1376,7 @@ theorem coe_centralizer
 
 中文:
 定理 coe_centralizer
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: rfl
 -/
 theorem coe_centralizer (s : Set R) :
@@ -1393,7 +1393,7 @@ theorem centralizer_toNonUnitalSubsemiring
 
 中文:
 定理 centralizer_toNonUnitalSubsemiring
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: rfl
 -/
 theorem centralizer_toNonUnitalSubsemiring (s : Set R) :
@@ -1410,7 +1410,7 @@ theorem mem_centralizer_iff
 
 中文:
 定理 mem_centralizer_iff
-  条件: {s : Set R} {z : R}
+  条件: {s : 集合 R} {z : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1451,7 +1451,7 @@ theorem centralizer_le
 
 中文:
 定理 centralizer_le
-  条件: (s t : Set R) (h : s subseteq t)
+  条件: (s t : 集合 R) (h : s subseteq t)
   证明: Set.centralizer_subset h
 
 @[simp]
@@ -1475,7 +1475,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   证明: SetLike.ext'_iff.trans Set.centralizer_eq_top_iff_subset
 
 @[simp]
@@ -1497,7 +1497,7 @@ theorem centralizer_univ
 
 中文:
 定理 centralizer_univ
-  结论: centralizer Set.univ = center R
+  结论: centralizer 集合.univ = center R
   证明: SetLike.ext' (Set.centralizer_univ R)
 
 Depends on / 依赖: Set.centralizer_univ, SetLike, SetLike.ext, centralizer_univ
@@ -1525,7 +1525,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: sInf {S | s subseteq S}
 
 Depends on / 依赖: subseteq
@@ -1544,8 +1544,8 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {x : R} {s : Set R}
-  结论: x in closure s ↔ 对任意 S : NonUnitalSubring R, s subseteq S -> x in S
+  条件: {x : R} {s : 集合 R}
+  结论: x in closure s ↔ 对任意 S : NonUnital子环 R, s subseteq S -> x in S
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -1568,7 +1568,7 @@ theorem subset_closure
 
 中文:
 定理 subset_closure
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   结论: s subseteq closure s
   证明: fun _x hx => mem_closure.2 fun _S hS => hS hx
 
@@ -1590,7 +1590,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set R} {x : R} (hx : x in s)
+  条件: {s : 集合 R} {x : R} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -1610,7 +1610,7 @@ theorem notMem_of_notMem_closure
 
 中文:
 定理 notMem_of_notMem_closure
-  条件: {s : Set R} {P : R} (hP : P ∉ closure s)
+  条件: {s : 集合 R} {P : R} (hP : P ∉ closure s)
   结论: P ∉ s
   证明: fun h =>
   hP (subset_closure h)
@@ -1631,7 +1631,7 @@ theorem closure_le
 
 中文:
 定理 closure_le
-  条件: {s : Set R} {t : NonUnitalSubring R}
+  条件: {s : 集合 R} {t : NonUnital子环 R}
   结论: closure s <= t ↔ s subseteq t
   证明: ⟨Set.Subset.trans subset_closure, fun h => sInf_le h⟩
 
@@ -1655,7 +1655,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃s t
-  结论: Set R⦄ (h : s subseteq t) : closure s <= closure t
+  结论: 集合 R⦄ (h : s subseteq t) : closure s <= closure t
   证明: closure_le.2 Set.Subset.trans h subset_closure
 
 Depends on / 依赖: Set.Subset.trans, Subset, closure_le, subset_closure
@@ -1673,7 +1673,7 @@ theorem closure_eq_of_le
 
 中文:
 定理 closure_eq_of_le
-  条件: {s : Set R} {t : NonUnitalSubring R} (h₁ : s subseteq t) (h₂ : t <= closure s)
+  条件: {s : 集合 R} {t : NonUnital子环 R} (h₁ : s subseteq t) (h₂ : t <= closure s)
   证明: le_antisymm (closure_le.2 h₁) h₂
 
 Depends on / 依赖: closure_le, le_antisymm
@@ -1702,7 +1702,7 @@ theorem closure_induction
 
 中文:
 定理 closure_induction
-  结论: {s : Set R} {p : (x : R) -> x in closure s -> 命题}
+  结论: {s : 集合 R} {p : (x : R) -> x in closure s -> 命题}
   证明: let K : NonUnitalSubring R :=
     { carrier := { x | exists hx, p x hx }
       mul_mem' := fun ⟨_, hpx⟩ ⟨_, hpy⟩ => ⟨_, mul _ _ _ _ hpx hpy⟩
@@ -1746,7 +1746,7 @@ theorem closure_induction₂
 
 中文:
 定理 closure_induction₂
-  结论: {s : Set R} {p : (x y : R) -> x in closure s -> y in closure s -> 命题}
+  结论: {s : 集合 R} {p : (x y : R) -> x in closure s -> y in closure s -> 命题}
   证明: by
   induction hy using closure_induction with
   | mem z hz => induction hx using closure_induction with
@@ -1798,7 +1798,7 @@ theorem mem_closure_iff
 
 中文:
 定理 mem_closure_iff
-  条件: {s : Set R} {x}
+  条件: {s : 集合 R} {x}
   证明: ⟨fun h => by
     induction h using closure_induction with
     | mem _ hx => exact AddSubgroup.subset_closure (Subsemigroup.subset_closure hx)
@@ -1847,7 +1847,7 @@ lemma closure_le_centralizer_centralizer
 
 中文:
 引理 closure_le_centralizer_centralizer
-  条件: {R : 类型} [NonUnitalRing R] (s : Set R)
+  条件: {R : 类型} [非幺环 R] (s : 集合 R)
   证明: closure_le.mpr Set.subset_centralizer_centralizer
 
 Depends on / 依赖: Set.subset_centralizer_centralizer, closure_le, closure_le.mpr, subset_centralizer_centralizer
@@ -1868,7 +1868,7 @@ theorem isMulCommutative_closure
 
 中文:
 定理 isMulCommutative_closure
-  结论: {R : 类型} [NonUnitalRing R] {s : Set R}
+  结论: {R : 类型} [非幺环 R] {s : 集合 R}
   证明: have := closure_le_centralizer_centralizer s
   .of_setLike_mul_comm fun _ h₁ _ h₂ =>
     Set.centralizer_centralizer_comm_of_comm hcomm _ (this h₁) _ (this h₂)
@@ -1896,7 +1896,7 @@ abbreviation closureNonUnitalCommRingOfComm
 
 中文:
 缩写 closureNonUnitalCommRingOfComm
-  签名: {R : 类型} [NonUnitalRing R] {s : Set R}
+  签名: {R : 类型} [非幺环 R] {s : 集合 R}
   定义体: have := isMulCommutative_closure hcomm
   inferInstance
 
@@ -1917,7 +1917,7 @@ instance instIsMulCommutative_closure
 
 中文:
 实例 instIsMulCommutative_closure
-  签名: {S R : 类型} [NonUnitalRing R]
+  签名: {S R : 类型} [非幺环 R]
   定义体: isMulCommutative_closure fun _ h₁ _ h₂ => setLike_mul_comm h₁ h₂
 
 Depends on / 依赖: isMulCommutative_closure, setLike_mul_comm
@@ -1941,7 +1941,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure R _) SetLike.coe where
+  签名: : Galois嵌入 (@closure R _) 集合状.coe where
   定义体: closure s
   gc _s _t := closure_le
   le_l_u _s := subset_closure
@@ -1968,8 +1968,8 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  条件: (s : NonUnitalSubring R)
-  结论: closure (s : Set R) = s
+  条件: (s : NonUnital子环 R)
+  结论: closure (s : 集合 R) = s
   证明: (NonUnitalSubring.gi R).l_u_eq s
 
 @[simp]
@@ -1992,7 +1992,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set R) = ⊥
+  结论: closure (∅ : 集合 R) = ⊥
   证明: (NonUnitalSubring.gi R).gc.l_bot
 
 @[simp]
@@ -2013,7 +2013,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (Set.univ : Set R) = ⊤
+  结论: closure (集合.univ : 集合 R) = ⊤
   证明: @coe_top R _ ▸ closure_eq ⊤
 
 Depends on / 依赖: closure_eq, coe_top, h.symm
@@ -2032,7 +2032,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set R)
+  条件: (s t : 集合 R)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (NonUnitalSubring.gi R).gc.l_sup
 
@@ -2052,7 +2052,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set R)
+  条件: {ι} (s : ι -> 集合 R)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (NonUnitalSubring.gi R).gc.l_iSup
 
@@ -2072,7 +2072,7 @@ theorem closure_sUnion
 
 中文:
 定理 closure_sUnion
-  条件: (s : Set (Set R))
+  条件: (s : 集合 (集合 R))
   结论: closure (⋃₀ s) = ⨆ t in s, closure t
   证明: (NonUnitalSubring.gi R).gc.l_sSup
 
@@ -2092,7 +2092,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (s t : NonUnitalSubring R) (f : F)
+  条件: (s t : NonUnital子环 R) (f : F)
   结论: (s ⊔ t).map f = s.map f ⊔ t.map f
   证明: (gc_map_comap f).l_sup
 
@@ -2111,7 +2111,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : F) (s : ι -> NonUnitalSubring R)
+  条件: {ι : 类型层*} (f : F) (s : ι -> NonUnital子环 R)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -2130,7 +2130,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (s t : NonUnitalSubring R) (f : F) (hf : Function.Injective f)
+  条件: (s t : NonUnital子环 R) (f : F) (hf : 函数.单射 f)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_injective, coe_injective, image_inter
@@ -2150,7 +2150,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : F) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : F) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -2173,7 +2173,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (s t : NonUnitalSubring S) (f : F)
+  条件: (s t : NonUnital子环 S) (f : F)
   结论: (s ⊓ t).comap f = s.comap f ⊓ t.comap f
   证明: (gc_map_comap f).u_inf
 
@@ -2194,7 +2194,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : F) (s : ι -> NonUnitalSubring S)
+  条件: {ι : 类型层*} (f : F) (s : ι -> NonUnital子环 S)
   证明: (gc_map_comap f).u_iInf
 
 @[simp]
@@ -2220,7 +2220,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : R ->ₙ+* S)
-  结论: (⊥ : NonUnitalSubring R).map f = ⊥
+  结论: (⊥ : NonUnital子环 R).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[simp]
@@ -2243,7 +2243,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : R ->ₙ+* S)
-  结论: (⊤ : NonUnitalSubring S).comap f = ⊤
+  结论: (⊤ : NonUnital子环 S).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 Depends on / 依赖: gc_map_comap, u_top
@@ -2263,8 +2263,8 @@ definition prod
 @[norm_cast]
 
 中文:
-定义 prod
-  签名: (s : NonUnitalSubring R) (t : NonUnitalSubring S)
+定义 乘积
+  签名: (s : NonUnital子环 R) (t : NonUnital子环 S)
   定义体: { s.toSubsemigroup.prod t.toSubsemigroup, s.toAddSubgroup.prod t.toAddSubgroup with
     carrier := s ×ˢ t }
 
@@ -2287,7 +2287,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (s : NonUnitalSubring R) (t : NonUnitalSubring S)
+  条件: (s : NonUnital子环 R) (t : NonUnital子环 S)
   证明: rfl
 -/
 theorem coe_prod (s : NonUnitalSubring R) (t : NonUnitalSubring S) :
@@ -2306,7 +2306,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {s : NonUnitalSubring R} {t : NonUnitalSubring S} {p : R × S}
+  条件: {s : NonUnital子环 R} {t : NonUnital子环 S} {p : R × S}
   证明: Iff.rfl
 
 @[gcongr, mono]
@@ -2330,7 +2330,7 @@ theorem prod_mono
 中文:
 定理 prod_mono
   条件: ⦃s₁ s₂
-  结论: NonUnitalSubring R⦄ (hs : s₁ <= s₂) ⦃t₁ t₂ : NonUnitalSubring S⦄
+  结论: NonUnital子环 R⦄ (hs : s₁ <= s₂) ⦃t₁ t₂ : NonUnital子环 S⦄
   证明: Set.prod_mono hs ht
 
 Depends on / 依赖: Set.prod_mono, prod_mono
@@ -2349,7 +2349,7 @@ theorem prod_mono_right
 
 中文:
 定理 prod_mono_right
-  条件: (s : NonUnitalSubring R)
+  条件: (s : NonUnital子环 R)
   证明: prod_mono (le_refl s)
 
 Depends on / 依赖: le_refl, prod_mono
@@ -2369,8 +2369,8 @@ theorem prod_mono_left
 
 中文:
 定理 prod_mono_left
-  条件: (t : NonUnitalSubring S)
-  结论: Monotone fun s : NonUnitalSubring R => s.prod t
+  条件: (t : NonUnital子环 S)
+  结论: 递增 fun s : NonUnital子环 R => s.乘积 t
   证明: fun _s₁ _s₂ hs => prod_mono hs (le_refl t)
 
 Depends on / 依赖: le_refl, prod_mono
@@ -2388,7 +2388,7 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  条件: (s : NonUnitalSubring R)
+  条件: (s : NonUnital子环 R)
   证明: ext fun x => by simp [mem_prod]
 
 Depends on / 依赖: mem_prod
@@ -2409,7 +2409,7 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  条件: (s : NonUnitalSubring S)
+  条件: (s : NonUnital子环 S)
   证明: ext fun x => by simp [mem_prod]
 
 @[simp]
@@ -2431,7 +2431,7 @@ theorem top_prod_top
 
 中文:
 定理 top_prod_top
-  结论: (⊤ : NonUnitalSubring R).prod (⊤ : NonUnitalSubring S) = ⊤
+  结论: (⊤ : NonUnital子环 R).乘积 (⊤ : NonUnital子环 S) = ⊤
   证明: (top_prod _).trans comap_top _
 
 Depends on / 依赖: comap_top, top_prod
@@ -2449,7 +2449,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  结论: center (R × S) = prod (center R) (center S)
+  结论: center (R × S) = 乘积 (center R) (center S)
   证明: SetLike.coe_injective Set.center_prod
 -/
 protected theorem center_prod : center (R × S) = prod (center R) (center S) :=
@@ -2467,7 +2467,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (s : NonUnitalSubring R) (t : NonUnitalSubring S)
+  签名: (s : NonUnital子环 R) (t : NonUnital子环 S)
   定义体: { Equiv.Set.prod (s : Set R) (t : Set S) with
     map_mul' := fun _ _ => rfl
     map_add' := fun _ _ => rfl }
@@ -2494,7 +2494,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  结论: {ι} [hι : Nonempty ι] {S : ι -> NonUnitalSubring R}
+  结论: {ι} [hι : 非空 ι] {S : ι -> NonUnital子环 R}
   证明: by
   refine ⟨?_, fun ⟨i, hi⟩ => le_iSup S i hi⟩
   let U : NonUnitalSubring R :=
@@ -2523,7 +2523,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: {ι} [Nonempty ι] {S : ι -> NonUnitalSubring R}
+  结论: {ι} [非空 ι] {S : ι -> NonUnital子环 R}
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 Depends on / 依赖: Set.ext, mem_iSup_of_directed
@@ -2545,7 +2545,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {S : Set (NonUnitalSubring R)} (Sne : S.Nonempty)
+  结论: {S : 集合 (NonUnital子环 R)} (Sne : S.非空)
   证明: by
   have : Nonempty S := Sne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hS.directed_val, SetCoe.exists,
@@ -2569,7 +2569,7 @@ theorem coe_sSup_of_directedOn
 
 中文:
 定理 coe_sSup_of_directedOn
-  结论: {S : Set (NonUnitalSubring R)} (Sne : S.Nonempty)
+  结论: {S : 集合 (NonUnital子环 R)} (Sne : S.非空)
   证明: Set.ext fun x => by simp [mem_sSup_of_directedOn Sne hS]
 
 Depends on / 依赖: Set.ext, mem_sSup_of_directedOn
@@ -2590,7 +2590,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : Sort*} [Nonempty ι] {S : ι -> NonUnitalSubring R}
+  结论: {ι : 类型层*} [非空 ι] {S : ι -> NonUnital子环 R}
   证明: by
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, NonUnitalSubsemiring.coe_iSup_of_directed dir,
     coe_iSup_of_directed dir] using NonUnitalSubsemiring.isMulCommutative_iSup dir
@@ -2613,7 +2613,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
@@ -2633,7 +2633,7 @@ theorem mem_map_equiv
 
 中文:
 定理 mem_map_equiv
-  条件: {f : R ≃+* S} {K : NonUnitalSubring R} {x : S}
+  条件: {f : R ≃+* S} {K : NonUnital子环 R} {x : S}
   证明: @Set.mem_image_equiv _ _ (K : Set R) f.toEquiv x
 
 Depends on / 依赖: Set.mem_image_equiv, f.toEquiv, mem_image_equiv, toEquiv
@@ -2652,7 +2652,7 @@ theorem map_equiv_eq_comap_symm
 
 中文:
 定理 map_equiv_eq_comap_symm
-  条件: (f : R ≃+* S) (K : NonUnitalSubring R)
+  条件: (f : R ≃+* S) (K : NonUnital子环 R)
   证明: SetLike.coe_injective (f.toEquiv.image_eq_preimage_symm K)
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -2671,7 +2671,7 @@ theorem comap_equiv_eq_map_symm
 
 中文:
 定理 comap_equiv_eq_map_symm
-  条件: (f : R ≃+* S) (K : NonUnitalSubring S)
+  条件: (f : R ≃+* S) (K : NonUnital子环 S)
   证明: (map_equiv_eq_comap_symm f.symm K).symm
 
 Depends on / 依赖: f.symm, map_equiv_eq_comap_symm
@@ -2744,7 +2744,7 @@ theorem rangeRestrict_surjective
 中文:
 定理 rangeRestrict_surjective
   条件: (f : R ->ₙ+* S)
-  结论: Function.Surjective f.rangeRestrict
+  结论: 函数.满射 f.rangeRestrict
   证明: fun ⟨_y, hy⟩ =>
   let ⟨x, hx⟩ := mem_range.mp hy
   ⟨x, Subtype.ext hx⟩
@@ -2787,7 +2787,7 @@ theorem range_eq_top_of_surjective
 
 中文:
 定理 range_eq_top_of_surjective
-  条件: (f : R ->ₙ+* S) (hf : Function.Surjective f)
+  条件: (f : R ->ₙ+* S) (hf : 函数.满射 f)
   证明: range_eq_top.2 hf
 
 Depends on / 依赖: range_eq_top
@@ -2873,7 +2873,7 @@ theorem eqOn_set_closure
 
 中文:
 定理 eqOn_set_closure
-  条件: {f g : R ->ₙ+* S} {s : Set R} (h : Set.EqOn f g s)
+  条件: {f g : R ->ₙ+* S} {s : 集合 R} (h : 集合.EqOn f g s)
   证明: show closure s <= f.eqLocus g from closure_le.2 h
 
 Depends on / 依赖: closure, closure_le, eqLocus, f.eqLocus
@@ -2893,7 +2893,7 @@ theorem eq_of_eqOn_set_top
 
 中文:
 定理 eq_of_eqOn_set_top
-  条件: {f g : R ->ₙ+* S} (h : Set.EqOn f g (⊤ : NonUnitalSubring R))
+  条件: {f g : R ->ₙ+* S} (h : 集合.EqOn f g (⊤ : NonUnital子环 R))
   结论: f = g
   证明: ext fun _x => h trivial
 -/
@@ -2910,7 +2910,7 @@ theorem eq_of_eqOn_set_dense
 
 中文:
 定理 eq_of_eqOn_set_dense
-  条件: {s : Set R} (hs : closure s = ⊤) {f g : R ->ₙ+* S} (h : s.EqOn f g)
+  条件: {s : 集合 R} (hs : closure s = ⊤) {f g : R ->ₙ+* S} (h : s.EqOn f g)
   证明: eq_of_eqOn_set_top hs ▸ eqOn_set_closure h
 
 Depends on / 依赖: eqOn_set_closure, eq_of_eqOn_set_top
@@ -2930,7 +2930,7 @@ theorem closure_preimage_le
 
 中文:
 定理 closure_preimage_le
-  条件: (f : R ->ₙ+* S) (s : Set S)
+  条件: (f : R ->ₙ+* S) (s : 集合 S)
   结论: closure (f ⁻¹' s) <= (closure s).comap f
   证明: closure_le.2 fun _x hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
@@ -2951,7 +2951,7 @@ theorem map_closure
 
 中文:
 定理 map_closure
-  条件: (f : R ->ₙ+* S) (s : Set R)
+  条件: (f : R ->ₙ+* S) (s : 集合 R)
   结论: (closure s).map f = closure (f '' s)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (NonUnitalSubring.gi S).gc
     (NonUnitalSubring.gi R).gc fun _ => rfl
@@ -2983,8 +2983,8 @@ theorem range_subtype
 
 中文:
 定理 range_subtype
-  条件: (s : NonUnitalSubring R)
-  结论: (NonUnitalSubringClass.subtype s).range = s
+  条件: (s : NonUnital子环 R)
+  结论: (NonUnital子环类.subtype s).range = s
   证明: SetLike.coe_injective (coe_srange _).trans Subtype.range_coe
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, Subtype, Subtype.range_coe, coe_injective, coe_srange, range_coe
@@ -3002,7 +3002,7 @@ theorem range_fst
 
 中文:
 定理 range_fst
-  结论: NonUnitalRingHom.srange (fst R S) = ⊤
+  结论: 非幺环态射.srange (fst R S) = ⊤
   证明: NonUnitalSubsemiring.range_fst
 
 Depends on / 依赖: NonUnitalSubsemiring, NonUnitalSubsemiring.range_fst, range_fst
@@ -3020,7 +3020,7 @@ theorem range_snd
 
 中文:
 定理 range_snd
-  结论: NonUnitalRingHom.srange (snd R S) = ⊤
+  结论: 非幺环态射.srange (snd R S) = ⊤
   证明: NonUnitalSubsemiring.range_snd
 
 Depends on / 依赖: NonUnitalSubsemiring, NonUnitalSubsemiring.range_snd, range_snd
@@ -3080,7 +3080,7 @@ Subtype.ext
 
 中文:
 定义 ofLeftInverse'
-  签名: {g : S -> R} {f : R ->ₙ+* S} (h : Function.LeftInverse g f)
+  签名: {g : S -> R} {f : R ->ₙ+* S} (h : 函数.左逆 g f)
   定义体: { f.rangeRestrict with
     toFun := fun x => f.rangeRestrict x
     invFun := fun x => (g ∘ NonUnitalSubringClass.subtype f.range) x
@@ -3117,7 +3117,7 @@ theorem ofLeftInverse'_apply
 
 中文:
 定理 ofLeftInverse'_apply
-  条件: {g : S -> R} {f : R ->ₙ+* S} (h : Function.LeftInverse g f) (x : R)
+  条件: {g : S -> R} {f : R ->ₙ+* S} (h : 函数.左逆 g f) (x : R)
   证明: rfl
 
 @[simp]
@@ -3137,7 +3137,7 @@ theorem ofLeftInverse'_symm_apply
 
 中文:
 定理 ofLeftInverse'_symm_apply
-  结论: {g : S -> R} {f : R ->ₙ+* S} (h : Function.LeftInverse g f)
+  结论: {g : S -> R} {f : R ->ₙ+* S} (h : 函数.左逆 g f)
   证明: rfl
 -/
 theorem ofLeftInverse'_symm_apply {g : S -> R} {f : R ->ₙ+* S} (h : Function.LeftInverse g f)
@@ -3162,7 +3162,7 @@ theorem closure_preimage_le
 
 中文:
 定理 closure_preimage_le
-  条件: (f : F) (s : Set S)
+  条件: (f : F) (s : 集合 S)
   证明: closure_le.2 fun _x hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
 Depends on / 依赖: SetLike, SetLike.mem_coe, closure_le, mem_coe, mem_comap, subset_closure

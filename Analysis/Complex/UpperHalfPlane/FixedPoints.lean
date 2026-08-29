@@ -170,7 +170,7 @@ theorem exists_gl_smul_eq_self_iff_trace_eq_zero
     
 
 中文:
-定理 exists_gl_smul_eq_self_iff_trace_eq_zero
+定理 存在_gl_smul_eq_self_iff_trace_eq_zero
   条件: (h : g.val.det < 0)
   证明: by
   constructor
@@ -241,8 +241,8 @@ theorem isElliptic_of_exists_smul_eq_self
   refine lt_of_
 
 中文:
-定理 isElliptic_of_exists_smul_eq_self
-  结论: (h : 0 < g.val.det) (hgc : g ∉ Subgroup.center _)
+定理 isElliptic_of_存在_smul_eq_self
+  结论: (h : 0 < g.val.det) (hgc : g ∉ 子群.center _)
   证明: by
   rcases hfix with ⟨z, hz⟩
   have hc : g 1 0 != 0 := by
@@ -286,7 +286,7 @@ definition fixedPt
 
 中文:
 定义 fixedPt
-  签名: (g : GL (Fin 2) 实数) (hell : g.IsElliptic)
+  签名: (g : GL (有限集 2) 实数) (hell : g.是Elliptic)
   定义体: ⟨(g 0 0 - g 1 1) / (2 * g 1 0) + .I * (√(-g.val.discr) / (2 * |g 1 0|)), by
     simpa [div_pos, Complex.div_re, Complex.div_im, hell.c_ne_zero]⟩
 
@@ -312,7 +312,7 @@ theorem fixedPt_neg
 
 中文:
 定理 fixedPt_neg
-  条件: (hg : (-g).IsElliptic)
+  条件: (hg : (-g).是Elliptic)
   证明: by
   ext
   simp [fixedPt, Matrix.discr_fin_two, Matrix.det_neg]
@@ -341,7 +341,7 @@ theorem gl_smul_eq_self_iff_eq_fixedPt
 
 中文:
 定理 gl_smul_eq_self_iff_eq_fixedPt
-  条件: (hpos : 0 < g.val.det) (hell : g.IsElliptic)
+  条件: (hpos : 0 < g.val.det) (hell : g.是Elliptic)
   证明: by
   wlog hc : 0 < g 1 0 generalizing g
   · replace hc := hell.c_ne_zero.lt_or_gt.resolve_right hc
@@ -382,7 +382,7 @@ theorem gl_smul_I_eq_I_iff_of_pos
 
 中文:
 定理 gl_smul_I_eq_I_iff_of_pos
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.det.val)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.det.val)
   证明: by
   rw [gl_smul_eq_iff_num_eq]; rw [σ]; rw [if_pos hg]
   simp [Complex.ext_iff, num, denom, and_comm]
@@ -406,7 +406,7 @@ theorem gl_smul_I_eq_I_iff_of_neg
 
 中文:
 定理 gl_smul_I_eq_I_iff_of_neg
-  条件: {g : GL (Fin 2) 实数} (hg : g.det.val < 0)
+  条件: {g : GL (有限集 2) 实数} (hg : g.det.val < 0)
   证明: by
   rw [gl_smul_eq_iff_num_eq]; rw [σ]; rw [if_neg (not_lt_of_gt hg)]
   simp [num, denom, Complex.ext_iff, and_comm]
@@ -435,8 +435,8 @@ theorem forall_smul_eq_self_iff_mem_center
       · specialize hg
 
 中文:
-定理 forall_smul_eq_self_iff_mem_center
-  条件: {g : GL (Fin 2) 实数}
+定理 对任意_smul_eq_self_iff_mem_center
+  条件: {g : GL (有限集 2) 实数}
   证明: by
   constructor
   · intro hg
@@ -486,7 +486,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul PGL(2, 实数) ℍ
+  签名: 忠实标量乘法 PGL(2, 实数) ℍ
   定义体: by
   rw [faithfulSMul_iff]
   intro g

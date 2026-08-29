@@ -162,7 +162,7 @@ lemma coe_fst
 
 中文:
 引理 coe_fst
-  结论: ⇑(fst R M M₂) = Prod.fst
+  结论: ⇑(fst R M M₂) = 积类型.fst
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_fst : ⇑(fst R M M₂) = Prod.fst := rfl
@@ -177,7 +177,7 @@ lemma coe_snd
 
 中文:
 引理 coe_snd
-  结论: ⇑(snd R M M₂) = Prod.snd
+  结论: ⇑(snd R M M₂) = 积类型.snd
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_snd : ⇑(snd R M M₂) = Prod.snd := rfl
@@ -192,7 +192,7 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  结论: Function.Surjective (fst R M M₂)
+  结论: 函数.满射 (fst R M M₂)
   证明: fun x => ⟨(x, 0), rfl⟩
 -/
 theorem fst_surjective : Function.Surjective (fst R M M₂) := fun x => ⟨(x, 0), rfl⟩
@@ -207,7 +207,7 @@ theorem snd_surjective
 
 中文:
 定理 snd_surjective
-  结论: Function.Surjective (snd R M M₂)
+  结论: 函数.满射 (snd R M M₂)
   证明: fun x => ⟨(0, x), rfl⟩
 -/
 theorem snd_surjective : Function.Surjective (snd R M M₂) := fun x => ⟨(0, x), rfl⟩
@@ -226,7 +226,7 @@ definition prod
   map_smul' c x := by simp only [Function.prod_apply, Prod.smul_mk, map_smul, RingHom.id_apply]
 
 中文:
-定义 prod
+定义 乘积
   签名: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃)
   定义体: Function.prod f g
   map_add' x y := by simp only [Function.prod_apply, Prod.mk_add_mk, map_add]
@@ -253,7 +253,7 @@ theorem coe_prod
 中文:
 定理 coe_prod
   条件: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃)
-  结论: ⇑(f.prod g) = Function.prod f g
+  结论: ⇑(f.乘积 g) = 函数.乘积 f g
   证明: rfl
 
 @[simp]
@@ -276,7 +276,7 @@ theorem fst_prod
 中文:
 定理 fst_prod
   条件: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃)
-  结论: (fst R M₂ M₃).comp (prod f g) = f
+  结论: (fst R M₂ M₃).comp (乘积 f g) = f
   证明: rfl
 
 @[simp]
@@ -298,7 +298,7 @@ theorem snd_prod
 中文:
 定理 snd_prod
   条件: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃)
-  结论: (snd R M₂ M₃).comp (prod f g) = g
+  结论: (snd R M₂ M₃).comp (乘积 f g) = g
   证明: rfl
 
 @[simp]
@@ -316,7 +316,7 @@ theorem pair_fst_snd
 
 中文:
 定理 pair_fst_snd
-  结论: prod (fst R M M₂) (snd R M M₂) = LinearMap.id
+  结论: 乘积 (fst R M M₂) (snd R M M₂) = 线性映射.id
   证明: rfl
 
 Depends on / 依赖: instIsOpenPosMeasure, prod.instIsOpenPosMeasure
@@ -358,7 +358,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: [Module S M₂] [Module S M₃] [SMulCommClass R S M₂] [SMulCommClass R S M₃]
+  签名: [模 S M₂] [模 S M₃] [标量交换类 R S M₂] [标量交换类 R S M₃]
   定义体: f.1.prod f.2
   invFun f := ((fst _ _ _).comp f, (snd _ _ _).comp f)
   map_add' _ _ := rfl
@@ -637,7 +637,7 @@ theorem coe_inr
 
 中文:
 定理 coe_inr
-  结论: (inr R M M₂ : M₂ -> M × M₂) = Prod.mk 0
+  结论: (inr R M M₂ : M₂ -> M × M₂) = 积类型.mk 0
   证明: rfl
 -/
 theorem coe_inr : (inr R M M₂ : M₂ -> M × M₂) = Prod.mk 0 :=
@@ -671,7 +671,7 @@ theorem inl_eq_prod
 
 中文:
 定理 inl_eq_prod
-  结论: inl R M M₂ = prod LinearMap.id 0
+  结论: inl R M M₂ = 乘积 线性映射.id 0
   证明: rfl
 -/
 theorem inl_eq_prod : inl R M M₂ = prod LinearMap.id 0 :=
@@ -687,7 +687,7 @@ theorem inr_eq_prod
 
 中文:
 定理 inr_eq_prod
-  结论: inr R M M₂ = prod 0 LinearMap.id
+  结论: inr R M M₂ = 乘积 0 线性映射.id
   证明: rfl
 -/
 theorem inr_eq_prod : inr R M M₂ = prod 0 LinearMap.id :=
@@ -703,7 +703,7 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  结论: Function.Injective (inl R M M₂)
+  结论: 函数.单射 (inl R M M₂)
   证明: fun _ => by simp
 -/
 theorem inl_injective : Function.Injective (inl R M M₂) := fun _ => by simp
@@ -718,7 +718,7 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  结论: Function.Injective (inr R M M₂)
+  结论: 函数.单射 (inr R M M₂)
   证明: fun _ => by simp
 -/
 theorem inr_injective : Function.Injective (inr R M M₂) := fun _ => by simp
@@ -834,7 +834,7 @@ theorem coprod_inl_inr
 
 中文:
 定理 coprod_inl_inr
-  结论: coprod (inl R M M₂) (inr R M M₂) = LinearMap.id
+  结论: coprod (inl R M M₂) (inr R M M₂) = 线性映射.id
   证明: by
   ext <;>
     simp only [Prod.mk_add_mk, add_zero, id_apply, coprod_apply, inl_apply, inr_apply, zero_add]
@@ -914,7 +914,7 @@ theorem fst_eq_coprod
 
 中文:
 定理 fst_eq_coprod
-  结论: fst R M M₂ = coprod LinearMap.id 0
+  结论: fst R M M₂ = coprod 线性映射.id 0
   证明: by ext; simp
 -/
 theorem fst_eq_coprod : fst R M M₂ = coprod LinearMap.id 0 := by ext; simp
@@ -931,7 +931,7 @@ theorem snd_eq_coprod
 
 中文:
 定理 snd_eq_coprod
-  结论: snd R M M₂ = coprod 0 LinearMap.id
+  结论: snd R M M₂ = coprod 0 线性映射.id
   证明: by ext; simp
 
 @[simp]
@@ -976,7 +976,7 @@ theorem coprod_map_prod
 
 中文:
 定理 coprod_map_prod
-  结论: (f : M ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₃) (S : Submodule R M)
+  结论: (f : M ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₃) (S : 子模 R M)
   证明: SetLike.coe_injective by
     simp only [LinearMap.coprod_apply, Submodule.coe_sup, Submodule.map_coe]
     rw [← Set.image2_add]; rw [Set.image2_image_left]; rw [Set.image2_image_right]
@@ -1036,7 +1036,7 @@ definition coprodEquiv
 
 中文:
 定义 coprodEquiv
-  签名: [Module S M₃] [SMulCommClass R S M₃]
+  签名: [模 S M₃] [标量交换类 R S M₃]
   定义体: f.1.coprod f.2
   invFun f := (f.comp (inl _ _ _), f.comp (inr _ _ _))
   left_inv f := by simp only [coprod_inl, coprod_inr]
@@ -1137,7 +1137,7 @@ theorem coe_prodMap
 中文:
 定理 coe_prodMap
   条件: (f : M ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₄)
-  结论: ⇑(f.prodMap g) = Prod.map f g
+  结论: ⇑(f.prodMap g) = 积类型.map f g
   证明: rfl
 
 @[simp]
@@ -1174,7 +1174,7 @@ theorem prodMap_comap_prod
 
 中文:
 定理 prodMap_comap_prod
-  结论: (f : M ->ₗ[R] M₂) (g : M₃ ->ₗ[R] M₄) (S : Submodule R M₂)
+  结论: (f : M ->ₗ[R] M₂) (g : M₃ ->ₗ[R] M₄) (S : 子模 R M₂)
   证明: SetLike.coe_injective Set.preimage_prod_map_prod f g _ _
 
 Depends on / 依赖: Set.preimage_prod_map_prod, SetLike, SetLike.coe_injective, coe_injective, preimage_prod_map_prod
@@ -1196,7 +1196,7 @@ theorem prodMap_map_prod
 
 中文:
 定理 prodMap_map_prod
-  结论: (f : M ->ₗ[R] M₂) (g : M₃ ->ₗ[R] M₄) (S : Submodule R M)
+  结论: (f : M ->ₗ[R] M₂) (g : M₃ ->ₗ[R] M₄) (S : 子模 R M)
   证明: SetLike.coe_injective Set.prodMap_image_prod f g _ _
 
 @[simp]
@@ -1387,7 +1387,7 @@ theorem prodMap_smul
 
 中文:
 定理 prodMap_smul
-  结论: [DistribMulAction S M₃] [DistribMulAction S M₄] [SMulCommClass R S M₃]
+  结论: [分配乘法作用 S M₃] [分配乘法作用 S M₄] [标量交换类 R S M₃]
   证明: rfl
 -/
 theorem prodMap_smul [DistribMulAction S M₃] [DistribMulAction S M₄] [SMulCommClass R S M₃]
@@ -1411,7 +1411,7 @@ definition prodMapLinear
 
 中文:
 定义 prodMapLinear
-  签名: [Module S M₃] [Module S M₄] [SMulCommClass R S M₃] [SMulCommClass R S M₄]
+  签名: [模 S M₃] [模 S M₄] [标量交换类 R S M₃] [标量交换类 R S M₄]
   定义体: prodMap f.1 f.2
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1526,7 +1526,7 @@ definition prodMapAlgHom
 
 中文:
 定义 prodMapAlgHom
-  签名: : Module.End R M × Module.End R M₂ ->ₐ[R] Module.End R (M × M₂)
+  签名: : 模.End R M × 模.End R M₂ ->ₐ[R] 模.End R (M × M₂)
   定义体: { prodMapRingHom R M M₂ with commutes' := fun _ => rfl }
 
 Depends on / 依赖: commutes, prodMapRingHom
@@ -1582,7 +1582,7 @@ theorem isCompl_range_inl_inr
 
 中文:
 定理 isCompl_range_inl_inr
-  结论: IsCompl (range <| inl R M M₂) (range <| inr R M M₂)
+  结论: 是补集 (range <| inl R M M₂) (range <| inr R M M₂)
   证明: by
   constructor
   · rw [disjoint_def]
@@ -1656,7 +1656,7 @@ theorem map_coprod_prod
 
 中文:
 定理 map_coprod_prod
-  结论: (f : M ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₃) (p : Submodule R M)
+  结论: (f : M ->ₗ[R] M₃) (g : M₂ ->ₗ[R] M₃) (p : 子模 R M)
   证明: coprod_map_prod f g p q
 
 Depends on / 依赖: coprod_map_prod
@@ -1675,7 +1675,7 @@ theorem comap_prod_prod
 
 中文:
 定理 comap_prod_prod
-  结论: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) (p : Submodule R M₂)
+  结论: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃) (p : 子模 R M₂)
   证明: Submodule.ext fun _x => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Submodule, Submodule.ext
@@ -1694,7 +1694,7 @@ theorem prod_eq_inf_comap
 
 中文:
 定理 prod_eq_inf_comap
-  条件: (p : Submodule R M) (q : Submodule R M₂)
+  条件: (p : 子模 R M) (q : 子模 R M₂)
   证明: Submodule.ext fun _x => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Submodule, Submodule.ext
@@ -1714,7 +1714,7 @@ theorem prod_eq_sup_map
 
 中文:
 定理 prod_eq_sup_map
-  条件: (p : Submodule R M) (q : Submodule R M₂)
+  条件: (p : 子模 R M) (q : 子模 R M₂)
   证明: by
   rw [← map_coprod_prod]; rw [coprod_inl_inr]; rw [map_id]
 
@@ -1737,7 +1737,7 @@ theorem span_inl_union_inr
 
 中文:
 定理 span_inl_union_inr
-  条件: {s : Set M} {t : Set M₂}
+  条件: {s : 集合 M} {t : 集合 M₂}
   证明: by
   rw [span_union]; rw [prod_eq_sup_map]; rw [← span_image]; rw [← span_image]
 
@@ -1763,7 +1763,7 @@ theorem ker_prod
 中文:
 定理 ker_prod
   条件: (f : M ->ₗ[R] M₂) (g : M ->ₗ[R] M₃)
-  结论: ker (prod f g) = ker f ⊓ ker g
+  结论: ker (乘积 f g) = ker f ⊓ ker g
   证明: by
   rw [ker]; rw [← prod_bot]; rw [comap_prod_prod]; rfl
 
@@ -1811,7 +1811,7 @@ theorem ker_prod_ker_le_ker_coprod
 
 中文:
 定理 ker_prod_ker_le_ker_coprod
-  结论: {M₂ : 类型} [AddCommMonoid M₂] [Module R M₂] {M₃ : 类型}
+  结论: {M₂ : 类型} [加法交换幺半群 M₂] [模 R M₂] {M₃ : 类型}
   证明: by
   rintro ⟨y, z⟩
   simp +contextual
@@ -1841,7 +1841,7 @@ theorem ker_coprod_of_disjoint_range
 
 中文:
 定理 ker_coprod_of_disjoint_range
-  结论: {M₂ : 类型} [AddCommGroup M₂] [Module R M₂] {M₃ : 类型}
+  结论: {M₂ : 类型} [加法交换群 M₂] [模 R M₂] {M₃ : 类型}
   证明: by
   apply le_antisymm _ (ker_prod_ker_le_ker_coprod f g)
   rintro ⟨y, z⟩ h
@@ -1887,7 +1887,7 @@ definition kerComplementEquivRange
 
 中文:
 定义 kerComplementEquivRange
-  签名: {R M M₂ : 类型} [Ring R] [AddCommGroup M]
+  签名: {R M M₂ : 类型} [环 R] [加法交换群 M]
   定义体: .ofBijective (codRestrict (range f) f (mem_range_self f) ∘ₗ C.subtype)
   ⟨by simpa [← ker_eq_bot, ker_codRestrict, ker_comp, ← disjoint_iff_comap_eq_bot] using h.disjoint,
    by
@@ -1930,7 +1930,7 @@ theorem sup_eq_range
 
 中文:
 定理 sup_eq_range
-  条件: (p q : Submodule R M)
+  条件: (p q : 子模 R M)
   结论: p ⊔ q = range (p.subtype.coprod q.subtype)
   证明: Submodule.ext fun x => by simp [Submodule.mem_sup]
 
@@ -1957,7 +1957,7 @@ theorem map_inl
 
 中文:
 定理 map_inl
-  结论: p.map (inl R M M₂) = prod p ⊥
+  结论: p.map (inl R M M₂) = 乘积 p ⊥
   证明: by
   ext ⟨x, y⟩
   simp only [and_left_comm, eq_comm, mem_map, Prod.mk_inj, inl_apply, mem_bot, exists_eq_left',
@@ -1986,7 +1986,7 @@ theorem map_inr
 
 中文:
 定理 map_inr
-  结论: q.map (inr R M M₂) = prod ⊥ q
+  结论: q.map (inr R M M₂) = 乘积 ⊥ q
   证明: by
   ext ⟨x, y⟩; simp [and_left_comm, eq_comm, and_comm]
 
@@ -2010,7 +2010,7 @@ theorem comap_fst
 
 中文:
 定理 comap_fst
-  结论: p.comap (fst R M M₂) = prod p ⊤
+  结论: p.comap (fst R M M₂) = 乘积 p ⊤
   证明: by ext ⟨x, y⟩; simp
 
 @[simp]
@@ -2030,7 +2030,7 @@ theorem comap_snd
 
 中文:
 定理 comap_snd
-  结论: q.comap (snd R M M₂) = prod ⊤ q
+  结论: q.comap (snd R M M₂) = 乘积 ⊤ q
   证明: by ext ⟨x, y⟩; simp
 
 @[simp]
@@ -2050,7 +2050,7 @@ theorem prod_comap_inl
 
 中文:
 定理 prod_comap_inl
-  结论: (prod p q).comap (inl R M M₂) = p
+  结论: (乘积 p q).comap (inl R M M₂) = p
   证明: by ext; simp
 
 @[simp]
@@ -2070,7 +2070,7 @@ theorem prod_comap_inr
 
 中文:
 定理 prod_comap_inr
-  结论: (prod p q).comap (inr R M M₂) = q
+  结论: (乘积 p q).comap (inr R M M₂) = q
   证明: by ext; simp
 
 @[simp]
@@ -2091,7 +2091,7 @@ theorem prod_map_fst
 
 中文:
 定理 prod_map_fst
-  结论: (prod p q).map (fst R M M₂) = p
+  结论: (乘积 p q).map (fst R M M₂) = p
   证明: by
   ext x; simp [(⟨0, zero_mem _⟩ : exists x, x in q)]
 
@@ -2116,7 +2116,7 @@ theorem prod_map_snd
 
 中文:
 定理 prod_map_snd
-  结论: (prod p q).map (snd R M M₂) = q
+  结论: (乘积 p q).map (snd R M M₂) = q
   证明: by
   ext x; simp [(⟨0, zero_mem _⟩ : exists x, x in p)]
 
@@ -2223,7 +2223,7 @@ definition fst
 
 中文:
 定义 fst
-  签名: : Submodule R (M × M₂)
+  签名: : 子模 R (M × M₂)
   定义体: (⊥ : Submodule R M₂).comap (LinearMap.snd R M M₂)
 
 Depends on / 依赖: LinearMap, LinearMap.snd, Submodule
@@ -2248,7 +2248,7 @@ definition fstEquiv
 
 中文:
 定义 fstEquiv
-  签名: : Submodule.fst R M M₂ ≃ₗ[R] M where
+  签名: : 子模.fst R M M₂ ≃ₗ[R] M where
   定义体: x.1.1
   invFun m := ⟨⟨m, 0⟩, by aesop⟩
   map_add' := by simp
@@ -2275,7 +2275,7 @@ theorem fst_map_fst
 
 中文:
 定理 fst_map_fst
-  结论: (Submodule.fst R M M₂).map (LinearMap.fst R M M₂) = ⊤
+  结论: (子模.fst R M M₂).map (线性映射.fst R M M₂) = ⊤
   证明: by
   aesop
 -/
@@ -2293,7 +2293,7 @@ theorem fst_map_snd
 
 中文:
 定理 fst_map_snd
-  结论: (Submodule.fst R M M₂).map (LinearMap.snd R M M₂) = ⊥
+  结论: (子模.fst R M M₂).map (线性映射.snd R M M₂) = ⊥
   证明: by
   aesop (add simp fst)
 -/
@@ -2310,7 +2310,7 @@ definition snd
 
 中文:
 定义 snd
-  签名: : Submodule R (M × M₂)
+  签名: : 子模 R (M × M₂)
   定义体: (⊥ : Submodule R M).comap (LinearMap.fst R M M₂)
 
 Depends on / 依赖: LinearMap, LinearMap.fst, Submodule
@@ -2334,7 +2334,7 @@ definition sndEquiv
 
 中文:
 定义 sndEquiv
-  签名: : Submodule.snd R M M₂ ≃ₗ[R] M₂ where
+  签名: : 子模.snd R M M₂ ≃ₗ[R] M₂ where
   定义体: x.1.2
   invFun n := ⟨⟨0, n⟩, by aesop⟩
   map_add' := by simp
@@ -2359,7 +2359,7 @@ theorem snd_map_fst
 
 中文:
 定理 snd_map_fst
-  结论: (Submodule.snd R M M₂).map (LinearMap.fst R M M₂) = ⊥
+  结论: (子模.snd R M M₂).map (线性映射.fst R M M₂) = ⊥
   证明: by
   aesop (add simp snd)
 -/
@@ -2377,7 +2377,7 @@ theorem snd_map_snd
 
 中文:
 定理 snd_map_snd
-  结论: (Submodule.snd R M M₂).map (LinearMap.snd R M M₂) = ⊤
+  结论: (子模.snd R M M₂).map (线性映射.snd R M M₂) = ⊤
   证明: by
   aesop
 -/
@@ -2400,7 +2400,7 @@ theorem fst_sup_snd
 
 中文:
 定理 fst_sup_snd
-  结论: Submodule.fst R M M₂ ⊔ Submodule.snd R M M₂ = ⊤
+  结论: 子模.fst R M M₂ ⊔ 子模.snd R M M₂ = ⊤
   证明: by
   rw [eq_top_iff]
   rintro ⟨m, n⟩ -
@@ -2430,7 +2430,7 @@ theorem fst_inf_snd
 
 中文:
 定理 fst_inf_snd
-  结论: Submodule.fst R M M₂ ⊓ Submodule.snd R M M₂ = ⊥
+  结论: 子模.fst R M M₂ ⊓ 子模.snd R M M₂ = ⊥
   证明: by
   aesop
 -/
@@ -2456,7 +2456,7 @@ theorem le_prod_iff
 
 中文:
 定理 le_prod_iff
-  条件: {p₁ : Submodule R M} {p₂ : Submodule R M₂} {q : Submodule R (M × M₂)}
+  条件: {p₁ : 子模 R M} {p₂ : 子模 R M₂} {q : 子模 R (M × M₂)}
   证明: by
   constructor
   · intro h
@@ -2503,7 +2503,7 @@ theorem prod_le_iff
 
 中文:
 定理 prod_le_iff
-  条件: {p₁ : Submodule R M} {p₂ : Submodule R M₂} {q : Submodule R (M × M₂)}
+  条件: {p₁ : 子模 R M} {p₂ : 子模 R M₂} {q : 子模 R (M × M₂)}
   证明: by
   constructor
   · intro h
@@ -2552,7 +2552,7 @@ theorem prod_eq_bot_iff
 
 中文:
 定理 prod_eq_bot_iff
-  条件: {p₁ : Submodule R M} {p₂ : Submodule R M₂}
+  条件: {p₁ : 子模 R M} {p₂ : 子模 R M₂}
   证明: by
   simp only [eq_bot_iff, prod_le_iff, (gc_map_comap _).le_iff_le, comap_bot, ker_inl, ker_inr]
 
@@ -2573,7 +2573,7 @@ theorem prod_eq_top_iff
 
 中文:
 定理 prod_eq_top_iff
-  条件: {p₁ : Submodule R M} {p₂ : Submodule R M₂}
+  条件: {p₁ : 子模 R M} {p₂ : 子模 R M₂}
   证明: by
   simp only [eq_top_iff, le_prod_iff, map_top, range_fst, range_snd]
 
@@ -2597,7 +2597,7 @@ theorem span_prod_eq
 
 中文:
 定理 span_prod_eq
-  条件: {s : Set M} {t : Set M₂} (hs : 0 in s) (ht : 0 in t)
+  条件: {s : 集合 M} {t : 集合 M₂} (hs : 0 in s) (ht : 0 in t)
   证明: by
   refine le_antisymm (span_prod_le s t) ?_
   simp [Submodule.prod_le_iff, map_span]
@@ -2629,7 +2629,7 @@ definition prodComm
 
 中文:
 定义 prodComm
-  签名: (R M N : 类型) [Semiring R] [AddCommMonoid M] [AddCommMonoid N] [Module R M]
+  签名: (R M N : 类型) [半环 R] [加法交换幺半群 M] [加法交换幺半群 N] [模 R M]
   定义体: { AddEquiv.prodComm with
     toFun := Prod.swap
     map_smul' := fun _r ⟨_m, _n⟩ => rfl }
@@ -2715,7 +2715,7 @@ definition prodAssoc
 
 中文:
 定义 prodAssoc
-  签名: (R M₁ M₂ M₃ : 类型) [Semiring R]
+  签名: (R M₁ M₂ M₃ : 类型) [半环 R]
   定义体: { AddEquiv.prodAssoc with
     map_smul' := fun _r ⟨_m, _n⟩ => rfl }
 
@@ -2838,7 +2838,7 @@ theorem skewSwap_apply
 中文:
 定理 skewSwap_apply
   条件: (x : M × N)
-  结论: LinearEquiv.skewSwap R M N x = (-x.2, x.1)
+  结论: 线性等价.skewSwap R M N x = (-x.2, x.1)
   证明: rfl
 
 @[simp]
@@ -2858,7 +2858,7 @@ theorem skewSwap_symm_apply
 中文:
 定理 skewSwap_symm_apply
   条件: (x : N × M)
-  结论: (LinearEquiv.skewSwap R M N).symm x = (x.2, -x.1)
+  结论: (线性等价.skewSwap R M N).symm x = (x.2, -x.1)
   证明: rfl
 -/
 theorem skewSwap_symm_apply (x : N × M) : (LinearEquiv.skewSwap R M N).symm x = (x.2, -x.1) := rfl
@@ -3281,7 +3281,7 @@ definition graph
 
 中文:
 定义 graph
-  签名: : Submodule R (M × M₂) where
+  签名: : 子模 R (M × M₂) where
   定义体: { p | p.2 = f p.1 }
   add_mem' (ha : _ = _) (hb : _ = _) := by
     change _ + _ = f (_ + _)
@@ -3337,7 +3337,7 @@ theorem graph_eq_ker_coprod
 
 中文:
 定理 graph_eq_ker_coprod
-  结论: g.graph = ker ((-g).coprod LinearMap.id)
+  结论: g.graph = ker ((-g).coprod 线性映射.id)
   证明: by
   ext x
   change _ = _ ↔ -g x.1 + x.2 = _
@@ -3362,7 +3362,7 @@ theorem graph_eq_range_prod
 
 中文:
 定理 graph_eq_range_prod
-  结论: f.graph = range (LinearMap.id.prod f)
+  结论: f.graph = range (线性映射.id.乘积 f)
   证明: by
   ext x
   exact ⟨fun hx => ⟨x.1, Prod.ext rfl hx.symm⟩, fun ⟨u, hu⟩ => hu ▸ rfl⟩
@@ -3405,8 +3405,8 @@ lemma LinearMap.exists_range_eq_graph
   
 
 中文:
-引理 LinearMap.exists_range_eq_graph
-  结论: {f : G ->ₛₗ[σ] H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 线性映射.存在_range_eq_graph
+  结论: {f : G ->ₛₗ[σ] H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   obtain ⟨f', hf'⟩ :=
     AddMonoidHom.exists_mrange_eq_mgraph (G := G) (H := H) (I := I) (f := f) hf₁ hf
@@ -3452,8 +3452,8 @@ lemma Submodule.exists_eq_graph
       (fun a b h => congr_arg (Prod.snd ∘ G.subtype) (hf₁.injective h))
 
 中文:
-引理 Submodule.exists_eq_graph
-  条件: {G : Submodule S (H × I)} (hf₁ : Bijective (Prod.fst ∘ G.subtype))
+引理 子模.存在_eq_graph
+  条件: {G : 子模 S (H × I)} (hf₁ : 双射 (积类型.fst ∘ G.subtype))
   证明: by
   simpa only [range_subtype] using LinearMap.exists_range_eq_graph hf₁.surjective
       (fun a b h => congr_arg (Prod.snd ∘ G.subtype) (hf₁.injective h))
@@ -3479,8 +3479,8 @@ lemma LinearMap.exists_linearEquiv_eq_graph
     simp only [SetLike.ext_iff, LinearMap.mem_graph_iff] at he₁
 
 中文:
-引理 LinearMap.exists_linearEquiv_eq_graph
-  结论: {f : G ->ₛₗ[σ] H × I} (hf₁ : Surjective (Prod.fst ∘ f))
+引理 线性映射.存在_linearEquiv_eq_graph
+  结论: {f : G ->ₛₗ[σ] H × I} (hf₁ : 满射 (积类型.fst ∘ f))
   证明: by
   obtain ⟨e₁, he₁⟩ := f.exists_range_eq_graph hf₁ fun _ _ => (hf _ _).1
   obtain ⟨e₂, he₂⟩ := ((LinearEquiv.prodComm _ _ _).toLinearMap.comp f).exists_range_eq_graph
@@ -3520,8 +3520,8 @@ lemma Submodule.exists_equiv_eq_graph
     hG₁.surjective hG₂.surjective fun _ _ => hG₁.injective.eq_iff.trans hG₂.injective.eq_iff.symm
 
 中文:
-引理 Submodule.exists_equiv_eq_graph
-  结论: {G : Submodule S (H × I)}
+引理 子模.存在_equiv_eq_graph
+  结论: {G : 子模 S (H × I)}
   证明: by
   simpa only [range_subtype] using LinearMap.exists_linearEquiv_eq_graph
     hG₁.surjective hG₂.surjective fun _ _ => hG₁.injective.eq_iff.trans hG₂.injective.eq_iff.symm

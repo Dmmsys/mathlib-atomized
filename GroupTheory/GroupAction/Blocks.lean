@@ -170,7 +170,7 @@ definition IsFixedBlock
 
 中文:
 定义 IsFixedBlock
-  签名: (B : Set X)
+  签名: (B : 集合 X)
   定义体: forall g : G, g • B = B
 -/
 def IsFixedBlock (B : Set X) := forall g : G, g • B = B
@@ -192,7 +192,7 @@ definition IsInvariantBlock
 
 中文:
 定义 IsInvariantBlock
-  签名: (B : Set X)
+  签名: (B : 集合 X)
   定义体: forall g : G, g • B subseteq B
 
 Depends on / 依赖: subseteq
@@ -218,7 +218,7 @@ definition IsTrivialBlock
 
 中文:
 定义 IsTrivialBlock
-  签名: (B : Set X)
+  签名: (B : 集合 X)
   定义体: B.Subsingleton ∨ B = univ
 
 Depends on / 依赖: B.Subsingleton, Subsingleton
@@ -247,7 +247,7 @@ theorem IsTrivialBlock.image
 @[to_additive]
 
 中文:
-定理 IsTrivialBlock.image
+定理 IsTrivialBlock.像
   结论: {φ : M -> N} {f : α ->ₑ[φ] β}
   证明: by
   obtain hB | hB := hB
@@ -280,7 +280,7 @@ theorem IsTrivialBlock.preimage
   · apply Or.intro_right; simp only [hB]; apply Set.preimage_univ
 
 中文:
-定理 IsTrivialBlock.preimage
+定理 IsTrivialBlock.原像
   结论: {φ : M -> N} {f : α ->ₑ[φ] β}
   证明: by
   obtain hB | hB := hB
@@ -320,7 +320,7 @@ theorem IsTrivialBlock.smul
 
 中文:
 定理 IsTrivialBlock.smul
-  条件: {B : Set α} (hB : IsTrivialBlock B) (g : M)
+  条件: {B : 集合 α} (hB : IsTrivialBlock B) (g : M)
   证明: by
   cases hB with
   | inl h =>
@@ -361,7 +361,7 @@ theorem IsTrivialBlock.smul_iff
 
 中文:
 定理 IsTrivialBlock.smul_iff
-  条件: {B : Set α} (g : M)
+  条件: {B : 集合 α} (g : M)
   证明: by
   constructor
   · intro H
@@ -396,7 +396,7 @@ definition IsBlock
 
 中文:
 定义 IsBlock
-  签名: (B : Set X)
+  签名: (B : 集合 X)
   定义体: forall ⦃g₁ g₂ : G⦄, g₁ • B != g₂ • B -> Disjoint (g₁ • B) (g₂ • B)
 
 Depends on / 依赖: Disjoint
@@ -631,7 +631,7 @@ lemma IsBlock.empty
 
 中文:
 引理 IsBlock.empty
-  结论: IsBlock G (∅ : Set X)
+  结论: IsBlock G (∅ : 集合 X)
   证明: by simp [IsBlock]
 
 Depends on / 依赖: IsBlock
@@ -650,7 +650,7 @@ lemma IsBlock.singleton
 
 中文:
 引理 IsBlock.singleton
-  结论: IsBlock G ({a} : Set X)
+  结论: IsBlock G ({a} : 集合 X)
   证明: by simp [IsBlock]
 
 Depends on / 依赖: IsBlock
@@ -670,7 +670,7 @@ lemma IsBlock.of_subsingleton
 
 中文:
 引理 IsBlock.of_subsingleton
-  条件: (hB : B.Subsingleton)
+  条件: (hB : B.子单例)
   结论: IsBlock G B
   证明: hB.induction_on .empty fun _ => .singleton
 
@@ -882,7 +882,7 @@ lemma IsBlock.subgroup
 
 中文:
 引理 IsBlock.subgroup
-  条件: {H : Subgroup G} (hB : IsBlock G B)
+  条件: {H : 子群 G} (hB : IsBlock G B)
   结论: IsBlock H B
   证明: fun _ _ h => hB h
 -/
@@ -945,7 +945,7 @@ lemma IsFixedBlock.univ
 
 中文:
 引理 IsFixedBlock.univ
-  结论: IsFixedBlock G (univ : Set X)
+  结论: IsFixedBlock G (univ : 集合 X)
   证明: fun _ => by simp
 -/
 lemma IsFixedBlock.univ : IsFixedBlock G (univ : Set X) := fun _ => by simp
@@ -962,7 +962,7 @@ lemma IsBlock.univ
 
 中文:
 引理 IsBlock.univ
-  结论: IsBlock G (univ : Set X)
+  结论: IsBlock G (univ : 集合 X)
   证明: IsFixedBlock.univ.isBlock
 
 Depends on / 依赖: IsFixedBlock, IsFixedBlock.univ.isBlock, isBlock
@@ -984,7 +984,7 @@ lemma IsBlock.inter
 
 中文:
 引理 IsBlock.inter
-  条件: {B₁ B₂ : Set X} (h₁ : IsBlock G B₁) (h₂ : IsBlock G B₂)
+  条件: {B₁ B₂ : 集合 X} (h₁ : IsBlock G B₁) (h₂ : IsBlock G B₂)
   证明: by
   simp only [isBlock_iff_smul_eq_smul_of_nonempty, smul_set_inter] at h₁ h₂ ⊢
   rintro g₁ g₂ ⟨a, ha₁, ha₂⟩
@@ -1012,8 +1012,8 @@ lemma IsBlock.iInter
   simp_rw [fun i => hB i ⟨a, iInter_subset _ i ha₁, iInter_subset _ i ha₂⟩]
 
 中文:
-引理 IsBlock.iInter
-  条件: {ι : Sort*} {B : ι -> Set X} (hB : 对任意 i, IsBlock G (B i))
+引理 IsBlock.i整数er
+  条件: {ι : 类型层*} {B : ι -> 集合 X} (hB : 对任意 i, IsBlock G (B i))
   证明: by
   simp only [isBlock_iff_smul_eq_smul_of_nonempty, smul_set_iInter] at hB ⊢
   rintro g₁ g₂ ⟨a, ha₁, ha₂⟩
@@ -1112,7 +1112,7 @@ lemma isBlock_top
 
 中文:
 引理 isBlock_top
-  结论: IsBlock (⊤ : Subgroup G) B ↔ IsBlock G B
+  结论: IsBlock (⊤ : 子群 G) B ↔ IsBlock G B
   证明: Subgroup.topEquiv.toEquiv.forall_congr fun _ => Subgroup.topEquiv.toEquiv.forall_congr_left
 
 @[to_additive]
@@ -1137,8 +1137,8 @@ lemma IsBlock.preimage
 @[to_additive]
 
 中文:
-引理 IsBlock.preimage
-  结论: {H Y : 类型} [Group H] [MulAction H Y]
+引理 IsBlock.原像
+  结论: {H Y : 类型} [群 H] [乘法作用 H Y]
   证明: by
   rintro g₁ g₂ hg
   rw [← Group.preimage_smul_setₛₗ]; rw [← Group.preimage_smul_setₛₗ] at hg ⊢
@@ -1169,8 +1169,8 @@ exact fun g₁ g₂ hg => disjoint_image_of_injective hj hB ne_of_apply_ne _ hg
 @[to_additive]
 
 中文:
-定理 IsBlock.image
-  结论: {H Y : 类型} [SMul H Y] {φ : G -> H} (j : X ->ₑ[φ] Y)
+定理 IsBlock.像
+  结论: {H Y : 类型} [标量乘法 H Y] {φ : G -> H} (j : X ->ₑ[φ] Y)
   证明: by
   simp only [IsBlock, hφ.forall, ← image_smul_setₛₗ]
 exact fun g₁ g₂ hg => disjoint_image_of_injective hj hB ne_of_apply_ne _ hg
@@ -1198,7 +1198,7 @@ theorem IsBlock.subtype_val_preimage
 
 中文:
 定理 IsBlock.subtype_val_preimage
-  条件: {C : SubMulAction G X} (hB : IsBlock G B)
+  条件: {C : SubMul作用 G X} (hB : IsBlock G B)
   证明: hB.preimage C.inclusion
 
 @[to_additive]
@@ -1224,7 +1224,7 @@ theorem isBlock_subtypeVal
 
 中文:
 定理 isBlock_subtypeVal
-  条件: {C : SubMulAction G X} {B : Set C}
+  条件: {C : SubMul作用 G X} {B : 集合 C}
   证明: by
   refine forall₂_congr fun g₁ g₂ => ?_
   rw [← SubMulAction.inclusion.coe_eq]; rw [← image_smul_set]; rw [← image_smul_set]; rw [ne_eq]; rw [Set.image_eq_image C.inclusion_injective]; rw [disjoint_image_iff C.inclusion_injective]
@@ -1257,7 +1257,7 @@ theorem IsBlock.of_subgroup_of_conjugate
 
 中文:
 定理 IsBlock.of_subgroup_of_conjugate
-  条件: {H : Subgroup G} (hB : IsBlock H B) (g : G)
+  条件: {H : 子群 G} (hB : IsBlock H B) (g : G)
   证明: by
   rw [isBlock_iff_smul_eq_or_disjoint]
   intro h'
@@ -1335,7 +1335,7 @@ definition IsBlockSystem
 
 中文:
 定义 IsBlockSystem
-  签名: (ℬ : Set (Set X))
+  签名: (ℬ : 集合 (集合 X))
   定义体: Setoid.IsPartition ℬ ∧ forall ⦃B⦄, B in ℬ -> IsBlock G B
 
 Depends on / 依赖: IsBlock, IsPartition, Setoid, Setoid.IsPartition
@@ -1363,7 +1363,7 @@ theorem IsBlock.isBlockSystem
 
 中文:
 定理 IsBlock.isBlockSystem
-  结论: [hGX : MulAction.IsPretransitive G X]
+  结论: [hGX : 乘法作用.是Pretransitive G X]
   证明: by
   refine ⟨⟨?nonempty, ?cover⟩, ?mem_blocks⟩
   case mem_blocks => rintro B' ⟨g, rfl⟩; exact hB.translate g
@@ -1418,7 +1418,7 @@ lemma smul_orbit_eq_orbit_smul
 
 中文:
 引理 smul_orbit_eq_orbit_smul
-  条件: (N : Subgroup G) [nN : N.Normal] (a : X) (g : G)
+  条件: (N : 子群 G) [nN : N.正规] (a : X) (g : G)
   证明: by
   simp only [orbit, Set.smul_set_range]
   ext
@@ -1464,7 +1464,7 @@ theorem IsBlock.orbit_of_normal
 
 中文:
 定理 IsBlock.orbit_of_normal
-  条件: {N : Subgroup G} [N.Normal] (a : X)
+  条件: {N : 子群 G} [N.正规] (a : X)
   证明: by
   rw [isBlock_iff_smul_eq_or_disjoint]
   intro g
@@ -1496,7 +1496,7 @@ theorem IsBlockSystem.of_normal
 
 中文:
 定理 IsBlockSystem.of_normal
-  条件: {N : Subgroup G} [N.Normal]
+  条件: {N : 子群 G} [N.正规]
   证明: by
   constructor
   · apply IsPartition.of_orbits
@@ -1540,7 +1540,7 @@ lemma isBlock_subgroup
 
 中文:
 引理 isBlock_subgroup
-  结论: IsBlock G (s : Set H)
+  结论: IsBlock G (s : 集合 H)
   证明: by
   simp only [IsBlock, disjoint_left]
   rintro a b hab _ ⟨c, hc, rfl⟩ ⟨d, hd, (hcd : b • d = a • c)⟩
@@ -1580,7 +1580,7 @@ lemma isBlock_subgroup'
 
 中文:
 引理 isBlock_subgroup'
-  结论: IsBlock G (s : Set H)
+  结论: IsBlock G (s : 集合 H)
   证明: by
   simp only [IsBlock, disjoint_left]
   rintro a b hab _ ⟨c, hc, rfl⟩ ⟨d, hd, (hcd : b • d = a • c)⟩
@@ -1628,7 +1628,7 @@ theorem IsBlock.of_orbit
 
 中文:
 定理 IsBlock.of_orbit
-  条件: {H : Subgroup G} {a : X} (hH : stabilizer G a <= H)
+  条件: {H : 子群 G} {a : X} (hH : stabilizer G a <= H)
   证明: by
   rw [isBlock_iff_smul_eq_of_nonempty]
   rintro g ⟨-, ⟨-, ⟨h₁, rfl⟩, h⟩, h₂, rfl⟩
@@ -1693,7 +1693,7 @@ theorem IsBlock.orbit_stabilizer_eq
 
 中文:
 定理 IsBlock.orbit_stabilizer_eq
-  条件: [IsPretransitive G X] (hB : IsBlock G B) {a : X} (ha : a in B)
+  条件: [是Pretransitive G X] (hB : IsBlock G B) {a : X} (ha : a in B)
   证明: by
   ext x
   constructor
@@ -1742,7 +1742,7 @@ theorem stabilizer_orbit_eq
 
 中文:
 定理 stabilizer_orbit_eq
-  条件: {a : X} {H : Subgroup G} (hH : stabilizer G a <= H)
+  条件: {a : X} {H : 子群 G} (hH : stabilizer G a <= H)
   证明: by
   ext g
   constructor
@@ -1790,7 +1790,7 @@ definition block_stabilizerOrderIso
 
 中文:
 定义 block_stabilizerOrderIso
-  签名: [htGX : IsPretransitive G X] (a : X)
+  签名: [htGX : 是Pretransitive G X] (a : X)
   定义体: fun ⟨B, ha, hB⟩ => ⟨stabilizer G B, hB.stabilizer_le ha⟩
   invFun := fun ⟨H, hH⟩ =>
     ⟨MulAction.orbit H a, MulAction.mem_orbit_self a, IsBlock.of_orbit hH⟩
@@ -1924,7 +1924,7 @@ instance [Nontrivial
   apply Set.mem_univ
 
 中文:
-实例 [Nontrivial
+实例 [非平凡
   签名: X] (a
   定义体: by
   rw [nontrivial_iff]
@@ -2005,7 +2005,7 @@ theorem ncard_block_mul_ncard_orbit_eq
 
 中文:
 定理 ncard_block_mul_ncard_orbit_eq
-  条件: (hB : IsBlock G B) (hB_ne : B.Nonempty)
+  条件: (hB : IsBlock G B) (hB_ne : B.非空)
   证明: by
   obtain ⟨x, hx⟩ := hB_ne
   rw [ncard_block_eq_relIndex hB hx]; rw [← index_stabilizer]; rw [Subgroup.relIndex_mul_index (hB.stabilizer_le hx)]; rw [index_stabilizer_of_transitive]
@@ -2029,7 +2029,7 @@ theorem ncard_dvd_card
 
 中文:
 定理 ncard_dvd_card
-  条件: (hB : IsBlock G B) (hB_ne : B.Nonempty)
+  条件: (hB : IsBlock G B) (hB_ne : B.非空)
   证明: Dvd.intro _ (hB.ncard_block_mul_ncard_orbit_eq hB_ne)
 
 Depends on / 依赖: Dvd.intro, hB.ncard_block_mul_ncard_orbit_eq, hB_ne, ncard_block_mul_ncard_orbit_eq
@@ -2056,7 +2056,7 @@ theorem eq_univ_of_card_lt
 
 中文:
 定理 eq_univ_of_card_lt
-  条件: [hX : Finite X] (hB : IsBlock G B) (hB' : 自然数.card X < Set.ncard B * 2)
+  条件: [hX : 有限 X] (hB : IsBlock G B) (hB' : 自然数.card X < 集合.ncard B * 2)
   证明: by
   rcases Set.eq_empty_or_nonempty B with rfl | hB_ne
   · simp at hB'
@@ -2098,7 +2098,7 @@ theorem subsingleton_of_card_lt
 
 中文:
 定理 subsingleton_of_card_lt
-  结论: [Finite X] (hB : IsBlock G B)
+  结论: [有限 X] (hB : IsBlock G B)
   证明: by
   suffices Set.ncard B < 2 by simp_all
   cases Set.eq_empty_or_nonempty B with
@@ -2148,7 +2148,7 @@ theorem of_subset
 
 中文:
 定理 of_subset
-  条件: (a : X) (hfB : B.Finite)
+  条件: (a : X) (hfB : B.有限)
   证明: by
   let B' := ⋂ (k : G) (_ : a in k • B), k • B
   rcases Set.eq_empty_or_nonempty B with hfB_e | hfB_ne

@@ -67,7 +67,7 @@ lemma sigmaIsoHom_inj
 
 中文:
 引理 sigmaIsoHom_inj
-  结论: Function.Injective (sigmaIsoHom f)
+  结论: 函数.单射 (sigmaIsoHom f)
   证明: by
   rintro ⟨⟨_, _, rfl⟩, ⟨_, hx⟩⟩ ⟨⟨_, _, rfl⟩, ⟨_, hy⟩⟩ h
   refine Sigma.subtype_ext ?_ h
@@ -94,7 +94,7 @@ lemma sigmaIsoHom_surj
 
 中文:
 引理 sigmaIsoHom_surj
-  结论: Function.Surjective (sigmaIsoHom f)
+  结论: 函数.满射 (sigmaIsoHom f)
   证明: fun _ => ⟨⟨⟨_, ⟨⟨_, Set.mem_range_self _⟩, rfl⟩⟩, ⟨_, rfl⟩⟩, rfl⟩
 
 Depends on / 依赖: Set.mem_range_self, mem_range_self
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: Finite (Fiber l)
+  签名: 有限 (Fiber l)
   定义体: have : Finite (Set.range l) := l.range_finite
   Finite.Set.finite_range _
 

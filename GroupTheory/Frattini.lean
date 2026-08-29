@@ -30,7 +30,7 @@ definition frattini
 
 中文:
 定义 frattini
-  签名: (G : 类型) [Group G]
+  签名: (G : 类型) [群 G]
   定义体: Order.radical (Subgroup G)
 
 Depends on / 依赖: Order.radical, Subgroup, radical
@@ -51,7 +51,7 @@ lemma frattini_le_coatom
 
 中文:
 引理 frattini_le_coatom
-  条件: {K : Subgroup G} (h : IsCoatom K)
+  条件: {K : 子群 G} (h : IsCoatom K)
   结论: frattini G <= K
   证明: Order.radical_le_coatom h
 
@@ -76,7 +76,7 @@ lemma frattini_le_comap_frattini_of_surjective
 
 中文:
 引理 frattini_le_comap_frattini_of_surjective
-  条件: (hφ : Function.Surjective φ)
+  条件: (hφ : 函数.满射 φ)
   证明: by
   simp_rw [frattini, Order.radical, comap_iInf, le_iInf_iff]
   intro M hM
@@ -105,7 +105,7 @@ instance frattini_characteristic
 
 中文:
 实例 frattini_characteristic
-  签名: : (frattini G).Characteristic
+  签名: : (frattini G).特征
   定义体: by
   rw [characteristic_iff_comap_eq]
   intro φ
@@ -128,7 +128,7 @@ theorem frattini_nongenerating
 
 中文:
 定理 frattini_nongenerating
-  结论: [IsCoatomic (Subgroup G)] {K : Subgroup G}
+  结论: [是余原子的 (子群 G)] {K : 子群 G}
   证明: Order.radical_nongenerating h
 
 Depends on / 依赖: Order.radical_nongenerating, radical_nongenerating
@@ -154,8 +154,8 @@ theorem frattini_nilpotent
 
 中文:
 定理 frattini_nilpotent
-  条件: [Finite G]
-  结论: Group.IsNilpotent (frattini G)
+  条件: [有限 G]
+  结论: 群.是幂零 (frattini G)
   证明: by
   -- We use the characterisation of nilpotency in terms of all Sylow subgroups being normal.
   have q := (Group.isNilpotent_of_finite_tfae (G := frattini G)).out 0 3

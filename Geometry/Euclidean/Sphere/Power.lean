@@ -168,7 +168,7 @@ theorem mul_dist_eq_mul_dist_of_cospherical
 
 中文:
 定理 mul_dist_eq_mul_dist_of_cospherical
-  结论: {a b c d p : P} (h : Cospherical ({a, b, c, d} : Set P))
+  结论: {a b c d p : P} (h : Cospherical ({a, b, c, d} : 集合 P))
   证明: by
   obtain ⟨q, r, h'⟩ := (cospherical_def {a, b, c, d}).mp h
   obtain ⟨ha, hb, hc, hd⟩ := h' a (by simp), h' b (by simp), h' c (by simp), h' d (by simp)
@@ -383,7 +383,7 @@ definition power
 
 中文:
 定义 power
-  签名: (s : Sphere P) (p : P)
+  签名: (s : 球面 P) (p : P)
   定义体: dist p s.center ^ 2 - s.radius ^ 2
 
 Depends on / 依赖: center, radius, s.center, s.radius
@@ -402,7 +402,7 @@ theorem power_eq_zero_iff_mem_sphere
 
 中文:
 定理 power_eq_zero_iff_mem_sphere
-  条件: {s : Sphere P} {p : P} (hr : 0 <= s.radius)
+  条件: {s : 球面 P} {p : P} (hr : 0 <= s.radius)
   证明: by
   rw [power]; rw [mem_sphere]; rw [sub_eq_zero]; rw [pow_left_inj₀ dist_nonneg hr two_ne_zero]
 
@@ -423,7 +423,7 @@ theorem power_pos_iff_radius_lt_dist_center
 
 中文:
 定理 power_pos_iff_radius_lt_dist_center
-  条件: {s : Sphere P} {p : P} (hr : 0 <= s.radius)
+  条件: {s : 球面 P} {p : P} (hr : 0 <= s.radius)
   证明: by
   rw [power]; rw [sub_pos]; rw [pow_lt_pow_iff_left₀ hr dist_nonneg two_ne_zero]
 
@@ -444,7 +444,7 @@ theorem power_neg_iff_dist_center_lt_radius
 
 中文:
 定理 power_neg_iff_dist_center_lt_radius
-  条件: {s : Sphere P} {p : P} (hr : 0 <= s.radius)
+  条件: {s : 球面 P} {p : P} (hr : 0 <= s.radius)
   证明: by
   rw [power]; rw [sub_neg]; rw [pow_lt_pow_iff_left₀ dist_nonneg hr two_ne_zero]
 
@@ -465,7 +465,7 @@ theorem power_nonneg_iff_radius_le_dist_center
 
 中文:
 定理 power_nonneg_iff_radius_le_dist_center
-  条件: {s : Sphere P} {p : P} (hr : 0 <= s.radius)
+  条件: {s : 球面 P} {p : P} (hr : 0 <= s.radius)
   证明: by
   rw [power]; rw [sub_nonneg]; rw [pow_le_pow_iff_left₀ hr dist_nonneg two_ne_zero]
 
@@ -486,7 +486,7 @@ theorem power_nonpos_iff_dist_center_le_radius
 
 中文:
 定理 power_nonpos_iff_dist_center_le_radius
-  条件: {s : Sphere P} {p : P} (hr : 0 <= s.radius)
+  条件: {s : 球面 P} {p : P} (hr : 0 <= s.radius)
   证明: by
   rw [power]; rw [sub_nonpos]; rw [pow_le_pow_iff_left₀ dist_nonneg hr two_ne_zero]
 
@@ -509,7 +509,7 @@ theorem mul_dist_eq_abs_power
 
 中文:
 定理 mul_dist_eq_abs_power
-  结论: {s : Sphere P} {p a b : P}
+  结论: {s : 球面 P} {p a b : P}
   证明: by
   have hq : dist a s.center = dist b s.center := by
     rw [mem_sphere.mp ha]; rw [mem_sphere.mp hb]
@@ -538,7 +538,7 @@ theorem mul_dist_eq_zero_of_mem_sphere
 
 中文:
 定理 mul_dist_eq_zero_of_mem_sphere
-  结论: {s : Sphere P} {p a b : P}
+  结论: {s : 球面 P} {p a b : P}
   证明: by
   have hq : dist a s.center = dist b s.center := by
     rw [mem_sphere.mp ha]; rw [mem_sphere.mp hb]
@@ -566,7 +566,7 @@ theorem mul_dist_eq_power_of_radius_le_dist_center
 
 中文:
 定理 mul_dist_eq_power_of_radius_le_dist_center
-  结论: {s : Sphere P} {p a b : P}
+  结论: {s : 球面 P} {p a b : P}
   证明: by
   rw [mul_dist_eq_abs_power hp ha hb]; rw [abs_of_nonneg (power_nonneg_iff_radius_le_dist_center hr).mpr hle]
 
@@ -591,7 +591,7 @@ theorem mul_dist_eq_neg_power_of_dist_center_le_radius
 
 中文:
 定理 mul_dist_eq_neg_power_of_dist_center_le_radius
-  结论: {s : Sphere P} {p a b : P}
+  结论: {s : 球面 P} {p a b : P}
   证明: by
   rw [mul_dist_eq_abs_power hp ha hb]; rw [abs_of_nonpos (power_nonpos_iff_dist_center_le_radius hr).mpr hle]
 
@@ -618,7 +618,7 @@ theorem dist_sq_eq_mul_dist_of_tangent_and_secant
 
 中文:
 定理 dist_sq_eq_mul_dist_of_tangent_and_secant
-  结论: {a b t p : P} {s : Sphere P}
+  结论: {a b t p : P} {s : 球面 P}
   证明: by
   have hr := radius_nonneg_of_mem ha
   have radius_le_dist := h_tangent.isTangent.radius_le_dist_center (left_mem_affineSpan_pair Real p t)
@@ -647,8 +647,8 @@ theorem IsTangentAt.power_eq_dist_sq
   ring_nf
 
 中文:
-定理 IsTangentAt.power_eq_dist_sq
-  结论: {s : Sphere P} {t p : P}
+定理 是TangentAt.power_eq_dist_sq
+  结论: {s : 球面 P} {t p : P}
   证明: by
   rw [Sphere.power]; rw [h_tangent.dist_sq_eq_of_mem (left_mem_affineSpan_pair Real p t)]
   ring_nf
@@ -675,7 +675,7 @@ theorem isTangentAt_iff_dist_sq_eq_power
 
 中文:
 定理 isTangentAt_iff_dist_sq_eq_power
-  条件: {t p : P} {s : Sphere P} (ht : t in s)
+  条件: {t p : P} {s : 球面 P} (ht : t in s)
   证明: ⟨fun h => h.power_eq_dist_sq.symm, fun h_dist_eq => by
     have h_orth : ⟪p -ᵥ t, t -ᵥ s.center⟫ = 0 := by
       simp only [Sphere.power, ← mem_sphere.mp ht, dist_eq_norm_vsub V, sq,

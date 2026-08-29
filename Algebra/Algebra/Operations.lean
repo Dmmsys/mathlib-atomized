@@ -70,7 +70,7 @@ theorem algebraMap_mem
 中文:
 定理 algebraMap_mem
   条件: (r : R)
-  结论: algebraMap R A r in (1 : SubMulAction R A)
+  结论: algebraMap R A r in (1 : SubMul作用 R A)
   证明: ⟨r, (algebraMap_eq_smul_one r).symm⟩
 
 Depends on / 依赖: algebraMap_eq_smul_one
@@ -90,7 +90,7 @@ theorem mem_one'
 中文:
 定理 mem_one'
   条件: {x : A}
-  结论: x in (1 : SubMulAction R A) ↔ 存在 y, algebraMap R A y = x
+  结论: x in (1 : SubMul作用 R A) ↔ 存在 y, algebraMap R A y = x
   证明: exists_congr fun r => by rw [algebraMap_eq_smul_one]
 
 Depends on / 依赖: algebraMap_eq_smul_one, exists_congr
@@ -120,7 +120,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (Submodule R A)
+  签名: : 幺 (子模 R A)
   定义体: ⟨LinearMap.range (LinearMap.toSpanSingleton R A 1)⟩
 
 Depends on / 依赖: LinearMap, LinearMap.range, LinearMap.toSpanSingleton, toSpanSingleton
@@ -138,7 +138,7 @@ theorem one_eq_span
 
 中文:
 定理 one_eq_span
-  结论: (1 : Submodule R A) = R ∙ 1
+  结论: (1 : 子模 R A) = R ∙ 1
   证明: (LinearMap.span_singleton_eq_range _ _ _).symm
 
 Depends on / 依赖: LinearMap, LinearMap.span_singleton_eq_range, span_singleton_eq_range
@@ -160,7 +160,7 @@ theorem le_one_toAddSubmonoid
 
 中文:
 定理 le_one_toAddSubmonoid
-  结论: 1 <= (1 : Submodule R A).toAddSubmonoid
+  结论: 1 <= (1 : 子模 R A).toAddSubmonoid
   证明: by
   rintro x ⟨n, rfl⟩
   exact ⟨n, show (n : R) • (1 : A) = n by rw [Nat.cast_smul_eq_nsmul, nsmul_one]⟩
@@ -184,7 +184,7 @@ theorem toSubMulAction_one
 
 中文:
 定理 toSubMulAction_one
-  结论: (1 : Submodule R A).toSubMulAction = 1
+  结论: (1 : 子模 R A).toSubMulAction = 1
   证明: SetLike.ext fun _ => by rw [one_eq_span, SubMulAction.mem_one]; exact mem_span_singleton
 
 Depends on / 依赖: SetLike, SetLike.ext, SubMulAction, SubMulAction.mem_one, mem_one, mem_span_singleton, one_eq_span
@@ -204,7 +204,7 @@ theorem one_eq_span_one_set
 
 中文:
 定理 one_eq_span_one_set
-  结论: (1 : Submodule R A) = span R 1
+  结论: (1 : 子模 R A) = span R 1
   证明: one_eq_span
 
 @[simp]
@@ -227,8 +227,8 @@ theorem one_le
 
 中文:
 定理 one_le
-  条件: {P : Submodule R A}
-  结论: (1 : Submodule R A) <= P ↔ (1 : A) in P
+  条件: {P : 子模 R A}
+  结论: (1 : 子模 R A) <= P ↔ (1 : A) in P
   证明: by
   simp [one_eq_span]
 
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoidWithOne (Submodule R A)
+  签名: 加法交换带幺幺半群 (子模 R A)
   定义体: sup_comm
 
 Depends on / 依赖: sup_comm
@@ -270,7 +270,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul (Submodule R A) (Submodule R M)
+  签名: 标量乘法 (子模 R A) (子模 R M)
   定义体: { __ := A'.toAddSubmonoid • M'.toAddSubmonoid
     smul_mem' := fun r m hm => AddSubmonoid.smul_induction_on hm
       (fun a ha m hm => by rw [← smul_assoc]; exact AddSubmonoid.smul_mem_smul (A'.smul_mem r ha) hm)
@@ -361,7 +361,7 @@ lemma coe_set_smul
 
 中文:
 引理 coe_set_smul
-  结论: (I : Set A) • N = I • N
+  结论: (I : 集合 A) • N = I • N
   证明: set_smul_eq_of_le _ _ _
     (fun _ _ hr hx => smul_mem_smul hr hx)
     (smul_le.mpr fun _ hr _ hx => mem_set_smul_of_mem_mem hr hx)
@@ -475,7 +475,7 @@ instance :
 
 中文:
 实例 :
-  签名: CovariantClass (Submodule R A) (Submodule R M) HSMul.hSMul LE.le
+  签名: 协变类 (子模 R A) (子模 R M) 异质标量乘法.hSMul LE.le
   定义体: ⟨fun _ _ => smul_mono le_rfl⟩
 
 Depends on / 依赖: le_rfl, smul_mono
@@ -498,7 +498,7 @@ theorem smul_bot
 
 中文:
 定理 smul_bot
-  结论: I • (⊥ : Submodule R M) = ⊥
+  结论: I • (⊥ : 子模 R M) = ⊥
   证明: toAddSubmonoid_injective AddSubmonoid.addSubmonoid_smul_bot _
 
 @[simp]
@@ -519,7 +519,7 @@ theorem bot_smul
 
 中文:
 定理 bot_smul
-  结论: (⊥ : Submodule R A) • N = ⊥
+  结论: (⊥ : 子模 R A) • N = ⊥
   证明: le_bot_iff.mp smul_le.mpr by rintro _ rfl _ _; rw [zero_smul]; exact zero_mem _
 
 Depends on / 依赖: le_bot_iff, le_bot_iff.mp, smul_le, smul_le.mpr, zero_mem, zero_smul
@@ -590,7 +590,7 @@ theorem smul_assoc
 
 中文:
 定理 smul_assoc
-  结论: {B} [Semiring B] [Module R B] [Module A B] [Module B M]
+  结论: {B} [半环 B] [模 R B] [模 A B] [模 B M]
   证明: le_antisymm
     (smul_le.2 fun _ hrsij t htn => smul_induction_on hrsij
       (fun r hr s hs => smul_assoc r s t ▸ smul_mem_smul hr (smul_mem_smul hs htn))
@@ -621,7 +621,7 @@ theorem smul_iSup
 
 中文:
 定理 smul_iSup
-  条件: {ι : Sort*} {I : Submodule R A} {t : ι -> Submodule R M}
+  条件: {ι : 类型层*} {I : 子模 R A} {t : ι -> 子模 R M}
   证明: toAddSubmonoid_injective by
     simp only [smul_toAddSubmonoid, iSup_toAddSubmonoid, AddSubmonoid.smul_iSup]
 
@@ -645,7 +645,7 @@ theorem iSup_smul
 
 中文:
 定理 iSup_smul
-  条件: {ι : Sort*} {t : ι -> Submodule R A} {N : Submodule R M}
+  条件: {ι : 类型层*} {t : ι -> 子模 R A} {N : 子模 R M}
   证明: le_antisymm (smul_le.mpr fun t ht s hs => iSup_induction _ (motive := (· • s in _)) ht
     (fun i t ht => mem_iSup_of_mem i <| smul_mem_smul ht hs)
     (by simp_rw [zero_smul]; apply zero_mem) fun x y => by simp_rw [add_smul]; apply add_mem)
@@ -674,7 +674,7 @@ theorem one_smul
 
 中文:
 定理 one_smul
-  结论: (1 : Submodule R A) • N = N
+  结论: (1 : 子模 R A) • N = N
   证明: by
   refine le_antisymm (smul_le.mpr fun r hr m hm => ?_) fun m hm => ?_
   · obtain ⟨r, rfl⟩ := hr
@@ -697,7 +697,7 @@ theorem smul_subset_smul
 
 中文:
 定理 smul_subset_smul
-  结论: (↑I : Set A) • (↑N : Set M) subseteq (↑(I • N) : Set M)
+  结论: (↑I : 集合 A) • (↑N : 集合 M) subseteq (↑(I • N) : 集合 M)
   证明: AddSubmonoid.smul_subset_smul
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.smul_subset_smul, smul_subset_smul
@@ -719,7 +719,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (Submodule R A) where
+  签名: : 乘法 (子模 R A) where
   定义体: (· • ·)
 -/
 instance mul : Mul (Submodule R A) where
@@ -777,7 +777,7 @@ theorem mul_toAddSubmonoid
 
 中文:
 定理 mul_toAddSubmonoid
-  条件: (M N : Submodule R A)
+  条件: (M N : 子模 R A)
   证明: rfl
 
 @[elab_as_elim]
@@ -890,7 +890,7 @@ theorem mul_eq_bot
 
 中文:
 定理 mul_eq_bot
-  条件: [NoZeroDivisors A] {M N : Submodule R A}
+  条件: [无零因子 A] {M N : 子模 R A}
   证明: ⟨fun hmn =>
     or_iff_not_imp_left.mpr fun M_ne_bot =>
       N.eq_bot_iff.mpr fun n hn =>
@@ -918,8 +918,8 @@ instance [NoZeroDivisors
   body: mul_eq_bot.1
 
 中文:
-实例 [NoZeroDivisors
-  签名: A] : NoZeroDivisors (Submodule R A) where
+实例 [无零因子
+  签名: A] : 无零因子 (子模 R A) where
   定义体: mul_eq_bot.1
 
 Depends on / 依赖: mul_eq_bot
@@ -937,7 +937,7 @@ theorem one_mul
 
 中文:
 定理 one_mul
-  结论: (1 : Submodule R A) * M = M
+  结论: (1 : 子模 R A) * M = M
   证明: Submodule.one_smul _
 -/
 protected theorem one_mul : (1 : Submodule R A) * M = M :=
@@ -955,7 +955,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulLeftMono (Submodule R A)
+  签名: MulLeftMono (子模 R A)
   定义体: smul_mono_right _ hNP
 
 Depends on / 依赖: smul_mono_right
@@ -973,7 +973,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulRightMono (Submodule R A)
+  签名: MulRightMono (子模 R A)
   定义体: smul_mono_left
 
 Depends on / 依赖: smul_mono_left
@@ -1049,7 +1049,7 @@ theorem mul_subset_mul
 
 中文:
 定理 mul_subset_mul
-  结论: (↑M : Set A) * (↑N : Set A) subseteq (↑(M * N) : Set A)
+  结论: (↑M : 集合 A) * (↑N : 集合 A) subseteq (↑(M * N) : 集合 A)
   证明: smul_subset_smul _ _
 
 Depends on / 依赖: smul_subset_smul
@@ -1067,7 +1067,7 @@ lemma restrictScalars_mul
 
 中文:
 引理 restrictScalars_mul
-  结论: {A B C} [Semiring A] [Semiring B] [Semiring C]
+  结论: {A B C} [半环 A] [半环 B] [半环 C]
   证明: rfl
 -/
 lemma restrictScalars_mul {A B C} [Semiring A] [Semiring B] [Semiring C]
@@ -1089,7 +1089,7 @@ theorem iSup_mul
 
 中文:
 定理 iSup_mul
-  条件: (s : ι -> Submodule R A) (t : Submodule R A)
+  条件: (s : ι -> 子模 R A) (t : 子模 R A)
   结论: (⨆ i, s i) * t = ⨆ i, s i * t
   证明: iSup_smul
 
@@ -1109,7 +1109,7 @@ theorem mul_iSup
 
 中文:
 定理 mul_iSup
-  条件: (t : Submodule R A) (s : ι -> Submodule R A)
+  条件: (t : 子模 R A) (s : ι -> 子模 R A)
   结论: (t * ⨆ i, s i) = ⨆ i, t * s i
   证明: smul_iSup
 
@@ -1132,7 +1132,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalSemiring (Submodule R A)
+  签名: 非幺半环 (子模 R A)
   定义体: toAddSubmonoid_injective.semigroup _ mul_toAddSubmonoid
   zero_mul := bot_mul
   mul_zero := mul_bot
@@ -1158,7 +1158,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (Submodule R A) 自然数
+  签名: 幂 (子模 R A) 自然数
   定义体: npowRec n s
 
 Depends on / 依赖: npowRec
@@ -1311,7 +1311,7 @@ theorem bot_pow
 
 中文:
 定理 bot_pow
-  结论: 对任意 {n : 自然数}, n != 0 -> (⊥ : Submodule R A) ^ n = ⊥
+  结论: 对任意 {n : 自然数}, n != 0 -> (⊥ : 子模 R A) ^ n = ⊥
 -/
 theorem bot_pow : forall {n : Nat}, n != 0 -> (⊥ : Submodule R A) ^ n = ⊥
   | 1, _ => Submodule.pow_one _
@@ -1400,7 +1400,7 @@ theorem pow_subset_pow
 中文:
 定理 pow_subset_pow
   条件: {n : 自然数}
-  结论: (↑M : Set A) ^ n subseteq ↑(M ^ n : Submodule R A)
+  结论: (↑M : 集合 A) ^ n subseteq ↑(M ^ n : 子模 R A)
   证明: trans AddSubmonoid.pow_subset_pow (le_pow_toAddSubmonoid M)
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.pow_subset_pow, le_pow_toAddSubmonoid, pow_subset_pow
@@ -1437,7 +1437,7 @@ lemma restrictScalars_pow
 
 中文:
 引理 restrictScalars_pow
-  结论: {A B C : 类型} [Semiring A] [Semiring B]
+  结论: {A B C : 类型} [半环 A] [半环 B]
 
 Depends on / 依赖: n.succ_ne_zero, restrictScalars_mul, restrictScalars_pow, succ_ne_zero
 -/
@@ -1464,7 +1464,7 @@ exact eq_zero_of_pow_eq_zero (M ^ n).eq_bot_iff.mp hn _ (pow_mem_pow M hm n)
 
 中文:
 实例 instIsReduced
-  签名: [IsReduced A]
+  签名: [是既约 A]
   定义体: by
     rw [Submodule.zero_eq_bot]; rw [Submodule.eq_bot_iff]
     rintro m hm
@@ -1490,7 +1490,7 @@ theorem pow_eq_bot
 
 中文:
 定理 pow_eq_bot
-  条件: [IsReduced A] {M : Submodule R A} {n : 自然数} (hn : n != 0)
+  条件: [是既约 A] {M : 子模 R A} {n : 自然数} (hn : n != 0)
   证明: by refine ⟨eq_zero_of_pow_eq_zero, by aesop⟩
 
 Depends on / 依赖: eq_zero_of_pow_eq_zero
@@ -1519,7 +1519,7 @@ theorem one_eq_range
 
 中文:
 定理 one_eq_range
-  结论: (1 : Submodule R A) = LinearMap.range (Algebra.linearMap R A)
+  结论: (1 : 子模 R A) = 线性映射.range (代数.linearMap R A)
   证明: by
   rw [one_eq_span]; rw [LinearMap.span_singleton_eq_range]; rw [LinearMap.toSpanSingleton_one_eq_algebraLinearMap]
 
@@ -1543,7 +1543,7 @@ theorem algebraMap_mem
 中文:
 定理 algebraMap_mem
   条件: (r : R)
-  结论: algebraMap R A r in (1 : Submodule R A)
+  结论: algebraMap R A r in (1 : 子模 R A)
   证明: by
   simp [one_eq_range]
 
@@ -1568,7 +1568,7 @@ theorem mem_one
 中文:
 定理 mem_one
   条件: {x : A}
-  结论: x in (1 : Submodule R A) ↔ 存在 y, algebraMap R A y = x
+  结论: x in (1 : 子模 R A) ↔ 存在 y, algebraMap R A y = x
   证明: by
   simp [one_eq_range]
 
@@ -1590,7 +1590,7 @@ theorem smul_one_eq_span
 中文:
 定理 smul_one_eq_span
   条件: (x : A)
-  结论: x • (1 : Submodule R A) = span R {x}
+  结论: x • (1 : 子模 R A) = span R {x}
   证明: by
   rw [one_eq_span]; rw [smul_span]; rw [smul_set_singleton]; rw [smul_eq_mul]; rw [mul_one]
 
@@ -1610,7 +1610,7 @@ theorem span_singleton_algebraMap_of_isUnit
 
 中文:
 定理 span_singleton_algebraMap_of_isUnit
-  条件: {r : R} (h : IsUnit r)
+  条件: {r : R} (h : 是单位 r)
   证明: by
   conv_rhs => rw [one_eq_span, ← span_singleton_smul_eq h, ← algebraMap_eq_smul_one]
 
@@ -1634,7 +1634,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A')
+  条件: {A'} [半环 A'] [代数 R A'] (f : A ->ₐ[R] A')
   证明: by
   ext
   simp
@@ -1754,7 +1754,7 @@ theorem mul_eq_map₂
 
 中文:
 定理 mul_eq_map₂
-  结论: M * N = map₂ (LinearMap.mul R A) M N
+  结论: M * N = map₂ (线性映射.mul R A) M N
   证明: le_antisymm (mul_le.mpr fun _m hm _n => apply_mem_map₂ _ hm)
     (map₂_le.mpr fun _m hm _n => mul_mem_mul hm)
 
@@ -1794,7 +1794,7 @@ lemma mul_def
 
 中文:
 引理 mul_def
-  结论: M * N = span R (M * N : Set A)
+  结论: M * N = span R (M * N : 集合 A)
   证明: by simp [← span_mul_span]
 
 Depends on / 依赖: span_mul_span
@@ -1845,7 +1845,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  条件: {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A')
+  条件: {A'} [半环 A'] [代数 R A'] (f : A ->ₐ[R] A')
   证明: calc
     map f.toLinearMap (M * N) = ⨆ i : M, (N.map (LinearMap.mul R A i)).map f.toLinearMap := by
       rw [mul_eq_map₂]; apply map_iSup
@@ -1952,7 +1952,7 @@ map_injective_of_injective this by
 
 中文:
 定理 map_unop_mul
-  条件: (M N : Submodule R Aᵐᵒᵖ)
+  条件: (M N : 子模 R Aᵐᵒᵖ)
   证明: have : Function.Injective (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ) : A ->ₗ[R] Aᵐᵒᵖ) :=
     LinearEquiv.injective _
 map_injective_of_injective this by
@@ -1980,7 +1980,7 @@ theorem comap_op_mul
 
 中文:
 定理 comap_op_mul
-  条件: (M N : Submodule R Aᵐᵒᵖ)
+  条件: (M N : 子模 R Aᵐᵒᵖ)
   证明: by
   simp_rw [comap_equiv_eq_map_symm, map_unop_mul]
 
@@ -2005,8 +2005,8 @@ instance [IsScalarTower
     rw [← S.span_eq]; rw [← T.span_eq]; rw [smul_span]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [span_mul_span]; rw [span_mul_span]; rw [smul_span]; rw [smul_mul_assoc]
 
 中文:
-实例 [IsScalarTower
-  签名: α A A] : IsScalarTower α (Submodule R A) (Submodule R A) where
+实例 [标量塔
+  签名: α A A] : 标量塔 α (子模 R A) (子模 R A) where
   定义体: by
     rw [← S.span_eq]; rw [← T.span_eq]; rw [smul_span]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [span_mul_span]; rw [span_mul_span]; rw [smul_span]; rw [smul_mul_assoc]
 
@@ -2026,8 +2026,8 @@ instance [SMulCommClass
     rw [← S.span_eq]; rw [← T.span_eq]; rw [smul_span]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [span_mul_span]; rw [span_mul_span]; rw [smul_span]; rw [mul_smul_comm]
 
 中文:
-实例 [SMulCommClass
-  签名: α A A] : SMulCommClass α (Submodule R A) (Submodule R A) where
+实例 [标量交换类
+  签名: α A A] : 标量交换类 α (子模 R A) (子模 R A) where
   定义体: by
     rw [← S.span_eq]; rw [← T.span_eq]; rw [smul_span]; rw [smul_eq_mul]; rw [smul_eq_mul]; rw [span_mul_span]; rw [span_mul_span]; rw [smul_span]; rw [mul_smul_comm]
 
@@ -2046,8 +2046,8 @@ instance [SMulCommClass
   body: have := SMulCommClass.symm A α A; .symm ..
 
 中文:
-实例 [SMulCommClass
-  签名: A α A] : SMulCommClass (Submodule R A) α (Submodule R A)
+实例 [标量交换类
+  签名: A α A] : 标量交换类 (子模 R A) α (子模 R A)
   定义体: have := SMulCommClass.symm A α A; .symm ..
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -2077,7 +2077,7 @@ scoped[Pointwise] attribute [instance] Submodule.hasDistribPointwiseNeg
 
 中文:
 定义 hasDistribPointwiseNeg
-  签名: {A} [Ring A] [Algebra R A]
+  签名: {A} [环 A] [代数 R A]
   定义体: toAddSubmonoid_injective.hasDistribNeg _ neg_toAddSubmonoid mul_toAddSubmonoid
 
 scoped[Pointwise] attribute [instance] Submodule.hasDistribPointwiseNeg
@@ -2108,7 +2108,7 @@ theorem mem_span_mul_finite_of_mem_span_mul
 
 中文:
 定理 mem_span_mul_finite_of_mem_span_mul
-  结论: {R A} [Semiring R] [AddCommMonoid A] [Mul A]
+  结论: {R A} [半环 R] [加法交换幺半群 A] [乘法 A]
   证明: by
   classical
   obtain ⟨U, h, hU⟩ := mem_span_finite_of_mem_span hx
@@ -2145,8 +2145,8 @@ theorem mul_eq_span_mul_set
 
 中文:
 定理 mul_eq_span_mul_set
-  条件: (s t : Submodule R A)
-  结论: s * t = span R ((s : Set A) * (t : Set A))
+  条件: (s t : 子模 R A)
+  结论: s * t = span R ((s : 集合 A) * (t : 集合 A))
   证明: by
   rw [mul_eq_map₂]; exact map₂_eq_span_image2 _ s t
 -/
@@ -2164,7 +2164,7 @@ theorem mem_span_mul_finite_of_mem_mul
 
 中文:
 定理 mem_span_mul_finite_of_mem_mul
-  条件: {P Q : Submodule R A} {x : A} (hx : x in P * Q)
+  条件: {P Q : 子模 R A} {x : A} (hx : x in P * Q)
   证明: Submodule.mem_span_mul_finite_of_mem_span_mul
     (by rwa [← Submodule.span_eq P, ← Submodule.span_eq Q, Submodule.span_mul_span] at hx)
 
@@ -2234,7 +2234,7 @@ lemma span_singleton_mul
 
 中文:
 引理 span_singleton_mul
-  条件: {x : A} {p : Submodule R A}
+  条件: {x : A} {p : 子模 R A}
   证明: ext fun _ => mem_span_singleton_mul
 
 Depends on / 依赖: mem_span_singleton_mul
@@ -2255,7 +2255,7 @@ lemma mem_smul_iff_inv_mul_mem
 
 中文:
 引理 mem_smul_iff_inv_mul_mem
-  结论: {S} [DivisionSemiring S] [Algebra R S] {x : S} {p : Submodule R S}
+  结论: {S} [除半环 S] [代数 R S] {x : S} {p : 子模 R S}
   证明: by
   constructor
   · rintro ⟨a, ha : a in p, rfl⟩; simpa [inv_mul_cancel_left₀ hx]
@@ -2278,7 +2278,7 @@ lemma mul_mem_smul_iff
 
 中文:
 引理 mul_mem_smul_iff
-  结论: {S} [Ring S] [Algebra R S] {x : S} {p : Submodule R S} {y : S}
+  结论: {S} [环 S] [代数 R S] {x : S} {p : 子模 R S} {y : S}
   证明: by
   simp [mem_smul_pointwise_iff_exists, mul_cancel_left_mem_nonZeroDivisors hx]
 
@@ -2321,7 +2321,7 @@ instance idemSemiring
 
 中文:
 实例 idemSemiring
-  签名: : IdemSemiring (Submodule R A) where
+  签名: : IdemSemiring (子模 R A) where
   定义体: Submodule.one_mul
   mul_one := Submodule.mul_one
 
@@ -2340,7 +2340,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing (Submodule R A)
+  签名: 是Ordered环 (子模 R A)
 -/
 instance : IsOrderedRing (Submodule R A) where
 
@@ -2356,7 +2356,7 @@ theorem span_pow
 
 中文:
 定理 span_pow
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   结论: 对任意 n : 自然数, span R s ^ n = span R (s ^ n)
 -/
 theorem span_pow (s : Set A) : forall n : Nat, span R s ^ n = span R (s ^ n)
@@ -2376,7 +2376,7 @@ theorem pow_eq_span_pow_set
 中文:
 定理 pow_eq_span_pow_set
   条件: (n : 自然数)
-  结论: M ^ n = span R ((M : Set A) ^ n)
+  结论: M ^ n = span R ((M : 集合 A) ^ n)
   证明: by
   rw [← span_pow]; rw [span_eq]
 
@@ -2587,7 +2587,7 @@ definition mapHom
 
 中文:
 定义 mapHom
-  签名: {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A')
+  签名: {A'} [半环 A'] [代数 R A'] (f : A ->ₐ[R] A')
   定义体: map f.toLinearMap
   map_zero' := Submodule.map_bot _
   map_add' := (Submodule.map_sup · · _)
@@ -2638,7 +2638,7 @@ right_inv _ := unop_injective SetLike.coe_injective rfl
 
 中文:
 定义 equivOpposite
-  签名: : Submodule R Aᵐᵒᵖ ≃+* (Submodule R A)ᵐᵒᵖ where
+  签名: : 子模 R Aᵐᵒᵖ ≃+* (子模 R A)ᵐᵒᵖ where
   定义体: op p.comap (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ) : A ->ₗ[R] Aᵐᵒᵖ)
   invFun p := p.unop.comap (↑(opLinearEquiv R : A ≃ₗ[R] Aᵐᵒᵖ).symm : Aᵐᵒᵖ ->ₗ[R] A)
 left_inv _ := SetLike.coe_injective rfl
@@ -2665,7 +2665,7 @@ theorem map_pow
 
 中文:
 定理 map_pow
-  条件: {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A') (n : 自然数)
+  条件: {A'} [半环 A'] [代数 R A'] (f : A ->ₐ[R] A') (n : 自然数)
   证明: map_pow (mapHom f) M n
 -/
 protected theorem map_pow {A'} [Semiring A'] [Algebra R A'] (f : A ->ₐ[R] A') (n : Nat) :
@@ -2702,7 +2702,7 @@ theorem comap_op_pow
 
 中文:
 定理 comap_op_pow
-  条件: (n : 自然数) (M : Submodule R Aᵐᵒᵖ)
+  条件: (n : 自然数) (M : 子模 R Aᵐᵒᵖ)
   证明: op_injective (equivOpposite : Submodule R Aᵐᵒᵖ ≃+* _).map_pow M n
 
 Depends on / 依赖: Submodule, equivOpposite, map_pow, op_injective
@@ -2745,7 +2745,7 @@ theorem map_unop_pow
 
 中文:
 定理 map_unop_pow
-  条件: (n : 自然数) (M : Submodule R Aᵐᵒᵖ)
+  条件: (n : 自然数) (M : 子模 R Aᵐᵒᵖ)
   证明: by
   rw [← comap_equiv_eq_map_symm]; rw [← comap_equiv_eq_map_symm]; rw [comap_op_pow]
 
@@ -2773,7 +2773,7 @@ definition span.ringHom
 
 中文:
 定义 span.ringHom
-  签名: : SetSemiring A ->+* Submodule R A where
+  签名: : SetSemiring A ->+* 子模 R A where
   定义体: Submodule.span R (SetSemiring.down s)
   map_zero' := span_empty
   map_one' := one_eq_span.symm
@@ -2802,7 +2802,7 @@ definition spanSingleton
 
 中文:
 定义 spanSingleton
-  签名: : A ->*₀ Submodule R A where
+  签名: : A ->*₀ 子模 R A where
   定义体: Submodule.span.ringHom.toMonoidHom.comp SetSemiring.singletonMonoidHom
   map_zero' := by simp [SetSemiring.singletonMonoidHom]
 
@@ -2824,7 +2824,7 @@ lemma spanSingleton_apply
 中文:
 引理 spanSingleton_apply
   条件: (x : A)
-  结论: spanSingleton R x = Submodule.span R {x}
+  结论: spanSingleton R x = 子模.span R {x}
   证明: rfl
 -/
 @[simp] lemma spanSingleton_apply (x : A) : spanSingleton R x = Submodule.span R {x} := rfl
@@ -2938,7 +2938,7 @@ scoped[Pointwise] attribute [instance] Submodule.pointwiseMulSemiringAction
 
 中文:
 定义 pointwiseMulSemiringAction
-  签名: : MulSemiringAction α (Submodule R A) where
+  签名: : MulSemiring作用 α (子模 R A) where
   定义体: Submodule.pointwiseDistribMulAction
 smul_mul r x y := Submodule.map_mul x y MulSemiringAction.toAlgHom R A r
 smul_one r := Submodule.map_one MulSemiringAction.toAlgHom R A r
@@ -3012,7 +3012,7 @@ instance :
 
 中文:
 实例 :
-  签名: IdemCommSemiring (Submodule R A)
+  签名: IdemCommSemiring (子模 R A)
   定义体: { Submodule.idemSemiring with mul_comm := Submodule.mul_comm }
 
 Depends on / 依赖: Submodule, Submodule.idemSemiring, Submodule.mul_comm, idemSemiring, mul_comm
@@ -3035,7 +3035,7 @@ theorem prod_span
 
 中文:
 定理 prod_span
-  条件: {ι : 类型} (s : Finset ι) (M : ι -> Set A)
+  条件: {ι : 类型} (s : 有限集 ι) (M : ι -> 集合 A)
   证明: by
   let := Classical.decEq ι
   refine Finset.induction_on s ?_ ?_
@@ -3064,7 +3064,7 @@ theorem prod_span_singleton
 
 中文:
 定理 prod_span_singleton
-  条件: {ι : 类型} (s : Finset ι) (x : ι -> A)
+  条件: {ι : 类型} (s : 有限集 ι) (x : ι -> A)
   证明: by
   rw [prod_span]; rw [Set.finsetProd_singleton]
 
@@ -3093,7 +3093,7 @@ instance moduleSet
 
 中文:
 实例 moduleSet
-  签名: : Module (SetSemiring A) (Submodule R A) where
+  签名: : 模 (SetSemiring A) (子模 R A) where
   定义体: span R (SetSemiring.down s) * P
   smul_add _ _ _ := mul_add _ _ _
   add_smul s t P := by
@@ -3130,7 +3130,7 @@ theorem setSemiring_smul_def
 
 中文:
 定理 setSemiring_smul_def
-  条件: (s : SetSemiring A) (P : Submodule R A)
+  条件: (s : SetSemiring A) (P : 子模 R A)
   证明: rfl
 -/
 theorem setSemiring_smul_def (s : SetSemiring A) (P : Submodule R A) :
@@ -3147,7 +3147,7 @@ theorem smul_le_smul
 
 中文:
 定理 smul_le_smul
-  结论: {s t : SetSemiring A} {M N : Submodule R A}
+  结论: {s t : SetSemiring A} {M N : 子模 R A}
   证明: mul_le_mul' (span_mono h₁) h₂
 
 Depends on / 依赖: SetSemiring, SetSemiring.down, subseteq
@@ -3170,7 +3170,7 @@ theorem singleton_smul
 
 中文:
 定理 singleton_smul
-  条件: (a : A) (M : Submodule R A)
+  条件: (a : A) (M : 子模 R A)
   证明: by
   conv_lhs => rw [← span_eq M]
   rw [setSemiring_smul_def]; rw [SetSemiring.down_up]; rw [span_mul_span]; rw [singleton_mul]
@@ -3204,7 +3204,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (Submodule R A)
+  签名: 除法 (子模 R A)
   定义体: ⟨fun I J =>
     { carrier := { x | forall y in J, x * y in I }
       zero_mem' := fun y _ => by
@@ -3240,8 +3240,8 @@ theorem mem_div_iff_forall_mul_mem
   proof: Iff.refl _
 
 中文:
-定理 mem_div_iff_forall_mul_mem
-  条件: {x : A} {I J : Submodule R A}
+定理 mem_div_iff_对任意_mul_mem
+  条件: {x : A} {I J : 子模 R A}
   结论: x in I / J ↔ 对任意 y in J, x * y in I
   证明: Iff.refl _
 
@@ -3262,8 +3262,8 @@ theorem mem_div_iff_smul_subset
 
 中文:
 定理 mem_div_iff_smul_subset
-  条件: {x : A} {I J : Submodule R A}
-  结论: x in I / J ↔ x • (J : Set A) subseteq I
+  条件: {x : A} {I J : 子模 R A}
+  结论: x in I / J ↔ x • (J : 集合 A) subseteq I
   证明: ⟨fun h y ⟨y', hy', xy'_eq_y⟩ => by rw [← xy'_eq_y]; exact h _ hy',
     fun h _ hy => h (Set.smul_mem_smul_set hy)⟩
 
@@ -3284,7 +3284,7 @@ theorem le_div_iff
 
 中文:
 定理 le_div_iff
-  条件: {I J K : Submodule R A}
+  条件: {I J K : 子模 R A}
   结论: I <= J / K ↔ 对任意 x in I, 对任意 z in K, x * z in J
   证明: Iff.refl _
 
@@ -3305,7 +3305,7 @@ theorem le_div_iff_mul_le
 
 中文:
 定理 le_div_iff_mul_le
-  条件: {I J K : Submodule R A}
+  条件: {I J K : 子模 R A}
   结论: I <= J / K ↔ I * K <= J
   证明: by
   rw [le_div_iff]; rw [mul_le]
@@ -3329,7 +3329,7 @@ theorem one_le_one_div
 
 中文:
 定理 one_le_one_div
-  条件: {I : Submodule R A}
+  条件: {I : 子模 R A}
   结论: 1 <= 1 / I ↔ I <= 1
   证明: by
   rw [le_div_iff_mul_le]; rw [one_mul]
@@ -3354,7 +3354,7 @@ theorem one_mem_div
 
 中文:
 定理 one_mem_div
-  条件: {I J : Submodule R A}
+  条件: {I J : 子模 R A}
   结论: 1 in I / J ↔ J <= I
   证明: by
   rw [← one_le]; rw [le_div_iff_mul_le]; rw [one_mul]
@@ -3376,7 +3376,7 @@ theorem le_self_mul_one_div
 
 中文:
 定理 le_self_mul_one_div
-  条件: {I : Submodule R A} (hI : I <= 1)
+  条件: {I : 子模 R A} (hI : I <= 1)
   结论: I <= I * (1 / I)
   证明: by
   simpa using mul_le_mul_right (one_le_one_div.mpr hI) _
@@ -3404,7 +3404,7 @@ theorem mul_one_div_le_one
 
 中文:
 定理 mul_one_div_le_one
-  条件: {I : Submodule R A}
+  条件: {I : 子模 R A}
   结论: I * (1 / I) <= 1
   证明: by
   rw [Submodule.mul_le]
@@ -3443,7 +3443,7 @@ theorem map_div
 
 中文:
 定理 map_div
-  结论: {B : 类型} [CommSemiring B] [Algebra R B] (I J : Submodule R A)
+  结论: {B : 类型} [交换半环 B] [代数 R B] (I J : 子模 R A)
   证明: by
   ext x
   simp only [mem_map, mem_div_iff_forall_mul_mem, AlgEquiv.toLinearMap_apply]

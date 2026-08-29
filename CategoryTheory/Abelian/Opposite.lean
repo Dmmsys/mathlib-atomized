@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian Cᵒᵖ
+  签名: 交换 Cᵒᵖ
   定义体: { normalMonoOfMono f := ⟨normalMonoOfNormalEpiUnop _ (normalEpiOfEpi f.unop)⟩
     normalEpiOfEpi f := ⟨normalEpiOfNormalMonoUnop _ (normalMonoOfMono f.unop)⟩ }
 
@@ -164,7 +164,7 @@ definition kernelUnopOp
 
 中文:
 定义 kernelUnopOp
-  签名: : Opposite.op (kernel g.unop) ≅ cokernel g
+  签名: : 对偶.op (kernel g.unop) ≅ cokernel g
   定义体: (cokernelOpUnop g.unop).op
 
 Depends on / 依赖: cokernelOpUnop, g.unop
@@ -184,7 +184,7 @@ definition cokernelUnopOp
 
 中文:
 定义 cokernelUnopOp
-  签名: : Opposite.op (cokernel g.unop) ≅ kernel g
+  签名: : 对偶.op (cokernel g.unop) ≅ kernel g
   定义体: (kernelOpUnop g.unop).op
 
 Depends on / 依赖: g.unop, kernelOpUnop
@@ -243,7 +243,7 @@ definition kernelOpOp
 
 中文:
 定义 kernelOpOp
-  签名: : kernel f.op ≅ Opposite.op (cokernel f)
+  签名: : kernel f.op ≅ 对偶.op (cokernel f)
   定义体: (kernelOpUnop f).op.symm
 
 Depends on / 依赖: kernelOpUnop, op.symm
@@ -263,7 +263,7 @@ definition cokernelOpOp
 
 中文:
 定义 cokernelOpOp
-  签名: : cokernel f.op ≅ Opposite.op (kernel f)
+  签名: : cokernel f.op ≅ 对偶.op (kernel f)
   定义体: (cokernelOpUnop f).op.symm
 
 Depends on / 依赖: cokernelOpUnop, op.symm
@@ -361,7 +361,7 @@ definition imageUnopOp
 
 中文:
 定义 imageUnopOp
-  签名: : Opposite.op (image g.unop) ≅ image g
+  签名: : 对偶.op (像 g.unop) ≅ 像 g
   定义体: (Abelian.imageIsoImage _).op ≪≫
     (cokernelOpOp _).symm ≪≫
       cokernelIsoOfEq (cokernel.π_unop _) ≪≫
@@ -385,7 +385,7 @@ definition imageOpOp
 
 中文:
 定义 imageOpOp
-  签名: : Opposite.op (image f) ≅ image f.op
+  签名: : 对偶.op (像 f) ≅ 像 f.op
   定义体: imageUnopOp f.op
 
 Depends on / 依赖: NatIso, NatIso.isIso_of_isIso_app, f.op, imageUnopOp, isIso_of_isIso_app
@@ -403,7 +403,7 @@ definition imageOpUnop
 
 中文:
 定义 imageOpUnop
-  签名: : (image f.op).unop ≅ image f
+  签名: : (像 f.op).unop ≅ 像 f
   定义体: (imageUnopOp f.op).unop
 
 Depends on / 依赖: f.op, imageUnopOp
@@ -421,7 +421,7 @@ definition imageUnopUnop
 
 中文:
 定义 imageUnopUnop
-  签名: : (image g).unop ≅ image g.unop
+  签名: : (像 g).unop ≅ 像 g.unop
   定义体: (imageUnopOp g).unop
 
 Depends on / 依赖: imageUnopOp, infer_instance, lanAdjunction_unit

@@ -153,7 +153,7 @@ lemma prod_comp_right
 
 中文:
 引理 prod_comp_right
-  条件: [SFinite ν] {κ : Kernel β γ} [IsSFiniteKernel κ]
+  条件: [SFinite ν] {κ : 核 β γ} [是SFiniteKernel κ]
   证明: by
   ext s hs
   rw [Measure.prod_apply hs]; rw [Measure.bind_apply hs (Kernel.aemeasurable _)]
@@ -191,7 +191,7 @@ lemma prod_comp_left
 
 中文:
 引理 prod_comp_left
-  条件: [SFinite μ] [SFinite ν] {κ : Kernel α γ} [IsSFiniteKernel κ]
+  条件: [SFinite μ] [SFinite ν] {κ : 核 α γ} [是SFiniteKernel κ]
   证明: by
   have h1 : (κ ∘ₘ μ).prod ν = (ν.prod (κ ∘ₘ μ)).map Prod.swap := by rw [Measure.prod_swap]
   have h2 : (κ ∥ₖ Kernel.id) ∘ₘ (μ.prod ν) = ((Kernel.id ∥ₖ κ) ∘ₘ (ν.prod μ)).map Prod.swap := by
@@ -228,7 +228,7 @@ lemma parallelComp_comp_compProd
 
 中文:
 引理 parallelComp_comp_compProd
-  条件: [IsSFiniteKernel κ] {η : Kernel β γ} [IsSFiniteKernel η]
+  条件: [是SFiniteKernel κ] {η : 核 β γ} [是SFiniteKernel η]
   证明: by
   by_cases hμ : SFinite μ
   swap; · simp [hμ]
@@ -256,7 +256,7 @@ lemma compProd_map
 
 中文:
 引理 compProd_map
-  条件: [SFinite μ] [IsSFiniteKernel κ] {f : β -> γ} (hf : Measurable f)
+  条件: [SFinite μ] [是SFiniteKernel κ] {f : β -> γ} (hf : 可测 f)
   证明: by
   calc μ otimesₘ (κ.map f)
   _ = (Kernel.id ∥ₖ Kernel.deterministic f hf) ∘ₘ (Kernel.id ×ₖ κ) ∘ₘ μ := by

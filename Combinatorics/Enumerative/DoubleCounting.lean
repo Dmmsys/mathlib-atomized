@@ -63,7 +63,7 @@ definition bipartiteBelow
 
 中文:
 定义 bipartiteBelow
-  签名: : Finset α
+  签名: : 有限集 α
   定义体: {a in s | r a b}
 -/
 def bipartiteBelow : Finset α := {a in s | r a b}
@@ -78,7 +78,7 @@ definition bipartiteAbove
 
 中文:
 定义 bipartiteAbove
-  签名: : Finset β
+  签名: : 有限集 β
   定义体: {b in t | r a b}
 -/
 def bipartiteAbove : Finset β := {b in t | r a b}
@@ -130,7 +130,7 @@ theorem coe_bipartiteBelow
 
 中文:
 定理 coe_bipartiteBelow
-  结论: s.bipartiteBelow r b = ({a in s | r a b} : Set α)
+  结论: s.bipartiteBelow r b = ({a in s | r a b} : 集合 α)
   证明: coe_filter _ _
 
 @[simp, norm_cast]
@@ -150,7 +150,7 @@ theorem coe_bipartiteAbove
 
 中文:
 定理 coe_bipartiteAbove
-  结论: t.bipartiteAbove r a = ({b in t | r a b} : Set β)
+  结论: t.bipartiteAbove r a = ({b in t | r a b} : 集合 β)
   证明: coe_filter _ _
 
 Depends on / 依赖: coe_filter
@@ -242,7 +242,7 @@ theorem sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow
 
 中文:
 定理 sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow
-  条件: [对任意 a b, Decidable (r a b)]
+  条件: [对任意 a b, 可判定 (r a b)]
   证明: by
   simp_rw [card_eq_sum_ones, sum_sum_bipartiteAbove_eq_sum_sum_bipartiteBelow]
 
@@ -269,7 +269,7 @@ theorem card_nsmul_le_card_nsmul
 
 中文:
 定理 card_nsmul_le_card_nsmul
-  结论: [对任意 a b, Decidable (r a b)]
+  结论: [对任意 a b, 可判定 (r a b)]
   证明: calc
     _ <= ∑ a in s, (#(t.bipartiteAbove r a) : R) := s.card_nsmul_le_sum _ _ hm
     _ = ∑ b in t, (#(s.bipartiteBelow r b) : R) := by
@@ -297,7 +297,7 @@ theorem card_nsmul_le_card_nsmul'
 
 中文:
 定理 card_nsmul_le_card_nsmul'
-  结论: [对任意 a b, Decidable (r a b)]
+  结论: [对任意 a b, 可判定 (r a b)]
   证明: card_nsmul_le_card_nsmul (swap r) hn hm
 
 Depends on / 依赖: card_nsmul_le_card_nsmul
@@ -328,7 +328,7 @@ theorem card_nsmul_lt_card_nsmul_of_lt_of_le
 
 中文:
 定理 card_nsmul_lt_card_nsmul_of_lt_of_le
-  结论: [对任意 a b, Decidable (r a b)] (hs : s.Nonempty)
+  结论: [对任意 a b, 可判定 (r a b)] (hs : s.非空)
   证明: calc
     _ = ∑ _a in s, m := by rw [sum_const]
     _ < ∑ a in s, (#(t.bipartiteAbove r a) : R) := sum_lt_sum_of_nonempty hs hm
@@ -363,7 +363,7 @@ theorem card_nsmul_lt_card_nsmul_of_le_of_lt
 
 中文:
 定理 card_nsmul_lt_card_nsmul_of_le_of_lt
-  结论: [对任意 a b, Decidable (r a b)] (ht : t.Nonempty)
+  结论: [对任意 a b, 可判定 (r a b)] (ht : t.非空)
   证明: calc
     _ <= ∑ a in s, (#(t.bipartiteAbove r a) : R) := s.card_nsmul_le_sum _ _ hm
     _ = ∑ b in t, (#(s.bipartiteBelow r b) : R) := by
@@ -393,7 +393,7 @@ theorem card_nsmul_lt_card_nsmul_of_lt_of_le'
 
 中文:
 定理 card_nsmul_lt_card_nsmul_of_lt_of_le'
-  结论: [对任意 a b, Decidable (r a b)] (ht : t.Nonempty)
+  结论: [对任意 a b, 可判定 (r a b)] (ht : t.非空)
   证明: card_nsmul_lt_card_nsmul_of_lt_of_le (swap r) ht hn hm
 
 Depends on / 依赖: card_nsmul_lt_card_nsmul_of_lt_of_le
@@ -413,7 +413,7 @@ theorem card_nsmul_lt_card_nsmul_of_le_of_lt'
 
 中文:
 定理 card_nsmul_lt_card_nsmul_of_le_of_lt'
-  结论: [对任意 a b, Decidable (r a b)] (hs : s.Nonempty)
+  结论: [对任意 a b, 可判定 (r a b)] (hs : s.非空)
   证明: card_nsmul_lt_card_nsmul_of_le_of_lt (swap r) hs hn hm
 
 Depends on / 依赖: card_nsmul_lt_card_nsmul_of_le_of_lt
@@ -435,7 +435,7 @@ theorem card_mul_le_card_mul
 
 中文:
 定理 card_mul_le_card_mul
-  结论: [对任意 a b, Decidable (r a b)]
+  结论: [对任意 a b, 可判定 (r a b)]
   证明: card_nsmul_le_card_nsmul _ hm hn
 
 Depends on / 依赖: card_nsmul_le_card_nsmul
@@ -455,7 +455,7 @@ theorem card_mul_le_card_mul'
 
 中文:
 定理 card_mul_le_card_mul'
-  结论: [对任意 a b, Decidable (r a b)]
+  结论: [对任意 a b, 可判定 (r a b)]
   证明: card_nsmul_le_card_nsmul' _ hn hm
 
 Depends on / 依赖: card_nsmul_le_card_nsmul
@@ -476,7 +476,7 @@ theorem card_mul_eq_card_mul
 
 中文:
 定理 card_mul_eq_card_mul
-  结论: [对任意 a b, Decidable (r a b)]
+  结论: [对任意 a b, 可判定 (r a b)]
   证明: (card_mul_le_card_mul _ (fun a ha => (hm a ha).ge) fun b hb => (hn b hb).le).antisymm
     card_mul_le_card_mul' _ (fun a ha => (hn a ha).ge) fun b hb => (hm b hb).le
 
@@ -505,7 +505,7 @@ theorem card_le_card_of_forall_subsingleton
         simp_rw [mem_bipartiteBe
 
 中文:
-定理 card_le_card_of_forall_subsingleton
+定理 card_le_card_of_对任意_subsingleton
   结论: (hs : 对任意 a in s, 存在 b, b in t ∧ r a b)
   证明: by
   classical
@@ -540,7 +540,7 @@ theorem card_le_card_of_forall_subsingleton'
   proof: card_le_card_of_forall_subsingleton (swap r) ht hs
 
 中文:
-定理 card_le_card_of_forall_subsingleton'
+定理 card_le_card_of_对任意_subsingleton'
   结论: (ht : 对任意 b in t, 存在 a, a in s ∧ r a b)
   证明: card_le_card_of_forall_subsingleton (swap r) ht hs
 
@@ -563,7 +563,7 @@ lemma sum_card_eq_sum_biUnion_card
 
 中文:
 引理 sum_card_eq_sum_biUnion_card
-  结论: [Fintype α] [DecidableEq α] [DecidableEq β]
+  结论: [有限类型 α] [DecidableEq α] [DecidableEq β]
   证明: by
   convert sum_card_bipartiteAbove_eq_sum_card_bipartiteBelow (fun j x => x in B j)
   · grind [bipartiteAbove]

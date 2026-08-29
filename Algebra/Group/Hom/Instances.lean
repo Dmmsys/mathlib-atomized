@@ -45,8 +45,8 @@ instance OneHom.instPow
 @[to_additive]
 
 中文:
-实例 OneHom.instPow
-  签名: [One M] [Monoid N]
+实例 幺态射.instPow
+  签名: [幺 M] [幺半群 N]
   定义体: { toFun := f ^ n
       map_one' := by simp }
 
@@ -73,8 +73,8 @@ instance MonoidHom.instPow
 @[to_additive (attr := simp)]
 
 中文:
-实例 MonoidHom.instPow
-  签名: [MulOneClass M] [CommMonoid N]
+实例 幺半群态射.instPow
+  签名: [MulOne类 M] [交换幺半群 N]
   定义体: { toFun := f ^ n
       map_one' := by simp
       map_mul' x y := by simp [mul_pow] }
@@ -101,8 +101,8 @@ lemma OneHom.pow_apply
 @[to_additive (attr := simp)]
 
 中文:
-引理 OneHom.pow_apply
-  条件: [One M] [Monoid N] (f : OneHom M N) (n : 自然数) (x : M)
+引理 幺态射.pow_apply
+  条件: [幺 M] [幺半群 N] (f : 幺态射 M N) (n : 自然数) (x : M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -121,8 +121,8 @@ lemma MonoidHom.pow_apply
   proof: rfl
 
 中文:
-引理 MonoidHom.pow_apply
-  条件: [MulOneClass M] [CommMonoid N] (f : M ->* N) (n : 自然数) (x : M)
+引理 幺半群态射.pow_apply
+  条件: [MulOne类 M] [交换幺半群 N] (f : M ->* N) (n : 自然数) (x : M)
   证明: rfl
 -/
 lemma MonoidHom.pow_apply [MulOneClass M] [CommMonoid N] (f : M ->* N) (n : Nat) (x : M) :
@@ -141,8 +141,8 @@ instance OneHom.instMonoid
     DFunLike.coe_injective.monoid DFunLike.coe rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 OneHom.instMonoid
-  签名: [One M] [Monoid N]
+实例 幺态射.instMonoid
+  签名: [幺 M] [幺半群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.monoid DFunLike.coe rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -164,8 +164,8 @@ instance OneHom.instCommMonoid
     DFunLike.coe_injective.commMonoid DFunLike.coe rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 OneHom.instCommMonoid
-  签名: [One M] [CommMonoid N]
+实例 幺态射.instCommMonoid
+  签名: [幺 M] [交换幺半群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.commMonoid DFunLike.coe rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -189,8 +189,8 @@ instance MonoidHom.instCommMonoid
 @[to_additive]
 
 中文:
-实例 MonoidHom.instCommMonoid
-  签名: [MulOneClass M] [CommMonoid N]
+实例 幺半群态射.instCommMonoid
+  签名: [MulOne类 M] [交换幺半群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.commMonoid DFunLike.coe rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -215,8 +215,8 @@ instance OneHom.instZPow
 @[to_additive]
 
 中文:
-实例 OneHom.instZPow
-  签名: [One M] [Group N]
+实例 幺态射.instZPow
+  签名: [幺 M] [群 N]
   定义体: { toFun := f ^ n
       map_one' := by simp }
 
@@ -243,8 +243,8 @@ instance MonoidHom.instZPow
 @[to_additive (attr := simp)]
 
 中文:
-实例 MonoidHom.instZPow
-  签名: [MulOneClass M] [CommGroup N]
+实例 幺半群态射.instZPow
+  签名: [MulOne类 M] [交换群 N]
   定义体: { toFun := f ^ n
       map_one' := by simp
       map_mul' x y := by simp [mul_zpow] }
@@ -271,8 +271,8 @@ lemma OneHom.zpow_apply
 @[to_additive (attr := simp)]
 
 中文:
-引理 OneHom.zpow_apply
-  条件: [One M] [Group N] (f : OneHom M N) (z : 整数) (x : M)
+引理 幺态射.zpow_apply
+  条件: [幺 M] [群 N] (f : 幺态射 M N) (z : 整数) (x : M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -291,8 +291,8 @@ lemma MonoidHom.zpow_apply
   proof: rfl
 
 中文:
-引理 MonoidHom.zpow_apply
-  条件: [MulOneClass M] [CommGroup N] (f : M ->* N) (z : 整数) (x : M)
+引理 幺半群态射.zpow_apply
+  条件: [MulOne类 M] [交换群 N] (f : M ->* N) (z : 整数) (x : M)
   证明: rfl
 -/
 lemma MonoidHom.zpow_apply [MulOneClass M] [CommGroup N] (f : M ->* N) (z : Int) (x : M) :
@@ -312,8 +312,8 @@ instance OneHom.instGroup
       rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 OneHom.instGroup
-  签名: [One M] [Group N]
+实例 幺态射.instGroup
+  签名: [幺 M] [群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.group DFunLike.coe
       rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -338,8 +338,8 @@ instance OneHom.instCommGroup
       rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
 
 中文:
-实例 OneHom.instCommGroup
-  签名: [One M] [CommGroup N]
+实例 幺态射.instCommGroup
+  签名: [幺 M] [交换群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.commGroup DFunLike.coe
       rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -367,8 +367,8 @@ instance MonoidHom.instCommGroup
 @[to_additive]
 
 中文:
-实例 MonoidHom.instCommGroup
-  签名: [MulOneClass M] [CommGroup N]
+实例 幺半群态射.instCommGroup
+  签名: [MulOne类 M] [交换群 N]
   定义体: fast_instance%
     DFunLike.coe_injective.commGroup DFunLike.coe
       rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -394,8 +394,8 @@ instance [One
 @[to_additive]
 
 中文:
-实例 [One
-  签名: M] [MulOneClass N] [IsLeftCancelMul N] : IsLeftCancelMul (OneHom M N)
+实例 [幺
+  签名: M] [MulOne类 N] [左乘消去 N] : 左乘消去 (幺态射 M N)
   定义体: DFunLike.coe_injective.isLeftCancelMul _ fun _ _ => rfl
 
 @[to_additive]
@@ -417,8 +417,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: M] [CommMonoid N] [IsLeftCancelMul N] : IsLeftCancelMul (M ->* N)
+实例 [MulOne类
+  签名: M] [交换幺半群 N] [左乘消去 N] : 左乘消去 (M ->* N)
   定义体: DFunLike.coe_injective.isLeftCancelMul _ fun _ _ => rfl
 
 @[to_additive]
@@ -440,8 +440,8 @@ instance [One
 @[to_additive]
 
 中文:
-实例 [One
-  签名: M] [MulOneClass N] [IsRightCancelMul N] : IsRightCancelMul (OneHom M N)
+实例 [幺
+  签名: M] [MulOne类 N] [右乘消去 N] : 右乘消去 (幺态射 M N)
   定义体: DFunLike.coe_injective.isRightCancelMul _ fun _ _ => rfl
 
 @[to_additive]
@@ -463,8 +463,8 @@ instance [MulOneClass
 @[to_additive]
 
 中文:
-实例 [MulOneClass
-  签名: M] [CommMonoid N] [IsRightCancelMul N] : IsRightCancelMul (M ->* N)
+实例 [MulOne类
+  签名: M] [交换幺半群 N] [右乘消去 N] : 右乘消去 (M ->* N)
   定义体: DFunLike.coe_injective.isRightCancelMul _ fun _ _ => rfl
 
 @[to_additive]
@@ -483,8 +483,8 @@ instance [One
   signature: M] [MulOneClass N] [IsCancelMul N] : IsCancelMul (OneHom M N) where
 
 中文:
-实例 [One
-  签名: M] [MulOneClass N] [IsCancelMul N] : IsCancelMul (OneHom M N) where
+实例 [幺
+  签名: M] [MulOne类 N] [是消去乘法 N] : 是消去乘法 (幺态射 M N) where
 -/
 instance [One M] [MulOneClass N] [IsCancelMul N] : IsCancelMul (OneHom M N) where
 
@@ -497,8 +497,8 @@ instance [MulOneClass
   signature: M] [CommMonoid N] [IsCancelMul N] : IsCancelMul (M ->* N) where
 
 中文:
-实例 [MulOneClass
-  签名: M] [CommMonoid N] [IsCancelMul N] : IsCancelMul (M ->* N) where
+实例 [MulOne类
+  签名: M] [交换幺半群 N] [是消去乘法 N] : 是消去乘法 (M ->* N) where
 -/
 instance [MulOneClass M] [CommMonoid N] [IsCancelMul N] : IsCancelMul (M ->* N) where
 
@@ -515,8 +515,8 @@ instance AddMonoid.End.instAddCommMonoid
 @[simp]
 
 中文:
-实例 AddMonoid.End.instAddCommMonoid
-  签名: [AddCommMonoid M]
+实例 加法幺半群.End.instAddCommMonoid
+  签名: [加法交换幺半群 M]
   定义体: inferInstanceAs AddCommMonoid (M ->+ M)
 
 @[simp]
@@ -537,9 +537,9 @@ theorem AddMonoid.End.zero_apply
   proof: rfl
 
 中文:
-定理 AddMonoid.End.zero_apply
-  条件: [AddCommMonoid M] (m : M)
-  结论: (0 : AddMonoid.End M) m = 0
+定理 加法幺半群.End.zero_apply
+  条件: [加法交换幺半群 M] (m : M)
+  结论: (0 : 加法幺半群.End M) m = 0
   证明: rfl
 -/
 theorem AddMonoid.End.zero_apply [AddCommMonoid M] (m : M) : (0 : AddMonoid.End M) m = 0 :=
@@ -556,9 +556,9 @@ theorem AddMonoid.End.one_apply
   proof: rfl
 
 中文:
-定理 AddMonoid.End.one_apply
-  条件: [AddZeroClass M] (m : M)
-  结论: (1 : AddMonoid.End M) m = m
+定理 加法幺半群.End.one_apply
+  条件: [加法零类 M] (m : M)
+  结论: (1 : 加法幺半群.End M) m = m
   证明: rfl
 -/
 theorem AddMonoid.End.one_apply [AddZeroClass M] (m : M) : (1 : AddMonoid.End M) m = m :=
@@ -573,8 +573,8 @@ instance AddMonoid.End.instAddCommGroup
   body: inferInstanceAs AddCommGroup (M ->+ M)
 
 中文:
-实例 AddMonoid.End.instAddCommGroup
-  签名: [AddCommGroup M]
+实例 加法幺半群.End.instAddCommGroup
+  签名: [加法交换群 M]
   定义体: inferInstanceAs AddCommGroup (M ->+ M)
 
 Depends on / 依赖: AddCommGroup
@@ -591,8 +591,8 @@ instance AddMonoid.End.instIntCast
   body: fun z => z • 1
 
 中文:
-实例 AddMonoid.End.instIntCast
-  签名: [AddCommGroup M]
+实例 加法幺半群.End.inst整数Cast
+  签名: [加法交换群 M]
   定义体: fun z => z • 1
 -/
 instance AddMonoid.End.instIntCast [AddCommGroup M] : IntCast (AddMonoid.End M) where
@@ -609,8 +609,8 @@ theorem AddMonoid.End.intCast_apply
   proof: rfl
 
 中文:
-定理 AddMonoid.End.intCast_apply
-  条件: [AddCommGroup M] (z : 整数) (m : M)
+定理 加法幺半群.End.intCast_apply
+  条件: [加法交换群 M] (z : 整数) (m : M)
   证明: rfl
 -/
 theorem AddMonoid.End.intCast_apply [AddCommGroup M] (z : Int) (m : M) :
@@ -640,7 +640,7 @@ theorem ext_iff₂
 
 中文:
 定理 ext_iff₂
-  条件: {_ : MulOneClass M} {_ : MulOneClass N} {_ : CommMonoid P} {f g : M ->* N ->* P}
+  条件: {_ : MulOne类 M} {_ : MulOne类 N} {_ : 交换幺半群 P} {f g : M ->* N ->* P}
   证明: DFunLike.ext_iff.trans forall_congr' fun _ => DFunLike.ext_iff
 
 Depends on / 依赖: DFunLike, DFunLike.ext_iff, DFunLike.ext_iff.trans, ext_iff, forall_congr
@@ -667,7 +667,7 @@ definition flip
 
 中文:
 定义 flip
-  签名: {mM : MulOneClass M} {mN : MulOneClass N} {mP : CommMonoid P} (f : M ->* N ->* P)
+  签名: {mM : MulOne类 M} {mN : MulOne类 N} {mP : 交换幺半群 P} (f : M ->* N ->* P)
   定义体: { toFun := fun x => f x y,
       map_one' := by simp [f.map_one, one_apply],
       map_mul' := fun x₁ x₂ => by simp [f.map_mul, mul_apply] }
@@ -700,7 +700,7 @@ theorem flip_apply
 
 中文:
 定理 flip_apply
-  结论: {_ : MulOneClass M} {_ : MulOneClass N} {_ : CommMonoid P} (f : M ->* N ->* P)
+  结论: {_ : MulOne类 M} {_ : MulOne类 N} {_ : 交换幺半群 P} (f : M ->* N ->* P)
   证明: rfl
 
 @[to_additive]
@@ -722,7 +722,7 @@ theorem map_one₂
 
 中文:
 定理 map_one₂
-  结论: {_ : MulOneClass M} {_ : MulOneClass N} {_ : CommMonoid P} (f : M ->* N ->* P)
+  结论: {_ : MulOne类 M} {_ : MulOne类 N} {_ : 交换幺半群 P} (f : M ->* N ->* P)
   证明: (flip f n).map_one
 
 @[to_additive]
@@ -746,7 +746,7 @@ theorem map_mul₂
 
 中文:
 定理 map_mul₂
-  结论: {_ : MulOneClass M} {_ : MulOneClass N} {_ : CommMonoid P} (f : M ->* N ->* P)
+  结论: {_ : MulOne类 M} {_ : MulOne类 N} {_ : 交换幺半群 P} (f : M ->* N ->* P)
   证明: (flip f n).map_mul _ _
 
 @[to_additive]
@@ -770,7 +770,7 @@ theorem map_inv₂
 
 中文:
 定理 map_inv₂
-  结论: {_ : Group M} {_ : MulOneClass N} {_ : CommGroup P} (f : M ->* N ->* P) (m : M)
+  结论: {_ : 群 M} {_ : MulOne类 N} {_ : 交换群 P} (f : M ->* N ->* P) (m : M)
   证明: (flip f n).map_inv _
 
 @[to_additive]
@@ -792,7 +792,7 @@ theorem map_div₂
 
 中文:
 定理 map_div₂
-  结论: {_ : Group M} {_ : MulOneClass N} {_ : CommGroup P} (f : M ->* N ->* P)
+  结论: {_ : 群 M} {_ : MulOne类 N} {_ : 交换群 P} (f : M ->* N ->* P)
   证明: (flip f n).map_div _ _
 
 Depends on / 依赖: map_div
@@ -816,7 +816,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: [MulOneClass M] [CommMonoid N]
+  签名: [MulOne类 M] [交换幺半群 N]
   定义体: (MonoidHom.id (M ->* N)).flip
 
 Depends on / 依赖: MonoidHom, MonoidHom.id
@@ -841,7 +841,7 @@ definition compHom'
 
 中文:
 定义 compHom'
-  签名: [MulOneClass M] [MulOneClass N] [CommMonoid P] (f : M ->* N)
+  签名: [MulOne类 M] [MulOne类 N] [交换幺半群 P] (f : M ->* N)
   定义体: flip eval.comp f
 
 Depends on / 依赖: eval.comp
@@ -875,7 +875,7 @@ definition compHom
 
 中文:
 定义 compHom
-  签名: [MulOneClass M] [CommMonoid N] [CommMonoid P]
+  签名: [MulOne类 M] [交换幺半群 N] [交换幺半群 P]
   定义体: { toFun := g.comp, map_one' := comp_one g, map_mul' := comp_mul g }
   map_one' := by
     ext1 f
@@ -912,7 +912,7 @@ definition flipHom
 
 中文:
 定义 flipHom
-  签名: {_ : MulOneClass M} {_ : MulOneClass N} {_ : CommMonoid P}
+  签名: {_ : MulOne类 M} {_ : MulOne类 N} {_ : 交换幺半群 P}
   定义体: MonoidHom.flip
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -946,7 +946,7 @@ definition compl₂
 
 中文:
 定义 compl₂
-  签名: [MulOneClass M] [MulOneClass N] [CommMonoid P] [MulOneClass Q] (f : M ->* N ->* P)
+  签名: [MulOne类 M] [MulOne类 N] [交换幺半群 P] [MulOne类 Q] (f : M ->* N ->* P)
   定义体: (compHom' g).comp f
 
 @[to_additive (attr := simp)]
@@ -968,7 +968,7 @@ theorem compl₂_apply
 
 中文:
 定理 compl₂_apply
-  结论: [MulOneClass M] [MulOneClass N] [CommMonoid P] [MulOneClass Q]
+  结论: [MulOne类 M] [MulOne类 N] [交换幺半群 P] [MulOne类 Q]
   证明: rfl
 -/
 theorem compl₂_apply [MulOneClass M] [MulOneClass N] [CommMonoid P] [MulOneClass Q]
@@ -992,7 +992,7 @@ definition compr₂
 
 中文:
 定义 compr₂
-  签名: [MulOneClass M] [MulOneClass N] [CommMonoid P] [CommMonoid Q] (f : M ->* N ->* P)
+  签名: [MulOne类 M] [MulOne类 N] [交换幺半群 P] [交换幺半群 Q] (f : M ->* N ->* P)
   定义体: (compHom g).comp f
 
 @[to_additive (attr := simp)]
@@ -1014,7 +1014,7 @@ theorem compr₂_apply
 
 中文:
 定理 compr₂_apply
-  结论: [MulOneClass M] [MulOneClass N] [CommMonoid P] [CommMonoid Q] (f : M ->* N ->* P)
+  结论: [MulOne类 M] [MulOne类 N] [交换幺半群 P] [交换幺半群 Q] (f : M ->* N ->* P)
   证明: rfl
 -/
 theorem compr₂_apply [MulOneClass M] [MulOneClass N] [CommMonoid P] [CommMonoid Q] (f : M ->* N ->* P)

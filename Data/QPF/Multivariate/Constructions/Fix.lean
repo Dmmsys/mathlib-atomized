@@ -135,12 +135,12 @@ inductive WEquiv
     - trans: (u v w : q.P.W α) : WEquiv u v -> WEquiv v w -> WEquiv u w
 
 中文:
-归纳类型 WEquiv
+归纳类型 W等价
   参数: {α : TypeVec n}
   构造子 (3 个):
-    - ind: (a : q.P.A) (f' : q.P.drop.B a ⟹ α) (f₀ f₁ : q.P.last.B a -> q.P.W α) : (对任意 x, WEquiv (f₀ x) (f₁ x)) -> WEquiv (q.P.wMk a f' f₀) (q.P.wMk a f' f₁)
-    - abs: (a₀ : q.P.A) (f'₀ : q.P.drop.B a₀ ⟹ α) (f₀ : q.P.last.B a₀ -> q.P.W α) (a₁ : q.P.A) (f'₁ : q.P.drop.B a₁ ⟹ α) (f₁ : q.P.last.B a₁ -> q.P.W α) : abs ⟨a₀, q.P.appendContents f'₀ f₀⟩ = abs ⟨a₁, q.P.appendContents f'₁ f₁⟩ -> WEquiv (q.P.wMk a₀ f'₀ f₀) (q.P.wMk a₁ f'₁ f₁)
-    - trans: (u v w : q.P.W α) : WEquiv u v -> WEquiv v w -> WEquiv u w
+    - ind: (a : q.P.A) (f' : q.P.drop.B a ⟹ α) (f₀ f₁ : q.P.last.B a -> q.P.W α) : (对任意 x, W等价 (f₀ x) (f₁ x)) -> W等价 (q.P.wMk a f' f₀) (q.P.wMk a f' f₁)
+    - abs: (a₀ : q.P.A) (f'₀ : q.P.drop.B a₀ ⟹ α) (f₀ : q.P.last.B a₀ -> q.P.W α) (a₁ : q.P.A) (f'₁ : q.P.drop.B a₁ ⟹ α) (f₁ : q.P.last.B a₁ -> q.P.W α) : abs ⟨a₀, q.P.appendContents f'₀ f₀⟩ = abs ⟨a₁, q.P.appendContents f'₁ f₁⟩ -> W等价 (q.P.wMk a₀ f'₀ f₀) (q.P.wMk a₁ f'₁ f₁)
+    - trans: (u v w : q.P.W α) : W等价 u v -> W等价 v w -> W等价 u w
 -/
 inductive WEquiv {α : TypeVec n} : q.P.W α -> q.P.W α -> Prop
   | ind (a : q.P.A) (f' : q.P.drop.B a ⟹ α) (f₀ f₁ : q.P.last.B a -> q.P.W α) :
@@ -243,7 +243,7 @@ theorem wEquiv.refl
 中文:
 定理 wEquiv.refl
   条件: {α : TypeVec n} (x : q.P.W α)
-  结论: WEquiv x x
+  结论: W等价 x x
   证明: abs' x x rfl
 -/
 theorem wEquiv.refl {α : TypeVec n} (x : q.P.W α) : WEquiv x x := abs' x x rfl
@@ -264,7 +264,7 @@ theorem wEquiv.symm
 中文:
 定理 wEquiv.symm
   条件: {α : TypeVec n} (x y : q.P.W α)
-  结论: WEquiv x y -> WEquiv y x
+  结论: W等价 x y -> W等价 y x
   证明: by
   intro h; induction h with
   | ind a f' f₀ f₁ _h ih => exact WEquiv.ind _ _ _ _ ih
@@ -339,7 +339,7 @@ theorem wrepr_equiv
 中文:
 定理 wrepr_equiv
   条件: {α : TypeVec n} (x : q.P.W α)
-  结论: WEquiv (wrepr x) x
+  结论: W等价 (wrepr x) x
   证明: by
   induction x using q.P.wInd
   case ih a f' f ih =>
@@ -472,7 +472,7 @@ instance Fix.mvfunctor
 
 中文:
 实例 Fix.mvfunctor
-  签名: : MvFunctor (Fix F) where map
+  签名: : Mv函子 (Fix F) where map
   定义体: Fix.map
 
 Depends on / 依赖: Fix.map

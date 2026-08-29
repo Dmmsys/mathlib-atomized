@@ -37,7 +37,7 @@ definition unitOfInvertible
 
 中文:
 定义 unitOfInvertible
-  签名: [Monoid α] (a : α) [Invertible a]
+  签名: [幺半群 α] (a : α) [可逆 a]
   定义体: a
   inv := ⅟a
   val_inv := by simp
@@ -60,8 +60,8 @@ theorem isUnit_of_invertible
 
 中文:
 定理 isUnit_of_invertible
-  条件: [Monoid α] (a : α) [Invertible a]
-  结论: IsUnit a
+  条件: [幺半群 α] (a : α) [可逆 a]
+  结论: 是单位 a
   证明: ⟨unitOfInvertible a, rfl⟩
 
 Depends on / 依赖: unitOfInvertible
@@ -82,8 +82,8 @@ instance Units.invertible
 @[simp]
 
 中文:
-实例 Units.invertible
-  签名: [Monoid α] (u : αˣ)
+实例 单位群.invertible
+  签名: [幺半群 α] (u : αˣ)
   定义体: ↑u⁻¹
   invOf_mul_self := u.inv_mul
   mul_invOf_self := u.mul_inv
@@ -108,7 +108,7 @@ theorem invOf_units
 
 中文:
 定理 invOf_units
-  条件: [Monoid α] (u : αˣ) [Invertible (u : α)]
+  条件: [幺半群 α] (u : αˣ) [可逆 (u : α)]
   结论: ⅟(u : α) = ↑u⁻¹
   证明: invOf_eq_right_inv u.mul_inv
 
@@ -128,9 +128,9 @@ theorem IsUnit.nonempty_invertible
   ⟨x.invertible.copy _ hx.symm⟩
 
 中文:
-定理 IsUnit.nonempty_invertible
-  条件: [Monoid α] {a : α} (h : IsUnit a)
-  结论: Nonempty (Invertible a)
+定理 是单位.nonempty_invertible
+  条件: [幺半群 α] {a : α} (h : 是单位 a)
+  结论: 非空 (可逆 a)
   证明: let ⟨x, hx⟩ := h
   ⟨x.invertible.copy _ hx.symm⟩
 
@@ -155,8 +155,8 @@ definition IsUnit.invertible
 @[simp]
 
 中文:
-定义 IsUnit.invertible
-  签名: [Monoid α] {a : α} (h : IsUnit a)
+定义 是单位.invertible
+  签名: [幺半群 α] {a : α} (h : 是单位 a)
   定义体: Classical.choice h.nonempty_invertible
 
 @[simp]
@@ -178,8 +178,8 @@ theorem nonempty_invertible_iff_isUnit
 
 中文:
 定理 nonempty_invertible_iff_isUnit
-  条件: [Monoid α] (a : α)
-  结论: Nonempty (Invertible a) ↔ IsUnit a
+  条件: [幺半群 α] (a : α)
+  结论: 非空 (可逆 a) ↔ 是单位 a
   证明: ⟨Nonempty.rec @isUnit_of_invertible _ _ _, IsUnit.nonempty_invertible⟩
 
 Depends on / 依赖: IsUnit, IsUnit.nonempty_invertible, Nonempty, Nonempty.rec, isUnit_of_invertible, nonempty_invertible
@@ -200,7 +200,7 @@ theorem Commute.invOf_right
 
 中文:
 定理 Commute.invOf_right
-  条件: [Monoid α] {a b : α} [Invertible b] (h : Commute a b)
+  条件: [幺半群 α] {a b : α} [可逆 b] (h : Commute a b)
   证明: calc
     a * ⅟b = ⅟b * (b * a * ⅟b) := by simp [mul_assoc]
     _ = ⅟b * (a * b * ⅟b) := by rw [h.eq]
@@ -228,7 +228,7 @@ theorem Commute.invOf_left
 
 中文:
 定理 Commute.invOf_left
-  条件: [Monoid α] {a b : α} [Invertible b] (h : Commute b a)
+  条件: [幺半群 α] {a b : α} [可逆 b] (h : Commute b a)
   证明: calc
     ⅟b * a = ⅟b * (a * b * ⅟b) := by simp [mul_assoc]
     _ = ⅟b * (b * a * ⅟b) := by rw [h.eq]
@@ -256,7 +256,7 @@ theorem commute_invOf
 
 中文:
 定理 commute_invOf
-  条件: {M : 类型} [One M] [Mul M] (m : M) [Invertible m]
+  条件: {M : 类型} [幺 M] [乘法 M] (m : M) [可逆 m]
   结论: Commute m (⅟m)
   证明: calc
     m * ⅟m = 1 := mul_invOf_self m
@@ -286,7 +286,7 @@ abbreviation invertibleOfInvertibleMul
 
 中文:
 缩写 invertibleOfInvertibleMul
-  签名: (a b : α) [Invertible a] [Invertible (a * b)]
+  签名: (a b : α) [可逆 a] [可逆 (a * b)]
   定义体: ⅟(a * b) * a
   invOf_mul_self := by rw [mul_assoc, invOf_mul_self]
   mul_invOf_self := by
@@ -311,7 +311,7 @@ abbreviation invertibleOfMulInvertible
 
 中文:
 缩写 invertibleOfMulInvertible
-  签名: (a b : α) [Invertible (a * b)] [Invertible b]
+  签名: (a b : α) [可逆 (a * b)] [可逆 b]
   定义体: b * ⅟(a * b)
   invOf_mul_self := by
     rw [← (isUnit_of_invertible b).mul_left_inj]; rw [mul_assoc]; rw [mul_assoc]; rw [invOf_mul_self]; rw [mul_one]; rw [one_mul]
@@ -337,8 +337,8 @@ definition Invertible.mulLeft
   right_inv _ := Subsingleton.elim _ _
 
 中文:
-定义 Invertible.mulLeft
-  签名: {a : α} (_ : Invertible a) (b : α)
+定义 可逆.mulLeft
+  签名: {a : α} (_ : 可逆 a) (b : α)
   定义体: invertibleMul a b
   invFun _ := invertibleOfInvertibleMul a _
   left_inv _ := Subsingleton.elim _ _
@@ -366,8 +366,8 @@ definition Invertible.mulRight
   right_inv _ := Subsingleton.elim _ _
 
 中文:
-定义 Invertible.mulRight
-  签名: (a : α) {b : α} (_ : Invertible b)
+定义 可逆.mulRight
+  签名: (a : α) {b : α} (_ : 可逆 b)
   定义体: invertibleMul a b
   invFun _ := invertibleOfMulInvertible _ b
   left_inv _ := Subsingleton.elim _ _
@@ -393,7 +393,7 @@ instance invertiblePow
 
 中文:
 实例 invertiblePow
-  签名: (m : α) [Invertible m] (n : 自然数)
+  签名: (m : α) [可逆 m] (n : 自然数)
   定义体: ⅟m ^ n
   invOf_mul_self := by rw [← (commute_invOf m).symm.mul_pow, invOf_mul_self, one_pow]
   mul_invOf_self := by rw [← (commute_invOf m).mul_pow, mul_invOf_self, one_pow]
@@ -414,7 +414,7 @@ lemma invOf_pow
 
 中文:
 引理 invOf_pow
-  条件: (m : α) [Invertible m] (n : 自然数) [Invertible (m ^ n)]
+  条件: (m : α) [可逆 m] (n : 自然数) [可逆 (m ^ n)]
   结论: ⅟(m ^ n) = ⅟m ^ n
   证明: @invertible_unique _ _ _ _ _ (invertiblePow m n) rfl
 
@@ -459,8 +459,8 @@ definition Invertible.map
   mul_invOf_self := by rw [← map_mul, mul_invOf_self, map_one]
 
 中文:
-定义 Invertible.map
-  签名: {R : 类型} {S : 类型} {F : 类型} [MulOneClass R] [MulOneClass S]
+定义 可逆.map
+  签名: {R : 类型} {S : 类型} {F : 类型} [MulOne类 R] [MulOne类 S]
   定义体: f (⅟r)
   invOf_mul_self := by rw [← map_mul, invOf_mul_self, map_one]
   mul_invOf_self := by rw [← map_mul, mul_invOf_self, map_one]
@@ -483,7 +483,7 @@ theorem map_invOf
 
 中文:
 定理 map_invOf
-  结论: {R : 类型} {S : 类型} {F : 类型} [MulOneClass R] [Monoid S]
+  结论: {R : 类型} {S : 类型} {F : 类型} [MulOne类 R] [幺半群 S]
   证明: by
   obtain rfl : ifr = Invertible.map f r := Subsingleton.elim _ _; rfl
 
@@ -509,8 +509,8 @@ definition Invertible.ofLeftInverse
   body: (Invertible.map g (f r)).copy _ (h r).symm
 
 中文:
-定义 Invertible.ofLeftInverse
-  签名: {R : 类型} {S : 类型} {G : 类型} [MulOneClass R] [MulOneClass S]
+定义 可逆.ofLeftInverse
+  签名: {R : 类型} {S : 类型} {G : 类型} [MulOne类 R] [MulOne类 S]
   定义体: (Invertible.map g (f r)).copy _ (h r).symm
 
 Depends on / 依赖: Invertible, Invertible.map
@@ -535,7 +535,7 @@ definition invertibleEquivOfLeftInverse
 
 中文:
 定义 invertibleEquivOfLeftInverse
-  签名: {R : 类型} {S : 类型} {F G : 类型} [Monoid R] [Monoid S]
+  签名: {R : 类型} {S : 类型} {F G : 类型} [幺半群 R] [幺半群 S]
   定义体: Invertible.ofLeftInverse f _ _ h
   invFun _ := Invertible.map f _
   left_inv _ := Subsingleton.elim _ _

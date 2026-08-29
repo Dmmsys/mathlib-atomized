@@ -54,8 +54,8 @@ class IsMaximal
     - out : IsCoatom I
 
 中文:
-类 IsMaximal
-  参数: (I : Ideal α)
+类 是极大
+  参数: (I : 理想 α)
   公理与运算 (1 个):
     - out : IsCoatom I
 -/
@@ -75,8 +75,8 @@ theorem isMaximal_def
 
 中文:
 定理 isMaximal_def
-  条件: {I : Ideal α}
-  结论: I.IsMaximal ↔ IsCoatom I
+  条件: {I : 理想 α}
+  结论: I.是极大 ↔ IsCoatom I
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem isMaximal_def {I : Ideal α} : I.IsMaximal ↔ IsCoatom I :=
@@ -92,8 +92,8 @@ theorem IsMaximal.ne_top
   proof: (isMaximal_def.1 h).1
 
 中文:
-定理 IsMaximal.ne_top
-  条件: {I : Ideal α} (h : I.IsMaximal)
+定理 是极大.ne_top
+  条件: {I : 理想 α} (h : I.是极大)
   结论: I != ⊤
   证明: (isMaximal_def.1 h).1
 
@@ -112,8 +112,8 @@ theorem IsMaximal.lt_top
   proof: h.ne_top.lt_top
 
 中文:
-定理 IsMaximal.lt_top
-  条件: {I : Ideal α} (h : I.IsMaximal)
+定理 是极大.lt_top
+  条件: {I : 理想 α} (h : I.是极大)
   结论: I < ⊤
   证明: h.ne_top.lt_top
 
@@ -133,7 +133,7 @@ theorem isMaximal_iff
 
 中文:
 定理 isMaximal_iff
-  条件: {I : Ideal α}
+  条件: {I : 理想 α}
   证明: by
   simp_rw [isMaximal_def, SetLike.isCoatom_iff, Ideal.ne_top_iff_one, ← Ideal.eq_top_iff_one]
 
@@ -153,8 +153,8 @@ theorem IsMaximal.eq_of_le
   proof: eq_iff_le_not_lt.2 ⟨IJ, fun h => hJ (hI.1.2 _ h)⟩
 
 中文:
-定理 IsMaximal.eq_of_le
-  条件: {I J : Ideal α} (hI : I.IsMaximal) (hJ : J != ⊤) (IJ : I <= J)
+定理 是极大.eq_of_le
+  条件: {I J : 理想 α} (hI : I.是极大) (hJ : J != ⊤) (IJ : I <= J)
   结论: I = J
   证明: eq_iff_le_not_lt.2 ⟨IJ, fun h => hJ (hI.1.2 _ h)⟩
 
@@ -173,8 +173,8 @@ theorem IsMaximal.eq_iff_le
   proof: ⟨by aesop, Ideal.IsMaximal.eq_of_le hI hJ⟩
 
 中文:
-定理 IsMaximal.eq_iff_le
-  条件: {I J : Ideal α} (hI : I.IsMaximal) (hJ : J != ⊤)
+定理 是极大.eq_iff_le
+  条件: {I J : 理想 α} (hI : I.是极大) (hJ : J != ⊤)
   结论: I = J ↔ I <= J
   证明: ⟨by aesop, Ideal.IsMaximal.eq_of_le hI hJ⟩
 
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCoatomic (Ideal α)
+  签名: 是余原子的 (理想 α)
   定义体: CompleteLattice.coatomic_of_top_compact isCompactElement_top
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.coatomic_of_top_compact, coatomic_of_top_compact, isCompactElement_top
@@ -211,8 +211,8 @@ theorem IsMaximal.coprime_of_ne
   exact hM.eq_of_le hM'.ne_top (le_sup_left.trans_eq (hM'.eq_of_le h le_sup_right).symm)
 
 中文:
-定理 IsMaximal.coprime_of_ne
-  结论: {M M' : Ideal α} (hM : M.IsMaximal) (hM' : M'.IsMaximal)
+定理 是极大.coprime_of_ne
+  结论: {M M' : 理想 α} (hM : M.是极大) (hM' : M'.是极大)
   证明: by
   contrapose! hne with h
   exact hM.eq_of_le hM'.ne_top (le_sup_left.trans_eq (hM'.eq_of_le h le_sup_right).symm)
@@ -235,9 +235,9 @@ theorem exists_le_maximal
   ⟨m, ⟨⟨hm.1⟩, hm.2⟩⟩
 
 中文:
-定理 exists_le_maximal
-  条件: (I : Ideal α) (hI : I != ⊤)
-  结论: 存在 M : Ideal α, M.IsMaximal ∧ I <= M
+定理 存在_le_maximal
+  条件: (I : 理想 α) (hI : I != ⊤)
+  结论: 存在 M : 理想 α, M.是极大 ∧ I <= M
   证明: let ⟨m, hm⟩ := (eq_top_or_exists_le_coatom I).resolve_left hI
   ⟨m, ⟨⟨hm.1⟩, hm.2⟩⟩
 
@@ -259,9 +259,9 @@ theorem exists_maximal
   ⟨I, hI⟩
 
 中文:
-定理 exists_maximal
-  条件: [Nontrivial α]
-  结论: 存在 M : Ideal α, M.IsMaximal
+定理 存在_maximal
+  条件: [非平凡 α]
+  结论: 存在 M : 理想 α, M.是极大
   证明: let ⟨I, ⟨hI, _⟩⟩ := exists_le_maximal (⊥ : Ideal α) bot_ne_top
   ⟨I, hI⟩
 
@@ -286,9 +286,9 @@ theorem ne_top_iff_exists_maximal
   exact IsMaximal.ne_top hMmax
 
 中文:
-定理 ne_top_iff_exists_maximal
-  条件: {I : Ideal α}
-  结论: I != ⊤ ↔ 存在 M : Ideal α, M.IsMaximal ∧ I <= M
+定理 ne_top_iff_存在_maximal
+  条件: {I : 理想 α}
+  结论: I != ⊤ ↔ 存在 M : 理想 α, M.是极大 ∧ I <= M
   证明: by
   refine ⟨exists_le_maximal I, ?_⟩
   contrapose!
@@ -316,8 +316,8 @@ instance [Nontrivial
   exact nontrivial_of_ne M ⊤ hM
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial (Ideal α)
+实例 [非平凡
+  签名: α] : 非平凡 (理想 α)
   定义体: by
   rcases @exists_maximal α _ _ with ⟨M, hM, _⟩
   exact nontrivial_of_ne M ⊤ hM
@@ -341,7 +341,7 @@ theorem maximal_of_no_maximal
 
 中文:
 定理 maximal_of_no_maximal
-  结论: {P : Ideal α}
+  结论: {P : 理想 α}
   证明: by
   by_contra hnonmax
   rcases exists_le_maximal J hnonmax with ⟨M, hM1, hM2⟩
@@ -371,8 +371,8 @@ theorem IsMaximal.exists_inv
   rwa [← span_eq I]
 
 中文:
-定理 IsMaximal.exists_inv
-  条件: {I : Ideal α} (hI : I.IsMaximal) {x} (hx : x ∉ I)
+定理 是极大.存在_inv
+  条件: {I : 理想 α} (hI : I.是极大) {x} (hx : x ∉ I)
   证明: by
   obtain ⟨H₁, H₂⟩ := isMaximal_iff.1 hI
   rcases mem_span_insert.1
@@ -413,7 +413,7 @@ theorem sInf_isPrime_of_isChain
 
 中文:
 定理 sInf_isPrime_of_isChain
-  结论: {s : Set (Ideal α)} (hs : s.Nonempty) (hs' : IsChain (· <= ·) s)
+  结论: {s : 集合 (理想 α)} (hs : s.非空) (hs' : IsChain (· <= ·) s)
   证明: ⟨fun e =>
     let ⟨x, hx⟩ := hs
     (H x hx).ne_top (eq_top_iff.mpr (e.symm.trans_le (sInf_le hx))),
@@ -469,7 +469,7 @@ theorem span_singleton_prime
 中文:
 定理 span_singleton_prime
   条件: {p : α} (hp : p != 0)
-  结论: IsPrime (span ({p} : Set α)) ↔ Prime p
+  结论: 是素 (span ({p} : 集合 α)) ↔ 素 p
   证明: by
   simp [isPrime_iff, Prime, span_singleton_eq_top, hp, mem_span_singleton]
 
@@ -490,8 +490,8 @@ theorem isPrime_span_singleton_of_prime
 
 中文:
 定理 isPrime_span_singleton_of_prime
-  条件: {p : α} (hp : Prime p)
-  结论: (span {p}).IsPrime
+  条件: {p : α} (hp : 素 p)
+  结论: (span {p}).是素
   证明: by
   simp [Ideal.span_singleton_prime hp.ne_zero, hp]
 
@@ -515,9 +515,9 @@ theorem IsMaximal.isPrime
       obtain ⟨_, oJ⟩ := isMaximal_iff.1 H
 
 中文:
-定理 IsMaximal.isPrime
-  条件: {I : Ideal α} (H : I.IsMaximal)
-  结论: I.IsPrime
+定理 是极大.isPrime
+  条件: {I : 理想 α} (H : I.是极大)
+  结论: I.是素
   证明: ⟨H.1.1, @fun x y hxy =>
     or_iff_not_imp_left.2 fun hx => by
       let J : Ideal α := Submodule.span α (insert x ↑I)
@@ -560,8 +560,8 @@ theorem exists_disjoint_powers_of_span_eq_top
     haM (hM.isPrime.mem_of_pow_mem _ (le <| hn ▸ hx))⟩
 
 中文:
-定理 exists_disjoint_powers_of_span_eq_top
-  结论: (s : Set α) (hs : span s = ⊤) (I : Ideal α)
+定理 存在_disjoint_powers_of_span_eq_top
+  结论: (s : 集合 α) (hs : span s = ⊤) (I : 理想 α)
   证明: by
   have ⟨M, hM, le⟩ := exists_le_maximal I hI
   have := hM.1.1
@@ -592,7 +592,7 @@ theorem span_singleton_lt_span_singleton
 
 中文:
 定理 span_singleton_lt_span_singleton
-  条件: [IsDomain α] {x y : α}
+  条件: [是整环 α] {x y : α}
   证明: by
   rw [lt_iff_le_not_ge]; rw [span_singleton_le_span_singleton]; rw [span_singleton_le_span_singleton]; rw [dvd_and_not_dvd_iff]
 
@@ -620,7 +620,7 @@ lemma isPrime_of_maximally_disjoint
 
 中文:
 引理 isPrime_of_maximally_disjoint
-  结论: (I : Ideal α)
+  结论: (I : 理想 α)
   证明: by
     rintro rfl
     have : 1 in (S : Set α) := S.one_mem
@@ -671,8 +671,8 @@ theorem exists_le_prime_disjoint
   · exact ⟨I, disjoint, fun J hJ => isEmptyElim (⟨J,
 
 中文:
-定理 exists_le_prime_disjoint
-  条件: (S : Submonoid α) (disjoint : Disjoint (I : Set α) S)
+定理 存在_le_prime_disjoint
+  条件: (S : 子幺半群 α) (disjoint : Disjoint (I : 集合 α) S)
   证明: by
   have ⟨p, hIp, hp⟩ := zorn_le_nonempty₀ {p : Ideal α | Disjoint (p : Set α) S}
     (fun c hc hc' x hx => ?_) I disjoint
@@ -707,7 +707,7 @@ theorem exists_le_prime_notMem_of_isIdempotentElem
   ⟨p, h1, h2, Set.disjoin
 
 中文:
-定理 exists_le_prime_notMem_of_isIdempotentElem
+定理 存在_le_prime_notMem_of_isIdempotentElem
   条件: (a : α) (ha : IsIdempotentElem a) (haI : a ∉ I)
   证明: have : Disjoint (I : Set α) (Submonoid.powers a) := Set.disjoint_right.mpr by
     rw [ha.coe_powers]
@@ -799,7 +799,7 @@ theorem irreducible_of_isMaximal_span_singleton
 
 中文:
 定理 irreducible_of_isMaximal_span_singleton
-  结论: [IsDomain α] {a : α}
+  结论: [是整环 α] {a : α}
   证明: ((Ideal.span_singleton_prime ha).1 max.isPrime).irreducible
 
 Depends on / 依赖: Ideal.span_singleton_prime, irreducible, isPrime, max.isPrime, span_singleton_prime
@@ -828,7 +828,7 @@ theorem isPrime_iff_of_isPrincipalIdealRing
 
 中文:
 定理 isPrime_iff_of_isPrincipalIdealRing
-  条件: {P : Ideal α} (hP : P != ⊥)
+  条件: {P : 理想 α} (hP : P != ⊥)
   证明: by
     obtain ⟨p, rfl⟩ := Submodule.IsPrincipal.principal P
     exact ⟨p, (span_singleton_prime (by simp [·] at hP)).mp h, rfl⟩
@@ -859,7 +859,7 @@ theorem isPrime_iff_of_isPrincipalIdealRing_of_noZeroDivisors
 
 中文:
 定理 isPrime_iff_of_isPrincipalIdealRing_of_noZeroDivisors
-  结论: [NoZeroDivisors α] [Nontrivial α]
+  结论: [无零因子 α] [非平凡 α]
   证明: by
   rw [or_iff_not_imp_left]; rw [← forall_congr' isPrime_iff_of_isPrincipalIdealRing]; rw [← or_iff_not_imp_left]; rw [or_iff_right_of_imp]
   rintro rfl; exact isPrime_bot
@@ -894,7 +894,7 @@ theorem bot_isMaximal
 
 中文:
 定理 bot_isMaximal
-  结论: IsMaximal (⊥ : Ideal K)
+  结论: 是极大 (⊥ : 理想 K)
   证明: ⟨⟨fun h => absurd ((eq_top_iff_one (⊤ : Ideal K)).mp rfl) (by rw [← h]; simp), fun I hI =>
       or_iff_not_imp_left.mp (eq_bot_or_top I) (ne_of_gt hI)⟩⟩
 

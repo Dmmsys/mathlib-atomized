@@ -64,7 +64,7 @@ definition mkRecNames
 
 中文:
 定义 mkRecNames
-  签名: (all : List Name) (numMotives : 自然数)
+  签名: (all : 列表 Name) (numMotives : 自然数)
   定义体: if numMotives <= all.length then
     all.map mkRecName
   else

@@ -46,7 +46,7 @@ definition IsGenericPoint
 
 中文:
 定义 IsGenericPoint
-  签名: (x : α) (S : Set α)
+  签名: (x : α) (S : 集合 α)
   定义体: closure ({x} : Set α) = S
 
 Depends on / 依赖: closure
@@ -65,8 +65,8 @@ theorem isGenericPoint_def
 
 中文:
 定理 isGenericPoint_def
-  条件: {x : α} {S : Set α}
-  结论: IsGenericPoint x S ↔ closure ({x} : Set α) = S
+  条件: {x : α} {S : 集合 α}
+  结论: IsGenericPoint x S ↔ closure ({x} : 集合 α) = S
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -84,7 +84,7 @@ theorem IsGenericPoint.def
 
 中文:
 定理 IsGenericPoint.def
-  条件: {x : α} {S : Set α} (h : IsGenericPoint x S)
+  条件: {x : α} {S : 集合 α} (h : IsGenericPoint x S)
   证明: h
 -/
 theorem IsGenericPoint.def {x : α} {S : Set α} (h : IsGenericPoint x S) :
@@ -103,7 +103,7 @@ theorem isGenericPoint_closure
 中文:
 定理 isGenericPoint_closure
   条件: {x : α}
-  结论: IsGenericPoint x (closure ({x} : Set α))
+  结论: IsGenericPoint x (closure ({x} : 集合 α))
   证明: refl _
 -/
 theorem isGenericPoint_closure {x : α} : IsGenericPoint x (closure ({x} : Set α)) :=
@@ -201,7 +201,7 @@ theorem isClosed
 中文:
 定理 isClosed
   条件: (h : IsGenericPoint x S)
-  结论: IsClosed S
+  结论: 是闭集 S
   证明: h.def ▸ isClosed_closure
 -/
 protected theorem isClosed (h : IsGenericPoint x S) : IsClosed S :=
@@ -219,7 +219,7 @@ theorem isIrreducible
 中文:
 定理 isIrreducible
   条件: (h : IsGenericPoint x S)
-  结论: IsIrreducible S
+  结论: 是不可约 S
   证明: h.def ▸ isIrreducible_singleton.closure
 -/
 protected theorem isIrreducible (h : IsGenericPoint x S) : IsIrreducible S :=
@@ -253,7 +253,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: [T0Space α] (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
+  条件: [T0空间 α] (h : IsGenericPoint x S) (h' : IsGenericPoint y S)
   结论: x = y
   证明: (h.inseparable h').eq
 -/
@@ -271,8 +271,8 @@ theorem mem_open_set_iff
 
 中文:
 定理 mem_open_set_iff
-  条件: (h : IsGenericPoint x S) (hU : IsOpen U)
-  结论: x in U ↔ (S inter U).Nonempty
+  条件: (h : IsGenericPoint x S) (hU : 是开集 U)
+  结论: x in U ↔ (S inter U).非空
   证明: ⟨fun h' => ⟨x, h.mem, h'⟩, fun ⟨_y, hyS, hyU⟩ => (h.specializes hyS).mem_open hU hyU⟩
 
 Depends on / 依赖: h.mem, h.specializes, mem_open, specializes
@@ -292,7 +292,7 @@ theorem disjoint_iff
 
 中文:
 定理 disjoint_iff
-  条件: (h : IsGenericPoint x S) (hU : IsOpen U)
+  条件: (h : IsGenericPoint x S) (hU : 是开集 U)
   结论: Disjoint S U ↔ x ∉ U
   证明: by
   rw [h.mem_open_set_iff hU]; rw [← not_disjoint_iff_nonempty_inter]; rw [Classical.not_not]
@@ -314,7 +314,7 @@ theorem mem_closed_set_iff
 
 中文:
 定理 mem_closed_set_iff
-  条件: (h : IsGenericPoint x S) (hZ : IsClosed Z)
+  条件: (h : IsGenericPoint x S) (hZ : 是闭集 Z)
   结论: x in Z ↔ S subseteq Z
   证明: by
   rw [← h.def]; rw [hZ.closure_subset_iff]; rw [singleton_subset_iff]
@@ -334,8 +334,8 @@ theorem image
   rw [isGenericPoint_def]; rw [← h.def]; rw [← image_singleton]; rw [closure_image_closure hf]
 
 中文:
-定理 image
-  条件: (h : IsGenericPoint x S) {f : α -> β} (hf : Continuous f)
+定理 像
+  条件: (h : IsGenericPoint x S) {f : α -> β} (hf : 连续 f)
   证明: by
   rw [isGenericPoint_def]; rw [← h.def]; rw [← image_singleton]; rw [closure_image_closure hf]
 -/
@@ -357,8 +357,8 @@ theorem isGenericPoint_iff_forall_closed
     mem_ofPred_eq, and_imp, singleton_subset_iff]
 
 中文:
-定理 isGenericPoint_iff_forall_closed
-  条件: (hS : IsClosed S) (hxS : x in S)
+定理 isGenericPoint_iff_对任意_closed
+  条件: (hS : 是闭集 S) (hxS : x in S)
   证明: by
   have : closure {x} subseteq S := closure_minimal (singleton_subset_iff.2 hxS) hS
   simp_rw [IsGenericPoint, subset_antisymm_iff, this, true_and, closure, subset_sInter_iff,
@@ -388,10 +388,10 @@ class QuasiSober
     - sober : forall {S : Set α}, IsIrreducible S -> IsClosed S -> exists x, IsGenericPoint x S
 
 中文:
-类 QuasiSober
-  参数: (α : 类型) [TopologicalSpace α]
+类 拟醇
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (1 个):
-    - sober : 对任意 {S : Set α}, IsIrreducible S -> IsClosed S -> 存在 x, IsGenericPoint x S
+    - sober : 对任意 {S : 集合 α}, 是不可约 S -> 是闭集 S -> 存在 x, IsGenericPoint x S
 -/
 class QuasiSober (α : Type*) [TopologicalSpace α] : Prop where
   sober : forall {S : Set α}, IsIrreducible S -> IsClosed S -> exists x, IsGenericPoint x S
@@ -405,8 +405,8 @@ definition IsIrreducible.genericPoint
   body: (QuasiSober.sober hS.closure isClosed_closure).choose
 
 中文:
-定义 IsIrreducible.genericPoint
-  签名: [QuasiSober α] {S : Set α} (hS : IsIrreducible S)
+定义 是不可约.genericPoint
+  签名: [拟醇 α] {S : 集合 α} (hS : 是不可约 S)
   定义体: (QuasiSober.sober hS.closure isClosed_closure).choose
 
 Depends on / 依赖: QuasiSober, QuasiSober.sober, closure, hS.closure, isClosed_closure
@@ -423,7 +423,7 @@ theorem IsIrreducible.isGenericPoint_genericPoint_closure
   proof: (QuasiSober.sober hS.closure isClosed_closure).choose_spec
 
 中文:
-定理 IsIrreducible.isGenericPoint_genericPoint_closure
+定理 是不可约.isGenericPoint_genericPoint_closure
   证明: (QuasiSober.sober hS.closure isClosed_closure).choose_spec
 
 Depends on / 依赖: QuasiSober, QuasiSober.sober, choose_spec, closure, hS.closure, isClosed_closure
@@ -445,8 +445,8 @@ theorem IsIrreducible.isGenericPoint_genericPoint
 @[simp]
 
 中文:
-定理 IsIrreducible.isGenericPoint_genericPoint
-  结论: [QuasiSober α] {S : Set α}
+定理 是不可约.isGenericPoint_genericPoint
+  结论: [拟醇 α] {S : 集合 α}
   证明: by
   convert! hS.isGenericPoint_genericPoint_closure; exact hS'.closure_eq.symm
 
@@ -469,8 +469,8 @@ theorem IsIrreducible.genericPoint_closure_eq
   proof: hS.isGenericPoint_genericPoint_closure
 
 中文:
-定理 IsIrreducible.genericPoint_closure_eq
-  条件: [QuasiSober α] {S : Set α} (hS : IsIrreducible S)
+定理 是不可约.genericPoint_closure_eq
+  条件: [拟醇 α] {S : 集合 α} (hS : 是不可约 S)
   证明: hS.isGenericPoint_genericPoint_closure
 
 Depends on / 依赖: hS.isGenericPoint_genericPoint_closure, isGenericPoint_genericPoint_closure
@@ -488,8 +488,8 @@ theorem IsIrreducible.closure_genericPoint
   proof: hS.isGenericPoint_genericPoint_closure.trans hS'.closure_eq
 
 中文:
-定理 IsIrreducible.closure_genericPoint
-  结论: [QuasiSober α] {S : Set α}
+定理 是不可约.closure_genericPoint
+  结论: [拟醇 α] {S : 集合 α}
   证明: hS.isGenericPoint_genericPoint_closure.trans hS'.closure_eq
 
 Depends on / 依赖: closure_eq, hS.isGenericPoint_genericPoint_closure.trans, isGenericPoint_genericPoint_closure
@@ -511,7 +511,7 @@ definition genericPoint
 
 中文:
 定义 genericPoint
-  签名: [QuasiSober α] [IrreducibleSpace α]
+  签名: [拟醇 α] [不可约空间 α]
   定义体: (IrreducibleSpace.isIrreducible_univ α).genericPoint
 
 Depends on / 依赖: IrreducibleSpace, IrreducibleSpace.isIrreducible_univ, genericPoint, isIrreducible_univ
@@ -532,7 +532,7 @@ theorem genericPoint_spec
 
 中文:
 定理 genericPoint_spec
-  条件: [QuasiSober α] [IrreducibleSpace α]
+  条件: [拟醇 α] [不可约空间 α]
   证明: by
   simpa using! (IrreducibleSpace.isIrreducible_univ α).isGenericPoint_genericPoint_closure
 
@@ -555,7 +555,7 @@ theorem genericPoint_closure
 
 中文:
 定理 genericPoint_closure
-  条件: [QuasiSober α] [IrreducibleSpace α]
+  条件: [拟醇 α] [不可约空间 α]
   证明: genericPoint_spec α
 
 Depends on / 依赖: genericPoint_spec
@@ -577,7 +577,7 @@ theorem genericPoint_specializes
 
 中文:
 定理 genericPoint_specializes
-  条件: [QuasiSober α] [IrreducibleSpace α] (x : α)
+  条件: [拟醇 α] [不可约空间 α] (x : α)
   结论: genericPoint α ⤳ x
   证明: (IsIrreducible.isGenericPoint_genericPoint_closure _).specializes (by simp)
 
@@ -604,7 +604,7 @@ definition irreducibleSetEquivPoints
 
 中文:
 定义 irreducibleSetEquivPoints
-  签名: [QuasiSober α] [T0Space α]
+  签名: [拟醇 α] [T0空间 α]
   定义体: s.2.genericPoint
   invFun x := ⟨closure ({x} : Set α), isIrreducible_singleton.closure, isClosed_closure⟩
   left_inv s := by
@@ -642,7 +642,7 @@ lemma coe_irreducibleEquivPoints_symm_apply
 
 中文:
 引理 coe_irreducibleEquivPoints_symm_apply
-  条件: [QuasiSober α] [T0Space α] (x : α)
+  条件: [拟醇 α] [T0空间 α] (x : α)
   证明: rfl
 -/
 lemma coe_irreducibleEquivPoints_symm_apply [QuasiSober α] [T0Space α] (x : α) :
@@ -663,8 +663,8 @@ lemma Topology.IsClosedEmbedding.quasiSober
     rw [← hx.def]; rw [← hf.closure_image_eq]; rw [image_singleton]
 
 中文:
-引理 Topology.IsClosedEmbedding.quasiSober
-  条件: {f : α -> β} (hf : IsClosedEmbedding f) [QuasiSober β]
+引理 拓扑.是闭嵌入.quasiSober
+  条件: {f : α -> β} (hf : 是闭嵌入 f) [拟醇 β]
   证明: by
     have hS'' := hS.image f hf.continuous.continuousOn
     obtain ⟨x, hx⟩ := QuasiSober.sober hS'' (hf.isClosedMap _ hS')
@@ -701,8 +701,8 @@ theorem Topology.IsOpenEmbedding.quasiSober
       e
 
 中文:
-定理 Topology.IsOpenEmbedding.quasiSober
-  条件: {f : α -> β} (hf : IsOpenEmbedding f) [QuasiSober β]
+定理 拓扑.是开嵌入.quasiSober
+  条件: {f : α -> β} (hf : 是开嵌入 f) [拟醇 β]
   证明: by
     have hS'' := hS.image f hf.continuous.continuousOn
     obtain ⟨x, hx⟩ := QuasiSober.sober hS''.closure isClosed_closure
@@ -753,7 +753,7 @@ lemma TopologicalSpace.IsOpenCover.quasiSober_iff_forall
   
 
 中文:
-引理 TopologicalSpace.IsOpenCover.quasiSober_iff_forall
+引理 拓扑空间.IsOpenCover.quasiSober_iff_对任意
   结论: {ι : 类型} {U : ι -> Opens α}
   证明: by
   refine ⟨fun h i => (U i).isOpenEmbedding'.quasiSober, fun hU' => (quasiSober_iff _).mpr ?_⟩
@@ -791,7 +791,7 @@ lemma TopologicalSpace.IsOpenCover.quasiSober
   proof: hU.quasiSober_iff_forall.mpr ‹_›
 
 中文:
-引理 TopologicalSpace.IsOpenCover.quasiSober
+引理 拓扑空间.IsOpenCover.quasiSober
   结论: {ι : 类型} {U : ι -> Opens α}
   证明: hU.quasiSober_iff_forall.mpr ‹_›
 
@@ -812,7 +812,7 @@ theorem quasiSober_of_open_cover
 
 中文:
 定理 quasiSober_of_open_cover
-  结论: (S : Set (Set α)) (hS : 对任意 s : S, IsOpen (s : Set α))
+  结论: (S : 集合 (集合 α)) (hS : 对任意 s : S, 是开集 (s : 集合 α))
   证明: TopologicalSpace.IsOpenCover.quasiSober (U := fun s : S => ⟨s, hS s⟩) by
     simpa [TopologicalSpace.IsOpenCover, ← SetLike.coe_set_eq, sUnion_eq_iUnion] using hS'
 
@@ -847,8 +847,8 @@ lemma QuasiSober.of_subset
   proof: Topology.IsClosedEmbedding.quasiSober .inclusion h hV
 
 中文:
-引理 QuasiSober.of_subset
-  条件: {V W : Set α} [QuasiSober W] (hV : IsClosed (W ↓inter V)) (h : V subseteq W)
+引理 拟醇.of_subset
+  条件: {V W : 集合 α} [拟醇 W] (hV : 是闭集 (W ↓inter V)) (h : V subseteq W)
   证明: Topology.IsClosedEmbedding.quasiSober .inclusion h hV
 
 Depends on / 依赖: IsClosedEmbedding, Topology, Topology.IsClosedEmbedding.quasiSober, inclusion, quasiSober
@@ -868,8 +868,8 @@ lemma QuasiSober.inter_of_isClosed_of_quasiSober_left
   exact IsClosed.preimage_val hV
 
 中文:
-引理 QuasiSober.inter_of_isClosed_of_quasiSober_left
-  结论: {V : Set α} (W : Set α) [QuasiSober W]
+引理 拟醇.inter_of_isClosed_of_quasiSober_left
+  结论: {V : 集合 α} (W : 集合 α) [拟醇 W]
   证明: by
   refine QuasiSober.of_subset ?_ (Set.inter_subset_left : W inter V subseteq W)
   rw [Subtype.preimage_coe_self_inter W V]
@@ -894,8 +894,8 @@ lemma QuasiSober.inter_of_isClosed_of_quasiSober_right
   exact .inter_of_isClosed_of_quasiSober_left V hW
 
 中文:
-引理 QuasiSober.inter_of_isClosed_of_quasiSober_right
-  结论: {V : Set α} (W : Set α) [QuasiSober V]
+引理 拟醇.inter_of_isClosed_of_quasiSober_right
+  结论: {V : 集合 α} (W : 集合 α) [拟醇 V]
   证明: by
   rw [inter_comm]
   exact .inter_of_isClosed_of_quasiSober_left V hW
@@ -922,7 +922,7 @@ definition genericPoints
 
 中文:
 定义 genericPoints
-  签名: : Set α
+  签名: : 集合 α
   定义体: { x | closure {x} in irreducibleComponents α }
 
 Depends on / 依赖: closure, irreducibleComponents
@@ -977,8 +977,8 @@ lemma component_injective
 
 中文:
 引理 component_injective
-  条件: [T0Space α]
-  结论: Function.Injective (component (α := α))
+  条件: [T0空间 α]
+  结论: 函数.单射 (component (α := α))
   证明: fun x y e => Subtype.ext ((isGenericPoint x).eq (e ▸ isGenericPoint y))
 -/
 lemma component_injective [T0Space α] : Function.Injective (component (α := α)) :=
@@ -997,7 +997,7 @@ definition ofComponent
 
 中文:
 定义 ofComponent
-  签名: [QuasiSober α] (x : irreducibleComponents α)
+  签名: [拟醇 α] (x : irreducibleComponents α)
   定义体: ⟨x.2.1.genericPoint, show _ in irreducibleComponents α from
     (x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)).symm ▸ x.2⟩
 
@@ -1019,7 +1019,7 @@ lemma isGenericPoint_ofComponent
 
 中文:
 引理 isGenericPoint_ofComponent
-  条件: [QuasiSober α] (x : irreducibleComponents α)
+  条件: [拟醇 α] (x : irreducibleComponents α)
   证明: x.2.1.isGenericPoint_genericPoint (isClosed_of_mem_irreducibleComponents x.1 x.2)
 
 @[simp]
@@ -1043,7 +1043,7 @@ lemma component_ofComponent
 
 中文:
 引理 component_ofComponent
-  条件: [QuasiSober α] (x : irreducibleComponents α)
+  条件: [拟醇 α] (x : irreducibleComponents α)
   证明: Subtype.ext (isGenericPoint_ofComponent x)
 
 @[simp]
@@ -1065,7 +1065,7 @@ lemma ofComponent_component
 
 中文:
 引理 ofComponent_component
-  条件: [T0Space α] [QuasiSober α] (x : genericPoints α)
+  条件: [T0空间 α] [拟醇 α] (x : genericPoints α)
   证明: component_injective (component_ofComponent _)
 
 Depends on / 依赖: component_injective, component_ofComponent
@@ -1085,8 +1085,8 @@ lemma component_surjective
 
 中文:
 引理 component_surjective
-  条件: [QuasiSober α]
-  结论: Function.Surjective (component (α := α))
+  条件: [拟醇 α]
+  结论: 函数.满射 (component (α := α))
   证明: Function.HasRightInverse.surjective ⟨ofComponent, component_ofComponent⟩
 -/
 lemma component_surjective [QuasiSober α] : Function.Surjective (component (α := α)) :=
@@ -1103,8 +1103,8 @@ lemma finite
 
 中文:
 引理 finite
-  条件: [T0Space α] (h : (irreducibleComponents α).Finite)
-  结论: (genericPoints α).Finite
+  条件: [T0空间 α] (h : (irreducibleComponents α).有限)
+  结论: (genericPoints α).有限
   证明: @Finite.of_injective _ _ h _ component_injective
 
 Depends on / 依赖: Finite, Finite.of_injective, component_injective, of_injective
@@ -1125,7 +1125,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: [T0Space α] [QuasiSober α]
+  签名: [T0空间 α] [拟醇 α]
   定义体: ⟨component, ofComponent, ofComponent_component, component_ofComponent⟩
 
 Depends on / 依赖: component, component_ofComponent, ofComponent, ofComponent_component
@@ -1148,8 +1148,8 @@ lemma closure
 
 中文:
 引理 closure
-  条件: [QuasiSober α]
-  结论: closure (genericPoints α) = Set.univ
+  条件: [拟醇 α]
+  结论: closure (genericPoints α) = 集合.univ
   证明: by
   refine Set.eq_univ_iff_forall.mpr fun x => Set.subset_def.mp ?_ x mem_irreducibleComponent
   refine (isGenericPoint_ofComponent
@@ -1179,7 +1179,7 @@ lemma genericPoints_eq_singleton
 
 中文:
 引理 genericPoints_eq_singleton
-  条件: [QuasiSober α] [IrreducibleSpace α] [T0Space α]
+  条件: [拟醇 α] [不可约空间 α] [T0空间 α]
   证明: by
   ext x
   rw [genericPoints]; rw [irreducibleComponents_eq_singleton]

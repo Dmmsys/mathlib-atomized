@@ -56,7 +56,7 @@ theorem eq_condKernel_of_measure_eq_compProd'
 
 中文:
 定理 eq_condKernel_of_measure_eq_compProd'
-  结论: (κ : Kernel α Ω) [IsSFiniteKernel κ]
+  结论: (κ : 核 α Ω) [是SFiniteKernel κ]
   证明: by
   refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite
     (Kernel.measurable_coe κ hs) (Kernel.measurable_coe ρ.condKernel hs) (fun t ht _ => ?_)
@@ -89,7 +89,7 @@ lemma eq_condKernel_of_measure_eq_compProd_real
 
 中文:
 引理 eq_condKernel_of_measure_eq_compProd_real
-  结论: {ρ : Measure (α × 实数)} [IsFiniteMeasure ρ]
+  结论: {ρ : 测度 (α × 实数)} [是有限测度 ρ]
   证明: by
   have huniv : forallᵐ x ∂ρ.fst, κ x Set.univ = ρ.condKernel x Set.univ :=
     eq_condKernel_of_measure_eq_compProd' κ hκ MeasurableSet.univ
@@ -135,7 +135,7 @@ theorem eq_condKernel_of_measure_eq_compProd
 
 中文:
 定理 eq_condKernel_of_measure_eq_compProd
-  结论: (κ : Kernel α Ω) [IsFiniteKernel κ]
+  结论: (κ : 核 α Ω) [是FiniteKernel κ]
   证明: by
   -- The idea is to transport the question to `ℝ` from `Ω` using `embeddingReal`
   -- and then construct a measure on `α × ℝ`
@@ -198,7 +198,7 @@ lemma condKernel_compProd
 
 中文:
 引理 condKernel_compProd
-  条件: (μ : Measure α) [IsFiniteMeasure μ] (κ : Kernel α Ω) [IsMarkovKernel κ]
+  条件: (μ : 测度 α) [是有限测度 μ] (κ : 核 α Ω) [是MarkovKernel κ]
   证明: by
   suffices κ =ᵐ[(μ otimesₘ κ).fst] (μ otimesₘ κ).condKernel by symm; rwa [Measure.fst_compProd] at this
   refine eq_condKernel_of_measure_eq_compProd _ ?_
@@ -232,7 +232,7 @@ lemma Kernel.apply_eq_measure_condKernel_of_compProd_eq
   filter_
 
 中文:
-引理 Kernel.apply_eq_measure_condKernel_of_compProd_eq
+引理 核.apply_eq_measure_condKernel_of_compProd_eq
   证明: by
   have : ρ a = (ρ a).fst otimesₘ Kernel.comap κ (fun b => (a, b)) measurable_prodMk_left := by
     ext s hs
@@ -268,8 +268,8 @@ lemma Kernel.condKernel_apply_eq_condKernel
   proof: Kernel.apply_eq_measure_condKernel_of_compProd_eq (κ.disintegrate _) a
 
 中文:
-引理 Kernel.condKernel_apply_eq_condKernel
-  结论: [CountableOrCountablyGenerated α β]
+引理 核.condKernel_apply_eq_condKernel
+  结论: [余untableOrCountablyGenerated α β]
   证明: Kernel.apply_eq_measure_condKernel_of_compProd_eq (κ.disintegrate _) a
 
 Depends on / 依赖: Kernel, Kernel.apply_eq_measure_condKernel_of_compProd_eq, apply_eq_measure_condKernel_of_compProd_eq, disintegrate
@@ -292,7 +292,7 @@ lemma condKernel_const
 
 中文:
 引理 condKernel_const
-  结论: [CountableOrCountablyGenerated α β] (ρ : Measure (β × Ω)) [IsFiniteMeasure ρ]
+  结论: [余untableOrCountablyGenerated α β] (ρ : 测度 (β × Ω)) [是有限测度 ρ]
   证明: by
   have h := Kernel.condKernel_apply_eq_condKernel (Kernel.const α ρ) a
   simp_rw [Kernel.fst_apply, Kernel.const_apply] at h
@@ -328,7 +328,7 @@ theorem eq_condKernel_of_kernel_eq_compProd
 
 中文:
 定理 eq_condKernel_of_kernel_eq_compProd
-  结论: [CountableOrCountablyGenerated α β]
+  结论: [余untableOrCountablyGenerated α β]
   证明: by
   filter_upwards [Kernel.condKernel_apply_eq_condKernel ρ a,
     Kernel.apply_eq_measure_condKernel_of_compProd_eq hκ a] with a h1 h2

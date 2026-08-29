@@ -154,7 +154,7 @@ theorem natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow
 
 中文:
 定理 natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow
-  结论: (L 𝒪' : 类型) [Field L]
+  结论: (L 𝒪' : 类型) [域 L]
   证明: by
   have := congr_arg Ideal.absNorm
     (differentIdeal_eq_differentIdeal_mul_differentIdeal Int 𝒪 𝒪')
@@ -194,7 +194,7 @@ exact Ideal.mem_map_of_mem (algebraMap (𝓞 K₁) (𝓞 L)) discr_mem_different
 
 中文:
 定理 isCoprime_differentIdeal_of_isCoprime_discr
-  结论: {K₁ K₂ : 类型} [Field K₁]
+  结论: {K₁ K₂ : 类型} [域 K₁]
   证明: by
   obtain ⟨u, v, h⟩ := h
   refine Ideal.isCoprime_iff_exists.mpr ⟨u * discr K₁, ?_, v * discr K₂, ?_, ?_⟩
@@ -236,7 +236,7 @@ theorem discr_dvd_discr
 
 中文:
 定理 discr_dvd_discr
-  条件: [Algebra K L]
+  条件: [代数 K L]
   证明: by
   suffices discr K ^ Module.finrank K L ∣ discr L from
     dvd_trans (dvd_pow_self _ (Nat.ne_zero_of_lt Module.finrank_pos)) this
@@ -268,7 +268,7 @@ theorem linearDisjoint_of_isGalois_isCoprime_discr
 
 中文:
 定理 linearDisjoint_of_isGalois_isCoprime_discr
-  结论: (K₁ K₂ : 整数ermediateField Rat L) [IsGalois Rat K₁]
+  结论: (K₁ K₂ : 中间域 有理数 L) [是Galois 有理数 K₁]
   证明: by
   apply IntermediateField.LinearDisjoint.of_inf_eq_bot
   suffices IsUnit (discr ↥(K₁ ⊓ K₂)) by
@@ -305,7 +305,7 @@ theorem natAbs_discr_eq_natAbs_discr_pow_mul_natAbs_discr_pow
 
 中文:
 定理 natAbs_discr_eq_natAbs_discr_pow_mul_natAbs_discr_pow
-  结论: (K₁ K₂ : 整数ermediateField Rat L)
+  结论: (K₁ K₂ : 中间域 有理数 L)
   证明: by
   let _ : Algebra (FractionRing (𝓞 K₁)) (FractionRing (𝓞 L)) := FractionRing.liftAlgebra _ _
   have h_main := natAbs_discr_eq_absNorm_differentIdeal_mul_natAbs_discr_pow K₂ (𝓞 K₂) L (𝓞 L)
@@ -344,8 +344,8 @@ lemma not_dvd_discr_iff_forall_liesOver
   simp_rw 
 
 中文:
-引理 not_dvd_discr_iff_forall_liesOver
-  条件: [Is整数egralClosure 𝒪 整数 K] {p : 整数} (hp : Prime p)
+引理 not_dvd_discr_iff_对任意_liesOver
+  条件: [是整闭包 𝒪 整数 K] {p : 整数} (hp : 素 p)
   证明: by
   have := (IsIntegralClosure.algebraMap_injective 𝒪 Int K).isDomain
   have := IsIntegralClosure.isDedekindDomain Int Rat K 𝒪
@@ -392,7 +392,7 @@ lemma not_dvd_discr_iff_isUnramifiedIn
 
 中文:
 引理 not_dvd_discr_iff_isUnramifiedIn
-  条件: [Is整数egralClosure 𝒪 整数 K] {p : 整数} (hp : Prime p)
+  条件: [是整闭包 𝒪 整数 K] {p : 整数} (hp : 素 p)
   证明: by
   have := (IsIntegralClosure.algebraMap_injective 𝒪 Int K).isDomain
   have := IsIntegralClosure.isDedekindDomain Int Rat K 𝒪
@@ -427,8 +427,8 @@ lemma not_dvd_discr_iff_forall_mem
     ((Ideal.liesO
 
 中文:
-引理 not_dvd_discr_iff_forall_mem
-  条件: [Is整数egralClosure 𝒪 整数 K] {p : 整数} (hp : Prime p)
+引理 not_dvd_discr_iff_对任意_mem
+  条件: [是整闭包 𝒪 整数 K] {p : 整数} (hp : 素 p)
   证明: by
   have := (IsIntegralClosure.algebraMap_injective 𝒪 Int K).isDomain
   have := IsIntegralClosure.isDedekindDomain Int Rat K 𝒪

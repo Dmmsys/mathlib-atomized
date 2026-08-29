@@ -71,7 +71,7 @@ definition residue
 
 中文:
 定义 residue
-  签名: (X : LocallyRingedSpace.{u}) (x : X)
+  签名: (X : LocallyRinged空间.{u}) (x : X)
   定义体: CommRingCat.ofHom (IsLocalRing.residue (X.presheaf.stalk x))
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, IsLocalRing, IsLocalRing.residue, X.presheaf.stalk, presheaf, residue
@@ -91,7 +91,7 @@ lemma residue_surjective
 中文:
 引理 residue_surjective
   条件: (x : X)
-  结论: Function.Surjective (X.residue x)
+  结论: 函数.满射 (X.residue x)
   证明: Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
@@ -197,7 +197,7 @@ fun h => eq_bot_iff.mpr fun a ha => h a (X.toRingedSpace.basicOpen_le f ha) ha�
 @[simp]
 
 中文:
-引理 basicOpen_eq_bot_iff_forall_evaluation_eq_zero
+引理 basicOpen_eq_bot_iff_对任意_evaluation_eq_zero
   条件: (f : X.presheaf.obj (op U))
   证明: by
   simp only [evaluation_eq_zero_iff_notMem_basicOpen, Subtype.forall]
@@ -349,7 +349,7 @@ lemma residueFieldMap_comp
 
 中文:
 引理 residueFieldMap_comp
-  条件: {Z : LocallyRingedSpace.{u}} (g : Y ⟶ Z) (x : X)
+  条件: {Z : LocallyRinged空间.{u}} (g : Y ⟶ Z) (x : X)
   证明: by
   ext : 1
   simp only [residueFieldMap, stalkMap_comp]

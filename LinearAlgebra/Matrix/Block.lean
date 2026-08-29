@@ -66,7 +66,7 @@ definition BlockTriangular
 
 中文:
 定义 BlockTriangular
-  签名: (M : Matrix m m R) (b : m -> α)
+  签名: (M : 矩阵 m m R) (b : m -> α)
   定义体: forall ⦃i j⦄, b j < b i -> M i j = 0
 -/
 def BlockTriangular (M : Matrix m m R) (b : m -> α) : Prop :=
@@ -82,7 +82,7 @@ abbreviation IsUpperTriangular
 
 中文:
 缩写 IsUpperTriangular
-  签名: [LT m] (M : Matrix m m R)
+  签名: [LT m] (M : 矩阵 m m R)
   定义体: M.BlockTriangular id
 
 Depends on / 依赖: BlockTriangular, M.BlockTriangular
@@ -102,7 +102,7 @@ abbreviation IsLowerTriangular
 
 中文:
 缩写 IsLowerTriangular
-  签名: [LT m] (M : Matrix m m R)
+  签名: [LT m] (M : 矩阵 m m R)
   定义体: M.BlockTriangular toDual
 
 @[simp]
@@ -214,7 +214,7 @@ theorem blockTriangular_zero
 
 中文:
 定理 blockTriangular_zero
-  结论: BlockTriangular (0 : Matrix m m R) b
+  结论: BlockTriangular (0 : 矩阵 m m R) b
   证明: fun _ _ _ => rfl
 -/
 theorem blockTriangular_zero : BlockTriangular (0 : Matrix m m R) b := fun _ _ _ => rfl
@@ -230,7 +230,7 @@ instance decidableBlockTriangular
 
 中文:
 实例 decidableBlockTriangular
-  签名: [DecidableEq R] [Fintype m] [DecidableLT α]
+  签名: [DecidableEq R] [有限类型 m] [DecidableLT α]
   定义体: decidable_of_iff (forall ij : m × m, b ij.2 < b ij.1 -> M ij.1 ij.2 = 0)
     ⟨fun h i j hij => h (i, j) hij, fun h _ hij => h hij⟩
 
@@ -253,7 +253,7 @@ theorem BlockTriangular.neg
 
 中文:
 定理 BlockTriangular.neg
-  结论: [NegZeroClass R] {M : Matrix m m R}
+  结论: [NegZero类 R] {M : 矩阵 m m R}
   证明: fun _ _ h => by rw [neg_apply, hM h, neg_zero]
 -/
 protected theorem BlockTriangular.neg [NegZeroClass R] {M : Matrix m m R}
@@ -270,7 +270,7 @@ theorem BlockTriangular.add
 
 中文:
 定理 BlockTriangular.add
-  条件: [AddZeroClass R] (hM : BlockTriangular M b) (hN : BlockTriangular N b)
+  条件: [加法零类 R] (hM : BlockTriangular M b) (hN : BlockTriangular N b)
   证明: fun i j h => by simp_rw [Matrix.add_apply, hM h, hN h, zero_add]
 
 Depends on / 依赖: Matrix, Matrix.add_apply, add_apply, simp_rw, zero_add
@@ -288,7 +288,7 @@ theorem BlockTriangular.sub
 
 中文:
 定理 BlockTriangular.sub
-  结论: [SubNegZeroMonoid R]
+  结论: [SubNegZero幺半群 R]
   证明: fun i j h => by simp_rw [Matrix.sub_apply, hM h, hN h, sub_zero]
 
 Depends on / 依赖: Matrix, Matrix.sub_apply, simp_rw, sub_apply, sub_zero
@@ -307,7 +307,7 @@ lemma BlockTriangular.add_iff_right
 
 中文:
 引理 BlockTriangular.add_iff_right
-  条件: [AddGroup R] (hM : BlockTriangular M b)
+  条件: [加法群 R] (hM : BlockTriangular M b)
   证明: ⟨(by simpa using hM.neg.add ·), hM.add⟩
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.extend_eq, denseRange, extend_eq, hM.add, hM.neg.add, isUniformInducing, one_ne_top, simpleFunc, simpleFunc.denseRange, simpleFunc.isUniformInducing
@@ -325,7 +325,7 @@ lemma BlockTriangular.add_iff_left
 
 中文:
 引理 BlockTriangular.add_iff_left
-  条件: [AddGroup R] (hN : BlockTriangular N b)
+  条件: [加法群 R] (hN : BlockTriangular N b)
   证明: ⟨(by simpa using ·.sub hN), (·.add hN)⟩
 
 Depends on / 依赖: _eq_setToL1SCLM, h_smul, setToL1
@@ -343,7 +343,7 @@ lemma BlockTriangular.sub_iff_right
 
 中文:
 引理 BlockTriangular.sub_iff_right
-  条件: [AddGroup R] (hM : BlockTriangular M b)
+  条件: [加法群 R] (hM : BlockTriangular M b)
   证明: ⟨(by simpa using ·.neg.add hM), hM.sub⟩
 
 Depends on / 依赖: hM.sub, neg.add
@@ -361,7 +361,7 @@ lemma BlockTriangular.sub_iff_left
 
 中文:
 引理 BlockTriangular.sub_iff_left
-  条件: [AddGroup R] (hN : BlockTriangular N b)
+  条件: [加法群 R] (hN : BlockTriangular N b)
   证明: ⟨(by simpa using ·.add hN), (·.sub hN)⟩
 -/
 lemma BlockTriangular.sub_iff_left [AddGroup R] (hN : BlockTriangular N b) :
@@ -377,7 +377,7 @@ lemma BlockTriangular.map
 
 中文:
 引理 BlockTriangular.map
-  结论: {S F} [FunLike F R S] [Zero R] [Zero S] [ZeroHomClass F R S] (f : F)
+  结论: {S F} [函数状 F R S] [零 R] [零 S] [保零态射类 F R S] (f : F)
   证明: fun i j lt => by simp [h lt]
 -/
 lemma BlockTriangular.map {S F} [FunLike F R S] [Zero R] [Zero S] [ZeroHomClass F R S] (f : F)
@@ -394,7 +394,7 @@ lemma BlockTriangular.comp
 
 中文:
 引理 BlockTriangular.comp
-  条件: [Zero R] {M : Matrix m m (Matrix n n R)} (h : BlockTriangular M b)
+  条件: [零 R] {M : 矩阵 m m (矩阵 n n R)} (h : BlockTriangular M b)
   证明: fun i j lt => by simp [h lt]
 -/
 lemma BlockTriangular.comp [Zero R] {M : Matrix m m (Matrix n n R)} (h : BlockTriangular M b) :
@@ -443,7 +443,7 @@ theorem blockTriangular_blockDiagonal'
 
 中文:
 定理 blockTriangular_blockDiagonal'
-  条件: [DecidableEq α] (d : 对任意 i : α, Matrix (m' i) (m' i) R)
+  条件: [DecidableEq α] (d : 对任意 i : α, 矩阵 (m' i) (m' i) R)
   证明: by
   rintro ⟨i, i'⟩ ⟨j, j'⟩ h
   apply blockDiagonal'_apply_ne d i' j' fun h' => ne_of_lt h h'.symm
@@ -468,7 +468,7 @@ theorem blockTriangular_blockDiagonal
 
 中文:
 定理 blockTriangular_blockDiagonal
-  条件: [DecidableEq α] (d : α -> Matrix m m R)
+  条件: [DecidableEq α] (d : α -> 矩阵 m m R)
   证明: by
   rintro ⟨i, i'⟩ ⟨j, j'⟩ h
   rw [blockDiagonal'_eq_blockDiagonal]; rw [blockTriangular_blockDiagonal']
@@ -495,8 +495,8 @@ theorem blockTriangular_one
 
 中文:
 定理 blockTriangular_one
-  条件: [One R]
-  结论: BlockTriangular (1 : Matrix m m R) b
+  条件: [幺 R]
+  结论: BlockTriangular (1 : 矩阵 m m R) b
   证明: blockTriangular_diagonal _
 
 Depends on / 依赖: blockTriangular_diagonal
@@ -617,7 +617,7 @@ theorem BlockTriangular.mul
 
 中文:
 定理 BlockTriangular.mul
-  结论: [Fintype m] [NonUnitalNonAssocSemiring R]
+  结论: [有限类型 m] [非幺非结合半环 R]
   证明: by
   intro i j hij
   apply Finset.sum_eq_zero
@@ -657,7 +657,7 @@ definition blockTriangularSubsemiring
 
 中文:
 定义 blockTriangularSubsemiring
-  签名: [DecidableEq m] [Fintype m] [Semiring R]
+  签名: [DecidableEq m] [有限类型 m] [半环 R]
   定义体: {M | BlockTriangular M b}
   zero_mem' := blockTriangular_zero
   one_mem' := blockTriangular_one
@@ -687,7 +687,7 @@ theorem mem_blockTriangularSubsemiring
 
 中文:
 定理 mem_blockTriangularSubsemiring
-  结论: [DecidableEq m] [Fintype m] [Semiring R]
+  结论: [DecidableEq m] [有限类型 m] [半环 R]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -707,7 +707,7 @@ theorem BlockTriangular.pow
 
 中文:
 定理 BlockTriangular.pow
-  结论: [DecidableEq m] [Fintype m] [Semiring R] (hM : BlockTriangular M b)
+  结论: [DecidableEq m] [有限类型 m] [半环 R] (hM : BlockTriangular M b)
   证明: pow_mem (S := blockTriangularSubsemiring R b) hM n
 
 Depends on / 依赖: blockTriangularSubsemiring, pow_mem
@@ -726,7 +726,7 @@ theorem blockTriangular_algebraMap
 
 中文:
 定理 blockTriangular_algebraMap
-  结论: [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [半环 A] [代数 R A]
   证明: blockTriangular_diagonal _
 
 Depends on / 依赖: blockTriangular_diagonal
@@ -749,7 +749,7 @@ definition blockTriangularSubalgebra
 
 中文:
 定义 blockTriangularSubalgebra
-  签名: [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: [交换半环 R] [半环 A] [代数 R A]
   定义体: blockTriangularSubsemiring A b
   algebraMap_mem' r := blockTriangular_algebraMap r
 
@@ -773,7 +773,7 @@ theorem mem_blockTriangularSubalgebra
 
 中文:
 定理 mem_blockTriangularSubalgebra
-  结论: [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: [交换半环 R] [半环 A] [代数 R A]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -796,7 +796,7 @@ theorem upper_two_blockTriangular
 
 中文:
 定理 upper_two_blockTriangular
-  结论: [Zero R] [Preorder α] (A : Matrix m m R) (B : Matrix m n R)
+  结论: [零 R] [预序 α] (A : 矩阵 m m R) (B : 矩阵 m n R)
   证明: by
   rintro (c | c) (d | d) hcd <;> first | simp [hab.not_gt] at hcd ⊢
 
@@ -827,7 +827,7 @@ theorem equiv_block_det
 
 中文:
 定理 equiv_block_det
-  结论: (M : Matrix m m R) {p q : m -> 命题} [DecidablePred p] [DecidablePred q]
+  结论: (M : 矩阵 m m R) {p q : m -> 命题} [DecidablePred p] [DecidablePred q]
   证明: by
   convert!
     Matrix.det_reindex_self (Equiv.subtypeEquivRight e)
@@ -860,7 +860,7 @@ theorem det_toSquareBlock_id
 
 中文:
 定理 det_toSquareBlock_id
-  条件: (M : Matrix m m R) (i : m)
+  条件: (M : 矩阵 m m R) (i : m)
   结论: (M.toSquareBlock id i).det = M i i
   证明: letI : Unique { a // id a = i } := ⟨⟨⟨i, rfl⟩⟩, fun j => Subtype.ext j.property⟩
   (det_unique _).trans rfl
@@ -888,7 +888,7 @@ theorem det_toBlock
 
 中文:
 定理 det_toBlock
-  条件: (M : Matrix m m R) (p : m -> 命题) [DecidablePred p]
+  条件: (M : 矩阵 m m R) (p : m -> 命题) [DecidablePred p]
   证明: by
   rw [← Matrix.det_reindex_self (Equiv.sumCompl p).symm M]
   rw [det_apply']; rw [det_apply']
@@ -929,7 +929,7 @@ theorem twoBlockTriangular_det
 
 中文:
 定理 twoBlockTriangular_det
-  结论: (M : Matrix m m R) (p : m -> 命题) [DecidablePred p]
+  结论: (M : 矩阵 m m R) (p : m -> 命题) [DecidablePred p]
   证明: by
   rw [det_toBlock M p]
   convert!
@@ -964,7 +964,7 @@ theorem twoBlockTriangular_det'
 
 中文:
 定理 twoBlockTriangular_det'
-  结论: (M : Matrix m m R) (p : m -> 命题) [DecidablePred p]
+  结论: (M : 矩阵 m m R) (p : m -> 命题) [DecidablePred p]
   证明: by
   rw [M.twoBlockTriangular_det fun i => ¬p i]; rw [mul_comm]
   · congr 1
@@ -999,7 +999,7 @@ theorem BlockTriangular.det
 
 中文:
 定理 BlockTriangular.det
-  条件: [DecidableEq α] [LinearOrder α] (hM : BlockTriangular M b)
+  条件: [DecidableEq α] [线性序 α] (hM : BlockTriangular M b)
   证明: by
   suffices forall hs : Finset α, univ.image b = hs -> M.det = ∏ a in hs, (M.toSquareBlock b a).det by
     exact this _ rfl
@@ -1056,7 +1056,7 @@ have : IsEmpty { i // b i = a } := ⟨fun i => ha mem_image.2 ⟨i, mem_univ _, 
 
 中文:
 定理 BlockTriangular.det_fintype
-  结论: [DecidableEq α] [Fintype α] [LinearOrder α]
+  结论: [DecidableEq α] [有限类型 α] [线性序 α]
   证明: by
   refine h.det.trans (prod_subset (subset_univ _) fun a _ ha => ?_)
 have : IsEmpty { i // b i = a } := ⟨fun i => ha mem_image.2 ⟨i, mem_univ _, i.2⟩⟩
@@ -1084,7 +1084,7 @@ theorem det_of_isUpperTriangular
 
 中文:
 定理 det_of_isUpperTriangular
-  条件: [LinearOrder m] (h : M.IsUpperTriangular)
+  条件: [线性序 m] (h : M.IsUpperTriangular)
   证明: by
   have : DecidableEq R := Classical.decEq _
   simp_rw [h.det, image_id, det_toSquareBlock_id]
@@ -1114,7 +1114,7 @@ theorem det_of_isLowerTriangular
 
 中文:
 定理 det_of_isLowerTriangular
-  条件: [LinearOrder m] (M : Matrix m m R) (h : M.IsLowerTriangular)
+  条件: [线性序 m] (M : 矩阵 m m R) (h : M.IsLowerTriangular)
   证明: by
   rw [← det_transpose]
   exact det_of_isUpperTriangular h.transpose
@@ -1143,7 +1143,7 @@ exact coeff_eq_zero_of_natDegree_lt Nat.lt_of_le_of_lt (h_deg j) h
 
 中文:
 定理 matrixOfPolynomials_blockTriangular
-  结论: {R} [Semiring R] {n : 自然数} (p : Fin n -> R[X])
+  结论: {R} [半环 R] {n : 自然数} (p : 有限集 n -> R[X])
   证明: fun _ j h => by
 exact coeff_eq_zero_of_natDegree_lt Nat.lt_of_le_of_lt (h_deg j) h
 
@@ -1169,7 +1169,7 @@ theorem det_matrixOfPolynomials
 
 中文:
 定理 det_matrixOfPolynomials
-  结论: {n : 自然数} (p : Fin n -> R[X])
+  结论: {n : 自然数} (p : 有限集 n -> R[X])
   证明: by
   rw [Matrix.det_of_isUpperTriangular (Matrix.matrixOfPolynomials_blockTriangular p (fun i =>
       Nat.le_of_eq (h_deg i)))]
@@ -1206,7 +1206,7 @@ theorem BlockTriangular.toBlock_inverse_mul_toBlock_eq_one
 
 中文:
 定理 BlockTriangular.toBlock_inverse_mul_toBlock_eq_one
-  结论: [LinearOrder α] [Invertible M]
+  结论: [线性序 α] [可逆 M]
   证明: by
   let p i := b i < k
   have h_sum :
@@ -1245,7 +1245,7 @@ theorem BlockTriangular.inv_toBlock
 
 中文:
 定理 BlockTriangular.inv_toBlock
-  结论: [LinearOrder α] [Invertible M] (hM : BlockTriangular M b)
+  结论: [线性序 α] [可逆 M] (hM : BlockTriangular M b)
   证明: inv_eq_left_inv hM.toBlock_inverse_mul_toBlock_eq_one k
 
 Depends on / 依赖: hM.toBlock_inverse_mul_toBlock_eq_one, inv_eq_left_inv, toBlock_inverse_mul_toBlock_eq_one
@@ -1269,7 +1269,7 @@ definition BlockTriangular.invertibleToBlock
 
 中文:
 定义 BlockTriangular.invertibleToBlock
-  签名: [LinearOrder α] [Invertible M] (hM : BlockTriangular M b)
+  签名: [线性序 α] [可逆 M] (hM : BlockTriangular M b)
   定义体: invertibleOfLeftInverse _ ((⅟M).toBlock (fun i => b i < k) fun i => b i < k) by
     simpa only [invOf_eq_nonsing_inv] using hM.toBlock_inverse_mul_toBlock_eq_one k
 
@@ -1297,7 +1297,7 @@ theorem toBlock_inverse_eq_zero
 
 中文:
 定理 toBlock_inverse_eq_zero
-  条件: [LinearOrder α] [Invertible M] (hM : BlockTriangular M b) (k : α)
+  条件: [线性序 α] [可逆 M] (hM : BlockTriangular M b) (k : α)
   证明: by
   let p i := b i < k
   let q i := ¬b i < k
@@ -1345,7 +1345,7 @@ theorem blockTriangular_inv_of_blockTriangular
 
 中文:
 定理 blockTriangular_inv_of_blockTriangular
-  结论: [LinearOrder α] [Invertible M]
+  结论: [线性序 α] [可逆 M]
   证明: by
   suffices forall hs : Finset α, univ.image b = hs -> BlockTriangular M⁻¹ b by exact this _ rfl
   intro s hs

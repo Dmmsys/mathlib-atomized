@@ -78,7 +78,7 @@ definition toΓSpecFun
 
 中文:
 定义 toΓSpecFun
-  签名: : X -> PrimeSpectrum (Γ.obj (op X))
+  签名: : X -> 素谱 (Γ.obj (op X))
   定义体: fun x =>
   comap (X.presheaf.Γgerm x).hom (IsLocalRing.closedPoint (X.presheaf.stalk x))
 -/
@@ -155,7 +155,7 @@ theorem toΓSpec_continuous
 
 中文:
 定理 toΓSpec_continuous
-  结论: Continuous X.toΓSpecFun
+  结论: 连续 X.toΓSpecFun
   证明: by
   rw [isTopologicalBasis_basic_opens.continuous_iff]
   rintro _ ⟨r, rfl⟩
@@ -267,7 +267,7 @@ theorem isUnit_res_toΓSpecMapBasicOpen
 
 中文:
 定理 isUnit_res_toΓSpecMapBasicOpen
-  结论: IsUnit (X.toToΓSpecMapBasicOpen r r)
+  结论: 是单位 (X.toToΓSpecMapBasicOpen r r)
   证明: by
   convert!
     (X.presheaf.map <| (eqToHom <| X.toΓSpecMapBasicOpen_eq r).op).hom.isUnit_map
@@ -600,7 +600,7 @@ lemma toΓSpec_preimage_zeroLocus_eq
 
 中文:
 引理 toΓSpec_preimage_zeroLocus_eq
-  结论: {X : LocallyRingedSpace.{u}}
+  结论: {X : LocallyRinged空间.{u}}
   证明: by
   simp only [RingedSpace.zeroLocus]
   have (i : LocallyRingedSpace.Γ.obj (op X)) (_ : i in s) :
@@ -647,7 +647,7 @@ theorem comp_ring_hom_ext
 
 中文:
 定理 comp_ring_hom_ext
-  结论: {X : LocallyRingedSpace.{u}} {R : CommRingCat.{u}} {f : R ⟶ Γ.obj (op X)}
+  结论: {X : LocallyRinged空间.{u}} {R : 交换环范畴.{u}} {f : R ⟶ Γ.obj (op X)}
   证明: by
   refine LocallyRingedSpace.forgetToSheafedSpace.map_injective
     (Spec.basicOpen_hom_ext w ?_)
@@ -734,7 +734,7 @@ definition identityToΓSpec
 
 中文:
 定义 identityToΓSpec
-  签名: : 𝟭 LocallyRingedSpace.{u} ⟶ Γ.rightOp ⋙ Spec.toLocallyRingedSpace where
+  签名: : 𝟭 LocallyRinged空间.{u} ⟶ Γ.rightOp ⋙ Spec.toLocallyRingedSpace where
   定义体: LocallyRingedSpace.toΓSpec
   naturality X Y f := by
     symm
@@ -778,7 +778,7 @@ theorem left_triangle
 
 中文:
 定理 left_triangle
-  条件: (X : LocallyRingedSpace)
+  条件: (X : LocallyRinged空间)
   证明: X.Γ_Spec_left_triangle
 -/
 theorem left_triangle (X : LocallyRingedSpace) :
@@ -805,7 +805,7 @@ theorem right_triangle
 
 中文:
 定理 right_triangle
-  条件: (R : CommRingCat)
+  条件: (R : 交换环范畴)
   证明: by
   apply LocallyRingedSpace.comp_ring_hom_ext
   · ext (p : PrimeSpectrum R)
@@ -900,7 +900,7 @@ lemma toSpecΓ_of
 
 中文:
 引理 toSpecΓ_of
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   证明: rfl
 -/
 lemma toSpecΓ_of (R : Type u) [CommRing R] :
@@ -935,7 +935,7 @@ lemma locallyRingedSpaceAdjunction_counit_app'
 
 中文:
 引理 locallyRingedSpaceAdjunction_counit_app'
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   证明: rfl
 -/
 lemma locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] :
@@ -953,7 +953,7 @@ lemma unop_locallyRingedSpaceAdjunction_counit_app'
 
 中文:
 引理 unop_locallyRingedSpaceAdjunction_counit_app'
-  条件: (R : 类型u) [CommRing R]
+  条件: (R : 类型u) [交换环 R]
   证明: rfl
 -/
 lemma unop_locallyRingedSpaceAdjunction_counit_app' (R : Type u) [CommRing R] :
@@ -1046,7 +1046,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: : Scheme.Γ.rightOp ⊣ Scheme.Spec.{u} where
+  签名: : 概形.Γ.rightOp ⊣ 概形.Spec.{u} where
   定义体: { app := fun X => ⟨locallyRingedSpaceAdjunction.{u}.unit.app X.toLocallyRingedSpace⟩
     naturality := fun _ _ f =>
       Scheme.Hom.ext' (locallyRingedSpaceAdjunction.{u}.unit.naturality f.toLRSHom) }
@@ -1077,7 +1077,7 @@ lemma _root_.AlgebraicGeometry.ext_to_Spec
 
 中文:
 引理 _root_.AlgebraicGeometry.ext_to_Spec
-  结论: {X : Scheme} {R : 类型} [CommRing R]
+  结论: {X : 概形} {R : 类型} [交换环 R]
   证明: (ΓSpec.adjunction.homEquiv X (.op <| .of R)).symm.injective Opposite.unop_injective h
 
 Depends on / 依赖: Opposite, Opposite.unop_injective, Spec.adjunction.homEquiv, adjunction, homEquiv, injective, symm.injective, unop_injective
@@ -1099,7 +1099,7 @@ theorem adjunction_homEquiv_apply
 
 中文:
 定理 adjunction_homEquiv_apply
-  结论: {X : Scheme} {R : CommRingCatᵒᵖ}
+  结论: {X : 概形} {R : CommRingCatᵒᵖ}
   证明: rfl
 -/
 theorem adjunction_homEquiv_apply {X : Scheme} {R : CommRingCatᵒᵖ}
@@ -1116,7 +1116,7 @@ theorem adjunction_homEquiv_symm_apply
 
 中文:
 定理 adjunction_homEquiv_symm_apply
-  结论: {X : Scheme} {R : CommRingCatᵒᵖ}
+  结论: {X : 概形} {R : CommRingCatᵒᵖ}
   证明: rfl
 -/
 theorem adjunction_homEquiv_symm_apply {X : Scheme} {R : CommRingCatᵒᵖ}
@@ -1172,8 +1172,8 @@ definition _root_.AlgebraicGeometry.Scheme.toSpecΓ
 @[simp]
 
 中文:
-定义 _root_.AlgebraicGeometry.Scheme.toSpecΓ
-  签名: (X : Scheme.{u})
+定义 _root_.AlgebraicGeometry.概形.toSpecΓ
+  签名: (X : 概形.{u})
   定义体: ΓSpec.adjunction.unit.app X
 
 @[simp]
@@ -1194,7 +1194,7 @@ theorem adjunction_unit_app
 
 中文:
 定理 adjunction_unit_app
-  条件: {X : Scheme}
+  条件: {X : 概形}
   证明: rfl
 -/
 theorem adjunction_unit_app {X : Scheme} :
@@ -1234,7 +1234,7 @@ instance isIso_adjunction_counit
 
 中文:
 实例 isIso_adjunction_counit
-  签名: : IsIso ΓSpec.adjunction.counit
+  签名: : 是同构 ΓSpec.adjunction.counit
   定义体: by
   apply +allowSynthFailures NatIso.isIso_of_isIso_app
   intro R
@@ -1263,8 +1263,8 @@ theorem Scheme.toSpecΓ_apply
 @[reassoc]
 
 中文:
-定理 Scheme.toSpecΓ_apply
-  条件: (X : Scheme.{u}) (x)
+定理 概形.toSpecΓ_apply
+  条件: (X : 概形.{u}) (x)
   证明: rfl
 
 @[reassoc]
@@ -1282,8 +1282,8 @@ theorem Scheme.toSpecΓ_naturality
   proof: ΓSpec.adjunction.unit.naturality f
 
 中文:
-定理 Scheme.toSpecΓ_naturality
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y)
+定理 概形.toSpecΓ_naturality
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: ΓSpec.adjunction.unit.naturality f
 
 Depends on / 依赖: Spec.adjunction.unit.naturality, adjunction, naturality
@@ -1308,8 +1308,8 @@ theorem Scheme.toSpecΓ_appTop
   rw [← Quiver.Hom.op_inj.eq_iff]; rw [this]; rw [← op_inv]; rw [IsIso.Iso.inv_inv]
 
 中文:
-定理 Scheme.toSpecΓ_appTop
-  条件: (X : Scheme.{u})
+定理 概形.toSpecΓ_appTop
+  条件: (X : 概形.{u})
   证明: by
   have := ΓSpec.adjunction.left_triangle_components X
   dsimp at this
@@ -1344,7 +1344,7 @@ theorem SpecMap_ΓSpecIso_hom
 
 中文:
 定理 SpecMap_ΓSpecIso_hom
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: by
   have := ΓSpec.adjunction.right_triangle_components (op R)
   dsimp at this
@@ -1374,7 +1374,7 @@ theorem SpecMap_ΓSpecIso_inv_toSpecΓ
 
 中文:
 定理 SpecMap_ΓSpecIso_inv_toSpecΓ
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: by
   rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.hom_inv_id]; rw [Spec.map_id]
 
@@ -1398,7 +1398,7 @@ theorem toSpecΓ_SpecMap_ΓSpecIso_inv
 
 中文:
 定理 toSpecΓ_SpecMap_ΓSpecIso_inv
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: by
   rw [← SpecMap_ΓSpecIso_hom]; rw [← Spec.map_comp]; rw [Iso.inv_hom_id]; rw [Spec.map_id]
 
@@ -1421,8 +1421,8 @@ lemma Scheme.toSpecΓ_preimage_basicOpen
   exact Iso.inv_hom_id_apply (C := CommRingCat) _ _
 
 中文:
-引理 Scheme.toSpecΓ_preimage_basicOpen
-  条件: (X : Scheme.{u}) (r : Γ(X, ⊤))
+引理 概形.toSpecΓ_preimage_basicOpen
+  条件: (X : 概形.{u}) (r : Γ(X, ⊤))
   证明: by
   rw [← basicOpen_eq_of_affine]; rw [Scheme.preimage_basicOpen]; rw [← Scheme.Hom.appTop]
   congr
@@ -1452,7 +1452,7 @@ lemma ΓSpecIso_inv_ΓSpec_adjunction_homEquiv
 
 中文:
 引理 ΓSpecIso_inv_ΓSpec_adjunction_homEquiv
-  条件: {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤))
+  条件: {X : 概形.{u}} {B : 交换环范畴} (φ : B ⟶ Γ(X, ⊤))
   证明: by
   simp only [Adjunction.homEquiv_apply, Scheme.Spec_map, Opens.map_top, Scheme.Hom.comp_app]
   simp
@@ -1476,7 +1476,7 @@ lemma ΓSpec_adjunction_homEquiv_eq
 
 中文:
 引理 ΓSpec_adjunction_homEquiv_eq
-  条件: {X : Scheme.{u}} {B : CommRingCat} (φ : B ⟶ Γ(X, ⊤))
+  条件: {X : 概形.{u}} {B : 交换环范畴} (φ : B ⟶ Γ(X, ⊤))
   证明: by
   rw [← Iso.inv_comp_eq]; rw [ΓSpecIso_inv_ΓSpec_adjunction_homEquiv]
 
@@ -1497,7 +1497,7 @@ theorem ΓSpecIso_obj_hom
 
 中文:
 定理 ΓSpecIso_obj_hom
-  条件: {X : Scheme.{u}} (U : X.Opens)
+  条件: {X : 概形.{u}} (U : X.Opens)
   证明: by simp
 -/
 theorem ΓSpecIso_obj_hom {X : Scheme.{u}} (U : X.Opens) :
@@ -1516,7 +1516,7 @@ definition Spec.fullyFaithfulToLocallyRingedSpace
 
 中文:
 定义 Spec.fullyFaithfulToLocallyRingedSpace
-  签名: : Spec.toLocallyRingedSpace.FullyFaithful
+  签名: : Spec.toLocallyRingedSpace.满忠实
   定义体: ΓSpec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit
 
 Depends on / 依赖: Spec.locallyRingedSpaceAdjunction.fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit, locallyRingedSpaceAdjunction
@@ -1534,7 +1534,7 @@ instance :
 
 中文:
 实例 :
-  签名: Spec.toLocallyRingedSpace.Full
+  签名: Spec.toLocallyRingedSpace.满
   定义体: Spec.fullyFaithfulToLocallyRingedSpace.full
 
 Depends on / 依赖: Spec.fullyFaithfulToLocallyRingedSpace.full, fullyFaithfulToLocallyRingedSpace
@@ -1552,7 +1552,7 @@ instance :
 
 中文:
 实例 :
-  签名: Spec.toLocallyRingedSpace.Faithful
+  签名: Spec.toLocallyRingedSpace.忠实
   定义体: Spec.fullyFaithfulToLocallyRingedSpace.faithful
 
 Depends on / 依赖: Spec.fullyFaithfulToLocallyRingedSpace.faithful, faithful, fullyFaithfulToLocallyRingedSpace
@@ -1570,7 +1570,7 @@ definition Spec.fullyFaithful
 
 中文:
 定义 Spec.fullyFaithful
-  签名: : Scheme.Spec.FullyFaithful
+  签名: : 概形.Spec.满忠实
   定义体: ΓSpec.adjunction.fullyFaithfulROfIsIsoCounit
 
 Depends on / 依赖: Spec.adjunction.fullyFaithfulROfIsIsoCounit, adjunction, fullyFaithfulROfIsIsoCounit
@@ -1588,7 +1588,7 @@ instance Spec.full
 
 中文:
 实例 Spec.full
-  签名: : Scheme.Spec.Full
+  签名: : 概形.Spec.满
   定义体: Spec.fullyFaithful.full
 
 Depends on / 依赖: Spec.fullyFaithful.full, fullyFaithful
@@ -1606,7 +1606,7 @@ instance Spec.faithful
 
 中文:
 实例 Spec.faithful
-  签名: : Scheme.Spec.Faithful
+  签名: : 概形.Spec.忠实
   定义体: Spec.fullyFaithful.faithful
 
 Depends on / 依赖: Spec.fullyFaithful.faithful, faithful, fullyFaithful
@@ -1654,8 +1654,8 @@ lemma Spec.map_injective
 
 中文:
 引理 Spec.map_injective
-  条件: {R S : CommRingCat}
-  结论: Function.Injective (Spec.map : (R ⟶ S) -> _)
+  条件: {R S : 交换环范畴}
+  结论: 函数.单射 (Spec.map : (R ⟶ S) -> _)
   证明: fun _ _ => Spec.map_inj.mp
 
 @[simp]
@@ -1678,7 +1678,7 @@ lemma Spec.map_eq_id
 
 中文:
 引理 Spec.map_eq_id
-  条件: {R : CommRingCat} {ϕ : R ⟶ R}
+  条件: {R : 交换环范畴} {ϕ : R ⟶ R}
   结论: Spec.map ϕ = 𝟙 (Spec R) ↔ ϕ = 𝟙 R
   证明: by
   simp [← map_inj]
@@ -1697,7 +1697,7 @@ definition Spec.preimage
   body: (Scheme.Spec.preimage f).unop
 
 中文:
-定义 Spec.preimage
+定义 Spec.原像
   签名: : R ⟶ S
   定义体: (Scheme.Spec.preimage f).unop
 
@@ -1715,7 +1715,7 @@ lemma Spec.map_preimage
 
 中文:
 引理 Spec.map_preimage
-  结论: Spec.map (Spec.preimage f) = f
+  结论: Spec.map (Spec.原像 f) = f
   证明: Scheme.Spec.map_preimage f
 -/
 @[simp] lemma Spec.map_preimage : Spec.map (Spec.preimage f) = f := Scheme.Spec.map_preimage f
@@ -1747,7 +1747,7 @@ lemma Spec.preimage_map
 
 中文:
 引理 Spec.preimage_map
-  结论: Spec.preimage (Spec.map φ) = φ
+  结论: Spec.原像 (Spec.map φ) = φ
   证明: Spec.map_injective (Spec.map_preimage (Spec.map φ))
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.hom_ext, SimplexCategory, SimplexCategory.Hom.ext, hom_ext
@@ -1768,7 +1768,7 @@ lemma Spec.map_surjective
 
 中文:
 引理 Spec.map_surjective
-  条件: {R S : CommRingCat}
+  条件: {R S : 交换环范畴}
   证明: by
   intro f
   use Spec.preimage f
@@ -1799,7 +1799,7 @@ definition Spec.homEquiv
 
 中文:
 定义 Spec.homEquiv
-  签名: {R S : CommRingCat}
+  签名: {R S : 交换环范畴}
   定义体: Spec.preimage
   invFun := Spec.map
   left_inv := Spec.map_preimage
@@ -1829,8 +1829,8 @@ lemma Spec.preimage_id
 
 中文:
 引理 Spec.preimage_id
-  条件: {R : CommRingCat}
-  结论: Spec.preimage (𝟙 (Spec R)) = 𝟙 R
+  条件: {R : 交换环范畴}
+  结论: Spec.原像 (𝟙 (Spec R)) = 𝟙 R
   证明: Spec.map_injective (by simp)
 
 @[simp, reassoc]
@@ -1851,7 +1851,7 @@ lemma Spec.preimage_comp
 
 中文:
 引理 Spec.preimage_comp
-  条件: {R S T : CommRingCat} (f : Spec R ⟶ Spec S) (g : Spec S ⟶ Spec T)
+  条件: {R S T : 交换环范畴} (f : Spec R ⟶ Spec S) (g : Spec S ⟶ Spec T)
   证明: Spec.map_injective (by simp)
 
 Depends on / 依赖: Spec.map_injective, map_injective
@@ -1873,7 +1873,7 @@ instance :
 
 中文:
 实例 :
-  签名: Reflective Spec.toLocallyRingedSpace
+  签名: 反射 Spec.toLocallyRingedSpace
   定义体: Γ.rightOp
   adj := ΓSpec.locallyRingedSpaceAdjunction
 
@@ -1894,7 +1894,7 @@ instance Spec.reflective
 
 中文:
 实例 Spec.reflective
-  签名: : Reflective Scheme.Spec where
+  签名: : 反射 概形.Spec where
   定义体: Scheme.Γ.rightOp
   adj := ΓSpec.adjunction
 
@@ -1914,7 +1914,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyRingedSpace.Γ.IsRightAdjoint
+  签名: LocallyRinged空间.Γ.是右伴随
   定义体: ΓSpec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint
 
 Depends on / 依赖: Spec.locallyRingedSpaceAdjunction.rightOp.isRightAdjoint, isRightAdjoint, locallyRingedSpaceAdjunction, rightOp
@@ -1932,7 +1932,7 @@ instance :
 
 中文:
 实例 :
-  签名: Scheme.Γ.IsRightAdjoint
+  签名: 概形.Γ.是右伴随
   定义体: ΓSpec.adjunction.rightOp.isRightAdjoint
 
 Depends on / 依赖: Spec.adjunction.rightOp.isRightAdjoint, adjunction, isRightAdjoint, rightOp

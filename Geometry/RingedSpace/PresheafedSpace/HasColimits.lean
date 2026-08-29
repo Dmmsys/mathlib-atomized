@@ -69,7 +69,7 @@ theorem map_id_c_app
 
 中文:
 定理 map_id_c_app
-  条件: (F : J ⥤ PresheafedSpace.{_, _, v} C) (j) (U)
+  条件: (F : J ⥤ Presheafed空间.{_, _, v} C) (j) (U)
   证明: by
   simp [PresheafedSpace.congr_app (F.map_id j)]
 
@@ -95,7 +95,7 @@ theorem map_comp_c_app
 
 中文:
 定理 map_comp_c_app
-  结论: (F : J ⥤ PresheafedSpace.{_, _, v} C) {j₁ j₂ j₃}
+  结论: (F : J ⥤ Presheafed空间.{_, _, v} C) {j₁ j₂ j₃}
   证明: by
   simp [PresheafedSpace.congr_app (F.map_comp f g)]
 
@@ -130,7 +130,7 @@ definition componentwiseDiagram
 
 中文:
 定义 componentwiseDiagram
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) [有余极限 F]
   定义体: (F.obj (unop j)).presheaf.obj (op ((Opens.map (colimit.ι F (unop j)).base).obj U))
   map {j k} f := (F.map f.unop).c.app _ ≫
     (F.obj (unop k)).presheaf.map (eqToHom (by rw [← colimit.w F f.unop, comp_base]; rfl))
@@ -171,7 +171,7 @@ definition pushforwardDiagramToColimit
 
 中文:
 定义 pushforwardDiagramToColimit
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
   定义体: op (colimit.ι (F ⋙ PresheafedSpace.forget C) j _* (F.obj j).presheaf)
   map {j j'} f :=
     ((pushforward C (colimit.ι (F ⋙ PresheafedSpace.forget C) j')).map (F.map f).c ≫
@@ -227,7 +227,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
   定义体: Limits.colimit (F ⋙ PresheafedSpace.forget C)
   presheaf := limit (pushforwardDiagramToColimit F).leftOp
 
@@ -252,7 +252,7 @@ theorem colimit_carrier
 
 中文:
 定理 colimit_carrier
-  条件: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  条件: (F : J ⥤ Presheafed空间.{_, _, v} C)
   证明: rfl
 
 @[simp]
@@ -272,7 +272,7 @@ theorem colimit_presheaf
 
 中文:
 定理 colimit_presheaf
-  条件: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  条件: (F : J ⥤ Presheafed空间.{_, _, v} C)
   证明: rfl
 -/
 theorem colimit_presheaf (F : J ⥤ PresheafedSpace.{_, _, v} C) :
@@ -304,7 +304,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
   定义体: colimit F
   ι :=
     { app := fun j =>
@@ -357,7 +357,7 @@ definition descCApp
 
 中文:
 定义 descCApp
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (U : (Opens s.pt.carrier)ᵒᵖ)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F) (U : (Opens s.pt.carrier)ᵒᵖ)
   定义体: by
   refine
     limit.lift _
@@ -418,7 +418,7 @@ theorem desc_c_naturality
 
 中文:
 定理 desc_c_naturality
-  结论: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
+  结论: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F)
   证明: by
   dsimp [descCApp]
   refine limit_obj_ext (fun j => ?_)
@@ -455,7 +455,7 @@ definition desc
 
 中文:
 定义 desc
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F)
   定义体: colimit.desc (F ⋙ PresheafedSpace.forget C) ((PresheafedSpace.forget C).mapCocone s)
   c :=
     { app := fun U => descCApp F s U
@@ -487,7 +487,7 @@ theorem desc_fac
 
 中文:
 定理 desc_fac
-  条件: (F : J ⥤ PresheafedSpace.{_, _, v} C) (s : Cocone F) (j : J)
+  条件: (F : J ⥤ Presheafed空间.{_, _, v} C) (s : 余锥 F) (j : J)
   证明: by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11041): the original proof is just
   -- `ext <;> dsimp [desc, descCApp] <;> simpa`,
@@ -531,7 +531,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C)
   定义体: desc F s
   fac s := desc_fac F s
   uniq s m w := by
@@ -575,7 +575,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfShape J (PresheafedSpace.{_, _, v} C)
+  签名: 有形状余极限 J (Presheafed空间.{_, _, v} C)
   定义体: ⟨colimitCocone F, colimitCoconeIsColimit F⟩
 
 Depends on / 依赖: colimitCocone, colimitCoconeIsColimit
@@ -599,7 +599,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (PresheafedSpace.forget.{v, u, v} C)
+  签名: 保持形状余极限 J (Presheafed空间.forget.{v, u, v} C)
   定义体: ⟨fun {F} => preservesColimit_of_preserves_colimit_cocone (colimitCoconeIsColimit F) by
     apply IsColimit.ofIsoColimit (colimit.isColimit _)
     fapply Cocone.ext
@@ -625,7 +625,7 @@ instance instHasColimits
 
 中文:
 实例 instHasColimits
-  签名: [HasLimits C]
+  签名: [有极限 C]
   定义体: ⟨fun {_ _} => ⟨fun {F} => ⟨colimitCocone F, colimitCoconeIsColimit F⟩⟩⟩
 
 Depends on / 依赖: colimitCocone, colimitCoconeIsColimit
@@ -645,7 +645,7 @@ instance forget_preservesColimits
 
 中文:
 实例 forget_preservesColimits
-  签名: [HasLimits C]
+  签名: [有极限 C]
   定义体: { preservesColimit := fun {F} => preservesColimit_of_preserves_colimit_cocone
           (colimitCoconeIsColimit F)
           (IsColimit.ofIsoColimit (colimit.isColimit _) (Cocone.ext (Iso.refl _))) }
@@ -678,7 +678,7 @@ definition colimitPresheafObjIsoComponentwiseLimit
 
 中文:
 定义 colimitPresheafObjIsoComponentwiseLimit
-  签名: (F : J ⥤ PresheafedSpace.{_, _, v} C) [HasColimit F]
+  签名: (F : J ⥤ Presheafed空间.{_, _, v} C) [有余极限 F]
   定义体: by
   refine
     ((sheafIsoOfIso (colimit.isoColimitCocone ⟨_, colimitCoconeIsColimit F⟩).symm).app
@@ -734,7 +734,7 @@ theorem colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
 
 中文:
 定理 colimitPresheafObjIsoComponentwiseLimit_inv_ι_app
-  结论: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  结论: (F : J ⥤ Presheafed空间.{_, _, v} C)
   证明: by
   delta colimitPresheafObjIsoComponentwiseLimit
   rw [Iso.trans_inv]; rw [Iso.trans_inv]; rw [Iso.app_inv]; rw [sheafIsoOfIso_inv]; rw [pushforwardToOfIso_app]; rw [congr_app (Iso.symm_inv _)]
@@ -766,7 +766,7 @@ theorem colimitPresheafObjIsoComponentwiseLimit_hom_π
 
 中文:
 定理 colimitPresheafObjIsoComponentwiseLimit_hom_π
-  结论: (F : J ⥤ PresheafedSpace.{_, _, v} C)
+  结论: (F : J ⥤ Presheafed空间.{_, _, v} C)
   证明: by
   rw [← Iso.eq_inv_comp]; rw [colimitPresheafObjIsoComponentwiseLimit_inv_ι_app]
 

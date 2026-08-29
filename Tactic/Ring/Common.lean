@@ -98,8 +98,8 @@ definition sNat
   body: q(Nat.instCommSemiring)
 
 中文:
-定义 sNat
-  签名: : Q(CommSemiring 自然数)
+定义 s自然数
+  签名: : Q(交换半环 自然数)
   定义体: q(Nat.instCommSemiring)
 
 Depends on / 依赖: Nat.instCommSemiring, instCommSemiring
@@ -117,11 +117,11 @@ structure _root_.Mathlib.Tactic.Ring.RatCoeff
     - hyp : Option Expr
 
 中文:
-结构 _root_.Mathlib.Tactic.Ring.RatCoeff
+结构 _root_.Mathlib.Tactic.环.RatCoeff
   参数: {u : Lean.Level} {α : Q(类型u)} (e : Q($α))
   公理与运算 (2 个):
-    - value : Rat
-    - hyp : Option Expr
+    - value : 有理数
+    - hyp : 选项类型 Expr
 -/
 structure _root_.Mathlib.Tactic.Ring.RatCoeff {u : Lean.Level} {α : Q(Type u)} (e : Q($α)) where
   /-- The value represented by `e`. Should not be zero. -/
@@ -139,7 +139,7 @@ abbreviation btNat
   body: _root_.Mathlib.Tactic.Ring.RatCoeff q($e)
 
 中文:
-缩写 btNat
+缩写 bt自然数
   签名: (e : Q(自然数))
   定义体: _root_.Mathlib.Tactic.Ring.RatCoeff q($e)
 
@@ -333,9 +333,9 @@ structure RingCompare
 
 中文:
 结构 RingCompare
-  参数: {u : Lean.Level} {α : Q(类型u)} (BaseType : Q($α) -> Type)
+  参数: {u : Lean.Level} {α : Q(类型u)} (BaseType : Q($α) -> 类型)
   公理与运算 (2 个):
-    - eq : 对任意 {x y : Q($α)}, BaseType x -> BaseType y -> 布尔
+    - eq : 对任意 {x y : Q($α)}, BaseType x -> BaseType y -> 布尔值
     - compare : 对任意 {x y : Q($α)}, BaseType x -> BaseType y -> Ordering
 -/
 structure RingCompare {u : Lean.Level} {α : Q(Type u)} (BaseType : Q($α) -> Type) where
@@ -364,17 +364,17 @@ structure RingCompute
 
 中文:
 结构 RingCompute
-  参数: {u : Lean.Level} {α : Q(类型u)} (BaseType : Q($α) -> Type)
+  参数: {u : Lean.Level} {α : Q(类型u)} (BaseType : Q($α) -> 类型)
   继承: RingCompare BaseType
   公理与运算 (9 个):
-    - add({x y : Q($α)}) : BaseType x -> BaseType y -> MetaM ((Result BaseType q($x + $y)) × (Option Q(Is自然数 ($x + $y) 0)))
+    - add({x y : Q($α)}) : BaseType x -> BaseType y -> MetaM ((Result BaseType q($x + $y)) × (选项类型 Q(是自然数 ($x + $y) 0)))
     - mul({x y : Q($α)}) : BaseType x -> BaseType y -> MetaM (Result BaseType q($x * $y))
-    - cast((v : Lean.Level) (β : Q(类型v)) (_ : Q(CommSemiring $β)) (_ : Q(SMul $β $α)) (x : Q($β))) : AtomM (Σ y : Q($α), ExSum BaseType sα q($y) × Q(对任意 a : $α, $x • a = $y * a))
-    - neg({x : Q($α)} (rα : Q(CommRing $α))) : BaseType x -> MetaM (Result BaseType q(-$x))
+    - cast((v : Lean.Level) (β : Q(类型v)) (_ : Q(交换半环 $β)) (_ : Q(标量乘法 $β $α)) (x : Q($β))) : AtomM (Σ y : Q($α), ExSum BaseType sα q($y) × Q(对任意 a : $α, $x • a = $y * a))
+    - neg({x : Q($α)} (rα : Q(交换环 $α))) : BaseType x -> MetaM (Result BaseType q(-$x))
     - pow({x : Q($α)} {b : Q(自然数)}) : BaseType x -> (vb : ExProd自然数 q($b)) -> OptionT MetaM (Result BaseType q($x ^ $b))
-    - inv({x : Q($α)} (czα : Option Q(CharZero $α)) (fα : Q(Semifield $α))) : BaseType x -> AtomM (Option <| Result BaseType q($x⁻¹))
+    - inv({x : Q($α)} (czα : 选项类型 Q(特征零 $α)) (fα : Q(半域 $α))) : BaseType x -> AtomM (选项类型 <| Result BaseType q($x⁻¹))
     - derive((x : Q($α))) : MetaM (Result (ExSum BaseType sα) q($x))
-    - isOne({x : Q($α)}) : BaseType x -> Option Q(NormNum.Is自然数 $x 1)
+    - isOne({x : Q($α)}) : BaseType x -> 选项类型 Q(NormNum.是自然数 $x 1)
     - one : Result BaseType q((nat_lit 1).rawCast)
 -/
 structure RingCompute {u : Lean.Level} {α : Q(Type u)} (BaseType : Q($α) -> Type)
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExBase自然数 e)
+  签名: 可居 (Σ e, ExBase自然数 e)
   定义体: ⟨default, .atom 0⟩
 -/
 instance : Inhabited (Σ e, ExBaseNat e) := ⟨default, .atom 0⟩
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExSum自然数 e)
+  签名: 可居 (Σ e, ExSum自然数 e)
   定义体: ⟨_, .zero⟩
 -/
 instance : Inhabited (Σ e, ExSumNat e) := ⟨_, .zero⟩
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExProd自然数 e)
+  签名: 可居 (Σ e, ExProd自然数 e)
   定义体: ⟨default, .const default⟩
 -/
 instance : Inhabited (Σ e, ExProdNat e) := ⟨default, .const default⟩
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExBase bt sα e)
+  签名: 可居 (Σ e, ExBase bt sα e)
   定义体: ⟨default, .atom 0⟩
 -/
 instance : Inhabited (Σ e, ExBase bt sα e) := ⟨default, .atom 0⟩
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExSum bt sα e)
+  签名: 可居 (Σ e, ExSum bt sα e)
   定义体: ⟨_, .zero⟩
 -/
 instance : Inhabited (Σ e, ExSum bt sα e) := ⟨_, .zero⟩
@@ -516,7 +516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Σ e, ExProd bt sα e)
+  签名: 可居 (Σ e, ExProd bt sα e)
   定义体: ⟨default, .const default⟩
 -/
 instance : Inhabited (Σ e, ExProd bt sα e) := ⟨default, .const default⟩
@@ -536,7 +536,7 @@ definition ExBaseNat.toExBase
   | .sum v => ⟨_, .sum v.toExSum.2⟩
 
 中文:
-定义 ExBaseNat.toExBase
+定义 ExBase自然数.toExBase
   签名: (e : Q(自然数))
   定义体: fun
   | .atom id => ⟨_, .atom (e := e) id⟩
@@ -557,7 +557,7 @@ definition ExProdNat.toExProd
   | .mul vx ve vt => ⟨_, .mul vx.toExBase.2 ve vt.toExProd.2⟩
 
 中文:
-定义 ExProdNat.toExProd
+定义 ExProd自然数.toExProd
   签名: (e : Q(自然数))
   定义体: fun
   | .const value => ⟨_, .const value⟩
@@ -578,7 +578,7 @@ definition ExSumNat.toExSum
   | .add va vb => ⟨_, .add va.toExProd.2 vb.toExSum.2⟩
 
 中文:
-定义 ExSumNat.toExSum
+定义 ExSum自然数.toExSum
   签名: (e : Q(自然数))
   定义体: fun
   | .zero => ⟨_, .zero (BaseType := btNat) (sα := sNat)⟩
@@ -603,7 +603,7 @@ definition ExBase.toExBaseNat
   | .sum v => ⟨_, .sum v.toExSumNat.2⟩
 
 中文:
-定义 ExBase.toExBaseNat
+定义 ExBase.toExBase自然数
   签名: (e : Q(自然数))
   定义体: fun
   | .atom id => ⟨_, .atom (e := e) id⟩
@@ -624,7 +624,7 @@ definition ExProd.toExProdNat
   | .mul vx ve vt => ⟨_, .mul vx.toExBaseNat.2 ve vt.toExProdNat.2⟩
 
 中文:
-定义 ExProd.toExProdNat
+定义 ExProd.toExProd自然数
   签名: (e : Q(自然数))
   定义体: fun
   | .const value => ⟨_, .const value⟩
@@ -645,7 +645,7 @@ definition ExSum.toExSumNat
   | .add va vb => ⟨_, .add va.toExProdNat.2 vb.toExSumNat.2⟩
 
 中文:
-定义 ExSum.toExSumNat
+定义 ExSum.toExSum自然数
   签名: (e : Q(自然数))
   定义体: fun
   | .zero => ⟨_, .zero⟩
@@ -771,7 +771,7 @@ definition ExBase.cmp
 
 中文:
 定义 ExBase.cmp
-  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(CommSemiring $α)}
+  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(交换半环 $α)}
 -/
 partial def ExBase.cmp {u : Lean.Level} {α : Q(Type u)} {bt} {sα : Q(CommSemiring $α)}
     (rc : RingCompare bt) {a b : Q($α)} :
@@ -791,7 +791,7 @@ definition ExProd.cmp
 
 中文:
 定义 ExProd.cmp
-  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(CommSemiring $α)}
+  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(交换半环 $α)}
 -/
 partial def ExProd.cmp {u : Lean.Level} {α : Q(Type u)} {bt} {sα : Q(CommSemiring $α)}
     (rc : RingCompare bt) {a b : Q($α)} :
@@ -812,7 +812,7 @@ definition ExSum.cmp
 
 中文:
 定义 ExSum.cmp
-  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(CommSemiring $α)}
+  签名: {u : Lean.Level} {α : Q(类型u)} {bt} {sα : Q(交换半环 $α)}
 -/
 partial def ExSum.cmp {u : Lean.Level} {α : Q(Type u)} {bt} {sα : Q(CommSemiring $α)}
     (rc : RingCompare bt) {a b : Q($α)} :
@@ -859,7 +859,7 @@ inductive Overlap
 归纳类型 Overlap
   参数: (e : Q($α))
   构造子 (2 个):
-    - zero: (_ : Q(Is自然数 $e (nat_lit 0)))
+    - zero: (_ : Q(是自然数 $e (nat_lit 0)))
     - nonzero: (_ : Result (ExProd bt sα) e)
 -/
 inductive Overlap (e : Q($α)) : Type where
@@ -1441,7 +1441,7 @@ theorem neg_one_mul
 
 中文:
 定理 neg_one_mul
-  条件: {R} [CommRing R] {a b : R} (_ : (-1 : R) * a = b)
+  条件: {R} [交换环 R] {a b : R} (_ : (-1 : R) * a = b)
   证明: by subst_vars; simp
 -/
 theorem neg_one_mul {R} [CommRing R] {a b : R} (_ : (-1 : R) * a = b) :
@@ -1457,7 +1457,7 @@ theorem neg_mul
 
 中文:
 定理 neg_mul
-  结论: {R} [CommRing R] (a₁ : R) (a₂) {a₃ b : R}
+  结论: {R} [交换环 R] (a₁ : R) (a₂) {a₃ b : R}
   证明: by subst_vars; simp
 -/
 theorem neg_mul {R} [CommRing R] (a₁ : R) (a₂) {a₃ b : R}
@@ -1481,7 +1481,7 @@ definition evalNegProd
 
 中文:
 定义 evalNegProd
-  签名: {a : Q($α)} (rα : Q(CommRing $α)) (va : ExProd bt sα a)
+  签名: {a : Q($α)} (rα : Q(交换环 $α)) (va : ExProd bt sα a)
   定义体: Lean.Core.checkSystem decl_name%.toString *>
   match va with
   | .const za => do
@@ -1517,7 +1517,7 @@ theorem neg_zero
 
 中文:
 定理 neg_zero
-  条件: {R} [CommRing R]
+  条件: {R} [交换环 R]
   结论: -(0 : R) = 0
   证明: by simp
 -/
@@ -1534,7 +1534,7 @@ theorem neg_add
 
 中文:
 定理 neg_add
-  结论: {R} [CommRing R] {a₁ a₂ b₁ b₂ : R}
+  结论: {R} [交换环 R] {a₁ a₂ b₁ b₂ : R}
   证明: by
   subst_vars; simp [add_comm]
 
@@ -1562,7 +1562,7 @@ definition evalNeg
 
 中文:
 定义 evalNeg
-  签名: {a : Q($α)} (rα : Q(CommRing $α)) (va : ExSum bt sα a)
+  签名: {a : Q($α)} (rα : Q(交换环 $α)) (va : ExSum bt sα a)
   定义体: match va with
   | .zero => do
     assumeInstancesCommute
@@ -1598,7 +1598,7 @@ theorem sub_pf
 
 中文:
 定理 sub_pf
-  结论: {R} [CommRing R] {a b c d : R}
+  结论: {R} [交换环 R] {a b c d : R}
   证明: by subst_vars; simp [sub_eq_add_neg]
 
 Depends on / 依赖: sub_eq_add_neg
@@ -1814,7 +1814,7 @@ definition ExBaseNat.evalPos
   | .sum va => va.evalPos
 
 中文:
-定义 ExBaseNat.evalPos
+定义 ExBase自然数.evalPos
   签名: {a : Q(自然数)} (va : ExBase自然数 a)
   定义体: match va with
   | .atom _ => none
@@ -1843,7 +1843,7 @@ haveI p : Nat.ble 1 lit =Q true := ⟨⟩
     l
 
 中文:
-定义 ExProdNat.evalPos
+定义 ExProd自然数.evalPos
   签名: {a : Q(自然数)} (va : ExProd自然数 a)
   定义体: match va with
   | .const _ =>
@@ -1883,7 +1883,7 @@ definition ExSumNat.evalPos
     | none => let p ← va₂.evalPos; some q(add_pos_right $a₁ $p)
 
 中文:
-定义 ExSumNat.evalPos
+定义 ExSum自然数.evalPos
   签名: {a : Q(自然数)} (va : ExSum自然数 a)
   定义体: match va with
   | .zero => none
@@ -1982,7 +1982,7 @@ have : n =Q 2 * m := ⟨⟩
 
 
 中文:
-定义 evalPowNat
+定义 evalPow自然数
   签名: {a : Q($α)} (va : ExSum bt sα a) (n : Q(自然数))
   定义体: do
   let nn := n.natLit!
@@ -2031,7 +2031,7 @@ theorem one_pow
 
 中文:
 定理 one_pow
-  条件: {a : R} (b : 自然数) (ha : Is自然数 a 1)
+  条件: {a : R} (b : 自然数) (ha : 是自然数 a 1)
   结论: a ^ b = a
   证明: by
   simp [ha.out]
@@ -2284,8 +2284,8 @@ theorem pow_one_cast_of_isNat
   proof: by simp [hb.out]
 
 中文:
-定理 pow_one_cast_of_isNat
-  条件: (a : R) (b : 自然数) (hb : Is自然数 b 1)
+定理 pow_one_cast_of_is自然数
+  条件: (a : R) (b : 自然数) (hb : 是自然数 b 1)
   证明: by simp [hb.out]
 
 Depends on / 依赖: hb.out
@@ -2501,11 +2501,11 @@ structure Cache
 
 中文:
 结构 Cache
-  参数: {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  参数: {α : Q(类型u)} (sα : Q(交换半环 $α))
   公理与运算 (3 个):
-    - rα : Option Q(CommRing $α)
-    - dsα : Option Q(Semifield $α)
-    - czα : Option Q(CharZero $α)
+    - rα : 选项类型 Q(交换环 $α)
+    - dsα : 选项类型 Q(半域 $α)
+    - czα : 选项类型 Q(特征零 $α)
 -/
 structure Cache {α : Q(Type u)} (sα : Q(CommSemiring $α)) where
   /-- A ring instance on `α`, if available. -/
@@ -2528,7 +2528,7 @@ definition mkCache
 
 中文:
 定义 mkCache
-  签名: {α : Q(类型u)} (sα : Q(CommSemiring $α))
+  签名: {α : Q(类型u)} (sα : Q(交换半环 $α))
   定义体: return {
     rα := (← trySynthInstanceQ q(CommRing $α)).toOption
     dsα := (← trySynthInstanceQ q(Semifield $α)).toOption
@@ -2651,7 +2651,7 @@ nonrec theorem inv_zero {R} [Semifield R] : (0 : R)⁻¹ = 0 := inv_zero
 
 中文:
 定理 inv_mul
-  结论: {R} [Semifield R] {a₁ a₂ a₃ b₁ b₃ c}
+  结论: {R} [半域 R] {a₁ a₂ a₃ b₁ b₃ c}
   证明: by subst_vars; simp
 
 nonrec theorem inv_zero {R} [Semifield R] : (0 : R)⁻¹ = 0 := inv_zero
@@ -2673,7 +2673,7 @@ theorem inv_single
 
 中文:
 定理 inv_single
-  结论: {R} [Semifield R] {a b : R}
+  结论: {R} [半域 R] {a b : R}
   证明: by simp [*]
 -/
 theorem inv_single {R} [Semifield R] {a b : R}
@@ -2740,7 +2740,7 @@ definition ExProd.evalInv
 
 中文:
 定义 ExProd.evalInv
-  签名: {a : Q($α)} (czα : Option Q(CharZero $α)) (va : ExProd bt sα a)
+  签名: {a : Q($α)} (czα : 选项类型 Q(特征零 $α)) (va : ExProd bt sα a)
   定义体: Lean.Core.checkSystem decl_name%.toString *>
   match va with
   | .const c => do
@@ -2790,7 +2790,7 @@ definition ExSum.evalInv
 
 中文:
 定义 ExSum.evalInv
-  签名: {a : Q($α)} (czα : Option Q(CharZero $α)) (va : ExSum bt sα a)
+  签名: {a : Q($α)} (czα : 选项类型 Q(特征零 $α)) (va : ExSum bt sα a)
   定义体: match va with
   | ExSum.zero => pure ⟨_, .zero, (q(inv_zero (R := $α)) : Expr)⟩
   | ExSum.add va ExSum.zero => do
@@ -2829,7 +2829,7 @@ theorem div_pf
 
 中文:
 定理 div_pf
-  结论: {R} [Semifield R] {a b c d : R}
+  结论: {R} [半域 R] {a b c d : R}
   证明: by
   subst_vars; simp [div_eq_mul_inv]
 
@@ -2853,7 +2853,7 @@ definition evalDiv
 
 中文:
 定义 evalDiv
-  签名: {a b : Q($α)} (rα : Q(Semifield $α)) (czα : Option Q(CharZero $α))
+  签名: {a b : Q($α)} (rα : Q(半域 $α)) (czα : 选项类型 Q(特征零 $α))
   定义体: do
   let ⟨_c, vc, pc⟩ ← vb.evalInv rc rcNat rα czα
   let ⟨d, vd, pd⟩ ← evalMul rc rcNat va vc
@@ -2937,7 +2937,7 @@ theorem zsmul_congr
 
 中文:
 定理 zsmul_congr
-  结论: {R} [CommRing R] {b b' c : R} {a a' : 整数} (_ : (a : 整数) = a') (_ : b = b')
+  结论: {R} [交换环 R] {b b' c : R} {a a' : 整数} (_ : (a : 整数) = a') (_ : b = b')
   证明: by
   subst_vars; rfl
 -/
@@ -2972,7 +2972,7 @@ theorem neg_congr
 
 中文:
 定理 neg_congr
-  结论: {R} [CommRing R] {a a' b : R} (_ : a = a')
+  结论: {R} [交换环 R] {a a' b : R} (_ : a = a')
   证明: by subst_vars; rfl
 -/
 theorem neg_congr {R} [CommRing R] {a a' b : R} (_ : a = a')
@@ -2988,7 +2988,7 @@ theorem sub_congr
 
 中文:
 定理 sub_congr
-  结论: {R} [CommRing R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
+  结论: {R} [交换环 R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
   证明: by subst_vars; rfl
 -/
 theorem sub_congr {R} [CommRing R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
@@ -3004,7 +3004,7 @@ theorem inv_congr
 
 中文:
 定理 inv_congr
-  结论: {R} [Semifield R] {a a' b : R} (_ : a = a')
+  结论: {R} [半域 R] {a a' b : R} (_ : a = a')
   证明: by subst_vars; rfl
 -/
 theorem inv_congr {R} [Semifield R] {a a' b : R} (_ : a = a')
@@ -3020,7 +3020,7 @@ theorem div_congr
 
 中文:
 定理 div_congr
-  结论: {R} [Semifield R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
+  结论: {R} [半域 R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
   证明: by subst_vars; rfl
 -/
 theorem div_congr {R} [Semifield R] {a a' b b' c : R} (_ : a = a') (_ : b = b')
@@ -3038,7 +3038,7 @@ theorem smul_congr
 
 中文:
 定理 smul_congr
-  结论: {R α : 类型} [CommSemiring α] [SMul R α]
+  结论: {R α : 类型} [交换半环 α] [标量乘法 R α]
   证明: by
   subst_vars
   simp [*]

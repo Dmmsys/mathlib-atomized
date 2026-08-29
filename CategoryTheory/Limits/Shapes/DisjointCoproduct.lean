@@ -46,11 +46,11 @@ class CoproductDisjoint
     - mono_inj({c : Cofan X} (hc : IsColimit c) (i : ι)) : Mono (c.inj i)
 
 中文:
-类 CoproductDisjoint
+类 余productDisjoint
   参数: {ι : 类型} (X : ι -> C)
   公理与运算 (2 个):
-    - nonempty_isInitial_of_ne({c : Cofan X} (hc : IsColimit c) {i j : ι} (_ : i != j) (s : PullbackCone (c.inj i) (c.inj j))) : IsLimit s -> Nonempty (IsInitial s.pt)
-    - mono_inj({c : Cofan X} (hc : IsColimit c) (i : ι)) : Mono (c.inj i)
+    - nonempty_isInitial_of_ne({c : Cofan X} (hc : 是余极限 c) {i j : ι} (_ : i != j) (s : PullbackCone (c.inj i) (c.inj j))) : 是极限 s -> 非空 (IsInitial s.pt)
+    - mono_inj({c : Cofan X} (hc : 是余极限 c) (i : ι)) : 单态射 (c.inj i)
 -/
 class CoproductDisjoint {ι : Type*} (X : ι -> C) : Prop where
   nonempty_isInitial_of_ne {c : Cofan X} (hc : IsColimit c) {i j : ι} (_ : i != j)
@@ -77,8 +77,8 @@ lemma CoproductDisjoint.of_cofan
     refine ⟨(H hij).ofIso ⟨(H hij).to t.pt, u, (H hij).hom_ext 
 
 中文:
-引理 CoproductDisjoint.of_cofan
-  结论: {c : Cofan X} (hc : IsColimit c)
+引理 余productDisjoint.of_cofan
+  结论: {c : Cofan X} (hc : 是余极限 c)
   证明: by
     let e := hd.uniqueUpToIso hc
     have heq (i) : d.inj i ≫ e.hom.hom = c.inj i := e.hom.w ⟨i⟩
@@ -119,8 +119,8 @@ lemma CoproductDisjoint.of_hasCoproduct
   .of_cofan (coproductIsCoproduct X) s hs H
 
 中文:
-引理 CoproductDisjoint.of_hasCoproduct
-  结论: [HasCoproduct X] [对任意 i, Mono (Sigma.ι X i)]
+引理 余productDisjoint.of_hasCoproduct
+  结论: [HasCoproduct X] [对任意 i, 单态射 (依赖和类型.ι X i)]
   证明: have (i : ι) : Mono ((Cofan.mk (∐ X) (Sigma.ι X)).inj i) := inferInstanceAs Mono (Sigma.ι X i)
   .of_cofan (coproductIsCoproduct X) s hs H
 
@@ -145,8 +145,8 @@ lemma _root_.CategoryTheory.Mono.of_coproductDisjoint
   proof: CoproductDisjoint.mono_inj hc i
 
 中文:
-引理 _root_.CategoryTheory.Mono.of_coproductDisjoint
-  条件: {c : Cofan X} (hc : IsColimit c) (i : ι)
+引理 _root_.范畴论.单态射.of_coproductDisjoint
+  条件: {c : Cofan X} (hc : 是余极限 c) (i : ι)
   证明: CoproductDisjoint.mono_inj hc i
 
 Depends on / 依赖: CoproductDisjoint, CoproductDisjoint.mono_inj, mono_inj
@@ -164,7 +164,7 @@ instance _root_.CategoryTheory.Mono.ι_of_coproductDisjoint
   body: CoproductDisjoint.mono_inj (colimit.isColimit _) i
 
 中文:
-实例 _root_.CategoryTheory.Mono.ι_of_coproductDisjoint
+实例 _root_.范畴论.单态射.ι_of_coproductDisjoint
   签名: [HasCoproduct X] (i : ι)
   定义体: CoproductDisjoint.mono_inj (colimit.isColimit _) i
 
@@ -187,7 +187,7 @@ definition ofCoproductDisjointOfIsColimitOfIsLimit
 
 中文:
 定义 ofCoproductDisjointOfIsColimitOfIsLimit
-  签名: {c : Cofan X} (hc : IsColimit c)
+  签名: {c : Cofan X} (hc : 是余极限 c)
   定义体: (CoproductDisjoint.nonempty_isInitial_of_ne hc hij _ hs).some
 
 Depends on / 依赖: CoproductDisjoint, CoproductDisjoint.nonempty_isInitial_of_ne, nonempty_isInitial_of_ne
@@ -208,7 +208,7 @@ definition ofCoproductDisjoint
 
 中文:
 定义 ofCoproductDisjoint
-  签名: [HasCoproduct X] [HasPullback (Sigma.ι X i) (Sigma.ι X j)]
+  签名: [HasCoproduct X] [HasPullback (依赖和类型.ι X i) (依赖和类型.ι X j)]
   定义体: ofCoproductDisjointOfIsColimitOfIsLimit hij (colimit.isColimit _)
     (pullback.isLimit (Sigma.ι X i) (Sigma.ι X j))
 
@@ -266,7 +266,7 @@ definition ofCoproductDisjointOfCommSq
 
 中文:
 定义 ofCoproductDisjointOfCommSq
-  签名: [HasStrictInitialObjects C]
+  签名: [有StrictInitialObjects C]
   定义体: .ofStrict (pullback.lift fst snd h)
     .ofCoproductDisjointOfIsColimitOfIsLimit hij hc (limit.isLimit _)
 
@@ -295,8 +295,8 @@ lemma CoproductDisjoint.isPullback_of_isInitial
   · simp
 
 中文:
-引理 CoproductDisjoint.isPullback_of_isInitial
-  结论: {c : Cofan X} (hc : IsColimit c)
+引理 余productDisjoint.isPullback_of_isInitial
+  结论: {c : Cofan X} (hc : 是余极限 c)
   证明: by
   refine .of_iso_pullback (by simp) ?_ ?_ ?_
   · refine hY.uniqueUpToIso ?_
@@ -357,7 +357,7 @@ lemma BinaryCoproductDisjoint.of_binaryCofan
 
 中文:
 引理 BinaryCoproductDisjoint.of_binaryCofan
-  结论: {c : BinaryCofan X Y} (hc : IsColimit c)
+  结论: {c : BinaryCofan X Y} (hc : 是余极限 c)
   证明: by
   have (i : WalkingPair) : Mono (Cofan.inj c i) := by
     cases i
@@ -399,7 +399,7 @@ lemma _root_.CategoryTheory.Mono.cofanInl_of_binaryCoproductDisjoint
   proof: .of_coproductDisjoint hc .left
 
 中文:
-引理 _root_.CategoryTheory.Mono.cofanInl_of_binaryCoproductDisjoint
+引理 _root_.范畴论.单态射.cofanInl_of_binaryCoproductDisjoint
   结论: {c : BinaryCofan X Y}
   证明: .of_coproductDisjoint hc .left
 
@@ -418,7 +418,7 @@ lemma _root_.CategoryTheory.Mono.cofanInr_of_binaryCoproductDisjoint
   proof: .of_coproductDisjoint hc .right
 
 中文:
-引理 _root_.CategoryTheory.Mono.cofanInr_of_binaryCoproductDisjoint
+引理 _root_.范畴论.单态射.cofanInr_of_binaryCoproductDisjoint
   结论: {c : BinaryCofan X Y}
   证明: .of_coproductDisjoint hc .right
 
@@ -437,7 +437,7 @@ lemma _root_.CategoryTheory.Mono.of_binaryCoproductDisjoint_left
   proof: .of_coproductDisjoint hc .left
 
 中文:
-引理 _root_.CategoryTheory.Mono.of_binaryCoproductDisjoint_left
+引理 _root_.范畴论.单态射.of_binaryCoproductDisjoint_left
   结论: {Z : C}
   证明: .of_coproductDisjoint hc .left
 
@@ -456,7 +456,7 @@ lemma _root_.CategoryTheory.Mono.of_binaryCoproductDisjoint_right
   proof: .of_coproductDisjoint hc .right
 
 中文:
-引理 _root_.CategoryTheory.Mono.of_binaryCoproductDisjoint_right
+引理 _root_.范畴论.单态射.of_binaryCoproductDisjoint_right
   结论: {Z : C}
   证明: .of_coproductDisjoint hc .right
 
@@ -475,7 +475,7 @@ instance _root_.CategoryTheory.Mono.inl_of_binaryCoproductDisjoint
   body: @Mono.ι_of_coproductDisjoint _ _ _ _ _ ‹_› WalkingPair.left
 
 中文:
-实例 _root_.CategoryTheory.Mono.inl_of_binaryCoproductDisjoint
+实例 _root_.范畴论.单态射.inl_of_binaryCoproductDisjoint
   签名: [HasBinaryCoproduct X Y]
   定义体: @Mono.ι_of_coproductDisjoint _ _ _ _ _ ‹_› WalkingPair.left
 
@@ -494,7 +494,7 @@ instance _root_.CategoryTheory.Mono.inr_of_binaryCoproductDisjoint
   body: @Mono.ι_of_coproductDisjoint _ _ _ _ _ ‹_› WalkingPair.right
 
 中文:
-实例 _root_.CategoryTheory.Mono.inr_of_binaryCoproductDisjoint
+实例 _root_.范畴论.单态射.inr_of_binaryCoproductDisjoint
   签名: [HasBinaryCoproduct X Y]
   定义体: @Mono.ι_of_coproductDisjoint _ _ _ _ _ ‹_› WalkingPair.right
 
@@ -596,10 +596,10 @@ class CoproductsOfShapeDisjoint
     - coproductDisjoint((X : ι -> C)) : CoproductDisjoint X
 
 中文:
-类 CoproductsOfShapeDisjoint
-  参数: (C : 类型) [Category* C] (ι : 类型)
+类 余productsOfShapeDisjoint
+  参数: (C : 类型) [范畴* C] (ι : 类型)
   公理与运算 (1 个):
-    - coproductDisjoint((X : ι -> C)) : CoproductDisjoint X
+    - coproductDisjoint((X : ι -> C)) : 余productDisjoint X
 -/
 class CoproductsOfShapeDisjoint (C : Type*) [Category* C] (ι : Type*) : Prop where
   coproductDisjoint (X : ι -> C) : CoproductDisjoint X
@@ -614,7 +614,7 @@ abbreviation BinaryCoproductsDisjoint
 
 中文:
 缩写 BinaryCoproductsDisjoint
-  签名: (C : 类型) [Category* C]
+  签名: (C : 类型) [范畴* C]
   定义体: CoproductsOfShapeDisjoint C WalkingPair
 
 Depends on / 依赖: CoproductsOfShapeDisjoint, WalkingPair

@@ -47,10 +47,10 @@ structure Submodule
     - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X <= (obj Y).comap (M.restrictₛₗ f)
 
 中文:
-结构 Submodule
-  参数: (M : PresheafOfModules.{v} R)
+结构 子模
+  参数: (M : 预模层.{v} R)
   公理与运算 (2 个):
-    - obj((X : Cᵒᵖ)) : _root_.Submodule (R.obj X) (M.obj X)
+    - obj((X : Cᵒᵖ)) : _root_.子模 (R.obj X) (M.obj X)
     - map({X Y : Cᵒᵖ} (f : X ⟶ Y)) : obj X <= (obj Y).comap (M.restrictₛₗ f)
 -/
 structure Submodule (M : PresheafOfModules.{v} R) where
@@ -77,7 +77,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {N₁ N₂ : M.Submodule} (h : 对任意 X, N₁.obj X = N₂.obj X)
+  条件: {N₁ N₂ : M.子模} (h : 对任意 X, N₁.obj X = N₂.obj X)
   证明: by
   cases N₁; cases N₂; congr 1; ext X : 1; exact h X
 
@@ -126,7 +126,7 @@ ModuleCat.semilinearMapAddEquiv _ _ _
 
 中文:
 定义 toPresheafOfModules
-  签名: : PresheafOfModules.{v} R where
+  签名: : 预模层.{v} R where
   定义体: ModuleCat.of (R.obj X) (N.obj X)
   map {X Y} f :=
 ModuleCat.semilinearMapAddEquiv _ _ _
@@ -192,7 +192,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono N.ι
+  签名: 单态射 N.ι
   定义体: mono_of_injective fun _ => Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, mono_of_injective, val_injective
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder M.Submodule
+  签名: 偏序 M.子模
   定义体: PartialOrder.lift _ fun _ _ h => ext (congrFun h)
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift
@@ -228,7 +228,7 @@ lemma le_iff
 
 中文:
 引理 le_iff
-  条件: {N₁ N₂ : M.Submodule}
+  条件: {N₁ N₂ : M.子模}
   结论: N₁ <= N₂ ↔ 对任意 X, N₁.obj X <= N₂.obj X
   证明: .rfl
 -/
@@ -248,7 +248,7 @@ definition homOfLE
 
 中文:
 定义 homOfLE
-  签名: {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂)
+  签名: {N₁ N₂ : M.子模} (hle : N₁ <= N₂)
   定义体: homMk { app X := AddCommGrpCat.ofHom (Submodule.inclusion (hle X)).toAddMonoidHom } (by cat_disch)
 
 Depends on / 依赖: AddCommGrpCat, AddCommGrpCat.ofHom, Submodule, Submodule.inclusion, cat_disch, inclusion, toAddMonoidHom
@@ -274,7 +274,7 @@ lemma homOfLE_ι
 
 中文:
 引理 homOfLE_ι
-  条件: {N₁ N₂ : M.Submodule} (hle : N₁ <= N₂)
+  条件: {N₁ N₂ : M.子模} (hle : N₁ <= N₂)
   结论: homOfLE hle ≫ N₂.ι = N₁.ι
   证明: rfl
 
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice M.Submodule
+  签名: 完备格 M.子模
   定义体: { obj X := F.obj X ⊔ G.obj X
       map f := sup_le ((F.map f).trans (Submodule.comap_mono le_sup_left))
         ((G.map f).trans (Submodule.comap_mono le_sup_right)) }

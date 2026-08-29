@@ -75,7 +75,7 @@ theorem surjective_proj
 
 中文:
 定理 surjective_proj
-  条件: [Nonempty F] (h : IsHomeomorphicTrivialFiberBundle F proj)
+  条件: [非空 F] (h : IsHomeomorphicTrivialFiberBundle F proj)
   证明: by
   obtain ⟨e, rfl⟩ := h.proj_eq
   exact Prod.fst_surjective.comp e.surjective
@@ -133,7 +133,7 @@ theorem isQuotientMap_proj
 
 中文:
 定理 isQuotientMap_proj
-  条件: [Nonempty F] (h : IsHomeomorphicTrivialFiberBundle F proj)
+  条件: [非空 F] (h : IsHomeomorphicTrivialFiberBundle F proj)
   证明: h.isOpenMap_proj.isQuotientMap h.continuous_proj h.surjective_proj
 -/
 protected theorem isQuotientMap_proj [Nonempty F] (h : IsHomeomorphicTrivialFiberBundle F proj) :

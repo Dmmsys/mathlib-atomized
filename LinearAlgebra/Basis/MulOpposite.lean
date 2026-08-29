@@ -36,7 +36,7 @@ definition mulOpposite
 
 中文:
 定义 mulOpposite
-  签名: (b : Basis ι R H)
+  签名: (b : 基 ι R H)
   定义体: b.map (opLinearEquiv R)
 
 @[simp]
@@ -57,7 +57,7 @@ theorem mulOpposite_apply
 
 中文:
 定理 mulOpposite_apply
-  条件: (b : Basis ι R H) (i : ι)
+  条件: (b : 基 ι R H) (i : ι)
   证明: rfl
 -/
 theorem mulOpposite_apply (b : Basis ι R H) (i : ι) :
@@ -75,7 +75,7 @@ theorem mulOpposite_repr_eq
 
 中文:
 定理 mulOpposite_repr_eq
-  条件: (b : Basis ι R H)
+  条件: (b : 基 ι R H)
   证明: rfl
 
 @[simp]
@@ -96,7 +96,7 @@ theorem repr_unop_eq_mulOpposite_repr
 
 中文:
 定理 repr_unop_eq_mulOpposite_repr
-  条件: (b : Basis ι R H) (x : Hᵐᵒᵖ)
+  条件: (b : 基 ι R H) (x : Hᵐᵒᵖ)
   证明: rfl
 
 @[simp]
@@ -115,7 +115,7 @@ theorem mulOpposite_repr_op
 
 中文:
 定理 mulOpposite_repr_op
-  条件: (b : Basis ι R H) (x : H)
+  条件: (b : 基 ι R H) (x : H)
   证明: rfl
 -/
 theorem mulOpposite_repr_op (b : Basis ι R H) (x : H) :
@@ -135,8 +135,8 @@ instance [DivisionRing
   (Basis.ofVectorSpace R H).mulOpposite (Basis.ofVectorSpaceIndex R H).toFinite
 
 中文:
-实例 [DivisionRing
-  签名: R] [AddCommGroup H] [Module R H]
+实例 [除环
+  签名: R] [加法交换群 H] [模 R H]
   定义体: FiniteDimensional.of_finite_basis
   (Basis.ofVectorSpace R H).mulOpposite (Basis.ofVectorSpaceIndex R H).toFinite
 
@@ -156,8 +156,8 @@ instance [Semiring
   Module.Free.of_basis b.2.mulOpposite
 
 中文:
-实例 [Semiring
-  签名: R] [AddCommMonoid H] [Module R H]
+实例 [半环
+  签名: R] [加法交换幺半群 H] [模 R H]
   定义体: let ⟨b⟩ := Module.Free.exists_basis (R := R) (M := H)
   Module.Free.of_basis b.2.mulOpposite
 
@@ -178,7 +178,7 @@ theorem rank
 
 中文:
 定理 rank
-  结论: [Semiring R] [StrongRankCondition R] [AddCommMonoid H] [Module R H]
+  结论: [半环 R] [StrongRankCondition R] [加法交换幺半群 H] [模 R H]
   证明: Module.nonempty_linearEquiv_iff_rank_eq.mp ⟨(opLinearEquiv R).symm⟩
 
 Depends on / 依赖: Module, Module.nonempty_linearEquiv_iff_rank_eq.mp, nonempty_linearEquiv_iff_rank_eq, opLinearEquiv
@@ -199,7 +199,7 @@ theorem finrank
 
 中文:
 定理 finrank
-  条件: [DivisionRing R] [AddCommGroup H] [Module R H]
+  条件: [除环 R] [加法交换群 H] [模 R H]
   证明: by
   let b := Basis.ofVectorSpace R H
   rw [Module.finrank_eq_nat_card_basis b]; rw [Module.finrank_eq_nat_card_basis b.mulOpposite]

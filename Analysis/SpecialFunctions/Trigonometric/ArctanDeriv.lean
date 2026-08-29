@@ -57,7 +57,7 @@ theorem hasDerivAt_tan
 中文:
 定理 hasDerivAt_tan
   条件: {x : 实数} (h : cos x != 0)
-  结论: HasDerivAt tan (1 / cos x ^ 2) x
+  结论: 在点处可导 tan (1 / cos x ^ 2) x
   证明: mod_cast (Complex.hasDerivAt_tan (by exact mod_cast h)).real_of_complex
 
 Depends on / 依赖: Complex.hasDerivAt_tan, hasDerivAt_tan, mod_cast, real_of_complex
@@ -237,7 +237,7 @@ theorem hasDerivAt_tan_of_mem_Ioo
 
 中文:
 定理 hasDerivAt_tan_of_mem_Ioo
-  条件: {x : 实数} (h : x in Ioo (-(π / 2) : 实数) (π / 2))
+  条件: {x : 实数} (h : x in 开区间 (-(π / 2) : 实数) (π / 2))
   证明: hasDerivAt_tan (cos_pos_of_mem_Ioo h).ne'
 
 Depends on / 依赖: cos_pos_of_mem_Ioo, hasDerivAt_tan
@@ -256,7 +256,7 @@ theorem differentiableAt_tan_of_mem_Ioo
 
 中文:
 定理 differentiableAt_tan_of_mem_Ioo
-  条件: {x : 实数} (h : x in Ioo (-(π / 2) : 实数) (π / 2))
+  条件: {x : 实数} (h : x in 开区间 (-(π / 2) : 实数) (π / 2))
   证明: (hasDerivAt_tan_of_mem_Ioo h).differentiableAt
 
 Depends on / 依赖: differentiableAt, hasDerivAt_tan_of_mem_Ioo
@@ -305,7 +305,7 @@ theorem hasDerivAt_arctan
 中文:
 定理 hasDerivAt_arctan
   条件: (x : 实数)
-  结论: HasDerivAt arctan (1 / (1 + x ^ 2)) x
+  结论: 在点处可导 arctan (1 / (1 + x ^ 2)) x
   证明: (hasStrictDerivAt_arctan x).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_arctan
@@ -325,7 +325,7 @@ theorem hasDerivAt_arctan'
 中文:
 定理 hasDerivAt_arctan'
   条件: (x : 实数)
-  结论: HasDerivAt arctan (1 + x ^ 2)⁻¹ x
+  结论: 在点处可导 arctan (1 + x ^ 2)⁻¹ x
   证明: one_div (1 + x ^ 2) ▸ hasDerivAt_arctan x
 
 Depends on / 依赖: hasDerivAt_arctan, one_div
@@ -365,7 +365,7 @@ theorem differentiable_arctan
 
 中文:
 定理 differentiable_arctan
-  结论: Differentiable 实数 arctan
+  结论: 可微 实数 arctan
   证明: differentiableAt_arctan
 
 @[simp]
@@ -409,7 +409,7 @@ theorem contDiff_arctan
 中文:
 定理 contDiff_arctan
   条件: {n : WithTop 自然数∞}
-  结论: ContDiff 实数 n arctan
+  结论: 连续可微 实数 n arctan
   证明: contDiff_iff_contDiffAt.2 fun x =>
     have : cos (arctan x) != 0 := (cos_arctan_pos x).ne'
     tanPartialHomeomorph.contDiffAt_symm_deriv (by simpa) trivial (hasDerivAt_tan this)
@@ -468,8 +468,8 @@ theorem HasDerivAt.arctan
   proof: (Real.hasDerivAt_arctan (f x)).comp x hf
 
 中文:
-定理 HasDerivAt.arctan
-  条件: (hf : HasDerivAt f f' x)
+定理 在点处可导.arctan
+  条件: (hf : 在点处可导 f f' x)
   证明: (Real.hasDerivAt_arctan (f x)).comp x hf
 
 Depends on / 依赖: Real.hasDerivAt_arctan, hasDerivAt_arctan
@@ -575,8 +575,8 @@ theorem HasFDerivAt.arctan
   proof: (hasDerivAt_arctan (f x)).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.arctan
-  条件: (hf : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.arctan
+  条件: (hf : 在点处Fréchet可导 f f' x)
   证明: (hasDerivAt_arctan (f x)).comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_arctan
@@ -723,9 +723,9 @@ theorem Differentiable.arctan
   proof: fun x => (hc x).arctan
 
 中文:
-定理 Differentiable.arctan
-  条件: (hc : Differentiable 实数 f)
-  结论: Differentiable 实数 fun x => arctan (f x)
+定理 可微.arctan
+  条件: (hc : 可微 实数 f)
+  结论: 可微 实数 fun x => arctan (f x)
   证明: fun x => (hc x).arctan
 
 Depends on / 依赖: arctan
@@ -763,9 +763,9 @@ theorem ContDiff.arctan
   proof: contDiff_arctan.comp h
 
 中文:
-定理 ContDiff.arctan
-  条件: (h : ContDiff 实数 n f)
-  结论: ContDiff 实数 n fun x => arctan (f x)
+定理 连续可微.arctan
+  条件: (h : 连续可微 实数 n f)
+  结论: 连续可微 实数 n fun x => arctan (f x)
   证明: contDiff_arctan.comp h
 
 Depends on / 依赖: contDiff_arctan, contDiff_arctan.comp

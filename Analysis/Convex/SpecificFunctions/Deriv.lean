@@ -56,7 +56,7 @@ theorem strictConvexOn_pow
 中文:
 定理 strictConvexOn_pow
   条件: {n : 自然数} (hn : 2 <= n)
-  结论: StrictConvexOn 实数 (Ici 0) fun x : 实数 => x ^ n
+  结论: StrictConvexOn 实数 (左闭右无界区间 0) fun x : 实数 => x ^ n
   证明: by
   apply StrictMonoOn.strictConvexOn_of_deriv (convex_Ici _) (continuousOn_pow _)
   eta_expand
@@ -125,7 +125,7 @@ theorem Finset.prod_nonneg_of_card_nonpos_even
       rw [Finset.prod_mul_distrib]; rw [Finset.prod_ite]; rw [Finset.prod_const_one]; rw [mul_one]; rw [Finset.pro
 
 中文:
-定理 Finset.prod_nonneg_of_card_nonpos_even
+定理 有限集.prod_nonneg_of_card_nonpos_even
   结论: {α β : 类型}
   证明: calc
     0 <= ∏ x in s, (if f x <= 0 then (-1 : β) else 1) * f x :=
@@ -210,7 +210,7 @@ exact ⟨Int.natCast_nonneg _, Int.ofNat_lt.2 Finset.mem_range.1 ha⟩
 
 中文:
 定理 int_prod_range_pos
-  条件: {m : 整数} {n : 自然数} (hn : Even n) (hm : m ∉ Ico (0 : 整数) n)
+  条件: {m : 整数} {n : 自然数} (hn : Even n) (hm : m ∉ 左闭右开区间 (0 : 整数) n)
   证明: by
   refine (int_prod_range_nonneg m n hn).lt_of_ne fun h => hm ?_
   rw [eq_comm]; rw [Finset.prod_eq_zero_iff] at h
@@ -445,7 +445,7 @@ theorem strictConcaveOn_sin_Icc
 
 中文:
 定理 strictConcaveOn_sin_Icc
-  结论: StrictConcaveOn 实数 (Icc 0 π) sin
+  结论: StrictConcaveOn 实数 (闭区间 0 π) sin
   证明: by
   apply strictConcaveOn_of_deriv2_neg (convex_Icc _ _) continuousOn_sin fun x hx => ?_
   rw [interior_Icc] at hx
@@ -471,7 +471,7 @@ theorem strictConcaveOn_cos_Icc
 
 中文:
 定理 strictConcaveOn_cos_Icc
-  结论: StrictConcaveOn 实数 (Icc (-(π / 2)) (π / 2)) cos
+  结论: StrictConcaveOn 实数 (闭区间 (-(π / 2)) (π / 2)) cos
   证明: by
   apply strictConcaveOn_of_deriv2_neg (convex_Icc _ _) continuousOn_cos fun x hx => ?_
   rw [interior_Icc] at hx

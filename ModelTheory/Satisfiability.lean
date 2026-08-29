@@ -109,7 +109,7 @@ theorem Model.isSatisfiable
 
 中文:
 定理 Model.isSatisfiable
-  条件: (M : Type w) [Nonempty M] [L.Structure M] [M ⊨ T]
+  条件: (M : 类型 w) [非空 M] [L.结构 M] [M ⊨ T]
   证明: ⟨((⊥ : Substructure _ (ModelType.of T M)).elementarySkolem₁Reduct.toModel T).shrink⟩
 
 Depends on / 依赖: ModelType, ModelType.of, Reduct.toModel, Substructure, shrink, toModel
@@ -189,7 +189,7 @@ theorem isSatisfiable_onTheory_iff
 
 中文:
 定理 isSatisfiable_onTheory_iff
-  条件: {L' : Language.{w, w'}} {φ : L ->ᴸ L'} (h : φ.Injective)
+  条件: {L' : Language.{w, w'}} {φ : L ->ᴸ L'} (h : φ.单射)
   证明: by
   classical
     refine ⟨isSatisfiable_of_isSatisfiable_onTheory φ, fun h' => ?_⟩
@@ -283,7 +283,7 @@ theorem isSatisfiable_directed_union_iff
 
 中文:
 定理 isSatisfiable_directed_union_iff
-  结论: {ι : 类型} [Nonempty ι] {T : ι -> L.Theory}
+  结论: {ι : 类型} [非空 ι] {T : ι -> L.Theory}
   证明: by
   refine ⟨fun h' i => h'.mono (Set.subset_iUnion _ _), fun h' => ?_⟩
   rw [isSatisfiable_iff_isFinitelySatisfiable]; rw [IsFinitelySatisfiable]
@@ -316,7 +316,7 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_card_le
 
 中文:
 定理 isSatisfiable_union_distinctConstantsTheory_of_card_le
-  结论: (T : L.Theory) (s : Set α)
+  结论: (T : L.Theory) (s : 集合 α)
   证明: by
   have : Inhabited M := Classical.inhabited_of_nonempty inferInstance
   rw [Cardinal.lift_mk_le'] at h
@@ -359,7 +359,7 @@ theorem isSatisfiable_union_distinctConstantsTheory_of_infinite
 
 中文:
 定理 isSatisfiable_union_distinctConstantsTheory_of_infinite
-  结论: (T : L.Theory) (s : Set α)
+  结论: (T : L.Theory) (s : 集合 α)
   证明: by
   rw [distinctConstantsTheory_eq_iUnion]; rw [Set.union_iUnion]; rw [isSatisfiable_directed_union_iff]
   · exact fun t =>
@@ -397,8 +397,8 @@ theorem exists_large_model_of_infinite_model
   rw [ModelType.reduct_Carrier]; rw [co
 
 中文:
-定理 exists_large_model_of_infinite_model
-  结论: (T : L.Theory) (κ : Cardinal.{w}) (M : Type w')
+定理 存在_large_model_of_infinite_model
+  结论: (T : L.Theory) (κ : 基数.{w}) (M : 类型 w')
   证明: by
   obtain ⟨N⟩ :=
     isSatisfiable_union_distinctConstantsTheory_of_infinite T (Set.univ : Set κ.out) M
@@ -485,8 +485,8 @@ theorem exists_elementaryEmbedding_card_eq_of_le
     ⟨(equivShrink S).bundle
 
 中文:
-定理 exists_elementaryEmbedding_card_eq_of_le
-  结论: (M : Type w') [L.Structure M]
+定理 存在_elementaryEmbedding_card_eq_of_le
+  结论: (M : 类型 w') [L.结构 M]
   证明: by
   obtain ⟨S, _, hS⟩ := exists_elementarySubstructure_card_eq L ∅ κ h1 (by simp) h2 h3
   have : Small.{w} S := by
@@ -527,8 +527,8 @@ theorem exists_elementaryEmbedding_card_eq_of_ge
       (aleph0_le_lift.1 ((aleph0_le_lift.2 (aleph0_le_mk M)).
 
 中文:
-定理 exists_elementaryEmbedding_card_eq_of_ge
-  结论: (M : Type w') [L.Structure M] [iM : Infinite M]
+定理 存在_elementaryEmbedding_card_eq_of_ge
+  结论: (M : 类型 w') [L.结构 M] [iM : 无限 M]
   证明: by
   obtain ⟨N0, hN0⟩ := (L.elementaryDiagram M).exists_large_model_of_infinite_model κ M
   rw [← lift_le.{max u v}]; rw [lift_lift]; rw [lift_lift] at h2
@@ -577,8 +577,8 @@ theorem exists_elementaryEmbedding_card_eq
     exa
 
 中文:
-定理 exists_elementaryEmbedding_card_eq
-  结论: (M : Type w') [L.Structure M] [iM : Infinite M]
+定理 存在_elementaryEmbedding_card_eq
+  结论: (M : 类型 w') [L.结构 M] [iM : 无限 M]
   证明: by
   cases le_or_gt (lift.{w'} κ) (Cardinal.lift.{w} #M) with
   | inl h =>
@@ -613,8 +613,8 @@ theorem exists_elementarilyEquivalent_card_eq
   · exact ⟨N, MN.some.elementarilyEquivalent, hNκ⟩
 
 中文:
-定理 exists_elementarilyEquivalent_card_eq
-  结论: (M : Type w') [L.Structure M] [Infinite M]
+定理 存在_elementarilyEquivalent_card_eq
+  结论: (M : 类型 w') [L.结构 M] [无限 M]
   证明: by
   obtain ⟨N, NM | MN, hNκ⟩ := exists_elementaryEmbedding_card_eq L M κ h1 h2
   · exact ⟨N, NM.some.elementarilyEquivalent.symm, hNκ⟩
@@ -647,8 +647,8 @@ theorem exists_model_card_eq
     exact ⟨hN.theory_model.bundled, rfl⟩
 
 中文:
-定理 exists_model_card_eq
-  结论: (h : 存在 M : ModelType.{u, v, max u v} T, Infinite M) (κ : Cardinal.{w})
+定理 存在_model_card_eq
+  结论: (h : 存在 M : ModelType.{u, v, 最大值 u v} T, 无限 M) (κ : 基数.{w})
   证明: by
   cases h with
   | intro M MI =>
@@ -708,7 +708,7 @@ theorem models_formula_iff
 
 中文:
 定理 models_formula_iff
-  条件: {φ : L.Formula α}
+  条件: {φ : L.公式 α}
   证明: forall_congr' fun _ => forall_congr' fun _ => Unique.forall_iff
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_congr, forall_iff
@@ -729,7 +729,7 @@ theorem models_sentence_iff
 中文:
 定理 models_sentence_iff
   条件: {φ : L.Sentence}
-  结论: T ⊨ᵇ φ ↔ 对任意 M : ModelType.{u, v, max u v} T, M ⊨ φ
+  结论: T ⊨ᵇ φ ↔ 对任意 M : ModelType.{u, v, 最大值 u v} T, M ⊨ φ
   证明: models_formula_iff.trans (forall_congr' fun _ => Unique.forall_iff)
 
 Depends on / 依赖: Unique, Unique.forall_iff, forall_congr, forall_iff, models_formula_iff, models_formula_iff.trans
@@ -865,7 +865,7 @@ theorem models_formula_iff_onTheory_models_equivSentence
 
 中文:
 定理 models_formula_iff_onTheory_models_equivSentence
-  条件: {φ : L.Formula α}
+  条件: {φ : L.公式 α}
   证明: by
   refine ⟨fun h => models_sentence_iff.2 (fun M => ?_),
     fun h => models_formula_iff.2 (fun M v => ?_)⟩
@@ -903,7 +903,7 @@ theorem ModelsBoundedFormula.realize_formula
 
 中文:
 定理 ModelsBoundedFormula.realize_formula
-  结论: {φ : L.Formula α} (h : T ⊨ᵇ φ) (M : 类型)
+  结论: {φ : L.公式 α} (h : T ⊨ᵇ φ) (M : 类型)
   证明: by
   rw [models_formula_iff_onTheory_models_equivSentence] at h
   let : (constantsOn α).Structure M := constantsOn.structure v
@@ -1068,7 +1068,7 @@ definition IsComplete
   body: T.IsSatisfiable ∧ forall φ : L.Sentence, T ⊨ᵇ φ ∨ T ⊨ᵇ φ.not
 
 中文:
-定义 IsComplete
+定义 是完备
   签名: (T : L.Theory)
   定义体: T.IsSatisfiable ∧ forall φ : L.Sentence, T ⊨ᵇ φ ∨ T ⊨ᵇ φ.not
 
@@ -1099,7 +1099,7 @@ theorem models_not_iff
 
 中文:
 定理 models_not_iff
-  条件: (h : T.IsComplete) (φ : L.Sentence)
+  条件: (h : T.是完备) (φ : L.Sentence)
   结论: T ⊨ᵇ φ.not ↔ ¬T ⊨ᵇ φ
   证明: by
   rcases h.2 φ with hφ | hφn
@@ -1141,7 +1141,7 @@ theorem realize_sentence_iff
 
 中文:
 定理 realize_sentence_iff
-  结论: (h : T.IsComplete) (φ : L.Sentence) (M : 类型) [L.Structure M]
+  结论: (h : T.是完备) (φ : L.Sentence) (M : 类型) [L.结构 M]
   证明: by
   rcases h.2 φ with hφ | hφn
   · exact iff_of_true (hφ.realize_sentence M) hφ
@@ -1178,7 +1178,7 @@ theorem eq_complete_theory
 
 中文:
 定理 eq_complete_theory
-  条件: (h : T.IsComplete) (M : 类型) [L.Structure M] [M ⊨ T] [Nonempty M]
+  条件: (h : T.是完备) (M : 类型) [L.结构 M] [M ⊨ T] [非空 M]
   证明: by
   ext φ
   simp only [Set.mem_ofPred_eq, L.mem_completeTheory]
@@ -1293,7 +1293,7 @@ definition IsMaximal
   body: T.IsSatisfiable ∧ forall φ : L.Sentence, φ in T ∨ φ.not in T
 
 中文:
-定义 IsMaximal
+定义 是极大
   签名: (T : L.Theory)
   定义体: T.IsSatisfiable ∧ forall φ : L.Sentence, φ in T ∨ φ.not in T
 
@@ -1312,9 +1312,9 @@ theorem IsMaximal.isComplete
   proof: h.imp_right (forall_imp fun _ => Or.imp models_sentence_of_mem models_sentence_of_mem)
 
 中文:
-定理 IsMaximal.isComplete
-  条件: (h : T.IsMaximal)
-  结论: T.IsComplete
+定理 是极大.isComplete
+  条件: (h : T.是极大)
+  结论: T.是完备
   证明: h.imp_right (forall_imp fun _ => Or.imp models_sentence_of_mem models_sentence_of_mem)
 
 Depends on / 依赖: Or.imp, forall_imp, h.imp_right, imp_right, models_sentence_of_mem
@@ -1332,8 +1332,8 @@ theorem IsMaximal.mem_or_not_mem
   proof: h.2 φ
 
 中文:
-定理 IsMaximal.mem_or_not_mem
-  条件: (h : T.IsMaximal) (φ : L.Sentence)
+定理 是极大.mem_or_not_mem
+  条件: (h : T.是极大) (φ : L.Sentence)
   结论: φ in T ∨ φ.not in T
   证明: h.2 φ
 -/
@@ -1353,8 +1353,8 @@ theorem IsMaximal.mem_of_models
   exact hφ h.1
 
 中文:
-定理 IsMaximal.mem_of_models
-  条件: (h : T.IsMaximal) {φ : L.Sentence} (hφ : T ⊨ᵇ φ)
+定理 是极大.mem_of_models
+  条件: (h : T.是极大) {φ : L.Sentence} (hφ : T ⊨ᵇ φ)
   结论: φ in T
   证明: by
   refine (h.mem_or_not_mem φ).resolve_right fun con => ?_
@@ -1378,8 +1378,8 @@ theorem IsMaximal.mem_iff_models
   proof: ⟨models_sentence_of_mem, h.mem_of_models⟩
 
 中文:
-定理 IsMaximal.mem_iff_models
-  条件: (h : T.IsMaximal) (φ : L.Sentence)
+定理 是极大.mem_iff_models
+  条件: (h : T.是极大) (φ : L.Sentence)
   结论: φ in T ↔ T ⊨ᵇ φ
   证明: ⟨models_sentence_of_mem, h.mem_of_models⟩
 
@@ -1406,7 +1406,7 @@ theorem isSatisfiable
 
 中文:
 定理 isSatisfiable
-  条件: [Nonempty M]
+  条件: [非空 M]
   结论: (L.completeTheory M).IsSatisfiable
   证明: Theory.Model.isSatisfiable M
 
@@ -1448,8 +1448,8 @@ theorem isMaximal
 
 中文:
 定理 isMaximal
-  条件: [Nonempty M]
-  结论: (L.completeTheory M).IsMaximal
+  条件: [非空 M]
+  结论: (L.completeTheory M).是极大
   证明: ⟨isSatisfiable L M, mem_or_not_mem L M⟩
 
 Depends on / 依赖: isSatisfiable, mem_or_not_mem
@@ -1468,8 +1468,8 @@ theorem isComplete
 
 中文:
 定理 isComplete
-  条件: [Nonempty M]
-  结论: (L.completeTheory M).IsComplete
+  条件: [非空 M]
+  结论: (L.completeTheory M).是完备
   证明: (completeTheory.isMaximal L M).isComplete
 
 Depends on / 依赖: completeTheory, completeTheory.isMaximal, isComplete, isMaximal
@@ -1588,7 +1588,7 @@ theorem empty_infinite_Theory_isComplete
 
 中文:
 定理 empty_infinite_Theory_isComplete
-  结论: Language.empty.infiniteTheory.IsComplete
+  结论: Language.empty.infiniteTheory.是完备
   证明: (empty_theory_categorical.{0} ℵ₀ _).isComplete ℵ₀ _ le_rfl (by simp)
     ⟨by
       haveI : Language.empty.Structure Nat := emptyStructure

@@ -126,8 +126,8 @@ theorem exists_one_le_pow_mul_dist
   by_case
 
 中文:
-定理 exists_one_le_pow_mul_dist
-  结论: {Z N R : 类型} [PseudoMetricSpace R] {d : N -> 实数}
+定理 存在_one_le_pow_mul_dist
+  结论: {Z N R : 类型} [伪度量空间 R] {d : N -> 实数}
   证明: by
   -- A useful inequality to keep at hand
   have me0 : 0 < max (1 / ε) M := lt_max_iff.mpr (Or.inl (one_div_pos.mpr e0))
@@ -181,7 +181,7 @@ theorem exists_pos_real_of_irrational_root
       (fR0.trans (Poly
 
 中文:
-定理 exists_pos_real_of_irrational_root
+定理 存在_pos_real_of_irrational_root
   结论: {α : 实数} (ha : Irrational α) {f : 整数[X]} (f0 : f != 0)
   证明: by
   -- `fR` is `f` viewed as a polynomial with `ℝ` coefficients.
@@ -261,7 +261,7 @@ theorem transcendental
 中文:
 定理 transcendental
   条件: {x : 实数} (lx : Liouville x)
-  结论: Transcendental 整数 x
+  结论: 超越 整数 x
   证明: by
   -- Proceed by contradiction: if `x` is algebraic, then `x` is the root (`ef0`) of a
   -- non-zero (`f0`) polynomial `f`

@@ -58,9 +58,9 @@ class GroupFilterBasis
     - conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ * x * x₀⁻¹) ⁻¹' U
 
 中文:
-类 GroupFilterBasis
-  参数: (G : 类型u) [Group G]
-  继承: FilterBasis G
+类 群滤子基
+  参数: (G : 类型u) [群 G]
+  继承: 滤子基 G
   公理与运算 (4 个):
     - one' : 对任意 {U}, U in sets -> (1 : G) in U
     - mul' : 对任意 {U}, U in sets -> 存在 V in sets, V * V subseteq U
@@ -87,9 +87,9 @@ class AddGroupFilterBasis
     - conj' : forall x₀, forall {U}, U in sets -> exists V in sets, V subseteq (fun x => x₀ + x + -x₀) ⁻¹' U
 
 中文:
-类 AddGroupFilterBasis
-  参数: (A : 类型u) [AddGroup A]
-  继承: FilterBasis A
+类 加法群滤子基
+  参数: (A : 类型u) [加法群 A]
+  继承: 滤子基 A
   公理与运算 (4 个):
     - zero' : 对任意 {U}, U in sets -> (0 : A) in U
     - add' : 对任意 {U}, U in sets -> 存在 V in sets, V + V subseteq U
@@ -123,7 +123,7 @@ definition groupFilterBasisOfComm
 
 中文:
 定义 groupFilterBasisOfComm
-  签名: {G : 类型} [CommGroup G] (sets : Set (Set G))
+  签名: {G : 类型} [交换群 G] (sets : 集合 (集合 G))
   定义体: { sets := sets
     nonempty := nonempty
     inter_sets := inter_sets _ _
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Set G) (GroupFilterBasis G)
+  签名: Membership (集合 G) (群滤子基 G)
   定义体: ⟨fun f s => s in f.sets⟩
 
 @[to_additive]
@@ -187,7 +187,7 @@ theorem one
 
 中文:
 定理 one
-  条件: {U : Set G}
+  条件: {U : 集合 G}
   结论: U in B -> (1 : G) in U
   证明: GroupFilterBasis.one'
 
@@ -212,7 +212,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: {U : Set G}
+  条件: {U : 集合 G}
   结论: U in B -> 存在 V in B, V * V subseteq U
   证明: GroupFilterBasis.mul'
 
@@ -237,7 +237,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: {U : Set G}
+  条件: {U : 集合 G}
   结论: U in B -> 存在 V in B, V subseteq (fun x => x⁻¹) ⁻¹' U
   证明: GroupFilterBasis.inv'
 
@@ -290,7 +290,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (GroupFilterBasis G)
+  签名: 可居 (群滤子基 G)
   定义体: {
     sets := {{1}}
     nonempty := singleton_nonempty _
@@ -324,7 +324,7 @@ theorem subset_mul_self
 
 中文:
 定理 subset_mul_self
-  条件: (B : GroupFilterBasis G) {U : Set G} (h : U in B)
+  条件: (B : 群滤子基 G) {U : 集合 G} (h : U in B)
   结论: U subseteq U * U
   证明: fun x x_in => ⟨1, one h, x, x_in, one_mul x⟩
 
@@ -347,7 +347,7 @@ definition N
 
 中文:
 定义 N
-  签名: (B : GroupFilterBasis G)
+  签名: (B : 群滤子基 G)
   定义体: fun x => map (fun y => x * y) B.toFilterBasis.filter
 
 @[to_additive (attr := simp)]
@@ -372,7 +372,7 @@ theorem N_one
 
 中文:
 定理 N_one
-  条件: (B : GroupFilterBasis G)
+  条件: (B : 群滤子基 G)
   结论: B.N 1 = B.toFilterBasis.filter
   证明: by
   simp only [N, one_mul, map_id']
@@ -395,7 +395,7 @@ theorem hasBasis
 
 中文:
 定理 hasBasis
-  条件: (B : GroupFilterBasis G) (x : G)
+  条件: (B : 群滤子基 G) (x : G)
   证明: HasBasis.map (fun y => x * y) toFilterBasis.hasBasis
 -/
 protected theorem hasBasis (B : GroupFilterBasis G) (x : G) :
@@ -417,7 +417,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: (B : GroupFilterBasis G)
+  签名: (B : 群滤子基 G)
   定义体: TopologicalSpace.mkOfNhds B.N
 
 @[to_additive]
@@ -446,8 +446,8 @@ theorem nhds_eq
 
 中文:
 定理 nhds_eq
-  条件: (B : GroupFilterBasis G) {x₀ : G}
-  结论: @nhds G B.topology x₀ = B.N x₀
+  条件: (B : 群滤子基 G) {x₀ : G}
+  结论: @邻域滤子 G B.topology x₀ = B.N x₀
   证明: by
   apply TopologicalSpace.nhds_mkOfNhds_of_hasBasis (fun x => (FilterBasis.hasBasis _).map _)
   · intro a U U_in
@@ -489,7 +489,7 @@ theorem nhds_one_eq
 
 中文:
 定理 nhds_one_eq
-  条件: (B : GroupFilterBasis G)
+  条件: (B : 群滤子基 G)
   证明: by
   rw [B.nhds_eq]
   simp only [N, one_mul]
@@ -520,7 +520,7 @@ theorem nhds_hasBasis
 
 中文:
 定理 nhds_hasBasis
-  条件: (B : GroupFilterBasis G) (x₀ : G)
+  条件: (B : 群滤子基 G) (x₀ : G)
   证明: by
   rw [B.nhds_eq]
   apply B.hasBasis
@@ -549,7 +549,7 @@ theorem nhds_one_hasBasis
 
 中文:
 定理 nhds_one_hasBasis
-  条件: (B : GroupFilterBasis G)
+  条件: (B : 群滤子基 G)
   证明: by
   rw [B.nhds_one_eq]
   exact B.toFilterBasis.hasBasis
@@ -576,7 +576,7 @@ theorem mem_nhds_one
 
 中文:
 定理 mem_nhds_one
-  条件: (B : GroupFilterBasis G) {U : Set G} (hU : U in B)
+  条件: (B : 群滤子基 G) {U : 集合 G} (hU : U in B)
   证明: by
   rw [B.nhds_one_hasBasis.mem_iff]
   exact ⟨U, hU, rfl.subset⟩
@@ -632,7 +632,7 @@ lemma t2Space_iff
 
 中文:
 引理 t2Space_iff
-  结论: [t : TopologicalSpace G] (F : GroupFilterBasis G)
+  结论: [t : 拓扑空间 G] (F : 群滤子基 G)
   证明: by
   have : IsTopologicalGroup G := hG ▸ F.isTopologicalGroup
   rw [IsTopologicalGroup.t2Space_iff_one_closed]; rw [← closure_eq_iff_isClosed]; rw [R0Space.closure_singleton]; rw [← hG]; rw [F.nhds_one_eq]; rw [FilterBasis.ker_filter]
@@ -659,8 +659,8 @@ lemma t2Space_iff_sInter_subset
   simpa using! fun _ => F.one
 
 中文:
-引理 t2Space_iff_sInter_subset
-  结论: [t : TopologicalSpace G] (F : GroupFilterBasis G)
+引理 t2Space_iff_s整数er_subset
+  结论: [t : 拓扑空间 G] (F : 群滤子基 G)
   证明: by
   rw [F.t2Space_iff hG]; rw [subset_antisymm_iff]; rw [and_iff_left_iff_imp]
   rintro -
@@ -690,8 +690,8 @@ class RingFilterBasis
 
 中文:
 类 RingFilterBasis
-  参数: (R : 类型u) [Ring R]
-  继承: AddGroupFilterBasis R
+  参数: (R : 类型u) [环 R]
+  继承: 加法群滤子基 R
   公理与运算 (3 个):
     - mul' : 对任意 {U}, U in sets -> 存在 V in sets, V * V subseteq U
     - mul_left' : 对任意 (x₀ : R) {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ * x) ⁻¹' U
@@ -716,7 +716,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership (Set R) (RingFilterBasis R)
+  签名: Membership (集合 R) (RingFilterBasis R)
   定义体: ⟨fun B s => s in B.sets⟩
 
 Depends on / 依赖: B.sets
@@ -735,7 +735,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: {U : Set R} (hU : U in B)
+  条件: {U : 集合 R} (hU : U in B)
   结论: 存在 V in B, V * V subseteq U
   证明: mul' hU
 -/
@@ -753,7 +753,7 @@ theorem mul_left
 
 中文:
 定理 mul_left
-  条件: (x₀ : R) {U : Set R} (hU : U in B)
+  条件: (x₀ : R) {U : 集合 R} (hU : U in B)
   结论: 存在 V in B, V subseteq (fun x => x₀ * x) ⁻¹' U
   证明: mul_left' x₀ hU
 
@@ -773,7 +773,7 @@ theorem mul_right
 
 中文:
 定理 mul_right
-  条件: (x₀ : R) {U : Set R} (hU : U in B)
+  条件: (x₀ : R) {U : 集合 R} (hU : U in B)
   结论: 存在 V in B, V subseteq (fun x => x * x₀) ⁻¹' U
   证明: mul_right' x₀ hU
 
@@ -795,7 +795,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: : TopologicalSpace R
+  签名: : 拓扑空间 R
   定义体: B.toAddGroupFilterBasis.topology
 
 Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
@@ -845,8 +845,8 @@ structure ModuleFilterBasis
 
 中文:
 结构 ModuleFilterBasis
-  参数: (R M : 类型) [Semiring R] [TopologicalSpace R] [AddCommGroup M]
-  继承: AddGroupFilterBasis M
+  参数: (R M : 类型) [半环 R] [拓扑空间 R] [加法交换群 M]
+  继承: 加法群滤子基 M
   公理与运算 (3 个):
     - smul' : 对任意 {U}, U in sets -> 存在 V in 𝓝 (0 : R), 存在 W in sets, V • W subseteq U
     - smul_left' : 对任意 (x₀ : R) {U}, U in sets -> 存在 V in sets, V subseteq (fun x => x₀ • x) ⁻¹' U
@@ -874,8 +874,8 @@ instance GroupFilterBasis.hasMem
   body: ⟨fun B s => s in B.sets⟩
 
 中文:
-实例 GroupFilterBasis.hasMem
-  签名: : Membership (Set M) (ModuleFilterBasis R M)
+实例 群滤子基.hasMem
+  签名: : Membership (集合 M) (ModuleFilterBasis R M)
   定义体: ⟨fun B s => s in B.sets⟩
 
 Depends on / 依赖: B.sets
@@ -894,7 +894,7 @@ theorem smul
 
 中文:
 定理 smul
-  条件: {U : Set M} (hU : U in B)
+  条件: {U : 集合 M} (hU : U in B)
   结论: 存在 V in 𝓝 (0 : R), 存在 W in B, V • W subseteq U
   证明: B.smul' hU
 
@@ -914,7 +914,7 @@ theorem smul_left
 
 中文:
 定理 smul_left
-  条件: (x₀ : R) {U : Set M} (hU : U in B)
+  条件: (x₀ : R) {U : 集合 M} (hU : U in B)
   结论: 存在 V in B, V subseteq (fun x => x₀ • x) ⁻¹' U
   证明: B.smul_left' x₀ hU
 
@@ -934,7 +934,7 @@ theorem smul_right
 
 中文:
 定理 smul_right
-  条件: (m₀ : M) {U : Set M} (hU : U in B)
+  条件: (m₀ : M) {U : 集合 M} (hU : U in B)
   结论: 对任意ᶠ x in 𝓝 (0 : R), x • m₀ in U
   证明: B.smul_right' m₀ hU
 
@@ -961,8 +961,8 @@ instance [DiscreteTopology
         rintro x₀ U (h : U in {{
 
 中文:
-实例 [DiscreteTopology
-  签名: R] : Inhabited (ModuleFilterBasis R M)
+实例 [离散拓扑
+  签名: R] : 可居 (ModuleFilterBasis R M)
   定义体: ⟨{
       show AddGroupFilterBasis M from
         default with
@@ -1008,7 +1008,7 @@ definition topology
 
 中文:
 定义 topology
-  签名: : TopologicalSpace M
+  签名: : 拓扑空间 M
   定义体: B.toAddGroupFilterBasis.topology
 
 Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
@@ -1030,7 +1030,7 @@ definition topology'
 
 中文:
 定义 topology'
-  签名: {R M : 类型} [Semiring R] {_ : TopologicalSpace R} [AddCommGroup M] [Module R M]
+  签名: {R M : 类型} [半环 R] {_ : 拓扑空间 R} [加法交换群 M] [模 R M]
   定义体: B.toAddGroupFilterBasis.topology
 
 Depends on / 依赖: B.toAddGroupFilterBasis.topology, toAddGroupFilterBasis, topology
@@ -1063,8 +1063,8 @@ theorem _root_.ContinuousSMul.of_basis_zero
   · intro
 
 中文:
-定理 _root_.ContinuousSMul.of_basis_zero
-  结论: {ι : 类型} [IsTopologicalRing R] [TopologicalSpace M]
+定理 _root_.连续标量乘法.of_basis_zero
+  结论: {ι : 类型} [是拓扑环 R] [拓扑空间 M]
   证明: by
   apply ContinuousSMul.of_nhds_zero
   · rw [h.tendsto_right_iff]
@@ -1128,7 +1128,7 @@ definition ofBases
 
 中文:
 定义 ofBases
-  签名: (BR : RingFilterBasis R) (BM : AddGroupFilterBasis M)
+  签名: (BR : RingFilterBasis R) (BM : 加法群滤子基 M)
   定义体: let _ := BR.topology
   { BM with
     smul' := by

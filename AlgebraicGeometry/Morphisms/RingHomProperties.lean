@@ -84,7 +84,7 @@ theorem IsStableUnderBaseChange.pullback_fst_appTop
   rw [Scheme.Hom.comp_appTop]; rw [CommRingCat.hom_comp]; rw [hP'.cancel_
 
 中文:
-定理 IsStableUnderBaseChange.pullback_fst_appTop
+定理 是StableUnderBaseChange.pullback_fst_appTop
   证明: by
   -- Porting note (https://github.com/leanprover-community/mathlib4/issues/11224): change `rw` to `erw`
   erw [← PreservesPullback.iso_inv_fst AffineScheme.forgetToScheme (AffineScheme.ofHom f)
@@ -127,7 +127,7 @@ definition sourceAffineLocally
 
 中文:
 定义 sourceAffineLocally
-  签名: : AffineTargetMorphism命题erty
+  签名: : AffineTargetMorphismProperty
   定义体: fun X _ f _ =>
   forall U : X.affineOpens, P (f.appLE ⊤ U le_top).hom
 -/
@@ -144,7 +144,7 @@ abbreviation affineLocally
 
 中文:
 缩写 affineLocally
-  签名: : Morphism命题erty Scheme.{u}
+  签名: : MorphismProperty 概形.{u}
   定义体: targetAffineLocally (sourceAffineLocally P)
 
 Depends on / 依赖: sourceAffineLocally, targetAffineLocally
@@ -169,7 +169,7 @@ theorem sourceAffineLocally_respectsIso
 
 中文:
 定理 sourceAffineLocally_respectsIso
-  条件: (h₁ : RingHom.RespectsIso P)
+  条件: (h₁ : 环态射.RespectsIso P)
   证明: by
   apply AffineTargetMorphismProperty.respectsIso_mk
   · introv H U
@@ -205,7 +205,7 @@ theorem affineLocally_respectsIso
 
 中文:
 定理 affineLocally_respectsIso
-  条件: (h : RingHom.RespectsIso P)
+  条件: (h : 环态射.RespectsIso P)
   结论: (affineLocally P).RespectsIso
   证明: letI := sourceAffineLocally_respectsIso P h
   inferInstance
@@ -234,7 +234,7 @@ theorem sourceAffineLocally_morphismRestrict
 
 中文:
 定理 sourceAffineLocally_morphismRestrict
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   dsimp only [sourceAffineLocally]
   simp only [morphismRestrict_appLE]
@@ -266,7 +266,7 @@ theorem affineLocally_iff_affineOpens_le
 
 中文:
 定理 affineLocally_iff_affineOpens_le
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: forall_congr' fun U => sourceAffineLocally_morphismRestrict P f U U.2
 
 Depends on / 依赖: Nonsingular, Nonsingular.of_iso, forall_congr, isoNerve, of_iso, sourceAffineLocally_morphismRestrict, stdSimplex, stdSimplex.isoNerve
@@ -286,8 +286,8 @@ theorem affineLocally_iff_forall_isAffineOpen
   simp [affineLocally_iff_affineOpens_le, Scheme.affineOpens]
 
 中文:
-定理 affineLocally_iff_forall_isAffineOpen
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y)
+定理 affineLocally_iff_对任意_isAffineOpen
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   simp [affineLocally_iff_affineOpens_le, Scheme.affineOpens]
 
@@ -318,7 +318,7 @@ theorem sourceAffineLocally_isLocal
 
 中文:
 定理 sourceAffineLocally_isLocal
-  结论: (h₁ : RingHom.RespectsIso P)
+  结论: (h₁ : 环态射.RespectsIso P)
   证明: by
   constructor
   · exact sourceAffineLocally_respectsIso P h₁
@@ -369,7 +369,7 @@ lemma affineLocally_le
 
 中文:
 引理 affineLocally_le
-  结论: {Q : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题}
+  结论: {Q : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题}
   证明: fun _ _ _ hf U V => hPQ (hf U V)
 -/
 lemma affineLocally_le {Q : forall {R S : Type u} [CommRing R] [CommRing S], (R ->+* S) -> Prop}
@@ -395,7 +395,7 @@ lemma exists_basicOpen_le_appLE_of_appLE_of_isAffine
     simpa [Scheme.Hom.appLE, ← Scheme.preimage_basicOpen]
 
 中文:
-引理 exists_basicOpen_le_appLE_of_appLE_of_isAffine
+引理 存在_basicOpen_le_appLE_of_appLE_of_isAffine
   证明: by
   obtain ⟨r, r', hBrr', hBfx⟩ := exists_basicOpen_le_affine_inter U₁.2 U₂.2 (f x)
     ⟨hfx₁, e₂ hx₂⟩
@@ -450,7 +450,7 @@ lemma exists_affineOpens_le_appLE_of_appLE
     ⟨Y.basicOpen r, U₂.2.basicOpen _⟩ U₂ ⟨X.basicOpen s, V₂.2.basic
 
 中文:
-引理 exists_affineOpens_le_appLE_of_appLE
+引理 存在_affineOpens_le_appLE_of_appLE
   证明: by
   obtain ⟨r, hBr, hBfx⟩ := U₂.2.exists_basicOpen_le ⟨f x, hfx₁⟩ (e₂ hx₂)
   obtain ⟨s, hBs, hBx⟩ := V₂.2.exists_basicOpen_le ⟨x, hx₁⟩ hx₂
@@ -487,10 +487,10 @@ class HasRingHomProperty
     - eq_affineLocally' : P = affineLocally Q
 
 中文:
-类 HasRingHomProperty
-  参数: (P : Morphism命题erty Scheme.{u})
+类 有RingHomProperty
+  参数: (P : MorphismProperty 概形.{u})
   公理与运算 (2 个):
-    - isLocal_ringHomProperty : RingHom.命题ertyIsLocal Q
+    - isLocal_ringHomProperty : 环态射.PropertyIsLocal Q
     - eq_affineLocally' : P = affineLocally Q
 -/
 class HasRingHomProperty (P : MorphismProperty Scheme.{u})
@@ -519,7 +519,7 @@ lemma copy
 
 中文:
 引理 copy
-  结论: {P' : Morphism命题erty Scheme.{u}}
+  结论: {P' : MorphismProperty 概形.{u}}
   证明: by
   subst e
   have heq : @Q = @Q' := by
@@ -576,8 +576,8 @@ lemma HasAffineProperty
   eq_targetAffineLocally' := eq_affineLocally P
 
 中文:
-引理 HasAffineProperty
-  结论: HasAffine命题erty P (sourceAffineLocally Q) where
+引理 有AffineProperty
+  结论: 有AffineProperty P (sourceAffineLocally Q) where
   证明: sourceAffineLocally_isLocal _
     (isLocal_ringHomProperty P).respectsIso
     (isLocal_ringHomProperty P).localizationAwayPreserves
@@ -636,7 +636,7 @@ include Q in
 
 中文:
 定理 appTop
-  条件: (H : P f) [IsAffine X] [IsAffine Y]
+  条件: (H : P f) [是仿射 X] [是仿射 Y]
   结论: Q f.appTop.hom
   证明: by
   rw [Scheme.Hom.appTop]; rw [Scheme.Hom.app_eq_appLE]
@@ -667,7 +667,7 @@ theorem comp_of_isOpenImmersion
 
 中文:
 定理 comp_of_isOpenImmersion
-  条件: [IsOpenImmersion f] (H : P g)
+  条件: [是开浸入 f] (H : P g)
   证明: by
   rw [eq_affineLocally P]; rw [affineLocally_iff_affineOpens_le] at H ⊢
   intro U V e
@@ -730,7 +730,7 @@ theorem of_source_openCover
 
 中文:
 定理 of_source_openCover
-  结论: [IsAffine Y]
+  结论: [是仿射 Y]
   证明: by
   rw [HasAffineProperty.iff_of_isAffine (P := P)]
   intro U
@@ -778,7 +778,7 @@ theorem iff_of_source_openCover
 
 中文:
 定理 iff_of_source_openCover
-  条件: [IsAffine Y] (𝒰 : X.OpenCover) [对任意 i, IsAffine (𝒰.X i)]
+  条件: [是仿射 Y] (𝒰 : X.OpenCover) [对任意 i, 是仿射 (𝒰.X i)]
   证明: ⟨fun H i => appTop P _ (comp_of_isOpenImmersion P (𝒰.f i) f H), of_source_openCover 𝒰⟩
 
 Depends on / 依赖: appTop, comp_of_isOpenImmersion, of_source_openCover
@@ -800,7 +800,7 @@ theorem iff_of_isAffine
 
 中文:
 定理 iff_of_isAffine
-  条件: [IsAffine X] [IsAffine Y]
+  条件: [是仿射 X] [是仿射 Y]
   证明: by
   rw [iff_of_source_openCover (P := P) (Scheme.coverOfIsIso.{u} (𝟙 _))]
   simp +instances
@@ -824,7 +824,7 @@ theorem Spec_iff
 
 中文:
 定理 Spec_iff
-  条件: {R S : CommRingCat.{u}} {φ : R ⟶ S}
+  条件: {R S : 交换环范畴.{u}} {φ : R ⟶ S}
   证明: by
   have H := (isLocal_ringHomProperty P).respectsIso
   rw [iff_of_isAffine (P := P)]; rw [← H.cancel_right_isIso _ (Scheme.ΓSpecIso _).hom]; rw [← CommRingCat.hom_comp]; rw [Scheme.ΓSpecIso_naturality]; rw [CommRingCat.hom_comp]; rw [H.cancel_left_isIso]
@@ -850,7 +850,7 @@ theorem of_iSup_eq_top
 
 中文:
 定理 of_iSup_eq_top
-  结论: [IsAffine Y] {ι : 类型}
+  结论: [是仿射 Y] {ι : 类型}
   证明: by
   have (i : _) : IsAffine ((X.openCoverOfIsOpenCover _ hU).X i) := (U i).2
   refine of_source_openCover (X.openCoverOfIsOpenCover _ hU) fun i => ?_
@@ -876,7 +876,7 @@ theorem iff_of_iSup_eq_top
 
 中文:
 定理 iff_of_iSup_eq_top
-  结论: [IsAffine Y] {ι : 类型}
+  结论: [是仿射 Y] {ι : 类型}
   证明: ⟨fun H _ => appLE P f H ⟨_, isAffineOpen_top _⟩ _ le_top, of_iSup_eq_top U hU⟩
 
 Depends on / 依赖: isAffineOpen_top, le_top, of_iSup_eq_top
@@ -940,8 +940,8 @@ lemma containsIdentities
 
 中文:
 引理 containsIdentities
-  条件: (hP : RingHom.ContainsIdentities Q)
-  结论: P.ContainsIdentities where
+  条件: (hP : 环态射.余ntainsIdentities Q)
+  结论: P.余ntainsIdentities where
   证明: by
     rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := P) _ (iSup_affineOpens_eq_top _)]
     intro U
@@ -1083,8 +1083,8 @@ lemma inf
 
 
 中文:
-引理 inf
-  结论: {P P' : Morphism命题erty Scheme.{u}}
+引理 下确界
+  结论: {P P' : MorphismProperty 概形.{u}}
   证明: .and (HasRingHomProperty.isLocal_ringHomProperty P)
       (HasRingHomProperty.isLocal_ringHomProperty P')
   eq_affineLocally' := by
@@ -1126,7 +1126,7 @@ lemma stalkwise
 
 中文:
 引理 stalkwise
-  条件: {P} (hP : RingHom.RespectsIso P)
+  条件: {P} (hP : 环态射.RespectsIso P)
   证明: by
   have := stalkwiseIsZariskiLocalAtTarget_of_respectsIso hP
   have := stalkwise_isZariskiLocalAtSource_of_respectsIso hP
@@ -1165,7 +1165,7 @@ lemma stableUnderComposition
 
 中文:
 引理 stableUnderComposition
-  条件: (hP : RingHom.StableUnderComposition Q)
+  条件: (hP : 环态射.StableUnderComposition Q)
   证明: by
     wlog hZ : IsAffine Z generalizing X Y Z
     · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := P) _ (iSup_affineOpens_eq_top _)]
@@ -1268,7 +1268,7 @@ include Q in
 
 中文:
 引理 isMultiplicative
-  结论: (hPc : RingHom.StableUnderComposition Q)
+  结论: (hPc : 环态射.StableUnderComposition Q)
   证明: (stableUnderComposition hPc).comp_mem
   id_mem := (containsIdentities hPi).id_mem
 
@@ -1295,7 +1295,7 @@ lemma of_isOpenImmersion
 
 中文:
 引理 of_isOpenImmersion
-  条件: (hP : RingHom.ContainsIdentities Q) [IsOpenImmersion f]
+  条件: (hP : 环态射.余ntainsIdentities Q) [是开浸入 f]
   结论: P f
   证明: haveI : P.ContainsIdentities := containsIdentities hP
   IsZariskiLocalAtSource.of_isOpenImmersion f
@@ -1324,7 +1324,7 @@ lemma isStableUnderBaseChange
 
 中文:
 引理 isStableUnderBaseChange
-  条件: (hP : RingHom.IsStableUnderBaseChange Q)
+  条件: (hP : 环态射.是StableUnderBaseChange Q)
   证明: by
   apply HasAffineProperty.isStableUnderBaseChange
   let := HasAffineProperty.isLocal_affineProperty P
@@ -1430,7 +1430,7 @@ lemma respects_isOpenImmersion
 
 中文:
 引理 respects_isOpenImmersion
-  条件: (hQ : RingHom.StableUnderCompositionWithLocalizationAwaySource Q)
+  条件: (hQ : 环态射.StableUnderCompositionWithLocalizationAwaySource Q)
   证明: by
     wlog hZ : IsAffine Z generalizing X Y Z
     · rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := P) _ (iSup_affineOpens_eq_top _)]
@@ -1469,7 +1469,7 @@ fun hf => (IsZariskiLocalAtSource.iff_exists_resLE (P := P)).mpr fun x => ?_⟩
   · obtain ⟨U, hU, hfx, _⟩ := Opens.isBasis_iff_nbhd.mp Y.isBasis_affineOpe
 
 中文:
-引理 iff_exists_appLE_locally
+引理 iff_存在_appLE_locally
   证明: by
   have := respects_isOpenImmersion (P := P)
     (RingHom.locally_stableUnderCompositionWithLocalizationAwaySource hQ)
@@ -1525,7 +1525,7 @@ lemma iff_exists_appLE
       exact (locally_iff_of_localizationSpanTarget (isLocal_ringHomProperty P).r
 
 中文:
-引理 iff_exists_appLE
+引理 iff_存在_appLE
   证明: by
   have inst : HasRingHomProperty P Q := inferInstance
   have : HasRingHomProperty P (Locally Q) := by
@@ -1715,7 +1715,7 @@ lemma stalkMap
 
 中文:
 引理 stalkMap
-  结论: (hQ : 对任意 {R S : 类型u} [CommRing R] [CommRing S] (f : R ->+* S) (_ : Q f)
+  结论: (hQ : 对任意 {R S : 类型u} [交换环 R] [交换环 S] (f : R ->+* S) (_ : Q f)
   证明: stalkMap_of_respectsIso (HasRingHomProperty.isLocal_ringHomProperty P).respectsIso hQ hf x
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isLocal_ringHomProperty, isLocal_ringHomProperty, respectsIso, stalkMap_of_respectsIso
@@ -1738,7 +1738,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {P' : Morphism命题erty Scheme.{u}}
+  结论: {P' : MorphismProperty 概形.{u}}
   证明: by
   ext f
   rw [HasRingHomProperty.eq_affineLocally (P := P)]; rw [HasRingHomProperty.eq_affineLocally (P := P')]; rw [affineLocally_iff_affineOpens_le]; rw [affineLocally_iff_affineOpens_le]

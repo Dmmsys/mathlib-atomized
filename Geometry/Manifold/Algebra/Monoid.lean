@@ -55,9 +55,9 @@ class ContMDiffAdd
     - contMDiff_add : CMDiff n fun p : G × G => p.1 + p.2
 
 中文:
-类 ContMDiffAdd
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
-  继承: IsManifold I n G
+类 余ntMDiffAdd
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
+  继承: 是流形 I n G
   公理与运算 (1 个):
     - contMDiff_add : CMDiff n fun p : G × G => p.1 + p.2
 -/
@@ -86,9 +86,9 @@ class ContMDiffMul
     - contMDiff_mul : CMDiff n fun p : G × G => p.1 * p.2
 
 中文:
-类 ContMDiffMul
-  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [TopologicalSpace H]
-  继承: IsManifold I n G
+类 余ntMDiffMul
+  参数: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {H : 类型} [拓扑空间 H]
+  继承: 是流形 I n G
   公理与运算 (1 个):
     - contMDiff_mul : CMDiff n fun p : G × G => p.1 * p.2
 -/
@@ -121,7 +121,7 @@ theorem ContMDiffMul.of_le
 @[to_additive]
 
 中文:
-定理 ContMDiffMul.of_le
+定理 余ntMDiffMul.of_le
   结论: {m n : 自然数∞ω} (hmn : m <= n)
   证明: by
   have : IsManifold I m G := IsManifold.of_le hmn
@@ -157,8 +157,8 @@ instance [ContinuousMul
 @[to_additive]
 
 中文:
-实例 [ContinuousMul
-  签名: G] : ContMDiffMul I 0 G
+实例 [连续乘法
+  签名: G] : 余ntMDiffMul I 0 G
   定义体: by
   constructor
   rw [contMDiff_zero_iff]
@@ -183,8 +183,8 @@ instance [ContMDiffMul
   body: ContMDiffMul.of_le one_le_two
 
 中文:
-实例 [ContMDiffMul
-  签名: I 2 G] : ContMDiffMul I 1 G
+实例 [余ntMDiffMul
+  签名: I 2 G] : 余ntMDiffMul I 1 G
   定义体: ContMDiffMul.of_le one_le_two
 
 Depends on / 依赖: ContMDiffMul, ContMDiffMul.of_le, of_le, one_le_two
@@ -210,7 +210,7 @@ include I n in
 
 中文:
 定理 contMDiff_mul
-  条件: [ContMDiffMul I n G]
+  条件: [余ntMDiffMul I n G]
   结论: CMDiff n fun p : G × G => p.1 * p.2
   证明: ContMDiffMul.contMDiff_mul
 
@@ -237,8 +237,8 @@ theorem continuousMul_of_contMDiffMul
 
 中文:
 定理 continuousMul_of_contMDiffMul
-  条件: [ContMDiffMul I n G]
-  结论: ContinuousMul G
+  条件: [余ntMDiffMul I n G]
+  结论: 连续乘法 G
   证明: ⟨(contMDiff_mul I n).continuous⟩
 
 Depends on / 依赖: contMDiff_mul, continuous
@@ -638,7 +638,7 @@ theorem L_mul
 
 中文:
 定理 L_mul
-  结论: {G : 类型} [Semigroup G] [TopologicalSpace G] [ChartedSpace H G] [ContMDiffMul I ∞ G]
+  结论: {G : 类型} [半群 G] [拓扑空间 G] [Charted空间 H G] [余ntMDiffMul I ∞ G]
   证明: by
   ext
   simp only [ContMDiffMap.comp_apply, L_apply, mul_assoc]
@@ -665,7 +665,7 @@ theorem R_mul
 
 中文:
 定理 R_mul
-  结论: {G : 类型} [Semigroup G] [TopologicalSpace G] [ChartedSpace H G] [ContMDiffMul I ∞ G]
+  结论: {G : 类型} [半群 G] [拓扑空间 G] [Charted空间 H G] [余ntMDiffMul I ∞ G]
   证明: by
   ext
   simp only [ContMDiffMap.comp_apply, R_apply, mul_assoc]
@@ -734,7 +734,7 @@ instance ContMDiffMul.prod
         ((contMDiff_snd.comp contMDiff_fst).mul (contMDiff_snd.comp contMDiff_snd)) }
 
 中文:
-实例 ContMDiffMul.prod
+实例 余ntMDiffMul.乘积
   签名: {𝕜 : 类型} [NontriviallyNormedField 𝕜] {E : 类型}
   定义体: { IsManifold.prod G G' with
     contMDiff_mul :=
@@ -792,8 +792,8 @@ structure ContMDiffAddMonoidMorphism
     - contMDiff_toFun : CMDiff n toFun
 
 中文:
-结构 ContMDiffAddMonoidMorphism
-  参数: (I : ModelWithCorners 𝕜 E H) (I' : ModelWithCorners 𝕜 E' H')
+结构 余ntMDiffAdd幺半群态射
+  参数: (I : 带角模型 𝕜 E H) (I' : 带角模型 𝕜 E' H')
   继承: G ->+ G'
   公理与运算 (1 个):
     - contMDiff_toFun : CMDiff n toFun
@@ -816,8 +816,8 @@ structure ContMDiffMonoidMorphism
     - contMDiff_toFun : CMDiff n toFun
 
 中文:
-结构 ContMDiffMonoidMorphism
-  参数: (I : ModelWithCorners 𝕜 E H) (I' : ModelWithCorners 𝕜 E' H')
+结构 余ntMDiff幺半群态射
+  参数: (I : 带角模型 𝕜 E H) (I' : 带角模型 𝕜 E' H')
   公理与运算 (1 个):
     - contMDiff_toFun : CMDiff n toFun
 -/
@@ -841,7 +841,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (ContMDiffMonoidMorphism I I' n G G')
+  签名: 幺 (余ntMDiff幺半群态射 I I' n G G')
   定义体: ⟨{ contMDiff_toFun := contMDiff_const
       toMonoidHom := 1 }⟩
 
@@ -866,7 +866,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ContMDiffMonoidMorphism I I' n G G')
+  签名: 可居 (余ntMDiff幺半群态射 I I' n G G')
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -888,7 +888,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (ContMDiffMonoidMorphism I I' n G G') G G'
+  签名: 函数状 (余ntMDiff幺半群态射 I I' n G G') G G'
   定义体: a.toFun
   coe_injective f g h := by cases f; cases g; congr; exact DFunLike.ext' h
 
@@ -914,7 +914,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass (ContMDiffMonoidMorphism I I' n G G') G G'
+  签名: 幺半群态射类 (余ntMDiff幺半群态射 I I' n G G') G G'
   定义体: f.map_one
   map_mul f := f.map_mul
 
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousMapClass (ContMDiffMonoidMorphism I I' n G G') G G'
+  签名: 连续映射类 (余ntMDiff幺半群态射 I I' n G G') G G'
   定义体: f.contMDiff_toFun.continuous
 
 Depends on / 依赖: contMDiff_toFun, continuous, f.contMDiff_toFun.continuous
@@ -981,7 +981,7 @@ theorem ContMDiffWithinAt.prod
 @[to_additive]
 
 中文:
-定理 ContMDiffWithinAt.prod
+定理 ContMDiffWithinAt.乘积
   条件: (h : 对任意 i in t, CMDiffAt[s] n (f i) x₀)
   证明: by
   classical
@@ -1019,7 +1019,7 @@ theorem contMDiffWithinAt_finprod
 
 中文:
 定理 contMDiffWithinAt_finprod
-  结论: (lf : LocallyFinite fun i => mulSupport <| f i) {x₀ : M}
+  结论: (lf : 局部有限 fun i => mulSupport <| f i) {x₀ : M}
   证明: let ⟨_I, hI⟩ := finprod_eventually_eq_prod lf x₀
   (ContMDiffWithinAt.prod fun i _hi => h i).congr_of_eventuallyEq
     (eventually_nhdsWithin_of_eventually_nhds hI) hI.self_of_nhds
@@ -1133,7 +1133,7 @@ theorem ContMDiffAt.prod
 @[to_additive]
 
 中文:
-定理 ContMDiffAt.prod
+定理 ContMDiffAt.乘积
   条件: (h : 对任意 i in t, CMDiffAt n (f i) x₀)
   证明: by
   simp only [← contMDiffWithinAt_univ] at *
@@ -1362,7 +1362,7 @@ theorem ContMDiff.prod
 @[to_additive]
 
 中文:
-定理 ContMDiff.prod
+定理 ContMDiff.乘积
   条件: (h : 对任意 i in t, CMDiff n (f i))
   证明: fun x => ContMDiffAt.prod fun j hj => h j hj x
 
@@ -1602,7 +1602,7 @@ instance instContMDiffAddSelf
 
 中文:
 实例 instContMDiffAddSelf
-  签名: : ContMDiffAdd 𝓘(𝕜, E) n E
+  签名: : 余ntMDiffAdd 𝓘(𝕜, E) n E
   定义体: by
   constructor
   rw [← modelWithCornersSelf_prod]; rw [chartedSpaceSelf_prod]

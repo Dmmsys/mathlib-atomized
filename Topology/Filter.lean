@@ -54,7 +54,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (Filter α)
+  签名: 拓扑空间 (滤子 α)
   定义体: generateFrom range Iic ∘ 𝓟
 
 Depends on / 依赖: generateFrom
@@ -73,8 +73,8 @@ theorem isOpen_Iic_principal
 
 中文:
 定理 isOpen_Iic_principal
-  条件: {s : Set α}
-  结论: IsOpen (Iic (𝓟 s))
+  条件: {s : 集合 α}
+  结论: 是开集 (左无界右闭区间 (𝓟 s))
   证明: GenerateOpen.basic _ (mem_range_self _)
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic, mem_range_self
@@ -96,8 +96,8 @@ theorem isOpen_setOfPred_mem
 
 中文:
 定理 isOpen_setOfPred_mem
-  条件: {s : Set α}
-  结论: IsOpen { l : Filter α | s in l }
+  条件: {s : 集合 α}
+  结论: 是开集 { l : 滤子 α | s in l }
   证明: by
   simpa only [Iic_principal] using isOpen_Iic_principal
 
@@ -154,8 +154,8 @@ theorem isOpen_iff
 
 中文:
 定理 isOpen_iff
-  条件: {s : Set (Filter α)}
-  结论: IsOpen s ↔ 存在 T : Set (Set α), s = ⋃ t in T, Iic (𝓟 t)
+  条件: {s : 集合 (滤子 α)}
+  结论: 是开集 s ↔ 存在 T : 集合 (集合 α), s = ⋃ t in T, 左无界右闭区间 (𝓟 t)
   证明: isTopologicalBasis_Iic_principal.open_iff_eq_sUnion.trans by
     simp only [exists_subset_range_and_iff, sUnion_image, (· ∘ ·)]
 
@@ -179,8 +179,8 @@ theorem nhds_eq
 
 中文:
 定理 nhds_eq
-  条件: (l : Filter α)
-  结论: 𝓝 l = l.lift' (Iic ∘ 𝓟)
+  条件: (l : 滤子 α)
+  结论: 𝓝 l = l.lift' (左无界右闭区间 ∘ 𝓟)
   证明: nhds_generateFrom.trans by
     simp only [mem_ofPred_eq, @and_comm (l in _), iInf_and, iInf_range, Filter.lift', Filter.lift,
       (· ∘ ·), mem_Iic, le_principal_iff]
@@ -204,7 +204,7 @@ theorem nhds_eq'
 
 中文:
 定理 nhds_eq'
-  条件: (l : Filter α)
+  条件: (l : 滤子 α)
   结论: 𝓝 l = l.lift' fun s => { l' | s in l' }
   证明: by
   simpa only [Function.comp_def, Iic_principal] using nhds_eq l
@@ -225,7 +225,7 @@ theorem tendsto_nhds
 
 中文:
 定理 tendsto_nhds
-  条件: {la : Filter α} {lb : Filter β} {f : α -> Filter β}
+  条件: {la : 滤子 α} {lb : 滤子 β} {f : α -> 滤子 β}
   证明: by
   simp only [nhds_eq', tendsto_lift', mem_ofPred_eq]
 -/
@@ -244,8 +244,8 @@ theorem HasBasis.nhds
   exact h.lift' monotone_principal.Iic
 
 中文:
-定理 HasBasis.nhds
-  条件: {l : Filter α} {p : ι -> 命题} {s : ι -> Set α} (h : HasBasis l p s)
+定理 有基.邻域滤子
+  条件: {l : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α} (h : 有基 l p s)
   证明: by
   rw [nhds_eq]
   exact h.lift' monotone_principal.Iic
@@ -267,7 +267,7 @@ theorem tendsto_pure_self
 
 中文:
 定理 tendsto_pure_self
-  条件: (l : Filter X)
+  条件: (l : 滤子 X)
   证明: by
   rw [Filter.tendsto_nhds]
   exact fun s hs => Eventually.mono hs fun x => id
@@ -291,8 +291,8 @@ theorem HasBasis.nhds'
   proof: by simpa only [Iic_principal] using h.nhds
 
 中文:
-定理 HasBasis.nhds'
-  条件: {l : Filter α} {p : ι -> 命题} {s : ι -> Set α} (h : HasBasis l p s)
+定理 有基.邻域滤子'
+  条件: {l : 滤子 α} {p : ι -> 命题} {s : ι -> 集合 α} (h : 有基 l p s)
   证明: by simpa only [Iic_principal] using h.nhds
 
 Depends on / 依赖: Iic_principal, h.nhds
@@ -310,7 +310,7 @@ theorem mem_nhds_iff
 
 中文:
 定理 mem_nhds_iff
-  条件: {l : Filter α} {S : Set (Filter α)}
+  条件: {l : 滤子 α} {S : 集合 (滤子 α)}
   证明: l.basis_sets.nhds.mem_iff
 -/
 protected theorem mem_nhds_iff {l : Filter α} {S : Set (Filter α)} :
@@ -329,7 +329,7 @@ theorem mem_nhds_iff'
 
 中文:
 定理 mem_nhds_iff'
-  条件: {l : Filter α} {S : Set (Filter α)}
+  条件: {l : 滤子 α} {S : 集合 (滤子 α)}
   证明: l.basis_sets.nhds'.mem_iff
 
 @[simp]
@@ -354,7 +354,7 @@ theorem nhds_bot
 
 中文:
 定理 nhds_bot
-  结论: 𝓝 (⊥ : Filter α) = pure ⊥
+  结论: 𝓝 (⊥ : 滤子 α) = pure ⊥
   证明: by
   simp [nhds_eq, Function.comp_def, lift'_bot monotone_principal.Iic]
 
@@ -378,7 +378,7 @@ theorem nhds_top
 
 中文:
 定理 nhds_top
-  结论: 𝓝 (⊤ : Filter α) = ⊤
+  结论: 𝓝 (⊤ : 滤子 α) = ⊤
   证明: by simp [nhds_eq]
 
 @[simp]
@@ -401,8 +401,8 @@ theorem nhds_principal
 
 中文:
 定理 nhds_principal
-  条件: (s : Set α)
-  结论: 𝓝 (𝓟 s) = 𝓟 (Iic (𝓟 s))
+  条件: (s : 集合 α)
+  结论: 𝓝 (𝓟 s) = 𝓟 (左无界右闭区间 (𝓟 s))
   证明: (hasBasis_principal s).nhds.eq_of_same_basis (hasBasis_principal _)
 
 @[simp]
@@ -428,7 +428,7 @@ theorem nhds_pure
 中文:
 定理 nhds_pure
   条件: (x : α)
-  结论: 𝓝 (pure x : Filter α) = 𝓟 {⊥, pure x}
+  结论: 𝓝 (pure x : 滤子 α) = 𝓟 {⊥, pure x}
   证明: by
   rw [← principal_singleton]; rw [nhds_principal]; rw [principal_singleton]; rw [Iic_pure]
 
@@ -455,7 +455,7 @@ theorem nhds_iInf
 
 中文:
 定理 nhds_iInf
-  条件: (f : ι -> Filter α)
+  条件: (f : ι -> 滤子 α)
   结论: 𝓝 (⨅ i, f i) = ⨅ i, 𝓝 (f i)
   证明: by
   simp only [nhds_eq]
@@ -480,7 +480,7 @@ theorem nhds_inf
 
 中文:
 定理 nhds_inf
-  条件: (l₁ l₂ : Filter α)
+  条件: (l₁ l₂ : 滤子 α)
   结论: 𝓝 (l₁ ⊓ l₂) = 𝓝 l₁ ⊓ 𝓝 l₂
   证明: by
   simpa only [iInf_bool_eq] using! Filter.nhds_iInf fun b => cond b l₁ l₂
@@ -498,7 +498,7 @@ theorem monotone_nhds
 
 中文:
 定理 monotone_nhds
-  结论: Monotone (𝓝 : Filter α -> Filter (Filter α))
+  结论: 递增 (𝓝 : 滤子 α -> 滤子 (滤子 α))
   证明: Monotone.of_map_inf Filter.nhds_inf
 
 Depends on / 依赖: Filter, Filter.nhds_inf, Monotone, Monotone.of_map_inf, nhds_inf, of_map_inf
@@ -520,9 +520,9 @@ theorem sInter_nhds
 @[simp]
 
 中文:
-定理 sInter_nhds
-  条件: (l : Filter α)
-  结论: ⋂₀ { s | s in 𝓝 l } = Iic l
+定理 s整数er_nhds
+  条件: (l : 滤子 α)
+  结论: ⋂₀ { s | s in 𝓝 l } = 左无界右闭区间 l
   证明: by
   simp_rw [nhds_eq, Function.comp_def, sInter_lift'_sets monotone_principal.Iic, Iic,
     le_principal_iff, ← ofPred_forall, ← Filter.le_def]
@@ -550,7 +550,7 @@ theorem nhds_mono
 
 中文:
 定理 nhds_mono
-  条件: {l₁ l₂ : Filter α}
+  条件: {l₁ l₂ : 滤子 α}
   结论: 𝓝 l₁ <= 𝓝 l₂ ↔ l₁ <= l₂
   证明: by
   refine ⟨fun h => ?_, fun h => monotone_nhds h⟩
@@ -575,7 +575,7 @@ theorem mem_interior
 
 中文:
 定理 mem_interior
-  条件: {s : Set (Filter α)} {l : Filter α}
+  条件: {s : 集合 (滤子 α)} {l : 滤子 α}
   证明: by
   rw [mem_interior_iff_mem_nhds]; rw [Filter.mem_nhds_iff]
 -/
@@ -598,7 +598,7 @@ theorem mem_closure
 
 中文:
 定理 mem_closure
-  条件: {s : Set (Filter α)} {l : Filter α}
+  条件: {s : 集合 (滤子 α)} {l : 滤子 α}
   证明: by
   simp only [closure_eq_compl_interior_compl, Filter.mem_interior, mem_compl_iff, not_exists,
     not_forall, Classical.not_not, exists_prop, not_and, and_comm, subset_def, mem_Iic,
@@ -628,8 +628,8 @@ theorem closure_singleton
 
 中文:
 定理 closure_singleton
-  条件: (l : Filter α)
-  结论: closure {l} = Ici l
+  条件: (l : 滤子 α)
+  结论: closure {l} = 左闭右无界区间 l
   证明: by
   ext l'
   simp [Filter.mem_closure, Filter.le_def]
@@ -653,7 +653,7 @@ theorem specializes_iff_le
 
 中文:
 定理 specializes_iff_le
-  条件: {l₁ l₂ : Filter α}
+  条件: {l₁ l₂ : 滤子 α}
   结论: l₁ ⤳ l₂ ↔ l₁ <= l₂
   证明: by
   simp only [specializes_iff_closure_subset, Filter.closure_singleton, Ici_subset_Ici]
@@ -674,7 +674,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space (Filter α)
+  签名: T0空间 (滤子 α)
   定义体: ⟨fun _ _ h => (specializes_iff_le.1 h.specializes).antisymm
     (specializes_iff_le.1 h.symm.specializes)⟩
 
@@ -696,8 +696,8 @@ theorem nhds_atTop
 
 中文:
 定理 nhds_atTop
-  条件: [Preorder α]
-  结论: 𝓝 atTop = ⨅ x : α, 𝓟 (Iic (𝓟 (Ici x)))
+  条件: [预序 α]
+  结论: 𝓝 atTop = ⨅ x : α, 𝓟 (左无界右闭区间 (𝓟 (左闭右无界区间 x)))
   证明: by
   simp only [atTop, Filter.nhds_iInf, nhds_principal]
 
@@ -717,7 +717,7 @@ theorem tendsto_nhds_atTop_iff
 
 中文:
 定理 tendsto_nhds_atTop_iff
-  条件: [Preorder β] {l : Filter α} {f : α -> Filter β}
+  条件: [预序 β] {l : 滤子 α} {f : α -> 滤子 β}
   证明: by
   simp only [nhds_atTop, tendsto_iInf, tendsto_principal, mem_Iic, le_principal_iff]
 -/
@@ -736,8 +736,8 @@ theorem nhds_atBot
 
 中文:
 定理 nhds_atBot
-  条件: [Preorder α]
-  结论: 𝓝 atBot = ⨅ x : α, 𝓟 (Iic (𝓟 (Iic x)))
+  条件: [预序 α]
+  结论: 𝓝 atBot = ⨅ x : α, 𝓟 (左无界右闭区间 (𝓟 (左无界右闭区间 x)))
   证明: @nhds_atTop αᵒᵈ _
 
 Depends on / 依赖: nhds_atTop
@@ -755,7 +755,7 @@ theorem tendsto_nhds_atBot_iff
 
 中文:
 定理 tendsto_nhds_atBot_iff
-  条件: [Preorder β] {l : Filter α} {f : α -> Filter β}
+  条件: [预序 β] {l : 滤子 α} {f : α -> 滤子 β}
   证明: @Filter.tendsto_nhds_atTop_iff α βᵒᵈ _ _ _
 -/
 protected theorem tendsto_nhds_atBot_iff [Preorder β] {l : Filter α} {f : α -> Filter β} :
@@ -801,7 +801,7 @@ theorem isInducing_nhds
 
 中文:
 定理 isInducing_nhds
-  结论: IsInducing (𝓝 : X -> Filter X)
+  结论: 是Inducing (𝓝 : X -> 滤子 X)
   证明: isInducing_iff_nhds.2 fun x =>
 (nhds_def' _).trans by
       simp +contextual only [nhds_nhds, comap_iInf, comap_principal,
@@ -830,7 +830,7 @@ theorem continuous_nhds
 
 中文:
 定理 continuous_nhds
-  结论: Continuous (𝓝 : X -> Filter X)
+  结论: 连续 (𝓝 : X -> 滤子 X)
   证明: isInducing_nhds.continuous
 
 Depends on / 依赖: continuous, isInducing_nhds, isInducing_nhds.continuous
@@ -847,8 +847,8 @@ theorem Tendsto.nhds
   proof: (continuous_nhds.tendsto _).comp h
 
 中文:
-定理 Tendsto.nhds
-  条件: {f : α -> X} {l : Filter α} {x : X} (h : Tendsto f l (𝓝 x))
+定理 收敛.邻域滤子
+  条件: {f : α -> X} {l : 滤子 α} {x : X} (h : 收敛 f l (𝓝 x))
   证明: (continuous_nhds.tendsto _).comp h
 -/
 protected theorem Tendsto.nhds {f : α -> X} {l : Filter α} {x : X} (h : Tendsto f l (𝓝 x)) :

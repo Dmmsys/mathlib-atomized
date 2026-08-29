@@ -57,7 +57,7 @@ theorem PInfty_comp_map_mono_eq_zero
 
 中文:
 定理 PInfty_comp_map_mono_eq_zero
-  结论: (X : SimplicialObject C) {n : 自然数} {Δ' : SimplexCategory}
+  结论: (X : SimplicialObject C) {n : 自然数} {Δ' : 单纯形范畴}
   证明: by
   induction Δ' using SimplexCategory.rec with | _ m
   obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_lt (len_lt_of_mono i fun h => by
@@ -132,7 +132,7 @@ theorem Γ₀_obj_termwise_mapMono_comp_PInfty
 
 中文:
 定理 Γ₀_obj_termwise_mapMono_comp_PInfty
-  结论: (X : SimplicialObject C) {Δ Δ' : SimplexCategory}
+  结论: (X : SimplicialObject C) {Δ Δ' : 单纯形范畴}
   证明: by
   induction Δ using SimplexCategory.rec with | _ n
   induction Δ' using SimplexCategory.rec with | _ n'
@@ -462,7 +462,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (Γ₂N₂.natTrans : (N₂ : Karoubi (SimplicialObject C) ⥤ _) ⋙ _ ⟶ _)
+  签名: 是同构 (Γ₂N₂.natTrans : (N₂ : Karoubi (SimplicialObject C) ⥤ _) ⋙ _ ⟶ _)
   定义体: by
   have : forall P : Karoubi (SimplicialObject C), IsIso (Γ₂N₂.natTrans.app P) := by
     intro P
@@ -502,7 +502,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (Γ₂N₁.natTrans : (N₁ : SimplicialObject C ⥤ _) ⋙ _ ⟶ _)
+  签名: 是同构 (Γ₂N₁.natTrans : (N₁ : SimplicialObject C ⥤ _) ⋙ _ ⟶ _)
   定义体: by
   have : forall X : SimplicialObject C, IsIso (Γ₂N₁.natTrans.app X) := by
     intro X

@@ -32,8 +32,8 @@ instance Matrix.charP
     CharP.cast_eq_zero_iff R p k, forall_const]
 
 中文:
-实例 Matrix.charP
-  签名: [DecidableEq n] [Nonempty n] (p : 自然数) [CharP R p]
+实例 矩阵.charP
+  签名: [DecidableEq n] [非空 n] (p : 自然数) [特征p R p]
   定义体: by simp_rw [← diagonal_natCast, ← diagonal_zero, diagonal_eq_diagonal_iff,
     CharP.cast_eq_zero_iff R p k, forall_const]
 

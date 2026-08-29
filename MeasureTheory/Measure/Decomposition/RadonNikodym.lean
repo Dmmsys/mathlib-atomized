@@ -70,7 +70,7 @@ theorem withDensity_rnDeriv_eq
 
 中文:
 定理 withDensity_rnDeriv_eq
-  条件: (μ ν : Measure α) [HaveLebesgueDecomposition μ ν] (h : μ ≪ ν)
+  条件: (μ ν : 测度 α) [有Lebesgue分解 μ ν] (h : μ ≪ ν)
   证明: by
   suffices μ.singularPart ν = 0 by
     conv_rhs => rw [haveLebesgueDecomposition_add μ ν, this, zero_add]
@@ -115,7 +115,7 @@ lemma rnDeriv_pos
 
 中文:
 引理 rnDeriv_pos
-  条件: [HaveLebesgueDecomposition μ ν] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 μ ν] (hμν : μ ≪ ν)
   证明: by
   rw [← Measure.withDensity_rnDeriv_eq _ _ hμν]; rw [ae_withDensity_iff (Measure.measurable_rnDeriv _ _)]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
   exact ae_of_all _ (fun x hx => hx.pos)
@@ -141,7 +141,7 @@ lemma rnDeriv_pos'
 
 中文:
 引理 rnDeriv_pos'
-  条件: [HaveLebesgueDecomposition ν μ] [SigmaFinite μ] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 ν μ] [σ有限 μ] (hμν : μ ≪ ν)
   证明: by
   refine (absolutelyContinuous_withDensity_rnDeriv hμν).ae_le ?_
   filter_upwards [Measure.rnDeriv_pos (withDensity_absolutelyContinuous μ (ν.rnDeriv μ)),
@@ -176,7 +176,7 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_left
 
 中文:
 引理 rnDeriv_withDensity_withDensity_rnDeriv_left
-  结论: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  结论: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   conv_rhs => rw [μ.haveLebesgueDecomposition_add ν, add_comm, withDensity_add_measure]
   have : SigmaFinite ((μ.singularPart ν).withDensity f) :=
@@ -210,7 +210,7 @@ lemma rnDeriv_withDensity_withDensity_rnDeriv_right
 
 中文:
 引理 rnDeriv_withDensity_withDensity_rnDeriv_right
-  结论: (μ ν : Measure α) [SigmaFinite μ]
+  结论: (μ ν : 测度 α) [σ有限 μ]
   证明: by
   conv_rhs => rw [μ.haveLebesgueDecomposition_add ν, add_comm]
   have hν_ac : ν ≪ ν.withDensity f := withDensity_absolutelyContinuous' hf hf_ne_zero
@@ -247,7 +247,7 @@ lemma rnDeriv_withDensity_left_of_absolutelyContinuous
 
 中文:
 引理 rnDeriv_withDensity_left_of_absolutelyContinuous
-  结论: {ν : Measure α} [SigmaFinite μ]
+  结论: {ν : 测度 α} [σ有限 μ]
   证明: by
   refine (Measure.eq_rnDeriv₀ ?_ Measure.MutuallySingular.zero_left ?_).symm
   · exact hf.mul (Measure.measurable_rnDeriv _ _).aemeasurable
@@ -290,7 +290,7 @@ lemma rnDeriv_withDensity_left
 
 中文:
 引理 rnDeriv_withDensity_left
-  结论: {μ ν : Measure α} [SigmaFinite μ] [SigmaFinite ν]
+  结论: {μ ν : 测度 α} [σ有限 μ] [σ有限 ν]
   证明: by
   let μ' := ν.withDensity (μ.rnDeriv ν)
   have hμ'ν : μ' ≪ ν := withDensity_absolutelyContinuous _ _
@@ -328,7 +328,7 @@ lemma rnDeriv_withDensity_right_of_absolutelyContinuous
 
 中文:
 引理 rnDeriv_withDensity_right_of_absolutelyContinuous
-  结论: {ν : Measure α}
+  结论: {ν : 测度 α}
   证明: by
   have : SigmaFinite (ν.withDensity f) := SigmaFinite.withDensity_of_ne_top hf_ne_top
   refine (withDensity_absolutelyContinuous' hf hf_ne_zero).ae_eq ?_
@@ -374,7 +374,7 @@ lemma rnDeriv_withDensity_right
 
 中文:
 引理 rnDeriv_withDensity_right
-  结论: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  结论: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   let μ' := ν.withDensity (μ.rnDeriv ν)
   have h₁ : μ'.rnDeriv (ν.withDensity f) =ᵐ[ν] μ.rnDeriv (ν.withDensity f) :=
@@ -415,7 +415,7 @@ lemma rnDeriv_eq_zero_of_mutuallySingular
 
 中文:
 引理 rnDeriv_eq_zero_of_mutuallySingular
-  结论: {ν' : Measure α} [HaveLebesgueDecomposition μ ν']
+  结论: {ν' : 测度 α} [有Lebesgue分解 μ ν']
   证明: by
   let t := h.nullSet
   have ht : MeasurableSet t := h.measurableSet_nullSet
@@ -459,7 +459,7 @@ lemma rnDeriv_eq_zero_ae_singularPart
 
 中文:
 引理 rnDeriv_eq_zero_ae_singularPart
-  条件: [SigmaFinite μ] [SigmaFinite ν]
+  条件: [σ有限 μ] [σ有限 ν]
   证明: by
   refine rnDeriv_eq_zero_of_mutuallySingular (mutuallySingular_singularPart ν μ).symm ?_
   exact (Measure.singularPart_le _ _).absolutelyContinuous
@@ -487,7 +487,7 @@ lemma rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
 
 中文:
 引理 rnDeriv_add_right_of_absolutelyContinuous_of_mutuallySingular
-  结论: {ν' : Measure α}
+  结论: {ν' : 测度 α}
   证明: by
   let t := hνν'.nullSet
   have ht : MeasurableSet t := hνν'.measurableSet_nullSet
@@ -527,7 +527,7 @@ lemma rnDeriv_add_right_of_mutuallySingular'
 
 中文:
 引理 rnDeriv_add_right_of_mutuallySingular'
-  结论: {ν' : Measure α}
+  结论: {ν' : 测度 α}
   证明: by
   have h_ac : ν ≪ ν + ν' := Measure.AbsolutelyContinuous.rfl.add_right _
   rw [haveLebesgueDecomposition_add μ ν]
@@ -572,7 +572,7 @@ lemma rnDeriv_add_right_of_mutuallySingular
 
 中文:
 引理 rnDeriv_add_right_of_mutuallySingular
-  结论: {ν' : Measure α}
+  结论: {ν' : 测度 α}
   证明: by
   have h_ac : ν ≪ ν + ν' := Measure.AbsolutelyContinuous.rfl.add_right _
   rw [haveLebesgueDecomposition_add μ ν']
@@ -615,7 +615,7 @@ lemma rnDeriv_withDensity_rnDeriv
 
 中文:
 引理 rnDeriv_withDensity_rnDeriv
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   conv_rhs => rw [ν.haveLebesgueDecomposition_add μ, add_comm]
   refine (absolutelyContinuous_withDensity_rnDeriv hμν).ae_eq ?_
@@ -646,7 +646,7 @@ lemma inv_rnDeriv_aux
 
 中文:
 引理 inv_rnDeriv_aux
-  结论: [HaveLebesgueDecomposition μ ν] [HaveLebesgueDecomposition ν μ]
+  结论: [有Lebesgue分解 μ ν] [有Lebesgue分解 ν μ]
   证明: by
   suffices μ.withDensity (μ.rnDeriv ν)⁻¹ = μ.withDensity (ν.rnDeriv μ) by
     calc (μ.rnDeriv ν)⁻¹ =ᵐ[μ] (μ.withDensity (μ.rnDeriv ν)⁻¹).rnDeriv μ :=
@@ -686,7 +686,7 @@ lemma inv_rnDeriv
 
 中文:
 引理 inv_rnDeriv
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   suffices (μ.rnDeriv ν)⁻¹ =ᵐ[μ] (μ.rnDeriv (μ.withDensity (ν.rnDeriv μ)))⁻¹
       ∧ ν.rnDeriv μ =ᵐ[μ] (μ.withDensity (ν.rnDeriv μ)).rnDeriv μ by
@@ -720,7 +720,7 @@ lemma inv_rnDeriv'
 
 中文:
 引理 inv_rnDeriv'
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   filter_upwards [inv_rnDeriv hμν] with x hx; simp only [Pi.inv_apply, ← hx, inv_inv]
 
@@ -747,7 +747,7 @@ lemma ae_rnDeriv_ne_zero_imp_of_ae
 
 中文:
 引理 ae_rnDeriv_ne_zero_imp_of_ae
-  结论: [SigmaFinite μ] [SigmaFinite ν] {p : α -> 命题}
+  结论: [σ有限 μ] [σ有限 ν] {p : α -> 命题}
   证明: by
   rw [ν.haveLebesgueDecomposition_add μ]; rw [ae_add_measure_iff]
   constructor
@@ -782,8 +782,8 @@ lemma setLIntegral_rnDeriv_le
   proof: (withDensity_apply_le _ _).trans (Measure.le_iff'.1 (withDensity_rnDeriv_le μ ν) s)
 
 中文:
-引理 setLIntegral_rnDeriv_le
-  条件: (s : Set α)
+引理 setL整数egral_rnDeriv_le
+  条件: (s : 集合 α)
   证明: (withDensity_apply_le _ _).trans (Measure.le_iff'.1 (withDensity_rnDeriv_le μ ν) s)
 
 Depends on / 依赖: Measure, Measure.le_iff, le_iff, withDensity_apply_le, withDensity_rnDeriv_le
@@ -802,7 +802,7 @@ lemma lintegral_rnDeriv_le
 
 中文:
 引理 lintegral_rnDeriv_le
-  结论: ∫⁻ x, μ.rnDeriv ν x ∂ν <= μ Set.univ
+  结论: ∫⁻ x, μ.rnDeriv ν x ∂ν <= μ 集合.univ
   证明: (setLIntegral_univ _).symm ▸ Measure.setLIntegral_rnDeriv_le Set.univ
 
 Depends on / 依赖: Measure, Measure.setLIntegral_rnDeriv_le, Set.univ, setLIntegral_rnDeriv_le, setLIntegral_univ
@@ -820,8 +820,8 @@ lemma setLIntegral_rnDeriv'
   rw [← withDensity_apply _ hs]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
 中文:
-引理 setLIntegral_rnDeriv'
-  结论: [HaveLebesgueDecomposition μ ν] (hμν : μ ≪ ν) {s : Set α}
+引理 setL整数egral_rnDeriv'
+  结论: [有Lebesgue分解 μ ν] (hμν : μ ≪ ν) {s : 集合 α}
   证明: by
   rw [← withDensity_apply _ hs]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
@@ -842,8 +842,8 @@ lemma setLIntegral_rnDeriv
   rw [← withDensity_apply' _ s]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
 中文:
-引理 setLIntegral_rnDeriv
-  结论: [HaveLebesgueDecomposition μ ν] [SFinite ν]
+引理 setL整数egral_rnDeriv
+  结论: [有Lebesgue分解 μ ν] [SFinite ν]
   证明: by
   rw [← withDensity_apply' _ s]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
@@ -865,7 +865,7 @@ lemma lintegral_rnDeriv
 
 中文:
 引理 lintegral_rnDeriv
-  条件: [HaveLebesgueDecomposition μ ν] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 μ ν] (hμν : μ ≪ ν)
   证明: by
   rw [← setLIntegral_univ]; rw [setLIntegral_rnDeriv' hμν MeasurableSet.univ]
 
@@ -886,8 +886,8 @@ lemma integrableOn_toReal_rnDeriv
   exact ((setLIntegral_rnDeriv_le _).trans_lt hμs.lt_top).ne
 
 中文:
-引理 integrableOn_toReal_rnDeriv
-  条件: {s : Set α} (hμs : μ s != ∞)
+引理 integrableOn_to实数_rnDeriv
+  条件: {s : 集合 α} (hμs : μ s != ∞)
   证明: by
   refine integrable_toReal_of_lintegral_ne_top (Measure.measurable_rnDeriv _ _).aemeasurable ?_
   exact ((setLIntegral_rnDeriv_le _).trans_lt hμs.lt_top).ne
@@ -912,8 +912,8 @@ lemma setIntegral_toReal_rnDeriv_eq_withDensity'
   · exact ae_restrict_of_ae (Measure.rnDeriv_lt_top _ _)
 
 中文:
-引理 setIntegral_toReal_rnDeriv_eq_withDensity'
-  结论: [SigmaFinite μ]
+引理 set整数egral_to实数_rnDeriv_eq_withDensity'
+  结论: [σ有限 μ]
   证明: by
   rw [integral_toReal (Measure.measurable_rnDeriv _ _).aemeasurable]; rw [measureReal_def]
   · rw [ENNReal.toReal_eq_toReal_iff, ← withDensity_apply _ hs]
@@ -943,8 +943,8 @@ lemma setIntegral_toReal_rnDeriv_eq_withDensity
   · exact ae_restrict_of_ae (Measure.rnDeriv_lt_top _ _)
 
 中文:
-引理 setIntegral_toReal_rnDeriv_eq_withDensity
-  条件: [SigmaFinite μ] [SFinite ν] (s : Set α)
+引理 set整数egral_to实数_rnDeriv_eq_withDensity
+  条件: [σ有限 μ] [SFinite ν] (s : 集合 α)
   证明: by
   rw [integral_toReal (Measure.measurable_rnDeriv _ _).aemeasurable]; rw [measureReal_def]
   · rw [ENNReal.toReal_eq_toReal_iff, ← withDensity_apply' _ s]
@@ -975,8 +975,8 @@ lemma setIntegral_toReal_rnDeriv_le
         refine setIntegral_mono_set ?_ ?_ (L
 
 中文:
-引理 setIntegral_toReal_rnDeriv_le
-  条件: [SigmaFinite μ] {s : Set α} (hμs : μ s != ∞)
+引理 set整数egral_to实数_rnDeriv_le
+  条件: [σ有限 μ] {s : 集合 α} (hμs : μ s != ∞)
   证明: by
   set t := toMeasurable μ s with ht
   have ht_m : MeasurableSet t := measurableSet_toMeasurable μ s
@@ -1014,8 +1014,8 @@ lemma setIntegral_toReal_rnDeriv'
   rw [setIntegral_toReal_rnDeriv_eq_withDensity' hs]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]; rw [measureReal_def]
 
 中文:
-引理 setIntegral_toReal_rnDeriv'
-  结论: [SigmaFinite μ] [HaveLebesgueDecomposition μ ν]
+引理 set整数egral_to实数_rnDeriv'
+  结论: [σ有限 μ] [有Lebesgue分解 μ ν]
   证明: by
   rw [setIntegral_toReal_rnDeriv_eq_withDensity' hs]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]; rw [measureReal_def]
 
@@ -1036,8 +1036,8 @@ lemma setIntegral_toReal_rnDeriv
   rw [setIntegral_toReal_rnDeriv_eq_withDensity s]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
 中文:
-引理 setIntegral_toReal_rnDeriv
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν) (s : Set α)
+引理 set整数egral_to实数_rnDeriv
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν) (s : 集合 α)
   证明: by
   rw [setIntegral_toReal_rnDeriv_eq_withDensity s]; rw [Measure.withDensity_rnDeriv_eq _ _ hμν]
 
@@ -1057,8 +1057,8 @@ lemma integral_toReal_rnDeriv
   rw [← setIntegral_univ]; rw [setIntegral_toReal_rnDeriv hμν Set.univ]
 
 中文:
-引理 integral_toReal_rnDeriv
-  条件: [SigmaFinite μ] [SigmaFinite ν] (hμν : μ ≪ ν)
+引理 integral_to实数_rnDeriv
+  条件: [σ有限 μ] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   rw [← setIntegral_univ]; rw [setIntegral_toReal_rnDeriv hμν Set.univ]
 
@@ -1078,8 +1078,8 @@ lemma integral_toReal_rnDeriv'
   rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_
 
 中文:
-引理 integral_toReal_rnDeriv'
-  条件: [IsFiniteMeasure μ] [SigmaFinite ν]
+引理 integral_to实数_rnDeriv'
+  条件: [是有限测度 μ] [σ有限 ν]
   证明: by
   rw [measureReal_def]; rw [measureReal_def]; rw [← ENNReal.toReal_sub_of_le (μ.singularPart_le ν Set.univ) (measure_ne_top _ _)]; rw [← Measure.sub_apply .univ (Measure.singularPart_le μ ν)]; rw [Measure.measure_sub_singularPart]; rw [← measureReal_def]; rw [← Measure.setIntegral_toReal_rnDeriv_
 
@@ -1105,7 +1105,7 @@ lemma rnDeriv_mul_rnDeriv
 
 中文:
 引理 rnDeriv_mul_rnDeriv
-  结论: {κ : Measure α} [SigmaFinite μ] [SigmaFinite ν] [SigmaFinite κ]
+  结论: {κ : 测度 α} [σ有限 μ] [σ有限 ν] [σ有限 κ]
   证明: by
   refine (rnDeriv_withDensity_left ?_ ?_).symm.trans ?_
   · exact (Measure.measurable_rnDeriv _ _).aemeasurable
@@ -1136,7 +1136,7 @@ hνκ Measure.rnDeriv_withDensity_left_of_absolutelyContinuous hνκ h_meas.aeme
 
 中文:
 引理 rnDeriv_mul_rnDeriv'
-  结论: {κ : Measure α} [SigmaFinite μ] [SigmaFinite ν] [SigmaFinite κ]
+  结论: {κ : 测度 α} [σ有限 μ] [σ有限 ν] [σ有限 κ]
   证明: by
   obtain ⟨h_meas, h_sing, hμν⟩ := Measure.haveLebesgueDecomposition_spec μ ν
   filter_upwards [hνκ <| Measure.rnDeriv_add' (μ.singularPart ν) (ν.withDensity (μ.rnDeriv ν)) κ,
@@ -1169,7 +1169,7 @@ lemma rnDeriv_le_one_of_le
 
 中文:
 引理 rnDeriv_le_one_of_le
-  条件: (hμν : μ <= ν) [SigmaFinite ν]
+  条件: (hμν : μ <= ν) [σ有限 ν]
   结论: μ.rnDeriv ν <=ᵐ[ν] 1
   证明: by
   refine ae_le_of_forall_setLIntegral_le_of_sigmaFinite (μ.measurable_rnDeriv ν) fun s _ _ => ?_
@@ -1196,7 +1196,7 @@ lemma rnDeriv_le_one_iff_le
 
 中文:
 引理 rnDeriv_le_one_iff_le
-  条件: [HaveLebesgueDecomposition μ ν] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 μ ν] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   refine ⟨fun h s => ?_, fun h => rnDeriv_le_one_of_le h⟩
   rw [← withDensity_rnDeriv_eq _ _ hμν]; rw [withDensity_apply']; rw [← setLIntegral_one]
@@ -1222,7 +1222,7 @@ lemma rnDeriv_eq_one_iff_eq
 
 中文:
 引理 rnDeriv_eq_one_iff_eq
-  条件: [HaveLebesgueDecomposition μ ν] [SigmaFinite ν] (hμν : μ ≪ ν)
+  条件: [有Lebesgue分解 μ ν] [σ有限 ν] (hμν : μ ≪ ν)
   证明: by
   refine ⟨fun h => ?_, fun h => h ▸ ν.rnDeriv_self⟩
   rw [← withDensity_rnDeriv_eq _ _ hμν]; rw [withDensity_congr_ae h]; rw [withDensity_one]
@@ -1250,7 +1250,7 @@ lemma rnDeriv_add_self
 
 中文:
 引理 rnDeriv_add_self
-  条件: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  条件: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   have hν_ac : μ ≪ ν + μ := rfl.absolutelyContinuous.add_right' _
   filter_upwards [ν.rnDeriv_add' μ μ, μ.rnDeriv_self, Measure.inv_rnDeriv hν_ac] with a h1 h2 h3
@@ -1281,7 +1281,7 @@ lemma rnDeriv_self_add
 
 中文:
 引理 rnDeriv_self_add
-  条件: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  条件: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   have h_add : (μ + ν).rnDeriv (μ + ν) =ᵐ[ν] μ.rnDeriv (μ + ν) + ν.rnDeriv (μ + ν) :=
     (ae_add_measure_iff.mp (μ.rnDeriv_add' ν (μ + ν))).2
@@ -1323,7 +1323,7 @@ lemma rnDeriv_eq_div_rnDeriv_add
 
 中文:
 引理 rnDeriv_eq_div_rnDeriv_add
-  条件: (μ ν : Measure α) [SigmaFinite μ] [SigmaFinite ν]
+  条件: (μ ν : 测度 α) [σ有限 μ] [σ有限 ν]
   证明: by
   filter_upwards [rnDeriv_add_self ν μ, rnDeriv_self_add μ ν, μ.rnDeriv_lt_top ν]
       with a ha1 ha2 ha_lt_top
@@ -1356,7 +1356,7 @@ lemma rnDeriv_div_rnDeriv_eq_div_rnDeriv_add
 
 中文:
 引理 rnDeriv_div_rnDeriv_eq_div_rnDeriv_add
-  结论: {ξ : Measure α}
+  结论: {ξ : 测度 α}
   证明: by
   have h1 : μ.rnDeriv (μ + ν) * (μ + ν).rnDeriv ξ =ᵐ[ξ] μ.rnDeriv ξ :=
     Measure.rnDeriv_mul_rnDeriv (rfl.absolutelyContinuous.add_right _)
@@ -1393,7 +1393,7 @@ lemma rnDeriv_eq_div
 
 中文:
 引理 rnDeriv_eq_div
-  结论: {ξ : Measure α} [SigmaFinite μ] [SigmaFinite ν] [SigmaFinite ξ]
+  结论: {ξ : 测度 α} [σ有限 μ] [σ有限 ν] [σ有限 ξ]
   证明: by
   have hν_ac : ν ≪ μ + ν := rfl.absolutelyContinuous.add_right' _
   filter_upwards [μ.rnDeriv_eq_div_rnDeriv_add ν,
@@ -1428,8 +1428,8 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map_aux
   have hs_eq : s = f ⁻¹' f '' s := by rw [hf.inje
 
 中文:
-引理 _root_.MeasurableEmbedding.rnDeriv_map_aux
-  结论: (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.rnDeriv_map_aux
+  结论: (hf : 可测嵌入 f)
   证明: by
   refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite ?_ ?_ (fun s _ _ => ?_)
   · exact (Measure.measurable_rnDeriv _ _).comp hf.measurable
@@ -1464,8 +1464,8 @@ lemma _root_.MeasurableEmbedding.rnDeriv_map
   have h_add
 
 中文:
-引理 _root_.MeasurableEmbedding.rnDeriv_map
-  结论: (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.rnDeriv_map
+  结论: (hf : 可测嵌入 f)
   证明: by
   rw [μ.haveLebesgueDecomposition_add ν]; rw [Measure.map_add _ _ hf.measurable]
   have : SigmaFinite (map f ν) := hf.sigmaFinite_map
@@ -1509,8 +1509,8 @@ lemma _root_.MeasurableEmbedding.map_withDensity_rnDeriv
   filter_upwards [hf.rnDeriv_map μ ν] with a ha _ using ha.sym
 
 中文:
-引理 _root_.MeasurableEmbedding.map_withDensity_rnDeriv
-  结论: (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.map_withDensity_rnDeriv
+  结论: (hf : 可测嵌入 f)
   证明: by
   ext s hs
   rw [hf.map_apply]; rw [withDensity_apply _ (hf.measurable hs)]; rw [withDensity_apply _ hs]; rw [setLIntegral_map hs (Measure.measurable_rnDeriv _ _) hf.measurable]
@@ -1541,8 +1541,8 @@ lemma _root_.MeasurableEmbedding.singularPart_map
   refine (Measure.eq_singularPart (Measure.m
 
 中文:
-引理 _root_.MeasurableEmbedding.singularPart_map
-  结论: (hf : MeasurableEmbedding f)
+引理 _root_.可测嵌入.singularPart_map
+  结论: (hf : 可测嵌入 f)
   证明: by
   have h_add : μ.map f = (μ.singularPart ν).map f
       + (ν.map f).withDensity ((μ.map f).rnDeriv (ν.map f)) := by
@@ -1585,7 +1585,7 @@ theorem lintegral_rnDeriv_mul
 
 中文:
 定理 lintegral_rnDeriv_mul
-  结论: [HaveLebesgueDecomposition μ ν] (hμν : μ ≪ ν) {f : α -> 实数>=0∞}
+  结论: [有Lebesgue分解 μ ν] (hμν : μ ≪ ν) {f : α -> 实数>=0∞}
   证明: by
   nth_rw 2 [← withDensity_rnDeriv_eq μ ν hμν]
   rw [lintegral_withDensity_eq_lintegral_mul₀ (measurable_rnDeriv μ ν).aemeasurable hf]
@@ -1611,8 +1611,8 @@ lemma setLIntegral_rnDeriv_mul
   simp only [Pi.mul_apply]
 
 中文:
-引理 setLIntegral_rnDeriv_mul
-  结论: [HaveLebesgueDecomposition μ ν] (hμν : μ ≪ ν) {f : α -> 实数>=0∞}
+引理 setL整数egral_rnDeriv_mul
+  结论: [有Lebesgue分解 μ ν] (hμν : μ ≪ ν) {f : α -> 实数>=0∞}
   证明: by
   nth_rw 2 [← Measure.withDensity_rnDeriv_eq μ ν hμν]
   rw [setLIntegral_withDensity_eq_lintegral_mul₀ (measurable_rnDeriv μ ν).aemeasurable hf hs]
@@ -1666,7 +1666,7 @@ lemma integrable_toReal_rnDeriv_mul_iff
   proof: integrable_rnDeriv_smul_iff hμν
 
 中文:
-引理 integrable_toReal_rnDeriv_mul_iff
+引理 integrable_to实数_rnDeriv_mul_iff
   条件: (hμν : μ ≪ ν) {f : α -> 实数}
   证明: integrable_rnDeriv_smul_iff hμν
 
@@ -1706,7 +1706,7 @@ lemma integral_toReal_rnDeriv_mul
   proof: integral_rnDeriv_smul hμν
 
 中文:
-引理 integral_toReal_rnDeriv_mul
+引理 integral_to实数_rnDeriv_mul
   条件: (hμν : μ ≪ ν) {f : α -> 实数}
   证明: integral_rnDeriv_smul hμν
 
@@ -1726,8 +1726,8 @@ lemma setIntegral_rnDeriv_smul
   exacts [measurable_rnDeriv _ _, ae_restrict_of_ae (rnDeriv_lt_top _ _), hs]
 
 中文:
-引理 setIntegral_rnDeriv_smul
-  条件: (hμν : μ ≪ ν) {s : Set α} (hs : MeasurableSet s)
+引理 set整数egral_rnDeriv_smul
+  条件: (hμν : μ ≪ ν) {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [← setIntegral_withDensity_eq_setIntegral_toReal_smul]; rw [withDensity_rnDeriv_eq _ _ hμν]
   exacts [measurable_rnDeriv _ _, ae_restrict_of_ae (rnDeriv_lt_top _ _), hs]
@@ -1750,8 +1750,8 @@ lemma setIntegral_toReal_rnDeriv_mul
 omit [HaveLebesgueDecomposition μ ν] in
 
 中文:
-引理 setIntegral_toReal_rnDeriv_mul
-  条件: (hμν : μ ≪ ν) {f : α -> 实数} {s : Set α} (hs : MeasurableSet s)
+引理 set整数egral_to实数_rnDeriv_mul
+  条件: (hμν : μ ≪ ν) {f : α -> 实数} {s : 集合 α} (hs : 可测集 s)
   证明: setIntegral_rnDeriv_smul hμν hs
 
 omit [HaveLebesgueDecomposition μ ν] in
@@ -1776,8 +1776,8 @@ lemma setIntegral_rnDeriv_smul'
 omit [HaveLebesgueDecomposition μ ν] in
 
 中文:
-引理 setIntegral_rnDeriv_smul'
-  条件: [SigmaFinite ν] (hμν : μ ≪ ν) (s : Set α)
+引理 set整数egral_rnDeriv_smul'
+  条件: [σ有限 ν] (hμν : μ ≪ ν) (s : 集合 α)
   证明: by
   rw [← setIntegral_withDensity_eq_setIntegral_toReal_smul']; rw [withDensity_rnDeriv_eq _ _ hμν]
   exacts [measurable_rnDeriv _ _, ae_restrict_of_ae (rnDeriv_lt_top _ _)]
@@ -1801,8 +1801,8 @@ lemma setIntegral_toReal_rnDeriv_mul'
   proof: setIntegral_rnDeriv_smul' hμν s
 
 中文:
-引理 setIntegral_toReal_rnDeriv_mul'
-  条件: [SigmaFinite ν] (hμν : μ ≪ ν) (f : α -> 实数) (s : Set α)
+引理 set整数egral_to实数_rnDeriv_mul'
+  条件: [σ有限 ν] (hμν : μ ≪ ν) (f : α -> 实数) (s : 集合 α)
   证明: setIntegral_rnDeriv_smul' hμν s
 
 Depends on / 依赖: setIntegral_rnDeriv_smul
@@ -1834,7 +1834,7 @@ theorem mconv_eq_withDensity_mlconvolution_rnDeriv
 
 中文:
 定理 mconv_eq_withDensity_mlconvolution_rnDeriv
-  结论: [SFinite μ] {ν₁ ν₂ : Measure G}
+  结论: [SFinite μ] {ν₁ ν₂ : 测度 G}
   证明: by
   rw [← mconv_withDensity_eq_mlconvolution (by fun_prop) (by fun_prop)]; rw [withDensity_rnDeriv_eq _ _ hν₁]; rw [withDensity_rnDeriv_eq _ _ hν₂]
 
@@ -1861,8 +1861,8 @@ theorem HaveLebesgueDecomposition.mconv
 @[to_additive]
 
 中文:
-定理 HaveLebesgueDecomposition.mconv
-  结论: [SFinite μ] {ν₁ ν₂ : Measure G}
+定理 有Lebesgue分解.mconv
+  结论: [SFinite μ] {ν₁ ν₂ : 测度 G}
   证明: ⟨⟨0, (ν₁.rnDeriv μ) ⋆ₘₗ[μ] (ν₂.rnDeriv μ)⟩, by fun_prop, by simp,
     by simpa using mconv_eq_withDensity_mlconvolution_rnDeriv hν₁ hν₂⟩
 
@@ -1892,7 +1892,7 @@ theorem rnDeriv_mconv
 
 中文:
 定理 rnDeriv_mconv
-  结论: [SFinite μ] {ν₁ ν₂ : Measure G} [IsFiniteMeasure ν₁] [IsFiniteMeasure ν₂]
+  结论: [SFinite μ] {ν₁ ν₂ : 测度 G} [是有限测度 ν₁] [是有限测度 ν₂]
   证明: by
   have := HaveLebesgueDecomposition.mconv hν₁ hν₂
   rw [← withDensity_eq_iff (by fun_prop) (by fun_prop)]; rw [withDensity_rnDeriv_eq _ _ (mconv_absolutelyContinuous hν₂)]; rw [mconv_eq_withDensity_mlconvolution_rnDeriv hν₁ hν₂]
@@ -1922,7 +1922,7 @@ theorem rnDeriv_mconv'
 
 中文:
 定理 rnDeriv_mconv'
-  结论: [SigmaFinite μ] {ν₁ ν₂ : Measure G} [SigmaFinite ν₁] [SigmaFinite ν₂]
+  结论: [σ有限 μ] {ν₁ ν₂ : 测度 G} [σ有限 ν₁] [σ有限 ν₂]
   证明: by
   rw [← withDensity_eq_iff_of_sigmaFinite (by fun_prop) (by fun_prop)]; rw [← mconv_eq_withDensity_mlconvolution_rnDeriv hν₁ hν₂]; rw [withDensity_rnDeriv_eq _ _ (mconv_absolutelyContinuous hν₂)]
 

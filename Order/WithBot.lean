@@ -46,7 +46,7 @@ instance nontrivial
 
 中文:
 实例 nontrivial
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: inferInstanceAs Nontrivial (Option α)
 
 @[to_dual]
@@ -66,8 +66,8 @@ instance [IsEmpty
   body: inferInstanceAs Unique (Option α)
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (WithBot α)
+实例 [是空
+  签名: α] : 唯一 (WithBot α)
   定义体: inferInstanceAs Unique (Option α)
 
 Depends on / 依赖: Unique
@@ -90,7 +90,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : α -> WithBot α)
+  结论: 单射 ((↑) : α -> WithBot α)
   证明: Option.some_injective _
 
 @[to_dual (attr := simp, norm_cast)]
@@ -136,7 +136,7 @@ theorem «forall»
 @[to_dual]
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : WithBot α -> 命题}
   结论: (对任意 x, p x) ↔ p ⊥ ∧ 对任意 x : α, p x
   证明: Option.forall
@@ -159,7 +159,7 @@ theorem «exists»
 @[to_dual]
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : WithBot α -> 命题}
   结论: (存在 x, p x) ↔ p ⊥ ∨ 存在 x : α, p x
   证明: Option.exists
@@ -205,7 +205,7 @@ theorem some_eq_coe
 中文:
 定理 some_eq_coe
   条件: (a : α)
-  结论: (Option.some a : WithBot α) = (↑a : WithBot α)
+  结论: (选项类型.some a : WithBot α) = (↑a : WithBot α)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -697,8 +697,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (Hf : Injective f)
-  结论: Injective (WithBot.map f)
+  条件: {f : α -> β} (Hf : 单射 f)
+  结论: 单射 (WithBot.map f)
   证明: Option.map_injective Hf
 
 Depends on / 依赖: Option.map_injective, map_injective
@@ -871,7 +871,7 @@ lemma ne_bot_iff_exists
 @[to_dual]
 
 中文:
-引理 ne_bot_iff_exists
+引理 ne_bot_iff_存在
   条件: {x : WithBot α}
   结论: x != ⊥ ↔ 存在 a : α, ↑a = x
   证明: Option.ne_none_iff_exists
@@ -895,7 +895,7 @@ lemma eq_bot_iff_forall_ne
 @[to_dual]
 
 中文:
-引理 eq_bot_iff_forall_ne
+引理 eq_bot_iff_对任意_ne
   条件: {x : WithBot α}
   结论: x = ⊥ ↔ 对任意 a : α, ↑a != x
   证明: Option.eq_none_iff_forall_some_ne
@@ -921,7 +921,7 @@ theorem forall_ne_bot
 @[to_dual]
 
 中文:
-定理 forall_ne_bot
+定理 对任意_ne_bot
   条件: {p : WithBot α -> 命题}
   结论: (对任意 x != ⊥, p x) ↔ 对任意 x : α, p x
   证明: by
@@ -946,7 +946,7 @@ theorem exists_ne_bot
   simp [ne_bot_iff_exists]
 
 中文:
-定理 exists_ne_bot
+定理 存在_ne_bot
   条件: {p : WithBot α -> 命题}
   结论: (存在 x != ⊥, p x) ↔ 存在 x : α, p x
   证明: by
@@ -1048,7 +1048,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: [Top α]
+  签名: [顶元素 α]
   定义体: (⊤ : α)
 
 @[to_dual (attr := simp, norm_cast)]
@@ -1071,7 +1071,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  条件: [Top α]
+  条件: [顶元素 α]
   结论: ((⊤ : α) : WithBot α) = ⊤
   证明: rfl
 @[to_dual (attr := simp, norm_cast)]
@@ -1092,7 +1092,7 @@ lemma coe_eq_top
 
 中文:
 引理 coe_eq_top
-  条件: [Top α] {a : α}
+  条件: [顶元素 α] {a : α}
   结论: (a : WithBot α) = ⊤ ↔ a = ⊤
   证明: coe_eq_coe
 @[to_dual (attr := simp, norm_cast)]
@@ -1114,7 +1114,7 @@ lemma top_eq_coe
 
 中文:
 引理 top_eq_coe
-  条件: [Top α] {a : α}
+  条件: [顶元素 α] {a : α}
   结论: ⊤ = (a : WithBot α) ↔ ⊤ = a
   证明: coe_eq_coe
 
@@ -1221,7 +1221,7 @@ definition _root_.Equiv.withBotSubtypeNe
   right_inv _ := by simp
 
 中文:
-定义 _root_.Equiv.withBotSubtypeNe
+定义 _root_.等价.withBotSubtypeNe
   签名: : {y : WithBot α // y != ⊥} ≃ α where
   定义体: fun ⟨x,h⟩ => WithBot.unbot x h
   invFun x := ⟨x, WithBot.coe_ne_bot⟩
@@ -1253,7 +1253,7 @@ abbreviation unbotA
 
 中文:
 缩写 unbotA
-  签名: [Nonempty α]
+  签名: [非空 α]
   定义体: unbotD (Classical.arbitrary α)
 
 @[to_dual]
@@ -1277,7 +1277,7 @@ lemma unbotA_eq_unbot
 
 中文:
 引理 unbotA_eq_unbot
-  条件: [Nonempty α] {a : WithBot α} (ha : a != ⊥)
+  条件: [非空 α] {a : WithBot α} (ha : a != ⊥)
   结论: unbotA a = unbot a ha
   证明: by
   cases a with
@@ -1338,7 +1338,7 @@ theorem withBotCongr_refl
 
 中文:
 定理 withBotCongr_refl
-  结论: withBotCongr (Equiv.refl α) = Equiv.refl _
+  结论: withBotCongr (等价.refl α) = 等价.refl _
   证明: Equiv.ext congr_fun WithBot.map_id
 
 @[to_dual (attr := simp, grind =)]
@@ -1648,7 +1648,7 @@ lemma le_iff_forall
 @[to_dual (attr := simp, norm_cast)]
 
 中文:
-引理 le_iff_forall
+引理 le_iff_对任意
   结论: x <= y ↔ 对任意 a : α, x = ↑a -> 存在 b : α, y = ↑b ∧ a <= b
   证明: by
   cases x <;> cases y <;> simp [le_def]
@@ -1719,7 +1719,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (WithBot α) where bot_le
+  签名: : 有底序 (WithBot α) where bot_le
   定义体: by simp [le_def]
 
 @[to_dual]
@@ -1741,7 +1741,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: [OrderTop α]
+  签名: [有顶序 α]
   定义体: by cases x <;> simp [le_def]
 
 @[to_dual]
@@ -1761,7 +1761,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: [OrderTop α]
+  签名: [有顶序 α]
 -/
 instance instBoundedOrder [OrderTop α] : BoundedOrder (WithBot α) where
 
@@ -1793,7 +1793,7 @@ theorem coe_le
 
 中文:
 定理 coe_le
-  结论: 对任意 {o : Option α}, b in o -> ((a : WithBot α) <= o ↔ a <= b)
+  结论: 对任意 {o : 选项类型 α}, b in o -> ((a : WithBot α) <= o ↔ a <= b)
 -/
 theorem coe_le : forall {o : Option α}, b in o -> ((a : WithBot α) <= o ↔ a <= b)
   | _, rfl => coe_le_coe
@@ -2022,7 +2022,7 @@ lemma le_unbotA_iff
 
 中文:
 引理 le_unbotA_iff
-  条件: [Nonempty α] (hx : x != ⊥)
+  条件: [非空 α] (hx : x != ⊥)
   结论: a <= x.unbotA ↔ a <= x
   证明: le_unbotD_iff hx
 @[to_dual le_untopA_iff]
@@ -2045,7 +2045,7 @@ lemma unbotA_le_iff
 
 中文:
 引理 unbotA_le_iff
-  条件: [Nonempty α] (hx : x != ⊥)
+  条件: [非空 α] (hx : x != ⊥)
   结论: x.unbotA <= a ↔ x <= a
   证明: by
   lift x to α using hx; simp
@@ -2067,7 +2067,7 @@ lemma unbotA_mono
 
 中文:
 引理 unbotA_mono
-  条件: [Nonempty α] (hy : x != ⊥) (h : x <= y)
+  条件: [非空 α] (hy : x != ⊥) (h : x <= y)
   结论: x.unbotA <= y.unbotA
   证明: unbotD_mono hy h
 
@@ -2094,7 +2094,7 @@ lemma lt_iff_exists
 @[to_dual (attr := simp, norm_cast)]
 
 中文:
-引理 lt_iff_exists
+引理 lt_iff_存在
   结论: x < y ↔ 存在 b : α, y = ↑b ∧ 对任意 a : α, x = ↑a -> a < b
   证明: by
   cases x <;> cases y <;> simp [lt_def]
@@ -2180,7 +2180,7 @@ lemma lt_iff_exists_coe
 @[to_dual coe_lt_iff]
 
 中文:
-引理 lt_iff_exists_coe
+引理 lt_iff_存在_coe
   结论: x < y ↔ 存在 b : α, y = b ∧ x < b
   证明: by cases y <;> simp
 
@@ -2351,7 +2351,7 @@ lemma lt_unbotA_iff
 
 中文:
 引理 lt_unbotA_iff
-  条件: [Nonempty α] (hx : x != ⊥)
+  条件: [非空 α] (hx : x != ⊥)
   结论: a < x.unbotA ↔ a < x
   证明: lt_unbotD_iff hx
 @[to_dual lt_untopA_iff]
@@ -2372,7 +2372,7 @@ lemma unbotA_lt_iff
 
 中文:
 引理 unbotA_lt_iff
-  条件: [Nonempty α] (hx : x != ⊥)
+  条件: [非空 α] (hx : x != ⊥)
   结论: x.unbotA < a ↔ x < a
   证明: by
   lift x to α using hx; simp
@@ -2394,8 +2394,8 @@ instance [Preorder
   le_trans x y z := by cases x <;> cases y <;> cases z <;> simp [le_def]; simpa using le_trans
 
 中文:
-实例 [Preorder
-  签名: α] : Preorder (WithBot α) where
+实例 [预序
+  签名: α] : 预序 (WithBot α) where
   定义体: by cases x <;> cases y <;> simp [lt_iff_le_not_ge]
   le_refl x := by cases x <;> simp [le_def]
   le_trans x y z := by cases x <;> cases y <;> cases z <;> simp [le_def]; simpa using le_trans
@@ -2424,7 +2424,7 @@ theorem coe_strictMono
 
 中文:
 定理 coe_strictMono
-  结论: StrictMono (fun (a : α) => (a : WithBot α))
+  结论: 严格递增 (fun (a : α) => (a : WithBot α))
   证明: fun _ _ => coe_lt_coe.2
 
 @[to_dual]
@@ -2446,7 +2446,7 @@ theorem coe_mono
 
 中文:
 定理 coe_mono
-  结论: Monotone (fun (a : α) => (a : WithBot α))
+  结论: 递增 (fun (a : α) => (a : WithBot α))
   证明: fun _ _ => coe_le_coe.2
 
 @[to_dual]
@@ -2509,7 +2509,7 @@ alias ⟨_, _root_.Monotone.withBot_map⟩ := monotone_map_iff
 中文:
 定理 monotone_map_iff
   条件: {f : α -> β}
-  结论: Monotone (WithBot.map f) ↔ Monotone f
+  结论: 递增 (WithBot.map f) ↔ 递增 f
   证明: monotone_iff.trans by simp [Monotone]
 
 @[to_dual]
@@ -2674,7 +2674,7 @@ theorem lt_coe_bot
 
 中文:
 定理 lt_coe_bot
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: x < (⊥ : α) ↔ x = ⊥
   证明: by cases x <;> simp
 
@@ -2695,7 +2695,7 @@ lemma eq_bot_iff_forall_lt
 @[to_dual eq_top_iff_forall_ge]
 
 中文:
-引理 eq_bot_iff_forall_lt
+引理 eq_bot_iff_对任意_lt
   结论: x = ⊥ ↔ 对任意 b : α, x < b
   证明: by
   cases x <;> simp; simpa using ⟨_, lt_irrefl _⟩
@@ -2723,8 +2723,8 @@ lemma eq_bot_iff_forall_le
 @[to_dual forall_le_coe_iff_le]
 
 中文:
-引理 eq_bot_iff_forall_le
-  条件: [NoBotOrder α]
+引理 eq_bot_iff_对任意_le
+  条件: [无底序 α]
   结论: x = ⊥ ↔ 对任意 b : α, x <= b
   证明: by
   refine ⟨by simp +contextual, fun h => (x.eq_bot_iff_forall_ne).2 fun y => ?_⟩
@@ -2756,8 +2756,8 @@ lemma forall_coe_le_iff_le
 @[to_dual forall_coe_le_iff_le]
 
 中文:
-引理 forall_coe_le_iff_le
-  条件: [NoBotOrder α]
+引理 对任意_coe_le_iff_le
+  条件: [无底序 α]
   结论: (对任意 a : α, a <= x -> a <= y) ↔ x <= y
   证明: by
   obtain _ | a := x
@@ -2789,8 +2789,8 @@ lemma forall_le_coe_iff_le
 @[to_dual (attr := simp) forall_lt_coe]
 
 中文:
-引理 forall_le_coe_iff_le
-  条件: [NoBotOrder α]
+引理 对任意_le_coe_iff_le
+  条件: [无底序 α]
   结论: (对任意 a : α, y <= a -> x <= a) ↔ x <= y
   证明: by
   obtain _ | y := y
@@ -2819,7 +2819,7 @@ theorem forall_coe_lt
 @[to_dual (attr := simp) exists_lt_coe]
 
 中文:
-定理 forall_coe_lt
+定理 对任意_coe_lt
   条件: {p : WithBot α -> 命题}
   证明: by
   simp [WithBot.forall]
@@ -2845,7 +2845,7 @@ theorem exists_coe_lt
 @[to_dual (attr := simp) forall_le_coe]
 
 中文:
-定理 exists_coe_lt
+定理 存在_coe_lt
   条件: {p : WithBot α -> 命题}
   证明: by
   simp [WithBot.exists]
@@ -2871,7 +2871,7 @@ theorem forall_coe_le
 @[to_dual (attr := simp) exists_le_coe]
 
 中文:
-定理 forall_coe_le
+定理 对任意_coe_le
   条件: {p : WithBot α -> 命题}
   证明: by
   simp [WithBot.forall]
@@ -2895,7 +2895,7 @@ theorem exists_coe_le
   simp [WithBot.exists]
 
 中文:
-定理 exists_coe_le
+定理 存在_coe_le
   条件: {p : WithBot α -> 命题}
   证明: by
   simp [WithBot.exists]
@@ -2918,8 +2918,8 @@ instance [PartialOrder
   body: by cases x <;> cases y <;> simp [le_def]; simpa using le_antisymm
 
 中文:
-实例 [PartialOrder
-  签名: α] : PartialOrder (WithBot α) where
+实例 [偏序
+  签名: α] : 偏序 (WithBot α) where
   定义体: by cases x <;> cases y <;> simp [le_def]; simpa using le_antisymm
 
 Depends on / 依赖: le_antisymm, le_def
@@ -2974,7 +2974,7 @@ lemma le_unbotA
 
 中文:
 引理 le_unbotA
-  条件: [Nonempty α] (hy : b <= y)
+  条件: [非空 α] (hy : b <= y)
   结论: b <= y.unbotA
   证明: le_unbotD hy
 
@@ -2998,8 +2998,8 @@ lemma eq_top_iff_forall_ge
   · simpa [WithTop.eq_top_iff_forall_ge] using H
 
 中文:
-引理 eq_top_iff_forall_ge
-  条件: [Nonempty α] [NoTopOrder α] {x : WithBot (WithTop α)}
+引理 eq_top_iff_对任意_ge
+  条件: [非空 α] [无顶序 α] {x : WithBot (WithTop α)}
   证明: by
   refine ⟨by simp_all, fun H => ?_⟩
   induction x
@@ -3030,7 +3030,7 @@ lemma eq_of_forall_coe_le_iff
 @[to_dual eq_of_forall_coe_le_iff]
 
 中文:
-引理 eq_of_forall_coe_le_iff
+引理 eq_of_对任意_coe_le_iff
   条件: (h : 对任意 a : α, a <= x ↔ a <= y)
   结论: x = y
   证明: le_antisymm (forall_coe_le_iff_le.mp fun a => (h a).1) (forall_coe_le_iff_le.mp fun a => (h a).2)
@@ -3053,7 +3053,7 @@ lemma eq_of_forall_le_coe_iff
   proof: le_antisymm (forall_le_coe_iff_le.mp fun a => (h a).2) (forall_le_coe_iff_le.mp fun a => (h a).1)
 
 中文:
-引理 eq_of_forall_le_coe_iff
+引理 eq_of_对任意_le_coe_iff
   条件: (h : 对任意 a : α, x <= a ↔ y <= a)
   结论: x = y
   证明: le_antisymm (forall_le_coe_iff_le.mp fun a => (h a).2) (forall_le_coe_iff_le.mp fun a => (h a).1)
@@ -3236,7 +3236,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: [Lattice α]
+  签名: [格 α]
 -/
 instance lattice [Lattice α] : Lattice (WithBot α) where
 
@@ -3250,7 +3250,7 @@ instance _root_.WithTop.lattice
 
 中文:
 实例 _root_.WithTop.lattice
-  签名: [Lattice α]
+  签名: [格 α]
 -/
 instance _root_.WithTop.lattice [Lattice α] : Lattice (WithTop α) where
 
@@ -3268,7 +3268,7 @@ instance distribLattice
 
 中文:
 实例 distribLattice
-  签名: [DistribLattice α]
+  签名: [Distrib格 α]
   定义体: by
     cases x <;> cases y <;> cases z <;> simp [← coe_inf, ← coe_sup]
     simpa [← coe_inf, ← coe_sup] using le_sup_inf
@@ -3297,7 +3297,7 @@ instance _root_.WithTop.distribLattice
 
 中文:
 实例 _root_.WithTop.distribLattice
-  签名: [DistribLattice α]
+  签名: [Distrib格 α]
   定义体: by
     cases x <;> cases y <;> cases z <;> simp [← WithTop.coe_inf, ← WithTop.coe_sup]
     simpa [← coe_inf, ← coe_sup] using le_sup_inf
@@ -3378,7 +3378,7 @@ instance total_le
 
 中文:
 实例 total_le
-  签名: [LE α] [@Std.Total α (· <= ·)]
+  签名: [LE α] [@Std.全 α (· <= ·)]
   定义体: by cases x <;> cases y <;> simp; simpa using Std.Total.total ..
 
 Depends on / 依赖: Std.Total.total
@@ -3396,7 +3396,7 @@ instance _root_.WithTop.total_le
 
 中文:
 实例 _root_.WithTop.total_le
-  签名: [LE α] [@Std.Total α (· <= ·)]
+  签名: [LE α] [@Std.全 α (· <= ·)]
   定义体: by cases x <;> cases y <;> simp; simpa using Std.Total.total ..
 
 Depends on / 依赖: Std.Total.total
@@ -3417,7 +3417,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: Lattice.toLinearOrder _
 
 @[to_dual existing]
@@ -3439,7 +3439,7 @@ instance _root_.WithTop.linearOrder
 
 中文:
 实例 _root_.WithTop.linearOrder
-  签名: [LinearOrder α]
+  签名: [线性序 α]
   定义体: Lattice.toLinearOrder _
 
 @[to_dual]
@@ -3532,7 +3532,7 @@ lemma denselyOrdered_iff
 
 中文:
 引理 denselyOrdered_iff
-  条件: [LT α] [NoMinOrder α]
+  条件: [LT α] [NoMin序 α]
   证明: by
   constructor <;> intro h <;> constructor
   · intro a b hab
@@ -3576,7 +3576,7 @@ lemma _root_.WithTop.denselyOrdered_iff
 
 中文:
 引理 _root_.WithTop.denselyOrdered_iff
-  条件: [LT α] [NoMaxOrder α]
+  条件: [LT α] [NoMax序 α]
   证明: by
   constructor <;> intro h <;> constructor
   · intro a b hab
@@ -3611,7 +3611,7 @@ instance denselyOrdered
 
 中文:
 实例 denselyOrdered
-  签名: [LT α] [DenselyOrdered α] [NoMinOrder α]
+  签名: [LT α] [稠密序 α] [NoMin序 α]
   定义体: denselyOrdered_iff.mpr inferInstance
 
 Depends on / 依赖: denselyOrdered_iff, denselyOrdered_iff.mpr
@@ -3631,7 +3631,7 @@ instance trichotomous.lt
 
 中文:
 实例 trichotomous.lt
-  签名: [Preorder α] [@Std.Trichotomous α (· < ·)]
+  签名: [预序 α] [@Std.三歧 α (· < ·)]
   定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap fun {x y} => by
     cases x <;> cases y <;> simp [trichotomous]
 
@@ -3653,7 +3653,7 @@ instance _root_.WithTop.trichotomous.lt
 
 中文:
 实例 _root_.WithTop.trichotomous.lt
-  签名: [Preorder α] [@Std.Trichotomous α (· < ·)]
+  签名: [预序 α] [@Std.三歧 α (· < ·)]
   定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap fun {x y} => by
     cases x <;> cases y <;> simp [trichotomous]
 
@@ -3673,8 +3673,8 @@ instance IsWellOrder.lt
   signature: [Preorder α] [IsWellOrder α (· < ·)]
 
 中文:
-实例 IsWellOrder.lt
-  签名: [Preorder α] [IsWellOrder α (· < ·)]
+实例 是良序.lt
+  签名: [预序 α] [是良序 α (· < ·)]
 -/
 instance IsWellOrder.lt [Preorder α] [IsWellOrder α (· < ·)] :
   IsWellOrder (WithBot α) (· < ·) where
@@ -3688,8 +3688,8 @@ instance _root_.WithTop.IsWellOrder.lt
   signature: [Preorder α] [IsWellOrder α (· < ·)]
 
 中文:
-实例 _root_.WithTop.IsWellOrder.lt
-  签名: [Preorder α] [IsWellOrder α (· < ·)]
+实例 _root_.WithTop.是良序.lt
+  签名: [预序 α] [是良序 α (· < ·)]
 -/
 instance _root_.WithTop.IsWellOrder.lt [Preorder α] [IsWellOrder α (· < ·)] :
   IsWellOrder (WithTop α) (· < ·) where
@@ -3705,7 +3705,7 @@ instance trichotomous.gt
 
 中文:
 实例 trichotomous.gt
-  签名: [Preorder α] [@Std.Trichotomous α (· > ·)]
+  签名: [预序 α] [@Std.三歧 α (· > ·)]
   定义体: have : @Std.Trichotomous α (· < ·) := inferInstanceAs Std.Trichotomous Function.swap _
   inferInstance
 
@@ -3727,7 +3727,7 @@ instance _root_.WithTop.trichotomous.gt
 
 中文:
 实例 _root_.WithTop.trichotomous.gt
-  签名: [Preorder α] [@Std.Trichotomous α (· > ·)]
+  签名: [预序 α] [@Std.三歧 α (· > ·)]
   定义体: have : @Std.Trichotomous α (· < ·) := inferInstanceAs Std.Trichotomous Function.swap _
   inferInstance
 
@@ -3747,8 +3747,8 @@ instance IsWellOrder.gt
   signature: [Preorder α] [IsWellOrder α (· > ·)]
 
 中文:
-实例 IsWellOrder.gt
-  签名: [Preorder α] [IsWellOrder α (· > ·)]
+实例 是良序.gt
+  签名: [预序 α] [是良序 α (· > ·)]
 -/
 instance IsWellOrder.gt [Preorder α] [IsWellOrder α (· > ·)] :
     IsWellOrder (WithBot α) (· > ·) where
@@ -3762,8 +3762,8 @@ instance _root_.WithTop.IsWellOrder.gt
   signature: [Preorder α] [IsWellOrder α (· > ·)]
 
 中文:
-实例 _root_.WithTop.IsWellOrder.gt
-  签名: [Preorder α] [IsWellOrder α (· > ·)]
+实例 _root_.WithTop.是良序.gt
+  签名: [预序 α] [是良序 α (· > ·)]
 -/
 instance _root_.WithTop.IsWellOrder.gt [Preorder α] [IsWellOrder α (· > ·)] :
     IsWellOrder (WithTop α) (· > ·) where
@@ -3785,7 +3785,7 @@ lemma coe_min
 中文:
 引理 coe_min
   条件: (a b : α)
-  结论: ↑(min a b) = min (a : WithBot α) b
+  结论: ↑(最小值 a b) = 最小值 (a : WithBot α) b
   证明: rfl
 @[to_dual]
 -/
@@ -3803,7 +3803,7 @@ lemma coe_max
 中文:
 引理 coe_max
   条件: (a b : α)
-  结论: ↑(max a b) = max (a : WithBot α) b
+  结论: ↑(最大值 a b) = 最大值 (a : WithBot α) b
   证明: rfl
 -/
 lemma coe_max (a b : α) : ↑(max a b) = max (a : WithBot α) b := rfl
@@ -3823,7 +3823,7 @@ lemma le_of_forall_lt_iff_le
 @[to_dual le_of_forall_lt_iff_le]
 
 中文:
-引理 le_of_forall_lt_iff_le
+引理 le_of_对任意_lt_iff_le
   结论: (对任意 z : α, x < z -> y <= z) ↔ y <= x
   证明: by
   cases x <;> cases y <;> simp [exists_lt, forall_gt_imp_ge_iff_le_of_dense]
@@ -3846,7 +3846,7 @@ lemma ge_of_forall_gt_iff_ge
   cases x <;> cases y <;> simp [exists_lt, forall_lt_imp_le_iff_le_of_dense]
 
 中文:
-引理 ge_of_forall_gt_iff_ge
+引理 ge_of_对任意_gt_iff_ge
   结论: (对任意 z : α, z < x -> z <= y) ↔ x <= y
   证明: by
   cases x <;> cases y <;> simp [exists_lt, forall_lt_imp_le_iff_le_of_dense]
@@ -3874,8 +3874,8 @@ theorem lt_iff_exists_coe_btwn
 @[to_dual lt_iff_exists_coe_btwn]
 
 中文:
-定理 lt_iff_exists_coe_btwn
-  条件: [Preorder α] [DenselyOrdered α] [NoMinOrder α] {a b : WithBot α}
+定理 lt_iff_存在_coe_btwn
+  条件: [预序 α] [稠密序 α] [NoMin序 α] {a b : WithBot α}
   证明: ⟨fun h =>
     let ⟨_, hy⟩ := exists_between h
     let ⟨x, hx⟩ := lt_iff_exists_coe.1 hy.1
@@ -3907,8 +3907,8 @@ theorem lt_iff_exists_coe_btwn'
 @[to_dual]
 
 中文:
-定理 lt_iff_exists_coe_btwn'
-  条件: [Preorder α] [DenselyOrdered α] [NoMinOrder α] {a b : WithBot α}
+定理 lt_iff_存在_coe_btwn'
+  条件: [预序 α] [稠密序 α] [NoMin序 α] {a b : WithBot α}
   证明: by
   rw [lt_iff_exists_coe_btwn]; simp_rw [and_comm]
 
@@ -3935,7 +3935,7 @@ instance noTopOrder
 
 中文:
 实例 noTopOrder
-  签名: [LE α] [NoTopOrder α] [Nonempty α]
+  签名: [LE α] [无顶序 α] [非空 α]
   定义体: fun
     | ⊥ => ‹Nonempty α›.elim fun a => ⟨a, by simp⟩
     | (a : α) => let ⟨b, hba⟩ := exists_not_le a; ⟨b, mod_cast hba⟩
@@ -3960,7 +3960,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [LT α] [NoMaxOrder α] [Nonempty α]
+  签名: [LT α] [NoMax序 α] [非空 α]
   定义体: fun
     | ⊥ => ‹Nonempty α›.elim fun a => ⟨a, by simp⟩
     | (a : α) => let ⟨b, hba⟩ := exists_gt a; ⟨b, mod_cast hba⟩

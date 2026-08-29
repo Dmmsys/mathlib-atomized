@@ -50,8 +50,8 @@ abbreviation TopCat.generatedBy
   body: fun Y => IsGeneratedBy X Y
 
 中文:
-缩写 TopCat.generatedBy
-  签名: : Object命题erty TopCat.{v}
+缩写 顶元素范畴.generatedBy
+  签名: : ObjectProperty 顶元素范畴.{v}
   定义体: fun Y => IsGeneratedBy X Y
 
 Depends on / 依赖: IsGeneratedBy
@@ -68,8 +68,8 @@ lemma TopCat.generatedBy_def
   proof: Iff.rfl
 
 中文:
-引理 TopCat.generatedBy_def
-  条件: (Y : TopCat.{v})
+引理 顶元素范畴.generatedBy_def
+  条件: (Y : 顶元素范畴.{v})
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -105,7 +105,7 @@ abbreviation toTopCat
 
 中文:
 缩写 toTopCat
-  签名: : GeneratedByTopCat.{v} X ⥤ TopCat.{v}
+  签名: : GeneratedByTopCat.{v} X ⥤ 顶元素范畴.{v}
   定义体: ObjectProperty.ι _
 
 Depends on / 依赖: ObjectProperty
@@ -124,7 +124,7 @@ abbreviation fullyFaithfulToTopCat
 
 中文:
 缩写 fullyFaithfulToTopCat
-  签名: : (toTopCat.{v} (X := X)).FullyFaithful
+  签名: : (toTopCat.{v} (X := X)).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: FullyFaithful
@@ -144,7 +144,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (Y : 类型v) [TopologicalSpace Y] [IsGeneratedBy X Y]
+  签名: (Y : 类型v) [拓扑空间 Y] [是GeneratedBy X Y]
   定义体: TopCat.of Y
   property := by assumption
 
@@ -189,12 +189,12 @@ structure ContinuousGeneratedByCat
     - [str : TopologicalSpace carrier]
 
 中文:
-结构 ContinuousGeneratedByCat
-  参数: (X : ι -> 类型u) [对任意 i, TopologicalSpace (X i)]
+结构 余ntinuousGeneratedBy范畴
+  参数: (X : ι -> 类型u) [对任意 i, 拓扑空间 (X i)]
   公理与运算 (3 个):
     - of : :
     - carrier : 类型v
-    - [str : TopologicalSpace carrier]
+    - [str : 拓扑空间 carrier]
 -/
 structure ContinuousGeneratedByCat (X : ι -> Type u) [forall i, TopologicalSpace (X i)] where
   /-- Constructor for objects in `ContinuousGeneratedByCat X`. -/
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (ContinuousGeneratedByCat.{v} X) (类型v)
+  签名: CoeSort (余ntinuousGeneratedBy范畴.{v} X) (类型v)
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -240,7 +240,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (Y : 类型v) [TopologicalSpace Y]
+  条件: (Y : 类型v) [拓扑空间 Y]
   结论: (of (X := X) Y : 类型v) = Y
   证明: rfl
 -/
@@ -257,7 +257,7 @@ lemma of_carrier
 
 中文:
 引理 of_carrier
-  条件: (Y : ContinuousGeneratedByCat.{v} X)
+  条件: (Y : 余ntinuousGeneratedBy范畴.{v} X)
   结论: of (X := X) Y = Y
   证明: rfl
 -/
@@ -273,10 +273,10 @@ structure Hom
     - hom : ContinuousMapGeneratedBy X Y Z
 
 中文:
-结构 Hom
-  参数: (Y Z : ContinuousGeneratedByCat.{v} X)
+结构 态射
+  参数: (Y Z : 余ntinuousGeneratedBy范畴.{v} X)
   公理与运算 (1 个):
-    - hom : ContinuousMapGeneratedBy X Y Z
+    - hom : 余ntinuousMapGeneratedBy X Y Z
 -/
 structure Hom (Y Z : ContinuousGeneratedByCat.{v} X) where
   /-- the underlying `X`-continuous map of a morphism in `ContinuousGeneratedByCat X`. -/
@@ -294,7 +294,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (ContinuousGeneratedByCat.{v} X)
+  签名: 范畴 (余ntinuousGeneratedBy范畴.{v} X)
   定义体: Hom
   id X := { hom := .id }
   comp f g := {hom := g.hom.comp f.hom }
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{v} (ContinuousGeneratedByCat.{v} X)
+  签名: 余ncrete范畴.{v} (余ntinuousGeneratedBy范畴.{v} X)
   定义体: Hom.hom
   ofHom := Hom.mk
 
@@ -339,7 +339,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {Y Z : ContinuousGeneratedByCat.{v} X} (f : Y -> Z) (hf : ContinuousGeneratedBy X f)
+  签名: {Y Z : 余ntinuousGeneratedBy范畴.{v} X} (f : Y -> Z) (hf : ContinuousGeneratedBy X f)
   定义体: f
   hom.prop := hf
 -/
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ TopCat.{v} (ContinuousGeneratedByCat.{v} X)
+  签名: 有Forget₂ 顶元素范畴.{v} (余ntinuousGeneratedBy范畴.{v} X)
   定义体: .of Y
   forget₂.map f := ContinuousGeneratedByCat.homMk f (f.hom.continuous.continuousGeneratedBy)
 -/
@@ -383,7 +383,7 @@ abbreviation TopCat.toContinuousGeneratedByCat
   body: forget₂ _ _
 
 中文:
-缩写 TopCat.toContinuousGeneratedByCat
+缩写 顶元素范畴.toContinuousGeneratedByCat
   签名: :
   定义体: forget₂ _ _
 -/
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toContinuousGeneratedByCat.{v} X).Faithful
+  签名: (顶元素范畴.toContinuousGeneratedByCat.{v} X).忠实
   定义体: inferInstance
 -/
 instance : (TopCat.toContinuousGeneratedByCat.{v} X).Faithful := inferInstance
@@ -422,7 +422,7 @@ definition toTopCat
 
 中文:
 定义 toTopCat
-  签名: : ContinuousGeneratedByCat.{v} X ⥤ TopCat where
+  签名: : 余ntinuousGeneratedBy范畴.{v} X ⥤ 顶元素范畴 where
   定义体: TopCat.of (WithGeneratedByTopology X Y)
   map f := TopCat.ofHom (f.hom.prop.continuousMap)
 
@@ -443,7 +443,7 @@ lemma toTopCat_map_apply
 
 中文:
 引理 toTopCat_map_apply
-  结论: {Y Z : ContinuousGeneratedByCat.{v} X}
+  结论: {Y Z : 余ntinuousGeneratedBy范畴.{v} X}
   证明: rfl
 -/
 lemma toTopCat_map_apply {Y Z : ContinuousGeneratedByCat.{v} X}
@@ -466,7 +466,7 @@ definition fullyFaithfulToTopCat
 
 中文:
 定义 fullyFaithfulToTopCat
-  签名: : (toTopCat.{v} X).FullyFaithful where
+  签名: : (toTopCat.{v} X).满忠实 where
   定义体: homMk (WithGeneratedByTopology.equiv (X := X) ∘ g.hom ∘
       (WithGeneratedByTopology.equiv (X := X)).symm) (by
       rw [continuousGeneratedBy_iff]
@@ -491,7 +491,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toTopCat.{v} X).Full
+  签名: (toTopCat.{v} X).满
   定义体: (fullyFaithfulToTopCat X).full
 
 Depends on / 依赖: fullyFaithfulToTopCat
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toTopCat.{v} X).Faithful
+  签名: (toTopCat.{v} X).忠实
   定义体: (fullyFaithfulToTopCat X).faithful
 
 Depends on / 依赖: faithful, fullyFaithfulToTopCat
@@ -552,7 +552,7 @@ definition adjCounit
 
 中文:
 定义 adjCounit
-  签名: : TopCat.toContinuousGeneratedByCat.{v} X ⋙ toTopCat X ⟶ 𝟭 TopCat where
+  签名: : 顶元素范畴.toContinuousGeneratedByCat.{v} X ⋙ toTopCat X ⟶ 𝟭 顶元素范畴 where
   定义体: TopCat.ofHom (⟨_, WithGeneratedByTopology.continuous_equiv⟩)
 
 Depends on / 依赖: TopCat, TopCat.ofHom, WithGeneratedByTopology, WithGeneratedByTopology.continuous_equiv, continuous_equiv
@@ -573,7 +573,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : toTopCat.{v} X ⊣ TopCat.toContinuousGeneratedByCat X where
+  签名: : toTopCat.{v} X ⊣ 顶元素范畴.toContinuousGeneratedByCat X where
   定义体: adjUnitIso.hom
   counit := adjCounit
 
@@ -593,7 +593,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toTopCat.{v} X).IsLeftAdjoint
+  签名: (toTopCat.{v} X).是左伴随
   定义体: adj.isLeftAdjoint
 
 Depends on / 依赖: adj.isLeftAdjoint, isLeftAdjoint
@@ -610,7 +610,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toContinuousGeneratedByCat.{v} X).IsRightAdjoint
+  签名: (顶元素范畴.toContinuousGeneratedByCat.{v} X).是右伴随
   定义体: adj.isRightAdjoint
 
 Depends on / 依赖: adj.isRightAdjoint, isRightAdjoint
@@ -627,7 +627,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toContinuousGeneratedByCat.{v} X).Faithful
+  签名: (顶元素范畴.toContinuousGeneratedByCat.{v} X).忠实
   定义体: by ext x; exact ConcreteCategory.congr_hom h x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
@@ -645,7 +645,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (adj.{v} (X := X)).unit
+  签名: 是同构 (adj.{v} (X := X)).unit
   定义体: inferInstanceAs (IsIso adjUnitIso.hom)
 
 Depends on / 依赖: adjUnitIso, adjUnitIso.hom
@@ -668,7 +668,7 @@ definition fromGeneratedByTopCat
 
 中文:
 定义 fromGeneratedByTopCat
-  签名: : GeneratedByTopCat.{v} X ⥤ ContinuousGeneratedByCat.{v} X where
+  签名: : GeneratedByTopCat.{v} X ⥤ 余ntinuousGeneratedBy范畴.{v} X where
   定义体: .of Y.obj
   map f := ⟨f, f.hom.hom.continuous.continuousGeneratedBy⟩
 
@@ -715,7 +715,7 @@ definition toGeneratedByTopCat
 
 中文:
 定义 toGeneratedByTopCat
-  签名: : ContinuousGeneratedByCat.{v} X ⥤ GeneratedByTopCat.{v} X
+  签名: : 余ntinuousGeneratedBy范畴.{v} X ⥤ GeneratedByTopCat.{v} X
   定义体: ObjectProperty.lift _ (toTopCat X) (fun Y => by
     rw [TopCat.generatedBy_def]
     exact inferInstanceAs (IsGeneratedBy X (WithGeneratedByTopology X ↑Y)))
@@ -737,7 +737,7 @@ lemma toGeneratedByTopCat_map_apply
 
 中文:
 引理 toGeneratedByTopCat_map_apply
-  结论: {Y Z : ContinuousGeneratedByCat.{v} X} (f : Y ⟶ Z)
+  结论: {Y Z : 余ntinuousGeneratedBy范畴.{v} X} (f : Y ⟶ Z)
   证明: rfl
 -/
 lemma toGeneratedByTopCat_map_apply {Y Z : ContinuousGeneratedByCat.{v} X} (f : Y ⟶ Z)
@@ -805,7 +805,7 @@ definition equivalence
 
 中文:
 定义 equivalence
-  签名: : GeneratedByTopCat.{v} X ≌ ContinuousGeneratedByCat.{v} X where
+  签名: : GeneratedByTopCat.{v} X ≌ 余ntinuousGeneratedBy范畴.{v} X where
   定义体: fromGeneratedByTopCat
   inverse := toGeneratedByTopCat
   unitIso := equivalenceUnitIso
@@ -829,7 +829,7 @@ instance :
 
 中文:
 实例 :
-  签名: (fromGeneratedByTopCat.{v} (X := X)).IsEquivalence
+  签名: (fromGeneratedByTopCat.{v} (X := X)).是等价
   定义体: equivalence.isEquivalence_functor
 
 Depends on / 依赖: IsEquivalence
@@ -847,7 +847,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toGeneratedByTopCat.{v} (X := X)).IsEquivalence
+  签名: (toGeneratedByTopCat.{v} (X := X)).是等价
   定义体: equivalence.isEquivalence_inverse
 
 Depends on / 依赖: IsEquivalence
@@ -868,8 +868,8 @@ definition TopCat.toGeneratedByTopCat
   body: TopCat.toContinuousGeneratedByCat X ⋙ ContinuousGeneratedByCat.toGeneratedByTopCat
 
 中文:
-定义 TopCat.toGeneratedByTopCat
-  签名: : TopCat.{v} ⥤ GeneratedByTopCat X
+定义 顶元素范畴.toGeneratedByTopCat
+  签名: : 顶元素范畴.{v} ⥤ GeneratedByTopCat X
   定义体: TopCat.toContinuousGeneratedByCat X ⋙ ContinuousGeneratedByCat.toGeneratedByTopCat
 
 Depends on / 依赖: ContinuousGeneratedByCat, ContinuousGeneratedByCat.toGeneratedByTopCat, TopCat, TopCat.toContinuousGeneratedByCat, toContinuousGeneratedByCat, toGeneratedByTopCat
@@ -889,7 +889,7 @@ definition adjUnitIso
 
 中文:
 定义 adjUnitIso
-  签名: : 𝟭 (GeneratedByTopCat.{v} X) ≅ toTopCat ⋙ TopCat.toGeneratedByTopCat
+  签名: : 𝟭 (GeneratedByTopCat.{v} X) ≅ toTopCat ⋙ 顶元素范畴.toGeneratedByTopCat
   定义体: ContinuousGeneratedByCat.equivalenceUnitIso
 
 Depends on / 依赖: ContinuousGeneratedByCat, ContinuousGeneratedByCat.equivalenceUnitIso, equivalenceUnitIso
@@ -907,7 +907,7 @@ definition adjCounit
 
 中文:
 定义 adjCounit
-  签名: : TopCat.toGeneratedByTopCat.{v} (X := X) ⋙ toTopCat ⟶ 𝟭 TopCat
+  签名: : 顶元素范畴.toGeneratedByTopCat.{v} (X := X) ⋙ toTopCat ⟶ 𝟭 顶元素范畴
   定义体: ContinuousGeneratedByCat.adjCounit
 
 Depends on / 依赖: TopCat, toTopCat
@@ -931,7 +931,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : toTopCat.{v} (X := X) ⊣ TopCat.toGeneratedByTopCat where
+  签名: : toTopCat.{v} (X := X) ⊣ 顶元素范畴.toGeneratedByTopCat where
   定义体: adjUnitIso.hom
   counit := adjCounit
 
@@ -951,7 +951,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (adj.{v} (X := X)).unit
+  签名: 是同构 (adj.{v} (X := X)).unit
   定义体: inferInstanceAs (IsIso adjUnitIso.hom)
 
 Depends on / 依赖: adjUnitIso, adjUnitIso.hom
@@ -968,7 +968,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toTopCat.{v} (X := X)).IsLeftAdjoint
+  签名: (toTopCat.{v} (X := X)).是左伴随
   定义体: adj.isLeftAdjoint
 
 Depends on / 依赖: IsLeftAdjoint, adj.isLeftAdjoint, isLeftAdjoint
@@ -985,7 +985,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toGeneratedByTopCat.{v} (X := X)).IsRightAdjoint
+  签名: (顶元素范畴.toGeneratedByTopCat.{v} (X := X)).是右伴随
   定义体: adj.isRightAdjoint
 
 Depends on / 依赖: IsRightAdjoint, adj.isRightAdjoint, isRightAdjoint
@@ -1013,7 +1013,7 @@ instance :
 
 中文:
 实例 :
-  签名: (TopCat.toGeneratedByTopCat.{v} (X := X)).Faithful
+  签名: (顶元素范畴.toGeneratedByTopCat.{v} (X := X)).忠实
   定义体: by ext x; exact ConcreteCategory.congr_hom h x
 
 Depends on / 依赖: Faithful
@@ -1032,7 +1032,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coreflective (toTopCat.{v} (X := X))
+  签名: 余反射 (toTopCat.{v} (X := X))
   定义体: TopCat.toGeneratedByTopCat
   adj := adj
 -/
@@ -1066,7 +1066,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits (GeneratedByTopCat X)
+  签名: 有极限 (GeneratedByTopCat X)
   定义体: hasLimits_of_coreflective toTopCat
 
 Depends on / 依赖: hasLimits_of_coreflective, toTopCat
@@ -1084,7 +1084,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits (GeneratedByTopCat X)
+  签名: 有余极限 (GeneratedByTopCat X)
   定义体: hasColimits_of_hasColimits_createsColimits toTopCat
 
 Depends on / 依赖: hasColimits_of_hasColimits_createsColimits, toTopCat

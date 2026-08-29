@@ -42,7 +42,7 @@ definition IsEvenlyCovered
 
 中文:
 定义 IsEvenlyCovered
-  签名: (x : X) (I : 类型) [TopologicalSpace I]
+  签名: (x : X) (I : 类型) [拓扑空间 I]
   定义体: DiscreteTopology I ∧ exists U : Set X, x in U ∧ IsOpen U ∧ IsOpen (f ⁻¹' U) ∧
     exists H : f ⁻¹' U ≃ₜ U × I, forall x, (H x).1.1 = f x
 
@@ -108,7 +108,7 @@ theorem discreteTopology_fiber
 中文:
 定理 discreteTopology_fiber
   条件: {x : X} (h : IsEvenlyCovered f x I)
-  结论: DiscreteTopology (f ⁻¹' {x})
+  结论: 离散拓扑 (f ⁻¹' {x})
   证明: have := h.1; h.fiberHomeomorph.discreteTopology
 
 Depends on / 依赖: discreteTopology, fiberHomeomorph, h.fiberHomeomorph.discreteTopology
@@ -133,7 +133,7 @@ definition toTrivialization'
 
 中文:
 定义 toTrivialization'
-  签名: {x : X} [Nonempty I] (h : IsEvenlyCovered f x I)
+  签名: {x : X} [非空 I] (h : IsEvenlyCovered f x I)
   定义体: by
   choose _ U hxU hU hfU H hH using h
   classical exact
@@ -181,7 +181,7 @@ definition toTrivialization
 
 中文:
 定义 toTrivialization
-  签名: {x : X} [Nonempty I] (h : IsEvenlyCovered f x I)
+  签名: {x : X} [非空 I] (h : IsEvenlyCovered f x I)
   定义体: h.toTrivialization'.transFiberHomeomorph h.fiberHomeomorph
 
 Depends on / 依赖: fiberHomeomorph, h.fiberHomeomorph, h.toTrivialization, toTrivialization, transFiberHomeomorph
@@ -200,7 +200,7 @@ theorem mem_toTrivialization_baseSet
 
 中文:
 定理 mem_toTrivialization_baseSet
-  条件: {x : X} [Nonempty I] (h : IsEvenlyCovered f x I)
+  条件: {x : X} [非空 I] (h : IsEvenlyCovered f x I)
   证明: h.2.choose_spec.1
 
 Depends on / 依赖: choose_spec
@@ -220,7 +220,7 @@ theorem toTrivialization_apply
 
 中文:
 定理 toTrivialization_apply
-  条件: {x : E} [Nonempty I] (h : IsEvenlyCovered f (f x) I)
+  条件: {x : E} [非空 I] (h : IsEvenlyCovered f (f x) I)
   证明: h.fiberHomeomorph.symm.injective by
     simp [toTrivialization, toTrivialization', dif_pos h.2.choose_spec.1, fiberHomeomorph]
 
@@ -269,7 +269,7 @@ theorem of_fiber_homeomorph
 
 中文:
 定理 of_fiber_homeomorph
-  结论: {J} [TopologicalSpace J] (g : I ≃ₜ J) {x : X}
+  结论: {J} [拓扑空间 J] (g : I ≃ₜ J) {x : X}
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   ⟨g.discreteTopology, U, hxU, hU, hfU, H.trans (.prodCongr (.refl U) g), fun _ => by simp [hH]⟩
 
@@ -313,7 +313,7 @@ left_inv e := Subtype.ext t.symm_apply_mk_proj (t.mem_source.m
 
 中文:
 定理 of_trivialization
-  结论: [DiscreteTopology I] {x : X} {t : Trivialization I f}
+  结论: [离散拓扑 I] {x : X} {t : Trivialization I f}
   证明: ⟨‹_›, _, hx, t.open_baseSet, t.source_eq ▸ t.open_source,
   { toFun e := ⟨⟨f e, e.2⟩, (t e).2⟩
     invFun xi := ⟨t.invFun (xi.1, xi.2), by
@@ -351,7 +351,7 @@ theorem of_preimage_eq_empty
 
 中文:
 定理 of_preimage_eq_empty
-  条件: [IsEmpty I] {x : X} {U : Set X} (hUx : U in 𝓝 x) (hfU : f ⁻¹' U = ∅)
+  条件: [是空 I] {x : X} {U : 集合 X} (hUx : U in 𝓝 x) (hfU : f ⁻¹' U = ∅)
   证明: have ⟨V, hVU, hV, hxV⟩ := mem_nhds_iff.mp hUx
   have hfV : f ⁻¹' V = ∅ := Set.eq_empty_of_subset_empty ((Set.preimage_mono hVU).trans hfU.le)
   have := Set.isEmpty_coe_sort.mpr hfV
@@ -409,7 +409,7 @@ theorem subtypeVal_comp
 
 中文:
 定理 subtypeVal_comp
-  条件: (hs : IsOpen s) {x : s} {f : E -> s} (h : IsEvenlyCovered f x I)
+  条件: (hs : 是开集 s) {x : s} {f : E -> s} (h : IsEvenlyCovered f x I)
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   have : Subtype.val ∘ f ⁻¹' Subtype.val '' U = f ⁻¹' U := by ext; simp
   ⟨inst, Subtype.val '' U, ⟨x, hxU, rfl⟩, hs.isOpenMap_subtype_val _ hU, by rwa [this], .trans
@@ -439,7 +439,7 @@ theorem comp_subtypeVal
 
 中文:
 定理 comp_subtypeVal
-  结论: (hs : IsOpen s) (hfs : IsOpen (f ⁻¹' s)) {x : X} (hx : x in s)
+  结论: (hs : 是开集 s) (hfs : 是开集 (f ⁻¹' s)) {x : X} (hx : x in s)
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   (isEmpty_or_nonempty I).elim (fun _ => .of_preimage_eq_empty _ ((hs.inter hU).mem_nhds ⟨hx, hxU⟩)
  Set.not_nonempty_iff_eq_empty.mp fun ⟨e, he⟩ => isEmptyElim (H ⟨⟨e, he.1⟩, he.2⟩).2) fun _ =>
@@ -472,7 +472,7 @@ theorem comp_homeomorph
 
 中文:
 定理 comp_homeomorph
-  结论: {x : X} (h : IsEvenlyCovered f x I) {E'} [TopologicalSpace E']
+  结论: {x : X} (h : IsEvenlyCovered f x I) {E'} [拓扑空间 E']
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   ⟨inst, U, hxU, hU, hfU.preimage g.continuous, .trans (.trans
     (.setCongr <| by rw [Set.preimage_comp, g.image_symm]) (g.symm.image _).symm) H, fun _ => hH _⟩
@@ -496,7 +496,7 @@ theorem comp_homeomorph_iff
 
 中文:
 定理 comp_homeomorph_iff
-  条件: {x : X} {E'} [TopologicalSpace E'] (g : E' ≃ₜ E)
+  条件: {x : X} {E'} [拓扑空间 E'] (g : E' ≃ₜ E)
   证明: by convert! h.comp_homeomorph g.symm; ext; simp
   mpr h := h.comp_homeomorph g
 -/
@@ -518,7 +518,7 @@ theorem homeomorph_comp
 
 中文:
 定理 homeomorph_comp
-  条件: {x : X} (h : IsEvenlyCovered f x I) {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: {x : X} (h : IsEvenlyCovered f x I) {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   证明: have ⟨inst, U, hxU, hU, hfU, H, hH⟩ := h
   ⟨inst, g '' U, ⟨x, hxU, rfl⟩, g.isOpen_image.mpr hU, by simpa [Set.preimage_comp],
     .trans (.setCongr <| by simp [Set.preimage_comp]) (H.trans <| (g.image U).prodCongr (.refl I)),
@@ -544,7 +544,7 @@ theorem homeomorph_comp_iff
 
 中文:
 定理 homeomorph_comp_iff
-  条件: {x : X} {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: {x : X} {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   证明: by convert! h.homeomorph_comp g.symm <;> ((try ext); simp)
   mpr h := h.homeomorph_comp g
 -/
@@ -585,7 +585,7 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [IsEmpty E]
+  条件: [是空 E]
   结论: IsCoveringMapOn f s
   证明: fun _ _ => .to_isEvenlyCovered_preimage
   (.of_preimage_eq_empty Empty Filter.univ_mem <| Set.eq_empty_of_isEmpty _)
@@ -610,7 +610,7 @@ theorem mk'
 
 中文:
 定理 mk'
-  结论: (F : s -> 类型) [对任意 x : s, TopologicalSpace (F x)] [hF : 对任意 x : s, DiscreteTopology (F x)]
+  结论: (F : s -> 类型) [对任意 x : s, 拓扑空间 (F x)] [hF : 对任意 x : s, 离散拓扑 (F x)]
   证明: fun x hx => by
   lift x to s using hx
   by_cases hxf : x.1 in Set.range f
@@ -644,7 +644,7 @@ theorem mk
 
 中文:
 定理 mk
-  结论: (F : s -> 类型) [对任意 x, TopologicalSpace (F x)] [hF : 对任意 x, DiscreteTopology (F x)]
+  结论: (F : s -> 类型) [对任意 x, 拓扑空间 (F x)] [hF : 对任意 x, 离散拓扑 (F x)]
   证明: by
   cases isEmpty_or_nonempty E
   · exact .of_isEmpty _ _
@@ -674,7 +674,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {t : Set X} (hf : IsCoveringMapOn f s) (ht : t subseteq s)
+  条件: {t : 集合 X} (hf : IsCoveringMapOn f s) (ht : t subseteq s)
   结论: IsCoveringMapOn f t
   证明: fun x hx => hf x (ht hx)
 -/
@@ -780,7 +780,7 @@ theorem restrictPreimage
 
 中文:
 定理 restrictPreimage
-  条件: (hf : IsCoveringMapOn f s) (t : Set X)
+  条件: (hf : IsCoveringMapOn f s) (t : 集合 X)
   证明: fun x hs => ((hf x hs).restrictPreimage t x.2).to_isEvenlyCovered_preimage
 
 Depends on / 依赖: restrictPreimage, to_isEvenlyCovered_preimage
@@ -799,7 +799,7 @@ theorem comp_homeomorph
 
 中文:
 定理 comp_homeomorph
-  条件: (hf : IsCoveringMapOn f s) {E'} [TopologicalSpace E'] (g : E' ≃ₜ E)
+  条件: (hf : IsCoveringMapOn f s) {E'} [拓扑空间 E'] (g : E' ≃ₜ E)
   证明: fun x hx => ((hf x hx).comp_homeomorph _).to_isEvenlyCovered_preimage
 
 Depends on / 依赖: comp_homeomorph, to_isEvenlyCovered_preimage
@@ -819,7 +819,7 @@ theorem comp_homeomorph_iff
 
 中文:
 定理 comp_homeomorph_iff
-  条件: {E'} [TopologicalSpace E'] (g : E' ≃ₜ E)
+  条件: {E'} [拓扑空间 E'] (g : E' ≃ₜ E)
   证明: by convert! h.comp_homeomorph g.symm; ext; simp
   mpr h := h.comp_homeomorph g
 -/
@@ -838,7 +838,7 @@ theorem homeomorph_comp
 
 中文:
 定理 homeomorph_comp
-  条件: (hf : IsCoveringMapOn f s) {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: (hf : IsCoveringMapOn f s) {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   证明: fun y hy => (g.apply_symm_apply y ▸ (hf _ hy).homeomorph_comp _).to_isEvenlyCovered_preimage
 
 Depends on / 依赖: apply_symm_apply, g.apply_symm_apply, homeomorph_comp, to_isEvenlyCovered_preimage
@@ -858,7 +858,7 @@ theorem homeomorph_comp_iff
 
 中文:
 定理 homeomorph_comp_iff
-  条件: {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   证明: by convert! h.homeomorph_comp g.symm <;> (ext; simp)
   mpr h := h.homeomorph_comp g
 -/
@@ -955,7 +955,7 @@ theorem IsCoveringMapOn.of_isCoveringMap_restrictPreimage
 
 中文:
 定理 IsCoveringMapOn.of_isCoveringMap_restrictPreimage
-  结论: (hs : IsOpen s) (hfs : IsOpen (f ⁻¹' s))
+  结论: (hs : 是开集 s) (hfs : 是开集 (f ⁻¹' s))
   证明: fun x hx =>
   (((hf ⟨x, hx⟩).subtypeVal_comp _ hs).comp_subtypeVal _ hs hfs hx).to_isEvenlyCovered_preimage
 -/
@@ -978,7 +978,7 @@ theorem of_isEmpty
 
 中文:
 定理 of_isEmpty
-  条件: [IsEmpty E]
+  条件: [是空 E]
   结论: IsCoveringMap f
   证明: isCoveringMap_iff_isCoveringMapOn_univ.mpr .of_isEmpty _ _
 
@@ -1003,7 +1003,7 @@ theorem of_discreteTopology
 
 中文:
 定理 of_discreteTopology
-  条件: [DiscreteTopology E] [DiscreteTopology X]
+  条件: [离散拓扑 E] [离散拓扑 X]
   结论: IsCoveringMap f
   证明: fun x => ⟨inferInstance, {x}, rfl, isOpen_discrete _, isOpen_discrete _,
     { toFun e := ⟨⟨x, rfl⟩, e⟩
@@ -1033,7 +1033,7 @@ theorem mk'
 
 中文:
 定理 mk'
-  结论: (F : X -> 类型) [对任意 x, TopologicalSpace (F x)] [对任意 x, DiscreteTopology (F x)]
+  结论: (F : X -> 类型) [对任意 x, 拓扑空间 (F x)] [对任意 x, 离散拓扑 (F x)]
   证明: isCoveringMap_iff_isCoveringMapOn_univ.mpr .mk' f _ _ (fun x h => t x h) fun _x hx =>
     ⟨_, h.isOpen_compl.mem_nhds hx, Set.eq_empty_of_forall_notMem fun x h => h ⟨x, rfl⟩⟩
 
@@ -1055,7 +1055,7 @@ theorem mk
 
 中文:
 定理 mk
-  结论: (F : X -> 类型) [对任意 x, TopologicalSpace (F x)] [对任意 x, DiscreteTopology (F x)]
+  结论: (F : X -> 类型) [对任意 x, 拓扑空间 (F x)] [对任意 x, 离散拓扑 (F x)]
   证明: isCoveringMap_iff_isCoveringMapOn_univ.mpr .mk _ _ _ _ fun x => h x
 
 Depends on / 依赖: isCoveringMap_iff_isCoveringMapOn_univ, isCoveringMap_iff_isCoveringMapOn_univ.mpr
@@ -1078,7 +1078,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous f
+  结论: 连续 f
   证明: continuousOn_univ.mp hf.isCoveringMapOn.continuousOn
 -/
 protected theorem continuous : Continuous f :=
@@ -1110,7 +1110,7 @@ theorem isOpenMap
 
 中文:
 定理 isOpenMap
-  结论: IsOpenMap f
+  结论: 是开映射 f
   证明: hf.isLocalHomeomorph.isOpenMap
 -/
 protected theorem isOpenMap : IsOpenMap f :=
@@ -1127,8 +1127,8 @@ theorem isQuotientMap
 
 中文:
 定理 isQuotientMap
-  条件: (hf' : Function.Surjective f)
-  结论: IsQuotientMap f
+  条件: (hf' : 函数.满射 f)
+  结论: 是商映射 f
   证明: hf.isOpenMap.isQuotientMap hf.continuous hf'
 
 Depends on / 依赖: continuous, hf.continuous, hf.isOpenMap.isQuotientMap, isOpenMap, isQuotientMap
@@ -1191,7 +1191,7 @@ theorem eq_of_comp_eq
 
 中文:
 定理 eq_of_comp_eq
-  结论: [PreconnectedSpace A] (h₁ : Continuous g₁) (h₂ : Continuous g₂)
+  结论: [预连通空间 A] (h₁ : 连续 g₁) (h₂ : 连续 g₂)
   证明: hf.isSeparatedMap.eq_of_comp_eq hf.isLocalHomeomorph.isLocallyInjective h₁ h₂ he a ha
 
 Depends on / 依赖: eq_of_comp_eq, hf.isLocalHomeomorph.isLocallyInjective, hf.isSeparatedMap.eq_of_comp_eq, isLocalHomeomorph, isLocallyInjective, isSeparatedMap
@@ -1210,7 +1210,7 @@ theorem const_of_comp
 
 中文:
 定理 const_of_comp
-  结论: [PreconnectedSpace A] (cont : Continuous g)
+  结论: [预连通空间 A] (cont : 连续 g)
   证明: hf.isSeparatedMap.const_of_comp hf.isLocalHomeomorph.isLocallyInjective cont he a a'
 
 Depends on / 依赖: const_of_comp, hf.isLocalHomeomorph.isLocallyInjective, hf.isSeparatedMap.const_of_comp, isLocalHomeomorph, isLocallyInjective, isSeparatedMap
@@ -1229,7 +1229,7 @@ theorem eqOn_of_comp_eqOn
 
 中文:
 定理 eqOn_of_comp_eqOn
-  结论: (hs : IsPreconnected s) (h₁ : ContinuousOn g₁ s) (h₂ : ContinuousOn g₂ s)
+  结论: (hs : 是预连通 s) (h₁ : ContinuousOn g₁ s) (h₂ : ContinuousOn g₂ s)
   证明: hf.isSeparatedMap.eqOn_of_comp_eqOn hf.isLocalHomeomorph.isLocallyInjective hs h₁ h₂ he has ha
 
 Depends on / 依赖: eqOn_of_comp_eqOn, hf.isLocalHomeomorph.isLocallyInjective, hf.isSeparatedMap.eqOn_of_comp_eqOn, isLocalHomeomorph, isLocallyInjective, isSeparatedMap
@@ -1248,7 +1248,7 @@ theorem constOn_of_comp
 
 中文:
 定理 constOn_of_comp
-  结论: (hs : IsPreconnected s) (cont : ContinuousOn g s)
+  结论: (hs : 是预连通 s) (cont : ContinuousOn g s)
   证明: hf.isSeparatedMap.constOn_of_comp hf.isLocalHomeomorph.isLocallyInjective hs cont he ha ha'
 
 Depends on / 依赖: constOn_of_comp, hf.isLocalHomeomorph.isLocallyInjective, hf.isSeparatedMap.constOn_of_comp, isLocalHomeomorph, isLocallyInjective, isSeparatedMap
@@ -1271,7 +1271,7 @@ theorem restrictPreimage
 
 中文:
 定理 restrictPreimage
-  条件: (t : Set X)
+  条件: (t : 集合 X)
   结论: IsCoveringMap (t.restrictPreimage f)
   证明: by
   rw [isCoveringMap_iff_isCoveringMapOn_univ] at hf ⊢
@@ -1296,7 +1296,7 @@ theorem comp_homeomorph
 
 中文:
 定理 comp_homeomorph
-  条件: {E'} [TopologicalSpace E'] (g : E' ≃ₜ E)
+  条件: {E'} [拓扑空间 E'] (g : E' ≃ₜ E)
   结论: IsCoveringMap (f ∘ g)
   证明: by
   rw [isCoveringMap_iff_isCoveringMapOn_univ] at hf ⊢
@@ -1323,7 +1323,7 @@ omit hf
 
 中文:
 定理 homeomorph_comp
-  条件: {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   结论: IsCoveringMap (g ∘ f)
   证明: by
   rw [isCoveringMap_iff_isCoveringMapOn_univ] at hf ⊢
@@ -1350,7 +1350,7 @@ theorem comp_homeomorph_iff
 
 中文:
 定理 comp_homeomorph_iff
-  条件: {E'} [TopologicalSpace E'] (g : E' ≃ₜ E)
+  条件: {E'} [拓扑空间 E'] (g : E' ≃ₜ E)
   证明: by convert! h.comp_homeomorph g.symm; ext; simp
   mpr h := h.comp_homeomorph g
 
@@ -1372,7 +1372,7 @@ theorem homeomorph_comp_iff
 
 中文:
 定理 homeomorph_comp_iff
-  条件: {Y} [TopologicalSpace Y] (g : X ≃ₜ Y)
+  条件: {Y} [拓扑空间 Y] (g : X ≃ₜ Y)
   证明: by convert! h.homeomorph_comp g.symm; ext; simp
   mpr h := h.homeomorph_comp g
 
@@ -1397,7 +1397,7 @@ of_isCoveringMap_restrictPreimage _ hs (by simp [eq])
 
 中文:
 定理 IsCoveringMapOn.of_isCoveringMap_subtype
-  结论: {s : Set X} (hs : IsOpen s) {f : E -> X}
+  结论: {s : 集合 X} (hs : 是开集 s) {f : E -> X}
   证明: have eq : f ⁻¹' s = .univ := by simpa [Set.range, Set.subset_def] using h
 of_isCoveringMap_restrictPreimage _ hs (by simp [eq])
     hf.comp_homeomorph ((Homeomorph.setCongr eq).trans (Homeomorph.Set.univ E))
@@ -1423,7 +1423,7 @@ theorem IsFiberBundle.isCoveringMap
 
 中文:
 定理 IsFiberBundle.isCoveringMap
-  结论: {F : 类型} [TopologicalSpace F] [DiscreteTopology F]
+  结论: {F : 类型} [拓扑空间 F] [离散拓扑 F]
   证明: IsCoveringMap.mk f (fun _ => F) (fun x => Classical.choose (hf x)) fun x =>
     Classical.choose_spec (hf x)
 -/
@@ -1441,8 +1441,8 @@ theorem FiberBundle.isCoveringMap
   proof: IsFiberBundle.isCoveringMap fun x => ⟨trivializationAt F E x, mem_baseSet_trivializationAt F E x⟩
 
 中文:
-定理 FiberBundle.isCoveringMap
-  结论: {F : 类型} {E : X -> 类型} [TopologicalSpace F]
+定理 纤维丛.isCoveringMap
+  结论: {F : 类型} {E : X -> 类型} [拓扑空间 F]
   证明: IsFiberBundle.isCoveringMap fun x => ⟨trivializationAt F E x, mem_baseSet_trivializationAt F E x⟩
 -/
 protected theorem FiberBundle.isCoveringMap {F : Type*} {E : X -> Type*} [TopologicalSpace F]
@@ -1468,8 +1468,8 @@ definition IsOpen.trivializationDiscrete
     in
 
 中文:
-定义 IsOpen.trivializationDiscrete
-  签名: [Nonempty (X -> E)]
+定义 是开集.trivializationDiscrete
+  签名: [非空 (X -> E)]
   定义体: by
   have exhaustive' := exhaustive
   simp_rw [Set.subset_def, Set.mem_iUnion] at exhaustive
@@ -1551,8 +1551,8 @@ theorem IsDiscrete.of_openPartialHomeomorph
       (htx he'.2).trans (htx he).symm) <| Set.singleton_subset_iff.mpr ⟨hφ, he⟩⟩
 
 中文:
-定理 IsDiscrete.of_openPartialHomeomorph
-  结论: {t : Set E} {x : X}
+定理 是离散.of_openPartialHomeomorph
+  结论: {t : 集合 E} {x : X}
   证明: isDiscrete_iff_forall_mem_exists_isOpen.mpr fun e he => by
     obtain ⟨φ, hφ, rfl⟩ := hf e he
     exact ⟨_, φ.open_source, subset_antisymm (fun e' he' => φ.injOn he'.1 hφ <|
@@ -1584,8 +1584,8 @@ theorem IsClosedMap.isEvenlyCovered_of_openPartialHomeomorph
   -- separately, choose pairwise disjoint neig
 
 中文:
-定理 IsClosedMap.isEvenlyCovered_of_openPartialHomeomorph
-  结论: [T2Space E] {x : X}
+定理 是闭映射.isEvenlyCovered_of_openPartialHomeomorph
+  结论: [T2空间 E] {x : X}
   证明: by
   have : DiscreteTopology (f ⁻¹' {x}) :=
     (IsDiscrete.of_openPartialHomeomorph f subset_rfl h).1
@@ -1658,8 +1658,8 @@ alias IsClosedMap.isCoveringMapOn_of_openPartialHomeomorph :=
   IsClosedMap.isCoveringMapOn_of_isLocalHomeomorphOn
 
 中文:
-定理 IsClosedMap.isCoveringMapOn_of_isLocalHomeomorphOn
-  结论: [T2Space E]
+定理 是闭映射.isCoveringMapOn_of_isLocalHomeomorphOn
+  结论: [T2空间 E]
   证明: by
   intro x hx
   refine hf.isEvenlyCovered_of_openPartialHomeomorph (hs x hx) fun e he => ?_
@@ -1770,7 +1770,7 @@ lemma isLocalHomeomorph_iff_isCoveringMap
 
 中文:
 引理 isLocalHomeomorph_iff_isCoveringMap
-  条件: [T2Space E] [T2Space X] [CompactSpace E]
+  条件: [T2空间 E] [T2空间 X] [紧空间 E]
   证明: by
   refine ⟨fun h => ?_, IsCoveringMap.isLocalHomeomorph⟩
   have hf : Continuous f := by

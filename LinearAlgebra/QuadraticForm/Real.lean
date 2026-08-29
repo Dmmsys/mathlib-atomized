@@ -90,7 +90,7 @@ theorem equivalent_sign_ne_zero_weighted_sum_squared
 
 中文:
 定理 equivalent_sign_ne_zero_weighted_sum_squared
-  结论: {M : 类型} [AddCommGroup M] [Module 实数 M]
+  结论: {M : 类型} [加法交换群 M] [模 实数 M]
   证明: let ⟨w, ⟨hw₁⟩⟩ := Q.equivalent_weightedSumSquares_units_of_nondegenerate' hQ
   ⟨sign ∘ ((↑) : Realˣ -> Real) ∘ w, fun i => sign_ne_zero.2 (w i).ne_zero,
     ⟨hw₁.trans (isometryEquivSignWeightedSumSquares (((↑) : Realˣ -> Real) ∘ w))⟩⟩
@@ -116,7 +116,7 @@ theorem equivalent_one_neg_one_weighted_sum_squared
 
 中文:
 定理 equivalent_one_neg_one_weighted_sum_squared
-  结论: {M : 类型} [AddCommGroup M] [Module 实数 M]
+  结论: {M : 类型} [加法交换群 M] [模 实数 M]
   证明: let ⟨w, hw₀, hw⟩ := Q.equivalent_sign_ne_zero_weighted_sum_squared hQ
   ⟨(w ·), fun i => by cases hi : w i <;> simp_all, hw⟩
 
@@ -140,7 +140,7 @@ theorem equivalent_signType_weighted_sum_squared
 
 中文:
 定理 equivalent_signType_weighted_sum_squared
-  结论: {M : 类型} [AddCommGroup M] [Module 实数 M]
+  结论: {M : 类型} [加法交换群 M] [模 实数 M]
   证明: let ⟨w, ⟨hw₁⟩⟩ := Q.equivalent_weightedSumSquares
   ⟨sign ∘ w, ⟨hw₁.trans (isometryEquivSignWeightedSumSquares w)⟩⟩
 
@@ -164,7 +164,7 @@ theorem equivalent_one_zero_neg_one_weighted_sum_squared
 
 中文:
 定理 equivalent_one_zero_neg_one_weighted_sum_squared
-  结论: {M : 类型} [AddCommGroup M] [Module 实数 M]
+  结论: {M : 类型} [加法交换群 M] [模 实数 M]
   证明: let ⟨w, hw⟩ := Q.equivalent_signType_weighted_sum_squared
   ⟨(w ·), fun i => by cases h : w i <;> simp [h], hw⟩
 

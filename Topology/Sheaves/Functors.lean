@@ -61,8 +61,8 @@ theorem pushforward_sheaf_of_sheaf
 
 中文:
 定理 pushforward_sheaf_of_sheaf
-  条件: {F : X.Presheaf C} (h : F.IsSheaf)
-  结论: (f _* F).IsSheaf
+  条件: {F : X.预层 C} (h : F.是层)
+  结论: (f _* F).是层
   证明: (Opens.map f).op_comp_isSheaf _ _ ⟨_, h⟩
 
 Depends on / 依赖: Opens.map, op_comp_isSheaf
@@ -136,7 +136,7 @@ lemma pushforward_obj_val
 
 中文:
 引理 pushforward_obj_val
-  条件: (f : X ⟶ Y) (F : X.Sheaf C)
+  条件: (f : X ⟶ Y) (F : X.层 C)
   证明: rfl
 -/
 @[simp] lemma pushforward_obj_val (f : X ⟶ Y) (F : X.Sheaf C) :
@@ -152,7 +152,7 @@ lemma pushforward_map
 
 中文:
 引理 pushforward_map
-  条件: (f : X ⟶ Y) {F F' : X.Sheaf C} (α : F ⟶ F')
+  条件: (f : X ⟶ Y) {F F' : X.层 C} (α : F ⟶ F')
   证明: rfl
 -/
 @[simp] lemma pushforward_map (f : X ⟶ Y) {F F' : X.Sheaf C} (α : F ⟶ F') :
@@ -230,7 +230,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pullback A f).IsLeftAdjoint
+  签名: (pullback A f).是左伴随
   定义体: (pullbackPushforwardAdjunction A f).isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward A f).IsRightAdjoint
+  签名: (pushforward A f).是右伴随
   定义体: (pullbackPushforwardAdjunction A f).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, pullbackPushforwardAdjunction
@@ -275,7 +275,7 @@ definition sheafPullback
 
 中文:
 定义 sheafPullback
-  签名: : Y.Sheaf A ⥤ X.Sheaf A
+  签名: : Y.层 A ⥤ X.层 A
   定义体: haveI := Topology.IsOpenEmbedding.functor_isContinuous hf
   hf.functor.sheafPushforwardContinuous _ _ _
 
@@ -308,7 +308,7 @@ definition sheafPullbackIso
 
 中文:
 定义 sheafPullbackIso
-  签名: : Sheaf.pullback A f ≅ hf.sheafPullback A
+  签名: : 层.pullback A f ≅ hf.sheafPullback A
   定义体: by
   refine Sheaf.pullbackIso A f ≪≫ NatIso.ofComponents (fun F => ?_) (fun u => ?_)
   · exact (presheafToSheaf (Opens.grothendieckTopology ↑X) A).mapIso

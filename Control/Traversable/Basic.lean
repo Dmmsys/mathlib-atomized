@@ -83,7 +83,7 @@ structure ApplicativeTransformation
 
 中文:
 结构 ApplicativeTransformation
-  参数: : Type max (u + 1) v w where
+  参数: : 类型 最大值 (u + 1) v w where
   公理与运算 (3 个):
     - app : 对任意 α : 类型u, F α -> G α
     - preserves_pure' : 对任意 {α : 类型u} (x : α), app _ (pure x) = pure x
@@ -338,7 +338,7 @@ theorem preserves_map'
 中文:
 定理 preserves_map'
   条件: {α β} (x : α -> β)
-  结论: @η _ ∘ Functor.map x = Functor.map x ∘ @η _
+  结论: @η _ ∘ 函子.map x = 函子.map x ∘ @η _
   证明: by
   ext y
   exact preserves_map η x y
@@ -385,7 +385,7 @@ universe s t
 
 中文:
 实例 :
-  签名: Inhabited (ApplicativeTransformation F F)
+  签名: 可居 (ApplicativeTransformation F F)
   定义体: ⟨idTransformation⟩
 
 universe s t
@@ -456,7 +456,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {I : 类型u -> Type t} [Applicative I]
+  结论: {I : 类型u -> 类型 t} [适用 I]
   证明: rfl
 
 @[simp]
@@ -523,11 +523,11 @@ class Traversable
     - traverse : forall {m : Type u -> Type u} [Applicative m] {α β}, (α -> m β) -> t α -> m (t β)
 
 中文:
-类 Traversable
+类 可遍历
   参数: (t : 类型u -> 类型u)
-  继承: Functor t
+  继承: 函子 t
   公理与运算 (1 个):
-    - traverse : 对任意 {m : 类型u -> 类型u} [Applicative m] {α β}, (α -> m β) -> t α -> m (t β)
+    - traverse : 对任意 {m : 类型u -> 类型u} [适用 m] {α β}, (α -> m β) -> t α -> m (t β)
 -/
 class Traversable (t : Type u -> Type u) extends Functor t where
   /-- The function commuting a traversable functor `t` with an arbitrary applicative functor `m`. -/
@@ -553,7 +553,7 @@ definition sequence
 
 中文:
 定义 sequence
-  签名: [Traversable t]
+  签名: [可遍历 t]
   定义体: traverse id
 
 Depends on / 依赖: traverse
@@ -577,14 +577,14 @@ class LawfulTraversable
     - naturality : forall {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α), η (traverse f x) = traverse (@η _ ∘ f) x
 
 中文:
-类 LawfulTraversable
-  参数: (t : 类型u -> 类型u) [Traversable t]
-  继承: LawfulFunctor t
+类 合法可遍历
+  参数: (t : 类型u -> 类型u) [可遍历 t]
+  继承: Lawful函子 t
   公理与运算 (4 个):
     - id_traverse : 对任意 {α} (x : t α), traverse (pure : α -> Id α) x = pure x
-    - comp_traverse : 对任意 {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] {α β γ} (f : β -> F γ) (g : α -> G β) (x : t α), traverse (Functor.Comp.mk ∘ map f ∘ g) x = Comp.mk (map (traverse f) (traverse g x))
+    - comp_traverse : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] {α β γ} (f : β -> F γ) (g : α -> G β) (x : t α), traverse (函子.复合.mk ∘ map f ∘ g) x = 复合.mk (map (traverse f) (traverse g x))
     - traverse_eq_map_id : 对任意 {α β} (f : α -> β) (x : t α), traverse ((pure : β -> Id β) ∘ f) x = pure (f <$> x)
-    - naturality : 对任意 {F G} [Applicative F] [Applicative G] [LawfulApplicative F] [LawfulApplicative G] (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α), η (traverse f x) = traverse (@η _ ∘ f) x
+    - naturality : 对任意 {F G} [适用 F] [适用 G] [合法适用 F] [合法适用 G] (η : ApplicativeTransformation F G) {α β} (f : α -> F β) (x : t α), η (traverse f x) = traverse (@η _ ∘ f) x
 -/
 class LawfulTraversable (t : Type u -> Type u) [Traversable t] : Prop extends LawfulFunctor t where
   /-- `traverse` plays well with `pure` of the identity monad -/
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable Id
+  签名: 可遍历 Id
   定义体: ⟨id⟩
 -/
 instance : Traversable Id :=
@@ -633,7 +633,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulTraversable Id
+  签名: 合法可遍历 Id
   定义体: rfl
   comp_traverse _ _ _ := rfl
   traverse_eq_map_id _ _ := rfl
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable Option
+  签名: 可遍历 选项类型
   定义体: ⟨Option.traverse⟩
 
 Depends on / 依赖: Option.traverse, traverse
@@ -675,7 +675,7 @@ instance :
 
 中文:
 实例 :
-  签名: Traversable List
+  签名: 可遍历 列表
   定义体: ⟨List.traverse⟩
 
 Depends on / 依赖: List.traverse, traverse

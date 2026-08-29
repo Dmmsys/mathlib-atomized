@@ -59,13 +59,13 @@ structure HomologicalComplex
     - d_comp_d' : forall i j k, c.Rel i j -> c.Rel j k -> d i j ≫ d j k = 0  [default: by cat_disch]
 
 中文:
-结构 HomologicalComplex
-  参数: (c : ComplexShape ι)
+结构 同调复形
+  参数: (c : 余mplexShape ι)
   公理与运算 (4 个):
     - X : ι -> V
     - d : 对任意 i j, X i ⟶ X j
-    - shape : 对任意 i j, ¬c.Rel i j -> d i j = 0  [默认: by cat_disch]
-    - d_comp_d' : 对任意 i j k, c.Rel i j -> c.Rel j k -> d i j ≫ d j k = 0  [默认: by cat_disch]
+    - shape : 对任意 i j, ¬c.关系 i j -> d i j = 0  [默认: by cat_disch]
+    - d_comp_d' : 对任意 i j k, c.关系 i j -> c.关系 j k -> d i j ≫ d j k = 0  [默认: by cat_disch]
 
 Depends on / 依赖: c.Rel, cat_disch, d_comp_d
 -/
@@ -98,7 +98,7 @@ theorem d_comp_d
 
 中文:
 定理 d_comp_d
-  条件: (C : HomologicalComplex V c) (i j k : ι)
+  条件: (C : 同调复形 V c) (i j k : ι)
   结论: C.d i j ≫ C.d j k = 0
   证明: by
   by_cases hij : c.Rel i j
@@ -135,7 +135,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {C₁ C₂ : HomologicalComplex V c} (h_X : C₁.X = C₂.X)
+  结论: {C₁ C₂ : 同调复形 V c} (h_X : C₁.X = C₂.X)
   证明: by
   obtain ⟨X₁, d₁, s₁, h₁⟩ := C₁
   obtain ⟨X₂, d₂, s₂, h₂⟩ := C₂
@@ -176,7 +176,7 @@ definition XIsoOfEq
 
 中文:
 定义 XIsoOfEq
-  签名: (K : HomologicalComplex V c) {p q : ι} (h : p = q)
+  签名: (K : 同调复形 V c) {p q : ι} (h : p = q)
   定义体: eqToIso (by rw [h])
 
 @[simp]
@@ -199,7 +199,7 @@ lemma XIsoOfEq_rfl
 
 中文:
 引理 XIsoOfEq_rfl
-  条件: (K : HomologicalComplex V c) (p : ι)
+  条件: (K : 同调复形 V c) (p : ι)
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -222,7 +222,7 @@ lemma XIsoOfEq_hom_comp_XIsoOfEq_hom
 
 中文:
 引理 XIsoOfEq_hom_comp_XIsoOfEq_hom
-  结论: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
   证明: by
   dsimp [XIsoOfEq]
   simp only [eqToHom_trans]
@@ -252,7 +252,7 @@ lemma XIsoOfEq_hom_comp_XIsoOfEq_inv
 
 中文:
 引理 XIsoOfEq_hom_comp_XIsoOfEq_inv
-  结论: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
   证明: by
   dsimp [XIsoOfEq]
   simp only [eqToHom_trans]
@@ -282,7 +282,7 @@ lemma XIsoOfEq_inv_comp_XIsoOfEq_hom
 
 中文:
 引理 XIsoOfEq_inv_comp_XIsoOfEq_hom
-  结论: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
   证明: by
   dsimp [XIsoOfEq]
   simp only [eqToHom_trans]
@@ -312,7 +312,7 @@ lemma XIsoOfEq_inv_comp_XIsoOfEq_inv
 
 中文:
 引理 XIsoOfEq_inv_comp_XIsoOfEq_inv
-  结论: (K : HomologicalComplex V c) {p₁ p₂ p₃ : ι}
+  结论: (K : 同调复形 V c) {p₁ p₂ p₃ : ι}
   证明: by
   dsimp [XIsoOfEq]
   simp only [eqToHom_trans]
@@ -340,7 +340,7 @@ lemma XIsoOfEq_hom_comp_d
 
 中文:
 引理 XIsoOfEq_hom_comp_d
-  条件: (K : HomologicalComplex V c) {p₁ p₂ : ι} (h : p₁ = p₂) (p₃ : ι)
+  条件: (K : 同调复形 V c) {p₁ p₂ : ι} (h : p₁ = p₂) (p₃ : ι)
   证明: by subst h; simp
 
 @[reassoc (attr := simp)]
@@ -361,7 +361,7 @@ lemma XIsoOfEq_inv_comp_d
 
 中文:
 引理 XIsoOfEq_inv_comp_d
-  条件: (K : HomologicalComplex V c) {p₂ p₁ : ι} (h : p₂ = p₁) (p₃ : ι)
+  条件: (K : 同调复形 V c) {p₂ p₁ : ι} (h : p₂ = p₁) (p₃ : ι)
   证明: by subst h; simp
 
 @[reassoc (attr := simp)]
@@ -382,7 +382,7 @@ lemma d_comp_XIsoOfEq_hom
 
 中文:
 引理 d_comp_XIsoOfEq_hom
-  条件: (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₂ = p₃) (p₁ : ι)
+  条件: (K : 同调复形 V c) {p₂ p₃ : ι} (h : p₂ = p₃) (p₁ : ι)
   证明: by subst h; simp
 
 @[reassoc (attr := simp)]
@@ -401,7 +401,7 @@ lemma d_comp_XIsoOfEq_inv
 
 中文:
 引理 d_comp_XIsoOfEq_inv
-  条件: (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι)
+  条件: (K : 同调复形 V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι)
   证明: by subst h; simp
 -/
 lemma d_comp_XIsoOfEq_inv (K : HomologicalComplex V c) {p₂ p₃ : ι} (h : p₃ = p₂) (p₁ : ι) :
@@ -418,8 +418,8 @@ abbreviation ChainComplex
   body: HomologicalComplex V (ComplexShape.down α)
 
 中文:
-缩写 ChainComplex
-  签名: (α : 类型) [AddRightCancelSemigroup α] [One α]
+缩写 链复形
+  签名: (α : 类型) [加法右消去半群 α] [幺 α]
   定义体: HomologicalComplex V (ComplexShape.down α)
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, HomologicalComplex
@@ -436,8 +436,8 @@ abbreviation CochainComplex
   body: HomologicalComplex V (ComplexShape.up α)
 
 中文:
-缩写 CochainComplex
-  签名: (α : 类型) [AddRightCancelSemigroup α] [One α]
+缩写 上链复形
+  签名: (α : 类型) [加法右消去半群 α] [幺 α]
   定义体: HomologicalComplex V (ComplexShape.up α)
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, HomologicalComplex
@@ -460,7 +460,7 @@ theorem prev
 
 中文:
 定理 prev
-  条件: (α : 类型) [AddRightCancelSemigroup α] [One α] (i : α)
+  条件: (α : 类型) [加法右消去半群 α] [幺 α] (i : α)
   证明: (ComplexShape.down α).prev_eq' rfl
 
 @[simp]
@@ -485,8 +485,8 @@ theorem next
 
 中文:
 定理 next
-  条件: (α : 类型) [AddGroup α] [One α] (i : α)
-  结论: (ComplexShape.down α).next i = i - 1
+  条件: (α : 类型) [加法群 α] [幺 α] (i : α)
+  结论: (余mplexShape.down α).next i = i - 1
   证明: (ComplexShape.down α).next_eq' sub_add_cancel _ _
 
 @[simp]
@@ -513,7 +513,7 @@ theorem next_nat_zero
 
 中文:
 定理 next_nat_zero
-  结论: (ComplexShape.down 自然数).next 0 = 0
+  结论: (余mplexShape.down 自然数).next 0 = 0
   证明: by
   refine dif_neg ?_
   push Not
@@ -543,7 +543,7 @@ theorem next_nat_succ
 中文:
 定理 next_nat_succ
   条件: (i : 自然数)
-  结论: (ComplexShape.down 自然数).next (i + 1) = i
+  结论: (余mplexShape.down 自然数).next (i + 1) = i
   证明: (ComplexShape.down Nat).next_eq' rfl
 
 Depends on / 依赖: ComplexShape, ComplexShape.down, next_eq
@@ -569,8 +569,8 @@ theorem prev
 
 中文:
 定理 prev
-  条件: (α : 类型) [AddGroup α] [One α] (i : α)
-  结论: (ComplexShape.up α).prev i = i - 1
+  条件: (α : 类型) [加法群 α] [幺 α] (i : α)
+  结论: (余mplexShape.up α).prev i = i - 1
   证明: (ComplexShape.up α).prev_eq' sub_add_cancel _ _
 
 @[simp]
@@ -593,7 +593,7 @@ theorem next
 
 中文:
 定理 next
-  条件: (α : 类型) [AddRightCancelSemigroup α] [One α] (i : α)
+  条件: (α : 类型) [加法右消去半群 α] [幺 α] (i : α)
   证明: (ComplexShape.up α).next_eq' rfl
 
 @[simp]
@@ -621,7 +621,7 @@ theorem prev_nat_zero
 
 中文:
 定理 prev_nat_zero
-  结论: (ComplexShape.up 自然数).prev 0 = 0
+  结论: (余mplexShape.up 自然数).prev 0 = 0
   证明: by
   refine dif_neg ?_
   push Not
@@ -651,7 +651,7 @@ theorem prev_nat_succ
 中文:
 定理 prev_nat_succ
   条件: (i : 自然数)
-  结论: (ComplexShape.up 自然数).prev (i + 1) = i
+  结论: (余mplexShape.up 自然数).prev (i + 1) = i
   证明: (ComplexShape.up Nat).prev_eq' rfl
 
 Depends on / 依赖: ComplexShape, ComplexShape.up, prev_eq
@@ -681,11 +681,11 @@ structure Hom
     - comm' : forall i j, c.Rel i j -> f i ≫ B.d i j = A.d i j ≫ f j  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (A B : HomologicalComplex V c)
+结构 态射
+  参数: (A B : 同调复形 V c)
   公理与运算 (2 个):
     - f : 对任意 i, A.X i ⟶ B.X i
-    - comm' : 对任意 i j, c.Rel i j -> f i ≫ B.d i j = A.d i j ≫ f j  [默认: by cat_disch]
+    - comm' : 对任意 i j, c.关系 i j -> f i ≫ B.d i j = A.d i j ≫ f j  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -706,8 +706,8 @@ theorem Hom.comm
   · rw [A.shape i j hij, B.shape i j hij, comp_zero, zero_comp]
 
 中文:
-定理 Hom.comm
-  条件: {A B : HomologicalComplex V c} (f : A.Hom B) (i j : ι)
+定理 态射.comm
+  条件: {A B : 同调复形 V c} (f : A.态射 B) (i j : ι)
   证明: by
   by_cases hij : c.Rel i j
   · exact f.comm' i j hij
@@ -734,7 +734,7 @@ definition id
 
 中文:
 定义 id
-  签名: (A : HomologicalComplex V c)
+  签名: (A : 同调复形 V c)
   定义体: 𝟙 _
 -/
 def id (A : HomologicalComplex V c) : Hom A A where f _ := 𝟙 _
@@ -749,7 +749,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (A B C : HomologicalComplex V c) (φ : Hom A B) (ψ : Hom B C)
+  签名: (A B C : 同调复形 V c) (φ : 态射 A B) (ψ : 态射 B C)
   定义体: φ.f i ≫ ψ.f i
 -/
 def comp (A B C : HomologicalComplex V c) (φ : Hom A B) (ψ : Hom B C) : Hom A C where
@@ -771,7 +771,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (HomologicalComplex V c)
+  签名: 范畴 (同调复形 V c)
   定义体: Hom
   id := id
   comp := comp _ _ _
@@ -799,7 +799,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {C D : HomologicalComplex V c} (f g : C ⟶ D)
+  结论: {C D : 同调复形 V c} (f g : C ⟶ D)
   证明: by
   apply Hom.ext
   funext
@@ -829,8 +829,8 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (C : HomologicalComplex V c) (i : ι)
-  结论: Hom.f (𝟙 C) i = 𝟙 (C.X i)
+  条件: (C : 同调复形 V c) (i : ι)
+  结论: 态射.f (𝟙 C) i = 𝟙 (C.X i)
   证明: rfl
 
 @[simp, reassoc]
@@ -851,7 +851,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {C₁ C₂ C₃ : HomologicalComplex V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
+  条件: {C₁ C₂ C₃ : 同调复形 V c} (f : C₁ ⟶ C₂) (g : C₂ ⟶ C₃) (i : ι)
   证明: rfl
 
 @[simp]
@@ -873,7 +873,7 @@ theorem eqToHom_f
 
 中文:
 定理 eqToHom_f
-  条件: {C₁ C₂ : HomologicalComplex V c} (h : C₁ = C₂) (n : ι)
+  条件: {C₁ C₂ : 同调复形 V c} (h : C₁ = C₂) (n : ι)
   证明: by
   subst h
   rfl
@@ -895,7 +895,7 @@ theorem hom_f_injective
 
 中文:
 定理 hom_f_injective
-  条件: {C₁ C₂ : HomologicalComplex V c}
+  条件: {C₁ C₂ : 同调复形 V c}
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -918,7 +918,7 @@ theorem zero_f
 
 中文:
 定理 zero_f
-  条件: (C D : HomologicalComplex V c) (i : ι)
+  条件: (C D : 同调复形 V c) (i : ι)
   结论: (0 : C ⟶ D).f i = 0
   证明: rfl
 -/
@@ -934,7 +934,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (HomologicalComplex V c)
+  签名: 有ZeroMorphisms (同调复形 V c)
 -/
 instance : HasZeroMorphisms (HomologicalComplex V c) where
 
@@ -951,7 +951,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: [HasZeroObject V]
+  签名: [有ZeroObject V]
   定义体: 0
   d _ _ := 0
 -/
@@ -975,8 +975,8 @@ theorem isZero_zero
 
 中文:
 定理 isZero_zero
-  条件: [HasZeroObject V]
-  结论: IsZero (zero : HomologicalComplex V c)
+  条件: [有ZeroObject V]
+  结论: 是零 (zero : 同调复形 V c)
   证明: by
   refine ⟨fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩, fun X => ⟨⟨⟨0⟩, fun f => ?_⟩⟩⟩
   all_goals
@@ -1002,8 +1002,8 @@ instance [HasZeroObject
   body: ⟨⟨zero, isZero_zero⟩⟩
 
 中文:
-实例 [HasZeroObject
-  签名: V] : HasZeroObject (HomologicalComplex V c)
+实例 [有ZeroObject
+  签名: V] : 有ZeroObject (同调复形 V c)
   定义体: ⟨⟨zero, isZero_zero⟩⟩
 
 Depends on / 依赖: isZero_zero
@@ -1020,8 +1020,8 @@ instance [HasZeroObject
   body: ⟨zero⟩
 
 中文:
-实例 [HasZeroObject
-  签名: V] : Inhabited (HomologicalComplex V c)
+实例 [有ZeroObject
+  签名: V] : 可居 (同调复形 V c)
   定义体: ⟨zero⟩
 -/
 noncomputable instance [HasZeroObject V] : Inhabited (HomologicalComplex V c) :=
@@ -1037,7 +1037,7 @@ theorem congr_hom
 
 中文:
 定理 congr_hom
-  条件: {C D : HomologicalComplex V c} {f g : C ⟶ D} (w : f = g) (i : ι)
+  条件: {C D : 同调复形 V c} {f g : C ⟶ D} (w : f = g) (i : ι)
   证明: congr_fun (congr_arg Hom.f w) i
 
 Depends on / 依赖: Hom.f, congr_arg, congr_fun
@@ -1059,7 +1059,7 @@ lemma mono_of_mono_f
 
 中文:
 引理 mono_of_mono_f
-  结论: {K L : HomologicalComplex V c} (φ : K ⟶ L)
+  结论: {K L : 同调复形 V c} (φ : K ⟶ L)
   证明: by
     ext i
     rw [← cancel_mono (φ.f i)]
@@ -1087,7 +1087,7 @@ lemma epi_of_epi_f
 
 中文:
 引理 epi_of_epi_f
-  结论: {K L : HomologicalComplex V c} (φ : K ⟶ L)
+  结论: {K L : 同调复形 V c} (φ : K ⟶ L)
   证明: by
     ext i
     rw [← cancel_epi (φ.f i)]
@@ -1142,7 +1142,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : HomologicalComplex V c ⥤ GradedObject ι V where
+  签名: : 同调复形 V c ⥤ GradedObject ι V where
   定义体: C.X
   map f := f.f
 -/
@@ -1162,7 +1162,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget V c).Faithful
+  签名: (forget V c).忠实
   定义体: by
     ext i
     exact congr_fun h i
@@ -1206,7 +1206,7 @@ definition dNatTrans
   body: X.d i j
 
 中文:
-定义 dNatTrans
+定义 d自然数Trans
   签名: (i j : ι)
   定义体: X.d i j
 -/
@@ -1231,7 +1231,7 @@ lemma XIsoOfEq_hom_naturality
 
 中文:
 引理 XIsoOfEq_hom_naturality
-  条件: {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
+  条件: {K L : 同调复形 V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
   证明: by subst h; simp
 
 @[reassoc]
@@ -1250,7 +1250,7 @@ lemma XIsoOfEq_inv_naturality
 
 中文:
 引理 XIsoOfEq_inv_naturality
-  条件: {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
+  条件: {K L : 同调复形 V c} (φ : K ⟶ L) {n n' : ι} (h : n = n')
   证明: by subst h; simp
 -/
 lemma XIsoOfEq_inv_naturality {K L : HomologicalComplex V c} (φ : K ⟶ L) {n n' : ι} (h : n = n') :
@@ -1272,7 +1272,7 @@ theorem d_comp_eqToHom
 
 中文:
 定理 d_comp_eqToHom
-  条件: {i j j' : ι} (rij : c.Rel i j) (rij' : c.Rel i j')
+  条件: {i j j' : ι} (rij : c.关系 i j) (rij' : c.关系 i j')
   证明: by
   obtain rfl := c.next_eq rij rij'
   simp only [eqToHom_refl, comp_id]
@@ -1300,7 +1300,7 @@ theorem eqToHom_comp_d
 
 中文:
 定理 eqToHom_comp_d
-  条件: {i i' j : ι} (rij : c.Rel i j) (rij' : c.Rel i' j)
+  条件: {i i' j : ι} (rij : c.关系 i j) (rij' : c.关系 i' j)
   证明: by
   obtain rfl := c.prev_eq rij rij'
   simp only [eqToHom_refl, id_comp]
@@ -1324,7 +1324,7 @@ theorem kernel_eq_kernel
 
 中文:
 定理 kernel_eq_kernel
-  条件: [HasKernels V] {i j j' : ι} (r : c.Rel i j) (r' : c.Rel i j')
+  条件: [有Kernels V] {i j j' : ι} (r : c.关系 i j) (r' : c.关系 i j')
   证明: by
   rw [← d_comp_eqToHom C r r']
   apply kernelSubobject_comp_mono
@@ -1348,7 +1348,7 @@ theorem image_eq_image
 
 中文:
 定理 image_eq_image
-  结论: [HasImages V] [HasEqualizers V] {i i' j : ι} (r : c.Rel i j)
+  结论: [有Images V] [HasEqualizers V] {i i' j : ι} (r : c.关系 i j)
   证明: by
   rw [← eqToHom_comp_d C r r']
   apply imageSubobject_iso_comp
@@ -1390,7 +1390,7 @@ definition xPrevIso
 
 中文:
 定义 xPrevIso
-  签名: {i j : ι} (r : c.Rel i j)
+  签名: {i j : ι} (r : c.关系 i j)
   定义体: eqToIso by rw [← c.prev_eq' r]
 
 Depends on / 依赖: c.prev_eq, eqToIso, prev_eq
@@ -1415,7 +1415,7 @@ definition xPrevIsoSelf
 
 中文:
 定义 xPrevIsoSelf
-  签名: {j : ι} (h : ¬c.Rel (c.prev j) j)
+  签名: {j : ι} (h : ¬c.关系 (c.prev j) j)
   定义体: eqToIso
     congr_arg C.X
       (by
@@ -1465,7 +1465,7 @@ definition xNextIso
 
 中文:
 定义 xNextIso
-  签名: {i j : ι} (r : c.Rel i j)
+  签名: {i j : ι} (r : c.关系 i j)
   定义体: eqToIso by rw [← c.next_eq' r]
 
 Depends on / 依赖: c.next_eq, eqToIso, next_eq
@@ -1489,7 +1489,7 @@ definition xNextIsoSelf
 
 中文:
 定义 xNextIsoSelf
-  签名: {i : ι} (h : ¬c.Rel i (c.next i))
+  签名: {i : ι} (h : ¬c.关系 i (c.next i))
   定义体: eqToIso
     congr_arg C.X
       (by
@@ -1558,7 +1558,7 @@ theorem dTo_eq
 
 中文:
 定理 dTo_eq
-  条件: {i j : ι} (r : c.Rel i j)
+  条件: {i j : ι} (r : c.关系 i j)
   结论: C.dTo j = (C.xPrevIso r).hom ≫ C.d i j
   证明: by
   obtain rfl := c.prev_eq' r
@@ -1582,7 +1582,7 @@ theorem dTo_eq_zero
 
 中文:
 定理 dTo_eq_zero
-  条件: {j : ι} (h : ¬c.Rel (c.prev j) j)
+  条件: {j : ι} (h : ¬c.关系 (c.prev j) j)
   结论: C.dTo j = 0
   证明: by
   simp [h]
@@ -1603,7 +1603,7 @@ theorem dFrom_eq
 
 中文:
 定理 dFrom_eq
-  条件: {i j : ι} (r : c.Rel i j)
+  条件: {i j : ι} (r : c.关系 i j)
   结论: C.dFrom i = C.d i j ≫ (C.xNextIso r).inv
   证明: by
   obtain rfl := c.next_eq' r
@@ -1629,7 +1629,7 @@ theorem dFrom_eq_zero
 
 中文:
 定理 dFrom_eq_zero
-  条件: {i : ι} (h : ¬c.Rel i (c.next i))
+  条件: {i : ι} (h : ¬c.关系 i (c.next i))
   结论: C.dFrom i = 0
   证明: by
   simp [h]
@@ -1654,7 +1654,7 @@ theorem xPrevIso_comp_dTo
 
 中文:
 定理 xPrevIso_comp_dTo
-  条件: {i j : ι} (r : c.Rel i j)
+  条件: {i j : ι} (r : c.关系 i j)
   结论: (C.xPrevIso r).inv ≫ C.dTo j = C.d i j
   证明: by
   simp [C.dTo_eq r]
@@ -1679,7 +1679,7 @@ theorem xPrevIsoSelf_comp_dTo
 
 中文:
 定理 xPrevIsoSelf_comp_dTo
-  条件: {j : ι} (h : ¬c.Rel (c.prev j) j)
+  条件: {j : ι} (h : ¬c.关系 (c.prev j) j)
   证明: by simp [h]
 
 @[reassoc (attr := simp)]
@@ -1701,7 +1701,7 @@ theorem dFrom_comp_xNextIso
 
 中文:
 定理 dFrom_comp_xNextIso
-  条件: {i j : ι} (r : c.Rel i j)
+  条件: {i j : ι} (r : c.关系 i j)
   证明: by
   simp [C.dFrom_eq r]
 
@@ -1724,7 +1724,7 @@ theorem dFrom_comp_xNextIsoSelf
 
 中文:
 定理 dFrom_comp_xNextIsoSelf
-  条件: {i : ι} (h : ¬c.Rel i (c.next i))
+  条件: {i : ι} (h : ¬c.关系 i (c.next i))
   证明: by simp [h]
 -/
 theorem dFrom_comp_xNextIsoSelf {i : ι} (h : ¬c.Rel i (c.next i)) :
@@ -1763,7 +1763,7 @@ theorem kernel_from_eq_kernel
 
 中文:
 定理 kernel_from_eq_kernel
-  条件: [HasKernels V] {i j : ι} (r : c.Rel i j)
+  条件: [有Kernels V] {i j : ι} (r : c.关系 i j)
   证明: by
   rw [C.dFrom_eq r]
   apply kernelSubobject_comp_mono
@@ -1787,7 +1787,7 @@ theorem image_to_eq_image
 
 中文:
 定理 image_to_eq_image
-  条件: [HasImages V] [HasEqualizers V] {i j : ι} (r : c.Rel i j)
+  条件: [有Images V] [HasEqualizers V] {i j : ι} (r : c.关系 i j)
   证明: by
   rw [C.dTo_eq r]
   apply imageSubobject_iso_comp
@@ -1912,8 +1912,8 @@ theorem isIso_of_components
 
 中文:
 定理 isIso_of_components
-  条件: (f : C₁ ⟶ C₂) [对任意 n : ι, IsIso (f.f n)]
-  结论: IsIso f
+  条件: (f : C₁ ⟶ C₂) [对任意 n : ι, 是同构 (f.f n)]
+  结论: 是同构 f
   证明: (HomologicalComplex.Hom.isoOfComponents fun n => asIso (f.f n)).isIso_hom
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.Hom.isoOfComponents, isIso_hom, isoOfComponents
@@ -1934,7 +1934,7 @@ abbreviation prev
 
 中文:
 缩写 prev
-  签名: (f : Hom C₁ C₂) (j : ι)
+  签名: (f : 态射 C₁ C₂) (j : ι)
   定义体: f.f _
 -/
 abbrev prev (f : Hom C₁ C₂) (j : ι) : C₁.xPrev j ⟶ C₂.xPrev j :=
@@ -1952,7 +1952,7 @@ theorem prev_eq
 
 中文:
 定理 prev_eq
-  条件: (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j)
+  条件: (f : 态射 C₁ C₂) {i j : ι} (w : c.关系 i j)
   证明: by
   obtain rfl := c.prev_eq' w
   simp only [xPrevIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
@@ -1974,7 +1974,7 @@ abbreviation next
 
 中文:
 缩写 next
-  签名: (f : Hom C₁ C₂) (i : ι)
+  签名: (f : 态射 C₁ C₂) (i : ι)
   定义体: f.f _
 -/
 abbrev next (f : Hom C₁ C₂) (i : ι) : C₁.xNext i ⟶ C₂.xNext i :=
@@ -1994,7 +1994,7 @@ theorem next_eq
 
 中文:
 定理 next_eq
-  条件: (f : Hom C₁ C₂) {i j : ι} (w : c.Rel i j)
+  条件: (f : 态射 C₁ C₂) {i j : ι} (w : c.关系 i j)
   证明: by
   obtain rfl := c.next_eq' w
   simp only [xNextIso, eqToIso_refl, Iso.refl_hom, Iso.refl_inv, comp_id, id_comp]
@@ -2020,7 +2020,7 @@ theorem comm_from
 
 中文:
 定理 comm_from
-  条件: (f : Hom C₁ C₂) (i : ι)
+  条件: (f : 态射 C₁ C₂) (i : ι)
   结论: f.f i ≫ C₂.dFrom i = C₁.dFrom i ≫ f.next i
   证明: f.comm _ _
 
@@ -2043,7 +2043,7 @@ theorem comm_to
 
 中文:
 定理 comm_to
-  条件: (f : Hom C₁ C₂) (j : ι)
+  条件: (f : 态射 C₁ C₂) (j : ι)
   结论: f.prev j ≫ C₂.dTo j = C₁.dTo j ≫ f.f j
   证明: f.comm _ _
 
@@ -2066,7 +2066,7 @@ definition sqFrom
 
 中文:
 定义 sqFrom
-  签名: (f : Hom C₁ C₂) (i : ι)
+  签名: (f : 态射 C₁ C₂) (i : ι)
   定义体: Arrow.homMk _ _ (f.comm_from i)
 
 @[simp]
@@ -2090,7 +2090,7 @@ theorem sqFrom_left
 
 中文:
 定理 sqFrom_left
-  条件: (f : Hom C₁ C₂) (i : ι)
+  条件: (f : 态射 C₁ C₂) (i : ι)
   结论: (f.sqFrom i).left = f.f i
   证明: rfl
 
@@ -2113,7 +2113,7 @@ theorem sqFrom_right
 
 中文:
 定理 sqFrom_right
-  条件: (f : Hom C₁ C₂) (i : ι)
+  条件: (f : 态射 C₁ C₂) (i : ι)
   结论: (f.sqFrom i).right = f.next i
   证明: rfl
 
@@ -2136,7 +2136,7 @@ theorem sqFrom_id
 
 中文:
 定理 sqFrom_id
-  条件: (C₁ : HomologicalComplex V c) (i : ι)
+  条件: (C₁ : 同调复形 V c) (i : ι)
   结论: sqFrom (𝟙 C₁) i = 𝟙 _
   证明: rfl
 
@@ -2175,7 +2175,7 @@ definition sqTo
 
 中文:
 定义 sqTo
-  签名: (f : Hom C₁ C₂) (j : ι)
+  签名: (f : 态射 C₁ C₂) (j : ι)
   定义体: Arrow.homMk _ _ (f.comm_to j)
 
 @[simp]
@@ -2199,7 +2199,7 @@ theorem sqTo_left
 
 中文:
 定理 sqTo_left
-  条件: (f : Hom C₁ C₂) (j : ι)
+  条件: (f : 态射 C₁ C₂) (j : ι)
   结论: (f.sqTo j).left = f.prev j
   证明: rfl
 
@@ -2220,7 +2220,7 @@ theorem sqTo_right
 
 中文:
 定理 sqTo_right
-  条件: (f : Hom C₁ C₂) (j : ι)
+  条件: (f : 态射 C₁ C₂) (j : ι)
   结论: (f.sqTo j).right = f.f j
   证明: rfl
 -/
@@ -2250,7 +2250,7 @@ lemma inv_f_apply
 
 中文:
 引理 inv_f_apply
-  条件: (f : C₁ ⟶ C₂) [IsIso f] (j : ι)
+  条件: (f : C₁ ⟶ C₂) [是同构 f] (j : ι)
   结论: (inv f).f j = inv (f.f j)
   证明: by
   apply IsIso.eq_inv_of_inv_hom_id
@@ -2422,7 +2422,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : ChainComplex V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
+  签名: {X Y : 链复形 V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
   定义体: f
   comm' n m := by
     simp only [ComplexShape.down_Rel]
@@ -2457,7 +2457,7 @@ definition mkAux
 
 中文:
 定义 mkAux
-  签名: : 自然数 -> ShortComplex V
+  签名: : 自然数 -> 短复形 V
 -/
 def mkAux : Nat -> ShortComplex V
   | 0 => ShortComplex.mk _ _ s
@@ -2476,7 +2476,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : ChainComplex V 自然数
+  签名: : 链复形 V 自然数
   定义体: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₃) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).g)
     fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
 
@@ -2613,7 +2613,7 @@ lemma mk_congr_succ_X₃
 
 中文:
 引理 mk_congr_succ_X₃
-  条件: {S S' : ShortComplex V} (h : S = S')
+  条件: {S S' : 短复形 V} (h : S = S')
   证明: by rw [h]
 -/
 lemma mk_congr_succ_X₃ {S S' : ShortComplex V} (h : S = S') :
@@ -2631,7 +2631,7 @@ lemma mk_congr_succ_d₂
 
 中文:
 引理 mk_congr_succ_d₂
-  条件: {S S' : ShortComplex V} (h : S = S')
+  条件: {S S' : 短复形 V} (h : S = S')
   证明: by
   subst h
   simp
@@ -3212,7 +3212,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : CochainComplex V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
+  签名: {X Y : 上链复形 V α} (f : 对任意 i : α, X.X i ⟶ Y.X i)
   定义体: f
   comm' n m := by
     simp only [ComplexShape.up_Rel]
@@ -3245,7 +3245,7 @@ definition mkAux
 
 中文:
 定义 mkAux
-  签名: : 自然数 -> ShortComplex V
+  签名: : 自然数 -> 短复形 V
 -/
 def mkAux : Nat -> ShortComplex V
   | 0 => ShortComplex.mk _ _ s
@@ -3264,7 +3264,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: : CochainComplex V 自然数
+  签名: : 上链复形 V 自然数
   定义体: of (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).X₁) (fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).f)
     fun n => (mkAux X₀ X₁ X₂ d₀ d₁ s succ n).zero
 

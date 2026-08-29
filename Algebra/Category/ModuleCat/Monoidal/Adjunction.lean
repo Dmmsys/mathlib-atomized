@@ -44,7 +44,7 @@ lemma extendsScalars_map_leftUnitor_inv_one_tmul
 
 中文:
 引理 extendsScalars_map_leftUnitor_inv_one_tmul
-  条件: (M : ModuleCat R) (m : M)
+  条件: (M : 模范畴 R) (m : M)
   证明: f.toAlgebra
     (extendScalars f).map (fun_ M).inv ((1 : S) otimesₜ[R] m) = (1 : S) otimesₜ[R] (1 otimesₜ m) := rfl
 
@@ -68,7 +68,7 @@ lemma extendsScalars_map_rightUnitor_inv_one_tmul
 
 中文:
 引理 extendsScalars_map_rightUnitor_inv_one_tmul
-  条件: (M : ModuleCat R) (m : M)
+  条件: (M : 模范畴 R) (m : M)
   证明: f.toAlgebra
     (extendScalars f).map (ρ_ M).inv ((1 : S) otimesₜ[R] m) = (1 : S) otimesₜ[R] (m otimesₜ 1) := rfl
 
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: (extendScalars f).Monoidal
+  签名: (extendScalars f).幺半群
   定义体: letI : Algebra R S := f.toAlgebra
   Functor.CoreMonoidal.toMonoidal
     (.mk'
@@ -198,7 +198,7 @@ lemma extendScalars_μ
 
 中文:
 引理 extendScalars_μ
-  条件: (M₁ M₂ : ModuleCat R)
+  条件: (M₁ M₂ : 模范畴 R)
   证明: f.toAlgebra
     dsimp% μ (extendScalars f) M₁ M₂ =
       (AlgebraTensorModule.distribBaseChange R S M₁ M₂).toModuleIso.inv :=
@@ -227,7 +227,7 @@ lemma extendScalars_δ
 
 中文:
 引理 extendScalars_δ
-  条件: (M₁ M₂ : ModuleCat R)
+  条件: (M₁ M₂ : 模范畴 R)
   证明: f.toAlgebra
     dsimp% δ (extendScalars f) M₁ M₂ =
       (AlgebraTensorModule.distribBaseChange R S M₁ M₂).toModuleIso.hom :=
@@ -255,7 +255,7 @@ lemma extendScalars_δ_tmul
 
 中文:
 引理 extendScalars_δ_tmul
-  条件: (M₁ M₂ : ModuleCat R) (m₁ : M₁) (m₂ : M₂)
+  条件: (M₁ M₂ : 模范畴 R) (m₁ : M₁) (m₂ : M₂)
   证明: f.toAlgebra
     dsimp% δ (extendScalars f) M₁ M₂ (((1 : S) otimesₜ[R] (m₁ otimesₜ[R] m₂) :)) =
       ((1 : S) otimesₜ[R] m₁) otimesₜ[S] ((1 : S) otimesₜ[R] m₂) := rfl
@@ -278,7 +278,7 @@ instance :
 
 中文:
 实例 :
-  签名: (restrictScalars f).LaxMonoidal
+  签名: (restrictScalars f).松弛幺半群
   定义体: (extendRestrictScalarsAdj f).rightAdjointLaxMonoidal
 
 Depends on / 依赖: extendRestrictScalarsAdj, rightAdjointLaxMonoidal
@@ -337,7 +337,7 @@ lemma restrictScalars_μ_tmul
 
 中文:
 引理 restrictScalars_μ_tmul
-  条件: (M₁ M₂ : ModuleCat S) (m₁ : M₁) (m₂ : M₂)
+  条件: (M₁ M₂ : 模范畴 S) (m₁ : M₁) (m₂ : M₂)
   证明: by
   dsimp [Adjunction.rightAdjointLaxMonoidal_μ]
   rw [extendRestrictScalarsAdj_homEquiv_apply]

@@ -37,8 +37,8 @@ lemma IsStandardSmooth.smooth
   infer_instance
 
 中文:
-引理 IsStandardSmooth.smooth
-  结论: {R S : 类型} [CommRing R] [CommRing S] {f : R ->+* S}
+引理 是StandardSmooth.smooth
+  结论: {R S : 类型} [交换环 R] [交换环 S] {f : R ->+* S}
   证明: by
   algebraize [f]
   rw [RingHom.Smooth]
@@ -68,9 +68,9 @@ theorem Smooth.locally_isStandardSmooth
   exact h t ht
 
 中文:
-定理 Smooth.locally_isStandardSmooth
-  条件: (hf : f.Smooth)
-  结论: Locally IsStandardSmooth f
+定理 光滑.locally_isStandardSmooth
+  条件: (hf : f.光滑)
+  结论: Locally 是StandardSmooth f
   证明: by
   algebraize [f]
   obtain ⟨s, hs, h⟩ := Algebra.Smooth.exists_span_eq_top_isStandardSmooth R S
@@ -103,7 +103,7 @@ theorem smooth_iff_locally_isStandardSmooth
 
 中文:
 定理 smooth_iff_locally_isStandardSmooth
-  结论: Smooth f ↔ Locally IsStandardSmooth f
+  结论: 光滑 f ↔ Locally 是StandardSmooth f
   证明: by
   refine ⟨fun hf => hf.locally_isStandardSmooth, fun hf => ?_⟩
   rw [← locally_iff_of_localizationSpanTarget Smooth.propertyIsLocal.respectsIso

@@ -138,7 +138,7 @@ lemma coe_rangeIcc
 中文:
 引理 coe_rangeIcc
   条件: (f g : ι ->₀ α)
-  结论: rangeIcc f g i = Icc (f i) (g i)
+  结论: rangeIcc f g i = 闭区间 (f i) (g i)
   证明: rfl
 
 @[simp]
@@ -201,7 +201,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (ι ->₀ α)
+  签名: : 局部有限序 (ι ->₀ α)
   定义体: LocallyFiniteOrder.ofIcc (ι ->₀ α) (fun f g => (f.support union g.support).finsupp <| f.rangeIcc g)
     fun f g x => by
       refine
@@ -229,7 +229,7 @@ theorem Icc_eq
 
 中文:
 定理 Icc_eq
-  结论: Icc f g = (f.support union g.support).finsupp (f.rangeIcc g)
+  结论: 闭区间 f g = (f.support union g.support).finsupp (f.rangeIcc g)
   证明: rfl
 -/
 theorem Icc_eq : Icc f g = (f.support union g.support).finsupp (f.rangeIcc g) := rfl
@@ -245,7 +245,7 @@ theorem card_Icc
 
 中文:
 定理 card_Icc
-  结论: #(Icc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i))
+  结论: #(闭区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i))
   证明: by
   simp_rw [Icc_eq, card_finsupp, coe_rangeIcc]
 
@@ -265,7 +265,7 @@ theorem card_Ico
 
 中文:
 定理 card_Ico
-  结论: #(Ico f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1
+  结论: #(左闭右开区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 1
   证明: by
   rw [card_Ico_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -285,7 +285,7 @@ theorem card_Ioc
 
 中文:
 定理 card_Ioc
-  结论: #(Ioc f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 1
+  结论: #(左开右闭区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 1
   证明: by
   rw [card_Ioc_eq_card_Icc_sub_one]; rw [card_Icc]
 
@@ -305,7 +305,7 @@ theorem card_Ioo
 
 中文:
 定理 card_Ioo
-  结论: #(Ioo f g) = ∏ i in f.support union g.support, #(Icc (f i) (g i)) - 2
+  结论: #(开区间 f g) = ∏ i in f.support union g.support, #(闭区间 (f i) (g i)) - 2
   证明: by
   rw [card_Ioo_eq_card_Icc_sub_two]; rw [card_Icc]
 
@@ -358,7 +358,7 @@ theorem card_Iic
 
 中文:
 定理 card_Iic
-  结论: #(Iic f) = ∏ i in f.support, #(Iic (f i))
+  结论: #(左无界右闭区间 f) = ∏ i in f.support, #(左无界右闭区间 (f i))
   证明: by
   simp [Iic_eq_Icc, card_Icc, bot_eq_zero]
 
@@ -378,7 +378,7 @@ theorem card_Iio
 
 中文:
 定理 card_Iio
-  结论: #(Iio f) = ∏ i in f.support, #(Iic (f i)) - 1
+  结论: #(左无界右开区间 f) = ∏ i in f.support, #(左无界右闭区间 (f i)) - 1
   证明: by
   rw [card_Iio_eq_card_Iic_sub_one]; rw [card_Iic]
 

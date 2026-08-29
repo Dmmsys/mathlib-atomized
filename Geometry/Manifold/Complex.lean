@@ -66,7 +66,7 @@ theorem Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
   rw [← H₂]; r
 
 中文:
-定理 Complex.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
+定理 复形.norm_eventually_eq_of_mdifferentiableAt_of_isLocalMax
   结论: {f : M -> F} {c : M}
   证明: by
   set e := extChartAt I c
@@ -122,7 +122,7 @@ theorem norm_eqOn_of_isPreconnected_of_isMaxOn
 
 中文:
 定理 norm_eqOn_of_isPreconnected_of_isMaxOn
-  结论: {f : M -> F} {U : Set M} {c : M}
+  结论: {f : M -> F} {U : 集合 M} {c : M}
   证明: by
   set V := {z in U | ‖f z‖ = ‖f c‖}
   suffices U subseteq V from fun x hx => (this hx).2
@@ -168,7 +168,7 @@ eq_of_norm_eq_o
 
 中文:
 定理 eqOn_of_isPreconnected_of_isMaxOn_norm
-  结论: [StrictConvexSpace 实数 F] {f : M -> F} {U : Set M}
+  结论: [严格凸空间 实数 F] {f : M -> F} {U : 集合 M}
   证明: fun x hx =>
   have H₁ : ‖f x‖ = ‖f c‖ := hd.norm_eqOn_of_isPreconnected_of_isMaxOn hc ho hcU hm hx
   have hd' : MDiff[U] (f · + f c) := hd.add mdifferentiableOn_const
@@ -201,7 +201,7 @@ theorem apply_eq_of_isPreconnected_isCompact_isOpen
 
 中文:
 定理 apply_eq_of_isPreconnected_isCompact_isOpen
-  结论: {f : M -> F} {U : Set M} {a b : M}
+  结论: {f : M -> F} {U : 集合 M} {a b : M}
   证明: by
   -- Subtract `f b` to avoid the assumption `[StrictConvexSpace ℝ F]`
   wlog hb₀ : f b = 0 generalizing f
@@ -277,7 +277,7 @@ theorem apply_eq_of_compactSpace
 
 中文:
 定理 apply_eq_of_compactSpace
-  结论: [PreconnectedSpace M] {f : M -> F}
+  结论: [预连通空间 M] {f : M -> F}
   证明: hf.isLocallyConstant.apply_eq_of_preconnectedSpace _ _
 
 Depends on / 依赖: apply_eq_of_preconnectedSpace, hf.isLocallyConstant.apply_eq_of_preconnectedSpace, isLocallyConstant
@@ -295,8 +295,8 @@ theorem exists_eq_const_of_compactSpace
   proof: hf.isLocallyConstant.exists_eq_const
 
 中文:
-定理 exists_eq_const_of_compactSpace
-  条件: [PreconnectedSpace M] {f : M -> F} (hf : MDiff f)
+定理 存在_eq_const_of_compactSpace
+  条件: [预连通空间 M] {f : M -> F} (hf : MDiff f)
   证明: hf.isLocallyConstant.exists_eq_const
 
 Depends on / 依赖: exists_eq_const, hf.isLocallyConstant.exists_eq_const, isLocallyConstant

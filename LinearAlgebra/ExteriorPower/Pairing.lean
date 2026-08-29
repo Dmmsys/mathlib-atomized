@@ -58,7 +58,7 @@ lemma toTensorPower_apply_ιMulti
 
 中文:
 引理 toTensorPower_apply_ιMulti
-  条件: {n : 自然数} (v : Fin n -> M)
+  条件: {n : 自然数} (v : 有限集 n -> M)
   证明: by
   dsimp [toTensorPower]
   simp only [alternatingMapLinearEquiv_apply_ιMulti,
@@ -169,7 +169,7 @@ lemma pairingDual_ιMulti_ιMulti
 
 中文:
 引理 pairingDual_ιMulti_ιMulti
-  条件: {n : 自然数} (f : (_ : Fin n) -> Module.Dual R M) (v : Fin n -> M)
+  条件: {n : 自然数} (f : (_ : 有限集 n) -> 模.对偶 R M) (v : 有限集 n -> M)
   证明: by
   simp [pairingDual]
 
@@ -217,7 +217,7 @@ include h₀ in
 
 中文:
 引理 pairingDual_apply_apply_eq_one
-  条件: (a : Fin n ↪o ι)
+  条件: (a : 有限集 n ↪o ι)
   证明: by
   simp only [pairingDual_ιMulti_ιMulti, Function.comp_apply]
   rw [← Matrix.det_one (n := Fin n)]
@@ -265,7 +265,7 @@ lemma pairingDual_apply_apply_eq_one_zero
 
 中文:
 引理 pairingDual_apply_apply_eq_one_zero
-  条件: (a b : Fin n ↪o ι) (h : a != b)
+  条件: (a b : 有限集 n ↪o ι) (h : a != b)
   证明: by
   simp only [pairingDual_ιMulti_ιMulti, Function.comp_apply, Matrix.det_apply]
   refine Finset.sum_eq_zero (fun σ _ => ?_)

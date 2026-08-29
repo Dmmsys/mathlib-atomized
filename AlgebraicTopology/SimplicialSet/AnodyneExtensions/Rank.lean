@@ -85,7 +85,7 @@ lemma wf_ancestralRel
 
 中文:
 引理 wf_ancestralRel
-  结论: WellFounded P.AncestralRel
+  结论: 良基 P.AncestralRel
   证明: by
   rw [wellFounded_iff_isEmpty_descending_chain]
   exact ⟨fun ⟨g, hg⟩ => not_strictAnti_of_wellFoundedLT (f.rank ∘ g)
@@ -109,8 +109,8 @@ lemma isRegular
 
 中文:
 引理 isRegular
-  条件: [P.Is命题er]
-  结论: P.IsRegular where
+  条件: [P.是真]
+  结论: P.是正则 where
   证明: f.wf_ancestralRel
 
 Depends on / 依赖: f.wf_ancestralRel, wf_ancestralRel
@@ -167,7 +167,7 @@ lemma wf_ancestralRel
 
 中文:
 引理 wf_ancestralRel
-  结论: WellFounded P.AncestralRel
+  结论: 良基 P.AncestralRel
   证明: by
   rw [wellFounded_iff_isEmpty_descending_chain]
   refine ⟨fun ⟨g, hg⟩ => ?_⟩
@@ -203,7 +203,7 @@ lemma isRegular
 
 中文:
 引理 isRegular
-  结论: P.IsRegular where
+  结论: P.是正则 where
   证明: f.wf_ancestralRel
 
 Depends on / 依赖: f.wf_ancestralRel, wf_ancestralRel
@@ -401,8 +401,8 @@ lemma RankFunction.isRegular
 
 中文:
 引理 RankFunction.isRegular
-  条件: [h.Is命题er] (f : h.RankFunction α)
-  结论: h.IsRegular
+  条件: [h.是真] (f : h.RankFunction α)
+  结论: h.是正则
   证明: by
   rw [← isRegular_pairing_iff]
   exact (h.rankFunctionEquiv α f).isRegular
@@ -426,8 +426,8 @@ lemma WeakRankFunction.isRegular
 
 中文:
 引理 WeakRankFunction.isRegular
-  条件: [h.Is命题er] (f : h.WeakRankFunction α)
-  结论: h.IsRegular
+  条件: [h.是真] (f : h.WeakRankFunction α)
+  结论: h.是正则
   证明: by
   rw [← isRegular_pairing_iff]
   exact (h.weakRankFunctionEquiv α f).isRegular

@@ -87,7 +87,7 @@ theorem mul_meas_ge_le_lintegral₀
 
 中文:
 定理 mul_meas_ge_le_lintegral₀
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (ε : 实数>=0∞)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (ε : 实数>=0∞)
   证明: by
   simpa only [lintegral_zero, zero_add] using
     lintegral_add_mul_meas_add_le_le_lintegral (ae_of_all _ fun x => zero_le) hf ε
@@ -109,7 +109,7 @@ theorem mul_meas_ge_le_lintegral
 
 中文:
 定理 mul_meas_ge_le_lintegral
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (ε : 实数>=0∞)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (ε : 实数>=0∞)
   证明: mul_meas_ge_le_lintegral₀ hf.aemeasurable ε
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable
@@ -131,7 +131,7 @@ lemma meas_le_lintegral₀
 
 中文:
 引理 meas_le_lintegral₀
-  结论: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   apply le_trans _ (mul_meas_ge_le_lintegral₀ hf 1)
   rw [one_mul]
@@ -159,7 +159,7 @@ lemma lintegral_le_meas
 
 中文:
 引理 lintegral_le_meas
-  条件: {s : Set α} {f : α -> 实数>=0∞} (hf : 对任意 a, f a <= 1) (h'f : 对任意 a in sᶜ, f a = 0)
+  条件: {s : 集合 α} {f : α -> 实数>=0∞} (hf : 对任意 a, f a <= 1) (h'f : 对任意 a in sᶜ, f a = 0)
   证明: by
   apply (lintegral_mono (fun x => ?_)).trans (lintegral_indicator_one_le s)
   by_cases hx : x in s
@@ -187,8 +187,8 @@ lemma setLIntegral_le_meas
   by_cases has : a in s <;> [by_cases hat : a in t; skip] <;> simp [*]
 
 中文:
-引理 setLIntegral_le_meas
-  结论: {s t : Set α} (hs : MeasurableSet s)
+引理 setL整数egral_le_meas
+  结论: {s t : 集合 α} (hs : 可测集 s)
   证明: by
   rw [← lintegral_indicator hs]
   refine lintegral_le_meas (fun a => ?_) (by simp_all)
@@ -216,7 +216,7 @@ theorem lintegral_eq_top_of_measure_eq_top_ne_zero
 
 中文:
 定理 lintegral_eq_top_of_measure_eq_top_ne_zero
-  结论: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: eq_top_iff.mpr
     calc
       ∞ = ∞ * μ { x | ∞ <= f x } := by simp [hμf]
@@ -241,8 +241,8 @@ theorem setLIntegral_eq_top_of_measure_eq_top_ne_zero
     mt (eq_bot_mono <| by rw [← ofPred_inter_eq_sep]; exact Measure.le_restrict_apply _ _) hμf
 
 中文:
-定理 setLIntegral_eq_top_of_measure_eq_top_ne_zero
-  结论: {f : α -> 实数>=0∞} {s : Set α}
+定理 setL整数egral_eq_top_of_measure_eq_top_ne_zero
+  结论: {f : α -> 实数>=0∞} {s : 集合 α}
   证明: lintegral_eq_top_of_measure_eq_top_ne_zero hf
     mt (eq_bot_mono <| by rw [← ofPred_inter_eq_sep]; exact Measure.le_restrict_apply _ _) hμf
 
@@ -282,8 +282,8 @@ theorem measure_eq_top_of_setLIntegral_ne_top
   proof: of_not_not fun h => hμf setLIntegral_eq_top_of_measure_eq_top_ne_zero hf h
 
 中文:
-定理 measure_eq_top_of_setLIntegral_ne_top
-  结论: {f : α -> 实数>=0∞} {s : Set α}
+定理 measure_eq_top_of_setL整数egral_ne_top
+  结论: {f : α -> 实数>=0∞} {s : 集合 α}
   证明: of_not_not fun h => hμf setLIntegral_eq_top_of_measure_eq_top_ne_zero hf h
 
 Depends on / 依赖: of_not_not, setLIntegral_eq_top_of_measure_eq_top_ne_zero
@@ -305,7 +305,7 @@ theorem meas_ge_le_lintegral_div
 
 中文:
 定理 meas_ge_le_lintegral_div
-  结论: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) {ε : 实数>=0∞} (hε : ε != 0)
+  结论: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) {ε : 实数>=0∞} (hε : ε != 0)
   证明: (ENNReal.le_div_iff_mul_le (Or.inl hε) (Or.inl hε')).2 by
     rw [mul_comm]
     exact mul_meas_ge_le_lintegral₀ hf ε
@@ -372,7 +372,7 @@ theorem lintegral_strict_mono_of_ae_le_of_frequently_ae_lt
 
 中文:
 定理 lintegral_strict_mono_of_ae_le_of_frequently_ae_lt
-  结论: {f g : α -> 实数>=0∞} (hg : AEMeasurable g μ)
+  结论: {f g : α -> 实数>=0∞} (hg : 几乎处处可测 g μ)
   证明: by
   contrapose! h
   exact ae_eq_of_ae_le_of_lintegral_le h_le hfi hg h
@@ -396,7 +396,7 @@ theorem lintegral_strict_mono_of_ae_le_of_ae_lt_on
 
 中文:
 定理 lintegral_strict_mono_of_ae_le_of_ae_lt_on
-  结论: {f g : α -> 实数>=0∞} (hg : AEMeasurable g μ)
+  结论: {f g : α -> 实数>=0∞} (hg : 几乎处处可测 g μ)
   证明: lintegral_strict_mono_of_ae_le_of_frequently_ae_lt hg hfi h_le
     ((frequently_ae_mem_iff.2 hμs).and_eventually h).mono fun _x hx => (hx.2 hx.1).ne
 
@@ -421,7 +421,7 @@ theorem lintegral_strict_mono
 
 中文:
 定理 lintegral_strict_mono
-  结论: {f g : α -> 实数>=0∞} (hμ : μ != 0) (hg : AEMeasurable g μ)
+  结论: {f g : α -> 实数>=0∞} (hμ : μ != 0) (hg : 几乎处处可测 g μ)
   证明: by
   rw [Ne]; rw [← Measure.measure_univ_eq_zero] at hμ
   refine lintegral_strict_mono_of_ae_le_of_ae_lt_on hg hfi (ae_le_of_ae_lt h) hμ ?_
@@ -444,8 +444,8 @@ theorem setLIntegral_strict_mono
   proof: lintegral_strict_mono (by simp [hs]) hg.aemeasurable hfi ((ae_restrict_iff' hsm).mpr h)
 
 中文:
-定理 setLIntegral_strict_mono
-  结论: {f g : α -> 实数>=0∞} {s : Set α} (hsm : MeasurableSet s)
+定理 setL整数egral_strict_mono
+  结论: {f g : α -> 实数>=0∞} {s : 集合 α} (hsm : 可测集 s)
   证明: lintegral_strict_mono (by simp [hs]) hg.aemeasurable hfi ((ae_restrict_iff' hsm).mpr h)
 
 Depends on / 依赖: ae_restrict_iff, aemeasurable, hg.aemeasurable, lintegral_strict_mono
@@ -467,7 +467,7 @@ theorem ae_lt_top'
 
 中文:
 定理 ae_lt_top'
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ) (h2f : ∫⁻ x, f x ∂μ != ∞)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ) (h2f : ∫⁻ x, f x ∂μ != ∞)
   证明: by
   simp_rw [ae_iff, ENNReal.not_lt_top]
   exact measure_eq_top_of_lintegral_ne_top hf h2f
@@ -489,7 +489,7 @@ theorem ae_lt_top
 
 中文:
 定理 ae_lt_top
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (h2f : ∫⁻ x, f x ∂μ != ∞)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (h2f : ∫⁻ x, f x ∂μ != ∞)
   证明: ae_lt_top' hf.aemeasurable h2f
 
 Depends on / 依赖: ae_lt_top, aemeasurable, hf.aemeasurable

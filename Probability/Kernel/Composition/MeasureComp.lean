@@ -38,7 +38,7 @@ lemma comp_assoc
 
 中文:
 引理 comp_assoc
-  条件: {η : Kernel β γ}
+  条件: {η : 核 β γ}
   结论: η ∘ₘ (κ ∘ₘ μ) = (η ∘ₖ κ) ∘ₘ μ
   证明: Measure.bind_bind κ.aemeasurable η.aemeasurable
 
@@ -58,7 +58,7 @@ lemma comp_eq_comp_const_apply
 
 中文:
 引理 comp_eq_comp_const_apply
-  结论: κ ∘ₘ μ = (κ ∘ₖ (Kernel.const Unit μ)) ()
+  结论: κ ∘ₘ μ = (κ ∘ₖ (核.const 单元 μ)) ()
   证明: by
   rw [Kernel.comp_apply]; rw [Kernel.const_apply]
 
@@ -82,7 +82,7 @@ lemma comp_eq_sum_of_countable
 
 中文:
 引理 comp_eq_sum_of_countable
-  条件: [Countable α] [MeasurableSingletonClass α]
+  条件: [可数 α] [MeasurableSingleton类 α]
   证明: by
   ext s hs
   rw [Measure.sum_apply _ hs]; rw [Measure.bind_apply hs (by fun_prop)]
@@ -113,7 +113,7 @@ lemma snd_compProd
 
 中文:
 引理 snd_compProd
-  条件: (μ : Measure α) [SFinite μ] (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (μ : 测度 α) [SFinite μ] (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   ext s hs
   rw [bind_apply hs κ.aemeasurable]; rw [snd_apply hs]; rw [compProd_apply]
@@ -184,7 +184,7 @@ lemma ae_comp_of_ae_ae
 
 中文:
 引理 ae_comp_of_ae_ae
-  结论: {p : β -> 命题} (hp : MeasurableSet {z | p z})
+  结论: {p : β -> 命题} (hp : 可测集 {z | p z})
   证明: by
   rw [comp_eq_comp_const_apply]
   exact Kernel.ae_comp_of_ae_ae hp h
@@ -206,7 +206,7 @@ lemma ae_comp_iff
 
 中文:
 引理 ae_comp_iff
-  条件: {p : β -> 命题} (hp : MeasurableSet {z | p z})
+  条件: {p : β -> 命题} (hp : 可测集 {z | p z})
   证明: ⟨ae_ae_of_ae_comp, ae_comp_of_ae_ae hp⟩
 
 Depends on / 依赖: ae_ae_of_ae_comp, ae_comp_of_ae_ae
@@ -226,7 +226,7 @@ instance [SFinite
 
 中文:
 实例 [SFinite
-  签名: μ] [IsSFiniteKernel κ] : SFinite (κ ∘ₘ μ)
+  签名: μ] [是SFiniteKernel κ] : SFinite (κ ∘ₘ μ)
   定义体: by
   rw [← snd_compProd]; infer_instance
 
@@ -245,8 +245,8 @@ instance [IsFiniteMeasure
   rw [← snd_compProd]; infer_instance
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ] [IsFiniteKernel κ] : IsFiniteMeasure (κ ∘ₘ μ)
+实例 [是有限测度
+  签名: μ] [是FiniteKernel κ] : 是有限测度 (κ ∘ₘ μ)
   定义体: by
   rw [← snd_compProd]; infer_instance
 
@@ -265,8 +265,8 @@ instance [IsProbabilityMeasure
   rw [← snd_compProd]; infer_instance
 
 中文:
-实例 [IsProbabilityMeasure
-  签名: μ] [IsMarkovKernel κ] : IsProbabilityMeasure (κ ∘ₘ μ)
+实例 [是概率测度
+  签名: μ] [是MarkovKernel κ] : 是概率测度 (κ ∘ₘ μ)
   定义体: by
   rw [← snd_compProd]; infer_instance
 
@@ -287,8 +287,8 @@ instance [IsZeroOrProbabilityMeasure
 @[simp]
 
 中文:
-实例 [IsZeroOrProbabilityMeasure
-  签名: μ] [IsZeroOrMarkovKernel κ] :
+实例 [是ZeroOrProbabilityMeasure
+  签名: μ] [是ZeroOrMarkovKernel κ] :
   定义体: by
   rw [← snd_compProd]; infer_instance
 
@@ -310,8 +310,8 @@ lemma _root_.ProbabilityTheory.Kernel.comp_const
   proof: rfl
 
 中文:
-引理 _root_.ProbabilityTheory.Kernel.comp_const
-  条件: (κ : Kernel β γ) (μ : Measure β)
+引理 _root_.ProbabilityTheory.核.comp_const
+  条件: (κ : 核 β γ) (μ : 测度 β)
   证明: rfl
 -/
 lemma _root_.ProbabilityTheory.Kernel.comp_const (κ : Kernel β γ) (μ : Measure β) :
@@ -332,7 +332,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: (μ : Measure α) (κ : Kernel α β) {f : β -> γ} (hf : Measurable f)
+  条件: (μ : 测度 α) (κ : 核 α β) {f : β -> γ} (hf : 可测 f)
   证明: by
   ext s hs
   rw [Measure.map_apply hf hs]; rw [Measure.bind_apply (hf hs) κ.aemeasurable]; rw [Measure.bind_apply hs (Kernel.aemeasurable _)]
@@ -361,8 +361,8 @@ lemma discard_comp
 
 中文:
 引理 discard_comp
-  条件: (μ : Measure α)
-  结论: Kernel.discard α ∘ₘ μ = μ .univ • Measure.dirac ()
+  条件: (μ : 测度 α)
+  结论: 核.discard α ∘ₘ μ = μ .univ • 测度.dirac ()
   证明: by
   ext s hs; simp [Measure.bind_apply hs (Kernel.aemeasurable _), mul_comm]
 
@@ -383,7 +383,7 @@ lemma copy_comp_map
 
 中文:
 引理 copy_comp_map
-  条件: {f : α -> β} (hf : AEMeasurable f μ)
+  条件: {f : α -> β} (hf : 几乎处处可测 f μ)
   证明: by
   rw [Kernel.copy]; rw [deterministic_comp_eq_map]
   exact (aemeasurable_id.prodMk aemeasurable_id).map_map_of_aemeasurable hf
@@ -409,7 +409,7 @@ lemma compProd_eq_comp_prod
 
 中文:
 引理 compProd_eq_comp_prod
-  条件: (μ : Measure α) [SFinite μ] (κ : Kernel α β) [IsSFiniteKernel κ]
+  条件: (μ : 测度 α) [SFinite μ] (κ : 核 α β) [是SFiniteKernel κ]
   证明: by
   rw [compProd]; rw [Kernel.compProd_prodMkLeft_eq_comp]
   rfl
@@ -434,7 +434,7 @@ lemma compProd_id_eq_copy_comp
 中文:
 引理 compProd_id_eq_copy_comp
   条件: [SFinite μ]
-  结论: μ otimesₘ Kernel.id = Kernel.copy α ∘ₘ μ
+  结论: μ otimesₘ 核.id = 核.copy α ∘ₘ μ
   证明: by
   rw [compProd_id]; rw [Kernel.copy]; rw [deterministic_comp_eq_map]
 
@@ -458,7 +458,7 @@ lemma comp_compProd_comm
 
 中文:
 引理 comp_compProd_comm
-  条件: {η : Kernel (α × β) γ} [SFinite μ] [IsSFiniteKernel η]
+  条件: {η : 核 (α × β) γ} [SFinite μ] [是SFiniteKernel η]
   证明: by
   by_cases hκ : IsSFiniteKernel κ; swap
   · simp [compProd_of_not_isSFiniteKernel _ _ hκ,
@@ -493,7 +493,7 @@ lemma prodMkLeft_comp_compProd
 
 中文:
 引理 prodMkLeft_comp_compProd
-  条件: {η : Kernel β γ} [SFinite μ] [IsSFiniteKernel κ]
+  条件: {η : 核 β γ} [SFinite μ] [是SFiniteKernel κ]
   证明: by
   rw [← snd_compProd μ κ]; rw [Kernel.prodMkLeft]; rw [snd]; rw [← deterministic_comp_eq_map measurable_snd]; rw [comp_assoc]; rw [Kernel.comp_deterministic_eq_comap]
 
@@ -515,7 +515,7 @@ lemma compProd_deterministic
 
 中文:
 引理 compProd_deterministic
-  条件: [SFinite μ] {f : α -> β} (hf : Measurable f)
+  条件: [SFinite μ] {f : α -> β} (hf : 可测 f)
   证明: by
   rw [compProd_eq_comp_prod]; rw [Kernel.id]; rw [Kernel.deterministic_prod_deterministic]; rw [deterministic_comp_eq_map]
   rfl
@@ -639,7 +639,7 @@ lemma AbsolutelyContinuous.comp_right
 
 中文:
 引理 AbsolutelyContinuous.comp_right
-  条件: (hμν : μ ≪ ν) (κ : Kernel α γ)
+  条件: (hμν : μ ≪ ν) (κ : 核 α γ)
   证明: by
   refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
   rw [Measure.bind_apply hs (Kernel.aemeasurable _)]; rw [lintegral_eq_zero_iff (Kernel.measurable_coe _ hs)] at hs_zero ⊢
@@ -666,7 +666,7 @@ lemma AbsolutelyContinuous.comp_left
 
 中文:
 引理 AbsolutelyContinuous.comp_left
-  条件: (μ : Measure α) (hκη : 对任意ᵐ a ∂μ, κ a ≪ η a)
+  条件: (μ : 测度 α) (hκη : 对任意ᵐ a ∂μ, κ a ≪ η a)
   证明: by
   refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
   rw [Measure.bind_apply hs (Kernel.aemeasurable _)]; rw [lintegral_eq_zero_iff (Kernel.measurable_coe _ hs)] at hs_zero ⊢
@@ -711,7 +711,7 @@ lemma absolutelyContinuous_comp_of_countable
 
 中文:
 引理 absolutelyContinuous_comp_of_countable
-  条件: [Countable α] [MeasurableSingletonClass α]
+  条件: [可数 α] [MeasurableSingleton类 α]
   证明: by
   rw [Measure.comp_eq_sum_of_countable]; rw [ae_iff_of_countable]
   exact fun ω hμω => Measure.absolutelyContinuous_sum_right ω (Measure.absolutelyContinuous_smul hμω)
@@ -748,8 +748,8 @@ lemma Kernel.comp_boolKernel
   cases b <;> simp
 
 中文:
-引理 Kernel.comp_boolKernel
-  条件: (κ : Kernel α β) (μ ν : Measure α)
+引理 核.comp_boolKernel
+  条件: (κ : 核 α β) (μ ν : 测度 α)
   证明: by
   ext b : 1
   rw [comp_apply]
@@ -776,7 +776,7 @@ lemma boolKernel_comp_measure
 
 中文:
 引理 boolKernel_comp_measure
-  条件: (μ ν : Measure α) (π : Measure 布尔)
+  条件: (μ ν : 测度 α) (π : 测度 布尔值)
   证明: by
   ext s hs
   rw [Measure.bind_apply hs (Kernel.aemeasurable _)]
@@ -801,7 +801,7 @@ lemma absolutelyContinuous_boolKernel_comp_left
 
 中文:
 引理 absolutelyContinuous_boolKernel_comp_left
-  条件: (μ ν : Measure α) (hπ : π {false} != 0)
+  条件: (μ ν : 测度 α) (hπ : π {false} != 0)
   证明: boolKernel_comp_measure _ _ _ ▸ add_comm _ (π {true} • ν) ▸
     (Measure.absolutelyContinuous_smul hπ).add_right _
 
@@ -822,7 +822,7 @@ lemma absolutelyContinuous_boolKernel_comp_right
 
 中文:
 引理 absolutelyContinuous_boolKernel_comp_right
-  条件: (μ ν : Measure α) (hπ : π {true} != 0)
+  条件: (μ ν : 测度 α) (hπ : π {true} != 0)
   证明: boolKernel_comp_measure _ _ _ ▸ (Measure.absolutelyContinuous_smul hπ).add_right _
 
 Depends on / 依赖: Measure, Measure.absolutelyContinuous_smul, absolutelyContinuous_smul, add_right, boolKernel_comp_measure

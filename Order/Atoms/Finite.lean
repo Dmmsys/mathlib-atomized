@@ -65,7 +65,7 @@ theorem univ
 
 中文:
 定理 univ
-  结论: (Finset.univ : Finset α) = {⊤, ⊥}
+  结论: (有限集.univ : 有限集 α) = {⊤, ⊥}
   证明: by
   ext
   simpa using (eq_bot_or_eq_top _).symm
@@ -86,7 +86,7 @@ theorem card
 
 中文:
 定理 card
-  结论: Fintype.card α = 2
+  结论: 有限类型.card α = 2
   证明: (Fintype.ofEquiv_card _).trans Fintype.card_bool
 
 Depends on / 依赖: Fintype, Fintype.card_bool, Fintype.ofEquiv_card, card_bool, ofEquiv_card
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSimpleOrder 布尔
+  签名: 是单序 布尔值
   定义体: ⟨fun a => by
     rw [← Finset.mem_singleton]; rw [Or.comm]; rw [← Finset.mem_insert]; rw [top_eq_true]; rw [bot_eq_false]; rw [←
       Fintype.univ_bool]
@@ -163,7 +163,7 @@ exact ⟨x, ⟨hx.1, fun c hac hcx => hcx.not_ge hxmin ⟨hac, hcx.le.trans hx.2
 
 中文:
 实例 :
-  签名: IsStronglyAtomic α
+  签名: 是StronglyAtomic α
   定义体: by
     obtain ⟨x, hx, hxmin⟩ := (LocallyFiniteOrder.finsetIoc a b).exists_minimal
       ⟨b, by simpa [LocallyFiniteOrder.finset_mem_Ioc]⟩
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStronglyCoatomic α
+  签名: 是StronglyCoatomic α
   定义体: by
   rw [← isStronglyAtomic_dual_iff_is_stronglyCoatomic]; infer_instance
 
@@ -219,8 +219,8 @@ theorem exists_covby_infinite_Ici_of_infinite_Ici
   exact Set.mem_biUnion hax hxb
 
 中文:
-定理 exists_covby_infinite_Ici_of_infinite_Ici
-  结论: [IsStronglyAtomic α]
+定理 存在_covby_infinite_Ici_of_infinite_Ici
+  结论: [是StronglyAtomic α]
   证明: by
   by_contra! h
   refine ((hfin.biUnion (t := Set.Ici) (by simpa using h)).subset (fun b hb => ?_)).not_infinite
@@ -250,8 +250,8 @@ theorem exists_covby_infinite_Iic_of_infinite_Iic
   exact exists_covby_infinite_Ici_of_infinite_Ici (α := αᵒᵈ) ha hfin
 
 中文:
-定理 exists_covby_infinite_Iic_of_infinite_Iic
-  结论: [IsStronglyCoatomic α]
+定理 存在_covby_infinite_Iic_of_infinite_Iic
+  结论: [是StronglyCoatomic α]
   证明: by
   simp_rw [← toDual_covBy_toDual_iff (α := α)] at hfin ⊢
   exact exists_covby_infinite_Ici_of_infinite_Ici (α := αᵒᵈ) ha hfin

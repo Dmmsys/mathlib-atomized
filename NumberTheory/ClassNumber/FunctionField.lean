@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (ClassGroup (ringOf整数egers Fq F))
+  签名: 有限类型 (ClassGroup (ringOf整数egers Fq F))
   定义体: ClassGroup.fintypeOfAdmissibleOfFinite (RatFunc Fq) F
     (Polynomial.cardPowDegreeIsAdmissible :
       AbsoluteValue.IsAdmissible (Polynomial.cardPowDegree : AbsoluteValue Fq[X] Int))

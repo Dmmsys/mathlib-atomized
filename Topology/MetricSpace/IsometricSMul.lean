@@ -51,10 +51,10 @@ class IsIsometricVAdd
     - isometry_vadd((X)) : forall c : M, Isometry ((c +ᵥ ·) : X -> X)
 
 中文:
-类 IsIsometricVAdd
-  参数: (X : Type w) [PseudoEMetricSpace X] [VAdd M X]
+类 是是ometricVAdd
+  参数: (X : 类型 w) [PseudoEMetric空间 X] [向量加法 M X]
   公理与运算 (1 个):
-    - isometry_vadd((X)) : 对任意 c : M, Isometry ((c +ᵥ ·) : X -> X)
+    - isometry_vadd((X)) : 对任意 c : M, 等距 ((c +ᵥ ·) : X -> X)
 -/
 class IsIsometricVAdd (X : Type w) [PseudoEMetricSpace X] [VAdd M X] : Prop where
   isometry_vadd (X) : forall c : M, Isometry ((c +ᵥ ·) : X -> X)
@@ -71,10 +71,10 @@ class IsIsometricSMul
     - isometry_smul((X)) : forall c : M, Isometry ((c • ·) : X -> X)
 
 中文:
-类 IsIsometricSMul
-  参数: (X : Type w) [PseudoEMetricSpace X] [SMul M X]
+类 是是ometricSMul
+  参数: (X : 类型 w) [PseudoEMetric空间 X] [标量乘法 M X]
   公理与运算 (1 个):
-    - isometry_smul((X)) : 对任意 c : M, Isometry ((c • ·) : X -> X)
+    - isometry_smul((X)) : 对任意 c : M, 等距 ((c • ·) : X -> X)
 -/
 class IsIsometricSMul (X : Type w) [PseudoEMetricSpace X] [SMul M X] : Prop where
   isometry_smul (X) : forall c : M, Isometry ((c • ·) : X -> X)
@@ -111,7 +111,7 @@ theorem edist_smul_left
 
 中文:
 定理 edist_smul_left
-  条件: [SMul M X] [IsIsometricSMul M X] (c : M) (x y : X)
+  条件: [标量乘法 M X] [是是ometricSMul M X] (c : M) (x y : X)
   证明: isometry_smul X c x y
 
 @[to_additive (attr := simp)]
@@ -135,7 +135,7 @@ theorem ediam_smul
 
 中文:
 定理 ediam_smul
-  条件: [SMul M X] [IsIsometricSMul M X] (c : M) (s : Set X)
+  条件: [标量乘法 M X] [是是ometricSMul M X] (c : M) (s : 集合 X)
   证明: (isometry_smul _ _).ediam_image s
 
 @[to_additive]
@@ -159,7 +159,7 @@ theorem isometry_mul_left
 
 中文:
 定理 isometry_mul_left
-  条件: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul M M] (a : M)
+  条件: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul M M] (a : M)
   证明: isometry_smul M a
 
 @[to_additive (attr := simp)]
@@ -183,7 +183,7 @@ theorem edist_mul_left
 
 中文:
 定理 edist_mul_left
-  条件: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul M M] (a b c : M)
+  条件: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul M M] (a b c : M)
   证明: isometry_mul_left a b c
 
 @[to_additive]
@@ -207,7 +207,7 @@ theorem isometry_mul_right
 
 中文:
 定理 isometry_mul_right
-  条件: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M] (a : M)
+  条件: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul Mᵐᵒᵖ M] (a : M)
   证明: isometry_smul M (MulOpposite.op a)
 
 @[to_additive (attr := simp)]
@@ -231,7 +231,7 @@ theorem edist_mul_right
 
 中文:
 定理 edist_mul_right
-  条件: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M] (a b c : M)
+  条件: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul Mᵐᵒᵖ M] (a b c : M)
   证明: isometry_mul_right c a b
 
 @[to_additive (attr := simp)]
@@ -256,7 +256,7 @@ theorem edist_div_right
 
 中文:
 定理 edist_div_right
-  结论: [DivInvMonoid M] [PseudoEMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M]
+  结论: [除逆幺半群 M] [PseudoEMetric空间 M] [是是ometricSMul Mᵐᵒᵖ M]
   证明: by
   simp only [div_eq_mul_inv, edist_mul_right]
 
@@ -282,7 +282,7 @@ theorem edist_inv_inv
 
 中文:
 定理 edist_inv_inv
-  结论: [PseudoEMetricSpace G] [IsIsometricSMul G G] [IsIsometricSMul Gᵐᵒᵖ G]
+  结论: [PseudoEMetric空间 G] [是是ometricSMul G G] [是是ometricSMul Gᵐᵒᵖ G]
   证明: by
   rw [← edist_mul_left a]; rw [← edist_mul_right _ _ b]; rw [mul_inv_cancel]; rw [one_mul]; rw [inv_mul_cancel_right]; rw [edist_comm]
 
@@ -307,7 +307,7 @@ theorem isometry_inv
 
 中文:
 定理 isometry_inv
-  条件: [PseudoEMetricSpace G] [IsIsometricSMul G G] [IsIsometricSMul Gᵐᵒᵖ G]
+  条件: [PseudoEMetric空间 G] [是是ometricSMul G G] [是是ometricSMul Gᵐᵒᵖ G]
   证明: edist_inv_inv
 
 @[to_additive]
@@ -331,7 +331,7 @@ theorem edist_inv
 
 中文:
 定理 edist_inv
-  结论: [PseudoEMetricSpace G] [IsIsometricSMul G G] [IsIsometricSMul Gᵐᵒᵖ G]
+  结论: [PseudoEMetric空间 G] [是是ometricSMul G G] [是是ometricSMul Gᵐᵒᵖ G]
   证明: by rw [← edist_inv_inv, inv_inv]
 
 @[to_additive (attr := simp)]
@@ -353,7 +353,7 @@ theorem edist_div_left
 
 中文:
 定理 edist_div_left
-  结论: [PseudoEMetricSpace G] [IsIsometricSMul G G] [IsIsometricSMul Gᵐᵒᵖ G]
+  结论: [PseudoEMetric空间 G] [是是ometricSMul G G] [是是ometricSMul Gᵐᵒᵖ G]
   证明: by
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [edist_mul_left]; rw [edist_inv_inv]
 
@@ -431,7 +431,7 @@ definition mulLeft
 
 中文:
 定义 mulLeft
-  签名: [IsIsometricSMul G G] (c : G)
+  签名: [是是ometricSMul G G] (c : G)
   定义体: Equiv.mulLeft c
   isometry_toFun := edist_mul_left c
 
@@ -454,7 +454,7 @@ theorem mulLeft_symm
 
 中文:
 定理 mulLeft_symm
-  条件: [IsIsometricSMul G G] (x : G)
+  条件: [是是ometricSMul G G] (x : G)
   证明: constSMul_symm x
 
 Depends on / 依赖: constSMul_symm
@@ -478,7 +478,7 @@ definition mulRight
 
 中文:
 定义 mulRight
-  签名: [IsIsometricSMul Gᵐᵒᵖ G] (c : G)
+  签名: [是是ometricSMul Gᵐᵒᵖ G] (c : G)
   定义体: Equiv.mulRight c
   isometry_toFun a b := edist_mul_right a b c
 
@@ -502,7 +502,7 @@ theorem mulRight_symm
 
 中文:
 定理 mulRight_symm
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (x : G)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (x : G)
   结论: (mulRight x).symm = mulRight x⁻¹
   证明: ext fun _ => rfl
 -/
@@ -524,7 +524,7 @@ definition divRight
 
 中文:
 定义 divRight
-  签名: [IsIsometricSMul Gᵐᵒᵖ G] (c : G)
+  签名: [是是ometricSMul Gᵐᵒᵖ G] (c : G)
   定义体: Equiv.divRight c
   isometry_toFun a b := edist_div_right a b c
 
@@ -548,7 +548,7 @@ theorem divRight_symm
 
 中文:
 定理 divRight_symm
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (c : G)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (c : G)
   结论: (divRight c).symm = mulRight c
   证明: ext fun _ => rfl
 -/
@@ -736,7 +736,7 @@ theorem preimage_mul_left_eball
 
 中文:
 定理 preimage_mul_left_eball
-  条件: [IsIsometricSMul G G] (a b : G) (r : 实数>=0∞)
+  条件: [是是ometricSMul G G] (a b : G) (r : 实数>=0∞)
   证明: preimage_smul_eball a b r
 
 @[to_additive (attr := simp)]
@@ -762,7 +762,7 @@ theorem preimage_mul_right_eball
 
 中文:
 定理 preimage_mul_right_eball
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数>=0∞)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数>=0∞)
   证明: by
   rw [div_eq_mul_inv]
   exact preimage_smul_eball (MulOpposite.op a) b r
@@ -789,7 +789,7 @@ theorem preimage_mul_left_closedEBall
 
 中文:
 定理 preimage_mul_left_closedEBall
-  条件: [IsIsometricSMul G G] (a b : G) (r : 实数>=0∞)
+  条件: [是是ometricSMul G G] (a b : G) (r : 实数>=0∞)
   证明: preimage_smul_closedEBall a b r
 
 @[to_additive (attr := simp)]
@@ -813,7 +813,7 @@ theorem preimage_mul_right_closedEBall
 
 中文:
 定理 preimage_mul_right_closedEBall
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数>=0∞)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数>=0∞)
   证明: by
   rw [div_eq_mul_inv]
   exact preimage_smul_closedEBall (MulOpposite.op a) b r
@@ -894,7 +894,7 @@ theorem dist_smul
 
 中文:
 定理 dist_smul
-  条件: [PseudoMetricSpace X] [SMul M X] [IsIsometricSMul M X] (c : M) (x y : X)
+  条件: [伪度量空间 X] [标量乘法 M X] [是是ometricSMul M X] (c : M) (x y : X)
   证明: (isometry_smul X c).dist_eq x y
 
 @[to_additive (attr := simp)]
@@ -918,7 +918,7 @@ theorem nndist_smul
 
 中文:
 定理 nndist_smul
-  条件: [PseudoMetricSpace X] [SMul M X] [IsIsometricSMul M X] (c : M) (x y : X)
+  条件: [伪度量空间 X] [标量乘法 M X] [是是ometricSMul M X] (c : M) (x y : X)
   证明: (isometry_smul X c).nndist_eq x y
 
 @[to_additive (attr := simp)]
@@ -942,7 +942,7 @@ theorem diam_smul
 
 中文:
 定理 diam_smul
-  条件: [PseudoMetricSpace X] [SMul M X] [IsIsometricSMul M X] (c : M) (s : Set X)
+  条件: [伪度量空间 X] [标量乘法 M X] [是是ometricSMul M X] (c : M) (s : 集合 X)
   证明: (isometry_smul _ _).diam_image s
 
 @[to_additive (attr := simp)]
@@ -966,7 +966,7 @@ theorem dist_mul_left
 
 中文:
 定理 dist_mul_left
-  条件: [PseudoMetricSpace M] [Mul M] [IsIsometricSMul M M] (a b c : M)
+  条件: [伪度量空间 M] [乘法 M] [是是ometricSMul M M] (a b c : M)
   证明: dist_smul a b c
 
 @[to_additive (attr := simp)]
@@ -990,7 +990,7 @@ theorem nndist_mul_left
 
 中文:
 定理 nndist_mul_left
-  条件: [PseudoMetricSpace M] [Mul M] [IsIsometricSMul M M] (a b c : M)
+  条件: [伪度量空间 M] [乘法 M] [是是ometricSMul M M] (a b c : M)
   证明: nndist_smul a b c
 
 @[to_additive (attr := simp)]
@@ -1014,7 +1014,7 @@ theorem dist_mul_right
 
 中文:
 定理 dist_mul_right
-  条件: [Mul M] [PseudoMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M] (a b c : M)
+  条件: [乘法 M] [伪度量空间 M] [是是ometricSMul Mᵐᵒᵖ M] (a b c : M)
   证明: dist_smul (MulOpposite.op c) a b
 
 @[to_additive (attr := simp)]
@@ -1038,7 +1038,7 @@ theorem nndist_mul_right
 
 中文:
 定理 nndist_mul_right
-  条件: [PseudoMetricSpace M] [Mul M] [IsIsometricSMul Mᵐᵒᵖ M] (a b c : M)
+  条件: [伪度量空间 M] [乘法 M] [是是ometricSMul Mᵐᵒᵖ M] (a b c : M)
   证明: nndist_smul (MulOpposite.op c) a b
 
 @[to_additive (attr := simp)]
@@ -1062,7 +1062,7 @@ theorem dist_div_right
 
 中文:
 定理 dist_div_right
-  结论: [DivInvMonoid M] [PseudoMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M]
+  结论: [除逆幺半群 M] [伪度量空间 M] [是是ometricSMul Mᵐᵒᵖ M]
   证明: by simp only [div_eq_mul_inv, dist_mul_right]
 
 @[to_additive (attr := simp)]
@@ -1086,7 +1086,7 @@ theorem nndist_div_right
 
 中文:
 定理 nndist_div_right
-  结论: [DivInvMonoid M] [PseudoMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M]
+  结论: [除逆幺半群 M] [伪度量空间 M] [是是ometricSMul Mᵐᵒᵖ M]
   证明: by
   simp only [div_eq_mul_inv, nndist_mul_right]
 
@@ -1111,7 +1111,7 @@ theorem dist_inv_inv
 
 中文:
 定理 dist_inv_inv
-  结论: [Group G] [PseudoMetricSpace G] [IsIsometricSMul G G]
+  结论: [群 G] [伪度量空间 G] [是是ometricSMul G G]
   证明: (IsometryEquiv.inv G).dist_eq a b
 
 @[to_additive (attr := simp)]
@@ -1135,7 +1135,7 @@ theorem nndist_inv_inv
 
 中文:
 定理 nndist_inv_inv
-  结论: [Group G] [PseudoMetricSpace G] [IsIsometricSMul G G]
+  结论: [群 G] [伪度量空间 G] [是是ometricSMul G G]
   证明: (IsometryEquiv.inv G).nndist_eq a b
 
 @[to_additive (attr := simp)]
@@ -1160,7 +1160,7 @@ theorem dist_div_left
 
 中文:
 定理 dist_div_left
-  结论: [Group G] [PseudoMetricSpace G] [IsIsometricSMul G G]
+  结论: [群 G] [伪度量空间 G] [是是ometricSMul G G]
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1184,7 +1184,7 @@ theorem nndist_div_left
 
 中文:
 定理 nndist_div_left
-  结论: [Group G] [PseudoMetricSpace G] [IsIsometricSMul G G]
+  结论: [群 G] [伪度量空间 G] [是是ometricSMul G G]
   证明: by
   simp [div_eq_mul_inv]
 
@@ -1208,8 +1208,8 @@ theorem Bornology.IsBounded.smul
   proof: (isometry_smul X c).lipschitz.isBounded_image hs
 
 中文:
-定理 Bornology.IsBounded.smul
-  结论: [PseudoMetricSpace X] [SMul G X] [IsIsometricSMul G X] {s : Set X}
+定理 有界结构.IsBounded.smul
+  结论: [伪度量空间 X] [标量乘法 G X] [是是ometricSMul G X] {s : 集合 X}
   证明: (isometry_smul X c).lipschitz.isBounded_image hs
 
 Depends on / 依赖: isBounded_image, isometry_smul, lipschitz, lipschitz.isBounded_image
@@ -1381,7 +1381,7 @@ theorem preimage_mul_left_ball
 
 中文:
 定理 preimage_mul_left_ball
-  条件: [IsIsometricSMul G G] (a b : G) (r : 实数)
+  条件: [是是ometricSMul G G] (a b : G) (r : 实数)
   证明: preimage_smul_ball a b r
 
 @[to_additive (attr := simp)]
@@ -1407,7 +1407,7 @@ theorem preimage_mul_right_ball
 
 中文:
 定理 preimage_mul_right_ball
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数)
   证明: by
   rw [div_eq_mul_inv]
   exact preimage_smul_ball (MulOpposite.op a) b r
@@ -1434,7 +1434,7 @@ theorem preimage_mul_left_closedBall
 
 中文:
 定理 preimage_mul_left_closedBall
-  条件: [IsIsometricSMul G G] (a b : G) (r : 实数)
+  条件: [是是ometricSMul G G] (a b : G) (r : 实数)
   证明: preimage_smul_closedBall a b r
 
 @[to_additive (attr := simp)]
@@ -1458,7 +1458,7 @@ theorem preimage_mul_right_closedBall
 
 中文:
 定理 preimage_mul_right_closedBall
-  条件: [IsIsometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数)
+  条件: [是是ometricSMul Gᵐᵒᵖ G] (a b : G) (r : 实数)
   证明: by
   rw [div_eq_mul_inv]
   exact preimage_smul_closedBall (MulOpposite.op a) b r
@@ -1489,8 +1489,8 @@ instance Prod.instIsIsometricSMul
 @[to_additive]
 
 中文:
-实例 Prod.instIsIsometricSMul
-  签名: [SMul M Y] [IsIsometricSMul M Y]
+实例 积类型.instIsIsometricSMul
+  签名: [标量乘法 M Y] [是是ometricSMul M Y]
   定义体: ⟨fun c => (isometry_smul X c).prodMap (isometry_smul Y c)⟩
 
 @[to_additive]
@@ -1512,8 +1512,8 @@ instance Prod.isIsometricSMul'
 @[to_additive]
 
 中文:
-实例 Prod.isIsometricSMul'
-  签名: {N} [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul M M] [Mul N]
+实例 积类型.isIsometricSMul'
+  签名: {N} [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul M M] [乘法 N]
   定义体: ⟨fun c => (isometry_smul M c.1).prodMap (isometry_smul N c.2)⟩
 
 @[to_additive]
@@ -1536,8 +1536,8 @@ instance Prod.isIsometricSMul''
 @[to_additive]
 
 中文:
-实例 Prod.isIsometricSMul''
-  签名: {N} [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M]
+实例 积类型.isIsometricSMul''
+  签名: {N} [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul Mᵐᵒᵖ M]
   定义体: ⟨fun c => (isometry_mul_right c.unop.1).prodMap (isometry_mul_right c.unop.2)⟩
 
 @[to_additive]
@@ -1561,8 +1561,8 @@ instance Units.isIsometricSMul
 @[to_additive]
 
 中文:
-实例 Units.isIsometricSMul
-  签名: [Monoid M]
+实例 单位群.isIsometricSMul
+  签名: [幺半群 M]
   定义体: ⟨fun c => isometry_smul X (c : M)⟩
 
 @[to_additive]
@@ -1585,7 +1585,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIsometricSMul M Xᵐᵒᵖ
+  签名: 是是ometricSMul M Xᵐᵒᵖ
   定义体: ⟨fun c x y => by simpa only using! edist_smul_left c x.unop y.unop⟩
 
 @[to_additive]
@@ -1607,8 +1607,8 @@ instance ULift.isIsometricSMul
 @[to_additive]
 
 中文:
-实例 ULift.isIsometricSMul
-  签名: : IsIsometricSMul (ULift M) X
+实例 类型层提升.isIsometricSMul
+  签名: : 是是ometricSMul (类型层提升 M) X
   定义体: ⟨fun c => by simpa only using! isometry_smul X c.down⟩
 
 @[to_additive]
@@ -1630,8 +1630,8 @@ instance ULift.isIsometricSMul'
 @[to_additive]
 
 中文:
-实例 ULift.isIsometricSMul'
-  签名: : IsIsometricSMul M (ULift X)
+实例 类型层提升.isIsometricSMul'
+  签名: : 是是ometricSMul M (类型层提升 X)
   定义体: ⟨fun c x y => by simpa only using! edist_smul_left c x.1 y.1⟩
 
 @[to_additive]
@@ -1658,8 +1658,8 @@ instance Pi.isIsometricSMul'
 @[to_additive]
 
 中文:
-实例 Pi.isIsometricSMul'
-  签名: {ι} {M X : ι -> 类型} [Fintype ι] [对任意 i, SMul (M i) (X i)]
+实例 依赖函数类型.isIsometricSMul'
+  签名: {ι} {M X : ι -> 类型} [有限类型 ι] [对任意 i, 标量乘法 (M i) (X i)]
   定义体: ⟨fun c => .piMap (fun i => (c i • ·)) fun _ => isometry_smul _ _⟩
 
 @[to_additive]
@@ -1681,8 +1681,8 @@ instance Pi.isIsometricSMul''
   body: ⟨fun c => .piMap (fun i (x : M i) => x * c.unop i) fun _ => isometry_mul_right _⟩
 
 中文:
-实例 Pi.isIsometricSMul''
-  签名: {ι} {M : ι -> 类型} [Fintype ι] [对任意 i, Mul (M i)]
+实例 依赖函数类型.isIsometricSMul''
+  签名: {ι} {M : ι -> 类型} [有限类型 ι] [对任意 i, 乘法 (M i)]
   定义体: ⟨fun c => .piMap (fun i (x : M i) => x * c.unop i) fun _ => isometry_mul_right _⟩
 
 Depends on / 依赖: c.unop, isometry_mul_right
@@ -1701,8 +1701,8 @@ instance Additive.isIsIsometricVAdd
   body: ⟨fun c => isometry_smul X c.toMul⟩
 
 中文:
-实例 Additive.isIsIsometricVAdd
-  签名: : IsIsometricVAdd (Additive M) X
+实例 加性.isIsIsometricVAdd
+  签名: : 是是ometricVAdd (加性 M) X
   定义体: ⟨fun c => isometry_smul X c.toMul⟩
 
 Depends on / 依赖: c.toMul, isometry_smul
@@ -1719,8 +1719,8 @@ instance Additive.isIsIsometricVAdd'
   body: ⟨fun c x y => edist_smul_left c.toMul x.toMul y.toMul⟩
 
 中文:
-实例 Additive.isIsIsometricVAdd'
-  签名: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul M M]
+实例 加性.isIsIsometricVAdd'
+  签名: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul M M]
   定义体: ⟨fun c x y => edist_smul_left c.toMul x.toMul y.toMul⟩
 
 Depends on / 依赖: c.toMul, edist_smul_left, x.toMul, y.toMul
@@ -1738,8 +1738,8 @@ instance Additive.isIsIsometricVAdd''
   body: ⟨fun c x y => edist_smul_left (MulOpposite.op c.unop.toMul) x.toMul y.toMul⟩
 
 中文:
-实例 Additive.isIsIsometricVAdd''
-  签名: [Mul M] [PseudoEMetricSpace M] [IsIsometricSMul Mᵐᵒᵖ M]
+实例 加性.isIsIsometricVAdd''
+  签名: [乘法 M] [PseudoEMetric空间 M] [是是ometricSMul Mᵐᵒᵖ M]
   定义体: ⟨fun c x y => edist_smul_left (MulOpposite.op c.unop.toMul) x.toMul y.toMul⟩
 
 Depends on / 依赖: MulOpposite, MulOpposite.op, c.unop.toMul, edist_smul_left, x.toMul, y.toMul
@@ -1758,7 +1758,7 @@ instance Multiplicative.isIsometricSMul
 
 中文:
 实例 Multiplicative.isIsometricSMul
-  签名: {M X} [VAdd M X] [PseudoEMetricSpace X]
+  签名: {M X} [向量加法 M X] [PseudoEMetric空间 X]
   定义体: ⟨fun c => isometry_vadd X c.toAdd⟩
 
 Depends on / 依赖: c.toAdd, isometry_vadd
@@ -1777,7 +1777,7 @@ instance Multiplicative.isIsometricSMul'
 
 中文:
 实例 Multiplicative.isIsometricSMul'
-  签名: [Add M] [PseudoEMetricSpace M] [IsIsometricVAdd M M]
+  签名: [加法 M] [PseudoEMetric空间 M] [是是ometricVAdd M M]
   定义体: ⟨fun c x y => edist_vadd_left c.toAdd x.toAdd y.toAdd⟩
 
 Depends on / 依赖: c.toAdd, edist_vadd_left, x.toAdd, y.toAdd
@@ -1796,7 +1796,7 @@ instance Multiplicative.isIsIsometricVAdd''
 
 中文:
 实例 Multiplicative.isIsIsometricVAdd''
-  签名: [Add M] [PseudoEMetricSpace M]
+  签名: [加法 M] [PseudoEMetric空间 M]
   定义体: ⟨fun c x y => edist_vadd_left (AddOpposite.op c.unop.toAdd) x.toAdd y.toAdd⟩
 
 Depends on / 依赖: AddOpposite, AddOpposite.op, c.unop.toAdd, edist_vadd_left, x.toAdd, y.toAdd

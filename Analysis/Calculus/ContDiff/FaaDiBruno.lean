@@ -112,15 +112,15 @@ structure OrderedFinpartition
     - cover(x) : exists m, x in range (emb m)
 
 中文:
-结构 OrderedFinpartition
+结构 有序有限分拆
   参数: (n : 自然数)
   公理与运算 (8 个):
     - length : 自然数
-    - partSize : Fin length -> 自然数
+    - partSize : 有限集 length -> 自然数
     - partSize_pos : 对任意 m, 0 < partSize m
-    - emb : 对任意 m, (Fin (partSize m)) -> Fin n
-    - emb_strictMono : 对任意 m, StrictMono (emb m)
-    - parts_strictMono : StrictMono fun m => emb m ⟨partSize m - 1, 自然数.sub_one_lt_of_lt (partSize_pos m)⟩
+    - emb : 对任意 m, (有限集 (partSize m)) -> 有限集 n
+    - emb_strictMono : 对任意 m, 严格递增 (emb m)
+    - parts_strictMono : 严格递增 fun m => emb m ⟨partSize m - 1, 自然数.sub_one_lt_of_lt (partSize_pos m)⟩
     - disjoint : PairwiseDisjoint univ fun m => range (emb m)
     - cover(x) : 存在 m, x in range (emb m)
 -/
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (OrderedFinpartition n)
+  签名: 可居 (有序有限分拆 n)
   定义体: ⟨atomic n⟩
 
 @[simp]
@@ -219,7 +219,7 @@ theorem default_eq
 
 中文:
 定理 default_eq
-  结论: (default : OrderedFinpartition n) = atomic n
+  结论: (default : 有序有限分拆 n) = atomic n
   证明: rfl
 -/
 theorem default_eq : (default : OrderedFinpartition n) = atomic n := rfl
@@ -256,7 +256,7 @@ lemma partSize_le
 
 中文:
 引理 partSize_le
-  条件: (m : Fin c.length)
+  条件: (m : 有限集 c.length)
   结论: c.partSize m <= n
   证明: by
   simpa only [Fintype.card_fin] using Fintype.card_le_of_injective _ (c.emb_strictMono m).injective
@@ -307,7 +307,7 @@ lemma injective_embSigma
 中文:
 引理 injective_embSigma
   条件: (n : 自然数)
-  结论: Injective (embSigma n)
+  结论: 单射 (embSigma n)
   证明: by
   rintro ⟨plength, psize, -, pemb, -, -, -, -⟩ ⟨qlength, qsize, -, qemb, -, -, -, -⟩
   intro hpq
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (OrderedFinpartition n)
+  签名: 有限类型 (有序有限分拆 n)
   定义体: Fintype.ofInjective _ (injective_embSigma n)
 
 Depends on / 依赖: Fintype, Fintype.ofInjective, injective_embSigma, ofInjective
@@ -360,7 +360,7 @@ instance instUniqueZero
 
 中文:
 实例 instUniqueZero
-  签名: : Unique (OrderedFinpartition 0)
+  签名: : 唯一 (有序有限分拆 0)
   定义体: by
   have : Subsingleton (OrderedFinpartition 0) :=
     Fintype.card_le_one_iff_subsingleton.mp (Fintype.card_le_of_injective _ (injective_embSigma 0))
@@ -384,8 +384,8 @@ lemma exists_inverse
   exact ⟨⟨m, r⟩, hmr⟩
 
 中文:
-引理 exists_inverse
-  条件: {n : 自然数} (c : OrderedFinpartition n) (j : Fin n)
+引理 存在_inverse
+  条件: {n : 自然数} (c : 有序有限分拆 n) (j : 有限集 n)
   证明: by
   rcases c.cover j with ⟨m, r, hmr⟩
   exact ⟨⟨m, r⟩, hmr⟩
@@ -415,7 +415,7 @@ lemma emb_injective
 
 中文:
 引理 emb_injective
-  结论: Injective (fun (p : Σ m, Fin (c.partSize m)) => c.emb p.1 p.2)
+  结论: 单射 (fun (p : Σ m, 有限集 (c.partSize m)) => c.emb p.1 p.2)
   证明: by
   rintro ⟨m, r⟩ ⟨m', r'⟩ (h : c.emb m r = c.emb m' r')
   have : m = m' := by
@@ -448,7 +448,7 @@ lemma emb_ne_emb_of_ne
 
 中文:
 引理 emb_ne_emb_of_ne
-  结论: {i j : Fin c.length} {a : Fin (c.partSize i)} {b : Fin (c.partSize j)}
+  结论: {i j : 有限集 c.length} {a : 有限集 (c.partSize i)} {b : 有限集 (c.partSize j)}
   证明: c.emb_injective.ne (a₁ := ⟨i, a⟩) (a₂ := ⟨j, b⟩) (by simp [h])
 
 Depends on / 依赖: c.emb_injective.ne, emb_injective
@@ -467,7 +467,7 @@ definition index
 
 中文:
 定义 index
-  签名: (j : Fin n)
+  签名: (j : 有限集 n)
   定义体: (c.exists_inverse j).choose.1
 
 Depends on / 依赖: c.exists_inverse, exists_inverse
@@ -485,7 +485,7 @@ definition invEmbedding
 
 中文:
 定义 invEmbedding
-  签名: (j : Fin n)
+  签名: (j : 有限集 n)
   定义体: (c.exists_inverse j).choose.2
 
 Depends on / 依赖: c.exists_inverse, exists_inverse
@@ -503,7 +503,7 @@ lemma emb_invEmbedding
 
 中文:
 引理 emb_invEmbedding
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   证明: (c.exists_inverse j).choose_spec
 -/
 @[simp] lemma emb_invEmbedding (j : Fin n) :
@@ -523,7 +523,7 @@ definition equivSigma
 
 中文:
 定义 equivSigma
-  签名: : ((i : Fin c.length) × Fin (c.partSize i)) ≃ Fin n where
+  签名: : ((i : 有限集 c.length) × 有限集 (c.partSize i)) ≃ 有限集 n where
   定义体: c.emb p.1 p.2
   invFun i := ⟨c.index i, c.invEmbedding i⟩
   right_inv _ := by simp
@@ -549,7 +549,7 @@ lemma prod_sigma_eq_prod
 
 中文:
 引理 prod_sigma_eq_prod
-  条件: {α : 类型} [CommMonoid α] (v : Fin n -> α)
+  条件: {α : 类型} [交换幺半群 α] (v : 有限集 n -> α)
   证明: by
   rw [Finset.prod_sigma']
   exact Fintype.prod_equiv c.equivSigma _ _ (fun p => rfl)
@@ -589,7 +589,7 @@ lemma neZero_length
 
 中文:
 引理 neZero_length
-  条件: [NeZero n] (c : OrderedFinpartition n)
+  条件: [NeZero n] (c : 有序有限分拆 n)
   结论: NeZero c.length
   证明: ⟨(c.length_pos pos').ne'⟩
 
@@ -609,7 +609,7 @@ lemma neZero_partSize
 
 中文:
 引理 neZero_partSize
-  条件: (c : OrderedFinpartition n) (i : Fin c.length)
+  条件: (c : 有序有限分拆 n) (i : 有限集 c.length)
   结论: NeZero (c.partSize i)
   证明: .of_pos (c.partSize_pos i)
 
@@ -636,7 +636,7 @@ instance instUniqueOne
 
 中文:
 实例 instUniqueOne
-  签名: : Unique (OrderedFinpartition 1) where
+  签名: : 唯一 (有序有限分拆 1) where
   定义体: by
     have h₁ : c.length = 1 := le_antisymm c.length_le (c.length_pos Nat.zero_lt_one)
     have h₂ (i) : c.partSize i = 1 := le_antisymm (c.partSize_le _) (c.partSize_pos _)
@@ -728,7 +728,7 @@ lemma one_lt_partSize_index_zero
 
 中文:
 引理 one_lt_partSize_index_zero
-  条件: (c : OrderedFinpartition (n + 1)) (hc : range (c.emb 0) != {0})
+  条件: (c : 有序有限分拆 (n + 1)) (hc : range (c.emb 0) != {0})
   证明: by
   have : c.partSize (c.index 0) = Nat.card (range (c.emb (c.index 0))) := by
     rw [Nat.card_range_of_injective (c.emb_strictMono _).injective]; simp
@@ -797,7 +797,7 @@ definition extendLeft
 
 中文:
 定义 extendLeft
-  签名: (c : OrderedFinpartition n)
+  签名: (c : 有序有限分拆 n)
   定义体: c.length + 1
   partSize := Fin.cons 1 c.partSize
   partSize_pos := Fin.cases (by simp) (by simp [c.partSize_pos])
@@ -868,7 +868,7 @@ lemma range_extendLeft_zero
 
 中文:
 引理 range_extendLeft_zero
-  条件: (c : OrderedFinpartition n)
+  条件: (c : 有序有限分拆 n)
   证明: by
   simp only [extendLeft, cases_zero]
   apply @range_const _ _ (by simp; infer_instance)
@@ -900,7 +900,7 @@ definition extendMiddle
 
 中文:
 定义 extendMiddle
-  签名: (c : OrderedFinpartition n) (k : Fin c.length)
+  签名: (c : 有序有限分拆 n) (k : 有限集 c.length)
   定义体: c.length
   partSize := update c.partSize k (c.partSize k + 1)
   partSize_pos m := by
@@ -1014,7 +1014,7 @@ lemma index_extendMiddle_zero
 
 中文:
 引理 index_extendMiddle_zero
-  条件: (c : OrderedFinpartition n) (i : Fin c.length)
+  条件: (c : 有序有限分拆 n) (i : 有限集 c.length)
   证明: by
   have : (c.extendMiddle i).emb i 0 = 0 := by simp [extendMiddle]
   conv_rhs at this => rw [← (c.extendMiddle i).emb_invEmbedding 0]
@@ -1048,7 +1048,7 @@ lemma range_emb_extendMiddle_ne_singleton_zero
 
 中文:
 引理 range_emb_extendMiddle_ne_singleton_zero
-  条件: (c : OrderedFinpartition n) (i j : Fin c.length)
+  条件: (c : 有序有限分拆 n) (i j : 有限集 c.length)
   证明: by
   intro h
   rcases eq_or_ne j i with rfl | hij
@@ -1090,7 +1090,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (c : OrderedFinpartition n) (i : Option (Fin c.length))
+  签名: (c : 有序有限分拆 n) (i : 选项类型 (有限集 c.length))
   定义体: match i with
   | none => c.extendLeft
   | some i => c.extendMiddle i
@@ -1115,7 +1115,7 @@ lemma extend_none
 
 中文:
 引理 extend_none
-  条件: (c : OrderedFinpartition n)
+  条件: (c : 有序有限分拆 n)
   结论: c.extend none = c.extendLeft
   证明: rfl
 
@@ -1135,7 +1135,7 @@ lemma extend_some
 
 中文:
 引理 extend_some
-  条件: (c : OrderedFinpartition n) (i : Fin c.length)
+  条件: (c : 有序有限分拆 n) (i : 有限集 c.length)
   结论: c.extend i = c.extendMiddle i
   证明: rfl
 -/
@@ -1158,7 +1158,7 @@ definition eraseLeft
 
 中文:
 定义 eraseLeft
-  签名: (c : OrderedFinpartition (n + 1)) (hc : range (c.emb 0) = {0})
+  签名: (c : 有序有限分拆 (n + 1)) (hc : range (c.emb 0) = {0})
   定义体: c.length - 1
   partSize := by
     have : c.length - 1 + 1 = c.length := Nat.sub_add_cancel (c.length_pos (Nat.zero_lt_succ n))
@@ -1230,7 +1230,7 @@ definition eraseMiddle
 
 中文:
 定义 eraseMiddle
-  签名: (c : OrderedFinpartition (n + 1)) (hc : range (c.emb 0) != {0})
+  签名: (c : 有序有限分拆 (n + 1)) (hc : range (c.emb 0) != {0})
   定义体: c.length
   partSize := update c.partSize (c.index 0) (c.partSize (c.index 0) - 1)
   partSize_pos i := by
@@ -1485,7 +1485,7 @@ definition applyOrderedFinpartition
 
 中文:
 定义 applyOrderedFinpartition
-  签名: (p : 对任意 (i : Fin c.length), E [×c.partSize i]->L[𝕜] F)
+  签名: (p : 对任意 (i : 有限集 c.length), E [×c.partSize i]->L[𝕜] F)
   定义体: fun v m => p m (v ∘ c.emb m)
 
 Depends on / 依赖: c.emb
@@ -1504,7 +1504,7 @@ lemma applyOrderedFinpartition_apply
 
 中文:
 引理 applyOrderedFinpartition_apply
-  结论: (p : 对任意 (i : Fin c.length), E [×c.partSize i]->L[𝕜] F)
+  结论: (p : 对任意 (i : 有限集 c.length), E [×c.partSize i]->L[𝕜] F)
   证明: rfl
 -/
 lemma applyOrderedFinpartition_apply (p : forall (i : Fin c.length), E [×c.partSize i]->L[𝕜] F)
@@ -1521,7 +1521,7 @@ theorem norm_applyOrderedFinpartition_le
 
 中文:
 定理 norm_applyOrderedFinpartition_le
-  结论: (p : 对任意 (i : Fin c.length), E [×c.partSize i]->L[𝕜] F)
+  结论: (p : 对任意 (i : 有限集 c.length), E [×c.partSize i]->L[𝕜] F)
   证明: (p m).le_opNorm _
 
 Depends on / 依赖: le_opNorm
@@ -1603,7 +1603,7 @@ theorem applyOrderedFinpartition_update_left
 
 中文:
 定理 applyOrderedFinpartition_update_left
-  结论: (p : 对任意 (i : Fin c.length), E [×c.partSize i]->L[𝕜] F)
+  结论: (p : 对任意 (i : 有限集 c.length), E [×c.partSize i]->L[𝕜] F)
   证明: by
   ext d
   by_cases h : d = m
@@ -2182,7 +2182,7 @@ theorem HasFTaylorSeriesUpToOn.comp
   thank
 
 中文:
-定理 HasFTaylorSeriesUpToOn.comp
+定理 有FTaylorSeriesUpToOn.comp
   结论: {n : WithTop 自然数∞} {g : F -> G} {f : E -> F}
   证明: by
   /- One has to check that the `m+1`-th term is the derivative of the `m`-th term. The `m`-th term

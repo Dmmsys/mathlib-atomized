@@ -43,7 +43,7 @@ definition leftExactFunctor
 
 中文:
 定义 leftExactFunctor
-  签名: : Object命题erty (C ⥤ D)
+  签名: : ObjectProperty (C ⥤ D)
   定义体: fun F => PreservesFiniteLimits F
 
 Depends on / 依赖: PreservesFiniteLimits
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: (leftExactFunctor C D).IsClosedUnderIsomorphisms
+  签名: (leftExactFunctor C D).在同构下封闭
   定义体: by
     simp only [leftExactFunctor_iff] at h ⊢
     exact preservesFiniteLimits_of_natIso e
@@ -141,7 +141,7 @@ abbreviation LeftExactFunctor.fullyFaithful
 
 中文:
 缩写 LeftExactFunctor.fullyFaithful
-  签名: : (LeftExactFunctor.forget C D).FullyFaithful
+  签名: : (LeftExactFunctor.forget C D).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
@@ -159,7 +159,7 @@ definition rightExactFunctor
 
 中文:
 定义 rightExactFunctor
-  签名: : Object命题erty (C ⥤ D)
+  签名: : ObjectProperty (C ⥤ D)
   定义体: fun F => PreservesFiniteColimits F
 
 Depends on / 依赖: PreservesFiniteColimits
@@ -199,7 +199,7 @@ instance :
 
 中文:
 实例 :
-  签名: (rightExactFunctor C D).IsClosedUnderIsomorphisms
+  签名: (rightExactFunctor C D).在同构下封闭
   定义体: by
     simp only [rightExactFunctor_iff] at h ⊢
     exact preservesFiniteColimits_of_natIso e
@@ -257,7 +257,7 @@ abbreviation RightExactFunctor.fullyFaithful
 
 中文:
 缩写 RightExactFunctor.fullyFaithful
-  签名: : (RightExactFunctor.forget C D).FullyFaithful
+  签名: : (RightExactFunctor.forget C D).满忠实
   定义体: ObjectProperty.fullyFaithfulι _
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.fullyFaithful
@@ -275,7 +275,7 @@ definition exactFunctor
 
 中文:
 定义 exactFunctor
-  签名: : Object命题erty (C ⥤ D)
+  签名: : ObjectProperty (C ⥤ D)
   定义体: leftExactFunctor C D ⊓ rightExactFunctor C D
 
 Depends on / 依赖: leftExactFunctor, rightExactFunctor
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: (exactFunctor C D).IsClosedUnderIsomorphisms
+  签名: (exactFunctor C D).在同构下封闭
   定义体: by
   dsimp [exactFunctor]
   infer_instance
@@ -659,7 +659,7 @@ definition LeftExactFunctor.of
 
 中文:
 定义 LeftExactFunctor.of
-  签名: (F : C ⥤ D) [PreservesFiniteLimits F]
+  签名: (F : C ⥤ D) [保持FiniteLimits F]
   定义体: ⟨F, by simpa⟩
 -/
 def LeftExactFunctor.of (F : C ⥤ D) [PreservesFiniteLimits F] : C ⥤ₗ D :=
@@ -675,7 +675,7 @@ definition RightExactFunctor.of
 
 中文:
 定义 RightExactFunctor.of
-  签名: (F : C ⥤ D) [PreservesFiniteColimits F]
+  签名: (F : C ⥤ D) [保持FiniteColimits F]
   定义体: ⟨F, by simpa⟩
 -/
 def RightExactFunctor.of (F : C ⥤ D) [PreservesFiniteColimits F] : C ⥤ᵣ D :=
@@ -693,7 +693,7 @@ definition ExactFunctor.of
 
 中文:
 定义 ExactFunctor.of
-  签名: (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F]
+  签名: (F : C ⥤ D) [保持FiniteLimits F] [保持FiniteColimits F]
   定义体: ⟨F, by simp only [exactFunctor_iff]; constructor <;> assumption⟩
 
 @[simp]
@@ -716,7 +716,7 @@ theorem LeftExactFunctor.of_fst
 
 中文:
 定理 LeftExactFunctor.of_fst
-  条件: (F : C ⥤ D) [PreservesFiniteLimits F]
+  条件: (F : C ⥤ D) [保持FiniteLimits F]
   证明: rfl
 
 @[simp]
@@ -738,7 +738,7 @@ theorem RightExactFunctor.of_fst
 
 中文:
 定理 RightExactFunctor.of_fst
-  条件: (F : C ⥤ D) [PreservesFiniteColimits F]
+  条件: (F : C ⥤ D) [保持FiniteColimits F]
   证明: rfl
 
 @[simp]
@@ -758,7 +758,7 @@ theorem ExactFunctor.of_fst
 
 中文:
 定理 ExactFunctor.of_fst
-  条件: (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F]
+  条件: (F : C ⥤ D) [保持FiniteLimits F] [保持FiniteColimits F]
   证明: rfl
 -/
 theorem ExactFunctor.of_fst (F : C ⥤ D) [PreservesFiniteLimits F] [PreservesFiniteColimits F] :
@@ -775,7 +775,7 @@ theorem LeftExactFunctor.forget_obj_of
 
 中文:
 定理 LeftExactFunctor.forget_obj_of
-  条件: (F : C ⥤ D) [PreservesFiniteLimits F]
+  条件: (F : C ⥤ D) [保持FiniteLimits F]
   证明: rfl
 -/
 theorem LeftExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteLimits F] :
@@ -792,7 +792,7 @@ theorem RightExactFunctor.forget_obj_of
 
 中文:
 定理 RightExactFunctor.forget_obj_of
-  条件: (F : C ⥤ D) [PreservesFiniteColimits F]
+  条件: (F : C ⥤ D) [保持FiniteColimits F]
   证明: rfl
 -/
 theorem RightExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteColimits F] :
@@ -809,7 +809,7 @@ theorem ExactFunctor.forget_obj_of
 
 中文:
 定理 ExactFunctor.forget_obj_of
-  结论: (F : C ⥤ D) [PreservesFiniteLimits F]
+  结论: (F : C ⥤ D) [保持FiniteLimits F]
   证明: rfl
 -/
 theorem ExactFunctor.forget_obj_of (F : C ⥤ D) [PreservesFiniteLimits F]

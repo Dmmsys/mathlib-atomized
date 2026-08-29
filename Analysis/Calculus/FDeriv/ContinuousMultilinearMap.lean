@@ -67,7 +67,7 @@ theorem ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap
   ext <;> simp [fderivCompContinuousLinearMap]
 
 中文:
-定理 ContinuousMultilinearMap.hasStrictFDerivAt_compContinuousLinearMap
+定理 连续多重线性映射.hasStrictFDerivAt_compContinuousLinearMap
   证明: by
   have := (compContinuousLinearMapContinuousMultilinear 𝕜 F G H).hasStrictFDerivAt fg.2
 .clm_apply hasStrictFDerivAt_fst convert! this.comp fg hasStrictFDerivAt_snd
@@ -121,7 +121,7 @@ theorem HasFDerivAt.continuousMultilinearMapCompContinuousLinearMap
       (hf.prodMk (hasFDerivAt_pi.2 hg))
 
 中文:
-定理 HasFDerivAt.continuousMultilinearMapCompContinuousLinearMap
+定理 在点处Fréchet可导.continuousMultilinearMapCompContinuousLinearMap
   证明: by
   convert!
 .comp x .hasFDerivAt hasStrictFDerivAt_compContinuousLinearMap (f x, (g · x))
@@ -305,7 +305,7 @@ theorem Differentiable.continuousMultilinearMapCompContinuousLinearMap
   (hf x).continuousMultilinearMapCompContinuousLinearMap (hg · x)
 
 中文:
-定理 Differentiable.continuousMultilinearMapCompContinuousLinearMap
+定理 可微.continuousMultilinearMapCompContinuousLinearMap
   证明: fun x =>
   (hf x).continuousMultilinearMapCompContinuousLinearMap (hg · x)
 -/

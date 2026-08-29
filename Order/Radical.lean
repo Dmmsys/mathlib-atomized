@@ -25,7 +25,7 @@ definition Order.radical
 
 中文:
 定义 Order.radical
-  签名: (α : 类型) [Preorder α] [OrderTop α] [InfSet α]
+  签名: (α : 类型) [预序 α] [有顶序 α] [下确界集 α]
   定义体: ⨅ a in {H | IsCoatom H}, a
 
 Depends on / 依赖: IsCoatom
@@ -108,7 +108,7 @@ theorem Order.radical_nongenerating
 
 中文:
 定理 Order.radical_nongenerating
-  条件: [IsCoatomic α] {a : α} (h : a ⊔ radical α = ⊤)
+  条件: [是余原子的 α] {a : α} (h : a ⊔ radical α = ⊤)
   结论: a = ⊤
   证明: by
   -- Since the lattice is coatomic, either `a` is already the top element,

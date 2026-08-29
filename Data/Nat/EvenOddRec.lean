@@ -33,7 +33,7 @@ definition evenOddRec
 
 中文:
 定义 evenOddRec
-  签名: {P : 自然数 -> Sort*} (h0 : P 0) (h_even : 对任意 n, P n -> P (2 * n))
+  签名: {P : 自然数 -> 类型层*} (h0 : P 0) (h_even : 对任意 n, P n -> P (2 * n))
   定义体: binaryRec h0 (fun
     | false, i, hi => (h_even i hi : P (2 * i))
     | true, i, hi => (h_odd i hi : P (2 * i + 1))) n
@@ -61,7 +61,7 @@ theorem evenOddRec_zero
 
 中文:
 定理 evenOddRec_zero
-  结论: {P : 自然数 -> Sort*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
+  结论: {P : 自然数 -> 类型层*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
   证明: binaryRec_zero _ _
 
 @[simp]
@@ -87,7 +87,7 @@ theorem evenOddRec_even
 
 中文:
 定理 evenOddRec_even
-  结论: {P : 自然数 -> Sort*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
+  结论: {P : 自然数 -> 类型层*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
   证明: by
   apply binaryRec_eq false n
   simp [H]
@@ -115,7 +115,7 @@ theorem evenOddRec_odd
 
 中文:
 定理 evenOddRec_odd
-  结论: {P : 自然数 -> Sort*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
+  结论: {P : 自然数 -> 类型层*} (h0 : P 0) (h_even : 对任意 i, P i -> P (2 * i))
   证明: by
   apply binaryRec_eq true n
   simp [H]
@@ -144,7 +144,7 @@ definition evenOddStrongRec
 
 中文:
 定义 evenOddStrongRec
-  签名: {P : 自然数 -> Sort*}
+  签名: {P : 自然数 -> 类型层*}
   定义体: n.strongRecOn fun m ih => m.even_or_odd'.choose_spec.by_cases
     (fun h => h.symm ▸ h_even m.even_or_odd'.choose <| h ▸ ih)
     (fun h => h.symm ▸ h_odd m.even_or_odd'.choose <| h ▸ ih)

@@ -60,8 +60,8 @@ definition OrderType.instSetoid
   iseqv := ⟨fun _ => ⟨.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
 
 中文:
-定义 OrderType.instSetoid
-  签名: : Setoid LinOrd where
+定义 序型.instSetoid
+  签名: : 集合等价关系 线性序 where
   定义体: fun lin_ord₁ lin_ord₂ => Nonempty (lin_ord₁ ≃o lin_ord₂)
   iseqv := ⟨fun _ => ⟨.refl _⟩, fun ⟨e⟩ => ⟨e.symm⟩, fun ⟨e₁⟩ ⟨e₂⟩ => ⟨e₁.trans e₂⟩⟩
 
@@ -82,8 +82,8 @@ definition OrderType
   body: Quotient OrderType.instSetoid
 
 中文:
-定义 OrderType
-  签名: : Type (u + 1)
+定义 序型
+  签名: : 类型 (u + 1)
   定义体: Quotient OrderType.instSetoid
 
 Depends on / 依赖: OrderType, OrderType.instSetoid, Quotient, instSetoid
@@ -103,7 +103,7 @@ definition ToType
 
 中文:
 定义 ToType
-  签名: (o : OrderType)
+  签名: (o : 序型)
   定义体: o.out.carrier
 
 Depends on / 依赖: carrier, o.out.carrier
@@ -129,7 +129,7 @@ definition type
 
 中文:
 定义 type
-  签名: (α : 类型u) [LinearOrder α]
+  签名: (α : 类型u) [线性序 α]
   定义体: ⟦⟨α⟩⟧
 -/
 def type (α : Type u) [LinearOrder α] : OrderType :=
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero OrderType
+  签名: 零 序型
   定义体: type PEmpty
 
 Depends on / 依赖: PEmpty
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited OrderType
+  签名: 可居 序型
   定义体: ⟨0⟩
 -/
 instance : Inhabited OrderType :=
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: One OrderType
+  签名: 幺 序型
   定义体: type PUnit
 
 @[simp]
@@ -201,7 +201,7 @@ theorem type_toType
 
 中文:
 定理 type_toType
-  条件: (o : OrderType)
+  条件: (o : 序型)
   结论: type o.ToType = o
   证明: surjInv_eq Quot.exists_rep o
 
@@ -219,7 +219,7 @@ theorem type_eq_type
 
 中文:
 定理 type_eq_type
-  结论: type α = type β ↔ Nonempty (α ≃o β)
+  结论: type α = type β ↔ 非空 (α ≃o β)
   证明: Quotient.eq'
 
 Depends on / 依赖: Quotient, Quotient.eq
@@ -269,7 +269,7 @@ theorem type_of_isEmpty
 
 中文:
 定理 type_of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: type α = 0
   证明: type_congr .ofIsEmpty α PEmpty
 
@@ -290,7 +290,7 @@ theorem type_eq_zero
 
 中文:
 定理 type_eq_zero
-  结论: type α = 0 ↔ IsEmpty α where
+  结论: type α = 0 ↔ 是空 α where
   证明: let ⟨s⟩ := type_eq_type.1 h
     s.toEquiv.isEmpty
   mpr := @type_of_isEmpty α _
@@ -315,7 +315,7 @@ theorem type_ne_zero_iff
 
 中文:
 定理 type_ne_zero_iff
-  结论: type α != 0 ↔ Nonempty α
+  结论: type α != 0 ↔ 非空 α
   证明: by simp [type_eq_zero]
 
 @[simp]
@@ -338,7 +338,7 @@ theorem type_ne_zero
 
 中文:
 定理 type_ne_zero
-  条件: [h : Nonempty α]
+  条件: [h : 非空 α]
   结论: type α != 0
   证明: type_ne_zero_iff.2 h
 
@@ -363,7 +363,7 @@ theorem type_of_unique
 
 中文:
 定理 type_of_unique
-  条件: [Nonempty α] [Subsingleton α]
+  条件: [非空 α] [子单例 α]
   结论: type α = 1
   证明: by
   cases nonempty_unique α
@@ -388,7 +388,7 @@ theorem type_eq_one
 
 中文:
 定理 type_eq_one
-  结论: type α = 1 ↔ Nonempty (Unique α)
+  结论: type α = 1 ↔ 非空 (唯一 α)
   证明: ⟨fun h => let ⟨s⟩ := type_eq_type.1 h; ⟨s.toEquiv.unique⟩,
     fun ⟨_⟩ => type_of_unique⟩
 
@@ -415,8 +415,8 @@ theorem isEmpty_toType_iff
 
 中文:
 定理 isEmpty_toType_iff
-  条件: {o : OrderType}
-  结论: IsEmpty o.ToType ↔ o = 0
+  条件: {o : 序型}
+  结论: 是空 o.ToType ↔ o = 0
   证明: by
   rw [← @type_eq_zero o.ToType]; rw [type_toType]
 
@@ -438,8 +438,8 @@ theorem nonempty_toType_iff
 
 中文:
 定理 nonempty_toType_iff
-  条件: {o : OrderType}
-  结论: Nonempty o.ToType ↔ o != 0
+  条件: {o : 序型}
+  结论: 非空 o.ToType ↔ o != 0
   证明: by
   rw [← @type_ne_zero_iff o.ToType]; rw [type_toType]
 -/
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial OrderType.{u}
+  签名: 非平凡 序型.{u}
   定义体: ⟨⟨1, 0, type_ne_zero⟩⟩
 
 Depends on / 依赖: type_ne_zero
@@ -476,7 +476,7 @@ theorem inductionOn
 
 中文:
 定理 inductionOn
-  结论: {C : OrderType -> 命题} (o : OrderType)
+  结论: {C : 序型 -> 命题} (o : 序型)
   证明: Quot.inductionOn o (fun α => H α)
 
 Depends on / 依赖: Quot.inductionOn, inductionOn
@@ -497,7 +497,7 @@ theorem inductionOn₂
 
 中文:
 定理 inductionOn₂
-  结论: {C : OrderType -> OrderType -> 命题} (o₁ o₂ : OrderType)
+  结论: {C : 序型 -> 序型 -> 命题} (o₁ o₂ : 序型)
   证明: Quotient.inductionOn₂ o₁ o₂ fun α β => H α β
 
 Depends on / 依赖: Quotient, Quotient.inductionOn
@@ -519,7 +519,7 @@ theorem inductionOn₃
 
 中文:
 定理 inductionOn₃
-  结论: {C : OrderType -> OrderType -> OrderType -> 命题} (o₁ o₂ o₃ : OrderType)
+  结论: {C : 序型 -> 序型 -> 序型 -> 命题} (o₁ o₂ o₃ : 序型)
   证明: Quotient.inductionOn₃ o₁ o₂ o₃ fun α β γ =>
     H α β γ
 
@@ -542,7 +542,7 @@ definition liftOn
 
 中文:
 定义 liftOn
-  签名: (o : OrderType) (f : 对任意 (α) [LinearOrder α], δ)
+  签名: (o : 序型) (f : 对任意 (α) [线性序 α], δ)
   定义体: Quotient.liftOn o (fun w => f w)
     fun w₁ w₂ h => c w₁ w₂ (Quotient.sound h)
 
@@ -567,7 +567,7 @@ definition liftOn₂
 
 中文:
 定义 liftOn₂
-  签名: (o₁ o₂ : OrderType) (f : 对任意 (α) [LinearOrder α] (β) [LinearOrder β], δ)
+  签名: (o₁ o₂ : 序型) (f : 对任意 (α) [线性序 α] (β) [线性序 β], δ)
   定义体: Quotient.liftOn₂ o₁ o₂ (fun w v => f w v)
     fun w₁ w₂ v₁ v₂ hw hv => c w₁ w₂ v₁ v₂ (Quotient.sound hw) (Quotient.sound hv)
 
@@ -594,7 +594,7 @@ theorem liftOn_type
 
 中文:
 定理 liftOn_type
-  结论: (f : 对任意 (α) [LinearOrder α], δ)
+  结论: (f : 对任意 (α) [线性序 α], δ)
   证明: by rfl
 
 @[simp]
@@ -615,7 +615,7 @@ theorem liftOn₂_type
 
 中文:
 定理 liftOn₂_type
-  结论: {α : 类型u} {β : 类型v} {δ : 类型} [LinearOrder α] [LinearOrder β]
+  结论: {α : 类型u} {β : 类型v} {δ : 类型} [线性序 α] [线性序 β]
   证明: by rfl
 -/
 theorem liftOn₂_type {α : Type u} {β : Type v} {δ : Type*} [LinearOrder α] [LinearOrder β]
@@ -644,7 +644,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder OrderType
+  签名: 预序 序型
   定义体: Quotient.liftOn₂ o₁ o₂ (fun r s => Nonempty (r ↪o s))
     fun _ _ _ _ ⟨f⟩ ⟨g⟩ => propext
       ⟨fun ⟨h⟩ => ⟨(f.symm.toOrderEmbedding.trans h).trans g.toOrderEmbedding⟩, fun ⟨h⟩ =>
@@ -672,7 +672,7 @@ instance :
 
 中文:
 实例 :
-  签名: NeZero (1 : OrderType)
+  签名: NeZero (1 : 序型)
   定义体: ⟨type_ne_zero⟩
 
 Depends on / 依赖: type_ne_zero
@@ -690,7 +690,7 @@ theorem type_le_type_iff
 
 中文:
 定理 type_le_type_iff
-  结论: type α <= type β ↔ Nonempty (α ↪o β)
+  结论: type α <= type β ↔ 非空 (α ↪o β)
   证明: .rfl
 -/
 theorem type_le_type_iff : type α <= type β ↔ Nonempty (α ↪o β) :=
@@ -729,7 +729,7 @@ alias _root_.OrderEmbedding.type_le_type := type_le_type
 
 中文:
 定理 type_lt_type
-  条件: (h : α ↪o β) (hne : IsEmpty (β ↪o α))
+  条件: (h : α ↪o β) (hne : 是空 (β ↪o α))
   结论: type α < type β
   证明: ⟨⟨h⟩, not_nonempty_iff.mpr hne⟩
 
@@ -756,7 +756,7 @@ theorem zero_le
 
 中文:
 定理 zero_le
-  条件: (o : OrderType)
+  条件: (o : 序型)
   结论: 0 <= o
   证明: inductionOn o fun _ => OrderEmbedding.ofIsEmpty.type_le_type
 -/
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot OrderType
+  签名: 有底序 序型
   定义体: 0
   bot_le := OrderType.zero_le
 
@@ -799,7 +799,7 @@ theorem bot_eq_zero
 
 中文:
 定理 bot_eq_zero
-  结论: (⊥ : OrderType) = 0
+  结论: (⊥ : 序型) = 0
   证明: rfl
 
 @[simp]
@@ -821,7 +821,7 @@ theorem not_lt_zero
 
 中文:
 定理 not_lt_zero
-  条件: {o : OrderType}
+  条件: {o : 序型}
   结论: ¬o < 0
   证明: not_lt_bot
 
@@ -846,7 +846,7 @@ theorem pos_iff_ne_zero
 
 中文:
 定理 pos_iff_ne_zero
-  条件: {o : OrderType}
+  条件: {o : 序型}
   结论: 0 < o ↔ o != 0 where
   证明: ne_bot_of_gt
   mpr ho := by
@@ -879,7 +879,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (o : OrderType.{v})
+  签名: (o : 序型.{v})
   定义体: o.liftOn (fun α _ => type (ULift α)) fun _α _ _β _ e =>
     ((ULift.orderIso.trans (type_eq_type.mp e).some).trans ULift.orderIso.symm).type_congr
 
@@ -902,7 +902,7 @@ theorem type_ulift
 
 中文:
 定理 type_ulift
-  结论: type (ULift.{v, u} α) = lift.{v} (type α)
+  结论: type (类型层提升.{v, u} α) = lift.{v} (type α)
   证明: (rfl)
 -/
 theorem type_ulift : type (ULift.{v, u} α) = lift.{v} (type α) := (rfl)
@@ -918,7 +918,7 @@ theorem lift_id'
 
 中文:
 定理 lift_id'
-  条件: (o : OrderType.{max u v})
+  条件: (o : 序型.{最大值 u v})
   结论: lift.{u} o = o
   证明: inductionOn o fun _ => type_congr ULift.orderIso
 
@@ -940,7 +940,7 @@ theorem lift_id
 
 中文:
 定理 lift_id
-  条件: (o : OrderType)
+  条件: (o : 序型)
   结论: lift.{u, u} o = o
   证明: lift_id'.{u, u} o
 
@@ -964,7 +964,7 @@ theorem lift_uzero
 
 中文:
 定理 lift_uzero
-  条件: (o : OrderType.{u})
+  条件: (o : 序型.{u})
   结论: lift.{0} o = o
   证明: lift_id'.{0, u} o
 
@@ -988,8 +988,8 @@ theorem lift_lift.{u_1}
 
 中文:
 定理 lift_lift.{u_1}
-  条件: (o : OrderType.{u_1})
-  结论: lift.{u} (lift.{v} o) = lift.{max v u} o
+  条件: (o : 序型.{u_1})
+  结论: lift.{u} (lift.{v} o) = lift.{最大值 v u} o
   证明: inductionOn o fun _ =>
     (ULift.orderIso.trans <| ULift.orderIso.trans ULift.orderIso.symm).type_congr
 
@@ -1012,7 +1012,7 @@ refine ⟨fun h => ?_, fun ⟨h⟩ => congrArg lift type_congr h⟩
 
 中文:
 定理 lift_type_eq_iff
-  结论: lift (type α) = lift (type β) ↔ Nonempty (α ≃o β)
+  结论: lift (type α) = lift (type β) ↔ 非空 (α ≃o β)
   证明: by
 refine ⟨fun h => ?_, fun ⟨h⟩ => congrArg lift type_congr h⟩
   rw [← type_ulift]; rw [← type_ulift]; rw [type_eq_type] at h
@@ -1039,7 +1039,7 @@ refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedd
 
 中文:
 定理 lift_type_le_iff
-  结论: lift (type α) <= lift (type β) ↔ Nonempty (α ↪o β)
+  结论: lift (type α) <= lift (type β) ↔ 非空 (α ↪o β)
   证明: by
 refine ⟨fun h => ?_, fun ⟨h⟩ => type_le_type (ULift.orderIso.toOrderEmbedding.trans h).trans
     ULift.orderIso.symm.toOrderEmbedding⟩
@@ -1072,7 +1072,7 @@ recommended_spelling "omega0" for "ω" in [omega0, «termω»]
 
 中文:
 定义 omega0
-  签名: : OrderType
+  签名: : 序型
   定义体: lift type Nat
 
 @[inherit_doc]

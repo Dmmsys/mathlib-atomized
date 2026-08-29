@@ -68,7 +68,7 @@ toFinsupp_injective by
 
 中文:
 实例 algebraOfAlgebra
-  签名: : Algebra R A[X] where
+  签名: : 代数 R A[X] where
   定义体: toFinsupp_injective by
       dsimp only [RingHom.toFun_eq_coe, RingHom.comp_apply]
       rw [toFinsupp_smul]; rw [toFinsupp_mul]; rw [toFinsupp_C]
@@ -296,7 +296,7 @@ instance subalgebraNontrivial
 
 中文:
 实例 subalgebraNontrivial
-  签名: [Nontrivial A]
+  签名: [非平凡 A]
   定义体: ⟨⟨⊥, ⊤, by
       rw [Ne]; rw [SetLike.ext_iff]; rw [not_forall]
       refine ⟨X, ?_⟩
@@ -337,7 +337,7 @@ theorem algHom_eval₂_algebraMap
 
 中文:
 定理 algHom_eval₂_algebraMap
-  结论: {R A B : 类型} [CommSemiring R] [Semiring A] [Semiring B]
+  结论: {R A B : 类型} [交换半环 R] [半环 A] [半环 B]
   证明: by
   simp only [eval₂_eq_sum, sum_def]
   simp only [map_sum, map_mul, map_pow, AlgHom.commutes]
@@ -367,7 +367,7 @@ theorem eval₂_algebraMap_X
 
 中文:
 定理 eval₂_algebraMap_X
-  结论: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A] (p : R[X])
+  结论: {R A : 类型} [交换半环 R] [半环 A] [代数 R A] (p : R[X])
   证明: by
   conv_rhs => rw [← Polynomial.sum_C_mul_X_pow_eq p]
   simp only [eval₂_eq_sum, sum_def]
@@ -397,7 +397,7 @@ theorem ringHom_eval₂_intCastRingHom
 
 中文:
 定理 ringHom_eval₂_intCastRingHom
-  结论: {R S : 类型} [Ring R] [Ring S] (p : 整数[X]) (f : R ->+* S)
+  结论: {R S : 类型} [环 R] [环 S] (p : 整数[X]) (f : R ->+* S)
   证明: algHom_eval₂_algebraMap p f.toIntAlgHom r
 
 @[simp]
@@ -419,7 +419,7 @@ theorem eval₂_intCastRingHom_X
 
 中文:
 定理 eval₂_intCastRingHom_X
-  条件: {R : 类型} [Ring R] (p : 整数[X]) (f : 整数[X] ->+* R)
+  条件: {R : 类型} [环 R] (p : 整数[X]) (f : 整数[X] ->+* R)
   证明: eval₂_algebraMap_X p f.toIntAlgHom
 
 Depends on / 依赖: f.toIntAlgHom, toIntAlgHom
@@ -514,7 +514,7 @@ theorem mapAlgHom_id
 
 中文:
 定理 mapAlgHom_id
-  结论: mapAlgHom (AlgHom.id R A) = AlgHom.id R (Polynomial A)
+  结论: mapAlgHom (代数态射.id R A) = 代数态射.id R (多项式 A)
   证明: AlgHom.ext fun _x => map_id
 
 @[simp]
@@ -558,7 +558,7 @@ theorem mapAlgHom_comp
 
 中文:
 定理 mapAlgHom_comp
-  条件: (C : 类型) [Semiring C] [Algebra R C] (f : B ->ₐ[R] C) (g : A ->ₐ[R] B)
+  条件: (C : 类型) [半环 C] [代数 R C] (f : B ->ₐ[R] C) (g : A ->ₐ[R] B)
   证明: by
   ext <;> simp
 -/
@@ -700,7 +700,7 @@ theorem mapAlgEquiv_id
 
 中文:
 定理 mapAlgEquiv_id
-  结论: mapAlgEquiv (@AlgEquiv.refl R A _ _ _) = AlgEquiv.refl
+  结论: mapAlgEquiv (@代数等价.refl R A _ _ _) = 代数等价.refl
   证明: AlgEquiv.ext fun _x => map_id
 
 @[simp]
@@ -768,7 +768,7 @@ theorem mapAlgEquiv_comp
 
 中文:
 定理 mapAlgEquiv_comp
-  条件: (C : 类型) [Semiring C] [Algebra R C] (f : A ≃ₐ[R] B) (g : B ≃ₐ[R] C)
+  条件: (C : 类型) [半环 C] [代数 R C] (f : A ≃ₐ[R] B) (g : B ≃ₐ[R] C)
   证明: by
   ext
   simp
@@ -867,7 +867,7 @@ definition mapAlg
 
 中文:
 定义 mapAlg
-  签名: (R : 类型u) [CommSemiring R] (S : 类型v) [Semiring S] [Algebra R S]
+  签名: (R : 类型u) [交换半环 R] (S : 类型v) [半环 S] [代数 R S]
   定义体: @aeval _ S[X] _ _ _ (X : S[X])
 
 @[ext 1200]
@@ -951,7 +951,7 @@ theorem mapAlg_eq_map
 
 中文:
 定理 mapAlg_eq_map
-  条件: (S : 类型v) [Semiring S] [Algebra R S] (p : R[X])
+  条件: (S : 类型v) [半环 S] [代数 R S] (p : R[X])
   证明: by
   rfl
 -/
@@ -1163,7 +1163,7 @@ theorem aeval_comp
 
 中文:
 定理 aeval_comp
-  条件: {A : 类型} [Semiring A] [Algebra R A] (x : A)
+  条件: {A : 类型} [半环 A] [代数 R A] (x : A)
   证明: eval₂_comp' x p q
 
 @[gcongr]
@@ -1328,7 +1328,7 @@ definition algEquivCMulXAddC
 
 中文:
 定义 algEquivCMulXAddC
-  签名: {R : 类型} [CommRing R] (a b : R) [Invertible a]
+  签名: {R : 类型} [交换环 R] (a b : R) [可逆 a]
   定义体: algEquivOfCompEqX (C a * X + C b) (C ⅟a * (X - C b))
     (by simp [← C_mul, ← mul_assoc]) (by simp [← C_mul, ← mul_assoc])
 
@@ -1352,7 +1352,7 @@ theorem algEquivCMulXAddC_symm_eq
 
 中文:
 定理 algEquivCMulXAddC_symm_eq
-  条件: {R : 类型} [CommRing R] (a b : R) [Invertible a]
+  条件: {R : 类型} [交换环 R] (a b : R) [可逆 a]
   证明: by
   ext p : 1
   simp only [algEquivCMulXAddC_symm_apply, neg_mul, algEquivCMulXAddC_apply, map_neg, map_mul]
@@ -1383,7 +1383,7 @@ definition algEquivAevalXAddC
 
 中文:
 定义 algEquivAevalXAddC
-  签名: {R : 类型} [CommRing R] (t : R)
+  签名: {R : 类型} [交换环 R] (t : R)
   定义体: algEquivOfCompEqX (X + C t) (X - C t) (by simp) (by simp)
 
 @[simp]
@@ -1407,7 +1407,7 @@ theorem algEquivAevalXAddC_eq_iff
 
 中文:
 定理 algEquivAevalXAddC_eq_iff
-  条件: {R : 类型} [CommRing R] (t t' : R)
+  条件: {R : 类型} [交换环 R] (t t' : R)
   证明: by
   simp [algEquivAevalXAddC]
 
@@ -1431,7 +1431,7 @@ theorem algEquivAevalXAddC_symm
 
 中文:
 定理 algEquivAevalXAddC_symm
-  条件: {R : 类型} [CommRing R] (t : R)
+  条件: {R : 类型} [交换环 R] (t : R)
   证明: by
   simp [algEquivAevalXAddC, sub_eq_add_neg]
 
@@ -1453,7 +1453,7 @@ definition algEquivAevalNegX
 
 中文:
 定义 algEquivAevalNegX
-  签名: {R : 类型} [CommRing R]
+  签名: {R : 类型} [交换环 R]
   定义体: algEquivOfCompEqX (-X) (-X) (by simp) (by simp)
 
 Depends on / 依赖: algEquivOfCompEqX
@@ -1473,7 +1473,7 @@ theorem comp_neg_X_comp_neg_X
 
 中文:
 定理 comp_neg_X_comp_neg_X
-  条件: {R : 类型} [CommRing R] (p : R[X])
+  条件: {R : 类型} [交换环 R] (p : R[X])
   证明: by
   rw [comp_assoc]
   simp only [neg_comp, X_comp, neg_neg, comp_X]
@@ -1520,7 +1520,7 @@ theorem aeval_X_left
 
 中文:
 定理 aeval_X_left
-  结论: aeval (X : R[X]) = AlgHom.id R R[X]
+  结论: aeval (X : R[X]) = 代数态射.id R R[X]
   证明: algHom_ext aeval_X X
 
 Depends on / 依赖: aeval_X, algHom_ext
@@ -1558,7 +1558,7 @@ lemma aeval_X_left_eq_map
 
 中文:
 引理 aeval_X_left_eq_map
-  条件: [CommSemiring S] [Algebra R S] (p : R[X])
+  条件: [交换半环 S] [代数 R S] (p : R[X])
   证明: rfl
 -/
 lemma aeval_X_left_eq_map [CommSemiring S] [Algebra R S] (p : R[X]) :
@@ -1600,7 +1600,7 @@ theorem aeval_algHom_apply
 
 中文:
 定理 aeval_algHom_apply
-  结论: {F : 类型} [FunLike F A B] [AlgHomClass F R A B]
+  结论: {F : 类型} [函数状 F A B] [代数态射类 F R A B]
   证明: by
   refine Polynomial.induction_on p (by simp [AlgHomClass.commutes]) (fun p q hp hq => ?_)
     (by simp [AlgHomClass.commutes])
@@ -1655,7 +1655,7 @@ theorem aeval_smul
 
 中文:
 定理 aeval_smul
-  结论: (f : R[X]) {G : 类型} [Monoid G] [MulSemiringAction G A] [SMulCommClass G R A]
+  结论: (f : R[X]) {G : 类型} [幺半群 G] [MulSemiring作用 G A] [标量交换类 G R A]
   证明: by
   rw [← MulSemiringAction.toAlgHom_apply R]; rw [aeval_algHom_apply]; rw [MulSemiringAction.toAlgHom_apply]
 
@@ -1678,7 +1678,7 @@ lemma coe_aeval_mk_apply
 
 中文:
 引理 coe_aeval_mk_apply
-  条件: {S : Subalgebra R A} (h : x in S)
+  条件: {S : 子代数 R A} (h : x in S)
   证明: (aeval_algHom_apply S.val (⟨x, h⟩ : S) p).symm
 
 Depends on / 依赖: S.val, aeval_algHom_apply
@@ -1739,7 +1739,7 @@ theorem aeval_prod
 中文:
 定理 aeval_prod
   条件: (x : A × B)
-  结论: aeval (R := R) x = (aeval x.1).prod (aeval x.2)
+  结论: aeval (R := R) x = (aeval x.1).乘积 (aeval x.2)
   证明: aeval_algHom (.fst R A B) x ▸ aeval_algHom (.snd R A B) x ▸
     (aeval x).prod_comp (.fst R A B) (.snd R A B)
 -/
@@ -1757,7 +1757,7 @@ theorem aeval_prod_apply
 
 中文:
 定理 aeval_prod_apply
-  条件: (x : A × B) (p : Polynomial R)
+  条件: (x : A × B) (p : 多项式 R)
   证明: by simp [aeval_prod]
 
 Depends on / 依赖: aeval_prod
@@ -1783,7 +1783,7 @@ theorem aeval_pi
 中文:
 定理 aeval_pi
   条件: (x : Π i, A i)
-  结论: aeval (R := R) x = AlgHom.pi (fun i => aeval (x i))
+  结论: aeval (R := R) x = 代数态射.pi (fun i => aeval (x i))
   证明: (funext fun i => aeval_algHom (Pi.evalAlgHom R A i) x) ▸
     (AlgHom.pi_comp (Pi.evalAlgHom R A) (aeval x))
 
@@ -1911,7 +1911,7 @@ theorem aeval_subalgebra_coe
 
 中文:
 定理 aeval_subalgebra_coe
-  结论: (g : R[X]) {A : 类型} [Semiring A] [Algebra R A] (s : Subalgebra R A)
+  结论: (g : R[X]) {A : 类型} [半环 A] [代数 R A] (s : 子代数 R A)
   证明: (aeval_algHom_apply s.val f g).symm
 
 Depends on / 依赖: aeval_algHom_apply, s.val
@@ -1976,7 +1976,7 @@ theorem map_aeval_eq_aeval_map
 
 中文:
 定理 map_aeval_eq_aeval_map
-  结论: {S T U : 类型} [Semiring S] [CommSemiring T] [Semiring U]
+  结论: {S T U : 类型} [半环 S] [交换半环 T] [半环 U]
   证明: by
   conv_rhs => rw [← eval_map_algebraMap]
   rw [map_map]; rw [h]; rw [← map_map]; rw [eval_map]; rw [eval₂_at_apply]; rw [aeval_def]; rw [eval_map]
@@ -2000,7 +2000,7 @@ theorem aeval_eq_aeval_map
 
 中文:
 定理 aeval_eq_aeval_map
-  结论: [Semiring S] [CommSemiring T] [Algebra R S]
+  结论: [半环 S] [交换半环 T] [代数 R S]
   证明: map_aeval_eq_aeval_map (by rwa [RingHom.id_comp]) p a
 
 Depends on / 依赖: RingHom, RingHom.id_comp, id_comp, map_aeval_eq_aeval_map
@@ -2044,7 +2044,7 @@ theorem aeval_eq_sum_range
 
 中文:
 定理 aeval_eq_sum_range
-  条件: [Algebra R S] {p : R[X]} (x : S)
+  条件: [代数 R S] {p : R[X]} (x : S)
   证明: by
   simp_rw [Algebra.smul_def]
   exact eval₂_eq_sum_range (algebraMap R S) x
@@ -2068,7 +2068,7 @@ theorem aeval_eq_sum_range'
 
 中文:
 定理 aeval_eq_sum_range'
-  条件: [Algebra R S] {p : R[X]} {n : 自然数} (hn : p.natDegree < n) (x : S)
+  条件: [代数 R S] {p : R[X]} {n : 自然数} (hn : p.natDegree < n) (x : S)
   证明: by
   simp_rw [Algebra.smul_def]
   exact eval₂_eq_sum_range' (algebraMap R S) hn x
@@ -2093,7 +2093,7 @@ theorem isRoot_of_eval₂_map_eq_zero
 
 中文:
 定理 isRoot_of_eval₂_map_eq_zero
-  条件: (hf : Function.Injective f) {r : R}
+  条件: (hf : 函数.单射 f) {r : R}
   证明: by
   intro h
   apply hf
@@ -2117,7 +2117,7 @@ theorem isRoot_of_aeval_algebraMap_eq_zero
 
 中文:
 定理 isRoot_of_aeval_algebraMap_eq_zero
-  结论: [Algebra R S] [FaithfulSMul R S] {p : R[X]} {r : R}
+  结论: [代数 R S] [忠实标量乘法 R S] {p : R[X]} {r : R}
   证明: isRoot_of_eval₂_map_eq_zero (FaithfulSMul.algebraMap_injective _ _) hr
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective
@@ -2267,7 +2267,7 @@ theorem aevalTower_toAlgHom
 中文:
 定理 aevalTower_toAlgHom
   条件: (x : R)
-  结论: aevalTower g y (IsScalarTower.toAlgHom S R R[X] x) = g x
+  结论: aevalTower g y (标量塔.toAlgHom S R R[X] x) = g x
   证明: aevalTower_algebraMap _ _ _
 
 @[simp]
@@ -2290,7 +2290,7 @@ theorem aevalTower_comp_toAlgHom
 
 中文:
 定理 aevalTower_comp_toAlgHom
-  结论: (aevalTower g y).comp (IsScalarTower.toAlgHom S R R[X]) = g
+  结论: (aevalTower g y).comp (标量塔.toAlgHom S R R[X]) = g
   证明: AlgHom.coe_ringHom_injective aevalTower_comp_algebraMap _ _
 
 @[simp]
@@ -2315,7 +2315,7 @@ theorem aevalTower_id
 
 中文:
 定理 aevalTower_id
-  结论: aevalTower (AlgHom.id S S) = aeval
+  结论: aevalTower (代数态射.id S S) = aeval
   证明: by
   ext s
   simp only [eval_X, aevalTower_X, coe_aeval_eq_eval]
@@ -2341,7 +2341,7 @@ theorem aevalTower_ofId
 
 中文:
 定理 aevalTower_ofId
-  结论: aevalTower (Algebra.ofId S A') = aeval
+  结论: aevalTower (代数.ofId S A') = aeval
   证明: by
   ext
   simp only [aeval_X, aevalTower_X]
@@ -2371,7 +2371,7 @@ lemma X_pow_smul_rTensor_monomial
 
 中文:
 引理 X_pow_smul_rTensor_monomial
-  结论: [CommSemiring S] [Algebra R S] {N : 类型}
+  结论: [交换半环 S] [代数 R S] {N : 类型}
   证明: by
   induction sn using TensorProduct.induction_on with
   | zero => simp
@@ -2502,8 +2502,8 @@ theorem not_isUnit_X_sub_C
 
 中文:
 定理 not_isUnit_X_sub_C
-  条件: [Nontrivial R] (r : R)
-  结论: ¬IsUnit (X - C r)
+  条件: [非平凡 R] (r : R)
+  结论: ¬是单位 (X - C r)
   证明: fun ⟨⟨_, g, _hfg, hgf⟩, rfl⟩ => zero_ne_one' R by rw [← eval_mul_X_sub_C, hgf, eval_one]
 
 Depends on / 依赖: _hfg, eval_mul_X_sub_C, eval_one, zero_ne_one
@@ -2529,7 +2529,7 @@ theorem aeval_neg
 
 中文:
 定理 aeval_neg
-  条件: {p : R[X]} [Ring A] [Algebra R A] (x : A)
+  条件: {p : R[X]} [环 A] [代数 R A] (x : A)
   证明: map_neg ..
 
 @[simp]
@@ -2550,7 +2550,7 @@ theorem aeval_sub
 
 中文:
 定理 aeval_sub
-  条件: {p q : R[X]} [Ring A] [Algebra R A] (x : A)
+  条件: {p q : R[X]} [环 A] [代数 R A] (x : A)
   证明: map_sub ..
 
 Depends on / 依赖: map_sub
@@ -2570,7 +2570,7 @@ theorem aeval_endomorphism
 
 中文:
 定理 aeval_endomorphism
-  结论: {M : 类型} [AddCommGroup M] [Module R M] (f : M ->ₗ[R] M)
+  结论: {M : 类型} [加法交换群 M] [模 R M] (f : M ->ₗ[R] M)
   证明: by
   rw [aeval_def]; rw [eval₂_eq_sum]
   exact map_sum (LinearMap.applyₗ v) _ _
@@ -2654,7 +2654,7 @@ convert! map_dvd_iff algEquivCMulXAddC a b using 2
 
 中文:
 引理 dvd_comp_C_mul_X_add_C_iff
-  条件: (p q : R[X]) (a b : R) [Invertible a]
+  条件: (p q : R[X]) (a b : R) [可逆 a]
   证明: by
 convert! map_dvd_iff algEquivCMulXAddC a b using 2
   simp [← comp_eq_aeval, comp_assoc, ← mul_assoc, ← C_mul]

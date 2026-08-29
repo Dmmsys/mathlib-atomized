@@ -42,11 +42,11 @@ structure AddMonCat
     - [str : AddMonoid carrier]
 
 中文:
-结构 AddMonCat
-  参数: : Type (u + 1) where
+结构 加法幺半群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : AddMonoid carrier]
+    - [str : 加法幺半群 carrier]
 -/
 structure AddMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -66,11 +66,11 @@ structure MonCat
     - [str : Monoid carrier]
 
 中文:
-结构 MonCat
-  参数: : Type (u + 1) where
+结构 幺半群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : Monoid carrier]
+    - [str : 幺半群 carrier]
 -/
 structure MonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -95,7 +95,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort MonCat (类型u)
+  签名: CoeSort 幺半群范畴 (类型u)
   定义体: ⟨MonCat.carrier⟩
 
 Depends on / 依赖: MonCat, MonCat.carrier, carrier
@@ -117,7 +117,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [Monoid M]
+  签名: (M : 类型u) [幺半群 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [Monoid M] : MonCat := ⟨M⟩
@@ -137,8 +137,8 @@ structure AddMonCat.Hom
     - hom' : A ->+ B
 
 中文:
-结构 AddMonCat.Hom
-  参数: (A B : AddMonCat.{u})
+结构 加法幺半群范畴.态射
+  参数: (A B : 加法幺半群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->+ B
@@ -161,8 +161,8 @@ structure MonCat.Hom
     - hom' : A ->* B
 
 中文:
-结构 MonCat.Hom
-  参数: (A B : MonCat.{u})
+结构 幺半群范畴.态射
+  参数: (A B : 幺半群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->* B
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category MonCat.{u}
+  签名: 范畴 幺半群范畴.{u}
   定义体: Hom X Y
   id X := ⟨MonoidHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory MonCat (· ->* ·)
+  签名: 余ncrete范畴 幺半群范畴 (· ->* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -234,8 +234,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := MonCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : MonCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 幺半群范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := MonCat) f
 -/
 abbrev Hom.hom {X Y : MonCat.{u}} (f : Hom X Y) :=
@@ -253,7 +253,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [Monoid X] [Monoid Y] (f : X ->* Y)
+  签名: {X Y : 类型u} [幺半群 X] [幺半群 Y] (f : X ->* Y)
   定义体: ConcreteCategory.ofHom (C := MonCat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, MonCat
@@ -275,8 +275,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddMonCat.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : MonCat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 幺半群范畴.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -306,7 +306,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : MonCat}
+  条件: {X : 幺半群范畴}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -328,7 +328,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : MonCat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 幺半群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -349,7 +349,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : MonCat} (f : X ⟶ Y)
+  条件: {X Y : 幺半群范畴} (f : X ⟶ Y)
   证明: rfl
 
 @[to_additive (attr := ext)]
@@ -371,7 +371,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : MonCat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 幺半群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -397,8 +397,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (M : 类型u) [Monoid M]
-  结论: (MonCat.of M : 类型u) = M
+  条件: (M : 类型u) [幺半群 M]
+  结论: (幺半群范畴.of M : 类型u) = M
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -417,8 +417,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {M : MonCat}
-  结论: (𝟙 M : M ⟶ M).hom = MonoidHom.id M
+  条件: {M : 幺半群范畴}
+  结论: (𝟙 M : M ⟶ M).hom = 幺半群态射.id M
   证明: rfl
 -/
 lemma hom_id {M : MonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M := rfl
@@ -437,7 +437,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (M : MonCat) (x : M)
+  条件: (M : 幺半群范畴) (x : M)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -456,7 +456,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T)
+  条件: {M N T : 幺半群范畴} (f : M ⟶ N) (g : N ⟶ T)
   证明: rfl
 -/
 lemma hom_comp {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) :
@@ -476,7 +476,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {M N T : MonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
+  条件: {M N T : 幺半群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -498,7 +498,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : MonCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
+  条件: {M N : 幺半群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -523,7 +523,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {M N : 类型u} [Monoid M] [Monoid N] (f : M ->* N)
+  条件: {M N : 类型u} [幺半群 M] [幺半群 N] (f : M ->* N)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -544,7 +544,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {M N : MonCat} (f : M ⟶ N)
+  条件: {M N : 幺半群范畴} (f : M ⟶ N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -566,8 +566,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型u} [Monoid M]
-  结论: ofHom (MonoidHom.id M) = 𝟙 (of M)
+  条件: {M : 类型u} [幺半群 M]
+  结论: ofHom (幺半群态射.id M) = 𝟙 (of M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -587,7 +587,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N P : 类型u} [Monoid M] [Monoid N] [Monoid P]
+  结论: {M N P : 类型u} [幺半群 M] [幺半群 N] [幺半群 P]
   证明: rfl
 
 @[to_additive]
@@ -610,7 +610,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [Monoid X] [Monoid Y] (f : X ->* Y) (x : X)
+  条件: {X Y : 类型u} [幺半群 X] [幺半群 Y] (f : X ->* Y) (x : X)
   证明: rfl
 
 @[to_additive]
@@ -633,7 +633,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {M N : MonCat} (e : M ≅ N) (x : M)
+  条件: {M N : 幺半群范畴} (e : M ≅ N) (x : M)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -658,7 +658,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {M N : MonCat} (e : M ≅ N) (s : N)
+  条件: {M N : 幺半群范畴} (e : M ≅ N) (s : N)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -683,7 +683,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited MonCat
+  签名: 可居 幺半群范畴
   定义体: -- The default instance for `Monoid PUnit` is derived via `CommRing` which breaks to_additive
   ⟨@of PUnit (@DivInvMonoid.toMonoid _ (@Group.toDivInvMonoid _
     (@CommGroup.toGroup _ PUnit.commGroup)))⟩
@@ -712,7 +712,7 @@ lemma hom_one
 
 中文:
 引理 hom_one
-  条件: (X Y : MonCat.{u})
+  条件: (X Y : 幺半群范畴.{u})
   结论: (1 : X ⟶ Y).hom = 1
   证明: rfl
 
@@ -734,7 +734,7 @@ lemma oneHom_apply
 
 中文:
 引理 oneHom_apply
-  条件: (X Y : MonCat.{u}) (x : X)
+  条件: (X Y : 幺半群范畴.{u}) (x : X)
   结论: (1 : X ⟶ Y).hom x = 1
   证明: rfl
 
@@ -756,8 +756,8 @@ lemma one_of
 
 中文:
 引理 one_of
-  条件: {A : 类型} [Monoid A]
-  结论: (1 : MonCat.of A) = (1 : A)
+  条件: {A : 类型} [幺半群 A]
+  结论: (1 : 幺半群范畴.of A) = (1 : A)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -775,7 +775,7 @@ lemma mul_of
 
 中文:
 引理 mul_of
-  条件: {A : 类型} [Monoid A] (a b : A)
+  条件: {A : 类型} [幺半群 A] (a b : A)
   证明: rfl
 -/
 lemma mul_of {A : Type*} [Monoid A] (a b : A) :
@@ -798,7 +798,7 @@ MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
 
 中文:
 定义 uliftFunctor
-  签名: : MonCat.{v} ⥤ MonCat.{max v u} where
+  签名: : 幺半群范畴.{v} ⥤ 幺半群范畴.{最大值 v u} where
   定义体: MonCat.of (ULift.{u, v} X)
 map {_ _} f := MonCat.ofHom
 MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
@@ -827,11 +827,11 @@ structure AddCommMonCat
     - [str : AddCommMonoid carrier]
 
 中文:
-结构 AddCommMonCat
-  参数: : Type (u + 1) where
+结构 加法交换幺半群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : AddCommMonoid carrier]
+    - [str : 加法交换幺半群 carrier]
 -/
 structure AddCommMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -851,11 +851,11 @@ structure CommMonCat
     - [str : CommMonoid carrier]
 
 中文:
-结构 CommMonCat
-  参数: : Type (u + 1) where
+结构 交换幺半群范畴
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - (carrier : 类型u)
-    - [str : CommMonoid carrier]
+    - [str : 交换幺半群 carrier]
 -/
 structure CommMonCat : Type (u + 1) where
   /-- The underlying type. -/
@@ -880,7 +880,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort CommMonCat (类型u)
+  签名: CoeSort 交换幺半群范畴 (类型u)
   定义体: ⟨CommMonCat.carrier⟩
 
 Depends on / 依赖: CommMonCat, CommMonCat.carrier, carrier
@@ -902,7 +902,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型u) [CommMonoid M]
+  签名: (M : 类型u) [交换幺半群 M]
   定义体: ⟨M⟩
 -/
 abbrev of (M : Type u) [CommMonoid M] : CommMonCat := ⟨M⟩
@@ -922,8 +922,8 @@ structure AddCommMonCat.Hom
     - hom' : A ->+ B
 
 中文:
-结构 AddCommMonCat.Hom
-  参数: (A B : AddCommMonCat.{u})
+结构 加法交换幺半群范畴.态射
+  参数: (A B : 加法交换幺半群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->+ B
@@ -946,8 +946,8 @@ structure CommMonCat.Hom
     - hom' : A ->* B
 
 中文:
-结构 CommMonCat.Hom
-  参数: (A B : CommMonCat.{u})
+结构 交换幺半群范畴.态射
+  参数: (A B : 交换幺半群范畴.{u})
   公理与运算 (2 个):
     - private(mk) : :
     - hom' : A ->* B
@@ -974,7 +974,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category CommMonCat.{u}
+  签名: 范畴 交换幺半群范畴.{u}
   定义体: Hom X Y
   id X := ⟨MonoidHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -998,7 +998,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory CommMonCat (· ->* ·)
+  签名: 余ncrete范畴 交换幺半群范畴 (· ->* ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -1019,8 +1019,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommMonCat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : CommMonCat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : 交换幺半群范畴.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := CommMonCat) f
 -/
 abbrev Hom.hom {X Y : CommMonCat.{u}} (f : Hom X Y) :=
@@ -1038,7 +1038,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y)
+  签名: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y] (f : X ->* Y)
   定义体: ConcreteCategory.ofHom (C := CommMonCat) f
 
 Depends on / 依赖: CommMonCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -1060,8 +1060,8 @@ initialize_simps_projections Hom (hom' -> hom)
 initialize_simps_projections AddCommMonCat.Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : CommMonCat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : 交换幺半群范畴.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -1091,7 +1091,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : CommMonCat}
+  条件: {X : 交换幺半群范畴}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 
@@ -1115,7 +1115,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : CommMonCat} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 交换幺半群范畴} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 
@@ -1141,7 +1141,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : CommMonCat} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
+  条件: {X Y : 交换幺半群范畴} {f g : X ⟶ Y} (w : 对任意 x : X, f x = g x)
   结论: f = g
   证明: ConcreteCategory.hom_ext _ _ w
 
@@ -1164,8 +1164,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {M : CommMonCat}
-  结论: (𝟙 M : M ⟶ M).hom = MonoidHom.id M
+  条件: {M : 交换幺半群范畴}
+  结论: (𝟙 M : M ⟶ M).hom = 幺半群态射.id M
   证明: rfl
 -/
 lemma hom_id {M : CommMonCat} : (𝟙 M : M ⟶ M).hom = MonoidHom.id M := rfl
@@ -1184,7 +1184,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (M : CommMonCat) (x : M)
+  条件: (M : 交换幺半群范畴) (x : M)
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -1203,7 +1203,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T)
+  条件: {M N T : 交换幺半群范畴} (f : M ⟶ N) (g : N ⟶ T)
   证明: rfl
 
 Depends on / 依赖: congr_map, map_injective, toPresheaf
@@ -1225,7 +1225,7 @@ lemma comp_apply
 
 中文:
 引理 comp_apply
-  条件: {M N T : CommMonCat} (f : M ⟶ N) (g : N ⟶ T) (x : M)
+  条件: {M N T : 交换幺半群范畴} (f : M ⟶ N) (g : N ⟶ T) (x : M)
   证明: by simp
 
 @[to_additive (attr := ext)]
@@ -1247,7 +1247,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : CommMonCat} {f g : M ⟶ N} (hf : f.hom = g.hom)
+  条件: {M N : 交换幺半群范畴} {f g : M ⟶ N} (hf : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext hf
 
@@ -1272,7 +1272,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  条件: {M N : 类型u} [CommMonoid M] [CommMonoid N] (f : M ->* N)
+  条件: {M N : 类型u} [交换幺半群 M] [交换幺半群 N] (f : M ->* N)
   结论: (ofHom f).hom = f
   证明: rfl
 
@@ -1293,7 +1293,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {M N : CommMonCat} (f : M ⟶ N)
+  条件: {M N : 交换幺半群范畴} (f : M ⟶ N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1315,8 +1315,8 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {M : 类型u} [CommMonoid M]
-  结论: ofHom (MonoidHom.id M) = 𝟙 (of M)
+  条件: {M : 类型u} [交换幺半群 M]
+  结论: ofHom (幺半群态射.id M) = 𝟙 (of M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1336,7 +1336,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {M N P : 类型u} [CommMonoid M] [CommMonoid N] [CommMonoid P]
+  结论: {M N P : 类型u} [交换幺半群 M] [交换幺半群 N] [交换幺半群 P]
   证明: rfl
 
 @[to_additive]
@@ -1359,7 +1359,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  条件: {X Y : 类型u} [CommMonoid X] [CommMonoid Y] (f : X ->* Y) (x : X)
+  条件: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y] (f : X ->* Y) (x : X)
   证明: rfl
 
 @[to_additive]
@@ -1382,7 +1382,7 @@ lemma inv_hom_apply
 
 中文:
 引理 inv_hom_apply
-  条件: {M N : CommMonCat} (e : M ≅ N) (x : M)
+  条件: {M N : 交换幺半群范畴} (e : M ≅ N) (x : M)
   结论: e.inv (e.hom x) = x
   证明: by
   simp
@@ -1407,7 +1407,7 @@ lemma hom_inv_apply
 
 中文:
 引理 hom_inv_apply
-  条件: {M N : CommMonCat} (e : M ≅ N) (s : N)
+  条件: {M N : 交换幺半群范畴} (e : M ≅ N) (s : N)
   结论: e.hom (e.inv s) = s
   证明: by
   simp
@@ -1431,7 +1431,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited CommMonCat
+  签名: 可居 交换幺半群范畴
   定义体: -- The default instance for `CommMonoid PUnit` is derived via `CommRing` which breaks to_additive
   ⟨@of PUnit (@CommGroup.toCommMonoid _ PUnit.commGroup)⟩
 
@@ -1455,8 +1455,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (R : 类型u) [CommMonoid R]
-  结论: (CommMonCat.of R : 类型u) = R
+  条件: (R : 类型u) [交换幺半群 R]
+  结论: (交换幺半群范畴.of R : 类型u) = R
   证明: rfl
 
 @[to_additive hasForgetToAddMonCat]
@@ -1476,7 +1476,7 @@ instance hasForgetToMonCat
 
 中文:
 实例 hasForgetToMonCat
-  签名: : HasForget₂ CommMonCat MonCat where
+  签名: : 有Forget₂ 交换幺半群范畴 幺半群范畴 where
   定义体: { obj R := MonCat.of R
       map f := MonCat.ofHom f.hom }
 
@@ -1497,7 +1497,7 @@ lemma coe_forget₂_obj
 
 中文:
 引理 coe_forget₂_obj
-  条件: (X : CommMonCat)
+  条件: (X : 交换幺半群范畴)
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma coe_forget₂_obj (X : CommMonCat) :
@@ -1513,7 +1513,7 @@ lemma hom_forget₂_map
 
 中文:
 引理 hom_forget₂_map
-  结论: {X Y : CommMonCat}
+  结论: {X Y : 交换幺半群范畴}
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma hom_forget₂_map {X Y : CommMonCat}
@@ -1530,7 +1530,7 @@ lemma forget₂_map_ofHom
 
 中文:
 引理 forget₂_map_ofHom
-  结论: {X Y : 类型u} [CommMonoid X] [CommMonoid Y]
+  结论: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y]
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma forget₂_map_ofHom {X Y : Type u} [CommMonoid X] [CommMonoid Y]
@@ -1552,7 +1552,7 @@ definition fullyFaithfulForgetToMonCat
 
 中文:
 定义 fullyFaithfulForgetToMonCat
-  签名: : (forget₂ CommMonCat.{u} MonCat.{u}).FullyFaithful where
+  签名: : (forget₂ 交换幺半群范畴.{u} 幺半群范畴.{u}).满忠实 where
   定义体: ofHom f.hom
 
 @[to_additive]
@@ -1575,7 +1575,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommMonCat.{u} MonCat.{u}).Full
+  签名: (forget₂ 交换幺半群范畴.{u} 幺半群范畴.{u}).满
   定义体: fullyFaithfulForgetToMonCat.full
 
 @[to_additive]
@@ -1596,7 +1596,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe CommMonCat.{u} MonCat.{u}
+  签名: Coe 交换幺半群范畴.{u} 幺半群范畴.{u}
   定义体: (forget₂ CommMonCat MonCat).obj
 
 Depends on / 依赖: CommMonCat, MonCat
@@ -1620,7 +1620,7 @@ MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
 
 中文:
 定义 uliftFunctor
-  签名: : CommMonCat.{v} ⥤ CommMonCat.{max v u} where
+  签名: : 交换幺半群范畴.{v} ⥤ 交换幺半群范畴.{最大值 v u} where
   定义体: CommMonCat.of (ULift.{u, v} X)
 map {_ _} f := CommMonCat.ofHom
 MulEquiv.ulift.symm.toMonoidHom.comp f.hom.comp MulEquiv.ulift.toMonoidHom
@@ -1658,7 +1658,7 @@ definition MulEquiv.toMonCatIso
   inv := MonCat.ofHom e.symm.toMonoidHom
 
 中文:
-定义 MulEquiv.toMonCatIso
+定义 乘法等价.toMonCatIso
   签名: (e : X ≃* Y)
   定义体: MonCat.ofHom e.toMonoidHom
   inv := MonCat.ofHom e.symm.toMonoidHom
@@ -1687,7 +1687,7 @@ definition MulEquiv.toCommMonCatIso
   inv := CommMonCat.ofHom e.symm.toMonoidHom
 
 中文:
-定义 MulEquiv.toCommMonCatIso
+定义 乘法等价.toCommMonCatIso
   签名: (e : X ≃* Y)
   定义体: CommMonCat.ofHom e.toMonoidHom
   inv := CommMonCat.ofHom e.symm.toMonoidHom
@@ -1720,7 +1720,7 @@ definition monCatIsoToMulEquiv
 
 中文:
 定义 monCatIsoToMulEquiv
-  签名: {X Y : MonCat} (i : X ≅ Y)
+  签名: {X Y : 幺半群范畴} (i : X ≅ Y)
   定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -1741,7 +1741,7 @@ definition commMonCatIsoToMulEquiv
 
 中文:
 定义 commMonCatIsoToMulEquiv
-  签名: {X Y : CommMonCat} (i : X ≅ Y)
+  签名: {X Y : 交换幺半群范畴} (i : X ≅ Y)
   定义体: MonoidHom.toMulEquiv i.hom.hom i.inv.hom (by ext; simp) (by ext; simp)
 
 Depends on / 依赖: MonoidHom, MonoidHom.toMulEquiv, i.hom.hom, i.inv.hom, toMulEquiv
@@ -1765,7 +1765,7 @@ definition mulEquivIsoMonCatIso
 
 中文:
 定义 mulEquivIsoMonCatIso
-  签名: {X Y : 类型u} [Monoid X] [Monoid Y]
+  签名: {X Y : 类型u} [幺半群 X] [幺半群 Y]
   定义体: ↾fun e => e.toMonCatIso
   inv := ↾fun i => i.monCatIsoToMulEquiv
 
@@ -1794,7 +1794,7 @@ definition mulEquivIsoCommMonCatIso
 
 中文:
 定义 mulEquivIsoCommMonCatIso
-  签名: {X Y : 类型u} [CommMonoid X] [CommMonoid Y]
+  签名: {X Y : 类型u} [交换幺半群 X] [交换幺半群 Y]
   定义体: ↾fun e => e.toCommMonCatIso
   inv := ↾fun i => i.commMonCatIsoToMulEquiv
 
@@ -1824,8 +1824,8 @@ instance MonCat.forget_reflects_isos
 @[to_additive]
 
 中文:
-实例 MonCat.forget_reflects_isos
-  签名: : (forget MonCat.{u}).ReflectsIsomorphisms where
+实例 幺半群范畴.forget_reflects_isos
+  签名: : (forget 幺半群范畴.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget MonCat).map f)
     let e : X ≃* Y := { f.hom, i.toEquiv with }
@@ -1854,8 +1854,8 @@ instance CommMonCat.forget_reflects_isos
     exact e.toCommMonCatIso.isIso_hom
 
 中文:
-实例 CommMonCat.forget_reflects_isos
-  签名: : (forget CommMonCat.{u}).ReflectsIsomorphisms where
+实例 交换幺半群范畴.forget_reflects_isos
+  签名: : (forget 交换幺半群范畴.{u}).反映同构 where
   定义体: by
     let i := asIso ((forget CommMonCat).map f)
     let e : X ≃* Y := { f.hom, i.toEquiv with }
@@ -1883,8 +1883,8 @@ instance CommMonCat.forget₂_full
 example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
 
 中文:
-实例 CommMonCat.forget₂_full
-  签名: : (forget₂ CommMonCat MonCat).Full where
+实例 交换幺半群范畴.forget₂_full
+  签名: : (forget₂ 交换幺半群范畴 幺半群范畴).满 where
   定义体: ⟨ofHom f.hom, rfl⟩
 
 example : (forget₂ CommMonCat MonCat).ReflectsIsomorphisms := inferInstance
@@ -1914,8 +1914,8 @@ definition AddMonCat.equivalence
   counitIso := Iso.refl _
 
 中文:
-定义 AddMonCat.equivalence
-  签名: : AddMonCat ≌ MonCat where
+定义 加法幺半群范畴.equivalence
+  签名: : 加法幺半群范畴 ≌ 幺半群范畴 where
   定义体: { obj X := .of (Multiplicative X), map f := MonCat.ofHom f.hom.toMultiplicative }
   inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
   unitIso := Iso.refl _
@@ -1943,8 +1943,8 @@ definition AddCommMonCat.equivalence
   counitIso := Iso.refl _
 
 中文:
-定义 AddCommMonCat.equivalence
-  签名: : AddCommMonCat ≌ CommMonCat where
+定义 加法交换幺半群范畴.equivalence
+  签名: : 加法交换幺半群范畴 ≌ 交换幺半群范畴 where
   定义体: { obj X := .of (Multiplicative X), map f := CommMonCat.ofHom f.hom.toMultiplicative }
   inverse := { obj X := .of (Additive X), map f := ofHom f.hom.toAdditive }
   unitIso := Iso.refl _

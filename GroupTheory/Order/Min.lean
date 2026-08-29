@@ -121,7 +121,7 @@ lemma le_minOrder_iff_forall_subgroup
   · simpa using
 
 中文:
-引理 le_minOrder_iff_forall_subgroup
+引理 le_minOrder_iff_对任意_subgroup
   条件: {n : 自然数∞}
   证明: by
   rw [le_minOrder]
@@ -158,7 +158,7 @@ lemma minOrder_le_natCard
 
 中文:
 引理 minOrder_le_natCard
-  条件: (hs : s != ⊥) (hs' : (s : Set G).Finite)
+  条件: (hs : s != ⊥) (hs' : (s : 集合 G).有限)
   结论: minOrder G <= 自然数.card s
   证明: le_minOrder_iff_forall_subgroup.1 le_rfl hs hs'
 
@@ -182,7 +182,7 @@ lemma minOrder_eq_top
 
 中文:
 引理 minOrder_eq_top
-  条件: [IsMulTorsionFree G]
+  条件: [是MulTorsionFree G]
   结论: minOrder G = ⊤
   证明: by
   simpa [minOrder] using fun _ => not_isOfFinOrder_of_isMulTorsionFree
@@ -209,7 +209,7 @@ lemma minOrder_eq_top_iff
 
 中文:
 引理 minOrder_eq_top_iff
-  结论: minOrder G = ⊤ ↔ IsMulTorsionFree G
+  结论: minOrder G = ⊤ ↔ 是MulTorsionFree G
   证明: by
   simp [minOrder, isMulTorsionFree_iff_not_isOfFinOrder]
 
@@ -281,7 +281,7 @@ lemma minOrder_of_prime
 
 中文:
 引理 minOrder_of_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: minOrder (ZMod p) = p
   证明: by
   rw [ZMod.minOrder hp.ne_zero hp.ne_one]; rw [hp.minFac_eq]

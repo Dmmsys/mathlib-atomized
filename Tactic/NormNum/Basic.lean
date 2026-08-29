@@ -42,7 +42,7 @@ definition invertibleOfMul
 
 中文:
 定义 invertibleOfMul
-  签名: {α} [Semiring α] (k : 自然数) (b : α)
+  签名: {α} [半环 α] (k : 自然数) (b : α)
 -/
 def invertibleOfMul {α} [Semiring α] (k : Nat) (b : α) :
     forall (a : α) [Invertible a], a = k * b -> Invertible b
@@ -63,7 +63,7 @@ definition invertibleOfMul'
 
 中文:
 定义 invertibleOfMul'
-  签名: {α} [Semiring α] {a k b : 自然数} [Invertible (a : α)]
+  签名: {α} [半环 α] {a k b : 自然数} [可逆 (a : α)]
   定义体: invertibleOfMul k (b:α) ↑a (by simp [h])
 
 Depends on / 依赖: invertibleOfMul
@@ -83,9 +83,9 @@ theorem IsInt.raw_refl
 meta section
 
 中文:
-定理 IsInt.raw_refl
+定理 是整数.raw_refl
   条件: (n : 整数)
-  结论: Is整数 n n
+  结论: 是整数 n n
   证明: ⟨rfl⟩
 
 meta section
@@ -107,9 +107,9 @@ theorem isNat_zero
   proof: ⟨Nat.cast_zero.symm⟩
 
 中文:
-定理 isNat_zero
-  条件: (α) [AddMonoidWithOne α]
-  结论: Is自然数 (Zero.zero : α) (nat_lit 0)
+定理 is自然数_zero
+  条件: (α) [加法带幺幺半群 α]
+  结论: 是自然数 (零.zero : α) (nat_lit 0)
   证明: ⟨Nat.cast_zero.symm⟩
 
 Depends on / 依赖: Nat.cast_zero.symm, cast_zero
@@ -151,9 +151,9 @@ theorem isNat_one
   proof: ⟨Nat.cast_one.symm⟩
 
 中文:
-定理 isNat_one
-  条件: (α) [AddMonoidWithOne α]
-  结论: Is自然数 (One.one : α) (nat_lit 1)
+定理 is自然数_one
+  条件: (α) [加法带幺幺半群 α]
+  结论: 是自然数 (幺.one : α) (nat_lit 1)
   证明: ⟨Nat.cast_one.symm⟩
 
 Depends on / 依赖: Nat.cast_one.symm, cast_one
@@ -193,8 +193,8 @@ theorem isNat_ofNat
   proof: ⟨h.symm⟩
 
 中文:
-定理 isNat_ofNat
-  结论: (α : 类型u) [AddMonoidWithOne α] {a : α} {n : 自然数}
+定理 is自然数_of自然数
+  结论: (α : 类型u) [加法带幺幺半群 α] {a : α} {n : 自然数}
   证明: ⟨h.symm⟩
 
 Depends on / 依赖: h.symm
@@ -219,7 +219,7 @@ guard ← isDefEq a e
     return .isNat sα n q(isNat_ofNat $α $pa)
 
 中文:
-定义 evalOfNat
+定义 evalOf自然数
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let sα ← inferAddMonoidWithOne α
@@ -251,8 +251,8 @@ theorem isNat_intOfNat
   statement: {n n' : Nat} -> IsNat n n' -> IsNat (Int.ofNat n) n'
 
 中文:
-定理 isNat_intOfNat
-  结论: {n n' : 自然数} -> Is自然数 n n' -> Is自然数 (整数.of自然数 n) n'
+定理 is自然数_intOf自然数
+  结论: {n n' : 自然数} -> 是自然数 n n' -> 是自然数 (整数.of自然数 n) n'
 
 Depends on / 依赖: R0Space, T0Space, T1Space
 -/
@@ -274,7 +274,7 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
 haveI' x : e =Q I
 
 中文:
-定义 evalIntOfNat
+定义 eval整数Of自然数
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.const ``Int.ofNat _) (n : Q(Nat)) ← whnfR e | failure
@@ -303,9 +303,9 @@ theorem isInt_negOfNat
   proof: ⟨congr_arg Int.negOfNat h.1⟩
 
 中文:
-定理 isInt_negOfNat
-  条件: (m n : 自然数) (h : Is自然数 m n)
-  结论: Is整数 (整数.negOf自然数 m) (.negOf自然数 n)
+定理 is整数_negOf自然数
+  条件: (m n : 自然数) (h : 是自然数 m n)
+  结论: 是整数 (整数.negOf自然数 m) (.negOf自然数 n)
   证明: ⟨congr_arg Int.negOfNat h.1⟩
 
 Depends on / 依赖: Int.negOfNat, congr_arg, negOfNat
@@ -331,7 +331,7 @@ definition evalNegOfNat
   | _ => failure
 
 中文:
-定义 evalNegOfNat
+定义 evalNegOf自然数
   签名: : NormNumExt where eval {u αZ} e
   定义体: do
   match u, αZ, e with
@@ -355,8 +355,8 @@ theorem isNat_natAbs_pos
   statement: {n : Int} -> {a : Nat} -> IsNat n a -> IsNat n.natAbs a
 
 中文:
-定理 isNat_natAbs_pos
-  结论: {n : 整数} -> {a : 自然数} -> Is自然数 n a -> Is自然数 n.natAbs a
+定理 is自然数_natAbs_pos
+  结论: {n : 整数} -> {a : 自然数} -> 是自然数 n a -> 是自然数 n.natAbs a
 -/
 theorem isNat_natAbs_pos : {n : Int} -> {a : Nat} -> IsNat n a -> IsNat n.natAbs a
   | _, _, ⟨rfl⟩ => ⟨rfl⟩
@@ -369,8 +369,8 @@ theorem isNat_natAbs_neg
   statement: {n : Int} -> {a : Nat} -> IsInt n (.negOfNat a) -> IsNat n.natAbs a
 
 中文:
-定理 isNat_natAbs_neg
-  结论: {n : 整数} -> {a : 自然数} -> Is整数 n (.negOf自然数 a) -> Is自然数 n.natAbs a
+定理 is自然数_natAbs_neg
+  结论: {n : 整数} -> {a : 自然数} -> 是整数 n (.negOf自然数 a) -> 是自然数 n.natAbs a
 -/
 theorem isNat_natAbs_neg : {n : Int} -> {a : Nat} -> IsInt n (.negOfNat a) -> IsNat n.natAbs a
   | _, _, ⟨rfl⟩ => ⟨by simp⟩
@@ -390,7 +390,7 @@ haveI' : e =Q Int.natAbs x := ⟨⟩
   | .isNat _ a p => assumeInstancesCommute;
 
 中文:
-定义 evalIntNatAbs
+定义 eval整数自然数Abs
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.const ``Int.natAbs _) (x : Q(Int)) ← whnfR e | failure
@@ -420,8 +420,8 @@ theorem isNat_natCast
   proof: by rintro ⟨⟨⟩⟩; exact ⟨rfl⟩
 
 中文:
-定理 isNat_natCast
-  条件: {R} [AddMonoidWithOne R] (n m : 自然数)
+定理 is自然数_natCast
+  条件: {R} [加法带幺幺半群 R] (n m : 自然数)
   证明: by rintro ⟨⟨⟩⟩; exact ⟨rfl⟩
 -/
 theorem isNat_natCast {R} [AddMonoidWithOne R] (n m : Nat) :
@@ -442,7 +442,7 @@ haveI' : e =Q a := ⟨⟩
   return .isNat sα na q(isNat_natCast $a $na $pa)
 
 中文:
-定义 evalNatCast
+定义 eval自然数Cast
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let sα ← inferAddMonoidWithOne α
@@ -471,8 +471,8 @@ theorem isNat_intCast
   proof: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 
 中文:
-定理 isNat_intCast
-  条件: {R} [Ring R] (n : 整数) (m : 自然数)
+定理 is自然数_intCast
+  条件: {R} [环 R] (n : 整数) (m : 自然数)
   证明: by rintro ⟨⟨⟩⟩; exact ⟨by simp⟩
 -/
 theorem isNat_intCast {R} [Ring R] (n : Int) (m : Nat) :
@@ -488,7 +488,7 @@ theorem isintCast
 
 中文:
 定理 isintCast
-  条件: {R} [Ring R] (n m : 整数)
+  条件: {R} [环 R] (n m : 整数)
   证明: by rintro ⟨⟨⟩⟩; exact ⟨rfl⟩
 
 Depends on / 依赖: T0Space, T1Space, T1Space.t0Space, t0Space
@@ -514,7 +514,7 @@ haveI' : e =Q Int.cast a := ⟨⟩
   
 
 中文:
-定义 evalIntCast
+定义 eval整数Cast
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let rα ← inferRing α
@@ -553,8 +553,8 @@ theorem isNat_add
   statement: forall {f : α -> α -> α} {a b : α} {a' b' c : Nat},
 
 中文:
-定理 isNat_add
-  条件: {α} [AddMonoidWithOne α]
+定理 is自然数_add
+  条件: {α} [加法带幺幺半群 α]
   结论: 对任意 {f : α -> α -> α} {a b : α} {a' b' c : 自然数},
 -/
 theorem isNat_add {α} [AddMonoidWithOne α] : forall {f : α -> α -> α} {a b : α} {a' b' c : Nat},
@@ -571,8 +571,8 @@ theorem isInt_add
   statement: forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
 
 中文:
-定理 isInt_add
-  条件: {α} [Ring α]
+定理 is整数_add
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> α -> α} {a b : α} {a' b' c : 整数},
 -/
 theorem isInt_add {α} [Ring α] : forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
@@ -595,7 +595,7 @@ theorem isNNRat_add
 
 中文:
 定理 isNNRat_add
-  条件: {α} [Semiring α] {f : α -> α -> α} {a b : α} {na nb nc : 自然数} {da db dc k : 自然数}
+  条件: {α} [半环 α] {f : α -> α -> α} {a b : α} {na nb nc : 自然数} {da db dc k : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨_, rfl⟩ (h₁ : na * db + nb * da = k * nc) (h₂ : da * db = k * dc)
   have : Invertible (↑(da * db) : α) := by simpa using invertibleMul (da:α) db
@@ -642,7 +642,7 @@ theorem isRat_add
 
 中文:
 定理 isRat_add
-  条件: {α} [Ring α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
+  条件: {α} [环 α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨_, rfl⟩ (h₁ : na * db + nb * da = k * nc) (h₂ : da * db = k * dc)
   have : Invertible (↑(da * db) : α) := by simpa using invertibleMul (da:α) db
@@ -683,7 +683,7 @@ definition _root_.Mathlib.Meta.monadLiftOptionMetaM
 
 中文:
 定义 _root_.Mathlib.Meta.monadLiftOptionMetaM
-  签名: : MonadLift Option MetaM where
+  签名: : MonadLift 选项类型 MetaM where
 -/
 def _root_.Mathlib.Meta.monadLiftOptionMetaM : MonadLift Option MetaM where
   monadLift
@@ -832,8 +832,8 @@ theorem isInt_neg
   statement: forall {f : α -> α} {a : α} {a' b : Int},
 
 中文:
-定理 isInt_neg
-  条件: {α} [Ring α]
+定理 is整数_neg
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> α} {a : α} {a' b : 整数},
 -/
 theorem isInt_neg {α} [Ring α] : forall {f : α -> α} {a : α} {a' b : Int},
@@ -851,7 +851,7 @@ theorem isRat_neg
 
 中文:
 定理 isRat_neg
-  条件: {α} [Ring α]
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> α} {a : α} {n n' : 整数} {d : 自然数},
 -/
 theorem isRat_neg {α} [Ring α] : forall {f : α -> α} {a : α} {n n' : Int} {d : Nat},
@@ -958,8 +958,8 @@ theorem isInt_sub
   statement: forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
 
 中文:
-定理 isInt_sub
-  条件: {α} [Ring α]
+定理 is整数_sub
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> α -> α} {a b : α} {a' b' c : 整数},
 -/
 theorem isInt_sub {α} [Ring α] : forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
@@ -980,7 +980,7 @@ theorem isRat_sub
 
 中文:
 定理 isRat_sub
-  结论: {α} [Ring α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
+  结论: {α} [环 α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
   证明: by
   rw [hf]; rw [sub_eq_add_neg]
   refine isRat_add rfl ra (isRat_neg (n' := -nb) rfl rb rfl) (k := k) (nc := nc) ?_ h₂
@@ -1108,8 +1108,8 @@ theorem isNat_mul
   statement: forall {f : α -> α -> α} {a b : α} {a' b' c : Nat},
 
 中文:
-定理 isNat_mul
-  条件: {α} [Semiring α]
+定理 is自然数_mul
+  条件: {α} [半环 α]
   结论: 对任意 {f : α -> α -> α} {a b : α} {a' b' c : 自然数},
 -/
 theorem isNat_mul {α} [Semiring α] : forall {f : α -> α -> α} {a b : α} {a' b' c : Nat},
@@ -1126,8 +1126,8 @@ theorem isInt_mul
   statement: forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
 
 中文:
-定理 isInt_mul
-  条件: {α} [Ring α]
+定理 is整数_mul
+  条件: {α} [环 α]
   结论: 对任意 {f : α -> α -> α} {a b : α} {a' b' c : 整数},
 -/
 theorem isInt_mul {α} [Ring α] : forall {f : α -> α -> α} {a b : α} {a' b' c : Int},
@@ -1150,7 +1150,7 @@ theorem isNNRat_mul
 
 中文:
 定理 isNNRat_mul
-  条件: {α} [Semiring α] {f : α -> α -> α} {a b : α} {na nb nc : 自然数} {da db dc k : 自然数}
+  条件: {α} [半环 α] {f : α -> α -> α} {a b : α} {na nb nc : 自然数} {da db dc k : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨_, rfl⟩ (h₁ : na * nb = k * nc) (h₂ : da * db = k * dc)
   have : Invertible (↑(da * db) : α) := by simpa using invertibleMul (da:α) db
@@ -1197,7 +1197,7 @@ theorem isRat_mul
 
 中文:
 定理 isRat_mul
-  条件: {α} [Ring α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
+  条件: {α} [环 α] {f : α -> α -> α} {a b : α} {na nb nc : 整数} {da db dc k : 自然数}
   证明: by
   rintro rfl ⟨_, rfl⟩ ⟨_, rfl⟩ (h₁ : na * nb = k * nc) (h₂ : da * db = k * dc)
   have : Invertible (↑(da * db) : α) := by simpa using invertibleMul (da:α) db
@@ -1363,7 +1363,7 @@ theorem isNNRat_div
 
 中文:
 定理 isNNRat_div
-  条件: {α : 类型u} [DivisionSemiring α]
+  条件: {α : 类型u} [除半环 α]
   结论: {a b : α} -> {cn : 自然数} -> {cd : 自然数} ->
 -/
 theorem isNNRat_div {α : Type u} [DivisionSemiring α] : {a b : α} -> {cn : Nat} -> {cd : Nat} ->
@@ -1380,7 +1380,7 @@ theorem isRat_div
 
 中文:
 定理 isRat_div
-  条件: {α : 类型u} [DivisionRing α]
+  条件: {α : 类型u} [除环 α]
   结论: {a b : α} -> {cn : 整数} -> {cd : 自然数} ->
 -/
 theorem isRat_div {α : Type u} [DivisionRing α] : {a b : α} -> {cn : Int} -> {cd : Nat} ->
@@ -1546,8 +1546,8 @@ theorem isNat_eq_true
   statement: {a b : α} -> {c : Nat} ->
 
 中文:
-定理 isNat_eq_true
-  条件: [AddMonoidWithOne α]
+定理 is自然数_eq_true
+  条件: [加法带幺幺半群 α]
   结论: {a b : α} -> {c : 自然数} ->
 -/
 theorem isNat_eq_true [AddMonoidWithOne α] : {a b : α} -> {c : Nat} ->
@@ -1585,9 +1585,9 @@ theorem isInt_eq_true
   statement: {a b : α} -> {z : Int} -> IsInt a z -> IsInt b z -> a = b
 
 中文:
-定理 isInt_eq_true
-  条件: [Ring α]
-  结论: {a b : α} -> {z : 整数} -> Is整数 a z -> Is整数 b z -> a = b
+定理 is整数_eq_true
+  条件: [环 α]
+  结论: {a b : α} -> {z : 整数} -> 是整数 a z -> 是整数 b z -> a = b
 -/
 theorem isInt_eq_true [Ring α] : {a b : α} -> {z : Int} -> IsInt a z -> IsInt b z -> a = b
   | _, _, _, ⟨rfl⟩, ⟨rfl⟩ => rfl
@@ -1602,7 +1602,7 @@ theorem isNNRat_eq_true
 
 中文:
 定理 isNNRat_eq_true
-  条件: [Semiring α]
+  条件: [半环 α]
   结论: {a b : α} -> {n : 自然数} -> {d : 自然数} ->
 -/
 theorem isNNRat_eq_true [Semiring α] : {a b : α} -> {n : Nat} -> {d : Nat} ->
@@ -1619,7 +1619,7 @@ theorem isRat_eq_true
 
 中文:
 定理 isRat_eq_true
-  条件: [Ring α]
+  条件: [环 α]
   结论: {a b : α} -> {n : 整数} -> {d : 自然数} ->
 -/
 theorem isRat_eq_true [Ring α] : {a b : α} -> {n : Int} -> {d : Nat} ->
@@ -1704,7 +1704,7 @@ theorem isNat_natSucc
   statement: {a : Nat} -> {a' c : Nat} ->
 
 中文:
-定理 isNat_natSucc
+定理 is自然数_natSucc
   结论: {a : 自然数} -> {a' c : 自然数} ->
 -/
 theorem isNat_natSucc : {a : Nat} -> {a' c : Nat} ->
@@ -1727,7 +1727,7 @@ haveI' : e =Q Nat.succ a := ⟨⟩
   have nc : Q(Nat) := m
 
 中文:
-定义 evalNatSucc
+定义 eval自然数Succ
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app f (a : Q(Nat)) ← whnfR e | failure
@@ -1759,7 +1759,7 @@ theorem isNat_natSub
   statement: {a b : Nat} -> {a' b' c : Nat} ->
 
 中文:
-定理 isNat_natSub
+定理 is自然数_natSub
   结论: {a b : 自然数} -> {a' b' c : 自然数} ->
 -/
 theorem isNat_natSub : {a b : Nat} -> {a' b' c : Nat} ->
@@ -1781,7 +1781,7 @@ haveI' : e =Q a - b := ⟨⟩
 
 
 中文:
-定义 evalNatSub
+定义 eval自然数Sub
   签名: :
   定义体: do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
@@ -1812,7 +1812,7 @@ theorem isNat_natMod
   statement: {a b : Nat} -> {a' b' c : Nat} ->
 
 中文:
-定理 isNat_natMod
+定理 is自然数_natMod
   结论: {a b : 自然数} -> {a' b' c : 自然数} ->
 -/
 theorem isNat_natMod : {a b : Nat} -> {a' b' c : Nat} ->
@@ -1834,7 +1834,7 @@ guard ← withNewMCtxDepth isDefEq f q(HMod.hMod (α := Nat))
 
 
 中文:
-定义 evalNatMod
+定义 eval自然数Mod
   签名: :
   定义体: do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
@@ -1865,7 +1865,7 @@ theorem isNat_natDiv
   statement: {a b : Nat} -> {a' b' c : Nat} ->
 
 中文:
-定理 isNat_natDiv
+定理 is自然数_natDiv
   结论: {a b : 自然数} -> {a' b' c : 自然数} ->
 -/
 theorem isNat_natDiv : {a b : Nat} -> {a' b' c : Nat} ->
@@ -1890,7 +1890,7 @@ guard ← withNewMCtxDepth isDefEq f q(HDiv.hDiv (α := Nat))
 
 
 中文:
-定义 evalNatDiv
+定义 eval自然数Div
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure
@@ -1920,7 +1920,7 @@ theorem isNat_dvd_true
   statement: {a b : Nat} -> {a' b' : Nat} ->
 
 中文:
-定理 isNat_dvd_true
+定理 is自然数_dvd_true
   结论: {a b : 自然数} -> {a' b' : 自然数} ->
 -/
 theorem isNat_dvd_true : {a b : Nat} -> {a' b' : Nat} ->
@@ -1935,7 +1935,7 @@ theorem isNat_dvd_false
   statement: {a b : Nat} -> {a' b' c : Nat} ->
 
 中文:
-定理 isNat_dvd_false
+定理 is自然数_dvd_false
   结论: {a b : 自然数} -> {a' b' c : 自然数} ->
 -/
 theorem isNat_dvd_false : {a b : Nat} -> {a' b' c : Nat} ->
@@ -1956,7 +1956,7 @@ guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Nat))
   let ⟨na
 
 中文:
-定义 evalNatDvd
+定义 eval自然数Dvd
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app f (a : Q(Nat))) (b : Q(Nat)) ← whnfR e | failure

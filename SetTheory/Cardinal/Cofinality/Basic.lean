@@ -42,7 +42,7 @@ definition cof
 
 中文:
 定义 cof
-  签名: : Cardinal
+  签名: : 基数
   定义体: ⨅ s : {s : Set α // IsCofinal s}, #s
 
 Depends on / 依赖: IsCofinal, equivShrink, symm.topologicalSpace, topologicalSpace
@@ -61,7 +61,7 @@ theorem cof_le
 
 中文:
 定理 cof_le
-  条件: {s : Set α} (h : IsCofinal s)
+  条件: {s : 集合 α} (h : IsCofinal s)
   结论: cof α <= #s
   证明: ciInf_le' (ι := {s : Set α // IsCofinal s}) _ ⟨s, h⟩
 
@@ -82,7 +82,7 @@ theorem le_lift_cof_iff
 
 中文:
 定理 le_lift_cof_iff
-  条件: {c : Cardinal.{max u v}}
+  条件: {c : 基数.{最大值 u v}}
   证明: by
   rw [cof]; rw [lift_iInf]; rw [le_ciInf_iff']
   simp
@@ -108,8 +108,8 @@ theorem le_cof_iff
 
 中文:
 定理 le_cof_iff
-  条件: {c : Cardinal}
-  结论: c <= cof α ↔ 对任意 s : Set α, IsCofinal s -> c <= #s
+  条件: {c : 基数}
+  结论: c <= cof α ↔ 对任意 s : 集合 α, IsCofinal s -> c <= #s
   证明: by
   simpa using @le_lift_cof_iff.{u, u} α _ c
 
@@ -136,8 +136,8 @@ theorem exists_cof_eq
 @[deprecated (since := "2026-05-25")] alias cof_eq := exists_cof_eq
 
 中文:
-定理 exists_cof_eq
-  结论: 存在 s : Set α, IsCofinal s ∧ #s = cof α
+定理 存在_cof_eq
+  结论: 存在 s : 集合 α, IsCofinal s ∧ #s = cof α
   证明: by
   obtain ⟨s, hs⟩ := ciInf_mem fun s : {s : Set α // IsCofinal s} => #s
   exact ⟨s.1, s.2, hs⟩
@@ -186,7 +186,7 @@ theorem cof_eq_zero_iff
 
 中文:
 定理 cof_eq_zero_iff
-  结论: cof α = 0 ↔ IsEmpty α
+  结论: cof α = 0 ↔ 是空 α
   证明: by
   refine ⟨fun _ => ?_, fun _ => by simp [cof]⟩
   obtain ⟨s, hs, hs'⟩ := exists_cof_eq α
@@ -213,7 +213,7 @@ theorem cof_eq_zero
 
 中文:
 定理 cof_eq_zero
-  条件: [h : IsEmpty α]
+  条件: [h : 是空 α]
   结论: cof α = 0
   证明: cof_eq_zero_iff.2 h
 
@@ -235,7 +235,7 @@ theorem cof_ne_zero_iff
 
 中文:
 定理 cof_ne_zero_iff
-  结论: cof α != 0 ↔ Nonempty α
+  结论: cof α != 0 ↔ 非空 α
   证明: by
   simpa using cof_eq_zero_iff.not
 
@@ -258,7 +258,7 @@ theorem cof_ne_zero
 
 中文:
 定理 cof_ne_zero
-  条件: [h : Nonempty α]
+  条件: [h : 非空 α]
   结论: cof α != 0
   证明: cof_ne_zero_iff.2 h
 
@@ -325,7 +325,7 @@ theorem cof_eq_one
 
 中文:
 定理 cof_eq_one
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   结论: cof α = 1
   证明: cof_eq_one_iff.2 ⟨⊤, isTop_top⟩
 
@@ -348,7 +348,7 @@ theorem cof_ne_one_iff
 
 中文:
 定理 cof_ne_one_iff
-  结论: cof α != 1 ↔ NoTopOrder α
+  结论: cof α != 1 ↔ 无顶序 α
   证明: by
   rw [← not_iff_not]; rw [not_not]; rw [noTopOrder_iff]; rw [cof_eq_one_iff]
   simp
@@ -373,7 +373,7 @@ theorem cof_ne_one
 
 中文:
 定理 cof_ne_one
-  条件: [h : NoTopOrder α]
+  条件: [h : 无顶序 α]
   结论: cof α != 1
   证明: cof_ne_one_iff.2 h
 
@@ -395,7 +395,7 @@ theorem cof_le_one_iff
 
 中文:
 定理 cof_le_one_iff
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: cof α <= 1 ↔ 存在 x : α, IsTop x
   证明: by
   rw [le_iff_lt_or_eq]; rw [Cardinal.lt_one_iff]; rw [cof_eq_one_iff]
@@ -422,8 +422,8 @@ theorem one_lt_cof_iff
 
 中文:
 定理 one_lt_cof_iff
-  条件: [Nonempty α]
-  结论: 1 < cof α ↔ NoTopOrder α
+  条件: [非空 α]
+  结论: 1 < cof α ↔ 无顶序 α
   证明: by
   rw [← not_iff_not]; rw [not_lt]; rw [noTopOrder_iff]; rw [cof_le_one_iff]
   simp
@@ -448,7 +448,7 @@ theorem one_lt_cof
 
 中文:
 定理 one_lt_cof
-  条件: [Nonempty α] [h : NoTopOrder α]
+  条件: [非空 α] [h : 无顶序 α]
   结论: 1 < cof α
   证明: one_lt_cof_iff.2 h
 
@@ -478,7 +478,7 @@ theorem lift_cof_congr_of_strictMono
 
 中文:
 定理 lift_cof_congr_of_strictMono
-  条件: {f : α -> β} (hf : StrictMono f) (hf' : IsCofinal (range f))
+  条件: {f : α -> β} (hf : 严格递增 f) (hf' : IsCofinal (range f))
   证明: by
   apply le_antisymm <;> rw [le_lift_cof_iff] <;> intro s hs
   · have H (x : s) : exists y : α, x <= f y := by simpa using hf' x
@@ -513,7 +513,7 @@ theorem cof_congr_of_strictMono
 
 中文:
 定理 cof_congr_of_strictMono
-  条件: {f : α -> γ} (hf : StrictMono f) (hf' : IsCofinal (range f))
+  条件: {f : α -> γ} (hf : 严格递增 f) (hf' : IsCofinal (range f))
   证明: by
   simpa using lift_cof_congr_of_strictMono hf hf'
 
@@ -536,7 +536,7 @@ theorem cof_eq_of_isCofinal
 
 中文:
 定理 cof_eq_of_isCofinal
-  条件: {s : Set α} (hs : IsCofinal s)
+  条件: {s : 集合 α} (hs : IsCofinal s)
   结论: cof s = cof α
   证明: cof_congr_of_strictMono (Subtype.strictMono_coe _) (by simpa)
 
@@ -628,7 +628,7 @@ theorem aleph0_le_cof
 
 中文:
 定理 aleph0_le_cof
-  条件: [Nonempty α] [NoMaxOrder α]
+  条件: [非空 α] [NoMax序 α]
   结论: ℵ₀ <= cof α
   证明: by
   simp
@@ -650,7 +650,7 @@ theorem cof_eq_aleph0
 
 中文:
 定理 cof_eq_aleph0
-  条件: [NoMaxOrder α] [Nonempty α] [Countable α]
+  条件: [NoMax序 α] [非空 α] [可数 α]
   结论: cof α = ℵ₀
   证明: ((cof_le_cardinalMk _).trans mk_le_aleph0).antisymm (by simp)
 
@@ -805,7 +805,7 @@ theorem isCofinal_of_isCofinal_sUnion
 
 中文:
 定理 isCofinal_of_isCofinal_sUnion
-  结论: {α : 类型} [LinearOrder α] {s : Set (Set α)}
+  结论: {α : 类型} [线性序 α] {s : 集合 (集合 α)}
   证明: by
   contrapose! h₂
   simp_rw [not_isCofinal_iff] at h₂
@@ -838,7 +838,7 @@ theorem isCofinal_of_isCofinal_iUnion
 
 中文:
 定理 isCofinal_of_isCofinal_iUnion
-  结论: {α : 类型} {ι} [LinearOrder α] {s : ι -> Set α}
+  结论: {α : 类型} {ι} [线性序 α] {s : ι -> 集合 α}
   证明: by
   rw [← sUnion_range] at h₁
   obtain ⟨_, ⟨i, rfl⟩, h⟩ := isCofinal_of_isCofinal_sUnion h₁ (mk_range_le.trans_lt h₂)

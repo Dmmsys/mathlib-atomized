@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Mᵈᵐᵃ (α ->ₘ[μ] β)
+  签名: 标量乘法 Mᵈᵐᵃ (α ->ₘ[μ] β)
   定义体: f.compMeasurePreserving (mk.symm c • ·) (measurePreserving_smul _ _)
 
 @[to_additive]
@@ -133,8 +133,8 @@ instance [SMul
   body: by rintro _ _ ⟨_⟩; rfl
 
 中文:
-实例 [SMul
-  签名: N β] [ContinuousConstSMul N β] : SMulCommClass Mᵈᵐᵃ N (α ->ₘ[μ] β) where
+实例 [标量乘法
+  签名: N β] [连续常数标量乘法 N β] : 标量交换类 Mᵈᵐᵃ N (α ->ₘ[μ] β) where
   定义体: by rintro _ _ ⟨_⟩; rfl
 -/
 instance [SMul N β] [ContinuousConstSMul N β] : SMulCommClass Mᵈᵐᵃ N (α ->ₘ[μ] β) where
@@ -151,8 +151,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: N β] [ContinuousConstSMul N β] : SMulCommClass N Mᵈᵐᵃ (α ->ₘ[μ] β)
+实例 [标量乘法
+  签名: N β] [连续常数标量乘法 N β] : 标量交换类 N Mᵈᵐᵃ (α ->ₘ[μ] β)
   定义体: .symm _ _ _
 
 @[to_additive]
@@ -171,8 +171,8 @@ instance [SMul
     (AEEqFun.induction_on · fun f hf => by simp only [mk_smul_mk_aeeqFun, smul_comm])
 
 中文:
-实例 [SMul
-  签名: N α] [MeasurableConstSMul N α] [SMulInvariantMeasure N α μ] [SMulCommClass M N α] :
+实例 [标量乘法
+  签名: N α] [可测常数标量乘法 N α] [标量乘不变测度 N α μ] [标量交换类 M N α] :
   定义体: mk.surjective.forall.2 fun c₁ => mk.surjective.forall.2 fun c₂ =>
     (AEEqFun.induction_on · fun f hf => by simp only [mk_smul_mk_aeeqFun, smul_comm])
 
@@ -192,8 +192,8 @@ instance [Zero
   body: rfl
 
 中文:
-实例 [Zero
-  签名: β] : SMulZeroClass Mᵈᵐᵃ (α ->ₘ[μ] β) where
+实例 [零
+  签名: β] : SMulZero类 Mᵈᵐᵃ (α ->ₘ[μ] β) where
   定义体: rfl
 -/
 instance [Zero β] : SMulZeroClass Mᵈᵐᵃ (α ->ₘ[μ] β) where
@@ -209,8 +209,8 @@ instance [AddMonoid
   body: by rintro _ ⟨⟩ ⟨⟩; rfl
 
 中文:
-实例 [AddMonoid
-  签名: β] [ContinuousAdd β] : DistribSMul Mᵈᵐᵃ (α ->ₘ[μ] β) where
+实例 [加法幺半群
+  签名: β] [连续加法 β] : 分配标量乘法 Mᵈᵐᵃ (α ->ₘ[μ] β) where
   定义体: by rintro _ ⟨⟩ ⟨⟩; rfl
 -/
 instance [AddMonoid β] [ContinuousAdd β] : DistribSMul Mᵈᵐᵃ (α ->ₘ[μ] β) where
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Mᵈᵐᵃ (α ->ₘ[μ] β)
+  签名: 乘法作用 Mᵈᵐᵃ (α ->ₘ[μ] β)
   定义体: (AEEqFun.induction_on · fun _ _ => by
     simp only [← mk_one, mk_smul_mk_aeeqFun, one_smul])
   mul_smul := mk.surjective.forall.2 fun _ => mk.surjective.forall.2 fun _ =>
@@ -260,8 +260,8 @@ instance [Monoid
   smul_mul := by rintro _ ⟨⟩ ⟨⟩; rfl
 
 中文:
-实例 [Monoid
-  签名: β] [ContinuousMul β] : MulDistribMulAction Mᵈᵐᵃ (α ->ₘ[μ] β) where
+实例 [幺半群
+  签名: β] [连续乘法 β] : MulDistribMul作用 Mᵈᵐᵃ (α ->ₘ[μ] β) where
   定义体: rfl
   smul_mul := by rintro _ ⟨⟩ ⟨⟩; rfl
 -/
@@ -279,8 +279,8 @@ instance [AddMonoid
   smul_add := smul_add
 
 中文:
-实例 [AddMonoid
-  签名: β] [ContinuousAdd β] : DistribMulAction Mᵈᵐᵃ (α ->ₘ[μ] β) where
+实例 [加法幺半群
+  签名: β] [连续加法 β] : 分配乘法作用 Mᵈᵐᵃ (α ->ₘ[μ] β) where
   定义体: smul_zero
   smul_add := smul_add
 

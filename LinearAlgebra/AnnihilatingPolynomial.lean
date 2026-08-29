@@ -400,7 +400,7 @@ theorem span_minpoly_eq_annihilator
 
 中文:
 定理 span_minpoly_eq_annihilator
-  条件: {M} [AddCommGroup M] [Module 𝕜 M] (f : Module.End 𝕜 M)
+  条件: {M} [加法交换群 M] [模 𝕜 M] (f : 模.End 𝕜 M)
   证明: by
   rw [← annIdealGenerator_eq_minpoly]; rw [span_singleton_annIdealGenerator]; ext
   rw [mem_annIdeal_iff_aeval_eq_zero]; rw [DFunLike.ext_iff]; rw [Module.mem_annihilator]; rfl

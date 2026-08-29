@@ -35,7 +35,7 @@ theorem logDeriv_tprod_eq_tsum
 
 中文:
 定理 logDeriv_tprod_eq_tsum
-  结论: {ι : 类型} {s : Set Complex} (hs : IsOpen s) {x : Complex} (hx : x in s)
+  结论: {ι : 类型} {s : 集合 复形} (hs : 是开集 s) {x : 复形} (hx : x in s)
   证明: by
   rw [Eq.comm]; rw [← hm.hasSum_iff]
   refine logDeriv_tendsto hs hx htend.hasProdLocallyUniformlyOn (.of_forall <| by fun_prop) hnez

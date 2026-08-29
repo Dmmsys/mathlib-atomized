@@ -33,10 +33,10 @@ class HasNoLoop
     - not_rel_self((i : ι)) : ¬ c.Rel i i
 
 中文:
-类 HasNoLoop
-  参数: (c : ComplexShape ι)
+类 有NoLoop
+  参数: (c : 余mplexShape ι)
   公理与运算 (1 个):
-    - not_rel_self((i : ι)) : ¬ c.Rel i i
+    - not_rel_self((i : ι)) : ¬ c.关系 i i
 -/
 class HasNoLoop (c : ComplexShape ι) : Prop where
   not_rel_self (i : ι) : ¬ c.Rel i i
@@ -55,7 +55,7 @@ lemma not_rel_self
 
 中文:
 引理 not_rel_self
-  结论: ¬ c.Rel j j
+  结论: ¬ c.关系 j j
   证明: HasNoLoop.not_rel_self j
 
 Depends on / 依赖: HasNoLoop, HasNoLoop.not_rel_self, not_rel_self
@@ -78,7 +78,7 @@ lemma not_rel_of_eq
 中文:
 引理 not_rel_of_eq
   条件: {j' : ι} (h : j = j')
-  结论: ¬ c.Rel j j'
+  结论: ¬ c.关系 j j'
   证明: by
   subst h
   exact c.not_rel_self j
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: c.symm.HasNoLoop
+  签名: c.symm.有NoLoop
   定义体: c.not_rel_self j
 
 Depends on / 依赖: c.not_rel_self, not_rel_self
@@ -116,7 +116,7 @@ lemma exists_distinct_prev_or
   grind +splitIndPred
 
 中文:
-引理 exists_distinct_prev_or
+引理 存在_distinct_prev_or
   证明: by
   grind +splitIndPred
 
@@ -135,7 +135,7 @@ lemma exists_distinct_next_or
   grind +splitIndPred
 
 中文:
-引理 exists_distinct_next_or
+引理 存在_distinct_next_or
   证明: by
   grind +splitIndPred
 
@@ -155,7 +155,7 @@ lemma hasNoLoop_up'
 
 中文:
 引理 hasNoLoop_up'
-  结论: {α : 类型} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
+  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
   证明: ha (add_left_cancel (by rw [add_zero, hi]))
 
 Depends on / 依赖: add_left_cancel, add_zero
@@ -178,7 +178,7 @@ lemma hasNoLoop_down'
 
 中文:
 引理 hasNoLoop_down'
-  结论: {α : 类型} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
+  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
   证明: by
   have := hasNoLoop_up' a ha
   exact inferInstanceAs (up' a).symm.HasNoLoop
@@ -201,7 +201,7 @@ lemma hasNoLoop_up
 
 中文:
 引理 hasNoLoop_up
-  结论: {α : 类型} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
+  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
   证明: hasNoLoop_up' _ ha
 
 Depends on / 依赖: hasNoLoop_up
@@ -221,7 +221,7 @@ lemma hasNoLoop_down
 
 中文:
 引理 hasNoLoop_down
-  结论: {α : 类型} [AddZeroClass α] [IsRightCancelAdd α] [IsLeftCancelAdd α]
+  结论: {α : 类型} [加法零类 α] [是右消去加法 α] [是左消去加法 α]
   证明: hasNoLoop_down' _ ha
 
 Depends on / 依赖: hasNoLoop_down
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: (up 整数).HasNoLoop
+  签名: (up 整数).有NoLoop
   定义体: hasNoLoop_up (by simp)
 
 Depends on / 依赖: hasNoLoop_up
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: (up 自然数).HasNoLoop
+  签名: (up 自然数).有NoLoop
   定义体: hasNoLoop_up (by simp)
 
 Depends on / 依赖: hasNoLoop_up
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: (down 整数).HasNoLoop
+  签名: (down 整数).有NoLoop
   定义体: hasNoLoop_down (by simp)
 
 Depends on / 依赖: hasNoLoop_down
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: (down 自然数).HasNoLoop
+  签名: (down 自然数).有NoLoop
   定义体: hasNoLoop_down (by simp)
 
 Depends on / 依赖: hasNoLoop_down

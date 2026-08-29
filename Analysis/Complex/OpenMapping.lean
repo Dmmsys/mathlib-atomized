@@ -61,7 +61,7 @@ theorem DiffContOnCl.ball_subset_image_closedBall
 
 中文:
 定理 DiffContOnCl.ball_subset_image_closedBall
-  结论: (h : DiffContOnCl Complex f (ball z₀ r)) (hr : 0 < r)
+  结论: (h : DiffContOnCl 复形 f (ball z₀ r)) (hr : 0 < r)
   证明: by
   /- This is a direct application of the maximum principle. Pick `v` close to `f z₀`, and look at
     the function `fun z ↦ ‖f z - v‖`: it is bounded below on the circle, and takes a small value
@@ -110,7 +110,7 @@ theorem AnalyticAt.eventually_constant_or_nhds_le_map_nhds_aux
 
 中文:
 定理 AnalyticAt.eventually_constant_or_nhds_le_map_nhds_aux
-  条件: (hf : AnalyticAt Complex f z₀)
+  条件: (hf : AnalyticAt 复形 f z₀)
   证明: by
   /- The function `f` is analytic in a neighborhood of `z₀`; by the isolated zeros principle, if `f`
     is not constant in a neighborhood of `z₀`, then it is nonzero, and therefore bounded below, on
@@ -162,7 +162,7 @@ theorem AnalyticAt.eventually_constant_or_nhds_le_map_nhds
 
 中文:
 定理 AnalyticAt.eventually_constant_or_nhds_le_map_nhds
-  条件: {z₀ : E} (hg : AnalyticAt Complex g z₀)
+  条件: {z₀ : E} (hg : AnalyticAt 复形 g z₀)
   证明: by
   /- The idea of the proof is to use the one-dimensional version applied to the restriction of `g`
     to lines going through `z₀` (indexed by `sphere (0 : E) 1`). If the restriction is eventually
@@ -229,7 +229,7 @@ theorem AnalyticOnNhd.is_constant_or_isOpen
 
 中文:
 定理 AnalyticOnNhd.is_constant_or_isOpen
-  条件: (hg : AnalyticOnNhd Complex g U) (hU : IsPreconnected U)
+  条件: (hg : AnalyticOnNhd 复形 g U) (hU : 是预连通 U)
   证明: by
   by_cases h : exists z₀ in U, forallᶠ z in 𝓝 z₀, g z = g z₀
   · obtain ⟨z₀, hz₀, h⟩ := h
@@ -262,7 +262,7 @@ theorem AnalyticOnNhd.is_constant_or_isOpenMap
 
 中文:
 定理 AnalyticOnNhd.is_constant_or_isOpenMap
-  条件: (hg : AnalyticOnNhd Complex g .univ)
+  条件: (hg : AnalyticOnNhd 复形 g .univ)
   证明: (hg.is_constant_or_isOpen PreconnectedSpace.isPreconnected_univ).imp
     (fun ⟨w, eq⟩ => ⟨w, fun z => eq z ⟨⟩⟩) (· · <| subset_univ _)
 
@@ -291,7 +291,7 @@ theorem AnalyticOnNhd.eq_const_of_re_eq_const
 
 中文:
 定理 AnalyticOnNhd.eq_const_of_re_eq_const
-  结论: {U : Set Complex} {c₀ : 实数} (h₁f : AnalyticOnNhd Complex f U)
+  结论: {U : 集合 复形} {c₀ : 实数} (h₁f : AnalyticOnNhd 复形 f U)
   证明: by
   obtain ⟨z₀, _⟩ := h₂U.nonempty
   by_contra h₅
@@ -322,7 +322,7 @@ theorem AnalyticOnNhd.eq_re_add_const_mul_I_of_re_eq_const
 
 中文:
 定理 AnalyticOnNhd.eq_re_add_const_mul_I_of_re_eq_const
-  结论: {U : Set Complex} {c₀ : 实数}
+  结论: {U : 集合 复形} {c₀ : 实数}
   证明: by
   obtain ⟨cc, hcc⟩ := eq_const_of_re_eq_const h₁f h₂f h₁U h₂U
   use cc.im
@@ -354,7 +354,7 @@ theorem AnalyticOnNhd.eq_const_of_im_eq_const
 
 中文:
 定理 AnalyticOnNhd.eq_const_of_im_eq_const
-  结论: {U : Set Complex} {c₀ : 实数} (h₁f : AnalyticOnNhd Complex f U)
+  结论: {U : 集合 复形} {c₀ : 实数} (h₁f : AnalyticOnNhd 复形 f U)
   证明: by
   obtain ⟨z₀, _⟩ := h₂U.nonempty
   by_contra h₅
@@ -385,7 +385,7 @@ theorem AnalyticOnNhd.eq_const_add_im_mul_I_of_re_eq_const
 
 中文:
 定理 AnalyticOnNhd.eq_const_add_im_mul_I_of_re_eq_const
-  结论: {U : Set Complex} {c₀ : 实数}
+  结论: {U : 集合 复形} {c₀ : 实数}
   证明: by
   obtain ⟨cc, hcc⟩ := AnalyticOnNhd.eq_const_of_im_eq_const h₁f h₂f h₁U h₂U
   use cc.re
@@ -417,8 +417,8 @@ theorem Polynomial.C_eq_or_isOpenQuotientMap_eval
 · exact ⟨IsAlgClosed.eval_surjective natDegree_eq_zero.not.mpr h, p.continuous_aeval, hp⟩
 
 中文:
-定理 Polynomial.C_eq_or_isOpenQuotientMap_eval
-  条件: (p : Polynomial Complex)
+定理 多项式.C_eq_or_isOpenQuotientMap_eval
+  条件: (p : 多项式 复形)
   证明: by
   refine or_iff_not_imp_left.mpr fun h => ?_
   obtain ⟨x, eq⟩ | hp := (AnalyticOnNhd.eval_polynomial p).is_constant_or_isOpenMap
@@ -443,8 +443,8 @@ theorem Polynomial.isOpenQuotientMap_eval
   proof: p.C_eq_or_isOpenQuotientMap_eval.resolve_left natDegree_eq_zero.not.mp hp
 
 中文:
-定理 Polynomial.isOpenQuotientMap_eval
-  条件: (p : Polynomial Complex) (hp : p.natDegree != 0)
+定理 多项式.isOpenQuotientMap_eval
+  条件: (p : 多项式 复形) (hp : p.natDegree != 0)
   证明: p.C_eq_or_isOpenQuotientMap_eval.resolve_left natDegree_eq_zero.not.mp hp
 
 Depends on / 依赖: C_eq_or_isOpenQuotientMap_eval, natDegree_eq_zero, natDegree_eq_zero.not.mp, p.C_eq_or_isOpenQuotientMap_eval.resolve_left, resolve_left
@@ -470,7 +470,7 @@ theorem isOpenQuotientMap_pow
 中文:
 定理 isOpenQuotientMap_pow
   条件: (n : 自然数) [NeZero n]
-  结论: IsOpenQuotientMap (· ^ n : Complex -> Complex)
+  结论: 是OpenQuotient映射 (· ^ n : 复形 -> 复形)
   证明: by
   convert! Polynomial.isOpenQuotientMap_eval (.X ^ n) _
   · simp

@@ -46,7 +46,7 @@ definition localizedModule
 
 中文:
 定义 localizedModule
-  签名: [Small.{v} R] (M : ModuleCat.{v} R) (S : Submonoid R)
+  签名: [Small.{v} R] (M : 模范畴.{v} R) (S : 子幺半群 R)
   定义体: ModuleCat.of.{v} _ (Shrink.{v} (LocalizedModule S M))
 
 Depends on / 依赖: LocalizedModule, ModuleCat, ModuleCat.of, Shrink
@@ -103,7 +103,7 @@ definition localizedModuleMkLinearMap
 
 中文:
 定义 localizedModuleMkLinearMap
-  签名: [Small.{v} R] (M : ModuleCat.{v} R)
+  签名: [Small.{v} R] (M : 模范畴.{v} R)
   定义体: (Shrink.linearEquiv.{v} R _).symm.toLinearMap.comp (LocalizedModule.mkLinearMap S M)
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, Shrink, Shrink.linearEquiv, linearEquiv, mkLinearMap, symm.toLinearMap.comp, toLinearMap
@@ -125,7 +125,7 @@ instance localizedModule_isLocalizedModule
 
 中文:
 实例 localizedModule_isLocalizedModule
-  签名: [Small.{v} R] (M : ModuleCat.{v} R)
+  签名: [Small.{v} R] (M : 模范畴.{v} R)
   定义体: by
   dsimp only [localizedModuleMkLinearMap]
   infer_instance
@@ -150,7 +150,7 @@ definition localizedModuleMap
 
 中文:
 定义 localizedModuleMap
-  签名: [Small.{v} R] {M N : ModuleCat.{v} R}
+  签名: [Small.{v} R] {M N : 模范畴.{v} R}
   定义体: ModuleCat.ofHom.{v} IsLocalizedModule.mapExtendScalars S (M.localizedModuleMkLinearMap S)
     (N.localizedModuleMkLinearMap S) (Localization S) f.hom
 
@@ -179,7 +179,7 @@ definition localizedModuleFunctor
 
 中文:
 定义 localizedModuleFunctor
-  签名: [Small.{v} R] (S : Submonoid R)
+  签名: [Small.{v} R] (S : 子幺半群 R)
   定义体: M.localizedModule S
   map := ModuleCat.localizedModuleMap S
   map_comp {X Y Z} f g := by
@@ -222,7 +222,7 @@ lemma localizedModuleFunctor_map_exact
 
 中文:
 引理 localizedModuleFunctor_map_exact
-  结论: [Small.{v} R] (S : Submonoid R)
+  结论: [Small.{v} R] (S : 子幺半群 R)
   证明: by
   rw [CategoryTheory.ShortComplex.ShortExact.moduleCat_exact_iff_function_exact] at h ⊢
   exact IsLocalizedModule.map_exact S (T.X₁.localizedModuleMkLinearMap S)
@@ -299,7 +299,7 @@ lemma isIso_of_isLocalizedModule_comp
 
 中文:
 引理 isIso_of_isLocalizedModule_comp
-  结论: {S : Submonoid R} {M₁ M₂ M₃ : ModuleCat R} {f₁ : M₁ ⟶ M₂}
+  结论: {S : 子幺半群 R} {M₁ M₂ M₃ : 模范畴 R} {f₁ : M₁ ⟶ M₂}
   证明: by
   have : Function.Bijective f₂.hom := by
     rw [← IsLocalizedModule.linearEquiv_of_isLocalizedModule_comp S f₁.hom f₂.hom]

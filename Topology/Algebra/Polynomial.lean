@@ -62,7 +62,7 @@ theorem continuous_eval₂
 
 中文:
 定理 continuous_eval₂
-  条件: [Semiring S] (p : S[X]) (f : S ->+* R)
+  条件: [半环 S] (p : S[X]) (f : S ->+* R)
   证明: by
   simp only [eval₂_eq_sum]
   exact continuous_finsetSum _ fun c _ => continuous_const.mul (continuous_pow _)
@@ -87,7 +87,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: Continuous fun x => p.eval x
+  结论: 连续 fun x => p.eval x
   证明: p.continuous_eval₂ _
 
 @[fun_prop]
@@ -180,7 +180,7 @@ theorem continuous_aeval
 
 中文:
 定理 continuous_aeval
-  结论: Continuous fun x : A => aeval x p
+  结论: 连续 fun x : A => aeval x p
   证明: p.continuous_eval₂ _
 
 @[fun_prop]
@@ -271,7 +271,7 @@ theorem tendsto_abv_eval₂_atTop
 
 中文:
 定理 tendsto_abv_eval₂_atTop
-  结论: {R S k α : 类型} [Semiring R] [Ring S]
+  结论: {R S k α : 类型} [半环 R] [环 S]
   证明: by
   revert hf; refine degree_pos_induction_on p hd ?_ ?_ ?_ <;> clear hd p
   · rintro _ - hc
@@ -313,7 +313,7 @@ theorem tendsto_abv_atTop
 
 中文:
 定理 tendsto_abv_atTop
-  结论: {R k α : 类型} [Ring R]
+  结论: {R k α : 类型} [环 R]
   证明: by
   apply tendsto_abv_eval₂_atTop _ _ _ h _ hz
   exact mt leadingCoeff_eq_zero.1 (ne_zero_of_degree_gt h)
@@ -337,7 +337,7 @@ theorem tendsto_abv_aeval_atTop
 
 中文:
 定理 tendsto_abv_aeval_atTop
-  结论: {R A k α : 类型} [CommSemiring R] [Ring A] [Algebra R A]
+  结论: {R A k α : 类型} [交换半环 R] [环 A] [代数 R A]
   证明: tendsto_abv_eval₂_atTop _ abv p hd h₀ hz
 -/
 theorem tendsto_abv_aeval_atTop {R A k α : Type*} [CommSemiring R] [Ring A] [Algebra R A]
@@ -359,7 +359,7 @@ theorem tendsto_norm_atTop
 
 中文:
 定理 tendsto_norm_atTop
-  结论: (p : R[X]) (h : 0 < degree p) {l : Filter α} {z : α -> R}
+  结论: (p : R[X]) (h : 0 < degree p) {l : 滤子 α} {z : α -> R}
   证明: p.tendsto_abv_atTop norm h hz
 
 Depends on / 依赖: p.tendsto_abv_atTop, tendsto_abv_atTop
@@ -381,8 +381,8 @@ p.continuous.norm.exists_forall_le p.tendsto_norm_atTop hp0 tendsto_norm_cocompa
     ⟨p.coeff 0, by rw [eq_C_of_degree_le_zero (le_of_not_gt hp0)]; simp⟩
 
 中文:
-定理 exists_forall_norm_le
-  条件: [命题erSpace R] (p : R[X])
+定理 存在_对任意_norm_le
+  条件: [真空间 R] (p : R[X])
   结论: 存在 x, 对任意 y, ‖p.eval x‖ <= ‖p.eval y‖
   证明: if hp0 : 0 < degree p then
 p.continuous.norm.exists_forall_le p.tendsto_norm_atTop hp0 tendsto_norm_cocompact_atTop
@@ -410,8 +410,8 @@ theorem isProperMap_eval
 
 中文:
 定理 isProperMap_eval
-  条件: [命题erSpace R] (p : R[X]) (h : 0 < degree p)
-  结论: Is命题erMap p.eval
+  条件: [真空间 R] (p : R[X]) (h : 0 < degree p)
+  结论: 是真映射 p.eval
   证明: isProperMap_iff_tendsto_cocompact.mpr ⟨by fun_prop, by
     rw [← Metric.cobounded_eq_cocompact]; rw [← tendsto_norm_atTop_iff_cobounded]
     exact p.tendsto_norm_atTop h tendsto_norm_cobounded_atTop⟩
@@ -437,8 +437,8 @@ theorem isClosedMap_eval
 
 中文:
 定理 isClosedMap_eval
-  条件: [命题erSpace R] (p : R[X])
-  结论: IsClosedMap p.eval
+  条件: [真空间 R] (p : R[X])
+  结论: 是闭映射 p.eval
   证明: by
   obtain h | h := le_or_gt p.degree 0
   · rw [degree_le_zero_iff.mp h]; simpa using! isClosedMap_const
@@ -464,8 +464,8 @@ theorem _root_.isClosedMap_pow
 
 中文:
 定理 _root_.isClosedMap_pow
-  条件: [命题erSpace R] (n : 自然数)
-  结论: IsClosedMap fun x : R => x ^ n
+  条件: [真空间 R] (n : 自然数)
+  结论: 是闭映射 fun x : R => x ^ n
   证明: by
   simpa [eval_X_pow] using (X ^ n).isClosedMap_eval
 

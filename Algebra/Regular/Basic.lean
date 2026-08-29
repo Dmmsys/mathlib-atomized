@@ -107,7 +107,7 @@ theorem Commute.isRegular_iff
 中文:
 定理 Commute.isRegular_iff
   条件: {a : R} (ca : 对任意 b, Commute a b)
-  结论: IsRegular a ↔ IsLeftRegular a
+  结论: 是正则 a ↔ IsLeftRegular a
   证明: ⟨fun h => h.left, fun h => ⟨h, h.right_of_commute ca⟩⟩
 
 Depends on / 依赖: h.left, h.right_of_commute, right_of_commute
@@ -177,8 +177,8 @@ theorem IsRegular.mul
   proof: ⟨rra.left.mul rrb.left, rra.right.mul rrb.right⟩
 
 中文:
-定理 IsRegular.mul
-  条件: (rra : IsRegular a) (rrb : IsRegular b)
+定理 是正则.mul
+  条件: (rra : 是正则 a) (rrb : 是正则 b)
   证明: ⟨rra.left.mul rrb.left, rra.right.mul rrb.right⟩
 
 Depends on / 依赖: rra.left.mul, rra.right.mul, rrb.left, rrb.right
@@ -343,8 +343,8 @@ theorem IsRegular.and_of_mul_of_mul
   proof: isRegular_mul_and_mul_iff.mp ⟨ab, ba⟩
 
 中文:
-定理 IsRegular.and_of_mul_of_mul
-  条件: (ab : IsRegular (a * b)) (ba : IsRegular (b * a))
+定理 是正则.and_of_mul_of_mul
+  条件: (ab : 是正则 (a * b)) (ba : 是正则 (b * a))
   证明: isRegular_mul_and_mul_iff.mp ⟨ab, ba⟩
 
 Depends on / 依赖: isRegular_mul_and_mul_iff, isRegular_mul_and_mul_iff.mp
@@ -373,7 +373,7 @@ theorem isRegular_one
 
 中文:
 定理 isRegular_one
-  结论: IsRegular (1 : R)
+  结论: 是正则 (1 : R)
   证明: ⟨fun a b ab => (one_mul a).symm.trans (Eq.trans ab (one_mul b)), fun a b ab =>
     (mul_one a).symm.trans (Eq.trans ab (mul_one b))⟩
 
@@ -403,7 +403,7 @@ theorem isRegular_mul_iff
 
 中文:
 定理 isRegular_mul_iff
-  结论: IsRegular (a * b) ↔ IsRegular a ∧ IsRegular b
+  结论: 是正则 (a * b) ↔ 是正则 a ∧ 是正则 b
   证明: by
   refine Iff.trans ?_ isRegular_mul_and_mul_iff
   exact ⟨fun ab => ⟨ab, by rwa [mul_comm]⟩, fun rab => rab.1⟩
@@ -426,9 +426,9 @@ theorem IsRegular.of_mul_left
   proof: (isRegular_mul_iff.mp h).1
 
 中文:
-定理 IsRegular.of_mul_left
-  条件: (h : IsRegular (a * b))
-  结论: IsRegular a
+定理 是正则.of_mul_left
+  条件: (h : 是正则 (a * b))
+  结论: 是正则 a
   证明: (isRegular_mul_iff.mp h).1
 
 Depends on / 依赖: isRegular_mul_iff, isRegular_mul_iff.mp
@@ -448,9 +448,9 @@ theorem IsRegular.of_mul_right
   proof: (isRegular_mul_iff.mp h).2
 
 中文:
-定理 IsRegular.of_mul_right
-  条件: (h : IsRegular (a * b))
-  结论: IsRegular b
+定理 是正则.of_mul_right
+  条件: (h : 是正则 (a * b))
+  结论: 是正则 b
   证明: (isRegular_mul_iff.mp h).2
 
 Depends on / 依赖: isRegular_mul_iff, isRegular_mul_iff.mp
@@ -520,9 +520,9 @@ theorem Units.isRegular
   proof: ⟨isLeftRegular_of_mul_eq_one a.inv_mul, isRightRegular_of_mul_eq_one a.mul_inv⟩
 
 中文:
-定理 Units.isRegular
+定理 单位群.isRegular
   条件: (a : Rˣ)
-  结论: IsRegular (a : R)
+  结论: 是正则 (a : R)
   证明: ⟨isLeftRegular_of_mul_eq_one a.inv_mul, isRightRegular_of_mul_eq_one a.mul_inv⟩
 
 Depends on / 依赖: a.inv_mul, a.mul_inv, inv_mul, isLeftRegular_of_mul_eq_one, isRightRegular_of_mul_eq_one, mul_inv
@@ -544,9 +544,9 @@ theorem IsUnit.isRegular
   exact Units.isRegular a
 
 中文:
-定理 IsUnit.isRegular
-  条件: (ua : IsUnit a)
-  结论: IsRegular a
+定理 是单位.isRegular
+  条件: (ua : 是单位 a)
+  结论: 是正则 a
   证明: by
   rcases ua with ⟨a, rfl⟩
   exact Units.isRegular a
@@ -618,9 +618,9 @@ lemma IsRegular.pow
   proof: ⟨IsLeftRegular.pow n ra.left, IsRightRegular.pow n ra.right⟩
 
 中文:
-引理 IsRegular.pow
-  条件: (n : 自然数) (ra : IsRegular a)
-  结论: IsRegular (a ^ n)
+引理 是正则.pow
+  条件: (n : 自然数) (ra : 是正则 a)
+  结论: 是正则 (a ^ n)
   证明: ⟨IsLeftRegular.pow n ra.left, IsRightRegular.pow n ra.right⟩
 -/
 @[to_additive] lemma IsRegular.pow (n : Nat) (ra : IsRegular a) : IsRegular (a ^ n) :=
@@ -687,9 +687,9 @@ lemma IsRegular.pow_iff
   mpr h := ⟨.pow n h.left, .pow n h.right⟩
 
 中文:
-引理 IsRegular.pow_iff
+引理 是正则.pow_iff
   条件: {n : 自然数} (n0 : 0 < n)
-  结论: IsRegular (a ^ n) ↔ IsRegular a where
+  结论: 是正则 (a ^ n) ↔ 是正则 a where
   证明: ⟨(IsLeftRegular.pow_iff n0).mp h.left, (IsRightRegular.pow_iff n0).mp h.right⟩
   mpr h := ⟨.pow n h.left, .pow n h.right⟩
 -/

@@ -44,10 +44,10 @@ class Algebra.FiniteType
     - out : (⊤ : Subalgebra R A).FG
 
 中文:
-类 Algebra.FiniteType
-  参数: [CommSemiring R] [Semiring A] [Algebra R A]
+类 代数.有限型
+  参数: [交换半环 R] [半环 A] [代数 R A]
   公理与运算 (1 个):
-    - out : (⊤ : Subalgebra R A).FG
+    - out : (⊤ : 子代数 R A).FG
 -/
 class Algebra.FiniteType [CommSemiring R] [Semiring A] [Algebra R A] : Prop where
   out : (⊤ : Subalgebra R A).FG
@@ -99,7 +99,7 @@ theorem of_restrictScalars_finiteType
 
 中文:
 定理 of_restrictScalars_finiteType
-  条件: [Algebra S A] [IsScalarTower R S A] [hA : FiniteType R A]
+  条件: [代数 S A] [标量塔 R S A] [hA : 有限型 R A]
   证明: by
   obtain ⟨s, hS⟩ := hA.out
   refine ⟨⟨s, eq_top_iff.2 fun b => ?_⟩⟩
@@ -134,8 +134,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: [FiniteType R A] (f : A ->ₐ[R] B) (hf : Surjective f)
-  结论: FiniteType R B
+  条件: [有限型 R A] (f : A ->ₐ[R] B) (hf : 满射 f)
+  结论: 有限型 R B
   证明: ⟨by
     convert ‹FiniteType R A›.1.map f
     simpa only [map_top f, @eq_comm _ ⊤, eq_top_iff, AlgHom.mem_range] using! hf⟩
@@ -158,8 +158,8 @@ theorem equiv
 
 中文:
 定理 equiv
-  条件: (hRA : FiniteType R A) (e : A ≃ₐ[R] B)
-  结论: FiniteType R B
+  条件: (hRA : 有限型 R A) (e : A ≃ₐ[R] B)
+  结论: 有限型 R B
   证明: hRA.of_surjective e e.surjective
 
 Depends on / 依赖: e.surjective, hRA.of_surjective, of_surjective, surjective
@@ -177,7 +177,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: [Algebra S A] [IsScalarTower R S A] (hRS : FiniteType R S) (hSA : FiniteType S A)
+  条件: [代数 S A] [标量塔 R S A] (hRS : 有限型 R S) (hSA : 有限型 S A)
   证明: ⟨fg_trans' hRS.1 hSA.1⟩
 
 Depends on / 依赖: fg_trans
@@ -196,7 +196,7 @@ instance quotient
 
 中文:
 实例 quotient
-  签名: (R : 类型) {S : 类型} [CommSemiring R] [CommRing S] [Algebra R S] (I : Ideal S)
+  签名: (R : 类型) {S : 类型} [交换半环 R] [交换环 S] [代数 R S] (I : 理想 S)
   定义体: Algebra.FiniteType.trans h inferInstance
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.trans, FiniteType
@@ -217,8 +217,8 @@ instance [FiniteType
   exact Polynomial.adjoin_X
 
 中文:
-实例 [FiniteType
-  签名: R S] : FiniteType R S[X]
+实例 [有限型
+  签名: R S] : 有限型 R S[X]
   定义体: by
   refine .trans ‹_› ⟨{Polynomial.X}, ?_⟩
   rw [Finset.coe_singleton]
@@ -338,7 +338,7 @@ theorem iff_quotient_freeAlgebra'
 
 中文:
 定理 iff_quotient_freeAlgebra'
-  结论: FiniteType R A ↔
+  结论: 有限型 R A ↔
   证明: by
   constructor
   · rw [iff_quotient_freeAlgebra]
@@ -377,7 +377,7 @@ theorem iff_quotient_mvPolynomial'
 
 中文:
 定理 iff_quotient_mvPolynomial'
-  结论: FiniteType R S ↔
+  结论: 有限型 R S ↔
   证明: by
   constructor
   · rw [iff_quotient_mvPolynomial]
@@ -445,8 +445,8 @@ instance prod
   body: ⟨by rw [← Subalgebra.prod_top]; exact hA.1.prod hB.1⟩
 
 中文:
-实例 prod
-  签名: [hA : FiniteType R A] [hB : FiniteType R B]
+实例 乘积
+  签名: [hA : 有限型 R A] [hB : 有限型 R B]
   定义体: ⟨by rw [← Subalgebra.prod_top]; exact hA.1.prod hB.1⟩
 
 Depends on / 依赖: Subalgebra, Subalgebra.prod_top, prod_top
@@ -469,7 +469,7 @@ theorem isNoetherianRing
 
 中文:
 定理 isNoetherianRing
-  结论: (R S : 类型) [CommRing R] [CommRing S] [Algebra R S]
+  结论: (R S : 类型) [交换环 R] [交换环 S] [代数 R S]
   证明: by
   obtain ⟨s, hs⟩ := h.1
   apply
@@ -498,9 +498,9 @@ theorem _root_.Subalgebra.fg_iff_finiteType
   proof: S.fg_top.symm.trans ⟨fun h => ⟨h⟩, fun h => h.out⟩
 
 中文:
-定理 _root_.Subalgebra.fg_iff_finiteType
-  条件: (S : Subalgebra R A)
-  结论: S.FG ↔ Algebra.FiniteType R S
+定理 _root_.子代数.fg_iff_finiteType
+  条件: (S : 子代数 R A)
+  结论: S.FG ↔ 代数.有限型 R S
   证明: S.fg_top.symm.trans ⟨fun h => ⟨h⟩, fun h => h.out⟩
 
 Depends on / 依赖: S.fg_top.symm.trans, fg_top, h.out
@@ -520,7 +520,7 @@ lemma adjoin_of_finite
 
 中文:
 引理 adjoin_of_finite
-  条件: {A : 类型} [CommSemiring A] [Algebra R A] {t : Set A} (h : Set.Finite t)
+  条件: {A : 类型} [交换半环 A] [代数 R A] {t : 集合 A} (h : 集合.有限 t)
   证明: by
   rw [← Subalgebra.fg_iff_finiteType]
   exact ⟨h.toFinset, by simp⟩
@@ -553,7 +553,7 @@ definition FiniteType
   body: @Algebra.FiniteType A B _ _ f.toAlgebra
 
 中文:
-定义 FiniteType
+定义 有限型
   签名: (f : A ->+* B)
   定义体: @Algebra.FiniteType A B _ _ f.toAlgebra
 
@@ -573,7 +573,7 @@ lemma finiteType_algebraMap
 
 中文:
 引理 finiteType_algebraMap
-  条件: [Algebra A B]
+  条件: [代数 A B]
   证明: by
   rw [FiniteType]; rw [toAlgebra_algebraMap]
 
@@ -596,8 +596,8 @@ theorem finiteType
 
 中文:
 定理 finiteType
-  条件: {f : A ->+* B} (hf : f.Finite)
-  结论: FiniteType f
+  条件: {f : A ->+* B} (hf : f.有限)
+  结论: 有限型 f
   证明: @Module.Finite.finiteType _ _ _ _ f.toAlgebra hf
 
 Depends on / 依赖: Finite, Module, Module.Finite.finiteType, f.toAlgebra, finiteType, toAlgebra
@@ -622,7 +622,7 @@ theorem id
 
 中文:
 定理 id
-  结论: FiniteType (RingHom.id A)
+  结论: 有限型 (环态射.id A)
   证明: by simp [FiniteType]; infer_instance
 
 Depends on / 依赖: FiniteType, infer_instance
@@ -645,7 +645,7 @@ theorem comp_surjective
 
 中文:
 定理 comp_surjective
-  条件: {f : A ->+* B} {g : B ->+* C} (hf : f.FiniteType) (hg : Surjective g)
+  条件: {f : A ->+* B} {g : B ->+* C} (hf : f.有限型) (hg : 满射 g)
   证明: by
   algebraize_only [f, g.comp f]
   exact ‹Algebra.FiniteType _ _›.of_surjective
@@ -678,8 +678,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->+* B) (hf : Surjective f)
-  结论: f.FiniteType
+  条件: (f : A ->+* B) (hf : 满射 f)
+  结论: f.有限型
   证明: by
   rw [← f.comp_id]
   exact (id A).comp_surjective hf
@@ -702,7 +702,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.FiniteType) (hf : f.FiniteType)
+  条件: {g : B ->+* C} {f : A ->+* B} (hg : g.有限型) (hf : f.有限型)
   证明: by
   algebraize_only [f, g, g.comp f]
   exact Algebra.FiniteType.trans hf hg
@@ -727,8 +727,8 @@ alias _root_.RingHom.Finite.to_finiteType := of_finite
 
 中文:
 定理 of_finite
-  条件: {f : A ->+* B} (hf : f.Finite)
-  结论: f.FiniteType
+  条件: {f : A ->+* B} (hf : f.有限)
+  结论: f.有限型
   证明: @Module.Finite.finiteType _ _ _ _ f.toAlgebra hf
 
 alias _root_.RingHom.Finite.to_finiteType := of_finite
@@ -752,7 +752,7 @@ theorem of_comp_finiteType
 
 中文:
 定理 of_comp_finiteType
-  条件: {f : A ->+* B} {g : B ->+* C} (h : (g.comp f).FiniteType)
+  条件: {f : A ->+* B} {g : B ->+* C} (h : (g.comp f).有限型)
   证明: by
   algebraize [f, g, g.comp f]
   exact Algebra.FiniteType.of_restrictScalars_finiteType A B C
@@ -783,7 +783,7 @@ definition FiniteType
   body: f.toRingHom.FiniteType
 
 中文:
-定义 FiniteType
+定义 有限型
   签名: (f : A ->ₐ[R] B)
   定义体: f.toRingHom.FiniteType
 
@@ -805,8 +805,8 @@ theorem finiteType
 
 中文:
 定理 finiteType
-  条件: {f : A ->ₐ[R] B} (hf : f.Finite)
-  结论: FiniteType f
+  条件: {f : A ->ₐ[R] B} (hf : f.有限)
+  结论: 有限型 f
   证明: RingHom.Finite.finiteType hf
 
 Depends on / 依赖: Finite, RingHom, RingHom.Finite.finiteType, finiteType
@@ -830,7 +830,7 @@ theorem id
 
 中文:
 定理 id
-  结论: FiniteType (AlgHom.id R A)
+  结论: 有限型 (代数态射.id R A)
   证明: RingHom.FiniteType.id A
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.id
@@ -850,7 +850,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.FiniteType) (hf : f.FiniteType)
+  条件: {g : B ->ₐ[R] C} {f : A ->ₐ[R] B} (hg : g.有限型) (hf : f.有限型)
   证明: RingHom.FiniteType.comp hg hf
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.comp
@@ -869,7 +869,7 @@ theorem comp_surjective
 
 中文:
 定理 comp_surjective
-  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (hf : f.FiniteType) (hg : Surjective g)
+  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (hf : f.有限型) (hg : 满射 g)
   证明: RingHom.FiniteType.comp_surjective hf hg
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.comp_surjective, comp_surjective
@@ -889,8 +889,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: (f : A ->ₐ[R] B) (hf : Surjective f)
-  结论: f.FiniteType
+  条件: (f : A ->ₐ[R] B) (hf : 满射 f)
+  结论: f.有限型
   证明: RingHom.FiniteType.of_surjective f.toRingHom hf
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.of_surjective, f.toRingHom, of_surjective, toRingHom
@@ -908,7 +908,7 @@ theorem of_comp_finiteType
 
 中文:
 定理 of_comp_finiteType
-  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (h : (g.comp f).FiniteType)
+  条件: {f : A ->ₐ[R] B} {g : B ->ₐ[R] C} (h : (g.comp f).有限型)
   证明: RingHom.FiniteType.of_comp_finiteType h
 
 Depends on / 依赖: FiniteType, RingHom, RingHom.FiniteType.of_comp_finiteType, of_comp_finiteType
@@ -974,7 +974,7 @@ theorem support_gen_of_gen
 
 中文:
 定理 support_gen_of_gen
-  条件: {S : Set R[M]} (hS : Algebra.adjoin R S = ⊤)
+  条件: {S : 集合 R[M]} (hS : 代数.adjoin R S = ⊤)
   证明: by
   refine le_antisymm le_top ?_
   rw [← hS]; rw [adjoin_le_iff]
@@ -1008,7 +1008,7 @@ theorem support_gen_of_gen'
 
 中文:
 定理 support_gen_of_gen'
-  条件: {S : Set R[M]} (hS : Algebra.adjoin R S = ⊤)
+  条件: {S : 集合 R[M]} (hS : 代数.adjoin R S = ⊤)
   证明: by
   suffices of' R M '' ⋃ f in S, (f.coeff.support : Set M) = ⋃ f in S, of' R M '' f.coeff.support by
     rw [this]
@@ -1046,8 +1046,8 @@ theorem exists_finset_adjoin_eq_top
   exact support_gen_of_
 
 中文:
-定理 exists_finset_adjoin_eq_top
-  条件: [h : FiniteType R R[M]]
+定理 存在_finset_adjoin_eq_top
+  条件: [h : 有限型 R R[M]]
   证明: by
   obtain ⟨S, hS⟩ := h
   let : DecidableEq M := Classical.decEq M
@@ -1091,7 +1091,7 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
 
 中文:
 定理 mvPolynomial_aeval_of_surjective_of_closure
-  结论: [AddCommMonoid M] [CommSemiring R] {S : Set M}
+  结论: [加法交换幺半群 M] [交换半环 R] {S : 集合 M}
   证明: by
   intro f
   induction f using induction_on with
@@ -1147,7 +1147,7 @@ theorem freeAlgebra_lift_of_surjective_of_closure
 
 中文:
 定理 freeAlgebra_lift_of_surjective_of_closure
-  结论: [CommSemiring R] {S : Set M}
+  结论: [交换半环 R] {S : 集合 M}
   证明: by
   intro f
   induction f using induction_on with
@@ -1199,7 +1199,7 @@ instance finiteType_of_fg
 
 中文:
 实例 finiteType_of_fg
-  签名: [CommRing R] [h : AddMonoid.FG M]
+  签名: [交换环 R] [h : 加法幺半群.FG M]
   定义体: by
   obtain ⟨S, hS⟩ := h.fg_top
   exact .of_surjective
@@ -1232,7 +1232,7 @@ theorem finiteType_iff_fg
 
 中文:
 定理 finiteType_iff_fg
-  条件: [CommRing R] [Nontrivial R]
+  条件: [交换环 R] [非平凡 R]
   证明: by
   refine ⟨fun h => ?_, fun h => @AddMonoidAlgebra.finiteType_of_fg _ _ _ _ h⟩
   obtain ⟨S, hS⟩ := @exists_finset_adjoin_eq_top R M _ _ h
@@ -1262,7 +1262,7 @@ theorem fg_of_finiteType
 
 中文:
 定理 fg_of_finiteType
-  条件: [CommRing R] [Nontrivial R] [h : FiniteType R R[M]]
+  条件: [交换环 R] [非平凡 R] [h : 有限型 R R[M]]
   证明: finiteType_iff_fg.1 h
 
 Depends on / 依赖: finiteType_iff_fg
@@ -1282,7 +1282,7 @@ theorem finiteType_iff_group_fg
 
 中文:
 定理 finiteType_iff_group_fg
-  条件: {G : 类型} [AddGroup G] [CommRing R] [Nontrivial R]
+  条件: {G : 类型} [加法群 G] [交换环 R] [非平凡 R]
   证明: by
   simpa [AddGroup.fg_iff_addMonoid_fg] using finiteType_iff_fg
 
@@ -1343,7 +1343,7 @@ theorem support_gen_of_gen
 
 中文:
 定理 support_gen_of_gen
-  条件: {S : Set R[M]} (hS : Algebra.adjoin R S = ⊤)
+  条件: {S : 集合 R[M]} (hS : 代数.adjoin R S = ⊤)
   证明: by
   refine le_antisymm le_top ?_
   rw [← hS]; rw [adjoin_le_iff]
@@ -1377,7 +1377,7 @@ theorem support_gen_of_gen'
 
 中文:
 定理 support_gen_of_gen'
-  条件: {S : Set R[M]} (hS : Algebra.adjoin R S = ⊤)
+  条件: {S : 集合 R[M]} (hS : 代数.adjoin R S = ⊤)
   证明: by
   suffices of R M '' ⋃ f in S, f.coeff.support = ⋃ f in S, of R M '' f.coeff.support by
     rw [this]
@@ -1415,8 +1415,8 @@ theorem exists_finset_adjoin_eq_top
   exact support_gen_of_
 
 中文:
-定理 exists_finset_adjoin_eq_top
-  条件: [h : FiniteType R R[M]]
+定理 存在_finset_adjoin_eq_top
+  条件: [h : 有限型 R R[M]]
   证明: by
   obtain ⟨S, hS⟩ := h
   let : DecidableEq M := Classical.decEq M
@@ -1460,7 +1460,7 @@ theorem mvPolynomial_aeval_of_surjective_of_closure
 
 中文:
 定理 mvPolynomial_aeval_of_surjective_of_closure
-  结论: [CommMonoid M] [CommSemiring R] {S : Set M}
+  结论: [交换幺半群 M] [交换半环 R] {S : 集合 M}
   证明: by
   intro f
   induction f using induction_on with
@@ -1516,7 +1516,7 @@ theorem freeAlgebra_lift_of_surjective_of_closure
 
 中文:
 定理 freeAlgebra_lift_of_surjective_of_closure
-  结论: [CommSemiring R] {S : Set M}
+  结论: [交换半环 R] {S : 集合 M}
   证明: by
   intro f
   induction f using induction_on with
@@ -1562,7 +1562,7 @@ instance finiteType_of_fg
 
 中文:
 实例 finiteType_of_fg
-  签名: [CommRing R] [Monoid.FG M]
+  签名: [交换环 R] [幺半群.FG M]
   定义体: (AddMonoidAlgebra.finiteType_of_fg R (Additive M)).equiv (toAdditiveAlgEquiv R R M).symm
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.finiteType_of_fg, Additive, FriendlyOperation, Seq.FriendlyOperation.ite, finiteType_of_fg, toAdditiveAlgEquiv
@@ -1583,8 +1583,8 @@ AddMonoidAlgebra.finiteType_iff_fg.1 h.equiv toAdditiveAlgEquiv R R M
 
 中文:
 定理 finiteType_iff_fg
-  条件: [CommRing R] [Nontrivial R]
-  结论: FiniteType R R[M] ↔ Monoid.FG M where
+  条件: [交换环 R] [非平凡 R]
+  结论: 有限型 R R[M] ↔ 幺半群.FG M where
   证明: Monoid.fg_iff_add_fg.2
 AddMonoidAlgebra.finiteType_iff_fg.1 h.equiv toAdditiveAlgEquiv R R M
   mpr _ := inferInstance
@@ -1606,7 +1606,7 @@ theorem fg_of_finiteType
 
 中文:
 定理 fg_of_finiteType
-  条件: [CommRing R] [Nontrivial R] [h : FiniteType R R[M]]
+  条件: [交换环 R] [非平凡 R] [h : 有限型 R R[M]]
   证明: finiteType_iff_fg.1 h
 
 Depends on / 依赖: FriendlyOperation, Seq.FriendlyOperation.cons_tail, cons_tail, finiteType_iff_fg
@@ -1626,7 +1626,7 @@ theorem finiteType_iff_group_fg
 
 中文:
 定理 finiteType_iff_group_fg
-  条件: {G : 类型} [Group G] [CommRing R] [Nontrivial R]
+  条件: {G : 类型} [群 G] [交换环 R] [非平凡 R]
   证明: by
   simpa [Group.fg_iff_monoid_fg] using finiteType_iff_fg
 

@@ -71,7 +71,7 @@ theorem sup_sdiff_injOn
 
 中文:
 定理 sup_sdiff_injOn
-  条件: [Generalized布尔eanAlgebra α] (u v : α)
+  条件: [Generalized布尔ean代数 α] (u v : α)
   证明: by
   rintro a ha b hb hab
   have h : ((a ⊔ u) \ v) \ u ⊔ v = ((b ⊔ u) \ v) \ u ⊔ v := by
@@ -280,7 +280,7 @@ scoped[FinsetFamily] notation "𝓒 " => UV.compression
 
 中文:
 定义 compression
-  签名: (u v : α) (s : Finset α)
+  签名: (u v : α) (s : 有限集 α)
   定义体: {a in s | compress u v a in s} union {a in s.image <| compress u v | a ∉ s}
 
 @[inherit_doc]
@@ -306,7 +306,7 @@ definition IsCompressed
 
 中文:
 定义 IsCompressed
-  签名: (u v : α) (s : Finset α)
+  签名: (u v : α) (s : 有限集 α)
   定义体: 𝓒 u v s = s
 -/
 def IsCompressed (u v : α) (s : Finset α) :=
@@ -331,7 +331,7 @@ theorem compress_injOn
 
 中文:
 定理 compress_injOn
-  结论: Set.InjOn (compress u v) ↑{a in s | compress u v a ∉ s}
+  结论: 集合.单射限制 (compress u v) ↑{a in s | compress u v a ∉ s}
   证明: by
   intro a ha b hb hab
   rw [mem_coe]; rw [mem_filter] at ha hb
@@ -409,7 +409,7 @@ theorem compression_self
 
 中文:
 定理 compression_self
-  条件: (u : α) (s : Finset α)
+  条件: (u : α) (s : 有限集 α)
   结论: 𝓒 u u s = s
   证明: by
   grind [mem_compression]
@@ -430,7 +430,7 @@ theorem isCompressed_self
 
 中文:
 定理 isCompressed_self
-  条件: (u : α) (s : Finset α)
+  条件: (u : α) (s : 有限集 α)
   结论: IsCompressed u u s
   证明: compression_self u s
 
@@ -540,7 +540,7 @@ filter_false_of_mem fun a ha h => h compress_mem_compression_of_mem_compression 
 
 中文:
 定理 compression_idem
-  条件: (u v : α) (s : Finset α)
+  条件: (u v : α) (s : 有限集 α)
   结论: 𝓒 u v (𝓒 u v s) = 𝓒 u v s
   证明: by
   have h : {a in 𝓒 u v s | compress u v a ∉ 𝓒 u v s} = ∅ :=
@@ -570,7 +570,7 @@ theorem card_compression
 
 中文:
 定理 card_compression
-  条件: (u v : α) (s : Finset α)
+  条件: (u v : α) (s : 有限集 α)
   结论: #(𝓒 u v s) = #s
   证明: by
   rw [compression]; rw [card_union_of_disjoint compress_disjoint]; rw [filter_image]; rw [card_image_of_injOn compress_injOn]; rw [← card_union_of_disjoint (disjoint_filter_filter_not s _ _)]; rw [filter_union_filter_not_eq]
@@ -820,7 +820,7 @@ theorem card_compress
 
 中文:
 定理 card_compress
-  条件: (huv : #u = #v) (a : Finset α)
+  条件: (huv : #u = #v) (a : 有限集 α)
   结论: #(compress u v a) = #a
   证明: by
   unfold compress
@@ -851,8 +851,8 @@ lemma _root_.Set.Sized.uvCompression
   · rw [card_compress huv, h𝒜 ht]
 
 中文:
-引理 _root_.Set.Sized.uvCompression
-  条件: (huv : #u = #v) (h𝒜 : (𝒜 : Set (Finset α)).Sized r)
+引理 _root_.集合.Sized.uvCompression
+  条件: (huv : #u = #v) (h𝒜 : (𝒜 : 集合 (有限集 α)).Sized r)
   证明: by
   simp_rw [Set.Sized, mem_coe, mem_compression]
   rintro s (hs | ⟨huvt, t, ht, rfl⟩)
@@ -906,7 +906,7 @@ theorem shadow_compression_subset_compression_shadow
 
 中文:
 定理 shadow_compression_subset_compression_shadow
-  结论: (u v : Finset α)
+  结论: (u v : 有限集 α)
   证明: by
   set 𝒜' := 𝓒 u v 𝒜
   suffices H : forall s in ∂ 𝒜',
@@ -1029,7 +1029,7 @@ theorem card_shadow_compression_le
 
 中文:
 定理 card_shadow_compression_le
-  结论: (u v : Finset α)
+  结论: (u v : 有限集 α)
   证明: (card_le_card <| shadow_compression_subset_compression_shadow _ _ huv).trans
     (card_compression _ _ _).le
 

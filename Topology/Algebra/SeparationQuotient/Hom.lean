@@ -41,7 +41,7 @@ map_mul' := Quotient.ind₂ map_mul f
 
 中文:
 定义 liftContinuousMonoidHom
-  签名: [CommMonoid M] [ContinuousMul M] [CommMonoid N]
+  签名: [交换幺半群 M] [连续乘法 M] [交换幺半群 N]
   定义体: SeparationQuotient.lift f hf
   map_one' := map_one f
 map_mul' := Quotient.ind₂ map_mul f
@@ -70,7 +70,7 @@ theorem liftContinuousCommMonoidHom_mk
 
 中文:
 定理 liftContinuousCommMonoidHom_mk
-  结论: [CommMonoid M] [ContinuousMul M] [CommMonoid N]
+  结论: [交换幺半群 M] [连续乘法 M] [交换幺半群 N]
   证明: rfl
 -/
 theorem liftContinuousCommMonoidHom_mk [CommMonoid M] [ContinuousMul M] [CommMonoid N]

@@ -96,7 +96,7 @@ theorem _root_.LinearMap.rTensor_injective_of_fg
     from rfl, rTensor
 
 中文:
-定理 _root_.LinearMap.rTensor_injective_of_fg
+定理 _root_.线性映射.rTensor_injective_of_fg
   结论: {f : N ->ₗ[R] P}
   证明: fun x y eq => by
   have ⟨N', Nfg, sub⟩ := Submodule.exists_fg_le_subset_range_rTensor_subtype {x, y} (by simp)
@@ -133,8 +133,8 @@ lemma _root_.LinearMap.rTensor_injective_iff_subtype
   rfl
 
 中文:
-引理 _root_.LinearMap.rTensor_injective_iff_subtype
-  结论: {f : N ->ₗ[R] P} (hf : Function.Injective f)
+引理 _root_.线性映射.rTensor_injective_iff_subtype
+  结论: {f : N ->ₗ[R] P} (hf : 函数.单射 f)
   证明: by
   simp_rw [← EquivLike.injective_comp <| (LinearEquiv.ofInjective (e.toLinearMap ∘ₗ f)
     (e.injective.comp hf)).rTensor M, ← EquivLike.comp_injective _ (e.rTensor M),
@@ -162,10 +162,10 @@ class Flat
     - out(⦃P) : Type u⦄ [AddCommMonoid P] [Module R P] [Module.Finite R P] (N : Submodule R P) : N.FG -> Function.Injective (N.subtype.rTensor M)
 
 中文:
-类 Flat
+类 平坦
   参数: : 命题 where
   公理与运算 (1 个):
-    - out(⦃P) : 类型u⦄ [AddCommMonoid P] [Module R P] [Module.Finite R P] (N : Submodule R P) : N.FG -> Function.Injective (N.subtype.rTensor M)
+    - out(⦃P) : 类型u⦄ [加法交换幺半群 P] [模 R P] [模.有限 R P] (N : 子模 R P) : N.FG -> 函数.单射 (N.subtype.rTensor M)
 -/
 @[mk_iff] class Flat : Prop where
   out ⦃P : Type u⦄ [AddCommMonoid P] [Module R P] [Module.Finite R P] (N : Submodule R P) : N.FG ->
@@ -190,7 +190,7 @@ theorem rTensor_preserves_injective_linearMap
 
 中文:
 定理 rTensor_preserves_injective_linearMap
-  结论: [Flat R M] (f : N ->ₗ[R] P)
+  结论: [平坦 R M] (f : N ->ₗ[R] P)
   证明: by
   refine rTensor_injective_of_fg fun N P Nfg Pfg le => ?_
   rw [← Finite.iff_fg] at Nfg Pfg
@@ -222,7 +222,7 @@ theorem lTensor_preserves_injective_linearMap
 
 中文:
 定理 lTensor_preserves_injective_linearMap
-  结论: [Flat R M] (f : N ->ₗ[R] P)
+  结论: [平坦 R M] (f : N ->ₗ[R] P)
   证明: (f.lTensor_inj_iff_rTensor_inj M).2 (rTensor_preserves_injective_linearMap f hf)
 
 Depends on / 依赖: f.lTensor_inj_iff_rTensor_inj, lTensor_inj_iff_rTensor_inj, rTensor_preserves_injective_linearMap
@@ -246,7 +246,7 @@ lemma iff_rTensor_preserves_injective_linearMapₛ
 中文:
 引理 iff_rTensor_preserves_injective_linearMapₛ
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: ⟨by introv _; apply rTensor_preserves_injective_linearMap, fun h => ⟨fun P _ _ _ _ _ => by
     have := Finite.small.{v'} R P
     rw [rTensor_injective_iff_subtype Subtype.val_injective (Shrink.linearEquiv R P).symm]
@@ -275,7 +275,7 @@ lemma iff_lTensor_preserves_injective_linearMapₛ
 中文:
 引理 iff_lTensor_preserves_injective_linearMapₛ
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: by
   simp_rw [iff_rTensor_preserves_injective_linearMapₛ, LinearMap.lTensor_inj_iff_rTensor_inj]
 
@@ -297,7 +297,7 @@ lemma iff_rTensor_injectiveₛ
 
 中文:
 引理 iff_rTensor_injectiveₛ
-  结论: Flat R M ↔ 对任意 ⦃P : 类型u⦄ [AddCommMonoid P] [Module R P]
+  结论: 平坦 R M ↔ 对任意 ⦃P : 类型u⦄ [加法交换幺半群 P] [模 R P]
   证明: ⟨fun _ _ _ _ _ => rTensor_preserves_injective_linearMap _ Subtype.val_injective,
     fun h => ⟨fun _ _ _ _ _ _ => h _⟩⟩
 
@@ -319,7 +319,7 @@ lemma iff_lTensor_injectiveₛ
 
 中文:
 引理 iff_lTensor_injectiveₛ
-  结论: Flat R M ↔ 对任意 ⦃P : 类型u⦄ [AddCommMonoid P] [Module R P]
+  结论: 平坦 R M ↔ 对任意 ⦃P : 类型u⦄ [加法交换幺半群 P] [模 R P]
   证明: by
   simp_rw [iff_rTensor_injectiveₛ, LinearMap.lTensor_inj_iff_rTensor_inj]
 
@@ -339,7 +339,7 @@ instance instSubalgebraToSubmodule
 
 中文:
 实例 instSubalgebraToSubmodule
-  签名: {S : 类型v} [Semiring S] [Algebra R S]
+  签名: {S : 类型v} [半环 S] [代数 R S]
   定义体: ‹Flat R A›
 -/
 instance instSubalgebraToSubmodule {S : Type v} [Semiring S] [Algebra R S]
@@ -358,7 +358,7 @@ instance self
 
 中文:
 实例 self
-  签名: : Flat R R where
+  签名: : 平坦 R R where
   定义体: by
     rw [← (TensorProduct.rid R I).symm.injective_comp]; rw [← (TensorProduct.rid R _).comp_injective]
     convert! Subtype.coe_injective using 1
@@ -387,7 +387,7 @@ lemma of_retract
 
 中文:
 引理 of_retract
-  条件: [f : Flat R M] (i : N ->ₗ[R] M) (r : M ->ₗ[R] N) (h : r.comp i = LinearMap.id)
+  条件: [f : 平坦 R M] (i : N ->ₗ[R] M) (r : M ->ₗ[R] N) (h : r.comp i = 线性映射.id)
   证明: by
   rw [iff_rTensor_injectiveₛ] at *
   refine fun P _ _ Q => .of_comp (f := lTensor P i) ?_
@@ -416,8 +416,8 @@ lemma of_linearEquiv
 
 中文:
 引理 of_linearEquiv
-  条件: [Flat R M] (e : N ≃ₗ[R] M)
-  结论: Flat R N
+  条件: [平坦 R M] (e : N ≃ₗ[R] M)
+  结论: 平坦 R N
   证明: of_retract e.toLinearMap e.symm (by simp)
 
 Depends on / 依赖: e.symm, e.toLinearMap, of_retract, toLinearMap
@@ -437,7 +437,7 @@ lemma equiv_iff
 中文:
 引理 equiv_iff
   条件: (e : M ≃ₗ[R] N)
-  结论: Flat R M ↔ Flat R N
+  结论: 平坦 R M ↔ 平坦 R N
   证明: ⟨fun _ => of_linearEquiv e.symm, fun _ => of_linearEquiv e⟩
 
 Depends on / 依赖: e.symm, of_linearEquiv
@@ -455,7 +455,7 @@ instance ulift
 
 中文:
 实例 ulift
-  签名: [Flat R M]
+  签名: [平坦 R M]
   定义体: of_linearEquiv ULift.moduleEquiv
 
 Depends on / 依赖: ULift.moduleEquiv, moduleEquiv, of_linearEquiv
@@ -475,8 +475,8 @@ lemma of_ulift
 
 中文:
 引理 of_ulift
-  条件: [Flat R (ULift.{v'} M)]
-  结论: Flat R M
+  条件: [平坦 R (类型层提升.{v'} M)]
+  结论: 平坦 R M
   证明: of_linearEquiv ULift.moduleEquiv.symm
 
 Depends on / 依赖: ULift.moduleEquiv.symm, moduleEquiv, of_linearEquiv
@@ -494,7 +494,7 @@ instance shrink
 
 中文:
 实例 shrink
-  签名: [Small.{v'} M] [Flat R M]
+  签名: [Small.{v'} M] [平坦 R M]
   定义体: of_linearEquiv (Shrink.linearEquiv R M)
 
 Depends on / 依赖: Shrink, Shrink.linearEquiv, linearEquiv, of_linearEquiv
@@ -514,8 +514,8 @@ lemma of_shrink
 
 中文:
 引理 of_shrink
-  条件: [Small.{v'} M] [Flat R (Shrink.{v'} M)]
-  结论: Flat R M
+  条件: [Small.{v'} M] [平坦 R (Shrink.{v'} M)]
+  结论: 平坦 R M
   证明: of_linearEquiv (Shrink.linearEquiv R M).symm
 
 Depends on / 依赖: Shrink, Shrink.linearEquiv, linearEquiv, of_linearEquiv
@@ -542,7 +542,7 @@ theorem directSum_iff
 
 中文:
 定理 directSum_iff
-  结论: Flat R (⨁ i, M i) ↔ 对任意 i, Flat R (M i)
+  结论: 平坦 R (⨁ i, M i) ↔ 对任意 i, 平坦 R (M i)
   证明: by
   classical
   simp_rw [iff_rTensor_injectiveₛ, ← EquivLike.comp_injective _ (directSumRight R R _ _),
@@ -569,7 +569,7 @@ theorem dfinsupp_iff
 
 中文:
 定理 dfinsupp_iff
-  结论: Flat R (Π₀ i, M i) ↔ 对任意 i, Flat R (M i)
+  结论: 平坦 R (Π₀ i, M i) ↔ 对任意 i, 平坦 R (M i)
   证明: directSum_iff ..
 
 Depends on / 依赖: directSum_iff
@@ -586,7 +586,7 @@ instance directSum
 
 中文:
 实例 directSum
-  签名: [对任意 i, Flat R (M i)]
+  签名: [对任意 i, 平坦 R (M i)]
   定义体: directSum_iff.mpr ‹_›
 
 Depends on / 依赖: directSum_iff, directSum_iff.mpr
@@ -603,7 +603,7 @@ instance dfinsupp
 
 中文:
 实例 dfinsupp
-  签名: [对任意 i, Flat R (M i)]
+  签名: [对任意 i, 平坦 R (M i)]
   定义体: dfinsupp_iff.mpr ‹_›
 
 Depends on / 依赖: dfinsupp_iff, dfinsupp_iff.mpr
@@ -643,7 +643,7 @@ instance of_projective
 
 中文:
 实例 of_projective
-  签名: [Projective R M]
+  签名: [投射 R M]
   定义体: have ⟨e, he⟩ := Module.projective_def'.mp ‹_›
   of_retract _ _ he
 
@@ -663,7 +663,7 @@ instance of_free
 
 中文:
 实例 of_free
-  签名: [Free R M]
+  签名: [自由 R M]
   定义体: inferInstance
 
 Depends on / 依赖: List.cons, Multiseries, basis_hd, basis_tl
@@ -699,7 +699,7 @@ theorem linearIndependent_one_tmul
 
 中文:
 定理 linearIndependent_one_tmul
-  结论: [Flat R S] {ι} {v : ι -> M}
+  结论: [平坦 R S] {ι} {v : ι -> M}
   证明: by
   classical rw [LinearIndependent, ← LinearMap.coe_restrictScalars R,
     Finsupp.linearCombination_one_tmul]
@@ -730,7 +730,7 @@ exact Flat.rTensor_preserves_injective_linearMap _ FaithfulSMul.algebraMap_injec
 
 中文:
 引理 tensorProduct_mk_injective
-  条件: [FaithfulSMul R S] [Flat R M]
+  条件: [忠实标量乘法 R S] [平坦 R M]
   证明: by
   have : TensorProduct.mk R S M 1 =
       (Algebra.linearMap R S).rTensor M ∘ (TensorProduct.lid R M).symm := by ext; simp
@@ -760,8 +760,8 @@ lemma _root_.LinearMap.baseChangeHom_injective
 simpa using Flat.tensorProduct_mk_injective R N S LinearMap.congr_fun h (1 otimesₜ[R] m)
 
 中文:
-引理 _root_.LinearMap.baseChangeHom_injective
-  条件: [FaithfulSMul R S] [Flat R N]
+引理 _root_.线性映射.baseChangeHom_injective
+  条件: [忠实标量乘法 R S] [平坦 R N]
   证明: by
   intro f g h
   ext m
@@ -804,7 +804,7 @@ lemma iff_rTensor_preserves_injective_linearMap'
 中文:
 引理 iff_rTensor_preserves_injective_linearMap'
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: ⟨by introv _; apply rTensor_preserves_injective_linearMap, fun h =>
     iff_rTensor_preserves_injective_linearMapₛ.mpr fun P N _ _ _ _ => by
       let := Module.addCommMonoidToAddCommGroup R (M := P)
@@ -832,7 +832,7 @@ lemma iff_rTensor_preserves_injective_linearMap
 
 中文:
 引理 iff_rTensor_preserves_injective_linearMap
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: iff_rTensor_preserves_injective_linearMap'
 
 Depends on / 依赖: iff_rTensor_preserves_injective_linearMap
@@ -855,7 +855,7 @@ lemma iff_lTensor_preserves_injective_linearMap'
 中文:
 引理 iff_lTensor_preserves_injective_linearMap'
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: by
   simp_rw [iff_rTensor_preserves_injective_linearMap', LinearMap.lTensor_inj_iff_rTensor_inj]
 
@@ -876,7 +876,7 @@ lemma iff_lTensor_preserves_injective_linearMap
 
 中文:
 引理 iff_lTensor_preserves_injective_linearMap
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: iff_lTensor_preserves_injective_linearMap'
 
 Depends on / 依赖: iff_lTensor_preserves_injective_linearMap
@@ -904,7 +904,7 @@ lemma lTensor_exact
 
 中文:
 引理 lTensor_exact
-  条件: [Flat R M] ⦃N N' N''
+  条件: [平坦 R M] ⦃N N' N''
   结论: 类型⦄
   证明: by
   let π : N' ->ₗ[R] N' ⧸ LinearMap.range f := Submodule.mkQ _
@@ -949,7 +949,7 @@ lemma rTensor_exact
 
 中文:
 引理 rTensor_exact
-  条件: [Flat R M] ⦃N N' N''
+  条件: [平坦 R M] ⦃N N' N''
   结论: 类型⦄
   证明: by
   let π : N' ->ₗ[R] N' ⧸ LinearMap.range f := Submodule.mkQ _
@@ -993,7 +993,7 @@ theorem iff_lTensor_exact'
 中文:
 定理 iff_lTensor_exact'
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: by
   refine ⟨fun _ => lTensor_exact _, fun H => iff_lTensor_preserves_injective_linearMap'.mpr
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ L hL => LinearMap.ker_eq_bot
@@ -1024,7 +1024,7 @@ theorem iff_lTensor_exact
 
 中文:
 定理 iff_lTensor_exact
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: iff_lTensor_exact'
 
 Depends on / 依赖: iff_lTensor_exact
@@ -1052,7 +1052,7 @@ theorem iff_rTensor_exact'
 中文:
 定理 iff_rTensor_exact'
   条件: [Small.{v'} R]
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: by
   refine ⟨fun _ => rTensor_exact _, fun H => iff_rTensor_preserves_injective_linearMap'.mpr
 .mp .mpr eq_bot_iff fun N' N'' _ _ _ _ f hf => LinearMap.ker_eq_bot
@@ -1083,7 +1083,7 @@ theorem iff_rTensor_exact
 
 中文:
 定理 iff_rTensor_exact
-  结论: Flat R M ↔
+  结论: 平坦 R M ↔
   证明: iff_rTensor_exact'
 
 Depends on / 依赖: iff_rTensor_exact
@@ -1119,7 +1119,7 @@ theorem includeLeft_injective
 
 中文:
 定理 includeLeft_injective
-  条件: [Module.Flat R A] (hb : Function.Injective (algebraMap R B))
+  条件: [模.平坦 R A] (hb : 函数.单射 (algebraMap R B))
   证明: by
   convert!
 .comp Module.Flat.lTensor_preserves_injective_linearMap (M := A) (Algebra.linearMap R B) hb
@@ -1149,7 +1149,7 @@ theorem includeRight_injective
 
 中文:
 定理 includeRight_injective
-  条件: [Module.Flat R B] (ha : Function.Injective (algebraMap R A))
+  条件: [模.平坦 R B] (ha : 函数.单射 (algebraMap R A))
   证明: by
   convert!
 .comp Module.Flat.rTensor_preserves_injective_linearMap (M := B) (Algebra.linearMap R A) ha
@@ -1182,7 +1182,7 @@ theorem toBaseChange_injective
 
 中文:
 定理 toBaseChange_injective
-  结论: Function.Injective (p.toBaseChange A)
+  结论: 函数.单射 (p.toBaseChange A)
   证明: (p.subtype.baseChange A).injective_rangeRestrict_iff.mpr
     (Module.Flat.lTensor_preserves_injective_linearMap p.subtype (injective_subtype p))
 
@@ -1260,7 +1260,7 @@ theorem nontrivial_of_linearMap_injective_of_flat_left
 
 中文:
 定理 nontrivial_of_linearMap_injective_of_flat_left
-  结论: (f : R ->ₗ[R] N) (h : Function.Injective f)
+  结论: (f : R ->ₗ[R] N) (h : 函数.单射 f)
   证明: .comp Module.Flat.lTensor_preserves_injective_linearMap (M := M) f h
 .nontrivial (TensorProduct.rid R M).symm.injective
 
@@ -1282,7 +1282,7 @@ theorem nontrivial_of_linearMap_injective_of_flat_right
 
 中文:
 定理 nontrivial_of_linearMap_injective_of_flat_right
-  结论: (f : R ->ₗ[R] M) (h : Function.Injective f)
+  结论: (f : R ->ₗ[R] M) (h : 函数.单射 f)
   证明: .comp Module.Flat.rTensor_preserves_injective_linearMap (M := N) f h
 .nontrivial (TensorProduct.lid R N).symm.injective
 
@@ -1370,7 +1370,7 @@ lemma _root_.LinearIndependent.tmul_of_flat_left
 
 中文:
 引理 _root_.LinearIndependent.tmul_of_flat_left
-  结论: [Module.Flat R M] (hv : LinearIndependent R v)
+  结论: [模.平坦 R M] (hv : LinearIndependent R v)
   证明: by
   rw [LinearIndependent]
   convert!
@@ -1415,7 +1415,7 @@ lemma _root_.LinearIndependent.tmul_of_flat_right
 
 中文:
 引理 _root_.LinearIndependent.tmul_of_flat_right
-  结论: [Module.Flat R N] (hv : LinearIndependent R v)
+  结论: [模.平坦 R N] (hv : LinearIndependent R v)
   证明: (((TensorProduct.comm R N M).toLinearMap.linearIndependent_iff_of_injOn
     (TensorProduct.comm R N M).injective.injOn).mpr
       (hw.tmul_of_flat_left hv)).comp Prod.swap Prod.swap_bijective.injective
@@ -1447,7 +1447,7 @@ theorem _root_.Module.Flat.tensorProduct_mapIncl_injective_of_right
   proof: TensorProduct.map_injective_of_flat_flat _ _ p.subtype_injective q.subtype_injective
 
 中文:
-定理 _root_.Module.Flat.tensorProduct_mapIncl_injective_of_right
+定理 _root_.模.平坦.tensorProduct_mapIncl_injective_of_right
   证明: TensorProduct.map_injective_of_flat_flat _ _ p.subtype_injective q.subtype_injective
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_injective_of_flat_flat, map_injective_of_flat_flat, p.subtype_injective, q.subtype_injective, subtype_injective
@@ -1464,7 +1464,7 @@ theorem _root_.Module.Flat.tensorProduct_mapIncl_injective_of_left
   proof: TensorProduct.map_injective_of_flat_flat' _ _ p.subtype_injective q.subtype_injective
 
 中文:
-定理 _root_.Module.Flat.tensorProduct_mapIncl_injective_of_left
+定理 _root_.模.平坦.tensorProduct_mapIncl_injective_of_left
   证明: TensorProduct.map_injective_of_flat_flat' _ _ p.subtype_injective q.subtype_injective
 
 Depends on / 依赖: TensorProduct, TensorProduct.map_injective_of_flat_flat, map_injective_of_flat_flat, p.subtype_injective, q.subtype_injective, subtype_injective
@@ -1489,7 +1489,7 @@ theorem nontrivial_of_algebraMap_injective_of_flat_left
 
 中文:
 定理 nontrivial_of_algebraMap_injective_of_flat_left
-  结论: (h : Function.Injective (algebraMap R B))
+  结论: (h : 函数.单射 (algebraMap R B))
   证明: TensorProduct.nontrivial_of_linearMap_injective_of_flat_left R A B (Algebra.linearMap R B) h
 
 Depends on / 依赖: Algebra, Algebra.linearMap, TensorProduct, TensorProduct.nontrivial_of_linearMap_injective_of_flat_left, linearMap, nontrivial_of_linearMap_injective_of_flat_left
@@ -1508,7 +1508,7 @@ theorem nontrivial_of_algebraMap_injective_of_flat_right
 
 中文:
 定理 nontrivial_of_algebraMap_injective_of_flat_right
-  结论: (h : Function.Injective (algebraMap R A))
+  结论: (h : 函数.单射 (algebraMap R A))
   证明: TensorProduct.nontrivial_of_linearMap_injective_of_flat_right R A B (Algebra.linearMap R A) h
 
 Depends on / 依赖: Algebra, Algebra.linearMap, TensorProduct, TensorProduct.nontrivial_of_linearMap_injective_of_flat_right, linearMap, nontrivial_of_linearMap_injective_of_flat_right
@@ -1598,7 +1598,7 @@ theorem map_injective_of_flat_right_left
 
 中文:
 定理 map_injective_of_flat_right_left
-  结论: (h₁ : Function.Injective i₁) (h₂ : Function.Injective i₂)
+  结论: (h₁ : 函数.单射 i₁) (h₂ : 函数.单射 i₂)
   证明: by
   have h : hf.map hg i₁ i₂ = hg.equiv ∘ TensorProduct.map i₁ i₂ ∘ hf.equiv.symm :=
     funext fun x => hf.inductionOn x (by simp) (by simp) (fun _ _ hx hy => by simp [hx, hy])
@@ -1625,7 +1625,7 @@ theorem map_injective_of_flat_left_right
 
 中文:
 定理 map_injective_of_flat_left_right
-  结论: (h₁ : Function.Injective i₁) (h₂ : Function.Injective i₂)
+  结论: (h₁ : 函数.单射 i₁) (h₂ : 函数.单射 i₂)
   证明: by
   have h : hf.map hg i₁ i₂ = hg.equiv ∘ TensorProduct.map i₁ i₂ ∘ hf.equiv.symm :=
     funext fun x => hf.inductionOn x (by simp) (by simp) (fun _ _ hx hy => by simp [hx, hy])
@@ -1706,7 +1706,7 @@ theorem IsReduced.tensorProduct_of_flat_of_forall_fg
     Module.Flat.lTensor_preserves_injective_linearMap _ Subtype.val
 
 中文:
-定理 IsReduced.tensorProduct_of_flat_of_forall_fg
+定理 是既约.tensorProduct_of_flat_of_对任意_fg
   结论: {R C A : 类型}
   证明: by
   by_contra h_contra

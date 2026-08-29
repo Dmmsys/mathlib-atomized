@@ -522,8 +522,8 @@ lemma Acyclic.truncGE
   exact ⟨fun _ => hK _⟩
 
 中文:
-引理 Acyclic.truncGE
-  条件: (hK : K.Acyclic) (e : c.Embedding c') [e.IsTruncGE]
+引理 非循环.truncGE
+  条件: (hK : K.非循环) (e : c.嵌入 c') [e.是TruncGE]
   证明: by
   rw [acyclic_truncGE_iff_isSupportedOutside]
   exact ⟨fun _ => hK _⟩

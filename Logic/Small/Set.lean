@@ -29,7 +29,7 @@ theorem small_subset
 
 中文:
 定理 small_subset
-  条件: {s t : Set α} (hts : t subseteq s) [Small.{u} s]
+  条件: {s t : 集合 α} (hts : t subseteq s) [Small.{u} s]
   结论: Small.{u} t
   证明: small_of_injective (Set.inclusion_injective hts)
 
@@ -48,7 +48,7 @@ instance small_powerset
 
 中文:
 实例 small_powerset
-  签名: (s : Set α) [Small.{u} s]
+  签名: (s : 集合 α) [Small.{u} s]
   定义体: small_map (Equiv.Set.powerset s)
 
 Depends on / 依赖: Equiv.Set.powerset, powerset, small_map
@@ -66,7 +66,7 @@ instance small_setProd
 
 中文:
 实例 small_setProd
-  签名: (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t]
+  签名: (s : 集合 α) (t : 集合 β) [Small.{u} s] [Small.{u} t]
   定义体: small_of_injective (Equiv.Set.prod s t).injective
 
 Depends on / 依赖: Equiv.Set.prod, injective, small_of_injective
@@ -85,7 +85,7 @@ instance small_setPi
 
 中文:
 实例 small_setPi
-  签名: {β : α -> 类型u2} (s : (a : α) -> Set (β a))
+  签名: {β : α -> 类型u2} (s : (a : α) -> 集合 (β a))
   定义体: small_of_injective (Equiv.Set.univPi s).injective
 
 Depends on / 依赖: Equiv.Set.univPi, injective, small_of_injective, univPi
@@ -123,7 +123,7 @@ instance small_image
 
 中文:
 实例 small_image
-  签名: (f : α -> β) (s : Set α) [Small.{u} s]
+  签名: (f : α -> β) (s : 集合 α) [Small.{u} s]
   定义体: small_of_surjective Set.imageFactorization_surjective
 
 Depends on / 依赖: Set.imageFactorization_surjective, imageFactorization_surjective, small_of_surjective
@@ -144,7 +144,7 @@ instance small_image2
 
 中文:
 实例 small_image2
-  签名: (f : α -> β -> γ) (s : Set α) (t : Set β) [Small.{u} s] [Small.{u} t]
+  签名: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [Small.{u} s] [Small.{u} t]
   定义体: by
   rw [← Set.image_uncurry_prod]
   infer_instance
@@ -166,7 +166,7 @@ theorem small_univ_iff
 
 中文:
 定理 small_univ_iff
-  结论: Small.{u} (@Set.univ α) ↔ Small.{u} α
+  结论: Small.{u} (@集合.univ α) ↔ Small.{u} α
   证明: small_congr Equiv.Set.univ α
 
 Depends on / 依赖: Equiv.Set.univ, small_congr
@@ -204,7 +204,7 @@ instance small_union
 
 中文:
 实例 small_union
-  签名: (s t : Set α) [Small.{u} s] [Small.{u} t]
+  签名: (s t : 集合 α) [Small.{u} s] [Small.{u} t]
   定义体: by
   rw [← Subtype.range_val (s := s)]; rw [← Subtype.range_val (s := t)]; rw [← Set.Sum.elim_range]
   infer_instance
@@ -226,7 +226,7 @@ instance small_iUnion
 
 中文:
 实例 small_iUnion
-  签名: [Small.{u} ι] (s : ι -> Set α)
+  签名: [Small.{u} ι] (s : ι -> 集合 α)
   定义体: small_of_surjective Set.sigmaToiUnion_surjective _
 
 Depends on / 依赖: Set.sigmaToiUnion_surjective, sigmaToiUnion_surjective, small_of_surjective
@@ -245,7 +245,7 @@ instance small_sUnion
 
 中文:
 实例 small_sUnion
-  签名: (s : Set (Set α)) [Small.{u} s] [对任意 t : s, Small.{u} t]
+  签名: (s : 集合 (集合 α)) [Small.{u} s] [对任意 t : s, Small.{u} t]
   定义体: Set.sUnion_eq_iUnion ▸ small_iUnion _
 
 Depends on / 依赖: Set.sUnion_eq_iUnion, sUnion_eq_iUnion, small_iUnion
@@ -264,7 +264,7 @@ instance small_biUnion
 
 中文:
 实例 small_biUnion
-  签名: (s : Set ι) [Small.{u} s]
+  签名: (s : 集合 ι) [Small.{u} s]
   定义体: Set.biUnion_eq_iUnion s f ▸ small_iUnion _
 
 Depends on / 依赖: Set.biUnion_eq_iUnion, biUnion_eq_iUnion, small_iUnion
@@ -283,7 +283,7 @@ instance small_insert
 
 中文:
 实例 small_insert
-  签名: (x : α) (s : Set α) [Small.{u} s]
+  签名: (x : α) (s : 集合 α) [Small.{u} s]
   定义体: Set.insert_eq x s ▸ small_union.{u} {x} s
 
 Depends on / 依赖: Set.insert_eq, insert_eq, small_union
@@ -302,7 +302,7 @@ instance small_diff
 
 中文:
 实例 small_diff
-  签名: (s t : Set α) [Small.{u} s]
+  签名: (s t : 集合 α) [Small.{u} s]
   定义体: small_subset (Set.sdiff_subset)
 
 Depends on / 依赖: Set.sdiff_subset, sdiff_subset, small_subset
@@ -320,7 +320,7 @@ instance small_sep
 
 中文:
 实例 small_sep
-  签名: (s : Set α) (P : α -> 命题) [Small.{u} s]
+  签名: (s : 集合 α) (P : α -> 命题) [Small.{u} s]
   定义体: small_subset (Set.sep_subset s P)
 
 Depends on / 依赖: Set.sep_subset, sep_subset, small_subset
@@ -339,7 +339,7 @@ instance small_inter_of_left
 
 中文:
 实例 small_inter_of_left
-  签名: (s t : Set α) [Small.{u} s]
+  签名: (s t : 集合 α) [Small.{u} s]
   定义体: small_subset Set.inter_subset_left
 
 Depends on / 依赖: Set.inter_subset_left, inter_subset_left, small_subset
@@ -358,7 +358,7 @@ instance small_inter_of_right
 
 中文:
 实例 small_inter_of_right
-  签名: (s t : Set α) [Small.{u} t]
+  签名: (s t : 集合 α) [Small.{u} t]
   定义体: small_subset Set.inter_subset_right
 
 Depends on / 依赖: Set.inter_subset_right, inter_subset_right, small_subset
@@ -376,8 +376,8 @@ theorem small_iInter
   proof: small_subset (Set.iInter_subset s i)
 
 中文:
-定理 small_iInter
-  结论: (s : ι -> Set α) (i : ι)
+定理 small_i整数er
+  结论: (s : ι -> 集合 α) (i : ι)
   证明: small_subset (Set.iInter_subset s i)
 
 Depends on / 依赖: Set.iInter_subset, iInter_subset, small_subset
@@ -396,8 +396,8 @@ instance small_iInter'
   small_iInter s i
 
 中文:
-实例 small_iInter'
-  签名: [Nonempty ι] (s : ι -> Set α)
+实例 small_i整数er'
+  签名: [非空 ι] (s : ι -> 集合 α)
   定义体: let ⟨i⟩ : Nonempty ι := inferInstance
   small_iInter s i
 
@@ -417,8 +417,8 @@ theorem small_sInter
   proof: Set.sInter_eq_iInter ▸ small_iInter _ ⟨t, ht⟩
 
 中文:
-定理 small_sInter
-  结论: {s : Set (Set α)} {t : Set α} (ht : t in s)
+定理 small_s整数er
+  结论: {s : 集合 (集合 α)} {t : 集合 α} (ht : t in s)
   证明: Set.sInter_eq_iInter ▸ small_iInter _ ⟨t, ht⟩
 
 Depends on / 依赖: Set.sInter_eq_iInter, sInter_eq_iInter, small_iInter
@@ -437,8 +437,8 @@ instance small_sInter'
   small_sInter t.prop
 
 中文:
-实例 small_sInter'
-  签名: {s : Set (Set α)} [Nonempty s]
+实例 small_s整数er'
+  签名: {s : 集合 (集合 α)} [非空 s]
   定义体: let ⟨t⟩ : Nonempty s := inferInstance
   small_sInter t.prop
 
@@ -458,8 +458,8 @@ theorem small_biInter
   proof: Set.biInter_eq_iInter s f ▸ small_iInter _ ⟨i, hi⟩
 
 中文:
-定理 small_biInter
-  结论: {s : Set ι} {i : ι} (hi : i in s)
+定理 small_bi整数er
+  结论: {s : 集合 ι} {i : ι} (hi : i in s)
   证明: Set.biInter_eq_iInter s f ▸ small_iInter _ ⟨i, hi⟩
 
 Depends on / 依赖: Set.biInter_eq_iInter, biInter_eq_iInter, small_iInter
@@ -478,8 +478,8 @@ instance small_biInter'
   small_biInter t.prop f
 
 中文:
-实例 small_biInter'
-  签名: (s : Set ι) [Nonempty s]
+实例 small_bi整数er'
+  签名: (s : 集合 ι) [非空 s]
   定义体: let ⟨t⟩ : Nonempty s := inferInstance
   small_biInter t.prop f
 
@@ -500,7 +500,7 @@ theorem small_empty
 
 中文:
 定理 small_empty
-  结论: Small.{u} (∅ : Set α)
+  结论: Small.{u} (∅ : 集合 α)
   证明: inferInstance
 -/
 theorem small_empty : Small.{u} (∅ : Set α) :=
@@ -518,7 +518,7 @@ theorem small_single
 中文:
 定理 small_single
   条件: (x : α)
-  结论: Small.{u} ({x} : Set α)
+  结论: Small.{u} ({x} : 集合 α)
   证明: inferInstance
 -/
 theorem small_single (x : α) : Small.{u} ({x} : Set α) :=
@@ -536,7 +536,7 @@ theorem small_pair
 中文:
 定理 small_pair
   条件: (x y : α)
-  结论: Small.{u} ({x, y} : Set α)
+  结论: Small.{u} ({x, y} : 集合 α)
   证明: inferInstance
 -/
 theorem small_pair (x y : α) : Small.{u} ({x, y} : Set α) :=

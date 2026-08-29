@@ -227,7 +227,7 @@ lemma smul
 
 中文:
 引理 smul
-  结论: [NormedAlgebra 𝕜 R] [IsScalarTower 𝕜 R E]
+  结论: [赋范代数 𝕜 R] [标量塔 𝕜 R E]
   证明: by
   rcases hf with ⟨m, hf⟩
   rcases hg with ⟨n, hg⟩
@@ -263,7 +263,7 @@ lemma const_smul
 
 中文:
 引理 const_smul
-  条件: [SMulCommClass 𝕜 R E] {x : 𝕜} {f : 𝕜 -> E} (hf : MeromorphicAt f x) (c : R)
+  条件: [标量交换类 𝕜 R E] {x : 𝕜} {f : 𝕜 -> E} (hf : MeromorphicAt f x) (c : R)
   证明: by
   rcases hf with ⟨m, hf⟩
   exact ⟨m, by simpa [smul_comm _ c _] using hf.fun_const_smul⟩
@@ -319,7 +319,7 @@ theorem prod
       (hs (fun i hi => hf i (Finset.mem_insert_of_mem hi)))
 
 中文:
-定理 prod
+定理 乘积
   条件: (hf : 对任意 σ in s, MeromorphicAt (F σ) x)
   证明: by
   classical
@@ -421,7 +421,7 @@ theorem sum
       (hind (fun τ hτ => h τ (Finset.mem_insert_of_
 
 中文:
-定理 sum
+定理 求和
   条件: (h : 对任意 σ in s, MeromorphicAt (G σ) x)
   证明: by
   classical
@@ -1086,7 +1086,7 @@ theorem eventually_analyticAt
 
 中文:
 定理 eventually_analyticAt
-  结论: [CompleteSpace E] {f : 𝕜 -> E}
+  结论: [完备空间 E] {f : 𝕜 -> E}
   证明: by
   obtain ⟨n, h⟩ := h
   apply AnalyticAt.eventually_analyticAt at h
@@ -1173,7 +1173,7 @@ theorem deriv
 
 中文:
 定理 deriv
-  条件: [CompleteSpace E] {f : 𝕜 -> E} {x : 𝕜} (h : MeromorphicAt f x)
+  条件: [完备空间 E] {f : 𝕜 -> E} {x : 𝕜} (h : MeromorphicAt f x)
   证明: by
   rw [MeromorphicAt.iff_eventuallyEq_zpow_smul_analyticAt] at h
   obtain ⟨n, g, h₁g, h₂g⟩ := h
@@ -1208,7 +1208,7 @@ theorem iterated_deriv
 
 中文:
 定理 iterated_deriv
-  结论: [CompleteSpace E] {n : 自然数} {f : 𝕜 -> E} {x : 𝕜}
+  结论: [完备空间 E] {n : 自然数} {f : 𝕜 -> E} {x : 𝕜}
   证明: by
   induction n with
   | zero => exact h
@@ -1231,7 +1231,7 @@ theorem logDeriv
 
 中文:
 定理 logDeriv
-  条件: [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} (hf : MeromorphicAt f x)
+  条件: [完备空间 𝕜'] {f : 𝕜 -> 𝕜'} (hf : MeromorphicAt f x)
   证明: hf.deriv.div hf
 -/
 @[fun_prop] theorem logDeriv [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} (hf : MeromorphicAt f x) :
@@ -1370,7 +1370,7 @@ lemma meromorphicAt_comp_iff_of_deriv_ne_zero
 
 中文:
 引理 meromorphicAt_comp_iff_of_deriv_ne_zero
-  结论: [CompleteSpace 𝕜] [CharZero 𝕜] {f : 𝕜 -> E}
+  结论: [完备空间 𝕜] [特征零 𝕜] {f : 𝕜 -> E}
   证明: by
   refine ⟨fun hf => ?_, by fun_prop⟩
   let r := hg.hasStrictDerivAt.localInverse _ _ _ hg'
@@ -1463,7 +1463,7 @@ definition MeromorphicOn
 
 中文:
 定义 MeromorphicOn
-  签名: (f : 𝕜 -> E) (U : Set 𝕜)
+  签名: (f : 𝕜 -> E) (U : 集合 𝕜)
   定义体: forall x in U, MeromorphicAt f x
 
 Depends on / 依赖: MeromorphicAt
@@ -1480,7 +1480,7 @@ lemma AnalyticOnNhd.meromorphicOn
 
 中文:
 引理 AnalyticOnNhd.meromorphicOn
-  条件: {f : 𝕜 -> E} {U : Set 𝕜} (hf : AnalyticOnNhd 𝕜 f U)
+  条件: {f : 𝕜 -> E} {U : 集合 𝕜} (hf : AnalyticOnNhd 𝕜 f U)
   证明: fun x hx => (hf x hx).meromorphicAt
 
 Depends on / 依赖: meromorphicAt
@@ -1613,7 +1613,7 @@ lemma id
 
 中文:
 引理 id
-  条件: {U : Set 𝕜}
+  条件: {U : 集合 𝕜}
   结论: MeromorphicOn id U
   证明: fun x _ => .id x
 -/
@@ -1630,7 +1630,7 @@ lemma const
 
 中文:
 引理 const
-  条件: (e : E) {U : Set 𝕜}
+  条件: (e : E) {U : 集合 𝕜}
   结论: MeromorphicOn (fun _ => e) U
   证明: fun x _ => .const e x
 -/
@@ -1653,7 +1653,7 @@ include hf hg in
 
 中文:
 引理 mono_set
-  条件: {V : Set 𝕜} (hv : V subseteq U)
+  条件: {V : 集合 𝕜} (hv : V subseteq U)
   结论: MeromorphicOn f V
   证明: fun x hx => hf x (hv hx)
 
@@ -1750,7 +1750,7 @@ include hf in
 
 中文:
 引理 smul
-  结论: [NormedAlgebra 𝕜 R] [IsScalarTower 𝕜 R E] {s : 𝕜 -> R} (hs : MeromorphicOn s U)
+  结论: [赋范代数 𝕜 R] [标量塔 𝕜 R E] {s : 𝕜 -> R} (hs : MeromorphicOn s U)
   证明: fun x hx => (hs x hx).smul (hf x hx)
 
 include hf in
@@ -1776,7 +1776,7 @@ include hs ht in
 
 中文:
 引理 const_smul
-  条件: [SMulCommClass 𝕜 R E] (c : R)
+  条件: [标量交换类 𝕜 R E] (c : R)
   结论: MeromorphicOn (c • f) U
   证明: fun x hx => (hf x hx).const_smul c
 
@@ -1810,8 +1810,8 @@ lemma prod
   proof: fun z hz => MeromorphicAt.prod (h · · z hz)
 
 中文:
-引理 prod
-  结论: {U : Set 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜'}
+引理 乘积
+  结论: {U : 集合 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜'}
   证明: fun z hz => MeromorphicAt.prod (h · · z hz)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.prod
@@ -1831,7 +1831,7 @@ lemma fun_prod
 
 中文:
 引理 fun_prod
-  结论: {U : Set 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜'}
+  结论: {U : 集合 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜'}
   证明: fun z hz => MeromorphicAt.fun_prod (h · · z hz)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.fun_prod, fun_prod
@@ -1851,7 +1851,7 @@ lemma finprod
 
 中文:
 引理 finprod
-  条件: {U : Set 𝕜} {ι : 类型} {f : ι -> 𝕜 -> 𝕜'} (h : 对任意 σ, MeromorphicOn (f σ) U)
+  条件: {U : 集合 𝕜} {ι : 类型} {f : ι -> 𝕜 -> 𝕜'} (h : 对任意 σ, MeromorphicOn (f σ) U)
   证明: fun z hz => MeromorphicAt.finprod (h · z hz)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.finprod, finprod
@@ -1869,8 +1869,8 @@ lemma sum
   proof: fun z hz => MeromorphicAt.sum (h · · z hz)
 
 中文:
-引理 sum
-  结论: {U : Set 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> E}
+引理 求和
+  结论: {U : 集合 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> E}
   证明: fun z hz => MeromorphicAt.sum (h · · z hz)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.sum
@@ -1890,7 +1890,7 @@ lemma fun_sum
 
 中文:
 引理 fun_sum
-  结论: {U : Set 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> E}
+  结论: {U : 集合 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> E}
   证明: fun z hz => MeromorphicAt.fun_sum (fun σ _ => h σ z hz)
 
 Depends on / 依赖: MeromorphicAt, MeromorphicAt.fun_sum, fun_sum
@@ -1912,7 +1912,7 @@ include hs in
 
 中文:
 引理 finsum
-  条件: {U : Set 𝕜} {ι : 类型} {f : ι -> 𝕜 -> 𝕜'} (h : 对任意 σ, MeromorphicOn (f σ) U)
+  条件: {U : 集合 𝕜} {ι : 类型} {f : ι -> 𝕜 -> 𝕜'} (h : 对任意 σ, MeromorphicOn (f σ) U)
   证明: fun z hz => MeromorphicAt.finsum (h · z hz)
 
 include hs in
@@ -2037,7 +2037,7 @@ include hf in
 
 中文:
 定理 deriv
-  条件: [CompleteSpace E]
+  条件: [完备空间 E]
   结论: MeromorphicOn (deriv f) U
   证明: fun z hz => (hf z hz).deriv
 
@@ -2057,7 +2057,7 @@ theorem iterated_deriv
 
 中文:
 定理 iterated_deriv
-  条件: [CompleteSpace E] {n : 自然数}
+  条件: [完备空间 E] {n : 自然数}
   结论: MeromorphicOn (_root_.deriv^[n] f) U
   证明: fun z hz => (hf z hz).iterated_deriv
 
@@ -2076,7 +2076,7 @@ theorem logDeriv
 
 中文:
 定理 logDeriv
-  条件: [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} {hf : MeromorphicOn f U}
+  条件: [完备空间 𝕜'] {f : 𝕜 -> 𝕜'} {hf : MeromorphicOn f U}
   证明: hf.deriv.div hf
 -/
 protected theorem logDeriv [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} {hf : MeromorphicOn f U} :
@@ -2099,7 +2099,7 @@ theorem meromorphicOn_comp_add_const_iff_meromorphicOn
 
 中文:
 定理 meromorphicOn_comp_add_const_iff_meromorphicOn
-  条件: {c : 𝕜} {U : Set 𝕜}
+  条件: {c : 𝕜} {U : 集合 𝕜}
   证明: by
   refine ⟨fun h y hy => ?_, fun h y hy => ?_⟩
   · rw [add_singleton, mem_image] at hy
@@ -2132,7 +2132,7 @@ theorem meromorphicOn_comp_sub_const_iff_meromorphicOn
 
 中文:
 定理 meromorphicOn_comp_sub_const_iff_meromorphicOn
-  条件: {c : 𝕜} {U : Set 𝕜}
+  条件: {c : 𝕜} {U : 集合 𝕜}
   证明: by
   simp_rw [sub_eq_add_neg, meromorphicOn_comp_add_const_iff_meromorphicOn, neg_singleton]
 
@@ -2227,7 +2227,7 @@ lemma congr
 
 中文:
 引理 congr
-  条件: (h_eq : Set.EqOn f g U) (hu : IsOpen U)
+  条件: (h_eq : 集合.EqOn f g U) (hu : 是开集 U)
   结论: MeromorphicOn g U
   证明: by
   refine fun x hx => (hf x hx).congr (EventuallyEq.filter_mono ?_ nhdsWithin_le_nhds)
@@ -2287,7 +2287,7 @@ theorem countable_compl_analyticAt_inter
 
 中文:
 定理 countable_compl_analyticAt_inter
-  结论: [SecondCountableTopology 𝕜] [CompleteSpace E]
+  结论: [第二可数拓扑 𝕜] [完备空间 E]
   证明: by
   apply (HereditarilyLindelofSpace.isLindelof _).countable_of_isDiscrete
     (isDiscrete_of_codiscreteWithin _)
@@ -2315,7 +2315,7 @@ definition Meromorphic
   body: forall x, MeromorphicAt f x
 
 中文:
-定义 Meromorphic
+定义 亚纯
   签名: (f : 𝕜 -> E)
   定义体: forall x, MeromorphicAt f x
 
@@ -2337,7 +2337,7 @@ lemma meromorphicOn_univ
 中文:
 引理 meromorphicOn_univ
   条件: {f : 𝕜 -> E}
-  结论: MeromorphicOn f Set.univ ↔ Meromorphic f
+  结论: MeromorphicOn f 集合.univ ↔ 亚纯 f
   证明: by tauto
 -/
 lemma meromorphicOn_univ {f : 𝕜 -> E} : MeromorphicOn f Set.univ ↔ Meromorphic f := by tauto
@@ -2360,7 +2360,7 @@ lemma meromorphicAt
 
 中文:
 引理 meromorphicAt
-  条件: {x : 𝕜} (hf : Meromorphic f)
+  条件: {x : 𝕜} (hf : 亚纯 f)
   结论: MeromorphicAt f x
   证明: hf x
 -/
@@ -2379,7 +2379,7 @@ lemma meromorphicOn
 
 中文:
 引理 meromorphicOn
-  条件: {s : Set 𝕜} (hf : Meromorphic f)
+  条件: {s : 集合 𝕜} (hf : 亚纯 f)
   结论: MeromorphicOn f s
   证明: fun x _ => hf x
 
@@ -2402,7 +2402,7 @@ lemma const
 中文:
 引理 const
   条件: (x : E)
-  结论: Meromorphic fun _ : 𝕜 => x
+  结论: 亚纯 fun _ : 𝕜 => x
   证明: fun _ => .const _ _
 
 @[to_fun (attr := fun_prop)]
@@ -2423,8 +2423,8 @@ lemma neg
 
 中文:
 引理 neg
-  条件: (hf : Meromorphic f)
-  结论: Meromorphic (-f)
+  条件: (hf : 亚纯 f)
+  结论: 亚纯 (-f)
   证明: fun x => (hf x).neg
 
 @[to_fun (attr := fun_prop)]
@@ -2444,7 +2444,7 @@ lemma add
 
 中文:
 引理 add
-  条件: (hf : Meromorphic f) (hg : Meromorphic g)
+  条件: (hf : 亚纯 f) (hg : 亚纯 g)
   证明: fun x => (hf x).add (hg x)
 
 @[to_fun (attr := fun_prop)]
@@ -2464,8 +2464,8 @@ theorem sum
 @[fun_prop]
 
 中文:
-定理 sum
-  条件: (h : 对任意 σ in s, Meromorphic (G σ))
+定理 求和
+  条件: (h : 对任意 σ in s, 亚纯 (G σ))
   证明: fun x => MeromorphicAt.sum (h · · x)
 
 @[fun_prop]
@@ -2488,7 +2488,7 @@ theorem finsum
 
 中文:
 定理 finsum
-  条件: (h : 对任意 σ, Meromorphic (F σ))
+  条件: (h : 对任意 σ, 亚纯 (F σ))
   证明: fun x => MeromorphicAt.finsum (h · x)
 
 @[to_fun (attr := fun_prop)]
@@ -2511,7 +2511,7 @@ lemma sub
 
 中文:
 引理 sub
-  条件: (hf : Meromorphic f) (hg : Meromorphic g)
+  条件: (hf : 亚纯 f) (hg : 亚纯 g)
   证明: fun x => (hf x).sub (hg x)
 
 @[to_fun (attr := fun_prop)]
@@ -2532,7 +2532,7 @@ lemma smul
 
 中文:
 引理 smul
-  结论: [NormedAlgebra 𝕜 R] [IsScalarTower 𝕜 R E] {f : 𝕜 -> R} (hf : Meromorphic f)
+  结论: [赋范代数 𝕜 R] [标量塔 𝕜 R E] {f : 𝕜 -> R} (hf : 亚纯 f)
   证明: fun x => (hf x).smul (hg x)
 
 @[to_fun (attr := fun_prop)]
@@ -2554,7 +2554,7 @@ lemma const_smul
 
 中文:
 引理 const_smul
-  条件: [SMulCommClass 𝕜 R E] (hf : Meromorphic f) (c : R)
+  条件: [标量交换类 𝕜 R E] (hf : 亚纯 f) (c : R)
   证明: fun x => (hf x).const_smul c
 
 @[to_fun (attr := fun_prop)]
@@ -2577,7 +2577,7 @@ lemma mul
 
 中文:
 引理 mul
-  条件: {f g : 𝕜 -> 𝕜'} (hf : Meromorphic f) (hg : Meromorphic g)
+  条件: {f g : 𝕜 -> 𝕜'} (hf : 亚纯 f) (hg : 亚纯 g)
   证明: fun x => (hf x).mul (hg x)
 
 @[to_fun (attr := fun_prop)]
@@ -2599,8 +2599,8 @@ lemma inv
 
 中文:
 引理 inv
-  条件: {f : 𝕜 -> 𝕜'} (hf : Meromorphic f)
-  结论: Meromorphic f⁻¹
+  条件: {f : 𝕜 -> 𝕜'} (hf : 亚纯 f)
+  结论: 亚纯 f⁻¹
   证明: fun x => (hf x).inv
 
 @[to_fun (attr := fun_prop)]
@@ -2619,8 +2619,8 @@ theorem prod
 @[fun_prop]
 
 中文:
-定理 prod
-  条件: (h : 对任意 σ in s, Meromorphic (F σ))
+定理 乘积
+  条件: (h : 对任意 σ in s, 亚纯 (F σ))
   证明: fun x => MeromorphicAt.prod (h · · x)
 
 @[fun_prop]
@@ -2643,7 +2643,7 @@ theorem finprod
 
 中文:
 定理 finprod
-  条件: (h : 对任意 σ, Meromorphic (F σ))
+  条件: (h : 对任意 σ, 亚纯 (F σ))
   证明: fun x => MeromorphicAt.finprod (h · x)
 
 @[to_fun (attr := fun_prop)]
@@ -2666,7 +2666,7 @@ lemma div
 
 中文:
 引理 div
-  条件: {f g : 𝕜 -> 𝕜'} (hf : Meromorphic f) (hg : Meromorphic g)
+  条件: {f g : 𝕜 -> 𝕜'} (hf : 亚纯 f) (hg : 亚纯 g)
   证明: fun x => (hf x).div (hg x)
 
 @[to_fun (attr := fun_prop)]
@@ -2688,8 +2688,8 @@ lemma pow
 
 中文:
 引理 pow
-  条件: {f : 𝕜 -> 𝕜'} {n : 自然数} (hf : Meromorphic f)
-  结论: Meromorphic (f ^ n)
+  条件: {f : 𝕜 -> 𝕜'} {n : 自然数} (hf : 亚纯 f)
+  结论: 亚纯 (f ^ n)
   证明: fun x => (hf x).pow n
 
 @[to_fun (attr := fun_prop)]
@@ -2710,8 +2710,8 @@ lemma zpow
 
 中文:
 引理 zpow
-  条件: {f : 𝕜 -> 𝕜'} {n : 整数} (hf : Meromorphic f)
-  结论: Meromorphic (f ^ n)
+  条件: {f : 𝕜 -> 𝕜'} {n : 整数} (hf : 亚纯 f)
+  结论: 亚纯 (f ^ n)
   证明: fun x => (hf x).zpow n
 
 @[fun_prop]
@@ -2732,8 +2732,8 @@ lemma deriv
 
 中文:
 引理 deriv
-  条件: [CompleteSpace E] (hf : Meromorphic f)
-  结论: Meromorphic (deriv f)
+  条件: [完备空间 E] (hf : 亚纯 f)
+  结论: 亚纯 (deriv f)
   证明: fun x => (hf x).deriv
 
 @[fun_prop]
@@ -2752,7 +2752,7 @@ lemma iterated_deriv
 
 中文:
 引理 iterated_deriv
-  条件: [CompleteSpace E] {n : 自然数} (hf : Meromorphic f)
+  条件: [完备空间 E] {n : 自然数} (hf : 亚纯 f)
   证明: fun x => (hf x).iterated_deriv
 
 Depends on / 依赖: iterated_deriv
@@ -2770,7 +2770,7 @@ theorem logDeriv
 
 中文:
 定理 logDeriv
-  条件: [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} (hf : Meromorphic f)
+  条件: [完备空间 𝕜'] {f : 𝕜 -> 𝕜'} (hf : 亚纯 f)
   证明: hf.deriv.div hf
 -/
 @[fun_prop] protected theorem logDeriv [CompleteSpace 𝕜'] {f : 𝕜 -> 𝕜'} (hf : Meromorphic f) :
@@ -2788,7 +2788,7 @@ theorem congr_codiscrete
 
 中文:
 定理 congr_codiscrete
-  条件: (hf : Meromorphic f) (h₁ : f =ᶠ[codiscrete 𝕜] g)
+  条件: (hf : 亚纯 f) (h₁ : f =ᶠ[codiscrete 𝕜] g)
   证明: by
   rw [← meromorphicOn_univ] at *
   exact hf.congr_codiscreteWithin (eventuallyEq_of_mem h₁ fun ⦃x⦄ a => a) isOpen_univ
@@ -2830,7 +2830,7 @@ theorem countable_compl_analyticAt
 
 中文:
 定理 countable_compl_analyticAt
-  结论: [SecondCountableTopology 𝕜] [CompleteSpace E]
+  结论: [第二可数拓扑 𝕜] [完备空间 E]
   证明: by
   simpa using (h.meromorphicOn (s := univ)).countable_compl_analyticAt_inter
 
@@ -2857,7 +2857,7 @@ theorem measurable
 
 中文:
 定理 measurable
-  结论: [MeasurableSpace 𝕜] [SecondCountableTopology 𝕜] [BorelSpace 𝕜]
+  结论: [可测空间 𝕜] [第二可数拓扑 𝕜] [Borel空间 𝕜]
   证明: by
   set s := {z : 𝕜 | AnalyticAt 𝕜 f z}
   have h₁ : sᶜ.Countable := by simpa using h.countable_compl_analyticAt

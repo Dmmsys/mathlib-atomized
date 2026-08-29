@@ -41,8 +41,8 @@ definition Total
   body: Σ j, I j
 
 中文:
-定义 Total
-  签名: (P : 对任意 j, ColimitPresentation (I j) (D.obj j))
+定义 全
+  签名: (P : 对任意 j, 余limitPresentation (I j) (D.obj j))
   定义体: Σ j, I j
 -/
 def Total (P : forall j, ColimitPresentation (I j) (D.obj j)) : Type _ :=
@@ -58,7 +58,7 @@ abbreviation Total.mk
   body: ⟨i, k⟩
 
 中文:
-缩写 Total.mk
+缩写 全.mk
   签名: (i : J) (k : I i)
   定义体: ⟨i, k⟩
 -/
@@ -78,8 +78,8 @@ structure Total.Hom
     - w : (P k.1).ι.app k.2 ≫ D.map base = hom ≫ (P l.1).ι.app l.2  [default: by cat_disch]
 
 中文:
-结构 Total.Hom
-  参数: (k l : Total P)
+结构 全.态射
+  参数: (k l : 全 P)
   公理与运算 (3 个):
     - base : k.1 ⟶ l.1
     - hom : (P k.1).diag.obj k.2 ⟶ (P l.1).diag.obj l.2
@@ -113,8 +113,8 @@ definition Total.Hom.comp
     rw [f.w_assoc]; rw [g.w]
 
 中文:
-定义 Total.Hom.comp
-  签名: {k l m : Total P} (f : k.Hom l) (g : l.Hom m)
+定义 全.态射.comp
+  签名: {k l m : 全 P} (f : k.态射 l) (g : l.态射 m)
   定义体: f.base ≫ g.base
   hom := f.hom ≫ g.hom
   w := by
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Total P)
+  签名: 范畴 (全 P)
   定义体: Total.Hom
   id _ := { base := 𝟙 _, hom := 𝟙 _ }
   comp := Total.Hom.comp
@@ -168,7 +168,7 @@ instance [LocallySmall.{w}
 
 中文:
 实例 [LocallySmall.{w}
-  签名: C] [LocallySmall.{w} J] : LocallySmall.{w} (Total P) where
+  签名: C] [LocallySmall.{w} J] : LocallySmall.{w} (全 P) where
   定义体: let f (x : k ⟶ l) : (k.1 ⟶ l.1) × ((P k.1).diag.obj k.2 ⟶ (P l.1).diag.obj l.2) :=
       (x.base, x.hom)
     small_of_injective (f := f) (by grind [Function.Injective, Total.Hom.ext])
@@ -198,7 +198,7 @@ lemma Total.exists_hom_of_hom
   use i', { base := u, hom := q, w := by simp [← hq] }
 
 中文:
-引理 Total.exists_hom_of_hom
+引理 全.存在_hom_of_hom
   结论: {j j' : J} (i : I j) (u : j ⟶ j')
   证明: by
   obtain ⟨i', q, hq⟩ := IsFinitelyPresentable.exists_hom_of_isColimit (P j').isColimit
@@ -226,8 +226,8 @@ instance [IsFiltered
   exact ⟨⟨j, i⟩⟩
 
 中文:
-实例 [IsFiltered
-  签名: J] [对任意 j, IsFiltered (I j)] : Nonempty (Total P)
+实例 [是Filtered
+  签名: J] [对任意 j, 是Filtered (I j)] : 非空 (全 P)
   定义体: by
   obtain ⟨j⟩ : Nonempty J := IsFiltered.nonempty
   obtain ⟨i⟩ : Nonempty (I j) := IsFiltered.nonempty
@@ -256,8 +256,8 @@ instance [IsFiltered
     · exact f ≫ 
 
 中文:
-实例 [IsFiltered
-  签名: J] [对任意 j, IsFiltered (I j)]
+实例 [是Filtered
+  签名: J] [对任意 j, 是Filtered (I j)]
   定义体: by
     let a := IsFiltered.max k.1 l.1
     obtain ⟨a', f, hf⟩ := Total.exists_hom_of_hom (P := P) k.2 (IsFiltered.leftToMax k.1 l.1)
@@ -319,7 +319,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: {X : C} (P : ColimitPresentation J X) (Q : 对任意 j, ColimitPresentation (I j) (P.diag.obj j))
+  签名: {X : C} (P : 余limitPresentation J X) (Q : 对任意 j, 余limitPresentation (I j) (P.diag.obj j))
   定义体: (Q k.1).diag.obj k.2
   diag.map {k l} f := f.hom
   ι.app k := (Q k.1).ι.app k.2 ≫ P.ι.app k.1

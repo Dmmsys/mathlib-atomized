@@ -55,10 +55,10 @@ class IsCardinalAccessible
     - preservesColimitOfShape((J : Type w) [SmallCategory J] [IsCardinalFiltered J κ]) : PreservesColimitsOfShape J F  [default: by intros; infer_instance]
 
 中文:
-类 IsCardinalAccessible
+类 是CardinalAccessible
   参数: : 命题 where
   公理与运算 (1 个):
-    - preservesColimitOfShape((J : Type w) [SmallCategory J] [IsCardinalFiltered J κ]) : PreservesColimitsOfShape J F  [默认: by intros; infer_instance]
+    - preservesColimitOfShape((J : 类型 w) [小范畴 J] [是CardinalFiltered J κ]) : 保持形状余极限 J F  [默认: by intros; infer_instance]
 
 Depends on / 依赖: infer_instance, intros
 -/
@@ -76,7 +76,7 @@ lemma preservesColimitsOfShape_of_isCardinalAccessible
 
 中文:
 引理 preservesColimitsOfShape_of_isCardinalAccessible
-  结论: [F.IsCardinalAccessible κ]
+  结论: [F.是CardinalAccessible κ]
   证明: IsCardinalAccessible.preservesColimitOfShape κ _
 
 Depends on / 依赖: IsCardinalAccessible, IsCardinalAccessible.preservesColimitOfShape, preservesColimitOfShape
@@ -157,8 +157,8 @@ lemma isCardinalAccessible_of_natIso
 
 中文:
 引理 isCardinalAccessible_of_natIso
-  条件: [F.IsCardinalAccessible κ]
-  结论: G.IsCardinalAccessible κ where
+  条件: [F.是CardinalAccessible κ]
+  结论: G.是CardinalAccessible κ where
   证明: by
     have := F.preservesColimitsOfShape_of_isCardinalAccessible κ J
     exact preservesColimitsOfShape_of_natIso e
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCardinalAccessible (𝟭 C) κ
+  签名: 是CardinalAccessible (𝟭 C) κ
 -/
 instance : IsCardinalAccessible (𝟭 C) κ where
 
@@ -198,8 +198,8 @@ instance [PreservesColimitsOfSize.{w,
   signature: w} F] : F.IsCardinalAccessible κ where
 
 中文:
-实例 [PreservesColimitsOfSize.{w,
-  签名: w} F] : F.IsCardinalAccessible κ where
+实例 [保持余limitsOfSize.{w,
+  签名: w} F] : F.是CardinalAccessible κ where
 -/
 instance [PreservesColimitsOfSize.{w, w} F] : F.IsCardinalAccessible κ where
 
@@ -234,10 +234,10 @@ class IsAccessible
     - exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalAccessible F κ
 
 中文:
-类 IsAccessible
+类 是Accessible
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_cardinal : 存在 (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalAccessible F κ
+    - exists_cardinal : 存在 (κ : 基数.{w}) (_ : Fact κ.是正则), 是CardinalAccessible F κ
 -/
 class IsAccessible : Prop where
   exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular), IsCardinalAccessible F κ
@@ -252,7 +252,7 @@ lemma isAccessible_of_isCardinalAccessible
 
 中文:
 引理 isAccessible_of_isCardinalAccessible
-  结论: (κ : Cardinal.{w}) [Fact κ.IsRegular]
+  结论: (κ : 基数.{w}) [Fact κ.是正则]
   证明: ⟨κ, inferInstance, inferInstance⟩
 -/
 lemma isAccessible_of_isCardinalAccessible (κ : Cardinal.{w}) [Fact κ.IsRegular]
@@ -308,7 +308,7 @@ definition isCardinalPresentable
 
 中文:
 定义 isCardinalPresentable
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => IsCardinalPresentable X κ
 
 Depends on / 依赖: IsCardinalPresentable
@@ -434,7 +434,7 @@ include e in
 
 中文:
 引理 isCardinalPresentable_monotone
-  条件: {κ' : Cardinal.{w}} [Fact κ'.IsRegular] (h : κ <= κ')
+  条件: {κ' : 基数.{w}} [Fact κ'.是正则] (h : κ <= κ')
   证明: by
   intro X hX
   rw [isCardinalPresentable_iff] at hX ⊢
@@ -484,7 +484,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isCardinalPresentable C κ).IsClosedUnderIsomorphisms
+  签名: (isCardinalPresentable C κ).在同构下封闭
   定义体: by
     rw [isCardinalPresentable_iff] at hX ⊢
     exact isCardinalPresentable_of_iso e _
@@ -610,8 +610,8 @@ lemma Limits.exists_hom_of_preservesColimit_coyoneda
   proof: Types.jointly_surjective_of_isColimit (isColimitOfPreserves (coyoneda.obj (.op X)) hc) f
 
 中文:
-引理 Limits.exists_hom_of_preservesColimit_coyoneda
-  结论: {c : Cocone D} (hc : IsColimit c) {X : C}
+引理 Limits.存在_hom_of_preservesColimit_coyoneda
+  结论: {c : 余锥 D} (hc : 是余极限 c) {X : C}
   证明: Types.jointly_surjective_of_isColimit (isColimitOfPreserves (coyoneda.obj (.op X)) hc) f
 
 Depends on / 依赖: Types.jointly_surjective_of_isColimit, coyoneda, coyoneda.obj, isColimitOfPreserves, jointly_surjective_of_isColimit
@@ -630,8 +630,8 @@ lemma Limits.exists_eq_of_preservesColimit_coyoneda
   proof: (Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (coyoneda.obj (.op X)) hc)).mp h
 
 中文:
-引理 Limits.exists_eq_of_preservesColimit_coyoneda
-  结论: [IsFiltered J] {c : Cocone D}
+引理 Limits.存在_eq_of_preservesColimit_coyoneda
+  结论: [是Filtered J] {c : 余锥 D}
   证明: (Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (coyoneda.obj (.op X)) hc)).mp h
 
 Depends on / 依赖: FilteredColimit, Types.FilteredColimit.isColimit_eq_iff, coyoneda, coyoneda.obj, isColimitOfPreserves, isColimit_eq_iff
@@ -652,8 +652,8 @@ lemma Limits.exists_eq_of_preservesColimit_coyoneda_self
     (isColimitOfPreserves (coyoneda.obj (.op X)) hc) f g).mp h
 
 中文:
-引理 Limits.exists_eq_of_preservesColimit_coyoneda_self
-  结论: [IsFiltered J] {c : Cocone D}
+引理 Limits.存在_eq_of_preservesColimit_coyoneda_self
+  结论: [是Filtered J] {c : 余锥 D}
   证明: (Types.FilteredColimit.isColimit_eq_iff'
     (isColimitOfPreserves (coyoneda.obj (.op X)) hc) f g).mp h
 
@@ -678,8 +678,8 @@ lemma Limits.exists_hom_of_preservesColimit_yoneda
   exact ⟨j.unop, p, hp⟩
 
 中文:
-引理 Limits.exists_hom_of_preservesColimit_yoneda
-  结论: {c : Cone D} (hc : IsLimit c) {X : C}
+引理 Limits.存在_hom_of_preservesColimit_yoneda
+  结论: {c : 锥 D} (hc : 是极限 c) {X : C}
   证明: by
   obtain ⟨j, p, hp⟩ := Types.jointly_surjective_of_isColimit
     (isColimitOfPreserves (yoneda.obj X) hc.op) f
@@ -706,8 +706,8 @@ lemma Limits.exists_eq_of_preservesColimit_yoneda
   exact ⟨k.unop, u.unop, v.unop, huv⟩
 
 中文:
-引理 Limits.exists_eq_of_preservesColimit_yoneda
-  结论: [IsCofiltered J] {c : Cone D} (hc : IsLimit c)
+引理 Limits.存在_eq_of_preservesColimit_yoneda
+  结论: [是余filtered J] {c : 锥 D} (hc : 是极限 c)
   证明: by
   obtain ⟨k, u, v, huv⟩ :=
     (Types.FilteredColimit.isColimit_eq_iff _ (isColimitOfPreserves (yoneda.obj X) hc.op)).mp h
@@ -735,8 +735,8 @@ lemma Limits.exists_eq_of_preservesColimit_yoneda_self
   exact ⟨j.unop, a.unop, ha⟩
 
 中文:
-引理 Limits.exists_eq_of_preservesColimit_yoneda_self
-  结论: [IsCofiltered J] {c : Cone D}
+引理 Limits.存在_eq_of_preservesColimit_yoneda_self
+  结论: [是余filtered J] {c : 锥 D}
   证明: by
   obtain ⟨j, a, ha⟩ := (Types.FilteredColimit.isColimit_eq_iff'
     (isColimitOfPreserves (yoneda.obj X) hc.op) f g).mp h
@@ -764,7 +764,7 @@ lemma IsCardinalPresentable.exists_hom_of_isColimit
   exact exists_hom_of_preservesColimit_coyoneda hc f
 
 中文:
-引理 IsCardinalPresentable.exists_hom_of_isColimit
+引理 IsCardinalPresentable.存在_hom_of_isColimit
   结论: [IsCardinalPresentable X κ]
   证明: by
   have := preservesColimitsOfShape_of_isCardinalPresentable_of_essentiallySmall X κ J
@@ -792,7 +792,7 @@ lemma IsCardinalPresentable.exists_eq_of_isColimit
   exact exists_eq_of_preservesColimit_coyoneda hc f₁ f₂ hf
 
 中文:
-引理 IsCardinalPresentable.exists_eq_of_isColimit
+引理 IsCardinalPresentable.存在_eq_of_isColimit
   结论: [IsCardinalPresentable X κ]
   证明: by
   have := preservesColimitsOfShape_of_isCardinalPresentable_of_essentiallySmall X κ J
@@ -823,7 +823,7 @@ lemma IsCardinalPresentable.exists_eq_of_isColimit'
   exact exists_eq_of_preservesColimit_coyoneda_self hc f₁ f₂ hf
 
 中文:
-引理 IsCardinalPresentable.exists_eq_of_isColimit'
+引理 IsCardinalPresentable.存在_eq_of_isColimit'
   结论: [IsCardinalPresentable X κ]
   证明: by
   have := preservesColimitsOfShape_of_isCardinalPresentable_of_essentiallySmall X κ J
@@ -930,7 +930,7 @@ lemma isPresentable_of_isCardinalPresentable
 
 中文:
 引理 isPresentable_of_isCardinalPresentable
-  结论: (κ : Cardinal.{w}) [Fact κ.IsRegular]
+  结论: (κ : 基数.{w}) [Fact κ.是正则]
   证明: ⟨κ, inferInstance, inferInstance⟩
 -/
 lemma isPresentable_of_isCardinalPresentable (κ : Cardinal.{w}) [Fact κ.IsRegular]
@@ -951,10 +951,10 @@ class HasCardinalFilteredColimits
     - hasColimitsOfShape((C) (J : Type w) [SmallCategory J] [IsCardinalFiltered J κ]) : HasColimitsOfShape J C  [default: by intros; infer_instance]
 
 中文:
-类 HasCardinalFilteredColimits
-  参数: (C : 类型u₁) [Category.{v₁} C]
+类 有CardinalFilteredColimits
+  参数: (C : 类型u₁) [范畴.{v₁} C]
   公理与运算 (1 个):
-    - hasColimitsOfShape((C) (J : Type w) [SmallCategory J] [IsCardinalFiltered J κ]) : HasColimitsOfShape J C  [默认: by intros; infer_instance]
+    - hasColimitsOfShape((C) (J : 类型 w) [小范畴 J] [是CardinalFiltered J κ]) : 有形状余极限 J C  [默认: by intros; infer_instance]
 
 Depends on / 依赖: infer_instance, intros
 -/

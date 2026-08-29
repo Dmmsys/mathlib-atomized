@@ -250,7 +250,7 @@ theorem HasFPowerSeriesOnBall.exchange_radius
   proof: h₂.hasFPowerSeriesAt.eq_formalMultilinearSeries h₁.hasFPowerSeriesAt ▸ h₂
 
 中文:
-定理 HasFPowerSeriesOnBall.exchange_radius
+定理 有FPowerSeriesOnBall.exchange_radius
   结论: {p₁ p₂ : FormalMultilinearSeries 𝕜 𝕜 E} {f : 𝕜 -> E}
   证明: h₂.hasFPowerSeriesAt.eq_formalMultilinearSeries h₁.hasFPowerSeriesAt ▸ h₂
 
@@ -277,7 +277,7 @@ theorem HasFPowerSeriesOnBall.r_eq_top_of_exists
 (h.exchange_radius hp').hasSum me
 
 中文:
-定理 HasFPowerSeriesOnBall.r_eq_top_of_exists
+定理 有FPowerSeriesOnBall.r_eq_top_of_存在
   结论: {f : 𝕜 -> E} {r : 实数>=0∞} {x : 𝕜}
   证明: { r_le := ENNReal.le_of_forall_pos_nnreal_lt fun r hr _ =>
       let ⟨_, hp'⟩ := h' r hr
@@ -323,7 +323,7 @@ theorem eqOn_zero_of_preconnected_of_eventuallyEq_zero_aux
 
 中文:
 定理 eqOn_zero_of_preconnected_of_eventuallyEq_zero_aux
-  结论: [CompleteSpace F] {f : E -> F} {U : Set E}
+  结论: [完备空间 F] {f : E -> F} {U : 集合 E}
   证明: by
   /- Let `u` be the set of points around which `f` vanishes. It is clearly open. We have to show
     that its limit points in `U` still belong to it, from which the inclusion `U ⊆ u` will follow
@@ -388,7 +388,7 @@ theorem eqOn_zero_of_preconnected_of_eventuallyEq_zero
 
 中文:
 定理 eqOn_zero_of_preconnected_of_eventuallyEq_zero
-  结论: {f : E -> F} {U : Set E}
+  结论: {f : E -> F} {U : 集合 E}
   证明: by
   let F' := UniformSpace.Completion F
   set e : F ->L[𝕜] F' := UniformSpace.Completion.toComplL
@@ -427,7 +427,7 @@ theorem eqOn_of_preconnected_of_eventuallyEq
 
 中文:
 定理 eqOn_of_preconnected_of_eventuallyEq
-  结论: {f g : E -> F} {U : Set E} (hf : AnalyticOnNhd 𝕜 f U)
+  结论: {f g : E -> F} {U : 集合 E} (hf : AnalyticOnNhd 𝕜 f U)
   证明: by
   have hfg' : f - g =ᶠ[𝓝 z₀] 0 := hfg.mono fun z h => by simp [h]
   simpa [sub_eq_zero] using! fun z hz =>
@@ -453,7 +453,7 @@ theorem eq_of_eventuallyEq
 
 中文:
 定理 eq_of_eventuallyEq
-  结论: {f g : E -> F} [PreconnectedSpace E] (hf : AnalyticOnNhd 𝕜 f univ)
+  结论: {f g : E -> F} [预连通空间 E] (hf : AnalyticOnNhd 𝕜 f univ)
   证明: funext fun x =>
     eqOn_of_preconnected_of_eventuallyEq hf hg isPreconnected_univ (mem_univ z₀) hfg (mem_univ x)
 

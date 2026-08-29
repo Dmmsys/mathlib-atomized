@@ -46,7 +46,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvMonoid (Matrix n' n' R)
+  签名: 除逆幺半群 (矩阵 n' n' R)
   定义体: inferInstance
   __ : Inv M := inferInstance
 -/
@@ -97,7 +97,7 @@ theorem pow_sub'
 
 中文:
 定理 pow_sub'
-  条件: (A : M) {m n : 自然数} (ha : IsUnit A.det) (h : n <= m)
+  条件: (A : M) {m n : 自然数} (ha : 是单位 A.det) (h : n <= m)
   证明: by
   rw [← tsub_add_cancel_of_le h]; rw [pow_add]; rw [Matrix.mul_assoc]; rw [mul_nonsing_inv]; rw [tsub_add_cancel_of_le h]; rw [Matrix.mul_one]
   simpa using ha.pow n
@@ -313,9 +313,9 @@ theorem _root_.IsUnit.det_zpow
   · simpa using h.pow n.succ
 
 中文:
-定理 _root_.IsUnit.det_zpow
-  条件: {A : M} (h : IsUnit A.det) (n : 整数)
-  结论: IsUnit (A ^ n).det
+定理 _root_.是单位.det_zpow
+  条件: {A : M} (h : 是单位 A.det) (n : 整数)
+  结论: 是单位 (A ^ n).det
   证明: by
   rcases n with n | n
   · simpa using h.pow n
@@ -347,7 +347,7 @@ theorem isUnit_det_zpow_iff
 中文:
 定理 isUnit_det_zpow_iff
   条件: {A : M} {z : 整数}
-  结论: IsUnit (A ^ z).det ↔ IsUnit A.det ∨ z = 0
+  结论: 是单位 (A ^ z).det ↔ 是单位 A.det ∨ z = 0
   证明: by
   induction z with
   | zero => simp
@@ -379,7 +379,7 @@ theorem zpow_neg
 
 中文:
 定理 zpow_neg
-  条件: {A : M} (h : IsUnit A.det)
+  条件: {A : M} (h : 是单位 A.det)
   结论: 对任意 n : 整数, A ^ (-n) = (A ^ n)⁻¹
 -/
 theorem zpow_neg {A : M} (h : IsUnit A.det) : forall n : Int, A ^ (-n) = (A ^ n)⁻¹
@@ -401,7 +401,7 @@ theorem inv_zpow'
 
 中文:
 定理 inv_zpow'
-  条件: {A : M} (h : IsUnit A.det) (n : 整数)
+  条件: {A : M} (h : 是单位 A.det) (n : 整数)
   结论: A⁻¹ ^ n = A ^ (-n)
   证明: by
   rw [zpow_neg h]; rw [inv_zpow]
@@ -427,7 +427,7 @@ theorem zpow_add_one
 
 中文:
 定理 zpow_add_one
-  条件: {A : M} (h : IsUnit A.det)
+  条件: {A : M} (h : 是单位 A.det)
   结论: 对任意 n : 整数, A ^ (n + 1) = A ^ n * A
   证明: by
         rw [neg_add]; rw [neg_add_cancel_right]; rw [zpow_neg h]; rw [zpow_natCast]
@@ -463,7 +463,7 @@ theorem zpow_sub_one
 
 中文:
 定理 zpow_sub_one
-  条件: {A : M} (h : IsUnit A.det) (n : 整数)
+  条件: {A : M} (h : 是单位 A.det) (n : 整数)
   结论: A ^ (n - 1) = A ^ n * A⁻¹
   证明: calc
     A ^ (n - 1) = A ^ (n - 1) * A * A⁻¹ := by
@@ -493,7 +493,7 @@ theorem zpow_add
 
 中文:
 定理 zpow_add
-  条件: {A : M} (ha : IsUnit A.det) (m n : 整数)
+  条件: {A : M} (ha : 是单位 A.det) (m n : 整数)
   结论: A ^ (m + n) = A ^ m * A ^ n
   证明: by
   induction n with
@@ -581,7 +581,7 @@ theorem zpow_one_add
 
 中文:
 定理 zpow_one_add
-  条件: {A : M} (h : IsUnit A.det) (i : 整数)
+  条件: {A : M} (h : 是单位 A.det) (i : 整数)
   结论: A ^ (1 + i) = A * A ^ i
   证明: by
   rw [zpow_add h]; rw [zpow_one]
@@ -608,7 +608,7 @@ theorem SemiconjBy.zpow_right
 
 中文:
 定理 SemiconjBy.zpow_right
-  结论: {A X Y : M} (hx : IsUnit X.det) (hy : IsUnit Y.det)
+  结论: {A X Y : M} (hx : 是单位 X.det) (hy : 是单位 Y.det)
   证明: by
       rw [det_pow]
       exact hx.pow n.succ
@@ -797,7 +797,7 @@ theorem zpow_mul
 
 中文:
 定理 zpow_mul
-  条件: (A : M) (h : IsUnit A.det)
+  条件: (A : M) (h : 是单位 A.det)
   结论: 对任意 m n : 整数, A ^ (m * n) = (A ^ m) ^ n
 -/
 theorem zpow_mul (A : M) (h : IsUnit A.det) : forall m n : Int, A ^ (m * n) = (A ^ m) ^ n
@@ -827,7 +827,7 @@ theorem zpow_mul'
 
 中文:
 定理 zpow_mul'
-  条件: (A : M) (h : IsUnit A.det) (m n : 整数)
+  条件: (A : M) (h : 是单位 A.det) (m n : 整数)
   结论: A ^ (m * n) = (A ^ n) ^ m
   证明: by
   rw [mul_comm]; rw [zpow_mul _ h]
@@ -874,7 +874,7 @@ theorem zpow_ne_zero_of_isUnit_det
 
 中文:
 定理 zpow_ne_zero_of_isUnit_det
-  结论: [Nonempty n'] [Nontrivial R] {A : M} (ha : IsUnit A.det)
+  结论: [非空 n'] [非平凡 R] {A : M} (ha : 是单位 A.det)
   证明: by
   have := ha.det_zpow z
   contrapose this
@@ -902,7 +902,7 @@ theorem zpow_sub
 
 中文:
 定理 zpow_sub
-  条件: {A : M} (ha : IsUnit A.det) (z1 z2 : 整数)
+  条件: {A : M} (ha : 是单位 A.det) (z1 z2 : 整数)
   结论: A ^ (z1 - z2) = A ^ z1 / A ^ z2
   证明: by
   rw [sub_eq_add_neg]; rw [zpow_add ha]; rw [zpow_neg ha]; rw [div_eq_mul_inv]
@@ -942,7 +942,7 @@ theorem zpow_neg_mul_zpow_self
 
 中文:
 定理 zpow_neg_mul_zpow_self
-  条件: (n : 整数) {A : M} (h : IsUnit A.det)
+  条件: (n : 整数) {A : M} (h : 是单位 A.det)
   结论: A ^ (-n) * A ^ n = 1
   证明: by
   rw [zpow_neg h]; rw [nonsing_inv_mul _ (h.det_zpow _)]
@@ -1023,7 +1023,7 @@ theorem conjTranspose_zpow
 
 中文:
 定理 conjTranspose_zpow
-  条件: [StarRing R] (A : M)
+  条件: [对合环 R] (A : M)
   结论: 对任意 n : 整数, (A ^ n)ᴴ = Aᴴ ^ n
 -/
 theorem conjTranspose_zpow [StarRing R] (A : M) : forall n : Int, (A ^ n)ᴴ = Aᴴ ^ n
@@ -1040,8 +1040,8 @@ theorem IsSymm.zpow
   rw [IsSymm]; rw [transpose_zpow]; rw [h]
 
 中文:
-定理 IsSymm.zpow
-  条件: {A : M} (h : A.IsSymm) (k : 整数)
+定理 是Symm.zpow
+  条件: {A : M} (h : A.是Symm) (k : 整数)
   证明: by
   rw [IsSymm]; rw [transpose_zpow]; rw [h]
 

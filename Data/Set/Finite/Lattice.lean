@@ -53,7 +53,7 @@ instance fintypeiUnion
 
 中文:
 实例 fintypeiUnion
-  签名: [DecidableEq α] [Fintype (PLift ι)] (f : ι -> Set α) [对任意 i, Fintype (f i)]
+  签名: [DecidableEq α] [有限类型 (命题层提升 ι)] (f : ι -> 集合 α) [对任意 i, 有限类型 (f i)]
   定义体: Fintype.ofFinset (Finset.univ.biUnion fun i : PLift ι => (f i.down).toFinset) by simp
 
 Depends on / 依赖: Finset, Finset.univ.biUnion, Fintype, Fintype.ofFinset, biUnion, i.down, ofFinset, toFinset
@@ -74,7 +74,7 @@ instance fintypesUnion
 
 中文:
 实例 fintypesUnion
-  签名: [DecidableEq α] {s : Set (Set α)} [Fintype s]
+  签名: [DecidableEq α] {s : 集合 (集合 α)} [有限类型 s]
   定义体: by
   rw [sUnion_eq_iUnion]
   exact @Set.fintypeiUnion _ _ _ _ _ H
@@ -98,7 +98,7 @@ lemma toFinset_iUnion
 
 中文:
 引理 toFinset_iUnion
-  结论: [Fintype β] [DecidableEq α] (f : β -> Set α)
+  结论: [有限类型 β] [DecidableEq α] (f : β -> 集合 α)
   证明: by
   ext v
   simp only [mem_toFinset, mem_iUnion, Finset.mem_biUnion, Finset.mem_univ, true_and]
@@ -126,7 +126,7 @@ definition fintypeBiUnion
 
 中文:
 定义 fintypeBiUnion
-  签名: [DecidableEq α] {ι : 类型} (s : Set ι) [Fintype s] (t : ι -> Set α)
+  签名: [DecidableEq α] {ι : 类型} (s : 集合 ι) [有限类型 s] (t : ι -> 集合 α)
   定义体: haveI : forall i : toFinset s, Fintype (t i) := fun i => H i (mem_toFinset.1 i.2)
   Fintype.ofFinset (s.toFinset.attach.biUnion fun x => (t x).toFinset) fun x => by simp
 
@@ -147,7 +147,7 @@ instance fintypeBiUnion'
 
 中文:
 实例 fintypeBiUnion'
-  签名: [DecidableEq α] {ι : 类型} (s : Set ι) [Fintype s] (t : ι -> Set α)
+  签名: [DecidableEq α] {ι : 类型} (s : 集合 ι) [有限类型 s] (t : ι -> 集合 α)
   定义体: Fintype.ofFinset (s.toFinset.biUnion fun x => (t x).toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, biUnion, ofFinset, s.toFinset.biUnion, toFinset
@@ -187,7 +187,7 @@ instance finite_iUnion
 
 中文:
 实例 finite_iUnion
-  签名: [Finite ι] (f : ι -> Set α) [对任意 i, Finite (f i)]
+  签名: [有限 ι] (f : ι -> 集合 α) [对任意 i, 有限 (f i)]
   定义体: by
   have : Fintype (PLift ι) := Fintype.ofFinite _
   have : forall i, Fintype (f i) := fun i => Fintype.ofFinite _
@@ -212,7 +212,7 @@ instance finite_sUnion
 
 中文:
 实例 finite_sUnion
-  签名: {s : Set (Set α)} [Finite s] [H : 对任意 t : s, Finite (t : Set α)]
+  签名: {s : 集合 (集合 α)} [有限 s] [H : 对任意 t : s, 有限 (t : 集合 α)]
   定义体: by
   rw [sUnion_eq_iUnion]
   exact @Finite.Set.finite_iUnion _ _ _ _ H
@@ -237,7 +237,7 @@ theorem finite_biUnion
 
 中文:
 定理 finite_biUnion
-  结论: {ι : 类型} (s : Set ι) [Finite s] (t : ι -> Set α)
+  结论: {ι : 类型} (s : 集合 ι) [有限 s] (t : ι -> 集合 α)
   证明: by
   rw [biUnion_eq_iUnion]
   have : forall i : s, Finite (t i) := fun i => H i i.property
@@ -261,7 +261,7 @@ instance finite_biUnion'
 
 中文:
 实例 finite_biUnion'
-  签名: {ι : 类型} (s : Set ι) [Finite s] (t : ι -> Set α) [对任意 i, Finite (t i)]
+  签名: {ι : 类型} (s : 集合 ι) [有限 s] (t : ι -> 集合 α) [对任意 i, 有限 (t i)]
   定义体: finite_biUnion s t fun _ _ => inferInstance
 
 Depends on / 依赖: finite_biUnion
@@ -280,7 +280,7 @@ instance finite_biUnion''
 
 中文:
 实例 finite_biUnion''
-  签名: {ι : 类型} (p : ι -> 命题) [h : Finite { x | p x }] (t : ι -> Set α)
+  签名: {ι : 类型} (p : ι -> 命题) [h : 有限 { x | p x }] (t : ι -> 集合 α)
   定义体: @Finite.Set.finite_biUnion' _ _ (Set.ofPred p) h t _
 
 Depends on / 依赖: Finite, Finite.Set.finite_biUnion, Set.ofPred, finite_biUnion, ofPred
@@ -298,8 +298,8 @@ instance finite_iInter
   body: Finite.Set.subset (t <| Classical.arbitrary ι) (iInter_subset _ _)
 
 中文:
-实例 finite_iInter
-  签名: {ι : Sort*} [Nonempty ι] (t : ι -> Set α) [对任意 i, Finite (t i)]
+实例 finite_i整数er
+  签名: {ι : 类型层*} [非空 ι] (t : ι -> 集合 α) [对任意 i, 有限 (t i)]
   定义体: Finite.Set.subset (t <| Classical.arbitrary ι) (iInter_subset _ _)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Finite, Finite.Set.subset, arbitrary, iInter_subset, subset
@@ -336,8 +336,8 @@ theorem finite_iUnion
 
 中文:
 定理 finite_iUnion
-  条件: [Finite ι] {f : ι -> Set α} (H : 对任意 i, (f i).Finite)
-  结论: (⋃ i, f i).Finite
+  条件: [有限 ι] {f : ι -> 集合 α} (H : 对任意 i, (f i).有限)
+  结论: (⋃ i, f i).有限
   证明: haveI := fun i => (H i).to_subtype
   toFinite _
 
@@ -359,8 +359,8 @@ theorem Finite.biUnion'
   apply finite_iUnion fun i : s => ht i.1 i.2
 
 中文:
-定理 Finite.biUnion'
-  结论: {ι} {s : Set ι} (hs : s.Finite) {t : 对任意 i in s, Set α}
+定理 有限.biUnion'
+  结论: {ι} {s : 集合 ι} (hs : s.有限) {t : 对任意 i in s, 集合 α}
   证明: by
   have := hs.to_subtype
   rw [biUnion_eq_iUnion]
@@ -383,8 +383,8 @@ theorem Finite.biUnion
   proof: hs.biUnion' ht
 
 中文:
-定理 Finite.biUnion
-  结论: {ι} {s : Set ι} (hs : s.Finite) {t : ι -> Set α}
+定理 有限.biUnion
+  结论: {ι} {s : 集合 ι} (hs : s.有限) {t : ι -> 集合 α}
   证明: hs.biUnion' ht
 
 Depends on / 依赖: biUnion, hs.biUnion
@@ -403,8 +403,8 @@ theorem Finite.sUnion
   simpa only [sUnion_eq_biUnion] using hs.biUnion H
 
 中文:
-定理 Finite.sUnion
-  条件: {s : Set (Set α)} (hs : s.Finite) (H : 对任意 t in s, Set.Finite t)
+定理 有限.集合并集
+  条件: {s : 集合 (集合 α)} (hs : s.有限) (H : 对任意 t in s, 集合.有限 t)
   证明: by
   simpa only [sUnion_eq_biUnion] using hs.biUnion H
 
@@ -423,8 +423,8 @@ theorem Finite.sInter
   proof: hf.subset (sInter_subset_of_mem ht)
 
 中文:
-定理 Finite.sInter
-  条件: {α : 类型} {s : Set (Set α)} {t : Set α} (ht : t in s) (hf : t.Finite)
+定理 有限.集合交集
+  条件: {α : 类型} {s : 集合 (集合 α)} {t : 集合 α} (ht : t in s) (hf : t.有限)
   证明: hf.subset (sInter_subset_of_mem ht)
 
 Depends on / 依赖: hf.subset, sInter_subset_of_mem, subset
@@ -448,8 +448,8 @@ theorem Finite.iUnion
     contradiction
 
 中文:
-定理 Finite.iUnion
-  结论: {ι : 类型} {s : ι -> Set α} {t : Set ι} (ht : t.Finite)
+定理 有限.iUnion
+  结论: {ι : 类型} {s : ι -> 集合 α} {t : 集合 ι} (ht : t.有限)
   证明: by
   suffices ⋃ i, s i subseteq ⋃ i in t, s i by exact (ht.biUnion hs).subset this
   refine iUnion_subset fun i x hx => ?_
@@ -485,7 +485,7 @@ refine hs.eq not_disjoint_iff.2 ⟨u ⟨i, hi⟩, hi.choose_spec,
 
 中文:
 引理 finite_iUnion_iff
-  条件: {ι : 类型} {s : ι -> Set α} (hs : Pairwise fun i j => Disjoint (s i) (s j))
+  条件: {ι : 类型} {s : ι -> 集合 α} (hs : 两两 fun i j => Disjoint (s i) (s j))
   证明: by
 refine ⟨fun i => h.subset subset_iUnion _ _, ?_⟩
     let u (i : {i | (s i).Nonempty}) : ⋃ i, s i := ⟨i.2.choose, mem_iUnion.2 ⟨i.1, i.2.choose_spec⟩⟩
@@ -520,8 +520,8 @@ lemma Infinite.iUnion
   proof: fun h => hi (h.subset (Set.subset_iUnion s i))
 
 中文:
-引理 Infinite.iUnion
-  条件: {ι : Sort*} {s : ι -> Set α} (i : ι) (hi : (s i).Infinite)
+引理 无限.iUnion
+  条件: {ι : 类型层*} {s : ι -> 集合 α} (i : ι) (hi : (s i).无限)
   证明: fun h => hi (h.subset (Set.subset_iUnion s i))
 -/
 protected lemma Infinite.iUnion {ι : Sort*} {s : ι -> Set α} (i : ι) (hi : (s i).Infinite) :
@@ -537,8 +537,8 @@ lemma Infinite.iUnion₂
   proof: fun hc => hij (hc.subset <| subset_iUnion₂ _ _)
 
 中文:
-引理 Infinite.iUnion₂
-  结论: {ι : Sort*} {κ : ι -> Sort*} {s : 对任意 i, κ i -> Set α} (i : ι) (j : κ i)
+引理 无限.iUnion₂
+  结论: {ι : 类型层*} {κ : ι -> 类型层*} {s : 对任意 i, κ i -> 集合 α} (i : ι) (j : κ i)
   证明: fun hc => hij (hc.subset <| subset_iUnion₂ _ _)
 
 Depends on / 依赖: hc.subset, subset
@@ -559,7 +559,7 @@ lemma finite_iUnion_of_subsingleton
 
 中文:
 引理 finite_iUnion_of_subsingleton
-  条件: {ι : Sort*} [Subsingleton ι] {s : ι -> Set α}
+  条件: {ι : 类型层*} [子单例 ι] {s : ι -> 集合 α}
   证明: by
   rw [← iUnion_plift_down]; rw [finite_iUnion_iff _root_.Subsingleton.pairwise]
   simp [PLift.forall, Finite.of_subsingleton]
@@ -581,7 +581,7 @@ lemma PairwiseDisjoint.finite_biUnion_iff
 
 中文:
 引理 PairwiseDisjoint.finite_biUnion_iff
-  条件: {f : β -> Set α} {s : Set β} (hs : s.PairwiseDisjoint f)
+  条件: {f : β -> 集合 α} {s : 集合 β} (hs : s.PairwiseDisjoint f)
   证明: by
   rw [finite_iUnion_iff (by aesop (add unfold safe [Pairwise]; rw [PairwiseDisjoint]; rw [Set.Pairwise]))]
   simp
@@ -607,8 +607,8 @@ theorem Finite.preimage'
   exact Set.Finite.biUnion h hf
 
 中文:
-定理 Finite.preimage'
-  条件: (h : s.Finite) (hf : 对任意 b in s, (f ⁻¹' {b}).Finite)
+定理 有限.原像'
+  条件: (h : s.有限) (hf : 对任意 b in s, (f ⁻¹' {b}).有限)
   证明: by
   rw [← Set.biUnion_preimage_singleton]
   exact Set.Finite.biUnion h hf
@@ -634,7 +634,7 @@ theorem union_finset_finite_of_range_finite
 
 中文:
 定理 union_finset_finite_of_range_finite
-  条件: (f : α -> Finset β) (h : (range f).Finite)
+  条件: (f : α -> 有限集 β) (h : (range f).有限)
   证明: by
   rw [← biUnion_range]
   exact h.biUnion fun y _ => y.finite_toSet
@@ -657,8 +657,8 @@ lemma Finite.of_finite_fibers
   proof: (himage.biUnion hfibers).subset fun x => by aesop
 
 中文:
-引理 Finite.of_finite_fibers
-  结论: (f : α -> β) {s : Set α} (himage : (f '' s).Finite)
+引理 有限.of_finite_fibers
+  结论: (f : α -> β) {s : 集合 α} (himage : (f '' s).有限)
   证明: (himage.biUnion hfibers).subset fun x => by aesop
 
 Depends on / 依赖: biUnion, hfibers, himage, himage.biUnion, subset
@@ -683,7 +683,7 @@ theorem finite_subset_iUnion
 
 中文:
 定理 finite_subset_iUnion
-  条件: {s : Set α} (hs : s.Finite) {ι} {t : ι -> Set α} (h : s subseteq ⋃ i, t i)
+  条件: {s : 集合 α} (hs : s.有限) {ι} {t : ι -> 集合 α} (h : s subseteq ⋃ i, t i)
   证明: by
   have := hs.to_subtype
   choose f hf using show forall x : s, exists i, x.1 in t i by simpa [subset_def] using h
@@ -719,7 +719,7 @@ theorem eq_finite_iUnion_of_finite_subset_iUnion
 
 中文:
 定理 eq_finite_iUnion_of_finite_subset_iUnion
-  结论: {ι} {s : ι -> Set α} {t : Set α} (tfin : t.Finite)
+  结论: {ι} {s : ι -> 集合 α} {t : 集合 α} (tfin : t.有限)
   证明: let ⟨I, Ifin, hI⟩ := finite_subset_iUnion tfin h
   ⟨I, Ifin, fun x => s x inter t, fun _ => tfin.subset inter_subset_right, fun _ =>
     inter_subset_left, by
@@ -764,7 +764,7 @@ theorem infinite_iUnion
 
 中文:
 定理 infinite_iUnion
-  条件: {ι : 类型} [Infinite ι] {s : ι -> Set α} (hs : Function.Injective s)
+  条件: {ι : 类型} [无限 ι] {s : ι -> 集合 α} (hs : 函数.单射 s)
   证明: fun hfin => @not_injective_infinite_finite ι _ _ hfin.finite_subsets.to_subtype
     (fun i => ⟨s i, subset_iUnion _ _⟩) fun _ _ h_eq => hs (Subtype.ext_iff.1 h_eq)
 
@@ -787,8 +787,8 @@ theorem Infinite.biUnion
   exact infinite_iUnion fun ⟨i,hi⟩ ⟨j,hj⟩ hij => by simp [hs hi hj hij]
 
 中文:
-定理 Infinite.biUnion
-  结论: {ι : 类型} {s : ι -> Set α} {a : Set ι} (ha : a.Infinite)
+定理 无限.biUnion
+  结论: {ι : 类型} {s : ι -> 集合 α} {a : 集合 ι} (ha : a.无限)
   证明: by
   rw [biUnion_eq_iUnion]
   have _ := ha.to_subtype
@@ -815,9 +815,9 @@ theorem Infinite.sUnion
   exact infinite_iUnion Subtype.coe_injective
 
 中文:
-定理 Infinite.sUnion
-  条件: {s : Set (Set α)} (hs : s.Infinite)
-  结论: (⋃₀ s).Infinite
+定理 无限.集合并集
+  条件: {s : 集合 (集合 α)} (hs : s.无限)
+  结论: (⋃₀ s).无限
   证明: by
   rw [sUnion_eq_iUnion]
   have _ := hs.to_subtype
@@ -848,7 +848,7 @@ lemma map_finite_biSup
 
 中文:
 引理 map_finite_biSup
-  结论: {F ι : 类型} [CompleteLattice α] [CompleteLattice β] [FunLike F α β]
+  结论: {F ι : 类型} [完备格 α] [完备格 β] [函数状 F α β]
   证明: by
   have := map_finset_sup f hs.toFinset g
   simp only [Finset.sup_eq_iSup, hs.mem_toFinset, comp_apply] at this
@@ -880,7 +880,7 @@ lemma map_finite_iSup
 
 中文:
 引理 map_finite_iSup
-  结论: {F ι : 类型} [CompleteLattice α] [CompleteLattice β] [FunLike F α β]
+  结论: {F ι : 类型} [完备格 α] [完备格 β] [函数状 F α β]
   证明: by
   rw [← iSup_univ (f := g)]; rw [← iSup_univ (f := fun i => f (g i))]
   exact map_finite_biSup finite_univ f g
@@ -913,8 +913,8 @@ theorem Finite.iSup_biInf_of_monotone
 @[to_dual]
 
 中文:
-定理 Finite.iSup_biInf_of_monotone
-  结论: {ι ι' α : 类型} [Preorder ι'] [Nonempty ι']
+定理 有限.iSup_biInf_of_monotone
+  结论: {ι ι' α : 类型} [预序 ι'] [非空 ι']
   证明: by
   induction s, hs using Set.Finite.induction_on with
   | empty => simp [iSup_const]
@@ -949,8 +949,8 @@ theorem Finite.iSup_biInf_of_antitone
 @[to_dual]
 
 中文:
-定理 Finite.iSup_biInf_of_antitone
-  结论: {ι ι' α : 类型} [Preorder ι'] [Nonempty ι']
+定理 有限.iSup_biInf_of_antitone
+  结论: {ι ι' α : 类型} [预序 ι'] [非空 ι']
   证明: @Finite.iSup_biInf_of_monotone ι ι'ᵒᵈ α _ _ _ _ _ hs _ fun i hi => (hf i hi).dual_left
 
 @[to_dual]
@@ -976,7 +976,7 @@ theorem _root_.iSup_iInf_of_monotone
 
 中文:
 定理 _root_.iSup_iInf_of_monotone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι'] [Nonempty ι']
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι'] [非空 ι']
   证明: by
   simpa only [iInf_univ] using finite_univ.iSup_biInf_of_monotone fun i _ => hf i
 
@@ -1004,7 +1004,7 @@ theorem _root_.iSup_iInf_of_antitone
 
 中文:
 定理 _root_.iSup_iInf_of_antitone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι'] [Nonempty ι']
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι'] [非空 ι']
   证明: @iSup_iInf_of_monotone ι ι'ᵒᵈ α _ _ _ _ _ _ fun i => (hf i).dual_left
 
 @[deprecated (since := "2026-02-03")] protected alias iSup_iInf_of_monotone := iSup_iInf_of_monotone
@@ -1032,8 +1032,8 @@ theorem iUnion_iInter_of_monotone
   proof: iSup_iInf_of_monotone hs
 
 中文:
-定理 iUnion_iInter_of_monotone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι'] [IsDirectedOrder ι']
+定理 iUnion_i整数er_of_monotone
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι'] [IsDirectedOrder ι']
   证明: iSup_iInf_of_monotone hs
 
 Depends on / 依赖: iSup_iInf_of_monotone
@@ -1052,8 +1052,8 @@ theorem iUnion_iInter_of_antitone
   proof: iSup_iInf_of_antitone hs
 
 中文:
-定理 iUnion_iInter_of_antitone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι']
+定理 iUnion_i整数er_of_antitone
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι']
   证明: iSup_iInf_of_antitone hs
 
 Depends on / 依赖: iSup_iInf_of_antitone
@@ -1072,8 +1072,8 @@ theorem iInter_iUnion_of_monotone
   proof: iInf_iSup_of_monotone hs
 
 中文:
-定理 iInter_iUnion_of_monotone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι']
+定理 i整数er_iUnion_of_monotone
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι']
   证明: iInf_iSup_of_monotone hs
 
 Depends on / 依赖: iInf_iSup_of_monotone
@@ -1092,8 +1092,8 @@ theorem iInter_iUnion_of_antitone
   proof: iInf_iSup_of_antitone hs
 
 中文:
-定理 iInter_iUnion_of_antitone
-  结论: {ι ι' α : 类型} [Finite ι] [Preorder ι'] [IsDirectedOrder ι']
+定理 i整数er_iUnion_of_antitone
+  结论: {ι ι' α : 类型} [有限 ι] [预序 ι'] [IsDirectedOrder ι']
   证明: iInf_iSup_of_antitone hs
 
 Depends on / 依赖: iInf_iSup_of_antitone
@@ -1117,7 +1117,7 @@ exact preimage_mono hs i i.2 h
 
 中文:
 定理 iUnion_pi_of_monotone
-  结论: {ι ι' : 类型} [LinearOrder ι'] [Nonempty ι'] {α : ι -> 类型}
+  结论: {ι ι' : 类型} [线性序 ι'] [非空 ι'] {α : ι -> 类型}
   证明: by
   simp only [pi_def, biInter_eq_iInter, preimage_iUnion]
   have := hI.fintype.finite
@@ -1144,7 +1144,7 @@ theorem iUnion_univ_pi_of_monotone
 
 中文:
 定理 iUnion_univ_pi_of_monotone
-  结论: {ι ι' : 类型} [LinearOrder ι'] [Nonempty ι'] [Finite ι]
+  结论: {ι ι' : 类型} [线性序 ι'] [非空 ι'] [有限 ι]
   证明: iUnion_pi_of_monotone finite_univ fun i _ => hs i
 
 Depends on / 依赖: finite_univ, iUnion_pi_of_monotone
@@ -1168,7 +1168,7 @@ theorem _root_.iInf_iSup_eq_of_finite
 
 中文:
 定理 _root_.iInf_iSup_eq_of_finite
-  结论: {ι : Sort v} {κ : ι -> Sort w} [Order.Frame α] [Finite ι]
+  结论: {ι : 类型层 v} {κ : ι -> 类型层 w} [Order.框架 α] [有限 ι]
   证明: by
   suffices forall {ι : Type v} {κ : ι -> Type w} [Finite ι] (f : Π a, κ a -> α),
       ⨅ a, ⨆ b, f a b = ⨆ g : (Π a, κ a), ⨅ a, f a (g a) by
@@ -1202,7 +1202,7 @@ theorem _root_.iSup_iInf_eq_of_finite
 
 中文:
 定理 _root_.iSup_iInf_eq_of_finite
-  结论: {ι : Sort v} {κ : ι -> Sort w} [Order.Coframe α] [Finite ι]
+  结论: {ι : 类型层 v} {κ : ι -> 类型层 w} [Order.余frame α] [有限 ι]
   证明: iInf_iSup_eq_of_finite (α := αᵒᵈ)
 
 Depends on / 依赖: iInf_iSup_eq_of_finite
@@ -1225,8 +1225,8 @@ theorem Finite.biInf_iSup_eq
     simpa [← Equiv.plift.symm.iSup_comp
 
 中文:
-定理 Finite.biInf_iSup_eq
-  结论: {ι : 类型v} {κ : ι -> Sort w} [Nonempty (Π a, κ a)] [Order.Frame α]
+定理 有限.biInf_iSup_eq
+  结论: {ι : 类型v} {κ : ι -> 类型层 w} [非空 (Π a, κ a)] [Order.框架 α]
   证明: by
   classical
   suffices h : forall {κ : ι -> Type w} [Nonempty (Π a, κ a)] (f : Π a, κ a -> α),
@@ -1260,8 +1260,8 @@ theorem Finite.biSup_iInf_eq
   proof: hs.biInf_iSup_eq (α := αᵒᵈ)
 
 中文:
-定理 Finite.biSup_iInf_eq
-  结论: {ι : 类型v} {κ : ι -> Sort w} [Nonempty (对任意 a, κ a)] [Order.Coframe α]
+定理 有限.biSup_iInf_eq
+  结论: {ι : 类型v} {κ : ι -> 类型层 w} [非空 (对任意 a, κ a)] [Order.余frame α]
   证明: hs.biInf_iSup_eq (α := αᵒᵈ)
 
 Depends on / 依赖: biInf_iSup_eq, hs.biInf_iSup_eq
@@ -1287,8 +1287,8 @@ theorem Finite.bddAbove
   proof: Finite.induction_on _ hs bddAbove_empty fun _ _ h => h.insert _
 
 中文:
-定理 Finite.bddAbove
-  条件: (hs : s.Finite)
+定理 有限.bddAbove
+  条件: (hs : s.有限)
   结论: BddAbove s
   证明: Finite.induction_on _ hs bddAbove_empty fun _ _ h => h.insert _
 -/
@@ -1311,8 +1311,8 @@ theorem Finite.bddAbove_biUnion
 @[to_dual]
 
 中文:
-定理 Finite.bddAbove_biUnion
-  条件: {I : Set β} {S : β -> Set α} (H : I.Finite)
+定理 有限.bddAbove_biUnion
+  条件: {I : 集合 β} {S : β -> 集合 α} (H : I.有限)
   证明: by
   induction I, H using Set.Finite.induction_on with
   | empty => simp only [biUnion_empty, bddAbove_empty, forall_mem_empty]
@@ -1339,7 +1339,7 @@ theorem infinite_of_not_bddAbove
 
 中文:
 定理 infinite_of_not_bddAbove
-  结论: ¬BddAbove s -> s.Infinite
+  结论: ¬BddAbove s -> s.无限
   证明: mt Finite.bddAbove
 
 Depends on / 依赖: Finite, Finite.bddAbove, bddAbove
@@ -1362,8 +1362,8 @@ theorem Finset.bddAbove
   proof: s.finite_toSet.bddAbove
 
 中文:
-定理 Finset.bddAbove
-  条件: [SemilatticeSup α] [Nonempty α] (s : Finset α)
+定理 有限集.bddAbove
+  条件: [SemilatticeSup α] [非空 α] (s : 有限集 α)
   证明: s.finite_toSet.bddAbove
 -/
 protected theorem Finset.bddAbove [SemilatticeSup α] [Nonempty α] (s : Finset α) :
@@ -1387,9 +1387,9 @@ lemma Set.finite_sdiff_iUnion_Ioo
 alias Set.finite_diff_iUnion_Ioo := Set.finite_sdiff_iUnion_Ioo
 
 中文:
-引理 Set.finite_sdiff_iUnion_Ioo
-  条件: (s : Set α)
-  结论: (s \ ⋃ (x in s) (y in s), Ioo x y).Finite
+引理 集合.finite_sdiff_iUnion_Ioo
+  条件: (s : 集合 α)
+  结论: (s \ ⋃ (x in s) (y in s), 开区间 x y).有限
   证明: Set.finite_of_forall_not_lt_lt fun _x hx _y hy _z hz hxy hyz => hy.2 mem_iUnion₂_of_mem hx.1
     mem_iUnion₂_of_mem hz.1 ⟨hxy, hyz⟩
 
@@ -1419,9 +1419,9 @@ lemma Set.finite_sdiff_iUnion_Ioo'
 alias Set.finite_diff_iUnion_Ioo' := Set.finite_sdiff_iUnion_Ioo'
 
 中文:
-引理 Set.finite_sdiff_iUnion_Ioo'
-  条件: (s : Set α)
-  结论: (s \ ⋃ x : s × s, Ioo x.1 x.2).Finite
+引理 集合.finite_sdiff_iUnion_Ioo'
+  条件: (s : 集合 α)
+  结论: (s \ ⋃ x : s × s, 开区间 x.1 x.2).有限
   证明: by
   simpa only [iUnion, iSup_prod, iSup_subtype] using s.finite_sdiff_iUnion_Ioo
 
@@ -1452,8 +1452,8 @@ lemma Directed.exists_mem_subset_of_finset_subset_biUnion
     exact ⟨k, hik hi, hj.trans hjk⟩
 
 中文:
-引理 Directed.exists_mem_subset_of_finset_subset_biUnion
-  结论: {α ι : 类型} [Nonempty ι]
+引理 Directed.存在_mem_subset_of_finset_subset_biUnion
+  结论: {α ι : 类型} [非空 ι]
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1488,8 +1488,8 @@ theorem DirectedOn.exists_mem_subset_of_finset_subset_biUnion
   simpa using (directed_comp.2 hc.directed_val).exists_mem_subset_of_finset_subset_biUnion hs
 
 中文:
-定理 DirectedOn.exists_mem_subset_of_finset_subset_biUnion
-  结论: {α ι : 类型} {f : ι -> Set α}
+定理 DirectedOn.存在_mem_subset_of_finset_subset_biUnion
+  结论: {α ι : 类型} {f : ι -> 集合 α}
   证明: by
   rw [Set.biUnion_eq_iUnion] at hs
   have := hn.coe_sort
@@ -1516,8 +1516,8 @@ theorem DirectedOn.exists_mem_subset_of_finite_of_subset_sUnion
   exact hs.coe_toFinset ▸ this
 
 中文:
-定理 DirectedOn.exists_mem_subset_of_finite_of_subset_sUnion
-  结论: {α : 类型} {c : Set (Set α)}
+定理 DirectedOn.存在_mem_subset_of_finite_of_subset_sUnion
+  结论: {α : 类型} {c : 集合 (集合 α)}
   证明: by
   rw [← hs.coe_toFinset]; rw [sUnion_eq_biUnion] at hsc
   have := DirectedOn.exists_mem_subset_of_finset_subset_biUnion hn hc hsc

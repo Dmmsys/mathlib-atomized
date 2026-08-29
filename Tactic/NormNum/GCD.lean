@@ -69,7 +69,7 @@ theorem nat_gcd_helper_dvd_left
 中文:
 定理 nat_gcd_helper_dvd_left
   条件: (x y : 自然数) (h : y % x = 0)
-  结论: 自然数.gcd x y = x
+  结论: 自然数.最大公约数 x y = x
   证明: Nat.gcd_eq_left (Nat.dvd_of_mod_eq_zero h)
 
 Depends on / 依赖: Nat.dvd_of_mod_eq_zero, Nat.gcd_eq_left, dvd_of_mod_eq_zero, gcd_eq_left
@@ -89,7 +89,7 @@ theorem nat_gcd_helper_dvd_right
 中文:
 定理 nat_gcd_helper_dvd_right
   条件: (x y : 自然数) (h : x % y = 0)
-  结论: 自然数.gcd x y = y
+  结论: 自然数.最大公约数 x y = y
   证明: Nat.gcd_eq_right (Nat.dvd_of_mod_eq_zero h)
 
 Depends on / 依赖: Nat.dvd_of_mod_eq_zero, Nat.gcd_eq_right, dvd_of_mod_eq_zero, gcd_eq_right
@@ -202,7 +202,7 @@ theorem nat_lcm_helper
 
 中文:
 定理 nat_lcm_helper
-  结论: (x y d m : 自然数) (hd : 自然数.gcd x y = d)
+  结论: (x y d m : 自然数) (hd : 自然数.最大公约数 x y = d)
   证明: mul_right_injective₀ (Nat.ne_of_beq_eq_false d0) by
     dsimp only
     rw [← dm]; rw [← hd]; rw [Nat.gcd_mul_lcm]
@@ -264,7 +264,7 @@ theorem isNat_gcd
   statement: {x y nx ny z : Nat} ->
 
 中文:
-定理 isNat_gcd
+定理 is自然数_gcd
   结论: {x y nx ny z : 自然数} ->
 -/
 theorem isNat_gcd : {x y nx ny z : Nat} ->
@@ -279,7 +279,7 @@ theorem isNat_lcm
   statement: {x y nx ny z : Nat} ->
 
 中文:
-定理 isNat_lcm
+定理 is自然数_lcm
   结论: {x y nx ny z : 自然数} ->
 -/
 theorem isNat_lcm : {x y nx ny z : Nat} ->
@@ -294,7 +294,7 @@ theorem isInt_gcd
   statement: {x y nx ny : Int} -> {z : Nat} ->
 
 中文:
-定理 isInt_gcd
+定理 is整数_gcd
   结论: {x y nx ny : 整数} -> {z : 自然数} ->
 -/
 theorem isInt_gcd : {x y nx ny : Int} -> {z : Nat} ->
@@ -309,7 +309,7 @@ theorem isInt_lcm
   statement: {x y nx ny : Int} -> {z : Nat} ->
 
 中文:
-定理 isInt_lcm
+定理 is整数_lcm
   结论: {x y nx ny : 整数} -> {z : 自然数} ->
 -/
 theorem isInt_lcm : {x y nx ny : Int} -> {z : Nat} ->
@@ -329,7 +329,7 @@ definition proveNatGCD
 | _, 1 => have : ey =Q nat_lit 1 := ⟨⟩; ⟨q(
 
 中文:
-定义 proveNatGCD
+定义 prove自然数GCD
   签名: (ex ey : Q(自然数))
   定义体: match ex.natLit!, ey.natLit! with
 | 0, _ => have : ex =Q nat_lit 0 := ⟨⟩; ⟨ey, q(Nat.gcd_zero_left $ey)⟩
@@ -392,7 +392,7 @@ haveI' : e =Q Nat.gcd x y := ⟨⟩
   let ⟨ed, p
 
 中文:
-定义 evalNatGCD
+定义 eval自然数GCD
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -427,7 +427,7 @@ definition proveNatLCM
   | 1, _ => show (ed : Q(Nat)) × Q(Nat.lcm 1 $ey = $e
 
 中文:
-定义 proveNatLCM
+定义 prove自然数LCM
   签名: (ex ey : Q(自然数))
   定义体: match ex.natLit!, ey.natLit! with
   | 0, _ =>
@@ -471,7 +471,7 @@ haveI' : e =Q Nat.lcm x y := ⟨⟩
   let ⟨ed, p
 
 中文:
-定义 evalNatLCM
+定义 eval自然数LCM
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x : Q(Nat))) (y : Q(Nat)) ← Meta.whnfR e | failure
@@ -504,7 +504,7 @@ definition proveIntGCD
   ⟨ed, q(int_gcd_helper $hx $hy $pf)⟩
 
 中文:
-定义 proveIntGCD
+定义 prove整数GCD
   签名: (ex ey : Q(整数))
   定义体: let ⟨ex', hx⟩ := rawIntLitNatAbs ex
   let ⟨ey', hy⟩ := rawIntLitNatAbs ey
@@ -537,7 +537,7 @@ haveI' : e =Q Int.gcd x y := ⟨⟩
   return .isNat _ ed q(isInt_gcd $p $q $pf)
 
 中文:
-定义 evalIntGCD
+定义 eval整数GCD
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x : Q(Int))) (y : Q(Int)) ← Meta.whnfR e | failure
@@ -569,7 +569,7 @@ definition proveIntLCM
   ⟨ed, q(int_lcm_helper $hx $hy $pf)⟩
 
 中文:
-定义 proveIntLCM
+定义 prove整数LCM
   签名: (ex ey : Q(整数))
   定义体: let ⟨ex', hx⟩ := rawIntLitNatAbs ex
   let ⟨ey', hy⟩ := rawIntLitNatAbs ey
@@ -602,7 +602,7 @@ haveI' : e =Q Int.lcm x y := ⟨⟩
   return .isNat _ ed q(isInt_lcm $p $q $pf)
 
 中文:
-定义 evalIntLCM
+定义 eval整数LCM
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app _ (x : Q(Int))) (y : Q(Int)) ← Meta.whnfR e | failure
@@ -636,8 +636,8 @@ theorem isInt_ratNum
       Rat.num_intCast, one_mul, mul_one, h, Nat.cast_one, Int.ediv_one, Int.cast_id]
 
 中文:
-定理 isInt_ratNum
-  结论: 对任意 {q : Rat} {n : 整数} {n' : 自然数} {d : 自然数},
+定理 is整数_ratNum
+  结论: 对任意 {q : 有理数} {n : 整数} {n' : 自然数} {d : 自然数},
   证明: Nat.pos_iff_ne_zero.mpr by simpa using hi.ne_zero
     simp_rw [Rat.mul_num, Rat.den_intCast, invOf_eq_inv,
       Rat.inv_natCast_den_of_pos this, Rat.inv_natCast_num_of_pos this,
@@ -666,8 +666,8 @@ theorem isNat_ratDen
       Rat.num_intCast, one_mul, mul_one, Nat.cast_id, h, Nat.div_one]
 
 中文:
-定理 isNat_ratDen
-  结论: 对任意 {q : Rat} {n : 整数} {n' : 自然数} {d : 自然数},
+定理 is自然数_ratDen
+  结论: 对任意 {q : 有理数} {n : 整数} {n' : 自然数} {d : 自然数},
   证明: Nat.pos_iff_ne_zero.mpr by simpa using hi.ne_zero
     simp_rw [Rat.mul_den, Rat.den_intCast, invOf_eq_inv,
       Rat.inv_natCast_den_of_pos this, Rat.inv_natCast_num_of_pos this,

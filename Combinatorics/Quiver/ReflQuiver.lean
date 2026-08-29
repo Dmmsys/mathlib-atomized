@@ -38,9 +38,9 @@ class ReflQuiver
 中文:
 类 ReflQuiver
   参数: (obj : 类型u)
-  继承: Quiver.{v} obj
+  继承: 箭图.{v} obj
   公理与运算 (1 个):
-    - id : 对任意 X : obj, Hom X X
+    - id : 对任意 X : obj, 态射 X X
 -/
 class ReflQuiver (obj : Type u) : Type max u (v + 1) extends Quiver.{v} obj where
   /-- The identity morphism on an object. -/
@@ -76,7 +76,7 @@ instance catToReflQuiver
 
 中文:
 实例 catToReflQuiver
-  签名: {C : 类型u} [inst : Category.{v} C]
+  签名: {C : 类型u} [inst : 范畴.{v} C]
   定义体: { inst with }
 -/
 instance catToReflQuiver {C : Type u} [inst : Category.{v} C] : ReflQuiver.{v, u} C :=
@@ -93,7 +93,7 @@ theorem ReflQuiver.id_eq_id
 
 中文:
 定理 ReflQuiver.id_eq_id
-  条件: {C : 类型} [Category* C] (X : C)
+  条件: {C : 类型} [范畴* C] (X : C)
   结论: 𝟙rq X = 𝟙 X
   证明: rfl
 -/
@@ -112,7 +112,7 @@ structure ReflPrefunctor
 中文:
 结构 ReflPrefunctor
   参数: (V : 类型u₁) [ReflQuiver.{v₁} V] (W : 类型u₂) [ReflQuiver.{v₂} W]
-  继承: Prefunctor V W
+  继承: 预函子 V W
   公理与运算 (1 个):
     - map_id : 对任意 X : V, map (𝟙rq X) = 𝟙rq (obj X)  [默认: by cat_disch]
 
@@ -425,8 +425,8 @@ definition Functor.toReflPrefunctor
   body: { F with }
 
 中文:
-定义 Functor.toReflPrefunctor
-  签名: {C D} [Category* C] [Category* D] (F : C ⥤ D)
+定义 函子.toReflPrefunctor
+  签名: {C D} [范畴* C] [范畴* D] (F : C ⥤ D)
   定义体: { F with }
 -/
 def Functor.toReflPrefunctor {C D} [Category* C] [Category* D] (F : C ⥤ D) : C ⥤rq D := { F with }
@@ -442,8 +442,8 @@ theorem Functor.toReflPrefunctor.map_comp
 @[simp]
 
 中文:
-定理 Functor.toReflPrefunctor.map_comp
-  结论: {C D E} [Category* C] [Category* D] [Category* E]
+定理 函子.toReflPrefunctor.map_comp
+  结论: {C D E} [范畴* C] [范畴* D] [范畴* E]
   证明: rfl
 
 @[simp]
@@ -462,7 +462,7 @@ theorem Functor.toReflPrefunctor_toPrefunctor
   proof: rfl
 
 中文:
-定理 Functor.toReflPrefunctor_toPrefunctor
+定理 函子.toReflPrefunctor_toPrefunctor
   条件: {C D : Cat} (F : C ⥤ D)
   证明: rfl
 -/

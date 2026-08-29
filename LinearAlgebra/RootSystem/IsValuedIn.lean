@@ -60,8 +60,8 @@ class IsValuedIn
     - exists_value : forall i j, exists s, algebraMap S R s = P.pairing i j
 
 中文:
-类 IsValuedIn
-  参数: (S : 类型) [CommRing S] [Algebra S R]
+类 是ValuedIn
+  参数: (S : 类型) [交换环 S] [代数 S R]
   公理与运算 (1 个):
     - exists_value : 对任意 i j, 存在 s, algebraMap S R s = P.pairing i j
 
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.IsValuedIn R
+  签名: P.是ValuedIn R
   定义体: by simp
 
 Depends on / 依赖: OrderDual, OrderDual.instMeasurableInf
@@ -138,8 +138,8 @@ instance [P.IsValuedIn
   exact P.exists_value
 
 中文:
-实例 [P.IsValuedIn
-  签名: S] : P.flip.IsValuedIn S
+实例 [P.是ValuedIn
+  签名: S] : P.flip.是ValuedIn S
   定义体: by
   rw [isValuedIn_iff]; rw [forall_comm]
   exact P.exists_value
@@ -162,7 +162,7 @@ definition pairingIn
 
 中文:
 定义 pairingIn
-  签名: [P.IsValuedIn S] (i j : ι)
+  签名: [P.是ValuedIn S] (i j : ι)
   定义体: (P.exists_value i j).choose
 
 @[simp]
@@ -185,7 +185,7 @@ lemma algebraMap_pairingIn
 
 中文:
 引理 algebraMap_pairingIn
-  条件: [P.IsValuedIn S] (i j : ι)
+  条件: [P.是ValuedIn S] (i j : ι)
   证明: (P.exists_value i j).choose_spec
 
 @[simp]
@@ -207,7 +207,7 @@ lemma pairingIn_same
 
 中文:
 引理 pairingIn_same
-  条件: [FaithfulSMul S R] [P.IsValuedIn S] (i : ι)
+  条件: [忠实标量乘法 S R] [P.是ValuedIn S] (i : ι)
   证明: FaithfulSMul.algebraMap_injective S R by simp [map_ofNat]
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, map_ofNat
@@ -229,7 +229,7 @@ lemma pairingIn_eq_add_of_root_eq_add
 
 中文:
 引理 pairingIn_eq_add_of_root_eq_add
-  结论: [FaithfulSMul S R] [P.IsValuedIn S]
+  结论: [忠实标量乘法 S R] [P.是ValuedIn S]
   证明: by
   apply FaithfulSMul.algebraMap_injective S R
   simpa [← P.algebraMap_pairingIn S, -algebraMap_pairingIn] using pairing_eq_add_of_root_eq_add h
@@ -287,7 +287,7 @@ lemma pairingIn_reflectionPerm
 
 中文:
 引理 pairingIn_reflectionPerm
-  条件: [FaithfulSMul S R] [P.IsValuedIn S] (i j k : ι)
+  条件: [忠实标量乘法 S R] [P.是ValuedIn S] (i j k : ι)
   证明: by
   simp only [← (FaithfulSMul.algebraMap_injective S R).eq_iff, algebraMap_pairingIn]
   exact pairing_reflectionPerm P i j k
@@ -315,7 +315,7 @@ lemma pairingIn_reflectionPerm_self_left
 
 中文:
 引理 pairingIn_reflectionPerm_self_left
-  条件: [FaithfulSMul S R] [P.IsValuedIn S] (i j : ι)
+  条件: [忠实标量乘法 S R] [P.是ValuedIn S] (i j : ι)
   证明: by
   simp [← (FaithfulSMul.algebraMap_injective S R).eq_iff]
 
@@ -339,7 +339,7 @@ lemma pairingIn_reflectionPerm_self_right
 
 中文:
 引理 pairingIn_reflectionPerm_self_right
-  条件: [FaithfulSMul S R] [P.IsValuedIn S] (i j : ι)
+  条件: [忠实标量乘法 S R] [P.是ValuedIn S] (i j : ι)
   证明: by
   simp [← (FaithfulSMul.algebraMap_injective S R).eq_iff]
 
@@ -360,8 +360,8 @@ lemma IsValuedIn.trans
     simp [← RingHom.comp_apply, ← IsScalarTower.algebraMap_eq T S R]
 
 中文:
-引理 IsValuedIn.trans
-  结论: (T : 类型) [CommRing T] [Algebra T S] [Algebra T R] [IsScalarTower T S R]
+引理 是ValuedIn.trans
+  结论: (T : 类型) [交换环 T] [代数 T S] [代数 T R] [标量塔 T S R]
   证明: by
     use algebraMap T S (P.pairingIn T i j)
     simp [← RingHom.comp_apply, ← IsScalarTower.algebraMap_eq T S R]
@@ -385,7 +385,7 @@ instance [P.IsCrystallographic]
 
 中文:
 实例 [P.IsCrystallographic]
-  签名: [Algebra Rat R]
+  签名: [代数 有理数 R]
   定义体: IsValuedIn.trans P (T := Int) (S := Rat)
 
 Depends on / 依赖: IsValuedIn, IsValuedIn.trans
@@ -431,7 +431,7 @@ lemma pairingIn_rat
 
 中文:
 引理 pairingIn_rat
-  条件: [Nontrivial R] [P.IsCrystallographic] [Algebra Rat R] (i j : ι)
+  条件: [非平凡 R] [P.IsCrystallographic] [代数 有理数 R] (i j : ι)
   证明: by
   simp [← P.algebraMap_pairingIn' Rat Int]
 
@@ -458,7 +458,7 @@ lemma coroot'_apply_apply_mem_of_mem_span
 
 中文:
 引理 coroot'_apply_apply_mem_of_mem_span
-  结论: [Module S M] [IsScalarTower S R M] [P.IsValuedIn S]
+  结论: [模 S M] [标量塔 S R M] [P.是ValuedIn S]
   证明: by
   rw [show range (algebraMap S R) = LinearMap.range (Algebra.linearMap S R) by ext; simp]
   induction hx using Submodule.span_induction with
@@ -490,7 +490,7 @@ lemma root'_apply_apply_mem_of_mem_span
 
 中文:
 引理 root'_apply_apply_mem_of_mem_span
-  结论: [Module S N] [IsScalarTower S R N] [P.IsValuedIn S]
+  结论: [模 S N] [标量塔 S R N] [P.是ValuedIn S]
   证明: P.flip.coroot'_apply_apply_mem_of_mem_span S hx i
 -/
 lemma root'_apply_apply_mem_of_mem_span [Module S N] [IsScalarTower S R N] [P.IsValuedIn S]
@@ -508,7 +508,7 @@ abbreviation rootSpan
 
 中文:
 缩写 rootSpan
-  签名: [Module S M]
+  签名: [模 S M]
   定义体: span S (range P.root)
 
 Depends on / 依赖: P.root
@@ -525,7 +525,7 @@ abbreviation corootSpan
 
 中文:
 缩写 corootSpan
-  签名: [Module S N]
+  签名: [模 S N]
   定义体: span S (range P.coroot)
 
 Depends on / 依赖: P.coroot, coroot
@@ -541,8 +541,8 @@ instance [Module
   body: Finite.span_of_finite S finite_range _
 
 中文:
-实例 [Module
-  签名: S M] [Finite ι] :
+实例 [模
+  签名: S M] [有限 ι] :
   定义体: Finite.span_of_finite S finite_range _
 
 Depends on / 依赖: Finite, Finite.span_of_finite, finite_range, span_of_finite
@@ -560,8 +560,8 @@ instance [Module
   body: Finite.span_of_finite S finite_range _
 
 中文:
-实例 [Module
-  签名: S N] [Finite ι] :
+实例 [模
+  签名: S N] [有限 ι] :
   定义体: Finite.span_of_finite S finite_range _
 
 Depends on / 依赖: Finite, Finite.span_of_finite, finite_range, span_of_finite
@@ -580,7 +580,7 @@ abbreviation rootSpanMem
 
 中文:
 缩写 rootSpanMem
-  签名: [Module S M] (i : ι)
+  签名: [模 S M] (i : ι)
   定义体: ⟨P.root i, Submodule.subset_span (mem_range_self i)⟩
 
 Depends on / 依赖: P.root, Submodule, Submodule.subset_span, mem_range_self, subset_span
@@ -600,7 +600,7 @@ omit [Algebra S R] in
 
 中文:
 缩写 corootSpanMem
-  签名: [Module S N] (i : ι)
+  签名: [模 S N] (i : ι)
   定义体: ⟨P.coroot i, Submodule.subset_span (mem_range_self i)⟩
 
 omit [Algebra S R] in
@@ -624,7 +624,7 @@ omit [Algebra S R] in
 
 中文:
 引理 rootSpanMem_reflectionPerm_self
-  条件: [Module S M] (i : ι)
+  条件: [模 S M] (i : ι)
   证明: by
   ext; simp
 
@@ -646,7 +646,7 @@ lemma corootSpanMem_reflectionPerm_self
 
 中文:
 引理 corootSpanMem_reflectionPerm_self
-  条件: [Module S N] (i : ι)
+  条件: [模 S N] (i : ι)
   证明: by
   ext; simp
 -/
@@ -666,7 +666,7 @@ definition root'In
 
 中文:
 定义 root'In
-  签名: [Module S N] [IsScalarTower S R N] [FaithfulSMul S R] [P.IsValuedIn S] (i : ι)
+  签名: [模 S N] [标量塔 S R N] [忠实标量乘法 S R] [P.是ValuedIn S] (i : ι)
   定义体: LinearMap.restrictScalarsRange (P.corootSpan S).subtype (Algebra.linearMap S R)
     (FaithfulSMul.algebraMap_injective S R) (P.root' i)
     (fun m => P.root'_apply_apply_mem_of_mem_span S m.2 i)
@@ -692,7 +692,7 @@ lemma algebraMap_root'In_apply
 
 中文:
 引理 algebraMap_root'In_apply
-  结论: [Module S N] [IsScalarTower S R N] [FaithfulSMul S R]
+  结论: [模 S N] [标量塔 S R N] [忠实标量乘法 S R]
   证明: by
   rw [root'In]; rw [← Algebra.linearMap_apply]; rw [LinearMap.restrictScalarsRange_apply]; rw [Submodule.subtype_apply]
 
@@ -716,7 +716,7 @@ lemma root'In_corootSpanMem_eq_pairingIn
 
 中文:
 引理 root'In_corootSpanMem_eq_pairingIn
-  结论: [Module S N] [IsScalarTower S R N] [FaithfulSMul S R]
+  结论: [模 S N] [标量塔 S R N] [忠实标量乘法 S R]
   证明: rfl
 -/
 lemma root'In_corootSpanMem_eq_pairingIn [Module S N] [IsScalarTower S R N] [FaithfulSMul S R]
@@ -736,7 +736,7 @@ definition coroot'In
 
 中文:
 定义 coroot'In
-  签名: [Module S M] [IsScalarTower S R M] [FaithfulSMul S R] [P.IsValuedIn S] (i : ι)
+  签名: [模 S M] [标量塔 S R M] [忠实标量乘法 S R] [P.是ValuedIn S] (i : ι)
   定义体: P.flip.root'In S i
 
 @[simp]
@@ -758,7 +758,7 @@ lemma algebraMap_coroot'In_apply
 
 中文:
 引理 algebraMap_coroot'In_apply
-  结论: [Module S M] [IsScalarTower S R M] [FaithfulSMul S R]
+  结论: [模 S M] [标量塔 S R M] [忠实标量乘法 S R]
   证明: P.flip.algebraMap_root'In_apply S i x
 
 @[simp]
@@ -783,7 +783,7 @@ omit [Algebra S R] in
 
 中文:
 引理 coroot'In_rootSpanMem_eq_pairingIn
-  结论: [Module S M] [IsScalarTower S R M] [FaithfulSMul S R]
+  结论: [模 S M] [标量塔 S R M] [忠实标量乘法 S R]
   证明: rfl
 
 omit [Algebra S R] in
@@ -808,7 +808,7 @@ omit [Algebra S R] in
 
 中文:
 引理 rootSpan_ne_bot
-  条件: [Module S M] [Nonempty ι] [NeZero (2 : R)]
+  条件: [模 S M] [非空 ι] [NeZero (2 : R)]
   结论: P.rootSpan S != ⊥
   证明: by
   simpa [rootSpan] using P.exists_ne_zero
@@ -832,7 +832,7 @@ lemma corootSpan_ne_bot
 
 中文:
 引理 corootSpan_ne_bot
-  条件: [Module S N] [Nonempty ι] [NeZero (2 : R)]
+  条件: [模 S N] [非空 ι] [NeZero (2 : R)]
   结论: P.corootSpan S != ⊥
   证明: P.flip.rootSpan_ne_bot S
 
@@ -1058,7 +1058,7 @@ lemma span_root'_eq_top
 
 中文:
 引理 span_root'_eq_top
-  条件: [P.IsRootSystem]
+  条件: [P.是RootSystem]
   证明: by
   simp [← rootSpan_map_toPerfPair]
 -/
@@ -1076,7 +1076,7 @@ lemma span_coroot'_eq_top
 
 中文:
 引理 span_coroot'_eq_top
-  条件: [P.IsRootSystem]
+  条件: [P.是RootSystem]
   证明: span_root'_eq_top P.flip
 -/
 @[simp] lemma span_coroot'_eq_top [P.IsRootSystem] :
@@ -1095,7 +1095,7 @@ lemma pairingIn_eq_zero_iff
 
 中文:
 引理 pairingIn_eq_zero_iff
-  结论: {S : 类型} [CommRing S] [Algebra S R] [FaithfulSMul S R]
+  结论: {S : 类型} [交换环 S] [代数 S R] [忠实标量乘法 S R]
   证明: by
   simpa only [← FaithfulSMul.algebraMap_eq_zero_iff S R, algebraMap_pairingIn] using
     P.pairing_eq_zero_iff
@@ -1120,7 +1120,7 @@ lemma reflection_apply_root'
 
 中文:
 引理 reflection_apply_root'
-  结论: (S : 类型) [CommRing S] [Algebra S R]
+  结论: (S : 类型) [交换环 S] [代数 S R]
   证明: by
   rw [reflection_apply_root]; rw [← P.algebraMap_pairingIn S]; rw [algebraMap_smul]
 
@@ -1141,7 +1141,7 @@ definition coxeterWeightIn
 
 中文:
 定义 coxeterWeightIn
-  签名: (S : 类型) [CommRing S] [Algebra S R] [P.IsValuedIn S] (i j : ι)
+  签名: (S : 类型) [交换环 S] [代数 S R] [P.是ValuedIn S] (i j : ι)
   定义体: P.pairingIn S i j * P.pairingIn S j i
 
 Depends on / 依赖: P.pairingIn, pairingIn
@@ -1160,7 +1160,7 @@ lemma algebraMap_coxeterWeightIn
 
 中文:
 引理 algebraMap_coxeterWeightIn
-  结论: (S : 类型) [CommRing S] [Algebra S R] [P.IsValuedIn S]
+  结论: (S : 类型) [交换环 S] [代数 S R] [P.是ValuedIn S]
   证明: by
   simp [coxeterWeightIn, coxeterWeight]
 -/
@@ -1182,7 +1182,7 @@ lemma toLinearMap_apply_apply_mem_range_algebraMap
 
 中文:
 引理 toLinearMap_apply_apply_mem_range_algebraMap
-  结论: [P.IsValuedIn S]
+  结论: [P.是ValuedIn S]
   证明: LinearMap.BilinMap.apply_apply_mem_of_mem_span
     (LinearMap.range (Algebra.linearMap S R)) (range P.root) (range P.coroot)
     (LinearMap.restrictScalarsₗ S R _ _ _ ∘ₗ P.toLinearMap.restrictScalars S)
@@ -1222,7 +1222,7 @@ lemma finrank_rootSpanIn
 
 中文:
 引理 finrank_rootSpanIn
-  条件: [Q.IsValuedIn K]
+  条件: [Q.是ValuedIn K]
   证明: by
   rw [LinearMap.finrank_eq_of_isPerfPair Q.toLinearMap (Q.rootSpan K) (Q.corootSpan K)]
   · simp
@@ -1253,7 +1253,7 @@ lemma finrank_corootSpanIn
 
 中文:
 引理 finrank_corootSpanIn
-  条件: [Q.IsValuedIn K]
+  条件: [Q.是ValuedIn K]
   证明: finrank_rootSpanIn K Q.flip
 
 @[simp]
@@ -1281,7 +1281,7 @@ lemma finrank_rootSpanIn_int
 
 中文:
 引理 finrank_rootSpanIn_int
-  条件: [Finite ι] [CharZero L] [Q.IsCrystallographic]
+  条件: [有限 ι] [特征零 L] [Q.IsCrystallographic]
   证明: by
   let _i : Module Rat M := .compHom M (algebraMap Rat L)
   let _i : Module Rat N := .compHom N (algebraMap Rat L)
@@ -1310,7 +1310,7 @@ lemma finrank_corootSpanIn_int
 
 中文:
 引理 finrank_corootSpanIn_int
-  条件: [Finite ι] [CharZero L] [Q.IsCrystallographic]
+  条件: [有限 ι] [特征零 L] [Q.IsCrystallographic]
   证明: Q.flip.finrank_rootSpanIn_int
 
 Depends on / 依赖: Q.flip.finrank_rootSpanIn_int, finrank_rootSpanIn_int

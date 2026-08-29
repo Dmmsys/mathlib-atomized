@@ -53,7 +53,7 @@ abbreviation componentComplMk
 
 中文:
 缩写 componentComplMk
-  签名: (G : SimpleGraph V) {v : V} (vK : v ∉ K)
+  签名: (G : 简单图 V) {v : V} (vK : v ∉ K)
   定义体: connectedComponentMk (G.induce Kᶜ) ⟨v, vK⟩
 
 Depends on / 依赖: G.induce, connectedComponentMk, induce
@@ -143,7 +143,7 @@ instance ComponentCompl.setLike
 
 中文:
 实例 ComponentCompl.setLike
-  签名: : SetLike (G.ComponentCompl K) V where
+  签名: : 集合状 (G.ComponentCompl K) V where
   定义体: ComponentCompl.supp
   coe_injective _ _ := ComponentCompl.supp_inj.mp
 
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (G.ComponentCompl K)
+  签名: 偏序 (G.ComponentCompl K)
   定义体: .ofSetLike (G.ComponentCompl K) V
 
 @[simp]
@@ -205,7 +205,7 @@ theorem componentComplMk_mem
 
 中文:
 定理 componentComplMk_mem
-  条件: (G : SimpleGraph V) {v : V} (vK : v ∉ K)
+  条件: (G : 简单图 V) {v : V} (vK : v ∉ K)
   结论: v in G.componentComplMk vK
   证明: ⟨vK, rfl⟩
 -/
@@ -225,7 +225,7 @@ theorem componentComplMk_eq_of_adj
 
 中文:
 定理 componentComplMk_eq_of_adj
-  结论: (G : SimpleGraph V) {v w : V} (vK : v ∉ K) (wK : w ∉ K)
+  结论: (G : 简单图 V) {v w : V} (vK : v ∉ K) (wK : w ∉ K)
   证明: by
   rw [ConnectedComponent.eq]
   apply Adj.reachable
@@ -250,7 +250,7 @@ instance componentCompl_nonempty_of_infinite
 
 中文:
 实例 componentCompl_nonempty_of_infinite
-  签名: (G : SimpleGraph V) [Infinite V] (K : Finset V)
+  签名: (G : 简单图 V) [无限 V] (K : 有限集 V)
   定义体: let ⟨_, kK⟩ := K.finite_toSet.infinite_compl.nonempty
   ⟨componentComplMk _ kK⟩
 
@@ -278,7 +278,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {β : Sort*} (f : 对任意 ⦃v⦄ (_ : v ∉ K), β)
+  签名: {β : 类型层*} (f : 对任意 ⦃v⦄ (_ : v ∉ K), β)
   定义体: ConnectedComponent.lift (fun vv => f vv.prop) fun v w p => by
     induction p with
     | nil => rintro _; rfl
@@ -346,7 +346,7 @@ theorem coe_inj
 中文:
 定理 coe_inj
   条件: {C D : G.ComponentCompl K}
-  结论: (C : Set V) = (D : Set V) ↔ C = D
+  结论: (C : 集合 V) = (D : 集合 V) ↔ C = D
   证明: SetLike.coe_set_eq
 
 @[simp]
@@ -369,7 +369,7 @@ theorem nonempty
 中文:
 定理 nonempty
   条件: (C : G.ComponentCompl K)
-  结论: (C : Set V).Nonempty
+  结论: (C : 集合 V).非空
   证明: C.ind fun v vnK => ⟨v, vnK, rfl⟩
 -/
 protected theorem nonempty (C : G.ComponentCompl K) : (C : Set V).Nonempty :=
@@ -384,7 +384,7 @@ theorem exists_eq_mk
   proof: C.nonempty
 
 中文:
-定理 exists_eq_mk
+定理 存在_eq_mk
   条件: (C : G.ComponentCompl K)
   证明: C.nonempty
 -/
@@ -471,7 +471,7 @@ theorem mem_of_adj
 
 中文:
 定理 mem_of_adj
-  结论: 对任意 {C : G.ComponentCompl K} (c d : V), c in C -> d ∉ K -> G.Adj c d -> d in C
+  结论: 对任意 {C : G.ComponentCompl K} (c d : V), c in C -> d ∉ K -> G.伴随 c d -> d in C
   证明: fun {C} c d ⟨cnK, h⟩ dnK cd =>
   ⟨dnK, by
     rw [← h]; rw [ConnectedComponent.eq]
@@ -502,8 +502,8 @@ theorem exists_adj_boundary_pair
   r
 
 中文:
-定理 exists_adj_boundary_pair
-  条件: (Gc : G.Preconnected) (hK : K.Nonempty)
+定理 存在_adj_boundary_pair
+  条件: (Gc : G.预连通) (hK : K.非空)
   证明: by
   refine ComponentCompl.ind fun v vnK => ?_
   let C : G.ComponentCompl K := G.componentComplMk vnK
@@ -564,7 +564,7 @@ theorem subset_hom
 中文:
 定理 subset_hom
   条件: (C : G.ComponentCompl L) (h : K subseteq L)
-  结论: (C : Set V) subseteq (C.hom h : Set V)
+  结论: (C : 集合 V) subseteq (C.hom h : 集合 V)
   证明: by
   rintro c ⟨cL, rfl⟩
   exact ⟨fun h' => cL (h h'), rfl⟩
@@ -581,7 +581,7 @@ theorem _root_.SimpleGraph.componentComplMk_mem_hom
   proof: subset_hom (G.componentComplMk vK) h (G.componentComplMk_mem vK)
 
 中文:
-定理 _root_.SimpleGraph.componentComplMk_mem_hom
+定理 _root_.简单图.componentComplMk_mem_hom
   证明: subset_hom (G.componentComplMk vK) h (G.componentComplMk_mem vK)
 
 Depends on / 依赖: G.componentComplMk, G.componentComplMk_mem, componentComplMk, componentComplMk_mem, subset_hom
@@ -735,7 +735,7 @@ theorem hom_infinite
 
 中文:
 定理 hom_infinite
-  条件: (C : G.ComponentCompl L) (h : K subseteq L) (Cinf : (C : Set V).Infinite)
+  条件: (C : G.ComponentCompl L) (h : K subseteq L) (Cinf : (C : 集合 V).无限)
   证明: Set.Infinite.mono (C.subset_hom h) Cinf
 
 Depends on / 依赖: C.subset_hom, Infinite, Set.Infinite.mono, subset_hom
@@ -762,7 +762,7 @@ theorem infinite_iff_in_all_ranges
 
 中文:
 定理 infinite_iff_in_all_ranges
-  条件: {K : Finset V} (C : G.ComponentCompl K)
+  条件: {K : 有限集 V} (C : G.ComponentCompl K)
   证明: by
   classical
     constructor
@@ -809,7 +809,7 @@ instance componentCompl_finite
 
 中文:
 实例 componentCompl_finite
-  签名: [LocallyFinite G] [Gpc : Fact G.Preconnected] (K : Finset V)
+  签名: [局部有限 G] [Gpc : Fact G.预连通] (K : 有限集 V)
   定义体: by
   classical
   rcases K.eq_empty_or_nonempty with rfl | h
@@ -876,7 +876,7 @@ definition componentComplFunctor
 
 中文:
 定义 componentComplFunctor
-  签名: : (Finset V)ᵒᵖ ⥤ 类型u where
+  签名: : (有限集 V)ᵒᵖ ⥤ 类型u where
   定义体: G.ComponentCompl K.unop
   map f := ↾(ComponentCompl.hom (le_of_op_hom f))
   map_id _ := by
@@ -924,7 +924,7 @@ theorem end_hom_mk_of_mk
 
 中文:
 定理 end_hom_mk_of_mk
-  结论: {s} (sec : s in G.end) {K L : (Finset V)ᵒᵖ} (h : L ⟶ K) {v : V}
+  结论: {s} (sec : s in G.end) {K L : (有限集 V)ᵒᵖ} (h : L ⟶ K) {v : V}
   证明: by
   rw [← sec h]; rw [hs]
   apply ComponentCompl.hom_mk _ (le_of_op_hom h)
@@ -952,7 +952,7 @@ theorem infinite_iff_in_eventualRange
 
 中文:
 定理 infinite_iff_in_eventualRange
-  条件: {K : (Finset V)ᵒᵖ} (C : G.componentComplFunctor.obj K)
+  条件: {K : (有限集 V)ᵒᵖ} (C : G.componentComplFunctor.obj K)
   证明: by
   simp only [C.infinite_iff_in_all_ranges, CategoryTheory.Functor.eventualRange, Set.mem_iInter,
     Set.mem_range, componentComplFunctor_map]

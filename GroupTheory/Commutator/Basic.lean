@@ -536,7 +536,7 @@ instance commutator
 
 中文:
 实例 commutator
-  签名: : Bracket (Subgroup G) (Subgroup G)
+  签名: : Bracket (子群 G) (子群 G)
   定义体: ⟨fun H₁ H₂ => closure { g | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = g }⟩
 
 @[to_additive]
@@ -557,7 +557,7 @@ theorem commutator_def
 
 中文:
 定理 commutator_def
-  条件: (H₁ H₂ : Subgroup G)
+  条件: (H₁ H₂ : 子群 G)
   证明: rfl
 -/
 theorem commutator_def (H₁ H₂ : Subgroup G) :
@@ -778,7 +778,7 @@ theorem commutator_self_eq_bot_iff
 
 中文:
 定理 commutator_self_eq_bot_iff
-  结论: ⁅H, H⁆ = ⊥ ↔ IsMulCommutative H
+  结论: ⁅H, H⁆ = ⊥ ↔ 是MulCommutative H
   证明: by
   rw [commutator_eq_bot_iff_le_centralizer]; rw [le_centralizer_iff_isMulCommutative]
 
@@ -803,7 +803,7 @@ theorem commutator_top_right_eq_bot_iff_le_center
 
 中文:
 定理 commutator_top_right_eq_bot_iff_le_center
-  结论: ⁅H, (⊤ : Subgroup G)⁆ = ⊥ ↔ H <= center G
+  结论: ⁅H, (⊤ : 子群 G)⁆ = ⊥ ↔ H <= center G
   证明: by
   rw [commutator_eq_bot_iff_le_centralizer]; rw [coe_top]; rw [centralizer_univ]
 
@@ -826,7 +826,7 @@ theorem commutator_top_left_eq_bot_iff_le_center
 
 中文:
 定理 commutator_top_left_eq_bot_iff_le_center
-  结论: ⁅(⊤ : Subgroup G), H⁆ = ⊥ ↔ H <= center G
+  结论: ⁅(⊤ : 子群 G), H⁆ = ⊥ ↔ H <= center G
   证明: by
   rw [commutator_comm]; rw [commutator_top_right_eq_bot_iff_le_center]
 
@@ -897,7 +897,7 @@ instance commutator_normal
 
 中文:
 实例 commutator_normal
-  签名: [h₁ : H₁.Normal] [h₂ : H₂.Normal]
+  签名: [h₁ : H₁.正规] [h₂ : H₂.正规]
   定义体: by
   let base : Set G := { x | exists g₁ in H₁, exists g₂ in H₂, ⁅g₁, g₂⁆ = x }
   change (closure base).Normal
@@ -933,7 +933,7 @@ theorem commutator_def'
 
 中文:
 定理 commutator_def'
-  条件: [H₁.Normal] [H₂.Normal]
+  条件: [H₁.正规] [H₂.正规]
   证明: le_antisymm closure_le_normalClosure (normalClosure_le_normal subset_closure)
 
 @[to_additive]
@@ -958,7 +958,7 @@ theorem commutator_le_right
 
 中文:
 定理 commutator_le_right
-  条件: [h : H₂.Normal]
+  条件: [h : H₂.正规]
   结论: ⁅H₁, H₂⁆ <= H₂
   证明: commutator_le.mpr fun g₁ _h₁ g₂ h₂ => H₂.mul_mem (h.conj_mem g₂ h₂ g₁) (H₂.inv_mem h₂)
 
@@ -983,7 +983,7 @@ theorem commutator_le_left
 
 中文:
 定理 commutator_le_left
-  条件: [H₁.Normal]
+  条件: [H₁.正规]
   结论: ⁅H₁, H₂⁆ <= H₁
   证明: commutator_comm H₂ H₁ ▸ commutator_le_right H₂ H₁
 
@@ -1009,7 +1009,7 @@ exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp commutator_le.mp hle g trivial
 
 中文:
 定理 commutator_top_left_le_iff
-  结论: ⁅(⊤ : Subgroup G), H⁆ <= H ↔ H.Normal
+  结论: ⁅(⊤ : 子群 G), H⁆ <= H ↔ H.正规
   证明: by
   refine ⟨fun hle => ⟨fun h hh g => ?_⟩, fun h => commutator_le_right ⊤ H⟩
 exact (H.mul_mem_cancel_right <| H.inv_mem hh).mp commutator_le.mp hle g trivial h hh
@@ -1035,7 +1035,7 @@ theorem commutator_top_right_le_iff
 
 中文:
 定理 commutator_top_right_le_iff
-  结论: ⁅H, ⊤⁆ <= H ↔ H.Normal
+  结论: ⁅H, ⊤⁆ <= H ↔ H.正规
   证明: commutator_comm H ⊤ ▸ commutator_top_left_le_iff
 
 @[to_additive]
@@ -1112,7 +1112,7 @@ theorem commutator_bot_left
 
 中文:
 定理 commutator_bot_left
-  结论: ⁅(⊥ : Subgroup G), H₁⁆ = ⊥
+  结论: ⁅(⊥ : 子群 G), H₁⁆ = ⊥
   证明: le_bot_iff.mp (commutator_le_left ⊥ H₁)
 
 @[to_additive (attr := simp)]
@@ -1135,7 +1135,7 @@ theorem commutator_bot_right
 
 中文:
 定理 commutator_bot_right
-  结论: ⁅H₁, ⊥⁆ = (⊥ : Subgroup G)
+  结论: ⁅H₁, ⊥⁆ = (⊥ : 子群 G)
   证明: le_bot_iff.mp (commutator_le_right H₁ ⊥)
 
 @[to_additive]
@@ -1157,7 +1157,7 @@ theorem commutator_le_inf
 
 中文:
 定理 commutator_le_inf
-  条件: [Normal H₁] [Normal H₂]
+  条件: [正规 H₁] [正规 H₂]
   结论: ⁅H₁, H₂⁆ <= H₁ ⊓ H₂
   证明: le_inf (commutator_le_left H₁ H₂) (commutator_le_right H₁ H₂)
 
@@ -1178,7 +1178,7 @@ theorem commutator_eq_bot_of_disjoint
 
 中文:
 定理 commutator_eq_bot_of_disjoint
-  条件: [H₁.Normal] [H₂.Normal] (h : Disjoint H₁ H₂)
+  条件: [H₁.正规] [H₂.正规] (h : Disjoint H₁ H₂)
   证明: by
   grw [eq_bot_iff, commutator_le_inf, h.eq_bot.le]
 
@@ -1231,7 +1231,7 @@ theorem normalizer_commutator_ge_left
 
 中文:
 定理 normalizer_commutator_ge_left
-  结论: H₁ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
+  结论: H₁ <= normalizer (⁅H₁, H₂⁆ : 子群 G)
   证明: by
   apply le_normalizer_closure_iff.mpr
   rintro g hg _ ⟨g₁, hg₁, g₂, hg₂, rfl⟩
@@ -1265,7 +1265,7 @@ theorem normalizer_commutator_ge_right
 
 中文:
 定理 normalizer_commutator_ge_right
-  结论: H₂ <= normalizer (⁅H₁, H₂⁆ : Subgroup G)
+  结论: H₂ <= normalizer (⁅H₁, H₂⁆ : 子群 G)
   证明: by
   rw [commutator_comm]
   apply normalizer_commutator_ge_left
@@ -1292,7 +1292,7 @@ instance normal_subgroupOf_commutator_sup
 
 中文:
 实例 normal_subgroupOf_commutator_sup
-  签名: : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).Normal
+  签名: : (⁅H₁, H₂⁆.subgroupOf <| H₁ ⊔ H₂).正规
   定义体: normal_subgroupOf_of_le_normalizer sup_le
     (normalizer_commutator_ge_left H₁ H₂) (normalizer_commutator_ge_right H₁ H₂)
 
@@ -1358,7 +1358,7 @@ theorem commutator_le_map_commutator
 
 中文:
 定理 commutator_le_map_commutator
-  结论: {f : G ->* G'} {K₁ K₂ : Subgroup G'} (h₁ : K₁ <= H₁.map f)
+  结论: {f : G ->* G'} {K₁ K₂ : 子群 G'} (h₁ : K₁ <= H₁.map f)
   证明: (commutator_mono h₁ h₂).trans (ge_of_eq (map_commutator H₁ H₂ f))
 
 Depends on / 依赖: commutator_mono, ge_of_eq, map_commutator
@@ -1384,7 +1384,7 @@ instance commutator_characteristic
 
 中文:
 实例 commutator_characteristic
-  签名: [h₁ : Characteristic H₁] [h₂ : Characteristic H₂]
+  签名: [h₁ : 特征 H₁] [h₂ : 特征 H₂]
   定义体: characteristic_iff_le_map.mpr fun ϕ =>
     commutator_le_map_commutator (characteristic_iff_le_map.mp h₁ ϕ)
       (characteristic_iff_le_map.mp h₂ ϕ)
@@ -1419,7 +1419,7 @@ theorem commutator_prod_prod
 
 中文:
 定理 commutator_prod_prod
-  条件: (K₁ K₂ : Subgroup G')
+  条件: (K₁ K₂ : 子群 G')
   证明: by
   apply le_antisymm
   · rw [commutator_le]
@@ -1462,7 +1462,7 @@ theorem commutator_pi_pi_le
 
 中文:
 定理 commutator_pi_pi_le
-  结论: {η : 类型} {Gs : η -> 类型} [对任意 i, Group (Gs i)]
+  结论: {η : 类型} {Gs : η -> 类型} [对任意 i, 群 (Gs i)]
   证明: commutator_le.mpr fun _p hp _q hq i hi => commutator_mem_commutator (hp i hi) (hq i hi)
 
 Depends on / 依赖: commutator_le, commutator_le.mpr, commutator_mem_commutator
@@ -1492,7 +1492,7 @@ definition commutatorSet
 
 中文:
 定义 commutatorSet
-  签名: : Set G
+  签名: : 集合 G
   定义体: { g | exists g₁ g₂ : G, ⁅g₁, g₂⁆ = g }
 
 @[to_additive]
@@ -1555,7 +1555,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (commutatorSet G)
+  签名: 非空 (commutatorSet G)
   定义体: ⟨⟨1, one_mem_commutatorSet G⟩⟩
 -/
 instance : Nonempty (commutatorSet G) :=
@@ -1620,7 +1620,7 @@ deriving Subgroup.Normal, Subgroup.Characteristic
 
 中文:
 定义 commutator
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: ⁅(⊤ : Subgroup G), ⊤⁆
 deriving Subgroup.Normal, Subgroup.Characteristic
 
@@ -1645,7 +1645,7 @@ lemma commutator_def
 
 中文:
 引理 commutator_def
-  结论: commutator G = ⁅(⊤ : Subgroup G), ⊤⁆
+  结论: commutator G = ⁅(⊤ : 子群 G), ⊤⁆
   证明: rfl
 
 @[to_additive]
@@ -1667,7 +1667,7 @@ lemma commutator_eq_closure
 
 中文:
 引理 commutator_eq_closure
-  结论: commutator G = Subgroup.closure (commutatorSet G)
+  结论: commutator G = 子群.closure (commutatorSet G)
   证明: by
   simp [commutator, Subgroup.commutator_def, commutatorSet]
 
@@ -1690,7 +1690,7 @@ lemma commutator_eq_normalClosure
 
 中文:
 引理 commutator_eq_normalClosure
-  结论: commutator G = Subgroup.normalClosure (commutatorSet G)
+  结论: commutator G = 子群.normalClosure (commutatorSet G)
   证明: by
   simp [commutator, Subgroup.commutator_def', commutatorSet]
 
@@ -1711,8 +1711,8 @@ lemma Subgroup.map_subtype_commutator
   rw [_root_.commutator_def]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [H.range_subtype]
 
 中文:
-引理 Subgroup.map_subtype_commutator
-  条件: (H : Subgroup G)
+引理 子群.map_subtype_commutator
+  条件: (H : 子群 G)
   证明: by
   rw [_root_.commutator_def]; rw [map_commutator]; rw [← MonoidHom.range_eq_map]; rw [H.range_subtype]
 
@@ -1736,8 +1736,8 @@ lemma Subgroup.commutator_le_self
 @[to_additive]
 
 中文:
-引理 Subgroup.commutator_le_self
-  条件: (H : Subgroup G)
+引理 子群.commutator_le_self
+  条件: (H : 子群 G)
   结论: ⁅H, H⁆ <= H
   证明: H.map_subtype_commutator.symm.trans_le (map_subtype_le _)
 
@@ -1760,8 +1760,8 @@ theorem Subgroup.Normal.of_commutator_le
 @[to_additive]
 
 中文:
-定理 Subgroup.Normal.of_commutator_le
-  条件: {H : Subgroup G} (h : _root_.commutator G <= H)
+定理 子群.正规.of_commutator_le
+  条件: {H : 子群 G} (h : _root_.commutator G <= H)
   证明: commutator_top_left_le_iff.mp .trans h commutator_mono le_top le_top
 
 @[to_additive]
@@ -1786,7 +1786,7 @@ theorem commutator_eq_bot_iff_center_eq_top
 
 中文:
 定理 commutator_eq_bot_iff_center_eq_top
-  结论: commutator G = ⊥ ↔ Subgroup.center G = ⊤
+  结论: commutator G = ⊥ ↔ 子群.center G = ⊤
   证明: by
   simp [commutator, Subgroup.commutator_eq_bot_iff_le_centralizer]
 
@@ -1811,7 +1811,7 @@ theorem commutator_eq_bot_iff
 
 中文:
 定理 commutator_eq_bot_iff
-  结论: commutator G = ⊥ ↔ IsMulCommutative G
+  结论: commutator G = ⊥ ↔ 是MulCommutative G
   证明: by
   rw [commutator_eq_bot_iff_center_eq_top]; rw [center_eq_top_iff]
 
@@ -1836,7 +1836,7 @@ theorem commutator_eq_bot
 
 中文:
 定理 commutator_eq_bot
-  条件: [hG : IsMulCommutative G]
+  条件: [hG : 是MulCommutative G]
   结论: commutator G = ⊥
   证明: (commutator_eq_bot_iff G).mpr hG
 
@@ -1933,7 +1933,7 @@ lemma map_commutator_eq
 
 中文:
 引理 map_commutator_eq
-  条件: {H : 类型} [Group H] (f : G ->* H)
+  条件: {H : 类型} [群 H] (f : G ->* H)
   证明: by
   rw [_root_.commutator_def]; rw [Subgroup.map_commutator]
   apply congr_arg₂ <;>
@@ -1967,7 +1967,7 @@ definition commutatorRepresentatives
 
 中文:
 定义 commutatorRepresentatives
-  签名: : Set (G × G)
+  签名: : 集合 (G × G)
   定义体: Set.range fun g : commutatorSet G => (g.2.choose, g.2.choose_spec.choose)
 
 Depends on / 依赖: Set.range, choose_spec, choose_spec.choose, commutatorSet
@@ -1992,7 +1992,7 @@ definition closureCommutatorRepresentatives
 
 中文:
 定义 closureCommutatorRepresentatives
-  签名: : Subgroup G
+  签名: : 子群 G
   定义体: closure (Prod.fst '' commutatorRepresentatives G union Prod.snd '' commutatorRepresentatives G)
 
 @[to_additive]
@@ -2061,8 +2061,8 @@ theorem Subgroup.Normal.quotient_commutative_iff_commutator_le
     simp only [QuotientGroup.mk_mul, QuotientGroup.mk
 
 中文:
-定理 Subgroup.Normal.quotient_commutative_iff_commutator_le
-  条件: {N : Subgroup G} [N.Normal]
+定理 子群.正规.quotient_commutative_iff_commutator_le
+  条件: {N : 子群 G} [N.正规]
   证明: by
   refine ⟨fun hcomm => ?_, fun hGN => ⟨⟨fun x' y' => ?_⟩⟩⟩
   · rw [commutator_eq_normalClosure, ← Subgroup.normalClosure_subset_iff]
@@ -2106,8 +2106,8 @@ theorem Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top
   apply Function.Surjective.mul_
 
 中文:
-定理 Subgroup.Normal.commutator_le_of_self_sup_commutative_eq_top
-  结论: {N : Subgroup G} [N.Normal]
+定理 子群.正规.commutator_le_of_self_sup_commutative_eq_top
+  结论: {N : 子群 G} [N.正规]
   证明: by
   -- It is enough to prove that Q = G ⧸ N is commutative
   apply quotient_commutative_iff_commutator_le.mp

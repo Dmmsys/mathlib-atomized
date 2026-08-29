@@ -39,7 +39,7 @@ theorem withDensityᵥ_rnDeriv_eq
 
 中文:
 定理 withDensityᵥ_rnDeriv_eq
-  结论: (s : SignedMeasure α) (μ : Measure α) [SigmaFinite μ]
+  结论: (s : 符号测度 α) (μ : 测度 α) [σ有限 μ]
   证明: by
   rw [absolutelyContinuous_ennreal_iff]; rw [(_ : μ.toENNRealVectorMeasure.ennrealToMeasure = μ)]; rw [totalVariation_absolutelyContinuous_iff] at h
   · ext1 i hi
@@ -71,7 +71,7 @@ theorem absolutelyContinuous_iff_withDensityᵥ_rnDeriv_eq
 
 中文:
 定理 absolutelyContinuous_iff_withDensityᵥ_rnDeriv_eq
-  结论: (s : SignedMeasure α) (μ : Measure α)
+  结论: (s : 符号测度 α) (μ : 测度 α)
   证明: ⟨withDensityᵥ_rnDeriv_eq s μ, fun h => h ▸ withDensityᵥ_absolutelyContinuous _ _⟩
 -/
 theorem absolutelyContinuous_iff_withDensityᵥ_rnDeriv_eq (s : SignedMeasure α) (μ : Measure α)
@@ -92,7 +92,7 @@ theorem withDensityᵥ_rnDeriv_smul
 
 中文:
 定理 withDensityᵥ_rnDeriv_smul
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   rw [withDensityᵥ_smul_eq_withDensityᵥ_withDensity' (measurable_rnDeriv μ ν).aemeasurable
     (rnDeriv_lt_top μ ν) ((integrable_rnDeriv_smul_iff hμν).mpr hf)]; rw [withDensity_rnDeriv_eq μ ν hμν]

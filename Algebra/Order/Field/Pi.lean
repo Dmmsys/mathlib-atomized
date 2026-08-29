@@ -38,8 +38,8 @@ theorem Pi.exists_forall_pos_add_lt
   obtain rfl : x +
 
 中文:
-定理 Pi.exists_forall_pos_add_lt
-  结论: [ExistsAddOfLE α] [Finite ι] {x y : ι -> α}
+定理 依赖函数类型.存在_对任意_pos_add_lt
+  结论: [ExistsAddOfLE α] [有限 ι] {x y : ι -> α}
   证明: by
   cases nonempty_fintype ι
   cases isEmpty_or_nonempty ι

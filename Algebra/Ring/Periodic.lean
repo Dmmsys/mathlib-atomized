@@ -51,8 +51,8 @@ definition Periodic
   body: forall x : α, f (x + c) = f x
 
 中文:
-定义 Periodic
-  签名: [Add α] (f : α -> β) (c : α)
+定义 周期
+  签名: [加法 α] (f : α -> β) (c : α)
   定义体: forall x : α, f (x + c) = f x
 
 Depends on / 依赖: Nonempty, Subsingleton
@@ -70,8 +70,8 @@ theorem Periodic.funext
   proof: funext h
 
 中文:
-定理 Periodic.funext
-  条件: [Add α] (h : Periodic f c)
+定理 周期.funext
+  条件: [加法 α] (h : 周期 f c)
   结论: (fun x => f (x + c)) = f
   证明: funext h
 -/
@@ -89,9 +89,9 @@ theorem Periodic.comp
   simp_all
 
 中文:
-定理 Periodic.comp
-  条件: [Add α] (h : Periodic f c) (g : β -> γ)
-  结论: Periodic (g ∘ f) c
+定理 周期.comp
+  条件: [加法 α] (h : 周期 f c) (g : β -> γ)
+  结论: 周期 (g ∘ f) c
   证明: by
   simp_all
 -/
@@ -110,8 +110,8 @@ theorem Periodic.comp_addHom
 @[to_additive]
 
 中文:
-定理 Periodic.comp_addHom
-  结论: [Add α] [Add γ] (h : Periodic f c) (g : AddHom γ α) (g_inv : α -> γ)
+定理 周期.comp_addHom
+  结论: [加法 α] [加法 γ] (h : 周期 f c) (g : 加法半群态射 γ α) (g_inv : α -> γ)
   证明: fun x => by
   simp only [hg c, h (g x), map_add, comp_apply]
 
@@ -135,8 +135,8 @@ theorem Periodic.mul
 @[to_additive]
 
 中文:
-定理 Periodic.mul
-  条件: [Add α] [Mul β] (hf : Periodic f c) (hg : Periodic g c)
+定理 周期.mul
+  条件: [加法 α] [乘法 β] (hf : 周期 f c) (hg : 周期 g c)
   证明: by simp_all
 
 @[to_additive]
@@ -156,8 +156,8 @@ theorem Periodic.div
 @[to_additive]
 
 中文:
-定理 Periodic.div
-  条件: [Add α] [Div β] (hf : Periodic f c) (hg : Periodic g c)
+定理 周期.div
+  条件: [加法 α] [除法 β] (hf : 周期 f c) (hg : 周期 g c)
   证明: by simp_all
 
 @[to_additive]
@@ -182,8 +182,8 @@ theorem _root_.List.periodic_prod
 @[to_additive]
 
 中文:
-定理 _root_.List.periodic_prod
-  结论: [Add α] [MulOneClass β] (l : List (α -> β))
+定理 _root_.列表.periodic_prod
+  结论: [加法 α] [MulOne类 β] (l : 列表 (α -> β))
   证明: by
   induction l with
   | nil => simp
@@ -216,7 +216,7 @@ theorem _root_.Multiset.periodic_prod
 
 中文:
 定理 _root_.Multiset.periodic_prod
-  结论: [Add α] [CommMonoid β] (s : Multiset (α -> β))
+  结论: [加法 α] [交换幺半群 β] (s : Multiset (α -> β))
   证明: (s.prod_toList ▸ s.toList.periodic_prod) fun f hf => hs f Multiset.mem_toList.mp hf
 
 @[to_additive]
@@ -239,8 +239,8 @@ theorem _root_.Finset.periodic_prod
 @[to_additive]
 
 中文:
-定理 _root_.Finset.periodic_prod
-  结论: [Add α] [CommMonoid β] {ι : 类型} {f : ι -> α -> β}
+定理 _root_.有限集.periodic_prod
+  结论: [加法 α] [交换幺半群 β] {ι : 类型} {f : ι -> α -> β}
   证明: s.prod_map_toList f ▸ (s.toList.map f).periodic_prod (by simpa [-Periodic])
 
 @[to_additive]
@@ -261,8 +261,8 @@ theorem Periodic.smul
   proof: by simp_all
 
 中文:
-定理 Periodic.smul
-  条件: [Add α] [SMul γ β] (h : Periodic f c) (a : γ)
+定理 周期.smul
+  条件: [加法 α] [标量乘法 γ β] (h : 周期 f c) (a : γ)
   证明: by simp_all
 -/
 protected theorem Periodic.smul [Add α] [SMul γ β] (h : Periodic f c) (a : γ) :
@@ -278,8 +278,8 @@ theorem Periodic.const_smul
   simpa only [smul_add, smul_inv_smul] using h (a • x)
 
 中文:
-定理 Periodic.const_smul
-  结论: [AddMonoid α] [Group γ] [DistribMulAction γ α]
+定理 周期.const_smul
+  结论: [加法幺半群 α] [群 γ] [分配乘法作用 γ α]
   证明: fun x => by
   simpa only [smul_add, smul_inv_smul] using h (a • x)
 -/
@@ -297,8 +297,8 @@ theorem Periodic.const_inv_smul
   simpa only [inv_inv] using h.const_smul a⁻¹
 
 中文:
-定理 Periodic.const_inv_smul
-  结论: [AddMonoid α] [Group γ] [DistribMulAction γ α] (h : Periodic f c)
+定理 周期.const_inv_smul
+  结论: [加法幺半群 α] [群 γ] [分配乘法作用 γ α] (h : 周期 f c)
   证明: by
   simpa only [inv_inv] using h.const_smul a⁻¹
 
@@ -317,8 +317,8 @@ theorem Periodic.add_period
   proof: by simp_all [← add_assoc]
 
 中文:
-定理 Periodic.add_period
-  条件: [AddSemigroup α] (h1 : Periodic f c₁) (h2 : Periodic f c₂)
+定理 周期.add_period
+  条件: [加法半群 α] (h1 : 周期 f c₁) (h2 : 周期 f c₂)
   证明: by simp_all [← add_assoc]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, add_assoc, pullback_fst
@@ -337,8 +337,8 @@ theorem Periodic.sub_eq
   simpa only [sub_add_cancel] using (h (x - c)).symm
 
 中文:
-定理 Periodic.sub_eq
-  条件: [AddGroup α] (h : Periodic f c) (x : α)
+定理 周期.sub_eq
+  条件: [加法群 α] (h : 周期 f c) (x : α)
   结论: f (x - c) = f x
   证明: by
   simpa only [sub_add_cancel] using (h (x - c)).symm
@@ -359,8 +359,8 @@ theorem Periodic.sub_eq'
   simpa only [sub_eq_neg_add] using h (-x)
 
 中文:
-定理 Periodic.sub_eq'
-  条件: [SubtractionCommMonoid α] (h : Periodic f c)
+定理 周期.sub_eq'
+  条件: [SubtractionComm幺半群 α] (h : 周期 f c)
   结论: f (c - x) = f (-x)
   证明: by
   simpa only [sub_eq_neg_add] using h (-x)
@@ -381,9 +381,9 @@ theorem Periodic.neg
   simpa only [sub_eq_add_neg, Periodic] using h.sub_eq
 
 中文:
-定理 Periodic.neg
-  条件: [AddGroup α] (h : Periodic f c)
-  结论: Periodic f (-c)
+定理 周期.neg
+  条件: [加法群 α] (h : 周期 f c)
+  结论: 周期 f (-c)
   证明: by
   simpa only [sub_eq_add_neg, Periodic] using h.sub_eq
 -/
@@ -400,8 +400,8 @@ theorem Periodic.sub_period
   rw [sub_eq_add_neg]; rw [← add_assoc]; rw [h2.neg]; rw [h1]
 
 中文:
-定理 Periodic.sub_period
-  条件: [AddGroup α] (h1 : Periodic f c₁) (h2 : Periodic f c₂)
+定理 周期.sub_period
+  条件: [加法群 α] (h1 : 周期 f c₁) (h2 : 周期 f c₂)
   证明: fun x => by
   rw [sub_eq_add_neg]; rw [← add_assoc]; rw [h2.neg]; rw [h1]
 
@@ -420,8 +420,8 @@ theorem Periodic.const_add
   proof: fun x => by simpa [add_assoc] using h (a + x)
 
 中文:
-定理 Periodic.const_add
-  条件: [AddSemigroup α] (h : Periodic f c) (a : α)
+定理 周期.const_add
+  条件: [加法半群 α] (h : 周期 f c) (a : α)
   证明: fun x => by simpa [add_assoc] using h (a + x)
 
 Depends on / 依赖: add_assoc
@@ -439,8 +439,8 @@ theorem Periodic.add_const
   simpa only [add_right_comm] using h (x + a)
 
 中文:
-定理 Periodic.add_const
-  条件: [AddCommSemigroup α] (h : Periodic f c) (a : α)
+定理 周期.add_const
+  条件: [加法交换半群 α] (h : 周期 f c) (a : α)
   证明: fun x => by
   simpa only [add_right_comm] using h (x + a)
 
@@ -460,8 +460,8 @@ theorem Periodic.const_sub
   simp only [← sub_sub, h.sub_eq]
 
 中文:
-定理 Periodic.const_sub
-  条件: [AddCommGroup α] (h : Periodic f c) (a : α)
+定理 周期.const_sub
+  条件: [加法交换群 α] (h : 周期 f c) (a : α)
   证明: fun x => by
   simp only [← sub_sub, h.sub_eq]
 
@@ -481,8 +481,8 @@ theorem Periodic.sub_const
   simpa only [sub_eq_add_neg] using h.add_const (-a)
 
 中文:
-定理 Periodic.sub_const
-  条件: [SubtractionCommMonoid α] (h : Periodic f c) (a : α)
+定理 周期.sub_const
+  条件: [SubtractionComm幺半群 α] (h : 周期 f c) (a : α)
   证明: by
   simpa only [sub_eq_add_neg] using h.add_const (-a)
 
@@ -503,9 +503,9 @@ theorem Periodic.nsmul
   induction n <;> simp_all [add_nsmul, ← add_assoc]
 
 中文:
-定理 Periodic.nsmul
-  条件: [AddMonoid α] (h : Periodic f c) (n : 自然数)
-  结论: Periodic f (n • c)
+定理 周期.nsmul
+  条件: [加法幺半群 α] (h : 周期 f c) (n : 自然数)
+  结论: 周期 f (n • c)
   证明: by
   induction n <;> simp_all [add_nsmul, ← add_assoc]
 
@@ -525,9 +525,9 @@ theorem Periodic.nat_mul
   simpa only [nsmul_eq_mul] using h.nsmul n
 
 中文:
-定理 Periodic.nat_mul
-  条件: [NonAssocSemiring α] (h : Periodic f c) (n : 自然数)
-  结论: Periodic f (n * c)
+定理 周期.nat_mul
+  条件: [非结合半环 α] (h : 周期 f c) (n : 自然数)
+  结论: 周期 f (n * c)
   证明: by
   simpa only [nsmul_eq_mul] using h.nsmul n
 
@@ -546,9 +546,9 @@ theorem Periodic.neg_nsmul
   proof: (h.nsmul n).neg
 
 中文:
-定理 Periodic.neg_nsmul
-  条件: [AddGroup α] (h : Periodic f c) (n : 自然数)
-  结论: Periodic f (-(n • c))
+定理 周期.neg_nsmul
+  条件: [加法群 α] (h : 周期 f c) (n : 自然数)
+  结论: 周期 f (-(n • c))
   证明: (h.nsmul n).neg
 
 Depends on / 依赖: Category, Category.assoc, h.nsmul, lift_fst_assoc, pullback, pullback.lift_fst_assoc, pullbackRightPullbackFstIso_hom_fst_assoc, pullbackRightPullbackFstIso_inv_snd_fst_assoc, pullbackSymmetry_hom_comp_fst_assoc, t_fst_snd
@@ -566,9 +566,9 @@ theorem Periodic.neg_nat_mul
   proof: (h.nat_mul n).neg
 
 中文:
-定理 Periodic.neg_nat_mul
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 自然数)
-  结论: Periodic f (-(n * c))
+定理 周期.neg_nat_mul
+  条件: [非结合环 α] (h : 周期 f c) (n : 自然数)
+  结论: 周期 f (-(n * c))
   证明: (h.nat_mul n).neg
 
 Depends on / 依赖: Category, Category.assoc, Category.comp_id, comp_id, h.nat_mul, lift_snd, nat_mul, pullback, pullback.lift_snd, pullbackRightPullbackFstIso_hom_snd, pullbackRightPullbackFstIso_inv_snd_snd, pullbackSymmetry_hom_comp_fst_assoc
@@ -587,8 +587,8 @@ theorem Periodic.sub_nsmul_eq
   simpa only [sub_eq_add_neg] using h.neg_nsmul n x
 
 中文:
-定理 Periodic.sub_nsmul_eq
-  条件: [AddGroup α] (h : Periodic f c) (n : 自然数)
+定理 周期.sub_nsmul_eq
+  条件: [加法群 α] (h : 周期 f c) (n : 自然数)
   结论: f (x - n • c) = f x
   证明: by
   simpa only [sub_eq_add_neg] using h.neg_nsmul n x
@@ -608,8 +608,8 @@ theorem Periodic.sub_nat_mul_eq
   simpa only [nsmul_eq_mul] using h.sub_nsmul_eq n
 
 中文:
-定理 Periodic.sub_nat_mul_eq
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 自然数)
+定理 周期.sub_nat_mul_eq
+  条件: [非结合环 α] (h : 周期 f c) (n : 自然数)
   证明: by
   simpa only [nsmul_eq_mul] using h.sub_nsmul_eq n
 
@@ -628,8 +628,8 @@ theorem Periodic.nsmul_sub_eq
   proof: (h.nsmul n).sub_eq'
 
 中文:
-定理 Periodic.nsmul_sub_eq
-  条件: [SubtractionCommMonoid α] (h : Periodic f c) (n : 自然数)
+定理 周期.nsmul_sub_eq
+  条件: [SubtractionComm幺半群 α] (h : 周期 f c) (n : 自然数)
   证明: (h.nsmul n).sub_eq'
 
 Depends on / 依赖: Category, Category.assoc, h.nsmul, lift_fst_assoc, pullback, pullback.lift_fst_assoc, pullbackRightPullbackFstIso_hom_fst_assoc, pullbackRightPullbackFstIso_inv_fst_assoc, pullbackSymmetry_hom_comp_snd_assoc, sub_eq, t_snd
@@ -648,8 +648,8 @@ theorem Periodic.nat_mul_sub_eq
   simpa only [sub_eq_neg_add] using h.nat_mul n (-x)
 
 中文:
-定理 Periodic.nat_mul_sub_eq
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 自然数)
+定理 周期.nat_mul_sub_eq
+  条件: [非结合环 α] (h : 周期 f c) (n : 自然数)
   证明: by
   simpa only [sub_eq_neg_add] using h.nat_mul n (-x)
 
@@ -672,9 +672,9 @@ theorem Periodic.zsmul
   · simpa only [negSucc_zsmul] using (h.nsmul (n + 1)).neg
 
 中文:
-定理 Periodic.zsmul
-  条件: [AddGroup α] (h : Periodic f c) (n : 整数)
-  结论: Periodic f (n • c)
+定理 周期.zsmul
+  条件: [加法群 α] (h : 周期 f c) (n : 整数)
+  结论: 周期 f (n • c)
   证明: by
   rcases n with n | n
   · simpa only [Int.ofNat_eq_natCast, natCast_zsmul] using h.nsmul n
@@ -695,8 +695,8 @@ theorem Periodic.int_mul
   simpa only [zsmul_eq_mul] using h.zsmul n
 
 中文:
-定理 Periodic.int_mul
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 整数)
+定理 周期.int_mul
+  条件: [非结合环 α] (h : 周期 f c) (n : 整数)
   证明: by
   simpa only [zsmul_eq_mul] using h.zsmul n
 -/
@@ -714,8 +714,8 @@ theorem Periodic.sub_zsmul_eq
   proof: (h.zsmul n).sub_eq x
 
 中文:
-定理 Periodic.sub_zsmul_eq
-  条件: [AddGroup α] (h : Periodic f c) (n : 整数)
+定理 周期.sub_zsmul_eq
+  条件: [加法群 α] (h : 周期 f c) (n : 整数)
   结论: f (x - n • c) = f x
   证明: (h.zsmul n).sub_eq x
 
@@ -734,8 +734,8 @@ theorem Periodic.sub_int_mul_eq
   proof: (h.int_mul n).sub_eq x
 
 中文:
-定理 Periodic.sub_int_mul_eq
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 整数)
+定理 周期.sub_int_mul_eq
+  条件: [非结合环 α] (h : 周期 f c) (n : 整数)
   结论: f (x - n * c) = f x
   证明: (h.int_mul n).sub_eq x
 
@@ -753,8 +753,8 @@ theorem Periodic.zsmul_sub_eq
   proof: (h.zsmul _).sub_eq'
 
 中文:
-定理 Periodic.zsmul_sub_eq
-  条件: [AddCommGroup α] (h : Periodic f c) (n : 整数)
+定理 周期.zsmul_sub_eq
+  条件: [加法交换群 α] (h : 周期 f c) (n : 整数)
   证明: (h.zsmul _).sub_eq'
 
 Depends on / 依赖: h.zsmul, sub_eq
@@ -772,8 +772,8 @@ theorem Periodic.int_mul_sub_eq
   proof: (h.int_mul _).sub_eq'
 
 中文:
-定理 Periodic.int_mul_sub_eq
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 整数)
+定理 周期.int_mul_sub_eq
+  条件: [非结合环 α] (h : 周期 f c) (n : 整数)
   证明: (h.int_mul _).sub_eq'
 
 Depends on / 依赖: h.int_mul, int_mul, sub_eq
@@ -793,8 +793,8 @@ theorem Periodic.eq
   simpa only [zero_add] using h 0
 
 中文:
-定理 Periodic.eq
-  条件: [AddZeroClass α] (h : Periodic f c)
+定理 周期.eq
+  条件: [加法零类 α] (h : 周期 f c)
   结论: f c = f 0
   证明: by
   simpa only [zero_add] using h 0
@@ -812,8 +812,8 @@ theorem Periodic.neg_eq
   proof: h.neg.eq
 
 中文:
-定理 Periodic.neg_eq
-  条件: [AddGroup α] (h : Periodic f c)
+定理 周期.neg_eq
+  条件: [加法群 α] (h : 周期 f c)
   结论: f (-c) = f 0
   证明: h.neg.eq
 -/
@@ -830,8 +830,8 @@ theorem Periodic.nsmul_eq
   proof: (h.nsmul n).eq
 
 中文:
-定理 Periodic.nsmul_eq
-  条件: [AddMonoid α] (h : Periodic f c) (n : 自然数)
+定理 周期.nsmul_eq
+  条件: [加法幺半群 α] (h : 周期 f c) (n : 自然数)
   结论: f (n • c) = f 0
   证明: (h.nsmul n).eq
 -/
@@ -848,8 +848,8 @@ theorem Periodic.nat_mul_eq
   proof: (h.nat_mul n).eq
 
 中文:
-定理 Periodic.nat_mul_eq
-  条件: [NonAssocSemiring α] (h : Periodic f c) (n : 自然数)
+定理 周期.nat_mul_eq
+  条件: [非结合半环 α] (h : 周期 f c) (n : 自然数)
   结论: f (n * c) = f 0
   证明: (h.nat_mul n).eq
 
@@ -868,8 +868,8 @@ theorem Periodic.zsmul_eq
   proof: (h.zsmul n).eq
 
 中文:
-定理 Periodic.zsmul_eq
-  条件: [AddGroup α] (h : Periodic f c) (n : 整数)
+定理 周期.zsmul_eq
+  条件: [加法群 α] (h : 周期 f c) (n : 整数)
   结论: f (n • c) = f 0
   证明: (h.zsmul n).eq
 
@@ -888,8 +888,8 @@ theorem Periodic.int_mul_eq
   proof: (h.int_mul n).eq
 
 中文:
-定理 Periodic.int_mul_eq
-  条件: [NonAssocRing α] (h : Periodic f c) (n : 整数)
+定理 周期.int_mul_eq
+  条件: [非结合环 α] (h : 周期 f c) (n : 整数)
   结论: f (n * c) = f 0
   证明: (h.int_mul n).eq
 
@@ -910,8 +910,8 @@ theorem periodic_with_period_zero
 
 中文:
 定理 periodic_with_period_zero
-  条件: [AddZeroClass α] (f : α -> β)
-  结论: Periodic f 0
+  条件: [加法零类 α] (f : α -> β)
+  结论: 周期 f 0
   证明: fun x => by
   rw [add_zero]
 
@@ -961,8 +961,8 @@ theorem Periodic.map_vadd_zmultiples
   simp [AddSubgroup.vadd_def, add_comm _ x, hf.zsmul m x]
 
 中文:
-定理 Periodic.map_vadd_zmultiples
-  结论: [AddCommGroup α] (hf : Periodic f c)
+定理 周期.map_vadd_zmultiples
+  结论: [加法交换群 α] (hf : 周期 f c)
   证明: by
   rcases a with ⟨_, m, rfl⟩
   simp [AddSubgroup.vadd_def, add_comm _ x, hf.zsmul m x]
@@ -985,8 +985,8 @@ theorem Periodic.map_vadd_multiples
   simp [AddSubmonoid.vadd_def, add_comm _ x, hf.nsmul m x]
 
 中文:
-定理 Periodic.map_vadd_multiples
-  结论: [AddCommMonoid α] (hf : Periodic f c)
+定理 周期.map_vadd_multiples
+  结论: [加法交换幺半群 α] (hf : 周期 f c)
   证明: by
   rcases a with ⟨_, m, rfl⟩
   simp [AddSubmonoid.vadd_def, add_comm _ x, hf.nsmul m x]
@@ -1012,8 +1012,8 @@ definition Periodic.lift
 @[simp]
 
 中文:
-定义 Periodic.lift
-  签名: [AddGroup α] (h : Periodic f c) (x : α ⧸ AddSubgroup.zmultiples c)
+定义 周期.lift
+  签名: [加法群 α] (h : 周期 f c) (x : α ⧸ 加法子群.zmultiples c)
   定义体: Quotient.liftOn' x f fun a b h' => by
     rw [QuotientAddGroup.leftRel_apply] at h'
     obtain ⟨k, hk⟩ := h'
@@ -1039,8 +1039,8 @@ theorem Periodic.lift_coe
   proof: rfl
 
 中文:
-定理 Periodic.lift_coe
-  条件: [AddGroup α] (h : Periodic f c) (a : α)
+定理 周期.lift_coe
+  条件: [加法群 α] (h : 周期 f c) (a : α)
   证明: rfl
 -/
 theorem Periodic.lift_coe [AddGroup α] (h : Periodic f c) (a : α) :
@@ -1056,8 +1056,8 @@ lemma Periodic.not_injective
   proof: fun h => hc h hf.eq
 
 中文:
-引理 Periodic.not_injective
-  结论: {R X : 类型} [AddZeroClass R] {f : R -> X} {c : R}
+引理 周期.not_injective
+  结论: {R X : 类型} [加法零类 R] {f : R -> X} {c : R}
   证明: fun h => hc h hf.eq
 
 Depends on / 依赖: hf.eq
@@ -1080,7 +1080,7 @@ definition Antiperiodic
 
 中文:
 定义 Antiperiodic
-  签名: [Add α] [Neg β] (f : α -> β) (c : α)
+  签名: [加法 α] [取负 β] (f : α -> β) (c : α)
   定义体: forall x : α, f (x + c) = -f x
 -/
 def Antiperiodic [Add α] [Neg β] (f : α -> β) (c : α) : Prop :=
@@ -1096,7 +1096,7 @@ theorem Antiperiodic.funext
 
 中文:
 定理 Antiperiodic.funext
-  条件: [Add α] [Neg β] (h : Antiperiodic f c)
+  条件: [加法 α] [取负 β] (h : Antiperiodic f c)
   证明: funext h
 -/
 protected theorem Antiperiodic.funext [Add α] [Neg β] (h : Antiperiodic f c) :
@@ -1113,7 +1113,7 @@ theorem Antiperiodic.funext'
 
 中文:
 定理 Antiperiodic.funext'
-  条件: [Add α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  条件: [加法 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: neg_eq_iff_eq_neg.mpr h.funext
 -/
 protected theorem Antiperiodic.funext' [Add α] [InvolutiveNeg β] (h : Antiperiodic f c) :
@@ -1130,7 +1130,7 @@ theorem Antiperiodic.periodic
 
 中文:
 定理 Antiperiodic.periodic
-  结论: [AddMonoid α] [InvolutiveNeg β]
+  结论: [加法幺半群 α] [InvolutiveNeg β]
   证明: by simp [two_nsmul, ← add_assoc, h _]
 -/
 protected theorem Antiperiodic.periodic [AddMonoid α] [InvolutiveNeg β]
@@ -1146,7 +1146,7 @@ theorem Antiperiodic.periodic_two_mul
 
 中文:
 定理 Antiperiodic.periodic_two_mul
-  结论: [NonAssocSemiring α] [InvolutiveNeg β]
+  结论: [非结合半环 α] [InvolutiveNeg β]
   证明: nsmul_eq_mul 2 c ▸ h.periodic
 -/
 protected theorem Antiperiodic.periodic_two_mul [NonAssocSemiring α] [InvolutiveNeg β]
@@ -1164,7 +1164,7 @@ theorem Antiperiodic.eq
 
 中文:
 定理 Antiperiodic.eq
-  条件: [AddZeroClass α] [Neg β] (h : Antiperiodic f c)
+  条件: [加法零类 α] [取负 β] (h : Antiperiodic f c)
   结论: f c = -f 0
   证明: by
   simpa only [zero_add] using h 0
@@ -1182,7 +1182,7 @@ theorem Antiperiodic.even_nsmul_periodic
 
 中文:
 定理 Antiperiodic.even_nsmul_periodic
-  结论: [AddMonoid α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  结论: [加法幺半群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: mul_nsmul c 2 n ▸ h.periodic.nsmul n
 
 Depends on / 依赖: h.periodic.nsmul, mul_nsmul, periodic
@@ -1200,7 +1200,7 @@ theorem Antiperiodic.nat_even_mul_periodic
 
 中文:
 定理 Antiperiodic.nat_even_mul_periodic
-  结论: [NonAssocSemiring α] [InvolutiveNeg β]
+  结论: [非结合半环 α] [InvolutiveNeg β]
   证明: h.periodic_two_mul.nat_mul n
 
 Depends on / 依赖: h.periodic_two_mul.nat_mul, nat_mul, periodic_two_mul
@@ -1220,7 +1220,7 @@ theorem Antiperiodic.odd_nsmul_antiperiodic
 
 中文:
 定理 Antiperiodic.odd_nsmul_antiperiodic
-  结论: [AddMonoid α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  结论: [加法幺半群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: fun x => by
   rw [add_nsmul]; rw [one_nsmul]; rw [← add_assoc]; rw [h]; rw [h.even_nsmul_periodic]
 
@@ -1241,7 +1241,7 @@ theorem Antiperiodic.nat_odd_mul_antiperiodic
 
 中文:
 定理 Antiperiodic.nat_odd_mul_antiperiodic
-  结论: [NonAssocSemiring α] [InvolutiveNeg β]
+  结论: [非结合半环 α] [InvolutiveNeg β]
   证明: fun x => by
   rw [← add_assoc]; rw [h]; rw [h.nat_even_mul_periodic]
 
@@ -1263,7 +1263,7 @@ theorem Antiperiodic.even_zsmul_periodic
 
 中文:
 定理 Antiperiodic.even_zsmul_periodic
-  结论: [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  结论: [加法群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: by
   rw [mul_comm]; rw [mul_zsmul]; rw [two_zsmul]; rw [← two_nsmul]
   exact h.periodic.zsmul n
@@ -1285,7 +1285,7 @@ theorem Antiperiodic.int_even_mul_periodic
 
 中文:
 定理 Antiperiodic.int_even_mul_periodic
-  结论: [NonAssocRing α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  结论: [非结合环 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: h.periodic_two_mul.int_mul n
 
 Depends on / 依赖: h.periodic_two_mul.int_mul, int_mul, periodic_two_mul
@@ -1306,7 +1306,7 @@ theorem Antiperiodic.odd_zsmul_antiperiodic
 
 中文:
 定理 Antiperiodic.odd_zsmul_antiperiodic
-  结论: [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  结论: [加法群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: by
   intro x
   rw [add_zsmul]; rw [one_zsmul]; rw [← add_assoc]; rw [h]; rw [h.even_zsmul_periodic]
@@ -1329,7 +1329,7 @@ theorem Antiperiodic.int_odd_mul_antiperiodic
 
 中文:
 定理 Antiperiodic.int_odd_mul_antiperiodic
-  结论: [NonAssocRing α] [InvolutiveNeg β]
+  结论: [非结合环 α] [InvolutiveNeg β]
   证明: fun x => by
   rw [← add_assoc]; rw [h]; rw [h.int_even_mul_periodic]
 
@@ -1349,7 +1349,7 @@ theorem Antiperiodic.sub_eq
 
 中文:
 定理 Antiperiodic.sub_eq
-  条件: [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c) (x : α)
+  条件: [加法群 α] [InvolutiveNeg β] (h : Antiperiodic f c) (x : α)
   证明: by simp only [← neg_eq_iff_eq_neg, ← h (x - c), sub_add_cancel]
 
 Depends on / 依赖: Z.affineCover.pullback, affineCover, hasPullback_of_cover, neg_eq_iff_eq_neg, sub_add_cancel
@@ -1367,7 +1367,7 @@ theorem Antiperiodic.sub_eq'
 
 中文:
 定理 Antiperiodic.sub_eq'
-  条件: [SubtractionCommMonoid α] [Neg β] (h : Antiperiodic f c)
+  条件: [SubtractionComm幺半群 α] [取负 β] (h : Antiperiodic f c)
   证明: by simpa only [sub_eq_neg_add] using h (-x)
 
 Depends on / 依赖: sub_eq_neg_add
@@ -1385,7 +1385,7 @@ theorem Antiperiodic.neg
 
 中文:
 定理 Antiperiodic.neg
-  条件: [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  条件: [加法群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: by simpa only [sub_eq_add_neg, Antiperiodic] using h.sub_eq
 -/
 protected theorem Antiperiodic.neg [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c) :
@@ -1402,7 +1402,7 @@ theorem Antiperiodic.neg_eq
 
 中文:
 定理 Antiperiodic.neg_eq
-  条件: [AddGroup α] [InvolutiveNeg β] (h : Antiperiodic f c)
+  条件: [加法群 α] [InvolutiveNeg β] (h : Antiperiodic f c)
   证明: by
   simpa only [zero_add] using h.neg 0
 
@@ -1421,7 +1421,7 @@ theorem Antiperiodic.nat_mul_eq_of_eq_zero
 
 中文:
 定理 Antiperiodic.nat_mul_eq_of_eq_zero
-  结论: [NonAssocSemiring α] [NegZeroClass β]
+  结论: [非结合半环 α] [NegZero类 β]
 -/
 theorem Antiperiodic.nat_mul_eq_of_eq_zero [NonAssocSemiring α] [NegZeroClass β]
     (h : Antiperiodic f c) (hi : f 0 = 0) : forall n : Nat, f (n * c) = 0
@@ -1437,7 +1437,7 @@ theorem Antiperiodic.int_mul_eq_of_eq_zero
 
 中文:
 定理 Antiperiodic.int_mul_eq_of_eq_zero
-  结论: [NonAssocRing α] [SubtractionMonoid β]
+  结论: [非结合环 α] [Subtraction幺半群 β]
 -/
 theorem Antiperiodic.int_mul_eq_of_eq_zero [NonAssocRing α] [SubtractionMonoid β]
     (h : Antiperiodic f c) (hi : f 0 = 0) : forall n : Int, f (n * c) = 0
@@ -1458,7 +1458,7 @@ theorem Antiperiodic.add_zsmul_eq
 
 中文:
 定理 Antiperiodic.add_zsmul_eq
-  结论: [AddGroup α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   rcases Int.even_or_odd' n with ⟨k, rfl | rfl⟩
   · rw [h.even_zsmul_periodic, Int.negOnePow_two_mul, Units.val_one, one_zsmul]
@@ -1485,7 +1485,7 @@ theorem Antiperiodic.sub_zsmul_eq
 
 中文:
 定理 Antiperiodic.sub_zsmul_eq
-  结论: [AddGroup α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   simpa only [sub_eq_add_neg, neg_zsmul, Int.negOnePow_neg] using h.add_zsmul_eq (-n)
 
@@ -1507,7 +1507,7 @@ theorem Antiperiodic.zsmul_sub_eq
 
 中文:
 定理 Antiperiodic.zsmul_sub_eq
-  结论: [AddCommGroup α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法交换群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   rw [sub_eq_add_neg]; rw [add_comm]
   exact h.add_zsmul_eq n
@@ -1530,7 +1530,7 @@ theorem Antiperiodic.add_int_mul_eq
 
 中文:
 定理 Antiperiodic.add_int_mul_eq
-  结论: [NonAssocRing α] [NonAssocRing β] (h : Antiperiodic f c)
+  结论: [非结合环 α] [非结合环 β] (h : Antiperiodic f c)
   证明: by
   simpa only [zsmul_eq_mul] using h.add_zsmul_eq n
 
@@ -1551,7 +1551,7 @@ theorem Antiperiodic.sub_int_mul_eq
 
 中文:
 定理 Antiperiodic.sub_int_mul_eq
-  结论: [NonAssocRing α] [NonAssocRing β] (h : Antiperiodic f c)
+  结论: [非结合环 α] [非结合环 β] (h : Antiperiodic f c)
   证明: by
   simpa only [zsmul_eq_mul] using h.sub_zsmul_eq n
 
@@ -1572,7 +1572,7 @@ theorem Antiperiodic.int_mul_sub_eq
 
 中文:
 定理 Antiperiodic.int_mul_sub_eq
-  结论: [NonAssocRing α] [NonAssocRing β] (h : Antiperiodic f c)
+  结论: [非结合环 α] [非结合环 β] (h : Antiperiodic f c)
   证明: by
   simpa only [zsmul_eq_mul] using h.zsmul_sub_eq n
 
@@ -1597,7 +1597,7 @@ theorem Antiperiodic.add_nsmul_eq
 
 中文:
 定理 Antiperiodic.add_nsmul_eq
-  结论: [AddMonoid α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法幺半群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   rcases Nat.even_or_odd' n with ⟨k, rfl | rfl⟩
   · rw [h.even_nsmul_periodic]
@@ -1626,7 +1626,7 @@ theorem Antiperiodic.sub_nsmul_eq
 
 中文:
 定理 Antiperiodic.sub_nsmul_eq
-  结论: [AddGroup α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   simpa only [Int.reduceNeg, natCast_zsmul] using! h.sub_zsmul_eq n
 
@@ -1647,7 +1647,7 @@ theorem Antiperiodic.nsmul_sub_eq
 
 中文:
 定理 Antiperiodic.nsmul_sub_eq
-  结论: [AddCommGroup α] [SubtractionMonoid β] (h : Antiperiodic f c)
+  结论: [加法交换群 α] [Subtraction幺半群 β] (h : Antiperiodic f c)
   证明: by
   simpa only [Int.reduceNeg, natCast_zsmul] using! h.zsmul_sub_eq n
 
@@ -1667,7 +1667,7 @@ theorem Antiperiodic.const_add
 
 中文:
 定理 Antiperiodic.const_add
-  条件: [AddSemigroup α] [Neg β] (h : Antiperiodic f c) (a : α)
+  条件: [加法半群 α] [取负 β] (h : Antiperiodic f c) (a : α)
   证明: fun x => by simpa [add_assoc] using h (a + x)
 
 Depends on / 依赖: add_assoc
@@ -1686,7 +1686,7 @@ theorem Antiperiodic.add_const
 
 中文:
 定理 Antiperiodic.add_const
-  条件: [AddCommSemigroup α] [Neg β] (h : Antiperiodic f c) (a : α)
+  条件: [加法交换半群 α] [取负 β] (h : Antiperiodic f c) (a : α)
   证明: fun x => by
   simpa only [add_right_comm] using h (x + a)
 
@@ -1707,7 +1707,7 @@ theorem Antiperiodic.const_sub
 
 中文:
 定理 Antiperiodic.const_sub
-  条件: [AddCommGroup α] [InvolutiveNeg β] (h : Antiperiodic f c) (a : α)
+  条件: [加法交换群 α] [InvolutiveNeg β] (h : Antiperiodic f c) (a : α)
   证明: fun x => by
   simp only [← sub_sub, h.sub_eq]
 
@@ -1728,7 +1728,7 @@ theorem Antiperiodic.sub_const
 
 中文:
 定理 Antiperiodic.sub_const
-  条件: [SubtractionCommMonoid α] [Neg β] (h : Antiperiodic f c) (a : α)
+  条件: [SubtractionComm幺半群 α] [取负 β] (h : Antiperiodic f c) (a : α)
   证明: by
   simpa only [sub_eq_add_neg] using h.add_const (-a)
 
@@ -1748,7 +1748,7 @@ theorem Antiperiodic.smul
 
 中文:
 定理 Antiperiodic.smul
-  结论: [Add α] [Monoid γ] [AddGroup β] [DistribMulAction γ β]
+  结论: [加法 α] [幺半群 γ] [加法群 β] [分配乘法作用 γ β]
   证明: by simp_all
 -/
 theorem Antiperiodic.smul [Add α] [Monoid γ] [AddGroup β] [DistribMulAction γ β]
@@ -1765,7 +1765,7 @@ theorem Antiperiodic.const_smul
 
 中文:
 定理 Antiperiodic.const_smul
-  结论: [AddMonoid α] [Neg β] [Group γ] [DistribMulAction γ α]
+  结论: [加法幺半群 α] [取负 β] [群 γ] [分配乘法作用 γ α]
   证明: fun x => by
   simpa only [smul_add, smul_inv_smul] using h (a • x)
 
@@ -1786,7 +1786,7 @@ theorem Antiperiodic.const_inv_smul
 
 中文:
 定理 Antiperiodic.const_inv_smul
-  结论: [AddMonoid α] [Neg β] [Group γ] [DistribMulAction γ α]
+  结论: [加法幺半群 α] [取负 β] [群 γ] [分配乘法作用 γ α]
   证明: by
   simpa only [inv_inv] using h.const_smul a⁻¹
 
@@ -1806,7 +1806,7 @@ theorem Antiperiodic.add
 
 中文:
 定理 Antiperiodic.add
-  结论: [AddSemigroup α] [InvolutiveNeg β] (h1 : Antiperiodic f c₁)
+  结论: [加法半群 α] [InvolutiveNeg β] (h1 : Antiperiodic f c₁)
   证明: by simp_all [← add_assoc]
 
 Depends on / 依赖: add_assoc
@@ -1825,7 +1825,7 @@ theorem Antiperiodic.sub
 
 中文:
 定理 Antiperiodic.sub
-  结论: [AddGroup α] [InvolutiveNeg β] (h1 : Antiperiodic f c₁)
+  结论: [加法群 α] [InvolutiveNeg β] (h1 : Antiperiodic f c₁)
   证明: by
   simpa only [sub_eq_add_neg] using h1.add h2.neg
 
@@ -1844,8 +1844,8 @@ theorem Periodic.add_antiperiod
   proof: by simp_all [← add_assoc]
 
 中文:
-定理 Periodic.add_antiperiod
-  结论: [AddSemigroup α] [Neg β] (h1 : Periodic f c₁)
+定理 周期.add_antiperiod
+  结论: [加法半群 α] [取负 β] (h1 : 周期 f c₁)
   证明: by simp_all [← add_assoc]
 
 Depends on / 依赖: add_assoc
@@ -1863,8 +1863,8 @@ theorem Periodic.sub_antiperiod
   simpa only [sub_eq_add_neg] using h1.add_antiperiod h2.neg
 
 中文:
-定理 Periodic.sub_antiperiod
-  结论: [AddGroup α] [InvolutiveNeg β] (h1 : Periodic f c₁)
+定理 周期.sub_antiperiod
+  结论: [加法群 α] [InvolutiveNeg β] (h1 : 周期 f c₁)
   证明: by
   simpa only [sub_eq_add_neg] using h1.add_antiperiod h2.neg
 
@@ -1883,8 +1883,8 @@ theorem Periodic.add_antiperiod_eq
   proof: (h1.add_antiperiod h2).eq
 
 中文:
-定理 Periodic.add_antiperiod_eq
-  结论: [AddMonoid α] [Neg β] (h1 : Periodic f c₁)
+定理 周期.add_antiperiod_eq
+  结论: [加法幺半群 α] [取负 β] (h1 : 周期 f c₁)
   证明: (h1.add_antiperiod h2).eq
 
 Depends on / 依赖: add_antiperiod, h1.add_antiperiod
@@ -1902,8 +1902,8 @@ theorem Periodic.sub_antiperiod_eq
   proof: (h1.sub_antiperiod h2).eq
 
 中文:
-定理 Periodic.sub_antiperiod_eq
-  结论: [AddGroup α] [InvolutiveNeg β] (h1 : Periodic f c₁)
+定理 周期.sub_antiperiod_eq
+  结论: [加法群 α] [InvolutiveNeg β] (h1 : 周期 f c₁)
   证明: (h1.sub_antiperiod h2).eq
 
 Depends on / 依赖: h1.sub_antiperiod, sub_antiperiod
@@ -1922,7 +1922,7 @@ theorem Antiperiodic.mul
 
 中文:
 定理 Antiperiodic.mul
-  结论: [Add α] [Mul β] [HasDistribNeg β] (hf : Antiperiodic f c)
+  结论: [加法 α] [乘法 β] [有DistribNeg β] (hf : Antiperiodic f c)
   证明: by simp_all
 -/
 theorem Antiperiodic.mul [Add α] [Mul β] [HasDistribNeg β] (hf : Antiperiodic f c)
@@ -1938,7 +1938,7 @@ theorem Antiperiodic.div
 
 中文:
 定理 Antiperiodic.div
-  结论: [Add α] [DivisionMonoid β] [HasDistribNeg β] (hf : Antiperiodic f c)
+  结论: [加法 α] [Division幺半群 β] [有DistribNeg β] (hf : Antiperiodic f c)
   证明: by simp_all [neg_div_neg_eq]
 
 Depends on / 依赖: neg_div_neg_eq
@@ -1957,7 +1957,7 @@ theorem Antiperiodic.sum_map_addRightEmbedding
 
 中文:
 定理 Antiperiodic.sum_map_addRightEmbedding
-  结论: [Add α] [IsRightCancelAdd α]
+  结论: [加法 α] [是右消去加法 α]
   证明: by
   simp [hf _]
 -/

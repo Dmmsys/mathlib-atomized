@@ -72,7 +72,7 @@ theorem inertiaDeg_def
 
 中文:
 定理 inertiaDeg_def
-  结论: [hq : q.IsPrime]
+  结论: [hq : q.是素]
   证明: by
   convert! dif_pos hq
   simp [Algebra.algebra_ext_iff, Localization.AtPrime.IsLiesOverAlgebra.algebraMap_eq]
@@ -104,7 +104,7 @@ theorem inertiaDeg_of_not_isPrime
 
 中文:
 定理 inertiaDeg_of_not_isPrime
-  条件: (hq : ¬ q.IsPrime)
+  条件: (hq : ¬ q.是素)
   结论: q.inertiaDeg R = 0
   证明: dif_neg hq
 
@@ -133,7 +133,7 @@ theorem inertiaDeg_pos
 
 中文:
 定理 inertiaDeg_pos
-  条件: [hq : q.IsPrime] [Module.Finite R S]
+  条件: [hq : q.是素] [模.有限 R S]
   结论: 0 < q.inertiaDeg R
   证明: by
   let := Localization.AtPrime.algebraOfLiesOver (q.under R) q
@@ -170,7 +170,7 @@ theorem inertiaDeg_eq
 
 中文:
 定理 inertiaDeg_eq
-  结论: [q.LiesOver p] [q.IsPrime] [p.IsPrime]
+  结论: [q.LiesOver p] [q.是素] [p.是素]
   证明: by
   have := Ideal.over_def q p
   subst this
@@ -205,7 +205,7 @@ theorem inertiaDeg_eq_of_isFractionRing
 
 中文:
 定理 inertiaDeg_eq_of_isFractionRing
-  结论: [q.LiesOver p] [p.IsPrime] [q.IsPrime]
+  结论: [q.LiesOver p] [p.是素] [q.是素]
   证明: by
   let := Localization.AtPrime.algebraOfLiesOver p q
   rw [inertiaDeg_eq p q]
@@ -255,7 +255,7 @@ theorem inertiaDeg_eq_of_isMaximal
 
 中文:
 定理 inertiaDeg_eq_of_isMaximal
-  条件: [q.LiesOver p] [p.IsMaximal] [q.IsMaximal]
+  条件: [q.LiesOver p] [p.是极大] [q.是极大]
   证明: by
   let : Field (R ⧸ p) := Quotient.field p
   let : Field (S ⧸ q) := Quotient.field q
@@ -288,7 +288,7 @@ theorem inertiaDeg'_eq_inertiaDeg
 
 中文:
 定理 inertiaDeg'_eq_inertiaDeg
-  条件: [q.LiesOver p] [p.IsMaximal] [q.IsMaximal]
+  条件: [q.LiesOver p] [p.是极大] [q.是极大]
   证明: by
   rw [inertiaDeg'_algebraMap]; rw [inertiaDeg_eq_of_isMaximal p q]
 
@@ -413,7 +413,7 @@ theorem inertiaDeg_below_le
 
 中文:
 定理 inertiaDeg_below_le
-  条件: [r.IsPrime] [r.LiesOver q] [Module.Finite R T]
+  条件: [r.是素] [r.LiesOver q] [模.有限 R T]
   证明: Nat.le_of_dvd (r.inertiaDeg_pos R) (q.inertiaDeg_below_dvd r)
 
 @[deprecated (since := "2026-07-03")] alias inertiaDeg'_below_le := inertiaDeg_below_le
@@ -438,7 +438,7 @@ theorem inertiaDeg_above_le
 
 中文:
 定理 inertiaDeg_above_le
-  条件: [r.IsPrime] [r.LiesOver q] [Module.Finite R T]
+  条件: [r.是素] [r.LiesOver q] [模.有限 R T]
   证明: Nat.le_of_dvd (r.inertiaDeg_pos R) (q.inertiaDeg_above_dvd r)
 
 @[deprecated (since := "2026-07-03")] alias inertiaDeg'_above_le := inertiaDeg_above_le
@@ -471,7 +471,7 @@ theorem inertiaDeg_smul
 
 中文:
 定理 inertiaDeg_smul
-  结论: {G : 类型} [Group G] [MulSemiringAction G S] [SMulCommClass G R S]
+  结论: {G : 类型} [群 G] [MulSemiring作用 G S] [标量交换类 G R S]
   证明: by
   by_cases hq : q.IsPrime; swap
   · rw [inertiaDeg_of_not_isPrime, inertiaDeg_of_not_isPrime] <;> simpa
@@ -512,7 +512,7 @@ theorem cardQuot_pow_inertiaDeg
 
 中文:
 定理 cardQuot_pow_inertiaDeg
-  条件: [Module.Finite R S] [p.IsMaximal] [q.IsMaximal] [q.LiesOver p]
+  条件: [模.有限 R S] [p.是极大] [q.是极大] [q.LiesOver p]
   证明: by
   let _ : Field (R ⧸ p) := Quotient.field p
   rw [← inertiaDeg'_eq_inertiaDeg p q]; rw [inertiaDeg'_algebraMap p q]
@@ -549,7 +549,7 @@ theorem absNorm_pow_inertiaDeg
 
 中文:
 定理 absNorm_pow_inertiaDeg
-  结论: [Module.Finite R S] [q.IsPrime] [q.LiesOver p]
+  结论: [模.有限 R S] [q.是素] [q.LiesOver p]
   证明: by
   by_cases hp : p = ⊥
   · subst hp
@@ -589,7 +589,7 @@ theorem natAbs_pow_inertiaDeg
 
 中文:
 定理 natAbs_pow_inertiaDeg
-  结论: [IsDedekindDomain R] [Module.Free 整数 R] [Module.Finite 整数 R] (p : 整数)
+  结论: [是Dedekind整环 R] [模.自由 整数 R] [模.有限 整数 R] (p : 整数)
   证明: by
   simpa using absNorm_pow_inertiaDeg (span {p}) P
 
@@ -614,7 +614,7 @@ theorem pow_inertiaDeg
 
 中文:
 定理 pow_inertiaDeg
-  结论: [IsDedekindDomain R] [Module.Free 整数 R] [Module.Finite 整数 R] (p : 自然数)
+  结论: [是Dedekind整环 R] [模.自由 整数 R] [模.有限 整数 R] (p : 自然数)
   证明: natAbs_pow_inertiaDeg p P
 
 Depends on / 依赖: natAbs_pow_inertiaDeg

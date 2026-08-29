@@ -34,8 +34,8 @@ lemma Monotone.partBind
   exact fun b hb ha => ⟨b, hf h _ hb, hg h _ _ ha⟩
 
 中文:
-引理 Monotone.partBind
-  条件: (hf : Monotone f) (hg : Monotone g)
+引理 递增.partBind
+  条件: (hf : 递增 f) (hg : 递增 g)
   证明: by
   rintro x y h a
   simp only [and_imp, Part.mem_bind_iff, exists_imp]
@@ -61,8 +61,8 @@ lemma Antitone.partBind
   exact fun b hb ha => ⟨b, hf h _ hb, hg h _ _ ha⟩
 
 中文:
-引理 Antitone.partBind
-  条件: (hf : Antitone f) (hg : Antitone g)
+引理 递减.partBind
+  条件: (hf : 递减 f) (hg : 递减 g)
   证明: by
   rintro x y h a
   simp only [and_imp, Part.mem_bind_iff, exists_imp]
@@ -92,9 +92,9 @@ lemma Monotone.partMap
   simpa only [← bind_some_eq_map] using hg.partBind monotone_const
 
 中文:
-引理 Monotone.partMap
-  条件: (hg : Monotone g)
-  结论: Monotone fun x => (g x).map f
+引理 递增.partMap
+  条件: (hg : 递增 g)
+  结论: 递增 fun x => (g x).map f
   证明: by
   simpa only [← bind_some_eq_map] using hg.partBind monotone_const
 
@@ -114,9 +114,9 @@ lemma Antitone.partMap
   simpa only [← bind_some_eq_map] using hg.partBind antitone_const
 
 中文:
-引理 Antitone.partMap
-  条件: (hg : Antitone g)
-  结论: Antitone fun x => (g x).map f
+引理 递减.partMap
+  条件: (hg : 递减 g)
+  结论: 递减 fun x => (g x).map f
   证明: by
   simpa only [← bind_some_eq_map] using hg.partBind antitone_const
 
@@ -141,9 +141,9 @@ lemma Monotone.partSeq
 simpa only [seq_eq_bind_map] using! hf.partBind Monotone.of_apply₂ fun _ => hg.partMap
 
 中文:
-引理 Monotone.partSeq
-  条件: (hf : Monotone f) (hg : Monotone g)
-  结论: Monotone fun x => f x <*> g x
+引理 递增.partSeq
+  条件: (hf : 递增 f) (hg : 递增 g)
+  结论: 递增 fun x => f x <*> g x
   证明: by
 simpa only [seq_eq_bind_map] using! hf.partBind Monotone.of_apply₂ fun _ => hg.partMap
 
@@ -163,9 +163,9 @@ lemma Antitone.partSeq
 simpa only [seq_eq_bind_map] using! hf.partBind Antitone.of_apply₂ fun _ => hg.partMap
 
 中文:
-引理 Antitone.partSeq
-  条件: (hf : Antitone f) (hg : Antitone g)
-  结论: Antitone fun x => f x <*> g x
+引理 递减.partSeq
+  条件: (hf : 递减 f) (hg : 递减 g)
+  结论: 递减 fun x => f x <*> g x
   证明: by
 simpa only [seq_eq_bind_map] using! hf.partBind Antitone.of_apply₂ fun _ => hg.partMap
 

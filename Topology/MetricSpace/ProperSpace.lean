@@ -45,10 +45,10 @@ class ProperSpace
     - isCompact_closedBall : forall x : α, forall r, IsCompact (closedBall x r)
 
 中文:
-类 ProperSpace
-  参数: (α : 类型u) [PseudoMetricSpace α]
+类 真空间
+  参数: (α : 类型u) [伪度量空间 α]
   公理与运算 (1 个):
-    - isCompact_closedBall : 对任意 x : α, 对任意 r, IsCompact (closedBall x r)
+    - isCompact_closedBall : 对任意 x : α, 对任意 r, 是紧集 (closedBall x r)
 -/
 class ProperSpace (α : Type u) [PseudoMetricSpace α] : Prop where
   isCompact_closedBall : forall x : α, forall r, IsCompact (closedBall x r)
@@ -68,7 +68,7 @@ theorem isCompact_sphere
 
 中文:
 定理 isCompact_sphere
-  条件: {α : 类型} [PseudoMetricSpace α] [命题erSpace α] (x : α) (r : 实数)
+  条件: {α : 类型} [伪度量空间 α] [真空间 α] (x : α) (r : 实数)
   证明: (isCompact_closedBall x r).of_isClosed_subset isClosed_sphere sphere_subset_closedBall
 
 Depends on / 依赖: isClosed_sphere, isCompact_closedBall, of_isClosed_subset, sphere_subset_closedBall
@@ -93,7 +93,7 @@ instance Metric.sphere.compactSpace
 
 中文:
 实例 Metric.sphere.compactSpace
-  签名: {α : 类型} [PseudoMetricSpace α] [命题erSpace α]
+  签名: {α : 类型} [伪度量空间 α] [真空间 α]
   定义体: isCompact_iff_compactSpace.mp (isCompact_sphere _ _)
 
 Depends on / 依赖: isCompact_iff_compactSpace, isCompact_iff_compactSpace.mp, isCompact_sphere
@@ -125,7 +125,7 @@ theorem ProperSpace.of_isCompact_closedBall_of_le
     (closedBall_subset_closedBall <| le_max_left _ _)⟩
 
 中文:
-定理 ProperSpace.of_isCompact_closedBall_of_le
+定理 真空间.of_isCompact_closedBall_of_le
   结论: (R : 实数)
   证明: ⟨fun x r => IsCompact.of_isClosed_subset (h x (max r R) (le_max_right _ _)) isClosed_closedBall
     (closedBall_subset_closedBall <| le_max_left _ _)⟩
@@ -147,8 +147,8 @@ theorem ProperSpace.of_seq_closedBall
 hci.of_isClosed_subset isClosed_closedBall closedBall_subset_closedBall' hir
 
 中文:
-定理 ProperSpace.of_seq_closedBall
-  结论: {β : 类型} {l : Filter β} [NeBot l] {x : α} {r : β -> 实数}
+定理 真空间.of_seq_closedBall
+  结论: {β : 类型} {l : 滤子 β} [NeBot l] {x : α} {r : β -> 实数}
   证明: let ⟨_i, hci, hir⟩ := (hc.and <| hr.eventually_ge_atTop <| r + dist a x).exists
 hci.of_isClosed_subset isClosed_closedBall closedBall_subset_closedBall' hir
 
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace 实数
+  签名: 真空间 实数
   定义体: Real.closedBall_eq_Icc ▸ ConditionallyCompleteLinearOrder.isCompact_Icc _ _
 
 Depends on / 依赖: ConditionallyCompleteLinearOrder, ConditionallyCompleteLinearOrder.isCompact_Icc, Real.closedBall_eq_Icc, closedBall_eq_Icc, isCompact_Icc
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: SecondCountableTopology 实数
+  签名: 第二可数拓扑 实数
   定义体: inferInstance
 -/
 instance : SecondCountableTopology Real := inferInstance
@@ -234,7 +234,7 @@ instance prod_properSpace
 
 中文:
 实例 prod_properSpace
-  签名: {α : 类型} {β : 类型} [PseudoMetricSpace α] [PseudoMetricSpace β]
+  签名: {α : 类型} {β : 类型} [伪度量空间 α] [伪度量空间 β]
   定义体: by
     rintro ⟨x, y⟩ r
     rw [← closedBall_prod_same x y]
@@ -262,7 +262,7 @@ instance pi_properSpace
 
 中文:
 实例 pi_properSpace
-  签名: {X : β -> 类型} [Fintype β] [对任意 b, PseudoMetricSpace (X b)]
+  签名: {X : β -> 类型} [有限类型 β] [对任意 b, 伪度量空间 (X b)]
   定义体: by
   refine .of_isCompact_closedBall_of_le 0 fun x r hr => ?_
   rw [closedBall_pi _ hr]
@@ -287,8 +287,8 @@ lemma ProperSpace.of_isClosed
     (hs.isClosedMap_subtype_val _ isClosed_closedBall) (Set.image_subset_iff.mpr subset_rfl))⟩
 
 中文:
-引理 ProperSpace.of_isClosed
-  结论: {X : 类型} [PseudoMetricSpace X] [命题erSpace X]
+引理 真空间.of_isClosed
+  结论: {X : 类型} [伪度量空间 X] [真空间 X]
   证明: ⟨fun x r => Topology.IsEmbedding.subtypeVal.isCompact_iff.mpr
     ((isCompact_closedBall x.1 r).of_isClosed_subset
     (hs.isClosedMap_subtype_val _ isClosed_closedBall) (Set.image_subset_iff.mpr subset_rfl))⟩
@@ -313,8 +313,8 @@ instance [PseudoMetricSpace
   body: ‹ProperSpace X›
 
 中文:
-实例 [PseudoMetricSpace
-  签名: X] [命题erSpace X] : 命题erSpace (Additive X)
+实例 [伪度量空间
+  签名: X] [真空间 X] : 真空间 (加性 X)
   定义体: ‹ProperSpace X›
 
 Depends on / 依赖: ProperSpace
@@ -329,8 +329,8 @@ instance [PseudoMetricSpace
   body: ‹ProperSpace X›
 
 中文:
-实例 [PseudoMetricSpace
-  签名: X] [命题erSpace X] : 命题erSpace (Multiplicative X)
+实例 [伪度量空间
+  签名: X] [真空间 X] : 真空间 (Multiplicative X)
   定义体: ‹ProperSpace X›
 
 Depends on / 依赖: ProperSpace
@@ -345,8 +345,8 @@ instance [PseudoMetricSpace
   body: ‹ProperSpace X›
 
 中文:
-实例 [PseudoMetricSpace
-  签名: X] [命题erSpace X] : 命题erSpace Xᵒᵈ
+实例 [伪度量空间
+  签名: X] [真空间 X] : 真空间 Xᵒᵈ
   定义体: ‹ProperSpace X›
 
 Depends on / 依赖: ProperSpace

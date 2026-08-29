@@ -54,7 +54,7 @@ definition span
 
 中文:
 定义 span
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: sInf { p | s subseteq p }
 
 Depends on / 依赖: subseteq
@@ -74,8 +74,8 @@ class IsPrincipal
     - principal((S)) : exists a, S = span R {a}
 
 中文:
-类 IsPrincipal
-  参数: (S : Submodule R M)
+类 是Principal
+  参数: (S : 子模 R M)
   公理与运算 (1 个):
     - principal((S)) : 存在 a, S = span R {a}
 -/
@@ -96,7 +96,7 @@ definition generator
 
 中文:
 定义 generator
-  签名: (S : Submodule R M) [S.IsPrincipal]
+  签名: (S : 子模 R M) [S.是Principal]
   定义体: Classical.choose (principal S)
 
 Depends on / 依赖: Classical, Classical.choose, principal
@@ -115,7 +115,7 @@ theorem span_singleton_generator
 
 中文:
 定理 span_singleton_generator
-  条件: (S : Submodule R M) [S.IsPrincipal]
+  条件: (S : 子模 R M) [S.是Principal]
   结论: span R {generator S} = S
   证明: (Classical.choose_spec (principal S)).symm
 
@@ -142,7 +142,7 @@ theorem mem_span
 
 中文:
 定理 mem_span
-  结论: x in span R s ↔ 对任意 p : Submodule R M, s subseteq p -> x in p
+  结论: x in span R s ↔ 对任意 p : 子模 R M, s subseteq p -> x in p
   证明: mem_iInter₂
 
 @[simp, aesop safe 20 (rule_sets := [SetLike])]
@@ -184,7 +184,7 @@ theorem mem_span_of_mem
 
 中文:
 定理 mem_span_of_mem
-  条件: {s : Set M} {x : M} (hx : x in s)
+  条件: {s : 集合 M} {x : M} (hx : x in s)
   结论: x in span R s
   证明: subset_span hx
 
@@ -240,7 +240,7 @@ theorem span_monotone
 
 中文:
 定理 span_monotone
-  结论: Monotone (span R : Set M -> Submodule R M)
+  结论: 递增 (span R : 集合 M -> 子模 R M)
   证明: fun _ _ => span_mono
 
 Depends on / 依赖: span_mono
@@ -277,7 +277,7 @@ theorem span_eq
 
 中文:
 定理 span_eq
-  结论: span R (p : Set M) = p
+  结论: span R (p : 集合 M) = p
   证明: span_eq_of_le _ (Subset.refl _) subset_span
 
 Depends on / 依赖: Subset, Subset.refl, span_eq_of_le, subset_span
@@ -324,7 +324,7 @@ lemma coe_span_eq_self
 
 中文:
 引理 coe_span_eq_self
-  条件: [SetLike S M] [AddSubmonoidClass S M] [SMulMemClass S R M] (s : S)
+  条件: [集合状 S M] [加法子幺半群类 S M] [SMulMem类 S R M] (s : S)
   证明: by
   refine le_antisymm ?_ subset_span
   let s' : Submodule R M :=
@@ -417,8 +417,8 @@ theorem closure_subset_span
 
 中文:
 定理 closure_subset_span
-  条件: {s : Set M}
-  结论: (AddSubmonoid.closure s : Set M) subseteq span R s
+  条件: {s : 集合 M}
+  结论: (加法子幺半群.closure s : 集合 M) subseteq span R s
   证明: (@AddSubmonoid.closure_le _ _ _ (span R s).toAddSubmonoid).mpr subset_span
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.closure_le, closure_le, subset_span, toAddSubmonoid
@@ -438,7 +438,7 @@ theorem closure_le_toAddSubmonoid_span
 
 中文:
 定理 closure_le_toAddSubmonoid_span
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   证明: closure_subset_span
 
 @[simp]
@@ -461,8 +461,8 @@ theorem span_closure
 
 中文:
 定理 span_closure
-  条件: {s : Set M}
-  结论: span R (AddSubmonoid.closure s : Set M) = span R s
+  条件: {s : 集合 M}
+  结论: span R (加法子幺半群.closure s : 集合 M) = span R s
   证明: le_antisymm (span_le.mpr closure_subset_span) (span_mono AddSubmonoid.subset_closure)
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.subset_closure, closure_subset_span, le_antisymm, span_le, span_le.mpr, span_mono, subset_closure
@@ -531,7 +531,7 @@ theorem span_induction₂
 
 中文:
 定理 span_induction₂
-  结论: {N : 类型} [AddCommMonoid N] [Module R N] {t : Set N}
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N] {t : 集合 N}
   证明: by
   induction hb using span_induction with
   | mem z hz => induction ha using span_induction with
@@ -581,7 +581,7 @@ theorem span_eq_closure
 
 中文:
 定理 span_eq_closure
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   结论: (span R s).toAddSubmonoid = closure (@univ R • s)
   证明: by
   refine le_antisymm (fun x (hx : x in span R s) => ?of_mem_span) (fun x hx => ?of_mem_closure)
@@ -727,7 +727,7 @@ theorem span_nat_eq_addSubmonoidClosure
 
 中文:
 定理 span_nat_eq_addSubmonoidClosure
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   refine Eq.symm (AddSubmonoid.closure_eq_of_le subset_span ?_)
   apply (OrderIso.to_galoisConnection (AddSubmonoid.toNatSubmodule (M := M)).symm).l_le
@@ -760,8 +760,8 @@ theorem span_nat_eq
 
 中文:
 定理 span_nat_eq
-  条件: (s : AddSubmonoid M)
-  结论: (span 自然数 (s : Set M)).toAddSubmonoid = s
+  条件: (s : 加法子幺半群 M)
+  结论: (span 自然数 (s : 集合 M)).toAddSubmonoid = s
   证明: by
   rw [span_nat_eq_addSubmonoidClosure]; rw [s.closure_eq]
 
@@ -785,7 +785,7 @@ theorem span_int_eq_addSubgroupClosure
 
 中文:
 定理 span_int_eq_addSubgroupClosure
-  条件: {M : 类型} [AddCommGroup M] (s : Set M)
+  条件: {M : 类型} [加法交换群 M] (s : 集合 M)
   证明: Eq.symm
     AddSubgroup.closure_eq_of_le _ subset_span fun _ hx =>
       span_induction (fun _ hx => AddSubgroup.subset_closure hx) (AddSubgroup.zero_mem _)
@@ -813,7 +813,7 @@ theorem span_int_eq
 
 中文:
 定理 span_int_eq
-  条件: {M : 类型} [AddCommGroup M] (s : AddSubgroup M)
+  条件: {M : 类型} [加法交换群 M] (s : 加法子群 M)
   证明: by rw [span_int_eq_addSubgroupClosure, s.closure_eq]
 
 Depends on / 依赖: closure_eq, s.closure_eq, span_int_eq_addSubgroupClosure
@@ -889,7 +889,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@span R M _ _ _) (↑) where
+  签名: : Galois嵌入 (@span R M _ _ _) (↑) where
   定义体: span R s
   gc _ _ := span_le
   le_l_u _ := subset_span
@@ -916,7 +916,7 @@ theorem span_empty
 
 中文:
 定理 span_empty
-  结论: span R (∅ : Set M) = ⊥
+  结论: span R (∅ : 集合 M) = ⊥
   证明: (Submodule.gi R M).gc.l_bot
 
 @[simp]
@@ -939,7 +939,7 @@ theorem span_univ
 
 中文:
 定理 span_univ
-  结论: span R (univ : Set M) = ⊤
+  结论: span R (univ : 集合 M) = ⊤
   证明: eq_top_iff.2 SetLike.le_def.2 subset_span
 
 @[simp]
@@ -961,7 +961,7 @@ theorem span_inter
 
 中文:
 定理 span_inter
-  条件: (S S' : Submodule R M)
+  条件: (S S' : 子模 R M)
   结论: span R (S inter S') = S ⊓ S'
   证明: (Submodule.gi R M).l_inf_u S S'
 
@@ -981,7 +981,7 @@ theorem span_sInf_le
 
 中文:
 定理 span_sInf_le
-  条件: (s : Set (Set M))
+  条件: (s : 集合 (集合 M))
   结论: span R (⋂₀ s) <= sInf (span R '' s)
   证明: le_sInf fun _ ⟨_, hTs, h⟩ => h ▸ span_mono (sInter_subset_of_mem hTs)
 
@@ -1001,8 +1001,8 @@ theorem span_sInf
 
 中文:
 定理 span_sInf
-  条件: (s : Set (Submodule R M))
-  结论: span R (sInf s : Submodule R M) = sInf s
+  条件: (s : 集合 (子模 R M))
+  结论: span R (sInf s : 子模 R M) = sInf s
   证明: span_eq (sInf s)
 
 Depends on / 依赖: span_eq
@@ -1023,8 +1023,8 @@ theorem span_biInter
 @[simp]
 
 中文:
-定理 span_biInter
-  条件: (s : Set (Submodule R M))
+定理 span_bi整数er
+  条件: (s : 集合 (子模 R M))
   结论: span R (⋂ S in s, S) = sInf s
   证明: by
   rw [← Submodule.coe_sInf]; rw [span_eq]
@@ -1048,7 +1048,7 @@ theorem span_union
 
 中文:
 定理 span_union
-  条件: (s t : Set M)
+  条件: (s t : 集合 M)
   结论: span R (s union t) = span R s ⊔ span R t
   证明: (Submodule.gi R M).gc.l_sup
 
@@ -1071,7 +1071,7 @@ theorem span_sSup
 
 中文:
 定理 span_sSup
-  条件: (s : Set (Set M))
+  条件: (s : 集合 (集合 M))
   结论: span R (⋃₀ s) = sSup (span R '' s)
   证明: by
   refine le_antisymm ?_ (sSup_le fun P ⟨t, ht, h⟩ => h ▸ span_mono (subset_sUnion_of_mem ht))
@@ -1095,7 +1095,7 @@ theorem span_sSup'
 
 中文:
 定理 span_sSup'
-  条件: (s : Set (Submodule R M))
+  条件: (s : 集合 (子模 R M))
   证明: Submodule.span_eq (sSup s)
 
 Depends on / 依赖: Submodule, Submodule.span_eq, span_eq
@@ -1114,7 +1114,7 @@ theorem span_iUnion
 
 中文:
 定理 span_iUnion
-  条件: {ι} (s : ι -> Set M)
+  条件: {ι} (s : ι -> 集合 M)
   结论: span R (⋃ i, s i) = ⨆ i, span R (s i)
   证明: (Submodule.gi R M).gc.l_iSup
 
@@ -1133,7 +1133,7 @@ theorem span_iUnion₂
 
 中文:
 定理 span_iUnion₂
-  条件: {ι} {κ : ι -> Sort*} (s : 对任意 i, κ i -> Set M)
+  条件: {ι} {κ : ι -> 类型层*} (s : 对任意 i, κ i -> 集合 M)
   证明: (Submodule.gi R M).gc.l_iSup₂
 
 Depends on / 依赖: Submodule, Submodule.gi, gc.l_iSup
@@ -1154,7 +1154,7 @@ theorem span_biUnion
 
 中文:
 定理 span_biUnion
-  条件: (s : Set (Submodule R M))
+  条件: (s : 集合 (子模 R M))
   结论: span R (⋃ S in s, S) = sSup s
   证明: by
   simpa using (Submodule.gi R M).l_sSup_u_image s
@@ -1174,7 +1174,7 @@ theorem span_attach_biUnion
 
 中文:
 定理 span_attach_biUnion
-  条件: [DecidableEq M] {α : 类型} (s : Finset α) (f : s -> Finset M)
+  条件: [DecidableEq M] {α : 类型} (s : 有限集 α) (f : s -> 有限集 M)
   证明: by simp [span_iUnion]
 
 Depends on / 依赖: span_iUnion
@@ -1241,7 +1241,7 @@ theorem span_eq_iSup_of_singleton_spans
 
 中文:
 定理 span_eq_iSup_of_singleton_spans
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: span R s = ⨆ x in s, R ∙ x
   证明: by
   simp only [← span_iUnion, Set.biUnion_of_singleton s]
@@ -1263,7 +1263,7 @@ theorem span_range_eq_iSup
 
 中文:
 定理 span_range_eq_iSup
-  条件: {ι : Sort*} {v : ι -> M}
+  条件: {ι : 类型层*} {v : ι -> M}
   结论: span R (range v) = ⨆ i, R ∙ v i
   证明: by
   rw [span_eq_iSup_of_singleton_spans]; rw [iSup_range]
@@ -1287,7 +1287,7 @@ theorem span_smul_le
 
 中文:
 定理 span_smul_le
-  条件: (s : Set M) (r : R)
+  条件: (s : 集合 M) (r : R)
   结论: span R (r • s) <= span R s
   证明: by
   rw [span_le]
@@ -1313,7 +1313,7 @@ theorem subset_span_trans
 
 中文:
 定理 subset_span_trans
-  结论: {U V W : Set M} (hUV : U subseteq Submodule.span R V)
+  结论: {U V W : 集合 M} (hUV : U subseteq 子模.span R V)
   证明: (Submodule.gi R M).gc.le_u_l_trans hUV hVW
 
 @[simp]
@@ -1340,7 +1340,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  结论: {ι} [Nonempty ι] (S : ι -> Submodule R M)
+  结论: {ι} [非空 ι] (S : ι -> 子模 R M)
   证明: let s : Submodule R M :=
     { __ := AddSubmonoid.copy _ _ (AddSubmonoid.coe_iSup_of_directed H).symm
       smul_mem' := fun r _ hx => have ⟨i, hi⟩ := Set.mem_iUnion.mp hx
@@ -1373,7 +1373,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  条件: {ι} [Nonempty ι] (S : ι -> Submodule R M) (H : Directed (· <= ·) S) {x}
+  条件: {ι} [非空 ι] (S : ι -> 子模 R M) (H : Directed (· <= ·) S) {x}
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_iSup_of_directed S H]; rw [mem_iUnion]
   rfl
@@ -1400,7 +1400,7 @@ theorem mem_sSup_of_directed
 
 中文:
 定理 mem_sSup_of_directed
-  结论: {s : Set (Submodule R M)} {z} (hs : s.Nonempty)
+  结论: {s : 集合 (子模 R M)} {z} (hs : s.非空)
   证明: by
   have : Nonempty s := hs.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed _ hdir.directed_val, SetCoe.exists,
@@ -1430,8 +1430,8 @@ theorem coe_iSup_of_chain
 
 中文:
 定理 coe_iSup_of_chain
-  条件: (a : 自然数 ->o Submodule R M)
-  结论: (↑(⨆ k, a k) : Set M) = ⋃ k, (a k : Set M)
+  条件: (a : 自然数 ->o 子模 R M)
+  结论: (↑(⨆ k, a k) : 集合 M) = ⋃ k, (a k : 集合 M)
   证明: coe_iSup_of_directed a a.monotone.directed_le
 
 @[simp]
@@ -1453,7 +1453,7 @@ theorem mem_iSup_of_chain
 
 中文:
 定理 mem_iSup_of_chain
-  条件: (a : 自然数 ->o Submodule R M) (m : M)
+  条件: (a : 自然数 ->o 子模 R M) (m : M)
   结论: (m in ⨆ k, a k) ↔ 存在 k, m in a k
   证明: mem_iSup_of_directed a a.monotone.directed_le
 
@@ -1539,7 +1539,7 @@ theorem codisjoint_iff_exists_add_eq
   exact forall_congr' (fun z => mem_sup.trans <| by simp)
 
 中文:
-定理 codisjoint_iff_exists_add_eq
+定理 codisjoint_iff_存在_add_eq
   证明: by
   rw [codisjoint_iff]; rw [eq_top_iff']
   exact forall_congr' (fun z => mem_sup.trans <| by simp)
@@ -1566,7 +1566,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  结论: ↑(p ⊔ p') = (p + p' : Set M)
+  结论: ↑(p ⊔ p') = (p + p' : 集合 M)
   证明: by
   ext
   rw [SetLike.mem_coe]; rw [mem_sup]; rw [Set.mem_add]
@@ -1650,7 +1650,7 @@ lemma forall_mem_sup
 @[simp high]
 
 中文:
-引理 forall_mem_sup
+引理 对任意_mem_sup
   结论: (对任意 x in p ⊔ p', P x) ↔ (对任意 x₁ in p, 对任意 x₂ in p', P (x₁ + x₂))
   证明: by
   simp [mem_sup]
@@ -1675,7 +1675,7 @@ lemma exists_mem_sup
   simp [mem_sup]
 
 中文:
-引理 exists_mem_sup
+引理 存在_mem_sup
   结论: (存在 x in p ⊔ p', P x) ↔ (存在 x₁ in p, 存在 x₂ in p', P (x₁ + x₂))
   证明: by
   simp [mem_sup]
@@ -1724,7 +1724,7 @@ theorem nontrivial_span_singleton
 中文:
 定理 nontrivial_span_singleton
   条件: {x : M} (h : x != 0)
-  结论: Nontrivial (R ∙ x)
+  结论: 非平凡 (R ∙ x)
   证明: ⟨by
     use 0, ⟨x, Submodule.mem_span_singleton_self x⟩
     intro H
@@ -1797,7 +1797,7 @@ theorem le_span_singleton_iff
 
 中文:
 定理 le_span_singleton_iff
-  条件: {s : Submodule R M} {v₀ : M}
+  条件: {s : 子模 R M} {v₀ : M}
   证明: by simp_rw [SetLike.le_def, mem_span_singleton]
 
 Depends on / 依赖: SetLike, SetLike.le_def, le_def, mem_span_singleton, simp_rw
@@ -1819,7 +1819,7 @@ theorem eq_span_singleton_of_surjective
 
 中文:
 定理 eq_span_singleton_of_surjective
-  结论: {s : Submodule R M}
+  结论: {s : 子模 R M}
   证明: by
   refine le_antisymm (fun x hx => mem_span_singleton.mpr ?_)
     (span_le.mpr <| by rintro _ rfl; exact (f 1).2)
@@ -1922,7 +1922,7 @@ theorem span_singleton_smul_le
 
 中文:
 定理 span_singleton_smul_le
-  结论: {S} [SMul S R] [SMul S M] [IsScalarTower S R M]
+  结论: {S} [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   证明: by
   rw [span_le]; rw [Set.singleton_subset_iff]; rw [SetLike.mem_coe]
   exact smul_of_tower_mem _ _ (mem_span_singleton_self _)
@@ -1947,7 +1947,7 @@ theorem span_singleton_group_smul_eq
 
 中文:
 定理 span_singleton_group_smul_eq
-  结论: {G} [Group G] [SMul G R] [MulAction G M] [IsScalarTower G R M]
+  结论: {G} [群 G] [标量乘法 G R] [乘法作用 G M] [标量塔 G R M]
   证明: by
   refine le_antisymm (span_singleton_smul_le R g x) ?_
   convert! span_singleton_smul_le R g⁻¹ (g • x)
@@ -1977,7 +1977,7 @@ theorem span_singleton_smul_eq
 
 中文:
 定理 span_singleton_smul_eq
-  条件: {r : R} (hr : IsUnit r) (x : M)
+  条件: {r : R} (hr : 是单位 r) (x : M)
   结论: R ∙ r • x = R ∙ x
   证明: by
   lift r to Rˣ using hr
@@ -2028,7 +2028,7 @@ theorem span_insert
 
 中文:
 定理 span_insert
-  条件: (x) (s : Set M)
+  条件: (x) (s : 集合 M)
   结论: span R (insert x s) = R ∙ x ⊔ span R s
   证明: by
   rw [insert_eq]; rw [span_union]
@@ -2068,7 +2068,7 @@ theorem span_span
 
 中文:
 定理 span_span
-  结论: span R (span R s : Set M) = span R s
+  结论: span R (span R s : 集合 M) = span R s
   证明: span_eq _
 
 Depends on / 依赖: span_eq
@@ -2174,7 +2174,7 @@ span_le.2 fun x h => (mem_bot R).2 H x h⟩
 
 中文:
 定理 span_eq_bot
-  结论: span R (s : Set M) = ⊥ ↔ 对任意 x in s, (x : M) = 0
+  结论: span R (s : 集合 M) = ⊥ ↔ 对任意 x in s, (x : M) = 0
   证明: eq_bot_iff.trans
 ⟨fun H _ h => (mem_bot R).1 H subset_span h, fun H =>
 span_le.2 fun x h => (mem_bot R).2 H x h⟩
@@ -2218,7 +2218,7 @@ theorem span_zero
 
 中文:
 定理 span_zero
-  结论: span R (0 : Set M) = ⊥
+  结论: span R (0 : 集合 M) = ⊥
   证明: by rw [← singleton_zero, span_singleton_eq_bot]
 
 @[simp]
@@ -2240,7 +2240,7 @@ theorem span_singleton_le_iff_mem
 
 中文:
 定理 span_singleton_le_iff_mem
-  条件: (m : M) (p : Submodule R M)
+  条件: (m : M) (p : 子模 R M)
   结论: R ∙ m <= p ↔ m in p
   证明: by
   rw [span_le]; rw [singleton_subset_iff]; rw [SetLike.mem_coe]
@@ -2262,7 +2262,7 @@ span_le.mpr iUnion_subset fun i _ hm => mem_iSup_of_mem i subset_span hm
 
 中文:
 定理 iSup_span
-  条件: {ι : Sort*} (p : ι -> Set M)
+  条件: {ι : 类型层*} (p : ι -> 集合 M)
   结论: ⨆ i, span R (p i) = span R (⋃ i, p i)
   证明: le_antisymm (iSup_le fun i => span_mono <| subset_iUnion _ i)
 span_le.mpr iUnion_subset fun i _ hm => mem_iSup_of_mem i subset_span hm
@@ -2285,7 +2285,7 @@ theorem iSup_eq_span
 
 中文:
 定理 iSup_eq_span
-  条件: {ι : Sort*} (p : ι -> Submodule R M)
+  条件: {ι : 类型层*} (p : ι -> 子模 R M)
   结论: ⨆ i, p i = span R (⋃ i, ↑(p i))
   证明: by
   simp_rw [← iSup_span, span_eq]
@@ -2306,7 +2306,7 @@ theorem iSup_eq_span'
 
 中文:
 定理 iSup_eq_span'
-  条件: {ι : Sort*} (p : ι -> Submodule R M) (h : ι -> 命题)
+  条件: {ι : 类型层*} (p : ι -> 子模 R M) (h : ι -> 命题)
   证明: by
   simp_rw [← Submodule.iSup_span, Submodule.span_eq]
 
@@ -2336,7 +2336,7 @@ theorem submodule_eq_sSup_le_nonzero_spans
 
 中文:
 定理 submodule_eq_sSup_le_nonzero_spans
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: by
   let S := { T : Submodule R M | exists m in p, m != 0 ∧ T = span R {m} }
   apply le_antisymm
@@ -2375,7 +2375,7 @@ theorem lt_sup_iff_notMem
 
 中文:
 定理 lt_sup_iff_notMem
-  条件: {I : Submodule R M} {a : M}
+  条件: {I : 子模 R M} {a : M}
   结论: I < I ⊔ R ∙ a ↔ a ∉ I
   证明: by simp
 -/
@@ -2393,7 +2393,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {ι : Sort*} (p : ι -> Submodule R M) {m : M}
+  条件: {ι : 类型层*} (p : ι -> 子模 R M) {m : M}
   证明: by
   rw [← span_singleton_le_iff_mem]; rw [le_iSup_iff]
   simp only [span_singleton_le_iff_mem]
@@ -2416,7 +2416,7 @@ theorem mem_sSup
 
 中文:
 定理 mem_sSup
-  条件: {s : Set (Submodule R M)} {m : M}
+  条件: {s : 集合 (子模 R M)} {m : M}
   证明: by
   simp_rw [sSup_eq_iSup, Submodule.mem_iSup, iSup_le_iff]
 
@@ -2448,7 +2448,7 @@ theorem mem_span_finite_of_mem_span
 
 中文:
 定理 mem_span_finite_of_mem_span
-  条件: {S : Set M} {x : M} (hx : x in span R S)
+  条件: {S : 集合 M} {x : M} (hx : x in span R S)
   证明: by
   classical
   refine span_induction (fun x hx => ?_) ?_ ?_ ?_ hx
@@ -2499,7 +2499,7 @@ theorem subset_span_finite_of_subset_span
 
 中文:
 定理 subset_span_finite_of_subset_span
-  条件: {s : Set M} {t : Finset M} (ht : (t : Set M) subseteq span R s)
+  条件: {s : 集合 M} {t : 有限集 M} (ht : (t : 集合 M) subseteq span R s)
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -2544,7 +2544,7 @@ lemma sup_toAddSubgroup
 
 中文:
 引理 sup_toAddSubgroup
-  条件: (p p' : Submodule R M)
+  条件: (p p' : 子模 R M)
   证明: by
   ext x
   rw [mem_toAddSubgroup]; rw [mem_sup]; rw [AddSubgroup.mem_sup]
@@ -2573,7 +2573,7 @@ theorem mem_span_insert'
 
 中文:
 定理 mem_span_insert'
-  条件: {x y} {s : Set M}
+  条件: {x y} {s : 集合 M}
   证明: by
   rw [mem_span_insert]; constructor
   · rintro ⟨a, z, hz, rfl⟩
@@ -2665,7 +2665,7 @@ abbreviation Module.IsPrincipal
   body: (⊤ : Submodule R M).IsPrincipal
 
 中文:
-缩写 Module.IsPrincipal
+缩写 模.是Principal
   定义体: (⊤ : Submodule R M).IsPrincipal
 
 Depends on / 依赖: IsPrincipal, Submodule
@@ -2683,8 +2683,8 @@ theorem Module.isPrincipal_def
   proof: .rfl
 
 中文:
-定理 Module.isPrincipal_def
-  结论: IsPrincipal R M ↔ (⊤ : Submodule R M).IsPrincipal
+定理 模.isPrincipal_def
+  结论: 是Principal R M ↔ (⊤ : 子模 R M).是Principal
   证明: .rfl
 -/
 theorem Module.isPrincipal_def : IsPrincipal R M ↔ (⊤ : Submodule R M).IsPrincipal := .rfl
@@ -2706,8 +2706,8 @@ theorem Module.isPrincipal_submodule_iff
 · refine ⟨⟨a
 
 中文:
-定理 Module.isPrincipal_submodule_iff
-  条件: {p : Submodule R M}
+定理 模.isPrincipal_submodule_iff
+  条件: {p : 子模 R M}
   证明: by
   simp_rw [IsPrincipal, isPrincipal_iff]
   constructor <;> rintro ⟨a, ha⟩
@@ -2744,8 +2744,8 @@ refine ⟨f m, .symm top_unique fun y _ => ?_⟩
     simpa only [map_smul] using smul_mem _ r (mem_span_singleton_self _)
 
 中文:
-定理 Module.IsPrincipal.of_surjective
-  结论: (f : M ->ₗ[R] M₂) (hf : Function.Surjective f)
+定理 模.是Principal.of_surjective
+  结论: (f : M ->ₗ[R] M₂) (hf : 函数.满射 f)
   证明: by
     have ⟨m, hm⟩ := IsPrincipal.principal (⊤ : Submodule R M)
 refine ⟨f m, .symm top_unique fun y _ => ?_⟩
@@ -2774,7 +2774,7 @@ theorem LinearEquiv.isPrincipal_iff
   mpr := (·.of_surjective _ e.symm.surjective)
 
 中文:
-定理 LinearEquiv.isPrincipal_iff
+定理 线性等价.isPrincipal_iff
   条件: (e : M ≃ₗ[R] M₂)
   证明: (·.of_surjective _ e.surjective)
   mpr := (·.of_surjective _ e.symm.surjective)
@@ -2809,7 +2809,7 @@ theorem Commute.span_left
 
 中文:
 定理 Commute.span_left
-  条件: {s : Set A} {x : A} (h : 对任意 y in s, Commute y x)
+  条件: {s : 集合 A} {x : A} (h : 对任意 y in s, Commute y x)
   证明: by
   intro y hy
   induction hy using span_induction with
@@ -2841,7 +2841,7 @@ theorem Commute.span_right
 
 中文:
 定理 Commute.span_right
-  条件: {s : Set A} {x : A} (h : 对任意 y in s, Commute x y)
+  条件: {s : 集合 A} {x : A} (h : 对任意 y in s, Commute x y)
   证明: by
   simp only [Commute.symm_iff (a := x)] at *
   exact .span_left h

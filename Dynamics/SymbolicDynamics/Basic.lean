@@ -271,7 +271,7 @@ definition cylinder
 
 中文:
 定义 cylinder
-  签名: (U : Finset G) (x : G -> A)
+  签名: (U : 有限集 G) (x : G -> A)
   定义体: { y | forall i in U, y i = x i }
 -/
 def cylinder (U : Finset G) (x : G -> A) : Set (G -> A) :=
@@ -288,7 +288,7 @@ lemma cylinder_eq_set_pi
 
 中文:
 引理 cylinder_eq_set_pi
-  条件: (U : Finset G) (x : G -> A)
+  条件: (U : 有限集 G) (x : G -> A)
   证明: by
   ext y; simp [cylinder, Set.pi]
 
@@ -308,7 +308,7 @@ lemma mem_cylinder
 
 中文:
 引理 mem_cylinder
-  条件: {U : Finset G} {x y : G -> A}
+  条件: {U : 有限集 G} {x y : G -> A}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -329,7 +329,7 @@ lemma isOpen_cylinder
 
 中文:
 引理 isOpen_cylinder
-  条件: [DiscreteTopology A] (U : Finset G) (x : G -> A)
+  条件: [离散拓扑 A] (U : 有限集 G) (x : G -> A)
   证明: by
   simpa [cylinder_eq_set_pi U x] using isOpen_set_pi (U.finite_toSet) (by simp)
 
@@ -350,7 +350,7 @@ lemma isClosed_cylinder
 
 中文:
 引理 isClosed_cylinder
-  条件: [T1Space A] (U : Finset G) (x : G -> A)
+  条件: [T1空间 A] (U : 有限集 G) (x : G -> A)
   证明: by
   simpa [cylinder_eq_set_pi U x] using isClosed_set_pi (by simp)
 
@@ -376,12 +376,12 @@ structure Subshift
     - mapsTo : forall g : G, MapsTo (shift g) carrier carrier
 
 中文:
-结构 Subshift
-  参数: (A : 类型) [TopologicalSpace A] (G : 类型) [AddMonoid G]
+结构 子平移
+  参数: (A : 类型) [拓扑空间 A] (G : 类型) [加法幺半群 G]
   公理与运算 (3 个):
-    - carrier : Set (G -> A)
-    - isClosed : IsClosed carrier
-    - mapsTo : 对任意 g : G, MapsTo (shift g) carrier carrier
+    - carrier : 集合 (G -> A)
+    - isClosed : 是闭集 carrier
+    - mapsTo : 对任意 g : G, 映射到 (shift g) carrier carrier
 -/
 structure Subshift (A : Type*) [TopologicalSpace A] (G : Type*) [AddMonoid G] where
   /-- The underlying set of configurations (additive monoid version). -/
@@ -418,9 +418,9 @@ structure MulSubshift
 结构 MulSubshift
   参数: where
   公理与运算 (3 个):
-    - carrier : Set (G -> A)
-    - isClosed : IsClosed carrier
-    - mapsTo : 对任意 g : G, MapsTo (mulShift g) carrier carrier
+    - carrier : 集合 (G -> A)
+    - isClosed : 是闭集 carrier
+    - mapsTo : 对任意 g : G, 映射到 (mulShift g) carrier carrier
 -/
 structure MulSubshift where
   /-- The underlying set of configurations. -/
@@ -453,7 +453,7 @@ definition mulFullShift
 
 中文:
 定义 mulFullShift
-  签名: (A G) [TopologicalSpace A] [Monoid G]
+  签名: (A G) [拓扑空间 A] [幺半群 G]
   定义体: Set.univ
   isClosed := isClosed_univ
   mapsTo := fun _ _ _ => trivial
@@ -478,10 +478,10 @@ structure Pattern
 
 中文:
 结构 Pattern
-  参数: (A : 类型) (G : 类型) [Inhabited A]
+  参数: (A : 类型) (G : 类型) [可居 A]
   公理与运算 (3 个):
     - config : G -> A
-    - support : Finset G
+    - support : 有限集 G
     - condition : 对任意 g ∉ support, config g = default
 -/
 structure Pattern (A : Type*) (G : Type*) [Inhabited A] where
@@ -561,7 +561,7 @@ definition mulForbidden
 
 中文:
 定义 mulForbidden
-  签名: (F : Set (Pattern A G))
+  签名: (F : 集合 (Pattern A G))
   定义体: { x | forall p in F, forall g : G, ¬ p.mulOccursInAt x g }
 
 Depends on / 依赖: mulOccursInAt, p.mulOccursInAt
@@ -655,7 +655,7 @@ definition fromConfig
 
 中文:
 定义 fromConfig
-  签名: (x : G -> A) (U : Finset G)
+  签名: (x : G -> A) (U : 有限集 G)
   定义体: by
   classical
   exact { config := fun g => if g in U then x g else default,
@@ -754,7 +754,7 @@ lemma mulOccursInAt_mulShift
 
 中文:
 引理 mulOccursInAt_mulShift
-  结论: {A G : 类型} [Inhabited A] [Monoid G]
+  结论: {A G : 类型} [可居 A] [幺半群 G]
   证明: by
   simp only [Pattern.mulOccursInAt, mulShift_apply, mul_assoc]
 
@@ -789,7 +789,7 @@ lemma mapsTo_mulShift_mulForbidden
 
 中文:
 引理 mapsTo_mulShift_mulForbidden
-  结论: {A G : 类型} [Inhabited A] [Monoid G]
+  结论: {A G : 类型} [可居 A] [幺半群 G]
   证明: by
   -- unfold `MapsTo`
   intro x hx p hp g
@@ -899,7 +899,7 @@ lemma isOpen_mulOccursInAt
 
 中文:
 引理 isOpen_mulOccursInAt
-  条件: [DiscreteTopology A] (p : Pattern A G) (g : G)
+  条件: [离散拓扑 A] (p : Pattern A G) (g : G)
   证明: by
   simpa [mulOccursInAt_eq_cylinder] using isOpen_cylinder _ _
 
@@ -936,7 +936,7 @@ lemma isClosed_mulForbidden
 
 中文:
 引理 isClosed_mulForbidden
-  条件: [DiscreteTopology A] (F : Set (Pattern A G))
+  条件: [离散拓扑 A] (F : 集合 (Pattern A G))
   证明: by
   rw [mulForbidden]
   -- Rewrite as an intersection indexed by `p ∈ F` and `v : G`.
@@ -975,7 +975,7 @@ lemma isClosed_mulOccursInAt
 
 中文:
 引理 isClosed_mulOccursInAt
-  条件: [T1Space A] (p : Pattern A G) (g : G)
+  条件: [T1空间 A] (p : Pattern A G) (g : G)
   证明: by
   simpa [mulOccursInAt_eq_cylinder] using isClosed_cylinder _ _
 
@@ -1017,7 +1017,7 @@ definition MulSubshift.ofForbidden
 
 中文:
 定义 MulSubshift.ofForbidden
-  签名: [DiscreteTopology A] (F : Set (Pattern A G))
+  签名: [离散拓扑 A] (F : 集合 (Pattern A G))
   定义体: mulForbidden F
   isClosed := isClosed_mulForbidden F
   mapsTo := Pattern.mapsTo_mulShift_mulForbidden F
@@ -1100,7 +1100,7 @@ definition LanguageOn
 
 中文:
 定义 LanguageOn
-  签名: (X : Set (G -> A)) (U : Finset G)
+  签名: (X : 集合 (G -> A)) (U : 有限集 G)
   定义体: { p | exists x in X, Pattern.fromConfig x U = p }
 
 Depends on / 依赖: Pattern, Pattern.fromConfig, fromConfig
@@ -1118,7 +1118,7 @@ definition MulSubshift.languageOn
 
 中文:
 定义 MulSubshift.languageOn
-  签名: {A G} [TopologicalSpace A] [Inhabited A] [Monoid G]
+  签名: {A G} [拓扑空间 A] [可居 A] [幺半群 G]
   定义体: SymbolicDynamics.FullShift.LanguageOn (A := A) (G := G) Y.carrier U
 
 Depends on / 依赖: FullShift, LanguageOn, SymbolicDynamics, SymbolicDynamics.FullShift.LanguageOn, Y.carrier, carrier

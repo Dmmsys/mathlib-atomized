@@ -32,7 +32,7 @@ not_subsingleton R IsArtinian.subsingleton_of_injective
 
 中文:
 定理 StrongRankCondition.of_isArtinian
-  结论: (R) [Semiring R] [Nontrivial R]
+  结论: (R) [半环 R] [非平凡 R]
   证明: (strongRankCondition_iff_succ R).2 fun n f hf =>
     have e := LinearEquiv.piCongrLeft R (fun _ => R) (finSuccEquiv n) ≪≫ₗ .piOptionEquivProd _
 not_subsingleton R IsArtinian.subsingleton_of_injective
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecompositionMonoid R
+  签名: 分解幺半群 R
   定义体: MulEquiv.decompositionMonoid (equivPi R)
 
 Depends on / 依赖: MulEquiv, MulEquiv.decompositionMonoid, decompositionMonoid, equivPi
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecompositionMonoid (Polynomial R)
+  签名: 分解幺半群 (多项式 R)
   定义体: MulEquiv.decompositionMonoid
     (Polynomial.mapEquiv <| (equivPi R).toRingEquiv).trans (Polynomial.piEquiv _)
 

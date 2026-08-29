@@ -61,7 +61,7 @@ theorem mem_primesOver_of_isPrime
 
 中文:
 定理 mem_primesOver_of_isPrime
-  条件: {Q : Ideal Sₚ} [Q.IsMaximal] [Algebra.Is整数egral Rₚ Sₚ]
+  条件: {Q : 理想 Sₚ} [Q.是极大] [代数.是整 Rₚ Sₚ]
   证明: by
   refine ⟨inferInstance, ?_⟩
   rw [liesOver_iff]; rw [← eq_maximalIdeal]
@@ -91,7 +91,7 @@ include p in
 
 中文:
 定理 liesOver_comap_of_liesOver
-  结论: {T : 类型} [CommRing T] [Algebra R T] [Algebra Rₚ T]
+  结论: {T : 类型} [交换环 T] [代数 R T] [代数 Rₚ T]
   证明: by
   have : Q.LiesOver p := by
     have : (maximalIdeal Rₚ).LiesOver p := liesOver_maximalIdeal Rₚ p _
@@ -125,7 +125,7 @@ theorem liesOver_map_of_liesOver
 
 中文:
 定理 liesOver_map_of_liesOver
-  结论: [Algebra R Sₚ] [IsScalarTower R S Sₚ] [IsScalarTower R Rₚ Sₚ]
+  结论: [代数 R Sₚ] [标量塔 R S Sₚ] [标量塔 R Rₚ Sₚ]
   证明: by
   rw [liesOver_iff]; rw [eq_comm]; rw [← map_eq_maximalIdeal p]; rw [over_def P p]
   exact under_map_eq_map_under _
@@ -158,8 +158,8 @@ theorem exists_algebraMap_quot_eq_of_mem_quot
   simp only [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _), Quotient.alg
 
 中文:
-定理 exists_algebraMap_quot_eq_of_mem_quot
-  结论: [P.IsMaximal]
+定理 存在_algebraMap_quot_eq_of_mem_quot
+  结论: [P.是极大]
   证明: by
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨x, s, rfl⟩ := IsLocalization.exists_mk'_eq (algebraMapSubmonoid S p.primeCompl) x
@@ -197,7 +197,7 @@ definition equivQuotientMapOfIsMaximal
 
 中文:
 定义 equivQuotientMapOfIsMaximal
-  签名: [P.IsMaximal]
+  签名: [P.是极大]
   定义体: .trans
     (Ideal.quotEquivOfEq (by
       rw [IsScalarTower.algebraMap_eq S Sₚ (Sₚ ⧸ _)]; rw [← RingHom.comap_ker]; rw [Quotient.algebraMap_eq]; rw [mk_ker]; rw [comap_map_eq_self_of_isMaximal _ (isPrime_map_of_liesOver S p Sₚ P).ne_top]))
@@ -226,7 +226,7 @@ theorem equivQuotientMapOfIsMaximal_apply_mk
 
 中文:
 定理 equivQuotientMapOfIsMaximal_apply_mk
-  条件: [P.IsMaximal] (x : S)
+  条件: [P.是极大] (x : S)
   证明: rfl
 
 @[simp]
@@ -251,7 +251,7 @@ Quotient.eq_zero_iff_mem.not.mpr
 
 中文:
 定理 equivQuotientMapOfIsMaximal_symm_apply_mk
-  结论: [P.IsMaximal] (x : S)
+  结论: [P.是极大] (x : S)
   证明: by
   have : (Ideal.map (algebraMap S Sₚ) P).IsPrime := isPrime_map_of_liesOver S p Sₚ P
   have h₁ : Ideal.Quotient.mk P ↑s != 0 :=
@@ -289,7 +289,7 @@ theorem algebraMap_equivQuotMaximalIdeal_symm_apply
 
 中文:
 定理 algebraMap_equivQuotMaximalIdeal_symm_apply
-  结论: [p.IsMaximal] [P.IsMaximal]
+  结论: [p.是极大] [P.是极大]
   证明: by
   obtain ⟨x, rfl⟩ := Ideal.Quotient.mk_surjective x
   obtain ⟨x, s, rfl⟩ := mk'_surjective p.primeCompl x
@@ -322,7 +322,7 @@ theorem equivQuotientMapMaximalIdeal_apply_mk
 
 中文:
 定理 equivQuotientMapMaximalIdeal_apply_mk
-  条件: [p.IsMaximal] (x : S)
+  条件: [p.是极大] (x : S)
   证明: rfl
 -/
 theorem equivQuotientMapMaximalIdeal_apply_mk [p.IsMaximal] (x : S) :
@@ -346,7 +346,7 @@ include p in
 
 中文:
 定理 inertiaDeg_map_eq_inertiaDeg
-  结论: [p.IsMaximal] [P.IsMaximal]
+  结论: [p.是极大] [P.是极大]
   证明: by
   rw [inertiaDeg'_algebraMap]; rw [inertiaDeg'_algebraMap]
   refine Algebra.finrank_eq_of_equiv_equiv (equivQuotMaximalIdeal p Rₚ).symm
@@ -383,7 +383,7 @@ theorem ramificationIdx_map_eq_ramificationIdx
 
 中文:
 定理 ramificationIdx_map_eq_ramificationIdx
-  条件: [P.IsPrime]
+  条件: [P.是素]
   证明: by
   have := liesOver_map_of_liesOver p Rₚ Sₚ P
   have := IsLocalization.liesOver_map_of_isPrime_disjoint (algebraMapSubmonoid S p.primeCompl) Sₚ
@@ -521,7 +521,7 @@ theorem primesOverEquivPrimesOver_inertiagDeg_eq
 
 中文:
 定理 primesOverEquivPrimesOver_inertiagDeg_eq
-  条件: [p.IsMaximal] (hp : p != ⊥) (P : p.primesOver S)
+  条件: [p.是极大] (hp : p != ⊥) (P : p.primesOver S)
   证明: by
   have : NeZero p := ⟨hp⟩
   have : P.val.IsMaximal := Ring.DimensionLEOne.maximalOfPrime

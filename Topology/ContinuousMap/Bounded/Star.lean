@@ -65,7 +65,7 @@ instance instStarAddMonoid
 
 中文:
 实例 instStarAddMonoid
-  签名: : StarAddMonoid (α ->ᵇ β) where
+  签名: : StarAdd幺半群 (α ->ᵇ β) where
   定义体: f.comp star starNormedAddGroupHom.lipschitz
   star_involutive f := ext fun x => star_star (f x)
   star_add f g := ext fun x => star_add (f x) (g x)
@@ -129,7 +129,7 @@ instance instNormedStarGroup
 
 中文:
 实例 instNormedStarGroup
-  签名: : NormedStarGroup (α ->ᵇ β) where
+  签名: : NormedStar群 (α ->ᵇ β) where
   定义体: by simp only [norm_eq, star_apply, norm_star, le_of_eq]
 
 Depends on / 依赖: le_of_eq, norm_eq, norm_star, star_apply
@@ -147,7 +147,7 @@ instance instStarModule
 
 中文:
 实例 instStarModule
-  签名: : StarModule 𝕜 (α ->ᵇ β) where
+  签名: : 对合模 𝕜 (α ->ᵇ β) where
   定义体: ext fun x => star_smul k (f x)
 
 Depends on / 依赖: star_smul
@@ -173,7 +173,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: [NormedStarGroup β]
+  签名: [NormedStar群 β]
   定义体: instStarAddMonoid
   star_mul f g := ext fun x => star_mul (f x) (g x)
 
@@ -199,7 +199,7 @@ instance instCStarRing
 
 中文:
 实例 instCStarRing
-  签名: : CStarRing (α ->ᵇ β) where
+  签名: : CStar环 (α ->ᵇ β) where
   定义体: by
     rw [← sq]; rw [← Real.le_sqrt (norm_nonneg _) (norm_nonneg _)]; rw [norm_le (Real.sqrt_nonneg _)]
     intro x

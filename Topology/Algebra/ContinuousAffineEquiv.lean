@@ -50,12 +50,12 @@ structure ContinuousAffineEquiv
     - continuous_invFun : Continuous invFun  [default: by fun_prop]
 
 中文:
-结构 ContinuousAffineEquiv
-  参数: (k P₁ P₂ : 类型) {V₁ V₂ : 类型} [Ring k]
+结构 余ntinuousAffine等价
+  参数: (k P₁ P₂ : 类型) {V₁ V₂ : 类型} [环 k]
   继承: P₁ ≃ᵃ[k] P₂
   公理与运算 (2 个):
-    - continuous_toFun : Continuous toFun  [默认: by fun_prop]
-    - continuous_invFun : Continuous invFun  [默认: by fun_prop]
+    - continuous_toFun : 连续 toFun  [默认: by fun_prop]
+    - continuous_invFun : 连续 invFun  [默认: by fun_prop]
 
 Depends on / 依赖: Continuous, continuous_invFun, fun_prop, invFun
 -/
@@ -108,7 +108,7 @@ theorem toAffineEquiv_injective
 
 中文:
 定理 toAffineEquiv_injective
-  结论: Injective (toAffineEquiv : (P₁ ≃ᴬ[k] P₂) -> P₁ ≃ᵃ[k] P₂)
+  结论: 单射 (toAffineEquiv : (P₁ ≃ᴬ[k] P₂) -> P₁ ≃ᵃ[k] P₂)
   证明: by
   rintro ⟨e, econt, einv_cont⟩ ⟨e', e'cont, e'inv_cont⟩ H
   congr
@@ -133,7 +133,7 @@ instance instEquivLike
 
 中文:
 实例 instEquivLike
-  签名: : EquivLike (P₁ ≃ᴬ[k] P₂) P₁ P₂ where
+  签名: : 等价状 (P₁ ≃ᴬ[k] P₂) P₁ P₂ where
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomeomorphClass (P₁ ≃ᴬ[k] P₂) P₁ P₂
+  签名: 同胚类 (P₁ ≃ᴬ[k] P₂) P₁ P₂
   定义体: f.continuous_toFun
   inv_continuous f := f.continuous_invFun
 
@@ -202,7 +202,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (P₁ ≃ᴬ[k] P₂) P₁ P₂ where
+  签名: : 函数状 (P₁ ≃ᴬ[k] P₂) P₁ P₂ where
   定义体: f.toAffineEquiv
   coe_injective _ _ h := toAffineEquiv_injective (DFunLike.coe_injective h)
 
@@ -298,7 +298,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (e : P₁ ≃ᴬ[k] P₂)
-  结论: Continuous e
+  结论: 连续 e
   证明: e.2
 -/
 protected theorem continuous (e : P₁ ≃ᴬ[k] P₂) : Continuous e :=
@@ -334,7 +334,7 @@ instance ContinuousAffineMap.coe
 @[simp]
 
 中文:
-实例 ContinuousAffineMap.coe
+实例 余ntinuousAffine映射.coe
   签名: : Coe (P₁ ≃ᴬ[k] P₂) (P₁ ->ᴬ[k] P₂)
   定义体: ⟨toContinuousAffineMap⟩
 
@@ -513,7 +513,7 @@ theorem toAffineEquiv_refl
 
 中文:
 定理 toAffineEquiv_refl
-  结论: (refl k P₁).toAffineEquiv = AffineEquiv.refl k P₁
+  结论: (refl k P₁).toAffineEquiv = 仿射等价.refl k P₁
   证明: rfl
 
 @[simp]
@@ -532,7 +532,7 @@ theorem toEquiv_refl
 
 中文:
 定理 toEquiv_refl
-  结论: (refl k P₁).toEquiv = Equiv.refl P₁
+  结论: (refl k P₁).toEquiv = 等价.refl P₁
   证明: rfl
 -/
 theorem toEquiv_refl : (refl k P₁).toEquiv = Equiv.refl P₁ :=
@@ -793,7 +793,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (symm : (P₁ ≃ᴬ[k] P₂) -> _)
+  结论: 函数.双射 (symm : (P₁ ≃ᴬ[k] P₂) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -902,7 +902,7 @@ theorem image_symm
 
 中文:
 定理 image_symm
-  条件: (f : P₁ ≃ᴬ[k] P₂) (s : Set P₂)
+  条件: (f : P₁ ≃ᴬ[k] P₂) (s : 集合 P₂)
   结论: f.symm '' s = f ⁻¹' s
   证明: f.symm.toEquiv.image_eq_preimage_symm _
 
@@ -925,7 +925,7 @@ theorem preimage_symm
 
 中文:
 定理 preimage_symm
-  条件: (f : P₁ ≃ᴬ[k] P₂) (s : Set P₁)
+  条件: (f : P₁ ≃ᴬ[k] P₂) (s : 集合 P₁)
   结论: f.symm ⁻¹' s = f '' s
   证明: (f.symm.image_symm _).symm
 
@@ -946,7 +946,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : P₁ ≃ᴬ[k] P₂)
-  结论: Bijective e
+  结论: 双射 e
   证明: e.toEquiv.bijective
 -/
 protected theorem bijective (e : P₁ ≃ᴬ[k] P₂) : Bijective e :=
@@ -964,7 +964,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : P₁ ≃ᴬ[k] P₂)
-  结论: Surjective e
+  结论: 满射 e
   证明: e.toEquiv.surjective
 
 Depends on / 依赖: SetRel, SetRel.left_subset_comp, antisymm, comp_le_uniformity, comp_le_uniformity.antisymm, isRefl_of_mem_uniformity, le_lift, left_subset_comp, mem_of_superset
@@ -984,7 +984,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : P₁ ≃ᴬ[k] P₂)
-  结论: Injective e
+  结论: 单射 e
   证明: e.toEquiv.injective
 -/
 protected theorem injective (e : P₁ ≃ᴬ[k] P₂) : Injective e :=
@@ -1001,7 +1001,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₁)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₁)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toEquiv.image_eq_preimage_symm s
 -/
@@ -1021,7 +1021,7 @@ theorem image_symm_eq_preimage
 
 中文:
 定理 image_symm_eq_preimage
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₂)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₂)
   证明: by
   rw [e.symm.image_eq_preimage_symm]; rw [e.symm_symm]
 
@@ -1045,7 +1045,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₂)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₂)
   结论: e '' e ⁻¹' s = s
   证明: e.surjective.image_preimage s
 
@@ -1068,7 +1068,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₁)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₁)
   结论: e ⁻¹' e '' s = s
   证明: e.injective.preimage_image s
 
@@ -1088,7 +1088,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₁)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₁)
   结论: e.symm '' e '' s = s
   证明: e.toEquiv.symm_image_image s
 
@@ -1110,7 +1110,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: (e : P₁ ≃ᴬ[k] P₂) (s : Set P₂)
+  条件: (e : P₁ ≃ᴬ[k] P₂) (s : 集合 P₂)
   结论: e '' e.symm '' s = s
   证明: e.symm.symm_image_image s
 
@@ -1409,7 +1409,7 @@ lemma toAffineEquiv_vaddConst
 中文:
 引理 toAffineEquiv_vaddConst
   条件: {p : P₁}
-  结论: vaddConst k p = AffineEquiv.vaddConst k p
+  结论: vaddConst k p = 仿射等价.vaddConst k p
   证明: rfl
 -/
 lemma toAffineEquiv_vaddConst {p : P₁} : vaddConst k p = AffineEquiv.vaddConst k p := rfl
@@ -1455,7 +1455,7 @@ lemma toAffineEquiv_constVSub
 中文:
 引理 toAffineEquiv_constVSub
   条件: {p : P₁}
-  结论: constVSub k p = AffineEquiv.constVSub k p
+  结论: constVSub k p = 仿射等价.constVSub k p
   证明: rfl
 -/
 lemma toAffineEquiv_constVSub {p : P₁} : constVSub k p = AffineEquiv.constVSub k p := rfl
@@ -1596,7 +1596,7 @@ theorem pointReflection_involutive
 中文:
 定理 pointReflection_involutive
   条件: (x : P₁)
-  结论: Involutive (pointReflection k x : P₁ -> P₁)
+  结论: 对合 (pointReflection k x : P₁ -> P₁)
   证明: Equiv.pointReflection_involutive x
 
 Depends on / 依赖: Equiv.pointReflection_involutive, pointReflection_involutive
@@ -1624,7 +1624,7 @@ definition _root_.ContinuousLinearEquiv.toContinuousAffineEquiv
 @[simp]
 
 中文:
-定义 _root_.ContinuousLinearEquiv.toContinuousAffineEquiv
+定义 _root_.连续线性等价.toContinuousAffineEquiv
   签名: (L : E ≃L[k] F)
   定义体: L.toAffineEquiv
   continuous_toFun := L.continuous_toFun
@@ -1649,7 +1649,7 @@ theorem _root_.ContinuousLinearEquiv.coe_toContinuousAffineEquiv
   proof: rfl
 
 中文:
-定理 _root_.ContinuousLinearEquiv.coe_toContinuousAffineEquiv
+定理 _root_.连续线性等价.coe_toContinuousAffineEquiv
   条件: (e : E ≃L[k] F)
   证明: rfl
 -/
@@ -1666,7 +1666,7 @@ lemma _root_.ContinuousLinearEquiv.toContinuousAffineEquiv_toContinuousAffineMap
   proof: rfl
 
 中文:
-引理 _root_.ContinuousLinearEquiv.toContinuousAffineEquiv_toContinuousAffineMap
+引理 _root_.连续线性等价.toContinuousAffineEquiv_toContinuousAffineMap
   条件: (L : E ≃L[k] F)
   证明: rfl
 -/
@@ -1688,7 +1688,7 @@ definition constVAdd
 
 中文:
 定义 constVAdd
-  签名: [ContinuousConstVAdd V₁ P₁] (v : V₁)
+  签名: [连续常数向量加法 V₁ P₁] (v : V₁)
   定义体: AffineEquiv.constVAdd k P₁ v
   continuous_toFun := continuous_const_vadd v
   continuous_invFun := continuous_const_vadd (-v)
@@ -1710,7 +1710,7 @@ lemma constVAdd_coe
 
 中文:
 引理 constVAdd_coe
-  条件: [ContinuousConstVAdd V₁ P₁] (v : V₁)
+  条件: [连续常数向量加法 V₁ P₁] (v : V₁)
   证明: rfl
 -/
 lemma constVAdd_coe [ContinuousConstVAdd V₁ P₁] (v : V₁) :

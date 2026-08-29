@@ -48,7 +48,7 @@ instance isDominant_restrict_hom
 
 中文:
 实例 isDominant_restrict_hom
-  签名: (f : X.PartialMap Y) [IsDominant f.hom] (U : X.Opens)
+  签名: (f : X.Partial映射 Y) [是Dominant f.hom] (U : X.Opens)
   定义体: by
   dsimp only [restrict_domain, restrict_hom]
   have : IsDominant (X.homOfLE hU') := Opens.isDominant_homOfLE hU hU'
@@ -72,7 +72,7 @@ lemma isDominant_hom_of_isDominant_restrict_hom
 
 中文:
 引理 isDominant_hom_of_isDominant_restrict_hom
-  结论: (f : X.PartialMap Y) (U : X.Opens)
+  结论: (f : X.Partial映射 Y) (U : X.Opens)
   证明: IsDominant.of_comp (X.homOfLE hU') f.hom (H := H)
 
 Depends on / 依赖: IsDominant, IsDominant.of_comp, X.homOfLE, f.hom, homOfLE, of_comp
@@ -93,7 +93,7 @@ lemma isDominant_hom_iff_isDominant_restrict_hom
 
 中文:
 引理 isDominant_hom_iff_isDominant_restrict_hom
-  结论: (f : X.PartialMap Y) (U : X.Opens)
+  结论: (f : X.Partial映射 Y) (U : X.Opens)
   证明: ⟨fun _ => f.isDominant_restrict_hom U hU hU',
     fun _ => f.isDominant_hom_of_isDominant_restrict_hom U hU hU'⟩
 
@@ -121,7 +121,7 @@ lemma isDominant_hom_iff_of_equiv
 
 中文:
 引理 isDominant_hom_iff_of_equiv
-  条件: (f g : X.PartialMap Y) (h : f.equiv g)
+  条件: (f g : X.Partial映射 Y) (h : f.equiv g)
   证明: by
   obtain ⟨W, hW, hWl, hWr, h⟩ := h
   have e₁ := isDominant_hom_iff_isDominant_restrict_hom f W hW hWl
@@ -155,10 +155,10 @@ class RationalMap.IsDominant
     - @[simp]
 
 中文:
-类 RationalMap.IsDominant
+类 RationalMap.是Dominant
   参数: (f : X ⤏ Y)
   公理与运算 (2 个):
-    - out : Quotient.liftOn f (fun g => IsDominant g.hom) fun _ _ h => propext (PartialMap.isDominant_hom_iff_of_equiv _ _ h)
+    - out : 商.liftOn f (fun g => 是Dominant g.hom) fun _ _ h => propext (Partial映射.isDominant_hom_iff_of_equiv _ _ h)
     - @[simp]
 -/
 protected class RationalMap.IsDominant (f : X ⤏ Y) : Prop where
@@ -175,8 +175,8 @@ lemma PartialMap.isDominant_toRationalMap_iff
   proof: f.toRationalMap.isDominant_iff
 
 中文:
-引理 PartialMap.isDominant_toRationalMap_iff
-  条件: (f : X.PartialMap Y)
+引理 Partial映射.isDominant_toRationalMap_iff
+  条件: (f : X.Partial映射 Y)
   证明: f.toRationalMap.isDominant_iff
 
 Depends on / 依赖: f.toRationalMap.isDominant_iff, isDominant_iff, toRationalMap

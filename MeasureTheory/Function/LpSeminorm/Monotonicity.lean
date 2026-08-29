@@ -545,7 +545,7 @@ theorem le_eLpNorm_of_bddBelow
 
 中文:
 定理 le_eLpNorm_of_bddBelow
-  结论: (hp : p != 0) (hp' : p != ∞) {f : α -> F} (C : 实数>=0) {s : Set α}
+  结论: (hp : p != 0) (hp' : p != ∞) {f : α -> F} (C : 实数>=0) {s : 集合 α}
   证明: by
   rw [ENNReal.smul_def]; rw [smul_eq_mul]; rw [eLpNorm_eq_lintegral_rpow_enorm_toReal hp hp']; rw [one_div]; rw [ENNReal.le_rpow_inv_iff (ENNReal.toReal_pos hp hp')]; rw [ENNReal.mul_rpow_of_nonneg _ _ ENNReal.toReal_nonneg]; rw [← ENNReal.rpow_mul]; rw [inv_mul_cancel₀ (ENNReal.toReal_pos hp hp'
 
@@ -647,7 +647,7 @@ lemma eLpNorm_conj
 
 中文:
 引理 eLpNorm_conj
-  条件: (f : α -> 𝕜) (p : 实数>=0∞) (μ : Measure α)
+  条件: (f : α -> 𝕜) (p : 实数>=0∞) (μ : 测度 α)
   证明: by simp [← eLpNorm_norm]
 -/
 @[simp] lemma eLpNorm_conj (f : α -> 𝕜) (p : Real>=0∞) (μ : Measure α) :

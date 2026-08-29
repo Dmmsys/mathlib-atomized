@@ -45,7 +45,7 @@ abbreviation mulActionBaseChange
 
 中文:
 缩写 mulActionBaseChange
-  签名: : MulAction A (S otimes[R] Ω[A⁄R])
+  签名: : 乘法作用 A (S otimes[R] Ω[A⁄R])
   定义体: (TensorProduct.comm R S Ω[A⁄R]).toEquiv.mulAction A
 
 Depends on / 依赖: TensorProduct, TensorProduct.comm, mulAction, toEquiv, toEquiv.mulAction
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R A (S otimes[R] Ω[A⁄R])
+  签名: 标量塔 R A (S otimes[R] Ω[A⁄R])
   定义体: by
   apply IsScalarTower.of_algebraMap_smul
   intro r x
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass S A (S otimes[R] Ω[A⁄R])
+  签名: 标量交换类 S A (S otimes[R] Ω[A⁄R])
   定义体: by
     induction x
     · simp only [smul_zero]
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass A S (S otimes[R] Ω[A⁄R])
+  签名: 标量交换类 A S (S otimes[R] Ω[A⁄R])
   定义体: by rw [← smul_comm]
 
 Depends on / 依赖: smul_comm
@@ -261,7 +261,7 @@ definition moduleBaseChange'
 
 中文:
 定义 moduleBaseChange'
-  签名: [Algebra.IsPushout R S A B]
+  签名: [代数.是推出 R S A B]
   定义体: Module.compHom _ (Algebra.pushoutDesc B (Algebra.lsmul R (A := S) S (S otimes[R] Ω[A⁄R]))
     (Algebra.lsmul R (A := A) _ _) (LinearMap.ext <| smul_comm · ·)).toRingHom
 
@@ -289,7 +289,7 @@ instance [Algebra.IsPushout
   simp only [Algebra.pushoutDesc_right, Module.End.smul_
 
 中文:
-实例 [Algebra.IsPushout
+实例 [代数.是推出
   签名: R S A B] :
   定义体: by
   apply IsScalarTower.of_algebraMap_smul
@@ -325,7 +325,7 @@ instance [Algebra.IsPushout
   simp only [Algebra.pushoutDesc_left, Module.End.smul_d
 
 中文:
-实例 [Algebra.IsPushout
+实例 [代数.是推出
   签名: R S A B] :
   定义体: by
   apply IsScalarTower.of_algebraMap_smul
@@ -365,7 +365,7 @@ lemma map_liftBaseChange_smul
 
 中文:
 引理 map_liftBaseChange_smul
-  条件: [h : Algebra.IsPushout R S A B] (b : B) (x)
+  条件: [h : 代数.是推出 R S A B] (b : B) (x)
   证明: by
   induction b using h.1.inductionOn with
   | zero => simp only [zero_smul, map_zero]
@@ -412,7 +412,7 @@ definition derivationTensorProduct
 
 中文:
 定义 derivationTensorProduct
-  签名: [h : Algebra.IsPushout R S A B]
+  签名: [h : 代数.是推出 R S A B]
   定义体: h.out.lift ((TensorProduct.mk R S Ω[A⁄R] 1).comp (D R A).toLinearMap)
   map_one_eq_zero' := by
     rw [← (algebraMap A B).map_one]
@@ -462,7 +462,7 @@ lemma derivationTensorProduct_algebraMap
 
 中文:
 引理 derivationTensorProduct_algebraMap
-  条件: [Algebra.IsPushout R S A B] (x)
+  条件: [代数.是推出 R S A B] (x)
   证明: IsBaseChange.lift_eq _ _ _
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.lift_eq, lift_eq
@@ -489,7 +489,7 @@ lemma tensorKaehlerEquiv_left_inv
 
 中文:
 引理 tensorKaehlerEquiv_left_inv
-  条件: [Algebra.IsPushout R S A B]
+  条件: [代数.是推出 R S A B]
   证明: by
   refine LinearMap.restrictScalars_injective R ?_
   apply TensorProduct.ext'
@@ -538,7 +538,7 @@ definition tensorKaehlerEquivBase
 
 中文:
 定义 tensorKaehlerEquivBase
-  签名: [h : Algebra.IsPushout R S A B]
+  签名: [h : 代数.是推出 R S A B]
   定义体: ((map R S A B).restrictScalars R).liftBaseChange S
   invFun := (derivationTensorProduct R S A B).liftKaehlerDifferential
   left_inv := LinearMap.congr_fun (tensorKaehlerEquiv_left_inv R S A B)
@@ -587,7 +587,7 @@ lemma tensorKaehlerEquivBase_tmul
 
 中文:
 引理 tensorKaehlerEquivBase_tmul
-  条件: [Algebra.IsPushout R S A B] (a b)
+  条件: [代数.是推出 R S A B] (a b)
   证明: LinearMap.liftBaseChange_tmul _ _ _ _
 
 @[deprecated (since := "2026-01-01")] alias tensorKaehlerEquiv_tmul := tensorKaehlerEquivBase_tmul
@@ -616,7 +616,7 @@ lemma isBaseChange
 
 中文:
 引理 isBaseChange
-  条件: [h : Algebra.IsPushout R S A B]
+  条件: [h : 代数.是推出 R S A B]
   证明: by
   convert!
     (TensorProduct.isBaseChange R Ω[A⁄R] S).comp
@@ -647,7 +647,7 @@ instance isLocalizedModule
 
 中文:
 实例 isLocalizedModule
-  签名: (p : Submonoid R) [IsLocalization p S]
+  签名: (p : 子幺半群 R) [是Localization p S]
   定义体: have := (Algebra.isPushout_of_isLocalization p S A B).symm
   (isLocalizedModule_iff_isBaseChange p S _).mpr (isBaseChange R S A B)
 
@@ -671,7 +671,7 @@ instance isLocalizedModule_of_isLocalizedModule
 
 中文:
 实例 isLocalizedModule_of_isLocalizedModule
-  签名: (p : Submonoid R) [IsLocalization p S]
+  签名: (p : 子幺半群 R) [是Localization p S]
   定义体: have : IsLocalization (Algebra.algebraMapSubmonoid A p) B :=
     isLocalizedModule_iff_isLocalization.mp inferInstance
   inferInstance
@@ -703,7 +703,7 @@ definition tensorKaehlerEquiv
 
 中文:
 定义 tensorKaehlerEquiv
-  签名: [h : Algebra.IsPushout R S A B]
+  签名: [h : 代数.是推出 R S A B]
   定义体: by
   have : Algebra.IsPushout R A S B := .symm inferInstance
   let e₁ : B otimes[A] Ω[A⁄R] ≃ₗ[A] Ω[A⁄R] otimes[R] S :=
@@ -765,7 +765,7 @@ lemma tensorKaehlerEquiv_tmul_D
 
 中文:
 引理 tensorKaehlerEquiv_tmul_D
-  条件: [Algebra.IsPushout R S A B] (b a)
+  条件: [代数.是推出 R S A B] (b a)
   证明: by
   have : Algebra.IsPushout R A S B := .symm inferInstance
   obtain ⟨b, rfl⟩ := (Algebra.IsPushout.equiv R A S B).surjective b

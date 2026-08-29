@@ -73,7 +73,7 @@ definition discr
 
 中文:
 定义 discr
-  签名: (A : 类型u) {B : 类型v} [CommRing A] [CommRing B] [Algebra A B]
+  签名: (A : 类型u) {B : 类型v} [交换环 A] [交换环 B] [代数 A B]
   定义体: (traceMatrix A b).det
 
 Depends on / 依赖: traceMatrix
@@ -92,7 +92,7 @@ theorem discr_def
 
 中文:
 定理 discr_def
-  条件: [Fintype ι] (b : ι -> B)
+  条件: [有限类型 ι] (b : ι -> B)
   结论: discr A b = (traceMatrix A b).det
   证明: rfl
 -/
@@ -111,7 +111,7 @@ theorem discr_eq_discr_of_algEquiv
 
 中文:
 定理 discr_eq_discr_of_algEquiv
-  条件: [Fintype ι] (b : ι -> B) (f : B ≃ₐ[A] C)
+  条件: [有限类型 ι] (b : ι -> B) (f : B ≃ₐ[A] C)
   证明: by
   rw [discr_def]; congr; ext
   simp_rw [traceMatrix_apply, traceForm_apply, Function.comp, ← map_mul f, trace_eq_of_algEquiv]
@@ -140,7 +140,7 @@ theorem discr_reindex
 
 中文:
 定理 discr_reindex
-  条件: (b : Basis ι A B) (f : ι ≃ ι')
+  条件: (b : 基 ι A B) (f : ι ≃ ι')
   结论: discr A (b ∘ ⇑f.symm) = discr A b
   证明: by
   rw [← Basis.coe_reindex]; rw [discr_def]; rw [traceMatrix_reindex]; rw [det_reindex_self]; rw [← discr_def]
@@ -167,7 +167,7 @@ theorem discr_zero_of_not_linearIndependent
 
 中文:
 定理 discr_zero_of_not_linearIndependent
-  结论: [IsDomain A] {b : ι -> B}
+  结论: [是整环 A] {b : ι -> B}
   证明: by
   obtain ⟨g, hg, i, hi⟩ := Fintype.not_linearIndependent_iff.1 hli
   have : (traceMatrix A b) *ᵥ g = 0 := by
@@ -207,7 +207,7 @@ theorem discr_of_matrix_vecMul
 
 中文:
 定理 discr_of_matrix_vecMul
-  条件: (b : ι -> B) (P : Matrix ι ι A)
+  条件: (b : ι -> B) (P : 矩阵 ι ι A)
   证明: by
   rw [discr_def]; rw [traceMatrix_of_matrix_vecMul]; rw [det_mul]; rw [det_mul]; rw [det_transpose]; rw [mul_comm]; rw [←
     mul_assoc]; rw [discr_def]; rw [pow_two]
@@ -231,7 +231,7 @@ theorem discr_of_matrix_mulVec
 
 中文:
 定理 discr_of_matrix_mulVec
-  条件: (b : ι -> B) (P : Matrix ι ι A)
+  条件: (b : ι -> B) (P : 矩阵 ι ι A)
   证明: by
   rw [discr_def]; rw [traceMatrix_of_matrix_mulVec]; rw [det_mul]; rw [det_mul]; rw [det_transpose]; rw [mul_comm]; rw [←
     mul_assoc]; rw [discr_def]; rw [pow_two]
@@ -263,7 +263,7 @@ theorem discr_not_zero_of_basis
 
 中文:
 定理 discr_not_zero_of_basis
-  条件: [Algebra.IsSeparable K L] (b : Basis ι K L)
+  条件: [代数.是可分 K L] (b : 基 ι K L)
   证明: by
   rw [discr_def]; rw [traceMatrix_of_basis]; rw [← LinearMap.BilinForm.nondegenerate_iff_det_ne_zero]
   exact traceForm_nondegenerate _ _
@@ -286,8 +286,8 @@ theorem discr_isUnit_of_basis
 
 中文:
 定理 discr_isUnit_of_basis
-  条件: [Algebra.IsSeparable K L] (b : Basis ι K L)
-  结论: IsUnit (discr K b)
+  条件: [代数.是可分 K L] (b : 基 ι K L)
+  结论: 是单位 (discr K b)
   证明: IsUnit.mk0 _ (discr_not_zero_of_basis _ _)
 
 Depends on / 依赖: IsUnit, IsUnit.mk0, discr_not_zero_of_basis
@@ -330,7 +330,7 @@ theorem discr_powerBasis_eq_prod
 
 中文:
 定理 discr_powerBasis_eq_prod
-  条件: (e : Fin pb.dim ≃ (L ->ₐ[K] E)) [Algebra.IsSeparable K L]
+  条件: (e : 有限集 pb.dim ≃ (L ->ₐ[K] E)) [代数.是可分 K L]
   证明: by
   rw [discr_eq_det_embeddingsMatrixReindex_pow_two K E pb.basis e]; rw [embeddingsMatrixReindex_eq_vandermonde]; rw [det_transpose]; rw [det_vandermonde]; rw [← prod_pow]
   congr; ext i
@@ -360,7 +360,7 @@ local notation "n" => finrank K L
 
 中文:
 定理 discr_powerBasis_eq_prod'
-  条件: [Algebra.IsSeparable K L] (e : Fin pb.dim ≃ (L ->ₐ[K] E))
+  条件: [代数.是可分 K L] (e : 有限集 pb.dim ≃ (L ->ₐ[K] E))
   证明: by
   rw [discr_powerBasis_eq_prod _ _ _ e]
   congr; ext i; congr; ext j
@@ -397,7 +397,7 @@ theorem discr_powerBasis_eq_prod''
 
 中文:
 定理 discr_powerBasis_eq_prod''
-  条件: [Algebra.IsSeparable K L] (e : Fin pb.dim ≃ (L ->ₐ[K] E))
+  条件: [代数.是可分 K L] (e : 有限集 pb.dim ≃ (L ->ₐ[K] E))
   证明: by
   rw [discr_powerBasis_eq_prod' _ _ _ e]
   simp_rw [fun i j => neg_eq_neg_one_mul ((e j pb.gen - e i pb.gen) * (e i pb.gen - e j pb.gen)),
@@ -457,7 +457,7 @@ theorem discr_powerBasis_eq_norm
 
 中文:
 定理 discr_powerBasis_eq_norm
-  条件: [Algebra.IsSeparable K L]
+  条件: [代数.是可分 K L]
   证明: by
   let E := AlgebraicClosure L
   let := fun a b : E => Classical.propDecidable (Eq a b)
@@ -526,9 +526,9 @@ theorem discr_isIntegral
   exact IsIntegral.det fun i j => isIntegral_trace ((h i).mul (h j))
 
 中文:
-定理 discr_isIntegral
-  条件: {b : ι -> L} (h : 对任意 i, Is整数egral R (b i))
-  结论: Is整数egral R (discr K b)
+定理 discr_is整数egral
+  条件: {b : ι -> L} (h : 对任意 i, 是整 R (b i))
+  结论: 是整 R (discr K b)
   证明: by
   rw [discr_def]
   exact IsIntegral.det fun i j => isIntegral_trace ((h i).mul (h j))
@@ -554,8 +554,8 @@ theorem discr_mul_isIntegral_mem_adjoin
     cong
 
 中文:
-定理 discr_mul_isIntegral_mem_adjoin
-  结论: [Algebra.IsSeparable K L] [Is整数egrallyClosed R]
+定理 discr_mul_is整数egral_mem_adjoin
+  结论: [代数.是可分 K L] [是整闭 R]
   证明: by
   have hinv : IsUnit (traceMatrix K B.basis).det := by
     simpa [← discr_def] using discr_isUnit_of_basis _ B.basis
@@ -624,7 +624,7 @@ theorem discr_eq_discr
 
 中文:
 定理 discr_eq_discr
-  条件: (b : Basis ι 整数 A) (b' : Basis ι 整数 A)
+  条件: (b : 基 ι 整数 A) (b' : 基 ι 整数 A)
   证明: by
   convert! Algebra.discr_of_matrix_vecMul b' (b'.toMatrix b)
   · rw [Basis.toMatrix_map_vecMul]

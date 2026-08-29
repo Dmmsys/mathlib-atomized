@@ -98,7 +98,7 @@ lemma injective_valMinAbs
 
 中文:
 引理 injective_valMinAbs
-  结论: (valMinAbs : ZMod n -> 整数).Injective
+  结论: (valMinAbs : ZMod n -> 整数).单射
   证明: Function.injective_iff_hasLeftInverse.2 ⟨_, coe_valMinAbs⟩
 
 @[simp]
@@ -219,7 +219,7 @@ lemma valMinAbs_mem_Ioc
 中文:
 引理 valMinAbs_mem_Ioc
   条件: [NeZero n] (x : ZMod n)
-  结论: x.valMinAbs * 2 in Set.Ioc (-n : 整数) n
+  结论: x.valMinAbs * 2 in 集合.左开右闭区间 (-n : 整数) n
   证明: by
   simp_rw [valMinAbs_def_pos, Nat.le_div_two_iff_mul_two_le]; split_ifs with h
   · exact ⟨(neg_lt_zero.2 <| mod_cast NeZero.pos n).trans_le (by positivity), h⟩
@@ -580,7 +580,7 @@ lemma prime_ne_zero
 
 中文:
 引理 prime_ne_zero
-  条件: (p q : 自然数) [hp : Fact p.Prime] [hq : Fact q.Prime] (hpq : p != q)
+  条件: (p q : 自然数) [hp : Fact p.素] [hq : Fact q.素] (hpq : p != q)
   证明: by
   rwa [← Nat.cast_zero, Ne, natCast_eq_natCast_iff, Nat.modEq_zero_iff_dvd,
     ← hp.1.coprime_iff_not_dvd, Nat.coprime_primes hp.1 hq.1]

@@ -81,7 +81,7 @@ theorem ramificationIdx_def
 
 中文:
 定理 ramificationIdx_def
-  条件: [q.IsPrime]
+  条件: [q.是素]
   证明: Localization.AtPrime q
     q.ramificationIdx R = (Module.length Sq (Sq ⧸ (q.under R).map (algebraMap R Sq))).toNat :=
   dif_pos _
@@ -111,7 +111,7 @@ theorem ramificationIdx_of_not_isPrime
 
 中文:
 定理 ramificationIdx_of_not_isPrime
-  条件: (hq : ¬ q.IsPrime)
+  条件: (hq : ¬ q.是素)
   结论: q.ramificationIdx R = 0
   证明: dif_neg hq
 
@@ -144,7 +144,7 @@ theorem ramificationIdx_pos
 
 中文:
 定理 ramificationIdx_pos
-  条件: [q.IsPrime] [Module.Finite R S]
+  条件: [q.是素] [模.有限 R S]
   结论: 0 < q.ramificationIdx R
   证明: by
   let p := q.under R
@@ -193,7 +193,7 @@ theorem ramificationIdx_eq_one
 
 中文:
 定理 ramificationIdx_eq_one
-  结论: [q.IsPrime] [Algebra.EssFiniteType R S]
+  结论: [q.是素] [代数.EssFiniteType R S]
   证明: by
   let p := q.under R
   let Rp := Localization.AtPrime p
@@ -231,7 +231,7 @@ theorem ramificationIdx_eq_one_iff
 
 中文:
 定理 ramificationIdx_eq_one_iff
-  结论: [q.IsPrime] [Algebra.EssFiniteType R S]
+  结论: [q.是素] [代数.EssFiniteType R S]
   证明: by
   refine ⟨fun h => ?_, fun _ => ramificationIdx_eq_one q R⟩
   rw [ramificationIdx_def]; rw [ENat.toNat_eq_iff_eq_natCast]; rw [Nat.cast_one]; rw [Module.length_eq_one_iff]; rw [isSimpleModule_iff_isCoatom]; rw [← Ideal.isMaximal_def]; rw [IsLocalRing.isMaximal_iff] at h
@@ -279,7 +279,7 @@ theorem ramificationIdx_eq
 
 中文:
 定理 ramificationIdx_eq
-  条件: [q.LiesOver p] [q.IsPrime]
+  条件: [q.LiesOver p] [q.是素]
   证明: Localization.AtPrime q
     q.ramificationIdx R = (Module.length Sq (Sq ⧸ p.map (algebraMap R Sq))).toNat := by
   rw [ramificationIdx_def]; rw [over_def q p]
@@ -314,7 +314,7 @@ theorem ramificationIdx'_eq_ramificationIdx'
 
 中文:
 定理 ramificationIdx'_eq_ramificationIdx'
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   have hq' : q != ⊥ := ne_bot_of_le_ne_bot hpS (map_le_of_le_comap (q.over_def p).le)
   have : q.IsMaximal := hq.isMaximal hq'
@@ -359,7 +359,7 @@ theorem ramificationIdx'_eq_ramificationIdx
 
 中文:
 定理 ramificationIdx'_eq_ramificationIdx
-  结论: [IsDomain R] [IsDedekindDomain S]
+  结论: [是整环 R] [是Dedekind整环 S]
   证明: by
   have hpS : p.map (algebraMap R S) != ⊥ := map_ne_bot_of_ne_bot hp
   exact ramificationIdx'_eq_ramificationIdx' p q hpS
@@ -396,7 +396,7 @@ theorem ramificationIdx_eq_factors_count
 
 中文:
 定理 ramificationIdx_eq_factors_count
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   by_cases hq : q.IsPrime; swap
   · rw [ramificationIdx_of_not_isPrime q R hq, eq_comm, Multiset.count_eq_zero]
@@ -429,7 +429,7 @@ theorem ramificationIdx_eq_normalizedFactors_count
 
 中文:
 定理 ramificationIdx_eq_normalizedFactors_count
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   rw [← factors_eq_normalizedFactors]; rw [← ramificationIdx_eq_factors_count p q hp0]
 
@@ -454,7 +454,7 @@ theorem ramificationIdx_eq_multiplicity
 
 中文:
 定理 ramificationIdx_eq_multiplicity
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   have hq : q != ⊥ := ne_bot_of_le_ne_bot hp (map_le_of_le_comap (q.over_def p).le)
   rw [ramificationIdx_eq_normalizedFactors_count p q hp]; rw [multiplicity_eq_of_emultiplicity_eq_some (emultiplicity_eq_count_normalizedFactors
@@ -486,7 +486,7 @@ theorem ramificationIdx_tower'
 
 中文:
 定理 ramificationIdx_tower'
-  结论: [q.IsPrime] [r.IsPrime] [r.LiesOver q]
+  结论: [q.是素] [r.是素] [r.LiesOver q]
   证明: by
   have : q.LiesOver (r.under R) := LiesOver.tower_bot r q (r.under R)
   let f := (Ideal.quotientEquivAlgOfEq (Localization.AtPrime r)
@@ -527,7 +527,7 @@ theorem ramificationIdx_tower
 
 中文:
 定理 ramificationIdx_tower
-  条件: [r.LiesOver q] [Module.Flat S T]
+  条件: [r.LiesOver q] [模.平坦 S T]
   证明: by
   by_cases hr : r.IsPrime
   · have : q.IsPrime := isPrime_of_liesOver r q
@@ -563,7 +563,7 @@ theorem ramificationIdx_below_dvd
 
 中文:
 定理 ramificationIdx_below_dvd
-  条件: [r.LiesOver q] [Module.Flat S T]
+  条件: [r.LiesOver q] [模.平坦 S T]
   证明: by
   use r.ramificationIdx S
   rw [← ramificationIdx_tower]
@@ -593,7 +593,7 @@ theorem ramificationIdx_above_dvd
 
 中文:
 定理 ramificationIdx_above_dvd
-  条件: [r.LiesOver q] [Module.Flat S T]
+  条件: [r.LiesOver q] [模.平坦 S T]
   证明: by
   use q.ramificationIdx R
   rw [mul_comm]; rw [← ramificationIdx_tower]
@@ -622,7 +622,7 @@ theorem ramificationIdx_below_le
 
 中文:
 定理 ramificationIdx_below_le
-  条件: [r.IsPrime] [r.LiesOver q] [Module.Finite R T] [Module.Flat S T]
+  条件: [r.是素] [r.LiesOver q] [模.有限 R T] [模.平坦 S T]
   证明: Nat.le_of_dvd (r.ramificationIdx_pos R) (q.ramificationIdx_below_dvd r)
 
 @[deprecated (since := "2026-07-01")] alias ramificationIdx'_below_le :=
@@ -649,7 +649,7 @@ theorem ramificationIdx_above_le
 
 中文:
 定理 ramificationIdx_above_le
-  条件: [r.IsPrime] [r.LiesOver q] [Module.Finite R T] [Module.Flat S T]
+  条件: [r.是素] [r.LiesOver q] [模.有限 R T] [模.平坦 S T]
   证明: Nat.le_of_dvd (r.ramificationIdx_pos R) (q.ramificationIdx_above_dvd r)
 
 @[deprecated (since := "2026-07-01")] alias ramificationIdx'_above_le := ramificationIdx_above_le
@@ -683,7 +683,7 @@ theorem ramificationIdx_smul
 
 中文:
 定理 ramificationIdx_smul
-  结论: {G : 类型} [Group G] [MulSemiringAction G S] [SMulCommClass G R S]
+  结论: {G : 类型} [群 G] [MulSemiring作用 G S] [标量交换类 G R S]
   证明: by
   by_cases hq : q.IsPrime; swap
   · rw [ramificationIdx_of_not_isPrime, ramificationIdx_of_not_isPrime] <;> simpa

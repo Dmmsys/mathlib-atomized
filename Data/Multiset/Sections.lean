@@ -168,7 +168,7 @@ theorem card_sections
 中文:
 定理 card_sections
   条件: {s : Multiset (Multiset α)}
-  结论: card (Sections s) = prod (s.map card)
+  结论: card (Sections s) = 乘积 (s.map card)
   证明: Multiset.induction_on s (by simp) (by simp +contextual)
 
 Depends on / 依赖: Multiset, Multiset.induction_on, contextual, induction_on

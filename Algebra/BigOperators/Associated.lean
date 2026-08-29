@@ -46,9 +46,9 @@ theorem exists_mem_multiset_dvd
       ⟨a, Multiset.mem_cons_of_mem has, h⟩
 
 中文:
-定理 exists_mem_multiset_dvd
-  条件: (hp : Prime p) {s : Multiset M₀}
-  结论: p ∣ s.prod -> 存在 a in s, p ∣ a
+定理 存在_mem_multiset_dvd
+  条件: (hp : 素 p) {s : Multiset M₀}
+  结论: p ∣ s.乘积 -> 存在 a in s, p ∣ a
   证明: Multiset.induction_on s (fun h => (hp.not_dvd_one h).elim) fun a s ih h =>
     have : p ∣ a * s.prod := by simpa using h
     match hp.dvd_or_dvd this with
@@ -79,8 +79,8 @@ theorem exists_mem_multiset_map_dvd
     hp.exists_mem_multiset_dvd h
 
 中文:
-定理 exists_mem_multiset_map_dvd
-  条件: (hp : Prime p) {s : Multiset ι} {f : ι -> M₀}
+定理 存在_mem_multiset_map_dvd
+  条件: (hp : 素 p) {s : Multiset ι} {f : ι -> M₀}
   证明: fun h => by
   simpa only [exists_prop, Multiset.mem_map, exists_exists_and_eq_and] using
     hp.exists_mem_multiset_dvd h
@@ -101,8 +101,8 @@ theorem exists_mem_finset_dvd
   proof: hp.exists_mem_multiset_map_dvd
 
 中文:
-定理 exists_mem_finset_dvd
-  条件: (hp : Prime p) {s : Finset ι} {f : ι -> M₀}
+定理 存在_mem_finset_dvd
+  条件: (hp : 素 p) {s : 有限集 ι} {f : ι -> M₀}
   证明: hp.exists_mem_multiset_map_dvd
 
 Depends on / 依赖: exists_mem_multiset_map_dvd, hp.exists_mem_multiset_map_dvd
@@ -125,8 +125,8 @@ theorem Prod.associated_iff
     ⟨MulEquiv.prodUnits.invFun (u₁, u₂), Prod.eq_iff_fst_eq_snd_eq.2 ⟨h₁, h₂⟩⟩⟩
 
 中文:
-定理 Prod.associated_iff
-  条件: {M N : 类型} [Monoid M] [Monoid N] {x z : M × N}
+定理 积类型.associated_iff
+  条件: {M N : 类型} [幺半群 M] [幺半群 N] {x z : M × N}
   证明: ⟨fun ⟨u, hu⟩ => ⟨⟨(MulEquiv.prodUnits.toFun u).1, (Prod.eq_iff_fst_eq_snd_eq.1 hu).1⟩,
     ⟨(MulEquiv.prodUnits.toFun u).2, (Prod.eq_iff_fst_eq_snd_eq.1 hu).2⟩⟩,
   fun ⟨⟨u₁, h₁⟩, ⟨u₂, h₂⟩⟩ =>
@@ -160,8 +160,8 @@ theorem Associated.prod
     grind [Associated.mul_mul]
 
 中文:
-定理 Associated.prod
-  结论: {M : 类型} [CommMonoid M] {ι : 类型} (s : Finset ι) (f : ι -> M)
+定理 Associated.乘积
+  结论: {M : 类型} [交换幺半群 M] {ι : 类型} (s : 有限集 ι) (f : ι -> M)
   证明: by
   induction s using Finset.induction with
   | empty =>
@@ -198,8 +198,8 @@ theorem exists_associated_mem_of_dvd_prod
       exact ⟨a, Multiset.mem_cons_self a _, hp.associated_of_dvd hap 
 
 中文:
-定理 exists_associated_mem_of_dvd_prod
-  结论: [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
+定理 存在_associated_mem_of_dvd_prod
+  结论: [带零交换幺半群 M₀] [是乘零消去 M₀]
   证明: Multiset.induction_on s (by simp [mt isUnit_iff_dvd_one.2 hp.not_isUnit]) fun a s ih hs hps => by
     rw [Multiset.prod_cons] at hps
     rcases hp.dvd_or_dvd hps with h | h
@@ -239,7 +239,7 @@ theorem divisor_closure_eq_closure
 
 中文:
 定理 divisor_closure_eq_closure
-  结论: [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
+  结论: [带零交换幺半群 M₀] [是乘零消去 M₀]
   证明: by
   obtain ⟨m, hm, hprod⟩ := exists_multiset_of_mem_closure hxy
   induction m using Multiset.induction generalizing x y with
@@ -306,7 +306,7 @@ theorem Multiset.prod_primes_dvd
 
 中文:
 定理 Multiset.prod_primes_dvd
-  结论: [CommMonoidWithZero M₀] [IsCancelMulZero M₀]
+  结论: [带零交换幺半群 M₀] [是乘零消去 M₀]
   证明: by
   induction s using Multiset.induction_on generalizing n with
   | empty => simp only [Multiset.prod_zero, one_dvd]
@@ -354,8 +354,8 @@ theorem Finset.prod_primes_dvd
             ←
 
 中文:
-定理 Finset.prod_primes_dvd
-  结论: [CommMonoidWithZero M₀] [IsCancelMulZero M₀] [Subsingleton M₀ˣ]
+定理 有限集.prod_primes_dvd
+  结论: [带零交换幺半群 M₀] [是乘零消去 M₀] [子单例 M₀ˣ]
   证明: by
   classical
     exact
@@ -395,7 +395,7 @@ theorem prod_mk
 中文:
 定理 prod_mk
   条件: {p : Multiset M}
-  结论: (p.map Associates.mk).prod = Associates.mk p.prod
+  结论: (p.map Associates.mk).乘积 = Associates.mk p.乘积
   证明: Multiset.induction_on p (by simp) fun a s ih => by simp [ih, Associates.mk_mul_mk]
 
 Depends on / 依赖: Associates, Associates.mk_mul_mk, Multiset, Multiset.induction_on, induction_on, mk_mul_mk
@@ -416,7 +416,7 @@ theorem finsetProd_mk
 
 中文:
 定理 finsetProd_mk
-  条件: {p : Finset ι} {f : ι -> M}
+  条件: {p : 有限集 ι} {f : ι -> M}
   证明: by
   rw [Finset.prod_eq_multiset_prod]; rw [← Function.comp_def]; rw [← Multiset.map_map]; rw [prod_mk]; rw [← Finset.prod_eq_multiset_prod]
 
@@ -492,7 +492,7 @@ theorem prod_le_prod
 中文:
 定理 prod_le_prod
   条件: {p q : Multiset (Associates M)} (h : p <= q)
-  结论: p.prod <= q.prod
+  结论: p.乘积 <= q.乘积
   证明: by
   have := Classical.decEq (Associates M)
   suffices p.prod <= (p + (q - p)).prod by rwa [add_tsub_cancel_of_le h] at this
@@ -529,7 +529,7 @@ theorem exists_mem_multiset_le_of_prime
       ⟨a, M
 
 中文:
-定理 exists_mem_multiset_le_of_prime
+定理 存在_mem_multiset_le_of_prime
   结论: {s : Multiset (Associates M₀)} {p : Associates M₀}
   证明: Multiset.induction_on s (fun ⟨_, eq⟩ => (hp.ne_one (mul_eq_one.1 eq.symm).1).elim)
     fun a s ih h =>
@@ -569,7 +569,7 @@ theorem prod_ne_zero_of_prime
 
 中文:
 定理 prod_ne_zero_of_prime
-  结论: [CommMonoidWithZero M₀] [NoZeroDivisors M₀] [Nontrivial M₀]
+  结论: [带零交换幺半群 M₀] [无零因子 M₀] [非平凡 M₀]
   证明: Multiset.prod_ne_zero fun h0 => Prime.ne_zero (h 0 h0) rfl
 
 Depends on / 依赖: IsScalarTower, Multiset, Multiset.prod_ne_zero, Prime.ne_zero, Subsemiring, ne_zero, prod_ne_zero, subsemiring
@@ -597,8 +597,8 @@ theorem Prime.dvd_finsetProd_iff
 @[deprecated (since := "2026-04-08")] alias Prime.dvd_finset_prod_iff := Prime.dvd_finsetProd_iff
 
 中文:
-定理 Prime.dvd_finsetProd_iff
-  条件: {S : Finset M₀} {p : M} (pp : Prime p) (g : M₀ -> M)
+定理 素.dvd_finsetProd_iff
+  条件: {S : 有限集 M₀} {p : M} (pp : 素 p) (g : M₀ -> M)
   证明: ⟨pp.exists_mem_finset_dvd, fun ⟨_, ha1, ha2⟩ => dvd_trans ha2 (dvd_prod_of_mem g ha1)⟩
 
 @[deprecated (since := "2026-04-08")] alias Prime.dvd_finset_prod_iff := Prime.dvd_finsetProd_iff
@@ -623,8 +623,8 @@ exact mt (Prime.dvd_finsetProd_iff pp _).1 not_exists.2 fun a => not_and.2 (hS a
 @[deprecated (since := "2026-04-08")] alias Prime.not_dvd_finset_prod := Prime.not_dvd_finsetProd
 
 中文:
-定理 Prime.not_dvd_finsetProd
-  结论: {S : Finset M₀} {p : M} (pp : Prime p) {g : M₀ -> M}
+定理 素.not_dvd_finsetProd
+  结论: {S : 有限集 M₀} {p : M} (pp : 素 p) {g : M₀ -> M}
   证明: by
 exact mt (Prime.dvd_finsetProd_iff pp _).1 not_exists.2 fun a => not_and.2 (hS a)
 
@@ -647,8 +647,8 @@ theorem Prime.dvd_finsuppProd_iff
   proof: Prime.dvd_finsetProd_iff pp _
 
 中文:
-定理 Prime.dvd_finsuppProd_iff
-  条件: {f : M₀ ->₀ M} {g : M₀ -> M -> 自然数} {p : 自然数} (pp : Prime p)
+定理 素.dvd_finsuppProd_iff
+  条件: {f : M₀ ->₀ M} {g : M₀ -> M -> 自然数} {p : 自然数} (pp : 素 p)
   证明: Prime.dvd_finsetProd_iff pp _
 
 Depends on / 依赖: Prime.dvd_finsetProd_iff, dvd_finsetProd_iff
@@ -666,8 +666,8 @@ theorem Prime.not_dvd_finsuppProd
   proof: Prime.not_dvd_finsetProd pp hS
 
 中文:
-定理 Prime.not_dvd_finsuppProd
-  结论: {f : M₀ ->₀ M} {g : M₀ -> M -> 自然数} {p : 自然数} (pp : Prime p)
+定理 素.not_dvd_finsuppProd
+  结论: {f : M₀ ->₀ M} {g : M₀ -> M -> 自然数} {p : 自然数} (pp : 素 p)
   证明: Prime.not_dvd_finsetProd pp hS
 
 Depends on / 依赖: Prime.not_dvd_finsetProd, not_dvd_finsetProd

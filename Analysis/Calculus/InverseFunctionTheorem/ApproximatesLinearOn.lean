@@ -75,7 +75,7 @@ definition ApproximatesLinearOn
 
 中文:
 定义 ApproximatesLinearOn
-  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : Set E) (c : 实数>=0)
+  签名: (f : E -> F) (f' : E ->L[𝕜] F) (s : 集合 E) (c : 实数>=0)
   定义体: forall x in s, forall y in s, ‖f x - f y - f' (x - y)‖ <= c * ‖x - y‖
 
 @[simp]
@@ -165,7 +165,7 @@ alias ⟨lipschitzOnWith, _root_.LipschitzOnWith.approximatesLinearOn⟩ :=
 
 中文:
 定理 approximatesLinearOn_iff_lipschitzOnWith
-  结论: {f : E -> F} {f' : E ->L[𝕜] F} {s : Set E}
+  结论: {f : E -> F} {f' : E ->L[𝕜] F} {s : 集合 E}
   证明: by
   have : forall x y, f x - f y - f' (x - y) = (f - f') x - (f - f') y := fun x y => by
     simp only [map_sub, Pi.sub_apply]; abel
@@ -238,7 +238,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (hf : ApproximatesLinearOn f f' s c)
-  结论: Continuous (s.domRestrict f)
+  结论: 连续 (s.domRestrict f)
   证明: hf.lipschitz.continuous
 -/
 protected theorem continuous (hf : ApproximatesLinearOn f f' s c) : Continuous (s.domRestrict f) :=
@@ -631,7 +631,7 @@ theorem surjective
 
 中文:
 定理 surjective
-  结论: [CompleteSpace E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
+  结论: [完备空间 E] (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) univ c)
   证明: by
   rcases hc with hE | hc
   · have : Subsingleton F := (Equiv.subsingleton_congr f'.toEquiv).1 hE
@@ -719,7 +719,7 @@ theorem to_inv
 
 中文:
 定理 to_inv
-  条件: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : Subsingleton E ∨ c < N⁻¹)
+  条件: (hf : ApproximatesLinearOn f (f' : E ->L[𝕜] F) s c) (hc : 子单例 E ∨ c < N⁻¹)
   证明: fun x hx y hy => by
   set A := hf.toPartialEquiv hc
   have Af : forall z, A z = f z := fun z => rfl

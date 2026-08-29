@@ -71,7 +71,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CharacterModule A) A (AddCircle (1 : Rat))
+  签名: 函数状 (CharacterModule A) A (AddCircle (1 : 有理数))
   定义体: c.toFun
   coe_injective _ _ _ := by simp_all
 
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (CharacterModule A) 整数 A (AddCircle (1 : Rat))
+  签名: 线性映射类 (CharacterModule A) 整数 A (AddCircle (1 : 有理数))
   定义体: AddMonoidHom.map_add
   map_smulₛₗ := AddMonoidHom.map_zsmul
 
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (CharacterModule A)
+  签名: 加法交换群 (CharacterModule A)
   定义体: inferInstanceAs (AddCommGroup (A ->+ _))
 
 Depends on / 依赖: AddCommGroup
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (CharacterModule A)
+  签名: 模 R (CharacterModule A)
   定义体: fast_instance% Module.compHom (A ->+ _) (RingEquiv.toOpposite _ |>.toRingHom : R ->+* Rᵈᵐᵃ)
 
 Depends on / 依赖: Module, Module.compHom, RingEquiv, RingEquiv.toOpposite, compHom, fast_instance, toOpposite, toRingHom
@@ -241,7 +241,7 @@ lemma dual_comp
 
 中文:
 引理 dual_comp
-  条件: {C : 类型} [AddCommGroup C] [Module R C] (f : A ->ₗ[R] B) (g : B ->ₗ[R] C)
+  条件: {C : 类型} [加法交换群 C] [模 R C] (f : A ->ₗ[R] B) (g : B ->ₗ[R] C)
   证明: by
   ext
   rfl
@@ -266,7 +266,7 @@ lemma dual_injective_of_surjective
 
 中文:
 引理 dual_injective_of_surjective
-  条件: (f : A ->ₗ[R] B) (hf : Function.Surjective f)
+  条件: (f : A ->ₗ[R] B) (hf : 函数.满射 f)
   证明: by
   intro φ ψ eq
   ext x
@@ -292,7 +292,7 @@ lemma dual_surjective_of_injective
 
 中文:
 引理 dual_surjective_of_injective
-  条件: (f : A ->ₗ[R] B) (hf : Function.Injective f)
+  条件: (f : A ->ₗ[R] B) (hf : 函数.单射 f)
   证明: (Module.Baer.of_divisible _).extension_property_addMonoidHom _ hf
 
 Depends on / 依赖: Module, Module.Baer.of_divisible, extension_property_addMonoidHom, of_divisible
@@ -433,7 +433,7 @@ abbreviation int
 
 中文:
 缩写 int
-  签名: : Type
+  签名: : 类型
   定义体: CharacterModule Int
 -/
 protected abbrev int : Type := CharacterModule Int
@@ -447,7 +447,7 @@ abbreviation int.divByNat
   body: .toAddMonoidHom LinearMap.toSpanSingleton Int _ (QuotientAddGroup.mk (n : Rat)⁻¹)
 
 中文:
-缩写 int.divByNat
+缩写 int.divBy自然数
   签名: (n : 自然数)
   定义体: .toAddMonoidHom LinearMap.toSpanSingleton Int _ (QuotientAddGroup.mk (n : Rat)⁻¹)
 -/
@@ -467,7 +467,7 @@ lemma int.divByNat_self
     ⟨1, by simp [mul_inv_cancel₀ (Nat.cast_ne_zero (R := Rat).mpr h0)]⟩
 
 中文:
-引理 int.divByNat_self
+引理 int.divBy自然数_self
   条件: (n : 自然数)
   证明: by
   obtain rfl | h0 := eq_or_ne n 0
@@ -622,7 +622,7 @@ lemma exists_character_apply_ne_zero_of_ne_zero
 ⟨c, fun h => ne_zero eq_zero_of_ofSpanSingleton_apply_self a by rwa [← hc]⟩
 
 中文:
-引理 exists_character_apply_ne_zero_of_ne_zero
+引理 存在_character_apply_ne_zero_of_ne_zero
   条件: {a : A} (ne_zero : a != 0)
   证明: have ⟨c, hc⟩ := dual_surjective_of_injective _ (Submodule.injective_subtype _) (ofSpanSingleton a)
 ⟨c, fun h => ne_zero eq_zero_of_ofSpanSingleton_apply_self a by rwa [← hc]⟩
@@ -721,7 +721,7 @@ lemma surjective_of_dual_injective
 
 中文:
 引理 surjective_of_dual_injective
-  条件: (f : A ->ₗ[R] A') (hf : Function.Injective (dual f))
+  条件: (f : A ->ₗ[R] A') (hf : 函数.单射 (dual f))
   证明: by
   rw [← LinearMap.range_eq_top]; rw [← Submodule.unique_quotient_iff_eq_top]
   refine ⟨Unique.mk inferInstance fun a => eq_zero_of_character_apply fun c => ?_⟩

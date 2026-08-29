@@ -294,7 +294,7 @@ definition approxOn
 
 中文:
 定义 approxOn
-  签名: (f : β -> α) (hf : Measurable f) (s : Set α) (y₀ : α) (h₀ : y₀ in s)
+  签名: (f : β -> α) (hf : 可测 f) (s : 集合 α) (y₀ : α) (h₀ : y₀ in s)
   定义体: haveI : Nonempty s := ⟨⟨y₀, h₀⟩⟩
   comp (nearestPt (fun k => Nat.casesOn k y₀ ((↑) ∘ denseSeq s) : Nat -> α) n) f hf
 
@@ -318,7 +318,7 @@ theorem approxOn_zero
 
 中文:
 定理 approxOn_zero
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: rfl
 -/
 theorem approxOn_zero {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
@@ -339,7 +339,7 @@ theorem approxOn_mem
 
 中文:
 定理 approxOn_mem
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: by
   have : Nonempty s := ⟨⟨y₀, h₀⟩⟩
   suffices forall n, (Nat.casesOn n y₀ ((↑) ∘ denseSeq s) : α) in s by apply this
@@ -372,7 +372,7 @@ exact fun _ => this approxOn_mem ..
 
 中文:
 引理 approxOn_range_nonneg
-  结论: [Zero α] [Preorder α] {f : β -> α}
+  结论: [零 α] [预序 α] {f : β -> α}
   证明: by
   have : range f union {0} subseteq Set.Ici 0 := by
     simp only [Set.union_singleton, Set.insert_subset_iff, Set.mem_Ici, le_refl, true_and]
@@ -404,7 +404,7 @@ theorem approxOn_comp
 
 中文:
 定理 approxOn_comp
-  结论: {γ : 类型} [MeasurableSpace γ] {f : β -> α} (hf : Measurable f) {g : γ -> β}
+  结论: {γ : 类型} [可测空间 γ] {f : β -> α} (hf : 可测 f) {g : γ -> β}
   证明: rfl
 -/
 theorem approxOn_comp {γ : Type*} [MeasurableSpace γ] {f : β -> α} (hf : Measurable f) {g : γ -> β}
@@ -427,7 +427,7 @@ theorem tendsto_approxOn
 
 中文:
 定理 tendsto_approxOn
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: by
   have : Nonempty s := ⟨⟨y₀, h₀⟩⟩
   rw [← @Subtype.range_coe _ s]; rw [← image_univ]; rw [← (denseRange_denseSeq s).closure_eq] at hx
@@ -461,7 +461,7 @@ theorem edist_approxOn_mono
 
 中文:
 定理 edist_approxOn_mono
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: by
   dsimp only [approxOn, coe_comp, Function.comp_def]
   exact edist_nearestPt_le _ _ ((nearestPtInd_le _ _ _).trans h)
@@ -484,7 +484,7 @@ theorem edist_approxOn_le
 
 中文:
 定理 edist_approxOn_le
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: edist_approxOn_mono hf h₀ x zero_le
 
 Depends on / 依赖: edist_approxOn_mono, zero_le
@@ -507,7 +507,7 @@ theorem edist_approxOn_y0_le
 
 中文:
 定理 edist_approxOn_y0_le
-  结论: {f : β -> α} (hf : Measurable f) {s : Set α} {y₀ : α} (h₀ : y₀ in s)
+  结论: {f : β -> α} (hf : 可测 f) {s : 集合 α} {y₀ : α} (h₀ : y₀ in s)
   证明: calc
     edist y₀ (approxOn f hf s y₀ h₀ n x) <=
         edist y₀ (f x) + edist (approxOn f hf s y₀ h₀ n x) (f x) :=
@@ -550,8 +550,8 @@ lemma HasCompactSupport.exists_simpleFunc_approx_of_prod
       (p := fun t => exists (g : SimpleFunc (X × 
 
 中文:
-引理 HasCompactSupport.exists_simpleFunc_approx_of_prod
-  结论: [PseudoMetricSpace α]
+引理 HasCompactSupport.存在_simpleFunc_approx_of_prod
+  结论: [伪度量空间 α]
   证明: by
   have M : forall (K : Set (X × Y)), IsCompact K ->
       exists (g : SimpleFunc (X × Y) α), exists (s : Set (X × Y)), MeasurableSet s ∧ K subseteq s ∧

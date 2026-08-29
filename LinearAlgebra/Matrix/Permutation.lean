@@ -43,8 +43,8 @@ abbreviation Equiv.Perm.permMatrix
   body: σ.toPEquiv.toMatrix
 
 中文:
-缩写 Equiv.Perm.permMatrix
-  签名: [Zero R] [One R]
+缩写 等价.置换.permMatrix
+  签名: [零 R] [幺 R]
   定义体: σ.toPEquiv.toMatrix
 
 Depends on / 依赖: toMatrix, toPEquiv, toPEquiv.toMatrix
@@ -68,8 +68,8 @@ lemma permMatrix_refl
 
 中文:
 引理 permMatrix_refl
-  条件: [Zero R] [One R]
-  结论: Equiv.Perm.permMatrix R (.refl n) = 1
+  条件: [零 R] [幺 R]
+  结论: 等价.置换.permMatrix R (.refl n) = 1
   证明: by
   simp [← Matrix.ext_iff, Matrix.one_apply]
 
@@ -92,8 +92,8 @@ lemma permMatrix_one
 
 中文:
 引理 permMatrix_one
-  条件: [Zero R] [One R]
-  结论: (1 : Equiv.Perm n).permMatrix R = 1
+  条件: [零 R] [幺 R]
+  结论: (1 : 等价.置换 n).permMatrix R = 1
   证明: permMatrix_refl
 
 @[simp]
@@ -118,7 +118,7 @@ lemma transpose_permMatrix
 
 中文:
 引理 transpose_permMatrix
-  条件: [Zero R] [One R]
+  条件: [零 R] [幺 R]
   结论: (σ.permMatrix R).transpose = (σ⁻¹).permMatrix R
   证明: by
   rw [← PEquiv.toMatrix_symm]; rw [← Equiv.toPEquiv_symm]; rw [← Equiv.Perm.inv_def]
@@ -143,7 +143,7 @@ lemma conjTranspose_permMatrix
 
 中文:
 引理 conjTranspose_permMatrix
-  条件: [NonAssocSemiring R] [StarRing R]
+  条件: [非结合半环 R] [对合环 R]
   证明: by
   simp only [conjTranspose, transpose_permMatrix, map]
   aesop
@@ -171,8 +171,8 @@ theorem det_permutation
 
 中文:
 定理 det_permutation
-  条件: [CommRing R]
-  结论: det (σ.permMatrix R) = Perm.sign σ
+  条件: [交换环 R]
+  结论: det (σ.permMatrix R) = 置换.sign σ
   证明: by
   rw [← Matrix.mul_one (σ.permMatrix R)]; rw [PEquiv.toMatrix_toPEquiv_mul]; rw [det_permute]; rw [det_one]; rw [mul_one]
 
@@ -193,7 +193,7 @@ theorem trace_permutation
 
 中文:
 定理 trace_permutation
-  条件: [AddCommMonoidWithOne R]
+  条件: [加法交换带幺幺半群 R]
   证明: by
   delta trace
   simp [toPEquiv_apply, ← Set.ncard_coe_finset, Function.fixedPoints, Function.IsFixedPt]
@@ -217,7 +217,7 @@ lemma permMatrix_mulVec
 
 中文:
 引理 permMatrix_mulVec
-  条件: {v : n -> R} [CommRing R]
+  条件: {v : n -> R} [交换环 R]
   证明: by
   ext j
   simp [mulVec_eq_sum, Pi.single, Function.update, Equiv.eq_symm_apply]
@@ -243,7 +243,7 @@ lemma vecMul_permMatrix
 
 中文:
 引理 vecMul_permMatrix
-  条件: {v : n -> R} [CommRing R]
+  条件: {v : n -> R} [交换环 R]
   证明: by
   ext j
   simp [vecMul_eq_sum, Pi.single, Function.update, ← Equiv.symm_apply_eq σ]
@@ -269,7 +269,7 @@ lemma permMatrix_mul
 
 中文:
 引理 permMatrix_mul
-  条件: [NonAssocSemiring R]
+  条件: [非结合半环 R]
   证明: by
   rw [Perm.permMatrix]; rw [Perm.mul_def]; rw [toPEquiv_trans]; rw [PEquiv.toMatrix_trans]
 
@@ -293,7 +293,7 @@ definition permMatrixHom
 
 中文:
 定义 permMatrixHom
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: σ⁻¹.permMatrix R
   map_one' := permMatrix_one
   map_mul' σ τ := by rw [_root_.mul_inv_rev, permMatrix_mul]
@@ -347,7 +347,7 @@ theorem permMatrix_l2_opNorm_eq
 
 中文:
 定理 permMatrix_l2_opNorm_eq
-  条件: [Nonempty n]
+  条件: [非空 n]
   结论: ‖σ.permMatrix 𝕜‖ = 1
   证明: le_antisymm (permMatrix_l2_opNorm_le σ) by
     inhabit n

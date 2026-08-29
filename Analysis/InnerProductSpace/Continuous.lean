@@ -54,7 +54,7 @@ theorem _root_.isBoundedBilinearMap_inner
 
 中文:
 定理 _root_.isBoundedBilinearMap_inner
-  条件: [NormedSpace 实数 E] [IsScalarTower 实数 𝕜 E]
+  条件: [赋范空间 实数 E] [标量塔 实数 𝕜 E]
   证明: { add_left := inner_add_left
     smul_left := fun r x y => by
       simp only [← algebraMap_smul 𝕜 r x, algebraMap_eq_ofReal, inner_smul_real_left]
@@ -89,7 +89,7 @@ theorem continuous_inner
 
 中文:
 定理 continuous_inner
-  结论: Continuous fun p : E × E => ⟪p.1, p.2⟫
+  结论: 连续 fun p : E × E => ⟪p.1, p.2⟫
   证明: letI : InnerProductSpace Real E := InnerProductSpace.rclikeToReal 𝕜 E
   haveI := IsScalarTower.restrictScalars Real 𝕜 E
   isBoundedBilinearMap_inner.continuous
@@ -112,8 +112,8 @@ theorem Filter.Tendsto.inner
   proof: (continuous_inner.tendsto _).comp (hf.prodMk_nhds hg)
 
 中文:
-定理 Filter.Tendsto.inner
-  结论: {f g : α -> E} {l : Filter α} {x y : E} (hf : Tendsto f l (𝓝 x))
+定理 滤子.收敛.inner
+  结论: {f g : α -> E} {l : 滤子 α} {x y : E} (hf : 收敛 f l (𝓝 x))
   证明: (continuous_inner.tendsto _).comp (hf.prodMk_nhds hg)
 
 Depends on / 依赖: continuous_inner, continuous_inner.tendsto, hf.prodMk_nhds, prodMk_nhds, tendsto
@@ -203,9 +203,9 @@ theorem Continuous.inner
   proof: continuous_iff_continuousAt.2 fun _x => by fun_prop
 
 中文:
-定理 Continuous.inner
-  条件: (hf : Continuous f) (hg : Continuous g)
-  结论: Continuous fun t => ⟪f t, g t⟫
+定理 连续.inner
+  条件: (hf : 连续 f) (hg : 连续 g)
+  结论: 连续 fun t => ⟪f t, g t⟫
   证明: continuous_iff_continuousAt.2 fun _x => by fun_prop
 
 Depends on / 依赖: continuous_iff_continuousAt, fun_prop
@@ -240,8 +240,8 @@ theorem Dense.eq_zero_of_inner_left
       (by simp +contextual [inner_add_right]) (by simp +contextual [inner_smul_righ
 
 中文:
-定理 Dense.eq_zero_of_inner_left
-  条件: (hS : Dense S) (h : 对任意 v in S, ⟪x, v⟫ = 0)
+定理 稠密.eq_zero_of_inner_left
+  条件: (hS : 稠密 S) (h : 对任意 v in S, ⟪x, v⟫ = 0)
   结论: x = 0
   证明: by
   let K := span 𝕜 S
@@ -270,8 +270,8 @@ theorem Dense.eq_zero_of_inner_right
   proof: hS.eq_zero_of_inner_left 𝕜 fun v hv => by rw! [← inner_conj_symm]; simp [-inner_conj_symm, h, hv]
 
 中文:
-定理 Dense.eq_zero_of_inner_right
-  条件: (hS : Dense S) (h : 对任意 v in S, ⟪v, x⟫ = 0)
+定理 稠密.eq_zero_of_inner_right
+  条件: (hS : 稠密 S) (h : 对任意 v in S, ⟪v, x⟫ = 0)
   结论: x = 0
   证明: hS.eq_zero_of_inner_left 𝕜 fun v hv => by rw! [← inner_conj_symm]; simp [-inner_conj_symm, h, hv]
 
@@ -291,8 +291,8 @@ theorem Dense.eq_of_inner_left
   rw [← sub_eq_zero]; exact hS.eq_zero_of_inner_left 𝕜 (by simpa [inner_sub_left, sub_eq_zero])
 
 中文:
-定理 Dense.eq_of_inner_left
-  条件: (hS : Dense S) (h : 对任意 v in S, ⟪x, v⟫ = ⟪y, v⟫)
+定理 稠密.eq_of_inner_left
+  条件: (hS : 稠密 S) (h : 对任意 v in S, ⟪x, v⟫ = ⟪y, v⟫)
   结论: x = y
   证明: by
   rw [← sub_eq_zero]; exact hS.eq_zero_of_inner_left 𝕜 (by simpa [inner_sub_left, sub_eq_zero])
@@ -318,8 +318,8 @@ nonrec theorem DenseRange.eq_of_inner_left (hf : DenseRange f) (h : forall i, �
 nonrec theorem DenseRange.eq_of_inner_right (hf : 
 
 中文:
-定理 Dense.eq_of_inner_right
-  条件: (hS : Dense S) (h : 对任意 v in S, ⟪v, x⟫ = ⟪v, y⟫)
+定理 稠密.eq_of_inner_right
+  条件: (hS : 稠密 S) (h : 对任意 v in S, ⟪v, x⟫ = ⟪v, y⟫)
   结论: x = y
   证明: by
   rw [← sub_eq_zero]; exact hS.eq_zero_of_inner_right 𝕜 (by simpa [inner_sub_right, sub_eq_zero])

@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: Union (Finset α)
+  签名: 并集 (有限集 α)
   定义体: ⟨fun s t => ⟨_, t.2.ndunion s.1⟩⟩
 
 Depends on / 依赖: ndunion
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数er (Finset α)
+  签名: 交集 (有限集 α)
   定义体: ⟨fun s t => ⟨_, s.2.ndinter t.1⟩⟩
 
 Depends on / 依赖: ndinter
@@ -108,7 +108,7 @@ le_sup_right := fun _ _ _ h => mem_ndunion.2 Or.inr h
 
 中文:
 实例 :
-  签名: Lattice (Finset α)
+  签名: 格 (有限集 α)
   定义体: (· union ·)
   sup_le := fun _ _ _ hs ht _ ha => (mem_ndunion.1 ha).elim (fun h => hs h) fun h => ht h
 le_sup_left := fun _ _ _ h => mem_ndunion.2 Or.inl h
@@ -140,7 +140,7 @@ theorem sup_eq_union'
 
 中文:
 定理 sup_eq_union'
-  结论: (Max.max : Finset α -> Finset α -> Finset α) = Union.union
+  结论: (最大值.最大值 : 有限集 α -> 有限集 α -> 有限集 α) = 并集.union
   证明: rfl
 
 @[grind =]
@@ -162,7 +162,7 @@ theorem sup_eq_union
 
 中文:
 定理 sup_eq_union
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s ⊔ t = s union t
   证明: rfl
 
@@ -184,7 +184,7 @@ theorem inf_eq_inter'
 
 中文:
 定理 inf_eq_inter'
-  结论: (Min.min : Finset α -> Finset α -> Finset α) = 整数er.inter
+  结论: (最小值.最小值 : 有限集 α -> 有限集 α -> 有限集 α) = 交集.inter
   证明: rfl
 
 @[grind =]
@@ -204,7 +204,7 @@ theorem inf_eq_inter
 
 中文:
 定理 inf_eq_inter
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: s ⊓ t = s inter t
   证明: rfl
 -/
@@ -225,7 +225,7 @@ theorem union_val_nd
 
 中文:
 定理 union_val_nd
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t).1 = ndunion s.1 t.1
   证明: rfl
 
@@ -248,7 +248,7 @@ theorem union_val
 
 中文:
 定理 union_val
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s union t).1 = s.1 union t.1
   证明: ndunion_eq_union s.2
 
@@ -289,7 +289,7 @@ theorem mem_union_left
 
 中文:
 定理 mem_union_left
-  条件: (t : Finset α) (h : a in s)
+  条件: (t : 有限集 α) (h : a in s)
   结论: a in s union t
   证明: mem_union.2 Or.inl h
 
@@ -309,7 +309,7 @@ theorem mem_union_right
 
 中文:
 定理 mem_union_right
-  条件: (s : Finset α) (h : a in t)
+  条件: (s : 有限集 α) (h : a in t)
   结论: a in s union t
   证明: mem_union.2 Or.inr h
 
@@ -329,7 +329,7 @@ theorem forall_mem_union
   grind
 
 中文:
-定理 forall_mem_union
+定理 对任意_mem_union
   条件: {p : α -> 命题}
   结论: (对任意 a in s union t, p a) ↔ (对任意 a in s, p a) ∧ 对任意 a in t, p a
   证明: by
@@ -371,8 +371,8 @@ theorem coe_union
 
 中文:
 定理 coe_union
-  条件: (s₁ s₂ : Finset α)
-  结论: ↑(s₁ union s₂) = (s₁ union s₂ : Set α)
+  条件: (s₁ s₂ : 有限集 α)
+  结论: ↑(s₁ union s₂) = (s₁ union s₂ : 集合 α)
   证明: Set.ext fun _ => mem_union
 
 Depends on / 依赖: Set.ext, mem_union
@@ -505,7 +505,7 @@ theorem union_comm
 
 中文:
 定理 union_comm
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: s₁ union s₂ = s₂ union s₁
   证明: sup_comm _ _
 
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Commutative (α := Finset α) (· union ·)
+  签名: Std.交换 (α := 有限集 α) (· union ·)
   定义体: ⟨union_comm⟩
 
 @[simp]
@@ -547,7 +547,7 @@ theorem union_assoc
 
 中文:
 定理 union_assoc
-  条件: (s₁ s₂ s₃ : Finset α)
+  条件: (s₁ s₂ s₃ : 有限集 α)
   结论: s₁ union s₂ union s₃ = s₁ union (s₂ union s₃)
   证明: sup_assoc _ _ _
 
@@ -567,7 +567,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Associative (α := Finset α) (· union ·)
+  签名: Std.结合 (α := 有限集 α) (· union ·)
   定义体: ⟨union_assoc⟩
 
 @[simp]
@@ -589,7 +589,7 @@ theorem union_idempotent
 
 中文:
 定理 union_idempotent
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s union s = s
   证明: sup_idem _
 
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.IdempotentOp (α := Finset α) (· union ·)
+  签名: Std.IdempotentOp (α := 有限集 α) (· union ·)
   定义体: ⟨union_idempotent⟩
 
 Depends on / 依赖: Finset
@@ -646,7 +646,7 @@ theorem union_subset_right
 
 中文:
 定理 union_subset_right
-  条件: {s t u : Finset α} (h : s union t subseteq u)
+  条件: {s t u : 有限集 α} (h : s union t subseteq u)
   结论: t subseteq u
   证明: Subset.trans subset_union_right h
 
@@ -666,7 +666,7 @@ theorem union_left_comm
 
 中文:
 定理 union_left_comm
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s union (t union u) = t union (s union u)
   证明: ext fun _ => by simp only [mem_union, or_left_comm]
 
@@ -686,7 +686,7 @@ theorem union_right_comm
 
 中文:
 定理 union_right_comm
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s union t union u = s union u union t
   证明: ext fun x => by simp only [mem_union, or_assoc, @or_comm (x in t)]
 
@@ -706,7 +706,7 @@ theorem union_self
 
 中文:
 定理 union_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s union s = s
   证明: union_idempotent s
 
@@ -864,7 +864,7 @@ theorem inter_val_nd
 
 中文:
 定理 inter_val_nd
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: (s₁ inter s₂).1 = ndinter s₁.1 s₂.1
   证明: rfl
 
@@ -887,7 +887,7 @@ theorem inter_val
 
 中文:
 定理 inter_val
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: (s₁ inter s₂).1 = s₁.1 inter s₂.1
   证明: ndinter_eq_inter s₁.2
 
@@ -910,7 +910,7 @@ theorem mem_inter
 
 中文:
 定理 mem_inter
-  条件: {a : α} {s₁ s₂ : Finset α}
+  条件: {a : α} {s₁ s₂ : 有限集 α}
   结论: a in s₁ inter s₂ ↔ a in s₁ ∧ a in s₂
   证明: mem_ndinter
 
@@ -930,7 +930,7 @@ theorem mem_of_mem_inter_left
 
 中文:
 定理 mem_of_mem_inter_left
-  条件: {a : α} {s₁ s₂ : Finset α} (h : a in s₁ inter s₂)
+  条件: {a : α} {s₁ s₂ : 有限集 α} (h : a in s₁ inter s₂)
   结论: a in s₁
   证明: (mem_inter.1 h).1
 
@@ -950,7 +950,7 @@ theorem mem_of_mem_inter_right
 
 中文:
 定理 mem_of_mem_inter_right
-  条件: {a : α} {s₁ s₂ : Finset α} (h : a in s₁ inter s₂)
+  条件: {a : α} {s₁ s₂ : 有限集 α} (h : a in s₁ inter s₂)
   结论: a in s₂
   证明: (mem_inter.1 h).2
 
@@ -970,7 +970,7 @@ theorem mem_inter_of_mem
 
 中文:
 定理 mem_inter_of_mem
-  条件: {a : α} {s₁ s₂ : Finset α}
+  条件: {a : α} {s₁ s₂ : 有限集 α}
   结论: a in s₁ -> a in s₂ -> a in s₁ inter s₂
   证明: and_imp.1 mem_inter.2
 
@@ -1021,7 +1021,7 @@ theorem subset_inter
 
 中文:
 定理 subset_inter
-  条件: {s₁ s₂ u : Finset α}
+  条件: {s₁ s₂ u : 有限集 α}
   结论: s₁ subseteq s₂ -> s₁ subseteq u -> s₁ subseteq s₂ inter u
   证明: by grind
 
@@ -1043,8 +1043,8 @@ theorem coe_inter
 
 中文:
 定理 coe_inter
-  条件: (s₁ s₂ : Finset α)
-  结论: ↑(s₁ inter s₂) = (s₁ inter s₂ : Set α)
+  条件: (s₁ s₂ : 有限集 α)
+  结论: ↑(s₁ inter s₂) = (s₁ inter s₂ : 集合 α)
   证明: Set.ext fun _ => mem_inter
 
 @[simp]
@@ -1068,7 +1068,7 @@ theorem union_inter_cancel_left
 
 中文:
 定理 union_inter_cancel_left
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: (s union t) inter s = s
   证明: by grind
 
@@ -1088,7 +1088,7 @@ theorem union_inter_cancel_right
 
 中文:
 定理 union_inter_cancel_right
-  条件: {s t : Finset α}
+  条件: {s t : 有限集 α}
   结论: (s union t) inter t = t
   证明: by grind
 -/
@@ -1107,7 +1107,7 @@ theorem inter_comm
 
 中文:
 定理 inter_comm
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: s₁ inter s₂ = s₂ inter s₁
   证明: by grind
 
@@ -1127,7 +1127,7 @@ theorem inter_assoc
 
 中文:
 定理 inter_assoc
-  条件: (s₁ s₂ s₃ : Finset α)
+  条件: (s₁ s₂ s₃ : 有限集 α)
   结论: s₁ inter s₂ inter s₃ = s₁ inter (s₂ inter s₃)
   证明: by grind
 -/
@@ -1144,7 +1144,7 @@ theorem inter_left_comm
 
 中文:
 定理 inter_left_comm
-  条件: (s₁ s₂ s₃ : Finset α)
+  条件: (s₁ s₂ s₃ : 有限集 α)
   结论: s₁ inter (s₂ inter s₃) = s₂ inter (s₁ inter s₃)
   证明: by grind
 -/
@@ -1163,7 +1163,7 @@ theorem inter_right_comm
 
 中文:
 定理 inter_right_comm
-  条件: (s₁ s₂ s₃ : Finset α)
+  条件: (s₁ s₂ s₃ : 有限集 α)
   结论: s₁ inter s₂ inter s₃ = s₁ inter s₃ inter s₂
   证明: by grind
 
@@ -1185,7 +1185,7 @@ theorem inter_self
 
 中文:
 定理 inter_self
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s inter s = s
   证明: ext fun _ => mem_inter.trans and_self_iff
 
@@ -1211,7 +1211,7 @@ theorem inter_union_self
 
 中文:
 定理 inter_union_self
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s inter (t union s) = s
   证明: by
   rw [inter_comm]; rw [union_inter_cancel_right]
@@ -1235,7 +1235,7 @@ theorem inter_subset_inter
 
 中文:
 定理 inter_subset_inter
-  条件: {x y s t : Finset α} (h : x subseteq y) (h' : s subseteq t)
+  条件: {x y s t : 有限集 α} (h : x subseteq y) (h' : s subseteq t)
   结论: x inter s subseteq y inter t
   证明: inf_le_inf h h'
 
@@ -1317,7 +1317,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice (Finset α)
+  签名: Distrib格 (有限集 α)
   定义体: { le_sup_inf := fun a b c => by
       simp +contextual only
         [sup_eq_union, inf_eq_inter, subset_iff, mem_inter, mem_union, and_imp,
@@ -1345,7 +1345,7 @@ theorem union_left_idem
 
 中文:
 定理 union_left_idem
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s union (s union t) = s union t
   证明: sup_left_idem _ _
 
@@ -1366,7 +1366,7 @@ theorem union_right_idem
 
 中文:
 定理 union_right_idem
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s union t union t = s union t
   证明: sup_right_idem _ _
 
@@ -1388,7 +1388,7 @@ theorem inter_left_idem
 
 中文:
 定理 inter_left_idem
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s inter (s inter t) = s inter t
   证明: inf_left_idem _ _
 
@@ -1407,7 +1407,7 @@ theorem inter_right_idem
 
 中文:
 定理 inter_right_idem
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s inter t inter t = s inter t
   证明: inf_right_idem _ _
 
@@ -1426,7 +1426,7 @@ theorem inter_union_distrib_left
 
 中文:
 定理 inter_union_distrib_left
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s inter (t union u) = s inter t union s inter u
   证明: inf_sup_left _ _ _
 
@@ -1446,7 +1446,7 @@ theorem union_inter_distrib_right
 
 中文:
 定理 union_inter_distrib_right
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: (s union t) inter u = s inter u union t inter u
   证明: inf_sup_right _ _ _
 
@@ -1466,7 +1466,7 @@ theorem union_inter_distrib_left
 
 中文:
 定理 union_inter_distrib_left
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s union t inter u = (s union t) inter (s union u)
   证明: sup_inf_left _ _ _
 
@@ -1486,7 +1486,7 @@ theorem inter_union_distrib_right
 
 中文:
 定理 inter_union_distrib_right
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s inter t union u = (s union u) inter (t union u)
   证明: sup_inf_right _ _ _
 
@@ -1506,7 +1506,7 @@ theorem union_union_distrib_left
 
 中文:
 定理 union_union_distrib_left
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s union (t union u) = s union t union (s union u)
   证明: sup_sup_distrib_left _ _ _
 
@@ -1526,7 +1526,7 @@ theorem union_union_distrib_right
 
 中文:
 定理 union_union_distrib_right
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s union t union u = s union u union (t union u)
   证明: sup_sup_distrib_right _ _ _
 
@@ -1546,7 +1546,7 @@ theorem inter_inter_distrib_left
 
 中文:
 定理 inter_inter_distrib_left
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s inter (t inter u) = s inter t inter (s inter u)
   证明: inf_inf_distrib_left _ _ _
 
@@ -1566,7 +1566,7 @@ theorem inter_inter_distrib_right
 
 中文:
 定理 inter_inter_distrib_right
-  条件: (s t u : Finset α)
+  条件: (s t u : 有限集 α)
   结论: s inter t inter u = s inter u inter (t inter u)
   证明: inf_inf_distrib_right _ _ _
 
@@ -1586,7 +1586,7 @@ theorem union_union_union_comm
 
 中文:
 定理 union_union_union_comm
-  条件: (s t u v : Finset α)
+  条件: (s t u v : 有限集 α)
   结论: s union t union (u union v) = s union u union (t union v)
   证明: sup_sup_sup_comm _ _ _ _
 
@@ -1606,7 +1606,7 @@ theorem inter_inter_inter_comm
 
 中文:
 定理 inter_inter_inter_comm
-  条件: (s t u v : Finset α)
+  条件: (s t u v : 有限集 α)
   结论: s inter t inter (u inter v) = s inter u inter (t inter v)
   证明: inf_inf_inf_comm _ _ _ _
 
@@ -1768,7 +1768,7 @@ theorem ite_subset_union
 
 中文:
 定理 ite_subset_union
-  条件: (s s' : Finset α) (P : 命题) [Decidable P]
+  条件: (s s' : 有限集 α) (P : 命题) [可判定 P]
   结论: ite P s s' subseteq s union s'
   证明: ite_le_sup s s' P
 
@@ -1788,7 +1788,7 @@ theorem inter_subset_ite
 
 中文:
 定理 inter_subset_ite
-  条件: (s s' : Finset α) (P : 命题) [Decidable P]
+  条件: (s s' : 有限集 α) (P : 命题) [可判定 P]
   结论: s inter s' subseteq ite P s s'
   证明: inf_le_ite s s' P
 

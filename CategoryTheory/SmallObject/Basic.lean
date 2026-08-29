@@ -91,10 +91,10 @@ class HasSmallObjectArgument
     - exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType), IsCardinalForSmallObjectArgument I κ
 
 中文:
-类 HasSmallObjectArgument
+类 有SmallObjectArgument
   参数: : 命题 where
   公理与运算 (1 个):
-    - exists_cardinal : 存在 (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType), IsCardinalForSmallObjectArgument I κ
+    - exists_cardinal : 存在 (κ : 基数.{w}) (_ : Fact κ.是正则) (_ : 有底序 κ.ord.ToType), 是CardinalForSmallObjectArgument I κ
 -/
 class HasSmallObjectArgument : Prop where
   exists_cardinal : exists (κ : Cardinal.{w}) (_ : Fact κ.IsRegular) (_ : OrderBot κ.ord.ToType),
@@ -115,7 +115,7 @@ local instance smallObjectκ_isRegular : Fact I.smallObjectκ.IsRegular :=
 
 中文:
 定义 smallObjectκ
-  签名: : Cardinal.{w}
+  签名: : 基数.{w}
   定义体: (HasSmallObjectArgument.exists_cardinal (I := I)).choose
 
 local instance smallObjectκ_isRegular : Fact I.smallObjectκ.IsRegular :=
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot I.smallObjectκ.ord.ToType
+  签名: 有底序 I.smallObjectκ.ord.ToType
   定义体: HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose
 
 Depends on / 依赖: HasSmallObjectArgument, HasSmallObjectArgument.exists_cardinal.choose_spec.choose_spec.choose, choose_spec, exists_cardinal
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFunctorialFactorization I.rlp.llp I.rlp
+  签名: 有FunctorialFactorization I.rlp.llp I.rlp
   定义体: hasFunctorialFactorization I I.smallObjectκ
 
 Depends on / 依赖: I.smallObject, hasFunctorialFactorization

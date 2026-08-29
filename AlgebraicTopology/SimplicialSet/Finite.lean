@@ -37,10 +37,10 @@ class Finite
     - finite : _root_.Finite X.N
 
 中文:
-类 Finite
+类 有限
   参数: : 命题 where
   公理与运算 (1 个):
-    - finite : _root_.Finite X.N
+    - finite : _root_.有限 X.N
 -/
 protected class Finite : Prop where
   finite : _root_.Finite X.N
@@ -58,7 +58,7 @@ instance [X.Finite]
     aesop)
 
 中文:
-实例 [X.Finite]
+实例 [X.有限]
   签名: (n : 自然数)
   定义体: Finite.of_injective (fun x => N.mk _ x.property) (fun x y h => by
     rw [N.ext_iff]; rw [S.ext_iff'] at h
@@ -87,7 +87,7 @@ lemma finite_of_hasDimensionLT
 
 中文:
 引理 finite_of_hasDimensionLT
-  结论: (d : 自然数) [X.HasDimensionLT d]
+  结论: (d : 自然数) [X.有DimensionLT d]
   证明: by
     have (i : Fin d) : Finite (X.nonDegenerate i) := h i.1 i.2
     refine Finite.of_surjective (α := Σ (i : Fin d), X.nonDegenerate i)
@@ -127,7 +127,7 @@ lemma hasDimensionLT_of_finite
 
 中文:
 引理 hasDimensionLT_of_finite
-  条件: [X.Finite]
+  条件: [X.有限]
   证明: by
   have : Fintype X.N := Fintype.ofFinite _
   let φ (x : X.N) : Nat := x.dim
@@ -174,7 +174,7 @@ instance [X.Finite]
  
 
 中文:
-实例 [X.Finite]
+实例 [X.有限]
   签名: (n : SimplexCategoryᵒᵖ)
   定义体: by
   obtain ⟨n⟩ := n
@@ -212,8 +212,8 @@ instance [X.Finite]
   rfl
 
 中文:
-实例 [X.Finite]
-  签名: (A : X.Subcomplex)
+实例 [X.有限]
+  签名: (A : X.子复形)
   定义体: by
   obtain ⟨d, _⟩ := X.hasDimensionLT_of_finite
   refine finite_of_hasDimensionLT _ d (fun i hi => ?_)
@@ -248,8 +248,8 @@ lemma finite_of_mono
 
 中文:
 引理 finite_of_mono
-  条件: {Y : SSet.{u}} [Y.Finite] (f : X ⟶ Y) [hf : Mono f]
-  结论: X.Finite
+  条件: {Y : SSet.{u}} [Y.有限] (f : X ⟶ Y) [hf : 单态射 f]
+  结论: X.有限
   证明: by
   obtain ⟨d, _⟩ := Y.hasDimensionLT_of_finite
   have := hasDimensionLT_of_mono f d
@@ -285,8 +285,8 @@ lemma finite_of_epi
 
 中文:
 引理 finite_of_epi
-  条件: {Y : SSet.{u}} [X.Finite] (f : X ⟶ Y) [hf : Epi f]
-  结论: Y.Finite
+  条件: {Y : SSet.{u}} [X.有限] (f : X ⟶ Y) [hf : 满态射 f]
+  结论: Y.有限
   证明: by
   obtain ⟨d, _⟩ := X.hasDimensionLT_of_finite
   have := hasDimensionLT_of_epi f d
@@ -320,8 +320,8 @@ lemma finite_of_iso
 
 中文:
 引理 finite_of_iso
-  条件: {Y : SSet.{u}} (e : X ≅ Y) [X.Finite]
-  结论: Y.Finite
+  条件: {Y : SSet.{u}} (e : X ≅ Y) [X.有限]
+  结论: Y.有限
   证明: finite_of_mono e.inv
 
 Depends on / 依赖: e.inv, finite_of_mono
@@ -341,7 +341,7 @@ lemma finite_iff_of_iso
 中文:
 引理 finite_iff_of_iso
   条件: {Y : SSet.{u}} (e : X ≅ Y)
-  结论: X.Finite ↔ Y.Finite
+  结论: X.有限 ↔ Y.有限
   证明: ⟨fun _ => finite_of_iso e, fun _ => finite_of_iso e.symm⟩
 
 Depends on / 依赖: e.symm, finite_of_iso
@@ -377,7 +377,7 @@ instance finite_range
 
 中文:
 实例 finite_range
-  签名: {Y : SSet.{u}} (f : Y ⟶ X) [Y.Finite]
+  签名: {Y : SSet.{u}} (f : Y ⟶ X) [Y.有限]
   定义体: finite_of_epi (Subcomplex.toRange f)
 
 Depends on / 依赖: Subcomplex, Subcomplex.toRange, finite_of_epi, toRange
@@ -401,7 +401,7 @@ lemma finite_iSup_iff
 
 中文:
 引理 finite_iSup_iff
-  结论: {X : SSet.{u}} {ι : 类型} [Finite ι]
+  结论: {X : SSet.{u}} {ι : 类型} [有限 ι]
   证明: by
   refine ⟨fun h i => finite_of_mono (Subcomplex.homOfLE (le_iSup A i)), fun h => ⟨?_⟩⟩
   refine Finite.of_surjective (f := fun (⟨i, s⟩ : Σ (i : ι), (A i).toSSet.N) =>

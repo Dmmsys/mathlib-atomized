@@ -63,7 +63,7 @@ theorem gcd_right_comm
 中文:
 定理 gcd_right_comm
   条件: (a b c : 自然数)
-  结论: gcd (gcd a b) c = gcd (gcd a c) b
+  结论: 最大公约数 (最大公约数 a b) c = 最大公约数 (最大公约数 a c) b
   证明: by
   rw [gcd_assoc]; rw [gcd_assoc]; rw [gcd_comm b c]
 
@@ -170,7 +170,7 @@ alias Dvd.dvd.nat_lcm_right := dvd_lcm_of_dvd_left
 中文:
 定理 dvd_lcm_of_dvd_left
   条件: (h : a ∣ b) (c : 自然数)
-  结论: a ∣ lcm b c
+  结论: a ∣ 最小公倍数 b c
   证明: h.trans (dvd_lcm_left b c)
 
 alias Dvd.dvd.nat_lcm_right := dvd_lcm_of_dvd_left
@@ -193,7 +193,7 @@ theorem dvd_of_lcm_right_dvd
 
 中文:
 定理 dvd_of_lcm_right_dvd
-  条件: {a b c : 自然数} (h : lcm a b ∣ c)
+  条件: {a b c : 自然数} (h : 最小公倍数 a b ∣ c)
   结论: a ∣ c
   证明: (dvd_lcm_left a b).trans h
 
@@ -216,7 +216,7 @@ alias Dvd.dvd.nat_lcm_left := dvd_lcm_of_dvd_right
 中文:
 定理 dvd_lcm_of_dvd_right
   条件: {a b : 自然数} (h : a ∣ b) (c : 自然数)
-  结论: a ∣ lcm c b
+  结论: a ∣ 最小公倍数 c b
   证明: h.trans (dvd_lcm_right c b)
 
 alias Dvd.dvd.nat_lcm_left := dvd_lcm_of_dvd_right
@@ -239,7 +239,7 @@ theorem dvd_of_lcm_left_dvd
 
 中文:
 定理 dvd_of_lcm_left_dvd
-  条件: {a b c : 自然数} (h : lcm a b ∣ c)
+  条件: {a b c : 自然数} (h : 最小公倍数 a b ∣ c)
   结论: b ∣ c
   证明: (dvd_lcm_right a b).trans h
 
@@ -262,7 +262,7 @@ theorem Coprime.lcm_eq_mul
 中文:
 定理 Coprime.lcm_eq_mul
   条件: {m n : 自然数} (h : Coprime m n)
-  结论: lcm m n = m * n
+  结论: 最小公倍数 m n = m * n
   证明: by
   rw [← one_mul (lcm m n)]; rw [← h.gcd_eq_one]; rw [gcd_mul_lcm]
 
@@ -993,7 +993,7 @@ theorem coprime_one_left_iff
 中文:
 定理 coprime_one_left_iff
   条件: (n : 自然数)
-  结论: Coprime 1 n ↔ True
+  结论: Coprime 1 n ↔ 真
   证明: by simp [Coprime]
 
 Depends on / 依赖: Coprime
@@ -1012,7 +1012,7 @@ theorem coprime_one_right_iff
 中文:
 定理 coprime_one_right_iff
   条件: (n : 自然数)
-  结论: Coprime n 1 ↔ True
+  结论: Coprime n 1 ↔ 真
   证明: by simp [Coprime]
 
 Depends on / 依赖: Coprime
@@ -1264,7 +1264,7 @@ lemma div_lcm_eq_div_gcd
 中文:
 引理 div_lcm_eq_div_gcd
   条件: (hkm : m ∣ k) (hkn : n ∣ k)
-  结论: (k / m).lcm (k / n) = k / (m.gcd n)
+  结论: (k / m).最小公倍数 (k / n) = k / (m.最大公约数 n)
   证明: by
   rw [Nat.lcm_eq_iff]
   refine ⟨div_dvd_div_left hkm (Nat.gcd_dvd_left m n),

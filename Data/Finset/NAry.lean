@@ -48,7 +48,7 @@ definition image₂
 
 中文:
 定义 image₂
-  签名: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  签名: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   定义体: (s ×ˢ t).image uncurry f
 
 @[simp]
@@ -94,7 +94,7 @@ theorem coe_image₂
 
 中文:
 定理 coe_image₂
-  条件: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: Set.ext fun _ => mem_image₂
 
 Depends on / 依赖: Set.ext
@@ -113,7 +113,7 @@ theorem card_image₂_le
 
 中文:
 定理 card_image₂_le
-  条件: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: card_image_le.trans_eq card_product _ _
 
 Depends on / 依赖: card_image_le, card_image_le.trans_eq, card_product, trans_eq
@@ -154,7 +154,7 @@ theorem card_image₂
 
 中文:
 定理 card_image₂
-  条件: (hf : Injective2 f) (s : Finset α) (t : Finset β)
+  条件: (hf : Injective2 f) (s : 有限集 α) (t : 有限集 β)
   证明: (card_image_of_injective _ hf.uncurry).trans card_product _ _
 
 Depends on / 依赖: card_image_of_injective, card_product, hf.uncurry, uncurry
@@ -285,7 +285,7 @@ theorem image_subset_image₂_left
 中文:
 定理 image_subset_image₂_left
   条件: (hb : b in t)
-  结论: s.image (fun a => f a b) subseteq image₂ f s t
+  结论: s.像 (fun a => f a b) subseteq image₂ f s t
   证明: image_subset_iff.2 fun _ ha => mem_image₂_of_mem ha hb
 
 Depends on / 依赖: image_subset_iff
@@ -305,7 +305,7 @@ theorem image_subset_image₂_right
 中文:
 定理 image_subset_image₂_right
   条件: (ha : a in s)
-  结论: t.image (fun b => f a b) subseteq image₂ f s t
+  结论: t.像 (fun b => f a b) subseteq image₂ f s t
   证明: image_subset_iff.2 fun _ => mem_image₂_of_mem ha
 
 Depends on / 依赖: image_subset_iff
@@ -323,7 +323,7 @@ lemma forall_mem_image₂
   simp_rw [← mem_coe, coe_image₂, forall_mem_image2]
 
 中文:
-引理 forall_mem_image₂
+引理 对任意_mem_image₂
   条件: {p : γ -> 命题}
   证明: by
   simp_rw [← mem_coe, coe_image₂, forall_mem_image2]
@@ -346,7 +346,7 @@ lemma exists_mem_image₂
 @[simp]
 
 中文:
-引理 exists_mem_image₂
+引理 存在_mem_image₂
   条件: {p : γ -> 命题}
   证明: by
   simp_rw [← mem_coe, coe_image₂, exists_mem_image2]
@@ -387,7 +387,7 @@ theorem image₂_subset_iff_left
 
 中文:
 定理 image₂_subset_iff_left
-  结论: image₂ f s t subseteq u ↔ 对任意 a in s, (t.image fun b => f a b) subseteq u
+  结论: image₂ f s t subseteq u ↔ 对任意 a in s, (t.像 fun b => f a b) subseteq u
   证明: by
   simp_rw [image₂_subset_iff, image_subset_iff]
 
@@ -409,7 +409,7 @@ theorem image₂_subset_iff_right
 
 中文:
 定理 image₂_subset_iff_right
-  结论: image₂ f s t subseteq u ↔ 对任意 b in t, (s.image fun a => f a b) subseteq u
+  结论: image₂ f s t subseteq u ↔ 对任意 b in t, (s.像 fun a => f a b) subseteq u
   证明: by
   simp_rw [image₂_subset_iff, image_subset_iff, @forall₂_comm α]
 
@@ -435,7 +435,7 @@ theorem image₂_nonempty_iff
 
 中文:
 定理 image₂_nonempty_iff
-  结论: (image₂ f s t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (image₂ f s t).非空 ↔ s.非空 ∧ t.非空
   证明: by
   rw [← coe_nonempty]; rw [coe_image₂]
   exact image2_nonempty_iff
@@ -459,9 +459,9 @@ theorem Nonempty.image₂
   proof: image₂_nonempty_iff.2 ⟨hs, ht⟩
 
 中文:
-定理 Nonempty.image₂
-  条件: (hs : s.Nonempty) (ht : t.Nonempty)
-  结论: (image₂ f s t).Nonempty
+定理 非空.image₂
+  条件: (hs : s.非空) (ht : t.非空)
+  结论: (image₂ f s t).非空
   证明: image₂_nonempty_iff.2 ⟨hs, ht⟩
 -/
 theorem Nonempty.image₂ (hs : s.Nonempty) (ht : t.Nonempty) : (image₂ f s t).Nonempty :=
@@ -477,9 +477,9 @@ theorem Nonempty.of_image₂_left
   proof: (image₂_nonempty_iff.1 h).1
 
 中文:
-定理 Nonempty.of_image₂_left
-  条件: (h : (s.image₂ f t).Nonempty)
-  结论: s.Nonempty
+定理 非空.of_image₂_left
+  条件: (h : (s.image₂ f t).非空)
+  结论: s.非空
   证明: (image₂_nonempty_iff.1 h).1
 -/
 theorem Nonempty.of_image₂_left (h : (s.image₂ f t).Nonempty) : s.Nonempty :=
@@ -497,9 +497,9 @@ theorem Nonempty.of_image₂_right
 @[simp]
 
 中文:
-定理 Nonempty.of_image₂_right
-  条件: (h : (s.image₂ f t).Nonempty)
-  结论: t.Nonempty
+定理 非空.of_image₂_right
+  条件: (h : (s.image₂ f t).非空)
+  结论: t.非空
   证明: (image₂_nonempty_iff.1 h).2
 
 @[simp]
@@ -591,7 +591,7 @@ theorem image₂_singleton_left
 
 中文:
 定理 image₂_singleton_left
-  结论: image₂ f {a} t = t.image fun b => f a b
+  结论: image₂ f {a} t = t.像 fun b => f a b
   证明: ext fun x => by simp
 
 @[simp]
@@ -610,7 +610,7 @@ theorem image₂_singleton_right
 
 中文:
 定理 image₂_singleton_right
-  结论: image₂ f s {b} = s.image fun a => f a b
+  结论: image₂ f s {b} = s.像 fun a => f a b
   证明: ext fun x => by simp
 -/
 theorem image₂_singleton_right : image₂ f s {b} = s.image fun a => f a b :=
@@ -626,7 +626,7 @@ theorem image₂_singleton_left'
 
 中文:
 定理 image₂_singleton_left'
-  结论: image₂ f {a} t = t.image (f a)
+  结论: image₂ f {a} t = t.像 (f a)
   证明: image₂_singleton_left
 -/
 theorem image₂_singleton_left' : image₂ f {a} t = t.image (f a) :=
@@ -917,7 +917,7 @@ theorem card_image₂_singleton_left
 
 中文:
 定理 card_image₂_singleton_left
-  条件: (hf : Injective (f a))
+  条件: (hf : 单射 (f a))
   结论: #(image₂ f {a} t) = #t
   证明: by
   rw [image₂_singleton_left]; rw [card_image_of_injective _ hf]
@@ -937,7 +937,7 @@ theorem card_image₂_singleton_right
 
 中文:
 定理 card_image₂_singleton_right
-  条件: (hf : Injective fun a => f a b)
+  条件: (hf : 单射 fun a => f a b)
   证明: by rw [image₂_singleton_right, card_image_of_injective _ hf]
 
 Depends on / 依赖: card_image_of_injective
@@ -956,7 +956,7 @@ theorem image₂_singleton_inter
 
 中文:
 定理 image₂_singleton_inter
-  条件: [DecidableEq β] (t₁ t₂ : Finset β) (hf : Injective (f a))
+  条件: [DecidableEq β] (t₁ t₂ : 有限集 β) (hf : 单射 (f a))
   证明: by
   simp_rw [image₂_singleton_left, image_inter _ _ hf]
 
@@ -977,7 +977,7 @@ theorem image₂_inter_singleton
 
 中文:
 定理 image₂_inter_singleton
-  条件: [DecidableEq α] (s₁ s₂ : Finset α) (hf : Injective fun a => f a b)
+  条件: [DecidableEq α] (s₁ s₂ : 有限集 α) (hf : 单射 fun a => f a b)
   证明: by
   simp_rw [image₂_singleton_right, image_inter _ _ hf]
 
@@ -997,7 +997,7 @@ theorem card_le_card_image₂_left
 
 中文:
 定理 card_le_card_image₂_left
-  条件: {s : Finset α} (ha : a in s) (hf : Injective (f a))
+  条件: {s : 有限集 α} (ha : a in s) (hf : 单射 (f a))
   证明: card_le_card_of_injOn (f a) (fun _ hb => mem_image₂_of_mem ha hb) hf.injOn
 
 Depends on / 依赖: card_le_card_of_injOn, hf.injOn
@@ -1016,7 +1016,7 @@ theorem card_le_card_image₂_right
 
 中文:
 定理 card_le_card_image₂_right
-  条件: {t : Finset β} (hb : b in t) (hf : Injective (f · b))
+  条件: {t : 有限集 β} (hb : b in t) (hf : 单射 (f · b))
   证明: card_le_card_of_injOn (f · b) (fun _ ha => mem_image₂_of_mem ha hb) hf.injOn
 
 Depends on / 依赖: card_le_card_of_injOn, hf.injOn
@@ -1039,7 +1039,7 @@ theorem biUnion_image_left
 
 中文:
 定理 biUnion_image_left
-  结论: (s.biUnion fun a => t.image <| f a) = image₂ f s t
+  结论: (s.biUnion fun a => t.像 <| f a) = image₂ f s t
   证明: coe_injective by
     push_cast
     exact Set.iUnion_image_left _
@@ -1063,7 +1063,7 @@ theorem biUnion_image_right
 
 中文:
 定理 biUnion_image_right
-  结论: (t.biUnion fun b => s.image fun a => f a b) = image₂ f s t
+  结论: (t.biUnion fun b => s.像 fun a => f a b) = image₂ f s t
   证明: coe_injective by
     push_cast
     exact Set.iUnion_image_right _
@@ -1180,7 +1180,7 @@ theorem image₂_mk_eq_product
 
 中文:
 定理 image₂_mk_eq_product
-  条件: [DecidableEq α] [DecidableEq β] (s : Finset α) (t : Finset β)
+  条件: [DecidableEq α] [DecidableEq β] (s : 有限集 α) (t : 有限集 β)
   证明: by ext; simp [Prod.ext_iff]
 
 @[simp]
@@ -1203,7 +1203,7 @@ theorem image₂_curry
 
 中文:
 定理 image₂_curry
-  条件: (f : α × β -> γ) (s : Finset α) (t : Finset β)
+  条件: (f : α × β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: rfl
 
 @[simp]
@@ -1222,7 +1222,7 @@ theorem image_uncurry_product
 
 中文:
 定理 image_uncurry_product
-  条件: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: rfl
 -/
 theorem image_uncurry_product (f : α -> β -> γ) (s : Finset α) (t : Finset β) :
@@ -1242,7 +1242,7 @@ theorem image₂_swap
 
 中文:
 定理 image₂_swap
-  条件: (f : α -> β -> γ) (s : Finset α) (t : Finset β)
+  条件: (f : α -> β -> γ) (s : 有限集 α) (t : 有限集 β)
   证明: coe_injective by
     push_cast
     exact image2_swap _ _ _
@@ -1273,7 +1273,7 @@ theorem image₂_left
 
 中文:
 定理 image₂_left
-  条件: [DecidableEq α] (h : t.Nonempty)
+  条件: [DecidableEq α] (h : t.非空)
   结论: image₂ (fun x _ => x) s t = s
   证明: coe_injective by
     push_cast
@@ -1302,7 +1302,7 @@ theorem image₂_right
 
 中文:
 定理 image₂_right
-  条件: [DecidableEq β] (h : s.Nonempty)
+  条件: [DecidableEq β] (h : s.非空)
   结论: image₂ (fun _ y => y) s t = t
   证明: coe_injective by
     push_cast
@@ -1327,7 +1327,7 @@ theorem image₂_assoc
 
 中文:
 定理 image₂_assoc
-  结论: {γ : 类型} {u : Finset γ}
+  结论: {γ : 类型} {u : 有限集 γ}
   证明: coe_injective by
     push_cast
     exact image2_assoc h_assoc
@@ -1374,7 +1374,7 @@ theorem image₂_left_comm
 
 中文:
 定理 image₂_left_comm
-  结论: {γ : 类型} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
+  结论: {γ : 类型} {u : 有限集 γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
   证明: coe_injective by
     push_cast
     exact image2_left_comm h_left_comm
@@ -1400,7 +1400,7 @@ theorem image₂_right_comm
 
 中文:
 定理 image₂_right_comm
-  结论: {γ : 类型} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
+  结论: {γ : 类型} {u : 有限集 γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
   证明: coe_injective by
     push_cast
     exact image2_right_comm h_right_comm
@@ -1426,7 +1426,7 @@ theorem image₂_image₂_image₂_comm
 
 中文:
 定理 image₂_image₂_image₂_comm
-  结论: {γ δ : 类型} {u : Finset γ} {v : Finset δ} [DecidableEq ζ]
+  结论: {γ δ : 类型} {u : 有限集 γ} {v : 有限集 δ} [DecidableEq ζ]
   证明: coe_injective by
     push_cast
     exact image2_image2_image2_comm h_comm
@@ -1572,7 +1572,7 @@ theorem image₂_distrib_subset_left
 
 中文:
 定理 image₂_distrib_subset_left
-  结论: {γ : 类型} {u : Finset γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
+  结论: {γ : 类型} {u : 有限集 γ} {f : α -> δ -> ε} {g : β -> γ -> δ}
   证明: coe_subset.1 by
     push_cast
     exact Set.image2_distrib_subset_left h_distrib
@@ -1599,7 +1599,7 @@ theorem image₂_distrib_subset_right
 
 中文:
 定理 image₂_distrib_subset_right
-  结论: {γ : 类型} {u : Finset γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
+  结论: {γ : 类型} {u : 有限集 γ} {f : δ -> γ -> ε} {g : α -> β -> δ}
   证明: coe_subset.1 by
     push_cast
     exact Set.image2_distrib_subset_right h_distrib
@@ -1741,7 +1741,7 @@ theorem image₂_left_identity
 
 中文:
 定理 image₂_left_identity
-  条件: {f : α -> γ -> γ} {a : α} (h : 对任意 b, f a b = b) (t : Finset γ)
+  条件: {f : α -> γ -> γ} {a : α} (h : 对任意 b, f a b = b) (t : 有限集 γ)
   证明: coe_injective by rw [coe_image₂, coe_singleton, Set.image2_left_identity h]
 
 Depends on / 依赖: Set.image2_left_identity, coe_injective, coe_singleton, image2_left_identity
@@ -1760,7 +1760,7 @@ theorem image₂_right_identity
 
 中文:
 定理 image₂_right_identity
-  条件: {f : γ -> β -> γ} {b : β} (h : 对任意 a, f a b = a) (s : Finset γ)
+  条件: {f : γ -> β -> γ} {b : β} (h : 对任意 a, f a b = a) (s : 有限集 γ)
   证明: by rw [image₂_singleton_right, funext h, image_id']
 
 Depends on / 依赖: image_id
@@ -1787,7 +1787,7 @@ theorem card_dvd_card_image₂_right
 
 中文:
 定理 card_dvd_card_image₂_right
-  结论: (hf : 对任意 a in s, Injective (f a))
+  结论: (hf : 对任意 a in s, 单射 (f a))
   证明: by
   classical
   induction s using Finset.induction with
@@ -1830,7 +1830,7 @@ theorem card_dvd_card_image₂_left
 
 中文:
 定理 card_dvd_card_image₂_left
-  结论: (hf : 对任意 b in t, Injective fun a => f a b)
+  结论: (hf : 对任意 b in t, 单射 fun a => f a b)
   证明: by rw [← image₂_swap]; exact card_dvd_card_image₂_right hf ht
 -/
 theorem card_dvd_card_image₂_left (hf : forall b in t, Injective fun a => f a b)
@@ -1854,7 +1854,7 @@ theorem subset_set_image₂
 
 中文:
 定理 subset_set_image₂
-  条件: {s : Set α} {t : Set β} (hu : ↑u subseteq image2 f s t)
+  条件: {s : 集合 α} {t : 集合 β} (hu : ↑u subseteq image2 f s t)
   证明: by
   rw [← Set.image_prod]; rw [subset_set_image_iff] at hu
   rcases hu with ⟨u, hu, rfl⟩
@@ -1939,7 +1939,7 @@ theorem image₂_inter_union_subset
 
 中文:
 定理 image₂_inter_union_subset
-  条件: {f : α -> α -> β} {s t : Finset α} (hf : 对任意 a b, f a b = f b a)
+  条件: {f : α -> α -> β} {s t : 有限集 α} (hf : 对任意 a b, f a b = f b a)
   证明: coe_subset.1 by
     push_cast
     exact image2_inter_union_subset hf
@@ -1964,7 +1964,7 @@ theorem image₂_union_inter_subset
 
 中文:
 定理 image₂_union_inter_subset
-  条件: {f : α -> α -> β} {s t : Finset α} (hf : 对任意 a b, f a b = f b a)
+  条件: {f : α -> α -> β} {s t : 有限集 α} (hf : 对任意 a b, f a b = f b a)
   证明: coe_subset.1 by
     push_cast
     exact image2_union_inter_subset hf
@@ -1994,8 +1994,8 @@ lemma sup'_image₂_le
   rw [sup'_le_iff]; rw [forall_mem_image₂]
 
 中文:
-引理 sup'_image₂_le
-  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty)
+引理 上确界'_image₂_le
+  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).非空)
   证明: by
   rw [sup'_le_iff]; rw [forall_mem_image₂]
 -/
@@ -2013,8 +2013,8 @@ lemma sup'_image₂_left
   simp only [image₂, sup'_image, sup'_product_left]; rfl
 
 中文:
-引理 sup'_image₂_left
-  条件: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
+引理 上确界'_image₂_left
+  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
   证明: by
   simp only [image₂, sup'_image, sup'_product_left]; rfl
 -/
@@ -2033,8 +2033,8 @@ lemma sup'_image₂_right
   simp only [image₂, sup'_image, sup'_product_right]; rfl
 
 中文:
-引理 sup'_image₂_right
-  条件: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
+引理 上确界'_image₂_right
+  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
   证明: by
   simp only [image₂, sup'_image, sup'_product_right]; rfl
 -/
@@ -2082,7 +2082,7 @@ lemma sup_image₂_left
 中文:
 引理 sup_image₂_left
   条件: (g : γ -> δ)
-  结论: sup (image₂ f s t) g = sup s fun x => sup t (g <| f x ·)
+  结论: 上确界 (image₂ f s t) g = 上确界 s fun x => 上确界 t (g <| f x ·)
   证明: by
   simp only [image₂, sup_image, sup_product_left]; rfl
 
@@ -2104,7 +2104,7 @@ lemma sup_image₂_right
 中文:
 引理 sup_image₂_right
   条件: (g : γ -> δ)
-  结论: sup (image₂ f s t) g = sup t fun y => sup s (g <| f · y)
+  结论: 上确界 (image₂ f s t) g = 上确界 t fun y => 上确界 s (g <| f · y)
   证明: by
   simp only [image₂, sup_image, sup_product_right]; rfl
 
@@ -2131,7 +2131,7 @@ lemma le_inf'_image₂
 
 中文:
 引理 le_inf'_image₂
-  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).Nonempty)
+  条件: {g : γ -> δ} {a : δ} (h : (image₂ f s t).非空)
   证明: by
   rw [le_inf'_iff]; rw [forall_mem_image₂]
 
@@ -2150,8 +2150,8 @@ lemma inf'_image₂_left
   proof: sup'_image₂_left (δ := δᵒᵈ) g h
 
 中文:
-引理 inf'_image₂_left
-  条件: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
+引理 下确界'_image₂_left
+  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
   证明: sup'_image₂_left (δ := δᵒᵈ) g h
 -/
 lemma inf'_image₂_left (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
@@ -2168,8 +2168,8 @@ lemma inf'_image₂_right
   proof: sup'_image₂_right (δ := δᵒᵈ) g h
 
 中文:
-引理 inf'_image₂_right
-  条件: (g : γ -> δ) (h : (image₂ f s t).Nonempty)
+引理 下确界'_image₂_right
+  条件: (g : γ -> δ) (h : (image₂ f s t).非空)
   证明: sup'_image₂_right (δ := δᵒᵈ) g h
 -/
 lemma inf'_image₂_right (g : γ -> δ) (h : (image₂ f s t).Nonempty) :
@@ -2211,7 +2211,7 @@ lemma inf_image₂_left
 中文:
 引理 inf_image₂_left
   条件: (g : γ -> δ)
-  结论: inf (image₂ f s t) g = inf s fun x => inf t (g ∘ f x)
+  结论: 下确界 (image₂ f s t) g = 下确界 s fun x => 下确界 t (g ∘ f x)
   证明: sup_image₂_left (δ := δᵒᵈ) ..
 -/
 lemma inf_image₂_left (g : γ -> δ) : inf (image₂ f s t) g = inf s fun x => inf t (g ∘ f x) :=
@@ -2229,7 +2229,7 @@ lemma inf_image₂_right
 中文:
 引理 inf_image₂_right
   条件: (g : γ -> δ)
-  结论: inf (image₂ f s t) g = inf t fun y => inf s (g <| f · y)
+  结论: 下确界 (image₂ f s t) g = 下确界 t fun y => 下确界 s (g <| f · y)
   证明: sup_image₂_right (δ := δᵒᵈ) ..
 -/
 lemma inf_image₂_right (g : γ -> δ) : inf (image₂ f s t) g = inf t fun y => inf s (g <| f · y) :=
@@ -2255,7 +2255,7 @@ lemma piFinset_image₂
 
 中文:
 引理 piFinset_image₂
-  条件: (f : 对任意 i, α i -> β i -> γ i) (s : 对任意 i, Finset (α i)) (t : 对任意 i, Finset (β i))
+  条件: (f : 对任意 i, α i -> β i -> γ i) (s : 对任意 i, 有限集 (α i)) (t : 对任意 i, 有限集 (β i))
   证明: by
   ext; simp only [mem_piFinset, mem_image₂, Classical.skolem, forall_and, funext_iff]
 
@@ -2283,7 +2283,7 @@ theorem toFinset_image2
 
 中文:
 定理 toFinset_image2
-  结论: (f : α -> β -> γ) (s : Set α) (t : Set β) [Fintype s] [Fintype t]
+  结论: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β) [有限类型 s] [有限类型 t]
   证明: Finset.coe_injective by simp
 
 Depends on / 依赖: Finset, Finset.coe_injective, coe_injective
@@ -2301,8 +2301,8 @@ theorem Finite.toFinset_image2
   proof: Finset.coe_injective by simp
 
 中文:
-定理 Finite.toFinset_image2
-  结论: (f : α -> β -> γ) (hs : s.Finite) (ht : t.Finite)
+定理 有限.toFinset_image2
+  结论: (f : α -> β -> γ) (hs : s.有限) (ht : t.有限)
   证明: Finset.coe_injective by simp
 
 Depends on / 依赖: Finset, Finset.image, hf.toFinset, hs.image2, hs.toFinset, ht.toFinset, image2, toFinset

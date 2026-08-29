@@ -47,7 +47,7 @@ theorem Lex.acc
 
 中文:
 定理 Lex.acc
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : WellFounded s) (x : α ->₀ N)
+  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s) (x : α ->₀ N)
   证明: by
   rw [lex_eq_invImage_dfinsupp_lex]
   classical
@@ -72,7 +72,7 @@ theorem Lex.wellFounded
 
 中文:
 定理 Lex.wellFounded
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : WellFounded s)
+  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s)
   证明: ⟨fun x => Lex.acc hbot hs x fun a _ => hr.apply a⟩
 -/
 theorem Lex.wellFounded (hbot : forall ⦃n⦄, ¬s n 0) (hs : WellFounded s)
@@ -90,7 +90,7 @@ theorem Lex.wellFounded'
 
 中文:
 定理 Lex.wellFounded'
-  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : WellFounded s)
+  结论: (hbot : 对任意 ⦃n⦄, ¬s n 0) (hs : 良基 s)
   证明: (lex_eq_invImage_dfinsupp_lex r s).symm ▸
     InvImage.wf _ (DFinsupp.Lex.wellFounded' (fun _ => hbot) (fun _ => hs) hr)
 -/
@@ -109,7 +109,7 @@ instance Lex.wellFoundedLT
 
 中文:
 实例 Lex.wellFoundedLT
-  签名: {α N} [LT α] [@Std.Trichotomous α (· < ·)] [hα : WellFoundedGT α]
+  签名: {α N} [LT α] [@Std.三歧 α (· < ·)] [hα : WellFoundedGT α]
   定义体: ⟨Lex.wellFounded' (fun _ => not_lt_zero) hN.wf hα.wf⟩
 -/
 instance Lex.wellFoundedLT {α N} [LT α] [@Std.Trichotomous α (· < ·)] [hα : WellFoundedGT α]
@@ -127,7 +127,7 @@ instance Colex.wellFoundedLT
 
 中文:
 实例 Colex.wellFoundedLT
-  签名: {α N} [LT α] [@Std.Trichotomous α (· < ·)] [WellFoundedLT α]
+  签名: {α N} [LT α] [@Std.三歧 α (· < ·)] [WellFoundedLT α]
   定义体: Lex.wellFoundedLT (α := αᵒᵈ)
 -/
 instance Colex.wellFoundedLT {α N} [LT α] [@Std.Trichotomous α (· < ·)] [WellFoundedLT α]
@@ -147,7 +147,7 @@ theorem Lex.wellFounded_of_finite
 
 中文:
 定理 Lex.wellFounded_of_finite
-  结论: [IsStrictTotalOrder α r] [Finite α]
+  结论: [是StrictTotal序 α r] [有限 α]
   证明: InvImage.wf (@equivFunOnFinite α N _ _) (Pi.Lex.wellFounded r fun _ => hs)
 
 Depends on / 依赖: InvImage, InvImage.wf, Pi.Lex.wellFounded, equivFunOnFinite, wellFounded
@@ -166,7 +166,7 @@ theorem Lex.wellFoundedLT_of_finite
 
 中文:
 定理 Lex.wellFoundedLT_of_finite
-  结论: [LinearOrder α] [Finite α] [LT N]
+  结论: [线性序 α] [有限 α] [LT N]
   证明: ⟨Finsupp.Lex.wellFounded_of_finite (· < ·) hwf.1⟩
 
 Depends on / 依赖: Finsupp, Finsupp.Lex.wellFounded_of_finite, wellFounded_of_finite
@@ -185,7 +185,7 @@ theorem Colex.wellFoundedLT_of_finite
 
 中文:
 定理 Colex.wellFoundedLT_of_finite
-  结论: [LinearOrder α] [Finite α] [LT N]
+  结论: [线性序 α] [有限 α] [LT N]
   证明: Lex.wellFoundedLT_of_finite (α := αᵒᵈ)
 
 Depends on / 依赖: Lex.wellFoundedLT_of_finite, wellFoundedLT_of_finite
@@ -204,7 +204,7 @@ theorem wellFoundedLT
 
 中文:
 定理 wellFoundedLT
-  条件: [Preorder N] [WellFoundedLT N] (hbot : 对任意 n : N, ¬n < 0)
+  条件: [预序 N] [WellFoundedLT N] (hbot : 对任意 n : N, ¬n < 0)
   证明: ⟨InvImage.wf toDFinsupp (DFinsupp.wellFoundedLT fun _ a => hbot a).wf⟩
 -/
 protected theorem wellFoundedLT [Preorder N] [WellFoundedLT N] (hbot : forall n : N, ¬n < 0) :
@@ -241,7 +241,7 @@ instance wellFoundedLT_of_finite
 
 中文:
 实例 wellFoundedLT_of_finite
-  签名: [Finite α] [Preorder N] [WellFoundedLT N]
+  签名: [有限 α] [预序 N] [WellFoundedLT N]
   定义体: ⟨InvImage.wf equivFunOnFinite Function.wellFoundedLT.wf⟩
 
 Depends on / 依赖: Function, Function.wellFoundedLT.wf, InvImage, InvImage.wf, equivFunOnFinite, wellFoundedLT

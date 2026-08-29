@@ -48,8 +48,8 @@ definition Measure.withDensity
 @[simp]
 
 中文:
-定义 Measure.withDensity
-  签名: {m : MeasurableSpace α} (μ : Measure α) (f : α -> 实数>=0∞)
+定义 测度.withDensity
+  签名: {m : 可测空间 α} (μ : 测度 α) (f : α -> 实数>=0∞)
   定义体: Measure.ofMeasurable (fun s _ => ∫⁻ a in s, f a ∂μ) (by simp) fun _ hs hd =>
     lintegral_iUnion hs hd _
 
@@ -72,7 +72,7 @@ theorem withDensity_apply
 
 中文:
 定理 withDensity_apply
-  条件: (f : α -> 实数>=0∞) {s : Set α} (hs : MeasurableSet s)
+  条件: (f : α -> 实数>=0∞) {s : 集合 α} (hs : 可测集 s)
   证明: Measure.ofMeasurable_apply s hs
 
 Depends on / 依赖: Measure, Measure.ofMeasurable_apply, ofMeasurable_apply
@@ -98,7 +98,7 @@ theorem withDensity_apply_le
 
 中文:
 定理 withDensity_apply_le
-  条件: (f : α -> 实数>=0∞) (s : Set α)
+  条件: (f : α -> 实数>=0∞) (s : 集合 α)
   证明: by
   let t := toMeasurable (μ.withDensity f) s
   calc
@@ -138,7 +138,7 @@ theorem withDensity_apply'
 
 中文:
 定理 withDensity_apply'
-  条件: [SFinite μ] (f : α -> 实数>=0∞) (s : Set α)
+  条件: [SFinite μ] (f : α -> 实数>=0∞) (s : 集合 α)
   证明: by
   apply le_antisymm ?_ (withDensity_apply_le f s)
   let t := toMeasurable μ s
@@ -174,7 +174,7 @@ lemma withDensity_zero_left
 中文:
 引理 withDensity_zero_left
   条件: (f : α -> 实数>=0∞)
-  结论: (0 : Measure α).withDensity f = 0
+  结论: (0 : 测度 α).withDensity f = 0
   证明: by
   ext s hs
   rw [withDensity_apply _ hs]
@@ -257,7 +257,7 @@ theorem withDensity_add_left
 
 中文:
 定理 withDensity_add_left
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (g : α -> 实数>=0∞)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (g : α -> 实数>=0∞)
   证明: by
   refine Measure.ext fun s hs => ?_
   rw [withDensity_apply _ hs]; rw [Measure.add_apply]; rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]; rw [← lintegral_add_left hf]
@@ -282,7 +282,7 @@ theorem withDensity_add_right
 
 中文:
 定理 withDensity_add_right
-  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : Measurable g)
+  条件: (f : α -> 实数>=0∞) {g : α -> 实数>=0∞} (hg : 可测 g)
   证明: by
   simpa only [add_comm] using withDensity_add_left hg f
 
@@ -304,7 +304,7 @@ theorem withDensity_add_measure
 
 中文:
 定理 withDensity_add_measure
-  条件: {m : MeasurableSpace α} (μ ν : Measure α) (f : α -> 实数>=0∞)
+  条件: {m : 可测空间 α} (μ ν : 测度 α) (f : α -> 实数>=0∞)
   证明: by
   ext1 s hs
   simp only [withDensity_apply f hs, restrict_add, lintegral_add_measure, Measure.add_apply]
@@ -328,7 +328,7 @@ theorem withDensity_sum
 
 中文:
 定理 withDensity_sum
-  条件: {ι : 类型} {m : MeasurableSpace α} (μ : ι -> Measure α) (f : α -> 实数>=0∞)
+  条件: {ι : 类型} {m : 可测空间 α} (μ : ι -> 测度 α) (f : α -> 实数>=0∞)
   证明: by
   ext1 s hs
   simp_rw [sum_apply _ hs, withDensity_apply f hs, restrict_sum μ hs, lintegral_sum_measure]
@@ -353,7 +353,7 @@ theorem withDensity_smul
 
 中文:
 定理 withDensity_smul
-  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (r : 实数>=0∞) {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: by
   refine Measure.ext fun s hs => ?_
   rw [withDensity_apply _ hs]; rw [Measure.coe_smul]; rw [Pi.smul_apply]; rw [withDensity_apply _ hs]; rw [smul_eq_mul]; rw [← lintegral_const_mul r hf]
@@ -453,7 +453,7 @@ theorem withDensity_absolutelyContinuous
 
 中文:
 定理 withDensity_absolutelyContinuous
-  条件: {m : MeasurableSpace α} (μ : Measure α) (f : α -> 实数>=0∞)
+  条件: {m : 可测空间 α} (μ : 测度 α) (f : α -> 实数>=0∞)
   证明: by
   refine AbsolutelyContinuous.mk fun s hs₁ hs₂ => ?_
   rw [withDensity_apply _ hs₁]
@@ -484,7 +484,7 @@ theorem withDensity_apply₀
 
 中文:
 定理 withDensity_apply₀
-  条件: (f : α -> 实数>=0∞) {s : Set α} (hs : NullMeasurableSet s μ)
+  条件: (f : α -> 实数>=0∞) {s : 集合 α} (hs : NullMeasurableSet s μ)
   证明: by
   let t := toMeasurable μ s
   have A : ∫⁻ a in t, f a ∂μ = ∫⁻ a in s, f a ∂μ :=
@@ -521,7 +521,7 @@ alias noAtoms_withDensity := nullSingletonClass_withDensity
 
 中文:
 实例 nullSingletonClass_withDensity
-  签名: [NullSingletonClass μ] (f : α -> 实数>=0∞)
+  签名: [NullSingleton类 μ] (f : α -> 实数>=0∞)
   定义体: withDensity_absolutelyContinuous μ f (measure_singleton _)
 
 @[deprecated (since := "2026-06-09")]
@@ -635,7 +635,7 @@ theorem withDensity_tsum
 
 中文:
 定理 withDensity_tsum
-  条件: {ι : 类型} [Countable ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, Measurable (f i))
+  条件: {ι : 类型} [可数 ι] {f : ι -> α -> 实数>=0∞} (h : 对任意 i, 可测 (f i))
   证明: by
   ext1 s hs
   simp_rw [sum_apply _ hs, withDensity_apply _ hs]
@@ -666,7 +666,7 @@ theorem withDensity_indicator
 
 中文:
 定理 withDensity_indicator
-  条件: {s : Set α} (hs : MeasurableSet s) (f : α -> 实数>=0∞)
+  条件: {s : 集合 α} (hs : 可测集 s) (f : α -> 实数>=0∞)
   证明: by
   ext1 t ht
   rw [withDensity_apply _ ht]; rw [lintegral_indicator hs]; rw [restrict_comm hs]; rw [←
@@ -691,7 +691,7 @@ theorem withDensity_indicator_one
 
 中文:
 定理 withDensity_indicator_one
-  条件: {s : Set α} (hs : MeasurableSet s)
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   rw [withDensity_indicator hs]; rw [withDensity_one]
 
@@ -715,8 +715,8 @@ theorem withDensity_ofReal_mutuallySingular
     exact (ae_restrict_mem hS).mono fun x hx => ENNReal.ofReal_eq_zero.2 (le_of_lt
 
 中文:
-定理 withDensity_ofReal_mutuallySingular
-  条件: {f : α -> 实数} (hf : Measurable f)
+定理 withDensity_of实数_mutuallySingular
+  条件: {f : α -> 实数} (hf : 可测 f)
   证明: by
   set S : Set α := { x | f x < 0 }
   have hS : MeasurableSet S := measurableSet_lt hf measurable_const
@@ -751,7 +751,7 @@ theorem restrict_withDensity
 
 中文:
 定理 restrict_withDensity
-  条件: {s : Set α} (hs : MeasurableSet s) (f : α -> 实数>=0∞)
+  条件: {s : 集合 α} (hs : 可测集 s) (f : α -> 实数>=0∞)
   证明: by
   ext1 t ht
   rw [restrict_apply ht]; rw [withDensity_apply _ ht]; rw [withDensity_apply _ (ht.inter hs)]; rw [restrict_restrict ht]
@@ -775,7 +775,7 @@ theorem restrict_withDensity'
 
 中文:
 定理 restrict_withDensity'
-  条件: [SFinite μ] (s : Set α) (f : α -> 实数>=0∞)
+  条件: [SFinite μ] (s : 集合 α) (f : α -> 实数>=0∞)
   证明: by
   ext1 t ht
   rw [restrict_apply ht]; rw [withDensity_apply _ ht]; rw [withDensity_apply' _ (t inter s)]; rw [restrict_restrict ht]
@@ -799,7 +799,7 @@ lemma trim_withDensity
 
 中文:
 引理 trim_withDensity
-  结论: {m m0 : MeasurableSpace α} {μ : Measure α}
+  结论: {m m0 : 可测空间 α} {μ : 测度 α}
   证明: by
   refine @Measure.ext _ m _ _ (fun s hs => ?_)
   rw [withDensity_apply _ hs]; rw [restrict_trim _ _ hs]; rw [lintegral_trim _ hf]; rw [trim_measurableSet_eq _ hs]; rw [withDensity_apply _ (hm s hs)]
@@ -823,8 +823,8 @@ lemma Measure.MutuallySingular.withDensity
 @[simp]
 
 中文:
-引理 Measure.MutuallySingular.withDensity
-  条件: {ν : Measure α} {f : α -> 实数>=0∞} (h : μ ⟂ₘ ν)
+引理 测度.互奇异.withDensity
+  条件: {ν : 测度 α} {f : α -> 实数>=0∞} (h : μ ⟂ₘ ν)
   证明: MutuallySingular.mono_ac h (withDensity_absolutelyContinuous _ _) AbsolutelyContinuous.rfl
 
 @[simp]
@@ -849,7 +849,7 @@ alias ⟨withDensity_eq_zero, _⟩ := withDensity_eq_zero_iff
 
 中文:
 定理 withDensity_eq_zero_iff
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   rw [← measure_univ_eq_zero]; rw [withDensity_apply _ .univ]; rw [restrict_univ]; rw [lintegral_eq_zero_iff' hf]
 
@@ -879,7 +879,7 @@ theorem withDensity_apply_eq_zero'
 
 中文:
 定理 withDensity_apply_eq_zero'
-  条件: {f : α -> 实数>=0∞} {s : Set α} (hf : AEMeasurable f μ)
+  条件: {f : α -> 实数>=0∞} {s : 集合 α} (hf : 几乎处处可测 f μ)
   证明: by
   constructor
   · intro hs
@@ -940,7 +940,7 @@ theorem withDensity_apply_eq_zero
 
 中文:
 定理 withDensity_apply_eq_zero
-  条件: {f : α -> 实数>=0∞} {s : Set α} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} {s : 集合 α} (hf : 可测 f)
   证明: withDensity_apply_eq_zero' hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, withDensity_apply_eq_zero
@@ -963,7 +963,7 @@ theorem ae_withDensity_iff'
 
 中文:
 定理 ae_withDensity_iff'
-  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   rw [ae_iff]; rw [ae_iff]; rw [withDensity_apply_eq_zero' hf]; rw [iff_iff_eq]
   congr
@@ -989,7 +989,7 @@ theorem ae_withDensity_iff
 
 中文:
 定理 ae_withDensity_iff
-  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: ae_withDensity_iff' hf.aemeasurable
 
 Depends on / 依赖: ae_withDensity_iff, aemeasurable, hf.aemeasurable
@@ -1053,7 +1053,7 @@ theorem ae_withDensity_iff_ae_restrict
 
 中文:
 定理 ae_withDensity_iff_ae_restrict
-  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {p : α -> 命题} {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: ae_withDensity_iff_ae_restrict' hf.aemeasurable
 
 Depends on / 依赖: ae_withDensity_iff_ae_restrict, aemeasurable, hf.aemeasurable
@@ -1131,7 +1131,7 @@ theorem aemeasurable_withDensity_ennreal_iff
 
 中文:
 定理 aemeasurable_withDensity_ennreal_iff
-  条件: {f : α -> 实数>=0} (hf : Measurable f) {g : α -> 实数>=0∞}
+  条件: {f : α -> 实数>=0} (hf : 可测 f) {g : α -> 实数>=0∞}
   证明: aemeasurable_withDensity_ennreal_iff' hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, aemeasurable_withDensity_ennreal_iff, hf.aemeasurable
@@ -1155,7 +1155,7 @@ theorem dirac_withDensity'
 
 中文:
 定理 dirac_withDensity'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (a : α)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (a : α)
   证明: by
   ext s hs
   classical
@@ -1184,7 +1184,7 @@ theorem dirac_withDensity
 
 中文:
 定理 dirac_withDensity
-  条件: [MeasurableSingletonClass α] (f : α -> 实数>=0∞) (a : α)
+  条件: [MeasurableSingleton类 α] (f : α -> 实数>=0∞) (a : α)
   证明: by
   ext s hs
   classical
@@ -1209,7 +1209,7 @@ theorem count_withDensity'
 
 中文:
 定理 count_withDensity'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: by
   simp [count, withDensity_sum, dirac_withDensity' hf _]
 
@@ -1232,7 +1232,7 @@ theorem count_withDensity
 
 中文:
 定理 count_withDensity
-  条件: [MeasurableSingletonClass α] (f : α -> 实数>=0∞)
+  条件: [MeasurableSingleton类 α] (f : α -> 实数>=0∞)
   证明: by
   simp [count, withDensity_sum, dirac_withDensity]
 
@@ -1259,7 +1259,7 @@ theorem measurable_withDensity
 
 中文:
 定理 measurable_withDensity
-  结论: {β : 类型} [MeasurableSpace β] {f : β -> α -> 实数>=0∞}
+  结论: {β : 类型} [可测空间 β] {f : β -> α -> 实数>=0∞}
   证明: by
   rw [Measure.measurable_measure]
   intro s hs
@@ -1295,7 +1295,7 @@ theorem lintegral_withDensity_eq_lintegral_mul
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul
-  结论: (μ : Measure α) {f : α -> 实数>=0∞}
+  结论: (μ : 测度 α) {f : α -> 实数>=0∞}
   证明: by
   apply Measurable.ennreal_induction
   · intro c s h_ms
@@ -1329,8 +1329,8 @@ theorem setLIntegral_withDensity_eq_setLIntegral_mul
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul _ hf hg]
 
 中文:
-定理 setLIntegral_withDensity_eq_setLIntegral_mul
-  结论: (μ : Measure α) {f g : α -> 实数>=0∞}
+定理 setL整数egral_withDensity_eq_setL整数egral_mul
+  结论: (μ : 测度 α) {f g : α -> 实数>=0∞}
   证明: by
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul _ hf hg]
 
@@ -1359,7 +1359,7 @@ theorem lintegral_withDensity_eq_lintegral_mul₀'
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul₀'
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: by
   let f' := hf.mk f
   have : μ.withDensity f = μ.withDensity f' := withDensity_congr_ae hf.ae_eq_mk
@@ -1415,8 +1415,8 @@ lemma setLIntegral_withDensity_eq_lintegral_mul₀'
   exact hg.restrict
 
 中文:
-引理 setLIntegral_withDensity_eq_lintegral_mul₀'
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+引理 setL整数egral_withDensity_eq_lintegral_mul₀'
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: by
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul₀' hf.restrict]
   rw [← restrict_withDensity hs]
@@ -1442,7 +1442,7 @@ theorem lintegral_withDensity_eq_lintegral_mul₀
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul₀
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: lintegral_withDensity_eq_lintegral_mul₀' hf (hg.mono' (withDensity_absolutelyContinuous μ f))
 
 Depends on / 依赖: hg.mono, withDensity_absolutelyContinuous
@@ -1462,8 +1462,8 @@ lemma setLIntegral_withDensity_eq_lintegral_mul₀
     (hg.mono' (MeasureTheory.withDensity_absolutelyContinuous μ f)) hs
 
 中文:
-引理 setLIntegral_withDensity_eq_lintegral_mul₀
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+引理 setL整数egral_withDensity_eq_lintegral_mul₀
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: setLIntegral_withDensity_eq_lintegral_mul₀' hf
     (hg.mono' (MeasureTheory.withDensity_absolutelyContinuous μ f)) hs
 
@@ -1490,7 +1490,7 @@ exact le_iSup₂_of_le (f * i) (f_meas.mul i_meas) le_iSup_of_le (by grw [hi]) l
 
 中文:
 定理 lintegral_withDensity_le_lintegral_mul
-  结论: (μ : Measure α) {f : α -> 实数>=0∞}
+  结论: (μ : 测度 α) {f : α -> 实数>=0∞}
   证明: by
   rw [← iSup_lintegral_measurable_le_eq_lintegral]; rw [← iSup_lintegral_measurable_le_eq_lintegral]
   refine iSup₂_le fun i i_meas => iSup_le fun hi => ?_
@@ -1522,7 +1522,7 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul_non_measurable
-  结论: (μ : Measure α) {f : α -> 实数>=0∞}
+  结论: (μ : 测度 α) {f : α -> 实数>=0∞}
   证明: by
   refine le_antisymm (lintegral_withDensity_le_lintegral_mul μ f_meas g) ?_
   rw [← iSup_lintegral_measurable_le_eq_lintegral]; rw [← iSup_lintegral_measurable_le_eq_lintegral]
@@ -1568,8 +1568,8 @@ theorem setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable _ f_meas hf]
 
 中文:
-定理 setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable
-  结论: (μ : Measure α) {f : α -> 实数>=0∞}
+定理 setL整数egral_withDensity_eq_setL整数egral_mul_non_measurable
+  结论: (μ : 测度 α) {f : α -> 实数>=0∞}
   证明: by
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable _ f_meas hf]
 
@@ -1599,7 +1599,7 @@ theorem lintegral_withDensity_eq_lintegral_mul_non_measurable₀
 
 中文:
 定理 lintegral_withDensity_eq_lintegral_mul_non_measurable₀
-  结论: (μ : Measure α) {f : α -> 实数>=0∞}
+  结论: (μ : 测度 α) {f : α -> 实数>=0∞}
   证明: by
   let f' := hf.mk f
   calc
@@ -1640,8 +1640,8 @@ theorem setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable₀ _ hf h'f]
 
 中文:
-定理 setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀
-  结论: (μ : Measure α)
+定理 setL整数egral_withDensity_eq_setL整数egral_mul_non_measurable₀
+  结论: (μ : 测度 α)
   证明: by
   rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable₀ _ hf h'f]
 
@@ -1663,8 +1663,8 @@ theorem setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀'
   rw [restrict_withDensity' s]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable₀ _ hf h'f]
 
 中文:
-定理 setLIntegral_withDensity_eq_setLIntegral_mul_non_measurable₀'
-  结论: (μ : Measure α) [SFinite μ]
+定理 setL整数egral_withDensity_eq_setL整数egral_mul_non_measurable₀'
+  结论: (μ : 测度 α) [SFinite μ]
   证明: by
   rw [restrict_withDensity' s]; rw [lintegral_withDensity_eq_lintegral_mul_non_measurable₀ _ hf h'f]
 
@@ -1688,7 +1688,7 @@ theorem withDensity_mul₀
 
 中文:
 定理 withDensity_mul₀
-  结论: {μ : Measure α} {f g : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f g : α -> 实数>=0∞}
   证明: by
   ext1 s hs
   rw [withDensity_apply _ hs]; rw [withDensity_apply _ hs]; rw [restrict_withDensity hs]; rw [lintegral_withDensity_eq_lintegral_mul₀ hf.restrict hg.restrict]
@@ -1711,7 +1711,7 @@ theorem withDensity_mul
 
 中文:
 定理 withDensity_mul
-  条件: (μ : Measure α) {f g : α -> 实数>=0∞} (hf : Measurable f) (hg : Measurable g)
+  条件: (μ : 测度 α) {f g : α -> 实数>=0∞} (hf : 可测 f) (hg : 可测 g)
   证明: withDensity_mul₀ hf.aemeasurable hg.aemeasurable
 
 Depends on / 依赖: aemeasurable, better_inf, hf.aemeasurable, hg.aemeasurable
@@ -1737,7 +1737,7 @@ lemma withDensity_inv_same_le
 
 中文:
 引理 withDensity_inv_same_le
-  条件: {μ : Measure α} {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: {μ : 测度 α} {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   change (μ.withDensity f).withDensity (fun x => (f x)⁻¹) <= μ
   rw [← withDensity_mul₀ hf hf.fun_inv]
@@ -1775,7 +1775,7 @@ lemma withDensity_inv_same₀
 
 中文:
 引理 withDensity_inv_same₀
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: by
   rw [← withDensity_mul₀ hf hf.fun_inv]
   suffices (f * fun x => (f x)⁻¹) =ᵐ[μ] 1 by
@@ -1806,7 +1806,7 @@ lemma withDensity_inv_same
 
 中文:
 引理 withDensity_inv_same
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: withDensity_inv_same₀ hf.aemeasurable hf_ne_zero hf_ne_top
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hf_ne_top, hf_ne_zero
@@ -1829,7 +1829,7 @@ lemma withDensity_absolutelyContinuous'
 
 中文:
 引理 withDensity_absolutelyContinuous'
-  结论: {μ : Measure α} {f : α -> 实数>=0∞}
+  结论: {μ : 测度 α} {f : α -> 实数>=0∞}
   证明: by
   refine Measure.AbsolutelyContinuous.mk (fun s hs hμs => ?_)
   rw [withDensity_apply _ hs]; rw [lintegral_eq_zero_iff' hf.restrict]; rw [ae_eq_restrict_iff_indicator_ae_eq hs]; rw [Set.indicator_zero']; rw [Filter.EventuallyEq]; rw [ae_iff] at hμs
@@ -1895,8 +1895,8 @@ instance SigmaFinite.withDensity
     · exact ⟨n, forall_mem_image.2 fun
 
 中文:
-实例 SigmaFinite.withDensity
-  签名: [SigmaFinite μ] (f : α -> 实数>=0)
+实例 σ有限.withDensity
+  签名: [σ有限 μ] (f : α -> 实数>=0)
   定义体: by
   refine ⟨⟨⟨fun n => spanningSets μ n inter f ⁻¹' (Iic n), fun _ => trivial, fun n => ?_, ?_⟩⟩⟩
   · rw [withDensity_apply']
@@ -1928,8 +1928,8 @@ lemma SigmaFinite.withDensity_of_ne_top
   infer_instance
 
 中文:
-引理 SigmaFinite.withDensity_of_ne_top
-  结论: [SigmaFinite μ] {f : α -> 实数>=0∞}
+引理 σ有限.withDensity_of_ne_top
+  结论: [σ有限 μ] {f : α -> 实数>=0∞}
   证明: by
   have : f =ᵐ[μ] fun x => (f x).toNNReal := hf_ne_top.mono fun x hx => (ENNReal.coe_toNNReal hx).symm
   rw [withDensity_congr_ae this]
@@ -1952,8 +1952,8 @@ lemma SigmaFinite.withDensity_of_ne_top'
   proof: SigmaFinite.withDensity_of_ne_top ae_of_all _ hf_ne_top
 
 中文:
-引理 SigmaFinite.withDensity_of_ne_top'
-  条件: [SigmaFinite μ] {f : α -> 实数>=0∞} (hf_ne_top : 对任意 x, f x != ∞)
+引理 σ有限.withDensity_of_ne_top'
+  条件: [σ有限 μ] {f : α -> 实数>=0∞} (hf_ne_top : 对任意 x, f x != ∞)
   证明: SigmaFinite.withDensity_of_ne_top ae_of_all _ hf_ne_top
 
 Depends on / 依赖: SigmaFinite, SigmaFinite.withDensity_of_ne_top, ae_of_all, hf_ne_top, withDensity_of_ne_top
@@ -1971,8 +1971,8 @@ instance SigmaFinite.withDensity_ofReal
   body: .withDensity _
 
 中文:
-实例 SigmaFinite.withDensity_ofReal
-  签名: [SigmaFinite μ] (f : α -> 实数)
+实例 σ有限.withDensity_of实数
+  签名: [σ有限 μ] (f : α -> 实数)
   定义体: .withDensity _
 
 Depends on / 依赖: withDensity
@@ -1997,7 +1997,7 @@ theorem exists_measurable_le_withDensity_eq
   simp only [hint, withDensity_apply _ hs]
 
 中文:
-定理 exists_measurable_le_withDensity_eq
+定理 存在_measurable_le_withDensity_eq
   条件: [SFinite μ] (f : α -> 实数>=0∞)
   证明: by
   obtain ⟨g, hgm, hgf, hint⟩ := exists_measurable_le_forall_setLIntegral_eq μ f
@@ -2029,7 +2029,7 @@ instance Measure.withDensity.instSFinite
     have (n : Nat) : SFinite ((sfiniteSeq μ n).withDensity f) := this in
 
 中文:
-实例 Measure.withDensity.instSFinite
+实例 测度.withDensity.instSFinite
   签名: [SFinite μ] {f : α -> 实数>=0∞}
   定义体: by
   wlog hfm : Measurable f generalizing f
@@ -2109,7 +2109,7 @@ theorem sFinite_of_absolutelyContinuous
 
 中文:
 定理 sFinite_of_absolutelyContinuous
-  条件: {ν : Measure α} [SFinite ν] (hμν : μ ≪ ν)
+  条件: {ν : 测度 α} [SFinite ν] (hμν : μ ≪ ν)
   证明: by
   rw [← Measure.restrict_add_restrict_compl (μ := μ) measurableSet_sigmaFiniteSetWRT]; rw [restrict_compl_sigmaFiniteSetWRT hμν]
   infer_instance
@@ -2133,7 +2133,7 @@ instance [Countable
   infer_instance
 
 中文:
-实例 [Countable
+实例 [可数
   签名: α] : SFinite μ
   定义体: by
   obtain ⟨s, h⟩ := exists_sum_smul_dirac μ
@@ -2167,7 +2167,7 @@ theorem prod_withDensity_left₀
 
 中文:
 定理 prod_withDensity_left₀
-  条件: {f : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  条件: {f : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   refine ext_of_lintegral _ fun φ hφ => ?_
   rw [lintegral_prod _ hφ.aemeasurable]; rw [lintegral_withDensity_eq_lintegral_mul₀ hf]; rw [lintegral_withDensity_eq_lintegral_mul₀ _ hφ.aemeasurable]; rw [lintegral_prod]
@@ -2195,7 +2195,7 @@ theorem prod_withDensity_left
 
 中文:
 定理 prod_withDensity_left
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: prod_withDensity_left₀ hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable
@@ -2220,7 +2220,7 @@ theorem prod_withDensity_right₀
 
 中文:
 定理 prod_withDensity_right₀
-  条件: {g : β -> 实数>=0∞} (hg : AEMeasurable g ν)
+  条件: {g : β -> 实数>=0∞} (hg : 几乎处处可测 g ν)
   证明: by
   refine ext_of_lintegral _ fun φ hφ => ?_
   rw [lintegral_prod _ hφ.aemeasurable]; rw [lintegral_withDensity_eq_lintegral_mul₀ _ hφ.aemeasurable]; rw [lintegral_prod]
@@ -2250,7 +2250,7 @@ theorem prod_withDensity_right
 
 中文:
 定理 prod_withDensity_right
-  条件: {g : β -> 实数>=0∞} (hg : Measurable g)
+  条件: {g : β -> 实数>=0∞} (hg : 可测 g)
   证明: prod_withDensity_right₀ hg.aemeasurable
 
 Depends on / 依赖: aemeasurable, hg.aemeasurable
@@ -2297,7 +2297,7 @@ theorem prod_withDensity
 
 中文:
 定理 prod_withDensity
-  条件: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (hf : Measurable f) (hg : Measurable g)
+  条件: {f : α -> 实数>=0∞} {g : β -> 实数>=0∞} (hf : 可测 f) (hg : 可测 g)
   证明: prod_withDensity₀ hf.aemeasurable hg.aemeasurable
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hg.aemeasurable
@@ -2322,8 +2322,8 @@ lemma Measure.prod_smul_right
   exact measurable_measure_prodMk_left hs
 
 中文:
-引理 Measure.prod_smul_right
-  条件: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (c : R)
+引理 测度.prod_smul_right
+  条件: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R)
   证明: by
   ext s hs
   have A (s : Set β) : c • ν s = (c • 1) * ν s := by simp
@@ -2360,8 +2360,8 @@ lemma IsLocallyFiniteMeasure.withDensity_coe
   exact setLIntegral_lt_top_of_b
 
 中文:
-引理 IsLocallyFiniteMeasure.withDensity_coe
-  条件: {f : α -> 实数>=0} (hf : Continuous f)
+引理 是局部有限测度.withDensity_coe
+  条件: {f : α -> 实数>=0} (hf : 连续 f)
   证明: by
   refine ⟨fun x => ?_⟩
   rcases (μ.finiteAt_nhds x).exists_mem_basis ((nhds_basis_opens' x).restrict_subset
@@ -2390,8 +2390,8 @@ lemma IsLocallyFiniteMeasure.withDensity_ofReal
   proof: .withDensity_coe continuous_real_toNNReal.comp hf
 
 中文:
-引理 IsLocallyFiniteMeasure.withDensity_ofReal
-  条件: {f : α -> 实数} (hf : Continuous f)
+引理 是局部有限测度.withDensity_of实数
+  条件: {f : α -> 实数} (hf : 连续 f)
   证明: .withDensity_coe continuous_real_toNNReal.comp hf
 
 Depends on / 依赖: continuous_real_toNNReal, continuous_real_toNNReal.comp, withDensity_coe
@@ -2418,8 +2418,8 @@ theorem Measure.mconv_smul_right
   rw [Measure.prod_smul_right]; rw [Measure.map_smul]
 
 中文:
-定理 Measure.mconv_smul_right
-  条件: (μ : Measure M) (ν : Measure M) [SFinite ν] (s : 实数>=0∞)
+定理 测度.mconv_smul_right
+  条件: (μ : 测度 M) (ν : 测度 M) [SFinite ν] (s : 实数>=0∞)
   证明: by
   unfold mconv
   rw [Measure.prod_smul_right]; rw [Measure.map_smul]

@@ -36,8 +36,8 @@ definition Int.castDef
   signature: {R : Type u} [NatCast R] [Neg R]
 
 中文:
-定义 Int.castDef
-  签名: {R : 类型u} [自然数Cast R] [Neg R]
+定义 整数.castDef
+  签名: {R : 类型u} [自然数嵌入 R] [取负 R]
 -/
 protected def Int.castDef {R : Type u} [NatCast R] [Neg R] : Int -> R
   | (n : Nat) => n
@@ -58,9 +58,9 @@ class AddGroupWithOne
     - intCast_negSucc : forall n : Nat, intCast (Int.negSucc n) = -Nat.cast (n + 1)  [default: by intros; rfl]
 
 中文:
-类 AddGroupWithOne
+类 加法带幺群
   参数: (R : 类型u)
-  继承: IntCast R, AddMonoidWithOne R, AddGroup R
+  继承: 整数嵌入 R, 加法带幺幺半群 R, 加法群 R
   公理与运算 (3 个):
     - intCast : = 整数.castDef
     - intCast_ofNat : 对任意 n : 自然数, intCast (n : 自然数) = 自然数.cast n  [默认: by intros; rfl]
@@ -87,9 +87,9 @@ class AddCommGroupWithOne
   (no additional axioms)
 
 中文:
-类 AddCommGroupWithOne
+类 加法交换带幺群
   参数: (R : 类型u)
-  继承: AddCommGroup R, AddGroupWithOne R, AddCommMonoidWithOne R
+  继承: 加法交换群 R, 加法带幺群 R, 加法交换带幺幺半群 R
   (无附加公理)
 -/
 class AddCommGroupWithOne (R : Type u)

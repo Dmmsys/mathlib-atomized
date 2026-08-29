@@ -149,7 +149,7 @@ lemma isPosSemidef_diagonalStrongDualPi
 
 中文:
 引理 isPosSemidef_diagonalStrongDualPi
-  条件: (hL : 对任意 i, (L i).toBilinForm.IsPosSemidef)
+  条件: (hL : 对任意 i, (L i).toBilinForm.是PosSemidef)
   证明: by
     simp_rw [toBilinForm_diagonalStrongDualPi_apply, fun i => (hL i).eq]
   nonneg x := by
@@ -460,7 +460,7 @@ lemma HasGaussianLaw.iIndepFun_of_covariance_eval
 
 中文:
 引理 HasGaussianLaw.iIndepFun_of_covariance_eval
-  结论: {κ : ι -> 类型} [对任意 i, Finite (κ i)]
+  结论: {κ : ι -> 类型} [对任意 i, 有限 (κ i)]
   证明: by
   have := hX.isProbabilityMeasure
   have : (fun i ω j => X i j ω) = fun i => (ofLp ∘ (toLp 2 ∘ fun ω j => X i j ω)) := by ext; simp
@@ -545,7 +545,7 @@ lemma IndepFun.hasGaussianLaw
 
 中文:
 引理 IndepFun.hasGaussianLaw
-  结论: [NormedSpace 实数 E] [NormedSpace 实数 F] {X : Ω -> E} {Y : Ω -> F}
+  结论: [赋范空间 实数 E] [赋范空间 实数 F] {X : Ω -> E} {Y : Ω -> F}
   证明: by
     have := hX.isProbabilityMeasure
     rw [isGaussian_iff_gaussian_charFunDual]
@@ -599,7 +599,7 @@ lemma HasGaussianLaw.indepFun_of_covariance_strongDual
 
 中文:
 引理 HasGaussianLaw.indepFun_of_covariance_strongDual
-  结论: [NormedSpace 实数 E] [NormedSpace 实数 F]
+  结论: [赋范空间 实数 E] [赋范空间 实数 F]
   证明: by
   have := hXY.isProbabilityMeasure
   rw [indepFun_iff_charFunDual_prod hXY.fst.aemeasurable hXY.snd.aemeasurable]
@@ -637,7 +637,7 @@ lemma HasGaussianLaw.indepFun_of_covariance_inner
 
 中文:
 引理 HasGaussianLaw.indepFun_of_covariance_inner
-  结论: [InnerProductSpace 实数 E] [InnerProductSpace 实数 F]
+  结论: [内积空间 实数 E] [内积空间 实数 F]
   证明: hXY.indepFun_of_covariance_strongDual fun L₁ L₂ => by
     simpa using! h ((toDual Real E).symm L₁) ((toDual Real F).symm L₂)
 
@@ -667,7 +667,7 @@ lemma HasGaussianLaw.indepFun_of_covariance_eval
 
 中文:
 引理 HasGaussianLaw.indepFun_of_covariance_eval
-  结论: {ι κ : 类型} [Finite ι] [Finite κ]
+  结论: {ι κ : 类型} [有限 ι] [有限 κ]
   证明: by
   have := hXY.isProbabilityMeasure
   have hX : (fun ω i => X i ω) = (ofLp ∘ (toLp 2 ∘ fun ω i => X i ω)) := by ext; simp
@@ -751,7 +751,7 @@ lemma iIndepFun.hasGaussianLaw_sum
 
 中文:
 引理 iIndepFun.hasGaussianLaw_sum
-  结论: [CompleteSpace E] {ι : 类型} [Fintype ι] {X : ι -> Ω -> E}
+  结论: [完备空间 E] {ι : 类型} [有限类型 ι] {X : ι -> Ω -> E}
   证明: (hX2.hasGaussianLaw hX1).sum
 
 Depends on / 依赖: hX2.hasGaussianLaw, hasGaussianLaw
@@ -771,7 +771,7 @@ lemma iIndepFun.hasGaussianLaw_fun_sum
 
 中文:
 引理 iIndepFun.hasGaussianLaw_fun_sum
-  结论: [CompleteSpace E] {ι : 类型} [Fintype ι] {X : ι -> Ω -> E}
+  结论: [完备空间 E] {ι : 类型} [有限类型 ι] {X : ι -> Ω -> E}
   证明: (hX2.hasGaussianLaw hX1).fun_sum
 
 Depends on / 依赖: fun_sum, hX2.hasGaussianLaw, hasGaussianLaw
@@ -791,7 +791,7 @@ lemma iIndepFun.hasGaussianLaw_add
 
 中文:
 引理 iIndepFun.hasGaussianLaw_add
-  结论: [CompleteSpace E] {X Y : Ω -> E}
+  结论: [完备空间 E] {X Y : Ω -> E}
   证明: (h.hasGaussianLaw hX hY).add
 
 Depends on / 依赖: h.hasGaussianLaw, hasGaussianLaw
@@ -811,7 +811,7 @@ lemma iIndepFun.hasGaussianLaw_fun_add
 
 中文:
 引理 iIndepFun.hasGaussianLaw_fun_add
-  结论: [CompleteSpace E] {X Y : Ω -> E}
+  结论: [完备空间 E] {X Y : Ω -> E}
   证明: (h.hasGaussianLaw hX hY).add
 
 Depends on / 依赖: Finite, Module, Module.Finite.equiv, MvPolynomial, MvPolynomial.isEmptyAlgEquiv, h.hasGaussianLaw, hasGaussianLaw, isEmptyAlgEquiv, toLinearEquiv, toLinearEquiv.symm
@@ -831,7 +831,7 @@ lemma iIndepFun.hasGaussianLaw_sub
 
 中文:
 引理 iIndepFun.hasGaussianLaw_sub
-  结论: [CompleteSpace E] {X Y : Ω -> E}
+  结论: [完备空间 E] {X Y : Ω -> E}
   证明: (h.hasGaussianLaw hX hY).sub
 
 Depends on / 依赖: h.hasGaussianLaw, hasGaussianLaw
@@ -851,7 +851,7 @@ lemma iIndepFun.hasGaussianLaw_fun_sub
 
 中文:
 引理 iIndepFun.hasGaussianLaw_fun_sub
-  结论: [CompleteSpace E] {X Y : Ω -> E}
+  结论: [完备空间 E] {X Y : Ω -> E}
   证明: (h.hasGaussianLaw hX hY).sub
 
 Depends on / 依赖: h.hasGaussianLaw, hasGaussianLaw

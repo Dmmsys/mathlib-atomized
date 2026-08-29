@@ -100,7 +100,7 @@ lemma prop_of_isTerminal
 
 中文:
 引理 prop_of_isTerminal
-  结论: [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)]
+  结论: [P.是ClosedUnderLimitsOfShape (离散.{0} 命题空)]
   证明: P.prop_of_isLimit hX (by rintro ⟨⟨⟩⟩)
 
 Depends on / 依赖: P.prop_of_isLimit, prop_of_isLimit
@@ -120,7 +120,7 @@ lemma prop_terminal
 
 中文:
 引理 prop_terminal
-  条件: [P.IsClosedUnderLimitsOfShape (Discrete.{0} PEmpty)] [HasTerminal C]
+  条件: [P.是ClosedUnderLimitsOfShape (离散.{0} 命题空)] [有终止 C]
   证明: P.prop_of_isTerminal _ terminalIsTerminal
 
 Depends on / 依赖: P.prop_of_isTerminal, prop_of_isTerminal, terminalIsTerminal
@@ -148,7 +148,7 @@ lemma IsClosedUnderBinaryProducts.closedUnderIsomorphisms
 
 中文:
 引理 IsClosedUnderBinaryProducts.closedUnderIsomorphisms
-  结论: [HasTerminal C]
+  结论: [有终止 C]
   证明: by
     let h : IsLimit (BinaryFan.mk (terminal.from Y) e.inv) :=
       BinaryFan.IsLimit.mk _ (fun _ f => f ≫ e.hom) (by cat_disch) (by simp) (by cat_disch)
@@ -174,7 +174,7 @@ abbreviation binaryProductsClosure
 
 中文:
 缩写 binaryProductsClosure
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: P.limitClosure (Discrete WalkingPair)
 
 Depends on / 依赖: Discrete, NatTrans, NatTrans.isIso_iff_isIso_app, P.limitClosure, WalkingPair, isIso_iff_isIso_app, limitClosure, natTransTruncLTOfLE, someOctahedron, t.isIso, t.natTransTruncLTOfLE, t.triangleLTGE_distinguished, t.triangleLTLTGELT_distinguished, t.truncGELT, t.truncLT, triangleLTGE_distinguished, triangleLTLTGELT_distinguished, truncGELT, truncLT
@@ -195,7 +195,7 @@ lemma binaryProductsClosure_le_iff
 
 中文:
 引理 binaryProductsClosure_le_iff
-  结论: [HasTerminal C] {P Q : Object命题erty C}
+  结论: [有终止 C] {P Q : ObjectProperty C}
   证明: by
   refine ⟨fun h => (P.le_limitsClosure _).trans h, fun h => ?_⟩
   let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryProducts.closedUnderIsomorphisms Q
@@ -220,10 +220,10 @@ class IsClosedUnderFiniteProducts
     - isClosedUnderLimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderLimitsOfShape (Discrete J)  [default: by infer_instance]
 
 中文:
-类 IsClosedUnderFiniteProducts
+类 是ClosedUnderFiniteProducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - isClosedUnderLimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderLimitsOfShape (Discrete J)  [默认: by infer_instance]
+    - isClosedUnderLimitsOfShape((J : 类型) [有限 J]) : P.是ClosedUnderLimitsOfShape (离散 J)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -242,7 +242,7 @@ lemma IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
     exact H _
 
 中文:
-引理 IsClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
+引理 是ClosedUnderFiniteProducts.of_isClosedUnderLimitsOfShape
   证明: by
     rw [P.isClosedUnderLimitsOfShape_iff_of_equivalence (Discrete.equivalence (equivShrink.{w} _))]
     exact H _
@@ -269,8 +269,8 @@ instance [P.IsClosedUnderFiniteProducts]
   exact IsClosedUnderLimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
 
 中文:
-实例 [P.IsClosedUnderFiniteProducts]
-  签名: (J : 类型) [Finite J]
+实例 [P.是ClosedUnderFiniteProducts]
+  签名: (J : 类型) [有限 J]
   定义体: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
   have : P.IsClosedUnderLimitsOfShape (Discrete (Fin n)) :=
@@ -295,8 +295,8 @@ instance [HasFiniteProducts
   body: inferInstance
 
 中文:
-实例 [HasFiniteProducts
-  签名: C] [P.IsClosedUnderFiniteProducts] :
+实例 [有FiniteProducts
+  签名: C] [P.是ClosedUnderFiniteProducts] :
   定义体: inferInstance
 -/
 instance [HasFiniteProducts C] [P.IsClosedUnderFiniteProducts] :
@@ -313,7 +313,7 @@ lemma prop_of_isLimit_fan
 
 中文:
 引理 prop_of_isLimit_fan
-  结论: [P.IsClosedUnderFiniteProducts] {J : 类型} [Finite J] {f : J -> C}
+  结论: [P.是ClosedUnderFiniteProducts] {J : 类型} [有限 J] {f : J -> C}
   证明: P.prop_of_isLimit hF (by intro ⟨j⟩; exact h j)
 
 Depends on / 依赖: P.prop_of_isLimit, prop_of_isLimit
@@ -333,7 +333,7 @@ lemma prop_product
 
 中文:
 引理 prop_product
-  结论: [P.IsClosedUnderFiniteProducts] {J : 类型} [Finite J] {f : J -> C}
+  结论: [P.是ClosedUnderFiniteProducts] {J : 类型} [有限 J] {f : J -> C}
   证明: P.prop_of_isLimit_fan (limit.isLimit (Discrete.functor f)) h
 
 Depends on / 依赖: Discrete, Discrete.functor, P.prop_of_isLimit_fan, functor, isLimit, limit.isLimit, prop_of_isLimit_fan
@@ -359,8 +359,8 @@ instance [P.ContainsZero]
       (IsLimit.c
 
 中文:
-实例 [P.ContainsZero]
-  签名: [P.IsClosedUnderIsomorphisms]
+实例 [P.余ntainsZero]
+  签名: [P.在同构下封闭]
   定义体: by
     rintro X ⟨p⟩
     obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
@@ -397,8 +397,8 @@ lemma IsClosedUnderFiniteProducts.mk'
   exact ⟨fun J _ => P.isClosedUnderLimitsOfShape_of_preservesLimitsOfShape_ι _⟩
 
 中文:
-引理 IsClosedUnderFiniteProducts.mk'
-  结论: [HasFiniteProducts C]
+引理 是ClosedUnderFiniteProducts.mk'
+  结论: [有FiniteProducts C]
   证明: by
   have := IsClosedUnderBinaryProducts.closedUnderIsomorphisms P
   have := hasFiniteProducts_of_has_binary_and_terminal (C := P.FullSubcategory)
@@ -482,7 +482,7 @@ lemma prop_of_isInitial
 
 中文:
 引理 prop_of_isInitial
-  结论: [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)]
+  结论: [P.是ClosedUnderColimitsOfShape (离散.{0} 命题空)]
   证明: P.prop_of_isColimit hX (by rintro ⟨⟨⟩⟩)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.hom, P.prop_of_isColimit, prop_of_isColimit
@@ -502,7 +502,7 @@ lemma prop_initial
 
 中文:
 引理 prop_initial
-  条件: [P.IsClosedUnderColimitsOfShape (Discrete.{0} PEmpty)] [HasInitial C]
+  条件: [P.是ClosedUnderColimitsOfShape (离散.{0} 命题空)] [HasInitial C]
   证明: P.prop_of_isInitial _ initialIsInitial
 
 Depends on / 依赖: P.prop_of_isInitial, initialIsInitial, prop_of_isInitial
@@ -557,7 +557,7 @@ abbreviation binaryCoproductsClosure
 
 中文:
 缩写 binaryCoproductsClosure
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: P.colimitClosure (Discrete WalkingPair)
 
 Depends on / 依赖: Discrete, P.colimitClosure, WalkingPair, colimitClosure
@@ -578,7 +578,7 @@ lemma binaryCoproductsClosure_le_iff
 
 中文:
 引理 binaryCoproductsClosure_le_iff
-  结论: [HasInitial C] {P Q : Object命题erty C}
+  结论: [HasInitial C] {P Q : ObjectProperty C}
   证明: by
   refine ⟨fun h => (P.le_colimitsClosure _).trans h, fun h => ?_⟩
   let : Q.IsClosedUnderIsomorphisms := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms Q
@@ -603,10 +603,10 @@ class IsClosedUnderFiniteCoproducts
     - isClosedUnderColimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderColimitsOfShape (Discrete J)  [default: by infer_instance]
 
 中文:
-类 IsClosedUnderFiniteCoproducts
+类 是ClosedUnderFiniteCoproducts
   参数: : 命题 where
   公理与运算 (1 个):
-    - isClosedUnderColimitsOfShape((J : Type) [Finite J]) : P.IsClosedUnderColimitsOfShape (Discrete J)  [默认: by infer_instance]
+    - isClosedUnderColimitsOfShape((J : 类型) [有限 J]) : P.是ClosedUnderColimitsOfShape (离散 J)  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -626,7 +626,7 @@ lemma IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
     exact H _
 
 中文:
-引理 IsClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
+引理 是ClosedUnderFiniteCoproducts.of_isClosedUnderColimitsOfShape
   证明: by
     rw [P.isClosedUnderColimitsOfShape_iff_of_equivalence
       (Discrete.equivalence (equivShrink.{w} _))]
@@ -655,8 +655,8 @@ instance [P.IsClosedUnderFiniteCoproducts]
   exact IsClosedUnderColimitsOfShape.of_equivalence (Discrete.equivalence e.symm)
 
 中文:
-实例 [P.IsClosedUnderFiniteCoproducts]
-  签名: (J : 类型) [Finite J]
+实例 [P.是ClosedUnderFiniteCoproducts]
+  签名: (J : 类型) [有限 J]
   定义体: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin J
   have : P.IsClosedUnderColimitsOfShape (Discrete (Fin n)) :=
@@ -681,8 +681,8 @@ instance [HasFiniteCoproducts
   body: inferInstance
 
 中文:
-实例 [HasFiniteCoproducts
-  签名: C] [P.IsClosedUnderFiniteCoproducts] :
+实例 [有FiniteCoproducts
+  签名: C] [P.是ClosedUnderFiniteCoproducts] :
   定义体: inferInstance
 -/
 instance [HasFiniteCoproducts C] [P.IsClosedUnderFiniteCoproducts] :
@@ -699,7 +699,7 @@ lemma prop_of_isColimit_cofan
 
 中文:
 引理 prop_of_isColimit_cofan
-  结论: [P.IsClosedUnderFiniteCoproducts] {J : 类型} [Finite J] {f : J -> C}
+  结论: [P.是ClosedUnderFiniteCoproducts] {J : 类型} [有限 J] {f : J -> C}
   证明: P.prop_of_isColimit hF (by intro ⟨j⟩; exact h j)
 
 Depends on / 依赖: P.prop_of_isColimit, prop_of_isColimit
@@ -719,7 +719,7 @@ lemma prop_coproduct
 
 中文:
 引理 prop_coproduct
-  结论: [P.IsClosedUnderFiniteCoproducts] {J : 类型} [Finite J] {f : J -> C}
+  结论: [P.是ClosedUnderFiniteCoproducts] {J : 类型} [有限 J] {f : J -> C}
   证明: P.prop_of_isColimit_cofan (colimit.isColimit (Discrete.functor f)) h
 
 Depends on / 依赖: Discrete, Discrete.functor, P.prop_of_isColimit_cofan, colimit, colimit.isColimit, functor, isColimit, prop_of_isColimit_cofan
@@ -745,8 +745,8 @@ instance [P.ContainsZero]
       (IsCo
 
 中文:
-实例 [P.ContainsZero]
-  签名: [P.IsClosedUnderIsomorphisms]
+实例 [P.余ntainsZero]
+  签名: [P.在同构下封闭]
   定义体: by
     rintro X ⟨p⟩
     obtain ⟨Z, hZ, hZ₂⟩ := P.exists_prop_of_containsZero
@@ -783,8 +783,8 @@ lemma IsClosedUnderFiniteCoproducts.mk'
   exact ⟨fun J _ => P.isClosedUnderColimitsOfShape_of_preservesColimitsOfShape
 
 中文:
-引理 IsClosedUnderFiniteCoproducts.mk'
-  结论: [HasFiniteCoproducts C]
+引理 是ClosedUnderFiniteCoproducts.mk'
+  结论: [有FiniteCoproducts C]
   证明: by
   have := IsClosedUnderBinaryCoproducts.closedUnderIsomorphisms P
   have := hasFiniteCoproducts_of_has_binary_and_initial (C := P.FullSubcategory)

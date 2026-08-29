@@ -46,7 +46,7 @@ theorem prod_isUnit
 
 中文:
 定理 prod_isUnit
-  结论: 对任意 {L : List M}, (对任意 m in L, IsUnit m) -> IsUnit L.prod
+  结论: 对任意 {L : 列表 M}, (对任意 m in L, 是单位 m) -> 是单位 L.乘积
 -/
 theorem prod_isUnit : forall {L : List M}, (forall m in L, IsUnit m) -> IsUnit L.prod
   | [], _ => by simp
@@ -71,7 +71,7 @@ theorem prod_isUnit_iff
 
 中文:
 定理 prod_isUnit_iff
-  条件: {M : 类型} [CommMonoid M] {L : List M}
+  条件: {M : 类型} [交换幺半群 M] {L : 列表 M}
   证明: by
   refine ⟨fun h => ?_, prod_isUnit⟩
   induction L with
@@ -108,9 +108,9 @@ lemma Perm.prod_eq'
   rw [← mul_assoc]; rw [← mul_assoc]; rw [h]
 
 中文:
-引理 Perm.prod_eq'
-  条件: (h : l₁ ~ l₂) (hc : l₁.Pairwise Commute)
-  结论: l₁.prod = l₂.prod
+引理 置换.prod_eq'
+  条件: (h : l₁ ~ l₂) (hc : l₁.两两 Commute)
+  结论: l₁.乘积 = l₂.乘积
   证明: by
   have : Std.Symm fun x y => forall z : M, y * (x * z) = x * (y * z) := { symm x y h z := h z |>.symm }
   refine h.foldr_eq' (Pairwise.forall_of_forall (fun _ _ _ => rfl) <| hc.imp fun {a b} h z => ?_) 1
@@ -178,7 +178,7 @@ theorem sum_map_count_dedup_filter_eq_countP
 
 中文:
 定理 sum_map_count_dedup_filter_eq_countP
-  条件: (p : α -> 布尔) (l : List α)
+  条件: (p : α -> 布尔值) (l : 列表 α)
   证明: by
   induction l with
   | nil => simp
@@ -224,7 +224,7 @@ theorem sum_map_count_dedup_eq_length
 
 中文:
 定理 sum_map_count_dedup_eq_length
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   simpa using sum_map_count_dedup_filter_eq_countP (fun _ => True) l
 
@@ -251,7 +251,7 @@ lemma length_sigma
 
 中文:
 引理 length_sigma
-  条件: {σ : α -> 类型} (l₁ : List α) (l₂ : 对任意 a, List (σ a))
+  条件: {σ : α -> 类型} (l₁ : 列表 α) (l₂ : 对任意 a, 列表 (σ a))
   证明: by
   induction l₁ with
   | nil => rfl
@@ -274,7 +274,7 @@ lemma ranges_flatten
 
 中文:
 引理 ranges_flatten
-  结论: 对任意 (l : List 自然数), l.ranges.flatten = range l.sum
+  结论: 对任意 (l : 列表 自然数), l.ranges.flatten = range l.求和
 -/
 lemma ranges_flatten : forall (l : List Nat), l.ranges.flatten = range l.sum
   | [] => rfl
@@ -291,7 +291,7 @@ theorem ranges_nodup
 
 中文:
 定理 ranges_nodup
-  条件: {l s : List 自然数} (hs : s in ranges l)
+  条件: {l s : 列表 自然数} (hs : s in ranges l)
   结论: s.Nodup
   证明: (List.pairwise_flatten.mp <| by rw [ranges_flatten]; exact nodup_range).1 s hs
 
@@ -311,7 +311,7 @@ lemma mem_mem_ranges_iff_lt_sum
 
 中文:
 引理 mem_mem_ranges_iff_lt_sum
-  条件: (l : List 自然数) {n : 自然数}
+  条件: (l : 列表 自然数) {n : 自然数}
   证明: by
   rw [← mem_range]; rw [← ranges_flatten]; rw [mem_flatten]
 
@@ -335,7 +335,7 @@ lemma drop_take_succ_flatten_eq_getElem
 
 中文:
 引理 drop_take_succ_flatten_eq_getElem
-  条件: (L : List (List α)) (i : 自然数) (h : i < L.length)
+  条件: (L : 列表 (列表 α)) (i : 自然数) (h : i < L.length)
   证明: by
   have : (L.map length).take i = ((L.take (i + 1)).map length).take i := by
     simp [map_take, take_take, Nat.min_eq_left]
@@ -371,7 +371,7 @@ theorem neg_one_mem_of_prod_eq_neg_one
 
 中文:
 定理 neg_one_mem_of_prod_eq_neg_one
-  条件: {l : List 整数} (h : l.prod = -1)
+  条件: {l : 列表 整数} (h : l.乘积 = -1)
   结论: (-1 : 整数) in l
   证明: by
   obtain ⟨x, h₁, h₂⟩ := exists_mem_ne_one_of_prod_ne_one (ne_of_eq_of_ne h (by decide))
@@ -401,8 +401,8 @@ theorem dvd_prod
 
 中文:
 定理 dvd_prod
-  条件: [CommMonoid M] {a} {l : List M} (ha : a in l)
-  结论: a ∣ l.prod
+  条件: [交换幺半群 M] {a} {l : 列表 M} (ha : a in l)
+  结论: a ∣ l.乘积
   证明: by
   let ⟨s, t, h⟩ := append_of_mem ha
   rw [h]; rw [prod_append]; rw [prod_cons]; rw [mul_left_comm]
@@ -427,8 +427,8 @@ theorem Sublist.prod_dvd_prod
   exact dvd_mul_right _ _
 
 中文:
-定理 Sublist.prod_dvd_prod
-  条件: [CommMonoid M] {l₁ l₂ : List M} (h : l₁ <+ l₂)
+定理 子表.prod_dvd_prod
+  条件: [交换幺半群 M] {l₁ l₂ : 列表 M} (h : l₁ <+ l₂)
   证明: by
   obtain ⟨l, hl⟩ := h.exists_perm_append
   rw [hl.prod_eq]; rw [prod_append]
@@ -506,7 +506,7 @@ lemma op_list_prod
 
 中文:
 引理 op_list_prod
-  结论: 对任意 l : List M, op l.prod = (l.map op).reverse.prod
+  结论: 对任意 l : 列表 M, op l.乘积 = (l.map op).reverse.乘积
   证明: by
   intro l; induction l with
   | nil => rfl
@@ -533,8 +533,8 @@ lemma unop_list_prod
 
 中文:
 引理 unop_list_prod
-  条件: (l : List Mᵐᵒᵖ)
-  结论: l.prod.unop = (l.map unop).reverse.prod
+  条件: (l : 列表 Mᵐᵒᵖ)
+  结论: l.乘积.unop = (l.map unop).reverse.乘积
   证明: by
   rw [← op_inj]; rw [op_unop]; rw [MulOpposite.op_list_prod]; rw [map_reverse]; rw [map_map]; rw [reverse_reverse]; rw [op_comp_unop]; rw [map_id]
 
@@ -559,7 +559,7 @@ lemma unop_map_list_prod
 
 中文:
 引理 unop_map_list_prod
-  结论: {F : 类型} [FunLike F M Nᵐᵒᵖ] [MonoidHomClass F M Nᵐᵒᵖ]
+  结论: {F : 类型} [函数状 F M Nᵐᵒᵖ] [幺半群态射类 F M Nᵐᵒᵖ]
   证明: by
   rw [map_list_prod f l]; rw [MulOpposite.unop_list_prod]; rw [List.map_map]
 

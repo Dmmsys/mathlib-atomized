@@ -37,7 +37,7 @@ instance [HasLimitsOfShape
   body: functorCategoryHasLimitsOfShape
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: J C] (X
   定义体: functorCategoryHasLimitsOfShape
 
@@ -54,7 +54,7 @@ instance [HasLimits
   signature: C] (X
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] (X
 -/
 instance [HasLimits C] (X : TopCat.{v}) : HasLimits.{v} (Presheaf C X) where
@@ -68,7 +68,7 @@ instance [HasColimitsOfShape
   body: functorCategoryHasColimitsOfShape
 
 中文:
-实例 [HasColimitsOfShape
+实例 [有形状余极限
   签名: J C] (X
   定义体: functorCategoryHasColimitsOfShape
 
@@ -85,8 +85,8 @@ instance [HasColimits.{v,
   signature: u} C] (X : TopCat.{t}) : HasColimitsOfSize.{v, v} (Presheaf C X) where
 
 中文:
-实例 [HasColimits.{v,
-  签名: u} C] (X : TopCat.{t}) : HasColimitsOfSize.{v, v} (Presheaf C X) where
+实例 [有余极限.{v,
+  签名: u} C] (X : 顶元素范畴.{t}) : 有余limitsOfSize.{v, v} (预层 C X) where
 -/
 instance [HasColimits.{v, u} C] (X : TopCat.{t}) : HasColimitsOfSize.{v, v} (Presheaf C X) where
 
@@ -99,7 +99,7 @@ instance [HasLimitsOfShape
   body: inferInstanceAs CreatesLimitsOfShape J (sheafToPresheaf _ _)
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: J C] (X
   定义体: inferInstanceAs CreatesLimitsOfShape J (sheafToPresheaf _ _)
 
@@ -117,7 +117,7 @@ instance [HasLimitsOfShape
   body: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Sheaf.forget C X)
 
 中文:
-实例 [HasLimitsOfShape
+实例 [有形状极限
   签名: J C] (X
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (Sheaf.forget C X)
 
@@ -134,7 +134,7 @@ instance [HasLimits
   signature: C] (X
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] (X
 -/
 instance [HasLimits C] (X : TopCat) : CreatesLimits.{v, v} (Sheaf.forget C X) where
@@ -147,7 +147,7 @@ instance [HasLimits
   signature: C] (X
 
 中文:
-实例 [HasLimits
+实例 [有极限
   签名: C] (X
 -/
 instance [HasLimits C] (X : TopCat.{v}) : HasLimitsOfSize.{v, v} (Sheaf.{v} C X) where
@@ -169,7 +169,7 @@ theorem isSheaf_of_isLimit
 
 中文:
 定理 isSheaf_of_isLimit
-  结论: [HasLimitsOfShape J C] {X : TopCat.{v}} (F : J ⥤ Presheaf.{v} C X)
+  结论: [有形状极限 J C] {X : 顶元素范畴.{v}} (F : J ⥤ 预层.{v} C X)
   证明: by
   let F' : J ⥤ Sheaf C X :=
     { obj := fun j => ⟨F.obj j, H j⟩
@@ -200,7 +200,7 @@ theorem limit_isSheaf
 
 中文:
 定理 limit_isSheaf
-  结论: [HasLimitsOfShape J C] {X : TopCat.{v}} (F : J ⥤ Presheaf.{v} C X)
+  结论: [有形状极限 J C] {X : 顶元素范畴.{v}} (F : J ⥤ 预层.{v} C X)
   证明: isSheaf_of_isLimit F H (limit.isLimit F)
 
 Depends on / 依赖: isLimit, isSheaf_of_isLimit, limit.isLimit

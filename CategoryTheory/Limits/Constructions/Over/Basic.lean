@@ -50,7 +50,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: {B : C} [HasFiniteWidePullbacks C]
+  签名: {B : C} [有FiniteWidePullbacks C]
   定义体: by
   have := ConstructProducts.over_finiteProducts_of_finiteWidePullbacks (B := B)
   have := hasEqualizers_of_hasPullbacks_and_binary_products (C := Over B)

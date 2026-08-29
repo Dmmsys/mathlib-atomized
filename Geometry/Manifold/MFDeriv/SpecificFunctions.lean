@@ -386,7 +386,7 @@ theorem hasMFDerivWithinAt_id
 
 中文:
 定理 hasMFDerivWithinAt_id
-  条件: (s : Set M) (x : M)
+  条件: (s : 集合 M) (x : M)
   证明: (hasMFDerivAt_id x).hasMFDerivWithinAt
 
 Depends on / 依赖: hasMFDerivAt_id, hasMFDerivWithinAt
@@ -481,7 +481,7 @@ theorem mfderiv_id
 
 中文:
 定理 mfderiv_id
-  结论: mfderiv% (@id M) x = ContinuousLinearMap.id 𝕜 (TangentSpace% x)
+  结论: mfderiv% (@id M) x = 连续线性映射.id 𝕜 (TangentSpace% x)
   证明: (hasMFDerivAt_id x).mfderiv
 
 Depends on / 依赖: hasMFDerivAt_id, mfderiv
@@ -546,7 +546,7 @@ theorem tangentMapWithin_id
 
 中文:
 定理 tangentMapWithin_id
-  条件: {p : TangentBundle I M} (hs : UniqueMDiffAt[s] p.proj)
+  条件: {p : 切丛 I M} (hs : UniqueMDiffAt[s] p.proj)
   证明: by
   simp only [tangentMapWithin, id]
   rw [mfderivWithin_id]
@@ -601,7 +601,7 @@ theorem hasMFDerivWithinAt_const
 
 中文:
 定理 hasMFDerivWithinAt_const
-  条件: (c : M') (s : Set M) (x : M)
+  条件: (c : M') (s : 集合 M) (x : M)
   证明: (hasMFDerivAt_const c x).hasMFDerivWithinAt
 
 Depends on / 依赖: hasMFDerivAt_const, hasMFDerivWithinAt
@@ -1023,7 +1023,7 @@ theorem hasMFDerivWithinAt_fst
 
 中文:
 定理 hasMFDerivWithinAt_fst
-  条件: (s : Set (M × M')) (x : M × M')
+  条件: (s : 集合 (M × M')) (x : M × M')
   证明: (hasMFDerivAt_fst x).hasMFDerivWithinAt
 
 Depends on / 依赖: hasMFDerivAt_fst, hasMFDerivWithinAt
@@ -1045,7 +1045,7 @@ theorem mdifferentiableAt_fst
 中文:
 定理 mdifferentiableAt_fst
   条件: {x : M × M'}
-  结论: MDiffAt (@Prod.fst M M') x
+  结论: MDiffAt (@积类型.fst M M') x
   证明: (hasMFDerivAt_fst x).mdifferentiableAt
 
 Depends on / 依赖: hasMFDerivAt_fst, mdifferentiableAt
@@ -1063,7 +1063,7 @@ theorem mdifferentiableWithinAt_fst
 
 中文:
 定理 mdifferentiableWithinAt_fst
-  条件: {s : Set (M × M')} {x : M × M'}
+  条件: {s : 集合 (M × M')} {x : M × M'}
   证明: mdifferentiableAt_fst.mdifferentiableWithinAt
 
 Depends on / 依赖: mdifferentiableAt_fst, mdifferentiableAt_fst.mdifferentiableWithinAt, mdifferentiableWithinAt
@@ -1082,7 +1082,7 @@ theorem mdifferentiable_fst
 
 中文:
 定理 mdifferentiable_fst
-  结论: MDiff (@Prod.fst M M')
+  结论: MDiff (@积类型.fst M M')
   证明: fun _ => mdifferentiableAt_fst
 
 Depends on / 依赖: mdifferentiableAt_fst
@@ -1102,8 +1102,8 @@ theorem mdifferentiableOn_fst
 
 中文:
 定理 mdifferentiableOn_fst
-  条件: {s : Set (M × M')}
-  结论: MDiff[s] (@Prod.fst M M')
+  条件: {s : 集合 (M × M')}
+  结论: MDiff[s] (@积类型.fst M M')
   证明: mdifferentiable_fst.mdifferentiableOn
 
 @[simp, mfld_simps]
@@ -1147,7 +1147,7 @@ theorem mfderivWithin_fst
 
 中文:
 定理 mfderivWithin_fst
-  结论: {s : Set (M × M')} {x : M × M'}
+  结论: {s : 集合 (M × M')} {x : M × M'}
   证明: by
   rw [MDifferentiable.mfderivWithin mdifferentiableAt_fst hxs]; exact mfderiv_fst
 
@@ -1173,7 +1173,7 @@ theorem tangentMap_prodFst
 
 中文:
 定理 tangentMap_prodFst
-  条件: {p : TangentBundle (I.prod I') (M × M')}
+  条件: {p : 切丛 (I.乘积 I') (M × M')}
   证明: by
   simp [tangentMap]; rfl
 
@@ -1197,7 +1197,7 @@ theorem tangentMapWithin_prodFst
 
 中文:
 定理 tangentMapWithin_prodFst
-  结论: {s : Set (M × M')} {p : TangentBundle (I.prod I') (M × M')}
+  结论: {s : 集合 (M × M')} {p : 切丛 (I.乘积 I') (M × M')}
   证明: by
   simp only [tangentMapWithin]
   rw [mfderivWithin_fst]
@@ -1269,7 +1269,7 @@ theorem hasMFDerivWithinAt_snd
 
 中文:
 定理 hasMFDerivWithinAt_snd
-  条件: (s : Set (M × M')) (x : M × M')
+  条件: (s : 集合 (M × M')) (x : M × M')
   证明: (hasMFDerivAt_snd x).hasMFDerivWithinAt
 
 Depends on / 依赖: hasMFDerivAt_snd, hasMFDerivWithinAt
@@ -1291,7 +1291,7 @@ theorem mdifferentiableAt_snd
 中文:
 定理 mdifferentiableAt_snd
   条件: {x : M × M'}
-  结论: MDiffAt (@Prod.snd M M') x
+  结论: MDiffAt (@积类型.snd M M') x
   证明: (hasMFDerivAt_snd x).mdifferentiableAt
 
 Depends on / 依赖: hasMFDerivAt_snd, mdifferentiableAt
@@ -1309,7 +1309,7 @@ theorem mdifferentiableWithinAt_snd
 
 中文:
 定理 mdifferentiableWithinAt_snd
-  条件: {s : Set (M × M')} {x : M × M'}
+  条件: {s : 集合 (M × M')} {x : M × M'}
   证明: mdifferentiableAt_snd.mdifferentiableWithinAt
 
 Depends on / 依赖: mdifferentiableAt_snd, mdifferentiableAt_snd.mdifferentiableWithinAt, mdifferentiableWithinAt
@@ -1327,7 +1327,7 @@ theorem mdifferentiable_snd
 
 中文:
 定理 mdifferentiable_snd
-  结论: MDiff (@Prod.snd M M')
+  结论: MDiff (@积类型.snd M M')
   证明: fun _ => mdifferentiableAt_snd
 
 Depends on / 依赖: mdifferentiableAt_snd
@@ -1347,8 +1347,8 @@ theorem mdifferentiableOn_snd
 
 中文:
 定理 mdifferentiableOn_snd
-  条件: {s : Set (M × M')}
-  结论: MDiff[s] (@Prod.snd M M')
+  条件: {s : 集合 (M × M')}
+  结论: MDiff[s] (@积类型.snd M M')
   证明: mdifferentiable_snd.mdifferentiableOn
 
 @[simp, mfld_simps]
@@ -1390,7 +1390,7 @@ theorem mfderivWithin_snd
 
 中文:
 定理 mfderivWithin_snd
-  结论: {s : Set (M × M')} {x : M × M'}
+  结论: {s : 集合 (M × M')} {x : M × M'}
   证明: by
   rw [MDifferentiable.mfderivWithin mdifferentiableAt_snd hxs]; exact mfderiv_snd
 
@@ -1412,7 +1412,7 @@ theorem MDifferentiableWithinAt.fst
 
 中文:
 定理 MDifferentiableWithinAt.fst
-  结论: {f : N -> M × M'} {s : Set N} {x : N}
+  结论: {f : N -> M × M'} {s : 集合 N} {x : N}
   证明: mdifferentiableAt_fst.comp_mdifferentiableWithinAt x hf
 
 Depends on / 依赖: comp_mdifferentiableWithinAt, mdifferentiableAt_fst, mdifferentiableAt_fst.comp_mdifferentiableWithinAt
@@ -1470,7 +1470,7 @@ theorem MDifferentiableWithinAt.snd
 
 中文:
 定理 MDifferentiableWithinAt.snd
-  条件: {f : N -> M × M'} {s : Set N} {x : N} (hf : MDiffAt[s] f x)
+  条件: {f : N -> M × M'} {s : 集合 N} {x : N} (hf : MDiffAt[s] f x)
   证明: mdifferentiableAt_snd.comp_mdifferentiableWithinAt x hf
 
 Depends on / 依赖: comp_mdifferentiableWithinAt, mdifferentiableAt_snd, mdifferentiableAt_snd.comp_mdifferentiableWithinAt
@@ -1828,7 +1828,7 @@ theorem MDifferentiable.prodMap
 中文:
 定理 MDifferentiable.prodMap
   条件: (hf : MDiff f) (hg : MDiff g)
-  结论: MDiff (Prod.map f g)
+  结论: MDiff (积类型.map f g)
   证明: fun p =>
   (hf p.1).prodMap' (hg p.2)
 -/
@@ -1850,7 +1850,7 @@ lemma HasMFDerivWithinAt.prodMap
 
 中文:
 引理 HasMFDerivWithinAt.prodMap
-  结论: {s : Set <| M × M'} {p : M × M'} {f : M -> N} {g : M' -> N'}
+  结论: {s : 集合 <| M × M'} {p : M × M'} {f : M -> N} {g : M' -> N'}
   证明: by
 .mono (by grind), ?_⟩ refine ⟨hf.1.prodMap hg.1
   have better : ((extChartAt (I.prod I') p).symm ⁻¹' s inter range ↑(I.prod I')) subseteq
@@ -1932,7 +1932,7 @@ lemma mfderivWithin_prodMap
 
 中文:
 引理 mfderivWithin_prodMap
-  结论: {p : M × M'} {t : Set M'} {f : M -> N} {g : M' -> N'}
+  结论: {p : M × M'} {t : 集合 M'} {f : M -> N} {g : M' -> N'}
   证明: by
   have hf' : HasMFDerivAt[Prod.fst '' s ×ˢ t] f p.1 (mfderiv[s] f p.1) :=
     hf.hasMFDerivWithinAt.mono (by grind)
@@ -1994,7 +1994,7 @@ theorem tangentMap_prodSnd
 
 中文:
 定理 tangentMap_prodSnd
-  条件: {p : TangentBundle (I.prod I') (M × M')}
+  条件: {p : 切丛 (I.乘积 I') (M × M')}
   证明: by
   simp [tangentMap]; rfl
 
@@ -2017,7 +2017,7 @@ theorem tangentMapWithin_prodSnd
 
 中文:
 定理 tangentMapWithin_prodSnd
-  结论: {s : Set (M × M')} {p : TangentBundle (I.prod I') (M × M')}
+  结论: {s : 集合 (M × M')} {p : 切丛 (I.乘积 I') (M × M')}
   证明: by
   simp only [tangentMapWithin]
   rw [mfderivWithin_snd hs]
@@ -2074,7 +2074,7 @@ theorem tangentMap_prod_left
 
 中文:
 定理 tangentMap_prod_left
-  条件: {p : TangentBundle I M} {y₀ : M'}
+  条件: {p : 切丛 I M} {y₀ : M'}
   证明: by
   simp only [tangentMap, mfderiv_prod_left]
   rfl
@@ -2124,7 +2124,7 @@ theorem tangentMap_prod_right
 
 中文:
 定理 tangentMap_prod_right
-  条件: {p : TangentBundle I' M'} {x₀ : M}
+  条件: {p : 切丛 I' M'} {x₀ : M}
   证明: by
   simp only [tangentMap, mfderiv_prod_right]
   rfl
@@ -2365,7 +2365,7 @@ theorem mfderivWithin_sumSwap
 
 中文:
 定理 mfderivWithin_sumSwap
-  条件: {s : Set (M oplus M')} (hs : UniqueMDiffAt[s] p)
+  条件: {s : 集合 (M oplus M')} (hs : UniqueMDiffAt[s] p)
   证明: hasMFDerivAt_sumSwap.hasMFDerivWithinAt.mfderivWithin hs
 
 @[simp]
@@ -2539,7 +2539,7 @@ theorem hasMFDerivWithinAt_inr
 
 中文:
 定理 hasMFDerivWithinAt_inr
-  条件: {t : Set M'}
+  条件: {t : 集合 M'}
   证明: by
   refine ⟨by fun_prop, ?_⟩
   have : (writtenInExtChartAt I I q' (@Sum.inr M M'))
@@ -2626,7 +2626,7 @@ theorem mfderivWithin_sumInr
 
 中文:
 定理 mfderivWithin_sumInr
-  条件: {t : Set M'} (hU : UniqueMDiffAt[t] q')
+  条件: {t : 集合 M'} (hU : UniqueMDiffAt[t] q')
   证明: hasMFDerivWithinAt_inr.mfderivWithin hU
 
 Depends on / 依赖: hasMFDerivWithinAt_inr, hasMFDerivWithinAt_inr.mfderivWithin, mfderivWithin
@@ -2679,7 +2679,7 @@ theorem HasMFDerivWithinAt.add
 
 中文:
 定理 HasMFDerivWithinAt.add
-  结论: {s : Set M}
+  结论: {s : 集合 M}
   证明: ⟨hf.1.add hg.1, hf.2.add hg.2⟩
 -/
 theorem HasMFDerivWithinAt.add {s : Set M}
@@ -2714,7 +2714,7 @@ theorem MDifferentiableWithinAt.add
 
 中文:
 定理 MDifferentiableWithinAt.add
-  条件: {s : Set M} (hf : MDiffAt[s] f z) (hg : MDiffAt[s] g z)
+  条件: {s : 集合 M} (hf : MDiffAt[s] f z) (hg : MDiffAt[s] g z)
   证明: (hf.hasMFDerivWithinAt.add hg.hasMFDerivWithinAt).mdifferentiableWithinAt
 
 Depends on / 依赖: hasMFDerivWithinAt, hf.hasMFDerivWithinAt.add, hg.hasMFDerivWithinAt, mdifferentiableWithinAt
@@ -2754,7 +2754,7 @@ theorem MDifferentiableOn.add
 
 中文:
 定理 MDifferentiableOn.add
-  条件: {s : Set M} (hf : MDiff[s] f) (hg : MDiff[s] g)
+  条件: {s : 集合 M} (hf : MDiff[s] f) (hg : MDiff[s] g)
   结论: MDiff[s] (f + g)
   证明: fun x hx => (hf x hx).add (hg x hx)
 -/
@@ -2839,7 +2839,7 @@ lemma HasMFDerivWithinAt.sum
   | insert i s hi IH => grind [HasMFDerivWithinAt.add]
 
 中文:
-引理 HasMFDerivWithinAt.sum
+引理 HasMFDerivWithinAt.求和
   条件: (hf : 对任意 i in t, HasMFDerivAt[s] (f i) z (f' i))
   证明: by
   classical
@@ -2868,7 +2868,7 @@ lemma HasMFDerivAt.sum
   exact HasMFDerivWithinAt.sum hf
 
 中文:
-引理 HasMFDerivAt.sum
+引理 HasMFDerivAt.求和
   条件: (hf : 对任意 i in t, HasMFDerivAt% (f i) z (f' i))
   证明: by
   simp_all only [← hasMFDerivWithinAt_univ]
@@ -2889,7 +2889,7 @@ lemma MDifferentiableWithinAt.sum
   proof: (HasMFDerivWithinAt.sum fun i hi => (hf i hi).hasMFDerivWithinAt).mdifferentiableWithinAt
 
 中文:
-引理 MDifferentiableWithinAt.sum
+引理 MDifferentiableWithinAt.求和
   证明: (HasMFDerivWithinAt.sum fun i hi => (hf i hi).hasMFDerivWithinAt).mdifferentiableWithinAt
 
 Depends on / 依赖: HasMFDerivWithinAt, HasMFDerivWithinAt.sum, hasMFDerivWithinAt, mdifferentiableWithinAt
@@ -2910,7 +2910,7 @@ lemma MDifferentiableAt.sum
   exact .sum hf
 
 中文:
-引理 MDifferentiableAt.sum
+引理 MDifferentiableAt.求和
   条件: (hf : 对任意 i in t, MDiffAt (f i) z)
   结论: MDiffAt (∑ i in t, f i) z
   证明: by
@@ -2933,7 +2933,7 @@ lemma MDifferentiableOn.sum
   proof: fun z hz => .sum fun i hi => hf i hi z hz
 
 中文:
-引理 MDifferentiableOn.sum
+引理 MDifferentiableOn.求和
   条件: (hf : 对任意 i in t, MDiff[s] (f i))
   结论: MDiff[s] (∑ i in t, f i)
   证明: fun z hz => .sum fun i hi => hf i hi z hz
@@ -2951,7 +2951,7 @@ lemma MDifferentiable.sum
   proof: fun z => .sum fun i hi => hf i hi z
 
 中文:
-引理 MDifferentiable.sum
+引理 MDifferentiable.求和
   条件: (hf : 对任意 i in t, MDiff (f i))
   结论: MDiff (∑ i in t, f i)
   证明: fun z => .sum fun i hi => hf i hi z
@@ -3109,7 +3109,7 @@ theorem HasMFDerivWithinAt.neg
 
 中文:
 定理 HasMFDerivWithinAt.neg
-  条件: {s : Set M} (hf : HasMFDerivAt[s] f z f')
+  条件: {s : 集合 M} (hf : HasMFDerivAt[s] f z f')
   证明: ⟨hf.1.neg, hf.2.neg⟩
 -/
 theorem HasMFDerivWithinAt.neg {s : Set M} (hf : HasMFDerivAt[s] f z f') :
@@ -3164,7 +3164,7 @@ theorem MDifferentiableWithinAt.neg
 
 中文:
 定理 MDifferentiableWithinAt.neg
-  条件: {s : Set M} (hf : MDiffAt[s] f z)
+  条件: {s : 集合 M} (hf : MDiffAt[s] f z)
   结论: MDiffAt[s] (-f) z
   证明: (hf.hasMFDerivWithinAt.neg).mdifferentiableWithinAt
 
@@ -3204,7 +3204,7 @@ theorem MDifferentiableOn.neg
 
 中文:
 定理 MDifferentiableOn.neg
-  条件: {s : Set M} (hf : MDiff[s] f)
+  条件: {s : 集合 M} (hf : MDiff[s] f)
   结论: MDiff[s] (-f)
   证明: fun x hx => (hf x hx).neg
 -/
@@ -3735,7 +3735,7 @@ lemma HasMFDerivWithinAt.prod
     · simp o
 
 中文:
-引理 HasMFDerivWithinAt.prod
+引理 HasMFDerivWithinAt.乘积
   结论: [DecidableEq ι]
   证明: by
   induction t using Finset.induction_on with
@@ -3775,7 +3775,7 @@ lemma HasMFDerivAt.prod
   exact HasMFDerivWithinAt.prod hf
 
 中文:
-引理 HasMFDerivAt.prod
+引理 HasMFDerivAt.乘积
   结论: [DecidableEq ι]
   证明: by
   simp_all only [← hasMFDerivWithinAt_univ]
@@ -3800,7 +3800,7 @@ lemma MDifferentiableWithinAt.prod
     fun i hi => (hf i hi).hasMFDerivWithinAt).mdifferentiableWithinAt
 
 中文:
-引理 MDifferentiableWithinAt.prod
+引理 MDifferentiableWithinAt.乘积
   证明: by
   -- `by classical exact` to avoid needing a `DecidableEq` argument
   classical exact (HasMFDerivWithinAt.prod
@@ -3824,7 +3824,7 @@ lemma MDifferentiableAt.prod
   exact MDifferentiableWithinAt.prod hf
 
 中文:
-引理 MDifferentiableAt.prod
+引理 MDifferentiableAt.乘积
   条件: (hf : 对任意 i in t, MDifferentiableAt I 𝓘(𝕜, F') (f i) z)
   证明: by
   simp_all only [← mdifferentiableWithinAt_univ]
@@ -3846,7 +3846,7 @@ lemma MDifferentiableOn.prod
   proof: fun z hz => .prod fun i hi => hf i hi z hz
 
 中文:
-引理 MDifferentiableOn.prod
+引理 MDifferentiableOn.乘积
   条件: (hf : 对任意 i in t, MDifferentiableOn I 𝓘(𝕜, F') (f i) s)
   证明: fun z hz => .prod fun i hi => hf i hi z hz
 -/
@@ -3863,7 +3863,7 @@ lemma MDifferentiable.prod
   proof: fun z => .prod fun i hi => hf i hi z
 
 中文:
-引理 MDifferentiable.prod
+引理 MDifferentiable.乘积
   条件: (hf : 对任意 i in t, MDifferentiable I 𝓘(𝕜, F') (f i))
   证明: fun z => .prod fun i hi => hf i hi z
 -/

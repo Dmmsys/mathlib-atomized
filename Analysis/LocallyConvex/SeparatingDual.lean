@@ -50,7 +50,7 @@ class SeparatingDual
 
 中文:
 类 SeparatingDual
-  参数: (R V : 类型) [Ring R] [AddCommGroup V] [TopologicalSpace V]
+  参数: (R V : 类型) [环 R] [加法交换群 V] [拓扑空间 V]
   公理与运算 (1 个):
     - exists_ne_zero' : 对任意 (x : V), x != 0 -> 存在 f : StrongDual R V, f x != 0
 -/
@@ -90,7 +90,7 @@ lemma exists_ne_zero
   proof: exists_ne_zero' x hx
 
 中文:
-引理 exists_ne_zero
+引理 存在_ne_zero
   条件: {x : V} (hx : x != 0)
   证明: exists_ne_zero' x hx
 
@@ -111,7 +111,7 @@ theorem exists_separating_of_ne
   exact ⟨f, by simpa [sub_ne_zero] using hf⟩
 
 中文:
-定理 exists_separating_of_ne
+定理 存在_separating_of_ne
   条件: {x y : V} (h : x != y)
   证明: by
   rcases exists_ne_zero (R := R) (sub_ne_zero_of_ne h) with ⟨f, hf⟩
@@ -138,8 +138,8 @@ theorem t1Space
 
 中文:
 定理 t1Space
-  条件: [T1Space R]
-  结论: T1Space V
+  条件: [T1空间 R]
+  结论: T1空间 V
   证明: by
   apply t1Space_iff_exists_open.2 (fun x y hxy => ?_)
   rcases exists_separating_of_ne (R := R) hxy with ⟨f, hf⟩
@@ -164,8 +164,8 @@ theorem t2Space
 
 中文:
 定理 t2Space
-  条件: [T2Space R]
-  结论: T2Space V
+  条件: [T2空间 R]
+  结论: T2空间 V
   证明: by
   apply (t2Space_iff _).2 (fun {x} {y} hxy => ?_)
   rcases exists_separating_of_ne (R := R) hxy with ⟨f, hf⟩
@@ -189,7 +189,7 @@ theorem eq_zero_of_forall_dual_eq_zero
   exact hf (h f)
 
 中文:
-定理 eq_zero_of_forall_dual_eq_zero
+定理 eq_zero_of_对任意_dual_eq_zero
   条件: {x : V} (h : 对任意 f : StrongDual R V, f x = 0)
   结论: x = 0
   证明: by
@@ -214,7 +214,7 @@ theorem eq_zero_iff_forall_dual_eq_zero
   proof: ⟨by simp +contextual, fun h => eq_zero_of_forall_dual_eq_zero (R := R) h⟩
 
 中文:
-定理 eq_zero_iff_forall_dual_eq_zero
+定理 eq_zero_iff_对任意_dual_eq_zero
   条件: (x : V)
   结论: x = 0 ↔ 对任意 g : StrongDual R V, g x = 0
   证明: ⟨by simp +contextual, fun h => eq_zero_of_forall_dual_eq_zero (R := R) h⟩
@@ -236,7 +236,7 @@ theorem eq_iff_forall_dual_eq
   simp [sub_eq_zero]
 
 中文:
-定理 eq_iff_forall_dual_eq
+定理 eq_iff_对任意_dual_eq
   条件: {x y : V}
   结论: x = y ↔ 对任意 g : StrongDual R V, g x = g y
   证明: by
@@ -306,7 +306,7 @@ theorem dualMap_surjective_iff
 
 中文:
 定理 dualMap_surjective_iff
-  结论: {W} [AddCommGroup W] [Module R W] [FiniteDimensional R W]
+  结论: {W} [加法交换群 W] [模 R W] [有限维 R W]
   证明: by
   constructor <;> intro hf
   · exact LinearMap.dualMap_surjective_iff.mp hf.of_comp
@@ -348,7 +348,7 @@ lemma exists_eq_one
   exact ⟨(f x)⁻¹ • f, inv_mul_cancel₀ hf⟩
 
 中文:
-引理 exists_eq_one
+引理 存在_eq_one
   条件: {x : V} (hx : x != 0)
   证明: by
   rcases exists_ne_zero (R := R) hx with ⟨f, hf⟩
@@ -376,7 +376,7 @@ theorem exists_eq_one_ne_zero_of_ne_zero_pair
   · exact ⟨(v x)⁻¹ • v, inv_mul_cancel₀ vx, show 
 
 中文:
-定理 exists_eq_one_ne_zero_of_ne_zero_pair
+定理 存在_eq_one_ne_zero_of_ne_zero_pair
   条件: {x y : V} (hx : x != 0) (hy : y != 0)
   证明: by
   obtain ⟨u, ux⟩ : exists u : StrongDual R V, u x = 1 := exists_eq_one hx
@@ -420,8 +420,8 @@ instance _root_.Algebra.IsCentral.instContinuousLinearMap
     have (y : V) := by simpa
 
 中文:
-实例 _root_.Algebra.IsCentral.instContinuousLinearMap
-  签名: [Algebra.IsCentral S R]
+实例 _root_.代数.是中心.instContinuousLinearMap
+  签名: [代数.是中心 S R]
   定义体: by
     suffices exists α in Subalgebra.center S R, f = α • .id R V from
       have ⟨_, ⟨y, _⟩, _⟩ := Algebra.IsCentral.center_eq_bot S R ▸ this
@@ -459,7 +459,7 @@ theorem _root_.ContinuousLinearEquiv.conjContinuousAlgEquiv_ext_iff
     ← ContinuousLinearMap.comp_assoc _ f.
 
 中文:
-定理 _root_.ContinuousLinearEquiv.conjContinuousAlgEquiv_ext_iff
+定理 _root_.连续线性等价.conjContinuousAlgEquiv_ext_iff
   证明: by
   conv_lhs => rw [eq_comm]
   simp_rw [ContinuousAlgEquiv.ext_iff, funext_iff, conjContinuousAlgEquiv_apply,
@@ -503,7 +503,7 @@ theorem exists_continuousLinearEquiv_apply_eq
     map_s
 
 中文:
-定理 exists_continuousLinearEquiv_apply_eq
+定理 存在_continuousLinearEquiv_apply_eq
   证明: by
   obtain ⟨G, Gx, Gy⟩ : exists G : StrongDual R V, G x = 1 ∧ G y != 0 :=
     exists_eq_one_ne_zero_of_ne_zero_pair hx hy

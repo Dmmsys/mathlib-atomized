@@ -56,7 +56,7 @@ definition IsSelfAdjoint
 
 中文:
 定义 IsSelfAdjoint
-  签名: [Star R] (x : R)
+  签名: [对合 R] (x : R)
   定义体: star x = x
 -/
 def IsSelfAdjoint [Star R] (x : R) : Prop :=
@@ -74,8 +74,8 @@ class IsStarNormal
     - star_comm_self : Commute (star x) x
 
 中文:
-类 IsStarNormal
-  参数: [Mul R] [Star R] (x : R)
+类 是StarNormal
+  参数: [乘法 R] [对合 R] (x : R)
   公理与运算 (1 个):
     - star_comm_self : Commute (star x) x
 -/
@@ -98,7 +98,7 @@ theorem star_comm_self'
 
 中文:
 定理 star_comm_self'
-  条件: [Mul R] [Star R] (x : R) [IsStarNormal x]
+  条件: [乘法 R] [对合 R] (x : R) [是StarNormal x]
   结论: star x * x = x * star x
   证明: IsStarNormal.star_comm_self
 
@@ -121,7 +121,7 @@ theorem all
 
 中文:
 定理 all
-  条件: [Star R] [TrivialStar R] (r : R)
+  条件: [对合 R] [TrivialStar R] (r : R)
   结论: IsSelfAdjoint r
   证明: star_trivial _
 
@@ -143,7 +143,7 @@ grind_pattern star_eq => IsSelfAdjoint x, star x
 
 中文:
 定理 star_eq
-  条件: [Star R] {x : R} (hx : IsSelfAdjoint x)
+  条件: [对合 R] {x : R} (hx : IsSelfAdjoint x)
   结论: star x = x
   证明: hx
 
@@ -167,7 +167,7 @@ theorem _root_.isSelfAdjoint_iff
 
 中文:
 定理 _root_.isSelfAdjoint_iff
-  条件: [Star R] {x : R}
+  条件: [对合 R] {x : R}
   结论: IsSelfAdjoint x ↔ star x = x
   证明: Iff.rfl
 
@@ -220,7 +220,7 @@ theorem star_mul_self
 
 中文:
 定理 star_mul_self
-  条件: [Mul R] [StarMul R] (x : R)
+  条件: [乘法 R] [StarMul R] (x : R)
   结论: IsSelfAdjoint (star x * x)
   证明: by
   simp only [IsSelfAdjoint, star_mul, star_star]
@@ -245,7 +245,7 @@ theorem mul_star_self
 
 中文:
 定理 mul_star_self
-  条件: [Mul R] [StarMul R] (x : R)
+  条件: [乘法 R] [StarMul R] (x : R)
   结论: IsSelfAdjoint (x * star x)
   证明: by
   simpa only [star_star] using star_mul_self (star x)
@@ -268,7 +268,7 @@ lemma commute_iff
 
 中文:
 引理 commute_iff
-  结论: {R : 类型} [Mul R] [StarMul R] {x y : R}
+  结论: {R : 类型} [乘法 R] [StarMul R] {x y : R}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [isSelfAdjoint_iff, star_mul, hx.star_eq, hy.star_eq, h.eq]
@@ -293,7 +293,7 @@ lemma commute_of_mul_eq_isSelfAdjoint
 
 中文:
 引理 commute_of_mul_eq_isSelfAdjoint
-  结论: {R : 类型} [Mul R] [StarMul R] (x y z : R)
+  结论: {R : 类型} [乘法 R] [StarMul R] (x y z : R)
   证明: by
   grind [commute_iff hx hy]
 
@@ -316,7 +316,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {F R S : 类型} [Star R] [Star S] [FunLike F R S] [StarHomClass F R S]
+  结论: {F R S : 类型} [对合 R] [对合 S] [函数状 F R S] [对合态射类 F R S]
   证明: show star (f x) = f x from map_star f x ▸ congr_arg f hx
 
 Depends on / 依赖: congr_arg, map_star
@@ -337,7 +337,7 @@ theorem _root_.isSelfAdjoint_map
 
 中文:
 定理 _root_.isSelfAdjoint_map
-  结论: {F R S : 类型} [Star R] [Star S] [FunLike F R S]
+  结论: {F R S : 类型} [对合 R] [对合 S] [函数状 F R S]
   证明: (IsSelfAdjoint.all x).map f
 
 @[aesop 10% apply]
@@ -359,7 +359,7 @@ theorem isStarNormal
 
 中文:
 定理 isStarNormal
-  条件: {R : 类型} [Mul R] [Star R] {x : R} (hx : IsSelfAdjoint x)
+  条件: {R : 类型} [乘法 R] [对合 R] {x : R} (hx : IsSelfAdjoint x)
   证明: ⟨by simp only [Commute, SemiconjBy, hx.star_eq]⟩
 
 Depends on / 依赖: Commute, SemiconjBy, hx.star_eq, star_eq
@@ -678,7 +678,7 @@ alias ⟨_, invOf⟩ := invOf_iff
 
 中文:
 定理 invOf_iff
-  条件: (x : R) [Invertible x]
+  条件: (x : R) [可逆 x]
   结论: IsSelfAdjoint ⅟x ↔ IsSelfAdjoint x
   证明: by
   rw [isSelfAdjoint_iff]; rw [isSelfAdjoint_iff]; rw [star_invOf]; rw [invOf_inj]
@@ -707,8 +707,8 @@ lemma _root_.IsUnit.isSelfAdjoint_conjugate_iff
 @[grind =]
 
 中文:
-引理 _root_.IsUnit.isSelfAdjoint_conjugate_iff
-  条件: {a u : R} (hu : IsUnit u)
+引理 _root_.是单位.isSelfAdjoint_conjugate_iff
+  条件: {a u : R} (hu : 是单位 u)
   证明: by
   simp [IsSelfAdjoint, mul_assoc, hu.mul_right_inj, hu.star.mul_left_inj]
 
@@ -731,8 +731,8 @@ lemma _root_.IsUnit.isSelfAdjoint_conjugate_iff'
   simpa using hu.star.isSelfAdjoint_conjugate_iff
 
 中文:
-引理 _root_.IsUnit.isSelfAdjoint_conjugate_iff'
-  条件: {a u : R} (hu : IsUnit u)
+引理 _root_.是单位.isSelfAdjoint_conjugate_iff'
+  条件: {a u : R} (hu : 是单位 u)
   证明: by
   simpa using hu.star.isSelfAdjoint_conjugate_iff
 
@@ -786,7 +786,7 @@ theorem ofNat
 @[aesop safe apply, grind ←]
 
 中文:
-定理 ofNat
+定理 of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: IsSelfAdjoint (of自然数(n) : R)
   证明: .natCast n
@@ -808,7 +808,7 @@ theorem ringInverse
 
 中文:
 定理 ringInverse
-  结论: {a : A} [Semiring A] [StarRing A]
+  结论: {a : A} [半环 A] [对合环 A]
   证明: by
   rw [isSelfAdjoint_iff]; rw [← Ring.inverse_star]; rw [ha.star_eq]
 -/
@@ -826,7 +826,7 @@ theorem _root_.isSelfAdjoint_ringInverse_iff
 
 中文:
 定理 _root_.isSelfAdjoint_ringInverse_iff
-  条件: {a : A} [Semiring A] [StarRing A] (ha : IsUnit a)
+  条件: {a : A} [半环 A] [对合环 A] (ha : 是单位 a)
   证明: ⟨fun h => by grind [h.ringInverse], fun h => h.ringInverse⟩
 
 Depends on / 依赖: h.ringInverse, ringInverse
@@ -1093,7 +1093,7 @@ lemma nnratCast
 
 中文:
 引理 nnratCast
-  条件: [DivisionSemiring R] [StarRing R] (q : Rat>=0)
+  条件: [除半环 R] [对合环 R] (q : 有理数>=0)
   证明: star_nnratCast _
 -/
 protected lemma nnratCast [DivisionSemiring R] [StarRing R] (q : Rat>=0) :
@@ -1116,7 +1116,7 @@ theorem ratCast
 
 中文:
 定理 ratCast
-  条件: (x : Rat)
+  条件: (x : 有理数)
   结论: IsSelfAdjoint (x : R)
   证明: star_ratCast _
 -/
@@ -1167,7 +1167,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: [Star R] [Star A] [SMul R A] [StarModule R A]
+  结论: [对合 R] [对合 A] [标量乘法 R A] [对合模 R A]
   证明: by
   simp only [isSelfAdjoint_iff, star_smul, hr.star_eq, hx.star_eq]
 
@@ -1193,7 +1193,7 @@ theorem smul_iff
 
 中文:
 定理 smul_iff
-  结论: [Monoid R] [StarMul R] [Star A]
+  结论: [幺半群 R] [StarMul R] [对合 A]
   证明: by
   refine ⟨fun hrx => ?_, .smul hr⟩
   lift r to Rˣ using hu
@@ -1231,7 +1231,7 @@ definition selfAdjoint
 
 中文:
 定义 selfAdjoint
-  签名: [AddGroup R] [StarAddMonoid R]
+  签名: [加法群 R] [StarAdd幺半群 R]
   定义体: { x | IsSelfAdjoint x }
   zero_mem' := star_zero R
   add_mem' hx := hx.add
@@ -1259,7 +1259,7 @@ definition skewAdjoint
 
 中文:
 定义 skewAdjoint
-  签名: [AddCommGroup R] [StarAddMonoid R]
+  签名: [加法交换群 R] [StarAdd幺半群 R]
   定义体: { x | star x = -x }
   zero_mem' := show star (0 : R) = -0 by simp only [star_zero, neg_zero]
   add_mem' := @fun x y (hx : star x = -x) (hy : star y = -y) =>
@@ -1343,7 +1343,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (selfAdjoint R)
+  签名: 可居 (selfAdjoint R)
   定义体: ⟨0⟩
 
 @[simp]
@@ -1383,7 +1383,7 @@ instance isStarNormal
 
 中文:
 实例 isStarNormal
-  签名: [NonUnitalRing R] [StarRing R] (x : selfAdjoint R)
+  签名: [非幺环 R] [对合环 R] (x : selfAdjoint R)
   定义体: x.prop.isStarNormal
 
 Depends on / 依赖: isStarNormal, x.prop.isStarNormal
@@ -1408,7 +1408,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (selfAdjoint R)
+  签名: 幺 (selfAdjoint R)
   定义体: ⟨⟨1, .one R⟩⟩
 
 @[simp, norm_cast]
@@ -1442,8 +1442,8 @@ instance [Nontrivial
   body: ⟨⟨0, 1, ne_of_apply_ne Subtype.val zero_ne_one⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (selfAdjoint R)
+实例 [非平凡
+  签名: R] : 非平凡 (selfAdjoint R)
   定义体: ⟨⟨0, 1, ne_of_apply_ne Subtype.val zero_ne_one⟩⟩
 
 Depends on / 依赖: Subtype, Subtype.val, ne_of_apply_ne, zero_ne_one
@@ -1461,7 +1461,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (selfAdjoint R)
+  签名: 自然数嵌入 (selfAdjoint R)
   定义体: ⟨n, .natCast _⟩
 
 Depends on / 依赖: natCast
@@ -1479,7 +1479,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (selfAdjoint R)
+  签名: 整数嵌入 (selfAdjoint R)
   定义体: ⟨n, .intCast _⟩
 
 Depends on / 依赖: intCast
@@ -1499,7 +1499,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (selfAdjoint R) 自然数
+  签名: 幂 (selfAdjoint R) 自然数
   定义体: ⟨(x : R) ^ n, x.prop.pow n⟩
 
 @[simp, norm_cast]
@@ -1546,7 +1546,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (selfAdjoint R)
+  签名: 乘法 (selfAdjoint R)
   定义体: ⟨(x : R) * y, x.prop.mul y.prop⟩
 
 @[simp, norm_cast]
@@ -1594,7 +1594,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (selfAdjoint R)
+  签名: 交换环 (selfAdjoint R)
   定义体: Function.Injective.commRing _ Subtype.coe_injective (selfAdjoint R).coe_zero val_one
     (selfAdjoint R).coe_add val_mul (selfAdjoint R).coe_neg (selfAdjoint R).coe_sub
     (by intros; rfl) (by intros; rfl) val_pow
@@ -1626,7 +1626,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (selfAdjoint R)
+  签名: 取逆 (selfAdjoint R)
   定义体: ⟨x.val⁻¹, x.prop.inv₀⟩
 
 @[simp, norm_cast]
@@ -1667,7 +1667,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (selfAdjoint R)
+  签名: 除法 (selfAdjoint R)
   定义体: ⟨x / y, x.prop.div y.prop⟩
 
 @[simp, norm_cast]
@@ -1708,7 +1708,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (selfAdjoint R) 整数
+  签名: 幂 (selfAdjoint R) 整数
   定义体: ⟨(x : R) ^ z, x.prop.zpow₀ z⟩
 
 @[simp, norm_cast]
@@ -1747,7 +1747,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast (selfAdjoint R) where
+  签名: : 非负有理数嵌入 (selfAdjoint R) where
   定义体: ⟨q, .nnratCast q⟩
 
 Depends on / 依赖: nnratCast
@@ -1765,7 +1765,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: : RatCast (selfAdjoint R) where
+  签名: : 有理数嵌入 (selfAdjoint R) where
   定义体: ⟨q, .ratCast q⟩
 
 Depends on / 依赖: ratCast
@@ -1784,7 +1784,7 @@ lemma val_nnratCast
 
 中文:
 引理 val_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : selfAdjoint R) = (q : R)
   证明: rfl
 -/
@@ -1800,7 +1800,7 @@ lemma val_ratCast
 
 中文:
 引理 val_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : selfAdjoint R) = (q : R)
   证明: rfl
 -/
@@ -1816,7 +1816,7 @@ instance instSMulNNRat
 
 中文:
 实例 instSMulNNRat
-  签名: : SMul Rat>=0 (selfAdjoint R) where
+  签名: : 标量乘法 有理数>=0 (selfAdjoint R) where
   定义体: ⟨a • (x : R), by rw [NNRat.smul_def]; exact .mul (.nnratCast a) x.prop⟩
 
 Depends on / 依赖: NNRat.smul_def, nnratCast, smul_def, x.prop
@@ -1834,7 +1834,7 @@ instance instSMulRat
 
 中文:
 实例 instSMulRat
-  签名: : SMul Rat (selfAdjoint R) where
+  签名: : 标量乘法 有理数 (selfAdjoint R) where
   定义体: ⟨a • (x : R), by rw [Rat.smul_def]; exact .mul (.ratCast a) x.prop⟩
 
 Depends on / 依赖: Rat.smul_def, ratCast, smul_def, x.prop
@@ -1853,7 +1853,7 @@ lemma val_nnqsmul
 
 中文:
 引理 val_nnqsmul
-  条件: (q : Rat>=0) (x : selfAdjoint R)
+  条件: (q : 有理数>=0) (x : selfAdjoint R)
   结论: ↑(q • x) = q • (x : R)
   证明: rfl
 -/
@@ -1869,7 +1869,7 @@ lemma val_qsmul
 
 中文:
 引理 val_qsmul
-  条件: (q : Rat) (x : selfAdjoint R)
+  条件: (q : 有理数) (x : selfAdjoint R)
   结论: ↑(q • x) = q • (x : R)
   证明: rfl
 -/
@@ -1888,7 +1888,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field (selfAdjoint R)
+  签名: : 域 (selfAdjoint R)
   定义体: Subtype.coe_injective.field _ (selfAdjoint R).coe_zero val_one
     (selfAdjoint R).coe_add val_mul (selfAdjoint R).coe_neg (selfAdjoint R).coe_sub
     val_inv val_div (swap (selfAdjoint R).coe_nsmul) (by intros; rfl) val_nnqsmul
@@ -1919,8 +1919,8 @@ instance [SMul
 @[simp, norm_cast]
 
 中文:
-实例 [SMul
-  签名: R A] [StarModule R A] : SMul R (selfAdjoint A) where
+实例 [标量乘法
+  签名: R A] [对合模 R A] : 标量乘法 R (selfAdjoint A) where
   定义体: ⟨r • (x : A), (IsSelfAdjoint.all _).smul x.prop⟩
 
 @[simp, norm_cast]
@@ -1942,7 +1942,7 @@ theorem val_smul
 
 中文:
 定理 val_smul
-  条件: [SMul R A] [StarModule R A] (r : R) (x : selfAdjoint A)
+  条件: [标量乘法 R A] [对合模 R A] (r : R) (x : selfAdjoint A)
   结论: ↑(r • x) = r • (x : A)
   证明: rfl
 -/
@@ -1958,8 +1958,8 @@ instance [Monoid
   body: Function.Injective.mulAction Subtype.val Subtype.coe_injective val_smul
 
 中文:
-实例 [Monoid
-  签名: R] [MulAction R A] [StarModule R A] : MulAction R (selfAdjoint A)
+实例 [幺半群
+  签名: R] [乘法作用 R A] [对合模 R A] : 乘法作用 R (selfAdjoint A)
   定义体: Function.Injective.mulAction Subtype.val Subtype.coe_injective val_smul
 
 Depends on / 依赖: Function, Function.Injective.mulAction, Injective, Subtype, Subtype.coe_injective, Subtype.val, coe_injective, mulAction, val_smul
@@ -1976,8 +1976,8 @@ instance [Monoid
   body: Function.Injective.distribMulAction (selfAdjoint A).subtype Subtype.coe_injective val_smul
 
 中文:
-实例 [Monoid
-  签名: R] [DistribMulAction R A] [StarModule R A] : DistribMulAction R (selfAdjoint A)
+实例 [幺半群
+  签名: R] [分配乘法作用 R A] [对合模 R A] : 分配乘法作用 R (selfAdjoint A)
   定义体: Function.Injective.distribMulAction (selfAdjoint A).subtype Subtype.coe_injective val_smul
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, Subtype, Subtype.coe_injective, coe_injective, distribMulAction, selfAdjoint, subtype, val_smul
@@ -2000,8 +2000,8 @@ instance [Semiring
   body: Function.Injective.module R (selfAdjoint A).subtype Subtype.coe_injective val_smul
 
 中文:
-实例 [Semiring
-  签名: R] [Module R A] [StarModule R A] : Module R (selfAdjoint A)
+实例 [半环
+  签名: R] [模 R A] [对合模 R A] : 模 R (selfAdjoint A)
   定义体: Function.Injective.module R (selfAdjoint A).subtype Subtype.coe_injective val_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, Subtype, Subtype.coe_injective, coe_injective, module, selfAdjoint, subtype, val_smul
@@ -2079,7 +2079,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (skewAdjoint R)
+  签名: 可居 (skewAdjoint R)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (skewAdjoint R) :=
@@ -2149,7 +2149,7 @@ theorem isStarNormal_of_mem
 中文:
 定理 isStarNormal_of_mem
   条件: {x : R} (hx : x in skewAdjoint R)
-  结论: IsStarNormal x
+  结论: 是StarNormal x
   证明: ⟨by
     simp only [mem_iff] at hx
     simp only [hx, Commute.neg_left, Commute.refl]⟩
@@ -2182,7 +2182,7 @@ theorem smul_mem
 
 中文:
 定理 smul_mem
-  结论: [Monoid R] [DistribMulAction R A] [StarModule R A] (r : R) {x : A}
+  结论: [幺半群 R] [分配乘法作用 R A] [对合模 R A] (r : R) {x : A}
   证明: by
   rw [mem_iff]; rw [star_smul]; rw [star_trivial]; rw [mem_iff.mp h]; rw [smul_neg r]
 
@@ -2203,8 +2203,8 @@ instance [Monoid
 @[simp, norm_cast]
 
 中文:
-实例 [Monoid
-  签名: R] [DistribMulAction R A] [StarModule R A] : SMul R (skewAdjoint A) where
+实例 [幺半群
+  签名: R] [分配乘法作用 R A] [对合模 R A] : 标量乘法 R (skewAdjoint A) where
   定义体: ⟨r • (x : A), smul_mem r x.prop⟩
 
 @[simp, norm_cast]
@@ -2225,7 +2225,7 @@ theorem val_smul
 
 中文:
 定理 val_smul
-  条件: [Monoid R] [DistribMulAction R A] [StarModule R A] (r : R) (x : skewAdjoint A)
+  条件: [幺半群 R] [分配乘法作用 R A] [对合模 R A] (r : R) (x : skewAdjoint A)
   证明: rfl
 -/
 theorem val_smul [Monoid R] [DistribMulAction R A] [StarModule R A] (r : R) (x : skewAdjoint A) :
@@ -2241,8 +2241,8 @@ instance [Monoid
   body: Function.Injective.distribMulAction (skewAdjoint A).subtype Subtype.coe_injective val_smul
 
 中文:
-实例 [Monoid
-  签名: R] [DistribMulAction R A] [StarModule R A] : DistribMulAction R (skewAdjoint A)
+实例 [幺半群
+  签名: R] [分配乘法作用 R A] [对合模 R A] : 分配乘法作用 R (skewAdjoint A)
   定义体: Function.Injective.distribMulAction (skewAdjoint A).subtype Subtype.coe_injective val_smul
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, Subtype, Subtype.coe_injective, coe_injective, distribMulAction, skewAdjoint, subtype, val_smul
@@ -2259,8 +2259,8 @@ instance [Semiring
   body: Function.Injective.module R (skewAdjoint A).subtype Subtype.coe_injective val_smul
 
 中文:
-实例 [Semiring
-  签名: R] [Module R A] [StarModule R A] : Module R (skewAdjoint A)
+实例 [半环
+  签名: R] [模 R A] [对合模 R A] : 模 R (skewAdjoint A)
   定义体: Function.Injective.module R (skewAdjoint A).subtype Subtype.coe_injective val_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, Subtype, Subtype.coe_injective, coe_injective, module, skewAdjoint, subtype, val_smul
@@ -2282,7 +2282,7 @@ theorem IsSelfAdjoint.smul_mem_skewAdjoint
 
 中文:
 定理 IsSelfAdjoint.smul_mem_skewAdjoint
-  结论: [Ring R] [AddCommGroup A] [Module R A] [StarAddMonoid R]
+  结论: [环 R] [加法交换群 A] [模 R A] [StarAdd幺半群 R]
   证明: (star_smul _ _).trans (congr_arg₂ _ hr ha).trans neg_smul _ _
 
 Depends on / 依赖: neg_smul, star_smul
@@ -2302,7 +2302,7 @@ theorem isSelfAdjoint_smul_of_mem_skewAdjoint
 
 中文:
 定理 isSelfAdjoint_smul_of_mem_skewAdjoint
-  结论: [Ring R] [AddCommGroup A] [Module R A]
+  结论: [环 R] [加法交换群 A] [模 R A]
   证明: (star_smul _ _).trans (congr_arg₂ _ hr ha).trans neg_smul_neg _ _
 
 Depends on / 依赖: neg_smul_neg, star_smul
@@ -2321,8 +2321,8 @@ instance IsStarNormal.zero
   body: ⟨by simp only [Commute.refl, star_zero]⟩
 
 中文:
-实例 IsStarNormal.zero
-  签名: [NonUnitalNonAssocSemiring R]
+实例 是StarNormal.zero
+  签名: [非幺非结合半环 R]
   定义体: ⟨by simp only [Commute.refl, star_zero]⟩
 -/
 protected instance IsStarNormal.zero [NonUnitalNonAssocSemiring R]
@@ -2338,8 +2338,8 @@ instance IsStarNormal.one
   body: ⟨by simp only [Commute.refl, star_one]⟩
 
 中文:
-实例 IsStarNormal.one
-  签名: [MulOneClass R] [StarMul R]
+实例 是StarNormal.one
+  签名: [MulOne类 R] [StarMul R]
   定义体: ⟨by simp only [Commute.refl, star_one]⟩
 -/
 protected instance IsStarNormal.one [MulOneClass R] [StarMul R] : IsStarNormal (1 : R) :=
@@ -2354,8 +2354,8 @@ instance IsStarNormal.star
   body: ⟨show star (star x) * star x = star x * star (star x) by rw [star_star, star_comm_self']⟩
 
 中文:
-实例 IsStarNormal.star
-  签名: [Mul R] [StarMul R] {x : R} [IsStarNormal x]
+实例 是StarNormal.star
+  签名: [乘法 R] [StarMul R] {x : R} [是StarNormal x]
   定义体: ⟨show star (star x) * star x = star x * star (star x) by rw [star_star, star_comm_self']⟩
 -/
 protected instance IsStarNormal.star [Mul R] [StarMul R] {x : R} [IsStarNormal x] :
@@ -2371,8 +2371,8 @@ instance IsStarNormal.neg
   body: ⟨show star (-x) * -x = -x * star (-x) by simp_rw [star_neg, neg_mul_neg, star_comm_self']⟩
 
 中文:
-实例 IsStarNormal.neg
-  签名: [NonUnitalNonAssocRing R]
+实例 是StarNormal.neg
+  签名: [非幺非结合环 R]
   定义体: ⟨show star (-x) * -x = -x * star (-x) by simp_rw [star_neg, neg_mul_neg, star_comm_self']⟩
 -/
 protected instance IsStarNormal.neg [NonUnitalNonAssocRing R]
@@ -2388,8 +2388,8 @@ instance IsStarNormal.val_inv
   body: by simpa [← Units.coe_star_inv, -Commute.units_val_iff] using star_comm_self
 
 中文:
-实例 IsStarNormal.val_inv
-  签名: [Monoid R] [StarMul R] {x : Rˣ} [IsStarNormal (x : R)]
+实例 是StarNormal.val_inv
+  签名: [幺半群 R] [StarMul R] {x : Rˣ} [是StarNormal (x : R)]
   定义体: by simpa [← Units.coe_star_inv, -Commute.units_val_iff] using star_comm_self
 -/
 protected instance IsStarNormal.val_inv [Monoid R] [StarMul R] {x : Rˣ} [IsStarNormal (x : R)] :
@@ -2405,8 +2405,8 @@ instance IsStarNormal.map
   body: by simpa [map_star] using! congr(f $(hr.star_comm_self))
 
 中文:
-实例 IsStarNormal.map
-  签名: {F R S : 类型} [Mul R] [Star R] [Mul S] [Star S]
+实例 是StarNormal.map
+  签名: {F R S : 类型} [乘法 R] [对合 R] [乘法 S] [对合 S]
   定义体: by simpa [map_star] using! congr(f $(hr.star_comm_self))
 -/
 protected instance IsStarNormal.map {F R S : Type*} [Mul R] [Star R] [Mul S] [Star S]
@@ -2423,8 +2423,8 @@ instance IsStarNormal.smul
   body: star_smul r a ▸ ha.star_comm_self.smul_left (star r)
 
 中文:
-实例 IsStarNormal.smul
-  签名: {R A : 类型} [SMul R A] [Star R] [Star A] [Mul A]
+实例 是StarNormal.smul
+  签名: {R A : 类型} [标量乘法 R A] [对合 R] [对合 A] [乘法 A]
   定义体: star_smul r a ▸ ha.star_comm_self.smul_left (star r)
 -/
 protected instance IsStarNormal.smul {R A : Type*} [SMul R A] [Star R] [Star A] [Mul A]
@@ -2456,7 +2456,7 @@ theorem Commute.isStarNormal_add
 
 中文:
 定理 Commute.isStarNormal_add
-  结论: [NonUnitalNonAssocSemiring R] [StarRing R] {a b : R}
+  结论: [非幺非结合半环 R] [对合环 R] {a b : R}
   证明: by
   rw [isStarNormal_iff] at ha hb ⊢
   have := _root_.star_star b ▸ hab.star_star
@@ -2483,7 +2483,7 @@ theorem Commute.isStarNormal_sub
 
 中文:
 定理 Commute.isStarNormal_sub
-  结论: [NonUnitalNonAssocRing R] [StarRing R] {a b : R}
+  结论: [非幺非结合环 R] [对合环 R] {a b : R}
   证明: sub_eq_add_neg a b ▸ (star_neg b ▸ hab.neg_right).isStarNormal_add
 
 Depends on / 依赖: hab.neg_right, isStarNormal_add, neg_right, star_neg, sub_eq_add_neg
@@ -2502,8 +2502,8 @@ instance IsStarNormal.one_add
   body: .isStarNormal_add Commute.one_left (star a)
 
 中文:
-实例 IsStarNormal.one_add
-  签名: [NonAssocSemiring R] [StarRing R] {a : R}
+实例 是StarNormal.one_add
+  签名: [非结合半环 R] [对合环 R] {a : R}
   定义体: .isStarNormal_add Commute.one_left (star a)
 
 Depends on / 依赖: Commute, Commute.one_left, isStarNormal_add, one_left
@@ -2521,8 +2521,8 @@ instance IsStarNormal.one_sub
   body: .isStarNormal_sub Commute.one_left (star a)
 
 中文:
-实例 IsStarNormal.one_sub
-  签名: [NonAssocRing R] [StarRing R] {a : R}
+实例 是StarNormal.one_sub
+  签名: [非结合环 R] [对合环 R] {a : R}
   定义体: .isStarNormal_sub Commute.one_left (star a)
 
 Depends on / 依赖: Commute, Commute.one_left, isStarNormal_sub, one_left
@@ -2543,7 +2543,7 @@ lemma IsSelfAdjoint.commute_of_mul_eq_zero
 
 中文:
 引理 IsSelfAdjoint.commute_of_mul_eq_zero
-  结论: [NonUnitalNonAssocRing R] [StarRing R]
+  结论: [非幺非结合环 R] [对合环 R]
   证明: by
   have : b * a = 0 := by simpa [ha.star_eq, hb.star_eq] using congr(star $hab)
   grind [commute_iff_eq]

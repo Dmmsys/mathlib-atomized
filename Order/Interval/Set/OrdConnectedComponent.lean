@@ -36,7 +36,7 @@ definition ordConnectedComponent
 
 中文:
 定义 ordConnectedComponent
-  签名: (s : Set α) (x : α)
+  签名: (s : 集合 α) (x : α)
   定义体: { y | [[x, y]] subseteq s }
 
 Depends on / 依赖: subseteq
@@ -109,7 +109,7 @@ theorem subset_ordConnectedComponent
 
 中文:
 定理 subset_ordConnectedComponent
-  条件: {t} [h : OrdConnected s] (hs : x in s) (ht : s subseteq t)
+  条件: {t} [h : 序连通 s] (hs : x in s) (ht : s subseteq t)
   证明: fun _ hy => (h.uIcc_subset hs hy).trans ht
 
 @[simp]
@@ -157,7 +157,7 @@ theorem nonempty_ordConnectedComponent
 
 中文:
 定理 nonempty_ordConnectedComponent
-  结论: (ordConnectedComponent s x).Nonempty ↔ x in s
+  结论: (ordConnectedComponent s x).非空 ↔ x in s
   证明: ⟨fun ⟨_, hy⟩ => hy left_mem_uIcc, fun h => ⟨x, self_mem_ordConnectedComponent.2 h⟩⟩
 
 @[simp]
@@ -247,7 +247,7 @@ theorem ordConnectedComponent_inter
 
 中文:
 定理 ordConnectedComponent_inter
-  条件: (s t : Set α) (x : α)
+  条件: (s t : 集合 α) (x : α)
   证明: by
   simp [ordConnectedComponent, ofPred_and]
 
@@ -336,7 +336,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrdConnected (ordConnectedComponent s x)
+  签名: 序连通 (ordConnectedComponent s x)
   定义体: ordConnected_of_uIcc_subset_left fun _ hy _ hz => (uIcc_subset_uIcc_left hz).trans hy
 
 Depends on / 依赖: ordConnected_of_uIcc_subset_left, uIcc_subset_uIcc_left
@@ -355,7 +355,7 @@ definition ordConnectedProj
 
 中文:
 定义 ordConnectedProj
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: fun x : s =>
   (nonempty_ordConnectedComponent.2 x.2).some
 -/
@@ -372,7 +372,7 @@ theorem ordConnectedProj_mem_ordConnectedComponent
 
 中文:
 定理 ordConnectedProj_mem_ordConnectedComponent
-  条件: (s : Set α) (x : s)
+  条件: (s : 集合 α) (x : s)
   证明: Nonempty.some_mem _
 
 Depends on / 依赖: Nonempty, Nonempty.some_mem, some_mem
@@ -393,7 +393,7 @@ theorem mem_ordConnectedComponent_ordConnectedProj
 
 中文:
 定理 mem_ordConnectedComponent_ordConnectedProj
-  条件: (s : Set α) (x : s)
+  条件: (s : 集合 α) (x : s)
   证明: mem_ordConnectedComponent_comm.2 ordConnectedProj_mem_ordConnectedComponent s x
 
 @[simp]
@@ -417,7 +417,7 @@ theorem ordConnectedComponent_ordConnectedProj
 
 中文:
 定理 ordConnectedComponent_ordConnectedProj
-  条件: (s : Set α) (x : s)
+  条件: (s : 集合 α) (x : s)
   证明: ordConnectedComponent_eq mem_ordConnectedComponent_ordConnectedProj _ _
 
 @[simp]
@@ -474,7 +474,7 @@ definition ordConnectedSection
 
 中文:
 定义 ordConnectedSection
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: range ordConnectedProj s
 
 Depends on / 依赖: ordConnectedProj
@@ -498,7 +498,7 @@ theorem dual_ordConnectedSection
 
 中文:
 定理 dual_ordConnectedSection
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simp only [ordConnectedSection]
   simp +unfoldPartialApp only [ordConnectedProj]
@@ -582,7 +582,7 @@ definition ordSeparatingSet
 
 中文:
 定义 ordSeparatingSet
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: (⋃ x in s, ordConnectedComponent tᶜ x) inter ⋃ x in t, ordConnectedComponent sᶜ x
 
 Depends on / 依赖: ordConnectedComponent
@@ -601,7 +601,7 @@ theorem ordSeparatingSet_comm
 
 中文:
 定理 ordSeparatingSet_comm
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: ordSeparatingSet s t = ordSeparatingSet t s
   证明: inter_comm _ _
 
@@ -686,7 +686,7 @@ definition ordT5Nhd
 
 中文:
 定义 ordT5Nhd
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: ⋃ x in s, ordConnectedComponent (tᶜ inter (ordConnectedSection <| ordSeparatingSet s t)ᶜ) x
 
 Depends on / 依赖: ordConnectedComponent, ordConnectedSection, ordSeparatingSet

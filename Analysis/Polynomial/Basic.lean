@@ -292,7 +292,7 @@ theorem abs_tendsto_atTop_iff
 
 中文:
 定理 abs_tendsto_atTop_iff
-  结论: Tendsto (fun x => abs <| eval x P) atTop atTop ↔ 0 < P.degree
+  结论: 收敛 (fun x => abs <| eval x P) atTop atTop ↔ 0 < P.degree
   证明: ⟨fun h => not_le.mp (mt (isBoundedUnder_abs_atTop_iff P).mpr
     (not_isBoundedUnder_of_tendsto_atTop h)), abs_tendsto_atTop P⟩
 
@@ -390,7 +390,7 @@ theorem abs_tendsto_atBot
 中文:
 定理 abs_tendsto_atBot
   条件: (hdeg : 0 < P.degree)
-  结论: Tendsto (|P.eval ·|) atBot atTop
+  结论: 收敛 (|P.eval ·|) atBot atTop
   证明: by
   convert! ((P.comp (-X)).abs_tendsto_atTop (by simp [hdeg])).comp tendsto_neg_atBot_atTop using 2
   simp
@@ -443,7 +443,7 @@ theorem abs_tendsto_atBot_iff
 
 中文:
 定理 abs_tendsto_atBot_iff
-  结论: Tendsto (|P.eval ·|) atBot atTop ↔ 0 < P.degree
+  结论: 收敛 (|P.eval ·|) atBot atTop ↔ 0 < P.degree
   证明: ⟨fun h => not_le.mp (mt (isBoundedUnder_abs_atBot_iff P).mpr
     (not_isBoundedUnder_of_tendsto_atTop h)), abs_tendsto_atBot P⟩
 
@@ -1141,7 +1141,7 @@ lemma eventually_cofinite_not_isRoot
 
 中文:
 引理 eventually_cofinite_not_isRoot
-  条件: {R : 类型} [CommRing R] [IsDomain R] {P : R[X]} (hP : P != 0)
+  条件: {R : 类型} [交换环 R] [是整环 R] {P : R[X]} (hP : P != 0)
   证明: (finite_setOfPred_isRoot hP).compl_mem_cofinite
 
 Depends on / 依赖: compl_mem_cofinite, finite_setOfPred_isRoot

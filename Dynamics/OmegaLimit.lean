@@ -56,7 +56,7 @@ scoped[omegaLimit] notation "ω" => omegaLimit
 
 中文:
 定义 omegaLimit
-  签名: [TopologicalSpace β] (f : Filter τ) (ϕ : τ -> α -> β) (s : Set α)
+  签名: [拓扑空间 β] (f : 滤子 τ) (ϕ : τ -> α -> β) (s : 集合 α)
   定义体: ⋂ u in f, closure (image2 ϕ u s)
 
 @[inherit_doc]
@@ -112,7 +112,7 @@ theorem omegaLimit_subset_of_tendsto
 
 中文:
 定理 omegaLimit_subset_of_tendsto
-  条件: {m : τ -> τ} {f₁ f₂ : Filter τ} (hf : Tendsto m f₁ f₂)
+  条件: {m : τ -> τ} {f₁ f₂ : 滤子 τ} (hf : 收敛 m f₁ f₂)
   证明: by
   refine iInter₂_mono' fun u hu => ⟨m ⁻¹' u, tendsto_def.mp hf _ hu, ?_⟩
   rw [← image2_image_left]
@@ -137,7 +137,7 @@ theorem omegaLimit_mono_left
 
 中文:
 定理 omegaLimit_mono_left
-  条件: {f₁ f₂ : Filter τ} (hf : f₁ <= f₂)
+  条件: {f₁ f₂ : 滤子 τ} (hf : f₁ <= f₂)
   结论: ω f₁ ϕ s subseteq ω f₂ ϕ s
   证明: omegaLimit_subset_of_tendsto ϕ s (tendsto_id'.2 hf)
 
@@ -157,7 +157,7 @@ theorem omegaLimit_mono_right
 
 中文:
 定理 omegaLimit_mono_right
-  条件: {s₁ s₂ : Set α} (hs : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 α} (hs : s₁ subseteq s₂)
   结论: ω f ϕ s₁ subseteq ω f ϕ s₂
   证明: iInter₂_mono fun _u _hu => closure_mono (image2_subset Subset.rfl hs)
 
@@ -176,7 +176,7 @@ theorem isClosed_omegaLimit
 
 中文:
 定理 isClosed_omegaLimit
-  结论: IsClosed (ω f ϕ s)
+  结论: 是闭集 (ω f ϕ s)
   证明: isClosed_iInter fun _u => isClosed_iInter fun _hu => isClosed_closure
 
 Depends on / 依赖: isClosed_closure, isClosed_iInter
@@ -200,7 +200,7 @@ theorem mapsTo_omegaLimit'
 
 中文:
 定理 mapsTo_omegaLimit'
-  结论: {α' β' : 类型} [TopologicalSpace β'] {f : Filter τ} {ϕ : τ -> α -> β}
+  结论: {α' β' : 类型} [拓扑空间 β'] {f : 滤子 τ} {ϕ : τ -> α -> β}
   证明: by
   simp only [omegaLimit_def, mem_iInter, MapsTo]
   intro y hy u hu
@@ -232,7 +232,7 @@ theorem mapsTo_omegaLimit
 
 中文:
 定理 mapsTo_omegaLimit
-  结论: {α' β' : 类型} [TopologicalSpace β'] {f : Filter τ} {ϕ : τ -> α -> β}
+  结论: {α' β' : 类型} [拓扑空间 β'] {f : 滤子 τ} {ϕ : τ -> α -> β}
   证明: mapsTo_omegaLimit' _ hs (Eventually.of_forall fun t x _hx => hg t x) hgc
 
 Depends on / 依赖: Eventually, Eventually.of_forall, mapsTo_omegaLimit, of_forall
@@ -253,7 +253,7 @@ theorem omegaLimit_image_eq
 
 中文:
 定理 omegaLimit_image_eq
-  条件: {α' : 类型} (ϕ : τ -> α' -> β) (f : Filter τ) (g : α -> α')
+  条件: {α' : 类型} (ϕ : τ -> α' -> β) (f : 滤子 τ) (g : α -> α')
   证明: by simp only [omegaLimit, image2_image_right]
 
 Depends on / 依赖: image2_image_right, omegaLimit
@@ -271,7 +271,7 @@ theorem omegaLimit_preimage_subset
 
 中文:
 定理 omegaLimit_preimage_subset
-  结论: {α' : 类型} (ϕ : τ -> α' -> β) (s : Set α') (f : Filter τ)
+  结论: {α' : 类型} (ϕ : τ -> α' -> β) (s : 集合 α') (f : 滤子 τ)
   证明: mapsTo_omegaLimit _ (mapsTo_preimage _ _) (fun _t _x => rfl) continuous_id
 
 Depends on / 依赖: continuous_id, mapsTo_omegaLimit, mapsTo_preimage
@@ -415,8 +415,8 @@ theorem omegaLimit_iInter
   proof: subset_iInter fun _i => omegaLimit_mono_right _ _ (iInter_subset _ _)
 
 中文:
-定理 omegaLimit_iInter
-  条件: (p : ι -> Set α)
+定理 omegaLimit_i整数er
+  条件: (p : ι -> 集合 α)
   结论: ω f ϕ (⋂ i, p i) subseteq ⋂ i, ω f ϕ (p i)
   证明: subset_iInter fun _i => omegaLimit_mono_right _ _ (iInter_subset _ _)
 
@@ -481,7 +481,7 @@ theorem omegaLimit_iUnion
 
 中文:
 定理 omegaLimit_iUnion
-  条件: (p : ι -> Set α)
+  条件: (p : ι -> 集合 α)
   结论: ⋃ i, ω f ϕ (p i) subseteq ω f ϕ (⋃ i, p i)
   证明: by
   rw [iUnion_subset_iff]
@@ -503,7 +503,7 @@ theorem omegaLimit_eq_iInter
   proof: biInter_eq_iInter _ _
 
 中文:
-定理 omegaLimit_eq_iInter
+定理 omegaLimit_eq_i整数er
   结论: ω f ϕ s = ⋂ u : ↥f.sets, closure (image2 ϕ u s)
   证明: biInter_eq_iInter _ _
 
@@ -522,8 +522,8 @@ theorem omegaLimit_eq_biInter_inter
     (iInter₂_mono fun _u _hu => closure_mono <| image2_subset inter_subset_left Subset.rfl)
 
 中文:
-定理 omegaLimit_eq_biInter_inter
-  条件: {v : Set τ} (hv : v in f)
+定理 omegaLimit_eq_bi整数er_inter
+  条件: {v : 集合 τ} (hv : v in f)
   证明: Subset.antisymm (iInter₂_mono' fun u hu => ⟨u inter v, inter_mem hu hv, Subset.rfl⟩)
     (iInter₂_mono fun _u _hu => closure_mono <| image2_subset inter_subset_left Subset.rfl)
 
@@ -545,8 +545,8 @@ theorem omegaLimit_eq_iInter_inter
   apply biInter_eq_iInter
 
 中文:
-定理 omegaLimit_eq_iInter_inter
-  条件: {v : Set τ} (hv : v in f)
+定理 omegaLimit_eq_i整数er_inter
+  条件: {v : 集合 τ} (hv : v in f)
   证明: by
   rw [omegaLimit_eq_biInter_inter _ _ _ hv]
   apply biInter_eq_iInter
@@ -575,7 +575,7 @@ alias omegaLimit_subset_closure_fw_image := omegaLimit_subset_closure_image2
 
 中文:
 定理 omegaLimit_subset_closure_image2
-  条件: {u : Set τ} (hu : u in f)
+  条件: {u : 集合 τ} (hu : u in f)
   证明: by
   rw [omegaLimit_eq_iInter]
   intro _ hx
@@ -608,7 +608,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited f.sets
+  签名: 可居 f.sets
   定义体: Filter.inhabitedMem
 
 Depends on / 依赖: Filter, Filter.inhabitedMem, inhabitedMem
@@ -635,7 +635,7 @@ theorem eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit
 
 中文:
 定理 eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset'
-  结论: {c : Set β}
+  结论: {c : 集合 β}
   证明: by
   rcases hc₂ with ⟨v, hv₁, hv₂⟩
   let k := closure (image2 ϕ v s)
@@ -692,7 +692,7 @@ theorem eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit
 
 中文:
 定理 eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset
-  结论: [T2Space β]
+  结论: [T2空间 β]
   证明: eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset' f ϕ _ hc₁
     ⟨_, hc₂, closure_minimal (image2_subset_iff.2 fun _t => id) hc₁.isClosed⟩ hn₁ hn₂
 
@@ -719,7 +719,7 @@ theorem eventually_mapsTo_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset
 
 中文:
 定理 eventually_mapsTo_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset
-  结论: [T2Space β]
+  结论: [T2空间 β]
   证明: by
   rcases eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset f ϕ s hc₁
       hc₂ hn₁ hn₂ with
@@ -749,7 +749,7 @@ theorem eventually_closure_subset_of_isOpen_of_omegaLimit_subset
 
 中文:
 定理 eventually_closure_subset_of_isOpen_of_omegaLimit_subset
-  结论: [CompactSpace β] {v : Set β}
+  结论: [紧空间 β] {v : 集合 β}
   证明: eventually_closure_subset_of_isCompact_absorbing_of_isOpen_of_omegaLimit_subset' _ _ _
     isCompact_univ ⟨univ, univ_mem, subset_univ _⟩ hv₁ hv₂
 
@@ -773,7 +773,7 @@ theorem eventually_mapsTo_of_isOpen_of_omegaLimit_subset
 
 中文:
 定理 eventually_mapsTo_of_isOpen_of_omegaLimit_subset
-  结论: [CompactSpace β] {v : Set β}
+  结论: [紧空间 β] {v : 集合 β}
   证明: by
   rcases eventually_closure_subset_of_isOpen_of_omegaLimit_subset f ϕ s hv₁ hv₂ with ⟨u, hu_mem, hu⟩
   refine mem_of_superset hu_mem fun t ht x hx => ?_
@@ -804,7 +804,7 @@ theorem nonempty_omegaLimit_of_isCompact_absorbing
 
 中文:
 定理 nonempty_omegaLimit_of_isCompact_absorbing
-  结论: [NeBot f] {c : Set β} (hc₁ : IsCompact c)
+  结论: [NeBot f] {c : 集合 β} (hc₁ : 是紧集 c)
   证明: by
   rcases hc₂ with ⟨v, hv₁, hv₂⟩
   rw [omegaLimit_eq_iInter_inter _ _ _ hv₁]
@@ -845,8 +845,8 @@ theorem nonempty_omegaLimit
 
 中文:
 定理 nonempty_omegaLimit
-  条件: [CompactSpace β] [NeBot f] (hs : s.Nonempty)
-  结论: (ω f ϕ s).Nonempty
+  条件: [紧空间 β] [NeBot f] (hs : s.非空)
+  结论: (ω f ϕ s).非空
   证明: nonempty_omegaLimit_of_isCompact_absorbing _ _ _ isCompact_univ ⟨univ, univ_mem, subset_univ _⟩ hs
 
 Depends on / 依赖: isCompact_univ, nonempty_omegaLimit_of_isCompact_absorbing, subset_univ, univ_mem
@@ -881,8 +881,8 @@ theorem isInvariant_omegaLimit
 
 中文:
 定理 isInvariant_omegaLimit
-  条件: (hf : 对任意 t, Tendsto (t + ·) f f)
-  结论: IsInvariant ϕ (ω f ϕ s)
+  条件: (hf : 对任意 t, 收敛 (t + ·) f f)
+  结论: 是不变 ϕ (ω f ϕ s)
   证明: by
   refine fun t => MapsTo.mono_right ?_ (omegaLimit_subset_of_tendsto ϕ s (hf t))
   exact
@@ -909,7 +909,7 @@ theorem omegaLimit_image_subset
 
 中文:
 定理 omegaLimit_image_subset
-  条件: (t : τ) (ht : Tendsto (· + t) f f)
+  条件: (t : τ) (ht : 收敛 (· + t) f f)
   证明: by
   simp only [omegaLimit_image_eq, ← map_add]
   exact omegaLimit_subset_of_tendsto ϕ s ht
@@ -949,7 +949,7 @@ theorem omegaLimit_image_eq
 
 中文:
 定理 omegaLimit_image_eq
-  条件: (hf : 对任意 t, Tendsto (· + t) f f) (t : τ)
+  条件: (hf : 对任意 t, 收敛 (· + t) f f) (t : τ)
   结论: ω f ϕ (ϕ t '' s) = ω f ϕ s
   证明: Subset.antisymm (omegaLimit_image_subset _ _ _ _ (hf t))
     calc
@@ -983,7 +983,7 @@ theorem omegaLimit_omegaLimit
 
 中文:
 定理 omegaLimit_omegaLimit
-  条件: (hf : 对任意 t, Tendsto (t + ·) f f)
+  条件: (hf : 对任意 t, 收敛 (t + ·) f f)
   结论: ω f ϕ (ω f ϕ s) subseteq ω f ϕ s
   证明: by
   simp only [subset_def, mem_omegaLimit_iff_frequently₂, frequently_iff]

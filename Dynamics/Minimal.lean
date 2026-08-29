@@ -38,10 +38,10 @@ class AddAction.IsMinimal
     - dense_orbit : forall x : α, Dense (AddAction.orbit M x)
 
 中文:
-类 AddAction.IsMinimal
-  参数: (M α : 类型) [AddMonoid M] [TopologicalSpace α] [AddAction M α]
+类 加法作用.是极小
+  参数: (M α : 类型) [加法幺半群 M] [拓扑空间 α] [加法作用 M α]
   公理与运算 (1 个):
-    - dense_orbit : 对任意 x : α, Dense (AddAction.orbit M x)
+    - dense_orbit : 对任意 x : α, 稠密 (加法作用.orbit M x)
 -/
 class AddAction.IsMinimal (M α : Type*) [AddMonoid M] [TopologicalSpace α] [AddAction M α] :
     Prop where
@@ -60,10 +60,10 @@ class MulAction.IsMinimal
     - dense_orbit : forall x : α, Dense (MulAction.orbit M x)
 
 中文:
-类 MulAction.IsMinimal
-  参数: (M α : 类型) [Monoid M] [TopologicalSpace α] [MulAction M α]
+类 乘法作用.是极小
+  参数: (M α : 类型) [幺半群 M] [拓扑空间 α] [乘法作用 M α]
   公理与运算 (1 个):
-    - dense_orbit : 对任意 x : α, Dense (MulAction.orbit M x)
+    - dense_orbit : 对任意 x : α, 稠密 (乘法作用.orbit M x)
 -/
 class MulAction.IsMinimal (M α : Type*) [Monoid M] [TopologicalSpace α] [MulAction M α] :
     Prop where
@@ -87,9 +87,9 @@ theorem MulAction.dense_orbit
 @[to_additive]
 
 中文:
-定理 MulAction.dense_orbit
-  条件: [IsMinimal M α] (x : α)
-  结论: Dense (orbit M x)
+定理 乘法作用.dense_orbit
+  条件: [是极小 M α] (x : α)
+  结论: 稠密 (orbit M x)
   证明: MulAction.IsMinimal.dense_orbit x
 
 @[to_additive]
@@ -113,7 +113,7 @@ theorem denseRange_smul
 
 中文:
 定理 denseRange_smul
-  条件: [IsMinimal M α] (x : α)
+  条件: [是极小 M α] (x : α)
   结论: DenseRange fun c : M => c • x
   证明: MulAction.dense_orbit M x
 
@@ -141,8 +141,8 @@ theorem IsOpen.exists_smul_mem
 @[to_additive]
 
 中文:
-定理 IsOpen.exists_smul_mem
-  结论: [IsMinimal M α] (x : α) {U : Set α} (hUo : IsOpen U)
+定理 是开集.存在_smul_mem
+  结论: [是极小 M α] (x : α) {U : 集合 α} (hUo : 是开集 U)
   证明: (denseRange_smul M x).exists_mem_open hUo hne
 
 @[to_additive]
@@ -165,8 +165,8 @@ theorem IsOpen.iUnion_preimage_smul
 @[to_additive]
 
 中文:
-定理 IsOpen.iUnion_preimage_smul
-  结论: [IsMinimal M α] {U : Set α} (hUo : IsOpen U)
+定理 是开集.iUnion_preimage_smul
+  结论: [是极小 M α] {U : 集合 α} (hUo : 是开集 U)
   证明: iUnion_eq_univ_iff.2 fun x => hUo.exists_smul_mem M x hne
 
 @[to_additive]
@@ -191,8 +191,8 @@ theorem IsOpen.iUnion_smul
 @[to_additive]
 
 中文:
-定理 IsOpen.iUnion_smul
-  条件: [IsMinimal G α] {U : Set α} (hUo : IsOpen U) (hne : U.Nonempty)
+定理 是开集.iUnion_smul
+  条件: [是极小 G α] {U : 集合 α} (hUo : 是开集 U) (hne : U.非空)
   证明: iUnion_eq_univ_iff.2 fun x =>
     let ⟨g, hg⟩ := hUo.exists_smul_mem G x hne
     ⟨g⁻¹, _, hg, inv_smul_smul _ _⟩
@@ -221,8 +221,8 @@ theorem IsCompact.exists_finite_cover_smul
 @[to_additive]
 
 中文:
-定理 IsCompact.exists_finite_cover_smul
-  结论: [IsMinimal G α] [ContinuousConstSMul G α]
+定理 是紧集.存在_finite_cover_smul
+  结论: [是极小 G α] [连续常数标量乘法 G α]
   证明: (hK.elim_finite_subcover (fun g => g • U) fun _ => hUo.smul _) calc
     K subseteq univ := subset_univ K
     _ = ⋃ g : G, g • U := (hUo.iUnion_smul G hne).symm
@@ -252,7 +252,7 @@ theorem dense_of_nonempty_smul_invariant
 
 中文:
 定理 dense_of_nonempty_smul_invariant
-  结论: [IsMinimal M α] {s : Set α} (hne : s.Nonempty)
+  结论: [是极小 M α] {s : 集合 α} (hne : s.非空)
   证明: let ⟨x, hx⟩ := hne
   (MulAction.dense_orbit M x).mono (range_subset_iff.2 fun c => hsmul c ⟨x, hx, rfl⟩)
 
@@ -279,7 +279,7 @@ theorem eq_empty_or_univ_of_smul_invariant_closed
 
 中文:
 定理 eq_empty_or_univ_of_smul_invariant_closed
-  结论: [IsMinimal M α] {s : Set α} (hs : IsClosed s)
+  结论: [是极小 M α] {s : 集合 α} (hs : 是闭集 s)
   证明: s.eq_empty_or_nonempty.imp_right fun hne =>
     hs.closure_eq ▸ (dense_of_nonempty_smul_invariant M hne hsmul).closure_eq
 
@@ -309,7 +309,7 @@ refine fun H => ⟨fun _ => dense_iff_closure_eq.2 (H _ ?_ ?_).resolve_left ?_�
 
 中文:
 定理 isMinimal_iff_isClosed_smul_invariant
-  条件: [ContinuousConstSMul M α]
+  条件: [连续常数标量乘法 M α]
   证明: by
   constructor
   · intro _ _

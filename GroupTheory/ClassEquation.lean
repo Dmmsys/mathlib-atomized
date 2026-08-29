@@ -42,7 +42,7 @@ theorem sum_conjClasses_card_eq_card
 
 中文:
 定理 sum_conjClasses_card_eq_card
-  结论: [Fintype <| ConjClasses G] [Fintype G]
+  结论: [有限类型 <| ConjClasses G] [有限类型 G]
   证明: by
   suffices (Σ x : ConjClasses G, x.carrier) ≃ G by simpa using! (Fintype.card_congr this)
   simpa [carrier_eq_preimage_mk] using! Equiv.sigmaFiberEquiv ConjClasses.mk
@@ -67,8 +67,8 @@ theorem Group.sum_card_conj_classes_eq_card
   simp [← sum_conjClasses_card_eq_card, finsum_eq_sum_of_fintype]
 
 中文:
-定理 Group.sum_card_conj_classes_eq_card
-  条件: [Finite G]
+定理 群.sum_card_conj_classes_eq_card
+  条件: [有限 G]
   证明: by
   classical
   cases nonempty_fintype G
@@ -100,8 +100,8 @@ theorem Group.nat_card_center_add_sum_card_noncenter_eq_card
   · convert! finsum_cond_eq_sum_of_
 
 中文:
-定理 Group.nat_card_center_add_sum_card_noncenter_eq_card
-  条件: [Finite G]
+定理 群.nat_card_center_add_sum_card_noncenter_eq_card
+  条件: [有限 G]
   证明: by
   classical
   cases nonempty_fintype G
@@ -154,8 +154,8 @@ theorem Group.card_center_add_sum_card_noncenter_eq_card
   · simp
 
 中文:
-定理 Group.card_center_add_sum_card_noncenter_eq_card
-  结论: (G) [Group G]
+定理 群.card_center_add_sum_card_noncenter_eq_card
+  结论: (G) [群 G]
   证明: by
   convert! Group.nat_card_center_add_sum_card_noncenter_eq_card G using 2
   · simp

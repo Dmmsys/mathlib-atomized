@@ -36,7 +36,7 @@ instance isClosed_genEigenspace
 
 中文:
 实例 isClosed_genEigenspace
-  签名: : IsClosed (genEigenspace (f : End R M) μ n : Set M)
+  签名: : 是闭集 (genEigenspace (f : End R M) μ n : 集合 M)
   定义体: by
   simpa [genEigenspace_nat] using isClosed_ker ↑((f - μ • 1) ^ n)
 
@@ -55,7 +55,7 @@ instance isClosed_eigenspace
 
 中文:
 实例 isClosed_eigenspace
-  签名: : IsClosed (eigenspace (f : End R M) μ : Set M)
+  签名: : 是闭集 (eigenspace (f : End R M) μ : 集合 M)
   定义体: isClosed_genEigenspace f μ 1
 
 Depends on / 依赖: isClosed_genEigenspace

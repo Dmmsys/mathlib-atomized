@@ -70,14 +70,14 @@ structure AddGroupExtension
     - rightHom_surjective : Function.Surjective rightHom
 
 中文:
-结构 AddGroupExtension
-  参数: [AddGroup N] [AddGroup E] [AddGroup G]
+结构 加法群扩张
+  参数: [加法群 N] [加法群 E] [加法群 G]
   公理与运算 (5 个):
     - inl : N ->+ E
     - rightHom : E ->+ G
-    - inl_injective : Function.Injective inl
+    - inl_injective : 函数.单射 inl
     - range_inl_eq_ker_rightHom : inl.range = rightHom.ker
-    - rightHom_surjective : Function.Surjective rightHom
+    - rightHom_surjective : 函数.满射 rightHom
 -/
 structure AddGroupExtension [AddGroup N] [AddGroup E] [AddGroup G] where
   /-- The inclusion homomorphism `N →+ E` -/
@@ -107,14 +107,14 @@ structure GroupExtension
     - rightHom_surjective : Function.Surjective rightHom
 
 中文:
-结构 GroupExtension
-  参数: [Group N] [Group E] [Group G]
+结构 群扩张
+  参数: [群 N] [群 E] [群 G]
   公理与运算 (5 个):
     - inl : N ->* E
     - rightHom : E ->* G
-    - inl_injective : Function.Injective inl
+    - inl_injective : 函数.单射 inl
     - range_inl_eq_ker_rightHom : inl.range = rightHom.ker
-    - rightHom_surjective : Function.Surjective rightHom
+    - rightHom_surjective : 函数.满射 rightHom
 -/
 structure GroupExtension [Group N] [Group E] [Group G] where
   /-- The inclusion homomorphism `N →* E` -/
@@ -146,8 +146,8 @@ structure Equiv
     - rightHom_comm : S'.rightHom ∘ toAddEquiv = S.rightHom
 
 中文:
-结构 Equiv
-  参数: {E' : 类型} [AddGroup E'] (S' : AddGroupExtension N E' G)
+结构 等价
+  参数: {E' : 类型} [加法群 E'] (S' : 加法群扩张 N E' G)
   继承: E ≃+ E'
   公理与运算 (2 个):
     - inl_comm : toAddEquiv ∘ S.inl = S'.inl
@@ -170,11 +170,11 @@ structure Section
     - rightInverse_rightHom : Function.RightInverse toFun S.rightHom
 
 中文:
-结构 Section
+结构 截面
   参数: where
   公理与运算 (2 个):
     - toFun : G -> E
-    - rightInverse_rightHom : Function.RightInverse toFun S.rightHom
+    - rightInverse_rightHom : 函数.右逆 toFun S.rightHom
 -/
 structure Section where
   /-- The underlying function -/
@@ -193,8 +193,8 @@ structure Splitting
 
 中文:
 结构 Splitting
-  参数: extends G ->+ E, S.Section
-  继承: G ->+ E, S.Section
+  参数: extends G ->+ E, S.截面
+  继承: G ->+ E, S.截面
   (无附加公理)
 -/
 structure Splitting extends G ->+ E, S.Section
@@ -222,7 +222,7 @@ instance normal_inl_range
 
 中文:
 实例 normal_inl_range
-  签名: : S.inl.range.Normal
+  签名: : S.inl.range.正规
   定义体: S.range_inl_eq_ker_rightHom ▸ S.rightHom.normal_ker
 
 @[to_additive (attr := simp)]
@@ -369,8 +369,8 @@ structure Equiv
     - rightHom_comm : S'.rightHom ∘ toMulEquiv = S.rightHom
 
 中文:
-结构 Equiv
-  参数: {E' : 类型} [Group E'] (S' : GroupExtension N E' G)
+结构 等价
+  参数: {E' : 类型} [群 E'] (S' : 群扩张 N E' G)
   继承: E ≃* E'
   公理与运算 (2 个):
     - inl_comm : toMulEquiv ∘ S.inl = S'.inl
@@ -407,7 +407,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (S.Equiv S') E E'
+  签名: 等价状 (S.等价 S') E E'
   定义体: equiv.toMulEquiv
   inv equiv := equiv.toMulEquiv.symm
   left_inv equiv := equiv.left_inv
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulEquivClass (S.Equiv S') E E'
+  签名: 乘法等价类 (S.等价 S') E E'
   定义体: equiv.map_mul'
 
 Depends on / 依赖: equiv.map_mul, map_mul
@@ -551,7 +551,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : S'.Equiv S where
+  签名: : S'.等价 S where
   定义体: equiv.toMulEquiv.symm
   inl_comm := by rw [MulEquiv.symm_comp_eq, ← equiv.inl_comm]
   rightHom_comm := by rw [MulEquiv.comp_symm_eq, ← equiv.rightHom_comm]
@@ -630,7 +630,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: {E'' : 类型} [Group E''] {S'' : GroupExtension N E'' G} (equiv' : S'.Equiv S'')
+  签名: {E'' : 类型} [群 E''] {S'' : 群扩张 N E'' G} (equiv' : S'.等价 S'')
   定义体: equiv.toMulEquiv.trans equiv'.toMulEquiv
   inl_comm := by rw [MulEquiv.coe_trans, Function.comp_assoc, equiv.inl_comm, equiv'.inl_comm]
   rightHom_comm := by
@@ -660,7 +660,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : S.Equiv S where
+  签名: : S.等价 S where
   定义体: MulEquiv.refl E
   inl_comm := rfl
   rightHom_comm := rfl
@@ -687,11 +687,11 @@ structure Section
     - rightInverse_rightHom : Function.RightInverse toFun S.rightHom
 
 中文:
-结构 Section
+结构 截面
   参数: where
   公理与运算 (2 个):
     - toFun : G -> E
-    - rightInverse_rightHom : Function.RightInverse toFun S.rightHom
+    - rightInverse_rightHom : 函数.右逆 toFun S.rightHom
 -/
 structure Section where
   /-- The underlying function -/
@@ -713,7 +713,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike S.Section G E
+  签名: 函数状 S.截面 G E
   定义体: toFun
   coe_injective := fun ⟨_, _⟩ ⟨_, _⟩ _ => by congr
 -/
@@ -735,7 +735,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (σ : G -> E) (hσ : Function.RightInverse σ S.rightHom)
+  条件: (σ : G -> E) (hσ : 函数.右逆 σ S.rightHom)
   结论: (mk σ hσ : G -> E) = σ
   证明: rfl
 -/
@@ -800,8 +800,8 @@ structure Splitting
 
 中文:
 结构 Splitting
-  参数: extends G ->* E, S.Section
-  继承: G ->* E, S.Section
+  参数: extends G ->* E, S.截面
+  继承: G ->* E, S.截面
   (无附加公理)
 -/
 structure Splitting extends G ->* E, S.Section
@@ -828,7 +828,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike S.Splitting G E
+  签名: 函数状 S.Splitting G E
   定义体: s.toFun
   coe_injective := by
     intro ⟨_, _⟩ ⟨_, _⟩ h
@@ -858,7 +858,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidHomClass S.Splitting G E
+  签名: 幺半群态射类 S.Splitting G E
   定义体: s.map_mul'
   map_one s := s.map_one'
 
@@ -884,7 +884,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : G ->* E) (hs : Function.RightInverse s S.rightHom)
+  条件: (s : G ->* E) (hs : 函数.右逆 s S.rightHom)
   结论: (mk s hs : G -> E) = s
   证明: rfl
 
@@ -903,7 +903,7 @@ theorem coe_monoidHom_mk
 
 中文:
 定理 coe_monoidHom_mk
-  条件: (s : G ->* E) (hs : Function.RightInverse s S.rightHom)
+  条件: (s : G ->* E) (hs : 函数.右逆 s S.rightHom)
   证明: rfl
 -/
 theorem coe_monoidHom_mk (s : G ->* E) (hs : Function.RightInverse s S.rightHom) :
@@ -948,7 +948,7 @@ theorem rightHom_comp_splitting
 
 中文:
 定理 rightHom_comp_splitting
-  结论: S.rightHom.comp s = MonoidHom.id G
+  结论: S.rightHom.comp s = 幺半群态射.id G
   证明: by
   ext g
   simp only [MonoidHom.comp_apply, MonoidHom.id_apply, MonoidHom.coe_coe, rightHom_splitting]
@@ -1003,7 +1003,7 @@ definition toGroupExtension
 
 中文:
 定义 toGroupExtension
-  签名: : GroupExtension N (N ⋊[φ] G) G where
+  签名: : 群扩张 N (N ⋊[φ] G) G where
   定义体: inl
   inl_injective := inl_injective
   range_inl_eq_ker_rightHom := range_inl_eq_ker_rightHom
@@ -1027,7 +1027,7 @@ theorem toGroupExtension_inl
 
 中文:
 定理 toGroupExtension_inl
-  结论: (toGroupExtension φ).inl = SemidirectProduct.inl
+  结论: (toGroupExtension φ).inl = 半直积.inl
   证明: rfl
 -/
 theorem toGroupExtension_inl : (toGroupExtension φ).inl = SemidirectProduct.inl := rfl
@@ -1042,7 +1042,7 @@ theorem toGroupExtension_rightHom
 
 中文:
 定理 toGroupExtension_rightHom
-  结论: (toGroupExtension φ).rightHom = SemidirectProduct.rightHom
+  结论: (toGroupExtension φ).rightHom = 半直积.rightHom
   证明: rfl
 -/
 theorem toGroupExtension_rightHom : (toGroupExtension φ).rightHom = SemidirectProduct.rightHom :=

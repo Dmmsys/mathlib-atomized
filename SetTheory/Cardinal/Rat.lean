@@ -31,8 +31,8 @@ theorem Cardinal.mkRat
   proof: mk_eq_aleph0 Rat
 
 中文:
-定理 Cardinal.mkRat
-  结论: #Rat = ℵ₀
+定理 基数.mkRat
+  结论: #有理数 = ℵ₀
   证明: mk_eq_aleph0 Rat
 
 Depends on / 依赖: mk_eq_aleph0

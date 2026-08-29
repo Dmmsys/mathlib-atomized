@@ -34,7 +34,7 @@ theorem map_frobenius_expand
 
 中文:
 定理 map_frobenius_expand
-  条件: {f : MvPolynomial σ R}
+  条件: {f : 多元多项式 σ R}
   证明: f.induction_on' fun _ _ => by simp [monomial_pow, frobenius]
     fun _ _ ha hb => by rw [map_add, map_add, ha, hb, add_pow_expChar]
 
@@ -62,7 +62,7 @@ theorem map_iterateFrobenius_expand
 
 中文:
 定理 map_iterateFrobenius_expand
-  条件: (f : MvPolynomial σ R) (n : 自然数)
+  条件: (f : 多元多项式 σ R) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [map_id]

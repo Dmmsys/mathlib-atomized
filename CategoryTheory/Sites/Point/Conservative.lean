@@ -58,10 +58,10 @@ structure IsConservativeFamilyOfPoints
     - jointlyReflectIsomorphisms_type : JointlyReflectIsomorphisms (fun (Φ : P.FullSubcategory) => Φ.obj.sheafFiber (A := Type w))
 
 中文:
-结构 IsConservativeFamilyOfPoints
+结构 是余nservativeFamilyOfPoints
   参数: : 命题 where
   公理与运算 (1 个):
-    - jointlyReflectIsomorphisms_type : JointlyReflectIsomorphisms (fun (Φ : P.FullSubcategory) => Φ.obj.sheafFiber (A := Type w))
+    - jointlyReflectIsomorphisms_type : JointlyReflectIsomorphisms (fun (Φ : P.满子范畴) => Φ.obj.sheafFiber (A := 类型 w))
 -/
 structure IsConservativeFamilyOfPoints : Prop where
   jointlyReflectIsomorphisms_type :
@@ -130,7 +130,7 @@ include hP hJ in
 
 中文:
 引理 jointlyReflectMonomorphisms
-  条件: [AB5OfSize.{w, w} A] [HasFiniteLimits A]
+  条件: [AB5OfSize.{w, w} A] [有有限极限 A]
   证明: (hP.jointlyReflectIsomorphisms A).jointlyReflectMonomorphisms
 
 include hP hJ in
@@ -178,7 +178,7 @@ lemma jointlyFaithful
 
 中文:
 引理 jointlyFaithful
-  条件: [AB5OfSize.{w, w} A] [HasFiniteLimits A]
+  条件: [AB5OfSize.{w, w} A] [有有限极限 A]
   证明: (hP.jointlyReflectIsomorphisms A).jointlyFaithful
 -/
 lemma jointlyFaithful [AB5OfSize.{w, w} A] [HasFiniteLimits A] :
@@ -446,7 +446,7 @@ lemma mk'
 
 中文:
 引理 mk'
-  结论: [HasSheafify J (Type w)]
+  结论: [有Sheafify J (类型 w)]
   证明: JointlyFaithful.jointlyReflectsIsomorphisms
       (JointlyFaithful.of_jointly_reflects_isIso_of_mono (fun _ _ f _ hf => by
         have : Epi f := by
@@ -486,10 +486,10 @@ class HasEnoughPoints
     - exists_objectProperty((J)) : exists (P : ObjectProperty (Point.{w} J)), ObjectProperty.Small.{w} P ∧ P.IsConservativeFamilyOfPoints
 
 中文:
-类 HasEnoughPoints
-  参数: (J : GrothendieckTopology C)
+类 有EnoughPoints
+  参数: (J : Grothendieck拓扑 C)
   公理与运算 (1 个):
-    - exists_objectProperty((J)) : 存在 (P : Object命题erty (Point.{w} J)), Object命题erty.Small.{w} P ∧ P.IsConservativeFamilyOfPoints
+    - exists_objectProperty((J)) : 存在 (P : ObjectProperty (Point.{w} J)), ObjectProperty.Small.{w} P ∧ P.是余nservativeFamilyOfPoints
 -/
 class HasEnoughPoints (J : GrothendieckTopology C) : Prop where
   exists_objectProperty (J) :

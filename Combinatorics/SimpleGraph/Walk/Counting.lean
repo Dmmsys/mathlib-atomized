@@ -49,9 +49,9 @@ alias Walk.setOf_length_eq_zero := Walk.setOfPred_length_eq_zero
 alias set_walk_self_length_zero_eq := Walk.setOfPred_length_eq_zero
 
 中文:
-定理 Walk.setOfPred_length_eq_zero
+定理 途径.setOfPred_length_eq_zero
   条件: (u : V)
-  结论: {p : G.Walk u u | p.length = 0} = {.nil}
+  结论: {p : G.途径 u u | p.length = 0} = {.nil}
   证明: by
   simp [Walk.length_eq_zero_iff, ← Walk.eq_nil_iff_nil]
 
@@ -87,7 +87,7 @@ alias Walk.setOf_length_eq_zero_of_ne := Walk.setOfPred_length_eq_zero_of_ne
 alias set_walk_length_zero_eq_of_ne := Walk.setOfPred_length_eq_zero_of_ne
 
 中文:
-定理 Walk.setOfPred_length_eq_zero_of_ne
+定理 途径.setOfPred_length_eq_zero_of_ne
   条件: {u v : V} (h : u != v)
   证明: Set.eq_empty_of_forall_notMem (h <| ·.eq_of_length_eq_zero ·)
 
@@ -128,7 +128,7 @@ alias Walk.setOf_length_eq_add_one := Walk.setOfPred_length_eq_add_one
 alias set_walk_length_succ_eq := Walk.setOf
 
 中文:
-定理 Walk.setOfPred_length_eq_add_one
+定理 途径.setOfPred_length_eq_add_one
   条件: (u v : V) (n : 自然数)
   证明: by
   ext p
@@ -284,7 +284,7 @@ theorem mem_finsetWalkLength_iff
 
 中文:
 定理 mem_finsetWalkLength_iff
-  条件: {n : 自然数} {u v : V} {p : G.Walk u v}
+  条件: {n : 自然数} {u v : V} {p : G.途径 u v}
   证明: Set.ext_iff.mp (G.coe_finsetWalkLength_eq n u v) p
 
 Depends on / 依赖: G.coe_finsetWalkLength_eq, Set.ext_iff.mp, coe_finsetWalkLength_eq, ext_iff
@@ -363,7 +363,7 @@ theorem mem_finsetWalkLengthLT_iff
 
 中文:
 定理 mem_finsetWalkLengthLT_iff
-  条件: {n : 自然数} {u v : V} {p : G.Walk u v}
+  条件: {n : 自然数} {u v : V} {p : G.途径 u v}
   证明: Set.ext_iff.mp (G.coe_finsetWalkLengthLT_eq n u v) p
 
 Depends on / 依赖: G.coe_finsetWalkLengthLT_eq, Set.ext_iff.mp, coe_finsetWalkLengthLT_eq, ext_iff
@@ -594,7 +594,7 @@ fun _ _ h => SetCoe.ext Subtype.mk.injEq .. ▸ h⟩
     ⟨mem_univ _, rfl⟩⟩
 
 中文:
-实例 Path.instFintype
+实例 道路.instFintype
   签名: {u v : V}
   定义体: (univ (α := { p : G.Walk u v | p.IsPath ∧ p.length < Fintype.card V })).map
     ⟨fun p => { val := p.val, property := p.prop.left },

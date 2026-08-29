@@ -72,7 +72,7 @@ definition perfectClosure
 
 中文:
 定义 perfectClosure
-  签名: : 整数ermediateField F E where
+  签名: : 中间域 F E where
   定义体: have := expChar_of_injective_algebraMap (algebraMap F E).injective (ringExpChar F)
     Subalgebra.perfectClosure F E (ringExpChar F)
   inv_mem' := by
@@ -188,7 +188,7 @@ instance perfectClosure.isPurelyInseparable
 
 中文:
 实例 perfectClosure.isPurelyInseparable
-  签名: : IsPurelyInseparable F (perfectClosure F E)
+  签名: : 是纯不可分 F (perfectClosure F E)
   定义体: by
   rw [isPurelyInseparable_iff_pow_mem F (ringExpChar F)]
   exact fun ⟨_, n, y, h⟩ => ⟨n, y, (algebraMap _ E).injective h⟩
@@ -209,7 +209,7 @@ instance perfectClosure.isAlgebraic
 
 中文:
 实例 perfectClosure.isAlgebraic
-  签名: : Algebra.IsAlgebraic F (perfectClosure F E)
+  签名: : 代数.是代数 F (perfectClosure F E)
   定义体: IsPurelyInseparable.isAlgebraic F _
 
 Depends on / 依赖: IsPurelyInseparable, IsPurelyInseparable.isAlgebraic, isAlgebraic
@@ -229,7 +229,7 @@ theorem perfectClosure.eq_bot_of_isSeparable
 
 中文:
 定理 perfectClosure.eq_bot_of_isSeparable
-  条件: [Algebra.IsSeparable F E]
+  条件: [代数.是可分 F E]
   结论: perfectClosure F E = ⊥
   证明: haveI := Algebra.isSeparable_tower_bot_of_isSeparable F (perfectClosure F E) E
   eq_bot_of_isPurelyInseparable_of_isSeparable _
@@ -254,7 +254,7 @@ theorem le_perfectClosure
 
 中文:
 定理 le_perfectClosure
-  条件: (L : 整数ermediateField F E) [h : IsPurelyInseparable F L]
+  条件: (L : 中间域 F E) [h : 是纯不可分 F L]
   证明: by
   rw [isPurelyInseparable_iff_pow_mem F (ringExpChar F)] at h
   intro x hx
@@ -284,7 +284,7 @@ theorem le_perfectClosure_iff
 
 中文:
 定理 le_perfectClosure_iff
-  条件: (L : 整数ermediateField F E)
+  条件: (L : 中间域 F E)
   证明: by
   refine ⟨fun h => (isPurelyInseparable_iff_pow_mem F (ringExpChar F)).2 fun x => ?_,
     fun _ => le_perfectClosure F E L⟩
@@ -503,7 +503,7 @@ instance perfectClosure.perfectField
 
 中文:
 实例 perfectClosure.perfectField
-  签名: [PerfectField E]
+  签名: [完美域 E]
   定义体: PerfectRing.toPerfectField _ (ringExpChar E)
 
 Depends on / 依赖: PerfectRing, PerfectRing.toPerfectField, ringExpChar, toPerfectField
@@ -569,7 +569,7 @@ theorem isPurelyInseparable_adjoin_iff_pow_mem
 
 中文:
 定理 isPurelyInseparable_adjoin_iff_pow_mem
-  条件: (q : 自然数) [hF : ExpChar F q] {S : Set E}
+  条件: (q : 自然数) [hF : ExpChar F q] {S : 集合 E}
   证明: by
   simp_rw [← le_perfectClosure_iff, adjoin_le_iff, ← mem_perfectClosure_iff_pow_mem q,
     Set.subset_def, SetLike.mem_coe]
@@ -593,7 +593,7 @@ instance isPurelyInseparable_sup
 
 中文:
 实例 isPurelyInseparable_sup
-  签名: (L1 L2 : 整数ermediateField F E)
+  签名: (L1 L2 : 中间域 F E)
   定义体: by
   rw [← le_perfectClosure_iff] at h1 h2 ⊢
   exact sup_le h1 h2
@@ -618,7 +618,7 @@ instance isPurelyInseparable_iSup
 
 中文:
 实例 isPurelyInseparable_iSup
-  签名: {ι : Sort*} {t : ι -> 整数ermediateField F E}
+  签名: {ι : 类型层*} {t : ι -> 中间域 F E}
   定义体: by
   simp_rw [← le_perfectClosure_iff] at h ⊢
   exact iSup_le h
@@ -647,7 +647,7 @@ theorem adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable
 
 中文:
 定理 adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable
-  结论: (S : Set E)
+  结论: (S : 集合 E)
   证明: by
   set M := adjoin F ((· ^ q ^ n) '' S)
   have := expChar_of_injective_algebraMap (algebraMap F M).injective q
@@ -688,7 +688,7 @@ theorem adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable'
 
 中文:
 定理 adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable'
-  结论: [Algebra.IsSeparable F E] (S : Set E)
+  结论: [代数.是可分 F E] (S : 集合 E)
   证明: haveI := Algebra.isSeparable_tower_bot_of_isSeparable F (adjoin F S) E
   adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable F E S q n
 
@@ -710,7 +710,7 @@ theorem adjoin_eq_adjoin_pow_expChar_of_isSeparable
 
 中文:
 定理 adjoin_eq_adjoin_pow_expChar_of_isSeparable
-  结论: (S : Set E) [Algebra.IsSeparable F (adjoin F S)]
+  结论: (S : 集合 E) [代数.是可分 F (adjoin F S)]
   证明: pow_one q ▸ adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable F E S q 1
 
 Depends on / 依赖: adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable, pow_one
@@ -729,7 +729,7 @@ theorem adjoin_eq_adjoin_pow_expChar_of_isSeparable'
 
 中文:
 定理 adjoin_eq_adjoin_pow_expChar_of_isSeparable'
-  结论: [Algebra.IsSeparable F E] (S : Set E)
+  结论: [代数.是可分 F E] (S : 集合 E)
   证明: pow_one q ▸ adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable' F E S q 1
 
 Depends on / 依赖: adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable, pow_one
@@ -752,7 +752,7 @@ theorem adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable
 
 中文:
 定理 adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable
-  结论: {a : E} (ha : IsSeparable F a)
+  结论: {a : E} (ha : 是可分 F a)
   证明: by
   have := (isSeparable_adjoin_simple_iff_isSeparable F E).mpr ha
   simpa using adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable F E {a} q n
@@ -775,7 +775,7 @@ theorem adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable'
 
 中文:
 定理 adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable'
-  结论: [Algebra.IsSeparable F E] (a : E)
+  结论: [代数.是可分 F E] (a : E)
   证明: by
   simpa using adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable F E {a} q n
 
@@ -795,7 +795,7 @@ theorem adjoin_simple_eq_adjoin_pow_expChar_of_isSeparable
 
 中文:
 定理 adjoin_simple_eq_adjoin_pow_expChar_of_isSeparable
-  结论: {a : E} (ha : IsSeparable F a)
+  结论: {a : E} (ha : 是可分 F a)
   证明: pow_one q ▸ adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable F E ha q 1
 
 Depends on / 依赖: IsNoetherianRing, IsNoetherianRing.strongRankCondition, StrongRankCondition, adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable, pow_one, strongRankCondition
@@ -814,7 +814,7 @@ theorem adjoin_simple_eq_adjoin_pow_expChar_of_isSeparable'
 
 中文:
 定理 adjoin_simple_eq_adjoin_pow_expChar_of_isSeparable'
-  结论: [Algebra.IsSeparable F E] (a : E)
+  结论: [代数.是可分 F E] (a : E)
   证明: pow_one q ▸ adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable' F E a q 1
 
 Depends on / 依赖: CommRing, adjoin_simple_eq_adjoin_pow_expChar_pow_of_isSeparable, invariantBasisNumber_of_nontrivial_of_commRing, pow_one
@@ -840,8 +840,8 @@ theorem Field.span_map_pow_expChar_pow_eq_top_of_isSeparable
   have := (MonoidH
 
 中文:
-定理 Field.span_map_pow_expChar_pow_eq_top_of_isSeparable
-  结论: [Algebra.IsSeparable F E]
+定理 域.span_map_pow_expChar_pow_eq_top_of_isSeparable
+  结论: [代数.是可分 F E]
   证明: by
   rw [← Algebra.top_toSubmodule]; rw [← top_toSubalgebra]; rw [← adjoin_univ]; rw [adjoin_eq_adjoin_pow_expChar_pow_of_isSeparable' F E _ q n]; rw [adjoin_toSubalgebra_of_isAlgebraic fun x _ => Algebra.IsAlgebraic.isAlgebraic x]; rw [Set.image_univ]; rw [Algebra.adjoin_eq_span]
   have := (MonoidH
@@ -916,7 +916,7 @@ theorem LinearIndependent.map_pow_expChar_pow_of_isSeparable
 
 中文:
 定理 LinearIndependent.map_pow_expChar_pow_of_isSeparable
-  结论: [Algebra.IsSeparable F E]
+  结论: [代数.是可分 F E]
   证明: by
   classical
   rw [linearIndependent_iff_finset_linearIndependent] at h ⊢
@@ -987,8 +987,8 @@ definition Module.Basis.mapPowExpCharPowOfIsSeparable
     (Field.span_map_pow_expChar_pow_eq_top_of_isSeparable q n b.span_eq).ge
 
 中文:
-定义 Module.Basis.mapPowExpCharPowOfIsSeparable
-  签名: [Algebra.IsSeparable F E] (b : Basis ι F E)
+定义 模.基.mapPowExpCharPowOfIsSeparable
+  签名: [代数.是可分 F E] (b : 基 ι F E)
   定义体: .mk (b.linearIndependent.map_pow_expChar_pow_of_isSeparable q n)
     (Field.span_map_pow_expChar_pow_eq_top_of_isSeparable q n b.span_eq).ge
 
@@ -1061,7 +1061,7 @@ theorem minpoly.frobenius_of_isSeparable
 
 中文:
 定理 minpoly.frobenius_of_isSeparable
-  条件: [ExpChar E q] {a : E} (hsep : IsSeparable F a)
+  条件: [ExpChar E q] {a : E} (hsep : 是可分 F a)
   证明: by
   simpa using minpoly.iterateFrobenius_of_isSeparable q 1 hsep
 
@@ -1088,7 +1088,7 @@ theorem perfectField_of_perfectClosure_eq_bot
 
 中文:
 定理 perfectField_of_perfectClosure_eq_bot
-  条件: [h : PerfectField E] (eq : perfectClosure F E = ⊥)
+  条件: [h : 完美域 E] (eq : perfectClosure F E = ⊥)
   证明: by
   let p := ringExpChar F
   have := expChar_of_injective_algebraMap (algebraMap F E).injective p
@@ -1120,7 +1120,7 @@ theorem perfectField_of_isSeparable_of_perfectField_top
 
 中文:
 定理 perfectField_of_isSeparable_of_perfectField_top
-  条件: [Algebra.IsSeparable F E] [PerfectField E]
+  条件: [代数.是可分 F E] [完美域 E]
   证明: perfectField_of_perfectClosure_eq_bot F E (perfectClosure.eq_bot_of_isSeparable F E)
 
 Depends on / 依赖: eq_bot_of_isSeparable, perfectClosure, perfectClosure.eq_bot_of_isSeparable, perfectField_of_perfectClosure_eq_bot
@@ -1140,7 +1140,7 @@ theorem perfectField_iff_isSeparable_algebraicClosure
 
 中文:
 定理 perfectField_iff_isSeparable_algebraicClosure
-  条件: [IsAlgClosure F E]
+  条件: [是AlgClosure F E]
   证明: ⟨fun _ => IsSepClosure.separable, fun _ => haveI : IsAlgClosed E := IsAlgClosure.isAlgClosed F
     perfectField_of_isSeparable_of_perfectField_top F E⟩
 

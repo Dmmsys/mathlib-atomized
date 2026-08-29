@@ -110,12 +110,12 @@ structure Composition
     - blocks_sum : blocks.sum = n
 
 中文:
-结构 Composition
+结构 余mposition
   参数: (n : 自然数)
   公理与运算 (3 个):
-    - blocks : List 自然数
+    - blocks : 列表 自然数
     - blocks_pos : 对任意 {i}, i in blocks -> 0 < i
-    - blocks_sum : blocks.sum = n
+    - blocks_sum : blocks.求和 = n
 -/
 structure Composition (n : Nat) where
   /-- List of positive integers summing to `n` -/
@@ -146,12 +146,12 @@ structure CompositionAsSet
     - getLast_mem : Fin.last n in boundaries
 
 中文:
-结构 CompositionAsSet
+结构 余mpositionAsSet
   参数: (n : 自然数)
   公理与运算 (3 个):
-    - boundaries : Finset (Fin n.succ)
-    - zero_mem : (0 : Fin n.succ) in boundaries
-    - getLast_mem : Fin.last n in boundaries
+    - boundaries : 有限集 (有限集 n.succ)
+    - zero_mem : (0 : 有限集 n.succ) in boundaries
+    - getLast_mem : 有限集.last n in boundaries
 -/
 structure CompositionAsSet (n : Nat) where
   /-- Combinatorial viewpoint on a composition of `n` as consecutive integers `{0, ..., n-1}` -/
@@ -227,7 +227,7 @@ definition blocksFun
 
 中文:
 定义 blocksFun
-  签名: : Fin c.length -> 自然数
+  签名: : 有限集 c.length -> 自然数
   定义体: c.blocks.get
 
 @[simp]
@@ -296,7 +296,7 @@ theorem blocksFun_mem_blocks
 
 中文:
 定理 blocksFun_mem_blocks
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   结论: c.blocksFun i in c.blocks
   证明: get_mem _ _
 
@@ -418,7 +418,7 @@ theorem one_le_blocksFun
 
 中文:
 定理 one_le_blocksFun
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   结论: 1 <= c.blocksFun i
   证明: c.one_le_blocks (c.blocksFun_mem_blocks i)
 
@@ -442,7 +442,7 @@ theorem blocksFun_le
 
 中文:
 定理 blocksFun_le
-  条件: {n} (c : Composition n) (i : Fin c.length)
+  条件: {n} (c : 余mposition n) (i : 有限集 c.length)
   证明: c.blocks_le getElem_mem _
 
 @[simp]
@@ -716,7 +716,7 @@ theorem sizeUpTo_succ'
 
 中文:
 定理 sizeUpTo_succ'
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   证明: c.sizeUpTo_succ i.2
 
 Depends on / 依赖: c.sizeUpTo_succ, sizeUpTo_succ
@@ -760,7 +760,7 @@ theorem monotone_sizeUpTo
 
 中文:
 定理 monotone_sizeUpTo
-  结论: Monotone c.sizeUpTo
+  结论: 递增 c.sizeUpTo
   证明: monotone_sum_take _
 
 Depends on / 依赖: monotone_sum_take
@@ -781,7 +781,7 @@ definition boundary
 
 中文:
 定义 boundary
-  签名: : Fin (c.length + 1) ↪o Fin (n + 1)
+  签名: : 有限集 (c.length + 1) ↪o 有限集 (n + 1)
   定义体: (OrderEmbedding.ofStrictMono fun i => ⟨c.sizeUpTo i, Nat.lt_succ_of_le (c.sizeUpTo_le i)⟩)
     Fin.strictMono_iff_lt_succ.2 fun ⟨_, hi⟩ => c.sizeUpTo_strict_mono hi
 
@@ -827,7 +827,7 @@ theorem boundary_last
 
 中文:
 定理 boundary_last
-  结论: c.boundary (Fin.last c.length) = Fin.last n
+  结论: c.boundary (有限集.last c.length) = 有限集.last n
   证明: by
   simp [boundary, Fin.ext_iff]
 
@@ -846,7 +846,7 @@ definition boundaries
 
 中文:
 定义 boundaries
-  签名: : Finset (Fin (n + 1))
+  签名: : 有限集 (有限集 (n + 1))
   定义体: Finset.univ.map c.boundary.toEmbedding
 
 Depends on / 依赖: Finset, Finset.univ.map, boundary, c.boundary.toEmbedding, toEmbedding
@@ -887,7 +887,7 @@ definition toCompositionAsSet
 
 中文:
 定义 toCompositionAsSet
-  签名: : CompositionAsSet n where
+  签名: : 余mpositionAsSet n where
   定义体: c.boundaries
   zero_mem := by
     simp only [boundaries, Finset.mem_univ, Finset.mem_map]
@@ -945,7 +945,7 @@ definition embedding
 
 中文:
 定义 embedding
-  签名: (i : Fin c.length)
+  签名: (i : 有限集 c.length)
   定义体: (Fin.natAddOrderEmb <| c.sizeUpTo i).trans Fin.castLEOrderEmb
     calc
       c.sizeUpTo i + c.blocksFun i = c.sizeUpTo (i + 1) := (c.sizeUpTo_succ i.2).symm
@@ -974,7 +974,7 @@ theorem coe_embedding
 
 中文:
 定理 coe_embedding
-  条件: (i : Fin c.length) (j : Fin (c.blocksFun i))
+  条件: (i : 有限集 c.length) (j : 有限集 (c.blocksFun i))
   证明: rfl
 -/
 theorem coe_embedding (i : Fin c.length) (j : Fin (c.blocksFun i)) :
@@ -995,7 +995,7 @@ theorem index_exists
   simp [this, h]
 
 中文:
-定理 index_exists
+定理 index_存在
   条件: {j : 自然数} (h : j < n)
   结论: 存在 i : 自然数, j < c.sizeUpTo (i + 1) ∧ i < c.length
   证明: by
@@ -1022,7 +1022,7 @@ definition index
 
 中文:
 定义 index
-  签名: (j : Fin n)
+  签名: (j : 有限集 n)
   定义体: ⟨Nat.find (c.index_exists j.2), (Nat.find_spec (c.index_exists j.2)).2⟩
 
 Depends on / 依赖: HasColimitsOfShape, Nat.find, Nat.find_spec, c.index_exists, find_spec, index_exists
@@ -1041,7 +1041,7 @@ theorem lt_sizeUpTo_index_succ
 
 中文:
 定理 lt_sizeUpTo_index_succ
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: (j : 自然数) < c.sizeUpTo (c.index j).succ
   证明: (Nat.find_spec (c.index_exists j.2)).1
 
@@ -1070,7 +1070,7 @@ theorem sizeUpTo_index_le
 
 中文:
 定理 sizeUpTo_index_le
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: c.sizeUpTo (c.index j) <= j
   证明: by
   by_contra! H
@@ -1113,7 +1113,7 @@ definition invEmbedding
 
 中文:
 定义 invEmbedding
-  签名: (j : Fin n)
+  签名: (j : 有限集 n)
   定义体: ⟨j - c.sizeUpTo (c.index j), by
     rw [tsub_lt_iff_right]; rw [add_comm]; rw [← sizeUpTo_succ']
     · exact lt_sizeUpTo_index_succ _ _
@@ -1143,7 +1143,7 @@ theorem coe_invEmbedding
 
 中文:
 定理 coe_invEmbedding
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: (c.invEmbedding j : 自然数) = j - c.sizeUpTo (c.index j)
   证明: rfl
 
@@ -1166,7 +1166,7 @@ theorem embedding_comp_inv
 
 中文:
 定理 embedding_comp_inv
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: c.embedding (c.index j) (c.invEmbedding j) = j
   证明: by
   rw [Fin.ext_iff]
@@ -1200,7 +1200,7 @@ theorem mem_range_embedding_iff
 
 中文:
 定理 mem_range_embedding_iff
-  条件: {j : Fin n} {i : Fin c.length}
+  条件: {j : 有限集 n} {i : 有限集 c.length}
   证明: by
   constructor
   · intro h
@@ -1253,7 +1253,7 @@ theorem disjoint_range
 
 中文:
 定理 disjoint_range
-  条件: {i₁ i₂ : Fin c.length} (h : i₁ != i₂)
+  条件: {i₁ i₂ : 有限集 c.length} (h : i₁ != i₂)
   证明: by
   wlog h' : i₁ < i₂
   · exact (this c h.symm (h.lt_or_gt.resolve_left h')).symm
@@ -1295,8 +1295,8 @@ theorem mem_range_embedding
 
 中文:
 定理 mem_range_embedding
-  条件: (j : Fin n)
-  结论: j in Set.range (c.embedding (c.index j))
+  条件: (j : 有限集 n)
+  结论: j in 集合.range (c.embedding (c.index j))
   证明: by
   have : c.embedding (c.index j) (c.invEmbedding j) in Set.range (c.embedding (c.index j)) :=
     Set.mem_range_self _
@@ -1328,7 +1328,7 @@ theorem mem_range_embedding_iff'
 
 中文:
 定理 mem_range_embedding_iff'
-  条件: {j : Fin n} {i : Fin c.length}
+  条件: {j : 有限集 n} {i : 有限集 c.length}
   证明: by
   constructor
   · rw [← not_imp_not]
@@ -1366,7 +1366,7 @@ theorem index_embedding
 
 中文:
 定理 index_embedding
-  条件: (i : Fin c.length) (j : Fin (c.blocksFun i))
+  条件: (i : 有限集 c.length) (j : 有限集 (c.blocksFun i))
   证明: by
   symm
   rw [← mem_range_embedding_iff']
@@ -1391,7 +1391,7 @@ theorem invEmbedding_comp
 
 中文:
 定理 invEmbedding_comp
-  条件: (i : Fin c.length) (j : Fin (c.blocksFun i))
+  条件: (i : 有限集 c.length) (j : 有限集 (c.blocksFun i))
   证明: by
   simp_rw [coe_invEmbedding, index_embedding, coe_embedding, add_tsub_cancel_left]
 
@@ -1420,7 +1420,7 @@ definition blocksFinEquiv
 
 中文:
 定义 blocksFinEquiv
-  签名: : (Σ i : Fin c.length, Fin (c.blocksFun i)) ≃ Fin n where
+  签名: : (Σ i : 有限集 c.length, 有限集 (c.blocksFun i)) ≃ 有限集 n where
   定义体: c.embedding x.1 x.2
   invFun j := ⟨c.index j, c.invEmbedding j⟩
   left_inv x := by
@@ -1461,7 +1461,7 @@ theorem blocksFun_congr
 
 中文:
 定理 blocksFun_congr
-  结论: {n₁ n₂ : 自然数} (c₁ : Composition n₁) (c₂ : Composition n₂) (i₁ : Fin c₁.length)
+  结论: {n₁ n₂ : 自然数} (c₁ : 余mposition n₁) (c₂ : 余mposition n₂) (i₁ : 有限集 c₁.length)
   证明: by
   cases hn
   rw [← Composition.ext_iff] at hc
@@ -1500,7 +1500,7 @@ theorem sigma_eq_iff_blocks_eq
 
 中文:
 定理 sigma_eq_iff_blocks_eq
-  条件: {c : Σ n, Composition n} {c' : Σ n, Composition n}
+  条件: {c : Σ n, 余mposition n} {c' : Σ n, 余mposition n}
   证明: by
   refine ⟨fun H => by rw [H], fun H => ?_⟩
   rcases c with ⟨n, c⟩
@@ -1538,7 +1538,7 @@ lemma prod_prod_apply_embedding
 
 中文:
 引理 prod_prod_apply_embedding
-  条件: {A : 类型} [CommMonoid A] (a : Fin n -> A) (x : Composition n)
+  条件: {A : 类型} [交换幺半群 A] (a : 有限集 n -> A) (x : 余mposition n)
   证明: by
   simpa [Finset.prod_sigma', Finset.univ_sigma_univ] using! x.blocksFinEquiv.prod_comp a
 
@@ -1632,7 +1632,7 @@ theorem ones_blocksFun
 
 中文:
 定理 ones_blocksFun
-  条件: (n : 自然数) (i : Fin (ones n).length)
+  条件: (n : 自然数) (i : 有限集 (ones n).length)
   结论: (ones n).blocksFun i = 1
   证明: by
   simp only [blocksFun, ones, get_eq_getElem, getElem_replicate]
@@ -1660,7 +1660,7 @@ theorem ones_sizeUpTo
 中文:
 定理 ones_sizeUpTo
   条件: (n : 自然数) (i : 自然数)
-  结论: (ones n).sizeUpTo i = min i n
+  结论: (ones n).sizeUpTo i = 最小值 i n
   证明: by
   simp [sizeUpTo, ones_blocks, take_replicate]
 
@@ -1684,7 +1684,7 @@ theorem ones_embedding
 
 中文:
 定理 ones_embedding
-  条件: (i : Fin (ones n).length) (h : 0 < (ones n).blocksFun i)
+  条件: (i : 有限集 (ones n).length) (h : 0 < (ones n).blocksFun i)
   证明: by
   ext
   simpa using i.2.le
@@ -1715,7 +1715,7 @@ theorem eq_ones_iff
 
 中文:
 定理 eq_ones_iff
-  条件: {c : Composition n}
+  条件: {c : 余mposition n}
   结论: c = ones n ↔ 对任意 i in c.blocks, i = 1
   证明: by
   constructor
@@ -1757,7 +1757,7 @@ theorem ne_ones_iff
 
 中文:
 定理 ne_ones_iff
-  条件: {c : Composition n}
+  条件: {c : 余mposition n}
   结论: c != ones n ↔ 存在 i in c.blocks, 1 < i
   证明: by
   refine (not_congr eq_ones_iff).trans ?_
@@ -1793,7 +1793,7 @@ theorem eq_ones_iff_length
 
 中文:
 定理 eq_ones_iff_length
-  条件: {c : Composition n}
+  条件: {c : 余mposition n}
   结论: c = ones n ↔ c.length = n
   证明: by
   constructor
@@ -1841,7 +1841,7 @@ theorem eq_ones_iff_le_length
 
 中文:
 定理 eq_ones_iff_le_length
-  条件: {c : Composition n}
+  条件: {c : 余mposition n}
   结论: c = ones n ↔ n <= c.length
   证明: by
   simp [eq_ones_iff_length, le_antisymm_iff, c.length_le]
@@ -1927,7 +1927,7 @@ theorem single_blocksFun
 
 中文:
 定理 single_blocksFun
-  条件: {n : 自然数} (h : 0 < n) (i : Fin (single n h).length)
+  条件: {n : 自然数} (h : 0 < n) (i : 有限集 (single n h).length)
   证明: by simp [blocksFun, single]
 
 Depends on / 依赖: blocksFun, single
@@ -1949,7 +1949,7 @@ theorem single_embedding
 
 中文:
 定理 single_embedding
-  条件: {n : 自然数} (h : 0 < n) (i : Fin n)
+  条件: {n : 自然数} (h : 0 < n) (i : 有限集 n)
   证明: by
   ext
   simp
@@ -1981,7 +1981,7 @@ theorem eq_single_iff_length
 
 中文:
 定理 eq_single_iff_length
-  条件: {n : 自然数} (h : 0 < n) {c : Composition n}
+  条件: {n : 自然数} (h : 0 < n) {c : 余mposition n}
   证明: by
   constructor
   · intro H
@@ -2032,7 +2032,7 @@ theorem ne_single_iff
 
 中文:
 定理 ne_single_iff
-  条件: {n : 自然数} (hn : 0 < n) {c : Composition n}
+  条件: {n : 自然数} (hn : 0 < n) {c : 余mposition n}
   证明: by
   contrapose!
   constructor
@@ -2085,7 +2085,7 @@ definition cast
 
 中文:
 定义 cast
-  签名: (c : Composition m) (hmn : m = n)
+  签名: (c : 余mposition m) (hmn : m = n)
   定义体: c
   blocks_sum := c.blocks_sum.trans hmn
 
@@ -2109,7 +2109,7 @@ theorem cast_rfl
 
 中文:
 定理 cast_rfl
-  条件: (c : Composition n)
+  条件: (c : 余mposition n)
   结论: c.cast rfl = c
   证明: rfl
 -/
@@ -2126,7 +2126,7 @@ theorem cast_heq
 
 中文:
 定理 cast_heq
-  条件: (c : Composition m) (hmn : m = n)
+  条件: (c : 余mposition m) (hmn : m = n)
   结论: c.cast hmn ≍ c
   证明: by subst m; rfl
 -/
@@ -2144,7 +2144,7 @@ theorem cast_eq_cast
 
 中文:
 定理 cast_eq_cast
-  条件: (c : Composition m) (hmn : m = n)
+  条件: (c : 余mposition m) (hmn : m = n)
   证明: by
   subst m
   rfl
@@ -2171,7 +2171,7 @@ definition append
 
 中文:
 定义 append
-  签名: (c₁ : Composition m) (c₂ : Composition n)
+  签名: (c₁ : 余mposition m) (c₂ : 余mposition n)
   定义体: c₁.blocks ++ c₂.blocks
   blocks_pos := by
     intro i hi
@@ -2205,7 +2205,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: (c : Composition n)
+  签名: (c : 余mposition n)
   定义体: c.blocks.reverse
   blocks_pos hi := c.blocks_pos (mem_reverse.mp hi)
   blocks_sum := by simp
@@ -2231,7 +2231,7 @@ lemma reverse_reverse
 
 中文:
 引理 reverse_reverse
-  条件: (c : Composition n)
+  条件: (c : 余mposition n)
   结论: c.reverse.reverse = c
   证明: Composition.ext List.reverse_reverse _
 
@@ -2250,7 +2250,7 @@ lemma reverse_involutive
 
 中文:
 引理 reverse_involutive
-  结论: Function.Involutive (@reverse n)
+  结论: 函数.对合 (@reverse n)
   证明: reverse_reverse
 
 Depends on / 依赖: reverse_reverse
@@ -2266,7 +2266,7 @@ lemma reverse_bijective
 
 中文:
 引理 reverse_bijective
-  结论: Function.Bijective (@reverse n)
+  结论: 函数.双射 (@reverse n)
   证明: reverse_involutive.bijective
 
 Depends on / 依赖: bijective, reverse_involutive, reverse_involutive.bijective
@@ -2282,7 +2282,7 @@ lemma reverse_injective
 
 中文:
 引理 reverse_injective
-  结论: Function.Injective (@reverse n)
+  结论: 函数.单射 (@reverse n)
   证明: reverse_involutive.injective
 
 Depends on / 依赖: injective, reverse_involutive, reverse_involutive.injective
@@ -2300,7 +2300,7 @@ lemma reverse_surjective
 
 中文:
 引理 reverse_surjective
-  结论: Function.Surjective (@reverse n)
+  结论: 函数.满射 (@reverse n)
   证明: reverse_involutive.surjective
 
 @[simp]
@@ -2323,7 +2323,7 @@ lemma reverse_inj
 
 中文:
 引理 reverse_inj
-  条件: {c₁ c₂ : Composition n}
+  条件: {c₁ c₂ : 余mposition n}
   结论: c₁.reverse = c₂.reverse ↔ c₁ = c₂
   证明: reverse_injective.eq_iff
 
@@ -2390,7 +2390,7 @@ lemma reverse_eq_ones
 
 中文:
 引理 reverse_eq_ones
-  条件: {c : Composition n}
+  条件: {c : 余mposition n}
   结论: c.reverse = ones n ↔ c = ones n
   证明: reverse_injective.eq_iff' reverse_ones
 
@@ -2412,7 +2412,7 @@ lemma reverse_eq_single
 
 中文:
 引理 reverse_eq_single
-  条件: {hn : 0 < n} {c : Composition n}
+  条件: {hn : 0 < n} {c : 余mposition n}
   证明: reverse_injective.eq_iff' reverse_single _
 
 Depends on / 依赖: eq_iff, reverse_injective, reverse_injective.eq_iff, reverse_single
@@ -2431,7 +2431,7 @@ lemma reverse_append
 
 中文:
 引理 reverse_append
-  条件: (c₁ : Composition m) (c₂ : Composition n)
+  条件: (c₁ : 余mposition m) (c₂ : 余mposition n)
   证明: Composition.ext by simp
 
 Depends on / 依赖: Composition, Composition.ext
@@ -2460,7 +2460,7 @@ single_append k l.sum ⟨l, fun hi => blocks_pos mem_cons_of_mem _ hi, rfl⟩
 
 中文:
 定义 recOnSingleAppend
-  签名: {motive : 对任意 n, Composition n -> Sort*} {n : 自然数} (c : Composition n)
+  签名: {motive : 对任意 n, 余mposition n -> 类型层*} {n : 自然数} (c : 余mposition n)
   定义体: match n, c with
   | _, ⟨blocks, blocks_pos, rfl⟩ =>
     match blocks with
@@ -2503,7 +2503,7 @@ definition recOnAppendSingle
 
 中文:
 定义 recOnAppendSingle
-  签名: {motive : 对任意 n, Composition n -> Sort*} {n : 自然数} (c : Composition n)
+  签名: {motive : 对任意 n, 余mposition n -> 类型层*} {n : 自然数} (c : 余mposition n)
   定义体: reverse_reverse c ▸ c.reverse.recOnSingleAppend zero fun k n c ih => by
     convert! append_single k n c.reverse ih using 1
     · apply add_comm
@@ -2549,7 +2549,7 @@ definition splitWrtCompositionAux
 
 中文:
 定义 splitWrtCompositionAux
-  签名: : List α -> List 自然数 -> List (List α)
+  签名: : 列表 α -> 列表 自然数 -> 列表 (列表 α)
   定义体: l.splitAt n
     l₁::splitWrtCompositionAux l₂ ns
 
@@ -2573,7 +2573,7 @@ definition splitWrtComposition
 
 中文:
 定义 splitWrtComposition
-  签名: (l : List α) (c : Composition n)
+  签名: (l : 列表 α) (c : 余mposition n)
   定义体: splitWrtCompositionAux l c.blocks
 
 @[local simp]
@@ -2595,7 +2595,7 @@ theorem splitWrtCompositionAux_cons
 
 中文:
 定理 splitWrtCompositionAux_cons
-  条件: (l : List α) (n ns)
+  条件: (l : 列表 α) (n ns)
   证明: by
   simp [splitWrtCompositionAux]
 
@@ -2618,7 +2618,7 @@ theorem length_splitWrtCompositionAux
 
 中文:
 定理 length_splitWrtCompositionAux
-  条件: (l : List α) (ns)
+  条件: (l : 列表 α) (ns)
   证明: by
     induction ns generalizing l
     · simp [splitWrtCompositionAux, *]
@@ -2645,7 +2645,7 @@ theorem length_splitWrtComposition
 
 中文:
 定理 length_splitWrtComposition
-  条件: (l : List α) (c : Composition n)
+  条件: (l : 列表 α) (c : 余mposition n)
   证明: length_splitWrtCompositionAux _ _
 
 Depends on / 依赖: length_splitWrtCompositionAux
@@ -2668,7 +2668,7 @@ theorem map_length_splitWrtCompositionAux
 
 中文:
 定理 map_length_splitWrtCompositionAux
-  条件: {ns : List 自然数}
+  条件: {ns : 列表 自然数}
   证明: by
   induction ns with
   | nil => simp [splitWrtCompositionAux]
@@ -2692,7 +2692,7 @@ theorem map_length_splitWrtComposition
 
 中文:
 定理 map_length_splitWrtComposition
-  条件: (l : List α) (c : Composition l.length)
+  条件: (l : 列表 α) (c : 余mposition l.length)
   证明: map_length_splitWrtCompositionAux (le_of_eq c.blocks_sum)
 
 Depends on / 依赖: blocks_sum, c.blocks_sum, le_of_eq, map_length_splitWrtCompositionAux
@@ -2715,7 +2715,7 @@ theorem length_pos_of_mem_splitWrtComposition
 
 中文:
 定理 length_pos_of_mem_splitWrtComposition
-  结论: {l l' : List α} {c : Composition l.length}
+  结论: {l l' : 列表 α} {c : 余mposition l.length}
   证明: by
   have : l'.length in (l.splitWrtComposition c).map List.length :=
     List.mem_map_of_mem h
@@ -2743,7 +2743,7 @@ theorem sum_take_map_length_splitWrtComposition
 
 中文:
 定理 sum_take_map_length_splitWrtComposition
-  条件: (l : List α) (c : Composition l.length) (i : 自然数)
+  条件: (l : 列表 α) (c : 余mposition l.length) (i : 自然数)
   证明: by
   congr
   exact map_length_splitWrtComposition l c
@@ -2773,7 +2773,7 @@ theorem getElem_splitWrtCompositionAux
 
 中文:
 定理 getElem_splitWrtCompositionAux
-  结论: (l : List α) (ns : List 自然数) {i : 自然数}
+  结论: (l : 列表 α) (ns : 列表 自然数) {i : 自然数}
   证明: by
   induction ns generalizing l i with
   | nil => cases hi
@@ -2809,7 +2809,7 @@ theorem getElem_splitWrtComposition'
 
 中文:
 定理 getElem_splitWrtComposition'
-  结论: (l : List α) (c : Composition n) {i : 自然数}
+  结论: (l : 列表 α) (c : 余mposition n) {i : 自然数}
   证明: getElem_splitWrtCompositionAux _ _ hi
 
 Depends on / 依赖: getElem_splitWrtCompositionAux
@@ -2829,7 +2829,7 @@ theorem getElem_splitWrtComposition
 
 中文:
 定理 getElem_splitWrtComposition
-  结论: (l : List α) (c : Composition n)
+  结论: (l : 列表 α) (c : 余mposition n)
   证明: getElem_splitWrtComposition' _ _ h
 
 Depends on / 依赖: getElem_splitWrtComposition
@@ -2857,7 +2857,7 @@ theorem flatten_splitWrtCompositionAux
 
 中文:
 定理 flatten_splitWrtCompositionAux
-  条件: {ns : List 自然数}
+  条件: {ns : 列表 自然数}
   证明: by
   induction ns with
   | nil => exact fun h => (length_eq_zero_iff.1 h.symm).symm
@@ -2894,7 +2894,7 @@ theorem flatten_splitWrtComposition
 
 中文:
 定理 flatten_splitWrtComposition
-  条件: (l : List α) (c : Composition l.length)
+  条件: (l : 列表 α) (c : 余mposition l.length)
   证明: flatten_splitWrtCompositionAux c.blocks_sum
 
 Depends on / 依赖: blocks_sum, c.blocks_sum, flatten_splitWrtCompositionAux
@@ -2918,7 +2918,7 @@ theorem splitWrtComposition_flatten
 
 中文:
 定理 splitWrtComposition_flatten
-  结论: (L : List (List α)) (c : Composition L.flatten.length)
+  结论: (L : 列表 (列表 α)) (c : 余mposition L.flatten.length)
   证明: by
   simp only [and_self_iff, eq_iff_flatten_eq, flatten_splitWrtComposition,
     map_length_splitWrtComposition, h]
@@ -3038,7 +3038,7 @@ theorem compositionAsSet_card
 中文:
 定理 compositionAsSet_card
   条件: (n : 自然数)
-  结论: Fintype.card (CompositionAsSet n) = 2 ^ (n - 1)
+  结论: 有限类型.card (余mpositionAsSet n) = 2 ^ (n - 1)
   证明: by
   have : Fintype.card (Finset (Fin (n - 1))) = 2 ^ (n - 1) := by simp
   rw [← this]
@@ -3065,7 +3065,7 @@ theorem boundaries_nonempty
 
 中文:
 定理 boundaries_nonempty
-  结论: c.boundaries.Nonempty
+  结论: c.boundaries.非空
   证明: ⟨0, c.zero_mem⟩
 
 Depends on / 依赖: c.zero_mem, zero_mem
@@ -3083,7 +3083,7 @@ theorem card_boundaries_pos
 
 中文:
 定理 card_boundaries_pos
-  结论: 0 < Finset.card c.boundaries
+  结论: 0 < 有限集.card c.boundaries
   证明: Finset.card_pos.mpr c.boundaries_nonempty
 
 Depends on / 依赖: Finset, Finset.card_pos.mpr, boundaries_nonempty, c.boundaries_nonempty, card_pos
@@ -3161,7 +3161,7 @@ theorem lt_length
 
 中文:
 定理 lt_length
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   结论: (i : 自然数) + 1 < c.boundaries.card
   证明: lt_tsub_iff_right.mp i.2
 
@@ -3181,7 +3181,7 @@ theorem lt_length'
 
 中文:
 定理 lt_length'
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   结论: (i : 自然数) < c.boundaries.card
   证明: lt_of_le_of_lt (Nat.le_succ i) (c.lt_length i)
 
@@ -3202,7 +3202,7 @@ definition boundary
 
 中文:
 定义 boundary
-  签名: : Fin c.boundaries.card ↪o Fin (n + 1)
+  签名: : 有限集 c.boundaries.card ↪o 有限集 (n + 1)
   定义体: c.boundaries.orderEmbOfFin rfl
 
 @[simp]
@@ -3227,7 +3227,7 @@ theorem boundary_zero
 
 中文:
 定理 boundary_zero
-  结论: (c.boundary ⟨0, c.card_boundaries_pos⟩ : Fin (n + 1)) = 0
+  结论: (c.boundary ⟨0, c.card_boundaries_pos⟩ : 有限集 (n + 1)) = 0
   证明: by
   rw [boundary]; rw [Finset.orderEmbOfFin_zero rfl c.card_boundaries_pos]
   exact le_antisymm (Finset.min'_le _ _ c.zero_mem) (Fin.zero_le _)
@@ -3253,7 +3253,7 @@ theorem boundary_length
 
 中文:
 定理 boundary_length
-  结论: c.boundary ⟨c.length, c.length_lt_card_boundaries⟩ = Fin.last n
+  结论: c.boundary ⟨c.length, c.length_lt_card_boundaries⟩ = 有限集.last n
   证明: by
   convert! Finset.orderEmbOfFin_last rfl c.card_boundaries_pos
   exact le_antisymm (Finset.le_max' _ _ c.getLast_mem) (Fin.le_last _)
@@ -3274,7 +3274,7 @@ definition blocksFun
 
 中文:
 定义 blocksFun
-  签名: (i : Fin c.length)
+  签名: (i : 有限集 c.length)
   定义体: c.boundary ⟨(i : Nat) + 1, c.lt_length i⟩ - c.boundary ⟨i, c.lt_length' i⟩
 
 Depends on / 依赖: boundary, c.boundary, c.lt_length, lt_length
@@ -3295,7 +3295,7 @@ theorem blocksFun_pos
 
 中文:
 定理 blocksFun_pos
-  条件: (i : Fin c.length)
+  条件: (i : 有限集 c.length)
   结论: 0 < c.blocksFun i
   证明: haveI : (⟨i, c.lt_length' i⟩ : Fin c.boundaries.card) < ⟨i + 1, c.lt_length i⟩ :=
     Nat.lt_succ_self _
@@ -3320,7 +3320,7 @@ definition blocks
 
 中文:
 定义 blocks
-  签名: (c : CompositionAsSet n)
+  签名: (c : 余mpositionAsSet n)
   定义体: ofFn c.blocksFun
 
 @[simp]
@@ -3412,8 +3412,8 @@ theorem mem_boundaries_iff_exists_blocks_sum_take_eq
     convert! (c.boundarie
 
 中文:
-定理 mem_boundaries_iff_exists_blocks_sum_take_eq
-  条件: {j : Fin (n + 1)}
+定理 mem_boundaries_iff_存在_blocks_sum_take_eq
+  条件: {j : 有限集 (n + 1)}
   证明: by
   constructor
   · intro hj
@@ -3456,7 +3456,7 @@ theorem blocks_sum
 
 中文:
 定理 blocks_sum
-  结论: c.blocks.sum = n
+  结论: c.blocks.求和 = n
   证明: by
   have : c.blocks.take c.length = c.blocks := take_of_length_le (by simp [blocks])
   rw [← this]; rw [c.blocks_partial_sum c.length_lt_card_boundaries]; rw [c.boundary_length]
@@ -3481,7 +3481,7 @@ definition toComposition
 
 中文:
 定义 toComposition
-  签名: : Composition n where
+  签名: : 余mposition n where
   定义体: c.blocks
   blocks_pos := by simp only [blocks, forall_mem_ofFn_iff, blocksFun_pos c, forall_true_iff]
   blocks_sum := c.blocks_sum
@@ -3517,8 +3517,8 @@ theorem Composition.toCompositionAsSet_length
 @[simp]
 
 中文:
-定理 Composition.toCompositionAsSet_length
-  条件: (c : Composition n)
+定理 余mposition.toCompositionAsSet_length
+  条件: (c : 余mposition n)
   证明: by
   simp [Composition.toCompositionAsSet, CompositionAsSet.length, c.card_boundaries_eq_succ_length]
 
@@ -3543,8 +3543,8 @@ theorem CompositionAsSet.toComposition_length
 @[simp]
 
 中文:
-定理 CompositionAsSet.toComposition_length
-  条件: (c : CompositionAsSet n)
+定理 余mpositionAsSet.toComposition_length
+  条件: (c : 余mpositionAsSet n)
   证明: by
   simp [CompositionAsSet.toComposition, Composition.length]
 
@@ -3573,8 +3573,8 @@ theorem Composition.toCompositionAsSet_blocks
   have i_lt
 
 中文:
-定理 Composition.toCompositionAsSet_blocks
-  条件: (c : Composition n)
+定理 余mposition.toCompositionAsSet_blocks
+  条件: (c : 余mposition n)
   证明: by
   let d := c.toCompositionAsSet
   change d.blocks = c.blocks
@@ -3618,8 +3618,8 @@ theorem CompositionAsSet.toComposition_blocks
 @[simp]
 
 中文:
-定理 CompositionAsSet.toComposition_blocks
-  条件: (c : CompositionAsSet n)
+定理 余mpositionAsSet.toComposition_blocks
+  条件: (c : 余mpositionAsSet n)
   证明: rfl
 
 @[simp]
@@ -3643,8 +3643,8 @@ theorem CompositionAsSet.toComposition_boundaries
 @[simp]
 
 中文:
-定理 CompositionAsSet.toComposition_boundaries
-  条件: (c : CompositionAsSet n)
+定理 余mpositionAsSet.toComposition_boundaries
+  条件: (c : 余mpositionAsSet n)
   证明: by
   ext ⟨j, hj⟩
   simp [c.mem_boundaries_iff_exists_blocks_sum_take_eq, Composition.boundaries,
@@ -3670,8 +3670,8 @@ theorem Composition.toCompositionAsSet_boundaries
   proof: rfl
 
 中文:
-定理 Composition.toCompositionAsSet_boundaries
-  条件: (c : Composition n)
+定理 余mposition.toCompositionAsSet_boundaries
+  条件: (c : 余mposition n)
   证明: rfl
 -/
 theorem Composition.toCompositionAsSet_boundaries (c : Composition n) :
@@ -3749,7 +3749,7 @@ theorem composition_card
 中文:
 定理 composition_card
   条件: (n : 自然数)
-  结论: Fintype.card (Composition n) = 2 ^ (n - 1)
+  结论: 有限类型.card (余mposition n) = 2 ^ (n - 1)
   证明: by
   rw [← compositionAsSet_card n]
   exact Fintype.card_congr (compositionEquiv n)

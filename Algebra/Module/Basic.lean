@@ -40,8 +40,8 @@ theorem Units.neg_smul
 @[simp]
 
 中文:
-定理 Units.neg_smul
-  条件: [Ring R] [AddCommGroup M] [Module R M] (u : Rˣ) (x : M)
+定理 单位群.neg_smul
+  条件: [环 R] [加法交换群 M] [模 R M] (u : Rˣ) (x : M)
   证明: by
   rw [Units.smul_def]; rw [Units.val_neg]; rw [_root_.neg_smul]; rw [Units.smul_def]
 
@@ -64,7 +64,7 @@ theorem invOf_two_smul_add_invOf_two_smul
 
 中文:
 定理 invOf_two_smul_add_invOf_two_smul
-  结论: (R) [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: (R) [半环 R] [加法交换幺半群 M] [模 R M]
   证明: Convex.combo_self invOf_two_add_invOf_two _
 
 Depends on / 依赖: Convex, Convex.combo_self, combo_self, invOf_two_add_invOf_two
@@ -92,7 +92,7 @@ theorem map_inv_natCast_smul
 
 中文:
 定理 map_inv_natCast_smul
-  结论: [AddCommMonoid M] [AddCommMonoid M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换幺半群 M] [加法交换幺半群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by
   by_cases hR : (n : R) = 0 <;> by_cases hS : (n : S) = 0
   · simp [hR, hS, map_zero f]
@@ -136,7 +136,7 @@ theorem map_inv_intCast_smul
 
 中文:
 定理 map_inv_intCast_smul
-  结论: [AddCommGroup M] [AddCommGroup M₂] {F : 类型} [FunLike F M M₂]
+  结论: [加法交换群 M] [加法交换群 M₂] {F : 类型} [函数状 F M M₂]
   证明: by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
   · rw [Int.cast_natCast, Int.cast_natCast, map_inv_natCast_smul _ R S]
@@ -163,7 +163,7 @@ theorem inv_natCast_smul_eq
 
 中文:
 定理 inv_natCast_smul_eq
-  结论: {E : 类型} (R S : 类型) [AddCommMonoid E] [DivisionSemiring R]
+  结论: {E : 类型} (R S : 类型) [加法交换幺半群 E] [除半环 R]
   证明: map_inv_natCast_smul (AddMonoidHom.id E) R S n x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, map_inv_natCast_smul
@@ -183,7 +183,7 @@ theorem inv_intCast_smul_eq
 
 中文:
 定理 inv_intCast_smul_eq
-  结论: {E : 类型} (R S : 类型) [AddCommGroup E] [DivisionRing R]
+  结论: {E : 类型} (R S : 类型) [加法交换群 E] [除环 R]
   证明: map_inv_intCast_smul (AddMonoidHom.id E) R S n x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, map_inv_intCast_smul
@@ -202,7 +202,7 @@ theorem inv_natCast_smul_comm
 
 中文:
 定理 inv_natCast_smul_comm
-  结论: {α E : 类型} (R : 类型) [AddCommMonoid E] [DivisionSemiring R]
+  结论: {α E : 类型} (R : 类型) [加法交换幺半群 E] [除半环 R]
   证明: (map_inv_natCast_smul (DistribSMul.toAddMonoidHom E s) R R n x).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_inv_natCast_smul, toAddMonoidHom
@@ -222,7 +222,7 @@ theorem inv_intCast_smul_comm
 
 中文:
 定理 inv_intCast_smul_comm
-  结论: {α E : 类型} (R : 类型) [AddCommGroup E] [DivisionRing R]
+  结论: {α E : 类型} (R : 类型) [加法交换群 E] [除环 R]
   证明: (map_inv_intCast_smul (DistribSMul.toAddMonoidHom E s) R R n x).symm
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_inv_intCast_smul, toAddMonoidHom
@@ -245,7 +245,7 @@ hfg by rw [Pi.smul_apply', hf, zero_smul]
 
 中文:
 引理 support_smul_subset_left
-  条件: [Zero R] [Zero M] [SMulWithZero R M] (f : α -> R) (g : α -> M)
+  条件: [零 R] [零 M] [带零标量乘法 R M] (f : α -> R) (g : α -> M)
   证明: fun x hfg hf =>
 hfg by rw [Pi.smul_apply', hf, zero_smul]
 -/
@@ -265,7 +265,7 @@ lemma support_smul_subset_right
 
 中文:
 引理 support_smul_subset_right
-  条件: [Zero M] [SMulZeroClass R M] (f : α -> R) (g : α -> M)
+  条件: [零 M] [SMulZero类 R M] (f : α -> R) (g : α -> M)
   证明: fun x hbf hf => hbf by rw [Pi.smul_apply', hf, smul_zero]
 
 Depends on / 依赖: Pi.smul_apply, smul_apply, smul_zero
@@ -284,7 +284,7 @@ lemma support_const_smul_of_ne_zero
 
 中文:
 引理 support_const_smul_of_ne_zero
-  结论: [Semiring R] [IsDomain R] [AddCommMonoid M] [Module R M]
+  结论: [半环 R] [是整环 R] [加法交换幺半群 M] [模 R M]
   证明: ext fun _ => smul_ne_zero_iff_right hc
 
 Depends on / 依赖: smul_ne_zero_iff_right
@@ -303,7 +303,7 @@ lemma support_smul
 
 中文:
 引理 support_smul
-  结论: [Semiring R] [IsDomain R] [AddCommMonoid M] [Module R M]
+  结论: [半环 R] [是整环 R] [加法交换幺半群 M] [模 R M]
   证明: ext fun _ => smul_ne_zero_iff
 
 Depends on / 依赖: smul_ne_zero_iff
@@ -322,7 +322,7 @@ lemma support_const_smul_subset
 
 中文:
 引理 support_const_smul_subset
-  条件: [Zero M] [SMulZeroClass R M] (a : R) (f : α -> M)
+  条件: [零 M] [SMulZero类 R M] (a : R) (f : α -> M)
   证明: support_smul_subset_right (fun _ => a) f
 
 Depends on / 依赖: support_smul_subset_right
@@ -349,7 +349,7 @@ lemma indicator_smul_apply
 
 中文:
 引理 indicator_smul_apply
-  条件: (s : Set α) (r : α -> R) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (r : α -> R) (f : α -> M) (a : α)
   证明: by
   dsimp only [indicator]
   split_ifs
@@ -373,7 +373,7 @@ lemma indicator_smul
 
 中文:
 引理 indicator_smul
-  条件: (s : Set α) (r : α -> R) (f : α -> M)
+  条件: (s : 集合 α) (r : α -> R) (f : α -> M)
   证明: funext indicator_smul_apply s r f
 
 Depends on / 依赖: indicator_smul_apply
@@ -392,7 +392,7 @@ lemma indicator_const_smul_apply
 
 中文:
 引理 indicator_const_smul_apply
-  条件: (s : Set α) (r : R) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (r : R) (f : α -> M) (a : α)
   证明: indicator_smul_apply s (fun _ => r) f a
 
 Depends on / 依赖: indicator_smul_apply
@@ -411,7 +411,7 @@ lemma indicator_const_smul
 
 中文:
 引理 indicator_const_smul
-  条件: (s : Set α) (r : R) (f : α -> M)
+  条件: (s : 集合 α) (r : R) (f : α -> M)
   证明: funext indicator_const_smul_apply s r f
 
 Depends on / 依赖: indicator_const_smul_apply
@@ -438,7 +438,7 @@ lemma indicator_smul_apply_left
 
 中文:
 引理 indicator_smul_apply_left
-  条件: (s : Set α) (r : α -> R) (f : α -> M) (a : α)
+  条件: (s : 集合 α) (r : α -> R) (f : α -> M) (a : α)
   证明: by
   dsimp only [indicator]
   split_ifs
@@ -462,7 +462,7 @@ lemma indicator_smul_left
 
 中文:
 引理 indicator_smul_left
-  条件: (s : Set α) (r : α -> R) (f : α -> M)
+  条件: (s : 集合 α) (r : α -> R) (f : α -> M)
   证明: funext indicator_smul_apply_left _ _ _
 
 Depends on / 依赖: indicator_smul_apply_left
@@ -481,7 +481,7 @@ lemma indicator_smul_const_apply
 
 中文:
 引理 indicator_smul_const_apply
-  条件: (s : Set α) (r : α -> R) (m : M) (a : α)
+  条件: (s : 集合 α) (r : α -> R) (m : M) (a : α)
   证明: indicator_smul_apply_left _ _ _ _
 
 Depends on / 依赖: indicator_smul_apply_left
@@ -499,7 +499,7 @@ lemma indicator_smul_const
 
 中文:
 引理 indicator_smul_const
-  条件: (s : Set α) (r : α -> R) (m : M)
+  条件: (s : 集合 α) (r : α -> R) (m : M)
   证明: funext indicator_smul_const_apply _ _ _
 
 Depends on / 依赖: indicator_smul_const_apply
@@ -525,7 +525,7 @@ lemma smul_indicator_one_apply
 
 中文:
 引理 smul_indicator_one_apply
-  条件: (s : Set α) (r : R) (a : α)
+  条件: (s : 集合 α) (r : R) (a : α)
   证明: by
   simp_rw [← indicator_const_smul_apply, Pi.one_apply, smul_eq_mul, mul_one]
 

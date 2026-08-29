@@ -50,7 +50,7 @@ definition padicNorm
 
 中文:
 定义 padicNorm
-  签名: (p : 自然数) (q : Rat)
+  签名: (p : 自然数) (q : 有理数)
   定义体: if q = 0 then 0 else (p : Rat) ^ (-padicValRat p q)
 
 Depends on / 依赖: padicValRat
@@ -76,7 +76,7 @@ theorem eq_zpow_of_nonzero
 
 中文:
 定理 eq_zpow_of_nonzero
-  条件: {q : Rat} (hq : q != 0)
+  条件: {q : 有理数} (hq : q != 0)
   证明: by simp [hq, padicNorm]
 -/
 protected theorem eq_zpow_of_nonzero {q : Rat} (hq : q != 0) :
@@ -98,7 +98,7 @@ theorem nonneg
 
 中文:
 定理 nonneg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: 0 <= padicNorm p q
   证明: if hq : q = 0 then by simp [hq, padicNorm]
   else by
@@ -160,7 +160,7 @@ theorem padicNorm_p
 中文:
 定理 padicNorm_p
   条件: (hp : 1 < p)
-  结论: padicNorm p p = (p : Rat)⁻¹
+  结论: padicNorm p p = (p : 有理数)⁻¹
   证明: by
   simp [padicNorm, (pos_of_gt hp).ne', padicValNat.self hp]
 
@@ -184,8 +184,8 @@ theorem padicNorm_p_of_prime
 
 中文:
 定理 padicNorm_p_of_prime
-  条件: [Fact p.Prime]
-  结论: padicNorm p p = (p : Rat)⁻¹
+  条件: [Fact p.素]
+  结论: padicNorm p p = (p : 有理数)⁻¹
   证明: padicNorm_p Nat.Prime.one_lt Fact.out
 
 Depends on / 依赖: Fact.out, Nat.Prime.one_lt, one_lt, padicNorm_p
@@ -206,7 +206,7 @@ theorem padicNorm_of_prime_of_ne
 
 中文:
 定理 padicNorm_of_prime_of_ne
-  结论: {q : 自然数} [p_prime : Fact p.Prime] [q_prime : Fact q.Prime]
+  结论: {q : 自然数} [p_prime : Fact p.素] [q_prime : Fact q.素]
   证明: by
   have p : padicValRat p q = 0 := mod_cast padicValNat_primes ne
   rw [padicNorm]; rw [p]
@@ -256,7 +256,7 @@ theorem padicNorm_p_lt_one_of_prime
 
 中文:
 定理 padicNorm_p_lt_one_of_prime
-  条件: [Fact p.Prime]
+  条件: [Fact p.素]
   结论: padicNorm p p < 1
   证明: padicNorm_p_lt_one Nat.Prime.one_lt Fact.out
 
@@ -276,8 +276,8 @@ theorem values_discrete
 
 中文:
 定理 values_discrete
-  条件: {q : Rat} (hq : q != 0)
-  结论: 存在 z : 整数, padicNorm p q = (p : Rat) ^ (-z)
+  条件: {q : 有理数} (hq : q != 0)
+  结论: 存在 z : 整数, padicNorm p q = (p : 有理数) ^ (-z)
   证明: ⟨padicValRat p q, by simp [padicNorm, hq]⟩
 -/
 protected theorem values_discrete {q : Rat} (hq : q != 0) : exists z : Int, padicNorm p q = (p : Rat) ^ (-z) :=
@@ -296,7 +296,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: padicNorm p (-q) = padicNorm p q
   证明: if hq : q = 0 then by simp [hq] else by simp [padicNorm, hq]
 -/
@@ -319,7 +319,7 @@ theorem nonzero
 
 中文:
 定理 nonzero
-  条件: {q : Rat} (hq : q != 0)
+  条件: {q : 有理数} (hq : q != 0)
   结论: padicNorm p q != 0
   证明: by
   rw [padicNorm.eq_zpow_of_nonzero hq]
@@ -347,7 +347,7 @@ theorem zero_of_padicNorm_eq_zero
 
 中文:
 定理 zero_of_padicNorm_eq_zero
-  条件: {q : Rat} (h : padicNorm p q = 0)
+  条件: {q : 有理数} (h : padicNorm p q = 0)
   结论: q = 0
   证明: by
   apply by_contradiction; intro hq
@@ -383,7 +383,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   结论: padicNorm p (q * r) = padicNorm p q * padicNorm p r
   证明: if hq : q = 0 then by simp [hq]
   else
@@ -414,7 +414,7 @@ theorem div
 
 中文:
 定理 div
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   结论: padicNorm p (q / r) = padicNorm p q / padicNorm p r
   证明: if hr : r = 0 then by simp [hr]
   else eq_div_of_mul_eq (padicNorm.nonzero hr) (by rw [← padicNorm.mul, div_mul_cancel₀ _ hr])
@@ -468,7 +468,7 @@ theorem nonarchimedean_aux
 
 中文:
 定理 nonarchimedean_aux
-  条件: {q r : Rat} (h : padicValRat p q <= padicValRat p r)
+  条件: {q r : 有理数} (h : padicValRat p q <= padicValRat p r)
   证明: have hnqp : padicNorm p q >= 0 := padicNorm.nonneg _
   have hnrp : padicNorm p r >= 0 := padicNorm.nonneg _
   if hq : q = 0 then by simp [hq, max_eq_right hnrp]
@@ -511,7 +511,7 @@ theorem nonarchimedean
 
 中文:
 定理 nonarchimedean
-  条件: {q r : Rat}
+  条件: {q r : 有理数}
   证明: by
   wlog hle : padicValRat p q <= padicValRat p r generalizing q r
   · rw [add_comm, max_comm]
@@ -539,7 +539,7 @@ theorem triangle_ineq
 
 中文:
 定理 triangle_ineq
-  条件: (q r : Rat)
+  条件: (q r : 有理数)
   结论: padicNorm p (q + r) <= padicNorm p q + padicNorm p r
   证明: calc
     padicNorm p (q + r) <= max (padicNorm p q) (padicNorm p r) := padicNorm.nonarchimedean
@@ -567,8 +567,8 @@ theorem sub
 
 中文:
 定理 sub
-  条件: {q r : Rat}
-  结论: padicNorm p (q - r) <= max (padicNorm p q) (padicNorm p r)
+  条件: {q r : 有理数}
+  结论: padicNorm p (q - r) <= 最大值 (padicNorm p q) (padicNorm p r)
   证明: by
   rw [sub_eq_add_neg]; rw [← padicNorm.neg r]
   exact padicNorm.nonarchimedean
@@ -590,7 +590,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAbsoluteValue (padicNorm p)
+  签名: 是绝对值 (padicNorm p)
   定义体: padicNorm.nonneg
   abv_eq_zero' := ⟨zero_of_padicNorm_eq_zero, fun hx => by simp [hx]⟩
   abv_add' := padicNorm.triangle_ineq
@@ -615,7 +615,7 @@ theorem add_eq_max_of_ne
 
 中文:
 定理 add_eq_max_of_ne
-  条件: {q r : Rat} (hne : padicNorm p q != padicNorm p r)
+  条件: {q r : 有理数} (hne : padicNorm p q != padicNorm p r)
   证明: IsNonarchimedean.add_eq_max_of_ne (f := IsAbsoluteValue.toAbsoluteValue (padicNorm p))
     (fun _ _ => padicNorm.nonarchimedean) hne
 
@@ -647,7 +647,7 @@ theorem dvd_iff_norm_le
 中文:
 定理 dvd_iff_norm_le
   条件: {n : 自然数} {z : 整数}
-  结论: ↑(p ^ n) ∣ z ↔ padicNorm p z <= (p : Rat) ^ (-n : 整数)
+  结论: ↑(p ^ n) ∣ z ↔ padicNorm p z <= (p : 有理数) ^ (-n : 整数)
   证明: by
   unfold padicNorm; split_ifs with hz
   · norm_cast at hz
@@ -832,7 +832,7 @@ theorem not_int_of_not_padic_int
 
 中文:
 定理 not_int_of_not_padic_int
-  结论: (p : 自然数) {a : Rat} [hp : Fact (自然数.Prime p)]
+  结论: (p : 自然数) {a : 有理数} [hp : Fact (自然数.素 p)]
   证明: by
   contrapose! H
   rw [Rat.eq_num_of_isInt H]
@@ -857,7 +857,7 @@ theorem sum_lt
 
 中文:
 定理 sum_lt
-  结论: {α : 类型} {F : α -> Rat} {t : Rat} {s : Finset α} (hs : s.Nonempty)
+  结论: {α : 类型} {F : α -> 有理数} {t : 有理数} {s : 有限集 α} (hs : s.非空)
   证明: lt_of_le_of_lt (IsNonarchimedean.apply_sum_le_sup (fun _ _ => padicNorm.nonarchimedean) hs)
     (Finset.sup'_lt_iff hs).2 hF
 
@@ -879,7 +879,7 @@ theorem sum_le
 
 中文:
 定理 sum_le
-  结论: {α : 类型} {F : α -> Rat} {t : Rat} {s : Finset α} (hs : s.Nonempty)
+  结论: {α : 类型} {F : α -> 有理数} {t : 有理数} {s : 有限集 α} (hs : s.非空)
   证明: (IsNonarchimedean.apply_sum_le_sup (fun _ _ => padicNorm.nonarchimedean) hs).trans
     (Finset.sup'_le_iff hs (fun i => padicNorm p (F i))).2 hF
 
@@ -903,7 +903,7 @@ theorem sum_lt'
 
 中文:
 定理 sum_lt'
-  结论: {α : 类型} {F : α -> Rat} {t : Rat} {s : Finset α}
+  结论: {α : 类型} {F : α -> 有理数} {t : 有理数} {s : 有限集 α}
   证明: by
   obtain rfl | hs := Finset.eq_empty_or_nonempty s
   · simp [ht]
@@ -930,7 +930,7 @@ theorem sum_le'
 
 中文:
 定理 sum_le'
-  结论: {α : 类型} {F : α -> Rat} {t : Rat} {s : Finset α}
+  结论: {α : 类型} {F : α -> 有理数} {t : 有理数} {s : 有限集 α}
   证明: by
   obtain rfl | hs := Finset.eq_empty_or_nonempty s
   · simp [ht]

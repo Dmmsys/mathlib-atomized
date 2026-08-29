@@ -199,7 +199,7 @@ definition functorCoreMonoidalOfComp
 
 中文:
 定义 functorCoreMonoidalOfComp
-  签名: : F.CoreMonoidal
+  签名: : F.余reMonoidal
   定义体: by
   letI e := Lifting.iso L W G F
   refine Functor.CoreMonoidal.ofBifunctor
@@ -262,7 +262,7 @@ definition functorMonoidalOfComp
 
 中文:
 定义 functorMonoidalOfComp
-  签名: : F.Monoidal
+  签名: : F.幺半群
   定义体: (functorCoreMonoidalOfComp L W F G).toMonoidal
 
 @[reassoc]

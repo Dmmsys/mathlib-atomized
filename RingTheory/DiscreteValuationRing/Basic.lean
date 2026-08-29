@@ -64,9 +64,9 @@ class IsDiscreteValuationRing
     - not_a_field' : maximalIdeal R != ⊥
 
 中文:
-类 IsDiscreteValuationRing
-  参数: (R : 类型u) [CommRing R] [IsDomain R]
-  继承: IsPrincipalIdealRing R, IsLocalRing R
+类 是离散赋值环
+  参数: (R : 类型u) [交换环 R] [是整环 R]
+  继承: 是主理想环 R, 是局部环 R
   公理与运算 (1 个):
     - not_a_field' : maximalIdeal R != ⊥
 -/
@@ -106,7 +106,7 @@ theorem not_isField
 
 中文:
 定理 not_isField
-  结论: ¬IsField R
+  结论: ¬是域 R
   证明: IsLocalRing.isField_iff_maximalIdeal_eq.not.mpr (not_a_field R)
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.isField_iff_maximalIdeal_eq.not.mpr, isField_iff_maximalIdeal_eq, not_a_field
@@ -136,7 +136,7 @@ theorem irreducible_of_span_eq_maximalIdeal
 
 中文:
 定理 irreducible_of_span_eq_maximalIdeal
-  结论: {R : 类型} [CommSemiring R] [IsLocalRing R]
+  结论: {R : 类型} [交换半环 R] [是局部环 R]
   证明: by
   have h2 : ¬IsUnit ϖ := show ϖ in maximalIdeal R from h.symm ▸ Submodule.mem_span_singleton_self ϖ
   refine ⟨h2, ?_⟩
@@ -177,7 +177,7 @@ theorem irreducible_iff_uniformizer
 中文:
 定理 irreducible_iff_uniformizer
   条件: (ϖ : R)
-  结论: Irreducible ϖ ↔ maximalIdeal R = Ideal.span {ϖ}
+  结论: 不可约 ϖ ↔ maximalIdeal R = 理想.span {ϖ}
   证明: ⟨fun hϖ => (eq_maximalIdeal (isMaximal_of_irreducible hϖ)).symm,
     fun h => irreducible_of_span_eq_maximalIdeal ϖ
       (fun e => not_a_field R <| by rwa [h, span_singleton_eq_bot]) h⟩
@@ -198,8 +198,8 @@ theorem _root_.Irreducible.maximalIdeal_eq
   proof: (irreducible_iff_uniformizer _).mp h
 
 中文:
-定理 _root_.Irreducible.maximalIdeal_eq
-  条件: {ϖ : R} (h : Irreducible ϖ)
+定理 _root_.不可约.maximalIdeal_eq
+  条件: {ϖ : R} (h : 不可约 ϖ)
   证明: (irreducible_iff_uniformizer _).mp h
 
 Depends on / 依赖: irreducible_iff_uniformizer
@@ -221,8 +221,8 @@ theorem exists_irreducible
   exact (IsPrincipalIdealRing.principal <| maximalIdeal R).principal
 
 中文:
-定理 exists_irreducible
-  结论: 存在 ϖ : R, Irreducible ϖ
+定理 存在_irreducible
+  结论: 存在 ϖ : R, 不可约 ϖ
   证明: by
   simp_rw [irreducible_iff_uniformizer]
   exact (IsPrincipalIdealRing.principal <| maximalIdeal R).principal
@@ -242,8 +242,8 @@ theorem exists_prime
   proof: (exists_irreducible R).imp fun _ => irreducible_iff_prime.1
 
 中文:
-定理 exists_prime
-  结论: 存在 ϖ : R, Prime ϖ
+定理 存在_prime
+  结论: 存在 ϖ : R, 素 ϖ
   证明: (exists_irreducible R).imp fun _ => irreducible_iff_prime.1
 
 Depends on / 依赖: exists_irreducible, irreducible_iff_prime
@@ -272,7 +272,7 @@ theorem iff_pid_with_one_nonzero_prime
 
 中文:
 定理 iff_pid_with_one_nonzero_prime
-  条件: (R : 类型u) [CommRing R] [IsDomain R]
+  条件: (R : 类型u) [交换环 R] [是整环 R]
   证明: by
   constructor
   · intro RDVR
@@ -327,7 +327,7 @@ theorem associated_of_irreducible
 
 中文:
 定理 associated_of_irreducible
-  条件: {a b : R} (ha : Irreducible a) (hb : Irreducible b)
+  条件: {a b : R} (ha : 不可约 a) (hb : 不可约 b)
   证明: by
   rw [irreducible_iff_uniformizer] at ha hb
   rw [← span_singleton_eq_span_singleton]; rw [← ha]; rw [hb]
@@ -351,7 +351,7 @@ definition HasUnitMulPowIrreducibleFactorization
 
 中文:
 定义 HasUnitMulPowIrreducibleFactorization
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: exists p : R, Irreducible p ∧ forall {x : R}, x != 0 -> exists n : Nat, Associated (p ^ n) x
 
 Depends on / 依赖: Associated, Irreducible
@@ -436,7 +436,7 @@ theorem toUniqueFactorizationMonoid
 
 中文:
 定理 toUniqueFactorizationMonoid
-  结论: [IsCancelMulZero R]
+  结论: [是乘零消去 R]
   证明: let p := Classical.choose hR
   let spec := Classical.choose_spec hR
   UniqueFactorizationMonoid.of_exists_prime_factors fun x hx => by
@@ -497,7 +497,7 @@ theorem of_ufd_of_unique_irreducible
 
 中文:
 定理 of_ufd_of_unique_irreducible
-  结论: [UniqueFactorizationMonoid R] (h₁ : 存在 p : R, Irreducible p)
+  结论: [唯一分解幺半群 R] (h₁ : 存在 p : R, 不可约 p)
   证明: by
   obtain ⟨p, hp⟩ := h₁
   refine ⟨p, hp, ?_⟩
@@ -550,7 +550,7 @@ theorem aux_pid_of_ufd_of_unique_irreducible
 
 中文:
 定理 aux_pid_of_ufd_of_unique_irreducible
-  结论: (R : 类型u) [CommRing R]
+  结论: (R : 类型u) [交换环 R]
   证明: by
   classical
   constructor
@@ -613,7 +613,7 @@ theorem of_ufd_of_unique_irreducible
 
 中文:
 定理 of_ufd_of_unique_irreducible
-  结论: {R : 类型u} [CommRing R] [IsDomain R]
+  结论: {R : 类型u} [交换环 R] [是整环 R]
   证明: by
   rw [iff_pid_with_one_nonzero_prime]
   have PID : IsPrincipalIdealRing R := aux_pid_of_ufd_of_unique_irreducible R h₁ h₂
@@ -658,7 +658,7 @@ theorem ofHasUnitMulPowIrreducibleFactorization
 
 中文:
 定理 ofHasUnitMulPowIrreducibleFactorization
-  结论: {R : 类型u} [CommRing R] [IsDomain R]
+  结论: {R : 类型u} [交换环 R] [是整环 R]
   证明: by
   let : UniqueFactorizationMonoid R := hR.toUniqueFactorizationMonoid
   apply of_ufd_of_unique_irreducible _ hR.unique_irreducible
@@ -689,8 +689,8 @@ theorem RingEquivClass.isDiscreteValuationRing
     rw [Submodule.
 
 中文:
-定理 RingEquivClass.isDiscreteValuationRing
-  结论: {A B E : 类型} [CommRing A] [IsDomain A]
+定理 环等价类.isDiscreteValuationRing
+  结论: {A B E : 类型} [交换环 A] [是整环 A]
   证明: (isPrincipalIdealRing_iff _).1
     .of_surjective _ (EquivLike.surjective e)
   __ : IsLocalRing B := (RingEquivClass.toRingEquiv e).isLocalRing
@@ -738,7 +738,7 @@ theorem associated_pow_irreducible
 
 中文:
 定理 associated_pow_irreducible
-  条件: {x : R} (hx : x != 0) {ϖ : R} (hirr : Irreducible ϖ)
+  条件: {x : R} (hx : x != 0) {ϖ : R} (hirr : 不可约 ϖ)
   证明: by
   have : WfDvdMonoid R := IsNoetherianRing.wfDvdMonoid
   obtain ⟨fx, hfx⟩ := WfDvdMonoid.exists_factors x hx
@@ -781,7 +781,7 @@ theorem eq_unit_mul_pow_irreducible
 
 中文:
 定理 eq_unit_mul_pow_irreducible
-  条件: {x : R} (hx : x != 0) {ϖ : R} (hirr : Irreducible ϖ)
+  条件: {x : R} (hx : x != 0) {ϖ : R} (hirr : 不可约 ϖ)
   证明: by
   obtain ⟨n, hn⟩ := associated_pow_irreducible hx hirr
   obtain ⟨u, rfl⟩ := hn.symm
@@ -810,7 +810,7 @@ lemma exists_units_eq_smul_zpow_of_irreducible
   refine ⟨n
 
 中文:
-引理 exists_units_eq_smul_zpow_of_irreducible
+引理 存在_units_eq_smul_zpow_of_irreducible
   证明: by
   obtain ⟨x, y, hy, rfl⟩ := IsFractionRing.div_surjective (A := R) x
   obtain ⟨n, u, rfl⟩ := eq_unit_mul_pow_irreducible (x := x) (by simp_all) hϖ
@@ -850,7 +850,7 @@ theorem ideal_eq_span_pow_irreducible
 
 中文:
 定理 ideal_eq_span_pow_irreducible
-  条件: {s : Ideal R} (hs : s != ⊥) {ϖ : R} (hirr : Irreducible ϖ)
+  条件: {s : 理想 R} (hs : s != ⊥) {ϖ : R} (hirr : 不可约 ϖ)
   证明: by
   have gen_ne_zero : generator s != 0 := by
     rw [Ne]; rw [← eq_bot_iff_generator_eq_zero]
@@ -888,7 +888,7 @@ theorem unit_mul_pow_congr_pow
 
 中文:
 定理 unit_mul_pow_congr_pow
-  结论: {p q : R} (hp : Irreducible p) (hq : Irreducible q) (u v : Rˣ)
+  结论: {p q : R} (hp : 不可约 p) (hq : 不可约 q) (u v : Rˣ)
   证明: by
   have key : Associated (Multiset.replicate m p).prod (Multiset.replicate n q).prod := by
     rw [Multiset.prod_replicate]; rw [Multiset.prod_replicate]; rw [Associated]
@@ -930,7 +930,7 @@ theorem unit_mul_pow_congr_unit
 
 中文:
 定理 unit_mul_pow_congr_unit
-  结论: {ϖ : R} (hirr : Irreducible ϖ) (u v : Rˣ) (m n : 自然数)
+  结论: {ϖ : R} (hirr : 不可约 ϖ) (u v : Rˣ) (m n : 自然数)
   证明: by
   obtain rfl : m = n := unit_mul_pow_congr_pow hirr hirr u v m n h
   rw [← sub_eq_zero] at h
@@ -966,7 +966,7 @@ definition addVal
 
 中文:
 定义 addVal
-  签名: (R : 类型u) [CommRing R] [IsDomain R] [IsDiscreteValuationRing R]
+  签名: (R : 类型u) [交换环 R] [是整环 R] [是离散赋值环 R]
   定义体: multiplicity_addValuation (Classical.choose_spec (exists_prime R))
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec, exists_prime, multiplicity_addValuation
@@ -987,7 +987,7 @@ theorem addVal_def
 
 中文:
 定理 addVal_def
-  条件: (r : R) (u : Rˣ) {ϖ : R} (hϖ : Irreducible ϖ) (n : 自然数) (hr : r = u * ϖ ^ n)
+  条件: (r : R) (u : Rˣ) {ϖ : R} (hϖ : 不可约 ϖ) (n : 自然数) (hr : r = u * ϖ ^ n)
   证明: by
   rw [addVal]; rw [multiplicity_addValuation_apply]; rw [hr]; rw [emultiplicity_eq_of_associated_left
       (associated_of_irreducible R hϖ (Classical.choose_spec (exists_prime R)).irreducible)]; rw [emultiplicity_eq_of_associated_right (Associated.symm ⟨u]; rw [mul_comm _ _⟩)]; rw [emultiplicity
@@ -1009,7 +1009,7 @@ theorem addVal_def'
 
 中文:
 定理 addVal_def'
-  条件: (u : Rˣ) {ϖ : R} (hϖ : Irreducible ϖ) (n : 自然数)
+  条件: (u : Rˣ) {ϖ : R} (hϖ : 不可约 ϖ) (n : 自然数)
   证明: addVal_def _ u hϖ n rfl
 
 Depends on / 依赖: addVal_def
@@ -1072,7 +1072,7 @@ theorem addVal_uniformizer
 
 中文:
 定理 addVal_uniformizer
-  条件: {ϖ : R} (hϖ : Irreducible ϖ)
+  条件: {ϖ : R} (hϖ : 不可约 ϖ)
   结论: addVal R ϖ = 1
   证明: by
   simpa only [one_mul, eq_self_iff_true, Units.val_one, pow_one, forall_true_left, Nat.cast_one]
@@ -1244,7 +1244,7 @@ theorem addVal_add
 中文:
 定理 addVal_add
   条件: {a b : R}
-  结论: min (addVal R a) (addVal R b) <= addVal R (a + b)
+  结论: 最小值 (addVal R a) (addVal R b) <= addVal R (a + b)
   证明: (addVal R).map_add _ _
 
 @[simp]
@@ -1391,8 +1391,8 @@ definition idealOrderIsoENat
 
 
 中文:
-定义 idealOrderIsoENat
-  签名: : Ideal R ≃o E自然数ᵒᵈ where
+定义 idealOrderIsoE自然数
+  签名: : 理想 R ≃o E自然数ᵒᵈ where
   定义体: .toDual (addVal R (generator I))
   invFun n := n.ofDual.recTopCoe ⊥ (fun n => maximalIdeal R ^ n)
   left_inv I := by
@@ -1438,7 +1438,7 @@ theorem idealOrderIsoENat_symm_apply_coe
   proof: rfl
 
 中文:
-定理 idealOrderIsoENat_symm_apply_coe
+定理 idealOrderIsoE自然数_symm_apply_coe
   条件: (n : 自然数)
   证明: rfl
 -/
@@ -1457,8 +1457,8 @@ theorem idealOrderIsoENat_symm_apply_coe_of_irreducible
   rw [idealOrderIsoENat_symm_apply_coe]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]
 
 中文:
-定理 idealOrderIsoENat_symm_apply_coe_of_irreducible
-  条件: (n : 自然数) {ϖ : R} (hϖ : Irreducible ϖ)
+定理 idealOrderIsoE自然数_symm_apply_coe_of_irreducible
+  条件: (n : 自然数) {ϖ : R} (hϖ : 不可约 ϖ)
   证明: by
   rw [idealOrderIsoENat_symm_apply_coe]; rw [hϖ.maximalIdeal_eq]; rw [span_singleton_pow]
 
@@ -1573,7 +1573,7 @@ definition toWithBotNat
   body: addVal R x
 
 中文:
-定义 toWithBotNat
+定义 toWithBot自然数
   签名: (x : R)
   定义体: addVal R x
 
@@ -1591,7 +1591,7 @@ lemma toWithBotNat_zero
   proof: addVal_zero
 
 中文:
-引理 toWithBotNat_zero
+引理 toWithBot自然数_zero
   结论: toWithBot自然数 (R := R) 0 = ⊥
   证明: addVal_zero
 -/
@@ -1608,7 +1608,7 @@ lemma toWithBotNat_eq_bot_iff
   proof: addVal_eq_top_iff
 
 中文:
-引理 toWithBotNat_eq_bot_iff
+引理 toWithBot自然数_eq_bot_iff
   条件: (x : R)
   结论: toWithBot自然数 x = ⊥ ↔ x = 0
   证明: addVal_eq_top_iff
@@ -1627,7 +1627,7 @@ lemma bot_lt_toWithBotNat_iff
   rw [bot_lt_iff_ne_bot]; simp
 
 中文:
-引理 bot_lt_toWithBotNat_iff
+引理 bot_lt_toWithBot自然数_iff
   条件: (x : R)
   结论: ⊥ < toWithBot自然数 x ↔ x != 0
   证明: by
@@ -1655,7 +1655,7 @@ lemma toWithBotNat_le_toWithBotNat_iff
       rw [← addVal_le_iff_dvd]; rw [hvx]; r
 
 中文:
-引理 toWithBotNat_le_toWithBotNat_iff
+引理 toWithBot自然数_le_toWithBot自然数_iff
   条件: {x y : R} (hx : x != 0) (hy : y != 0)
   证明: by
   unfold toWithBotNat
@@ -1697,7 +1697,7 @@ lemma dvd_of_toWithBotNat_le_toWithBotNat
   exact (toWithBotNat_le_toWithBotNat_iff hx hy).mp hle
 
 中文:
-引理 dvd_of_toWithBotNat_le_toWithBotNat
+引理 dvd_of_toWithBot自然数_le_toWithBot自然数
   结论: (x y : R) (hx : x != 0)
   证明: by
   by_cases hy : y = 0
@@ -1738,7 +1738,7 @@ definition toEuclideanDomain
 
 中文:
 定义 toEuclideanDomain
-  签名: : EuclideanDomain R where
+  签名: : 欧几里得整环 R where
   定义体: quotient
   quotient_zero x := by simp [quotient]
   remainder := remainder
@@ -1891,7 +1891,7 @@ alias _root_.Irreducible.maximalIdeal_eq_setOf_le_v_coe :=
   _root_.Irreducible.maximalIdeal_eq_setOfPred_le_v_coe
 
 中文:
-引理 _root_.Irreducible.maximalIdeal_eq_setOfPred_le_v_coe
+引理 _root_.不可约.maximalIdeal_eq_setOfPred_le_v_coe
   证明: (Valuation.integer.integers v).maximalIdeal_eq_setOfPred_le_v_algebraMap h
 
 @[deprecated (since := "2026-07-09")]
@@ -1921,7 +1921,7 @@ alias _root_.Irreducible.maximalIdeal_pow_eq_setOf_le_v_coe_pow :=
   _root_.Irreducible.maximalIdeal_pow_eq_setOfPred_le_v_coe_pow
 
 中文:
-引理 _root_.Irreducible.maximalIdeal_pow_eq_setOfPred_le_v_coe_pow
+引理 _root_.不可约.maximalIdeal_pow_eq_setOfPred_le_v_coe_pow
   证明: (Valuation.integer.integers v).maximalIdeal_pow_eq_setOfPred_le_v_algebraMap_pow h _
 
 @[deprecated (since := "2026-07-09")]

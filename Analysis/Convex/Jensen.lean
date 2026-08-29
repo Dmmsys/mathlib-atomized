@@ -797,7 +797,7 @@ theorem ConvexOn.le_sup_of_mem_convexHull
 
 中文:
 定理 ConvexOn.le_sup_of_mem_convexHull
-  结论: {t : Finset E} (hf : ConvexOn 𝕜 s f) (hts : ↑t subseteq s)
+  结论: {t : 有限集 E} (hf : ConvexOn 𝕜 s f) (hts : ↑t subseteq s)
   证明: by
   obtain ⟨w, hw₀, hw₁, rfl⟩ := mem_convexHull.1 hx
   exact (hf.map_centerMass_le hw₀ (by positivity) hts).trans
@@ -822,7 +822,7 @@ theorem ConvexOn.inf_le_of_mem_convexHull
 
 中文:
 定理 ConvexOn.inf_le_of_mem_convexHull
-  结论: {t : Finset E} (hf : ConcaveOn 𝕜 s f) (hts : ↑t subseteq s)
+  结论: {t : 有限集 E} (hf : ConcaveOn 𝕜 s f) (hts : ↑t subseteq s)
   证明: hf.dual.le_sup_of_mem_convexHull hts hx
 
 Depends on / 依赖: hf.dual.le_sup_of_mem_convexHull, le_sup_of_mem_convexHull
@@ -845,8 +845,8 @@ lemma ConvexOn.exists_ge_of_centerMass
     have hw' : (0 : 𝕜) < ∑ i in t with w i != 0, w i := by rwa [sum_filter_ne_zero]
 
 中文:
-引理 ConvexOn.exists_ge_of_centerMass
-  结论: {t : Finset ι} (h : ConvexOn 𝕜 s f)
+引理 ConvexOn.存在_ge_of_centerMass
+  结论: {t : 有限集 ι} (h : ConvexOn 𝕜 s f)
   证明: by
   set y := t.centerMass w p
   -- TODO: can `rsuffices` be used to write the `exact` first, then the proof of this obtain?
@@ -878,8 +878,8 @@ lemma ConcaveOn.exists_le_of_centerMass
   proof: h.dual.exists_ge_of_centerMass hw₀ hw₁ hp
 
 中文:
-引理 ConcaveOn.exists_le_of_centerMass
-  结论: {t : Finset ι} (h : ConcaveOn 𝕜 s f)
+引理 ConcaveOn.存在_le_of_centerMass
+  结论: {t : 有限集 ι} (h : ConcaveOn 𝕜 s f)
   证明: h.dual.exists_ge_of_centerMass hw₀ hw₁ hp
 
 Depends on / 依赖: exists_ge_of_centerMass, h.dual.exists_ge_of_centerMass
@@ -902,8 +902,8 @@ lemma ConvexOn.exists_ge_of_mem_convexHull
   exact ⟨p i, hp i hit, Hi⟩
 
 中文:
-引理 ConvexOn.exists_ge_of_mem_convexHull
-  结论: {t : Set E} (hf : ConvexOn 𝕜 s f) (hts : t subseteq s)
+引理 ConvexOn.存在_ge_of_mem_convexHull
+  结论: {t : 集合 E} (hf : ConvexOn 𝕜 s f) (hts : t subseteq s)
   证明: by
   rw [_root_.convexHull_eq] at hx
   obtain ⟨α, t, w, p, hw₀, hw₁, hp, rfl⟩ := hx
@@ -930,8 +930,8 @@ lemma ConcaveOn.exists_le_of_mem_convexHull
   proof: hf.dual.exists_ge_of_mem_convexHull hts hx
 
 中文:
-引理 ConcaveOn.exists_le_of_mem_convexHull
-  结论: {t : Set E} (hf : ConcaveOn 𝕜 s f) (hts : t subseteq s)
+引理 ConcaveOn.存在_le_of_mem_convexHull
+  结论: {t : 集合 E} (hf : ConcaveOn 𝕜 s f) (hts : t subseteq s)
   证明: hf.dual.exists_ge_of_mem_convexHull hts hx
 
 Depends on / 依赖: exists_ge_of_mem_convexHull, hf.dual.exists_ge_of_mem_convexHull
@@ -989,7 +989,7 @@ lemma ConvexOn.le_max_of_mem_Icc
 
 中文:
 引理 ConvexOn.le_max_of_mem_Icc
-  结论: {s : Set 𝕜} {f : 𝕜 -> β} {x y z : 𝕜} (hf : ConvexOn 𝕜 s f)
+  结论: {s : 集合 𝕜} {f : 𝕜 -> β} {x y z : 𝕜} (hf : ConvexOn 𝕜 s f)
   证明: by
   rw [← segment_eq_Icc (hz.1.trans hz.2)] at hz; exact hf.le_max_of_mem_segment hx hy hz
 
@@ -1009,7 +1009,7 @@ lemma ConcaveOn.min_le_of_mem_Icc
 
 中文:
 引理 ConcaveOn.min_le_of_mem_Icc
-  结论: {s : Set 𝕜} {f : 𝕜 -> β} {x y z : 𝕜} (hf : ConcaveOn 𝕜 s f)
+  结论: {s : 集合 𝕜} {f : 𝕜 -> β} {x y z : 𝕜} (hf : ConcaveOn 𝕜 s f)
   证明: hf.dual.le_max_of_mem_Icc hx hy hz
 
 Depends on / 依赖: hf.dual.le_max_of_mem_Icc, le_max_of_mem_Icc
@@ -1033,7 +1033,7 @@ exact hxy.trans hb mem_image_of_mem _ hy
 
 中文:
 引理 ConvexOn.bddAbove_convexHull
-  条件: {s t : Set E} (hst : s subseteq t) (hf : ConvexOn 𝕜 t f)
+  条件: {s t : 集合 E} (hst : s subseteq t) (hf : ConvexOn 𝕜 t f)
   证明: by
   rintro ⟨b, hb⟩
   refine ⟨b, ?_⟩
@@ -1061,7 +1061,7 @@ lemma ConcaveOn.bddBelow_convexHull
 
 中文:
 引理 ConcaveOn.bddBelow_convexHull
-  条件: {s t : Set E} (hst : s subseteq t) (hf : ConcaveOn 𝕜 t f)
+  条件: {s t : 集合 E} (hst : s subseteq t) (hf : ConcaveOn 𝕜 t f)
   证明: hf.dual.bddAbove_convexHull hst
 
 Depends on / 依赖: bddAbove_convexHull, hf.dual.bddAbove_convexHull

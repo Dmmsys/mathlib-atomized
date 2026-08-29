@@ -67,7 +67,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidalClosed (类型v₁)
+  签名: 幺半群闭 (类型v₁)
   定义体: MonoidalClosed.mk
   fun X => Closed.mk _ (Types.tensorProductAdjunction X)
 
@@ -103,7 +103,7 @@ definition cartesianClosedFunctorToTypes
 
 中文:
 定义 cartesianClosedFunctorToTypes
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: let e : (ULiftHom.{max u₁ v₁ u₂} (ULift.{max u₁ v₁ u₂} C)) ⥤ Type (max u₁ v₁ u₂) ≌
       C ⥤ Type (max u₁ v₁ u₂) :=
       Functor.asEquivalence ((Functor.whiskeringLeft _ _ _).obj

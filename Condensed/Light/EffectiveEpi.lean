@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: lightProfiniteToLightCondSet.PreservesEpimorphisms
+  签名: lightProfiniteToLightCondSet.保持Epimorphisms
   定义体: by
     rw [LightCondSet.epi_iff_locallySurjective_on_lightProfinite]
     intro S g
@@ -68,7 +68,7 @@ example : lightProfiniteToLightCondSet.PreservesEffectiveEpis := inferInstance
 
 中文:
 实例 :
-  签名: IsRegularEpiCategory LightCondSet.{u}
+  签名: 是正则满态射范畴 LightCondSet.{u}
   定义体: inferInstanceAs IsRegularEpiCategory (Sheaf _ _)
 
 example : lightProfiniteToLightCondSet.PreservesEffectiveEpis := inferInstance

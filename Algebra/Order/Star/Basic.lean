@@ -110,10 +110,10 @@ class StarOrderedRing
     - le_iff : forall x y : R, x <= y ↔ exists p, p in AddSubmonoid.closure (Set.range fun s => star s * s) ∧ y = x + p
 
 中文:
-类 StarOrderedRing
-  参数: (R : 类型) [NonUnitalSemiring R] [PartialOrder R] [StarRing R]
+类 StarOrdered环
+  参数: (R : 类型) [非幺半环 R] [偏序 R] [对合环 R]
   公理与运算 (1 个):
-    - le_iff : 对任意 x y : R, x <= y ↔ 存在 p, p in AddSubmonoid.closure (Set.range fun s => star s * s) ∧ y = x + p
+    - le_iff : 对任意 x y : R, x <= y ↔ 存在 p, p in 加法子幺半群.closure (集合.range fun s => star s * s) ∧ y = x + p
 -/
 class StarOrderedRing (R : Type*) [NonUnitalSemiring R] [PartialOrder R] [StarRing R] : Prop where
   /-- characterization of the order in terms of the `StarRing` structure. -/
@@ -131,7 +131,7 @@ class SelfAdjointDecompose
 
 中文:
 类 SelfAdjointDecompose
-  参数: (R : 类型) [AddGroup R] [Star R]
+  参数: (R : 类型) [加法群 R] [对合 R]
   公理与运算 (1 个):
     - exists_nonneg_sub_nonneg({a : R} (ha : IsSelfAdjoint a)) : 存在 (b c : R), 0 <= b ∧ 0 <= c ∧ a = b - c
 -/
@@ -150,8 +150,8 @@ lemma IsSelfAdjoint.exists_nonneg_sub_nonneg
   proof: SelfAdjointDecompose.exists_nonneg_sub_nonneg ha
 
 中文:
-引理 IsSelfAdjoint.exists_nonneg_sub_nonneg
-  结论: {R : 类型} [AddGroup R] [Star R]
+引理 IsSelfAdjoint.存在_nonneg_sub_nonneg
+  结论: {R : 类型} [加法群 R] [对合 R]
   证明: SelfAdjointDecompose.exists_nonneg_sub_nonneg ha
 
 Depends on / 依赖: SelfAdjointDecompose, SelfAdjointDecompose.exists_nonneg_sub_nonneg, exists_nonneg_sub_nonneg
@@ -184,7 +184,7 @@ lemma of_le_iff
 中文:
 引理 of_le_iff
   条件: (h_le_iff : 对任意 x y : R, x <= y ↔ 存在 s, y = x + star s * s)
-  结论: StarOrderedRing R where
+  结论: StarOrdered环 R where
   证明: by
     refine ⟨fun h => ?_, ?_⟩
     · obtain ⟨p, hp⟩ := (h_le_iff x y).mp h
@@ -237,7 +237,7 @@ lemma nonneg_iff
 
 中文:
 引理 nonneg_iff
-  结论: 0 <= x ↔ x in AddSubmonoid.closure (Set.range fun s : R => star s * s)
+  结论: 0 <= x ↔ x in 加法子幺半群.closure (集合.range fun s : R => star s * s)
   证明: by
   simp only [le_iff, zero_add, exists_eq_right']
 
@@ -257,7 +257,7 @@ lemma pos_iff
 
 中文:
 引理 pos_iff
-  结论: 0 < x ↔ x != 0 ∧ x in AddSubmonoid.closure (Set.range fun s : R => star s * s)
+  结论: 0 < x ↔ x != 0 ∧ x in 加法子幺半群.closure (集合.range fun s : R => star s * s)
   证明: by
   simp [lt_iff_le_and_ne, and_comm, eq_comm, le_iff]
 
@@ -307,7 +307,7 @@ lemma of_nonneg_iff
 
 中文:
 引理 of_nonneg_iff
-  结论: [NonUnitalRing R] [PartialOrder R] [StarRing R]
+  结论: [非幺环 R] [偏序 R] [对合环 R]
   证明: by
     have : AddLeftMono R := ⟨fun _ _ _ h => h_add h _⟩
     simpa only [← sub_eq_iff_eq_add', sub_nonneg, exists_eq_right'] using h_nonneg_iff (y - x)
@@ -334,7 +334,7 @@ lemma of_nonneg_iff'
 
 中文:
 引理 of_nonneg_iff'
-  结论: [NonUnitalRing R] [PartialOrder R] [StarRing R]
+  结论: [非幺环 R] [偏序 R] [对合环 R]
   证明: of_le_iff by
     have : AddLeftMono R := ⟨fun _ _ _ h => h_add h _⟩
     simpa [sub_eq_iff_eq_add', sub_nonneg] using fun x y => h_nonneg_iff (y - x)
@@ -535,8 +535,8 @@ theorem IsStarProjection.nonneg
 @[aesop safe apply]
 
 中文:
-定理 IsStarProjection.nonneg
-  条件: {p : R} (hp : IsStarProjection p)
+定理 是StarProjection.nonneg
+  条件: {p : R} (hp : 是StarProjection p)
   结论: 0 <= p
   证明: hp.isIdempotentElem ▸ hp.isSelfAdjoint.mul_self_nonneg
 
@@ -980,7 +980,7 @@ theorem star_left_conjugate_lt_conjugate
 
 中文:
 定理 star_left_conjugate_lt_conjugate
-  条件: {a b : R} (hab : a < b) {c : R} (hc : IsRegular c)
+  条件: {a b : R} (hab : a < b) {c : R} (hc : 是正则 c)
   证明: by
   rw [(star_left_conjugate_le_conjugate hab.le _).lt_iff_ne]; rw [hc.right.ne_iff]; rw [hc.star.left.ne_iff]
   exact hab.ne
@@ -1003,7 +1003,7 @@ theorem star_right_conjugate_lt_conjugate
 
 中文:
 定理 star_right_conjugate_lt_conjugate
-  条件: {a b : R} (hab : a < b) {c : R} (hc : IsRegular c)
+  条件: {a b : R} (hab : a < b) {c : R} (hc : 是正则 c)
   证明: by
   simpa only [star_star] using star_left_conjugate_lt_conjugate hab hc.star
 
@@ -1024,7 +1024,7 @@ theorem star_left_conjugate_pos
 
 中文:
 定理 star_left_conjugate_pos
-  条件: {a : R} (ha : 0 < a) {c : R} (hc : IsRegular c)
+  条件: {a : R} (ha : 0 < a) {c : R} (hc : 是正则 c)
   证明: by
   simpa only [mul_zero, zero_mul] using star_left_conjugate_lt_conjugate ha hc
 
@@ -1045,7 +1045,7 @@ theorem star_right_conjugate_pos
 
 中文:
 定理 star_right_conjugate_pos
-  条件: {a : R} (ha : 0 < a) {c : R} (hc : IsRegular c)
+  条件: {a : R} (ha : 0 < a) {c : R} (hc : 是正则 c)
   证明: by
   simpa only [star_star] using star_left_conjugate_pos ha hc.star
 
@@ -1068,7 +1068,7 @@ theorem star_mul_self_pos
 
 中文:
 定理 star_mul_self_pos
-  条件: [Nontrivial R] {x : R} (hx : IsRegular x)
+  条件: [非平凡 R] {x : R} (hx : 是正则 x)
   结论: 0 < star x * x
   证明: by
   rw [(star_mul_self_nonneg _).lt_iff_ne]; rw [← mul_zero (star x)]; rw [hx.star.left.ne_iff]
@@ -1092,7 +1092,7 @@ theorem mul_star_self_pos
 
 中文:
 定理 mul_star_self_pos
-  条件: [Nontrivial R] {x : R} (hx : IsRegular x)
+  条件: [非平凡 R] {x : R} (hx : 是正则 x)
   结论: 0 < x * star x
   证明: by
   simpa using star_mul_self_pos hx.star
@@ -1155,7 +1155,7 @@ instance :
 
 中文:
 实例 :
-  签名: ZeroLEOneClass R
+  签名: ZeroLEOne类 R
   定义体: by simpa using star_mul_self_nonneg (1 : R)
 
 @[simp]
@@ -1307,8 +1307,8 @@ lemma IsUnit.star_right_conjugate_nonneg_iff
   rwa [hv, one_mul, mul_assoc, ← star_mul, hv, star_one, mul_one] at this
 
 中文:
-引理 IsUnit.star_right_conjugate_nonneg_iff
-  条件: {u x : R} (hu : IsUnit u)
+引理 是单位.star_right_conjugate_nonneg_iff
+  条件: {u x : R} (hu : 是单位 u)
   证明: by
   refine ⟨fun h => ?_, fun h => star_right_conjugate_nonneg h _⟩
   obtain ⟨v, hv⟩ := hu.exists_left_inv
@@ -1334,8 +1334,8 @@ lemma IsUnit.star_left_conjugate_nonneg_iff
   simpa using hu.star.star_right_conjugate_nonneg_iff
 
 中文:
-引理 IsUnit.star_left_conjugate_nonneg_iff
-  条件: {u x : R} (hu : IsUnit u)
+引理 是单位.star_left_conjugate_nonneg_iff
+  条件: {u x : R} (hu : 是单位 u)
   证明: by
   simpa using hu.star.star_right_conjugate_nonneg_iff
 
@@ -1362,8 +1362,8 @@ instance [NonUnitalSemiring
         ← (star_involutive.surjective.comp op_
 
 中文:
-实例 [NonUnitalSemiring
-  签名: R] [StarRing R] [PartialOrder R] [StarOrderedRing R] :
+实例 [非幺半环
+  签名: R] [对合环 R] [偏序 R] [StarOrdered环 R] :
   定义体: by
     rw [← unop_le_unop]; rw [StarOrderedRing.le_iff]; rw [op_surjective.exists]; rw [← (AddSubmonoid.closure _).comap_map_eq_of_injective opAddEquiv.injective]
     congr! with p
@@ -1406,7 +1406,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedModule R A
+  签名: 是Ordered模 R A
   定义体: by
     rw [StarOrderedRing.nonneg_iff] at hr
     rw [StarOrderedRing.le_iff] at hab ⊢
@@ -1447,7 +1447,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosSMulStrictMono R A
+  签名: 正标量乘严格递增 R A
   定义体: by
     rw [StarOrderedRing.pos_iff] at hr
     rw [StarOrderedRing.lt_iff] at hab ⊢
@@ -1479,8 +1479,8 @@ instance [IsCancelAdd
     exact ⟨r • a, smul_ne_zero hr₀ ha₀, smul_mem_closure_star_mul hr ha, add_smul ..⟩
 
 中文:
-实例 [IsCancelAdd
-  签名: R] : IsStrictOrderedModule R A where
+实例 [是消去加法
+  签名: R] : 是StrictOrdered模 R A where
   定义体: by
     rw [StarOrderedRing.pos_iff] at ha
     rw [StarOrderedRing.lt_iff] at hrs ⊢
@@ -1520,7 +1520,7 @@ lemma NonUnitalStarRingHom.map_le_map_of_map_star
   all_goals aesop
 
 中文:
-引理 NonUnitalStarRingHom.map_le_map_of_map_star
+引理 非幺对合环态射.map_le_map_of_map_star
   条件: (f : R ->⋆ₙ+* S) {x y : R} (hxy : x <= y)
   证明: by
   rw [StarOrderedRing.le_iff] at hxy ⊢
@@ -1576,7 +1576,7 @@ lemma IsSelfAdjoint.map'
 
 中文:
 引理 IsSelfAdjoint.map'
-  结论: {F E R : 类型} [AddCommGroup E] [PartialOrder E] [StarAddMonoid E]
+  结论: {F E R : 类型} [加法交换群 E] [偏序 E] [StarAdd幺半群 E]
   证明: by
   obtain ⟨b, c, hb, hc, rfl⟩ := ha.exists_nonneg_sub_nonneg
   have h₁ := OrderHomClass.mono f hb
@@ -1615,8 +1615,8 @@ instance Nat.instStarOrderedRing
     simp [this, le_iff_exists_add]
 
 中文:
-实例 Nat.instStarOrderedRing
-  签名: : StarOrderedRing 自然数 where
+实例 自然数.instStarOrderedRing
+  签名: : StarOrdered环 自然数 where
   定义体: by
     have : AddSubmonoid.closure (range fun x : Nat => x * x) = ⊤ :=
       eq_top_mono
@@ -1650,7 +1650,7 @@ theorem one_sub_nonneg
 
 中文:
 定理 one_sub_nonneg
-  条件: (hp : IsStarProjection p)
+  条件: (hp : 是StarProjection p)
   结论: 0 <= 1 - p
   证明: hp.one_sub.nonneg
 
@@ -1669,7 +1669,7 @@ theorem le_one
 
 中文:
 定理 le_one
-  条件: (hp : IsStarProjection p)
+  条件: (hp : 是StarProjection p)
   结论: p <= 1
   证明: sub_nonneg.mp hp.one_sub_nonneg
 
@@ -1689,8 +1689,8 @@ theorem mem_Icc
 
 中文:
 定理 mem_Icc
-  条件: (hp : IsStarProjection p)
-  结论: p in Set.Icc (0 : R) 1
+  条件: (hp : 是StarProjection p)
+  结论: p in 集合.闭区间 (0 : R) 1
   证明: by
   simp only [Set.mem_Icc, hp.nonneg, hp.le_one, and_self]
 
@@ -1714,7 +1714,7 @@ theorem le_of_mul_eq_left
 
 中文:
 定理 le_of_mul_eq_left
-  结论: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  结论: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: sub_nonneg.mp (hp.sub_of_mul_eq_left hq hpq).nonneg
 
 Depends on / 依赖: hp.sub_of_mul_eq_left, nonneg, sub_nonneg, sub_nonneg.mp, sub_of_mul_eq_left
@@ -1732,7 +1732,7 @@ theorem le_of_mul_eq_right
 
 中文:
 定理 le_of_mul_eq_right
-  结论: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  结论: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: sub_nonneg.mp (hp.sub_of_mul_eq_right hq hpq).nonneg
 
 Depends on / 依赖: hp.sub_of_mul_eq_right, nonneg, sub_nonneg, sub_nonneg.mp, sub_of_mul_eq_right

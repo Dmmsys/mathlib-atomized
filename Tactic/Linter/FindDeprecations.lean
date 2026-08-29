@@ -159,7 +159,7 @@ definition getDeprecatedInfo
 
 中文:
 定义 getDeprecatedInfo
-  签名: (nm : Name) (verbose? : 布尔)
+  签名: (nm : Name) (verbose? : 布尔值)
   定义体: do
   let env ← getEnv
   -- if there is a `since` in the deprecation
@@ -273,7 +273,7 @@ definition removeRanges
 
 中文:
 定义 removeRanges
-  签名: (file : String) (rgs : Array Lean.Syntax.Range)
+  签名: (file : String) (rgs : 数组 Lean.Syntax.值域)
   定义体: Id.run do
   let mut curr : String.Pos.Raw := 0
   let mut fileSubstring := file.toRawSubstring
@@ -309,7 +309,7 @@ definition removeDeprecations
 
 中文:
 定义 removeDeprecations
-  签名: (fname : String) (rgs : Array Lean.Syntax.Range)
+  签名: (fname : String) (rgs : 数组 Lean.Syntax.值域)
   定义体: return removeRanges (← IO.FS.readFile fname) rgs
 
 Depends on / 依赖: IO.FS.readFile, readFile, removeRanges, return
@@ -376,7 +376,7 @@ definition rewriteOneFile
 
 中文:
 定义 rewriteOneFile
-  签名: (fname : String) (rgs : Array (Name × Lean.Syntax.Range))
+  签名: (fname : String) (rgs : 数组 (Name × Lean.Syntax.值域))
   定义体: do
   -- `option` is the extra text that we add to the files that contain deprecations.
   -- We save these modified files with a different name then their originals, so that all their

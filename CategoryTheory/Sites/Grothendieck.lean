@@ -86,13 +86,13 @@ structure GrothendieckTopology
     - transitive' : forall ⦃X⦄ ⦃S : Sieve X⦄ (_ : S in sieves X) (R : Sieve X), (forall ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in sieves Y) -> R in sieves X
 
 中文:
-结构 GrothendieckTopology
+结构 Grothendieck拓扑
   参数: where
   公理与运算 (4 个):
-    - sieves : 对任意 X : C, Set (Sieve X)
+    - sieves : 对任意 X : C, 集合 (筛 X)
     - top_mem' : 对任意 X, ⊤ in sieves X
-    - pullback_stable' : 对任意 ⦃X Y : C⦄ ⦃S : Sieve X⦄ (f : Y ⟶ X), S in sieves X -> S.pullback f in sieves Y
-    - transitive' : 对任意 ⦃X⦄ ⦃S : Sieve X⦄ (_ : S in sieves X) (R : Sieve X), (对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in sieves Y) -> R in sieves X
+    - pullback_stable' : 对任意 ⦃X Y : C⦄ ⦃S : 筛 X⦄ (f : Y ⟶ X), S in sieves X -> S.pullback f in sieves Y
+    - transitive' : 对任意 ⦃X⦄ ⦃S : 筛 X⦄ (_ : S in sieves X) (R : 筛 X), (对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in sieves Y) -> R in sieves X
 -/
 structure GrothendieckTopology where
   /-- A Grothendieck topology on `C` consists of a set of sieves for each object `X`,
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: DFunLike (GrothendieckTopology C) C (fun X => Set (Sieve X))
+  签名: 依赖函数状 (Grothendieck拓扑 C) C (fun X => 集合 (筛 X))
   定义体: sieves J X
   coe_injective J₁ J₂ h := by cases J₁; cases J₂; congr
 
@@ -153,7 +153,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {J₁ J₂ : GrothendieckTopology C} (h : (J₁ : 对任意 X : C, Set (Sieve X)) = J₂)
+  条件: {J₁ J₂ : Grothendieck拓扑 C} (h : (J₁ : 对任意 X : C, 集合 (筛 X)) = J₂)
   结论: J₁ = J₂
   证明: DFunLike.coe_injective h
 
@@ -244,7 +244,7 @@ lemma pullback_mem_iff_of_isIso
 
 中文:
 引理 pullback_mem_iff_of_isIso
-  条件: {i : X ⟶ Y} [IsIso i] {S : Sieve Y}
+  条件: {i : X ⟶ Y} [是同构 i] {S : 筛 Y}
   证明: by
   refine ⟨fun H => ?_, J.pullback_stable i⟩
   convert! J.pullback_stable (inv i) H
@@ -271,7 +271,7 @@ theorem transitive
 
 中文:
 定理 transitive
-  条件: (hS : S in J X) (R : Sieve X) (h : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in J Y)
+  条件: (hS : S in J X) (R : 筛 X) (h : 对任意 ⦃Y⦄ ⦃f : Y ⟶ X⦄, S f -> R.pullback f in J Y)
   证明: J.transitive' hS R h
 
 Depends on / 依赖: J.transitive, transitive
@@ -312,7 +312,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (J : GrothendieckTopology C) (s : 对任意 X : C, Set (Sieve X)) (h : J.sieves = s)
+  签名: (J : Grothendieck拓扑 C) (s : 对任意 X : C, 集合 (筛 X)) (h : J.sieves = s)
   定义体: s
   top_mem' := h ▸ J.top_mem'
   pullback_stable' := h ▸ J.pullback_stable'
@@ -340,7 +340,7 @@ theorem sieves_copy
 
 中文:
 定理 sieves_copy
-  条件: {J : GrothendieckTopology C} {s : 对任意 X : C, Set (Sieve X)} {h : J.sieves = s}
+  条件: {J : Grothendieck拓扑 C} {s : 对任意 X : C, 集合 (筛 X)} {h : J.sieves = s}
   证明: rfl
 
 @[simp]
@@ -360,7 +360,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: {J : GrothendieckTopology C} {s : 对任意 X : C, Set (Sieve X)} {h : J.sieves = s}
+  条件: {J : Grothendieck拓扑 C} {s : 对任意 X : C, 集合 (筛 X)} {h : J.sieves = s}
   证明: rfl
 -/
 theorem coe_copy {J : GrothendieckTopology C} {s : forall X : C, Set (Sieve X)} {h : J.sieves = s} :
@@ -377,7 +377,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: {J : GrothendieckTopology C} {s : 对任意 X : C, Set (Sieve X)} {h : J.sieves = s}
+  条件: {J : Grothendieck拓扑 C} {s : 对任意 X : C, 集合 (筛 X)} {h : J.sieves = s}
   证明: GrothendieckTopology.ext h.symm
 
 Depends on / 依赖: GrothendieckTopology, GrothendieckTopology.ext, h.symm
@@ -495,7 +495,7 @@ theorem bind_covering
 
 中文:
 定理 bind_covering
-  结论: {S : Sieve X} {R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> Sieve Y} (hS : S in J X)
+  结论: {S : 筛 X} {R : 对任意 ⦃Y : C⦄ ⦃f : Y ⟶ X⦄, S f -> 筛 Y} (hS : S in J X)
   证明: J.transitive hS _ fun _ f hf => superset_covering J (Sieve.le_pullback_bind S R f hf) (hR hf)
 
 Depends on / 依赖: J.transitive, Sieve.le_pullback_bind, le_pullback_bind, superset_covering, transitive
@@ -539,7 +539,7 @@ definition Covers
 
 中文:
 定义 Covers
-  签名: (S : Sieve X) (f : Y ⟶ X)
+  签名: (S : 筛 X) (f : Y ⟶ X)
   定义体: S.pullback f in J Y
 
 Depends on / 依赖: S.pullback, pullback
@@ -558,7 +558,7 @@ theorem covers_iff
 
 中文:
 定理 covers_iff
-  条件: (S : Sieve X) (f : Y ⟶ X)
+  条件: (S : 筛 X) (f : Y ⟶ X)
   结论: J.Covers S f ↔ S.pullback f in J Y
   证明: Iff.rfl
 
@@ -578,7 +578,7 @@ theorem covering_iff_covers_id
 
 中文:
 定理 covering_iff_covers_id
-  条件: (S : Sieve X)
+  条件: (S : 筛 X)
   结论: S in J X ↔ J.Covers S (𝟙 X)
   证明: by simp [covers_iff]
 
@@ -599,7 +599,7 @@ theorem arrow_max
 
 中文:
 定理 arrow_max
-  条件: (f : Y ⟶ X) (S : Sieve X) (hf : S f)
+  条件: (f : Y ⟶ X) (S : 筛 X) (hf : S f)
   结论: J.Covers S f
   证明: by
   rw [Covers]; rw [(Sieve.mem_iff_pullback_eq_top f).1 hf]
@@ -623,7 +623,7 @@ theorem arrow_stable
 
 中文:
 定理 arrow_stable
-  条件: (f : Y ⟶ X) (S : Sieve X) (h : J.Covers S f) {Z : C} (g : Z ⟶ Y)
+  条件: (f : Y ⟶ X) (S : 筛 X) (h : J.Covers S f) {Z : C} (g : Z ⟶ Y)
   证明: by
   rw [covers_iff] at h ⊢
   simp [h, Sieve.pullback_comp]
@@ -650,7 +650,7 @@ theorem arrow_trans
 
 中文:
 定理 arrow_trans
-  条件: (f : Y ⟶ X) (S R : Sieve X) (h : J.Covers S f)
+  条件: (f : Y ⟶ X) (S R : 筛 X) (h : J.Covers S f)
   证明: by
   intro k
   apply J.transitive h
@@ -678,7 +678,7 @@ theorem arrow_intersect
 
 中文:
 定理 arrow_intersect
-  条件: (f : Y ⟶ X) (S R : Sieve X) (hS : J.Covers S f) (hR : J.Covers R f)
+  条件: (f : Y ⟶ X) (S R : 筛 X) (hS : J.Covers S f) (hR : J.Covers R f)
   证明: by simpa [covers_iff] using And.intro hS hR
 
 Depends on / 依赖: And.intro, covers_iff
@@ -705,7 +705,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : GrothendieckTopology C where
+  签名: : Grothendieck拓扑 C where
   定义体: {⊤}
   top_mem' _ := rfl
   pullback_stable' X Y S f hf := by
@@ -738,7 +738,7 @@ definition discrete
 
 中文:
 定义 discrete
-  签名: : GrothendieckTopology C where
+  签名: : Grothendieck拓扑 C where
   定义体: Set.univ
   top_mem' := by simp
   pullback_stable' X Y f := by simp
@@ -787,7 +787,7 @@ instance instLEGrothendieckTopology
 
 中文:
 实例 instLEGrothendieckTopology
-  签名: : LE (GrothendieckTopology C) where
+  签名: : LE (Grothendieck拓扑 C) where
   定义体: (J₁ : forall X : C, Set (Sieve X)) <= (J₂ : forall X : C, Set (Sieve X))
 -/
 instance instLEGrothendieckTopology : LE (GrothendieckTopology C) where
@@ -806,8 +806,8 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {J₁ J₂ : GrothendieckTopology C}
-  结论: J₁ <= J₂ ↔ (J₁ : 对任意 X : C, Set (Sieve X)) <= J₂
+  条件: {J₁ J₂ : Grothendieck拓扑 C}
+  结论: J₁ <= J₂ ↔ (J₁ : 对任意 X : C, 集合 (筛 X)) <= J₂
   证明: Iff.rfl
 
 @[stacks 00Z6]
@@ -833,7 +833,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (GrothendieckTopology C)
+  签名: 偏序 (Grothendieck拓扑 C)
   定义体: { instLEGrothendieckTopology with
     le_refl := fun _ => le_def.mpr le_rfl
     le_trans := fun _ _ _ h₁₂ h₂₃ => le_def.mpr (le_trans h₁₂ h₂₃)
@@ -868,7 +868,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (GrothendieckTopology C)
+  签名: 下确界集 (Grothendieck拓扑 C)
   定义体: { sieves := sInf (sieves '' T)
       top_mem' := by
         rintro X S ⟨⟨_, J, hJ, rfl⟩, rfl⟩
@@ -909,7 +909,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: (s : Set (GrothendieckTopology C)) {X : C} (S : Sieve X)
+  条件: (s : 集合 (Grothendieck拓扑 C)) {X : C} (S : 筛 X)
   证明: by
   change S in sInf (sieves '' s) X ↔ _
   simp
@@ -938,7 +938,7 @@ theorem isGLB_sInf
 
 中文:
 定理 isGLB_sInf
-  条件: (s : Set (GrothendieckTopology C))
+  条件: (s : 集合 (Grothendieck拓扑 C))
   结论: IsGLB s (sInf s)
   证明: by
   refine @IsGLB.of_image _ _ _ _ sieves ?_ _ _ ?_
@@ -971,7 +971,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (GrothendieckTopology C)
+  签名: 完备格 (Grothendieck拓扑 C)
   定义体: fast_instance% CompleteLattice.copy (completeLatticeOfInf _ isGLB_sInf) _ rfl (discrete C)
     (by
       apply le_antisymm
@@ -1013,7 +1013,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (GrothendieckTopology C)
+  签名: 可居 (Grothendieck拓扑 C)
   定义体: ⟨⊤⟩
 
 @[simp]
@@ -1076,7 +1076,7 @@ theorem bot_covering
 
 中文:
 定理 bot_covering
-  结论: S in (⊥ : GrothendieckTopology C) X ↔ S = ⊤
+  结论: S in (⊥ : Grothendieck拓扑 C) X ↔ S = ⊤
   证明: trivial_covering
 
 @[simp]
@@ -1097,7 +1097,7 @@ theorem top_covering
 
 中文:
 定理 top_covering
-  结论: S in (⊤ : GrothendieckTopology C) X
+  结论: S in (⊤ : Grothendieck拓扑 C) X
   证明: ⟨⟩
 -/
 theorem top_covering : S in (⊤ : GrothendieckTopology C) X :=
@@ -1117,8 +1117,8 @@ theorem bot_covers
 
 中文:
 定理 bot_covers
-  条件: (S : Sieve X) (f : Y ⟶ X)
-  结论: (⊥ : GrothendieckTopology C).Covers S f ↔ S f
+  条件: (S : 筛 X) (f : Y ⟶ X)
+  结论: (⊥ : Grothendieck拓扑 C).Covers S f ↔ S f
   证明: by
   rw [covers_iff]; rw [bot_covering]; rw [← Sieve.mem_iff_pullback_eq_top]
 
@@ -1142,8 +1142,8 @@ theorem top_covers
 
 中文:
 定理 top_covers
-  条件: (S : Sieve X) (f : Y ⟶ X)
-  结论: (⊤ : GrothendieckTopology C).Covers S f
+  条件: (S : 筛 X) (f : Y ⟶ X)
+  结论: (⊤ : Grothendieck拓扑 C).Covers S f
   证明: by
   simp [covers_iff]
 
@@ -1167,7 +1167,7 @@ lemma eq_top_iff
 
 中文:
 引理 eq_top_iff
-  条件: (J : GrothendieckTopology C)
+  条件: (J : Grothendieck拓扑 C)
   结论: J = ⊤ ↔ 对任意 X, ⊥ in J X
   证明: by
   refine ⟨fun h => h ▸ by simp, fun h => ?_⟩
@@ -1199,7 +1199,7 @@ lemma eq_top_of_isEmpty
 
 中文:
 引理 eq_top_of_isEmpty
-  条件: [IsEmpty C] (J : GrothendieckTopology C)
+  条件: [是空 C] (J : Grothendieck拓扑 C)
   结论: J = ⊤
   证明: by
   rw [eq_top_iff]
@@ -1231,7 +1231,7 @@ lemma bot_eq_top_iff_isEmpty
 
 中文:
 引理 bot_eq_top_iff_isEmpty
-  结论: (⊥ : GrothendieckTopology C) = ⊤ ↔ IsEmpty C
+  结论: (⊥ : Grothendieck拓扑 C) = ⊤ ↔ 是空 C
   证明: by
   refine ⟨fun h => ⟨fun X => ?_⟩, fun h => eq_top_of_isEmpty _⟩
   apply bot_ne_top (α := Sieve X)
@@ -1259,7 +1259,7 @@ lemma bot_lt_top_iff_nonempty
 
 中文:
 引理 bot_lt_top_iff_nonempty
-  结论: (⊥ : GrothendieckTopology C) < ⊤ ↔ Nonempty C
+  结论: (⊥ : Grothendieck拓扑 C) < ⊤ ↔ 非空 C
   证明: by
   contrapose!
   simp
@@ -1289,7 +1289,7 @@ definition dense
 
 中文:
 定义 dense
-  签名: : GrothendieckTopology C where
+  签名: : Grothendieck拓扑 C where
   定义体: {S | forall {Y : C} (f : Y ⟶ X), exists (Z : _) (g : Z ⟶ Y), S (g ≫ f)}
   top_mem' _ Y _ := ⟨Y, 𝟙 Y, ⟨⟩⟩
   pullback_stable' := by
@@ -1342,7 +1342,7 @@ definition RightOreCondition
 
 中文:
 定义 RightOreCondition
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: forall {X Y Z : C} (yx : Y ⟶ X) (zx : Z ⟶ X), exists (W : _) (wy : W ⟶ Y) (wz : W ⟶ Z), wy ≫ yx = wz ≫ zx
 -/
 def RightOreCondition (C : Type u) [Category.{v} C] : Prop :=
@@ -1360,7 +1360,7 @@ theorem right_ore_of_pullbacks
 
 中文:
 定理 right_ore_of_pullbacks
-  条件: [Limits.HasPullbacks C]
+  条件: [Limits.有Pullbacks C]
   结论: RightOreCondition C
   证明: fun _ _ =>
   ⟨_, _, _, Limits.pullback.condition⟩
@@ -1448,7 +1448,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (J.Cover X) (Sieve X)
+  签名: CoeOut (J.Cover X) (筛 X)
   定义体: ⟨fun S => S.1⟩
 -/
 instance : CoeOut (J.Cover X) (Sieve X) := ⟨fun S => S.1⟩
@@ -1482,7 +1482,7 @@ theorem condition
 中文:
 定理 condition
   条件: (S : J.Cover X)
-  结论: (S : Sieve X) in J X
+  结论: (S : 筛 X) in J X
   证明: S.2
 
 @[ext]
@@ -1522,7 +1522,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (J.Cover X)
+  签名: 有顶序 (J.Cover X)
   定义体: { (inferInstance : Preorder (J.Cover X)) with
     top := ⟨⊤, J.top_mem _⟩
     le_top := fun _ _ _ _ => by tauto }
@@ -1577,7 +1577,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (J.Cover X)
+  签名: 可居 (J.Cover X)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (J.Cover X) :=
@@ -1597,7 +1597,7 @@ structure Arrow
     - hf : S f
 
 中文:
-结构 Arrow
+结构 箭头
   参数: (S : J.Cover X)
   公理与运算 (3 个):
     - Y : C
@@ -1628,8 +1628,8 @@ structure Arrow.Relation
     - w : g₁ ≫ I₁.f = g₂ ≫ I₂.f  [default: by cat_disch]
 
 中文:
-结构 Arrow.Relation
-  参数: {S : J.Cover X} (I₁ I₂ : S.Arrow)
+结构 箭头.关系
+  参数: {S : J.Cover X} (I₁ I₂ : S.箭头)
   公理与运算 (4 个):
     - Z : C
     - g₁ : Z ⟶ I₁.Y
@@ -1662,8 +1662,8 @@ definition Arrow.precomp
   body: ⟨Z, g ≫ I.f, S.1.downward_closed I.hf g⟩
 
 中文:
-定义 Arrow.precomp
-  签名: {S : J.Cover X} (I : S.Arrow) {Z : C} (g : Z ⟶ I.Y)
+定义 箭头.precomp
+  签名: {S : J.Cover X} (I : S.箭头) {Z : C} (g : Z ⟶ I.Y)
   定义体: ⟨Z, g ≫ I.f, S.1.downward_closed I.hf g⟩
 
 Depends on / 依赖: I.hf, downward_closed
@@ -1686,8 +1686,8 @@ definition Arrow.precompRelation
   g₂ := g
 
 中文:
-定义 Arrow.precompRelation
-  签名: {S : J.Cover X} (I : S.Arrow) {Z : C} (g : Z ⟶ I.Y)
+定义 箭头.precompRelation
+  签名: {S : J.Cover X} (I : S.箭头) {Z : C} (g : Z ⟶ I.Y)
   定义体: (I.precomp g).Y
   g₁ := 𝟙 _
   g₂ := g
@@ -1711,8 +1711,8 @@ definition Arrow.map
   body: ⟨I.Y, I.f, f.le _ I.hf⟩
 
 中文:
-定义 Arrow.map
-  签名: {S T : J.Cover X} (I : S.Arrow) (f : S ⟶ T)
+定义 箭头.map
+  签名: {S T : J.Cover X} (I : S.箭头) (f : S ⟶ T)
   定义体: ⟨I.Y, I.f, f.le _ I.hf⟩
 
 Depends on / 依赖: I.hf, f.le
@@ -1731,8 +1731,8 @@ definition Arrow.Relation.map
   body: { r with }
 
 中文:
-定义 Arrow.Relation.map
-  签名: {S T : J.Cover X} {I₁ I₂ : S.Arrow}
+定义 箭头.关系.map
+  签名: {S T : J.Cover X} {I₁ I₂ : S.箭头}
   定义体: { r with }
 -/
 def Arrow.Relation.map {S T : J.Cover X} {I₁ I₂ : S.Arrow}
@@ -1768,8 +1768,8 @@ definition Arrow.base
   body: ⟨I.Y, I.f ≫ f, I.hf⟩
 
 中文:
-定义 Arrow.base
-  签名: {f : Y ⟶ X} {S : J.Cover X} (I : (S.pullback f).Arrow)
+定义 箭头.base
+  签名: {f : Y ⟶ X} {S : J.Cover X} (I : (S.pullback f).箭头)
   定义体: ⟨I.Y, I.f ≫ f, I.hf⟩
 
 Depends on / 依赖: I.hf
@@ -1788,7 +1788,7 @@ definition Arrow.Relation.base
 @[simp]
 
 中文:
-定义 Arrow.Relation.base
+定义 箭头.关系.base
   定义体: { r with w := by simp [r.w_assoc] }
 
 @[simp]
@@ -1868,7 +1868,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: {X : C} (S : J.Cover X) (T : 对任意 I : S.Arrow, J.Cover I.Y)
+  签名: {X : C} (S : J.Cover X) (T : 对任意 I : S.箭头, J.Cover I.Y)
   定义体: ⟨Sieve.bind S fun Y f hf => T ⟨Y, f, hf⟩,
     J.bind_covering S.condition fun _ _ _ => (T { Y := _, f := _, hf := _ }).condition⟩
 
@@ -1892,7 +1892,7 @@ definition bindToBase
 
 中文:
 定义 bindToBase
-  签名: {X : C} (S : J.Cover X) (T : 对任意 I : S.Arrow, J.Cover I.Y)
+  签名: {X : C} (S : J.Cover X) (T : 对任意 I : S.箭头, J.Cover I.Y)
   定义体: homOfLE by
     rintro Y f ⟨Z, e1, e2, h1, _, h3⟩
     rw [← h3]
@@ -1917,8 +1917,8 @@ definition Arrow.middle
   body: I.hf.choose
 
 中文:
-定义 Arrow.middle
-  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定义 箭头.middle
+  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   定义体: I.hf.choose
 
 Depends on / 依赖: I.hf.choose
@@ -1936,8 +1936,8 @@ definition Arrow.toMiddleHom
   body: I.hf.choose_spec.choose
 
 中文:
-定义 Arrow.toMiddleHom
-  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定义 箭头.toMiddleHom
+  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   定义体: I.hf.choose_spec.choose
 
 Depends on / 依赖: I.hf.choose_spec.choose, choose_spec
@@ -1955,8 +1955,8 @@ definition Arrow.fromMiddleHom
   body: I.hf.choose_spec.choose_spec.choose
 
 中文:
-定义 Arrow.fromMiddleHom
-  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定义 箭头.fromMiddleHom
+  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   定义体: I.hf.choose_spec.choose_spec.choose
 
 Depends on / 依赖: I.hf.choose_spec.choose_spec.choose, choose_spec
@@ -1974,8 +1974,8 @@ theorem Arrow.from_middle_condition
   proof: I.hf.choose_spec.choose_spec.choose_spec.choose
 
 中文:
-定理 Arrow.from_middle_condition
-  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定理 箭头.from_middle_condition
+  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   证明: I.hf.choose_spec.choose_spec.choose_spec.choose
 
 Depends on / 依赖: I.hf.choose_spec.choose_spec.choose_spec.choose, choose_spec
@@ -1993,8 +1993,8 @@ definition Arrow.fromMiddle
   body: ⟨_, I.fromMiddleHom, I.from_middle_condition⟩
 
 中文:
-定义 Arrow.fromMiddle
-  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定义 箭头.fromMiddle
+  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   定义体: ⟨_, I.fromMiddleHom, I.from_middle_condition⟩
 
 Depends on / 依赖: I.fromMiddleHom, I.from_middle_condition, fromMiddleHom, from_middle_condition
@@ -2012,8 +2012,8 @@ theorem Arrow.to_middle_condition
   proof: I.hf.choose_spec.choose_spec.choose_spec.choose_spec.1
 
 中文:
-定理 Arrow.to_middle_condition
-  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定理 箭头.to_middle_condition
+  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   证明: I.hf.choose_spec.choose_spec.choose_spec.choose_spec.1
 
 Depends on / 依赖: I.hf.choose_spec.choose_spec.choose_spec.choose_spec, choose_spec
@@ -2031,8 +2031,8 @@ definition Arrow.toMiddle
   body: ⟨_, I.toMiddleHom, I.to_middle_condition⟩
 
 中文:
-定义 Arrow.toMiddle
-  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定义 箭头.toMiddle
+  签名: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   定义体: ⟨_, I.toMiddleHom, I.to_middle_condition⟩
 
 Depends on / 依赖: I.toMiddleHom, I.to_middle_condition, toMiddleHom, to_middle_condition
@@ -2050,8 +2050,8 @@ theorem Arrow.middle_spec
   proof: I.hf.choose_spec.choose_spec.choose_spec.choose_spec.2
 
 中文:
-定理 Arrow.middle_spec
-  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.Arrow, J.Cover I.Y}
+定理 箭头.middle_spec
+  结论: {X : C} {S : J.Cover X} {T : 对任意 I : S.箭头, J.Cover I.Y}
   证明: I.hf.choose_spec.choose_spec.choose_spec.choose_spec.2
 
 Depends on / 依赖: I.hf.choose_spec.choose_spec.choose_spec.choose_spec, choose_spec
@@ -2074,12 +2074,12 @@ structure Relation
     - r : fst.Relation snd
 
 中文:
-结构 Relation
+结构 关系
   参数: (S : J.Cover X)
   公理与运算 (3 个):
-    - {fst : S.Arrow}
-    - {snd : S.Arrow}
-    - r : fst.Relation snd
+    - {fst : S.箭头}
+    - {snd : S.箭头}
+    - r : fst.关系 snd
 -/
 structure Relation (S : J.Cover X) where
   /-- The first arrow. -/
@@ -2103,8 +2103,8 @@ definition Relation.mk'
   r := r
 
 中文:
-定义 Relation.mk'
-  签名: {S : J.Cover X} {fst snd : S.Arrow} (r : fst.Relation snd)
+定义 关系.mk'
+  签名: {S : J.Cover X} {fst snd : S.箭头} (r : fst.关系 snd)
   定义体: fst
   snd := snd
   r := r
@@ -2162,7 +2162,7 @@ definition index
 
 中文:
 定义 index
-  签名: {D : 类型u₁} [Category.{v₁} D] (S : J.Cover X) (P : Cᵒᵖ ⥤ D)
+  签名: {D : 类型u₁} [范畴.{v₁} D] (S : J.Cover X) (P : Cᵒᵖ ⥤ D)
   定义体: P.obj (Opposite.op I.Y)
   right I := P.obj (Opposite.op I.r.Z)
   fst I := P.map I.r.g₁.op
@@ -2193,7 +2193,7 @@ abbreviation multifork
 
 中文:
 缩写 multifork
-  签名: {D : 类型u₁} [Category.{v₁} D] (S : J.Cover X) (P : Cᵒᵖ ⥤ D)
+  签名: {D : 类型u₁} [范畴.{v₁} D] (S : J.Cover X) (P : Cᵒᵖ ⥤ D)
   定义体: Limits.Multifork.ofι _ (P.obj (Opposite.op X)) (fun I => P.map I.f.op)
     (by
       intro I
@@ -2224,7 +2224,7 @@ abbreviation toMultiequalizer
 
 中文:
 缩写 toMultiequalizer
-  签名: {D : 类型u₁} [Category.{v₁} D] (S : J.Cover X)
+  签名: {D : 类型u₁} [范畴.{v₁} D] (S : J.Cover X)
   定义体: Limits.Multiequalizer.lift _ _ (fun I => P.map I.f.op)
     (by
       intro I

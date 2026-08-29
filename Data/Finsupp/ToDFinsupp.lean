@@ -83,8 +83,8 @@ definition Finsupp.toDFinsupp
 @[simp]
 
 中文:
-定义 Finsupp.toDFinsupp
-  签名: [Zero M] (f : ι ->₀ M)
+定义 有限支撑.toDFinsupp
+  签名: [零 M] (f : ι ->₀ M)
   定义体: f
   support' :=
     Trunc.mk
@@ -109,8 +109,8 @@ theorem Finsupp.toDFinsupp_coe
   proof: rfl
 
 中文:
-定理 Finsupp.toDFinsupp_coe
-  条件: [Zero M] (f : ι ->₀ M)
+定理 有限支撑.toDFinsupp_coe
+  条件: [零 M] (f : ι ->₀ M)
   结论: ⇑f.toDFinsupp = f
   证明: rfl
 -/
@@ -133,7 +133,7 @@ theorem Finsupp.toDFinsupp_single
   simp [Finsupp.single_apply, DFinsupp.single_apply]
 
 中文:
-定理 Finsupp.toDFinsupp_single
+定理 有限支撑.toDFinsupp_single
   条件: (i : ι) (m : M)
   证明: by
   ext
@@ -183,7 +183,7 @@ definition DFinsupp.toFinsupp
 @[simp]
 
 中文:
-定义 DFinsupp.toFinsupp
+定义 直和有限支撑.toFinsupp
   签名: (f : Π₀ _ : ι, M)
   定义体: ⟨f.support, f, fun i => by simp only [DFinsupp.mem_support_iff]⟩
 
@@ -207,7 +207,7 @@ theorem DFinsupp.toFinsupp_coe
 @[simp]
 
 中文:
-定理 DFinsupp.toFinsupp_coe
+定理 直和有限支撑.toFinsupp_coe
   条件: (f : Π₀ _ : ι, M)
   结论: ⇑f.toFinsupp = f
   证明: rfl
@@ -232,7 +232,7 @@ theorem DFinsupp.toFinsupp_support
 @[simp]
 
 中文:
-定理 DFinsupp.toFinsupp_support
+定理 直和有限支撑.toFinsupp_support
   条件: (f : Π₀ _ : ι, M)
   结论: f.toFinsupp.support = f.support
   证明: by
@@ -259,7 +259,7 @@ theorem DFinsupp.toFinsupp_single
 @[simp]
 
 中文:
-定理 DFinsupp.toFinsupp_single
+定理 直和有限支撑.toFinsupp_single
   条件: (i : ι) (m : M)
   证明: by
   ext
@@ -287,7 +287,7 @@ theorem Finsupp.toDFinsupp_toFinsupp
 @[simp]
 
 中文:
-定理 Finsupp.toDFinsupp_toFinsupp
+定理 有限支撑.toDFinsupp_toFinsupp
   条件: (f : ι ->₀ M)
   结论: f.toDFinsupp.toFinsupp = f
   证明: DFunLike.coe_injective rfl
@@ -310,7 +310,7 @@ theorem DFinsupp.toFinsupp_toDFinsupp
   proof: DFunLike.coe_injective rfl
 
 中文:
-定理 DFinsupp.toFinsupp_toDFinsupp
+定理 直和有限支撑.toFinsupp_toDFinsupp
   条件: (f : Π₀ _ : ι, M)
   结论: f.toFinsupp.toDFinsupp = f
   证明: DFunLike.coe_injective rfl
@@ -345,7 +345,7 @@ theorem toDFinsupp_zero
 
 中文:
 定理 toDFinsupp_zero
-  条件: [Zero M]
+  条件: [零 M]
   结论: (0 : ι ->₀ M).toDFinsupp = 0
   证明: DFunLike.coe_injective rfl
 
@@ -369,7 +369,7 @@ theorem toDFinsupp_add
 
 中文:
 定理 toDFinsupp_add
-  条件: [AddZeroClass M] (f g : ι ->₀ M)
+  条件: [加法零类 M] (f g : ι ->₀ M)
   证明: DFunLike.coe_injective rfl
 
 @[simp]
@@ -394,7 +394,7 @@ theorem toDFinsupp_neg
 
 中文:
 定理 toDFinsupp_neg
-  条件: [AddGroup M] (f : ι ->₀ M)
+  条件: [加法群 M] (f : ι ->₀ M)
   结论: (-f).toDFinsupp = -f.toDFinsupp
   证明: DFunLike.coe_injective rfl
 
@@ -418,7 +418,7 @@ theorem toDFinsupp_sub
 
 中文:
 定理 toDFinsupp_sub
-  条件: [AddGroup M] (f g : ι ->₀ M)
+  条件: [加法群 M] (f g : ι ->₀ M)
   证明: DFunLike.coe_injective rfl
 
 @[simp]
@@ -440,7 +440,7 @@ theorem toDFinsupp_smul
 
 中文:
 定理 toDFinsupp_smul
-  条件: [Monoid R] [AddMonoid M] [DistribMulAction R M] (r : R) (f : ι ->₀ M)
+  条件: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] (r : R) (f : ι ->₀ M)
   证明: DFunLike.coe_injective rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -469,7 +469,7 @@ theorem toFinsupp_zero
 
 中文:
 定理 toFinsupp_zero
-  条件: [Zero M] [对任意 m : M, Decidable (m != 0)]
+  条件: [零 M] [对任意 m : M, 可判定 (m != 0)]
   结论: toFinsupp 0 = (0 : ι ->₀ M)
   证明: DFunLike.coe_injective rfl
 
@@ -493,7 +493,7 @@ theorem toFinsupp_add
 
 中文:
 定理 toFinsupp_add
-  条件: [AddZeroClass M] [对任意 m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M)
+  条件: [加法零类 M] [对任意 m : M, 可判定 (m != 0)] (f g : Π₀ _ : ι, M)
   证明: DFunLike.coe_injective DFinsupp.coe_add _ _
 
 @[simp]
@@ -517,7 +517,7 @@ theorem toFinsupp_neg
 
 中文:
 定理 toFinsupp_neg
-  条件: [AddGroup M] [对任意 m : M, Decidable (m != 0)] (f : Π₀ _ : ι, M)
+  条件: [加法群 M] [对任意 m : M, 可判定 (m != 0)] (f : Π₀ _ : ι, M)
   证明: DFunLike.coe_injective DFinsupp.coe_neg _
 
 @[simp]
@@ -541,7 +541,7 @@ theorem toFinsupp_sub
 
 中文:
 定理 toFinsupp_sub
-  条件: [AddGroup M] [对任意 m : M, Decidable (m != 0)] (f g : Π₀ _ : ι, M)
+  条件: [加法群 M] [对任意 m : M, 可判定 (m != 0)] (f g : Π₀ _ : ι, M)
   证明: DFunLike.coe_injective DFinsupp.coe_sub _ _
 
 @[simp]
@@ -563,7 +563,7 @@ theorem toFinsupp_smul
 
 中文:
 定理 toFinsupp_smul
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [对任意 m : M, Decidable (m != 0)]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [对任意 m : M, 可判定 (m != 0)]
   证明: DFunLike.coe_injective DFinsupp.coe_smul _ _
 
 Depends on / 依赖: DFinsupp, DFinsupp.coe_smul, DFunLike, DFunLike.coe_injective, coe_injective, coe_smul
@@ -596,7 +596,7 @@ definition finsuppEquivDFinsupp
 
 中文:
 定义 finsuppEquivDFinsupp
-  签名: [DecidableEq ι] [Zero M] [对任意 m : M, Decidable (m != 0)]
+  签名: [DecidableEq ι] [零 M] [对任意 m : M, 可判定 (m != 0)]
   定义体: Finsupp.toDFinsupp
   invFun := DFinsupp.toFinsupp
   left_inv := Finsupp.toDFinsupp_toFinsupp
@@ -627,7 +627,7 @@ definition finsuppAddEquivDFinsupp
 
 中文:
 定义 finsuppAddEquivDFinsupp
-  签名: [DecidableEq ι] [AddZeroClass M] [对任意 m : M, Decidable (m != 0)]
+  签名: [DecidableEq ι] [加法零类 M] [对任意 m : M, 可判定 (m != 0)]
   定义体: { finsuppEquivDFinsupp with
     toFun := Finsupp.toDFinsupp
     invFun := DFinsupp.toFinsupp
@@ -660,7 +660,7 @@ definition finsuppLequivDFinsupp
 
 中文:
 定义 finsuppLequivDFinsupp
-  签名: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
+  签名: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
   定义体: { finsuppEquivDFinsupp with
     toFun := Finsupp.toDFinsupp
     invFun := DFinsupp.toFinsupp
@@ -692,7 +692,7 @@ theorem finsuppLequivDFinsupp_apply_apply
 
 中文:
 定理 finsuppLequivDFinsupp_apply_apply
-  结论: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
+  结论: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
   证明: rfl
 
 @[simp]
@@ -716,7 +716,7 @@ noncomputable section Sigma
 
 中文:
 定理 finsuppLequivDFinsupp_symm_apply
-  结论: [DecidableEq ι] [Semiring R] [AddCommMonoid M]
+  结论: [DecidableEq ι] [半环 R] [加法交换幺半群 M]
   证明: rfl
 
 noncomputable section Sigma
@@ -754,7 +754,7 @@ definition sigmaFinsuppEquivDFinsupp
 
 中文:
 定义 sigmaFinsuppEquivDFinsupp
-  签名: [Zero N]
+  签名: [零 N]
   定义体: ⟨split f, Trunc.mk ⟨(splitSupport f : Finset ι).val, fun i => by
           rw [← Finset.mem_def]; rw [mem_splitSupport_iff_nonzero]
           exact (em _).symm⟩⟩
@@ -797,7 +797,7 @@ theorem sigmaFinsuppEquivDFinsupp_apply
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_apply
-  条件: [Zero N] (f : (Σ i, η i) ->₀ N)
+  条件: [零 N] (f : (Σ i, η i) ->₀ N)
   证明: rfl
 
 @[simp]
@@ -819,7 +819,7 @@ theorem sigmaFinsuppEquivDFinsupp_symm_apply
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_symm_apply
-  条件: [Zero N] (f : Π₀ i, η i ->₀ N) (s : Σ i, η i)
+  条件: [零 N] (f : Π₀ i, η i ->₀ N) (s : Σ i, η i)
   证明: rfl
 
 @[simp]
@@ -844,7 +844,7 @@ theorem sigmaFinsuppEquivDFinsupp_support
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_support
-  结论: [DecidableEq ι] [Zero N]
+  结论: [DecidableEq ι] [零 N]
   证明: by
   ext
   rw [DFinsupp.mem_support_toFun]
@@ -880,7 +880,7 @@ theorem sigmaFinsuppEquivDFinsupp_single
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_single
-  条件: [DecidableEq ι] [Zero N] (a : Σ i, η i) (n : N)
+  条件: [DecidableEq ι] [零 N] (a : Σ i, η i) (n : N)
   证明: by
   obtain ⟨i, a⟩ := a
   ext j b
@@ -921,7 +921,7 @@ theorem sigmaFinsuppEquivDFinsupp_add
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_add
-  条件: [AddZeroClass N] (f g : (Σ i, η i) ->₀ N)
+  条件: [加法零类 N] (f g : (Σ i, η i) ->₀ N)
   证明: by
   ext
   rfl
@@ -947,7 +947,7 @@ definition sigmaFinsuppAddEquivDFinsupp
 
 中文:
 定义 sigmaFinsuppAddEquivDFinsupp
-  签名: [AddZeroClass N]
+  签名: [加法零类 N]
   定义体: { sigmaFinsuppEquivDFinsupp with
     toFun := sigmaFinsuppEquivDFinsupp
     invFun := sigmaFinsuppEquivDFinsupp.symm
@@ -976,7 +976,7 @@ theorem sigmaFinsuppEquivDFinsupp_smul
 
 中文:
 定理 sigmaFinsuppEquivDFinsupp_smul
-  结论: {R} [Monoid R] [AddMonoid N] [DistribMulAction R N] (r : R)
+  结论: {R} [幺半群 R] [加法幺半群 N] [分配乘法作用 R N] (r : R)
   证明: by
   ext
   rfl
@@ -1002,7 +1002,7 @@ definition sigmaFinsuppLequivDFinsupp
 
 中文:
 定义 sigmaFinsuppLequivDFinsupp
-  签名: [AddCommMonoid N] [Module R N]
+  签名: [加法交换幺半群 N] [模 R N]
   定义体: { sigmaFinsuppAddEquivDFinsupp with
     map_smul' := sigmaFinsuppEquivDFinsupp_smul }
 

@@ -34,7 +34,7 @@ instance fintype
 
 中文:
 实例 fintype
-  签名: {R : 类型} [CommRing R] [IsDomain R] {n : 自然数}
+  签名: {R : 类型} [交换环 R] [是整环 R] {n : 自然数}
   定义体: .ofFinite _
 
 Depends on / 依赖: ofFinite
@@ -55,7 +55,7 @@ lemma mulEquiv_units
 
 中文:
 引理 mulEquiv_units
-  结论: Nonempty (DirichletCharacter R n ≃* (ZMod n)ˣ)
+  结论: 非空 (DirichletCharacter R n ≃* (ZMod n)ˣ)
   证明: MulChar.mulEquiv_units ..
 
 Depends on / 依赖: MulChar, MulChar.mulEquiv_units, mulEquiv_units
@@ -97,8 +97,8 @@ theorem exists_apply_ne_one_of_hasEnoughRootsOfUnity
   proof: MulChar.exists_apply_ne_one_of_hasEnoughRootsOfUnity (ZMod n) R ha
 
 中文:
-定理 exists_apply_ne_one_of_hasEnoughRootsOfUnity
-  条件: [Nontrivial R] ⦃a
+定理 存在_apply_ne_one_of_hasEnoughRootsOfUnity
+  条件: [非平凡 R] ⦃a
   结论: ZMod n⦄ (ha : a != 1) :
   证明: MulChar.exists_apply_ne_one_of_hasEnoughRootsOfUnity (ZMod n) R ha
 
@@ -186,7 +186,7 @@ theorem sum_char_inv_mul_char_eq
 
 中文:
 定理 sum_char_inv_mul_char_eq
-  条件: {a : ZMod n} (ha : IsUnit a) (b : ZMod n)
+  条件: {a : ZMod n} (ha : 是单位 a) (b : ZMod n)
   证明: by
   simp only [← map_mul, sum_characters_eq, ZMod.inv_mul_eq_one_of_isUnit ha]
 

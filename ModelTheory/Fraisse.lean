@@ -98,7 +98,7 @@ definition age
 
 中文:
 定义 age
-  签名: (M : Type w) [L.Structure M]
+  签名: (M : 类型 w) [L.结构 M]
   定义体: {N | Structure.FG L N ∧ Nonempty (N ↪[L] M)}
 
 Depends on / 依赖: Nonempty, Structure, Structure.FG
@@ -184,12 +184,12 @@ class IsFraisse
     - amalgamation : Amalgamation K
 
 中文:
-类 IsFraisse
+类 是Fraisse
   参数: : 命题 where
   公理与运算 (6 个):
-    - is_nonempty : K.Nonempty
-    - FG : 对任意 M : Bundled.{w} L.Structure, M in K -> Structure.FG L M
-    - is_essentially_countable : (Quotient.mk' '' K).Countable
+    - is_nonempty : K.非空
+    - FG : 对任意 M : 打包.{w} L.结构, M in K -> 结构.FG L M
+    - is_essentially_countable : (商.mk' '' K).可数
     - hereditary : Hereditary K
     - jointEmbedding : JointEmbedding K
     - amalgamation : Amalgamation K
@@ -216,7 +216,7 @@ theorem age.is_equiv_invariant
 
 中文:
 定理 age.is_equiv_invariant
-  条件: (N P : Bundled.{w} L.Structure) (h : Nonempty (N ≃[L] P))
+  条件: (N P : 打包.{w} L.结构) (h : 非空 (N ≃[L] P))
   证明: and_congr h.some.fg_iff
     ⟨Nonempty.map fun x => Embedding.comp x h.some.symm.toEmbedding,
       Nonempty.map fun x => Embedding.comp x h.some.toEmbedding⟩
@@ -242,7 +242,7 @@ theorem Embedding.age_subset_age
   And.imp_right (Nonempty.map MN.comp)
 
 中文:
-定理 Embedding.age_subset_age
+定理 嵌入.age_subset_age
   条件: (MN : M ↪[L] N)
   结论: L.age M subseteq L.age N
   证明: fun _ =>
@@ -261,7 +261,7 @@ theorem Equiv.age_eq_age
   proof: le_antisymm MN.toEmbedding.age_subset_age MN.symm.toEmbedding.age_subset_age
 
 中文:
-定理 Equiv.age_eq_age
+定理 等价.age_eq_age
   条件: (MN : M ≃[L] N)
   结论: L.age M = L.age N
   证明: le_antisymm MN.toEmbedding.age_subset_age MN.symm.toEmbedding.age_subset_age
@@ -280,8 +280,8 @@ theorem Structure.FG.mem_age_of_equiv
   proof: ⟨MN.some.fg_iff.1 h, ⟨MN.some.symm.toEmbedding⟩⟩
 
 中文:
-定理 Structure.FG.mem_age_of_equiv
-  结论: {M N : Bundled L.Structure} (h : Structure.FG L M)
+定理 结构.FG.mem_age_of_equiv
+  结论: {M N : 打包 L.结构} (h : 结构.FG L M)
   证明: ⟨MN.some.fg_iff.1 h, ⟨MN.some.symm.toEmbedding⟩⟩
 
 Depends on / 依赖: MN.some.fg_iff, MN.some.symm.toEmbedding, fg_iff, toEmbedding
@@ -322,8 +322,8 @@ theorem IsFraisse.is_equiv_invariant
   proof: h.hereditary.is_equiv_invariant_of_fg h.FG M N hn
 
 中文:
-定理 IsFraisse.is_equiv_invariant
-  结论: [h : IsFraisse K] {M N : Bundled.{w} L.Structure}
+定理 是Fraisse.is_equiv_invariant
+  结论: [h : 是Fraisse K] {M N : 打包.{w} L.结构}
   证明: h.hereditary.is_equiv_invariant_of_fg h.FG M N hn
 
 Depends on / 依赖: h.FG, h.hereditary.is_equiv_invariant_of_fg, hereditary, is_equiv_invariant_of_fg
@@ -345,7 +345,7 @@ theorem age.nonempty
 
 中文:
 定理 age.nonempty
-  结论: (L.age M).Nonempty
+  结论: (L.age M).非空
   证明: ⟨Bundled.of (Substructure.closure L (∅ : Set M)),
     (fg_iff_structure_fg _).1 (fg_closure Set.finite_empty), ⟨Substructure.subtype _⟩⟩
 
@@ -415,8 +415,8 @@ theorem age.fg_substructure
 
 中文:
 定理 age.fg_substructure
-  条件: {S : L.Substructure M} (fg : S.FG)
-  结论: Bundled.mk S in L.age M
+  条件: {S : L.子结构 M} (fg : S.FG)
+  结论: 打包.mk S in L.age M
   证明: by
   exact ⟨(Substructure.fg_iff_structure_fg _).1 fg, ⟨subtype _⟩⟩
 
@@ -469,8 +469,8 @@ theorem age.countable_quotient
 
 中文:
 定理 age.countable_quotient
-  条件: [h : Countable M]
-  结论: (Quotient.mk' '' L.age M).Countable
+  条件: [h : 可数 M]
+  结论: (商.mk' '' L.age M).可数
   证明: by
   classical
   refine (congr_arg _ (Set.ext <| Quotient.forall.2 fun N => ?_)).mp
@@ -517,7 +517,7 @@ theorem age_directLimit
 
 中文:
 定理 age_directLimit
-  结论: {ι : Type w} [Preorder ι] [IsDirectedOrder ι] [Nonempty ι]
+  结论: {ι : 类型 w} [预序 ι] [IsDirectedOrder ι] [非空 ι]
   证明: by
   classical
   ext M
@@ -567,8 +567,8 @@ theorem exists_cg_is_age_of
     -- 
 
 中文:
-定理 exists_cg_is_age_of
-  结论: (hn : K.Nonempty)
+定理 存在_cg_is_age_of
+  结论: (hn : K.非空)
   证明: by
   obtain ⟨F, hF⟩ := hc.exists_eq_range (hn.image _)
   simp only [Set.ext_iff, Quotient.forall, mem_image, mem_range] at hF
@@ -625,8 +625,8 @@ theorem exists_countable_is_age_of_iff
     exac
 
 中文:
-定理 exists_countable_is_age_of_iff
-  条件: [Countable (Σ l, L.Functions l)]
+定理 存在_countable_is_age_of_iff
+  条件: [可数 (Σ l, L.函数 l)]
   证明: by
   constructor
   · rintro ⟨M, h1, h2, rfl⟩
@@ -687,8 +687,8 @@ structure IsFraisseLimit
     - age : L.age M = K
 
 中文:
-结构 IsFraisseLimit
-  参数: [Countable (Σ l, L.Functions l)] [Countable M]
+结构 是FraisseLimit
+  参数: [可数 (Σ l, L.函数 l)] [可数 M]
   公理与运算 (2 个):
     - ultrahomogeneous : IsUltrahomogeneous L M
     - age : L.age M = K
@@ -864,7 +864,7 @@ theorem IsUltrahomogeneous.age_isFraisse
 
 中文:
 定理 IsUltrahomogeneous.age_isFraisse
-  条件: [Countable M] (h : L.IsUltrahomogeneous M)
+  条件: [可数 M] (h : L.IsUltrahomogeneous M)
   证明: ⟨age.nonempty M, fun _ hN => hN.1, age.countable_quotient M,
     age.hereditary M, age.jointEmbedding M, h.amalgamation_age⟩
 
@@ -887,7 +887,7 @@ theorem isFraisse
 
 中文:
 定理 isFraisse
-  条件: [Countable (Σ l, L.Functions l)] [Countable M] (h : IsFraisseLimit K M)
+  条件: [可数 (Σ l, L.函数 l)] [可数 M] (h : 是FraisseLimit K M)
   证明: (congr rfl h.age).mp h.ultrahomogeneous.age_isFraisse
 
 Depends on / 依赖: age_isFraisse, h.age, h.ultrahomogeneous.age_isFraisse, ultrahomogeneous
@@ -962,7 +962,7 @@ theorem nonempty_equiv
 
 中文:
 定理 nonempty_equiv
-  结论: Nonempty (M ≃[L] N)
+  结论: 非空 (M ≃[L] N)
   证明: by
   let S : L.Substructure M := ⊥
   have S_fg : FG L S := (fg_iff_structure_fg _).1 Substructure.fg_bot
@@ -1056,7 +1056,7 @@ theorem isFraisse_finite
 
 中文:
 定理 isFraisse_finite
-  结论: IsFraisse { S : Bundled.{w} Language.empty.Structure | Finite S }
+  结论: 是Fraisse { S : 打包.{w} Language.empty.结构 | 有限 S }
   证明: by
   have : Language.empty.Structure (ULift Nat : Type w) := emptyStructure
   exact (isFraisseLimit_of_countable_infinite (ULift Nat)).isFraisse

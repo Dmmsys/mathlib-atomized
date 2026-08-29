@@ -46,7 +46,7 @@ theorem ContDiffAt.harmonicAt
 
 中文:
 定理 ContDiffAt.harmonicAt
-  条件: (h : ContDiffAt Complex 2 f x)
+  条件: (h : ContDiffAt 复形 2 f x)
   结论: HarmonicAt f x
   证明: by
   refine ⟨h.restrict_scalars Real, ?_⟩
@@ -77,7 +77,7 @@ theorem AnalyticAt.harmonicAt
 
 中文:
 定理 AnalyticAt.harmonicAt
-  条件: [CompleteSpace F] (h : AnalyticAt Complex f x)
+  条件: [完备空间 F] (h : AnalyticAt 复形 f x)
   结论: HarmonicAt f x
   证明: h.contDiffAt.harmonicAt
 
@@ -96,7 +96,7 @@ theorem AnalyticAt.harmonicAt_re
 
 中文:
 定理 AnalyticAt.harmonicAt_re
-  条件: {f : Complex -> Complex} (h : AnalyticAt Complex f x)
+  条件: {f : 复形 -> 复形} (h : AnalyticAt 复形 f x)
   证明: h.harmonicAt.comp_CLM reCLM
 
 Depends on / 依赖: comp_CLM, h.harmonicAt.comp_CLM, harmonicAt
@@ -114,7 +114,7 @@ theorem AnalyticAt.harmonicAt_im
 
 中文:
 定理 AnalyticAt.harmonicAt_im
-  条件: {f : Complex -> Complex} (h : AnalyticAt Complex f x)
+  条件: {f : 复形 -> 复形} (h : AnalyticAt 复形 f x)
   证明: h.harmonicAt.comp_CLM imCLM
 
 Depends on / 依赖: comp_CLM, h.harmonicAt.comp_CLM, harmonicAt
@@ -134,7 +134,7 @@ theorem AnalyticAt.harmonicAt_conj
 
 中文:
 定理 AnalyticAt.harmonicAt_conj
-  条件: {f : Complex -> Complex} (h : AnalyticAt Complex f x)
+  条件: {f : 复形 -> 复形} (h : AnalyticAt 复形 f x)
   结论: HarmonicAt (conj f) x
   证明: (harmonicAt_comp_CLE_iff conjCLE).2 h.harmonicAt
 
@@ -161,7 +161,7 @@ lemma analyticAt_harmonicAt_log_normSq
 
 中文:
 引理 analyticAt_harmonicAt_log_normSq
-  结论: {z : Complex} {g : Complex -> Complex} (h₁g : AnalyticAt Complex g z)
+  结论: {z : 复形} {g : 复形 -> 复形} (h₁g : AnalyticAt 复形 g z)
   证明: by
   rw [harmonicAt_congr_nhds (f₂ := reCLM ∘ (conjCLE ∘ log ∘ g + log ∘ g))]
   · exact (((harmonicAt_comp_CLE_iff conjCLE).2 ((analyticAt_clog h₃g).comp h₁g).harmonicAt).add
@@ -218,7 +218,7 @@ theorem AnalyticAt.harmonicAt_log_norm
 
 中文:
 定理 AnalyticAt.harmonicAt_log_norm
-  结论: {f : Complex -> Complex} {z : Complex} (h₁f : AnalyticAt Complex f z)
+  结论: {f : 复形 -> 复形} {z : 复形} (h₁f : AnalyticAt 复形 f z)
   证明: by
   have : (Real.log ‖f ·‖) = (2 : Real)⁻¹ • (Real.log ∘ Complex.normSq ∘ f) := by
     funext z

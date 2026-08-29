@@ -44,10 +44,10 @@ class HasCountableLimits
     - out((J : Type) [SmallCategory J] [CountableCategory J]) : HasLimitsOfShape J C  [default: by infer_instance]
 
 中文:
-类 HasCountableLimits
+类 有余untableLimits
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [SmallCategory J] [CountableCategory J]) : HasLimitsOfShape J C  [默认: by infer_instance]
+    - out((J : 类型) [小范畴 J] [余untable范畴 J]) : 有形状极限 J C  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -75,8 +75,8 @@ instance [HasCountableLimits
   hasLimitsOfShape_of_equivalence (homAsTypeEquiv J)
 
 中文:
-实例 [HasCountableLimits
-  签名: C] [Category.{v} J] [CountableCategory J] : HasLimitsOfShape J C
+实例 [有余untableLimits
+  签名: C] [范畴.{v} J] [余untable范畴 J] : 有形状极限 J C
   定义体: have : HasLimitsOfShape (HomAsType J) C := HasCountableLimits.out (HomAsType J)
   hasLimitsOfShape_of_equivalence (homAsTypeEquiv J)
 
@@ -96,10 +96,10 @@ class HasCountableProducts
     - out((J : Type) [Countable J]) : HasProductsOfShape J C
 
 中文:
-类 HasCountableProducts
+类 有余untableProducts
   参数: where
   公理与运算 (1 个):
-    - out((J : Type) [Countable J]) : HasProductsOfShape J C
+    - out((J : 类型) [可数 J]) : HasProductsOfShape J C
 -/
 class HasCountableProducts where
   out (J : Type) [Countable J] : HasProductsOfShape J C
@@ -115,7 +115,7 @@ instance [HasCountableProducts
   hasLimitsOfShape_of_equivalence (Discrete.equivalence (equivShrink.{0} J)).symm
 
 中文:
-实例 [HasCountableProducts
+实例 [有余untableProducts
   签名: C] (J
   定义体: have : Countable (Shrink.{0} J) := Countable.of_equiv _ (equivShrink.{0} J)
   have : HasLimitsOfShape (Discrete (Shrink.{0} J)) C := HasCountableProducts.out _
@@ -152,10 +152,10 @@ class HasCountableColimits
     - out((J : Type) [SmallCategory J] [CountableCategory J]) : HasColimitsOfShape J C
 
 中文:
-类 HasCountableColimits
+类 有余untableColimits
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [SmallCategory J] [CountableCategory J]) : HasColimitsOfShape J C
+    - out((J : 类型) [小范畴 J] [余untable范畴 J]) : 有形状余极限 J C
 -/
 class HasCountableColimits : Prop where
   /-- `C` has all limits over any type `J` whose objects and morphisms lie in the same universe
@@ -182,7 +182,7 @@ instance [HasCountableColimits
   hasColimitsOfShape_of_equivalence (homAsTypeEquiv J)
 
 中文:
-实例 [HasCountableColimits
+实例 [有余untableColimits
   签名: C] (J
   定义体: have : HasColimitsOfShape (HomAsType J) C := HasCountableColimits.out (HomAsType J)
   hasColimitsOfShape_of_equivalence (homAsTypeEquiv J)
@@ -204,10 +204,10 @@ class HasCountableCoproducts
     - out((J : Type) [Countable J]) : HasCoproductsOfShape J C
 
 中文:
-类 HasCountableCoproducts
+类 有余untableCoproducts
   参数: where
   公理与运算 (1 个):
-    - out((J : Type) [Countable J]) : HasCoproductsOfShape J C
+    - out((J : 类型) [可数 J]) : HasCoproductsOfShape J C
 -/
 class HasCountableCoproducts where
   out (J : Type) [Countable J] : HasCoproductsOfShape J C
@@ -230,7 +230,7 @@ instance [HasCountableCoproducts
   hasColimitsOfShape_of_equivalence (Discrete.equivalence (equivShrink.{0} J)).symm
 
 中文:
-实例 [HasCountableCoproducts
+实例 [有余untableCoproducts
   签名: C] (J
   定义体: have : Countable (Shrink.{0} J) := Countable.of_equiv _ (equivShrink.{0} J)
   have : HasColimitsOfShape (Discrete (Shrink.{0} J)) C := HasCountableCoproducts.out _
@@ -295,7 +295,7 @@ theorem sequentialFunctor_map
 
 中文:
 定理 sequentialFunctor_map
-  结论: Monotone (sequentialFunctor_obj J)
+  结论: 递增 (sequentialFunctor_obj J)
   证明: monotone_nat_of_le_succ fun n =>
     leOfHom (IsFilteredOrEmpty.cocone_objs ((exists_surjective_nat _).choose n)
       (sequentialFunctor_obj J n)).choose_spec.choose_spec.choose
@@ -375,7 +375,7 @@ instance sequentialFunctor_final
 
 中文:
 实例 sequentialFunctor_final
-  签名: : (sequentialFunctor J).Final where
+  签名: : (sequentialFunctor J).终 where
   定义体: by
     obtain ⟨n, (g : d <= (sequentialFunctor J).obj n)⟩ := sequentialFunctor_final_aux J d
     have : Nonempty (StructuredArrow d (sequentialFunctor J)) :=
@@ -445,7 +445,7 @@ theorem sequentialFunctor_map
 
 中文:
 定理 sequentialFunctor_map
-  结论: Antitone (sequentialFunctor_obj J)
+  结论: 递减 (sequentialFunctor_obj J)
   证明: antitone_nat_of_succ_le fun n =>
     leOfHom (IsCofilteredOrEmpty.cone_objs ((exists_surjective_nat _).choose n)
       (sequentialFunctor_obj J n)).choose_spec.choose_spec.choose
@@ -525,7 +525,7 @@ instance sequentialFunctor_initial
 
 中文:
 实例 sequentialFunctor_initial
-  签名: : (sequentialFunctor J).Initial where
+  签名: : (sequentialFunctor J).初始 where
   定义体: by
     obtain ⟨n, (g : (sequentialFunctor J).obj ⟨n⟩ <= d)⟩ := sequentialFunctor_initial_aux J d
     have : Nonempty (CostructuredArrow (sequentialFunctor J) d) :=

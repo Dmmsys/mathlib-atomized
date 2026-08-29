@@ -295,7 +295,7 @@ lemma abel_aux
 
 中文:
 引理 abel_aux
-  条件: (h : Tendsto (fun n => ∑ i in range n, f i) atTop (𝓝 l)) {z : Complex} (hz : ‖z‖ < 1)
+  条件: (h : 收敛 (fun n => ∑ i in range n, f i) atTop (𝓝 l)) {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   let s := fun n => ∑ i in range n, f i
   have k := h.sub (summable_powerSeries_of_norm_lt_one h.cauchySeq hz).hasSum.tendsto_sum_nat

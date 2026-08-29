@@ -156,7 +156,7 @@ theorem coe_zeta_smul_apply
 
 中文:
 定理 coe_zeta_smul_apply
-  结论: {M} [Semiring R] [AddCommMonoid M] [MulAction R M]
+  结论: {M} [半环 R] [加法交换幺半群 M] [乘法作用 R M]
   证明: by
   rw [smul_apply]
   trans ∑ i in divisorsAntidiagonal x, f i.snd
@@ -190,7 +190,7 @@ theorem sum_divisorsAntidiagonal_eq_sum_divisors
 
 中文:
 定理 sum_divisorsAntidiagonal_eq_sum_divisors
-  结论: {M} [Semiring R] [AddCommMonoid M] [MulAction R M]
+  结论: {M} [半环 R] [加法交换幺半群 M] [乘法作用 R M]
   证明: by
   simp [← coe_zeta_smul_apply (R := R)]
 
@@ -216,7 +216,7 @@ theorem coe_zeta_mul_comm
 
 中文:
 定理 coe_zeta_mul_comm
-  条件: [Semiring R] {f : ArithmeticFunction R}
+  条件: [半环 R] {f : ArithmeticFunction R}
   结论: ζ * f = f * ζ
   证明: by
   ext n
@@ -240,7 +240,7 @@ theorem coe_zeta_mul_apply
 
 中文:
 定理 coe_zeta_mul_apply
-  条件: [Semiring R] {f : ArithmeticFunction R} {x : 自然数}
+  条件: [半环 R] {f : ArithmeticFunction R} {x : 自然数}
   证明: coe_zeta_smul_apply
 
 Depends on / 依赖: coe_zeta_smul_apply
@@ -261,7 +261,7 @@ theorem coe_mul_zeta_apply
 
 中文:
 定理 coe_mul_zeta_apply
-  条件: [Semiring R] {f : ArithmeticFunction R} {x : 自然数}
+  条件: [半环 R] {f : ArithmeticFunction R} {x : 自然数}
   证明: by
   rw [← coe_zeta_mul_comm]; rw [coe_zeta_mul_apply]
 
@@ -353,7 +353,7 @@ definition pmul
 
 中文:
 定义 pmul
-  签名: [MulZeroClass R] (f g : ArithmeticFunction R)
+  签名: [乘零类 R] (f g : ArithmeticFunction R)
   定义体: ⟨fun x => f x * g x, by simp⟩
 
 @[simp]
@@ -373,7 +373,7 @@ theorem pmul_apply
 
 中文:
 定理 pmul_apply
-  条件: [MulZeroClass R] {f g : ArithmeticFunction R} {x : 自然数}
+  条件: [乘零类 R] {f g : ArithmeticFunction R} {x : 自然数}
   结论: f.pmul g x = f x * g x
   证明: rfl
 -/
@@ -393,7 +393,7 @@ theorem pmul_comm
 
 中文:
 定理 pmul_comm
-  条件: [CommMonoidWithZero R] (f g : ArithmeticFunction R)
+  条件: [带零交换幺半群 R] (f g : ArithmeticFunction R)
   结论: f.pmul g = g.pmul f
   证明: by
   ext
@@ -417,7 +417,7 @@ lemma pmul_assoc
 
 中文:
 引理 pmul_assoc
-  条件: [SemigroupWithZero R] (f₁ f₂ f₃ : ArithmeticFunction R)
+  条件: [带零半群 R] (f₁ f₂ f₃ : ArithmeticFunction R)
   证明: by
   ext
   simp only [pmul_apply, mul_assoc]
@@ -650,7 +650,7 @@ definition pdiv
 
 中文:
 定义 pdiv
-  签名: [GroupWithZero R] (f g : ArithmeticFunction R)
+  签名: [带零群 R] (f g : ArithmeticFunction R)
   定义体: ⟨fun n => f n / g n, by simp only [map_zero, div_zero]⟩
 
 @[simp]
@@ -671,7 +671,7 @@ theorem pdiv_apply
 
 中文:
 定理 pdiv_apply
-  条件: [GroupWithZero R] (f g : ArithmeticFunction R) (n : 自然数)
+  条件: [带零群 R] (f g : ArithmeticFunction R) (n : 自然数)
   证明: rfl
 -/
 theorem pdiv_apply [GroupWithZero R] (f g : ArithmeticFunction R) (n : Nat) :
@@ -692,7 +692,7 @@ theorem pdiv_zeta
 
 中文:
 定理 pdiv_zeta
-  条件: [DivisionSemiring R] (f : ArithmeticFunction R)
+  条件: [除半环 R] (f : ArithmeticFunction R)
   证明: by
   ext n
   cases n <;> simp
@@ -715,7 +715,7 @@ theorem isMultiplicative_zeta
 
 中文:
 定理 isMultiplicative_zeta
-  结论: IsMultiplicative ζ
+  结论: 是Multiplicative ζ
   证明: IsMultiplicative.iff_ne_zero.2 ⟨by simp, by simp +contextual⟩
 
 Depends on / 依赖: IsMultiplicative, IsMultiplicative.iff_ne_zero, contextual, iff_ne_zero
@@ -740,7 +740,7 @@ theorem pmul
 
 中文:
 定理 pmul
-  结论: [CommSemiring R] {f g : ArithmeticFunction R} (hf : f.IsMultiplicative)
+  结论: [交换半环 R] {f g : ArithmeticFunction R} (hf : f.是Multiplicative)
   证明: ⟨by simp [hf, hg], fun cop => by
     simp only [pmul_apply, hf.map_mul_of_coprime cop, hg.map_mul_of_coprime cop]
     ring⟩
@@ -771,7 +771,7 @@ theorem pdiv
 
 中文:
 定理 pdiv
-  结论: [CommGroupWithZero R] {f g : ArithmeticFunction R} (hf : IsMultiplicative f)
+  结论: [带零交换群 R] {f g : ArithmeticFunction R} (hf : 是Multiplicative f)
   证明: ⟨by simp [hf, hg], fun cop => by
     simp only [pdiv_apply, map_mul_of_coprime hf cop, map_mul_of_coprime hg cop, div_eq_mul_inv,
       mul_inv]
@@ -802,7 +802,7 @@ theorem ppow
 
 中文:
 定理 ppow
-  结论: [CommSemiring R] {f : ArithmeticFunction R} (hf : f.IsMultiplicative)
+  结论: [交换半环 R] {f : ArithmeticFunction R} (hf : f.是Multiplicative)
   证明: by
   induction k with
   | zero => exact isMultiplicative_zeta.natCast

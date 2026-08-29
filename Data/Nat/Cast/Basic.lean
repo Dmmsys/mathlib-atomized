@@ -50,7 +50,7 @@ definition castAddMonoidHom
 
 中文:
 定义 castAddMonoidHom
-  签名: (α : 类型) [AddMonoidWithOne α]
+  签名: (α : 类型) [加法带幺幺半群 α]
   定义体: Nat.cast
   map_add' := cast_add
   map_zero' := cast_zero
@@ -77,7 +77,7 @@ theorem coe_castAddMonoidHom
 
 中文:
 定理 coe_castAddMonoidHom
-  条件: [AddMonoidWithOne α]
+  条件: [加法带幺幺半群 α]
   结论: (castAddMonoidHom α : 自然数 -> α) = 自然数.cast
   证明: rfl
 -/
@@ -95,7 +95,7 @@ lemma _root_.Even.natCast
 
 中文:
 引理 _root_.Even.natCast
-  条件: [AddMonoidWithOne α] {n : 自然数} (hn : Even n)
+  条件: [加法带幺幺半群 α] {n : 自然数} (hn : Even n)
   结论: Even (n : α)
   证明: hn.map Nat.castAddMonoidHom α
 
@@ -202,7 +202,7 @@ lemma ofNat_nsmul_eq_mul
   simp [nsmul_eq_mul]
 
 中文:
-引理 ofNat_nsmul_eq_mul
+引理 of自然数_nsmul_eq_mul
   条件: (n : 自然数) [n.AtLeastTwo] (a : α)
   结论: of自然数(n) • a = of自然数(n) * a
   证明: by
@@ -280,7 +280,7 @@ theorem eq_natCast'
 
 中文:
 定理 eq_natCast'
-  条件: [AddMonoidHomClass F 自然数 A] (f : F) (h1 : f 1 = 1)
+  条件: [加法幺半群态射类 F 自然数 A] (f : F) (h1 : f 1 = 1)
   结论: 对任意 n : 自然数, f n = n
 -/
 theorem eq_natCast' [AddMonoidHomClass F Nat A] (f : F) (h1 : f 1 = 1) : forall n : Nat, f n = n
@@ -297,7 +297,7 @@ theorem map_natCast'
 
 中文:
 定理 map_natCast'
-  结论: {A} [AddMonoidWithOne A] [FunLike F A B] [AddMonoidHomClass F A B]
+  结论: {A} [加法带幺幺半群 A] [函数状 F A B] [加法幺半群态射类 F A B]
   证明: eq_natCast' ((f : A ->+ B).comp <| Nat.castAddMonoidHom _) (by simpa)
 
 Depends on / 依赖: Nat.castAddMonoidHom, castAddMonoidHom, eq_natCast
@@ -316,8 +316,8 @@ theorem map_ofNat'
   proof: map_natCast' f h n
 
 中文:
-定理 map_ofNat'
-  结论: {A} [AddMonoidWithOne A] [FunLike F A B] [AddMonoidHomClass F A B]
+定理 map_of自然数'
+  结论: {A} [加法带幺幺半群 A] [函数状 F A B] [加法幺半群态射类 F A B]
   证明: map_natCast' f h n
 
 Depends on / 依赖: map_natCast
@@ -348,7 +348,7 @@ theorem ext_nat''
 
 中文:
 定理 ext_nat''
-  条件: [ZeroHomClass F 自然数 A] (f g : F) (h_pos : 对任意 {n : 自然数}, 0 < n -> f n = g n)
+  条件: [保零态射类 F 自然数 A] (f g : F) (h_pos : 对任意 {n : 自然数}, 0 < n -> f n = g n)
   证明: by
   apply DFunLike.ext
   rintro (_ | n)
@@ -377,7 +377,7 @@ theorem MonoidWithZeroHom.ext_nat
   proof: ext_nat'' f g
 
 中文:
-定理 MonoidWithZeroHom.ext_nat
+定理 带零幺半群态射.ext_nat
   条件: {f g : 自然数 ->*₀ A}
   结论: (对任意 {n : 自然数}, 0 < n -> f n = g n) -> f = g
   证明: ext_nat'' f g
@@ -407,7 +407,7 @@ theorem eq_natCast
 
 中文:
 定理 eq_natCast
-  条件: [FunLike F 自然数 R] [RingHomClass F 自然数 R] (f : F)
+  条件: [函数状 F 自然数 R] [环态射类 F 自然数 R] (f : F)
   结论: 对任意 n, f n = n
   证明: eq_natCast' f map_one f
 
@@ -430,7 +430,7 @@ theorem map_natCast
 
 中文:
 定理 map_natCast
-  条件: [FunLike F R S] [RingHomClass F R S] (f : F)
+  条件: [函数状 F R S] [环态射类 F R S] (f : F)
   结论: 对任意 n : 自然数, f (n : R) = n
   证明: map_natCast' f map_one f
 
@@ -448,8 +448,8 @@ theorem map_ofNat
   proof: map_natCast f n
 
 中文:
-定理 map_ofNat
-  条件: [FunLike F R S] [RingHomClass F R S] (f : F) (n : 自然数) [自然数.AtLeastTwo n]
+定理 map_of自然数
+  条件: [函数状 F R S] [环态射类 F R S] (f : F) (n : 自然数) [自然数.AtLeastTwo n]
   证明: map_natCast f n
 
 Depends on / 依赖: map_natCast
@@ -469,7 +469,7 @@ theorem ext_nat
 
 中文:
 定理 ext_nat
-  条件: [FunLike F 自然数 R] [RingHomClass F 自然数 R] (f g : F)
+  条件: [函数状 F 自然数 R] [环态射类 F 自然数 R] (f g : F)
   结论: f = g
   证明: ext_nat' f g by simp
 
@@ -488,7 +488,7 @@ theorem NeZero.nat_of_neZero
 
 中文:
 定理 NeZero.nat_of_neZero
-  结论: {R S} [NonAssocSemiring R] [NonAssocSemiring S]
+  结论: {R S} [非结合半环 R] [非结合半环 S]
   证明: .of_map (f := f) (neZero := by simp only [map_natCast, hn])
 
 Depends on / 依赖: map_natCast, neZero, of_map
@@ -513,7 +513,7 @@ theorem eq_natCast'
 
 中文:
 定理 eq_natCast'
-  条件: {R} [NonAssocSemiring R] (f : 自然数 ->+* R)
+  条件: {R} [非结合半环 R] (f : 自然数 ->+* R)
   结论: f = 自然数.castRingHom R
   证明: RingHom.ext eq_natCast f
 
@@ -537,7 +537,7 @@ theorem Nat.cast_id
 @[simp]
 
 中文:
-定理 Nat.cast_id
+定理 自然数.cast_id
   条件: (n : 自然数)
   结论: n.cast = n
   证明: rfl
@@ -557,8 +557,8 @@ theorem Nat.castRingHom_nat
   proof: rfl
 
 中文:
-定理 Nat.castRingHom_nat
-  结论: 自然数.castRingHom 自然数 = RingHom.id 自然数
+定理 自然数.castRingHom_nat
+  结论: 自然数.castRingHom 自然数 = 环态射.id 自然数
   证明: rfl
 -/
 theorem Nat.castRingHom_nat : Nat.castRingHom Nat = RingHom.id Nat :=
@@ -574,8 +574,8 @@ instance Nat.uniqueRingHom
   uniq := RingHom.eq_natCast'
 
 中文:
-实例 Nat.uniqueRingHom
-  签名: {R : 类型} [NonAssocSemiring R]
+实例 自然数.uniqueRingHom
+  签名: {R : 类型} [非结合半环 R]
   定义体: Nat.castRingHom R
   uniq := RingHom.eq_natCast'
 
@@ -603,8 +603,8 @@ instance instNatCast
 @[simp]
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast (对任意 a, π a) where natCast n _
+实例 inst自然数Cast
+  签名: : 自然数嵌入 (对任意 a, π a) where natCast n _
   定义体: n
 
 @[simp]
@@ -675,7 +675,7 @@ theorem ofNat_apply
 @[push ←]
 
 中文:
-定理 ofNat_apply
+定理 of自然数_apply
   条件: (n : 自然数) [对任意 i, Of自然数 (π i) n] (a : α)
   结论: (of自然数(n) : 对任意 a, π a) a = of自然数(n)
   证明: rfl
@@ -695,7 +695,7 @@ lemma ofNat_def
   proof: rfl
 
 中文:
-引理 ofNat_def
+引理 of自然数_def
   条件: (n : 自然数) [对任意 i, Of自然数 (π i) n]
   结论: (Of自然数.of自然数 n : 对任意 a, π a) = fun _ => of自然数(n)
   证明: rfl
@@ -715,8 +715,8 @@ theorem Sum.elim_natCast_natCast
   proof: Sum.elim_lam_const_lam_const (γ := γ) n
 
 中文:
-定理 Sum.elim_natCast_natCast
-  条件: {α β γ : 类型} [自然数Cast γ] (n : 自然数)
+定理 和.elim_natCast_natCast
+  条件: {α β γ : 类型} [自然数嵌入 γ] (n : 自然数)
   证明: Sum.elim_lam_const_lam_const (γ := γ) n
 
 Depends on / 依赖: Sum.elim_lam_const_lam_const, elim_lam_const_lam_const

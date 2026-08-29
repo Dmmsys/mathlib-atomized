@@ -42,9 +42,9 @@ theorem IsNormal.continuous
   · exact
 
 中文:
-定理 IsNormal.continuous
-  条件: {f : α -> β} (hf : IsNormal f)
-  结论: Continuous f
+定理 是正规.continuous
+  条件: {f : α -> β} (hf : 是正规 f)
+  结论: 连续 f
   证明: by
   rw [OrderTopology.continuous_iff]
   refine fun b => ⟨?_, ((isLowerSet_Iio b).preimage hf.strictMono.monotone).isOpen⟩

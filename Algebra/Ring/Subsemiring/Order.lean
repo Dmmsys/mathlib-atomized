@@ -30,7 +30,7 @@ instance toIsOrderedRing
 
 中文:
 实例 toIsOrderedRing
-  签名: [Semiring R] [PartialOrder R] [IsOrderedRing R] [SubsemiringClass S R]
+  签名: [半环 R] [偏序 R] [是Ordered环 R] [子半环类 S R]
   定义体: Function.Injective.isOrderedRing Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedRing, Injective, Subtype, Subtype.val, isOrderedRing
@@ -50,7 +50,7 @@ instance toIsStrictOrderedRing
 
 中文:
 实例 toIsStrictOrderedRing
-  签名: [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: [半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: Function.Injective.isStrictOrderedRing Subtype.val
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
 
@@ -77,7 +77,7 @@ instance toIsOrderedRing
 
 中文:
 实例 toIsOrderedRing
-  签名: [Semiring R] [PartialOrder R] [IsOrderedRing R] (s : Subsemiring R)
+  签名: [半环 R] [偏序 R] [是Ordered环 R] (s : 子半环 R)
   定义体: SubsemiringClass.toIsOrderedRing _
 
 Depends on / 依赖: SubsemiringClass, SubsemiringClass.toIsOrderedRing, toIsOrderedRing
@@ -96,7 +96,7 @@ instance toIsStrictOrderedRing
 
 中文:
 实例 toIsStrictOrderedRing
-  签名: [Semiring R] [PartialOrder R] [IsStrictOrderedRing R]
+  签名: [半环 R] [偏序 R] [是StrictOrdered环 R]
   定义体: SubsemiringClass.toIsStrictOrderedRing _
 
 Depends on / 依赖: SubsemiringClass, SubsemiringClass.toIsStrictOrderedRing, toIsStrictOrderedRing
@@ -124,7 +124,7 @@ definition nonneg
 
 中文:
 定义 nonneg
-  签名: : Subsemiring R where
+  签名: : 子半环 R where
   定义体: AddSubmonoid.nonneg R
   mul_mem' := mul_nonneg
   one_mem' := zero_le_one
@@ -165,7 +165,7 @@ theorem nonneg_toAddSubmonoid
 
 中文:
 定理 nonneg_toAddSubmonoid
-  结论: (nonneg R).toAddSubmonoid = AddSubmonoid.nonneg R
+  结论: (nonneg R).toAddSubmonoid = 加法子幺半群.nonneg R
   证明: rfl
 -/
 theorem nonneg_toAddSubmonoid : (nonneg R).toAddSubmonoid = AddSubmonoid.nonneg R := rfl

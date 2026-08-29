@@ -78,12 +78,12 @@ structure Entry
   参数: where
   公理与运算 (7 个):
     - type : MessageData
-    - line : Option 自然数  [默认: none]
+    - line : 选项类型 自然数  [默认: none]
     - depth : 自然数
     - status : Status
     - thm : MessageData
-    - deps : List (Option 自然数)
-    - useAsDep : 布尔
+    - deps : 列表 (选项类型 自然数)
+    - useAsDep : 布尔值
 -/
 structure Entry where
   /-- A type of this expression as a `MessageData`. Make sure to use `addMessageContext`. -/
@@ -133,10 +133,10 @@ structure Entries
 
 中文:
 结构 Entries
-  参数: : Type where
+  参数: : 类型 where
   公理与运算 (2 个):
     - s : ExprMap Entry
-    - l : List Entry
+    - l : 列表 Entry
 -/
 structure Entries : Type where
   /-- Allows us to compare `Expr`s fast. -/

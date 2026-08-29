@@ -43,8 +43,8 @@ theorem Polynomial.ringKrullDim_le
       (PrimeSpectrum.preimageOrderI
 
 中文:
-定理 Polynomial.ringKrullDim_le
-  条件: {R : 类型} [CommRing R]
+定理 多项式.ringKrullDim_le
+  条件: {R : 类型} [交换环 R]
   证明: by
   rw [ringKrullDim]; rw [ringKrullDim]
   apply Order.krullDim_le_of_krullDim_preimage_le' (PrimeSpectrum.comap C) ?_ (fun p => ?_)
@@ -86,7 +86,7 @@ lemma height_eq_height_add_one_of_isMaximal
 
 中文:
 引理 height_eq_height_add_one_of_isMaximal
-  结论: (p : Ideal R) [p.IsMaximal] (P : Ideal R[X])
+  结论: (p : 理想 R) [p.是极大] (P : 理想 R[X])
   证明: by
   let _ : Field (R ⧸ p) := Quotient.field p
   suffices h : (P.map (Ideal.Quotient.mk (Ideal.map (algebraMap R R[X]) p))).height = 1 by
@@ -124,7 +124,7 @@ lemma height_map_C
 
 中文:
 引理 height_map_C
-  条件: (p : Ideal R) [p.IsMaximal]
+  条件: (p : 理想 R) [p.是极大]
   结论: (p.map C).height = p.height
   证明: by
   have : (p.map C).LiesOver p := ⟨IsMaximal.eq_of_le inferInstance IsPrime.ne_top' le_comap_map⟩
@@ -154,7 +154,7 @@ lemma height_eq_height_add_one
 
 中文:
 引理 height_eq_height_add_one
-  结论: (p : Ideal R)
+  结论: (p : 理想 R)
   证明: by
   have : p.IsPrime := by rw [P.over_def p]; infer_instance
   let Rₚ := Localization.AtPrime p
@@ -250,8 +250,8 @@ lemma MvPolynomial.ringKrullDim_of_isNoetherianRing
     simp only [Nat.card_eq_fintype_card, Fintype.card_optio
 
 中文:
-引理 MvPolynomial.ringKrullDim_of_isNoetherianRing
-  条件: {ι : 类型} [Finite ι]
+引理 多元多项式.ringKrullDim_of_isNoetherianRing
+  条件: {ι : 类型} [有限 ι]
   证明: by
   induction ι using Finite.induction_empty_option with
   | of_equiv e H =>

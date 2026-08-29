@@ -46,7 +46,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul M (α oplus β)
+  签名: : 标量乘法 M (α oplus β)
   定义体: ⟨fun a => Sum.map (a • ·) (a • ·)⟩
 
 @[to_additive]
@@ -148,8 +148,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: M N] [IsScalarTower M N α] [IsScalarTower M N β] : IsScalarTower M N (α oplus β)
+实例 [标量乘法
+  签名: M N] [标量塔 M N α] [标量塔 M N β] : 标量塔 M N (α oplus β)
   定义体: ⟨fun a b x => by
     cases x
     exacts [congr_arg inl (smul_assoc _ _ _), congr_arg inr (smul_assoc _ _ _)]⟩
@@ -177,8 +177,8 @@ instance [SMulCommClass
 @[to_additive]
 
 中文:
-实例 [SMulCommClass
-  签名: M N α] [SMulCommClass M N β] : SMulCommClass M N (α oplus β)
+实例 [标量交换类
+  签名: M N α] [标量交换类 M N β] : 标量交换类 M N (α oplus β)
   定义体: ⟨fun a b x => by
     cases x
     exacts [congr_arg inl (smul_comm _ _ _), congr_arg inr (smul_comm _ _ _)]⟩
@@ -206,8 +206,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: Mᵐᵒᵖ α] [SMul Mᵐᵒᵖ β] [IsCentralScalar M α] [IsCentralScalar M β] :
+实例 [标量乘法
+  签名: Mᵐᵒᵖ α] [标量乘法 Mᵐᵒᵖ β] [中心标量 M α] [中心标量 M β] :
   定义体: ⟨fun a x => by
     cases x
     exacts [congr_arg inl (op_smul_eq_smul _ _), congr_arg inr (op_smul_eq_smul _ _)]⟩
@@ -235,7 +235,7 @@ instance FaithfulSMulLeft
 
 中文:
 实例 FaithfulSMulLeft
-  签名: [FaithfulSMul M α]
+  签名: [忠实标量乘法 M α]
   定义体: ⟨fun h => eq_of_smul_eq_smul fun a : α => by injection h (inl a)⟩
 
 @[to_additive]
@@ -256,7 +256,7 @@ instance FaithfulSMulRight
 
 中文:
 实例 FaithfulSMulRight
-  签名: [FaithfulSMul M β]
+  签名: [忠实标量乘法 M β]
   定义体: ⟨fun h => eq_of_smul_eq_smul fun b : β => by injection h (inr b)⟩
 
 Depends on / 依赖: eq_of_smul_eq_smul, injection

@@ -95,8 +95,8 @@ class Invertible
     - mul_invOf_self : a * invOf = 1
 
 中文:
-类 Invertible
-  参数: [Mul α] [One α] (a : α)
+类 可逆
+  参数: [乘法 α] [幺 α] (a : α)
   公理与运算 (3 个):
     - invOf : α
     - invOf_mul_self : invOf * a = 1
@@ -126,7 +126,7 @@ theorem invOf_mul_self'
 
 中文:
 定理 invOf_mul_self'
-  条件: [Mul α] [One α] (a : α) {_ : Invertible a}
+  条件: [乘法 α] [幺 α] (a : α) {_ : 可逆 a}
   结论: ⅟a * a = 1
   证明: Invertible.invOf_mul_self
 
@@ -148,7 +148,7 @@ theorem invOf_mul_self
 
 中文:
 定理 invOf_mul_self
-  条件: [Mul α] [One α] (a : α) [Invertible a]
+  条件: [乘法 α] [幺 α] (a : α) [可逆 a]
   结论: ⅟a * a = 1
   证明: invOf_mul_self' _
 
@@ -170,7 +170,7 @@ theorem mul_invOf_self'
 
 中文:
 定理 mul_invOf_self'
-  条件: [Mul α] [One α] (a : α) {_ : Invertible a}
+  条件: [乘法 α] [幺 α] (a : α) {_ : 可逆 a}
   结论: a * ⅟a = 1
   证明: Invertible.mul_invOf_self
 
@@ -190,7 +190,7 @@ theorem mul_invOf_self
 
 中文:
 定理 mul_invOf_self
-  条件: [Mul α] [One α] (a : α) [Invertible a]
+  条件: [乘法 α] [幺 α] (a : α) [可逆 a]
   结论: a * ⅟a = 1
   证明: mul_invOf_self' _
 
@@ -216,7 +216,7 @@ example {G} [Group G] (a b : G) : a⁻¹ * (a * b) = b := inv_mul_cancel_left a 
 
 中文:
 定理 invOf_mul_cancel_left'
-  条件: {_ : Invertible a}
+  条件: {_ : 可逆 a}
   结论: ⅟a * (a * b) = b
   证明: by
   rw [← mul_assoc]; rw [invOf_mul_self]; rw [one_mul]
@@ -241,7 +241,7 @@ theorem invOf_mul_cancel_left
 
 中文:
 定理 invOf_mul_cancel_left
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: ⅟a * (a * b) = b
   证明: invOf_mul_cancel_left' _ _
 
@@ -266,7 +266,7 @@ example {G} [Group G] (a b : G) : a * (a⁻¹ * b) = b := mul_inv_cancel_left a 
 
 中文:
 定理 mul_invOf_cancel_left'
-  条件: {_ : Invertible a}
+  条件: {_ : 可逆 a}
   结论: a * (⅟a * b) = b
   证明: by
   rw [← mul_assoc]; rw [mul_invOf_self]; rw [one_mul]
@@ -291,7 +291,7 @@ theorem mul_invOf_cancel_left
 
 中文:
 定理 mul_invOf_cancel_left
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: a * (⅟a * b) = b
   证明: mul_invOf_cancel_left' a b
 
@@ -316,7 +316,7 @@ example {G} [Group G] (a b : G) : a * b⁻¹ * b = a := inv_mul_cancel_right a b
 
 中文:
 定理 invOf_mul_cancel_right'
-  条件: {_ : Invertible b}
+  条件: {_ : 可逆 b}
   结论: a * ⅟b * b = a
   证明: by
   simp [mul_assoc]
@@ -341,7 +341,7 @@ theorem invOf_mul_cancel_right
 
 中文:
 定理 invOf_mul_cancel_right
-  条件: [Invertible b]
+  条件: [可逆 b]
   结论: a * ⅟b * b = a
   证明: invOf_mul_cancel_right' _ _
 
@@ -366,7 +366,7 @@ example {G} [Group G] (a b : G) : a * b * b⁻¹ = a := mul_inv_cancel_right a b
 
 中文:
 定理 mul_invOf_cancel_right'
-  条件: {_ : Invertible b}
+  条件: {_ : 可逆 b}
   结论: a * b * ⅟b = a
   证明: by
   simp [mul_assoc]
@@ -389,7 +389,7 @@ theorem mul_invOf_cancel_right
 
 中文:
 定理 mul_invOf_cancel_right
-  条件: [Invertible b]
+  条件: [可逆 b]
   结论: a * b * ⅟b = a
   证明: mul_invOf_cancel_right' _ _
 
@@ -411,7 +411,7 @@ theorem invOf_eq_right_inv
 
 中文:
 定理 invOf_eq_right_inv
-  条件: [Invertible a] (hac : a * b = 1)
+  条件: [可逆 a] (hac : a * b = 1)
   结论: ⅟a = b
   证明: left_inv_eq_right_inv (invOf_mul_self _) hac
 
@@ -431,7 +431,7 @@ theorem invOf_eq_left_inv
 
 中文:
 定理 invOf_eq_left_inv
-  条件: [Invertible a] (hac : b * a = 1)
+  条件: [可逆 a] (hac : b * a = 1)
   结论: ⅟a = b
   证明: (left_inv_eq_right_inv hac (mul_invOf_self _)).symm
 
@@ -451,7 +451,7 @@ theorem invOf_eq_iff_right
 
 中文:
 定理 invOf_eq_iff_right
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: ⅟a = b ↔ a * b = 1
   证明: ⟨fun h => by rw [← h, mul_invOf_self], invOf_eq_right_inv⟩
 
@@ -471,7 +471,7 @@ theorem invOf_eq_iff_left
 
 中文:
 定理 invOf_eq_iff_left
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: ⅟a = b ↔ b * a = 1
   证明: ⟨fun h => by rw [← h, invOf_mul_self], invOf_eq_left_inv⟩
 
@@ -494,7 +494,7 @@ theorem invertible_unique
 
 中文:
 定理 invertible_unique
-  结论: [Invertible a] [Invertible b]
+  结论: [可逆 a] [可逆 b]
   证明: by
   apply invOf_eq_right_inv
   rw [h]; rw [mul_invOf_self]
@@ -517,8 +517,8 @@ instance Invertible.subsingleton
     exact left_inv_eq_right_inv hba hac⟩
 
 中文:
-实例 Invertible.subsingleton
-  签名: : Subsingleton (Invertible a)
+实例 可逆.subsingleton
+  签名: : 子单例 (可逆 a)
   定义体: ⟨fun ⟨b, hba, hab⟩ ⟨c, _, hac⟩ => by
     congr
     exact left_inv_eq_right_inv hba hac⟩
@@ -541,8 +541,8 @@ theorem Invertible.congr
   proof: invertible_unique a b h
 
 中文:
-定理 Invertible.congr
-  条件: [Invertible a] [Invertible b] (h : a = b)
+定理 可逆.congr
+  条件: [可逆 a] [可逆 b] (h : a = b)
   证明: invertible_unique a b h
 
 Depends on / 依赖: invertible_unique
@@ -566,8 +566,8 @@ definition Invertible.copy'
   mul_invOf_self := by rw [hs, hsi, mul_invOf_self]
 
 中文:
-定义 Invertible.copy'
-  签名: [MulOneClass α] {r : α} (hr : Invertible r) (s : α) (si : α) (hs : s = r)
+定义 可逆.copy'
+  签名: [MulOne类 α] {r : α} (hr : 可逆 r) (s : α) (si : α) (hs : s = r)
   定义体: si
   invOf_mul_self := by rw [hs, hsi, invOf_mul_self]
   mul_invOf_self := by rw [hs, hsi, mul_invOf_self]
@@ -587,8 +587,8 @@ abbreviation Invertible.copy
   body: hr.copy' _ _ hs rfl
 
 中文:
-缩写 Invertible.copy
-  签名: [MulOneClass α] {r : α} (hr : Invertible r) (s : α) (hs : s = r)
+缩写 可逆.copy
+  签名: [MulOne类 α] {r : α} (hr : 可逆 r) (s : α) (hs : s = r)
   定义体: hr.copy' _ _ hs rfl
 
 Depends on / 依赖: hr.copy
@@ -611,7 +611,7 @@ definition invertibleOfGroup
 
 中文:
 定义 invertibleOfGroup
-  签名: [Group α] (a : α)
+  签名: [群 α] (a : α)
   定义体: ⟨a⁻¹, inv_mul_cancel a, mul_inv_cancel a⟩
 
 @[simp]
@@ -633,7 +633,7 @@ theorem invOf_eq_group_inv
 
 中文:
 定理 invOf_eq_group_inv
-  条件: [Group α] (a : α) [Invertible a]
+  条件: [群 α] (a : α) [可逆 a]
   结论: ⅟a = a⁻¹
   证明: invOf_eq_right_inv (mul_inv_cancel a)
 
@@ -656,7 +656,7 @@ definition invertibleOne
 
 中文:
 定义 invertibleOne
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: ⟨1, mul_one _, one_mul _⟩
 
 @[simp]
@@ -678,7 +678,7 @@ theorem invOf_one'
 
 中文:
 定理 invOf_one'
-  条件: [Monoid α] {_ : Invertible (1 : α)}
+  条件: [幺半群 α] {_ : 可逆 (1 : α)}
   结论: ⅟(1 : α) = 1
   证明: invOf_eq_right_inv (mul_one _)
 
@@ -698,7 +698,7 @@ theorem invOf_one
 
 中文:
 定理 invOf_one
-  条件: [Monoid α] [Invertible (1 : α)]
+  条件: [幺半群 α] [可逆 (1 : α)]
   结论: ⅟(1 : α) = 1
   证明: invOf_one'
 
@@ -718,7 +718,7 @@ instance invertibleInvOf
 
 中文:
 实例 invertibleInvOf
-  签名: [One α] [Mul α] {a : α} [Invertible a]
+  签名: [幺 α] [乘法 α] {a : α} [可逆 a]
   定义体: ⟨a, mul_invOf_self a, invOf_mul_self a⟩
 
 @[simp]
@@ -742,7 +742,7 @@ theorem invOf_invOf
 
 中文:
 定理 invOf_invOf
-  条件: [Monoid α] (a : α) [Invertible a] [Invertible (⅟a)]
+  条件: [幺半群 α] (a : α) [可逆 a] [可逆 (⅟a)]
   结论: ⅟(⅟a) = a
   证明: invOf_eq_right_inv (invOf_mul_self _)
 
@@ -765,7 +765,7 @@ theorem invOf_inj
 
 中文:
 定理 invOf_inj
-  条件: [Monoid α] {a b : α} [Invertible a] [Invertible b]
+  条件: [幺半群 α] {a b : α} [可逆 a] [可逆 b]
   结论: ⅟a = ⅟b ↔ a = b
   证明: ⟨invertible_unique _ _, invertible_unique _ _⟩
 
@@ -788,7 +788,7 @@ definition invertibleMul
 
 中文:
 定义 invertibleMul
-  签名: [Monoid α] (a b : α) [Invertible a] [Invertible b]
+  签名: [幺半群 α] (a b : α) [可逆 a] [可逆 b]
   定义体: ⟨⅟b * ⅟a, by simp [← mul_assoc], by simp [← mul_assoc]⟩
 
 @[simp]
@@ -809,7 +809,7 @@ theorem invOf_mul
 
 中文:
 定理 invOf_mul
-  条件: [Monoid α] (a b : α) [Invertible a] [Invertible b] [Invertible (a * b)]
+  条件: [幺半群 α] (a b : α) [可逆 a] [可逆 b] [可逆 (a * b)]
   证明: invOf_eq_right_inv (by simp [← mul_assoc])
 
 Depends on / 依赖: invOf_eq_right_inv, mul_assoc
@@ -827,8 +827,8 @@ abbreviation Invertible.mul
   body: invertibleMul _ _
 
 中文:
-缩写 Invertible.mul
-  签名: [Monoid α] {a b : α} (_ : Invertible a) (_ : Invertible b)
+缩写 可逆.mul
+  签名: [幺半群 α] {a b : α} (_ : 可逆 a) (_ : 可逆 b)
   定义体: invertibleMul _ _
 
 Depends on / 依赖: invertibleMul

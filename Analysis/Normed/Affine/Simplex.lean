@@ -46,7 +46,7 @@ definition Scalene
 
 中文:
 定义 Scalene
-  签名: (s : Simplex R P n)
+  签名: (s : 单纯形 R P n)
   定义体: Injective fun i : {x : Fin (n + 1) × Fin (n + 1) // x.1 < x.2} =>
     dist (s.points i.val.1) (s.points i.val.2)
 
@@ -72,7 +72,7 @@ lemma Scalene.dist_ne
 
 中文:
 引理 Scalene.dist_ne
-  结论: {s : Simplex R P n} (hs : s.Scalene) {i₁ i₂ i₃ i₄ : Fin (n + 1)}
+  结论: {s : 单纯形 R P n} (hs : s.Scalene) {i₁ i₂ i₃ i₄ : 有限集 (n + 1)}
   证明: by
   rw [Classical.not_and_iff_not_or_not] at h₁₂₃₄ h₁₂₄₃
   rcases h₁₂.lt_or_gt with h₁₂lt | h₂₁lt <;> rcases h₃₄.lt_or_gt with h₃₄lt | h₄₃lt
@@ -116,7 +116,7 @@ lemma scalene_reindex_iff
 
 中文:
 引理 scalene_reindex_iff
-  条件: {s : Simplex R P m} (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {s : 单纯形 R P m} (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   let f : {x : Fin (m + 1) × Fin (m + 1) // x.1 < x.2} ≃
     {y : Fin (n + 1) × Fin (n + 1) // y.1 < y.2} :=
@@ -155,7 +155,7 @@ definition Equilateral
 
 中文:
 定义 Equilateral
-  签名: (s : Simplex R P n)
+  签名: (s : 单纯形 R P n)
   定义体: exists r : Real, forall i j, i != j -> dist (s.points i) (s.points j) = r
 
 Depends on / 依赖: points, s.points
@@ -175,7 +175,7 @@ lemma Equilateral.dist_eq
 
 中文:
 引理 Equilateral.dist_eq
-  结论: {s : Simplex R P n} (he : s.Equilateral) {i₁ i₂ i₃ i₄ : Fin (n + 1)}
+  结论: {s : 单纯形 R P n} (he : s.Equilateral) {i₁ i₂ i₃ i₄ : 有限集 (n + 1)}
   证明: by
   rcases he with ⟨r, hr⟩
   rw [hr _ _ h₁₂]; rw [hr _ _ h₃₄]
@@ -199,7 +199,7 @@ lemma equilateral_reindex_iff
 
 中文:
 引理 equilateral_reindex_iff
-  条件: {s : Simplex R P m} (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {s : 单纯形 R P m} (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   refine ⟨fun ⟨r, hr⟩ => ⟨r, fun i j hij => ?_⟩, fun ⟨r, hr⟩ => ⟨r, fun i j hij => ?_⟩⟩
   · convert! hr (e i) (e j) (e.injective.ne hij) using 2 <;> simp
@@ -220,8 +220,8 @@ definition Regular
   body: forall σ : Equiv.Perm (Fin (n + 1)), exists x : P ≃ᵢ P, s.points ∘ σ = x ∘ s.points
 
 中文:
-定义 Regular
-  签名: (s : Simplex R P n)
+定义 正则
+  签名: (s : 单纯形 R P n)
   定义体: forall σ : Equiv.Perm (Fin (n + 1)), exists x : P ≃ᵢ P, s.points ∘ σ = x ∘ s.points
 
 Depends on / 依赖: Equiv.Perm, points, s.points
@@ -248,7 +248,7 @@ lemma regular_reindex_iff
 
 中文:
 引理 regular_reindex_iff
-  条件: {s : Simplex R P m} (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {s : 单纯形 R P m} (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   refine ⟨fun h σ => ?_, fun h σ => ?_⟩
   · rcases h ((e.symm.trans σ).trans e) with ⟨x, hx⟩
@@ -290,8 +290,8 @@ lemma Regular.equilateral
     simp only [comp_apply, Equiv.swap_ap
 
 中文:
-引理 Regular.equilateral
-  条件: {s : Simplex R P n} (hr : s.Regular)
+引理 正则.equilateral
+  条件: {s : 单纯形 R P n} (hr : s.正则)
   结论: s.Equilateral
   证明: by
   refine ⟨dist (s.points 0) (s.points 1), fun i j hij => ?_⟩
@@ -384,7 +384,7 @@ lemma equilateral_iff_dist_eq_and_dist_eq
 
 中文:
 引理 equilateral_iff_dist_eq_and_dist_eq
-  结论: {t : Triangle R P} {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂)
+  结论: {t : Triangle R P} {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂)
   证明: by
   refine ⟨fun ⟨r, hr⟩ => ?_, fun h => ?_⟩
   · simp [hr _ _ h₁₂, hr _ _ h₁₃, hr _ _ h₂₃]

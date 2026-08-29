@@ -48,7 +48,7 @@ theorem sublist_insertIdx
 
 中文:
 定理 sublist_insertIdx
-  条件: (l : List α) (n : 自然数) (a : α)
+  条件: (l : 列表 α) (n : 自然数) (a : α)
   结论: l <+ (l.insertIdx n a)
   证明: by
   simpa only [eraseIdx_insertIdx_self] using eraseIdx_sublist (l.insertIdx n a) n
@@ -72,7 +72,7 @@ theorem subset_insertIdx
 
 中文:
 定理 subset_insertIdx
-  条件: (l : List α) (n : 自然数) (a : α)
+  条件: (l : 列表 α) (n : 自然数) (a : α)
   结论: l subseteq l.insertIdx n a
   证明: (sublist_insertIdx ..).subset
 
@@ -97,7 +97,7 @@ theorem insertIdx_eraseIdx_self
 
 中文:
 定理 insertIdx_eraseIdx_self
-  条件: {l : List α} {n : 自然数} (hn : n != length l) (a : α)
+  条件: {l : 列表 α} {n : 自然数} (hn : n != length l) (a : α)
   证明: by
   induction n generalizing l <;> cases l <;> simp_all
 
@@ -118,7 +118,7 @@ theorem insertIdx_eraseIdx_getElem
 
 中文:
 定理 insertIdx_eraseIdx_getElem
-  条件: {l : List α} {n : 自然数} (hn : n < length l)
+  条件: {l : 列表 α} {n : 自然数} (hn : n < length l)
   证明: by
   simp [Nat.ne_of_lt hn]
 
@@ -144,7 +144,7 @@ theorem eq_or_mem_of_mem_insertIdx
 
 中文:
 定理 eq_or_mem_of_mem_insertIdx
-  条件: {l : List α} {n : 自然数} {a b : α} (h : a in l.insertIdx n b)
+  条件: {l : 列表 α} {n : 自然数} {a b : α} (h : a in l.insertIdx n b)
   证明: by
   cases Nat.lt_or_ge (length l) n with
   | inl hn =>
@@ -177,7 +177,7 @@ theorem insertIdx_subset_cons
 
 中文:
 定理 insertIdx_subset_cons
-  条件: (n : 自然数) (a : α) (l : List α)
+  条件: (n : 自然数) (a : α) (l : 列表 α)
   结论: l.insertIdx n a subseteq a :: l
   证明: by
   intro b hb
@@ -202,7 +202,7 @@ theorem insertIdx_pmap
 
 中文:
 定理 insertIdx_pmap
-  结论: {p : α -> 命题} (f : 对任意 a, p a -> β) {l : List α} {a : α} {n : 自然数}
+  结论: {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α} {a : α} {n : 自然数}
   证明: by
   induction n generalizing l with
   | zero => cases l <;> simp
@@ -229,7 +229,7 @@ theorem map_insertIdx
 
 中文:
 定理 map_insertIdx
-  条件: (f : α -> β) (l : List α) (n : 自然数) (a : α)
+  条件: (f : α -> β) (l : 列表 α) (n : 自然数) (a : α)
   证明: by
   simpa only [pmap_eq_map] using (insertIdx_pmap (fun a _ => f a) (fun _ _ => trivial) trivial).symm
 
@@ -252,7 +252,7 @@ theorem eraseIdx_pmap
 
 中文:
 定理 eraseIdx_pmap
-  条件: {p : α -> 命题} (f : 对任意 a, p a -> β) {l : List α} (hl : 对任意 a in l, p a) (n : 自然数)
+  条件: {p : α -> 命题} (f : 对任意 a, p a -> β) {l : 列表 α} (hl : 对任意 a in l, p a) (n : 自然数)
   证明: match l, hl, n with
   | [], _, _ => rfl
   | a :: _, _, 0 => rfl
@@ -278,7 +278,7 @@ theorem eraseIdx_map
 
 中文:
 定理 eraseIdx_map
-  条件: (f : α -> β) (l : List α) (n : 自然数)
+  条件: (f : α -> β) (l : 列表 α) (n : 自然数)
   证明: by
   simpa only [pmap_eq_map] using eraseIdx_pmap (fun a _ => f a) (fun _ _ => trivial) n
 
@@ -299,7 +299,7 @@ theorem get_insertIdx_of_lt
 
 中文:
 定理 get_insertIdx_of_lt
-  结论: (l : List α) (x : α) (n k : 自然数) (hn : k < n) (hk : k < l.length)
+  结论: (l : 列表 α) (x : α) (n k : 自然数) (hn : k < n) (hk : k < l.length)
   证明: by
   simp_all [getElem_insertIdx_of_lt]
 
@@ -321,7 +321,7 @@ theorem get_insertIdx_self
 
 中文:
 定理 get_insertIdx_self
-  结论: (l : List α) (x : α) (n : 自然数) (hn : n <= l.length)
+  结论: (l : 列表 α) (x : α) (n : 自然数) (hn : n <= l.length)
   证明: by
   simp
 
@@ -344,7 +344,7 @@ theorem getElem_insertIdx_add_succ
 
 中文:
 定理 getElem_insertIdx_add_succ
-  结论: (l : List α) (x : α) (n k : 自然数) (hk' : n + k < l.length)
+  结论: (l : 列表 α) (x : α) (n k : 自然数) (hk' : n + k < l.length)
   证明: by
   grind
 
@@ -367,7 +367,7 @@ theorem get_insertIdx_add_succ
 
 中文:
 定理 get_insertIdx_add_succ
-  结论: (l : List α) (x : α) (n k : 自然数) (hk' : n + k < l.length)
+  结论: (l : 列表 α) (x : α) (n k : 自然数) (hk' : n + k < l.length)
   证明: by
   simp [getElem_insertIdx_add_succ, hk']
 
@@ -413,7 +413,7 @@ theorem take_insertIdx_eq_take_of_le
 
 中文:
 定理 take_insertIdx_eq_take_of_le
-  条件: (l : List α) x i j (h : i <= j)
+  条件: (l : 列表 α) x i j (h : i <= j)
   证明: ext_getElem (by grind) (by grind)
 
 Depends on / 依赖: ext_getElem
@@ -432,7 +432,7 @@ theorem take_eraseIdx_eq_take_of_le
 
 中文:
 定理 take_eraseIdx_eq_take_of_le
-  条件: (l : List α) i j (h : i <= j)
+  条件: (l : 列表 α) i j (h : i <= j)
   证明: ext_getElem (by grind) (by grind)
 
 Depends on / 依赖: ext_getElem

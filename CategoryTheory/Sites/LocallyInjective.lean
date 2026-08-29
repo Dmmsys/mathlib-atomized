@@ -141,7 +141,7 @@ class IsLocallyInjective
     - equalizerSieve_mem({X : Cᵒᵖ} (x y : ToType (F₁.obj X)) (h : φ.app X x = φ.app X y)) : equalizerSieve x y in J X.unop
 
 中文:
-类 IsLocallyInjective
+类 是LocallyInjective
   参数: : 命题 where
   公理与运算 (1 个):
     - equalizerSieve_mem({X : Cᵒᵖ} (x y : ToType (F₁.obj X)) (h : φ.app X x = φ.app X y)) : equalizerSieve x y in J X.unop
@@ -160,7 +160,7 @@ lemma equalizerSieve_mem
 
 中文:
 引理 equalizerSieve_mem
-  结论: [IsLocallyInjective J φ]
+  结论: [是LocallyInjective J φ]
   证明: IsLocallyInjective.equalizerSieve_mem x y h
 
 Depends on / 依赖: IsLocallyInjective, IsLocallyInjective.equalizerSieve_mem, equalizerSieve_mem
@@ -185,7 +185,7 @@ lemma isLocallyInjective_of_injective
 
 中文:
 引理 isLocallyInjective_of_injective
-  条件: (hφ : 对任意 (X : Cᵒᵖ), Function.Injective (φ.app X))
+  条件: (hφ : 对任意 (X : Cᵒᵖ), 函数.单射 (φ.app X))
   证明: by
     convert! J.top_mem X.unop
     ext Y f
@@ -215,8 +215,8 @@ instance [IsIso
     infer_instance))
 
 中文:
-实例 [IsIso
-  签名: φ] : IsLocallyInjective J φ
+实例 [是同构
+  签名: φ] : 是LocallyInjective J φ
   定义体: isLocallyInjective_of_injective J φ (fun X => Function.Bijective.injective (by
     rw [bijective_iff_isIso_ofHom]
     infer_instance))
@@ -238,7 +238,7 @@ instance isLocallyInjective_forget
 
 中文:
 实例 isLocallyInjective_forget
-  签名: [IsLocallyInjective J φ]
+  签名: [是LocallyInjective J φ]
   定义体: equalizerSieve_mem J φ x y h
 
 Depends on / 依赖: equalizerSieve_mem
@@ -355,7 +355,7 @@ instance isLocallyInjective_comp
 
 中文:
 实例 isLocallyInjective_comp
-  签名: [IsLocallyInjective J φ] [IsLocallyInjective J ψ]
+  签名: [是LocallyInjective J φ] [是LocallyInjective J ψ]
   定义体: by
     apply equalizerSieve_mem_of_equalizerSieve_app_mem J φ
     exact equalizerSieve_mem J ψ _ _ (by simpa using h)
@@ -378,7 +378,7 @@ lemma isLocallyInjective_of_isLocallyInjective
 
 中文:
 引理 isLocallyInjective_of_isLocallyInjective
-  条件: [IsLocallyInjective J (φ ≫ ψ)]
+  条件: [是LocallyInjective J (φ ≫ ψ)]
   证明: equalizerSieve_mem J (φ ≫ ψ) x y (by simp [h])
 
 Depends on / 依赖: equalizerSieve_mem
@@ -429,7 +429,7 @@ lemma isLocallyInjective_iff_of_fac
 
 中文:
 引理 isLocallyInjective_iff_of_fac
-  条件: {φψ : F₁ ⟶ F₃} (fac : φ ≫ ψ = φψ) [IsLocallyInjective J ψ]
+  条件: {φψ : F₁ ⟶ F₃} (fac : φ ≫ ψ = φψ) [是LocallyInjective J ψ]
   证明: by
   constructor
   · intro
@@ -461,7 +461,7 @@ lemma isLocallyInjective_comp_iff
 
 中文:
 引理 isLocallyInjective_comp_iff
-  条件: [IsLocallyInjective J ψ]
+  条件: [是LocallyInjective J ψ]
   证明: isLocallyInjective_iff_of_fac J rfl
 
 Depends on / 依赖: isLocallyInjective_iff_of_fac
@@ -522,7 +522,7 @@ instance isLocallyInjective_toPlus
 
 中文:
 实例 isLocallyInjective_toPlus
-  签名: (P : Cᵒᵖ ⥤ Type (max u v))
+  签名: (P : Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: by
     rw [toPlus_eq_mk]; rw [toPlus_eq_mk]; rw [eq_mk_iff_exists] at h
     obtain ⟨W, h₁, h₂, eq⟩ := h
@@ -551,7 +551,7 @@ instance isLocallyInjective_toSheafify
 
 中文:
 实例 isLocallyInjective_toSheafify
-  签名: (P : Cᵒᵖ ⥤ Type (max u v))
+  签名: (P : Cᵒᵖ ⥤ 类型 (最大值 u v))
   定义体: by
   dsimp [GrothendieckTopology.toSheafify]
   rw [GrothendieckTopology.plusMap_toPlus]
@@ -577,7 +577,7 @@ instance isLocallyInjective_toSheafify'
 
 中文:
 实例 isLocallyInjective_toSheafify'
-  签名: {CD : D -> Type (max u v)}
+  签名: {CD : D -> 类型 (最大值 u v)}
   定义体: by
   rw [← isLocallyInjective_forget_iff]; rw [← sheafComposeIso_hom_fac]; rw [← toSheafify_plusPlusIsoSheafify_hom]
   infer_instance
@@ -609,7 +609,7 @@ abbreviation IsLocallyInjective
   body: Presheaf.IsLocallyInjective J φ.hom
 
 中文:
-缩写 IsLocallyInjective
+缩写 是LocallyInjective
   定义体: Presheaf.IsLocallyInjective J φ.hom
 
 Depends on / 依赖: IsLocallyInjective, Presheaf, Presheaf.IsLocallyInjective
@@ -642,7 +642,7 @@ instance isLocallyInjective_of_iso
 
 中文:
 实例 isLocallyInjective_of_iso
-  签名: [IsIso φ]
+  签名: [是同构 φ]
   定义体: by
   change Presheaf.IsLocallyInjective J ((sheafToPresheaf _ _).map φ)
   infer_instance
@@ -685,7 +685,7 @@ instance isLocallyInjective_forget
 
 中文:
 实例 isLocallyInjective_forget
-  签名: [IsLocallyInjective φ]
+  签名: [是LocallyInjective φ]
   定义体: Presheaf.isLocallyInjective_forget J φ.1
 
 Depends on / 依赖: Presheaf, Presheaf.isLocallyInjective_forget, isLocallyInjective_forget
@@ -734,8 +734,8 @@ lemma mono_of_isLocallyInjective
 
 中文:
 引理 mono_of_isLocallyInjective
-  条件: [IsLocallyInjective φ]
-  结论: Mono φ
+  条件: [是LocallyInjective φ]
+  结论: 单态射 φ
   证明: by
   apply mono_of_injective
   rw [← isLocallyInjective_iff_injective]

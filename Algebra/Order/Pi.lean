@@ -41,7 +41,7 @@ instance isOrderedMonoid
 
 中文:
 实例 isOrderedMonoid
-  签名: {ι : 类型} {Z : ι -> 类型} [对任意 i, CommMonoid (Z i)]
+  签名: {ι : 类型} {Z : ι -> 类型} [对任意 i, 交换幺半群 (Z i)]
   定义体: fun i => mul_le_mul_left (w i) _
 
 @[to_additive]
@@ -65,8 +65,8 @@ instance existsMulOfLe
       funext fun i => (exists_mul_of_le <| h i).choose_spec⟩⟩
 
 中文:
-实例 existsMulOfLe
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, LE (α i)] [对任意 i, Mul (α i)]
+实例 存在MulOfLe
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, LE (α i)] [对任意 i, 乘法 (α i)]
   定义体: ⟨fun h =>
     ⟨fun i => (exists_mul_of_le <| h i).choose,
       funext fun i => (exists_mul_of_le <| h i).choose_spec⟩⟩
@@ -101,7 +101,7 @@ instance isOrderedCancelMonoid
 
 中文:
 实例 isOrderedCancelMonoid
-  签名: [对任意 i, CommMonoid <| f i] [对任意 i, Preorder <| f i]
+  签名: [对任意 i, 交换幺半群 <| f i] [对任意 i, 预序 <| f i]
   定义体: le_of_mul_le_mul_left' (h i)
 
 Depends on / 依赖: le_of_mul_le_mul_left
@@ -124,7 +124,7 @@ mul_le_mul_of_nonneg_right _ hc _ _ hab := fun _ => mul_le_mul_of_nonneg_right (
 
 中文:
 实例 isOrderedRing
-  签名: [对任意 i, Semiring (f i)] [对任意 i, PartialOrder (f i)] [对任意 i, IsOrderedRing (f i)]
+  签名: [对任意 i, 半环 (f i)] [对任意 i, 偏序 (f i)] [对任意 i, 是Ordered环 (f i)]
   定义体: fun _ => add_le_add_left (hab _) _
   zero_le_one := fun i => zero_le_one (α := f i)
 mul_le_mul_of_nonneg_left _ hc _ _ hab := fun _ => mul_le_mul_of_nonneg_left (hab _) hc _

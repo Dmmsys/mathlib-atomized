@@ -75,7 +75,7 @@ theorem fourierIntegral_half_period_translate
 
 
 中文:
-定理 fourierIntegral_half_period_translate
+定理 fourier整数egral_half_period_translate
   条件: {w : V} (hw : w != 0)
   证明: by
   have hiw : ⟪i w, w⟫ = 1 / 2 := by
@@ -119,7 +119,7 @@ theorem fourierIntegral_eq_half_sub_half_period_translate
   exacts [(Real.fourierIntegral_convergent_iff w).2 hf,
 
 中文:
-定理 fourierIntegral_eq_half_sub_half_period_translate
+定理 fourier整数egral_eq_half_sub_half_period_translate
   结论: {w : V} (hw : w != 0)
   证明: by
   simp_rw [smul_sub]
@@ -156,7 +156,7 @@ theorem tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support
 
 中文:
 定理 tendsto_integral_exp_inner_smul_cocompact_of_continuous_compact_support
-  结论: (hf1 : Continuous f)
+  结论: (hf1 : 连续 f)
   证明: by
   refine NormedAddGroup.tendsto_nhds_zero.mpr fun ε hε => ?_
   suffices exists T : Real, forall w : V, T <= ‖w‖ -> ‖∫ v : V, 𝐞 (-⟪v, w⟫) • f v‖ < ε by
@@ -309,7 +309,7 @@ theorem Real.tendsto_integral_exp_smul_cocompact
   exact tendsto_integral_exp_inner_smul_cocompact f
 
 中文:
-定理 Real.tendsto_integral_exp_smul_cocompact
+定理 实数.tendsto_integral_exp_smul_cocompact
   条件: (f : 实数 -> E)
   证明: by
   simp_rw [mul_comm]
@@ -332,9 +332,9 @@ theorem Real.zero_at_infty_fourier
   proof: tendsto_integral_exp_inner_smul_cocompact f
 
 中文:
-定理 Real.zero_at_infty_fourier
+定理 实数.zero_at_infty_fourier
   条件: (f : 实数 -> E)
-  结论: Tendsto (𝓕 f) (cocompact 实数) (𝓝 0)
+  结论: 收敛 (𝓕 f) (cocompact 实数) (𝓝 0)
   证明: tendsto_integral_exp_inner_smul_cocompact f
 
 Depends on / 依赖: tendsto_integral_exp_inner_smul_cocompact
@@ -358,7 +358,7 @@ theorem tendsto_integral_exp_smul_cocompact_of_inner_product
 
 中文:
 定理 tendsto_integral_exp_smul_cocompact_of_inner_product
-  条件: (μ : Measure V) [μ.IsAddHaarMeasure]
+  条件: (μ : 测度 V) [μ.是加法Haar测度]
   证明: by
   rw [μ.isAddLeftInvariant_eq_smul volume]
   simp_rw [integral_smul_nnreal_measure]
@@ -408,7 +408,7 @@ theorem tendsto_integral_exp_smul_cocompact
 
 中文:
 定理 tendsto_integral_exp_smul_cocompact
-  条件: (μ : Measure V) [μ.IsAddHaarMeasure]
+  条件: (μ : 测度 V) [μ.是加法Haar测度]
   证明: by
   -- We have already proved the result for inner-product spaces, formulated in a way which doesn't
   -- refer to the inner product. So we choose an arbitrary inner-product space isomorphic to V
@@ -447,8 +447,8 @@ theorem Real.zero_at_infty_vector_fourierIntegral
   proof: _root_.tendsto_integral_exp_smul_cocompact f μ
 
 中文:
-定理 Real.zero_at_infty_vector_fourierIntegral
-  条件: (μ : Measure V) [μ.IsAddHaarMeasure]
+定理 实数.zero_at_infty_vector_fourier整数egral
+  条件: (μ : 测度 V) [μ.是加法Haar测度]
   证明: _root_.tendsto_integral_exp_smul_cocompact f μ
 
 Depends on / 依赖: _root_, _root_.tendsto_integral_exp_smul_cocompact, tendsto_integral_exp_smul_cocompact

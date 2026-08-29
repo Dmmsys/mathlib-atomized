@@ -55,12 +55,12 @@ structure struct
 
 中文:
 结构 struct
-  参数: (F : 自然数ᵒᵖ ⥤ Sheaf (coherentTopology C) (类型v))
+  参数: (F : 自然数ᵒᵖ ⥤ 层 (coherentTopology C) (类型v))
   公理与运算 (5 个):
     - X((n : 自然数)) : C
     - x((n : 自然数)) : (F.obj ⟨n⟩).obj.obj ⟨X n⟩
     - map((n : 自然数)) : X (n + 1) ⟶ X n
-    - effectiveEpi((n : 自然数)) : EffectiveEpi (map n)
+    - effectiveEpi((n : 自然数)) : 有效满态射 (map n)
     - w((n : 自然数)) : (F.map (homOfLE (n.le_add_right 1)).op).hom.app (op (X (n + 1))) (x (n + 1)) = (F.obj (op n)).obj.map (map n).op (x n)
 -/
 private structure struct (F : Natᵒᵖ ⥤ Sheaf (coherentTopology C) (Type v)) where
@@ -84,7 +84,7 @@ lemma exists_effectiveEpi
   exact this X y
 
 中文:
-引理 exists_effectiveEpi
+引理 存在_effectiveEpi
   条件: (n : 自然数) (X : C) (y : (F.obj ⟨n⟩).obj.obj ⟨X⟩)
   证明: by
   have := hF n
@@ -107,7 +107,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def preimage (X : C) (y : (F.obj ⟨0⟩).obj.obj ⟨X⟩)
+  签名: def 原像 (X : C) (y : (F.obj ⟨0⟩).obj.obj ⟨X⟩)
 -/
 private noncomputable def preimage (X : C) (y : (F.obj ⟨0⟩).obj.obj ⟨X⟩) :
     (n : Nat) -> ((Y : C) × (F.obj ⟨n⟩).obj.obj ⟨Y⟩)
@@ -255,7 +255,7 @@ lemma epi_π_app_zero_of_epi
 
 中文:
 引理 epi_π_app_zero_of_epi
-  结论: [HasSheafify (coherentTopology C) (类型v)]
+  结论: [有Sheafify (coherentTopology C) (类型v)]
   证明: by
   simp_rw [← Sheaf.isLocallySurjective_iff_epi'] at hF ⊢
   exact isLocallySurjective_π_app_zero_of_isLocallySurjective_map hc hF h

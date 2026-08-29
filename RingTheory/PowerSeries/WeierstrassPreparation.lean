@@ -124,10 +124,10 @@ structure IsWeierstrassDivisionAt
     - eq_mul_add : f = g * q + r
 
 中文:
-结构 IsWeierstrassDivisionAt
+结构 是WeierstrassDivisionAt
   参数: : 命题 where
   公理与运算 (2 个):
-    - degree_lt : r.degree < (g.map (Ideal.Quotient.mk I)).order.to自然数
+    - degree_lt : r.degree < (g.map (理想.商.mk I)).order.to自然数
     - eq_mul_add : f = g * q + r
 -/
 structure IsWeierstrassDivisionAt : Prop where
@@ -144,7 +144,7 @@ abbreviation IsWeierstrassDivision
 
 中文:
 缩写 IsWeierstrassDivision
-  签名: [IsLocalRing A]
+  签名: [是局部环 A]
   定义体: f.IsWeierstrassDivisionAt g q r (IsLocalRing.maximalIdeal A)
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassDivisionAt, f.IsWeierstrassDivisionAt, maximalIdeal
@@ -166,7 +166,7 @@ theorem isWeierstrassDivisionAt_zero
 
 中文:
 定理 isWeierstrassDivisionAt_zero
-  结论: IsWeierstrassDivisionAt 0 g 0 0 I
+  结论: 是WeierstrassDivisionAt 0 g 0 0 I
   证明: by
   constructor
   · rw [Polynomial.degree_zero]
@@ -201,7 +201,7 @@ theorem coeff_f_sub_r_mem
 
 中文:
 定理 coeff_f_sub_r_mem
-  结论: (H : f.IsWeierstrassDivisionAt g q r I)
+  结论: (H : f.是WeierstrassDivisionAt g q r I)
   证明: by
   replace H := H.2
   rw [← sub_eq_iff_eq_add] at H
@@ -233,7 +233,7 @@ theorem add
 
 中文:
 定理 add
-  结论: {f' q' r'} (H : f.IsWeierstrassDivisionAt g q r I)
+  结论: {f' q' r'} (H : f.是WeierstrassDivisionAt g q r I)
   证明: ⟨(Polynomial.degree_add_le _ _).trans_lt (sup_lt_iff.2 ⟨H.degree_lt, H'.degree_lt⟩), by
     rw [H.eq_mul_add]; rw [H'.eq_mul_add]; rw [Polynomial.coe_add]; ring⟩
 
@@ -256,7 +256,7 @@ theorem smul
 
 中文:
 定理 smul
-  条件: (H : f.IsWeierstrassDivisionAt g q r I) (a : A)
+  条件: (H : f.是WeierstrassDivisionAt g q r I) (a : A)
   证明: ⟨(Polynomial.degree_smul_le a _).trans_lt H.degree_lt, by
     simp [H.eq_mul_add, Algebra.smul_def, mul_add, mul_left_comm]⟩
 
@@ -303,7 +303,7 @@ abbreviation IsWeierstrassDivisor
 
 中文:
 缩写 IsWeierstrassDivisor
-  签名: [IsLocalRing A]
+  签名: [是局部环 A]
   定义体: g.IsWeierstrassDivisorAt (IsLocalRing.maximalIdeal A)
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassDivisorAt, g.IsWeierstrassDivisorAt, maximalIdeal
@@ -326,7 +326,7 @@ theorem IsWeierstrassDivisor.of_map_ne_zero
 
 中文:
 定理 IsWeierstrassDivisor.of_map_ne_zero
-  结论: [IsLocalRing A]
+  结论: [是局部环 A]
   证明: by
   rw [IsWeierstrassDivisor]; rw [IsWeierstrassDivisorAt]; rw [← IsLocalRing.notMem_maximalIdeal]
   have h := coeff_order hg
@@ -354,8 +354,8 @@ theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt
   simp [IsWeierstrassDivisorAt, ← this, H.monic.leadingCoeff]
 
 中文:
-定理 _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt
-  结论: {g : A[X]} {I : Ideal A}
+定理 _root_.多项式.是DistinguishedAt.isWeierstrassDivisorAt
+  结论: {g : A[X]} {I : 理想 A}
   证明: by
   have : g.natDegree = _ := congr(ENat.toNat $(H.coe_natDegree_eq_order_map g 1
     (by rwa [constantCoeff_one, ← Ideal.ne_top_iff_one]) (by simp)))
@@ -382,8 +382,8 @@ theorem _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'
   exact H.isWeierstrassDivisorAt hI
 
 中文:
-定理 _root_.Polynomial.IsDistinguishedAt.isWeierstrassDivisorAt'
-  结论: {g : A[X]} {I : Ideal A}
+定理 _root_.多项式.是DistinguishedAt.isWeierstrassDivisorAt'
+  结论: {g : A[X]} {I : 理想 A}
   证明: by
   rcases eq_or_ne I ⊤ with rfl | hI
   · have := ‹IsHausdorff ⊤ A›.subsingleton
@@ -445,7 +445,7 @@ theorem isUnit_shift
 
 中文:
 定理 isUnit_shift
-  结论: IsUnit mk fun i =>
+  结论: 是单位 mk fun i =>
   证明: by
   simpa [isUnit_iff_constantCoeff]
 
@@ -494,7 +494,7 @@ theorem coeff_seq_mem
 
 中文:
 定理 coeff_seq_mem
-  条件: (k : 自然数) {i : 自然数} (hi : i >= (g.map (Ideal.Quotient.mk I)).order.to自然数)
+  条件: (k : 自然数) {i : 自然数} (hi : i >= (g.map (理想.商.mk I)).order.to自然数)
   证明: by
   induction k generalizing hi i with
   | zero => simp
@@ -598,7 +598,7 @@ theorem seq_one
 
 中文:
 定理 seq_one
-  结论: H.seq f 1 = (PowerSeries.mk fun i => coeff
+  结论: H.seq f 1 = (幂级数.mk fun i => coeff
   证明: by
   simp_rw [seq, mul_zero, zero_add, sub_zero]
 
@@ -624,7 +624,7 @@ definition divCoeff
 
 中文:
 定义 divCoeff
-  签名: [IsPrecomplete I A] (i : 自然数)
+  签名: [是Precomplete I A] (i : 自然数)
   定义体: Classical.indefiniteDescription _ IsPrecomplete.prec' (I := I)
     (fun k => coeff i (H.seq f k)) fun {m} {n} hn => by
       induction n, hn using Nat.le_induction with
@@ -655,7 +655,7 @@ definition div
 
 中文:
 定义 div
-  签名: [IsPrecomplete I A]
+  签名: [是Precomplete I A]
   定义体: PowerSeries.mk fun i => (H.divCoeff f i).1
 
 Depends on / 依赖: H.divCoeff, PowerSeries, PowerSeries.mk, divCoeff
@@ -674,7 +674,7 @@ theorem coeff_div
 
 中文:
 定理 coeff_div
-  条件: [IsPrecomplete I A] (i : 自然数)
+  条件: [是Precomplete I A] (i : 自然数)
   结论: coeff i (H.div f) = (H.divCoeff f i).1
   证明: by
   simp [div]
@@ -693,7 +693,7 @@ theorem coeff_div_sub_seq_mem
 
 中文:
 定理 coeff_div_sub_seq_mem
-  条件: [IsPrecomplete I A] (k i : 自然数)
+  条件: [是Precomplete I A] (k i : 自然数)
   证明: by
   simpa [coeff_div, SModEq.sub_mem] using ((H.divCoeff f i).2 k).symm
 
@@ -713,7 +713,7 @@ definition mod
 
 中文:
 定义 mod
-  签名: [IsPrecomplete I A]
+  签名: [是Precomplete I A]
   定义体: (f - g * H.div f).trunc (g.map (Ideal.Quotient.mk I)).order.toNat
 
 Depends on / 依赖: H.div, Ideal.Quotient.mk, Quotient, g.map, order.toNat
@@ -738,7 +738,7 @@ theorem isWeierstrassDivisionAt_div_mod
 
 中文:
 定理 isWeierstrassDivisionAt_div_mod
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   证明: by
   rcases eq_or_ne I ⊤ with rfl | hI
   · have := ‹IsAdicComplete ⊤ A›.toIsHausdorff.subsingleton
@@ -786,7 +786,7 @@ theorem eq_zero_of_mul_eq
 
 中文:
 定理 eq_zero_of_mul_eq
-  结论: [IsHausdorff I A]
+  结论: [是豪斯多夫 I A]
   证明: by
   suffices forall k i, coeff i q in I ^ k by
     have hq : q = 0 := by
@@ -855,7 +855,7 @@ theorem eq_of_mul_add_eq_mul_add
 
 中文:
 定理 eq_of_mul_add_eq_mul_add
-  结论: [IsHausdorff I A] {q q' : A⟦X⟧} {r r' : A[X]}
+  结论: [是豪斯多夫 I A] {q q' : A⟦X⟧} {r r' : A[X]}
   证明: by
   replace heq : g * (q - q') = ↑(r' - r) := by
     rw [← eq_sub_iff_add_eq] at heq
@@ -899,7 +899,7 @@ theorem div_add
 
 中文:
 定理 div_add
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.div (f + f') = H.div f + H.div f'
   证明: by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
@@ -935,7 +935,7 @@ theorem div_smul
 
 中文:
 定理 div_smul
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.div (a • f) = a • H.div f
   证明: by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
@@ -968,7 +968,7 @@ theorem div_zero
 
 中文:
 定理 div_zero
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.div 0 = 0
   证明: by
   simpa using H.div_smul 0 0
@@ -998,7 +998,7 @@ theorem mod_add
 
 中文:
 定理 mod_add
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.mod (f + f') = H.mod f + H.mod f'
   证明: by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).add (H.isWeierstrassDivisionAt_div_mod f')
@@ -1034,7 +1034,7 @@ theorem mod_smul
 
 中文:
 定理 mod_smul
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.mod (a • f) = a • H.mod f
   证明: by
   have H1 := (H.isWeierstrassDivisionAt_div_mod f).smul a
@@ -1065,7 +1065,7 @@ theorem mod_zero
 
 中文:
 定理 mod_zero
-  条件: [IsAdicComplete I A]
+  条件: [是AdicComplete I A]
   结论: H.mod 0 = 0
   证明: by
   simpa using H.mod_smul 0 0
@@ -1090,7 +1090,7 @@ definition mod'
 
 中文:
 定义 mod'
-  签名: [IsAdicComplete I A]
+  签名: [是AdicComplete I A]
   定义体: Quotient.lift (fun f => H.mod f) fun f f' hf => by
     have hf := (Submodule.quotientRel_def (p := Ideal.span {g})).mp hf
     rw [Ideal.mem_span_singleton'] at hf
@@ -1128,7 +1128,7 @@ theorem mod'_mk_eq_mod
 
 中文:
 定理 mod'_mk_eq_mod
-  条件: [IsAdicComplete I A] {f : A⟦X⟧}
+  条件: [是AdicComplete I A] {f : A⟦X⟧}
   证明: rfl
 -/
 theorem mod'_mk_eq_mod [IsAdicComplete I A] {f : A⟦X⟧} :
@@ -1146,7 +1146,7 @@ theorem div_coe_eq_zero
 
 中文:
 定理 div_coe_eq_zero
-  结论: [IsAdicComplete I A] {r : A[X]}
+  结论: [是AdicComplete I A] {r : A[X]}
   证明: by
   obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
   exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).1
@@ -1172,7 +1172,7 @@ theorem mod_coe_eq_self
 
 中文:
 定理 mod_coe_eq_self
-  结论: [IsAdicComplete I A] {r : A[X]}
+  结论: [是AdicComplete I A] {r : A[X]}
   证明: by
   obtain ⟨h1, h2⟩ := H.isWeierstrassDivisionAt_div_mod r
   exact (H.eq_of_mul_add_eq_mul_add (q := H.div r) (q' := 0) h1 hr (by simpa using h2.symm)).2
@@ -1201,7 +1201,7 @@ theorem mk_mod'_eq_self
 
 中文:
 定理 mk_mod'_eq_self
-  条件: [IsAdicComplete I A] {f : A⟦X⟧ ⧸ Ideal.span {g}}
+  条件: [是AdicComplete I A] {f : A⟦X⟧ ⧸ 理想.span {g}}
   证明: by
   obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
   rw [mod'_mk_eq_mod]; rw [Eq.comm]; rw [Ideal.Quotient.mk_eq_mk_iff_sub_mem]; rw [Ideal.mem_span_singleton']
@@ -1239,7 +1239,7 @@ definition _root_.Polynomial.IsDistinguishedAt.algEquivQuotient
     exact ⟨b, by simp [← 
 
 中文:
-定义 _root_.Polynomial.IsDistinguishedAt.algEquivQuotient
+定义 _root_.多项式.是DistinguishedAt.algEquivQuotient
   签名: :
   定义体: Ideal.quotientMapₐ _ (Polynomial.coeToPowerSeries.algHom A) fun a ha => by
     obtain ⟨b, hb⟩ := Ideal.mem_span_singleton'.1 ha
@@ -1299,8 +1299,8 @@ theorem exists_isWeierstrassDivision
   proof: ⟨_, _, (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f⟩
 
 中文:
-定理 exists_isWeierstrassDivision
-  结论: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+定理 存在_isWeierstrassDivision
+  结论: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: ⟨_, _, (IsWeierstrassDivisor.of_map_ne_zero hg).isWeierstrassDivisionAt_div_mod f⟩
 
 Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, isWeierstrassDivisionAt_div_mod, of_map_ne_zero
@@ -1325,7 +1325,7 @@ definition weierstrassDiv
 
 中文:
 定义 weierstrassDiv
-  签名: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
+  签名: [是Precomplete (是局部环.maximalIdeal A) A]
   定义体: open scoped Classical in
   if hg : g.map (IsLocalRing.residue A) != 0 then
     (IsWeierstrassDivisor.of_map_ne_zero hg).div f
@@ -1363,7 +1363,7 @@ infixl:70 " %ʷ " => weierstrassMod
 
 中文:
 定义 weierstrassMod
-  签名: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
+  签名: [是Precomplete (是局部环.maximalIdeal A) A]
   定义体: open scoped Classical in
   if hg : g.map (IsLocalRing.residue A) != 0 then
     (IsWeierstrassDivisor.of_map_ne_zero hg).mod f
@@ -1410,7 +1410,7 @@ alias weierstrassDiv_zero := weierstrassDiv_zero_right
 
 中文:
 定理 weierstrassDiv_zero_right
-  条件: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是Precomplete (是局部环.maximalIdeal A) A]
   结论: f /ʷ 0 = 0
   证明: by
   rw [weierstrassDiv]; rw [dif_neg (by simp)]
@@ -1441,7 +1441,7 @@ alias weierstrassMod_zero := weierstrassMod_zero_right
 
 中文:
 定理 weierstrassMod_zero_right
-  条件: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是Precomplete (是局部环.maximalIdeal A) A]
   结论: f %ʷ 0 = 0
   证明: by
   rw [weierstrassMod]; rw [dif_neg (by simp)]
@@ -1471,7 +1471,7 @@ theorem degree_weierstrassMod_lt
 
 中文:
 定理 degree_weierstrassMod_lt
-  条件: [IsPrecomplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是Precomplete (是局部环.maximalIdeal A) A]
   证明: by
   rw [weierstrassMod]
   split_ifs with hg
@@ -1553,7 +1553,7 @@ theorem IsWeierstrassDivision.elim
 
 中文:
 定理 IsWeierstrassDivision.elim
-  结论: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
+  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
   证明: (IsWeierstrassDivisor.of_map_ne_zero hg).eq_of_mul_add_eq_mul_add H.1 H2.1 (H.2.symm.trans H2.2)
 
 Depends on / 依赖: IsWeierstrassDivisor, IsWeierstrassDivisor.of_map_ne_zero, eq_of_mul_add_eq_mul_add, of_map_ne_zero, symm.trans
@@ -1573,7 +1573,7 @@ theorem IsWeierstrassDivision.eq_zero
 
 中文:
 定理 IsWeierstrassDivision.eq_zero
-  结论: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
+  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
   证明: H.elim hg (g.isWeierstrassDivisionAt_zero _)
 
 Depends on / 依赖: H.elim, g.isWeierstrassDivisionAt_zero, isWeierstrassDivisionAt_zero
@@ -1594,7 +1594,7 @@ theorem IsWeierstrassDivision.unique
 
 中文:
 定理 IsWeierstrassDivision.unique
-  结论: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  结论: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: H.elim hg (f.isWeierstrassDivision_weierstrassDiv_weierstrassMod hg)
 
 Depends on / 依赖: H.elim, f.isWeierstrassDivision_weierstrassDiv_weierstrassMod, isWeierstrassDivision_weierstrassDiv_weierstrassMod
@@ -1621,7 +1621,7 @@ theorem add_weierstrassDiv
 
 中文:
 定理 add_weierstrassDiv
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: by
   simp_rw [weierstrassDiv]
   split_ifs <;> simp
@@ -1650,7 +1650,7 @@ theorem smul_weierstrassDiv
 
 中文:
 定理 smul_weierstrassDiv
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: by
   simp_rw [weierstrassDiv]
   split_ifs <;> simp
@@ -1682,7 +1682,7 @@ alias zero_weierstrassDiv := weierstrassDiv_zero_left
 
 中文:
 定理 weierstrassDiv_zero_left
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   结论: 0 /ʷ g = 0
   证明: by
   simp_rw [weierstrassDiv]
@@ -1715,7 +1715,7 @@ theorem add_weierstrassMod
 
 中文:
 定理 add_weierstrassMod
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: by
   simp_rw [weierstrassMod]
   split_ifs <;> simp
@@ -1744,7 +1744,7 @@ theorem smul_weierstrassMod
 
 中文:
 定理 smul_weierstrassMod
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   证明: by
   simp_rw [weierstrassMod]
   split_ifs <;> simp
@@ -1774,7 +1774,7 @@ alias zero_weierstrassMod := weierstrassMod_zero_left
 
 中文:
 定理 weierstrassMod_zero_left
-  条件: [IsAdicComplete (IsLocalRing.maximalIdeal A) A]
+  条件: [是AdicComplete (是局部环.maximalIdeal A) A]
   结论: 0 %ʷ g = 0
   证明: by
   simp_rw [weierstrassMod]
@@ -1814,11 +1814,11 @@ structure IsWeierstrassFactorizationAt
     - eq_mul : g = f * h
 
 中文:
-结构 IsWeierstrassFactorizationAt
-  参数: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : Ideal A)
+结构 是WeierstrassFactorizationAt
+  参数: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : 理想 A)
   公理与运算 (3 个):
-    - isDistinguishedAt : f.IsDistinguishedAt I
-    - isUnit : IsUnit h
+    - isDistinguishedAt : f.是DistinguishedAt I
+    - isUnit : 是单位 h
     - eq_mul : g = f * h
 -/
 structure IsWeierstrassFactorizationAt (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) (I : Ideal A) : Prop where
@@ -1836,7 +1836,7 @@ abbreviation IsWeierstrassFactorization
 
 中文:
 缩写 IsWeierstrassFactorization
-  签名: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [IsLocalRing A]
+  签名: (g : A⟦X⟧) (f : A[X]) (h : A⟦X⟧) [是局部环 A]
   定义体: g.IsWeierstrassFactorizationAt f h (IsLocalRing.maximalIdeal A)
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.maximalIdeal, IsWeierstrassFactorizationAt, g.IsWeierstrassFactorizationAt, maximalIdeal
@@ -1864,7 +1864,7 @@ theorem map_ne_zero_of_ne_top
 中文:
 定理 map_ne_zero_of_ne_top
   条件: (hI : I != ⊤)
-  结论: g.map (Ideal.Quotient.mk I) != 0
+  结论: g.map (理想.商.mk I) != 0
   证明: by
   have := Ideal.Quotient.nontrivial_iff.mpr hI
   rw [congr(map (Ideal.Quotient.mk I) $(H.eq_mul))]; rw [map_mul]; rw [← Polynomial.polynomial_map_coe]; rw [ne_eq]; rw [(H.isUnit.map _).mul_left_eq_zero]
@@ -1916,7 +1916,7 @@ theorem natDegree_eq_toNat_order_map_of_ne_top
   exact WithBot.unbotD_coe _ _
 
 中文:
-定理 natDegree_eq_toNat_order_map_of_ne_top
+定理 natDegree_eq_to自然数_order_map_of_ne_top
   条件: (hI : I != ⊤)
   证明: by
   rw [Polynomial.natDegree]; rw [H.degree_eq_coe_lift_order_map_of_ne_top hI]; rw [ENat.lift_eq_toNat_of_lt_top]
@@ -1945,7 +1945,7 @@ definition algEquivQuotient
 
 中文:
 定义 algEquivQuotient
-  签名: [IsAdicComplete I A]
+  签名: [是AdicComplete I A]
   定义体: H.isDistinguishedAt.algEquivQuotient.trans Ideal.quotientEquivAlgOfEq A
     by rw [H.eq_mul, Ideal.span_singleton_mul_right_unit H.isUnit]
 
@@ -1970,7 +1970,7 @@ theorem algEquivQuotient_symm_apply
 
 中文:
 定理 algEquivQuotient_symm_apply
-  条件: [IsAdicComplete I A] (x : A⟦X⟧ ⧸ Ideal.span {g})
+  条件: [是AdicComplete I A] (x : A⟦X⟧ ⧸ 理想.span {g})
   证明: by
   simp [algEquivQuotient]
 
@@ -1993,7 +1993,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.IsWeierstrassFactorizationAt f' h' I)
+  条件: {g' : A⟦X⟧} {f' : A[X]} {h' : A⟦X⟧} (H' : g'.是WeierstrassFactorizationAt f' h' I)
   证明: ⟨H.isDistinguishedAt.mul H'.isDistinguishedAt, H.isUnit.mul H'.isUnit, by
     rw [H.eq_mul]; rw [H'.eq_mul]; rw [Polynomial.coe_mul]; ring⟩
 
@@ -2019,8 +2019,8 @@ theorem smul
 
 中文:
 定理 smul
-  条件: {a : A} (ha : IsUnit a)
-  结论: (a • g).IsWeierstrassFactorizationAt f (a • h) I
+  条件: {a : A} (ha : 是单位 a)
+  结论: (a • g).是WeierstrassFactorizationAt f (a • h) I
   证明: by
   refine ⟨H.isDistinguishedAt, ?_, ?_⟩
   · rw [Algebra.smul_def]
@@ -2054,7 +2054,7 @@ theorem map_ne_zero
 
 中文:
 定理 map_ne_zero
-  结论: g.map (IsLocalRing.residue A) != 0
+  结论: g.map (是局部环.residue A) != 0
   证明: H.map_ne_zero_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
 
 Depends on / 依赖: H.map_ne_zero_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, map_ne_zero_of_ne_top, ne_top
@@ -2072,7 +2072,7 @@ theorem degree_eq_coe_lift_order_map
 
 中文:
 定理 degree_eq_coe_lift_order_map
-  结论: f.degree = (g.map (IsLocalRing.residue A)).order.lift
+  结论: f.degree = (g.map (是局部环.residue A)).order.lift
   证明: H.degree_eq_coe_lift_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
 
 Depends on / 依赖: H.degree_eq_coe_lift_order_map_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, degree_eq_coe_lift_order_map_of_ne_top, ne_top
@@ -2089,7 +2089,7 @@ theorem natDegree_eq_toNat_order_map
   proof: H.natDegree_eq_toNat_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
 
 中文:
-定理 natDegree_eq_toNat_order_map
+定理 natDegree_eq_to自然数_order_map
   证明: H.natDegree_eq_toNat_order_map_of_ne_top (Ideal.IsMaximal.ne_top inferInstance)
 
 Depends on / 依赖: H.natDegree_eq_toNat_order_map_of_ne_top, Ideal.IsMaximal.ne_top, IsMaximal, natDegree_eq_toNat_order_map_of_ne_top, ne_top
@@ -2241,7 +2241,7 @@ theorem IsWeierstrassFactorization.elim
 
 中文:
 定理 IsWeierstrassFactorization.elim
-  结论: [IsHausdorff (IsLocalRing.maximalIdeal A) A]
+  结论: [是豪斯多夫 (是局部环.maximalIdeal A) A]
   证明: by
   obtain ⟨h1, h2⟩ := H.isWeierstrassDivision.elim H.map_ne_zero H2.isWeierstrassDivision
   rw [← Units.ext_iff]; rw [inv_inj]; rw [Units.ext_iff] at h1
@@ -2272,8 +2272,8 @@ theorem exists_isWeierstrassFactorization
   exact ⟨_, _, H.isWeierstrassFactorization hg⟩
 
 中文:
-定理 exists_isWeierstrassFactorization
-  条件: (hg : g.map (IsLocalRing.residue A) != 0)
+定理 存在_isWeierstrassFactorization
+  条件: (hg : g.map (是局部环.residue A) != 0)
   证明: by
   obtain ⟨q, r, H⟩ :=
     (X ^ (g.map (IsLocalRing.residue A)).order.toNat).exists_isWeierstrassDivision hg
@@ -2298,7 +2298,7 @@ definition weierstrassDistinguished
 
 中文:
 定义 weierstrassDistinguished
-  签名: (hg : g.map (IsLocalRing.residue A) != 0)
+  签名: (hg : g.map (是局部环.residue A) != 0)
   定义体: (g.exists_isWeierstrassFactorization hg).choose
 
 Depends on / 依赖: exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
@@ -2317,7 +2317,7 @@ definition weierstrassUnit
 
 中文:
 定义 weierstrassUnit
-  签名: (hg : g.map (IsLocalRing.residue A) != 0)
+  签名: (hg : g.map (是局部环.residue A) != 0)
   定义体: (g.exists_isWeierstrassFactorization hg).choose_spec.choose
 
 Depends on / 依赖: choose_spec, choose_spec.choose, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
@@ -2370,7 +2370,7 @@ theorem isDistinguishedAt_weierstrassDistinguished
 
 中文:
 定理 isDistinguishedAt_weierstrassDistinguished
-  条件: (hg : g.map (IsLocalRing.residue A) != 0)
+  条件: (hg : g.map (是局部环.residue A) != 0)
   证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isDistinguishedAt
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.isDistinguishedAt, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization, isDistinguishedAt
@@ -2389,7 +2389,7 @@ theorem isUnit_weierstrassUnit
 
 中文:
 定理 isUnit_weierstrassUnit
-  条件: (hg : g.map (IsLocalRing.residue A) != 0)
+  条件: (hg : g.map (是局部环.residue A) != 0)
   证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.isUnit
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.isUnit, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization, isUnit
@@ -2408,7 +2408,7 @@ theorem eq_weierstrassDistinguished_mul_weierstrassUnit
 
 中文:
 定理 eq_weierstrassDistinguished_mul_weierstrassUnit
-  条件: (hg : g.map (IsLocalRing.residue A) != 0)
+  条件: (hg : g.map (是局部环.residue A) != 0)
   证明: (g.exists_isWeierstrassFactorization hg).choose_spec.choose_spec.eq_mul
 
 Depends on / 依赖: choose_spec, choose_spec.choose_spec.eq_mul, eq_mul, exists_isWeierstrassFactorization, g.exists_isWeierstrassFactorization
@@ -2455,7 +2455,7 @@ theorem weierstrassDistinguished_mul
 
 中文:
 定理 weierstrassDistinguished_mul
-  条件: (hg : (g * g').map (IsLocalRing.residue A) != 0)
+  条件: (hg : (g * g').map (是局部环.residue A) != 0)
   证明: by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
@@ -2492,7 +2492,7 @@ theorem weierstrassUnit_mul
 
 中文:
 定理 weierstrassUnit_mul
-  条件: (hg : (g * g').map (IsLocalRing.residue A) != 0)
+  条件: (hg : (g * g').map (是局部环.residue A) != 0)
   证明: by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [h]))
@@ -2528,7 +2528,7 @@ theorem weierstrassDistinguished_smul
 
 中文:
 定理 weierstrassDistinguished_smul
-  条件: (hg : (a • g).map (IsLocalRing.residue A) != 0)
+  条件: (hg : (a • g).map (是局部环.residue A) != 0)
   证明: by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))
@@ -2561,7 +2561,7 @@ theorem weierstrassUnit_smul
 
 中文:
 定理 weierstrassUnit_smul
-  条件: (hg : (a • g).map (IsLocalRing.residue A) != 0)
+  条件: (hg : (a • g).map (是局部环.residue A) != 0)
   证明: by
   have H := g.isWeierstrassFactorization_weierstrassDistinguished_weierstrassUnit
     (fun h => hg (by simp [Algebra.smul_def, h]))

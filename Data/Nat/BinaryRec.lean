@@ -35,7 +35,7 @@ definition bit
 
 中文:
 定义 bit
-  签名: (b : 布尔) (n : 自然数)
+  签名: (b : 布尔值) (n : 自然数)
   定义体: cond b (2 * n + 1) (2 * n)
 -/
 def bit (b : Bool) (n : Nat) : Nat :=
@@ -213,7 +213,7 @@ theorem bit_eq_zero_iff
 
 中文:
 定理 bit_eq_zero_iff
-  条件: {n : 自然数} {b : 布尔}
+  条件: {n : 自然数} {b : 布尔值}
   结论: bit b n = 0 ↔ n = 0 ∧ b = false
   证明: by
   cases n <;> cases b <;> simp [bit, Nat.two_mul, ← Nat.add_assoc]
@@ -235,7 +235,7 @@ theorem bit_ne_zero_iff
 
 中文:
 定理 bit_ne_zero_iff
-  条件: {n : 自然数} {b : 布尔}
+  条件: {n : 自然数} {b : 布尔值}
   结论: n.bit b != 0 ↔ n = 0 -> b = true
   证明: by
   simp
@@ -260,7 +260,7 @@ definition bitCasesOn
 
 中文:
 定义 bitCasesOn
-  签名: {motive : 自然数 -> Sort u} (n) (bit : 对任意 b n, motive (bit b n))
+  签名: {motive : 自然数 -> 类型层 u} (n) (bit : 对任意 b n, motive (bit b n))
   定义体: -- `1 &&& n != 0` is faster than `n.testBit 0`. This may change when we have faster `testBit`.
   let x := bit (1 &&& n != 0) (n >>> 1)
   -- `congrArg motive _ ▸ x` is defeq to `x` in non-dependent case
@@ -336,7 +336,7 @@ decreasing_by
 
 中文:
 定义 binaryRec
-  签名: {motive : 自然数 -> Sort u} (zero : motive 0) (bit : 对任意 b n, motive n -> motive (bit b n))
+  签名: {motive : 自然数 -> 类型层 u} (zero : motive 0) (bit : 对任意 b n, motive n -> motive (bit b n))
   定义体: if n0 : n = 0 then congrArg motive n0 ▸ zero
   else
     let x := bit (1 &&& n != 0) (n >>> 1) (binaryRec zero bit (n >>> 1))
@@ -379,7 +379,7 @@ definition binaryRec'
 
 中文:
 定义 binaryRec'
-  签名: {motive : 自然数 -> Sort u} (zero : motive 0)
+  签名: {motive : 自然数 -> 类型层 u} (zero : motive 0)
   定义体: binaryRec zero fun b n ih =>
     if h : n = 0 -> b = true then bit b n h ih
     else
@@ -418,7 +418,7 @@ definition binaryRecFromOne
 
 中文:
 定义 binaryRecFromOne
-  签名: {motive : 自然数 -> Sort u} (zero : motive 0) (one : motive 1)
+  签名: {motive : 自然数 -> 类型层 u} (zero : motive 0) (one : motive 1)
   定义体: binaryRec' zero fun b n h ih =>
     if h' : n = 0 then
       have : n.bit b = Nat.bit true 0 := by
@@ -582,7 +582,7 @@ theorem bitCasesOn_bit
 
 中文:
 定理 bitCasesOn_bit
-  条件: (h : 对任意 b n, motive (bit b n)) (b : 布尔) (n : 自然数)
+  条件: (h : 对任意 b n, motive (bit b n)) (b : 布尔值) (n : 自然数)
   证明: by
   change congrArg motive (bit b n).bit_testBit_zero_shiftRight_one ▸ h _ _ = h b n
   generalize congrArg motive (bit b n).bit_testBit_zero_shiftRight_one = e; revert e

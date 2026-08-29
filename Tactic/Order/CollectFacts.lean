@@ -178,7 +178,7 @@ definition addFact
 
 中文:
 定义 addFact
-  签名: (type : Expr) (fact : AtomicFact)
+  签名: (type : Expr) (阶乘 : AtomicFact)
   定义体: modify fun res => res.modify type fun facts => facts.push fact
 
 Depends on / 依赖: facts.push, modify, res.modify
@@ -261,7 +261,7 @@ definition collectFactsImp
 
 中文:
 定义 collectFactsImp
-  签名: (only? : 布尔) (hyps : Array Expr) (negGoal : Expr)
+  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr)
   定义体: do
   let ctx ← getLCtx
   for expr in hyps do
@@ -352,7 +352,7 @@ definition collectFacts
 
 中文:
 定义 collectFacts
-  签名: (only? : 布尔) (hyps : Array Expr) (negGoal : Expr)
+  签名: (only? : 布尔值) (hyps : 数组 Expr) (negGoal : Expr)
   定义体: do
   return (← (collectFactsImp only? hyps negGoal).run ∅).snd
 -/

@@ -173,7 +173,7 @@ theorem hasDerivAt_sqrt
 中文:
 定理 hasDerivAt_sqrt
   条件: {x : 实数} (hx : x != 0)
-  结论: HasDerivAt (√·) (1 / (2 * √x)) x
+  结论: 在点处可导 (√·) (1 / (2 * √x)) x
   证明: (hasStrictDerivAt_sqrt hx).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_sqrt
@@ -223,8 +223,8 @@ theorem HasDerivAt.sqrt
   simpa only [(· ∘ ·), div_eq_inv_mul, mul_one] using! (hasDerivAt_sqrt hx).comp x hf
 
 中文:
-定理 HasDerivAt.sqrt
-  条件: (hf : HasDerivAt f f' x) (hx : f x != 0)
+定理 在点处可导.sqrt
+  条件: (hf : 在点处可导 f f' x) (hx : f x != 0)
   证明: by
   simpa only [(· ∘ ·), div_eq_inv_mul, mul_one] using! (hasDerivAt_sqrt hx).comp x hf
 
@@ -315,8 +315,8 @@ theorem HasFDerivAt.sqrt
   proof: (hasDerivAt_sqrt hx).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.sqrt
-  条件: (hf : HasFDerivAt f f' x) (hx : f x != 0)
+定理 在点处Fréchet可导.sqrt
+  条件: (hf : 在点处Fréchet可导 f f' x) (hx : f x != 0)
   证明: (hasDerivAt_sqrt hx).comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_sqrt
@@ -446,8 +446,8 @@ theorem Differentiable.sqrt
   proof: fun x => (hf x).sqrt (hs x)
 
 中文:
-定理 Differentiable.sqrt
-  条件: (hf : Differentiable 实数 f) (hs : 对任意 x, f x != 0)
+定理 可微.sqrt
+  条件: (hf : 可微 实数 f) (hs : 对任意 x, f x != 0)
   证明: fun x => (hf x).sqrt (hs x)
 -/
 theorem Differentiable.sqrt (hf : Differentiable Real f) (hs : forall x, f x != 0) :
@@ -581,9 +581,9 @@ theorem ContDiff.sqrt
   proof: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.sqrt (h x)
 
 中文:
-定理 ContDiff.sqrt
-  条件: (hf : ContDiff 实数 n f) (h : 对任意 x, f x != 0)
-  结论: ContDiff 实数 n fun y => √(f y)
+定理 连续可微.sqrt
+  条件: (hf : 连续可微 实数 n f) (h : 对任意 x, f x != 0)
+  结论: 连续可微 实数 n fun y => √(f y)
   证明: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.sqrt (h x)
 
 Depends on / 依赖: contDiffAt, contDiff_iff_contDiffAt, hf.contDiffAt.sqrt

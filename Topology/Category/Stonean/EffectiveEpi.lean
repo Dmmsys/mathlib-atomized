@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Stonean.toCompHaus.PreservesEffectiveEpis
+  签名: Stonean.toCompHaus.保持EffectiveEpis
   定义体: ((CompHaus.effectiveEpi_tfae (Stonean.toCompHaus.map f)).out 0 2).mpr
       (((Stonean.effectiveEpi_tfae f).out 0 2).mp h)
 

@@ -33,7 +33,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (Matrix m n 𝕜)
+  签名: : 一致空间 (矩阵 m n 𝕜)
   定义体: inferInstanceAs UniformSpace (m -> n -> 𝕜)
 
 Depends on / 依赖: UniformSpace
@@ -51,7 +51,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: [AddGroup 𝕜] [IsUniformAddGroup 𝕜]
+  签名: [加法群 𝕜] [是UniformAdd群 𝕜]
   定义体: inferInstanceAs IsUniformAddGroup (m -> n -> 𝕜)
 
 Depends on / 依赖: IsUniformAddGroup
@@ -97,7 +97,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  条件: {β : 类型} [UniformSpace β] {f : β -> Matrix m n 𝕜}
+  条件: {β : 类型} [一致空间 β] {f : β -> 矩阵 m n 𝕜}
   证明: by
   simp only [UniformContinuous, Matrix.uniformity, Filter.tendsto_iInf, Filter.tendsto_comap_iff]
   apply Iff.intro <;> intro a <;> apply a
@@ -118,8 +118,8 @@ instance [CompleteSpace
   body: inferInstanceAs CompleteSpace (m -> n -> 𝕜)
 
 中文:
-实例 [CompleteSpace
-  签名: 𝕜] : CompleteSpace (Matrix m n 𝕜)
+实例 [完备空间
+  签名: 𝕜] : 完备空间 (矩阵 m n 𝕜)
   定义体: inferInstanceAs CompleteSpace (m -> n -> 𝕜)
 
 Depends on / 依赖: CompleteSpace

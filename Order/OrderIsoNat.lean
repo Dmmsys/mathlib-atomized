@@ -211,7 +211,7 @@ theorem not_wellFounded
 中文:
 定理 not_wellFounded
   条件: (f : ((· > ·) : 自然数 -> 自然数 -> 命题) ↪r r)
-  结论: ¬WellFounded r
+  结论: ¬良基 r
   证明: by
   rw [wellFounded_iff_isEmpty]; rw [not_isEmpty_iff]
   exact ⟨f⟩
@@ -235,7 +235,7 @@ theorem not_strictAnti_of_wellFoundedLT
 
 中文:
 定理 not_strictAnti_of_wellFoundedLT
-  条件: [Preorder α] [WellFoundedLT α] (f : 自然数 -> α)
+  条件: [预序 α] [WellFoundedLT α] (f : 自然数 -> α)
   证明: fun hf =>
   (RelEmbedding.natGT f (fun n => hf (by simp))).not_wellFounded wellFounded_lt
 -/
@@ -253,7 +253,7 @@ theorem not_strictMono_of_wellFoundedGT
 
 中文:
 定理 not_strictMono_of_wellFoundedGT
-  条件: [Preorder α] [WellFoundedGT α] (f : 自然数 -> α)
+  条件: [预序 α] [WellFoundedGT α] (f : 自然数 -> α)
   证明: not_strictAnti_of_wellFoundedLT (α := αᵒᵈ) f
 
 Depends on / 依赖: not_strictAnti_of_wellFoundedLT
@@ -305,7 +305,7 @@ definition Subtype.orderIsoOfNat
       Nat.Subtype.ofNat_surjective
 
 中文:
-定义 Subtype.orderIsoOfNat
+定义 子类型.orderIsoOf自然数
   签名: : 自然数 ≃o s
   定义体: by
   classical
@@ -378,7 +378,7 @@ theorem Subtype.orderIsoOfNat_apply
   congr!
 
 中文:
-定理 Subtype.orderIsoOfNat_apply
+定理 子类型.orderIsoOf自然数_apply
   条件: [dP : DecidablePred (· in s)] {n : 自然数}
   证明: by
   simp only [orderIsoOfNat, RelIso.ofSurjective_apply,
@@ -429,8 +429,8 @@ theorem exists_subseq_of_forall_mem_union
     exacts [⟨Nat.orderEmbeddingOfSet (e ⁻¹' s
 
 中文:
-定理 exists_subseq_of_forall_mem_union
-  条件: {s t : Set α} (e : 自然数 -> α) (he : 对任意 n, e n in s union t)
+定理 存在_subseq_of_对任意_mem_union
+  条件: {s t : 集合 α} (e : 自然数 -> α) (he : 对任意 n, e n in s union t)
   证明: by
   classical
     have : Infinite (e ⁻¹' s) ∨ Infinite (e ⁻¹' t) := by
@@ -468,7 +468,7 @@ theorem exists_increasing_or_nonincreasing_subseq'
       rw [Nat.orderEmbeddingOfSet_
 
 中文:
-定理 exists_increasing_or_nonincreasing_subseq'
+定理 存在_increasing_or_nonincreasing_subseq'
   条件: (r : α -> α -> 命题) (f : 自然数 -> α)
   证明: by
   classical
@@ -529,8 +529,8 @@ theorem exists_increasing_or_nonincreasing_subseq
  
 
 中文:
-定理 exists_increasing_or_nonincreasing_subseq
-  条件: (r : α -> α -> 命题) [IsTrans α r] (f : 自然数 -> α)
+定理 存在_increasing_or_nonincreasing_subseq
+  条件: (r : α -> α -> 命题) [是Trans α r] (f : 自然数 -> α)
   证明: by
   obtain ⟨g, hr | hnr⟩ := exists_increasing_or_nonincreasing_subseq' r f
   · refine ⟨g, Or.intro_left _ fun m n mn => ?_⟩
@@ -572,8 +572,8 @@ theorem Infinite.exists_strictMono_or_strictAnti
     · 
 
 中文:
-定理 Infinite.exists_strictMono_or_strictAnti
-  条件: (α : 类型) [LinearOrder α] [Infinite α]
+定理 无限.存在_strictMono_or_strictAnti
+  条件: (α : 类型) [线性序 α] [无限 α]
   证明: by
   let f := Infinite.natEmbedding α
   obtain ⟨g, hg⟩ := exists_increasing_or_nonincreasing_subseq (· < ·) f
@@ -610,8 +610,8 @@ theorem Finite.of_wellFoundedLT_wellFoundedGT
   · exact not_strictAnti_of_wellFoundedLT f hStrictAnti
 
 中文:
-定理 Finite.of_wellFoundedLT_wellFoundedGT
-  结论: (α : 类型) [LinearOrder α]
+定理 有限.of_wellFoundedLT_wellFoundedGT
+  结论: (α : 类型) [线性序 α]
   证明: by
   apply Finite.of_not_infinite
   intro
@@ -645,7 +645,7 @@ theorem wellFoundedGT_iff_monotone_chain_condition'
 
 中文:
 定理 wellFoundedGT_iff_monotone_chain_condition'
-  条件: [Preorder α]
+  条件: [预序 α]
   证明: by
   refine ⟨fun h a => ?_, fun h => ?_⟩
   · obtain ⟨x, ⟨n, rfl⟩, H⟩ := h.wf.has_min _ (Set.range_nonempty a)
@@ -676,7 +676,7 @@ theorem WellFoundedGT.monotone_chain_condition'
 
 中文:
 定理 WellFoundedGT.monotone_chain_condition'
-  条件: [Preorder α] [h : WellFoundedGT α] (a : 自然数 ->o α)
+  条件: [预序 α] [h : WellFoundedGT α] (a : 自然数 ->o α)
   证明: wellFoundedGT_iff_monotone_chain_condition'.1 h a
 
 Depends on / 依赖: wellFoundedGT_iff_monotone_chain_condition
@@ -698,7 +698,7 @@ theorem wellFoundedGT_iff_monotone_chain_condition
 
 中文:
 定理 wellFoundedGT_iff_monotone_chain_condition
-  条件: [PartialOrder α]
+  条件: [偏序 α]
   证明: wellFoundedGT_iff_monotone_chain_condition'.trans by
   congrm forall a, exists n, forall m h, ?_
   rw [lt_iff_le_and_ne]
@@ -723,7 +723,7 @@ theorem WellFoundedGT.monotone_chain_condition
 
 中文:
 定理 WellFoundedGT.monotone_chain_condition
-  条件: [PartialOrder α] [h : WellFoundedGT α] (a : 自然数 ->o α)
+  条件: [偏序 α] [h : WellFoundedGT α] (a : 自然数 ->o α)
   证明: wellFoundedGT_iff_monotone_chain_condition.1 h a
 
 Depends on / 依赖: wellFoundedGT_iff_monotone_chain_condition
@@ -742,7 +742,7 @@ theorem WellFoundedLT.antitone_chain_condition
 
 中文:
 定理 WellFoundedLT.antitone_chain_condition
-  结论: [PartialOrder α] [WellFoundedLT α]
+  结论: [偏序 α] [WellFoundedLT α]
   证明: WellFoundedGT.monotone_chain_condition ⟨OrderDual.toDual ∘ f, hf⟩
 
 Depends on / 依赖: OrderDual, OrderDual.toDual, WellFoundedGT, WellFoundedGT.monotone_chain_condition, monotone_chain_condition, toDual
@@ -761,7 +761,7 @@ definition monotonicSequenceLimitIndex
 
 中文:
 定义 monotonicSequenceLimitIndex
-  签名: [Preorder α] (a : 自然数 ->o α)
+  签名: [预序 α] (a : 自然数 ->o α)
   定义体: sInf { n | forall m, n <= m -> a n = a m }
 -/
 noncomputable def monotonicSequenceLimitIndex [Preorder α] (a : Nat ->o α) : Nat :=
@@ -777,7 +777,7 @@ definition monotonicSequenceLimit
 
 中文:
 定义 monotonicSequenceLimit
-  签名: [Preorder α] (a : 自然数 ->o α)
+  签名: [预序 α] (a : 自然数 ->o α)
   定义体: a (monotonicSequenceLimitIndex a)
 
 Depends on / 依赖: monotonicSequenceLimitIndex
@@ -799,7 +799,7 @@ theorem le_monotonicSequenceLimit
 
 中文:
 定理 le_monotonicSequenceLimit
-  条件: [PartialOrder α] [WellFoundedGT α] (a : 自然数 ->o α) (m : 自然数)
+  条件: [偏序 α] [WellFoundedGT α] (a : 自然数 ->o α) (m : 自然数)
   证明: by
   rcases le_or_gt m (monotonicSequenceLimitIndex a) with hm | hm
   · exact a.monotone hm
@@ -825,7 +825,7 @@ theorem WellFoundedGT.iSup_eq_monotonicSequenceLimit
 
 中文:
 定理 WellFoundedGT.iSup_eq_monotonicSequenceLimit
-  结论: [CompleteLattice α]
+  结论: [完备格 α]
   证明: (iSup_le (le_monotonicSequenceLimit a)).antisymm (le_iSup a _)
 
 Depends on / 依赖: antisymm, iSup_le, le_iSup, le_monotonicSequenceLimit
@@ -844,7 +844,7 @@ theorem WellFoundedGT.ciSup_eq_monotonicSequenceLimit
 
 中文:
 定理 WellFoundedGT.ciSup_eq_monotonicSequenceLimit
-  结论: [ConditionallyCompleteLattice α]
+  结论: [条件完备格 α]
   证明: (ciSup_le (le_monotonicSequenceLimit a)).antisymm (le_ciSup ha _)
 
 Depends on / 依赖: antisymm, ciSup_le, le_ciSup, le_monotonicSequenceLimit
@@ -868,8 +868,8 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT
   refine ⟨a, isMin_iff_forall_not_lt.mpr fun _ => wfl.wf.not_lt_min _ (Se
 
 中文:
-定理 exists_covBy_seq_of_wellFoundedLT_wellFoundedGT
-  结论: (α) [Preorder α]
+定理 存在_covBy_seq_of_wellFoundedLT_wellFoundedGT
+  结论: (α) [预序 α]
   证明: by
   choose next hnext using exists_covBy_of_wellFoundedLT (α := α)
   have hα := Set.nonempty_iff_univ_nonempty.mp ‹_›
@@ -910,8 +910,8 @@ theorem exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
   simp only [isMin_iff_eq_bot, Subtype.ext_iff, isMax_iff_eq_top] at h₁ h₂
 
 中文:
-定理 exists_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
-  结论: {α : 类型} [PartialOrder α]
+定理 存在_covBy_seq_of_wellFoundedLT_wellFoundedGT_of_le
+  结论: {α : 类型} [偏序 α]
   证明: by
   let S := Set.Icc x y
   let hS : BoundedOrder S :=

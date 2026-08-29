@@ -37,7 +37,7 @@ lemma FinStronglyMeasurable.exists_measurableSet_measure_pos_lt_top
   filter_upwar
 
 中文:
-引理 FinStronglyMeasurable.exists_measurableSet_measure_pos_lt_top
+引理 FinStronglyMeasurable.存在_measurableSet_measure_pos_lt_top
   结论: {f : α -> E}
   证明: by
   contrapose! h'f
@@ -77,7 +77,7 @@ lemma AEFinStronglyMeasurable.exists_measurableSet_measure_pos_lt_top
   exact hf.ae_eq_mk.trans h'f
 
 中文:
-引理 AEFinStronglyMeasurable.exists_measurableSet_measure_pos_lt_top
+引理 AEFinStronglyMeasurable.存在_measurableSet_measure_pos_lt_top
   结论: {f : α -> E}
   证明: by
   apply hf.finStronglyMeasurable_mk.exists_measurableSet_measure_pos_lt_top
@@ -114,8 +114,8 @@ lemma nontrivial_Lp_real_of_nontrivial_Lp
 
 中文:
 引理 nontrivial_Lp_real_of_nontrivial_Lp
-  条件: [Nontrivial (Lp E p μ)]
-  结论: Nontrivial (Lp 实数 p μ)
+  条件: [非平凡 (Lp E p μ)]
+  结论: 非平凡 (Lp 实数 p μ)
   证明: by
   obtain ⟨f, hf⟩ : exists f : Lp E p μ, f != 0 := exists_ne 0
   have hfne : ¬ (f =ᵐ[μ] 0) := by

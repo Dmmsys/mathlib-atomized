@@ -189,7 +189,7 @@ theorem sumInv_pqr
 中文:
 定理 sumInv_pqr
   条件: (p q r : 自然数+)
-  结论: sumInv {p, q, r} = (p : Rat)⁻¹ + (q : Rat)⁻¹ + (r : Rat)⁻¹
+  结论: sumInv {p, q, r} = (p : 有理数)⁻¹ + (q : 有理数)⁻¹ + (r : 有理数)⁻¹
   证明: by
   simp only [sumInv, insert_eq_cons, add_assoc, map_cons, sum_cons,
     map_singleton, sum_singleton]

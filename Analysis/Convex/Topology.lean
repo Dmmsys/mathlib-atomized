@@ -89,7 +89,7 @@ theorem convex_iff_isPreconnected
 
 中文:
 定理 convex_iff_isPreconnected
-  结论: Convex 实数 s ↔ IsPreconnected s
+  结论: 凸 实数 s ↔ 是预连通 s
   证明: convex_iff_ordConnected.trans isPreconnected_iff_ordConnected.symm
 
 Depends on / 依赖: convex_iff_ordConnected, convex_iff_ordConnected.trans, isPreconnected_iff_ordConnected, isPreconnected_iff_ordConnected.symm
@@ -192,8 +192,8 @@ theorem Convex.combo_interior_closure_subset_interior
       _ subseteq interior (a • s + b 
 
 中文:
-定理 Convex.combo_interior_closure_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {a b : 𝕜}
+定理 凸.combo_interior_closure_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {a b : 𝕜}
   证明: interior_smul₀ ha.ne' s ▸
     calc
       interior (a • s) + b • closure s subseteq interior (a • s) + closure (b • s) :=
@@ -225,8 +225,8 @@ add_subset_add Subset.rfl image_mono subset_closure
     _ subseteq interior s := hs.combo_interior_closure_subset_interior ha hb hab
 
 中文:
-定理 Convex.combo_interior_self_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {a b : 𝕜}
+定理 凸.combo_interior_self_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {a b : 𝕜}
   证明: calc
     a • interior s + b • s subseteq a • interior s + b • closure s :=
 add_subset_add Subset.rfl image_mono subset_closure
@@ -252,8 +252,8 @@ theorem Convex.combo_closure_interior_subset_interior
   exact hs.combo_interior_closure_subset_interior hb ha (add_comm a b ▸ hab)
 
 中文:
-定理 Convex.combo_closure_interior_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {a b : 𝕜}
+定理 凸.combo_closure_interior_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {a b : 𝕜}
   证明: by
   rw [add_comm]
   exact hs.combo_interior_closure_subset_interior hb ha (add_comm a b ▸ hab)
@@ -276,8 +276,8 @@ theorem Convex.combo_self_interior_subset_interior
   exact hs.combo_interior_self_subset_interior hb ha (add_comm a b ▸ hab)
 
 中文:
-定理 Convex.combo_self_interior_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {a b : 𝕜}
+定理 凸.combo_self_interior_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {a b : 𝕜}
   证明: by
   rw [add_comm]
   exact hs.combo_interior_self_subset_interior hb ha (add_comm a b ▸ hab)
@@ -299,8 +299,8 @@ theorem Convex.combo_interior_closure_mem_interior
     add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
 
 中文:
-定理 Convex.combo_interior_closure_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.combo_interior_closure_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: hs.combo_interior_closure_subset_interior ha hb hab
     add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
 
@@ -321,8 +321,8 @@ theorem Convex.combo_interior_self_mem_interior
   proof: hs.combo_interior_closure_mem_interior hx (subset_closure hy) ha hb hab
 
 中文:
-定理 Convex.combo_interior_self_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.combo_interior_self_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: hs.combo_interior_closure_mem_interior hx (subset_closure hy) ha hb hab
 
 Depends on / 依赖: combo_interior_closure_mem_interior, hs.combo_interior_closure_mem_interior, subset_closure
@@ -342,8 +342,8 @@ theorem Convex.combo_closure_interior_mem_interior
     add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
 
 中文:
-定理 Convex.combo_closure_interior_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.combo_closure_interior_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: hs.combo_closure_interior_subset_interior ha hb hab
     add_mem_add (smul_mem_smul_set hx) (smul_mem_smul_set hy)
 
@@ -364,8 +364,8 @@ theorem Convex.combo_self_interior_mem_interior
   proof: hs.combo_closure_interior_mem_interior (subset_closure hx) hy ha hb hab
 
 中文:
-定理 Convex.combo_self_interior_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E} (hx : x in s)
+定理 凸.combo_self_interior_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E} (hx : x in s)
   证明: hs.combo_closure_interior_mem_interior (subset_closure hx) hy ha hb hab
 
 Depends on / 依赖: combo_closure_interior_mem_interior, hs.combo_closure_interior_mem_interior, subset_closure
@@ -386,8 +386,8 @@ theorem Convex.openSegment_interior_closure_subset_interior
   exact hs.combo_interior_closure_mem_interior hx hy ha hb.le hab
 
 中文:
-定理 Convex.openSegment_interior_closure_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.openSegment_interior_closure_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: by
   rintro _ ⟨a, b, ha, hb, hab, rfl⟩
   exact hs.combo_interior_closure_mem_interior hx hy ha hb.le hab
@@ -408,8 +408,8 @@ theorem Convex.openSegment_interior_self_subset_interior
   proof: hs.openSegment_interior_closure_subset_interior hx (subset_closure hy)
 
 中文:
-定理 Convex.openSegment_interior_self_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.openSegment_interior_self_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: hs.openSegment_interior_closure_subset_interior hx (subset_closure hy)
 
 Depends on / 依赖: hs.openSegment_interior_closure_subset_interior, openSegment_interior_closure_subset_interior, subset_closure
@@ -429,8 +429,8 @@ theorem Convex.openSegment_closure_interior_subset_interior
   exact hs.combo_closure_interior_mem_interior hx hy ha.le hb hab
 
 中文:
-定理 Convex.openSegment_closure_interior_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.openSegment_closure_interior_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: by
   rintro _ ⟨a, b, ha, hb, hab, rfl⟩
   exact hs.combo_closure_interior_mem_interior hx hy ha.le hb hab
@@ -451,8 +451,8 @@ theorem Convex.openSegment_self_interior_subset_interior
   proof: hs.openSegment_closure_interior_subset_interior (subset_closure hx) hy
 
 中文:
-定理 Convex.openSegment_self_interior_subset_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.openSegment_self_interior_subset_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: hs.openSegment_closure_interior_subset_interior (subset_closure hx) hy
 
 Depends on / 依赖: hs.openSegment_closure_interior_subset_interior, openSegment_closure_interior_subset_interior, subset_closure
@@ -477,8 +477,8 @@ theorem Convex.add_smul_sub_mem_interior'
       (add_sub_cancel _ _)
 
 中文:
-定理 Convex.add_smul_sub_mem_interior'
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E}
+定理 凸.add_smul_sub_mem_interior'
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E}
   证明: by
   simpa only [sub_smul, smul_sub, one_smul, add_sub, add_comm] using
     hs.combo_interior_closure_mem_interior hy hx ht.1 (sub_nonneg.mpr ht.2)
@@ -502,8 +502,8 @@ theorem Convex.add_smul_sub_mem_interior
   proof: hs.add_smul_sub_mem_interior' (subset_closure hx) hy ht
 
 中文:
-定理 Convex.add_smul_sub_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E} (hx : x in s)
+定理 凸.add_smul_sub_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E} (hx : x in s)
   证明: hs.add_smul_sub_mem_interior' (subset_closure hx) hy ht
 
 Depends on / 依赖: add_smul_sub_mem_interior, hs.add_smul_sub_mem_interior, subset_closure
@@ -522,8 +522,8 @@ theorem Convex.add_smul_mem_interior'
   simpa only [add_sub_cancel_left] using hs.add_smul_sub_mem_interior' hx hy ht
 
 中文:
-定理 Convex.add_smul_mem_interior'
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E} (hx : x in closure s)
+定理 凸.add_smul_mem_interior'
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E} (hx : x in closure s)
   证明: by
   simpa only [add_sub_cancel_left] using hs.add_smul_sub_mem_interior' hx hy ht
 
@@ -542,8 +542,8 @@ theorem Convex.add_smul_mem_interior
   proof: hs.add_smul_mem_interior' (subset_closure hx) hy ht
 
 中文:
-定理 Convex.add_smul_mem_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s) {x y : E} (hx : x in s)
+定理 凸.add_smul_mem_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s) {x y : E} (hx : x in s)
   证明: hs.add_smul_mem_interior' (subset_closure hx) hy ht
 
 Depends on / 依赖: add_smul_mem_interior, hs.add_smul_mem_interior, subset_closure
@@ -564,8 +564,8 @@ theorem Convex.interior
     hs.openSegment_closure_interior_subset_interior (interior_subset_closure hx) hy
 
 中文:
-定理 Convex.interior
-  条件: [ZeroLEOneClass 𝕜] {s : Set E} (hs : Convex 𝕜 s)
+定理 凸.interior
+  条件: [ZeroLEOne类 𝕜] {s : 集合 E} (hs : 凸 𝕜 s)
   证明: convex_iff_openSegment_subset.mpr fun _ hx _ hy =>
     hs.openSegment_closure_interior_subset_interior (interior_subset_closure hx) hy
 -/
@@ -588,9 +588,9 @@ theorem Convex.closure
   show f x y in closure s from map_mem_closure₂ hf hx hy fun _ hx' _ hy' => hs hx' hy' ha hb hab
 
 中文:
-定理 Convex.closure
-  条件: {s : Set E} (hs : Convex 𝕜 s)
-  结论: Convex 𝕜 (closure s)
+定理 凸.closure
+  条件: {s : 集合 E} (hs : 凸 𝕜 s)
+  结论: 凸 𝕜 (closure s)
   证明: fun x hx y hy a b ha hb hab =>
   let f : E -> E -> E := fun x' y' => a • x' + b • y'
   have hf : Continuous (Function.uncurry f) :=
@@ -614,7 +614,7 @@ lemma convexHull_interior_subset
 
 中文:
 引理 convexHull_interior_subset
-  条件: [ZeroLEOneClass 𝕜] (s : Set E)
+  条件: [ZeroLEOne类 𝕜] (s : 集合 E)
   证明: convexHull_min (interior_mono <| subset_convexHull 𝕜 s) (convex_convexHull 𝕜 s).interior
 
 Depends on / 依赖: convexHull_min, convex_convexHull, interior, interior_mono, subset_convexHull
@@ -633,8 +633,8 @@ theorem IsOpen.convexHull
   simpa [← subset_interior_iff_isOpen, hs.interior_eq] using convexHull_interior_subset s
 
 中文:
-定理 IsOpen.convexHull
-  条件: [ZeroLEOneClass 𝕜] {s : Set E} (hs : IsOpen s)
+定理 是开集.convexHull
+  条件: [ZeroLEOne类 𝕜] {s : 集合 E} (hs : 是开集 s)
   证明: by
   simpa [← subset_interior_iff_isOpen, hs.interior_eq] using convexHull_interior_subset s
 -/
@@ -669,8 +669,8 @@ theorem Convex.strictConvex'
   rcases h ⟨hx, hx'⟩ ⟨hy, hy'⟩ hne 
 
 中文:
-定理 Convex.strictConvex'
-  结论: {s : Set E} (hs : Convex 𝕜 s)
+定理 凸.strictConvex'
+  结论: {s : 集合 E} (hs : 凸 𝕜 s)
   证明: by
   refine strictConvex_iff_openSegment_subset.2 ?_
   intro x hx y hy hne
@@ -709,8 +709,8 @@ refine hs.strictConvex' h.imp_on fun x hx y hy _ => ?_
   exact lineMap_mem_segment 𝕜 x y hc
 
 中文:
-定理 Convex.strictConvex
-  结论: {s : Set E} (hs : Convex 𝕜 s)
+定理 凸.strictConvex
+  结论: {s : 集合 E} (hs : 凸 𝕜 s)
   证明: by
 refine hs.strictConvex' h.imp_on fun x hx y hy _ => ?_
   simp only [segment_eq_image_lineMap, ← self_sdiff_frontier]
@@ -746,8 +746,8 @@ theorem Convex.closure_interior_eq_closure_of_nonempty_interior
       (segment_subset_closure_openSegment (right_mem_segment ..))
 
 中文:
-定理 Convex.closure_interior_eq_closure_of_nonempty_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s)
+定理 凸.closure_interior_eq_closure_of_nonempty_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s)
   证明: subset_antisymm (closure_mono interior_subset)
     fun _ h => closure_mono (hs.openSegment_interior_closure_subset_interior hs'.choose_spec h)
       (segment_subset_closure_openSegment (right_mem_segment ..))
@@ -776,8 +776,8 @@ theorem Convex.interior_closure_eq_interior_of_nonempty_interior
   apply hs.openSegm
 
 中文:
-定理 Convex.interior_closure_eq_interior_of_nonempty_interior
-  结论: {s : Set E} (hs : Convex 𝕜 s)
+定理 凸.interior_closure_eq_interior_of_nonempty_interior
+  结论: {s : 集合 E} (hs : 凸 𝕜 s)
   证明: by
   refine subset_antisymm ?_ (interior_mono subset_closure)
   intro y hy
@@ -818,8 +818,8 @@ theorem convex_closed_sInter
     isClosed_sInter fun _ hs => (h _ hs).2⟩
 
 中文:
-定理 convex_closed_sInter
-  条件: {S : Set (Set E)} (h : 对任意 s in S, Convex 𝕜 s ∧ IsClosed s)
+定理 convex_closed_s整数er
+  条件: {S : 集合 (集合 E)} (h : 对任意 s in S, 凸 𝕜 s ∧ 是闭集 s)
   证明: ⟨fun _ hx => starConvex_sInter fun _ hs => (h _ hs).1 hx _ hs,
     isClosed_sInter fun _ hs => (h _ hs).2⟩
 
@@ -844,7 +844,7 @@ definition closedConvexHull
 
 中文:
 定义 closedConvexHull
-  签名: : ClosureOperator (Set E)
+  签名: : 闭包算子 (集合 E)
   定义体: .ofCompletePred (fun s => Convex 𝕜 s ∧ IsClosed s)
   fun _ => convex_closed_sInter
 
@@ -863,7 +863,7 @@ theorem convex_closedConvexHull
 
 中文:
 定理 convex_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: ((closedConvexHull 𝕜).isClosed_closure s).1
 
 Depends on / 依赖: closedConvexHull, isClosed_closure
@@ -881,7 +881,7 @@ theorem isClosed_closedConvexHull
 
 中文:
 定理 isClosed_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: ((closedConvexHull 𝕜).isClosed_closure s).2
 
 Depends on / 依赖: closedConvexHull, isClosed_closure
@@ -900,7 +900,7 @@ theorem subset_closedConvexHull
 
 中文:
 定理 subset_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: s subseteq closedConvexHull 𝕜 s
   证明: (closedConvexHull 𝕜).le_closure s
 
@@ -920,7 +920,7 @@ theorem closure_subset_closedConvexHull
 
 中文:
 定理 closure_subset_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   结论: closure s subseteq closedConvexHull 𝕜 s
   证明: closure_minimal subset_closedConvexHull isClosed_closedConvexHull
 
@@ -939,7 +939,7 @@ theorem closedConvexHull_min
 
 中文:
 定理 closedConvexHull_min
-  结论: {s t : Set E} (hst : s subseteq t) (h_conv : Convex 𝕜 t)
+  结论: {s t : 集合 E} (hst : s subseteq t) (h_conv : 凸 𝕜 t)
   证明: (closedConvexHull 𝕜).closure_min hst ⟨h_conv, h_closed⟩
 
 Depends on / 依赖: closedConvexHull, closure_min, h_closed, h_conv
@@ -960,7 +960,7 @@ theorem convexHull_subset_closedConvexHull
 
 中文:
 定理 convexHull_subset_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: convexHull_min subset_closedConvexHull convex_closedConvexHull
 
 @[simp]
@@ -984,7 +984,7 @@ theorem closedConvexHull_closure_eq_closedConvexHull
 
 中文:
 定理 closedConvexHull_closure_eq_closedConvexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: subset_antisymm (by
     simpa using ((closedConvexHull 𝕜).monotone (closure_subset_closedConvexHull (𝕜 := 𝕜) (E := E))))
     ((closedConvexHull 𝕜).monotone subset_closure)
@@ -1018,7 +1018,7 @@ theorem closedConvexHull_eq_closure_convexHull
 
 中文:
 定理 closedConvexHull_eq_closure_convexHull
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: subset_antisymm
   (closedConvexHull_min (subset_trans (subset_convexHull 𝕜 s) subset_closure)
     (Convex.closure (convex_convexHull 𝕜 s)) isClosed_closure)
@@ -1052,8 +1052,8 @@ theorem Set.Finite.isCompact_convexHull
   exact (isCompact_stdSimplex 𝕜 s).image (LinearMap.continuous_on_pi _)
 
 中文:
-定理 Set.Finite.isCompact_convexHull
-  条件: {s : Set E} (hs : s.Finite)
+定理 集合.有限.isCompact_convexHull
+  条件: {s : 集合 E} (hs : s.有限)
   证明: by
   rw [hs.convexHull_eq_image]
   let := hs.fintype
@@ -1076,8 +1076,8 @@ theorem Set.Finite.isClosed_convexHull
   proof: (hs.isCompact_convexHull 𝕜).isClosed
 
 中文:
-定理 Set.Finite.isClosed_convexHull
-  条件: [T2Space E] {s : Set E} (hs : s.Finite)
+定理 集合.有限.isClosed_convexHull
+  条件: [T2空间 E] {s : 集合 E} (hs : s.有限)
   证明: (hs.isCompact_convexHull 𝕜).isClosed
 
 Depends on / 依赖: hs.isCompact_convexHull, isClosed, isCompact_convexHull
@@ -1109,8 +1109,8 @@ theorem Convex.closure_subset_image_homothety_interior_of_one_lt
   rw [openSegment_eq_image_lineMap]; rw [← inv_one]; rw [← inv_Ioi
 
 中文:
-定理 Convex.closure_subset_image_homothety_interior_of_one_lt
-  结论: {s : Set E} (hs : Convex 实数 s)
+定理 凸.closure_subset_image_homothety_interior_of_one_lt
+  结论: {s : 集合 E} (hs : 凸 实数 s)
   证明: by
   intro y hy
   have hne : t != 0 := (one_pos.trans ht).ne'
@@ -1142,8 +1142,8 @@ theorem Convex.closure_subset_interior_image_homothety_of_one_lt
     (homothety_isOpenMap x t (one_pos.trans ht).ne').image_interior_subset _
 
 中文:
-定理 Convex.closure_subset_interior_image_homothety_of_one_lt
-  结论: {s : Set E} (hs : Convex 实数 s)
+定理 凸.closure_subset_interior_image_homothety_of_one_lt
+  结论: {s : 集合 E} (hs : 凸 实数 s)
   证明: (hs.closure_subset_image_homothety_interior_of_one_lt hx t ht).trans
     (homothety_isOpenMap x t (one_pos.trans ht).ne').image_interior_subset _
 
@@ -1164,8 +1164,8 @@ theorem Convex.subset_interior_image_homothety_of_one_lt
   proof: subset_closure.trans hs.closure_subset_interior_image_homothety_of_one_lt hx t ht
 
 中文:
-定理 Convex.subset_interior_image_homothety_of_one_lt
-  结论: {s : Set E} (hs : Convex 实数 s) {x : E}
+定理 凸.subset_interior_image_homothety_of_one_lt
+  结论: {s : 集合 E} (hs : 凸 实数 s) {x : E}
   证明: subset_closure.trans hs.closure_subset_interior_image_homothety_of_one_lt hx t ht
 
 Depends on / 依赖: closure_subset_interior_image_homothety_of_one_lt, hs.closure_subset_interior_image_homothety_of_one_lt, subset_closure, subset_closure.trans
@@ -1200,8 +1200,8 @@ have hs' := Nonempty.mono interior_mono hs.segment_subset hx hy
     rcases eq_singleton_or_nontrivial (interior_subset hx) with rfl 
 
 中文:
-定理 Convex.nontrivial_iff_nonempty_interior
-  条件: {s : Set 𝕜} (hs : Convex 𝕜 s)
+定理 凸.nontrivial_iff_nonempty_interior
+  条件: {s : 集合 𝕜} (hs : 凸 𝕜 s)
   证明: by
   constructor
   · rintro ⟨x, hx, y, hy, h⟩
@@ -1244,8 +1244,8 @@ lemma Convex.Ioo_subset_of_mem_closure
 _ subseteq interior (openSegment 𝕜 a b)
 
 中文:
-引理 Convex.Ioo_subset_of_mem_closure
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a b : 𝕜}
+引理 凸.Ioo_subset_of_mem_closure
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a b : 𝕜}
   证明: by
   cases subsingleton_or_nontrivial s with
   | inl hs_sub =>
@@ -1288,8 +1288,8 @@ lemma Convex.nhdsWithin_inter_Iio_eq_nhdsLT
   exact hs.Ioo_subset_of_mem_closure (subset_closure hbs) has
 
 中文:
-引理 Convex.nhdsWithin_inter_Iio_eq_nhdsLT
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a : 𝕜}
+引理 凸.nhdsWithin_inter_Iio_eq_nhdsLT
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a : 𝕜}
   证明: by
   obtain ⟨b, hbs, hba⟩ := h'
   refine nhdsWithin_inter_of_mem (mem_nhdsLT_iff_exists_Ioo_subset.2 ⟨b, hba, ?_⟩)
@@ -1316,8 +1316,8 @@ lemma Convex.nhdsWithin_inter_Ioi_eq_nhdsGT
   exact hs.Ioo_subset_of_mem_closure has (subset_closure hbs)
 
 中文:
-引理 Convex.nhdsWithin_inter_Ioi_eq_nhdsGT
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a : 𝕜}
+引理 凸.nhdsWithin_inter_Ioi_eq_nhdsGT
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a : 𝕜}
   证明: by
   obtain ⟨b, hbs, hba⟩ := h'
   refine nhdsWithin_inter_of_mem (mem_nhdsGT_iff_exists_Ioo_subset.2 ⟨b, hba, ?_⟩)
@@ -1346,8 +1346,8 @@ lemma Convex.nhdsWithin_sdiff_eq_nhdsNE
 alias Convex.nhdsWithin_diff_eq_nhdsNE := Con
 
 中文:
-引理 Convex.nhdsWithin_sdiff_eq_nhdsNE
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a : 𝕜}
+引理 凸.nhdsWithin_sdiff_eq_nhdsNE
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a : 𝕜}
   证明: by
   rw [sdiff_eq]; rw [← Iio_union_Ioi]; rw [inter_union_distrib_left]; rw [nhdsWithin_union]; rw [nhdsWithin_union]
   simp [hs.nhdsWithin_inter_Ioi_eq_nhdsGT has h_Ioi, hs.nhdsWithin_inter_Iio_eq_nhdsLT has h_Iio]
@@ -1380,8 +1380,8 @@ lemma Convex.nhdsWithin_sdiff_eq_nhdsLT
 alias Convex.nhdsWithin_diff_eq_nhdsLT := Convex.nhdsWithin_sdiff_eq_nhdsLT
 
 中文:
-引理 Convex.nhdsWithin_sdiff_eq_nhdsLT
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a : 𝕜}
+引理 凸.nhdsWithin_sdiff_eq_nhdsLT
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a : 𝕜}
   证明: by
   rw [sdiff_eq]; rw [← Iio_union_Ioi]; rw [inter_union_distrib_left]; rw [nhdsWithin_union]
   simp [h_Ioi, hs.nhdsWithin_inter_Iio_eq_nhdsLT has h_Iio]
@@ -1416,8 +1416,8 @@ alias Convex.nhdsWithin_diff_eq_nhdsGT := Convex.nhdsWithin_sdiff_eq_nhdsGT
 omit [Field 𝕜] [IsStrictOrder
 
 中文:
-引理 Convex.nhdsWithin_sdiff_eq_nhdsGT
-  结论: {s : Set 𝕜} (hs : Convex 𝕜 s) {a : 𝕜}
+引理 凸.nhdsWithin_sdiff_eq_nhdsGT
+  结论: {s : 集合 𝕜} (hs : 凸 𝕜 s) {a : 𝕜}
   证明: by
   rw [sdiff_eq]; rw [← Iio_union_Ioi]; rw [inter_union_distrib_left]; rw [nhdsWithin_union]
   simp [h_Iio, hs.nhdsWithin_inter_Ioi_eq_nhdsGT has h_Ioi]
@@ -1455,7 +1455,7 @@ lemma sdiff_singleton_eventually_mem_nhds_left
 
 中文:
 引理 sdiff_singleton_eventually_mem_nhds_left
-  结论: {s : Set 𝕜} {a : 𝕜}
+  结论: {s : 集合 𝕜} {a : 𝕜}
   证明: by
   rcases eq_empty_or_nonempty (s inter Iio a) with hs' | ⟨b, hbs, hba⟩
   · simp [hs']
@@ -1489,8 +1489,8 @@ theorem Convex.sdiff_singleton_eventually_mem_nhds
 
 
 中文:
-定理 Convex.sdiff_singleton_eventually_mem_nhds
-  条件: {s : Set 𝕜} (hs : Convex 𝕜 s) (a : 𝕜)
+定理 凸.sdiff_singleton_eventually_mem_nhds
+  条件: {s : 集合 𝕜} (hs : 凸 𝕜 s) (a : 𝕜)
   证明: by
   rcases eq_or_neBot (𝓝[s \ {a}] a) with h | has
   · rw [h]
@@ -1545,9 +1545,9 @@ theorem isCompact_closedInterior
   exact (Set.fin
 
 中文:
-定理 isCompact_closedInterior
-  条件: {n : 自然数} (s : Simplex 𝕜 P n)
-  结论: IsCompact s.closed整数erior
+定理 isCompact_closed整数erior
+  条件: {n : 自然数} (s : 单纯形 𝕜 P n)
+  结论: 是紧集 s.closed整数erior
   证明: by
   suffices IsCompact ((AffineEquiv.vaddConst 𝕜 (s.points 0)).symm.toAffineMap ''
       s.closedInterior) by
@@ -1575,8 +1575,8 @@ theorem isClosed_closedInterior
   proof: s.isCompact_closedInterior.isClosed
 
 中文:
-定理 isClosed_closedInterior
-  条件: [T2Space P] {n : 自然数} (s : Simplex 𝕜 P n)
+定理 isClosed_closed整数erior
+  条件: [T2空间 P] {n : 自然数} (s : 单纯形 𝕜 P n)
   证明: s.isCompact_closedInterior.isClosed
 
 Depends on / 依赖: isClosed, isCompact_closedInterior, s.isCompact_closedInterior.isClosed

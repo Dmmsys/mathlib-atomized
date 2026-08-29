@@ -140,7 +140,7 @@ theorem tendsto_atTop
 中文:
 定理 tendsto_atTop
   条件: (e : α ≃o β)
-  结论: Tendsto e atTop atTop
+  结论: 收敛 e atTop atTop
   证明: e.map_atTop.le
 
 Depends on / 依赖: e.map_atTop.le, map_atTop
@@ -162,7 +162,7 @@ theorem tendsto_atBot
 中文:
 定理 tendsto_atBot
   条件: (e : α ≃o β)
-  结论: Tendsto e atBot atBot
+  结论: 收敛 e atBot atBot
   证明: e.map_atBot.le
 
 @[simp]
@@ -186,7 +186,7 @@ theorem tendsto_atTop_iff
 
 中文:
 定理 tendsto_atTop_iff
-  条件: {l : Filter γ} {f : γ -> α} (e : α ≃o β)
+  条件: {l : 滤子 γ} {f : γ -> α} (e : α ≃o β)
   证明: by
   rw [← e.comap_atTop]; rw [tendsto_comap_iff]; rw [Function.comp_def]
 
@@ -209,7 +209,7 @@ theorem tendsto_atBot_iff
 
 中文:
 定理 tendsto_atBot_iff
-  条件: {l : Filter γ} {f : γ -> α} (e : α ≃o β)
+  条件: {l : 滤子 γ} {f : γ -> α} (e : α ≃o β)
   证明: e.dual.tendsto_atTop_iff
 
 Depends on / 依赖: e.dual.tendsto_atTop_iff, tendsto_atTop_iff

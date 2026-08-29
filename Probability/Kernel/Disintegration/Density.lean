@@ -104,7 +104,7 @@ definition densityProcess
 
 中文:
 定义 densityProcess
-  签名: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数) (a : α) (x : γ) (s : Set β)
+  签名: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (x : γ) (s : 集合 β)
   定义体: (κ a (countablePartitionSet n x ×ˢ s) / ν a (countablePartitionSet n x)).toReal
 
 Depends on / 依赖: countablePartitionSet, toReal
@@ -123,7 +123,7 @@ lemma densityProcess_def
 
 中文:
 引理 densityProcess_def
-  条件: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数) (a : α) (s : Set β)
+  条件: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (s : 集合 β)
   证明: rfl
 -/
 lemma densityProcess_def (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : Nat) (a : α) (s : Set β) :
@@ -146,7 +146,7 @@ lemma measurable_densityProcess_countableFiltration_aux
 
 中文:
 引理 measurable_densityProcess_countableFiltration_aux
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: by
   change Measurable[mα.prod (countableFiltration γ n)]
       ((fun (p : α × countablePartition γ n) => κ p.1 (↑p.2 ×ˢ s) / ν p.1 p.2)
@@ -188,7 +188,7 @@ lemma measurable_densityProcess_aux
 
 中文:
 引理 measurable_densityProcess_aux
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: by
   refine Measurable.mono (measurable_densityProcess_countableFiltration_aux κ ν n hs) ?_ le_rfl
   exact sup_le_sup le_rfl (comap_mono ((countableFiltration γ).le _))
@@ -212,7 +212,7 @@ lemma measurable_densityProcess
 
 中文:
 引理 measurable_densityProcess
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: (measurable_densityProcess_aux κ ν n hs).ennreal_toReal
 
 Depends on / 依赖: ennreal_toReal, measurable_densityProcess_aux
@@ -233,7 +233,7 @@ lemma measurable_densityProcess_left
 
 中文:
 引理 measurable_densityProcess_left
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: ((measurable_densityProcess κ ν n hs).comp (measurable_id.prodMk measurable_const) :)
 
 Depends on / 依赖: measurable_const, measurable_densityProcess, measurable_id, measurable_id.prodMk, prodMk
@@ -253,7 +253,7 @@ lemma measurable_densityProcess_right
 
 中文:
 引理 measurable_densityProcess_right
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: ((measurable_densityProcess κ ν n hs).comp (measurable_const.prodMk measurable_id) :)
 
 Depends on / 依赖: _algebraMap, inertiaDeg, inertiaDeg_eq_of_isMaximal, measurable_const, measurable_const.prodMk, measurable_densityProcess, measurable_id, prodMk
@@ -276,7 +276,7 @@ lemma measurable_countableFiltration_densityProcess
 
 中文:
 引理 measurable_countableFiltration_densityProcess
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: by
   refine @Measurable.ennreal_toReal _ (countableFiltration γ n) _ ?_
   -- The exact also works without the `( :)`, but is a bit slow.
@@ -301,7 +301,7 @@ lemma stronglyMeasurable_countableFiltration_densityProcess
 
 中文:
 引理 stronglyMeasurable_countableFiltration_densityProcess
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: (measurable_countableFiltration_densityProcess κ ν n a hs).stronglyMeasurable
 
 Depends on / 依赖: measurable_countableFiltration_densityProcess, stronglyMeasurable
@@ -321,7 +321,7 @@ lemma stronglyAdapted_densityProcess
 
 中文:
 引理 stronglyAdapted_densityProcess
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (a : α)
   证明: fun n => stronglyMeasurable_countableFiltration_densityProcess κ ν n a hs
 
 Depends on / 依赖: stronglyMeasurable_countableFiltration_densityProcess
@@ -341,7 +341,7 @@ lemma densityProcess_nonneg
 
 中文:
 引理 densityProcess_nonneg
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数)
   证明: ENNReal.toReal_nonneg
 
 Depends on / 依赖: ENNReal, ENNReal.toReal_nonneg, toReal_nonneg
@@ -404,7 +404,7 @@ lemma densityProcess_le_one
 
 中文:
 引理 densityProcess_le_one
-  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (x : γ) (s : Set β)
+  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (x : γ) (s : 集合 β)
   证明: by
   refine ENNReal.toReal_le_of_le_ofReal zero_le_one (ENNReal.div_le_of_le_mul ?_)
   rw [ENNReal.ofReal_one]; rw [one_mul]
@@ -432,7 +432,7 @@ lemma eLpNorm_densityProcess_le
 
 中文:
 引理 eLpNorm_densityProcess_le
-  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (s : Set β)
+  条件: (hκν : fst κ <= ν) (n : 自然数) (a : α) (s : 集合 β)
   证明: by
   refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun x => ?_))).trans ?_
   · simp only [Real.norm_eq_abs, abs_of_nonneg (densityProcess_nonneg κ ν n a x s),
@@ -462,7 +462,7 @@ lemma integrable_densityProcess
 
 中文:
 引理 integrable_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν] (n : 自然数)
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (n : 自然数)
   证明: by
   rw [← memLp_one_iff_integrable]
   refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
@@ -495,8 +495,8 @@ lemma setIntegral_densityProcess_of_mem
     change Measurable (
 
 中文:
-引理 setIntegral_densityProcess_of_mem
-  结论: (hκν : fst κ <= ν) [hν : IsFiniteKernel ν]
+引理 set整数egral_densityProcess_of_mem
+  结论: (hκν : fst κ <= ν) [hν : 是FiniteKernel ν]
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   have hu_meas : MeasurableSet u := measurableSet_countablePartition n hu
@@ -563,8 +563,8 @@ lemma setIntegral_densityProcess
     in
 
 中文:
-引理 setIntegral_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+引理 set整数egral_densityProcess
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   obtain ⟨S, hS_subset, rfl⟩ := (measurableSet_generateFrom_countablePartition_iff _ _).mp hA
@@ -609,7 +609,7 @@ lemma integral_densityProcess
 
 中文:
 引理 integral_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   rw [← setIntegral_univ]; rw [setIntegral_densityProcess hκν _ _ hs MeasurableSet.univ]
 
@@ -629,7 +629,7 @@ lemma setIntegral_densityProcess_of_le
   proof: setIntegral_densityProcess hκν m a hs ((countableFiltration γ).mono hnm A hA)
 
 中文:
-引理 setIntegral_densityProcess_of_le
+引理 set整数egral_densityProcess_of_le
   结论: (hκν : fst κ <= ν)
   证明: setIntegral_densityProcess hκν m a hs ((countableFiltration γ).mono hnm A hA)
 
@@ -656,7 +656,7 @@ lemma condExp_densityProcess
 
 中文:
 引理 condExp_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   refine (ae_eq_condExp_of_forall_setIntegral_eq ?_ ?_ ?_ ?_ ?_).symm
   · exact integrable_densityProcess hκν j a hs
@@ -688,7 +688,7 @@ lemma martingale_densityProcess
 
 中文:
 引理 martingale_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: ⟨stronglyAdapted_densityProcess κ ν a hs, fun _ _ h => condExp_densityProcess hκν h a hs⟩
 
 Depends on / 依赖: condExp_densityProcess, stronglyAdapted_densityProcess
@@ -753,7 +753,7 @@ lemma densityProcess_mono_kernel_left
 
 中文:
 引理 densityProcess_mono_kernel_left
-  结论: {κ' : Kernel α (γ × β)} (hκκ' : κ <= κ')
+  结论: {κ' : 核 α (γ × β)} (hκκ' : κ <= κ')
   证明: by
   unfold densityProcess
   by_cases h0 : ν a (countablePartitionSet n x) = 0
@@ -797,7 +797,7 @@ lemma densityProcess_antitone_kernel_right
 
 中文:
 引理 densityProcess_antitone_kernel_right
-  结论: {ν' : Kernel α γ}
+  结论: {ν' : 核 α γ}
   证明: by
   unfold densityProcess
   have h_le : κ a (countablePartitionSet n x ×ˢ s) <= ν a (countablePartitionSet n x) :=
@@ -834,7 +834,7 @@ lemma densityProcess_empty
 
 中文:
 引理 densityProcess_empty
-  条件: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (n : 自然数) (a : α) (x : γ)
+  条件: (κ : 核 α (γ × β)) (ν : 核 α γ) (n : 自然数) (a : α) (x : γ)
   证明: by
   simp [densityProcess]
 
@@ -864,7 +864,7 @@ lemma tendsto_densityProcess_atTop_empty_of_antitone
 
 中文:
 引理 tendsto_densityProcess_atTop_empty_of_antitone
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: by
   simp_rw [densityProcess]
   by_cases h0 : ν a (countablePartitionSet n x) = 0
@@ -914,7 +914,7 @@ lemma tendsto_densityProcess_atTop_of_antitone
 
 中文:
 引理 tendsto_densityProcess_atTop_of_antitone
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: by
   rw [← densityProcess_empty κ ν n a x]
   exact tendsto_densityProcess_atTop_empty_of_antitone κ ν n a x seq hseq hseq_iInter hseq_meas
@@ -980,7 +980,7 @@ lemma memL1_limitProcess_densityProcess
 
 中文:
 引理 memL1_limitProcess_densityProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   refine Submartingale.memLp_limitProcess (martingale_densityProcess hκν a hs).submartingale
     (R := (ν a univ).toNNReal) (fun n => ?_)
@@ -1015,7 +1015,7 @@ lemma tendsto_eLpNorm_one_densityProcess_limitProcess
 
 中文:
 引理 tendsto_eLpNorm_one_densityProcess_limitProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   refine Submartingale.tendsto_eLpNorm_one_limitProcess ?_ ?_
   · exact (martingale_densityProcess hκν a hs).submartingale
@@ -1055,7 +1055,7 @@ lemma tendsto_eLpNorm_one_restrict_densityProcess_limitProcess
 
 中文:
 引理 tendsto_eLpNorm_one_restrict_densityProcess_limitProcess
-  结论: [IsFiniteKernel ν]
+  结论: [是FiniteKernel ν]
   证明: tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds
     (tendsto_eLpNorm_one_densityProcess_limitProcess hκν a hs) (fun _ => zero_le)
     (fun _ => eLpNorm_restrict_le ..)
@@ -1089,7 +1089,7 @@ definition density
 
 中文:
 定义 density
-  签名: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (a : α) (x : γ) (s : Set β)
+  签名: (κ : 核 α (γ × β)) (ν : 核 α γ) (a : α) (x : γ) (s : 集合 β)
   定义体: limsup (fun n => densityProcess κ ν n a x s) atTop
 
 Depends on / 依赖: densityProcess, limsup
@@ -1108,7 +1108,7 @@ lemma density_ae_eq_limitProcess
 
 中文:
 引理 density_ae_eq_limitProcess
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   filter_upwards [tendsto_densityProcess_limitProcess hκν a hs] with t ht using ht.limsup_eq
 
@@ -1133,7 +1133,7 @@ lemma tendsto_m_density
 
 中文:
 引理 tendsto_m_density
-  结论: (hκν : fst κ <= ν) (a : α) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) (a : α) [是FiniteKernel ν]
   证明: by
   filter_upwards [tendsto_densityProcess_limitProcess hκν a hs, density_ae_eq_limitProcess hκν a hs]
     with t h1 h2 using h2 ▸ h1
@@ -1157,7 +1157,7 @@ lemma measurable_density
 
 中文:
 引理 measurable_density
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: .limsup (fun n => measurable_densityProcess κ ν n hs)
 
 Depends on / 依赖: limsup, measurable_densityProcess
@@ -1179,7 +1179,7 @@ lemma measurable_density_left
 
 中文:
 引理 measurable_density_left
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ) (x : γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ) (x : γ)
   证明: by
   change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun a => (a, x)))
   exact (measurable_density κ ν hs).comp measurable_prodMk_right
@@ -1204,7 +1204,7 @@ lemma measurable_density_right
 
 中文:
 引理 measurable_density_right
-  结论: (κ : Kernel α (γ × β)) (ν : Kernel α γ)
+  结论: (κ : 核 α (γ × β)) (ν : 核 α γ)
   证明: by
   change Measurable ((fun (p : α × γ) => density κ ν p.1 p.2 s) ∘ (fun x => (a, x)))
   exact (measurable_density κ ν hs).comp measurable_prodMk_left
@@ -1231,7 +1231,7 @@ lemma density_mono_set
 
 中文:
 引理 density_mono_set
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : Set β} (h : s subseteq s')
+  条件: (hκν : fst κ <= ν) (a : α) (x : γ) {s s' : 集合 β} (h : s subseteq s')
   证明: by
   refine limsup_le_limsup ?_ ?_ ?_
   · exact Eventually.of_forall (fun n => densityProcess_mono_set hκν n a x h)
@@ -1260,7 +1260,7 @@ lemma density_nonneg
 
 中文:
 引理 density_nonneg
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β)
+  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : 集合 β)
   证明: by
   refine le_limsup_of_frequently_le ?_ ?_
   · exact Frequently.of_forall (fun n => densityProcess_nonneg _ _ _ _ _ _)
@@ -1287,7 +1287,7 @@ lemma density_le_one
 
 中文:
 引理 density_le_one
-  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : Set β)
+  条件: (hκν : fst κ <= ν) (a : α) (x : γ) (s : 集合 β)
   证明: by
   refine limsup_le_of_le ?_ ?_
   · exact isCoboundedUnder_le_of_le atTop (fun i => densityProcess_nonneg _ _ _ _ _ _)
@@ -1317,7 +1317,7 @@ lemma eLpNorm_density_le
 
 中文:
 引理 eLpNorm_density_le
-  条件: (hκν : fst κ <= ν) (a : α) (s : Set β)
+  条件: (hκν : fst κ <= ν) (a : α) (s : 集合 β)
   证明: by
   refine (eLpNorm_le_of_ae_bound (C := 1) (ae_of_all _ (fun t => ?_))).trans ?_
   · simp only [Real.norm_eq_abs, abs_of_nonneg (density_nonneg hκν a t s),
@@ -1347,7 +1347,7 @@ lemma integrable_density
 
 中文:
 引理 integrable_density
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   rw [← memLp_one_iff_integrable]
   refine ⟨Measurable.aestronglyMeasurable ?_, ?_⟩
@@ -1378,7 +1378,7 @@ lemma tendsto_setIntegral_densityProcess
   refine (tendsto_congr 
 
 中文:
-引理 tendsto_setIntegral_densityProcess
+引理 tendsto_set整数egral_densityProcess
   结论: (hκν : fst κ <= ν)
   证明: by
   refine tendsto_setIntegral_of_L1' (μ := ν a) (fun x => density κ ν a x s)
@@ -1415,7 +1415,7 @@ lemma setIntegral_density_of_measurableSet
     rw [this]; rw [
 
 中文:
-引理 setIntegral_density_of_measurableSet
+引理 set整数egral_density_of_measurableSet
   结论: (hκν : fst κ <= ν)
   证明: by
   suffices ∫ x in A, density κ ν a x s ∂(ν a) = ∫ x in A, densityProcess κ ν n a x s ∂(ν a) by
@@ -1453,7 +1453,7 @@ lemma integral_density
 
 中文:
 引理 integral_density
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   rw [← setIntegral_univ]; rw [setIntegral_density_of_measurableSet hκν 0 a hs MeasurableSet.univ]
 
@@ -1477,8 +1477,8 @@ lemma setIntegral_density
     rw [ofPred_exists]; rw [generateFrom_iUnion_measurableSet (countableFiltrati
 
 中文:
-引理 setIntegral_density
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+引理 set整数egral_density
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   have hgen : ‹MeasurableSpace γ› =
@@ -1537,8 +1537,8 @@ lemma setLIntegral_density
   · exact (integrable_density hκν a hs).restri
 
 中文:
-引理 setLIntegral_density
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+引理 setL整数egral_density
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   rw [← ofReal_integral_eq_lintegral_ofReal]
@@ -1570,7 +1570,7 @@ lemma lintegral_density
 
 中文:
 引理 lintegral_density
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   rw [← setLIntegral_univ]
   exact setLIntegral_density hκν a hs MeasurableSet.univ
@@ -1601,7 +1601,7 @@ lemma tendsto_integral_density_of_monotone
 
 中文:
 引理 tendsto_integral_density_of_monotone
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν]
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν]
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   simp_rw [integral_density hκν a (hseq_meas _)]
@@ -1645,7 +1645,7 @@ lemma tendsto_integral_density_of_antitone
 
 中文:
 引理 tendsto_integral_density_of_antitone
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (a : α)
   证明: by
   have : IsFiniteKernel κ := isFiniteKernel_of_isFiniteKernel_fst (h := isFiniteKernel_of_le hκν)
   simp_rw [integral_density hκν a (hseq_meas _)]
@@ -1688,7 +1688,7 @@ lemma tendsto_density_atTop_ae_of_antitone
 
 中文:
 引理 tendsto_density_atTop_ae_of_antitone
-  结论: (hκν : fst κ <= ν) [IsFiniteKernel ν] (a : α)
+  结论: (hκν : fst κ <= ν) [是FiniteKernel ν] (a : α)
   证明: by
   refine tendsto_of_integral_tendsto_of_antitone ?_ (integrable_const _) ?_ ?_ ?_
   · exact fun m => integrable_density hκν _ (hseq_meas m)
@@ -1730,7 +1730,7 @@ lemma densityProcess_fst_univ
 
 中文:
 引理 densityProcess_fst_univ
-  条件: [IsFiniteKernel κ] (n : 自然数) (a : α) (x : γ)
+  条件: [是FiniteKernel κ] (n : 自然数) (a : α) (x : γ)
   证明: by
   rw [densityProcess]
   split_ifs with h
@@ -1780,7 +1780,7 @@ lemma densityProcess_fst_univ_ae
 
 中文:
 引理 densityProcess_fst_univ_ae
-  条件: (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (n : 自然数) (a : α)
+  条件: (κ : 核 α (γ × β)) [是FiniteKernel κ] (n : 自然数) (a : α)
   证明: by
   rw [ae_iff]
   have : {x | ¬ densityProcess κ (fst κ) n a x univ = 1}
@@ -1840,7 +1840,7 @@ lemma tendsto_densityProcess_fst_atTop_univ_of_monotone
 
 中文:
 引理 tendsto_densityProcess_fst_atTop_univ_of_monotone
-  结论: (κ : Kernel α (γ × β)) (n : 自然数) (a : α)
+  结论: (κ : 核 α (γ × β)) (n : 自然数) (a : α)
   证明: by
   simp_rw [densityProcess]
   refine (ENNReal.tendsto_toReal ?_).comp ?_
@@ -1899,7 +1899,7 @@ lemma tendsto_densityProcess_fst_atTop_ae_of_monotone
 
 中文:
 引理 tendsto_densityProcess_fst_atTop_ae_of_monotone
-  结论: (κ : Kernel α (γ × β)) [IsFiniteKernel κ]
+  结论: (κ : 核 α (γ × β)) [是FiniteKernel κ]
   证明: by
   filter_upwards [densityProcess_fst_univ_ae κ n a] with x hx
   rw [← hx]
@@ -1928,7 +1928,7 @@ lemma density_fst_univ
 
 中文:
 引理 density_fst_univ
-  条件: (κ : Kernel α (γ × β)) [IsFiniteKernel κ] (a : α)
+  条件: (κ : 核 α (γ × β)) [是FiniteKernel κ] (a : α)
   证明: by
   have h := fun n => densityProcess_fst_univ_ae κ n a
   rw [← ae_all_iff] at h
@@ -1958,7 +1958,7 @@ lemma tendsto_density_fst_atTop_ae_of_monotone
 
 中文:
 引理 tendsto_density_fst_atTop_ae_of_monotone
-  结论: [IsFiniteKernel κ]
+  结论: [是FiniteKernel κ]
   证明: by
   refine tendsto_of_integral_tendsto_of_monotone ?_ (integrable_const _) ?_ ?_ ?_
   · exact fun m => integrable_density le_rfl _ (hseq_meas m)

@@ -53,8 +53,8 @@ instance [forall
     infer_instance
 
 中文:
-实例 [forall
-  签名: p, HasBinaryBiproduct (F.X (p + 1)) (G.X p)] :
+实例 [对任意
+  签名: p, 有BinaryBiproduct (F.X (p + 1)) (G.X p)] :
   定义体: by
     rintro i _ rfl
     infer_instance
@@ -82,7 +82,7 @@ definition mappingCone
 
 中文:
 定义 mappingCone
-  签名: : CochainComplex C 整数
+  签名: : 上链复形 C 整数
   定义体: homotopyCofiber φ
 
 Depends on / 依赖: homotopyCofiber
@@ -414,7 +414,7 @@ lemma inl_fst_assoc
 
 中文:
 引理 inl_fst_assoc
-  条件: {K : CochainComplex C 整数} {d e : 整数} (γ : Cochain F K d) (he : 1 + d = e)
+  条件: {K : 上链复形 C 整数} {d e : 整数} (γ : Cochain F K d) (he : 1 + d = e)
   证明: by
   rw [← Cochain.comp_assoc _ _ _ (neg_add_cancel 1) (by lia) (by lia)]; rw [inl_fst]; rw [Cochain.id_comp]
 
@@ -441,7 +441,7 @@ lemma inl_snd_assoc
 
 中文:
 引理 inl_snd_assoc
-  结论: {K : CochainComplex C 整数} {d e f : 整数} (γ : Cochain G K d)
+  结论: {K : 上链复形 C 整数} {d e f : 整数} (γ : Cochain G K d)
   证明: by
   obtain rfl : e = d := by lia
   rw [← Cochain.comp_assoc_of_second_is_zero_cochain]; rw [inl_snd]; rw [Cochain.zero_comp]
@@ -471,7 +471,7 @@ lemma inr_fst_assoc
 
 中文:
 引理 inr_fst_assoc
-  结论: {K : CochainComplex C 整数} {d e f : 整数} (γ : Cochain F K d)
+  结论: {K : 上链复形 C 整数} {d e f : 整数} (γ : Cochain F K d)
   证明: by
   obtain rfl : e = f := by lia
   rw [← Cochain.comp_assoc_of_first_is_zero_cochain]; rw [inr_fst]; rw [Cochain.zero_comp]
@@ -499,7 +499,7 @@ lemma inr_snd_assoc
 
 中文:
 引理 inr_snd_assoc
-  条件: {K : CochainComplex C 整数} {d e : 整数} (γ : Cochain G K d) (he : 0 + d = e)
+  条件: {K : 上链复形 C 整数} {d e : 整数} (γ : Cochain G K d) (he : 0 + d = e)
   证明: by
   obtain rfl : d = e := by lia
   rw [← Cochain.comp_assoc_of_first_is_zero_cochain]; rw [inr_snd]; rw [Cochain.id_comp]
@@ -1228,7 +1228,7 @@ definition descCocycle
 
 中文:
 定义 descCocycle
-  签名: {K : CochainComplex C 整数} {n m : 整数}
+  签名: {K : 上链复形 C 整数} {n m : 整数}
   定义体: Cocycle.mk (descCochain φ α β.1 h) (n + 1) rfl
     (by simp [δ_descCochain _ _ _ _ _ rfl, eq, Int.negOnePow_succ])
 
@@ -1408,7 +1408,7 @@ definition descHomotopy
 
 中文:
 定义 descHomotopy
-  签名: {K : CochainComplex C 整数} (f₁ f₂ : mappingCone φ ⟶ K)
+  签名: {K : 上链复形 C 整数} (f₁ f₂ : mappingCone φ ⟶ K)
   定义体: (Cochain.equivHomotopy f₁ f₂).symm ⟨descCochain φ γ₁ γ₂ (by simp), by
     simp only [Cochain.ofHom_comp] at h₂
     simp [ext_cochain_from_iff _ _ _ (neg_add_cancel 1),
@@ -1612,7 +1612,7 @@ definition liftCocycle
 
 中文:
 定义 liftCocycle
-  签名: {K : CochainComplex C 整数} {n m : 整数}
+  签名: {K : 上链复形 C 整数} {n m : 整数}
   定义体: Cocycle.mk (liftCochain φ α β h) m h (by
     simp only [δ_liftCochain φ α β h (m + 1) rfl, eq,
       Cocycle.δ_eq_zero, Cochain.zero_comp, neg_zero, add_zero])
@@ -1789,7 +1789,7 @@ definition liftHomotopy
 
 中文:
 定义 liftHomotopy
-  签名: {K : CochainComplex C 整数} (f₁ f₂ : K ⟶ mappingCone φ)
+  签名: {K : 上链复形 C 整数} (f₁ f₂ : K ⟶ mappingCone φ)
   定义体: (Cochain.equivHomotopy f₁ f₂).symm ⟨liftCochain φ α β (neg_add_cancel 1), by
     simp [δ_liftCochain _ _ _ _ _ (zero_add 1), ext_cochain_to_iff _ _ _ (zero_add 1), h₁, h₂]⟩
 
@@ -1880,7 +1880,7 @@ lemma lift_desc_f
 
 中文:
 引理 lift_desc_f
-  结论: {K L : CochainComplex C 整数} (α : Cocycle K F 1) (β : Cochain K G 0)
+  结论: {K L : 上链复形 C 整数} (α : Cocycle K F 1) (β : Cochain K G 0)
   证明: by
   simp only [lift, desc, Cocycle.homOf_f, liftCocycle_coe, descCocycle_coe, Cocycle.ofHom_coe,
     liftCochain_v_descCochain_v φ α.1 β α' (Cochain.ofHom β') (zero_add 1) (neg_add_cancel 1) 0

@@ -49,7 +49,7 @@ class Bicategory.Strict
     - associator_eqToIso : forall {a b c d : B} (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d), α_ f g h = eqToIso (assoc f g h)  [default: by cat_disch]
 
 中文:
-类 Bicategory.Strict
+类 双范畴.Strict
   参数: : 命题 where
   公理与运算 (6 个):
     - id_comp : 对任意 {a b : B} (f : a ⟶ b), 𝟙 a ≫ f = f  [默认: by cat_disch]

@@ -67,7 +67,7 @@ lemma IsTransitiveRel.prod_subset_trans
 
 中文:
 引理 IsTransitiveRel.prod_subset_trans
-  结论: {s : SetRel X X} {t u v : Set X} [s.IsTrans]
+  结论: {s : SetRel X X} {t u v : 集合 X} [s.是Trans]
   证明: by
   rintro ⟨a, b⟩ hab
   simp only [mem_prod] at hab
@@ -95,7 +95,7 @@ lemma IsTransitiveRel.mem_filter_prod_trans
 
 中文:
 引理 IsTransitiveRel.mem_filter_prod_trans
-  结论: {s : SetRel X X} {f g h : Filter X} [g.NeBot]
+  结论: {s : SetRel X X} {f g h : 滤子 X} [g.NeBot]
   证明: Eventually.trans_prod (p := (fun x y => (x, y) in s)) (q := (fun x y => (x, y) in s))
     (r := (fun x y => (x, y) in s)) hfg hgh fun _ _ _ => s.trans
 
@@ -119,7 +119,7 @@ lemma ball_subset_of_mem
 
 中文:
 引理 ball_subset_of_mem
-  条件: {V : SetRel X X} [V.IsTrans] {x y : X} (hy : y in ball x V)
+  条件: {V : SetRel X X} [V.是Trans] {x y : X} (hy : y in ball x V)
   证明: ball_subset_of_comp_subset hy SetRel.comp_subset_self
 
 Depends on / 依赖: SetRel, SetRel.comp_subset_self, ball_subset_of_comp_subset, comp_subset_self
@@ -140,7 +140,7 @@ lemma ball_eq_of_mem
 
 中文:
 引理 ball_eq_of_mem
-  条件: {V : SetRel X X} [V.IsSymm] [V.IsTrans] {x y : X} (hy : y in ball x V)
+  条件: {V : SetRel X X} [V.是Symm] [V.是Trans] {x y : X} (hy : y in ball x V)
   证明: by
   refine le_antisymm (ball_subset_of_mem ?_) (ball_subset_of_mem hy)
   rwa [← mem_ball_symmetry]
@@ -165,10 +165,10 @@ class IsUltraUniformity
     - hasBasis : (𝓤 X).HasBasis (fun s : SetRel X X => s in 𝓤 X ∧ SetRel.IsSymm s ∧ SetRel.IsTrans s) id
 
 中文:
-类 IsUltraUniformity
+类 是UltraUniformity
   参数: : 命题 where
   公理与运算 (1 个):
-    - hasBasis : (𝓤 X).HasBasis (fun s : SetRel X X => s in 𝓤 X ∧ SetRel.IsSymm s ∧ SetRel.IsTrans s) id
+    - hasBasis : (𝓤 X).有基 (fun s : SetRel X X => s in 𝓤 X ∧ SetRel.是Symm s ∧ SetRel.是Trans s) id
 -/
 class IsUltraUniformity : Prop where
   hasBasis : (𝓤 X).HasBasis
@@ -185,7 +185,7 @@ lemma IsUltraUniformity.mk_of_hasBasis
     (fun _ hs => hs.1)
 
 中文:
-引理 IsUltraUniformity.mk_of_hasBasis
+引理 是UltraUniformity.mk_of_hasBasis
   结论: {ι : 类型} {p : ι -> 命题} {s : ι -> SetRel X X}
   证明: h_basis.to_hasBasis'
     (fun i hi => ⟨s i, ⟨h_basis.mem_of_mem hi, h_symm i hi, h_trans i hi⟩, subset_rfl⟩)
@@ -217,8 +217,8 @@ lemma IsUltraUniformity.mem_nhds_iff_symm_trans
   · rintro ⟨V, V_in, _, _, V_sub
 
 中文:
-引理 IsUltraUniformity.mem_nhds_iff_symm_trans
-  条件: [IsUltraUniformity X] {x : X} {s : Set X}
+引理 是UltraUniformity.mem_nhds_iff_symm_trans
+  条件: [是UltraUniformity X] {x : X} {s : 集合 X}
   证明: by
   rw [UniformSpace.mem_nhds_iff]
   constructor
@@ -256,7 +256,7 @@ lemma isOpen_ball_of_mem_uniformity
 
 中文:
 引理 isOpen_ball_of_mem_uniformity
-  条件: (x : X) {V : SetRel X X} [V.IsTrans] (h' : V in 𝓤 X)
+  条件: (x : X) {V : SetRel X X} [V.是Trans] (h' : V in 𝓤 X)
   证明: by
   rw [isOpen_iff_ball_subset]
   intro y hy
@@ -282,7 +282,7 @@ exact fun y hy => ⟨V, h', fun z hyz hxz => hy V.trans hxz V.symm hyz⟩
 
 中文:
 引理 isClosed_ball_of_isSymm_of_isTrans_of_mem_uniformity
-  结论: (x : X) {V : SetRel X X} [V.IsSymm]
+  结论: (x : X) {V : SetRel X X} [V.是Symm]
   证明: by
   rw [← isOpen_compl_iff]; rw [isOpen_iff_ball_subset]
 exact fun y hy => ⟨V, h', fun z hyz hxz => hy V.trans hxz V.symm hyz⟩
@@ -305,7 +305,7 @@ lemma isClopen_ball_of_isSymm_of_isTrans_of_mem_uniformity
 
 中文:
 引理 isClopen_ball_of_isSymm_of_isTrans_of_mem_uniformity
-  结论: (x : X) {V : SetRel X X} [V.IsSymm]
+  结论: (x : X) {V : SetRel X X} [V.是Symm]
   证明: ⟨isClosed_ball_of_isSymm_of_isTrans_of_mem_uniformity _ ‹_›, isOpen_ball_of_mem_uniformity _ ‹_›⟩
 
 Depends on / 依赖: isClosed_ball_of_isSymm_of_isTrans_of_mem_uniformity, isOpen_ball_of_mem_uniformity
@@ -361,7 +361,7 @@ lemma _root_.TopologicalSpace.isTopologicalBasis_clopens
   proof: .of_hasBasis_nhds fun x => by simpa [and_comm] using nhds_basis_clopens x
 
 中文:
-引理 _root_.TopologicalSpace.isTopologicalBasis_clopens
+引理 _root_.拓扑空间.isTopologicalBasis_clopens
   证明: .of_hasBasis_nhds fun x => by simpa [and_comm] using nhds_basis_clopens x
 
 Depends on / 依赖: and_comm, nhds_basis_clopens, of_hasBasis_nhds

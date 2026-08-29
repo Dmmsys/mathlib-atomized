@@ -58,7 +58,7 @@ definition IsTightMeasureSet
 
 中文:
 定义 IsTightMeasureSet
-  签名: (S : Set (Measure 𝓧))
+  签名: (S : 集合 (测度 𝓧))
   定义体: Tendsto (⨆ μ in S, μ) (cocompact 𝓧).smallSets (𝓝 0)
 
 Depends on / 依赖: Tendsto, cocompact, smallSets
@@ -79,7 +79,7 @@ lemma isTightMeasureSet_iff_exists_isCompact_measure_compl_le
   · obtain ⟨A, ⟨K, h1, h2⟩, hA⟩ := h ε 
 
 中文:
-引理 isTightMeasureSet_iff_exists_isCompact_measure_compl_le
+引理 isTightMeasureSet_iff_存在_isCompact_measure_compl_le
   证明: by
   simp only [IsTightMeasureSet, ENNReal.tendsto_nhds ENNReal.zero_ne_top, gt_iff_lt, zero_add,
     iSup_apply, mem_Icc, tsub_le_iff_right, zero_le, iSup_le_iff, true_and, eventually_smallSets,
@@ -117,7 +117,7 @@ theorem isTightMeasureSet_singleton_of_innerRegularWRT
 
 中文:
 定理 isTightMeasureSet_singleton_of_innerRegularWRT
-  结论: [OpensMeasurableSpace 𝓧] [IsFiniteMeasure μ]
+  结论: [OpensMeasurable空间 𝓧] [是有限测度 μ]
   证明: by
   rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le]
   intro ε hε
@@ -160,7 +160,7 @@ lemma isTightMeasureSet_singleton_of_innerRegular
 
 中文:
 引理 isTightMeasureSet_singleton_of_innerRegular
-  结论: [T2Space 𝓧] [OpensMeasurableSpace 𝓧]
+  结论: [T2空间 𝓧] [OpensMeasurable空间 𝓧]
   证明: by
   refine isTightMeasureSet_singleton_of_innerRegularWRT ?_
   intro s hs r hr
@@ -188,7 +188,7 @@ theorem isTightMeasureSet_singleton
 
 中文:
 定理 isTightMeasureSet_singleton
-  结论: {α : 类型} [MeasurableSpace α] [TopologicalSpace α]
+  结论: {α : 类型} [可测空间 α] [拓扑空间 α]
   证明: isTightMeasureSet_singleton_of_innerRegularWRT
     (innerRegular_isCompact_isClosed_measurableSet_of_finite _)
 
@@ -217,7 +217,7 @@ lemma of_compactSpace
 
 中文:
 引理 of_compactSpace
-  条件: [CompactSpace 𝓧]
+  条件: [紧空间 𝓧]
   结论: IsTightMeasureSet S
   证明: by
   simp only [IsTightMeasureSet, cocompact_eq_bot, smallSets_bot, tendsto_pure_left, iSup_apply,
@@ -286,7 +286,7 @@ lemma inter
 
 中文:
 引理 inter
-  条件: (hS : IsTightMeasureSet S) (T : Set (Measure 𝓧))
+  条件: (hS : IsTightMeasureSet S) (T : 集合 (测度 𝓧))
   证明: hS.subset inter_subset_left
 
 Depends on / 依赖: HasLimit, HasLimit.mk, isProduct
@@ -311,7 +311,7 @@ lemma map
 
 中文:
 引理 map
-  结论: [TopologicalSpace 𝓨] [MeasurableSpace 𝓨] [OpensMeasurableSpace 𝓨] [T2Space 𝓨]
+  结论: [拓扑空间 𝓨] [可测空间 𝓨] [OpensMeasurable空间 𝓨] [T2空间 𝓨]
   证明: by
   rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le] at hS ⊢
   simp only [mem_image, forall_exists_index, and_imp, forall_apply_eq_imp_iff₂]
@@ -353,7 +353,7 @@ lemma prodMk
 
 中文:
 引理 prodMk
-  结论: {m𝓨 : MeasurableSpace 𝓨} [TopologicalSpace 𝓨] {μ : Set (Measure (𝓧 × 𝓨))}
+  结论: {m𝓨 : 可测空间 𝓨} [拓扑空间 𝓨] {μ : 集合 (测度 (𝓧 × 𝓨))}
   证明: by
   rw [isTightMeasureSet_iff_exists_isCompact_measure_compl_le] at hμ₁ hμ₂ ⊢
   intro ε hε

@@ -881,7 +881,7 @@ theorem meromorphicTrailingCoeffAt_prod
 
 中文:
 定理 meromorphicTrailingCoeffAt_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   classical
   induction s using Finset.induction with
@@ -921,7 +921,7 @@ theorem meromorphicTrailingCoeffAt_fun_prod
 
 中文:
 定理 meromorphicTrailingCoeffAt_fun_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   convert! meromorphicTrailingCoeffAt_prod h
   simp

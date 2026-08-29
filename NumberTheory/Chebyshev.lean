@@ -634,7 +634,7 @@ theorem psi_mono
 
 中文:
 定理 psi_mono
-  结论: Monotone ψ
+  结论: 递增 ψ
   证明: by
   intro x y hxy
   apply sum_le_sum_of_subset_of_nonneg
@@ -666,7 +666,7 @@ theorem theta_mono
 
 中文:
 定理 theta_mono
-  结论: Monotone θ
+  结论: 递增 θ
   证明: by
   intro x y hxy
   apply sum_le_sum_of_subset_of_nonneg
@@ -831,7 +831,7 @@ theorem factorization_lcmUpto
 
 中文:
 定理 factorization_lcmUpto
-  条件: (n : 自然数) {p : 自然数} (hp : p.Prime)
+  条件: (n : 自然数) {p : 自然数} (hp : p.素)
   证明: by
   rw [lcmUpto]; rw [Finset.factorization_lcm (fun _ _ => by grind)]
   have := hp.one_lt
@@ -1258,7 +1258,7 @@ theorem sum_PrimePow_eq_sum_sum'
 
 中文:
 定理 sum_PrimePow_eq_sum_sum'
-  结论: {R : 类型} [AddCommMonoid R] (f : 自然数 -> R) {x : 实数} (hx : 0 <= x)
+  结论: {R : 类型} [加法交换幺半群 R] (f : 自然数 -> R) {x : 实数} (hx : 0 <= x)
   证明: by
   trans ∑ ⟨k, p⟩ in Icc 1 N ×ˢ (Ioc 0 ⌊x⌋₊).filter Nat.Prime
     with p <= ⌊x ^ (k : Real)⁻¹⌋₊, f (p ^ k)
@@ -1317,7 +1317,7 @@ theorem sum_PrimePow_eq_sum_sum
 
 中文:
 定理 sum_PrimePow_eq_sum_sum
-  条件: {R : 类型} [AddCommMonoid R] (f : 自然数 -> R) {x : 实数} (hx : 0 <= x)
+  条件: {R : 类型} [加法交换幺半群 R] (f : 自然数 -> R) {x : 实数} (hx : 0 <= x)
   证明: sum_PrimePow_eq_sum_sum' f hx (le_refl _)
 
 Depends on / 依赖: le_refl, sum_PrimePow_eq_sum_sum
@@ -1842,7 +1842,7 @@ theorem b_antitone
 中文:
 定理 b_antitone
   条件: (hx : 0 <= x)
-  结论: AntitoneOn (b x) (.Ici 1)
+  结论: AntitoneOn (b x) (.左闭右无界区间 1)
   证明: by
   intro n hn m hm hnm; unfold b
   simp only [Set.mem_Ici] at hn hm
@@ -2281,7 +2281,7 @@ theorem intervalIntegrable_one_div_log_sq
   fun_prop
 
 中文:
-定理 intervalIntegrable_one_div_log_sq
+定理 interval整数egrable_one_div_log_sq
   条件: {a b : 实数} (one_lt_a : 1 < a) (one_lt_b : 1 < b)
   证明: by
   refine ContinuousOn.intervalIntegrable fun x hx => ContinuousAt.continuousWithinAt ?_

@@ -113,7 +113,7 @@ definition upperCentralSeriesStep
 
 中文:
 定义 upperCentralSeriesStep
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: { x : G | forall y : G, ⁅x, y⁆ in N }
   one_mem' y := by simp
   mul_mem' {a b} ha hb y := by
@@ -205,8 +205,8 @@ instance [N.Characteristic]
   body: (upperCentralSeriesStep_eq_comap_center N) ▸ Characteristic.comap_quotient_mk centerCharacteristic
 
 中文:
-实例 [N.Characteristic]
-  签名: : Characteristic (upperCentralSeriesStep N)
+实例 [N.特征]
+  签名: : 特征 (upperCentralSeriesStep N)
   定义体: (upperCentralSeriesStep_eq_comap_center N) ▸ Characteristic.comap_quotient_mk centerCharacteristic
 
 Depends on / 依赖: Characteristic, Characteristic.comap_quotient_mk, centerCharacteristic, comap_quotient_mk, upperCentralSeriesStep_eq_comap_center
@@ -228,7 +228,7 @@ definition upperCentralSeriesAux
 
 中文:
 定义 upperCentralSeriesAux
-  签名: : 自然数 -> Σ' H : Subgroup G, Characteristic H
+  签名: : 自然数 -> Σ' H : 子群 G, 特征 H
   定义体: upperCentralSeriesAux n
     let _un_characteristic := un.2
     ⟨upperCentralSeriesStep un.1, inferInstance⟩
@@ -253,8 +253,8 @@ definition _root_.AddSubgroup.upperCentralSeriesAux
     ⟨AddSubgroup.upperCentralSeriesStep un.1, inferInstance⟩
 
 中文:
-定义 _root_.AddSubgroup.upperCentralSeriesAux
-  签名: (G : 类型) [AddGroup G]
+定义 _root_.加法子群.upperCentralSeriesAux
+  签名: (G : 类型) [加法群 G]
   定义体: upperCentralSeriesAux G n
     let _un_characteristic := un.2
     ⟨AddSubgroup.upperCentralSeriesStep un.1, inferInstance⟩
@@ -387,8 +387,8 @@ theorem _root_.AddSubgroup.upperCentralSeries_one
 
 
 中文:
-定理 _root_.AddSubgroup.upperCentralSeries_one
-  条件: (G : 类型) [AddGroup G]
+定理 _root_.加法子群.upperCentralSeries_one
+  条件: (G : 类型) [加法群 G]
   证明: by
   ext
   simp only [AddSubgroup.upperCentralSeries, AddSubgroup.upperCentralSeriesAux,
@@ -479,7 +479,7 @@ lemma comap_upperCentralSeries
 
 中文:
 引理 comap_upperCentralSeries
-  条件: {H : 类型} [Group H] (e : H ≃* G)
+  条件: {H : 类型} [群 H] (e : H ≃* G)
 -/
 lemma comap_upperCentralSeries {H : Type*} [Group H] (e : H ≃* G) :
     forall n, (upperCentralSeries G n).comap e = upperCentralSeries H n
@@ -508,8 +508,8 @@ class IsNilpotent
     - nilpotent' : exists n : Nat, upperCentralSeries G n = ⊤
 
 中文:
-类 IsNilpotent
-  参数: (G : 类型) [Group G]
+类 是幂零
+  参数: (G : 类型) [群 G]
   公理与运算 (1 个):
     - nilpotent' : 存在 n : 自然数, upperCentralSeries G n = ⊤
 -/
@@ -531,10 +531,10 @@ class _root_.AddGroup.IsNilpotent
     - nilpotent' : exists n : Nat, AddSubgroup.upperCentralSeries G n = ⊤
 
 中文:
-类 _root_.AddGroup.IsNilpotent
-  参数: (G : 类型) [AddGroup G]
+类 _root_.加法群.是幂零
+  参数: (G : 类型) [加法群 G]
   公理与运算 (1 个):
-    - nilpotent' : 存在 n : 自然数, AddSubgroup.upperCentralSeries G n = ⊤
+    - nilpotent' : 存在 n : 自然数, 加法子群.upperCentralSeries G n = ⊤
 -/
 class _root_.AddGroup.IsNilpotent (G : Type*) [AddGroup G] : Prop where
   nilpotent' : exists n : Nat, AddSubgroup.upperCentralSeries G n = ⊤
@@ -551,8 +551,8 @@ lemma IsNilpotent.nilpotent
 @[to_additive]
 
 中文:
-引理 IsNilpotent.nilpotent
-  条件: (G : 类型) [Group G] [IsNilpotent G]
+引理 是幂零.nilpotent
+  条件: (G : 类型) [群 G] [是幂零 G]
   证明: Group.IsNilpotent.nilpotent'
 
 @[to_additive]
@@ -578,8 +578,8 @@ lemma isNilpotent_congr
 
 中文:
 引理 isNilpotent_congr
-  条件: {H : 类型} [Group H] (e : G ≃* H)
-  结论: IsNilpotent G ↔ IsNilpotent H
+  条件: {H : 类型} [群 H] (e : G ≃* H)
+  结论: 是幂零 G ↔ 是幂零 H
   证明: by
   simp_rw [isNilpotent_iff]
   refine exists_congr fun n => ⟨fun h => ?_, fun h => ?_⟩
@@ -607,7 +607,7 @@ lemma isNilpotent_top
 
 中文:
 引理 isNilpotent_top
-  结论: IsNilpotent (⊤ : Subgroup G) ↔ IsNilpotent G
+  结论: 是幂零 (⊤ : 子群 G) ↔ 是幂零 G
   证明: isNilpotent_congr Subgroup.topEquiv
 
 Depends on / 依赖: Subgroup, Subgroup.topEquiv, isNilpotent_congr, topEquiv
@@ -651,8 +651,8 @@ lemma IsNilpotent.isVirtuallyNilpotent
   proof: ⟨⊤, by simpa, inferInstance⟩
 
 中文:
-引理 IsNilpotent.isVirtuallyNilpotent
-  条件: (hG : IsNilpotent G)
+引理 是幂零.isVirtuallyNilpotent
+  条件: (hG : 是幂零 G)
   结论: IsVirtuallyNilpotent G
   证明: ⟨⊤, by simpa, inferInstance⟩
 -/
@@ -679,7 +679,7 @@ definition IsAscendingCentralSeries
 
 中文:
 定义 IsAscendingCentralSeries
-  签名: (H : 自然数 -> Subgroup G)
+  签名: (H : 自然数 -> 子群 G)
   定义体: H 0 = ⊥ ∧ forall (x : G) (n : Nat), x in H (n + 1) -> forall g, ⁅x, g⁆ in H n
 -/
 def IsAscendingCentralSeries (H : Nat -> Subgroup G) : Prop :=
@@ -699,7 +699,7 @@ definition IsDescendingCentralSeries
 
 中文:
 定义 IsDescendingCentralSeries
-  签名: (H : 自然数 -> Subgroup G)
+  签名: (H : 自然数 -> 子群 G)
   定义体: H 0 = ⊤ ∧ forall (x : G) (n : Nat), x in H n -> forall g, ⁅x, g⁆ in H (n + 1)
 -/
 def IsDescendingCentralSeries (H : Nat -> Subgroup G) :=
@@ -717,7 +717,7 @@ theorem ascending_central_series_le_upper
 
 中文:
 定理 ascending_central_series_le_upper
-  条件: (H : 自然数 -> Subgroup G) (hH : IsAscendingCentralSeries H)
+  条件: (H : 自然数 -> 子群 G) (hH : IsAscendingCentralSeries H)
 -/
 theorem ascending_central_series_le_upper (H : Nat -> Subgroup G) (hH : IsAscendingCentralSeries H) :
     forall n : Nat, H n <= upperCentralSeries G n
@@ -765,7 +765,7 @@ theorem upperCentralSeries_mono
 
 中文:
 定理 upperCentralSeries_mono
-  结论: Monotone (upperCentralSeries G)
+  结论: 递增 (upperCentralSeries G)
   证明: by
   refine monotone_nat_of_le_succ ?_
   intro n x hx y
@@ -847,7 +847,7 @@ theorem is_descending_rev_series_of_is_ascending
 
 中文:
 定理 is_descending_rev_series_of_is_ascending
-  结论: {H : 自然数 -> Subgroup G} {n : 自然数} (hn : H n = ⊤)
+  结论: {H : 自然数 -> 子群 G} {n : 自然数} (hn : H n = ⊤)
   证明: by
   obtain ⟨h0, hH⟩ := hasc
   refine ⟨hn, fun x m hx g => ?_⟩
@@ -897,7 +897,7 @@ theorem is_ascending_rev_series_of_is_descending
 
 中文:
 定理 is_ascending_rev_series_of_is_descending
-  结论: {H : 自然数 -> Subgroup G} {n : 自然数} (hn : H n = ⊥)
+  结论: {H : 自然数 -> 子群 G} {n : 自然数} (hn : H n = ⊥)
   证明: by
   obtain ⟨h0, hH⟩ := hdesc
   refine ⟨hn, fun x m hx g => ?_⟩
@@ -984,7 +984,7 @@ definition lowerCentralSeries
 
 中文:
 定义 lowerCentralSeries
-  签名: (S : Subgroup G)
+  签名: (S : 子群 G)
 -/
 def lowerCentralSeries (S : Subgroup G) : Nat -> Subgroup G
   | 0 => S
@@ -998,8 +998,8 @@ definition _root_.AddSubgroup.lowerCentralSeries
   signature: {G : Type*} [AddGroup G] (S : AddSubgroup G)
 
 中文:
-定义 _root_.AddSubgroup.lowerCentralSeries
-  签名: {G : 类型} [AddGroup G] (S : AddSubgroup G)
+定义 _root_.加法子群.lowerCentralSeries
+  签名: {G : 类型} [加法群 G] (S : 加法子群 G)
 -/
 def _root_.AddSubgroup.lowerCentralSeries {G : Type*} [AddGroup G] (S : AddSubgroup G) :
     Nat -> AddSubgroup G
@@ -1070,7 +1070,7 @@ alias lowerCentralSeries_one := top_lowerCentralSeries_one
 
 中文:
 定理 top_lowerCentralSeries_one
-  结论: (⊤ : Subgroup G).lowerCentralSeries 1 = _root_.commutator G
+  结论: (⊤ : 子群 G).lowerCentralSeries 1 = _root_.commutator G
   证明: rfl
 
 @[deprecated (since := "2026-05-25")]
@@ -1130,7 +1130,7 @@ instance lowerCentralSeries_characteristic
 
 中文:
 实例 lowerCentralSeries_characteristic
-  签名: [S.Characteristic] (n : 自然数)
+  签名: [S.特征] (n : 自然数)
   定义体: by
   induction n with
   | zero => simpa
@@ -1177,7 +1177,7 @@ theorem lowerCentralSeries_antitone
 
 中文:
 定理 lowerCentralSeries_antitone
-  结论: Antitone S.lowerCentralSeries
+  结论: 递减 S.lowerCentralSeries
   证明: by
   refine antitone_nat_of_succ_le fun n => ?_
   rw [lowerCentralSeries_succ]; rw [← le_normalizer_iff_commutator_le_left]
@@ -1232,7 +1232,7 @@ theorem descending_central_series_ge_lower
 
 中文:
 定理 descending_central_series_ge_lower
-  条件: (H : 自然数 -> Subgroup G) (hH : IsDescendingCentralSeries H)
+  条件: (H : 自然数 -> 子群 G) (hH : IsDescendingCentralSeries H)
 -/
 theorem descending_central_series_ge_lower (H : Nat -> Subgroup G) (hH : IsDescendingCentralSeries H) :
     forall n : Nat, lowerCentralSeries ⊤ n <= H n
@@ -1256,7 +1256,7 @@ theorem map_lowerCentralSeries
 
 中文:
 定理 map_lowerCentralSeries
-  条件: {K : 类型} [Group K] (f : G ->* K) (n : 自然数)
+  条件: {K : 类型} [群 K] (f : G ->* K) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -1286,7 +1286,7 @@ theorem top_subtype_lowerCentralSeries
 
 中文:
 定理 top_subtype_lowerCentralSeries
-  条件: (H : Subgroup G) (n : 自然数)
+  条件: (H : 子群 G) (n : 自然数)
   证明: by
   rw [map_lowerCentralSeries]; rw [← MonoidHom.range_eq_map]; rw [subtype_range]
 
@@ -1386,7 +1386,7 @@ definition Group.nilpotencyClass
 @[to_additive]
 
 中文:
-定义 Group.nilpotencyClass
+定义 群.nilpotencyClass
   签名: : 自然数
   定义体: if hG : IsNilpotent G then Nat.find hG.nilpotent else 0
 
@@ -1407,8 +1407,8 @@ theorem Group.nilpotencyClass_of_not_nilpotent
   proof: dif_neg hG
 
 中文:
-定理 Group.nilpotencyClass_of_not_nilpotent
-  条件: (hG : ¬ IsNilpotent G)
+定理 群.nilpotencyClass_of_not_nilpotent
+  条件: (hG : ¬ 是幂零 G)
   证明: dif_neg hG
 
 Depends on / 依赖: dif_neg
@@ -1429,7 +1429,7 @@ theorem Group.nilpotencyClass_def
   proof: dif_pos hG
 
 中文:
-定理 Group.nilpotencyClass_def
+定理 群.nilpotencyClass_def
   证明: dif_pos hG
 
 Depends on / 依赖: dif_pos
@@ -1782,7 +1782,7 @@ theorem lowerCentralSeries_le_self
 
 中文:
 定理 lowerCentralSeries_le_self
-  条件: (S : Subgroup G) (n : 自然数)
+  条件: (S : 子群 G) (n : 自然数)
   证明: by
   simpa using S.lowerCentralSeries_antitone (Nat.zero_le n)
 
@@ -1845,7 +1845,7 @@ theorem lowerCentralSeries_map_subtype_le
 
 中文:
 定理 lowerCentralSeries_map_subtype_le
-  条件: (H : Subgroup G) (n : 自然数)
+  条件: (H : 子群 G) (n : 自然数)
   证明: by
   rw [top_subtype_lowerCentralSeries]
   exact lowerCentralSeries_mono n le_top
@@ -1876,7 +1876,7 @@ theorem lowerCentralSeries.map
 
 中文:
 定理 lowerCentralSeries.map
-  条件: {K : 类型} [Group K] (f : G ->* K) (n : 自然数)
+  条件: {K : 类型} [群 K] (f : G ->* K) (n : 自然数)
   证明: by
   rw [map_lowerCentralSeries]
   exact lowerCentralSeries_mono n le_top
@@ -1904,7 +1904,7 @@ instance lowerCentralSeries_normal
 
 中文:
 实例 lowerCentralSeries_normal
-  签名: (S : Subgroup G) [S.Normal] (n : 自然数)
+  签名: (S : 子群 G) [S.正规] (n : 自然数)
   定义体: by
   induction n with
   | zero => simpa
@@ -1935,7 +1935,7 @@ instance isNilpotent
 
 中文:
 实例 isNilpotent
-  签名: (H : Subgroup G) [hG : IsNilpotent G]
+  签名: (H : 子群 G) [hG : 是幂零 G]
   定义体: by
   rw [nilpotent_iff_lowerCentralSeries] at *
   rcases hG with ⟨n, hG⟩
@@ -1985,7 +1985,7 @@ theorem nilpotencyClass_le
 
 中文:
 定理 nilpotencyClass_le
-  条件: (H : Subgroup G) [hG : IsNilpotent G]
+  条件: (H : 子群 G) [hG : 是幂零 G]
   证明: by
   repeat rw [← lowerCentralSeries_length_eq_nilpotencyClass]
   classical apply Nat.find_mono
@@ -2018,7 +2018,7 @@ theorem isNilpotent_of_lowerCentralSeries_eq_bot
 
 中文:
 定理 isNilpotent_of_lowerCentralSeries_eq_bot
-  结论: {S : Subgroup G} {n : 自然数}
+  结论: {S : 子群 G} {n : 自然数}
   证明: (isNilpotent_iff_lowerCentralSeries S).mpr ⟨n, h⟩
 
 @[to_additive]
@@ -2043,7 +2043,7 @@ theorem lowerCentralSeries_eq_bot_of_nilpotencyClass_le
 
 中文:
 定理 lowerCentralSeries_eq_bot_of_nilpotencyClass_le
-  结论: {S : Subgroup G}
+  结论: {S : 子群 G}
   证明: by
   rw [← top_subtype_lowerCentralSeries]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr hn]; rw [map_bot]
 
@@ -2080,7 +2080,7 @@ theorem upperCentralSeries.map
 
 中文:
 定理 upperCentralSeries.map
-  结论: {H : 类型} [Group H] {f : G ->* H} (h : Function.Surjective f)
+  结论: {H : 类型} [群 H] {f : G ->* H} (h : 函数.满射 f)
   证明: by
   induction n with
   | zero => simp
@@ -2117,7 +2117,7 @@ theorem lowerCentralSeries_succ_eq_bot
 
 中文:
 定理 lowerCentralSeries_succ_eq_bot
-  结论: (S : Subgroup G) {n : 自然数}
+  结论: (S : 子群 G) {n : 自然数}
   证明: by
   rw [lowerCentralSeries_succ]; rw [commutator_def]; rw [closure_eq_bot_iff]; rw [Set.subset_singleton_iff]
   rintro x ⟨y, hy1, z, _, rfl⟩
@@ -2154,7 +2154,7 @@ theorem isNilpotent_of_ker_le_center
 
 中文:
 定理 isNilpotent_of_ker_le_center
-  结论: {H : 类型} [Group H] (f : G ->* H) (hf1 : f.ker <= center G)
+  结论: {H : 类型} [群 H] (f : G ->* H) (hf1 : f.ker <= center G)
   证明: by
   rw [nilpotent_iff_lowerCentralSeries]
   rcases nilpotent_iff_lowerCentralSeries.mp ‹_› with ⟨n, hn⟩
@@ -2195,7 +2195,7 @@ theorem nilpotencyClass_le_of_ker_le_center
 
 中文:
 定理 nilpotencyClass_le_of_ker_le_center
-  结论: {H : 类型} [Group H] (f : G ->* H)
+  结论: {H : 类型} [群 H] (f : G ->* H)
   证明: by
   have : IsNilpotent G := isNilpotent_of_ker_le_center f hf1
   rw [← lowerCentralSeries_length_eq_nilpotencyClass]
@@ -2238,7 +2238,7 @@ theorem nilpotent_of_surjective
 
 中文:
 定理 nilpotent_of_surjective
-  结论: {G' : 类型} [Group G'] [h : IsNilpotent G] (f : G ->* G')
+  结论: {G' : 类型} [群 G'] [h : 是幂零 G] (f : G ->* G')
   证明: by
   rcases h with ⟨n, hn⟩
   use n
@@ -2285,7 +2285,7 @@ theorem nilpotencyClass_le_of_surjective
 
 中文:
 定理 nilpotencyClass_le_of_surjective
-  结论: {G' : 类型} [Group G'] (f : G ->* G')
+  结论: {G' : 类型} [群 G'] (f : G ->* G')
   证明: by
   have := nilpotent_of_surjective _ hf
   rw [nilpotencyClass_def]; rw [nilpotencyClass_def]
@@ -2325,7 +2325,7 @@ theorem nilpotent_of_mulEquiv
 
 中文:
 定理 nilpotent_of_mulEquiv
-  条件: {G' : 类型} [Group G'] [_h : IsNilpotent G] (f : G ≃* G')
+  条件: {G' : 类型} [群 G'] [_h : 是幂零 G] (f : G ≃* G')
   证明: nilpotent_of_surjective f.toMonoidHom (MulEquiv.surjective f)
 
 Depends on / 依赖: MulEquiv, MulEquiv.surjective, f.toMonoidHom, nilpotent_of_surjective, surjective, toMonoidHom
@@ -2346,7 +2346,7 @@ instance nilpotent_quotient_of_nilpotent
 
 中文:
 实例 nilpotent_quotient_of_nilpotent
-  签名: (H : Subgroup G) [H.Normal] [_h : IsNilpotent G]
+  签名: (H : 子群 G) [H.正规] [_h : 是幂零 G]
   定义体: nilpotent_of_surjective (QuotientGroup.mk' H) QuotientGroup.mk_surjective
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, QuotientGroup.mk_surjective, mk_surjective, nilpotent_of_surjective
@@ -2368,7 +2368,7 @@ theorem nilpotencyClass_quotient_le
 
 中文:
 定理 nilpotencyClass_quotient_le
-  条件: (H : Subgroup G) [H.Normal] [_h : IsNilpotent G]
+  条件: (H : 子群 G) [H.正规] [_h : 是幂零 G]
   证明: nilpotencyClass_le_of_surjective (QuotientGroup.mk' H) QuotientGroup.mk_surjective
 
 Depends on / 依赖: QuotientGroup, QuotientGroup.mk, QuotientGroup.mk_surjective, mk_surjective, nilpotencyClass_le_of_surjective
@@ -2397,7 +2397,7 @@ theorem comap_center_subst
 
 中文:
 定理 comap_center_subst
-  条件: {H₁ H₂ : Subgroup G} [Normal H₁] [Normal H₂] (h : H₁ = H₂)
+  条件: {H₁ H₂ : 子群 G} [正规 H₁] [正规 H₂] (h : H₁ = H₂)
   证明: by subst h; rfl
 
 @[to_additive]
@@ -2475,7 +2475,7 @@ theorem nilpotencyClass_zero_iff_subsingleton
 
 中文:
 定理 nilpotencyClass_zero_iff_subsingleton
-  条件: [IsNilpotent G]
+  条件: [是幂零 G]
   证明: by
   classical
   rw [Group.nilpotencyClass_def]; rw [Nat.find_eq_zero]; rw [upperCentralSeries_zero]; rw [subsingleton_iff_bot_eq_top]; rw [Subgroup.subsingleton_iff]
@@ -2503,8 +2503,8 @@ theorem of_quotient_center_nilpotent
 
 中文:
 定理 of_quotient_center_nilpotent
-  条件: (h : IsNilpotent (G ⧸ center G))
-  结论: IsNilpotent G
+  条件: (h : 是幂零 (G ⧸ center G))
+  结论: 是幂零 G
   证明: by
   obtain ⟨n, hn⟩ := h.nilpotent
   use n.succ
@@ -2584,7 +2584,7 @@ theorem nilpotencyClass_eq_quotient_center_plus_one
 
 中文:
 定理 nilpotencyClass_eq_quotient_center_plus_one
-  条件: [hH : IsNilpotent G] [Nontrivial G]
+  条件: [hH : 是幂零 G] [非平凡 G]
   证明: by
   rw [nilpotencyClass_quotient_center]
   rcases h : Group.nilpotencyClass G with ⟨⟩
@@ -2628,7 +2628,7 @@ theorem nilpotent_center_quotient_ind
 
 中文:
 定理 nilpotent_center_quotient_ind
-  结论: {P : 对任意 (G) [Group G] [IsNilpotent G], 命题}
+  结论: {P : 对任意 (G) [群 G] [是幂零 G], 命题}
   证明: by
   obtain ⟨n, h⟩ : exists n, Group.nilpotencyClass G = n := ⟨_, rfl⟩
   induction n generalizing G with
@@ -2672,7 +2672,7 @@ theorem Subgroup.derived_le_lower_central
 @[to_additive]
 
 中文:
-定理 Subgroup.derived_le_lower_central
+定理 子群.derived_le_lower_central
   条件: (n : 自然数)
   证明: by
   induction n with
@@ -2702,7 +2702,7 @@ theorem Subgroup.upperCentralSeries_one_eq_top_iff
 @[to_additive]
 
 中文:
-定理 Subgroup.upperCentralSeries_one_eq_top_iff
+定理 子群.upperCentralSeries_one_eq_top_iff
   证明: by
   rw [upperCentralSeries_one]
   exact Subgroup.center_eq_top_iff
@@ -2729,7 +2729,7 @@ theorem Subgroup.lowerCentralSeries_one_eq_bot_iff
 @[to_additive]
 
 中文:
-定理 Subgroup.lowerCentralSeries_one_eq_bot_iff
+定理 子群.lowerCentralSeries_one_eq_bot_iff
   证明: by
   rw [lowerCentralSeries_eq_bot_iff_upperCentralSeries_eq_top]
   exact upperCentralSeries_one_eq_top_iff
@@ -2755,8 +2755,8 @@ theorem Group.IsNilpotent.nilpotencyClass_le_one_iff
   exact upperCentralSeries_one_eq_top_iff
 
 中文:
-定理 Group.IsNilpotent.nilpotencyClass_le_one_iff
-  条件: [IsNilpotent G]
+定理 群.是幂零.nilpotencyClass_le_one_iff
+  条件: [是幂零 G]
   证明: by
   rw [← upperCentralSeries_eq_top_iff_nilpotencyClass_le]
   exact upperCentralSeries_one_eq_top_iff
@@ -2788,8 +2788,8 @@ theorem CommGroup.nilpotencyClass_le_one
   apply CommGroup.center_eq_top
 
 中文:
-定理 CommGroup.nilpotencyClass_le_one
-  条件: {G : 类型} [CommGroup G]
+定理 交换群.nilpotencyClass_le_one
+  条件: {G : 类型} [交换群 G]
   证明: by
   rw [← upperCentralSeries_eq_top_iff_nilpotencyClass_le]; rw [upperCentralSeries_one]
   apply CommGroup.center_eq_top
@@ -2816,7 +2816,7 @@ definition commGroupOfNilpotencyClass
 
 中文:
 定义 commGroupOfNilpotencyClass
-  签名: [IsNilpotent G] (h : Group.nilpotencyClass G <= 1)
+  签名: [是幂零 G] (h : 群.nilpotencyClass G <= 1)
   定义体: Group.commGroupOfCenterEqTop by
     rw [← upperCentralSeries_one]
     exact upperCentralSeries_eq_top_iff_nilpotencyClass_le.mpr h
@@ -2916,7 +2916,7 @@ lemma upperCentralSeries.eq_top
 
 中文:
 引理 upperCentralSeries.eq_top
-  结论: [IsNilpotent G] {a b : 自然数} (ab : a != b)
+  结论: [是幂零 G] {a b : 自然数} (ab : a != b)
   证明: by
   grind only [IsNilpotent.nilpotent', IsNilpotent.nilpotent,
     upperCentralSeries_eq_top_iff_nilpotencyClass_le, eq_ge_of_eq_gt]
@@ -3058,8 +3058,8 @@ theorem Group.IsNilpotent.center_ne_bot
   proof: .symm by simpa using mt (upperCentralSeries.eq_top zero_ne_one) by simp
 
 中文:
-定理 Group.IsNilpotent.center_ne_bot
-  条件: [Nontrivial G] [IsNilpotent G]
+定理 群.是幂零.center_ne_bot
+  条件: [非平凡 G] [是幂零 G]
   结论: center G != ⊥
   证明: .symm by simpa using mt (upperCentralSeries.eq_top zero_ne_one) by simp
 
@@ -3085,8 +3085,8 @@ theorem Subgroup.lowerCentralSeries_prod
   | succ n ih => simp_rw [lowerCentralSeries_succ, ih, commutator_prod_prod]
 
 中文:
-定理 Subgroup.lowerCentralSeries_prod
-  条件: (S₁ : Subgroup G₁) (S₂ : Subgroup G₂) (n : 自然数)
+定理 子群.lowerCentralSeries_prod
+  条件: (S₁ : 子群 G₁) (S₂ : 子群 G₂) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -3113,7 +3113,7 @@ theorem Subgroup.top_lowerCentralSeries_prod
   rw [← lowerCentralSeries_prod]; rw [top_prod_top]
 
 中文:
-定理 Subgroup.top_lowerCentralSeries_prod
+定理 子群.top_lowerCentralSeries_prod
   条件: (n : 自然数)
   证明: by
   rw [← lowerCentralSeries_prod]; rw [top_prod_top]
@@ -3139,8 +3139,8 @@ instance Group.isNilpotent_prod
   rw [top_lowerCentralSeries_prod]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_left _ _)]; rw [lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (le_max_right 
 
 中文:
-实例 Group.isNilpotent_prod
-  签名: [IsNilpotent G₁] [IsNilpotent G₂]
+实例 群.isNilpotent_prod
+  签名: [是幂零 G₁] [是幂零 G₂]
   定义体: by
   rw [nilpotent_iff_lowerCentralSeries]
   refine ⟨max (Group.nilpotencyClass G₁) (Group.nilpotencyClass G₂), ?_⟩
@@ -3168,8 +3168,8 @@ theorem Group.nilpotencyClass_prod
     top_lowerCentralSeries_prod, prod_eq_bot_iff]
 
 中文:
-定理 Group.nilpotencyClass_prod
-  条件: [IsNilpotent G₁] [IsNilpotent G₂]
+定理 群.nilpotencyClass_prod
+  条件: [是幂零 G₁] [是幂零 G₂]
   证明: by
   refine eq_of_forall_ge_iff fun k => ?_
   simp only [max_le_iff, ← lowerCentralSeries_eq_bot_iff_nilpotencyClass_le,
@@ -3206,8 +3206,8 @@ theorem Subgroup.lowerCentralSeries_pi_le
     grw [commutator_mono ih le_rfl, commutator_pi_pi_le]
 
 中文:
-定理 Subgroup.lowerCentralSeries_pi_le
-  条件: (Ss : 对任意 i, Subgroup (Gs i)) (n : 自然数)
+定理 子群.lowerCentralSeries_pi_le
+  条件: (Ss : 对任意 i, 子群 (Gs i)) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -3239,7 +3239,7 @@ theorem Subgroup.top_lowerCentralSeries_pi_le
   exact lowerCentralSeries_pi_le _ _
 
 中文:
-定理 Subgroup.top_lowerCentralSeries_pi_le
+定理 子群.top_lowerCentralSeries_pi_le
   条件: (n : 自然数)
   证明: by
   rw [← pi_top (I := Set.univ)]
@@ -3269,8 +3269,8 @@ refine ⟨n, eq_bot_iff.mpr (top_lowerCentralSeries_pi_le _).trans ?_⟩
   exact fun i => lowerCentralSeries_eq_bot_iff_nilpotencyClass_le.mpr (h i)
 
 中文:
-定理 Group.isNilpotent_pi_of_bounded_class
-  结论: [对任意 i, IsNilpotent (Gs i)] (n : 自然数)
+定理 群.isNilpotent_pi_of_bounded_class
+  结论: [对任意 i, 是幂零 (Gs i)] (n : 自然数)
   证明: by
   rw [nilpotent_iff_lowerCentralSeries]
 refine ⟨n, eq_bot_iff.mpr (top_lowerCentralSeries_pi_le _).trans ?_⟩
@@ -3306,8 +3306,8 @@ theorem Subgroup.lowerCentralSeries_pi_of_finite
   | succ n ih => simp_rw [lowerCentralSeries_succ, ih, commutator_pi_pi_of_finite]
 
 中文:
-定理 Subgroup.lowerCentralSeries_pi_of_finite
-  条件: [Finite η] (Ss : 对任意 i, Subgroup (Gs i)) (n : 自然数)
+定理 子群.lowerCentralSeries_pi_of_finite
+  条件: [有限 η] (Ss : 对任意 i, 子群 (Gs i)) (n : 自然数)
   证明: by
   induction n with
   | zero => simp
@@ -3334,8 +3334,8 @@ theorem Subgroup.top_lowerCentralSeries_pi_of_finite
   rw [← pi_top (I := Set.univ)]; rw [lowerCentralSeries_pi_of_finite]
 
 中文:
-定理 Subgroup.top_lowerCentralSeries_pi_of_finite
-  条件: [Finite η] (n : 自然数)
+定理 子群.top_lowerCentralSeries_pi_of_finite
+  条件: [有限 η] (n : 自然数)
   证明: by
   rw [← pi_top (I := Set.univ)]; rw [lowerCentralSeries_pi_of_finite]
 
@@ -3364,8 +3364,8 @@ instance Group.isNilpotent_pi
   exact Finset.le_sup (f := fun 
 
 中文:
-实例 Group.isNilpotent_pi
-  签名: [Finite η] [对任意 i, IsNilpotent (Gs i)]
+实例 群.isNilpotent_pi
+  签名: [有限 η] [对任意 i, 是幂零 (Gs i)]
   定义体: by
   cases nonempty_fintype η
   rw [nilpotent_iff_lowerCentralSeries]
@@ -3402,8 +3402,8 @@ theorem Group.nilpotencyClass_pi
     top_lowerCentralSeries_pi_of_finite, pi_eq_bot_iff, Finset.mem_univ, true_imp_iff]
 
 中文:
-定理 Group.nilpotencyClass_pi
-  条件: [Fintype η] [对任意 i, IsNilpotent (Gs i)]
+定理 群.nilpotencyClass_pi
+  条件: [有限类型 η] [对任意 i, 是幂零 (Gs i)]
   证明: by
   apply eq_of_forall_ge_iff
   intro k
@@ -3437,8 +3437,8 @@ instance [IsSimpleGroup
   body: ⟨IsSimpleGroup.comm_iff_isSolvable.mpr inferInstance⟩
 
 中文:
-实例 [IsSimpleGroup
-  签名: G] [IsNilpotent G] : CommGroup G
+实例 [是单群
+  签名: G] [是幂零 G] : 交换群 G
   定义体: ⟨IsSimpleGroup.comm_iff_isSolvable.mpr inferInstance⟩
 
 Depends on / 依赖: IsSimpleGroup, IsSimpleGroup.comm_iff_isSolvable.mpr, comm_iff_isSolvable
@@ -3455,8 +3455,8 @@ instance [IsSimpleGroup
   body: inferInstance
 
 中文:
-实例 [IsSimpleGroup
-  签名: G] [IsNilpotent G] : IsCyclic G
+实例 [是单群
+  签名: G] [是幂零 G] : 是循环 G
   定义体: inferInstance
 -/
 instance [IsSimpleGroup G] [IsNilpotent G] : IsCyclic G :=
@@ -3474,7 +3474,7 @@ lemma nilpotencyClass_le_one_of_isSimple_of_isNilpotent
 
 中文:
 引理 nilpotencyClass_le_one_of_isSimple_of_isNilpotent
-  条件: [IsSimpleGroup G] [IsNilpotent G]
+  条件: [是单群 G] [是幂零 G]
   证明: CommGroup.nilpotencyClass_le_one
 
 Depends on / 依赖: CommGroup, CommGroup.nilpotencyClass_le_one, nilpotencyClass_le_one
@@ -3499,7 +3499,7 @@ theorem normalizerCondition_of_isNilpotent
 
 中文:
 定理 normalizerCondition_of_isNilpotent
-  条件: [h : IsNilpotent G]
+  条件: [h : 是幂零 G]
   结论: NormalizerCondition G
   证明: by
   -- roughly based on https://groupprops.subwiki.org/wiki/Nilpotent_implies_normalizer_condition
@@ -3551,8 +3551,8 @@ theorem IsPGroup.isNilpotent
       apply lt_mul_of_one_lt_right Nat.card_po
 
 中文:
-定理 IsPGroup.isNilpotent
-  条件: [Finite G] {p : 自然数} [hp : Fact (自然数.Prime p)] (h : IsPGroup p G)
+定理 是p群.isNilpotent
+  条件: [有限 G] {p : 自然数} [hp : Fact (自然数.素 p)] (h : 是p群 p G)
   证明: by
   induction G using Finite.induction_subsingleton_or_nontrivial generalizing hG with
   | hbase => infer_instance
@@ -3591,7 +3591,7 @@ have : Fact (Nat.Prime ↑p) := Fact.mk Nat.prime_of_mem_primeFactors p.2
   exact nilpotent_of_mulEquiv e
 
 中文:
-定理 Group.isNilpotent_of_product_of_sylow_group
+定理 群.isNilpotent_of_product_of_sylow_group
   证明: by
   let ps := (Nat.card G).primeFactors
   have : forall (p : ps) (P : Sylow p G), IsNilpotent (↑P : Subgroup G) := by
@@ -3627,7 +3627,7 @@ theorem Group.isNilpotent_of_finite_tfae
   | h => Nonempty.intro (Sylow.directProductOfNormal fun {p hp
 
 中文:
-定理 Group.isNilpotent_of_finite_tfae
+定理 群.isNilpotent_of_finite_tfae
   证明: by
   tfae_have 1 -> 2 := @normalizerCondition_of_isNilpotent _ _
   tfae_have 2 -> 3
@@ -3665,7 +3665,7 @@ instance [IsNilpotent
   body: .mp ‹_› p ‹_› P isNilpotent_of_finite_tfae.out 0 3 rfl rfl
 
 中文:
-实例 [IsNilpotent
+实例 [是幂零
   签名: G] {p
   定义体: .mp ‹_› p ‹_› P isNilpotent_of_finite_tfae.out 0 3 rfl rfl
 

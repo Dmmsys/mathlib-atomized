@@ -411,7 +411,7 @@ instance toNormedRing
 
 中文:
 实例 toNormedRing
-  签名: : NormedRing (E ->L[𝕜] E) where
+  签名: : 赋范环 (E ->L[𝕜] E) where
   定义体: toNormedAddCommGroup
   __ := toSeminormedRing
 
@@ -431,7 +431,7 @@ theorem antilipschitz_of_isEmbedding
 
 中文:
 定理 antilipschitz_of_isEmbedding
-  条件: (f : E ->L[𝕜] Fₗ) (hf : IsEmbedding f)
+  条件: (f : E ->L[𝕜] Fₗ) (hf : 是嵌入 f)
   证明: f.toLinearMap.antilipschitz_of_comap_nhds_le map_zero f ▸ (hf.nhds_eq_comap 0).ge
 
 Depends on / 依赖: antilipschitz_of_comap_nhds_le, f.toLinearMap.antilipschitz_of_comap_nhds_le, hf.nhds_eq_comap, map_zero, nhds_eq_comap, toLinearMap
@@ -467,7 +467,7 @@ theorem norm_smulRightL
 
 中文:
 定理 norm_smulRightL
-  条件: (c : StrongDual 𝕜 E) [Nontrivial Fₗ]
+  条件: (c : StrongDual 𝕜 E) [非平凡 Fₗ]
   结论: ‖smulRightL 𝕜 E Fₗ c‖ = ‖c‖
   证明: ContinuousLinearMap.homothety_norm _ c.norm_smulRight_apply
 
@@ -683,7 +683,7 @@ theorem norm_subtypeL
 
 中文:
 定理 norm_subtypeL
-  条件: (K : Submodule 𝕜 E) [Nontrivial K]
+  条件: (K : 子模 𝕜 E) [非平凡 K]
   结论: ‖K.subtypeL‖ = 1
   证明: K.subtypeₗᵢ.norm_toContinuousLinearMap
 
@@ -734,7 +734,7 @@ theorem one_le_norm_mul_norm_symm
 
 中文:
 定理 one_le_norm_mul_norm_symm
-  条件: [RingHomIsometric σ₁₂] [Nontrivial E] (e : E ≃SL[σ₁₂] F)
+  条件: [RingHomIsometric σ₁₂] [非平凡 E] (e : E ≃SL[σ₁₂] F)
   证明: by
   rw [mul_comm]
   convert! (e.symm : F ->SL[σ₂₁] E).opNorm_comp_le (e : E ->SL[σ₁₂] F)
@@ -758,7 +758,7 @@ theorem norm_pos
 
 中文:
 定理 norm_pos
-  条件: [RingHomIsometric σ₁₂] [Nontrivial E] (e : E ≃SL[σ₁₂] F)
+  条件: [RingHomIsometric σ₁₂] [非平凡 E] (e : E ≃SL[σ₁₂] F)
   证明: pos_of_mul_pos_left (lt_of_lt_of_le zero_lt_one e.one_le_norm_mul_norm_symm) (norm_nonneg _)
 
 Depends on / 依赖: e.one_le_norm_mul_norm_symm, lt_of_lt_of_le, norm_nonneg, one_le_norm_mul_norm_symm, pos_of_mul_pos_left, zero_lt_one
@@ -777,7 +777,7 @@ theorem norm_symm_pos
 
 中文:
 定理 norm_symm_pos
-  条件: [RingHomIsometric σ₁₂] [Nontrivial E] (e : E ≃SL[σ₁₂] F)
+  条件: [RingHomIsometric σ₁₂] [非平凡 E] (e : E ≃SL[σ₁₂] F)
   证明: pos_of_mul_pos_right (zero_lt_one.trans_le e.one_le_norm_mul_norm_symm) (norm_nonneg _)
 
 Depends on / 依赖: e.one_le_norm_mul_norm_symm, norm_nonneg, one_le_norm_mul_norm_symm, pos_of_mul_pos_right, trans_le, zero_lt_one, zero_lt_one.trans_le
@@ -796,7 +796,7 @@ theorem nnnorm_symm_pos
 
 中文:
 定理 nnnorm_symm_pos
-  条件: [RingHomIsometric σ₁₂] [Nontrivial E] (e : E ≃SL[σ₁₂] F)
+  条件: [RingHomIsometric σ₁₂] [非平凡 E] (e : E ≃SL[σ₁₂] F)
   证明: e.norm_symm_pos
 
 Depends on / 依赖: e.norm_symm_pos, norm_symm_pos
@@ -907,7 +907,7 @@ definition IsCoercive
 
 中文:
 定义 IsCoercive
-  签名: [SeminormedAddCommGroup E] [NormedSpace 实数 E] (B : E ->L[实数] E ->L[实数] 实数)
+  签名: [SeminormedAddComm群 E] [赋范空间 实数 E] (B : E ->L[实数] E ->L[实数] 实数)
   定义体: exists C, 0 < C ∧ forall u, C * ‖u‖ * ‖u‖ <= B u u
 -/
 def IsCoercive [SeminormedAddCommGroup E] [NormedSpace Real E] (B : E ->L[Real] E ->L[Real] Real) : Prop :=
@@ -933,8 +933,8 @@ theorem NormedSpace.equicontinuous_TFAE
   -- `4 ↔ 5 ↔ 6 ↔ 7 ↔ 8 ↔ 9` is morally trivial, we j
 
 中文:
-定理 NormedSpace.equicontinuous_TFAE
-  结论: List.TFAE
+定理 赋范空间.equicontinuous_TFAE
+  结论: 列表.TFAE
   证明: by
   -- `1 ↔ 2 ↔ 3` follows from `uniformEquicontinuous_of_equicontinuousAt_zero`
   tfae_have 1 -> 3 := uniformEquicontinuous_of_equicontinuousAt_zero f
@@ -1005,8 +1005,8 @@ definition LinearIsometry.single
   body: (LinearMap.single 𝕜 E i).toLinearIsometry (.single i)
 
 中文:
-定义 LinearIsometry.single
-  签名: [对任意 i, SeminormedAddCommGroup (E i)] [对任意 i, NormedSpace 𝕜 (E i)]
+定义 线性等距.single
+  签名: [对任意 i, SeminormedAddComm群 (E i)] [对任意 i, 赋范空间 𝕜 (E i)]
   定义体: (LinearMap.single 𝕜 E i).toLinearIsometry (.single i)
 -/
 protected def LinearIsometry.single [forall i, SeminormedAddCommGroup (E i)] [forall i, NormedSpace 𝕜 (E i)]
@@ -1022,8 +1022,8 @@ lemma ContinuousLinearMap.norm_single_le_one
   proof: (LinearIsometry.single 𝕜 E i).norm_toContinuousLinearMap_le
 
 中文:
-引理 ContinuousLinearMap.norm_single_le_one
-  结论: [对任意 i, SeminormedAddCommGroup (E i)]
+引理 连续线性映射.norm_single_le_one
+  结论: [对任意 i, SeminormedAddComm群 (E i)]
   证明: (LinearIsometry.single 𝕜 E i).norm_toContinuousLinearMap_le
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.single, norm_toContinuousLinearMap_le, single
@@ -1042,8 +1042,8 @@ lemma ContinuousLinearMap.norm_single
   proof: (LinearIsometry.single 𝕜 E i).norm_toContinuousLinearMap
 
 中文:
-引理 ContinuousLinearMap.norm_single
-  结论: [对任意 i, SeminormedAddCommGroup (E i)]
+引理 连续线性映射.norm_single
+  结论: [对任意 i, SeminormedAddComm群 (E i)]
   证明: (LinearIsometry.single 𝕜 E i).norm_toContinuousLinearMap
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.single, norm_toContinuousLinearMap, single
@@ -1070,8 +1070,8 @@ definition LinearIsometry.inl
 @[simp]
 
 中文:
-定义 LinearIsometry.inl
-  签名: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+定义 线性等距.inl
+  签名: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   定义体: (LinearMap.inl 𝕜 E F).toLinearIsometry .inl
 
 @[simp]
@@ -1090,8 +1090,8 @@ lemma LinearIsometry.inl_apply
   proof: rfl
 
 中文:
-引理 LinearIsometry.inl_apply
-  结论: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+引理 线性等距.inl_apply
+  结论: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: rfl
 -/
 lemma LinearIsometry.inl_apply [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
@@ -1109,8 +1109,8 @@ definition LinearIsometry.inr
 @[simp]
 
 中文:
-定义 LinearIsometry.inr
-  签名: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+定义 线性等距.inr
+  签名: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   定义体: (LinearMap.inr 𝕜 E F).toLinearIsometry .inr
 
 @[simp]
@@ -1129,8 +1129,8 @@ lemma LinearIsometry.inr_apply
   proof: rfl
 
 中文:
-引理 LinearIsometry.inr_apply
-  结论: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+引理 线性等距.inr_apply
+  结论: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: rfl
 -/
 lemma LinearIsometry.inr_apply [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
@@ -1146,8 +1146,8 @@ lemma ContinuousLinearMap.norm_inl_le_one
   proof: (LinearIsometry.inl 𝕜 E F).norm_toContinuousLinearMap_le
 
 中文:
-引理 ContinuousLinearMap.norm_inl_le_one
-  结论: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+引理 连续线性映射.norm_inl_le_one
+  结论: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: (LinearIsometry.inl 𝕜 E F).norm_toContinuousLinearMap_le
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inl, norm_toContinuousLinearMap_le
@@ -1166,8 +1166,8 @@ lemma ContinuousLinearMap.norm_inr_le_one
   proof: (LinearIsometry.inr 𝕜 E F).norm_toContinuousLinearMap_le
 
 中文:
-引理 ContinuousLinearMap.norm_inr_le_one
-  结论: [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
+引理 连续线性映射.norm_inr_le_one
+  结论: [SeminormedAddComm群 E] [赋范空间 𝕜 E]
   证明: (LinearIsometry.inr 𝕜 E F).norm_toContinuousLinearMap_le
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inr, norm_toContinuousLinearMap_le
@@ -1186,8 +1186,8 @@ lemma ContinuousLinearMap.norm_inl
   proof: (LinearIsometry.inl 𝕜 E F).norm_toContinuousLinearMap
 
 中文:
-引理 ContinuousLinearMap.norm_inl
-  结论: [SeminormedAddCommGroup E] [NontrivialTopology E]
+引理 连续线性映射.norm_inl
+  结论: [SeminormedAddComm群 E] [非平凡拓扑 E]
   证明: (LinearIsometry.inl 𝕜 E F).norm_toContinuousLinearMap
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inl, norm_toContinuousLinearMap
@@ -1206,8 +1206,8 @@ lemma ContinuousLinearMap.norm_inr
   proof: (LinearIsometry.inr 𝕜 E F).norm_toContinuousLinearMap
 
 中文:
-引理 ContinuousLinearMap.norm_inr
-  结论: [SeminormedAddCommGroup E]
+引理 连续线性映射.norm_inr
+  结论: [SeminormedAddComm群 E]
   证明: (LinearIsometry.inr 𝕜 E F).norm_toContinuousLinearMap
 
 Depends on / 依赖: LinearIsometry, LinearIsometry.inr, norm_toContinuousLinearMap

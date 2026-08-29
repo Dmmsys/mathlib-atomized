@@ -41,7 +41,7 @@ definition llp
 
 中文:
 定义 llp
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f =>
   forall ⦃X Y : C⦄ (g : X ⟶ Y) (_ : T g), HasLiftingProperty f g
 -/
@@ -59,7 +59,7 @@ definition rlp
 
 中文:
 定义 rlp
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f =>
   forall ⦃X Y : C⦄ (g : X ⟶ Y) (_ : T g), HasLiftingProperty g f
 -/
@@ -76,7 +76,7 @@ lemma llp_of_isIso
 
 中文:
 引理 llp_of_isIso
-  条件: {A B : C} (i : A ⟶ B) [IsIso i]
+  条件: {A B : C} (i : A ⟶ B) [是同构 i]
   证明: fun _ _ _ _ => inferInstance
 -/
 lemma llp_of_isIso {A B : C} (i : A ⟶ B) [IsIso i] :
@@ -93,7 +93,7 @@ lemma rlp_of_isIso
 
 中文:
 引理 rlp_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   证明: fun _ _ _ _ => inferInstance
 -/
 lemma rlp_of_isIso {X Y : C} (f : X ⟶ Y) [IsIso f] :
@@ -111,7 +111,7 @@ instance llp_isStableUnderRetracts
 
 中文:
 实例 llp_isStableUnderRetracts
-  签名: : T.llp.IsStableUnderRetracts where
+  签名: : T.llp.是StableUnderRetracts where
   定义体: letI := hg _ hf
     h.leftLiftingProperty f
 
@@ -133,7 +133,7 @@ instance rlp_isStableUnderRetracts
 
 中文:
 实例 rlp_isStableUnderRetracts
-  签名: : T.rlp.IsStableUnderRetracts where
+  签名: : T.rlp.是StableUnderRetracts where
   定义体: letI := hf _ hg
     h.rightLiftingProperty g
 
@@ -155,7 +155,7 @@ instance llp_isStableUnderCobaseChange
 
 中文:
 实例 llp_isStableUnderCobaseChange
-  签名: : T.llp.IsStableUnderCobaseChange where
+  签名: : T.llp.是StableUnderCobaseChange where
   定义体: letI := hf _ hg'
     h.hasLiftingProperty g'
 
@@ -178,7 +178,7 @@ instance rlp_isStableUnderBaseChange
 
 中文:
 实例 rlp_isStableUnderBaseChange
-  签名: : T.rlp.IsStableUnderBaseChange where
+  签名: : T.rlp.是StableUnderBaseChange where
   定义体: letI := hf _ hf'
     h.hasLiftingProperty f'
 
@@ -203,7 +203,7 @@ instance llp_isMultiplicative
 
 中文:
 实例 llp_isMultiplicative
-  签名: : T.llp.IsMultiplicative where
+  签名: : T.llp.是Multiplicative where
   定义体: by infer_instance
   comp_mem i j hi hj _ _ p hp := by
     have := hi _ hp
@@ -233,7 +233,7 @@ instance rlp_isMultiplicative
 
 中文:
 实例 rlp_isMultiplicative
-  签名: : T.rlp.IsMultiplicative where
+  签名: : T.rlp.是Multiplicative where
   定义体: by infer_instance
   comp_mem i j hi hj _ _ p hp := by
     have := hi _ hp
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderCoproducts.{w} T.llp
+  签名: 是StableUnderCoproducts.{w} T.llp
 -/
 instance : IsStableUnderCoproducts.{w} T.llp where
 
@@ -333,7 +333,7 @@ lemma le_llp_iff_le_rlp
 
 中文:
 引理 le_llp_iff_le_rlp
-  条件: (T' : Morphism命题erty C)
+  条件: (T' : MorphismProperty C)
   证明: ⟨fun h _ _ _ hp _ _ _ hi => h _ hi _ hp,
     fun h _ _ _ hi _ _ _ hp => h _ hp _ hi⟩
 -/
@@ -436,7 +436,7 @@ lemma antitone_rlp
 
 中文:
 引理 antitone_rlp
-  结论: Antitone (rlp : Morphism命题erty C -> _)
+  结论: 递减 (rlp : MorphismProperty C -> _)
   证明: fun _ _ h => gc_llp_rlp.monotone_u h
 
 Depends on / 依赖: gc_llp_rlp, gc_llp_rlp.monotone_u, monotone_u
@@ -454,7 +454,7 @@ lemma antitone_llp
 
 中文:
 引理 antitone_llp
-  结论: Antitone (llp : Morphism命题erty C -> _)
+  结论: 递减 (llp : MorphismProperty C -> _)
   证明: fun _ _ h => gc_llp_rlp.monotone_l h
 
 Depends on / 依赖: gc_llp_rlp, gc_llp_rlp.monotone_l, monotone_l
@@ -534,7 +534,7 @@ lemma colimitsOfShape_discrete_le_llp_rlp
 
 中文:
 引理 colimitsOfShape_discrete_le_llp_rlp
-  条件: (J : Type w)
+  条件: (J : 类型 w)
   证明: by
   intro A B i hi
   exact MorphismProperty.colimitsOfShape_le _ (colimitsOfShape_monotone T.le_llp_rlp _ _ hi)
@@ -672,7 +672,7 @@ lemma rlp_ofHoms_iff_hasLiftingProperty
 
 中文:
 引理 rlp_ofHoms_iff_hasLiftingProperty
-  结论: (ι : 类型) [Nonempty ι] {A B X Y : C}
+  结论: (ι : 类型) [非空 ι] {A B X Y : C}
   证明: ⟨fun hp => hp _ ⟨Classical.arbitrary ι⟩,
     by rintro _ _ _ _ ⟨⟩; assumption⟩
 
@@ -695,7 +695,7 @@ lemma llp_ofHoms_iff_hasLiftingProperty
 
 中文:
 引理 llp_ofHoms_iff_hasLiftingProperty
-  结论: (ι : 类型) [Nonempty ι] {A B X Y : C}
+  结论: (ι : 类型) [非空 ι] {A B X Y : C}
   证明: ⟨fun hp => hp _ ⟨Classical.arbitrary ι⟩,
     by rintro _ _ _ _ ⟨⟩; assumption⟩
 
@@ -723,7 +723,7 @@ lemma Functor.hasLiftingProperty_iff_of_isEquivalence
   This is a temporary repair, and authors/maintainers are encourag
 
 中文:
-引理 Functor.hasLiftingProperty_iff_of_isEquivalence
+引理 函子.hasLiftingProperty_iff_of_isEquivalence
   证明: by
   #adaptation_note /-- Prior to nightly-2026-05-07, the next three lines were just
   ```

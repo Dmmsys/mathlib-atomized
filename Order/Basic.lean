@@ -178,7 +178,7 @@ definition Order.Preimage
 @[inherit_doc] infixl:80 " ⁻¹'o " => Order.Preimage
 
 中文:
-定义 Order.Preimage
+定义 Order.原像
   签名: (f : α -> β) (s : β -> β -> 命题) (x y : α)
   定义体: s (f x) (f y)
 
@@ -197,7 +197,7 @@ instance Order.Preimage.decidable
   body: fun _ _ => H _ _
 
 中文:
-实例 Order.Preimage.decidable
+实例 Order.原像.decidable
   签名: (f : α -> β) (s : β -> β -> 命题) [H : DecidableRel s]
   定义体: fun _ _ => H _ _
 -/
@@ -277,7 +277,7 @@ lemma lt_self_iff_false
 中文:
 引理 lt_self_iff_false
   条件: (x : α)
-  结论: x < x ↔ False
+  结论: x < x ↔ 假
   证明: ⟨lt_irrefl x, False.elim⟩
 
 @[to_dual ge_trans'] alias le_trans' := ge_trans
@@ -316,7 +316,7 @@ lemma LT.lt.false
 
 中文:
 引理 LT.lt.false
-  结论: a < a -> False
+  结论: a < a -> 假
   证明: lt_irrefl a
 -/
 protected lemma LT.lt.false : a < a -> False := lt_irrefl a
@@ -333,7 +333,7 @@ lemma Eq.not_lt
 @[to_dual ne_of_not_ge]
 
 中文:
-引理 Eq.not_lt
+引理 相等.not_lt
   条件: (hab : a = b)
   结论: ¬a < b
   证明: fun h' => h'.ne hab
@@ -378,7 +378,7 @@ lemma le_of_subsingleton
 
 中文:
 引理 le_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: a <= b
   证明: (Subsingleton.elim a b).le
 
@@ -401,7 +401,7 @@ lemma not_lt_of_subsingleton
 
 中文:
 引理 not_lt_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: ¬a < b
   证明: (Subsingleton.elim a b).not_lt
 
@@ -424,7 +424,7 @@ theorem le_of_forall_le
 @[to_dual forall_ge_iff_le]
 
 中文:
-定理 le_of_forall_le
+定理 le_of_对任意_le
   条件: (H : 对任意 c, c <= a -> c <= b)
   结论: a <= b
   证明: H _ le_rfl
@@ -445,7 +445,7 @@ theorem forall_le_iff_le
   proof: ⟨le_of_forall_le, fun h _ hca => le_trans hca h⟩
 
 中文:
-定理 forall_le_iff_le
+定理 对任意_le_iff_le
   结论: (对任意 ⦃c⦄, c <= a -> c <= b) ↔ a <= b
   证明: ⟨le_of_forall_le, fun h _ hca => le_trans hca h⟩
 
@@ -571,7 +571,7 @@ theorem Ne.lt_of_le
   proof: flip lt_of_le_of_ne
 
 中文:
-定理 Ne.lt_of_le
+定理 不等.lt_of_le
   结论: a != b -> a <= b -> a < b
   证明: flip lt_of_le_of_ne
 
@@ -690,7 +690,7 @@ theorem Decidable.le_iff_eq_or_lt
 @[to_dual le_iff_eq_or_lt']
 
 中文:
-定理 Decidable.le_iff_eq_or_lt
+定理 可判定.le_iff_eq_or_lt
   条件: [DecidableLE α]
   结论: a <= b ↔ a = b ∨ a < b
   证明: Decidable.le_iff_lt_or_eq.trans or_comm
@@ -756,7 +756,7 @@ h₁.antisymm Decidable.byContradiction fun h₃ => h₂ (h₁.lt_of_not_ge h₃
 @[to_dual eq_iff_ge_not_gt]
 
 中文:
-定理 Decidable.eq_iff_le_not_lt
+定理 可判定.eq_iff_le_not_lt
   条件: [DecidableLE α]
   结论: a = b ↔ a <= b ∧ ¬a < b
   证明: ⟨fun h => ⟨h.le, h ▸ lt_irrefl _⟩, fun ⟨h₁, h₂⟩ =>
@@ -803,7 +803,7 @@ theorem Decidable.eq_or_lt_of_le
 @[to_dual eq_or_lt_of_le']
 
 中文:
-定理 Decidable.eq_or_lt_of_le
+定理 可判定.eq_or_lt_of_le
   条件: [DecidableLE α] (h : a <= b)
   结论: a = b ∨ a < b
   证明: (Decidable.lt_or_eq_of_le h).symm
@@ -891,7 +891,7 @@ theorem Ne.le_iff_lt
 @[to_dual not_ge_or_not_le]
 
 中文:
-定理 Ne.le_iff_lt
+定理 不等.le_iff_lt
   条件: (h : a != b)
   结论: a <= b ↔ a < b
   证明: ⟨fun h' => lt_of_le_of_ne h' h, fun h => h.le⟩
@@ -913,7 +913,7 @@ theorem Ne.not_le_or_not_ge
   proof: not_and_or.1 le_antisymm_iff.not.1 h
 
 中文:
-定理 Ne.not_le_or_not_ge
+定理 不等.not_le_or_not_ge
   条件: (h : a != b)
   结论: ¬a <= b ∨ ¬b <= a
   证明: not_and_or.1 le_antisymm_iff.not.1 h
@@ -936,7 +936,7 @@ theorem Decidable.ne_iff_lt_iff_le
 @[to_dual (attr := simp) ne_iff_gt_iff_ge]
 
 中文:
-定理 Decidable.ne_iff_lt_iff_le
+定理 可判定.ne_iff_lt_iff_le
   条件: [DecidableEq α]
   结论: (a != b ↔ a < b) ↔ a <= b
   证明: ⟨fun h => Decidable.byCases le_of_eq (le_of_lt ∘ h.mp), fun h => ⟨lt_of_le_of_ne h, ne_of_lt⟩⟩
@@ -982,7 +982,7 @@ lemma eq_of_forall_le_iff
   proof: ((H _).1 le_rfl).antisymm ((H _).2 le_rfl)
 
 中文:
-引理 eq_of_forall_le_iff
+引理 eq_of_对任意_le_iff
   条件: (H : 对任意 c, c <= a ↔ c <= b)
   结论: a = b
   证明: ((H _).1 le_rfl).antisymm ((H _).2 le_rfl)
@@ -1024,7 +1024,7 @@ lemma associative_of_commutative_of_le
 
 中文:
 引理 associative_of_commutative_of_le
-  结论: {f : α -> α -> α} (comm : Std.Commutative f)
+  结论: {f : α -> α -> α} (comm : Std.交换 f)
   证明: le_antisymm (assoc _ _ _) by
       rw [comm.comm]; rw [comm.comm b]; rw [comm.comm _ c]; rw [comm.comm a]
       exact assoc ..
@@ -1150,7 +1150,7 @@ theorem Ne.lt_or_gt
   proof: lt_or_gt_of_ne h
 
 中文:
-定理 Ne.lt_or_gt
+定理 不等.lt_or_gt
   条件: (h : a != b)
   结论: a < b ∨ b < a
   证明: lt_or_gt_of_ne h
@@ -1222,7 +1222,7 @@ theorem exists_ge_of_linear
 @[to_dual exists_forall_le_and]
 
 中文:
-定理 exists_ge_of_linear
+定理 存在_ge_of_linear
   条件: (a b : α)
   结论: 存在 c, a <= c ∧ b <= c
   证明: match le_total a b with
@@ -1251,7 +1251,7 @@ lemma exists_forall_ge_and
 @[to_dual le_of_forall_gt]
 
 中文:
-引理 exists_forall_ge_and
+引理 存在_对任意_ge_and
   条件: {p q : α -> 命题}
   证明: exists_ge_of_linear a b
 ⟨c, fun _d hcd => ⟨ha _ hac.trans hcd, hb _ hbc.trans hcd⟩⟩
@@ -1279,7 +1279,7 @@ theorem le_of_forall_lt
 @[to_dual forall_gt_iff_le]
 
 中文:
-定理 le_of_forall_lt
+定理 le_of_对任意_lt
   条件: (H : 对任意 c, c < a -> c < b)
   结论: a <= b
   证明: le_of_not_gt fun h => lt_irrefl _ (H _ h)
@@ -1303,7 +1303,7 @@ theorem forall_lt_iff_le
 @[to_dual le_of_forall_gt_imp_ne]
 
 中文:
-定理 forall_lt_iff_le
+定理 对任意_lt_iff_le
   结论: (对任意 ⦃c⦄, c < a -> c < b) ↔ a <= b
   证明: ⟨le_of_forall_lt, fun h _ hca => lt_of_lt_of_le hca h⟩
 
@@ -1327,7 +1327,7 @@ theorem le_of_forall_lt_imp_ne
 @[to_dual lt_of_forall_ge_imp_ne]
 
 中文:
-定理 le_of_forall_lt_imp_ne
+定理 le_of_对任意_lt_imp_ne
   条件: (H : 对任意 c < a, c != b)
   结论: a <= b
   证明: le_of_not_gt fun hb => H b hb rfl
@@ -1352,7 +1352,7 @@ theorem lt_of_forall_le_imp_ne
 @[to_dual forall_gt_imp_ne_iff_le]
 
 中文:
-定理 lt_of_forall_le_imp_ne
+定理 lt_of_对任意_le_imp_ne
   条件: (H : 对任意 c <= a, c != b)
   结论: a < b
   证明: lt_of_not_ge fun hb => H b hb rfl
@@ -1376,7 +1376,7 @@ theorem forall_lt_imp_ne_iff_le
 @[to_dual forall_ge_imp_ne_iff_lt]
 
 中文:
-定理 forall_lt_imp_ne_iff_le
+定理 对任意_lt_imp_ne_iff_le
   结论: (对任意 c < a, c != b) ↔ a <= b
   证明: ⟨le_of_forall_lt_imp_ne, fun ha _ hc => (hc.trans_le ha).ne⟩
 
@@ -1399,7 +1399,7 @@ theorem forall_le_imp_ne_iff_lt
 @[to_dual eq_of_forall_gt_iff]
 
 中文:
-定理 forall_le_imp_ne_iff_lt
+定理 对任意_le_imp_ne_iff_lt
   结论: (对任意 c <= a, c != b) ↔ a < b
   证明: ⟨lt_of_forall_le_imp_ne, fun ha _ hc => (hc.trans_lt ha).ne⟩
 
@@ -1423,7 +1423,7 @@ theorem eq_of_forall_lt_iff
 @[to_dual self (reorder := ltc gtc)]
 
 中文:
-定理 eq_of_forall_lt_iff
+定理 eq_of_对任意_lt_iff
   条件: (h : 对任意 c, c < a ↔ c < b)
   结论: a = b
   证明: (le_of_forall_lt fun _ => (h _).1).antisymm le_of_forall_lt fun _ => (h _).2
@@ -1474,7 +1474,7 @@ lemma min_rec
 中文:
 引理 min_rec
   条件: (ha : a <= b -> p a) (hb : b <= a -> p b)
-  结论: p (min a b)
+  结论: p (最小值 a b)
   证明: by
   obtain hab | hba := le_total a b <;> simp [min_eq_left, min_eq_right, *]
 
@@ -1500,7 +1500,7 @@ lemma min_rec'
 中文:
 引理 min_rec'
   条件: (p : α -> 命题) (ha : p a) (hb : p b)
-  结论: p (min a b)
+  结论: p (最小值 a b)
   证明: min_rec (fun _ => ha) fun _ => hb
 
 @[to_dual max_def_lt']
@@ -1526,7 +1526,7 @@ lemma min_def_lt
 中文:
 引理 min_def_lt
   条件: (a b : α)
-  结论: min a b = if a < b then a else b
+  结论: 最小值 a b = if a < b then a else b
   证明: by
   rw [min_comm]; rw [min_def]; rw [← ite_not]; simp only [not_le]
 
@@ -1551,7 +1551,7 @@ lemma max_def_lt
 中文:
 引理 max_def_lt
   条件: (a b : α)
-  结论: max a b = if a < b then b else a
+  结论: 最大值 a b = if a < b then b else a
   证明: by
   rw [max_comm]; rw [max_def]; rw [← ite_not]; simp only [not_le]
 
@@ -1578,7 +1578,7 @@ lemma lt_imp_lt_of_le_imp_le
 
 中文:
 引理 lt_imp_lt_of_le_imp_le
-  结论: {β} [LinearOrder α] [Preorder β] {a b : α} {c d : β}
+  结论: {β} [线性序 α] [预序 β] {a b : α} {c d : β}
   证明: lt_of_not_ge fun h' => (H h').not_gt h
 
 @[to_dual self]
@@ -1602,7 +1602,7 @@ lemma le_imp_le_iff_lt_imp_lt
 
 中文:
 引理 le_imp_le_iff_lt_imp_lt
-  条件: {β} [LinearOrder α] [LinearOrder β] {a b : α} {c d : β}
+  条件: {β} [线性序 α] [线性序 β] {a b : α} {c d : β}
   证明: ⟨lt_imp_lt_of_le_imp_le, le_imp_le_of_lt_imp_lt⟩
 
 @[to_dual self]
@@ -1626,7 +1626,7 @@ lemma lt_iff_lt_of_le_iff_le'
 
 中文:
 引理 lt_iff_lt_of_le_iff_le'
-  结论: {β} [Preorder α] [Preorder β] {a b : α} {c d : β}
+  结论: {β} [预序 α] [预序 β] {a b : α} {c d : β}
   证明: lt_iff_le_not_ge.trans (and_congr H' (not_congr H)).trans lt_iff_le_not_ge.symm
 
 @[to_dual self]
@@ -1650,7 +1650,7 @@ lemma lt_iff_lt_of_le_iff_le
 
 中文:
 引理 lt_iff_lt_of_le_iff_le
-  结论: {β} [LinearOrder α] [LinearOrder β] {a b : α} {c d : β}
+  结论: {β} [线性序 α] [线性序 β] {a b : α} {c d : β}
   证明: not_le.symm.trans (not_congr H).trans not_le
 
 @[to_dual self]
@@ -1671,7 +1671,7 @@ lemma le_iff_le_iff_lt_iff_lt
 
 中文:
 引理 le_iff_le_iff_lt_iff_lt
-  条件: {β} [LinearOrder α] [LinearOrder β] {a b : α} {c d : β}
+  条件: {β} [线性序 α] [线性序 β] {a b : α} {c d : β}
   证明: ⟨lt_iff_lt_of_le_iff_le, fun H => not_lt.symm.trans (not_congr H).trans not_lt⟩
 
 Depends on / 依赖: lt_iff_lt_of_le_iff_le, not_congr, not_lt, not_lt.symm.trans
@@ -1691,7 +1691,7 @@ lemma rel_imp_eq_of_rel_imp_le
 
 中文:
 引理 rel_imp_eq_of_rel_imp_le
-  结论: [PartialOrder β] (r : α -> α -> 命题) [Std.Symm r] {f : α -> β}
+  结论: [偏序 β] (r : α -> α -> 命题) [Std.Symm r] {f : α -> β}
   证明: fun hab =>
   le_antisymm (h a b hab) (h b a <| symm hab)
 -/
@@ -1721,8 +1721,8 @@ lemma Preorder.toLE_injective
 @[ext]
 
 中文:
-引理 Preorder.toLE_injective
-  结论: Function.Injective (@Preorder.toLE α)
+引理 预序.toLE_injective
+  结论: 函数.单射 (@预序.toLE α)
   证明: fun
   | { lt := A_lt, lt_iff_le_not_ge := A_iff, .. },
     { lt := B_lt, lt_iff_le_not_ge := B_iff, .. } => by
@@ -1761,8 +1761,8 @@ lemma PartialOrder.toPreorder_injective
 @[ext]
 
 中文:
-引理 PartialOrder.toPreorder_injective
-  结论: Function.Injective (@PartialOrder.toPreorder α)
+引理 偏序.toPreorder_injective
+  结论: 函数.单射 (@偏序.toPreorder α)
   证明: by
   rintro ⟨⟩ ⟨⟩ ⟨⟩; congr
 
@@ -1785,8 +1785,8 @@ lemma LinearOrder.toPartialOrder_injective
       compare := A_compare, compare_eq_compareOfLessAndEq := A_compare_canonical, .. },
 
 中文:
-引理 LinearOrder.toPartialOrder_injective
-  结论: Function.Injective (@LinearOrder.toPartialOrder α)
+引理 线性序.toPartialOrder_injective
+  结论: 函数.单射 (@线性序.toPartialOrder α)
   证明: fun
   | { le := A_le, lt := A_lt,
       toDecidableLE := A_decidableLE, toDecidableEq := A_decidableEq, toDecidableLT := A_decidableLT
@@ -1836,8 +1836,8 @@ lemma Preorder.ext
 @[to_dual self]
 
 中文:
-引理 Preorder.ext
-  条件: {A B : Preorder α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
+引理 预序.ext
+  条件: {A B : 预序 α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
   结论: A = B
   证明: by
   ext x y; exact H x y
@@ -1859,8 +1859,8 @@ lemma PartialOrder.ext
 @[to_dual self]
 
 中文:
-引理 PartialOrder.ext
-  条件: {A B : PartialOrder α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
+引理 偏序.ext
+  条件: {A B : 偏序 α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
   证明: by ext x y; exact H x y
 
 @[to_dual self]
@@ -1880,8 +1880,8 @@ lemma PartialOrder.ext_lt
 @[to_dual self]
 
 中文:
-引理 PartialOrder.ext_lt
-  条件: {A B : PartialOrder α} (H : 对任意 x y : α, (haveI := A; x < y) ↔ x < y)
+引理 偏序.ext_lt
+  条件: {A B : 偏序 α} (H : 对任意 x y : α, (haveI := A; x < y) ↔ x < y)
   证明: by ext x y; rw [le_iff_lt_or_eq, @le_iff_lt_or_eq _ A, H]
 
 @[to_dual self]
@@ -1901,8 +1901,8 @@ lemma LinearOrder.ext
 @[to_dual self]
 
 中文:
-引理 LinearOrder.ext
-  条件: {A B : LinearOrder α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
+引理 线性序.ext
+  条件: {A B : 线性序 α} (H : 对任意 x y : α, (haveI := A; x <= y) ↔ x <= y)
   证明: by ext x y; exact H x y
 
 @[to_dual self]
@@ -1920,8 +1920,8 @@ lemma LinearOrder.ext_lt
   proof: LinearOrder.toPartialOrder_injective (PartialOrder.ext_lt H)
 
 中文:
-引理 LinearOrder.ext_lt
-  条件: {A B : LinearOrder α} (H : 对任意 x y : α, (haveI := A; x < y) ↔ x < y)
+引理 线性序.ext_lt
+  条件: {A B : 线性序 α} (H : 对任意 x y : α, (haveI := A; x < y) ↔ x < y)
   证明: LinearOrder.toPartialOrder_injective (PartialOrder.ext_lt H)
 -/
 lemma LinearOrder.ext_lt {A B : LinearOrder α} (H : forall x y : α, (haveI := A; x < y) ↔ x < y) :
@@ -1940,8 +1940,8 @@ instance Prop.instCompl
 @[to_dual instHNot]
 
 中文:
-实例 Prop.instCompl
-  签名: : Compl 命题
+实例 命题.instCompl
+  签名: : 补集 命题
   定义体: ⟨Not⟩
 
 @[to_dual instHNot]
@@ -1961,8 +1961,8 @@ instance Pi.instCompl
 @[to_dual (attr := push ←) hnot_def]
 
 中文:
-实例 Pi.instCompl
-  签名: [对任意 i, Compl (π i)]
+实例 依赖函数类型.instCompl
+  签名: [对任意 i, 补集 (π i)]
   定义体: ⟨fun x i => (x i)ᶜ⟩
 
 @[to_dual (attr := push ←) hnot_def]
@@ -1982,8 +1982,8 @@ theorem Pi.compl_def
 @[to_dual (attr := simp) hnot_apply]
 
 中文:
-定理 Pi.compl_def
-  条件: [对任意 i, Compl (π i)] (x : 对任意 i, π i)
+定理 依赖函数类型.compl_def
+  条件: [对任意 i, 补集 (π i)] (x : 对任意 i, π i)
   证明: rfl
 
 @[to_dual (attr := simp) hnot_apply]
@@ -2002,8 +2002,8 @@ theorem Pi.compl_apply
   proof: rfl
 
 中文:
-定理 Pi.compl_apply
-  条件: [对任意 i, Compl (π i)] (x : 对任意 i, π i) (i : ι)
+定理 依赖函数类型.compl_apply
+  条件: [对任意 i, 补集 (π i)] (x : 对任意 i, π i) (i : ι)
   证明: rfl
 -/
 theorem Pi.compl_apply [forall i, Compl (π i)] (x : forall i, π i) (i : ι) :
@@ -2057,7 +2057,7 @@ theorem compl_lt
 
 中文:
 定理 compl_lt
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: (· < · : α -> α -> _)ᶜ = (· >= ·)
   证明: by simp [compl]
 -/
@@ -2073,7 +2073,7 @@ theorem compl_le
 
 中文:
 定理 compl_le
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: (· <= · : α -> α -> _)ᶜ = (· > ·)
   证明: by simp [compl]
 -/
@@ -2089,7 +2089,7 @@ theorem compl_gt
 
 中文:
 定理 compl_gt
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: (· > · : α -> α -> _)ᶜ = (· <= ·)
   证明: by simp [compl]
 -/
@@ -2105,7 +2105,7 @@ theorem compl_ge
 
 中文:
 定理 compl_ge
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: (· >= · : α -> α -> _)ᶜ = (· < ·)
   证明: by simp [compl]
 -/
@@ -2122,8 +2122,8 @@ instance Ne.instIsEquiv_compl
   simp [compl]
 
 中文:
-实例 Ne.instIsEquiv_compl
-  签名: : IsEquiv α (· != ·)ᶜ
+实例 不等.instIsEquiv_compl
+  签名: : Is等价 α (· != ·)ᶜ
   定义体: by
   convert! eq_isEquiv α
   simp [compl]
@@ -2148,8 +2148,8 @@ instance Pi.preorder
 @[to_dual self]
 
 中文:
-实例 Pi.preorder
-  签名: [对任意 i, Preorder (π i)]
+实例 依赖函数类型.preorder
+  签名: [对任意 i, 预序 (π i)]
   定义体: (inferInstance : LE (forall i, π i))
   le_refl := fun a i => le_refl (a i)
   le_trans := fun _ _ _ h₁ h₂ i => le_trans (h₁ i) (h₂ i)
@@ -2172,8 +2172,8 @@ theorem Pi.lt_def
   simp +contextual [lt_iff_le_not_ge, Pi.le_def]
 
 中文:
-定理 Pi.lt_def
-  条件: [对任意 i, Preorder (π i)] {x y : 对任意 i, π i}
+定理 依赖函数类型.lt_def
+  条件: [对任意 i, 预序 (π i)] {x y : 对任意 i, π i}
   证明: by
   simp +contextual [lt_iff_le_not_ge, Pi.le_def]
 
@@ -2193,8 +2193,8 @@ instance Pi.partialOrder
   le_antisymm := fun _ _ h1 h2 => funext fun b => (h1 b).antisymm (h2 b)
 
 中文:
-实例 Pi.partialOrder
-  签名: [对任意 i, PartialOrder (π i)]
+实例 依赖函数类型.partialOrder
+  签名: [对任意 i, 偏序 (π i)]
   定义体: Pi.preorder
   le_antisymm := fun _ _ h1 h2 => funext fun b => (h1 b).antisymm (h2 b)
 
@@ -2337,7 +2337,7 @@ theorem lt_of_strongLT
 
 中文:
 定理 lt_of_strongLT
-  条件: [Nonempty ι] (h : a ≺ b)
+  条件: [非空 ι] (h : a ≺ b)
   结论: a < b
   证明: by
   inhabit ι
@@ -2412,7 +2412,7 @@ theorem le_update_iff
 
 中文:
 定理 le_update_iff
-  结论: x <= Function.update y i a ↔ x i <= a ∧ 对任意 (j) (_ : j != i), x j <= y j
+  结论: x <= 函数.update y i a ↔ x i <= a ∧ 对任意 (j) (_ : j != i), x j <= y j
   证明: Function.forall_update_iff _ fun j z => x j <= z
 
 @[to_dual self]
@@ -2548,8 +2548,8 @@ instance Pi.instSDiff
 @[to_dual (attr := push ←) himp_def]
 
 中文:
-实例 Pi.instSDiff
-  签名: [对任意 i, SDiff (π i)]
+实例 依赖函数类型.instSDiff
+  签名: [对任意 i, 对称差 (π i)]
   定义体: ⟨fun x y i => x i \ y i⟩
 
 @[to_dual (attr := push ←) himp_def]
@@ -2569,8 +2569,8 @@ theorem Pi.sdiff_def
 @[to_dual (attr := simp) himp_apply]
 
 中文:
-定理 Pi.sdiff_def
-  条件: [对任意 i, SDiff (π i)] (x y : 对任意 i, π i)
+定理 依赖函数类型.sdiff_def
+  条件: [对任意 i, 对称差 (π i)] (x y : 对任意 i, π i)
   证明: rfl
 
 @[to_dual (attr := simp) himp_apply]
@@ -2589,8 +2589,8 @@ theorem Pi.sdiff_apply
   proof: rfl
 
 中文:
-定理 Pi.sdiff_apply
-  条件: [对任意 i, SDiff (π i)] (x y : 对任意 i, π i) (i : ι)
+定理 依赖函数类型.sdiff_apply
+  条件: [对任意 i, 对称差 (π i)] (x y : 对任意 i, π i) (i : ι)
   证明: rfl
 -/
 theorem Pi.sdiff_apply [forall i, SDiff (π i)] (x y : forall i, π i) (i : ι) :
@@ -2661,8 +2661,8 @@ le_trans _ _ _ h₁ h₂ := le.1 le_trans (le.2 h₁) (le.2 h₂)
     rw [← le]; rw [← le]; rw [← lt]; rw [lt_iff_le_not_ge]
 
 中文:
-缩写 Function.Injective.preorder
-  签名: [Preorder β] [LE α] [LT α] (f : α -> β)
+缩写 函数.单射.preorder
+  签名: [预序 β] [LE α] [LT α] (f : α -> β)
   定义体: le.1 le_refl _
 le_trans _ _ _ h₁ h₂ := le.1 le_trans (le.2 h₁) (le.2 h₂)
   lt_iff_le_not_ge _ _ := by
@@ -2692,8 +2692,8 @@ abbreviation Function.Injective.partialOrder
 le_antisymm _ _ h₁ h₂ := hf le_antisymm (le.2 h₁) (le.2 h₂)
 
 中文:
-缩写 Function.Injective.partialOrder
-  签名: [PartialOrder β] [LE α] [LT α] (f : α -> β)
+缩写 函数.单射.partialOrder
+  签名: [偏序 β] [LE α] [LT α] (f : α -> β)
   定义体: Function.Injective.preorder f le lt
 le_antisymm _ _ h₁ h₂ := hf le_antisymm (le.2 h₁) (le.2 h₂)
 
@@ -2722,8 +2722,8 @@ abbreviation Function.Injective.linearOrder
   com
 
 中文:
-缩写 Function.Injective.linearOrder
-  签名: [LinearOrder β] [LE α] [LT α] [Max α] [Min α] [Ord α]
+缩写 函数.单射.linearOrder
+  签名: [线性序 β] [LE α] [LT α] [最大值 α] [最小值 α] [序 α]
   定义体: hf.partialOrder _ le lt
   toDecidableLE := ‹_›
   toDecidableEq := ‹_›
@@ -2770,8 +2770,8 @@ abbreviation Preorder.lift
   Function.Injective.preorder f .rfl .rfl
 
 中文:
-缩写 Preorder.lift
-  签名: [Preorder β] (f : α -> β)
+缩写 预序.lift
+  签名: [预序 β] (f : α -> β)
   定义体: letI _instLE : LE α := ⟨fun a b => f a <= f b⟩
   letI _instLT : LT α := ⟨fun a b => f a < f b⟩
   Function.Injective.preorder f .rfl .rfl
@@ -2794,8 +2794,8 @@ abbreviation PartialOrder.lift
   Function.Injective.partialOrder f inj .rfl .rfl
 
 中文:
-缩写 PartialOrder.lift
-  签名: [PartialOrder β] (f : α -> β) (inj : Injective f)
+缩写 偏序.lift
+  签名: [偏序 β] (f : α -> β) (inj : 单射 f)
   定义体: letI _instLE : LE α := ⟨fun a b => f a <= f b⟩
   letI _instLT : LT α := ⟨fun a b => f a < f b⟩
   Function.Injective.partialOrder f inj .rfl .rfl
@@ -2823,7 +2823,7 @@ theorem compare_of_injective_eq_compareOfLessAndEq
 
 中文:
 定理 compare_of_injective_eq_compareOfLessAndEq
-  结论: (a b : α) [LinearOrder β]
+  结论: (a b : α) [线性序 β]
   证明: by
   have h := LinearOrder.compare_eq_compareOfLessAndEq (f a) (f b)
   simp only [h, compareOfLessAndEq]
@@ -2869,8 +2869,8 @@ abbreviation LinearOrder.lift
   letI _decidableLT := fun x y => (inferInstance : Decidable (f x < f
 
 中文:
-缩写 LinearOrder.lift
-  签名: [LinearOrder β] [Max α] [Min α] (f : α -> β) (inj : Injective f)
+缩写 线性序.lift
+  签名: [线性序 β] [最大值 α] [最小值 α] (f : α -> β) (inj : 单射 f)
   定义体: letI _instLE : LE α := ⟨fun a b => f a <= f b⟩
   letI _instLT : LT α := ⟨fun a b => f a < f b⟩
   letI _instOrdα : Ord α := ⟨fun a b => compare (f a) (f b)⟩
@@ -2902,8 +2902,8 @@ abbreviation LinearOrder.lift'
     (apply_ite f _ _ _).trans (min_def _ _).symm
 
 中文:
-缩写 LinearOrder.lift'
-  签名: [LinearOrder β] (f : α -> β) (inj : Injective f)
+缩写 线性序.lift'
+  签名: [线性序 β] (f : α -> β) (inj : 单射 f)
   定义体: @LinearOrder.lift α β _ ⟨fun x y => if f x <= f y then y else x⟩
     ⟨fun x y => if f x <= f y then x else y⟩ f inj
     (fun _ _ => (apply_ite f _ _ _).trans (max_def _ _).symm) fun _ _ =>
@@ -2937,8 +2937,8 @@ abbreviation LinearOrder.liftWithOrd
   letI _decidableEq := fun x y => decidable_of_iff (f x 
 
 中文:
-缩写 LinearOrder.liftWithOrd
-  签名: [LinearOrder β] [Max α] [Min α] [Ord α] (f : α -> β)
+缩写 线性序.liftWithOrd
+  签名: [线性序 β] [最大值 α] [最小值 α] [序 α] (f : α -> β)
   定义体: letI _instLE : LE α := ⟨fun a b => f a <= f b⟩
   letI _instLE : LT α := ⟨fun a b => f a < f b⟩
   letI _decidableLE := fun x y => (inferInstance : Decidable (f x <= f y))
@@ -2971,8 +2971,8 @@ abbreviation LinearOrder.liftWithOrd'
     compare_f
 
 中文:
-缩写 LinearOrder.liftWithOrd'
-  签名: [LinearOrder β] [Ord α] (f : α -> β)
+缩写 线性序.liftWithOrd'
+  签名: [线性序 β] [序 α] (f : α -> β)
   定义体: @LinearOrder.liftWithOrd α β _ ⟨fun x y => if f x <= f y then y else x⟩
     ⟨fun x y => if f x <= f y then x else y⟩ _ f inj
     (fun _ _ => (apply_ite f _ _ _).trans (max_def _ _).symm)
@@ -3057,7 +3057,7 @@ theorem coe_le_coe
 
 中文:
 定理 coe_le_coe
-  条件: [LE α] {p : α -> 命题} {x y : Subtype p}
+  条件: [LE α] {p : α -> 命题} {x y : 子类型 p}
   结论: (x : α) <= y ↔ x <= y
   证明: Iff.rfl
 
@@ -3080,7 +3080,7 @@ theorem coe_lt_coe
 
 中文:
 定理 coe_lt_coe
-  条件: [LT α] {p : α -> 命题} {x y : Subtype p}
+  条件: [LT α] {p : α -> 命题} {x y : 子类型 p}
   结论: (x : α) < y ↔ x < y
   证明: Iff.rfl
 
@@ -3099,7 +3099,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: [Preorder α] (p : α -> 命题)
+  签名: [预序 α] (p : α -> 命题)
   定义体: fast_instance% Preorder.lift (fun (a : Subtype p) => (a : α))
 
 Depends on / 依赖: Preorder, Preorder.lift, Subtype, fast_instance
@@ -3117,7 +3117,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: [PartialOrder α] (p : α -> 命题)
+  签名: [偏序 α] (p : α -> 命题)
   定义体: fast_instance% PartialOrder.lift (fun (a : Subtype p) => (a : α)) Subtype.coe_injective
 -/
 instance partialOrder [PartialOrder α] (p : α -> Prop) : PartialOrder (Subtype p) :=
@@ -3133,7 +3133,7 @@ instance decidableLE
 
 中文:
 实例 decidableLE
-  签名: [Preorder α] [h : DecidableLE α] {p : α -> 命题}
+  签名: [预序 α] [h : DecidableLE α] {p : α -> 命题}
   定义体: fun a b => h a b
 -/
 instance decidableLE [Preorder α] [h : DecidableLE α] {p : α -> Prop} :
@@ -3149,7 +3149,7 @@ instance decidableLT
 
 中文:
 实例 decidableLT
-  签名: [Preorder α] [h : DecidableLT α] {p : α -> 命题}
+  签名: [预序 α] [h : DecidableLT α] {p : α -> 命题}
   定义体: fun a b => h a b
 -/
 instance decidableLT [Preorder α] [h : DecidableLT α] {p : α -> Prop} :
@@ -3168,7 +3168,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: [LinearOrder α] (p : α -> 命题)
+  签名: [线性序 α] (p : α -> 命题)
   定义体: fast_instance% @LinearOrder.lift (Subtype p) _ _ ⟨fun x y => ⟨max x y, max_rec' _ x.2 y.2⟩⟩
     ⟨fun x y => ⟨min x y, min_rec' _ x.2 y.2⟩⟩ (fun (a : Subtype p) => (a : α))
     Subtype.coe_injective (fun _ _ => rfl) fun _ _ =>
@@ -3226,7 +3226,7 @@ instance instDecidableLE
 
 中文:
 实例 instDecidableLE
-  签名: [Decidable (x.1 <= y.1)] [Decidable (x.2 <= y.2)]
+  签名: [可判定 (x.1 <= y.1)] [可判定 (x.2 <= y.2)]
   定义体: inferInstanceAs Decidable (x.1 <= y.1 ∧ x.2 <= y.2)
 
 Depends on / 依赖: Decidable
@@ -3343,7 +3343,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (α × β)
+  签名: 预序 (α × β)
   定义体: (inferInstance : LE (α × β))
   le_refl := fun ⟨a, b⟩ => ⟨le_refl a, le_refl b⟩
   le_trans := fun ⟨_, _⟩ ⟨_, _⟩ ⟨_, _⟩ ⟨hac, hbd⟩ ⟨hce, hdf⟩ => ⟨le_trans hac hce, le_trans hbd hdf⟩
@@ -3661,7 +3661,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: (α β : 类型) [PartialOrder α] [PartialOrder β]
+  签名: (α β : 类型) [偏序 α] [偏序 β]
   定义体: (inferInstance : Preorder (α × β))
   le_antisymm := fun _ _ ⟨hac, hbd⟩ ⟨hca, hdb⟩ => Prod.ext (hac.antisymm hca) (hbd.antisymm hdb)
 
@@ -3686,7 +3686,7 @@ class DenselyOrdered
     - dense : forall a₁ a₂ : α, a₁ < a₂ -> exists a, a₁ < a ∧ a < a₂
 
 中文:
-类 DenselyOrdered
+类 稠密序
   参数: (α : 类型) [LT α]
   公理与运算 (1 个):
     - dense : 对任意 a₁ a₂ : α, a₁ < a₂ -> 存在 a, a₁ < a ∧ a < a₂
@@ -3708,8 +3708,8 @@ theorem DenselyOrdered.dense'
 @[to_dual exists_between']
 
 中文:
-定理 DenselyOrdered.dense'
-  条件: [LT α] [DenselyOrdered α]
+定理 稠密序.dense'
+  条件: [LT α] [稠密序 α]
   证明: by
   simp_rw [and_comm]; exact dense
 
@@ -3732,8 +3732,8 @@ theorem exists_between
   proof: DenselyOrdered.dense _ _
 
 中文:
-定理 exists_between
-  条件: [LT α] [DenselyOrdered α] {a₁ a₂ : α}
+定理 存在_between
+  条件: [LT α] [稠密序 α] {a₁ a₂ : α}
   结论: a₁ < a₂ -> 存在 a, a₁ < a ∧ a < a₂
   证明: DenselyOrdered.dense _ _
 
@@ -3752,8 +3752,8 @@ lemma Subsingleton.instDenselyOrdered
   proof: ⟨fun _ _ h => ⟨_, h.trans_eq (Subsingleton.elim _ _), h⟩⟩
 
 中文:
-引理 Subsingleton.instDenselyOrdered
-  条件: {X : 类型} [Subsingleton X] [LT X]
+引理 子单例.instDenselyOrdered
+  条件: {X : 类型} [子单例 X] [LT X]
   证明: ⟨fun _ _ h => ⟨_, h.trans_eq (Subsingleton.elim _ _), h⟩⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, h.trans_eq, trans_eq
@@ -3777,8 +3777,8 @@ instance [Preorder
       exact ⟨(_, c), Or.inr ⟨h₁, ha⟩, Or.inr ⟨le_rfl, hb⟩⟩⟩
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [DenselyOrdered α] [DenselyOrdered β] : DenselyOrdered (α × β)
+实例 [预序
+  签名: α] [预序 β] [稠密序 α] [稠密序 β] : 稠密序 (α × β)
   定义体: ⟨fun a b => by
     simp_rw [Prod.lt_iff]
     rintro (⟨h₁, h₂⟩ | ⟨h₁, h₂⟩)
@@ -3815,8 +3815,8 @@ instance [forall
           update_le_iff.2 ⟨hb.le, fun _ _ => hab
 
 中文:
-实例 [forall
-  签名: i, Preorder (π i)] [对任意 i, DenselyOrdered (π i)] :
+实例 [对任意
+  签名: i, 预序 (π i)] [对任意 i, 稠密序 (π i)] :
   定义体: ⟨fun a b => by
     classical
       simp_rw [Pi.lt_def]
@@ -3859,7 +3859,7 @@ lt_irrefl a lt_of_lt_of_le ‹a < a₁› (h _ ‹a₂ < a›)
 @[to_dual forall_lt_imp_le_iff_le_of_dense]
 
 中文:
-定理 le_of_forall_gt_imp_ge_of_dense
+定理 le_of_对任意_gt_imp_ge_of_dense
   条件: (h : 对任意 a, a₂ < a -> a₁ <= a)
   结论: a₁ <= a₂
   证明: le_of_not_gt fun ha =>
@@ -3885,7 +3885,7 @@ lemma forall_gt_imp_ge_iff_le_of_dense
   proof: ⟨le_of_forall_gt_imp_ge_of_dense, fun ha _a ha₂ => ha.trans ha₂.le⟩
 
 中文:
-引理 forall_gt_imp_ge_iff_le_of_dense
+引理 对任意_gt_imp_ge_iff_le_of_dense
   结论: (对任意 a, a₂ < a -> a₁ <= a) ↔ a₁ <= a₂
   证明: ⟨le_of_forall_gt_imp_ge_of_dense, fun ha _a ha₂ => ha.trans ha₂.le⟩
 
@@ -3906,7 +3906,7 @@ lemma eq_of_le_of_forall_lt_imp_le_of_dense
   proof: le_antisymm (le_of_forall_gt_imp_ge_of_dense h₂) h₁
 
 中文:
-引理 eq_of_le_of_forall_lt_imp_le_of_dense
+引理 eq_of_le_of_对任意_lt_imp_le_of_dense
   条件: (h₁ : a₂ <= a₁) (h₂ : 对任意 a, a₂ < a -> a₁ <= a)
   结论: a₁ = a₂
   证明: le_antisymm (le_of_forall_gt_imp_ge_of_dense h₂) h₁
@@ -3931,7 +3931,7 @@ theorem dense_or_discrete
 
 中文:
 定理 dense_or_discrete
-  条件: [LinearOrder α] (a₁ a₂ : α)
+  条件: [线性序 α] (a₁ a₂ : α)
   证明: or_iff_not_imp_left.2 fun h =>
     ⟨fun a ha₁ => le_of_not_gt fun ha₂ => h ⟨a, ha₁, ha₂⟩,
      fun a ha₂ => le_of_not_gt fun ha₁ => h ⟨a, ha₁, ha₂⟩⟩
@@ -3961,8 +3961,8 @@ lemma eq_or_eq_or_eq_of_forall_not_lt_lt
   exacts [h h₁ h₂, h h₂ h₃, h h₃ h₂, h h₃ h₁, h h₁ h₃, h h₂ h₃, h h₁ h₃, h h₂ h₁]
 
 中文:
-引理 eq_or_eq_or_eq_of_forall_not_lt_lt
-  结论: [LinearOrder α]
+引理 eq_or_eq_or_eq_of_对任意_not_lt_lt
+  结论: [线性序 α]
   证明: by
   by_contra hne
   simp only [not_or, ← Ne.eq_def] at hne
@@ -3998,8 +3998,8 @@ abbreviation LinearOrder.ofSubsingleton
   toDecidableLE _ _ := instDecidableTrue
 
 中文:
-缩写 LinearOrder.ofSubsingleton
-  签名: {α : 类型} [Subsingleton α]
+缩写 线性序.ofSubsingleton
+  签名: {α : 类型} [子单例 α]
   定义体: True
   lt _ _ := False
   le_refl _ := trivial
@@ -4029,7 +4029,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder Empty
+  签名: 线性序 空
   定义体: .ofSubsingleton
 
 Depends on / 依赖: ofSubsingleton
@@ -4045,7 +4045,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder PEmpty
+  签名: 线性序 命题空
   定义体: .ofSubsingleton
 -/
 instance : LinearOrder PEmpty := .ofSubsingleton
@@ -4066,7 +4066,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder PUnit
+  签名: : 线性序 命题单元
   定义体: .ofSubsingleton
 
 @[to_dual]
@@ -4088,7 +4088,7 @@ theorem max_eq
 
 中文:
 定理 max_eq
-  结论: max a b = unit
+  结论: 最大值 a b = unit
   证明: rfl
 
 @[to_dual self]
@@ -4146,7 +4146,7 @@ instance :
 
 中文:
 实例 :
-  签名: DenselyOrdered PUnit
+  签名: 稠密序 命题单元
   定义体: ⟨fun _ _ => False.elim⟩
 
 Depends on / 依赖: False.elim
@@ -4190,8 +4190,8 @@ instance Prop.partialOrder
   le_antisymm _ _ Hab Hba := propext ⟨Hab, Hba⟩
 
 中文:
-实例 Prop.partialOrder
-  签名: : PartialOrder 命题 where
+实例 命题.partialOrder
+  签名: : 偏序 命题 where
   定义体: Prop.le
   le_refl _ := id
   le_trans _ _ _ f g := g ∘ f

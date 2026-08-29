@@ -46,7 +46,7 @@ theorem quotient_span_eq_top_iff_span_eq_top
 
 中文:
 定理 quotient_span_eq_top_iff_span_eq_top
-  条件: (s : Set S)
+  条件: (s : 集合 S)
   证明: by
   have H : (span (R ⧸ p) ((Ideal.Quotient.mk (I := pS)) '' s)).restrictScalars R =
       (span R s).map (IsScalarTower.toAlgHom R S (S ⧸ pS) : S ->ₗ[R] S ⧸ pS) := by
@@ -142,7 +142,7 @@ definition basisQuotient
 
 中文:
 定义 basisQuotient
-  签名: [Fintype ι] (b : Basis ι R S)
+  签名: [有限类型 ι] (b : 基 ι R S)
   定义体: basisOfTopLeSpanOfCardEqFinrank (Ideal.Quotient.mk pS ∘ b)
     (by
       rw [Set.range_comp]
@@ -170,7 +170,7 @@ lemma basisQuotient_apply
 
 中文:
 引理 basisQuotient_apply
-  条件: [Fintype ι] (b : Basis ι R S) (i)
+  条件: [有限类型 ι] (b : 基 ι R S) (i)
   证明: by
   delta basisQuotient
   rw [coe_basisOfTopLeSpanOfCardEqFinrank]; rw [Function.comp_apply]
@@ -198,7 +198,7 @@ lemma basisQuotient_repr
 
 中文:
 引理 basisQuotient_repr
-  条件: {ι} [Fintype ι] (b : Basis ι R S) (x) (i)
+  条件: {ι} [有限类型 ι] (b : 基 ι R S) (x) (i)
   证明: by
   refine congr_fun (g := Ideal.Quotient.mk p ∘ b.repr x) ?_ i
   apply (Finsupp.linearEquivFunOnFinite (R ⧸ p) _ _).symm.injective
@@ -236,7 +236,7 @@ lemma exists_maximalIdeal_pow_le_of_isArtinianRing_quotient
   obtain ⟨n, hn⟩ :=
 
 中文:
-引理 exists_maximalIdeal_pow_le_of_isArtinianRing_quotient
+引理 存在_maximalIdeal_pow_le_of_isArtinianRing_quotient
   证明: by
   by_cases hI : I = ⊤
   · simp [hI]
@@ -277,7 +277,7 @@ lemma finite_quotient_iff
 
 中文:
 引理 finite_quotient_iff
-  条件: [IsNoetherianRing R] [Finite (ResidueField R)] {I : Ideal R}
+  条件: [是Noether环 R] [有限 (ResidueField R)] {I : 理想 R}
   证明: by
   refine ⟨fun _ => exists_maximalIdeal_pow_le_of_isArtinianRing_quotient I, ?_⟩
   rintro ⟨n, hn⟩

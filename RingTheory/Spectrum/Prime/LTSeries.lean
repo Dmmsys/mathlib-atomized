@@ -45,7 +45,7 @@ obtain ⟨q, hq⟩ := (p₀.1 + span {x}).nonempty_minimalPrimes
 
 中文:
 定理 exist_mem_one_of_mem_maximal_ideal
-  结论: [IsLocalRing R] {p₁ p₀ : PrimeSpectrum R}
+  结论: [是局部环 R] {p₁ p₀ : 素谱 R}
   证明: by
   by_cases hn : x in p₀.1
   · exact ⟨p₁, h₀.le hn, h₀, h₁⟩
@@ -94,7 +94,7 @@ theorem exist_mem_one_of_mem_two
 
 中文:
 定理 exist_mem_one_of_mem_two
-  结论: {p₁ p₀ p₂ : PrimeSpectrum R}
+  结论: {p₁ p₀ p₂ : 素谱 R}
   证明: by
   let e := IsLocalization.AtPrime.primeSpectrumOrderIso (Localization.AtPrime p₂.1) p₂.1
   have hm : closedPoint (Localization.AtPrime p₂.1) =
@@ -142,7 +142,7 @@ theorem exist_ltSeries_mem_one_of_mem_last
 
 中文:
 定理 exist_ltSeries_mem_one_of_mem_last
-  结论: (p : LTSeries (PrimeSpectrum R))
+  结论: (p : LTSeries (素谱 R))
   证明: by
   generalize hp : p.length = n
   induction n generalizing p with

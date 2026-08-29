@@ -59,7 +59,7 @@ theorem listProd_map_one
 中文:
 定理 listProd_map_one
   条件: (h : 对任意 x in l, f x ≡ 1 [MOD n])
-  结论: (l.map f).prod ≡ 1 [MOD n]
+  结论: (l.map f).乘积 ≡ 1 [MOD n]
   证明: (listProd_map h).trans by simp [ModEq.refl]
 
 Depends on / 依赖: ModEq.refl, listProd_map
@@ -79,8 +79,8 @@ theorem listProd_one
 
 中文:
 定理 listProd_one
-  条件: {l : List 自然数} (h : 对任意 x in l, x ≡ 1 [MOD n])
-  结论: l.prod ≡ 1 [MOD n]
+  条件: {l : 列表 自然数} (h : 对任意 x in l, x ≡ 1 [MOD n])
+  结论: l.乘积 ≡ 1 [MOD n]
   证明: by
   simpa using listProd_map_one h
 
@@ -102,7 +102,7 @@ theorem listSum_map
 中文:
 定理 listSum_map
   条件: (h : 对任意 x in l, f x ≡ g x [MOD n])
-  结论: (l.map f).sum ≡ (l.map g).sum [MOD n]
+  结论: (l.map f).求和 ≡ (l.map g).求和 [MOD n]
   证明: by
   induction l <;> aesop (add unsafe ModEq.add)
 
@@ -124,7 +124,7 @@ theorem listSum_map_zero
 中文:
 定理 listSum_map_zero
   条件: (h : 对任意 x in l, f x ≡ 0 [MOD n])
-  结论: (l.map f).sum ≡ 0 [MOD n]
+  结论: (l.map f).求和 ≡ 0 [MOD n]
   证明: by
   simpa using listSum_map h
 
@@ -145,8 +145,8 @@ theorem listSum_zero
 
 中文:
 定理 listSum_zero
-  条件: {l : List 自然数} (h : 对任意 x in l, x ≡ 0 [MOD n])
-  结论: l.sum ≡ 0 [MOD n]
+  条件: {l : 列表 自然数} (h : 对任意 x in l, x ≡ 0 [MOD n])
+  结论: l.求和 ≡ 0 [MOD n]
   证明: by
   simpa using listSum_map h
 
@@ -213,7 +213,7 @@ theorem multisetProd_one
 中文:
 定理 multisetProd_one
   条件: {s : Multiset 自然数} (h : 对任意 x in s, x ≡ 1 [MOD n])
-  结论: s.prod ≡ 1 [MOD n]
+  结论: s.乘积 ≡ 1 [MOD n]
   证明: by
   simpa using multisetProd_map_one h
 
@@ -282,7 +282,7 @@ theorem multisetSum_zero
 中文:
 定理 multisetSum_zero
   条件: {s : Multiset 自然数} (h : 对任意 x in s, x ≡ 0 [MOD n])
-  结论: s.sum ≡ 0 [MOD n]
+  结论: s.求和 ≡ 0 [MOD n]
   证明: by
   simpa using multisetSum_map h
 
@@ -303,8 +303,8 @@ theorem prod
   proof: .multisetProd_map (s := s.1) h
 
 中文:
-定理 prod
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ g x [MOD n])
+定理 乘积
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ g x [MOD n])
   证明: .multisetProd_map (s := s.1) h
 -/
 protected theorem prod {s : Finset α} (h : forall x in s, f x ≡ g x [MOD n]) :
@@ -325,7 +325,7 @@ theorem prod_one
 
 中文:
 定理 prod_one
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ 1 [MOD n])
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ 1 [MOD n])
   结论: ∏ x in s, f x ≡ 1 [MOD n]
   证明: by
   simpa using ModEq.prod h
@@ -347,8 +347,8 @@ theorem sum
   proof: .multisetSum_map (s := s.1) h
 
 中文:
-定理 sum
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ g x [MOD n])
+定理 求和
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ g x [MOD n])
   证明: .multisetSum_map (s := s.1) h
 -/
 protected theorem sum {s : Finset α} (h : forall x in s, f x ≡ g x [MOD n]) :
@@ -367,7 +367,7 @@ theorem sum_zero
 
 中文:
 定理 sum_zero
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ 0 [MOD n])
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ 0 [MOD n])
   结论: ∑ x in s, f x ≡ 0 [MOD n]
   证明: by
   simpa using ModEq.sum h
@@ -391,7 +391,7 @@ theorem prod_modEq_ite
 
 中文:
 定理 prod_modEq_ite
-  结论: [DecidableEq α] {s : Finset α} {a : α}
+  结论: [DecidableEq α] {s : 有限集 α} {a : α}
   证明: by
   simp only [← ZMod.natCast_eq_natCast_iff, cast_one, cast_prod, apply_ite Nat.cast] at *
   exact Finset.prod_eq_ite _ hf
@@ -416,7 +416,7 @@ theorem prod_modEq_single
 
 中文:
 定理 prod_modEq_single
-  结论: {s : Finset α} {a : α}
+  结论: {s : 有限集 α} {a : α}
   证明: by
   simp only [← ZMod.natCast_eq_natCast_iff, cast_one, cast_prod] at *
   apply Finset.prod_eq_single <;> assumption
@@ -441,7 +441,7 @@ theorem sum_modEq_ite
 
 中文:
 定理 sum_modEq_ite
-  结论: [DecidableEq α] {s : Finset α} {a : α}
+  结论: [DecidableEq α] {s : 有限集 α} {a : α}
   证明: by
   simp only [← ZMod.natCast_eq_natCast_iff, cast_zero, cast_sum, apply_ite Nat.cast] at *
   exact Finset.sum_eq_ite _ hf
@@ -466,7 +466,7 @@ theorem sum_modEq_single
 
 中文:
 定理 sum_modEq_single
-  结论: {s : Finset α} {a : α}
+  结论: {s : 有限集 α} {a : α}
   证明: by
   simp only [← ZMod.natCast_eq_natCast_iff, cast_zero, cast_sum] at *
   apply Finset.sum_eq_single <;> assumption
@@ -520,7 +520,7 @@ theorem listProd_map_one
 中文:
 定理 listProd_map_one
   条件: (h : 对任意 x in l, f x ≡ 1 [ZMOD n])
-  结论: (l.map f).prod ≡ 1 [ZMOD n]
+  结论: (l.map f).乘积 ≡ 1 [ZMOD n]
   证明: (listProd_map h).trans by simp
 
 Depends on / 依赖: listProd_map
@@ -540,8 +540,8 @@ theorem listProd_one
 
 中文:
 定理 listProd_one
-  条件: {l : List 整数} (h : 对任意 x in l, x ≡ 1 [ZMOD n])
-  结论: l.prod ≡ 1 [ZMOD n]
+  条件: {l : 列表 整数} (h : 对任意 x in l, x ≡ 1 [ZMOD n])
+  结论: l.乘积 ≡ 1 [ZMOD n]
   证明: by
   simpa using listProd_map_one h
 
@@ -563,7 +563,7 @@ theorem listSum_map
 中文:
 定理 listSum_map
   条件: (h : 对任意 x in l, f x ≡ g x [ZMOD n])
-  结论: (l.map f).sum ≡ (l.map g).sum [ZMOD n]
+  结论: (l.map f).求和 ≡ (l.map g).求和 [ZMOD n]
   证明: by
   induction l <;> aesop (add unsafe ModEq.add)
 
@@ -585,7 +585,7 @@ theorem listSum_map_zero
 中文:
 定理 listSum_map_zero
   条件: (h : 对任意 x in l, f x ≡ 0 [ZMOD n])
-  结论: (l.map f).sum ≡ 0 [ZMOD n]
+  结论: (l.map f).求和 ≡ 0 [ZMOD n]
   证明: by
   simpa using listSum_map h
 
@@ -606,8 +606,8 @@ theorem listSum_zero
 
 中文:
 定理 listSum_zero
-  条件: {l : List 整数} (h : 对任意 x in l, x ≡ 0 [ZMOD n])
-  结论: l.sum ≡ 0 [ZMOD n]
+  条件: {l : 列表 整数} (h : 对任意 x in l, x ≡ 0 [ZMOD n])
+  结论: l.求和 ≡ 0 [ZMOD n]
   证明: by
   simpa using listSum_map_zero h
 
@@ -674,7 +674,7 @@ theorem multisetProd_one
 中文:
 定理 multisetProd_one
   条件: {s : Multiset 整数} (h : 对任意 x in s, x ≡ 1 [ZMOD n])
-  结论: s.prod ≡ 1 [ZMOD n]
+  结论: s.乘积 ≡ 1 [ZMOD n]
   证明: by
   simpa using multisetProd_map_one h
 
@@ -743,7 +743,7 @@ theorem multisetSum_zero
 中文:
 定理 multisetSum_zero
   条件: {s : Multiset 整数} (h : 对任意 x in s, x ≡ 0 [ZMOD n])
-  结论: s.sum ≡ 0 [ZMOD n]
+  结论: s.求和 ≡ 0 [ZMOD n]
   证明: by
   simpa using multisetSum_map_zero h
 
@@ -764,8 +764,8 @@ theorem prod
   proof: .multisetProd_map (s := s.1) h
 
 中文:
-定理 prod
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ g x [ZMOD n])
+定理 乘积
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ g x [ZMOD n])
   证明: .multisetProd_map (s := s.1) h
 -/
 protected theorem prod {s : Finset α} (h : forall x in s, f x ≡ g x [ZMOD n]) :
@@ -786,7 +786,7 @@ theorem prod_one
 
 中文:
 定理 prod_one
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ 1 [ZMOD n])
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ 1 [ZMOD n])
   结论: ∏ x in s, f x ≡ 1 [ZMOD n]
   证明: by
   simpa using ModEq.prod h
@@ -808,8 +808,8 @@ theorem sum
   proof: .multisetSum_map (s := s.1) h
 
 中文:
-定理 sum
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ g x [ZMOD n])
+定理 求和
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ g x [ZMOD n])
   证明: .multisetSum_map (s := s.1) h
 -/
 protected theorem sum {s : Finset α} (h : forall x in s, f x ≡ g x [ZMOD n]) :
@@ -826,7 +826,7 @@ theorem sum_zero
 
 中文:
 定理 sum_zero
-  条件: {s : Finset α} (h : 对任意 x in s, f x ≡ 0 [ZMOD n])
+  条件: {s : 有限集 α} (h : 对任意 x in s, f x ≡ 0 [ZMOD n])
   证明: .multisetSum_map_zero (s := s.1) h
 -/
 protected theorem sum_zero {s : Finset α} (h : forall x in s, f x ≡ 0 [ZMOD n]) :
@@ -848,7 +848,7 @@ theorem prod_modEq_ite
 
 中文:
 定理 prod_modEq_ite
-  结论: [DecidableEq α] {s : Finset α} {a : α}
+  结论: [DecidableEq α] {s : 有限集 α} {a : α}
   证明: by
   simp only [← modEq_natAbs (n := n), ← ZMod.intCast_eq_intCast_iff, cast_one, cast_prod,
     apply_ite Int.cast] at *
@@ -875,7 +875,7 @@ theorem prod_modEq_single
 
 中文:
 定理 prod_modEq_single
-  结论: {s : Finset α} {a : α}
+  结论: {s : 有限集 α} {a : α}
   证明: by
   simp only [← modEq_natAbs (n := n), ← ZMod.intCast_eq_intCast_iff, cast_one, cast_prod] at *
   apply Finset.prod_eq_single <;> assumption
@@ -901,7 +901,7 @@ theorem sum_modEq_ite
 
 中文:
 定理 sum_modEq_ite
-  结论: [DecidableEq α] {s : Finset α} {a : α}
+  结论: [DecidableEq α] {s : 有限集 α} {a : α}
   证明: by
   simp only [← modEq_natAbs (n := n), ← ZMod.intCast_eq_intCast_iff, cast_zero, cast_sum,
     apply_ite Int.cast] at *
@@ -928,7 +928,7 @@ theorem sum_modEq_single
 
 中文:
 定理 sum_modEq_single
-  结论: {s : Finset α} {a : α}
+  结论: {s : 有限集 α} {a : α}
   证明: by
   simp only [← modEq_natAbs (n := n), ← ZMod.intCast_eq_intCast_iff, cast_zero, cast_sum] at *
   apply Finset.sum_eq_single <;> assumption

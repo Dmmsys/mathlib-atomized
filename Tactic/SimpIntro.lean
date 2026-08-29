@@ -31,8 +31,8 @@ definition simpIntroCore
   
 
 中文:
-定义 simpIntroCore
-  签名: (g : MVarId) (ctx : Simp.Context) (simprocs : Simp.SimprocsArray := #[])
+定义 simp整数roCore
+  签名: (g : MVarId) (ctx : Simp.余ntext) (simprocs : Simp.SimprocsArray := #[])
   定义体: do
   let done := return (← simpTargetCore g ctx simprocs discharge?).1
   let (transp, var, ids') ← match ids with

@@ -54,11 +54,11 @@ inductive Walk
     - cons: {u v w : V} (h : G.Adj u v) (p : Walk v w) : Walk u w
 
 中文:
-归纳类型 Walk
+归纳类型 途径
   参数: : V -> V -> 类型u
   构造子 (2 个):
-    - nil: {u : V} : Walk u u
-    - cons: {u v w : V} (h : G.Adj u v) (p : Walk v w) : Walk u w
+    - nil: {u : V} : 途径 u u
+    - cons: {u v w : V} (h : G.伴随 u v) (p : 途径 v w) : 途径 u w
 -/
 inductive Walk : V -> V -> Type u
   | nil {u : V} : Walk u u
@@ -77,7 +77,7 @@ instance Walk.instInhabited
   body: ⟨Walk.nil⟩
 
 中文:
-实例 Walk.instInhabited
+实例 途径.instInhabited
   签名: (v : V)
   定义体: ⟨Walk.nil⟩
 
@@ -96,8 +96,8 @@ definition Adj.toWalk
   body: Walk.cons h Walk.nil
 
 中文:
-定义 Adj.toWalk
-  签名: {G : SimpleGraph V} {u v : V} (h : G.Adj u v)
+定义 伴随.toWalk
+  签名: {G : 简单图 V} {u v : V} (h : G.伴随 u v)
   定义体: Walk.cons h Walk.nil
 
 Depends on / 依赖: Walk.cons, Walk.nil
@@ -140,7 +140,7 @@ abbreviation cons'
 
 中文:
 缩写 cons'
-  签名: (u v w : V) (h : G.Adj u v) (p : G.Walk v w)
+  签名: (u v w : V) (h : G.伴随 u v) (p : G.途径 v w)
   定义体: Walk.cons h p
 
 Depends on / 依赖: Walk.cons
@@ -155,7 +155,7 @@ theorem exists_eq_cons_of_ne
   given: {u v : V} (hne : u != v)
 
 中文:
-定理 exists_eq_cons_of_ne
+定理 存在_eq_cons_of_ne
   条件: {u v : V} (hne : u != v)
 -/
 theorem exists_eq_cons_of_ne {u v : V} (hne : u != v) :
@@ -193,7 +193,7 @@ theorem length_nil
 中文:
 定理 length_nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).length = 0
+  结论: (nil : G.途径 u u).length = 0
   证明: rfl
 
 @[simp]
@@ -211,7 +211,7 @@ theorem length_cons
 
 中文:
 定理 length_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: rfl
 -/
 theorem length_cons {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
@@ -228,8 +228,8 @@ theorem _root_.SimpleGraph.Adj.length_toWalk
   simp
 
 中文:
-定理 _root_.SimpleGraph.Adj.length_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.length_toWalk
+  条件: (h : G.伴随 u v)
   结论: h.toWalk.length = 1
   证明: by
   simp
@@ -248,7 +248,7 @@ theorem eq_of_length_eq_zero
 中文:
 定理 eq_of_length_eq_zero
   条件: {u v : V}
-  结论: 对任意 {p : G.Walk u v}, p.length = 0 -> u = v
+  结论: 对任意 {p : G.途径 u v}, p.length = 0 -> u = v
 -/
 theorem eq_of_length_eq_zero {u v : V} : forall {p : G.Walk u v}, p.length = 0 -> u = v
   | nil, _ => rfl
@@ -264,7 +264,7 @@ theorem adj_of_length_eq_one
 中文:
 定理 adj_of_length_eq_one
   条件: {u v : V}
-  结论: 对任意 {p : G.Walk u v}, p.length = 1 -> G.Adj u v
+  结论: 对任意 {p : G.途径 u v}, p.length = 1 -> G.伴随 u v
 -/
 theorem adj_of_length_eq_one {u v : V} : forall {p : G.Walk u v}, p.length = 1 -> G.Adj u v
   | cons h nil, _ => h
@@ -281,9 +281,9 @@ theorem exists_length_eq_zero_iff
 @[simp]
 
 中文:
-定理 exists_length_eq_zero_iff
+定理 存在_length_eq_zero_iff
   条件: {u v : V}
-  结论: (存在 p : G.Walk u v, p.length = 0) ↔ u = v
+  结论: (存在 p : G.途径 u v, p.length = 0) ↔ u = v
   证明: ⟨fun ⟨_, h⟩ => (eq_of_length_eq_zero h), (· ▸ ⟨nil, rfl⟩)⟩
 
 @[simp]
@@ -304,9 +304,9 @@ lemma exists_length_eq_one_iff
   proof: ⟨fun ⟨_, hp⟩ => adj_of_length_eq_one hp, (⟨·.toWalk, by simp⟩)⟩
 
 中文:
-引理 exists_length_eq_one_iff
+引理 存在_length_eq_one_iff
   条件: {u v : V}
-  结论: (存在 (p : G.Walk u v), p.length = 1) ↔ G.Adj u v
+  结论: (存在 (p : G.途径 u v), p.length = 1) ↔ G.伴随 u v
   证明: ⟨fun ⟨_, hp⟩ => adj_of_length_eq_one hp, (⟨·.toWalk, by simp⟩)⟩
 
 Depends on / 依赖: adj_of_length_eq_one, toWalk
@@ -326,7 +326,7 @@ theorem eq_of_length_le_one
 
 中文:
 定理 eq_of_length_le_one
-  条件: {p q : G.Walk u v} (hp : p.length <= 1) (hq : q.length <= 1)
+  条件: {p q : G.途径 u v} (hp : p.length <= 1) (hq : q.length <= 1)
   结论: p = q
   证明: by
   grind [cases Walk, length_cons, Adj.ne]
@@ -376,7 +376,7 @@ definition edges
 
 中文:
 定义 edges
-  签名: {u v : V} (p : G.Walk u v)
+  签名: {u v : V} (p : G.途径 u v)
   定义体: p.darts.map Dart.edge
 
 Depends on / 依赖: Dart.edge, p.darts.map
@@ -396,7 +396,7 @@ theorem edges_eq_map_darts
 
 中文:
 定理 edges_eq_map_darts
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.edges = p.darts.map Dart.edge
   证明: rfl
 
@@ -420,7 +420,7 @@ theorem support_nil
 中文:
 定理 support_nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).support = [u]
+  结论: (nil : G.途径 u u).support = [u]
   证明: rfl
 
 @[simp, grind =]
@@ -438,7 +438,7 @@ theorem support_cons
 
 中文:
 定理 support_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: rfl
 -/
 theorem support_cons {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
@@ -456,8 +456,8 @@ theorem _root_.SimpleGraph.Adj.support_toWalk
 @[simp]
 
 中文:
-定理 _root_.SimpleGraph.Adj.support_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.support_toWalk
+  条件: (h : G.伴随 u v)
   结论: h.toWalk.support = [u, v]
   证明: rfl
 
@@ -480,7 +480,7 @@ theorem support_ne_nil
 
 中文:
 定理 support_ne_nil
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.support != []
   证明: by cases p <;> simp
 
@@ -501,7 +501,7 @@ theorem head_support
 
 中文:
 定理 head_support
-  条件: {G : SimpleGraph V} {a b : V} (p : G.Walk a b)
+  条件: {G : 简单图 V} {a b : V} (p : G.途径 a b)
   证明: by cases p <;> simp
 
 @[simp]
@@ -523,7 +523,7 @@ theorem getLast_support
 
 中文:
 定理 getLast_support
-  条件: {G : SimpleGraph V} {a b : V} (p : G.Walk a b)
+  条件: {G : 简单图 V} {a b : V} (p : G.途径 a b)
   证明: by
   induction p <;> simp [*]
 
@@ -548,7 +548,7 @@ lemma cons_tail_support
 
 中文:
 引理 cons_tail_support
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: u :: p.support.tail = p.support
   证明: by
   cases p <;> simp
@@ -573,7 +573,7 @@ theorem support_eq_cons
 
 中文:
 定理 support_eq_cons
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.support = u :: p.support.tail
   证明: by
   cases p <;> simp
@@ -597,7 +597,7 @@ theorem start_mem_support
 
 中文:
 定理 start_mem_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: u in p.support
   证明: by cases p <;> simp
 
@@ -619,7 +619,7 @@ theorem end_mem_support
 
 中文:
 定理 end_mem_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: v in p.support
   证明: by induction p <;> simp [*]
 
@@ -639,8 +639,8 @@ theorem support_nonempty
 
 中文:
 定理 support_nonempty
-  条件: {u v : V} (p : G.Walk u v)
-  结论: { w | w in p.support }.Nonempty
+  条件: {u v : V} (p : G.途径 u v)
+  结论: { w | w in p.support }.非空
   证明: ⟨u, by simp⟩
 -/
 theorem support_nonempty {u v : V} (p : G.Walk u v) : { w | w in p.support }.Nonempty :=
@@ -656,7 +656,7 @@ theorem mem_support_iff
 
 中文:
 定理 mem_support_iff
-  条件: {u v w : V} (p : G.Walk u v)
+  条件: {u v w : V} (p : G.途径 u v)
   证明: by cases p <;> simp
 -/
 theorem mem_support_iff {u v w : V} (p : G.Walk u v) :
@@ -676,7 +676,7 @@ theorem mem_support_nil_iff
 中文:
 定理 mem_support_nil_iff
   条件: {u v : V}
-  结论: u in (nil : G.Walk v v).support ↔ u = v
+  结论: u in (nil : G.途径 v v).support ↔ u = v
   证明: by simp
 
 @[simp]
@@ -697,7 +697,7 @@ theorem end_mem_tail_support_of_ne
 
 中文:
 定理 end_mem_tail_support_of_ne
-  条件: {u v : V} (h : u != v) (p : G.Walk u v)
+  条件: {u v : V} (h : u != v) (p : G.途径 u v)
   结论: v in p.support.tail
   证明: by
   obtain ⟨_, _, _, rfl⟩ := exists_eq_cons_of_ne h p
@@ -720,7 +720,7 @@ theorem support_suffix_support_cons
 
 中文:
 定理 support_suffix_support_cons
-  条件: (p : G.Walk v w) (hadj : G.Adj u v)
+  条件: (p : G.途径 v w) (hadj : G.伴随 u v)
   证明: by
   simp
 -/
@@ -739,7 +739,7 @@ theorem support_subset_support_cons
 
 中文:
 定理 support_subset_support_cons
-  条件: {u v w : V} (p : G.Walk v w) (hadj : G.Adj u v)
+  条件: {u v w : V} (p : G.途径 v w) (hadj : G.伴随 u v)
   证明: by
   simp
 -/
@@ -757,7 +757,7 @@ theorem coe_support
 
 中文:
 定理 coe_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by cases p <;> rfl
 -/
 theorem coe_support {u v : V} (p : G.Walk u v) :
@@ -772,7 +772,7 @@ theorem isChain_adj_cons_support
 
 中文:
 定理 isChain_adj_cons_support
-  条件: {u v w : V} (h : G.Adj u v)
+  条件: {u v w : V} (h : G.伴随 u v)
 -/
 theorem isChain_adj_cons_support {u v w : V} (h : G.Adj u v) :
     forall (p : G.Walk v w), List.IsChain G.Adj (u :: p.support)
@@ -790,7 +790,7 @@ theorem isChain_adj_support
 中文:
 定理 isChain_adj_support
   条件: {u v : V}
-  结论: 对任意 (p : G.Walk u v), List.IsChain G.Adj p.support
+  结论: 对任意 (p : G.途径 u v), 列表.IsChain G.伴随 p.support
 -/
 theorem isChain_adj_support {u v : V} : forall (p : G.Walk u v), List.IsChain G.Adj p.support
   | nil => .singleton _
@@ -809,7 +809,7 @@ theorem isChain_dartAdj_cons_darts
 
 中文:
 定理 isChain_dartAdj_cons_darts
-  条件: {d : G.Dart} {v w : V} (h : d.snd = v) (p : G.Walk v w)
+  条件: {d : G.Dart} {v w : V} (h : d.snd = v) (p : G.途径 v w)
   证明: by
   induction p generalizing d with
   | nil => exact .singleton _
@@ -834,7 +834,7 @@ theorem isChain_dartAdj_darts
 中文:
 定理 isChain_dartAdj_darts
   条件: {u v : V}
-  结论: 对任意 (p : G.Walk u v), List.IsChain G.DartAdj p.darts
+  结论: 对任意 (p : G.途径 u v), 列表.IsChain G.DartAdj p.darts
 -/
 theorem isChain_dartAdj_darts {u v : V} : forall (p : G.Walk u v), List.IsChain G.DartAdj p.darts
   | nil => .nil
@@ -872,8 +872,8 @@ theorem adj_of_mem_edges
 
 中文:
 定理 adj_of_mem_edges
-  条件: {u v x y : V} (p : G.Walk u v) (h : s(x, y) in p.edges)
-  结论: G.Adj x y
+  条件: {u v x y : V} (p : G.途径 u v) (h : s(x, y) in p.edges)
+  结论: G.伴随 x y
   证明: p.edges_subset_edgeSet h
 
 @[simp]
@@ -898,7 +898,7 @@ theorem darts_nil
 中文:
 定理 darts_nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).darts = []
+  结论: (nil : G.途径 u u).darts = []
   证明: rfl
 
 @[simp]
@@ -916,7 +916,7 @@ theorem darts_cons
 
 中文:
 定理 darts_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: rfl
 -/
 theorem darts_cons {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
@@ -932,8 +932,8 @@ theorem _root_.SimpleGraph.Adj.darts_toWalk
   proof: rfl
 
 中文:
-定理 _root_.SimpleGraph.Adj.darts_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.darts_toWalk
+  条件: (h : G.伴随 u v)
   结论: h.toWalk.darts = [⟨(u, v), h⟩]
   证明: rfl
 -/
@@ -952,7 +952,7 @@ theorem cons_map_snd_darts
 
 中文:
 定理 cons_map_snd_darts
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: (u :: p.darts.map (·.snd)) = p.support
   证明: by
   induction p <;> simp [*]
@@ -972,7 +972,7 @@ theorem map_snd_darts
 
 中文:
 定理 map_snd_darts
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.darts.map (·.snd) = p.support.tail
   证明: by
   simpa using congr_arg List.tail (cons_map_snd_darts p)
@@ -993,7 +993,7 @@ theorem map_fst_darts_append
 
 中文:
 定理 map_fst_darts_append
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   induction p <;> simp [*]
 -/
@@ -1015,7 +1015,7 @@ theorem map_fst_darts
 
 中文:
 定理 map_fst_darts
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.darts.map (·.fst) = p.support.dropLast
   证明: by
   simpa! using! congr_arg List.dropLast (map_fst_darts_append p)
@@ -1042,7 +1042,7 @@ theorem edges_nil
 中文:
 定理 edges_nil
   条件: {u : V}
-  结论: (nil : G.Walk u u).edges = []
+  结论: (nil : G.途径 u u).edges = []
   证明: rfl
 
 @[simp]
@@ -1060,7 +1060,7 @@ theorem edges_cons
 
 中文:
 定理 edges_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: rfl
 -/
 theorem edges_cons {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
@@ -1078,8 +1078,8 @@ theorem _root_.SimpleGraph.Adj.edges_toWalk
 @[simp, grind =]
 
 中文:
-定理 _root_.SimpleGraph.Adj.edges_toWalk
-  条件: (h : G.Adj u v)
+定理 _root_.简单图.伴随.edges_toWalk
+  条件: (h : G.伴随 u v)
   结论: h.toWalk.edges = [s(u, v)]
   证明: rfl
 
@@ -1103,7 +1103,7 @@ theorem length_support
 
 中文:
 定理 length_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.support.length = p.length + 1
   证明: by
   induction p <;> simp [*]
@@ -1128,7 +1128,7 @@ theorem length_darts
 
 中文:
 定理 length_darts
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.darts.length = p.length
   证明: by
   induction p <;> simp [*]
@@ -1150,7 +1150,7 @@ theorem length_edges
 
 中文:
 定理 length_edges
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   结论: p.edges.length = p.length
   证明: by simp [edges]
 -/
@@ -1166,7 +1166,7 @@ theorem getElem_edges_eq_edge_getElem_darts
 
 中文:
 定理 getElem_edges_eq_edge_getElem_darts
-  条件: {p : G.Walk u v} {i : 自然数} (h : i < p.edges.length)
+  条件: {p : G.途径 u v} {i : 自然数} (h : i < p.edges.length)
   证明: List.getElem_map ..
 
 Depends on / 依赖: List.getElem_map, getElem_map
@@ -1188,7 +1188,7 @@ theorem edge_getElem_darts
 
 中文:
 定理 edge_getElem_darts
-  条件: {p : G.Walk u v} {i : 自然数} (h : i < p.darts.length)
+  条件: {p : G.途径 u v} {i : 自然数} (h : i < p.darts.length)
   证明: by
   rw [getElem_edges_eq_edge_getElem_darts]
 
@@ -1214,7 +1214,7 @@ theorem fst_darts_getElem
 
 中文:
 定理 fst_darts_getElem
-  条件: {p : G.Walk u v} {i : 自然数} (hi : i < p.darts.length)
+  条件: {p : G.途径 u v} {i : 自然数} (hi : i < p.darts.length)
   证明: by
   grind [map_fst_darts]
 
@@ -1240,7 +1240,7 @@ theorem snd_darts_getElem
 
 中文:
 定理 snd_darts_getElem
-  条件: {p : G.Walk u v} {i : 自然数} (hi : i < p.darts.length)
+  条件: {p : G.途径 u v} {i : 自然数} (hi : i < p.darts.length)
   证明: by
   grind [map_snd_darts]
 
@@ -1266,7 +1266,7 @@ lemma support_getElem_zero
 
 中文:
 引理 support_getElem_zero
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.support[0] = u
   证明: by cases p <;> simp
 
@@ -1287,7 +1287,7 @@ lemma support_getElem_length
 
 中文:
 引理 support_getElem_length
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: p.support[p.length] = v
   证明: by
   induction p <;> simp_all
@@ -1312,7 +1312,7 @@ theorem mem_darts_iff_infix_support
 
 中文:
 定理 mem_darts_iff_infix_support
-  条件: {u' v'} {p : G.Walk u v} (h : G.Adj u' v')
+  条件: {u' v'} {p : G.途径 u v} (h : G.伴随 u' v')
   证明: by
   refine .trans ⟨fun h => ?_, fun ⟨i, hi, h⟩ => ?_⟩ List.infix_iff_getElem?.symm
   · have ⟨i, hi, h⟩ := List.getElem_of_mem h
@@ -1344,7 +1344,7 @@ theorem mem_darts_iff_fst_snd_infix_support
 
 中文:
 定理 mem_darts_iff_fst_snd_infix_support
-  条件: {p : G.Walk u v} {d : G.Dart}
+  条件: {p : G.途径 u v} {d : G.Dart}
   证明: mem_darts_iff_infix_support ..
 
 Depends on / 依赖: mem_darts_iff_infix_support
@@ -1382,8 +1382,8 @@ theorem mem_support_iff_exists_mem_edges
   induction p <;> aesop
 
 中文:
-定理 mem_support_iff_exists_mem_edges
-  条件: {u v w : V} {p : G.Walk u v}
+定理 mem_support_iff_存在_mem_edges
+  条件: {u v w : V} {p : G.途径 u v}
   证明: by
   induction p <;> aesop
 -/
@@ -1406,7 +1406,7 @@ theorem darts_nodup_of_support_nodup
 
 中文:
 定理 darts_nodup_of_support_nodup
-  条件: {u v : V} {p : G.Walk u v} (h : p.support.Nodup)
+  条件: {u v : V} {p : G.途径 u v} (h : p.support.Nodup)
   证明: by
   induction p with
   | nil => simp
@@ -1437,7 +1437,7 @@ theorem edges_eq_zipWith_support
 
 中文:
 定理 edges_eq_zipWith_support
-  条件: {u v : V} {p : G.Walk u v}
+  条件: {u v : V} {p : G.途径 u v}
   证明: by
   induction p with
   | nil => simp
@@ -1464,7 +1464,7 @@ theorem edges_injective
 中文:
 定理 edges_injective
   条件: {u v : V}
-  结论: Function.Injective (Walk.edges : G.Walk u v -> List (Sym2 V))
+  结论: 函数.单射 (途径.edges : G.途径 u v -> 列表 (Sym2 V))
   证明: by simpa [h₁, h₂.ne] using h
     rw [edges_injective h₃]
 
@@ -1490,7 +1490,7 @@ theorem darts_injective
 中文:
 定理 darts_injective
   条件: {u v : V}
-  结论: Function.Injective (Walk.darts : G.Walk u v -> List G.Dart)
+  结论: 函数.单射 (途径.darts : G.途径 u v -> 列表 G.Dart)
   证明: edges_injective.of_comp
 
 Depends on / 依赖: edges_injective, edges_injective.of_comp, of_comp
@@ -1510,7 +1510,7 @@ definition edgeSet
 
 中文:
 定义 edgeSet
-  签名: {u v : V} (p : G.Walk u v)
+  签名: {u v : V} (p : G.途径 u v)
   定义体: {e | e in p.edges}
 
 @[simp]
@@ -1533,7 +1533,7 @@ lemma mem_edgeSet
 
 中文:
 引理 mem_edgeSet
-  条件: {u v : V} {p : G.Walk u v} {e : Sym2 V}
+  条件: {u v : V} {p : G.途径 u v} {e : Sym2 V}
   结论: e in p.edgeSet ↔ e in p.edges
   证明: Iff.rfl
 
@@ -1558,7 +1558,7 @@ lemma edgeSet_nil
 中文:
 引理 edgeSet_nil
   条件: (u : V)
-  结论: (nil : G.Walk u u).edgeSet = ∅
+  结论: (nil : G.途径 u u).edgeSet = ∅
   证明: by ext; simp
 
 @[simp]
@@ -1576,7 +1576,7 @@ theorem edgeSet_cons
 
 中文:
 定理 edgeSet_cons
-  条件: {u v w : V} (h : G.Adj u v) (p : G.Walk v w)
+  条件: {u v w : V} (h : G.伴随 u v) (p : G.途径 v w)
   证明: by ext; simp
 -/
 theorem edgeSet_cons {u v w : V} (h : G.Adj u v) (p : G.Walk v w) :
@@ -1593,7 +1593,7 @@ theorem coe_edges_toFinset
 
 中文:
 定理 coe_edges_toFinset
-  条件: [DecidableEq V] {u v : V} (p : G.Walk u v)
+  条件: [DecidableEq V] {u v : V} (p : G.途径 u v)
   证明: by
   simp [edgeSet]
 
@@ -1614,9 +1614,9 @@ inductive Nil
 
 中文:
 归纳类型 Nil
-  参数: : {v w : V} -> G.Walk v w -> 命题
+  参数: : {v w : V} -> G.途径 v w -> 命题
   构造子 (1 个):
-    - nil: {u : V} : Nil (nil : G.Walk u u)
+    - nil: {u : V} : Nil (nil : G.途径 u u)
 -/
 inductive Nil : {v w : V} -> G.Walk v w -> Prop
   | nil {u : V} : Nil (nil : G.Walk u u)
@@ -1631,7 +1631,7 @@ lemma nil_nil
 
 中文:
 引理 nil_nil
-  结论: (nil : G.Walk u u).Nil
+  结论: (nil : G.途径 u u).Nil
   证明: Nil.nil
 -/
 @[simp, grind .] lemma nil_nil : (nil : G.Walk u u).Nil := Nil.nil
@@ -1647,7 +1647,7 @@ lemma not_nil_cons
 
 中文:
 引理 not_nil_cons
-  条件: {h : G.Adj u v} {p : G.Walk v w}
+  条件: {h : G.伴随 u v} {p : G.途径 v w}
   结论: ¬ (cons h p).Nil
   证明: nofun
 -/
@@ -1669,7 +1669,7 @@ lemma Nil.eq
 
 中文:
 引理 Nil.eq
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.Nil -> v = w | .nil => rfl
 -/
 protected lemma Nil.eq {p : G.Walk v w} : p.Nil -> v = w | .nil => rfl
@@ -1685,7 +1685,7 @@ lemma not_nil_of_ne
 
 中文:
 引理 not_nil_of_ne
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: v != w -> ¬ p.Nil
   证明: mt Nil.eq
 
@@ -1707,7 +1707,7 @@ lemma nil_iff_support_eq
 
 中文:
 引理 nil_iff_support_eq
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.Nil ↔ p.support = [v]
   证明: by
   cases p <;> simp
@@ -1732,7 +1732,7 @@ lemma darts_eq_nil
 
 中文:
 引理 darts_eq_nil
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.darts = [] ↔ p.Nil
   证明: by
   cases p <;> simp
@@ -1757,7 +1757,7 @@ lemma edges_eq_nil
 
 中文:
 引理 edges_eq_nil
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.edges = [] ↔ p.Nil
   证明: by
   cases p <;> simp
@@ -1784,7 +1784,7 @@ alias ⟨_, Nil.length_eq_zero⟩ := length_eq_zero_iff
 
 中文:
 定理 length_eq_zero_iff
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   结论: p.length = 0 ↔ p.Nil
   证明: by
   cases p <;> simp
@@ -1810,7 +1810,7 @@ lemma nil_iff_length_eq
 
 中文:
 引理 nil_iff_length_eq
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: p.Nil ↔ p.length = 0
   证明: length_eq_zero_iff.symm
 
@@ -1831,7 +1831,7 @@ lemma not_nil_iff_lt_length
 
 中文:
 引理 not_nil_iff_lt_length
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   结论: ¬ p.Nil ↔ 0 < p.length
   证明: by
   cases p <;> simp
@@ -1850,7 +1850,7 @@ lemma not_nil_iff
 
 中文:
 引理 not_nil_iff
-  条件: {p : G.Walk v w}
+  条件: {p : G.途径 v w}
   证明: by
   cases p <;> simp [*]
 -/
@@ -1876,7 +1876,7 @@ alias ⟨_, Nil.eq_nil⟩ := eq_nil_iff_nil
 
 中文:
 定理 eq_nil_iff_nil
-  条件: {p : G.Walk v v}
+  条件: {p : G.途径 v v}
   结论: p = nil ↔ p.Nil
   证明: by
   cases p <;> simp
@@ -1901,7 +1901,7 @@ lemma nil_iff_eq_nil
 
 中文:
 引理 nil_iff_eq_nil
-  结论: 对任意 {p : G.Walk v v}, p.Nil ↔ p = nil
+  结论: 对任意 {p : G.途径 v v}, p.Nil ↔ p = nil
   证明: eq_nil_iff_nil.symm
 
 Depends on / 依赖: eq_nil_iff_nil, eq_nil_iff_nil.symm
@@ -1924,7 +1924,7 @@ lemma nil_of_subsingleton
 
 中文:
 引理 nil_of_subsingleton
-  条件: [Subsingleton V] (p : G.Walk v w)
+  条件: [子单例 V] (p : G.途径 v w)
   结论: p.Nil
   证明: match p with
   | nil => Nil.nil
@@ -1950,9 +1950,9 @@ theorem exists_nil_iff
   proof: ⟨fun ⟨_, h⟩ => h.eq, (· ▸ ⟨nil, .nil⟩)⟩
 
 中文:
-定理 exists_nil_iff
+定理 存在_nil_iff
   条件: {u v : V}
-  结论: (存在 p : G.Walk u v, p.Nil) ↔ u = v
+  结论: (存在 p : G.途径 u v, p.Nil) ↔ u = v
   证明: ⟨fun ⟨_, h⟩ => h.eq, (· ▸ ⟨nil, .nil⟩)⟩
 
 Depends on / 依赖: h.eq
@@ -1976,7 +1976,7 @@ definition notNilRec
 
 中文:
 定义 notNilRec
-  签名: {motive : {u w : V} -> (p : G.Walk u w) -> (h : ¬ p.Nil) -> Sort*}
+  签名: {motive : {u w : V} -> (p : G.途径 u w) -> (h : ¬ p.Nil) -> 类型层*}
   定义体: match p with
   | nil => fun hp => absurd .nil hp
   | .cons h q => fun _ => cons h q
@@ -2003,7 +2003,7 @@ lemma notNilRec_cons
 
 中文:
 引理 notNilRec_cons
-  结论: {motive : {u w : V} -> (p : G.Walk u w) -> ¬ p.Nil -> Sort*}
+  结论: {motive : {u w : V} -> (p : G.途径 u w) -> ¬ p.Nil -> 类型层*}
   证明: by rfl
 -/
 lemma notNilRec_cons {motive : {u w : V} -> (p : G.Walk u w) -> ¬ p.Nil -> Sort*}
@@ -2022,7 +2022,7 @@ theorem end_mem_tail_support
 
 中文:
 定理 end_mem_tail_support
-  条件: {u v : V} {p : G.Walk u v} (h : ¬ p.Nil)
+  条件: {u v : V} {p : G.途径 u v} (h : ¬ p.Nil)
   结论: v in p.support.tail
   证明: p.notNilRec (by simp) h
 
@@ -2043,8 +2043,8 @@ theorem mem_support_iff_exists_mem_edges_of_not_nil
   | cons h p ih => cases p <;> aesop
 
 中文:
-定理 mem_support_iff_exists_mem_edges_of_not_nil
-  条件: {u v w : V} {p : G.Walk u v} (hnil : ¬p.Nil)
+定理 mem_support_iff_存在_mem_edges_of_not_nil
+  条件: {u v w : V} {p : G.途径 u v} (hnil : ¬p.Nil)
   证明: by
   induction p with
   | nil => simp at hnil
@@ -2073,8 +2073,8 @@ theorem exists_boundary_dart
     · exact ⟨⟨_, a⟩, List.Mem.head _, uS, h⟩
 
 中文:
-定理 exists_boundary_dart
-  条件: {u v : V} (p : G.Walk u v) (S : Set V) (uS : u in S) (vS : v ∉ S)
+定理 存在_boundary_dart
+  条件: {u v : V} (p : G.途径 u v) (S : 集合 V) (uS : u in S) (vS : v ∉ S)
   证明: by
   induction p with
   | nil => cases vS uS
@@ -2110,7 +2110,7 @@ definition ofSupport
 
 中文:
 定义 ofSupport
-  签名: (l : List V) (hne : l != []) (hchain : l.IsChain G.Adj)
+  签名: (l : 列表 V) (hne : l != []) (hchain : l.IsChain G.伴随)
   定义体: match l with
   | [_] => .nil
 | _ :: v :: l => .cons hchain.rel .ofSupport (v :: l) (l.cons_ne_nil v) hchain.of_cons
@@ -2155,7 +2155,7 @@ theorem ofSupport_cons_cons
 
 中文:
 定理 ofSupport_cons_cons
-  条件: {l : List V} (hchain : u :: v :: l |>.IsChain G.Adj)
+  条件: {l : 列表 V} (hchain : u :: v :: l |>.IsChain G.伴随)
   证明: rfl
 -/
 theorem ofSupport_cons_cons {l : List V} (hchain : u :: v :: l |>.IsChain G.Adj) :
@@ -2181,7 +2181,7 @@ theorem support_ofSupport
 
 中文:
 定理 support_ofSupport
-  条件: {l : List V} (hne : l != []) (hchain : l.IsChain G.Adj)
+  条件: {l : 列表 V} (hne : l != []) (hchain : l.IsChain G.伴随)
   证明: by
   match l with
   | [_] => rfl
@@ -2211,7 +2211,7 @@ theorem length_ofSupport
 
 中文:
 定理 length_ofSupport
-  条件: {l : List V} (hne : l != []) (hchain : l.IsChain G.Adj)
+  条件: {l : 列表 V} (hne : l != []) (hchain : l.IsChain G.伴随)
   证明: by
   grind [support_ofSupport]
 
@@ -2236,7 +2236,7 @@ definition ofDarts
 
 中文:
 定义 ofDarts
-  签名: (l : List G.Dart) (hne : l != []) (hchain : l.IsChain G.DartAdj)
+  签名: (l : 列表 G.Dart) (hne : l != []) (hchain : l.IsChain G.DartAdj)
   定义体: match l with
   | [d] => .cons d.adj .nil
   | d₁ :: d₂ :: l =>
@@ -2305,7 +2305,7 @@ theorem ofDarts_cons_cons
 
 中文:
 定理 ofDarts_cons_cons
-  结论: {d₁ d₂ : G.Dart} {l : List G.Dart}
+  结论: {d₁ d₂ : G.Dart} {l : 列表 G.Dart}
   证明: rfl
 -/
 theorem ofDarts_cons_cons {d₁ d₂ : G.Dart} {l : List G.Dart}
@@ -2332,7 +2332,7 @@ theorem darts_ofDarts
 
 中文:
 定理 darts_ofDarts
-  条件: {l : List G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
+  条件: {l : 列表 G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
   证明: by
   match l with
   | [_] => rfl
@@ -2364,7 +2364,7 @@ theorem edges_ofDarts
 
 中文:
 定理 edges_ofDarts
-  条件: {l : List G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
+  条件: {l : 列表 G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
   证明: by
   simp [edges]
 
@@ -2386,7 +2386,7 @@ theorem length_ofDarts
 
 中文:
 定理 length_ofDarts
-  条件: {l : List G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
+  条件: {l : 列表 G.Dart} (hne : l != []) (hchain : l.IsChain G.DartAdj)
   证明: by
   grind [darts_ofDarts]
 

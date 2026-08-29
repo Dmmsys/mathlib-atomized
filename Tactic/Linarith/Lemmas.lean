@@ -35,7 +35,7 @@ theorem lt_irrefl
 
 中文:
 定理 lt_irrefl
-  条件: {α : 类型u} [Preorder α] {a : α}
+  条件: {α : 类型u} [预序 α] {a : α}
   结论: ¬a < a
   证明: _root_.lt_irrefl a
 
@@ -55,7 +55,7 @@ theorem eq_of_eq_of_eq
 
 中文:
 定理 eq_of_eq_of_eq
-  条件: {α} [Semiring α] {a b : α} (ha : a = 0) (hb : b = 0)
+  条件: {α} [半环 α] {a b : α} (ha : a = 0) (hb : b = 0)
   结论: a + b = 0
   证明: by
   simp [*]
@@ -77,7 +77,7 @@ theorem zero_lt_one
 
 中文:
 定理 zero_lt_one
-  条件: [IsStrictOrderedRing α]
+  条件: [是StrictOrdered环 α]
   结论: (0:α) < 1
   证明: _root_.zero_lt_one
 
@@ -176,7 +176,7 @@ theorem add_nonpos
 
 中文:
 定理 add_nonpos
-  条件: [IsOrderedRing α] {a b : α} (ha : a <= 0) (hb : b <= 0)
+  条件: [是Ordered环 α] {a b : α} (ha : a <= 0) (hb : b <= 0)
   证明: _root_.add_nonpos ha hb
 
 Depends on / 依赖: _root_, _root_.add_nonpos, add_nonpos
@@ -195,7 +195,7 @@ theorem add_lt_of_le_of_neg
 
 中文:
 定理 add_lt_of_le_of_neg
-  结论: [IsStrictOrderedRing α] {a b c : α} (hbc : b <= c)
+  结论: [是StrictOrdered环 α] {a b c : α} (hbc : b <= c)
   证明: _root_.add_lt_of_le_of_neg hbc ha
 
 Depends on / 依赖: _root_, _root_.add_lt_of_le_of_neg, add_lt_of_le_of_neg
@@ -214,7 +214,7 @@ theorem add_lt_of_neg_of_le
 
 中文:
 定理 add_lt_of_neg_of_le
-  结论: [IsStrictOrderedRing α] {a b c : α} (ha : a < 0)
+  结论: [是StrictOrdered环 α] {a b c : α} (ha : a < 0)
   证明: _root_.add_lt_of_neg_of_le ha hbc
 
 Depends on / 依赖: _root_, _root_.add_lt_of_neg_of_le, add_lt_of_neg_of_le
@@ -233,7 +233,7 @@ theorem add_neg
 
 中文:
 定理 add_neg
-  结论: [IsStrictOrderedRing α] {a b : α} (ha : a < 0)
+  结论: [是StrictOrdered环 α] {a b : α} (ha : a < 0)
   证明: _root_.add_neg ha hb
 
 Depends on / 依赖: _root_, _root_.add_neg, add_neg
@@ -254,7 +254,7 @@ lemma natCast_nonneg
 
 中文:
 引理 natCast_nonneg
-  条件: [IsOrderedRing α] (n : 自然数)
+  条件: [是Ordered环 α] (n : 自然数)
   结论: (0 : α) <= n
   证明: Nat.cast_nonneg n
 
@@ -276,7 +276,7 @@ theorem mul_eq
 
 中文:
 定理 mul_eq
-  条件: [IsOrderedRing α] {a b : α} (ha : a = 0) (_ : 0 < b)
+  条件: [是Ordered环 α] {a b : α} (ha : a = 0) (_ : 0 < b)
   结论: b * a = 0
   证明: by
   simp [*]
@@ -301,7 +301,7 @@ theorem mul_neg
 
 中文:
 定理 mul_neg
-  条件: [IsStrictOrderedRing α] {a b : α} (ha : a < 0) (hb : 0 < b)
+  条件: [是StrictOrdered环 α] {a b : α} (ha : a < 0) (hb : 0 < b)
   结论: b * a < 0
   证明: have : (-b)*a > 0 := mul_pos_of_neg_of_neg (neg_neg_of_pos hb) ha
   neg_of_neg_pos (by simpa)
@@ -324,7 +324,7 @@ theorem mul_nonpos
 
 中文:
 定理 mul_nonpos
-  条件: [IsOrderedRing α] {a b : α} (ha : a <= 0) (hb : 0 < b)
+  条件: [是Ordered环 α] {a b : α} (ha : a <= 0) (hb : 0 < b)
   结论: b * a <= 0
   证明: have : (-b)*a >= 0 := mul_nonneg_of_nonpos_of_nonpos (le_of_lt (neg_neg_of_pos hb)) ha
   by simpa
@@ -346,7 +346,7 @@ theorem sub_nonpos_of_le
 
 中文:
 定理 sub_nonpos_of_le
-  条件: [IsOrderedRing α] {a b : α}
+  条件: [是Ordered环 α] {a b : α}
   结论: a <= b -> a - b <= 0
   证明: _root_.sub_nonpos_of_le
 
@@ -366,7 +366,7 @@ theorem sub_neg_of_lt
 
 中文:
 定理 sub_neg_of_lt
-  条件: [IsOrderedRing α] {a b : α}
+  条件: [是Ordered环 α] {a b : α}
   结论: a < b -> a - b < 0
   证明: _root_.sub_neg_of_lt
 
@@ -404,7 +404,7 @@ lemma eq_of_not_lt_of_not_gt
 
 中文:
 引理 eq_of_not_lt_of_not_gt
-  条件: {α} [LinearOrder α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a)
+  条件: {α} [线性序 α] (a b : α) (h1 : ¬ a < b) (h2 : ¬ b < a)
   结论: a = b
   证明: le_antisymm (le_of_not_gt h2) (le_of_not_gt h1)
 
@@ -426,7 +426,7 @@ lemma mul_zero_eq
 
 中文:
 引理 mul_zero_eq
-  条件: {α} {R : α -> α -> 命题} [Semiring α] {a b : α} (_ : R a 0) (h : b = 0)
+  条件: {α} {R : α -> α -> 命题} [半环 α] {a b : α} (_ : R a 0) (h : b = 0)
   证明: by
   simp [h]
 -/
@@ -447,7 +447,7 @@ lemma zero_mul_eq
 
 中文:
 引理 zero_mul_eq
-  条件: {α} {R : α -> α -> 命题} [Semiring α] {a b : α} (h : a = 0) (_ : R b 0)
+  条件: {α} {R : α -> α -> 命题} [半环 α] {a b : α} (h : a = 0) (_ : R b 0)
   证明: by
   simp [h]
 -/

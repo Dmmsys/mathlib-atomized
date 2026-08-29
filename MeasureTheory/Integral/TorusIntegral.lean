@@ -172,7 +172,7 @@ definition TorusIntegrable
   body: IntegrableOn (fun θ : Realⁿ => f (torusMap c R θ)) (Icc (0 : Realⁿ) fun _ => 2 * π) volume
 
 中文:
-定义 TorusIntegrable
+定义 Torus整数egrable
   签名: (f : Complexⁿ -> E) (c : Complexⁿ) (R : 实数ⁿ)
   定义体: IntegrableOn (fun θ : Realⁿ => f (torusMap c R θ)) (Icc (0 : Realⁿ) fun _ => 2 * π) volume
 
@@ -196,7 +196,7 @@ theorem torusIntegrable_const
   simp [TorusIntegrable, measure_Icc_lt_top]
 
 中文:
-定理 torusIntegrable_const
+定理 torus整数egrable_const
   条件: (a : E) (c : Complexⁿ) (R : 实数ⁿ)
   结论: Torus整数egrable (fun _ => a) c R
   证明: by
@@ -232,7 +232,7 @@ theorem torusIntegrable_zero_radius
   apply torusIntegrable_const (f c) c 0
 
 中文:
-定理 torusIntegrable_zero_radius
+定理 torus整数egrable_zero_radius
   条件: {f : Complexⁿ -> E} {c : Complexⁿ}
   结论: Torus整数egrable f c 0
   证明: by
@@ -258,7 +258,7 @@ theorem function_integrable
 
 中文:
 定理 function_integrable
-  条件: [NormedSpace Complex E] (hf : Torus整数egrable f c R)
+  条件: [赋范空间 复形 E] (hf : Torus整数egrable f c R)
   证明: by
   refine (hf.norm.const_mul (∏ i, |R i|)).mono' ?_ ?_
   · refine (Continuous.aestronglyMeasurable ?_).smul hf.1; fun_prop
@@ -289,7 +289,7 @@ definition torusIntegral
 notation3 "∯ " (...) " in " "T(" c ", " R ")" ", " r:(scoped f => torusIntegral f c R) => r
 
 中文:
-定义 torusIntegral
+定义 torus整数egral
   签名: (f : Complexⁿ -> E) (c : Complexⁿ) (R : 实数ⁿ)
   定义体: ∫ θ : Realⁿ in Icc (0 : Realⁿ) fun _ => 2 * π, (∏ i, R i * exp (θ i * I) * I : Complex) • f (torusMap c R θ)
 
@@ -315,7 +315,7 @@ theorem torusIntegral_radius_zero
     zero_pow hn, zero_smul, integral_zero]
 
 中文:
-定理 torusIntegral_radius_zero
+定理 torus整数egral_radius_zero
   条件: (hn : n != 0) (f : Complexⁿ -> E) (c : Complexⁿ)
   证明: by
   simp only [torusIntegral, Pi.zero_apply, ofReal_zero, zero_mul, Fin.prod_const,
@@ -337,7 +337,7 @@ theorem torusIntegral_neg
   proof: by simp [torusIntegral, integral_neg]
 
 中文:
-定理 torusIntegral_neg
+定理 torus整数egral_neg
   条件: (f : Complexⁿ -> E) (c : Complexⁿ) (R : 实数ⁿ)
   证明: by simp [torusIntegral, integral_neg]
 
@@ -357,7 +357,7 @@ theorem torusIntegral_add
     integral_add hf.function_integrable hg.function_integrable
 
 中文:
-定理 torusIntegral_add
+定理 torus整数egral_add
   条件: (hf : Torus整数egrable f c R) (hg : Torus整数egrable g c R)
   证明: by
   simpa only [torusIntegral, smul_add, Pi.add_apply] using
@@ -380,7 +380,7 @@ theorem torusIntegral_sub
   simpa only [sub_eq_add_neg, ← torusIntegral_neg] using! torusIntegral_add hf hg.neg
 
 中文:
-定理 torusIntegral_sub
+定理 torus整数egral_sub
   条件: (hf : Torus整数egrable f c R) (hg : Torus整数egrable g c R)
   证明: by
   simpa only [sub_eq_add_neg, ← torusIntegral_neg] using! torusIntegral_add hf hg.neg
@@ -401,8 +401,8 @@ theorem torusIntegral_smul
   simp only [torusIntegral, integral_smul, ← smul_comm a (_ : Complex) (_ : E)]
 
 中文:
-定理 torusIntegral_smul
-  结论: {𝕜 : 类型} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜)
+定理 torus整数egral_smul
+  结论: {𝕜 : 类型} [RCLike 𝕜] [赋范空间 𝕜 E] [标量交换类 𝕜 复形 E] (a : 𝕜)
   证明: by
   simp only [torusIntegral, integral_smul, ← smul_comm a (_ : Complex) (_ : E)]
 
@@ -421,8 +421,8 @@ theorem torusIntegral_const_mul
   proof: torusIntegral_smul a f c R
 
 中文:
-定理 torusIntegral_const_mul
-  条件: (a : Complex) (f : Complexⁿ -> Complex) (c : Complexⁿ) (R : 实数ⁿ)
+定理 torus整数egral_const_mul
+  条件: (a : 复形) (f : Complexⁿ -> 复形) (c : Complexⁿ) (R : 实数ⁿ)
   证明: torusIntegral_smul a f c R
 
 Depends on / 依赖: torusIntegral_smul
@@ -445,7 +445,7 @@ theorem norm_torusIntegral_le_of_norm_le_const
               (∏ i : Fin 
 
 中文:
-定理 norm_torusIntegral_le_of_norm_le_const
+定理 norm_torus整数egral_le_of_norm_le_const
   条件: {C : 实数} (hf : 对任意 θ, ‖f (torusMap c R θ)‖ <= C)
   证明: calc
     ‖∯ x in T(c, R), f x‖ <= (∏ i, |R i|) * C * (volume (Icc (0 : Realⁿ) fun _ => 2 * π)).toReal :=
@@ -483,8 +483,8 @@ theorem torusIntegral_dim0
     Measure.dirac_apply_of_mem (mem_singleton _), Subsingleton.elim (to
 
 中文:
-定理 torusIntegral_dim0
-  结论: [CompleteSpace E]
+定理 torus整数egral_dim0
+  结论: [完备空间 E]
   证明: by
   simp only [torusIntegral, Fin.prod_univ_zero, one_smul,
     Subsingleton.elim (fun _ : Fin 0 => 2 * π) 0, Icc_self, Measure.restrict_singleton, volume_pi,
@@ -516,7 +516,7 @@ theorem torusIntegral_dim1
   rw [torusInteg
 
 中文:
-定理 torusIntegral_dim1
+定理 torus整数egral_dim1
   条件: (f : Complex¹ -> E) (c : Complex¹) (R : 实数¹)
   证明: by
   have H₁ : (((MeasurableEquiv.funUnique _ _).symm) ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) :=
@@ -552,7 +552,7 @@ theorem torusIntegral_succAbove
   have heπ : (e ⁻¹' Icc 0 fun _ => 2 * π) = Icc 0 (2 * π) ×ˢ Icc (0 : Realⁿ) fun _ => 2 * 
 
 中文:
-定理 torusIntegral_succAbove
+定理 torus整数egral_succAbove
   证明: by
   set e : Real × Realⁿ ≃ᵐ Realⁿ⁺¹ := (MeasurableEquiv.piFinSuccAbove (fun _ => Real) i).symm
   have hem : MeasurePreserving e :=
@@ -593,7 +593,7 @@ theorem torusIntegral_succ
   simpa using torusIntegral_succAbove hf 0
 
 中文:
-定理 torusIntegral_succ
+定理 torus整数egral_succ
   证明: by
   simpa using torusIntegral_succAbove hf 0
 

@@ -73,7 +73,7 @@ abbreviation commMonoidOfSkeletalBraided
 
 中文:
 缩写 commMonoidOfSkeletalBraided
-  签名: [BraidedCategory C] (hC : Skeletal C)
+  签名: [辫范畴 C] (hC : Skeletal C)
   定义体: { monoidOfSkeletalMonoidal hC with mul_comm := fun X Y => hC ⟨β_ X Y⟩ }
 
 Depends on / 依赖: monoidOfSkeletalMonoidal, mul_comm
@@ -93,7 +93,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (Skeleton C)
+  签名: : 幺半群范畴 (Skeleton C)
   定义体: Monoidal.transport (skeletonEquivalence C).symm
 
 Depends on / 依赖: Monoidal, Monoidal.transport, skeletonEquivalence, transport
@@ -111,7 +111,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: : Monoid (Skeleton C)
+  签名: : 幺半群 (Skeleton C)
   定义体: monoidOfSkeletalMonoidal (skeleton_isSkeleton _).skel
 
 Depends on / 依赖: monoidOfSkeletalMonoidal, skeleton_isSkeleton
@@ -181,7 +181,7 @@ instance instBraidedCategory
 
 中文:
 实例 instBraidedCategory
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: (BraidedCategory.ofFullyFaithful
     (Monoidal.equivalenceTransported (skeletonEquivalence C).symm).inverse :)
 
@@ -201,7 +201,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: commMonoidOfSkeletalBraided (skeleton_isSkeleton _).skel
 
 Depends on / 依赖: commMonoidOfSkeletalBraided, skeleton_isSkeleton
@@ -223,7 +223,7 @@ instance :
 
 中文:
 实例 :
-  签名: (skeletonEquivalence C).functor.Monoidal
+  签名: (skeletonEquivalence C).functor.幺半群
   定义体: inferInstanceAs (Monoidal.equivalenceTransported (skeletonEquivalence C).symm).inverse.Monoidal
 
 Depends on / 依赖: Monoidal, Monoidal.equivalenceTransported, equivalenceTransported, inverse, inverse.Monoidal, skeletonEquivalence
@@ -241,7 +241,7 @@ instance :
 
 中文:
 实例 :
-  签名: (skeletonEquivalence C).inverse.Monoidal
+  签名: (skeletonEquivalence C).inverse.幺半群
   定义体: inferInstanceAs (Monoidal.equivalenceTransported (skeletonEquivalence C).symm).functor.Monoidal
 
 Depends on / 依赖: Monoidal, Monoidal.equivalenceTransported, equivalenceTransported, functor, functor.Monoidal, skeletonEquivalence
@@ -260,8 +260,8 @@ instance [F.LaxMonoidal]
   body: .comp ..
 
 中文:
-实例 [F.LaxMonoidal]
-  签名: : F.mapSkeleton.LaxMonoidal
+实例 [F.松弛幺半群]
+  签名: : F.mapSkeleton.松弛幺半群
   定义体: .comp ..
 -/
 noncomputable instance [F.LaxMonoidal] : F.mapSkeleton.LaxMonoidal := .comp ..
@@ -274,8 +274,8 @@ instance [F.OplaxMonoidal]
   body: .comp ..
 
 中文:
-实例 [F.OplaxMonoidal]
-  签名: : F.mapSkeleton.OplaxMonoidal
+实例 [F.反松弛幺半群]
+  签名: : F.mapSkeleton.反松弛幺半群
   定义体: .comp ..
 -/
 noncomputable instance [F.OplaxMonoidal] : F.mapSkeleton.OplaxMonoidal := .comp ..
@@ -288,8 +288,8 @@ instance [F.Monoidal]
   body: .instComp ..
 
 中文:
-实例 [F.Monoidal]
-  签名: : F.mapSkeleton.Monoidal
+实例 [F.幺半群]
+  签名: : F.mapSkeleton.幺半群
   定义体: .instComp ..
 
 Depends on / 依赖: instComp
@@ -312,7 +312,7 @@ definition Skeletal.monoidHom
 
 中文:
 定义 Skeletal.monoidHom
-  签名: [F.Monoidal] (hC : Skeletal C) (hD : Skeletal D)
+  签名: [F.幺半群] (hC : Skeletal C) (hD : Skeletal D)
   定义体: monoidOfSkeletalMonoidal hC
     let _ := monoidOfSkeletalMonoidal hD
     C ->* D := by
@@ -342,7 +342,7 @@ definition Skeleton.monoidHom
 
 中文:
 定义 Skeleton.monoidHom
-  签名: [F.Monoidal]
+  签名: [F.幺半群]
   定义体: (skeleton_skeletal C).monoidHom F.mapSkeleton (skeleton_skeletal D)
 
 Depends on / 依赖: F.mapSkeleton, mapSkeleton, monoidHom, skeleton_skeletal
@@ -368,7 +368,7 @@ definition Skeletal.mulEquiv
 
 中文:
 定义 Skeletal.mulEquiv
-  签名: [e.functor.Monoidal] (hC : Skeletal C) (hD : Skeletal D)
+  签名: [e.functor.幺半群] (hC : Skeletal C) (hD : Skeletal D)
   定义体: monoidOfSkeletalMonoidal hC
     let _ := monoidOfSkeletalMonoidal hD
     C ≃* D := by
@@ -403,7 +403,7 @@ definition Skeleton.mulEquiv
 
 中文:
 定义 Skeleton.mulEquiv
-  签名: [e.functor.Monoidal]
+  签名: [e.functor.幺半群]
   定义体: (skeleton_skeletal C).mulEquiv
     (((skeletonEquivalence C).trans e).trans (skeletonEquivalence D).symm) (skeleton_skeletal D)
 

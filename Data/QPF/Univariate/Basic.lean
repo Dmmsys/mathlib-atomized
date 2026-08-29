@@ -60,9 +60,9 @@ class QPF
 中文:
 类 QPF
   参数: (F : 类型u -> 类型v)
-  继承: Functor F
+  继承: 函子 F
   公理与运算 (4 个):
-    - P : PFunctor.{u, u'}
+    - P : P函子.{u, u'}
     - abs : 对任意 {α}, P α -> F α
     - repr : 对任意 {α}, F α -> P α
     - abs_repr : 对任意 {α} (x : F α), abs (repr x) = x
@@ -96,7 +96,7 @@ theorem id_map
 
 中文:
 定理 id_map
-  条件: {α : Type _} (x : F α)
+  条件: {α : 类型 _} (x : F α)
   结论: id < > x = x
   证明: by
   rw [← abs_repr x]
@@ -125,7 +125,7 @@ theorem comp_map
 
 中文:
 定理 comp_map
-  条件: {α β γ : Type _} (f : α -> β) (g : β -> γ) (x : F α)
+  条件: {α β γ : 类型 _} (f : α -> β) (g : β -> γ) (x : F α)
   证明: by
   rw [← abs_repr x]
   rw [← abs_map]; rw [← abs_map]; rw [← abs_map]
@@ -360,7 +360,7 @@ definition recF
 
 中文:
 定义 recF
-  签名: {α : Type _} (g : F α -> α)
+  签名: {α : 类型 _} (g : F α -> α)
 -/
 def recF {α : Type _} (g : F α -> α) : q.P.W -> α
   | ⟨a, f⟩ => g (abs ⟨a, fun x => recF g (f x)⟩)
@@ -377,7 +377,7 @@ theorem recF_eq
 
 中文:
 定理 recF_eq
-  条件: {α : Type _} (g : F α -> α) (x : q.P.W)
+  条件: {α : 类型 _} (g : F α -> α) (x : q.P.W)
   证明: by
   cases x
   rfl
@@ -397,7 +397,7 @@ theorem recF_eq'
 
 中文:
 定理 recF_eq'
-  条件: {α : Type _} (g : F α -> α) (a : q.P.A) (f : q.P.B a -> q.P.W)
+  条件: {α : 类型 _} (g : F α -> α) (a : q.P.A) (f : q.P.B a -> q.P.W)
   证明: rfl
 -/
 theorem recF_eq' {α : Type _} (g : F α -> α) (a : q.P.A) (f : q.P.B a -> q.P.W) :
@@ -623,7 +623,7 @@ definition Wsetoid
 
 中文:
 定义 Wsetoid
-  签名: : Setoid q.P.W
+  签名: : 集合等价关系 q.P.W
   定义体: ⟨Wequiv, @Wequiv.refl _ _, @Wequiv.symm _ _, @Wequiv.trans _ _⟩
 
 Depends on / 依赖: Wequiv, Wequiv.refl, Wequiv.symm, Wequiv.trans
@@ -663,7 +663,7 @@ definition Fix.rec
 
 中文:
 定义 Fix.rec
-  签名: {α : Type _} (g : F α -> α)
+  签名: {α : 类型 _} (g : F α -> α)
   定义体: Quot.lift (recF g) (recF_eq_of_Wequiv g)
 -/
 def Fix.rec {α : Type _} (g : F α -> α) : Fix F -> α :=
@@ -741,7 +741,7 @@ theorem Fix.rec_eq
 
 中文:
 定理 Fix.rec_eq
-  条件: {α : Type _} (g : F α -> α) (x : F (Fix F))
+  条件: {α : 类型 _} (g : F α -> α) (x : F (Fix F))
   证明: by
   have : recF g ∘ fixToW = Fix.rec g := by
     ext ⟨x⟩
@@ -1007,7 +1007,7 @@ definition corecF
 
 中文:
 定义 corecF
-  签名: {α : Type _} (g : α -> F α)
+  签名: {α : 类型 _} (g : α -> F α)
   定义体: PFunctor.M.corec fun x => repr (g x)
 
 Depends on / 依赖: PFunctor, PFunctor.M.corec
@@ -1026,7 +1026,7 @@ theorem corecF_eq
 
 中文:
 定理 corecF_eq
-  条件: {α : Type _} (g : α -> F α) (x : α)
+  条件: {α : 类型 _} (g : α -> F α) (x : α)
   证明: by
   rw [corecF]; rw [PFunctor.M.dest_corec]
 
@@ -1102,8 +1102,8 @@ instance [Inhabited
   body: ⟨Quot.mk _ default⟩
 
 中文:
-实例 [Inhabited
-  签名: q.P.A] : Inhabited (Cofix F)
+实例 [可居
+  签名: q.P.A] : 可居 (Cofix F)
   定义体: ⟨Quot.mk _ default⟩
 
 Depends on / 依赖: Quot.mk
@@ -1121,7 +1121,7 @@ definition Cofix.corec
 
 中文:
 定义 Cofix.corec
-  签名: {α : Type _} (g : α -> F α) (x : α)
+  签名: {α : 类型 _} (g : α -> F α) (x : α)
   定义体: Quot.mk _ (corecF g x)
 -/
 def Cofix.corec {α : Type _} (g : α -> F α) (x : α) : Cofix F :=
@@ -1433,7 +1433,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : QPF (Functor.Comp F₂ F₁) where
+  签名: : QPF (函子.复合 F₂ F₁) where
   定义体: PFunctor.comp q₂.P q₁.P
   abs {α} := by
     dsimp [Functor.Comp]
@@ -1691,7 +1691,7 @@ definition IsUniform
     abs ⟨a, f⟩ = abs ⟨a', f'⟩ -> f '' univ = f' '' univ
 
 中文:
-定义 IsUniform
+定义 是一致
   签名: : 命题
   定义体: forall ⦃α : Type u⦄ (a a' : q.P.A) (f : q.P.B a -> α) (f' : q.P.B a' -> α),
     abs ⟨a, f⟩ = abs ⟨a', f'⟩ -> f '' univ = f' '' univ
@@ -1749,7 +1749,7 @@ theorem supp_eq_of_isUniform
 
 中文:
 定理 supp_eq_of_isUniform
-  条件: (h : q.IsUniform) {α : 类型u} (a : q.P.A) (f : q.P.B a -> α)
+  条件: (h : q.是一致) {α : 类型u} (a : q.P.A) (f : q.P.B a -> α)
   证明: by
   ext u; rw [mem_supp]; constructor
   · intro h'
@@ -1788,7 +1788,7 @@ theorem liftp_iff_of_isUniform
 
 中文:
 定理 liftp_iff_of_isUniform
-  条件: (h : q.IsUniform) {α : 类型u} (x : F α) (p : α -> 命题)
+  条件: (h : q.是一致) {α : 类型u} (x : F α) (p : α -> 命题)
   证明: by
   rw [liftp_iff]; rw [← abs_repr x]
   obtain ⟨a, f⟩ := repr x; constructor
@@ -1831,7 +1831,7 @@ theorem supp_map
 
 中文:
 定理 supp_map
-  条件: (h : q.IsUniform) {α β : 类型u} (g : α -> β) (x : F α)
+  条件: (h : q.是一致) {α β : 类型u} (g : α -> β) (x : F α)
   证明: by
   rw [← abs_repr x]; obtain ⟨a, f⟩ := repr x; rw [← abs_map, PFunctor.map_eq]
   rw [supp_eq_of_isUniform h]; rw [supp_eq_of_isUniform h]; rw [image_comp]
@@ -1859,7 +1859,7 @@ theorem suppPreservation_iff_uniform
 
 中文:
 定理 suppPreservation_iff_uniform
-  结论: q.SuppPreservation ↔ q.IsUniform
+  结论: q.SuppPreservation ↔ q.是一致
   证明: by
   constructor
   · intro h α a a' f f' h'
@@ -1933,7 +1933,7 @@ theorem liftpPreservation_iff_uniform
 
 中文:
 定理 liftpPreservation_iff_uniform
-  结论: q.LiftpPreservation ↔ q.IsUniform
+  结论: q.LiftpPreservation ↔ q.是一致
   证明: by
   rw [← suppPreservation_iff_liftpPreservation]; rw [suppPreservation_iff_uniform]
 

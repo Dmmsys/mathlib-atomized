@@ -112,7 +112,7 @@ lemma shiftShortComplexFunctorIso_zero_add_hom_app
 
 中文:
 引理 shiftShortComplexFunctorIso_zero_add_hom_app
-  条件: (a : 整数) (K : CochainComplex C 整数)
+  条件: (a : 整数) (K : 上链复形 C 整数)
   证明: by
   ext <;> simp [one_smul, shiftFunctorZero_hom_app_f]
 
@@ -206,7 +206,7 @@ lemma shiftIso_hom_app
 
 中文:
 引理 shiftIso_hom_app
-  条件: (n a a' : 整数) (ha' : n + a = a') (K : CochainComplex C 整数)
+  条件: (n a a' : 整数) (ha' : n + a = a') (K : 上链复形 C 整数)
   证明: by
   simp [shiftIso, HomologicalComplex.homology]
 
@@ -229,7 +229,7 @@ lemma shiftIso_inv_app
 
 中文:
 引理 shiftIso_inv_app
-  条件: (n a a' : 整数) (ha' : n + a = a') (K : CochainComplex C 整数)
+  条件: (n a a' : 整数) (ha' : n + a = a') (K : 上链复形 C 整数)
   证明: by
   simp [shiftIso, HomologicalComplex.homology]
 
@@ -303,7 +303,7 @@ lemma quasiIsoAt_shift_iff
 
 中文:
 引理 quasiIsoAt_shift_iff
-  条件: {K L : CochainComplex C 整数} (φ : K ⟶ L) (n i j : 整数) (h : n + i = j)
+  条件: {K L : 上链复形 C 整数} (φ : K ⟶ L) (n i j : 整数) (h : n + i = j)
   证明: by
   simp only [quasiIsoAt_iff_isIso_homologyMap]
   exact (NatIso.isIso_map_iff
@@ -334,7 +334,7 @@ lemma quasiIso_shift_iff
 
 中文:
 引理 quasiIso_shift_iff
-  条件: {K L : CochainComplex C 整数} (φ : K ⟶ L) (n : 整数)
+  条件: {K L : 上链复形 C 整数} (φ : K ⟶ L) (n : 整数)
   证明: by
   simp only [quasiIso_iff, fun i => quasiIsoAt_shift_iff φ n i _ rfl]
   constructor
@@ -371,7 +371,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomologicalComplex.quasiIso C (ComplexShape.up 整数)).IsCompatibleWithShift 整数
+  签名: (同调复形.quasiIso C (余mplexShape.up 整数)).是余mpatibleWithShift 整数
   定义体: by ext; apply quasiIso_shift_iff
 
 Depends on / 依赖: quasiIso_shift_iff
@@ -489,7 +489,7 @@ lemma homologyShiftIso_hom_app
 
 中文:
 引理 homologyShiftIso_hom_app
-  条件: (n a a' : 整数) (ha' : n + a = a') (K : CochainComplex C 整数)
+  条件: (n a a' : 整数) (ha' : n + a = a') (K : 上链复形 C 整数)
   证明: by
   apply Functor.ShiftSequence.induced_shiftIso_hom_app_obj
 

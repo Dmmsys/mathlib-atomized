@@ -53,7 +53,7 @@ class ExtremallyDisconnected
 类 ExtremallyDisconnected
   参数: : 命题 where
   公理与运算 (1 个):
-    - open_closure : 对任意 U : Set X, IsOpen U -> IsOpen (closure U)
+    - open_closure : 对任意 U : 集合 X, 是开集 U -> 是开集 (closure U)
 -/
 class ExtremallyDisconnected : Prop where
   /-- The closure of every open set is open. -/
@@ -71,7 +71,7 @@ theorem extremallyDisconnected_of_homeo
 
 中文:
 定理 extremallyDisconnected_of_homeo
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
     rw [e.symm.isInducing.closure_eq_preimage_closure_image]; rw [Homeomorph.isOpen_preimage]
     exact ExtremallyDisconnected.open_closure _ (e.symm.isOpen_image.mpr hU)
@@ -101,7 +101,7 @@ instance [ExtremallyDisconnected
 
 中文:
 实例 [ExtremallyDisconnected
-  签名: X] [T2Space X] : TotallySeparatedSpace X
+  签名: X] [T2空间 X] : TotallySeparated空间 X
   定义体: { isTotallySeparated_univ := by
     intro x _ y _ hxy
     obtain ⟨U, V, hUV⟩ := T2Space.t2 hxy
@@ -140,7 +140,7 @@ definition CompactT2.Projective
         exists h : X -> Y, Continuous h ∧ g ∘ h = f
 
 中文:
-定义 CompactT2.Projective
+定义 CompactT2.投射
   签名: : 命题
   定义体: forall {Y Z : Type u} [TopologicalSpace Y] [TopologicalSpace Z],
     forall [CompactSpace Y] [T2Space Y] [CompactSpace Z] [T2Space Z],
@@ -174,8 +174,8 @@ let s : Z -> Y := fun z => Classical.choose g_sur z
 
 中文:
 定理 StoneCech.projective
-  条件: [DiscreteTopology X]
-  结论: CompactT2.Projective (StoneCech X)
+  条件: [离散拓扑 X]
+  结论: CompactT2.投射 (StoneCech X)
   证明: by
   intro Y Z _tsY _tsZ _csY _t2Y _csZ _csZ f g hf hg g_sur
 let s : Z -> Y := fun z => Classical.choose g_sur z
@@ -212,8 +212,8 @@ theorem CompactT2.Projective.extremallyDisconnected
   have hZ₁ : IsClosed Z₁
 
 中文:
-定理 CompactT2.Projective.extremallyDisconnected
-  结论: [CompactSpace X] [T2Space X]
+定理 CompactT2.投射.extremallyDisconnected
+  结论: [紧空间 X] [T2空间 X]
   证明: by
   refine { open_closure := fun U hU => ?_ }
   let Z₁ : Set (X × Bool) := Uᶜ ×ˢ {true}
@@ -276,8 +276,8 @@ let S : Set Set D := {E : Set D | IsClosed E ∧ X '' E = univ}
     rca
 
 中文:
-引理 exists_compact_surjective_zorn_subset
-  结论: [T1Space A] [CompactSpace D] {X : D -> A}
+引理 存在_compact_surjective_zorn_subset
+  结论: [T1空间 A] [紧空间 D] {X : D -> A}
   证明: by
   -- suffices to apply Zorn's lemma on the subsets of $D$ that are closed and mapped onto $A$
 let S : Set Set D := {E : Set D | IsClosed E ∧ X '' E = univ}
@@ -337,7 +337,7 @@ lemma image_subset_closure_compl_image_compl_of_isOpen
 
 中文:
 引理 image_subset_closure_compl_image_compl_of_isOpen
-  结论: {ρ : E -> A} (ρ_cont : Continuous ρ)
+  结论: {ρ : E -> A} (ρ_cont : 连续 ρ)
   证明: by
   -- suffices to prove for nonempty $G$
   by_cases G_empty : G = ∅
@@ -458,7 +458,7 @@ definition ExtremallyDisconnected.homeoCompactToT2
 
 中文:
 定义 ExtremallyDisconnected.homeoCompactToT2
-  签名: [ExtremallyDisconnected A] [T2Space A]
+  签名: [ExtremallyDisconnected A] [T2空间 A]
   定义体: ρ_cont.homeoOfEquivCompactToT2
     (f := Equiv.ofBijective ρ ⟨homeoCompactToT2_injective ρ_cont ρ_surj zorn_subset, ρ_surj⟩)
 
@@ -532,7 +532,7 @@ theorem CompactT2.projective_iff_extremallyDisconnected
 
 中文:
 定理 CompactT2.projective_iff_extremallyDisconnected
-  条件: [CompactSpace A] [T2Space A]
+  条件: [紧空间 A] [T2空间 A]
   证明: ⟨Projective.extremallyDisconnected, fun _ => ExtremallyDisconnected.projective⟩
 -/
 protected theorem CompactT2.projective_iff_extremallyDisconnected [CompactSpace A] [T2Space A] :
@@ -564,7 +564,7 @@ instance instExtremallyDisconnected
 
 中文:
 实例 instExtremallyDisconnected
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: by
   constructor
   intro s hs

@@ -43,7 +43,7 @@ lemma IsWeightedHomogeneous.pderiv
 
 中文:
 引理 IsWeightedHomogeneous.pderiv
-  结论: [AddCancelCommMonoid M] {w : σ -> M} {n n' : M} {i : σ}
+  结论: [加法消去交换幺半群 M] {w : σ -> M} {n n' : M} {i : σ}
   证明: by
   rw [← mem_weightedHomogeneousSubmodule]; rw [weightedHomogeneousSubmodule_eq_finsupp_supported]; rw [AddMonoidAlgebra.supported_eq_span_single] at h
   refine Submodule.span_induction ?_ ?_ (fun p q _ _ hp hq => ?_) (fun r p _ h => ?_) h

@@ -31,8 +31,8 @@ instance NoMaxOrder.infinite
   Infinite.of_injective f hf.injective
 
 中文:
-实例 NoMaxOrder.infinite
-  签名: [Nonempty α] [NoMaxOrder α]
+实例 NoMax序.infinite
+  签名: [非空 α] [NoMax序 α]
   定义体: let ⟨f, hf⟩ := Nat.exists_strictMono α
   Infinite.of_injective f hf.injective
 
@@ -51,8 +51,8 @@ instance NoMinOrder.infinite
   body: @NoMaxOrder.infinite αᵒᵈ _ _ _
 
 中文:
-实例 NoMinOrder.infinite
-  签名: [Nonempty α] [NoMinOrder α]
+实例 NoMin序.infinite
+  签名: [非空 α] [NoMin序 α]
   定义体: @NoMaxOrder.infinite αᵒᵈ _ _ _
 
 Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite
@@ -76,8 +76,8 @@ theorem Ioo.infinite
   proof: @NoMaxOrder.infinite _ _ (nonempty_Ioo_subtype h) _
 
 中文:
-定理 Ioo.infinite
-  结论: Infinite (Ioo a b)
+定理 开区间.infinite
+  结论: 无限 (开区间 a b)
   证明: @NoMaxOrder.infinite _ _ (nonempty_Ioo_subtype h) _
 
 Depends on / 依赖: NoMaxOrder, NoMaxOrder.infinite, infinite, nonempty_Ioo_subtype
@@ -95,7 +95,7 @@ theorem Ioo_infinite
 
 中文:
 定理 Ioo_infinite
-  结论: (Ioo a b).Infinite
+  结论: (开区间 a b).无限
   证明: infinite_coe_iff.1 Ioo.infinite h
 
 Depends on / 依赖: Ioo.infinite, infinite, infinite_coe_iff
@@ -113,7 +113,7 @@ theorem Ico_infinite
 
 中文:
 定理 Ico_infinite
-  结论: (Ico a b).Infinite
+  结论: (左闭右开区间 a b).无限
   证明: (Ioo_infinite h).mono Ioo_subset_Ico_self
 
 Depends on / 依赖: Ioo_infinite, Ioo_subset_Ico_self
@@ -130,8 +130,8 @@ theorem Ico.infinite
   proof: infinite_coe_iff.2 Ico_infinite h
 
 中文:
-定理 Ico.infinite
-  结论: Infinite (Ico a b)
+定理 左闭右开区间.infinite
+  结论: 无限 (左闭右开区间 a b)
   证明: infinite_coe_iff.2 Ico_infinite h
 
 Depends on / 依赖: Ico_infinite, infinite_coe_iff
@@ -149,7 +149,7 @@ theorem Ioc_infinite
 
 中文:
 定理 Ioc_infinite
-  结论: (Ioc a b).Infinite
+  结论: (左开右闭区间 a b).无限
   证明: (Ioo_infinite h).mono Ioo_subset_Ioc_self
 
 Depends on / 依赖: Ioo_infinite, Ioo_subset_Ioc_self
@@ -166,8 +166,8 @@ theorem Ioc.infinite
   proof: infinite_coe_iff.2 Ioc_infinite h
 
 中文:
-定理 Ioc.infinite
-  结论: Infinite (Ioc a b)
+定理 左开右闭区间.infinite
+  结论: 无限 (左开右闭区间 a b)
   证明: infinite_coe_iff.2 Ioc_infinite h
 
 Depends on / 依赖: Ioc_infinite, infinite_coe_iff
@@ -185,7 +185,7 @@ theorem Icc_infinite
 
 中文:
 定理 Icc_infinite
-  结论: (Icc a b).Infinite
+  结论: (闭区间 a b).无限
   证明: (Ioo_infinite h).mono Ioo_subset_Icc_self
 
 Depends on / 依赖: Ioo_infinite, Ioo_subset_Icc_self
@@ -202,8 +202,8 @@ theorem Icc.infinite
   proof: infinite_coe_iff.2 Icc_infinite h
 
 中文:
-定理 Icc.infinite
-  结论: Infinite (Icc a b)
+定理 闭区间.infinite
+  结论: 无限 (闭区间 a b)
   证明: infinite_coe_iff.2 Icc_infinite h
 
 Depends on / 依赖: Icc_infinite, infinite_coe_iff
@@ -222,7 +222,7 @@ instance [NoMinOrder
   body: NoMinOrder.infinite
 
 中文:
-实例 [NoMinOrder
+实例 [NoMin序
   签名: α] {a
   定义体: NoMinOrder.infinite
 
@@ -242,8 +242,8 @@ theorem Iio_infinite
 
 中文:
 定理 Iio_infinite
-  条件: [NoMinOrder α] (a : α)
-  结论: (Iio a).Infinite
+  条件: [NoMin序 α] (a : α)
+  结论: (左无界右开区间 a).无限
   证明: infinite_coe_iff.1 inferInstance
 
 Depends on / 依赖: infinite_coe_iff
@@ -260,7 +260,7 @@ instance [NoMinOrder
   body: NoMinOrder.infinite
 
 中文:
-实例 [NoMinOrder
+实例 [NoMin序
   签名: α] {a
   定义体: NoMinOrder.infinite
 
@@ -280,8 +280,8 @@ theorem Iic_infinite
 
 中文:
 定理 Iic_infinite
-  条件: [NoMinOrder α] (a : α)
-  结论: (Iic a).Infinite
+  条件: [NoMin序 α] (a : α)
+  结论: (左无界右闭区间 a).无限
   证明: infinite_coe_iff.1 inferInstance
 
 Depends on / 依赖: infinite_coe_iff
@@ -298,7 +298,7 @@ instance [NoMaxOrder
   body: NoMaxOrder.infinite
 
 中文:
-实例 [NoMaxOrder
+实例 [NoMax序
   签名: α] {a
   定义体: NoMaxOrder.infinite
 
@@ -318,8 +318,8 @@ theorem Ioi_infinite
 
 中文:
 定理 Ioi_infinite
-  条件: [NoMaxOrder α] (a : α)
-  结论: (Ioi a).Infinite
+  条件: [NoMax序 α] (a : α)
+  结论: (左开右无界区间 a).无限
   证明: infinite_coe_iff.1 inferInstance
 
 Depends on / 依赖: infinite_coe_iff
@@ -336,7 +336,7 @@ instance [NoMaxOrder
   body: NoMaxOrder.infinite
 
 中文:
-实例 [NoMaxOrder
+实例 [NoMax序
   签名: α] {a
   定义体: NoMaxOrder.infinite
 
@@ -356,8 +356,8 @@ theorem Ici_infinite
 
 中文:
 定理 Ici_infinite
-  条件: [NoMaxOrder α] (a : α)
-  结论: (Ici a).Infinite
+  条件: [NoMax序 α] (a : α)
+  结论: (左闭右无界区间 a).无限
   证明: infinite_coe_iff.1 inferInstance
 
 Depends on / 依赖: infinite_coe_iff

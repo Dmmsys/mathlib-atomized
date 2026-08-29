@@ -53,8 +53,8 @@ theorem IntermediateField.adjoin_X
   exact le_trans (le_of_eq RatFunc.adjoin_X.symm) (adjoin.mono _ _ _ (by simp))
 
 中文:
-定理 IntermediateField.adjoin_X
-  条件: (E : 整数ermediateField K K⟮X⟯)
+定理 中间域.adjoin_X
+  条件: (E : 中间域 K K⟮X⟯)
   证明: by
   rw [← restrictScalars_eq_top_iff (K := K)]; rw [IntermediateField.restrictScalars_adjoin]; rw [_root_.eq_top_iff]
   exact le_trans (le_of_eq RatFunc.adjoin_X.symm) (adjoin.mono _ _ _ (by simp))
@@ -75,8 +75,8 @@ definition IntermediateField.adjoinXEquiv
   body: (equivOfEq (adjoin_X E)).trans topEquiv
 
 中文:
-定义 IntermediateField.adjoinXEquiv
-  签名: (E : 整数ermediateField K K⟮X⟯)
+定义 中间域.adjoinXEquiv
+  签名: (E : 中间域 K K⟮X⟯)
   定义体: (equivOfEq (adjoin_X E)).trans topEquiv
 
 Depends on / 依赖: adjoin_X, equivOfEq, topEquiv
@@ -97,7 +97,7 @@ abbreviation minpolyX
 
 中文:
 缩写 minpolyX
-  签名: (A : 类型) [CommRing A] [Algebra K A] [Algebra K[f] A]
+  签名: (A : 类型) [交换环 A] [代数 K A] [代数 K[f] A]
   定义体: f.num.map (algebraMap K A) -
   Polynomial.C (algebraMap K[f] A (⟨f, self_mem_adjoin_singleton K f⟩ : K[f])) *
     f.denom.map (algebraMap K A)
@@ -123,7 +123,7 @@ theorem minpolyX_map
 
 中文:
 定理 minpolyX_map
-  结论: (A : 类型) [CommRing A] [Algebra K A] [Algebra (Algebra.adjoin K {f}) A]
+  结论: (A : 类型) [交换环 A] [代数 K A] [代数 (代数.adjoin K {f}) A]
   证明: by
   simp [minpolyX, Polynomial.map_map, ← IsScalarTower.algebraMap_eq,
     ← IsScalarTower.algebraMap_apply]
@@ -251,7 +251,7 @@ theorem isAlgebraic_adjoin_simple_X
 中文:
 定理 isAlgebraic_adjoin_simple_X
   条件: (hf : ¬存在 c, f = C c)
-  结论: IsAlgebraic K⟮f⟯ (X : K⟮X⟯)
+  结论: 是代数 K⟮f⟯ (X : K⟮X⟯)
   证明: ⟨f.minpolyX K⟮f⟯, fun H => hf (f.minpolyX_eq_zero_iff.mp H), f.minpolyX_aeval_X⟩
 
 Depends on / 依赖: f.minpolyX, f.minpolyX_aeval_X, f.minpolyX_eq_zero_iff.mp, minpolyX, minpolyX_aeval_X, minpolyX_eq_zero_iff
@@ -411,7 +411,7 @@ exact tr Algebra.IsAlgebraic.trans _ _ _ (alg := f.isAlgebraic_adjoin_simple_X' 
 中文:
 定理 transcendental_of_ne_C
   条件: (hf : ¬存在 c, f = C c)
-  结论: Transcendental K f
+  结论: 超越 K f
   证明: by
   intro H
   have := isAlgebraic_adjoin_simple H.isIntegral
@@ -446,7 +446,7 @@ theorem irreducible_minpolyX'
 中文:
 定理 irreducible_minpolyX'
   条件: (hf : ¬存在 c, f = C c)
-  结论: Irreducible (f.minpolyX K[f])
+  结论: 不可约 (f.minpolyX K[f])
   证明: by
   let e := Polynomial.algEquivOfTranscendental K f (f.transcendental_of_ne_C hf)
   let φ : K[X][X] := f.num.map (algebraMap ..) -
@@ -500,7 +500,7 @@ theorem irreducible_minpolyX
 中文:
 定理 irreducible_minpolyX
   条件: (hf : ¬存在 c, f = C c)
-  结论: Irreducible (f.minpolyX K⟮f⟯)
+  结论: 不可约 (f.minpolyX K⟮f⟯)
   证明: by
   have : UniqueFactorizationMonoid K[f] :=
     (f.transcendental_of_ne_C hf).uniqueFactorizationMonoid_adjoin
@@ -571,8 +571,8 @@ exact IsAlgebraic.tower_top_of_subalgebra_le (adjoin_simple_le_iff.mpr hf₁)
     f.isAlgebraic_adjoin_simple_X (by rintro ⟨c, rfl⟩; exact hf₂ ⟨c, rfl⟩)
 
 中文:
-定理 IntermediateField.isAlgebraic_X
-  条件: {E : 整数ermediateField K K⟮X⟯} (hE : E != ⊥)
+定理 中间域.isAlgebraic_X
+  条件: {E : 中间域 K K⟮X⟯} (hE : E != ⊥)
   证明: by
   rw [ne_eq]; rw [← le_bot_iff]; rw [SetLike.not_le_iff_exists] at hE
   obtain ⟨f, hf₁, hf₂⟩ := hE

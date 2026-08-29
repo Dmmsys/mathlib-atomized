@@ -39,8 +39,8 @@ theorem setLIntegral_const_lt_top
   exact ENNReal.mul_lt_top hc.lt_top (measure_lt_top (μ.restrict s) univ)
 
 中文:
-定理 setLIntegral_const_lt_top
-  条件: [IsFiniteMeasure μ] (s : Set α) {c : 实数>=0∞} (hc : c != ∞)
+定理 setL整数egral_const_lt_top
+  条件: [是有限测度 μ] (s : 集合 α) {c : 实数>=0∞} (hc : c != ∞)
   证明: by
   rw [lintegral_const]
   exact ENNReal.mul_lt_top hc.lt_top (measure_lt_top (μ.restrict s) univ)
@@ -64,7 +64,7 @@ theorem lintegral_const_lt_top
 
 中文:
 定理 lintegral_const_lt_top
-  条件: [IsFiniteMeasure μ] {c : 实数>=0∞} (hc : c != ∞)
+  条件: [是有限测度 μ] {c : 实数>=0∞} (hc : c != ∞)
   结论: ∫⁻ _, c ∂μ < ∞
   证明: by
   simpa only [Measure.restrict_univ] using setLIntegral_const_lt_top (univ : Set α) hc
@@ -84,7 +84,7 @@ lemma lintegral_eq_const
 
 中文:
 引理 lintegral_eq_const
-  结论: [IsProbabilityMeasure μ] {f : α -> 实数>=0∞} {c : 实数>=0∞}
+  结论: [是概率测度 μ] {f : α -> 实数>=0∞} {c : 实数>=0∞}
   证明: by simp [lintegral_congr_ae hf]
 
 Depends on / 依赖: lintegral_congr_ae
@@ -102,7 +102,7 @@ lemma lintegral_le_const
 
 中文:
 引理 lintegral_le_const
-  结论: [IsProbabilityMeasure μ] {f : α -> 实数>=0∞} {c : 实数>=0∞}
+  结论: [是概率测度 μ] {f : α -> 实数>=0∞} {c : 实数>=0∞}
   证明: (lintegral_mono_ae hf).trans_eq (by simp)
 
 Depends on / 依赖: lintegral_mono_ae, trans_eq
@@ -122,7 +122,7 @@ lemma iInf_le_lintegral
 
 中文:
 引理 iInf_le_lintegral
-  条件: [IsProbabilityMeasure μ] (f : α -> 实数>=0∞)
+  条件: [是概率测度 μ] (f : α -> 实数>=0∞)
   结论: ⨅ x, f x <= ∫⁻ x, f x ∂μ
   证明: le_trans (by simp) (iInf_mul_le_lintegral f)
 
@@ -142,7 +142,7 @@ lemma lintegral_le_iSup
 
 中文:
 引理 lintegral_le_iSup
-  条件: [IsProbabilityMeasure μ] (f : α -> 实数>=0∞)
+  条件: [是概率测度 μ] (f : α -> 实数>=0∞)
   结论: ∫⁻ x, f x ∂μ <= ⨆ x, f x
   证明: le_trans (lintegral_le_iSup_mul f) (by simp)
 
@@ -163,7 +163,7 @@ theorem _root_.IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal
   simpa using f_bdd
 
 中文:
-定理 _root_.IsFiniteMeasure.lintegral_lt_top_of_bounded_to_ennreal
+定理 _root_.是有限测度.lintegral_lt_top_of_bounded_to_ennreal
   证明: by
   rw [← μ.restrict_univ]
   refine setLIntegral_lt_top_of_le_nnreal (measure_ne_top _ _) ?_
@@ -195,7 +195,7 @@ theorem lintegral_dirac'
 
 中文:
 定理 lintegral_dirac'
-  条件: (a : α) {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: (a : α) {f : α -> 实数>=0∞} (hf : 可测 f)
   结论: ∫⁻ a, f a ∂dirac a = f a
   证明: by
   simp [lintegral_congr_ae (ae_eq_dirac' hf)]
@@ -218,7 +218,7 @@ theorem lintegral_dirac
 
 中文:
 定理 lintegral_dirac
-  条件: [MeasurableSingletonClass α] (a : α) (f : α -> 实数>=0∞)
+  条件: [MeasurableSingleton类 α] (a : α) (f : α -> 实数>=0∞)
   证明: by simp [lintegral_congr_ae (ae_eq_dirac f)]
 
 Depends on / 依赖: ae_eq_dirac, lintegral_congr_ae
@@ -239,8 +239,8 @@ theorem setLIntegral_dirac'
   · exact lintegral_zero_measure _
 
 中文:
-定理 setLIntegral_dirac'
-  结论: {a : α} {f : α -> 实数>=0∞} (hf : Measurable f) {s : Set α}
+定理 setL整数egral_dirac'
+  结论: {a : α} {f : α -> 实数>=0∞} (hf : 可测 f) {s : 集合 α}
   证明: by
   rw [restrict_dirac' hs]
   split_ifs
@@ -270,8 +270,8 @@ theorem setLIntegral_dirac
   · exact lintegral_zero_measure _
 
 中文:
-定理 setLIntegral_dirac
-  结论: {a : α} (f : α -> 实数>=0∞) (s : Set α) [MeasurableSingletonClass α]
+定理 setL整数egral_dirac
+  结论: {a : α} (f : α -> 实数>=0∞) (s : 集合 α) [MeasurableSingleton类 α]
   证明: by
   rw [restrict_dirac]
   split_ifs
@@ -301,7 +301,7 @@ theorem lintegral_count'
 
 中文:
 定理 lintegral_count'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   结论: ∫⁻ a, f a ∂count = ∑' a, f a
   证明: by
   rw [count]; rw [lintegral_sum_measure]
@@ -328,7 +328,7 @@ theorem lintegral_count
 
 中文:
 定理 lintegral_count
-  条件: [MeasurableSingletonClass α] (f : α -> 实数>=0∞)
+  条件: [MeasurableSingleton类 α] (f : α -> 实数>=0∞)
   证明: by
   rw [count]; rw [lintegral_sum_measure]
   congr
@@ -354,8 +354,8 @@ theorem _root_.ENNReal.count_const_le_le_of_tsum_le
   exact ENNReal.div_le_div tsum_le_c rfl.le
 
 中文:
-定理 _root_.ENNReal.count_const_le_le_of_tsum_le
-  结论: [MeasurableSingletonClass α] {a : α -> 实数>=0∞}
+定理 _root_.广义非负实数.count_const_le_le_of_tsum_le
+  结论: [MeasurableSingleton类 α] {a : α -> 实数>=0∞}
   证明: by
   rw [← lintegral_count] at tsum_le_c
   apply (MeasureTheory.meas_ge_le_lintegral_div a_mble.aemeasurable ε_ne_zero ε_ne_top).trans
@@ -385,8 +385,8 @@ theorem _root_.NNReal.count_const_le_le_of_tsum_le
   convert! ENNReal
 
 中文:
-定理 _root_.NNReal.count_const_le_le_of_tsum_le
-  结论: [MeasurableSingletonClass α] {a : α -> 实数>=0}
+定理 _root_.非负实数.count_const_le_le_of_tsum_le
+  结论: [MeasurableSingleton类 α] {a : α -> 实数>=0}
   证明: by
   rw [show (fun i => ε <= a i) = fun i => (ε : Real>=0∞) <= ((↑) ∘ a) i by
       simp only [ENNReal.coe_le_coe]; rw [Function.comp]]
@@ -426,7 +426,7 @@ theorem lintegral_countable'
 
 中文:
 定理 lintegral_countable'
-  条件: [Countable α] [MeasurableSingletonClass α] (f : α -> 实数>=0∞)
+  条件: [可数 α] [MeasurableSingleton类 α] (f : α -> 实数>=0∞)
   证明: by
   conv_lhs => rw [← sum_smul_dirac μ, lintegral_sum_measure]
   congr 1 with a : 1
@@ -451,7 +451,7 @@ theorem lintegral_singleton'
 
 中文:
 定理 lintegral_singleton'
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (a : α)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (a : α)
   证明: by
   simp [lintegral_dirac' _ hf, mul_comm]
 
@@ -472,7 +472,7 @@ theorem lintegral_singleton
 
 中文:
 定理 lintegral_singleton
-  条件: [MeasurableSingletonClass α] (f : α -> 实数>=0∞) (a : α)
+  条件: [MeasurableSingleton类 α] (f : α -> 实数>=0∞) (a : α)
   证明: by
   simp [mul_comm]
 
@@ -496,7 +496,7 @@ theorem lintegral_countable
 
 中文:
 定理 lintegral_countable
-  结论: [MeasurableSingletonClass α] (f : α -> 实数>=0∞) {s : Set α}
+  结论: [MeasurableSingleton类 α] (f : α -> 实数>=0∞) {s : 集合 α}
   证明: calc
     ∫⁻ a in s, f a ∂μ = ∫⁻ a in ⋃ x in s, {x}, f a ∂μ := by rw [biUnion_of_singleton]
     _ = ∑' a : s, ∫⁻ x in {(a : α)}, f x ∂μ :=
@@ -525,7 +525,7 @@ theorem lintegral_insert
 
 中文:
 定理 lintegral_insert
-  结论: [MeasurableSingletonClass α] {a : α} {s : Set α} (h : a ∉ s)
+  结论: [MeasurableSingleton类 α] {a : α} {s : 集合 α} (h : a ∉ s)
   证明: by
   rw [← union_singleton]; rw [lintegral_union (measurableSet_singleton a)]; rw [lintegral_singleton]; rw [add_comm]
   rwa [disjoint_singleton_right]
@@ -548,7 +548,7 @@ theorem lintegral_finset
 
 中文:
 定理 lintegral_finset
-  条件: [MeasurableSingletonClass α] (s : Finset α) (f : α -> 实数>=0∞)
+  条件: [MeasurableSingleton类 α] (s : 有限集 α) (f : α -> 实数>=0∞)
   证明: by
   simp only [lintegral_countable _ s.countable_toSet, ← Finset.tsum_subtype']
 
@@ -569,7 +569,7 @@ theorem lintegral_fintype
 
 中文:
 定理 lintegral_fintype
-  条件: [MeasurableSingletonClass α] [Fintype α] (f : α -> 实数>=0∞)
+  条件: [MeasurableSingleton类 α] [有限类型 α] (f : α -> 实数>=0∞)
   证明: by
   rw [← lintegral_finset]; rw [Finset.coe_univ]; rw [Measure.restrict_univ]
 
@@ -592,7 +592,7 @@ theorem lintegral_unique
 
 中文:
 定理 lintegral_unique
-  条件: [Unique α] (f : α -> 实数>=0∞)
+  条件: [唯一 α] (f : α -> 实数>=0∞)
   结论: ∫⁻ x, f x ∂μ = f default * μ univ
   证明: calc
 ∫⁻ x, f x ∂μ = ∫⁻ _, f default ∂μ := lintegral_congr Unique.forall_iff.2 rfl
@@ -623,7 +623,7 @@ theorem exists_measurable_le_forall_setLIntegral_eq
   · exact ⟨g, hgm, hgle, fun s => (hleg s).antisymm (lin
 
 中文:
-定理 exists_measurable_le_forall_setLIntegral_eq
+定理 存在_measurable_le_对任意_setL整数egral_eq
   条件: [SFinite μ] (f : α -> 实数>=0∞)
   证明: by
   -- We only need to prove the `≤` inequality for the integrals, the other one follows from `g ≤ f`.
@@ -693,8 +693,8 @@ theorem exists_pos_lintegral_lt_of_sigmaFinite
   set s : Nat -
 
 中文:
-定理 exists_pos_lintegral_lt_of_sigmaFinite
-  结论: (μ : Measure α) [SigmaFinite μ] {ε : 实数>=0∞}
+定理 存在_pos_lintegral_lt_of_sigmaFinite
+  结论: (μ : 测度 α) [σ有限 μ] {ε : 实数>=0∞}
   证明: by
   /- Let `s` be a covering of `α` by pairwise disjoint measurable sets of finite measure. Let
     `δ : ℕ → ℝ≥0` be a positive function such that `∑' i, μ (s i) * δ i < ε`. Then the function that
@@ -739,8 +739,8 @@ theorem univ_le_of_forall_fin_meas_le
   refine (h_F_lim S hS_meas hS_mono).
 
 中文:
-定理 univ_le_of_forall_fin_meas_le
-  结论: {μ : Measure α} (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+定理 univ_le_of_对任意_fin_meas_le
+  结论: {μ : 测度 α} (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: by
   let S := @spanningSets _ m (μ.trim hm) _
   have hS_mono : Monotone S := @monotone_spanningSets _ m (μ.trim hm) _
@@ -779,8 +779,8 @@ theorem lintegral_le_of_forall_fin_meas_trim_le
 alias lintegral_le_of_forall_fin_meas_le_of_mea
 
 中文:
-定理 lintegral_le_of_forall_fin_meas_trim_le
-  结论: {μ : Measure α} (hm : m <= m0)
+定理 lintegral_le_of_对任意_fin_meas_trim_le
+  结论: {μ : 测度 α} (hm : m <= m0)
   证明: by
   have : ∫⁻ x in univ, f x ∂μ = ∫⁻ x, f x ∂μ := by simp only [Measure.restrict_univ]
   rw [← this]
@@ -813,8 +813,8 @@ theorem lintegral_le_of_forall_fin_meas_le
   lintegral_le_of_forall_fin_meas_trim_le _ C hf
 
 中文:
-定理 lintegral_le_of_forall_fin_meas_le
-  结论: [MeasurableSpace α] {μ : Measure α} [SigmaFinite μ]
+定理 lintegral_le_of_对任意_fin_meas_le
+  结论: [可测空间 α] {μ : 测度 α} [σ有限 μ]
   证明: have : SigmaFinite (μ.trim le_rfl) := by rwa [trim_eq_self]
   lintegral_le_of_forall_fin_meas_trim_le _ C hf
 
@@ -840,8 +840,8 @@ theorem SimpleFunc.exists_lt_lintegral_simpleFunc_of_lt_lintegral
       ENNReal.coe_
 
 中文:
-定理 SimpleFunc.exists_lt_lintegral_simpleFunc_of_lt_lintegral
-  结论: {m : MeasurableSpace α}
+定理 SimpleFunc.存在_lt_lintegral_simpleFunc_of_lt_lintegral
+  结论: {m : 可测空间 α}
   证明: by
   induction f using MeasureTheory.SimpleFunc.induction generalizing L with
   | @const c s hs =>
@@ -922,8 +922,8 @@ theorem exists_lt_lintegral_simpleFunc_of_lt_lintegral
   rcases SimpleFunc.exists_lt_lintegral_simpleFunc_of_
 
 中文:
-定理 exists_lt_lintegral_simpleFunc_of_lt_lintegral
-  结论: {m : MeasurableSpace α} {μ : Measure α}
+定理 存在_lt_lintegral_simpleFunc_of_lt_lintegral
+  结论: {m : 可测空间 α} {μ : 测度 α}
   证明: by
   simp_rw [lintegral_eq_nnreal, lt_iSup_iff] at hL
   rcases hL with ⟨g₀, hg₀, g₀L⟩

@@ -95,9 +95,9 @@ theorem IsAtom.Iic
   proof: ⟨fun con => ha.1 (Subtype.mk_eq_mk.1 con), fun ⟨b, _⟩ hba => Subtype.mk_eq_mk.2 (ha.2 b hba)⟩
 
 中文:
-定理 IsAtom.Iic
+定理 IsAtom.左无界右闭区间
   条件: (ha : IsAtom a) (hax : a <= x)
-  结论: IsAtom (⟨a, hax⟩ : Set.Iic x)
+  结论: IsAtom (⟨a, hax⟩ : 集合.左无界右闭区间 x)
   证明: ⟨fun con => ha.1 (Subtype.mk_eq_mk.1 con), fun ⟨b, _⟩ hba => Subtype.mk_eq_mk.2 (ha.2 b hba)⟩
 
 Depends on / 依赖: Subtype, Subtype.mk_eq_mk, mk_eq_mk
@@ -117,7 +117,7 @@ theorem IsAtom.of_isAtom_coe_Iic
 
 中文:
 定理 IsAtom.of_isAtom_coe_Iic
-  条件: {a : Set.Iic x} (ha : IsAtom a)
+  条件: {a : 集合.左无界右闭区间 x} (ha : IsAtom a)
   结论: IsAtom (a : α)
   证明: ⟨fun con => ha.1 (Subtype.ext con), fun b hba =>
     Subtype.mk_eq_mk.1 (ha.2 ⟨b, hba.le.trans a.prop⟩ hba)⟩
@@ -309,7 +309,7 @@ theorem IsAtom.Iic_eq
 中文:
 定理 IsAtom.Iic_eq
   条件: (h : IsAtom a)
-  结论: Set.Iic a = {⊥, a}
+  结论: 集合.左无界右闭区间 a = {⊥, a}
   证明: Set.ext fun _ => h.le_iff
 
 Depends on / 依赖: Set.ext, h.le_iff, le_iff
@@ -329,8 +329,8 @@ lemma Set.Iio_eq_singleton_bot_iff
 @[simp]
 
 中文:
-引理 Set.Iio_eq_singleton_bot_iff
-  结论: Iio a = {⊥} ↔ IsAtom a
+引理 集合.Iio_eq_singleton_bot_iff
+  结论: 左无界右开区间 a = {⊥} ↔ IsAtom a
   证明: by
   simp [IsAtom, superset_antisymm_iff, bot_lt_iff_ne_bot]
 
@@ -455,7 +455,7 @@ definition IsCoatom
 
 中文:
 定义 IsCoatom
-  签名: [OrderTop α] (a : α)
+  签名: [有顶序 α] (a : α)
   定义体: a != ⊤ ∧ forall b, a < b -> b = ⊤
 
 @[simp]
@@ -476,7 +476,7 @@ theorem isCoatom_dual_iff_isAtom
 
 中文:
 定理 isCoatom_dual_iff_isAtom
-  条件: [OrderBot α] {a : α}
+  条件: [有底序 α] {a : α}
   证明: Iff.rfl
 
 @[simp]
@@ -502,7 +502,7 @@ alias ⟨_, IsCoatom.dual⟩ := isAtom_dual_iff_isCoatom
 
 中文:
 定理 isAtom_dual_iff_isCoatom
-  条件: [OrderTop α] {a : α}
+  条件: [有顶序 α] {a : α}
   证明: Iff.rfl
 
 alias ⟨_, IsAtom.dual⟩ := isCoatom_dual_iff_isAtom
@@ -531,9 +531,9 @@ theorem IsCoatom.Ici
   proof: ha.dual.Iic hax
 
 中文:
-定理 IsCoatom.Ici
+定理 IsCoatom.左闭右无界区间
   条件: (ha : IsCoatom a) (hax : x <= a)
-  结论: IsCoatom (⟨a, hax⟩ : Set.Ici x)
+  结论: IsCoatom (⟨a, hax⟩ : 集合.左闭右无界区间 x)
   证明: ha.dual.Iic hax
 
 Depends on / 依赖: ha.dual.Iic
@@ -552,7 +552,7 @@ theorem IsCoatom.of_isCoatom_coe_Ici
 
 中文:
 定理 IsCoatom.of_isCoatom_coe_Ici
-  条件: {a : Set.Ici x} (ha : IsCoatom a)
+  条件: {a : 集合.左闭右无界区间 x} (ha : IsCoatom a)
   结论: IsCoatom (a : α)
   证明: @IsAtom.of_isAtom_coe_Iic αᵒᵈ _ _ x a ha
 
@@ -736,7 +736,7 @@ theorem IsCoatom.Ici_eq
 中文:
 定理 IsCoatom.Ici_eq
   条件: (h : IsCoatom a)
-  结论: Set.Ici a = {⊤, a}
+  结论: 集合.左闭右无界区间 a = {⊤, a}
   证明: h.dual.Iic_eq
 
 Depends on / 依赖: Iic_eq, h.dual.Iic_eq
@@ -756,8 +756,8 @@ lemma Set.Ioi_eq_singleton_top_iff
 @[simp]
 
 中文:
-引理 Set.Ioi_eq_singleton_top_iff
-  结论: Ioi a = {⊤} ↔ IsCoatom a
+引理 集合.Ioi_eq_singleton_top_iff
+  结论: 左开右无界区间 a = {⊤} ↔ IsCoatom a
   证明: by
   simp [IsCoatom, superset_antisymm_iff, lt_top_iff_ne_top]
 
@@ -809,7 +809,7 @@ theorem isAtom_iff
 
 中文:
 定理 isAtom_iff
-  条件: [OrderBot A] {K : A}
+  条件: [有底序 A] {K : A}
   证明: by
   simp_rw [IsAtom, lt_iff_le_not_ge, SetLike.not_le_iff_exists,
     and_comm (a := _ <= _), and_imp, exists_imp, ← and_imp, and_comm]
@@ -833,7 +833,7 @@ theorem isCoatom_iff
 
 中文:
 定理 isCoatom_iff
-  条件: [OrderTop A] {K : A}
+  条件: [有顶序 A] {K : A}
   证明: by
   simp_rw [IsCoatom, lt_iff_le_not_ge, SetLike.not_le_iff_exists,
     and_comm (a := _ <= _), and_imp, exists_imp, ← and_imp, and_comm]
@@ -979,8 +979,8 @@ theorem Set.Ici.isAtom_iff
 @[simp]
 
 中文:
-定理 Set.Ici.isAtom_iff
-  条件: {b : Set.Ici a}
+定理 集合.左闭右无界区间.isAtom_iff
+  条件: {b : 集合.左闭右无界区间 a}
   结论: IsAtom b ↔ a ⋖ b
   证明: by
   rw [← bot_covBy_iff]
@@ -1010,8 +1010,8 @@ theorem Set.Iic.isCoatom_iff
   simpa only [OrderEmbedding.coe_subtype, Subtype.range_coe_subtype] using! Set.ordConnected_Iic
 
 中文:
-定理 Set.Iic.isCoatom_iff
-  条件: {a : Set.Iic b}
+定理 集合.左无界右闭区间.isCoatom_iff
+  条件: {a : 集合.左无界右闭区间 b}
   结论: IsCoatom a ↔ ↑a ⋖ b
   证明: by
   rw [← covBy_top_iff]
@@ -1037,7 +1037,7 @@ theorem covBy_iff_atom_Ici
 中文:
 定理 covBy_iff_atom_Ici
   条件: (h : a <= b)
-  结论: a ⋖ b ↔ IsAtom (⟨b, h⟩ : Set.Ici a)
+  结论: a ⋖ b ↔ IsAtom (⟨b, h⟩ : 集合.左闭右无界区间 a)
   证明: by simp
 -/
 theorem covBy_iff_atom_Ici (h : a <= b) : a ⋖ b ↔ IsAtom (⟨b, h⟩ : Set.Ici a) := by simp
@@ -1054,7 +1054,7 @@ theorem covBy_iff_coatom_Iic
 中文:
 定理 covBy_iff_coatom_Iic
   条件: (h : a <= b)
-  结论: a ⋖ b ↔ IsCoatom (⟨a, h⟩ : Set.Iic b)
+  结论: a ⋖ b ↔ IsCoatom (⟨a, h⟩ : 集合.左无界右闭区间 b)
   证明: by simp
 -/
 theorem covBy_iff_coatom_Iic (h : a <= b) : a ⋖ b ↔ IsCoatom (⟨a, h⟩ : Set.Iic b) := by simp
@@ -1236,8 +1236,8 @@ class IsAtomic
     - eq_bot_or_exists_atom_le : forall b : α, b = ⊥ ∨ exists a : α, IsAtom a ∧ a <= b
 
 中文:
-类 IsAtomic
-  参数: [OrderBot α]
+类 是原子的
+  参数: [有底序 α]
   公理与运算 (1 个):
     - eq_bot_or_exists_atom_le : 对任意 b : α, b = ⊥ ∨ 存在 a : α, IsAtom a ∧ a <= b
 -/
@@ -1257,8 +1257,8 @@ class IsCoatomic
     - eq_top_or_exists_le_coatom : forall b : α, b = ⊤ ∨ exists a : α, IsCoatom a ∧ b <= a
 
 中文:
-类 IsCoatomic
-  参数: [OrderTop α]
+类 是余原子的
+  参数: [有顶序 α]
   公理与运算 (1 个):
     - eq_top_or_exists_le_coatom : 对任意 b : α, b = ⊤ ∨ 存在 a : α, IsCoatom a ∧ b <= a
 -/
@@ -1282,8 +1282,8 @@ lemma IsAtomic.exists_atom
   ⟨a, ha.1⟩
 
 中文:
-引理 IsAtomic.exists_atom
-  条件: [OrderBot α] [Nontrivial α] [IsAtomic α]
+引理 是原子的.存在_atom
+  条件: [有底序 α] [非平凡 α] [是原子的 α]
   结论: 存在 a : α, IsAtom a
   证明: have ⟨b, hb⟩ := exists_ne (⊥ : α)
   have ⟨a, ha⟩ := (eq_bot_or_exists_atom_le b).resolve_left hb
@@ -1308,8 +1308,8 @@ lemma IsCoatomic.exists_coatom
   ⟨a, ha.1⟩
 
 中文:
-引理 IsCoatomic.exists_coatom
-  条件: [OrderTop α] [Nontrivial α] [IsCoatomic α]
+引理 是余原子的.存在_coatom
+  条件: [有顶序 α] [非平凡 α] [是余原子的 α]
   结论: 存在 a : α, IsCoatom a
   证明: have ⟨b, hb⟩ := exists_ne (⊤ : α)
   have ⟨a, ha⟩ := (eq_top_or_exists_le_coatom b).resolve_left hb
@@ -1339,8 +1339,8 @@ theorem isCoatomic_dual_iff_isAtomic
 
 中文:
 定理 isCoatomic_dual_iff_isAtomic
-  条件: [OrderBot α]
-  结论: IsCoatomic αᵒᵈ ↔ IsAtomic α
+  条件: [有底序 α]
+  结论: 是余原子的 αᵒᵈ ↔ 是原子的 α
   证明: ⟨fun h => ⟨fun b => by apply h.eq_top_or_exists_le_coatom⟩, fun h =>
     ⟨fun b => by apply h.eq_bot_or_exists_atom_le⟩⟩
 
@@ -1365,8 +1365,8 @@ theorem isAtomic_dual_iff_isCoatomic
 
 中文:
 定理 isAtomic_dual_iff_isCoatomic
-  条件: [OrderTop α]
-  结论: IsAtomic αᵒᵈ ↔ IsCoatomic α
+  条件: [有顶序 α]
+  结论: 是原子的 αᵒᵈ ↔ 是余原子的 α
   证明: ⟨fun h => ⟨fun b => by apply h.eq_bot_or_exists_atom_le⟩, fun h =>
     ⟨fun b => by apply h.eq_top_or_exists_le_coatom⟩⟩
 
@@ -1390,7 +1390,7 @@ instance _root_.OrderDual.instIsCoatomic
 
 中文:
 实例 _root_.OrderDual.instIsCoatomic
-  签名: : IsCoatomic αᵒᵈ
+  签名: : 是余原子的 αᵒᵈ
   定义体: isCoatomic_dual_iff_isAtomic.2 ‹IsAtomic α›
 
 Depends on / 依赖: IsAtomic, isCoatomic_dual_iff_isAtomic
@@ -1409,7 +1409,7 @@ instance Set.Iic.isAtomic
       ⟨⟨a, hay.trans hy⟩, ha.Iic (hay.trans hy), hay⟩⟩
 
 中文:
-实例 Set.Iic.isAtomic
+实例 集合.左无界右闭区间.isAtomic
   签名: {x : α}
   定义体: ⟨fun ⟨y, hy⟩ =>
     (eq_bot_or_exists_atom_le y).imp Subtype.mk_eq_mk.2 fun ⟨a, ha, hay⟩ =>
@@ -1438,7 +1438,7 @@ instance _root_.OrderDual.instIsAtomic
 
 中文:
 实例 _root_.OrderDual.instIsAtomic
-  签名: : IsAtomic αᵒᵈ
+  签名: : 是原子的 αᵒᵈ
   定义体: isAtomic_dual_iff_isCoatomic.2 ‹IsCoatomic α›
 
 Depends on / 依赖: IsCoatomic, isAtomic_dual_iff_isCoatomic
@@ -1457,7 +1457,7 @@ instance Set.Ici.isCoatomic
       ⟨⟨a, le_trans hy hay⟩, ha.Ici (le_trans hy hay), hay⟩⟩
 
 中文:
-实例 Set.Ici.isCoatomic
+实例 集合.左闭右无界区间.isCoatomic
   签名: {x : α}
   定义体: ⟨fun ⟨y, hy⟩ =>
     (eq_top_or_exists_le_coatom y).imp Subtype.mk_eq_mk.2 fun ⟨a, ha, hay⟩ =>
@@ -1484,8 +1484,8 @@ theorem isAtomic_iff_forall_isAtomic_Iic
         (Exists.imp' (↑) fun ⟨_, _⟩ => And.imp_left IsAtom.of_isAtom_coe_Iic)⟩⟩
 
 中文:
-定理 isAtomic_iff_forall_isAtomic_Iic
-  条件: [OrderBot α]
+定理 isAtomic_iff_对任意_isAtomic_Iic
+  条件: [有底序 α]
   证明: ⟨@IsAtomic.Set.Iic.isAtomic _ _ _, fun h =>
     ⟨fun x =>
       ((@eq_bot_or_exists_atom_le _ _ _ (h x)) (⊤ : Set.Iic x)).imp Subtype.mk_eq_mk.1
@@ -1511,8 +1511,8 @@ isAtomic_iff_forall_isAtomic_Iic.trans
       forall_congr' fun _ => isCoatomic_dual_iff_isAtomic.symm.trans Iff.rfl
 
 中文:
-定理 isCoatomic_iff_forall_isCoatomic_Ici
-  条件: [OrderTop α]
+定理 isCoatomic_iff_对任意_isCoatomic_Ici
+  条件: [有顶序 α]
   证明: isAtomic_dual_iff_isCoatomic.symm.trans
 isAtomic_iff_forall_isAtomic_Iic.trans
       forall_congr' fun _ => isCoatomic_dual_iff_isAtomic.symm.trans Iff.rfl
@@ -1542,8 +1542,8 @@ class IsStronglyAtomic
     - exists_covBy_le_of_lt : forall (a b : α), a < b -> exists x, a ⋖ x ∧ x <= b
 
 中文:
-类 IsStronglyAtomic
-  参数: (α : 类型) [Preorder α]
+类 是StronglyAtomic
+  参数: (α : 类型) [预序 α]
   公理与运算 (1 个):
     - exists_covBy_le_of_lt : 对任意 (a b : α), a < b -> 存在 x, a ⋖ x ∧ x <= b
 -/
@@ -1562,8 +1562,8 @@ theorem exists_covBy_le_of_lt
 alias LT.lt.exists_covby_le := exists_covBy_le_of_lt
 
 中文:
-定理 exists_covBy_le_of_lt
-  条件: [IsStronglyAtomic α] (h : a < b)
+定理 存在_covBy_le_of_lt
+  条件: [是StronglyAtomic α] (h : a < b)
   结论: 存在 x, a ⋖ x ∧ x <= b
   证明: IsStronglyAtomic.exists_covBy_le_of_lt a b h
 
@@ -1589,8 +1589,8 @@ class IsStronglyCoatomic
     - (exists_le_covBy_of_lt : forall (a b : α), a < b -> exists x, a <= x ∧ x ⋖ b)
 
 中文:
-类 IsStronglyCoatomic
-  参数: (α : 类型) [Preorder α]
+类 是StronglyCoatomic
+  参数: (α : 类型) [预序 α]
   公理与运算 (1 个):
     - (exists_le_covBy_of_lt : 对任意 (a b : α), a < b -> 存在 x, a <= x ∧ x ⋖ b)
 -/
@@ -1609,8 +1609,8 @@ theorem exists_le_covBy_of_lt
 alias LT.lt.exists_le_covby := exists_le_covBy_of_lt
 
 中文:
-定理 exists_le_covBy_of_lt
-  条件: [IsStronglyCoatomic α] (h : a < b)
+定理 存在_le_covBy_of_lt
+  条件: [是StronglyCoatomic α] (h : a < b)
   结论: 存在 x, a <= x ∧ x ⋖ b
   证明: IsStronglyCoatomic.exists_le_covBy_of_lt a b h
 
@@ -1673,7 +1673,7 @@ instance OrderDual.instIsStronglyCoatomic
 
 中文:
 实例 OrderDual.instIsStronglyCoatomic
-  签名: [IsStronglyAtomic α]
+  签名: [是StronglyAtomic α]
   定义体: by
   rwa [isStronglyCoatomic_dual_iff_is_stronglyAtomic]
 
@@ -1692,8 +1692,8 @@ instance [IsStronglyCoatomic
   rwa [isStronglyAtomic_dual_iff_is_stronglyCoatomic]
 
 中文:
-实例 [IsStronglyCoatomic
-  签名: α] : IsStronglyAtomic αᵒᵈ
+实例 [是StronglyCoatomic
+  签名: α] : 是StronglyAtomic αᵒᵈ
   定义体: by
   rwa [isStronglyAtomic_dual_iff_is_stronglyCoatomic]
 
@@ -1715,8 +1715,8 @@ instance IsStronglyAtomic.isAtomic
     exact ⟨x, bot_covBy_iff.1 hx, hxa⟩
 
 中文:
-实例 IsStronglyAtomic.isAtomic
-  签名: (α : 类型) [PartialOrder α] [OrderBot α] [IsStronglyAtomic α]
+实例 是StronglyAtomic.isAtomic
+  签名: (α : 类型) [偏序 α] [有底序 α] [是StronglyAtomic α]
   定义体: by
     rw [or_iff_not_imp_left]; rw [← Ne]; rw [← bot_lt_iff_ne_bot]
     refine fun hlt => ?_
@@ -1742,8 +1742,8 @@ instance IsStronglyCoatomic.toIsCoatomic
   body: isAtomic_dual_iff_isCoatomic.1 IsStronglyAtomic.isAtomic (α := αᵒᵈ)
 
 中文:
-实例 IsStronglyCoatomic.toIsCoatomic
-  签名: (α : 类型) [PartialOrder α] [OrderTop α]
+实例 是StronglyCoatomic.toIsCoatomic
+  签名: (α : 类型) [偏序 α] [有顶序 α]
   定义体: isAtomic_dual_iff_isCoatomic.1 IsStronglyAtomic.isAtomic (α := αᵒᵈ)
 
 Depends on / 依赖: IsStronglyAtomic, IsStronglyAtomic.isAtomic, isAtomic, isAtomic_dual_iff_isCoatomic
@@ -1766,8 +1766,8 @@ theorem Set.OrdConnected.isStronglyAtomic
         using! hcx.lt, fun y hy hy' => hcx.2 (by simpa using! hy) (by simpa using! hy')⟩, hxd⟩
 
 中文:
-定理 Set.OrdConnected.isStronglyAtomic
-  结论: [IsStronglyAtomic α] {s : Set α}
+定理 集合.序连通.isStronglyAtomic
+  结论: [是StronglyAtomic α] {s : 集合 α}
   证明: by
     rintro ⟨c, hc⟩ ⟨d, hd⟩ hcd
     obtain ⟨x, hcx, hxd⟩ := (Subtype.mk_lt_mk.1 hcd).exists_covby_le
@@ -1795,8 +1795,8 @@ theorem Set.OrdConnected.isStronglyCoatomic
   proof: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 h.dual.isStronglyAtomic
 
 中文:
-定理 Set.OrdConnected.isStronglyCoatomic
-  结论: [IsStronglyCoatomic α] {s : Set α}
+定理 集合.序连通.isStronglyCoatomic
+  结论: [是StronglyCoatomic α] {s : 集合 α}
   证明: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 h.dual.isStronglyAtomic
 
 Depends on / 依赖: h.dual.isStronglyAtomic, isStronglyAtomic, isStronglyAtomic_dual_iff_is_stronglyCoatomic
@@ -1814,7 +1814,7 @@ instance [IsStronglyAtomic
   body: Set.OrdConnected.isStronglyAtomic by assumption
 
 中文:
-实例 [IsStronglyAtomic
+实例 [是StronglyAtomic
   签名: α] {s
   定义体: Set.OrdConnected.isStronglyAtomic by assumption
 
@@ -1832,7 +1832,7 @@ instance [IsStronglyCoatomic
   body: Set.OrdConnected.isStronglyCoatomic by assumption
 
 中文:
-实例 [IsStronglyCoatomic
+实例 [是StronglyCoatomic
   签名: α] {s
   定义体: Set.OrdConnected.isStronglyCoatomic by assumption
 
@@ -1851,8 +1851,8 @@ instance SuccOrder.toIsStronglyAtomic
       SuccOrder.succ_le_of_lt hab⟩
 
 中文:
-实例 SuccOrder.toIsStronglyAtomic
-  签名: [SuccOrder α]
+实例 Succ序.toIsStronglyAtomic
+  签名: [Succ序 α]
   定义体: ⟨SuccOrder.succ a, Order.covBy_succ_of_not_isMax fun ha => ha.not_lt hab,
       SuccOrder.succ_le_of_lt hab⟩
 
@@ -1873,8 +1873,8 @@ instance [PredOrder
   rw [← isStronglyAtomic_dual_iff_is_stronglyCoatomic]; infer_instance
 
 中文:
-实例 [PredOrder
-  签名: α] : IsStronglyCoatomic α
+实例 [Pred序
+  签名: α] : 是StronglyCoatomic α
   定义体: by
   rw [← isStronglyAtomic_dual_iff_is_stronglyCoatomic]; infer_instance
 
@@ -1900,8 +1900,8 @@ theorem IsStronglyAtomic.of_wellFounded_lt
       (Set.Ioc a b) ⟨hac, hlt.le.trans hmem.2⟩ hlt⟩, hmem.2⟩
 
 中文:
-定理 IsStronglyAtomic.of_wellFounded_lt
-  条件: (h : WellFounded ((· < ·) : α -> α -> 命题))
+定理 是StronglyAtomic.of_wellFounded_lt
+  条件: (h : 良基 ((· < ·) : α -> α -> 命题))
   证明: by
     refine ⟨WellFounded.min h (Set.Ioc a b) ⟨b, hab,rfl.le⟩, ?_⟩
     have hmem := (WellFounded.min_mem h (Set.Ioc a b) ⟨b, hab,rfl.le⟩)
@@ -1927,8 +1927,8 @@ theorem IsStronglyCoatomic.of_wellFounded_gt
   proof: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 IsStronglyAtomic.of_wellFounded_lt (α := αᵒᵈ) h
 
 中文:
-定理 IsStronglyCoatomic.of_wellFounded_gt
-  条件: (h : WellFounded ((· > ·) : α -> α -> 命题))
+定理 是StronglyCoatomic.of_wellFounded_gt
+  条件: (h : 良基 ((· > ·) : α -> α -> 命题))
   证明: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 IsStronglyAtomic.of_wellFounded_lt (α := αᵒᵈ) h
 
 Depends on / 依赖: IsStronglyAtomic, IsStronglyAtomic.of_wellFounded_lt, isStronglyAtomic_dual_iff_is_stronglyCoatomic, of_wellFounded_lt
@@ -1947,7 +1947,7 @@ instance [WellFoundedLT
 
 中文:
 实例 [WellFoundedLT
-  签名: α] : IsStronglyAtomic α
+  签名: α] : 是StronglyAtomic α
   定义体: IsStronglyAtomic.of_wellFounded_lt wellFounded_lt
 
 Depends on / 依赖: IsStronglyAtomic, IsStronglyAtomic.of_wellFounded_lt, of_wellFounded_lt, wellFounded_lt
@@ -1965,7 +1965,7 @@ instance [WellFoundedGT
 
 中文:
 实例 [WellFoundedGT
-  签名: α] : IsStronglyCoatomic α
+  签名: α] : 是StronglyCoatomic α
   定义体: IsStronglyCoatomic.of_wellFounded_gt wellFounded_gt
 
 Depends on / 依赖: IsStronglyCoatomic, IsStronglyCoatomic.of_wellFounded_gt, of_wellFounded_gt, wellFounded_gt
@@ -1983,7 +1983,7 @@ theorem isAtomic_of_orderBot_wellFounded_lt
 
 中文:
 定理 isAtomic_of_orderBot_wellFounded_lt
-  结论: [OrderBot α]
+  结论: [有底序 α]
   证明: (IsStronglyAtomic.of_wellFounded_lt h).isAtomic
 
 Depends on / 依赖: IsStronglyAtomic, IsStronglyAtomic.of_wellFounded_lt, isAtomic, of_wellFounded_lt
@@ -2002,7 +2002,7 @@ theorem isCoatomic_of_orderTop_gt_wellFounded
 
 中文:
 定理 isCoatomic_of_orderTop_gt_wellFounded
-  结论: [OrderTop α]
+  结论: [有顶序 α]
   证明: isAtomic_dual_iff_isCoatomic.1 (@isAtomic_of_orderBot_wellFounded_lt αᵒᵈ _ _ h)
 
 Depends on / 依赖: isAtomic_dual_iff_isCoatomic, isAtomic_of_orderBot_wellFounded_lt
@@ -2032,7 +2032,7 @@ theorem le_iff_atom_le_imp
 
 中文:
 定理 le_iff_atom_le_imp
-  条件: {α} [布尔eanAlgebra α] [IsAtomic α] {x y : α}
+  条件: {α} [布尔代数 α] [是原子的 α] {x y : α}
   证明: by
   refine ⟨fun h a _ => (le_trans · h), fun h => ?_⟩
   have : x ⊓ yᶜ = ⊥ := of_not_not fun hbot =>
@@ -2068,7 +2068,7 @@ theorem eq_iff_atom_le_iff
 
 中文:
 定理 eq_iff_atom_le_iff
-  条件: {α} [布尔eanAlgebra α] [IsAtomic α] {x y : α}
+  条件: {α} [布尔代数 α] [是原子的 α] {x y : α}
   证明: by
   refine ⟨fun h => h ▸ by simp, fun h => ?_⟩
   exact le_antisymm (le_iff_atom_le_imp.2 fun a ha hx => (h a ha).1 hx)
@@ -2098,8 +2098,8 @@ abbreviation toCompleteAtomicBooleanAlgebra
     simp only [le_iInf_iff, ha.le_iSup, Classical.skolem]
 
 中文:
-缩写 toCompleteAtomicBooleanAlgebra
-  签名: {α} [Complete布尔eanAlgebra α] [IsAtomic α]
+缩写 toCompleteAtomic布尔eanAlgebra
+  签名: {α} [完备布尔代数 α] [是原子的 α]
   定义体: ‹CompleteBooleanAlgebra α›
   iInf_iSup_eq f := BooleanAlgebra.eq_iff_atom_le_iff.2 fun a ha => by
     simp only [le_iInf_iff, ha.le_iSup, Classical.skolem]
@@ -2132,10 +2132,10 @@ class IsAtomistic
     - isLUB_atoms : forall b : α, exists s : Set α, IsLUB s b ∧ forall a, a in s -> IsAtom a
 
 中文:
-类 IsAtomistic
-  参数: [OrderBot α]
+类 是Atomistic
+  参数: [有底序 α]
   公理与运算 (1 个):
-    - isLUB_atoms : 对任意 b : α, 存在 s : Set α, IsLUB s b ∧ 对任意 a, a in s -> IsAtom a
+    - isLUB_atoms : 对任意 b : α, 存在 s : 集合 α, IsLUB s b ∧ 对任意 a, a in s -> IsAtom a
 -/
 class IsAtomistic [OrderBot α] : Prop where
   /-- Every element is a `sSup` of a set of atoms. -/
@@ -2153,10 +2153,10 @@ class IsCoatomistic
     - isGLB_coatoms : forall b : α, exists s : Set α, IsGLB s b ∧ forall a, a in s -> IsCoatom a
 
 中文:
-类 IsCoatomistic
-  参数: [OrderTop α]
+类 是余atomistic
+  参数: [有顶序 α]
   公理与运算 (1 个):
-    - isGLB_coatoms : 对任意 b : α, 存在 s : Set α, IsGLB s b ∧ 对任意 a, a in s -> IsCoatom a
+    - isGLB_coatoms : 对任意 b : α, 存在 s : 集合 α, IsGLB s b ∧ 对任意 a, a in s -> IsCoatom a
 -/
 class IsCoatomistic [OrderTop α] : Prop where
   /-- Every element is a `sInf` of a set of coatoms. -/
@@ -2182,8 +2182,8 @@ theorem isCoatomistic_dual_iff_isAtomistic
 
 中文:
 定理 isCoatomistic_dual_iff_isAtomistic
-  条件: [OrderBot α]
-  结论: IsCoatomistic αᵒᵈ ↔ IsAtomistic α
+  条件: [有底序 α]
+  结论: 是余atomistic αᵒᵈ ↔ 是Atomistic α
   证明: ⟨fun h => ⟨fun b => by apply h.isGLB_coatoms⟩, fun h => ⟨fun b => by apply h.isLUB_atoms⟩⟩
 
 @[simp]
@@ -2205,8 +2205,8 @@ theorem isAtomistic_dual_iff_isCoatomistic
 
 中文:
 定理 isAtomistic_dual_iff_isCoatomistic
-  条件: [OrderTop α]
-  结论: IsAtomistic αᵒᵈ ↔ IsCoatomistic α
+  条件: [有顶序 α]
+  结论: 是Atomistic αᵒᵈ ↔ 是余atomistic α
   证明: ⟨fun h => ⟨fun b => by apply h.isLUB_atoms⟩, fun h => ⟨fun b => by apply h.isGLB_coatoms⟩⟩
 
 Depends on / 依赖: h.isGLB_coatoms, h.isLUB_atoms, isGLB_coatoms, isLUB_atoms
@@ -2226,7 +2226,7 @@ instance _root_.OrderDual.instIsCoatomistic
 
 中文:
 实例 _root_.OrderDual.instIsCoatomistic
-  签名: [OrderBot α] [h : IsAtomistic α]
+  签名: [有底序 α] [h : 是Atomistic α]
   定义体: isCoatomistic_dual_iff_isAtomistic.2 h
 
 Depends on / 依赖: isCoatomistic_dual_iff_isAtomistic
@@ -2286,7 +2286,7 @@ theorem isLUB_atoms_top
 
 中文:
 定理 isLUB_atoms_top
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   结论: IsLUB { a : α | IsAtom a } ⊤
   证明: by
   simpa using isLUB_atoms_le (⊤ : α)
@@ -2363,7 +2363,7 @@ instance _root_.OrderDual.instIsAtomistic
 
 中文:
 实例 _root_.OrderDual.instIsAtomistic
-  签名: [h : IsCoatomistic α]
+  签名: [h : 是余atomistic α]
   定义体: isAtomistic_dual_iff_isCoatomistic.2 h
 
 Depends on / 依赖: isAtomistic_dual_iff_isCoatomistic
@@ -2397,7 +2397,7 @@ theorem sSup_atoms_le_eq
 
 中文:
 定理 sSup_atoms_le_eq
-  条件: {α} [CompleteLattice α] [IsAtomistic α] (b : α)
+  条件: {α} [完备格 α] [是Atomistic α] (b : α)
   证明: (isLUB_atoms_le b).sSup_eq
 
 @[simp]
@@ -2423,7 +2423,7 @@ nonrec lemma CompleteLattice.isAtomistic_iff {α} [CompleteLattice α] :
 
 中文:
 定理 sSup_atoms_eq_top
-  条件: {α} [CompleteLattice α] [IsAtomistic α]
+  条件: {α} [完备格 α] [是Atomistic α]
   证明: isLUB_atoms_top.sSup_eq
 
 nonrec lemma CompleteLattice.isAtomistic_iff {α} [CompleteLattice α] :
@@ -2454,7 +2454,7 @@ nonrec lemma CompleteLattice.isCoatomistic_iff {α} [CompleteLattice α] :
 
 中文:
 引理 eq_sSup_atoms
-  条件: {α} [CompleteLattice α] [IsAtomistic α] (b : α)
+  条件: {α} [完备格 α] [是Atomistic α] (b : α)
   证明: CompleteLattice.isAtomistic_iff.1 ‹_› b
 
 nonrec lemma CompleteLattice.isCoatomistic_iff {α} [CompleteLattice α] :
@@ -2481,7 +2481,7 @@ lemma eq_sInf_coatoms
 
 中文:
 引理 eq_sInf_coatoms
-  条件: {α} [CompleteLattice α] [IsCoatomistic α] (b : α)
+  条件: {α} [完备格 α] [是余atomistic α] (b : α)
   证明: CompleteLattice.isCoatomistic_iff.1 ‹_› b
 
 Depends on / 依赖: CompleteLattice, CompleteLattice.isCoatomistic_iff, isCoatomistic_iff
@@ -2531,7 +2531,7 @@ alias eq_setOf_le_sSup_and_isAtom := eq_setO
 
 中文:
 引理 eq_setOfPred_le_sSup_and_isAtom
-  结论: {α} [CompleteAtomic布尔eanAlgebra α] {S : Set α}
+  结论: {α} [余mpleteAtomic布尔ean代数 α] {S : 集合 α}
   证明: by
   ext a
   refine ⟨fun h => ⟨le_sSup h, hS a h⟩, fun ⟨hale, hatom⟩ => ?_⟩
@@ -2575,7 +2575,7 @@ definition toSetOfIsAtom
 
 中文:
 定义 toSetOfIsAtom
-  签名: {α} [CompleteAtomic布尔eanAlgebra α]
+  签名: {α} [余mpleteAtomic布尔ean代数 α]
   定义体: {a | a <= A}
   invFun S := sSup (Subtype.val '' S)
   left_inv A := by simp [Subtype.coe_image]
@@ -2616,9 +2616,9 @@ class IsSimpleOrder
     - eq_bot_or_eq_top : forall a : α, a = ⊥ ∨ a = ⊤
 
 中文:
-类 IsSimpleOrder
-  参数: (α : 类型) [LE α] [BoundedOrder α]
-  继承: Nontrivial α
+类 是单序
+  参数: (α : 类型) [LE α] [有界序 α]
+  继承: 非平凡 α
   公理与运算 (1 个):
     - eq_bot_or_eq_top : 对任意 a : α, a = ⊥ ∨ a = ⊤
 -/
@@ -2637,8 +2637,8 @@ lemma IsSimpleOrder.of_forall_eq_top
   proof: or_iff_not_imp_left.mpr h a
 
 中文:
-引理 IsSimpleOrder.of_forall_eq_top
-  结论: {α : 类型} [LE α] [BoundedOrder α] [Nontrivial α]
+引理 是单序.of_对任意_eq_top
+  结论: {α : 类型} [LE α] [有界序 α] [非平凡 α]
   证明: or_iff_not_imp_left.mpr h a
 
 Depends on / 依赖: or_iff_not_imp_left, or_iff_not_imp_left.mpr
@@ -2664,7 +2664,7 @@ theorem isSimpleOrder_iff_isSimpleOrder_orderDual
 
 中文:
 定理 isSimpleOrder_iff_isSimpleOrder_orderDual
-  条件: [LE α] [BoundedOrder α]
+  条件: [LE α] [有界序 α]
   证明: by
   constructor <;> intro i
   · exact
@@ -2697,8 +2697,8 @@ theorem IsSimpleOrder.bot_ne_top
     first | simpa | simpa using h.symm
 
 中文:
-定理 IsSimpleOrder.bot_ne_top
-  条件: [LE α] [BoundedOrder α] [IsSimpleOrder α]
+定理 是单序.bot_ne_top
+  条件: [LE α] [有界序 α] [是单序 α]
   结论: (⊥ : α) != (⊤ : α)
   证明: by
   obtain ⟨a, b, h⟩ := exists_pair_ne α
@@ -2726,7 +2726,7 @@ instance OrderDual.instIsSimpleOrder
 
 中文:
 实例 OrderDual.instIsSimpleOrder
-  签名: {α} [LE α] [BoundedOrder α] [IsSimpleOrder α]
+  签名: {α} [LE α] [有界序 α] [是单序 α]
   定义体: isSimpleOrder_iff_isSimpleOrder_orderDual.1 (by infer_instance)
 
 Depends on / 依赖: infer_instance, isSimpleOrder_iff_isSimpleOrder_orderDual
@@ -2751,8 +2751,8 @@ definition IsSimpleOrder.preorder
       · simp
 
 中文:
-定义 IsSimpleOrder.preorder
-  签名: {α} [LE α] [BoundedOrder α] [IsSimpleOrder α]
+定义 是单序.preorder
+  签名: {α} [LE α] [有界序 α] [是单序 α]
   定义体: by rcases eq_bot_or_eq_top a with (rfl | rfl) <;> simp
   le_trans a b c := by
     rcases eq_bot_or_eq_top a with (rfl | rfl)
@@ -2787,7 +2787,7 @@ definition IsSimpleOrder.linearOrder
  
 
 中文:
-定义 IsSimpleOrder.linearOrder
+定义 是单序.linearOrder
   签名: [DecidableEq α]
   定义体: { (inferInstance : PartialOrder α) with
     le_total := fun a b => by rcases eq_bot_or_eq_top a with (rfl | rfl) <;> simp
@@ -2985,7 +2985,7 @@ definition lattice
 
 中文:
 定义 lattice
-  签名: {α} [DecidableEq α] [PartialOrder α] [BoundedOrder α] [IsSimpleOrder α]
+  签名: {α} [DecidableEq α] [偏序 α] [有界序 α] [是单序 α]
   定义体: @LinearOrder.toLattice α IsSimpleOrder.linearOrder
 -/
 protected def lattice {α} [DecidableEq α] [PartialOrder α] [BoundedOrder α] [IsSimpleOrder α] :
@@ -3006,7 +3006,7 @@ definition distribLattice
 
 中文:
 定义 distribLattice
-  签名: : DistribLattice α
+  签名: : Distrib格 α
   定义体: { (inferInstance : Lattice α) with
     le_sup_inf := fun x y z => by rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp }
 -/
@@ -3043,8 +3043,8 @@ definition equivBool
   right_inv x := by cases x <;> simp [bot_ne_top]
 
 中文:
-定义 equivBool
-  签名: {α} [DecidableEq α] [LE α] [BoundedOrder α] [IsSimpleOrder α]
+定义 equiv布尔
+  签名: {α} [DecidableEq α] [LE α] [有界序 α] [是单序 α]
   定义体: x = ⊤
   invFun x := x.casesOn ⊥ ⊤
   left_inv x := by rcases eq_bot_or_eq_top x with (rfl | rfl) <;> simp [bot_ne_top]
@@ -3071,8 +3071,8 @@ definition orderIsoBool
         · simp }
 
 中文:
-定义 orderIsoBool
-  签名: : α ≃o 布尔
+定义 orderIso布尔
+  签名: : α ≃o 布尔值
   定义体: { equivBool with
     map_rel_iff' := @fun a b => by
       rcases eq_bot_or_eq_top a with (rfl | rfl)
@@ -3110,7 +3110,7 @@ definition booleanAlgebra
 
 中文:
 定义 booleanAlgebra
-  签名: {α} [DecidableEq α] [Lattice α] [BoundedOrder α] [IsSimpleOrder α]
+  签名: {α} [DecidableEq α] [格 α] [有界序 α] [是单序 α]
   定义体: { (inferInstance : BoundedOrder α), IsSimpleOrder.distribLattice with
     compl := fun x => if x = ⊥ then ⊤ else ⊥
     sdiff := fun x y => if x = ⊤ ∧ y = ⊥ then ⊤ else ⊥
@@ -3224,7 +3224,7 @@ instance :
 
 中文:
 实例 :
-  签名: ComplementedLattice α
+  签名: 有补格 α
   定义体: letI := IsSimpleOrder.completeBooleanAlgebra (α := α); inferInstance
 
 Depends on / 依赖: IsSimpleOrder, IsSimpleOrder.completeBooleanAlgebra, completeBooleanAlgebra
@@ -3294,7 +3294,7 @@ theorem isSimpleOrder_iff_isAtom_top
 
 中文:
 定理 isSimpleOrder_iff_isAtom_top
-  条件: [PartialOrder α] [BoundedOrder α]
+  条件: [偏序 α] [有界序 α]
   证明: ⟨fun h => @isAtom_top _ _ _ h, fun h =>
     { exists_pair_ne := ⟨⊤, ⊥, h.1⟩
       eq_bot_or_eq_top := fun a => ((eq_or_lt_of_le le_top).imp_right (h.2 a)).symm }⟩
@@ -3317,7 +3317,7 @@ theorem isSimpleOrder_iff_isCoatom_bot
 
 中文:
 定理 isSimpleOrder_iff_isCoatom_bot
-  条件: [PartialOrder α] [BoundedOrder α]
+  条件: [偏序 α] [有界序 α]
   证明: isSimpleOrder_iff_isSimpleOrder_orderDual.trans isSimpleOrder_iff_isAtom_top
 
 Depends on / 依赖: isSimpleOrder_iff_isAtom_top, isSimpleOrder_iff_isSimpleOrder_orderDual, isSimpleOrder_iff_isSimpleOrder_orderDual.trans
@@ -3341,7 +3341,7 @@ theorem isSimpleOrder_Iic_iff_isAtom
 
 中文:
 定理 isSimpleOrder_Iic_iff_isAtom
-  条件: [PartialOrder α] [OrderBot α] {a : α}
+  条件: [偏序 α] [有底序 α] {a : α}
   证明: isSimpleOrder_iff_isAtom_top.trans
     and_congr (not_congr Subtype.mk_eq_mk)
       ⟨fun h b ab => Subtype.mk_eq_mk.1 (h ⟨b, le_of_lt ab⟩ ab), fun h ⟨b, _⟩ hbotb =>
@@ -3369,7 +3369,7 @@ theorem isSimpleOrder_Ici_iff_isCoatom
 
 中文:
 定理 isSimpleOrder_Ici_iff_isCoatom
-  条件: [PartialOrder α] [OrderTop α] {a : α}
+  条件: [偏序 α] [有顶序 α] {a : α}
   证明: isSimpleOrder_iff_isCoatom_bot.trans
     and_congr (not_congr Subtype.mk_eq_mk)
       ⟨fun h b ab => Subtype.mk_eq_mk.1 (h ⟨b, le_of_lt ab⟩ ab), fun h ⟨b, _⟩ hbotb =>
@@ -3402,7 +3402,7 @@ theorem isAtom_of_map_bot_of_image
 
 中文:
 定理 isAtom_of_map_bot_of_image
-  结论: [OrderBot α] [OrderBot β] (f : β ↪o α) (hbot : f ⊥ = ⊥) {b : β}
+  结论: [有底序 α] [有底序 β] (f : β ↪o α) (hbot : f ⊥ = ⊥) {b : β}
   证明: by
   simp only [← bot_covBy_iff] at hb ⊢
   exact CovBy.of_image f (hbot.symm ▸ hb)
@@ -3424,7 +3424,7 @@ theorem isCoatom_of_map_top_of_image
 
 中文:
 定理 isCoatom_of_map_top_of_image
-  结论: [OrderTop α] [OrderTop β] (f : β ↪o α) (htop : f ⊤ = ⊤)
+  结论: [有顶序 α] [有顶序 β] (f : β ↪o α) (htop : f ⊤ = ⊤)
   证明: f.dual.isAtom_of_map_bot_of_image htop hb
 
 Depends on / 依赖: f.dual.isAtom_of_map_bot_of_image, isAtom_of_map_bot_of_image
@@ -3450,7 +3450,7 @@ theorem isAtom_of_u_bot
 
 中文:
 定理 isAtom_of_u_bot
-  结论: [OrderBot α] [OrderBot β] {l : α -> β} {u : β -> α}
+  结论: [有底序 α] [有底序 β] {l : α -> β} {u : β -> α}
   证明: OrderEmbedding.isAtom_of_map_bot_of_image
     ⟨⟨u, gi.u_injective⟩, @GaloisInsertion.u_le_u_iff _ _ _ _ _ _ gi⟩ hbot hb
 
@@ -3476,7 +3476,7 @@ theorem isAtom_iff
 
 中文:
 定理 isAtom_iff
-  结论: [OrderBot α] [IsAtomic α] [OrderBot β] {l : α -> β} {u : β -> α}
+  结论: [有底序 α] [是原子的 α] [有底序 β] {l : α -> β} {u : β -> α}
   证明: by
   refine ⟨fun hla => ?_, fun ha => gi.isAtom_of_u_bot hbot ((h_atom a ha).symm ▸ ha)⟩
   obtain ⟨a', ha', hab'⟩ :=
@@ -3511,7 +3511,7 @@ theorem isAtom_iff'
 
 中文:
 定理 isAtom_iff'
-  结论: [OrderBot α] [IsAtomic α] [OrderBot β] {l : α -> β} {u : β -> α}
+  结论: [有底序 α] [是原子的 α] [有底序 β] {l : α -> β} {u : β -> α}
   证明: by rw [← gi.isAtom_iff hbot h_atom, gi.l_u_eq]
 
 Depends on / 依赖: gi.isAtom_iff, gi.l_u_eq, h_atom, isAtom_iff, l_u_eq
@@ -3531,7 +3531,7 @@ theorem isCoatom_of_image
 
 中文:
 定理 isCoatom_of_image
-  结论: [OrderTop α] [OrderTop β] {l : α -> β} {u : β -> α}
+  结论: [有顶序 α] [有顶序 β] {l : α -> β} {u : β -> α}
   证明: OrderEmbedding.isCoatom_of_map_top_of_image
     ⟨⟨u, gi.u_injective⟩, @GaloisInsertion.u_le_u_iff _ _ _ _ _ _ gi⟩ gi.gc.u_top hb
 
@@ -3558,7 +3558,7 @@ hb.1 (gi.gc.u_top ▸ gi.l_u_eq ⊤ : l ⊤ = ⊤) ▸ gi.l_u_eq b ▸ congr_arg
 
 中文:
 定理 isCoatom_iff
-  结论: [OrderTop α] [IsCoatomic α] [OrderTop β] {l : α -> β} {u : β -> α}
+  结论: [有顶序 α] [是余原子的 α] [有顶序 β] {l : α -> β} {u : β -> α}
   证明: by
   refine ⟨fun hb => gi.isCoatom_of_image hb, fun hb => ?_⟩
   obtain ⟨a, ha, hab⟩ :=
@@ -3597,7 +3597,7 @@ theorem isCoatom_of_l_top
 
 中文:
 定理 isCoatom_of_l_top
-  结论: [OrderTop α] [OrderTop β] {l : α -> β} {u : β -> α}
+  结论: [有顶序 α] [有顶序 β] {l : α -> β} {u : β -> α}
   证明: gi.dual.isAtom_of_u_bot hbot hb.dual
 
 Depends on / 依赖: gi.dual.isAtom_of_u_bot, hb.dual, isAtom_of_u_bot
@@ -3616,7 +3616,7 @@ theorem isCoatom_iff
 
 中文:
 定理 isCoatom_iff
-  结论: [OrderTop α] [OrderTop β] [IsCoatomic β] {l : α -> β} {u : β -> α}
+  结论: [有顶序 α] [有顶序 β] [是余原子的 β] {l : α -> β} {u : β -> α}
   证明: gi.dual.isAtom_iff htop h_coatom b
 
 Depends on / 依赖: gi.dual.isAtom_iff, h_coatom, isAtom_iff
@@ -3636,7 +3636,7 @@ theorem isCoatom_iff'
 
 中文:
 定理 isCoatom_iff'
-  结论: [OrderTop α] [OrderTop β] [IsCoatomic β] {l : α -> β} {u : β -> α}
+  结论: [有顶序 α] [有顶序 β] [是余原子的 β] {l : α -> β} {u : β -> α}
   证明: gi.dual.isAtom_iff' htop h_coatom a
 
 Depends on / 依赖: gi.dual.isAtom_iff, h_coatom, isAtom_iff
@@ -3656,7 +3656,7 @@ theorem isAtom_of_image
 
 中文:
 定理 isAtom_of_image
-  结论: [OrderBot α] [OrderBot β] {l : α -> β} {u : β -> α}
+  结论: [有底序 α] [有底序 β] {l : α -> β} {u : β -> α}
   证明: gi.dual.isCoatom_of_image hb.dual
 
 Depends on / 依赖: gi.dual.isCoatom_of_image, hb.dual, isCoatom_of_image
@@ -3675,7 +3675,7 @@ theorem isAtom_iff
 
 中文:
 定理 isAtom_iff
-  结论: [OrderBot α] [OrderBot β] [IsAtomic β] {l : α -> β} {u : β -> α}
+  结论: [有底序 α] [有底序 β] [是原子的 β] {l : α -> β} {u : β -> α}
   证明: gi.dual.isCoatom_iff h_atom a
 
 Depends on / 依赖: gi.dual.isCoatom_iff, h_atom, isCoatom_iff
@@ -3706,7 +3706,7 @@ f.toGaloisInsertion.isAtom_of_u_bot (map_bot f.symm) (f.symm_apply_apply a).symm
 
 中文:
 定理 isAtom_iff
-  条件: [OrderBot α] [OrderBot β] (f : α ≃o β) (a : α)
+  条件: [有底序 α] [有底序 β] (f : α ≃o β) (a : α)
   结论: IsAtom (f a) ↔ IsAtom a
   证明: ⟨f.toGaloisCoinsertion.isAtom_of_image, fun ha =>
 f.toGaloisInsertion.isAtom_of_u_bot (map_bot f.symm) (f.symm_apply_apply a).symm ▸ ha⟩
@@ -3730,7 +3730,7 @@ theorem isCoatom_iff
 
 中文:
 定理 isCoatom_iff
-  条件: [OrderTop α] [OrderTop β] (f : α ≃o β) (a : α)
+  条件: [有顶序 α] [有顶序 β] (f : α ≃o β) (a : α)
   证明: f.dual.isAtom_iff a
 
 Depends on / 依赖: f.dual.isAtom_iff, isAtom_iff
@@ -3750,7 +3750,7 @@ theorem isSimpleOrder_iff
 
 中文:
 定理 isSimpleOrder_iff
-  条件: [BoundedOrder α] [BoundedOrder β] (f : α ≃o β)
+  条件: [有界序 α] [有界序 β] (f : α ≃o β)
   证明: by
   rw [isSimpleOrder_iff_isAtom_top]; rw [isSimpleOrder_iff_isAtom_top]; rw [← f.isAtom_iff ⊤]; rw [f.map_top]
 
@@ -3770,7 +3770,7 @@ theorem isSimpleOrder
 
 中文:
 定理 isSimpleOrder
-  条件: [BoundedOrder α] [BoundedOrder β] [h : IsSimpleOrder β] (f : α ≃o β)
+  条件: [有界序 α] [有界序 β] [h : 是单序 β] (f : α ≃o β)
   证明: f.isSimpleOrder_iff.mpr h
 
 Depends on / 依赖: f.isSimpleOrder_iff.mpr, isSimpleOrder_iff
@@ -3791,7 +3791,7 @@ theorem isAtomic_iff
 
 中文:
 定理 isAtomic_iff
-  条件: [OrderBot α] [OrderBot β] (f : α ≃o β)
+  条件: [有底序 α] [有底序 β] (f : α ≃o β)
   证明: by
   simp only [isAtomic_iff, f.surjective.forall, f.surjective.exists, ← map_bot f, f.eq_iff_eq,
     f.le_iff_le, f.isAtom_iff]
@@ -3812,7 +3812,7 @@ theorem isCoatomic_iff
 
 中文:
 定理 isCoatomic_iff
-  条件: [OrderTop α] [OrderTop β] (f : α ≃o β)
+  条件: [有顶序 α] [有顶序 β] (f : α ≃o β)
   证明: by
   simp only [← isAtomic_dual_iff_isCoatomic, f.dual.isAtomic_iff]
 -/
@@ -3839,8 +3839,8 @@ refine by_contra fun hcon => hab.not_ge (isLUB_le_iff hsb).2 fun x hx => ?_
     obtain (hbot | h_inf) := (h x hx).bot_covBy.eq_or_eq (c 
 
 中文:
-定理 Lattice.isStronglyAtomic
-  条件: [OrderBot α] [IsUpperModularLattice α] [IsAtomistic α]
+定理 格.isStronglyAtomic
+  条件: [有底序 α] [是UpperModular格 α] [是Atomistic α]
   证明: by
     obtain ⟨s, hsb, h⟩ := isLUB_atoms b
 refine by_contra fun hcon => hab.not_ge (isLUB_le_iff hsb).2 fun x hx => ?_
@@ -3873,8 +3873,8 @@ theorem Lattice.isStronglyCoatomic
   exact Lattice.isStronglyAtomic
 
 中文:
-定理 Lattice.isStronglyCoatomic
-  结论: [OrderTop α] [IsLowerModularLattice α]
+定理 格.isStronglyCoatomic
+  结论: [有顶序 α] [是LowerModular格 α]
   证明: by
   rw [← isStronglyAtomic_dual_iff_is_stronglyCoatomic]
   exact Lattice.isStronglyAtomic
@@ -3957,7 +3957,7 @@ theorem isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
 
 中文:
 定理 isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
-  条件: [IsAtomic α]
+  条件: [是原子的 α]
   证明: ⟨fun x => by
     rcases exists_isCompl x with ⟨y, xy⟩
     apply (eq_bot_or_exists_atom_le y).imp _ _
@@ -3992,7 +3992,7 @@ theorem isAtomic_of_isCoatomic_of_complementedLattice_of_isModular
 
 中文:
 定理 isAtomic_of_isCoatomic_of_complementedLattice_of_isModular
-  条件: [IsCoatomic α]
+  条件: [是余原子的 α]
   证明: isCoatomic_dual_iff_isAtomic.1 isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
 
 Depends on / 依赖: isCoatomic_dual_iff_isAtomic, isCoatomic_of_isAtomic_of_complementedLattice_of_isModular
@@ -4012,7 +4012,7 @@ theorem isAtomic_iff_isCoatomic
 
 中文:
 定理 isAtomic_iff_isCoatomic
-  结论: IsAtomic α ↔ IsCoatomic α
+  结论: 是原子的 α ↔ 是余原子的 α
   证明: ⟨fun _ => isCoatomic_of_isAtomic_of_complementedLattice_of_isModular,
    fun _ => isAtomic_of_isCoatomic_of_complementedLattice_of_isModular⟩
 
@@ -4038,9 +4038,9 @@ exact False.elim hab.ne rfl
     refine ⟨d ⊔ a, IsUpperModul
 
 中文:
-定理 ComplementedLattice.isStronglyAtomic
-  条件: [IsAtomic α]
-  结论: IsStronglyAtomic α where
+定理 有补格.isStronglyAtomic
+  条件: [是原子的 α]
+  结论: 是StronglyAtomic α where
   证明: by
     obtain ⟨⟨a', ha'b : a' <= b⟩, ha'⟩ := exists_isCompl (α := Set.Iic b) ⟨a, hab.le⟩
     obtain (rfl | ⟨d, hd⟩) := eq_bot_or_exists_atom_le a'
@@ -4071,9 +4071,9 @@ theorem ComplementedLattice.isStronglyCoatomic
   proof: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 ComplementedLattice.isStronglyAtomic
 
 中文:
-定理 ComplementedLattice.isStronglyCoatomic
-  条件: [IsCoatomic α]
-  结论: IsStronglyCoatomic α
+定理 有补格.isStronglyCoatomic
+  条件: [是余原子的 α]
+  结论: 是StronglyCoatomic α
   证明: isStronglyAtomic_dual_iff_is_stronglyCoatomic.1 ComplementedLattice.isStronglyAtomic
 
 Depends on / 依赖: ComplementedLattice, ComplementedLattice.isStronglyAtomic, isStronglyAtomic, isStronglyAtomic_dual_iff_is_stronglyCoatomic
@@ -4093,9 +4093,9 @@ theorem ComplementedLattice.isStronglyAtomic'
   exact isStronglyCoatomic
 
 中文:
-定理 ComplementedLattice.isStronglyAtomic'
-  条件: [h : IsAtomic α]
-  结论: IsStronglyCoatomic α
+定理 有补格.isStronglyAtomic'
+  条件: [h : 是原子的 α]
+  结论: 是StronglyCoatomic α
   证明: by
   rw [isAtomic_iff_isCoatomic] at h
   exact isStronglyCoatomic
@@ -4118,9 +4118,9 @@ theorem ComplementedLattice.isStronglyCoatomic'
   exact isStronglyAtomic
 
 中文:
-定理 ComplementedLattice.isStronglyCoatomic'
-  条件: [h : IsCoatomic α]
-  结论: IsStronglyAtomic α
+定理 有补格.isStronglyCoatomic'
+  条件: [h : 是余原子的 α]
+  结论: 是StronglyAtomic α
   证明: by
   rw [← isAtomic_iff_isCoatomic] at h
   exact isStronglyAtomic
@@ -4145,7 +4145,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSimpleOrder 命题
+  签名: 是单序 命题
   定义体: by simp [em']
 -/
 instance : IsSimpleOrder Prop where
@@ -4203,7 +4203,7 @@ theorem eq_bot_iff
 
 中文:
 定理 eq_bot_iff
-  条件: [对任意 i, Bot (π i)] {f : 对任意 i, π i}
+  条件: [对任意 i, 底元素 (π i)] {f : 对任意 i, π i}
   结论: f = ⊥ ↔ 对任意 i, f i = ⊥
   证明: funext_iff
 -/
@@ -4221,7 +4221,7 @@ theorem isAtom_iff
 
 中文:
 定理 isAtom_iff
-  条件: {f : 对任意 i, π i} [对任意 i, PartialOrder (π i)] [对任意 i, OrderBot (π i)]
+  条件: {f : 对任意 i, π i} [对任意 i, 偏序 (π i)] [对任意 i, 有底序 (π i)]
   证明: by
   simp only [← bot_covBy_iff, Pi.covBy_iff, bot_apply, eq_comm]
 
@@ -4241,7 +4241,7 @@ theorem isAtom_single
 
 中文:
 定理 isAtom_single
-  结论: {i : ι} [DecidableEq ι] [对任意 i, PartialOrder (π i)] [对任意 i, OrderBot (π i)]
+  结论: {i : ι} [DecidableEq ι] [对任意 i, 偏序 (π i)] [对任意 i, 有底序 (π i)]
   证明: isAtom_iff.2 ⟨i, by simpa, fun _ hji => Function.update_of_ne hji ..⟩
 
 Depends on / 依赖: Function, Function.update_of_ne, isAtom_iff, update_of_ne
@@ -4261,7 +4261,7 @@ theorem isAtom_iff_eq_single
 
 中文:
 定理 isAtom_iff_eq_single
-  结论: [DecidableEq ι] [对任意 i, PartialOrder (π i)]
+  结论: [DecidableEq ι] [对任意 i, 偏序 (π i)]
   证明: by
   simp [← bot_covBy_iff, covBy_iff_exists_right_eq]
 
@@ -4285,7 +4285,7 @@ instance isAtomic
 
 中文:
 实例 isAtomic
-  签名: [对任意 i, PartialOrder (π i)] [对任意 i, OrderBot (π i)] [对任意 i, IsAtomic (π i)]
+  签名: [对任意 i, 偏序 (π i)] [对任意 i, 有底序 (π i)] [对任意 i, 是原子的 (π i)]
   定义体: or_iff_not_imp_left.2 fun h =>
     have ⟨i, hi⟩ : exists i, b i != ⊥ := not_forall.1 (h.imp Pi.eq_bot_iff.2)
     have ⟨a, ha, hab⟩ := (eq_bot_or_exists_atom_le (b i)).resolve_left hi
@@ -4311,7 +4311,7 @@ instance isCoatomic
 
 中文:
 实例 isCoatomic
-  签名: [对任意 i, PartialOrder (π i)] [对任意 i, OrderTop (π i)] [对任意 i, IsCoatomic (π i)]
+  签名: [对任意 i, 偏序 (π i)] [对任意 i, 有顶序 (π i)] [对任意 i, 是余原子的 (π i)]
   定义体: isAtomic_dual_iff_isCoatomic.1
     show IsAtomic (forall i, (π i)ᵒᵈ) from inferInstance
 
@@ -4342,7 +4342,7 @@ instance isAtomistic
 
 中文:
 实例 isAtomistic
-  签名: [对任意 i, PartialOrder (π i)] [对任意 i, OrderBot (π i)] [对任意 i, IsAtomistic (π i)]
+  签名: [对任意 i, 偏序 (π i)] [对任意 i, 有底序 (π i)] [对任意 i, 是Atomistic (π i)]
   定义体: by
     classical
     refine ⟨{f | IsAtom f ∧ f <= s}, ?_, by simp +contextual⟩
@@ -4382,7 +4382,7 @@ instance isCoatomistic
 
 中文:
 实例 isCoatomistic
-  签名: [对任意 i, CompleteLattice (π i)] [对任意 i, IsCoatomistic (π i)]
+  签名: [对任意 i, 完备格 (π i)] [对任意 i, 是余atomistic (π i)]
   定义体: isAtomistic_dual_iff_isCoatomistic.1
     show IsAtomistic (forall i, (π i)ᵒᵈ) from inferInstance
 
@@ -4452,7 +4452,7 @@ theorem isAtom_singleton
 中文:
 定理 isAtom_singleton
   条件: (x : α)
-  结论: IsAtom ({x} : Set α)
+  结论: IsAtom ({x} : 集合 α)
   证明: ⟨singleton_ne_empty _, fun _ hs => ssubset_singleton_iff.mp hs⟩
 
 Depends on / 依赖: singleton_ne_empty, ssubset_singleton_iff, ssubset_singleton_iff.mp
@@ -4480,7 +4480,7 @@ theorem isAtom_iff
 
 中文:
 定理 isAtom_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: IsAtom s ↔ 存在 x, s = {x}
   证明: by
   refine
@@ -4519,7 +4519,7 @@ theorem isCoatom_iff
 
 中文:
 定理 isCoatom_iff
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsCoatom s ↔ 存在 x, s = {x}ᶜ
   证明: by
   rw [isCompl_compl.isCoatom_iff_isAtom]; rw [isAtom_iff]
@@ -4543,7 +4543,7 @@ theorem isCoatom_singleton_compl
 中文:
 定理 isCoatom_singleton_compl
   条件: (x : α)
-  结论: IsCoatom ({x}ᶜ : Set α)
+  结论: IsCoatom ({x}ᶜ : 集合 α)
   证明: (isCoatom_iff {x}ᶜ).mpr ⟨x, rfl⟩
 
 Depends on / 依赖: isCoatom_iff
@@ -4561,7 +4561,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAtomistic (Set α)
+  签名: 是Atomistic (集合 α)
   定义体: inferInstance
 -/
 instance : IsAtomistic (Set α) := inferInstance
@@ -4576,7 +4576,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCoatomistic (Set α)
+  签名: 是余atomistic (集合 α)
   定义体: inferInstance
 -/
 instance : IsCoatomistic (Set α) := inferInstance

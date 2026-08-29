@@ -59,7 +59,7 @@ theorem seq_le_seq
 
 中文:
 定理 seq_le_seq
-  结论: (hf : Monotone f) (n : 自然数) (h₀ : x 0 <= y 0) (hx : 对任意 k < n, x (k + 1) <= f (x k))
+  结论: (hf : 递增 f) (n : 自然数) (h₀ : x 0 <= y 0) (hx : 对任意 k < n, x (k + 1) <= f (x k))
   证明: by
   induction n with
   | zero => exact h₀
@@ -97,7 +97,7 @@ theorem seq_pos_lt_seq_of_lt_of_le
 
 中文:
 定理 seq_pos_lt_seq_of_lt_of_le
-  结论: (hf : Monotone f) {n : 自然数} (hn : 0 < n) (h₀ : x 0 <= y 0)
+  结论: (hf : 递增 f) {n : 自然数} (hn : 0 < n) (h₀ : x 0 <= y 0)
   证明: by
   induction n with
   | zero => exact hn.false.elim
@@ -132,7 +132,7 @@ theorem seq_pos_lt_seq_of_le_of_lt
 
 中文:
 定理 seq_pos_lt_seq_of_le_of_lt
-  结论: (hf : Monotone f) {n : 自然数} (hn : 0 < n) (h₀ : x 0 <= y 0)
+  结论: (hf : 递增 f) {n : 自然数} (hn : 0 < n) (h₀ : x 0 <= y 0)
   证明: hf.dual.seq_pos_lt_seq_of_lt_of_le hn h₀ hy hx
 
 Depends on / 依赖: hf.dual.seq_pos_lt_seq_of_lt_of_le, seq_pos_lt_seq_of_lt_of_le
@@ -153,7 +153,7 @@ theorem seq_lt_seq_of_lt_of_le
 
 中文:
 定理 seq_lt_seq_of_lt_of_le
-  结论: (hf : Monotone f) (n : 自然数) (h₀ : x 0 < y 0)
+  结论: (hf : 递增 f) (n : 自然数) (h₀ : x 0 < y 0)
   证明: by
   cases n
   exacts [h₀, hf.seq_pos_lt_seq_of_lt_of_le (Nat.zero_lt_succ _) h₀.le hx hy]
@@ -175,7 +175,7 @@ theorem seq_lt_seq_of_le_of_lt
 
 中文:
 定理 seq_lt_seq_of_le_of_lt
-  结论: (hf : Monotone f) (n : 自然数) (h₀ : x 0 < y 0)
+  结论: (hf : 递增 f) (n : 自然数) (h₀ : x 0 < y 0)
   证明: hf.dual.seq_lt_seq_of_lt_of_le n h₀ hy hx
 
 Depends on / 依赖: hf.dual.seq_lt_seq_of_lt_of_le, seq_lt_seq_of_lt_of_le
@@ -212,7 +212,7 @@ theorem le_iterate_comp_of_le
 
 中文:
 定理 le_iterate_comp_of_le
-  条件: (hf : Monotone f) (H : h ∘ g <= f ∘ h) (n : 自然数)
+  条件: (hf : 递增 f) (H : h ∘ g <= f ∘ h) (n : 自然数)
   证明: fun x => by
   apply hf.seq_le_seq n <;>
     aesop (add simp [iterate_succ']) (erase simp [iterate_succ])
@@ -237,7 +237,7 @@ theorem iterate_le_of_le
 
 中文:
 定理 iterate_le_of_le
-  条件: {g : α -> α} (hf : Monotone f) (h : f <= g) (n : 自然数)
+  条件: {g : α -> α} (hf : 递增 f) (h : f <= g) (n : 自然数)
   结论: f^[n] <= g^[n]
   证明: hf.iterate_comp_le_of_le h n
 
@@ -301,7 +301,7 @@ theorem monotone_iterate_of_id_le
 中文:
 定理 monotone_iterate_of_id_le
   条件: (h : id <= f)
-  结论: Monotone fun m => f^[m]
+  结论: 递增 fun m => f^[m]
   证明: monotone_nat_of_le_succ fun n x => by
     rw [iterate_succ_apply']
     exact h _
@@ -326,7 +326,7 @@ theorem antitone_iterate_of_le_id
 中文:
 定理 antitone_iterate_of_le_id
   条件: (h : f <= id)
-  结论: Antitone fun m => f^[m]
+  结论: 递减 fun m => f^[m]
   证明: fun m n hmn =>
   @monotone_iterate_of_id_le αᵒᵈ _ f h m n hmn
 -/
@@ -364,7 +364,7 @@ theorem iterate_le_of_map_le
 
 中文:
 定理 iterate_le_of_map_le
-  结论: (h : Commute f g) (hf : Monotone f) (hg : Monotone g) {x}
+  结论: (h : Commute f g) (hf : 递增 f) (hg : 递增 g) {x}
   证明: by
   apply hf.seq_le_seq n
   · rfl
@@ -394,7 +394,7 @@ theorem iterate_pos_lt_of_map_lt
 
 中文:
 定理 iterate_pos_lt_of_map_lt
-  结论: (h : Commute f g) (hf : Monotone f) (hg : StrictMono g) {x}
+  结论: (h : Commute f g) (hf : 递增 f) (hg : 严格递增 g) {x}
   证明: by
   apply hf.seq_pos_lt_seq_of_le_of_lt hn
   · rfl
@@ -420,7 +420,7 @@ theorem iterate_pos_lt_of_map_lt'
 
 中文:
 定理 iterate_pos_lt_of_map_lt'
-  结论: (h : Commute f g) (hf : StrictMono f) (hg : Monotone g) {x}
+  结论: (h : Commute f g) (hf : 严格递增 f) (hg : 递增 g) {x}
   证明: @iterate_pos_lt_of_map_lt αᵒᵈ _ g f h.symm hg.dual hf.dual x hx n hn
 
 Depends on / 依赖: h.symm, hf.dual, hg.dual, iterate_pos_lt_of_map_lt
@@ -447,7 +447,7 @@ theorem iterate_pos_lt_iff_map_lt
 
 中文:
 定理 iterate_pos_lt_iff_map_lt
-  结论: (h : Commute f g) (hf : Monotone f) (hg : StrictMono g) {x n}
+  结论: (h : Commute f g) (hf : 递增 f) (hg : 严格递增 g) {x n}
   证明: by
   rcases lt_trichotomy (f x) (g x) with (H | H | H)
   · simp only [*, iterate_pos_lt_of_map_lt]
@@ -473,7 +473,7 @@ theorem iterate_pos_lt_iff_map_lt'
 
 中文:
 定理 iterate_pos_lt_iff_map_lt'
-  结论: (h : Commute f g) (hf : StrictMono f) (hg : Monotone g) {x n}
+  结论: (h : Commute f g) (hf : 严格递增 f) (hg : 递增 g) {x n}
   证明: @iterate_pos_lt_iff_map_lt αᵒᵈ _ _ _ h.symm hg.dual hf.dual x n hn
 
 Depends on / 依赖: h.symm, hf.dual, hg.dual, iterate_pos_lt_iff_map_lt
@@ -493,7 +493,7 @@ theorem iterate_pos_le_iff_map_le
 
 中文:
 定理 iterate_pos_le_iff_map_le
-  结论: (h : Commute f g) (hf : Monotone f) (hg : StrictMono g) {x n}
+  结论: (h : Commute f g) (hf : 递增 f) (hg : 严格递增 g) {x n}
   证明: by
   simpa only [not_lt] using not_congr (h.symm.iterate_pos_lt_iff_map_lt' hg hf hn)
 
@@ -514,7 +514,7 @@ theorem iterate_pos_le_iff_map_le'
 
 中文:
 定理 iterate_pos_le_iff_map_le'
-  结论: (h : Commute f g) (hf : StrictMono f) (hg : Monotone g) {x n}
+  结论: (h : Commute f g) (hf : 严格递增 f) (hg : 递增 g) {x n}
   证明: by
   simpa only [not_lt] using not_congr (h.symm.iterate_pos_lt_iff_map_lt hg hf hn)
 
@@ -536,7 +536,7 @@ theorem iterate_pos_eq_iff_map_eq
 
 中文:
 定理 iterate_pos_eq_iff_map_eq
-  结论: (h : Commute f g) (hf : Monotone f) (hg : StrictMono g) {x n}
+  结论: (h : Commute f g) (hf : 递增 f) (hg : 严格递增 g) {x n}
   证明: by
   simp only [le_antisymm_iff, h.iterate_pos_le_iff_map_le hf hg hn,
     h.symm.iterate_pos_le_iff_map_le' hg hf hn]
@@ -569,8 +569,8 @@ theorem monotone_iterate_of_le_map
 
 中文:
 定理 monotone_iterate_of_le_map
-  条件: (hf : Monotone f) (hx : x <= f x)
-  结论: Monotone fun n => f^[n] x
+  条件: (hf : 递增 f) (hx : x <= f x)
+  结论: 递增 fun n => f^[n] x
   证明: monotone_nat_of_le_succ fun n => by
     rw [iterate_succ_apply]
     exact hf.iterate n hx
@@ -593,8 +593,8 @@ theorem antitone_iterate_of_map_le
 
 中文:
 定理 antitone_iterate_of_map_le
-  条件: (hf : Monotone f) (hx : f x <= x)
-  结论: Antitone fun n => f^[n] x
+  条件: (hf : 递增 f) (hx : f x <= x)
+  结论: 递减 fun n => f^[n] x
   证明: hf.dual.monotone_iterate_of_le_map hx
 
 Depends on / 依赖: hf.dual.monotone_iterate_of_le_map, monotone_iterate_of_le_map
@@ -620,7 +620,7 @@ theorem strictMono_iterate_of_lt_map
 
 中文:
 定理 strictMono_iterate_of_lt_map
-  条件: (hf : StrictMono f) (hx : x < f x)
+  条件: (hf : 严格递增 f) (hx : x < f x)
   证明: strictMono_nat_of_lt_succ fun n => by
     rw [iterate_succ_apply]
     exact hf.iterate n hx
@@ -643,7 +643,7 @@ theorem strictAnti_iterate_of_map_lt
 
 中文:
 定理 strictAnti_iterate_of_map_lt
-  条件: (hf : StrictMono f) (hx : f x < x)
+  条件: (hf : 严格递增 f) (hx : f x < x)
   证明: hf.dual.strictMono_iterate_of_lt_map hx
 
 Depends on / 依赖: hf.dual.strictMono_iterate_of_lt_map, strictMono_iterate_of_lt_map

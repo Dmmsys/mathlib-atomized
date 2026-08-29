@@ -104,7 +104,7 @@ lemma from_singleFunctor_obj_eq_zero_of_projective
 
 中文:
 引理 from_singleFunctor_obj_eq_zero_of_projective
-  结论: {P : C} [Projective P]
+  结论: {P : C} [投射 P]
   证明: by
   obtain ⟨K, _, π, h, g, rfl⟩ := right_fac_of_isStrictlyLE φ i
   have hπ : IsSplitEpi π := by
@@ -160,7 +160,7 @@ lemma eq_zero_of_projective
 
 中文:
 引理 eq_zero_of_projective
-  结论: [HasExt.{w} C] {P Y : C} {n : 自然数} [Projective P]
+  结论: [HasExt.{w} C] {P Y : C} {n : 自然数} [投射 P]
   证明: by
   let := HasDerivedCategory.standard C
   apply homEquiv.injective
@@ -226,7 +226,7 @@ lemma hasExt_of_enoughProjectives
 
 中文:
 引理 hasExt_of_enoughProjectives
-  条件: [LocallySmall.{w} C] [EnoughProjectives C]
+  条件: [LocallySmall.{w} C] [有足够投射 C]
   结论: HasExt.{w} C
   证明: by
   let := HasDerivedCategory.standard C

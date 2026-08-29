@@ -41,9 +41,9 @@ theorem LocalizationMap.subsingleton
     exact ⟨⟨0, h⟩, by simp only [zero_mul]⟩
 
 中文:
-定理 LocalizationMap.subsingleton
-  条件: (f : LocalizationMap S N) (h : 0 in S)
-  结论: Subsingleton N where
+定理 Localization映射.subsingleton
+  条件: (f : Localization映射 S N) (h : 0 in S)
+  结论: 子单例 N where
   证明: by
     rw [← f.mk'_sec a]; rw [← f.mk'_sec b]; rw [f.eq]
     exact ⟨⟨0, h⟩, by simp only [zero_mul]⟩
@@ -66,9 +66,9 @@ theorem LocalizationMap.subsingleton_iff
     by rw [mul_zero, mul_one] at eq; exact eq ▸ c.2, f.subsingleton⟩
 
 中文:
-定理 LocalizationMap.subsingleton_iff
-  条件: (f : LocalizationMap S N)
-  结论: Subsingleton N ↔ 0 in S
+定理 Localization映射.subsingleton_iff
+  条件: (f : Localization映射 S N)
+  结论: 子单例 N ↔ 0 in S
   证明: ⟨fun _ => have ⟨c, eq⟩ := f.exists_of_eq (Subsingleton.elim (f 0) (f 1))
     by rw [mul_zero, mul_one] at eq; exact eq ▸ c.2, f.subsingleton⟩
 
@@ -89,9 +89,9 @@ theorem LocalizationMap.nontrivial
   rwa [← not_subsingleton_iff_nontrivial, f.subsingleton_iff]
 
 中文:
-定理 LocalizationMap.nontrivial
-  条件: (f : LocalizationMap S N) (h : 0 ∉ S)
-  结论: Nontrivial N
+定理 Localization映射.nontrivial
+  条件: (f : Localization映射 S N) (h : 0 ∉ S)
+  结论: 非平凡 N
   证明: by
   rwa [← not_subsingleton_iff_nontrivial, f.subsingleton_iff]
 
@@ -112,8 +112,8 @@ theorem LocalizationMap.map_zero
   rw [← zero_mul]; rw [map_mul]; rw [← eq]; rw [zero_mul]; rw [mul_zero]
 
 中文:
-定理 LocalizationMap.map_zero
-  条件: (f : LocalizationMap S N)
+定理 Localization映射.map_zero
+  条件: (f : Localization映射 S N)
   结论: f 0 = 0
   证明: by
   have ⟨ms, eq⟩ := f.surj 0
@@ -132,8 +132,8 @@ theorem IsLocalizationMap.map_zero
   proof: LocalizationMap.map_zero ⟨MulHomClass.toMulHom f, hf⟩
 
 中文:
-定理 IsLocalizationMap.map_zero
-  结论: {F} [FunLike F M N] [MulHomClass F M N] {f : F}
+定理 是Localization映射.map_zero
+  结论: {F} [函数状 F M N] [乘法态射类 F M N] {f : F}
   证明: LocalizationMap.map_zero ⟨MulHomClass.toMulHom f, hf⟩
 -/
 protected theorem IsLocalizationMap.map_zero {F} [FunLike F M N] [MulHomClass F M N] {f : F}
@@ -152,7 +152,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZeroHomClass (LocalizationMap S N) M N
+  签名: 带零幺半群态射类 (Localization映射 S N) M N
   定义体: by
     have ⟨ms, eq⟩ := f.surj 0
     rw [← zero_mul]; rw [map_mul]; rw [← eq]; rw [zero_mul]; rw [mul_zero]
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoidWithZero (Localization S)
+  签名: 带零交换幺半群 (Localization S)
   定义体: fun x => Localization.induction_on x fun y => by
     simp only [← Localization.mk_zero y.2, mk_mul, mk_eq_mk_iff, mul_zero, zero_mul, r_of_eq]
   mul_zero := fun x => Localization.induction_on x fun y => by
@@ -256,8 +256,8 @@ theorem LocalizationMap.sec_zero_fst
   rw [LocalizationMap.sec_spec']; rw [mul_zero]
 
 中文:
-定理 LocalizationMap.sec_zero_fst
-  条件: {f : LocalizationMap S N}
+定理 Localization映射.sec_zero_fst
+  条件: {f : Localization映射 S N}
   结论: f (f.sec 0).fst = 0
   证明: by
   rw [LocalizationMap.sec_spec']; rw [mul_zero]
@@ -284,7 +284,7 @@ definition lift₀
 
 中文:
 定义 lift₀
-  签名: (f : LocalizationMap S N) (g : M ->*₀ P)
+  签名: (f : Localization映射 S N) (g : M ->*₀ P)
   定义体: { @LocalizationMap.lift _ _ _ _ _ _ _ f g.toMonoidHom hg with
     map_zero' := by
       dsimp only [OneHom.toFun_eq_coe, MonoidHom.toOneHom_coe]
@@ -314,7 +314,7 @@ lemma lift₀_def
 
 中文:
 引理 lift₀_def
-  条件: (f : LocalizationMap S N) (g : M ->*₀ P) (hg : 对任意 y : S, IsUnit (g y))
+  条件: (f : Localization映射 S N) (g : M ->*₀ P) (hg : 对任意 y : S, 是单位 (g y))
   证明: rfl
 -/
 lemma lift₀_def (f : LocalizationMap S N) (g : M ->*₀ P) (hg : forall y : S, IsUnit (g y)) :
@@ -330,7 +330,7 @@ lemma lift₀_apply
 
 中文:
 引理 lift₀_apply
-  条件: (f : LocalizationMap S N) (g : M ->*₀ P) (hg : 对任意 y : S, IsUnit (g y)) (x)
+  条件: (f : Localization映射 S N) (g : M ->*₀ P) (hg : 对任意 y : S, 是单位 (g y)) (x)
   证明: rfl
 -/
 lemma lift₀_apply (f : LocalizationMap S N) (g : M ->*₀ P) (hg : forall y : S, IsUnit (g y)) (x) :
@@ -354,8 +354,8 @@ theorem isCancelMulZero
 
 中文:
 定理 isCancelMulZero
-  条件: (f : LocalizationMap S N) [IsCancelMulZero M]
-  结论: IsCancelMulZero N
+  条件: (f : Localization映射 S N) [是乘零消去 M]
+  结论: 是乘零消去 N
   证明: by
   simp_rw [isCancelMulZero_iff_forall_isRegular, Commute.isRegular_iff (Commute.all _),
     ← Commute.isRightRegular_iff (Commute.all _)]
@@ -388,7 +388,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: (f : LocalizationMap S N) {m : M}
+  条件: (f : Localization映射 S N) {m : M}
   结论: f m = 0 ↔ 存在 s : S, s * m = 0
   证明: by
   simp_rw [← f.map_zero, eq_iff_exists, mul_zero]
@@ -409,7 +409,7 @@ theorem mk'_eq_zero_iff
 
 中文:
 定理 mk'_eq_zero_iff
-  条件: (f : LocalizationMap S N) (m : M) (s : S)
+  条件: (f : Localization映射 S N) (m : M) (s : S)
   证明: by
   rw [← (f.map_units s).mul_left_inj]; rw [mk'_spec]; rw [zero_mul]; rw [map_eq_zero_iff]
 -/
@@ -429,7 +429,7 @@ theorem mk'_zero
 
 中文:
 定理 mk'_zero
-  条件: (f : LocalizationMap S N) (s : S)
+  条件: (f : Localization映射 S N) (s : S)
   结论: f.mk' 0 s = 0
   证明: by
   rw [eq_comm]; rw [eq_mk'_iff_mul_eq]; rw [zero_mul]; rw [f.map_zero]
@@ -451,7 +451,7 @@ theorem nonZeroDivisors_le_comap
 
 中文:
 定理 nonZeroDivisors_le_comap
-  条件: (f : LocalizationMap S N)
+  条件: (f : Localization映射 S N)
   证明: by
   refine fun m hm => nonZeroDivisorsRight_eq_nonZeroDivisors (M₀ := N) ▸ fun n h0 => ?_
   have ⟨ms, eq⟩ := f.surj n
@@ -478,7 +478,7 @@ theorem map_nonZeroDivisors_le
 
 中文:
 定理 map_nonZeroDivisors_le
-  条件: (f : LocalizationMap S N)
+  条件: (f : Localization映射 S N)
   证明: map_le_iff_le_comap.mpr f.nonZeroDivisors_le_comap
 
 Depends on / 依赖: f.nonZeroDivisors_le_comap, map_le_iff_le_comap, map_le_iff_le_comap.mpr, nonZeroDivisors_le_comap
@@ -503,8 +503,8 @@ exact And.left mul_mem_nonZeroDivisors.mp
 
 中文:
 定理 noZeroDivisors
-  条件: (f : LocalizationMap S N) [NoZeroDivisors M]
-  结论: NoZeroDivisors N
+  条件: (f : Localization映射 S N) [无零因子 M]
+  结论: 无零因子 N
   证明: by
   refine noZeroDivisors_iff_forall_mem_nonZeroDivisors.mpr fun n hn => ?_
   have ⟨ms, eq⟩ := f.surj n

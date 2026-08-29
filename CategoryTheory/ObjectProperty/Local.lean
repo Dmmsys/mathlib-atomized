@@ -49,7 +49,7 @@ definition isLocal
 
 中文:
 定义 isLocal
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun Z => forall ⦃X Y : C⦄ (f : X ⟶ Y),
     W f -> Function.Bijective (fun (g : _ ⟶ Z) => f ≫ g)
 
@@ -89,7 +89,7 @@ definition isColocal
 
 中文:
 定义 isColocal
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => forall ⦃Y Z : C⦄ (g : Y ⟶ Z),
     W g -> Function.Bijective (fun (f : X ⟶ _) => f ≫ g)
 
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.isLocal.IsClosedUnderIsomorphisms
+  签名: W.isLocal.在同构下封闭
   定义体: by
     rw [← Function.Bijective.of_comp_iff _ (Iso.homToEquiv e).bijective]
     convert! (Iso.homToEquiv e).bijective.comp (hZ f hf) using 1
@@ -158,7 +158,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.isColocal.IsClosedUnderIsomorphisms
+  签名: W.isColocal.在同构下封闭
   定义体: by
     rw [← Function.Bijective.of_comp_iff _ (Iso.homFromEquiv e).bijective]
     convert! (Iso.homFromEquiv e).bijective.comp (hX g hg) using 1
@@ -261,7 +261,7 @@ lemma isLocal_iSup
 
 中文:
 引理 isLocal_iSup
-  条件: {ι : Sort*} (W : ι -> Morphism命题erty C)
+  条件: {ι : 类型层*} (W : ι -> MorphismProperty C)
   证明: by
   aesop
 -/
@@ -282,7 +282,7 @@ lemma isColocal_iSup
 
 中文:
 引理 isColocal_iSup
-  条件: {ι : Sort*} (W : ι -> Morphism命题erty C)
+  条件: {ι : 类型层*} (W : ι -> MorphismProperty C)
   证明: by
   aesop
 -/

@@ -48,8 +48,8 @@ structure Presentation
     - relations : (kernel generators.π).GeneratingSections
 
 中文:
-结构 Presentation
-  参数: (M : SheafOfModules.{u} R)
+结构 呈现
+  参数: (M : 模层.{u} R)
   公理与运算 (2 个):
     - generators : M.GeneratingSections
     - relations : (kernel generators.π).GeneratingSections
@@ -71,11 +71,11 @@ class Presentation.IsFinite
     - isFiniteType_relations : p.relations.IsFiniteType  [default: by infer_instance]
 
 中文:
-类 Presentation.IsFinite
-  参数: {M : SheafOfModules.{u} R} (p : M.Presentation)
+类 呈现.是有限
+  参数: {M : 模层.{u} R} (p : M.呈现)
   公理与运算 (2 个):
-    - isFiniteType_generators : p.generators.IsFiniteType  [默认: by infer_instance]
-    - isFiniteType_relations : p.relations.IsFiniteType  [默认: by infer_instance]
+    - isFiniteType_generators : p.generators.是有限型  [默认: by infer_instance]
+    - isFiniteType_relations : p.relations.是有限型  [默认: by infer_instance]
 
 Depends on / 依赖: IsFiniteType, infer_instance, isFiniteType_relations, p.relations.IsFiniteType, relations
 -/
@@ -96,8 +96,8 @@ lemma Presentation.IsFinite.finite_relations
   proof: GeneratingSections.IsFiniteType.finite
 
 中文:
-引理 Presentation.IsFinite.finite_relations
-  结论: {M : SheafOfModules.{u} R} (p : M.Presentation)
+引理 呈现.是有限.finite_relations
+  结论: {M : 模层.{u} R} (p : M.呈现)
   证明: GeneratingSections.IsFiniteType.finite
 
 Depends on / 依赖: GeneratingSections, GeneratingSections.IsFiniteType.finite, IsFiniteType, finite
@@ -131,7 +131,7 @@ definition generatorsOfIsCokernelFree
 
 中文:
 定义 generatorsOfIsCokernelFree
-  签名: {M : SheafOfModules.{u} R}
+  签名: {M : 模层.{u} R}
   定义体: σ
   s := M.freeHomEquiv g
   epi := by simpa using! epi_of_isColimit_cofork H'
@@ -156,7 +156,7 @@ theorem generatorsOfIsCokernelFree_π
 
 中文:
 定理 generatorsOfIsCokernelFree_π
-  结论: {M : SheafOfModules.{u} R}
+  结论: {M : 模层.{u} R}
   证明: M.freeHomEquiv.symm_apply_apply g
 
 Depends on / 依赖: M.freeHomEquiv.symm_apply_apply, freeHomEquiv, symm_apply_apply
@@ -186,7 +186,7 @@ s := (kernel (generatorsOfIsCokernelFree f g H H').π).freeHomEquiv kernel.lift
 
 中文:
 定义 relationsOfIsCokernelFree
-  签名: {M : SheafOfModules.{u} R}
+  签名: {M : 模层.{u} R}
   定义体: ι
 s := (kernel (generatorsOfIsCokernelFree f g H H').π).freeHomEquiv kernel.lift
     (generatorsOfIsCokernelFree f g H H').π f (by simp [H])
@@ -227,7 +227,7 @@ definition presentationOfIsCokernelFree
 
 中文:
 定义 presentationOfIsCokernelFree
-  签名: {M : SheafOfModules.{u} R}
+  签名: {M : 模层.{u} R}
   定义体: generatorsOfIsCokernelFree f g H H'
   relations := relationsOfIsCokernelFree f g H H'
 
@@ -249,8 +249,8 @@ definition Presentation.isColimit
       (Abelian.epiIsCokernelOfKernel _ <| limit.isLimit _) _ rfl
 
 中文:
-定义 Presentation.isColimit
-  签名: {M : SheafOfModules.{u} R} (P : Presentation M)
+定义 呈现.isColimit
+  签名: {M : 模层.{u} R} (P : 呈现 M)
   定义体: isCokernelEpiComp (c := CokernelCofork.ofπ _ (kernel.condition P.generators.π))
       (Abelian.epiIsCokernelOfKernel _ <| limit.isLimit _) _ rfl
 
@@ -277,8 +277,8 @@ definition Presentation.ofIsIso
 @[deprecated (since := "2026-04-15")] alias Presentation.of_isIso := Presentation.ofIsIso
 
 中文:
-定义 Presentation.ofIsIso
-  签名: {M N : SheafOfModules.{u} R} (f : M ⟶ N) [IsIso f]
+定义 呈现.ofIsIso
+  签名: {M N : 模层.{u} R} (f : M ⟶ N) [是同构 f]
   定义体: σ.generators.ofEpi f
   relations := σ.relations.ofEpi ((kernelCompMono _ f).symm.trans <| eqToIso (by simp)).hom
 
@@ -320,7 +320,7 @@ definition Presentation.mapRelations
     F.map (kernel.ι _) ≫ (mapFreeIso F P.generators.I η).inv
 
 中文:
-定义 Presentation.mapRelations
+定义 呈现.mapRelations
   签名: : free P.relations.I (R := S) ⟶ free P.generators.I
   定义体: (mapFreeIso F P.relations.I η).hom ≫ F.map ((freeHomEquiv _).symm P.relations.s) ≫
     F.map (kernel.ι _) ≫ (mapFreeIso F P.generators.I η).inv
@@ -342,7 +342,7 @@ abbreviation Presentation.mapGenerators
 @[reassoc (attr := simp)]
 
 中文:
-缩写 Presentation.mapGenerators
+缩写 呈现.mapGenerators
   签名: : free P.generators.I ⟶ F.obj M
   定义体: P.generators.mapFreeHom F η
 
@@ -363,7 +363,7 @@ theorem Presentation.mapRelations_mapGenerators
     ← Functor.map_comp, kernel.condition, Functor.map_zero, comp_zero]
 
 中文:
-定理 Presentation.mapRelations_mapGenerators
+定理 呈现.mapRelations_mapGenerators
   证明: by
   simp only [mapRelations, GeneratingSections.mapFreeHom, Category.assoc, Iso.inv_hom_id_assoc,
     ← Functor.map_comp, kernel.condition, Functor.map_zero, comp_zero]
@@ -394,8 +394,8 @@ definition Presentation.map
         (by simp [Presentation.mapRelations]) (by simp)) _ _ ?_ (isColimitOfP
 
 中文:
-定义 Presentation.map
-  签名: : Presentation (F.obj M)
+定义 呈现.map
+  签名: : 呈现 (F.obj M)
   定义体: presentationOfIsCokernelFree (P.mapRelations F η) (P.mapGenerators F η)
 (P.mapRelations_mapGenerators F η) by
     refine IsColimit.equivOfNatIsoOfIso
@@ -421,7 +421,7 @@ theorem Presentation.map_π_eq
   proof: (F.obj M).freeHomEquiv.symm_apply_eq.mpr rfl
 
 中文:
-定理 Presentation.map_π_eq
+定理 呈现.map_π_eq
   证明: (F.obj M).freeHomEquiv.symm_apply_eq.mpr rfl
 
 Depends on / 依赖: F.obj, freeHomEquiv, freeHomEquiv.symm_apply_eq.mpr, symm_apply_eq
@@ -451,12 +451,12 @@ structure QuasicoherentData
 
 中文:
 结构 QuasicoherentData
-  参数: (M : SheafOfModules.{u} R)
+  参数: (M : 模层.{u} R)
   公理与运算 (4 个):
-    - I : Type w
+    - I : 类型 w
     - X : I -> C
     - coversTop : J.CoversTop X
-    - presentation((i : I)) : (M.over (X i)).Presentation
+    - presentation((i : I)) : (M.over (X i)).呈现
 -/
 structure QuasicoherentData (M : SheafOfModules.{u} R) where
   /-- the index type of the covering -/
@@ -487,7 +487,7 @@ definition shrink
 
 中文:
 定义 shrink
-  签名: {M : SheafOfModules.{u} R} (q : M.QuasicoherentData)
+  签名: {M : 模层.{u} R} (q : M.QuasicoherentData)
   定义体: Set.range q.X
   X i := q.X i.2.choose
   coversTop X := by
@@ -523,7 +523,7 @@ definition localGeneratorsData
 
 中文:
 定义 localGeneratorsData
-  签名: {M : SheafOfModules.{u} R} (q : M.QuasicoherentData)
+  签名: {M : 模层.{u} R} (q : M.QuasicoherentData)
   定义体: q.I
   X := q.X
   coversTop := q.coversTop
@@ -548,10 +548,10 @@ class IsFinitePresentation
     - isFinite_presentation((i : q.I)) : (q.presentation i).IsFinite  [default: by infer_instance]
 
 中文:
-类 IsFinitePresentation
-  参数: {M : SheafOfModules.{u} R} (q : M.QuasicoherentData)
+类 是有限呈现
+  参数: {M : 模层.{u} R} (q : M.QuasicoherentData)
   公理与运算 (1 个):
-    - isFinite_presentation((i : q.I)) : (q.presentation i).IsFinite  [默认: by infer_instance]
+    - isFinite_presentation((i : q.I)) : (q.presentation i).是有限  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -578,10 +578,10 @@ class IsQuasicoherent
     - nonempty_quasicoherentData : Nonempty (QuasicoherentData.{u₁} M)  [default: by infer_instance]
 
 中文:
-类 IsQuasicoherent
-  参数: (M : SheafOfModules.{u} R)
+类 是Quasicoherent
+  参数: (M : 模层.{u} R)
   公理与运算 (1 个):
-    - nonempty_quasicoherentData : Nonempty (QuasicoherentData.{u₁} M)  [默认: by infer_instance]
+    - nonempty_quasicoherentData : 非空 (QuasicoherentData.{u₁} M)  [默认: by infer_instance]
 
 Depends on / 依赖: Algebra, SemimoduleCat, SemimoduleCat.Algebra.instLinear, infer_instance, instLinear
 -/
@@ -598,7 +598,7 @@ lemma QuasicoherentData.isQuasicoherent
 
 中文:
 引理 QuasicoherentData.isQuasicoherent
-  条件: {M : SheafOfModules.{u} R} (q : M.QuasicoherentData)
+  条件: {M : 模层.{u} R} (q : M.QuasicoherentData)
   证明: ⟨⟨q.shrink⟩⟩
 
 Depends on / 依赖: q.shrink, shrink
@@ -618,7 +618,7 @@ abbreviation isQuasicoherent
 
 中文:
 缩写 isQuasicoherent
-  签名: : Object命题erty (SheafOfModules.{u} R)
+  签名: : ObjectProperty (模层.{u} R)
   定义体: IsQuasicoherent
 
 Depends on / 依赖: IsQuasicoherent
@@ -639,10 +639,10 @@ class IsFinitePresentation
     - exists_quasicoherentData((M)) : exists (σ : QuasicoherentData.{u₁} M), σ.IsFinitePresentation
 
 中文:
-类 IsFinitePresentation
-  参数: (M : SheafOfModules.{u} R)
+类 是有限呈现
+  参数: (M : 模层.{u} R)
   公理与运算 (1 个):
-    - exists_quasicoherentData((M)) : 存在 (σ : QuasicoherentData.{u₁} M), σ.IsFinitePresentation
+    - exists_quasicoherentData((M)) : 存在 (σ : QuasicoherentData.{u₁} M), σ.是有限呈现
 -/
 class IsFinitePresentation (M : SheafOfModules.{u} R) : Prop where
   exists_quasicoherentData (M) :
@@ -660,7 +660,7 @@ abbreviation isFinitePresentation
 
 中文:
 缩写 isFinitePresentation
-  签名: : Object命题erty (SheafOfModules.{u} R)
+  签名: : ObjectProperty (模层.{u} R)
   定义体: IsFinitePresentation
 
 Depends on / 依赖: IsFinitePresentation
@@ -852,8 +852,8 @@ coversTop x := GrothendieckTopology.covering_of_eq_top J by
   presentation x := P.map (pushforward (𝟙 (R.over x))) (by rfl)
 
 中文:
-定义 Presentation.quasicoherentData
-  签名: {M : SheafOfModules.{u} R} (P : Presentation M)
+定义 呈现.quasicoherentData
+  签名: {M : 模层.{u} R} (P : 呈现 M)
   定义体: C
   X := id
 coversTop x := GrothendieckTopology.covering_of_eq_top J by
@@ -881,8 +881,8 @@ theorem Presentation.isQuasicoherent
   proof: Nonempty.intro (Presentation.quasicoherentData P)
 
 中文:
-定理 Presentation.isQuasicoherent
-  条件: {M : SheafOfModules.{u} R} (P : Presentation M)
+定理 呈现.isQuasicoherent
+  条件: {M : 模层.{u} R} (P : 呈现 M)
   证明: Nonempty.intro (Presentation.quasicoherentData P)
 
 Depends on / 依赖: Nonempty, Nonempty.intro, Presentation, Presentation.quasicoherentData, quasicoherentData
@@ -906,7 +906,7 @@ definition QuasicoherentData.ofIsIso
 
 中文:
 定义 QuasicoherentData.ofIsIso
-  签名: {M N : SheafOfModules.{u} R} (f : M ⟶ N) [IsIso f]
+  签名: {M N : 模层.{u} R} (f : M ⟶ N) [是同构 f]
   定义体: σ.I
   X := σ.X
   coversTop := σ.coversTop
@@ -931,7 +931,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isQuasicoherent R).IsClosedUnderIsomorphisms
+  签名: (isQuasicoherent R).在同构下封闭
   定义体: by
     intro ⟨⟨q⟩⟩
     exact ⟨⟨q.ofIsIso e.hom⟩⟩
@@ -963,7 +963,7 @@ instance :
 
 中文:
 实例 :
-  签名: (isFinitePresentation R).IsClosedUnderIsomorphisms
+  签名: (isFinitePresentation R).在同构下封闭
   定义体: by
     intro ⟨σ, hσ⟩
     exact ⟨σ.ofIsIso e.hom, inferInstance⟩
@@ -1000,7 +1000,7 @@ definition QuasicoherentData.bind
 
 中文:
 定义 QuasicoherentData.bind
-  签名: {R : Sheaf J RingCat.{u}}
+  签名: {R : 层 J 环范畴.{u}}
   定义体: (i : I) × (D i).I
   X ij := ((D ij.1).X ij.2).left
   coversTop := hX.over (fun i => (D i).coversTop)
@@ -1034,8 +1034,8 @@ lemma IsQuasicoherent.of_coversTop
     IsQuasicoherent.nonempty_quasicoherentData.some).isQuasicoherent
 
 中文:
-引理 IsQuasicoherent.of_coversTop
-  结论: {R : Sheaf J RingCat.{u}}
+引理 是Quasicoherent.of_coversTop
+  结论: {R : 层 J 环范畴.{u}}
   证明: (QuasicoherentData.bind M X hX fun _ =>
     IsQuasicoherent.nonempty_quasicoherentData.some).isQuasicoherent
 

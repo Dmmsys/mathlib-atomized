@@ -81,7 +81,7 @@ theorem irreducible_factor
 中文:
 定理 irreducible_factor
   条件: (f : K[X])
-  结论: Irreducible (factor f)
+  结论: 不可约 (factor f)
   证明: by
   rw [factor]
   split_ifs with H
@@ -108,7 +108,7 @@ theorem fact_irreducible_factor
 中文:
 定理 fact_irreducible_factor
   条件: (f : K[X])
-  结论: Fact (Irreducible (factor f))
+  结论: Fact (不可约 (factor f))
   证明: ⟨irreducible_factor f⟩
 
 Depends on / 依赖: irreducible_factor
@@ -132,7 +132,7 @@ theorem factor_dvd_of_not_isUnit
 
 中文:
 定理 factor_dvd_of_not_isUnit
-  条件: {f : K[X]} (hf1 : ¬IsUnit f)
+  条件: {f : K[X]} (hf1 : ¬是单位 f)
   结论: factor f ∣ f
   证明: by
   by_cases hf2 : f = 0; · rw [hf2]; exact dvd_zero _
@@ -205,7 +205,7 @@ replace h := not_and_or.mpr h AdjoinRoot.root x.factor
 中文:
 引理 isCoprime_iff_aeval_ne_zero
   条件: (f g : K[X])
-  结论: IsCoprime f g ↔ 对任意 {A : 类型v} [CommRing A]
+  结论: IsCoprime f g ↔ 对任意 {A : 类型v} [交换环 A]
   证明: by
   refine ⟨fun h => aeval_ne_zero_of_isCoprime h, fun h => isCoprime_of_dvd _ _ ?_ fun x hx _ => ?_⟩
   · replace h := @h K _ _ _ 0
@@ -361,7 +361,7 @@ definition SplittingFieldAux
 
 中文:
 定义 SplittingFieldAux
-  签名: (n : 自然数) {K : 类型u} [Field K] (f : K[X])
+  签名: (n : 自然数) {K : 类型u} [域 K] (f : K[X])
   定义体: (SplittingFieldAuxAux n f).1
 
 Depends on / 依赖: SplittingFieldAuxAux
@@ -379,7 +379,7 @@ instance SplittingFieldAux.field
 
 中文:
 实例 SplittingFieldAux.field
-  签名: (n : 自然数) {K : 类型u} [Field K] (f : K[X])
+  签名: (n : 自然数) {K : 类型u} [域 K] (f : K[X])
   定义体: (SplittingFieldAuxAux n f).2.1
 
 Depends on / 依赖: SplittingFieldAuxAux
@@ -401,7 +401,7 @@ instance SplittingFieldAux.algebra
 
 中文:
 实例 SplittingFieldAux.algebra
-  签名: (n : 自然数) {K : 类型u} [Field K] (f : K[X])
+  签名: (n : 自然数) {K : 类型u} [域 K] (f : K[X])
   定义体: (SplittingFieldAuxAux n f).2.2
 
 Depends on / 依赖: SplittingFieldAuxAux
@@ -626,7 +626,7 @@ definition SplittingField
 deriving Inhabited
 
 中文:
-定义 SplittingField
+定义 分裂域
   签名: (f : K[X])
   定义体: MvPolynomial (SplittingFieldAux f.natDegree f) K ⧸
     RingHom.ker (MvPolynomial.aeval (R := K) id).toRingHom
@@ -656,7 +656,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (SplittingField f)
+  签名: 交换环 (分裂域 f)
   定义体: inferInstanceAs CommRing (_ ⧸ _)
 
 Depends on / 依赖: CommRing, RayVector, RayVector.ext_iff, coe_neg, ext_iff, neg_neg
@@ -676,7 +676,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra K f.SplittingField
+  签名: 代数 K f.分裂域
   定义体: inferInstance
 -/
 instance : Algebra K f.SplittingField := inferInstance
@@ -713,7 +713,7 @@ mul_inv_cancel := fun a ha => e.injective by simp [EmbeddingLike.map_ne_zero_iff
 
 中文:
 实例 instGroupWithZero
-  签名: : GroupWithZero (SplittingField f)
+  签名: : 带零群 (分裂域 f)
   定义体: let e := algEquivSplittingFieldAux f
   { inv := fun a => e.symm (e a)⁻¹
     inv_zero := by simp
@@ -746,7 +746,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field (SplittingField f) where
+  签名: : 域 (分裂域 f) where
   定义体: (inferInstance : CommRing (SplittingField f))
   __ := instGroupWithZero f
   nnratCast q := algebraMap K _ q
@@ -783,7 +783,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: [CharZero K]
+  签名: [特征零 K]
   定义体: charZero_of_injective_algebraMap (algebraMap K _).injective
 
 Depends on / 依赖: algebraMap, charZero_of_injective_algebraMap, injective
@@ -801,7 +801,7 @@ instance instCharP
 
 中文:
 实例 instCharP
-  签名: (p : 自然数) [CharP K p]
+  签名: (p : 自然数) [特征p K p]
   定义体: charP_of_injective_algebraMap (algebraMap K _).injective p
 
 Depends on / 依赖: algebraMap, charP_of_injective_algebraMap, injective
@@ -838,7 +838,7 @@ instance _root_.Polynomial.IsSplittingField.splittingField
 @[stacks 09HU "Splitting part"]
 
 中文:
-实例 _root_.Polynomial.IsSplittingField.splittingField
+实例 _root_.多项式.是分裂域.splittingField
   签名: (f : K[X])
   定义体: IsSplittingField.of_algEquiv _ f (algEquivSplittingFieldAux f).symm
 
@@ -861,7 +861,7 @@ theorem splits
 
 中文:
 定理 splits
-  结论: Splits (f.map (algebraMap K (SplittingField f)))
+  结论: Splits (f.map (algebraMap K (分裂域 f)))
   证明: IsSplittingField.splits f.SplittingField f
 -/
 protected theorem splits : Splits (f.map (algebraMap K (SplittingField f))) :=
@@ -879,7 +879,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : SplittingField f ->ₐ[K] L
+  签名: : 分裂域 f ->ₐ[K] L
   定义体: IsSplittingField.lift f.SplittingField f hb
 
 Depends on / 依赖: IsSplittingField, IsSplittingField.lift, SplittingField, f.SplittingField
@@ -897,7 +897,7 @@ theorem adjoin_rootSet
 
 中文:
 定理 adjoin_rootSet
-  结论: Algebra.adjoin K (f.rootSet (SplittingField f)) = ⊤
+  结论: 代数.adjoin K (f.rootSet (分裂域 f)) = ⊤
   证明: Polynomial.IsSplittingField.adjoin_rootSet _ f
 
 Depends on / 依赖: IsSplittingField, Polynomial, Polynomial.IsSplittingField.adjoin_rootSet, adjoin_rootSet
@@ -927,7 +927,7 @@ instance [Finite
   body: Module.finite_of_finite K
 
 中文:
-实例 [Finite
+实例 [有限
   签名: K] (f
   定义体: Module.finite_of_finite K
 
@@ -951,7 +951,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: (f : K[X]) [h : IsSplittingField K L f]
+  签名: (f : K[X]) [h : 是分裂域 K L f]
   定义体: AlgEquiv.ofBijective (lift L f <| splits (SplittingField f) f)
     have := finiteDimensional L f
     ((Algebra.IsAlgebraic.of_finite K L).algHom_bijective₂ _ <| lift _ f h.1).1

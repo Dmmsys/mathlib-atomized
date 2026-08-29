@@ -55,7 +55,7 @@ definition reesAlgebra
 
 中文:
 定义 reesAlgebra
-  签名: : Subalgebra R R[X] where
+  签名: : 子代数 R R[X] where
   定义体: { f | forall i, f.coeff i in I ^ i }
   mul_mem' hf hg i := by
     rw [coeff_mul]
@@ -158,7 +158,7 @@ theorem reesAlgebra.monomial_mem
 
 中文:
 定理 reesAlgebra.monomial_mem
-  条件: {I : Ideal R} {i : 自然数} {r : R}
+  条件: {I : 理想 R} {i : 自然数} {r : R}
   证明: by
   simp +contextual [mem_reesAlgebra_iff_support, coeff_monomial, ←
     imp_iff_not_or]
@@ -188,7 +188,7 @@ theorem monomial_mem_adjoin_monomial
 
 中文:
 定理 monomial_mem_adjoin_monomial
-  条件: {I : Ideal R} {n : 自然数} {r : R} (hr : r in I ^ n)
+  条件: {I : 理想 R} {n : 自然数} {r : R} (hr : r in I ^ n)
   证明: by
   induction n generalizing r with
   | zero => exact Subalgebra.algebraMap_mem _ _
@@ -318,8 +318,8 @@ instance [IsNoetherianRing
   body: ⟨(reesAlgebra I).fg_top.mpr (reesAlgebra.fg <| IsNoetherian.noetherian I)⟩
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] : Algebra.FiniteType R (reesAlgebra I)
+实例 [是Noether环
+  签名: R] : 代数.有限型 R (reesAlgebra I)
   定义体: ⟨(reesAlgebra I).fg_top.mpr (reesAlgebra.fg <| IsNoetherian.noetherian I)⟩
 
 Depends on / 依赖: IsNoetherian, IsNoetherian.noetherian, fg_top, fg_top.mpr, noetherian, reesAlgebra, reesAlgebra.fg
@@ -336,8 +336,8 @@ instance [IsNoetherianRing
   body: Algebra.FiniteType.isNoetherianRing R _
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] : IsNoetherianRing (reesAlgebra I)
+实例 [是Noether环
+  签名: R] : 是Noether环 (reesAlgebra I)
   定义体: Algebra.FiniteType.isNoetherianRing R _
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.isNoetherianRing, FiniteType, isNoetherianRing

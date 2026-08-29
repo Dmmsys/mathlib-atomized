@@ -39,10 +39,10 @@ class CharZero
     - cast_injective : Function.Injective (Nat.cast : Nat -> R)
 
 中文:
-类 CharZero
-  参数: (R) [AddMonoidWithOne R]
+类 特征零
+  参数: (R) [加法带幺幺半群 R]
   公理与运算 (1 个):
-    - cast_injective : Function.Injective (自然数.cast : 自然数 -> R)
+    - cast_injective : 函数.单射 (自然数.cast : 自然数 -> R)
 -/
 class CharZero (R) [AddMonoidWithOne R] : Prop where
   /-- An additive monoid with one has characteristic zero if the canonical map `ℕ → R` is
@@ -67,7 +67,7 @@ theorem charZero_of_inj_zero
 
 中文:
 定理 charZero_of_inj_zero
-  条件: [AddGroupWithOne R] (H : 对任意 n : 自然数, (n : R) = 0 -> n = 0)
+  条件: [加法带幺群 R] (H : 对任意 n : 自然数, (n : R) = 0 -> n = 0)
   证明: ⟨@fun m n h => by
     induction m generalizing n with
     | zero => rw [H n]; rw [← h, Nat.cast_zero]
@@ -104,7 +104,7 @@ theorem cast_injective
 
 中文:
 定理 cast_injective
-  结论: Function.Injective (自然数.cast : 自然数 -> R)
+  结论: 函数.单射 (自然数.cast : 自然数 -> R)
   证明: CharZero.cast_injective
 
 @[simp, norm_cast]
@@ -269,7 +269,7 @@ lemma ofNat_ne_zero
   proof: Nat.cast_ne_zero.2 (NeZero.ne n)
 
 中文:
-引理 ofNat_ne_zero
+引理 of自然数_ne_zero
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R) != 0
   证明: Nat.cast_ne_zero.2 (NeZero.ne n)
@@ -287,7 +287,7 @@ lemma zero_ne_ofNat
   proof: (ofNat_ne_zero n).symm
 
 中文:
-引理 zero_ne_ofNat
+引理 zero_ne_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: 0 != (of自然数(n) : R)
   证明: (ofNat_ne_zero n).symm
@@ -305,7 +305,7 @@ lemma ofNat_ne_one
   proof: Nat.cast_ne_one.2 (Nat.AtLeastTwo.ne_one)
 
 中文:
-引理 ofNat_ne_one
+引理 of自然数_ne_one
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (of自然数(n) : R) != 1
   证明: Nat.cast_ne_one.2 (Nat.AtLeastTwo.ne_one)
@@ -323,7 +323,7 @@ lemma one_ne_ofNat
   proof: (ofNat_ne_one n).symm
 
 中文:
-引理 one_ne_ofNat
+引理 one_ne_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: (1 : R) != of自然数(n)
   证明: (ofNat_ne_one n).symm
@@ -340,7 +340,7 @@ lemma ofNat_eq_ofNat
   proof: Nat.cast_inj
 
 中文:
-引理 ofNat_eq_ofNat
+引理 of自然数_eq_of自然数
   条件: {m n : 自然数} [m.AtLeastTwo] [n.AtLeastTwo]
   证明: Nat.cast_inj
 -/
@@ -362,7 +362,7 @@ instance charZero
 
 中文:
 实例 charZero
-  签名: {M} {n : 自然数} [NeZero n] [AddMonoidWithOne M] [CharZero M]
+  签名: {M} {n : 自然数} [NeZero n] [加法带幺幺半群 M] [特征零 M]
   定义体: ⟨Nat.cast_ne_zero.mpr out⟩
 
 Depends on / 依赖: Nat.cast_ne_zero.mpr, cast_ne_zero
@@ -382,7 +382,7 @@ instance charZero_one
 
 中文:
 实例 charZero_one
-  签名: {M} [AddMonoidWithOne M] [CharZero M]
+  签名: {M} [加法带幺幺半群 M] [特征零 M]
   定义体: by
     rw [← Nat.cast_one]; rw [Nat.cast_ne_zero]
     trivial
@@ -403,8 +403,8 @@ instance charZero_ofNat
   body: ⟨OfNat.ofNat_ne_zero n⟩
 
 中文:
-实例 charZero_ofNat
-  签名: {M} {n : 自然数} [n.AtLeastTwo] [AddMonoidWithOne M] [CharZero M]
+实例 charZero_of自然数
+  签名: {M} {n : 自然数} [n.AtLeastTwo] [加法带幺幺半群 M] [特征零 M]
   定义体: ⟨OfNat.ofNat_ne_zero n⟩
 
 Depends on / 依赖: OfNat.ofNat_ne_zero, ofNat_ne_zero

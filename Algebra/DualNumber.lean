@@ -75,7 +75,7 @@ scoped[DualNumber] postfix:1024 "[ε]" => DualNumber
 
 中文:
 定义 DualNumber.eps
-  签名: [Zero R] [One R]
+  签名: [零 R] [幺 R]
   定义体: TrivSqZeroExt.inr 1
 
 @[inherit_doc]
@@ -115,7 +115,7 @@ theorem fst_eps
 
 中文:
 定理 fst_eps
-  条件: [Zero R] [One R]
+  条件: [零 R] [幺 R]
   结论: fst ε = (0 : R)
   证明: rfl
 
@@ -138,7 +138,7 @@ theorem snd_eps
 
 中文:
 定理 snd_eps
-  条件: [Zero R] [One R]
+  条件: [零 R] [幺 R]
   结论: snd ε = (1 : R)
   证明: rfl
 
@@ -162,7 +162,7 @@ theorem snd_mul
 
 中文:
 定理 snd_mul
-  条件: [Semiring R] (x y : R[ε])
+  条件: [半环 R] (x y : R[ε])
   结论: snd (x * y) = fst x * snd y + snd x * fst y
   证明: rfl
 
@@ -185,7 +185,7 @@ theorem eps_mul_eps
 
 中文:
 定理 eps_mul_eps
-  条件: [Semiring R]
+  条件: [半环 R]
   结论: (ε * ε : R[ε]) = 0
   证明: inr_mul_inr _ _ _
 
@@ -211,7 +211,7 @@ lemma eps_pow_two
 
 中文:
 引理 eps_pow_two
-  条件: [Semiring R]
+  条件: [半环 R]
   结论: (ε : R[ε]) ^ 2 = 0
   证明: by
   simp [pow_two]
@@ -237,7 +237,7 @@ theorem inv_eps
 
 中文:
 定理 inv_eps
-  条件: [DivisionRing R]
+  条件: [除环 R]
   结论: (ε : R[ε])⁻¹ = 0
   证明: TrivSqZeroExt.inv_inr 1
 
@@ -260,7 +260,7 @@ theorem inr_eq_smul_eps
 
 中文:
 定理 inr_eq_smul_eps
-  条件: [MulZeroOneClass R] (r : R)
+  条件: [乘零幺类 R] (r : R)
   结论: inr r = (r • ε : R[ε])
   证明: ext (mul_zero r).symm (mul_one r).symm
 
@@ -281,7 +281,7 @@ theorem commute_eps_left
 
 中文:
 定理 commute_eps_left
-  条件: [Semiring R] (x : DualNumber R)
+  条件: [半环 R] (x : DualNumber R)
   结论: Commute ε x
   证明: by
   ext <;> simp
@@ -300,7 +300,7 @@ theorem commute_eps_right
 
 中文:
 定理 commute_eps_right
-  条件: [Semiring R] (x : DualNumber R)
+  条件: [半环 R] (x : DualNumber R)
   结论: Commute x ε
   证明: (commute_eps_left x).symm
 
@@ -377,7 +377,7 @@ lemma ringHom_ext
 
 中文:
 引理 ringHom_ext
-  结论: {R' : 类型} [CommSemiring R'] {f g : R[ε] ->+* R'}
+  结论: {R' : 类型} [交换半环 R'] {f g : R[ε] ->+* R'}
   证明: by
   let : Algebra R R' := by
     letI := f.toAlgebra

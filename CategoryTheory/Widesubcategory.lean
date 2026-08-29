@@ -54,7 +54,7 @@ definition InducedWideCategory
 
 中文:
 定义 InducedWideCategory
-  签名: (_F : C -> D) (_P : Morphism命题erty D) [IsMultiplicative _P]
+  签名: (_F : C -> D) (_P : MorphismProperty D) [是Multiplicative _P]
   定义体: C
 -/
 def InducedWideCategory (_F : C -> D) (_P : MorphismProperty D) [IsMultiplicative _P] :=
@@ -72,7 +72,7 @@ instance InducedWideCategory.hasCoeToSort
 
 中文:
 实例 InducedWideCategory.hasCoeToSort
-  签名: {α : Sort*} [CoeSort D α]
+  签名: {α : 类型层*} [CoeSort D α]
   定义体: ⟨fun c => F c⟩
 -/
 instance InducedWideCategory.hasCoeToSort {α : Sort*} [CoeSort D α] :
@@ -95,7 +95,7 @@ structure InducedWideCategory.Hom
     - property : P hom
 
 中文:
-结构 InducedWideCategory.Hom
+结构 InducedWideCategory.态射
   参数: (X Y : InducedWideCategory D F P)
   公理与运算 (2 个):
     - hom : F X ⟶ F Y
@@ -165,7 +165,7 @@ instance InducedWideCategory.faithful
 
 中文:
 实例 InducedWideCategory.faithful
-  签名: : (wideInducedFunctor F P).Faithful where
+  签名: : (wideInducedFunctor F P).忠实 where
   定义体: by
     cases f
     cases g
@@ -198,8 +198,8 @@ structure WideSubcategory
     - obj : C
 
 中文:
-结构 WideSubcategory
-  参数: (_P : Morphism命题erty C) [IsMultiplicative _P]
+结构 宽子范畴
+  参数: (_P : MorphismProperty C) [是Multiplicative _P]
   公理与运算 (1 个):
     - obj : C
 -/
@@ -218,8 +218,8 @@ instance WideSubcategory.category
 @[ext]
 
 中文:
-实例 WideSubcategory.category
-  签名: : Category.{v₁} (WideSubcategory P)
+实例 宽子范畴.category
+  签名: : 范畴.{v₁} (宽子范畴 P)
   定义体: InducedWideCategory.category WideSubcategory.obj P
 
 @[ext]
@@ -241,8 +241,8 @@ lemma WideSubcategory.hom_ext
 @[simp]
 
 中文:
-引理 WideSubcategory.hom_ext
-  条件: {X Y : WideSubcategory P} {f g : X ⟶ Y} (h : f.hom = g.hom)
+引理 宽子范畴.hom_ext
+  条件: {X Y : 宽子范畴 P} {f g : X ⟶ Y} (h : f.hom = g.hom)
   证明: InducedWideCategory.Hom.ext h
 
 @[simp]
@@ -266,8 +266,8 @@ lemma WideSubcategory.id_def
 @[simp]
 
 中文:
-引理 WideSubcategory.id_def
-  条件: (X : WideSubcategory P)
+引理 宽子范畴.id_def
+  条件: (X : 宽子范畴 P)
   结论: (CategoryStruct.id X).1 = 𝟙 X.obj
   证明: rfl
 
@@ -285,8 +285,8 @@ lemma WideSubcategory.comp_def
   proof: rfl
 
 中文:
-引理 WideSubcategory.comp_def
-  条件: {X Y Z : WideSubcategory P} (f : X ⟶ Y) (g : Y ⟶ Z)
+引理 宽子范畴.comp_def
+  条件: {X Y Z : 宽子范畴 P} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 lemma WideSubcategory.comp_def {X Y Z : WideSubcategory P} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -304,7 +304,7 @@ definition wideSubcategoryInclusion
 
 中文:
 定义 wideSubcategoryInclusion
-  签名: : WideSubcategory P ⥤ C
+  签名: : 宽子范畴 P ⥤ C
   定义体: wideInducedFunctor WideSubcategory.obj P
 
 @[simp]
@@ -365,7 +365,7 @@ instance wideSubcategory.faithful
 
 中文:
 实例 wideSubcategory.faithful
-  签名: : (wideSubcategoryInclusion P).Faithful
+  签名: : (wideSubcategoryInclusion P).忠实
   定义体: inferInstanceAs (wideInducedFunctor WideSubcategory.obj P).Faithful
 
 Depends on / 依赖: Faithful, WideSubcategory, WideSubcategory.obj, wideInducedFunctor
@@ -388,8 +388,8 @@ definition WideSubcategory.isoMk
 @[deprecated (since := "2026-08-07")] alias isoMk := WideSubcategory.isoMk
 
 中文:
-定义 WideSubcategory.isoMk
-  签名: {X Y : WideSubcategory P} (e : X.obj ≅ Y.obj)
+定义 宽子范畴.isoMk
+  签名: {X Y : 宽子范畴 P} (e : X.obj ≅ Y.obj)
   定义体: ⟨e.hom, h₁⟩
   inv := ⟨e.inv, h₂⟩
 

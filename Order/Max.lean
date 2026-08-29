@@ -51,7 +51,7 @@ class NoBotOrder
     - exists_not_ge((a : α)) : exists b, ¬a <= b
 
 中文:
-类 NoBotOrder
+类 无底序
   参数: (α : 类型) [LE α]
   公理与运算 (1 个):
     - exists_not_ge((a : α)) : 存在 b, ¬a <= b
@@ -72,7 +72,7 @@ class NoTopOrder
     - exists_not_le((a : α)) : exists b, ¬b <= a
 
 中文:
-类 NoTopOrder
+类 无顶序
   参数: (α : 类型) [LE α]
   公理与运算 (1 个):
     - exists_not_le((a : α)) : 存在 b, ¬b <= a
@@ -93,7 +93,7 @@ class NoMinOrder
     - exists_lt((a : α)) : exists b, b < a
 
 中文:
-类 NoMinOrder
+类 NoMin序
   参数: (α : 类型) [LT α]
   公理与运算 (1 个):
     - exists_lt((a : α)) : 存在 b, b < a
@@ -114,7 +114,7 @@ class NoMaxOrder
     - exists_gt((a : α)) : exists b, a < b
 
 中文:
-类 NoMaxOrder
+类 NoMax序
   参数: (α : 类型) [LT α]
   公理与运算 (1 个):
     - exists_gt((a : α)) : 存在 b, a < b
@@ -143,7 +143,7 @@ instance nonempty_lt
 
 中文:
 实例 nonempty_lt
-  签名: [LT α] [NoMinOrder α] (a : α)
+  签名: [LT α] [NoMin序 α] (a : α)
   定义体: nonempty_subtype.2 (exists_lt a)
 
 @[to_dual]
@@ -165,8 +165,8 @@ instance IsEmpty.toNoMinOrder
 @[to_dual]
 
 中文:
-实例 IsEmpty.toNoMinOrder
-  签名: [LT α] [IsEmpty α]
+实例 是空.toNoMinOrder
+  签名: [LT α] [是空 α]
   定义体: ⟨isEmptyElim⟩
 
 @[to_dual]
@@ -188,7 +188,7 @@ instance OrderDual.noBotOrder
 
 中文:
 实例 OrderDual.noBotOrder
-  签名: [LE α] [NoTopOrder α]
+  签名: [LE α] [无顶序 α]
   定义体: ⟨fun a => exists_not_le (α := α) a⟩
 
 @[to_dual]
@@ -209,7 +209,7 @@ instance OrderDual.noMinOrder
 
 中文:
 实例 OrderDual.noMinOrder
-  签名: [LT α] [NoMaxOrder α]
+  签名: [LT α] [NoMax序 α]
   定义体: ⟨fun a => exists_gt (α := α) a⟩
 
 Depends on / 依赖: exists_gt
@@ -237,7 +237,7 @@ instance noMinOrder_of_left
 
 中文:
 实例 noMinOrder_of_left
-  签名: [Preorder α] [Preorder β] [NoMinOrder α]
+  签名: [预序 α] [预序 β] [NoMin序 α]
   定义体: ⟨fun ⟨a, b⟩ => by
     obtain ⟨c, h⟩ := exists_lt a
     exact ⟨(c, b), Prod.mk_lt_mk_iff_left.2 h⟩⟩
@@ -266,7 +266,7 @@ instance noMinOrder_of_right
 
 中文:
 实例 noMinOrder_of_right
-  签名: [Preorder α] [Preorder β] [NoMinOrder β]
+  签名: [预序 α] [预序 β] [NoMin序 β]
   定义体: ⟨fun ⟨a, b⟩ => by
     obtain ⟨c, h⟩ := exists_lt b
     exact ⟨(a, c), Prod.mk_lt_mk_iff_right.2 h⟩⟩
@@ -301,9 +301,9 @@ theorem NoBotOrder.to_noMinOrder
 @[to_dual]
 
 中文:
-定理 NoBotOrder.to_noMinOrder
-  条件: (α : 类型) [LinearOrder α] [NoBotOrder α]
-  结论: NoMinOrder α
+定理 无底序.to_noMinOrder
+  条件: (α : 类型) [线性序 α] [无底序 α]
+  结论: NoMin序 α
   证明: { exists_lt := fun a => by simpa [not_le] using exists_not_ge a }
 
 @[to_dual]
@@ -327,8 +327,8 @@ theorem noBotOrder_iff_noMinOrder
 
 中文:
 定理 noBotOrder_iff_noMinOrder
-  条件: (α : 类型) [LinearOrder α]
-  结论: NoBotOrder α ↔ NoMinOrder α
+  条件: (α : 类型) [线性序 α]
+  结论: 无底序 α ↔ NoMin序 α
   证明: ⟨fun _ => NoBotOrder.to_noMinOrder α, fun _ => inferInstance⟩
 
 @[to_dual]
@@ -350,8 +350,8 @@ theorem NoMinOrder.not_acc
   Acc.recOn h fun x _ => (exists_lt x).recOn
 
 中文:
-定理 NoMinOrder.not_acc
-  条件: [LT α] [NoMinOrder α] (a : α)
+定理 NoMin序.not_acc
+  条件: [LT α] [NoMin序 α] (a : α)
   结论: ¬Acc (· < ·) a
   证明: fun h =>
   Acc.recOn h fun x _ => (exists_lt x).recOn
@@ -429,7 +429,7 @@ theorem noBotOrder_iff
 
 中文:
 定理 noBotOrder_iff
-  结论: NoBotOrder α ↔ 对任意 x : α, ¬ IsBot x
+  结论: 无底序 α ↔ 对任意 x : α, ¬ IsBot x
   证明: by
   simp_rw [noBotOrder_iff', IsBot, not_forall]
 
@@ -456,7 +456,7 @@ hb h _
 
 中文:
 定理 not_isBot
-  条件: [NoBotOrder α] (a : α)
+  条件: [无底序 α] (a : α)
   结论: ¬IsBot a
   证明: fun h =>
   let ⟨_, hb⟩ := exists_not_ge a
@@ -506,7 +506,7 @@ theorem IsBot.isMin_iff
 
 中文:
 定理 IsBot.isMin_iff
-  条件: {α} [PartialOrder α] {i j : α} (h : IsBot i)
+  条件: {α} [偏序 α] {i j : α} (h : IsBot i)
   结论: IsMin j ↔ j = i
   证明: by
   simp_rw [le_antisymm_iff, h j, and_true]
@@ -668,7 +668,7 @@ theorem noMinOrder_iff
 
 中文:
 定理 noMinOrder_iff
-  结论: NoMinOrder α ↔ 对任意 x : α, ¬ IsMin x
+  结论: NoMin序 α ↔ 对任意 x : α, ¬ IsMin x
   证明: by
   simp [noMinOrder_iff', IsMin, lt_iff_le_not_ge]
 
@@ -796,7 +796,7 @@ theorem isMin_iff_forall_not_lt
 @[to_dual (attr := simp)]
 
 中文:
-定理 isMin_iff_forall_not_lt
+定理 isMin_iff_对任意_not_lt
   结论: IsMin a ↔ 对任意 b, ¬b < a
   证明: ⟨fun h _ => h.not_lt, fun h _ hba => of_not_not fun hab => h _ hba.lt_of_not_ge hab⟩
 
@@ -844,7 +844,7 @@ theorem not_isMin
 
 中文:
 定理 not_isMin
-  条件: [NoMinOrder α] (a : α)
+  条件: [NoMin序 α] (a : α)
   结论: ¬IsMin a
   证明: not_isMin_iff.2 exists_lt a
 
@@ -1015,7 +1015,7 @@ exact hb ha'.eq_of_ge (ha.lt_of_ne hb.symm).le
 
 中文:
 定理 IsBot.not_isMax
-  条件: [Nontrivial α] (ha : IsBot a)
+  条件: [非平凡 α] (ha : IsBot a)
   结论: ¬ IsMax a
   证明: by
   intro ha'
@@ -1041,7 +1041,7 @@ theorem IsBot.not_isTop
 
 中文:
 定理 IsBot.not_isTop
-  条件: [Nontrivial α] (ha : IsBot a)
+  条件: [非平凡 α] (ha : IsBot a)
   结论: ¬ IsTop a
   证明: mt IsTop.isMax ha.not_isMax
 -/
@@ -1204,7 +1204,7 @@ theorem Prod.isBot_iff
 @[to_dual]
 
 中文:
-定理 Prod.isBot_iff
+定理 积类型.isBot_iff
   结论: IsBot x ↔ IsBot x.1 ∧ IsBot x.2
   证明: ⟨fun hx => ⟨hx.fst, hx.snd⟩, fun h => h.1.prodMk h.2⟩
 
@@ -1225,7 +1225,7 @@ theorem Prod.isMin_iff
   proof: ⟨fun hx => ⟨hx.fst, hx.snd⟩, fun h => h.1.prodMk h.2⟩
 
 中文:
-定理 Prod.isMin_iff
+定理 积类型.isMin_iff
   结论: IsMin x ↔ IsMin x.1 ∧ IsMin x.2
   证明: ⟨fun hx => ⟨hx.fst, hx.snd⟩, fun h => h.1.prodMk h.2⟩
 

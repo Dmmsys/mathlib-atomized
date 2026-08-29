@@ -84,7 +84,7 @@ lemma Iotop_subset_Ioc
 中文:
 引理 Iotop_subset_Ioc
   条件: {a b : R}
-  结论: Iotop a b subseteq Ioc a b
+  结论: Iotop a b subseteq 左开右闭区间 a b
   证明: by
   simp only [Iotop]
   split_ifs with h <;> simp [Ioo_subset_Ioc_self]
@@ -109,7 +109,7 @@ lemma Ioo_subset_Iotop
 中文:
 引理 Ioo_subset_Iotop
   条件: {a b : R}
-  结论: Ioo a b subseteq Iotop a b
+  结论: 开区间 a b subseteq Iotop a b
   证明: by
   simp only [Iotop]
   split_ifs with h <;> simp [Ioo_subset_Ioc_self]
@@ -136,8 +136,8 @@ lemma isOpen_Iotop
 
 中文:
 引理 isOpen_Iotop
-  条件: [TopologicalSpace R] [OrderTopology R] (a b : R)
-  结论: IsOpen (Iotop a b)
+  条件: [拓扑空间 R] [Order拓扑 R] (a b : R)
+  结论: 是开集 (Iotop a b)
   证明: by
   simp only [Iotop]
   split_ifs with h
@@ -164,7 +164,7 @@ definition botSet
 
 中文:
 定义 botSet
-  签名: : Set R
+  签名: : 集合 R
   定义体: {x | IsBot x}
 -/
 def botSet : Set R := {x | IsBot x}
@@ -186,7 +186,7 @@ lemma Ioc_sdiff_botSet
 中文:
 引理 Ioc_sdiff_botSet
   条件: (a b : R)
-  结论: Ioc a b \ botSet = Ioc a b
+  结论: 左开右闭区间 a b \ botSet = 左开右闭区间 a b
   证明: by
   rw [sdiff_eq_left]; rw [disjoint_iff_forall_ne]
   rintro c ⟨hc, _⟩ _ hc' rfl
@@ -236,7 +236,7 @@ lemma subsingleton_botSet
 
 中文:
 引理 subsingleton_botSet
-  结论: (botSet (R := R)).Subsingleton
+  结论: (botSet (R := R)).子单例
   证明: subsingleton_isBot _
 
 Depends on / 依赖: Subsingleton
@@ -254,7 +254,7 @@ lemma measurableSet_botSet
 
 中文:
 引理 measurableSet_botSet
-  条件: [MeasurableSpace R] [MeasurableSingletonClass R]
+  条件: [可测空间 R] [MeasurableSingleton类 R]
   证明: subsingleton_botSet.measurableSet
 -/
 lemma measurableSet_botSet [MeasurableSpace R] [MeasurableSingletonClass R] :
@@ -299,12 +299,12 @@ structure StieltjesFunction
     - right_continuous' : forall x, ContinuousWithinAt toFun (Ici x) x
 
 中文:
-结构 StieltjesFunction
+结构 Stieltjes函数
   参数: where
   公理与运算 (3 个):
     - toFun : R -> 实数
-    - mono' : Monotone toFun
-    - right_continuous' : 对任意 x, ContinuousWithinAt toFun (Ici x) x
+    - mono' : 递增 toFun
+    - right_continuous' : 对任意 x, ContinuousWithinAt toFun (左闭右无界区间 x) x
 -/
 structure StieltjesFunction where
   /-- The underlying function `R → ℝ`.
@@ -332,7 +332,7 @@ initialize_simps_projections StieltjesFunction (toFun -> apply)
 
 中文:
 实例 instCoeFun
-  签名: : CoeFun (StieltjesFunction R) fun _ => R -> 实数
+  签名: : CoeFun (Stieltjes函数 R) fun _ => R -> 实数
   定义体: ⟨toFun⟩
 
 initialize_simps_projections StieltjesFunction (toFun -> apply)
@@ -354,7 +354,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {f g : StieltjesFunction R} (h : 对任意 x, f x = g x)
+  条件: {f g : Stieltjes函数 R} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: by
   exact (StieltjesFunction.mk.injEq ..).mpr (funext h)
@@ -375,7 +375,7 @@ theorem mono
 
 中文:
 定理 mono
-  结论: Monotone f
+  结论: 递增 f
   证明: f.mono'
 
 Depends on / 依赖: f.mono
@@ -395,7 +395,7 @@ theorem right_continuous
 中文:
 定理 right_continuous
   条件: (x : R)
-  结论: ContinuousWithinAt f (Ici x) x
+  结论: ContinuousWithinAt f (左闭右无界区间 x) x
   证明: f.right_continuous' x
 
 Depends on / 依赖: f.right_continuous, right_continuous
@@ -415,7 +415,7 @@ theorem rightLim_eq
 
 中文:
 定理 rightLim_eq
-  结论: [OrderTopology R]
+  结论: [Order拓扑 R]
   证明: by
   rw [← f.mono.continuousWithinAt_Ioi_iff_rightLim_eq]; rw [continuousWithinAt_Ioi_iff_Ici]
   exact f.right_continuous' x
@@ -439,7 +439,7 @@ theorem iInf_Ioi_eq
 
 中文:
 定理 iInf_Ioi_eq
-  结论: [OrderTopology R] [DenselyOrdered R] [NoMaxOrder R]
+  结论: [Order拓扑 R] [稠密序 R] [NoMax序 R]
   证明: by
   suffices Function.rightLim f x = ⨅ r : Ioi x, f r by rw [← this, f.rightLim_eq]
   rw [f.mono.rightLim_eq_sInf]; rw [sInf_image']
@@ -466,7 +466,7 @@ theorem iInf_rat_gt_eq
 
 中文:
 定理 iInf_rat_gt_eq
-  条件: (f : StieltjesFunction 实数) (x : 实数)
+  条件: (f : Stieltjes函数 实数) (x : 实数)
   证明: by
   rw [← iInf_Ioi_eq f x]
   refine (Real.iInf_Ioi_eq_iInf_rat_gt _ ?_ f.mono).symm
@@ -500,7 +500,7 @@ definition id
 
 中文:
 定义 id
-  签名: : StieltjesFunction 实数 where
+  签名: : Stieltjes函数 实数 where
   定义体: id
   mono' _ _ := id
   right_continuous' _ := continuousWithinAt_id
@@ -525,7 +525,7 @@ theorem id_leftLim
 中文:
 定理 id_leftLim
   条件: (x : 实数)
-  结论: leftLim StieltjesFunction.id x = x
+  结论: leftLim Stieltjes函数.id x = x
   证明: continuousWithinAt_id.leftLim_eq
 
 Depends on / 依赖: continuousWithinAt_id, continuousWithinAt_id.leftLim_eq, leftLim_eq
@@ -566,7 +566,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (StieltjesFunction R)
+  签名: : 可居 (Stieltjes函数 R)
   定义体: ⟨StieltjesFunction.const R 0⟩
 
 Depends on / 依赖: StieltjesFunction, StieltjesFunction.const
@@ -586,7 +586,7 @@ lemma const_apply
 中文:
 引理 const_apply
   条件: (c : 实数) (x : R)
-  结论: (StieltjesFunction.const R c) x = c
+  结论: (Stieltjes函数.const R c) x = c
   证明: rfl
 -/
 @[simp] lemma const_apply (c : Real) (x : R) : (StieltjesFunction.const R c) x = c := rfl
@@ -603,7 +603,7 @@ definition add
 
 中文:
 定义 add
-  签名: (f g : StieltjesFunction R)
+  签名: (f g : Stieltjes函数 R)
   定义体: fun x => f x + g x
   mono' := f.mono.add g.mono
   right_continuous' := fun x => (f.right_continuous x).add (g.right_continuous x)
@@ -626,7 +626,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddZeroClass (StieltjesFunction R)
+  签名: 加法零类 (Stieltjes函数 R)
   定义体: StieltjesFunction.add
   zero := StieltjesFunction.const R 0
   zero_add _ := ext fun _ => zero_add _
@@ -653,7 +653,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (StieltjesFunction R)
+  签名: 加法交换幺半群 (Stieltjes函数 R)
   定义体: nsmulRec n f
   add_assoc _ _ _ := ext fun _ => add_assoc _ _ _
   add_comm _ _ := ext fun _ => add_comm _ _
@@ -684,7 +684,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module 实数>=0 (StieltjesFunction R)
+  签名: 模 实数>=0 (Stieltjes函数 R)
   定义体: {
     toFun := fun x => c * f x
     mono' := f.mono.const_mul c.2
@@ -720,7 +720,7 @@ lemma zero_apply
 中文:
 引理 zero_apply
   条件: (x : R)
-  结论: (0 : StieltjesFunction R) x = 0
+  结论: (0 : Stieltjes函数 R) x = 0
   证明: rfl
 -/
 @[simp] lemma zero_apply (x : R) : (0 : StieltjesFunction R) x = 0 := rfl
@@ -736,7 +736,7 @@ lemma add_apply
 
 中文:
 引理 add_apply
-  条件: (f g : StieltjesFunction R) (x : R)
+  条件: (f g : Stieltjes函数 R) (x : R)
   结论: (f + g) x = f x + g x
   证明: rfl
 -/
@@ -758,8 +758,8 @@ definition _root_.Monotone.stieltjesFunction
     by_cases! hx : fo
 
 中文:
-定义 _root_.Monotone.stieltjesFunction
-  签名: [OrderTopology R]
+定义 _root_.递增.stieltjesFunction
+  签名: [Order拓扑 R]
   定义体: rightLim f
   mono' _ _ hxy := hf.rightLim hxy
   right_continuous' := by
@@ -809,7 +809,7 @@ theorem _root_.Monotone.stieltjesFunction_eq
   proof: rfl
 
 中文:
-定理 _root_.Monotone.stieltjesFunction_eq
+定理 _root_.递增.stieltjesFunction_eq
   证明: rfl
 -/
 theorem _root_.Monotone.stieltjesFunction_eq
@@ -831,7 +831,7 @@ theorem countable_leftLim_ne
 
 中文:
 定理 countable_leftLim_ne
-  条件: [OrderTopology R] (f : StieltjesFunction R)
+  条件: [Order拓扑 R] (f : Stieltjes函数 R)
   证明: by
   refine Countable.mono ?_ f.mono.countable_not_continuousAt
   intro x hx h'x
@@ -865,7 +865,7 @@ definition length
 
 中文:
 定义 length
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: -- we treat separately the empty case, where the formula below would give `∞`.
   if IsEmpty R then 0
   -- if there is a bot element `x`, it does not belong to any interval `Ioc a b`. So we remove it
@@ -890,7 +890,7 @@ lemma length_eq
 
 中文:
 引理 length_eq
-  条件: [Nonempty R] (s : Set R)
+  条件: [非空 R] (s : 集合 R)
   证明: by
   simp [length]
 
@@ -914,7 +914,7 @@ lemma length_eq_of_isEmpty
 
 中文:
 引理 length_eq_of_isEmpty
-  条件: [IsEmpty R] (s : Set R)
+  条件: [是空 R] (s : 集合 R)
   结论: f.length s = 0
   证明: by
   simp only [length, if_pos]
@@ -984,7 +984,7 @@ theorem length_Ioc
 中文:
 定理 length_Ioc
   条件: (a b : R)
-  结论: f.length (Ioc a b) = of实数 (f b - f a)
+  结论: f.length (左开右闭区间 a b) = of实数 (f b - f a)
   证明: by
   have : Nonempty R := ⟨a⟩
   rw [length_eq]
@@ -1026,7 +1026,7 @@ theorem length_mono
 
 中文:
 定理 length_mono
-  条件: {s₁ s₂ : Set R} (h : s₁ subseteq s₂)
+  条件: {s₁ s₂ : 集合 R} (h : s₁ subseteq s₂)
   结论: f.length s₁ <= f.length s₂
   证明: by
   rcases isEmpty_or_nonempty R with hR | hR
@@ -1058,7 +1058,7 @@ theorem length_sdiff_botSet
 
 中文:
 定理 length_sdiff_botSet
-  条件: {s : Set R}
+  条件: {s : 集合 R}
   结论: f.length (s \ botSet) = f.length s
   证明: by
   rcases isEmpty_or_nonempty R with hR | hR
@@ -1088,7 +1088,7 @@ definition outer
 
 中文:
 定义 outer
-  签名: : OuterMeasure R
+  签名: : 外测度 R
   定义体: OuterMeasure.ofFunction f.length f.length_empty
 -/
 protected def outer : OuterMeasure R :=
@@ -1105,7 +1105,7 @@ theorem outer_le_length
 
 中文:
 定理 outer_le_length
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   结论: f.outer s <= f.length s
   证明: OuterMeasure.ofFunction_le _
 
@@ -1131,7 +1131,7 @@ theorem length_subadditive_Icc_Ioo
 
 中文:
 定理 length_subadditive_Icc_Ioo
-  条件: {a b : R} {c d : 自然数 -> R} (ss : Icc a b subseteq ⋃ i, Iotop (c i) (d i))
+  条件: {a b : R} {c d : 自然数 -> R} (ss : 闭区间 a b subseteq ⋃ i, Iotop (c i) (d i))
   证明: by
   suffices
     forall (s : Finset Nat) (b), Icc a b subseteq (⋃ i in (s : Set Nat), Iotop (c i) (d i)) ->
@@ -1189,8 +1189,8 @@ theorem outer_Ioc
 
 中文:
 定理 outer_Ioc
-  条件: [DenselyOrdered R] (a b : R)
-  结论: f.outer (Ioc a b) = of实数 (f b - f a)
+  条件: [稠密序 R] (a b : R)
+  结论: f.outer (左开右闭区间 a b) = of实数 (f b - f a)
   证明: by
   /- It suffices to show that, if `(a, b]` is covered by sets `s i`, then `f b - f a` is bounded
     by `∑ f.length (s i) + ε`. The difficulty is that `f.length` is expressed in terms of half-open
@@ -1294,7 +1294,7 @@ theorem measurableSet_Ioi
 中文:
 定理 measurableSet_Ioi
   条件: {c : R}
-  结论: MeasurableSet[f.outer.caratheodory] (Ioi c)
+  结论: 可测集[f.outer.caratheodory] (左开右无界区间 c)
   证明: by
   refine OuterMeasure.ofFunction_caratheodory fun t => ?_
   have : Nonempty R := ⟨c⟩
@@ -1341,7 +1341,7 @@ theorem outer_trim
 
 中文:
 定理 outer_trim
-  条件: [MeasurableSpace R] [BorelSpace R] [DenselyOrdered R]
+  条件: [可测空间 R] [Borel空间 R] [稠密序 R]
   证明: by
   refine le_antisymm (fun s => ?_) (OuterMeasure.le_trim _)
   rw [OuterMeasure.trim_eq_iInf]
@@ -1403,7 +1403,7 @@ theorem borel_le_measurable
 
 中文:
 定理 borel_le_measurable
-  条件: [SecondCountableTopology R]
+  条件: [第二可数拓扑 R]
   证明: by
   rw [borel_eq_generateFrom_Ioi]
   refine MeasurableSpace.generateFrom_le ?_
@@ -1447,7 +1447,7 @@ theorem measure_Ioc
 中文:
 定理 measure_Ioc
   条件: (a b : R)
-  结论: f.measure (Ioc a b) = of实数 (f b - f a)
+  结论: f.measure (左开右闭区间 a b) = of实数 (f b - f a)
   证明: by
   rw [StieltjesFunction.measure]
   exact f.outer_Ioc a b
@@ -1552,7 +1552,7 @@ theorem measure_Icc
 中文:
 定理 measure_Icc
   条件: (a b : R)
-  结论: f.measure (Icc a b) = of实数 (f b - leftLim f a)
+  结论: f.measure (闭区间 a b) = of实数 (f b - leftLim f a)
   证明: by
   rcases le_or_gt a b with (hab | hab)
   · have A : Disjoint {a} (Ioc a b) := by simp
@@ -1591,7 +1591,7 @@ theorem measure_Ioo
 中文:
 定理 measure_Ioo
   条件: {a b : R}
-  结论: f.measure (Ioo a b) = of实数 (leftLim f b - f a)
+  结论: f.measure (开区间 a b) = of实数 (leftLim f b - f a)
   证明: by
   rcases le_or_gt b a with (hab | hab)
   · simp only [hab, measure_empty, Ioo_eq_empty, not_lt]
@@ -1638,7 +1638,7 @@ theorem measure_Ico
 中文:
 定理 measure_Ico
   条件: (a b : R)
-  结论: f.measure (Ico a b) = of实数 (leftLim f b - leftLim f a)
+  结论: f.measure (左闭右开区间 a b) = of实数 (leftLim f b - leftLim f a)
   证明: by
   rcases le_or_gt b a with (hab | hab)
   · simp only [hab, measure_empty, Ico_eq_empty, not_lt]
@@ -1702,7 +1702,7 @@ theorem measure_Iic
 
 中文:
 定理 measure_Iic
-  条件: {l : 实数} (hf : Tendsto f atBot (𝓝 l)) (x : R)
+  条件: {l : 实数} (hf : 收敛 f atBot (𝓝 l)) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   cases botOrderOrNoBotOrder R
@@ -1738,7 +1738,7 @@ lemma measure_Iio
 
 中文:
 引理 measure_Iio
-  条件: {l : 实数} (hf : Tendsto f atBot (𝓝 l)) (x : R)
+  条件: {l : 实数} (hf : 收敛 f atBot (𝓝 l)) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   rw [← Iic_sdiff_right]; rw [measure_sdiff _ (nullMeasurableSet_singleton x)]; rw [measure_singleton]; rw [f.measure_Iic hf]; rw [← ofReal_sub _ (sub_nonneg.mpr <| Monotone.leftLim_le f.mono' le_rfl)]
@@ -1769,7 +1769,7 @@ theorem measure_Ici
 
 中文:
 定理 measure_Ici
-  条件: {l : 实数} (hf : Tendsto f atTop (𝓝 l)) (x : R)
+  条件: {l : 实数} (hf : 收敛 f atTop (𝓝 l)) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   cases topOrderOrNoTopOrder R
@@ -1805,7 +1805,7 @@ lemma measure_Ioi
 
 中文:
 引理 measure_Ioi
-  条件: {l : 实数} (hf : Tendsto f atTop (𝓝 l)) (x : R)
+  条件: {l : 实数} (hf : 收敛 f atTop (𝓝 l)) (x : R)
   证明: by
   rw [← Ici_sdiff_left]; rw [measure_sdiff _ (nullMeasurableSet_singleton x)]; rw [measure_singleton]; rw [f.measure_Ici hf]; rw [← ofReal_sub _ (sub_nonneg.mpr <| Monotone.leftLim_le f.mono' le_rfl)]
     <;> simp
@@ -1832,7 +1832,7 @@ le_tsub_of_add_le_right hN _ (le_max_right x N))).
 
 中文:
 引理 measure_Ioi_of_tendsto_atTop_atTop
-  条件: (hf : Tendsto f atTop atTop) (x : R)
+  条件: (hf : 收敛 f atTop atTop) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   refine ENNReal.eq_top_of_forall_nnreal_le fun r => ?_
@@ -1862,7 +1862,7 @@ lemma measure_Ici_of_tendsto_atTop_atTop
 
 中文:
 引理 measure_Ici_of_tendsto_atTop_atTop
-  条件: (hf : Tendsto f atTop atTop) (x : R)
+  条件: (hf : 收敛 f atTop atTop) (x : R)
   证明: by
   rw [← top_le_iff]; rw [← f.measure_Ioi_of_tendsto_atTop_atTop hf x]
   exact measure_mono Ioi_subset_Ici_self
@@ -1889,7 +1889,7 @@ le_sub_comm.mp hN _ (min_le_right x N))).trans (me
 
 中文:
 引理 measure_Iic_of_tendsto_atBot_atBot
-  条件: (hf : Tendsto f atBot atBot) (x : R)
+  条件: (hf : 收敛 f atBot atBot) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   refine ENNReal.eq_top_of_forall_nnreal_le fun r => ?_
@@ -1924,7 +1924,7 @@ lemma measure_Iio_of_tendsto_atBot_atBot
 
 中文:
 引理 measure_Iio_of_tendsto_atBot_atBot
-  条件: (hf : Tendsto f atBot atBot) (x : R)
+  条件: (hf : 收敛 f atBot atBot) (x : R)
   证明: by
   have : Nonempty R := ⟨x⟩
   cases botOrderOrNoBotOrder R
@@ -1960,7 +1960,7 @@ theorem measure_univ
 
 中文:
 定理 measure_univ
-  结论: [Nonempty R]
+  结论: [非空 R]
   证明: by
   refine tendsto_nhds_unique (tendsto_measure_Iic_atTop _) ?_
   simp_rw [measure_Iic f hfl]
@@ -1988,7 +1988,7 @@ lemma measure_univ_of_tendsto_atTop_atTop
 
 中文:
 引理 measure_univ_of_tendsto_atTop_atTop
-  条件: [Nonempty R] (hf : Tendsto f atTop atTop)
+  条件: [非空 R] (hf : 收敛 f atTop atTop)
   证明: by
   inhabit R
   rw [← top_le_iff]; rw [← f.measure_Ioi_of_tendsto_atTop_atTop hf default]
@@ -2015,7 +2015,7 @@ lemma measure_univ_of_tendsto_atBot_atBot
 
 中文:
 引理 measure_univ_of_tendsto_atBot_atBot
-  条件: [Nonempty R] (hf : Tendsto f atBot atBot)
+  条件: [非空 R] (hf : 收敛 f atBot atBot)
   证明: by
   inhabit R
   rw [← top_le_iff]; rw [← f.measure_Iio_of_tendsto_atBot_atBot hf default]
@@ -2077,7 +2077,7 @@ lemma isFiniteMeasure_of_forall_abs_le
   obtain ⟨l, hl⟩ : exists l,
 
 中文:
-引理 isFiniteMeasure_of_forall_abs_le
+引理 isFiniteMeasure_of_对任意_abs_le
   条件: {C : 实数} (h : 对任意 x, |f x| <= C)
   证明: by
   cases isEmpty_or_nonempty R
@@ -2117,7 +2117,7 @@ lemma isProbabilityMeasure
 
 中文:
 引理 isProbabilityMeasure
-  结论: [Nonempty R]
+  结论: [非空 R]
   证明: ⟨by simp [f.measure_univ hf_bot hf_top]⟩
 
 Depends on / 依赖: f.measure_univ, hf_bot, hf_top, measure_univ
@@ -2140,7 +2140,7 @@ instance instIsLocallyFiniteMeasure
 
 中文:
 实例 instIsLocallyFiniteMeasure
-  签名: : IsLocallyFiniteMeasure f.measure
+  签名: : 是局部有限测度 f.measure
   定义体: by
   refine ⟨fun x => ?_⟩
   obtain ⟨b, c, -, h, -⟩ : exists b c, x in Icc b c ∧ Icc b c in 𝓝 x ∧ Icc b c subseteq univ :=
@@ -2173,7 +2173,7 @@ lemma eq_of_measure_of_tendsto_atBot
 
 中文:
 引理 eq_of_measure_of_tendsto_atBot
-  结论: (g : StieltjesFunction R) {l : 实数}
+  结论: (g : Stieltjes函数 R) {l : 实数}
   证明: by
   ext x
   have hf := measure_Iic f hfl x
@@ -2219,7 +2219,7 @@ lemma eq_of_measure_of_eq
 
 中文:
 引理 eq_of_measure_of_eq
-  结论: (g : StieltjesFunction R) {y : R}
+  结论: (g : Stieltjes函数 R) {y : R}
   证明: by
   ext x
   cases le_total x y with
@@ -2278,7 +2278,7 @@ lemma measure_const
 中文:
 引理 measure_const
   条件: (c : 实数)
-  结论: (StieltjesFunction.const R c).measure = 0
+  结论: (Stieltjes函数.const R c).measure = 0
   证明: by
   apply Measure.ext_of_Icc _ _ (fun a b hab => ?_)
   simp only [measure_Icc, const_apply, Measure.coe_zero, Pi.ofNat_apply, ofReal_eq_zero,
@@ -2312,7 +2312,7 @@ lemma measure_zero
 
 中文:
 引理 measure_zero
-  结论: (0 : StieltjesFunction R).measure = 0
+  结论: (0 : Stieltjes函数 R).measure = 0
   证明: measure_const 0
 
 @[simp]
@@ -2339,7 +2339,7 @@ lemma measure_add
 
 中文:
 引理 measure_add
-  条件: (f g : StieltjesFunction R)
+  条件: (f g : Stieltjes函数 R)
   结论: (f + g).measure = f.measure + g.measure
   证明: by
   refine Measure.ext_of_Icc _ _ (fun a b h => ?_)
@@ -2381,7 +2381,7 @@ lemma measure_smul
 
 中文:
 引理 measure_smul
-  条件: (c : 实数>=0) (f : StieltjesFunction R)
+  条件: (c : 实数>=0) (f : Stieltjes函数 R)
   结论: (c • f).measure = c • f.measure
   证明: by
   refine Measure.ext_of_Icc _ _ (fun a b h => ?_)

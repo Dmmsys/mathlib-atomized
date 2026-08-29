@@ -42,7 +42,7 @@ theorem associated_norm_prod_smith
 
 中文:
 定理 associated_norm_prod_smith
-  条件: [Fintype ι] (b : Basis ι R S) {f : S} (hf : f != 0)
+  条件: [有限类型 ι] (b : 基 ι R S) {f : S} (hf : f != 0)
   证明: by
   have hI := span_singleton_eq_bot.not.2 hf
   let b' := ringBasis b (span {f}) hI
@@ -102,7 +102,7 @@ theorem finrank_quotient_span_eq_natDegree_norm
 
 中文:
 定理 finrank_quotient_span_eq_natDegree_norm
-  结论: [Algebra F S] [IsScalarTower F F[X] S]
+  结论: [代数 F S] [标量塔 F F[X] S]
   证明: by
   have := Fintype.ofFinite ι
   have h := span_singleton_eq_bot.not.2 hf

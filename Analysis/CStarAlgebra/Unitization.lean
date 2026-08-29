@@ -101,7 +101,7 @@ lemma isometry_mul_flip
 
 中文:
 引理 isometry_mul_flip
-  结论: Isometry (mul 𝕜 E).flip
+  结论: 等距 (mul 𝕜 E).flip
   证明: AddMonoidHomClass.isometry_of_norm _ (opNorm_mul_flip_apply 𝕜)
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, isometry_of_norm, opNorm_mul_flip_apply
@@ -130,8 +130,8 @@ instance CStarRing.instRegularNormedAlgebra
     · rintro -
 
 中文:
-实例 CStarRing.instRegularNormedAlgebra
-  签名: : RegularNormedAlgebra 𝕜 E where
+实例 CStar环.instRegularNormedAlgebra
+  签名: : RegularNormed代数 𝕜 E where
   定义体: AddMonoidHomClass.isometry_of_norm (mul 𝕜 E) fun a => NNReal.eq_iff.mp
     show ‖mul 𝕜 E a‖₊ = ‖a‖₊ by
     rw [← sSup_unitClosedBall_eq_nnnorm]
@@ -240,7 +240,7 @@ instance Unitization.instCStarRing
 
 中文:
 实例 Unitization.instCStarRing
-  签名: : CStarRing (Unitization 𝕜 E) where
+  签名: : CStar环 (Unitization 𝕜 E) where
   定义体: by
     -- rewrite both sides as a `⊔`
     simp only [Unitization.norm_def, Prod.norm_def]
@@ -307,7 +307,7 @@ instance Unitization.instCStarAlgebra
 
 中文:
 实例 Unitization.instCStarAlgebra
-  签名: {A : 类型} [NonUnitalCStarAlgebra A]
+  签名: {A : 类型} [非幺CStar代数 A]
 -/
 noncomputable instance Unitization.instCStarAlgebra {A : Type*} [NonUnitalCStarAlgebra A] :
     CStarAlgebra (Unitization Complex A) where
@@ -321,7 +321,7 @@ instance Unitization.instCommCStarAlgebra
 
 中文:
 实例 Unitization.instCommCStarAlgebra
-  签名: {A : 类型} [NonUnitalCommCStarAlgebra A]
+  签名: {A : 类型} [非幺交换CStar代数 A]
 -/
 noncomputable instance Unitization.instCommCStarAlgebra {A : Type*} [NonUnitalCommCStarAlgebra A] :
     CommCStarAlgebra (Unitization Complex A) where

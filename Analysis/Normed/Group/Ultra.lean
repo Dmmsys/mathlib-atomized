@@ -79,7 +79,7 @@ lemma isUltrametricDist_of_forall_norm_mul_le_max_norm
     simpa [dist_eq_norm_inv_mul] using h (x⁻¹ * y) (y⁻¹ * z)
 
 中文:
-引理 isUltrametricDist_of_forall_norm_mul_le_max_norm
+引理 isUltrametricDist_of_对任意_norm_mul_le_max_norm
   证明: by
     simpa [dist_eq_norm_inv_mul] using h (x⁻¹ * y) (y⁻¹ * z)
 
@@ -100,7 +100,7 @@ lemma isUltrametricDist_of_isNonarchimedean_norm
 
 中文:
 引理 isUltrametricDist_of_isNonarchimedean_norm
-  结论: {S' : 类型} [SeminormedAddGroup S']
+  结论: {S' : 类型} [半赋范加群 S']
   证明: isUltrametricDist_of_forall_norm_add_le_max_norm h
 
 Depends on / 依赖: isUltrametricDist_of_forall_norm_add_le_max_norm
@@ -123,7 +123,7 @@ lemma isNonarchimedean_norm
 
 中文:
 引理 isNonarchimedean_norm
-  条件: {R} [SeminormedAddCommGroup R] [IsUltrametricDist R]
+  条件: {R} [SeminormedAddComm群 R] [是UltrametricDist R]
   证明: by
   intro x y
   convert! dist_triangle_max 0 x (x + y) using 1
@@ -151,7 +151,7 @@ lemma isUltrametricDist_iff_isNonarchimedean_norm
 
 中文:
 引理 isUltrametricDist_iff_isNonarchimedean_norm
-  条件: {R} [SeminormedAddCommGroup R]
+  条件: {R} [SeminormedAddComm群 R]
   证明: ⟨fun h => h.isNonarchimedean_norm, IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm⟩
 
 @[to_additive]
@@ -195,7 +195,7 @@ lemma isUltrametricDist_of_forall_nnnorm_mul_le_max_nnnorm
   proof: isUltrametricDist_of_forall_norm_mul_le_max_norm h
 
 中文:
-引理 isUltrametricDist_of_forall_nnnorm_mul_le_max_nnnorm
+引理 isUltrametricDist_of_对任意_nnnorm_mul_le_max_nnnorm
   证明: isUltrametricDist_of_forall_norm_mul_le_max_norm h
 
 Depends on / 依赖: isUltrametricDist_of_forall_norm_mul_le_max_norm
@@ -214,7 +214,7 @@ lemma isUltrametricDist_of_isNonarchimedean_nnnorm
 
 中文:
 引理 isUltrametricDist_of_isNonarchimedean_nnnorm
-  结论: {S' : 类型} [SeminormedAddGroup S']
+  结论: {S' : 类型} [半赋范加群 S']
   证明: isUltrametricDist_of_forall_nnnorm_add_le_max_nnnorm h
 
 Depends on / 依赖: isUltrametricDist_of_forall_nnnorm_add_le_max_nnnorm
@@ -234,7 +234,7 @@ lemma isNonarchimedean_nnnorm
 
 中文:
 引理 isNonarchimedean_nnnorm
-  条件: {R} [SeminormedAddCommGroup R] [IsUltrametricDist R]
+  条件: {R} [SeminormedAddComm群 R] [是UltrametricDist R]
   证明: by
   simpa using isNonarchimedean_norm
 
@@ -254,7 +254,7 @@ lemma isUltrametricDist_iff_isNonarchimedean_nnnorm
 
 中文:
 引理 isUltrametricDist_iff_isNonarchimedean_nnnorm
-  条件: {R} [SeminormedAddCommGroup R]
+  条件: {R} [SeminormedAddComm群 R]
   证明: ⟨fun h => h.isNonarchimedean_norm, IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm⟩
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.isUltrametricDist_of_isNonarchimedean_norm, h.isNonarchimedean_norm, isNonarchimedean_norm, isUltrametricDist_of_isNonarchimedean_norm
@@ -302,7 +302,7 @@ lemma norm_eq_of_mul_norm_lt_max
 
 中文:
 引理 norm_eq_of_mul_norm_lt_max
-  条件: {x y : S} (h : ‖x * y‖ < max ‖x‖ ‖y‖)
+  条件: {x y : S} (h : ‖x * y‖ < 最大值 ‖x‖ ‖y‖)
   证明: not_ne_iff.mp (h.ne ∘ norm_mul_eq_max_of_norm_ne_norm)
 
 Depends on / 依赖: h.ne, norm_mul_eq_max_of_norm_ne_norm, not_ne_iff, not_ne_iff.mp
@@ -350,7 +350,7 @@ lemma nnnorm_eq_of_mul_nnnorm_lt_max
 
 中文:
 引理 nnnorm_eq_of_mul_nnnorm_lt_max
-  条件: {x y : S} (h : ‖x * y‖₊ < max ‖x‖₊ ‖y‖₊)
+  条件: {x y : S} (h : ‖x * y‖₊ < 最大值 ‖x‖₊ ‖y‖₊)
   证明: not_ne_iff.mp (h.ne ∘ nnnorm_mul_eq_max_of_nnnorm_ne_nnnorm)
 
 Depends on / 依赖: h.ne, nnnorm_mul_eq_max_of_nnnorm_ne_nnnorm, not_ne_iff, not_ne_iff.mp
@@ -621,7 +621,7 @@ instance nonarchimedeanGroup
 
 中文:
 实例 nonarchimedeanGroup
-  签名: : NonarchimedeanGroup M where
+  签名: : Nonarchimedean群 M where
   定义体: by simpa only [Metric.mem_nhds_iff]
     using fun U ⟨ε, hεp, hεU⟩ => ⟨ball_openSubgroup M hεp, hεU⟩
 
@@ -652,8 +652,8 @@ lemma _root_.Finset.Nonempty.norm_prod_le_sup'_norm
       refine 
 
 中文:
-引理 _root_.Finset.Nonempty.norm_prod_le_sup'_norm
-  条件: {s : Finset ι} (hs : s.Nonempty) (f : ι -> M)
+引理 _root_.有限集.非空.norm_prod_le_sup'_norm
+  条件: {s : 有限集 ι} (hs : s.非空) (f : ι -> M)
   证明: by
   simp only [Finset.le_sup'_iff]
   induction hs using Finset.Nonempty.cons_induction with
@@ -693,8 +693,8 @@ lemma _root_.Finset.nnnorm_prod_le_sup_nnnorm
       using! hs.norm_prod_le_sup'_norm f
 
 中文:
-引理 _root_.Finset.nnnorm_prod_le_sup_nnnorm
-  条件: (s : Finset ι) (f : ι -> M)
+引理 _root_.有限集.nnnorm_prod_le_sup_nnnorm
+  条件: (s : 有限集 ι) (f : ι -> M)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
   · simp
@@ -725,8 +725,8 @@ lemma nnnorm_prod_le_of_forall_le
   proof: (s.nnnorm_prod_le_sup_nnnorm f).trans Finset.sup_le hC
 
 中文:
-引理 nnnorm_prod_le_of_forall_le
-  结论: {s : Finset ι} {f : ι -> M} {C : 实数>=0}
+引理 nnnorm_prod_le_of_对任意_le
+  结论: {s : 有限集 ι} {f : ι -> M} {C : 实数>=0}
   证明: (s.nnnorm_prod_le_sup_nnnorm f).trans Finset.sup_le hC
 
 Depends on / 依赖: Finset, Finset.sup_le, nnnorm_prod_le_sup_nnnorm, s.nnnorm_prod_le_sup_nnnorm, sup_le
@@ -750,8 +750,8 @@ lemma norm_prod_le_of_forall_le_of_nonempty
   proof: (hs.norm_prod_le_sup'_norm f).trans (Finset.sup'_le hs _ hC)
 
 中文:
-引理 norm_prod_le_of_forall_le_of_nonempty
-  结论: {s : Finset ι} (hs : s.Nonempty) {f : ι -> M} {C : 实数}
+引理 norm_prod_le_of_对任意_le_of_nonempty
+  结论: {s : 有限集 ι} (hs : s.非空) {f : ι -> M} {C : 实数}
   证明: (hs.norm_prod_le_sup'_norm f).trans (Finset.sup'_le hs _ hC)
 
 Depends on / 依赖: Finset, Finset.sup, _norm, hs.norm_prod_le_sup, norm_prod_le_sup
@@ -777,8 +777,8 @@ lemma norm_prod_le_of_forall_le_of_nonneg
   exact nnnorm_prod_le_of_forall_le hC
 
 中文:
-引理 norm_prod_le_of_forall_le_of_nonneg
-  结论: {s : Finset ι} {f : ι -> M} {C : 实数}
+引理 norm_prod_le_of_对任意_le_of_nonneg
+  结论: {s : 有限集 ι} {f : ι -> M} {C : 实数}
   证明: by
   lift C to NNReal using h_nonneg
   exact nnnorm_prod_le_of_forall_le hC
@@ -811,8 +811,8 @@ alias exists_norm_finset_sum_le_of_nonempty := exists_norm_finsetSum_le_of_nonem
 @[to_additive existing, deprecated (since := "2026-04
 
 中文:
-定理 exists_norm_finsetProd_le_of_nonempty
-  条件: {t : Finset ι} (ht : t.Nonempty) (f : ι -> M)
+定理 存在_norm_finsetProd_le_of_nonempty
+  条件: {t : 有限集 ι} (ht : t.非空) (f : ι -> M)
   证明: match t.exists_mem_eq_sup' ht (‖f ·‖) with
   | ⟨j, hj, hj'⟩ => ⟨j, hj, (ht.norm_prod_le_sup'_norm f).trans (le_of_eq hj')⟩
 
@@ -856,8 +856,8 @@ exact (fun ⟨i, h, h'⟩ => ⟨i, fun _ => h, h'⟩) exists_norm_finsetProd_le_
 @[to_additive existing, deprecated (since := "2026-04
 
 中文:
-定理 exists_norm_finsetProd_le
-  条件: (t : Finset ι) [Nonempty ι] (f : ι -> M)
+定理 存在_norm_finsetProd_le
+  条件: (t : 有限集 ι) [非空 ι] (f : ι -> M)
   证明: by
   rcases t.eq_empty_or_nonempty with rfl | ht
   · simp
@@ -904,8 +904,8 @@ theorem exists_norm_multiset_prod_le
           exact le_trans (norm_mul_le_max _ _) 
 
 中文:
-定理 exists_norm_multiset_prod_le
-  条件: (s : Multiset ι) [Nonempty ι] {f : ι -> M}
+定理 存在_norm_multiset_prod_le
+  条件: (s : Multiset ι) [非空 ι] {f : ι -> M}
   证明: by
   inhabit ι
   induction s using Multiset.induction_on with
@@ -1023,8 +1023,8 @@ lemma norm_tprod_le_of_forall_le
 @[to_additive]
 
 中文:
-引理 norm_tprod_le_of_forall_le
-  条件: [Nonempty ι] {f : ι -> M} {C : 实数} (h : 对任意 i, ‖f i‖ <= C)
+引理 norm_tprod_le_of_对任意_le
+  条件: [非空 ι] {f : ι -> M} {C : 实数} (h : 对任意 i, ‖f i‖ <= C)
   证明: (norm_tprod_le f).trans (ciSup_le h)
 
 @[to_additive]
@@ -1050,7 +1050,7 @@ lemma norm_tprod_le_of_forall_le_of_nonneg
 @[to_additive]
 
 中文:
-引理 norm_tprod_le_of_forall_le_of_nonneg
+引理 norm_tprod_le_of_对任意_le_of_nonneg
   条件: {f : ι -> M} {C : 实数} (hC : 0 <= C) (h : 对任意 i, ‖f i‖ <= C)
   证明: by
   rcases isEmpty_or_nonempty ι
@@ -1080,7 +1080,7 @@ lemma nnnorm_tprod_le_of_forall_le
 @[to_additive]
 
 中文:
-引理 nnnorm_tprod_le_of_forall_le
+引理 nnnorm_tprod_le_of_对任意_le
   条件: {f : ι -> M} {C : 实数>=0} (h : 对任意 i, ‖f i‖₊ <= C)
   结论: ‖∏' i, f i‖₊ <= C
   证明: (nnnorm_tprod_le f).trans (ciSup_le' h)
@@ -1111,7 +1111,7 @@ lemma nnnorm_prod_eq_sup_of_pairwise_ne
 
 中文:
 引理 nnnorm_prod_eq_sup_of_pairwise_ne
-  结论: {s : Finset ι} {f : ι -> M}
+  结论: {s : 有限集 ι} {f : ι -> M}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -1153,7 +1153,7 @@ lemma norm_prod_eq_sup'_of_pairwise_ne
 
 中文:
 引理 norm_prod_eq_sup'_of_pairwise_ne
-  结论: {s : Finset ι} {f : ι -> M} (hs' : s.Nonempty)
+  结论: {s : 有限集 ι} {f : ι -> M} (hs' : s.非空)
   证明: by
   rw [← coe_nnnorm']; rw [nnnorm_prod_eq_sup_of_pairwise_ne]; rw [← Finset.sup'_eq_sup hs']
   · exact s.apply_sup'_eq_sup'_comp hs' _ (by tauto)

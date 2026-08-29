@@ -230,7 +230,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: [Semiring T] (g : S ->+* T) (p : R[X])
+  条件: [半环 T] (g : S ->+* T) (p : R[X])
   结论: (p.map f).map g = p.map (g.comp f)
   证明: ext (by simp [coeff_map])
 
@@ -252,7 +252,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: p.map (RingHom.id _) = p
+  结论: p.map (环态射.id _) = p
   证明: by simp [Polynomial.ext_iff, coeff_map]
 
 Depends on / 依赖: Polynomial, Polynomial.ext_iff, coeff_map, ext_iff
@@ -272,7 +272,7 @@ fun p => ⟨.ofFinsupp .ofCoeff .ofSupportFinite (fun n i => coeff (p i) n)
 
 中文:
 定义 piEquiv
-  签名: {ι} [Finite ι] (R : ι -> 类型) [对任意 i, Semiring (R i)]
+  签名: {ι} [有限 ι] (R : ι -> 类型) [对任意 i, 半环 (R i)]
   定义体: .ofBijective (RingHom.pi fun i => mapRingHom (Pi.evalRingHom R i))
     ⟨fun p q h => by ext n i; simpa using congr_arg (fun p => coeff (p i) n) h,
 fun p => ⟨.ofFinsupp .ofCoeff .ofSupportFinite (fun n i => coeff (p i) n)
@@ -301,8 +301,8 @@ ext fun m => hf by rw [← coeff_map f, ← coeff_map f, h]
 
 中文:
 定理 map_injective
-  条件: (hf : Function.Injective f)
-  结论: Function.Injective (map f)
+  条件: (hf : 函数.单射 f)
+  结论: 函数.单射 (map f)
   证明: fun p q h =>
 ext fun m => hf by rw [← coeff_map f, ← coeff_map f, h]
 -/
@@ -319,7 +319,7 @@ theorem map_injective_iff
 
 中文:
 定理 map_injective_iff
-  结论: Function.Injective (map f) ↔ Function.Injective f
+  结论: 函数.单射 (map f) ↔ 函数.单射 f
   证明: ⟨fun h r r' eq => by simpa using h (a₁ := C r) (a₂ := C r') (by simpa), map_injective f⟩
 
 Depends on / 依赖: map_injective
@@ -343,8 +343,8 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (hf : Function.Surjective f)
-  结论: Function.Surjective (map f)
+  条件: (hf : 函数.满射 f)
+  结论: 函数.满射 (map f)
   证明: fun p =>
   p.induction_on'
     (by rintro _ _ ⟨p, rfl⟩ ⟨q, rfl⟩; exact ⟨p + q, Polynomial.map_add f⟩)
@@ -369,7 +369,7 @@ theorem map_surjective_iff
 
 中文:
 定理 map_surjective_iff
-  结论: Function.Surjective (map f) ↔ Function.Surjective f
+  结论: 函数.满射 (map f) ↔ 函数.满射 f
   证明: ⟨fun h s => let ⟨p, h⟩ := h (C s); ⟨p.coeff 0, by simpa using congr(coeff $h 0)⟩, map_surjective f⟩
 
 Depends on / 依赖: map_surjective, p.coeff
@@ -390,7 +390,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   结论: p.map f = 0 ↔ p = 0
   证明: map_eq_zero_iff (mapRingHom f) (map_injective f hf)
 -/
@@ -408,7 +408,7 @@ theorem map_ne_zero_iff
 
 中文:
 定理 map_ne_zero_iff
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   结论: p.map f != 0 ↔ p != 0
   证明: (Polynomial.map_eq_zero_iff hf).not
 -/
@@ -430,7 +430,7 @@ theorem mapRingHom_id
 
 中文:
 定理 mapRingHom_id
-  结论: mapRingHom (RingHom.id R) = RingHom.id R[X]
+  结论: mapRingHom (环态射.id R) = 环态射.id R[X]
   证明: RingHom.ext fun _x => map_id
 
 @[simp]
@@ -451,7 +451,7 @@ theorem mapRingHom_comp
 
 中文:
 定理 mapRingHom_comp
-  条件: [Semiring T] (f : S ->+* T) (g : R ->+* S)
+  条件: [半环 T] (f : S ->+* T) (g : R ->+* S)
   证明: RingHom.ext Polynomial.map_map g f
 
 Depends on / 依赖: Polynomial, Polynomial.map_map, RingHom, RingHom.ext, map_map
@@ -473,7 +473,7 @@ theorem eval₂_map
 
 中文:
 定理 eval₂_map
-  条件: [Semiring T] (g : S ->+* T) (x : T)
+  条件: [半环 T] (g : S ->+* T) (x : T)
   证明: by
   rw [eval₂_eq_eval_map]; rw [eval₂_eq_eval_map]; rw [map_map]
 
@@ -591,7 +591,7 @@ theorem eval_intCast_map
 
 中文:
 定理 eval_intCast_map
-  条件: {R S : 类型} [Ring R] [Ring S] (f : R ->+* S) (p : R[X]) (i : 整数)
+  条件: {R S : 类型} [环 R] [环 S] (f : R ->+* S) (p : R[X]) (i : 整数)
   证明: by
   induction p using Polynomial.induction_on' with
   | add p q hp hq => simp only [hp, hq, Polynomial.map_add, map_add, eval_add]
@@ -708,7 +708,7 @@ theorem support_map_subset
 
 中文:
 定理 support_map_subset
-  条件: [Semiring R] [Semiring S] (f : R ->+* S) (p : R[X])
+  条件: [半环 R] [半环 S] (f : R ->+* S) (p : R[X])
   证明: by
   intro x
   contrapose
@@ -734,7 +734,7 @@ theorem support_map_of_injective
 
 中文:
 定理 support_map_of_injective
-  结论: [Semiring R] [Semiring S] (p : R[X]) {f : R ->+* S}
+  结论: [半环 R] [半环 S] (p : R[X]) {f : R ->+* S}
   证明: by
   simp_rw [Finset.ext_iff, mem_support_iff, coeff_map, ← map_zero f, hf.ne_iff,
     forall_const]
@@ -781,7 +781,7 @@ theorem IsRoot.of_map
 
 中文:
 定理 IsRoot.of_map
-  结论: {R} [Ring R] {f : R ->+* S} {x : R} {p : R[X]} (h : IsRoot (p.map f) (f x))
+  结论: {R} [环 R] {f : R ->+* S} {x : R} {p : R[X]} (h : IsRoot (p.map f) (f x))
   证明: by
   rwa [IsRoot, ← (injective_iff_map_eq_zero' f).mp hf, ← eval₂_hom, ← eval_map]
 
@@ -801,7 +801,7 @@ theorem isRoot_map_iff
 
 中文:
 定理 isRoot_map_iff
-  结论: {R : 类型} [CommRing R] {f : R ->+* S} {x : R} {p : R[X]}
+  结论: {R : 类型} [交换环 R] {f : R ->+* S} {x : R} {p : R[X]}
   证明: ⟨fun h => h.of_map hf, fun h => h.map⟩
 
 Depends on / 依赖: h.map, h.of_map, of_map

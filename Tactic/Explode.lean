@@ -44,7 +44,7 @@ definition explodeCore
 
 中文:
 定义 explodeCore
-  签名: (e : Expr) (depth : 自然数) (entries : Entries) (start : 布尔 := false)
+  签名: (e : Expr) (depth : 自然数) (entries : Entries) (start : 布尔值 := false)
   定义体: do
   trace[explode] "depth = {depth}, start = {start}, e = {e}"
   let e := e.cleanupAnnotations
@@ -175,7 +175,7 @@ definition explode
 
 中文:
 定义 explode
-  签名: (e : Expr) (filterProofs : 布尔 := true)
+  签名: (e : Expr) (filterProofs : 布尔值 := true)
   定义体: do
   let filter (e : Expr) : MetaM Bool :=
     if filterProofs then Meta.isProof e else return true

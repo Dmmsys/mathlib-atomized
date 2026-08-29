@@ -109,7 +109,7 @@ theorem lifts_iff_set_range
 中文:
 定理 lifts_iff_set_range
   条件: (p : S[X])
-  结论: p in lifts f ↔ p in Set.range (map f)
+  结论: p in lifts f ↔ p in 集合.range (map f)
   证明: by
   simp only [coe_mapRingHom, lifts, Set.mem_range, RingHom.mem_rangeS]
 
@@ -154,7 +154,7 @@ theorem lifts_iff_coeff_lifts
 中文:
 定理 lifts_iff_coeff_lifts
   条件: (p : S[X])
-  结论: p in lifts f ↔ 对任意 n : 自然数, p.coeff n in Set.range f
+  结论: p in lifts f ↔ 对任意 n : 自然数, p.coeff n in 集合.range f
   证明: by
   rw [lifts_iff_ringHom_rangeS]; rw [mem_map_rangeS f]
   rfl
@@ -221,7 +221,7 @@ theorem mem_lifts_of_surjective
 
 中文:
 定理 mem_lifts_of_surjective
-  条件: (hf : Function.Surjective f) (p : S[X])
+  条件: (hf : 函数.满射 f) (p : S[X])
   结论: p in lifts f
   证明: (lifts_iff_coeff_lifts p).mpr fun n => hf (p.coeff n)
 
@@ -267,7 +267,7 @@ theorem C'_mem_lifts
 
 中文:
 定理 C'_mem_lifts
-  条件: {f : R ->+* S} {s : S} (h : s in Set.range f)
+  条件: {f : R ->+* S} {s : S} (h : s in 集合.range f)
   结论: C s in lifts f
   证明: by
   obtain ⟨r, rfl⟩ := Set.mem_range.1 h
@@ -372,7 +372,7 @@ theorem monomial_mem_lifts
 
 中文:
 定理 monomial_mem_lifts
-  条件: {s : S} (n : 自然数) (h : s in Set.range f)
+  条件: {s : S} (n : 自然数) (h : s in 集合.range f)
   结论: monomial n s in lifts f
   证明: by
   obtain ⟨r, rfl⟩ := Set.mem_range.1 h
@@ -481,7 +481,7 @@ theorem exists_support_eq_of_mem_lifts
   have hq : map f q = p := by simp_rw [q, Polynomial.map_sum, map_monomial, hg,
 
 中文:
-定理 exists_support_eq_of_mem_lifts
+定理 存在_support_eq_of_mem_lifts
   条件: {p : S[X]} (hlifts : p in lifts f)
   证明: by
   rw [lifts_iff_coeff_lifts] at hlifts
@@ -516,7 +516,7 @@ theorem exists_degree_eq_of_mem_lifts
   exact ⟨q, hq, congrArg Finset.max hq'⟩
 
 中文:
-定理 exists_degree_eq_of_mem_lifts
+定理 存在_degree_eq_of_mem_lifts
   条件: {p : S[X]} (hlifts : p in lifts f)
   证明: by
   obtain ⟨q, hq, hq'⟩ := exists_support_eq_of_mem_lifts hlifts
@@ -541,7 +541,7 @@ theorem exists_natDegree_eq_of_mem_lifts
 alias mem_lifts_and_degree_eq := exists_degree_eq_of_mem_lifts
 
 中文:
-定理 exists_natDegree_eq_of_mem_lifts
+定理 存在_natDegree_eq_of_mem_lifts
   条件: {p : S[X]} (hlifts : p in lifts f)
   证明: (exists_degree_eq_of_mem_lifts hlifts).imp fun _ => And.imp_right natDegree_eq_of_degree_eq
 
@@ -577,7 +577,7 @@ theorem lifts_and_degree_eq_and_monic
 
 中文:
 定理 lifts_and_degree_eq_and_monic
-  结论: [Nontrivial S] {p : S[X]} (hlifts : p in lifts f)
+  结论: [非平凡 S] {p : S[X]} (hlifts : p in lifts f)
   证明: by
   rw [lifts_iff_coeff_lifts] at hlifts
   let g : Nat -> R := fun k => (hlifts k).choose
@@ -698,7 +698,7 @@ theorem mem_lifts_iff_mem_alg
 
 中文:
 定理 mem_lifts_iff_mem_alg
-  结论: (R : 类型u) [CommSemiring R] {S : 类型v} [Semiring S] [Algebra R S]
+  结论: (R : 类型u) [交换半环 R] {S : 类型v} [半环 S] [代数 R S]
   证明: by
   simp only [coe_mapRingHom, lifts, mapAlg_eq_map, AlgHom.mem_range, RingHom.mem_rangeS]
 
@@ -742,7 +742,7 @@ theorem monic_of_monic_mapAlg
 
 中文:
 定理 monic_of_monic_mapAlg
-  条件: [FaithfulSMul R S] {p : Polynomial R} (hp : (mapAlg R S p).Monic)
+  条件: [忠实标量乘法 R S] {p : 多项式 R} (hp : (mapAlg R S p).Monic)
   证明: monic_of_injective (FaithfulSMul.algebraMap_injective R S) hp
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.algebraMap_injective, algebraMap_injective, monic_of_injective

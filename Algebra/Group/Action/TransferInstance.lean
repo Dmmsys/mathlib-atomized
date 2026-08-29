@@ -39,7 +39,7 @@ abbreviation mulAction
 
 中文:
 缩写 mulAction
-  签名: (e : α ≃ β) [MulAction M β]
+  签名: (e : α ≃ β) [乘法作用 M β]
   定义体: e.smul M
   one_smul := by simp [smul_def]
   mul_smul := by simp [smul_def, mul_smul]
@@ -67,7 +67,7 @@ lemma smulCommClass
 
 中文:
 引理 smulCommClass
-  条件: (e : α ≃ β) [SMulCommClass M N β]
+  条件: (e : α ≃ β) [标量交换类 M N β]
   证明: e.smul M
     letI := e.smul N
     SMulCommClass M N α :=
@@ -101,7 +101,7 @@ lemma isScalarTower
 
 中文:
 引理 isScalarTower
-  条件: (e : α ≃ β) [IsScalarTower M N β]
+  条件: (e : α ≃ β) [标量塔 M N β]
   证明: e.smul M
     letI := e.smul N
     IsScalarTower M N α :=
@@ -135,7 +135,7 @@ lemma isCentralScalar
 
 中文:
 引理 isCentralScalar
-  条件: (e : α ≃ β) [IsCentralScalar M β]
+  条件: (e : α ≃ β) [中心标量 M β]
   证明: e.smul M
     letI := e.smul Mᵐᵒᵖ
     IsCentralScalar M α :=
@@ -167,7 +167,7 @@ abbreviation mulDistribMulAction
 
 中文:
 缩写 mulDistribMulAction
-  签名: (e : N ≃ O) [MulDistribMulAction M O]
+  签名: (e : N ≃ O) [MulDistribMul作用 M O]
   定义体: e.monoid
     MulDistribMulAction M N :=
   letI := e.monoid
@@ -204,7 +204,7 @@ lemma faithfulSMul
 
 中文:
 引理 faithfulSMul
-  条件: (e : α ≃ β) [FaithfulSMul M β]
+  条件: (e : α ≃ β) [忠实标量乘法 M β]
   证明: e.smul M
     FaithfulSMul M α :=
   letI := e.smul M

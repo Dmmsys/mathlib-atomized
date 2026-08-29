@@ -44,7 +44,7 @@ theorem contDiff
 中文:
 定理 contDiff
   条件: {n : WithTop 自然数∞} (f : V ->ᴬ[𝕜] W)
-  结论: ContDiff 𝕜 n f
+  结论: 连续可微 𝕜 n f
   证明: by
   rw [f.decomp]
   apply f.contLinear.contDiff.add
@@ -206,8 +206,8 @@ theorem ContDiff.lineMap
   fun_prop
 
 中文:
-定理 ContDiff.lineMap
-  结论: (h₁ : ContDiff 𝕜 n f₁)
+定理 连续可微.lineMap
+  结论: (h₁ : 连续可微 𝕜 n f₁)
   证明: by
   fun_prop
 

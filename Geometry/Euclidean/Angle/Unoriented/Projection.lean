@@ -40,7 +40,7 @@ lemma angle_self_orthogonalProjection
 
 中文:
 引理 angle_self_orthogonalProjection
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     ∠ p (orthogonalProjection s p) p' = π / 2 := by
   have : Nonempty s := ⟨p', h⟩
@@ -70,7 +70,7 @@ lemma angle_orthogonalProjection_self
 
 中文:
 引理 angle_orthogonalProjection_self
-  结论: (p : P) {p' : P} {s : AffineSubspace 实数 P}
+  结论: (p : P) {p' : P} {s : 仿射子空间 实数 P}
   证明: ⟨p', h⟩
     ∠ p' (orthogonalProjection s p) p = π / 2 := by
   rw [angle_comm]; rw [angle_self_orthogonalProjection p h]

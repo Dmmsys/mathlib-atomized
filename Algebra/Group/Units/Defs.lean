@@ -54,8 +54,8 @@ structure Units
     - inv_val : inv * val = 1
 
 中文:
-结构 Units
-  参数: (α : 类型u) [Monoid α]
+结构 单位群
+  参数: (α : 类型u) [幺半群 α]
   公理与运算 (4 个):
     - val : α
     - inv : α
@@ -91,8 +91,8 @@ structure AddUnits
     - neg_val : neg + val = 0
 
 中文:
-结构 AddUnits
-  参数: (α : 类型u) [AddMonoid α]
+结构 加法单位群
+  参数: (α : 类型u) [加法幺半群 α]
   公理与运算 (4 个):
     - val : α
     - neg : α
@@ -146,7 +146,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv αˣ
+  签名: : 取逆 αˣ
   定义体: ⟨fun u => ⟨u.2, u.1, u.4, u.3⟩⟩
 
 Depends on / 依赖: AddUnits, AddUnits.instNeg, attribute, instNeg, instance
@@ -207,7 +207,7 @@ theorem val_mk
 中文:
 定理 val_mk
   条件: (a : α) (b h₁ h₂)
-  结论: ↑(Units.mk a b h₁ h₂) = a
+  结论: ↑(单位群.mk a b h₁ h₂) = a
   证明: rfl
 
 @[to_additive]
@@ -225,7 +225,7 @@ theorem val_injective
 
 中文:
 定理 val_injective
-  结论: Function.Injective (val : αˣ -> α)
+  结论: 函数.单射 (val : αˣ -> α)
 -/
 theorem val_injective : Function.Injective (val : αˣ -> α)
   | ⟨v, i₁, vi₁, iv₁⟩, ⟨v', i₂, vi₂, iv₂⟩, e => by
@@ -377,7 +377,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul αˣ
+  签名: 乘法 αˣ
   定义体: ⟨u₁.val * u₂.val, u₂.inv * u₁.inv,
       by rw [mul_assoc, ← mul_assoc u₂.val, val_inv, one_mul, val_inv],
       by rw [mul_assoc, ← mul_assoc u₁.inv, inv_val, one_mul, inv_val]⟩
@@ -402,7 +402,7 @@ instance :
 
 中文:
 实例 :
-  签名: One αˣ
+  签名: 幺 αˣ
   定义体: ⟨1, 1, one_mul 1, one_mul 1⟩
 
 Depends on / 依赖: one_mul
@@ -424,7 +424,7 @@ mul_one u := ext mul_one (u : α)
 
 中文:
 实例 instMulOneClass
-  签名: : MulOneClass αˣ where
+  签名: : MulOne类 αˣ where
   定义体: ext one_mul (u : α)
 mul_one u := ext mul_one (u : α)
 
@@ -447,7 +447,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited αˣ
+  签名: 可居 αˣ
   定义体: ⟨1⟩
 -/
 instance : Inhabited αˣ :=
@@ -810,7 +810,7 @@ mul_assoc := fun _ _ _ => ext mul_assoc _ _ _,
 
 中文:
 实例 instMonoid
-  签名: : Monoid αˣ
+  签名: : 幺半群 αˣ
   定义体: { (inferInstance : MulOneClass αˣ) with
 mul_assoc := fun _ _ _ => ext mul_assoc _ _ _,
     npow := fun n a =>
@@ -849,7 +849,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div αˣ
+  签名: 除法 αˣ
   定义体: fun a b =>
     { val := a * b⁻¹
       inv := b * a⁻¹
@@ -880,7 +880,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: : DivInvMonoid αˣ where
+  签名: : 除逆幺半群 αˣ where
   定义体: fun n a => match n, a with
     | Int.ofNat n, a => a ^ n
     | Int.negSucc n, a => (a ^ n.succ)⁻¹
@@ -908,7 +908,7 @@ instance instGroup
 
 中文:
 实例 instGroup
-  签名: : Group αˣ where
+  签名: : 群 αˣ where
   定义体: fun u => ext u.inv_val
 
 Depends on / 依赖: inv_val, u.inv_val
@@ -931,7 +931,7 @@ instance instCommGroupUnits
 
 中文:
 实例 instCommGroupUnits
-  签名: {α} [CommMonoid α]
+  签名: {α} [交换幺半群 α]
   定义体: fun _ _ => ext mul_comm _ _
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1043,8 +1043,8 @@ definition Units.mkOfMulEqOne
 @[to_additive (attr := simp)]
 
 中文:
-定义 Units.mkOfMulEqOne
-  签名: [Monoid α] [IsDedekindFiniteMonoid α] (a b : α) (hab : a * b = 1)
+定义 单位群.mkOfMulEqOne
+  签名: [幺半群 α] [是DedekindFinite幺半群 α] (a b : α) (hab : a * b = 1)
   定义体: ⟨a, b, hab, mul_eq_one_symm hab⟩
 
 @[to_additive (attr := simp)]
@@ -1064,8 +1064,8 @@ theorem Units.val_mkOfMulEqOne
   proof: rfl
 
 中文:
-定理 Units.val_mkOfMulEqOne
-  条件: [Monoid α] [IsDedekindFiniteMonoid α] {a b : α} (h : a * b = 1)
+定理 单位群.val_mkOfMulEqOne
+  条件: [幺半群 α] [是DedekindFinite幺半群 α] {a b : α} (h : a * b = 1)
   证明: rfl
 -/
 theorem Units.val_mkOfMulEqOne [Monoid α] [IsDedekindFiniteMonoid α] {a b : α} (h : a * b = 1) :
@@ -1091,7 +1091,7 @@ infixl:70 " /ₚ " => divp
 
 中文:
 定义 divp
-  签名: (a : α) (u : Units α)
+  签名: (a : α) (u : 单位群 α)
   定义体: a * (u⁻¹ : αˣ)
 
 @[inherit_doc]
@@ -1359,8 +1359,8 @@ definition IsUnit
   body: exists u : Mˣ, (u : M) = a
 
 中文:
-定义 IsUnit
-  签名: [Monoid M] (a : M)
+定义 是单位
+  签名: [幺半群 M] (a : M)
   定义体: exists u : Mˣ, (u : M) = a
 -/
 def IsUnit [Monoid M] (a : M) : Prop :=
@@ -1382,9 +1382,9 @@ lemma isUnit_iff_exists
   exact ⟨u.inv, u.val_inv, u.inv_val⟩
 
 中文:
-引理 isUnit_iff_exists
-  条件: [Monoid M] {x : M}
-  结论: IsUnit x ↔ 存在 b, x * b = 1 ∧ b * x = 1
+引理 isUnit_iff_存在
+  条件: [幺半群 M] {x : M}
+  结论: 是单位 x ↔ 存在 b, x * b = 1 ∧ b * x = 1
   证明: by
   refine ⟨fun ⟨u, hu⟩ => ?_, fun ⟨b, h1b, h2b⟩ => ⟨⟨x, b, h1b, h2b⟩, rfl⟩⟩
   subst x
@@ -1412,8 +1412,8 @@ theorem isUnit_iff_exists_and_exists
 @[to_additive (attr := simp)]
 
 中文:
-定理 isUnit_iff_exists_and_exists
-  条件: [Monoid M] {a : M}
+定理 isUnit_iff_存在_and_存在
+  条件: [幺半群 M] {a : M}
   证明: isUnit_iff_exists.trans
     ⟨fun ⟨b, hba, hab⟩ => ⟨⟨b, hba⟩, ⟨b, hab⟩⟩,
       fun ⟨⟨b, hb⟩, ⟨_, hc⟩⟩ => ⟨b, hb, left_inv_eq_right_inv hc hb ▸ hc⟩⟩
@@ -1441,9 +1441,9 @@ theorem Units.isUnit
 @[to_additive (attr := simp, grind ←)]
 
 中文:
-定理 Units.isUnit
-  条件: [Monoid M] (u : Mˣ)
-  结论: IsUnit (u : M)
+定理 单位群.isUnit
+  条件: [幺半群 M] (u : Mˣ)
+  结论: 是单位 (u : M)
   证明: ⟨u, rfl⟩
 
 @[to_additive (attr := simp, grind ←)]
@@ -1465,8 +1465,8 @@ theorem isUnit_one
 
 中文:
 定理 isUnit_one
-  条件: [Monoid M]
-  结论: IsUnit (1 : M)
+  条件: [幺半群 M]
+  结论: 是单位 (1 : M)
   证明: ⟨1, rfl⟩
 
 @[to_additive]
@@ -1486,8 +1486,8 @@ theorem IsUnit.of_mul_eq_one
 @[to_additive]
 
 中文:
-定理 IsUnit.of_mul_eq_one
-  条件: [Monoid M] [IsDedekindFiniteMonoid M] {a : M} (b : M) (h : a * b = 1)
+定理 是单位.of_mul_eq_one
+  条件: [幺半群 M] [是DedekindFinite幺半群 M] {a : M} (b : M) (h : a * b = 1)
   证明: ⟨.mkOfMulEqOne a b h, rfl⟩
 
 @[to_additive]
@@ -1508,8 +1508,8 @@ theorem IsUnit.of_mul_eq_one_right
   proof: .of_mul_eq_one a mul_eq_one_symm h
 
 中文:
-定理 IsUnit.of_mul_eq_one_right
-  结论: [Monoid M] [IsDedekindFiniteMonoid M] {b : M} (a : M)
+定理 是单位.of_mul_eq_one_right
+  结论: [幺半群 M] [是DedekindFinite幺半群 M] {b : M} (a : M)
   证明: .of_mul_eq_one a mul_eq_one_symm h
 
 Depends on / 依赖: mul_eq_one_symm, of_mul_eq_one
@@ -1536,8 +1536,8 @@ lemma IsUnit.exists_right_inv
 @[to_additive IsAddUnit.exists_neg']
 
 中文:
-引理 IsUnit.exists_right_inv
-  条件: (h : IsUnit a)
+引理 是单位.存在_right_inv
+  条件: (h : 是单位 a)
   结论: 存在 b, a * b = 1
   证明: by
   rcases h with ⟨⟨a, b, hab, _⟩, rfl⟩
@@ -1562,8 +1562,8 @@ lemma IsUnit.exists_left_inv
   exact ⟨b, hba⟩
 
 中文:
-引理 IsUnit.exists_left_inv
-  条件: {a : M} (h : IsUnit a)
+引理 是单位.存在_left_inv
+  条件: {a : M} (h : 是单位 a)
   结论: 存在 b, b * a = 1
   证明: by
   rcases h with ⟨⟨a, b, _, hba⟩, rfl⟩
@@ -1583,8 +1583,8 @@ lemma IsUnit.mul
   rintro ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨x * y, rfl⟩
 
 中文:
-引理 IsUnit.mul
-  结论: IsUnit a -> IsUnit b -> IsUnit (a * b)
+引理 是单位.mul
+  结论: 是单位 a -> 是单位 b -> 是单位 (a * b)
   证明: by
   rintro ⟨x, rfl⟩ ⟨y, rfl⟩; exact ⟨x * y, rfl⟩
 -/
@@ -1602,9 +1602,9 @@ lemma IsUnit.pow
   rintro ⟨u, rfl⟩; exact ⟨u ^ n, rfl⟩
 
 中文:
-引理 IsUnit.pow
+引理 是单位.pow
   条件: (n : 自然数)
-  结论: IsUnit a -> IsUnit (a ^ n)
+  结论: 是单位 a -> 是单位 (a ^ n)
   证明: by
   rintro ⟨u, rfl⟩; exact ⟨u ^ n, rfl⟩
 -/
@@ -1620,8 +1620,8 @@ lemma Subsingleton.units_of_isUnit
   proof: subsingleton_of_forall_eq 1 fun u => Units.ext h u u.isUnit
 
 中文:
-引理 Subsingleton.units_of_isUnit
-  条件: (h : 对任意 a : M, IsUnit a -> a = 1)
+引理 子单例.units_of_isUnit
+  条件: (h : 对任意 a : M, 是单位 a -> a = 1)
   证明: subsingleton_of_forall_eq 1 fun u => Units.ext h u u.isUnit
 -/
 @[to_additive] lemma Subsingleton.units_of_isUnit (h : forall a : M, IsUnit a -> a = 1) :
@@ -1639,7 +1639,7 @@ lemma Units.eq_one
   proof: Subsingleton.elim ..
 
 中文:
-引理 Units.eq_one
+引理 单位群.eq_one
   条件: (u : Mˣ)
   结论: u = 1
   证明: Subsingleton.elim ..
@@ -1656,8 +1656,8 @@ lemma IsUnit.eq_one
 @[to_additive (attr := simp)]
 
 中文:
-引理 IsUnit.eq_one
-  结论: IsUnit a -> a = 1
+引理 是单位.eq_one
+  结论: 是单位 a -> a = 1
   证明: by rintro ⟨u, rfl⟩; simp [u.eq_one]
 
 @[to_additive (attr := simp)]
@@ -1676,7 +1676,7 @@ lemma isUnit_iff_eq_one
 
 中文:
 引理 isUnit_iff_eq_one
-  结论: IsUnit a ↔ a = 1 where
+  结论: 是单位 a ↔ a = 1 where
   证明: IsUnit.eq_one
   mpr := by rintro rfl; exact isUnit_one
 
@@ -1700,8 +1700,8 @@ theorem isUnit_iff_exists_inv
 @[to_additive]
 
 中文:
-定理 isUnit_iff_exists_inv
-  条件: [Monoid M] [IsDedekindFiniteMonoid M] {a : M}
+定理 isUnit_iff_存在_inv
+  条件: [幺半群 M] [是DedekindFinite幺半群 M] {a : M}
   证明: ⟨(·.exists_right_inv), fun ⟨b, hab⟩ => .of_mul_eq_one b hab⟩
 
 @[to_additive]
@@ -1722,8 +1722,8 @@ theorem isUnit_iff_exists_inv'
   proof: ⟨(·.exists_left_inv), fun ⟨b, hba⟩ => .of_mul_eq_one_right b hba⟩
 
 中文:
-定理 isUnit_iff_exists_inv'
-  条件: [Monoid M] [IsDedekindFiniteMonoid M] {a : M}
+定理 isUnit_iff_存在_inv'
+  条件: [幺半群 M] [是DedekindFinite幺半群 M] {a : M}
   证明: ⟨(·.exists_left_inv), fun ⟨b, hba⟩ => .of_mul_eq_one_right b hba⟩
 
 Depends on / 依赖: exists_left_inv, of_mul_eq_one_right
@@ -1749,9 +1749,9 @@ theorem Units.isUnit_mul_units
     fun v => v.mul u.isUnit
 
 中文:
-定理 Units.isUnit_mul_units
-  条件: [Monoid M] (a : M) (u : Mˣ)
-  结论: IsUnit (a * u) ↔ IsUnit a
+定理 单位群.isUnit_mul_units
+  条件: [幺半群 M] (a : M) (u : Mˣ)
+  结论: 是单位 (a * u) ↔ 是单位 a
   证明: Iff.intro
     (fun ⟨v, hv⟩ => by
       have : IsUnit (a * ↑u * ↑u⁻¹) := by exists v * u⁻¹; rw [← hv, Units.val_mul]
@@ -1785,8 +1785,8 @@ theorem Units.isUnit_units_mul
 @[to_additive]
 
 中文:
-定理 Units.isUnit_units_mul
-  条件: {M : 类型} [Monoid M] (u : Mˣ) (a : M)
+定理 单位群.isUnit_units_mul
+  条件: {M : 类型} [幺半群 M] (u : Mˣ) (a : M)
   证明: Iff.intro
     (fun ⟨v, hv⟩ => by
       have : IsUnit (↑u⁻¹ * (↑u * a)) := by exists u⁻¹ * v; rw [← hv, Units.val_mul]
@@ -1819,7 +1819,7 @@ theorem isUnit_of_mul_isUnit_left
 
 中文:
 定理 isUnit_of_mul_isUnit_left
-  结论: [Monoid M] [IsDedekindFiniteMonoid M] {x y : M}
+  结论: [幺半群 M] [是DedekindFinite幺半群 M] {x y : M}
   证明: let ⟨z, hz⟩ := isUnit_iff_exists_inv.1 hu
   isUnit_iff_exists_inv.2 ⟨y * z, by rwa [← mul_assoc]⟩
 
@@ -1844,7 +1844,7 @@ theorem isUnit_of_mul_isUnit_right
 
 中文:
 定理 isUnit_of_mul_isUnit_right
-  结论: [Monoid M] [IsDedekindFiniteMonoid M] {x y : M}
+  结论: [幺半群 M] [是DedekindFinite幺半群 M] {x y : M}
   证明: let ⟨z, hz⟩ := isUnit_iff_exists_inv'.1 hu
   isUnit_iff_exists_inv'.2 ⟨z * x, by rwa [mul_assoc]⟩
 
@@ -1869,7 +1869,7 @@ theorem mul_iff
 
 中文:
 定理 mul_iff
-  条件: [Monoid M] [IsDedekindFiniteMonoid M] {x y : M}
+  条件: [幺半群 M] [是DedekindFinite幺半群 M] {x y : M}
   证明: ⟨fun h => ⟨isUnit_of_mul_isUnit_left h, isUnit_of_mul_isUnit_right h⟩,
    fun h => IsUnit.mul h.1 h.2⟩
 
@@ -1901,7 +1901,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def unit (h : IsUnit a)
+  签名: def unit (h : 是单位 a)
   定义体: (Classical.choose h).copy a (Classical.choose_spec h).symm _ rfl
 
 @[to_additive (attr := simp)]
@@ -1923,7 +1923,7 @@ theorem unit_of_val_units
 
 中文:
 定理 unit_of_val_units
-  条件: {a : Mˣ} (h : IsUnit (a : M))
+  条件: {a : Mˣ} (h : 是单位 (a : M))
   结论: h.unit = a
   证明: Units.ext rfl
 
@@ -1948,7 +1948,7 @@ theorem unit_spec
 
 中文:
 定理 unit_spec
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: ↑h.unit = a
   证明: rfl
 
@@ -1973,7 +1973,7 @@ theorem unit_one
 
 中文:
 定理 unit_one
-  条件: (h : IsUnit (1 : M))
+  条件: (h : 是单位 (1 : M))
   结论: h.unit = 1
   证明: Units.ext rfl
 
@@ -1998,7 +1998,7 @@ theorem unit_mul
 
 中文:
 定理 unit_mul
-  条件: (ha : IsUnit a) (hb : IsUnit b)
+  条件: (ha : 是单位 a) (hb : 是单位 b)
   结论: (ha.mul hb).unit = ha.unit * hb.unit
   证明: Units.ext rfl
 
@@ -2023,7 +2023,7 @@ theorem unit_pow
 
 中文:
 定理 unit_pow
-  条件: (h : IsUnit a) (n : 自然数)
+  条件: (h : 是单位 a) (n : 自然数)
   结论: (h.pow n).unit = h.unit ^ n
   证明: Units.ext rfl
 
@@ -2048,7 +2048,7 @@ theorem val_inv_mul
 
 中文:
 定理 val_inv_mul
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: ↑h.unit⁻¹ * a = 1
   证明: Units.mul_inv _
 
@@ -2072,7 +2072,7 @@ theorem mul_val_inv
 
 中文:
 定理 mul_val_inv
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a * ↑h.unit⁻¹ = 1
   证明: by
   rw [← h.unit.mul_inv]; congr
@@ -2099,7 +2099,7 @@ grind_pattern mul_left_iff => IsUnit a, IsUnit (a * b)
 
 中文:
 定理 mul_left_iff
-  条件: {a b : M} (ha : IsUnit a)
+  条件: {a b : M} (ha : 是单位 a)
   证明: show IsUnit (ha.unit * b) ↔ _ by simp [-IsUnit.unit_spec]
 
 grind_pattern mul_left_iff => IsUnit a, IsUnit (a * b)
@@ -2124,7 +2124,7 @@ grind_pattern mul_right_iff => IsUnit b, IsUnit (a * b)
 
 中文:
 定理 mul_right_iff
-  条件: {a b : M} (hb : IsUnit b)
+  条件: {a b : M} (hb : 是单位 b)
   证明: show IsUnit (a * hb.unit) ↔ _ by simp [-IsUnit.unit_spec]
 
 grind_pattern mul_right_iff => IsUnit b, IsUnit (a * b)
@@ -2157,7 +2157,7 @@ theorem inv_mul_cancel
 
 中文:
 定理 inv_mul_cancel
-  结论: IsUnit a -> a⁻¹ * a = 1
+  结论: 是单位 a -> a⁻¹ * a = 1
   证明: by
   rintro ⟨u, rfl⟩
   rw [← Units.val_inv_eq_inv_val]; rw [Units.inv_mul]
@@ -2181,7 +2181,7 @@ theorem mul_inv_cancel
 
 中文:
 定理 mul_inv_cancel
-  结论: IsUnit a -> a * a⁻¹ = 1
+  结论: 是单位 a -> a * a⁻¹ = 1
   证明: by
   rintro ⟨u, rfl⟩
   rw [← Units.val_inv_eq_inv_val]; rw [Units.mul_inv]
@@ -2208,7 +2208,7 @@ definition unit'
 
 中文:
 定义 unit'
-  签名: (h : IsUnit a)
+  签名: (h : 是单位 a)
   定义体: ⟨a, a⁻¹, h.mul_inv_cancel, h.inv_mul_cancel⟩
 
 Depends on / 依赖: h.inv_mul_cancel, h.mul_inv_cancel, inv_mul_cancel, mul_inv_cancel
@@ -2228,7 +2228,7 @@ lemma val_inv_unit'
 
 中文:
 引理 val_inv_unit'
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: ↑(h.unit'⁻¹) = a⁻¹
   证明: rfl
 
@@ -2250,7 +2250,7 @@ lemma mul_inv_cancel_left
 
 中文:
 引理 mul_inv_cancel_left
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: 对任意 b, a * (a⁻¹ * b) = b
   证明: h.unit'.mul_inv_cancel_left
 
@@ -2273,7 +2273,7 @@ lemma inv_mul_cancel_left
 
 中文:
 引理 inv_mul_cancel_left
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: 对任意 b, a⁻¹ * (a * b) = b
   证明: h.unit'.inv_mul_cancel_left
 
@@ -2296,7 +2296,7 @@ lemma div_self
 
 中文:
 引理 div_self
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: a / a = 1
   证明: by rw [div_eq_mul_inv, h.mul_inv_cancel]
 
@@ -2321,8 +2321,8 @@ lemma inv
 
 中文:
 引理 inv
-  条件: (h : IsUnit a)
-  结论: IsUnit a⁻¹
+  条件: (h : 是单位 a)
+  结论: 是单位 a⁻¹
   证明: by
   obtain ⟨u, hu⟩ := h
   rw [← hu]; rw [← Units.val_inv_eq_inv_val]
@@ -2351,7 +2351,7 @@ lemma unit_inv
 
 中文:
 引理 unit_inv
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: h.inv.unit = h.unit⁻¹
   证明: Units.ext h.unit.val_inv_eq_inv_val.symm
 
@@ -2377,8 +2377,8 @@ lemma div
 
 中文:
 引理 div
-  条件: (ha : IsUnit a) (hb : IsUnit b)
-  结论: IsUnit (a / b)
+  条件: (ha : 是单位 a) (hb : 是单位 b)
+  结论: 是单位 (a / b)
   证明: by
   rw [div_eq_mul_inv]; exact ha.mul hb.inv
 
@@ -2403,7 +2403,7 @@ lemma unit_div
 
 中文:
 引理 unit_div
-  条件: (ha : IsUnit a) (hb : IsUnit b)
+  条件: (ha : 是单位 a) (hb : 是单位 b)
   结论: (ha.div hb).unit = ha.unit / hb.unit
   证明: Units.ext (ha.unit.val_div_eq_div_val hb.unit).symm
 
@@ -2429,7 +2429,7 @@ lemma div_mul_cancel_right
 
 中文:
 引理 div_mul_cancel_right
-  条件: (h : IsUnit b) (a : α)
+  条件: (h : 是单位 b) (a : α)
   结论: b / (a * b) = a⁻¹
   证明: by
   rw [div_eq_mul_inv]; rw [mul_inv_rev]; rw [h.mul_inv_cancel_left]
@@ -2452,7 +2452,7 @@ lemma mul_div_mul_right
 
 中文:
 引理 mul_div_mul_right
-  条件: (h : IsUnit c) (a b : α)
+  条件: (h : 是单位 c) (a b : α)
   结论: a * c / (b * c) = a / b
   证明: by
   simp only [div_eq_mul_inv, mul_inv_rev, mul_assoc, h.mul_inv_cancel_left]
@@ -2480,7 +2480,7 @@ lemma div_mul_cancel_left
 
 中文:
 引理 div_mul_cancel_left
-  条件: (h : IsUnit a) (b : α)
+  条件: (h : 是单位 a) (b : α)
   结论: a / (a * b) = b⁻¹
   证明: by
   rw [mul_comm]; rw [h.div_mul_cancel_right]
@@ -2503,7 +2503,7 @@ lemma mul_div_mul_left
 
 中文:
 引理 mul_div_mul_left
-  条件: (h : IsUnit c) (a b : α)
+  条件: (h : 是单位 c) (a b : α)
   结论: c * a / (c * b) = a / b
   证明: by
   rw [mul_comm c]; rw [mul_comm c]; rw [h.mul_div_mul_right]
@@ -2528,7 +2528,7 @@ lemma divp_eq_div
 
 中文:
 引理 divp_eq_div
-  条件: [DivisionMonoid α] (a : α) (u : αˣ)
+  条件: [Division幺半群 α] (a : α) (u : αˣ)
   结论: a /ₚ u = a / u
   证明: by
   rw [div_eq_mul_inv]; rw [divp]; rw [u.val_inv_eq_inv_val]
@@ -2551,9 +2551,9 @@ lemma Group.isUnit
   proof: ⟨⟨a, a⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩, rfl⟩
 
 中文:
-引理 Group.isUnit
-  条件: [Group α] (a : α)
-  结论: IsUnit a
+引理 群.isUnit
+  条件: [群 α] (a : α)
+  结论: 是单位 a
   证明: ⟨⟨a, a⁻¹, mul_inv_cancel _, inv_mul_cancel _⟩, rfl⟩
 
 Depends on / 依赖: inv_mul_cancel, mul_inv_cancel
@@ -2581,7 +2581,7 @@ definition invOfIsUnit
 
 中文:
 定义 invOfIsUnit
-  签名: [Monoid M] (h : 对任意 a : M, IsUnit a)
+  签名: [幺半群 M] (h : 对任意 a : M, 是单位 a)
   定义体: fun a => ↑(h a).unit⁻¹
 -/
 noncomputable def invOfIsUnit [Monoid M] (h : forall a : M, IsUnit a) : Inv M where
@@ -2603,7 +2603,7 @@ definition groupOfIsUnit
 
 中文:
 定义 groupOfIsUnit
-  签名: [hM : Monoid M] (h : 对任意 a : M, IsUnit a)
+  签名: [hM : 幺半群 M] (h : 对任意 a : M, 是单位 a)
   定义体: { hM with
     toInv := invOfIsUnit h,
     inv_mul_cancel := fun a => by
@@ -2635,7 +2635,7 @@ definition commGroupOfIsUnit
 
 中文:
 定义 commGroupOfIsUnit
-  签名: [hM : CommMonoid M] (h : 对任意 a : M, IsUnit a)
+  签名: [hM : 交换幺半群 M] (h : 对任意 a : M, 是单位 a)
   定义体: { hM with
     toInv := invOfIsUnit h,
     inv_mul_cancel := fun a => by

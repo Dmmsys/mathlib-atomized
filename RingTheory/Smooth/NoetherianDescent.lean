@@ -51,15 +51,15 @@ structure DescentAux
 结构 DescentAux
   参数: where
   公理与运算 (11 个):
-    - vars : Type
-    - rels : Type
-    - P : Presentation A B vars rels
-    - σ : B ->ₐ[A] MvPolynomial vars A ⧸ P.ker ^ 2
-    - h : vars -> MvPolynomial vars A
-    - p : rels -> MvPolynomial rels (MvPolynomial vars A)
+    - vars : 类型
+    - rels : 类型
+    - P : 呈现 A B vars rels
+    - σ : B ->ₐ[A] 多元多项式 vars A ⧸ P.ker ^ 2
+    - h : vars -> 多元多项式 vars A
+    - p : rels -> 多元多项式 rels (多元多项式 vars A)
     - hphom : 对任意 (j : rels), (p j).IsHomogeneous 2
     - hp : 对任意 (j : rels), (eval P.relation) (p j) = (aeval h) (P.relation j)
-    - q : vars -> MvPolynomial rels P.Ring
+    - q : vars -> 多元多项式 rels P.环
     - hqhom : 对任意 (i : vars), (q i).IsHomogeneous 1
     - hq : 对任意 (i : vars), (eval P.relation) (q i) = h i - X i
 -/
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (D.subalgebra R)
+  签名: 交换环 (D.subalgebra R)
   定义体: inferInstanceAs CommRing (Algebra.adjoin _ _)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, CommRing, adjoin
@@ -146,7 +146,7 @@ instance algebra₀
 
 中文:
 实例 algebra₀
-  签名: : Algebra R (D.subalgebra R)
+  签名: : 代数 R (D.subalgebra R)
   定义体: inferInstanceAs Algebra R (Algebra.adjoin _ _)
 
 Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
@@ -166,7 +166,7 @@ instance algebra₁
 
 中文:
 实例 algebra₁
-  签名: : Algebra (D.subalgebra R) A
+  签名: : 代数 (D.subalgebra R) A
   定义体: inferInstanceAs Algebra (Algebra.adjoin _ _) A
 
 Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
@@ -186,7 +186,7 @@ instance algebra₂
 
 中文:
 实例 algebra₂
-  签名: : Algebra (D.subalgebra R) B
+  签名: : 代数 (D.subalgebra R) B
   定义体: inferInstanceAs Algebra (Algebra.adjoin _ _) B
 
 Depends on / 依赖: Algebra, Algebra.adjoin, adjoin
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower (D.subalgebra R) A B
+  签名: 标量塔 (D.subalgebra R) A B
   定义体: inferInstanceAs IsScalarTower (Algebra.adjoin _ _) _ _
 
 Depends on / 依赖: Algebra, Algebra.adjoin, IsScalarTower, adjoin
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul (D.subalgebra R) A
+  签名: 忠实标量乘法 (D.subalgebra R) A
   定义体: inferInstanceAs FaithfulSMul (Algebra.adjoin _ _) _
 
 Depends on / 依赖: Algebra, Algebra.adjoin, FaithfulSMul, adjoin
@@ -246,7 +246,7 @@ lemma fg_subalgebra
 
 中文:
 引理 fg_subalgebra
-  条件: [Finite D.vars] [Finite D.rels]
+  条件: [有限 D.vars] [有限 D.rels]
   结论: (D.subalgebra R).FG
   证明: by
   refine Subalgebra.fg_def.mpr ⟨_, ?_, rfl⟩
@@ -283,7 +283,7 @@ instance hasCoeffs
 
 中文:
 实例 hasCoeffs
-  签名: : D.P.HasCoeffs (D.subalgebra R) where
+  签名: : D.P.有余effs (D.subalgebra R) where
   定义体: by
     #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
     (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal
@@ -325,7 +325,7 @@ lemma coeffs_h_subset
 中文:
 引理 coeffs_h_subset
   条件: (i)
-  结论: ↑(D.h i).coeffs subseteq Set.range ⇑(algebraMap (D.subalgebra R) A)
+  结论: ↑(D.h i).coeffs subseteq 集合.range ⇑(algebraMap (D.subalgebra R) A)
   证明: by
   have : ((D.h i).coeffs : Set _) subseteq ⋃ i, ((D.h i).coeffs : Set A) :=
     Set.subset_iUnion_of_subset i subset_rfl
@@ -443,7 +443,7 @@ lemma exists_kerSquareLift_comp_eq_id
    
 
 中文:
-引理 exists_kerSquareLift_comp_eq_id
+引理 存在_kerSquareLift_comp_eq_id
   证明: by
   choose p hp using fun i => (D.h i).mem_range_map_iff_coeffs_subset.mpr (D.coeffs_h_subset R i)
   refine ⟨?_, ?_⟩

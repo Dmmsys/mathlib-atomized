@@ -52,7 +52,7 @@ instance decidableEq
 
 中文:
 实例 decidableEq
-  签名: [DecidableEq α] [Fintype m] [Fintype n]
+  签名: [DecidableEq α] [有限类型 m] [有限类型 n]
   定义体: Fintype.decidablePiFintype
 
 Depends on / 依赖: Fintype, Fintype.decidablePiFintype, decidablePiFintype
@@ -82,7 +82,7 @@ definition ofLinearEquiv
 
 中文:
 定义 ofLinearEquiv
-  签名: [Semiring R] [AddCommMonoid α] [Module R α]
+  签名: [半环 R] [加法交换幺半群 α] [模 R α]
   定义体: ofAddEquiv
   map_smul' _ _ := rfl
 
@@ -102,7 +102,7 @@ lemma coe_ofLinearEquiv
 
 中文:
 引理 coe_ofLinearEquiv
-  条件: [Semiring R] [AddCommMonoid α] [Module R α]
+  条件: [半环 R] [加法交换幺半群 α] [模 R α]
   证明: rfl
 -/
 @[simp] lemma coe_ofLinearEquiv [Semiring R] [AddCommMonoid α] [Module R α] :
@@ -117,7 +117,7 @@ lemma coe_ofLinearEquiv_symm
 
 中文:
 引理 coe_ofLinearEquiv_symm
-  条件: [Semiring R] [AddCommMonoid α] [Module R α]
+  条件: [半环 R] [加法交换幺半群 α] [模 R α]
   证明: rfl
 -/
 @[simp] lemma coe_ofLinearEquiv_symm [Semiring R] [AddCommMonoid α] [Module R α] :
@@ -135,7 +135,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: [AddCommMonoid α] (i : m) (j : n) (s : Finset β) (g : β -> Matrix m n α)
+  条件: [加法交换幺半群 α] (i : m) (j : n) (s : 有限集 β) (g : β -> 矩阵 m n α)
   证明: (congr_fun (s.sum_apply i g) j).trans (s.sum_apply j _)
 
 Depends on / 依赖: congr_fun, s.sum_apply, sum_apply
@@ -170,7 +170,7 @@ definition diagonalAddMonoidHom
 
 中文:
 定义 diagonalAddMonoidHom
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: diagonal
   map_zero' := diagonal_zero
   map_add' x y := (diagonal_add x y).symm
@@ -196,7 +196,7 @@ definition diagonalLinearMap
 
 中文:
 定义 diagonalLinearMap
-  签名: [Semiring R] [AddCommMonoid α] [Module R α]
+  签名: [半环 R] [加法交换幺半群 α] [模 R α]
   定义体: { diagonalAddMonoidHom n α with map_smul' := diagonal_smul }
 
 Depends on / 依赖: diagonalAddMonoidHom, diagonal_smul, map_smul
@@ -224,7 +224,7 @@ lemma zero_le_one_elem
 
 中文:
 引理 zero_le_one_elem
-  条件: [Preorder α] [ZeroLEOneClass α] (i j : n)
+  条件: [预序 α] [ZeroLEOne类 α] (i j : n)
   证明: by
   by_cases hi : i = j
   · subst hi
@@ -248,7 +248,7 @@ lemma zero_le_one_row
 
 中文:
 引理 zero_le_one_row
-  条件: [Preorder α] [ZeroLEOneClass α] (i : n)
+  条件: [预序 α] [ZeroLEOne类 α] (i : n)
   证明: zero_le_one_elem i
 
 Depends on / 依赖: zero_le_one_elem
@@ -279,7 +279,7 @@ definition diagAddMonoidHom
 
 中文:
 定义 diagAddMonoidHom
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: diag
   map_zero' := diag_zero
   map_add' := diag_add
@@ -303,7 +303,7 @@ definition diagLinearMap
 
 中文:
 定义 diagLinearMap
-  签名: [Semiring R] [AddCommMonoid α] [Module R α]
+  签名: [半环 R] [加法交换幺半群 α] [模 R α]
   定义体: { diagAddMonoidHom n α with map_smul' := diag_smul }
 
 Depends on / 依赖: diagAddMonoidHom, diag_smul, map_smul
@@ -327,8 +327,8 @@ theorem diag_list_sum
 
 中文:
 定理 diag_list_sum
-  条件: [AddMonoid α] (l : List (Matrix n n α))
-  结论: diag l.sum = (l.map diag).sum
+  条件: [加法幺半群 α] (l : 列表 (矩阵 n n α))
+  结论: diag l.求和 = (l.map diag).求和
   证明: map_list_sum (diagAddMonoidHom n α) l
 
 @[simp]
@@ -351,7 +351,7 @@ theorem diag_multiset_sum
 
 中文:
 定理 diag_multiset_sum
-  条件: [AddCommMonoid α] (s : Multiset (Matrix n n α))
+  条件: [加法交换幺半群 α] (s : Multiset (矩阵 n n α))
   证明: map_multiset_sum (diagAddMonoidHom n α) s
 
 @[simp]
@@ -373,7 +373,7 @@ theorem diag_sum
 
 中文:
 定理 diag_sum
-  条件: {ι} [AddCommMonoid α] (s : Finset ι) (f : ι -> Matrix n n α)
+  条件: {ι} [加法交换幺半群 α] (s : 有限集 ι) (f : ι -> 矩阵 n n α)
   证明: map_sum (diagAddMonoidHom n α) f s
 
 Depends on / 依赖: diagAddMonoidHom, map_sum
@@ -407,7 +407,7 @@ definition diagonalRingHom
 
 中文:
 定义 diagonalRingHom
-  签名: [Fintype n] [DecidableEq n]
+  签名: [有限类型 n] [DecidableEq n]
   定义体: { diagonalAddMonoidHom n α with
     toFun := diagonal
     map_one' := diagonal_one
@@ -437,7 +437,7 @@ theorem diagonal_pow
 
 中文:
 定理 diagonal_pow
-  条件: [Fintype n] [DecidableEq n] (v : n -> α) (k : 自然数)
+  条件: [有限类型 n] [DecidableEq n] (v : n -> α) (k : 自然数)
   证明: (map_pow (diagonalRingHom n α) v k).symm
 
 Depends on / 依赖: diagonalRingHom, map_pow
@@ -456,7 +456,7 @@ definition scalar
 
 中文:
 定义 scalar
-  签名: (n : 类型u) [DecidableEq n] [Fintype n]
+  签名: (n : 类型u) [DecidableEq n] [有限类型 n]
   定义体: (diagonalRingHom n α).comp Pi.constRingHom n α
 
 Depends on / 依赖: Pi.constRingHom, constRingHom, diagonalRingHom
@@ -498,7 +498,7 @@ theorem scalar_inj
 
 中文:
 定理 scalar_inj
-  条件: [Nonempty n] {r s : α}
+  条件: [非空 n] {r s : α}
   结论: scalar n r = scalar n s ↔ r = s
   证明: (diagonal_injective.comp Function.const_injective).eq_iff
 
@@ -518,7 +518,7 @@ theorem scalar_comm_iff
 
 中文:
 定理 scalar_comm_iff
-  条件: {r : α} {M : Matrix m n α}
+  条件: {r : α} {M : 矩阵 m n α}
   证明: by
   simp_rw [scalar_apply, ← smul_eq_diagonal_mul, ← op_smul_eq_mul_diagonal]
 
@@ -538,7 +538,7 @@ theorem scalar_commute_iff
 
 中文:
 定理 scalar_commute_iff
-  条件: {r : α} {M : Matrix n n α}
+  条件: {r : α} {M : 矩阵 n n α}
   证明: scalar_comm_iff
 
 Depends on / 依赖: scalar_comm_iff
@@ -557,7 +557,7 @@ theorem scalar_comm
 
 中文:
 定理 scalar_comm
-  条件: (r : α) (hr : 对任意 r', Commute r r') (M : Matrix m n α)
+  条件: (r : α) (hr : 对任意 r', Commute r r') (M : 矩阵 m n α)
   证明: scalar_comm_iff.2 ext fun _ _ => hr _
 
 Depends on / 依赖: scalar_comm_iff
@@ -576,7 +576,7 @@ theorem scalar_commute
 
 中文:
 定理 scalar_commute
-  条件: (r : α) (hr : 对任意 r', Commute r r') (M : Matrix n n α)
+  条件: (r : α) (hr : 对任意 r', Commute r r') (M : 矩阵 n n α)
   证明: scalar_comm r hr M
 
 Depends on / 依赖: scalar_comm
@@ -605,7 +605,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: : Algebra R (Matrix n n α) where
+  签名: : 代数 R (矩阵 n n α) where
   定义体: (Matrix.scalar n).comp (algebraMap R α)
   commutes' _ _ := scalar_commute _ (fun _ => Algebra.commutes _ _) _
   smul_def' r x := by ext; simp [Matrix.scalar, Algebra.smul_def r]
@@ -709,7 +709,7 @@ definition diagonalAlgHom
 
 中文:
 定义 diagonalAlgHom
-  签名: : (n -> α) ->ₐ[R] Matrix n n α
+  签名: : (n -> α) ->ₐ[R] 矩阵 n n α
   定义体: { diagonalRingHom n α with
     toFun := diagonal
     commutes' := fun r => (algebraMap_eq_diagonal r).symm }
@@ -734,7 +734,7 @@ definition scalarAlgHom
 
 中文:
 定义 scalarAlgHom
-  签名: : α ->ₐ[R] Matrix n n α where
+  签名: : α ->ₐ[R] 矩阵 n n α where
   定义体: scalar n
   commutes' _ := rfl
 
@@ -1068,7 +1068,7 @@ theorem mapMatrix_refl
 
 中文:
 定理 mapMatrix_refl
-  结论: (Equiv.refl α).mapMatrix = Equiv.refl (Matrix m n α)
+  结论: (等价.refl α).mapMatrix = 等价.refl (矩阵 m n α)
   证明: rfl
 
 @[simp]
@@ -1091,7 +1091,7 @@ theorem mapMatrix_symm
 中文:
 定理 mapMatrix_symm
   条件: (f : α ≃ β)
-  结论: f.mapMatrix.symm = (f.symm.mapMatrix : Matrix m n β ≃ _)
+  结论: f.mapMatrix.symm = (f.symm.mapMatrix : 矩阵 m n β ≃ _)
   证明: rfl
 
 @[simp]
@@ -1168,7 +1168,7 @@ theorem mapMatrix_id
 
 中文:
 定理 mapMatrix_id
-  结论: (AddMonoidHom.id α).mapMatrix = AddMonoidHom.id (Matrix m n α)
+  结论: (加法幺半群态射.id α).mapMatrix = 加法幺半群态射.id (矩阵 m n α)
   证明: rfl
 
 @[simp]
@@ -1225,7 +1225,7 @@ theorem mapMatrix_zero
 
 中文:
 定理 mapMatrix_zero
-  结论: (0 : α ->+ β).mapMatrix = (0 : Matrix m n α ->+ _)
+  结论: (0 : α ->+ β).mapMatrix = (0 : 矩阵 m n α ->+ _)
   证明: rfl
 -/
 theorem mapMatrix_zero : (0 : α ->+ β).mapMatrix = (0 : Matrix m n α ->+ _) := rfl
@@ -1245,7 +1245,7 @@ theorem mapMatrix_add
 
 中文:
 定理 mapMatrix_add
-  条件: [AddZeroClass α] [AddCommMonoid β] (f g : α ->+ β)
+  条件: [加法零类 α] [加法交换幺半群 β] (f g : α ->+ β)
   证明: rfl
 
 @[simp]
@@ -1266,7 +1266,7 @@ theorem mapMatrix_sub
 
 中文:
 定理 mapMatrix_sub
-  条件: [AddZeroClass α] [AddCommGroup β] (f g : α ->+ β)
+  条件: [加法零类 α] [加法交换群 β] (f g : α ->+ β)
   证明: rfl
 
 @[simp]
@@ -1287,7 +1287,7 @@ theorem mapMatrix_neg
 
 中文:
 定理 mapMatrix_neg
-  条件: [AddZeroClass α] [AddCommGroup β] (f : α ->+ β)
+  条件: [加法零类 α] [加法交换群 β] (f : α ->+ β)
   证明: rfl
 
 @[simp]
@@ -1306,7 +1306,7 @@ theorem mapMatrix_smul
 
 中文:
 定理 mapMatrix_smul
-  结论: [Monoid A] [AddZeroClass α] [AddMonoid β] [DistribMulAction A β]
+  结论: [幺半群 A] [加法零类 α] [加法幺半群 β] [分配乘法作用 A β]
   证明: rfl
 -/
 theorem mapMatrix_smul [Monoid A] [AddZeroClass α] [AddMonoid β] [DistribMulAction A β]
@@ -1366,7 +1366,7 @@ theorem mapMatrix_refl
 
 中文:
 定理 mapMatrix_refl
-  结论: (AddEquiv.refl α).mapMatrix = AddEquiv.refl (Matrix m n α)
+  结论: (加法等价.refl α).mapMatrix = 加法等价.refl (矩阵 m n α)
   证明: rfl
 
 @[simp]
@@ -1389,7 +1389,7 @@ theorem mapMatrix_symm
 中文:
 定理 mapMatrix_symm
   条件: (f : α ≃+ β)
-  结论: f.mapMatrix.symm = (f.symm.mapMatrix : Matrix m n β ≃+ _)
+  结论: f.mapMatrix.symm = (f.symm.mapMatrix : 矩阵 m n β ≃+ _)
   证明: rfl
 
 @[simp]
@@ -1487,7 +1487,7 @@ theorem mapMatrix_id
 
 中文:
 定理 mapMatrix_id
-  结论: LinearMap.id.mapMatrix = (LinearMap.id : Matrix m n α ->ₗ[R] _)
+  结论: 线性映射.id.mapMatrix = (线性映射.id : 矩阵 m n α ->ₗ[R] _)
   证明: rfl
 
 @[simp]
@@ -1546,7 +1546,7 @@ theorem mapMatrix_zero
 
 中文:
 定理 mapMatrix_zero
-  结论: (0 : α ->ₛₗ[σᵣₛ] β).mapMatrix = (0 : Matrix m n α ->ₛₗ[_] _)
+  结论: (0 : α ->ₛₗ[σᵣₛ] β).mapMatrix = (0 : 矩阵 m n α ->ₛₗ[_] _)
   证明: rfl
 
 @[simp]
@@ -1585,7 +1585,7 @@ theorem mapMatrix_smul
 
 中文:
 定理 mapMatrix_smul
-  结论: [Monoid A] [DistribMulAction A β] [SMulCommClass S A β]
+  结论: [幺半群 A] [分配乘法作用 A β] [标量交换类 S A β]
   证明: rfl
 -/
 theorem mapMatrix_smul [Monoid A] [DistribMulAction A β] [SMulCommClass S A β]
@@ -1609,7 +1609,7 @@ definition mapMatrixLinear
 
 中文:
 定义 mapMatrixLinear
-  签名: [Semiring A] [Module A β] [SMulCommClass S A β]
+  签名: [半环 A] [模 A β] [标量交换类 S A β]
   定义体: mapMatrix
   map_add' := mapMatrix_add
   map_smul' := mapMatrix_smul
@@ -1728,7 +1728,7 @@ theorem mapMatrix_refl
 
 中文:
 定理 mapMatrix_refl
-  结论: (LinearEquiv.refl R α).mapMatrix = LinearEquiv.refl R (Matrix m n α)
+  结论: (线性等价.refl R α).mapMatrix = 线性等价.refl R (矩阵 m n α)
   证明: rfl
 
 @[simp]
@@ -1871,7 +1871,7 @@ theorem mapMatrix_id
 
 中文:
 定理 mapMatrix_id
-  结论: (RingHom.id α).mapMatrix = RingHom.id (Matrix m m α)
+  结论: (环态射.id α).mapMatrix = 环态射.id (矩阵 m m α)
   证明: rfl
 
 @[simp]
@@ -1906,8 +1906,8 @@ lemma _root_.Matrix.map_pow
   proof: f.mapMatrix.map_pow M a
 
 中文:
-引理 _root_.Matrix.map_pow
-  结论: {α β : 类型} [Semiring α] [Semiring β]
+引理 _root_.矩阵.map_pow
+  结论: {α β : 类型} [半环 α] [半环 β]
   证明: f.mapMatrix.map_pow M a
 -/
 protected lemma _root_.Matrix.map_pow {α β : Type*} [Semiring α] [Semiring β]
@@ -1968,7 +1968,7 @@ theorem mapMatrix_refl
 
 中文:
 定理 mapMatrix_refl
-  结论: (RingEquiv.refl α).mapMatrix = RingEquiv.refl (Matrix m m α)
+  结论: (环等价.refl α).mapMatrix = 环等价.refl (矩阵 m m α)
   证明: rfl
 
 @[simp]
@@ -1991,7 +1991,7 @@ theorem mapMatrix_symm
 中文:
 定理 mapMatrix_symm
   条件: (f : α ≃+* β)
-  结论: f.mapMatrix.symm = (f.symm.mapMatrix : Matrix m m β ≃+* _)
+  结论: f.mapMatrix.symm = (f.symm.mapMatrix : 矩阵 m m β ≃+* _)
   证明: rfl
 
 @[simp]
@@ -2036,7 +2036,7 @@ map_mul' _ _ := unop_injective by ext; simp [mul_apply]
 
 中文:
 定义 mopMatrix
-  签名: {α} [Mul α] [AddCommMonoid α]
+  签名: {α} [乘法 α] [加法交换幺半群 α]
   定义体: op (M.transpose.map unop)
   invFun M := M.unop.transpose.map op
 map_mul' _ _ := unop_injective by ext; simp [mul_apply]
@@ -2071,7 +2071,7 @@ theorem MulOpposite.isStablyFiniteRing_iff
 
 中文:
 定理 MulOpposite.isStablyFiniteRing_iff
-  条件: (α) [MulOne α] [AddCommMonoid α]
+  条件: (α) [MulOne α] [加法交换幺半群 α]
   证明: ⟨fun n => let f := MonoidHom.mk ⟨fun M : Matrix (Fin n) (Fin n) α => M.map (op ∘ op), by aesop⟩
                fun _ _ => by ext; simp [mul_apply]
   .of_injective f (map_injective (op_injective.comp op_injective))⟩
@@ -2137,7 +2137,7 @@ theorem mapMatrix_id
 
 中文:
 定理 mapMatrix_id
-  结论: (AlgHom.id R α).mapMatrix = AlgHom.id R (Matrix m m α)
+  结论: (代数态射.id R α).mapMatrix = 代数态射.id R (矩阵 m m α)
   证明: rfl
 
 @[simp]
@@ -2218,7 +2218,7 @@ theorem mapMatrix_refl
 
 中文:
 定理 mapMatrix_refl
-  结论: AlgEquiv.refl.mapMatrix = (AlgEquiv.refl : Matrix m m α ≃ₐ[R] _)
+  结论: 代数等价.refl.mapMatrix = (代数等价.refl : 矩阵 m m α ≃ₐ[R] _)
   证明: rfl
 
 @[simp]
@@ -2278,7 +2278,7 @@ commutes' _ := MulOpposite.unop_injective by
 
 中文:
 定义 mopMatrix
-  签名: : Matrix m m αᵐᵒᵖ ≃ₐ[R] (Matrix m m α)ᵐᵒᵖ where
+  签名: : 矩阵 m m αᵐᵒᵖ ≃ₐ[R] (矩阵 m m α)ᵐᵒᵖ where
   定义体: RingEquiv.mopMatrix
 commutes' _ := MulOpposite.unop_injective by
     ext; simp [algebraMap_matrix_apply, eq_comm, apply_ite MulOpposite.unop]
@@ -2310,7 +2310,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : AddSubmonoid A)
+  签名: (S : 加法子幺半群 A)
   定义体: Set.matrix S
   add_mem' hm hn i j := add_mem (hm i j) (hn i j)
   zero_mem' _ _ := zero_mem _
@@ -2343,7 +2343,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : AddSubgroup A)
+  签名: (S : 加法子群 A)
   定义体: S.toAddSubmonoid.matrix
   neg_mem' hm i j := AddSubgroup.neg_mem _ (hm i j)
 
@@ -2376,7 +2376,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : Subsemiring R)
+  签名: (S : 子半环 R)
   定义体: S.toAddSubmonoid.matrix
   mul_mem' ha hb i j := Subsemiring.sum_mem _ (fun k _ => Subsemiring.mul_mem _ (ha i k) (hb k j))
   one_mem' := (diagonal_mem_matrix_iff (Subsemiring.zero_mem _)).mpr fun _ => Subsemiring.one_mem _
@@ -2410,7 +2410,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : Subring R)
+  签名: (S : 子环 R)
   定义体: S.toSubsemiring.matrix
   neg_mem' hm i j := Subring.neg_mem _ (hm i j)
 
@@ -2441,7 +2441,7 @@ definition matrix
 
 中文:
 定义 matrix
-  签名: (S : Submodule R M)
+  签名: (S : 子模 R M)
   定义体: S.toAddSubmonoid.matrix
   smul_mem' _ _ hm i j := Submodule.smul_mem _ _ (hm i j)
 
@@ -2474,7 +2474,7 @@ definition piEquiv
 
 中文:
 定义 piEquiv
-  签名: : Matrix m n (Π i, β i) ≃ Π i, Matrix m n (β i) where
+  签名: : 矩阵 m n (Π i, β i) ≃ Π i, 矩阵 m n (β i) where
   定义体: f.map (· i)
   invFun f := .of fun j k i => f i j k
   left_inv _ := rfl
@@ -2497,7 +2497,7 @@ definition piAddEquiv
 
 中文:
 定义 piAddEquiv
-  签名: [对任意 i, Add (β i)]
+  签名: [对任意 i, 加法 (β i)]
   定义体: piEquiv
   map_add' _ _ := rfl
 -/
@@ -2516,7 +2516,7 @@ definition piLinearEquiv
 
 中文:
 定义 piLinearEquiv
-  签名: (R) [Semiring R] [对任意 i, AddCommMonoid (β i)] [对任意 i, Module R (β i)]
+  签名: (R) [半环 R] [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 模 R (β i)]
   定义体: piAddEquiv
   map_smul' _ _ := rfl
 -/
@@ -2536,7 +2536,7 @@ definition piRingEquiv
 
 中文:
 定义 piRingEquiv
-  签名: [对任意 i, AddCommMonoid (β i)] [对任意 i, Mul (β i)] [Fintype n]
+  签名: [对任意 i, 加法交换幺半群 (β i)] [对任意 i, 乘法 (β i)] [有限类型 n]
   定义体: piAddEquiv
   map_mul' _ _ := by ext; simp [Matrix.mul_apply]
 -/
@@ -2556,7 +2556,7 @@ definition piAlgEquiv
 
 中文:
 定义 piAlgEquiv
-  签名: (R) [CommSemiring R] [对任意 i, Semiring (β i)] [对任意 i, Algebra R (β i)]
+  签名: (R) [交换半环 R] [对任意 i, 半环 (β i)] [对任意 i, 代数 R (β i)]
   定义体: piRingEquiv
   commutes' := (AlgHom.mk' (piRingEquiv (β := β) (n := n)).toRingHom fun _ _ => rfl).commutes
 -/
@@ -2591,7 +2591,7 @@ definition transposeAddEquiv
 
 中文:
 定义 transposeAddEquiv
-  签名: [Add α]
+  签名: [加法 α]
   定义体: transpose
   invFun := transpose
   left_inv := transpose_transpose
@@ -2621,7 +2621,7 @@ theorem transposeAddEquiv_symm
 
 中文:
 定理 transposeAddEquiv_symm
-  条件: [Add α]
+  条件: [加法 α]
   结论: (transposeAddEquiv m n α).symm = transposeAddEquiv n m α
   证明: rfl
 -/
@@ -2640,7 +2640,7 @@ theorem transpose_list_sum
 
 中文:
 定理 transpose_list_sum
-  条件: [AddMonoid α] (l : List (Matrix m n α))
+  条件: [加法幺半群 α] (l : 列表 (矩阵 m n α))
   证明: map_list_sum (transposeAddEquiv m n α) l
 
 Depends on / 依赖: map_list_sum, transposeAddEquiv
@@ -2659,7 +2659,7 @@ theorem transpose_multiset_sum
 
 中文:
 定理 transpose_multiset_sum
-  条件: [AddCommMonoid α] (s : Multiset (Matrix m n α))
+  条件: [加法交换幺半群 α] (s : Multiset (矩阵 m n α))
   证明: (transposeAddEquiv m n α).toAddMonoidHom.map_multiset_sum s
 
 Depends on / 依赖: map_multiset_sum, toAddMonoidHom, toAddMonoidHom.map_multiset_sum, transposeAddEquiv
@@ -2678,7 +2678,7 @@ theorem transpose_sum
 
 中文:
 定理 transpose_sum
-  条件: [AddCommMonoid α] {ι : 类型} (s : Finset ι) (M : ι -> Matrix m n α)
+  条件: [加法交换幺半群 α] {ι : 类型} (s : 有限集 ι) (M : ι -> 矩阵 m n α)
   证明: map_sum (transposeAddEquiv m n α) _ s
 
 Depends on / 依赖: map_sum, transposeAddEquiv
@@ -2704,7 +2704,7 @@ definition transposeLinearEquiv
 
 中文:
 定义 transposeLinearEquiv
-  签名: [Semiring R] [AddCommMonoid α] [Module R α]
+  签名: [半环 R] [加法交换幺半群 α] [模 R α]
   定义体: transposeAddEquiv m n α
   map_smul' := transpose_smul
 
@@ -2728,7 +2728,7 @@ theorem transposeLinearEquiv_symm
 
 中文:
 定理 transposeLinearEquiv_symm
-  条件: [Semiring R] [AddCommMonoid α] [Module R α]
+  条件: [半环 R] [加法交换幺半群 α] [模 R α]
   证明: rfl
 -/
 theorem transposeLinearEquiv_symm [Semiring R] [AddCommMonoid α] [Module R α] :
@@ -2754,7 +2754,7 @@ map_mul' M N := (congrArg MulOpposite.op <| transpose_mul M N).trans MulOpposite
 
 中文:
 定义 transposeRingEquiv
-  签名: [AddCommMonoid α] [CommMagma α] [Fintype m]
+  签名: [加法交换幺半群 α] [交换原群 α] [有限类型 m]
   定义体: transposeAddEquiv m m α
 map_mul' M N := (congrArg MulOpposite.op <| transpose_mul M N).trans MulOpposite.op_mul ..
 
@@ -2778,7 +2778,7 @@ theorem transpose_pow
 
 中文:
 定理 transpose_pow
-  条件: [CommSemiring α] [Fintype m] [DecidableEq m] (M : Matrix m m α) (k : 自然数)
+  条件: [交换半环 α] [有限类型 m] [DecidableEq m] (M : 矩阵 m m α) (k : 自然数)
   证明: MulOpposite.op_injective map_pow (transposeRingEquiv m α) M k
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_injective, map_pow, op_injective, transposeRingEquiv
@@ -2797,7 +2797,7 @@ theorem transpose_list_prod
 
 中文:
 定理 transpose_list_prod
-  条件: [CommSemiring α] [Fintype m] [DecidableEq m] (l : List (Matrix m m α))
+  条件: [交换半环 α] [有限类型 m] [DecidableEq m] (l : 列表 (矩阵 m m α))
   证明: (transposeRingEquiv m α).unop_map_list_prod l
 
 Depends on / 依赖: transposeRingEquiv, unop_map_list_prod
@@ -2824,7 +2824,7 @@ definition transposeAlgEquiv
 
 中文:
 定义 transposeAlgEquiv
-  签名: [CommSemiring R] [CommSemiring α] [Fintype m] [DecidableEq m] [Algebra R α]
+  签名: [交换半环 R] [交换半环 α] [有限类型 m] [DecidableEq m] [代数 R α]
   定义体: transposeRingEquiv m α
   commutes' r := by simp [algebraMap_eq_diagonal]
 
@@ -2853,7 +2853,7 @@ theorem sum_mulVec
 
 中文:
 定理 sum_mulVec
-  条件: (s : Finset ι) (x : ι -> Matrix m n α) (y : n -> α)
+  条件: (s : 有限集 ι) (x : ι -> 矩阵 m n α) (y : n -> α)
   证明: by
   ext
   simp only [mulVec, dotProduct, sum_apply, Finset.sum_mul, Finset.sum_apply]
@@ -2879,7 +2879,7 @@ theorem mulVec_sum
 
 中文:
 定理 mulVec_sum
-  条件: (x : Matrix m n α) (s : Finset ι) (y : ι -> (n -> α))
+  条件: (x : 矩阵 m n α) (s : 有限集 ι) (y : ι -> (n -> α))
   证明: by
   ext
   simp only [mulVec, dotProduct_sum, Finset.sum_apply]
@@ -2903,7 +2903,7 @@ theorem sum_vecMul
 
 中文:
 定理 sum_vecMul
-  条件: (s : Finset ι) (x : ι -> (n -> α)) (y : Matrix n m α)
+  条件: (s : 有限集 ι) (x : ι -> (n -> α)) (y : 矩阵 n m α)
   证明: by
   ext
   simp only [vecMul, sum_dotProduct, Finset.sum_apply]
@@ -2928,7 +2928,7 @@ theorem vecMul_sum
 
 中文:
 定理 vecMul_sum
-  条件: (x : n -> α) (s : Finset ι) (y : ι -> Matrix n m α)
+  条件: (x : n -> α) (s : 有限集 ι) (y : ι -> 矩阵 n m α)
   证明: by
   ext
   simp only [vecMul, dotProduct, sum_apply, Finset.mul_sum, Finset.sum_apply]

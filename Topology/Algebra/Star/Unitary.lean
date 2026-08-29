@@ -29,8 +29,8 @@ instance [ContinuousStar
   body: continuous_induced_rng.mpr continuous_subtype_val.star
 
 中文:
-实例 [ContinuousStar
-  签名: R] : ContinuousStar (unitary R) where
+实例 [余ntinuousStar
+  签名: R] : 余ntinuousStar (unitary R) where
   定义体: continuous_induced_rng.mpr continuous_subtype_val.star
 
 Depends on / 依赖: continuous_induced_rng, continuous_induced_rng.mpr, continuous_subtype_val, continuous_subtype_val.star
@@ -47,8 +47,8 @@ instance [ContinuousStar
   body: continuous_star
 
 中文:
-实例 [ContinuousStar
-  签名: R] : ContinuousInv (unitary R) where
+实例 [余ntinuousStar
+  签名: R] : 连续取逆 (unitary R) where
   定义体: continuous_star
 
 Depends on / 依赖: continuous_star
@@ -64,8 +64,8 @@ instance [ContinuousMul
   signature: R] [ContinuousStar R] : IsTopologicalGroup (unitary R) where
 
 中文:
-实例 [ContinuousMul
-  签名: R] [ContinuousStar R] : IsTopologicalGroup (unitary R) where
+实例 [连续乘法
+  签名: R] [余ntinuousStar R] : 是拓扑群 (unitary R) where
 -/
 instance [ContinuousMul R] [ContinuousStar R] : IsTopologicalGroup (unitary R) where
 
@@ -83,7 +83,7 @@ lemma isClosed_unitary
 
 中文:
 引理 isClosed_unitary
-  条件: [T1Space R] [ContinuousStar R] [ContinuousMul R]
+  条件: [T1空间 R] [余ntinuousStar R] [连续乘法 R]
   证明: by
   let f (u : R) : R × R := (star u * u, u * star u)
   have hf : f ⁻¹' {(1, 1)} = unitary R := by ext u; simp [f, Unitary.mem_iff]

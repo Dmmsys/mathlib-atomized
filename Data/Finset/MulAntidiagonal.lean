@@ -37,7 +37,7 @@ theorem IsPWO.mul
 
 中文:
 定理 IsPWO.mul
-  结论: [CommMonoid α] [PartialOrder α] [IsOrderedCancelMonoid α]
+  结论: [交换幺半群 α] [偏序 α] [是OrderedCancel幺半群 α]
   证明: by
   rw [← image_mul_prod]
   exact (hs.prod ht).image_of_monotone (monotone_fst.mul' monotone_snd)
@@ -91,7 +91,7 @@ theorem IsWF.min_mul
 
 中文:
 定理 IsWF.min_mul
-  条件: (hs : s.IsWF) (ht : t.IsWF) (hsn : s.Nonempty) (htn : t.Nonempty)
+  条件: (hs : s.IsWF) (ht : t.IsWF) (hsn : s.非空) (htn : t.非空)
   证明: by
   refine le_antisymm (IsWF.min_le _ _ (mem_mul.2 ⟨_, hs.min_mem _, _, ht.min_mem _, rfl⟩)) ?_
   rw [IsWF.le_min_iff]
@@ -133,7 +133,7 @@ definition mulAntidiagonal
 
 中文:
 定义 mulAntidiagonal
-  签名: : Finset (α × α)
+  签名: : 有限集 (α × α)
   定义体: (Set.MulAntidiagonal.finite_of_isPWO hs ht a).toFinset
 
 Depends on / 依赖: MulAntidiagonal, Set.MulAntidiagonal.finite_of_isPWO, finite_of_isPWO, toFinset
@@ -254,7 +254,7 @@ theorem support_mulAntidiagonal_subset_mul
 
 中文:
 定理 support_mulAntidiagonal_subset_mul
-  结论: { a | (mulAntidiagonal hs ht a).Nonempty } subseteq s * t
+  结论: { a | (mulAntidiagonal hs ht a).非空 } subseteq s * t
   证明: fun a ⟨b, hb⟩ => by
   rw [mem_mulAntidiagonal] at hb
   exact ⟨b.1, hb.1, b.2, hb.2⟩
@@ -281,7 +281,7 @@ theorem isPWO_support_mulAntidiagonal
 
 中文:
 定理 isPWO_support_mulAntidiagonal
-  结论: { a | (mulAntidiagonal hs ht a).Nonempty }.IsPWO
+  结论: { a | (mulAntidiagonal hs ht a).非空 }.IsPWO
   证明: (hs.mul ht).mono support_mulAntidiagonal_subset_mul
 
 @[to_additive]
@@ -311,7 +311,7 @@ theorem mulAntidiagonal_min_mul_min
 
 中文:
 定理 mulAntidiagonal_min_mul_min
-  结论: {α} [CommMonoid α] [LinearOrder α] [IsOrderedCancelMonoid α]
+  结论: {α} [交换幺半群 α] [线性序 α] [是OrderedCancel幺半群 α]
   证明: by
   ext ⟨a, b⟩
   simp only [mem_mulAntidiagonal, mem_singleton, Prod.ext_iff]

@@ -52,10 +52,10 @@ class ProperVAdd
     - isProperMap_vadd_pair : IsProperMap (fun gx => (gx.1 +ᵥ gx.2, gx.2) : G × X -> X × X)
 
 中文:
-类 ProperVAdd
-  参数: (G X : 类型) [TopologicalSpace G] [TopologicalSpace X] [AddGroup G]
+类 真向量加法
+  参数: (G X : 类型) [拓扑空间 G] [拓扑空间 X] [加法群 G]
   公理与运算 (1 个):
-    - isProperMap_vadd_pair : Is命题erMap (fun gx => (gx.1 +ᵥ gx.2, gx.2) : G × X -> X × X)
+    - isProperMap_vadd_pair : 是真映射 (fun gx => (gx.1 +ᵥ gx.2, gx.2) : G × X -> X × X)
 -/
 class ProperVAdd (G X : Type*) [TopologicalSpace G] [TopologicalSpace X] [AddGroup G]
     [AddAction G X] : Prop where
@@ -76,10 +76,10 @@ class ProperSMul
     - isProperMap_smul_pair : IsProperMap (fun gx => (gx.1 • gx.2, gx.2) : G × X -> X × X)
 
 中文:
-类 ProperSMul
-  参数: (G X : 类型) [TopologicalSpace G] [TopologicalSpace X] [Group G]
+类 真标量乘法
+  参数: (G X : 类型) [拓扑空间 G] [拓扑空间 X] [群 G]
   公理与运算 (1 个):
-    - isProperMap_smul_pair : Is命题erMap (fun gx => (gx.1 • gx.2, gx.2) : G × X -> X × X)
+    - isProperMap_smul_pair : 是真映射 (fun gx => (gx.1 • gx.2, gx.2) : G × X -> X × X)
 -/
 class ProperSMul (G X : Type*) [TopologicalSpace G] [TopologicalSpace X] [Group G]
     [MulAction G X] : Prop where
@@ -163,7 +163,7 @@ theorem properSMul_iff_continuousSMul_ultrafilter_tendsto_t2
 
 中文:
 定理 properSMul_iff_continuousSMul_ultrafilter_tendsto_t2
-  条件: [T2Space X]
+  条件: [T2空间 X]
   证明: by
   rw [properSMul_iff_continuousSMul_ultrafilter_tendsto]
   refine and_congr_right fun hc => ?_
@@ -203,7 +203,7 @@ instance t2Space_quotient_mulAction_of_properSMul
 
 中文:
 实例 t2Space_quotient_mulAction_of_properSMul
-  签名: [命题erSMul G X]
+  签名: [真标量乘法 G X]
   定义体: by
   rw [t2_iff_isClosed_diagonal]
   set R := MulAction.orbitRel G X
@@ -251,8 +251,8 @@ theorem t2Space_of_properSMul_of_t1Group
 
 中文:
 定理 t2Space_of_properSMul_of_t1Group
-  条件: [h_proper : 命题erSMul G X] [T1Space G]
-  结论: T2Space X
+  条件: [h_proper : 真标量乘法 G X] [T1空间 G]
+  结论: T2空间 X
   证明: by
   let f := fun x : X => ((1 : G), x)
   have proper_f : IsProperMap f := by
@@ -300,7 +300,7 @@ theorem properSMul_of_isClosedEmbedding
 
 中文:
 定理 properSMul_of_isClosedEmbedding
-  结论: {H : 类型} [Group H] [MulAction H X] [TopologicalSpace H]
+  结论: {H : 类型} [群 H] [乘法作用 H X] [拓扑空间 H]
   证明: by
     have h : IsProperMap (Prod.map f (fun x : X => x)) := f_clemb.isProperMap.prodMap isProperMap_id
     have : (fun hx : H × X => (hx.1 • hx.2, hx.2)) = (fun hx => (f hx.1 • hx.2, hx.2)) := by
@@ -344,8 +344,8 @@ instance [IsTopologicalGroup
     exact Φ.isProperMap
 
 中文:
-实例 [IsTopologicalGroup
-  签名: G] : 命题erSMul G G where
+实例 [是拓扑群
+  签名: G] : 真标量乘法 G G where
   定义体: by
     let Φ : G × G ≃ₜ G × G :=
     { toFun := fun gh => (gh.1 * gh.2, gh.2)
@@ -384,8 +384,8 @@ instance [IsTopologicalGroup
     exact Φ.isProperMap
 
 中文:
-实例 [IsTopologicalGroup
-  签名: G] : 命题erSMul Gᵐᵒᵖ G where
+实例 [是拓扑群
+  签名: G] : 真标量乘法 Gᵐᵒᵖ G where
   定义体: by
     let Φ : Gᵐᵒᵖ × G ≃ₜ G × G :=
     { toFun := fun gh => (gh.2 * (unop gh.1), gh.2)
@@ -423,7 +423,7 @@ instance [IsTopologicalGroup
 @[to_additive]
 
 中文:
-实例 [IsTopologicalGroup
+实例 [是拓扑群
   签名: G] {H
   定义体: have : IsClosed (H.op : Set Gᵐᵒᵖ) := H_closed.preimage MulOpposite.continuous_unop
   inferInstance
@@ -447,8 +447,8 @@ instance QuotientGroup.instT2Space
   body: t2Space_quotient_mulAction_of_properSMul
 
 中文:
-实例 QuotientGroup.instT2Space
-  签名: [IsTopologicalGroup G] {H : Subgroup G} [IsClosed (H : Set G)]
+实例 商群.instT2Space
+  签名: [是拓扑群 G] {H : 子群 G} [是闭集 (H : 集合 G)]
   定义体: t2Space_quotient_mulAction_of_properSMul
 
 Depends on / 依赖: t2Space_quotient_mulAction_of_properSMul
@@ -477,8 +477,8 @@ lemma ProperSMul.isProperMap_smul_pair_set
 .trans (Homeomorp
 
 中文:
-引理 ProperSMul.isProperMap_smul_pair_set
-  条件: [命题erSMul G X] {t : Set X}
+引理 真标量乘法.isProperMap_smul_pair_set
+  条件: [真标量乘法 G X] {t : 集合 X}
   证明: by
   let Φ : G × X -> X × X := fun gx => (gx.1 • gx.2, gx.2)
   have Φ_proper : IsProperMap Φ := ProperSMul.isProperMap_smul_pair
@@ -530,8 +530,8 @@ theorem IsClosed.smul_right_of_isCompact
       (im
 
 中文:
-定理 IsClosed.smul_right_of_isCompact
-  结论: [命题erSMul G X] {s : Set G} {t : Set X} (hs : IsClosed s)
+定理 是闭集.smul_right_of_isCompact
+  结论: [真标量乘法 G X] {s : 集合 G} {t : 集合 X} (hs : 是闭集 s)
   证明: by
   let Ψ : G × t -> X × t := fun gx => (gx.1 • gx.2, gx.2)
   have Ψ_proper : IsProperMap Ψ := ProperSMul.isProperMap_smul_pair_set
@@ -588,7 +588,7 @@ lemma ProperSMul.isCompact_setOfPred_inter_nonempty
 @[deprecated (sin
 
 中文:
-引理 ProperSMul.isCompact_setOfPred_inter_nonempty
+引理 真标量乘法.isCompact_setOfPred_inter_nonempty
   证明: by
   convert!
     ((ProperSMul.isProperMap_smul_pair (G := G)).isCompact_preimage (hV.prod hU)).image
@@ -637,7 +637,7 @@ lemma MulAction.properSMul_of_proper_orbitMap
     using! (
 
 中文:
-引理 MulAction.properSMul_of_proper_orbitMap
+引理 乘法作用.properSMul_of_proper_orbitMap
   证明: by
   constructor
   let f : G × G -> G × X := Prod.map id (fun g => g • x)

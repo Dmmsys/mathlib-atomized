@@ -41,7 +41,7 @@ instance instArchimedean
 
 中文:
 实例 instArchimedean
-  签名: : Archimedean 实数
+  签名: : 阿基米德 实数
   定义体: archimedean_iff_rat_le.2 fun x =>
     Real.ind_mk x fun f =>
       let ⟨M, _, H⟩ := f.bounded' 0
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: FloorRing 实数
+  签名: Floor环 实数
   定义体: Archimedean.floorRing _
 
 Depends on / 依赖: Archimedean, Archimedean.floorRing, floorRing
@@ -87,7 +87,7 @@ theorem isCauSeq_iff_lift
 
 中文:
 定理 isCauSeq_iff_lift
-  条件: {f : 自然数 -> Rat}
+  条件: {f : 自然数 -> 有理数}
   结论: IsCauSeq abs f ↔ IsCauSeq abs fun i => (f i : 实数) where
   证明: let ⟨δ, δ0, δε⟩ := exists_pos_rat_lt ε0
     (H _ δ0).imp fun i hi j ij => by dsimp; exact lt_trans (mod_cast hi _ ij) δε
@@ -119,7 +119,7 @@ mk_near_of_forall_near (h _ ε0).imp fun _i h j ij => le_of_lt (h j ij)⟩
 
 中文:
 定理 of_near
-  条件: (f : 自然数 -> Rat) (x : 实数) (h : 对任意 ε > 0, 存在 i, 对任意 j >= i, |(f j : 实数) - x| < ε)
+  条件: (f : 自然数 -> 有理数) (x : 实数) (h : 对任意 ε > 0, 存在 i, 对任意 j >= i, |(f j : 实数) - x| < ε)
   证明: ⟨isCauSeq_iff_lift.2 (CauSeq.of_near _ (const abs x) h),
 sub_eq_zero.1
 abs_eq_zero.1
@@ -149,7 +149,7 @@ theorem exists_floor
   proof: ⟨⌊x⌋, Int.floor_le x, fun _ => Int.le_floor.mpr⟩
 
 中文:
-定理 exists_floor
+定理 存在_floor
   条件: (x : 实数)
   结论: 存在 ub : 整数, (ub : 实数) <= x ∧ 对任意 z : 整数, (z : 实数) <= x -> z <= ub
   证明: ⟨⌊x⌋, Int.floor_le x, fun _ => Int.le_floor.mpr⟩
@@ -177,8 +177,8 @@ theorem exists_isLUB
  
 
 中文:
-定理 exists_isLUB
-  条件: (hne : s.Nonempty) (hbdd : BddAbove s)
+定理 存在_isLUB
+  条件: (hne : s.非空) (hbdd : BddAbove s)
   结论: 存在 x, IsLUB s x
   证明: by
   rcases hne, hbdd with ⟨⟨L, hL⟩, ⟨U, hU⟩⟩
@@ -258,8 +258,8 @@ theorem exists_isGLB
   exact Classical.choose_spec (Real.exists_isLUB hne' hbdd')
 
 中文:
-定理 exists_isGLB
-  条件: (hne : s.Nonempty) (hbdd : BddBelow s)
+定理 存在_isGLB
+  条件: (hne : s.非空) (hbdd : BddBelow s)
   结论: 存在 x, IsGLB s x
   证明: by
   have hne' : (-s).Nonempty := Set.nonempty_neg.mpr hne
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet 实数
+  签名: 上确界集 实数
   定义体: ⟨fun s => if h : s.Nonempty ∧ BddAbove s then Classical.choose (exists_isLUB h.1 h.2) else 0⟩
 
 Depends on / 依赖: BddAbove, Classical, Classical.choose, Nonempty, exists_isLUB, s.Nonempty
@@ -307,7 +307,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   证明: rfl
 -/
 theorem sSup_def (s : Set Real) :
@@ -327,7 +327,7 @@ theorem isLUB_sSup
 
 中文:
 定理 isLUB_sSup
-  条件: (h₁ : s.Nonempty) (h₂ : BddAbove s)
+  条件: (h₁ : s.非空) (h₂ : BddAbove s)
   结论: IsLUB s (sSup s)
   证明: by
   simp only [sSup_def, dif_pos (And.intro h₁ h₂)]
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet 实数
+  签名: 下确界集 实数
   定义体: ⟨fun s => -sSup (-s)⟩
 -/
 noncomputable instance : InfSet Real :=
@@ -364,7 +364,7 @@ theorem sInf_def
 
 中文:
 定理 sInf_def
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: sInf s = -sSup (-s)
   证明: rfl
 -/
@@ -383,7 +383,7 @@ theorem isGLB_sInf
 
 中文:
 定理 isGLB_sInf
-  条件: (h₁ : s.Nonempty) (h₂ : BddBelow s)
+  条件: (h₁ : s.非空) (h₂ : BddBelow s)
   结论: IsGLB s (sInf s)
   证明: by
   rw [sInf_def]; rw [← isLUB_neg']; rw [neg_neg]
@@ -408,7 +408,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrder 实数
+  签名: 条件完备线性序 实数
   定义体: Real.linearOrder
   __ := Real.lattice
   isLUB_csSup _ := Real.isLUB_sSup
@@ -437,7 +437,7 @@ theorem lt_sInf_add_pos
 
 中文:
 定理 lt_sInf_add_pos
-  条件: (h : s.Nonempty) {ε : 实数} (hε : 0 < ε)
+  条件: (h : s.非空) {ε : 实数} (hε : 0 < ε)
   结论: 存在 a in s, a < sInf s + ε
   证明: exists_lt_of_csInf_lt h lt_add_of_pos_right _ hε
 
@@ -457,7 +457,7 @@ theorem add_neg_lt_sSup
 
 中文:
 定理 add_neg_lt_sSup
-  条件: (h : s.Nonempty) {ε : 实数} (hε : ε < 0)
+  条件: (h : s.非空) {ε : 实数} (hε : ε < 0)
   结论: 存在 a in s, sSup s + ε < a
   证明: exists_lt_of_lt_csSup h add_lt_iff_neg_left.2 hε
 
@@ -481,7 +481,7 @@ theorem sInf_le_iff
 
 中文:
 定理 sInf_le_iff
-  条件: (h : BddBelow s) (h' : s.Nonempty)
+  条件: (h : BddBelow s) (h' : s.非空)
   证明: by
   rw [le_iff_forall_pos_lt_add]
   constructor <;> intro H ε ε_pos
@@ -516,7 +516,7 @@ theorem le_sSup_iff
 
 中文:
 定理 le_sSup_iff
-  条件: (h : BddAbove s) (h' : s.Nonempty)
+  条件: (h : BddAbove s) (h' : s.非空)
   证明: by
   rw [le_iff_forall_pos_lt_add]
   refine ⟨fun H ε ε_neg => ?_, fun H ε ε_pos => ?_⟩
@@ -547,7 +547,7 @@ theorem sSup_empty
 
 中文:
 定理 sSup_empty
-  结论: sSup (∅ : Set 实数) = 0
+  结论: sSup (∅ : 集合 实数) = 0
   证明: dif_neg by simp
 
 Depends on / 依赖: dif_neg
@@ -566,7 +566,7 @@ theorem sInf_univ
 
 中文:
 定理 sInf_univ
-  结论: sInf (@Set.univ 实数) = 0
+  结论: sInf (@集合.univ 实数) = 0
   证明: by
   simp [sInf_def]
 
@@ -592,7 +592,7 @@ lemma iSup_of_isEmpty
 
 中文:
 引理 iSup_of_isEmpty
-  条件: [IsEmpty ι] (f : ι -> 实数)
+  条件: [是空 ι] (f : ι -> 实数)
   结论: ⨆ i, f i = 0
   证明: by
   dsimp [iSup]
@@ -664,7 +664,7 @@ lemma iSup_of_not_bddAbove
 
 中文:
 引理 iSup_of_not_bddAbove
-  条件: (hf : ¬BddAbove (Set.range f))
+  条件: (hf : ¬BddAbove (集合.range f))
   结论: ⨆ i, f i = 0
   证明: sSup_of_not_bddAbove hf
 
@@ -684,7 +684,7 @@ theorem sSup_univ
 
 中文:
 定理 sSup_univ
-  结论: sSup (@Set.univ 实数) = 0
+  结论: sSup (@集合.univ 实数) = 0
   证明: Real.sSup_of_not_bddAbove not_bddAbove_univ
 
 @[simp]
@@ -709,7 +709,7 @@ theorem sInf_empty
 
 中文:
 定理 sInf_empty
-  结论: sInf (∅ : Set 实数) = 0
+  结论: sInf (∅ : 集合 实数) = 0
   证明: by simp [sInf_def, sSup_empty]
 
 @[simp] nonrec lemma iInf_of_isEmpty [IsEmpty ι] (f : ι -> Real) : ⨅ i, f i = 0 := by
@@ -784,7 +784,7 @@ theorem iInf_of_not_bddBelow
 
 中文:
 定理 iInf_of_not_bddBelow
-  条件: (hf : ¬BddBelow (Set.range f))
+  条件: (hf : ¬BddBelow (集合.range f))
   结论: ⨅ i, f i = 0
   证明: sInf_of_not_bddBelow hf
 
@@ -814,7 +814,7 @@ theorem sSup_neg
 
 中文:
 定理 sSup_neg
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: sSup (-s) = -sInf s
   证明: by
   obtain rfl | hn := s.eq_empty_or_nonempty; · simp
@@ -847,7 +847,7 @@ theorem sInf_neg
 
 中文:
 定理 sInf_neg
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: sInf (-s) = -sSup s
   证明: by
   rw [← neg_eq_iff_eq_neg]; rw [← Real.sSup_neg]; rw [neg_neg]
@@ -1166,7 +1166,7 @@ lemma iSup_nonneg_of_nonnegHomClass
 
 中文:
 引理 iSup_nonneg_of_nonnegHomClass
-  结论: {ι F α : 类型} [FunLike F α 实数] [NonnegHomClass F α 实数] (f : F)
+  结论: {ι F α : 类型} [函数状 F α 实数] [Nonneg态射类 F α 实数] (f : F)
   证明: iSup_nonneg (fun i => apply_nonneg f (g i))
 
 Depends on / 依赖: apply_nonneg, iSup_nonneg
@@ -1237,7 +1237,7 @@ theorem sInf_le_sSup
 
 中文:
 定理 sInf_le_sSup
-  条件: (s : Set 实数) (h₁ : BddBelow s) (h₂ : BddAbove s)
+  条件: (s : 集合 实数) (h₁ : BddBelow s) (h₂ : BddAbove s)
   结论: sInf s <= sSup s
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hne)
@@ -1308,7 +1308,7 @@ instance :
 
 中文:
 实例 :
-  签名: CauSeq.IsComplete 实数 abs
+  签名: CauSeq.是完备 实数 abs
   定义体: ⟨cauSeq_converges⟩
 
 Depends on / 依赖: SMulCommClass, cauSeq_converges
@@ -1337,7 +1337,7 @@ theorem iInf_Ioi_eq_iInf_rat_gt
 
 中文:
 定理 iInf_Ioi_eq_iInf_rat_gt
-  结论: {f : 实数 -> 实数} (x : 实数) (hf : BddBelow (f '' Ioi x))
+  结论: {f : 实数 -> 实数} (x : 实数) (hf : BddBelow (f '' 左开右无界区间 x))
   证明: by
   refine le_antisymm ?_ ?_
   · have : Nonempty { r' : Rat // x < ↑r' } := by
@@ -1388,7 +1388,7 @@ theorem not_bddAbove_coe
 
 中文:
 定理 not_bddAbove_coe
-  结论: ¬ (BddAbove <| range (fun (x : Rat) => (x : 实数)))
+  结论: ¬ (BddAbove <| range (fun (x : 有理数) => (x : 实数)))
   证明: by
   dsimp only [BddAbove, upperBounds]
   rw [Set.not_nonempty_iff_eq_empty]
@@ -1417,7 +1417,7 @@ theorem not_bddBelow_coe
 
 中文:
 定理 not_bddBelow_coe
-  结论: ¬ (BddBelow <| range (fun (x : Rat) => (x : 实数)))
+  结论: ¬ (BddBelow <| range (fun (x : 有理数) => (x : 实数)))
   证明: by
   dsimp only [BddBelow, lowerBounds]
   rw [Set.not_nonempty_iff_eq_empty]
@@ -1443,7 +1443,7 @@ theorem iUnion_Iic_rat
 
 中文:
 定理 iUnion_Iic_rat
-  结论: ⋃ r : Rat, Iic (r : 实数) = univ
+  结论: ⋃ r : 有理数, 左无界右闭区间 (r : 实数) = univ
   证明: by
   exact iUnion_Iic_of_not_bddAbove_range not_bddAbove_coe
 
@@ -1462,8 +1462,8 @@ theorem iInter_Iic_rat
   exact iInter_Iic_eq_empty_iff.mpr not_bddBelow_coe
 
 中文:
-定理 iInter_Iic_rat
-  结论: ⋂ r : Rat, Iic (r : 实数) = ∅
+定理 i整数er_Iic_rat
+  结论: ⋂ r : 有理数, 左无界右闭区间 (r : 实数) = ∅
   证明: by
   exact iInter_Iic_eq_empty_iff.mpr not_bddBelow_coe
 
@@ -1489,7 +1489,7 @@ lemma exists_natCast_add_one_lt_pow_of_one_lt
     norm_cast a
 
 中文:
-引理 exists_natCast_add_one_lt_pow_of_one_lt
+引理 存在_natCast_add_one_lt_pow_of_one_lt
   条件: (ha : 1 < a)
   结论: 存在 m : 自然数, (m + 1 : 实数) < a ^ m
   证明: by
@@ -1536,7 +1536,7 @@ lemma exists_nat_pos_inv_lt
   rwa [inv_lt_comm₀ this hb]
 
 中文:
-引理 exists_nat_pos_inv_lt
+引理 存在_nat_pos_inv_lt
   条件: {b : 实数} (hb : 0 < b)
   证明: by
   refine (exists_nat_gt b⁻¹).imp fun k hk => ?_

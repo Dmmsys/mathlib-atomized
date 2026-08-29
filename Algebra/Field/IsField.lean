@@ -36,8 +36,8 @@ structure IsField
     - mul_inv_cancel : forall {a : R}, a != 0 -> exists b, a * b = 1
 
 中文:
-结构 IsField
-  参数: (R : 类型u) [Semiring R]
+结构 是域
+  参数: (R : 类型u) [半环 R]
   公理与运算 (3 个):
     - exists_pair_ne : 存在 x y : R, x != y
     - mul_comm : 对任意 x y : R, x * y = y * x
@@ -62,9 +62,9 @@ theorem Semifield.toIsField
   mul_inv_cancel {a} ha := ⟨a⁻¹, mul_inv_cancel₀ ha⟩
 
 中文:
-定理 Semifield.toIsField
-  条件: (R : 类型u) [Semifield R]
-  结论: IsField R where
+定理 半域.toIsField
+  条件: (R : 类型u) [半域 R]
+  结论: 是域 R where
   证明: ‹Semifield R›
   mul_inv_cancel {a} ha := ⟨a⁻¹, mul_inv_cancel₀ ha⟩
 
@@ -86,9 +86,9 @@ theorem Field.toIsField
 @[simp]
 
 中文:
-定理 Field.toIsField
-  条件: (R : 类型u) [Field R]
-  结论: IsField R
+定理 域.toIsField
+  条件: (R : 类型u) [域 R]
+  结论: 是域 R
   证明: Semifield.toIsField _
 
 @[simp]
@@ -109,9 +109,9 @@ theorem IsField.nontrivial
   proof: ⟨h.exists_pair_ne⟩
 
 中文:
-定理 IsField.nontrivial
-  条件: {R : 类型u} [Semiring R] (h : IsField R)
-  结论: Nontrivial R
+定理 是域.nontrivial
+  条件: {R : 类型u} [半环 R] (h : 是域 R)
+  结论: 非平凡 R
   证明: ⟨h.exists_pair_ne⟩
 
 Depends on / 依赖: exists_pair_ne, h.exists_pair_ne
@@ -135,9 +135,9 @@ lemma IsField.isDomain
   exists_pair_ne := h.exists_pair_ne
 
 中文:
-引理 IsField.isDomain
-  条件: {R : 类型u} [Semiring R] (h : IsField R)
-  结论: IsDomain R where
+引理 是域.isDomain
+  条件: {R : 类型u} [半环 R] (h : 是域 R)
+  结论: 是整环 R where
   证明: by
     obtain ⟨x, hx⟩ := h.mul_inv_cancel ha
     simpa [← mul_assoc, h.mul_comm, hx] using congr_arg (x * ·) hb
@@ -174,8 +174,8 @@ theorem not_isField_of_subsingleton
 
 中文:
 定理 not_isField_of_subsingleton
-  条件: (R : 类型u) [Semiring R] [Subsingleton R]
-  结论: ¬IsField R
+  条件: (R : 类型u) [半环 R] [子单例 R]
+  结论: ¬是域 R
   证明: fun h =>
   let ⟨_, _, h⟩ := h.exists_pair_ne
   h (Subsingleton.elim _ _)
@@ -205,8 +205,8 @@ definition IsField.toSemifield
   nnqsmul_def _ _ := rfl
 
 中文:
-定义 IsField.toSemifield
-  签名: {R : 类型u} [Semiring R] (h : IsField R)
+定义 是域.toSemifield
+  签名: {R : 类型u} [半环 R] (h : 是域 R)
   定义体: ‹Semiring R›
   __ := h
   inv a := if ha : a = 0 then 0 else Classical.choose (h.mul_inv_cancel ha)
@@ -240,8 +240,8 @@ definition IsField.toField
   qsmul_def := fun _ _ => rfl
 
 中文:
-定义 IsField.toField
-  签名: {R : 类型u} [Ring R] (h : IsField R)
+定义 是域.toField
+  签名: {R : 类型u} [环 R] (h : 是域 R)
   定义体: (‹Ring R› :) -- this also works without the `( :)`, but it's slow
   __ := h.toSemifield
   qsmul := _
@@ -273,7 +273,7 @@ theorem uniq_inv_of_isField
 
 中文:
 定理 uniq_inv_of_isField
-  条件: (R : 类型u) [Ring R] (hf : IsField R)
+  条件: (R : 类型u) [环 R] (hf : 是域 R)
   证明: by
   intro x hx
   apply existsUnique_of_exists_of_unique

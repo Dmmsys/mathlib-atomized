@@ -122,12 +122,12 @@ structure IsFredholm
     - closedComplemented_ker : u.ker.ClosedComplemented
 
 中文:
-结构 IsFredholm
+结构 是Fredholm
   参数: (u : E ->L[𝕜] F)
   公理与运算 (5 个):
     - isStrictMap : IsStrictMap u
-    - isClosed_range : IsClosed (u.range : Set F)
-    - finite_ker : FiniteDimensional 𝕜 u.ker
+    - isClosed_range : 是闭集 (u.range : 集合 F)
+    - finite_ker : 有限维 𝕜 u.ker
     - finite_coker : u.range.CoFG
     - closedComplemented_ker : u.ker.ClosedComplemented
 -/
@@ -149,8 +149,8 @@ lemma IsFredholm.closedComplemented_range
   ClosedComplemented.of_finiteDimensional_quotient u_fred.isClosed_range
 
 中文:
-引理 IsFredholm.closedComplemented_range
-  条件: {u : E ->L[𝕜] F} (u_fred : IsFredholm u)
+引理 是Fredholm.closedComplemented_range
+  条件: {u : E ->L[𝕜] F} (u_fred : 是Fredholm u)
   证明: have := u_fred.finite_coker
   ClosedComplemented.of_finiteDimensional_quotient u_fred.isClosed_range
 
@@ -182,10 +182,10 @@ structure _root_.FredholmDecomposition
 结构 _root_.FredholmDecomposition
   参数: where
   公理与运算 (4 个):
-    - X₀ : Submodule 𝕜 E
-    - X₁ : Submodule 𝕜 E
-    - isTopCompl : IsTopCompl X₁ X₀
-    - finite_X₀ : FiniteDimensional 𝕜 X₀
+    - X₀ : 子模 𝕜 E
+    - X₁ : 子模 𝕜 E
+    - isTopCompl : 是TopCompl X₁ X₀
+    - finite_X₀ : 有限维 𝕜 X₀
 -/
 structure _root_.FredholmDecomposition where
   /-- The inessential (i.e. finite dimensional) part of a Fredholm decomposition. -/
@@ -425,7 +425,7 @@ theorem exists_restrict_isInvertible_of_isQuasiInverse
   set F₁ := (ContinuousLinearMap.id 𝕜 F).eqLocus (u
 
 中文:
-定理 exists_restrict_isInvertible_of_isQuasiInverse
+定理 存在_restrict_isInvertible_of_isQuasiInverse
   结论: {u : E ->L[𝕜] F}
   证明: by
   obtain ⟨hvu, huv⟩ := hvu
@@ -472,7 +472,7 @@ theorem IsFredholm.of_isInvertible_restrict
     rw [u.isStrictMap_isClosed
 
 中文:
-定理 IsFredholm.of_isInvertible_restrict
+定理 是Fredholm.of_isInvertible_restrict
   结论: {u : E ->L[𝕜] F}
   证明: by
   obtain ⟨e, he⟩ := h_inv
@@ -523,7 +523,7 @@ finite_X₀ := .of_fg u_fred.finite_coker.fg_of_isCompl h_codom.isCompl }
 .symm letI Φ : dom₁ ≃L[𝕜] E ⧸ u.ker
 
 中文:
-定义 IsFredholm.fredholmPackage
+定义 是Fredholm.fredholmPackage
   签名: {u : E ->L[𝕜] F}
   定义体: { X₀ := u.ker
       X₁ := dom₁
@@ -577,7 +577,7 @@ theorem IsFredholm.nonempty_fredholmPackage
   exact ⟨u_fred.fredholmPackage h_dom h_codom⟩
 
 中文:
-定理 IsFredholm.nonempty_fredholmPackage
+定理 是Fredholm.nonempty_fredholmPackage
   结论: {u : E ->L[𝕜] F}
   证明: by
   obtain ⟨codom₀, h_codom⟩ := u_fred.closedComplemented_range.exists_isTopCompl
@@ -677,7 +677,7 @@ theorem isFredholm_iff_exists_isQuasiInverse
 alias ⟨IsFredholm.exists_isQuasiInverse, _⟩ := isFredholm_iff_exists_isQuasiInverse
 
 中文:
-定理 isFredholm_iff_exists_isQuasiInverse
+定理 isFredholm_iff_存在_isQuasiInverse
   条件: {u : E ->L[𝕜] F}
   证明: .out 0 1 isFredholm_tfae u
 
@@ -700,7 +700,7 @@ theorem IsFredholm.of_isQuasiInverse
   proof: isFredholm_iff_exists_isQuasiInverse.mpr ⟨v, h⟩
 
 中文:
-定理 IsFredholm.of_isQuasiInverse
+定理 是Fredholm.of_isQuasiInverse
   条件: {u : E ->L[𝕜] F} {v : F ->L[𝕜] E} (h : v.IsQuasiInverse u)
   证明: isFredholm_iff_exists_isQuasiInverse.mpr ⟨v, h⟩
 

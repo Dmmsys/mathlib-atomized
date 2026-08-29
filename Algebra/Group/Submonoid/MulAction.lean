@@ -87,7 +87,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul M' α] (S : Submonoid M')
+  签名: [标量乘法 M' α] (S : 子幺半群 M')
   定义体: inferInstance
 
 @[to_additive]
@@ -108,7 +108,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [SMul M' β] [SMul α β] [SMulCommClass M' α β]
+  签名: [标量乘法 M' β] [标量乘法 α β] [标量交换类 M' α β]
   定义体: inferInstance
 
 @[to_additive]
@@ -128,7 +128,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul α β] [SMul M' β] [SMulCommClass α M' β]
+  签名: [标量乘法 α β] [标量乘法 M' β] [标量交换类 α M' β]
   定义体: inferInstance
 -/
 instance smulCommClass_right [SMul α β] [SMul M' β] [SMulCommClass α M' β]
@@ -147,7 +147,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β]
+  签名: [标量乘法 α β] [标量乘法 M' α] [标量乘法 M' β] [标量塔 M' α β]
   定义体: inferInstance
 -/
 instance isScalarTower [SMul α β] [SMul M' α] [SMul M' β] [IsScalarTower M' α β]
@@ -215,7 +215,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [MulAction M' α] (S : Submonoid M')
+  签名: [乘法作用 M' α] (S : 子幺半群 M')
   定义体: inferInstance
 -/
 instance mulAction [MulAction M' α] (S : Submonoid M') : MulAction S α :=
@@ -233,7 +233,7 @@ example {S : Submonoid M'} : IsScalarTower S M' M' := by infer_instance
 
 中文:
 实例 smulDistribClass
-  签名: {β S : 类型} [SMul M' α] [SMul M' β] [SMul α β] [SetLike S M']
+  签名: {β S : 类型} [标量乘法 M' α] [标量乘法 M' β] [标量乘法 α β] [集合状 S M']
   定义体: ⟨fun g _ _ => h.smul_distrib_smul g _ _⟩
 
 example {S : Submonoid M'} : IsScalarTower S M' M' := by infer_instance

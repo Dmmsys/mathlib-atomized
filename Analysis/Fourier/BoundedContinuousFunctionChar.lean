@@ -67,7 +67,7 @@ definition char
 
 中文:
 定义 char
-  签名: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2) (w : W)
+  签名: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2) (w : W)
   定义体: fun v => e (L v w)
   continuous_toFun :=
     continuous_induced_dom.comp (he.comp (hL.comp (Continuous.prodMk_left w)))
@@ -184,7 +184,7 @@ theorem ext_of_char_eq
 
 中文:
 定理 ext_of_char_eq
-  结论: (he : Continuous e) (he' : e != 1)
+  结论: (he : 连续 e) (he' : e != 1)
   证明: by
   contrapose! h
   obtain ⟨w, hw⟩ := DFunLike.ne_iff.mp (hL' (v - v') (sub_ne_zero_of_ne h))
@@ -227,7 +227,7 @@ definition charMonoidHom
 
 中文:
 定义 charMonoidHom
-  签名: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2)
+  签名: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2)
   定义体: char he hL w.toAdd
   map_one' := char_zero_eq_one
   map_mul' := char_add_eq_mul (he := he) (hL := hL)
@@ -274,7 +274,7 @@ definition charAlgHom
 
 中文:
 定义 charAlgHom
-  签名: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2)
+  签名: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2)
   定义体: AddMonoidAlgebra.lift Complex (V ->ᵇ Complex) W (charMonoidHom he hL)
 
 @[simp]
@@ -298,7 +298,7 @@ lemma charAlgHom_apply
 
 中文:
 引理 charAlgHom_apply
-  条件: (w : AddMonoidAlgebra Complex W) (v : V)
+  条件: (w : 加法幺半群代数 复形 W) (v : V)
   证明: by
   simp [charAlgHom, charMonoidHom, char, AddMonoidAlgebra.lift_apply]
   simp [Finsupp.sum]
@@ -328,7 +328,7 @@ refine ⟨.ofCoeff z.coeff.embDomain f, ?_⟩
 
 中文:
 引理 star_mem_range_charAlgHom
-  结论: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2)
+  结论: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2)
   证明: by
   simp only [AlgHom.mem_range] at hx ⊢
   obtain ⟨y, rfl⟩ := hx
@@ -364,7 +364,7 @@ definition charPoly
 
 中文:
 定义 charPoly
-  签名: (he : Continuous e) (hL : Continuous fun p : V × W => L p.1 p.2)
+  签名: (he : 连续 e) (hL : 连续 fun p : V × W => L p.1 p.2)
   定义体: (charAlgHom he hL).range
   star_mem' hx := star_mem_range_charAlgHom he hL hx
 
@@ -387,7 +387,7 @@ lemma mem_charPoly
 
 中文:
 引理 mem_charPoly
-  条件: (f : V ->ᵇ Complex)
+  条件: (f : V ->ᵇ 复形)
   证明: by
   change f in (charAlgHom he hL).range ↔ _
   simp [BoundedContinuousFunction.ext_iff, funext_iff, eq_comm]
@@ -436,7 +436,7 @@ lemma separatesPoints_charPoly
 
 中文:
 引理 separatesPoints_charPoly
-  结论: (he : Continuous e) (he' : e != 1)
+  结论: (he : 连续 e) (he' : e != 1)
   证明: by
   intro v v' hvv'
   obtain ⟨w, hw⟩ : exists w, char he hL w v != char he hL w v' := by

@@ -30,7 +30,7 @@ definition Erased
 
 中文:
 定义 Erased
-  签名: (α : Sort u)
+  签名: (α : 类型层 u)
   定义体: { s : α -> Prop // exists a, (a = ·) = s }
 -/
 def Erased (α : Sort u) : Sort max 1 u :=
@@ -80,7 +80,7 @@ abbreviation OutType
 
 中文:
 缩写 OutType
-  签名: (a : Erased (Sort u))
+  签名: (a : Erased (类型层 u))
   定义体: out a
 -/
 abbrev OutType (a : Erased (Sort u)) : Sort u :=
@@ -214,7 +214,7 @@ definition choice
 
 中文:
 定义 choice
-  签名: {α} (h : Nonempty α)
+  签名: {α} (h : 非空 α)
   定义体: mk (Classical.choice h)
 
 @[simp]
@@ -237,7 +237,7 @@ theorem nonempty_iff
 中文:
 定理 nonempty_iff
   条件: {α}
-  结论: Nonempty (Erased α) ↔ Nonempty α
+  结论: 非空 (Erased α) ↔ 非空 α
   证明: ⟨fun ⟨a⟩ => ⟨a.out⟩, fun ⟨a⟩ => ⟨mk a⟩⟩
 
 Depends on / 依赖: a.out
@@ -378,8 +378,8 @@ instance Monad
 @[simp]
 
 中文:
-实例 Monad
-  签名: : Monad Erased where
+实例 单子
+  签名: : 单子 Erased where
   定义体: @mk
   bind := @bind
   map := @map
@@ -472,7 +472,7 @@ instance instLawfulMonad
 
 中文:
 实例 instLawfulMonad
-  签名: : LawfulMonad Erased
+  签名: : 合法单子 Erased
   定义体: { id_map := by intros; ext; simp
     map_const := by intros; ext; simp [Functor.mapConst]
     pure_bind := by intros; ext; simp

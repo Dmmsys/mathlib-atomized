@@ -70,7 +70,7 @@ abbreviation basicCell
 
 中文:
 缩写 basicCell
-  签名: (n : 自然数) (_ : Unit)
+  签名: (n : 自然数) (_ : 单元)
   定义体: diskBoundaryInclusion n
 
 Depends on / 依赖: diskBoundaryInclusion
@@ -90,7 +90,7 @@ abbreviation RelativeCWComplex
 
 中文:
 缩写 RelativeCWComplex
-  签名: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  签名: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   定义体: RelativeCellComplex.{u} basicCell f
 
 Depends on / 依赖: RelativeCellComplex, basicCell
@@ -107,7 +107,7 @@ abbreviation CWComplex
 
 中文:
 缩写 CWComplex
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: RelativeCWComplex (initial.to X)
 
 Depends on / 依赖: RelativeCWComplex, initial, initial.to

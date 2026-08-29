@@ -42,7 +42,7 @@ lemma prod_powerset_insert
 
 中文:
 引理 prod_powerset_insert
-  条件: [DecidableEq α] (ha : a ∉ s) (f : Finset α -> β)
+  条件: [DecidableEq α] (ha : a ∉ s) (f : 有限集 α -> β)
   证明: by
   rw [powerset_insert]; rw [prod_union]; rw [prod_image]
   · exact insert_erase_invOn.2.injOn.mono fun t ht => notMem_mono (mem_powerset.1 ht) ha
@@ -74,7 +74,7 @@ lemma prod_powerset_cons
 
 中文:
 引理 prod_powerset_cons
-  条件: (ha : a ∉ s) (f : Finset α -> β)
+  条件: (ha : a ∉ s) (f : 有限集 α -> β)
   证明: by
   classical
   simp_rw [cons_eq_insert]
@@ -105,7 +105,7 @@ lemma prod_powerset
 
 中文:
 引理 prod_powerset
-  条件: (s : Finset α) (f : Finset α -> β)
+  条件: (s : 有限集 α) (f : 有限集 α -> β)
   证明: by
   rw [powerset_card_disjiUnion]; rw [prod_disjiUnion]
 
@@ -129,7 +129,7 @@ lemma prod_powersetCard
 
 中文:
 引理 prod_powersetCard
-  条件: (n : 自然数) (s : Finset α) (f : 自然数 -> β)
+  条件: (n : 自然数) (s : 有限集 α) (f : 自然数 -> β)
   证明: by
   rw [prod_eq_pow_card]; rw [card_powersetCard]; rintro a ha; rw [(mem_powersetCard.1 ha).2]
 

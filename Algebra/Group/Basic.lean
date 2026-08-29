@@ -44,7 +44,7 @@ lemma pow_dite
 
 中文:
 引理 pow_dite
-  条件: (p : 命题) [Decidable p] (a : α) (b : p -> β) (c : ¬ p -> β)
+  条件: (p : 命题) [可判定 p] (a : α) (b : p -> β) (c : ¬ p -> β)
   证明: by split_ifs <;> rfl
 
 @[to_additive (attr := simp, to_additive) smul_dite]
@@ -67,7 +67,7 @@ lemma dite_pow
 
 中文:
 引理 dite_pow
-  条件: (p : 命题) [Decidable p] (a : p -> α) (b : ¬ p -> α) (c : β)
+  条件: (p : 命题) [可判定 p] (a : p -> α) (b : ¬ p -> α) (c : β)
   证明: by split_ifs <;> rfl
 
 @[to_additive (attr := simp, to_additive) ite_smul]
@@ -90,7 +90,7 @@ lemma pow_ite
 
 中文:
 引理 pow_ite
-  条件: (p : 命题) [Decidable p] (a : α) (b c : β)
+  条件: (p : 命题) [可判定 p] (a : α) (b c : β)
   证明: pow_dite _ _ _ _
 
 @[to_additive (attr := simp, to_additive) smul_ite]
@@ -111,7 +111,7 @@ lemma ite_pow
 
 中文:
 引理 ite_pow
-  条件: (p : 命题) [Decidable p] (a b : α) (c : β)
+  条件: (p : 命题) [可判定 p] (a b : α) (c : β)
   证明: dite_pow _ _ _ _
 
 Depends on / 依赖: dite_pow
@@ -134,8 +134,8 @@ instance Semigroup.to_isAssociative
   body: ⟨mul_assoc⟩
 
 中文:
-实例 Semigroup.to_isAssociative
-  签名: : Std.Associative (α := α) (· * ·)
+实例 半群.to_isAssociative
+  签名: : Std.结合 (α := α) (· * ·)
   定义体: ⟨mul_assoc⟩
 
 Depends on / 依赖: mul_assoc
@@ -221,7 +221,7 @@ instance Semigroup.to_isLawfulIdentity
 @[to_additive]
 
 中文:
-实例 Semigroup.to_isLawfulIdentity
+实例 半群.to_isLawfulIdentity
   签名: : Std.LawfulIdentity (α := M) (· * ·) 1 where
   定义体: one_mul
   right_id := mul_one
@@ -246,7 +246,7 @@ theorem ite_mul_one
 
 中文:
 定理 ite_mul_one
-  条件: {P : 命题} [Decidable P] {a b : M}
+  条件: {P : 命题} [可判定 P] {a b : M}
   证明: by
   by_cases h : P <;> simp [h]
 
@@ -270,7 +270,7 @@ theorem ite_one_mul
 
 中文:
 定理 ite_one_mul
-  条件: {P : 命题} [Decidable P] {a b : M}
+  条件: {P : 命题} [可判定 P] {a b : M}
   证明: by
   by_cases h : P <;> simp [h]
 
@@ -529,7 +529,7 @@ lemma pow_boole
 
 中文:
 引理 pow_boole
-  条件: (P : 命题) [Decidable P] (a : M)
+  条件: (P : 命题) [可判定 P] (a : M)
   证明: by simp only [pow_ite, pow_one, pow_zero]
 
 @[to_additive nsmul_add_sub_nsmul]
@@ -1134,7 +1134,7 @@ theorem inv_involutive
 
 中文:
 定理 inv_involutive
-  结论: Function.Involutive (Inv.inv : G -> G)
+  结论: 函数.对合 (取逆.inv : G -> G)
   证明: inv_inv
 
 @[to_additive]
@@ -1157,7 +1157,7 @@ theorem inv_bijective
 
 中文:
 定理 inv_bijective
-  结论: Function.Bijective (Inv.inv : G -> G)
+  结论: 函数.双射 (取逆.inv : G -> G)
   证明: inv_involutive.bijective
 
 @[to_additive (attr := simp)]
@@ -1180,7 +1180,7 @@ theorem inv_surjective
 
 中文:
 定理 inv_surjective
-  结论: Function.Surjective (Inv.inv : G -> G)
+  结论: 函数.满射 (取逆.inv : G -> G)
   证明: inv_involutive.surjective
 
 @[to_additive]
@@ -1203,7 +1203,7 @@ theorem inv_injective
 
 中文:
 定理 inv_injective
-  结论: Function.Injective (Inv.inv : G -> G)
+  结论: 函数.单射 (取逆.inv : G -> G)
   证明: inv_involutive.injective
 
 @[to_additive (attr := simp)]
@@ -1270,7 +1270,7 @@ theorem inv_comp_inv
 
 中文:
 定理 inv_comp_inv
-  结论: Inv.inv ∘ Inv.inv = @id G
+  结论: 取逆.inv ∘ 取逆.inv = @id G
   证明: inv_involutive.comp_self
 
 @[to_additive]
@@ -1293,7 +1293,7 @@ theorem leftInverse_inv
 
 中文:
 定理 leftInverse_inv
-  结论: LeftInverse (fun a : G => a⁻¹) fun a => a⁻¹
+  结论: 左逆 (fun a : G => a⁻¹) fun a => a⁻¹
   证明: inv_inv
 
 @[to_additive]
@@ -1314,7 +1314,7 @@ theorem rightInverse_inv
 
 中文:
 定理 rightInverse_inv
-  结论: RightInverse (fun a : G => a⁻¹) fun a => a⁻¹
+  结论: 右逆 (fun a : G => a⁻¹) fun a => a⁻¹
   证明: inv_inv
 
 Depends on / 依赖: inv_inv
@@ -2770,7 +2770,7 @@ theorem mul_left_surjective
 中文:
 定理 mul_left_surjective
   条件: (a : G)
-  结论: Surjective (a * ·)
+  结论: 满射 (a * ·)
   证明: fun x => ⟨a⁻¹ * x, mul_inv_cancel_left a x⟩
 
 @[to_additive]
@@ -2796,7 +2796,7 @@ theorem mul_right_surjective
 中文:
 定理 mul_right_surjective
   条件: (a : G)
-  结论: Function.Surjective fun x => x * a
+  结论: 函数.满射 fun x => x * a
   证明: fun x =>
   ⟨x * a⁻¹, inv_mul_cancel_right x a⟩
 
@@ -3306,7 +3306,7 @@ theorem div_left_injective
 
 中文:
 定理 div_left_injective
-  结论: Function.Injective fun a => a / b
+  结论: 函数.单射 fun a => a / b
   证明: by
   -- FIXME this could be by `simpa`, but it fails. This is probably a bug in `simpa`.
   simp only [div_eq_mul_inv]
@@ -3335,7 +3335,7 @@ theorem div_right_injective
 
 中文:
 定理 div_right_injective
-  结论: Function.Injective fun a => b / a
+  结论: 函数.单射 fun a => b / a
   证明: by
   -- FIXME see above
   simp only [div_eq_mul_inv]
@@ -3812,7 +3812,7 @@ theorem leftInverse_div_mul_left
 中文:
 定理 leftInverse_div_mul_left
   条件: (c : G)
-  结论: Function.LeftInverse (fun x => x / c) fun x => x * c
+  结论: 函数.左逆 (fun x => x / c) fun x => x * c
   证明: fun x => mul_div_cancel_right x c
 
 @[to_additive]
@@ -3837,7 +3837,7 @@ theorem leftInverse_mul_left_div
 中文:
 定理 leftInverse_mul_left_div
   条件: (c : G)
-  结论: Function.LeftInverse (fun x => x * c) fun x => x / c
+  结论: 函数.左逆 (fun x => x * c) fun x => x / c
   证明: fun x => div_mul_cancel x c
 
 @[to_additive]
@@ -5072,7 +5072,7 @@ lemma const_div_involutive
 中文:
 引理 const_div_involutive
   条件: (a : G)
-  结论: Function.Involutive (a / ·)
+  结论: 函数.对合 (a / ·)
   证明: fun _ => div_div_cancel ..
 
 Depends on / 依赖: div_div_cancel
@@ -5204,7 +5204,7 @@ lemma hom_coe_pow
 
 中文:
 引理 hom_coe_pow
-  结论: {F : 类型} [Monoid F] (c : F -> M -> M) (h1 : c 1 = id)
+  结论: {F : 类型} [幺半群 F] (c : F -> M -> M) (h1 : c 1 = id)
 -/
 lemma hom_coe_pow {F : Type*} [Monoid F] (c : F -> M -> M) (h1 : c 1 = id)
     (hmul : forall f g, c (f * g) = c f ∘ c g) (f : F) : forall n, c (f ^ n) = (c f)^[n]
@@ -5233,8 +5233,8 @@ instance AddCommMonoid.toGrindNatModule
     add_one_nsmul n a := by change (n + 1) • a = n • a + a; rw [add_nsmul, one_nsmul] }
 
 中文:
-实例 AddCommMonoid.toGrindNatModule
-  签名: [s : AddCommMonoid α]
+实例 加法交换幺半群.toGrind自然数Module
+  签名: [s : 加法交换幺半群 α]
   定义体: { s with
     nsmul := ⟨s.nsmul⟩
     zero_nsmul := AddMonoid.nsmul_zero
@@ -5264,8 +5264,8 @@ instance AddCommGroup.toGrindIntModule
     zsmul_natCast_eq_nsmul n a := by simp }
 
 中文:
-实例 AddCommGroup.toGrindIntModule
-  签名: [s : AddCommGroup α]
+实例 加法交换群.toGrind整数Module
+  签名: [s : 加法交换群 α]
   定义体: { s with
     nsmul := ⟨s.nsmul⟩
     zsmul := ⟨s.zsmul⟩
@@ -5295,8 +5295,8 @@ instance IsRightCancelAdd.toGrindAddRightCancel
   body: add_right_cancel
 
 中文:
-实例 IsRightCancelAdd.toGrindAddRightCancel
-  签名: [AddSemigroup α] [IsRightCancelAdd α]
+实例 是右消去加法.toGrindAddRightCancel
+  签名: [加法半群 α] [是右消去加法 α]
   定义体: add_right_cancel
 
 Depends on / 依赖: add_right_cancel

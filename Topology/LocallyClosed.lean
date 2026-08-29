@@ -176,7 +176,7 @@ theorem coborder_eq_union_closure_compl
 
 中文:
 定理 coborder_eq_union_closure_compl
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   结论: coborder s = s union (closure s)ᶜ
   证明: by
   rw [coborder]; rw [compl_eq_comm]; rw [compl_union]; rw [compl_compl]; rw [inter_comm]
@@ -203,7 +203,7 @@ alias ⟨_, IsOpen.coborder_eq⟩ := coborder_eq_compl_frontier_iff
 
 中文:
 定理 dense_coborder
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [dense_iff_closure_eq]; rw [coborder_eq_union_closure_compl]; rw [closure_union]; rw [← univ_subset_iff]
   refine _root_.subset_trans ?_ (union_subset_union_right _ (subset_closure))
@@ -233,8 +233,8 @@ lemma IsOpenMap.coborder_preimage_subset
   exact hf.preimage_closure_subset_closure_preimage
 
 中文:
-引理 IsOpenMap.coborder_preimage_subset
-  条件: (hf : IsOpenMap f) (s : Set Y)
+引理 是开映射.coborder_preimage_subset
+  条件: (hf : 是开映射 f) (s : 集合 Y)
   证明: by
   rw [coborder]; rw [coborder]; rw [preimage_compl]; rw [preimage_sdiff]; rw [compl_subset_compl]
   apply sdiff_subset_sdiff_left
@@ -260,8 +260,8 @@ lemma Continuous.preimage_coborder_subset
   exact hf.closure_preimage_subset s
 
 中文:
-引理 Continuous.preimage_coborder_subset
-  条件: (hf : Continuous f) (s : Set Y)
+引理 连续.preimage_coborder_subset
+  条件: (hf : 连续 f) (s : 集合 Y)
   证明: by
   rw [coborder]; rw [coborder]; rw [preimage_compl]; rw [preimage_sdiff]; rw [compl_subset_compl]
   apply sdiff_subset_sdiff_left
@@ -287,7 +287,7 @@ protected
 
 中文:
 引理 coborder_preimage
-  条件: (hf : IsOpenMap f) (hf' : Continuous f) (s : Set Y)
+  条件: (hf : 是开映射 f) (hf' : 连续 f) (s : 集合 Y)
   证明: (hf.coborder_preimage_subset s).antisymm (hf'.preimage_coborder_subset s)
 
 protected
@@ -308,8 +308,8 @@ lemma Topology.IsOpenEmbedding.coborder_preimage
   proof: coborder_preimage hf.isOpenMap hf.continuous s
 
 中文:
-引理 Topology.IsOpenEmbedding.coborder_preimage
-  条件: (hf : IsOpenEmbedding f) (s : Set Y)
+引理 拓扑.是开嵌入.coborder_preimage
+  条件: (hf : 是开嵌入 f) (s : 集合 Y)
   证明: coborder_preimage hf.isOpenMap hf.continuous s
 
 Depends on / 依赖: coborder_preimage, continuous, hf.continuous, hf.isOpenMap, isOpenMap
@@ -377,8 +377,8 @@ lemma IsLocallyClosed.preimage
 nonrec
 
 中文:
-引理 IsLocallyClosed.preimage
-  结论: {s : Set Y} (hs : IsLocallyClosed s)
+引理 IsLocallyClosed.原像
+  结论: {s : 集合 Y} (hs : IsLocallyClosed s)
   证明: by
   obtain ⟨U, Z, hU, hZ, rfl⟩ := hs
   exact ⟨_, _, hU.preimage hf, hZ.preimage hf, preimage_inter⟩
@@ -409,8 +409,8 @@ lemma Topology.IsInducing.isLocallyClosed_iff
     exact ⟨_, _, ⟨U, hU, rfl⟩, ⟨Z, hZ, rfl⟩, rfl⟩
 
 中文:
-引理 Topology.IsInducing.isLocallyClosed_iff
-  结论: {s : Set X}
+引理 拓扑.是Inducing.isLocallyClosed_iff
+  结论: {s : 集合 X}
   证明: by
   simp_rw [IsLocallyClosed, hf.isOpen_iff, hf.isClosed_iff]
   constructor
@@ -442,8 +442,8 @@ lemma Topology.IsEmbedding.isLocallyClosed_iff
     ← (image_injective.mpr hf.injective).eq_iff, image_preimage_eq_inter_range]
 
 中文:
-引理 Topology.IsEmbedding.isLocallyClosed_iff
-  结论: {s : Set X}
+引理 拓扑.是嵌入.isLocallyClosed_iff
+  结论: {s : 集合 X}
   证明: by
   simp_rw [hf.isInducing.isLocallyClosed_iff,
     ← (image_injective.mpr hf.injective).eq_iff, image_preimage_eq_inter_range]
@@ -468,8 +468,8 @@ lemma IsLocallyClosed.image
   exact ht.inter hf'
 
 中文:
-引理 IsLocallyClosed.image
-  结论: {s : Set X} (hs : IsLocallyClosed s)
+引理 IsLocallyClosed.像
+  结论: {s : 集合 X} (hs : IsLocallyClosed s)
   证明: by
   obtain ⟨t, ht, rfl⟩ := hf.isLocallyClosed_iff.mp hs
   rw [image_preimage_eq_inter_range]
@@ -501,7 +501,7 @@ lemma isLocallyClosed_tfae
 
 中文:
 引理 isLocallyClosed_tfae
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   证明: by
   tfae_have 1 -> 2 := by
     rintro ⟨U, Z, hU, hZ, rfl⟩
@@ -564,7 +564,7 @@ alias ⟨IsLocallyClosed.isOpen_coborder, _⟩ := isLocallyClosed_iff_isOpen_cob
 
 中文:
 引理 isLocallyClosed_iff_isOpen_coborder
-  结论: IsLocallyClosed s ↔ IsOpen (coborder s)
+  结论: IsLocallyClosed s ↔ 是开集 (coborder s)
   证明: (isLocallyClosed_tfae s).out 0 1
 
 alias ⟨IsLocallyClosed.isOpen_coborder, _⟩ := isLocallyClosed_iff_isOpen_coborder

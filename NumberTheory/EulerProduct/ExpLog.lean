@@ -39,7 +39,7 @@ lemma Summable.clog_one_sub
 
 中文:
 引理 Summable.clog_one_sub
-  条件: {α : 类型} {f : α -> Complex} (hsum : Summable f)
+  条件: {α : 类型} {f : α -> 复形} (hsum : Summable f)
   证明: by
   have hg : DifferentiableAt Complex (fun z => log (1 - z)) 0 := by
     have : 1 - 0 in slitPlane := (sub_zero (1 : Complex)).symm ▸ one_mem_slitPlane
@@ -76,7 +76,7 @@ theorem exp_tsum_primes_log_eq_tsum
 
 中文:
 定理 exp_tsum_primes_log_eq_tsum
-  条件: {f : 自然数 ->*₀ Complex} (hsum : Summable (‖f ·‖))
+  条件: {f : 自然数 ->*₀ 复形} (hsum : Summable (‖f ·‖))
   证明: by
   have hs {p : Nat} (hp : 1 < p) : ‖f p‖ < 1 := hsum.of_norm.norm_lt_one (f := f.toMonoidHom) hp
   have hp (p : Nat.Primes) : 1 - f p != 0 :=

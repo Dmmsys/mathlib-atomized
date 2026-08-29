@@ -45,8 +45,8 @@ abbreviation AlgCat.algebraOfIsFiltered
     simp [← dsimp% c.w hjk, ← dsimp% (c.ι.app k).hom.map_mul, Algebra.commutes']
 
 中文:
-缩写 AlgCat.algebraOfIsFiltered
-  签名: (hc : IsColimit c) (j : J)
+缩写 Alg范畴.algebraOfIsFiltered
+  签名: (hc : 是余极限 c) (j : J)
   定义体: .toAlgebra' by (c.ι.app j).hom.comp (algebraMap R (F.obj j))
     intro r x
     obtain ⟨k, hjk, y, rfl⟩ := Concrete.exists_hom_ι_eq_of_isColimit _ hc x j
@@ -75,8 +75,8 @@ definition AlgCat.coconeOfIsFiltered
       ← c.w (Is
 
 中文:
-定义 AlgCat.coconeOfIsFiltered
-  签名: (hc : IsColimit c) (j : J)
+定义 Alg范畴.coconeOfIsFiltered
+  签名: (hc : 是余极限 c) (j : J)
   定义体: letI : Algebra R c.pt := algebraOfIsFiltered hc j
     AlgCat.of R c.pt
   ι.app k := by
@@ -117,8 +117,8 @@ definition AlgCat.isColimitCoconeOfIsFiltered
   
 
 中文:
-定义 AlgCat.isColimitCoconeOfIsFiltered
-  签名: (hc : IsColimit c) (j : J)
+定义 Alg范畴.isColimitCoconeOfIsFiltered
+  签名: (hc : 是余极限 c) (j : J)
   定义体: by
     letI : Algebra R c.pt := algebraOfIsFiltered hc j
     refine AlgCat.ofHom { __ := (hc.desc <| Functor.mapCocone _ s).hom, commutes' r := ?_ }
@@ -157,7 +157,7 @@ instance [IsFiltered
       AlgCat.isColimitCoconeOfIsFiltered _ _⟩
 
 中文:
-实例 [IsFiltered
+实例 [是Filtered
   签名: J] :
   定义体: createsColimitOfReflectsIso fun _ hc =>
     ⟨⟨AlgCat.coconeOfIsFiltered hc IsFiltered.nonempty.some, Iso.refl _⟩,
@@ -178,8 +178,8 @@ instance [IsFiltered
   body: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape (forget₂ _ RingCat.{v})
 
 中文:
-实例 [IsFiltered
-  签名: J] [HasColimitsOfShape J RingCat.{v}] :
+实例 [是Filtered
+  签名: J] [有形状余极限 J 环范畴.{v}] :
   定义体: hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape (forget₂ _ RingCat.{v})
 
 Depends on / 依赖: RingCat, hasColimitsOfShape_of_hasColimitsOfShape_createsColimitsOfShape
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFilteredColimits (forget₂ (AlgCat.{v} R) RingCat.{v})
+  签名: PreservesFilteredColimits (forget₂ (Alg范畴.{v} R) 环范畴.{v})
   定义体: inferInstance
 -/
 instance : PreservesFilteredColimits (forget₂ (AlgCat.{v} R) RingCat.{v}) where
@@ -214,7 +214,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFilteredColimits (forget (AlgCat.{v} R))
+  签名: PreservesFilteredColimits (forget (Alg范畴.{v} R))
   定义体: Limits.comp_preservesFilteredColimits (forget₂ _ _) (forget RingCat.{v})
 
 Depends on / 依赖: Limits, Limits.comp_preservesFilteredColimits, RingCat, comp_preservesFilteredColimits, forget

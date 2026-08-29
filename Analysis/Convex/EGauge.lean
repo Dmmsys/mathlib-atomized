@@ -44,7 +44,7 @@ definition egauge
 
 中文:
 定义 egauge
-  签名: (𝕜 : 类型) [ENorm 𝕜] {E : 类型} [SMul 𝕜 E] (s : Set E) (x : E)
+  签名: (𝕜 : 类型) [E范数 𝕜] {E : 类型} [标量乘法 𝕜 E] (s : 集合 E) (x : E)
   定义体: ⨅ (c : 𝕜) (_ : x in c • s), ‖c‖ₑ
 -/
 noncomputable def egauge (𝕜 : Type*) [ENorm 𝕜] {E : Type*} [SMul 𝕜 E] (s : Set E) (x : E) : Real>=0∞ :=
@@ -63,8 +63,8 @@ lemma Set.MapsTo.egauge_le
 @[mono, gcongr]
 
 中文:
-引理 Set.MapsTo.egauge_le
-  结论: {E' F : 类型} [SMul 𝕜 E'] [FunLike F E E'] [MulActionHomClass F 𝕜 E E']
+引理 集合.映射到.egauge_le
+  结论: {E' F : 类型} [标量乘法 𝕜 E'] [函数状 F E E'] [MulActionHomClass F 𝕜 E E']
   证明: iInf_mono fun c => iInf_mono' fun hc => ⟨h.smul_set c hc, le_rfl⟩
 
 @[mono, gcongr]
@@ -197,7 +197,7 @@ lemma egauge_union
 
 中文:
 引理 egauge_union
-  条件: (s t : Set E) (x : E)
+  条件: (s t : 集合 E) (x : E)
   结论: egauge 𝕜 (s union t) x = egauge 𝕜 s x ⊓ egauge 𝕜 t x
   证明: by
   unfold egauge
@@ -219,7 +219,7 @@ lemma le_egauge_inter
 
 中文:
 引理 le_egauge_inter
-  条件: (s t : Set E) (x : E)
+  条件: (s t : 集合 E) (x : E)
   证明: max_le (egauge_anti _ inter_subset_left _) (egauge_anti _ inter_subset_right _)
 
 Depends on / 依赖: egauge_anti, inter_subset_left, inter_subset_right, max_le
@@ -238,7 +238,7 @@ lemma le_egauge_pi
 
 中文:
 引理 le_egauge_pi
-  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, SMul 𝕜 (E i)] {I : Set ι} {i : ι}
+  结论: {ι : 类型} {E : ι -> 类型} [对任意 i, 标量乘法 𝕜 (E i)] {I : 集合 ι} {i : ι}
   证明: MapsTo.egauge_le _ (Pi.evalMulActionHom i) (fun x hx => by exact hx i hi) _
 
 Depends on / 依赖: MapsTo, MapsTo.egauge_le, Pi.evalMulActionHom, egauge_le, evalMulActionHom
@@ -261,7 +261,7 @@ lemma le_egauge_prod
 
 中文:
 引理 le_egauge_prod
-  条件: (s : Set E) (t : Set F) (a : E) (b : F)
+  条件: (s : 集合 E) (t : 集合 F) (a : E) (b : F)
   证明: max_le (mapsTo_fst_prod.egauge_le 𝕜 (MulActionHom.fst 𝕜 E F) (a, b))
     (MapsTo.egauge_le 𝕜 (MulActionHom.snd 𝕜 E F) mapsTo_snd_prod (a, b))
 
@@ -480,7 +480,7 @@ lemma egauge_zero_right
 
 中文:
 引理 egauge_zero_right
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: egauge 𝕜 s 0 = 0
   证明: by
   have : 0 in (0 : 𝕜) • s := by simp [zero_smul_set hs]
@@ -502,7 +502,7 @@ lemma egauge_zero_zero
 
 中文:
 引理 egauge_zero_zero
-  结论: egauge 𝕜 (0 : Set E) 0 = 0
+  结论: egauge 𝕜 (0 : 集合 E) 0 = 0
   证明: by simp
 -/
 lemma egauge_zero_zero : egauge 𝕜 (0 : Set E) 0 = 0 := by simp
@@ -554,7 +554,7 @@ rcases Filter.nonempty_of_mem
     inter_mem_nhdsWithin {(0 : 𝕜)}ᶜ (Metric.eba
 
 中文:
-引理 le_egauge_of_forall_ne_zero
+引理 le_egauge_of_对任意_ne_zero
   结论: [(𝓝[!=] (0 : 𝕜)).NeBot] {r : 实数>=0∞}
   证明: by
   rw [le_egauge_iff]
@@ -602,7 +602,7 @@ exact egauge_le_of_mem_smul smul_mem_smul_set hx
 
 中文:
 引理 le_egauge_smul_left
-  条件: (c : 𝕜) (s : Set E) (x : E)
+  条件: (c : 𝕜) (s : 集合 E) (x : E)
   证明: by
   simp_rw [le_egauge_iff, smul_smul]
   rintro a ⟨x, hx, rfl⟩
@@ -636,7 +636,7 @@ lemma egauge_smul_left
 
 中文:
 引理 egauge_smul_left
-  条件: (hc : c != 0) (s : Set E) (x : E)
+  条件: (hc : c != 0) (s : 集合 E) (x : E)
   证明: by
   refine le_antisymm ?_ (le_egauge_smul_left _ _ _)
   rw [ENNReal.le_div_iff_mul_le (by simp [*]) (by simp)]
@@ -675,7 +675,7 @@ lemma le_egauge_smul_right
 
 中文:
 引理 le_egauge_smul_right
-  条件: (c : 𝕜) (s : Set E) (x : E)
+  条件: (c : 𝕜) (s : 集合 E) (x : E)
   证明: by
   rw [le_egauge_iff]
   rintro a ⟨y, hy, hxy⟩
@@ -715,7 +715,7 @@ lemma egauge_smul_right
 
 中文:
 引理 egauge_smul_right
-  条件: (h : c = 0 -> s.Nonempty) (x : E)
+  条件: (h : c = 0 -> s.非空) (x : E)
   证明: by
   refine le_antisymm ?_ (le_egauge_smul_right c s x)
   rcases eq_or_ne c 0 with rfl | hc
@@ -752,7 +752,7 @@ theorem egauge_prod_mk
 
 中文:
 定理 egauge_prod_mk
-  结论: {F : 类型} [AddCommGroup F] [Module 𝕜 F] {U : Set E} {V : Set F}
+  结论: {F : 类型} [加法交换群 F] [模 𝕜 F] {U : 集合 E} {V : 集合 F}
   证明: by
   refine le_antisymm (le_of_forall_gt fun r hr => ?_) (le_egauge_prod _ _ _ _)
   simp only [max_lt_iff, egauge_lt_iff, smul_set_prod] at hr ⊢
@@ -785,7 +785,7 @@ theorem egauge_add_add_le
 
 中文:
 定理 egauge_add_add_le
-  条件: {U V : Set E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a b : E)
+  条件: {U V : 集合 E} (hU : Balanced 𝕜 U) (hV : Balanced 𝕜 V) (a b : E)
   证明: by
   rw [← egauge_prod_mk hU hV a b]; rw [← add_image_prod]
   exact MapsTo.egauge_le 𝕜 (LinearMap.fst 𝕜 E E + LinearMap.snd 𝕜 E E) (mapsTo_image _ _) (a, b)
@@ -821,7 +821,7 @@ egauge_lt_iff.mp (le_iSup₂ i hi).trans_lt hr
 
 中文:
 定理 egauge_pi'
-  结论: {I : Set ι} (hI : I.Finite)
+  结论: {I : 集合 ι} (hI : I.有限)
   证明: by
   refine le_antisymm ?_ (iSup₂_le fun i hi => le_egauge_pi hi _ _)
   refine le_of_forall_gt fun r hr => ?_
@@ -877,7 +877,7 @@ theorem egauge_univ_pi
 
 中文:
 定理 egauge_univ_pi
-  条件: [Finite ι] {U : 对任意 i, Set (E i)} (hU : 对任意 i, Balanced 𝕜 (U i)) (x : 对任意 i, E i)
+  条件: [有限 ι] {U : 对任意 i, 集合 (E i)} (hU : 对任意 i, Balanced 𝕜 (U i)) (x : 对任意 i, E i)
   证明: .trans by simp egauge_pi' finite_univ (fun i _ => hU i) x (.inl rfl)
 
 Depends on / 依赖: egauge_pi, finite_univ
@@ -896,7 +896,7 @@ theorem egauge_pi
 
 中文:
 定理 egauge_pi
-  结论: [(𝓝[!=] (0 : 𝕜)).NeBot] {I : Set ι} {U : 对任意 i, Set (E i)}
+  结论: [(𝓝[!=] (0 : 𝕜)).NeBot] {I : 集合 ι} {U : 对任意 i, 集合 (E i)}
   证明: egauge_pi' hI hU x .inr .inr inferInstance
 
 Depends on / 依赖: egauge_pi

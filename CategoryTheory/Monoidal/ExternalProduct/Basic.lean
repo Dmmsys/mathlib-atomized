@@ -154,7 +154,7 @@ definition externalProductSwap
 
 中文:
 定义 externalProductSwap
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: NatIso.ofComponents
     (fun _ => NatIso.ofComponents (fun _ => β_ _ _) (by simp [whisker_exchange]))
     (fun _ => by ext; simp [whisker_exchange])
@@ -183,7 +183,7 @@ fun _ => NatIso.ofComponents fun _ => NatIso.ofComponents (fun _ => β_ _ _)
 
 中文:
 定义 externalProductFlip
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: NatIso.ofComponents fun _ => NatIso.ofComponents
 fun _ => NatIso.ofComponents fun _ => NatIso.ofComponents (fun _ => β_ _ _)
 

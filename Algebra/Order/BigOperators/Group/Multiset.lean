@@ -43,7 +43,7 @@ lemma one_le_prod_of_one_le
 中文:
 引理 one_le_prod_of_one_le
   条件: [MulLeftMono α]
-  结论: (对任意 x in s, (1 : α) <= x) -> 1 <= s.prod
+  结论: (对任意 x in s, (1 : α) <= x) -> 1 <= s.乘积
   证明: Quotient.inductionOn s fun l hl => by simpa using List.one_le_prod_of_one_le hl
 
 @[to_additive]
@@ -67,8 +67,8 @@ lemma single_le_prod
 
 中文:
 引理 single_le_prod
-  条件: [IsOrderedMonoid α]
-  结论: (对任意 x in s, (1 : α) <= x) -> 对任意 x in s, x <= s.prod
+  条件: [是Ordered幺半群 α]
+  结论: (对任意 x in s, (1 : α) <= x) -> 对任意 x in s, x <= s.乘积
   证明: Quotient.inductionOn s fun l hl x hx => by simpa using List.single_le_prod hl x hx
 
 @[to_additive sum_le_card_nsmul]
@@ -122,7 +122,7 @@ lemma all_one_of_le_one_le_of_prod_eq_one
 
 中文:
 引理 all_one_of_le_one_le_of_prod_eq_one
-  结论: {α : 类型} [CommMonoid α]
+  结论: {α : 类型} [交换幺半群 α]
   证明: Quotient.inductionOn s (by
     simp only [quot_mk_to_coe, prod_coe, mem_coe]
     exact fun l => List.all_one_of_le_one_le_of_prod_eq_one)
@@ -157,8 +157,8 @@ lemma prod_le_prod_of_rel_le
 
 中文:
 引理 prod_le_prod_of_rel_le
-  条件: [MulLeftMono α] (h : s.Rel (· <= ·) t)
-  结论: s.prod <= t.prod
+  条件: [MulLeftMono α] (h : s.关系 (· <= ·) t)
+  结论: s.乘积 <= t.乘积
   证明: by
   induction h with
   | zero => rfl
@@ -264,7 +264,7 @@ lemma pow_card_le_prod
 中文:
 引理 pow_card_le_prod
   条件: [MulLeftMono α] (h : 对任意 x in s, a <= x)
-  结论: a ^ card s <= s.prod
+  结论: a ^ card s <= s.乘积
   证明: by
   rw [← Multiset.prod_replicate]; rw [← Multiset.map_const]
   exact prod_map_le_prod _ h
@@ -479,7 +479,7 @@ lemma prod_eq_one_iff
 
 中文:
 引理 prod_eq_one_iff
-  结论: [PartialOrder α] [CanonicallyOrderedMul α]
+  结论: [偏序 α] [典范有序乘法 α]
   证明: Quotient.inductionOn m fun l => by simpa using List.prod_eq_one_iff
 -/
 @[to_additive] lemma prod_eq_one_iff [PartialOrder α] [CanonicallyOrderedMul α]
@@ -499,7 +499,7 @@ lemma le_prod_of_mem
 
 中文:
 引理 le_prod_of_mem
-  条件: (ha : a in m) [Preorder α] [CanonicallyOrderedMul α]
+  条件: (ha : a in m) [预序 α] [典范有序乘法 α]
   证明: by
   obtain ⟨t, rfl⟩ := exists_cons_of_mem ha
   rw [prod_cons]
@@ -526,8 +526,8 @@ lemma max_le_of_forall_le
 @[to_additive]
 
 中文:
-引理 max_le_of_forall_le
-  结论: {α : 类型} [LinearOrder α] [OrderBot α] (l : Multiset α)
+引理 max_le_of_对任意_le
+  结论: {α : 类型} [线性序 α] [有底序 α] (l : Multiset α)
   证明: by
   induction l using Quotient.inductionOn
   simpa using List.max_le_of_forall_le _ _ h
@@ -557,7 +557,7 @@ lemma max_prod_le
 
 中文:
 引理 max_prod_le
-  结论: [CommMonoid α] [LinearOrder α] [IsOrderedMonoid α]
+  结论: [交换幺半群 α] [线性序 α] [是Ordered幺半群 α]
   证明: by
   obtain ⟨l⟩ := s
   simp_rw [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.prod_coe]
@@ -588,7 +588,7 @@ lemma prod_min_le
 
 中文:
 引理 prod_min_le
-  结论: [CommMonoid α] [LinearOrder α] [IsOrderedMonoid α]
+  结论: [交换幺半群 α] [线性序 α] [是Ordered幺半群 α]
   证明: by
   obtain ⟨l⟩ := s
   simp_rw [Multiset.quot_mk_to_coe'', Multiset.map_coe, Multiset.prod_coe]
@@ -613,7 +613,7 @@ lemma abs_sum_le_sum_abs
 
 中文:
 引理 abs_sum_le_sum_abs
-  条件: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α] {s : Multiset α}
+  条件: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α] {s : Multiset α}
   证明: le_sum_of_subadditive _ abs_zero.le abs_add_le s
 
 Depends on / 依赖: abs_add_le, abs_zero, abs_zero.le, le_sum_of_subadditive

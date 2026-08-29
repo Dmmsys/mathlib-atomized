@@ -48,7 +48,7 @@ theorem differentiable_descPochhammer_eval
 
 中文:
 定理 differentiable_descPochhammer_eval
-  结论: Differentiable 𝕜 (descPochhammer 𝕜 n).eval
+  结论: 可微 𝕜 (descPochhammer 𝕜 n).eval
   证明: by
   simp [descPochhammer_eval_eq_prod_range, Differentiable.fun_finsetProd]
 
@@ -68,7 +68,7 @@ theorem continuous_descPochhammer_eval
 
 中文:
 定理 continuous_descPochhammer_eval
-  结论: Continuous (descPochhammer 𝕜 n).eval
+  结论: 连续 (descPochhammer 𝕜 n).eval
   证明: by
   exact differentiable_descPochhammer_eval.continuous
 

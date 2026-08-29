@@ -66,7 +66,7 @@ theorem _root_.Nat.moebius_eq
 @[simp]
 
 中文:
-定理 _root_.Nat.moebius_eq
+定理 _root_.自然数.moebius_eq
   条件: (n : 自然数)
   结论: moebius n = ArithmeticFunction.moebius n
   证明: by
@@ -141,7 +141,7 @@ theorem moebius_zero
 
 中文:
 定理 moebius_zero
-  条件: [Nontrivial α]
+  条件: [非平凡 α]
   结论: moebius (0 : α) = 0
   证明: by
   simp
@@ -200,8 +200,8 @@ theorem _root_.IsUnit.moebius_eq
   rw [(associated_one_iff_isUnit.mpr ha).moebius_eq]; rw [moebius_one]
 
 中文:
-定理 _root_.IsUnit.moebius_eq
-  条件: (ha : IsUnit a)
+定理 _root_.是单位.moebius_eq
+  条件: (ha : 是单位 a)
   结论: moebius a = 1
   证明: by
   rw [(associated_one_iff_isUnit.mpr ha).moebius_eq]; rw [moebius_one]
@@ -222,8 +222,8 @@ theorem _root_.Irreducible.moebius_eq
   rw [ha.squarefree.moebius_eq]; rw [card_factors_of_irreducible ha]; rw [pow_one]
 
 中文:
-定理 _root_.Irreducible.moebius_eq
-  条件: (ha : Irreducible a)
+定理 _root_.不可约.moebius_eq
+  条件: (ha : 不可约 a)
   结论: moebius a = -1
   证明: by
   rw [ha.squarefree.moebius_eq]; rw [card_factors_of_irreducible ha]; rw [pow_one]

@@ -43,7 +43,7 @@ theorem ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_count
   have hA_toReal : (A_toReal.map (toContinuousMapₐ Real)).Separates
 
 中文:
-定理 ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable
+定理 ext_of_对任意_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable
   证明: by
   --consider the real subalgebra of the purely real-valued elements of A
   let A_toReal := (A.restrictScalars Real).comap
@@ -98,8 +98,8 @@ theorem ext_of_forall_mem_subalgebra_integral_eq_of_polish
   exact ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable hA heq
 
 中文:
-定理 ext_of_forall_mem_subalgebra_integral_eq_of_polish
-  结论: [TopologicalSpace E] [PolishSpace E]
+定理 ext_of_对任意_mem_subalgebra_integral_eq_of_polish
+  结论: [拓扑空间 E] [Polish空间 E]
   证明: by
   let := TopologicalSpace.upgradeIsCompletelyMetrizable E
   exact ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable hA heq

@@ -49,7 +49,7 @@ definition toCat
 
 中文:
 定义 toCat
-  签名: : Bicategory.Adjunction F.toCatHom G.toCatHom where
+  签名: : 双范畴.伴随 F.toCatHom G.toCatHom where
   定义体: .ofNatTrans adj.unit
   counit := .ofNatTrans adj.counit
 
@@ -176,7 +176,7 @@ lemma Adjunction.ofCat_id
   proof: rfl
 
 中文:
-引理 Adjunction.ofCat_id
+引理 伴随.ofCat_id
   条件: (C : Cat.{v, u})
   证明: rfl
 -/
@@ -197,7 +197,7 @@ lemma Adjunction.ofCat_comp
   simp [bicategoricalComp]
 
 中文:
-引理 Adjunction.ofCat_comp
+引理 伴随.ofCat_comp
   结论: {C D E : Cat.{v, u}}
   证明: by
   ext
@@ -225,7 +225,7 @@ lemma toNatTrans_mateEquiv
   simp [mateEquiv, Adjunction.homEquiv₁, Adjunction.homEquiv₂]
 
 中文:
-引理 toNatTrans_mateEquiv
+引理 to自然数Trans_mateEquiv
   结论: {C D E F : Cat}
   证明: by
   ext X
@@ -257,7 +257,7 @@ lemma toNatTrans_conjugateEquiv
   simp [CategoryTheory.conjugateEquiv]
 
 中文:
-引理 toNatTrans_conjugateEquiv
+引理 to自然数Trans_conjugateEquiv
   结论: {C D : Cat}
   证明: by
   dsimp [Bicategory.conjugateEquiv]

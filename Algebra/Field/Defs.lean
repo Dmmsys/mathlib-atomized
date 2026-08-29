@@ -70,7 +70,7 @@ definition NNRat.castRec
 
 中文:
 定义 NNRat.castRec
-  签名: [自然数Cast K] [Div K] (q : Rat>=0)
+  签名: [自然数嵌入 K] [除法 K] (q : 有理数>=0)
   定义体: q.num / q.den
 
 Depends on / 依赖: q.den, q.num
@@ -86,8 +86,8 @@ definition Rat.castRec
   body: q.num / q.den
 
 中文:
-定义 Rat.castRec
-  签名: [自然数Cast K] [整数Cast K] [Div K] (q : Rat)
+定义 有理数.castRec
+  签名: [自然数嵌入 K] [整数嵌入 K] [除法 K] (q : 有理数)
   定义体: q.num / q.den
 
 Depends on / 依赖: q.den, q.num
@@ -108,14 +108,14 @@ class DivisionSemiring
     - nnqsmul_def((q : Rat>=0) (a : K)) : nnqsmul q a = NNRat.cast q * a  [default: by intros; rfl]
 
 中文:
-类 DivisionSemiring
+类 除半环
   参数: (K : 类型)
-  继承: Semiring K, GroupWithZero K, NNRatCast K
+  继承: 半环 K, 带零群 K, 非负有理数嵌入 K
   公理与运算 (4 个):
     - nnratCast : = NNRat.castRec
-    - nnratCast_def((q : Rat>=0)) : (NNRat.cast q : K) = q.num / q.den  [默认: by intros; rfl]
-    - nnqsmul : Rat>=0 -> K -> K
-    - nnqsmul_def((q : Rat>=0) (a : K)) : nnqsmul q a = NNRat.cast q * a  [默认: by intros; rfl]
+    - nnratCast_def((q : 有理数>=0)) : (NNRat.cast q : K) = q.num / q.den  [默认: by intros; rfl]
+    - nnqsmul : 有理数>=0 -> K -> K
+    - nnqsmul_def((q : 有理数>=0) (a : K)) : nnqsmul q a = NNRat.cast q * a  [默认: by intros; rfl]
 
 Depends on / 依赖: NNRat.castRec, castRec
 -/
@@ -157,20 +157,20 @@ class DivisionRing
     - qsmul_def((a : Rat) (x : K)) : qsmul a x = Rat.cast a * x  [default: by intros; rfl]
 
 中文:
-类 DivisionRing
+类 除环
   参数: (K : 类型)
-  继承: Ring K, DivInvMonoid K, Nontrivial K, NNRatCast K, RatCast K
+  继承: 环 K, 除逆幺半群 K, 非平凡 K, 非负有理数嵌入 K, 有理数嵌入 K
   公理与运算 (10 个):
     - mul_inv_cancel : 对任意 (a : K), a != 0 -> a * a⁻¹ = 1
     - inv_zero : (0 : K)⁻¹ = 0
     - nnratCast : = NNRat.castRec
-    - nnratCast_def((q : Rat>=0)) : (NNRat.cast q : K) = q.num / q.den  [默认: by intros; rfl]
-    - nnqsmul : Rat>=0 -> K -> K
-    - nnqsmul_def((q : Rat>=0) (a : K)) : nnqsmul q a = NNRat.cast q * a  [默认: by intros; rfl]
-    - ratCast : = Rat.castRec
-    - ratCast_def((q : Rat)) : (Rat.cast q : K) = q.num / q.den  [默认: by intros; rfl]
-    - qsmul : Rat -> K -> K
-    - qsmul_def((a : Rat) (x : K)) : qsmul a x = Rat.cast a * x  [默认: by intros; rfl]
+    - nnratCast_def((q : 有理数>=0)) : (NNRat.cast q : K) = q.num / q.den  [默认: by intros; rfl]
+    - nnqsmul : 有理数>=0 -> K -> K
+    - nnqsmul_def((q : 有理数>=0) (a : K)) : nnqsmul q a = NNRat.cast q * a  [默认: by intros; rfl]
+    - ratCast : = 有理数.castRec
+    - ratCast_def((q : 有理数)) : (有理数.cast q : K) = q.num / q.den  [默认: by intros; rfl]
+    - qsmul : 有理数 -> K -> K
+    - qsmul_def((a : 有理数) (x : K)) : qsmul a x = 有理数.cast a * x  [默认: by intros; rfl]
 
 Depends on / 依赖: NNRat.castRec, castRec
 -/
@@ -227,9 +227,9 @@ class Semifield
   (no additional axioms)
 
 中文:
-类 Semifield
+类 半域
   参数: (K : 类型)
-  继承: CommSemiring K, DivisionSemiring K, CommGroupWithZero K
+  继承: 交换半环 K, 除半环 K, 带零交换群 K
   (无附加公理)
 -/
 class Semifield (K : Type*) extends CommSemiring K, DivisionSemiring K, CommGroupWithZero K
@@ -254,9 +254,9 @@ class Field
   (no additional axioms)
 
 中文:
-类 Field
+类 域
   参数: (K : 类型u)
-  继承: CommRing K, DivisionRing K
+  继承: 交换环 K, 除环 K
   (无附加公理)
 
 Depends on / 依赖: EuclideanDomain, IsDomain
@@ -282,7 +282,7 @@ lemma cast_def
 
 中文:
 引理 cast_def
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : K) = q.num / q.den
   证明: DivisionSemiring.nnratCast_def _
 
@@ -300,7 +300,7 @@ lemma smul_def
 
 中文:
 引理 smul_def
-  条件: (q : Rat>=0) (a : K)
+  条件: (q : 有理数>=0) (a : K)
   结论: q • a = q * a
   证明: DivisionSemiring.nnqsmul_def q a
 
@@ -321,7 +321,7 @@ lemma smul_one_eq_cast
 
 中文:
 引理 smul_one_eq_cast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: q • (1 : K) = q
   证明: by rw [NNRat.smul_def, mul_one]
 -/
@@ -343,7 +343,7 @@ lemma cast_def
 
 中文:
 引理 cast_def
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : K) = q.num / q.den
   证明: DivisionRing.ratCast_def _
 
@@ -363,7 +363,7 @@ lemma cast_mk'
 中文:
 引理 cast_mk'
   条件: (a b h1 h2)
-  结论: ((⟨a, b, h1, h2⟩ : Rat) : K) = a / b
+  结论: ((⟨a, b, h1, h2⟩ : 有理数) : K) = a / b
   证明: cast_def _
 
 Depends on / 依赖: cast_def
@@ -386,7 +386,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: (a : Rat) (x : K)
+  条件: (a : 有理数) (x : K)
   结论: a • x = ↑a * x
   证明: DivisionRing.qsmul_def a x
 
@@ -409,7 +409,7 @@ theorem smul_one_eq_cast
 
 中文:
 定理 smul_one_eq_cast
-  条件: (A : 类型) [DivisionRing A] (m : Rat)
+  条件: (A : 类型) [除环 A] (m : 有理数)
   结论: m • (1 : A) = ↑m
   证明: by
   rw [Rat.smul_def]; rw [mul_one]
@@ -432,8 +432,8 @@ theorem Rat.ofScientific_eq_ofScientific
   proof: rfl
 
 中文:
-定理 Rat.ofScientific_eq_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+定理 有理数.ofScientific_eq_ofScientific
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 -/
 theorem Rat.ofScientific_eq_ofScientific (m : Nat) (s : Bool) (e : Nat) :

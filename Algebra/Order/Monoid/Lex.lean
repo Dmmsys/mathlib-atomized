@@ -44,7 +44,7 @@ lemma inl_mono
 
 中文:
 引理 inl_mono
-  结论: Monotone (MonoidHom.inl α β)
+  结论: 递增 (幺半群态射.inl α β)
   证明: fun _ _ => by simp
 
 @[to_additive]
@@ -65,7 +65,7 @@ lemma inl_strictMono
 
 中文:
 引理 inl_strictMono
-  结论: StrictMono (MonoidHom.inl α β)
+  结论: 严格递增 (幺半群态射.inl α β)
   证明: fun _ _ => by simp
 
 @[to_additive]
@@ -86,7 +86,7 @@ lemma inr_mono
 
 中文:
 引理 inr_mono
-  结论: Monotone (MonoidHom.inr α β)
+  结论: 递增 (幺半群态射.inr α β)
   证明: fun _ _ => by simp
 
 @[to_additive]
@@ -107,7 +107,7 @@ lemma inr_strictMono
 
 中文:
 引理 inr_strictMono
-  结论: StrictMono (MonoidHom.inr α β)
+  结论: 严格递增 (幺半群态射.inr α β)
   证明: fun _ _ => by simp
 
 @[to_additive]
@@ -128,7 +128,7 @@ lemma fst_mono
 
 中文:
 引理 fst_mono
-  结论: Monotone (MonoidHom.fst α β)
+  结论: 递增 (幺半群态射.fst α β)
   证明: fun _ _ => by simp +contextual [Prod.le_def]
 
 @[to_additive]
@@ -149,7 +149,7 @@ lemma snd_mono
 
 中文:
 引理 snd_mono
-  结论: Monotone (MonoidHom.snd α β)
+  结论: 递增 (幺半群态射.snd α β)
   证明: fun _ _ => by simp +contextual [Prod.le_def]
 
 Depends on / 依赖: Prod.le_def, contextual, le_def

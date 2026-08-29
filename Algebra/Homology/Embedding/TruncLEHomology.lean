@@ -187,8 +187,8 @@ lemma Acyclic.truncLE
   exact ⟨fun _ => hK _⟩
 
 中文:
-引理 Acyclic.truncLE
-  条件: (hK : K.Acyclic) (e : c.Embedding c') [e.IsTruncLE]
+引理 非循环.truncLE
+  条件: (hK : K.非循环) (e : c.嵌入 c') [e.是TruncLE]
   证明: by
   rw [acyclic_truncLE_iff_isSupportedOutside]
   exact ⟨fun _ => hK _⟩
@@ -243,7 +243,7 @@ definition shortComplexTruncLE
 
 中文:
 定义 shortComplexTruncLE
-  签名: : ShortComplex (HomologicalComplex C c')
+  签名: : 短复形 (同调复形 C c')
   定义体: ShortComplex.mk (K.ιTruncLE e) _ (cokernel.condition _)
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, cokernel, cokernel.condition, condition
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (K.shortComplexTruncLE e).f
+  签名: 单态射 (K.shortComplexTruncLE e).f
   定义体: by
   dsimp [shortComplexTruncLE]
   infer_instance
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (K.shortComplexTruncLE e).g
+  签名: 满态射 (K.shortComplexTruncLE e).g
   定义体: by
   dsimp [shortComplexTruncLE]
   infer_instance
@@ -354,7 +354,7 @@ lemma shortComplexTruncLE_shortExact_δ_eq_zero
 
 中文:
 引理 shortComplexTruncLE_shortExact_δ_eq_zero
-  条件: (i' j' : ι') (hij' : c'.Rel i' j')
+  条件: (i' j' : ι') (hij' : c'.关系 i' j')
   证明: by
   by_cases hj : exists j, e.f j = j'
   · obtain ⟨j, rfl⟩ := hj

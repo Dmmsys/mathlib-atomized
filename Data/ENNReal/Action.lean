@@ -47,7 +47,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: {M : 类型} [MulAction 实数>=0∞ M] (c : 实数>=0) (x : M)
+  条件: {M : 类型} [乘法作用 实数>=0∞ M] (c : 实数>=0) (x : M)
   结论: c • x = (c : 实数>=0∞) • x
   证明: rfl
 
@@ -89,7 +89,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: {M N : 类型} [MulAction 实数>=0∞ N] [SMul M N] [SMulCommClass 实数>=0∞ M N]
+  签名: {M N : 类型} [乘法作用 实数>=0∞ N] [标量乘法 M N] [标量交换类 实数>=0∞ M N]
   定义体: smul_comm (r : Real>=0∞)
 
 Depends on / 依赖: smul_comm
@@ -107,7 +107,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: {M N : 类型} [MulAction 实数>=0∞ N] [SMul M N] [SMulCommClass M 实数>=0∞ N]
+  签名: {M N : 类型} [乘法作用 实数>=0∞ N] [标量乘法 M N] [标量交换类 M 实数>=0∞ N]
   定义体: smul_comm m (r : Real>=0∞)
 
 Depends on / 依赖: smul_comm
@@ -147,7 +147,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  结论: {R} (r : R) (s : 实数>=0) [SMul R 实数>=0] [SMul R 实数>=0∞] [IsScalarTower R 实数>=0 实数>=0]
+  结论: {R} (r : R) (s : 实数>=0) [标量乘法 R 实数>=0] [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0 实数>=0]
   证明: by
   rw [← smul_one_smul Real>=0 r (s : Real>=0∞)]; rw [smul_def]; rw [smul_eq_mul]; rw [← ENNReal.coe_mul]; rw [smul_mul_assoc]; rw [one_mul]
 
@@ -169,7 +169,7 @@ theorem smul_top
 
 中文:
 定理 smul_top
-  结论: {R : 类型} [Semiring R] [IsDomain R] [Module R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [半环 R] [是整环 R] [模 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: by
   rw [← smul_one_mul]; rw [mul_top']
   simp_rw [smul_eq_zero, or_iff_left one_ne_zero]
@@ -278,7 +278,7 @@ theorem smul_toNNReal
   simp only [ENNReal.toNNReal_mul, ENNReal.toNNReal_coe]
 
 中文:
-定理 smul_toNNReal
+定理 smul_toNN实数
   条件: (a : 实数>=0) (b : 实数>=0∞)
   结论: (a • b).toNN实数 = a * b.toNN实数
   证明: by
@@ -303,7 +303,7 @@ theorem toReal_smul
   rfl
 
 中文:
-定理 toReal_smul
+定理 to实数_smul
   条件: (r : 实数>=0) (s : 实数>=0∞)
   结论: (r • s).to实数 = r • s.to实数
   证明: by
@@ -326,7 +326,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosSMulStrictMono 实数>=0 实数>=0∞
+  签名: 正标量乘严格递增 实数>=0 实数>=0∞
   定义体: ENNReal.mul_lt_mul_right (coe_pos.2 hr).ne' coe_ne_top hab
 
 Depends on / 依赖: ENNReal, ENNReal.mul_lt_mul_right, coe_ne_top, coe_pos, mul_lt_mul_right
@@ -345,7 +345,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulPosMono 实数>=0 实数>=0∞
+  签名: 标量乘正递增 实数>=0 实数>=0∞
   定义体: _root_.mul_le_mul_left (coe_le_coe.2 hab) _
 
 Depends on / 依赖: _root_, _root_.mul_le_mul_left, coe_le_coe, mul_le_mul_left
@@ -363,7 +363,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedModule 实数>=0 实数>=0∞
+  签名: 是Ordered模 实数>=0 实数>=0∞
   定义体: inferInstance
 -/
 instance : IsOrderedModule Real>=0 Real>=0∞ where
@@ -383,7 +383,7 @@ example : CovariantClass Real>=0 Real>=0∞ (· • ·) (· <= ·) := inferInsta
 
 中文:
 实例 :
-  签名: IsOrderedSMul 实数>=0 实数>=0∞
+  签名: 是OrderedSMul 实数>=0 实数>=0∞
   定义体: by gcongr
   smul_le_smul_right a b hab c := by gcongr
 

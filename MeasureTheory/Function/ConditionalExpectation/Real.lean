@@ -56,7 +56,7 @@ theorem rnDeriv_ae_eq_condExp
 
 中文:
 定理 rnDeriv_ae_eq_condExp
-  结论: {hm : m <= m0} [hμm : SigmaFinite (μ.trim hm)] {f : α -> 实数}
+  结论: {hm : m <= m0} [hμm : σ有限 (μ.trim hm)] {f : α -> 实数}
   证明: by
   refine ae_eq_condExp_of_forall_setIntegral_eq hm hf ?_ ?_ ?_
   · exact fun _ _ _ => (integrable_of_integrable_trim hm
@@ -102,7 +102,7 @@ lemma condExp_le_nonneg_const
 
 中文:
 引理 condExp_le_nonneg_const
-  结论: [PartialOrder E] [ClosedIciTopology E] [IsOrderedAddMonoid E]
+  结论: [偏序 E] [ClosedIci拓扑 E] [是OrderedAdd幺半群 E]
   证明: by
   by_cases! hm : ¬ m <= m0
   · filter_upwards with a using by simpa [condExp_of_not_le hm]
@@ -265,8 +265,8 @@ theorem setIntegral_abs_condExp_le
   · simpa [cond
 
 中文:
-定理 setIntegral_abs_condExp_le
-  条件: {s : Set α} (hs : MeasurableSet[m] s) (f : α -> E)
+定理 set整数egral_abs_condExp_le
+  条件: {s : 集合 α} (hs : 可测集[m] s) (f : α -> E)
   证明: by
   by_cases! hm : ¬ m <= m0
   · simpa [condExp_of_not_le hm] using integral_nonneg (fun x => abs_nonneg f x)
@@ -305,8 +305,8 @@ lemma setIntegral_condExp_le_of_ae_restrict_nonneg
   · simpa [condExp_of_not
 
 中文:
-引理 setIntegral_condExp_le_of_ae_restrict_nonneg
-  结论: {s : Set α} (hs : MeasurableSet[m] s) {f : α -> 实数}
+引理 set整数egral_condExp_le_of_ae_restrict_nonneg
+  结论: {s : 集合 α} (hs : 可测集[m] s) {f : α -> 实数}
   证明: by
   by_cases! hm : ¬ m <= m0
   · simpa [condExp_of_not_le hm] using setIntegral_nonneg_of_ae_restrict hf
@@ -340,8 +340,8 @@ lemma setIntegral_condExp_le_of_ae_nonneg
   proof: setIntegral_condExp_le_of_ae_restrict_nonneg hs (ae_restrict_le hf)
 
 中文:
-引理 setIntegral_condExp_le_of_ae_nonneg
-  结论: {s : Set α} (hs : MeasurableSet[m] s) {f : α -> 实数}
+引理 set整数egral_condExp_le_of_ae_nonneg
+  结论: {s : 集合 α} (hs : 可测集[m] s) {f : α -> 实数}
   证明: setIntegral_condExp_le_of_ae_restrict_nonneg hs (ae_restrict_le hf)
 
 Depends on / 依赖: ae_restrict_le, setIntegral_condExp_le_of_ae_restrict_nonneg
@@ -533,8 +533,8 @@ theorem setIntegral_norm_condExp_rpow_le
   calc
 
 中文:
-定理 setIntegral_norm_condExp_rpow_le
-  结论: {p : 实数} (hp : 1 <= p) {f : α -> E} {s : Set α}
+定理 set整数egral_norm_condExp_rpow_le
+  结论: {p : 实数} (hp : 1 <= p) {f : α -> E} {s : 集合 α}
   证明: by
   have hp' : p != 0 := by linarith
   by_cases! hm : ¬ m <= m0
@@ -575,8 +575,8 @@ theorem setIntegral_norm_condExp_le
   simpa using setIntegral_norm_condExp_rpow_le le_rfl hs (by simpa using hfint.norm)
 
 中文:
-定理 setIntegral_norm_condExp_le
-  条件: {s : Set α} (hs : MeasurableSet[m] s) (f : α -> E)
+定理 set整数egral_norm_condExp_le
+  条件: {s : 集合 α} (hs : 可测集[m] s) (f : α -> E)
   证明: by
   by_cases! hfint : ¬ Integrable f μ
   · simpa [condExp_of_not_integrable hfint] using integral_nonneg (fun x => norm_nonneg (f x))
@@ -829,8 +829,8 @@ theorem Integrable.uniformIntegrable_condExp
   refine uniformI
 
 中文:
-定理 Integrable.uniformIntegrable_condExp
-  结论: {ι : 类型} [IsFiniteMeasure μ] {g : α -> 实数}
+定理 可积.uniform整数egrable_condExp
+  结论: {ι : 类型} [是有限测度 μ] {g : α -> 实数}
   证明: by
   let A : MeasurableSpace α := m0
   have hmeas : forall n, forall C, MeasurableSet {x | C <= ‖(μ[g|ℱ n]) x‖₊} := fun n C =>

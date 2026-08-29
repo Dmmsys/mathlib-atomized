@@ -55,12 +55,12 @@ structure PrimePair
     - isCompl_I_F : IsCompl (I : Set P) F
 
 中文:
-结构 PrimePair
-  参数: (P : 类型) [Preorder P]
+结构 素数对
+  参数: (P : 类型) [预序 P]
   公理与运算 (3 个):
-    - I : Ideal P
+    - I : 理想 P
     - F : PFilter P
-    - isCompl_I_F : IsCompl (I : Set P) F
+    - isCompl_I_F : 是补集 (I : 集合 P) F
 
 Depends on / 依赖: _one, toLocalizationMap
 -/
@@ -83,7 +83,7 @@ theorem compl_I_eq_F
 
 中文:
 定理 compl_I_eq_F
-  结论: (IF.I : Set P)ᶜ = IF.F
+  结论: (IF.I : 集合 P)ᶜ = IF.F
   证明: IF.isCompl_I_F.compl_eq
 
 Depends on / 依赖: IF.isCompl_I_F.compl_eq, _spec, compl_eq, isCompl_I_F, toLocalizationMap
@@ -101,7 +101,7 @@ theorem compl_F_eq_I
 
 中文:
 定理 compl_F_eq_I
-  结论: (IF.F : Set P)ᶜ = IF.I
+  结论: (IF.F : 集合 P)ᶜ = IF.I
   证明: IF.isCompl_I_F.eq_compl.symm
 
 Depends on / 依赖: IF.isCompl_I_F.eq_compl.symm, _spec, eq_compl, isCompl_I_F, toLocalizationMap
@@ -122,7 +122,7 @@ theorem I_isProper
 
 中文:
 定理 I_isProper
-  结论: Is命题er IF.I
+  结论: 是真 IF.I
   证明: by
   obtain ⟨w, h⟩ := IF.F.nonempty
   apply isProper_of_notMem (_ : w ∉ IF.I)
@@ -145,7 +145,7 @@ theorem disjoint
 
 中文:
 定理 disjoint
-  结论: Disjoint (IF.I : Set P) IF.F
+  结论: Disjoint (IF.I : 集合 P) IF.F
   证明: IF.isCompl_I_F.disjoint
 
 Depends on / 依赖: _spec
@@ -163,7 +163,7 @@ theorem I_union_F
 
 中文:
 定理 I_union_F
-  结论: (IF.I : Set P) union IF.F = Set.univ
+  结论: (IF.I : 集合 P) union IF.F = 集合.univ
   证明: IF.isCompl_I_F.sup_eq_top
 
 Depends on / 依赖: IF.isCompl_I_F.sup_eq_top, isCompl_I_F, sup_eq_top
@@ -181,7 +181,7 @@ theorem F_union_I
 
 中文:
 定理 F_union_I
-  结论: (IF.F : Set P) union IF.I = Set.univ
+  结论: (IF.F : 集合 P) union IF.I = 集合.univ
   证明: IF.isCompl_I_F.symm.sup_eq_top
 
 Depends on / 依赖: IF.isCompl_I_F.symm.sup_eq_top, _iff_mul_eq, _iff_mul_eq.mpr, eq_mk, isCompl_I_F, map_mul, sup_eq_top
@@ -205,11 +205,11 @@ class IsPrime
     - compl_filter : IsPFilter (I : Set P)ᶜ
 
 中文:
-类 IsPrime
-  参数: [Preorder P] (I : Ideal P)
-  继承: IsProper I
+类 是素
+  参数: [预序 P] (I : 理想 P)
+  继承: 是真 I
   公理与运算 (1 个):
-    - compl_filter : IsPFilter (I : Set P)ᶜ
+    - compl_filter : IsPFilter (I : 集合 P)ᶜ
 
 Depends on / 依赖: _eq_iff_eq_mul, toLocalizationMap
 -/
@@ -231,8 +231,8 @@ definition IsPrime.toPrimePair
     isCompl_I_F := isCompl_compl }
 
 中文:
-定义 IsPrime.toPrimePair
-  签名: {I : Ideal P} (h : IsPrime I)
+定义 是素.toPrimePair
+  签名: {I : 理想 P} (h : 是素 I)
   定义体: { I
     F := h.compl_filter.toPFilter
     isCompl_I_F := isCompl_compl }
@@ -257,9 +257,9 @@ theorem PrimePair.I_isPrime
       exact IF.F.isPFilter }
 
 中文:
-定理 PrimePair.I_isPrime
-  条件: (IF : PrimePair P)
-  结论: IsPrime IF.I
+定理 素数对.I_isPrime
+  条件: (IF : 素数对 P)
+  结论: 是素 IF.I
   证明: { IF.I_isProper with
     compl_filter := by
       rw [IF.compl_I_eq_F]
@@ -293,8 +293,8 @@ theorem IsPrime.mem_or_mem
   exact fun h => inf_mem h.1 h.2
 
 中文:
-定理 IsPrime.mem_or_mem
-  条件: (hI : IsPrime I) {x y : P}
+定理 是素.mem_or_mem
+  条件: (hI : 是素 I) {x y : P}
   结论: x ⊓ y in I -> x in I ∨ y in I
   证明: by
   contrapose!
@@ -326,8 +326,8 @@ theorem IsPrime.of_mem_or_mem
   · exact @mem_compl_of_ge _ _ _
 
 中文:
-定理 IsPrime.of_mem_or_mem
-  条件: [Is命题er I] (hI : 对任意 {x y : P}, x ⊓ y in I -> x in I ∨ y in I)
+定理 是素.of_mem_or_mem
+  条件: [是真 I] (hI : 对任意 {x y : P}, x ⊓ y in I -> x in I ∨ y in I)
   证明: by
   rw [isPrime_iff]
   use ‹_›
@@ -360,8 +360,8 @@ theorem isPrime_iff_mem_or_mem
 
 中文:
 定理 isPrime_iff_mem_or_mem
-  条件: [Is命题er I]
-  结论: IsPrime I ↔ 对任意 {x y : P}, x ⊓ y in I -> x in I ∨ y in I
+  条件: [是真 I]
+  结论: 是素 I ↔ 对任意 {x y : P}, x ⊓ y in I -> x in I ∨ y in I
   证明: ⟨IsPrime.mem_or_mem, IsPrime.of_mem_or_mem⟩
 
 Depends on / 依赖: IsPrime, IsPrime.mem_or_mem, IsPrime.of_mem_or_mem, mem_or_mem, of_mem_or_mem
@@ -411,8 +411,8 @@ theorem IsPrime.mem_or_compl_mem
   exact I.bot_mem
 
 中文:
-定理 IsPrime.mem_or_compl_mem
-  条件: (hI : IsPrime I)
+定理 是素.mem_or_compl_mem
+  条件: (hI : 是素 I)
   结论: x in I ∨ xᶜ in I
   证明: by
   apply hI.mem_or_mem
@@ -436,8 +436,8 @@ theorem IsPrime.compl_mem_of_notMem
   proof: hI.mem_or_compl_mem.resolve_left hxnI
 
 中文:
-定理 IsPrime.compl_mem_of_notMem
-  条件: (hI : IsPrime I) (hxnI : x ∉ I)
+定理 是素.compl_mem_of_notMem
+  条件: (hI : 是素 I) (hxnI : x ∉ I)
   结论: xᶜ in I
   证明: hI.mem_or_compl_mem.resolve_left hxnI
 
@@ -462,8 +462,8 @@ theorem isPrime_of_mem_or_compl_mem
 
 中文:
 定理 isPrime_of_mem_or_compl_mem
-  条件: [Is命题er I] (h : 对任意 {x : P}, x in I ∨ xᶜ in I)
-  结论: IsPrime I
+  条件: [是真 I] (h : 对任意 {x : P}, x in I ∨ xᶜ in I)
+  结论: 是素 I
   证明: by
   simp only [isPrime_iff_mem_or_mem, or_iff_not_imp_left]
   intro x y hxy hxI
@@ -491,8 +491,8 @@ theorem isPrime_iff_mem_or_compl_mem
 
 中文:
 定理 isPrime_iff_mem_or_compl_mem
-  条件: [Is命题er I]
-  结论: IsPrime I ↔ 对任意 {x : P}, x in I ∨ xᶜ in I
+  条件: [是真 I]
+  结论: 是素 I ↔ 对任意 {x : P}, x in I ∨ xᶜ in I
   证明: ⟨fun h _ => h.mem_or_compl_mem, isPrime_of_mem_or_compl_mem⟩
 
 Depends on / 依赖: _eq_zero_iff, h.mem_or_compl_mem, isPrime_of_mem_or_compl_mem, mem_or_compl_mem, toLocalizationMap
@@ -530,10 +530,10 @@ class IsPrime
     - compl_ideal : IsIdeal (F : Set P)ᶜ
 
 中文:
-类 IsPrime
+类 是素
   参数: (F : PFilter P)
   公理与运算 (1 个):
-    - compl_ideal : IsIdeal (F : Set P)ᶜ
+    - compl_ideal : Is理想 (F : 集合 P)ᶜ
 
 Depends on / 依赖: _zero, toLocalizationMap
 -/
@@ -551,8 +551,8 @@ definition IsPrime.toPrimePair
     isCompl_I_F := isCompl_compl.symm }
 
 中文:
-定义 IsPrime.toPrimePair
-  签名: {F : PFilter P} (h : IsPrime F)
+定义 是素.toPrimePair
+  签名: {F : PFilter P} (h : 是素 F)
   定义体: { I := h.compl_ideal.toIdeal
     F
     isCompl_I_F := isCompl_compl.symm }
@@ -575,9 +575,9 @@ theorem _root_.Order.Ideal.PrimePair.F_isPrime
       exact IF.I.isIdeal }
 
 中文:
-定理 _root_.Order.Ideal.PrimePair.F_isPrime
-  条件: (IF : Ideal.PrimePair P)
-  结论: IsPrime IF.F
+定理 _root_.Order.理想.素数对.F_isPrime
+  条件: (IF : 理想.素数对 P)
+  结论: 是素 IF.F
   证明: {
     compl_ideal := by
       rw [IF.compl_F_eq_I]

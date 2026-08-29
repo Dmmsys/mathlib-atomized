@@ -53,7 +53,7 @@ omit [DecidableEq α]
 
 中文:
 定理 coe_prod
-  条件: (s : Finset ι) (f : ι -> Finset α)
+  条件: (s : 有限集 ι) (f : ι -> 有限集 α)
   证明: map_prod (coeMonoidHom : Finset α ->* Set α) _ _
 
 omit [DecidableEq α]
@@ -77,7 +77,7 @@ lemma prod_inv_index
 
 中文:
 引理 prod_inv_index
-  条件: [InvolutiveInv ι] (s : Finset ι) (f : ι -> α)
+  条件: [InvolutiveInv ι] (s : 有限集 ι) (f : ι -> α)
   证明: prod_image inv_injective.injOn
 -/
 @[to_additive (attr := simp)] lemma prod_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι -> α) :
@@ -93,7 +93,7 @@ lemma prod_neg_index
 
 中文:
 引理 prod_neg_index
-  条件: [InvolutiveNeg ι] (s : Finset ι) (f : ι -> α)
+  条件: [InvolutiveNeg ι] (s : 有限集 ι) (f : ι -> α)
   证明: prod_image neg_injective.injOn
 -/
 @[to_additive existing, simp] lemma prod_neg_index [InvolutiveNeg ι] (s : Finset ι) (f : ι -> α) :
@@ -115,7 +115,7 @@ lemma sum_inv_index
 
 中文:
 引理 sum_inv_index
-  条件: [InvolutiveInv ι] (s : Finset ι) (f : ι -> α)
+  条件: [InvolutiveInv ι] (s : 有限集 ι) (f : ι -> α)
   证明: sum_image inv_injective.injOn
 -/
 @[to_additive existing, simp] lemma sum_inv_index [InvolutiveInv ι] (s : Finset ι) (f : ι -> α) :

@@ -81,7 +81,7 @@ theorem isSemisimpleModule_iff_isSemisimpleRepresentation_ofModule
 
 中文:
 定理 isSemisimpleModule_iff_isSemisimpleRepresentation_ofModule
-  结论: (M : 类型) [AddCommGroup M]
+  结论: (M : 类型) [加法交换群 M]
   证明: by
   rw [isSemisimpleModule_iff]
   exact OrderIso.complementedLattice_iff Subrepresentation.submoduleSubrepresentationOrderIso

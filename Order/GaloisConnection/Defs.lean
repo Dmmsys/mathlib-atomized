@@ -53,7 +53,7 @@ to_dual_name_hint U L
 
 中文:
 定义 GaloisConnection
-  签名: [Preorder α] [Preorder β] (l : α -> β) (u : β -> α)
+  签名: [预序 α] [预序 β] (l : α -> β) (u : β -> α)
   定义体: forall a b, l a <= b ↔ a <= u b
 
 to_dual_insert_cast GaloisConnection := by
@@ -89,7 +89,7 @@ theorem monotone_intro
 
 中文:
 定理 monotone_intro
-  结论: (hu : Monotone u) (hl : Monotone l) (h_u_l : 对任意 a, a <= u (l a))
+  结论: (hu : 递增 u) (hl : 递增 l) (h_u_l : 对任意 a, a <= u (l a))
   证明: fun _ _ =>
   ⟨fun h => (h_u_l _).trans (hu h), fun h => (hl h).trans (h_l_u _)⟩
 
@@ -205,7 +205,7 @@ theorem monotone_u
 
 中文:
 定理 monotone_u
-  结论: Monotone u
+  结论: 递增 u
   证明: fun a _ H => gc.le_u ((gc.l_u_le a).trans H)
 
 @[to_dual]
@@ -225,7 +225,7 @@ theorem monotone_l_comp_u
 
 中文:
 定理 monotone_l_comp_u
-  结论: Monotone (l ∘ u)
+  结论: 递增 (l ∘ u)
   证明: gc.monotone_l.comp gc.monotone_u
 
 Depends on / 依赖: gc.monotone_l.comp, gc.monotone_u, monotone_l, monotone_u
@@ -346,7 +346,7 @@ theorem exists_eq_u
 @[to_dual]
 
 中文:
-定理 exists_eq_u
+定理 存在_eq_u
   条件: (a : α)
   结论: (存在 b : β, a = u b) ↔ a = u (l a)
   证明: ⟨fun ⟨_, hS⟩ => hS.symm ▸ (gc.u_l_u_eq_u _).symm, fun HI => ⟨_, HI⟩⟩
@@ -438,7 +438,7 @@ theorem u_top
 
 中文:
 定理 u_top
-  条件: [OrderTop β] {l : α -> β} {u : β -> α} (gc : GaloisConnection l u)
+  条件: [有顶序 β] {l : α -> β} {u : β -> α} (gc : GaloisConnection l u)
   结论: u ⊤ = ⊤
   证明: gc.u_eq_top.2 le_top
 
@@ -514,7 +514,7 @@ theorem id
 
 中文:
 定理 id
-  条件: [pα : Preorder α]
+  条件: [pα : 预序 α]
   结论: @GaloisConnection α α pα pα id id
   证明: fun _ _ =>
   Iff.intro (fun x => x) fun x => x
@@ -532,7 +532,7 @@ theorem compose
 
 中文:
 定理 compose
-  结论: [Preorder α] [Preorder β] [Preorder γ] {l1 : α -> β} {u1 : β -> α}
+  结论: [预序 α] [预序 β] [预序 γ] {l1 : α -> β} {u1 : β -> α}
   证明: fun _ _ => (gc2 _ _).trans (gc1 _ _)
 -/
 protected theorem compose [Preorder α] [Preorder β] [Preorder γ] {l1 : α -> β} {u1 : β -> α}
@@ -550,7 +550,7 @@ theorem dfun
 
 中文:
 定理 dfun
-  结论: {ι : 类型u} {α : ι -> 类型v} {β : ι -> Type w} [对任意 i, Preorder (α i)]
+  结论: {ι : 类型u} {α : ι -> 类型v} {β : ι -> 类型 w} [对任意 i, 预序 (α i)]
   证明: fun a b =>
   forall_congr' fun i => gc i (a i) (b i)
 -/
@@ -572,7 +572,7 @@ theorem l_comm_of_u_comm
 
 中文:
 定理 l_comm_of_u_comm
-  结论: {X : 类型} [Preorder X] {Y : 类型} [Preorder Y] {Z : 类型}
+  结论: {X : 类型} [预序 X] {Y : 类型} [预序 Y] {Z : 类型}
   证明: (hXZ.compose hZW).l_unique (hXY.compose hWY) h
 
 Depends on / 依赖: compose, hXY.compose, hXZ.compose, l_unique
@@ -595,7 +595,7 @@ theorem u_comm_of_l_comm
 
 中文:
 定理 u_comm_of_l_comm
-  结论: {X : 类型} [PartialOrder X] {Y : 类型} [Preorder Y] {Z : 类型}
+  结论: {X : 类型} [偏序 X] {Y : 类型} [预序 Y] {Z : 类型}
   证明: (hXZ.compose hZW).u_unique (hXY.compose hWY) h
 
 Depends on / 依赖: compose, hXY.compose, hXZ.compose, u_unique
@@ -618,7 +618,7 @@ theorem l_comm_iff_u_comm
 
 中文:
 定理 l_comm_iff_u_comm
-  结论: {X : 类型} [PartialOrder X] {Y : 类型} [Preorder Y] {Z : 类型}
+  结论: {X : 类型} [偏序 X] {Y : 类型} [预序 Y] {Z : 类型}
   证明: ⟨hXY.l_comm_of_u_comm hZW hWY hXZ, hXY.u_comm_of_l_comm hZW hWY hXZ⟩
 
 Depends on / 依赖: hXY.l_comm_of_u_comm, hXY.u_comm_of_l_comm, l_comm_of_u_comm, u_comm_of_l_comm
@@ -646,8 +646,8 @@ structure GaloisInsertion
     - choice_eq : forall a h, choice a h = l a
 
 中文:
-结构 GaloisInsertion
-  参数: {α β : 类型} [Preorder α] [Preorder β] (l : α -> β) (u : β -> α)
+结构 Galois嵌入
+  参数: {α β : 类型} [预序 α] [预序 β] (l : α -> β) (u : β -> α)
   公理与运算 (4 个):
     - choice : 对任意 x : α, u (l x) <= x -> β
     - gc : GaloisConnection l u
@@ -681,8 +681,8 @@ structure GaloisCoinsertion
     - choice_eq : forall a h, choice a h = u a
 
 中文:
-结构 GaloisCoinsertion
-  参数: [Preorder α] [Preorder β] (l : α -> β) (u : β -> α)
+结构 Galois余嵌入
+  参数: [预序 α] [预序 β] (l : α -> β) (u : β -> α)
   公理与运算 (4 个):
     - choice : 对任意 x : β, x <= l (u x) -> α
     - gc : GaloisConnection l u
@@ -714,8 +714,8 @@ le_l_u b := le_of_eq (h_l_u b).symm
   choice_eq _ _ := rfl
 
 中文:
-定义 GaloisInsertion.monotoneIntro
-  签名: {α β : 类型} [Preorder α] [Preorder β] {l : α -> β} {u : β -> α}
+定义 Galois嵌入.monotone整数ro
+  签名: {α β : 类型} [预序 α] [预序 β] {l : α -> β} {u : β -> α}
   定义体: l x
   gc := GaloisConnection.monotone_intro hu hl h_u_l fun b => le_of_eq (h_l_u b)
 le_l_u b := le_of_eq (h_l_u b).symm
@@ -745,7 +745,7 @@ definition GaloisConnection.toGaloisInsertion
 
 中文:
 定义 GaloisConnection.toGaloisInsertion
-  签名: {α β : 类型} [Preorder α] [Preorder β] {l : α -> β}
+  签名: {α β : 类型} [预序 α] [预序 β] {l : α -> β}
   定义体: { choice := fun x _ => l x
     gc
     le_l_u := h
@@ -773,7 +773,7 @@ bot_le _ := gc.l_le bot_le
 
 中文:
 定义 GaloisConnection.liftOrderBot
-  签名: {α β : 类型} [Preorder α] [OrderBot α] [PartialOrder β]
+  签名: {α β : 类型} [预序 α] [有底序 α] [偏序 β]
   定义体: l ⊥
 bot_le _ := gc.l_le bot_le
 -/
@@ -801,7 +801,7 @@ theorem l_u_eq
 
 中文:
 定理 l_u_eq
-  条件: [Preorder α] [PartialOrder β] (gi : GaloisInsertion l u) (b : β)
+  条件: [预序 α] [偏序 β] (gi : Galois嵌入 l u) (b : β)
   结论: l (u b) = b
   证明: (gi.gc.l_u_le _).antisymm (gi.le_l_u _)
 
@@ -828,7 +828,7 @@ alias _root_.GaloisCoinsertion.u_l_leftInverse := GaloisCoinsertion.leftInverse_
 
 中文:
 定理 leftInverse_l_u
-  条件: [Preorder α] [PartialOrder β] (gi : GaloisInsertion l u)
+  条件: [预序 α] [偏序 β] (gi : Galois嵌入 l u)
   证明: gi.l_u_eq
 
 @[deprecated (since := "2026-03-06")]
@@ -858,7 +858,7 @@ theorem l_top
 
 中文:
 定理 l_top
-  结论: [Preorder α] [PartialOrder β] [OrderTop α] [OrderTop β]
+  结论: [预序 α] [偏序 β] [有顶序 α] [有顶序 β]
   证明: top_unique (gi.le_l_u _).trans gi.gc.monotone_l le_top
 
 @[to_dual]
@@ -883,8 +883,8 @@ theorem l_surjective
 
 中文:
 定理 l_surjective
-  条件: [Preorder α] [PartialOrder β] (gi : GaloisInsertion l u)
-  结论: Surjective l
+  条件: [预序 α] [偏序 β] (gi : Galois嵌入 l u)
+  结论: 满射 l
   证明: gi.leftInverse_l_u.surjective
 
 @[to_dual]
@@ -908,8 +908,8 @@ theorem u_injective
 
 中文:
 定理 u_injective
-  条件: [Preorder α] [PartialOrder β] (gi : GaloisInsertion l u)
-  结论: Injective u
+  条件: [预序 α] [偏序 β] (gi : Galois嵌入 l u)
+  结论: 单射 u
   证明: gi.leftInverse_l_u.injective
 
 @[to_dual]
@@ -933,7 +933,7 @@ theorem u_le_u_iff
 
 中文:
 定理 u_le_u_iff
-  条件: [Preorder α] [Preorder β] (gi : GaloisInsertion l u) {a b}
+  条件: [预序 α] [预序 β] (gi : Galois嵌入 l u) {a b}
   结论: u a <= u b ↔ a <= b
   证明: ⟨fun h => (gi.le_l_u _).trans (gi.gc.l_le h), fun h => gi.gc.monotone_u h⟩
 
@@ -956,8 +956,8 @@ theorem strictMono_u
 
 中文:
 定理 strictMono_u
-  条件: [Preorder α] [Preorder β] (gi : GaloisInsertion l u)
-  结论: StrictMono u
+  条件: [预序 α] [预序 β] (gi : Galois嵌入 l u)
+  结论: 严格递增 u
   证明: strictMono_of_le_iff_le fun _ _ => gi.u_le_u_iff.symm
 
 Depends on / 依赖: gi.u_le_u_iff.symm, strictMono_of_le_iff_le, u_le_u_iff
@@ -980,8 +980,8 @@ definition GaloisCoinsertion.dual
   body: fun x => ⟨x.1, x.2.dual, x.3, x.4⟩
 
 中文:
-定义 GaloisCoinsertion.dual
-  签名: [Preorder α] [Preorder β] {l : α -> β} {u : β -> α}
+定义 Galois余嵌入.dual
+  签名: [预序 α] [预序 β] {l : α -> β} {u : β -> α}
   定义体: fun x => ⟨x.1, x.2.dual, x.3, x.4⟩
 -/
 def GaloisCoinsertion.dual [Preorder α] [Preorder β] {l : α -> β} {u : β -> α} :
@@ -1001,8 +1001,8 @@ definition GaloisCoinsertion.ofDual
   body: fun x => ⟨x.1, x.2.dual, x.3, x.4⟩
 
 中文:
-定义 GaloisCoinsertion.ofDual
-  签名: [Preorder α] [Preorder β] {l : αᵒᵈ -> βᵒᵈ} {u : βᵒᵈ -> αᵒᵈ}
+定义 Galois余嵌入.ofDual
+  签名: [预序 α] [预序 β] {l : αᵒᵈ -> βᵒᵈ} {u : βᵒᵈ -> αᵒᵈ}
   定义体: fun x => ⟨x.1, x.2.dual, x.3, x.4⟩
 -/
 def GaloisCoinsertion.ofDual [Preorder α] [Preorder β] {l : αᵒᵈ -> βᵒᵈ} {u : βᵒᵈ -> αᵒᵈ} :

@@ -28,7 +28,7 @@ instance toIsOrderedRing
 
 中文:
 实例 toIsOrderedRing
-  签名: [CommSemiring R] [Semiring A] [PartialOrder A] [IsOrderedRing A]
+  签名: [交换半环 R] [半环 A] [偏序 A] [是Ordered环 A]
   定义体: S.toSubsemiring.toIsOrderedRing
 
 Depends on / 依赖: S.toSubsemiring.toIsOrderedRing, toIsOrderedRing, toSubsemiring
@@ -47,7 +47,7 @@ instance toIsStrictOrderedRing
 
 中文:
 实例 toIsStrictOrderedRing
-  签名: [CommSemiring R] [Semiring A] [PartialOrder A]
+  签名: [交换半环 R] [半环 A] [偏序 A]
   定义体: S.toSubsemiring.toIsStrictOrderedRing
 
 Depends on / 依赖: S.toSubsemiring.toIsStrictOrderedRing, toIsStrictOrderedRing, toSubsemiring

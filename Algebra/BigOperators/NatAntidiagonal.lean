@@ -178,7 +178,7 @@ theorem prod_antidiagonal_eq_prod_range_succ_mk
 
 中文:
 定理 prod_antidiagonal_eq_prod_range_succ_mk
-  结论: {M : 类型} [CommMonoid M] (f : 自然数 × 自然数 -> M)
+  结论: {M : 类型} [交换幺半群 M] (f : 自然数 × 自然数 -> M)
   证明: Finset.prod_map (range n.succ) ⟨fun i => (i, n - i), fun _ _ h => (Prod.mk.inj h).1⟩ f
 
 Depends on / 依赖: Finset, Finset.prod_map, Prod.mk.inj, n.succ, prod_map
@@ -201,7 +201,7 @@ theorem prod_antidiagonal_eq_prod_range_succ
 
 中文:
 定理 prod_antidiagonal_eq_prod_range_succ
-  条件: {M : 类型} [CommMonoid M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
+  条件: {M : 类型} [交换幺半群 M] (f : 自然数 -> 自然数 -> M) (n : 自然数)
   证明: prod_antidiagonal_eq_prod_range_succ_mk _ _
 
 Depends on / 依赖: prod_antidiagonal_eq_prod_range_succ_mk

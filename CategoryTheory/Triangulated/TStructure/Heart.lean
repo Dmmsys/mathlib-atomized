@@ -51,7 +51,7 @@ definition heart
 
 中文:
 定义 heart
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: t.le 0 ⊓ t.ge 0
   deriving ObjectProperty.IsClosedUnderIsomorphisms
 
@@ -99,9 +99,9 @@ class Heart
   参数: where
   公理与运算 (5 个):
     - ι : H ⥤ C
-    - additive_ι : ι.Additive  [默认: by infer_instance]
-    - full_ι : ι.Full  [默认: by infer_instance]
-    - faithful_ι : ι.Faithful  [默认: by infer_instance]
+    - additive_ι : ι.加性  [默认: by infer_instance]
+    - full_ι : ι.满  [默认: by infer_instance]
+    - faithful_ι : ι.忠实  [默认: by infer_instance]
     - essImage_eq_heart : ι.essImage = t.heart  [默认: by simp]
 
 Depends on / 依赖: Faithful, essImage, essImage_eq_heart, infer_instance, t.heart
@@ -131,7 +131,7 @@ definition hasHeartFullSubcategory
 
 中文:
 定义 hasHeartFullSubcategory
-  签名: : t.Heart t.heart.FullSubcategory where
+  签名: : t.Heart t.heart.满子范畴 where
   定义体: t.heart.ι
   essImage_eq_heart := by
     ext X
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: (t.ιHeart (H := H)).Additive
+  签名: (t.ιHeart (H := H)).加性
   定义体: Heart.additive_ι
 
 Depends on / 依赖: Additive, Heart.additive_
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: (t.ιHeart (H := H)).Full
+  签名: (t.ιHeart (H := H)).满
   定义体: Heart.full_ι
 
 Depends on / 依赖: Heart.full_
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: (t.ιHeart (H := H)).Faithful
+  签名: (t.ιHeart (H := H)).忠实
   定义体: Heart.faithful_ι
 
 @[simp]

@@ -51,7 +51,7 @@ theorem mem_hausdorffEntourage_of_hausdorffEDist_lt
 
 中文:
 定理 mem_hausdorffEntourage_of_hausdorffEDist_lt
-  结论: {s t : Set α} {δ : 实数>=0∞}
+  结论: {s t : 集合 α} {δ : 实数>=0∞}
   证明: by
   rw [hausdorffEDist]; rw [max_lt_iff] at h
   rw [hausdorffEntourage]; rw [Set.mem_ofPred]
@@ -91,7 +91,7 @@ theorem hausdorffEDist_le_of_mem_hausdorffEntourage
 
 中文:
 定理 hausdorffEDist_le_of_mem_hausdorffEntourage
-  结论: {s t : Set α} {δ : 实数>=0∞}
+  结论: {s t : 集合 α} {δ : 实数>=0∞}
   证明: by
   rw [hausdorffEDist]; rw [max_le_iff]
   rw [hausdorffEntourage]; rw [Set.mem_ofPred] at h
@@ -133,8 +133,8 @@ abbreviation _root_.PseudoEMetricSpace.hausdorff
       (unifo
 
 中文:
-缩写 _root_.PseudoEMetricSpace.hausdorff
-  签名: : PseudoEMetricSpace (Set α) where
+缩写 _root_.PseudoEMetric空间.hausdorff
+  签名: : PseudoEMetric空间 (集合 α) where
   定义体: hausdorffEDist s t
   edist_self _ := hausdorffEDist_self
   edist_comm _ _ := hausdorffEDist_comm
@@ -182,7 +182,7 @@ eq_of_edist_eq_zero {s t} h := Closeds.ext (s.isClosed.hausdorffEDist_zero_iff t
 
 中文:
 实例 instEMetricSpace
-  签名: : EMetricSpace (Closeds α) where
+  签名: : 广义度量空间 (Closeds α) where
   定义体: PseudoEMetricSpace.hausdorff.induced SetLike.coe
 eq_of_edist_eq_zero {s t} h := Closeds.ext (s.isClosed.hausdorffEDist_zero_iff t.isClosed).1 h
 
@@ -246,7 +246,7 @@ theorem edist_eq
 中文:
 定理 edist_eq
   条件: {s t : Closeds α}
-  结论: edist s t = hausdorffEDist (s : Set α) t
+  结论: edist s t = hausdorffEDist (s : 集合 α) t
   证明: rfl
 -/
 theorem edist_eq {s t : Closeds α} : edist s t = hausdorffEDist (s : Set α) t :=
@@ -267,7 +267,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace α]
+  签名: [完备空间 α]
   定义体: by
   /- We will show that, if a sequence of sets `s n` satisfies
     `edist (s n) (s (n+1)) < 2^{-n}`, then it converges. This is enough to guarantee
@@ -378,7 +378,7 @@ theorem isometry_singleton
 
 中文:
 定理 isometry_singleton
-  结论: Isometry ({·} : α -> Closeds α)
+  结论: 等距 ({·} : α -> Closeds α)
   证明: fun _ _ => hausdorffEDist_singleton
 
 Depends on / 依赖: hausdorffEDist_singleton
@@ -439,7 +439,7 @@ eq_of_edist_eq_zero {s t} h := Compacts.ext by
 
 中文:
 实例 instEMetricSpace
-  签名: : EMetricSpace (Compacts α) where
+  签名: : 广义度量空间 (余mpacts α) where
   定义体: (PseudoEMetricSpace.hausdorff.induced SetLike.coe).replaceUniformity by rfl
 eq_of_edist_eq_zero {s t} h := Compacts.ext by
     have : closure (s : Set α) = closure t := hausdorffEDist_zero_iff_closure_eq_closure.1 h
@@ -467,8 +467,8 @@ theorem edist_eq
 
 中文:
 定理 edist_eq
-  条件: {s t : Compacts α}
-  结论: edist s t = hausdorffEDist (s : Set α) t
+  条件: {s t : 余mpacts α}
+  结论: edist s t = hausdorffEDist (s : 集合 α) t
   证明: rfl
 -/
 theorem edist_eq {s t : Compacts α} : edist s t = hausdorffEDist (s : Set α) t :=
@@ -484,7 +484,7 @@ theorem isometry_toCloseds
 
 中文:
 定理 isometry_toCloseds
-  结论: Isometry (Compacts.toCloseds (α := α))
+  结论: 等距 (余mpacts.toCloseds (α := α))
   证明: fun _ _ => rfl
 -/
 theorem isometry_toCloseds : Isometry (Compacts.toCloseds (α := α)) :=
@@ -500,7 +500,7 @@ theorem isometry_singleton
 
 中文:
 定理 isometry_singleton
-  结论: Isometry ({·} : α -> Compacts α)
+  结论: 等距 ({·} : α -> 余mpacts α)
   证明: fun _ _ => hausdorffEDist_singleton
 
 Depends on / 依赖: hausdorffEDist_singleton
@@ -559,7 +559,7 @@ eq_of_edist_eq_zero {s t} h := NonemptyCompacts.ext by
 
 中文:
 实例 instEMetricSpace
-  签名: : EMetricSpace (NonemptyCompacts α) where
+  签名: : 广义度量空间 (NonemptyCompacts α) where
   定义体: (PseudoEMetricSpace.hausdorff.induced SetLike.coe).replaceUniformity by rfl
 eq_of_edist_eq_zero {s t} h := NonemptyCompacts.ext by
     have : closure (s : Set α) = closure t := hausdorffEDist_zero_iff_closure_eq_closure.1 h
@@ -586,7 +586,7 @@ theorem isometry_toCloseds
 
 中文:
 定理 isometry_toCloseds
-  结论: Isometry (@NonemptyCompacts.toCloseds α _ _)
+  结论: 等距 (@NonemptyCompacts.toCloseds α _ _)
   证明: fun _ _ => rfl
 -/
 theorem isometry_toCloseds : Isometry (@NonemptyCompacts.toCloseds α _ _) :=
@@ -602,7 +602,7 @@ theorem isometry_toCompacts
 
 中文:
 定理 isometry_toCompacts
-  结论: Isometry (NonemptyCompacts.toCompacts (α := α))
+  结论: 等距 (NonemptyCompacts.toCompacts (α := α))
   证明: fun _ _ => rfl
 -/
 theorem isometry_toCompacts : Isometry (NonemptyCompacts.toCompacts (α := α)) :=
@@ -622,7 +622,7 @@ theorem isClosed_in_closeds
 
 中文:
 定理 isClosed_in_closeds
-  条件: [CompleteSpace α]
+  条件: [完备空间 α]
   证明: NonemptyCompacts.isClosedEmbedding_toCloseds.isClosed_range
 
 Depends on / 依赖: NonemptyCompacts, NonemptyCompacts.isClosedEmbedding_toCloseds.isClosed_range, isClosedEmbedding_toCloseds, isClosed_range
@@ -641,7 +641,7 @@ theorem isometry_singleton
 
 中文:
 定理 isometry_singleton
-  结论: Isometry ({·} : α -> NonemptyCompacts α)
+  结论: 等距 ({·} : α -> NonemptyCompacts α)
   证明: fun _ _ => hausdorffEDist_singleton
 
 Depends on / 依赖: hausdorffEDist_singleton
@@ -751,7 +751,7 @@ instance NonemptyCompacts.instMetricSpace
 
 中文:
 实例 NonemptyCompacts.instMetricSpace
-  签名: : MetricSpace (NonemptyCompacts α)
+  签名: : 度量空间 (NonemptyCompacts α)
   定义体: EMetricSpace.toMetricSpace fun x y =>
     hausdorffEDist_ne_top_of_nonempty_of_bounded x.nonempty y.nonempty x.isCompact.isBounded
       y.isCompact.isBounded

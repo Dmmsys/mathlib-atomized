@@ -70,11 +70,11 @@ structure PreSubmersivePresentation
 
 中文:
 结构 PreSubmersivePresentation
-  参数: extends Algebra.Presentation R S ι σ
-  继承: Algebra.Presentation R S ι σ
+  参数: extends 代数.呈现 R S ι σ
+  继承: 代数.呈现 R S ι σ
   公理与运算 (2 个):
     - map : σ -> ι
-    - map_inj : Function.Injective map
+    - map_inj : 函数.单射 map
 -/
 structure PreSubmersivePresentation extends Algebra.Presentation R S ι σ where
   /-- A map from the relations type to the variables type. Used to compute the differential. -/
@@ -97,7 +97,7 @@ lemma card_relations_le_card_vars_of_isFinite
 
 中文:
 引理 card_relations_le_card_vars_of_isFinite
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: Nat.card_le_card_of_injective P.map P.map_inj
 
 Depends on / 依赖: Nat.card_le_card_of_injective, P.map, P.map_inj, card_le_card_of_injective, map_inj
@@ -120,7 +120,7 @@ abbreviation basis
 
 中文:
 缩写 basis
-  签名: : Basis σ P.Ring (σ -> P.Ring)
+  签名: : 基 σ P.环 (σ -> P.环)
   定义体: Pi.basisFun P.Ring σ
 
 Depends on / 依赖: P.Ring, Pi.basisFun, basisFun
@@ -139,7 +139,7 @@ definition differential
 
 中文:
 定义 differential
-  签名: : (σ -> P.Ring) ->ₗ[P.Ring] (σ -> P.Ring)
+  签名: : (σ -> P.环) ->ₗ[P.环] (σ -> P.环)
   定义体: Basis.constr P.basis P.Ring
     (fun j i : σ => MvPolynomial.pderiv (P.map i) (P.relation j))
 
@@ -233,7 +233,7 @@ definition jacobiMatrix
 
 中文:
 定义 jacobiMatrix
-  签名: : Matrix σ σ P.Ring
+  签名: : 矩阵 σ σ P.环
   定义体: LinearMap.toMatrix P.basis P.basis P.differential
 
 Depends on / 依赖: LinearMap, LinearMap.toMatrix, P.basis, P.differential, differential, toMatrix
@@ -252,7 +252,7 @@ lemma jacobian_eq_jacobiMatrix_det
 
 中文:
 引理 jacobian_eq_jacobiMatrix_det
-  结论: P.jacobian = algebraMap P.Ring S P.jacobiMatrix.det
+  结论: P.jacobian = algebraMap P.环 S P.jacobiMatrix.det
   证明: by
   simp [jacobiMatrix, jacobian]
 
@@ -445,7 +445,7 @@ lemma jacobiMatrix_ofAlgEquiv
 
 中文:
 引理 jacobiMatrix_ofAlgEquiv
-  结论: (P : PreSubmersivePresentation R S ι σ) {T : 类型} [CommRing T]
+  结论: (P : PreSubmersivePresentation R S ι σ) {T : 类型} [交换环 T]
   证明: rfl
 
 @[simp]
@@ -472,7 +472,7 @@ lemma jacobian_ofAlgEquiv
 
 中文:
 引理 jacobian_ofAlgEquiv
-  结论: (P : PreSubmersivePresentation R S ι σ) {T : 类型} [CommRing T]
+  结论: (P : PreSubmersivePresentation R S ι σ) {T : 类型} [交换环 T]
   证明: by
   classical
   cases nonempty_fintype σ
@@ -508,7 +508,7 @@ definition ofBijectiveAlgebraMap
 
 中文:
 定义 ofBijectiveAlgebraMap
-  签名: (h : Function.Bijective (algebraMap R S))
+  签名: (h : 函数.双射 (algebraMap R S))
   定义体: Presentation.ofBijectiveAlgebraMap.{t, w} h
   map := PEmpty.elim
   map_inj (a b : PEmpty) h := by contradiction
@@ -539,7 +539,7 @@ lemma ofBijectiveAlgebraMap_jacobian
 
 中文:
 引理 ofBijectiveAlgebraMap_jacobian
-  条件: (h : Function.Bijective (algebraMap R S))
+  条件: (h : 函数.双射 (algebraMap R S))
   证明: by
   have : (algebraMap (ofBijectiveAlgebraMap h).Ring S).mapMatrix
       (ofBijectiveAlgebraMap h).jacobiMatrix = 1 := by
@@ -579,7 +579,7 @@ definition localizationAway
 
 中文:
 定义 localizationAway
-  签名: : PreSubmersivePresentation R S Unit Unit where
+  签名: : PreSubmersivePresentation R S 单元 单元 where
   定义体: Presentation.localizationAway S r
   map _ := ()
   map_inj _ _ h := h
@@ -732,7 +732,7 @@ lemma dimension_comp_eq_dimension_add_dimension
 
 中文:
 引理 dimension_comp_eq_dimension_add_dimension
-  条件: [Finite ι] [Finite ι'] [Finite σ] [Finite σ']
+  条件: [有限 ι] [有限 ι'] [有限 σ] [有限 σ']
   证明: by
   simp only [Presentation.dimension]
   have : Nat.card σ <= Nat.card ι :=
@@ -976,7 +976,7 @@ lemma comp_jacobian_eq_jacobian_smul_jacobian
 
 中文:
 引理 comp_jacobian_eq_jacobian_smul_jacobian
-  条件: [Finite σ] [Finite σ']
+  条件: [有限 σ] [有限 σ']
   证明: by
   classical
   cases nonempty_fintype σ'
@@ -1061,7 +1061,7 @@ lemma baseChange_ring
 
 中文:
 引理 baseChange_ring
-  结论: (P.baseChange R).Ring = P.Ring
+  结论: (P.baseChange R).环 = P.环
   证明: rfl
 
 @[simp]
@@ -1088,7 +1088,7 @@ lemma baseChange_jacobian
 
 中文:
 引理 baseChange_jacobian
-  条件: [Finite σ]
+  条件: [有限 σ]
   结论: (P.baseChange T).jacobian = 1 otimesₜ P.jacobian
   证明: by
   classical
@@ -1255,7 +1255,7 @@ definition naive
 
 中文:
 定义 naive
-  签名: {v : ι -> MvPolynomial σ R} (a : ι -> σ) (ha : Function.Injective a)
+  签名: {v : ι -> 多元多项式 σ R} (a : ι -> σ) (ha : 函数.单射 a)
   定义体: Presentation.naive s hs
   map := a
   map_inj := ha
@@ -1281,7 +1281,7 @@ lemma jacobiMatrix_naive
 
 中文:
 引理 jacobiMatrix_naive
-  条件: [Fintype ι] [DecidableEq ι] (i j : ι)
+  条件: [有限类型 ι] [DecidableEq ι] (i j : ι)
   证明: jacobiMatrix_apply _ _ _
 -/
 @[simp] lemma jacobiMatrix_naive [Fintype ι] [DecidableEq ι] (i j : ι) :
@@ -1307,11 +1307,11 @@ structure SubmersivePresentation
     - jacobian_isUnit : IsUnit toPreSubmersivePresentation.jacobian
 
 中文:
-结构 SubmersivePresentation
+结构 浸没呈现
   参数: extends PreSubmersivePresentation.{t, w} R S ι σ
   继承: PreSubmersivePresentation.{t, w} R S ι σ
   公理与运算 (1 个):
-    - jacobian_isUnit : IsUnit toPreSubmersivePresentation.jacobian
+    - jacobian_isUnit : 是单位 toPreSubmersivePresentation.jacobian
 -/
 structure SubmersivePresentation extends PreSubmersivePresentation.{t, w} R S ι σ where
   jacobian_isUnit : IsUnit toPreSubmersivePresentation.jacobian
@@ -1360,7 +1360,7 @@ definition ofBijectiveAlgebraMap
 
 中文:
 定义 ofBijectiveAlgebraMap
-  签名: (h : Function.Bijective (algebraMap R S))
+  签名: (h : 函数.双射 (algebraMap R S))
   定义体: PreSubmersivePresentation.ofBijectiveAlgebraMap.{t, w} h
   jacobian_isUnit := by
     rw [ofBijectiveAlgebraMap_jacobian]
@@ -1385,7 +1385,7 @@ definition id
 
 中文:
 定义 id
-  签名: : SubmersivePresentation R R PEmpty.{w + 1} PEmpty.{t + 1}
+  签名: : 浸没呈现 R R 命题空.{w + 1} 命题空.{t + 1}
   定义体: ofBijectiveAlgebraMap Function.bijective_id
 
 Depends on / 依赖: Function, Function.bijective_id, bijective_id, ofBijectiveAlgebraMap
@@ -1411,7 +1411,7 @@ exact ⟨RingHom.isUnit_map _ P.jacobian_isUnit, Q.jacobian_isUnit⟩
 
 中文:
 定义 comp
-  签名: : SubmersivePresentation R T (ι' oplus ι) (σ' oplus σ) where
+  签名: : 浸没呈现 R T (ι' oplus ι) (σ' oplus σ) where
   定义体: Q.toPreSubmersivePresentation.comp P.toPreSubmersivePresentation
   jacobian_isUnit := by
     rw [comp_jacobian_eq_jacobian_smul_jacobian]; rw [Algebra.smul_def]; rw [IsUnit.mul_iff]
@@ -1444,7 +1444,7 @@ definition localizationAway
 
 中文:
 定义 localizationAway
-  签名: : SubmersivePresentation R S Unit Unit where
+  签名: : 浸没呈现 R S 单元 单元 where
   定义体: PreSubmersivePresentation.localizationAway S r
   jacobian_isUnit := by
     rw [localizationAway_jacobian]
@@ -1477,7 +1477,7 @@ definition baseChange
 
 中文:
 定义 baseChange
-  签名: : SubmersivePresentation T (T otimes[R] S) ι σ where
+  签名: : 浸没呈现 T (T otimes[R] S) ι σ where
   定义体: P.toPreSubmersivePresentation.baseChange T
   jacobian_isUnit :=
     P.baseChange_jacobian T ▸ P.jacobian_isUnit.map TensorProduct.includeRight
@@ -1507,7 +1507,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: (P : SubmersivePresentation R S ι σ)
+  签名: (P : 浸没呈现 R S ι σ)
   定义体: P.toPreSubmersivePresentation.reindex e f
   jacobian_isUnit := by simp [P.jacobian_isUnit]
 
@@ -1539,7 +1539,7 @@ definition ofSubsingleton
 
 中文:
 定义 ofSubsingleton
-  签名: [Subsingleton S]
+  签名: [子单例 S]
   定义体: 1
   σ' _ := 1
   aeval_val_σ' _ := Subsingleton.elim _ _
@@ -1580,7 +1580,7 @@ definition aevalDifferentialEquiv
 
 中文:
 定义 aevalDifferentialEquiv
-  签名: (P : SubmersivePresentation R S ι σ)
+  签名: (P : 浸没呈现 R S ι σ)
   定义体: haveI : Fintype σ := Fintype.ofFinite σ
   have :
       IsUnit (LinearMap.toMatrix (Pi.basisFun S σ) (Pi.basisFun S σ) P.aevalDifferential).det := by
@@ -1631,7 +1631,7 @@ definition basisDeriv
 
 中文:
 定义 basisDeriv
-  签名: (P : SubmersivePresentation R S ι σ)
+  签名: (P : 浸没呈现 R S ι σ)
   定义体: Basis.map (Pi.basisFun S σ) P.aevalDifferentialEquiv
 
 @[simp]

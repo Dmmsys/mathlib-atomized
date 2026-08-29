@@ -38,11 +38,11 @@ class IsometricContinuousFunctionalCalculus
     - isometric((a : A) (ha : p a)) : Isometry (cfcHom ha (R := R))
 
 中文:
-类 IsometricContinuousFunctionalCalculus
+类 是ometricContinuousFunctionalCalculus
   参数: (R A : 类型) (p : outParam (A -> 命题))
-  继承: ContinuousFunctionalCalculus R A p
+  继承: 余ntinuousFunctionalCalculus R A p
   公理与运算 (1 个):
-    - isometric((a : A) (ha : p a)) : Isometry (cfcHom ha (R := R))
+    - isometric((a : A) (ha : p a)) : 等距 (cfcHom ha (R := R))
 -/
 class IsometricContinuousFunctionalCalculus (R A : Type*) (p : outParam (A -> Prop))
     [CommSemiring R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R] [ContinuousStar R]
@@ -86,7 +86,7 @@ instance [CompleteSpace
   body: (isometry_cfcHom a).isClosedEmbedding
 
 中文:
-实例 [CompleteSpace
+实例 [完备空间
   签名: R] : ClosedEmbeddingContinuousFunctionalCalculus R A p where
   定义体: (isometry_cfcHom a).isClosedEmbedding
 
@@ -163,7 +163,7 @@ lemma IsGreatest.norm_cfc
 
 中文:
 引理 IsGreatest.norm_cfc
-  结论: [Nontrivial A] (f : 𝕜 -> 𝕜) (a : A)
+  结论: [非平凡 A] (f : 𝕜 -> 𝕜) (a : A)
   证明: by
   obtain ⟨x, hx⟩ := ContinuousFunctionalCalculus.isCompact_spectrum a
 .exists_isGreatest .image_of_continuousOn hf.norm
@@ -203,7 +203,7 @@ lemma IsGreatest.nnnorm_cfc
 
 中文:
 引理 IsGreatest.nnnorm_cfc
-  结论: [Nontrivial A] (f : 𝕜 -> 𝕜) (a : A)
+  结论: [非平凡 A] (f : 𝕜 -> 𝕜) (a : A)
   证明: by
   convert! Real.toNNReal_monotone.map_isGreatest (.norm_cfc f a)
   all_goals simp [Set.image_image, norm_toNNReal]
@@ -473,7 +473,7 @@ lemma isGreatest_norm_spectrum
 
 中文:
 引理 isGreatest_norm_spectrum
-  条件: [Nontrivial A] (a : A) (ha : p a := by cfc_tac)
+  条件: [非平凡 A] (a : A) (ha : p a := by cfc_tac)
   证明: by
   simpa only [cfc_id 𝕜 a] using! IsGreatest.norm_cfc (id : 𝕜 -> 𝕜) a
 
@@ -517,7 +517,7 @@ lemma isGreatest_nnnorm_spectrum
 
 中文:
 引理 isGreatest_nnnorm_spectrum
-  条件: [Nontrivial A] (a : A) (ha : p a := by cfc_tac)
+  条件: [非平凡 A] (a : A) (ha : p a := by cfc_tac)
   证明: by
   simpa only [cfc_id 𝕜 a] using! IsGreatest.nnnorm_cfc (id : 𝕜 -> 𝕜) a
 
@@ -582,7 +582,7 @@ theorem isometric_cfc
 
 中文:
 定理 isometric_cfc
-  结论: (f : C(S, R)) (halg : Isometry (algebraMap R S)) (h0 : p 0)
+  结论: (f : C(S, R)) (halg : 等距 (algebraMap R S)) (h0 : p 0)
   证明: SpectrumRestricts.cfc f halg.isClosedEmbedding h0 h
   isometric a ha := by
 .mp ha obtain ⟨ha', haf⟩ := h a
@@ -630,11 +630,11 @@ class NonUnitalIsometricContinuousFunctionalCalculus
     - isometric((a : A) (ha : p a)) : Isometry (cfcₙHom ha (R := R))
 
 中文:
-类 NonUnitalIsometricContinuousFunctionalCalculus
+类 非幺是ometricContinuousFunctionalCalculus
   参数: (R A : 类型) (p : outParam (A -> 命题))
-  继承: NonUnitalContinuousFunctionalCalculus R A p
+  继承: 非幺余ntinuousFunctionalCalculus R A p
   公理与运算 (1 个):
-    - isometric((a : A) (ha : p a)) : Isometry (cfcₙHom ha (R := R))
+    - isometric((a : A) (ha : p a)) : 等距 (cfcₙHom ha (R := R))
 -/
 class NonUnitalIsometricContinuousFunctionalCalculus (R A : Type*) (p : outParam (A -> Prop))
     [CommSemiring R] [Nontrivial R] [StarRing R] [MetricSpace R] [IsTopologicalSemiring R]
@@ -683,8 +683,8 @@ instance [CompleteSpace
   body: (isometry_cfcₙHom a).isClosedEmbedding
 
 中文:
-实例 [CompleteSpace
-  签名: R] : NonUnitalClosedEmbeddingContinuousFunctionalCalculus R A p where
+实例 [完备空间
+  签名: R] : 非幺ClosedEmbeddingContinuousFunctionalCalculus R A p where
   定义体: (isometry_cfcₙHom a).isClosedEmbedding
 
 Depends on / 依赖: isClosedEmbedding
@@ -1169,7 +1169,7 @@ theorem isometric_cfc
 
 中文:
 定理 isometric_cfc
-  结论: (f : C(S, R)) (halg : Isometry (algebraMap R S)) (h0 : p 0)
+  结论: (f : C(S, R)) (halg : 等距 (algebraMap R S)) (h0 : p 0)
   证明: QuasispectrumRestricts.cfc f
     halg.isClosedEmbedding h0 h
   isometric a ha := by
@@ -1307,7 +1307,7 @@ Continuo
 
 中文:
 引理 IsGreatest.nnnorm_cfc_nnreal
-  结论: [Nontrivial A] (f : 实数>=0 -> 实数>=0) (a : A)
+  结论: [非平凡 A] (f : 实数>=0 -> 实数>=0) (a : A)
   证明: by
   rw [cfc_nnreal_eq_real ..]
   obtain ⟨-, ha'⟩ := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts.mp ha
@@ -1490,7 +1490,7 @@ lemma isGreatest_spectrum
 
 中文:
 引理 isGreatest_spectrum
-  条件: [Nontrivial A] (a : A) (ha : 0 <= a := by cfc_tac)
+  条件: [非平凡 A] (a : A) (ha : 0 <= a := by cfc_tac)
   证明: by
   simpa [cfc_id Real>=0 a] using IsGreatest.nnnorm_cfc_nnreal id a
 
@@ -1536,7 +1536,7 @@ lemma MonotoneOn.nnnorm_cfc
 
 中文:
 引理 MonotoneOn.nnnorm_cfc
-  结论: [Nontrivial A] (f : 实数>=0 -> 实数>=0) (a : A)
+  结论: [非平凡 A] (f : 实数>=0 -> 实数>=0) (a : A)
   证明: .unique hf.map_isGreatest (isGreatest_spectrum a) IsGreatest.nnnorm_cfc_nnreal f a
 
 Depends on / 依赖: IsGreatest, IsGreatest.nnnorm_cfc_nnreal, cfc_cont_tac, cfc_tac, hf.map_isGreatest, isGreatest_spectrum, map_isGreatest, nnnorm_cfc_nnreal, unique
@@ -1818,7 +1818,7 @@ instance toNonUnital
 
 中文:
 实例 toNonUnital
-  签名: : NonUnitalIsometricContinuousFunctionalCalculus 𝕜 A p where
+  签名: : 非幺是ometricContinuousFunctionalCalculus 𝕜 A p where
   定义体: by
     have : CompactSpace (σₙ 𝕜 a) := by
       have h_cpct : CompactSpace (spectrum 𝕜 a) := inferInstance

@@ -56,7 +56,7 @@ class BimonObj
 中文:
 类 BimonObj
   参数: (M : C)
-  继承: MonObj M, ComonObj M
+  继承: MonObj M, 余monObj M
   公理与运算 (4 个):
     - mul_comul((M)) : μ[M] ≫ Δ[M] = (Δ[M] otimesₘ Δ[M]) ≫ tensorμ M M M M ≫ (μ[M] otimesₘ μ[M])  [默认: by cat_disch]
     - one_comul((M)) : η[M] ≫ Δ[M] = η[M otimes M]  [默认: by cat_disch]
@@ -86,7 +86,7 @@ class IsBimonHom
   (no additional axioms)
 
 中文:
-类 IsBimonHom
+类 是Bimon态射
   参数: {M N : C} [BimonObj M] [BimonObj N] (f : M ⟶ N)
   (无附加公理)
 -/
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Bimon C)
+  签名: 范畴 (Bimon C)
   定义体: inferInstanceAs (Category (Comon (Mon C)))
 
 Depends on / 依赖: Category
@@ -158,7 +158,7 @@ theorem id_hom'
 中文:
 定理 id_hom'
   条件: (M : Bimon C)
-  结论: Comon.Hom.hom (𝟙 M) = 𝟙 M.X
+  结论: 余mon.态射.hom (𝟙 M) = 𝟙 M.X
   证明: rfl
 
 @[simp]
@@ -196,7 +196,7 @@ abbreviation toMon
 
 中文:
 缩写 toMon
-  签名: : Bimon C ⥤ Mon C
+  签名: : Bimon C ⥤ 幺半群 C
   定义体: Comon.forget (Mon C)
 
 Depends on / 依赖: Comon.forget, forget
@@ -235,7 +235,7 @@ theorem toMon_forget
 
 中文:
 定理 toMon_forget
-  结论: toMon C ⋙ Mon.forget C = forget C
+  结论: toMon C ⋙ 幺半群.forget C = forget C
   证明: rfl
 -/
 theorem toMon_forget : toMon C ⋙ Mon.forget C = forget C := rfl
@@ -254,7 +254,7 @@ definition toComon
 
 中文:
 定义 toComon
-  签名: : Bimon C ⥤ Comon C
+  签名: : Bimon C ⥤ 余mon C
   定义体: (Mon.forget C).mapComon
 
 @[simp]
@@ -274,7 +274,7 @@ theorem toComon_forget
 
 中文:
 定理 toComon_forget
-  结论: toComon C ⋙ Comon.forget C = forget C
+  结论: toComon C ⋙ 余mon.forget C = forget C
   证明: rfl
 -/
 theorem toComon_forget : toComon C ⋙ Comon.forget C = forget C := rfl
@@ -325,7 +325,7 @@ definition toMonComon
 
 中文:
 定义 toMonComon
-  签名: : Bimon C ⥤ Mon (Comon C) where
+  签名: : Bimon C ⥤ 幺半群 (余mon C) where
   定义体: toMonComonObj
   map f := .mk' ((toComon C).map f)
 
@@ -351,7 +351,7 @@ definition ofMonComonObjX
 
 中文:
 定义 ofMonComonObjX
-  签名: (M : Mon (Comon C))
+  签名: (M : 幺半群 (余mon C))
   定义体: (Comon.forget C).mapMon.obj M
 
 @[simp]
@@ -373,7 +373,7 @@ theorem ofMonComonObjX_one
 
 中文:
 定理 ofMonComonObjX_one
-  条件: (M : Mon (Comon C))
+  条件: (M : 幺半群 (余mon C))
   证明: rfl
 
 @[simp]
@@ -393,7 +393,7 @@ theorem ofMonComonObjX_mul
 
 中文:
 定理 ofMonComonObjX_mul
-  条件: (M : Mon (Comon C))
+  条件: (M : 幺半群 (余mon C))
   证明: rfl
 -/
 theorem ofMonComonObjX_mul (M : Mon (Comon C)) :
@@ -417,7 +417,7 @@ definition ofMonComonObj
 
 中文:
 定义 ofMonComonObj
-  签名: (M : Mon (Comon C))
+  签名: (M : 幺半群 (余mon C))
   定义体: ofMonComonObjX M
   comon.counit := .mk' ε[M.X.X]
   comon.comul := .mk' Δ[M.X.X]
@@ -444,7 +444,7 @@ definition ofMonComon
 
 中文:
 定义 ofMonComon
-  签名: : Mon (Comon C) ⥤ Bimon C where
+  签名: : 幺半群 (余mon C) ⥤ Bimon C where
   定义体: ofMonComonObj
   map f := .mk' ((Comon.forget C).mapMon.map f)
 
@@ -580,7 +580,7 @@ theorem ofMonComon_toMonComon_obj_counit
 
 中文:
 定理 ofMonComon_toMonComon_obj_counit
-  条件: (M : Mon (Comon C))
+  条件: (M : 幺半群 (余mon C))
   证明: rfl
 
 @[simp]
@@ -604,7 +604,7 @@ theorem ofMonComon_toMonComon_obj_comul
 
 中文:
 定理 ofMonComon_toMonComon_obj_comul
-  条件: (M : Mon (Comon C))
+  条件: (M : 幺半群 (余mon C))
   证明: rfl
 
 #adaptation_note
@@ -630,7 +630,7 @@ definition equivMonComonCounitIsoAppXAux
 
 中文:
 定义 equivMonComonCounitIsoAppXAux
-  签名: (M : Mon (Comon C))
+  签名: (M : 幺半群 (余mon C))
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -657,7 +657,7 @@ definition equivMonComonCounitIsoAppX
 
 中文:
 定义 equivMonComonCounitIsoAppX
-  签名: (M : Mon (Comon C))
+  签名: (M : 幺半群 (余mon C))
   定义体: Comon.mkIso' (equivMonComonCounitIsoAppXAux M)
 
 Depends on / 依赖: Comon.mkIso, equivMonComonCounitIsoAppXAux
@@ -682,7 +682,7 @@ definition equivMonComonCounitIsoApp
 
 中文:
 定义 equivMonComonCounitIsoApp
-  签名: (M : Mon (Comon C))
+  签名: (M : 幺半群 (余mon C))
   定义体: Mon.mkIso (equivMonComonCounitIsoAppX M)
 
 Depends on / 依赖: Mon.mkIso, equivMonComonCounitIsoAppX
@@ -705,7 +705,7 @@ definition equivMonComon
 
 中文:
 定义 equivMonComon
-  签名: : Bimon C ≌ Mon (Comon C) where
+  签名: : Bimon C ≌ 幺半群 (余mon C) where
   定义体: toMonComon C
   inverse := ofMonComon C
   unitIso := NatIso.ofComponents equivMonComonUnitIsoApp

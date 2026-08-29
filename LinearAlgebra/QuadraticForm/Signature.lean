@@ -55,8 +55,8 @@ lemma QuadraticMap.IsometryEquiv.map_posDef_iff
   simp [PosDef, -Submodule.mem_map_equiv]
 
 中文:
-引理 QuadraticMap.IsometryEquiv.map_posDef_iff
-  条件: (e : IsometryEquiv Q Q')
+引理 二次映射.等距等价.map_posDef_iff
+  条件: (e : 等距等价 Q Q')
   证明: by
   simp [PosDef, -Submodule.mem_map_equiv]
 -/
@@ -74,8 +74,8 @@ lemma QuadraticMap.IsometryEquiv.map_negDef_iff
   simp [PosDef, -Submodule.mem_map_equiv]
 
 中文:
-引理 QuadraticMap.IsometryEquiv.map_negDef_iff
-  条件: (e : IsometryEquiv Q Q')
+引理 二次映射.等距等价.map_negDef_iff
+  条件: (e : 等距等价 Q Q')
   证明: by
   simp [PosDef, -Submodule.mem_map_equiv]
 -/
@@ -135,7 +135,7 @@ exact mem_Iic.mp mem_of_mem_filter _ max'_mem _ _
 
 中文:
 引理 sigPos_le_finrank
-  结论: sigPos Q <= Module.finrank R M
+  结论: sigPos Q <= 模.finrank R M
   证明: by
   classical
 exact mem_Iic.mp mem_of_mem_filter _ max'_mem _ _
@@ -163,7 +163,7 @@ lemma sigPos_isGreatest
 
 中文:
 引理 sigPos_isGreatest
-  条件: [Module.Finite R M] [StrongRankCondition R]
+  条件: [模.有限 R M] [StrongRankCondition R]
   结论: IsGreatest
   证明: by
   classical
@@ -193,8 +193,8 @@ lemma exists_finrank_eq_sigPos_and_posDef
   proof: (sigPos_isGreatest Q).1
 
 中文:
-引理 exists_finrank_eq_sigPos_and_posDef
-  条件: [Module.Finite R M] [StrongRankCondition R]
+引理 存在_finrank_eq_sigPos_and_posDef
+  条件: [模.有限 R M] [StrongRankCondition R]
   证明: (sigPos_isGreatest Q).1
 
 Depends on / 依赖: sigPos_isGreatest
@@ -213,7 +213,7 @@ lemma le_sigPos_of_posDef
 
 中文:
 引理 le_sigPos_of_posDef
-  结论: [Module.Finite R M] [StrongRankCondition R]
+  结论: [模.有限 R M] [StrongRankCondition R]
   证明: (sigPos_isGreatest Q).2 ⟨V, by tauto⟩
 
 Depends on / 依赖: sigPos_isGreatest
@@ -251,7 +251,7 @@ lemma sigNeg_isGreatest
 
 中文:
 引理 sigNeg_isGreatest
-  条件: [Module.Finite R M] [StrongRankCondition R]
+  条件: [模.有限 R M] [StrongRankCondition R]
   结论: IsGreatest
   证明: sigPos_isGreatest (-Q)
 
@@ -270,8 +270,8 @@ lemma exists_finrank_eq_sigNeg_and_negDef
   proof: exists_finrank_eq_sigPos_and_posDef (-Q)
 
 中文:
-引理 exists_finrank_eq_sigNeg_and_negDef
-  条件: [Module.Finite R M] [StrongRankCondition R]
+引理 存在_finrank_eq_sigNeg_and_negDef
+  条件: [模.有限 R M] [StrongRankCondition R]
   证明: exists_finrank_eq_sigPos_and_posDef (-Q)
 
 Depends on / 依赖: exists_finrank_eq_sigPos_and_posDef
@@ -290,7 +290,7 @@ lemma le_sigNeg_of_negDef
 
 中文:
 引理 le_sigNeg_of_negDef
-  结论: [Module.Finite R M] [StrongRankCondition R]
+  结论: [模.有限 R M] [StrongRankCondition R]
   证明: le_sigPos_of_posDef (-Q) hV
 
 Depends on / 依赖: le_sigPos_of_posDef
@@ -353,7 +353,7 @@ lemma QuadraticMap.Equivalent.sigPos_eq
   · exact e.toLinearEquiv.fin
 
 中文:
-引理 QuadraticMap.Equivalent.sigPos_eq
+引理 二次映射.Equivalent.sigPos_eq
   条件: (h : Equivalent Q Q')
   结论: sigPos Q = sigPos Q'
   证明: by
@@ -392,7 +392,7 @@ lemma QuadraticMap.Equivalent.sigNeg_eq
   proof: sigPos_eq match h with | ⟨e⟩ => ⟨e, by simp⟩
 
 中文:
-引理 QuadraticMap.Equivalent.sigNeg_eq
+引理 二次映射.Equivalent.sigNeg_eq
   条件: (h : Equivalent Q Q')
   结论: sigNeg Q = sigNeg Q'
   证明: sigPos_eq match h with | ⟨e⟩ => ⟨e, by simp⟩
@@ -430,7 +430,7 @@ lemma sigPos_add_finrank_le_of_nonpos
 
 中文:
 引理 sigPos_add_finrank_le_of_nonpos
-  结论: [FiniteDimensional 𝕜 M]
+  结论: [有限维 𝕜 M]
   证明: by
   obtain ⟨Vp, hr, hVp⟩ := exists_finrank_eq_sigPos_and_posDef Q
   rw [← hr]
@@ -479,7 +479,7 @@ lemma posDef_spanSubset
 
 中文:
 引理 posDef_spanSubset
-  条件: (s : Set ι) (hs : 对任意 i in s, 0 < w i)
+  条件: (s : 集合 ι) (hs : 对任意 i in s, 0 < w i)
   证明: by (weightedSumSquares 𝕜 w).restrict (Pi.spanSubset 𝕜 s)
   intro ⟨v, hv⟩ hv'
   rw [restrict_apply]; rw [weightedSumSquares_apply]
@@ -524,7 +524,7 @@ lemma negSemidef_spanSubset
 
 中文:
 引理 negSemidef_spanSubset
-  条件: (s : Set ι) (hs : 对任意 i in s, w i <= 0)
+  条件: (s : 集合 ι) (hs : 对任意 i in s, w i <= 0)
   证明: by
   intro x hx
   simp only [weightedSumSquares_apply, smul_eq_mul]
@@ -671,7 +671,7 @@ lemma sigPos_add_sigNeg_add_radical
 
 中文:
 引理 sigPos_add_sigNeg_add_radical
-  条件: [FiniteDimensional 𝕜 M]
+  条件: [有限维 𝕜 M]
   证明: by
   have : Invertible (2 : 𝕜) := invertibleOfNonzero (NeZero.ne _)
   obtain ⟨w, e⟩ := Q.equivalent_weightedSumSquares

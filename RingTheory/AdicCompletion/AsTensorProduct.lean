@@ -375,7 +375,7 @@ lemma ofTensorProduct_bijective_of_pi_of_fintype
 
 中文:
 引理 ofTensorProduct_bijective_of_pi_of_fintype
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: by
   classical
   cases nonempty_fintype ι
@@ -409,7 +409,7 @@ lemma ofTensorProduct_surjective_of_finite
 
 中文:
 引理 ofTensorProduct_surjective_of_finite
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: by
   obtain ⟨n, p, hp⟩ := Module.Finite.exists_fin' R M
   let f := ofTensorProduct I M ∘ₗ p.baseChange (AdicCompletion I R)
@@ -487,7 +487,7 @@ definition lTensorKerIncl
 
 中文:
 定义 lTensorKerIncl
-  签名: : AdicCompletion I R otimes[R] LinearMap.ker f ->ₗ[AdicCompletion I R]
+  签名: : AdicCompletion I R otimes[R] 线性映射.ker f ->ₗ[AdicCompletion I R]
   定义体: AlgebraTensorModule.map LinearMap.id (LinearMap.ker f).subtype
 
 Depends on / 依赖: AlgebraTensorModule, AlgebraTensorModule.map, LinearMap, LinearMap.id, LinearMap.ker, subtype
@@ -527,7 +527,7 @@ lemma tens_exact
 
 中文:
 引理 tens_exact
-  结论: Function.Exact (lTensorKerIncl I M f) (lTensorf I M f)
+  结论: 函数.正合 (lTensorKerIncl I M f) (lTensorf I M f)
   证明: lTensor_exact (AdicCompletion I R) (f.exact_subtype_ker_map) hf
 -/
 private lemma tens_exact : Function.Exact (lTensorKerIncl I M f) (lTensorf I M f) :=
@@ -543,7 +543,7 @@ lemma tens_surj
 
 中文:
 引理 tens_surj
-  结论: Function.Surjective (lTensorf I M f)
+  结论: 函数.满射 (lTensorf I M f)
   证明: LinearMap.lTensor_surjective (AdicCompletion I R) hf
 -/
 private lemma tens_surj : Function.Surjective (lTensorf I M f) :=
@@ -559,7 +559,7 @@ lemma adic_exact
 
 中文:
 引理 adic_exact
-  条件: [IsNoetherianRing R] [Finite ι]
+  条件: [是Noether环 R] [有限 ι]
   证明: map_exact (Submodule.injective_subtype _) (f.exact_subtype_ker_map) hf
 -/
 private lemma adic_exact [IsNoetherianRing R] [Finite ι] :
@@ -578,7 +578,7 @@ private
 
 中文:
 引理 adic_surj
-  结论: Function.Surjective (map I f)
+  结论: 函数.满射 (map I f)
   证明: map_surjective I hf
 
 private
@@ -604,7 +604,7 @@ lemma ofTensorProduct_bijective_of_map_from_fin
 
 中文:
 引理 ofTensorProduct_bijective_of_map_from_fin
-  条件: [Finite ι] [IsNoetherianRing R]
+  条件: [有限 ι] [是Noether环 R]
   证明: LinearMap.bijective_of_surjective_of_bijective_of_bijective_of_injective
     (lTensorKerIncl I M f)
     (lTensorf I M f)
@@ -685,7 +685,7 @@ definition ofTensorProductEquivOfFiniteNoetherian
 
 中文:
 定义 ofTensorProductEquivOfFiniteNoetherian
-  签名: [Module.Finite R M]
+  签名: [模.有限 R M]
   定义体: LinearEquiv.ofBijective (ofTensorProduct I M)
     (ofTensorProduct_bijective_of_finite_of_isNoetherian I M)
 
@@ -708,7 +708,7 @@ lemma coe_ofTensorProductEquivOfFiniteNoetherian
 
 中文:
 引理 coe_ofTensorProductEquivOfFiniteNoetherian
-  条件: [Module.Finite R M]
+  条件: [模.有限 R M]
   证明: rfl
 
 @[simp]
@@ -730,7 +730,7 @@ lemma ofTensorProductEquivOfFiniteNoetherian_apply
 
 中文:
 引理 ofTensorProductEquivOfFiniteNoetherian_apply
-  结论: [Module.Finite R M]
+  结论: [模.有限 R M]
   证明: rfl
 
 @[simp]
@@ -817,7 +817,7 @@ lemma tensor_map_id_left_injective_of_injective
 
 中文:
 引理 tensor_map_id_left_injective_of_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: by
   rw [tensor_map_id_left_eq_map I f]
   simp only [LinearMap.coe_comp, LinearEquiv.coe_coe, EmbeddingLike.comp_injective,
@@ -847,7 +847,7 @@ instance flat_of_isNoetherian
 
 中文:
 实例 flat_of_isNoetherian
-  签名: : Module.Flat R (AdicCompletion I R)
+  签名: : 模.平坦 R (AdicCompletion I R)
   定义体: Module.Flat.iff_lTensor_injective'.mpr fun J =>
     tensor_map_id_left_injective_of_injective I (Submodule.injective_subtype J)
 

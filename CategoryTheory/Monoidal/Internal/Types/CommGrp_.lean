@@ -39,7 +39,7 @@ instance commGrpCommGroup
 
 中文:
 实例 commGrpCommGroup
-  签名: (A : 类型u) [GrpObj A] [IsCommMonObj A]
+  签名: (A : 类型u) [GrpObj A] [是交换MonObj A]
   定义体: { GrpTypeEquivalenceGrp.grpGroup A with
     mul_comm := fun x y => by
       convert! congr_hom (CC := fun X => X) (IsCommMonObj.mul_comm A) (y, x) }
@@ -62,7 +62,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : CommGrp (类型u) ⥤ CommGrpCat.{u} where
+  签名: : 交换群 (类型u) ⥤ 交换群范畴.{u} where
   定义体: CommGrpCat.of A.X
   map f := CommGrpCat.ofHom (GrpTypeEquivalenceGrp.functor.map f.hom).hom
 
@@ -88,7 +88,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: : CommGrpCat.{u} ⥤ CommGrp (类型u) where
+  签名: : 交换群范畴.{u} ⥤ 交换群 (类型u) where
   定义体: { grpTypeEquivalenceGrp.inverse.obj ((forget₂ CommGrpCat GrpCat).obj A) with
       comm :=
         { mul_comm := by
@@ -123,7 +123,7 @@ theorem inverse_obj_X
 
 中文:
 定理 inverse_obj_X
-  条件: {A : CommGrpCat.{u}}
+  条件: {A : 交换群范畴.{u}}
   结论: (inverse.obj A).X = A
   证明: rfl
 
@@ -145,7 +145,7 @@ theorem inverse_obj_one
 
 中文:
 定理 inverse_obj_one
-  条件: {A : CommGrpCat.{u}} {x}
+  条件: {A : 交换群范畴.{u}} {x}
   结论: dsimp% η[(inverse.obj A).X] x = (1 : A)
   证明: rfl
 
@@ -166,7 +166,7 @@ theorem inverse_obj_mul
 
 中文:
 定理 inverse_obj_mul
-  条件: {A : CommGrpCat.{u}} {p}
+  条件: {A : 交换群范畴.{u}} {p}
   证明: rfl
 
 @[simp]
@@ -187,7 +187,7 @@ theorem inverse_obj_inv
 
 中文:
 定理 inverse_obj_inv
-  条件: {A : CommGrpCat.{u}} {x}
+  条件: {A : 交换群范畴.{u}} {x}
   结论: dsimp% ι[(inverse.obj A).X] x = (x : A)⁻¹
   证明: rfl
 -/
@@ -210,7 +210,7 @@ definition commGrpTypeEquivalenceCommGrp
 
 中文:
 定义 commGrpTypeEquivalenceCommGrp
-  签名: : CommGrp (类型u) ≌ CommGrpCat.{u} where
+  签名: : 交换群 (类型u) ≌ 交换群范畴.{u} where
   定义体: CommGrpTypeEquivalenceCommGrp.functor
   inverse := CommGrpTypeEquivalenceCommGrp.inverse
   unitIso := Iso.refl _

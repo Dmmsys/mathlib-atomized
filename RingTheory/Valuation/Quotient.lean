@@ -40,7 +40,7 @@ v.map_add_supp b (Ideal.neg_mem_iff _).2 hJ QuotientAddGroup.leftRel_apply.mp h
 
 中文:
 定义 onQuotVal
-  签名: {J : Ideal R} (hJ : J <= supp v)
+  签名: {J : 理想 R} (hJ : J <= supp v)
   定义体: fun q =>
   Quotient.liftOn' q v fun a b h =>
     calc
@@ -71,7 +71,7 @@ definition onQuot
 
 中文:
 定义 onQuot
-  签名: {J : Ideal R} (hJ : J <= supp v)
+  签名: {J : 理想 R} (hJ : J <= supp v)
   定义体: v.onQuotVal hJ
   map_zero' := v.map_zero
   map_one' := v.map_one
@@ -100,7 +100,7 @@ theorem onQuot_comap_eq
 
 中文:
 定理 onQuot_comap_eq
-  条件: {J : Ideal R} (hJ : J <= supp v)
+  条件: {J : 理想 R} (hJ : J <= supp v)
   证明: ext fun _ => rfl
 -/
 theorem onQuot_comap_eq {J : Ideal R} (hJ : J <= supp v) :
@@ -121,7 +121,7 @@ theorem self_le_supp_comap
 
 中文:
 定理 self_le_supp_comap
-  条件: (J : Ideal R) (v : Valuation (R ⧸ J) Γ₀)
+  条件: (J : 理想 R) (v : 赋值 (R ⧸ J) Γ₀)
   证明: by
   rw [comap_supp]; rw [← Ideal.map_le_iff_le_comap]
   simp
@@ -148,7 +148,7 @@ theorem comap_onQuot_eq
 
 中文:
 定理 comap_onQuot_eq
-  条件: (J : Ideal R) (v : Valuation (R ⧸ J) Γ₀)
+  条件: (J : 理想 R) (v : 赋值 (R ⧸ J) Γ₀)
   证明: ext by
     rintro ⟨x⟩
     rfl
@@ -176,7 +176,7 @@ theorem supp_quot
 
 中文:
 定理 supp_quot
-  条件: {J : Ideal R} (hJ : J <= supp v)
+  条件: {J : 理想 R} (hJ : J <= supp v)
   证明: by
   apply le_antisymm
   · rintro ⟨x⟩ hx
@@ -239,7 +239,7 @@ definition onQuotVal
 
 中文:
 定义 onQuotVal
-  签名: {J : Ideal R} (hJ : J <= supp v)
+  签名: {J : 理想 R} (hJ : J <= supp v)
   定义体: Valuation.onQuotVal v hJ
 
 Depends on / 依赖: Valuation, Valuation.onQuotVal, onQuotVal
@@ -259,7 +259,7 @@ definition onQuot
 
 中文:
 定义 onQuot
-  签名: {J : Ideal R} (hJ : J <= supp v)
+  签名: {J : 理想 R} (hJ : J <= supp v)
   定义体: Valuation.onQuot v hJ
 
 @[simp]
@@ -280,7 +280,7 @@ theorem onQuot_comap_eq
 
 中文:
 定理 onQuot_comap_eq
-  条件: {J : Ideal R} (hJ : J <= supp v)
+  条件: {J : 理想 R} (hJ : J <= supp v)
   证明: Valuation.onQuot_comap_eq v hJ
 
 Depends on / 依赖: Valuation, Valuation.onQuot_comap_eq, onQuot_comap_eq
@@ -299,7 +299,7 @@ theorem comap_supp
 
 中文:
 定理 comap_supp
-  条件: {S : 类型} [CommRing S] (f : S ->+* R)
+  条件: {S : 类型} [交换环 S] (f : S ->+* R)
   证明: Valuation.comap_supp v f
 
 Depends on / 依赖: Valuation, Valuation.comap_supp, comap_supp
@@ -320,7 +320,7 @@ theorem self_le_supp_comap
 
 中文:
 定理 self_le_supp_comap
-  条件: (J : Ideal R) (v : AddValuation (R ⧸ J) Γ₀)
+  条件: (J : 理想 R) (v : AddValuation (R ⧸ J) Γ₀)
   证明: Valuation.self_le_supp_comap J v
 
 @[simp]
@@ -342,7 +342,7 @@ theorem comap_onQuot_eq
 
 中文:
 定理 comap_onQuot_eq
-  条件: (J : Ideal R) (v : AddValuation (R ⧸ J) Γ₀)
+  条件: (J : 理想 R) (v : AddValuation (R ⧸ J) Γ₀)
   证明: Valuation.comap_onQuot_eq J v
 
 Depends on / 依赖: Valuation, Valuation.comap_onQuot_eq, comap_onQuot_eq
@@ -361,7 +361,7 @@ theorem supp_quot
 
 中文:
 定理 supp_quot
-  条件: {J : Ideal R} (hJ : J <= supp v)
+  条件: {J : 理想 R} (hJ : J <= supp v)
   证明: Valuation.supp_quot v hJ
 
 Depends on / 依赖: Valuation, Valuation.supp_quot, supp_quot
@@ -380,7 +380,7 @@ theorem supp_quot_supp
 
 中文:
 定理 supp_quot_supp
-  结论: supp ((Valuation.onQuot v) le_rfl) = 0
+  结论: supp ((赋值.onQuot v) le_rfl) = 0
   证明: Valuation.supp_quot_supp v
 
 Depends on / 依赖: Valuation, Valuation.supp_quot_supp, supp_quot_supp

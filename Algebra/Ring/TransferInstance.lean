@@ -44,7 +44,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: (e : α ≃ β) [Add β] [Mul β]
+  签名: (e : α ≃ β) [加法 β] [乘法 β]
   定义体: Equiv.add e
     let mul := Equiv.mul e
     exact α ≃+* β := by
@@ -84,7 +84,7 @@ lemma ringEquiv_apply
 
 中文:
 引理 ringEquiv_apply
-  条件: (e : α ≃ β) [Add β] [Mul β] (a : α)
+  条件: (e : α ≃ β) [加法 β] [乘法 β] (a : α)
   结论: ringEquiv e a = e a
   证明: rfl
 -/
@@ -103,7 +103,7 @@ lemma ringEquiv_symm_apply
 
 中文:
 引理 ringEquiv_symm_apply
-  条件: (e : α ≃ β) [Add β] [Mul β] (b : β)
+  条件: (e : α ≃ β) [加法 β] [乘法 β] (b : β)
   结论: by
   证明: Equiv.add e
     letI := Equiv.mul e
@@ -131,7 +131,7 @@ abbreviation nonUnitalNonAssocSemiring
 
 中文:
 缩写 nonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring β]
+  签名: [非幺非结合半环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -164,7 +164,7 @@ abbreviation nonUnitalSemiring
 
 中文:
 缩写 nonUnitalSemiring
-  签名: [NonUnitalSemiring β]
+  签名: [非幺半环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -193,7 +193,7 @@ abbreviation addMonoidWithOne
 
 中文:
 缩写 addMonoidWithOne
-  签名: [AddMonoidWithOne β]
+  签名: [加法带幺幺半群 β]
   定义体: { e.addMonoid, e.one with
     natCast := fun n => e.invFun n
     natCast_zero := e.injective (by simp [zero_def])
@@ -220,7 +220,7 @@ congr_arg e.invFun (Int.cast_negSucc _).trans congr_arg _ (e.apply_symm_apply _)
 
 中文:
 缩写 addGroupWithOne
-  签名: [AddGroupWithOne β]
+  签名: [加法带幺群 β]
   定义体: { e.addMonoidWithOne,
     e.addGroup with
     intCast := fun n => e.invFun n
@@ -249,7 +249,7 @@ abbreviation nonAssocSemiring
 
 中文:
 缩写 nonAssocSemiring
-  签名: [NonAssocSemiring β]
+  签名: [非结合半环 β]
   定义体: by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
@@ -274,7 +274,7 @@ abbreviation semiring
 
 中文:
 缩写 semiring
-  签名: [Semiring β]
+  签名: [半环 β]
   定义体: by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
@@ -302,7 +302,7 @@ abbreviation nonUnitalCommSemiring
 
 中文:
 缩写 nonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring β]
+  签名: [非幺交换半环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -333,7 +333,7 @@ abbreviation commSemiring
 
 中文:
 缩写 commSemiring
-  签名: [CommSemiring β]
+  签名: [交换半环 β]
   定义体: by
   let mul := e.mul
   let add_monoid_with_one := e.addMonoidWithOne
@@ -366,7 +366,7 @@ abbreviation nonUnitalNonAssocRing
 
 中文:
 缩写 nonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing β]
+  签名: [非幺非结合环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -407,7 +407,7 @@ abbreviation nonUnitalRing
 
 中文:
 缩写 nonUnitalRing
-  签名: [NonUnitalRing β]
+  签名: [非幺环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -441,7 +441,7 @@ abbreviation nonAssocRing
 
 中文:
 缩写 nonAssocRing
-  签名: [NonAssocRing β]
+  签名: [非结合环 β]
   定义体: by
   let add_group_with_one := e.addGroupWithOne
   let mul := e.mul
@@ -466,7 +466,7 @@ abbreviation ring
 
 中文:
 缩写 ring
-  签名: [Ring β]
+  签名: [环 β]
   定义体: by
   let mul := e.mul
   let add_group_with_one := e.addGroupWithOne
@@ -497,7 +497,7 @@ abbreviation nonUnitalCommRing
 
 中文:
 缩写 nonUnitalCommRing
-  签名: [NonUnitalCommRing β]
+  签名: [非幺交换环 β]
   定义体: by
   let zero := e.zero
   let add := e.add
@@ -534,7 +534,7 @@ abbreviation commRing
 
 中文:
 缩写 commRing
-  签名: [CommRing β]
+  签名: [交换环 β]
   定义体: by
   let mul := e.mul
   let add_group_with_one := e.addGroupWithOne
@@ -559,7 +559,7 @@ lemma isDomain
 
 中文:
 引理 isDomain
-  条件: [Semiring β] [IsDomain β] (e : α ≃ β)
+  条件: [半环 β] [是整环 β] (e : α ≃ β)
   证明: e.semiring
     IsDomain α :=
   letI := e.semiring; e.injective.isDomain e.ringEquiv

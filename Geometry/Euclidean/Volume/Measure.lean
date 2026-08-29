@@ -74,7 +74,7 @@ definition MeasureTheory.Measure.euclideanHausdorffMeasure
 scoped[MeasureTheory] notation "μHE[" d "]" => MeasureTheory.Measure.euclideanHausdorffMeasure d
 
 中文:
-定义 MeasureTheory.Measure.euclideanHausdorffMeasure
+定义 测度论.测度.euclideanHausdorffMeasure
   签名: (d : 自然数)
   定义体: addHaarScalarFactor (volume : Measure (EuclideanSpace Real (Fin d))) μH[d] • μH[d]
 
@@ -106,7 +106,7 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_def
   rfl
 
 中文:
-定理 MeasureTheory.Measure.euclideanHausdorffMeasure_def
+定理 测度论.测度.euclideanHausdorffMeasure_def
   条件: (d : 自然数)
   证明: by
   rfl
@@ -132,7 +132,7 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_zero
   obtain h := isAddLeftInvariant_eq_smul (volume : Measure (Euclidean
 
 中文:
-定理 MeasureTheory.Measure.euclideanHausdorffMeasure_zero
+定理 测度论.测度.euclideanHausdorffMeasure_zero
   证明: by
   let basis : OrthonormalBasis (Fin 0) Real (EuclideanSpace Real (Fin 0)) :=
     EuclideanSpace.basisFun (Fin 0) Real
@@ -168,7 +168,7 @@ theorem MeasureTheory.Measure.addHaarScalarFactor_volume_hausdorffMeasure_ne_zer
   simp [OrthonormalBasis.volume_parallelepiped, h0] at h
 
 中文:
-定理 MeasureTheory.Measure.addHaarScalarFactor_volume_hausdorffMeasure_ne_zero
+定理 测度论.测度.addHaarScalarFactor_volume_hausdorffMeasure_ne_zero
   条件: (d : 自然数)
   证明: by
   intro h0
@@ -199,7 +199,7 @@ instance MeasureTheory.isAddHaarMeasure_euclideanHausdorffMeasure
     (by simp)
 
 中文:
-实例 MeasureTheory.isAddHaarMeasure_euclideanHausdorffMeasure
+实例 测度论.isAddHaarMeasure_euclideanHausdorffMeasure
   签名: {E : 类型}
   定义体: by
   rw [euclideanHausdorffMeasure_def]; rw [ENNReal.smul_def]
@@ -233,7 +233,7 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_zero_or_top
     simp [addHaarScalarFactor_volume_hausdorffMeasure_ne_zero]
 
 中文:
-定理 MeasureTheory.Measure.euclideanHausdorffMeasure_zero_or_top
+定理 测度论.测度.euclideanHausdorffMeasure_zero_or_top
   结论: {d₁ d₂ : 自然数} (h : d₁ < d₂)
   证明: by
   simp_rw [euclideanHausdorffMeasure_def]
@@ -264,7 +264,7 @@ theorem IsometryEquiv.measurePreserving_euclideanHausdorffMeasure
   proof: (IsometryEquiv.measurePreserving_hausdorffMeasure e d).smul_measure _
 
 中文:
-定理 IsometryEquiv.measurePreserving_euclideanHausdorffMeasure
+定理 等距等价.measurePreserving_euclideanHausdorffMeasure
   条件: (e : X ≃ᵢ Y) (d : 自然数)
   证明: (IsometryEquiv.measurePreserving_hausdorffMeasure e d).smul_measure _
 
@@ -285,8 +285,8 @@ theorem Isometry.euclideanHausdorffMeasure_image
   rw [Isometry.hausdorffMeasure_image hf (by simp)]
 
 中文:
-定理 Isometry.euclideanHausdorffMeasure_image
-  条件: {f : X -> Y} {d : 自然数} (hf : Isometry f) (s : Set X)
+定理 等距.euclideanHausdorffMeasure_image
+  条件: {f : X -> Y} {d : 自然数} (hf : 等距 f) (s : 集合 X)
   证明: by
   simp_rw [euclideanHausdorffMeasure_def, Measure.smul_apply]
   rw [Isometry.hausdorffMeasure_image hf (by simp)]
@@ -309,8 +309,8 @@ theorem Isometry.euclideanHausdorffMeasure_preimage
   rw [Isometry.hausdorffMeasure_preimage hf (by simp)]
 
 中文:
-定理 Isometry.euclideanHausdorffMeasure_preimage
-  结论: {f : X -> Y} {d : 自然数} (hf : Isometry f)
+定理 等距.euclideanHausdorffMeasure_preimage
+  结论: {f : X -> Y} {d : 自然数} (hf : 等距 f)
   证明: by
   simp_rw [euclideanHausdorffMeasure_def, Measure.smul_apply]
   rw [Isometry.hausdorffMeasure_preimage hf (by simp)]
@@ -333,8 +333,8 @@ theorem Isometry.map_euclideanHausdorffMeasure
   rw [Measure.map_smul]; rw [map_hausdorffMeasure hf (by simp)]; rw [Measure.restrict_smul]
 
 中文:
-定理 Isometry.map_euclideanHausdorffMeasure
-  条件: {f : X -> Y} {d : 自然数} (hf : Isometry f)
+定理 等距.map_euclideanHausdorffMeasure
+  条件: {f : X -> Y} {d : 自然数} (hf : 等距 f)
   证明: by
   simp_rw [euclideanHausdorffMeasure_def]
   rw [Measure.map_smul]; rw [map_hausdorffMeasure hf (by simp)]; rw [Measure.restrict_smul]
@@ -362,7 +362,7 @@ theorem MeasureTheory.Measure.euclideanHausdorffMeasure_smul₀
   simp
 
 中文:
-定理 MeasureTheory.Measure.euclideanHausdorffMeasure_smul₀
+定理 测度论.测度.euclideanHausdorffMeasure_smul₀
   结论: {𝕜 : 类型} {E : 类型}
   证明: by
   rw [euclideanHausdorffMeasure_def]; rw [Measure.smul_apply]; rw [hausdorffMeasure_smul₀ (by simp) hr]; rw [Measure.smul_apply]; rw [smul_comm]
@@ -392,7 +392,7 @@ theorem MeasureTheory.euclideanHausdorffMeasure_homothety_image
   rw [hausdorffMeasure_homothety_image (by simp) x hc]; rw [smul_comm]; rw [NNReal.rpow_natCast]
 
 中文:
-定理 MeasureTheory.euclideanHausdorffMeasure_homothety_image
+定理 测度论.euclideanHausdorffMeasure_homothety_image
   结论: (d : 自然数) (x : P) {c : 𝕜}
   证明: by
   simp_rw [euclideanHausdorffMeasure_def, Measure.smul_apply]
@@ -417,7 +417,7 @@ theorem MeasureTheory.euclideanHausdorffMeasure_homothety_preimage
   rw [hausdorffMeasure_homothety_preimage (by simp) x hc]; rw [smul_comm]; rw [NNReal.rpow_natCast]
 
 中文:
-定理 MeasureTheory.euclideanHausdorffMeasure_homothety_preimage
+定理 测度论.euclideanHausdorffMeasure_homothety_preimage
   结论: (d : 自然数) (x : P) {c : 𝕜}
   证明: by
   simp_rw [euclideanHausdorffMeasure_def, Measure.smul_apply]
@@ -472,7 +472,7 @@ theorem InnerProductSpace.euclideanHausdorffMeasure_eq_volume
   simp
 
 中文:
-定理 InnerProductSpace.euclideanHausdorffMeasure_eq_volume
+定理 内积空间.euclideanHausdorffMeasure_eq_volume
   证明: by
   rw [← (stdOrthonormalBasis Real V).measurePreserving_repr_symm.map_eq]; rw [← (stdOrthonormalBasis Real V).repr.toIsometryEquiv
 .map_eq]; rw [.symm.measurePreserving_euclideanHausdorffMeasure _
@@ -559,8 +559,8 @@ theorem AffineSubspace.euclideanHausdorffMeasure_coe_image
   proof: isometry_subtype_coe.euclideanHausdorffMeasure_image _
 
 中文:
-定理 AffineSubspace.euclideanHausdorffMeasure_coe_image
-  结论: (d : 自然数) (s : AffineSubspace 实数 P)
+定理 仿射子空间.euclideanHausdorffMeasure_coe_image
+  结论: (d : 自然数) (s : 仿射子空间 实数 P)
   证明: isometry_subtype_coe.euclideanHausdorffMeasure_image _
 
 Depends on / 依赖: euclideanHausdorffMeasure_image, isometry_subtype_coe, isometry_subtype_coe.euclideanHausdorffMeasure_image
@@ -589,8 +589,8 @@ instance [AddGroup
   infer_instance
 
 中文:
-实例 [AddGroup
-  签名: X] [IsIsometricVAdd X X] (d
+实例 [加法群
+  签名: X] [是是ometricVAdd X X] (d
   定义体: by
   rw [euclideanHausdorffMeasure_def]
   infer_instance
@@ -613,8 +613,8 @@ instance [AddGroup
   infer_instance
 
 中文:
-实例 [AddGroup
-  签名: X] [IsIsometricVAdd Xᵃᵒᵖ X] (d
+实例 [加法群
+  签名: X] [是是ometricVAdd Xᵃᵒᵖ X] (d
   定义体: by
   rw [euclideanHausdorffMeasure_def]
   infer_instance
@@ -643,8 +643,8 @@ s.orthogonalDecomposition.toHomeomorph.toMeasurableEquiv.trans
 @[simp]
 
 中文:
-定义 Submodule.measurableEquivProd
-  签名: (s : Submodule 实数 V) (p : P)
+定义 子模.measurableEquivProd
+  签名: (s : 子模 实数 V) (p : P)
   定义体: (IsometryEquiv.vaddConst p).toHomeomorph.toMeasurableEquiv.symm.trans
 s.orthogonalDecomposition.toHomeomorph.toMeasurableEquiv.trans
   (MeasurableEquiv.toLp 2 _).symm
@@ -671,8 +671,8 @@ theorem Submodule.measurableEquivProd_apply
 @[simp]
 
 中文:
-定理 Submodule.measurableEquivProd_apply
-  条件: (s : Submodule 实数 V) (p q : P)
+定理 子模.measurableEquivProd_apply
+  条件: (s : 子模 实数 V) (p q : P)
   证明: by
   simp [measurableEquivProd]
 
@@ -696,8 +696,8 @@ theorem Submodule.measurableEquivProd_symm_apply
   simp [measurableEquivProd]
 
 中文:
-定理 Submodule.measurableEquivProd_symm_apply
-  条件: (s : Submodule 实数 V) (p : P) (q : s × sᗮ)
+定理 子模.measurableEquivProd_symm_apply
+  条件: (s : 子模 实数 V) (p : P) (q : s × sᗮ)
   证明: by
   simp [measurableEquivProd]
 
@@ -719,8 +719,8 @@ theorem Submodule.measurePreserving_measurableEquivProd
   exact WithLp.volume_preserving_ofLp _ _
 
 中文:
-定理 Submodule.measurePreserving_measurableEquivProd
-  条件: (s : Submodule 实数 V) (p : P)
+定理 子模.measurePreserving_measurableEquivProd
+  条件: (s : 子模 实数 V) (p : P)
   证明: by
   refine (measurePreserving_vaddConst _).symm.trans ?_
   refine s.orthogonalDecomposition.measurePreserving.trans ?_
@@ -746,8 +746,8 @@ theorem AffineSubspace.euclideanHausdorffMeasure_eq_lintegral
         (by simpa using (IsometryEquiv.vaddConst 
 
 中文:
-定理 AffineSubspace.euclideanHausdorffMeasure_eq_lintegral
-  结论: (s : AffineSubspace 实数 P)
+定理 仿射子空间.euclideanHausdorffMeasure_eq_lintegral
+  结论: (s : 仿射子空间 实数 P)
   证明: by
   obtain p := hs.some
   rw [← (s.direction.measurePreserving_measurableEquivProd p.val).symm.measure_preimage_equiv]; rw [volume_eq_prod]; rw [prod_apply (by measurability)]; rw [euclideanHausdorffMeasure_eq]; rw [MeasurableEmbedding.lintegral_map

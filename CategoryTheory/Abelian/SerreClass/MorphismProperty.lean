@@ -59,7 +59,7 @@ definition monoModSerre
 
 中文:
 定义 monoModSerre
-  签名: [P.IsSerreClass]
+  签名: [P.是Serre类]
   定义体: fun _ _ f => P (kernel f)
 
 Depends on / 依赖: kernel
@@ -81,7 +81,7 @@ definition epiModSerre
 
 中文:
 定义 epiModSerre
-  签名: [P.IsSerreClass]
+  签名: [P.是Serre类]
   定义体: fun _ _ f => P (cokernel f)
 
 Depends on / 依赖: cokernel
@@ -103,7 +103,7 @@ definition isoModSerre
 
 中文:
 定义 isoModSerre
-  签名: [P.IsSerreClass]
+  签名: [P.是Serre类]
   定义体: P.monoModSerre ⊓ P.epiModSerre
 
 Depends on / 依赖: P.epiModSerre, P.monoModSerre, epiModSerre, monoModSerre
@@ -159,7 +159,7 @@ lemma monoModSerre_of_mono
 
 中文:
 引理 monoModSerre_of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: P.monomorphisms_le_monoModSerre f (monomorphisms.infer_property f)
 
 Depends on / 依赖: P.monomorphisms_le_monoModSerre, infer_property, monomorphisms, monomorphisms.infer_property, monomorphisms_le_monoModSerre
@@ -216,7 +216,7 @@ lemma epiModSerre_of_epi
 
 中文:
 引理 epiModSerre_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f]
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f]
   证明: P.epimorphisms_le_epiModSerre f (epimorphisms.infer_property f)
 
 @[simp]
@@ -302,7 +302,7 @@ lemma isoModSerre_iff_of_mono
 
 中文:
 引理 isoModSerre_iff_of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f]
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f]
   证明: by
   have := P.monoModSerre_of_mono f
   rw [isoModSerre_iff]
@@ -329,7 +329,7 @@ lemma isoModSerre_iff_of_epi
 
 中文:
 引理 isoModSerre_iff_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f]
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f]
   证明: by
   have := P.epiModSerre_of_epi f
   rw [isoModSerre_iff]
@@ -354,7 +354,7 @@ lemma isoModSerre_of_mono
 
 中文:
 引理 isoModSerre_of_mono
-  条件: {X Y : C} (f : X ⟶ Y) [Mono f] (hf : P.epiModSerre f)
+  条件: {X Y : C} (f : X ⟶ Y) [单态射 f] (hf : P.epiModSerre f)
   证明: by
   rwa [isoModSerre_iff_of_mono]
 
@@ -377,7 +377,7 @@ lemma isoModSerre_of_epi
 
 中文:
 引理 isoModSerre_of_epi
-  条件: {X Y : C} (f : X ⟶ Y) [Epi f] (hf : P.monoModSerre f)
+  条件: {X Y : C} (f : X ⟶ Y) [满态射 f] (hf : P.monoModSerre f)
   证明: by
   rwa [isoModSerre_iff_of_epi]
 
@@ -440,7 +440,7 @@ lemma isoModSerre_of_isIso
 
 中文:
 引理 isoModSerre_of_isIso
-  条件: {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: P.isoModSerre f
   证明: P.isomorphisms_le_isoModSerre f (isomorphisms.infer_property f)
 
@@ -461,7 +461,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.monoModSerre.IsMultiplicative
+  签名: P.monoModSerre.是Multiplicative
   定义体: P.monoModSerre_of_mono _
   comp_mem f g hf hg :=
     P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 0) hf hg
@@ -485,7 +485,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.epiModSerre.IsMultiplicative
+  签名: P.epiModSerre.是Multiplicative
   定义体: P.epiModSerre_of_epi _
   comp_mem f g hf hg :=
     P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 3) hf hg
@@ -509,7 +509,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.IsMultiplicative
+  签名: P.isoModSerre.是Multiplicative
   定义体: by
   dsimp only [isoModSerre]
   infer_instance
@@ -531,7 +531,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.monoModSerre.IsStableUnderRetracts
+  签名: P.monoModSerre.是StableUnderRetracts
   定义体: P.prop_of_mono (kernel.map f' f h.left.i h.right.i (by simp)) hf
 
 Depends on / 依赖: P.prop_of_mono, h.left.i, h.right.i, kernel, kernel.map, prop_of_mono
@@ -551,7 +551,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.epiModSerre.IsStableUnderRetracts
+  签名: P.epiModSerre.是StableUnderRetracts
   定义体: P.prop_of_epi (cokernel.map f f' h.left.r h.right.r (by simp)) hf
 
 Depends on / 依赖: P.prop_of_epi, cokernel, cokernel.map, h.left.r, h.right.r, prop_of_epi
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.IsStableUnderRetracts
+  签名: P.isoModSerre.是StableUnderRetracts
   定义体: by
   dsimp only [isoModSerre]
   infer_instance
@@ -597,7 +597,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.HasTwoOutOfThree命题erty
+  签名: P.isoModSerre.有TwoOutOfThreeProperty
   定义体: ⟨P.prop_of_mono (kernel.map f (f ≫ g) (𝟙 _) g (by simp)) hfg.1,
       P.prop_X₂_of_exact ((kernelCokernelCompSequence_exact f g).exact 2) hg.1 hfg.2⟩
   of_precomp f g hf hfg :=
@@ -629,7 +629,7 @@ lemma le_kernel_of_isoModSerre_isInvertedBy
 
 中文:
 引理 le_kernel_of_isoModSerre_isInvertedBy
-  结论: (F : C ⥤ D) [F.PreservesZeroMorphisms]
+  结论: (F : C ⥤ D) [F.保持ZeroMorphisms]
   证明: by
   intro X hX
   let f : 0 ⟶ X := 0
@@ -698,7 +698,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.monoModSerre.IsStableUnderBaseChange
+  签名: P.monoModSerre.是StableUnderBaseChange
   定义体: have := isIso_kernel_map_of_isPullback sq.flip
     P.prop_of_iso (asIso (kernel.map _ _ _ _ sq.w.symm)).symm h
 
@@ -720,7 +720,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.epiModSerre.IsStableUnderBaseChange
+  签名: P.epiModSerre.是StableUnderBaseChange
   定义体: have := Abelian.mono_cokernel_map_of_isPullback sq.flip
     P.prop_of_mono (cokernel.map _ _ _ _ sq.w.symm) h
 
@@ -743,7 +743,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.IsStableUnderBaseChange
+  签名: P.isoModSerre.是StableUnderBaseChange
   定义体: by
   dsimp [isoModSerre]
   infer_instance
@@ -765,7 +765,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.monoModSerre.IsStableUnderCobaseChange
+  签名: P.monoModSerre.是StableUnderCobaseChange
   定义体: have := Abelian.epi_kernel_map_of_isPushout sq.flip
     P.prop_of_epi (kernel.map _ _ _ _ sq.w.symm) h
 
@@ -787,7 +787,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.epiModSerre.IsStableUnderCobaseChange
+  签名: P.epiModSerre.是StableUnderCobaseChange
   定义体: have := isIso_cokernel_map_of_isPushout sq.flip
     P.prop_of_iso (asIso (cokernel.map _ _ _ _ sq.w.symm)) h
 
@@ -810,7 +810,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.isoModSerre.IsStableUnderCobaseChange
+  签名: P.isoModSerre.是StableUnderCobaseChange
   定义体: by
   dsimp [isoModSerre]
   infer_instance

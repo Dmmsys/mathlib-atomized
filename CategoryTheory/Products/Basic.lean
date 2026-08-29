@@ -53,8 +53,8 @@ instance prod
   comp f g := (f.1 ≫ g.1, f.2 ≫ g.2)
 
 中文:
-实例 prod
-  签名: : CategoryStruct.{max v₁ v₂} (C × D) where
+实例 乘积
+  签名: : CategoryStruct.{最大值 v₁ v₂} (C × D) where
   定义体: (X.1 ⟶ Y.1) × (X.2 ⟶ Y.2)
   id X := ⟨𝟙 X.1, 𝟙 X.2⟩
   comp f g := (f.1 ≫ g.1, f.2 ≫ g.2)
@@ -256,8 +256,8 @@ instance prod'
   signature: : Category.{max v₁ v₂} (C × D) where
 
 中文:
-实例 prod'
-  签名: : Category.{max v₁ v₂} (C × D) where
+实例 乘积'
+  签名: : 范畴.{最大值 v₁ v₂} (C × D) where
 -/
 instance prod' : Category.{max v₁ v₂} (C × D) where
 
@@ -319,7 +319,7 @@ definition prod.etaIso
   inv := 𝟙 _ ×ₘ 𝟙 _
 
 中文:
-定义 prod.etaIso
+定义 乘积.etaIso
   签名: (X : C × D)
   定义体: 𝟙 _ ×ₘ 𝟙 _
   inv := 𝟙 _ ×ₘ 𝟙 _
@@ -342,7 +342,7 @@ definition Iso.prod
   inv := f.inv ×ₘ g.inv
 
 中文:
-定义 Iso.prod
+定义 同构.乘积
   签名: {P Q : C} {S T : D} (f : P ≅ Q) (g : S ≅ T)
   定义体: f.hom ×ₘ g.hom
   inv := f.inv ×ₘ g.inv
@@ -371,7 +371,7 @@ instance uniformProd
 
 中文:
 实例 uniformProd
-  签名: : Category (C × D)
+  签名: : 范畴 (C × D)
   定义体: CategoryTheory.prod' C D
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.prod
@@ -398,7 +398,7 @@ definition sectL
 
 中文:
 定义 sectL
-  签名: (C : 类型u₁) [Category.{v₁} C] {D : 类型u₂} [Category.{v₂} D] (Z : D)
+  签名: (C : 类型u₁) [范畴.{v₁} C] {D : 类型u₂} [范畴.{v₂} D] (Z : D)
   定义体: (X, Z)
   map f := f ×ₘ 𝟙 Z
 -/
@@ -419,7 +419,7 @@ definition sectR
 
 中文:
 定义 sectR
-  签名: {C : 类型u₁} [Category.{v₁} C] (Z : C) (D : 类型u₂) [Category.{v₂} D]
+  签名: {C : 类型u₁} [范畴.{v₁} C] (Z : C) (D : 类型u₂) [范畴.{v₂} D]
   定义体: (Z, X)
   map f := 𝟙 Z ×ₘ f
 -/
@@ -553,7 +553,7 @@ instance swapIsEquivalence
 
 中文:
 实例 swapIsEquivalence
-  签名: : (swap C D).IsEquivalence
+  签名: : (swap C D).是等价
   定义体: (by infer_instance : (braiding C D).functor.IsEquivalence)
 
 Depends on / 依赖: IsEquivalence, braiding, functor, functor.IsEquivalence, infer_instance
@@ -682,7 +682,7 @@ definition Functor.constCompEvaluationObj
   body: NatIso.ofComponents fun _ => Iso.refl _
 
 中文:
-定义 Functor.constCompEvaluationObj
+定义 函子.constCompEvaluationObj
   签名: (X : C)
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 
@@ -710,7 +710,7 @@ definition prod
   map f := F.map f.1 ×ₘ G.map f.2
 
 中文:
-定义 prod
+定义 乘积
   签名: (F : A ⥤ B) (G : C ⥤ D)
   定义体: (F.obj X.1, G.obj X.2)
   map f := F.map f.1 ×ₘ G.map f.2
@@ -735,7 +735,7 @@ definition prod'
   map f := F.map f ×ₘ G.map f
 
 中文:
-定义 prod'
+定义 乘积'
   签名: (F : A ⥤ B) (G : A ⥤ C)
   定义体: (F.obj a, G.obj a)
   map f := F.map f ×ₘ G.map f
@@ -757,7 +757,7 @@ definition prod'CompFst
   body: NatIso.ofComponents fun _ => Iso.refl _
 
 中文:
-定义 prod'CompFst
+定义 乘积'CompFst
   签名: (F : A ⥤ B) (G : A ⥤ C)
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 -/
@@ -775,7 +775,7 @@ definition prod'CompSnd
   body: NatIso.ofComponents fun _ => Iso.refl _
 
 中文:
-定义 prod'CompSnd
+定义 乘积'CompSnd
   签名: (F : A ⥤ B) (G : A ⥤ C)
   定义体: NatIso.ofComponents fun _ => Iso.refl _
 -/
@@ -821,7 +821,7 @@ definition prod
   body: α.app X.1 ×ₘ β.app X.2
 
 中文:
-定义 prod
+定义 乘积
   签名: {F G : A ⥤ B} {H I : C ⥤ D} (α : F ⟶ G) (β : H ⟶ I)
   定义体: α.app X.1 ×ₘ β.app X.2
 -/
@@ -843,7 +843,7 @@ definition prod'
   body: α.app X ×ₘ β.app X
 
 中文:
-定义 prod'
+定义 乘积'
   签名: {F G : A ⥤ B} {H K : A ⥤ C} (α : F ⟶ G) (β : H ⟶ K)
   定义体: α.app X ×ₘ β.app X
 -/
@@ -887,7 +887,7 @@ definition prod
   inv := NatTrans.prod e₁.inv e₂.inv
 
 中文:
-定义 prod
+定义 乘积
   签名: {F F' : A ⥤ B} {G G' : C ⥤ D} (e₁ : F ≅ F') (e₂ : G ≅ G')
   定义体: NatTrans.prod e₁.hom e₂.hom
   inv := NatTrans.prod e₁.inv e₂.inv
@@ -917,7 +917,7 @@ definition prod
   counitIso := NatIso.prod E₁.counitIso E₂.counitIso
 
 中文:
-定义 prod
+定义 乘积
   签名: (E₁ : A ≌ B) (E₂ : C ≌ D)
   定义体: E₁.functor.prod E₂.functor
   inverse := E₁.inverse.prod E₂.inverse

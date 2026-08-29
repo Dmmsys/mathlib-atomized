@@ -446,7 +446,7 @@ theorem reindexLinearEquiv_apply
 
 中文:
 定理 reindexLinearEquiv_apply
-  条件: (eₘ : m ≃ m') (eₙ : n ≃ n') (M : Matrix m n A)
+  条件: (eₘ : m ≃ m') (eₙ : n ≃ n') (M : 矩阵 m n A)
   证明: by
   simp
 
@@ -581,7 +581,7 @@ theorem reindexLinearEquiv_one
 
 中文:
 定理 reindexLinearEquiv_one
-  条件: [DecidableEq m] [DecidableEq m'] [One A] (e : m ≃ m')
+  条件: [DecidableEq m] [DecidableEq m'] [幺 A] (e : m ≃ m')
   证明: by
   simp
 -/
@@ -606,7 +606,7 @@ theorem reindexLinearEquiv_mul
 
 中文:
 定理 reindexLinearEquiv_mul
-  结论: [Fintype n] [Fintype n'] (eₘ : m ≃ m') (eₙ : n ≃ n') (eₒ : o ≃ o')
+  结论: [有限类型 n] [有限类型 n'] (eₘ : m ≃ m') (eₙ : n ≃ n') (eₒ : o ≃ o')
   证明: by
   simp
 -/
@@ -627,7 +627,7 @@ theorem mul_reindexLinearEquiv_one
 
 中文:
 定理 mul_reindexLinearEquiv_one
-  结论: [Fintype n] [DecidableEq o] (e₁ : o ≃ n) (e₂ : o ≃ n')
+  结论: [有限类型 n] [DecidableEq o] (e₁ : o ≃ n) (e₂ : o ≃ n')
   证明: haveI := Fintype.ofEquiv _ e₁.symm
   mul_submatrix_one _ _ _
 
@@ -799,7 +799,7 @@ theorem reindexAlgEquiv_apply
 
 中文:
 定理 reindexAlgEquiv_apply
-  条件: (e : m ≃ n) (M : Matrix m m A)
+  条件: (e : m ≃ n) (M : 矩阵 m m A)
   证明: by
   simp
 
@@ -850,7 +850,7 @@ theorem reindexAlgEquiv_refl
 
 中文:
 定理 reindexAlgEquiv_refl
-  结论: reindexAlgEquiv R A (Equiv.refl m) = AlgEquiv.refl
+  结论: reindexAlgEquiv R A (等价.refl m) = 代数等价.refl
   证明: rfl
 
 @[simp]
@@ -891,7 +891,7 @@ theorem reindexAlgEquiv_mul
 
 中文:
 定理 reindexAlgEquiv_mul
-  条件: (e : m ≃ n) (M : Matrix m m A) (N : Matrix m m A)
+  条件: (e : m ≃ n) (M : 矩阵 m m A) (N : 矩阵 m m A)
   证明: map_mul ..
 
 Depends on / 依赖: map_mul
@@ -912,7 +912,7 @@ theorem det_reindexLinearEquiv_self
 
 中文:
 定理 det_reindexLinearEquiv_self
-  结论: [CommRing R] [Fintype m] [DecidableEq m] [Fintype n]
+  结论: [交换环 R] [有限类型 m] [DecidableEq m] [有限类型 n]
   证明: det_reindex_self e M
 
 Depends on / 依赖: det_reindex_self
@@ -931,7 +931,7 @@ theorem det_reindexAlgEquiv
 
 中文:
 定理 det_reindexAlgEquiv
-  结论: (B : 类型) [CommSemiring R] [CommRing B] [Algebra R B] [Fintype m]
+  结论: (B : 类型) [交换半环 R] [交换环 B] [代数 R B] [有限类型 m]
   证明: det_reindex_self e A
 
 Depends on / 依赖: det_reindex_self

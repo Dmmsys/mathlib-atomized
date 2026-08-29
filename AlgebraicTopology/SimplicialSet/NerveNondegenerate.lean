@@ -48,7 +48,7 @@ lemma mem_range_nerve_σ_iff
 
 中文:
 引理 mem_range_nerve_σ_iff
-  条件: (s : (nerve X) _⦋n + 1⦌) (i : Fin (n + 1))
+  条件: (s : (nerve X) _⦋n + 1⦌) (i : 有限集 (n + 1))
   证明: by
   constructor
   · rintro ⟨s, rfl⟩
@@ -93,7 +93,7 @@ lemma mem_nerve_degenerate_of_eq
 
 中文:
 引理 mem_nerve_degenerate_of_eq
-  结论: (s : (nerve X) _⦋n + 1⦌) {i : Fin (n + 1)}
+  结论: (s : (nerve X) _⦋n + 1⦌) {i : 有限集 (n + 1)}
   证明: by
   simp only [SSet.degenerate_eq_iUnion_range_σ, Set.mem_iUnion]
   exact ⟨i, by rwa [← mem_range_nerve_σ_iff] at hi⟩

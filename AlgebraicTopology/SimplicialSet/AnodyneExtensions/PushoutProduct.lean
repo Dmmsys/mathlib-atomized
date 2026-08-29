@@ -62,7 +62,7 @@ lemma strongAnodyneExtensions_unionProd_ι
 
 中文:
 引理 strongAnodyneExtensions_unionProd_ι
-  条件: {m : 自然数} (k : Fin (m + 2)) (n : 自然数)
+  条件: {m : 自然数} (k : 有限集 (m + 2)) (n : 自然数)
   证明: (pairing k n).strongAnodyneExtensions
 
 Depends on / 依赖: pairing, strongAnodyneExtensions
@@ -81,7 +81,7 @@ lemma anodyneExtensions_unionProd_ι
 
 中文:
 引理 anodyneExtensions_unionProd_ι
-  条件: {m : 自然数} (k : Fin (m + 2)) (n : 自然数)
+  条件: {m : 自然数} (k : 有限集 (m + 2)) (n : 自然数)
   证明: (pairing k n).anodyneExtensions
 
 Depends on / 依赖: anodyneExtensions, pairing
@@ -115,7 +115,7 @@ lemma fibration_pullbackObjObjπ
 
 中文:
 引理 fibration_pullbackObjObjπ
-  结论: [Mono i] [Fibration p]
+  结论: [单态射 i] [纤维化 p]
   证明: by
   rw [fibration_iff]
   intro _ _ _ h

@@ -35,7 +35,7 @@ definition arctan
 
 中文:
 定义 arctan
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: -I / 2 * log ((1 + z * I) / (1 - z * I))
 -/
 noncomputable def arctan (z : Complex) : Complex := -I / 2 * log ((1 + z * I) / (1 - z * I))
@@ -54,7 +54,7 @@ theorem tan_arctan
 
 中文:
 定理 tan_arctan
-  条件: {z : Complex} (h₁ : z != I) (h₂ : z != -I)
+  条件: {z : 复形} (h₁ : z != I) (h₂ : z != -I)
   结论: tan (arctan z) = z
   证明: by
   unfold tan sin cos
@@ -98,7 +98,7 @@ lemma cos_ne_zero_of_arctan_bounds
 
 中文:
 引理 cos_ne_zero_of_arctan_bounds
-  结论: {z : Complex} (h₀ : z != π / 2) (h₁ : -(π / 2) < z.re)
+  结论: {z : 复形} (h₀ : z != π / 2) (h₁ : -(π / 2) < z.re)
   证明: by
   refine cos_ne_zero_iff.mpr (fun k => ?_)
   rw [ne_eq]; rw [Complex.ext_iff]; rw [not_and_or] at h₀ ⊢
@@ -142,7 +142,7 @@ theorem arctan_tan
 
 中文:
 定理 arctan_tan
-  条件: {z : Complex} (h₀ : z != π / 2) (h₁ : -(π / 2) < z.re) (h₂ : z.re <= π / 2)
+  条件: {z : 复形} (h₀ : z != π / 2) (h₁ : -(π / 2) < z.re) (h₂ : z.re <= π / 2)
   证明: by
   have h := cos_ne_zero_of_arctan_bounds h₀ h₁ h₂
   unfold arctan tan
@@ -185,9 +185,9 @@ theorem ofReal_arctan
   · exact (Real.arctan_lt_pi_div_two _).le
 
 中文:
-定理 ofReal_arctan
+定理 of实数_arctan
   条件: (x : 实数)
-  结论: (实数.arctan x : Complex) = arctan x
+  结论: (实数.arctan x : 复形) = arctan x
   证明: by
   conv_rhs => rw [← Real.tan_arctan x]
   rw [ofReal_tan]; rw [arctan_tan]
@@ -219,8 +219,8 @@ lemma arg_one_add_mem_Ioo
 
 中文:
 引理 arg_one_add_mem_Ioo
-  条件: {z : Complex} (hz : ‖z‖ < 1)
-  结论: (1 + z).arg in Set.Ioo (-(π / 2)) (π / 2)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
+  结论: (1 + z).arg in 集合.开区间 (-(π / 2)) (π / 2)
   证明: by
   rw [Set.mem_Ioo]; rw [← abs_lt]; rw [abs_arg_lt_pi_div_two_iff]; rw [add_re]; rw [one_re]; rw [← neg_lt_iff_pos_add']
   exact Or.inl (abs_lt.mp ((abs_re_le_norm z).trans_lt hz)).1
@@ -245,7 +245,7 @@ lemma hasSum_arctan_aux
 
 中文:
 引理 hasSum_arctan_aux
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   have z₁ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := z * I) (by simpa))
   have z₂ := mem_slitPlane_iff_arg.mp (mem_slitPlane_of_norm_lt_one (z := -(z * I)) (by simpa))
@@ -288,7 +288,7 @@ theorem hasSum_arctan
 
 中文:
 定理 hasSum_arctan
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   证明: by
   have := ((hasSum_taylorSeries_log (z := z * I) (by simpa)).add
     (hasSum_taylorSeries_neg_log (z := z * I) (by simpa))).mul_left (-I / 2)
@@ -324,7 +324,7 @@ theorem Real.hasSum_arctan
   proof: mod_cast Complex.hasSum_arctan (z := x) (by simpa)
 
 中文:
-定理 Real.hasSum_arctan
+定理 实数.hasSum_arctan
   条件: {x : 实数} (hx : ‖x‖ < 1)
   证明: mod_cast Complex.hasSum_arctan (z := x) (by simpa)
 

@@ -49,7 +49,7 @@ class ExponentiableMorphism
     - pullbackPushforwardAdj((f)) : pullback f ⊣ pushforward
 
 中文:
-类 ExponentiableMorphism
+类 Exponentiable态射
   参数: {I J : C} (f : I ⟶ J) [ChosenPullbacksAlong f]
   公理与运算 (2 个):
     - pushforward : Over I ⥤ Over J
@@ -91,7 +91,7 @@ instance isExponentiable
 
 中文:
 实例 isExponentiable
-  签名: [ChosenPullbacks C] {I J : C} (f : I ⟶ J) [ExponentiableMorphism f]
+  签名: [ChosenPullbacks C] {I J : C} (f : I ⟶ J) [Exponentiable态射 f]
   定义体: ⟨pushforward f, ⟨pullbackPushforwardAdj f⟩⟩
 
 Depends on / 依赖: pullbackPushforwardAdj, pushforward
@@ -417,7 +417,7 @@ instance OverMkHom
 
 中文:
 实例 OverMkHom
-  签名: : ExponentiableMorphism (Over.mk f).hom
+  签名: : Exponentiable态射 (Over.mk f).hom
   定义体: inferInstanceAs ExponentiableMorphism f
 
 Depends on / 依赖: ExponentiableMorphism
@@ -482,7 +482,7 @@ definition pushforwardId
 
 中文:
 定义 pushforwardId
-  签名: (I : C) [ChosenPullbacksAlong (𝟙 I)] [ExponentiableMorphism (𝟙 I)]
+  签名: (I : C) [ChosenPullbacksAlong (𝟙 I)] [Exponentiable态射 (𝟙 I)]
   定义体: Adjunction.rightAdjointUniq (pullbackPushforwardAdj (𝟙 I)) (id I).pullbackPushforwardAdj
 
 @[reassoc (attr := simp)]
@@ -507,7 +507,7 @@ theorem unit_pushforwardId_hom
 
 中文:
 定理 unit_pushforwardId_hom
-  条件: (I : C) [ChosenPullbacksAlong (𝟙 I)] [ExponentiableMorphism (𝟙 I)]
+  条件: (I : C) [ChosenPullbacksAlong (𝟙 I)] [Exponentiable态射 (𝟙 I)]
   证明: by
   rw [pushforwardId]; rw [Adjunction.unit_rightAdjointUniq_hom]
 

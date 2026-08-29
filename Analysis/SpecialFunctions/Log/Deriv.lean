@@ -115,7 +115,7 @@ theorem hasDerivAt_log
 中文:
 定理 hasDerivAt_log
   条件: (hx : x != 0)
-  结论: HasDerivAt log x⁻¹ x
+  结论: 在点处可导 log x⁻¹ x
   证明: (hasStrictDerivAt_log hx).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_log
@@ -223,7 +223,7 @@ theorem deriv_log'
 
 中文:
 定理 deriv_log'
-  结论: deriv log = Inv.inv
+  结论: deriv log = 取逆.inv
   证明: funext deriv_log
 
 Depends on / 依赖: deriv_log
@@ -351,8 +351,8 @@ theorem HasDerivAt.log
   exact hf.log hx
 
 中文:
-定理 HasDerivAt.log
-  条件: (hf : HasDerivAt f f' x) (hx : f x != 0)
+定理 在点处可导.log
+  条件: (hf : 在点处可导 f f' x) (hx : f x != 0)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hf.log hx
@@ -442,7 +442,7 @@ lemma Real.deriv_log_comp_eq_logDeriv
   simp only [logDeriv, Pi.div_apply, ← deriv.log h₁ h₂, Function.comp_def]
 
 中文:
-引理 Real.deriv_log_comp_eq_logDeriv
+引理 实数.deriv_log_comp_eq_logDeriv
   结论: {f : 实数 -> 实数} {x : 实数} (h₁ : DifferentiableAt 实数 f x)
   证明: by
   simp only [logDeriv, Pi.div_apply, ← deriv.log h₁ h₂, Function.comp_def]
@@ -488,8 +488,8 @@ theorem HasFDerivAt.log
   proof: (hasDerivAt_log hx).comp_hasFDerivAt x hf
 
 中文:
-定理 HasFDerivAt.log
-  条件: (hf : HasFDerivAt f f' x) (hx : f x != 0)
+定理 在点处Fréchet可导.log
+  条件: (hf : 在点处Fréchet可导 f f' x) (hx : f x != 0)
   证明: (hasDerivAt_log hx).comp_hasFDerivAt x hf
 
 Depends on / 依赖: comp_hasFDerivAt, hasDerivAt_log
@@ -645,8 +645,8 @@ theorem ContDiff.log
 @[fun_prop]
 
 中文:
-定理 ContDiff.log
-  条件: {n} (hf : ContDiff 实数 n f) (h : 对任意 x, f x != 0)
+定理 连续可微.log
+  条件: {n} (hf : 连续可微 实数 n f) (h : 对任意 x, f x != 0)
   证明: contDiff_iff_contDiffAt.2 fun x => hf.contDiffAt.log (h x)
 
 @[fun_prop]
@@ -690,8 +690,8 @@ theorem Differentiable.log
   proof: fun x => (hf x).log (hx x)
 
 中文:
-定理 Differentiable.log
-  条件: (hf : Differentiable 实数 f) (hx : 对任意 x, f x != 0)
+定理 可微.log
+  条件: (hf : 可微 实数 f) (hx : 对任意 x, f x != 0)
   证明: fun x => (hf x).log (hx x)
 -/
 theorem Differentiable.log (hf : Differentiable Real f) (hx : forall x, f x != 0) :

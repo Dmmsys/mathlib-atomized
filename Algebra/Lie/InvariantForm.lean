@@ -56,7 +56,7 @@ definition _root_.LinearMap.BilinForm.lieInvariant
   body: forall (x : L) (y z : M), Φ ⁅x, y⁆ z = -Φ y ⁅x, z⁆
 
 中文:
-定义 _root_.LinearMap.BilinForm.lieInvariant
+定义 _root_.线性映射.BilinForm.lieInvariant
   签名: : 命题
   定义体: forall (x : L) (y z : M), Φ ⁅x, y⁆ z = -Φ y ⁅x, z⁆
 -/
@@ -77,8 +77,8 @@ lemma _root_.LinearMap.BilinForm.lieInvariant_iff
     simp only [LieHom.lie_apply, Lin
 
 中文:
-引理 _root_.LinearMap.BilinForm.lieInvariant_iff
-  条件: [LieAlgebra R L] [LieModule R L M]
+引理 _root_.线性映射.BilinForm.lieInvariant_iff
+  条件: [Lie代数 R L] [Lie模 R L M]
   证明: by
   refine ⟨fun h x => ?_, fun h x y z => ?_⟩
   · ext y z
@@ -118,7 +118,7 @@ definition orthogonal
 
 中文:
 定义 orthogonal
-  签名: (hΦ_inv : Φ.lieInvariant L) (N : LieSubmodule R L M)
+  签名: (hΦ_inv : Φ.lieInvariant L) (N : Lie子模 R L M)
   定义体: Φ.orthogonal N
   lie_mem {x y} := by
     suffices (forall n in N, Φ n y = 0) -> forall n in N, Φ n ⁅x, y⁆ = 0 by
@@ -152,7 +152,7 @@ lemma orthogonal_toSubmodule
 
 中文:
 引理 orthogonal_toSubmodule
-  条件: (N : LieSubmodule R L M)
+  条件: (N : Lie子模 R L M)
   证明: rfl
 -/
 lemma orthogonal_toSubmodule (N : LieSubmodule R L M) :
@@ -169,7 +169,7 @@ lemma mem_orthogonal
 
 中文:
 引理 mem_orthogonal
-  条件: (N : LieSubmodule R L M) (y : M)
+  条件: (N : Lie子模 R L M) (y : M)
   证明: by
   simp [orthogonal, LinearMap.BilinForm.mem_orthogonal_iff]
 
@@ -438,7 +438,7 @@ theorem isSemisimple_of_nondegenerate
 
 中文:
 定理 isSemisimple_of_nondegenerate
-  结论: IsSemisimple K L
+  结论: 是半单 K L
   证明: by
   refine ⟨?_, ?_, hL⟩
   · simpa using atomistic Φ hΦ_nondeg hΦ_inv hΦ_refl hL ⊤

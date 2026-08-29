@@ -44,7 +44,7 @@ definition closedPoints
 
 中文:
 定义 closedPoints
-  签名: : Set X
+  签名: : 集合 X
   定义体: Set.ofPred (IsClosed {·})
 
 Depends on / 依赖: IsClosed, Set.ofPred, ofPred
@@ -66,7 +66,7 @@ lemma mem_closedPoints_iff
 中文:
 引理 mem_closedPoints_iff
   条件: {x}
-  结论: x in closedPoints X ↔ IsClosed {x}
+  结论: x in closedPoints X ↔ 是闭集 {x}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -87,7 +87,7 @@ lemma preimage_closedPoints_subset
 
 中文:
 引理 preimage_closedPoints_subset
-  条件: (hf : Function.Injective f) (hf' : Continuous f)
+  条件: (hf : 函数.单射 f) (hf' : 连续 f)
   证明: by
   intro x hx
   rw [mem_closedPoints_iff]
@@ -114,8 +114,8 @@ lemma Topology.IsClosedEmbedding.preimage_closedPoints
   simp [mem_closedPoints_iff, ← Set.image_singleton, hf.isClosed_iff_image_isClosed]
 
 中文:
-引理 Topology.IsClosedEmbedding.preimage_closedPoints
-  条件: (hf : IsClosedEmbedding f)
+引理 拓扑.是闭嵌入.preimage_closedPoints
+  条件: (hf : 是闭嵌入 f)
   证明: by
   ext x
   simp [mem_closedPoints_iff, ← Set.image_singleton, hf.isClosed_iff_image_isClosed]
@@ -137,7 +137,7 @@ lemma closedPoints_eq_univ
 
 中文:
 引理 closedPoints_eq_univ
-  条件: [T1Space X]
+  条件: [T1空间 X]
   证明: Set.eq_univ_iff_forall.mpr fun _ => isClosed_singleton
 
 Depends on / 依赖: Set.eq_univ_iff_forall.mpr, eq_univ_iff_forall, isClosed_singleton
@@ -157,7 +157,7 @@ lemma Set.Finite.isDiscrete_of_subset_closedPoints
   exact ⟨inferInstance⟩
 
 中文:
-引理 Set.Finite.isDiscrete_of_subset_closedPoints
+引理 集合.有限.isDiscrete_of_subset_closedPoints
   证明: by
   have : T1Space s := ⟨fun x => by convert! (hs' x.2).preimage continuous_subtype_val; aesop⟩
   have : Finite s := hs
@@ -186,10 +186,10 @@ class JacobsonSpace
     - closure_inter_closedPoints : forall {Z}, IsClosed Z -> closure (Z inter closedPoints X) = Z
 
 中文:
-类 JacobsonSpace
+类 Jacobson空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - closure_inter_closedPoints : 对任意 {Z}, IsClosed Z -> closure (Z inter closedPoints X) = Z
+    - closure_inter_closedPoints : 对任意 {Z}, 是闭集 Z -> closure (Z inter closedPoints X) = Z
 -/
 class JacobsonSpace : Prop where
   closure_inter_closedPoints : forall {Z}, IsClosed Z -> closure (Z inter closedPoints X) = Z
@@ -210,8 +210,8 @@ lemma closure_closedPoints
 
 中文:
 引理 closure_closedPoints
-  条件: [JacobsonSpace X]
-  结论: closure (closedPoints X) = Set.univ
+  条件: [Jacobson空间 X]
+  结论: closure (closedPoints X) = 集合.univ
   证明: by
   simpa using closure_inter_closedPoints isClosed_univ
 
@@ -283,7 +283,7 @@ lemma nonempty_inter_closedPoints
 
 中文:
 引理 nonempty_inter_closedPoints
-  结论: [JacobsonSpace X] {Z : Set X}
+  结论: [Jacobson空间 X] {Z : 集合 X}
   证明: jacobsonSpace_iff_locallyClosed.mp inferInstance Z hZ hZ'
 
 Depends on / 依赖: jacobsonSpace_iff_locallyClosed, jacobsonSpace_iff_locallyClosed.mp
@@ -307,8 +307,8 @@ theorem JacobsonSpace.closure_inter_closedPoints_eq_closure
     ⟨x, hx, H⟩ (.inter hS isClosed_closure.isOpen_com
 
 中文:
-定理 JacobsonSpace.closure_inter_closedPoints_eq_closure
-  结论: [JacobsonSpace X]
+定理 Jacobson空间.closure_inter_closedPoints_eq_closure
+  结论: [Jacobson空间 X]
   证明: by
   refine (closure_mono (Set.inter_subset_left)).antisymm ?_
   rw [IsClosed.closure_subset_iff isClosed_closure]
@@ -342,7 +342,7 @@ lemma isClosed_singleton_of_isLocallyClosed_singleton
 
 中文:
 引理 isClosed_singleton_of_isLocallyClosed_singleton
-  结论: [JacobsonSpace X] {x : X}
+  结论: [Jacobson空间 X] {x : X}
   证明: by
   obtain ⟨_, ⟨y, rfl : y = x, rfl⟩, hy'⟩ :=
     nonempty_inter_closedPoints (Set.singleton_nonempty x) hx
@@ -370,8 +370,8 @@ lemma Topology.IsOpenEmbedding.preimage_closedPoints
   exact (hx.isLocallyClosed.image hf.isInducing hf.isOpen_range.isLocallyClosed)
 
 中文:
-引理 Topology.IsOpenEmbedding.preimage_closedPoints
-  条件: (hf : IsOpenEmbedding f) [JacobsonSpace Y]
+引理 拓扑.是开嵌入.preimage_closedPoints
+  条件: (hf : 是开嵌入 f) [Jacobson空间 Y]
   证明: by
   apply subset_antisymm (preimage_closedPoints_subset hf.injective hf.continuous)
   intro x hx
@@ -403,8 +403,8 @@ lemma JacobsonSpace.of_isOpenEmbedding
   exact ⟨_, hx, hx'⟩
 
 中文:
-引理 JacobsonSpace.of_isOpenEmbedding
-  条件: [JacobsonSpace Y] (hf : IsOpenEmbedding f)
+引理 Jacobson空间.of_isOpenEmbedding
+  条件: [Jacobson空间 Y] (hf : 是开嵌入 f)
   证明: by
   rw [jacobsonSpace_iff_locallyClosed]; rw [← hf.preimage_closedPoints]
   intro Z hZ hZ'
@@ -436,8 +436,8 @@ lemma JacobsonSpace.of_isClosedEmbedding
   exact ⟨_, hx, hx'⟩
 
 中文:
-引理 JacobsonSpace.of_isClosedEmbedding
-  条件: [JacobsonSpace Y] (hf : IsClosedEmbedding f)
+引理 Jacobson空间.of_isClosedEmbedding
+  条件: [Jacobson空间 Y] (hf : 是闭嵌入 f)
   证明: by
   rw [jacobsonSpace_iff_locallyClosed]; rw [← hf.preimage_closedPoints]
   intro Z hZ hZ'
@@ -469,8 +469,8 @@ lemma JacobsonSpace.discreteTopology
   rw [discreteT
 
 中文:
-引理 JacobsonSpace.discreteTopology
-  结论: [JacobsonSpace X]
+引理 Jacobson空间.discreteTopology
+  结论: [Jacobson空间 X]
   证明: by
   have : closedPoints X = Set.univ := by
     rw [← Set.univ_subset_iff]; rw [← closure_closedPoints]; rw [closure_subset_iff_isClosed]; rw [← (closedPoints X).biUnion_of_singleton]
@@ -514,7 +514,7 @@ lemma TopologicalSpace.IsOpenCover.jacobsonSpace_iff
   obtain ⟨y, hy, hy'⟩ := (jacobsonSpace_iff_locallyClosed.mp 
 
 中文:
-引理 TopologicalSpace.IsOpenCover.jacobsonSpace_iff
+引理 拓扑空间.IsOpenCover.jacobsonSpace_iff
   结论: {ι : 类型} {U : ι -> Opens X}
   证明: by
   refine ⟨fun H i => .of_isOpenEmbedding (U i).2.isOpenEmbedding_subtypeVal, fun H => ?_⟩
@@ -568,7 +568,7 @@ theorem subsingleton_image_closure_of_finite_of_isPreirreducible
 
 中文:
 定理 subsingleton_image_closure_of_finite_of_isPreirreducible
-  结论: [JacobsonSpace X]
+  结论: [Jacobson空间 X]
   证明: by
   obtain rfl | hS'' := S.eq_empty_or_nonempty
   · simp

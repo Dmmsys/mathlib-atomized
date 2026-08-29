@@ -31,8 +31,8 @@ lemma isInt_ediv_zero
   statement: forall {a b r : Int}, IsInt a r -> IsNat b (nat_lit 0) -> IsNat (a / b) (nat_lit 0)
 
 中文:
-引理 isInt_ediv_zero
-  结论: 对任意 {a b r : 整数}, Is整数 a r -> Is自然数 b (nat_lit 0) -> Is自然数 (a / b) (nat_lit 0)
+引理 is整数_ediv_zero
+  结论: 对任意 {a b r : 整数}, 是整数 a r -> 是自然数 b (nat_lit 0) -> 是自然数 (a / b) (nat_lit 0)
 
 Depends on / 依赖: completelyRegularSpace_induced, completelyRegularSpace_inf
 -/
@@ -52,7 +52,7 @@ lemma isInt_ediv
   rw [Int.ediv_eq_zero_of_lt]; rw [zero_add] <;> [simp; simpa using h₂]⟩
 
 中文:
-引理 isInt_ediv
+引理 is整数_ediv
   结论: {a b q m a' : 整数} {b' r : 自然数}
   证明: ⟨by
   obtain ⟨⟨rfl⟩, ⟨rfl⟩⟩ := ha, hb
@@ -81,9 +81,9 @@ lemma isInt_ediv_neg
   proof: ⟨by rw [Int.cast_id, ← hq, ← @Int.cast_id q, ← h.out, ← Int.ediv_neg, Int.neg_neg]⟩
 
 中文:
-引理 isInt_ediv_neg
-  条件: {a b q q' : 整数} (h : Is整数 (a / -b) q) (hq : -q = q')
-  结论: Is整数 (a / b) q'
+引理 is整数_ediv_neg
+  条件: {a b q q' : 整数} (h : 是整数 (a / -b) q) (hq : -q = q')
+  结论: 是整数 (a / b) q'
   证明: ⟨by rw [Int.cast_id, ← hq, ← @Int.cast_id q, ← h.out, ← Int.ediv_neg, Int.neg_neg]⟩
 
 Depends on / 依赖: Int.cast_id, Int.ediv_neg, Int.neg_neg, cast_id, ediv_neg, h.out, neg_neg
@@ -101,9 +101,9 @@ lemma isNat_neg_of_isNegNat
   proof: ⟨by simp [h.out]⟩
 
 中文:
-引理 isNat_neg_of_isNegNat
-  条件: {a : 整数} {b : 自然数} (h : Is整数 a (.negOf自然数 b))
-  结论: Is自然数 (-a) b
+引理 is自然数_neg_of_isNeg自然数
+  条件: {a : 整数} {b : 自然数} (h : 是整数 a (.negOf自然数 b))
+  结论: 是自然数 (-a) b
   证明: ⟨by simp [h.out]⟩
 
 Depends on / 依赖: h.out
@@ -129,7 +129,7 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
 haveI' : e =Q ($a / $b) :=
 
 中文:
-定义 evalIntDiv
+定义 eval整数Div
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure
@@ -187,8 +187,8 @@ lemma isInt_emod_zero
   statement: forall {a b r : Int}, IsInt a r -> IsNat b (nat_lit 0) -> IsInt (a % b) r
 
 中文:
-引理 isInt_emod_zero
-  结论: 对任意 {a b r : 整数}, Is整数 a r -> Is自然数 b (nat_lit 0) -> Is整数 (a % b) r
+引理 is整数_emod_zero
+  结论: 对任意 {a b r : 整数}, 是整数 a r -> 是自然数 b (nat_lit 0) -> 是整数 (a % b) r
 -/
 lemma isInt_emod_zero : forall {a b r : Int}, IsInt a r -> IsNat b (nat_lit 0) -> IsInt (a % b) r
   | _, _, _, e, ⟨rfl⟩ => by simp [e]
@@ -205,7 +205,7 @@ lemma isInt_emod
   rw [Int.emod_eq_of_lt] <;> [simp; simpa using h₂]⟩
 
 中文:
-引理 isInt_emod
+引理 is整数_emod
   结论: {a b q m a' : 整数} {b' r : 自然数}
   证明: ⟨by
   obtain ⟨⟨rfl⟩, ⟨rfl⟩⟩ := ha, hb
@@ -232,9 +232,9 @@ lemma isInt_emod_neg
   proof: ⟨by rw [← Int.emod_neg, h.out]⟩
 
 中文:
-引理 isInt_emod_neg
-  条件: {a b : 整数} {r : 自然数} (h : Is自然数 (a % -b) r)
-  结论: Is自然数 (a % b) r
+引理 is整数_emod_neg
+  条件: {a b : 整数} {r : 自然数} (h : 是自然数 (a % -b) r)
+  结论: 是自然数 (a % b) r
   证明: ⟨by rw [← Int.emod_neg, h.out]⟩
 
 Depends on / 依赖: Int.emod_neg, emod_neg, h.out
@@ -260,7 +260,7 @@ haveI' : u =QL 0 := ⟨⟩; haveI' : α =Q Int := ⟨⟩
 haveI' : e =Q ($a % $b) :=
 
 中文:
-定义 evalIntMod
+定义 eval整数Mod
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure
@@ -320,7 +320,7 @@ theorem isInt_dvd_true
   statement: {a b : Int} -> {a' b' c : Int} ->
 
 中文:
-定理 isInt_dvd_true
+定理 is整数_dvd_true
   结论: {a b : 整数} -> {a' b' c : 整数} ->
 -/
 theorem isInt_dvd_true : {a b : Int} -> {a' b' c : Int} ->
@@ -335,7 +335,7 @@ theorem isInt_dvd_false
   statement: {a b : Int} -> {a' b' : Int} ->
 
 中文:
-定理 isInt_dvd_false
+定理 is整数_dvd_false
   结论: {a b : 整数} -> {a' b' : 整数} ->
 -/
 theorem isInt_dvd_false : {a b : Int} -> {a' b' : Int} ->
@@ -357,7 +357,7 @@ haveI' : e =Q ($a ∣ $b) := ⟨⟩
 guard ← withNewMCtxDepth isDefEq f q(Dvd.dvd (α := Int)
 
 中文:
-定义 evalIntDvd
+定义 eval整数Dvd
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let .app (.app f (a : Q(Int))) (b : Q(Int)) ← whnfR e | failure

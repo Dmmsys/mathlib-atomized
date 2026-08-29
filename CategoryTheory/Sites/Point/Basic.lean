@@ -76,10 +76,10 @@ structure Point
 结构 Point
   参数: where
   公理与运算 (4 个):
-    - fiber : C ⥤ Type w
-    - isCofiltered : IsCofiltered fiber.Elements  [默认: by infer_instance]
+    - fiber : C ⥤ 类型 w
+    - isCofiltered : 是余filtered fiber.Elements  [默认: by infer_instance]
     - initiallySmall : InitiallySmall.{w} fiber.Elements  [默认: by infer_instance]
-    - jointly_surjective({X : C} (R : Sieve X) (h : R in J X) (x : fiber.obj X)) : 存在 (Y : C) (f : Y ⟶ X) (_ : R f) (y : fiber.obj Y), fiber.map f y = x
+    - jointly_surjective({X : C} (R : 筛 X) (h : R in J X) (x : fiber.obj X)) : 存在 (Y : C) (f : Y ⟶ X) (_ : R f) (y : fiber.obj Y), fiber.map f y = x
 
 Depends on / 依赖: Elements, InitiallySmall, fiber.Elements, fiber.map, fiber.obj, infer_instance, initiallySmall, jointly_surjective
 -/
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimitsOfShape Φ.fiber.Elementsᵒᵖ A
+  签名: 有形状余极限 Φ.fiber.Elementsᵒᵖ A
   定义体: hasColimitsOfShape_of_finallySmall _ _
 
 Depends on / 依赖: hasColimitsOfShape_of_finallySmall
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSifted Φ.fiber.Elementsᵒᵖ
+  签名: 是Sifted Φ.fiber.Elementsᵒᵖ
   定义体: IsFiltered.isSifted
 
 Depends on / 依赖: IsFiltered, IsFiltered.isSifted, isSifted
@@ -145,7 +145,7 @@ instance [LocallySmall.{w}
 
 中文:
 实例 [LocallySmall.{w}
-  签名: C] [AB5OfSize.{w, w} A] [HasFiniteLimits A] :
+  签名: C] [AB5OfSize.{w, w} A] [有有限极限 A] :
   定义体: hasExactColimitsOfShape_of_final _
     (FinallySmall.fromFilteredFinalModel Φ.fiber.Elementsᵒᵖ)
 
@@ -235,7 +235,7 @@ definition toPresheafFiberNatTrans
 @[reassoc (attr := simp), elementwise (attr := simp)]
 
 中文:
-定义 toPresheafFiberNatTrans
+定义 toPresheafFiber自然数Trans
   签名: (X : C) (x : Φ.fiber.obj X)
   定义体: Φ.toPresheafFiber X x
   naturality _ _ f := by simp [presheafFiber, toPresheafFiber]
@@ -487,7 +487,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape Φ.fiber.Elementsᵒᵖ (forget A)
+  签名: 保持形状余极限 Φ.fiber.Elementsᵒᵖ (forget A)
   定义体: Functor.Final.preservesColimitsOfShape_of_final (FinallySmall.fromFilteredFinalModel.{w} _) _
 
 Depends on / 依赖: FinallySmall, FinallySmall.fromFilteredFinalModel, Functor, Functor.Final.preservesColimitsOfShape_of_final, fromFilteredFinalModel, preservesColimitsOfShape_of_final
@@ -611,7 +611,7 @@ lemma toPresheafFiber_map_surjective
 
 中文:
 引理 toPresheafFiber_map_surjective
-  条件: [Presheaf.IsLocallySurjective J f]
+  条件: [预层.是LocallySurjective J f]
   证明: by
   intro p
   obtain ⟨X, x, z, rfl⟩ := Φ.toPresheafFiber_jointly_surjective p
@@ -642,7 +642,7 @@ lemma toPresheafFiber_map_injective
 
 中文:
 引理 toPresheafFiber_map_injective
-  条件: [Presheaf.IsLocallyInjective J f]
+  条件: [预层.是LocallyInjective J f]
   证明: by
   suffices forall (X : C) (x : Φ.fiber.obj X) (p₁ p₂ : ToType (P.obj (op X)))
       (hp : f.app _ p₁ = f.app _ p₂), Φ.toPresheafFiber X x P p₁ = Φ.toPresheafFiber X x P p₂ by
@@ -725,7 +725,7 @@ definition sheafFiber
 
 中文:
 定义 sheafFiber
-  签名: : Sheaf J A ⥤ A
+  签名: : 层 J A ⥤ A
   定义体: sheafToPresheaf J A ⋙ Φ.presheafFiber
 
 Depends on / 依赖: presheafFiber, sheafToPresheaf
@@ -762,7 +762,7 @@ instance [LocallySmall.{w}
 
 中文:
 实例 [LocallySmall.{w}
-  签名: C] [HasFiniteLimits A] [AB5OfSize.{w, w} A] :
+  签名: C] [有有限极限 A] [AB5OfSize.{w, w} A] :
   定义体: comp_preservesFiniteLimits _ _
 -/
 instance [LocallySmall.{w} C] [HasFiniteLimits A] [AB5OfSize.{w, w} A] :
@@ -779,7 +779,7 @@ instance [LocallySmall.{w}
 
 中文:
 实例 [LocallySmall.{w}
-  签名: C] [HasFiniteLimits A] [AB5OfSize.{w, w} A] :
+  签名: C] [有有限极限 A] [AB5OfSize.{w, w} A] :
   定义体: comp_preservesFiniteLimits _ _
 -/
 instance [LocallySmall.{w} C] [HasFiniteLimits A] [AB5OfSize.{w, w} A] :
@@ -798,7 +798,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfSize.{w, w} (Φ.presheafFiber (A := A))
+  签名: 保持余limitsOfSize.{w, w} (Φ.presheafFiber (A := A))
   定义体: by
     dsimp [presheafFiber]
     infer_instance
@@ -822,7 +822,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits Φ.fiber
+  签名: 保持FiniteLimits Φ.fiber
   定义体: preservesFiniteLimits_of_natIso Φ.shrinkYonedaCompPresheafFiberIso
 
 Depends on / 依赖: preservesFiniteLimits_of_natIso, shrinkYonedaCompPresheafFiberIso
@@ -840,7 +840,7 @@ definition isTerminalFiberObj
 
 中文:
 定义 isTerminalFiberObj
-  签名: (T : C) (hT : IsTerminal T)
+  签名: (T : C) (hT : 是终止 T)
   定义体: IsTerminal.isTerminalObj _ _ hT
 
 Depends on / 依赖: IsTerminal, IsTerminal.isTerminalObj, isTerminalObj
@@ -861,7 +861,7 @@ definition uniqueFiberObj
 
 中文:
 定义 uniqueFiberObj
-  签名: (T : C) (hT : IsTerminal T)
+  签名: (T : C) (hT : 是终止 T)
   定义体: Types.isTerminalEquivUnique _ (Φ.isTerminalFiberObj T hT)
 
 Depends on / 依赖: Types.isTerminalEquivUnique, isTerminalEquivUnique, isTerminalFiberObj
@@ -882,7 +882,7 @@ lemma fiber_map_injective_of_mono
 
 中文:
 引理 fiber_map_injective_of_mono
-  条件: {U T : C} (f : U ⟶ T) [Mono f]
+  条件: {U T : C} (f : U ⟶ T) [单态射 f]
   证明: by
   rw [← mono_iff_injective]
   infer_instance
@@ -906,7 +906,7 @@ lemma subsingleton_fiber_obj
 
 中文:
 引理 subsingleton_fiber_obj
-  条件: {U T : C} (f : U ⟶ T) [Mono f] (hT : IsTerminal T)
+  条件: {U T : C} (f : U ⟶ T) [单态射 f] (hT : 是终止 T)
   证明: Φ.fiber_map_injective_of_mono f (by
     have := Φ.uniqueFiberObj T hT
     subsingleton)
@@ -1001,7 +1001,7 @@ definition sheafFiberCompIso
 
 中文:
 定义 sheafFiberCompIso
-  签名: [J.HasSheafCompose F]
+  签名: [J.有SheafCompose F]
   定义体: Functor.isoWhiskerLeft (sheafToPresheaf J A) (Φ.presheafFiberCompIso F) ≪≫
     (Functor.associator _ _ _).symm
 

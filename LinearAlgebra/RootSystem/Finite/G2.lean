@@ -70,8 +70,8 @@ class EmbeddedG2
 
 中文:
 类 EmbeddedG2
-  参数: extends P.IsCrystallographic, P.IsReduced
-  继承: P.IsCrystallographic, P.IsReduced
+  参数: extends P.IsCrystallographic, P.是既约
+  继承: P.IsCrystallographic, P.是既约
   公理与运算 (3 个):
     - long : ι
     - short : ι
@@ -95,9 +95,9 @@ class IsG2
     - exists_pairingIn_neg_three : exists i j, P.pairingIn Int i j = -3
 
 中文:
-类 IsG2
-  参数: : 命题 extends P.IsCrystallographic, P.IsReduced, P.IsIrreducible where
-  继承: P.IsCrystallographic, P.IsReduced, P.IsIrreducible
+类 是G2
+  参数: : 命题 extends P.IsCrystallographic, P.是既约, P.是不可约 where
+  继承: P.IsCrystallographic, P.是既约, P.是不可约
   公理与运算 (1 个):
     - exists_pairingIn_neg_three : 存在 i j, P.pairingIn 整数 i j = -3
 -/
@@ -115,11 +115,11 @@ class IsNotG2
     - pairingIn_mem_zero_one_two((i j : ι)) : P.pairingIn Int i j in ({-2, -1, 0, 1, 2} : Set Int)
 
 中文:
-类 IsNotG2
-  参数: : 命题 extends P.IsCrystallographic, P.IsReduced, P.IsIrreducible where
-  继承: P.IsCrystallographic, P.IsReduced, P.IsIrreducible
+类 是NotG2
+  参数: : 命题 extends P.IsCrystallographic, P.是既约, P.是不可约 where
+  继承: P.IsCrystallographic, P.是既约, P.是不可约
   公理与运算 (1 个):
-    - pairingIn_mem_zero_one_two((i j : ι)) : P.pairingIn 整数 i j in ({-2, -1, 0, 1, 2} : Set 整数)
+    - pairingIn_mem_zero_one_two((i j : ι)) : P.pairingIn 整数 i j in ({-2, -1, 0, 1, 2} : 集合 整数)
 -/
 class IsNotG2 : Prop extends P.IsCrystallographic, P.IsReduced, P.IsIrreducible where
   pairingIn_mem_zero_one_two (i j : ι) : P.pairingIn Int i j in ({-2, -1, 0, 1, 2} : Set Int)
@@ -140,8 +140,8 @@ definition IsG2.toEmbeddedG2
   pairingIn_long_short := (IsG2.exists_pairingIn_neg_three (P := P)).choose_spec.choose_spec
 
 中文:
-定义 IsG2.toEmbeddedG2
-  签名: [P.IsG2]
+定义 是G2.toEmbeddedG2
+  签名: [P.是G2]
   定义体: (IsG2.exists_pairingIn_neg_three (P := P)).choose
   short := (IsG2.exists_pairingIn_neg_three (P := P)).choose_spec.choose
   pairingIn_long_short := (IsG2.exists_pairingIn_neg_three (P := P)).choose_spec.choose_spec
@@ -163,9 +163,9 @@ lemma IsG2.nonempty
   proof: ⟨(IsG2.exists_pairingIn_neg_three (P := P)).choose⟩
 
 中文:
-引理 IsG2.nonempty
-  条件: [P.IsG2]
-  结论: Nonempty ι
+引理 是G2.nonempty
+  条件: [P.是G2]
+  结论: 非空 ι
   证明: ⟨(IsG2.exists_pairingIn_neg_three (P := P)).choose⟩
 
 Depends on / 依赖: IsG2.exists_pairingIn_neg_three, exists_pairingIn_neg_three
@@ -264,8 +264,8 @@ lemma IsG2.pairingIn_mem_zero_one_three
     have aux₂ := P
 
 中文:
-引理 IsG2.pairingIn_mem_zero_one_three
-  结论: [P.IsG2]
+引理 是G2.pairingIn_mem_zero_one_three
+  结论: [P.是G2]
   证明: by
   suffices ¬ (forall i j, P.pairingIn Int i j = P.pairingIn Int j i ∨
                      P.pairingIn Int i j = 2 * P.pairingIn Int j i ∨
@@ -316,7 +316,7 @@ lemma chainBotCoeff_add_chainTopCoeff_le_two
 
 中文:
 引理 chainBotCoeff_add_chainTopCoeff_le_two
-  条件: [P.IsNotG2]
+  条件: [P.是NotG2]
   证明: by
   by_cases h : LinearIndependent R ![P.root i, P.root j]
   swap; · simp [chainTopCoeff_of_not_linearIndependent, chainBotCoeff_of_not_linearIndependent, h]
@@ -348,7 +348,7 @@ have aux₁ := P.linearIndependent_of_add_mem_range_root' add_comm (P.root i) (P
 
 中文:
 引理 pairingIn_le_zero_of_root_add_mem
-  条件: [P.IsNotG2] (h : P.root i + P.root j in range P.root)
+  条件: [P.是NotG2] (h : P.root i + P.root j in range P.root)
   证明: by
 have aux₁ := P.linearIndependent_of_add_mem_range_root' add_comm (P.root i) (P.root j) ▸ h
   have aux₂ := P.chainBotCoeff_add_chainTopCoeff_le_two j i
@@ -379,7 +379,7 @@ lemma zero_le_pairingIn_of_root_sub_mem
 
 中文:
 引理 zero_le_pairingIn_of_root_sub_mem
-  条件: [P.IsNotG2] (h : P.root i - P.root j in range P.root)
+  条件: [P.是NotG2] (h : P.root i - P.root j in range P.root)
   证明: by
   replace h : P.root i + P.root (P.reflectionPerm j j) in range P.root := by simpa [← sub_eq_add_neg]
   simpa using P.pairingIn_le_zero_of_root_add_mem h
@@ -406,7 +406,7 @@ lemma chainBotCoeff_if_one_zero
 
 中文:
 引理 chainBotCoeff_if_one_zero
-  条件: [P.IsNotG2] (h : P.root i + P.root j in range P.root)
+  条件: [P.是NotG2] (h : P.root i + P.root j in range P.root)
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   have aux₁ := P.linearIndependent_of_add_mem_range_root' h
@@ -440,7 +440,7 @@ lemma chainTopCoeff_if_one_zero
 
 中文:
 引理 chainTopCoeff_if_one_zero
-  条件: [P.IsNotG2] (h : P.root i - P.root j in range P.root)
+  条件: [P.是NotG2] (h : P.root i - P.root j in range P.root)
   证明: by
   let := P.indexNeg
   replace h : P.root i + P.root (-j) in range P.root := by simpa [← sub_eq_add_neg] using h
@@ -472,7 +472,7 @@ definition ofPairingInThree
 
 中文:
 定义 ofPairingInThree
-  签名: [CharZero R] [P.IsCrystallographic] [P.IsReduced] (long short : ι)
+  签名: [特征零 R] [P.IsCrystallographic] [P.是既约] (long short : ι)
   定义体: P.reflectionPerm long long
   short := short
   pairingIn_long_short := by simp [h]
@@ -500,8 +500,8 @@ instance [P.IsIrreducible]
 @[simp]
 
 中文:
-实例 [P.IsIrreducible]
-  签名: : P.IsG2 where
+实例 [P.是不可约]
+  签名: : P.是G2 where
   定义体: ⟨long P, short P, by simp⟩
 
 @[simp]
@@ -714,7 +714,7 @@ abbreviation allRoots
 
 中文:
 缩写 allRoots
-  签名: : List M
+  签名: : 列表 M
   定义体: [ longRoot P, -longRoot P,
     shortRoot P, -shortRoot P,
     shortAddLongRoot P, -shortAddLongRoot P,
@@ -937,7 +937,7 @@ abbreviation allCoeffs
 
 中文:
 缩写 allCoeffs
-  签名: : List (Fin 2 -> 整数)
+  签名: : 列表 (有限集 2 -> 整数)
   定义体: [![0, 1], ![0, -1], ![1, 0], ![-1, 0], ![1, 1], ![-1, -1],
     ![2, 1], ![-2, -1], ![3, 1], ![-3, -1], ![3, 2], ![-3, -2]]
 -/
@@ -1427,7 +1427,7 @@ lemma isOrthogonal_short_and_long_aux
 
 中文:
 引理 isOrthogonal_short_and_long_aux
-  结论: {a b c d e f a' b' c' d' e' f' : 整数} {S : Set (整数 × 整数)}
+  结论: {a b c d e f a' b' c' d' e' f' : 整数} {S : 集合 (整数 × 整数)}
   证明: by
   simp [S_def] at ha hb hc hd he hf
   omega
@@ -1544,7 +1544,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Module.Basis (Fin 2) R M
+  签名: : 模.基 (有限集 2) R M
   定义体: have : LinearIndependent R ![EmbeddedG2.shortRoot P, EmbeddedG2.longRoot P] := by
     have := pairing_long_short P
     refine (IsReduced.linearIndependent_iff P).mpr ⟨fun h => ?_, fun h => ?_⟩

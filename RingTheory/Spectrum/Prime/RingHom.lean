@@ -38,8 +38,8 @@ definition PrimeSpectrum.comap
   body: ⟨Ideal.comap f p.asIdeal, inferInstance⟩
 
 中文:
-定义 PrimeSpectrum.comap
-  签名: {R S : 类型} [CommSemiring R] [CommSemiring S] (f : R ->+* S)
+定义 素谱.comap
+  签名: {R S : 类型} [交换半环 R] [交换半环 S] (f : R ->+* S)
   定义体: ⟨Ideal.comap f p.asIdeal, inferInstance⟩
 
 Depends on / 依赖: Ideal.comap, asIdeal, p.asIdeal
@@ -69,7 +69,7 @@ theorem comap_asIdeal
 
 中文:
 定理 comap_asIdeal
-  条件: (y : PrimeSpectrum S)
+  条件: (y : 素谱 S)
   证明: rfl
 
 @[simp]
@@ -91,7 +91,7 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  结论: comap (RingHom.id R) = fun x => x
+  结论: comap (环态射.id R) = fun x => x
   证明: rfl
 
 @[simp]
@@ -127,7 +127,7 @@ theorem comap_comp_apply
 
 中文:
 定理 comap_comp_apply
-  条件: (f : R ->+* S) (g : S ->+* S') (x : PrimeSpectrum S')
+  条件: (f : R ->+* S) (g : S ->+* S') (x : 素谱 S')
   证明: rfl
 -/
 theorem comap_comp_apply (f : R ->+* S) (g : S ->+* S') (x : PrimeSpectrum S') :
@@ -148,7 +148,7 @@ theorem preimage_comap_zeroLocus_aux
 
 中文:
 定理 preimage_comap_zeroLocus_aux
-  条件: (f : R ->+* S) (s : Set R)
+  条件: (f : R ->+* S) (s : 集合 R)
   证明: by
   ext x
   simp [mem_zeroLocus, Set.image_subset_iff, Set.mem_preimage, mem_zeroLocus]
@@ -173,7 +173,7 @@ theorem preimage_comap_zeroLocus
 
 中文:
 定理 preimage_comap_zeroLocus
-  条件: (s : Set R)
+  条件: (s : 集合 R)
   证明: preimage_comap_zeroLocus_aux f s
 
 Depends on / 依赖: preimage_comap_zeroLocus_aux
@@ -195,7 +195,7 @@ theorem comap_injective_of_surjective
 
 中文:
 定理 comap_injective_of_surjective
-  条件: (f : R ->+* S) (hf : Function.Surjective f)
+  条件: (f : R ->+* S) (hf : 函数.满射 f)
   证明: fun x y h =>
   PrimeSpectrum.ext
     (Ideal.comap_injective_of_surjective f hf
@@ -216,7 +216,7 @@ instance [Algebra
   body: rfl
 
 中文:
-实例 [Algebra
+实例 [代数
   签名: R S] (p
   定义体: rfl
 -/
@@ -294,7 +294,7 @@ definition sigmaToPi
 
 中文:
 定义 sigmaToPi
-  签名: : (Σ i, PrimeSpectrum (R i)) -> PrimeSpectrum (Π i, R i)
+  签名: : (Σ i, 素谱 (R i)) -> 素谱 (Π i, R i)
 -/
 def sigmaToPi : (Σ i, PrimeSpectrum (R i)) -> PrimeSpectrum (Π i, R i)
   | ⟨i, p⟩ => comap (Pi.evalRingHom R i) p
@@ -313,7 +313,7 @@ alias coe_sigmaToPi_asIdeal := sigmaToPi_apply
 
 中文:
 引理 sigmaToPi_apply
-  条件: (i : ι) (p : PrimeSpectrum (R i))
+  条件: (i : ι) (p : 素谱 (R i))
   证明: rfl
 
 @[deprecated (since := "2026-04-17")]
@@ -342,7 +342,7 @@ theorem sigmaToPi_injective
 
 中文:
 定理 sigmaToPi_injective
-  结论: (sigmaToPi R).Injective
+  结论: (sigmaToPi R).单射
   证明: fun ⟨i, p⟩ ⟨j, q⟩ eq => by
   classical
   obtain rfl | ne := eq_or_ne i j
@@ -379,7 +379,7 @@ theorem exists_maximal_notMem_range_sigmaToPi_of_infinite
       simp_rw
 
 中文:
-定理 exists_maximal_notMem_range_sigmaToPi_of_infinite
+定理 存在_maximal_notMem_range_sigmaToPi_of_infinite
   证明: by
   classical
   let J : Ideal (Π i, R i) := -- `J := Π₀ i, R i` is an ideal in `Π i, R i`
@@ -426,7 +426,7 @@ theorem sigmaToPi_not_surjective_of_infinite
 
 中文:
 定理 sigmaToPi_not_surjective_of_infinite
-  结论: ¬ (sigmaToPi R).Surjective
+  结论: ¬ (sigmaToPi R).满射
   证明: fun surj =>
   have ⟨_, _, notMem⟩ := exists_maximal_notMem_range_sigmaToPi_of_infinite R
   (Set.range_eq_univ.mpr surj ▸ notMem) ⟨⟩
@@ -454,7 +454,7 @@ lemma exists_comap_evalRingHom_eq
     simpa [←
 
 中文:
-引理 exists_comap_evalRingHom_eq
+引理 存在_comap_evalRingHom_eq
   证明: by
   classical
   cases nonempty_fintype ι
@@ -507,7 +507,7 @@ lemma sigmaToPi_bijective
 
 中文:
 引理 sigmaToPi_bijective
-  条件: {ι : 类型} (R : ι -> 类型) [对任意 i, CommRing (R i)] [Finite ι]
+  条件: {ι : 类型} (R : ι -> 类型) [对任意 i, 交换环 (R i)] [有限 ι]
   证明: by
   refine ⟨sigmaToPi_injective R, ?_⟩
   intro q
@@ -587,7 +587,7 @@ theorem image_comap_zeroLocus_eq_zeroLocus_comap
 
 中文:
 定理 image_comap_zeroLocus_eq_zeroLocus_comap
-  条件: (hf : Surjective f) (I : Ideal S)
+  条件: (hf : 满射 f) (I : 理想 S)
   证明: by
   simp only [Set.ext_iff, Set.mem_image, mem_zeroLocus, SetLike.coe_subset_coe]
   refine fun p => ⟨?_, fun h_I_p => ?_⟩
@@ -629,7 +629,7 @@ theorem range_comap_of_surjective
 
 中文:
 定理 range_comap_of_surjective
-  条件: (hf : Surjective f)
+  条件: (hf : 满射 f)
   证明: by
   rw [← Set.image_univ]
   convert! image_comap_zeroLocus_eq_zeroLocus_comap _ _ hf _
@@ -663,8 +663,8 @@ definition Ideal.primeSpectrumOrderIsoZeroLocusOfSurj
  
 
 中文:
-定义 Ideal.primeSpectrumOrderIsoZeroLocusOfSurj
-  签名: (hf : Surjective f) {I : Ideal R}
+定义 理想.primeSpectrumOrderIsoZeroLocusOfSurj
+  签名: (hf : 满射 f) {I : 理想 R}
   定义体: ⟨p.comap f, hI.symm.trans_le (Ideal.ker_le_comap f)⟩
   invFun := fun ⟨⟨p, _⟩, hp⟩ => ⟨p.map f, p.map_isPrime_of_surjective hf (hI.trans_le hp)⟩
   left_inv := by
@@ -700,8 +700,8 @@ definition Ideal.primeSpectrumQuotientOrderIsoZeroLocus
   body: primeSpectrumOrderIsoZeroLocusOfSurj (Quotient.mk I) Quotient.mk_surjective I.mk_ker
 
 中文:
-定义 Ideal.primeSpectrumQuotientOrderIsoZeroLocus
-  签名: (I : Ideal R)
+定义 理想.primeSpectrumQuotientOrderIsoZeroLocus
+  签名: (I : 理想 R)
   定义体: primeSpectrumOrderIsoZeroLocusOfSurj (Quotient.mk I) Quotient.mk_surjective I.mk_ker
 -/
 noncomputable def Ideal.primeSpectrumQuotientOrderIsoZeroLocus (I : Ideal R) :
@@ -721,8 +721,8 @@ lemma PrimeSpectrum.mem_range_comap_iff
   exact ⟨⟨q, inferInstance⟩, PrimeSpectrum.ext hq⟩
 
 中文:
-引理 PrimeSpectrum.mem_range_comap_iff
-  条件: {p : PrimeSpectrum R}
+引理 素谱.mem_range_comap_iff
+  条件: {p : 素谱 R}
   证明: by
   refine ⟨fun ⟨q, hq⟩ => by simp [← hq], ?_⟩
   rw [Ideal.comap_map_eq_self_iff_of_isPrime]
@@ -755,8 +755,8 @@ lemma PrimeSpectrum.nontrivial_iff_mem_rangeComap
     rw [← PrimeSpectrum.comap_comp_apply]; rw [← Algebra.TensorPr
 
 中文:
-引理 PrimeSpectrum.nontrivial_iff_mem_rangeComap
-  结论: {S : 类型} [CommRing S]
+引理 素谱.nontrivial_iff_mem_rangeComap
+  结论: {S : 类型} [交换环 S]
   证明: by
   let k := p.asIdeal.ResidueField
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -792,8 +792,8 @@ lemma RingHom.strictMono_comap_of_surjective
   proof: fun _ _ h => (Ideal.relIsoOfSurjective _ hf).strictMono h
 
 中文:
-引理 RingHom.strictMono_comap_of_surjective
-  结论: {S : 类型} [CommRing S]
+引理 环态射.strictMono_comap_of_surjective
+  结论: {S : 类型} [交换环 S]
   证明: fun _ _ h => (Ideal.relIsoOfSurjective _ hf).strictMono h
 
 Depends on / 依赖: Ideal.relIsoOfSurjective, relIsoOfSurjective, strictMono
@@ -819,8 +819,8 @@ lemma PrimeSpectrum.residueField_comap
   exact PrimeSpectrum.ext (Ideal.ext fun x => Ideal.algebraMap_residueField_eq_zero)
 
 中文:
-引理 PrimeSpectrum.residueField_comap
-  条件: (I : PrimeSpectrum R)
+引理 素谱.residueField_comap
+  条件: (I : 素谱 R)
   证明: by
   rw [Set.range_unique]; rw [Set.singleton_eq_singleton_iff]
   exact PrimeSpectrum.ext (Ideal.ext fun x => Ideal.algebraMap_residueField_eq_zero)
@@ -849,8 +849,8 @@ theorem IsLocalHom.of_comap_surjective
     exact hqp.ne_top (q.eq_top_of_isUnit_mem (q.mem_comap.mp (by rwa [hq])) hfx)
 
 中文:
-定理 IsLocalHom.of_comap_surjective
-  结论: [CommSemiring R] [CommSemiring S] (f : R ->+* S)
+定理 是Local态射.of_comap_surjective
+  结论: [交换半环 R] [交换半环 S] (f : R ->+* S)
   证明: by
     by_contra hx
     obtain ⟨p, hp, _⟩ := exists_max_ideal_of_mem_nonunits hx

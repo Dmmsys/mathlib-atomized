@@ -175,8 +175,8 @@ lemma IsStarConvexSet.sInter
 @[grind ←]
 
 中文:
-引理 IsStarConvexSet.sInter
-  条件: {S : Set (Set X)} (hS : 对任意 s in S, IsStarConvexSet R x s)
+引理 IsStarConvexSet.集合交集
+  条件: {S : 集合 (集合 X)} (hS : 对任意 s in S, IsStarConvexSet R x s)
   证明: by simp +contextual [IsStarConvexSet, hS _ _ _]
 
 @[grind ←]
@@ -194,8 +194,8 @@ lemma IsStarConvexSet.iInter
   proof: by simp +contextual [IsStarConvexSet, hs _ _]
 
 中文:
-引理 IsStarConvexSet.iInter
-  条件: {s : ι -> Set X} (hs : 对任意 i, IsStarConvexSet R x (s i))
+引理 IsStarConvexSet.i整数er
+  条件: {s : ι -> 集合 X} (hs : 对任意 i, IsStarConvexSet R x (s i))
   证明: by simp +contextual [IsStarConvexSet, hs _ _]
 -/
 protected lemma IsStarConvexSet.iInter {s : ι -> Set X} (hs : forall i, IsStarConvexSet R x (s i)) :
@@ -212,8 +212,8 @@ lemma IsStarConvexSet.iInter₂
 @[grind ←]
 
 中文:
-引理 IsStarConvexSet.iInter₂
-  条件: {s : 对任意 i, κ i -> Set X} (h : 对任意 i j, IsStarConvexSet R x (s i j))
+引理 IsStarConvexSet.i整数er₂
+  条件: {s : 对任意 i, κ i -> 集合 X} (h : 对任意 i j, IsStarConvexSet R x (s i j))
   证明: .iInter fun i => .iInter h i
 
 @[grind ←]
@@ -236,8 +236,8 @@ lemma IsStarConvexSet.sUnion
 @[grind ←]
 
 中文:
-引理 IsStarConvexSet.sUnion
-  条件: {S : Set (Set X)} (hS : 对任意 s in S, IsStarConvexSet R x s)
+引理 IsStarConvexSet.集合并集
+  条件: {S : 集合 (集合 X)} (hS : 对任意 s in S, IsStarConvexSet R x s)
   证明: by
   rintro y ⟨s, hs, hy⟩ a ha b hb hab; exact ⟨s, hs, hS _ hs hy _ ..⟩
 
@@ -258,7 +258,7 @@ lemma IsStarConvexSet.iUnion
 
 中文:
 引理 IsStarConvexSet.iUnion
-  条件: {s : ι -> Set X} (hs : 对任意 i, IsStarConvexSet R x (s i))
+  条件: {s : ι -> 集合 X} (hs : 对任意 i, IsStarConvexSet R x (s i))
   证明: .sUnion by simpa
 -/
 protected lemma IsStarConvexSet.iUnion {s : ι -> Set X} (hs : forall i, IsStarConvexSet R x (s i)) :
@@ -274,7 +274,7 @@ lemma IsStarConvexSet.iUnion₂
 
 中文:
 引理 IsStarConvexSet.iUnion₂
-  结论: {s : 对任意 i, κ i -> Set X}
+  结论: {s : 对任意 i, κ i -> 集合 X}
   证明: .iUnion fun i => .iUnion h i
 -/
 protected lemma IsStarConvexSet.iUnion₂ {s : forall i, κ i -> Set X}
@@ -315,7 +315,7 @@ lemma IsStarConvexSet.mem
 
 中文:
 引理 IsStarConvexSet.mem
-  条件: (hs : IsStarConvexSet R x s) (hs₀ : s.Nonempty)
+  条件: (hs : IsStarConvexSet R x s) (hs₀ : s.非空)
   结论: x in s
   证明: by
   obtain ⟨y, hy⟩ := hs₀; simpa using hs hy zero_le_one le_rfl (add_zero _)
@@ -339,8 +339,8 @@ lemma IsStarConvexSet.preimage
 @[grind <=]
 
 中文:
-引理 IsStarConvexSet.preimage
-  结论: {s : Set Y} (hf : IsAffineMap R f)
+引理 IsStarConvexSet.原像
+  结论: {s : 集合 Y} (hf : 是仿射映射 R f)
   证明: fun y hy a b ha hb hab => by simpa [mem_preimage, hf.map_convexCombPair] using hs hy _ ..
 
 @[grind <=]
@@ -362,8 +362,8 @@ lemma IsStarConvexSet.image
 @[grind ←]
 
 中文:
-引理 IsStarConvexSet.image
-  条件: (hf : IsAffineMap R f) (hs : IsStarConvexSet R x s)
+引理 IsStarConvexSet.像
+  条件: (hf : 是仿射映射 R f) (hs : IsStarConvexSet R x s)
   证明: by
   rintro _ ⟨y, hy, rfl⟩ a b ha hb hab; exact ⟨_, hs hy _ .., hf.map_convexCombPair ..⟩
 
@@ -386,8 +386,8 @@ lemma IsStarConvexSet.prod
 @[grind ←]
 
 中文:
-引理 IsStarConvexSet.prod
-  结论: {t : Set Y} {y : Y} (hs : IsStarConvexSet R x s)
+引理 IsStarConvexSet.乘积
+  结论: {t : 集合 Y} {y : Y} (hs : IsStarConvexSet R x s)
   证明: by
   rintro ⟨w, z⟩ ⟨hw, hz⟩ a b ha hb hab; exact ⟨by simpa using hs hw _ .., by simpa using ht hz _ ..⟩
 
@@ -408,7 +408,7 @@ lemma IsStarConvexSet.pi
 
 中文:
 引理 IsStarConvexSet.pi
-  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, ConvexSpace R (X i)]
+  结论: {ι : 类型} {X : ι -> 类型} [对任意 i, 凸空间 R (X i)]
   证明: fun y hy a b ha hb hab i hi => by simpa using ht _ hi (hy _ hi) _ ..
 -/
 protected lemma IsStarConvexSet.pi {ι : Type*} {X : ι -> Type*} [forall i, ConvexSpace R (X i)]

@@ -43,8 +43,8 @@ lemma Arrow.finite_iff
           chan
 
 中文:
-引理 Arrow.finite_iff
-  条件: (C : 类型u) [SmallCategory C]
+引理 箭头.finite_iff
+  条件: (C : 类型u) [小范畴 C]
   证明: by
   constructor
   · intro
@@ -86,8 +86,8 @@ instance Arrow.finite
   exact ⟨inferInstance⟩
 
 中文:
-实例 Arrow.finite
-  签名: {C : 类型u} [SmallCategory C] [FinCategory C]
+实例 箭头.finite
+  签名: {C : 类型u} [小范畴 C] [有限范畴 C]
   定义体: by
   rw [Arrow.finite_iff]
   exact ⟨inferInstance⟩
@@ -111,8 +111,8 @@ definition Arrow.opEquiv
 @[simp]
 
 中文:
-定义 Arrow.opEquiv
-  签名: (C : 类型u) [Category.{v} C]
+定义 箭头.opEquiv
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: Arrow.mk f.hom.unop
   invFun g := Arrow.mk g.hom.op
 
@@ -137,7 +137,7 @@ lemma hasCardinalLT_arrow_op_iff
 
 中文:
 引理 hasCardinalLT_arrow_op_iff
-  条件: (C : 类型u) [Category.{v} C] (κ : Cardinal.{w})
+  条件: (C : 类型u) [范畴.{v} C] (κ : 基数.{w})
   证明: hasCardinalLT_iff_of_equiv (Arrow.opEquiv C) κ
 
 @[simp]
@@ -159,7 +159,7 @@ lemma hasCardinalLT_arrow_discrete_iff
 
 中文:
 引理 hasCardinalLT_arrow_discrete_iff
-  条件: {X : 类型u} (κ : Cardinal.{w})
+  条件: {X : 类型u} (κ : 基数.{w})
   证明: hasCardinalLT_iff_of_equiv (Arrow.discreteEquiv X) κ
 
 Depends on / 依赖: Arrow.discreteEquiv, discreteEquiv, hasCardinalLT_iff_of_equiv
@@ -181,7 +181,7 @@ lemma small_of_small_arrow
 
 中文:
 引理 small_of_small_arrow
-  条件: (C : 类型u) [Category.{v} C] [Small.{w} (Arrow C)]
+  条件: (C : 类型u) [范畴.{v} C] [Small.{w} (箭头 C)]
   证明: small_of_injective (f := fun X => Arrow.mk (𝟙 X)) (fun _ _ h => congr_arg Comma.left h)
 
 Depends on / 依赖: Arrow.mk, Comma.left, congr_arg, small_of_injective
@@ -202,7 +202,7 @@ lemma locallySmall_of_small_arrow
 
 中文:
 引理 locallySmall_of_small_arrow
-  条件: (C : 类型u) [Category.{v} C] [Small.{w} (Arrow C)]
+  条件: (C : 类型u) [范畴.{v} C] [Small.{w} (箭头 C)]
   证明: small_of_injective (f := fun f => Arrow.mk f) (fun f g h => by
       change (Arrow.mk f).hom = (Arrow.mk g).hom
       congr)
@@ -230,8 +230,8 @@ definition Arrow.shrinkHomsEquiv
   right_inv _ := by simp
 
 中文:
-定义 Arrow.shrinkHomsEquiv
-  签名: (C : 类型u) [Category.{v} C] [LocallySmall.{w} C]
+定义 箭头.shrinkHomsEquiv
+  签名: (C : 类型u) [范畴.{v} C] [LocallySmall.{w} C]
   定义体: (ShrinkHoms.equivalence C).inverse.mapArrow.obj
   invFun := (ShrinkHoms.equivalence C).functor.mapArrow.obj
   left_inv _ := by simp
@@ -262,8 +262,8 @@ definition Arrow.shrinkEquiv
     (by simp [Shrink.equivalence]) 
 
 中文:
-定义 Arrow.shrinkEquiv
-  签名: (C : 类型u) [Category.{v} C] [Small.{w} C]
+定义 箭头.shrinkEquiv
+  签名: (C : 类型u) [范畴.{v} C] [Small.{w} C]
   定义体: (Shrink.equivalence C).inverse.mapArrow.obj
   invFun := (Shrink.equivalence C).functor.mapArrow.obj
   left_inv _ := Arrow.ext (Equiv.apply_symm_apply _ _)
@@ -295,7 +295,7 @@ lemma hasCardinalLT_arrow_shrinkHoms_iff
 
 中文:
 引理 hasCardinalLT_arrow_shrinkHoms_iff
-  结论: (C : 类型u) [Category.{v} C] [LocallySmall.{w'} C]
+  结论: (C : 类型u) [范畴.{v} C] [LocallySmall.{w'} C]
   证明: hasCardinalLT_iff_of_equiv (Arrow.shrinkHomsEquiv C) κ
 
 @[simp]
@@ -318,7 +318,7 @@ lemma hasCardinalLT_arrow_shrink_iff
 
 中文:
 引理 hasCardinalLT_arrow_shrink_iff
-  结论: (C : 类型u) [Category.{v} C] [Small.{w'} C]
+  结论: (C : 类型u) [范畴.{v} C] [Small.{w'} C]
   证明: hasCardinalLT_iff_of_equiv (Arrow.shrinkEquiv C) κ
 
 Depends on / 依赖: Arrow.shrinkEquiv, hasCardinalLT_iff_of_equiv, shrinkEquiv

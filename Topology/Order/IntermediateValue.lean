@@ -80,7 +80,7 @@ theorem intermediate_value_univ₂
 
 中文:
 定理 intermediate_value_univ₂
-  结论: [PreconnectedSpace X] {a b : X} {f g : X -> α} (hf : Continuous f)
+  结论: [预连通空间 X] {a b : X} {f g : X -> α} (hf : 连续 f)
   证明: by
   obtain ⟨x, _, hfg, hgf⟩ : (univ inter { x | f x <= g x ∧ g x <= f x }).Nonempty :=
     isPreconnected_closed_iff.1 PreconnectedSpace.isPreconnected_univ _ _ (isClosed_le hf hg)
@@ -106,7 +106,7 @@ theorem intermediate_value_univ₂_eventually₁
 
 中文:
 定理 intermediate_value_univ₂_eventually₁
-  结论: [PreconnectedSpace X] {a : X} {l : Filter X} [NeBot l]
+  结论: [预连通空间 X] {a : X} {l : 滤子 X} [NeBot l]
   证明: let ⟨_, h⟩ := he.exists; intermediate_value_univ₂ hf hg ha h
 
 Depends on / 依赖: he.exists
@@ -128,7 +128,7 @@ theorem intermediate_value_univ₂_eventually₂
 
 中文:
 定理 intermediate_value_univ₂_eventually₂
-  结论: [PreconnectedSpace X] {l₁ l₂ : Filter X} [NeBot l₁]
+  结论: [预连通空间 X] {l₁ l₂ : 滤子 X} [NeBot l₁]
   证明: let ⟨_, h₁⟩ := he₁.exists
   let ⟨_, h₂⟩ := he₂.exists
   intermediate_value_univ₂ hf hg h₁ h₂
@@ -153,8 +153,8 @@ theorem IsPreconnected.intermediate_value₂
   ⟨x, x.2, hx⟩
 
 中文:
-定理 IsPreconnected.intermediate_value₂
-  结论: {s : Set X} (hs : IsPreconnected s) {a b : X}
+定理 是预连通.intermediate_value₂
+  结论: {s : 集合 X} (hs : 是预连通 s) {a b : X}
   证明: let ⟨x, hx⟩ :=
     @intermediate_value_univ₂ s α _ _ _ _ (Subtype.preconnectedSpace hs) ⟨a, ha⟩ ⟨b, hb⟩ _ _
       (continuousOn_iff_continuous_domRestrict.1 hf)
@@ -186,8 +186,8 @@ theorem IsPreconnected.intermediate_value₂_eventually₁
   exact ⟨b, b.prop, h⟩
 
 中文:
-定理 IsPreconnected.intermediate_value₂_eventually₁
-  结论: {s : Set X} (hs : IsPreconnected s) {a : X}
+定理 是预连通.intermediate_value₂_eventually₁
+  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
   证明: by
   rw [continuousOn_iff_continuous_domRestrict] at hf hg
   obtain ⟨b, h⟩ :=
@@ -221,8 +221,8 @@ theorem IsPreconnected.intermediate_value₂_eventually₂
   exact
 
 中文:
-定理 IsPreconnected.intermediate_value₂_eventually₂
-  结论: {s : Set X} (hs : IsPreconnected s)
+定理 是预连通.intermediate_value₂_eventually₂
+  结论: {s : 集合 X} (hs : 是预连通 s)
   证明: by
   rw [continuousOn_iff_continuous_domRestrict] at hf hg
   obtain ⟨b, h⟩ :=
@@ -254,8 +254,8 @@ theorem IsPreconnected.intermediate_value
   hs.intermediate_value₂ ha hb hf continuousOn_const hx.1 hx.2
 
 中文:
-定理 IsPreconnected.intermediate_value
-  结论: {s : Set X} (hs : IsPreconnected s) {a b : X} (ha : a in s)
+定理 是预连通.intermediate_value
+  结论: {s : 集合 X} (hs : 是预连通 s) {a b : X} (ha : a in s)
   证明: fun _x hx =>
   hs.intermediate_value₂ ha hb hf continuousOn_const hx.1 hx.2
 -/
@@ -273,8 +273,8 @@ theorem IsPreconnected.intermediate_value_Ico
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h.1 (ht.eventually_const_le h.2)
 
 中文:
-定理 IsPreconnected.intermediate_value_Ico
-  结论: {s : Set X} (hs : IsPreconnected s) {a : X}
+定理 是预连通.intermediate_value_Ico
+  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
   证明: fun _ h =>
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h.1 (ht.eventually_const_le h.2)
 -/
@@ -294,8 +294,8 @@ theorem IsPreconnected.intermediate_value_Ioc
     (ht.eventually_le_const h.1)).imp fun _ h => h.imp_right Eq.symm
 
 中文:
-定理 IsPreconnected.intermediate_value_Ioc
-  结论: {s : Set X} (hs : IsPreconnected s) {a : X}
+定理 是预连通.intermediate_value_Ioc
+  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
   证明: fun _ h =>
   (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h.2
     (ht.eventually_le_const h.1)).imp fun _ h => h.imp_right Eq.symm
@@ -317,8 +317,8 @@ theorem IsPreconnected.intermediate_value_Ioo
     (ht₁.eventually_le_const h.1) (ht₂.eventually_const_le h.2)
 
 中文:
-定理 IsPreconnected.intermediate_value_Ioo
-  结论: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
+定理 是预连通.intermediate_value_Ioo
+  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
   证明: fun _ h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
     (ht₁.eventually_le_const h.1) (ht₂.eventually_const_le h.2)
@@ -340,8 +340,8 @@ theorem IsPreconnected.intermediate_value_Ici
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h (tendsto_atTop.1 ht y)
 
 中文:
-定理 IsPreconnected.intermediate_value_Ici
-  结论: {s : Set X} (hs : IsPreconnected s) {a : X}
+定理 是预连通.intermediate_value_Ici
+  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
   证明: fun y h =>
   hs.intermediate_value₂_eventually₁ ha hl hf continuousOn_const h (tendsto_atTop.1 ht y)
 -/
@@ -361,8 +361,8 @@ theorem IsPreconnected.intermediate_value_Iic
     fun _ h => h.imp_right Eq.symm
 
 中文:
-定理 IsPreconnected.intermediate_value_Iic
-  结论: {s : Set X} (hs : IsPreconnected s) {a : X}
+定理 是预连通.intermediate_value_Iic
+  结论: {s : 集合 X} (hs : 是预连通 s) {a : X}
   证明: fun y h =>
   (hs.intermediate_value₂_eventually₁ ha hl continuousOn_const hf h (tendsto_atBot.1 ht y)).imp
     fun _ h => h.imp_right Eq.symm
@@ -384,8 +384,8 @@ theorem IsPreconnected.intermediate_value_Ioi
     (ht₁.eventually_le_const h) (ht₂.eventually_ge_atTop y)
 
 中文:
-定理 IsPreconnected.intermediate_value_Ioi
-  结论: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
+定理 是预连通.intermediate_value_Ioi
+  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
   证明: fun y h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const
     (ht₁.eventually_le_const h) (ht₂.eventually_ge_atTop y)
@@ -407,8 +407,8 @@ theorem IsPreconnected.intermediate_value_Iio
     (ht₂.eventually_const_le h)
 
 中文:
-定理 IsPreconnected.intermediate_value_Iio
-  结论: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
+定理 是预连通.intermediate_value_Iio
+  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
   证明: fun y h =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
     (ht₂.eventually_const_le h)
@@ -430,8 +430,8 @@ theorem IsPreconnected.intermediate_value_Iii
     (ht₂.eventually_ge_atTop y)
 
 中文:
-定理 IsPreconnected.intermediate_value_Iii
-  结论: {s : Set X} (hs : IsPreconnected s) {l₁ l₂ : Filter X}
+定理 是预连通.intermediate_value_Iii
+  结论: {s : 集合 X} (hs : 是预连通 s) {l₁ l₂ : 滤子 X}
   证明: fun y _ =>
   hs.intermediate_value₂_eventually₂ hl₁ hl₂ hf continuousOn_const (ht₁.eventually_le_atBot y)
     (ht₂.eventually_ge_atTop y)
@@ -452,7 +452,7 @@ theorem intermediate_value_univ
 
 中文:
 定理 intermediate_value_univ
-  条件: [PreconnectedSpace X] (a b : X) {f : X -> α} (hf : Continuous f)
+  条件: [预连通空间 X] (a b : X) {f : X -> α} (hf : 连续 f)
   证明: fun _ hx => intermediate_value_univ₂ hf continuous_const hx.1 hx.2
 
 Depends on / 依赖: continuous_const
@@ -469,8 +469,8 @@ theorem mem_range_of_exists_le_of_exists_ge
   proof: let ⟨a, ha⟩ := h₁; let ⟨b, hb⟩ := h₂; intermediate_value_univ a b hf ⟨ha, hb⟩
 
 中文:
-定理 mem_range_of_exists_le_of_exists_ge
-  结论: [PreconnectedSpace X] {c : α} {f : X -> α}
+定理 mem_range_of_存在_le_of_存在_ge
+  结论: [预连通空间 X] {c : α} {f : X -> α}
   证明: let ⟨a, ha⟩ := h₁; let ⟨b, hb⟩ := h₂; intermediate_value_univ a b hf ⟨ha, hb⟩
 
 Depends on / 依赖: intermediate_value_univ
@@ -505,8 +505,8 @@ theorem IsPreconnected.Icc_subset
   simpa only [image_id] using! hs.intermediate_value ha hb continuousOn_id
 
 中文:
-定理 IsPreconnected.Icc_subset
-  结论: {s : Set α} (hs : IsPreconnected s) {a b : α} (ha : a in s)
+定理 是预连通.Icc_subset
+  结论: {s : 集合 α} (hs : 是预连通 s) {a b : α} (ha : a in s)
   证明: by
   simpa only [image_id] using! hs.intermediate_value ha hb continuousOn_id
 
@@ -526,9 +526,9 @@ theorem IsPreconnected.ordConnected
   proof: ⟨fun _ hx _ hy => h.Icc_subset hx hy⟩
 
 中文:
-定理 IsPreconnected.ordConnected
-  条件: {s : Set α} (h : IsPreconnected s)
-  结论: OrdConnected s
+定理 是预连通.ordConnected
+  条件: {s : 集合 α} (h : 是预连通 s)
+  结论: 序连通 s
   证明: ⟨fun _ hx _ hy => h.Icc_subset hx hy⟩
 
 Depends on / 依赖: Icc_subset, h.Icc_subset
@@ -545,8 +545,8 @@ theorem IsConnected.Icc_subset
   proof: hs.2.Icc_subset ha hb
 
 中文:
-定理 IsConnected.Icc_subset
-  结论: {s : Set α} (hs : IsConnected s) {a b : α} (ha : a in s)
+定理 是连通.Icc_subset
+  结论: {s : 集合 α} (hs : 是连通 s) {a b : α} (ha : a in s)
   证明: hs.2.Icc_subset ha hb
 
 Depends on / 依赖: Icc_subset
@@ -568,8 +568,8 @@ theorem IsPreconnected.eq_univ_of_unbounded
   exact hs.Icc_subset ys zs ⟨le_of_lt hy, le_of_lt hz⟩
 
 中文:
-定理 IsPreconnected.eq_univ_of_unbounded
-  结论: {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
+定理 是预连通.eq_univ_of_unbounded
+  结论: {s : 集合 α} (hs : 是预连通 s) (hb : ¬BddBelow s)
   证明: by
   refine eq_univ_of_forall fun x => ?_
   obtain ⟨y, ys, hy⟩ : exists y in s, y < x := not_bddBelow_iff.1 hb x
@@ -602,7 +602,7 @@ theorem denselyOrdered_of_preconnectedSpace
 
 中文:
 定理 denselyOrdered_of_preconnectedSpace
-  结论: [LinearOrder α] [OrderTopology α]
+  结论: [线性序 α] [Order拓扑 α]
   证明: by
     suffices (Iio y inter Ioi x).Nonempty by grind [Set.inter_nonempty_iff_exists_left]
     exact nonempty_inter (isOpen_Iio' y) (isOpen_Ioi' x) (Set.Iio_union_Ioi_of_lt hxy)
@@ -631,8 +631,8 @@ theorem IsConnected.Ioo_csInf_csSup_subset
   hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
 
 中文:
-定理 IsConnected.Ioo_csInf_csSup_subset
-  结论: {s : Set α} (hs : IsConnected s) (hb : BddBelow s)
+定理 是连通.Ioo_csInf_csSup_subset
+  结论: {s : 集合 α} (hs : 是连通 s) (hb : BddBelow s)
   证明: fun _x hx =>
   let ⟨_y, ys, hy⟩ := (isGLB_lt_iff (isGLB_csInf hs.nonempty hb)).1 hx.1
   let ⟨_z, zs, hz⟩ := (lt_isLUB_iff (isLUB_csSup hs.nonempty ha)).1 hx.2
@@ -655,7 +655,7 @@ theorem eq_Icc_csInf_csSup_of_connected_bdd_closed
 
 中文:
 定理 eq_Icc_csInf_csSup_of_connected_bdd_closed
-  结论: {s : Set α} (hc : IsConnected s)
+  结论: {s : 集合 α} (hc : 是连通 s)
   证明: (subset_Icc_csInf_csSup hb ha).antisymm
     hc.Icc_subset (hcl.csInf_mem hc.nonempty hb) (hcl.csSup_mem hc.nonempty ha)
 
@@ -679,8 +679,8 @@ theorem IsPreconnected.Ioi_csInf_subset
   hs.Icc_subset ys zs ⟨hy.le, hz.le⟩
 
 中文:
-定理 IsPreconnected.Ioi_csInf_subset
-  结论: {s : Set α} (hs : IsPreconnected s) (hb : BddBelow s)
+定理 是预连通.Ioi_csInf_subset
+  结论: {s : 集合 α} (hs : 是预连通 s) (hb : BddBelow s)
   证明: fun x hx =>
   have sne : s.Nonempty := nonempty_of_not_bddAbove ha
   let ⟨_y, ys, hy⟩ : exists y in s, y < x := (isGLB_lt_iff (isGLB_csInf sne hb)).1 hx
@@ -703,8 +703,8 @@ theorem IsPreconnected.Iio_csSup_subset
   proof: IsPreconnected.Ioi_csInf_subset (α := αᵒᵈ) hs ha hb
 
 中文:
-定理 IsPreconnected.Iio_csSup_subset
-  结论: {s : Set α} (hs : IsPreconnected s) (hb : ¬BddBelow s)
+定理 是预连通.Iio_csSup_subset
+  结论: {s : 集合 α} (hs : 是预连通 s) (hb : ¬BddBelow s)
   证明: IsPreconnected.Ioi_csInf_subset (α := αᵒᵈ) hs ha hb
 
 Depends on / 依赖: Ioi_csInf_subset, IsPreconnected, IsPreconnected.Ioi_csInf_subset
@@ -728,8 +728,8 @@ theorem IsPreconnected.mem_intervals
       (hs'.Ioo_csInf_csSup_subset hb ha
 
 中文:
-定理 IsPreconnected.mem_intervals
-  条件: {s : Set α} (hs : IsPreconnected s)
+定理 是预连通.mem_intervals
+  条件: {s : 集合 α} (hs : 是预连通 s)
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hne)
   · apply_rules [Or.inr, mem_singleton]
@@ -824,8 +824,8 @@ theorem IsClosed.mem_of_ge_of_forall_exists_gt
   rcases eq_or_lt_of_le c
 
 中文:
-定理 IsClosed.mem_of_ge_of_forall_exists_gt
-  结论: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
+定理 是闭集.mem_of_ge_of_对任意_存在_gt
+  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
   证明: by
   let S := s inter Icc a b
   replace ha : a in S := ⟨ha, left_mem_Icc.2 hab⟩
@@ -865,8 +865,8 @@ theorem IsClosed.Icc_subset_of_forall_exists_gt
   exact IsClosed.mem_of_ge_of_forall_exists_gt this ha hy.1 fun x hx =
 
 中文:
-定理 IsClosed.Icc_subset_of_forall_exists_gt
-  结论: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
+定理 是闭集.Icc_subset_of_对任意_存在_gt
+  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
   证明: by
   intro y hy
   have : IsClosed (s inter Icc a y) := by
@@ -899,8 +899,8 @@ theorem IsClosed.mem_of_ge_of_forall_exists_lt
   rw [Ico_toDual]; rw [← preimage_inter]
 
 中文:
-定理 IsClosed.mem_of_ge_of_forall_exists_lt
-  结论: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
+定理 是闭集.mem_of_ge_of_对任意_存在_lt
+  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
   证明: by
   suffices OrderDual.toDual a in ofDual ⁻¹' s by aesop
   have : IsClosed (OrderDual.ofDual ⁻¹' (s inter Icc a b)) := hs
@@ -933,8 +933,8 @@ theorem IsClosed.Icc_subset_of_forall_exists_lt
   exact IsClosed.mem_of_ge_of_forall_exists_lt this hb hy.2 fun x hx =>
 
 中文:
-定理 IsClosed.Icc_subset_of_forall_exists_lt
-  结论: {a b : α} {s : Set α} (hs : IsClosed (s inter Icc a b))
+定理 是闭集.Icc_subset_of_对任意_存在_lt
+  结论: {a b : α} {s : 集合 α} (hs : 是闭集 (s inter 闭区间 a b))
   证明: by
   intro y hy
   have : IsClosed (s inter Icc y b) := by
@@ -971,8 +971,8 @@ lemma IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset
   have t₁_mem : t₁ in Icc a b := ⟨le_csSup bdd_A a_mem, csSup_le ⟨
 
 中文:
-引理 IsClosed.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset
-  结论: {a b : α} {s : Set α}
+引理 是闭集.Icc_subset_of_对任意_mem_nhdsGT_of_Icc_subset
+  结论: {a b : α} {s : 集合 α}
   证明: by
   rcases lt_or_ge b a with hab | hab
   · simp_all
@@ -1030,8 +1030,8 @@ theorem IsClosed.Icc_subset_of_forall_mem_nhdsWithin
     (fun _t ht h't => hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
 
 中文:
-定理 IsClosed.Icc_subset_of_forall_mem_nhdsWithin
-  结论: {a b : α} {s : Set α}
+定理 是闭集.Icc_subset_of_对任意_mem_nhdsWithin
+  结论: {a b : α} {s : 集合 α}
   证明: hs.Icc_subset_of_forall_mem_nhdsGT_of_Icc_subset ha
     (fun _t ht h't => hgt _ ⟨h't ⟨ht.1, le_rfl⟩, ht⟩)
 
@@ -1060,7 +1060,7 @@ have zt
 
 中文:
 定理 isPreconnected_Icc_aux
-  结论: (x y : α) (s t : Set α) (hxy : x <= y) (hs : IsClosed s)
+  结论: (x y : α) (s t : 集合 α) (hxy : x <= y) (hs : 是闭集 s)
   证明: by
   have xyab : Icc x y subseteq Icc a b := Icc_subset_Icc hx.1.1 hy.1.2
   by_contra hst
@@ -1106,7 +1106,7 @@ theorem isPreconnected_Icc
 
 中文:
 定理 isPreconnected_Icc
-  结论: IsPreconnected (Icc a b)
+  结论: 是预连通 (闭区间 a b)
   证明: isPreconnected_closed_iff.2
     (by
       rintro s t hs ht hab ⟨x, hx⟩ ⟨y, hy⟩
@@ -1139,7 +1139,7 @@ theorem isPreconnected_uIcc
 
 中文:
 定理 isPreconnected_uIcc
-  结论: IsPreconnected ([[a, b]])
+  结论: 是预连通 ([[a, b]])
   证明: isPreconnected_Icc
 
 Depends on / 依赖: isPreconnected_Icc
@@ -1158,9 +1158,9 @@ theorem Set.OrdConnected.isPreconnected
     ⟨[[x, y]], h.uIcc_subset hx hy, left_mem_uIcc, right_mem_uIcc, isPreconnected_uIcc⟩
 
 中文:
-定理 Set.OrdConnected.isPreconnected
-  条件: {s : Set α} (h : s.OrdConnected)
-  结论: IsPreconnected s
+定理 集合.序连通.isPreconnected
+  条件: {s : 集合 α} (h : s.序连通)
+  结论: 是预连通 s
   证明: isPreconnected_of_forall_pair fun x hx y hy =>
     ⟨[[x, y]], h.uIcc_subset hx hy, left_mem_uIcc, right_mem_uIcc, isPreconnected_uIcc⟩
 
@@ -1181,8 +1181,8 @@ theorem isPreconnected_iff_ordConnected
 
 中文:
 定理 isPreconnected_iff_ordConnected
-  条件: {s : Set α}
-  结论: IsPreconnected s ↔ OrdConnected s
+  条件: {s : 集合 α}
+  结论: 是预连通 s ↔ 序连通 s
   证明: ⟨IsPreconnected.ordConnected, Set.OrdConnected.isPreconnected⟩
 
 Depends on / 依赖: IsPreconnected, IsPreconnected.ordConnected, OrdConnected, Set.OrdConnected.isPreconnected, isPreconnected, ordConnected
@@ -1200,7 +1200,7 @@ theorem isPreconnected_Ici
 
 中文:
 定理 isPreconnected_Ici
-  结论: IsPreconnected (Ici a)
+  结论: 是预连通 (左闭右无界区间 a)
   证明: ordConnected_Ici.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Ici, ordConnected_Ici.isPreconnected
@@ -1218,7 +1218,7 @@ theorem isPreconnected_Iic
 
 中文:
 定理 isPreconnected_Iic
-  结论: IsPreconnected (Iic a)
+  结论: 是预连通 (左无界右闭区间 a)
   证明: ordConnected_Iic.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Iic, ordConnected_Iic.isPreconnected
@@ -1236,7 +1236,7 @@ theorem isPreconnected_Iio
 
 中文:
 定理 isPreconnected_Iio
-  结论: IsPreconnected (Iio a)
+  结论: 是预连通 (左无界右开区间 a)
   证明: ordConnected_Iio.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Iio, ordConnected_Iio.isPreconnected
@@ -1254,7 +1254,7 @@ theorem isPreconnected_Ioi
 
 中文:
 定理 isPreconnected_Ioi
-  结论: IsPreconnected (Ioi a)
+  结论: 是预连通 (左开右无界区间 a)
   证明: ordConnected_Ioi.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Ioi, ordConnected_Ioi.isPreconnected
@@ -1272,7 +1272,7 @@ theorem isPreconnected_Ioo
 
 中文:
 定理 isPreconnected_Ioo
-  结论: IsPreconnected (Ioo a b)
+  结论: 是预连通 (开区间 a b)
   证明: ordConnected_Ioo.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Ioo, ordConnected_Ioo.isPreconnected
@@ -1290,7 +1290,7 @@ theorem isPreconnected_uIoo
 
 中文:
 定理 isPreconnected_uIoo
-  结论: IsPreconnected (uIoo a b)
+  结论: 是预连通 (uIoo a b)
   证明: isPreconnected_Ioo
 
 Depends on / 依赖: isPreconnected_Ioo
@@ -1308,7 +1308,7 @@ theorem isPreconnected_Ioc
 
 中文:
 定理 isPreconnected_Ioc
-  结论: IsPreconnected (Ioc a b)
+  结论: 是预连通 (左开右闭区间 a b)
   证明: ordConnected_Ioc.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Ioc, ordConnected_Ioc.isPreconnected
@@ -1326,7 +1326,7 @@ theorem isPreconnected_uIoc
 
 中文:
 定理 isPreconnected_uIoc
-  结论: IsPreconnected (uIoc a b)
+  结论: 是预连通 (uIoc a b)
   证明: isPreconnected_Ioc
 
 Depends on / 依赖: isPreconnected_Ioc
@@ -1344,7 +1344,7 @@ theorem isPreconnected_Ico
 
 中文:
 定理 isPreconnected_Ico
-  结论: IsPreconnected (Ico a b)
+  结论: 是预连通 (左闭右开区间 a b)
   证明: ordConnected_Ico.isPreconnected
 
 Depends on / 依赖: isPreconnected, ordConnected_Ico, ordConnected_Ico.isPreconnected
@@ -1362,7 +1362,7 @@ theorem isConnected_Ici
 
 中文:
 定理 isConnected_Ici
-  结论: IsConnected (Ici a)
+  结论: 是连通 (左闭右无界区间 a)
   证明: ⟨nonempty_Ici, isPreconnected_Ici⟩
 
 Depends on / 依赖: isPreconnected_Ici, nonempty_Ici
@@ -1380,7 +1380,7 @@ theorem isConnected_Iic
 
 中文:
 定理 isConnected_Iic
-  结论: IsConnected (Iic a)
+  结论: 是连通 (左无界右闭区间 a)
   证明: ⟨nonempty_Iic, isPreconnected_Iic⟩
 
 Depends on / 依赖: isPreconnected_Iic, nonempty_Iic
@@ -1399,8 +1399,8 @@ theorem isConnected_Ioi
 
 中文:
 定理 isConnected_Ioi
-  条件: [NoMaxOrder α]
-  结论: IsConnected (Ioi a)
+  条件: [NoMax序 α]
+  结论: 是连通 (左开右无界区间 a)
   证明: ⟨nonempty_Ioi, isPreconnected_Ioi⟩
 
 Depends on / 依赖: isPreconnected_Ioi, nonempty_Ioi
@@ -1419,8 +1419,8 @@ theorem isConnected_Iio
 
 中文:
 定理 isConnected_Iio
-  条件: [NoMinOrder α]
-  结论: IsConnected (Iio a)
+  条件: [NoMin序 α]
+  结论: 是连通 (左无界右开区间 a)
   证明: ⟨nonempty_Iio, isPreconnected_Iio⟩
 
 Depends on / 依赖: isPreconnected_Iio, nonempty_Iio
@@ -1440,7 +1440,7 @@ theorem isConnected_Icc
 中文:
 定理 isConnected_Icc
   条件: (h : a <= b)
-  结论: IsConnected (Icc a b)
+  结论: 是连通 (闭区间 a b)
   证明: ⟨nonempty_Icc.2 h, isPreconnected_Icc⟩
 
 Depends on / 依赖: isPreconnected_Icc, nonempty_Icc
@@ -1460,7 +1460,7 @@ theorem isConnected_Ioo
 中文:
 定理 isConnected_Ioo
   条件: (h : a < b)
-  结论: IsConnected (Ioo a b)
+  结论: 是连通 (开区间 a b)
   证明: ⟨nonempty_Ioo.2 h, isPreconnected_Ioo⟩
 
 Depends on / 依赖: isPreconnected_Ioo, nonempty_Ioo
@@ -1480,7 +1480,7 @@ theorem isConnected_uIoo
 中文:
 定理 isConnected_uIoo
   条件: (h : a != b)
-  结论: IsConnected (uIoo a b)
+  结论: 是连通 (uIoo a b)
   证明: ⟨nonempty_uIoo.2 h, isPreconnected_uIoo⟩
 
 Depends on / 依赖: isPreconnected_uIoo, nonempty_uIoo
@@ -1500,7 +1500,7 @@ theorem isConnected_Ioc
 中文:
 定理 isConnected_Ioc
   条件: (h : a < b)
-  结论: IsConnected (Ioc a b)
+  结论: 是连通 (左开右闭区间 a b)
   证明: ⟨nonempty_Ioc.2 h, isPreconnected_Ioc⟩
 
 Depends on / 依赖: isPreconnected_Ioc, nonempty_Ioc
@@ -1520,7 +1520,7 @@ theorem isConnected_uIoc
 中文:
 定理 isConnected_uIoc
   条件: (h : a != b)
-  结论: IsConnected (uIoc a b)
+  结论: 是连通 (uIoc a b)
   证明: ⟨nonempty_uIoc.2 h, isPreconnected_uIoc⟩
 
 Depends on / 依赖: isPreconnected_uIoc, nonempty_uIoc
@@ -1540,7 +1540,7 @@ theorem isConnected_Ico
 中文:
 定理 isConnected_Ico
   条件: (h : a < b)
-  结论: IsConnected (Ico a b)
+  结论: 是连通 (左闭右开区间 a b)
   证明: ⟨nonempty_Ico.2 h, isPreconnected_Ico⟩
 
 Depends on / 依赖: isPreconnected_Ico, nonempty_Ico
@@ -1603,7 +1603,7 @@ lemma isTotallyDisconnected_iff_lt
 
 中文:
 引理 isTotallyDisconnected_iff_lt
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   simp only [IsTotallyDisconnected, isPreconnected_iff_ordConnected, ← not_nontrivial_iff,
     nontrivial_iff_exists_lt, not_exists, not_and]
@@ -1646,7 +1646,7 @@ theorem intermediate_value_Icc
 
 中文:
 定理 intermediate_value_Icc
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
+  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
   证明: isPreconnected_Icc.intermediate_value (left_mem_Icc.2 hab) (right_mem_Icc.2 hab) hf
 
 Depends on / 依赖: intermediate_value, isPreconnected_Icc, isPreconnected_Icc.intermediate_value, left_mem_Icc, right_mem_Icc
@@ -1704,7 +1704,7 @@ theorem exists_mem_uIcc_isFixedPt
   proof: isPreconnected_uIcc.intermediate_value₂ right_mem_uIcc left_mem_uIcc hf continuousOn_id hb ha
 
 中文:
-定理 exists_mem_uIcc_isFixedPt
+定理 存在_mem_uIcc_isFixedPt
   结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
   证明: isPreconnected_uIcc.intermediate_value₂ right_mem_uIcc left_mem_uIcc hf continuousOn_id hb ha
 
@@ -1724,8 +1724,8 @@ theorem exists_mem_Icc_isFixedPt
     (right_mem_Icc.2 hle) (left_mem_Icc.2 hle) hf continuousOn_id hb ha
 
 中文:
-定理 exists_mem_Icc_isFixedPt
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
+定理 存在_mem_Icc_isFixedPt
+  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
   证明: isPreconnected_Icc.intermediate_value₂
     (right_mem_Icc.2 hle) (left_mem_Icc.2 hle) hf continuousOn_id hb ha
 
@@ -1745,8 +1745,8 @@ theorem exists_mem_Icc_isFixedPt_of_mapsTo
   proof: exists_mem_Icc_isFixedPt hf hle (hmaps <| left_mem_Icc.2 hle).1 (hmaps <| right_mem_Icc.2 hle).2
 
 中文:
-定理 exists_mem_Icc_isFixedPt_of_mapsTo
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
+定理 存在_mem_Icc_isFixedPt_of_mapsTo
+  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
   证明: exists_mem_Icc_isFixedPt hf hle (hmaps <| left_mem_Icc.2 hle).1 (hmaps <| right_mem_Icc.2 hle).2
 
 Depends on / 依赖: exists_mem_Icc_isFixedPt, left_mem_Icc, right_mem_Icc
@@ -1764,7 +1764,7 @@ theorem exists_mem_uIcc_isFixedPt_of_mapsTo
   proof: exists_mem_Icc_isFixedPt_of_mapsTo hf inf_left_le_sup_left hmaps
 
 中文:
-定理 exists_mem_uIcc_isFixedPt_of_mapsTo
+定理 存在_mem_uIcc_isFixedPt_of_mapsTo
   结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
   证明: exists_mem_Icc_isFixedPt_of_mapsTo hf inf_left_le_sup_left hmaps
 
@@ -1786,8 +1786,8 @@ theorem exists_mem_Icc_isFixedPt_of_surjOn
     hx₀.1 hx₁.1 hf continuousOn_id (by grind) (by grind)
 
 中文:
-定理 exists_mem_Icc_isFixedPt_of_surjOn
-  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (Icc a b))
+定理 存在_mem_Icc_isFixedPt_of_surjOn
+  结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (闭区间 a b))
   证明: have ⟨x₀, hx₀⟩ := h_surj (left_mem_Icc.mpr hle)
   have ⟨x₁, hx₁⟩ := h_surj (right_mem_Icc.mpr hle)
   isPreconnected_Icc.intermediate_value₂
@@ -1811,7 +1811,7 @@ theorem exists_mem_uIcc_isFixedPt_of_surjOn
   proof: exists_mem_Icc_isFixedPt_of_surjOn hf inf_left_le_sup_left h_surj
 
 中文:
-定理 exists_mem_uIcc_isFixedPt_of_surjOn
+定理 存在_mem_uIcc_isFixedPt_of_surjOn
   结论: {a b : α} {f : α -> α} (hf : ContinuousOn f (uIcc a b))
   证明: exists_mem_Icc_isFixedPt_of_surjOn hf inf_left_le_sup_left h_surj
 
@@ -1834,7 +1834,7 @@ theorem intermediate_value_Ico
 
 中文:
 定理 intermediate_value_Ico
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
+  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_ge (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ico _ _ _ _ _ _ _ isPreconnected_Ico _ _ ⟨refl a, hlt⟩
       (right_nhdsWithin_Ico_neBot hlt) inf_le_right _ (hf.mono Ico_subset_Icc_self) _
@@ -1890,7 +1890,7 @@ theorem intermediate_value_Ioc
 
 中文:
 定理 intermediate_value_Ioc
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
+  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_le_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioc _ _ _ _ _ _ _ isPreconnected_Ioc _ _ ⟨hlt, refl b⟩
       (left_nhdsWithin_Ioc_neBot hlt) inf_le_right _ (hf.mono Ioc_subset_Icc_self) _
@@ -1946,7 +1946,7 @@ theorem intermediate_value_Ioo
 
 中文:
 定理 intermediate_value_Ioo
-  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (Icc a b))
+  条件: {a b : α} (hab : a <= b) {f : α -> δ} (hf : ContinuousOn f (闭区间 a b))
   证明: Or.elim (eq_or_lt_of_le hab) (fun he _ h => absurd h.2 (not_lt_of_gt (he ▸ h.1))) fun hlt =>
     @IsPreconnected.intermediate_value_Ioo _ _ _ _ _ _ _ isPreconnected_Ioo _ _
       (left_nhdsWithin_Ioo_neBot hlt) (right_nhdsWithin_Ioo_neBot hlt) inf_le_right inf_le_right _
@@ -2004,7 +2004,7 @@ theorem intermediate_value_Ici
 
 中文:
 定理 intermediate_value_Ici
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
   证明: isPreconnected_Ici.intermediate_value_Ici self_mem_Ici
     (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
 
@@ -2026,7 +2026,7 @@ theorem intermediate_value_Ici'
 
 中文:
 定理 intermediate_value_Ici'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
   证明: isPreconnected_Ici.intermediate_value_Iic self_mem_Ici
     (le_principal_iff.mpr (Ici_mem_atTop a)) hf htop
 
@@ -2048,7 +2048,7 @@ theorem intermediate_value_Iic
 
 中文:
 定理 intermediate_value_Iic
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
   证明: isPreconnected_Iic.intermediate_value_Iic self_mem_Iic
     (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
 
@@ -2070,7 +2070,7 @@ theorem intermediate_value_Iic'
 
 中文:
 定理 intermediate_value_Iic'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
   证明: isPreconnected_Iic.intermediate_value_Ici self_mem_Iic
     (le_principal_iff.mpr (Iic_mem_atBot a)) hf hbot
 
@@ -2094,7 +2094,7 @@ theorem intermediate_value_Ioi
 
 中文:
 定理 intermediate_value_Ioi
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
   证明: by
   intro y hy
   have := intermediate_value_Ici hf htop (mem_Ici_of_Ioi hy)
@@ -2121,7 +2121,7 @@ theorem intermediate_value_Ioi'
 
 中文:
 定理 intermediate_value_Ioi'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Ici a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左闭右无界区间 a))
   证明: by
   intro y hy
   have := intermediate_value_Ici' hf htop (mem_Iic_of_Iio hy)
@@ -2148,7 +2148,7 @@ theorem intermediate_value_Iio
 
 中文:
 定理 intermediate_value_Iio
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
   证明: by
   intro y hy
   have := intermediate_value_Iic hf hbot (mem_Iic_of_Iio hy)
@@ -2175,7 +2175,7 @@ theorem intermediate_value_Iio'
 
 中文:
 定理 intermediate_value_Iio'
-  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (Iic a))
+  结论: {a : α} {f : α -> δ} (hf : ContinuousOn f (左无界右闭区间 a))
   证明: by
   intro y hy
   have := intermediate_value_Iic' hf hbot (mem_Ici_of_Ioi hy)
@@ -2199,7 +2199,7 @@ theorem ContinuousOn.surjOn_Icc
 
 中文:
 定理 ContinuousOn.surjOn_Icc
-  结论: {s : Set α} [hs : OrdConnected s] {f : α -> δ}
+  结论: {s : 集合 α} [hs : 序连通 s] {f : α -> δ}
   证明: hs.isPreconnected.intermediate_value ha hb hf
 
 Depends on / 依赖: hs.isPreconnected.intermediate_value, intermediate_value, isPreconnected
@@ -2219,7 +2219,7 @@ theorem ContinuousOn.surjOn_uIcc
 
 中文:
 定理 ContinuousOn.surjOn_uIcc
-  结论: {s : Set α} [hs : OrdConnected s] {f : α -> δ}
+  结论: {s : 集合 α} [hs : 序连通 s] {f : α -> δ}
   证明: by
   rcases le_total (f a) (f b) with hab | hab <;> simp [hf.surjOn_Icc, *]
 
@@ -2241,8 +2241,8 @@ theorem Continuous.surjective
     (h_top.eventually (eventually_ge_atTop p)).exists
 
 中文:
-定理 Continuous.surjective
-  结论: {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atTop atTop)
+定理 连续.surjective
+  结论: {f : α -> δ} (hf : 连续 f) (h_top : 收敛 f atTop atTop)
   证明: fun p =>
   mem_range_of_exists_le_of_exists_ge hf (h_bot.eventually (eventually_le_atBot p)).exists
     (h_top.eventually (eventually_ge_atTop p)).exists
@@ -2261,8 +2261,8 @@ theorem Continuous.surjective'
   proof: Continuous.surjective (α := αᵒᵈ) hf h_top h_bot
 
 中文:
-定理 Continuous.surjective'
-  结论: {f : α -> δ} (hf : Continuous f) (h_top : Tendsto f atBot atTop)
+定理 连续.surjective'
+  结论: {f : α -> δ} (hf : 连续 f) (h_top : 收敛 f atBot atTop)
   证明: Continuous.surjective (α := αᵒᵈ) hf h_top h_bot
 
 Depends on / 依赖: Continuous, Continuous.surjective, h_bot, h_top, surjective
@@ -2282,7 +2282,7 @@ surjOn_iff_surjective.2 hf.domRestrict.surjective htop hbot
 
 中文:
 定理 ContinuousOn.surjOn_of_tendsto
-  结论: {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
+  结论: {f : α -> δ} {s : 集合 α} [序连通 s] (hs : s.非空)
   证明: haveI := Classical.inhabited_of_nonempty hs.to_subtype
 surjOn_iff_surjective.2 hf.domRestrict.surjective htop hbot
 
@@ -2304,7 +2304,7 @@ theorem ContinuousOn.surjOn_of_tendsto'
 
 中文:
 定理 ContinuousOn.surjOn_of_tendsto'
-  结论: {f : α -> δ} {s : Set α} [OrdConnected s] (hs : s.Nonempty)
+  结论: {f : α -> δ} {s : 集合 α} [序连通 s] (hs : s.非空)
   证明: ContinuousOn.surjOn_of_tendsto (δ := δᵒᵈ) hs hf hbot htop
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.surjOn_of_tendsto, surjOn_of_tendsto
@@ -2333,8 +2333,8 @@ have H : f b < f a := lt_of_le_of_ne h hf_i.ne hab.ne'
     · obtain ⟨u, hu⟩ 
 
 中文:
-定理 Continuous.strictMono_of_inj_boundedOrder
-  结论: [BoundedOrder α] {f : α -> δ}
+定理 连续.strictMono_of_inj_boundedOrder
+  结论: [有界序 α] {f : α -> δ}
   证明: by
   intro a b hab
   by_contra! h
@@ -2375,8 +2375,8 @@ theorem Continuous.strictAnti_of_inj_boundedOrder
   proof: hf_c.strictMono_of_inj_boundedOrder (δ := δᵒᵈ) hf hf_i
 
 中文:
-定理 Continuous.strictAnti_of_inj_boundedOrder
-  结论: [BoundedOrder α] {f : α -> δ}
+定理 连续.strictAnti_of_inj_boundedOrder
+  结论: [有界序 α] {f : α -> δ}
   证明: hf_c.strictMono_of_inj_boundedOrder (δ := δᵒᵈ) hf hf_i
 
 Depends on / 依赖: hf_c, hf_c.strictMono_of_inj_boundedOrder, hf_i, strictMono_of_inj_boundedOrder
@@ -2396,8 +2396,8 @@ theorem Continuous.strictMono_of_inj_boundedOrder'
     (hf_c.strictAnti_of_inj_boundedOrder · hf_i)
 
 中文:
-定理 Continuous.strictMono_of_inj_boundedOrder'
-  结论: [BoundedOrder α] {f : α -> δ}
+定理 连续.strictMono_of_inj_boundedOrder'
+  结论: [有界序 α] {f : α -> δ}
   证明: (le_total (f ⊥) (f ⊤)).imp
     (hf_c.strictMono_of_inj_boundedOrder · hf_i)
     (hf_c.strictAnti_of_inj_boundedOrder · hf_i)
@@ -2427,7 +2427,7 @@ have : Fact (s <= t) := ⟨hsa.trans hbt.trans' hab.le⟩
     have := Continuous.strictMono
 
 中文:
-定理 Continuous.strictMonoOn_of_inj_rigidity
+定理 连续.strictMonoOn_of_inj_rigidity
   结论: {f : α -> δ}
   证明: by
   intro x y hxy
@@ -2563,7 +2563,7 @@ theorem Continuous.strictMono_of_inj
 | i
 
 中文:
-定理 Continuous.strictMono_of_inj
+定理 连续.strictMono_of_inj
   结论: {f : α -> δ}
   证明: by
   have H {c d : α} (hcd : c < d) : StrictMono f ∨ StrictAnti f :=
@@ -2637,7 +2637,7 @@ theorem ContinuousOn.image_Icc_of_monotoneOn
 
 中文:
 定理 ContinuousOn.image_Icc_of_monotoneOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc hab hf)
 
 Depends on / 依赖: hmono.image_Icc_subset, image_Icc_subset, intermediate_value_Icc, subset_antisymm
@@ -2656,7 +2656,7 @@ theorem ContinuousOn.image_Icc_of_antitoneOn
 
 中文:
 定理 ContinuousOn.image_Icc_of_antitoneOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Icc_subset) (intermediate_value_Icc' hab hf)
 
 Depends on / 依赖: hmono.image_Icc_subset, image_Icc_subset, intermediate_value_Icc, subset_antisymm
@@ -2675,7 +2675,7 @@ theorem ContinuousOn.image_Ico_of_strictMonoOn
 
 中文:
 定理 ContinuousOn.image_Ico_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico hab hf)
 
 Depends on / 依赖: hmono.image_Ico_subset, image_Ico_subset, intermediate_value_Ico, subset_antisymm
@@ -2694,7 +2694,7 @@ theorem ContinuousOn.image_Ico_of_strictAntiOn
 
 中文:
 定理 ContinuousOn.image_Ico_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ico_subset) (intermediate_value_Ico' hab hf)
 
 Depends on / 依赖: hmono.image_Ico_subset, image_Ico_subset, intermediate_value_Ico, subset_antisymm
@@ -2713,7 +2713,7 @@ theorem ContinuousOn.image_Ioc_of_strictMonoOn
 
 中文:
 定理 ContinuousOn.image_Ioc_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc hab hf)
 
 Depends on / 依赖: hmono.image_Ioc_subset, image_Ioc_subset, intermediate_value_Ioc, subset_antisymm
@@ -2732,7 +2732,7 @@ theorem ContinuousOn.image_Ioc_of_strictAntiOn
 
 中文:
 定理 ContinuousOn.image_Ioc_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ioc_subset) (intermediate_value_Ioc' hab hf)
 
 Depends on / 依赖: hmono.image_Ioc_subset, image_Ioc_subset, intermediate_value_Ioc, subset_antisymm
@@ -2751,7 +2751,7 @@ theorem ContinuousOn.image_Ioo_of_strictMonoOn
 
 中文:
 定理 ContinuousOn.image_Ioo_of_strictMonoOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo hab hf)
 
 Depends on / 依赖: hmono.image_Ioo_subset, image_Ioo_subset, intermediate_value_Ioo, subset_antisymm
@@ -2770,7 +2770,7 @@ theorem ContinuousOn.image_Ioo_of_strictAntiOn
 
 中文:
 定理 ContinuousOn.image_Ioo_of_strictAntiOn
-  结论: (hab : a <= b) (hf : ContinuousOn f (Icc a b))
+  结论: (hab : a <= b) (hf : ContinuousOn f (闭区间 a b))
   证明: subset_antisymm (hmono.image_Ioo_subset) (intermediate_value_Ioo' hab hf)
 
 Depends on / 依赖: hmono.image_Ioo_subset, image_Ioo_subset, intermediate_value_Ioo, subset_antisymm
@@ -2827,7 +2827,7 @@ theorem ContinuousOn.image_Ici_of_monotoneOn
 
 中文:
 定理 ContinuousOn.image_Ici_of_monotoneOn
-  结论: (hf : ContinuousOn f (Ici a))
+  结论: (hf : ContinuousOn f (左闭右无界区间 a))
   证明: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici hf htop)
 
 Depends on / 依赖: hmono.image_Ici_subset, image_Ici_subset, intermediate_value_Ici, subset_antisymm
@@ -2846,7 +2846,7 @@ theorem ContinuousOn.image_Ici_of_antitoneOn
 
 中文:
 定理 ContinuousOn.image_Ici_of_antitoneOn
-  结论: (hf : ContinuousOn f (Ici a))
+  结论: (hf : ContinuousOn f (左闭右无界区间 a))
   证明: subset_antisymm (hmono.image_Ici_subset) (intermediate_value_Ici' hf htop)
 
 Depends on / 依赖: hmono.image_Ici_subset, image_Ici_subset, intermediate_value_Ici, subset_antisymm
@@ -2865,7 +2865,7 @@ theorem ContinuousOn.image_Iic_of_monotoneOn
 
 中文:
 定理 ContinuousOn.image_Iic_of_monotoneOn
-  结论: (hf : ContinuousOn f (Iic a))
+  结论: (hf : ContinuousOn f (左无界右闭区间 a))
   证明: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic hf hbot)
 
 Depends on / 依赖: hmono.image_Iic_subset, image_Iic_subset, intermediate_value_Iic, subset_antisymm
@@ -2884,7 +2884,7 @@ theorem ContinuousOn.image_Iic_of_antitoneOn
 
 中文:
 定理 ContinuousOn.image_Iic_of_antitoneOn
-  结论: (hf : ContinuousOn f (Iic a))
+  结论: (hf : ContinuousOn f (左无界右闭区间 a))
   证明: subset_antisymm (hmono.image_Iic_subset) (intermediate_value_Iic' hf hbot)
 
 Depends on / 依赖: hmono.image_Iic_subset, image_Iic_subset, intermediate_value_Iic, subset_antisymm
@@ -2903,7 +2903,7 @@ theorem ContinuousOn.image_Ioi_of_strictMonoOn
 
 中文:
 定理 ContinuousOn.image_Ioi_of_strictMonoOn
-  结论: (hf : ContinuousOn f (Ici a))
+  结论: (hf : ContinuousOn f (左闭右无界区间 a))
   证明: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi hf htop)
 
 Depends on / 依赖: hmono.image_Ioi_subset, image_Ioi_subset, intermediate_value_Ioi, subset_antisymm
@@ -2922,7 +2922,7 @@ theorem ContinuousOn.image_Ioi_of_strictAntiOn
 
 中文:
 定理 ContinuousOn.image_Ioi_of_strictAntiOn
-  结论: (hf : ContinuousOn f (Ici a))
+  结论: (hf : ContinuousOn f (左闭右无界区间 a))
   证明: subset_antisymm (hmono.image_Ioi_subset) (intermediate_value_Ioi' hf htop)
 
 Depends on / 依赖: hmono.image_Ioi_subset, image_Ioi_subset, intermediate_value_Ioi, subset_antisymm
@@ -2941,7 +2941,7 @@ theorem ContinuousOn.image_Iio_of_strictMonoOn
 
 中文:
 定理 ContinuousOn.image_Iio_of_strictMonoOn
-  结论: (hf : ContinuousOn f (Iic a))
+  结论: (hf : ContinuousOn f (左无界右闭区间 a))
   证明: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio hf hbot)
 
 Depends on / 依赖: hmono.image_Iio_subset, image_Iio_subset, intermediate_value_Iio, subset_antisymm
@@ -2960,7 +2960,7 @@ theorem ContinuousOn.image_Iio_of_strictAntiOn
 
 中文:
 定理 ContinuousOn.image_Iio_of_strictAntiOn
-  结论: (hf : ContinuousOn f (Iic a))
+  结论: (hf : ContinuousOn f (左无界右闭区间 a))
   证明: subset_antisymm (hmono.image_Iio_subset) (intermediate_value_Iio' hf hbot)
 
 Depends on / 依赖: hmono.image_Iio_subset, image_Iio_subset, intermediate_value_Iio, subset_antisymm
@@ -2982,8 +2982,8 @@ theorem Continuous.image_Icc_of_strictMono
   · simp [not_le.mpr hab, not_le.mpr (hf hab)]
 
 中文:
-定理 Continuous.image_Icc_of_strictMono
-  条件: (hf_c : Continuous f) (hf : StrictMono f)
+定理 连续.image_Icc_of_strictMono
+  条件: (hf_c : 连续 f) (hf : 严格递增 f)
   证明: by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Icc_of_monotoneOn hab (hf.monotone.monotoneOn _)
@@ -3009,8 +3009,8 @@ theorem Continuous.image_Ico_of_strictMono
   · simp [lt_asymm hab, lt_asymm (hf hab)]
 
 中文:
-定理 Continuous.image_Ico_of_strictMono
-  条件: (hf_c : Continuous f) (hf : StrictMono f)
+定理 连续.image_Ico_of_strictMono
+  条件: (hf_c : 连续 f) (hf : 严格递增 f)
   证明: by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Ico_of_strictMonoOn hab (hf.strictMonoOn _)
@@ -3036,8 +3036,8 @@ theorem Continuous.image_Ioc_of_strictMono
   · simp [lt_asymm hab, lt_asymm (hf hab)]
 
 中文:
-定理 Continuous.image_Ioc_of_strictMono
-  条件: (hf_c : Continuous f) (hf : StrictMono f)
+定理 连续.image_Ioc_of_strictMono
+  条件: (hf_c : 连续 f) (hf : 严格递增 f)
   证明: by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Ioc_of_strictMonoOn hab (hf.strictMonoOn _)
@@ -3063,8 +3063,8 @@ theorem Continuous.image_Ioo_of_strictMono
   · simp [lt_asymm hab, lt_asymm (hf hab)]
 
 中文:
-定理 Continuous.image_Ioo_of_strictMono
-  条件: (hf_c : Continuous f) (hf : StrictMono f)
+定理 连续.image_Ioo_of_strictMono
+  条件: (hf_c : 连续 f) (hf : 严格递增 f)
   证明: by
   rcases le_or_gt a b with hab | hab
   · exact hf_c.continuousOn.image_Ioo_of_strictMonoOn hab (hf.strictMonoOn _)

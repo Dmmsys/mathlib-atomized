@@ -166,8 +166,8 @@ theorem LinearMap.lTensor_surjective
     exact ⟨x + y, map_add _ _ _⟩
 
 中文:
-定理 LinearMap.lTensor_surjective
-  条件: (hg : Function.Surjective g)
+定理 线性映射.lTensor_surjective
+  条件: (hg : 函数.满射 g)
   证明: by
   intro z
   induction z with
@@ -210,7 +210,7 @@ theorem LinearMap.lTensor_range
   rw [← range_eq_top]; rw [range_rangeRestrict]
 
 中文:
-定理 LinearMap.lTensor_range
+定理 线性映射.lTensor_range
   证明: by
   have : g = (Submodule.subtype _).comp g.rangeRestrict := rfl
   nth_rewrite 1 [this]
@@ -244,8 +244,8 @@ theorem LinearMap.baseChange_surjective
   exact lTensor_surjective _ hg
 
 中文:
-定理 LinearMap.baseChange_surjective
-  结论: (A : 类型) [Semiring A] [Algebra R A]
+定理 线性映射.baseChange_surjective
+  结论: (A : 类型) [半环 A] [代数 R A]
   证明: by
   rw [LinearMap.baseChange_eq_ltensor]
   exact lTensor_surjective _ hg
@@ -276,8 +276,8 @@ theorem LinearMap.rTensor_surjective
     exact ⟨x + y, map_add _ _ _⟩
 
 中文:
-定理 LinearMap.rTensor_surjective
-  条件: (hg : Function.Surjective g)
+定理 线性映射.rTensor_surjective
+  条件: (hg : 函数.满射 g)
   证明: by
   intro z
   induction z with
@@ -320,7 +320,7 @@ theorem LinearMap.rTensor_range
   rw [← range_eq_top]; rw [range_rangeRestrict]
 
 中文:
-定理 LinearMap.rTensor_range
+定理 线性映射.rTensor_range
   证明: by
   have : g = (Submodule.subtype _).comp g.rangeRestrict := rfl
   nth_rewrite 1 [this]
@@ -353,7 +353,7 @@ lemma LinearMap.rTensor_exact_iff_lTensor_exact
     (by ext; simp) (by ext; simp)
 
 中文:
-引理 LinearMap.rTensor_exact_iff_lTensor_exact
+引理 线性映射.rTensor_exact_iff_lTensor_exact
   证明: Function.Exact.iff_of_ladder_linearEquiv (e₁ := TensorProduct.comm _ _ _)
     (e₂ := TensorProduct.comm _ _ _) (e₃ := TensorProduct.comm _ _ _)
     (by ext; simp) (by ext; simp)
@@ -383,8 +383,8 @@ theorem TensorProduct.map_surjective
   exact Function.Surjective.comp (lTensor_surjective _ hg') (rTensor_surjective _ hg)
 
 中文:
-定理 TensorProduct.map_surjective
-  结论: Function.Surjective (TensorProduct.map g g')
+定理 张量积.map_surjective
+  结论: 函数.满射 (张量积.map g g')
   证明: by
   rw [← lTensor_comp_rTensor]; rw [coe_comp]
   exact Function.Surjective.comp (lTensor_surjective _ hg') (rTensor_surjective _ hg)
@@ -418,7 +418,7 @@ definition lTensor.toFun
 
 中文:
 定义 lTensor.toFun
-  签名: (hfg : Exact f g)
+  签名: (hfg : 正合 f g)
   定义体: Submodule.liftQ _ (lTensor Q g) by
     rw [LinearMap.range_le_iff_comap]; rw [← LinearMap.ker_comp]; rw [← lTensor_comp]; rw [hfg.linearMap_comp_eq_zero]; rw [lTensor_zero]; rw [ker_zero]
 
@@ -443,7 +443,7 @@ map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
 
 中文:
 定义 lTensor.inverse_of_rightInverse
-  签名: {h : P -> N} (hfg : Exact f g)
+  签名: {h : P -> N} (hfg : 正合 f g)
   定义体: TensorProduct.lift LinearMap.flip {
     toFun := fun p => Submodule.mkQ _ ∘ₗ ((TensorProduct.mk R _ _).flip (h p))
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
@@ -627,7 +627,7 @@ definition lTensor.linearEquiv_of_rightInverse
 
 中文:
 定义 lTensor.linearEquiv_of_rightInverse
-  签名: {h : P -> N} (hgh : Function.RightInverse h g)
+  签名: {h : P -> N} (hgh : 函数.右逆 h g)
   定义体: {
   toLinearMap := lTensor.toFun Q hfg
   invFun := lTensor.inverse_of_rightInverse Q hfg hgh
@@ -689,7 +689,7 @@ theorem lTensor_exact
 
 中文:
 定理 lTensor_exact
-  结论: Exact (lTensor Q f) (lTensor Q g)
+  结论: 正合 (lTensor Q f) (lTensor Q g)
   证明: by
   rw [exact_iff]; rw [← Submodule.ker_mkQ (p := range (lTensor Q f))]; rw [← lTensor.inverse_comp_lTensor Q hfg hg]
   apply symm
@@ -718,7 +718,7 @@ lemma lTensor_mkQ
 
 中文:
 引理 lTensor_mkQ
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   证明: by
   rw [← exact_iff]
   exact lTensor_exact Q (LinearMap.exact_subtype_mkQ N) (Submodule.mkQ_surjective N)
@@ -741,7 +741,7 @@ definition rTensor.toFun
 
 中文:
 定义 rTensor.toFun
-  签名: (hfg : Exact f g)
+  签名: (hfg : 正合 f g)
   定义体: Submodule.liftQ _ (rTensor Q g) by
     rw [range_le_iff_comap]; rw [← ker_comp]; rw [← rTensor_comp]; rw [hfg.linearMap_comp_eq_zero]; rw [rTensor_zero]; rw [ker_zero]
 
@@ -767,7 +767,7 @@ map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
 
 中文:
 定义 rTensor.inverse_of_rightInverse
-  签名: {h : P -> N} (hfg : Exact f g)
+  签名: {h : P -> N} (hfg : 正合 f g)
   定义体: TensorProduct.lift {
     toFun := fun p => Submodule.mkQ _ ∘ₗ TensorProduct.mk R _ _ (h p)
 map_add' := fun p p' => LinearMap.ext fun q => (Submodule.Quotient.eq _).mpr by
@@ -949,7 +949,7 @@ definition rTensor.linearEquiv_of_rightInverse
 
 中文:
 定义 rTensor.linearEquiv_of_rightInverse
-  签名: {h : P -> N} (hgh : Function.RightInverse h g)
+  签名: {h : P -> N} (hgh : 函数.右逆 h g)
   定义体: {
   toLinearMap := rTensor.toFun Q hfg
   invFun := rTensor.inverse_of_rightInverse Q hfg hgh
@@ -1008,7 +1008,7 @@ theorem rTensor_exact
 
 中文:
 定理 rTensor_exact
-  结论: Exact (rTensor Q f) (rTensor Q g)
+  结论: 正合 (rTensor Q f) (rTensor Q g)
   证明: by
   rw [rTensor_exact_iff_lTensor_exact]
   exact lTensor_exact Q hfg hg
@@ -1031,7 +1031,7 @@ lemma rTensor_mkQ
 
 中文:
 引理 rTensor_mkQ
-  条件: (N : Submodule R M)
+  条件: (N : 子模 R M)
   证明: by
   rw [← exact_iff]
   exact rTensor_exact Q (LinearMap.exact_subtype_mkQ N) (Submodule.mkQ_surjective N)
@@ -1058,8 +1058,8 @@ lemma LinearMap.ker_tensorProductMk
   rw [comap_equiv_eq_map_symm]; rw [map_symm_eq_iff]; rw [map_range_rTensor_subtype_lid]
 
 中文:
-引理 LinearMap.ker_tensorProductMk
-  条件: {I : Ideal R}
+引理 线性映射.ker_tensorProductMk
+  条件: {I : 理想 R}
   证明: by
   apply comap_injective_of_surjective (TensorProduct.lid R Q).surjective
   rw [← ker_comp]
@@ -1099,7 +1099,7 @@ theorem TensorProduct.map_ker
   rw [← lTensor_comp_rTensor]; rw [ran
 
 中文:
-定理 TensorProduct.map_ker
+定理 张量积.map_ker
   证明: by
   rw [← lTensor_comp_rTensor]
   rw [ker_comp]
@@ -1152,8 +1152,8 @@ lemma Ideal.map_includeLeft_eq
       simp only [includeLeft_apply, Set.mem_image, SetLike.mem_co
 
 中文:
-引理 Ideal.map_includeLeft_eq
-  条件: (I : Ideal A)
+引理 理想.map_includeLeft_eq
+  条件: (I : 理想 A)
   证明: by
   rw [← SetLike.coe_set_eq]
   apply le_antisymm
@@ -1246,8 +1246,8 @@ lemma Ideal.map_includeRight_eq
       simp only [includeRight_apply, Set.mem_image, SetLike.mem_c
 
 中文:
-引理 Ideal.map_includeRight_eq
-  条件: (I : Ideal B)
+引理 理想.map_includeRight_eq
+  条件: (I : 理想 B)
   证明: by
   rw [← SetLike.coe_set_eq]
   apply le_antisymm
@@ -1335,8 +1335,8 @@ lemma TensorProduct.AlgebraTensorModule.range_lTensor_idealMap
   exact (I.map_includeRight_eq (R := R) (A := A)).symm
 
 中文:
-引理 TensorProduct.AlgebraTensorModule.range_lTensor_idealMap
-  结论: (S : 类型) [CommSemiring S]
+引理 张量积.AlgebraTensorModule.range_lTensor_idealMap
+  结论: (S : 类型) [交换半环 S]
   证明: by
   rw [← (Submodule.restrictScalars_injective R _ _).eq_iff]
   exact (I.map_includeRight_eq (R := R) (A := A)).symm
@@ -1373,8 +1373,8 @@ lemma Algebra.TensorProduct.lTensor_ker
   rw [(lTensor_exact A g.toLinearMap.exact_subtype_ker_map hg).linearMap_ke
 
 中文:
-引理 Algebra.TensorProduct.lTensor_ker
-  条件: (hg : Function.Surjective g)
+引理 代数.张量积.lTensor_ker
+  条件: (hg : 函数.满射 g)
   证明: by
   rw [← Submodule.restrictScalars_inj R]
   have : (RingHom.ker (map (AlgHom.id R A) g)).restrictScalars R =
@@ -1408,8 +1408,8 @@ lemma Algebra.TensorProduct.rTensor_ker
   rw [(rTensor_exact C (f.restrictScalars R).toLinearMap.exact_su
 
 中文:
-引理 Algebra.TensorProduct.rTensor_ker
-  条件: (hf : Function.Surjective f)
+引理 代数.张量积.rTensor_ker
+  条件: (hf : 函数.满射 f)
   证明: by
   rw [← Submodule.restrictScalars_inj R]
   have : (RingHom.ker (map f (AlgHom.id R C))).restrictScalars R =
@@ -1437,7 +1437,7 @@ theorem Algebra.TensorProduct.map_surjective
   proof: _root_.TensorProduct.map_surjective (g := f.toLinearMap.restrictScalars R) hf hg
 
 中文:
-定理 Algebra.TensorProduct.map_surjective
+定理 代数.张量积.map_surjective
   证明: _root_.TensorProduct.map_surjective (g := f.toLinearMap.restrictScalars R) hf hg
 
 Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.map_surjective, f.toLinearMap.restrictScalars, map_surjective, restrictScalars, toLinearMap
@@ -1462,8 +1462,8 @@ theorem Algebra.TensorProduct.map_ker
   simp 
 
 中文:
-定理 Algebra.TensorProduct.map_ker
-  条件: (hf : Function.Surjective f) (hg : Function.Surjective g)
+定理 代数.张量积.map_ker
+  条件: (hf : 函数.满射 f) (hg : 函数.满射 g)
   证明: by
   -- rewrite map f g as the composition of two maps
   have : map f g = (map f (AlgHom.id R D)).comp (map (AlgHom.id S A) g) := ext rfl rfl

@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: Alternative Set
+  签名: Alternative 集合
   定义体: {a}
   seq s t := s.seq (t ())
   seqLeft s t := {a | a in s ∧ (t ()).Nonempty}
@@ -102,7 +102,7 @@ theorem seq_eq_set_seq
 
 中文:
 定理 seq_eq_set_seq
-  条件: (s : Set (α -> β)) (t : Set α)
+  条件: (s : 集合 (α -> β)) (t : 集合 α)
   结论: s <*> t = s.seq t
   证明: rfl
 
@@ -125,8 +125,8 @@ theorem seqLeft_def
 
 中文:
 定理 seqLeft_def
-  条件: (s : Set α) (t : Set β)
-  结论: s <* t = {a | a in s ∧ t.Nonempty}
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: s <* t = {a | a in s ∧ t.非空}
   证明: rfl
 
 @[simp]
@@ -148,8 +148,8 @@ theorem seqRight_def
 
 中文:
 定理 seqRight_def
-  条件: (s : Set α) (t : Set β)
-  结论: s *> t = {a | s.Nonempty ∧ a in t}
+  条件: (s : 集合 α) (t : 集合 β)
+  结论: s *> t = {a | s.非空 ∧ a in t}
   证明: rfl
 
 @[simp]
@@ -172,7 +172,7 @@ theorem pure_def
 中文:
 定理 pure_def
   条件: (a : α)
-  结论: (pure a : Set α) = {a}
+  结论: (pure a : 集合 α) = {a}
   证明: rfl
 
 @[simp]
@@ -193,7 +193,7 @@ theorem failure_def
 
 中文:
 定理 failure_def
-  结论: (failure : Set α) = ∅
+  结论: (failure : 集合 α) = ∅
   证明: rfl
 
 @[simp]
@@ -213,7 +213,7 @@ theorem orElse_def
 
 中文:
 定理 orElse_def
-  条件: (s : Set α) (t : Set α)
+  条件: (s : 集合 α) (t : 集合 α)
   结论: (s <|> t) = s union t
   证明: rfl
 -/
@@ -232,7 +232,7 @@ theorem image2_def
 
 中文:
 定理 image2_def
-  条件: {α β γ : 类型u} (f : α -> β -> γ) (s : Set α) (t : Set β)
+  条件: {α β γ : 类型u} (f : α -> β -> γ) (s : 集合 α) (t : 集合 β)
   证明: by
   ext
   simp
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulAlternative Set
+  签名: LawfulAlternative 集合
   定义体: Set.singleton_seq
   seqLeft_eq _ _ := by simp [Set.seq, Set.image2, Set.nonempty_def]
   seqRight_eq s t := by simp [Set.seq, Set.image2, Set.nonempty_def]
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommApplicative Set
+  签名: 交换适用 集合
   定义体: prod_image_seq_comm
 
 Depends on / 依赖: prod_image_seq_comm
@@ -323,7 +323,7 @@ definition monad
 
 中文:
 定义 monad
-  签名: : AlternativeMonad.{u} Set where
+  签名: : AlternativeMonad.{u} 集合 where
   定义体: inferInstance
   bind s f := ⋃ i in s, f i
 -/
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad Set
+  签名: 合法单子 集合
   定义体: (image_eq_iUnion _ _).symm
   bind_map _ _ := seq_def.symm
   pure_bind := biUnion_singleton
@@ -394,7 +394,7 @@ theorem mem_coe_of_mem
 中文:
 定理 mem_coe_of_mem
   条件: {a : α} (ha : a in β) (ha' : ⟨a, ha⟩ in γ)
-  结论: a in (γ : Set α)
+  结论: a in (γ : 集合 α)
   证明: ⟨_, ⟨⟨_, rfl⟩, _, ⟨ha', rfl⟩, rfl⟩⟩
 -/
 theorem mem_coe_of_mem {a : α} (ha : a in β) (ha' : ⟨a, ha⟩ in γ) : a in (γ : Set α) :=
@@ -411,7 +411,7 @@ theorem coe_subset
 
 中文:
 定理 coe_subset
-  结论: (γ : Set α) subseteq β
+  结论: (γ : 集合 α) subseteq β
   证明: by
   intro _ ⟨_, ⟨⟨⟨_, ha⟩, rfl⟩, _, ⟨_, rfl⟩, _⟩⟩; convert! ha
 
@@ -432,7 +432,7 @@ theorem mem_of_mem_coe
 
 中文:
 定理 mem_of_mem_coe
-  条件: {a : α} (ha : a in (γ : Set α))
+  条件: {a : α} (ha : a in (γ : 集合 α))
   结论: ⟨a, coe_subset ha⟩ in γ
   证明: by
   rcases ha with ⟨_, ⟨_, rfl⟩, _, ⟨ha, rfl⟩, _⟩; convert! ha
@@ -453,7 +453,7 @@ theorem eq_univ_of_coe_eq
 
 中文:
 定理 eq_univ_of_coe_eq
-  条件: (hγ : (γ : Set α) = β)
+  条件: (hγ : (γ : 集合 α) = β)
   结论: γ = univ
   证明: eq_univ_of_forall fun ⟨_, ha⟩ => mem_of_mem_coe hγ.symm ▸ ha
 
@@ -515,7 +515,7 @@ theorem coe_eq_image_val
 
 中文:
 定理 coe_eq_image_val
-  条件: (t : Set s)
+  条件: (t : 集合 s)
   证明: by
   change ⋃ (x in t), {x.1} = _
   ext
@@ -541,7 +541,7 @@ theorem mem_image_val_of_mem
 中文:
 定理 mem_image_val_of_mem
   条件: (ha : a in β) (ha' : ⟨a, ha⟩ in γ)
-  结论: a in (γ : Set α)
+  结论: a in (γ : 集合 α)
   证明: ⟨_, ha', rfl⟩
 -/
 theorem mem_image_val_of_mem (ha : a in β) (ha' : ⟨a, ha⟩ in γ) : a in (γ : Set α) :=
@@ -557,7 +557,7 @@ theorem image_val_subset
 
 中文:
 定理 image_val_subset
-  结论: (γ : Set α) subseteq β
+  结论: (γ : 集合 α) subseteq β
   证明: Subtype.coe_image_subset _ _
 
 Depends on / 依赖: Subtype, Subtype.coe_image_subset, coe_image_subset
@@ -576,7 +576,7 @@ theorem mem_of_mem_image_val
 
 中文:
 定理 mem_of_mem_image_val
-  条件: (ha : a in (γ : Set α))
+  条件: (ha : a in (γ : 集合 α))
   结论: ⟨a, image_val_subset ha⟩ in γ
   证明: by
   rcases ha with ⟨_, ha, rfl⟩; exact ha
@@ -595,7 +595,7 @@ theorem eq_univ_of_image_val_eq
 
 中文:
 定理 eq_univ_of_image_val_eq
-  条件: (hγ : (γ : Set α) = β)
+  条件: (hγ : (γ : 集合 α) = β)
   结论: γ = univ
   证明: eq_univ_of_forall fun ⟨_, ha⟩ => mem_of_mem_image_val hγ.symm ▸ ha
 
@@ -678,7 +678,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad SetM
+  签名: 合法单子 SetM
   定义体: Set.instLawfulMonad
 
 Depends on / 依赖: Set.instLawfulMonad, instLawfulMonad

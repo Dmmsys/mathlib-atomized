@@ -367,7 +367,7 @@ theorem _root_.Finsupp.toAList_lookupFinsupp
       simpa using h
 
 中文:
-定理 _root_.Finsupp.toAList_lookupFinsupp
+定理 _root_.有限支撑.toAList_lookupFinsupp
   条件: (f : α ->₀ M)
   结论: f.toAList.lookupFinsupp = f
   证明: by
@@ -403,7 +403,7 @@ theorem lookupFinsupp_surjective
 
 中文:
 定理 lookupFinsupp_surjective
-  结论: Function.Surjective (@lookupFinsupp α M _)
+  结论: 函数.满射 (@lookupFinsupp α M _)
   证明: fun f =>
   ⟨_, Finsupp.toAList_lookupFinsupp f⟩
 -/

@@ -85,11 +85,11 @@ structure SchwartzMap
     - decay' : forall k n : Nat, exists C : Real, forall x, ‖x‖ ^ k * ‖iteratedFDeriv Real n toFun x‖ <= C
 
 中文:
-结构 SchwartzMap
+结构 Schwartz映射
   参数: where
   公理与运算 (3 个):
     - toFun : E -> F
-    - smooth' : ContDiff 实数 ∞ toFun
+    - smooth' : 连续可微 实数 ∞ toFun
     - decay' : 对任意 k n : 自然数, 存在 C : 实数, 对任意 x, ‖x‖ ^ k * ‖iteratedFDeriv 实数 n toFun x‖ <= C
 -/
 structure SchwartzMap where
@@ -117,7 +117,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike 𝓢(E, F) E F where
+  签名: : 函数状 𝓢(E, F) E F where
   定义体: f.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -165,7 +165,7 @@ theorem smooth
 中文:
 定理 smooth
   条件: (f : 𝓢(E, F)) (n : 自然数∞)
-  结论: ContDiff 实数 n f
+  结论: 连续可微 实数 n f
   证明: f.smooth'.of_le (mod_cast le_top)
 
 Depends on / 依赖: f.smooth, le_top, mod_cast, of_le, smooth
@@ -209,7 +209,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : 𝓢(E, F))
-  结论: Continuous f
+  结论: 连续 f
   证明: (f.smooth 0).continuous
 -/
 protected theorem continuous (f : 𝓢(E, F)) : Continuous f :=
@@ -225,7 +225,7 @@ instance instContinuousMapClass
 
 中文:
 实例 instContinuousMapClass
-  签名: : ContinuousMapClass 𝓢(E, F) E F where
+  签名: : 连续映射类 𝓢(E, F) E F where
   定义体: SchwartzMap.continuous
 
 Depends on / 依赖: NormedGroup, NormedGroup.toSeminormedGroup, SchwartzMap, SchwartzMap.continuous, SeminormedGroup, continuous, toSeminormedGroup
@@ -247,7 +247,7 @@ theorem differentiable
 中文:
 定理 differentiable
   条件: (f : 𝓢(E, F))
-  结论: Differentiable 实数 f
+  结论: 可微 实数 f
   证明: (f.smooth 1).differentiable one_ne_zero
 
 Depends on / 依赖: NormedCommGroup, NormedCommGroup.toSeminormedCommGroup, toSeminormedCommGroup
@@ -361,7 +361,7 @@ theorem isBigO_cocompact_rpow
 
 中文:
 定理 isBigO_cocompact_rpow
-  条件: [命题erSpace E] (s : 实数)
+  条件: [真空间 E] (s : 实数)
   证明: by
   let k := ⌈-s⌉₊
   have hk : -(k : Real) <= s := neg_le.mp (Nat.le_ceil (-s))
@@ -395,7 +395,7 @@ theorem isBigO_cocompact_zpow
 
 中文:
 定理 isBigO_cocompact_zpow
-  条件: [命题erSpace E] (k : 整数)
+  条件: [真空间 E] (k : 整数)
   证明: by
   simpa only [Real.rpow_intCast] using isBigO_cocompact_rpow f k
 
@@ -421,7 +421,7 @@ theorem tendsto_cocompact
 
 中文:
 定理 tendsto_cocompact
-  条件: [命题erSpace E] (f : 𝓢(E, F))
+  条件: [真空间 E] (f : 𝓢(E, F))
   证明: by
   apply (isBigO_cocompact_rpow f (-1)).trans_tendsto
   simp_rw [Real.rpow_neg_one]
@@ -642,7 +642,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul 𝕜 𝓢(E, F)
+  签名: : 标量乘法 𝕜 𝓢(E, F)
   定义体: ⟨fun c f =>
     { toFun := c • (f : E -> F)
       smooth' := by exact (f.smooth _).const_smul c
@@ -682,7 +682,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply 𝕜 𝓢(E, F) E F
+  签名: 是SMulApply 𝕜 𝓢(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias smul_apply := smul_apply
@@ -702,7 +702,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul 𝕜 𝕜'] [IsScalarTower 𝕜 𝕜' F]
+  签名: [标量乘法 𝕜 𝕜'] [标量塔 𝕜 𝕜' F]
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -720,7 +720,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMulCommClass 𝕜 𝕜' F]
+  签名: [标量交换类 𝕜 𝕜' F]
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -772,7 +772,7 @@ instance instNSMul
 
 中文:
 实例 instNSMul
-  签名: : SMul 自然数 𝓢(E, F)
+  签名: : 标量乘法 自然数 𝓢(E, F)
   定义体: ⟨fun c f =>
     { toFun := c • (f : E -> F)
       smooth' := by exact (f.smooth _).const_smul c
@@ -796,7 +796,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply 自然数 𝓢(E, F) E F
+  签名: 是SMulApply 自然数 𝓢(E, F) E F
   定义体: rfl
 -/
 instance : IsSMulApply Nat 𝓢(E, F) E F where
@@ -815,7 +815,7 @@ instance instZSMul
 
 中文:
 实例 instZSMul
-  签名: : SMul 整数 𝓢(E, F)
+  签名: : 标量乘法 整数 𝓢(E, F)
   定义体: ⟨fun c f =>
     { toFun := c • (f : E -> F)
       smooth' := by exact (f.smooth _).const_smul c
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply 整数 𝓢(E, F) E F
+  签名: 是SMulApply 整数 𝓢(E, F) E F
   定义体: rfl
 -/
 instance : IsSMulApply Int 𝓢(E, F) E F where
@@ -861,7 +861,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero 𝓢(E, F)
+  签名: : 零 𝓢(E, F)
   定义体: ⟨{ toFun := fun _ => 0
       smooth' := by exact contDiff_const
       decay' := fun _ _ => ⟨1, fun _ => by simp⟩ }⟩
@@ -883,7 +883,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited 𝓢(E, F)
+  签名: : 可居 𝓢(E, F)
   定义体: ⟨0⟩
 -/
 instance instInhabited : Inhabited 𝓢(E, F) :=
@@ -905,7 +905,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply 𝓢(E, F) E F
+  签名: 是ZeroApply 𝓢(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] alias coe_zero := FunLike.coe_zero
@@ -962,7 +962,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg 𝓢(E, F)
+  签名: : 取负 𝓢(E, F)
   定义体: ⟨fun f =>
     ⟨-f, by exact (f.smooth _).neg, fun k n => by
       use f.seminormAux k n
@@ -990,7 +990,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply 𝓢(E, F) E F
+  签名: 是NegApply 𝓢(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
@@ -1018,7 +1018,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add 𝓢(E, F)
+  签名: : 加法 𝓢(E, F)
   定义体: ⟨fun f g =>
     ⟨f + g, by exact (f.smooth _).add (g.smooth _), fun k n => by
       use f.seminormAux k n + g.seminormAux k n
@@ -1046,7 +1046,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply 𝓢(E, F) E F
+  签名: 是加法Apply 𝓢(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
@@ -1103,7 +1103,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub 𝓢(E, F)
+  签名: : 减法 𝓢(E, F)
   定义体: ⟨fun f g =>
     ⟨f - g, by exact (f.smooth _).sub (g.smooth _), by
       intro k n
@@ -1137,7 +1137,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply 𝓢(E, F) E F
+  签名: 是SubApply 𝓢(E, F) E F
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
@@ -1163,7 +1163,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup 𝓢(E, F)
+  签名: : 加法交换群 𝓢(E, F)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-06-10")] protected alias sum_apply := sum_apply
@@ -1200,7 +1200,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 𝓢(E, F)
+  签名: : 模 𝕜 𝓢(E, F)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -1251,7 +1251,7 @@ theorem seminorm_apply
 中文:
 定理 seminorm_apply
   条件: {k n : 自然数} (f : 𝓢(E, F))
-  结论: SchwartzMap.seminorm 𝕜 k n f =
+  结论: Schwartz映射.seminorm 𝕜 k n f =
   证明: by rfl
 -/
 theorem seminorm_apply {k n : Nat} (f : 𝓢(E, F)) : SchwartzMap.seminorm 𝕜 k n f =
@@ -1405,7 +1405,7 @@ theorem norm_le_seminorm
 中文:
 定理 norm_le_seminorm
   条件: (f : 𝓢(E, F)) (x₀ : E)
-  结论: ‖f x₀‖ <= (SchwartzMap.seminorm 𝕜 0 0) f
+  结论: ‖f x₀‖ <= (Schwartz映射.seminorm 𝕜 0 0) f
   证明: by
   have := norm_pow_mul_le_seminorm 𝕜 f 0 x₀
   rwa [pow_zero, one_mul] at this
@@ -1553,7 +1553,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace 𝓢(E, F)
+  签名: : 拓扑空间 𝓢(E, F)
   定义体: (schwartzSeminormFamily Real E F).moduleFilterBasis.topology'
 
 Depends on / 依赖: moduleFilterBasis, moduleFilterBasis.topology, schwartzSeminormFamily, topology
@@ -1604,7 +1604,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: : ContinuousSMul 𝕜 𝓢(E, F)
+  签名: : 连续标量乘法 𝕜 𝓢(E, F)
   定义体: by
   rw [(schwartz_withSeminorms 𝕜 E F).withSeminorms_eq]
   exact (schwartzSeminormFamily 𝕜 E F).moduleFilterBasis.continuousSMul
@@ -1625,7 +1625,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup 𝓢(E, F)
+  签名: : 是拓扑加群 𝓢(E, F)
   定义体: (schwartzSeminormFamily Real E F).addGroupFilterBasis.isTopologicalAddGroup
 
 Depends on / 依赖: addGroupFilterBasis, addGroupFilterBasis.isTopologicalAddGroup, isTopologicalAddGroup, schwartzSeminormFamily
@@ -1643,7 +1643,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace 𝓢(E, F)
+  签名: : 一致空间 𝓢(E, F)
   定义体: fast_instance% (schwartzSeminormFamily Real E F).addGroupFilterBasis.uniformSpace
 
 Depends on / 依赖: addGroupFilterBasis, addGroupFilterBasis.uniformSpace, fast_instance, schwartzSeminormFamily, uniformSpace
@@ -1661,7 +1661,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: : IsUniformAddGroup 𝓢(E, F)
+  签名: : 是UniformAdd群 𝓢(E, F)
   定义体: (schwartzSeminormFamily Real E F).addGroupFilterBasis.isUniformAddGroup
 
 Depends on / 依赖: addGroupFilterBasis, addGroupFilterBasis.isUniformAddGroup, isUniformAddGroup, schwartzSeminormFamily
@@ -1679,7 +1679,7 @@ instance instLocallyConvexSpace
 
 中文:
 实例 instLocallyConvexSpace
-  签名: : LocallyConvexSpace 实数 𝓢(E, F)
+  签名: : LocallyConvex空间 实数 𝓢(E, F)
   定义体: (schwartz_withSeminorms Real E F).toLocallyConvexSpace
 
 Depends on / 依赖: schwartz_withSeminorms, toLocallyConvexSpace
@@ -1697,7 +1697,7 @@ instance instFirstCountableTopology
 
 中文:
 实例 instFirstCountableTopology
-  签名: : FirstCountableTopology 𝓢(E, F)
+  签名: : 第一可数拓扑 𝓢(E, F)
   定义体: (schwartz_withSeminorms Real E F).firstCountableTopology
 
 Depends on / 依赖: firstCountableTopology, schwartz_withSeminorms
@@ -1723,7 +1723,7 @@ theorem hasTemperateGrowth
 中文:
 定理 hasTemperateGrowth
   条件: (f : 𝓢(E, F))
-  结论: Function.HasTemperateGrowth f
+  结论: 函数.有TemperateGrowth f
   证明: by
   refine ⟨smooth f ⊤, fun n => ?_⟩
   rcases f.decay 0 n with ⟨C, Cpos, hC⟩
@@ -2028,7 +2028,7 @@ definition bilinLeftCLM
 
 中文:
 定义 bilinLeftCLM
-  签名: (B : E ->L[𝕜] F ->L[𝕜] G) {g : D -> F} (hg : g.HasTemperateGrowth)
+  签名: (B : E ->L[𝕜] F ->L[𝕜] G) {g : D -> F} (hg : g.有TemperateGrowth)
   定义体: mkCLM (fun f x => B (f x) (g x))
     (fun _ _ _ => by simp) (fun _ _ _ => by simp)
     (fun f => (B.bilinearRestrictScalars Real).isBoundedBilinearMap.contDiff.comp
@@ -2095,7 +2095,7 @@ theorem bilinLeftCLM_apply
 
 中文:
 定理 bilinLeftCLM_apply
-  结论: (B : E ->L[𝕜] F ->L[𝕜] G) {g : D -> F} (hg : g.HasTemperateGrowth)
+  结论: (B : E ->L[𝕜] F ->L[𝕜] G) {g : D -> F} (hg : g.有TemperateGrowth)
   证明: rfl
 -/
 theorem bilinLeftCLM_apply (B : E ->L[𝕜] F ->L[𝕜] G) {g : D -> F} (hg : g.HasTemperateGrowth)
@@ -2144,7 +2144,7 @@ theorem smulLeftCLM_apply
 
 中文:
 定理 smulLeftCLM_apply
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F))
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth) (f : 𝓢(E, F))
   证明: by
   simp [smulLeftCLM, hg]
 
@@ -2170,7 +2170,7 @@ theorem smulLeftCLM_apply_apply
 
 中文:
 定理 smulLeftCLM_apply_apply
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F)) (x : E)
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth) (f : 𝓢(E, F)) (x : E)
   证明: by
   simp [smulLeftCLM_apply hg]
 
@@ -2227,7 +2227,7 @@ theorem smulLeftCLM_smulLeftCLM_apply
 
 中文:
 定理 smulLeftCLM_smulLeftCLM_apply
-  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext x
   simp [smul_smul, hg₁, hg₂, hg₁.mul hg₂]
@@ -2252,7 +2252,7 @@ theorem smulLeftCLM_compL_smulLeftCLM
 
 中文:
 定理 smulLeftCLM_compL_smulLeftCLM
-  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext1 f
   exact smulLeftCLM_smulLeftCLM_apply hg₁ hg₂ f
@@ -2278,7 +2278,7 @@ theorem smulLeftCLM_smul
 
 中文:
 定理 smulLeftCLM_smul
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth) (c : 𝕜)
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth) (c : 𝕜)
   证明: by
   have : (fun (_ : E) => c).HasTemperateGrowth := by fun_prop
   convert! (smulLeftCLM_compL_smulLeftCLM this hg).symm using 1
@@ -2304,7 +2304,7 @@ theorem smulLeftCLM_add
 
 中文:
 定理 smulLeftCLM_add
-  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext f x
   simp [hg₁, hg₂, hg₁.add hg₂, add_smul]
@@ -2329,7 +2329,7 @@ theorem smulLeftCLM_sub
 
 中文:
 定理 smulLeftCLM_sub
-  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.HasTemperateGrowth)
+  结论: {g₁ g₂ : E -> 𝕜} (hg₁ : g₁.有TemperateGrowth)
   证明: by
   ext f x
   simp [hg₁, hg₂, hg₁.sub hg₂, sub_smul]
@@ -2354,7 +2354,7 @@ theorem smulLeftCLM_neg
 
 中文:
 定理 smulLeftCLM_neg
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth)
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth)
   证明: by
   ext f x
   simp [hg, hg.neg, neg_smul]
@@ -2376,7 +2376,7 @@ theorem smulLeftCLM_fun_neg
 
 中文:
 定理 smulLeftCLM_fun_neg
-  条件: {g : E -> 𝕜} (hg : g.HasTemperateGrowth)
+  条件: {g : E -> 𝕜} (hg : g.有TemperateGrowth)
   证明: smulLeftCLM_neg hg
 
 Depends on / 依赖: smulLeftCLM_neg
@@ -2397,7 +2397,7 @@ theorem smulLeftCLM_sum
 
 中文:
 定理 smulLeftCLM_sum
-  条件: {g : ι -> E -> 𝕜} {s : Finset ι} (hg : 对任意 i in s, (g i).HasTemperateGrowth)
+  条件: {g : ι -> E -> 𝕜} {s : 有限集 ι} (hg : 对任意 i in s, (g i).有TemperateGrowth)
   证明: by
   ext f x
   simp +contextual [Function.HasTemperateGrowth.sum hg, Finset.sum_smul, hg]
@@ -2423,8 +2423,8 @@ theorem smulLeftCLM_ofReal
   rw [smulLeftCLM_apply_apply (by fun_prop)]; rw [smulLeftCLM_apply_apply (by fun_prop)]; rw [algebraMap_smul]
 
 中文:
-定理 smulLeftCLM_ofReal
-  条件: {g : E -> 实数} (hg : g.HasTemperateGrowth) (f : 𝓢(E, F))
+定理 smulLeftCLM_of实数
+  条件: {g : E -> 实数} (hg : g.有TemperateGrowth) (f : 𝓢(E, F))
   证明: by
   ext x
   rw [smulLeftCLM_apply_apply (by fun_prop)]; rw [smulLeftCLM_apply_apply (by fun_prop)]; rw [algebraMap_smul]
@@ -2447,7 +2447,7 @@ theorem smulLeftCLM_real_smul
 
 中文:
 定理 smulLeftCLM_real_smul
-  条件: {g : E -> 𝕜'} (hg : g.HasTemperateGrowth) (c : 实数)
+  条件: {g : E -> 𝕜'} (hg : g.有TemperateGrowth) (c : 实数)
   证明: by
   rw [RCLike.real_smul_eq_coe_smul (K := 𝕜') c]; rw [smulLeftCLM_smul hg]; rw [← RCLike.real_smul_eq_coe_smul c]
 
@@ -2692,7 +2692,7 @@ definition compCLM
 
 中文:
 定义 compCLM
-  签名: {g : D -> E} (hg : g.HasTemperateGrowth)
+  签名: {g : D -> E} (hg : g.有TemperateGrowth)
   定义体: mkCLM (fun f => f ∘ g) (fun _ _ _ => by simp) (fun _ _ _ => rfl)
 (fun f => (f.smooth ⊤).comp hg.1) by
   rintro ⟨k, n⟩
@@ -2770,7 +2770,7 @@ lemma compCLM_apply
 
 中文:
 引理 compCLM_apply
-  结论: {g : D -> E} (hg : g.HasTemperateGrowth)
+  结论: {g : D -> E} (hg : g.有TemperateGrowth)
   证明: rfl
 -/
 @[simp] lemma compCLM_apply {g : D -> E} (hg : g.HasTemperateGrowth)
@@ -2843,7 +2843,7 @@ lemma compCLMOfAntilipschitz_apply
 
 中文:
 引理 compCLMOfAntilipschitz_apply
-  结论: {K : 实数>=0} {g : D -> E} (hg : g.HasTemperateGrowth)
+  结论: {K : 实数>=0} {g : D -> E} (hg : g.有TemperateGrowth)
   证明: rfl
 -/
 @[simp] lemma compCLMOfAntilipschitz_apply {K : Real>=0} {g : D -> E} (hg : g.HasTemperateGrowth)
@@ -2900,7 +2900,7 @@ theorem smulLeftCLM_compCLMOfContinuousLinearEquiv
 
 中文:
 定理 smulLeftCLM_compCLMOfContinuousLinearEquiv
-  结论: {u : D -> 𝕜'} (hu : u.HasTemperateGrowth)
+  结论: {u : D -> 𝕜'} (hu : u.有TemperateGrowth)
   证明: by
   ext x
   have hu' : (u ∘ g.symm).HasTemperateGrowth := by fun_prop
@@ -3081,7 +3081,7 @@ theorem compSubConstCLM_zero
 
 中文:
 定理 compSubConstCLM_zero
-  结论: compSubConstCLM 𝕜 (0 : E) (F := F) = ContinuousLinearMap.id _ _
+  结论: compSubConstCLM 𝕜 (0 : E) (F := F) = 连续线性映射.id _ _
   证明: by
   ext f x
   simp
@@ -3235,7 +3235,7 @@ lemma integrable
 中文:
 引理 integrable
   条件: (f : 𝓢(D, V))
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: (f.integrable_pow_mul μ 0).mono f.continuous.aestronglyMeasurable
     (Eventually.of_forall (fun _ => by simp))
 
@@ -3330,7 +3330,7 @@ instance instBoundedContinuousMapClass
 
 中文:
 实例 instBoundedContinuousMapClass
-  签名: : BoundedContinuousMapClass 𝓢(E, F) E F where
+  签名: : BoundedContinuous映射类 𝓢(E, F) E F where
   定义体: instContinuousMapClass
   map_bounded := fun f => ⟨2 * (SchwartzMap.seminorm Real 0 0) f,
     (BoundedContinuousFunction.dist_le_two_norm' (norm_le_seminorm Real f))⟩
@@ -3500,7 +3500,7 @@ instance :
 
 中文:
 实例 :
-  签名: T3Space 𝓢(E, F)
+  签名: T3空间 𝓢(E, F)
   定义体: suffices T2Space 𝓢(E, F) from inferInstance
   .of_injective_continuous (toBoundedContinuousFunctionCLM_injective Real ..)
     (ContinuousLinearMap.continuous _)
@@ -3531,7 +3531,7 @@ instance instZeroAtInftyContinuousMapClass
 
 中文:
 实例 instZeroAtInftyContinuousMapClass
-  签名: : ZeroAtInftyContinuousMapClass 𝓢(E, F) E F where
+  签名: : ZeroAtInftyContinuous映射类 𝓢(E, F) E F where
   定义体: instContinuousMapClass
   zero_at_infty := tendsto_cocompact
 
@@ -3686,7 +3686,7 @@ theorem eLpNorm_le_seminorm
 
 中文:
 定理 eLpNorm_le_seminorm
-  结论: (p : 实数>=0∞) (μ : Measure E := by volume_tac)
+  结论: (p : 实数>=0∞) (μ : 测度 E := by volume_tac)
   证明: by
   -- Apply Hölder's inequality `‖f‖_p ≤ ‖f₁‖_p * ‖f₂‖_∞` to obtain the `L^p` norm of `f = f₁ • f₂`
   -- using `f₁ = (1 + ‖x‖) ^ (-k)` and `f₂ = (1 + ‖x‖) ^ k • f x`.
@@ -3736,7 +3736,7 @@ theorem eLpNorm_lt_top
 
 中文:
 定理 eLpNorm_lt_top
-  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : Measure E := by volume_tac)
+  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : 测度 E := by volume_tac)
   证明: by
   rcases eLpNorm_le_seminorm Real F p μ with ⟨k, C, hC⟩
   exact lt_of_le_of_lt (hC f) (ENNReal.mul_lt_top ENNReal.coe_lt_top ENNReal.ofReal_lt_top)
@@ -3764,7 +3764,7 @@ theorem memLp_top
 
 中文:
 定理 memLp_top
-  条件: (f : 𝓢(E, F)) (μ : Measure E := by volume_tac)
+  条件: (f : 𝓢(E, F)) (μ : 测度 E := by volume_tac)
   结论: MemLp f ⊤ μ
   证明: by
   rcases f.decay 0 0 with ⟨C, _, hC⟩
@@ -3788,7 +3788,7 @@ theorem memLp
 
 中文:
 定理 memLp
-  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : Measure E := by volume_tac)
+  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : 测度 E := by volume_tac)
   证明: ⟨f.continuous.aestronglyMeasurable, f.eLpNorm_lt_top p μ⟩
 
 Depends on / 依赖: HasTemperateGrowth, aestronglyMeasurable, continuous, eLpNorm_lt_top, f.continuous.aestronglyMeasurable, f.eLpNorm_lt_top, volume_tac
@@ -3807,7 +3807,7 @@ definition toLp
 
 中文:
 定义 toLp
-  签名: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : Measure E := by volume_tac) [hμ : μ.HasTemperateGrowth]
+  签名: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : 测度 E := by volume_tac) [hμ : μ.有TemperateGrowth]
   定义体: (f.memLp p μ).toLp
 
 Depends on / 依赖: HasTemperateGrowth, f.memLp, volume_tac
@@ -3825,7 +3825,7 @@ instance instCoeToLp
 
 中文:
 实例 instCoeToLp
-  签名: {p : 实数>=0∞} {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  签名: {p : 实数>=0∞} {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   定义体: (SchwartzMap.toLp · p μ)
 
 Depends on / 依赖: SchwartzMap, SchwartzMap.toLp
@@ -3844,7 +3844,7 @@ theorem coeFn_toLp
 
 中文:
 定理 coeFn_toLp
-  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : Measure E := by volume_tac)
+  结论: (f : 𝓢(E, F)) (p : 实数>=0∞) (μ : 测度 E := by volume_tac)
   证明: (f.memLp p μ).coeFn_toLp
 
 Depends on / 依赖: HasTemperateGrowth, coeFn_toLp, f.memLp, f.toLp, volume_tac
@@ -3863,7 +3863,7 @@ theorem norm_toLp
 
 中文:
 定理 norm_toLp
-  条件: {f : 𝓢(E, F)} {p : 实数>=0∞} {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  条件: {f : 𝓢(E, F)} {p : 实数>=0∞} {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   证明: by
   rw [Lp.norm_def]; rw [eLpNorm_congr_ae (coeFn_toLp f p μ)]
 
@@ -3884,7 +3884,7 @@ theorem norm_toLp'
 
 中文:
 定理 norm_toLp'
-  结论: {f : 𝓢(E, F)} {p : 实数>=0∞} {μ : Measure E} (hp₁ : p != 0) (hp₂ : p != ⊤)
+  结论: {f : 𝓢(E, F)} {p : 实数>=0∞} {μ : 测度 E} (hp₁ : p != 0) (hp₂ : p != ⊤)
   证明: by
   rw [norm_toLp]; rw [MeasureTheory.MemLp.eLpNorm_eq_integral_rpow_norm hp₁ hp₂ (f.memLp p μ)]; rw [ENNReal.toReal_ofReal (by positivity)]
 
@@ -3906,7 +3906,7 @@ theorem norm_toLp_one
 
 中文:
 定理 norm_toLp_one
-  条件: {f : 𝓢(E, F)} {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  条件: {f : 𝓢(E, F)} {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   证明: by
   simpa using norm_toLp' (p := 1) (by simp) (by simp)
 
@@ -3928,7 +3928,7 @@ exact eLpNormEssSup_le_of_ae_bound .of_forall norm_le_seminorm Real f
 
 中文:
 定理 norm_toLp_top_le
-  条件: {f : 𝓢(E, F)} {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  条件: {f : 𝓢(E, F)} {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   证明: by
   rw [norm_toLp]; rw [← ENNReal.ofReal_le_ofReal_iff (by positivity)]; rw [ENNReal.ofReal_toReal (memLp_top f μ).eLpNorm_ne_top]
 exact eLpNormEssSup_le_of_ae_bound .of_forall norm_le_seminorm Real f
@@ -3950,7 +3950,7 @@ theorem injective_toLp
 
 中文:
 定理 injective_toLp
-  结论: (p : 实数>=0∞) (μ : Measure E := by volume_tac) [hμ : μ.HasTemperateGrowth]
+  结论: (p : 实数>=0∞) (μ : 测度 E := by volume_tac) [hμ : μ.有TemperateGrowth]
   证明: fun f g => by simpa [toLp] using (Continuous.ae_eq_iff_eq μ f.continuous g.continuous).mp
 
 Depends on / 依赖: Continuous, Continuous.ae_eq_iff_eq, Function, Function.Injective, HasTemperateGrowth, Injective, IsOpenPosMeasure, ae_eq_iff_eq, continuous, f.continuous, f.toLp, g.continuous, volume_tac
@@ -3976,7 +3976,7 @@ theorem norm_toLp_le_seminorm
 
 中文:
 定理 norm_toLp_le_seminorm
-  结论: (p : 实数>=0∞) (μ : Measure E := by volume_tac)
+  结论: (p : 实数>=0∞) (μ : 测度 E := by volume_tac)
   证明: by
   rcases eLpNorm_le_seminorm 𝕜 F p μ with ⟨k, C, hC⟩
   refine ⟨k, C, C.coe_nonneg, fun f => ?_⟩
@@ -4011,7 +4011,7 @@ definition toLpCLM
 
 中文:
 定义 toLpCLM
-  签名: (p : 实数>=0∞) [Fact (1 <= p)] (μ : Measure E := by volume_tac)
+  签名: (p : 实数>=0∞) [Fact (1 <= p)] (μ : 测度 E := by volume_tac)
   定义体: mkCLMtoNormedSpace (fun f => f.toLp p μ) (fun _ _ => rfl) (fun _ _ => rfl) by
     rcases norm_toLp_le_seminorm 𝕜 F p μ with ⟨k, C, hC_pos, hC⟩
     exact ⟨Finset.Iic (k, 0), C, hC_pos, hC⟩
@@ -4036,7 +4036,7 @@ theorem toLpCLM_apply
 
 中文:
 定理 toLpCLM_apply
-  结论: {p : 实数>=0∞} [Fact (1 <= p)] {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  结论: {p : 实数>=0∞} [Fact (1 <= p)] {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   证明: rfl
 
 @[fun_prop]
@@ -4055,7 +4055,7 @@ theorem continuous_toLp
 
 中文:
 定理 continuous_toLp
-  条件: {p : 实数>=0∞} [Fact (1 <= p)] {μ : Measure E} [hμ : μ.HasTemperateGrowth]
+  条件: {p : 实数>=0∞} [Fact (1 <= p)] {μ : 测度 E} [hμ : μ.有TemperateGrowth]
   证明: (toLpCLM Real F p μ).continuous
 
 Depends on / 依赖: continuous, toLpCLM
@@ -4078,7 +4078,7 @@ theorem denseRange_toLpCLM
 
 中文:
 定理 denseRange_toLpCLM
-  结论: [FiniteDimensional 实数 E] [BorelSpace E] {p : 实数>=0∞} (hp : p != ⊤)
+  结论: [有限维 实数 E] [Borel空间 E] {p : 实数>=0∞} (hp : p != ⊤)
   证明: by
   intro f
   refine (mem_closure_iff_nhds_basis Metric.nhds_basis_closedBall).2 fun ε hε => ?_
@@ -4129,7 +4129,7 @@ theorem inner_toL2_toL2_eq
 
 中文:
 定理 inner_toL2_toL2_eq
-  条件: (f g : 𝓢(H, V)) (μ : Measure H := by volume_tac) [μ.HasTemperateGrowth]
+  条件: (f g : 𝓢(H, V)) (μ : 测度 H := by volume_tac) [μ.有TemperateGrowth]
   证明: by
   apply integral_congr_ae
   have hf_ae := f.coeFn_toLp 2 μ

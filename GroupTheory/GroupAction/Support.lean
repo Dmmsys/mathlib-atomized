@@ -43,7 +43,7 @@ definition Supports
 
 中文:
 定义 Supports
-  签名: (s : Set α) (b : β)
+  签名: (s : 集合 α) (b : β)
   定义体: forall g : G, (forall ⦃a⦄, a in s -> g • a = a) -> g • b = b
 -/
 def Supports (s : Set α) (b : β) :=

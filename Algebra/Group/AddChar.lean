@@ -73,7 +73,7 @@ structure AddChar
     - map_add_eq_mul' : forall a b : A, toFun (a + b) = toFun a * toFun b
 
 中文:
-结构 AddChar
+结构 加法特征
   参数: where
   公理与运算 (3 个):
     - toFun : A -> M
@@ -117,7 +117,7 @@ initialize_simps_projections AddChar (toFun -> apply) -- needs to come after Fun
 
 中文:
 实例 instFunLike
-  签名: : FunLike (AddChar A M) A M where
+  签名: : 函数状 (加法特征 A M) A M where
   定义体: AddChar.toFun
   coe_injective φ ψ h := by cases φ; cases ψ; congr
 
@@ -142,7 +142,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: (f g : AddChar A M) (h : 对任意 x : A, f x = g x)
+  条件: (f g : 加法特征 A M) (h : 对任意 x : A, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 -/
@@ -180,7 +180,7 @@ lemma map_zero_eq_one
 
 中文:
 引理 map_zero_eq_one
-  条件: (ψ : AddChar A M)
+  条件: (ψ : 加法特征 A M)
   结论: ψ 0 = 1
   证明: ψ.map_zero_eq_one'
 -/
@@ -197,7 +197,7 @@ lemma map_add_eq_mul
 
 中文:
 引理 map_add_eq_mul
-  条件: (ψ : AddChar A M) (x y : A)
+  条件: (ψ : 加法特征 A M) (x y : A)
   结论: ψ (x + y) = ψ x * ψ y
   证明: ψ.map_add_eq_mul' x y
 
@@ -217,7 +217,7 @@ definition toMonoidHom
 
 中文:
 定义 toMonoidHom
-  签名: (φ : AddChar A M)
+  签名: (φ : 加法特征 A M)
   定义体: φ.toFun
   map_one' := φ.map_zero_eq_one'
   map_mul' := φ.map_add_eq_mul'
@@ -239,7 +239,7 @@ lemma toMonoidHom_apply
 
 中文:
 引理 toMonoidHom_apply
-  条件: (ψ : AddChar A M) (a : Multiplicative A)
+  条件: (ψ : 加法特征 A M) (a : Multiplicative A)
   证明: rfl
 -/
 @[simp] lemma toMonoidHom_apply (ψ : AddChar A M) (a : Multiplicative A) :
@@ -257,7 +257,7 @@ lemma map_nsmul_eq_pow
 
 中文:
 引理 map_nsmul_eq_pow
-  条件: (ψ : AddChar A M) (n : 自然数) (x : A)
+  条件: (ψ : 加法特征 A M) (n : 自然数) (x : A)
   结论: ψ (n • x) = ψ x ^ n
   证明: ψ.toMonoidHom.map_pow x n
 
@@ -280,7 +280,7 @@ definition toMonoidHomEquiv
 
 中文:
 定义 toMonoidHomEquiv
-  签名: : AddChar A M ≃ (Multiplicative A ->* M) where
+  签名: : 加法特征 A M ≃ (Multiplicative A ->* M) where
   定义体: φ.toMonoidHom
   invFun f :=
   { toFun := f.toFun
@@ -306,7 +306,7 @@ lemma coe_toMonoidHomEquiv
 
 中文:
 引理 coe_toMonoidHomEquiv
-  条件: (ψ : AddChar A M)
+  条件: (ψ : 加法特征 A M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_toMonoidHomEquiv (ψ : AddChar A M) :
@@ -338,7 +338,7 @@ lemma toMonoidHomEquiv_apply
 
 中文:
 引理 toMonoidHomEquiv_apply
-  条件: (ψ : AddChar A M) (a : Multiplicative A)
+  条件: (ψ : 加法特征 A M) (a : Multiplicative A)
   证明: rfl
 -/
 @[simp] lemma toMonoidHomEquiv_apply (ψ : AddChar A M) (a : Multiplicative A) :
@@ -372,7 +372,7 @@ definition toAddMonoidHom
 
 中文:
 定义 toAddMonoidHom
-  签名: (φ : AddChar A M)
+  签名: (φ : 加法特征 A M)
   定义体: φ.toFun
   map_zero' := φ.map_zero_eq_one'
   map_add' := φ.map_add_eq_mul'
@@ -393,8 +393,8 @@ lemma coe_toAddMonoidHom
 
 中文:
 引理 coe_toAddMonoidHom
-  条件: (ψ : AddChar A M)
-  结论: ⇑ψ.toAddMonoidHom = Additive.ofMul ∘ ψ
+  条件: (ψ : 加法特征 A M)
+  结论: ⇑ψ.toAddMonoidHom = 加性.ofMul ∘ ψ
   证明: rfl
 -/
 @[simp] lemma coe_toAddMonoidHom (ψ : AddChar A M) : ⇑ψ.toAddMonoidHom = Additive.ofMul ∘ ψ := rfl
@@ -409,7 +409,7 @@ lemma toAddMonoidHom_apply
 
 中文:
 引理 toAddMonoidHom_apply
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   证明: rfl
 -/
 @[simp] lemma toAddMonoidHom_apply (ψ : AddChar A M) (a : A) :
@@ -431,7 +431,7 @@ definition toAddMonoidHomEquiv
 
 中文:
 定义 toAddMonoidHomEquiv
-  签名: : AddChar A M ≃ (A ->+ Additive M) where
+  签名: : 加法特征 A M ≃ (A ->+ 加性 M) where
   定义体: φ.toAddMonoidHom
   invFun f :=
   { toFun := f.toFun
@@ -460,7 +460,7 @@ lemma coe_toAddMonoidHomEquiv
 
 中文:
 引理 coe_toAddMonoidHomEquiv
-  条件: (ψ : AddChar A M)
+  条件: (ψ : 加法特征 A M)
   证明: rfl
 -/
 lemma coe_toAddMonoidHomEquiv (ψ : AddChar A M) :
@@ -476,7 +476,7 @@ lemma coe_toAddMonoidHomEquiv_symm
 
 中文:
 引理 coe_toAddMonoidHomEquiv_symm
-  条件: (ψ : A ->+ Additive M)
+  条件: (ψ : A ->+ 加性 M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_toAddMonoidHomEquiv_symm (ψ : A ->+ Additive M) :
@@ -492,7 +492,7 @@ lemma toAddMonoidHomEquiv_apply
 
 中文:
 引理 toAddMonoidHomEquiv_apply
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   证明: rfl
 -/
 @[simp] lemma toAddMonoidHomEquiv_apply (ψ : AddChar A M) (a : A) :
@@ -508,7 +508,7 @@ lemma toAddMonoidHomEquiv_symm_apply
 
 中文:
 引理 toAddMonoidHomEquiv_symm_apply
-  条件: (ψ : A ->+ Additive M) (a : A)
+  条件: (ψ : A ->+ 加性 M) (a : A)
   证明: rfl
 -/
 @[simp] lemma toAddMonoidHomEquiv_symm_apply (ψ : A ->+ Additive M) (a : A) :
@@ -524,7 +524,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (AddChar A M)
+  签名: : 幺 (加法特征 A M)
   定义体: toMonoidHomEquiv.one
 
 Depends on / 依赖: toMonoidHomEquiv, toMonoidHomEquiv.one
@@ -541,7 +541,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (AddChar A M)
+  签名: : 零 (加法特征 A M)
   定义体: ⟨1⟩
 -/
 instance instZero : Zero (AddChar A M) := ⟨1⟩
@@ -556,7 +556,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ⇑(1 : AddChar A M) = 1
+  结论: ⇑(1 : 加法特征 A M) = 1
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_one : ⇑(1 : AddChar A M) = 1 := rfl
@@ -570,7 +570,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ⇑(0 : AddChar A M) = 1
+  结论: ⇑(0 : 加法特征 A M) = 1
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zero : ⇑(0 : AddChar A M) = 1 := rfl
@@ -586,7 +586,7 @@ lemma one_apply
 中文:
 引理 one_apply
   条件: (a : A)
-  结论: (1 : AddChar A M) a = 1
+  结论: (1 : 加法特征 A M) a = 1
   证明: rfl
 -/
 @[simp] lemma one_apply (a : A) : (1 : AddChar A M) a = 1 := rfl
@@ -602,7 +602,7 @@ lemma zero_apply
 中文:
 引理 zero_apply
   条件: (a : A)
-  结论: (0 : AddChar A M) a = 1
+  结论: (0 : 加法特征 A M) a = 1
   证明: rfl
 -/
 @[simp] lemma zero_apply (a : A) : (0 : AddChar A M) a = 1 := rfl
@@ -617,7 +617,7 @@ lemma one_eq_zero
 
 中文:
 引理 one_eq_zero
-  结论: (1 : AddChar A M) = (0 : AddChar A M)
+  结论: (1 : 加法特征 A M) = (0 : 加法特征 A M)
   证明: rfl
 -/
 lemma one_eq_zero : (1 : AddChar A M) = (0 : AddChar A M) := rfl
@@ -647,7 +647,7 @@ lemma toMonoidHomEquiv_zero
 
 中文:
 引理 toMonoidHomEquiv_zero
-  结论: toMonoidHomEquiv (0 : AddChar A M) = 1
+  结论: toMonoidHomEquiv (0 : 加法特征 A M) = 1
   证明: rfl
 -/
 @[simp] lemma toMonoidHomEquiv_zero : toMonoidHomEquiv (0 : AddChar A M) = 1 := rfl
@@ -675,7 +675,7 @@ lemma toAddMonoidHomEquiv_zero
 
 中文:
 引理 toAddMonoidHomEquiv_zero
-  结论: toAddMonoidHomEquiv (0 : AddChar A M) = 0
+  结论: toAddMonoidHomEquiv (0 : 加法特征 A M) = 0
   证明: rfl
 -/
 @[simp] lemma toAddMonoidHomEquiv_zero : toAddMonoidHomEquiv (0 : AddChar A M) = 0 := rfl
@@ -703,7 +703,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (AddChar A M)
+  签名: : 可居 (加法特征 A M)
   定义体: ⟨1⟩
 -/
 instance instInhabited : Inhabited (AddChar A M) := ⟨1⟩
@@ -719,8 +719,8 @@ definition _root_.MonoidHom.compAddChar
 @[simp, norm_cast]
 
 中文:
-定义 _root_.MonoidHom.compAddChar
-  签名: {N : 类型} [Monoid N] (f : M ->* N) (φ : AddChar A M)
+定义 _root_.幺半群态射.compAddChar
+  签名: {N : 类型} [幺半群 N] (f : M ->* N) (φ : 加法特征 A M)
   定义体: toMonoidHomEquiv.symm (f.comp φ.toMonoidHom)
 
 @[simp, norm_cast]
@@ -742,8 +742,8 @@ lemma _root_.MonoidHom.coe_compAddChar
 @[simp, norm_cast]
 
 中文:
-引理 _root_.MonoidHom.coe_compAddChar
-  条件: {N : 类型} [Monoid N] (f : M ->* N) (φ : AddChar A M)
+引理 _root_.幺半群态射.coe_compAddChar
+  条件: {N : 类型} [幺半群 N] (f : M ->* N) (φ : 加法特征 A M)
   证明: rfl
 
 @[simp, norm_cast]
@@ -763,8 +763,8 @@ lemma _root_.MonoidHom.compAddChar_apply
   proof: rfl
 
 中文:
-引理 _root_.MonoidHom.compAddChar_apply
-  条件: (f : M ->* N) (φ : AddChar A M)
+引理 _root_.幺半群态射.compAddChar_apply
+  条件: (f : M ->* N) (φ : 加法特征 A M)
   结论: f.compAddChar φ = f ∘ φ
   证明: rfl
 -/
@@ -781,8 +781,8 @@ lemma _root_.MonoidHom.compAddChar_injective_left
   rintro f g h; rw [DFunLike.ext'_iff] at h ⊢; exact hψ.injective_comp_right h
 
 中文:
-引理 _root_.MonoidHom.compAddChar_injective_left
-  条件: (ψ : AddChar A M) (hψ : Surjective ψ)
+引理 _root_.幺半群态射.compAddChar_injective_left
+  条件: (ψ : 加法特征 A M) (hψ : 满射 ψ)
   证明: by
   rintro f g h; rw [DFunLike.ext'_iff] at h ⊢; exact hψ.injective_comp_right h
 
@@ -802,8 +802,8 @@ lemma _root_.MonoidHom.compAddChar_injective_right
   rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.comp_left h
 
 中文:
-引理 _root_.MonoidHom.compAddChar_injective_right
-  条件: (f : M ->* N) (hf : Injective f)
+引理 _root_.幺半群态射.compAddChar_injective_right
+  条件: (f : M ->* N) (hf : 单射 f)
   证明: by
   rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.comp_left h
 
@@ -825,7 +825,7 @@ definition compAddMonoidHom
 
 中文:
 定义 compAddMonoidHom
-  签名: (φ : AddChar B M) (f : A ->+ B)
+  签名: (φ : 加法特征 B M) (f : A ->+ B)
   定义体: toAddMonoidHomEquiv.symm (φ.toAddMonoidHom.comp f)
 
 @[simp, norm_cast]
@@ -847,7 +847,7 @@ lemma coe_compAddMonoidHom
 
 中文:
 引理 coe_compAddMonoidHom
-  条件: (φ : AddChar B M) (f : A ->+ B)
+  条件: (φ : 加法特征 B M) (f : A ->+ B)
   结论: φ.compAddMonoidHom f = φ ∘ f
   证明: rfl
 -/
@@ -863,7 +863,7 @@ lemma compAddMonoidHom_apply
 
 中文:
 引理 compAddMonoidHom_apply
-  结论: (ψ : AddChar B M) (f : A ->+ B)
+  结论: (ψ : 加法特征 B M) (f : A ->+ B)
   证明: rfl
 -/
 @[simp] lemma compAddMonoidHom_apply (ψ : AddChar B M) (f : A ->+ B)
@@ -880,7 +880,7 @@ lemma compAddMonoidHom_injective_left
 
 中文:
 引理 compAddMonoidHom_injective_left
-  条件: (f : A ->+ B) (hf : Surjective f)
+  条件: (f : A ->+ B) (hf : 满射 f)
   证明: by
   rintro ψ χ h; rw [DFunLike.ext'_iff] at h ⊢; exact hf.injective_comp_right h
 
@@ -902,7 +902,7 @@ lemma compAddMonoidHom_injective_right
 
 中文:
 引理 compAddMonoidHom_injective_right
-  条件: (ψ : AddChar B M) (hψ : Injective ψ)
+  条件: (ψ : 加法特征 B M) (hψ : 单射 ψ)
   证明: by
   rintro f g h
   rw [DFunLike.ext'_iff] at h ⊢; exact hψ.comp_left h
@@ -989,7 +989,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableEq (AddChar A M)
+  签名: DecidableEq (加法特征 A M)
   定义体: Classical.decEq _
 
 Depends on / 依赖: Classical, Classical.decEq
@@ -1012,7 +1012,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid (AddChar A M)
+  签名: : 交换幺半群 (加法特征 A M)
   定义体: fast_instance% toMonoidHomEquiv.commMonoid
 
 Depends on / 依赖: commMonoid, fast_instance, toMonoidHomEquiv, toMonoidHomEquiv.commMonoid
@@ -1030,7 +1030,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (AddChar A M)
+  签名: : 加法交换幺半群 (加法特征 A M)
   定义体: inferInstanceAs (AddCommMonoid (Additive (AddChar A M)))
 
 Depends on / 依赖: AddChar, AddCommMonoid, Additive
@@ -1049,7 +1049,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: (ψ χ : AddChar A M)
+  条件: (ψ χ : 加法特征 A M)
   结论: ⇑(ψ * χ) = ψ * χ
   证明: rfl
 -/
@@ -1065,7 +1065,7 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: (ψ χ : AddChar A M)
+  条件: (ψ χ : 加法特征 A M)
   结论: ⇑(ψ + χ) = ψ * χ
   证明: rfl
 -/
@@ -1081,7 +1081,7 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  条件: (ψ : AddChar A M) (n : 自然数)
+  条件: (ψ : 加法特征 A M) (n : 自然数)
   结论: ⇑(ψ ^ n) = ψ ^ n
   证明: rfl
 -/
@@ -1099,7 +1099,7 @@ lemma coe_nsmul
 
 中文:
 引理 coe_nsmul
-  条件: (n : 自然数) (ψ : AddChar A M)
+  条件: (n : 自然数) (ψ : 加法特征 A M)
   结论: ⇑(n • ψ) = ψ ^ n
   证明: rfl
 
@@ -1122,7 +1122,7 @@ lemma coe_prod
 
 中文:
 引理 coe_prod
-  条件: (s : Finset ι) (ψ : ι -> AddChar A M)
+  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
   结论: ∏ i in s, ψ i = ∏ i in s, ⇑(ψ i)
   证明: by
   induction s using Finset.cons_induction <;> simp [*]
@@ -1147,7 +1147,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  条件: (s : Finset ι) (ψ : ι -> AddChar A M)
+  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
   结论: ∑ i in s, ψ i = ∏ i in s, ⇑(ψ i)
   证明: by
   induction s using Finset.cons_induction <;> simp [*]
@@ -1168,7 +1168,7 @@ lemma mul_apply
 
 中文:
 引理 mul_apply
-  条件: (ψ φ : AddChar A M) (a : A)
+  条件: (ψ φ : 加法特征 A M) (a : A)
   结论: (ψ * φ) a = ψ a * φ a
   证明: rfl
 -/
@@ -1184,7 +1184,7 @@ lemma add_apply
 
 中文:
 引理 add_apply
-  条件: (ψ φ : AddChar A M) (a : A)
+  条件: (ψ φ : 加法特征 A M) (a : A)
   结论: (ψ + φ) a = ψ a * φ a
   证明: rfl
 -/
@@ -1200,7 +1200,7 @@ lemma pow_apply
 
 中文:
 引理 pow_apply
-  条件: (ψ : AddChar A M) (n : 自然数) (a : A)
+  条件: (ψ : 加法特征 A M) (n : 自然数) (a : A)
   结论: (ψ ^ n) a = (ψ a) ^ n
   证明: rfl
 -/
@@ -1216,7 +1216,7 @@ lemma nsmul_apply
 
 中文:
 引理 nsmul_apply
-  条件: (ψ : AddChar A M) (n : 自然数) (a : A)
+  条件: (ψ : 加法特征 A M) (n : 自然数) (a : A)
   结论: (n • ψ) a = (ψ a) ^ n
   证明: rfl
 -/
@@ -1232,7 +1232,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  条件: (s : Finset ι) (ψ : ι -> AddChar A M) (a : A)
+  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M) (a : A)
   证明: by rw [coe_prod, Finset.prod_apply]
 
 Depends on / 依赖: Finset, Finset.prod_apply, coe_prod, prod_apply
@@ -1250,7 +1250,7 @@ lemma sum_apply
 
 中文:
 引理 sum_apply
-  条件: (s : Finset ι) (ψ : ι -> AddChar A M) (a : A)
+  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M) (a : A)
   证明: by rw [coe_sum, Finset.prod_apply]
 
 Depends on / 依赖: Finset, Finset.prod_apply, coe_sum, prod_apply
@@ -1269,7 +1269,7 @@ lemma mul_eq_add
 
 中文:
 引理 mul_eq_add
-  条件: (ψ χ : AddChar A M)
+  条件: (ψ χ : 加法特征 A M)
   结论: ψ * χ = ψ + χ
   证明: rfl
 -/
@@ -1285,7 +1285,7 @@ lemma pow_eq_nsmul
 
 中文:
 引理 pow_eq_nsmul
-  条件: (ψ : AddChar A M) (n : 自然数)
+  条件: (ψ : 加法特征 A M) (n : 自然数)
   结论: ψ ^ n = n • ψ
   证明: rfl
 -/
@@ -1301,7 +1301,7 @@ lemma prod_eq_sum
 
 中文:
 引理 prod_eq_sum
-  条件: (s : Finset ι) (ψ : ι -> AddChar A M)
+  条件: (s : 有限集 ι) (ψ : ι -> 加法特征 A M)
   结论: ∏ i in s, ψ i = ∑ i in s, ψ i
   证明: rfl
 -/
@@ -1317,7 +1317,7 @@ lemma toMonoidHomEquiv_add
 
 中文:
 引理 toMonoidHomEquiv_add
-  条件: (ψ φ : AddChar A M)
+  条件: (ψ φ : 加法特征 A M)
   证明: rfl
 -/
 @[simp] lemma toMonoidHomEquiv_add (ψ φ : AddChar A M) :
@@ -1348,7 +1348,7 @@ definition toMonoidHomMulEquiv
 
 中文:
 定义 toMonoidHomMulEquiv
-  签名: : AddChar A M ≃* (Multiplicative A ->* M)
+  签名: : 加法特征 A M ≃* (Multiplicative A ->* M)
   定义体: { toMonoidHomEquiv with map_mul' := fun φ ψ => by rfl }
 
 Depends on / 依赖: map_mul, toMonoidHomEquiv
@@ -1366,7 +1366,7 @@ definition toAddMonoidAddEquiv
 
 中文:
 定义 toAddMonoidAddEquiv
-  签名: : Additive (AddChar A M) ≃+ (A ->+ Additive M)
+  签名: : 加性 (加法特征 A M) ≃+ (A ->+ 加性 M)
   定义体: { toAddMonoidHomEquiv with map_add' := fun φ ψ => by rfl }
 
 Depends on / 依赖: map_add, toAddMonoidHomEquiv
@@ -1388,7 +1388,7 @@ definition doubleDualEmb
 
 中文:
 定义 doubleDualEmb
-  签名: : A ->+ AddChar (AddChar A M) M where
+  签名: : A ->+ 加法特征 (加法特征 A M) M where
   定义体: { toFun := fun ψ => ψ a
                map_zero_eq_one' := by simp
                map_add_eq_mul' := by simp }
@@ -1413,7 +1413,7 @@ lemma doubleDualEmb_apply
 
 中文:
 引理 doubleDualEmb_apply
-  条件: (a : A) (ψ : AddChar A M)
+  条件: (a : A) (ψ : 加法特征 A M)
   结论: doubleDualEmb a ψ = ψ a
   证明: rfl
 -/
@@ -1441,7 +1441,7 @@ lemma sum_eq_ite
 
 中文:
 引理 sum_eq_ite
-  条件: (ψ : AddChar A R) [Decidable (ψ = 0)]
+  条件: (ψ : 加法特征 A R) [可判定 (ψ = 0)]
   证明: by
   split_ifs with h
   · simp [h]
@@ -1520,7 +1520,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: : CommGroup (AddChar A M) where
+  签名: : 交换群 (加法特征 A M) where
   定义体: ψ.compAddMonoidHom negAddMonoidHom
   inv_mul_cancel ψ := by ext1 x; simp [negAddMonoidHom, ← map_add_eq_mul]
 
@@ -1540,7 +1540,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (AddChar A M)
+  签名: 加法交换群 (加法特征 A M)
   定义体: inferInstanceAs AddCommGroup (Additive (AddChar A M))
 
 Depends on / 依赖: AddChar, AddCommGroup, Additive
@@ -1558,7 +1558,7 @@ lemma inv_apply
 
 中文:
 引理 inv_apply
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   结论: ψ⁻¹ a = ψ (-a)
   证明: rfl
 -/
@@ -1574,7 +1574,7 @@ lemma neg_apply
 
 中文:
 引理 neg_apply
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   结论: (-ψ) a = ψ (-a)
   证明: rfl
 -/
@@ -1590,7 +1590,7 @@ lemma div_apply
 
 中文:
 引理 div_apply
-  条件: (ψ χ : AddChar A M) (a : A)
+  条件: (ψ χ : 加法特征 A M) (a : A)
   结论: (ψ / χ) a = ψ a * χ (-a)
   证明: rfl
 -/
@@ -1606,7 +1606,7 @@ lemma sub_apply
 
 中文:
 引理 sub_apply
-  条件: (ψ χ : AddChar A M) (a : A)
+  条件: (ψ χ : 加法特征 A M) (a : A)
   结论: (ψ - χ) a = ψ a * χ (-a)
   证明: rfl
 -/
@@ -1627,8 +1627,8 @@ lemma val_isUnit
 
 中文:
 引理 val_isUnit
-  条件: {A M} [AddGroup A] [Monoid M] (φ : AddChar A M) (a : A)
-  结论: IsUnit (φ a)
+  条件: {A M} [加法群 A] [幺半群 M] (φ : 加法特征 A M) (a : A)
+  结论: 是单位 (φ a)
   证明: IsUnit.map φ.toMonoidHom Group.isUnit (Multiplicative.ofAdd a)
 
 Depends on / 依赖: Group.isUnit, IsUnit, IsUnit.map, Multiplicative, Multiplicative.ofAdd, isUnit, toMonoidHom
@@ -1655,7 +1655,7 @@ lemma map_neg_eq_inv
 
 中文:
 引理 map_neg_eq_inv
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   结论: ψ (-a) = (ψ a)⁻¹
   证明: by
   apply eq_inv_of_mul_eq_one_left
@@ -1678,7 +1678,7 @@ lemma map_zsmul_eq_zpow
 
 中文:
 引理 map_zsmul_eq_zpow
-  条件: (ψ : AddChar A M) (n : 整数) (a : A)
+  条件: (ψ : 加法特征 A M) (n : 整数) (a : A)
   结论: ψ (n • a) = (ψ a) ^ n
   证明: ψ.toMonoidHom.map_zpow a n
 
@@ -1703,7 +1703,7 @@ lemma inv_apply'
 
 中文:
 引理 inv_apply'
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   结论: ψ⁻¹ a = (ψ a)⁻¹
   证明: by rw [inv_apply, map_neg_eq_inv]
 
@@ -1721,7 +1721,7 @@ lemma neg_apply'
 
 中文:
 引理 neg_apply'
-  条件: (ψ : AddChar A M) (a : A)
+  条件: (ψ : 加法特征 A M) (a : A)
   结论: (-ψ) a = (ψ a)⁻¹
   证明: map_neg_eq_inv _ _
 
@@ -1741,7 +1741,7 @@ lemma div_apply'
 
 中文:
 引理 div_apply'
-  条件: (ψ χ : AddChar A M) (a : A)
+  条件: (ψ χ : 加法特征 A M) (a : A)
   结论: (ψ / χ) a = ψ a / χ a
   证明: by
   rw [div_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
@@ -1763,7 +1763,7 @@ lemma sub_apply'
 
 中文:
 引理 sub_apply'
-  条件: (ψ χ : AddChar A M) (a : A)
+  条件: (ψ χ : 加法特征 A M) (a : A)
   结论: (ψ - χ) a = ψ a / χ a
   证明: by
   rw [sub_apply]; rw [map_neg_eq_inv]; rw [div_eq_mul_inv]
@@ -1785,7 +1785,7 @@ lemma zsmul_apply
 
 中文:
 引理 zsmul_apply
-  条件: (n : 整数) (ψ : AddChar A M) (a : A)
+  条件: (n : 整数) (ψ : 加法特征 A M) (a : A)
   结论: (n • ψ) a = ψ a ^ n
   证明: by
   cases n <;> simp [-neg_apply, neg_apply']
@@ -1804,7 +1804,7 @@ lemma zpow_apply
 
 中文:
 引理 zpow_apply
-  条件: (ψ : AddChar A M) (n : 整数) (a : A)
+  条件: (ψ : 加法特征 A M) (n : 整数) (a : A)
   结论: (ψ ^ n) a = ψ a ^ n
   证明: zsmul_apply ..
 -/
@@ -1821,7 +1821,7 @@ lemma map_sub_eq_div
 
 中文:
 引理 map_sub_eq_div
-  条件: (ψ : AddChar A M) (a b : A)
+  条件: (ψ : 加法特征 A M) (a b : A)
   结论: ψ (a - b) = ψ a / ψ b
   证明: ψ.toMonoidHom.map_div _ _
 
@@ -1841,8 +1841,8 @@ lemma injective_iff
 
 中文:
 引理 injective_iff
-  条件: {ψ : AddChar A M}
-  结论: Injective ψ ↔ 对任意 ⦃x⦄, ψ x = 1 -> x = 0
+  条件: {ψ : 加法特征 A M}
+  结论: 单射 ψ ↔ 对任意 ⦃x⦄, ψ x = 1 -> x = 0
   证明: ψ.toMonoidHom.ker_eq_bot_iff.symm.trans eq_bot_iff
 
 Depends on / 依赖: eq_bot_iff, ker_eq_bot_iff, toMonoidHom, toMonoidHom.ker_eq_bot_iff.symm.trans
@@ -1866,7 +1866,7 @@ lemma coe_ne_zero
 
 中文:
 引理 coe_ne_zero
-  条件: (ψ : AddChar A M₀)
+  条件: (ψ : 加法特征 A M₀)
   结论: (ψ : A -> M₀) != 0
   证明: ne_iff.2 ⟨0, fun h => by simpa only [h, Pi.zero_apply, zero_ne_one] using map_zero_eq_one ψ⟩
 -/
@@ -1893,7 +1893,7 @@ definition mulShift
 
 中文:
 定义 mulShift
-  签名: (ψ : AddChar R M) (r : R)
+  签名: (ψ : 加法特征 R M) (r : R)
   定义体: ψ.compAddMonoidHom (AddMonoidHom.mulLeft r)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mulLeft, compAddMonoidHom, mulLeft
@@ -1912,7 +1912,7 @@ lemma mulShift_apply
 
 中文:
 引理 mulShift_apply
-  条件: {ψ : AddChar R M} {r : R} {x : R}
+  条件: {ψ : 加法特征 R M} {r : R} {x : R}
   结论: mulShift ψ r x = ψ (r * x)
   证明: rfl
 -/
@@ -1932,7 +1932,7 @@ theorem inv_mulShift
 
 中文:
 定理 inv_mulShift
-  条件: (ψ : AddChar R M)
+  条件: (ψ : 加法特征 R M)
   结论: ψ⁻¹ = mulShift ψ (-1)
   证明: by
   ext
@@ -1956,7 +1956,7 @@ theorem mulShift_spec'
 
 中文:
 定理 mulShift_spec'
-  条件: (ψ : AddChar R M) (n : 自然数) (x : R)
+  条件: (ψ : 加法特征 R M) (n : 自然数) (x : R)
   结论: mulShift ψ n x = ψ x ^ n
   证明: by
   rw [mulShift_apply]; rw [← nsmul_eq_mul]; rw [map_nsmul_eq_pow]
@@ -1979,7 +1979,7 @@ theorem pow_mulShift
 
 中文:
 定理 pow_mulShift
-  条件: (ψ : AddChar R M) (n : 自然数)
+  条件: (ψ : 加法特征 R M) (n : 自然数)
   结论: ψ ^ n = mulShift ψ n
   证明: by
   ext x
@@ -2003,7 +2003,7 @@ theorem mulShift_mul
 
 中文:
 定理 mulShift_mul
-  条件: (ψ : AddChar R M) (r s : R)
+  条件: (ψ : 加法特征 R M) (r s : R)
   证明: by
   ext
   rw [mulShift_apply]; rw [right_distrib]; rw [map_add_eq_mul]; norm_cast
@@ -2027,7 +2027,7 @@ lemma mulShift_mulShift
 
 中文:
 引理 mulShift_mulShift
-  条件: (ψ : AddChar R M) (r s : R)
+  条件: (ψ : 加法特征 R M) (r s : R)
   证明: by
   ext
   simp only [mulShift_apply, mul_assoc]
@@ -2055,7 +2055,7 @@ theorem mulShift_zero
 
 中文:
 定理 mulShift_zero
-  条件: (ψ : AddChar R M)
+  条件: (ψ : 加法特征 R M)
   结论: mulShift ψ 0 = 1
   证明: by
   ext; rw [mulShift_apply, zero_mul, map_zero_eq_one, one_apply]
@@ -2080,7 +2080,7 @@ lemma mulShift_one
 
 中文:
 引理 mulShift_one
-  条件: (ψ : AddChar R M)
+  条件: (ψ : 加法特征 R M)
   结论: mulShift ψ 1 = ψ
   证明: by
   ext; rw [mulShift_apply, one_mul]
@@ -2105,7 +2105,7 @@ lemma mulShift_unit_eq_one_iff
 
 中文:
 引理 mulShift_unit_eq_one_iff
-  条件: (ψ : AddChar R M) {u : R} (hu : IsUnit u)
+  条件: (ψ : 加法特征 R M) {u : R} (hu : 是单位 u)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · ext1 y

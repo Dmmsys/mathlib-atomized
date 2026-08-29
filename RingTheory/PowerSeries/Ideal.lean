@@ -181,7 +181,7 @@ theorem eq_of_le_of_X_notMem_of_fg_of_isPrime
 
 中文:
 定理 eq_of_le_of_X_notMem_of_fg_of_isPrime
-  结论: {J : Ideal R⟦X⟧} (hJI : J <= I) (hXI : X ∉ I)
+  结论: {J : 理想 R⟦X⟧} (hJI : J <= I) (hXI : X ∉ I)
   证明: by
   refine hJI.antisymm' ?_
   replace h' := h'.antisymm (Ideal.map_mono hJI)
@@ -238,7 +238,7 @@ theorem exist_eq_span_eq_ncard_of_X_notMem
 
 中文:
 定理 exist_eq_span_eq_ncard_of_X_notMem
-  结论: (hI : X ∉ I) {S : Set R}
+  结论: (hI : X ∉ I) {S : 集合 R}
   证明: by
   have : SurjOn constantCoeff I S := by
     intro r hr
@@ -405,8 +405,8 @@ instance [IsNoetherianRing
 fg_iff_of_isPrime.2 (isNoetherianRing_iff_ideal_fg R).1 inferInstance (P.map constantCoeff)
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] : IsNoetherianRing R⟦X⟧
+实例 [是Noether环
+  签名: R] : 是Noether环 R⟦X⟧
   定义体: IsNoetherianRing.of_prime fun P _ =>
 fg_iff_of_isPrime.2 (isNoetherianRing_iff_ideal_fg R).1 inferInstance (P.map constantCoeff)
 
@@ -430,8 +430,8 @@ instance [IsPrincipalIdealRing
     obtain ⟨_, rfl, _, h⟩ := exist_eq_span_eq_ncard_of_X_notMem hXP 
 
 中文:
-实例 [IsPrincipalIdealRing
-  签名: R] [IsDomain R] : UniqueFactorizationMonoid R⟦X⟧
+实例 [是主理想环
+  签名: R] [是整环 R] : 唯一分解幺半群 R⟦X⟧
   定义体: by
   refine UniqueFactorizationMonoid.iff_exists_prime_mem_of_isPrime.mpr (fun P h₁ h₂ => ?_)
   by_cases hXP : X in P

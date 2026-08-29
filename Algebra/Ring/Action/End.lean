@@ -101,7 +101,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (RingAut R) R
+  签名: : 忠实标量乘法 (RingAut R) R
   定义体: ⟨RingEquiv.ext⟩
 
 Depends on / 依赖: RingEquiv, RingEquiv.ext
@@ -127,8 +127,8 @@ map_mul' g h := RingEquiv.ext mul_smul g h
 map_one' := RingEquiv.ext one_smul _
 
 中文:
-定义 _root_.MulSemiringAction.toRingAut
-  签名: [MulSemiringAction G R]
+定义 _root_.MulSemiring作用.toRingAut
+  签名: [MulSemiring作用 G R]
   定义体: MulSemiringAction.toRingEquiv G R
 map_mul' g h := RingEquiv.ext mul_smul g h
 map_one' := RingEquiv.ext one_smul _

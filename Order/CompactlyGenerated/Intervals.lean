@@ -34,7 +34,7 @@ replace hb : (b : α) <= iSup ((↑) ∘ s) := le_trans hb (coe_iSup s) ▸ le_r
 
 中文:
 定理 isCompactElement
-  条件: {a : α} {b : Iic a} (h : IsCompactElement (b : α))
+  条件: {a : α} {b : 左无界右闭区间 a} (h : IsCompactElement (b : α))
   证明: by
   simp only [CompleteLattice.isCompactElement_iff_exists_le_iSup_of_le_iSup,
     Finset.sup_eq_iSup] at h ⊢
@@ -73,7 +73,7 @@ instance instIsCompactlyGenerated
 
 中文:
 实例 instIsCompactlyGenerated
-  签名: [IsCompactlyGenerated α] {a : α}
+  签名: [是余mpactlyGenerated α] {a : α}
   定义体: by
   refine ⟨fun ⟨x, (hx : x <= a)⟩ => ?_⟩
   obtain ⟨s, hs, rfl⟩ := IsCompactlyGenerated.exists_sSup_eq x

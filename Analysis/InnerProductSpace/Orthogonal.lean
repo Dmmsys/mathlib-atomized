@@ -55,7 +55,7 @@ notation:1200 K "ᗮ" => orthogonal K
 
 中文:
 定义 orthogonal
-  签名: : Submodule 𝕜 E where
+  签名: : 子模 𝕜 E where
   定义体: { v | forall u in K, ⟪u, v⟫ = 0 }
   zero_mem' _ _ := inner_zero_right _
   add_mem' hx hy u hu := by rw [inner_add_right, hx u hu, hy u hu, add_zero]
@@ -357,7 +357,7 @@ convert! isClosed_iInter fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 
 
 中文:
 定理 isClosed_orthogonal
-  结论: IsClosed (Kᗮ : Set E)
+  结论: 是闭集 (Kᗮ : 集合 E)
   证明: by
   rw [orthogonal_eq_inter K]
 convert! isClosed_iInter fun v : K => ContinuousLinearMap.isClosed_ker (innerSL 𝕜 (v : E))
@@ -380,7 +380,7 @@ instance instOrthogonalCompleteSpace
 
 中文:
 实例 instOrthogonalCompleteSpace
-  签名: [CompleteSpace E]
+  签名: [完备空间 E]
   定义体: K.isClosed_orthogonal.completeSpace_coe
 
 Depends on / 依赖: K.isClosed_orthogonal.completeSpace_coe, completeSpace_coe, isClosed_orthogonal
@@ -483,7 +483,7 @@ theorem orthogonal_le
 
 中文:
 定理 orthogonal_le
-  条件: {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂)
+  条件: {K₁ K₂ : 子模 𝕜 E} (h : K₁ <= K₂)
   结论: K₂ᗮ <= K₁ᗮ
   证明: (orthogonal_gc 𝕜 E).monotone_l h
 
@@ -503,7 +503,7 @@ theorem orthogonal_orthogonal_monotone
 
 中文:
 定理 orthogonal_orthogonal_monotone
-  条件: {K₁ K₂ : Submodule 𝕜 E} (h : K₁ <= K₂)
+  条件: {K₁ K₂ : 子模 𝕜 E} (h : K₁ <= K₂)
   结论: K₁ᗮᗮ <= K₂ᗮᗮ
   证明: orthogonal_le (orthogonal_le h)
 
@@ -541,7 +541,7 @@ theorem inf_orthogonal
 
 中文:
 定理 inf_orthogonal
-  条件: (K₁ K₂ : Submodule 𝕜 E)
+  条件: (K₁ K₂ : 子模 𝕜 E)
   结论: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_sup.symm
 
@@ -561,7 +561,7 @@ theorem iInf_orthogonal
 
 中文:
 定理 iInf_orthogonal
-  条件: {ι : 类型} (K : ι -> Submodule 𝕜 E)
+  条件: {ι : 类型} (K : ι -> 子模 𝕜 E)
   结论: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_iSup.symm
 
@@ -583,7 +583,7 @@ theorem sInf_orthogonal
 
 中文:
 定理 sInf_orthogonal
-  条件: (s : Set <| Submodule 𝕜 E)
+  条件: (s : 集合 <| 子模 𝕜 E)
   结论: ⨅ K in s, Kᗮ = (sSup s)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_sSup.symm
 
@@ -613,7 +613,7 @@ theorem top_orthogonal_eq_bot
 
 中文:
 定理 top_orthogonal_eq_bot
-  结论: (⊤ : Submodule 𝕜 E)ᗮ = ⊥
+  结论: (⊤ : 子模 𝕜 E)ᗮ = ⊥
   证明: by
   ext x
   rw [mem_bot]; rw [mem_orthogonal]
@@ -649,7 +649,7 @@ theorem bot_orthogonal_eq_top
 
 中文:
 定理 bot_orthogonal_eq_top
-  结论: (⊥ : Submodule 𝕜 E)ᗮ = ⊤
+  结论: (⊥ : 子模 𝕜 E)ᗮ = ⊤
   证明: by
   rw [← top_orthogonal_eq_bot]; rw [eq_top_iff]
   exact le_orthogonal_orthogonal ⊤
@@ -715,7 +715,7 @@ lemma orthogonal_closure
 
 中文:
 引理 orthogonal_closure
-  条件: (K : Submodule 𝕜 E)
+  条件: (K : 子模 𝕜 E)
   结论: K.topologicalClosureᗮ = Kᗮ
   证明: le_antisymm (orthogonal_le <| le_topologicalClosure _)
     fun x hx y hy => closure_minimal hx (isClosed_eq (by fun_prop) (by fun_prop)) hy
@@ -737,7 +737,7 @@ lemma orthogonal_closure'
 
 中文:
 引理 orthogonal_closure'
-  条件: (K : Submodule 𝕜 E) (x : E)
+  条件: (K : 子模 𝕜 E) (x : E)
   证明: by
   simp_rw [← mem_orthogonal, orthogonal_closure]
 
@@ -776,7 +776,7 @@ theorem orthogonalBilin_innerₗ
 
 中文:
 定理 orthogonalBilin_innerₗ
-  结论: {E} [NormedAddCommGroup E] [InnerProductSpace 实数 E]
+  结论: {E} [赋范交换加群 E] [内积空间 实数 E]
   证明: rfl
 -/
 theorem orthogonalBilin_innerₗ {E} [NormedAddCommGroup E] [InnerProductSpace Real E]
@@ -807,7 +807,7 @@ infixl:50 " ⟂ " => Submodule.IsOrtho
 
 中文:
 定义 IsOrtho
-  签名: (U V : Submodule 𝕜 E)
+  签名: (U V : 子模 𝕜 E)
   定义体: U <= Vᗮ
 
 @[inherit_doc]
@@ -832,7 +832,7 @@ theorem isOrtho_iff_le
 
 中文:
 定理 isOrtho_iff_le
-  条件: {U V : Submodule 𝕜 E}
+  条件: {U V : 子模 𝕜 E}
   结论: U ⟂ V ↔ U <= Vᗮ
   证明: Iff.rfl
 
@@ -855,7 +855,7 @@ theorem IsOrtho.symm
 
 中文:
 定理 IsOrtho.symm
-  条件: {U V : Submodule 𝕜 E} (h : U ⟂ V)
+  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
   结论: V ⟂ U
   证明: (le_orthogonal_orthogonal _).trans (orthogonal_le h)
 
@@ -875,7 +875,7 @@ theorem isOrtho_comm
 
 中文:
 定理 isOrtho_comm
-  条件: {U V : Submodule 𝕜 E}
+  条件: {U V : 子模 𝕜 E}
   结论: U ⟂ V ↔ V ⟂ U
   证明: ⟨IsOrtho.symm, IsOrtho.symm⟩
 
@@ -910,7 +910,7 @@ theorem IsOrtho.inner_eq
 
 中文:
 定理 IsOrtho.inner_eq
-  条件: {U V : Submodule 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u in U) (hv : v in V)
+  条件: {U V : 子模 𝕜 E} (h : U ⟂ V) {u v : E} (hu : u in U) (hv : v in V)
   证明: h.symm hv _ hu
 
 Depends on / 依赖: h.symm
@@ -930,7 +930,7 @@ theorem isOrtho_iff_inner_eq
 
 中文:
 定理 isOrtho_iff_inner_eq
-  条件: {U V : Submodule 𝕜 E}
+  条件: {U V : 子模 𝕜 E}
   结论: U ⟂ V ↔ 对任意 u in U, 对任意 v in V, ⟪u, v⟫ = 0
   证明: forall₄_congr fun _u _hu _v _hv => inner_eq_zero_symm
 
@@ -955,7 +955,7 @@ theorem isOrtho_bot_left
 
 中文:
 定理 isOrtho_bot_left
-  条件: {V : Submodule 𝕜 E}
+  条件: {V : 子模 𝕜 E}
   结论: ⊥ ⟂ V
   证明: bot_le
 
@@ -978,7 +978,7 @@ theorem isOrtho_bot_right
 
 中文:
 定理 isOrtho_bot_right
-  条件: {U : Submodule 𝕜 E}
+  条件: {U : 子模 𝕜 E}
   结论: U ⟂ ⊥
   证明: isOrtho_bot_left.symm
 
@@ -998,7 +998,7 @@ theorem IsOrtho.mono_left
 
 中文:
 定理 IsOrtho.mono_left
-  条件: {U₁ U₂ V : Submodule 𝕜 E} (hU : U₂ <= U₁) (h : U₁ ⟂ V)
+  条件: {U₁ U₂ V : 子模 𝕜 E} (hU : U₂ <= U₁) (h : U₁ ⟂ V)
   结论: U₂ ⟂ V
   证明: hU.trans h
 
@@ -1018,7 +1018,7 @@ theorem IsOrtho.mono_right
 
 中文:
 定理 IsOrtho.mono_right
-  条件: {U V₁ V₂ : Submodule 𝕜 E} (hV : V₂ <= V₁) (h : U ⟂ V₁)
+  条件: {U V₁ V₂ : 子模 𝕜 E} (hV : V₂ <= V₁) (h : U ⟂ V₁)
   结论: U ⟂ V₂
   证明: (h.symm.mono_left hV).symm
 
@@ -1039,7 +1039,7 @@ theorem IsOrtho.mono
 
 中文:
 定理 IsOrtho.mono
-  条件: {U₁ V₁ U₂ V₂ : Submodule 𝕜 E} (hU : U₂ <= U₁) (hV : V₂ <= V₁) (h : U₁ ⟂ V₁)
+  条件: {U₁ V₁ U₂ V₂ : 子模 𝕜 E} (hU : U₂ <= U₁) (hV : V₂ <= V₁) (h : U₁ ⟂ V₁)
   证明: (h.mono_right hV).mono_left hU
 
 @[simp]
@@ -1065,7 +1065,7 @@ theorem isOrtho_self
 
 中文:
 定理 isOrtho_self
-  条件: {U : Submodule 𝕜 E}
+  条件: {U : 子模 𝕜 E}
   结论: U ⟂ U ↔ U = ⊥
   证明: ⟨fun h => eq_bot_iff.mpr fun x hx => inner_self_eq_zero.mp (h hx x hx), fun h =>
     h.symm ▸ isOrtho_bot_left⟩
@@ -1092,7 +1092,7 @@ theorem isOrtho_orthogonal_right
 
 中文:
 定理 isOrtho_orthogonal_right
-  条件: (U : Submodule 𝕜 E)
+  条件: (U : 子模 𝕜 E)
   结论: U ⟂ Uᗮ
   证明: le_orthogonal_orthogonal _
 
@@ -1115,7 +1115,7 @@ theorem isOrtho_orthogonal_left
 
 中文:
 定理 isOrtho_orthogonal_left
-  条件: (U : Submodule 𝕜 E)
+  条件: (U : 子模 𝕜 E)
   结论: Uᗮ ⟂ U
   证明: (isOrtho_orthogonal_right U).symm
 
@@ -1135,7 +1135,7 @@ theorem IsOrtho.le
 
 中文:
 定理 IsOrtho.le
-  条件: {U V : Submodule 𝕜 E} (h : U ⟂ V)
+  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
   结论: U <= Vᗮ
   证明: h
 -/
@@ -1155,7 +1155,7 @@ theorem IsOrtho.ge
 
 中文:
 定理 IsOrtho.ge
-  条件: {U V : Submodule 𝕜 E} (h : U ⟂ V)
+  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
   结论: V <= Uᗮ
   证明: h.symm
 
@@ -1181,7 +1181,7 @@ theorem isOrtho_top_right
 
 中文:
 定理 isOrtho_top_right
-  条件: {U : Submodule 𝕜 E}
+  条件: {U : 子模 𝕜 E}
   结论: U ⟂ ⊤ ↔ U = ⊥
   证明: ⟨fun h => eq_bot_iff.mpr fun _x hx => inner_self_eq_zero.mp (h hx _ mem_top), fun h =>
     h.symm ▸ isOrtho_bot_left⟩
@@ -1206,7 +1206,7 @@ theorem isOrtho_top_left
 
 中文:
 定理 isOrtho_top_left
-  条件: {V : Submodule 𝕜 E}
+  条件: {V : 子模 𝕜 E}
   结论: ⊤ ⟂ V ↔ V = ⊥
   证明: isOrtho_comm.trans isOrtho_top_right
 
@@ -1228,7 +1228,7 @@ theorem IsOrtho.disjoint
 
 中文:
 定理 IsOrtho.disjoint
-  条件: {U V : Submodule 𝕜 E} (h : U ⟂ V)
+  条件: {U V : 子模 𝕜 E} (h : U ⟂ V)
   结论: Disjoint U V
   证明: (Submodule.orthogonal_disjoint _).mono_right h.symm
 
@@ -1253,7 +1253,7 @@ theorem isOrtho_sup_left
 
 中文:
 定理 isOrtho_sup_left
-  条件: {U₁ U₂ V : Submodule 𝕜 E}
+  条件: {U₁ U₂ V : 子模 𝕜 E}
   结论: U₁ ⊔ U₂ ⟂ V ↔ U₁ ⟂ V ∧ U₂ ⟂ V
   证明: sup_le_iff
 
@@ -1278,7 +1278,7 @@ theorem isOrtho_sup_right
 
 中文:
 定理 isOrtho_sup_right
-  条件: {U V₁ V₂ : Submodule 𝕜 E}
+  条件: {U V₁ V₂ : 子模 𝕜 E}
   结论: U ⟂ V₁ ⊔ V₂ ↔ U ⟂ V₁ ∧ U ⟂ V₂
   证明: isOrtho_comm.trans isOrtho_sup_left.trans isOrtho_comm.and isOrtho_comm
 
@@ -1302,7 +1302,7 @@ theorem isOrtho_sSup_left
 
 中文:
 定理 isOrtho_sSup_left
-  条件: {U : Set (Submodule 𝕜 E)} {V : Submodule 𝕜 E}
+  条件: {U : 集合 (子模 𝕜 E)} {V : 子模 𝕜 E}
   证明: sSup_le_iff
 
 @[simp]
@@ -1326,7 +1326,7 @@ theorem isOrtho_sSup_right
 
 中文:
 定理 isOrtho_sSup_right
-  条件: {U : Submodule 𝕜 E} {V : Set (Submodule 𝕜 E)}
+  条件: {U : 子模 𝕜 E} {V : 集合 (子模 𝕜 E)}
   证明: isOrtho_comm.trans isOrtho_sSup_left.trans by simp_rw [isOrtho_comm]
 
 @[simp]
@@ -1350,7 +1350,7 @@ theorem isOrtho_iSup_left
 
 中文:
 定理 isOrtho_iSup_left
-  条件: {ι : Sort*} {U : ι -> Submodule 𝕜 E} {V : Submodule 𝕜 E}
+  条件: {ι : 类型层*} {U : ι -> 子模 𝕜 E} {V : 子模 𝕜 E}
   证明: iSup_le_iff
 
 @[simp]
@@ -1374,7 +1374,7 @@ theorem isOrtho_iSup_right
 
 中文:
 定理 isOrtho_iSup_right
-  条件: {ι : Sort*} {U : Submodule 𝕜 E} {V : ι -> Submodule 𝕜 E}
+  条件: {ι : 类型层*} {U : 子模 𝕜 E} {V : ι -> 子模 𝕜 E}
   证明: isOrtho_comm.trans isOrtho_iSup_left.trans by simp_rw [isOrtho_comm]
 
 @[simp]
@@ -1399,7 +1399,7 @@ theorem isOrtho_span
 
 中文:
 定理 isOrtho_span
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   证明: by
   simp_rw [span_eq_iSup_of_singleton_spans s, span_eq_iSup_of_singleton_spans t, isOrtho_iSup_left,
     isOrtho_iSup_right, isOrtho_iff_le, span_le, Set.subset_def, SetLike.mem_coe,
@@ -1424,7 +1424,7 @@ theorem IsOrtho.map
 
 中文:
 定理 IsOrtho.map
-  条件: (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E} (h : U ⟂ V)
+  条件: (f : E ->ₗᵢ[𝕜] F) {U V : 子模 𝕜 E} (h : U ⟂ V)
   证明: by
   aesop (add simp [isOrtho_iff_inner_eq])
 
@@ -1450,7 +1450,7 @@ theorem IsOrtho.comap
 
 中文:
 定理 IsOrtho.comap
-  条件: (f : E ->ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F} (h : U ⟂ V)
+  条件: (f : E ->ₗᵢ[𝕜] F) {U V : 子模 𝕜 F} (h : U ⟂ V)
   证明: by
   rw [isOrtho_iff_inner_eq] at *
   simp_rw [mem_comap, ← f.inner_map_map]
@@ -1486,7 +1486,7 @@ theorem IsOrtho.map_iff
 
 中文:
 定理 IsOrtho.map_iff
-  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 E}
+  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : 子模 𝕜 E}
   证明: by
   refine ⟨fun h => ?_, IsOrtho.map f.toLinearIsometry⟩
   have hf : forall p : Submodule 𝕜 E,
@@ -1519,7 +1519,7 @@ theorem IsOrtho.comap_iff
 
 中文:
 定理 IsOrtho.comap_iff
-  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : Submodule 𝕜 F}
+  条件: (f : E ≃ₗᵢ[𝕜] F) {U V : 子模 𝕜 F}
   证明: by
   convert IsOrtho.map_iff f.symm <;>
     exact Submodule.comap_equiv_eq_map_symm (f : E ≃ₗ[𝕜] F) _
@@ -1549,7 +1549,7 @@ alias ⟨OrthogonalFamily.pairwise, OrthogonalFamily.of_pairwise⟩ := orthogona
 
 中文:
 定理 orthogonalFamily_iff_pairwise
-  条件: {ι} {V : ι -> Submodule 𝕜 E}
+  条件: {ι} {V : ι -> 子模 𝕜 E}
   证明: forall₃_congr fun _i _j _hij =>
 Subtype.forall.trans
 forall₂_congr fun _x _hx => Subtype.forall.trans
@@ -1578,7 +1578,7 @@ theorem OrthogonalFamily.isOrtho
 
 中文:
 定理 OrthogonalFamily.isOrtho
-  结论: {ι} {V : ι -> Submodule 𝕜 E}
+  结论: {ι} {V : ι -> 子模 𝕜 E}
   证明: hV.pairwise hij
 
 Depends on / 依赖: hV.pairwise, pairwise
@@ -1614,7 +1614,7 @@ notation:1200 K "ᗮ" => orthogonal K
 
 中文:
 定义 orthogonal
-  签名: : ClosedSubmodule 𝕜 E where
+  签名: : 闭子模 𝕜 E where
   定义体: K.toSubmodule.orthogonal
   isClosed' := K.toSubmodule.isClosed_orthogonal
 
@@ -1822,7 +1822,7 @@ theorem orthogonal_eq_inter
 
 中文:
 定理 orthogonal_eq_inter
-  结论: Kᗮ = ⨅ v : K, LinearMap.ker (innerSL 𝕜 (v : E)).toLinearMap
+  结论: Kᗮ = ⨅ v : K, 线性映射.ker (innerSL 𝕜 (v : E)).toLinearMap
   证明: by
   ext
   simp
@@ -1869,7 +1869,7 @@ theorem orthogonal_le
 
 中文:
 定理 orthogonal_le
-  条件: {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂)
+  条件: {K₁ K₂ : 闭子模 𝕜 E} (h : K₁ <= K₂)
   结论: K₂ᗮ <= K₁ᗮ
   证明: (orthogonal_gc 𝕜 E).monotone_l h
 
@@ -1889,7 +1889,7 @@ theorem orthogonal_orthogonal_monotone
 
 中文:
 定理 orthogonal_orthogonal_monotone
-  条件: {K₁ K₂ : ClosedSubmodule 𝕜 E} (h : K₁ <= K₂)
+  条件: {K₁ K₂ : 闭子模 𝕜 E} (h : K₁ <= K₂)
   结论: K₁ᗮᗮ <= K₂ᗮᗮ
   证明: orthogonal_le (orthogonal_le h)
 
@@ -1909,7 +1909,7 @@ theorem inf_orthogonal
 
 中文:
 定理 inf_orthogonal
-  条件: (K₁ K₂ : ClosedSubmodule 𝕜 E)
+  条件: (K₁ K₂ : 闭子模 𝕜 E)
   结论: K₁ᗮ ⊓ K₂ᗮ = (K₁ ⊔ K₂)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_sup.symm
 
@@ -1929,7 +1929,7 @@ theorem iInf_orthogonal
 
 中文:
 定理 iInf_orthogonal
-  条件: {ι : 类型} (K : ι -> ClosedSubmodule 𝕜 E)
+  条件: {ι : 类型} (K : ι -> 闭子模 𝕜 E)
   结论: ⨅ i, (K i)ᗮ = (iSup K)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_iSup.symm
 
@@ -1951,7 +1951,7 @@ theorem sInf_orthogonal
 
 中文:
 定理 sInf_orthogonal
-  条件: (s : Set <| ClosedSubmodule 𝕜 E)
+  条件: (s : 集合 <| 闭子模 𝕜 E)
   结论: ⨅ K in s, Kᗮ = (sSup s)ᗮ
   证明: (orthogonal_gc 𝕜 E).l_sSup.symm
 
@@ -1975,7 +1975,7 @@ theorem top_orthogonal_eq_bot
 
 中文:
 定理 top_orthogonal_eq_bot
-  结论: (⊤ : ClosedSubmodule 𝕜 E)ᗮ = ⊥
+  结论: (⊤ : 闭子模 𝕜 E)ᗮ = ⊥
   证明: by ext x; simp
 
 @[simp]
@@ -1995,7 +1995,7 @@ theorem bot_orthogonal_eq_top
 
 中文:
 定理 bot_orthogonal_eq_top
-  结论: (⊥ : ClosedSubmodule 𝕜 E)ᗮ = ⊤
+  结论: (⊥ : 闭子模 𝕜 E)ᗮ = ⊤
   证明: by ext x; simp
 
 @[simp]
@@ -2051,8 +2051,8 @@ lemma orthogonal_closure
 
 中文:
 引理 orthogonal_closure
-  条件: (K : Submodule 𝕜 E)
-  结论: (K.closure : Submodule 𝕜 E)ᗮ = Kᗮ
+  条件: (K : 子模 𝕜 E)
+  结论: (K.closure : 子模 𝕜 E)ᗮ = Kᗮ
   证明: by
   rw [← Submodule.orthogonal_closure K]
   congr
@@ -2075,7 +2075,7 @@ lemma orthogonal_closure'
 
 中文:
 引理 orthogonal_closure'
-  条件: (K : Submodule 𝕜 E)
+  条件: (K : 子模 𝕜 E)
   结论: K.closureᗮ = ⟨Kᗮ, K.isClosed_orthogonal⟩
   证明: by
   ext x; simp
@@ -2096,7 +2096,7 @@ lemma orthogonal_closure''
 
 中文:
 引理 orthogonal_closure''
-  条件: (K : Submodule 𝕜 E)
+  条件: (K : 子模 𝕜 E)
   结论: K.closureᗮ = Kᗮ.closure
   证明: by
   rw [Submodule.closure_eq' K.isClosed_orthogonal]

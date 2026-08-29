@@ -52,7 +52,7 @@ structure LieDerivation
 
 中文:
 结构 LieDerivation
-  参数: (R L M : 类型) [CommRing R] [LieRing L] [LieAlgebra R L]
+  参数: (R L M : 类型) [交换环 R] [Lie环 L] [Lie代数 R L]
   继承: L ->ₗ[R] M
   公理与运算 (1 个):
     - leibniz'((a b : L)) : toLinearMap ⁅a, b⁆ = ⁅a, toLinearMap b⁆ - ⁅b, toLinearMap a⁆
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (LieDerivation R L M) L M
+  签名: 函数状 (LieDerivation R L M) L M
   定义体: D.toFun
   coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
 
@@ -106,7 +106,7 @@ instance instLinearMapClass
 
 中文:
 实例 instLinearMapClass
-  签名: : LinearMapClass (LieDerivation R L M) R L M where
+  签名: : 线性映射类 (LieDerivation R L M) R L M where
   定义体: D.toLinearMap.map_add'
   map_smulₛₗ D := D.toLinearMap.map_smul
 
@@ -230,7 +230,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (LieDerivation R L M) (L -> M) DFunLike.coe
+  结论: @函数.单射 (LieDerivation R L M) (L -> M) 依赖函数状.coe
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -344,7 +344,7 @@ theorem eqOn_lieSpan
 
 中文:
 定理 eqOn_lieSpan
-  条件: {s : Set L} (h : Set.EqOn D1 D2 s)
+  条件: {s : 集合 L} (h : 集合.EqOn D1 D2 s)
   证明: by
   intro _ hx
   induction hx using LieSubalgebra.lieSpan_induction with
@@ -376,7 +376,7 @@ theorem ext_of_lieSpan_eq_top
 
 中文:
 定理 ext_of_lieSpan_eq_top
-  结论: (s : Set L) (hs : LieSubalgebra.lieSpan R L s = ⊤)
+  结论: (s : 集合 L) (hs : Lie子代数.lieSpan R L s = ⊤)
   证明: ext fun _ => eqOn_lieSpan h hs.symm ▸ trivial
 
 Depends on / 依赖: eqOn_lieSpan, hs.symm
@@ -468,7 +468,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (LieDerivation R L M) where
+  签名: : 零 (LieDerivation R L M) where
   定义体: { toLinearMap := 0
       leibniz' := fun a b => by simp only [LinearMap.zero_apply, lie_zero, sub_self] }
 
@@ -547,7 +547,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LieDerivation R L M)
+  签名: 可居 (LieDerivation R L M)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (LieDerivation R L M) :=
@@ -567,7 +567,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (LieDerivation R L M) where
+  签名: : 加法 (LieDerivation R L M) where
   定义体: { toLinearMap := D1 + D2
       leibniz' := fun a b => by
         simp only [LinearMap.add_apply, coeFn_coe, apply_lie_eq_sub, lie_add, add_sub_add_comm] }
@@ -687,7 +687,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (LieDerivation R L M)
+  签名: : 取负 (LieDerivation R L M)
   定义体: ⟨fun D =>
     mk (-D) fun a b => by
       simp only [LinearMap.neg_apply, coeFn_coe, apply_lie_eq_sub,
@@ -775,7 +775,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (LieDerivation R L M)
+  签名: : 减法 (LieDerivation R L M)
   定义体: ⟨fun D1 D2 =>
     mk (D1 - D2 : L ->ₗ[R] M) fun a b => by
       simp only [LinearMap.sub_apply, coeFn_coe, apply_lie_eq_sub, lie_sub, sub_sub_sub_comm]⟩
@@ -861,8 +861,8 @@ class SMulBracketCommClass
     - smul_bracket_comm : forall (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
 
 中文:
-类 SMulBracketCommClass
-  参数: (S L α : 类型) [SMul S α] [LieRing L] [AddCommGroup α]
+类 SMulBracketComm类
+  参数: (S L α : 类型) [标量乘法 S α] [Lie环 L] [加法交换群 α]
   公理与运算 (1 个):
     - smul_bracket_comm : 对任意 (s : S) (l : L) (a : α), s • ⁅l, a⁆ = ⁅l, s • a⁆
 -/
@@ -889,7 +889,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul S (LieDerivation R L M) where
+  签名: : 标量乘法 S (LieDerivation R L M) where
   定义体: { toLinearMap := r • D
       leibniz' := fun a b => by simp only [LinearMap.smul_apply, coeFn_coe, apply_lie_eq_sub,
         smul_sub, SMulBracketCommClass.smul_bracket_comm] }
@@ -974,7 +974,7 @@ instance instSMulBase
 
 中文:
 实例 instSMulBase
-  签名: : SMulBracketCommClass R L M
+  签名: : SMulBracketComm类 R L M
   定义体: ⟨fun s l a => (lie_smul s l a).symm⟩
 
 Depends on / 依赖: lie_smul
@@ -990,8 +990,8 @@ instance instSMulNat
   body: ⟨fun s l a => (lie_nsmul l a s).symm⟩
 
 中文:
-实例 instSMulNat
-  签名: : SMulBracketCommClass 自然数 L M
+实例 instSMul自然数
+  签名: : SMulBracketComm类 自然数 L M
   定义体: ⟨fun s l a => (lie_nsmul l a s).symm⟩
 
 Depends on / 依赖: lie_nsmul
@@ -1007,8 +1007,8 @@ instance instSMulInt
   body: ⟨fun s l a => (lie_zsmul l a s).symm⟩
 
 中文:
-实例 instSMulInt
-  签名: : SMulBracketCommClass 整数 L M
+实例 instSMul整数
+  签名: : SMulBracketComm类 整数 L M
   定义体: ⟨fun s l a => (lie_zsmul l a s).symm⟩
 
 Depends on / 依赖: lie_zsmul
@@ -1025,7 +1025,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: : AddCommGroup (LieDerivation R L M)
+  签名: : 加法交换群 (LieDerivation R L M)
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_sub, coe_zero
@@ -1087,7 +1087,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction S (LieDerivation R L M)
+  签名: 分配乘法作用 S (LieDerivation R L M)
   定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, distribMulAction
@@ -1104,8 +1104,8 @@ instance [SMul
   body: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T M] : IsScalarTower S T (LieDerivation R L M)
+实例 [标量乘法
+  签名: S T] [标量塔 S T M] : 标量塔 S T (LieDerivation R L M)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc
@@ -1122,8 +1122,8 @@ instance [SMulCommClass
   body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 中文:
-实例 [SMulCommClass
-  签名: S T M] : SMulCommClass S T (LieDerivation R L M)
+实例 [标量交换类
+  签名: S T M] : 标量交换类 S T (LieDerivation R L M)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -1143,7 +1143,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {S : 类型} [Semiring S] [Module S M] [SMulCommClass R S M]
+  签名: {S : 类型} [半环 S] [模 S M] [标量交换类 R S M]
   定义体: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
@@ -1198,7 +1198,7 @@ lemma commutator_coe_linear_map
 
 中文:
 引理 commutator_coe_linear_map
-  结论: ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆
+  结论: ↑⁅D1, D2⁆ = ⁅(D1 : 模.End R L), (D2 : 模.End R L)⁆
   证明: rfl
 -/
 lemma commutator_coe_linear_map : ↑⁅D1, D2⁆ = ⁅(D1 : Module.End R L), (D2 : Module.End R L)⁆ :=
@@ -1239,7 +1239,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieRing (LieDerivation R L L)
+  签名: Lie环 (LieDerivation R L L)
   定义体: by
     ext a; simp only [commutator_apply, add_apply, map_add]; abel
   lie_add d e f := by
@@ -1272,7 +1272,7 @@ instance instLieAlgebra
 
 中文:
 实例 instLieAlgebra
-  签名: : LieAlgebra R (LieDerivation R L L) where
+  签名: : Lie代数 R (LieDerivation R L L) where
   定义体: fun r d e => by ext a; simp only [commutator_apply, map_smul, smul_sub, smul_apply]
 
 Depends on / 依赖: commutator_apply, map_smul, smul_apply, smul_sub
@@ -1343,7 +1343,7 @@ lemma toLinearMapLieHom_injective
 
 中文:
 引理 toLinearMapLieHom_injective
-  结论: Function.Injective (toLinearMapLieHom R L)
+  结论: 函数.单射 (toLinearMapLieHom R L)
   证明: fun _ _ h => ext fun a => congrFun (congrArg DFunLike.coe h) a
 
 Depends on / 依赖: DFunLike, DFunLike.coe
@@ -1362,7 +1362,7 @@ instance instNoetherian
 
 中文:
 实例 instNoetherian
-  签名: [IsNoetherian R L]
+  签名: [是Noether R L]
   定义体: isNoetherian_of_linearEquiv (LinearEquiv.ofInjective _ (toLinearMapLieHom_injective R L)).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, isNoetherian_of_linearEquiv, ofInjective, toLinearMapLieHom_injective
@@ -1421,7 +1421,7 @@ instance instLieRingModule
 
 中文:
 实例 instLieRingModule
-  签名: : LieRingModule L (LieDerivation R L M) where
+  签名: : Lie环模 L (LieDerivation R L M) where
   定义体: inner R L M (D x)
   add_lie x y D := by simp
   lie_add x D₁ D₂ := by simp
@@ -1481,7 +1481,7 @@ instance instLieModule
 
 中文:
 实例 instLieModule
-  签名: : LieModule R L (LieDerivation R L M) where
+  签名: : Lie模 R L (LieDerivation R L M) where
   定义体: by ext; simp
   lie_smul t x D := by ext; simp
 
@@ -1535,7 +1535,7 @@ definition exp
 
 中文:
 定义 exp
-  签名: (h : IsNilpotent D.toLinearMap)
+  签名: (h : 是幂零 D.toLinearMap)
   定义体: { toLinearMap := IsNilpotent.exp D.toLinearMap
     map_lie' := by
       let _i := LieRing.toNonUnitalNonAssocRing L
@@ -1571,7 +1571,7 @@ lemma exp_apply
 
 中文:
 引理 exp_apply
-  条件: (h : IsNilpotent D.toLinearMap)
+  条件: (h : 是幂零 D.toLinearMap)
   证明: rfl
 -/
 lemma exp_apply (h : IsNilpotent D.toLinearMap) :
@@ -1588,7 +1588,7 @@ lemma exp_map_apply
 
 中文:
 引理 exp_map_apply
-  条件: (h : IsNilpotent D.toLinearMap) (l : L)
+  条件: (h : 是幂零 D.toLinearMap) (l : L)
   证明: DFunLike.congr_fun (exp_apply D h) l
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, exp_apply

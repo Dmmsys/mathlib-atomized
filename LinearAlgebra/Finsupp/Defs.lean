@@ -276,8 +276,8 @@ instance [Nonempty
   body: .of_injective (Finsupp.lsingle <| Classical.arbitrary _) (Finsupp.single_injective _)
 
 中文:
-实例 [Nonempty
-  签名: α] [FaithfulSMul R M] : FaithfulSMul R (α ->₀ M)
+实例 [非空
+  签名: α] [忠实标量乘法 R M] : 忠实标量乘法 R (α ->₀ M)
   定义体: .of_injective (Finsupp.lsingle <| Classical.arbitrary _) (Finsupp.single_injective _)
 
 Depends on / 依赖: Classical, Classical.arbitrary, Finsupp, Finsupp.lsingle, Finsupp.single_injective, arbitrary, lsingle, of_injective, single_injective
@@ -483,7 +483,7 @@ lemma coe_lmapDomain
 中文:
 引理 coe_lmapDomain
   条件: (f : α -> α')
-  结论: ⇑(lmapDomain M R f) = Finsupp.mapDomain f
+  结论: ⇑(lmapDomain M R f) = 有限支撑.mapDomain f
   证明: rfl
 
 @[simp]
@@ -502,7 +502,7 @@ theorem lmapDomain_id
 
 中文:
 定理 lmapDomain_id
-  结论: (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = LinearMap.id
+  结论: (lmapDomain M R _root_.id : (α ->₀ M) ->ₗ[R] α ->₀ M) = 线性映射.id
   证明: LinearMap.ext fun _ => mapDomain_id
 
 Depends on / 依赖: LinearMap, LinearMap.ext, mapDomain_id
@@ -634,7 +634,7 @@ definition lcomapDomain
 
 中文:
 定义 lcomapDomain
-  签名: (f : α -> β) (hf : Function.Injective f)
+  签名: (f : α -> β) (hf : 函数.单射 f)
   定义体: Finsupp.comapDomain f l hf.injOn
   map_add' x y := by ext; simp
   map_smul' c x := by ext; simp
@@ -656,7 +656,7 @@ theorem leftInverse_lcomapDomain_mapDomain
 
 中文:
 定理 leftInverse_lcomapDomain_mapDomain
-  条件: (f : α -> β) (hf : Function.Injective f)
+  条件: (f : α -> β) (hf : 函数.单射 f)
   证明: comapDomain_mapDomain f hf
 
 Depends on / 依赖: mapDomain
@@ -999,8 +999,8 @@ definition Module.subsingletonEquiv
   map_smul' r _ := (smul_zero r).symm
 
 中文:
-定义 Module.subsingletonEquiv
-  签名: (R M ι : 类型) [Semiring R] [Subsingleton R] [AddCommMonoid M]
+定义 模.subsingletonEquiv
+  签名: (R M ι : 类型) [半环 R] [子单例 R] [加法交换幺半群 M]
   定义体: 0
   invFun _ := 0
   left_inv m :=

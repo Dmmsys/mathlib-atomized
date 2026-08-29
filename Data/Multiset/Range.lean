@@ -50,7 +50,7 @@ theorem coe_range
 中文:
 定理 coe_range
   条件: (n : 自然数)
-  结论: ↑(List.range n) = range n
+  结论: ↑(列表.range n) = range n
   证明: rfl
 
 @[simp]

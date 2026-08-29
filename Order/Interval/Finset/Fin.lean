@@ -67,7 +67,7 @@ instance instLocallyFiniteOrderBot
 
 中文:
 实例 instLocallyFiniteOrderBot
-  签名: : 对任意 n, LocallyFiniteOrderBot (Fin n)
+  签名: : 对任意 n, LocallyFiniteOrderBot (有限集 n)
 -/
 instance instLocallyFiniteOrderBot : forall n, LocallyFiniteOrderBot (Fin n)
   | 0 => IsEmpty.toLocallyFiniteOrderBot
@@ -82,7 +82,7 @@ instance instLocallyFiniteOrderTop
 
 中文:
 实例 instLocallyFiniteOrderTop
-  签名: : 对任意 n, LocallyFiniteOrderTop (Fin n)
+  签名: : 对任意 n, LocallyFiniteOrderTop (有限集 n)
 -/
 instance instLocallyFiniteOrderTop : forall n, LocallyFiniteOrderTop (Fin n)
   | 0 => IsEmpty.toLocallyFiniteOrderTop
@@ -205,7 +205,7 @@ theorem attachFin_Ico_eq_Ici
 
 中文:
 定理 attachFin_Ico_eq_Ici
-  结论: attachFin (Ico a n) (fun _x hx => (mem_Ico.mp hx).2) = Ici a
+  结论: attachFin (左闭右开区间 a n) (fun _x hx => (mem_Ico.mp hx).2) = 左闭右无界区间 a
   证明: by
   ext; simp
 
@@ -228,7 +228,7 @@ theorem attachFin_Ioo_eq_Ioi
 
 中文:
 定理 attachFin_Ioo_eq_Ioi
-  结论: attachFin (Ioo a n) (fun _x hx => (mem_Ioo.mp hx).2) = Ioi a
+  结论: attachFin (开区间 a n) (fun _x hx => (mem_Ioo.mp hx).2) = 左开右无界区间 a
   证明: by
   ext; simp
 
@@ -251,7 +251,7 @@ theorem attachFin_Iic
 
 中文:
 定理 attachFin_Iic
-  结论: attachFin (Iic a) (fun _x hx => (mem_Iic.mp hx).trans_lt a.2) = Iic a
+  结论: attachFin (左无界右闭区间 a) (fun _x hx => (mem_Iic.mp hx).trans_lt a.2) = 左无界右闭区间 a
   证明: by
   ext; simp
 
@@ -272,7 +272,7 @@ theorem attachFin_Iio
 
 中文:
 定理 attachFin_Iio
-  结论: attachFin (Iio a) (fun _x hx => (mem_Iio.mp hx).trans a.2) = Iio a
+  结论: attachFin (左无界右开区间 a) (fun _x hx => (mem_Iio.mp hx).trans a.2) = 左无界右开区间 a
   证明: by
   ext; simp
 -/
@@ -298,7 +298,7 @@ theorem finsetImage_val_Icc
 
 中文:
 定理 finsetImage_val_Icc
-  结论: (Icc a b).image val = Icc (a : 自然数) b
+  结论: (闭区间 a b).像 val = 闭区间 (a : 自然数) b
   证明: image_val_attachFin _
 
 @[simp]
@@ -321,7 +321,7 @@ theorem finsetImage_val_Ico
 
 中文:
 定理 finsetImage_val_Ico
-  结论: (Ico a b).image val = Ico (a : 自然数) b
+  结论: (左闭右开区间 a b).像 val = 左闭右开区间 (a : 自然数) b
   证明: image_val_attachFin _
 
 @[simp]
@@ -344,7 +344,7 @@ theorem finsetImage_val_Ioc
 
 中文:
 定理 finsetImage_val_Ioc
-  结论: (Ioc a b).image val = Ioc (a : 自然数) b
+  结论: (左开右闭区间 a b).像 val = 左开右闭区间 (a : 自然数) b
   证明: image_val_attachFin _
 
 @[simp]
@@ -367,7 +367,7 @@ theorem finsetImage_val_Ioo
 
 中文:
 定理 finsetImage_val_Ioo
-  结论: (Ioo a b).image val = Ioo (a : 自然数) b
+  结论: (开区间 a b).像 val = 开区间 (a : 自然数) b
   证明: image_val_attachFin _
 
 @[simp]
@@ -390,7 +390,7 @@ theorem finsetImage_val_uIcc
 
 中文:
 定理 finsetImage_val_uIcc
-  结论: (uIcc a b).image val = uIcc (a : 自然数) b
+  结论: (uIcc a b).像 val = uIcc (a : 自然数) b
   证明: finsetImage_val_Icc _ _
 
 @[simp]
@@ -413,7 +413,7 @@ theorem finsetImage_val_Ici
 
 中文:
 定理 finsetImage_val_Ici
-  结论: (Ici a).image val = Ico (a : 自然数) n
+  结论: (左闭右无界区间 a).像 val = 左闭右开区间 (a : 自然数) n
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -435,7 +435,7 @@ theorem finsetImage_val_Ioi
 
 中文:
 定理 finsetImage_val_Ioi
-  结论: (Ioi a).image val = Ioo (a : 自然数) n
+  结论: (左开右无界区间 a).像 val = 开区间 (a : 自然数) n
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -457,7 +457,7 @@ theorem finsetImage_val_Iic
 
 中文:
 定理 finsetImage_val_Iic
-  结论: (Iic a).image val = Iic (a : 自然数)
+  结论: (左无界右闭区间 a).像 val = 左无界右闭区间 (a : 自然数)
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -477,7 +477,7 @@ theorem finsetImage_val_Iio
 
 中文:
 定理 finsetImage_val_Iio
-  结论: (Iio b).image val = Iio (b : 自然数)
+  结论: (左无界右开区间 b).像 val = 左无界右开区间 (b : 自然数)
   证明: by simp [← coe_inj]
 
 Depends on / 依赖: coe_inj
@@ -501,7 +501,7 @@ theorem map_valEmbedding_Icc
 
 中文:
 定理 map_valEmbedding_Icc
-  结论: (Icc a b).map Fin.valEmbedding = Icc (a : 自然数) b
+  结论: (闭区间 a b).map 有限集.valEmbedding = 闭区间 (a : 自然数) b
   证明: map_valEmbedding_attachFin _
 
 @[simp]
@@ -524,7 +524,7 @@ theorem map_valEmbedding_Ico
 
 中文:
 定理 map_valEmbedding_Ico
-  结论: (Ico a b).map Fin.valEmbedding = Ico (a : 自然数) b
+  结论: (左闭右开区间 a b).map 有限集.valEmbedding = 左闭右开区间 (a : 自然数) b
   证明: map_valEmbedding_attachFin _
 
 @[simp]
@@ -547,7 +547,7 @@ theorem map_valEmbedding_Ioc
 
 中文:
 定理 map_valEmbedding_Ioc
-  结论: (Ioc a b).map Fin.valEmbedding = Ioc (a : 自然数) b
+  结论: (左开右闭区间 a b).map 有限集.valEmbedding = 左开右闭区间 (a : 自然数) b
   证明: map_valEmbedding_attachFin _
 
 @[simp]
@@ -570,7 +570,7 @@ theorem map_valEmbedding_Ioo
 
 中文:
 定理 map_valEmbedding_Ioo
-  结论: (Ioo a b).map Fin.valEmbedding = Ioo (a : 自然数) b
+  结论: (开区间 a b).map 有限集.valEmbedding = 开区间 (a : 自然数) b
   证明: map_valEmbedding_attachFin _
 
 @[simp]
@@ -617,7 +617,7 @@ theorem map_valEmbedding_Ici
 
 中文:
 定理 map_valEmbedding_Ici
-  结论: (Ici a).map Fin.valEmbedding = Ico (a : 自然数) n
+  结论: (左闭右无界区间 a).map 有限集.valEmbedding = 左闭右开区间 (a : 自然数) n
   证明: by
   rw [← attachFin_Ico_eq_Ici]; rw [map_valEmbedding_attachFin]
 
@@ -642,7 +642,7 @@ theorem map_valEmbedding_Ioi
 
 中文:
 定理 map_valEmbedding_Ioi
-  结论: (Ioi a).map Fin.valEmbedding = Ioo (a : 自然数) n
+  结论: (左开右无界区间 a).map 有限集.valEmbedding = 开区间 (a : 自然数) n
   证明: by
   rw [← attachFin_Ioo_eq_Ioi]; rw [map_valEmbedding_attachFin]
 
@@ -667,7 +667,7 @@ theorem map_valEmbedding_Iic
 
 中文:
 定理 map_valEmbedding_Iic
-  结论: (Iic a).map Fin.valEmbedding = Iic (a : 自然数)
+  结论: (左无界右闭区间 a).map 有限集.valEmbedding = 左无界右闭区间 (a : 自然数)
   证明: by
   rw [← attachFin_Iic]; rw [map_valEmbedding_attachFin]
 
@@ -690,7 +690,7 @@ theorem map_valEmbedding_Iio
 
 中文:
 定理 map_valEmbedding_Iio
-  结论: (Iio a).map Fin.valEmbedding = Iio (a : 自然数)
+  结论: (左无界右开区间 a).map 有限集.valEmbedding = 左无界右开区间 (a : 自然数)
   证明: by
   rw [← attachFin_Iio]; rw [map_valEmbedding_attachFin]
 
@@ -1046,7 +1046,7 @@ theorem finsetImage_castAdd_Icc
 
 中文:
 定理 finsetImage_castAdd_Icc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: finsetImage_castLE_Icc ..
 
 @[simp]
@@ -1070,7 +1070,7 @@ theorem finsetImage_castAdd_Ico
 
 中文:
 定理 finsetImage_castAdd_Ico
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: finsetImage_castLE_Ico ..
 
 @[simp]
@@ -1094,7 +1094,7 @@ theorem finsetImage_castAdd_Ioc
 
 中文:
 定理 finsetImage_castAdd_Ioc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: finsetImage_castLE_Ioc ..
 
 @[simp]
@@ -1118,7 +1118,7 @@ theorem finsetImage_castAdd_Ioo
 
 中文:
 定理 finsetImage_castAdd_Ioo
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: finsetImage_castLE_Ioo ..
 
 @[simp]
@@ -1142,7 +1142,7 @@ theorem finsetImage_castAdd_uIcc
 
 中文:
 定理 finsetImage_castAdd_uIcc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: finsetImage_castLE_uIcc ..
 
 @[simp]
@@ -1167,7 +1167,7 @@ theorem finsetImage_castAdd_Ici
 
 中文:
 定理 finsetImage_castAdd_Ici
-  条件: (m) [NeZero m] (i : Fin n)
+  条件: (m) [NeZero m] (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1193,7 +1193,7 @@ theorem finsetImage_castAdd_Ioi
 
 中文:
 定理 finsetImage_castAdd_Ioi
-  条件: (m) [NeZero m] (i : Fin n)
+  条件: (m) [NeZero m] (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1219,8 +1219,8 @@ theorem finsetImage_castAdd_Iic
 
 中文:
 定理 finsetImage_castAdd_Iic
-  条件: (m) (i : Fin n)
-  结论: (Iic i).image (castAdd m) = Iic (castAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左无界右闭区间 i).像 (castAdd m) = 左无界右闭区间 (castAdd m i)
   证明: finsetImage_castLE_Iic i _
 
 @[simp]
@@ -1242,8 +1242,8 @@ theorem finsetImage_castAdd_Iio
 
 中文:
 定理 finsetImage_castAdd_Iio
-  条件: (m) (i : Fin n)
-  结论: (Iio i).image (castAdd m) = Iio (castAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左无界右开区间 i).像 (castAdd m) = 左无界右开区间 (castAdd m i)
   证明: finsetImage_castLE_Iio ..
 
 Depends on / 依赖: finsetImage_castLE_Iio
@@ -1268,7 +1268,7 @@ theorem map_castAddEmb_Icc
 
 中文:
 定理 map_castAddEmb_Icc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: map_castLEEmb_Icc ..
 
 @[simp]
@@ -1292,7 +1292,7 @@ theorem map_castAddEmb_Ico
 
 中文:
 定理 map_castAddEmb_Ico
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: map_castLEEmb_Ico ..
 
 @[simp]
@@ -1316,7 +1316,7 @@ theorem map_castAddEmb_Ioc
 
 中文:
 定理 map_castAddEmb_Ioc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: map_castLEEmb_Ioc ..
 
 @[simp]
@@ -1340,7 +1340,7 @@ theorem map_castAddEmb_Ioo
 
 中文:
 定理 map_castAddEmb_Ioo
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: map_castLEEmb_Ioo ..
 
 @[simp]
@@ -1364,7 +1364,7 @@ theorem map_castAddEmb_uIcc
 
 中文:
 定理 map_castAddEmb_uIcc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: map_castLEEmb_uIcc ..
 
 @[simp]
@@ -1389,7 +1389,7 @@ theorem map_castAddEmb_Ici
 
 中文:
 定理 map_castAddEmb_Ici
-  条件: (m) [NeZero m] (i : Fin n)
+  条件: (m) [NeZero m] (i : 有限集 n)
   证明: by
   simp [map_eq_image]
 
@@ -1415,7 +1415,7 @@ theorem map_castAddEmb_Ioi
 
 中文:
 定理 map_castAddEmb_Ioi
-  条件: (m) [NeZero m] (i : Fin n)
+  条件: (m) [NeZero m] (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1441,8 +1441,8 @@ theorem map_castAddEmb_Iic
 
 中文:
 定理 map_castAddEmb_Iic
-  条件: (m) (i : Fin n)
-  结论: (Iic i).map (castAddEmb m) = Iic (castAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左无界右闭区间 i).map (castAddEmb m) = 左无界右闭区间 (castAdd m i)
   证明: map_castLEEmb_Iic i _
 
 @[simp]
@@ -1464,8 +1464,8 @@ theorem map_castAddEmb_Iio
 
 中文:
 定理 map_castAddEmb_Iio
-  条件: (m) (i : Fin n)
-  结论: (Iio i).map (castAddEmb m) = Iio (castAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左无界右开区间 i).map (castAddEmb m) = 左无界右开区间 (castAdd m i)
   证明: map_castLEEmb_Iio ..
 
 Depends on / 依赖: map_castLEEmb_Iio
@@ -1495,7 +1495,7 @@ theorem finsetImage_cast_Icc
 
 中文:
 定理 finsetImage_cast_Icc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1521,7 +1521,7 @@ theorem finsetImage_cast_Ico
 
 中文:
 定理 finsetImage_cast_Ico
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1547,7 +1547,7 @@ theorem finsetImage_cast_Ioc
 
 中文:
 定理 finsetImage_cast_Ioc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1573,7 +1573,7 @@ theorem finsetImage_cast_Ioo
 
 中文:
 定理 finsetImage_cast_Ioo
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1599,7 +1599,7 @@ theorem finsetImage_cast_uIcc
 
 中文:
 定理 finsetImage_cast_uIcc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1625,7 +1625,7 @@ theorem finsetImage_cast_Ici
 
 中文:
 定理 finsetImage_cast_Ici
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1651,7 +1651,7 @@ theorem finsetImage_cast_Ioi
 
 中文:
 定理 finsetImage_cast_Ioi
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1677,7 +1677,7 @@ theorem finsetImage_cast_Iic
 
 中文:
 定理 finsetImage_cast_Iic
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1701,7 +1701,7 @@ theorem finsetImage_cast_Iio
 
 中文:
 定理 finsetImage_cast_Iio
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1728,7 +1728,7 @@ theorem map_finCongr_Icc
 
 中文:
 定理 map_finCongr_Icc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1751,7 +1751,7 @@ theorem map_finCongr_Ico
 
 中文:
 定理 map_finCongr_Ico
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1774,7 +1774,7 @@ theorem map_finCongr_Ioc
 
 中文:
 定理 map_finCongr_Ioc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1797,7 +1797,7 @@ theorem map_finCongr_Ioo
 
 中文:
 定理 map_finCongr_Ioo
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1820,7 +1820,7 @@ theorem map_finCongr_uIcc
 
 中文:
 定理 map_finCongr_uIcc
-  条件: (h : n = m) (i j : Fin n)
+  条件: (h : n = m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1843,7 +1843,7 @@ theorem map_finCongr_Ici
 
 中文:
 定理 map_finCongr_Ici
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1866,7 +1866,7 @@ theorem map_finCongr_Ioi
 
 中文:
 定理 map_finCongr_Ioi
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1889,7 +1889,7 @@ theorem map_finCongr_Iic
 
 中文:
 定理 map_finCongr_Iic
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1912,7 +1912,7 @@ theorem map_finCongr_Iio
 
 中文:
 定理 map_finCongr_Iio
-  条件: (h : n = m) (i : Fin n)
+  条件: (h : n = m) (i : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -1943,7 +1943,7 @@ theorem finsetImage_castSucc_Icc
 
 中文:
 定理 finsetImage_castSucc_Icc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: finsetImage_castAdd_Icc ..
 
 @[simp]
@@ -1967,7 +1967,7 @@ theorem finsetImage_castSucc_Ico
 
 中文:
 定理 finsetImage_castSucc_Ico
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: finsetImage_castAdd_Ico ..
 
 @[simp]
@@ -1991,7 +1991,7 @@ theorem finsetImage_castSucc_Ioc
 
 中文:
 定理 finsetImage_castSucc_Ioc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: finsetImage_castAdd_Ioc ..
 
 @[simp]
@@ -2015,7 +2015,7 @@ theorem finsetImage_castSucc_Ioo
 
 中文:
 定理 finsetImage_castSucc_Ioo
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: finsetImage_castAdd_Ioo ..
 
 @[simp]
@@ -2039,7 +2039,7 @@ theorem finsetImage_castSucc_uIcc
 
 中文:
 定理 finsetImage_castSucc_uIcc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: finsetImage_castAdd_uIcc ..
 
 @[simp]
@@ -2064,8 +2064,8 @@ theorem finsetImage_castSucc_Ici
 
 中文:
 定理 finsetImage_castSucc_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).image castSucc = Ico i.castSucc (.last n)
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).像 castSucc = 左闭右开区间 i.castSucc (.last n)
   证明: finsetImage_castAdd_Ici ..
 
 @[simp]
@@ -2089,8 +2089,8 @@ theorem finsetImage_castSucc_Ioi
 
 中文:
 定理 finsetImage_castSucc_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).image castSucc = Ioo i.castSucc (.last n)
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).像 castSucc = 开区间 i.castSucc (.last n)
   证明: finsetImage_castAdd_Ioi ..
 
 @[simp]
@@ -2114,8 +2114,8 @@ theorem finsetImage_castSucc_Iic
 
 中文:
 定理 finsetImage_castSucc_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).image castSucc = Iic i.castSucc
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).像 castSucc = 左无界右闭区间 i.castSucc
   证明: finsetImage_castAdd_Iic ..
 
 @[simp]
@@ -2137,8 +2137,8 @@ theorem finsetImage_castSucc_Iio
 
 中文:
 定理 finsetImage_castSucc_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).image castSucc = Iio i.castSucc
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).像 castSucc = 左无界右开区间 i.castSucc
   证明: finsetImage_castAdd_Iio ..
 
 Depends on / 依赖: finsetImage_castAdd_Iio
@@ -2163,7 +2163,7 @@ theorem map_castSuccEmb_Icc
 
 中文:
 定理 map_castSuccEmb_Icc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: map_castAddEmb_Icc ..
 
 @[simp]
@@ -2187,7 +2187,7 @@ theorem map_castSuccEmb_Ico
 
 中文:
 定理 map_castSuccEmb_Ico
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: map_castAddEmb_Ico ..
 
 @[simp]
@@ -2211,7 +2211,7 @@ theorem map_castSuccEmb_Ioc
 
 中文:
 定理 map_castSuccEmb_Ioc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: map_castAddEmb_Ioc ..
 
 @[simp]
@@ -2235,7 +2235,7 @@ theorem map_castSuccEmb_Ioo
 
 中文:
 定理 map_castSuccEmb_Ioo
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: map_castAddEmb_Ioo ..
 
 @[simp]
@@ -2259,7 +2259,7 @@ theorem map_castSuccEmb_uIcc
 
 中文:
 定理 map_castSuccEmb_uIcc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   证明: map_castAddEmb_uIcc ..
 
 @[simp]
@@ -2284,8 +2284,8 @@ theorem map_castSuccEmb_Ici
 
 中文:
 定理 map_castSuccEmb_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).map castSuccEmb = Ico i.castSucc (.last n)
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).map castSuccEmb = 左闭右开区间 i.castSucc (.last n)
   证明: map_castAddEmb_Ici ..
 
 @[simp]
@@ -2309,8 +2309,8 @@ theorem map_castSuccEmb_Ioi
 
 中文:
 定理 map_castSuccEmb_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).map castSuccEmb = Ioo i.castSucc (.last n)
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).map castSuccEmb = 开区间 i.castSucc (.last n)
   证明: map_castAddEmb_Ioi ..
 
 @[simp]
@@ -2334,8 +2334,8 @@ theorem map_castSuccEmb_Iic
 
 中文:
 定理 map_castSuccEmb_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).map castSuccEmb = Iic i.castSucc
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).map castSuccEmb = 左无界右闭区间 i.castSucc
   证明: map_castAddEmb_Iic ..
 
 @[simp]
@@ -2357,8 +2357,8 @@ theorem map_castSuccEmb_Iio
 
 中文:
 定理 map_castSuccEmb_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).map castSuccEmb = Iio i.castSucc
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).map castSuccEmb = 左无界右开区间 i.castSucc
   证明: map_castAddEmb_Iio ..
 
 Depends on / 依赖: map_castAddEmb_Iio
@@ -2388,7 +2388,7 @@ theorem finsetImage_natAdd_Icc
 
 中文:
 定理 finsetImage_natAdd_Icc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2414,7 +2414,7 @@ theorem finsetImage_natAdd_Ico
 
 中文:
 定理 finsetImage_natAdd_Ico
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2440,7 +2440,7 @@ theorem finsetImage_natAdd_Ioc
 
 中文:
 定理 finsetImage_natAdd_Ioc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2466,7 +2466,7 @@ theorem finsetImage_natAdd_Ioo
 
 中文:
 定理 finsetImage_natAdd_Ioo
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2492,7 +2492,7 @@ theorem finsetImage_natAdd_uIcc
 
 中文:
 定理 finsetImage_natAdd_uIcc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2519,8 +2519,8 @@ theorem finsetImage_natAdd_Ici
 
 中文:
 定理 finsetImage_natAdd_Ici
-  条件: (m) (i : Fin n)
-  结论: (Ici i).image (natAdd m) = Ici (natAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左闭右无界区间 i).像 (natAdd m) = 左闭右无界区间 (natAdd m i)
   证明: by
   simp [← coe_inj]
 
@@ -2544,8 +2544,8 @@ theorem finsetImage_natAdd_Ioi
 
 中文:
 定理 finsetImage_natAdd_Ioi
-  条件: (m) (i : Fin n)
-  结论: (Ioi i).image (natAdd m) = Ioi (natAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左开右无界区间 i).像 (natAdd m) = 左开右无界区间 (natAdd m i)
   证明: by
   simp [← coe_inj]
 
@@ -2571,7 +2571,7 @@ theorem map_natAddEmb_Icc
 
 中文:
 定理 map_natAddEmb_Icc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2594,7 +2594,7 @@ theorem map_natAddEmb_Ico
 
 中文:
 定理 map_natAddEmb_Ico
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2617,7 +2617,7 @@ theorem map_natAddEmb_Ioc
 
 中文:
 定理 map_natAddEmb_Ioc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2640,7 +2640,7 @@ theorem map_natAddEmb_Ioo
 
 中文:
 定理 map_natAddEmb_Ioo
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2663,7 +2663,7 @@ theorem map_natAddEmb_uIcc
 
 中文:
 定理 map_natAddEmb_uIcc
-  条件: (m) (i j : Fin n)
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2687,8 +2687,8 @@ theorem map_natAddEmb_Ici
 
 中文:
 定理 map_natAddEmb_Ici
-  条件: (m) (i : Fin n)
-  结论: (Ici i).map (natAddEmb m) = Ici (natAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左闭右无界区间 i).map (natAddEmb m) = 左闭右无界区间 (natAdd m i)
   证明: by
   simp [← coe_inj]
 
@@ -2711,8 +2711,8 @@ theorem map_natAddEmb_Ioi
 
 中文:
 定理 map_natAddEmb_Ioi
-  条件: (m) (i : Fin n)
-  结论: (Ioi i).map (natAddEmb m) = Ioi (natAdd m i)
+  条件: (m) (i : 有限集 n)
+  结论: (左开右无界区间 i).map (natAddEmb m) = 左开右无界区间 (natAdd m i)
   证明: by
   simp [← coe_inj]
 
@@ -2742,8 +2742,8 @@ theorem finsetImage_addNat_Icc
 @[simp]
 
 中文:
-定理 finsetImage_addNat_Icc
-  条件: (m) (i j : Fin n)
+定理 finsetImage_add自然数_Icc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2768,8 +2768,8 @@ theorem finsetImage_addNat_Ico
 @[simp]
 
 中文:
-定理 finsetImage_addNat_Ico
-  条件: (m) (i j : Fin n)
+定理 finsetImage_add自然数_Ico
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2794,8 +2794,8 @@ theorem finsetImage_addNat_Ioc
 @[simp]
 
 中文:
-定理 finsetImage_addNat_Ioc
-  条件: (m) (i j : Fin n)
+定理 finsetImage_add自然数_Ioc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2820,8 +2820,8 @@ theorem finsetImage_addNat_Ioo
 @[simp]
 
 中文:
-定理 finsetImage_addNat_Ioo
-  条件: (m) (i j : Fin n)
+定理 finsetImage_add自然数_Ioo
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2846,8 +2846,8 @@ theorem finsetImage_addNat_uIcc
 @[simp]
 
 中文:
-定理 finsetImage_addNat_uIcc
-  条件: (m) (i j : Fin n)
+定理 finsetImage_add自然数_uIcc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2873,9 +2873,9 @@ theorem finsetImage_addNat_Ici
 @[simp]
 
 中文:
-定理 finsetImage_addNat_Ici
-  条件: (m) (i : Fin n)
-  结论: (Ici i).image (add自然数 · m) = Ici (i.add自然数 m)
+定理 finsetImage_add自然数_Ici
+  条件: (m) (i : 有限集 n)
+  结论: (左闭右无界区间 i).像 (add自然数 · m) = 左闭右无界区间 (i.add自然数 m)
   证明: by
   simp [← coe_inj]
 
@@ -2898,9 +2898,9 @@ theorem finsetImage_addNat_Ioi
   simp [← coe_inj]
 
 中文:
-定理 finsetImage_addNat_Ioi
-  条件: (m) (i : Fin n)
-  结论: (Ioi i).image (add自然数 · m) = Ioi (i.add自然数 m)
+定理 finsetImage_add自然数_Ioi
+  条件: (m) (i : 有限集 n)
+  结论: (左开右无界区间 i).像 (add自然数 · m) = 左开右无界区间 (i.add自然数 m)
   证明: by
   simp [← coe_inj]
 
@@ -2925,8 +2925,8 @@ theorem map_addNatEmb_Icc
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Icc
-  条件: (m) (i j : Fin n)
+定理 map_add自然数Emb_Icc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2948,8 +2948,8 @@ theorem map_addNatEmb_Ico
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Ico
-  条件: (m) (i j : Fin n)
+定理 map_add自然数Emb_Ico
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2971,8 +2971,8 @@ theorem map_addNatEmb_Ioc
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Ioc
-  条件: (m) (i j : Fin n)
+定理 map_add自然数Emb_Ioc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -2994,8 +2994,8 @@ theorem map_addNatEmb_Ioo
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Ioo
-  条件: (m) (i j : Fin n)
+定理 map_add自然数Emb_Ioo
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -3017,8 +3017,8 @@ theorem map_addNatEmb_uIcc
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_uIcc
-  条件: (m) (i j : Fin n)
+定理 map_add自然数Emb_uIcc
+  条件: (m) (i j : 有限集 n)
   证明: by
   simp [← coe_inj]
 
@@ -3041,9 +3041,9 @@ theorem map_addNatEmb_Ici
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Ici
-  条件: (m) (i : Fin n)
-  结论: (Ici i).map (add自然数Emb m) = Ici (i.add自然数 m)
+定理 map_add自然数Emb_Ici
+  条件: (m) (i : 有限集 n)
+  结论: (左闭右无界区间 i).map (add自然数Emb m) = 左闭右无界区间 (i.add自然数 m)
   证明: by
   simp [← coe_inj]
 
@@ -3065,9 +3065,9 @@ theorem map_addNatEmb_Ioi
   simp [← coe_inj]
 
 中文:
-定理 map_addNatEmb_Ioi
-  条件: (m) (i : Fin n)
-  结论: (Ioi i).map (add自然数Emb m) = Ioi (i.add自然数 m)
+定理 map_add自然数Emb_Ioi
+  条件: (m) (i : 有限集 n)
+  结论: (左开右无界区间 i).map (add自然数Emb m) = 左开右无界区间 (i.add自然数 m)
   证明: by
   simp [← coe_inj]
 
@@ -3098,8 +3098,8 @@ theorem finsetImage_succ_Icc
 
 中文:
 定理 finsetImage_succ_Icc
-  条件: (i j : Fin n)
-  结论: (Icc i j).image succ = Icc i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (闭区间 i j).像 succ = 闭区间 i.succ j.succ
   证明: finsetImage_addNat_Icc ..
 
 @[simp]
@@ -3123,8 +3123,8 @@ theorem finsetImage_succ_Ico
 
 中文:
 定理 finsetImage_succ_Ico
-  条件: (i j : Fin n)
-  结论: (Ico i j).image succ = Ico i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (左闭右开区间 i j).像 succ = 左闭右开区间 i.succ j.succ
   证明: finsetImage_addNat_Ico ..
 
 @[simp]
@@ -3148,8 +3148,8 @@ theorem finsetImage_succ_Ioc
 
 中文:
 定理 finsetImage_succ_Ioc
-  条件: (i j : Fin n)
-  结论: (Ioc i j).image succ = Ioc i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (左开右闭区间 i j).像 succ = 左开右闭区间 i.succ j.succ
   证明: finsetImage_addNat_Ioc ..
 
 @[simp]
@@ -3173,8 +3173,8 @@ theorem finsetImage_succ_Ioo
 
 中文:
 定理 finsetImage_succ_Ioo
-  条件: (i j : Fin n)
-  结论: (Ioo i j).image succ = Ioo i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (开区间 i j).像 succ = 开区间 i.succ j.succ
   证明: finsetImage_addNat_Ioo ..
 
 @[simp]
@@ -3198,8 +3198,8 @@ theorem finsetImage_succ_uIcc
 
 中文:
 定理 finsetImage_succ_uIcc
-  条件: (i j : Fin n)
-  结论: (uIcc i j).image succ = uIcc i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (uIcc i j).像 succ = uIcc i.succ j.succ
   证明: finsetImage_addNat_uIcc ..
 
 @[simp]
@@ -3223,8 +3223,8 @@ theorem finsetImage_succ_Ici
 
 中文:
 定理 finsetImage_succ_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).image succ = Ici i.succ
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).像 succ = 左闭右无界区间 i.succ
   证明: finsetImage_addNat_Ici ..
 
 @[simp]
@@ -3248,8 +3248,8 @@ theorem finsetImage_succ_Ioi
 
 中文:
 定理 finsetImage_succ_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).image succ = Ioi i.succ
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).像 succ = 左开右无界区间 i.succ
   证明: finsetImage_addNat_Ioi ..
 
 @[simp]
@@ -3274,8 +3274,8 @@ theorem finsetImage_succ_Iic
 
 中文:
 定理 finsetImage_succ_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).image succ = Ioc 0 i.succ
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).像 succ = 左开右闭区间 0 i.succ
   证明: by
   simp [← coe_inj]
 
@@ -3299,8 +3299,8 @@ theorem finsetImage_succ_Iio
 
 中文:
 定理 finsetImage_succ_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).image succ = Ioo 0 i.succ
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).像 succ = 开区间 0 i.succ
   证明: by
   simp [← coe_inj]
 
@@ -3327,8 +3327,8 @@ theorem map_succEmb_Icc
 
 中文:
 定理 map_succEmb_Icc
-  条件: (i j : Fin n)
-  结论: (Icc i j).map (succEmb n) = Icc i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (闭区间 i j).map (succEmb n) = 闭区间 i.succ j.succ
   证明: map_addNatEmb_Icc ..
 
 @[simp]
@@ -3352,8 +3352,8 @@ theorem map_succEmb_Ico
 
 中文:
 定理 map_succEmb_Ico
-  条件: (i j : Fin n)
-  结论: (Ico i j).map (succEmb n) = Ico i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (左闭右开区间 i j).map (succEmb n) = 左闭右开区间 i.succ j.succ
   证明: map_addNatEmb_Ico ..
 
 @[simp]
@@ -3377,8 +3377,8 @@ theorem map_succEmb_Ioc
 
 中文:
 定理 map_succEmb_Ioc
-  条件: (i j : Fin n)
-  结论: (Ioc i j).map (succEmb n) = Ioc i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (左开右闭区间 i j).map (succEmb n) = 左开右闭区间 i.succ j.succ
   证明: map_addNatEmb_Ioc ..
 
 @[simp]
@@ -3402,8 +3402,8 @@ theorem map_succEmb_Ioo
 
 中文:
 定理 map_succEmb_Ioo
-  条件: (i j : Fin n)
-  结论: (Ioo i j).map (succEmb n) = Ioo i.succ j.succ
+  条件: (i j : 有限集 n)
+  结论: (开区间 i j).map (succEmb n) = 开区间 i.succ j.succ
   证明: map_addNatEmb_Ioo ..
 
 @[simp]
@@ -3427,7 +3427,7 @@ theorem map_succEmb_uIcc
 
 中文:
 定理 map_succEmb_uIcc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   结论: (uIcc i j).map (succEmb n) = uIcc i.succ j.succ
   证明: map_addNatEmb_uIcc ..
 
@@ -3452,8 +3452,8 @@ theorem map_succEmb_Ici
 
 中文:
 定理 map_succEmb_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).map (succEmb n) = Ici i.succ
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).map (succEmb n) = 左闭右无界区间 i.succ
   证明: map_addNatEmb_Ici ..
 
 @[simp]
@@ -3477,8 +3477,8 @@ theorem map_succEmb_Ioi
 
 中文:
 定理 map_succEmb_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).map (succEmb n) = Ioi i.succ
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).map (succEmb n) = 左开右无界区间 i.succ
   证明: map_addNatEmb_Ioi ..
 
 @[simp]
@@ -3503,8 +3503,8 @@ theorem map_succEmb_Iic
 
 中文:
 定理 map_succEmb_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).map (succEmb n) = Ioc 0 i.succ
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).map (succEmb n) = 左开右闭区间 0 i.succ
   证明: by
   simp [← coe_inj]
 
@@ -3528,8 +3528,8 @@ theorem map_succEmb_Iio
 
 中文:
 定理 map_succEmb_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).map (succEmb n) = Ioo 0 i.succ
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).map (succEmb n) = 开区间 0 i.succ
   证明: by
   simp [← coe_inj]
 
@@ -3561,8 +3561,8 @@ theorem finsetImage_rev_Icc
 
 中文:
 定理 finsetImage_rev_Icc
-  条件: (i j : Fin n)
-  结论: (Icc i j).image rev = Icc j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (闭区间 i j).像 rev = 闭区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3588,8 +3588,8 @@ theorem finsetImage_rev_Ico
 
 中文:
 定理 finsetImage_rev_Ico
-  条件: (i j : Fin n)
-  结论: (Ico i j).image rev = Ioc j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (左闭右开区间 i j).像 rev = 左开右闭区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3615,8 +3615,8 @@ theorem finsetImage_rev_Ioc
 
 中文:
 定理 finsetImage_rev_Ioc
-  条件: (i j : Fin n)
-  结论: (Ioc i j).image rev = Ico j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (左开右闭区间 i j).像 rev = 左闭右开区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3642,8 +3642,8 @@ theorem finsetImage_rev_Ioo
 
 中文:
 定理 finsetImage_rev_Ioo
-  条件: (i j : Fin n)
-  结论: (Ioo i j).image rev = Ioo j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (开区间 i j).像 rev = 开区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3669,8 +3669,8 @@ theorem finsetImage_rev_uIcc
 
 中文:
 定理 finsetImage_rev_uIcc
-  条件: (i j : Fin n)
-  结论: (uIcc i j).image rev = uIcc i.rev j.rev
+  条件: (i j : 有限集 n)
+  结论: (uIcc i j).像 rev = uIcc i.rev j.rev
   证明: by
   simp [← coe_inj]
 
@@ -3695,8 +3695,8 @@ theorem finsetImage_rev_Ici
 
 中文:
 定理 finsetImage_rev_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).image rev = Iic i.rev
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).像 rev = 左无界右闭区间 i.rev
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -3719,8 +3719,8 @@ theorem finsetImage_rev_Ioi
 
 中文:
 定理 finsetImage_rev_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).image rev = Iio i.rev
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).像 rev = 左无界右开区间 i.rev
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -3743,8 +3743,8 @@ theorem finsetImage_rev_Iic
 
 中文:
 定理 finsetImage_rev_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).image rev = Ici i.rev
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).像 rev = 左闭右无界区间 i.rev
   证明: by simp [← coe_inj]
 
 @[simp]
@@ -3765,8 +3765,8 @@ theorem finsetImage_rev_Iio
 
 中文:
 定理 finsetImage_rev_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).image rev = Ioi i.rev
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).像 rev = 左开右无界区间 i.rev
   证明: by simp [← coe_inj]
 
 Depends on / 依赖: coe_inj
@@ -3791,8 +3791,8 @@ theorem map_revPerm_Icc
 
 中文:
 定理 map_revPerm_Icc
-  条件: (i j : Fin n)
-  结论: (Icc i j).map revPerm.toEmbedding = Icc j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (闭区间 i j).map revPerm.toEmbedding = 闭区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3815,8 +3815,8 @@ theorem map_revPerm_Ico
 
 中文:
 定理 map_revPerm_Ico
-  条件: (i j : Fin n)
-  结论: (Ico i j).map revPerm.toEmbedding = Ioc j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (左闭右开区间 i j).map revPerm.toEmbedding = 左开右闭区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3839,8 +3839,8 @@ theorem map_revPerm_Ioc
 
 中文:
 定理 map_revPerm_Ioc
-  条件: (i j : Fin n)
-  结论: (Ioc i j).map revPerm.toEmbedding = Ico j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (左开右闭区间 i j).map revPerm.toEmbedding = 左闭右开区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3863,8 +3863,8 @@ theorem map_revPerm_Ioo
 
 中文:
 定理 map_revPerm_Ioo
-  条件: (i j : Fin n)
-  结论: (Ioo i j).map revPerm.toEmbedding = Ioo j.rev i.rev
+  条件: (i j : 有限集 n)
+  结论: (开区间 i j).map revPerm.toEmbedding = 开区间 j.rev i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3887,7 +3887,7 @@ theorem map_revPerm_uIcc
 
 中文:
 定理 map_revPerm_uIcc
-  条件: (i j : Fin n)
+  条件: (i j : 有限集 n)
   结论: (uIcc i j).map revPerm.toEmbedding = uIcc i.rev j.rev
   证明: by
   simp [← coe_inj]
@@ -3911,8 +3911,8 @@ theorem map_revPerm_Ici
 
 中文:
 定理 map_revPerm_Ici
-  条件: (i : Fin n)
-  结论: (Ici i).map revPerm.toEmbedding = Iic i.rev
+  条件: (i : 有限集 n)
+  结论: (左闭右无界区间 i).map revPerm.toEmbedding = 左无界右闭区间 i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3935,8 +3935,8 @@ theorem map_revPerm_Ioi
 
 中文:
 定理 map_revPerm_Ioi
-  条件: (i : Fin n)
-  结论: (Ioi i).map revPerm.toEmbedding = Iio i.rev
+  条件: (i : 有限集 n)
+  结论: (左开右无界区间 i).map revPerm.toEmbedding = 左无界右开区间 i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3959,8 +3959,8 @@ theorem map_revPerm_Iic
 
 中文:
 定理 map_revPerm_Iic
-  条件: (i : Fin n)
-  结论: (Iic i).map revPerm.toEmbedding = Ici i.rev
+  条件: (i : 有限集 n)
+  结论: (左无界右闭区间 i).map revPerm.toEmbedding = 左闭右无界区间 i.rev
   证明: by
   simp [← coe_inj]
 
@@ -3983,8 +3983,8 @@ theorem map_revPerm_Iio
 
 中文:
 定理 map_revPerm_Iio
-  条件: (i : Fin n)
-  结论: (Iio i).map revPerm.toEmbedding = Ioi i.rev
+  条件: (i : 有限集 n)
+  结论: (左无界右开区间 i).map revPerm.toEmbedding = 左开右无界区间 i.rev
   证明: by
   simp [← coe_inj]
 
@@ -4014,7 +4014,7 @@ lemma card_Icc
 
 中文:
 引理 card_Icc
-  结论: #(Icc a b) = b + 1 - a
+  结论: #(闭区间 a b) = b + 1 - a
   证明: by rw [← Nat.card_Icc, ← map_valEmbedding_Icc, card_map]
 
 @[simp]
@@ -4036,7 +4036,7 @@ lemma card_Ico
 
 中文:
 引理 card_Ico
-  结论: #(Ico a b) = b - a
+  结论: #(左闭右开区间 a b) = b - a
   证明: by rw [← Nat.card_Ico, ← map_valEmbedding_Ico, card_map]
 
 @[simp]
@@ -4058,7 +4058,7 @@ lemma card_Ioc
 
 中文:
 引理 card_Ioc
-  结论: #(Ioc a b) = b - a
+  结论: #(左开右闭区间 a b) = b - a
   证明: by rw [← Nat.card_Ioc, ← map_valEmbedding_Ioc, card_map]
 
 @[simp]
@@ -4080,7 +4080,7 @@ lemma card_Ioo
 
 中文:
 引理 card_Ioo
-  结论: #(Ioo a b) = b - a - 1
+  结论: #(开区间 a b) = b - a - 1
   证明: by rw [← Nat.card_Ioo, ← map_valEmbedding_Ioo, card_map]
 
 @[simp]
@@ -4128,7 +4128,7 @@ theorem card_Ici
 
 中文:
 定理 card_Ici
-  结论: #(Ici a) = n - a
+  结论: #(左闭右无界区间 a) = n - a
   证明: by
   rw [← attachFin_Ico_eq_Ici]; rw [card_attachFin]; rw [Nat.card_Ico]
 
@@ -4153,7 +4153,7 @@ theorem card_Ioi
 
 中文:
 定理 card_Ioi
-  结论: #(Ioi a) = n - 1 - a
+  结论: #(左开右无界区间 a) = n - 1 - a
   证明: by
   rw [← card_map]; rw [map_valEmbedding_Ioi]; rw [Nat.card_Ioo]; rw [Nat.sub_right_comm]
 
@@ -4177,7 +4177,7 @@ theorem card_Iic
 
 中文:
 定理 card_Iic
-  结论: #(Iic b) = b + 1
+  结论: #(左无界右闭区间 b) = b + 1
   证明: by rw [← Nat.card_Iic b, ← map_valEmbedding_Iic, card_map]
 
 @[simp]
@@ -4197,7 +4197,7 @@ theorem card_Iio
 
 中文:
 定理 card_Iio
-  结论: #(Iio b) = b
+  结论: #(左无界右开区间 b) = b
   证明: by rw [← Nat.card_Iio b, ← map_valEmbedding_Iio, card_map]
 
 Depends on / 依赖: Nat.card_Iio, card_Iio, card_map, map_valEmbedding_Iio
@@ -4229,7 +4229,7 @@ lemma Iio_add_one_eq_Iic
 
 中文:
 引理 Iio_add_one_eq_Iic
-  条件: {n : 自然数} {b : Fin n} (hb : b + 1 < n)
+  条件: {n : 自然数} {b : 有限集 n} (hb : b + 1 < n)
   证明: b.neZero
     Iio (b + 1) = Iic b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_add_one_of_lt']
@@ -4253,7 +4253,7 @@ lemma Iic_sub_one_eq_Iio
 
 中文:
 引理 Iic_sub_one_eq_Iio
-  条件: {n : 自然数} {b : Fin n}
+  条件: {n : 自然数} {b : 有限集 n}
   证明: b.neZero
     (hb : 0 < b) -> Iic (b - 1) = Iio b := by
   grind [= Fin.val_sub_one_of_ne_zero]
@@ -4277,7 +4277,7 @@ lemma Ici_add_one_eq_Ioi
 
 中文:
 引理 Ici_add_one_eq_Ioi
-  条件: {n : 自然数} {a : Fin n} (ha : a + 1 < n)
+  条件: {n : 自然数} {a : 有限集 n} (ha : a + 1 < n)
   证明: a.neZero
     Ici (a + 1) = Ioi a := by
   grind [= Fin.le_def, = Fin.val_add_one_of_lt']
@@ -4301,7 +4301,7 @@ lemma Ioi_sub_one_eq_Ici
 
 中文:
 引理 Ioi_sub_one_eq_Ici
-  条件: {n : 自然数} {a : Fin n}
+  条件: {n : 自然数} {a : 有限集 n}
   证明: a.neZero
     (ha : 0 < a) -> Ioi (a - 1) = Ici a := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_sub_one_of_ne_zero]
@@ -4325,7 +4325,7 @@ lemma Ioc_sub_one_eq_Icc
 
 中文:
 引理 Ioc_sub_one_eq_Icc
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   证明: a.neZero
     (ha : 0 < a) -> Ioc (a - 1) b = Icc a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_sub_one_of_ne_zero]
@@ -4349,7 +4349,7 @@ lemma Icc_add_one_eq_Ioc
 
 中文:
 引理 Icc_add_one_eq_Ioc
-  条件: {n : 自然数} {a b : Fin n} (ha : a + 1 < n)
+  条件: {n : 自然数} {a b : 有限集 n} (ha : a + 1 < n)
   证明: a.neZero
     Icc (a + 1) b = Ioc a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_add_one_of_lt']
@@ -4373,7 +4373,7 @@ lemma Ioo_sub_one_eq_Ico
 
 中文:
 引理 Ioo_sub_one_eq_Ico
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   证明: a.neZero
     (ha : 0 < a) -> Ioo (a - 1) b = Ico a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_sub_one_of_ne_zero]
@@ -4397,7 +4397,7 @@ lemma Ico_add_one_eq_Ioo
 
 中文:
 引理 Ico_add_one_eq_Ioo
-  条件: {n : 自然数} {a b : Fin n} (ha : a + 1 < n)
+  条件: {n : 自然数} {a b : 有限集 n} (ha : a + 1 < n)
   证明: a.neZero
     Ico (a + 1) b = Ioo a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_add_one_of_lt']
@@ -4421,7 +4421,7 @@ lemma Icc_sub_one_eq_Ico
 
 中文:
 引理 Icc_sub_one_eq_Ico
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   证明: a.neZero
     (hb : 0 < b) -> Icc a (b - 1) = Ico a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_sub_one_of_ne_zero]
@@ -4445,7 +4445,7 @@ lemma Ico_add_one_eq_Icc
 
 中文:
 引理 Ico_add_one_eq_Icc
-  条件: {n : 自然数} {a b : Fin n} (hb : b + 1 < n)
+  条件: {n : 自然数} {a b : 有限集 n} (hb : b + 1 < n)
   证明: a.neZero
     Ico a (b + 1) = Icc a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_add_one_of_lt']
@@ -4469,7 +4469,7 @@ lemma Ioc_sub_one_eq_Ioo
 
 中文:
 引理 Ioc_sub_one_eq_Ioo
-  条件: {n : 自然数} {a b : Fin n}
+  条件: {n : 自然数} {a b : 有限集 n}
   证明: a.neZero
     (hb : 0 < b) -> Ioc a (b - 1) = Ioo a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_sub_one_of_ne_zero]
@@ -4493,7 +4493,7 @@ lemma Ioo_add_one_eq_Ioc
 
 中文:
 引理 Ioo_add_one_eq_Ioc
-  条件: {n : 自然数} {a b : Fin n} (hb : b + 1 < n)
+  条件: {n : 自然数} {a b : 有限集 n} (hb : b + 1 < n)
   证明: a.neZero
     Ioo a (b + 1) = Ioc a b := by
   grind [= Fin.lt_def, = Fin.le_def, = Fin.val_add_one_of_lt']

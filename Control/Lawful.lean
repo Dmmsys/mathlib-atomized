@@ -31,7 +31,7 @@ lemma map_const
 
 中文:
 引理 map_const
-  条件: [Monad m]
+  条件: [单子 m]
   证明: rfl
 -/
 protected lemma map_const [Monad m] :
@@ -48,7 +48,7 @@ lemma run_mapConst
 
 中文:
 引理 run_mapConst
-  条件: [Monad m] [LawfulMonad m] (x : StateT σ m α) (y : β) (st : σ)
+  条件: [单子 m] [合法单子 m] (x : StateT σ m α) (y : β) (st : σ)
   证明: run_map _ _ _
 -/
 @[simp] lemma run_mapConst [Monad m] [LawfulMonad m] (x : StateT σ m α) (y : β) (st : σ) :
@@ -75,7 +75,7 @@ theorem run_monadLift
 
 中文:
 定理 run_monadLift
-  条件: {n} [Monad m] [MonadLiftT n m] (x : n α)
+  条件: {n} [单子 m] [MonadLiftT n m] (x : n α)
   证明: rfl
 -/
 theorem run_monadLift {n} [Monad m] [MonadLiftT n m] (x : n α) :

@@ -43,7 +43,7 @@ abbreviation TensorPower
 
 中文:
 缩写 TensorPower
-  签名: (R : 类型) (n : 自然数) (M : 类型) [CommSemiring R] [AddCommMonoid M]
+  签名: (R : 类型) (n : 自然数) (M : 类型) [交换半环 R] [加法交换幺半群 M]
   定义体: ⨂[R] _ : Fin n, M
 -/
 abbrev TensorPower (R : Type*) (n : Nat) (M : Type*) [CommSemiring R] [AddCommMonoid M]
@@ -98,7 +98,7 @@ local notation "ₜ1" => @GradedMonoid.GOne.one Nat (fun i => ⨂[R]^i M) _ _
 
 中文:
 实例 gOne
-  签名: : GradedMonoid.GOne fun i => ⨂[R]^i M where one
+  签名: : 分次幺半群.GOne fun i => ⨂[R]^i M where one
   定义体: tprod R @Fin.elim0 M
 
 local notation "ₜ1" => @GradedMonoid.GOne.one Nat (fun i => ⨂[R]^i M) _ _
@@ -119,7 +119,7 @@ theorem gOne_def
 
 中文:
 定理 gOne_def
-  结论: ₜ1 = tprod R (@Fin.elim0 M)
+  结论: ₜ1 = tprod R (@有限集.elim0 M)
   证明: rfl
 -/
 theorem gOne_def : ₜ1 = tprod R (@Fin.elim0 M) :=
@@ -155,7 +155,7 @@ local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul Nat (fun i => ⨂[R]^i M) _ _
 
 中文:
 实例 gMul
-  签名: : GradedMonoid.GMul fun i => ⨂[R]^i M where
+  签名: : 分次幺半群.GMul fun i => ⨂[R]^i M where
   定义体: (TensorProduct.mk R _ _).compr₂ (↑(mulEquiv : _ ≃ₗ[R] (⨂[R]^(i + j)) M)) a b
 
 local infixl:70 " ₜ* " => @GradedMonoid.GMul.mul Nat (fun i => ⨂[R]^i M) _ _ _ _
@@ -234,7 +234,7 @@ theorem cast_tprod
 
 中文:
 定理 cast_tprod
-  条件: {i j} (h : i = j) (a : Fin i -> M)
+  条件: {i j} (h : i = j) (a : 有限集 i -> M)
   证明: reindex_tprod _ _
 
 @[simp]
@@ -260,7 +260,7 @@ theorem cast_refl
 中文:
 定理 cast_refl
   条件: {i} (h : i = i)
-  结论: cast R M h = LinearEquiv.refl _ _
+  结论: cast R M h = 线性等价.refl _ _
   证明: (congr_arg (reindex R fun _ => M) <| finCongr_refl h).trans reindex_refl
 
 @[simp]
@@ -355,7 +355,7 @@ theorem gradedMonoid_eq_of_cast
 
 中文:
 定理 gradedMonoid_eq_of_cast
-  结论: {a b : GradedMonoid fun n => ⨂[R] _ : Fin n, M} (h : a.fst = b.fst)
+  结论: {a b : 分次幺半群 fun n => ⨂[R] _ : 有限集 n, M} (h : a.fst = b.fst)
   证明: by
   refine gradedMonoid_eq_of_reindex_cast h ?_
   rw [cast] at h2
@@ -415,7 +415,7 @@ theorem tprod_mul_tprod
 
 中文:
 定理 tprod_mul_tprod
-  条件: {na nb} (a : Fin na -> M) (b : Fin nb -> M)
+  条件: {na nb} (a : 有限集 na -> M) (b : 有限集 nb -> M)
   证明: by
   dsimp [gMul_def, mulEquiv]
   rw [tmulEquiv_apply R M a b]
@@ -580,7 +580,7 @@ instance gmonoid
 
 中文:
 实例 gmonoid
-  签名: : GradedMonoid.GMonoid fun i => ⨂[R]^i M
+  签名: : 分次幺半群.G幺半群 fun i => ⨂[R]^i M
   定义体: { TensorPower.gMul, TensorPower.gOne with
     one_mul := fun _ => gradedMonoid_eq_of_cast (zero_add _) (one_mul _)
     mul_one := fun _ => gradedMonoid_eq_of_cast (add_zero _) (mul_one _)
@@ -732,7 +732,7 @@ instance gsemiring
 
 中文:
 实例 gsemiring
-  签名: : DirectSum.GSemiring fun i => ⨂[R]^i M
+  签名: : 直和.GSemiring fun i => ⨂[R]^i M
   定义体: { TensorPower.gmonoid with
     mul_zero := fun _ => map_zero _
     zero_mul := fun _ => LinearMap.map_zero₂ _ _
@@ -772,7 +772,7 @@ instance galgebra
 
 中文:
 实例 galgebra
-  签名: : DirectSum.GAlgebra R fun i => ⨂[R]^i M where
+  签名: : 直和.G代数 R fun i => ⨂[R]^i M where
   定义体: (algebraMap₀ : R ≃ₗ[R] (⨂[R]^0) M).toLinearMap.toAddMonoidHom
   map_one := algebraMap₀_one
   map_mul r s := gradedMonoid_eq_of_cast rfl (by

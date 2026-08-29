@@ -40,7 +40,7 @@ abbreviation Over
 
 中文:
 缩写 Over
-  签名: (X S : Scheme.{u})
+  签名: (X S : 概形.{u})
   定义体: OverClass X S
 -/
 protected abbrev Over (X S : Scheme.{u}) := OverClass X S
@@ -55,7 +55,7 @@ abbreviation CanonicallyOver
 
 中文:
 缩写 CanonicallyOver
-  签名: (X S : Scheme.{u})
+  签名: (X S : 概形.{u})
   定义体: CanonicallyOverClass X S
 
 Depends on / 依赖: CanonicallyOverClass
@@ -73,8 +73,8 @@ abbreviation Hom.IsOver
 @[simp]
 
 中文:
-缩写 Hom.IsOver
-  签名: (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S]
+缩写 态射.是Over
+  签名: (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S]
   定义体: HomIsOver f S
 
 @[simp]
@@ -94,9 +94,9 @@ lemma Hom.isOver_iff
   proof: ⟨fun H => H.1, fun h => ⟨h⟩⟩
 
 中文:
-引理 Hom.isOver_iff
+引理 态射.isOver_iff
   条件: [X.Over S] [Y.Over S] {f : X ⟶ Y}
-  结论: f.IsOver S ↔ f ≫ Y ↘ S = X ↘ S
+  结论: f.是Over S ↔ f ≫ Y ↘ S = X ↘ S
   证明: ⟨fun H => H.1, fun h => ⟨h⟩⟩
 -/
 lemma Hom.isOver_iff [X.Over S] [Y.Over S] {f : X ⟶ Y} : f.IsOver S ↔ f ≫ Y ↘ S = X ↘ S :=
@@ -114,7 +114,7 @@ abbreviation asOver
 
 中文:
 缩写 asOver
-  签名: (X S : Scheme.{u}) [X.Over S]
+  签名: (X S : 概形.{u}) [X.Over S]
   定义体: OverClass.asOver X S
 
 Depends on / 依赖: OverClass, OverClass.asOver, asOver
@@ -130,8 +130,8 @@ abbreviation Hom.asOver
   body: OverClass.asOverHom S f
 
 中文:
-缩写 Hom.asOver
-  签名: (f : X.Hom Y) (S : Scheme.{u}) [X.Over S] [Y.Over S] [f.IsOver S]
+缩写 态射.asOver
+  签名: (f : X.态射 Y) (S : 概形.{u}) [X.Over S] [Y.Over S] [f.是Over S]
   定义体: OverClass.asOverHom S f
 
 Depends on / 依赖: OverClass, OverClass.asOverHom, asOverHom

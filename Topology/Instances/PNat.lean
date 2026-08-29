@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace 自然数+
+  签名: 度量空间 自然数+
   定义体: inferInstanceAs (MetricSpace { n : Nat // 0 < n })
 
 Depends on / 依赖: MetricSpace
@@ -87,7 +87,7 @@ theorem isUniformEmbedding_coe
 
 中文:
 定理 isUniformEmbedding_coe
-  结论: IsUniformEmbedding ((↑) : 自然数+ -> 自然数)
+  结论: 是一致嵌入 ((↑) : 自然数+ -> 自然数)
   证明: isUniformEmbedding_subtype_val
 
 Depends on / 依赖: isUniformEmbedding_subtype_val
@@ -104,7 +104,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology 自然数+
+  签名: 离散拓扑 自然数+
   定义体: inferInstanceAs (DiscreteTopology { n : Nat // 0 < n })
 
 Depends on / 依赖: DiscreteTopology
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace 自然数+
+  签名: 真空间 自然数+
   定义体: by
     change IsCompact (((↑) : Nat+ -> Nat) ⁻¹' closedBall (↑n : Nat) r)
     rw [Nat.closedBall_eq_Icc]
@@ -148,7 +148,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoncompactSpace 自然数+
+  签名: Noncompact空间 自然数+
   定义体: noncompactSpace_of_neBot by simp only [Filter.cocompact_eq_cofinite, Filter.cofinite_neBot]
 
 Depends on / 依赖: Filter, Filter.cocompact_eq_cofinite, Filter.cofinite_neBot, cocompact_eq_cofinite, cofinite_neBot, noncompactSpace_of_neBot

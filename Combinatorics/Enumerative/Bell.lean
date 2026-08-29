@@ -684,7 +684,7 @@ theorem bell_eq_sum_erase
 
 中文:
 定理 bell_eq_sum_erase
-  条件: {n : 自然数} (p : (n + 1).Partition)
+  条件: {n : 自然数} (p : (n + 1).分拆)
   证明: by
   apply Nat.eq_of_mul_eq_mul_left n.succ_pos
   calc
@@ -761,7 +761,7 @@ theorem bell_eq_sum_partition
 中文:
 定理 bell_eq_sum_partition
   条件: (n : 自然数)
-  结论: n.bell = ∑ p : n.Partition, p.parts.bell
+  结论: n.bell = ∑ p : n.分拆, p.parts.bell
   证明: by
   refine Nat.strong_induction_on n ?_
   rintro (_ | n) ih

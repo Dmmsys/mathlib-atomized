@@ -105,7 +105,7 @@ lemma continuous_nnrpow_const
 中文:
 引理 continuous_nnrpow_const
   条件: (y : 实数>=0)
-  结论: Continuous (nnrpow · y)
+  结论: 连续 (nnrpow · y)
   证明: continuous_rpow_const zero_le_coe
 
 Depends on / 依赖: continuous_rpow_const, zero_le_coe
@@ -128,7 +128,7 @@ lemma monotone_nnrpow_const
 中文:
 引理 monotone_nnrpow_const
   条件: (y : 实数>=0)
-  结论: Monotone (nnrpow · y)
+  结论: 递增 (nnrpow · y)
   证明: monotone_rpow_of_nonneg zero_le_coe
 
 Depends on / 依赖: monotone_rpow_of_nonneg, zero_le_coe
@@ -230,7 +230,7 @@ lemma nnrpow_def
 中文:
 引理 nnrpow_def
   条件: {a : A} {y : 实数>=0}
-  结论: a ^ y = cfcₙ (NN实数.nnrpow · y) a
+  结论: a ^ y = cfcₙ (非负实数.nnrpow · y) a
   证明: rfl
 -/
 lemma nnrpow_def {a : A} {y : Real>=0} : a ^ y = cfcₙ (NNReal.nnrpow · y) a := rfl
@@ -250,7 +250,7 @@ lemma nnrpow_eq_cfcₙ_real
 
 中文:
 引理 nnrpow_eq_cfcₙ_real
-  结论: [T2Space A] [IsSemitopologicalRing A] (a : A)
+  结论: [T2空间 A] [是Semitopological环 A] (a : A)
   证明: by
   rw [nnrpow_def]; rw [cfcₙ_nnreal_eq_real ..]
   refine cfcₙ_congr ?_
@@ -363,7 +363,7 @@ lemma nnrpow_one_eqOn
 
 中文:
 引理 nnrpow_one_eqOn
-  结论: (Set.Ici (0 : A)).EqOn (fun a : A => a ^ (1 : 实数>=0)) id
+  结论: (集合.左闭右无界区间 (0 : A)).EqOn (fun a : A => a ^ (1 : 实数>=0)) id
   证明: fun _ ha => CFC.nnrpow_one _ ha
 
 Depends on / 依赖: CFC.nnrpow_one, nnrpow_one
@@ -1177,7 +1177,7 @@ theorem _root_.CStarAlgebra.nonneg_TFAE
 .symm tfae_have 1 -> 2 := fun h => sqrt_mul
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_TFAE
+定理 _root_.CStar代数.nonneg_TFAE
   条件: {a : A}
   证明: by
   tfae_have 1 ↔ 9 := nonneg_iff_isSelfAdjoint_and_quasispectrumRestricts
@@ -1219,7 +1219,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_eq_sqrt_mul_sqrt
   proof: CStarAlgebra.nonneg_TFAE.out 0 1
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_eq_sqrt_mul_sqrt
+定理 _root_.CStar代数.nonneg_iff_eq_sqrt_mul_sqrt
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 1
 
@@ -1236,7 +1236,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_exists_nonneg_and_eq_mul_self
   proof: CStarAlgebra.nonneg_TFAE.out 0 2
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_exists_nonneg_and_eq_mul_self
+定理 _root_.CStar代数.nonneg_iff_存在_nonneg_and_eq_mul_self
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 2
 
@@ -1253,7 +1253,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_exists_isSelfAdjoint_and_eq_mul_self
   proof: CStarAlgebra.nonneg_TFAE.out 0 3
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_exists_isSelfAdjoint_and_eq_mul_self
+定理 _root_.CStar代数.nonneg_iff_存在_isSelfAdjoint_and_eq_mul_self
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 3
 
@@ -1270,7 +1270,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_eq_star_mul_self
   proof: CStarAlgebra.nonneg_TFAE.out 0 4
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_eq_star_mul_self
+定理 _root_.CStar代数.nonneg_iff_eq_star_mul_self
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 4
 
@@ -1287,7 +1287,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_eq_mul_star_self
   proof: CStarAlgebra.nonneg_TFAE.out 0 5
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_eq_mul_star_self
+定理 _root_.CStar代数.nonneg_iff_eq_mul_star_self
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 5
 
@@ -1304,7 +1304,7 @@ theorem _root_.CStarAlgebra.nonneg_iff_isSelfAdjoint_and_negPart_eq_zero
   proof: CStarAlgebra.nonneg_TFAE.out 0 7
 
 中文:
-定理 _root_.CStarAlgebra.nonneg_iff_isSelfAdjoint_and_negPart_eq_zero
+定理 _root_.CStar代数.nonneg_iff_isSelfAdjoint_and_negPart_eq_zero
   条件: {a : A}
   证明: CStarAlgebra.nonneg_TFAE.out 0 7
 
@@ -1425,7 +1425,7 @@ lemma rpow_eq_cfc_real
 
 中文:
 引理 rpow_eq_cfc_real
-  结论: [IsSemitopologicalRing A] [T2Space A] {a : A} {y : 实数}
+  结论: [是Semitopological环 A] [T2空间 A] {a : A} {y : 实数}
   证明: by
   rw [CFC.rpow_def]; rw [cfc_nnreal_eq_real ..]
   refine cfc_congr ?_
@@ -1457,7 +1457,7 @@ lemma cfc_rpow
 
 中文:
 引理 cfc_rpow
-  结论: [IsSemitopologicalRing A] [T2Space A] {a : A} {y : 实数} {f : 实数 -> 实数}
+  结论: [是Semitopological环 A] [T2空间 A] {a : A} {y : 实数} {f : 实数 -> 实数}
   证明: by
   have hg : ContinuousOn (fun r => r ^ y) (f '' spectrum Real a) :=
     ContinuousOn.rpow_const (f := id) (by fun_prop) (by grind)
@@ -1554,7 +1554,7 @@ lemma rpow_zero_eqOn
 
 中文:
 引理 rpow_zero_eqOn
-  结论: (Set.Ici (0 : A)).EqOn (fun a => a ^ (0 : 实数)) (fun _ => 1)
+  结论: (集合.左闭右无界区间 (0 : A)).EqOn (fun a => a ^ (0 : 实数)) (fun _ => 1)
   证明: by
   intro a ha
   simp [rpow_zero a ha]
@@ -1655,7 +1655,7 @@ lemma rpow_add
 
 中文:
 引理 rpow_add
-  条件: {a : A} {x y : 实数} (ha : IsUnit a)
+  条件: {a : A} {x y : 实数} (ha : 是单位 a)
   证明: by
   have ha' : 0 ∉ spectrum Real>=0 a := spectrum.zero_notMem _ ha
   simp only [rpow_def]
@@ -1692,7 +1692,7 @@ lemma rpow_rpow
 
 中文:
 引理 rpow_rpow
-  结论: [IsSemitopologicalRing A] [T2Space A]
+  结论: [是Semitopological环 A] [T2空间 A]
   证明: by
   have ha₁' : 0 ∉ spectrum Real>=0 a := spectrum.zero_notMem _ ha.isUnit
   simp only [rpow_def]
@@ -1722,7 +1722,7 @@ lemma rpow_rpow_inv
 
 中文:
 引理 rpow_rpow_inv
-  结论: [IsSemitopologicalRing A] [T2Space A]
+  结论: [是Semitopological环 A] [T2空间 A]
   证明: by
   rw [rpow_rpow a x x⁻¹ hx]; rw [mul_inv_cancel₀ hx]; rw [rpow_one a ha.nonneg]
 
@@ -1744,7 +1744,7 @@ lemma rpow_inv_rpow
 
 中文:
 引理 rpow_inv_rpow
-  结论: [IsSemitopologicalRing A] [T2Space A]
+  结论: [是Semitopological环 A] [T2空间 A]
   证明: by
   simpa using rpow_rpow_inv a x⁻¹ (inv_ne_zero hx)
 
@@ -1769,7 +1769,7 @@ lemma rpow_rpow_of_exponent_nonneg
 
 中文:
 引理 rpow_rpow_of_exponent_nonneg
-  结论: [IsSemitopologicalRing A] [T2Space A] (a : A) (x y : 实数)
+  结论: [是Semitopological环 A] [T2空间 A] (a : A) (x y : 实数)
   证明: by
   simp only [rpow_def]
   rw [← cfc_comp _ _ a]
@@ -1861,7 +1861,7 @@ lemma rpow_neg_one_eq_cfc_inv
 
 中文:
 引理 rpow_neg_one_eq_cfc_inv
-  结论: {A : 类型} [PartialOrder A] [NormedRing A] [StarRing A]
+  结论: {A : 类型} [偏序 A] [赋范环 A] [对合环 A]
   证明: cfc_congr fun x _ => NNReal.rpow_neg_one x
 
 Depends on / 依赖: NNReal, NNReal.rpow_neg_one, cfc_congr, rpow_neg_one
@@ -1910,7 +1910,7 @@ lemma rpow_neg
 
 中文:
 引理 rpow_neg
-  结论: [IsSemitopologicalRing A] [T2Space A] (a : Aˣ) (x : 实数)
+  结论: [是Semitopological环 A] [T2空间 A] (a : Aˣ) (x : 实数)
   证明: by
   suffices h₁ : ContinuousOn (fun z => z ^ x) (Inv.inv '' (spectrum Real>=0 (a : A))) by
     rw [← cfc_inv_id (R := Real>=0) a]; rw [rpow_def]; rw [rpow_def]; rw [← cfc_comp' (fun z => z ^ x) (Inv.inv : Real>=0 -> Real>=0) (a : A) h₁]
@@ -1969,7 +1969,7 @@ definition _root_.Units.cfcRpow
 @[aesop safe apply, grind ←]
 
 中文:
-定义 _root_.Units.cfcRpow
+定义 _root_.单位群.cfcRpow
   签名: (a : Aˣ) (x : 实数) (ha : (0 : A) <= a := by cfc_tac)
   定义体: ⟨(a : A) ^ x, (a : A) ^ (-x), rpow_mul_rpow_neg x, rpow_neg_mul_rpow x⟩
 
@@ -1990,8 +1990,8 @@ lemma _root_.IsUnit.cfcRpow
   proof: .isUnit ha.unit.cfcRpow x
 
 中文:
-引理 _root_.IsUnit.cfcRpow
-  条件: {a : A} (ha : IsUnit a) (x : 实数) (ha_nonneg : 0 <= a := by cfc_tac)
+引理 _root_.是单位.cfcRpow
+  条件: {a : A} (ha : 是单位 a) (x : 实数) (ha_nonneg : 0 <= a := by cfc_tac)
   证明: .isUnit ha.unit.cfcRpow x
 
 Depends on / 依赖: IsUnit, cfcRpow, cfc_tac, ha.unit.cfcRpow, isUnit
@@ -2102,7 +2102,7 @@ lemma rpow_map_prod
 
 中文:
 引理 rpow_map_prod
-  结论: {a : A} {b : B} {x : 实数} (ha : IsUnit a) (hb : IsUnit b)
+  结论: {a : A} {b : B} {x : 实数} (ha : 是单位 a) (hb : 是单位 b)
   证明: by
   have ha'' : 0 ∉ spectrum Real>=0 a := spectrum.zero_notMem _ ha
   have hb'' : 0 ∉ spectrum Real>=0 b := spectrum.zero_notMem _ hb
@@ -2135,7 +2135,7 @@ lemma rpow_eq_rpow_prod
 
 中文:
 引理 rpow_eq_rpow_prod
-  结论: {a : A} {b : B} {x : 实数} (ha : IsUnit a) (hb : IsUnit b)
+  结论: {a : A} {b : B} {x : 实数} (ha : 是单位 a) (hb : 是单位 b)
   证明: rpow_map_prod ha hb
 
 Depends on / 依赖: cfc_tac, rpow_map_prod
@@ -2172,7 +2172,7 @@ lemma rpow_map_pi
 
 中文:
 引理 rpow_map_pi
-  结论: {c : 对任意 i, C i} {x : 实数} (hc : 对任意 i, IsUnit (c i))
+  结论: {c : 对任意 i, C i} {x : 实数} (hc : 对任意 i, 是单位 (c i))
   证明: by
   have hc'' : forall i, 0 ∉ spectrum Real>=0 (c i) := fun i => spectrum.zero_notMem _ (hc i)
   simp only [rpow_def]
@@ -2199,7 +2199,7 @@ lemma rpow_eq_rpow_pi
 
 中文:
 引理 rpow_eq_rpow_pi
-  结论: {c : 对任意 i, C i} {x : 实数} (hc : 对任意 i, IsUnit (c i))
+  结论: {c : 对任意 i, C i} {x : 实数} (hc : 对任意 i, 是单位 (c i))
   证明: rpow_map_pi hc
 
 Depends on / 依赖: cfc_tac, infer_instance, rpow_map_pi
@@ -2279,7 +2279,7 @@ lemma sqrt_eq_cfc
 中文:
 引理 sqrt_eq_cfc
   条件: {a : A}
-  结论: sqrt a = cfc NN实数.sqrt a
+  结论: sqrt a = cfc 非负实数.sqrt a
   证明: by
   unfold sqrt
   rw [cfcₙ_eq_cfc]
@@ -2373,7 +2373,7 @@ lemma sqrt_algebraMap
 中文:
 引理 sqrt_algebraMap
   条件: {r : 实数>=0}
-  结论: sqrt (algebraMap 实数>=0 A r) = algebraMap 实数>=0 A (NN实数.sqrt r)
+  结论: sqrt (algebraMap 实数>=0 A r) = algebraMap 实数>=0 A (非负实数.sqrt r)
   证明: by
   rw [sqrt_eq_cfc]; rw [cfc_algebraMap]
 
@@ -2436,7 +2436,7 @@ lemma sqrt_eq_one_iff'
 
 中文:
 引理 sqrt_eq_one_iff'
-  条件: [Nontrivial A] (a : A)
+  条件: [非平凡 A] (a : A)
   证明: by
 .mp h, fun h => by subst h; exact sqrt_one⟩ refine ⟨fun h => sqrt_eq_one_iff a ?_
   rw [sqrt]; rw [cfcₙ] at h
@@ -2467,7 +2467,7 @@ lemma sqrt_rpow
 
 中文:
 引理 sqrt_rpow
-  结论: {a : A} {x : 实数} (h : IsUnit a)
+  结论: {a : A} {x : 实数} (h : 是单位 a)
   证明: by
   by_cases hnonneg : 0 <= a
   case pos =>
@@ -2500,7 +2500,7 @@ lemma rpow_sqrt
 
 中文:
 引理 rpow_sqrt
-  结论: (a : A) (x : 实数) (h : IsUnit a)
+  结论: (a : A) (x : 实数) (h : 是单位 a)
   证明: by
   have : IsStrictlyPositive a := by grind
   rw [sqrt_eq_rpow]; rw [div_eq_mul_inv]; rw [one_mul]; rw [rpow_rpow _ _ _ (by simp)]; rw [inv_mul_eq_div]
@@ -2641,8 +2641,8 @@ lemma _root_.IsUnit.cfcNNRpow
   proof: (isUnit_nnrpow_iff a y hy ha).mpr ha_unit
 
 中文:
-引理 _root_.IsUnit.cfcNNRpow
-  结论: (a : A) (y : 实数>=0) (ha_unit : IsUnit a) (hy : y != 0)
+引理 _root_.是单位.cfcNNRpow
+  结论: (a : A) (y : 实数>=0) (ha_unit : 是单位 a) (hy : y != 0)
   证明: (isUnit_nnrpow_iff a y hy ha).mpr ha_unit
 
 Depends on / 依赖: IsUnit, cfc_tac, ha_unit, isUnit_nnrpow_iff
@@ -2667,7 +2667,7 @@ lemma isUnit_sqrt_iff
 中文:
 引理 isUnit_sqrt_iff
   条件: (a : A) (ha : 0 <= a := by cfc_tac)
-  结论: IsUnit (sqrt a) ↔ IsUnit a
+  结论: 是单位 (sqrt a) ↔ 是单位 a
   证明: by
   rw [sqrt_eq_rpow]
   exact isUnit_rpow_iff a _ (by simp) ha
@@ -2704,7 +2704,7 @@ lemma isUnit_sqrt_iff_isStrictlyPositive
 中文:
 引理 isUnit_sqrt_iff_isStrictlyPositive
   条件: {a : A}
-  结论: IsUnit (sqrt a) ↔ IsStrictlyPositive a
+  结论: 是单位 (sqrt a) ↔ IsStrictlyPositive a
   证明: by
   refine ⟨fun h => ?_, by grind [isUnit_sqrt_iff]⟩
   rw [IsStrictlyPositive.iff_of_unital]
@@ -2955,7 +2955,7 @@ lemma ringInverse_nonneg_iff_nonneg_of_isUnit
 
 中文:
 引理 ringInverse_nonneg_iff_nonneg_of_isUnit
-  条件: {a : A} (ha : IsUnit a)
+  条件: {a : A} (ha : 是单位 a)
   证明: by
   grind [isStrictlyPositive_ringInverse_iff]
 
@@ -3024,7 +3024,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_TFAE
 .symm⟩ tfae_have 1 -> 2 := fun h => ⟨h.sqrt, sqrt_mul_
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_TFAE
+定理 _root_.CStar代数.isStrictlyPositive_TFAE
   条件: {a : A}
   证明: by
   tfae_have 1 ↔ 8 := IsStrictlyPositive.iff_of_unital
@@ -3066,7 +3066,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_isStrictlyPositive_sqrt_and_e
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 1
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_isStrictlyPositive_sqrt_and_eq_sqrt_mul_sqrt
+定理 _root_.CStar代数.isStrictlyPositive_iff_isStrictlyPositive_sqrt_and_eq_sqrt_mul_sqrt
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 1
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE
@@ -3082,7 +3082,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_isUnit_sqrt_and_eq_sqrt_mul_s
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 2
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_isUnit_sqrt_and_eq_sqrt_mul_sqrt
+定理 _root_.CStar代数.isStrictlyPositive_iff_isUnit_sqrt_and_eq_sqrt_mul_sqrt
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 2
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE
@@ -3098,7 +3098,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_exists_isStrictlyPositive_and
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 3
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_exists_isStrictlyPositive_and_eq_mul_self
+定理 _root_.CStar代数.isStrictlyPositive_iff_存在_isStrictlyPositive_and_eq_mul_self
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 3
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE
@@ -3114,7 +3114,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_exists_isUnit_and_isSelfAdjoi
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 4
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_exists_isUnit_and_isSelfAdjoint_and_eq_mul_self
+定理 _root_.CStar代数.isStrictlyPositive_iff_存在_isUnit_and_isSelfAdjoint_and_eq_mul_self
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 4
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE
@@ -3130,7 +3130,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 5
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_eq_star_mul_self
+定理 _root_.CStar代数.isStrictlyPositive_iff_eq_star_mul_self
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 5
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE
@@ -3146,7 +3146,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_eq_mul_star_self
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 6
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_eq_mul_star_self
+定理 _root_.CStar代数.isStrictlyPositive_iff_eq_mul_star_self
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 6
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, hasProjectiveDimensionLT_zero, isStrictlyPositive_TFAE, isZero_zero
@@ -3162,7 +3162,7 @@ theorem _root_.CStarAlgebra.isStrictlyPositive_iff_isSelfAdjoint_and_spectrum_po
   proof: CStarAlgebra.isStrictlyPositive_TFAE.out 0 8
 
 中文:
-定理 _root_.CStarAlgebra.isStrictlyPositive_iff_isSelfAdjoint_and_spectrum_pos
+定理 _root_.CStar代数.isStrictlyPositive_iff_isSelfAdjoint_and_spectrum_pos
   证明: CStarAlgebra.isStrictlyPositive_TFAE.out 0 8
 
 Depends on / 依赖: CStarAlgebra, CStarAlgebra.isStrictlyPositive_TFAE.out, isStrictlyPositive_TFAE

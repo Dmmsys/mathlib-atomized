@@ -42,7 +42,7 @@ instance [Small.{w}
 
 中文:
 实例 [Small.{w}
-  签名: C] [LocallySmall.{w} D] : Small.{w} (StructuredArrow S T)
+  签名: C] [LocallySmall.{w} D] : Small.{w} (结构化箭头 S T)
   定义体: small_of_surjective (f := fun (f : Σ (X : C), S ⟶ T.obj X) => StructuredArrow.mk f.2)
     (fun f => by
       obtain ⟨X, f, rfl⟩ := f.mk_surjective

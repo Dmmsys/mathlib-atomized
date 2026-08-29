@@ -108,7 +108,7 @@ theorem exists_teichmullerFun
   proof: IsPrecomplete.prec' _ (teichmullerCauchy x).2
 
 中文:
-定理 exists_teichmullerFun
+定理 存在_teichmullerFun
   条件: (x : Perfection (R ⧸ I) p)
   证明: IsPrecomplete.prec' _ (teichmullerCauchy x).2
 
@@ -607,7 +607,7 @@ definition quotientMulEquiv
 
 中文:
 定义 quotientMulEquiv
-  签名: (p : 自然数) [Fact p.Prime]
+  签名: (p : 自然数) [Fact p.素]
   定义体: MonoidHom.toMulEquiv
   (mapMonoidHom _ <| Ideal.Quotient.mk I)
   (liftMonoidHom p _ _ <| teichmuller p I)

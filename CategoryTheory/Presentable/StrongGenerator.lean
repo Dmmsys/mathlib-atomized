@@ -53,7 +53,7 @@ lemma IsCardinalFilteredGenerator.of_isDense
 
 
 中文:
-引理 IsCardinalFilteredGenerator.of_isDense
+引理 是CardinalFilteredGenerator.of_isDense
   证明: by
     rintro X ⟨Y, hY, ⟨e⟩⟩
     exact isCardinalPresentable_of_iso e κ
@@ -97,7 +97,7 @@ lemma IsCardinalFilteredGenerator.of_isDense_ι
   simpa using IsCardinalFilteredGenerator.of_isDense P.ι κ
 
 中文:
-引理 IsCardinalFilteredGenerator.of_isDense_ι
+引理 是CardinalFilteredGenerator.of_isDense_ι
   证明: by
   rw [← ObjectProperty.IsCardinalFilteredGenerator.isoClosure_iff]
   have (X : P.FullSubcategory) : IsCardinalPresentable (P.ι.obj X) κ := hP _ X.property
@@ -313,8 +313,8 @@ lemma iff_exists_isStrongGenerator
     have : HasCardinalFilteredG
 
 中文:
-引理 iff_exists_isStrongGenerator
-  条件: [HasColimitsOfSize.{w, w} C] [LocallySmall.{w} C]
+引理 iff_存在_isStrongGenerator
+  条件: [有余limitsOfSize.{w, w} C] [LocallySmall.{w} C]
   证明: by
   refine ⟨fun _ => ?_, fun ⟨P, _, hS₁, hS₂⟩ => ?_⟩
   · obtain ⟨P, _, hP⟩ := HasCardinalFilteredGenerator.exists_small_generator C κ
@@ -352,7 +352,7 @@ lemma of_le
 
 中文:
 引理 of_le
-  结论: [IsCardinalLocallyPresentable C κ] {κ' : Cardinal.{w}} [Fact κ'.IsRegular]
+  结论: [是CardinalLocallyPresentable C κ] {κ' : 基数.{w}} [Fact κ'.是正则]
   证明: by
   rw [iff_exists_isStrongGenerator]
   obtain ⟨S, _, h₁, h₂⟩ := (iff_exists_isStrongGenerator C κ).1 inferInstance

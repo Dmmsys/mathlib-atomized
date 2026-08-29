@@ -41,7 +41,7 @@ definition RingHom.adjoinAlgebraMap
 @[simp]
 
 中文:
-定义 RingHom.adjoinAlgebraMap
+定义 环态射.adjoinAlgebraMap
   签名: :
   定义体: RingHom.codRestrict (((Algebra.ofId B C).restrictScalars A).comp
     (Subalgebra.val A[b])) _
@@ -70,7 +70,7 @@ theorem RingHom.adjoinAlgebraMap_apply
 alias RingHom.adjoin_algebraMap_apply := RingHom.adjoinAlgebraMap_apply
 
 中文:
-定理 RingHom.adjoinAlgebraMap_apply
+定理 环态射.adjoinAlgebraMap_apply
   条件: (x : A[b])
   证明: rfl
 
@@ -99,7 +99,7 @@ theorem RingHom.adjoinAlgebraMap_surjective
 alias RingHom.adjoin_algebraMap_surjective := RingHom.adjoinAlgebraMap_surjective
 
 中文:
-定理 RingHom.adjoinAlgebraMap_surjective
+定理 环态射.adjoinAlgebraMap_surjective
   证明: by
   intro c
   obtain ⟨p, hp⟩ := adjoin_eq_exists_aeval A (algebraMap B C b) c
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A[b] A[(algebraMap B C) b]
+  签名: 代数 A[b] A[(algebraMap B C) b]
   定义体: RingHom.toAlgebra (RingHom.adjoinAlgebraMap b)
 
 Depends on / 依赖: RingHom, RingHom.adjoinAlgebraMap, RingHom.toAlgebra, adjoinAlgebraMap, toAlgebra
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower A[b] A[(algebraMap B C) b] C
+  签名: 标量塔 A[b] A[(algebraMap B C) b] C
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -169,8 +169,8 @@ definition RingHom.adjoinAlgebraMapEquiv
   aesop (add norm [Polynomial.aeval_algebraMap_apply, Subt
 
 中文:
-定义 RingHom.adjoinAlgebraMapEquiv
-  签名: [FaithfulSMul B C]
+定义 环态射.adjoinAlgebraMapEquiv
+  签名: [忠实标量乘法 B C]
   定义体: by
   apply RingEquiv.ofBijective (RingHom.adjoinAlgebraMap b)
      ((Function.bijective_iff_existsUnique (adjoinAlgebraMap b)).mpr (fun y => ?_))

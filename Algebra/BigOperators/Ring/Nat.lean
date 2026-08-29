@@ -36,7 +36,7 @@ lemma even_sum_iff_even_card_odd
 
 中文:
 引理 even_sum_iff_even_card_odd
-  条件: {s : Finset ι} (f : ι -> 自然数)
+  条件: {s : 有限集 ι} (f : ι -> 自然数)
   证明: by
   rw [← Finset.sum_filter_add_sum_filter_not _ (fun x => Even (f x))]; rw [Nat.even_add]
   simp only [Finset.mem_filter, and_imp, imp_self, implies_true, Finset.even_sum, true_iff]
@@ -64,7 +64,7 @@ lemma odd_sum_iff_odd_card_odd
 
 中文:
 引理 odd_sum_iff_odd_card_odd
-  条件: {s : Finset ι} (f : ι -> 自然数)
+  条件: {s : 有限集 ι} (f : ι -> 自然数)
   证明: by
   simp only [← Nat.not_even_iff_odd, even_sum_iff_even_card_odd]
 
@@ -89,7 +89,7 @@ theorem card_preimage_eq_sum_card_image_eq
 
 中文:
 定理 card_preimage_eq_sum_card_image_eq
-  结论: {M : 类型} {f : ι -> M} {s : Finset M}
+  结论: {M : 类型} {f : ι -> M} {s : 有限集 M}
   证明: by
   classical
   -- `t = s ∩ Set.range f` as a `Finset`

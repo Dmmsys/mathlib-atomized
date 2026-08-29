@@ -46,7 +46,7 @@ structure RelativeMorphism
     - comm : A.ι ≫ map = φ ≫ B.ι  [default: by cat_disch]
 
 中文:
-结构 RelativeMorphism
+结构 Relative态射
   参数: where
   公理与运算 (2 个):
     - map : X ⟶ Y
@@ -77,7 +77,7 @@ definition const
 
 中文:
 定义 const
-  签名: {y : Y _⦋0⦌} {φ : (A : SSet) ⟶ (Subcomplex.ofSimplex y : SSet)}
+  签名: {y : Y _⦋0⦌} {φ : (A : SSet) ⟶ (子复形.ofSimplex y : SSet)}
   定义体: SSet.const y
 
 Depends on / 依赖: SSet.const
@@ -166,7 +166,7 @@ lemma image_le
 
 中文:
 引理 image_le
-  结论: A.image f.map <= B
+  结论: A.像 f.map <= B
   证明: by
   rintro n _ ⟨a, ha, rfl⟩
   have := f.map_coe ⟨a, ha⟩
@@ -190,7 +190,7 @@ lemma le_preimage
 
 中文:
 引理 le_preimage
-  结论: A <= B.preimage f.map
+  结论: A <= B.原像 f.map
   证明: by
   simpa only [← Subcomplex.image_le_iff] using f.image_le
 
@@ -216,7 +216,7 @@ structure Homotopy
     - rel : A.ι ▷ _ ≫ h = fst _ _ ≫ φ ≫ B.ι  [default: by cat_disch]
 
 中文:
-结构 Homotopy
+结构 同伦
   参数: where
   公理与运算 (4 个):
     - h : X otimes Δ[1] ⟶ Y
@@ -270,7 +270,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : Homotopy f f where
+  签名: : 同伦 f f where
   定义体: fst _ _ ≫ f.map
 
 Depends on / 依赖: f.map
@@ -312,7 +312,7 @@ definition homotopyClass
 
 中文:
 定义 homotopyClass
-  签名: (f : RelativeMorphism A B φ)
+  签名: (f : Relative态射 A B φ)
   定义体: Quot.mk _ f
 
 Depends on / 依赖: Quot.mk
@@ -328,8 +328,8 @@ lemma Homotopy.eq
   proof: Quot.sound ⟨h⟩
 
 中文:
-引理 Homotopy.eq
-  条件: {f g : RelativeMorphism A B φ} (h : Homotopy f g)
+引理 同伦.eq
+  条件: {f g : Relative态射 A B φ} (h : 同伦 f g)
   证明: Quot.sound ⟨h⟩
 
 Depends on / 依赖: Quot.sound
@@ -371,7 +371,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f' : RelativeMorphism B C ψ) {φψ : (A : SSet) ⟶ (C : SSet)}
+  签名: (f' : Relative态射 B C ψ) {φψ : (A : SSet) ⟶ (C : SSet)}
   定义体: f.map ≫ f'.map
 
 Depends on / 依赖: f.map
@@ -394,8 +394,8 @@ definition Homotopy.postcomp
   rel := by simp [h.rel_assoc, ← fac]
 
 中文:
-定义 Homotopy.postcomp
-  签名: (h : Homotopy f g)
+定义 同伦.postcomp
+  签名: (h : 同伦 f g)
   定义体: h.h ≫ f'.map
   rel := by simp [h.rel_assoc, ← fac]
 -/
@@ -418,7 +418,7 @@ definition Homotopy.precomp
     rw [← fac]; rw [Category.assoc]; rw [← comp_whiskerRight_assoc]; rw [f.comm]; rw [comp_whiskerRight_assoc]; rw [h.rel]; rw [whiskerRight_fst_assoc]
 
 中文:
-定义 Homotopy.precomp
+定义 同伦.precomp
   定义体: f.map ▷ _ ≫ h.h
   rel := by
     rw [← fac]; rw [Category.assoc]; rw [← comp_whiskerRight_assoc]; rw [f.comm]; rw [comp_whiskerRight_assoc]; rw [h.rel]; rw [whiskerRight_fst_assoc]

@@ -73,8 +73,8 @@ lemma hasFiniteIntegral_of_bound
     filter_upwards [bound_ge, bound_nonneg] with x bound_ge_x bound_nonne
 
 中文:
-引理 hasFiniteIntegral_of_bound
-  结论: [CompactSpace Y] (f : X -> C(Y, E)) (bound : X -> 实数)
+引理 hasFinite整数egral_of_bound
+  结论: [紧空间 Y] (f : X -> C(Y, E)) (bound : X -> 实数)
   证明: by
   rcases isEmpty_or_nonempty Y with (h | h)
   · simp
@@ -109,8 +109,8 @@ lemma hasFiniteIntegral_mkD_of_bound
   simpa only [mkD_apply_of_continuous cont_x] using bound_ge_x
 
 中文:
-引理 hasFiniteIntegral_mkD_of_bound
-  结论: [CompactSpace Y] (f : X -> Y -> E) (g : C(Y, E))
+引理 hasFinite整数egral_mkD_of_bound
+  结论: [紧空间 Y] (f : X -> Y -> E) (g : C(Y, E))
   证明: by
   refine hasFiniteIntegral_of_bound _ bound bound_int ?_
   filter_upwards [bound_ge, f_ae_cont] with x bound_ge_x cont_x
@@ -140,8 +140,8 @@ lemma hasFiniteIntegral_mkD_restrict_of_bound
   · simpa
 
 中文:
-引理 hasFiniteIntegral_mkD_restrict_of_bound
-  结论: {s : Set Y} [CompactSpace s]
+引理 hasFinite整数egral_mkD_restrict_of_bound
+  结论: {s : 集合 Y} [紧空间 s]
   证明: by
   refine hasFiniteIntegral_mkD_of_bound _ _ ?_ bound bound_int ?_
   · simpa [← continuousOn_iff_continuous_domRestrict]
@@ -170,7 +170,7 @@ lemma aeStronglyMeasurable_mkD_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_mkD_of_uncurry
-  结论: [CompactSpace Y] [TopologicalSpace X]
+  结论: [紧空间 Y] [拓扑空间 X]
   证明: .aestronglyMeasurable continuous_mkD_of_uncurry _ _ f_cont
 
 Depends on / 依赖: aestronglyMeasurable, continuous_mkD_of_uncurry, f_cont
@@ -192,7 +192,7 @@ lemma aeStronglyMeasurable_restrict_mkD_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_restrict_mkD_of_uncurry
-  结论: [CompactSpace Y] {s : Set X}
+  结论: [紧空间 Y] {s : 集合 X}
   证明: .aestronglyMeasurable hs continuousOn_mkD_of_uncurry _ _ f_cont
 
 Depends on / 依赖: aestronglyMeasurable, continuousOn_mkD_of_uncurry, f_cont
@@ -215,7 +215,7 @@ lemma aeStronglyMeasurable_mkD_restrict_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_mkD_restrict_of_uncurry
-  结论: {t : Set Y} [CompactSpace t] [TopologicalSpace X]
+  结论: {t : 集合 Y} [紧空间 t] [拓扑空间 X]
   证明: .aestronglyMeasurable continuous_mkD_restrict_of_uncurry _ _ f_cont
 
 Depends on / 依赖: aestronglyMeasurable, continuous_mkD_restrict_of_uncurry, f_cont
@@ -237,7 +237,7 @@ lemma aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry
 
 中文:
 引理 aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry
-  结论: {s : Set X} {t : Set Y}
+  结论: {s : 集合 X} {t : 集合 Y}
   证明: .aestronglyMeasurable hs continuousOn_mkD_restrict_of_uncurry _ _ f_cont
 
 Depends on / 依赖: aestronglyMeasurable, continuousOn_mkD_restrict_of_uncurry, f_cont

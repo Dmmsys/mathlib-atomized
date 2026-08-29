@@ -184,7 +184,7 @@ lemma pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed
-  条件: [P.IsReduced]
+  条件: [P.是既约]
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   rcases eq_or_ne i j with rfl | h₁; · simp
@@ -218,7 +218,7 @@ lemma pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed'
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed'
-  结论: [P.IsReduced]
+  结论: [P.是既约]
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   have := P.pairingIn_pairingIn_mem_set_of_isCrystal_of_isRed i j
@@ -327,7 +327,7 @@ lemma pairingIn_pairingIn_mem_set_of_length_eq
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_length_eq
-  结论: {B : P.InvariantForm}
+  结论: {B : P.不变形式}
   证明: by
   replace len_eq : P.pairingIn Int i j = P.pairingIn Int j i := by
     simp only [← (FaithfulSMul.algebraMap_injective Int R).eq_iff, algebraMap_pairingIn]
@@ -362,7 +362,7 @@ omit [Finite ι] in
 
 中文:
 引理 pairingIn_pairingIn_mem_set_of_length_eq_of_ne
-  结论: {B : P.InvariantForm}
+  结论: {B : P.不变形式}
   证明: by
   have : Module.IsReflexive R M := .of_isPerfPair P.toLinearMap
   have := P.pairingIn_pairingIn_mem_set_of_length_eq len_eq
@@ -713,8 +713,8 @@ lemma exists_apply_eq_or
     have hij := (B.apply_eq_or i j).resolve_left hj
 
 中文:
-引理 exists_apply_eq_or
-  条件: [Nonempty ι]
+引理 存在_apply_eq_or
+  条件: [非空 ι]
   结论: 存在 i j, 对任意 k,
   证明: by
   obtain ⟨i⟩ := (inferInstance : Nonempty ι)
@@ -794,8 +794,8 @@ lemma forall_pairing_eq_swap_or
     rwa [h i j, mul_left_inj' (B.ne_zero j)] at thi
 
 中文:
-引理 forall_pairing_eq_swap_or
-  条件: [P.IsReduced] [P.IsIrreducible]
+引理 对任意_pairing_eq_swap_or
+  条件: [P.是既约] [P.是不可约]
   证明: by
   have : Fintype ι := Fintype.ofFinite ι
   have B := (P.posRootForm Int).toInvariantForm
@@ -848,8 +848,8 @@ lemma forall_pairingIn_eq_swap_or
     ← map_ofNat (algebraMap Int R)] using P.forall_pairing_eq_swap_or
 
 中文:
-引理 forall_pairingIn_eq_swap_or
-  条件: [P.IsReduced] [P.IsIrreducible]
+引理 对任意_pairingIn_eq_swap_or
+  条件: [P.是既约] [P.是不可约]
   证明: by
   simpa only [← P.algebraMap_pairingIn Int, eq_intCast, ← Int.cast_mul, Int.cast_inj,
     ← map_ofNat (algebraMap Int R)] using P.forall_pairing_eq_swap_or

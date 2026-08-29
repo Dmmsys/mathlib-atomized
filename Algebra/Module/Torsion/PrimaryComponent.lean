@@ -55,7 +55,7 @@ definition primaryComponent
 
 中文:
 定义 primaryComponent
-  签名: : Submodule A M
+  签名: : 子模 A M
   定义体: ⨆ i : Nat, torsionBySet A M ↑(I ^ i)
 
 Depends on / 依赖: torsionBySet
@@ -201,7 +201,7 @@ theorem primaryComponent_torsionBySet_eq_inf
 
 中文:
 定理 primaryComponent_torsionBySet_eq_inf
-  条件: (I : Ideal A)
+  条件: (I : 理想 A)
   证明: by
   ext x
   simp [primaryComponent_mem]
@@ -229,7 +229,7 @@ theorem primaryComponent_torsionBySet_of_isCoprime
 
 中文:
 定理 primaryComponent_torsionBySet_of_isCoprime
-  条件: (J : Ideal A) (hD : IsCoprime I J)
+  条件: (J : 理想 A) (hD : IsCoprime I J)
   证明: by
   have (n : Nat) : Disjoint (torsionBySet A M ↑(I ^ n)) (torsionBySet A M ↑J) :=
     Submodule.disjoint_torsionBySet_ideal (M := M) (Ideal.pow_sup_eq_top hD.sup_eq)
@@ -275,7 +275,7 @@ theorem primaryComponent_sup
 
 中文:
 定理 primaryComponent_sup
-  条件: (N₁ N₂ : Submodule A M) (hD : Disjoint N₁ N₂)
+  条件: (N₁ N₂ : 子模 A M) (hD : Disjoint N₁ N₂)
   证明: by
   ext x
   simp_all only [mem_map, primaryComponent_mem, mem_torsionBySet_iff, SetLike.coe_sort_coe,
@@ -332,7 +332,7 @@ theorem iSup_primaryComponent_eq_top
 
 中文:
 定理 iSup_primaryComponent_eq_top
-  条件: (h : IsTorsion A M)
+  条件: (h : 是挠 A M)
   证明: by
   rw [eq_top_iff']
   intro x

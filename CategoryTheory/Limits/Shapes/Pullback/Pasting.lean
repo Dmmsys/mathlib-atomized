@@ -108,7 +108,7 @@ definition pasteHorizIsPullback
 
 中文:
 定义 pasteHorizIsPullback
-  签名: (H : IsLimit t₂) (H' : IsLimit t₁)
+  签名: (H : 是极限 t₂) (H' : 是极限 t₁)
   定义体: by
   apply PullbackCone.isLimitAux'
   intro s
@@ -155,7 +155,7 @@ definition leftSquareIsPullback
 
 中文:
 定义 leftSquareIsPullback
-  签名: (H : IsLimit t₂) (H' : IsLimit (t₂.pasteHoriz t₁ hi₂))
+  签名: (H : 是极限 t₂) (H' : 是极限 (t₂.pasteHoriz t₁ hi₂))
   定义体: by
   apply PullbackCone.isLimitAux'
   intro s
@@ -196,7 +196,7 @@ definition pasteHorizIsPullbackEquiv
 
 中文:
 定义 pasteHorizIsPullbackEquiv
-  签名: (H : IsLimit t₂)
+  签名: (H : 是极限 t₂)
   定义体: leftSquareIsPullback t₁ _ H H'
   invFun H' := pasteHorizIsPullback _ H H'
   left_inv _ := Subsingleton.elim _ _
@@ -295,7 +295,7 @@ apply PullbackCone.isLimitOfFlip IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ h
 
 中文:
 定义 pasteVertIsPullback
-  签名: (H₁ : IsLimit t₁) (H₂ : IsLimit t₂)
+  签名: (H₁ : 是极限 t₁) (H₂ : 是极限 t₂)
   定义体: by
 apply PullbackCone.isLimitOfFlip IsLimit.ofIsoLimit _ (t₁.pasteVertFlip t₂ hi₂).symm
   exact pasteHorizIsPullback hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂)
@@ -319,7 +319,7 @@ definition topSquareIsPullback
 
 中文:
 定义 topSquareIsPullback
-  签名: (H₁ : IsLimit t₁) (H₂ : IsLimit (t₁.pasteVert t₂ hi₂))
+  签名: (H₁ : 是极限 t₁) (H₂ : 是极限 (t₁.pasteVert t₂ hi₂))
   定义体: PullbackCone.isLimitOfFlip
     (leftSquareIsPullback _ hi₂ (PullbackCone.flipIsLimit H₁) (PullbackCone.flipIsLimit H₂))
 
@@ -342,7 +342,7 @@ definition pasteVertIsPullbackEquiv
 
 中文:
 定义 pasteVertIsPullbackEquiv
-  签名: (H : IsLimit t₁)
+  签名: (H : 是极限 t₁)
   定义体: topSquareIsPullback t₂ _ H H'
   invFun H' := pasteVertIsPullback _ H H'
   left_inv _ := Subsingleton.elim _ _
@@ -422,7 +422,7 @@ definition pasteHorizIsPushout
 
 中文:
 定义 pasteHorizIsPushout
-  签名: (H : IsColimit t₁) (H' : IsColimit t₂)
+  签名: (H : 是余极限 t₁) (H' : 是余极限 t₂)
   定义体: by
   apply PushoutCocone.isColimitAux'
   intro s
@@ -470,7 +470,7 @@ definition rightSquareIsPushout
 
 中文:
 定义 rightSquareIsPushout
-  签名: (H : IsColimit t₁) (H' : IsColimit (t₁.pasteHoriz t₂ hi₂))
+  签名: (H : 是余极限 t₁) (H' : 是余极限 (t₁.pasteHoriz t₂ hi₂))
   定义体: by
   apply PushoutCocone.isColimitAux'
   intro s
@@ -512,7 +512,7 @@ definition pasteHorizIsPushoutEquiv
 
 中文:
 定义 pasteHorizIsPushoutEquiv
-  签名: (H : IsColimit t₁)
+  签名: (H : 是余极限 t₁)
   定义体: rightSquareIsPushout t₂ _ H H'
   invFun H' := pasteHorizIsPushout _ H H'
   left_inv _ := Subsingleton.elim _ _
@@ -625,7 +625,7 @@ apply PushoutCocone.isColimitOfFlip IsColimit.ofIsoColimit _ (t₁.pasteVertFlip
 
 中文:
 定义 pasteVertIsPushout
-  签名: (H₁ : IsColimit t₁) (H₂ : IsColimit t₂)
+  签名: (H₁ : 是余极限 t₁) (H₂ : 是余极限 t₂)
   定义体: by
 apply PushoutCocone.isColimitOfFlip IsColimit.ofIsoColimit _ (t₁.pasteVertFlip t₂ hi₂).symm
   exact pasteHorizIsPushout hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂)
@@ -650,7 +650,7 @@ definition botSquareIsPushout
 
 中文:
 定义 botSquareIsPushout
-  签名: (H₁ : IsColimit t₁) (H₂ : IsColimit (t₁.pasteVert t₂ hi₂))
+  签名: (H₁ : 是余极限 t₁) (H₂ : 是余极限 (t₁.pasteVert t₂ hi₂))
   定义体: PushoutCocone.isColimitOfFlip
     (rightSquareIsPushout _ hi₂ (PushoutCocone.flipIsColimit H₁) (PushoutCocone.flipIsColimit H₂))
 
@@ -673,7 +673,7 @@ definition pasteVertIsPushoutEquiv
 
 中文:
 定义 pasteVertIsPushoutEquiv
-  签名: (H : IsColimit t₁)
+  签名: (H : 是余极限 t₁)
   定义体: botSquareIsPushout t₂ _ H H'
   invFun H' := pasteVertIsPushout _ H H'
   left_inv _ := Subsingleton.elim _ _

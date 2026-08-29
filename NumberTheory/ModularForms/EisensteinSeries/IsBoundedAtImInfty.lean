@@ -86,7 +86,7 @@ lemma norm_le_tsum_norm
 
 中文:
 引理 norm_le_tsum_norm
-  条件: (N : 自然数) (a : Fin 2 -> ZMod N) (k : 整数) (hk : 3 <= k) (z : ℍ)
+  条件: (N : 自然数) (a : 有限集 2 -> ZMod N) (k : 整数) (hk : 3 <= k) (z : ℍ)
   证明: by
   simp_rw [eisensteinSeries]
   apply le_trans (norm_tsum_le_tsum_norm ((summable_norm_eisSummand hk z).subtype _))
@@ -117,7 +117,7 @@ theorem isBoundedAtImInfty_eisensteinSeriesSIF
 
 中文:
 定理 isBoundedAtImInfty_eisensteinSeriesSIF
-  结论: {N : 自然数} [NeZero N] (a : Fin 2 -> ZMod N) {k : 整数}
+  结论: {N : 自然数} [NeZero N] (a : 有限集 2 -> ZMod N) {k : 整数}
   证明: by
   simp_rw [UpperHalfPlane.isBoundedAtImInfty_iff, eisensteinSeriesSIF] at *
   refine ⟨∑'(x : Fin 2 -> Int), r ⟨⟨N, 2⟩, Nat.ofNat_pos⟩ ^ (-k) * ‖x‖ ^ (-k), 2, ?_⟩

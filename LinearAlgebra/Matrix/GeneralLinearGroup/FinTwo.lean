@@ -188,7 +188,7 @@ lemma isParabolic_iff_of_upperTriangular
 
 中文:
 引理 isParabolic_iff_of_upperTriangular
-  条件: [IsReduced R] (hm : m 1 0 = 0)
+  条件: [是既约 R] (hm : m 1 0 = 0)
   证明: by
   rw [IsParabolic]
   have aux : m.discr = 0 ↔ m 0 0 = m 1 1 := by
@@ -317,7 +317,7 @@ lemma isParabolic_iff_exists
       simpa only [← hm, ← hb,
 
 中文:
-引理 isParabolic_iff_exists
+引理 isParabolic_iff_存在
   条件: [NeZero (2 : K)]
   证明: by
   constructor
@@ -382,7 +382,7 @@ definition IsElliptic
   body: m.discr < 0
 
 中文:
-定义 IsElliptic
+定义 是Elliptic
   签名: : 命题
   定义体: m.discr < 0
 
@@ -443,7 +443,7 @@ lemma isElliptic_conj_iff
 
 中文:
 引理 isElliptic_conj_iff
-  结论: (g.val * m * g.val⁻¹).IsElliptic ↔ m.IsElliptic
+  结论: (g.val * m * g.val⁻¹).是Elliptic ↔ m.是Elliptic
   证明: by
   simp [IsElliptic]
 
@@ -465,7 +465,7 @@ lemma isElliptic_conj'_iff
 
 中文:
 引理 isElliptic_conj'_iff
-  结论: (g.val⁻¹ * m * g.val).IsElliptic ↔ m.IsElliptic
+  结论: (g.val⁻¹ * m * g.val).是Elliptic ↔ m.是Elliptic
   证明: by
   simpa using isElliptic_conj_iff g⁻¹
 
@@ -521,7 +521,7 @@ protected alias ⟨IsElliptic.of_neg, IsElliptic.neg⟩ := isElliptic_neg_iff
 
 中文:
 定理 isElliptic_neg_iff
-  结论: (-m).IsElliptic ↔ m.IsElliptic
+  结论: (-m).是Elliptic ↔ m.是Elliptic
   证明: by
   simp [IsElliptic, discr_fin_two, det_neg]
 
@@ -554,8 +554,8 @@ theorem IsElliptic.bc_ne_zero
   linear_combination sq_nonneg (m 0 0 - m 1 1)
 
 中文:
-定理 IsElliptic.bc_ne_zero
-  条件: (hm : m.IsElliptic)
+定理 是Elliptic.bc_ne_zero
+  条件: (hm : m.是Elliptic)
   结论: m 0 1 * m 1 0 != 0
   证明: by
   intro hc
@@ -581,8 +581,8 @@ theorem IsElliptic.b_ne_zero
   proof: left_ne_zero_of_mul hm.bc_ne_zero
 
 中文:
-定理 IsElliptic.b_ne_zero
-  条件: (hm : m.IsElliptic)
+定理 是Elliptic.b_ne_zero
+  条件: (hm : m.是Elliptic)
   结论: m 0 1 != 0
   证明: left_ne_zero_of_mul hm.bc_ne_zero
 
@@ -601,8 +601,8 @@ theorem IsElliptic.c_ne_zero
   proof: right_ne_zero_of_mul hm.bc_ne_zero
 
 中文:
-定理 IsElliptic.c_ne_zero
-  条件: (hm : m.IsElliptic)
+定理 是Elliptic.c_ne_zero
+  条件: (hm : m.是Elliptic)
   结论: m 1 0 != 0
   证明: right_ne_zero_of_mul hm.bc_ne_zero
 
@@ -633,7 +633,7 @@ definition upperRightHom
 
 中文:
 定义 upperRightHom
-  签名: : AddChar R (GL (Fin 2) R) where
+  签名: : 加法特征 R (GL (有限集 2) R) where
   定义体: ⟨!![1, x; 0, 1], !![1, -x; 0, 1], by simp [one_fin_two], by simp [one_fin_two]⟩
   map_zero_eq_one' := by simp [Units.ext_iff, one_fin_two]
   map_add_eq_mul' a b := by simp [Units.ext_iff, add_comm]
@@ -657,7 +657,7 @@ lemma injective_upperRightHom
 
 中文:
 引理 injective_upperRightHom
-  结论: Function.Injective (upperRightHom (R := R))
+  结论: 函数.单射 (upperRightHom (R := R))
   证明: by
   refine (injective_iff_map_eq_zero (upperRightHom (R := R)).toAddMonoidHom).mpr ?_
   simp [Units.ext_iff, one_fin_two]
@@ -682,7 +682,7 @@ abbreviation IsParabolic
 
 中文:
 缩写 IsParabolic
-  签名: (g : GL (Fin 2) R)
+  签名: (g : GL (有限集 2) R)
   定义体: g.val.IsParabolic
 
 Depends on / 依赖: IsParabolic, g.val.IsParabolic
@@ -700,7 +700,7 @@ lemma isParabolic_conj_iff
 
 中文:
 引理 isParabolic_conj_iff
-  条件: (g h : GL (Fin 2) R)
+  条件: (g h : GL (有限集 2) R)
   证明: by
   simp [IsParabolic]
 -/
@@ -719,7 +719,7 @@ lemma isParabolic_conj_iff'
 
 中文:
 引理 isParabolic_conj_iff'
-  条件: (g h : GL (Fin 2) R)
+  条件: (g h : GL (有限集 2) R)
   证明: by
   simp [IsParabolic]
 -/
@@ -736,8 +736,8 @@ abbreviation IsElliptic
   body: g.val.IsElliptic
 
 中文:
-缩写 IsElliptic
-  签名: [Preorder R] (g : GL (Fin 2) R)
+缩写 是Elliptic
+  签名: [预序 R] (g : GL (有限集 2) R)
   定义体: g.val.IsElliptic
 
 Depends on / 依赖: IsElliptic, g.val.IsElliptic
@@ -754,7 +754,7 @@ abbreviation IsHyperbolic
 
 中文:
 缩写 IsHyperbolic
-  签名: [Preorder R] (g : GL (Fin 2) R)
+  签名: [预序 R] (g : GL (有限集 2) R)
   定义体: g.val.IsHyperbolic
 
 Depends on / 依赖: IsHyperbolic, g.val.IsHyperbolic
@@ -771,7 +771,7 @@ definition fixpointPolynomial
 
 中文:
 定义 fixpointPolynomial
-  签名: (g : GL (Fin 2) R)
+  签名: (g : GL (有限集 2) R)
   定义体: C (g 1 0) * X ^ 2 + C (g 1 1 - g 0 0) * X - C (g 0 1)
 -/
 noncomputable def fixpointPolynomial (g : GL (Fin 2) R) : R[X] :=
@@ -794,7 +794,7 @@ lemma fixpointPolynomial_eq_zero_iff
 
 中文:
 引理 fixpointPolynomial_eq_zero_iff
-  条件: {g : GL (Fin 2) R}
+  条件: {g : GL (有限集 2) R}
   证明: by
   rw [fixpointPolynomial]
   constructor
@@ -833,7 +833,7 @@ lemma parabolicEigenvalue_ne_zero
 
 中文:
 引理 parabolicEigenvalue_ne_zero
-  条件: {g : GL (Fin 2) K} [NeZero (2 : K)] (hg : IsParabolic g)
+  条件: {g : GL (有限集 2) K} [NeZero (2 : K)] (hg : IsParabolic g)
   证明: by
   have : g.val.trace ^ 2 = 4 * g.val.det := by simpa [sub_eq_zero, discr_fin_two] using hg.2
   rw [parabolicEigenvalue]; rw [div_ne_zero_iff]; rw [eq_true_intro (two_ne_zero' K)]; rw [and_true]; rw [Ne]; rw [← sq_eq_zero_iff]; rw [this]; rw [show (4 : K) = 2 ^ 2 by norm_num]; rw [mul_eq_zero]; rw
@@ -863,7 +863,7 @@ lemma IsParabolic.pow
 
 中文:
 引理 IsParabolic.pow
-  结论: {g : GL (Fin 2) K} (hg : IsParabolic g) [CharZero K]
+  结论: {g : GL (有限集 2) K} (hg : IsParabolic g) [特征零 K]
   证明: by
   rw [IsParabolic]; rw [isParabolic_iff_exists] at hg ⊢
   obtain ⟨a, m, hg, hm0, hmsq⟩ := hg
@@ -907,7 +907,7 @@ lemma isParabolic_iff_of_upperTriangular
 
 中文:
 引理 isParabolic_iff_of_upperTriangular
-  条件: {g : GL (Fin 2) K} (hg : g 1 0 = 0)
+  条件: {g : GL (有限集 2) K} (hg : g 1 0 = 0)
   证明: Matrix.isParabolic_iff_of_upperTriangular hg
 
 Depends on / 依赖: Matrix, Matrix.isParabolic_iff_of_upperTriangular, isParabolic_iff_of_upperTriangular
@@ -933,7 +933,7 @@ lemma isParabolic_iff_of_upperTriangular_of_det
 
 中文:
 引理 isParabolic_iff_of_upperTriangular_of_det
-  结论: [LinearOrder K] [IsStrictOrderedRing K]
+  结论: [线性序 K] [是StrictOrdered环 K]
   证明: by
   rw [isParabolic_iff_of_upperTriangular hg10]
   constructor

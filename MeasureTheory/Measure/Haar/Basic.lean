@@ -103,7 +103,7 @@ definition index
 
 中文:
 定义 index
-  签名: (K V : Set G)
+  签名: (K V : 集合 G)
   定义体: sInf Finset.card '' { t : Finset G | K subseteq ⋃ g in t, (fun h => g * h) ⁻¹' V }
 
 @[to_additive addIndex_empty]
@@ -125,7 +125,7 @@ theorem index_empty
 
 中文:
 定理 index_empty
-  条件: {V : Set G}
+  条件: {V : 集合 G}
   结论: index ∅ V = 0
   证明: by simp [index]
 -/
@@ -151,7 +151,7 @@ definition prehaar
 
 中文:
 定义 prehaar
-  签名: (K₀ U : Set G) (K : Compacts G)
+  签名: (K₀ U : 集合 G) (K : 余mpacts G)
   定义体: (index (K : Set G) U : Real) / index K₀ U
 
 @[to_additive]
@@ -174,8 +174,8 @@ theorem prehaar_empty
 
 中文:
 定理 prehaar_empty
-  条件: (K₀ : PositiveCompacts G) {U : Set G}
-  结论: prehaar (K₀ : Set G) U ⊥ = 0
+  条件: (K₀ : PositiveCompacts G) {U : 集合 G}
+  结论: prehaar (K₀ : 集合 G) U ⊥ = 0
   证明: by
   rw [prehaar]; rw [Compacts.coe_bot]; rw [index_empty]; rw [Nat.cast_zero]; rw [zero_div]
 
@@ -197,7 +197,7 @@ theorem prehaar_nonneg
 
 中文:
 定理 prehaar_nonneg
-  条件: (K₀ : PositiveCompacts G) {U : Set G} (K : Compacts G)
+  条件: (K₀ : PositiveCompacts G) {U : 集合 G} (K : 余mpacts G)
   证明: by apply div_nonneg <;> norm_cast <;> apply zero_le
 
 Depends on / 依赖: div_nonneg, zero_le
@@ -220,7 +220,7 @@ definition haarProduct
 
 中文:
 定义 haarProduct
-  签名: (K₀ : Set G)
+  签名: (K₀ : 集合 G)
   定义体: pi univ fun K => Icc 0 index (K : Set G) K₀
 
 @[to_additive (attr := simp)]
@@ -240,7 +240,7 @@ theorem mem_prehaar_empty
 
 中文:
 定理 mem_prehaar_empty
-  条件: {K₀ : Set G} {f : Compacts G -> 实数}
+  条件: {K₀ : 集合 G} {f : 余mpacts G -> 实数}
   证明: by
   simp only [haarProduct, Set.pi, forall_prop_of_true, mem_univ, mem_ofPred_eq]
 
@@ -266,7 +266,7 @@ definition clPrehaar
 
 中文:
 定义 clPrehaar
-  签名: (K₀ : Set G) (V : OpenNhdsOf (1 : G))
+  签名: (K₀ : 集合 G) (V : OpenNhdsOf (1 : G))
   定义体: closure prehaar K₀ '' { U : Set G | U subseteq V.1 ∧ IsOpen U ∧ (1 : G) in U }
 
 Depends on / 依赖: IsOpen, closure, prehaar, subseteq
@@ -299,7 +299,7 @@ theorem index_defined
 
 中文:
 定理 index_defined
-  条件: {K V : Set G} (hK : IsCompact K) (hV : (interior V).Nonempty)
+  条件: {K V : 集合 G} (hK : 是紧集 K) (hV : (interior V).非空)
   证明: by
   rcases compact_covered_by_mul_left_translates hK hV with ⟨t, ht⟩; exact ⟨t.card, t, ht, rfl⟩
 
@@ -325,7 +325,7 @@ theorem index_elim
 
 中文:
 定理 index_elim
-  条件: {K V : Set G} (hK : IsCompact K) (hV : (interior V).Nonempty)
+  条件: {K V : 集合 G} (hK : 是紧集 K) (hV : (interior V).非空)
   证明: by
   have := Nat.sInf_mem (index_defined hK hV); rwa [mem_image] at this
 
@@ -354,7 +354,7 @@ theorem le_index_mul
 
 中文:
 定理 le_index_mul
-  结论: (K₀ : PositiveCompacts G) (K : Compacts G) {V : Set G}
+  结论: (K₀ : PositiveCompacts G) (K : 余mpacts G) {V : 集合 G}
   证明: by
   classical
   obtain ⟨s, h1s, h2s⟩ := index_elim K.isCompact K₀.interior_nonempty
@@ -398,7 +398,7 @@ theorem index_pos
 
 中文:
 定理 index_pos
-  条件: (K : PositiveCompacts G) {V : Set G} (hV : (interior V).Nonempty)
+  条件: (K : PositiveCompacts G) {V : 集合 G} (hV : (interior V).非空)
   证明: by
   classical
   rw [index]; rw [Nat.sInf_def]; rw [Nat.find_pos]; rw [mem_image]
@@ -436,7 +436,7 @@ theorem index_mono
 
 中文:
 定理 index_mono
-  条件: {K K' V : Set G} (hK' : IsCompact K') (h : K subseteq K') (hV : (interior V).Nonempty)
+  条件: {K K' V : 集合 G} (hK' : 是紧集 K') (h : K subseteq K') (hV : (interior V).非空)
   证明: by
   rcases index_elim hK' hV with ⟨s, h1s, h2s⟩
   apply Nat.sInf_le; rw [mem_image]; exact ⟨s, Subset.trans h h1s, h2s⟩
@@ -470,7 +470,7 @@ theorem index_union_le
 
 中文:
 定理 index_union_le
-  条件: (K₁ K₂ : Compacts G) {V : Set G} (hV : (interior V).Nonempty)
+  条件: (K₁ K₂ : 余mpacts G) {V : 集合 G} (hV : (interior V).非空)
   证明: by
   classical
   rcases index_elim K₁.2 hV with ⟨s, h1s, h2s⟩
@@ -511,7 +511,7 @@ theorem index_union_eq
 
 中文:
 定理 index_union_eq
-  结论: (K₁ K₂ : Compacts G) {V : Set G} (hV : (interior V).Nonempty)
+  结论: (K₁ K₂ : 余mpacts G) {V : 集合 G} (hV : (interior V).非空)
   证明: by
   classical
   apply le_antisymm (index_union_le K₁ K₂ hV)
@@ -572,7 +572,7 @@ theorem mul_left_index_le
 
 中文:
 定理 mul_left_index_le
-  结论: {K : Set G} (hK : IsCompact K) {V : Set G} (hV : (interior V).Nonempty)
+  结论: {K : 集合 G} (hK : 是紧集 K) {V : 集合 G} (hV : (interior V).非空)
   证明: by
   rcases index_elim hK hV with ⟨s, h1s, h2s⟩; rw [← h2s]
   apply Nat.sInf_le; rw [mem_image]
@@ -610,7 +610,7 @@ theorem is_left_invariant_index
 
 中文:
 定理 is_left_invariant_index
-  结论: {K : Set G} (hK : IsCompact K) (g : G) {V : Set G}
+  结论: {K : 集合 G} (hK : 是紧集 K) (g : G) {V : 集合 G}
   证明: by
   refine le_antisymm (mul_left_index_le hK hV g) ?_
   convert! mul_left_index_le (hK.image <| continuous_const_mul g) hV g⁻¹
@@ -647,7 +647,7 @@ theorem prehaar_le_index
 
 中文:
 定理 prehaar_le_index
-  结论: (K₀ : PositiveCompacts G) {U : Set G} (K : Compacts G)
+  结论: (K₀ : PositiveCompacts G) {U : 集合 G} (K : 余mpacts G)
   证明: by
   unfold prehaar; rw [div_le_iff₀] <;> norm_cast
   · apply le_index_mul K₀ K hU
@@ -679,7 +679,7 @@ theorem prehaar_pos
 
 中文:
 定理 prehaar_pos
-  结论: (K₀ : PositiveCompacts G) {U : Set G} (hU : (interior U).Nonempty) {K : Set G}
+  结论: (K₀ : PositiveCompacts G) {U : 集合 G} (hU : (interior U).非空) {K : 集合 G}
   证明: by
   apply div_pos <;> norm_cast
   · apply index_pos ⟨⟨K, h1K⟩, h2K⟩ hU
@@ -711,7 +711,7 @@ theorem prehaar_mono
 
 中文:
 定理 prehaar_mono
-  结论: {K₀ : PositiveCompacts G} {U : Set G} (hU : (interior U).Nonempty)
+  结论: {K₀ : PositiveCompacts G} {U : 集合 G} (hU : (interior U).非空)
   证明: by
   simp only [prehaar]; rw [div_le_div_iff_of_pos_right]
   · exact mod_cast index_mono K₂.2 h hU
@@ -741,7 +741,7 @@ theorem prehaar_self
 
 中文:
 定理 prehaar_self
-  条件: {K₀ : PositiveCompacts G} {U : Set G} (hU : (interior U).Nonempty)
+  条件: {K₀ : PositiveCompacts G} {U : 集合 G} (hU : (interior U).非空)
   证明: div_self ne_of_gt mod_cast index_pos K₀ hU
 
 @[to_additive]
@@ -768,7 +768,7 @@ theorem prehaar_sup_le
 
 中文:
 定理 prehaar_sup_le
-  结论: {K₀ : PositiveCompacts G} {U : Set G} (K₁ K₂ : Compacts G)
+  结论: {K₀ : PositiveCompacts G} {U : 集合 G} (K₁ K₂ : 余mpacts G)
   证明: by
   simp only [prehaar]; rw [← add_div, div_le_div_iff_of_pos_right]
   · exact mod_cast index_union_le K₁ K₂ hU
@@ -802,7 +802,7 @@ theorem prehaar_sup_eq
 
 中文:
 定理 prehaar_sup_eq
-  结论: {K₀ : PositiveCompacts G} {U : Set G} {K₁ K₂ : Compacts G}
+  结论: {K₀ : PositiveCompacts G} {U : 集合 G} {K₁ K₂ : 余mpacts G}
   证明: by
   simp only [prehaar]; rw [← add_div]
   -- Porting note: Here was `congr`, but `to_additive` failed to generate a theorem.
@@ -833,7 +833,7 @@ theorem is_left_invariant_prehaar
 
 中文:
 定理 is_left_invariant_prehaar
-  结论: {K₀ : PositiveCompacts G} {U : Set G} (hU : (interior U).Nonempty)
+  结论: {K₀ : PositiveCompacts G} {U : 集合 G} (hU : (interior U).非空)
   证明: by
   simp only [prehaar, Compacts.coe_map, is_left_invariant_index K.isCompact _ hU]
 
@@ -862,7 +862,7 @@ theorem prehaar_mem_haarProduct
 
 中文:
 定理 prehaar_mem_haarProduct
-  条件: (K₀ : PositiveCompacts G) {U : Set G} (hU : (interior U).Nonempty)
+  条件: (K₀ : PositiveCompacts G) {U : 集合 G} (hU : (interior U).非空)
   证明: by
     rintro ⟨K, hK⟩ _; rw [mem_Icc]; exact ⟨prehaar_nonneg K₀ _, prehaar_le_index K₀ _ hU⟩
 
@@ -889,7 +889,7 @@ theorem nonempty_iInter_clPrehaar
 have h1V₀ : IsOpen V₀ := isOpen_biInter_f
 
 中文:
-定理 nonempty_iInter_clPrehaar
+定理 nonempty_i整数er_clPrehaar
   条件: (K₀ : PositiveCompacts G)
   证明: by
   have : IsCompact (haarProduct (K₀ : Set G)) := by
@@ -938,7 +938,7 @@ definition chaar
 
 中文:
 定义 chaar
-  签名: (K₀ : PositiveCompacts G) (K : Compacts G)
+  签名: (K₀ : PositiveCompacts G) (K : 余mpacts G)
   定义体: Classical.choose (nonempty_iInter_clPrehaar K₀) K
 
 @[to_additive addCHaar_mem_addHaarProduct]
@@ -963,7 +963,7 @@ theorem chaar_mem_haarProduct
 中文:
 定理 chaar_mem_haarProduct
   条件: (K₀ : PositiveCompacts G)
-  结论: chaar K₀ in haarProduct (K₀ : Set G)
+  结论: chaar K₀ in haarProduct (K₀ : 集合 G)
   证明: (Classical.choose_spec (nonempty_iInter_clPrehaar K₀)).1
 
 @[to_additive addCHaar_mem_clAddPrehaar]
@@ -1017,7 +1017,7 @@ theorem chaar_nonneg
 
 中文:
 定理 chaar_nonneg
-  条件: (K₀ : PositiveCompacts G) (K : Compacts G)
+  条件: (K₀ : PositiveCompacts G) (K : 余mpacts G)
   结论: 0 <= chaar K₀ K
   证明: by
   have := chaar_mem_haarProduct K₀ K (mem_univ _); rw [mem_Icc] at this; exact this.1
@@ -1124,7 +1124,7 @@ theorem chaar_mono
 
 中文:
 定理 chaar_mono
-  条件: {K₀ : PositiveCompacts G} {K₁ K₂ : Compacts G} (h : (K₁ : Set G) subseteq K₂)
+  条件: {K₀ : PositiveCompacts G} {K₁ K₂ : 余mpacts G} (h : (K₁ : 集合 G) subseteq K₂)
   证明: by
   let eval : (Compacts G -> Real) -> Real := fun f => f K₂ - f K₁
   have : Continuous eval := (continuous_apply K₂).sub (continuous_apply K₁)
@@ -1161,7 +1161,7 @@ theorem chaar_sup_le
 
 中文:
 定理 chaar_sup_le
-  条件: {K₀ : PositiveCompacts G} (K₁ K₂ : Compacts G)
+  条件: {K₀ : PositiveCompacts G} (K₁ K₂ : 余mpacts G)
   证明: by
   let eval : (Compacts G -> Real) -> Real := fun f => f K₁ + f K₂ - f (K₁ ⊔ K₂)
   have : Continuous eval := by
@@ -1257,7 +1257,7 @@ theorem is_left_invariant_chaar
 
 中文:
 定理 is_left_invariant_chaar
-  条件: {K₀ : PositiveCompacts G} (g : G) (K : Compacts G)
+  条件: {K₀ : PositiveCompacts G} (g : G) (K : 余mpacts G)
   证明: by
   let eval : (Compacts G -> Real) -> Real := fun f => f (K.map _ <| continuous_const_mul g) - f K
   have : Continuous eval := (continuous_apply (K.map _ _)).sub (continuous_apply K)
@@ -1328,7 +1328,7 @@ theorem haarContent_apply
 
 中文:
 定理 haarContent_apply
-  条件: (K₀ : PositiveCompacts G) (K : Compacts G)
+  条件: (K₀ : PositiveCompacts G) (K : 余mpacts G)
   证明: rfl
 -/
 theorem haarContent_apply (K₀ : PositiveCompacts G) (K : Compacts G) :
@@ -1377,7 +1377,7 @@ theorem is_left_invariant_haarContent
 
 中文:
 定理 is_left_invariant_haarContent
-  条件: {K₀ : PositiveCompacts G} (g : G) (K : Compacts G)
+  条件: {K₀ : PositiveCompacts G} (g : G) (K : 余mpacts G)
   证明: by
   simpa only [ENNReal.coe_inj, ← NNReal.coe_inj, haarContent_apply] using!
     is_left_invariant_chaar g K
@@ -1497,7 +1497,7 @@ theorem haarMeasure_apply
 
 中文:
 定理 haarMeasure_apply
-  条件: {K₀ : PositiveCompacts G} {s : Set G} (hs : MeasurableSet s)
+  条件: {K₀ : PositiveCompacts G} {s : 集合 G} (hs : 可测集 s)
   证明: by
   change ((haarContent K₀).measure K₀)⁻¹ * (haarContent K₀).measure s = _
   simp only [hs, div_eq_mul_inv, mul_comm, Content.measure_apply]
@@ -1651,7 +1651,7 @@ instance sigmaFinite_haarMeasure
 
 中文:
 实例 sigmaFinite_haarMeasure
-  签名: [SecondCountableTopology G] {K₀ : PositiveCompacts G}
+  签名: [第二可数拓扑 G] {K₀ : PositiveCompacts G}
   定义体: by
   have : LocallyCompactSpace G := K₀.locallyCompactSpace_of_group; infer_instance
 
@@ -1711,7 +1711,7 @@ abbreviation haar
 
 中文:
 缩写 haar
-  签名: [LocallyCompactSpace G]
+  签名: [局部紧空间 G]
   定义体: haarMeasure Classical.arbitrary _
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary, haarMeasure
@@ -1742,7 +1742,7 @@ lemma steinhaus_mul_aux
 
 中文:
 引理 steinhaus_mul_aux
-  结论: (μ : Measure G) [IsHaarMeasure μ] [μ.InnerRegularCompactLTTop]
+  结论: (μ : 测度 G) [是Haar测度 μ] [μ.InnerRegularCompactLTTop]
   证明: by
   /- For any measure `μ` and set `E` containing a compact set `K` of positive measure, there exists
   a neighborhood `V` of the identity such that `v • K \ K` has small measure for all `v ∈ V`, say
@@ -1787,7 +1787,7 @@ theorem div_mem_nhds_one_of_haar_pos_ne_top
 
 中文:
 定理 div_mem_nhds_one_of_haar_pos_ne_top
-  结论: (μ : Measure G) [IsHaarMeasure μ]
+  结论: (μ : 测度 G) [是Haar测度 μ]
   证明: steinhaus_mul_aux μ E hE hE.exists_lt_isCompact_of_ne_top hEfin hEpos
 
 Depends on / 依赖: exists_lt_isCompact_of_ne_top, hE.exists_lt_isCompact_of_ne_top, steinhaus_mul_aux
@@ -1816,7 +1816,7 @@ theorem div_mem_nhds_one_of_haar_pos
 
 中文:
 定理 div_mem_nhds_one_of_haar_pos
-  结论: (μ : Measure G) [IsHaarMeasure μ] [LocallyCompactSpace G]
+  结论: (μ : 测度 G) [是Haar测度 μ] [局部紧空间 G]
   证明: steinhaus_mul_aux μ E hE hE.exists_lt_isCompact hEpos
 
 Depends on / 依赖: exists_lt_isCompact, hE.exists_lt_isCompact, steinhaus_mul_aux
@@ -1866,7 +1866,7 @@ theorem haarMeasure_unique
 
 中文:
 定理 haarMeasure_unique
-  结论: (μ : Measure G) [SigmaFinite μ] [IsMulLeftInvariant μ]
+  结论: (μ : 测度 G) [σ有限 μ] [是MulLeftInvariant μ]
   证明: by
   have A : Set.Nonempty (interior (closure (K₀ : Set G))) :=
     K₀.interior_nonempty.mono (interior_mono subset_closure)
@@ -1902,7 +1902,7 @@ example [LocallyCompactSpace G] (μ : Measure G) [IsHaarMeasure μ] (K₀ : Posi
 
 中文:
 定理 haarMeasure_eq_iff
-  结论: (K₀ : PositiveCompacts G) (μ : Measure G) [SigmaFinite μ]
+  结论: (K₀ : PositiveCompacts G) (μ : 测度 G) [σ有限 μ]
   证明: ⟨fun h => h.symm ▸ haarMeasure_self, fun h => by rw [haarMeasure_unique μ K₀, h, one_smul]⟩
 
 example [LocallyCompactSpace G] (μ : Measure G) [IsHaarMeasure μ] (K₀ : PositiveCompacts G) :
@@ -1936,7 +1936,7 @@ theorem regular_of_isMulLeftInvariant
 
 中文:
 定理 regular_of_isMulLeftInvariant
-  结论: {μ : Measure G} [SigmaFinite μ] [IsMulLeftInvariant μ]
+  结论: {μ : 测度 G} [σ有限 μ] [是MulLeftInvariant μ]
   证明: by
   rw [haarMeasure_unique μ ⟨⟨K]; rw [hK⟩]; rw [h2K⟩]; exact Regular.smul hμK
 

@@ -59,8 +59,8 @@ structure IwasawaStructure
 结构 IwasawaStructure
   参数: where
   公理与运算 (4 个):
-    - T : α -> Subgroup M
-    - is_comm : 对任意 x : α, IsMulCommutative (T x)
+    - T : α -> 子群 M
+    - is_comm : 对任意 x : α, 是MulCommutative (T x)
     - is_conj : 对任意 g : M, 对任意 x : α, T (g • x) = MulAut.conj g • T x
     - is_generator : iSup T = ⊤
 -/
@@ -93,7 +93,7 @@ theorem commutator_le
 
 中文:
 定理 commutator_le
-  结论: (IwaS : IwasawaStructure M α) [IsQuasiPreprimitive M α]
+  结论: (IwaS : IwasawaStructure M α) [是QuasiPreprimitive M α]
   证明: by
   have is_transN := IsQuasiPreprimitive.isPretransitive_of_normal hNX
   have ntα : Nontrivial α := nontrivial_of_fixedPoints_ne_univ hNX
@@ -140,7 +140,7 @@ theorem isSimpleGroup
 
 中文:
 定理 isSimpleGroup
-  结论: [Nontrivial M] (is_perfect : commutator M = ⊤)
+  结论: [非平凡 M] (is_perfect : commutator M = ⊤)
   证明: by
   apply IsSimpleGroup.mk
   intro N nN

@@ -45,8 +45,8 @@ class NoZeroSMulDivisors
     - eq_zero_or_eq_zero_of_smul_eq_zero : forall {c : R} {x : M}, c • x = 0 -> c = 0 ∨ x = 0
 
 中文:
-类 NoZeroSMulDivisors
-  参数: (R M : 类型) [Zero R] [Zero M] [SMul R M]
+类 无零标量乘因子
+  参数: (R M : 类型) [零 R] [零 M] [标量乘法 R M]
   公理与运算 (1 个):
     - eq_zero_or_eq_zero_of_smul_eq_zero : 对任意 {c : R} {x : M}, c • x = 0 -> c = 0 ∨ x = 0
 -/
@@ -66,8 +66,8 @@ theorem Function.Injective.noZeroSMulDivisors
 Or.imp_right (@hf _ _) h0.symm ▸ eq_zero_or_eq_zero_of_smul_eq_zero (by rw [← hs, h, h0])⟩
 
 中文:
-定理 Function.Injective.noZeroSMulDivisors
-  结论: {R M N : 类型} [Zero R] [Zero M] [Zero N]
+定理 函数.单射.noZeroSMulDivisors
+  结论: {R M N : 类型} [零 R] [零 M] [零 N]
   证明: ⟨fun {_ _} h =>
 Or.imp_right (@hf _ _) h0.symm ▸ eq_zero_or_eq_zero_of_smul_eq_zero (by rw [← hs, h, h0])⟩
 
@@ -96,8 +96,8 @@ instance [Semiring
     simpa [hr.ne_zero, sub_eq_zero] using eq_zero_or_eq_zero_of_smul_eq_zero hm
 
 中文:
-实例 [Semiring
-  签名: R] [IsDomain R] [AddCommGroup M] [Module R M] [NoZeroSMulDivisors R M] :
+实例 [半环
+  签名: R] [是整环 R] [加法交换群 M] [模 R M] [无零标量乘因子 R M] :
   定义体: by
     dsimp at hm
     rw [← sub_eq_zero]; rw [← smul_sub] at hm
@@ -124,7 +124,7 @@ theorem noZeroSMulDivisors_iff_right_eq_zero_of_smul
 
 中文:
 定理 noZeroSMulDivisors_iff_right_eq_zero_of_smul
-  条件: [Zero R] [Zero M] [SMul R M]
+  条件: [零 R] [零 M] [标量乘法 R M]
   证明: by
   simp_rw [noZeroSMulDivisors_iff, or_iff_not_imp_left]
   exact ⟨fun h r hr m eq => h eq hr, fun h r m eq hr => h r hr m eq⟩
@@ -146,8 +146,8 @@ instance IsAddTorsionFree.to_noZeroSMulDivisors_nat
     contrapose! hx; simpa using (nsmul_right_injective hx.1).ne hx.2
 
 中文:
-实例 IsAddTorsionFree.to_noZeroSMulDivisors_nat
-  签名: [AddMonoid M] [IsAddTorsionFree M]
+实例 是加法无挠.to_noZeroSMulDivisors_nat
+  签名: [加法幺半群 M] [是加法无挠 M]
   定义体: by
     contrapose! hx; simpa using (nsmul_right_injective hx.1).ne hx.2
 
@@ -168,8 +168,8 @@ instance IsAddTorsionFree.to_noZeroSMulDivisors_int
     contrapose! hx; simpa using (zsmul_right_injective hx.1).ne hx.2
 
 中文:
-实例 IsAddTorsionFree.to_noZeroSMulDivisors_int
-  签名: [AddGroup G] [IsAddTorsionFree G]
+实例 是加法无挠.to_noZeroSMulDivisors_int
+  签名: [加法群 G] [是加法无挠 G]
   定义体: by
     contrapose! hx; simpa using (zsmul_right_injective hx.1).ne hx.2
 

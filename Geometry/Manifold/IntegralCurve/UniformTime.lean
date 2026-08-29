@@ -52,8 +52,8 @@ lemma eqOn_of_isMIntegralCurveOn_Ioo
   · apply Ioo_subset_Ioo <;> linarith
 
 中文:
-引理 eqOn_of_isMIntegralCurveOn_Ioo
-  结论: [BoundarylessManifold I M]
+引理 eqOn_of_isM整数egralCurveOn_Ioo
+  结论: [无边界流形 I M]
   证明: by
   apply isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless _ hv
     (hγ a' (by positivity)) ((hγ a (lt_of_lt_of_le hpos hle)).mono _)
@@ -91,8 +91,8 @@ lemma eqOn_abs_add_one_of_isMIntegralCurveOn_Ioo
 .symm (neg_lt_self_iff.mp <| lt_trans ht.1 ht.2) hlt ht
 
 中文:
-引理 eqOn_abs_add_one_of_isMIntegralCurveOn_Ioo
-  结论: [BoundarylessManifold I M]
+引理 eqOn_abs_add_one_of_isM整数egralCurveOn_Ioo
+  结论: [无边界流形 I M]
   证明: by
   intro t ht
   by_cases! hlt : |t| + 1 < a
@@ -130,8 +130,8 @@ lemma isMIntegralCurve_abs_add_one_of_isMIntegralCurveOn_Ioo
   · rw [Filter.eventuallyEq_iff_exists_
 
 中文:
-引理 isMIntegralCurve_abs_add_one_of_isMIntegralCurveOn_Ioo
-  结论: [BoundarylessManifold I M]
+引理 isM整数egralCurve_abs_add_one_of_isM整数egralCurveOn_Ioo
+  结论: [无边界流形 I M]
   证明: by
   intro t
   have ht : t in Ioo (-(|t| + 1)) (|t| + 1) := by
@@ -173,8 +173,8 @@ lemma exists_isMIntegralCurve_iff_exists_isMIntegralCurveOn_Ioo
     isMIntegralCurve_abs_add_one_of_isMIntegralCurveOn_Ioo hv γ hγx (fun a _ => hγ a)⟩
 
 中文:
-引理 exists_isMIntegralCurve_iff_exists_isMIntegralCurveOn_Ioo
-  结论: [BoundarylessManifold I M]
+引理 存在_isM整数egralCurve_iff_存在_isM整数egralCurveOn_Ioo
+  结论: [无边界流形 I M]
   证明: by
   refine ⟨fun ⟨γ, h1, h2⟩ _ => ⟨γ, h1, h2.isMIntegralCurveOn _⟩, fun h => ?_⟩
   choose γ hγx hγ using h
@@ -210,8 +210,8 @@ lemma eqOn_piecewise_of_isMIntegralCurveOn_Ioo
     (h
 
 中文:
-引理 eqOn_piecewise_of_isMIntegralCurveOn_Ioo
-  结论: [BoundarylessManifold I M]
+引理 eqOn_piecewise_of_isM整数egralCurveOn_Ioo
+  结论: [无边界流形 I M]
   证明: by
   intro t ht
   suffices H : EqOn γ γ' (Ioo (max a a') (min b b')) by
@@ -259,8 +259,8 @@ lemma isMIntegralCurveOn_piecewise
     refin
 
 中文:
-引理 isMIntegralCurveOn_piecewise
-  结论: [BoundarylessManifold I M]
+引理 isM整数egralCurveOn_piecewise
+  结论: [无边界流形 I M]
   证明: by
   intro t ht
   by_cases hmem : t in Ioo a b
@@ -315,8 +315,8 @@ lemma exists_isMIntegralCurve_of_isMIntegralCurveOn
 exact ⟨γ, hγ1, hγ2.mono Ioo_
 
 中文:
-引理 exists_isMIntegralCurve_of_isMIntegralCurveOn
-  结论: [BoundarylessManifold I M]
+引理 存在_isM整数egralCurve_of_isM整数egralCurveOn
+  结论: [无边界流形 I M]
   证明: by
   let s := { a | exists γ, γ 0 = x ∧ IsMIntegralCurveOn γ v (Ioo (-a) a) }
   suffices hbdd : ¬BddAbove s by

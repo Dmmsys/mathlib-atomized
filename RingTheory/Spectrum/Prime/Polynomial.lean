@@ -106,7 +106,7 @@ lemma mem_image_comap_zeroLocus_sdiff
 
 中文:
 引理 mem_image_comap_zeroLocus_sdiff
-  条件: (f : A) (s : Set A) (x)
+  条件: (f : A) (s : 集合 A) (x)
   证明: by
   constructor
   · rintro ⟨q, ⟨hqg, hqf⟩, rfl⟩ H
@@ -197,8 +197,8 @@ lemma exists_image_comap_of_finite_of_free
   rw [mem_image_comap_zeroLocus_sdiff]; rw [IsScalarTower.algebraMap_apply A (A ⧸ Ideal.span s)]; rw [isNilpotent_tensor_residueField
 
 中文:
-引理 exists_image_comap_of_finite_of_free
-  结论: (f : A) (s : Set A)
+引理 存在_image_comap_of_finite_of_free
+  结论: (f : A) (s : 集合 A)
   证明: by
   classical
   use (Finset.range (Module.finrank R (A ⧸ Ideal.span s))).image
@@ -236,7 +236,7 @@ lemma mem_image_comap_C_basicOpen
 
 中文:
 引理 mem_image_comap_C_basicOpen
-  条件: (f : R[X]) (x : PrimeSpectrum R)
+  条件: (f : R[X]) (x : 素谱 R)
   证明: by
   trans f.map (algebraMap R x.asIdeal.ResidueField) != 0
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
@@ -300,7 +300,7 @@ lemma isOpenMap_comap_C
 
 中文:
 引理 isOpenMap_comap_C
-  结论: IsOpenMap (comap (R := R) C)
+  结论: 是开映射 (comap (R := R) C)
   证明: by
   intro U hU
   obtain ⟨S, hS, rfl⟩ := isTopologicalBasis_basic_opens.open_eq_sUnion hU
@@ -336,7 +336,7 @@ lemma comap_C_surjective
 
 中文:
 引理 comap_C_surjective
-  结论: Function.Surjective (comap (R := R) C)
+  结论: 函数.满射 (comap (R := R) C)
   证明: by
   intro x
   refine ⟨comap (evalRingHom 0) x, ?_⟩
@@ -361,7 +361,7 @@ lemma exists_image_comap_of_monic
   · exact .of_basis (AdjoinRoot.powerBasis' hg).basis
 
 中文:
-引理 exists_image_comap_of_monic
+引理 存在_image_comap_of_monic
   条件: (f g : R[X]) (hg : g.Monic)
   证明: by
   apply +allowSynthFailures exists_image_comap_of_finite_of_free
@@ -454,7 +454,7 @@ lemma mem_image_comap_C_basicOpen
 
 中文:
 引理 mem_image_comap_C_basicOpen
-  条件: (f : MvPolynomial σ R) (x : PrimeSpectrum R)
+  条件: (f : 多元多项式 σ R) (x : 素谱 R)
   证明: by
   trans f.map (algebraMap R x.asIdeal.ResidueField) != 0
   · refine (mem_image_comap_basicOpen _ _).trans (not_iff_not.mpr ?_)
@@ -492,7 +492,7 @@ lemma image_comap_C_basicOpen
 
 中文:
 引理 image_comap_C_basicOpen
-  条件: (f : MvPolynomial σ R)
+  条件: (f : 多元多项式 σ R)
   证明: by
   ext p
   rw [mem_image_comap_C_basicOpen]
@@ -524,7 +524,7 @@ lemma isOpenMap_comap_C
 
 中文:
 引理 isOpenMap_comap_C
-  结论: IsOpenMap (comap (R := R) (C (σ := σ)))
+  结论: 是开映射 (comap (R := R) (C (σ := σ)))
   证明: by
   intro U hU
   obtain ⟨S, hS, rfl⟩ := isTopologicalBasis_basic_opens.open_eq_sUnion hU
@@ -560,7 +560,7 @@ lemma comap_C_surjective
 
 中文:
 引理 comap_C_surjective
-  结论: Function.Surjective (comap (R := R) (C (σ := σ)))
+  结论: 函数.满射 (comap (R := R) (C (σ := σ)))
   证明: by
   intro x
   refine ⟨comap (eval₂Hom (.id _) 0) x, ?_⟩

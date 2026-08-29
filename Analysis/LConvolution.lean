@@ -57,7 +57,7 @@ definition mlconvolution
 
 中文:
 定义 mlconvolution
-  签名: (f g : G -> 实数>=0∞) (μ : Measure G)
+  签名: (f g : G -> 实数>=0∞) (μ : 测度 G)
   定义体: fun x => ∫⁻ y, (f y) * (g (y⁻¹ * x)) ∂μ
 -/
 noncomputable def mlconvolution (f g : G -> Real>=0∞) (μ : Measure G) :
@@ -88,7 +88,7 @@ theorem mlconvolution_def
 
 中文:
 定理 mlconvolution_def
-  条件: {f g : G -> 实数>=0∞} {μ : Measure G} {x : G}
+  条件: {f g : G -> 实数>=0∞} {μ : 测度 G} {x : G}
   证明: rfl
 -/
 theorem mlconvolution_def {f g : G -> Real>=0∞} {μ : Measure G} {x : G} :
@@ -109,7 +109,7 @@ theorem zero_mlconvolution
 
 中文:
 定理 zero_mlconvolution
-  条件: (f : G -> 实数>=0∞) (μ : Measure G)
+  条件: (f : G -> 实数>=0∞) (μ : 测度 G)
   结论: 0 ⋆ₘₗ[μ] f = 0
   证明: by
   ext; simp [mlconvolution]
@@ -134,7 +134,7 @@ theorem mlconvolution_zero
 
 中文:
 定理 mlconvolution_zero
-  条件: (f : G -> 实数>=0∞) (μ : Measure G)
+  条件: (f : G -> 实数>=0∞) (μ : 测度 G)
   结论: f ⋆ₘₗ[μ] 0 = 0
   证明: by
   ext; simp [mlconvolution]
@@ -163,7 +163,7 @@ theorem measurable_mlconvolution
 
 中文:
 定理 measurable_mlconvolution
-  结论: {f g : G -> 实数>=0∞} (μ : Measure G) [SFinite μ]
+  结论: {f g : G -> 实数>=0∞} (μ : 测度 G) [SFinite μ]
   证明: by
   unfold mlconvolution
   fun_prop
@@ -308,7 +308,7 @@ theorem mlconvolution_comm
 
 中文:
 定理 mlconvolution_comm
-  条件: [IsMulLeftInvariant μ] [IsInvInvariant μ] {f g : G -> 实数>=0∞}
+  条件: [是MulLeftInvariant μ] [是InvInvariant μ] {f g : G -> 实数>=0∞}
   证明: by
   ext x
   simp only [mlconvolution_def]

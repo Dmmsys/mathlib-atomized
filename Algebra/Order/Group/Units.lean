@@ -30,8 +30,8 @@ instance Units.isOrderedMonoid
   body: mul_le_mul_left (α := α) h _
 
 中文:
-实例 Units.isOrderedMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+实例 单位群.isOrderedMonoid
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: mul_le_mul_left (α := α) h _
 
 Depends on / 依赖: mul_le_mul_left

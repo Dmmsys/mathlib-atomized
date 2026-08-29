@@ -56,7 +56,7 @@ definition delete
 
 中文:
 定义 delete
-  签名: (M : Matroid α) (D : Set α)
+  签名: (M : 拟阵 α) (D : 集合 α)
   定义体: M ↾ (M.E \ D)
 -/
 def delete (M : Matroid α) (D : Set α) : Matroid α := M ↾ (M.E \ D)
@@ -75,7 +75,7 @@ lemma delete_eq_restrict
 
 中文:
 引理 delete_eq_restrict
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: M ＼ D = M ↾ (M.E \ D)
   证明: rfl
 -/
@@ -94,7 +94,7 @@ lemma restrict_compl
 
 中文:
 引理 restrict_compl
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: M ↾ (M.E \ D) = M ＼ D
   证明: rfl
 
@@ -141,7 +141,7 @@ lemma delete_isRestriction
 
 中文:
 引理 delete_isRestriction
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: M ＼ D <=r M
   证明: restrict_isRestriction _ _ sdiff_subset
 
@@ -160,7 +160,7 @@ lemma IsRestriction.exists_eq_delete
   proof: ⟨M.E \ N.E, sdiff_subset, by obtain ⟨R, hR, rfl⟩ := hNM; rw [delete_compl, restrict_ground_eq]⟩
 
 中文:
-引理 IsRestriction.exists_eq_delete
+引理 IsRestriction.存在_eq_delete
   条件: (hNM : N <=r M)
   结论: 存在 D subseteq M.E, N = M ＼ D
   证明: ⟨M.E \ N.E, sdiff_subset, by obtain ⟨R, hR, rfl⟩ := hNM; rw [delete_compl, restrict_ground_eq]⟩
@@ -181,7 +181,7 @@ lemma isRestriction_iff_exists_eq_delete
 @[simp]
 
 中文:
-引理 isRestriction_iff_exists_eq_delete
+引理 isRestriction_iff_存在_eq_delete
   结论: N <=r M ↔ 存在 D subseteq M.E, N = M ＼ D
   证明: ⟨IsRestriction.exists_eq_delete, by rintro ⟨D, -, rfl⟩; apply delete_isRestriction⟩
 
@@ -206,7 +206,7 @@ lemma delete_ground
 
 中文:
 引理 delete_ground
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: (M ＼ D).E = M.E \ D
   证明: rfl
 
@@ -228,7 +228,7 @@ lemma delete_subset_ground
 
 中文:
 引理 delete_subset_ground
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: (M ＼ D).E subseteq M.E
   证明: sdiff_subset
 
@@ -304,7 +304,7 @@ lemma delete_delete
 
 中文:
 引理 delete_delete
-  条件: (M : Matroid α) (D₁ D₂ : Set α)
+  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
   结论: M ＼ D₁ ＼ D₂ = M ＼ (D₁ union D₂)
   证明: by
   rw [← restrict_compl]; rw [← restrict_compl]; rw [← restrict_compl]; rw [restrict_restrict_eq]; rw [restrict_ground_eq]; rw [sdiff_sdiff]
@@ -328,7 +328,7 @@ lemma delete_comm
 
 中文:
 引理 delete_comm
-  条件: (M : Matroid α) (D₁ D₂ : Set α)
+  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
   结论: M ＼ D₁ ＼ D₂ = M ＼ D₂ ＼ D₁
   证明: by
   rw [delete_delete]; rw [union_comm]; rw [delete_delete]
@@ -350,7 +350,7 @@ lemma delete_inter_ground_eq
 
 中文:
 引理 delete_inter_ground_eq
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: M ＼ (D inter M.E) = M ＼ D
   证明: by
   rw [← restrict_compl]; rw [← restrict_compl]; rw [sdiff_inter_self_eq_sdiff]
@@ -378,7 +378,7 @@ lemma delete_eq_delete_iff
 
 中文:
 引理 delete_eq_delete_iff
-  条件: {D₁ D₂ : Set α}
+  条件: {D₁ D₂ : 集合 α}
   结论: M ＼ D₁ = M ＼ D₂ ↔ D₁ inter M.E = D₂ inter M.E
   证明: by
   rw [← delete_inter_ground_eq]; rw [← M.delete_inter_ground_eq D₂]
@@ -412,7 +412,7 @@ lemma delete_empty
 
 中文:
 引理 delete_empty
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M ＼ ∅ = M
   证明: by
   rw [delete_eq_self_iff]
@@ -438,7 +438,7 @@ alias delete_delete_eq_delete_diff := delete_delete_eq_delete_sdiff
 
 中文:
 引理 delete_delete_eq_delete_sdiff
-  条件: (M : Matroid α) (D₁ D₂ : Set α)
+  条件: (M : 拟阵 α) (D₁ D₂ : 集合 α)
   证明: by
   simp
 
@@ -646,7 +646,7 @@ lemma delete_isBase_iff
 
 中文:
 引理 delete_isBase_iff
-  结论: (M ＼ D).IsBase B ↔ M.IsBasis B (M.E \ D)
+  结论: (M ＼ D).IsBase B ↔ M.是基 B (M.E \ D)
   证明: by
   rw [← restrict_compl]; rw [isBase_restrict_iff]
 
@@ -671,7 +671,7 @@ lemma delete_isBasis_iff
 
 中文:
 引理 delete_isBasis_iff
-  结论: (M ＼ D).IsBasis I X ↔ M.IsBasis I X ∧ Disjoint X D
+  结论: (M ＼ D).是基 I X ↔ M.是基 I X ∧ Disjoint X D
   证明: by
   rw [← restrict_compl]; rw [isBasis_restrict_iff]; rw [subset_sdiff]; rw [← and_assoc]; rw [and_iff_left_of_imp IsBasis.subset_ground]
 
@@ -695,7 +695,7 @@ lemma delete_isBasis'_iff
 
 中文:
 引理 delete_isBasis'_iff
-  结论: (M ＼ D).IsBasis' I X ↔ M.IsBasis' I (X \ D)
+  结论: (M ＼ D).是基' I X ↔ M.是基' I (X \ D)
   证明: by
   rw [isBasis'_iff_isBasis_inter_ground]; rw [delete_isBasis_iff]; rw [delete_ground]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [← isBasis'_iff_isBasis_inter_ground]; rw [and_iff_left_iff_imp]; rw [inter_comm]; rw [← inter_sdiff_assoc]
   exact fun _ => disjoint_
@@ -716,9 +716,9 @@ lemma IsBasis.of_delete
   proof: (delete_isBasis_iff.mp h).1
 
 中文:
-引理 IsBasis.of_delete
-  条件: (h : (M ＼ D).IsBasis I X)
-  结论: M.IsBasis I X
+引理 是基.of_delete
+  条件: (h : (M ＼ D).是基 I X)
+  结论: M.是基 I X
   证明: (delete_isBasis_iff.mp h).1
 
 Depends on / 依赖: delete_isBasis_iff, delete_isBasis_iff.mp
@@ -737,9 +737,9 @@ lemma IsBasis.delete
   rw [delete_isBasis_iff]; exact ⟨h, hX⟩
 
 中文:
-引理 IsBasis.delete
-  条件: (h : M.IsBasis I X) (hX : Disjoint X D)
-  结论: (M ＼ D).IsBasis I X
+引理 是基.delete
+  条件: (h : M.是基 I X) (hX : Disjoint X D)
+  结论: (M ＼ D).是基 I X
   证明: by
   rw [delete_isBasis_iff]; exact ⟨h, hX⟩
 
@@ -830,7 +830,7 @@ lemma Coindep.delete_spanning_iff
 
 中文:
 引理 Coindep.delete_spanning_iff
-  条件: {S : Set α} (hD : M.Coindep D)
+  条件: {S : 集合 α} (hD : M.Coindep D)
   证明: by
   simp only [spanning_iff_exists_isBase_subset', hD.delete_isBase_iff, and_assoc, delete_ground,
     subset_sdiff, and_congr_left_iff, and_imp]
@@ -885,7 +885,7 @@ lemma delete_isNonloop_iff
 
 中文:
 引理 delete_isNonloop_iff
-  结论: (M ＼ D).IsNonloop e ↔ M.IsNonloop e ∧ e ∉ D
+  结论: (M ＼ D).是Nonloop e ↔ M.是Nonloop e ∧ e ∉ D
   证明: by
   rw [← indep_singleton]; rw [delete_indep_iff]; rw [disjoint_singleton_left]; rw [indep_singleton]
 
@@ -904,9 +904,9 @@ lemma IsNonloop.of_delete
   proof: (delete_isNonloop_iff.1 h).1
 
 中文:
-引理 IsNonloop.of_delete
-  条件: (h : (M ＼ D).IsNonloop e)
-  结论: M.IsNonloop e
+引理 是Nonloop.of_delete
+  条件: (h : (M ＼ D).是Nonloop e)
+  结论: M.是Nonloop e
   证明: (delete_isNonloop_iff.1 h).1
 
 Depends on / 依赖: delete_isNonloop_iff
@@ -926,7 +926,7 @@ lemma isNonloop_iff_delete_of_notMem
 中文:
 引理 isNonloop_iff_delete_of_notMem
   条件: (he : e ∉ D)
-  结论: M.IsNonloop e ↔ (M ＼ D).IsNonloop e
+  结论: M.是Nonloop e ↔ (M ＼ D).是Nonloop e
   证明: ⟨fun h => delete_isNonloop_iff.2 ⟨h, he⟩, fun h => h.of_delete⟩
 
 Depends on / 依赖: delete_isNonloop_iff, h.of_delete, of_delete
@@ -948,7 +948,7 @@ lemma delete_loops_eq_removeLoops
 
 中文:
 引理 delete_loops_eq_removeLoops
-  条件: (M : Matroid α)
+  条件: (M : 拟阵 α)
   结论: M ＼ M.loops = M.removeLoops
   证明: by
   rw [removeLoops]; rw [delete_eq_restrict]; rw [compl_loops_eq]
@@ -973,7 +973,7 @@ lemma delete_isCircuit_iff
 
 中文:
 引理 delete_isCircuit_iff
-  条件: {C : Set α}
+  条件: {C : 集合 α}
   证明: by
   rw [delete_eq_restrict]; rw [restrict_isCircuit_iff]; rw [and_congr_right_iff]; rw [subset_sdiff]; rw [and_iff_right_iff_imp]
   exact fun h _ => h.subset_ground
@@ -995,9 +995,9 @@ lemma IsCircuit.of_delete
   proof: (delete_isCircuit_iff.1 h).1
 
 中文:
-引理 IsCircuit.of_delete
-  条件: {C : Set α} (h : (M ＼ D).IsCircuit C)
-  结论: M.IsCircuit C
+引理 是Circuit.of_delete
+  条件: {C : 集合 α} (h : (M ＼ D).是Circuit C)
+  结论: M.是Circuit C
   证明: (delete_isCircuit_iff.1 h).1
 
 Depends on / 依赖: delete_isCircuit_iff
@@ -1017,7 +1017,7 @@ lemma circuit_iff_delete_of_disjoint
 
 中文:
 引理 circuit_iff_delete_of_disjoint
-  条件: {C : Set α} (hCD : Disjoint C D)
+  条件: {C : 集合 α} (hCD : Disjoint C D)
   证明: ⟨fun h => delete_isCircuit_iff.2 ⟨h, hCD⟩, fun h => h.of_delete⟩
 
 @[simp]
@@ -1041,7 +1041,7 @@ lemma delete_closure_eq
 
 中文:
 引理 delete_closure_eq
-  条件: (M : Matroid α) (D X : Set α)
+  条件: (M : 拟阵 α) (D X : 集合 α)
   证明: by
   rw [← restrict_compl]; rw [restrict_closure_eq']; rw [sdiff_sdiff_self]; rw [bot_eq_empty]; rw [union_empty]; rw [sdiff_eq]; rw [inter_comm M.E]; rw [← inter_assoc X]; rw [← sdiff_eq]; rw [closure_inter_ground]; rw [← inter_assoc]; rw [← sdiff_eq]; rw [inter_eq_left]
   exact sdiff_subset.trans 
@@ -1066,7 +1066,7 @@ lemma delete_closure_eq_of_disjoint
 
 中文:
 引理 delete_closure_eq_of_disjoint
-  条件: (M : Matroid α) {D X : Set α} (hXD : Disjoint X D)
+  条件: (M : 拟阵 α) {D X : 集合 α} (hXD : Disjoint X D)
   证明: by
   rw [delete_closure_eq]; rw [hXD.sdiff_eq_left]
 
@@ -1091,7 +1091,7 @@ lemma delete_loops_eq
 
 中文:
 引理 delete_loops_eq
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   结论: (M ＼ D).loops = M.loops \ D
   证明: by
   simp [loops]
@@ -1111,7 +1111,7 @@ lemma delete_isColoop_iff
 
 中文:
 引理 delete_isColoop_iff
-  条件: (M : Matroid α) (D : Set α)
+  条件: (M : 拟阵 α) (D : 集合 α)
   证明: by
   rw [delete_eq_restrict]; rw [restrict_isColoop_iff sdiff_subset]; rw [mem_sdiff]; rw [and_congr_left_iff]
   simp
@@ -1134,7 +1134,7 @@ instance delete_finitary
 
 中文:
 实例 delete_finitary
-  签名: (M : Matroid α) [Finitary M] (D : Set α)
+  签名: (M : 拟阵 α) [Finitary M] (D : 集合 α)
   定义体: inferInstanceAs Finitary (M ↾ (M.E \ D))
 
 Depends on / 依赖: Finitary
@@ -1152,7 +1152,7 @@ instance delete_finite
 
 中文:
 实例 delete_finite
-  签名: [M.Finite]
+  签名: [M.有限]
   定义体: ⟨M.ground_finite.sdiff⟩
 
 Depends on / 依赖: M.ground_finite.sdiff, ground_finite

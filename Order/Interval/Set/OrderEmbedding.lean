@@ -39,7 +39,7 @@ theorem preimage_Ici
 
 中文:
 定理 preimage_Ici
-  结论: e ⁻¹' Ici (e x) = Ici x
+  结论: e ⁻¹' 左闭右无界区间 (e x) = 左闭右无界区间 x
   证明: ext fun _ => e.le_iff_le
 -/
 @[to_dual (attr := simp)] theorem preimage_Ici : e ⁻¹' Ici (e x) = Ici x := ext fun _ => e.le_iff_le
@@ -53,7 +53,7 @@ theorem preimage_Ioi
 
 中文:
 定理 preimage_Ioi
-  结论: e ⁻¹' Ioi (e x) = Ioi x
+  结论: e ⁻¹' 左开右无界区间 (e x) = 左开右无界区间 x
   证明: ext fun _ => e.lt_iff_lt
 -/
 @[to_dual (attr := simp)] theorem preimage_Ioi : e ⁻¹' Ioi (e x) = Ioi x := ext fun _ => e.lt_iff_lt
@@ -68,7 +68,7 @@ theorem preimage_Icc
 
 中文:
 定理 preimage_Icc
-  结论: e ⁻¹' Icc (e x) (e y) = Icc x y
+  结论: e ⁻¹' 闭区间 (e x) (e y) = 闭区间 x y
   证明: by ext; simp
 -/
 @[simp] theorem preimage_Icc : e ⁻¹' Icc (e x) (e y) = Icc x y := by ext; simp
@@ -82,7 +82,7 @@ theorem preimage_Ico
 
 中文:
 定理 preimage_Ico
-  结论: e ⁻¹' Ico (e x) (e y) = Ico x y
+  结论: e ⁻¹' 左闭右开区间 (e x) (e y) = 左闭右开区间 x y
   证明: by ext; simp
 -/
 @[simp] theorem preimage_Ico : e ⁻¹' Ico (e x) (e y) = Ico x y := by ext; simp
@@ -96,7 +96,7 @@ theorem preimage_Ioc
 
 中文:
 定理 preimage_Ioc
-  结论: e ⁻¹' Ioc (e x) (e y) = Ioc x y
+  结论: e ⁻¹' 左开右闭区间 (e x) (e y) = 左开右闭区间 x y
   证明: by ext; simp
 -/
 @[simp] theorem preimage_Ioc : e ⁻¹' Ioc (e x) (e y) = Ioc x y := by ext; simp
@@ -110,7 +110,7 @@ theorem preimage_Ioo
 
 中文:
 定理 preimage_Ioo
-  结论: e ⁻¹' Ioo (e x) (e y) = Ioo x y
+  结论: e ⁻¹' 开区间 (e x) (e y) = 开区间 x y
   证明: by ext; simp
 -/
 @[simp] theorem preimage_Ioo : e ⁻¹' Ioo (e x) (e y) = Ioo x y := by ext; simp
@@ -130,7 +130,7 @@ theorem preimage_uIcc
 
 中文:
 定理 preimage_uIcc
-  条件: [Lattice β] (e : α ↪o β) (x y : α)
+  条件: [格 β] (e : α ↪o β) (x y : α)
   证明: by
   cases le_total x y <;> simp [*]
 -/
@@ -149,7 +149,7 @@ theorem preimage_uIoc
 
 中文:
 定理 preimage_uIoc
-  条件: [LinearOrder β] (e : α ↪o β) (x y : α)
+  条件: [线性序 β] (e : α ↪o β) (x y : α)
   证明: by
   cases le_total x y <;> simp [*]
 

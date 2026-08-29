@@ -243,7 +243,7 @@ lemma eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction
 
 中文:
 引理 eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction
-  结论: {μ : Measure (Π i, X i)}
+  结论: {μ : 测度 (Π i, X i)}
   证明: ext_of_integral_prod_mul_prod_boundedContinuousFunction fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_prod_mul_prod_boundedContinuousFunction, integral_prod_mul
@@ -276,7 +276,7 @@ lemma ext_of_integral_prod_mul_boundedContinuousFunction
 
 中文:
 引理 ext_of_integral_prod_mul_boundedContinuousFunction
-  结论: {μ ν : Measure ((Π i, X i) × T)}
+  结论: {μ ν : 测度 ((Π i, X i) × T)}
   证明: by
   let e : ((Π i, X i) × T) ≃ᵐ ((Π i, X i) × (Unit -> T)) :=
     { toFun p := ⟨fun i => p.1 i, fun _ => p.2⟩
@@ -313,7 +313,7 @@ lemma eq_prod_of_integral_prod_mul_boundedContinuousFunction
 
 中文:
 引理 eq_prod_of_integral_prod_mul_boundedContinuousFunction
-  结论: {μ : Measure (Π i, X i)}
+  结论: {μ : 测度 (Π i, X i)}
   证明: ext_of_integral_prod_mul_boundedContinuousFunction fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_prod_mul_boundedContinuousFunction, integral_prod_mul
@@ -341,7 +341,7 @@ lemma ext_of_integral_mul_prod_boundedContinuousFunction
 
 中文:
 引理 ext_of_integral_mul_prod_boundedContinuousFunction
-  结论: {μ ν : Measure (Z × (Π j, Y j))}
+  结论: {μ ν : 测度 (Z × (Π j, Y j))}
   证明: by
   let e : (Z × (Π i, Y i)) ≃ᵐ ((Π i, Y i) × Z) := .prodComm
   rw [← e.map_measurableEquiv_injective.eq_iff]
@@ -372,7 +372,7 @@ lemma eq_prod_of_integral_mul_prod_boundedContinuousFunction
 
 中文:
 引理 eq_prod_of_integral_mul_prod_boundedContinuousFunction
-  结论: {μ : Measure Z}
+  结论: {μ : 测度 Z}
   证明: ext_of_integral_mul_prod_boundedContinuousFunction fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_mul_prod_boundedContinuousFunction, integral_prod_mul
@@ -402,7 +402,7 @@ lemma ext_of_integral_mul_boundedContinuousFunction
 
 中文:
 引理 ext_of_integral_mul_boundedContinuousFunction
-  结论: {μ ν : Measure (Z × T)}
+  结论: {μ ν : 测度 (Z × T)}
   证明: by
   let e : (Z × T) ≃ᵐ ((Unit -> Z) × (Unit -> T)) :=
 .symm .prodCongr (.funUnique ..) (.funUnique ..)
@@ -434,7 +434,7 @@ lemma eq_prod_of_integral_mul_boundedContinuousFunction
 
 中文:
 引理 eq_prod_of_integral_mul_boundedContinuousFunction
-  结论: {μ : Measure Z}
+  结论: {μ : 测度 Z}
   证明: ext_of_integral_mul_boundedContinuousFunction fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_mul_boundedContinuousFunction, integral_prod_mul
@@ -496,7 +496,7 @@ lemma eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction'
 
 中文:
 引理 eq_prod_of_integral_prod_mul_prod_boundedContinuousFunction'
-  结论: {μ : Measure (Π i, X i)}
+  结论: {μ : 测度 (Π i, X i)}
   证明: ext_of_integral_prod_mul_prod_boundedContinuousFunction' fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_prod_mul_prod_boundedContinuousFunction, integral_prod_mul
@@ -522,7 +522,7 @@ lemma ext_of_integral_prod_mul_boundedContinuousFunction'
 
 中文:
 引理 ext_of_integral_prod_mul_boundedContinuousFunction'
-  结论: {μ ν : Measure ((Π i, X i) × T)}
+  结论: {μ ν : 测度 ((Π i, X i) × T)}
   证明: by
   have := Fintype.ofFinite ι
   refine ext_of_integral_prod_mul_boundedContinuousFunction fun f g => ?_
@@ -549,7 +549,7 @@ lemma eq_prod_of_integral_prod_mul_boundedContinuousFunction'
 
 中文:
 引理 eq_prod_of_integral_prod_mul_boundedContinuousFunction'
-  结论: {μ : Measure (Π i, X i)}
+  结论: {μ : 测度 (Π i, X i)}
   证明: ext_of_integral_prod_mul_boundedContinuousFunction' fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_prod_mul_boundedContinuousFunction, integral_prod_mul
@@ -575,7 +575,7 @@ lemma ext_of_integral_mul_prod_boundedContinuousFunction'
 
 中文:
 引理 ext_of_integral_mul_prod_boundedContinuousFunction'
-  结论: {μ ν : Measure (Z × (Π i, Y i))}
+  结论: {μ ν : 测度 (Z × (Π i, Y i))}
   证明: by
   have := Fintype.ofFinite κ
   refine ext_of_integral_mul_prod_boundedContinuousFunction fun f g => ?_
@@ -601,7 +601,7 @@ lemma eq_prod_of_integral_mul_prod_boundedContinuousFunction'
 
 中文:
 引理 eq_prod_of_integral_mul_prod_boundedContinuousFunction'
-  结论: {μ : Measure Z}
+  结论: {μ : 测度 Z}
   证明: ext_of_integral_mul_prod_boundedContinuousFunction' fun f g => by rw [h, ← integral_prod_mul]
 
 Depends on / 依赖: ext_of_integral_mul_prod_boundedContinuousFunction, integral_prod_mul

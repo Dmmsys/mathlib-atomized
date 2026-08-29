@@ -365,7 +365,7 @@ theorem direct_sum_isInternal
     hT.orthogonalComplement_iSup_eigenspaces_eq_bot'
 
 中文:
-定理 direct_sum_isInternal
+定理 direct_sum_is整数ernal
   条件: (hT : T.IsSymmetric)
   证明: hT.orthogonalFamily_eigenspaces'.isInternal_iff.mpr
     hT.orthogonalComplement_iSup_eigenspaces_eq_bot'
@@ -480,7 +480,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def unsortedEigenvalues (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  签名: def unsortedEigenvalues (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   定义体: @RCLike.re 𝕜 _ (hT.direct_sum_isInternal.subordinateOrthonormalBasisIndex hn i
     hT.orthogonalFamily_eigenspaces').val
 -/
@@ -503,7 +503,7 @@ theorem hasEigenvalue_unsortedEigenvalues
 
 中文:
 定理 hasEigenvalue_unsortedEigenvalues
-  结论: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  结论: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   unfold unsortedEigenvalues
   let ⟨x, hx⟩ := hT.direct_sum_isInternal.subordinateOrthonormalBasisIndex hn i
@@ -531,8 +531,8 @@ theorem exists_unsortedEigenvalues_eq
   rw [unsortedEigenvalues]; rw [hi]; rw [hx]; rw [Eigenvalues.val_mk]; rw [← RCLike.c
 
 中文:
-定理 exists_unsortedEigenvalues_eq
-  结论: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+定理 存在_unsortedEigenvalues_eq
+  结论: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   let (eq := hx) x : Eigenvalues T := ⟨μ, hμ⟩
   obtain ⟨i, hi⟩ := hT.direct_sum_isInternal.exists_subordinateOrthonormalBasisIndex_eq hn
@@ -677,8 +677,8 @@ theorem exists_eigenvalues_eq
   simp [eigenvalues_def, hi]
 
 中文:
-定理 exists_eigenvalues_eq
-  结论: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) {μ : 𝕜}
+定理 存在_eigenvalues_eq
+  结论: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n) {μ : 𝕜}
   证明: by
   obtain ⟨i, hi⟩ := hT.exists_unsortedEigenvalues_eq hn hμ
   use ((Tuple.sort (hT.unsortedEigenvalues hn)).symm i).revPerm
@@ -705,7 +705,7 @@ theorem card_filter_eigenvalues_eq
 
 中文:
 定理 card_filter_eigenvalues_eq
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) (μ : 𝕜)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n) (μ : 𝕜)
   证明: by
   rw [← hT.card_filter_unsortedEigenvalues_eq hn]; rw [eigenvalues_def]
   apply Finset.card_equiv (Fin.revPerm.trans (Tuple.sort (hT.unsortedEigenvalues hn)))
@@ -742,7 +742,7 @@ theorem hasEigenvector_eigenvectorBasis
 
 中文:
 定理 hasEigenvector_eigenvectorBasis
-  结论: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  结论: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   rw [eigenvalues_def]; rw [eigenvectorBasis_def]; rw [OrthonormalBasis.reindex_apply]
   apply hasEigenvector_eigenvectorBasis_helper
@@ -769,7 +769,7 @@ theorem eigenvalues_antitone
 
 中文:
 定理 eigenvalues_antitone
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   rw [eigenvalues_def]; rw [← Function.comp_assoc]
   refine Monotone.comp_antitone ?_ ?_
@@ -799,7 +799,7 @@ theorem hasEigenvalue_eigenvalues
 
 中文:
 定理 hasEigenvalue_eigenvalues
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) (i : Fin n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n) (i : 有限集 n)
   证明: Module.End.hasEigenvalue_of_hasEigenvector (hT.hasEigenvector_eigenvectorBasis hn i)
 
 @[simp]
@@ -821,7 +821,7 @@ theorem apply_eigenvectorBasis
 
 中文:
 定理 apply_eigenvectorBasis
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n) (i : Fin n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n) (i : 有限集 n)
   证明: mem_eigenspace_iff.mp (hT.hasEigenvector_eigenvectorBasis hn i).1
 
 Depends on / 依赖: hT.hasEigenvector_eigenvectorBasis, hasEigenvector_eigenvectorBasis, mem_eigenspace_iff, mem_eigenspace_iff.mp
@@ -846,7 +846,7 @@ theorem eigenvectorBasis_apply_self_apply
 
 中文:
 定理 eigenvectorBasis_apply_self_apply
-  结论: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  结论: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   suffices
     forall w : EuclideanSpace 𝕜 (Fin n),
@@ -888,7 +888,7 @@ theorem toMatrix_eigenvectorBasis
 
 中文:
 定理 toMatrix_eigenvectorBasis
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: (hT.eigenvectorBasis hn).toBasis
     T.toMatrix b b = Matrix.diagonal (RCLike.ofReal ∘ hT.eigenvalues hn) := by
   ext i j
@@ -917,7 +917,7 @@ theorem charpoly_eq
 
 中文:
 定理 charpoly_eq
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   simp [← T.charpoly_toMatrix (hT.eigenvectorBasis hn).toBasis, toMatrix_eigenvectorBasis,
     Matrix.charpoly_diagonal]
@@ -942,7 +942,7 @@ theorem roots_charpoly_eq_eigenvalues
 
 中文:
 定理 roots_charpoly_eq_eigenvalues
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   rw [← charpoly_toMatrix _ (hT.eigenvectorBasis hn).toBasis]; rw [toMatrix_eigenvectorBasis]; rw [Matrix.charpoly_diagonal]; rw [Polynomial.roots_prod _ _ (by
       simp [Finset.prod_ne_zero_iff]; rw [Polynomial.X_sub_C_ne_zero])]
@@ -972,7 +972,7 @@ theorem sort_roots_charpoly_eq_eigenvalues
 
 中文:
 定理 sort_roots_charpoly_eq_eigenvalues
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   simp_rw [hT.roots_charpoly_eq_eigenvalues, Fin.univ_val_map, Multiset.map_coe, List.map_ofFn,
     Function.comp_def, RCLike.ofReal_re, Multiset.coe_sort]
@@ -1004,7 +1004,7 @@ theorem eigenvalues_eq_eigenvalues_iff
 
 中文:
 定理 eigenvalues_eq_eigenvalues_iff
-  结论: {E' : 类型} [NormedAddCommGroup E'] [InnerProductSpace 𝕜 E']
+  结论: {E' : 类型} [赋范交换加群 E'] [内积空间 𝕜 E']
   证明: by rw [hT.charpoly_eq hn, hT'.charpoly_eq hn', h]
   mpr h := by
     rw [← List.ofFn_inj]; rw [← sort_roots_charpoly_eq_eigenvalues]; rw [← sort_roots_charpoly_eq_eigenvalues]; rw [h]
@@ -1056,7 +1056,7 @@ theorem det_eq_prod_eigenvalues
 
 中文:
 定理 det_eq_prod_eigenvalues
-  条件: (hT : T.IsSymmetric) (hn : Module.finrank 𝕜 E = n)
+  条件: (hT : T.IsSymmetric) (hn : 模.finrank 𝕜 E = n)
   证明: by
   simp [det_eq_prod_roots_charpoly_of_splits hT.splits_charpoly,
     hT.roots_charpoly_eq_eigenvalues hn, List.prod_ofFn]
@@ -1185,7 +1185,7 @@ theorem eq_zero_of_forall_hasEigenvalue_eq_zero
   simp +contextual [hT.hasEigenvalue_iff_mem_spectrum]
 
 中文:
-定理 eq_zero_of_forall_hasEigenvalue_eq_zero
+定理 eq_zero_of_对任意_hasEigenvalue_eq_zero
   条件: (hT : IsCompactOperator T) (hT' : T.IsSymmetric)
   证明: by
   rw [← nnnorm_eq_zero]; rw [← ENNReal.coe_eq_zero]; rw [← T.spectralRadius_eq_nnnorm hT'.isSelfAdjoint]; rw [spectralRadius]; rw [← not_iff_not]; rw [ENNReal.iSup_eq_zero]

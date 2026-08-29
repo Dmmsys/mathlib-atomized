@@ -122,7 +122,7 @@ theorem exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
   proof: exists_lt_of_sum_lt by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
 中文:
-定理 exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
+定理 存在_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum
   结论: (hf : 对任意 a in s, f a in t)
   证明: exists_lt_of_sum_lt by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
@@ -141,7 +141,7 @@ theorem exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul
   proof: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (M := Mᵒᵈ) hf hb
 
 中文:
-定理 exists_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul
+定理 存在_sum_fiber_lt_of_maps_to_of_sum_lt_nsmul
   结论: (hf : 对任意 a in s, f a in t)
   证明: exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (M := Mᵒᵈ) hf hb
 
@@ -162,7 +162,7 @@ theorem exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
       _ <= ∑ y in t, ∑ x in s with f x = y, w x := sum_le_sum_fiberwise_of_sum_fiber_nonpos ht
 
 中文:
-定理 exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
+定理 存在_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
   证明: exists_lt_of_sum_lt
     calc
       ∑ _y in t, b < ∑ x in s, w x := by simpa
@@ -186,7 +186,7 @@ theorem exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
   proof: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (M := Mᵒᵈ) ht hb
 
 中文:
-定理 exists_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
+定理 存在_sum_fiber_lt_of_sum_fiber_nonneg_of_sum_lt_nsmul
   证明: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum (M := Mᵒᵈ) ht hb
 
 Depends on / 依赖: exists_lt_sum_fiber_of_sum_fiber_nonpos_of_nsmul_lt_sum
@@ -210,8 +210,8 @@ theorem exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum
   proof: exists_le_of_sum_le ht by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
 中文:
-定理 exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.Nonempty)
+定理 存在_le_sum_fiber_of_maps_to_of_nsmul_le_sum
+  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
   证明: exists_le_of_sum_le ht by simpa only [sum_fiberwise_of_maps_to hf, sum_const]
 
 Depends on / 依赖: Equiv.ulift.symm, exists_le_of_sum_le, of_equiv, sum_const, sum_fiberwise_of_maps_to
@@ -229,8 +229,8 @@ theorem exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul
   proof: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
 中文:
-定理 exists_sum_fiber_le_of_maps_to_of_sum_le_nsmul
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.Nonempty)
+定理 存在_sum_fiber_le_of_maps_to_of_sum_le_nsmul
+  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
   证明: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
 Depends on / 依赖: exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum
@@ -251,7 +251,7 @@ theorem exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
         sum_le_sum_fiberwise_of_sum_fiber_nonpos hf
 
 中文:
-定理 exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
+定理 存在_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum
   证明: exists_le_of_sum_le ht
     calc
       ∑ _y in t, b <= ∑ x in s, w x := by simpa
@@ -277,7 +277,7 @@ theorem exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
   proof: exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
 中文:
-定理 exists_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
+定理 存在_sum_fiber_le_of_sum_fiber_nonneg_of_sum_le_nsmul
   证明: exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum (M := Mᵒᵈ) hf ht hb
 
 Depends on / 依赖: Countable, Countable.toSmall, exists_le_sum_fiber_of_sum_fiber_nonpos_of_nsmul_le_sum, toSmall
@@ -320,7 +320,7 @@ theorem exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to
   exact exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum hf ht
 
 中文:
-定理 exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to
+定理 存在_lt_card_fiber_of_nsmul_lt_card_of_maps_to
   结论: (hf : 对任意 a in s, f a in t)
   证明: by
   simp_rw [cast_card] at ht ⊢
@@ -342,7 +342,7 @@ theorem exists_lt_card_fiber_of_mul_lt_card_of_maps_to
   proof: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to hf hn
 
 中文:
-定理 exists_lt_card_fiber_of_mul_lt_card_of_maps_to
+定理 存在_lt_card_fiber_of_mul_lt_card_of_maps_to
   结论: (hf : 对任意 a in s, f a in t)
   证明: exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to hf hn
 
@@ -365,7 +365,7 @@ theorem exists_card_fiber_lt_of_card_lt_nsmul
       (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht
 
 中文:
-定理 exists_card_fiber_lt_of_card_lt_nsmul
+定理 存在_card_fiber_lt_of_card_lt_nsmul
   条件: (ht : #s < #t • b)
   证明: by
   simp_rw [cast_card] at ht ⊢
@@ -392,7 +392,7 @@ theorem exists_card_fiber_lt_of_card_lt_mul
   proof: exists_card_fiber_lt_of_card_lt_nsmul hn
 
 中文:
-定理 exists_card_fiber_lt_of_card_lt_mul
+定理 存在_card_fiber_lt_of_card_lt_mul
   条件: (hn : #s < #t * n)
   结论: 存在 y in t, #{x in s | f x = y} < n
   证明: exists_card_fiber_lt_of_card_lt_nsmul hn
@@ -413,8 +413,8 @@ theorem exists_le_card_fiber_of_nsmul_le_card_of_maps_to
   exact exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum hf ht hb
 
 中文:
-定理 exists_le_card_fiber_of_nsmul_le_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.Nonempty)
+定理 存在_le_card_fiber_of_nsmul_le_card_of_maps_to
+  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
   证明: by
   simp_rw [cast_card] at hb ⊢
   exact exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum hf ht hb
@@ -435,8 +435,8 @@ theorem exists_le_card_fiber_of_mul_le_card_of_maps_to
   proof: exists_le_card_fiber_of_nsmul_le_card_of_maps_to hf ht hn
 
 中文:
-定理 exists_le_card_fiber_of_mul_le_card_of_maps_to
-  结论: (hf : 对任意 a in s, f a in t) (ht : t.Nonempty)
+定理 存在_le_card_fiber_of_mul_le_card_of_maps_to
+  结论: (hf : 对任意 a in s, f a in t) (ht : t.非空)
   证明: exists_le_card_fiber_of_nsmul_le_card_of_maps_to hf ht hn
 
 Depends on / 依赖: exists_le_card_fiber_of_nsmul_le_card_of_maps_to
@@ -458,8 +458,8 @@ theorem exists_card_fiber_le_of_card_le_nsmul
       (fun _ _ => sum_nonneg fun _ _ => zero_le_one) ht hb
 
 中文:
-定理 exists_card_fiber_le_of_card_le_nsmul
-  条件: (ht : t.Nonempty) (hb : #s <= #t • b)
+定理 存在_card_fiber_le_of_card_le_nsmul
+  条件: (ht : t.非空) (hb : #s <= #t • b)
   证明: by
   simp_rw [cast_card] at hb ⊢
   refine
@@ -484,8 +484,8 @@ theorem exists_card_fiber_le_of_card_le_mul
   proof: exists_card_fiber_le_of_card_le_nsmul ht hn
 
 中文:
-定理 exists_card_fiber_le_of_card_le_mul
-  条件: (ht : t.Nonempty) (hn : #s <= #t * n)
+定理 存在_card_fiber_le_of_card_le_mul
+  条件: (ht : t.非空) (hn : #s <= #t * n)
   证明: exists_card_fiber_le_of_card_le_nsmul ht hn
 
 Depends on / 依赖: exists_card_fiber_le_of_card_le_nsmul
@@ -510,8 +510,8 @@ lemma exists_mem_exists_mem_inf'_card_lt
     _ = ∑ x in s.biUnion f, #{j | j in s ∧ x in f j} := by r
 
 中文:
-引理 exists_mem_exists_mem_inf'_card_lt
-  结论: [DecidableEq α] [Fintype α] {f : α -> Finset β}
+引理 存在_mem_存在_mem_inf'_card_lt
+  结论: [DecidableEq α] [有限类型 α] {f : α -> 有限集 β}
   证明: by
   set k := s.inf' h₁ (fun j => #(f j)) with hk
   contrapose! h₃
@@ -565,7 +565,7 @@ theorem exists_lt_sum_fiber_of_nsmul_lt_sum
   ⟨y, hy⟩
 
 中文:
-定理 exists_lt_sum_fiber_of_nsmul_lt_sum
+定理 存在_lt_sum_fiber_of_nsmul_lt_sum
   条件: (hb : card β • b < ∑ x, w x)
   证明: let ⟨y, _, hy⟩ := exists_lt_sum_fiber_of_maps_to_of_nsmul_lt_sum (fun _ _ => mem_univ _) hb
   ⟨y, hy⟩
@@ -588,8 +588,8 @@ theorem exists_le_sum_fiber_of_nsmul_le_sum
   ⟨y, hy⟩
 
 中文:
-定理 exists_le_sum_fiber_of_nsmul_le_sum
-  条件: [Nonempty β] (hb : card β • b <= ∑ x, w x)
+定理 存在_le_sum_fiber_of_nsmul_le_sum
+  条件: [非空 β] (hb : card β • b <= ∑ x, w x)
   证明: let ⟨y, _, hy⟩ :=
     exists_le_sum_fiber_of_maps_to_of_nsmul_le_sum (fun _ _ => mem_univ _) univ_nonempty hb
   ⟨y, hy⟩
@@ -611,7 +611,7 @@ theorem exists_sum_fiber_lt_of_sum_lt_nsmul
   proof: exists_lt_sum_fiber_of_nsmul_lt_sum (M := Mᵒᵈ) _ hb
 
 中文:
-定理 exists_sum_fiber_lt_of_sum_lt_nsmul
+定理 存在_sum_fiber_lt_of_sum_lt_nsmul
   条件: (hb : ∑ x, w x < card β • b)
   证明: exists_lt_sum_fiber_of_nsmul_lt_sum (M := Mᵒᵈ) _ hb
 
@@ -630,8 +630,8 @@ theorem exists_sum_fiber_le_of_sum_le_nsmul
   proof: exists_le_sum_fiber_of_nsmul_le_sum (M := Mᵒᵈ) _ hb
 
 中文:
-定理 exists_sum_fiber_le_of_sum_le_nsmul
-  条件: [Nonempty β] (hb : ∑ x, w x <= card β • b)
+定理 存在_sum_fiber_le_of_sum_le_nsmul
+  条件: [非空 β] (hb : ∑ x, w x <= card β • b)
   证明: exists_le_sum_fiber_of_nsmul_le_sum (M := Mᵒᵈ) _ hb
 
 Depends on / 依赖: exists_le_sum_fiber_of_nsmul_le_sum
@@ -654,7 +654,7 @@ theorem exists_lt_card_fiber_of_nsmul_lt_card
   ⟨y, h⟩
 
 中文:
-定理 exists_lt_card_fiber_of_nsmul_lt_card
+定理 存在_lt_card_fiber_of_nsmul_lt_card
   条件: (hb : card β • b < card α)
   证明: let ⟨y, _, h⟩ := exists_lt_card_fiber_of_nsmul_lt_card_of_maps_to (fun _ _ => mem_univ _) hb
   ⟨y, h⟩
@@ -675,7 +675,7 @@ theorem exists_lt_card_fiber_of_mul_lt_card
   proof: exists_lt_card_fiber_of_nsmul_lt_card _ hn
 
 中文:
-定理 exists_lt_card_fiber_of_mul_lt_card
+定理 存在_lt_card_fiber_of_mul_lt_card
   条件: (hn : card β * n < card α)
   证明: exists_lt_card_fiber_of_nsmul_lt_card _ hn
 
@@ -695,7 +695,7 @@ theorem exists_card_fiber_lt_of_card_lt_nsmul
   ⟨y, h⟩
 
 中文:
-定理 exists_card_fiber_lt_of_card_lt_nsmul
+定理 存在_card_fiber_lt_of_card_lt_nsmul
   条件: (hb : ↑(card α) < card β • b)
   证明: let ⟨y, _, h⟩ := Finset.exists_card_fiber_lt_of_card_lt_nsmul (f := f) hb
   ⟨y, h⟩
@@ -716,7 +716,7 @@ theorem exists_card_fiber_lt_of_card_lt_mul
   proof: exists_card_fiber_lt_of_card_lt_nsmul _ hn
 
 中文:
-定理 exists_card_fiber_lt_of_card_lt_mul
+定理 存在_card_fiber_lt_of_card_lt_mul
   条件: (hn : card α < card β * n)
   证明: exists_card_fiber_lt_of_card_lt_nsmul _ hn
 
@@ -737,8 +737,8 @@ theorem exists_le_card_fiber_of_nsmul_le_card
   ⟨y, h⟩
 
 中文:
-定理 exists_le_card_fiber_of_nsmul_le_card
-  条件: [Nonempty β] (hb : card β • b <= card α)
+定理 存在_le_card_fiber_of_nsmul_le_card
+  条件: [非空 β] (hb : card β • b <= card α)
   证明: let ⟨y, _, h⟩ :=
     exists_le_card_fiber_of_nsmul_le_card_of_maps_to (fun _ _ => mem_univ _) univ_nonempty hb
   ⟨y, h⟩
@@ -760,8 +760,8 @@ theorem exists_le_card_fiber_of_mul_le_card
   proof: exists_le_card_fiber_of_nsmul_le_card _ hn
 
 中文:
-定理 exists_le_card_fiber_of_mul_le_card
-  条件: [Nonempty β] (hn : card β * n <= card α)
+定理 存在_le_card_fiber_of_mul_le_card
+  条件: [非空 β] (hn : card β * n <= card α)
   证明: exists_le_card_fiber_of_nsmul_le_card _ hn
 
 Depends on / 依赖: exists_le_card_fiber_of_nsmul_le_card
@@ -780,8 +780,8 @@ theorem exists_card_fiber_le_of_card_le_nsmul
   ⟨y, h⟩
 
 中文:
-定理 exists_card_fiber_le_of_card_le_nsmul
-  条件: [Nonempty β] (hb : ↑(card α) <= card β • b)
+定理 存在_card_fiber_le_of_card_le_nsmul
+  条件: [非空 β] (hb : ↑(card α) <= card β • b)
   证明: let ⟨y, _, h⟩ := Finset.exists_card_fiber_le_of_card_le_nsmul univ_nonempty hb
   ⟨y, h⟩
 
@@ -801,8 +801,8 @@ theorem exists_card_fiber_le_of_card_le_mul
   proof: exists_card_fiber_le_of_card_le_nsmul _ hn
 
 中文:
-定理 exists_card_fiber_le_of_card_le_mul
-  条件: [Nonempty β] (hn : card α <= card β * n)
+定理 存在_card_fiber_le_of_card_le_mul
+  条件: [非空 β] (hn : card α <= card β * n)
   证明: exists_card_fiber_le_of_card_le_nsmul _ hn
 
 Depends on / 依赖: exists_card_fiber_le_of_card_le_nsmul
@@ -827,8 +827,8 @@ theorem exists_lt_modEq_of_infinite
     finite_lt_nat k
 
 中文:
-定理 exists_lt_modEq_of_infinite
-  条件: {s : Set 自然数} (hs : s.Infinite) {k : 自然数} (hk : 0 < k)
+定理 存在_lt_modEq_of_infinite
+  条件: {s : 集合 自然数} (hs : s.无限) {k : 自然数} (hk : 0 < k)
   证明: (hs.exists_lt_map_eq_of_mapsTo fun n _ => show n % k in Iio k from Nat.mod_lt n hk)
     finite_lt_nat k
 

@@ -54,8 +54,8 @@ theorem HasProd.tendsto_prod_nat
   proof: h.comp tendsto_finset_range
 
 中文:
-定理 HasProd.tendsto_prod_nat
-  条件: {f : 自然数 -> M} (h : HasProd f m)
+定理 有积类型.tendsto_prod_nat
+  条件: {f : 自然数 -> M} (h : 有积类型 f m)
   证明: h.comp tendsto_finset_range
 
 Depends on / 依赖: h.comp, tendsto_finset_range
@@ -106,7 +106,7 @@ theorem prod_range_mul
 
 中文:
 定理 prod_range_mul
-  条件: {f : 自然数 -> M} {k : 自然数} (h : HasProd (fun n => f (n + k)) m)
+  条件: {f : 自然数 -> M} {k : 自然数} (h : 有积类型 (fun n => f (n + k)) m)
   证明: ((range k).hasProd f).mul_compl (notMemRangeEquiv k).symm.hasProd_iff.mp h
 
 @[to_additive]
@@ -131,7 +131,7 @@ theorem zero_mul
 
 中文:
 定理 zero_mul
-  条件: {f : 自然数 -> M} (h : HasProd (fun n => f (n + 1)) m)
+  条件: {f : 自然数 -> M} (h : 有积类型 (fun n => f (n + 1)) m)
   证明: by
   simpa only [prod_range_one] using h.prod_range_mul
 
@@ -158,7 +158,7 @@ theorem even_mul_odd
 
 中文:
 定理 even_mul_odd
-  结论: {f : 自然数 -> M} (he : HasProd (fun k => f (2 * k)) m)
+  结论: {f : 自然数 -> M} (he : 有积类型 (fun k => f (2 * k)) m)
   证明: by
   have := mul_right_injective₀ (two_ne_zero' Nat)
   replace ho := ((add_left_injective 1).comp this).hasProd_range_iff.2 ho
@@ -194,7 +194,7 @@ theorem hasProd_iff_tendsto_nat
 
 中文:
 定理 hasProd_iff_tendsto_nat
-  条件: [T2Space M] {f : 自然数 -> M} (hf : Multipliable f)
+  条件: [T2空间 M] {f : 自然数 -> M} (hf : Multipliable f)
   证明: by
   refine ⟨fun h => h.tendsto_prod_nat, fun h => ?_⟩
   rw [tendsto_nhds_unique h hf.hasProd.tendsto_prod_nat]
@@ -290,7 +290,7 @@ theorem tprod_iSup_decode₂
 
 中文:
 定理 tprod_iSup_decode₂
-  条件: [CompleteLattice α] (m : α -> M) (m0 : m ⊥ = 1) (s : β -> α)
+  条件: [完备格 α] (m : α -> M) (m0 : m ⊥ = 1) (s : β -> α)
   证明: by
   rw [← tprod_extend_one (@encode_injective β _)]
   refine tprod_congr fun n => ?_
@@ -324,7 +324,7 @@ theorem tprod_iUnion_decode₂
 
 中文:
 定理 tprod_iUnion_decode₂
-  条件: (m : Set α -> M) (m0 : m ∅ = 1) (s : β -> Set α)
+  条件: (m : 集合 α -> M) (m0 : m ∅ = 1) (s : β -> 集合 α)
   证明: tprod_iSup_decode₂ m m0 s
 -/
 theorem tprod_iUnion_decode₂ (m : Set α -> M) (m0 : m ∅ = 1) (s : β -> Set α) :
@@ -358,7 +358,7 @@ theorem rel_iSup_tprod
 
 中文:
 定理 rel_iSup_tprod
-  结论: [CompleteLattice α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
+  结论: [完备格 α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
   证明: by
   cases nonempty_encodable β
   rw [← iSup_decode₂]; rw [← tprod_iSup_decode₂ _ m0 s]
@@ -387,7 +387,7 @@ theorem rel_iSup_prod
 
 中文:
 定理 rel_iSup_prod
-  结论: [CompleteLattice α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
+  结论: [完备格 α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
   证明: by
   rw [iSup_subtype']; rw [← Finset.tprod_subtype]
   exact rel_iSup_tprod m m0 R m_iSup _
@@ -415,7 +415,7 @@ theorem rel_sup_mul
 
 中文:
 定理 rel_sup_mul
-  结论: [CompleteLattice α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
+  结论: [完备格 α] (m : α -> M) (m0 : m ⊥ = 1) (R : M -> M -> 命题)
   证明: by
   convert! rel_iSup_tprod m m0 R m_iSup fun b => cond b s₁ s₂
   · simp only [iSup_bool_eq, cond]
@@ -611,7 +611,7 @@ theorem Multipliable.prod_mul_tprod_nat_add
 
 中文:
 定理 Multipliable.prod_mul_tprod_nat_add
-  结论: [T2Space G] {f : 自然数 -> G} (k : 自然数)
+  结论: [T2空间 G] {f : 自然数 -> G} (k : 自然数)
   证明: Multipliable.prod_mul_tprod_nat_mul' (multipliable_nat_add_iff k).2 h
 
 @[to_additive]
@@ -631,7 +631,7 @@ theorem Multipliable.tprod_eq_zero_mul
 
 中文:
 定理 Multipliable.tprod_eq_zero_mul
-  条件: [T2Space G] {f : 自然数 -> G} (hf : Multipliable f)
+  条件: [T2空间 G] {f : 自然数 -> G} (hf : Multipliable f)
   证明: tprod_eq_zero_mul' (multipliable_nat_add_iff 1).2 hf
 -/
 protected theorem Multipliable.tprod_eq_zero_mul [T2Space G] {f : Nat -> G} (hf : Multipliable f) :
@@ -657,7 +657,7 @@ theorem tendsto_prod_nat_add
 
 中文:
 定理 tendsto_prod_nat_add
-  条件: [T2Space G] (f : 自然数 -> G)
+  条件: [T2空间 G] (f : 自然数 -> G)
   证明: by
   by_cases hf : Multipliable f
   · have h₀ : (fun i => (∏' i, f i) / ∏ j in range i, f j) = fun i => ∏' k : Nat, f (k + i) := by
@@ -775,7 +775,7 @@ theorem Multipliable.nat_tprod_vanishing
 中文:
 定理 Multipliable.nat_tprod_vanishing
   条件: {f : 自然数 -> G} (hf : Multipliable f) ⦃e
-  结论: Set G⦄
+  结论: 集合 G⦄
   证明: letI : UniformSpace G := IsTopologicalGroup.rightUniformSpace G
   have : IsUniformGroup G := isUniformGroup_of_commGroup
   cauchySeq_finset_iff_nat_tprod_vanishing.1 hf.hasProd.cauchySeq e he
@@ -844,8 +844,8 @@ lemma HasProd.nat_mul_neg_add_one
       fun v' hv' => ⟨v'.image Nat.cast union v'.image Int.negSuc
 
 中文:
-引理 HasProd.nat_mul_neg_add_one
-  条件: {f : 整数 -> M} (hf : HasProd f m)
+引理 有积类型.nat_mul_neg_add_one
+  条件: {f : 整数 -> M} (hf : 有积类型 f m)
   证明: by
   change HasProd (fun n : Nat => f n * f (Int.negSucc n)) m
   have : Injective Int.negSucc := @Int.negSucc.inj
@@ -906,7 +906,7 @@ lemma tprod_nat_mul_neg_add_one
 
 中文:
 引理 tprod_nat_mul_neg_add_one
-  条件: [T2Space M] {f : 整数 -> M} (hf : Multipliable f)
+  条件: [T2空间 M] {f : 整数 -> M} (hf : Multipliable f)
   证明: hf.hasProd.nat_mul_neg_add_one.tprod_eq
 
 Depends on / 依赖: hasProd, hf.hasProd.nat_mul_neg_add_one.tprod_eq, nat_mul_neg_add_one, tprod_eq
@@ -937,7 +937,7 @@ lemma HasProd.of_nat_of_neg_add_one
   exact (Nat.cast_i
 
 中文:
-引理 HasProd.of_nat_of_neg_add_one
+引理 有积类型.of_nat_of_neg_add_one
   结论: {f : 整数 -> M}
   证明: by
   have hi₂ : Injective Int.negSucc := @Int.negSucc.inj
@@ -1001,7 +1001,7 @@ lemma tprod_of_nat_of_neg_add_one
 
 中文:
 引理 tprod_of_nat_of_neg_add_one
-  结论: [T2Space M] {f : 整数 -> M}
+  结论: [T2空间 M] {f : 整数 -> M}
   证明: (hf₁.hasProd.of_nat_of_neg_add_one hf₂.hasProd).tprod_eq
 
 Depends on / 依赖: hasProd, hasProd.of_nat_of_neg_add_one, of_nat_of_neg_add_one, tprod_eq
@@ -1026,8 +1026,8 @@ lemma HasProd.int_rec
   proof: HasProd.of_nat_of_neg_add_one hf hg
 
 中文:
-引理 HasProd.int_rec
-  条件: {f g : 自然数 -> M} (hf : HasProd f m) (hg : HasProd g m')
+引理 有积类型.int_rec
+  条件: {f g : 自然数 -> M} (hf : 有积类型 f m) (hg : 有积类型 g m')
   证明: HasProd.of_nat_of_neg_add_one hf hg
 
 Depends on / 依赖: HasProd, HasProd.of_nat_of_neg_add_one, of_nat_of_neg_add_one
@@ -1077,7 +1077,7 @@ lemma tprod_int_rec
 
 中文:
 引理 tprod_int_rec
-  条件: [T2Space M] {f g : 自然数 -> M} (hf : Multipliable f) (hg : Multipliable g)
+  条件: [T2空间 M] {f g : 自然数 -> M} (hf : Multipliable f) (hg : Multipliable g)
   证明: (hf.hasProd.int_rec hg.hasProd).tprod_eq
 
 @[to_additive]
@@ -1103,8 +1103,8 @@ theorem HasProd.nat_mul_neg
   l
 
 中文:
-定理 HasProd.nat_mul_neg
-  条件: {f : 整数 -> M} (hf : HasProd f m)
+定理 有积类型.nat_mul_neg
+  条件: {f : 整数 -> M} (hf : 有积类型 f m)
   证明: by
   -- Note this is much easier to prove if you assume more about the target space, but we have to
   -- work hard to prove it under the very minimal assumptions here.
@@ -1183,7 +1183,7 @@ lemma tprod_nat_mul_neg
 
 中文:
 引理 tprod_nat_mul_neg
-  条件: [T2Space M] {f : 整数 -> M} (hf : Multipliable f)
+  条件: [T2空间 M] {f : 整数 -> M} (hf : Multipliable f)
   证明: hf.hasProd.nat_mul_neg.tprod_eq
 
 @[to_additive HasSum.of_add_one_of_neg_add_one]
@@ -1206,7 +1206,7 @@ theorem HasProd.of_add_one_of_neg_add_one
 @[to_additive Summable.of_add_one_of_neg_add_one]
 
 中文:
-定理 HasProd.of_add_one_of_neg_add_one
+定理 有积类型.of_add_one_of_neg_add_one
   结论: {f : 整数 -> M}
   证明: HasProd.of_nat_of_neg_add_one (mul_comm _ m ▸ HasProd.zero_mul hf₁) hf₂
 
@@ -1255,7 +1255,7 @@ lemma tprod_of_add_one_of_neg_add_one
 
 中文:
 引理 tprod_of_add_one_of_neg_add_one
-  结论: [T2Space M] {f : 整数 -> M}
+  结论: [T2空间 M] {f : 整数 -> M}
   证明: (hf₁.hasProd.of_add_one_of_neg_add_one hf₂.hasProd).tprod_eq
 
 Depends on / 依赖: hasProd, hasProd.of_add_one_of_neg_add_one, of_add_one_of_neg_add_one, tprod_eq
@@ -1287,8 +1287,8 @@ lemma HasProd.of_nat_of_neg
 @[to_additive]
 
 中文:
-引理 HasProd.of_nat_of_neg
-  结论: {f : 整数 -> G} (hf₁ : HasProd (fun n : 自然数 => f n) g)
+引理 有积类型.of_nat_of_neg
+  结论: {f : 整数 -> G} (hf₁ : 有积类型 (fun n : 自然数 => f n) g)
   证明: by
   refine mul_div_assoc' g .. ▸ hf₁.of_nat_of_neg_add_one (m' := g' / f 0) ?_
   rwa [← hasProd_nat_add_iff' 1, prod_range_one, Nat.cast_zero, neg_zero] at hf₂
@@ -1337,7 +1337,7 @@ lemma Multipliable.tprod_of_nat_of_neg
 
 中文:
 引理 Multipliable.tprod_of_nat_of_neg
-  结论: [T2Space G] {f : 整数 -> G}
+  结论: [T2空间 G] {f : 整数 -> G}
   证明: (hf₁.hasProd.of_nat_of_neg hf₂.hasProd).tprod_eq
 -/
 protected lemma Multipliable.tprod_of_nat_of_neg [T2Space G] {f : Int -> G}
@@ -1429,7 +1429,7 @@ theorem Summable.alternating
 
 中文:
 定理 Summable.alternating
-  结论: {α} [Ring α]
+  结论: {α} [环 α]
   证明: by
   apply Summable.even_add_odd
   · simp only [even_two, Even.mul_right, Even.neg_pow, one_pow, one_mul]
@@ -1496,7 +1496,7 @@ lemma multipliable_pnat_iff_multipliable_nat
 
 中文:
 引理 multipliable_pnat_iff_multipliable_nat
-  结论: [TopologicalSpace G] [IsTopologicalGroup G]
+  结论: [拓扑空间 G] [是拓扑群 G]
   证明: by
   rw [multipliable_pnat_iff_multipliable_succ]; rw [multipliable_nat_add_iff]
 
@@ -1546,7 +1546,7 @@ theorem hasProd_pnat_iff
 
 中文:
 定理 hasProd_pnat_iff
-  条件: [TopologicalSpace G] [IsTopologicalGroup G] {f : 自然数 -> G} {a : G}
+  条件: [拓扑空间 G] [是拓扑群 G] {f : 自然数 -> G} {a : G}
   证明: by
   simp [hasProd_pnat_iff_hasProd_succ, hasProd_nat_add_iff]
 
@@ -1630,7 +1630,7 @@ lemma tprod_zero_pnat_eq_tprod_nat
 
 中文:
 引理 tprod_zero_pnat_eq_tprod_nat
-  结论: [TopologicalSpace G] [IsTopologicalGroup G] [T2Space G]
+  结论: [拓扑空间 G] [是拓扑群 G] [T2空间 G]
   证明: by
   simpa [hf.tprod_eq_zero_mul] using tprod_pnat_eq_tprod_succ
 
@@ -1660,7 +1660,7 @@ theorem tprod_int_eq_zero_mul_tprod_pnat
 
 中文:
 定理 tprod_int_eq_zero_mul_tprod_pnat
-  结论: [UniformSpace G] [IsUniformGroup G] [CompleteSpace G]
+  结论: [一致空间 G] [是一致群 G] [完备空间 G]
   证明: by
   have h1 : Multipliable fun n : Nat => f n :=
     (multipliable_int_iff_multipliable_nat_and_neg.mp hf2).1
@@ -1701,7 +1701,7 @@ theorem tprod_int_eq_zero_mul_tprod_pnat_sq
 
 中文:
 定理 tprod_int_eq_zero_mul_tprod_pnat_sq
-  结论: [UniformSpace G] [IsUniformGroup G] [CompleteSpace G]
+  结论: [一致空间 G] [是一致群 G] [完备空间 G]
   证明: by
   simpa only [sq, ← mul_assoc, hf _] using tprod_int_eq_zero_mul_tprod_pnat hf2
 

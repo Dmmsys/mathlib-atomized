@@ -225,8 +225,8 @@ instance [Nonempty
 @[to_additive]
 
 中文:
-实例 [Nonempty
-  签名: M] : Nonempty (MulArchimedeanOrder M)
+实例 [非空
+  签名: M] : 非空 (MulArchimedeanOrder M)
   定义体: inferInstanceAs (Nonempty M)
 
 @[to_additive]
@@ -248,8 +248,8 @@ instance [Inhabited
 @[to_additive]
 
 中文:
-实例 [Inhabited
-  签名: M] : Inhabited (MulArchimedeanOrder M)
+实例 [可居
+  签名: M] : 可居 (MulArchimedeanOrder M)
   定义体: ⟨of default⟩
 
 @[to_additive]
@@ -267,8 +267,8 @@ instance [Subsingleton
   body: inferInstanceAs (Subsingleton M)
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (MulArchimedeanOrder M)
+实例 [子单例
+  签名: M] : 子单例 (MulArchimedeanOrder M)
   定义体: inferInstanceAs (Subsingleton M)
 
 Depends on / 依赖: Subsingleton
@@ -386,7 +386,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (MulArchimedeanOrder M)
+  签名: 预序 (MulArchimedeanOrder M)
   定义体: ⟨1, by simp⟩
   le_trans a b c := by
     intro ⟨m, hm⟩ ⟨n, hn⟩
@@ -426,7 +426,7 @@ instance :
 
 中文:
 实例 :
-  签名: @Std.Total (MulArchimedeanOrder M) (· <= ·)
+  签名: @Std.全 (MulArchimedeanOrder M) (· <= ·)
   定义体: by
     obtain hab | hab := le_total |a.val|ₘ |b.val|ₘ
     · exact .inr ⟨1, by simpa using hab⟩
@@ -564,7 +564,7 @@ theorem «forall»
   proof: Quotient.forall
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : MulArchimedeanClass M -> 命题}
   结论: (对任意 A, p A) ↔ 对任意 a, p (mk a)
   证明: Quotient.forall
@@ -583,7 +583,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective mk (M := M)
+  结论: 函数.满射 mk (M := M)
   证明: Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
@@ -602,7 +602,7 @@ theorem range_mk
 
 中文:
 定理 range_mk
-  结论: Set.range (mk (M := M)) = Set.univ
+  结论: 集合.range (mk (M := M)) = 集合.univ
   证明: Set.range_eq_univ.mpr (mk_surjective M)
 
 Depends on / 依赖: Set.range_eq_univ.mpr, Set.univ, mk_surjective, range_eq_univ
@@ -879,8 +879,8 @@ instance [Subsingleton
 noncomputable
 
 中文:
-实例 [Subsingleton
-  签名: M] : Subsingleton (MulArchimedeanClass M)
+实例 [子单例
+  签名: M] : 子单例 (MulArchimedeanClass M)
   定义体: inferInstanceAs (Subsingleton (Antisymmetrization ..))
 
 @[to_additive]
@@ -907,7 +907,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (MulArchimedeanClass M)
+  签名: 线性序 (MulArchimedeanClass M)
   定义体: open scoped Classical in
   -- TODO: why does `inferInstanceAs` not work here?
   fast_instance% (inferInstance : LinearOrder (Antisymmetrization (MulArchimedeanOrder M) (· <= ·)))
@@ -1013,7 +1013,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop (MulArchimedeanClass M)
+  签名: 有顶序 (MulArchimedeanClass M)
   定义体: mk 1
   le_top A := by
     induction A using ind with | mk a
@@ -1042,7 +1042,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (MulArchimedeanClass M)
+  签名: 可居 (MulArchimedeanClass M)
   定义体: ⟨⊤⟩
 
 @[to_additive (attr := simp)]
@@ -1159,8 +1159,8 @@ instance [Nontrivial
 @[to_additive]
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nontrivial (MulArchimedeanClass M) where
+实例 [非平凡
+  签名: M] : 非平凡 (MulArchimedeanClass M) where
   定义体: by
     obtain ⟨x, hx⟩ := exists_ne (1 : M)
     exact ⟨mk x, ⊤, mk_eq_top_iff.ne.mpr hx⟩
@@ -1193,7 +1193,7 @@ theorem mk_antitoneOn
 
 中文:
 定理 mk_antitoneOn
-  结论: AntitoneOn mk (Set.Ici (1 : M))
+  结论: AntitoneOn mk (集合.左闭右无界区间 (1 : M))
   证明: by
   intro a ha b hb hab
   contrapose! hab
@@ -1233,7 +1233,7 @@ theorem mk_monotoneOn
 
 中文:
 定理 mk_monotoneOn
-  结论: MonotoneOn mk (Set.Iic (1 : M))
+  结论: MonotoneOn mk (集合.左无界右闭区间 (1 : M))
   证明: by
   intro a ha b hb hab
   contrapose! hab
@@ -1307,7 +1307,7 @@ theorem min_le_mk_of_le_of_le
 中文:
 定理 min_le_mk_of_le_of_le
   条件: {x y z : M} (hy : y <= x) (hz : x <= z)
-  结论: min (mk y) (mk z) <= mk x
+  结论: 最小值 (mk y) (mk z) <= mk x
   证明: by
   have H := mabs_le_max_mabs_mabs hy hz
   rw [← mabs_of_one_le (le_max_of_le_left (one_le_mabs y))] at H
@@ -1350,7 +1350,7 @@ theorem min_le_mk_mul
 中文:
 定理 min_le_mk_mul
   条件: (a b : M)
-  结论: min (mk a) (mk b) <= mk (a * b)
+  结论: 最小值 (mk a) (mk b) <= mk (a * b)
   证明: by
   by_contra! h
   rw [lt_min_iff] at h
@@ -1387,7 +1387,7 @@ theorem min_le_mk_div
 中文:
 定理 min_le_mk_div
   条件: (a b : M)
-  结论: min (mk a) (mk b) <= mk (a / b)
+  结论: 最小值 (mk a) (mk b) <= mk (a / b)
   证明: by
   simpa [div_eq_mul_inv] using min_le_mk_mul (a := a) (b := b⁻¹)
 
@@ -1836,7 +1836,7 @@ theorem mk_prod
 
 中文:
 定理 mk_prod
-  结论: {ι : 类型} [LinearOrder ι] {s : Finset ι} (hnonempty : s.Nonempty)
+  结论: {ι : 类型} [线性序 ι] {s : 有限集 ι} (hnonempty : s.非空)
   证明: by
   induction hnonempty using Finset.Nonempty.cons_induction with
   | singleton i => simp
@@ -2189,7 +2189,7 @@ theorem orderHom_injective
 
 中文:
 定理 orderHom_injective
-  条件: {f : M ->*o N} (h : Function.Injective f)
+  条件: {f : M ->*o N} (h : 函数.单射 f)
   证明: by
   intro a b
   induction a using ind with | mk a
@@ -2324,7 +2324,7 @@ definition subsemigroup
 
 中文:
 定义 subsemigroup
-  签名: (s : UpperSet (MulArchimedeanClass M))
+  签名: (s : 上集 (MulArchimedeanClass M))
   定义体: mk ⁻¹' s
   mul_mem' {a b} ha hb := by
     rw [Set.mem_preimage] at ha hb ⊢
@@ -2359,7 +2359,7 @@ theorem subsemigroup_strictAnti
 
 中文:
 定理 subsemigroup_strictAnti
-  结论: StrictAnti (subsemigroup (M := M))
+  结论: 严格递减 (subsemigroup (M := M))
   证明: by
   intro s t hst
   rw [← SetLike.coe_ssubset_coe]
@@ -2402,7 +2402,7 @@ definition subgroup
 
 中文:
 定义 subgroup
-  签名: (s : UpperSet (MulArchimedeanClass M))
+  签名: (s : 上集 (MulArchimedeanClass M))
   定义体: if hs : s = ⊤ then
     ⊥
   else {
@@ -2522,7 +2522,7 @@ theorem subgroup_strictAntiOn
 
 中文:
 定理 subgroup_strictAntiOn
-  结论: StrictAntiOn (subgroup (M := M)) (Set.Iio ⊤)
+  结论: StrictAntiOn (subgroup (M := M)) (集合.左无界右开区间 ⊤)
   证明: by
   intro s hs t ht hst
   rw [← SetLike.coe_ssubset_coe]
@@ -2560,7 +2560,7 @@ theorem subgroup_antitone
 
 中文:
 定理 subgroup_antitone
-  结论: Antitone (subgroup (M := M))
+  结论: 递减 (subgroup (M := M))
   证明: by
   intro s t hst
   obtain rfl | hs := eq_or_ne s ⊤
@@ -2734,7 +2734,7 @@ exact subgroup_antitone (UpperSet.Ioi_strictMono _).monotone h
 
 中文:
 定理 ballSubgroup_antitone
-  结论: Antitone (ballSubgroup (M := M))
+  结论: 递减 (ballSubgroup (M := M))
   证明: by
   intro _ _ h
 exact subgroup_antitone (UpperSet.Ioi_strictMono _).monotone h
@@ -2944,7 +2944,7 @@ instance [MulArchimedean
 
 中文:
 实例 [MulArchimedean
-  签名: M] : Subsingleton (FiniteMulArchimedeanClass M) where
+  签名: M] : 子单例 (FiniteMulArchimedeanClass M) where
   定义体: by
     induction A using ind with | mk a ha
     induction B using ind with | mk b hb
@@ -2972,8 +2972,8 @@ instance [Nontrivial
   exact ⟨mk x hx, by simpa using hx⟩
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nonempty (FiniteMulArchimedeanClass M)
+实例 [非平凡
+  签名: M] : 非空 (FiniteMulArchimedeanClass M)
   定义体: by
   obtain ⟨x, hx⟩ := exists_ne (1 : M)
   exact ⟨mk x hx, by simpa using hx⟩
@@ -3065,7 +3065,7 @@ definition liftOrderHom
 
 中文:
 定义 liftOrderHom
-  签名: {α : 类型} [PartialOrder α]
+  签名: {α : 类型} [偏序 α]
   定义体: lift f fun a b heq => le_antisymm (h a b heq.le) (h b a heq.ge)
   monotone' A B hAB := by
     induction A using ind with | mk a ha
@@ -3097,7 +3097,7 @@ theorem liftOrderHom_mk
 
 中文:
 定理 liftOrderHom_mk
-  结论: {α : 类型} [PartialOrder α]
+  结论: {α : 类型} [偏序 α]
   证明: lift_mk f (fun a b heq => le_antisymm (h a b heq.le) (h b a heq.ge)) ha
 
 Depends on / 依赖: heq.ge, heq.le, le_antisymm, lift_mk
@@ -3303,7 +3303,7 @@ definition subgroup
 
 中文:
 定义 subgroup
-  签名: (s : UpperSet (FiniteMulArchimedeanClass M))
+  签名: (s : 上集 (FiniteMulArchimedeanClass M))
   定义体: MulArchimedeanClass.subsemigroup (toUpperSetMulArchimedeanClass s)
   one_mem' h := (h rfl).elim
   inv_mem' := by simp [MulArchimedeanClass.subsemigroup]
@@ -3392,7 +3392,7 @@ theorem subgroup_strictAnti
 
 中文:
 定理 subgroup_strictAnti
-  结论: StrictAnti (subgroup (M := M))
+  结论: 严格递减 (subgroup (M := M))
   证明: fun _ _ h =>
   MulArchimedeanClass.subsemigroup_strictAnti (toUpperSetMulArchimedeanClass.strictMono h)
 -/
@@ -3503,7 +3503,7 @@ theorem ballSubgroup_strictAnti
 
 中文:
 定理 ballSubgroup_strictAnti
-  结论: StrictAnti (ballSubgroup (M := M))
+  结论: 严格递减 (ballSubgroup (M := M))
   证明: fun _ _ h => subgroup_strictAnti UpperSet.Ioi_strictMono _ h
 -/
 theorem ballSubgroup_strictAnti : StrictAnti (ballSubgroup (M := M)) :=

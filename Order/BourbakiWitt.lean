@@ -51,8 +51,8 @@ structure NonemptyChain
 结构 NonemptyChain
   参数: (α : 类型) [LE α]
   公理与运算 (3 个):
-    - carrier : Set α
-    - Nonempty' : carrier.Nonempty
+    - carrier : 集合 α
+    - Nonempty' : carrier.非空
     - isChain' : IsChain (· <= ·) carrier
 -/
 structure NonemptyChain (α : Type*) [LE α] where
@@ -80,9 +80,9 @@ class ChainCompletePartialOrder
     - cSup_le((c : NonemptyChain α) (x : α)) : (forall y in c.carrier, y <= x) -> cSup c <= x
 
 中文:
-类 ChainCompletePartialOrder
+类 ChainCompletePartial序
   参数: (α : 类型)
-  继承: PartialOrder α
+  继承: 偏序 α
   公理与运算 (3 个):
     - cSup : NonemptyChain α -> α
     - le_cSup((c : NonemptyChain α) (x : α)) : x in c.carrier -> x <= cSup c
@@ -111,8 +111,8 @@ instance [ChainCompletePartialOrder
   ωSup_le _ _ hx := cSup_le _ _ (fun _ ⟨i, hi⟩ => hi ▸ hx i)
 
 中文:
-实例 [ChainCompletePartialOrder
-  签名: α] : OmegaCompletePartialOrder α where
+实例 [ChainCompletePartial序
+  签名: α] : OmegaCompletePartial序 α where
   定义体: cSup (NonemptyChain.mk (range c) (range_nonempty c) (isChain_range c))
   le_ωSup _ i := le_cSup _ _ (mem_range_self i)
   ωSup_le _ _ hx := cSup_le _ _ (fun _ ⟨i, hi⟩ => hi ▸ hx i)
@@ -135,8 +135,8 @@ instance [CompleteLattice
   cSup_le _ _ h := sSup_le h
 
 中文:
-实例 [CompleteLattice
-  签名: α] : ChainCompletePartialOrder α where
+实例 [完备格
+  签名: α] : ChainCompletePartial序 α where
   定义体: sSup c
   le_cSup _ _ hx := le_sSup hx
   cSup_le _ _ h := sSup_le h
@@ -160,8 +160,8 @@ structure IsAdmissible
     - cSup_mem : forall (c : NonemptyChain α), ↑c subseteq s -> cSup c in s
 
 中文:
-结构 IsAdmissible
-  参数: (x : α) (f : α -> α) (s : Set α)
+结构 是Admissible
+  参数: (x : α) (f : α -> α) (s : 集合 α)
   公理与运算 (3 个):
     - base_isLeast : IsLeast s x
     - image_self_subset_self : f '' s subseteq s
@@ -194,7 +194,7 @@ lemma ici_isAdmissible
 中文:
 引理 ici_isAdmissible
   条件: (le_map : 对任意 x, x <= f x)
-  结论: IsAdmissible x f (Ici x) where
+  结论: 是Admissible x f (左闭右无界区间 x) where
   证明: ⟨le_refl x, fun _ h => h⟩
   image_self_subset_self := by
     rintro _ ⟨y, hy, rfl⟩
@@ -255,7 +255,7 @@ lemma bot_isAdmissible
 中文:
 引理 bot_isAdmissible
   条件: (le_map : 对任意 x, x <= f x)
-  结论: IsAdmissible x f (bot x f) where
+  结论: 是Admissible x f (bot x f) where
   证明: by
     constructor
     · exact fun _ h => h.base_isLeast.1
@@ -295,7 +295,7 @@ lemma subset_bot_iff
 
 中文:
 引理 subset_bot_iff
-  条件: {s : Set α} (h : IsAdmissible x f s)
+  条件: {s : 集合 α} (h : 是Admissible x f s)
   结论: s subseteq bot x f ↔ s = bot x f where
   证明: subset_antisymm h' (sInter_subset_of_mem h)
   mpr h' := h' ▸ subset_refl (bot x f)
@@ -337,7 +337,7 @@ structure IsExtremePt
     - map_le_of_mem_of_lt({z : α} (h : z in bot x f) (h' : z < y)) : f z <= y
 
 中文:
-结构 IsExtremePt
+结构 是ExtremePt
   参数: (x : α) (f : α -> α) (y : α)
   公理与运算 (2 个):
     - mem_bot : y in bot x f
@@ -367,7 +367,7 @@ lemma bot_eq_of_le_or_map_le
 
 中文:
 引理 bot_eq_of_le_or_map_le
-  条件: {y : α} (le_map : 对任意 x, x <= f x) (hy : IsExtremePt x f y)
+  条件: {y : α} (le_map : 对任意 x, x <= f x) (hy : 是ExtremePt x f y)
   证明: by
   rw [← subset_bot_iff]
   · apply sep_subset
@@ -497,7 +497,7 @@ alias setOf_isExtremePt_eq_bot := setOfPred_isExtremePt_eq_bot
 中文:
 引理 setOfPred_isExtremePt_eq_bot
   条件: (le_map : 对任意 x, x <= f x)
-  结论: {y | IsExtremePt x f y} = bot x f
+  结论: {y | 是ExtremePt x f y} = bot x f
   证明: by
   rw [← subset_bot_iff]
   · exact fun _ h => h.mem_bot
@@ -596,7 +596,7 @@ theorem nonempty_fixedPoints_of_inflationary
 
 中文:
 定理 nonempty_fixedPoints_of_inflationary
-  条件: [Nonempty α] (le_map : 对任意 x, x <= f x)
+  条件: [非空 α] (le_map : 对任意 x, x <= f x)
   证明: by
   let x : α := Classical.ofNonempty
   let y := cSup
@@ -666,7 +666,7 @@ rw [sSup_eq_iSup]; apply ωScottContinuous.iSup fun f => ωScottContinuous.iSup 
 
 中文:
 引理 ωScottContinuous.sSup
-  条件: {s : Set (α -> β)} (hs : 对任意 f in s, ωScottContinuous f)
+  条件: {s : 集合 (α -> β)} (hs : 对任意 f in s, ωScottContinuous f)
   证明: by
 rw [sSup_eq_iSup]; apply ωScottContinuous.iSup fun f => ωScottContinuous.iSup hs f
 
@@ -690,7 +690,7 @@ lemma ωScottContinuous.sup
 #adaptation_note
 
 中文:
-引理 ωScottContinuous.sup
+引理 ωScottContinuous.上确界
   条件: (hf : ωScottContinuous f) (hg : ωScottContinuous g)
   证明: by
   rw [← sSup_pair]
@@ -783,7 +783,7 @@ lemma ωScottContinuous.inf
   ex
 
 中文:
-引理 ωScottContinuous.inf
+引理 ωScottContinuous.下确界
   条件: (hf : ωScottContinuous f) (hg : ωScottContinuous g)
   证明: by
   refine ωScottContinuous.of_monotone_map_ωSup

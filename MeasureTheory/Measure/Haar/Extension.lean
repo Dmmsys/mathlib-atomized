@@ -59,7 +59,7 @@ abbreviation pullback
 
 中文:
 缩写 pullback
-  签名: (f : CompactlySupportedContinuousMap B E) (b : B)
+  签名: (f : 余mpactlySupportedContinuous映射 B E) (b : B)
   定义体: f.pullback_monoidHom H.isClosedEmbedding b
 
 @[to_additive]
@@ -81,7 +81,7 @@ theorem pullback_def
 
 中文:
 定理 pullback_def
-  条件: (f : CompactlySupportedContinuousMap B E) (b : B) (a : A)
+  条件: (f : 余mpactlySupportedContinuous映射 B E) (b : B) (a : A)
   证明: f.pullback_monoidHom_def H.isClosedEmbedding b a
 
 Depends on / 依赖: H.isClosedEmbedding, f.pullback_monoidHom_def, isClosedEmbedding, pullback_monoidHom_def
@@ -109,7 +109,7 @@ theorem integral_pullback_invFun_apply
 
 中文:
 定理 integral_pullback_invFun_apply
-  条件: (f : CompactlySupportedContinuousMap B E) (b : B)
+  条件: (f : 余mpactlySupportedContinuous映射 B E) (b : B)
   证明: by
   have h : ψ ((Function.invFun ψ (ψ b))⁻¹ * b) = 1 := by simp [Function.apply_invFun_apply]
   rw [← ψ.mem_ker]; rw [H.mulExact.monoidHom_ker_eq] at h
@@ -226,7 +226,7 @@ theorem pushforward_def
 
 中文:
 定理 pushforward_def
-  条件: (f : CompactlySupportedContinuousMap B E) (c : C)
+  条件: (f : 余mpactlySupportedContinuous映射 B E) (c : C)
   证明: rfl
 
 @[to_additive]
@@ -248,7 +248,7 @@ theorem pushforward_apply_apply
 
 中文:
 定理 pushforward_apply_apply
-  条件: (f : CompactlySupportedContinuousMap B E) (b : B)
+  条件: (f : 余mpactlySupportedContinuous映射 B E) (b : B)
   证明: integral_pullback_invFun_apply H μA f b
 
 @[to_additive]
@@ -270,7 +270,7 @@ theorem pushforward_mono
 
 中文:
 定理 pushforward_mono
-  条件: {f g : CompactlySupportedContinuousMap B 实数} (h : f <= g)
+  条件: {f g : 余mpactlySupportedContinuous映射 B 实数} (h : f <= g)
   证明: fun _ => integral_mono (pullback H f _).integrable (pullback H g _).integrable (fun _ => h _)
 
 Depends on / 依赖: integrable, integral_mono, pullback
@@ -304,7 +304,7 @@ definition integrate
 
 中文:
 定义 integrate
-  签名: : CompactlySupportedContinuousMap B E ->ₗ[实数] E where
+  签名: : 余mpactlySupportedContinuous映射 B E ->ₗ[实数] E where
   定义体: ∫ c, pushforward H μA f c ∂μC
   map_add' f g := by
     rw [map_add]
@@ -339,7 +339,7 @@ theorem integrate_apply
 
 中文:
 定理 integrate_apply
-  条件: (f : CompactlySupportedContinuousMap B E)
+  条件: (f : 余mpactlySupportedContinuous映射 B E)
   证明: rfl
 
 @[to_additive]
@@ -360,7 +360,7 @@ theorem integrate_mono
 
 中文:
 定理 integrate_mono
-  条件: {f g : CompactlySupportedContinuousMap B 实数} (h : f <= g)
+  条件: {f g : 余mpactlySupportedContinuous映射 B 实数} (h : f <= g)
   证明: integral_mono (pushforward H μA f).integrable (pushforward H μA g).integrable
     (pushforward_mono H μA h)
 
@@ -390,7 +390,7 @@ definition inducedMeasure
 
 中文:
 定义 inducedMeasure
-  签名: : Measure B
+  签名: : 测度 B
   定义体: RealRMK.rieszMeasure ⟨integrate H μA μC, fun _ _ => integrate_mono H μA μC⟩
 
 @[to_additive]
@@ -413,7 +413,7 @@ instance inducedMeasure_regular
 
 中文:
 实例 inducedMeasure_regular
-  签名: : (inducedMeasure H μA μC).Regular
+  签名: : (inducedMeasure H μA μC).正则
   定义体: RealRMK.regular_rieszMeasure _
 
 @[to_additive]
@@ -437,7 +437,7 @@ theorem integral_inducedMeasure
 
 中文:
 定理 integral_inducedMeasure
-  条件: (f : CompactlySupportedContinuousMap B 实数)
+  条件: (f : 余mpactlySupportedContinuous映射 B 实数)
   证明: by
   apply RealRMK.integral_rieszMeasure
 
@@ -465,7 +465,7 @@ instance isHaarMeasure_inducedMeasure
 
 中文:
 实例 isHaarMeasure_inducedMeasure
-  签名: : IsHaarMeasure (inducedMeasure H μA μC) where
+  签名: : 是Haar测度 (inducedMeasure H μA μC) where
   定义体: by
     obtain ⟨f, hf1, hf2, hf3, hf4⟩ :=
       exists_continuousMap_one_of_isCompact_subset_isOpen hK isOpen_univ K.subset_univ
@@ -534,7 +534,7 @@ theorem inducedMeasure_lt_of_injOn
 
 中文:
 定理 inducedMeasure_lt_of_injOn
-  结论: {U : Set B} (hU : IsOpen U) [DiscreteTopology A]
+  结论: {U : 集合 B} (hU : 是开集 U) [离散拓扑 A]
   证明: by
   contrapose! h
   have ho : 0 < μA {1} := (isOpen_discrete {1}).measure_pos _ (Set.singleton_nonempty 1)

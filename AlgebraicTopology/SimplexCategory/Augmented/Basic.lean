@@ -60,7 +60,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: : SimplexCategory ⥤ AugmentedSimplexCategory
+  签名: : 单纯形范畴 ⥤ AugmentedSimplexCategory
   定义体: WithInitial.incl
 
 Depends on / 依赖: WithInitial, WithInitial.incl
@@ -77,7 +77,7 @@ instance :
 
 中文:
 实例 :
-  签名: inclusion.Full
+  签名: inclusion.满
   定义体: inferInstanceAs WithInitial.incl.Full
 
 Depends on / 依赖: WithInitial, WithInitial.incl.Full
@@ -93,7 +93,7 @@ instance :
 
 中文:
 实例 :
-  签名: inclusion.Faithful
+  签名: inclusion.忠实
   定义体: inferInstanceAs WithInitial.incl.Faithful
 
 Depends on / 依赖: Faithful, WithInitial, WithInitial.incl.Faithful

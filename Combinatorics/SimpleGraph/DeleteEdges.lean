@@ -49,7 +49,7 @@ definition deleteEdges
 
 中文:
 定义 deleteEdges
-  签名: (s : Set (Sym2 V))
+  签名: (s : 集合 (Sym2 V))
   定义体: G \ fromEdgeSet s
 
 Depends on / 依赖: fromEdgeSet
@@ -68,7 +68,7 @@ instance [DecidableRel
 
 中文:
 实例 [DecidableRel
-  签名: G.Adj] [DecidablePred (· in s)] [DecidableEq V] :
+  签名: G.伴随] [DecidablePred (· in s)] [DecidableEq V] :
   定义体: inferInstanceAs DecidableRel (G \ fromEdgeSet s).Adj
 
 Depends on / 依赖: DecidableRel, fromEdgeSet
@@ -87,7 +87,7 @@ lemma deleteEdges_adj
 
 中文:
 引理 deleteEdges_adj
-  结论: (G.deleteEdges s).Adj v w ↔ G.Adj v w ∧ s(v, w) ∉ s
+  结论: (G.deleteEdges s).伴随 v w ↔ G.伴随 v w ∧ s(v, w) ∉ s
   证明: and_congr_right fun h => (and_iff_left h.ne).not
 -/
 @[simp] lemma deleteEdges_adj : (G.deleteEdges s).Adj v w ↔ G.Adj v w ∧ s(v, w) ∉ s :=
@@ -107,7 +107,7 @@ lemma deleteEdges_edgeSet
 
 中文:
 引理 deleteEdges_edgeSet
-  条件: (G G' : SimpleGraph V)
+  条件: (G G' : 简单图 V)
   结论: G.deleteEdges G'.edgeSet = G \ G'
   证明: by
   ext; simp
@@ -128,7 +128,7 @@ theorem deleteEdges_deleteEdges
 
 中文:
 定理 deleteEdges_deleteEdges
-  条件: (s s' : Set (Sym2 V))
+  条件: (s s' : 集合 (Sym2 V))
   证明: by simp [deleteEdges, sdiff_sdiff]
 
 Depends on / 依赖: deleteEdges, sdiff_sdiff
@@ -165,7 +165,7 @@ lemma deleteEdges_univ
 
 中文:
 引理 deleteEdges_univ
-  结论: G.deleteEdges Set.univ = ⊥
+  结论: G.deleteEdges 集合.univ = ⊥
   证明: by simp [deleteEdges]
 
 @[simp]
@@ -184,7 +184,7 @@ theorem deleteEdges_le_iff
 
 中文:
 定理 deleteEdges_le_iff
-  条件: (s : Set (Sym2 V)) (G' : SimpleGraph V)
+  条件: (s : 集合 (Sym2 V)) (G' : 简单图 V)
   证明: by
     rw [deleteEdges]; rw [sdiff_le_iff]
 
@@ -205,7 +205,7 @@ lemma deleteEdges_le
 
 中文:
 引理 deleteEdges_le
-  条件: (s : Set (Sym2 V))
+  条件: (s : 集合 (Sym2 V))
   结论: G.deleteEdges s <= G
   证明: sdiff_le
 
@@ -285,7 +285,7 @@ theorem deleteEdges_eq_inter_edgeSet
 
 中文:
 定理 deleteEdges_eq_inter_edgeSet
-  条件: (s : Set (Sym2 V))
+  条件: (s : 集合 (Sym2 V))
   证明: by
   ext
   simp +contextual [imp_false]
@@ -307,7 +307,7 @@ lemma deleteEdges_of_subset_diagSet
 
 中文:
 引理 deleteEdges_of_subset_diagSet
-  条件: (G : SimpleGraph V) (hs : s subseteq Sym2.diagSet)
+  条件: (G : 简单图 V) (hs : s subseteq Sym2.diagSet)
   证明: by ext u v; simpa using (·.ne <| hs ·)
 -/
 @[simp] lemma deleteEdges_of_subset_diagSet (G : SimpleGraph V) (hs : s subseteq Sym2.diagSet) :
@@ -326,7 +326,7 @@ theorem deleteEdges_sdiff_eq_of_le
 
 中文:
 定理 deleteEdges_sdiff_eq_of_le
-  条件: {H : SimpleGraph V} (h : H <= G)
+  条件: {H : 简单图 V} (h : H <= G)
   证明: by
   rw [← edgeSet_sdiff]; rw [deleteEdges_edgeSet]; rw [sdiff_sdiff_eq_self h]
 
@@ -351,7 +351,7 @@ theorem edgeSet_deleteEdges
 
 中文:
 定理 edgeSet_deleteEdges
-  条件: (s : Set (Sym2 V))
+  条件: (s : 集合 (Sym2 V))
   结论: (G.deleteEdges s).edgeSet = G.edgeSet \ s
   证明: by
   simp [deleteEdges]
@@ -373,7 +373,7 @@ theorem edgeFinset_deleteEdges
 
 中文:
 定理 edgeFinset_deleteEdges
-  结论: [DecidableEq V] [Fintype G.edgeSet] (s : Finset (Sym2 V))
+  结论: [DecidableEq V] [有限类型 G.edgeSet] (s : 有限集 (Sym2 V))
   证明: by
   ext e
   simp [edgeSet_deleteEdges]
@@ -394,7 +394,7 @@ lemma deleteEdges_sup
 
 中文:
 引理 deleteEdges_sup
-  条件: (G H : SimpleGraph V) (s : Set (Sym2 V))
+  条件: (G H : 简单图 V) (s : 集合 (Sym2 V))
   证明: sup_sdiff
 -/
 @[simp] lemma deleteEdges_sup (G H : SimpleGraph V) (s : Set (Sym2 V)) :
@@ -410,7 +410,7 @@ lemma deleteEdges_fromEdgeSet
 
 中文:
 引理 deleteEdges_fromEdgeSet
-  条件: (s t : Set (Sym2 V))
+  条件: (s t : 集合 (Sym2 V))
   证明: by ext; simp +contextual
 -/
 @[simp] lemma deleteEdges_fromEdgeSet (s t : Set (Sym2 V)) :
@@ -445,7 +445,7 @@ definition deleteIncidenceSet
 
 中文:
 定义 deleteIncidenceSet
-  签名: (G : SimpleGraph V) (x : V)
+  签名: (G : 简单图 V) (x : V)
   定义体: G.deleteEdges (G.incidenceSet x)
 
 Depends on / 依赖: G.deleteEdges, G.incidenceSet, deleteEdges, incidenceSet
@@ -465,7 +465,7 @@ lemma deleteIncidenceSet_adj
 
 中文:
 引理 deleteIncidenceSet_adj
-  条件: {G : SimpleGraph V} {x v₁ v₂ : V}
+  条件: {G : 简单图 V} {x v₁ v₂ : V}
   证明: by
   rw [deleteIncidenceSet]; rw [deleteEdges_adj]; rw [mk'_mem_incidenceSet_iff]
   tauto
@@ -488,7 +488,7 @@ lemma deleteIncidenceSet_le
 
 中文:
 引理 deleteIncidenceSet_le
-  条件: (G : SimpleGraph V) (x : V)
+  条件: (G : 简单图 V) (x : V)
   结论: G.deleteIncidenceSet x <= G
   证明: deleteEdges_le (G.incidenceSet x)
 
@@ -509,7 +509,7 @@ lemma edgeSet_fromEdgeSet_incidenceSet
 
 中文:
 引理 edgeSet_fromEdgeSet_incidenceSet
-  条件: (G : SimpleGraph V) (x : V)
+  条件: (G : 简单图 V) (x : V)
   证明: by
   rw [edgeSet_fromEdgeSet]; rw [sdiff_eq_left]; rw [← Set.subset_compl_iff_disjoint_right]
   exact (incidenceSet_subset G x).trans G.edgeSet_subset_compl_diagSet
@@ -532,7 +532,7 @@ theorem edgeSet_deleteIncidenceSet
 
 中文:
 定理 edgeSet_deleteIncidenceSet
-  条件: (G : SimpleGraph V) (x : V)
+  条件: (G : 简单图 V) (x : V)
   证明: by
   simp_rw [deleteIncidenceSet, deleteEdges, edgeSet_sdiff, edgeSet_fromEdgeSet_incidenceSet]
 
@@ -552,7 +552,7 @@ theorem support_deleteIncidenceSet_subset
 
 中文:
 定理 support_deleteIncidenceSet_subset
-  条件: (G : SimpleGraph V) (x : V)
+  条件: (G : 简单图 V) (x : V)
   证明: fun _ => by simp_rw [mem_support, deleteIncidenceSet_adj]; tauto
 
 Depends on / 依赖: deleteIncidenceSet_adj, mem_support, simp_rw
@@ -574,7 +574,7 @@ theorem induce_deleteIncidenceSet_of_notMem
 
 中文:
 定理 induce_deleteIncidenceSet_of_notMem
-  条件: (G : SimpleGraph V) {s : Set V} {x : V} (h : x ∉ s)
+  条件: (G : 简单图 V) {s : 集合 V} {x : V} (h : x ∉ s)
   证明: by
   ext v₁ v₂
   simp_rw [comap_adj, Function.Embedding.coe_subtype, deleteIncidenceSet_adj, and_iff_left_iff_imp]
@@ -610,7 +610,7 @@ theorem card_edgeFinset_induce_compl_singleton
 
 中文:
 定理 card_edgeFinset_induce_compl_singleton
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj] (x : V)
+  条件: (G : 简单图 V) [DecidableRel G.伴随] (x : V)
   证明: by
   have h_notMem : x ∉ ({x}ᶜ : Set V) := Set.notMem_compl_iff.mpr (Set.mem_singleton x)
   simp_rw [edgeFinset, Set.toFinset_card,
@@ -645,7 +645,7 @@ theorem edgeFinset_deleteIncidenceSet_eq_sdiff
 
 中文:
 定理 edgeFinset_deleteIncidenceSet_eq_sdiff
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj] (x : V)
+  条件: (G : 简单图 V) [DecidableRel G.伴随] (x : V)
   证明: by
   apply Finset.coe_injective
   push_cast
@@ -671,7 +671,7 @@ theorem card_edgeFinset_deleteIncidenceSet
 
 中文:
 定理 card_edgeFinset_deleteIncidenceSet
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj] (x : V)
+  条件: (G : 简单图 V) [DecidableRel G.伴随] (x : V)
   证明: by
   simp_rw [← card_incidenceFinset_eq_degree, ← card_sdiff_of_subset (G.incidenceFinset_subset x),
     edgeFinset_deleteIncidenceSet_eq_sdiff]
@@ -699,7 +699,7 @@ theorem edgeFinset_deleteIncidenceSet_eq_filter
 
 中文:
 定理 edgeFinset_deleteIncidenceSet_eq_filter
-  条件: (G : SimpleGraph V) [DecidableRel G.Adj] (x : V)
+  条件: (G : 简单图 V) [DecidableRel G.伴随] (x : V)
   证明: by
   rw [edgeFinset_deleteIncidenceSet_eq_sdiff]; rw [sdiff_eq_filter]
   apply filter_congr
@@ -771,7 +771,7 @@ definition DeleteFar
 
 中文:
 定义 DeleteFar
-  签名: (p : SimpleGraph V -> 命题) (r : 𝕜)
+  签名: (p : 简单图 V -> 命题) (r : 𝕜)
   定义体: forall ⦃s⦄, s subseteq G.edgeFinset -> p (G.deleteEdges s) -> r <= #s
 
 Depends on / 依赖: G.deleteEdges, G.edgeFinset, deleteEdges, edgeFinset, subseteq
@@ -798,7 +798,7 @@ theorem deleteFar_iff
 
 中文:
 定理 deleteFar_iff
-  条件: [Fintype (Sym2 V)]
+  条件: [有限类型 (Sym2 V)]
   证明: by
   classical
   refine ⟨fun h H _ hHG hH => ?_, fun h s hs hG => ?_⟩

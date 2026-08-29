@@ -86,7 +86,7 @@ lemma lintegral_le_edist_mul
 
 中文:
 引理 lintegral_le_edist_mul
-  条件: (f : X ->ᵇ 实数>=0) (μ : Measure X)
+  条件: (f : X ->ᵇ 实数>=0) (μ : 测度 X)
   证明: le_trans (lintegral_mono (fun x => ENNReal.coe_le_coe.mpr (f.apply_le_nndist_zero x))) (by simp)
 
 Depends on / 依赖: ENNReal, ENNReal.coe_le_coe.mpr, apply_le_nndist_zero, coe_le_coe, f.apply_le_nndist_zero, le_trans, lintegral_mono
@@ -105,7 +105,7 @@ theorem measurable_coe_ennreal_comp
 
 中文:
 定理 measurable_coe_ennreal_comp
-  条件: [OpensMeasurableSpace X] (f : X ->ᵇ 实数>=0)
+  条件: [OpensMeasurable空间 X] (f : X ->ᵇ 实数>=0)
   证明: measurable_coe_nnreal_ennreal.comp f.continuous.measurable
 
 Depends on / 依赖: continuous, f.continuous.measurable, measurable, measurable_coe_nnreal_ennreal, measurable_coe_nnreal_ennreal.comp
@@ -160,7 +160,7 @@ theorem integrable_of_nnreal
 
 中文:
 定理 integrable_of_nnreal
-  条件: [OpensMeasurableSpace X] (f : X ->ᵇ 实数>=0)
+  条件: [OpensMeasurable空间 X] (f : X ->ᵇ 实数>=0)
   证明: by
   refine ⟨(NNReal.continuous_coe.comp f.continuous).measurable.aestronglyMeasurable, ?_⟩
   simp only [hasFiniteIntegral_iff_enorm, Function.comp_apply, NNReal.enorm_eq]
@@ -187,7 +187,7 @@ theorem integral_eq_integral_nnrealPart_sub
 
 中文:
 定理 integral_eq_integral_nnrealPart_sub
-  条件: [OpensMeasurableSpace X] (f : X ->ᵇ 实数)
+  条件: [OpensMeasurable空间 X] (f : X ->ᵇ 实数)
   证明: by
   simp only [f.self_eq_nnrealPart_sub_nnrealPart_neg, Pi.sub_apply, integral_sub,
              integrable_of_nnreal]
@@ -232,8 +232,8 @@ theorem toReal_lintegral_coe_eq_integral
   · exact Eventually.of_forall (by simp)
 
 中文:
-定理 toReal_lintegral_coe_eq_integral
-  条件: [OpensMeasurableSpace X] (f : X ->ᵇ 实数>=0) (μ : Measure X)
+定理 to实数_lintegral_coe_eq_integral
+  条件: [OpensMeasurable空间 X] (f : X ->ᵇ 实数>=0) (μ : 测度 X)
   证明: by
   rw [integral_eq_lintegral_of_nonneg_ae _ (by simpa [Function.comp_apply] using!
         (NNReal.continuous_coe.comp f.continuous).measurable.aestronglyMeasurable)]
@@ -302,7 +302,7 @@ lemma integrable
 
 中文:
 引理 integrable
-  条件: [IsFiniteMeasure μ] (f : X ->ᵇ E)
+  条件: [是有限测度 μ] (f : X ->ᵇ E)
   证明: by
   refine ⟨f.continuous.measurable.aestronglyMeasurable, (hasFiniteIntegral_def _ _).mp ?_⟩
   calc ∫⁻ x, ‖f x‖₊ ∂μ
@@ -337,7 +337,7 @@ lemma norm_integral_le_mul_norm
 
 中文:
 引理 norm_integral_le_mul_norm
-  条件: [IsFiniteMeasure μ] (f : X ->ᵇ E)
+  条件: [是有限测度 μ] (f : X ->ᵇ E)
   证明: by
   calc ‖∫ x, f x ∂μ‖
     _ <= ∫ x, ‖f x‖ ∂μ := norm_integral_le_integral_norm _
@@ -369,7 +369,7 @@ lemma norm_integral_le_norm
 
 中文:
 引理 norm_integral_le_norm
-  条件: [IsProbabilityMeasure μ] (f : X ->ᵇ E)
+  条件: [是概率测度 μ] (f : X ->ᵇ E)
   证明: by
   convert! f.norm_integral_le_mul_norm μ
   simp
@@ -479,8 +479,8 @@ lemma tendsto_integral_of_forall_limsup_integral_le_integral
   have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
 
 中文:
-引理 tendsto_integral_of_forall_limsup_integral_le_integral
-  结论: {ι : 类型} {L : Filter ι}
+引理 tendsto_integral_of_对任意_limsup_integral_le_integral
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   rcases eq_or_neBot L with rfl | hL
   · simp only [tendsto_bot]
@@ -526,8 +526,8 @@ lemma tendsto_integral_of_forall_integral_le_liminf_integral
   have bdd_below := BddBelow.isBoundedUnder L.univ_mem (by simpa using obs.bd
 
 中文:
-引理 tendsto_integral_of_forall_integral_le_liminf_integral
-  结论: {ι : 类型} {L : Filter ι}
+引理 tendsto_integral_of_对任意_integral_le_liminf_integral
+  结论: {ι : 类型} {L : 滤子 ι}
   证明: by
   rcases eq_or_neBot L with rfl | hL
   · simp only [tendsto_bot]

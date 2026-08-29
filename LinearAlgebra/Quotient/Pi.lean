@@ -46,7 +46,7 @@ definition piQuotientLift
 
 中文:
 定义 piQuotientLift
-  签名: [Fintype ι] [DecidableEq ι] (p : 对任意 i, Submodule R (Ms i)) (q : Submodule R N)
+  签名: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i)) (q : 子模 R N)
   定义体: lsum R (fun i => Ms i ⧸ p i) R fun i => (p i).mapQ q (f i) (hf i)
 
 @[simp]
@@ -70,7 +70,7 @@ theorem piQuotientLift_mk
 
 中文:
 定理 piQuotientLift_mk
-  结论: [Fintype ι] [DecidableEq ι] (p : 对任意 i, Submodule R (Ms i))
+  结论: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
   证明: by
   rw [piQuotientLift]; rw [lsum_apply]; rw [sum_apply]; rw [← mkQ_apply]; rw [lsum_apply]; rw [sum_apply]; rw [_root_.map_sum]
   simp only [coe_proj, mapQ_apply, mkQ_apply, comp_apply]
@@ -104,7 +104,7 @@ theorem piQuotientLift_single
 
 中文:
 定理 piQuotientLift_single
-  结论: [Fintype ι] [DecidableEq ι] (p : 对任意 i, Submodule R (Ms i))
+  结论: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
   证明: by
   simp_rw [piQuotientLift, lsum_apply, sum_apply, comp_apply, proj_apply]
   rw [Finset.sum_eq_single i]
@@ -144,7 +144,7 @@ mem_ker.mpr by
 
 中文:
 定义 quotientPiLift
-  签名: (p : 对任意 i, Submodule R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
+  签名: (p : 对任意 i, 子模 R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
   定义体: (pi Set.univ p).liftQ (LinearMap.pi fun i => (f i).comp (proj i)) fun x hx =>
 mem_ker.mpr by
       ext i
@@ -172,7 +172,7 @@ theorem quotientPiLift_mk
 
 中文:
 定理 quotientPiLift_mk
-  结论: (p : 对任意 i, Submodule R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
+  结论: (p : 对任意 i, 子模 R (Ms i)) (f : 对任意 i, Ms i ->ₗ[R] Ns i)
   证明: rfl
 -/
 theorem quotientPiLift_mk (p : forall i, Submodule R (Ms i)) (f : forall i, Ms i ->ₗ[R] Ns i)
@@ -195,7 +195,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: : ((对任意 i, Ms i) ⧸ pi Set.univ p) -> 对任意 i, Ms i ⧸ p i
+  签名: : ((对任意 i, Ms i) ⧸ pi 集合.univ p) -> 对任意 i, Ms i ⧸ p i
   定义体: quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge
 
 Depends on / 依赖: ker_mkQ, quotientPiLift
@@ -213,7 +213,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  条件: (x y : ((i : ι) -> Ms i) ⧸ pi Set.univ p)
+  条件: (x y : ((i : ι) -> Ms i) ⧸ pi 集合.univ p)
   证明: LinearMap.map_add (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) x y
 
 Depends on / 依赖: LinearMap, LinearMap.map_add, ker_mkQ, map_add, quotientPiLift
@@ -232,7 +232,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: (r : R) (x : ((i : ι) -> Ms i) ⧸ pi Set.univ p)
+  条件: (r : R) (x : ((i : ι) -> Ms i) ⧸ pi 集合.univ p)
   证明: LinearMap.map_smul (quotientPiLift p (fun i => (p i).mkQ) fun i => (ker_mkQ (p i)).ge) r x
 
 Depends on / 依赖: LinearMap, LinearMap.map_smul, ker_mkQ, map_smul, quotientPiLift
@@ -254,7 +254,7 @@ definition invFun
 
 中文:
 定义 invFun
-  签名: : (对任意 i, Ms i ⧸ p i) -> (对任意 i, Ms i) ⧸ pi Set.univ p
+  签名: : (对任意 i, Ms i ⧸ p i) -> (对任意 i, Ms i) ⧸ pi 集合.univ p
   定义体: piQuotientLift p (pi Set.univ p) _ fun _ => le_comap_single_pi p
 
 Depends on / 依赖: Set.univ, le_comap_single_pi, piQuotientLift
@@ -275,7 +275,7 @@ theorem left_inv
 
 中文:
 定理 left_inv
-  结论: Function.LeftInverse (invFun p) (toFun p)
+  结论: 函数.左逆 (invFun p) (toFun p)
   证明: fun x =>
   Submodule.Quotient.induction_on _ x fun x' => by
     dsimp only [toFun, invFun]
@@ -303,7 +303,7 @@ theorem right_inv
 
 中文:
 定理 right_inv
-  结论: Function.RightInverse (invFun p) (toFun p)
+  结论: 函数.右逆 (invFun p) (toFun p)
   证明: by
   dsimp only [toFun, invFun]
   rw [Function.rightInverse_iff_comp]; rw [← coe_comp]; rw [← @id_coe R]
@@ -348,7 +348,7 @@ definition quotientPi
 
 中文:
 定义 quotientPi
-  签名: [Fintype ι] [DecidableEq ι] (p : 对任意 i, Submodule R (Ms i))
+  签名: [有限类型 ι] [DecidableEq ι] (p : 对任意 i, 子模 R (Ms i))
   定义体: toFun p
   invFun := invFun p
   map_add' := map_add p

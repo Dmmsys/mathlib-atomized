@@ -57,10 +57,10 @@ structure IsRepresentedBy
     - map_bijective({Y : C}) : Function.Bijective (fun f : Y ⟶ X => F.map f.op x)
 
 中文:
-结构 IsRepresentedBy
-  参数: (F : Cᵒᵖ ⥤ Type w) {X : C} (x : F.obj (op X))
+结构 是RepresentedBy
+  参数: (F : Cᵒᵖ ⥤ 类型 w) {X : C} (x : F.obj (op X))
   公理与运算 (1 个):
-    - map_bijective({Y : C}) : Function.Bijective (fun f : Y ⟶ X => F.map f.op x)
+    - map_bijective({Y : C}) : 函数.双射 (fun f : Y ⟶ X => F.map f.op x)
 -/
 structure IsRepresentedBy (F : Cᵒᵖ ⥤ Type w) {X : C} (x : F.obj (op X)) : Prop where
   map_bijective {Y : C} : Function.Bijective (fun f : Y ⟶ X => F.map f.op x)
@@ -79,7 +79,7 @@ lemma IsRepresentedBy.iff_isIso_uliftYonedaEquiv
   rw [isIso_iff_bijective]; rw [← Function.Bijective.of_comp_iff _ Equiv.ulift.{w}.symm.bijective]; rw [← Function.Bijective.of_comp_iff' Equiv.ulift.{v}.bijective]
 
 中文:
-引理 IsRepresentedBy.iff_isIso_uliftYonedaEquiv
+引理 是RepresentedBy.iff_isIso_uliftYonedaEquiv
   证明: by
   rw [isRepresentedBy_iff]; rw [NatTrans.isIso_iff_isIso_app]; rw [Opposite.op_surjective.forall]
   refine forall_congr' fun Y => ?_
@@ -109,8 +109,8 @@ definition IsRepresentedBy.uliftYonedaIso
 asIso (uliftYonedaEquiv (F := F ⋙ uliftFunctor.{v})).symm ⟨x⟩
 
 中文:
-定义 IsRepresentedBy.uliftYonedaIso
-  签名: (h : F.IsRepresentedBy x)
+定义 是RepresentedBy.uliftYonedaIso
+  签名: (h : F.是RepresentedBy x)
   定义体: haveI : IsIso ((uliftYonedaEquiv (F := F ⋙ uliftFunctor.{v})).symm ⟨x⟩) := by
     rwa [IsRepresentedBy.iff_isIso_uliftYonedaEquiv] at h
 asIso (uliftYonedaEquiv (F := F ⋙ uliftFunctor.{v})).symm ⟨x⟩
@@ -135,8 +135,8 @@ definition IsRepresentedBy.representableBy
 @[simp]
 
 中文:
-定义 IsRepresentedBy.representableBy
-  签名: (h : F.IsRepresentedBy x)
+定义 是RepresentedBy.representableBy
+  签名: (h : F.是RepresentedBy x)
   定义体: Functor.representableByUliftFunctorEquiv.{v}
     ((RepresentableBy.equivUliftYonedaIso _ _).symm <| h.uliftYonedaIso)
 
@@ -159,8 +159,8 @@ lemma IsRepresentedBy.representableBy_homEquiv_apply
   proof: rfl
 
 中文:
-引理 IsRepresentedBy.representableBy_homEquiv_apply
-  结论: (h : F.IsRepresentedBy x)
+引理 是RepresentedBy.representableBy_homEquiv_apply
+  结论: (h : F.是RepresentedBy x)
   证明: rfl
 -/
 lemma IsRepresentedBy.representableBy_homEquiv_apply (h : F.IsRepresentedBy x)
@@ -185,8 +185,8 @@ lemma RepresentableBy.isRepresentedBy
   simpa [uliftYonedaEquiv] using (homEquiv_eq _ _).symm
 
 中文:
-引理 RepresentableBy.isRepresentedBy
-  条件: (R : F.RepresentableBy X)
+引理 可表示.isRepresentedBy
+  条件: (R : F.可表示 X)
   证明: by
   rw [IsRepresentedBy.iff_isIso_uliftYonedaEquiv]
   convert!
@@ -214,7 +214,7 @@ lemma IsRepresentedBy.iff_exists_representableBy
   proof: ⟨fun h => ⟨h.representableBy, by simp⟩, fun ⟨R, h⟩ => h ▸ R.isRepresentedBy⟩
 
 中文:
-引理 IsRepresentedBy.iff_exists_representableBy
+引理 是RepresentedBy.iff_存在_representableBy
   证明: ⟨fun h => ⟨h.representableBy, by simp⟩, fun ⟨R, h⟩ => h ▸ R.isRepresentedBy⟩
 
 Depends on / 依赖: R.isRepresentedBy, h.representableBy, isRepresentedBy, representableBy
@@ -235,8 +235,8 @@ lemma IsRepresentedBy.of_natIso
   simp [RepresentableBy.ofIso]
 
 中文:
-引理 IsRepresentedBy.of_natIso
-  结论: (h : F.IsRepresentedBy x) {F' : Cᵒᵖ ⥤ Type w}
+引理 是RepresentedBy.of_natIso
+  结论: (h : F.是RepresentedBy x) {F' : Cᵒᵖ ⥤ 类型 w}
   证明: by
   rw [iff_exists_representableBy]
   use h.representableBy.ofIso e
@@ -260,8 +260,8 @@ lemma IsRepresentedBy.iff_natIso
   proof: ⟨fun h => by simpa using h.of_natIso e.symm, fun h => .of_natIso h _⟩
 
 中文:
-引理 IsRepresentedBy.iff_natIso
-  条件: {F' : Cᵒᵖ ⥤ Type w} (e : F ≅ F')
+引理 是RepresentedBy.iff_natIso
+  条件: {F' : Cᵒᵖ ⥤ 类型 w} (e : F ≅ F')
   证明: ⟨fun h => by simpa using h.of_natIso e.symm, fun h => .of_natIso h _⟩
 
 Depends on / 依赖: e.symm, h.of_natIso, of_natIso
@@ -282,8 +282,8 @@ lemma IsRepresentedBy.of_isoObj
   simp
 
 中文:
-引理 IsRepresentedBy.of_isoObj
-  条件: (h : F.IsRepresentedBy x) {Y : C} (e : Y ≅ X)
+引理 是RepresentedBy.of_isoObj
+  条件: (h : F.是RepresentedBy x) {Y : C} (e : Y ≅ X)
   证明: by
   rw [iff_exists_representableBy]
   use h.representableBy.ofIsoObj e
@@ -310,7 +310,7 @@ lemma IsRepresentedBy.iff_of_isoObj
   exact this ▸ .of_isoObj h e.symm
 
 中文:
-引理 IsRepresentedBy.iff_of_isoObj
+引理 是RepresentedBy.iff_of_isoObj
   条件: {Y : C} (e : Y ≅ X)
   证明: by
   refine ⟨fun h => ?_, fun h => h.of_isoObj e⟩
@@ -337,9 +337,9 @@ lemma IsRepresentedBy.of_isRepresentable
   proof: F.representableBy.isRepresentedBy
 
 中文:
-引理 IsRepresentedBy.of_isRepresentable
-  条件: [F.IsRepresentable]
-  结论: F.IsRepresentedBy F.reprx
+引理 是RepresentedBy.of_isRepresentable
+  条件: [F.是Representable]
+  结论: F.是RepresentedBy F.reprx
   证明: F.representableBy.isRepresentedBy
 
 Depends on / 依赖: F.representableBy.isRepresentedBy, isRepresentedBy, representableBy
@@ -356,7 +356,7 @@ lemma IsRepresentable.iff_exists_isRepresentedBy
     fun ⟨_, _, h⟩ => h.representableBy.isRepresentable⟩
 
 中文:
-引理 IsRepresentable.iff_exists_isRepresentedBy
+引理 是Representable.iff_存在_isRepresentedBy
   证明: ⟨fun _ => ⟨F.reprX, F.reprx, .of_isRepresentable⟩,
     fun ⟨_, _, h⟩ => h.representableBy.isRepresentable⟩
 

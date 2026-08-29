@@ -53,7 +53,7 @@ definition succNthValUnits
 
 中文:
 定义 succNthValUnits
-  签名: (n : 自然数) (a : Units k) (A : 𝕎 k) (bs : Fin (n + 1) -> k)
+  签名: (n : 自然数) (a : 单位群 k) (A : 𝕎 k) (bs : 有限集 (n + 1) -> k)
   定义体: -↑(a⁻¹ ^ p ^ (n + 1)) *
     (A.coeff (n + 1) * ↑(a⁻¹ ^ p ^ (n + 1)) + nthRemainder p n (truncateFun (n + 1) A) bs)
 
@@ -72,7 +72,7 @@ definition inverseCoeff
 
 中文:
 定义 inverseCoeff
-  签名: (a : Units k) (A : 𝕎 k)
+  签名: (a : 单位群 k) (A : 𝕎 k)
 -/
 noncomputable def inverseCoeff (a : Units k) (A : 𝕎 k) : Nat -> k
   | 0 => ↑a⁻¹
@@ -94,7 +94,7 @@ definition mkUnit
 
 中文:
 定义 mkUnit
-  签名: {a : Units k} {A : 𝕎 k} (hA : A.coeff 0 = a)
+  签名: {a : 单位群 k} {A : 𝕎 k} (hA : A.coeff 0 = a)
   定义体: Units.mkOfMulEqOne A (@WittVector.mk' p _ (inverseCoeff a A)) (by
     ext n
     induction n with
@@ -133,7 +133,7 @@ theorem coe_mkUnit
 
 中文:
 定理 coe_mkUnit
-  条件: {a : Units k} {A : 𝕎 k} (hA : A.coeff 0 = a)
+  条件: {a : 单位群 k} {A : 𝕎 k} (hA : A.coeff 0 = a)
   结论: (mkUnit hA : 𝕎 k) = A
   证明: rfl
 -/
@@ -161,7 +161,7 @@ theorem isUnit_of_coeff_zero_ne_zero
 中文:
 定理 isUnit_of_coeff_zero_ne_zero
   条件: (x : 𝕎 k) (hx : x.coeff 0 != 0)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: by
   let y : kˣ := Units.mk0 (x.coeff 0) hx
   have hy : x.coeff 0 = y := rfl
@@ -193,7 +193,7 @@ theorem irreducible
 
 中文:
 定理 irreducible
-  结论: Irreducible (p : 𝕎 k)
+  结论: 不可约 (p : 𝕎 k)
   证明: by
   have hp : ¬IsUnit (p : 𝕎 k) := by
     intro hp
@@ -243,7 +243,7 @@ theorem exists_eq_pow_p_mul
   simp only [Function.comp_apply] at t
 
 中文:
-定理 exists_eq_pow_p_mul
+定理 存在_eq_pow_p_mul
   条件: (a : 𝕎 k) (ha : a != 0)
   证明: by
   obtain ⟨m, c, hc, hcm⟩ := WittVector.verschiebung_nonzero ha
@@ -289,7 +289,7 @@ theorem exists_eq_pow_p_mul'
   exact ⟨m, mkUnit hb₀, h₂⟩
 
 中文:
-定理 exists_eq_pow_p_mul'
+定理 存在_eq_pow_p_mul'
   条件: (a : 𝕎 k) (ha : a != 0)
   证明: by
   obtain ⟨m, b, h₁, h₂⟩ := exists_eq_pow_p_mul a ha
@@ -319,7 +319,7 @@ instance isDiscreteValuationRing
 
 中文:
 实例 isDiscreteValuationRing
-  签名: : IsDiscreteValuationRing (𝕎 k)
+  签名: : 是离散赋值环 (𝕎 k)
   定义体: IsDiscreteValuationRing.ofHasUnitMulPowIrreducibleFactorization (by
     refine ⟨p, irreducible p, fun {x} hx => ?_⟩
     obtain ⟨n, b, hb⟩ := exists_eq_pow_p_mul' x hx

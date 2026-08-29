@@ -50,7 +50,7 @@ definition doublyStochastic
 
 中文:
 定义 doublyStochastic
-  签名: (R n : 类型) [Fintype n] [DecidableEq n] [Semiring R] [PartialOrder R]
+  签名: (R n : 类型) [有限类型 n] [DecidableEq n] [半环 R] [偏序 R]
   定义体: {M | (forall i j, 0 <= M i j) ∧ M *ᵥ 1 = 1 ∧ 1 ᵥ* M = 1 }
   mul_mem' {M N} hM hN := by
     refine ⟨fun i j => sum_nonneg fun i _ => mul_nonneg (hM.1 _ _) (hN.1 _ _), ?_, ?_⟩
@@ -147,7 +147,7 @@ lemma mem_doublyStochastic_iff_mem_rowStochastic_and_mem_colStochastic
 
 中文:
 引理 mem_doublyStochastic_iff_mem_rowStochastic_and_mem_colStochastic
-  条件: {M : Matrix n n R}
+  条件: {M : 矩阵 n n R}
   证明: by
   rw [doublyStochastic_eq_rowStochastic_inf_colStochastic]; rw [Submonoid.mem_inf]
 
@@ -292,7 +292,7 @@ lemma convex_doublyStochastic
 
 中文:
 引理 convex_doublyStochastic
-  结论: Convex R (doublyStochastic R n : Set (Matrix n n R))
+  结论: 凸 R (doublyStochastic R n : 集合 (矩阵 n n R))
   证明: by
   intro x hx y hy a b ha hb h
   simp only [SetLike.mem_coe, mem_doublyStochastic_iff_sum] at hx hy ⊢
@@ -317,7 +317,7 @@ lemma permMatrix_mem_doublyStochastic
 
 中文:
 引理 permMatrix_mem_doublyStochastic
-  条件: {σ : Equiv.Perm n}
+  条件: {σ : 等价.置换 n}
   证明: by grind
 -/
 lemma permMatrix_mem_doublyStochastic {σ : Equiv.Perm n} :
@@ -352,7 +352,7 @@ lemma reindex_mem_doublyStochastic
 
 中文:
 引理 reindex_mem_doublyStochastic
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {M : Matrix n n R}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {M : 矩阵 n n R}
   证明: by
   grind
 -/
@@ -373,7 +373,7 @@ lemma reindex_mem_doublyStochastic_iff
 
 中文:
 引理 reindex_mem_doublyStochastic_iff
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {M : Matrix n n R}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {M : 矩阵 n n R}
   证明: by
   grind
 -/
@@ -393,7 +393,7 @@ lemma sum_mulVec_of_mem_doublyStochastic
 
 中文:
 引理 sum_mulVec_of_mem_doublyStochastic
-  结论: {M : Matrix n n R} {x : n -> R}
+  结论: {M : 矩阵 n n R} {x : n -> R}
   证明: by
   apply sum_mulVec_of_mem_colStochastic
   grind
@@ -429,8 +429,8 @@ lemma exists_mem_doublyStochastic_eq_smul_iff
     simp only [zero_sm
 
 中文:
-引理 exists_mem_doublyStochastic_eq_smul_iff
-  条件: {M : Matrix n n R} {s : R} (hs : 0 <= s)
+引理 存在_mem_doublyStochastic_eq_smul_iff
+  条件: {M : 矩阵 n n R} {s : R} (hs : 0 <= s)
   证明: by
   constructor
   case mp =>

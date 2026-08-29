@@ -64,8 +64,8 @@ structure IsAddFundamentalDomain
     - ae_covers : forallᵐ x ∂μ, exists g : G, g +ᵥ x in s
 
 中文:
-结构 IsAddFundamentalDomain
-  参数: (G : 类型) {α : 类型} [Zero G] [VAdd G α] [MeasurableSpace α]
+结构 是加法FundamentalDomain
+  参数: (G : 类型) {α : 类型} [零 G] [向量加法 G α] [可测空间 α]
   公理与运算 (2 个):
     - nullMeasurableSet : NullMeasurableSet s μ
     - ae_covers : 对任意ᵐ x ∂μ, 存在 g : G, g +ᵥ x in s
@@ -93,8 +93,8 @@ structure IsFundamentalDomain
     - ae_covers : forallᵐ x ∂μ, exists g : G, g • x in s
 
 中文:
-结构 IsFundamentalDomain
-  参数: (G : 类型) {α : 类型} [One G] [SMul G α] [MeasurableSpace α]
+结构 是FundamentalDomain
+  参数: (G : 类型) {α : 类型} [幺 G] [标量乘法 G α] [可测空间 α]
   公理与运算 (2 个):
     - nullMeasurableSet : NullMeasurableSet s μ
     - ae_covers : 对任意ᵐ x ∂μ, 存在 g : G, g • x in s
@@ -205,7 +205,7 @@ theorem mk_of_measure_univ_le
 
 中文:
 定理 mk_of_measure_univ_le
-  结论: [IsFiniteMeasure μ] [Countable G] (h_meas : NullMeasurableSet s μ)
+  结论: [是有限测度 μ] [可数 G] (h_meas : NullMeasurableSet s μ)
   证明: have aedisjoint : Pairwise (AEDisjoint μ on fun g : G => g • s) :=
     pairwise_aedisjoint_of_aedisjoint_forall_ne_one h_ae_disjoint h_qmp
   { nullMeasurableSet := h_meas
@@ -249,7 +249,7 @@ theorem iUnion_smul_ae_eq
 
 中文:
 定理 iUnion_smul_ae_eq
-  条件: (h : IsFundamentalDomain G s μ)
+  条件: (h : 是FundamentalDomain G s μ)
   结论: ⋃ g : G, g • s =ᵐ[μ] univ
   证明: eventuallyEq_univ.2 h.ae_covers.mono fun _ ⟨g, hg⟩ =>
     mem_iUnion.2 ⟨g⁻¹, _, hg, inv_smul_smul _ _⟩
@@ -280,7 +280,7 @@ theorem measure_ne_zero
 
 中文:
 定理 measure_ne_zero
-  结论: [Countable G] [SMulInvariantMeasure G α μ]
+  结论: [可数 G] [标量乘不变测度 G α μ]
   证明: by
   have hc := measure_univ_pos.mpr hμ
   contrapose! hc
@@ -313,7 +313,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: (h : IsFundamentalDomain G s μ) {ν : Measure α} (hle : ν ≪ μ)
+  条件: (h : 是FundamentalDomain G s μ) {ν : 测度 α} (hle : ν ≪ μ)
   证明: ⟨h.1.mono_ac hle, hle h.2, h.aedisjoint.mono fun _ _ h => hle h⟩
 
 @[to_additive]
@@ -341,7 +341,7 @@ theorem preimage_of_equiv
 
 中文:
 定理 preimage_of_equiv
-  结论: {ν : Measure β} (h : IsFundamentalDomain G s μ) {f : β -> α}
+  结论: {ν : 测度 β} (h : 是FundamentalDomain G s μ) {f : β -> α}
   证明: h.nullMeasurableSet.preimage hf
   ae_covers := (hf.ae h.ae_covers).mono fun x ⟨g, hg⟩ => ⟨e g, by rwa [mem_preimage, hef g x]⟩
   aedisjoint a b hab := by
@@ -382,7 +382,7 @@ theorem image_of_equiv
 
 中文:
 定理 image_of_equiv
-  结论: {ν : Measure β} (h : IsFundamentalDomain G s μ) (f : α ≃ β)
+  结论: {ν : 测度 β} (h : 是FundamentalDomain G s μ) (f : α ≃ β)
   证明: by
   rw [f.image_eq_preimage_symm]
   refine h.preimage_of_equiv hf e.symm.bijective fun g x => ?_
@@ -414,7 +414,7 @@ theorem pairwise_aedisjoint_of_ac
 
 中文:
 定理 pairwise_aedisjoint_of_ac
-  条件: {ν} (h : IsFundamentalDomain G s μ) (hν : ν ≪ μ)
+  条件: {ν} (h : 是FundamentalDomain G s μ) (hν : ν ≪ μ)
   证明: h.aedisjoint.mono fun _ _ H => hν H
 
 @[to_additive]
@@ -437,7 +437,7 @@ theorem smul_of_comm
 
 中文:
 定理 smul_of_comm
-  结论: {G' : 类型} [Group G'] [MulAction G' α]
+  结论: {G' : 类型} [群 G'] [乘法作用 G' α]
   证明: h.image_of_equiv (MulAction.toPerm g) (measurePreserving_smul _ _).quasiMeasurePreserving
 (Equiv.refl _) smul_comm g
 
@@ -464,7 +464,7 @@ theorem nullMeasurableSet_smul
 
 中文:
 定理 nullMeasurableSet_smul
-  条件: (h : IsFundamentalDomain G s μ) (g : G)
+  条件: (h : 是FundamentalDomain G s μ) (g : G)
   证明: h.nullMeasurableSet.smul g
 
 @[to_additive]
@@ -488,7 +488,7 @@ theorem restrict_restrict
 
 中文:
 定理 restrict_restrict
-  条件: (h : IsFundamentalDomain G s μ) (g : G) (t : Set α)
+  条件: (h : 是FundamentalDomain G s μ) (g : G) (t : 集合 α)
   证明: restrict_restrict₀ ((h.nullMeasurableSet_smul g).mono restrict_le_self)
 
 @[to_additive]
@@ -514,8 +514,8 @@ theorem smul
 
 中文:
 定理 smul
-  条件: (h : IsFundamentalDomain G s μ) (g : G)
-  结论: IsFundamentalDomain G (g • s) μ
+  条件: (h : 是FundamentalDomain G s μ) (g : G)
+  结论: 是FundamentalDomain G (g • s) μ
   证明: h.image_of_equiv (MulAction.toPerm g) (measurePreserving_smul _ _).quasiMeasurePreserving
     ⟨fun g' => g⁻¹ * g' * g, fun g' => g * g' * g⁻¹, fun g' => by simp [mul_assoc], fun g' => by
       simp [mul_assoc]⟩
@@ -546,7 +546,7 @@ theorem sum_restrict_of_ac
 
 中文:
 定理 sum_restrict_of_ac
-  条件: (h : IsFundamentalDomain G s μ) (hν : ν ≪ μ)
+  条件: (h : 是FundamentalDomain G s μ) (hν : ν ≪ μ)
   证明: by
   rw [← restrict_iUnion_ae (h.aedisjoint.mono fun i j h => hν h) fun g =>
       (h.nullMeasurableSet_smul g).mono_ac hν]; rw [restrict_congr_set (hν h.iUnion_smul_ae_eq)]; rw [restrict_univ]
@@ -574,7 +574,7 @@ theorem lintegral_eq_tsum_of_ac
 
 中文:
 定理 lintegral_eq_tsum_of_ac
-  条件: (h : IsFundamentalDomain G s μ) (hν : ν ≪ μ) (f : α -> 实数>=0∞)
+  条件: (h : 是FundamentalDomain G s μ) (hν : ν ≪ μ) (f : α -> 实数>=0∞)
   证明: by
   rw [← lintegral_sum_measure]; rw [h.sum_restrict_of_ac hν]
 
@@ -600,8 +600,8 @@ theorem sum_restrict
 
 中文:
 定理 sum_restrict
-  条件: (h : IsFundamentalDomain G s μ)
-  结论: (sum fun g : G => μ.restrict (g • s)) = μ
+  条件: (h : 是FundamentalDomain G s μ)
+  结论: (求和 fun g : G => μ.restrict (g • s)) = μ
   证明: h.sum_restrict_of_ac (refl _)
 
 @[to_additive]
@@ -624,7 +624,7 @@ theorem lintegral_eq_tsum
 
 中文:
 定理 lintegral_eq_tsum
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> 实数>=0∞)
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> 实数>=0∞)
   证明: h.lintegral_eq_tsum_of_ac (refl _) f
 
 @[to_additive]
@@ -650,7 +650,7 @@ _ = ∑' g : G, ∫⁻ x in s, f (g⁻¹ • x) ∂μ := tsum_congr fun g => Eq.
 
 中文:
 定理 lintegral_eq_tsum'
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> 实数>=0∞)
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> 实数>=0∞)
   证明: calc
     ∫⁻ x, f x ∂μ = ∑' g : G, ∫⁻ x in g • s, f x ∂μ := h.lintegral_eq_tsum f
     _ = ∑' g : G, ∫⁻ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
@@ -679,7 +679,7 @@ lemma lintegral_eq_tsum''
 
 中文:
 引理 lintegral_eq_tsum''
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> 实数>=0∞)
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> 实数>=0∞)
   证明: (lintegral_eq_tsum' h f).trans ((Equiv.inv G).tsum_eq (fun g => ∫⁻ (x : α) in s, f (g • x) ∂μ))
 
 @[to_additive]
@@ -703,8 +703,8 @@ theorem setLIntegral_eq_tsum
 @[to_additive]
 
 中文:
-定理 setLIntegral_eq_tsum
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> 实数>=0∞) (t : Set α)
+定理 setL整数egral_eq_tsum
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> 实数>=0∞) (t : 集合 α)
   证明: calc
     ∫⁻ x in t, f x ∂μ = ∑' g : G, ∫⁻ x in g • s, f x ∂μ.restrict t :=
       h.lintegral_eq_tsum_of_ac restrict_le_self.absolutelyContinuous _
@@ -735,8 +735,8 @@ theorem setLIntegral_eq_tsum'
 _ = ∑' g : G,
 
 中文:
-定理 setLIntegral_eq_tsum'
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> 实数>=0∞) (t : Set α)
+定理 setL整数egral_eq_tsum'
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> 实数>=0∞) (t : 集合 α)
   证明: calc
     ∫⁻ x in t, f x ∂μ = ∑' g : G, ∫⁻ x in t inter g • s, f x ∂μ := h.setLIntegral_eq_tsum f t
     _ = ∑' g : G, ∫⁻ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
@@ -771,7 +771,7 @@ theorem measure_eq_tsum_of_ac
 
 中文:
 定理 measure_eq_tsum_of_ac
-  条件: (h : IsFundamentalDomain G s μ) (hν : ν ≪ μ) (t : Set α)
+  条件: (h : 是FundamentalDomain G s μ) (hν : ν ≪ μ) (t : 集合 α)
   证明: by
   have H : ν.restrict t ≪ μ := Measure.restrict_le_self.absolutelyContinuous.trans hν
   simpa only [setLIntegral_one, Pi.one_def,
@@ -802,7 +802,7 @@ theorem measure_eq_tsum'
 
 中文:
 定理 measure_eq_tsum'
-  条件: (h : IsFundamentalDomain G s μ) (t : Set α)
+  条件: (h : 是FundamentalDomain G s μ) (t : 集合 α)
   证明: h.measure_eq_tsum_of_ac AbsolutelyContinuous.rfl t
 
 @[to_additive]
@@ -827,7 +827,7 @@ theorem measure_eq_tsum
 
 中文:
 定理 measure_eq_tsum
-  条件: (h : IsFundamentalDomain G s μ) (t : Set α)
+  条件: (h : 是FundamentalDomain G s μ) (t : 集合 α)
   证明: by
   simpa only [setLIntegral_one] using h.setLIntegral_eq_tsum' (fun _ => 1) t
 
@@ -851,7 +851,7 @@ theorem measure_zero_of_invariant
 
 中文:
 定理 measure_zero_of_invariant
-  结论: (h : IsFundamentalDomain G s μ) (t : Set α)
+  结论: (h : 是FundamentalDomain G s μ) (t : 集合 α)
   证明: by
   rw [measure_eq_tsum h]; simp [ht, hts]
 
@@ -882,7 +882,7 @@ theorem measure_eq_card_smul_of_smul_ae_eq_self
 
 中文:
 定理 measure_eq_card_smul_of_smul_ae_eq_self
-  结论: [Finite G] (h : IsFundamentalDomain G s μ)
+  结论: [有限 G] (h : 是FundamentalDomain G s μ)
   证明: by
   have : Fintype G := Fintype.ofFinite G
   rw [h.measure_eq_tsum]
@@ -917,8 +917,8 @@ theorem setLIntegral_eq
 @[to_additive]
 
 中文:
-定理 setLIntegral_eq
-  结论: (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
+定理 setL整数egral_eq
+  结论: (hs : 是FundamentalDomain G s μ) (ht : 是FundamentalDomain G t μ)
   证明: calc
     ∫⁻ x in s, f x ∂μ = ∑' g : G, ∫⁻ x in s inter g • t, f x ∂μ := ht.setLIntegral_eq_tsum _ _
     _ = ∑' g : G, ∫⁻ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_comm]
@@ -950,7 +950,7 @@ theorem measure_set_eq
 
 中文:
 定理 measure_set_eq
-  结论: (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ) {A : Set α}
+  结论: (hs : 是FundamentalDomain G s μ) (ht : 是FundamentalDomain G t μ) {A : 集合 α}
   证明: by
   have : ∫⁻ x in s, A.indicator 1 x ∂μ = ∫⁻ x in t, A.indicator 1 x ∂μ := by
     refine hs.setLIntegral_eq ht (Set.indicator A fun _ => 1) fun g x => ?_
@@ -984,7 +984,7 @@ theorem measure_eq
 
 中文:
 定理 measure_eq
-  条件: (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
+  条件: (hs : 是FundamentalDomain G s μ) (ht : 是FundamentalDomain G t μ)
   证明: by
   simpa only [setLIntegral_one] using hs.setLIntegral_eq ht (fun _ => 1) fun _ _ => rfl
 
@@ -1010,7 +1010,7 @@ theorem aestronglyMeasurable_on_iff
 
 中文:
 定理 aestronglyMeasurable_on_iff
-  结论: {β : 类型} [TopologicalSpace β]
+  结论: {β : 类型} [拓扑空间 β]
   证明: calc
     AEStronglyMeasurable f (μ.restrict s) ↔
         AEStronglyMeasurable f (Measure.sum fun g : G => μ.restrict (g • t inter s)) := by
@@ -1057,8 +1057,8 @@ theorem hasFiniteIntegral_on_iff
 @[to_additive]
 
 中文:
-定理 hasFiniteIntegral_on_iff
-  结论: (hs : IsFundamentalDomain G s μ)
+定理 hasFinite整数egral_on_iff
+  结论: (hs : 是FundamentalDomain G s μ)
   证明: by
   dsimp only [HasFiniteIntegral]
   rw [hs.setLIntegral_eq ht]
@@ -1084,7 +1084,7 @@ theorem integrableOn_iff
 
 中文:
 定理 integrableOn_iff
-  结论: (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
+  结论: (hs : 是FundamentalDomain G s μ) (ht : 是FundamentalDomain G t μ)
   证明: and_congr (hs.aestronglyMeasurable_on_iff ht hf) (hs.hasFiniteIntegral_on_iff ht hf)
 -/
 protected theorem integrableOn_iff (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
@@ -1109,7 +1109,7 @@ theorem integral_eq_tsum_of_ac
 
 中文:
 定理 integral_eq_tsum_of_ac
-  结论: (h : IsFundamentalDomain G s μ) (hν : ν ≪ μ) (f : α -> E)
+  结论: (h : 是FundamentalDomain G s μ) (hν : ν ≪ μ) (f : α -> E)
   证明: by
   rw [← MeasureTheory.integral_sum_measure]; rw [h.sum_restrict_of_ac hν]
   rw [h.sum_restrict_of_ac hν]
@@ -1138,7 +1138,7 @@ theorem integral_eq_tsum
 
 中文:
 定理 integral_eq_tsum
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> E) (hf : 整数egrable f μ)
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> E) (hf : 可积 f μ)
   证明: integral_eq_tsum_of_ac h (by rfl) f hf
 
 @[to_additive]
@@ -1164,7 +1164,7 @@ theorem integral_eq_tsum'
 
 中文:
 定理 integral_eq_tsum'
-  条件: (h : IsFundamentalDomain G s μ) (f : α -> E) (hf : 整数egrable f μ)
+  条件: (h : 是FundamentalDomain G s μ) (f : α -> E) (hf : 可积 f μ)
   证明: calc
     ∫ x, f x ∂μ = ∑' g : G, ∫ x in g • s, f x ∂μ := h.integral_eq_tsum f hf
     _ = ∑' g : G, ∫ x in g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
@@ -1193,7 +1193,7 @@ lemma integral_eq_tsum''
 
 中文:
 引理 integral_eq_tsum''
-  结论: (h : IsFundamentalDomain G s μ)
+  结论: (h : 是FundamentalDomain G s μ)
   证明: (integral_eq_tsum' h f hf).trans ((Equiv.inv G).tsum_eq (fun g => ∫ (x : α) in s, f (g • x) ∂μ))
 
 @[to_additive]
@@ -1218,8 +1218,8 @@ theorem setIntegral_eq_tsum
 @[to_additive]
 
 中文:
-定理 setIntegral_eq_tsum
-  结论: (h : IsFundamentalDomain G s μ) {f : α -> E} {t : Set α}
+定理 set整数egral_eq_tsum
+  结论: (h : 是FundamentalDomain G s μ) {f : α -> E} {t : 集合 α}
   证明: calc
     ∫ x in t, f x ∂μ = ∑' g : G, ∫ x in g • s, f x ∂μ.restrict t :=
       h.integral_eq_tsum_of_ac restrict_le_self.absolutelyContinuous f hf
@@ -1252,8 +1252,8 @@ theorem setIntegral_eq_tsum'
     _ = ∑' g : G, ∫
 
 中文:
-定理 setIntegral_eq_tsum'
-  结论: (h : IsFundamentalDomain G s μ) {f : α -> E} {t : Set α}
+定理 set整数egral_eq_tsum'
+  结论: (h : 是FundamentalDomain G s μ) {f : α -> E} {t : 集合 α}
   证明: calc
     ∫ x in t, f x ∂μ = ∑' g : G, ∫ x in t inter g • s, f x ∂μ := h.setIntegral_eq_tsum hf
     _ = ∑' g : G, ∫ x in t inter g⁻¹ • s, f x ∂μ := ((Equiv.inv G).tsum_eq _).symm
@@ -1287,8 +1287,8 @@ theorem setIntegral_eq
       _ = ∑' g : G, ∫ x in g • t inter s, f (g⁻¹ • x) ∂μ := by simp only [hf, inter_co
 
 中文:
-定理 setIntegral_eq
-  结论: (hs : IsFundamentalDomain G s μ) (ht : IsFundamentalDomain G t μ)
+定理 set整数egral_eq
+  结论: (hs : 是FundamentalDomain G s μ) (ht : 是FundamentalDomain G t μ)
   证明: by
   by_cases hfs : IntegrableOn f s μ
   · have hft : IntegrableOn f t μ := by rwa [ht.integrableOn_iff hs hf]
@@ -1327,7 +1327,7 @@ _ = μ (⋃ g : G, g • t inter s) := Eq.symm measure_iUnion₀ hd fun _ =>
 
 中文:
 定理 measure_le_of_pairwise_disjoint
-  结论: (hs : IsFundamentalDomain G s μ)
+  结论: (hs : 是FundamentalDomain G s μ)
   证明: calc
     μ t = ∑' g : G, μ (g • t inter s) := hs.measure_eq_tsum t
 _ = μ (⋃ g : G, g • t inter s) := Eq.symm measure_iUnion₀ hd fun _ =>
@@ -1367,8 +1367,8 @@ theorem exists_ne_one_smul_eq
   refine ht x hx y hy (g₂⁻¹ * g₁) (mt i
 
 中文:
-定理 exists_ne_one_smul_eq
-  结论: (hs : IsFundamentalDomain G s μ) (htm : NullMeasurableSet t μ)
+定理 存在_ne_one_smul_eq
+  结论: (hs : 是FundamentalDomain G s μ) (htm : NullMeasurableSet t μ)
   证明: by
   contrapose! ht
   refine hs.measure_le_of_pairwise_disjoint htm (Pairwise.aedisjoint fun g₁ g₂ hne => ?_)
@@ -1413,7 +1413,7 @@ theorem essSup_measure_restrict
 
 中文:
 定理 essSup_measure_restrict
-  结论: (hs : IsFundamentalDomain G s μ) {f : α -> 实数>=0∞}
+  结论: (hs : 是FundamentalDomain G s μ) {f : α -> 实数>=0∞}
   证明: by
   refine le_antisymm (essSup_mono_measure' Measure.restrict_le_self) ?_
   rw [essSup_eq_sInf (μ.restrict s) f]; rw [essSup_eq_sInf μ f]
@@ -1459,7 +1459,7 @@ definition fundamentalFrontier
 
 中文:
 定义 fundamentalFrontier
-  签名: : Set α
+  签名: : 集合 α
   定义体: s inter ⋃ (g : G) (_ : g != 1), g • s
 -/
 def fundamentalFrontier : Set α :=
@@ -1477,8 +1477,8 @@ definition fundamentalInterior
   body: s \ ⋃ (g : G) (_ : g != 1), g • s
 
 中文:
-定义 fundamentalInterior
-  签名: : Set α
+定义 fundamental整数erior
+  签名: : 集合 α
   定义体: s \ ⋃ (g : G) (_ : g != 1), g • s
 -/
 def fundamentalInterior : Set α :=
@@ -1522,7 +1522,7 @@ theorem mem_fundamentalInterior
 @[to_additive MeasureTheory.addFundamentalFrontier_subset]
 
 中文:
-定理 mem_fundamentalInterior
+定理 mem_fundamental整数erior
   证明: by
   simp [fundamentalInterior]
 
@@ -1567,7 +1567,7 @@ theorem fundamentalInterior_subset
   proof: sdiff_subset
 
 中文:
-定理 fundamentalInterior_subset
+定理 fundamental整数erior_subset
   结论: fundamental整数erior G s subseteq s
   证明: sdiff_subset
 
@@ -1589,7 +1589,7 @@ theorem disjoint_fundamentalInterior_fundamentalFrontier
 @[to_additive (attr := simp) MeasureTheory.addFundamentalInterior_union_addFundamentalFrontier]
 
 中文:
-定理 disjoint_fundamentalInterior_fundamentalFrontier
+定理 disjoint_fundamental整数erior_fundamentalFrontier
   证明: disjoint_sdiff_self_left.mono_right inf_le_right
 
 @[to_additive (attr := simp) MeasureTheory.addFundamentalInterior_union_addFundamentalFrontier]
@@ -1611,7 +1611,7 @@ theorem fundamentalInterior_union_fundamentalFrontier
 @[to_additive (attr := simp) MeasureTheory.addFundamentalFrontier_union_addFundamentalInterior]
 
 中文:
-定理 fundamentalInterior_union_fundamentalFrontier
+定理 fundamental整数erior_union_fundamentalFrontier
   证明: sdiff_union_inter _ _
 
 @[to_additive (attr := simp) MeasureTheory.addFundamentalFrontier_union_addFundamentalInterior]
@@ -1633,7 +1633,7 @@ theorem fundamentalFrontier_union_fundamentalInterior
 @[to_additive (attr := simp) MeasureTheory.sdiff_addFundamentalInterior]
 
 中文:
-定理 fundamentalFrontier_union_fundamentalInterior
+定理 fundamentalFrontier_union_fundamental整数erior
   证明: inter_union_sdiff _ _
 
 @[to_additive (attr := simp) MeasureTheory.sdiff_addFundamentalInterior]
@@ -1656,7 +1656,7 @@ theorem sdiff_fundamentalInterior
 @[to_additive (attr := simp) MeasureTheory.sdiff_addFundamentalFrontier]
 
 中文:
-定理 sdiff_fundamentalInterior
+定理 sdiff_fundamental整数erior
   结论: s \ fundamental整数erior G s = fundamentalFrontier G s
   证明: sdiff_sdiff_right_self
 
@@ -1704,7 +1704,7 @@ theorem fundamentalFrontier_smul
 
 中文:
 定理 fundamentalFrontier_smul
-  条件: [Group H] [MulAction H α] [SMulCommClass H G α] (g : H)
+  条件: [群 H] [乘法作用 H α] [标量交换类 H G α] (g : H)
   证明: by
   simp_rw [fundamentalFrontier, smul_set_inter, smul_set_iUnion, smul_comm g (_ : G) (_ : Set α)]
 
@@ -1729,8 +1729,8 @@ theorem fundamentalInterior_smul
 @[to_additive MeasureTheory.pairwise_disjoint_addFundamentalInterior]
 
 中文:
-定理 fundamentalInterior_smul
-  条件: [Group H] [MulAction H α] [SMulCommClass H G α] (g : H)
+定理 fundamental整数erior_smul
+  条件: [群 H] [乘法作用 H α] [标量交换类 H G α] (g : H)
   证明: by
   simp_rw [fundamentalInterior, smul_set_sdiff, smul_set_iUnion, smul_comm g (_ : G) (_ : Set α)]
 
@@ -1757,7 +1757,7 @@ theorem pairwise_disjoint_fundamentalInterior
   · simpa [mul_smul, ← hxy, mem_inv_smul_set_iff] using hy.1
 
 中文:
-定理 pairwise_disjoint_fundamentalInterior
+定理 pairwise_disjoint_fundamental整数erior
   证明: by
   refine fun a b hab => disjoint_left.2 ?_
   rintro _ ⟨x, hx, rfl⟩ ⟨y, hy, hxy⟩
@@ -1812,7 +1812,7 @@ theorem NullMeasurableSet.fundamentalInterior
   proof: hs.diff .iUnion fun _ => .iUnion fun _ => hs.smul _
 
 中文:
-定理 NullMeasurableSet.fundamentalInterior
+定理 NullMeasurableSet.fundamental整数erior
   条件: (hs : NullMeasurableSet s μ)
   证明: hs.diff .iUnion fun _ => .iUnion fun _ => hs.smul _
 -/
@@ -1869,7 +1869,7 @@ theorem measure_fundamentalInterior
   proof: measure_sdiff_null' hs.measure_fundamentalFrontier
 
 中文:
-定理 measure_fundamentalInterior
+定理 measure_fundamental整数erior
   结论: μ (fundamental整数erior G s) = μ s
   证明: measure_sdiff_null' hs.measure_fundamentalFrontier
 
@@ -1897,8 +1897,8 @@ theorem fundamentalInterior
         ⋃ g : G, g⁻¹ • f
 
 中文:
-定理 fundamentalInterior
-  结论: IsFundamentalDomain G (fundamental整数erior G s) μ where
+定理 fundamental整数erior
+  结论: 是FundamentalDomain G (fundamental整数erior G s) μ where
   证明: hs.nullMeasurableSet.fundamentalInterior _ _
   ae_covers := by
     simp_rw [ae_iff, not_exists, ← mem_inv_smul_set_iff, ofPred_forall, ← compl_ofPred,
@@ -1951,7 +1951,7 @@ lemma measure_map_restrict_apply
 
 中文:
 引理 measure_map_restrict_apply
-  结论: (s : Set α) {U : Set (Quotient α_mod_G)}
+  结论: (s : 集合 α) {U : 集合 (商 α_mod_G)}
   证明: by
   rw [map_apply (f := π) (fun V hV => measurableSet_quotient.mp hV) meas_U]; rw [Measure.restrict_apply (t := (Quotient.mk α_mod_G ⁻¹' U)) (measurableSet_quotient.mp meas_U)]
 
@@ -1981,8 +1981,8 @@ lemma IsFundamentalDomain.quotientMeasure_eq
     have : Quotient.mk α_mod_G (g
 
 中文:
-引理 IsFundamentalDomain.quotientMeasure_eq
-  结论: [Countable G] {s t : Set α}
+引理 是FundamentalDomain.quotientMeasure_eq
+  结论: [可数 G] {s t : 集合 α}
   证明: by
   ext U meas_U
   rw [measure_map_restrict_apply (meas_U := meas_U)]; rw [measure_map_restrict_apply (meas_U := meas_U)]
@@ -2034,10 +2034,10 @@ class HasAddFundamentalDomain
     - ExistsIsAddFundamentalDomain : exists s : Set α, IsAddFundamentalDomain G s ν
 
 中文:
-类 HasAddFundamentalDomain
-  参数: (G α : 类型) [Zero G] [VAdd G α] [MeasurableSpace α]
+类 有加法FundamentalDomain
+  参数: (G α : 类型) [零 G] [向量加法 G α] [可测空间 α]
   公理与运算 (1 个):
-    - ExistsIsAddFundamentalDomain : 存在 s : Set α, IsAddFundamentalDomain G s ν
+    - ExistsIsAddFundamentalDomain : 存在 s : 集合 α, 是加法FundamentalDomain G s ν
 
 Depends on / 依赖: ExistsIsAddFundamentalDomain, IsAddFundamentalDomain, volume_tac
 -/
@@ -2055,10 +2055,10 @@ class HasFundamentalDomain
     - ExistsIsFundamentalDomain : exists (s : Set α), IsFundamentalDomain G s ν
 
 中文:
-类 HasFundamentalDomain
-  参数: (G : 类型) (α : 类型) [One G] [SMul G α] [MeasurableSpace α]
+类 有FundamentalDomain
+  参数: (G : 类型) (α : 类型) [幺 G] [标量乘法 G α] [可测空间 α]
   公理与运算 (1 个):
-    - ExistsIsFundamentalDomain : 存在 (s : Set α), IsFundamentalDomain G s ν
+    - ExistsIsFundamentalDomain : 存在 (s : 集合 α), 是FundamentalDomain G s ν
 
 Depends on / 依赖: ExistsIsFundamentalDomain, IsFundamentalDomain, volume_tac
 -/
@@ -2083,7 +2083,7 @@ definition covolume
 
 中文:
 定义 covolume
-  签名: (G α : 类型) [One G] [SMul G α] [MeasurableSpace α]
+  签名: (G α : 类型) [幺 G] [标量乘法 G α] [可测空间 α]
   定义体: if funDom : HasFundamentalDomain G α ν then ν funDom.ExistsIsFundamentalDomain.choose else 0
 
 Depends on / 依赖: ExistsIsFundamentalDomain, HasFundamentalDomain, funDom, funDom.ExistsIsFundamentalDomain.choose, volume_tac
@@ -2106,8 +2106,8 @@ lemma IsFundamentalDomain.hasFundamentalDomain
   proof: ⟨⟨s, fund_dom_s⟩⟩
 
 中文:
-引理 IsFundamentalDomain.hasFundamentalDomain
-  结论: (ν : Measure α) {s : Set α}
+引理 是FundamentalDomain.hasFundamentalDomain
+  结论: (ν : 测度 α) {s : 集合 α}
   证明: ⟨⟨s, fund_dom_s⟩⟩
 
 Depends on / 依赖: fund_dom_s
@@ -2132,8 +2132,8 @@ lemma IsFundamentalDomain.covolume_eq_volume
   exact (fund_dom_s.hasFundamentalDomain ν).ExistsIsFundamentalDomain.choose_spec
 
 中文:
-引理 IsFundamentalDomain.covolume_eq_volume
-  结论: (ν : Measure α) [Countable G]
+引理 是FundamentalDomain.covolume_eq_volume
+  结论: (ν : 测度 α) [可数 G]
   证明: by
   dsimp [covolume]
   simp only [(fund_dom_s.hasFundamentalDomain ν), ↓reduceDIte]
@@ -2185,10 +2185,10 @@ class AddQuotientMeasureEqMeasurePreimage
     - addProjection_respects_measure' : forall (t : Set α) (_ : IsAddFundamentalDomain G t ν), μ = (ν.restrict t).map π
 
 中文:
-类 AddQuotientMeasureEqMeasurePreimage
-  参数: (ν : Measure α := by volume_tac)
+类 加法QuotientMeasureEqMeasurePreimage
+  参数: (ν : 测度 α := by volume_tac)
   公理与运算 (1 个):
-    - addProjection_respects_measure' : 对任意 (t : Set α) (_ : IsAddFundamentalDomain G t ν), μ = (ν.restrict t).map π
+    - addProjection_respects_measure' : 对任意 (t : 集合 α) (_ : 是加法FundamentalDomain G t ν), μ = (ν.restrict t).map π
 
 Depends on / 依赖: IsAddFundamentalDomain, Measure, Quotient, addProjection_respects_measure, restrict, volume_tac
 -/
@@ -2216,9 +2216,9 @@ class QuotientMeasureEqMeasurePreimage
 
 中文:
 类 QuotientMeasureEqMeasurePreimage
-  参数: (ν : Measure α := by volume_tac)
+  参数: (ν : 测度 α := by volume_tac)
   公理与运算 (1 个):
-    - projection_respects_measure'((t : Set α)) : IsFundamentalDomain G t ν -> μ = (ν.restrict t).map π
+    - projection_respects_measure'((t : 集合 α)) : 是FundamentalDomain G t ν -> μ = (ν.restrict t).map π
 
 Depends on / 依赖: IsFundamentalDomain, Measure, Quotient, projection_respects_measure, restrict, volume_tac
 -/
@@ -2241,8 +2241,8 @@ lemma IsFundamentalDomain.projection_respects_measure
 @[to_additive addProjection_respects_measure_apply]
 
 中文:
-引理 IsFundamentalDomain.projection_respects_measure
-  结论: {ν : Measure α}
+引理 是FundamentalDomain.projection_respects_measure
+  结论: {ν : 测度 α}
   证明: i.projection_respects_measure' t fund_dom_t
 
 @[to_additive addProjection_respects_measure_apply]
@@ -2265,8 +2265,8 @@ lemma IsFundamentalDomain.projection_respects_measure_apply
   rw [fund_dom_t.projection_respects_measure (μ := μ)]; rw [measure_map_restrict_apply ν t meas_U]
 
 中文:
-引理 IsFundamentalDomain.projection_respects_measure_apply
-  结论: {ν : Measure α}
+引理 是FundamentalDomain.projection_respects_measure_apply
+  结论: {ν : 测度 α}
   证明: by
   rw [fund_dom_t.projection_respects_measure (μ := μ)]; rw [measure_map_restrict_apply ν t meas_U]
 
@@ -2323,7 +2323,7 @@ theorem IsFundamentalDomain.measurePreserving_quotient_mk
     rw [h𝓕.projection_respects_measure (μ := μ)]
 
 中文:
-定理 IsFundamentalDomain.measurePreserving_quotient_mk
+定理 是FundamentalDomain.measurePreserving_quotient_mk
   证明: measurable_quotient_mk' (s := α_mod_G)
   map_eq := by
     have : HasFundamentalDomain G α ν := ⟨𝓕, h𝓕⟩
@@ -2356,7 +2356,7 @@ lemma IsFundamentalDomain.quotientMeasureEqMeasurePreimage_quotientMeasure
   proof: by rw [fund_dom_s.quotientMeasure_eq _ fund_dom_t]
 
 中文:
-引理 IsFundamentalDomain.quotientMeasureEqMeasurePreimage_quotientMeasure
+引理 是FundamentalDomain.quotientMeasureEqMeasurePreimage_quotientMeasure
   证明: by rw [fund_dom_s.quotientMeasure_eq _ fund_dom_t]
 
 Depends on / 依赖: fund_dom_s, fund_dom_s.quotientMeasure_eq, fund_dom_t, quotientMeasure_eq
@@ -2380,8 +2380,8 @@ lemma IsFundamentalDomain.quotientMeasureEqMeasurePreimage
   simpa [h] using fund_dom_s.quotientMeasureEqMeasurePreimage_quotientMeasure
 
 中文:
-引理 IsFundamentalDomain.quotientMeasureEqMeasurePreimage
-  结论: {μ : Measure (Quotient α_mod_G)}
+引理 是FundamentalDomain.quotientMeasureEqMeasurePreimage
+  结论: {μ : 测度 (商 α_mod_G)}
   证明: by
   simpa [h] using fund_dom_s.quotientMeasureEqMeasurePreimage_quotientMeasure
 
@@ -2409,7 +2409,7 @@ theorem IsFundamentalDomain.quotientMeasureEqMeasurePreimage_of_zero
   rw [measure_map_restrict_apply (meas_U := meas_U)]
 
 中文:
-定理 IsFundamentalDomain.quotientMeasureEqMeasurePreimage_of_zero
+定理 是FundamentalDomain.quotientMeasureEqMeasurePreimage_of_zero
   证明: by
   apply fund_dom_s.quotientMeasureEqMeasurePreimage
   ext U meas_U
@@ -2587,8 +2587,8 @@ instance [SigmaFinite
   body: QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient (ν := (volume : Measure α)) (μ := μ)
 
 中文:
-实例 [SigmaFinite
-  签名: (volume : Measure α)] [HasFundamentalDomain G α]
+实例 [σ有限
+  签名: (volume : 测度 α)] [有FundamentalDomain G α]
   定义体: QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient (ν := (volume : Measure α)) (μ := μ)
 
 Depends on / 依赖: Measure, QuotientMeasureEqMeasurePreimage, QuotientMeasureEqMeasurePreimage.sigmaFiniteQuotient, sigmaFiniteQuotient, volume

@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (Action V G) TopCat
+  签名: 有Forget₂ (作用 V G) 顶元素范畴
   定义体: HasForget₂.trans (Action V G) V TopCat
 
 Depends on / 依赖: Action, TopCat
@@ -79,8 +79,8 @@ abbreviation IsContinuous
   body: ContinuousSMul G ((CategoryTheory.forget₂ _ TopCat).obj X)
 
 中文:
-缩写 IsContinuous
-  签名: (X : Action V G)
+缩写 是连续
+  签名: (X : 作用 V G)
   定义体: ContinuousSMul G ((CategoryTheory.forget₂ _ TopCat).obj X)
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.forget, ContinuousSMul, TopCat
@@ -98,7 +98,7 @@ lemma isContinuous_def
 
 中文:
 引理 isContinuous_def
-  条件: (X : Action V G)
+  条件: (X : 作用 V G)
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 lemma isContinuous_def (X : Action V G) :
@@ -120,7 +120,7 @@ abbreviation ContAction
 
 中文:
 缩写 ContAction
-  签名: : Type _
+  签名: : 类型 _
   定义体: ObjectProperty.FullSubcategory (IsContinuous (V := V) (G := G))
 
 Depends on / 依赖: FullSubcategory, IsContinuous, ObjectProperty, ObjectProperty.FullSubcategory
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (ContAction V G) V
+  签名: 有Forget₂ (ContAction V G) V
   定义体: HasForget₂.trans (ContAction V G) (Action V G) V
 
 Depends on / 依赖: Action, ContAction
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (ContAction V G) TopCat
+  签名: 有Forget₂ (ContAction V G) 顶元素范畴
   定义体: HasForget₂.trans (ContAction V G) (Action V G) TopCat
 
 Depends on / 依赖: Action, ContAction, TopCat
@@ -175,7 +175,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (ContAction V G) (Action V G)
+  签名: Coe (ContAction V G) (作用 V G)
   定义体: X.obj
 
 Depends on / 依赖: X.obj
@@ -194,7 +194,7 @@ abbreviation IsDiscrete
   body: DiscreteTopology ((CategoryTheory.forget₂ _ TopCat).obj X)
 
 中文:
-缩写 IsDiscrete
+缩写 是离散
   签名: (X : ContAction V G)
   定义体: DiscreteTopology ((CategoryTheory.forget₂ _ TopCat).obj X)
 
@@ -259,7 +259,7 @@ definition resComp
 
 中文:
 定义 resComp
-  签名: {K : 类型} [Monoid K] [TopologicalSpace K]
+  签名: {K : 类型} [幺半群 K] [拓扑空间 K]
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -346,7 +346,7 @@ deriving Category, ConcreteCategory
 
 中文:
 定义 DiscreteContAction
-  签名: : Type _
+  签名: : 类型 _
   定义体: ObjectProperty.FullSubcategory (IsDiscrete (V := V) (G := G))
 deriving Category, ConcreteCategory
 
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (DiscreteContAction V G) (ContAction V G)
+  签名: 有Forget₂ (DiscreteContAction V G) (ContAction V G)
   定义体: inferInstanceAs HasForget₂ (ObjectProperty.FullSubcategory _) _
 
 Depends on / 依赖: FullSubcategory, ObjectProperty, ObjectProperty.FullSubcategory
@@ -388,7 +388,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (DiscreteContAction V G) TopCat
+  签名: 有Forget₂ (DiscreteContAction V G) 顶元素范畴
   定义体: HasForget₂.trans (DiscreteContAction V G) (ContAction V G) TopCat
 
 Depends on / 依赖: ContAction, DiscreteContAction, TopCat
@@ -428,7 +428,7 @@ definition mapContAction
 
 中文:
 定义 mapContAction
-  签名: (F : V ⥤ W) (H : 对任意 X : ContAction V G, ((F.mapAction G).obj X.obj).IsContinuous)
+  签名: (F : V ⥤ W) (H : 对任意 X : ContAction V G, ((F.mapAction G).obj X.obj).是连续)
   定义体: ObjectProperty.lift _ (ObjectProperty.ι _ ⋙ F.mapAction G) H
 
 Depends on / 依赖: F.mapAction, ObjectProperty, ObjectProperty.lift, mapAction
@@ -451,7 +451,7 @@ definition mapContActionComp
 
 中文:
 定义 mapContActionComp
-  签名: {T : 类型} [Category* T]
+  签名: {T : 类型} [范畴* T]
   定义体: NatIso.ofComponents (fun _ => Iso.refl _)
 
 Depends on / 依赖: Iso.refl, NatIso, NatIso.ofComponents, ofComponents
@@ -509,7 +509,7 @@ definition Equivalence.mapContAction
   counitIso := (Functor.mapContActionComp G _ _ _ _).symm ≪≫
 
 中文:
-定义 Equivalence.mapContAction
+定义 等价.mapContAction
   签名: (E : V ≌ W)
   定义体: E.functor.mapContAction G H₁
   inverse := E.inverse.mapContAction G H₂

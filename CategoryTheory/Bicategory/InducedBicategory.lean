@@ -66,7 +66,7 @@ instance hasCoeToSort
 
 中文:
 实例 hasCoeToSort
-  签名: {α : Sort*} [CoeSort C α]
+  签名: {α : 类型层*} [CoeSort C α]
   定义体: ⟨fun c => F c⟩
 -/
 instance hasCoeToSort {α : Sort*} [CoeSort C α] : CoeSort (InducedBicategory C F) α :=
@@ -87,7 +87,7 @@ structure Hom
     - hom : F X ⟶ F Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : InducedBicategory C F)
   公理与运算 (2 个):
     - private(mk) : :
@@ -204,7 +204,7 @@ instance Hom.category
 @[ext]
 
 中文:
-实例 Hom.category
+实例 态射.category
   签名: (X Y : InducedBicategory C F)
   定义体: Hom₂ f g
   id f := ⟨𝟙 f.hom⟩
@@ -292,7 +292,7 @@ whiskerRight {_ _ _} {_ _} η h := mkHom₂ (Hom₂.hom η) ▷ h.hom
 
 中文:
 实例 bicategory
-  签名: : Bicategory (InducedBicategory C F) where
+  签名: : 双范畴 (InducedBicategory C F) where
   定义体: mkHom₂ h.hom ◁ Hom₂.hom η
 whiskerRight {_ _ _} {_ _} η h := mkHom₂ (Hom₂.hom η) ▷ h.hom
   associator x y z := isoMk (α_ x.hom y.hom z.hom)

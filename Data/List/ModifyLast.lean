@@ -34,7 +34,7 @@ theorem modifyLast.go_concat
 
 中文:
 定理 modifyLast.go_concat
-  条件: (f : α -> α) (a : α) (tl : List α) (r : Array α)
+  条件: (f : α -> α) (a : α) (tl : 列表 α) (r : 数组 α)
   证明: by
   cases tl with
   | nil =>
@@ -76,7 +76,7 @@ theorem modifyLast_concat
 
 中文:
 定理 modifyLast_concat
-  条件: (f : α -> α) (a : α) (l : List α)
+  条件: (f : α -> α) (a : α) (l : 列表 α)
   证明: by
   cases l with
   | nil =>
@@ -120,7 +120,7 @@ theorem modifyLast_append_of_right_ne_nil
 
 中文:
 定理 modifyLast_append_of_right_ne_nil
-  条件: (f : α -> α) (l₁ l₂ : List α) (_ : l₂ != [])
+  条件: (f : α -> α) (l₁ l₂ : 列表 α) (_ : l₂ != [])
   证明: by
   cases l₂ with
   | nil => contradiction

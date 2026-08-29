@@ -59,11 +59,11 @@ inductive IsSubnormal
     - step: forall H K, (h_le : H <= K) -> (hSubn : IsSubnormal K) -> (hN : (H.subgroupOf K).Normal) -> IsSubnormal H
 
 中文:
-归纳类型 IsSubnormal
-  参数: : Subgroup G -> 命题 where
+归纳类型 是次正规
+  参数: : 子群 G -> 命题 where
   构造子 (2 个):
-    - top: IsSubnormal (⊤ : Subgroup G)
-    - step: 对任意 H K, (h_le : H <= K) -> (hSubn : IsSubnormal K) -> (hN : (H.subgroupOf K).Normal) -> IsSubnormal H
+    - top: 是次正规 (⊤ : 子群 G)
+    - step: 对任意 H K, (h_le : H <= K) -> (hSubn : 是次正规 K) -> (hN : (H.subgroupOf K).正规) -> 是次正规 H
 -/
 inductive IsSubnormal : Subgroup G -> Prop where
   /-- The whole subgroup `G` is subnormal in itself. -/
@@ -84,11 +84,11 @@ inductive _root_.AddSubgroup.IsSubnormal
     - step: forall H K, (h_le : H <= K) -> (hSubn : IsSubnormal K) -> (hN : (H.addSubgroupOf K).Normal) -> IsSubnormal H
 
 中文:
-归纳类型 _root_.AddSubgroup.IsSubnormal
-  参数: {G : 类型} [AddGroup G]
+归纳类型 _root_.加法子群.是次正规
+  参数: {G : 类型} [加法群 G]
   构造子 (2 个):
-    - top: IsSubnormal (⊤ : AddSubgroup G)
-    - step: 对任意 H K, (h_le : H <= K) -> (hSubn : IsSubnormal K) -> (hN : (H.addSubgroupOf K).Normal) -> IsSubnormal H
+    - top: 是次正规 (⊤ : 加法子群 G)
+    - step: 对任意 H K, (h_le : H <= K) -> (hSubn : 是次正规 K) -> (hN : (H.addSubgroupOf K).正规) -> 是次正规 H
 -/
 inductive _root_.AddSubgroup.IsSubnormal {G : Type*} [AddGroup G] : AddSubgroup G -> Prop where
   /-- The whole additive subgroup `G` is subnormal in itself. -/
@@ -112,9 +112,9 @@ lemma Normal.isSubnormal
   proof: IsSubnormal.step _ ⊤ le_top IsSubnormal.top normal_subgroupOf
 
 中文:
-引理 Normal.isSubnormal
-  条件: (hn : H.Normal)
-  结论: IsSubnormal H
+引理 正规.isSubnormal
+  条件: (hn : H.正规)
+  结论: 是次正规 H
   证明: IsSubnormal.step _ ⊤ le_top IsSubnormal.top normal_subgroupOf
 
 Depends on / 依赖: IsSubnormal, IsSubnormal.step, IsSubnormal.top, le_top, normal_subgroupOf
@@ -136,7 +136,7 @@ lemma bot
 
 中文:
 引理 bot
-  结论: IsSubnormal (⊥ : Subgroup G)
+  结论: 是次正规 (⊥ : 子群 G)
   证明: normal_bot.isSubnormal
 
 Depends on / 依赖: isSubnormal, normal_bot, normal_bot.isSubnormal
@@ -161,7 +161,7 @@ lemma normal_of_isSimpleGroup
 
 中文:
 引理 normal_of_isSimpleGroup
-  条件: (hG : IsSimpleGroup G) (hN : H.IsSubnormal)
+  条件: (hG : 是单群 G) (hN : H.是次正规)
   证明: by
   induction hN with
   | top => simp
@@ -196,7 +196,7 @@ lemma eq_bot_or_top_of_isSimpleGroup
 
 中文:
 引理 eq_bot_or_top_of_isSimpleGroup
-  条件: (hG : IsSimpleGroup G) (hN : IsSubnormal H)
+  条件: (hG : 是单群 G) (hN : 是次正规 H)
   证明: (hN.normal_of_isSimpleGroup hG).eq_bot_or_eq_top
 
 @[to_additive]
@@ -227,7 +227,7 @@ lemma iff_eq_top_or_exists
       · exa
 
 中文:
-引理 iff_eq_top_or_exists
+引理 iff_eq_top_or_存在
   证明: by
     induction h with
     | top => simp
@@ -281,8 +281,8 @@ lemma exists_normal_and_le_and_lt_top_of_ne
     · grind
 
 中文:
-引理 exists_normal_and_le_and_lt_top_of_ne
-  条件: (hN : H.IsSubnormal) (ne_top : H != ⊤)
+引理 存在_normal_and_le_and_lt_top_of_ne
+  条件: (hN : H.是次正规) (ne_top : H != ⊤)
   证明: by
   induction hN with
   | top => contradiction
@@ -323,8 +323,8 @@ lemma lt_normal
 
 中文:
 引理 lt_normal
-  条件: (hN : H.IsSubnormal)
-  结论: H = ⊤ ∨ 存在 K, K.Normal ∧ H <= K ∧ K < ⊤
+  条件: (hN : H.是次正规)
+  结论: H = ⊤ ∨ 存在 K, K.正规 ∧ H <= K ∧ K < ⊤
   证明: by
   obtain rfl | H_ne := eq_or_ne H ⊤
   · simp
@@ -366,7 +366,7 @@ lemma isSubnormal_iff
 
 中文:
 引理 isSubnormal_iff
-  结论: H.IsSubnormal ↔
+  结论: H.是次正规 ↔
   证明: by
     induction h with
     | top =>
@@ -435,7 +435,7 @@ lemma trans'
 
 中文:
 引理 trans'
-  条件: {H : Subgroup K} (Hsn : IsSubnormal H) (Ksn : IsSubnormal K)
+  条件: {H : 子群 K} (Hsn : 是次正规 H) (Ksn : 是次正规 K)
   证明: by
   induction Hsn with
   | top =>
@@ -477,7 +477,7 @@ lemma trans
 
 中文:
 引理 trans
-  条件: (HK : H <= K) (Hsn : IsSubnormal (H.subgroupOf K)) (Ksn : IsSubnormal K)
+  条件: (HK : H <= K) (Hsn : 是次正规 (H.subgroupOf K)) (Ksn : 是次正规 K)
   证明: by
   have key := Hsn.trans' Ksn
   rwa [map_subgroupOf_eq_of_le HK] at key
@@ -511,7 +511,7 @@ lemma map
 
 中文:
 引理 map
-  条件: {G'} [Group G'] {f : G ->* G'} (hf : Function.Surjective f) (hS : H.IsSubnormal)
+  条件: {G'} [群 G'] {f : G ->* G'} (hf : 函数.满射 f) (hS : H.是次正规)
   证明: by
   induction hS with
   | top =>
@@ -548,7 +548,7 @@ lemma quotient
 
 中文:
 引理 quotient
-  条件: [K.Normal] (hS : H.IsSubnormal)
+  条件: [K.正规] (hS : H.是次正规)
   证明: hS.map (QuotientGroup.mk'_surjective K)
 -/
 protected lemma quotient [K.Normal] (hS : H.IsSubnormal) :
@@ -578,7 +578,7 @@ lemma comap
 
 中文:
 引理 comap
-  条件: {G'} [Group G'] {H' : Subgroup G'} (f : G ->* G') (h : H'.IsSubnormal)
+  条件: {G'} [群 G'] {H' : 子群 G'} (f : G ->* G') (h : H'.是次正规)
   证明: by
   induction h with
   | top => simp
@@ -614,8 +614,8 @@ lemma subgroupOf
 
 中文:
 引理 subgroupOf
-  条件: (hH : H.IsSubnormal)
-  结论: (H.subgroupOf K).IsSubnormal
+  条件: (hH : H.是次正规)
+  结论: (H.subgroupOf K).是次正规
   证明: hH.comap _
 -/
 protected lemma subgroupOf (hH : H.IsSubnormal) : (H.subgroupOf K).IsSubnormal := hH.comap _
@@ -633,9 +633,9 @@ lemma inf
   simpa using hH.subgroupOf.trans' hK
 
 中文:
-引理 inf
-  条件: (hH : H.IsSubnormal) (hK : K.IsSubnormal)
-  结论: (H ⊓ K).IsSubnormal
+引理 下确界
+  条件: (hH : H.是次正规) (hK : K.是次正规)
+  结论: (H ⊓ K).是次正规
   证明: by
   simpa using hH.subgroupOf.trans' hK
 -/
@@ -654,7 +654,7 @@ lemma smul
 
 中文:
 引理 smul
-  结论: {Γ : 类型} [Group Γ] [MulDistribMulAction Γ G] (hS : H.IsSubnormal)
+  结论: {Γ : 类型} [群 Γ] [MulDistribMul作用 Γ G] (hS : H.是次正规)
   证明: hS.map (MulAction.surjective g)
 -/
 protected lemma smul {Γ : Type*} [Group Γ] [MulDistribMulAction Γ G] (hS : H.IsSubnormal)
@@ -675,8 +675,8 @@ lemma of_subsingleton
 
 中文:
 引理 of_subsingleton
-  条件: [Subsingleton H]
-  结论: H.IsSubnormal
+  条件: [子单例 H]
+  结论: H.是次正规
   证明: by
   simp [eq_bot_of_subsingleton H]
 

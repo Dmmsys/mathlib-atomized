@@ -59,9 +59,9 @@ class NonUnitalSubringClass
   (no additional axioms)
 
 中文:
-类 NonUnitalSubringClass
-  参数: (S : 类型) (R : 类型u) [NonUnitalNonAssocRing R] [SetLike S R]
-  继承: NonUnitalSubsemiringClass S R, NegMemClass S R
+类 NonUnital子环类
+  参数: (S : 类型) (R : 类型u) [非幺非结合环 R] [集合状 S R]
+  继承: NonUnital子半环类 S R, NegMem类 S R
   (无附加公理)
 -/
 class NonUnitalSubringClass (S : Type*) (R : Type u) [NonUnitalNonAssocRing R] [SetLike S R] : Prop
@@ -161,7 +161,7 @@ theorem subtype_injective
 
 中文:
 定理 subtype_injective
-  结论: Function.Injective (subtype s)
+  结论: 函数.单射 (subtype s)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -182,7 +182,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (subtype s : s -> R) = Subtype.val
+  结论: (subtype s : s -> R) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : (subtype s : s -> R) = Subtype.val :=
@@ -201,8 +201,8 @@ structure NonUnitalSubring
   (no additional axioms)
 
 中文:
-结构 NonUnitalSubring
-  参数: (R : 类型u) [NonUnitalNonAssocRing R]
+结构 NonUnital子环
+  参数: (R : 类型u) [非幺非结合环 R]
   (无附加公理)
 -/
 structure NonUnitalSubring (R : Type u) [NonUnitalNonAssocRing R] extends
@@ -228,7 +228,7 @@ definition toSubsemigroup
 
 中文:
 定义 toSubsemigroup
-  签名: (s : NonUnitalSubring R)
+  签名: (s : NonUnital子环 R)
   定义体: { s.toNonUnitalSubsemiring.toSubsemigroup with carrier := s.carrier }
 
 Depends on / 依赖: carrier, s.carrier, s.toNonUnitalSubsemiring.toSubsemigroup, toNonUnitalSubsemiring, toSubsemigroup
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (NonUnitalSubring R) R
+  签名: 集合状 (NonUnital子环 R) R
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonUnitalSubring R)
+  签名: 偏序 (NonUnital子环 R)
   定义体: .ofSetLike (NonUnitalSubring R) R
 
 Depends on / 依赖: NonUnitalSubring, ofSetLike
@@ -290,7 +290,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R : 类型} [NonUnitalNonAssocRing R] [SetLike S R] [NonUnitalSubringClass S R]
+  签名: {S R : 类型} [非幺非结合环 R] [集合状 S R] [NonUnital子环类 S R]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -329,7 +329,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonUnitalSubringClass (NonUnitalSubring R) R
+  签名: NonUnital子环类 (NonUnital子环 R) R
   定义体: s.zero_mem'
   add_mem {s} := s.add_mem'
   mul_mem {s} := s.mul_mem'
@@ -356,7 +356,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : NonUnitalSubring R} {x : R}
+  条件: {s : NonUnital子环 R} {x : R}
   结论: x in s.toNonUnitalSubsemiring ↔ x in s
   证明: Iff.rfl
 
@@ -380,7 +380,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {S : NonUnitalSubsemiring R} {x : R} (h)
+  条件: {S : NonUnital子半环 R} {x : R} (h)
   证明: Iff.rfl
 
 @[simp]
@@ -404,7 +404,7 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (S : NonUnitalSubsemiring R) (h)
+  条件: (S : NonUnital子半环 R) (h)
   证明: rfl
 
 @[simp]
@@ -424,7 +424,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {S S' : NonUnitalSubsemiring R} (h h')
+  条件: {S S' : NonUnital子半环 R} (h h')
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -446,7 +446,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : NonUnitalSubring R} (h : 对任意 x, x in S ↔ x in T)
+  条件: {S T : NonUnital子环 R} (h : 对任意 x, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -469,7 +469,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
+  签名: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
   定义体: { S.toNonUnitalSubsemiring.copy s hs with
     carrier := s
     neg_mem' := hs.symm ▸ S.neg_mem' }
@@ -493,8 +493,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
-  结论: (S.copy s hs : Set R) = s
+  条件: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
+  结论: (S.copy s hs : 集合 R) = s
   证明: rfl
 -/
 theorem coe_copy (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S) : (S.copy s hs : Set R) = s :=
@@ -511,7 +511,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : NonUnitalSubring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : NonUnital子环 R) (s : 集合 R) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -616,7 +616,7 @@ theorem toAddSubgroup_mono
 
 中文:
 定理 toAddSubgroup_mono
-  结论: Monotone (toAddSubgroup : NonUnitalSubring R -> AddSubgroup R)
+  结论: 递增 (toAddSubgroup : NonUnital子环 R -> 加法子群 R)
   证明: toAddSubgroup_strictMono.monotone
 
 Depends on / 依赖: monotone, toAddSubgroup_strictMono, toAddSubgroup_strictMono.monotone
@@ -667,7 +667,7 @@ theorem toSubsemigroup_mono
 
 中文:
 定理 toSubsemigroup_mono
-  结论: Monotone (toSubsemigroup : NonUnitalSubring R -> Subsemigroup R)
+  结论: 递增 (toSubsemigroup : NonUnital子环 R -> 子半群 R)
   证明: toSubsemigroup_strictMono.monotone
 
 Depends on / 依赖: monotone, toSubsemigroup_strictMono, toSubsemigroup_strictMono.monotone
@@ -687,7 +687,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (s : Set R) (sm : Subsemigroup R) (sa : AddSubgroup R) (hm : ↑sm = s)
+  签名: (s : 集合 R) (sm : 子半群 R) (sa : 加法子群 R) (hm : ↑sm = s)
   定义体: { sm.copy s hm.symm, sa.copy s ha.symm with }
 
 @[simp]
@@ -709,7 +709,7 @@ theorem coe_mk'
 
 中文:
 定理 coe_mk'
-  结论: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
+  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
   证明: rfl
 
 @[simp]
@@ -731,7 +731,7 @@ theorem mem_mk'
 
 中文:
 定理 mem_mk'
-  结论: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R} (ha : ↑sa = s)
+  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R} (ha : ↑sa = s)
   证明: Iff.rfl
 
 @[simp]
@@ -755,7 +755,7 @@ theorem mk'_toSubsemigroup
 
 中文:
 定理 mk'_toSubsemigroup
-  结论: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
+  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
   证明: SetLike.coe_injective hm.symm
 
 @[simp]
@@ -777,7 +777,7 @@ theorem mk'_toAddSubgroup
 
 中文:
 定理 mk'_toAddSubgroup
-  结论: {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
+  结论: {s : 集合 R} {sm : 子半群 R} (hm : ↑sm = s) {sa : 加法子群 R}
   证明: SetLike.coe_injective ha.symm
 -/
 theorem mk'_toAddSubgroup {s : Set R} {sm : Subsemigroup R} (hm : ↑sm = s) {sa : AddSubgroup R}
@@ -888,7 +888,7 @@ instance toNonUnitalRing
 
 中文:
 实例 toNonUnitalRing
-  签名: {R : 类型} [NonUnitalRing R] (s : NonUnitalSubring R)
+  签名: {R : 类型} [非幺环 R] (s : NonUnital子环 R)
   定义体: NonUnitalSubringClass.toNonUnitalRing s
 
 Depends on / 依赖: NonUnitalSubringClass, NonUnitalSubringClass.toNonUnitalRing, toNonUnitalRing
@@ -1035,7 +1035,7 @@ instance toNonUnitalCommRing
 
 中文:
 实例 toNonUnitalCommRing
-  签名: {R} [NonUnitalCommRing R] (s : NonUnitalSubring R)
+  签名: {R} [非幺交换环 R] (s : NonUnital子环 R)
   定义体: NonUnitalSubringClass.toNonUnitalCommRing s
 
 Depends on / 依赖: NonUnitalSubringClass, NonUnitalSubringClass.toNonUnitalCommRing, toNonUnitalCommRing
@@ -1059,7 +1059,7 @@ theorem mem_toSubsemigroup
 
 中文:
 定理 mem_toSubsemigroup
-  条件: {s : NonUnitalSubring R} {x : R}
+  条件: {s : NonUnital子环 R} {x : R}
   结论: x in s.toSubsemigroup ↔ x in s
   证明: Iff.rfl
 
@@ -1082,8 +1082,8 @@ theorem coe_toSubsemigroup
 
 中文:
 定理 coe_toSubsemigroup
-  条件: (s : NonUnitalSubring R)
-  结论: (s.toSubsemigroup : Set R) = s
+  条件: (s : NonUnital子环 R)
+  结论: (s.toSubsemigroup : 集合 R) = s
   证明: rfl
 -/
 theorem coe_toSubsemigroup (s : NonUnitalSubring R) : (s.toSubsemigroup : Set R) = s :=
@@ -1102,7 +1102,7 @@ theorem mem_toAddSubgroup
 
 中文:
 定理 mem_toAddSubgroup
-  条件: {s : NonUnitalSubring R} {x : R}
+  条件: {s : NonUnital子环 R} {x : R}
   结论: x in s.toAddSubgroup ↔ x in s
   证明: Iff.rfl
 
@@ -1127,8 +1127,8 @@ theorem coe_toAddSubgroup
 
 中文:
 定理 coe_toAddSubgroup
-  条件: (s : NonUnitalSubring R)
-  结论: (s.toAddSubgroup : Set R) = s
+  条件: (s : NonUnital子环 R)
+  结论: (s.toAddSubgroup : 集合 R) = s
   证明: rfl
 
 @[simp]
@@ -1149,7 +1149,7 @@ theorem mem_toNonUnitalSubsemiring
 
 中文:
 定理 mem_toNonUnitalSubsemiring
-  条件: {s : NonUnitalSubring R} {x : R}
+  条件: {s : NonUnital子环 R} {x : R}
   证明: Iff.rfl
 
 @[simp]
@@ -1171,7 +1171,7 @@ theorem coe_toNonUnitalSubsemiring
 
 中文:
 定理 coe_toNonUnitalSubsemiring
-  条件: (s : NonUnitalSubring R)
+  条件: (s : NonUnital子环 R)
   证明: rfl
 -/
 theorem coe_toNonUnitalSubsemiring (s : NonUnitalSubring R) :
@@ -1200,7 +1200,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : NonUnitalSubring R} (h : S <= T)
+  签名: {S T : NonUnital子环 R} (h : S <= T)
   定义体: NonUnitalRingHom.codRestrict (NonUnitalSubringClass.subtype S) _ fun x => h x.2
 
 Depends on / 依赖: NonUnitalRingHom, NonUnitalRingHom.codRestrict, NonUnitalSubringClass, NonUnitalSubringClass.subtype, codRestrict, subtype

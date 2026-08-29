@@ -78,7 +78,7 @@ theorem edist_eq_sInf
 
 中文:
 定理 edist_eq_sInf
-  结论: G.edist u v = sInf (Set.range fun w : G.Walk u v => (w.length : 自然数∞))
+  结论: G.edist u v = sInf (集合.range fun w : G.途径 u v => (w.length : 自然数∞))
   证明: rfl
 -/
 theorem edist_eq_sInf : G.edist u v = sInf (Set.range fun w : G.Walk u v => (w.length : Nat∞)) := rfl
@@ -92,7 +92,7 @@ theorem Reachable.exists_walk_length_eq_edist
   proof: csInf_mem Set.range_nonempty_iff_nonempty.mpr hr
 
 中文:
-定理 Reachable.exists_walk_length_eq_edist
+定理 Reachable.存在_walk_length_eq_edist
   条件: (hr : G.Reachable u v)
   证明: csInf_mem Set.range_nonempty_iff_nonempty.mpr hr
 -/
@@ -109,8 +109,8 @@ theorem Connected.exists_walk_length_eq_edist
   proof: (hconn u v).exists_walk_length_eq_edist
 
 中文:
-定理 Connected.exists_walk_length_eq_edist
-  条件: (hconn : G.Connected) (u v : V)
+定理 连通.存在_walk_length_eq_edist
+  条件: (hconn : G.连通) (u v : V)
   证明: (hconn u v).exists_walk_length_eq_edist
 -/
 protected theorem Connected.exists_walk_length_eq_edist (hconn : G.Connected) (u v : V) :
@@ -130,7 +130,7 @@ protected alias Walk.edist_le := edist_le
 
 中文:
 定理 edist_le
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   证明: sInf_le ⟨p, rfl⟩
 protected alias Walk.edist_le := edist_le
 
@@ -253,7 +253,7 @@ lemma exists_walk_of_edist_ne_top
   proof: (reachable_of_edist_ne_top h).exists_walk_length_eq_edist
 
 中文:
-引理 exists_walk_of_edist_ne_top
+引理 存在_walk_of_edist_ne_top
   条件: (h : G.edist u v != ⊤)
   证明: (reachable_of_edist_ne_top h).exists_walk_length_eq_edist
 
@@ -340,7 +340,7 @@ lemma exists_walk_of_edist_eq_coe
   ⟨p, Nat.cast_injective (hp.trans h)⟩
 
 中文:
-引理 exists_walk_of_edist_eq_coe
+引理 存在_walk_of_edist_eq_coe
   条件: {k : 自然数} (h : G.edist u v = k)
   证明: have : G.edist u v != ⊤ := by rw [h]; exact ENat.natCast_ne_top _
   have ⟨p, hp⟩ := exists_walk_of_edist_ne_top this
@@ -401,7 +401,7 @@ exact w.adj_of_length_eq_one Nat.cast_eq_one.mp h ▸ hw
 
 中文:
 定理 edist_eq_one_iff_adj
-  结论: G.edist u v = 1 ↔ G.Adj u v
+  结论: G.edist u v = 1 ↔ G.伴随 u v
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
 · obtain ⟨w, hw⟩ := exists_walk_of_edist_ne_top by rw [h]; simp
@@ -432,7 +432,7 @@ lemma edist_le_one_iff_adj_or_eq
 
 中文:
 引理 edist_le_one_iff_adj_or_eq
-  结论: G.edist u v <= 1 ↔ G.Adj u v ∨ u = v
+  结论: G.edist u v <= 1 ↔ G.伴随 u v ∨ u = v
   证明: by
   by_cases huv : u = v
   · simp [huv]
@@ -550,7 +550,7 @@ lemma edist_bot_of_ne
 中文:
 引理 edist_bot_of_ne
   条件: (h : u != v)
-  结论: (⊥ : SimpleGraph V).edist u v = ⊤
+  结论: (⊥ : 简单图 V).edist u v = ⊤
   证明: by
   rwa [ne_eq, ← reachable_bot.not, ← edist_ne_top_iff_reachable.not, not_not] at h
 
@@ -572,7 +572,7 @@ lemma edist_bot
 中文:
 引理 edist_bot
   条件: [DecidableEq V]
-  结论: (⊥ : SimpleGraph V).edist u v = (if u = v then 0 else ⊤)
+  结论: (⊥ : 简单图 V).edist u v = (if u = v then 0 else ⊤)
   证明: by
   by_cases h : u = v <;> simp [h, edist_bot_of_ne]
 
@@ -594,7 +594,7 @@ lemma edist_top_of_ne
 中文:
 引理 edist_top_of_ne
   条件: (h : u != v)
-  结论: (⊤ : SimpleGraph V).edist u v = 1
+  结论: (⊤ : 简单图 V).edist u v = 1
   证明: by
   simp [h]
 -/
@@ -614,7 +614,7 @@ lemma edist_top
 中文:
 引理 edist_top
   条件: [DecidableEq V]
-  结论: (⊤ : SimpleGraph V).edist u v = (if u = v then 0 else 1)
+  结论: (⊤ : 简单图 V).edist u v = (if u = v then 0 else 1)
   证明: by
   by_cases h : u = v <;> simp [h]
 -/
@@ -638,7 +638,7 @@ theorem edist_anti
 
 中文:
 定理 edist_anti
-  条件: {G' : SimpleGraph V} (h : G <= G')
+  条件: {G' : 简单图 V} (h : G <= G')
   证明: by
   by_cases hr : G.Reachable u v
   · obtain ⟨_, hw⟩ := hr.exists_walk_length_eq_edist
@@ -692,7 +692,7 @@ theorem dist_eq_sInf
 
 中文:
 定理 dist_eq_sInf
-  结论: G.dist u v = sInf (Set.range (Walk.length : G.Walk u v -> 自然数))
+  结论: G.dist u v = sInf (集合.range (途径.length : G.途径 u v -> 自然数))
   证明: ENat.iInf_toNat
 
 @[grind =]
@@ -732,7 +732,7 @@ theorem Reachable.exists_walk_length_eq_dist
   proof: dist_eq_sInf ▸ Nat.sInf_mem (Set.range_nonempty_iff_nonempty.mpr hr)
 
 中文:
-定理 Reachable.exists_walk_length_eq_dist
+定理 Reachable.存在_walk_length_eq_dist
   条件: (hr : G.Reachable u v)
   证明: dist_eq_sInf ▸ Nat.sInf_mem (Set.range_nonempty_iff_nonempty.mpr hr)
 -/
@@ -749,8 +749,8 @@ theorem Connected.exists_walk_length_eq_dist
   proof: dist_eq_sInf ▸ (hconn u v).exists_walk_length_eq_dist
 
 中文:
-定理 Connected.exists_walk_length_eq_dist
-  条件: (hconn : G.Connected) (u v : V)
+定理 连通.存在_walk_length_eq_dist
+  条件: (hconn : G.连通) (u v : V)
   证明: dist_eq_sInf ▸ (hconn u v).exists_walk_length_eq_dist
 -/
 protected theorem Connected.exists_walk_length_eq_dist (hconn : G.Connected) (u v : V) :
@@ -770,7 +770,7 @@ theorem dist_le
 
 中文:
 定理 dist_le
-  条件: (p : G.Walk u v)
+  条件: (p : G.途径 u v)
   结论: G.dist u v <= p.length
   证明: dist_eq_sInf ▸ Nat.sInf_le ⟨p, rfl⟩
 
@@ -886,8 +886,8 @@ theorem Connected.dist_eq_zero_iff
   proof: by simp [hconn u v]
 
 中文:
-定理 Connected.dist_eq_zero_iff
-  条件: (hconn : G.Connected)
+定理 连通.dist_eq_zero_iff
+  条件: (hconn : G.连通)
   证明: by simp [hconn u v]
 -/
 protected theorem Connected.dist_eq_zero_iff (hconn : G.Connected) :
@@ -902,8 +902,8 @@ theorem Connected.pos_dist_of_ne
   proof: Nat.pos_of_ne_zero fun h => False.elim hne (hconn.dist_eq_zero_iff).mp h
 
 中文:
-定理 Connected.pos_dist_of_ne
-  条件: (hconn : G.Connected) (hne : u != v)
+定理 连通.pos_dist_of_ne
+  条件: (hconn : G.连通) (hne : u != v)
   证明: Nat.pos_of_ne_zero fun h => False.elim hne (hconn.dist_eq_zero_iff).mp h
 -/
 protected theorem Connected.pos_dist_of_ne (hconn : G.Connected) (hne : u != v) :
@@ -919,8 +919,8 @@ theorem Connected.one_lt_dist_of_ne_of_not_adj
   proof: Reachable.one_lt_dist_of_ne_of_not_adj (h u v) hne hnadj
 
 中文:
-定理 Connected.one_lt_dist_of_ne_of_not_adj
-  结论: (h : G.Connected) (hne : u != v)
+定理 连通.one_lt_dist_of_ne_of_not_adj
+  结论: (h : G.连通) (hne : u != v)
   证明: Reachable.one_lt_dist_of_ne_of_not_adj (h u v) hne hnadj
 -/
 protected theorem Connected.one_lt_dist_of_ne_of_not_adj (h : G.Connected) (hne : u != v)
@@ -987,8 +987,8 @@ theorem Connected.dist_triangle
   apply dist_le
 
 中文:
-定理 Connected.dist_triangle
-  条件: (hconn : G.Connected)
+定理 连通.dist_triangle
+  条件: (hconn : G.连通)
   证明: by
   obtain ⟨p, hp⟩ := hconn.exists_walk_length_eq_dist u v
   obtain ⟨q, hq⟩ := hconn.exists_walk_length_eq_dist v w
@@ -1129,7 +1129,7 @@ lemma exists_walk_of_dist_ne_zero
   proof: (Reachable.of_dist_ne_zero h).exists_walk_length_eq_dist
 
 中文:
-引理 exists_walk_of_dist_ne_zero
+引理 存在_walk_of_dist_ne_zero
   条件: (h : G.dist u v != 0)
   证明: (Reachable.of_dist_ne_zero h).exists_walk_length_eq_dist
 
@@ -1155,7 +1155,7 @@ theorem dist_eq_one_iff_adj
 
 中文:
 定理 dist_eq_one_iff_adj
-  结论: G.dist u v = 1 ↔ G.Adj u v
+  结论: G.dist u v = 1 ↔ G.伴随 u v
   证明: by
   rw [dist]; rw [ENat.toNat_eq_iff]; rw [ENat.natCast_one]; rw [edist_eq_one_iff_adj]
   decide
@@ -1180,8 +1180,8 @@ theorem Adj.diff_dist_adj
   have : G.dist u w <= G.dist u v + G.dist v w := hadj.reachable
 
 中文:
-定理 Adj.diff_dist_adj
-  条件: (hadj : G.Adj v w)
+定理 伴随.diff_dist_adj
+  条件: (hadj : G.伴随 v w)
   证明: by
   by_cases! huw : ¬G.Reachable u w
   · grind [dist_eq_zero_iff_eq_or_not_reachable, Reachable.trans, Adj.reachable]
@@ -1218,8 +1218,8 @@ theorem Walk.isPath_of_length_eq_dist
   apply Walk.bypass_isPath
 
 中文:
-定理 Walk.isPath_of_length_eq_dist
-  条件: (p : G.Walk u v) (hp : p.length = G.dist u v)
+定理 途径.isPath_of_length_eq_dist
+  条件: (p : G.途径 u v) (hp : p.length = G.dist u v)
   证明: by
   classical
   have : p.bypass = p := by
@@ -1254,7 +1254,7 @@ lemma Reachable.exists_path_of_dist
   exact ⟨p, p.isPath_of_length_eq_dist h, h⟩
 
 中文:
-引理 Reachable.exists_path_of_dist
+引理 Reachable.存在_path_of_dist
   条件: (hr : G.Reachable u v)
   证明: by
   obtain ⟨p, h⟩ := hr.exists_walk_length_eq_dist
@@ -1280,8 +1280,8 @@ lemma Connected.exists_path_of_dist
 @[simp]
 
 中文:
-引理 Connected.exists_path_of_dist
-  条件: (hconn : G.Connected) (u v : V)
+引理 连通.存在_path_of_dist
+  条件: (hconn : G.连通) (u v : V)
   证明: by
   obtain ⟨p, h⟩ := hconn.exists_walk_length_eq_dist u v
   exact ⟨p, p.isPath_of_length_eq_dist h, h⟩
@@ -1307,7 +1307,7 @@ lemma dist_bot
 
 中文:
 引理 dist_bot
-  结论: (⊥ : SimpleGraph V).dist u v = 0
+  结论: (⊥ : 简单图 V).dist u v = 0
   证明: by
   by_cases h : u = v <;> simp [h]
 -/
@@ -1327,7 +1327,7 @@ lemma dist_top_of_ne
 中文:
 引理 dist_top_of_ne
   条件: (h : u != v)
-  结论: (⊤ : SimpleGraph V).dist u v = 1
+  结论: (⊤ : 简单图 V).dist u v = 1
   证明: by
   simp [h]
 -/
@@ -1347,7 +1347,7 @@ lemma dist_top
 中文:
 引理 dist_top
   条件: [DecidableEq V]
-  结论: (⊤ : SimpleGraph V).dist u v = (if u = v then 0 else 1)
+  结论: (⊤ : 简单图 V).dist u v = (if u = v then 0 else 1)
   证明: by
   by_cases h : u = v <;> simp [h]
 -/
@@ -1371,7 +1371,7 @@ lemma length_eq_dist_of_subwalk
 
 中文:
 引理 length_eq_dist_of_subwalk
-  结论: {u' v' : V} {p₁ : G.Walk u v} {p₂ : G.Walk u' v'}
+  结论: {u' v' : V} {p₁ : G.途径 u v} {p₂ : G.途径 u' v'}
   证明: by
   refine (dist_le _).eq_of_not_lt' fun hh => ?_
   obtain ⟨ru, rv, h⟩ := h₂
@@ -1409,7 +1409,7 @@ theorem Reachable.dist_anti
 
 中文:
 定理 Reachable.dist_anti
-  条件: {G' : SimpleGraph V} (h : G <= G') (hr : G.Reachable u v)
+  条件: {G' : 简单图 V} (h : G <= G') (hr : G.Reachable u v)
   证明: by
   obtain ⟨_, hw⟩ := hr.exists_walk_length_eq_dist
   rw [← hw]; rw [← Walk.length_map (.ofLE h)]
@@ -1438,8 +1438,8 @@ lemma Walk.exists_adj_adj_not_adj_ne
   have : p.tail.l
 
 中文:
-引理 Walk.exists_adj_adj_not_adj_ne
-  结论: {p : G.Walk v w} (hp : p.length = G.dist v w)
+引理 途径.存在_adj_adj_not_adj_ne
+  结论: {p : G.途径 v w} (hp : p.length = G.dist v w)
   证明: by
   use v, p.getVert 1, p.getVert 2
   have hnp : ¬p.Nil := by grind [Nil.length_eq_zero]

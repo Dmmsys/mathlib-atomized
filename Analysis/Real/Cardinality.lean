@@ -67,7 +67,7 @@ definition cantorFunctionAux
 
 中文:
 定义 cantorFunctionAux
-  签名: (c : 实数) (f : 自然数 -> 布尔) (n : 自然数)
+  签名: (c : 实数) (f : 自然数 -> 布尔值) (n : 自然数)
   定义体: cond (f n) (c ^ n) 0
 
 @[simp]
@@ -183,7 +183,7 @@ theorem cantorFunctionAux_zero
 
 中文:
 定理 cantorFunctionAux_zero
-  条件: (f : 自然数 -> 布尔)
+  条件: (f : 自然数 -> 布尔值)
   结论: cantorFunctionAux c f 0 = cond (f 0) 1 0
   证明: by
   cases h : f 0 <;> simp [h]
@@ -203,7 +203,7 @@ theorem cantorFunctionAux_succ
 
 中文:
 定理 cantorFunctionAux_succ
-  条件: (f : 自然数 -> 布尔)
+  条件: (f : 自然数 -> 布尔值)
   证明: by
   ext n
   cases h : f (n + 1) <;> simp [h, _root_.pow_succ']
@@ -228,7 +228,7 @@ theorem summable_cantor_function
 
 中文:
 定理 summable_cantor_function
-  条件: (f : 自然数 -> 布尔) (h1 : 0 <= c) (h2 : c < 1)
+  条件: (f : 自然数 -> 布尔值) (h1 : 0 <= c) (h2 : c < 1)
   证明: by
   apply (summable_geometric_of_lt_one h1 h2).summable_of_eq_zero_or_self
   intro n; cases h : f n <;> simp [h]
@@ -250,7 +250,7 @@ definition cantorFunction
 
 中文:
 定义 cantorFunction
-  签名: (c : 实数) (f : 自然数 -> 布尔)
+  签名: (c : 实数) (f : 自然数 -> 布尔值)
   定义体: ∑' n, cantorFunctionAux c f n
 
 Depends on / 依赖: cantorFunctionAux
@@ -300,7 +300,7 @@ theorem cantorFunction_succ
 
 中文:
 定理 cantorFunction_succ
-  条件: (f : 自然数 -> 布尔) (h1 : 0 <= c) (h2 : c < 1)
+  条件: (f : 自然数 -> 布尔值) (h1 : 0 <= c) (h2 : c < 1)
   证明: by
   rw [cantorFunction]; rw [(summable_cantor_function f h1 h2).tsum_eq_zero_add]
   rw [cantorFunctionAux_succ]; rw [tsum_mul_left]; rw [cantorFunctionAux]; rw [pow_zero]; rw [cantorFunction]
@@ -333,7 +333,7 @@ theorem increasing_cantorFunction
 
 中文:
 定理 increasing_cantorFunction
-  结论: (h1 : 0 < c) (h2 : c < 1 / 2) {n : 自然数} {f g : 自然数 -> 布尔}
+  结论: (h1 : 0 < c) (h2 : c < 1 / 2) {n : 自然数} {f g : 自然数 -> 布尔值}
   证明: by
   have h3 : c < 1 := by
     apply h2.trans
@@ -506,7 +506,7 @@ theorem mk_univ_real
 
 中文:
 定理 mk_univ_real
-  结论: #(Set.univ : Set 实数) = 𝔠
+  结论: #(集合.univ : 集合 实数) = 𝔠
   证明: by rw [mk_univ, mk_real]
 
 Depends on / 依赖: mk_real, mk_univ
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: Uncountable 实数
+  签名: 不可数 实数
   定义体: by
   rw [← aleph0_lt_mk_iff]; rw [mk_real]
   exact aleph0_lt_continuum
@@ -546,7 +546,7 @@ theorem not_countable_real
 
 中文:
 定理 not_countable_real
-  结论: ¬(Set.univ : Set 实数).Countable
+  结论: ¬(集合.univ : 集合 实数).可数
   证明: not_countable_univ
 
 Depends on / 依赖: not_countable_univ
@@ -576,7 +576,7 @@ theorem mk_Ioi_real
 中文:
 定理 mk_Ioi_real
   条件: (a : 实数)
-  结论: #(Ioi a) = 𝔠
+  结论: #(左开右无界区间 a) = 𝔠
   证明: by
   refine le_antisymm (mk_real ▸ mk_set_le _) ?_
   rw [← not_lt]
@@ -622,7 +622,7 @@ theorem mk_Ici_real
 中文:
 定理 mk_Ici_real
   条件: (a : 实数)
-  结论: #(Ici a) = 𝔠
+  结论: #(左闭右无界区间 a) = 𝔠
   证明: le_antisymm (mk_real ▸ mk_set_le _) (mk_Ioi_real a ▸ mk_le_mk_of_subset Ioi_subset_Ici_self)
 
 Depends on / 依赖: Ioi_subset_Ici_self, le_antisymm, mk_Ioi_real, mk_le_mk_of_subset, mk_real, mk_set_le
@@ -646,7 +646,7 @@ theorem mk_Iio_real
 中文:
 定理 mk_Iio_real
   条件: (a : 实数)
-  结论: #(Iio a) = 𝔠
+  结论: #(左无界右开区间 a) = 𝔠
   证明: by
   refine le_antisymm (mk_real ▸ mk_set_le _) ?_
   have h2 : (fun x => a + a - x) '' Iio a = Ioi a := by
@@ -673,7 +673,7 @@ theorem mk_Iic_real
 中文:
 定理 mk_Iic_real
   条件: (a : 实数)
-  结论: #(Iic a) = 𝔠
+  结论: #(左无界右闭区间 a) = 𝔠
   证明: le_antisymm (mk_real ▸ mk_set_le _) (mk_Iio_real a ▸ mk_le_mk_of_subset Iio_subset_Iic_self)
 
 Depends on / 依赖: Iio_subset_Iic_self, le_antisymm, mk_Iio_real, mk_le_mk_of_subset, mk_real, mk_set_le
@@ -700,7 +700,7 @@ theorem mk_Ioo_real
 中文:
 定理 mk_Ioo_real
   条件: {a b : 实数} (h : a < b)
-  结论: #(Ioo a b) = 𝔠
+  结论: #(开区间 a b) = 𝔠
   证明: by
   refine le_antisymm (mk_real ▸ mk_set_le _) ?_
   have h1 : #((fun x => x - a) '' Ioo a b) <= #(Ioo a b) := mk_image_le
@@ -734,7 +734,7 @@ theorem mk_Ico_real
 中文:
 定理 mk_Ico_real
   条件: {a b : 实数} (h : a < b)
-  结论: #(Ico a b) = 𝔠
+  结论: #(左闭右开区间 a b) = 𝔠
   证明: le_antisymm (mk_real ▸ mk_set_le _) (mk_Ioo_real h ▸ mk_le_mk_of_subset Ioo_subset_Ico_self)
 
 Depends on / 依赖: Ioo_subset_Ico_self, le_antisymm, mk_Ioo_real, mk_le_mk_of_subset, mk_real, mk_set_le
@@ -754,7 +754,7 @@ theorem mk_Icc_real
 中文:
 定理 mk_Icc_real
   条件: {a b : 实数} (h : a < b)
-  结论: #(Icc a b) = 𝔠
+  结论: #(闭区间 a b) = 𝔠
   证明: le_antisymm (mk_real ▸ mk_set_le _) (mk_Ioo_real h ▸ mk_le_mk_of_subset Ioo_subset_Icc_self)
 
 Depends on / 依赖: Ioo_subset_Icc_self, le_antisymm, mk_Ioo_real, mk_le_mk_of_subset, mk_real, mk_set_le
@@ -776,7 +776,7 @@ theorem mk_Ioc_real
 中文:
 定理 mk_Ioc_real
   条件: {a b : 实数} (h : a < b)
-  结论: #(Ioc a b) = 𝔠
+  结论: #(左开右闭区间 a b) = 𝔠
   证明: le_antisymm (mk_real ▸ mk_set_le _) (mk_Ioo_real h ▸ mk_le_mk_of_subset Ioo_subset_Ioc_self)
 
 @[simp]
@@ -802,7 +802,7 @@ lemma Real.Ioo_countable_iff
 @[simp]
 
 中文:
-引理 Real.Ioo_countable_iff
+引理 实数.Ioo_countable_iff
   条件: {x y : 实数}
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
@@ -837,7 +837,7 @@ lemma Real.Ico_countable_iff
 @[simp]
 
 中文:
-引理 Real.Ico_countable_iff
+引理 实数.Ico_countable_iff
   条件: {x y : 实数}
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
@@ -872,7 +872,7 @@ lemma Real.Ioc_countable_iff
 @[simp]
 
 中文:
-引理 Real.Ioc_countable_iff
+引理 实数.Ioc_countable_iff
   条件: {x y : 实数}
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
@@ -908,7 +908,7 @@ lemma Real.Icc_countable_iff
   exact Cardinal.aleph0_lt_continuum
 
 中文:
-引理 Real.Icc_countable_iff
+引理 实数.Icc_countable_iff
   条件: {x y : 实数}
   证明: by
   refine ⟨fun h => ?_, fun h => by

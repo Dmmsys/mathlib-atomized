@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonnegSpectrumClass 实数 (H ->L[𝕜] H)
+  签名: NonnegSpectrum类 实数 (H ->L[𝕜] H)
   定义体: QuasispectrumRestricts.nnreal_iff.mp sub_zero f ▸ hf.spectrumRestricts
 
 Depends on / 依赖: QuasispectrumRestricts, QuasispectrumRestricts.nnreal_iff.mp, hf.spectrumRestricts, nnreal_iff, spectrumRestricts, sub_zero
@@ -156,7 +156,7 @@ instance instStarOrderedRing
 
 中文:
 实例 instStarOrderedRing
-  签名: {H : 类型} [NormedAddCommGroup H]
+  签名: {H : 类型} [赋范交换加群 H]
   定义体: instStarOrderedRingRCLike
 
 Depends on / 依赖: instStarOrderedRingRCLike

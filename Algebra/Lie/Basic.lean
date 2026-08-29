@@ -70,9 +70,9 @@ class LieRing
     - leibniz_lie : forall x y z : L, ⁅x, ⁅y, z⁆⁆ = ⁅⁅x, y⁆, z⁆ + ⁅y, ⁅x, z⁆⁆
 
 中文:
-类 LieRing
+类 Lie环
   参数: (L : 类型v)
-  继承: AddCommGroup L, Bracket L L
+  继承: 加法交换群 L, Bracket L L
   公理与运算 (4 个):
     - add_lie : 对任意 x y z : L, ⁅x + y, z⁆ = ⁅x, z⁆ + ⁅y, z⁆
     - lie_add : 对任意 x y z : L, ⁅x, y + z⁆ = ⁅x, y⁆ + ⁅x, z⁆
@@ -100,9 +100,9 @@ class LieAlgebra
     - lie_smul : forall (t : R) (x y : L), ⁅x, t • y⁆ = t • ⁅x, y⁆
 
 中文:
-类 LieAlgebra
-  参数: (R : 类型u) (L : 类型v) [CommRing R] [LieRing L]
-  继承: Module R L
+类 Lie代数
+  参数: (R : 类型u) (L : 类型v) [交换环 R] [Lie环 L]
+  继承: 模 R L
   公理与运算 (1 个):
     - lie_smul : 对任意 (t : R) (x y : L), ⁅x, t • y⁆ = t • ⁅x, y⁆
 -/
@@ -126,8 +126,8 @@ class LieRingModule
     - leibniz_lie : forall (x y : L) (m : M), ⁅x, ⁅y, m⁆⁆ = ⁅⁅x, y⁆, m⁆ + ⁅y, ⁅x, m⁆⁆
 
 中文:
-类 LieRingModule
-  参数: (L : 类型v) (M : Type w) [LieRing L] [AddCommGroup M]
+类 Lie环模
+  参数: (L : 类型v) (M : 类型 w) [Lie环 L] [加法交换群 M]
   继承: Bracket L M
   公理与运算 (3 个):
     - add_lie : 对任意 (x y : L) (m : M), ⁅x + y, m⁆ = ⁅x, m⁆ + ⁅y, m⁆
@@ -153,8 +153,8 @@ class LieModule
     - lie_smul : forall (t : R) (x : L) (m : M), ⁅x, t • m⁆ = t • ⁅x, m⁆
 
 中文:
-类 LieModule
-  参数: (R : 类型u) (L : 类型v) (M : Type w) [CommRing R] [LieRing L] [LieAlgebra R L]
+类 Lie模
+  参数: (R : 类型u) (L : 类型v) (M : 类型 w) [交换环 R] [Lie环 L] [Lie代数 R L]
   公理与运算 (2 个):
     - smul_lie : 对任意 (t : R) (x : L) (m : M), ⁅t • x, m⁆ = t • ⁅x, m⁆
     - lie_smul : 对任意 (t : R) (x : L) (m : M), ⁅x, t • m⁆ = t • ⁅x, m⁆
@@ -176,8 +176,8 @@ class IsLieTower
     - leibniz_lie((x : L₁) (y : L₂) (m : M)) : ⁅x, ⁅y, m⁆⁆ = ⁅⁅x, y⁆, m⁆ + ⁅y, ⁅x, m⁆⁆
 
 中文:
-类 IsLieTower
-  参数: (L₁ L₂ M : 类型) [Bracket L₁ L₂] [Bracket L₁ M] [Bracket L₂ M] [Add M]
+类 是LieTower
+  参数: (L₁ L₂ M : 类型) [Bracket L₁ L₂] [Bracket L₁ M] [Bracket L₂ M] [加法 M]
   公理与运算 (1 个):
     - leibniz_lie((x : L₁) (y : L₂) (m : M)) : ⁅x, ⁅y, m⁆⁆ = ⁅⁅x, y⁆, m⁆ + ⁅y, ⁅x, m⁆⁆
 -/
@@ -198,7 +198,7 @@ lemma leibniz_lie
 
 中文:
 引理 leibniz_lie
-  条件: [Add M] [IsLieTower L₁ L₂ M] (x : L₁) (y : L₂) (m : M)
+  条件: [加法 M] [是LieTower L₁ L₂ M] (x : L₁) (y : L₂) (m : M)
   证明: IsLieTower.leibniz_lie x y m
 
 Depends on / 依赖: IsLieTower, IsLieTower.leibniz_lie, leibniz_lie
@@ -219,7 +219,7 @@ lemma lie_swap_lie
 
 中文:
 引理 lie_swap_lie
-  结论: [Bracket L₂ L₁] [AddCommGroup M] [IsLieTower L₁ L₂ M] [IsLieTower L₂ L₁ M]
+  结论: [Bracket L₂ L₁] [加法交换群 M] [是LieTower L₁ L₂ M] [是LieTower L₂ L₁ M]
   证明: by
   have h1 := leibniz_lie x y m
   have h2 := leibniz_lie y x m
@@ -248,8 +248,8 @@ theorem LieAlgebra.toModule_injective
   congr
 
 中文:
-定理 LieAlgebra.toModule_injective
-  条件: (L : 类型) [LieRing L]
+定理 Lie代数.toModule_injective
+  条件: (L : 类型) [Lie环 L]
   证明: by
   rintro ⟨h₁⟩ ⟨h₂⟩ heq
   congr
@@ -368,7 +368,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLieTower L L M
+  签名: 是LieTower L L M
   定义体: LieRingModule.leibniz_lie x y m
 
 @[simp]
@@ -455,7 +455,7 @@ instance lieRingSelfModule
 
 中文:
 实例 lieRingSelfModule
-  签名: : LieRingModule L L
+  签名: : Lie环模 L L
   定义体: { (inferInstance : LieRing L) with }
 
 @[simp]
@@ -502,7 +502,7 @@ instance lieAlgebraSelfModule
 
 中文:
 实例 lieAlgebraSelfModule
-  签名: : LieModule R L L where
+  签名: : Lie模 R L L where
   定义体: by rw [← lie_skew, ← lie_skew x m, LieAlgebra.lie_smul, smul_neg]
   lie_smul := by apply LieAlgebra.lie_smul
 
@@ -781,7 +781,7 @@ definition LieRingModule.toEnd
   map_add' y z := by ext n; exact add_lie y z n
 
 中文:
-定义 LieRingModule.toEnd
+定义 Lie环模.toEnd
   签名: : L ->+ M ->+ M where
   定义体: ⟨⟨fun m => ⁅x, m⁆, lie_zero x⟩, LieRingModule.lie_add x⟩
   map_zero' := by ext n; exact zero_lie n
@@ -801,8 +801,8 @@ instance LieRing.instLieAlgebra
   body: lie_zsmul x y n
 
 中文:
-实例 LieRing.instLieAlgebra
-  签名: : LieAlgebra 整数 L where lie_smul n x y
+实例 Lie环.instLieAlgebra
+  签名: : Lie代数 整数 L where lie_smul n x y
   定义体: lie_zsmul x y n
 
 Depends on / 依赖: lie_zsmul
@@ -820,7 +820,7 @@ instance :
 
 中文:
 实例 :
-  签名: LieModule 整数 L M
+  签名: Lie模 整数 L M
   定义体: zsmul_lie x m n
   lie_smul n x m := lie_zsmul x m n
 -/
@@ -846,8 +846,8 @@ instance LinearMap.instLieRingModule
     simp only [add_lie, coe_mk, AddHom.coe_m
 
 中文:
-实例 LinearMap.instLieRingModule
-  签名: : LieRingModule L (M ->ₗ[R] N) where
+实例 线性映射.instLieRingModule
+  签名: : Lie环模 L (M ->ₗ[R] N) where
   定义体: { toFun := fun m => ⁅x, f m⁆ - f ⁅x, m⁆
       map_add' := fun m n => by
         simp only [lie_add, map_add]
@@ -892,7 +892,7 @@ theorem LieHom.lie_apply
   proof: rfl
 
 中文:
-定理 LieHom.lie_apply
+定理 Lie态射.lie_apply
   条件: (f : M ->ₗ[R] N) (x : L) (m : M)
   结论: ⁅x, f⁆ m = ⁅x, f m⁆ - f ⁅x, m⁆
   证明: rfl
@@ -915,8 +915,8 @@ instance LinearMap.instLieModule
     simp only [smul_sub, smul_apply, LieHom.lie_apply, lie_smul]
 
 中文:
-实例 LinearMap.instLieModule
-  签名: : LieModule R L (M ->ₗ[R] N) where
+实例 线性映射.instLieModule
+  签名: : Lie模 R L (M ->ₗ[R] N) where
   定义体: by
     ext n
     simp only [smul_sub, smul_lie, smul_apply, LieHom.lie_apply, map_smul]
@@ -949,8 +949,8 @@ instance Module.Dual.instLieRingModule
   leibniz_lie := fun x m n => by ext p; simp
 
 中文:
-实例 Module.Dual.instLieRingModule
-  签名: : LieRingModule L (M ->ₗ[R] R) where
+实例 模.对偶.instLieRingModule
+  签名: : Lie环模 L (M ->ₗ[R] R) where
   定义体: fun x f =>
     { toFun := fun m => - f ⁅x, m⁆
       map_add' := by simp [-neg_add_rev, neg_add]
@@ -978,7 +978,7 @@ lemma Module.Dual.lie_apply
   proof: rfl
 
 中文:
-引理 Module.Dual.lie_apply
+引理 模.对偶.lie_apply
   条件: (f : M ->ₗ[R] R)
   结论: ⁅x, f⁆ m = - f ⁅x, m⁆
   证明: rfl
@@ -995,8 +995,8 @@ instance Module.Dual.instLieModule
   lie_smul := fun t x m => by ext n; simp
 
 中文:
-实例 Module.Dual.instLieModule
-  签名: : LieModule R L (M ->ₗ[R] R) where
+实例 模.对偶.instLieModule
+  签名: : Lie模 R L (M ->ₗ[R] R) where
   定义体: fun t x m => by ext n; simp
   lie_smul := fun t x m => by ext n; simp
 -/
@@ -1020,8 +1020,8 @@ definition LieRing.toNonUnitalNonAssocRing
     mul_zero := lie_zero }
 
 中文:
-定义 LieRing.toNonUnitalNonAssocRing
-  签名: : NonUnitalNonAssocRing L
+定义 Lie环.toNonUnitalNonAssocRing
+  签名: : 非幺非结合环 L
   定义体: { mul := Bracket.bracket
     left_distrib := lie_add
     right_distrib := add_lie
@@ -1050,7 +1050,7 @@ theorem sum_lie
 
 中文:
 定理 sum_lie
-  条件: (s : Finset ι) (f : ι -> L) (m : M)
+  条件: (s : 有限集 ι) (f : ι -> L) (m : M)
   结论: ⁅∑ i in s, f i, m⁆ = ∑ i in s, ⁅f i, m⁆
   证明: map_sum ((LieRingModule.toEnd L M).flip m) f s
 
@@ -1070,7 +1070,7 @@ theorem lie_sum
 
 中文:
 定理 lie_sum
-  条件: (s : Finset ι) (f : ι -> M) (a : L)
+  条件: (s : 有限集 ι) (f : ι -> M) (a : L)
   结论: ⁅a, ∑ i in s, f i⁆ = ∑ i in s, ⁅a, f i⁆
   证明: map_sum (LieRingModule.toEnd L M a) f s
 
@@ -1090,7 +1090,7 @@ theorem sum_lie_sum
 
 中文:
 定理 sum_lie_sum
-  条件: {κ : 类型} (s : Finset ι) (t : Finset κ) (f : ι -> L) (g : κ -> M)
+  条件: {κ : 类型} (s : 有限集 ι) (t : 有限集 κ) (f : ι -> L) (g : κ -> M)
   证明: by
   simp_rw [sum_lie, lie_sum]
 
@@ -1113,8 +1113,8 @@ structure LieHom
     - map_lie' : forall {x y : L}, toFun ⁅x, y⁆ = ⁅toFun x, toFun y⁆
 
 中文:
-结构 LieHom
-  参数: (R L L' : 类型) [CommRing R] [LieRing L] [LieAlgebra R L]
+结构 Lie态射
+  参数: (R L L' : 类型) [交换环 R] [Lie环 L] [Lie代数 R L]
   继承: L ->ₗ[R] L'
   公理与运算 (1 个):
     - map_lie' : 对任意 {x y : L}, toFun ⁅x, y⁆ = ⁅toFun x, toFun y⁆
@@ -1171,7 +1171,7 @@ initialize_simps_projections LieHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (L₁ ->ₗ⁅R⁆ L₂) L₁ L₂
+  签名: 函数状 (L₁ ->ₗ⁅R⁆ L₂) L₁ L₂
   定义体: f.toFun
   coe_injective x y h := by
     cases x; cases y; simp at h; simp [h]
@@ -1244,7 +1244,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (L₁ ->ₗ⁅R⁆ L₂) R L₁ L₂
+  签名: 线性映射类 (L₁ ->ₗ⁅R⁆ L₂) R L₁ L₂
   定义体: by rw [← coe_toLinearMap, map_add]
   map_smulₛₗ _ _ _ := by rw [← coe_toLinearMap, map_smulₛₗ]
 
@@ -1346,7 +1346,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (L₁ ->ₗ⁅R⁆ L₂)
+  签名: 零 (L₁ ->ₗ⁅R⁆ L₂)
   定义体: ⟨{ (0 : L₁ ->ₗ[R] L₂) with map_lie' := by simp }⟩
 
 @[norm_cast, simp]
@@ -1403,7 +1403,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (L₁ ->ₗ⁅R⁆ L₁)
+  签名: 幺 (L₁ ->ₗ⁅R⁆ L₁)
   定义体: ⟨id⟩
 
 @[simp]
@@ -1456,7 +1456,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (L₁ ->ₗ⁅R⁆ L₂)
+  签名: 可居 (L₁ ->ₗ⁅R⁆ L₂)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (L₁ ->ₗ⁅R⁆ L₂) :=
@@ -1476,7 +1476,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (L₁ ->ₗ⁅R⁆ L₂) (L₁ -> L₂) (↑)
+  结论: @函数.单射 (L₁ ->ₗ⁅R⁆ L₂) (L₁ -> L₂) (↑)
   证明: by
   rintro ⟨⟨⟨f, _⟩, _⟩, _⟩ ⟨⟨⟨g, _⟩, _⟩, _⟩ h
   congr
@@ -1733,7 +1733,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (g : L₂ -> L₁) (h₁ : Function.LeftInverse g f)
+  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (g : L₂ -> L₁) (h₁ : 函数.左逆 g f)
   定义体: { LinearMap.inverse f.toLinearMap g h₁ h₂ with
     map_lie' := by
       intro x y
@@ -1781,8 +1781,8 @@ definition LieRingModule.compLieHom
   leibniz_lie x y m := by simp only [lie_lie, sub_add_cancel, LieHom.map_lie]
 
 中文:
-定义 LieRingModule.compLieHom
-  签名: : LieRingModule L₁ M where
+定义 Lie环模.compLieHom
+  签名: : Lie环模 L₁ M where
   定义体: ⁅f x, m⁆
   lie_add x := lie_add (f x)
   add_lie x y m := by simp only [map_add, add_lie]
@@ -1805,7 +1805,7 @@ theorem LieRingModule.compLieHom_apply
   rfl
 
 中文:
-定理 LieRingModule.compLieHom_apply
+定理 Lie环模.compLieHom_apply
   条件: (x : L₁) (m : M)
   证明: LieRingModule.compLieHom M f
     ⁅x, m⁆ = ⁅f x, m⁆ :=
@@ -1832,8 +1832,8 @@ theorem LieModule.compLieHom
       simp only [LieRingModule.compLieHom_apply, lie_smul] }
 
 中文:
-定理 LieModule.compLieHom
-  条件: [Module R M] [LieModule R L₂ M]
+定理 Lie模.compLieHom
+  条件: [模 R M] [Lie模 R L₂ M]
   证明: { __ := LieRingModule.compLieHom M f
     smul_lie := fun t x m => by
       simp only [LieRingModule.compLieHom_apply, smul_lie, map_smul]
@@ -1865,13 +1865,13 @@ structure LieEquiv
     - right_inv : Function.RightInverse invFun toLieHom.toFun  [default: by intro; first | rfl | ext <;> rfl]
 
 中文:
-结构 LieEquiv
-  参数: (R : 类型u) (L : 类型v) (L' : Type w) [CommRing R] [LieRing L] [LieAlgebra R L]
+结构 Lie等价
+  参数: (R : 类型u) (L : 类型v) (L' : 类型 w) [交换环 R] [Lie环 L] [Lie代数 R L]
   继承: L ->ₗ⁅R⁆ L'
   公理与运算 (3 个):
     - invFun : L' -> L
-    - left_inv : Function.LeftInverse invFun toLieHom.toFun  [默认: by intro; first | rfl | ext <;> rfl]
-    - right_inv : Function.RightInverse invFun toLieHom.toFun  [默认: by intro; first | rfl | ext <;> rfl]
+    - left_inv : 函数.左逆 invFun toLieHom.toFun  [默认: by intro; first | rfl | ext <;> rfl]
+    - right_inv : 函数.右逆 invFun toLieHom.toFun  [默认: by intro; first | rfl | ext <;> rfl]
 -/
 structure LieEquiv (R : Type u) (L : Type v) (L' : Type w) [CommRing R] [LieRing L] [LieAlgebra R L]
   [LieRing L'] [LieAlgebra R L'] extends L ->ₗ⁅R⁆ L' where
@@ -1961,7 +1961,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (L₁ ≃ₗ⁅R⁆ L₂) L₁ L₂
+  签名: 等价状 (L₁ ≃ₗ⁅R⁆ L₂) L₁ L₂
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -2073,7 +2073,7 @@ theorem toLinearEquiv_injective
 
 中文:
 定理 toLinearEquiv_injective
-  结论: Injective ((↑) : (L₁ ≃ₗ⁅R⁆ L₂) -> L₁ ≃ₗ[R] L₂)
+  结论: 单射 ((↑) : (L₁ ≃ₗ⁅R⁆ L₂) -> L₁ ≃ₗ[R] L₂)
   证明: by
   rintro ⟨⟨⟨⟨f, -⟩, -⟩, -⟩, f_inv⟩ ⟨⟨⟨⟨g, -⟩, -⟩, -⟩, g_inv⟩
   simp
@@ -2094,7 +2094,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Injective (L₁ ≃ₗ⁅R⁆ L₂) (L₁ -> L₂) (↑)
+  结论: @单射 (L₁ ≃ₗ⁅R⁆ L₂) (L₁ -> L₂) (↑)
   证明: LinearEquiv.coe_injective.comp toLinearEquiv_injective
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.coe_injective.comp, coe_injective, toLinearEquiv_injective
@@ -2166,7 +2166,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (L₁ ≃ₗ⁅R⁆ L₁)
+  签名: 幺 (L₁ ≃ₗ⁅R⁆ L₁)
   定义体: ⟨{ (1 : L₁ ≃ₗ[R] L₁) with map_lie' := rfl }⟩
 
 @[simp]
@@ -2205,7 +2205,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (L₁ ≃ₗ⁅R⁆ L₁)
+  签名: 可居 (L₁ ≃ₗ⁅R⁆ L₁)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (L₁ ≃ₗ⁅R⁆ L₁) :=
@@ -2324,7 +2324,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (LieEquiv.symm : (L₁ ≃ₗ⁅R⁆ L₂) -> L₂ ≃ₗ⁅R⁆ L₁)
+  结论: 函数.双射 (Lie等价.symm : (L₁ ≃ₗ⁅R⁆ L₂) -> L₂ ≃ₗ⁅R⁆ L₁)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2568,7 +2568,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : L₁ ≃ₗ⁅R⁆ L₂)
-  结论: Function.Bijective ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂)
+  结论: 函数.双射 ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂)
   证明: e.toLinearEquiv.bijective
 -/
 protected theorem bijective (e : L₁ ≃ₗ⁅R⁆ L₂) : Function.Bijective ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂) :=
@@ -2586,7 +2586,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : L₁ ≃ₗ⁅R⁆ L₂)
-  结论: Function.Injective ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂)
+  结论: 函数.单射 ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂)
   证明: e.toLinearEquiv.injective
 -/
 protected theorem injective (e : L₁ ≃ₗ⁅R⁆ L₂) : Function.Injective ((e : L₁ ->ₗ⁅R⁆ L₂) : L₁ -> L₂) :=
@@ -2624,7 +2624,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (h : Function.Bijective f)
+  签名: (f : L₁ ->ₗ⁅R⁆ L₂) (h : 函数.双射 f)
   定义体: { LinearEquiv.ofBijective (f : L₁ ->ₗ[R] L₂)
       h with
     toFun := f
@@ -2659,7 +2659,7 @@ structure LieModuleHom
     - map_lie' : forall {x : L} {m : M}, toFun ⁅x, m⁆ = ⁅x, toFun m⁆
 
 中文:
-结构 LieModuleHom
+结构 Lie模态射
   参数: extends M ->ₗ[R] N
   继承: M ->ₗ[R] N
   公理与运算 (1 个):
@@ -2712,7 +2712,7 @@ initialize_simps_projections LieModuleHom (toFun -> apply)
 
 中文:
 实例 :
-  签名: FunLike (M ->ₗ⁅R,L⁆ N) M N
+  签名: 函数状 (M ->ₗ⁅R,L⁆ N) M N
   定义体: f.toFun
   coe_injective x y h := by cases x; cases y; simp at h; simp [h]
 
@@ -2760,7 +2760,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (M ->ₗ⁅R,L⁆ N) R M N
+  签名: 线性映射类 (M ->ₗ⁅R,L⁆ N) R M N
   定义体: by rw [← coe_toLinearMap, map_add]
   map_smulₛₗ _ _ _ := by rw [← coe_toLinearMap, map_smulₛₗ]
 
@@ -2881,7 +2881,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ->ₗ⁅R,L⁆ N)
+  签名: 零 (M ->ₗ⁅R,L⁆ N)
   定义体: ⟨{ (0 : M ->ₗ[R] N) with map_lie' := by simp }⟩
 
 @[norm_cast, simp]
@@ -2936,7 +2936,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (M ->ₗ⁅R,L⁆ M)
+  签名: 幺 (M ->ₗ⁅R,L⁆ M)
   定义体: ⟨id⟩
 -/
 instance : One (M ->ₗ⁅R,L⁆ M) :=
@@ -2952,7 +2952,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ->ₗ⁅R,L⁆ N)
+  签名: 可居 (M ->ₗ⁅R,L⁆ N)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (M ->ₗ⁅R,L⁆ N) :=
@@ -2972,7 +2972,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (M ->ₗ⁅R,L⁆ N) (M -> N) (↑)
+  结论: @函数.单射 (M ->ₗ⁅R,L⁆ N) (M -> N) (↑)
   证明: by
   rintro ⟨⟨⟨f, _⟩⟩⟩ ⟨⟨⟨g, _⟩⟩⟩ h
   congr
@@ -3201,7 +3201,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: (f : M ->ₗ⁅R,L⁆ N) (g : N -> M) (h₁ : Function.LeftInverse g f)
+  签名: (f : M ->ₗ⁅R,L⁆ N) (g : N -> M) (h₁ : 函数.左逆 g f)
   定义体: { LinearMap.inverse f.toLinearMap g h₁ h₂ with
     map_lie' := by
       intro x n
@@ -3234,7 +3234,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M ->ₗ⁅R,L⁆ N)
+  签名: 加法 (M ->ₗ⁅R,L⁆ N)
   定义体: { (f : M ->ₗ[R] N) + (g : M ->ₗ[R] N) with map_lie' := by simp }
 
 Depends on / 依赖: map_lie
@@ -3252,7 +3252,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M ->ₗ⁅R,L⁆ N)
+  签名: 减法 (M ->ₗ⁅R,L⁆ N)
   定义体: { (f : M ->ₗ[R] N) - (g : M ->ₗ[R] N) with map_lie' := by simp }
 
 Depends on / 依赖: map_lie
@@ -3272,7 +3272,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M ->ₗ⁅R,L⁆ N)
+  签名: 取负 (M ->ₗ⁅R,L⁆ N)
   定义体: { -(f : M ->ₗ[R] N) with map_lie' := by simp }
 
 @[norm_cast, simp]
@@ -3416,7 +3416,7 @@ instance hasNSMul
 
 中文:
 实例 hasNSMul
-  签名: : SMul 自然数 (M ->ₗ⁅R,L⁆ N) where
+  签名: : 标量乘法 自然数 (M ->ₗ⁅R,L⁆ N) where
   定义体: { n • (f : M ->ₗ[R] N) with map_lie' := by simp }
 
 @[norm_cast, simp]
@@ -3475,7 +3475,7 @@ instance hasZSMul
 
 中文:
 实例 hasZSMul
-  签名: : SMul 整数 (M ->ₗ⁅R,L⁆ N) where
+  签名: : 标量乘法 整数 (M ->ₗ⁅R,L⁆ N) where
   定义体: { z • (f : M ->ₗ[R] N) with map_lie' := by simp }
 
 @[norm_cast, simp]
@@ -3533,7 +3533,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (M ->ₗ⁅R,L⁆ N)
+  签名: 加法交换群 (M ->ₗ⁅R,L⁆ N)
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => coe_nsmul _ _)
     (fun _ _ => coe_zsmul _ _)
 
@@ -3557,7 +3557,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (M ->ₗ⁅R,L⁆ N)
+  签名: 标量乘法 R (M ->ₗ⁅R,L⁆ N)
   定义体: { t • (f : M ->ₗ[R] N) with map_lie' := by simp }
 
 @[norm_cast, simp]
@@ -3616,7 +3616,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (M ->ₗ⁅R,L⁆ N)
+  签名: 模 R (M ->ₗ⁅R,L⁆ N)
   定义体: Function.Injective.module R
     { toFun := fun f => f.toLinearMap.toFun, map_zero' := rfl, map_add' := coe_add }
     coe_injective coe_smul
@@ -3643,13 +3643,13 @@ structure LieModuleEquiv
     - right_inv : Function.RightInverse invFun toFun
 
 中文:
-结构 LieModuleEquiv
+结构 Lie模等价
   参数: extends M ->ₗ⁅R,L⁆ N
   继承: M ->ₗ⁅R, L⁆ N
   公理与运算 (3 个):
     - invFun : N -> M
-    - left_inv : Function.LeftInverse invFun toFun
-    - right_inv : Function.RightInverse invFun toFun
+    - left_inv : 函数.左逆 invFun toFun
+    - right_inv : 函数.右逆 invFun toFun
 -/
 structure LieModuleEquiv extends M ->ₗ⁅R,L⁆ N where
   /-- The inverse function of an equivalence of Lie modules -/
@@ -3770,7 +3770,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (M ≃ₗ⁅R,L⁆ N) M N
+  签名: 等价状 (M ≃ₗ⁅R,L⁆ N) M N
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -3815,7 +3815,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : M ≃ₗ⁅R,L⁆ N)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: e.toEquiv.injective
 
 Depends on / 依赖: e.toEquiv.injective, injective, toEquiv
@@ -3837,7 +3837,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : M ≃ₗ⁅R,L⁆ N)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: e.toEquiv.surjective
 
 @[simp]
@@ -3942,7 +3942,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Function.Injective (toEquiv : (M ≃ₗ⁅R,L⁆ N) -> M ≃ N)
+  结论: 函数.单射 (toEquiv : (M ≃ₗ⁅R,L⁆ N) -> M ≃ N)
   证明: by
   rintro ⟨⟨⟨⟨f, -⟩, -⟩, -⟩, f_inv⟩ ⟨⟨⟨⟨g, -⟩, -⟩, -⟩, g_inv⟩
   simp
@@ -4015,7 +4015,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (M ≃ₗ⁅R,L⁆ M)
+  签名: 幺 (M ≃ₗ⁅R,L⁆ M)
   定义体: ⟨{ (1 : M ≃ₗ[R] M) with map_lie' := rfl }⟩
 
 @[simp]
@@ -4054,7 +4054,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ≃ₗ⁅R,L⁆ M)
+  签名: 可居 (M ≃ₗ⁅R,L⁆ M)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (M ≃ₗ⁅R,L⁆ M) :=

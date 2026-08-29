@@ -90,7 +90,7 @@ theorem fixedSubmodule_eq_ker
 
 中文:
 定理 fixedSubmodule_eq_ker
-  结论: {R : 类型} [Ring R]
+  结论: {R : 类型} [环 R]
   证明: by
   ext; simp [sub_eq_zero]
 
@@ -272,7 +272,7 @@ theorem map_eq_of_mem_fixingSubgroup
 
 中文:
 定理 map_eq_of_mem_fixingSubgroup
-  结论: (W : Submodule R V)
+  结论: (W : 子模 R V)
   证明: by
   ext v
   simp only [mem_fixingSubgroup_iff, carrier_eq_coe, SetLike.mem_coe, LinearEquiv.smul_def] at he
@@ -313,7 +313,7 @@ definition reduce
 
 中文:
 定义 reduce
-  签名: (W : Submodule R V)
+  签名: (W : 子模 R V)
   定义体: Quotient.equiv W W u.val u.prop
   map_mul' u v := by
     ext x
@@ -344,7 +344,7 @@ theorem reduce_mk
 
 中文:
 定理 reduce_mk
-  条件: (W : Submodule R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V)
+  条件: (W : 子模 R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V)
   证明: rfl
 -/
 theorem reduce_mk (W : Submodule R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V) :
@@ -361,7 +361,7 @@ theorem reduce_mkQ
 
 中文:
 定理 reduce_mkQ
-  条件: (W : Submodule R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V)
+  条件: (W : 子模 R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V)
   证明: rfl
 -/
 theorem reduce_mkQ (W : Submodule R V) (u : stabilizer (V ≃ₗ[R] V) W) (x : V) :

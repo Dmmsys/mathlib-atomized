@@ -195,7 +195,7 @@ theorem cons_val'
 
 中文:
 定理 cons_val'
-  条件: (v : n' -> α) (B : Fin m -> n' -> α) (i j)
+  条件: (v : n' -> α) (B : 有限集 m -> n' -> α) (i j)
   证明: by refine Fin.cases ?_ ?_ i <;> simp
 
 @[simp]
@@ -219,7 +219,7 @@ theorem head_val'
 
 中文:
 定理 head_val'
-  条件: (B : Fin m.succ -> n' -> α) (j : n')
+  条件: (B : 有限集 m.succ -> n' -> α) (j : n')
   结论: (vecHead fun i => B i j) = vecHead B j
   证明: rfl
 
@@ -239,7 +239,7 @@ theorem tail_val'
 
 中文:
 定理 tail_val'
-  条件: (B : Fin m.succ -> n' -> α) (j : n')
+  条件: (B : 有限集 m.succ -> n' -> α) (j : n')
   证明: rfl
 -/
 theorem tail_val' (B : Fin m.succ -> n' -> α) (j : n') :
@@ -263,7 +263,7 @@ theorem dotProduct_of_isEmpty
 
 中文:
 定理 dotProduct_of_isEmpty
-  条件: [Fintype n'] [IsEmpty n'] (v w : n' -> α)
+  条件: [有限类型 n'] [是空 n'] (v w : n' -> α)
   结论: v ⬝ᵥ w = 0
   证明: Finset.sum_of_isEmpty _
 
@@ -288,7 +288,7 @@ theorem cons_dotProduct
 
 中文:
 定理 cons_dotProduct
-  条件: (x : α) (v : Fin n -> α) (w : Fin n.succ -> α)
+  条件: (x : α) (v : 有限集 n -> α) (w : 有限集 n.succ -> α)
   证明: by
   simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
 
@@ -312,7 +312,7 @@ theorem dotProduct_cons
 
 中文:
 定理 dotProduct_cons
-  条件: (v : Fin n.succ -> α) (x : α) (w : Fin n -> α)
+  条件: (v : 有限集 n.succ -> α) (x : α) (w : 有限集 n -> α)
   证明: by
   simp [dotProduct, Fin.sum_univ_succ, vecHead, vecTail]
 
@@ -332,7 +332,7 @@ theorem cons_dotProduct_cons
 
 中文:
 定理 cons_dotProduct_cons
-  条件: (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α)
+  条件: (x : α) (v : 有限集 n -> α) (y : α) (w : 有限集 n -> α)
   证明: by simp
 -/
 theorem cons_dotProduct_cons (x : α) (v : Fin n -> α) (y : α) (w : Fin n -> α) :
@@ -355,7 +355,7 @@ theorem diagonal_fin_one
 
 中文:
 定理 diagonal_fin_one
-  条件: (d : Fin 1 -> α)
+  条件: (d : 有限集 1 -> α)
   结论: diagonal d = !![d 0]
   证明: by
   simp [← Matrix.ext_iff]
@@ -397,7 +397,7 @@ theorem diagonal_fin_two
 
 中文:
 定理 diagonal_fin_two
-  条件: (d : Fin 2 -> α)
+  条件: (d : 有限集 2 -> α)
   结论: diagonal d = !![d 0, 0; 0, d 1]
   证明: by
   simp [← Matrix.ext_iff]
@@ -438,7 +438,7 @@ theorem diagonal_fin_three
 
 中文:
 定理 diagonal_fin_three
-  条件: (d : Fin 3 -> α)
+  条件: (d : 有限集 3 -> α)
   证明: by
   simp [← Matrix.ext_iff, Fin.forall_fin_succ]
 
@@ -485,7 +485,7 @@ theorem replicateCol_empty
 
 中文:
 定理 replicateCol_empty
-  条件: (v : Fin 0 -> α)
+  条件: (v : 有限集 0 -> α)
   结论: replicateCol ι v = of vecEmpty
   证明: empty_eq _
 
@@ -510,7 +510,7 @@ theorem replicateCol_cons
 
 中文:
 定理 replicateCol_cons
-  条件: (x : α) (u : Fin m -> α)
+  条件: (x : α) (u : 有限集 m -> α)
   证明: by
   ext i j
   refine Fin.cases ?_ ?_ i <;> simp
@@ -537,7 +537,7 @@ theorem replicateRow_empty
 
 中文:
 定理 replicateRow_empty
-  结论: replicateRow ι (vecEmpty : Fin 0 -> α) = of fun _ => vecEmpty
+  结论: replicateRow ι (vecEmpty : 有限集 0 -> α) = of fun _ => vecEmpty
   证明: rfl
 
 @[simp]
@@ -555,7 +555,7 @@ theorem replicateRow_cons
 
 中文:
 定理 replicateRow_cons
-  条件: (x : α) (u : Fin m -> α)
+  条件: (x : α) (u : 有限集 m -> α)
   证明: rfl
 -/
 theorem replicateRow_cons (x : α) (u : Fin m -> α) :
@@ -580,7 +580,7 @@ theorem transpose_empty_rows
 
 中文:
 定理 transpose_empty_rows
-  条件: (A : Matrix m' (Fin 0) α)
+  条件: (A : 矩阵 m' (有限集 0) α)
   结论: Aᵀ = of ![]
   证明: empty_eq _
 
@@ -603,7 +603,7 @@ theorem transpose_empty_cols
 
 中文:
 定理 transpose_empty_cols
-  条件: (A : Matrix (Fin 0) m' α)
+  条件: (A : 矩阵 (有限集 0) m' α)
   结论: Aᵀ = of fun _ => ![]
   证明: funext fun _ => empty_eq _
 
@@ -628,7 +628,7 @@ theorem cons_transpose
 
 中文:
 定理 cons_transpose
-  条件: (v : n' -> α) (A : Matrix (Fin m) n' α)
+  条件: (v : n' -> α) (A : 矩阵 (有限集 m) n' α)
   证明: by
   ext i j
   refine Fin.cases ?_ ?_ j <;> simp
@@ -655,7 +655,7 @@ theorem head_transpose
 
 中文:
 定理 head_transpose
-  条件: (A : Matrix m' (Fin n.succ) α)
+  条件: (A : 矩阵 m' (有限集 n.succ) α)
   证明: rfl
 
 @[simp]
@@ -678,7 +678,7 @@ theorem tail_transpose
 
 中文:
 定理 tail_transpose
-  条件: (A : Matrix m' (Fin n.succ) α)
+  条件: (A : 矩阵 m' (有限集 n.succ) α)
   结论: vecTail (of.symm Aᵀ) = (vecTail ∘ A)ᵀ
   证明: by
   ext i j
@@ -708,7 +708,7 @@ theorem empty_mul
 
 中文:
 定理 empty_mul
-  条件: [Fintype n'] (A : Matrix (Fin 0) n' α) (B : Matrix n' o' α)
+  条件: [有限类型 n'] (A : 矩阵 (有限集 0) n' α) (B : 矩阵 n' o' α)
   结论: A * B = of ![]
   证明: empty_eq _
 
@@ -733,7 +733,7 @@ theorem empty_mul_empty
 
 中文:
 定理 empty_mul_empty
-  条件: (A : Matrix m' (Fin 0) α) (B : Matrix (Fin 0) o' α)
+  条件: (A : 矩阵 m' (有限集 0) α) (B : 矩阵 (有限集 0) o' α)
   结论: A * B = 0
   证明: rfl
 
@@ -753,7 +753,7 @@ theorem mul_empty
 
 中文:
 定理 mul_empty
-  条件: [Fintype n'] (A : Matrix m' n' α) (B : Matrix n' (Fin 0) α)
+  条件: [有限类型 n'] (A : 矩阵 m' n' α) (B : 矩阵 n' (有限集 0) α)
   证明: funext fun _ => empty_eq _
 
 Depends on / 依赖: empty_eq
@@ -774,7 +774,7 @@ theorem mul_val_succ
 
 中文:
 定理 mul_val_succ
-  结论: [Fintype n'] (A : Matrix (Fin m.succ) n' α) (B : Matrix n' o' α) (i : Fin m)
+  结论: [有限类型 n'] (A : 矩阵 (有限集 m.succ) n' α) (B : 矩阵 n' o' α) (i : 有限集 m)
   证明: rfl
 
 @[simp]
@@ -798,7 +798,7 @@ theorem cons_mul
 
 中文:
 定理 cons_mul
-  条件: [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (B : Matrix n' o' α)
+  条件: [有限类型 n'] (v : n' -> α) (A : 有限集 m -> n' -> α) (B : 矩阵 n' o' α)
   证明: by
   ext i j
   refine Fin.cases ?_ ?_ i
@@ -834,7 +834,7 @@ theorem empty_vecMul
 
 中文:
 定理 empty_vecMul
-  条件: (v : Fin 0 -> α) (B : Matrix (Fin 0) o' α)
+  条件: (v : 有限集 0 -> α) (B : 矩阵 (有限集 0) o' α)
   结论: v ᵥ* B = 0
   证明: rfl
 
@@ -857,7 +857,7 @@ theorem vecMul_empty
 
 中文:
 定理 vecMul_empty
-  条件: [Fintype n'] (v : n' -> α) (B : Matrix n' (Fin 0) α)
+  条件: [有限类型 n'] (v : n' -> α) (B : 矩阵 n' (有限集 0) α)
   结论: v ᵥ* B = ![]
   证明: empty_eq _
 
@@ -883,7 +883,7 @@ theorem cons_vecMul
 
 中文:
 定理 cons_vecMul
-  条件: (x : α) (v : Fin n -> α) (B : Fin n.succ -> o' -> α)
+  条件: (x : α) (v : 有限集 n -> α) (B : 有限集 n.succ -> o' -> α)
   证明: by
   ext i
   simp [vecMul]
@@ -910,7 +910,7 @@ theorem vecMul_cons
 
 中文:
 定理 vecMul_cons
-  条件: (v : Fin n.succ -> α) (w : o' -> α) (B : Fin n -> o' -> α)
+  条件: (v : 有限集 n.succ -> α) (w : o' -> α) (B : 有限集 n -> o' -> α)
   证明: by
   ext i
   simp [vecMul]
@@ -932,7 +932,7 @@ theorem cons_vecMul_cons
 
 中文:
 定理 cons_vecMul_cons
-  条件: (x : α) (v : Fin n -> α) (w : o' -> α) (B : Fin n -> o' -> α)
+  条件: (x : α) (v : 有限集 n -> α) (w : o' -> α) (B : 有限集 n -> o' -> α)
   证明: by simp
 -/
 theorem cons_vecMul_cons (x : α) (v : Fin n -> α) (w : o' -> α) (B : Fin n -> o' -> α) :
@@ -958,7 +958,7 @@ theorem empty_mulVec
 
 中文:
 定理 empty_mulVec
-  条件: [Fintype n'] (A : Matrix (Fin 0) n' α) (v : n' -> α)
+  条件: [有限类型 n'] (A : 矩阵 (有限集 0) n' α) (v : n' -> α)
   结论: A *ᵥ v = ![]
   证明: empty_eq _
 
@@ -983,7 +983,7 @@ theorem mulVec_empty
 
 中文:
 定理 mulVec_empty
-  条件: (A : Matrix m' (Fin 0) α) (v : Fin 0 -> α)
+  条件: (A : 矩阵 m' (有限集 0) α) (v : 有限集 0 -> α)
   结论: A *ᵥ v = 0
   证明: rfl
 
@@ -1007,7 +1007,7 @@ theorem cons_mulVec
 
 中文:
 定理 cons_mulVec
-  条件: [Fintype n'] (v : n' -> α) (A : Fin m -> n' -> α) (w : n' -> α)
+  条件: [有限类型 n'] (v : n' -> α) (A : 有限集 m -> n' -> α) (w : n' -> α)
   证明: by
   ext i
   refine Fin.cases ?_ ?_ i <;> simp [mulVec]
@@ -1034,7 +1034,7 @@ theorem mulVec_cons
 
 中文:
 定理 mulVec_cons
-  结论: {α} [NonUnitalCommSemiring α] (A : m' -> Fin n.succ -> α) (x : α)
+  结论: {α} [非幺交换半环 α] (A : m' -> 有限集 n.succ -> α) (x : α)
   证明: by
   ext i
   simp [mulVec, mul_comm]
@@ -1066,7 +1066,7 @@ theorem empty_vecMulVec
 
 中文:
 定理 empty_vecMulVec
-  条件: (v : Fin 0 -> α) (w : n' -> α)
+  条件: (v : 有限集 0 -> α) (w : n' -> α)
   结论: vecMulVec v w = of ![]
   证明: empty_eq _
 
@@ -1089,7 +1089,7 @@ theorem vecMulVec_empty
 
 中文:
 定理 vecMulVec_empty
-  条件: (v : m' -> α) (w : Fin 0 -> α)
+  条件: (v : m' -> α) (w : 有限集 0 -> α)
   结论: vecMulVec v w = of fun _ => ![]
   证明: funext fun _ => empty_eq _
 
@@ -1114,7 +1114,7 @@ theorem cons_vecMulVec
 
 中文:
 定理 cons_vecMulVec
-  条件: (x : α) (v : Fin m -> α) (w : n' -> α)
+  条件: (x : α) (v : 有限集 m -> α) (w : n' -> α)
   证明: by
   ext i
   refine Fin.cases ?_ ?_ i <;> simp [vecMulVec]
@@ -1139,7 +1139,7 @@ theorem vecMulVec_cons
 
 中文:
 定理 vecMulVec_cons
-  条件: (v : m' -> α) (x : α) (w : Fin n -> α)
+  条件: (v : m' -> α) (x : α) (w : 有限集 n -> α)
   证明: rfl
 -/
 theorem vecMulVec_cons (v : m' -> α) (x : α) (w : Fin n -> α) :
@@ -1162,7 +1162,7 @@ theorem smul_mat_empty
 
 中文:
 定理 smul_mat_empty
-  条件: {m' : 类型} (x : α) (A : Fin 0 -> m' -> α)
+  条件: {m' : 类型} (x : α) (A : 有限集 0 -> m' -> α)
   结论: x • A = ![]
   证明: empty_eq _
 
@@ -1186,7 +1186,7 @@ theorem submatrix_empty
 
 中文:
 定理 submatrix_empty
-  条件: (A : Matrix m' n' α) (row : Fin 0 -> m') (col : o' -> n')
+  条件: (A : 矩阵 m' n' α) (row : 有限集 0 -> m') (col : o' -> n')
   证明: empty_eq _
 
 Depends on / 依赖: empty_eq
@@ -1209,7 +1209,7 @@ theorem submatrix_cons_row
 
 中文:
 定理 submatrix_cons_row
-  条件: (A : Matrix m' n' α) (i : m') (row : Fin m -> m') (col : o' -> n')
+  条件: (A : 矩阵 m' n' α) (i : m') (row : 有限集 m -> m') (col : o' -> n')
   证明: by
   ext i j
   refine Fin.cases ?_ ?_ i <;> simp [submatrix]
@@ -1233,7 +1233,7 @@ theorem submatrix_updateRow_succAbove
 
 中文:
 定理 submatrix_updateRow_succAbove
-  结论: (A : Matrix (Fin m.succ) n' α) (v : n' -> α) (f : o' -> n')
+  结论: (A : 矩阵 (有限集 m.succ) n' α) (v : n' -> α) (f : o' -> n')
   证明: ext fun r s => (congr_fun (updateRow_ne (Fin.succAbove_ne i r) : _ = A _) (f s) :)
 
 Depends on / 依赖: Fin.succAbove_ne, congr_fun, succAbove_ne, updateRow_ne
@@ -1254,7 +1254,7 @@ theorem submatrix_updateCol_succAbove
 
 中文:
 定理 submatrix_updateCol_succAbove
-  结论: (A : Matrix m' (Fin n.succ) α) (v : m' -> α) (f : o' -> m')
+  结论: (A : 矩阵 m' (有限集 n.succ) α) (v : m' -> α) (f : o' -> m')
   证明: ext fun _r s => updateCol_ne (Fin.succAbove_ne i s)
 
 Depends on / 依赖: Fin.succAbove_ne, succAbove_ne, updateCol_ne
@@ -1283,7 +1283,7 @@ theorem one_fin_two
 
 中文:
 定理 one_fin_two
-  结论: (1 : Matrix (Fin 2) (Fin 2) α) = !![1, 0; 0, 1]
+  结论: (1 : 矩阵 (有限集 2) (有限集 2) α) = !![1, 0; 0, 1]
   证明: by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
@@ -1306,7 +1306,7 @@ theorem one_fin_three
 
 中文:
 定理 one_fin_three
-  结论: (1 : Matrix (Fin 3) (Fin 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0, 1]
+  结论: (1 : 矩阵 (有限集 3) (有限集 3) α) = !![1, 0, 0; 0, 1, 0; 0, 0, 1]
   证明: by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
@@ -1336,7 +1336,7 @@ theorem natCast_fin_two
 中文:
 定理 natCast_fin_two
   条件: (n : 自然数)
-  结论: (n : Matrix (Fin 2) (Fin 2) α) = !![↑n, 0; 0, ↑n]
+  结论: (n : 矩阵 (有限集 2) (有限集 2) α) = !![↑n, 0; 0, ↑n]
   证明: by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
@@ -1380,7 +1380,7 @@ theorem ofNat_fin_two
   proof: natCast_fin_two _
 
 中文:
-定理 ofNat_fin_two
+定理 of自然数_fin_two
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: natCast_fin_two _
 
@@ -1400,7 +1400,7 @@ theorem ofNat_fin_three
   proof: natCast_fin_three _
 
 中文:
-定理 ofNat_fin_three
+定理 of自然数_fin_three
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: natCast_fin_three _
 
@@ -1426,7 +1426,7 @@ theorem eta_fin_two
 
 中文:
 定理 eta_fin_two
-  条件: (A : Matrix (Fin 2) (Fin 2) α)
+  条件: (A : 矩阵 (有限集 2) (有限集 2) α)
   结论: A = !![A 0 0, A 0 1; A 1 0, A 1 1]
   证明: by
   ext i j
@@ -1450,7 +1450,7 @@ theorem eta_fin_three
 
 中文:
 定理 eta_fin_three
-  条件: (A : Matrix (Fin 3) (Fin 3) α)
+  条件: (A : 矩阵 (有限集 3) (有限集 3) α)
   证明: by
   ext i j
   fin_cases i <;> fin_cases j <;> rfl
@@ -1476,7 +1476,7 @@ theorem mul_fin_two
 
 中文:
 定理 mul_fin_two
-  条件: [AddCommMonoid α] [Mul α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α)
+  条件: [加法交换幺半群 α] [乘法 α] (a₁₁ a₁₂ a₂₁ a₂₂ b₁₁ b₁₂ b₂₁ b₂₂ : α)
   证明: by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [Matrix.mul_apply, Fin.sum_univ_succ]
@@ -1505,7 +1505,7 @@ theorem mul_fin_three
 
 中文:
 定理 mul_fin_three
-  结论: [AddCommMonoid α] [Mul α]
+  结论: [加法交换幺半群 α] [乘法 α]
   证明: by
   ext i j
   fin_cases i <;> fin_cases j
@@ -1578,7 +1578,7 @@ theorem vec2_add
 
 中文:
 定理 vec2_add
-  条件: [Add α] (a₀ a₁ b₀ b₁ : α)
+  条件: [加法 α] (a₀ a₁ b₀ b₁ : α)
   结论: ![a₀, a₁] + ![b₀, b₁] = ![a₀ + b₀, a₁ + b₁]
   证明: by
   simp
@@ -1597,7 +1597,7 @@ theorem vec3_add
 
 中文:
 定理 vec3_add
-  条件: [Add α] (a₀ a₁ a₂ b₀ b₁ b₂ : α)
+  条件: [加法 α] (a₀ a₁ a₂ b₀ b₁ b₂ : α)
   证明: by
   simp
 -/
@@ -1616,7 +1616,7 @@ theorem smul_vec2
 
 中文:
 定理 smul_vec2
-  条件: {R : 类型} [SMul R α] (x : R) (a₀ a₁ : α)
+  条件: {R : 类型} [标量乘法 R α] (x : R) (a₀ a₁ : α)
   证明: by
   simp
 -/
@@ -1635,7 +1635,7 @@ theorem smul_vec3
 
 中文:
 定理 smul_vec3
-  条件: {R : 类型} [SMul R α] (x : R) (a₀ a₁ a₂ : α)
+  条件: {R : 类型} [标量乘法 R α] (x : R) (a₀ a₁ a₂ : α)
   证明: by
   simp
 -/
@@ -1681,7 +1681,7 @@ theorem vec2_dotProduct
 
 中文:
 定理 vec2_dotProduct
-  条件: (v w : Fin 2 -> α)
+  条件: (v w : 有限集 2 -> α)
   结论: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1
   证明: vec2_dotProduct'
 
@@ -1724,7 +1724,7 @@ theorem vec3_dotProduct
 
 中文:
 定理 vec3_dotProduct
-  条件: (v w : Fin 3 -> α)
+  条件: (v w : 有限集 3 -> α)
   结论: v ⬝ᵥ w = v 0 * w 0 + v 1 * w 1 + v 2 * w 2
   证明: vec3_dotProduct'
 

@@ -40,7 +40,7 @@ theorem rank_sup_le_of_free
 
 中文:
 定理 rank_sup_le_of_free
-  结论: Module.rank R ↥(A ⊔ B) <= Module.rank R A * Module.rank R B
+  结论: 模.rank R ↥(A ⊔ B) <= 模.rank R A * 模.rank R B
   证明: by
   obtain ⟨ιA, bA⟩ := Free.exists_basis (R := R) (M := A)
   obtain ⟨ιB, bB⟩ := Free.exists_basis (R := R) (M := B)

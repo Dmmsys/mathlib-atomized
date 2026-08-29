@@ -92,7 +92,7 @@ theorem bottom_row_coprime
 
 中文:
 定理 bottom_row_coprime
-  条件: {R : 类型} [CommRing R] (g : SL(2, R))
+  条件: {R : 类型} [交换环 R] (g : SL(2, R))
   证明: isCoprime_row g 1
 
 Depends on / 依赖: isCoprime_row
@@ -119,7 +119,7 @@ theorem bottom_row_surj
 
 中文:
 定理 bottom_row_surj
-  条件: {R : 类型} [CommRing R]
+  条件: {R : 类型} [交换环 R]
   证明: by
   rintro cd ⟨b₀, a, gcd_eqn⟩
   let A := of ![![a, -b₀], cd]
@@ -229,7 +229,7 @@ definition lcRow0
 
 中文:
 定义 lcRow0
-  签名: (p : Fin 2 -> 整数)
+  签名: (p : 有限集 2 -> 整数)
   定义体: ((p 0 : Real) • LinearMap.proj (0 : Fin 2) +
       (p 1 : Real) • LinearMap.proj (1 : Fin 2) : (Fin 2 -> Real) ->ₗ[Real] Real).comp
     (LinearMap.proj 0)
@@ -254,7 +254,7 @@ theorem lcRow0_apply
 
 中文:
 定理 lcRow0_apply
-  条件: (p : Fin 2 -> 整数) (g : Matrix (Fin 2) (Fin 2) 实数)
+  条件: (p : 有限集 2 -> 整数) (g : 矩阵 (有限集 2) (有限集 2) 实数)
   证明: rfl
 -/
 theorem lcRow0_apply (p : Fin 2 -> Int) (g : Matrix (Fin 2) (Fin 2) Real) :
@@ -281,7 +281,7 @@ definition lcRow0Extend
 
 中文:
 定义 lcRow0Extend
-  签名: {cd : Fin 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
+  签名: {cd : 有限集 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
   定义体: LinearEquiv.piCongrRight
     ![by
       refine
@@ -320,7 +320,7 @@ theorem tendsto_lcRow0
 
 中文:
 定理 tendsto_lcRow0
-  条件: {cd : Fin 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
+  条件: {cd : 有限集 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
   证明: by
   let mB : Real -> Matrix (Fin 2) (Fin 2) Real := fun t => of ![![t, (-(1 : Int) : Real)], (↑) ∘ cd]
   have hmB : Continuous mB := by
@@ -386,7 +386,7 @@ theorem smul_eq_lcRow0_add
 
 中文:
 定理 smul_eq_lcRow0_add
-  条件: {p : Fin 2 -> 整数} (hp : IsCoprime (p 0) (p 1)) (hg : g 1 = p)
+  条件: {p : 有限集 2 -> 整数} (hp : IsCoprime (p 0) (p 1)) (hg : g 1 = p)
   证明: by
   have nonZ1 : (p 0 : Complex) ^ 2 + (p 1 : Complex) ^ 2 != 0 := mod_cast hp.sq_add_sq_ne_zero
   have : ((↑) : Int -> Real) ∘ p != 0 := fun h => hp.ne_zero (by ext i; simpa using congr_fun h i)
@@ -430,7 +430,7 @@ theorem tendsto_abs_re_smul
 
 中文:
 定理 tendsto_abs_re_smul
-  条件: {p : Fin 2 -> 整数} (hp : IsCoprime (p 0) (p 1))
+  条件: {p : 有限集 2 -> 整数} (hp : IsCoprime (p 0) (p 1))
   证明: by
   suffices
     Tendsto (fun g : (fun g : SL(2, Int) => g 1) ⁻¹' {p} => ((g : SL(2, Int)) • z).re) cofinite
@@ -485,7 +485,7 @@ theorem exists_max_im
   refine ⟨g, fun g
 
 中文:
-定理 exists_max_im
+定理 存在_max_im
   结论: 存在 g : SL(2, 整数), 对任意 g' : SL(2, 整数), (g' • z).im <= (g • z).im
   证明: by
   let s : Set (Fin 2 -> Int) := {cd | IsCoprime (cd 0) (cd 1)}
@@ -527,8 +527,8 @@ theorem exists_row_one_eq_and_min_re
     rw [Set.mem
 
 中文:
-定理 exists_row_one_eq_and_min_re
-  条件: {cd : Fin 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
+定理 存在_row_one_eq_and_min_re
+  条件: {cd : 有限集 2 -> 整数} (hcd : IsCoprime (cd 0) (cd 1))
   证明: by
   have : Nonempty { g : SL(2, Int) // g 1 = cd } :=
     let ⟨x, hx⟩ := bottom_row_surj hcd
@@ -569,7 +569,7 @@ theorem coe_T_zpow_smul_eq
 中文:
 定理 coe_T_zpow_smul_eq
   条件: {n : 整数}
-  结论: (↑(T ^ n • z) : Complex) = z + n
+  结论: (↑(T ^ n • z) : 复形) = z + n
   证明: by
   rw [UpperHalfPlane.coe_specialLinearGroup_apply]
   simp [coe_T_zpow, -map_zpow]
@@ -711,7 +711,7 @@ theorem exists_eq_T_zpow_of_c_eq_zero
    
 
 中文:
-定理 exists_eq_T_zpow_of_c_eq_zero
+定理 存在_eq_T_zpow_of_c_eq_zero
   条件: (hc : g 1 0 = 0)
   证明: by
   have had := g.det_coe
@@ -848,7 +848,7 @@ definition fd
 
 中文:
 定义 fd
-  签名: : Set ℍ
+  签名: : 集合 ℍ
   定义体: {z | 1 <= normSq (z : Complex) ∧ |z.re| <= (1 : Real) / 2}
 
 Depends on / 依赖: normSq, z.re
@@ -872,7 +872,7 @@ scoped[Modular] notation "𝒟ᵒ" => ModularGroup.fdo
 
 中文:
 定义 fdo
-  签名: : Set ℍ
+  签名: : 集合 ℍ
   定义体: {z | 1 < normSq (z : Complex) ∧ |z.re| < (1 : Real) / 2}
 
 @[inherit_doc ModularGroup.fd]
@@ -1121,7 +1121,7 @@ theorem exists_smul_mem_fd
   have hg₀' : forall g' : SL(2, Int), (g
 
 中文:
-定理 exists_smul_mem_fd
+定理 存在_smul_mem_fd
   条件: (z : ℍ)
   结论: 存在 g : SL(2, 整数), g • z in 𝒟
   证明: by
@@ -1690,7 +1690,7 @@ lemma stabilizer_I
 
 中文:
 引理 stabilizer_I
-  结论: g • I = I ↔ g in ({1, -1, S, -S} : Finset SL(2, 整数))
+  结论: g • I = I ↔ g in ({1, -1, S, -S} : 有限集 SL(2, 整数))
   证明: by
   constructor
   · intro hg
@@ -1897,7 +1897,7 @@ lemma isClosed_fd
 
 中文:
 引理 isClosed_fd
-  结论: IsClosed 𝒟
+  结论: 是闭集 𝒟
   证明: by
   refine .inter (.preimage (by fun_prop) isClosed_Ici) ?_
   exact isClosed_le (f := fun z : ℍ => |z.re|) (by fun_prop) continuous_const
@@ -1920,7 +1920,7 @@ lemma isOpen_fdo
 
 中文:
 引理 isOpen_fdo
-  结论: IsOpen 𝒟ᵒ
+  结论: 是开集 𝒟ᵒ
   证明: by
   refine .inter (.preimage (by fun_prop) isOpen_Ioi) ?_
   exact isOpen_lt (f := fun z : ℍ => |z.re|) (by fun_prop) continuous_const
@@ -1945,7 +1945,7 @@ lemma coe_fdo
 
 中文:
 引理 coe_fdo
-  结论: (↑) '' 𝒟ᵒ = {z : Complex | 0 < z.im ∧ 1 < ‖z‖ ∧ |z.re| < 1/2}
+  结论: (↑) '' 𝒟ᵒ = {z : 复形 | 0 < z.im ∧ 1 < ‖z‖ ∧ |z.re| < 1/2}
   证明: by
   ext x
   refine ⟨?_, fun ⟨hxim, hxnorm, hxre⟩ => ⟨⟨x, hxim⟩, ⟨one_lt_normSq_iff.mpr hxnorm, hxre⟩, rfl⟩⟩
@@ -1974,7 +1974,7 @@ lemma coe_fd
 
 中文:
 引理 coe_fd
-  结论: (↑) '' 𝒟 = {z : Complex | 0 < z.im ∧ 1 <= ‖z‖ ∧ |z.re| <= 1/2}
+  结论: (↑) '' 𝒟 = {z : 复形 | 0 < z.im ∧ 1 <= ‖z‖ ∧ |z.re| <= 1/2}
   证明: by
   ext x
   refine ⟨?_, fun ⟨hxim, hxnorm, hxre⟩ => ⟨⟨x, hxim⟩, ⟨one_le_normSq_iff.mpr hxnorm, hxre⟩, rfl⟩⟩
@@ -2005,7 +2005,7 @@ lemma isClosed_coe_fd
 
 中文:
 引理 isClosed_coe_fd
-  结论: IsClosed ((↑) '' 𝒟 : Set Complex)
+  结论: 是闭集 ((↑) '' 𝒟 : 集合 复形)
   证明: by
   rw [coe_fd]
   have : IsClosed {z : Complex | 0 <= z.im ∧ 1 <= ‖z‖ ∧ |z.re| <= 1/2} := by
@@ -2043,7 +2043,7 @@ lemma mem_closure_of_one_lt_norm
 
 中文:
 引理 mem_closure_of_one_lt_norm
-  条件: {x : ℍ} (hxnorm : 1 < ‖(x : Complex)‖) (hxre : |x.re| <= 1 / 2)
+  条件: {x : ℍ} (hxnorm : 1 < ‖(x : 复形)‖) (hxre : |x.re| <= 1 / 2)
   证明: by
   -- Need to show that any `x` in this set is a limit of points in `𝒟ᵒ`.
   -- Idea is to use a line segment through the origin and `x`, and show that points
@@ -2097,7 +2097,7 @@ lemma mem_closure_of_arc
 
 中文:
 引理 mem_closure_of_arc
-  条件: {x : ℍ} (hxnorm : ‖(x : Complex)‖ = 1) (hxre : |x.re| <= 1 / 2)
+  条件: {x : ℍ} (hxnorm : ‖(x : 复形)‖ = 1) (hxre : |x.re| <= 1 / 2)
   证明: by
   -- We show that `x` is a limit of points known to be in the closure.
   rw [← closure_closure]
@@ -2342,7 +2342,7 @@ lemma exists_one_half_le_im_smul
   nlinarith [three_le_four_mul_im_sq_of_mem_fd hγ, im_pos (γ • τ)]
 
 中文:
-引理 exists_one_half_le_im_smul
+引理 存在_one_half_le_im_smul
   条件: (τ : ℍ)
   结论: 存在 γ : SL(2, 整数), 1 / 2 <= im (γ • τ)
   证明: by
@@ -2372,7 +2372,7 @@ lemma exists_one_half_le_im_smul_and_norm_denom_le
     rw [im_smul_eq_div_normSq];
 
 中文:
-引理 exists_one_half_le_im_smul_and_norm_denom_le
+引理 存在_one_half_le_im_smul_and_norm_denom_le
   条件: (τ : ℍ)
   证明: by
   rcases le_total (1 / 2) τ.im with h | h

@@ -167,7 +167,7 @@ definition sigmaFinsuppLEquivPiFinsupp
 
 中文:
 定义 sigmaFinsuppLEquivPiFinsupp
-  签名: {M : 类型} {ιs : η -> 类型} [AddCommMonoid M]
+  签名: {M : 类型} {ιs : η -> 类型} [加法交换幺半群 M]
   定义体: { sigmaFinsuppAddEquivPiFinsupp with
     map_smul' := fun c f => by
       ext
@@ -197,7 +197,7 @@ theorem sigmaFinsuppLEquivPiFinsupp_apply
 
 中文:
 定理 sigmaFinsuppLEquivPiFinsupp_apply
-  结论: {M : 类型} {ιs : η -> 类型} [AddCommMonoid M]
+  结论: {M : 类型} {ιs : η -> 类型} [加法交换幺半群 M]
   证明: rfl
 
 @[simp]
@@ -217,7 +217,7 @@ theorem sigmaFinsuppLEquivPiFinsupp_symm_apply
 
 中文:
 定理 sigmaFinsuppLEquivPiFinsupp_symm_apply
-  结论: {M : 类型} {ιs : η -> 类型} [AddCommMonoid M]
+  结论: {M : 类型} {ιs : η -> 类型} [加法交换幺半群 M]
   证明: rfl
 -/
 theorem sigmaFinsuppLEquivPiFinsupp_symm_apply {M : Type*} {ιs : η -> Type*} [AddCommMonoid M]

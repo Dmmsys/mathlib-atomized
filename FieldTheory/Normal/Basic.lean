@@ -48,8 +48,8 @@ theorem Normal.exists_isSplittingField
   rw [Algebra.top_toSubmodule]; rw [eq_top_iff]; rw [← s.span_eq]; rw [Submodule.s
 
 中文:
-定理 Normal.exists_isSplittingField
-  条件: [h : Normal F K] [FiniteDimensional F K]
+定理 正规.存在_isSplittingField
+  条件: [h : 正规 F K] [有限维 F K]
   证明: by
   classical
   let s := Module.Basis.ofVectorSpace F K
@@ -104,9 +104,9 @@ theorem Normal.of_isSplittingField
   have : F
 
 中文:
-定理 Normal.of_isSplittingField
-  条件: (p : F[X]) [hFEp : IsSplittingField F E p]
-  结论: Normal F E
+定理 正规.of_isSplittingField
+  条件: (p : F[X]) [hFEp : 是分裂域 F E p]
+  结论: 正规 F E
   证明: by
   rcases eq_or_ne p 0 with (rfl | hp)
   · have := hFEp.adjoin_rootSet
@@ -152,7 +152,7 @@ instance Polynomial.SplittingField.instNormal
   body: Normal.of_isSplittingField p
 
 中文:
-实例 Polynomial.SplittingField.instNormal
+实例 多项式.分裂域.instNormal
   签名: (p : F[X])
   定义体: Normal.of_isSplittingField p
 
@@ -180,7 +180,7 @@ instance normal_iSup
 
 中文:
 实例 normal_iSup
-  签名: {ι : 类型} (t : ι -> 整数ermediateField F K) [h : 对任意 i, Normal F (t i)]
+  签名: {ι : 类型} (t : ι -> 中间域 F K) [h : 对任意 i, 正规 F (t i)]
   定义体: by
   refine { toIsAlgebraic := isAlgebraic_iSup fun i => (h i).1, splits' := fun x => ?_ }
   obtain ⟨s, hx⟩ := exists_finset_of_mem_supr'' (fun i => (h i).1) x.2
@@ -228,7 +228,7 @@ theorem splits_of_mem_adjoin
 
 中文:
 定理 splits_of_mem_adjoin
-  结论: {L} [Field L] [Algebra F L] {S : Set K}
+  结论: {L} [域 L] [代数 F L] {S : 集合 K}
   证明: by
   let E : IntermediateField F L := ⨆ x : S, adjoin F ((minpoly F x.val).rootSet L)
   have normal : Normal F E := normal_iSup (h := fun x =>
@@ -286,7 +286,7 @@ instance normal_iInf
 
 中文:
 实例 normal_iInf
-  签名: {ι : 类型} [hι : Nonempty ι]
+  签名: {ι : 类型} [hι : 非空 ι]
   定义体: by
   refine { toIsAlgebraic := ?_, splits' := fun x => ?_ }
   · let f := inclusion (iInf_le t hι.some)
@@ -353,8 +353,8 @@ theorem AlgHom.fieldRange_of_normal
   rw [← show E.val.comp ↑g = f from DFunLike.ext_iff.mpr (f.restrictNormal_commutes E)]; rw [← AlgHom.map_fieldRange]; rw [AlgEquiv.fieldRange_eq_top g]; rw [← AlgHom.fieldRange_eq_map]; rw [IntermediateField.fieldRange_val]
 
 中文:
-定理 AlgHom.fieldRange_of_normal
-  结论: {E : 整数ermediateField F K} [Normal F E]
+定理 代数态射.fieldRange_of_normal
+  结论: {E : 中间域 F K} [正规 F E]
   证明: by
   let g := f.restrictNormal' E
   rw [← show E.val.comp ↑g = f from DFunLike.ext_iff.mpr (f.restrictNormal_commutes E)]; rw [← AlgHom.map_fieldRange]; rw [AlgEquiv.fieldRange_eq_top g]; rw [← AlgHom.fieldRange_eq_map]; rw [IntermediateField.fieldRange_val]
@@ -390,8 +390,8 @@ Nonempty.some
         (fun x _ => ⟨(h.out x
 
 中文:
-定义 AlgHom.liftNormal
-  签名: [h : Normal F E]
+定义 代数态射.liftNormal
+  签名: [h : 正规 F E]
   定义体: @AlgHom.restrictScalars F K₁ E E _ _ _ _ _ _
 ((IsScalarTower.toAlgHom F K₂ E).comp ϕ).toRingHom.toAlgebra _ _ _ _
 Nonempty.some
@@ -425,8 +425,8 @@ theorem AlgHom.liftNormal_commutes
 @[simp]
 
 中文:
-定理 AlgHom.liftNormal_commutes
-  条件: [Normal F E] (x : K₁)
+定理 代数态射.liftNormal_commutes
+  条件: [正规 F E] (x : K₁)
   证明: -- We have to specify one `Algebra` instance by unification, not synthesis.
   @AlgHom.commutes K₁ E E _ _ _ _ (_) _ _
 
@@ -449,8 +449,8 @@ theorem AlgHom.restrict_liftNormal
       (Eq.trans (AlgHom.restrictNormal_commutes _ K₁ x) (ϕ.liftNormal_commutes E x))
 
 中文:
-定理 AlgHom.restrict_liftNormal
-  条件: (ϕ : K₁ ->ₐ[F] K₁) [Normal F K₁] [Normal F E]
+定理 代数态射.restrict_liftNormal
+  条件: (ϕ : K₁ ->ₐ[F] K₁) [正规 F K₁] [正规 F E]
   证明: AlgHom.ext fun x =>
     (algebraMap K₁ E).injective
       (Eq.trans (AlgHom.restrictNormal_commutes _ K₁ x) (ϕ.liftNormal_commutes E x))
@@ -474,8 +474,8 @@ definition AlgEquiv.liftNormal
 @[simp]
 
 中文:
-定义 AlgEquiv.liftNormal
-  签名: [Normal F E]
+定义 代数等价.liftNormal
+  签名: [正规 F E]
   定义体: AlgEquiv.ofBijective (χ.toAlgHom.liftNormal E) (AlgHom.normal_bijective F E E _)
 
 @[simp]
@@ -497,8 +497,8 @@ theorem AlgEquiv.liftNormal_commutes
 @[simp]
 
 中文:
-定理 AlgEquiv.liftNormal_commutes
-  条件: [Normal F E] (x : K₁)
+定理 代数等价.liftNormal_commutes
+  条件: [正规 F E] (x : K₁)
   证明: χ.toAlgHom.liftNormal_commutes E x
 
 @[simp]
@@ -521,8 +521,8 @@ theorem AlgEquiv.restrict_liftNormal
       (Eq.trans (AlgEquiv.restrictNormal_commutes _ K₁ x) (χ.liftNormal_commutes E x))
 
 中文:
-定理 AlgEquiv.restrict_liftNormal
-  条件: (χ : K₁ ≃ₐ[F] K₁) [Normal F K₁] [Normal F E]
+定理 代数等价.restrict_liftNormal
+  条件: (χ : K₁ ≃ₐ[F] K₁) [正规 F K₁] [正规 F E]
   证明: AlgEquiv.ext fun x =>
     (algebraMap K₁ E).injective
       (Eq.trans (AlgEquiv.restrictNormal_commutes _ K₁ x) (χ.liftNormal_commutes E x))
@@ -545,8 +545,8 @@ theorem AlgEquiv.restrictNormalHom_surjective
   ⟨χ.liftNormal E, χ.restrict_liftNormal E⟩
 
 中文:
-定理 AlgEquiv.restrictNormalHom_surjective
-  条件: [Normal F K₁] [Normal F E]
+定理 代数等价.restrictNormalHom_surjective
+  条件: [正规 F K₁] [正规 F E]
   证明: fun χ =>
   ⟨χ.liftNormal E, χ.restrict_liftNormal E⟩
 -/
@@ -567,8 +567,8 @@ theorem Normal.minpoly_eq_iff_mem_orbit
   exact ⟨AlgEquiv.ofBijective φ (φ.normal_bijective F E E), hφ⟩
 
 中文:
-定理 Normal.minpoly_eq_iff_mem_orbit
-  条件: [h : Normal F E] {x y : E}
+定理 正规.minpoly_eq_iff_mem_orbit
+  条件: [h : 正规 F E] {x y : E}
   证明: by
   refine ⟨fun he => ?_, fun ⟨f, he⟩ => he ▸ minpoly.algEquiv_eq f y⟩
   obtain ⟨φ, hφ⟩ := exists_algHom_of_splits_of_aeval (normal_iff.mp h) (he ▸ minpoly.aeval F x)
@@ -600,7 +600,7 @@ theorem isSolvable_of_isScalarTower
 
 中文:
 定理 isSolvable_of_isScalarTower
-  结论: [Normal F K₁] [h1 : Group.IsSolvable (K₁ ≃ₐ[F] K₁)]
+  结论: [正规 F K₁] [h1 : 群.是可解 (K₁ ≃ₐ[F] K₁)]
   证明: by
   let f : (E ≃ₐ[K₁] E) ->* Gal(E/F) :=
     { toFun := fun ϕ =>
@@ -645,8 +645,8 @@ theorem exists_algEquiv_of_root
     rw [liftNormal_commutes f L]; rw [algEquiv_apply]; rw [AdjoinSimple.a
 
 中文:
-定理 exists_algEquiv_of_root
-  结论: [Normal K L] {x y : L} (hy : IsAlgebraic K y)
+定理 存在_algEquiv_of_root
+  结论: [正规 K L] {x y : L} (hy : 是代数 K y)
   证明: by
   have hx : IsAlgebraic K x := ⟨minpoly K y, ne_zero hy.isIntegral, h_ev⟩
   set f : K⟮x⟯ ≃ₐ[K] K⟮y⟯ := algEquiv hx (eq_of_root hy h_ev)
@@ -675,8 +675,8 @@ theorem exists_algEquiv_of_root'
   rw [← hσ]; rw [symm_apply_apply]
 
 中文:
-定理 exists_algEquiv_of_root'
-  结论: [Normal K L] {x y : L} (hy : IsAlgebraic K y)
+定理 存在_algEquiv_of_root'
+  结论: [正规 K L] {x y : L} (hy : 是代数 K y)
   证明: by
   obtain ⟨σ, hσ⟩ := exists_algEquiv_of_root hy h_ev
   use σ.symm
@@ -706,8 +706,8 @@ instance Algebra.IsQuadraticExtension.normal
         ((eval_map_algebraMap _ _).trans (
 
 中文:
-实例 Algebra.IsQuadraticExtension.normal
-  签名: (F K : 类型) [Field F] [Field K] [Algebra F K]
+实例 代数.是QuadraticExtension.normal
+  签名: (F K : 类型) [域 F] [域 K] [代数 F K]
   定义体: by
     intro x
     obtain h | h := le_iff_lt_or_eq.mp (finrank_eq_two F K ▸ minpoly.natDegree_le x)

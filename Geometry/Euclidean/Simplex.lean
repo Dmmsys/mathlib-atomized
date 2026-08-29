@@ -49,7 +49,7 @@ lemma Equilateral.angle_eq_pi_div_three
 
 中文:
 引理 Equilateral.angle_eq_pi_div_three
-  结论: {s : Simplex 实数 P n} (he : s.Equilateral)
+  结论: {s : 单纯形 实数 P n} (he : s.Equilateral)
   证明: by
   rcases he with ⟨r, hr⟩
   rw [angle]; rw [InnerProductGeometry.angle]; rw [real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]
@@ -84,7 +84,7 @@ definition AcuteAngled
 
 中文:
 定义 AcuteAngled
-  签名: (s : Simplex 实数 P n)
+  签名: (s : 单纯形 实数 P n)
   定义体: forall i₁ i₂ i₃ : Fin (n + 1), i₁ != i₂ -> i₁ != i₃ -> i₂ != i₃ ->
     ∠ (s.points i₁) (s.points i₂) (s.points i₃) < π / 2
 
@@ -107,7 +107,7 @@ lemma acuteAngled_reindex_iff
 
 中文:
 引理 acuteAngled_reindex_iff
-  条件: {s : Simplex 实数 P m} (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {s : 单纯形 实数 P m} (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   refine ⟨fun h {i₁ i₂ i₃} h₁₂ h₁₃ h₂₃ => ?_, fun h {i₁ i₂ i₃} h₁₂ h₁₃ h₂₃ => ?_⟩
   · convert! h (i₁ := e i₁) (i₂ := e i₂) (i₃ := e i₃) ?_ ?_ ?_ using 1 <;> simp [*]
@@ -133,7 +133,7 @@ lemma Equilateral.acuteAngled
 
 中文:
 引理 Equilateral.acuteAngled
-  条件: {s : Simplex 实数 P n} (he : s.Equilateral)
+  条件: {s : 单纯形 实数 P n} (he : s.Equilateral)
   结论: s.AcuteAngled
   证明: by
   intro i₁ i₂ i₃ h₁₂ h₁₃ h₂₃
@@ -158,7 +158,7 @@ theorem dist_point_centroid
 
 中文:
 定理 dist_point_centroid
-  条件: [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   simp_rw [dist_eq_norm_vsub, s.point_vsub_centroid_eq_smul_vsub i, norm_smul, Real.norm_natCast]
 
@@ -181,7 +181,7 @@ theorem dist_point_faceOppositeCentroid
 
 中文:
 定理 dist_point_faceOppositeCentroid
-  条件: [NeZero n] (s : Simplex 实数 P n) (i : Fin (n + 1))
+  条件: [NeZero n] (s : 单纯形 实数 P n) (i : 有限集 (n + 1))
   证明: by
   simp_rw [dist_eq_norm_vsub, s.point_vsub_faceOppositeCentroid_eq_smul_vsub i,
     norm_smul]
@@ -255,7 +255,7 @@ theorem dist_point_centroid
 
 中文:
 定理 dist_point_centroid
-  条件: (t : Affine.Triangle 实数 P) (i : Fin 3)
+  条件: (t : 仿射.Triangle 实数 P) (i : 有限集 3)
   证明: by
   rw [Affine.Simplex.dist_point_centroid]
   norm_cast
@@ -279,7 +279,7 @@ theorem dist_point_faceOppositeCentroid
 
 中文:
 定理 dist_point_faceOppositeCentroid
-  条件: (t : Affine.Triangle 实数 P) (i : Fin 3)
+  条件: (t : 仿射.Triangle 实数 P) (i : 有限集 3)
   证明: by
   rw [Affine.Simplex.dist_point_faceOppositeCentroid]
   norm_cast

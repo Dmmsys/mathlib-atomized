@@ -46,7 +46,7 @@ theorem exists_eq_const_mul_setIntegral_of_ae_nonneg
   have h_toReal_ae : (fun x =
 
 中文:
-定理 exists_eq_const_mul_setIntegral_of_ae_nonneg
+定理 存在_eq_const_mul_set整数egral_of_ae_nonneg
   证明: by
   let ρ := fun x => ENNReal.ofReal (g x)
   let ν := μ.withDensity ρ
@@ -144,7 +144,7 @@ theorem exists_eq_const_mul_setIntegral_of_nonneg
   exact exists_eq_const_mul_setIntegral_of_ae_nonneg hs_conn hs_meas hf hg hfg hg0_ae
 
 中文:
-定理 exists_eq_const_mul_setIntegral_of_nonneg
+定理 存在_eq_const_mul_set整数egral_of_nonneg
   证明: by
   have hg0_ae : forallᵐ x ∂(μ.restrict s), 0 <= g x := by
     rw [ae_restrict_iff' hs_meas]

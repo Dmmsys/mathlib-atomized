@@ -69,7 +69,7 @@ definition IsGδ
 
 中文:
 定义 IsGδ
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: exists T : Set (Set X), (forall t in T, IsOpen t) ∧ T.Countable ∧ s = ⋂₀ T
 
 Depends on / 依赖: Countable, IsOpen, T.Countable
@@ -89,8 +89,8 @@ theorem IsOpen.isGδ
 @[simp]
 
 中文:
-定理 IsOpen.isGδ
-  条件: {s : Set X} (h : IsOpen s)
+定理 是开集.isGδ
+  条件: {s : 集合 X} (h : 是开集 s)
   结论: IsGδ s
   证明: ⟨{s}, by simp [h], countable_singleton _, (Set.sInter_singleton _).symm⟩
 
@@ -115,7 +115,7 @@ theorem IsGδ.empty
 
 中文:
 定理 IsGδ.empty
-  结论: IsGδ (∅ : Set X)
+  结论: IsGδ (∅ : 集合 X)
   证明: isOpen_empty.isGδ
 
 
@@ -136,7 +136,7 @@ theorem IsGδ.univ
 
 中文:
 定理 IsGδ.univ
-  结论: IsGδ (univ : Set X)
+  结论: IsGδ (univ : 集合 X)
   证明: isOpen_univ.isGδ
 -/
 protected theorem IsGδ.univ : IsGδ (univ : Set X) :=
@@ -152,8 +152,8 @@ theorem IsGδ.biInter_of_isOpen
   proof: ⟨f '' I, by rwa [forall_mem_image], hI.image _, by rw [sInter_image]⟩
 
 中文:
-定理 IsGδ.biInter_of_isOpen
-  结论: {I : Set ι} (hI : I.Countable) {f : ι -> Set X}
+定理 IsGδ.bi整数er_of_isOpen
+  结论: {I : 集合 ι} (hI : I.可数) {f : ι -> 集合 X}
   证明: ⟨f '' I, by rwa [forall_mem_image], hI.image _, by rw [sInter_image]⟩
 
 Depends on / 依赖: forall_mem_image, hI.image, sInter_image
@@ -172,8 +172,8 @@ theorem IsGδ.iInter_of_isOpen
   proof: ⟨range f, by rwa [forall_mem_range], countable_range _, by rw [sInter_range]⟩
 
 中文:
-定理 IsGδ.iInter_of_isOpen
-  条件: [Countable ι'] {f : ι' -> Set X} (hf : 对任意 i, IsOpen (f i))
+定理 IsGδ.i整数er_of_isOpen
+  条件: [可数 ι'] {f : ι' -> 集合 X} (hf : 对任意 i, 是开集 (f i))
   证明: ⟨range f, by rwa [forall_mem_range], countable_range _, by rw [sInter_range]⟩
 
 Depends on / 依赖: countable_range, forall_mem_range, sInter_range
@@ -198,8 +198,8 @@ lemma isGδ_iff_eq_iInter_nat
       exact ⟨f, by simp_all, by
 
 中文:
-引理 isGδ_iff_eq_iInter_nat
-  条件: {s : Set X}
+引理 isGδ_iff_eq_i整数er_nat
+  条件: {s : 集合 X}
   证明: by
   refine ⟨?_, ?_⟩
   · rintro ⟨T, hT, T_count, rfl⟩
@@ -236,8 +236,8 @@ theorem IsGδ.iInter
   simpa [@forall_comm ι'] using hTo
 
 中文:
-定理 IsGδ.iInter
-  条件: [Countable ι'] {s : ι' -> Set X} (hs : 对任意 i, IsGδ (s i))
+定理 IsGδ.i整数er
+  条件: [可数 ι'] {s : ι' -> 集合 X} (hs : 对任意 i, IsGδ (s i))
   证明: by
   choose T hTo hTc hTs using hs
   obtain rfl : s = fun i => ⋂₀ T i := funext hTs
@@ -263,8 +263,8 @@ theorem IsGδ.biInter
   exact .iInter fun x => ht x x.2
 
 中文:
-定理 IsGδ.biInter
-  结论: {s : Set ι} (hs : s.Countable) {t : 对任意 i in s, Set X}
+定理 IsGδ.bi整数er
+  结论: {s : 集合 ι} (hs : s.可数) {t : 对任意 i in s, 集合 X}
   证明: by
   rw [biInter_eq_iInter]
   have := hs.to_subtype
@@ -290,8 +290,8 @@ theorem IsGδ.sInter
   simpa only [sInter_eq_biInter] using IsGδ.biInter hS h
 
 中文:
-定理 IsGδ.sInter
-  条件: {S : Set (Set X)} (h : 对任意 s in S, IsGδ s) (hS : S.Countable)
+定理 IsGδ.集合交集
+  条件: {S : 集合 (集合 X)} (h : 对任意 s in S, IsGδ s) (hS : S.可数)
   结论: IsGδ (⋂₀ S)
   证明: by
   simpa only [sInter_eq_biInter] using IsGδ.biInter hS h
@@ -315,7 +315,7 @@ theorem IsGδ.inter
 
 中文:
 定理 IsGδ.inter
-  条件: {s t : Set X} (hs : IsGδ s) (ht : IsGδ t)
+  条件: {s t : 集合 X} (hs : IsGδ s) (ht : IsGδ t)
   结论: IsGδ (s inter t)
   证明: by
   rw [inter_eq_iInter]
@@ -344,7 +344,7 @@ theorem IsGδ.union
 
 中文:
 定理 IsGδ.union
-  条件: {s t : Set X} (hs : IsGδ s) (ht : IsGδ t)
+  条件: {s t : 集合 X} (hs : IsGδ s) (ht : IsGδ t)
   结论: IsGδ (s union t)
   证明: by
   rcases hs with ⟨S, Sopen, Scount, rfl⟩
@@ -379,8 +379,8 @@ theorem IsGδ.sUnion
     exact h.1.union (ih h.2)
 
 中文:
-定理 IsGδ.sUnion
-  条件: {S : Set (Set X)} (hS : S.Finite) (h : 对任意 s in S, IsGδ s)
+定理 IsGδ.集合并集
+  条件: {S : 集合 (集合 X)} (hS : S.有限) (h : 对任意 s in S, IsGδ s)
   结论: IsGδ (⋃₀ S)
   证明: by
   induction S, hS using Set.Finite.induction_on with
@@ -410,7 +410,7 @@ theorem IsGδ.biUnion
 
 中文:
 定理 IsGδ.biUnion
-  条件: {s : Set ι} (hs : s.Finite) {f : ι -> Set X} (h : 对任意 i in s, IsGδ (f i))
+  条件: {s : 集合 ι} (hs : s.有限) {f : ι -> 集合 X} (h : 对任意 i in s, IsGδ (f i))
   证明: by
   rw [← sUnion_image]
   exact .sUnion (hs.image _) (forall_mem_image.2 h)
@@ -433,7 +433,7 @@ theorem IsGδ.iUnion
 
 中文:
 定理 IsGδ.iUnion
-  条件: [Finite ι'] {f : ι' -> Set X} (h : 对任意 i, IsGδ (f i))
+  条件: [有限 ι'] {f : ι' -> 集合 X} (h : 对任意 i, IsGδ (f i))
   结论: IsGδ (⋃ i, f i)
   证明: .sUnion (finite_range _) forall_mem_range.2 h
 
@@ -456,8 +456,8 @@ theorem IsGδ.preimage
 @[deprecated (since := "2026-05-19")] alias isGδ_induced := IsGδ.preimage
 
 中文:
-定理 IsGδ.preimage
-  结论: [TopologicalSpace Y] {f : X -> Y} {s : Set Y} (hf : Continuous f)
+定理 IsGδ.原像
+  结论: [拓扑空间 Y] {f : X -> Y} {s : 集合 Y} (hf : 连续 f)
   证明: by
   obtain ⟨U, hU1, hU2⟩ := hs.eq_iInter_nat
   simp_all only [preimage_iInter]
@@ -491,7 +491,7 @@ definition residual
 
 中文:
 定义 residual
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: Filter.countableGenerate { t | IsOpen t ∧ Dense t }
 
 Depends on / 依赖: Filter, Filter.countableGenerate, IsOpen, countableGenerate
@@ -509,8 +509,8 @@ instance countableInterFilter_residual
   rw [residual]; infer_instance
 
 中文:
-实例 countableInterFilter_residual
-  签名: : Countable整数erFilter (residual X)
+实例 countable整数erFilter_residual
+  签名: : 余untable整数erFilter (residual X)
   定义体: by
   rw [residual]; infer_instance
 
@@ -530,7 +530,7 @@ theorem residual_of_dense_open
 
 中文:
 定理 residual_of_dense_open
-  条件: {s : Set X} (ho : IsOpen s) (hd : Dense s)
+  条件: {s : 集合 X} (ho : 是开集 s) (hd : 稠密 s)
   结论: s in residual X
   证明: CountableGenerateSets.basic ⟨ho, hd⟩
 
@@ -554,7 +554,7 @@ theorem residual_of_dense_Gδ
 
 中文:
 定理 residual_of_dense_Gδ
-  条件: {s : Set X} (ho : IsGδ s) (hd : Dense s)
+  条件: {s : 集合 X} (ho : IsGδ s) (hd : 稠密 s)
   结论: s in residual X
   证明: by
   rcases ho with ⟨T, To, Tct, rfl⟩
@@ -580,7 +580,7 @@ theorem mem_residual_iff
 
 中文:
 定理 mem_residual_iff
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: mem_countableGenerate_iff.trans by simp_rw [subset_def, mem_ofPred, forall_and, and_assoc]
 
 Depends on / 依赖: and_assoc, forall_and, mem_countableGenerate_iff, mem_countableGenerate_iff.trans, mem_ofPred, simp_rw, subset_def
@@ -606,7 +606,7 @@ definition IsNowhereDense
 
 中文:
 定义 IsNowhereDense
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: interior (closure s) = ∅
 
 Depends on / 依赖: closure, interior
@@ -626,7 +626,7 @@ lemma isNowhereDense_empty
 
 中文:
 引理 isNowhereDense_empty
-  结论: IsNowhereDense (∅ : Set X)
+  结论: IsNowhereDense (∅ : 集合 X)
   证明: by
   rw [IsNowhereDense]; rw [closure_empty]; rw [interior_empty]
 
@@ -648,7 +648,7 @@ lemma IsNowhereDense.mono
 
 中文:
 引理 IsNowhereDense.mono
-  条件: {s t : Set X} (ht : t subseteq s) (hs : IsNowhereDense s)
+  条件: {s t : 集合 X} (ht : t subseteq s) (hs : IsNowhereDense s)
   结论: IsNowhereDense t
   证明: Set.eq_empty_of_subset_empty by grw [ht]; rw [hs]
 
@@ -667,8 +667,8 @@ lemma IsClosed.isNowhereDense_iff
   rw [IsNowhereDense]; rw [IsClosed.closure_eq hs]
 
 中文:
-引理 IsClosed.isNowhereDense_iff
-  条件: {s : Set X} (hs : IsClosed s)
+引理 是闭集.isNowhereDense_iff
+  条件: {s : 集合 X} (hs : 是闭集 s)
   证明: by
   rw [IsNowhereDense]; rw [IsClosed.closure_eq hs]
 
@@ -689,7 +689,7 @@ lemma IsNowhereDense.closure
 
 中文:
 引理 IsNowhereDense.closure
-  条件: {s : Set X} (hs : IsNowhereDense s)
+  条件: {s : 集合 X} (hs : IsNowhereDense s)
   证明: by
   rwa [IsNowhereDense, closure_closure]
 -/
@@ -707,7 +707,7 @@ lemma IsNowhereDense.subset_of_closed_isNowhereDense
 
 中文:
 引理 IsNowhereDense.subset_of_closed_isNowhereDense
-  条件: {s : Set X} (hs : IsNowhereDense s)
+  条件: {s : 集合 X} (hs : IsNowhereDense s)
   证明: ⟨closure s, subset_closure, ⟨hs.closure, isClosed_closure⟩⟩
 
 Depends on / 依赖: closure, hs.closure, isClosed_closure, subset_closure
@@ -727,7 +727,7 @@ lemma isClosed_isNowhereDense_iff_compl
 
 中文:
 引理 isClosed_isNowhereDense_iff_compl
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [and_congr_right IsClosed.isNowhereDense_iff]; rw [isOpen_compl_iff]; rw [interior_eq_empty_iff_dense_compl]
 
@@ -748,7 +748,7 @@ lemma isNowhereDense_iff_disjoint
 
 中文:
 引理 isNowhereDense_iff_disjoint
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: ⟨fun H => H ▸ disjoint_empty _, fun H =>
 .eq_bot_of_self⟩ .mono_left interior_subset H.closure_left isOpen_interior
 
@@ -770,8 +770,8 @@ lemma isNowhereDense_iff_forall_notMem_nhds
     mem_interior_iff_mem_nhds]
 
 中文:
-引理 isNowhereDense_iff_forall_notMem_nhds
-  条件: {s : Set X}
+引理 isNowhereDense_iff_对任意_notMem_nhds
+  条件: {s : 集合 X}
   证明: by
   simp [isNowhereDense_iff_disjoint, disjoint_iff_inter_eq_empty, eq_empty_iff_forall_notMem,
     mem_interior_iff_mem_nhds]
@@ -795,8 +795,8 @@ lemma Topology.IsInducing.isNowhereDense_image
   exact fun x x_mem hx => h x x_mem (preimage_mem_comap hx)
 
 中文:
-引理 Topology.IsInducing.isNowhereDense_image
-  结论: [TopologicalSpace Y] {f : X -> Y}
+引理 拓扑.是Inducing.isNowhereDense_image
+  结论: [拓扑空间 Y] {f : X -> Y}
   证明: by
   rw [isNowhereDense_iff_forall_notMem_nhds]; rw [forall_mem_image] at *
   simp_rw [hf.nhds_eq_comap, hf.closure_eq_preimage_closure_image] at h
@@ -820,7 +820,7 @@ lemma IsNowhereDense.image_val
 
 中文:
 引理 IsNowhereDense.image_val
-  结论: {Y : Set X} {s : Set Y}
+  结论: {Y : 集合 X} {s : 集合 Y}
   证明: Topology.IsInducing.subtypeVal.isNowhereDense_image hs
 
 Depends on / 依赖: IsInducing, Topology, Topology.IsInducing.subtypeVal.isNowhereDense_image, isNowhereDense_image, subtypeVal
@@ -839,7 +839,7 @@ definition IsMeagre
 
 中文:
 定义 IsMeagre
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: sᶜ in residual X
 
 Depends on / 依赖: residual
@@ -858,7 +858,7 @@ lemma IsMeagre.empty
 
 中文:
 引理 IsMeagre.empty
-  结论: IsMeagre (∅ : Set X)
+  结论: IsMeagre (∅ : 集合 X)
   证明: by
   rw [IsMeagre]; rw [compl_empty]
   exact Filter.univ_mem
@@ -882,7 +882,7 @@ lemma IsMeagre.mono
 
 中文:
 引理 IsMeagre.mono
-  条件: {s t : Set X} (hts : t subseteq s) (hs : IsMeagre s)
+  条件: {s t : 集合 X} (hts : t subseteq s) (hs : IsMeagre s)
   结论: IsMeagre t
   证明: Filter.mem_of_superset hs (compl_subset_compl.mpr hts)
 
@@ -902,7 +902,7 @@ lemma IsMeagre.inter
 
 中文:
 引理 IsMeagre.inter
-  条件: {s t : Set X} (hs : IsMeagre s)
+  条件: {s t : 集合 X} (hs : IsMeagre s)
   结论: IsMeagre (s inter t)
   证明: hs.mono inter_subset_left
 
@@ -924,7 +924,7 @@ lemma IsMeagre.union
 
 中文:
 引理 IsMeagre.union
-  条件: {s t : Set X} (hs : IsMeagre s) (ht : IsMeagre t)
+  条件: {s t : 集合 X} (hs : IsMeagre s) (ht : IsMeagre t)
   结论: IsMeagre (s union t)
   证明: by
   rw [IsMeagre]; rw [compl_union]
@@ -948,7 +948,7 @@ lemma isMeagre_iUnion
 
 中文:
 引理 isMeagre_iUnion
-  条件: [Countable ι'] {f : ι' -> Set X} (hs : 对任意 i, IsMeagre (f i))
+  条件: [可数 ι'] {f : ι' -> 集合 X} (hs : 对任意 i, IsMeagre (f i))
   证明: by
   rw [IsMeagre]; rw [compl_iUnion]
   exact countable_iInter_mem.mpr hs
@@ -975,7 +975,7 @@ lemma isMeagre_biUnion
 
 中文:
 引理 isMeagre_biUnion
-  结论: {I : Set ι} (c : I.Countable) {f : ι -> Set X}
+  结论: {I : 集合 ι} (c : I.可数) {f : ι -> 集合 X}
   证明: by
   suffices IsMeagre (⋃ i : I, f i) by simpa
   have : Countable I := c
@@ -1007,7 +1007,7 @@ lemma isMeagre_iff_countable_union_isNowhereDense
 
 中文:
 引理 isMeagre_iff_countable_union_isNowhereDense
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [IsMeagre]; rw [mem_residual_iff]; rw [compl_bijective.surjective.image_surjective.exists]
   simp_rw [← and_assoc, ← forall_and, forall_mem_image, ← isClosed_isNowhereDense_iff_compl,
@@ -1042,8 +1042,8 @@ lemma nonempty_of_not_isMeagre
 
 中文:
 引理 nonempty_of_not_isMeagre
-  条件: {s : Set X} (hs : ¬IsMeagre s)
-  结论: s.Nonempty
+  条件: {s : 集合 X} (hs : ¬IsMeagre s)
+  结论: s.非空
   证明: by
   contrapose! hs
   simpa [hs] using IsMeagre.empty
@@ -1067,7 +1067,7 @@ lemma IsNowhereDense.isMeagre
 
 中文:
 引理 IsNowhereDense.isMeagre
-  条件: {s : Set X} (h : IsNowhereDense s)
+  条件: {s : 集合 X} (h : IsNowhereDense s)
   结论: IsMeagre s
   证明: by
   rw [isMeagre_iff_countable_union_isNowhereDense]
@@ -1090,8 +1090,8 @@ lemma exists_of_not_isMeagre_biUnion
   exact isMeagre_biUnion c h
 
 中文:
-引理 exists_of_not_isMeagre_biUnion
-  结论: {I : Set ι}
+引理 存在_of_not_isMeagre_biUnion
+  结论: {I : 集合 ι}
   证明: by
   contrapose! h
   exact isMeagre_biUnion c h
@@ -1120,8 +1120,8 @@ lemma Topology.IsInducing.isMeagre_image
     apply hf.isNowhereDense_image (isNowhereDense t 
 
 中文:
-引理 Topology.IsInducing.isMeagre_image
-  结论: [TopologicalSpace Y] {f : X -> Y}
+引理 拓扑.是Inducing.isMeagre_image
+  结论: [拓扑空间 Y] {f : X -> Y}
   证明: by
   rw [isMeagre_iff_countable_union_isNowhereDense] at *
   obtain ⟨T, isNowhereDense, countable, cover⟩ := h
@@ -1156,7 +1156,7 @@ lemma IsMeagre.image_val
 
 中文:
 引理 IsMeagre.image_val
-  条件: {s : Set X} {m : Set s} (h : IsMeagre (m : Set s))
+  条件: {s : 集合 X} {m : 集合 s} (h : IsMeagre (m : 集合 s))
   证明: Topology.IsInducing.subtypeVal.isMeagre_image h
 
 Depends on / 依赖: IsInducing, Topology, Topology.IsInducing.subtypeVal.isMeagre_image, isMeagre_image, subtypeVal

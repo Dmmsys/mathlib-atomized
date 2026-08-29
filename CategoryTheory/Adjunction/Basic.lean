@@ -118,7 +118,7 @@ structure Adjunction
     - right_triangle_components((Y : D)) : dsimp% unit.app (G.obj Y) ≫ G.map (counit.app Y) = 𝟙 (G.obj Y)  [default: by cat_disch]
 
 中文:
-结构 Adjunction
+结构 伴随
   参数: (F : C ⥤ D) (G : D ⥤ C)
   公理与运算 (4 个):
     - unit : 𝟭 C ⟶ F.comp G
@@ -163,10 +163,10 @@ class IsLeftAdjoint
     - exists_rightAdjoint : exists (right : D ⥤ C), Nonempty (left ⊣ right)
 
 中文:
-类 IsLeftAdjoint
+类 是左伴随
   参数: (left : C ⥤ D)
   公理与运算 (1 个):
-    - exists_rightAdjoint : 存在 (right : D ⥤ C), Nonempty (left ⊣ right)
+    - exists_rightAdjoint : 存在 (right : D ⥤ C), 非空 (left ⊣ right)
 -/
 class IsLeftAdjoint (left : C ⥤ D) : Prop where
   exists_rightAdjoint : exists (right : D ⥤ C), Nonempty (left ⊣ right)
@@ -183,10 +183,10 @@ class IsRightAdjoint
     - exists_leftAdjoint : exists (left : C ⥤ D), Nonempty (left ⊣ right)
 
 中文:
-类 IsRightAdjoint
+类 是右伴随
   参数: (right : D ⥤ C)
   公理与运算 (1 个):
-    - exists_leftAdjoint : 存在 (left : C ⥤ D), Nonempty (left ⊣ right)
+    - exists_leftAdjoint : 存在 (left : C ⥤ D), 非空 (left ⊣ right)
 -/
 class IsRightAdjoint (right : D ⥤ C) : Prop where
   exists_leftAdjoint : exists (left : C ⥤ D), Nonempty (left ⊣ right)
@@ -203,7 +203,7 @@ definition leftAdjoint
 
 中文:
 定义 leftAdjoint
-  签名: (R : D ⥤ C) [IsRightAdjoint R]
+  签名: (R : D ⥤ C) [是右伴随 R]
   定义体: (IsRightAdjoint.exists_leftAdjoint (right := R)).choose
 
 Depends on / 依赖: IsRightAdjoint, IsRightAdjoint.exists_leftAdjoint, exists_leftAdjoint
@@ -224,8 +224,8 @@ definition Adjunction.ofIsLeftAdjoint
   body: IsLeftAdjoint.exists_rightAdjoint.choose_spec.some
 
 中文:
-定义 Adjunction.ofIsLeftAdjoint
-  签名: (left : C ⥤ D) [left.IsLeftAdjoint]
+定义 伴随.ofIsLeftAdjoint
+  签名: (left : C ⥤ D) [left.是左伴随]
   定义体: IsLeftAdjoint.exists_rightAdjoint.choose_spec.some
 
 Depends on / 依赖: IsLeftAdjoint, IsLeftAdjoint.exists_rightAdjoint.choose_spec.some, choose_spec, exists_rightAdjoint
@@ -364,7 +364,7 @@ lemma isLeftAdjoint
 中文:
 引理 isLeftAdjoint
   条件: (adj : F ⊣ G)
-  结论: F.IsLeftAdjoint
+  结论: F.是左伴随
   证明: ⟨_, ⟨adj⟩⟩
 
 @[to_dual]
@@ -890,7 +890,7 @@ structure CoreHomEquivUnitCounit
     - homEquiv_counit : forall {X Y g}, (homEquiv X Y).symm g = F.map g ≫ counit.app Y  [default: by cat_disch]
 
 中文:
-结构 CoreHomEquivUnitCounit
+结构 余reHomEquivUnitCounit
   参数: (F : C ⥤ D) (G : D ⥤ C)
   公理与运算 (5 个):
     - homEquiv : 对任意 X Y, (F.obj X ⟶ Y) ≃ (X ⟶ G.obj Y)
@@ -925,7 +925,7 @@ structure CoreHomEquiv
     - homEquiv_naturality_right : forall {X Y Y'} (f : F.obj X ⟶ Y) (g : Y ⟶ Y'), (homEquiv X Y') (f ≫ g) = (homEquiv X Y) f ≫ G.map g  [default: by cat_disch]
 
 中文:
-结构 CoreHomEquiv
+结构 核态射等价
   参数: (F : C ⥤ D) (G : D ⥤ C)
   公理与运算 (3 个):
     - homEquiv : 对任意 X Y, (F.obj X ⟶ Y) ≃ (X ⟶ G.obj Y)
@@ -1011,13 +1011,13 @@ structure CoreUnitCounit
     - right_triangle : whiskerLeft G unit ≫ (associator G F G).inv ≫ whiskerRight counit G = NatTrans.id (G ⋙ 𝟭 C)  [default: by cat_disch]
 
 中文:
-结构 CoreUnitCounit
+结构 余reUnitCounit
   参数: (F : C ⥤ D) (G : D ⥤ C)
   公理与运算 (4 个):
     - unit : 𝟭 C ⟶ F.comp G
     - counit : G.comp F ⟶ 𝟭 D
-    - left_triangle : whiskerRight unit F ≫ (associator F G F).hom ≫ whiskerLeft F counit = 自然数Trans.id (𝟭 C ⋙ F)  [默认: by cat_disch]
-    - right_triangle : whiskerLeft G unit ≫ (associator G F G).inv ≫ whiskerRight counit G = 自然数Trans.id (G ⋙ 𝟭 C)  [默认: by cat_disch]
+    - left_triangle : whiskerRight unit F ≫ (associator F G F).hom ≫ whiskerLeft F counit = 自然变换.id (𝟭 C ⋙ F)  [默认: by cat_disch]
+    - right_triangle : whiskerLeft G unit ≫ (associator G F G).inv ≫ whiskerRight counit G = 自然变换.id (G ⋙ 𝟭 C)  [默认: by cat_disch]
 
 Depends on / 依赖: cat_disch
 -/
@@ -1071,7 +1071,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (adj : CoreHomEquivUnitCounit F G)
+  签名: (adj : 余reHomEquivUnitCounit F G)
   定义体: adj.unit
   counit := adj.counit
   left_triangle_components X := by
@@ -1105,7 +1105,7 @@ lemma mk'_homEquiv
 
 中文:
 引理 mk'_homEquiv
-  条件: (adj : CoreHomEquivUnitCounit F G)
+  条件: (adj : 余reHomEquivUnitCounit F G)
   结论: (mk' adj).homEquiv = adj.homEquiv
   证明: by
   ext
@@ -1136,7 +1136,7 @@ definition mkOfHomEquiv
 
 中文:
 定义 mkOfHomEquiv
-  签名: (adj : CoreHomEquiv F G)
+  签名: (adj : 核态射等价 F G)
   定义体: mk' {
     unit :=
       { app := fun X => (adj.homEquiv X (F.obj X)) (𝟙 (F.obj X))
@@ -1178,7 +1178,7 @@ lemma mkOfHomEquiv_homEquiv
 
 中文:
 引理 mkOfHomEquiv_homEquiv
-  条件: (adj : CoreHomEquiv F G)
+  条件: (adj : 核态射等价 F G)
   证明: by
   ext X Y g
   simp [mkOfHomEquiv, ← adj.homEquiv_naturality_right (𝟙 _) g]
@@ -1211,7 +1211,7 @@ definition mkOfUnitCounit
 
 中文:
 定义 mkOfUnitCounit
-  签名: (adj : CoreUnitCounit F G)
+  签名: (adj : 余reUnitCounit F G)
   定义体: adj.unit
   counit := adj.counit
   left_triangle_components X := by
@@ -1268,7 +1268,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Adjunction (𝟭 C) (𝟭 C))
+  签名: 可居 (伴随 (𝟭 C) (𝟭 C))
   定义体: ⟨id⟩
 -/
 instance : Inhabited (Adjunction (𝟭 C) (𝟭 C)) :=
@@ -1289,7 +1289,7 @@ definition equivHomsetLeftOfNatIso
   right_inv g := by simp
 
 中文:
-定义 equivHomsetLeftOfNatIso
+定义 equivHomsetLeftOf自然数Iso
   签名: {F F' : C ⥤ D} (iso : F ≅ F') {X : C} {Y : D}
   定义体: iso.inv.app _ ≫ f
   invFun g := iso.hom.app _ ≫ g
@@ -1322,7 +1322,7 @@ definition ofNatIsoLeft
       Functor.map_comp, Functor.whiskerLeft_app, Category.assoc, NatTrans.
 
 中文:
-定义 ofNatIsoLeft
+定义 of自然数IsoLeft
   签名: {F G : C ⥤ D} {H : D ⥤ C} (adj : F ⊣ H) (iso : F ≅ G)
   定义体: adj.unit ≫ Functor.whiskerRight iso.hom _
   counit := Functor.whiskerLeft _ iso.inv ≫ adj.counit
@@ -1356,7 +1356,7 @@ lemma homEquiv_ofNatIsoLeft_apply
 @[to_dual none]
 
 中文:
-引理 homEquiv_ofNatIsoLeft_apply
+引理 homEquiv_of自然数IsoLeft_apply
   结论: {F G : C ⥤ D} {H : D ⥤ C} (adj : F ⊣ H) (iso : F ≅ G)
   证明: by
   simp
@@ -1381,7 +1381,7 @@ lemma homEquiv_ofNatIsoLeft_symm_apply
 @[to_dual none]
 
 中文:
-引理 homEquiv_ofNatIsoLeft_symm_apply
+引理 homEquiv_of自然数IsoLeft_symm_apply
   结论: {F G : C ⥤ D} {H : D ⥤ C} (adj : F ⊣ H) (iso : F ≅ G)
   证明: by
   simp
@@ -1406,7 +1406,7 @@ lemma homEquiv_ofNatIsoRight_apply
 @[to_dual none]
 
 中文:
-引理 homEquiv_ofNatIsoRight_apply
+引理 homEquiv_of自然数IsoRight_apply
   结论: {F : C ⥤ D} {G H : D ⥤ C} (adj : F ⊣ G) (iso : G ≅ H)
   证明: by
   simp
@@ -1429,7 +1429,7 @@ lemma homEquiv_ofNatIsoRight_symm_apply
   simp
 
 中文:
-引理 homEquiv_ofNatIsoRight_symm_apply
+引理 homEquiv_of自然数IsoRight_symm_apply
   结论: {F : C ⥤ D} {G H : D ⥤ C} (adj : F ⊣ G) (iso : G ≅ H)
   证明: by
   simp
@@ -1453,7 +1453,7 @@ definition compYonedaIso
 
 中文:
 定义 compYonedaIso
-  签名: {C : 类型u₁} [Category.{v₁} C] {D : 类型u₂} [Category.{v₁} D]
+  签名: {C : 类型u₁} [范畴.{v₁} C] {D : 类型u₂} [范畴.{v₁} D]
   定义体: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => (adj.homEquiv Y.unop X).toIso.symm
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, Y.unop, adj.homEquiv, homEquiv, ofComponents, toIso.symm
@@ -1476,7 +1476,7 @@ definition compCoyonedaIso
 
 中文:
 定义 compCoyonedaIso
-  签名: {C : 类型u₁} [Category.{v₁} C] {D : 类型u₂} [Category.{v₁} D]
+  签名: {C : 类型u₁} [范畴.{v₁} C] {D : 类型u₂} [范畴.{v₁} D]
   定义体: NatIso.ofComponents fun X => NatIso.ofComponents fun Y => (adj.homEquiv X.unop Y).toIso
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, X.unop, adj.homEquiv, homEquiv, ofComponents
@@ -1852,7 +1852,7 @@ definition toEquivalence
 
 中文:
 定义 toEquivalence
-  签名: (adj : F ⊣ G) [对任意 X, IsIso (adj.unit.app X)]
+  签名: (adj : F ⊣ G) [对任意 X, 是同构 (adj.unit.app X)]
   定义体: F
   inverse := G
   unitIso := NatIso.ofComponents fun X => asIso (adj.unit.app X)
@@ -1937,8 +1937,8 @@ lemma Functor.isEquivalence_of_isRightAdjoint
   proof: (Adjunction.ofIsRightAdjoint G).toEquivalence.isEquivalence_inverse
 
 中文:
-引理 Functor.isEquivalence_of_isRightAdjoint
-  结论: (G : C ⥤ D) [IsRightAdjoint G]
+引理 函子.isEquivalence_of_isRightAdjoint
+  结论: (G : C ⥤ D) [是右伴随 G]
   证明: (Adjunction.ofIsRightAdjoint G).toEquivalence.isEquivalence_inverse
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, isEquivalence_inverse, ofIsRightAdjoint, toEquivalence, toEquivalence.isEquivalence_inverse
@@ -2008,7 +2008,7 @@ lemma isLeftAdjoint_functor
 
 中文:
 引理 isLeftAdjoint_functor
-  结论: e.functor.IsLeftAdjoint where
+  结论: e.functor.是左伴随 where
   证明: ⟨_, ⟨e.toAdjunction⟩⟩
 
 @[to_dual]
@@ -2031,7 +2031,7 @@ lemma isRightAdjoint_inverse
 
 中文:
 引理 isRightAdjoint_inverse
-  结论: e.inverse.IsRightAdjoint where
+  结论: e.inverse.是右伴随 where
   证明: ⟨_, ⟨e.toAdjunction⟩⟩
 
 @[to_dual none]
@@ -2052,7 +2052,7 @@ lemma refl_toAdjunction
 
 中文:
 引理 refl_toAdjunction
-  结论: (refl (C := C)).toAdjunction = Adjunction.id
+  结论: (refl (C := C)).toAdjunction = 伴随.id
   证明: rfl
 
 Depends on / 依赖: Adjunction, Adjunction.id, toAdjunction
@@ -2069,7 +2069,7 @@ lemma trans_toAdjunction
 
 中文:
 引理 trans_toAdjunction
-  条件: {E : 类型} [Category* E] (e' : D ≌ E)
+  条件: {E : 类型} [范畴* E] (e' : D ≌ E)
   证明: rfl
 -/
 lemma trans_toAdjunction {E : Type*} [Category* E] (e' : D ≌ E) :
@@ -2089,7 +2089,7 @@ instance isLeftAdjoint_comp
 
 中文:
 实例 isLeftAdjoint_comp
-  签名: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  签名: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   定义体: ⟨_, ⟨(Adjunction.ofIsLeftAdjoint F).comp (Adjunction.ofIsLeftAdjoint G)⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsLeftAdjoint, ofIsLeftAdjoint
@@ -2109,7 +2109,7 @@ instance isRightAdjoint_comp
 
 中文:
 实例 isRightAdjoint_comp
-  签名: {E : 类型u₃} [Category.{v₃} E] {F : C ⥤ D} {G : D ⥤ E}
+  签名: {E : 类型u₃} [范畴.{v₃} E] {F : C ⥤ D} {G : D ⥤ E}
   定义体: ⟨_, ⟨(Adjunction.ofIsRightAdjoint G).comp (Adjunction.ofIsRightAdjoint F)⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint
@@ -2131,7 +2131,7 @@ lemma isRightAdjoint_of_iso
 
 中文:
 引理 isRightAdjoint_of_iso
-  条件: {F G : C ⥤ D} (h : F ≅ G) [F.IsRightAdjoint]
+  条件: {F G : C ⥤ D} (h : F ≅ G) [F.是右伴随]
   证明: ⟨_, ⟨(Adjunction.ofIsRightAdjoint F).ofNatIsoRight h⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.ofIsRightAdjoint, ofIsRightAdjoint, ofNatIsoRight
@@ -2150,7 +2150,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: (E : C ⥤ D) [IsEquivalence E]
+  签名: (E : C ⥤ D) [是等价 E]
   定义体: E.asEquivalence.toAdjunction
 
 Depends on / 依赖: E.asEquivalence.toAdjunction, asEquivalence, toAdjunction
@@ -2179,7 +2179,7 @@ lemma isLeftAdjoint_comp_iff_right
 
 中文:
 引理 isLeftAdjoint_comp_iff_right
-  结论: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   let iso : G ≅ F.asEquivalence.inverse ⋙ F ⋙ G :=
@@ -2213,7 +2213,7 @@ lemma isRightAdjoint_comp_iff_right
 
 中文:
 引理 isRightAdjoint_comp_iff_right
-  结论: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   let iso : G ≅ F.asEquivalence.inverse ⋙ F ⋙ G :=
@@ -2247,7 +2247,7 @@ lemma isLeftAdjoint_comp_iff_left
 
 中文:
 引理 isLeftAdjoint_comp_iff_left
-  结论: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   let iso : F ≅ (F ⋙ G) ⋙ G.asEquivalence.inverse :=
@@ -2281,7 +2281,7 @@ lemma isRightAdjoint_comp_iff_left
 
 中文:
 引理 isRightAdjoint_comp_iff_left
-  结论: {E : 类型u₃} [Category.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
+  结论: {E : 类型u₃} [范畴.{v₃} E] (F : C ⥤ D) (G : D ⥤ E)
   证明: by
   refine ⟨fun h => ?_, fun h => inferInstance⟩
   let iso : F ≅ (F ⋙ G) ⋙ G.asEquivalence.inverse :=

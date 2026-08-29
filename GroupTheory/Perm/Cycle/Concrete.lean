@@ -127,7 +127,7 @@ theorem isCycle_formPerm
 中文:
 定理 isCycle_formPerm
   条件: (hl : Nodup l) (hn : 2 <= l.length)
-  结论: IsCycle (formPerm l)
+  结论: 是环 (formPerm l)
   证明: by
   rcases l with - | ⟨x, l⟩
   · norm_num at hn
@@ -310,7 +310,7 @@ definition formPerm
 
 中文:
 定义 formPerm
-  签名: : 对任意 s : Cycle α, Nodup s -> Equiv.Perm α
+  签名: : 对任意 s : 环 α, Nodup s -> 等价.置换 α
   定义体: fun s => Quotient.hrecOn s (fun l _ => List.formPerm l) fun l₁ l₂ (h : l₁ ~r l₂) => by
     apply Function.hfunext
     · ext
@@ -342,8 +342,8 @@ theorem formPerm_coe
 
 中文:
 定理 formPerm_coe
-  条件: (l : List α) (hl : l.Nodup)
-  结论: formPerm (l : Cycle α) hl = l.formPerm
+  条件: (l : 列表 α) (hl : l.Nodup)
+  结论: formPerm (l : 环 α) hl = l.formPerm
   证明: rfl
 -/
 theorem formPerm_coe (l : List α) (hl : l.Nodup) : formPerm (l : Cycle α) hl = l.formPerm :=
@@ -368,7 +368,7 @@ theorem formPerm_subsingleton
 
 中文:
 定理 formPerm_subsingleton
-  条件: (s : Cycle α) (h : Subsingleton s)
+  条件: (s : 环 α) (h : 子单例 s)
   结论: formPerm s h.nodup = 1
   证明: by
   obtain ⟨s⟩ := s
@@ -402,7 +402,7 @@ theorem isCycle_formPerm
 
 中文:
 定理 isCycle_formPerm
-  条件: (s : Cycle α) (h : Nodup s) (hn : Nontrivial s)
+  条件: (s : 环 α) (h : Nodup s) (hn : 非平凡 s)
   证明: by
   induction s using Quot.inductionOn
   exact List.isCycle_formPerm h (length_nontrivial hn)
@@ -428,7 +428,7 @@ theorem support_formPerm
 
 中文:
 定理 support_formPerm
-  条件: [Fintype α] (s : Cycle α) (h : Nodup s) (hn : Nontrivial s)
+  条件: [有限类型 α] (s : 环 α) (h : Nodup s) (hn : 非平凡 s)
   证明: by
   obtain ⟨s⟩ := s
   refine support_formPerm_of_nodup s h ?_
@@ -457,7 +457,7 @@ theorem formPerm_eq_self_of_notMem
 
 中文:
 定理 formPerm_eq_self_of_notMem
-  条件: (s : Cycle α) (h : Nodup s) (x : α) (hx : x ∉ s)
+  条件: (s : 环 α) (h : Nodup s) (x : α) (hx : x ∉ s)
   证明: by
   induction s using Quot.inductionOn
   simpa using List.formPerm_apply_of_notMem hx
@@ -481,7 +481,7 @@ theorem formPerm_apply_mem_eq_next
 
 中文:
 定理 formPerm_apply_mem_eq_next
-  条件: (s : Cycle α) (h : Nodup s) (x : α) (hx : x in s)
+  条件: (s : 环 α) (h : Nodup s) (x : α) (hx : x in s)
   证明: by
   induction s using Quot.inductionOn
   simpa using! List.formPerm_apply_mem_eq_next h _ (by simp_all)
@@ -527,7 +527,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : List α
+  签名: : 列表 α
   定义体: List.iterate p x (cycleOf p x).support.card
 
 @[simp]
@@ -550,7 +550,7 @@ theorem toList_one
 
 中文:
 定理 toList_one
-  结论: toList (1 : Perm α) x = []
+  结论: toList (1 : 置换 α) x = []
   证明: by simp [toList, cycleOf_one]
 
 @[simp]
@@ -573,7 +573,7 @@ theorem toList_eq_nil_iff
 
 中文:
 定理 toList_eq_nil_iff
-  条件: {p : Perm α} {x}
+  条件: {p : 置换 α} {x}
   结论: toList p x = [] ↔ x ∉ p.support
   证明: by simp [toList]
 
@@ -636,7 +636,7 @@ theorem two_le_length_toList_iff_mem_support
 
 中文:
 定理 two_le_length_toList_iff_mem_support
-  条件: {p : Perm α} {x : α}
+  条件: {p : 置换 α} {x : α}
   证明: by simp
 -/
 theorem two_le_length_toList_iff_mem_support {p : Perm α} {x : α} :
@@ -765,7 +765,7 @@ theorem nodup_toList
 
 中文:
 定理 nodup_toList
-  条件: (p : Perm α) (x : α)
+  条件: (p : 置换 α) (x : α)
   结论: Nodup (toList p x)
   证明: by
   by_cases hx : p x = x
@@ -827,7 +827,7 @@ theorem next_toList_eq_apply
 
 中文:
 定理 next_toList_eq_apply
-  条件: (p : Perm α) (x y : α) (hy : y in toList p x)
+  条件: (p : 置换 α) (x y : α) (hy : y in toList p x)
   证明: by
   rw [mem_toList_iff] at hy
   obtain ⟨k, hk, hk'⟩ := hy.left.exists_pow_eq_of_mem_support hy.right
@@ -863,7 +863,7 @@ theorem toList_pow_apply_eq_rotate
 
 中文:
 定理 toList_pow_apply_eq_rotate
-  条件: (p : Perm α) (x : α) (k : 自然数)
+  条件: (p : 置换 α) (x : α) (k : 自然数)
   证明: by
   apply ext_getElem
   · simp only [length_toList, cycleOf_self_apply_pow, length_rotate]
@@ -897,7 +897,7 @@ theorem SameCycle.toList_isRotated
 
 中文:
 定理 SameCycle.toList_isRotated
-  条件: {f : Perm α} {x y : α} (h : SameCycle f x y)
+  条件: {f : 置换 α} {x y : α} (h : SameCycle f x y)
   证明: by
   by_cases hx : x in f.support
   · obtain ⟨_ | k, _, hy⟩ := h.exists_pow_eq_of_mem_support hx
@@ -962,7 +962,7 @@ theorem toList_formPerm_nil
 中文:
 定理 toList_formPerm_nil
   条件: (x : α)
-  结论: toList (formPerm ([] : List α)) x = []
+  结论: toList (formPerm ([] : 列表 α)) x = []
   证明: by simp
 -/
 theorem toList_formPerm_nil (x : α) : toList (formPerm ([] : List α)) x = [] := by simp
@@ -1000,7 +1000,7 @@ theorem toList_formPerm_nontrivial
 
 中文:
 定理 toList_formPerm_nontrivial
-  条件: (l : List α) (hl : 2 <= l.length) (hn : Nodup l)
+  条件: (l : 列表 α) (hl : 2 <= l.length) (hn : Nodup l)
   证明: by
   have hc : l.formPerm.IsCycle := List.isCycle_formPerm hn hl
   have hs : l.formPerm.support = l.toFinset := by
@@ -1043,7 +1043,7 @@ theorem toList_formPerm_isRotated_self
 
 中文:
 定理 toList_formPerm_isRotated_self
-  结论: (l : List α) (hl : 2 <= l.length) (hn : Nodup l) (x : α)
+  结论: (l : 列表 α) (hl : 2 <= l.length) (hn : Nodup l) (x : α)
   证明: by
   obtain ⟨k, hk, rfl⟩ := get_of_mem hx
   have hr : l ~r l.rotate k := ⟨k, rfl⟩
@@ -1087,7 +1087,7 @@ theorem formPerm_toList
 
 中文:
 定理 formPerm_toList
-  条件: (f : Perm α) (x : α)
+  条件: (f : 置换 α) (x : α)
   结论: formPerm (toList f x) = f.cycleOf x
   证明: by
   by_cases hx : f x = x
@@ -1130,7 +1130,7 @@ definition toCycle
 
 中文:
 定义 toCycle
-  签名: (f : Perm α) (hf : IsCycle f)
+  签名: (f : 置换 α) (hf : 是环 f)
   定义体: Multiset.recOn (Finset.univ : Finset α).val (Quot.mk _ [])
     (fun x _ l => if f x = x then l else toList f x)
     (by
@@ -1166,7 +1166,7 @@ theorem toCycle_eq_toList
 
 中文:
 定理 toCycle_eq_toList
-  条件: (f : Perm α) (hf : IsCycle f) (x : α) (hx : f x != x)
+  条件: (f : 置换 α) (hf : 是环 f) (x : α) (hx : f x != x)
   证明: by
   have key : (Finset.univ : Finset α).val = x ::ₘ Finset.univ.val.erase x := by simp
   rw [toCycle]; rw [key]
@@ -1190,8 +1190,8 @@ theorem exists_toCycle_toList
   proof: Exists.casesOn hf (fun x h => ⟨x, Perm.toCycle_eq_toList f hf x h.1⟩)
 
 中文:
-定理 exists_toCycle_toList
-  条件: (f : Perm α) (hf : IsCycle f)
+定理 存在_toCycle_toList
+  条件: (f : 置换 α) (hf : 是环 f)
   结论: 存在 x, toCycle f hf = toList f x
   证明: Exists.casesOn hf (fun x h => ⟨x, Perm.toCycle_eq_toList f hf x h.1⟩)
 
@@ -1213,7 +1213,7 @@ theorem nodup_toCycle
 
 中文:
 定理 nodup_toCycle
-  条件: (f : Perm α) (hf : IsCycle f)
+  条件: (f : 置换 α) (hf : 是环 f)
   结论: (toCycle f hf).Nodup
   证明: by
   obtain ⟨x, hx, -⟩ := id hf
@@ -1240,8 +1240,8 @@ theorem nontrivial_toCycle
 
 中文:
 定理 nontrivial_toCycle
-  条件: (f : Perm α) (hf : IsCycle f)
-  结论: (toCycle f hf).Nontrivial
+  条件: (f : 置换 α) (hf : 是环 f)
+  结论: (toCycle f hf).非平凡
   证明: by
   obtain ⟨x, hx, -⟩ := id hf
   simp [toCycle_eq_toList f hf x hx, hx, Cycle.nontrivial_coe_nodup_iff (nodup_toList _ _)]
@@ -1274,7 +1274,7 @@ theorem mem_toCycle_iff_support
 
 中文:
 定理 mem_toCycle_iff_support
-  条件: (f : Perm α) (hf : f.IsCycle)
+  条件: (f : 置换 α) (hf : f.是环)
   结论: x in f.toCycle hf ↔ f x != x
   证明: by
   constructor
@@ -1314,7 +1314,7 @@ theorem toCycle_next
 
 中文:
 定理 toCycle_next
-  条件: (f : Perm α) (hf : f.IsCycle) (hx : x in toCycle f hf)
+  条件: (f : 置换 α) (hf : f.是环) (hx : x in toCycle f hf)
   证明: by
   have ⟨l, hl⟩ := exists_toCycle_toList f hf
   simp only [hl, Cycle.mem_coe_iff] at ⊢ hx
@@ -1344,7 +1344,7 @@ definition isoCycle
 
 中文:
 定义 isoCycle
-  签名: : { f : Perm α // IsCycle f } ≃ { s : Cycle α // s.Nodup ∧ s.Nontrivial } where
+  签名: : { f : 置换 α // 是环 f } ≃ { s : 环 α // s.Nodup ∧ s.非平凡 } where
   定义体: ⟨toCycle (f : Perm α) f.prop, nodup_toCycle (f : Perm α) f.prop,
     nontrivial_toCycle _ f.prop⟩
   invFun s := ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
@@ -1401,8 +1401,8 @@ theorem IsCycle.existsUnique_cycle
     refine (toList_formPerm_isRotated_self _ ?_ hn
 
 中文:
-定理 IsCycle.existsUnique_cycle
-  条件: {f : Perm α} (hf : IsCycle f)
+定理 是环.存在Unique_cycle
+  条件: {f : 置换 α} (hf : 是环 f)
   证明: by
   cases nonempty_fintype α
   obtain ⟨x, hx, hy⟩ := id hf
@@ -1444,8 +1444,8 @@ theorem IsCycle.existsUnique_cycle_subtype
   simpa using hs' _ ⟨ht, ht'⟩
 
 中文:
-定理 IsCycle.existsUnique_cycle_subtype
-  条件: {f : Perm α} (hf : IsCycle f)
+定理 是环.存在Unique_cycle_subtype
+  条件: {f : 置换 α} (hf : 是环 f)
   证明: by
   obtain ⟨s, ⟨hs, rfl⟩, hs'⟩ := hf.existsUnique_cycle
   refine ⟨⟨s, hs⟩, rfl, ?_⟩
@@ -1480,8 +1480,8 @@ theorem IsCycle.existsUnique_cycle_nontrivial_subtype
     simpa using hs' ⟨t, ht⟩ ht''
 
 中文:
-定理 IsCycle.existsUnique_cycle_nontrivial_subtype
-  条件: {f : Perm α} (hf : IsCycle f)
+定理 是环.存在Unique_cycle_nontrivial_subtype
+  条件: {f : 置换 α} (hf : 是环 f)
   证明: by
   obtain ⟨⟨s, hn⟩, hs, hs'⟩ := hf.existsUnique_cycle_subtype
   refine ⟨⟨s, hn, ?_⟩, ?_, ?_⟩
@@ -1527,7 +1527,7 @@ definition isoCycle'
 
 中文:
 定义 isoCycle'
-  签名: : { f : Perm α // IsCycle f } ≃ { s : Cycle α // s.Nodup ∧ s.Nontrivial }
+  签名: : { f : 置换 α // 是环 f } ≃ { s : 环 α // s.Nodup ∧ s.非平凡 }
   定义体: let f : { s : Cycle α // s.Nodup ∧ s.Nontrivial } -> { f : Perm α // IsCycle f } :=
     fun s => ⟨(s : Cycle α).formPerm s.prop.left, (s : Cycle α).isCycle_formPerm _ s.prop.right⟩
   { toFun := Fintype.bijInv (show Function.Bijective f by

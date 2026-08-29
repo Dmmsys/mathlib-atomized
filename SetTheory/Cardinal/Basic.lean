@@ -69,8 +69,8 @@ lemma mk_preimage_down
 
 中文:
 引理 mk_preimage_down
-  条件: {s : Set α}
-  结论: #(ULift.down.{v} ⁻¹' s) = lift.{v} (#s)
+  条件: {s : 集合 α}
+  结论: #(类型层提升.down.{v} ⁻¹' s) = lift.{v} (#s)
   证明: by
   rw [← mk_uLift]; rw [Cardinal.eq]
   constructor
@@ -149,7 +149,7 @@ theorem lift_mk_shrink''
 
 中文:
 定理 lift_mk_shrink''
-  条件: (α : Type max u v) [Small.{v} α]
+  条件: (α : 类型 最大值 u v) [Small.{v} α]
   证明: by
   rw [← lift_umax]; rw [lift_mk_shrink.{max u v]; rw [v]; rw [0} α]; rw [← lift_umax]; rw [lift_id]
 
@@ -177,7 +177,7 @@ theorem prod_eq_of_fintype
 
 中文:
 定理 prod_eq_of_fintype
-  条件: {α : 类型u} [h : Fintype α] (f : α -> Cardinal.{v})
+  条件: {α : 类型u} [h : 有限类型 α] (f : α -> 基数.{v})
   证明: by
   revert f
   refine Fintype.induction_empty_option ?_ ?_ ?_ α (h_fintype := h)
@@ -221,7 +221,7 @@ theorem le_one_iff_subsingleton
 中文:
 定理 le_one_iff_subsingleton
   条件: {α : 类型u}
-  结论: #α <= 1 ↔ Subsingleton α
+  结论: #α <= 1 ↔ 子单例 α
   证明: ⟨fun ⟨f⟩ => ⟨fun _ _ => f.injective (Subsingleton.elim _ _)⟩, fun ⟨h⟩ =>
     ⟨fun _ => ULift.up 0, fun _ _ _ => h _ _⟩⟩
 
@@ -247,8 +247,8 @@ alias ⟨_, _root_.Set.Subsingleton.cardinalMk_le_one⟩ := mk_le_one_iff_set_su
 
 中文:
 定理 mk_le_one_iff_set_subsingleton
-  条件: {s : Set α}
-  结论: #s <= 1 ↔ s.Subsingleton
+  条件: {s : 集合 α}
+  结论: #s <= 1 ↔ s.子单例
   证明: le_one_iff_subsingleton.trans s.subsingleton_coe
 
 alias ⟨_, _root_.Set.Subsingleton.cardinalMk_le_one⟩ := mk_le_one_iff_set_subsingleton
@@ -274,7 +274,7 @@ theorem one_lt_iff_nontrivial
 中文:
 定理 one_lt_iff_nontrivial
   条件: {α : 类型u}
-  结论: 1 < #α ↔ Nontrivial α
+  结论: 1 < #α ↔ 非平凡 α
   证明: by
   rw [← not_le]; rw [le_one_iff_subsingleton]; rw [← not_nontrivial_iff_subsingleton]; rw [Classical.not_not]
 
@@ -301,7 +301,7 @@ lemma sInf_eq_zero_iff
 
 中文:
 引理 sInf_eq_zero_iff
-  条件: {s : Set Cardinal}
+  条件: {s : 集合 基数}
   结论: sInf s = 0 ↔ s = ∅ ∨ 存在 a in s, a = 0
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
@@ -334,7 +334,7 @@ lemma iInf_eq_zero_iff
 
 中文:
 引理 iInf_eq_zero_iff
-  条件: {ι : Sort*} {f : ι -> Cardinal}
+  条件: {ι : 类型层*} {f : ι -> 基数}
   证明: by
   simp [iInf, sInf_eq_zero_iff]
 
@@ -357,7 +357,7 @@ theorem iSup_of_empty
 
 中文:
 定理 iSup_of_empty
-  条件: {ι} (f : ι -> Cardinal) [IsEmpty ι]
+  条件: {ι} (f : ι -> 基数) [是空 ι]
   结论: iSup f = 0
   证明: ciSup_of_empty f
 
@@ -383,7 +383,7 @@ theorem lift_sInf
 
 中文:
 定理 lift_sInf
-  条件: (s : Set Cardinal)
+  条件: (s : 集合 基数)
   结论: lift.{u, v} (sInf s) = sInf (lift.{u, v} '' s)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hs)
@@ -414,7 +414,7 @@ theorem lift_iInf
 
 中文:
 定理 lift_iInf
-  条件: {ι} (f : ι -> Cardinal)
+  条件: {ι} (f : ι -> 基数)
   结论: lift.{u, v} (iInf f) = ⨅ i, lift.{u, v} (f i)
   证明: by
   unfold iInf
@@ -449,7 +449,7 @@ instance small_Iic
 
 中文:
 实例 small_Iic
-  签名: (a : Cardinal.{u})
+  签名: (a : 基数.{u})
   定义体: by
   rw [← mk_out a]
   apply @small_of_surjective (Set a.out) (Iic #a.out) _ fun x => ⟨#x, mk_set_le x⟩
@@ -474,7 +474,7 @@ instance small_Iio
 
 中文:
 实例 small_Iio
-  签名: (a : Cardinal.{u})
+  签名: (a : 基数.{u})
   定义体: small_subset Iio_subset_Iic_self
 
 Depends on / 依赖: Iio_subset_Iic_self, small_subset
@@ -490,7 +490,7 @@ instance small_Icc
 
 中文:
 实例 small_Icc
-  签名: (a b : Cardinal.{u})
+  签名: (a b : 基数.{u})
   定义体: small_subset Icc_subset_Iic_self
 
 Depends on / 依赖: Icc_subset_Iic_self, small_subset
@@ -506,7 +506,7 @@ instance small_Ico
 
 中文:
 实例 small_Ico
-  签名: (a b : Cardinal.{u})
+  签名: (a b : 基数.{u})
   定义体: small_subset Ico_subset_Iio_self
 
 Depends on / 依赖: Ico_subset_Iio_self, small_subset
@@ -522,7 +522,7 @@ instance small_Ioc
 
 中文:
 实例 small_Ioc
-  签名: (a b : Cardinal.{u})
+  签名: (a b : 基数.{u})
   定义体: small_subset Ioc_subset_Iic_self
 
 Depends on / 依赖: Ioc_subset_Iic_self, small_subset
@@ -538,7 +538,7 @@ instance small_Ioo
 
 中文:
 实例 small_Ioo
-  签名: (a b : Cardinal.{u})
+  签名: (a b : 基数.{u})
   定义体: small_subset Ioo_subset_Iio_self
 
 Depends on / 依赖: Ioo_subset_Iio_self, small_subset
@@ -560,7 +560,7 @@ theorem bddAbove_iff_small
 
 中文:
 定理 bddAbove_iff_small
-  条件: {s : Set Cardinal.{u}}
+  条件: {s : 集合 基数.{u}}
   结论: BddAbove s ↔ Small.{u} s
   证明: ⟨fun ⟨a, ha⟩ => @small_subset _ (Iic a) s (fun _ h => ha h) _, by
     rintro ⟨ι, ⟨e⟩⟩
@@ -590,7 +590,7 @@ theorem bddAbove_of_small
 
 中文:
 定理 bddAbove_of_small
-  条件: {s : Set Cardinal.{u}} [h : Small.{u} s]
+  条件: {s : 集合 基数.{u}} [h : Small.{u} s]
   结论: BddAbove s
   证明: bddAbove_iff_small.2 h
 
@@ -613,8 +613,8 @@ theorem bddAbove_range
 
 中文:
 定理 bddAbove_range
-  条件: {ι : 类型} [Small.{u} ι] (f : ι -> Cardinal.{u})
-  结论: BddAbove (Set.range f)
+  条件: {ι : 类型} [Small.{u} ι] (f : ι -> 基数.{u})
+  结论: BddAbove (集合.range f)
   证明: bddAbove_of_small
 
 Depends on / 依赖: bddAbove_of_small
@@ -634,7 +634,7 @@ theorem bddAbove_image
 
 中文:
 定理 bddAbove_image
-  结论: (f : Cardinal.{u} -> Cardinal.{max u v}) {s : Set Cardinal.{u}}
+  结论: (f : 基数.{u} -> 基数.{最大值 u v}) {s : 集合 基数.{u}}
   证明: by
   rw [bddAbove_iff_small] at hs ⊢
   exact small_lift _
@@ -658,7 +658,7 @@ theorem bddAbove_range_comp
 
 中文:
 定理 bddAbove_range_comp
-  结论: {ι : 类型u} {f : ι -> Cardinal.{v}} (hf : BddAbove (range f))
+  结论: {ι : 类型u} {f : ι -> 基数.{v}} (hf : BddAbove (range f))
   证明: by
   rw [range_comp]
   exact bddAbove_image g hf
@@ -684,7 +684,7 @@ theorem _root_.not_small_cardinal
 
 中文:
 定理 _root_.not_small_cardinal
-  结论: ¬ Small.{u} Cardinal.{max u v}
+  结论: ¬ Small.{u} 基数.{最大值 u v}
   证明: by
   intro h
   have := small_lift.{_, v} Cardinal.{max u v}
@@ -709,7 +709,7 @@ instance uncountable
 
 中文:
 实例 uncountable
-  签名: : Uncountable Cardinal.{u}
+  签名: : 不可数 基数.{u}
   定义体: Uncountable.of_not_small not_small_cardinal.{u}
 
 Depends on / 依赖: Uncountable, Uncountable.of_not_small, not_small_cardinal, of_not_small
@@ -732,7 +732,7 @@ theorem sum_le_lift_mk_mul_iSup_lift
 
 中文:
 定理 sum_le_lift_mk_mul_iSup_lift
-  条件: {ι : 类型u} (f : ι -> Cardinal.{v})
+  条件: {ι : 类型u} (f : ι -> 基数.{v})
   证明: by
   rw [← (sum f).lift_id]; rw [lift_sum]; rw [← lift_umax.{u]; rw [v}]; rw [← (⨆ i]; rw [lift (f i)).lift_id]; rw [lift_umax.{max v u]; rw [u}]; rw [← sum_const]
   refine sum_le_sum _ _ fun i => ?_
@@ -759,7 +759,7 @@ theorem sum_le_lift_mk_mul_iSup
 
 中文:
 定理 sum_le_lift_mk_mul_iSup
-  条件: {ι : 类型u} (f : ι -> Cardinal.{max u v})
+  条件: {ι : 类型u} (f : ι -> 基数.{最大值 u v})
   证明: by
   simpa [← lift_umax] using sum_le_lift_mk_mul_iSup_lift f
 
@@ -781,8 +781,8 @@ theorem sum_le_mk_mul_iSup
 
 中文:
 定理 sum_le_mk_mul_iSup
-  条件: {ι : 类型u} (f : ι -> Cardinal.{u})
-  结论: sum f <= #ι * ⨆ i, f i
+  条件: {ι : 类型u} (f : ι -> 基数.{u})
+  结论: 求和 f <= #ι * ⨆ i, f i
   证明: by
   simpa using sum_le_lift_mk_mul_iSup_lift f
 
@@ -808,7 +808,7 @@ exact h fun a ha => lift_le.1 hc (mem_imag
 
 中文:
 定理 lift_sSup
-  条件: {s : Set Cardinal} (hs : BddAbove s)
+  条件: {s : 集合 基数} (hs : BddAbove s)
   证明: by
   apply ((le_csSup_iff' (bddAbove_image.{_, u} _ hs)).2 fun c hc => _).antisymm (csSup_le' _)
   · intro c hc
@@ -844,7 +844,7 @@ theorem lift_iSup
 
 中文:
 定理 lift_iSup
-  条件: {ι : 类型v} {f : ι -> Cardinal.{w}} (hf : BddAbove (range f))
+  条件: {ι : 类型v} {f : ι -> 基数.{w}} (hf : BddAbove (range f))
   证明: by
   rw [iSup]; rw [iSup]; rw [lift_sSup hf]; rw [← range_comp]
   simp [Function.comp_def]
@@ -870,7 +870,7 @@ theorem lift_iSup_le
 
 中文:
 定理 lift_iSup_le
-  结论: {ι : 类型v} {f : ι -> Cardinal.{w}} {t : Cardinal} (hf : BddAbove (range f))
+  结论: {ι : 类型v} {f : ι -> 基数.{w}} {t : 基数} (hf : BddAbove (range f))
   证明: by
   rw [lift_iSup hf]
   exact ciSup_le' w
@@ -897,7 +897,7 @@ theorem lift_iSup_le_iff
 
 中文:
 定理 lift_iSup_le_iff
-  结论: {ι : 类型v} {f : ι -> Cardinal.{w}} (hf : BddAbove (range f))
+  结论: {ι : 类型v} {f : ι -> 基数.{w}} (hf : BddAbove (range f))
   证明: by
   rw [lift_iSup hf]
   exact ciSup_le_iff' (bddAbove_range_comp.{_, _, u} hf _)
@@ -921,7 +921,7 @@ theorem lift_iSup_le_lift_iSup
 
 中文:
 定理 lift_iSup_le_lift_iSup
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> Cardinal.{w}}
+  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 基数.{w}}
   证明: by
   rw [lift_iSup hf]; rw [lift_iSup hf']
   exact ciSup_mono_of_forall_exists' (bddAbove_range_comp.{_, _, w} hf' _) fun i => ⟨_, h i⟩
@@ -944,7 +944,7 @@ theorem lift_iSup_le_lift_iSup'
 
 中文:
 定理 lift_iSup_le_lift_iSup'
-  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> Cardinal.{v}}
+  结论: {ι : 类型v} {ι' : 类型v'} {f : ι -> 基数.{v}}
   证明: lift_iSup_le_lift_iSup hf hf' h
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.firstCountableTopology, firstCountableTopology, lift_iSup_le_lift_iSup
@@ -966,7 +966,7 @@ theorem lift_iSup_le_sum
 
 中文:
 定理 lift_iSup_le_sum
-  条件: {ι : 类型u} [Small.{v} ι] (f : ι -> Cardinal.{v})
+  条件: {ι : 类型u} [Small.{v} ι] (f : ι -> 基数.{v})
   证明: by
   rw [lift_iSup bddAbove_of_small]
   exact ciSup_le' fun i => lift_le_sum f i
@@ -993,8 +993,8 @@ theorem mk_finset_of_fintype
 
 中文:
 定理 mk_finset_of_fintype
-  条件: [Fintype α]
-  结论: #(Finset α) = 2 ^ Fintype.card α
+  条件: [有限类型 α]
+  结论: #(有限集 α) = 2 ^ 有限类型.card α
   证明: by
   simp
 
@@ -1021,7 +1021,7 @@ lemma succ_natCast
 中文:
 引理 succ_natCast
   条件: (n : 自然数)
-  结论: Order.succ (n : Cardinal) = n + 1
+  结论: Order.succ (n : 基数) = n + 1
   证明: by
   refine (succ_le_of_lt ?_).antisymm (add_one_le_of_lt <| lt_succ _)
   rw [← Nat.cast_succ]
@@ -1052,7 +1052,7 @@ theorem nat_succ
 中文:
 定理 nat_succ
   条件: (n : 自然数)
-  结论: (n.succ : Cardinal) = succ ↑n
+  结论: (n.succ : 基数) = succ ↑n
   证明: by
   simp
 
@@ -1076,7 +1076,7 @@ lemma natCast_add_one_le_iff
 
 中文:
 引理 natCast_add_one_le_iff
-  条件: {n : 自然数} {c : Cardinal}
+  条件: {n : 自然数} {c : 基数}
   结论: n + 1 <= c ↔ n < c
   证明: by
   rw [← Order.succ_le_iff]; rw [succ_natCast]
@@ -1101,7 +1101,7 @@ lemma lt_natCast_add_one_iff
 
 中文:
 引理 lt_natCast_add_one_iff
-  条件: {n : 自然数} {c : Cardinal}
+  条件: {n : 自然数} {c : 基数}
   结论: c < n + 1 ↔ c <= n
   证明: by
   rw [← Order.lt_succ_iff]; rw [succ_natCast]
@@ -1126,7 +1126,7 @@ lemma two_le_iff_one_lt
 
 中文:
 引理 two_le_iff_one_lt
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: 2 <= c ↔ 1 < c
   证明: by
   convert! natCast_add_one_le_iff
@@ -1151,7 +1151,7 @@ theorem succ_zero
 
 中文:
 定理 succ_zero
-  结论: succ (0 : Cardinal) = 1
+  结论: succ (0 : 基数) = 1
   证明: by norm_cast
 -/
 theorem succ_zero : succ (0 : Cardinal) = 1 := by norm_cast
@@ -1167,7 +1167,7 @@ theorem one_lt_two
 
 中文:
 定理 one_lt_two
-  结论: (1 : Cardinal) < 2
+  结论: (1 : 基数) < 2
   证明: by norm_cast
 -/
 theorem one_lt_two : (1 : Cardinal) < 2 := by norm_cast
@@ -1187,7 +1187,7 @@ obtain ⟨t, -, rfl⟩ := @Finset.exists_subset_card_eq α .univ n by simpa usin
     exact ⟨s, hs.symm⟩
 
 中文:
-定理 exists_finset_eq_card
+定理 存在_finset_eq_card
   条件: {α} {n : 自然数} (h : n <= #α)
   证明: by
   obtain hα | hα := finite_or_infinite α
@@ -1218,7 +1218,7 @@ theorem exists_finset_le_card
   ⟨s, eq.le⟩
 
 中文:
-定理 exists_finset_le_card
+定理 存在_finset_le_card
   条件: (α : 类型) (n : 自然数) (h : n <= #α)
   证明: have ⟨s, eq⟩ := exists_finset_eq_card h
   ⟨s, eq.le⟩
@@ -1244,7 +1244,7 @@ theorem card_le_of
 
 中文:
 定理 card_le_of
-  条件: {α : 类型u} {n : 自然数} (H : 对任意 s : Finset α, s.card <= n)
+  条件: {α : 类型u} {n : 自然数} (H : 对任意 s : 有限集 α, s.card <= n)
   结论: #α <= n
   证明: by
   contrapose! H
@@ -1271,7 +1271,7 @@ theorem cantor'
 
 中文:
 定理 cantor'
-  条件: (a) {b : Cardinal} (hb : 1 < b)
+  条件: (a) {b : 基数} (hb : 1 < b)
   结论: a < b ^ a
   证明: by
   rw [← succ_le_iff]; rw [(by norm_cast : succ (1 : Cardinal) = 2)] at hb
@@ -1295,7 +1295,7 @@ theorem one_le_iff_pos
 
 中文:
 定理 one_le_iff_pos
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: 1 <= c ↔ 0 < c
   证明: by
   rw [← succ_zero]; rw [succ_le_iff]
@@ -1317,7 +1317,7 @@ theorem one_le_iff_ne_zero
 
 中文:
 定理 one_le_iff_ne_zero
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: 1 <= c ↔ c != 0
   证明: by
   rw [Cardinal.one_le_iff_pos]; rw [pos_iff_ne_zero]
@@ -1343,7 +1343,7 @@ alias lt_one_iff_zero := Cardinal.lt_one_iff
 
 中文:
 定理 lt_one_iff
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: c < 1 ↔ c = 0
   证明: by
   simpa using lt_succ_bot_iff (a := c)
@@ -1369,7 +1369,7 @@ theorem le_one_iff
 
 中文:
 定理 le_one_iff
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: c <= 1 ↔ c = 0 ∨ c = 1
   证明: by
   simpa using le_succ_bot_iff (a := c)
@@ -1394,7 +1394,7 @@ lemma natCast_lt_aleph0
 中文:
 引理 natCast_lt_aleph0
   条件: {n : 自然数}
-  结论: (n : Cardinal.{u}) < ℵ₀
+  结论: (n : 基数.{u}) < ℵ₀
   证明: by
   rw [← natCast_add_one_le_iff]; rw [← Nat.cast_add_one]; rw [← lift_mk_fin]; rw [aleph0]; rw [lift_mk_le.{u}]
   exact ⟨⟨(↑), fun a b => Fin.ext⟩⟩
@@ -1418,7 +1418,7 @@ theorem nat_lt_aleph0
 中文:
 定理 nat_lt_aleph0
   条件: (n : 自然数)
-  结论: (n : Cardinal.{u}) < ℵ₀
+  结论: (n : 基数.{u}) < ℵ₀
   证明: natCast_lt_aleph0
 
 Depends on / 依赖: natCast_lt_aleph0
@@ -1437,7 +1437,7 @@ lemma natCast_le_aleph0
 中文:
 引理 natCast_le_aleph0
   条件: {n : 自然数}
-  结论: (n : Cardinal.{u}) <= ℵ₀
+  结论: (n : 基数.{u}) <= ℵ₀
   证明: natCast_lt_aleph0.le
 -/
 @[simp] lemma natCast_le_aleph0 {n : Nat} : (n : Cardinal.{u}) <= ℵ₀ := natCast_lt_aleph0.le
@@ -1452,7 +1452,7 @@ lemma ofNat_lt_aleph0
   proof: natCast_lt_aleph0
 
 中文:
-引理 ofNat_lt_aleph0
+引理 of自然数_lt_aleph0
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: of自然数(n) < ℵ₀
   证明: natCast_lt_aleph0
@@ -1470,7 +1470,7 @@ lemma ofNat_le_aleph0
 @[simp]
 
 中文:
-引理 ofNat_le_aleph0
+引理 of自然数_le_aleph0
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: of自然数(n) <= ℵ₀
   证明: natCast_le_aleph0
@@ -1539,7 +1539,7 @@ theorem lt_aleph0
 
 中文:
 定理 lt_aleph0
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: c < ℵ₀ ↔ 存在 n : 自然数, c = n
   证明: ⟨fun h => by
     rcases lt_lift_iff.1 h with ⟨c, h', rfl⟩
@@ -1577,7 +1577,7 @@ lemma succ_eq_of_lt_aleph0
 
 中文:
 引理 succ_eq_of_lt_aleph0
-  条件: {c : Cardinal} (h : c < ℵ₀)
+  条件: {c : 基数} (h : c < ℵ₀)
   结论: Order.succ c = c + 1
   证明: by
   obtain ⟨n, hn⟩ := Cardinal.lt_aleph0.mp h
@@ -1603,7 +1603,7 @@ theorem aleph0_le
 
 中文:
 定理 aleph0_le
-  条件: {c : Cardinal}
+  条件: {c : 基数}
   结论: ℵ₀ <= c ↔ 对任意 n : 自然数, ↑n <= c where
   证明: natCast_le_aleph0.trans h
   mpr h := le_of_not_gt fun hn => by
@@ -1657,7 +1657,7 @@ theorem isSuccLimit_aleph0
 
 中文:
 定理 isSuccLimit_aleph0
-  结论: IsSuccLimit ℵ₀
+  结论: 是SuccLimit ℵ₀
   证明: by
   rw [Cardinal.isSuccLimit_iff]
   exact ⟨aleph0_ne_zero, isSuccPrelimit_aleph0⟩
@@ -1677,7 +1677,7 @@ lemma not_isSuccLimit_natCast
 
 中文:
 引理 not_isSuccLimit_natCast
-  结论: (n : 自然数) -> ¬ IsSuccLimit (n : Cardinal.{u})
+  结论: (n : 自然数) -> ¬ 是SuccLimit (n : 基数.{u})
 -/
 lemma not_isSuccLimit_natCast : (n : Nat) -> ¬ IsSuccLimit (n : Cardinal.{u})
   | 0, e => e.1 isMin_bot
@@ -1698,8 +1698,8 @@ theorem not_isSuccLimit_of_lt_aleph0
 
 中文:
 定理 not_isSuccLimit_of_lt_aleph0
-  条件: {c : Cardinal} (h : c < ℵ₀)
-  结论: ¬ IsSuccLimit c
+  条件: {c : 基数} (h : c < ℵ₀)
+  结论: ¬ 是SuccLimit c
   证明: by
   obtain ⟨n, rfl⟩ := lt_aleph0.1 h
   exact not_isSuccLimit_natCast n
@@ -1723,7 +1723,7 @@ theorem aleph0_le_of_isSuccLimit
 
 中文:
 定理 aleph0_le_of_isSuccLimit
-  条件: {c : Cardinal} (h : IsSuccLimit c)
+  条件: {c : 基数} (h : 是SuccLimit c)
   结论: ℵ₀ <= c
   证明: by
   contrapose! h
@@ -1748,7 +1748,7 @@ theorem isStrongLimit_aleph0
 
 中文:
 定理 isStrongLimit_aleph0
-  结论: IsStrongLimit ℵ₀
+  结论: 是StrongLimit ℵ₀
   证明: by
   refine ⟨aleph0_ne_zero, fun x hx => ?_⟩
   obtain ⟨n, rfl⟩ := lt_aleph0.1 hx
@@ -1773,8 +1773,8 @@ theorem IsStrongLimit.aleph0_le
 @[deprecated exists_eq_ciSup_of_not_isSuccLimit (since := "2026-04-13")]
 
 中文:
-定理 IsStrongLimit.aleph0_le
-  条件: {c} (H : IsStrongLimit c)
+定理 是StrongLimit.aleph0_le
+  条件: {c} (H : 是StrongLimit c)
   结论: ℵ₀ <= c
   证明: aleph0_le_of_isSuccLimit H.isSuccLimit
 
@@ -1799,8 +1799,8 @@ lemma exists_eq_natCast_of_iSup_eq
 @[simp]
 
 中文:
-引理 exists_eq_natCast_of_iSup_eq
-  结论: {ι : 类型u} [Nonempty ι] (f : ι -> Cardinal.{v})
+引理 存在_eq_natCast_of_iSup_eq
+  结论: {ι : 类型u} [非空 ι] (f : ι -> 基数.{v})
   证明: by
   rw [← h]
   exact exists_eq_ciSup_of_not_isSuccLimit hf (h ▸ not_isSuccLimit_natCast n)
@@ -1825,7 +1825,7 @@ theorem range_natCast
 
 中文:
 定理 range_natCast
-  结论: range ((↑) : 自然数 -> Cardinal) = Iio ℵ₀
+  结论: range ((↑) : 自然数 -> 基数) = 左无界右开区间 ℵ₀
   证明: ext fun x => by simp only [mem_Iio, mem_range, eq_comm, lt_aleph0]
 
 Depends on / 依赖: eq_comm, lt_aleph0, mem_Iio, mem_range
@@ -1846,7 +1846,7 @@ theorem mk_eq_nat_iff
 中文:
 定理 mk_eq_nat_iff
   条件: {α : 类型u} {n : 自然数}
-  结论: #α = n ↔ Nonempty (α ≃ Fin n)
+  结论: #α = n ↔ 非空 (α ≃ 有限集 n)
   证明: by
   rw [← lift_mk_fin]; rw [← lift_uzero #α]; rw [lift_mk_eq']
 
@@ -1868,7 +1868,7 @@ theorem lt_aleph0_iff_finite
 中文:
 定理 lt_aleph0_iff_finite
   条件: {α : 类型u}
-  结论: #α < ℵ₀ ↔ Finite α
+  结论: #α < ℵ₀ ↔ 有限 α
   证明: by
   simp only [lt_aleph0, mk_eq_nat_iff, finite_iff_exists_equiv_fin]
 
@@ -1889,7 +1889,7 @@ theorem lt_aleph0_iff_fintype
 中文:
 定理 lt_aleph0_iff_fintype
   条件: {α : 类型u}
-  结论: #α < ℵ₀ ↔ Nonempty (Fintype α)
+  结论: #α < ℵ₀ ↔ 非空 (有限类型 α)
   证明: lt_aleph0_iff_finite.trans (finite_iff_nonempty_fintype _)
 
 Depends on / 依赖: finite_iff_nonempty_fintype, lt_aleph0_iff_finite, lt_aleph0_iff_finite.trans
@@ -1908,7 +1908,7 @@ theorem lt_aleph0_of_finite
 
 中文:
 定理 lt_aleph0_of_finite
-  条件: (α : 类型u) [Finite α]
+  条件: (α : 类型u) [有限 α]
   结论: #α < ℵ₀
   证明: lt_aleph0_iff_finite.2 ‹_›
 
@@ -1932,8 +1932,8 @@ alias ⟨_, _root_.Set.Finite.lt_aleph0⟩ := lt_aleph0_iff_set_finite
 
 中文:
 定理 lt_aleph0_iff_set_finite
-  条件: {S : Set α}
-  结论: #S < ℵ₀ ↔ S.Finite
+  条件: {S : 集合 α}
+  结论: #S < ℵ₀ ↔ S.有限
   证明: lt_aleph0_iff_finite.trans finite_coe_iff
 
 alias ⟨_, _root_.Set.Finite.lt_aleph0⟩ := lt_aleph0_iff_set_finite
@@ -1960,7 +1960,7 @@ theorem lt_aleph0_iff_subtype_finite
 中文:
 定理 lt_aleph0_iff_subtype_finite
   条件: {p : α -> 命题}
-  结论: #{ x // p x } < ℵ₀ ↔ { x | p x }.Finite
+  结论: #{ x // p x } < ℵ₀ ↔ { x | p x }.有限
   证明: lt_aleph0_iff_set_finite
 
 Depends on / 依赖: lt_aleph0_iff_set_finite
@@ -1981,7 +1981,7 @@ theorem mk_le_aleph0_iff
 
 中文:
 定理 mk_le_aleph0_iff
-  结论: #α <= ℵ₀ ↔ Countable α
+  结论: #α <= ℵ₀ ↔ 可数 α
   证明: by
   rw [countable_iff_nonempty_embedding]; rw [aleph0]; rw [← lift_uzero #α]; rw [lift_mk_le']
 
@@ -2004,7 +2004,7 @@ theorem mk_le_aleph0
 
 中文:
 定理 mk_le_aleph0
-  条件: [Countable α]
+  条件: [可数 α]
   结论: #α <= ℵ₀
   证明: mk_le_aleph0_iff.mpr ‹_›
 
@@ -2028,8 +2028,8 @@ alias ⟨_, _root_.Set.Countable.le_aleph0⟩ := le_aleph0_iff_set_countable
 
 中文:
 定理 le_aleph0_iff_set_countable
-  条件: {s : Set α}
-  结论: #s <= ℵ₀ ↔ s.Countable
+  条件: {s : 集合 α}
+  结论: #s <= ℵ₀ ↔ s.可数
   证明: mk_le_aleph0_iff
 
 alias ⟨_, _root_.Set.Countable.le_aleph0⟩ := le_aleph0_iff_set_countable
@@ -2075,7 +2075,7 @@ theorem aleph0_lt_mk_iff
 
 中文:
 定理 aleph0_lt_mk_iff
-  结论: ℵ₀ < #α ↔ Uncountable α
+  结论: ℵ₀ < #α ↔ 不可数 α
   证明: by
   rw [← not_le]; rw [← not_countable_iff]; rw [not_iff_not]; rw [mk_le_aleph0_iff]
 
@@ -2098,7 +2098,7 @@ theorem aleph0_lt_mk
 
 中文:
 定理 aleph0_lt_mk
-  条件: [Uncountable α]
+  条件: [不可数 α]
   结论: ℵ₀ < #α
   证明: aleph0_lt_mk_iff.mpr ‹_›
 
@@ -2118,8 +2118,8 @@ instance canLiftCardinalNat
     ⟨n, hn.symm⟩⟩
 
 中文:
-实例 canLiftCardinalNat
-  签名: : CanLift Cardinal 自然数 (↑) fun x => x < ℵ₀
+实例 canLiftCardinal自然数
+  签名: : CanLift 基数 自然数 (↑) fun x => x < ℵ₀
   定义体: ⟨fun _ hx =>
     let ⟨n, hn⟩ := lt_aleph0.mp hx
     ⟨n, hn.symm⟩⟩
@@ -2143,7 +2143,7 @@ theorem add_lt_aleph0
 
 中文:
 定理 add_lt_aleph0
-  条件: {a b : Cardinal} (ha : a < ℵ₀) (hb : b < ℵ₀)
+  条件: {a b : 基数} (ha : a < ℵ₀) (hb : b < ℵ₀)
   结论: a + b < ℵ₀
   证明: match a, b, lt_aleph0.1 ha, lt_aleph0.1 hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by rw [← Nat.cast_add]; apply natCast_lt_aleph0
@@ -2166,7 +2166,7 @@ theorem add_lt_aleph0_iff
 
 中文:
 定理 add_lt_aleph0_iff
-  条件: {a b : Cardinal}
+  条件: {a b : 基数}
   结论: a + b < ℵ₀ ↔ a < ℵ₀ ∧ b < ℵ₀
   证明: ⟨fun h => ⟨(self_le_add_right _ _).trans_lt h, (self_le_add_left _ _).trans_lt h⟩,
    fun ⟨h1, h2⟩ => add_lt_aleph0 h1 h2⟩
@@ -2189,7 +2189,7 @@ theorem aleph0_le_add_iff
 
 中文:
 定理 aleph0_le_add_iff
-  条件: {a b : Cardinal}
+  条件: {a b : 基数}
   结论: ℵ₀ <= a + b ↔ ℵ₀ <= a ∨ ℵ₀ <= b
   证明: by
   simp only [← not_lt, add_lt_aleph0_iff, not_and_or]
@@ -2209,7 +2209,7 @@ theorem nsmul_lt_aleph0_iff
 
 中文:
 定理 nsmul_lt_aleph0_iff
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: 对任意 {n : 自然数}, n • a < ℵ₀ ↔ n = 0 ∨ a < ℵ₀
 -/
 theorem nsmul_lt_aleph0_iff {a : Cardinal} : forall {n : Nat}, n • a < ℵ₀ ↔ n = 0 ∨ a < ℵ₀
@@ -2228,7 +2228,7 @@ theorem nsmul_lt_aleph0_iff_of_ne_zero
 
 中文:
 定理 nsmul_lt_aleph0_iff_of_ne_zero
-  条件: {n : 自然数} {a : Cardinal} (h : n != 0)
+  条件: {n : 自然数} {a : 基数} (h : n != 0)
   结论: n • a < ℵ₀ ↔ a < ℵ₀
   证明: nsmul_lt_aleph0_iff.trans or_iff_right h
 
@@ -2249,7 +2249,7 @@ theorem mul_lt_aleph0
 
 中文:
 定理 mul_lt_aleph0
-  条件: {a b : Cardinal} (ha : a < ℵ₀) (hb : b < ℵ₀)
+  条件: {a b : 基数} (ha : a < ℵ₀) (hb : b < ℵ₀)
   结论: a * b < ℵ₀
   证明: match a, b, lt_aleph0.1 ha, lt_aleph0.1 hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by rw [← Nat.cast_mul]; apply natCast_lt_aleph0
@@ -2283,7 +2283,7 @@ theorem mul_lt_aleph0_iff
 
 中文:
 定理 mul_lt_aleph0_iff
-  条件: {a b : Cardinal}
+  条件: {a b : 基数}
   结论: a * b < ℵ₀ ↔ a = 0 ∨ b = 0 ∨ a < ℵ₀ ∧ b < ℵ₀
   证明: by
   refine ⟨fun h => ?_, ?_⟩
@@ -2330,7 +2330,7 @@ theorem aleph0_le_mul_iff
 
 中文:
 定理 aleph0_le_mul_iff
-  条件: {a b : Cardinal}
+  条件: {a b : 基数}
   结论: ℵ₀ <= a * b ↔ a != 0 ∧ b != 0 ∧ (ℵ₀ <= a ∨ ℵ₀ <= b)
   证明: by
   let h := (@mul_lt_aleph0_iff a b).not
@@ -2356,7 +2356,7 @@ theorem aleph0_le_mul_iff'
 
 中文:
 定理 aleph0_le_mul_iff'
-  条件: {a b : Cardinal.{u}}
+  条件: {a b : 基数.{u}}
   结论: ℵ₀ <= a * b ↔ a != 0 ∧ ℵ₀ <= b ∨ ℵ₀ <= a ∧ b != 0
   证明: by
   have : forall {a : Cardinal.{u}}, ℵ₀ <= a -> a != 0 := fun a => ne_bot_of_le_ne_bot aleph0_ne_zero a
@@ -2380,7 +2380,7 @@ theorem mul_lt_aleph0_iff_of_ne_zero
 
 中文:
 定理 mul_lt_aleph0_iff_of_ne_zero
-  条件: {a b : Cardinal} (ha : a != 0) (hb : b != 0)
+  条件: {a b : 基数} (ha : a != 0) (hb : b != 0)
   证明: by simp [mul_lt_aleph0_iff, ha, hb]
 
 Depends on / 依赖: mul_lt_aleph0_iff
@@ -2400,7 +2400,7 @@ theorem power_lt_aleph0
 
 中文:
 定理 power_lt_aleph0
-  条件: {a b : Cardinal} (ha : a < ℵ₀) (hb : b < ℵ₀)
+  条件: {a b : 基数} (ha : a < ℵ₀) (hb : b < ℵ₀)
   结论: a ^ b < ℵ₀
   证明: match a, b, lt_aleph0.1 ha, lt_aleph0.1 hb with
   | _, _, ⟨m, rfl⟩, ⟨n, rfl⟩ => by rw [power_natCast, ← Nat.cast_pow]; apply natCast_lt_aleph0
@@ -2426,7 +2426,7 @@ theorem eq_one_iff_unique
 中文:
 定理 eq_one_iff_unique
   条件: {α : 类型}
-  结论: #α = 1 ↔ Subsingleton α ∧ Nonempty α
+  结论: #α = 1 ↔ 子单例 α ∧ 非空 α
   证明: calc
     #α = 1 ↔ #α <= 1 ∧ 1 <= #α := le_antisymm_iff
     _ ↔ Subsingleton α ∧ Nonempty α :=
@@ -2453,7 +2453,7 @@ theorem infinite_iff
 中文:
 定理 infinite_iff
   条件: {α : 类型u}
-  结论: Infinite α ↔ ℵ₀ <= #α
+  结论: 无限 α ↔ ℵ₀ <= #α
   证明: by
   rw [← not_lt]; rw [lt_aleph0_iff_finite]; rw [not_finite_iff_infinite]
 
@@ -2472,7 +2472,7 @@ lemma aleph0_le_mk_iff
 
 中文:
 引理 aleph0_le_mk_iff
-  结论: ℵ₀ <= #α ↔ Infinite α
+  结论: ℵ₀ <= #α ↔ 无限 α
   证明: infinite_iff.symm
 
 Depends on / 依赖: infinite_iff, infinite_iff.symm
@@ -2488,7 +2488,7 @@ lemma mk_lt_aleph0_iff
 
 中文:
 引理 mk_lt_aleph0_iff
-  结论: #α < ℵ₀ ↔ Finite α
+  结论: #α < ℵ₀ ↔ 有限 α
   证明: by simp [← not_le, aleph0_le_mk_iff]
 
 Depends on / 依赖: aleph0_le_mk_iff, not_le
@@ -2508,7 +2508,7 @@ lemma mk_lt_aleph0
 
 中文:
 引理 mk_lt_aleph0
-  条件: [Finite α]
+  条件: [有限 α]
   结论: #α < ℵ₀
   证明: mk_lt_aleph0_iff.2 ‹_›
 
@@ -2528,7 +2528,7 @@ theorem aleph0_le_mk
 
 中文:
 定理 aleph0_le_mk
-  条件: (α : 类型u) [Infinite α]
+  条件: (α : 类型u) [无限 α]
   结论: ℵ₀ <= #α
   证明: infinite_iff.1 ‹_›
 
@@ -2548,8 +2548,8 @@ theorem _root_.Infinite.of_cardinalMk_le
 @[simp]
 
 中文:
-定理 _root_.Infinite.of_cardinalMk_le
-  条件: {α β : 类型u} [Infinite α] (h : #α <= #β)
+定理 _root_.无限.of_cardinalMk_le
+  条件: {α β : 类型u} [无限 α] (h : #α <= #β)
   证明: infinite_iff.2 (aleph0_le_mk α).trans h
 
 @[simp]
@@ -2571,7 +2571,7 @@ theorem mk_eq_aleph0
 
 中文:
 定理 mk_eq_aleph0
-  条件: (α : 类型) [Countable α] [Infinite α]
+  条件: (α : 类型) [可数 α] [无限 α]
   结论: #α = ℵ₀
   证明: mk_le_aleph0.antisymm aleph0_le_mk _
 
@@ -2594,7 +2594,7 @@ exact ⟨Denumerable.mk' f.trans Equiv.ulift⟩⟩
 中文:
 定理 denumerable_iff
   条件: {α : 类型u}
-  结论: Nonempty (Denumerable α) ↔ #α = ℵ₀
+  结论: 非空 (可枚举 α) ↔ #α = ℵ₀
   证明: ⟨fun ⟨h⟩ => mk_congr ((@Denumerable.eqv α h).trans Equiv.ulift.symm), fun h => by
     obtain ⟨f⟩ := Quotient.exact h
 exact ⟨Denumerable.mk' f.trans Equiv.ulift⟩⟩
@@ -2617,7 +2617,7 @@ theorem mk_denumerable
 
 中文:
 定理 mk_denumerable
-  条件: (α : 类型u) [Denumerable α]
+  条件: (α : 类型u) [可枚举 α]
   结论: #α = ℵ₀
   证明: denumerable_iff.1 ⟨‹_›⟩
 
@@ -2638,8 +2638,8 @@ theorem _root_.Set.countable_infinite_iff_nonempty_denumerable
 @[simp]
 
 中文:
-定理 _root_.Set.countable_infinite_iff_nonempty_denumerable
-  条件: {α : 类型} {s : Set α}
+定理 _root_.集合.countable_infinite_iff_nonempty_denumerable
+  条件: {α : 类型} {s : 集合 α}
   证明: by
   rw [nonempty_denumerable_iff]; rw [← Set.infinite_coe_iff]; rw [countable_coe_iff]
 
@@ -2757,7 +2757,7 @@ theorem ofNat_mul_aleph0
 @[simp]
 
 中文:
-定理 ofNat_mul_aleph0
+定理 of自然数_mul_aleph0
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) * ℵ₀ = ℵ₀
   证明: nat_mul_aleph0 (NeZero.ne n)
@@ -2782,7 +2782,7 @@ theorem aleph0_mul_ofNat
 @[simp]
 
 中文:
-定理 aleph0_mul_ofNat
+定理 aleph0_mul_of自然数
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: ℵ₀ * of自然数(n) = ℵ₀
   证明: aleph0_mul_nat (NeZero.ne n)
@@ -2809,7 +2809,7 @@ theorem add_le_aleph0
 
 中文:
 定理 add_le_aleph0
-  条件: {c₁ c₂ : Cardinal}
+  条件: {c₁ c₂ : 基数}
   结论: c₁ + c₂ <= ℵ₀ ↔ c₁ <= ℵ₀ ∧ c₂ <= ℵ₀
   证明: ⟨fun h => ⟨le_self_add.trans h, le_add_self.trans h⟩, fun h =>
     aleph0_add_aleph0 ▸ add_le_add h.1 h.2⟩
@@ -2884,7 +2884,7 @@ theorem ofNat_add_aleph0
 @[simp]
 
 中文:
-定理 ofNat_add_aleph0
+定理 of自然数_add_aleph0
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) + ℵ₀ = ℵ₀
   证明: nat_add_aleph0 n
@@ -2907,7 +2907,7 @@ theorem aleph0_add_ofNat
   proof: aleph0_add_nat n
 
 中文:
-定理 aleph0_add_ofNat
+定理 aleph0_add_of自然数
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: ℵ₀ + of自然数(n) = ℵ₀
   证明: aleph0_add_nat n
@@ -2929,8 +2929,8 @@ theorem exists_nat_eq_of_le_nat
   exact ⟨c, mod_cast h, rfl⟩
 
 中文:
-定理 exists_nat_eq_of_le_nat
-  条件: {c : Cardinal} {n : 自然数} (h : c <= n)
+定理 存在_nat_eq_of_le_nat
+  条件: {c : 基数} {n : 自然数} (h : c <= n)
   结论: 存在 m, m <= n ∧ c = m
   证明: by
   lift c to Nat using h.trans_lt natCast_lt_aleph0
@@ -2989,7 +2989,7 @@ theorem mk_additive
 
 中文:
 定理 mk_additive
-  结论: #(Additive α) = #α
+  结论: #(加性 α) = #α
   证明: rfl
 -/
 @[simp] theorem mk_additive : #(Additive α) = #α := rfl
@@ -3039,7 +3039,7 @@ theorem mk_singleton
 中文:
 定理 mk_singleton
   条件: {α : 类型u} (x : α)
-  结论: #({x} : Set α) = 1
+  结论: #({x} : 集合 α) = 1
   证明: mk_eq_one _
 
 @[simp]
@@ -3062,7 +3062,7 @@ theorem mk_vector
 中文:
 定理 mk_vector
   条件: (α : 类型u) (n : 自然数)
-  结论: #(List.Vector α n) = #α ^ n
+  结论: #(列表.Vector α n) = #α ^ n
   证明: (mk_congr (Equiv.vectorEquivFin α n)).trans by simp
 
 Depends on / 依赖: Equiv.vectorEquivFin, mk_congr, vectorEquivFin
@@ -3084,7 +3084,7 @@ theorem mk_list_eq_sum_pow
 中文:
 定理 mk_list_eq_sum_pow
   条件: (α : 类型u)
-  结论: #(List α) = sum fun n => #α ^ n
+  结论: #(列表 α) = 求和 fun n => #α ^ n
   证明: calc
     #(List α) = #(Σ n, List.Vector α n) := mk_congr (Equiv.sigmaFiberEquiv List.length).symm
     _ = sum fun n => #α ^ n := by simp
@@ -3107,7 +3107,7 @@ theorem sum_zero_pow
 
 中文:
 定理 sum_zero_pow
-  结论: sum (fun n => (0 : Cardinal) ^ n) = 1
+  结论: 求和 (fun n => (0 : 基数) ^ n) = 1
   证明: by
   rw [← mk_eq_zero (α := PEmpty)]; rw [← mk_list_eq_sum_pow]; rw [mk_eq_one]
 
@@ -3128,7 +3128,7 @@ theorem mk_quot_le
 中文:
 定理 mk_quot_le
   条件: {α : 类型u} {r : α -> α -> 命题}
-  结论: #(Quot r) <= #α
+  结论: #(商 r) <= #α
   证明: mk_le_of_surjective Quot.exists_rep
 
 Depends on / 依赖: Quot.exists_rep, exists_rep, mk_le_of_surjective
@@ -3147,8 +3147,8 @@ theorem mk_quotient_le
 
 中文:
 定理 mk_quotient_le
-  条件: {α : 类型u} {s : Setoid α}
-  结论: #(Quotient s) <= #α
+  条件: {α : 类型u} {s : 集合等价关系 α}
+  结论: #(商 s) <= #α
   证明: mk_quot_le
 
 Depends on / 依赖: mk_quot_le
@@ -3186,7 +3186,7 @@ theorem mk_le_mk_of_subset
 
 中文:
 定理 mk_le_mk_of_subset
-  条件: {α} {s t : Set α} (h : s subseteq t)
+  条件: {α} {s t : 集合 α} (h : s subseteq t)
   结论: #s <= #t
   证明: ⟨Set.embeddingOfSubset s t h⟩
 
@@ -3207,7 +3207,7 @@ theorem mk_monotone
 
 中文:
 定理 mk_monotone
-  结论: Monotone (α := Set α) (mk ∘ (↑))
+  结论: 递增 (α := 集合 α) (mk ∘ (↑))
   证明: fun _ _ => mk_le_mk_of_subset
 
 @[deprecated mk_eq_zero (since := "2026-01-31")]
@@ -3228,7 +3228,7 @@ theorem mk_emptyCollection
 中文:
 定理 mk_emptyCollection
   条件: (α : 类型u)
-  结论: #(∅ : Set α) = 0
+  结论: #(∅ : 集合 α) = 0
   证明: mk_eq_zero _
 
 Depends on / 依赖: mk_eq_zero
@@ -3251,7 +3251,7 @@ alias mk_emptyCollection_iff := mk_set_eq_zero_iff
 
 中文:
 定理 mk_set_eq_zero_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: #s = 0 ↔ s = ∅
   证明: by
   rw [mk_eq_zero_iff]; rw [isEmpty_coe_sort]
@@ -3281,8 +3281,8 @@ theorem mk_set_ne_zero_iff
 
 中文:
 定理 mk_set_ne_zero_iff
-  条件: {s : Set α}
-  结论: #s != 0 ↔ s.Nonempty
+  条件: {s : 集合 α}
+  结论: #s != 0 ↔ s.非空
   证明: by
   rw [mk_ne_zero_iff]; rw [nonempty_coe_sort]
 
@@ -3326,7 +3326,7 @@ lemma mk_setProd
 
 中文:
 引理 mk_setProd
-  条件: {α β : 类型u} (s : Set α) (t : Set β)
+  条件: {α β : 类型u} (s : 集合 α) (t : 集合 β)
   结论: #(s ×ˢ t) = #s * #t
   证明: by
   rw [mul_def]; rw [mk_congr (Equiv.Set.prod ..)]
@@ -3345,7 +3345,7 @@ theorem mk_image_le
 
 中文:
 定理 mk_image_le
-  条件: {α β : 类型u} {f : α -> β} {s : Set α}
+  条件: {α β : 类型u} {f : α -> β} {s : 集合 α}
   结论: #(f '' s) <= #s
   证明: mk_le_of_surjective imageFactorization_surjective
 
@@ -3366,7 +3366,7 @@ lemma mk_image2_le
 
 中文:
 引理 mk_image2_le
-  条件: {α β γ : 类型u} {f : α -> β -> γ} {s : Set α} {t : Set β}
+  条件: {α β γ : 类型u} {f : α -> β -> γ} {s : 集合 α} {t : 集合 β}
   证明: by
   rw [← image_uncurry_prod]; rw [← mk_setProd]
   exact mk_image_le
@@ -3388,7 +3388,7 @@ theorem mk_image_le_lift
 
 中文:
 定理 mk_image_le_lift
-  条件: {α : 类型u} {β : 类型v} {f : α -> β} {s : Set α}
+  条件: {α : 类型u} {β : 类型v} {f : α -> β} {s : 集合 α}
   证明: lift_mk_le.{0}.mpr ⟨Embedding.ofSurjective _ imageFactorization_surjective⟩
 
 Depends on / 依赖: Embedding, Embedding.ofSurjective, imageFactorization_surjective, lift_mk_le, ofSurjective
@@ -3447,7 +3447,7 @@ theorem mk_range_eq
 
 中文:
 定理 mk_range_eq
-  条件: (f : α -> β) (h : Injective f)
+  条件: (f : α -> β) (h : 单射 f)
   结论: #(range f) = #α
   证明: mk_congr (Equiv.ofInjective f h).symm
 
@@ -3468,7 +3468,7 @@ theorem mk_range_eq_of_injective
 
 中文:
 定理 mk_range_eq_of_injective
-  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : Injective f)
+  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : 单射 f)
   证明: lift_mk_eq'.mpr ⟨(Equiv.ofInjective f hf).symm⟩
 
 @[deprecated mk_range_eq_of_injective (since := "2026-01-06")]
@@ -3490,7 +3490,7 @@ theorem mk_range_eq_lift
 
 中文:
 定理 mk_range_eq_lift
-  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : Injective f)
+  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : 单射 f)
   证明: lift_mk_eq.{v, u, w}.mpr ⟨(Equiv.ofInjective f hf).symm⟩
 
 Depends on / 依赖: Equiv.ofInjective, lift_mk_eq, ofInjective
@@ -3511,7 +3511,7 @@ lemma lift_mk_le_lift_mk_of_injective
 
 中文:
 引理 lift_mk_le_lift_mk_of_injective
-  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : Injective f)
+  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : 单射 f)
   证明: by
   rw [← Cardinal.mk_range_eq_of_injective hf]
   exact Cardinal.lift_le.2 (Cardinal.mk_set_le _)
@@ -3533,7 +3533,7 @@ lemma lift_mk_le_lift_mk_of_surjective
 
 中文:
 引理 lift_mk_le_lift_mk_of_surjective
-  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : Surjective f)
+  条件: {α : 类型u} {β : 类型v} {f : α -> β} (hf : 满射 f)
   证明: lift_mk_le_lift_mk_of_injective (injective_surjInv hf)
 
 Depends on / 依赖: injective_surjInv, lift_mk_le_lift_mk_of_injective
@@ -3552,7 +3552,7 @@ theorem mk_image_eq_of_injOn
 
 中文:
 定理 mk_image_eq_of_injOn
-  条件: {α β : 类型u} (f : α -> β) (s : Set α) (h : InjOn f s)
+  条件: {α β : 类型u} (f : α -> β) (s : 集合 α) (h : 单射限制 f s)
   证明: mk_congr (Equiv.Set.imageOfInjOn f s h).symm
 
 Depends on / 依赖: AddMonoidHom, Equiv.Set.imageOfInjOn, Function, Function.LeftInverse.map_tsum, LeftInverse, _blockDiagonal, blockDiag, blockDiagonal, continuous_id, continuous_id.matrix_blockDiag, continuous_id.matrix_blockDiagonal, imageOfInjOn, map_tsum, matrix_blockDiag, matrix_blockDiagonal, mk_congr
@@ -3571,7 +3571,7 @@ theorem mk_image_eq_of_injOn_lift
 
 中文:
 定理 mk_image_eq_of_injOn_lift
-  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : Set α)
+  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : 集合 α)
   证明: lift_mk_eq.{v, u, 0}.mpr ⟨(Equiv.Set.imageOfInjOn f s h).symm⟩
 
 Depends on / 依赖: Equiv.Set.imageOfInjOn, imageOfInjOn, lift_mk_eq
@@ -3591,7 +3591,7 @@ theorem mk_image_eq
 
 中文:
 定理 mk_image_eq
-  条件: {α β : 类型u} {f : α -> β} {s : Set α} (hf : Injective f)
+  条件: {α β : 类型u} {f : α -> β} {s : 集合 α} (hf : 单射 f)
   结论: #(f '' s) = #s
   证明: mk_image_eq_of_injOn _ _ hf.injOn
 
@@ -3612,7 +3612,7 @@ theorem mk_image_eq_lift
 
 中文:
 定理 mk_image_eq_lift
-  条件: {α : 类型u} {β : 类型v} (f : α -> β) (s : Set α) (h : Injective f)
+  条件: {α : 类型u} {β : 类型v} (f : α -> β) (s : 集合 α) (h : 单射 f)
   证明: mk_image_eq_of_injOn_lift _ _ h.injOn
 
 @[simp]
@@ -3636,7 +3636,7 @@ theorem mk_image_embedding_lift
 
 中文:
 定理 mk_image_embedding_lift
-  条件: {β : 类型v} (f : α ↪ β) (s : Set α)
+  条件: {β : 类型v} (f : α ↪ β) (s : 集合 α)
   证明: mk_image_eq_lift _ _ f.injective
 
 @[simp]
@@ -3660,7 +3660,7 @@ theorem mk_image_embedding
 
 中文:
 定理 mk_image_embedding
-  条件: (f : α ↪ β) (s : Set α)
+  条件: (f : α ↪ β) (s : 集合 α)
   结论: #(f '' s) = #s
   证明: by
   simpa using mk_image_embedding_lift f s
@@ -3680,7 +3680,7 @@ theorem iSup_mk_le_mk_iUnion
 
 中文:
 定理 iSup_mk_le_mk_iUnion
-  条件: {α : 类型u} {ι : 类型v} {f : ι -> Set α}
+  条件: {α : 类型u} {ι : 类型v} {f : ι -> 集合 α}
   证明: ciSup_le' fun _ => mk_le_mk_of_subset (subset_iUnion _ _)
 
 Depends on / 依赖: ciSup_le, mk_le_mk_of_subset, subset_iUnion
@@ -3702,8 +3702,8 @@ theorem mk_iUnion_le_sum_mk
 
 中文:
 定理 mk_iUnion_le_sum_mk
-  条件: {α ι : 类型u} {f : ι -> Set α}
-  结论: #(⋃ i, f i) <= sum fun i => #(f i)
+  条件: {α ι : 类型u} {f : ι -> 集合 α}
+  结论: #(⋃ i, f i) <= 求和 fun i => #(f i)
   证明: calc
     #(⋃ i, f i) <= #(Σ i, f i) := mk_le_of_surjective (Set.sigmaToiUnion_surjective f)
     _ = sum fun i => #(f i) := mk_sigma _
@@ -3728,7 +3728,7 @@ mk_le_of_surjective ULift.up_surjective.comp (Set.sigmaToiUnion_surjective f)
 
 中文:
 定理 mk_iUnion_le_sum_mk_lift
-  条件: {α : 类型u} {ι : 类型v} {f : ι -> Set α}
+  条件: {α : 类型u} {ι : 类型v} {f : ι -> 集合 α}
   证明: calc
     lift.{v} #(⋃ i, f i) <= #(Σ i, f i) :=
 mk_le_of_surjective ULift.up_surjective.comp (Set.sigmaToiUnion_surjective f)
@@ -3755,7 +3755,7 @@ theorem mk_iUnion_eq_sum_mk
 
 中文:
 定理 mk_iUnion_eq_sum_mk
-  结论: {α ι : 类型u} {f : ι -> Set α}
+  结论: {α ι : 类型u} {f : ι -> 集合 α}
   证明: calc
     #(⋃ i, f i) = #(Σ i, f i) := mk_congr (Set.unionEqSigmaOfDisjoint h)
     _ = sum fun i => #(f i) := mk_sigma _
@@ -3781,7 +3781,7 @@ mk_congr .trans Equiv.ulift (Set.unionEqSigmaOfDisjoint h)
 
 中文:
 定理 mk_iUnion_eq_sum_mk_lift
-  结论: {α : 类型u} {ι : 类型v} {f : ι -> Set α}
+  结论: {α : 类型u} {ι : 类型v} {f : ι -> 集合 α}
   证明: calc
     lift.{v} #(⋃ i, f i) = #(Σ i, f i) :=
 mk_congr .trans Equiv.ulift (Set.unionEqSigmaOfDisjoint h)
@@ -3808,7 +3808,7 @@ theorem mk_iUnion_le
 
 中文:
 定理 mk_iUnion_le
-  条件: {α ι : 类型u} (f : ι -> Set α)
+  条件: {α ι : 类型u} (f : ι -> 集合 α)
   结论: #(⋃ i, f i) <= #ι * ⨆ i, #(f i)
   证明: mk_iUnion_le_sum_mk.trans (sum_le_mk_mul_iSup _)
 
@@ -3829,7 +3829,7 @@ refine mk_iUnion_le_sum_mk_lift.trans Eq.trans_le ?_ (sum_le_lift_mk_mul_iSup _)
 
 中文:
 定理 mk_iUnion_le_lift
-  条件: {α : 类型u} {ι : 类型v} (f : ι -> Set α)
+  条件: {α : 类型u} {ι : 类型v} (f : ι -> 集合 α)
   证明: by
 refine mk_iUnion_le_sum_mk_lift.trans Eq.trans_le ?_ (sum_le_lift_mk_mul_iSup _)
   rw [← lift_sum]; rw [lift_id'.{_]; rw [u}]
@@ -3854,7 +3854,7 @@ theorem mk_sUnion_le
 
 中文:
 定理 mk_sUnion_le
-  条件: {α : 类型u} (A : Set (Set α))
+  条件: {α : 类型u} (A : 集合 (集合 α))
   结论: #(⋃₀ A) <= #A * ⨆ s : A, #s
   证明: by
   rw [sUnion_eq_iUnion]
@@ -3878,7 +3878,7 @@ theorem mk_biUnion_le
 
 中文:
 定理 mk_biUnion_le
-  条件: {ι α : 类型u} (A : ι -> Set α) (s : Set ι)
+  条件: {ι α : 类型u} (A : ι -> 集合 α) (s : 集合 ι)
   证明: by
   rw [biUnion_eq_iUnion]
   apply mk_iUnion_le
@@ -3902,7 +3902,7 @@ theorem mk_biUnion_le_lift
 
 中文:
 定理 mk_biUnion_le_lift
-  条件: {α : 类型u} {ι : 类型v} (A : ι -> Set α) (s : Set ι)
+  条件: {α : 类型u} {ι : 类型v} (A : ι -> 集合 α) (s : 集合 ι)
   证明: by
   rw [biUnion_eq_iUnion]
   apply mk_iUnion_le_lift
@@ -3925,8 +3925,8 @@ theorem finset_card_lt_aleph0
 
 中文:
 定理 finset_card_lt_aleph0
-  条件: (s : Finset α)
-  结论: #(↑s : Set α) < ℵ₀
+  条件: (s : 有限集 α)
+  结论: #(↑s : 集合 α) < ℵ₀
   证明: lt_aleph0_of_finite _
 
 Depends on / 依赖: lt_aleph0_of_finite
@@ -3950,7 +3950,7 @@ theorem mk_set_eq_nat_iff_finset
 
 中文:
 定理 mk_set_eq_nat_iff_finset
-  条件: {α} {s : Set α} {n : 自然数}
+  条件: {α} {s : 集合 α} {n : 自然数}
   证明: by
   constructor
   · intro h
@@ -4009,7 +4009,7 @@ theorem mk_eq_nat_iff_fintype
 中文:
 定理 mk_eq_nat_iff_fintype
   条件: {n : 自然数}
-  结论: #α = n ↔ 存在 h : Fintype α, @Fintype.card α h = n
+  结论: #α = n ↔ 存在 h : 有限类型 α, @有限类型.card α h = n
   证明: by
   rw [mk_eq_nat_iff_finset]
   constructor
@@ -4040,7 +4040,7 @@ theorem mk_set_eq_one_iff
 
 中文:
 定理 mk_set_eq_one_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: #s = 1 ↔ 存在 x, s = {x}
   证明: by
   rw [eq_one_iff_unique]; rw [Set.exists_eq_singleton_iff_nonempty_subsingleton]; rw [Set.nonempty_coe_sort]; rw [Set.subsingleton_coe]; rw [and_comm]
@@ -4062,7 +4062,7 @@ theorem mk_union_add_mk_inter
 
 中文:
 定理 mk_union_add_mk_inter
-  条件: {α : 类型u} {S T : Set α}
+  条件: {α : 类型u} {S T : 集合 α}
   证明: by
   classical
   exact Quot.sound ⟨Equiv.Set.unionSumInter S T⟩
@@ -4085,8 +4085,8 @@ theorem mk_union_le
 
 中文:
 定理 mk_union_le
-  条件: {α : 类型u} (S T : Set α)
-  结论: #(S union T : Set α) <= #S + #T
+  条件: {α : 类型u} (S T : 集合 α)
+  结论: #(S union T : 集合 α) <= #S + #T
   证明: @mk_union_add_mk_inter α S T ▸ self_le_add_right #(S union T : Set α) #(S inter T : Set α)
 
 Depends on / 依赖: mk_union_add_mk_inter, self_le_add_right
@@ -4106,7 +4106,7 @@ theorem mk_union_of_disjoint
 
 中文:
 定理 mk_union_of_disjoint
-  条件: {α : 类型u} {S T : Set α} (H : Disjoint S T)
+  条件: {α : 类型u} {S T : 集合 α} (H : Disjoint S T)
   证明: by
   classical
   exact Quot.sound ⟨Equiv.Set.union H⟩
@@ -4130,7 +4130,7 @@ theorem mk_insert
 
 中文:
 定理 mk_insert
-  条件: {α : 类型u} {s : Set α} {a : α} (h : a ∉ s)
+  条件: {α : 类型u} {s : 集合 α} {a : α} (h : a ∉ s)
   证明: by
   rw [← union_singleton]; rw [mk_union_of_disjoint]; rw [mk_singleton]
   simpa
@@ -4156,8 +4156,8 @@ theorem mk_insert_le
 
 中文:
 定理 mk_insert_le
-  条件: {α : 类型u} {s : Set α} {a : α}
-  结论: #(insert a s : Set α) <= #s + 1
+  条件: {α : 类型u} {s : 集合 α} {a : α}
+  结论: #(insert a s : 集合 α) <= #s + 1
   证明: by
   by_cases h : a in s
   · simp only [insert_eq_of_mem h, self_le_add_right]
@@ -4183,8 +4183,8 @@ theorem mk_sum_compl
 
 中文:
 定理 mk_sum_compl
-  条件: {α} (s : Set α)
-  结论: #s + #(sᶜ : Set α) = #α
+  条件: {α} (s : 集合 α)
+  结论: #s + #(sᶜ : 集合 α) = #α
   证明: by
   classical
   exact mk_congr (Equiv.Set.sumCompl s)
@@ -4210,8 +4210,8 @@ theorem mk_le_iff_forall_finset_subset_card_le
   grind
 
 中文:
-定理 mk_le_iff_forall_finset_subset_card_le
-  条件: {α : 类型u} {n : 自然数} {t : Set α}
+定理 mk_le_iff_对任意_finset_subset_card_le
+  条件: {α : 类型u} {n : 自然数} {t : 集合 α}
   证明: by
   refine ⟨fun H s hs => by simpa using (mk_le_mk_of_subset hs).trans H, fun H => ?_⟩
   apply card_le_of (fun s => ?_)
@@ -4264,7 +4264,7 @@ simpa using Finset.card_lt_card Set.toFinset_ssubset_toFinset.mpr hlt
 
 中文:
 引理 card_lt_card_of_right_finite
-  条件: {A B : Set α} (hfin : B.Finite) (hlt : A ⊂ B)
+  条件: {A B : 集合 α} (hfin : B.有限) (hlt : A ⊂ B)
   结论: #A < #B
   证明: by
   have : Fintype A := (hfin.subset hlt.subset).fintype
@@ -4292,7 +4292,7 @@ lemma card_lt_card_of_left_finite
 
 中文:
 引理 card_lt_card_of_left_finite
-  条件: {A B : Set α} (hfin : A.Finite) (hlt : A ⊂ B)
+  条件: {A B : 集合 α} (hfin : A.有限) (hlt : A ⊂ B)
   结论: #A < #B
   证明: by
   rcases finite_or_infinite B with hfin | hinf
@@ -4317,8 +4317,8 @@ theorem mk_strictMono
 
 中文:
 定理 mk_strictMono
-  条件: [Finite α]
-  结论: StrictMono (α := Set α) (mk ∘ (↑))
+  条件: [有限 α]
+  结论: 严格递增 (α := 集合 α) (mk ∘ (↑))
   证明: fun _ s => card_lt_card_of_right_finite s.toFinite
 -/
 theorem mk_strictMono [Finite α] : StrictMono (α := Set α) (mk ∘ (↑)) :=
@@ -4334,7 +4334,7 @@ theorem mk_strictMonoOn
 
 中文:
 定理 mk_strictMonoOn
-  结论: StrictMonoOn (mk ∘ (↑)) {s : Set α | s.Finite}
+  结论: StrictMonoOn (mk ∘ (↑)) {s : 集合 α | s.有限}
   证明: fun _ _ _ => card_lt_card_of_right_finite
 
 Depends on / 依赖: card_lt_card_of_right_finite
@@ -4355,8 +4355,8 @@ theorem le_mk_sdiff_add_mk
 
 中文:
 定理 le_mk_sdiff_add_mk
-  条件: (S T : Set α)
-  结论: #S <= #(S \ T : Set α) + #T
+  条件: (S T : 集合 α)
+  结论: #S <= #(S \ T : 集合 α) + #T
   证明: (mk_le_mk_of_subset <| subset_sdiff_union _ _).trans mk_union_le _ _
 
 @[deprecated (since := "2026-06-03")] alias le_mk_diff_add_mk := le_mk_sdiff_add_mk
@@ -4383,8 +4383,8 @@ refine (mk_union_of_disjoint <| ?_).symm.trans by rw [sdiff_union_of_subset h]
 
 中文:
 定理 mk_sdiff_add_mk
-  条件: {S T : Set α} (h : T subseteq S)
-  结论: #(S \ T : Set α) + #T = #S
+  条件: {S T : 集合 α} (h : T subseteq S)
+  结论: #(S \ T : 集合 α) + #T = #S
   证明: by
 refine (mk_union_of_disjoint <| ?_).symm.trans by rw [sdiff_union_of_subset h]
   exact disjoint_sdiff_self_left
@@ -4415,8 +4415,8 @@ lemma sdiff_nonempty_of_mk_lt_mk
 
 中文:
 引理 sdiff_nonempty_of_mk_lt_mk
-  条件: {S T : Set α} (h : #S < #T)
-  结论: (T \ S).Nonempty
+  条件: {S T : 集合 α} (h : #S < #T)
+  结论: (T \ S).非空
   证明: by
   rw [← mk_set_ne_zero_iff]
   intro h'
@@ -4446,8 +4446,8 @@ lemma compl_nonempty_of_mk_lt_mk
 
 中文:
 引理 compl_nonempty_of_mk_lt_mk
-  条件: {S : Set α} (h : #S < #α)
-  结论: Sᶜ.Nonempty
+  条件: {S : 集合 α} (h : #S < #α)
+  结论: Sᶜ.非空
   证明: by
   rw [← mk_univ (α := α)] at h
   simpa [Set.compl_eq_univ_sdiff] using sdiff_nonempty_of_mk_lt_mk h
@@ -4470,7 +4470,7 @@ theorem mk_union_le_aleph0
 
 中文:
 定理 mk_union_le_aleph0
-  条件: {α} {P Q : Set α}
+  条件: {α} {P Q : 集合 α}
   证明: by
   simp only [le_aleph0_iff_subtype_countable, ofPred_mem_eq, Set.union_def,
     ← countable_union]
@@ -4493,8 +4493,8 @@ theorem mk_sep
 
 中文:
 定理 mk_sep
-  条件: (s : Set α) (t : α -> 命题)
-  结论: #({ x in s | t x } : Set α) = #{ x : s | t x.1 }
+  条件: (s : 集合 α) (t : α -> 命题)
+  结论: #({ x in s | t x } : 集合 α) = #{ x : s | t x.1 }
   证明: mk_congr (Equiv.Set.sep s t)
 
 Depends on / 依赖: Equiv.Set.sep, mk_congr
@@ -4515,7 +4515,7 @@ theorem mk_preimage_of_injective_lift
 
 中文:
 定理 mk_preimage_of_injective_lift
-  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : Set β)
+  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : 集合 β)
   证明: by
   rw [lift_mk_le.{0}]
   use Subtype.coind (fun x => f x.1) fun x => mem_preimage.mp x.2
@@ -4542,7 +4542,7 @@ theorem mk_preimage_of_subset_range_lift
 
 中文:
 定理 mk_preimage_of_subset_range_lift
-  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : Set β)
+  结论: {α : 类型u} {β : 类型v} (f : α -> β) (s : 集合 β)
   证明: by
   rw [← image_preimage_eq_iff] at h
   nth_rewrite 1 [← h]
@@ -4566,7 +4566,7 @@ theorem mk_preimage_of_injective_of_subset_range_lift
 
 中文:
 定理 mk_preimage_of_injective_of_subset_range_lift
-  结论: {β : 类型v} (f : α -> β) (s : Set β)
+  结论: {β : 类型v} (f : α -> β) (s : 集合 β)
   证明: le_antisymm (mk_preimage_of_injective_lift f s h) (mk_preimage_of_subset_range_lift f s h2)
 
 Depends on / 依赖: le_antisymm, mk_preimage_of_injective_lift, mk_preimage_of_subset_range_lift
@@ -4588,7 +4588,7 @@ theorem mk_preimage_of_injective_of_subset_range
 
 中文:
 定理 mk_preimage_of_injective_of_subset_range
-  结论: (f : α -> β) (s : Set β) (h : Injective f)
+  结论: (f : α -> β) (s : 集合 β) (h : 单射 f)
   证明: by
   convert! mk_preimage_of_injective_of_subset_range_lift.{u, u} f s h h2 using 1 <;> rw [lift_id]
 
@@ -4616,7 +4616,7 @@ theorem mk_preimage_equiv_lift
 
 中文:
 定理 mk_preimage_equiv_lift
-  条件: {β : 类型v} (f : α ≃ β) (s : Set β)
+  条件: {β : 类型v} (f : α ≃ β) (s : 集合 β)
   证明: by
   apply mk_preimage_of_injective_of_subset_range_lift _ _ f.injective
   rw [f.range_eq_univ]
@@ -4645,7 +4645,7 @@ theorem mk_preimage_equiv
 
 中文:
 定理 mk_preimage_equiv
-  条件: (f : α ≃ β) (s : Set β)
+  条件: (f : α ≃ β) (s : 集合 β)
   结论: #(f ⁻¹' s) = #s
   证明: by
   simpa using mk_preimage_equiv_lift f s
@@ -4667,7 +4667,7 @@ theorem mk_preimage_of_injective
 
 中文:
 定理 mk_preimage_of_injective
-  条件: (f : α -> β) (s : Set β) (h : Injective f)
+  条件: (f : α -> β) (s : 集合 β) (h : 单射 f)
   证明: by
   rw [← lift_id #(↑(f ⁻¹' s))]; rw [← lift_id #(↑s)]
   exact mk_preimage_of_injective_lift f s h
@@ -4691,7 +4691,7 @@ theorem mk_preimage_of_subset_range
 
 中文:
 定理 mk_preimage_of_subset_range
-  条件: (f : α -> β) (s : Set β) (h : s subseteq range f)
+  条件: (f : α -> β) (s : 集合 β) (h : s subseteq range f)
   证明: by
   rw [← lift_id #(↑(f ⁻¹' s))]; rw [← lift_id #(↑s)]
   exact mk_preimage_of_subset_range_lift f s h
@@ -4717,7 +4717,7 @@ theorem mk_subset_ge_of_subset_image_lift
 
 中文:
 定理 mk_subset_ge_of_subset_image_lift
-  结论: {α : 类型u} {β : 类型v} (f : α -> β) {s : Set α}
+  结论: {α : 类型u} {β : 类型v} (f : α -> β) {s : 集合 α}
   证明: by
   rw [image_eq_range] at h
   convert! mk_preimage_of_subset_range_lift _ _ h using 1
@@ -4747,7 +4747,7 @@ theorem mk_subset_ge_of_subset_image
 
 中文:
 定理 mk_subset_ge_of_subset_image
-  条件: (f : α -> β) {s : Set α} {t : Set β} (h : t subseteq f '' s)
+  条件: (f : α -> β) {s : 集合 α} {t : 集合 β} (h : t subseteq f '' s)
   证明: by
   rw [image_eq_range] at h
   convert! mk_preimage_of_subset_range _ _ h using 1
@@ -4776,8 +4776,8 @@ theorem le_mk_iff_exists_subset
 @[simp]
 
 中文:
-定理 le_mk_iff_exists_subset
-  条件: {c : Cardinal} {α : 类型u} {s : Set α}
+定理 le_mk_iff_存在_subset
+  条件: {c : 基数} {α : 类型u} {s : 集合 α}
   证明: by
   rw [le_mk_iff_exists_set]; rw [← Subtype.exists_set_subtype]
   apply exists_congr; intro t; rw [mk_image_eq]; apply Subtype.val_injective
@@ -4807,7 +4807,7 @@ theorem mk_range_inl
 中文:
 定理 mk_range_inl
   条件: {α : 类型u} {β : 类型v}
-  结论: #(range (@Sum.inl α β)) = lift.{v} #α
+  结论: #(range (@和.inl α β)) = lift.{v} #α
   证明: by
   rw [← lift_id'.{u]; rw [v} #_]; rw [(Equiv.Set.rangeInl α β).lift_cardinal_eq]; rw [lift_umax.{u]; rw [v}]
 
@@ -4832,7 +4832,7 @@ theorem mk_range_inr
 中文:
 定理 mk_range_inr
   条件: {α : 类型u} {β : 类型v}
-  结论: #(range (@Sum.inr α β)) = lift.{u} #β
+  结论: #(range (@和.inr α β)) = lift.{u} #β
   证明: by
   rw [← lift_id'.{v]; rw [u} #_]; rw [(Equiv.Set.rangeInr α β).lift_cardinal_eq]; rw [lift_umax.{v]; rw [u}]
 
@@ -4852,7 +4852,7 @@ theorem two_le_iff
 
 中文:
 定理 two_le_iff
-  结论: (2 : Cardinal) <= #α ↔ 存在 x y : α, x != y
+  结论: (2 : 基数) <= #α ↔ 存在 x y : α, x != y
   证明: by
   rw [two_le_iff_one_lt]; rw [one_lt_iff_nontrivial]; rw [nontrivial_iff]
 
@@ -4874,7 +4874,7 @@ theorem two_le_iff'
 中文:
 定理 two_le_iff'
   条件: (x : α)
-  结论: (2 : Cardinal) <= #α ↔ 存在 y : α, y != x
+  结论: (2 : 基数) <= #α ↔ 存在 y : α, y != x
   证明: by
   rw [two_le_iff]; rw [← nontrivial_iff]; rw [nontrivial_iff_exists_ne x]
 
@@ -4900,7 +4900,7 @@ theorem mk_eq_two_iff
 
 中文:
 定理 mk_eq_two_iff
-  结论: #α = 2 ↔ 存在 x y : α, x != y ∧ ({x, y} : Set α) = univ
+  结论: #α = 2 ↔ 存在 x y : α, x != y ∧ ({x, y} : 集合 α) = univ
   证明: by
   classical
   simp only [← @Nat.cast_two Cardinal, mk_eq_nat_iff_finset, Finset.card_eq_two]
@@ -4977,8 +4977,8 @@ theorem exists_notMem_of_length_lt
     _ <= l.length := Nat.cast_le.mpr (List.toFinset_card_le l)
 
 中文:
-定理 exists_notMem_of_length_lt
-  条件: {α : 类型} (l : List α) (h : ↑l.length < #α)
+定理 存在_notMem_of_length_lt
+  条件: {α : 类型} (l : 列表 α) (h : ↑l.length < #α)
   证明: by
   classical
   contrapose! h
@@ -5016,7 +5016,7 @@ theorem exists_ne_ne_of_three_le
 @[deprecated (since := "2026-02-17")] alias three_le := exists_ne_ne_of_three_le
 
 中文:
-定理 exists_ne_ne_of_three_le
+定理 存在_ne_ne_of_three_le
   条件: {α : 类型} (h : 3 <= #α) (x y : α)
   结论: 存在 z : α, z != x ∧ z != y
   证明: by
@@ -5052,7 +5052,7 @@ infixl:80 " ^< " => powerlt
 
 中文:
 定义 powerlt
-  签名: (a b : Cardinal.{u})
+  签名: (a b : 基数.{u})
   定义体: ⨆ c : Iio b, a ^ (c : Cardinal)
 
 @[inherit_doc]
@@ -5080,7 +5080,7 @@ theorem le_powerlt
 
 中文:
 定理 le_powerlt
-  条件: {b c : Cardinal.{u}} (a) (h : c < b)
+  条件: {b c : 基数.{u}} (a) (h : c < b)
   结论: (a ^ c) <= a ^< b
   证明: by
   refine le_ciSup (f := fun y : Iio b => a ^ (y : Cardinal)) ?_ ⟨c, h⟩
@@ -5109,7 +5109,7 @@ theorem powerlt_le
 
 中文:
 定理 powerlt_le
-  条件: {a b c : Cardinal.{u}}
+  条件: {a b c : 基数.{u}}
   结论: a ^< b <= c ↔ 对任意 x < b, a ^ x <= c
   证明: by
   rw [powerlt]; rw [ciSup_le_iff']
@@ -5136,7 +5136,7 @@ theorem powerlt_le_powerlt_left
 
 中文:
 定理 powerlt_le_powerlt_left
-  条件: {a b c : Cardinal} (h : b <= c)
+  条件: {a b c : 基数} (h : b <= c)
   结论: a ^< b <= a ^< c
   证明: powerlt_le.2 fun _ hx => le_powerlt a hx.trans_le h
 
@@ -5157,7 +5157,7 @@ theorem powerlt_mono_left
 中文:
 定理 powerlt_mono_left
   条件: (a)
-  结论: Monotone fun c => a ^< c
+  结论: 递增 fun c => a ^< c
   证明: fun _ _ => powerlt_le_powerlt_left
 
 Depends on / 依赖: powerlt_le_powerlt_left
@@ -5176,7 +5176,7 @@ theorem powerlt_succ
 
 中文:
 定理 powerlt_succ
-  条件: {a b : Cardinal} (h : a != 0)
+  条件: {a b : 基数} (h : a != 0)
   结论: a ^< succ b = a ^ b
   证明: (powerlt_le.2 fun _ h' => power_le_power_left h <| le_of_lt_succ h').antisymm
     le_powerlt a (lt_succ b)
@@ -5198,8 +5198,8 @@ theorem powerlt_min
 
 中文:
 定理 powerlt_min
-  条件: {a b c : Cardinal}
-  结论: a ^< min b c = min (a ^< b) (a ^< c)
+  条件: {a b c : 基数}
+  结论: a ^< 最小值 b c = 最小值 (a ^< b) (a ^< c)
   证明: (powerlt_mono_left a).map_min
 
 Depends on / 依赖: map_min, powerlt_mono_left
@@ -5218,8 +5218,8 @@ theorem powerlt_max
 
 中文:
 定理 powerlt_max
-  条件: {a b c : Cardinal}
-  结论: a ^< max b c = max (a ^< b) (a ^< c)
+  条件: {a b c : 基数}
+  结论: a ^< 最大值 b c = 最大值 (a ^< b) (a ^< c)
   证明: (powerlt_mono_left a).map_max
 
 Depends on / 依赖: map_max, powerlt_mono_left
@@ -5243,7 +5243,7 @@ theorem zero_powerlt
 
 中文:
 定理 zero_powerlt
-  条件: {a : Cardinal} (h : a != 0)
+  条件: {a : 基数} (h : a != 0)
   结论: 0 ^< a = 1
   证明: by
   apply (powerlt_le.2 fun c _ => zero_power_le _).antisymm
@@ -5273,7 +5273,7 @@ theorem powerlt_zero
 
 中文:
 定理 powerlt_zero
-  条件: {a : Cardinal}
+  条件: {a : 基数}
   结论: a ^< 0 = 0
   证明: by
   convert! Cardinal.iSup_of_empty _
@@ -5294,7 +5294,7 @@ theorem _root_.WellFounded.cardinalMk_subtype_lt_min_compl_le
   proof: Cardinal.mk_le_mk_of_subset fun _ => wf.mem_of_lt_min_compl
 
 中文:
-定理 _root_.WellFounded.cardinalMk_subtype_lt_min_compl_le
+定理 _root_.良基.cardinalMk_subtype_lt_min_compl_le
   结论: {r : α -> α -> 命题}
   证明: Cardinal.mk_le_mk_of_subset fun _ => wf.mem_of_lt_min_compl
 

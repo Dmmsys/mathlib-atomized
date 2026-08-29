@@ -61,7 +61,7 @@ have : (List.ofFn fun k : Fin ($n * $n) => $A k.divNat k.modNat) =Q xs := ⟨⟩
 
 中文:
 定义 normalizeDetFromEntries
-  签名: {u : Level} {α : Q(类型u)} {n : Q(自然数)} (rα : Q(CommRing $α))
+  签名: {u : Level} {α : Q(类型u)} {n : Q(自然数)} (rα : Q(交换环 $α))
   定义体: do
   let xs : Q(List $α) ← mkListLit α entries.toList
   let arrayExpr : Q(Array $α) := q(List.toArray $xs)

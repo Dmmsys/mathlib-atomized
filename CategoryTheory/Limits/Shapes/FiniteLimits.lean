@@ -43,10 +43,10 @@ class HasFiniteLimits
     - out((J : Type) [𝒥 : SmallCategory J] [@FinCategory J 𝒥]) : @HasLimitsOfShape J 𝒥 C _
 
 中文:
-类 HasFiniteLimits
+类 有有限极限
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [𝒥 : SmallCategory J] [@FinCategory J 𝒥]) : @HasLimitsOfShape J 𝒥 C _
+    - out((J : 类型) [𝒥 : 小范畴 J] [@有限范畴 J 𝒥]) : @有形状极限 J 𝒥 C _
 -/
 class HasFiniteLimits : Prop where
   /-- `C` has all limits over any type `J` whose objects and morphisms lie in the same universe
@@ -72,7 +72,7 @@ lemma hasFiniteLimits_of_hasLimitsOfSize
 
 中文:
 引理 hasFiniteLimits_of_hasLimitsOfSize
-  条件: [HasLimitsOfSize.{v', u'} C]
+  条件: [有LimitsOfSize.{v', u'} C]
   证明: fun J hJ hJ' =>
     haveI := hasLimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
@@ -142,10 +142,10 @@ class HasFiniteColimits
     - out((J : Type) [𝒥 : SmallCategory J] [@FinCategory J 𝒥]) : @HasColimitsOfShape J 𝒥 C _
 
 中文:
-类 HasFiniteColimits
+类 有有限余极限
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [𝒥 : SmallCategory J] [@FinCategory J 𝒥]) : @HasColimitsOfShape J 𝒥 C _
+    - out((J : 类型) [𝒥 : 小范畴 J] [@有限范畴 J 𝒥]) : @有形状余极限 J 𝒥 C _
 -/
 class HasFiniteColimits : Prop where
   /-- `C` has all colimits over any type `J` whose objects and morphisms lie in the same universe
@@ -172,7 +172,7 @@ lemma hasFiniteColimits_of_hasColimitsOfSize
 
 中文:
 引理 hasFiniteColimits_of_hasColimitsOfSize
-  条件: [HasColimitsOfSize.{v', u'} C]
+  条件: [有余limitsOfSize.{v', u'} C]
   证明: fun J hJ hJ' =>
     haveI := hasColimitsOfSizeShrink.{0, 0} C
     let F := @FinCategory.equivAsType J (@FinCategory.fintypeObj J hJ hJ') hJ hJ'
@@ -245,7 +245,7 @@ instance fintypeWalkingParallelPair
 
 中文:
 实例 fintypeWalkingParallelPair
-  签名: : Fintype WalkingParallelPair where
+  签名: : 有限类型 WalkingParallelPair where
   定义体: [WalkingParallelPair.zero, WalkingParallelPair.one].toFinset
   complete x := by cases x <;> simp
 
@@ -301,7 +301,7 @@ instance :
 
 中文:
 实例 :
-  签名: FinCategory WalkingParallelPair
+  签名: 有限范畴 WalkingParallelPair
   定义体: fintypeWalkingParallelPair
   fintypeHom := instFintypeWalkingParallelPairHom
 
@@ -336,7 +336,7 @@ instance fintypeObj
 
 中文:
 实例 fintypeObj
-  签名: [Fintype J]
+  签名: [有限类型 J]
   定义体: inferInstanceAs Fintype (Option _)
 
 Depends on / 依赖: Fintype
@@ -412,7 +412,7 @@ instance fintypeObj
 
 中文:
 实例 fintypeObj
-  签名: [Fintype J]
+  签名: [有限类型 J]
   定义体: inferInstanceAs Fintype (Option _)
 
 Depends on / 依赖: Fintype
@@ -486,7 +486,7 @@ instance finCategoryWidePullback
 
 中文:
 实例 finCategoryWidePullback
-  签名: [Fintype J]
+  签名: [有限类型 J]
   定义体: WidePullbackShape.fintypeHom
 
 Depends on / 依赖: WidePullbackShape, WidePullbackShape.fintypeHom, fintypeHom
@@ -504,7 +504,7 @@ instance finCategoryWidePushout
 
 中文:
 实例 finCategoryWidePushout
-  签名: [Fintype J]
+  签名: [有限类型 J]
   定义体: WidePushoutShape.fintypeHom
 
 Depends on / 依赖: WidePushoutShape, WidePushoutShape.fintypeHom, fintypeHom
@@ -524,10 +524,10 @@ class HasFiniteWidePullbacks
     - out((J : Type) [Finite J]) : HasLimitsOfShape (WidePullbackShape J) C
 
 中文:
-类 HasFiniteWidePullbacks
+类 有FiniteWidePullbacks
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [Finite J]) : HasLimitsOfShape (WidePullbackShape J) C
+    - out((J : 类型) [有限 J]) : 有形状极限 (WidePullbackShape J) C
 -/
 class HasFiniteWidePullbacks : Prop where
   /-- `C` has all wide pullbacks for any Finite `J` -/
@@ -545,7 +545,7 @@ instance hasLimitsOfShape_widePullbackShape
 
 中文:
 实例 hasLimitsOfShape_widePullbackShape
-  签名: (J : Type) [Finite J] [HasFiniteWidePullbacks C]
+  签名: (J : 类型) [有限 J] [有FiniteWidePullbacks C]
   定义体: by
   have := @HasFiniteWidePullbacks.out C _ _ J
   infer_instance
@@ -567,10 +567,10 @@ class HasFiniteWidePushouts
     - out((J : Type) [Finite J]) : HasColimitsOfShape (WidePushoutShape J) C
 
 中文:
-类 HasFiniteWidePushouts
+类 有FiniteWidePushouts
   参数: : 命题 where
   公理与运算 (1 个):
-    - out((J : Type) [Finite J]) : HasColimitsOfShape (WidePushoutShape J) C
+    - out((J : 类型) [有限 J]) : 有形状余极限 (WidePushoutShape J) C
 -/
 class HasFiniteWidePushouts : Prop where
   /-- `C` has all wide pushouts for any Finite `J` -/
@@ -588,7 +588,7 @@ instance hasColimitsOfShape_widePushoutShape
 
 中文:
 实例 hasColimitsOfShape_widePushoutShape
-  签名: (J : Type) [Finite J] [HasFiniteWidePushouts C]
+  签名: (J : 类型) [有限 J] [有FiniteWidePushouts C]
   定义体: by
   have := @HasFiniteWidePushouts.out C _ _ J
   infer_instance
@@ -625,7 +625,7 @@ instance fintypeWalkingPair
 
 中文:
 实例 fintypeWalkingPair
-  签名: : Fintype WalkingPair where
+  签名: : 有限类型 WalkingPair where
   定义体: {WalkingPair.left, WalkingPair.right}
   complete x := by cases x <;> simp
 

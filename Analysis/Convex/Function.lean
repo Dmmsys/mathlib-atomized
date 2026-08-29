@@ -219,7 +219,7 @@ theorem convexOn_id
 
 中文:
 定理 convexOn_id
-  条件: {s : Set β} (hs : Convex 𝕜 s)
+  条件: {s : 集合 β} (hs : 凸 𝕜 s)
   结论: ConvexOn 𝕜 s _root_.id
   证明: ⟨hs, by
     intros
@@ -245,7 +245,7 @@ theorem concaveOn_id
 
 中文:
 定理 concaveOn_id
-  条件: {s : Set β} (hs : Convex 𝕜 s)
+  条件: {s : 集合 β} (hs : 凸 𝕜 s)
   结论: ConcaveOn 𝕜 s _root_.id
   证明: ⟨hs, by
     intros
@@ -366,7 +366,7 @@ theorem ConvexOn.subset
 
 中文:
 定理 ConvexOn.subset
-  条件: {t : Set E} (hf : ConvexOn 𝕜 t f) (hst : s subseteq t) (hs : Convex 𝕜 s)
+  条件: {t : 集合 E} (hf : ConvexOn 𝕜 t f) (hst : s subseteq t) (hs : 凸 𝕜 s)
   证明: ⟨hs, fun _ hx _ hy => hf.2 (hst hx) (hst hy)⟩
 -/
 theorem ConvexOn.subset {t : Set E} (hf : ConvexOn 𝕜 t f) (hst : s subseteq t) (hs : Convex 𝕜 s) :
@@ -383,7 +383,7 @@ theorem ConcaveOn.subset
 
 中文:
 定理 ConcaveOn.subset
-  条件: {t : Set E} (hf : ConcaveOn 𝕜 t f) (hst : s subseteq t) (hs : Convex 𝕜 s)
+  条件: {t : 集合 E} (hf : ConcaveOn 𝕜 t f) (hst : s subseteq t) (hs : 凸 𝕜 s)
   证明: ⟨hs, fun _ hx _ hy => hf.2 (hst hx) (hst hy)⟩
 -/
 theorem ConcaveOn.subset {t : Set E} (hf : ConcaveOn 𝕜 t f) (hst : s subseteq t) (hs : Convex 𝕜 s) :
@@ -400,7 +400,7 @@ theorem StrictConvexOn.subset
 
 中文:
 定理 StrictConvexOn.subset
-  结论: {t : Set E} (hf : StrictConvexOn 𝕜 t f) (hst : s subseteq t)
+  结论: {t : 集合 E} (hf : StrictConvexOn 𝕜 t f) (hst : s subseteq t)
   证明: ⟨hs, fun _ hx _ hy => hf.2 (hst hx) (hst hy)⟩
 -/
 theorem StrictConvexOn.subset {t : Set E} (hf : StrictConvexOn 𝕜 t f) (hst : s subseteq t)
@@ -417,7 +417,7 @@ theorem StrictConcaveOn.subset
 
 中文:
 定理 StrictConcaveOn.subset
-  结论: {t : Set E} (hf : StrictConcaveOn 𝕜 t f) (hst : s subseteq t)
+  结论: {t : 集合 E} (hf : StrictConcaveOn 𝕜 t f) (hst : s subseteq t)
   证明: ⟨hs, fun _ hx _ hy => hf.2 (hst hx) (hst hy)⟩
 -/
 theorem StrictConcaveOn.subset {t : Set E} (hf : StrictConcaveOn 𝕜 t f) (hst : s subseteq t)
@@ -867,7 +867,7 @@ theorem convexOn_const
 
 中文:
 定理 convexOn_const
-  条件: (c : β) (hs : Convex 𝕜 s)
+  条件: (c : β) (hs : 凸 𝕜 s)
   结论: ConvexOn 𝕜 s fun _ : E => c
   证明: ⟨hs, fun _ _ _ _ _ _ _ _ hab => (Convex.combo_self hab c).ge⟩
 
@@ -887,7 +887,7 @@ theorem concaveOn_const
 
 中文:
 定理 concaveOn_const
-  条件: (c : β) (hs : Convex 𝕜 s)
+  条件: (c : β) (hs : 凸 𝕜 s)
   结论: ConcaveOn 𝕜 s fun _ => c
   证明: convexOn_const (β := βᵒᵈ) _ hs
 
@@ -906,7 +906,7 @@ theorem ConvexOn.add_const
 
 中文:
 定理 ConvexOn.add_const
-  条件: [IsOrderedAddMonoid β] (hf : ConvexOn 𝕜 s f) (b : β)
+  条件: [是OrderedAdd幺半群 β] (hf : ConvexOn 𝕜 s f) (b : β)
   证明: hf.add (convexOn_const _ hf.1)
 
 Depends on / 依赖: convexOn_const, hf.add
@@ -925,7 +925,7 @@ theorem ConcaveOn.add_const
 
 中文:
 定理 ConcaveOn.add_const
-  条件: [IsOrderedAddMonoid β] (hf : ConcaveOn 𝕜 s f) (b : β)
+  条件: [是OrderedAdd幺半群 β] (hf : ConcaveOn 𝕜 s f) (b : β)
   证明: hf.add (concaveOn_const _ hf.1)
 
 Depends on / 依赖: concaveOn_const, hf.add
@@ -945,7 +945,7 @@ theorem convexOn_of_convex_epigraph
 
 中文:
 定理 convexOn_of_convex_epigraph
-  条件: (h : Convex 𝕜 { p : E × β | p.1 in s ∧ f p.1 <= p.2 })
+  条件: (h : 凸 𝕜 { p : E × β | p.1 in s ∧ f p.1 <= p.2 })
   证明: ⟨fun x hx y hy a b ha hb hab => (@h (x, f x) ⟨hx, le_rfl⟩ (y, f y) ⟨hy, le_rfl⟩ a b ha hb hab).1,
     fun x hx y hy a b ha hb hab => (@h (x, f x) ⟨hx, le_rfl⟩ (y, f y) ⟨hy, le_rfl⟩ a b ha hb hab).2⟩
 
@@ -966,7 +966,7 @@ theorem concaveOn_of_convex_hypograph
 
 中文:
 定理 concaveOn_of_convex_hypograph
-  条件: (h : Convex 𝕜 { p : E × β | p.1 in s ∧ p.2 <= f p.1 })
+  条件: (h : 凸 𝕜 { p : E × β | p.1 in s ∧ p.2 <= f p.1 })
   证明: convexOn_of_convex_epigraph (β := βᵒᵈ) h
 
 Depends on / 依赖: convexOn_of_convex_epigraph
@@ -1002,7 +1002,7 @@ theorem ConvexOn.convex_le
 中文:
 定理 ConvexOn.convex_le
   条件: (hf : ConvexOn 𝕜 s f) (r : β)
-  结论: Convex 𝕜 ({ x in s | f x <= r })
+  结论: 凸 𝕜 ({ x in s | f x <= r })
   证明: fun x hx y hy a b ha hb hab =>
   ⟨hf.1 hx.1 hy.1 ha hb hab,
     calc
@@ -1040,7 +1040,7 @@ theorem ConcaveOn.convex_ge
 中文:
 定理 ConcaveOn.convex_ge
   条件: (hf : ConcaveOn 𝕜 s f) (r : β)
-  结论: Convex 𝕜 ({ x in s | r <= f x })
+  结论: 凸 𝕜 ({ x in s | r <= f x })
   证明: hf.dual.convex_le r
 
 Depends on / 依赖: convex_le, hf.dual.convex_le
@@ -1254,8 +1254,8 @@ theorem convexOn_iff_forall_pos
   · rw [add_ze
 
 中文:
-定理 convexOn_iff_forall_pos
-  条件: {s : Set E} {f : E -> β}
+定理 convexOn_iff_对任意_pos
+  条件: {s : 集合 E} {f : E -> β}
   证明: by
   refine and_congr_right'
     ⟨fun h x hx y hy a b ha hb hab => h hx hy ha.le hb.le hab, fun h x hx y hy a b ha hb hab => ?_⟩
@@ -1292,8 +1292,8 @@ theorem concaveOn_iff_forall_pos
   proof: convexOn_iff_forall_pos (β := βᵒᵈ)
 
 中文:
-定理 concaveOn_iff_forall_pos
-  条件: {s : Set E} {f : E -> β}
+定理 concaveOn_iff_对任意_pos
+  条件: {s : 集合 E} {f : E -> β}
   证明: convexOn_iff_forall_pos (β := βᵒᵈ)
 
 Depends on / 依赖: convexOn_iff_forall_pos
@@ -1321,7 +1321,7 @@ theorem convexOn_iff_pairwise_pos
 
 中文:
 定理 convexOn_iff_pairwise_pos
-  条件: {s : Set E} {f : E -> β}
+  条件: {s : 集合 E} {f : E -> β}
   证明: by
   rw [convexOn_iff_forall_pos]
   refine
@@ -1356,7 +1356,7 @@ theorem concaveOn_iff_pairwise_pos
 
 中文:
 定理 concaveOn_iff_pairwise_pos
-  条件: {s : Set E} {f : E -> β}
+  条件: {s : 集合 E} {f : E -> β}
   证明: convexOn_iff_pairwise_pos (β := βᵒᵈ)
 
 Depends on / 依赖: convexOn_iff_pairwise_pos
@@ -1378,8 +1378,8 @@ theorem LinearMap.convexOn
   proof: ⟨hs, fun _ _ _ _ _ _ _ _ _ => by rw [f.map_add, f.map_smul, f.map_smul]⟩
 
 中文:
-定理 LinearMap.convexOn
-  条件: (f : E ->ₗ[𝕜] β) {s : Set E} (hs : Convex 𝕜 s)
+定理 线性映射.convexOn
+  条件: (f : E ->ₗ[𝕜] β) {s : 集合 E} (hs : 凸 𝕜 s)
   结论: ConvexOn 𝕜 s f
   证明: ⟨hs, fun _ _ _ _ _ _ _ _ _ => by rw [f.map_add, f.map_smul, f.map_smul]⟩
 
@@ -1398,8 +1398,8 @@ theorem LinearMap.concaveOn
   proof: ⟨hs, fun _ _ _ _ _ _ _ _ _ => by rw [f.map_add, f.map_smul, f.map_smul]⟩
 
 中文:
-定理 LinearMap.concaveOn
-  条件: (f : E ->ₗ[𝕜] β) {s : Set E} (hs : Convex 𝕜 s)
+定理 线性映射.concaveOn
+  条件: (f : E ->ₗ[𝕜] β) {s : 集合 E} (hs : 凸 𝕜 s)
   结论: ConcaveOn 𝕜 s f
   证明: ⟨hs, fun _ _ _ _ _ _ _ _ _ => by rw [f.map_add, f.map_smul, f.map_smul]⟩
 
@@ -1419,7 +1419,7 @@ theorem StrictConvexOn.convexOn
 
 中文:
 定理 StrictConvexOn.convexOn
-  条件: {s : Set E} {f : E -> β} (hf : StrictConvexOn 𝕜 s f)
+  条件: {s : 集合 E} {f : E -> β} (hf : StrictConvexOn 𝕜 s f)
   证明: convexOn_iff_pairwise_pos.mpr
     ⟨hf.1, fun _ hx _ hy hxy _ _ ha hb hab => (hf.2 hx hy hxy ha hb hab).le⟩
 
@@ -1440,7 +1440,7 @@ theorem StrictConcaveOn.concaveOn
 
 中文:
 定理 StrictConcaveOn.concaveOn
-  条件: {s : Set E} {f : E -> β} (hf : StrictConcaveOn 𝕜 s f)
+  条件: {s : 集合 E} {f : E -> β} (hf : StrictConcaveOn 𝕜 s f)
   证明: hf.dual.convexOn
 
 Depends on / 依赖: convexOn, hf.dual.convexOn
@@ -1537,8 +1537,8 @@ theorem LinearOrder.convexOn_of_lt
   exact hf hx hy h ha hb hab
 
 中文:
-定理 LinearOrder.convexOn_of_lt
-  结论: (hs : Convex 𝕜 s)
+定理 线性序.convexOn_of_lt
+  结论: (hs : 凸 𝕜 s)
   证明: by
   refine convexOn_iff_pairwise_pos.2 ⟨hs, fun x hx y hy hxy a b ha hb hab => ?_⟩
   wlog h : x < y
@@ -1569,8 +1569,8 @@ theorem LinearOrder.concaveOn_of_lt
   proof: LinearOrder.convexOn_of_lt (β := βᵒᵈ) hs hf
 
 中文:
-定理 LinearOrder.concaveOn_of_lt
-  结论: (hs : Convex 𝕜 s)
+定理 线性序.concaveOn_of_lt
+  结论: (hs : 凸 𝕜 s)
   证明: LinearOrder.convexOn_of_lt (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: LinearOrder, LinearOrder.convexOn_of_lt, convexOn_of_lt
@@ -1596,8 +1596,8 @@ theorem LinearOrder.strictConvexOn_of_lt
   exact hf hx hy h ha hb hab
 
 中文:
-定理 LinearOrder.strictConvexOn_of_lt
-  结论: (hs : Convex 𝕜 s)
+定理 线性序.strictConvexOn_of_lt
+  结论: (hs : 凸 𝕜 s)
   证明: by
   refine ⟨hs, fun x hx y hy hxy a b ha hb hab => ?_⟩
   wlog h : x < y
@@ -1628,8 +1628,8 @@ theorem LinearOrder.strictConcaveOn_of_lt
   proof: LinearOrder.strictConvexOn_of_lt (β := βᵒᵈ) hs hf
 
 中文:
-定理 LinearOrder.strictConcaveOn_of_lt
-  结论: (hs : Convex 𝕜 s)
+定理 线性序.strictConcaveOn_of_lt
+  结论: (hs : 凸 𝕜 s)
   证明: LinearOrder.strictConvexOn_of_lt (β := βᵒᵈ) hs hf
 
 Depends on / 依赖: LinearOrder, LinearOrder.strictConvexOn_of_lt, strictConvexOn_of_lt
@@ -1661,7 +1661,7 @@ theorem ConvexOn.comp_linearMap
 
 中文:
 定理 ConvexOn.comp_linearMap
-  条件: {f : F -> β} {s : Set F} (hf : ConvexOn 𝕜 s f) (g : E ->ₗ[𝕜] F)
+  条件: {f : F -> β} {s : 集合 F} (hf : ConvexOn 𝕜 s f) (g : E ->ₗ[𝕜] F)
   证明: ⟨hf.1.linear_preimage _, fun x hx y hy a b ha hb hab =>
     calc
       f (g (a • x + b • y)) = f (a • g x + b • g y) := by rw [g.map_add, g.map_smul, g.map_smul]
@@ -1686,7 +1686,7 @@ theorem ConcaveOn.comp_linearMap
 
 中文:
 定理 ConcaveOn.comp_linearMap
-  条件: {f : F -> β} {s : Set F} (hf : ConcaveOn 𝕜 s f) (g : E ->ₗ[𝕜] F)
+  条件: {f : F -> β} {s : 集合 F} (hf : ConcaveOn 𝕜 s f) (g : E ->ₗ[𝕜] F)
   证明: hf.dual.comp_linearMap g
 
 Depends on / 依赖: comp_linearMap, hf.dual.comp_linearMap
@@ -1909,7 +1909,7 @@ theorem ConvexOn.convex_lt
 中文:
 定理 ConvexOn.convex_lt
   条件: (hf : ConvexOn 𝕜 s f) (r : β)
-  结论: Convex 𝕜 ({ x in s | f x < r })
+  结论: 凸 𝕜 ({ x in s | f x < r })
   证明: convex_iff_forall_pos.2 fun x hx y hy a b ha hb hab =>
     ⟨hf.1 hx.1 hy.1 ha.le hb.le hab,
       calc
@@ -1942,7 +1942,7 @@ theorem ConcaveOn.convex_gt
 中文:
 定理 ConcaveOn.convex_gt
   条件: (hf : ConcaveOn 𝕜 s f) (r : β)
-  结论: Convex 𝕜 ({ x in s | r < f x })
+  结论: 凸 𝕜 ({ x in s | r < f x })
   证明: hf.dual.convex_lt r
 
 Depends on / 依赖: convex_lt, hf.dual.convex_lt
@@ -2018,7 +2018,7 @@ theorem ConvexOn.convex_strict_epigraph
 
 中文:
 定理 ConvexOn.convex_strict_epigraph
-  条件: [ZeroLEOneClass 𝕜] (hf : ConvexOn 𝕜 s f)
+  条件: [ZeroLEOne类 𝕜] (hf : ConvexOn 𝕜 s f)
   证明: convex_iff_openSegment_subset.mpr fun p hp q hq =>
     hf.openSegment_subset_strict_epigraph p q hp ⟨hq.1, hq.2.le⟩
 
@@ -2039,7 +2039,7 @@ theorem ConcaveOn.convex_strict_hypograph
 
 中文:
 定理 ConcaveOn.convex_strict_hypograph
-  条件: [ZeroLEOneClass 𝕜] (hf : ConcaveOn 𝕜 s f)
+  条件: [ZeroLEOne类 𝕜] (hf : ConcaveOn 𝕜 s f)
   证明: hf.dual.convex_strict_epigraph
 
 Depends on / 依赖: convex_strict_epigraph, hf.dual.convex_strict_epigraph
@@ -2074,7 +2074,7 @@ theorem ConvexOn.sup
       g (a • x + b • y) <= a • g x + b • g y := hg.right hx hy
 
 中文:
-定理 ConvexOn.sup
+定理 ConvexOn.上确界
   条件: (hf : ConvexOn 𝕜 s f) (hg : ConvexOn 𝕜 s g)
   结论: ConvexOn 𝕜 s (f ⊔ g)
   证明: by
@@ -2106,7 +2106,7 @@ theorem ConcaveOn.inf
   proof: hf.dual.sup hg
 
 中文:
-定理 ConcaveOn.inf
+定理 ConcaveOn.下确界
   条件: (hf : ConcaveOn 𝕜 s f) (hg : ConcaveOn 𝕜 s g)
   结论: ConcaveOn 𝕜 s (f ⊓ g)
   证明: hf.dual.sup hg
@@ -2131,7 +2131,7 @@ theorem StrictConvexOn.sup
         g (a • x + b • y) < a • g x + b • g y := hg.2 hx hy hxy
 
 中文:
-定理 StrictConvexOn.sup
+定理 StrictConvexOn.上确界
   条件: (hf : StrictConvexOn 𝕜 s f) (hg : StrictConvexOn 𝕜 s g)
   证明: ⟨hf.left, fun x hx y hy hxy a b ha hb hab =>
     max_lt
@@ -2163,7 +2163,7 @@ theorem StrictConcaveOn.inf
   proof: hf.dual.sup hg
 
 中文:
-定理 StrictConcaveOn.inf
+定理 StrictConcaveOn.下确界
   条件: (hf : StrictConcaveOn 𝕜 s f) (hg : StrictConcaveOn 𝕜 s g)
   证明: hf.dual.sup hg
 
@@ -3282,7 +3282,7 @@ theorem ConvexOn.comp_affineMap
 
 中文:
 定理 ConvexOn.comp_affineMap
-  条件: {f : F -> β} (g : E ->ᵃ[𝕜] F) {s : Set F} (hf : ConvexOn 𝕜 s f)
+  条件: {f : F -> β} (g : E ->ᵃ[𝕜] F) {s : 集合 F} (hf : ConvexOn 𝕜 s f)
   证明: ⟨hf.1.affine_preimage _, fun x hx y hy a b ha hb hab =>
     calc
       (f ∘ g) (a • x + b • y) = f (g (a • x + b • y)) := rfl
@@ -3309,7 +3309,7 @@ theorem ConcaveOn.comp_affineMap
 
 中文:
 定理 ConcaveOn.comp_affineMap
-  条件: {f : F -> β} (g : E ->ᵃ[𝕜] F) {s : Set F} (hf : ConcaveOn 𝕜 s f)
+  条件: {f : F -> β} (g : E ->ᵃ[𝕜] F) {s : 集合 F} (hf : ConcaveOn 𝕜 s f)
   证明: hf.dual.comp_affineMap g
 
 Depends on / 依赖: comp_affineMap, hf.dual.comp_affineMap

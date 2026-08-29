@@ -30,7 +30,7 @@ lemma cast_negOnePow
 
 中文:
 引理 cast_negOnePow
-  条件: (K : 类型) (n : 整数) [DivisionRing K]
+  条件: (K : 类型) (n : 整数) [除环 K]
   结论: n.negOnePow = (-1 : K) ^ n
   证明: by
   rcases even_or_odd' n with ⟨k, rfl | rfl⟩

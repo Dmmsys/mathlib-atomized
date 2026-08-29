@@ -64,7 +64,7 @@ definition iUnionLift
 
 中文:
 定义 iUnionLift
-  签名: (S : ι -> Set α) (f : 对任意 i, S i -> β)
+  签名: (S : ι -> 集合 α) (f : 对任意 i, S i -> β)
   定义体: let i := Classical.indefiniteDescription _ (mem_iUnion.1 (hT x.prop))
   f i ⟨x, i.prop⟩
 
@@ -151,7 +151,7 @@ theorem preimage_iUnionLift
 
 中文:
 定理 preimage_iUnionLift
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   证明: by
   ext x
   simp only [mem_preimage, mem_iUnion, mem_image]
@@ -320,7 +320,7 @@ definition liftCover
 
 中文:
 定义 liftCover
-  签名: (S : ι -> Set α) (f : 对任意 i, S i -> β)
+  签名: (S : ι -> 集合 α) (f : 对任意 i, S i -> β)
   定义体: iUnionLift S f hf univ hS.symm.subset ⟨a, trivial⟩
 
 @[simp]
@@ -386,7 +386,7 @@ theorem preimage_liftCover
 
 中文:
 定理 preimage_liftCover
-  条件: (t : Set β)
+  条件: (t : 集合 β)
   结论: liftCover S f hf hS ⁻¹' t = ⋃ i, (↑) '' f i ⁻¹' t
   证明: by
   change (iUnionLift S f hf univ hS.symm.subset ∘ fun a => ⟨a, mem_univ a⟩) ⁻¹' t = _

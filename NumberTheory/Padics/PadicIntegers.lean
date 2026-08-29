@@ -65,8 +65,8 @@ definition PadicInt
   body: {x : Rat_[p] // ‖x‖ <= 1}
 
 中文:
-定义 PadicInt
-  签名: : Type
+定义 Padic整数
+  签名: : 类型
   定义体: {x : Rat_[p] // ‖x‖ <= 1}
 
 Depends on / 依赖: Rat_
@@ -137,7 +137,7 @@ mul_mem' hx hy := (padicNormE.mul _ _).trans_le mul_le_one₀ hx (norm_nonneg _)
 
 中文:
 定义 subring
-  签名: : Subring Rat_[p] where
+  签名: : 子环 Rat_[p] where
   定义体: { x : Rat_[p] | ‖x‖ <= 1 }
   zero_mem' := by simp
   one_mem' := by simp
@@ -189,7 +189,7 @@ instance instCommRing
 
 中文:
 实例 instCommRing
-  签名: : CommRing 整数_[p]
+  签名: : 交换环 整数_[p]
   定义体: inferInstanceAs CommRing (subring p)
 
 Depends on / 依赖: CommRing, subring
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 整数_[p]
+  签名: 可居 整数_[p]
   定义体: ⟨0⟩
 
 @[simp]
@@ -510,7 +510,7 @@ lemma coe_sum
 
 中文:
 引理 coe_sum
-  条件: {α : 类型} (s : Finset α) (f : α -> 整数_[p])
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 整数_[p])
   证明: by
   simp [← Coe.ringHom_apply, map_sum PadicInt.Coe.ringHom f s]
 
@@ -534,7 +534,7 @@ lemma isOpenEmbedding_coe
 
 中文:
 引理 isOpenEmbedding_coe
-  结论: IsOpenEmbedding ((↑) : 整数_[p] -> Rat_[p])
+  结论: 是开嵌入 ((↑) : 整数_[p] -> Rat_[p])
   证明: by
   refine (?_ : IsOpen {y : Rat_[p] | ‖y‖ <= 1}).isOpenEmbedding_subtypeVal
   simpa only [Metric.closedBall, dist_eq_norm_sub, sub_zero] using
@@ -574,7 +574,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero 整数_[p]
+  签名: 特征零 整数_[p]
   定义体: Nat.cast_injective (R := Rat_[p]) (by rw [Subtype.ext_iff] at h; norm_cast at h)
 
 @[norm_cast]
@@ -617,7 +617,7 @@ definition ofIntSeq
       apply padicNorm.of_int⟩
 
 中文:
-定义 ofIntSeq
+定义 of整数Seq
   签名: (seq : 自然数 -> 整数) (h : IsCauSeq (padicNorm p) fun n => seq n)
   定义体: ⟨⟦⟨_, h⟩⟧,
     show ↑(PadicSeq.norm _) <= (1 : Real) by
@@ -654,7 +654,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace 整数_[p]
+  签名: 度量空间 整数_[p]
   定义体: inferInstanceAs MetricSpace (Subtype _)
 
 Depends on / 依赖: IsGaussian, IsGaussian.charFunDual_eq, MetricSpace, Subtype, charFunDual_eq, charFunDual_map_add_const, exp_add, fun_prop, hL_comp, integral, integral_add, integral_complex_ofReal, integral_map, isGaussian_of_charFunDual_eq, map_add, variance_add_const, variance_map
@@ -671,7 +671,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsUltrametricDist 整数_[p]
+  签名: 是UltrametricDist 整数_[p]
   定义体: IsUltrametricDist.subtype _
 
 Depends on / 依赖: IsUltrametricDist, IsUltrametricDist.subtype, add_comm, infer_instance, simp_rw, subtype
@@ -689,7 +689,7 @@ instance completeSpace
 
 中文:
 实例 completeSpace
-  签名: : CompleteSpace 整数_[p]
+  签名: : 完备空间 整数_[p]
   定义体: have : IsClosed { x : Rat_[p] | ‖x‖ <= 1 } := isClosed_le continuous_norm continuous_const
   this.completeSpace_coe
 
@@ -709,7 +709,7 @@ instance :
 
 中文:
 实例 :
-  签名: Norm 整数_[p]
+  签名: 范数 整数_[p]
   定义体: ⟨fun z => ‖(z : Rat_[p])‖⟩
 
 Depends on / 依赖: Rat_
@@ -749,7 +749,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedCommRing 整数_[p]
+  签名: NormedComm环 整数_[p]
   定义体: by
     rintro ⟨x, hx⟩ ⟨y, hy⟩
     exact dist_eq_norm_neg_add x y
@@ -773,7 +773,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormOneClass 整数_[p]
+  签名: NormOne类 整数_[p]
   定义体: ⟨norm_def.trans norm_one⟩
 
 Depends on / 依赖: norm_def, norm_def.trans, norm_one
@@ -791,7 +791,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormMulClass 整数_[p]
+  签名: NormMul类 整数_[p]
   定义体: ⟨fun x y => by simp [norm_def]⟩
 
 Depends on / 依赖: norm_def
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain 整数_[p]
+  签名: 是整环 整数_[p]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -847,7 +847,7 @@ theorem nonarchimedean
 中文:
 定理 nonarchimedean
   条件: (q r : 整数_[p])
-  结论: ‖q + r‖ <= max ‖q‖ ‖r‖
+  结论: ‖q + r‖ <= 最大值 ‖q‖ ‖r‖
   证明: Padic.nonarchimedean _ _
 
 Depends on / 依赖: Padic.nonarchimedean, nonarchimedean
@@ -866,7 +866,7 @@ theorem norm_add_eq_max_of_ne
 中文:
 定理 norm_add_eq_max_of_ne
   条件: {q r : 整数_[p]}
-  结论: ‖q‖ != ‖r‖ -> ‖q + r‖ = max ‖q‖ ‖r‖
+  结论: ‖q‖ != ‖r‖ -> ‖q + r‖ = 最大值 ‖q‖ ‖r‖
   证明: Padic.add_eq_max_of_ne
 
 Depends on / 依赖: Padic.add_eq_max_of_ne, add_eq_max_of_ne
@@ -935,7 +935,7 @@ theorem padic_norm_e_of_padicInt
   proof: by simp [norm_def]
 
 中文:
-定理 padic_norm_e_of_padicInt
+定理 padic_norm_e_of_padic整数
   条件: (z : 整数_[p])
   结论: ‖(z : Rat_[p])‖ = ‖z‖
   证明: by simp [norm_def]
@@ -1106,7 +1106,7 @@ instance complete
 
 中文:
 实例 complete
-  签名: : CauSeq.IsComplete 整数_[p] norm
+  签名: : CauSeq.是完备 整数_[p] norm
   定义体: ⟨fun f =>
     have hqn : ‖CauSeq.lim (cauSeq_to_rat_cauSeq f)‖ <= 1 :=
       padicNormE_lim_le zero_lt_one fun _ => norm_le_one _
@@ -1142,7 +1142,7 @@ theorem exists_pow_neg_lt
   · exact mod_cast hp.1.pos
 
 中文:
-定理 exists_pow_neg_lt
+定理 存在_pow_neg_lt
   条件: {ε : 实数} (hε : 0 < ε)
   结论: 存在 k : 自然数, (p : 实数) ^ (-(k : 整数)) < ε
   证明: by
@@ -1185,9 +1185,9 @@ theorem exists_pow_neg_lt_rat
   exact mod_cast hk
 
 中文:
-定理 exists_pow_neg_lt_rat
-  条件: {ε : Rat} (hε : 0 < ε)
-  结论: 存在 k : 自然数, (p : Rat) ^ (-(k : 整数)) < ε
+定理 存在_pow_neg_lt_rat
+  条件: {ε : 有理数} (hε : 0 < ε)
+  结论: 存在 k : 自然数, (p : 有理数) ^ (-(k : 整数)) < ε
   证明: by
   obtain ⟨k, hk⟩ := @exists_pow_neg_lt p _ ε (mod_cast hε)
   use k
@@ -1485,7 +1485,7 @@ zify; simpa [← valuation_coe] using Padic.le_valuation_add coe_ne_zero.2 hxy
 中文:
 引理 le_valuation_add
   条件: (hxy : x + y != 0)
-  结论: min x.valuation y.valuation <= (x + y).valuation
+  结论: 最小值 x.valuation y.valuation <= (x + y).valuation
   证明: by
 zify; simpa [← valuation_coe] using Padic.le_valuation_add coe_ne_zero.2 hxy
 
@@ -1663,7 +1663,7 @@ theorem isUnit_iff
 中文:
 定理 isUnit_iff
   条件: {z : 整数_[p]}
-  结论: IsUnit z ↔ ‖z‖ = 1
+  结论: 是单位 z ↔ ‖z‖ = 1
   证明: ⟨fun h => by
     rcases isUnit_iff_dvd_one.1 h with ⟨w, eq⟩
     refine le_antisymm (norm_le_one _) ?_
@@ -1762,7 +1762,7 @@ theorem not_isUnit_iff
 中文:
 定理 not_isUnit_iff
   条件: {z : 整数_[p]}
-  结论: ¬IsUnit z ↔ ‖z‖ < 1
+  结论: ¬是单位 z ↔ ‖z‖ < 1
   证明: by
   simpa using mem_nonunits
 
@@ -1955,7 +1955,7 @@ theorem isUnit_den
 
 中文:
 定理 isUnit_den
-  条件: {p : 自然数} [hp_prime : Fact p.Prime] (r : Rat) (h : ‖(r : Rat_[p])‖ <= 1)
+  条件: {p : 自然数} [hp_prime : Fact p.素] (r : 有理数) (h : ‖(r : Rat_[p])‖ <= 1)
   证明: by
   rw [isUnit_iff]
   apply le_antisymm (r.den : Int_[p]).2
@@ -2215,7 +2215,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalRing 整数_[p]
+  签名: 是局部环 整数_[p]
   定义体: IsLocalRing.of_nonunits_add by simp only [mem_nonunits]; exact fun x y => norm_lt_one_add
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.of_nonunits_add, mem_nonunits, norm_lt_one_add, of_nonunits_add
@@ -2262,7 +2262,7 @@ theorem maximalIdeal_eq_span_p
 
 中文:
 定理 maximalIdeal_eq_span_p
-  结论: maximalIdeal 整数_[p] = Ideal.span {(p : 整数_[p])}
+  结论: maximalIdeal 整数_[p] = 理想.span {(p : 整数_[p])}
   证明: by
   apply le_antisymm
   · intro x hx
@@ -2294,7 +2294,7 @@ theorem prime_p
 
 中文:
 定理 prime_p
-  结论: Prime (p : 整数_[p])
+  结论: 素 (p : 整数_[p])
   证明: by
   rw [← Ideal.span_singleton_prime]; rw [← maximalIdeal_eq_span_p]
   · infer_instance
@@ -2317,7 +2317,7 @@ theorem irreducible_p
 
 中文:
 定理 irreducible_p
-  结论: Irreducible (p : 整数_[p])
+  结论: 不可约 (p : 整数_[p])
   证明: Prime.irreducible prime_p
 
 Depends on / 依赖: Prime.irreducible, irreducible, prime_p
@@ -2336,7 +2336,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDiscreteValuationRing 整数_[p]
+  签名: 是离散赋值环 整数_[p]
   定义体: IsDiscreteValuationRing.ofHasUnitMulPowIrreducibleFactorization
     ⟨p, irreducible_p, fun {x hx} =>
       ⟨x.valuation, unitCoeff hx, by rw [mul_comm, ← unitCoeff_spec hx]⟩⟩
@@ -2358,7 +2358,7 @@ theorem ideal_eq_span_pow_p
 
 中文:
 定理 ideal_eq_span_pow_p
-  条件: {s : Ideal 整数_[p]} (hs : s != ⊥)
+  条件: {s : 理想 整数_[p]} (hs : s != ⊥)
   证明: IsDiscreteValuationRing.ideal_eq_span_pow_irreducible hs irreducible_p
 
 Depends on / 依赖: IsDiscreteValuationRing, IsDiscreteValuationRing.ideal_eq_span_pow_irreducible, ideal_eq_span_pow_irreducible, irreducible_p
@@ -2385,7 +2385,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAdicComplete (maximalIdeal 整数_[p]) 整数_[p]
+  签名: 是AdicComplete (maximalIdeal 整数_[p]) 整数_[p]
   定义体: by
     simp only [← Ideal.one_eq_top, smul_eq_mul, mul_one, SModEq.sub_mem, maximalIdeal_eq_span_p,
       Ideal.span_singleton_pow, ← norm_le_pow_iff_mem_span_pow] at hx ⊢
@@ -2433,7 +2433,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra 整数_[p] Rat_[p]
+  签名: : 代数 整数_[p] Rat_[p]
   定义体: inferInstanceAs Algebra (subring p) _
 
 @[simp]

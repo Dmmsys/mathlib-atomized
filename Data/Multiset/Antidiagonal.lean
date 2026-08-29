@@ -60,7 +60,7 @@ theorem antidiagonal_coe
 
 中文:
 定理 antidiagonal_coe
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: @antidiagonal α l = revzip (powersetAux l)
   证明: rfl
 
@@ -81,7 +81,7 @@ theorem antidiagonal_coe'
 
 中文:
 定理 antidiagonal_coe'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: @antidiagonal α l = revzip (powersetAux' l)
   证明: Quot.sound revzip_powersetAux_perm_aux'
 
@@ -146,7 +146,7 @@ theorem antidiagonal_map_fst
 中文:
 定理 antidiagonal_map_fst
   条件: (s : Multiset α)
-  结论: (antidiagonal s).map Prod.fst = powerset s
+  结论: (antidiagonal s).map 积类型.fst = powerset s
   证明: Quotient.inductionOn s fun l => by simp [powersetAux']
 
 @[simp]
@@ -171,7 +171,7 @@ theorem antidiagonal_map_snd
 中文:
 定理 antidiagonal_map_snd
   条件: (s : Multiset α)
-  结论: (antidiagonal s).map Prod.snd = powerset s
+  结论: (antidiagonal s).map 积类型.snd = powerset s
   证明: Quotient.inductionOn s fun l => by simp [powersetAux']
 
 @[simp]

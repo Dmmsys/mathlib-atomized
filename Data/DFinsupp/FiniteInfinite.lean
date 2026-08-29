@@ -37,8 +37,8 @@ instance DFinsupp.fintype
   body: Fintype.ofEquiv (forall i, π i) DFinsupp.equivFunOnFintype.symm
 
 中文:
-实例 DFinsupp.fintype
-  签名: {ι : Sort _} {π : ι -> Sort _} [DecidableEq ι] [对任意 i, Zero (π i)]
+实例 直和有限支撑.fintype
+  签名: {ι : 类型层 _} {π : ι -> 类型层 _} [DecidableEq ι] [对任意 i, 零 (π i)]
   定义体: Fintype.ofEquiv (forall i, π i) DFinsupp.equivFunOnFintype.symm
 
 Depends on / 依赖: DFinsupp, DFinsupp.equivFunOnFintype.symm, Fintype, Fintype.ofEquiv, equivFunOnFintype, ofEquiv
@@ -58,8 +58,8 @@ instance DFinsupp.infinite_of_left
   exact Infinite.of_injective _ (DFinsupp.single_left_injective hm)
 
 中文:
-实例 DFinsupp.infinite_of_left
-  签名: {ι : Sort _} {π : ι -> Sort _} [对任意 i, Nontrivial (π i)]
+实例 直和有限支撑.infinite_of_left
+  签名: {ι : 类型层 _} {π : ι -> 类型层 _} [对任意 i, 非平凡 (π i)]
   定义体: by
   let := Classical.decEq ι; choose m hm using fun i => exists_ne (0 : π i)
   exact Infinite.of_injective _ (DFinsupp.single_left_injective hm)
@@ -81,8 +81,8 @@ theorem DFinsupp.infinite_of_exists_right
   Infinite.of_injective (fun j => DFinsupp.single i j) DFinsupp.single_injective
 
 中文:
-定理 DFinsupp.infinite_of_exists_right
-  结论: {ι : Sort _} {π : ι -> Sort _} (i : ι) [Infinite (π i)]
+定理 直和有限支撑.infinite_of_存在_right
+  结论: {ι : 类型层 _} {π : ι -> 类型层 _} (i : ι) [无限 (π i)]
   证明: letI := Classical.decEq ι
   Infinite.of_injective (fun j => DFinsupp.single i j) DFinsupp.single_injective
 
@@ -102,8 +102,8 @@ instance DFinsupp.infinite_of_right
   body: DFinsupp.infinite_of_exists_right (Classical.arbitrary ι)
 
 中文:
-实例 DFinsupp.infinite_of_right
-  签名: {ι : Sort _} {π : ι -> Sort _} [对任意 i, Infinite (π i)]
+实例 直和有限支撑.infinite_of_right
+  签名: {ι : 类型层 _} {π : ι -> 类型层 _} [对任意 i, 无限 (π i)]
   定义体: DFinsupp.infinite_of_exists_right (Classical.arbitrary ι)
 
 Depends on / 依赖: Classical, Classical.arbitrary, DFinsupp, DFinsupp.infinite_of_exists_right, arbitrary, infinite_of_exists_right

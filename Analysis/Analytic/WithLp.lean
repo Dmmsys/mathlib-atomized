@@ -34,7 +34,7 @@ lemma analyticOn_ofLp
 
 中文:
 引理 analyticOn_ofLp
-  条件: (s : Set (WithLp p (E × F)))
+  条件: (s : 集合 (WithLp p (E × F)))
   结论: AnalyticOn 𝕜 ofLp s
   证明: (prodContinuousLinearEquiv p 𝕜 E F).analyticOn s
 
@@ -54,7 +54,7 @@ lemma analyticOn_toLp
 
 中文:
 引理 analyticOn_toLp
-  条件: (s : Set (E × F))
+  条件: (s : 集合 (E × F))
   结论: AnalyticOn 𝕜 (toLp p) s
   证明: (prodContinuousLinearEquiv p 𝕜 E F).symm.analyticOn s
 
@@ -81,7 +81,7 @@ lemma analyticOn_ofLp
 
 中文:
 引理 analyticOn_ofLp
-  条件: (s : Set (PiLp p E))
+  条件: (s : 集合 (PiLp p E))
   结论: AnalyticOn 𝕜 ofLp s
   证明: (continuousLinearEquiv p 𝕜 E).analyticOn s
 
@@ -101,7 +101,7 @@ lemma analyticOn_toLp
 
 中文:
 引理 analyticOn_toLp
-  条件: (s : Set (Π i, E i))
+  条件: (s : 集合 (Π i, E i))
   结论: AnalyticOn 𝕜 (toLp p) s
   证明: (continuousLinearEquiv p 𝕜 E).symm.analyticOn s
 

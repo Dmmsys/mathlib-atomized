@@ -54,8 +54,8 @@ class HasOrthogonalProjection
     - exists_orthogonal((v : E)) : exists w in K, v - w in Kᗮ
 
 中文:
-类 HasOrthogonalProjection
-  参数: (K : Submodule 𝕜 E)
+类 有OrthogonalProjection
+  参数: (K : 子模 𝕜 E)
   公理与运算 (1 个):
     - exists_orthogonal((v : E)) : 存在 w in K, v - w in Kᗮ
 -/
@@ -85,8 +85,8 @@ instance [K.HasOrthogonalProjection]
     exact K.le_orthogonal_orthogonal hwK
 
 中文:
-实例 [K.HasOrthogonalProjection]
-  签名: : Kᗮ.HasOrthogonalProjection where
+实例 [K.有OrthogonalProjection]
+  签名: : Kᗮ.有OrthogonalProjection where
   定义体: by
     rcases HasOrthogonalProjection.exists_orthogonal (K := K) v with ⟨w, hwK, hw⟩
     refine ⟨_, hw, ?_⟩
@@ -114,8 +114,8 @@ instance HasOrthogonalProjection.map_linearIsometryEquiv
     simp [← f.symm.inner_map_map, hw u hu]
 
 中文:
-实例 HasOrthogonalProjection.map_linearIsometryEquiv
-  签名: [K.HasOrthogonalProjection]
+实例 有OrthogonalProjection.map_linearIsometryEquiv
+  签名: [K.有OrthogonalProjection]
   定义体: by
     rcases HasOrthogonalProjection.exists_orthogonal (K := K) (f.symm v) with ⟨w, hwK, hw⟩
     refine ⟨f w, Submodule.mem_map_of_mem hwK, Set.forall_mem_image.2 fun u hu => ?_⟩
@@ -140,8 +140,8 @@ instance HasOrthogonalProjection.map_linearIsometryEquiv'
   body: HasOrthogonalProjection.map_linearIsometryEquiv K f
 
 中文:
-实例 HasOrthogonalProjection.map_linearIsometryEquiv'
-  签名: [K.HasOrthogonalProjection]
+实例 有OrthogonalProjection.map_linearIsometryEquiv'
+  签名: [K.有OrthogonalProjection]
   定义体: HasOrthogonalProjection.map_linearIsometryEquiv K f
 
 Depends on / 依赖: HasOrthogonalProjection, HasOrthogonalProjection.map_linearIsometryEquiv, map_linearIsometryEquiv
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Submodule 𝕜 E).HasOrthogonalProjection
+  签名: (⊤ : 子模 𝕜 E).有OrthogonalProjection
   定义体: ⟨fun v => ⟨v, trivial, by simp⟩⟩
 -/
 instance : (⊤ : Submodule 𝕜 E).HasOrthogonalProjection := ⟨fun v => ⟨v, trivial, by simp⟩⟩
@@ -184,8 +184,8 @@ theorem isCompl_orthogonal
 
 中文:
 定理 isCompl_orthogonal
-  条件: [K.HasOrthogonalProjection]
-  结论: IsCompl K Kᗮ where
+  条件: [K.有OrthogonalProjection]
+  结论: 是补集 K Kᗮ where
   证明: K.orthogonal_disjoint
   codisjoint := K.codisjoint_iff_exists_add_eq.mpr fun z =>
     have ⟨w, hw, hzw⟩ := Submodule.HasOrthogonalProjection.exists_orthogonal (K := K) z
@@ -212,7 +212,7 @@ theorem norm_projection_orthogonal_le
 
 中文:
 定理 norm_projection_orthogonal_le
-  条件: [K.HasOrthogonalProjection] (x : E)
+  条件: [K.有OrthogonalProjection] (x : E)
   证明: by
   conv_rhs => rw [← projection_add_projection_eq_self K.isCompl_orthogonal x]
   simp [← sq_le_sq₀ (norm_nonneg _), sq, mul_nonneg,
@@ -241,8 +241,8 @@ noncomputable section
 
 中文:
 定理 isTopCompl_orthogonal
-  条件: [K.HasOrthogonalProjection]
-  结论: IsTopCompl K Kᗮ where
+  条件: [K.有OrthogonalProjection]
+  结论: 是TopCompl K Kᗮ where
   证明: K.isCompl_orthogonal
   continuous_projection := AddMonoidHomClass.continuous_of_bound _ 1 fun x => by
     grw [norm_projection_orthogonal_le, one_mul]
@@ -307,7 +307,7 @@ definition starProjection
 
 中文:
 定义 starProjection
-  签名: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+  签名: (U : 子模 𝕜 E) [U.有OrthogonalProjection]
   定义体: U.subtypeL ∘L U.orthogonalProjectionOnto
 
 Depends on / 依赖: U.orthogonalProjectionOnto, U.subtypeL, orthogonalProjectionOnto, subtypeL
@@ -370,7 +370,7 @@ lemma starProjection_apply
 
 中文:
 引理 starProjection_apply
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (v : E)
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection] (v : E)
   证明: rfl
 
 @[simp]
@@ -394,7 +394,7 @@ alias coe_orthogonalProjection_apply := coe_orthogonalProjectionOnto_apply
 
 中文:
 引理 coe_orthogonalProjectionOnto_apply
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (v : E)
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection] (v : E)
   证明: rfl
 
 @[deprecated (since := "2026-05-05")]
@@ -422,7 +422,7 @@ lemma starProjection_apply_mem
 
 中文:
 引理 starProjection_apply_mem
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (x : E)
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection] (x : E)
   证明: by
   simp only [starProjection_apply, SetLike.coe_mem]
 
@@ -643,7 +643,7 @@ lemma starProjection_orthogonal
 
 中文:
 引理 starProjection_orthogonal
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection]
   证明: by
   ext
   simp only [starProjection, ContinuousLinearMap.comp_apply,
@@ -669,7 +669,7 @@ lemma starProjection_orthogonal'
 
 中文:
 引理 starProjection_orthogonal'
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection]
   证明: starProjection_orthogonal U
 
 Depends on / 依赖: starProjection_orthogonal
@@ -689,7 +689,7 @@ theorem starProjection_minimal
 
 中文:
 定理 starProjection_minimal
-  条件: {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (y : E)
+  条件: {U : 子模 𝕜 E} [U.有OrthogonalProjection] (y : E)
   证明: by
   rw [starProjection_apply]; rw [U.norm_eq_iInf_iff_inner_eq_zero (Submodule.coe_mem _)]
   exact starProjection_inner_eq_zero _
@@ -828,7 +828,7 @@ lemma range_starProjection
 
 中文:
 引理 range_starProjection
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection]
   证明: by
   ext x
   exact ⟨fun ⟨y, hy⟩ => hy ▸ coe_mem (U.orthogonalProjectionOnto y),
@@ -854,7 +854,7 @@ lemma starProjection_top
 
 中文:
 引理 starProjection_top
-  结论: (⊤ : Submodule 𝕜 E).starProjection = ContinuousLinearMap.id 𝕜 E
+  结论: (⊤ : 子模 𝕜 E).starProjection = 连续线性映射.id 𝕜 E
   证明: by
   ext
   exact starProjection_eq_self_iff.mpr trivial
@@ -877,7 +877,7 @@ lemma starProjection_top'
 
 中文:
 引理 starProjection_top'
-  结论: (⊤ : Submodule 𝕜 E).starProjection = 1
+  结论: (⊤ : 子模 𝕜 E).starProjection = 1
   证明: starProjection_top
 
 @[simp]
@@ -970,7 +970,7 @@ lemma ker_starProjection
 
 中文:
 引理 ker_starProjection
-  条件: (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+  条件: (U : 子模 𝕜 E) [U.有OrthogonalProjection]
   证明: by
   rw [LinearMap.IsIdempotentElem.ker_eq_range U.isIdempotentElem_starProjection.toLinearMap]; rw [← range_starProjection Uᗮ]; rw [starProjection_orthogonal]; rw [toLinearMap_sub]; rw [coe_id]
 
@@ -993,8 +993,8 @@ theorem _root_.LinearIsometry.map_starProjection
   rw [← f.map_sub]; rw [f.inner_map_map]; rw [starProjection_inner_eq_zero x x' hx']
 
 中文:
-定理 _root_.LinearIsometry.map_starProjection
-  结论: {E E' : 类型} [NormedAddCommGroup E]
+定理 _root_.线性等距.map_starProjection
+  结论: {E E' : 类型} [赋范交换加群 E]
   证明: by
   refine (eq_starProjection_of_mem_of_inner_eq_zero ?_ fun y hy => ?_).symm
   · refine Submodule.apply_coe_mem_map _ _
@@ -1022,8 +1022,8 @@ theorem _root_.LinearIsometry.map_starProjection'
   f.map_starProjection p x
 
 中文:
-定理 _root_.LinearIsometry.map_starProjection'
-  结论: {E E' : 类型} [NormedAddCommGroup E]
+定理 _root_.线性等距.map_starProjection'
+  结论: {E E' : 类型} [赋范交换加群 E]
   证明: have : (p.map f.toLinearMap).HasOrthogonalProjection := ‹_›
   f.map_starProjection p x
 
@@ -1049,7 +1049,7 @@ theorem starProjection_map_apply
 
 中文:
 定理 starProjection_map_apply
-  结论: {E E' : 类型} [NormedAddCommGroup E]
+  结论: {E E' : 类型} [赋范交换加群 E]
   证明: by
   simpa only [f.coe_toLinearIsometry, f.apply_symm_apply] using!
     (f.toLinearIsometry.map_starProjection' p (f.symm x)).symm
@@ -1080,7 +1080,7 @@ theorem orthogonalProjectionOnto_bot
 
 中文:
 定理 orthogonalProjectionOnto_bot
-  结论: (⊥ : Submodule 𝕜 E).orthogonalProjectionOnto = 0
+  结论: (⊥ : 子模 𝕜 E).orthogonalProjectionOnto = 0
   证明: by ext
 
 @[deprecated (since := "2026-05-05")] alias orthogonalProjection_bot := orthogonalProjectionOnto_bot
@@ -1103,7 +1103,7 @@ lemma starProjection_bot
 
 中文:
 引理 starProjection_bot
-  结论: (⊥ : Submodule 𝕜 E).starProjection = 0
+  结论: (⊥ : 子模 𝕜 E).starProjection = 0
   证明: by
   rw [starProjection]; rw [orthogonalProjectionOnto_bot]; rw [ContinuousLinearMap.comp_zero]
 
@@ -1489,8 +1489,8 @@ theorem exists_add_mem_mem_orthogonal
     sub_starProjection_mem_orthogonal _, by simp⟩
 
 中文:
-定理 exists_add_mem_mem_orthogonal
-  条件: [K.HasOrthogonalProjection] (v : E)
+定理 存在_add_mem_mem_orthogonal
+  条件: [K.有OrthogonalProjection] (v : E)
   证明: ⟨K.orthogonalProjectionOnto v, Subtype.coe_prop _, v - K.orthogonalProjectionOnto v,
     sub_starProjection_mem_orthogonal _, by simp⟩
 
@@ -1544,7 +1544,7 @@ alias IsOrtho.orthogonalProjection_comp_subtypeL := IsOrtho.orthogonalProjection
 
 中文:
 定理 IsOrtho.orthogonalProjectionOnto_comp_subtypeL
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: by
   ext v; simp [orthogonalProjectionOnto_apply_of_mem_orthogonal <| h.symm v.prop]
 
@@ -1573,7 +1573,7 @@ theorem IsOrtho.starProjection_comp_starProjection
 
 中文:
 定理 IsOrtho.starProjection_comp_starProjection
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: calc
   _ = U.subtypeL ∘L (U.orthogonalProjectionOnto ∘L V.subtypeL) ∘L V.orthogonalProjectionOnto := by
       simp only [starProjection, ContinuousLinearMap.comp_assoc]
@@ -1602,7 +1602,7 @@ theorem orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
 
 中文:
 定理 orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: by
   refine ⟨fun h u hu v hv => ?_, Submodule.IsOrtho.orthogonalProjectionOnto_comp_subtypeL⟩
   convert starProjection_inner_eq_zero v u hu
@@ -1640,7 +1640,7 @@ theorem starProjection_comp_starProjection_eq_zero_iff
 
 中文:
 定理 starProjection_comp_starProjection_eq_zero_iff
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: by
   refine ⟨fun h => ?_, fun h => h.starProjection_comp_starProjection⟩
   rw [← orthogonalProjectionOnto_comp_subtypeL_eq_zero_iff]
@@ -1726,7 +1726,7 @@ alias orthogonalProjection_starProjection_of_le := orthogonalProjectionOnto_s
 
 中文:
 定理 orthogonalProjectionOnto_starProjection_of_le
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: Eq.symm by
     simpa only [sub_eq_zero, map_sub] using
       orthogonalProjectionOnto_apply_of_mem_orthogonal
@@ -1760,7 +1760,7 @@ theorem starProjection_comp_starProjection_of_le
 
 中文:
 定理 starProjection_comp_starProjection_of_le
-  结论: {U V : Submodule 𝕜 E}
+  结论: {U V : 子模 𝕜 E}
   证明: ContinuousLinearMap.ext fun _ => by
   nth_rw 1 [starProjection]
   simp [orthogonalProjectionOnto_starProjection_of_le h]
@@ -1784,8 +1784,8 @@ theorem _root_.ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_rang
   .ofCompleteSpace _
 
 中文:
-定理 _root_.ContinuousLinearMap.IsIdempotentElem.hasOrthogonalProjection_range
-  结论: [CompleteSpace E]
+定理 _root_.连续线性映射.IsIdempotentElem.hasOrthogonalProjection_range
+  结论: [完备空间 E]
   证明: have := hp.isClosed_range.completeSpace_coe
   .ofCompleteSpace _
 
@@ -1807,7 +1807,7 @@ theorem _root_.LinearMap.IsSymmetricProjection.hasOrthogonalProjection_range
       ← Module.End.mul_apply, hp.isIdempotentElem.eq]⟩⟩
 
 中文:
-定理 _root_.LinearMap.IsSymmetricProjection.hasOrthogonalProjection_range
+定理 _root_.线性映射.是SymmetricProjection.hasOrthogonalProjection_range
   证明: ⟨fun v => ⟨p v, by
     simp [hp.isIdempotentElem.isSymmetric_iff_orthogonal_range.mp hp.isSymmetric,
       ← Module.End.mul_apply, hp.isIdempotentElem.eq]⟩⟩
@@ -1890,7 +1890,7 @@ theorem starProjection_add_starProjection_orthogonal
 
 中文:
 定理 starProjection_add_starProjection_orthogonal
-  结论: [K.HasOrthogonalProjection]
+  结论: [K.有OrthogonalProjection]
   证明: by
   simp
 -/
@@ -1914,7 +1914,7 @@ exact norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _
 
 中文:
 定理 norm_sq_eq_add_norm_sq_projection
-  条件: (x : E) (S : Submodule 𝕜 E) [S.HasOrthogonalProjection]
+  条件: (x : E) (S : 子模 𝕜 E) [S.有OrthogonalProjection]
   证明: calc
     ‖x‖ ^ 2 = ‖S.starProjection x + Sᗮ.starProjection x‖ ^ 2 := by
       rw [starProjection_add_starProjection_orthogonal]
@@ -1945,7 +1945,7 @@ theorem norm_sq_eq_add_norm_sq_starProjection
 
 中文:
 定理 norm_sq_eq_add_norm_sq_starProjection
-  结论: (x : E) (S : Submodule 𝕜 E)
+  结论: (x : E) (S : 子模 𝕜 E)
   证明: norm_sq_eq_add_norm_sq_projection x S
 
 Depends on / 依赖: norm_sq_eq_add_norm_sq_projection
@@ -1968,7 +1968,7 @@ theorem mem_iff_norm_starProjection
 
 中文:
 定理 mem_iff_norm_starProjection
-  结论: (U : Submodule 𝕜 E)
+  结论: (U : 子模 𝕜 E)
   证明: by
   refine ⟨fun h => norm_starProjection_apply _ h, fun h => ?_⟩
   simpa [h, sub_eq_zero, eq_comm (a := v), starProjection_eq_self_iff] using
@@ -1995,7 +1995,7 @@ theorem id_eq_sum_starProjection_self_orthogonalComplement
 
 中文:
 定理 id_eq_sum_starProjection_self_orthogonalComplement
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   证明: by
   ext w
   exact (K.starProjection_add_starProjection_orthogonal w).symm
@@ -2026,7 +2026,7 @@ theorem inner_orthogonalProjectionOnto_eq_of_mem_right
 
 中文:
 定理 inner_orthogonalProjectionOnto_eq_of_mem_right
-  条件: [K.HasOrthogonalProjection] (u : K) (v : E)
+  条件: [K.有OrthogonalProjection] (u : K) (v : E)
   证明: calc
     ⟪K.orthogonalProjectionOnto v, u⟫ = ⟪K.starProjection v, u⟫ := K.coe_inner _ _
     _ = ⟪K.starProjection v, u⟫ + ⟪v - K.starProjection v, u⟫ := by
@@ -2064,7 +2064,7 @@ alias inner_orthogonalProjection_eq_of_mem_left := inner_orthogonalProjectionOnt
 
 中文:
 定理 inner_orthogonalProjectionOnto_eq_of_mem_left
-  条件: [K.HasOrthogonalProjection] (u : K) (v : E)
+  条件: [K.有OrthogonalProjection] (u : K) (v : E)
   证明: by
   rw [← inner_conj_symm]; rw [← inner_conj_symm (u : E)]; rw [inner_orthogonalProjectionOnto_eq_of_mem_right]
 
@@ -2094,7 +2094,7 @@ theorem inner_starProjection_left_eq_right
 
 中文:
 定理 inner_starProjection_left_eq_right
-  条件: [K.HasOrthogonalProjection] (u v : E)
+  条件: [K.有OrthogonalProjection] (u v : E)
   证明: by
   simp_rw [starProjection_apply, ← inner_orthogonalProjectionOnto_eq_of_mem_left,
     inner_orthogonalProjectionOnto_eq_of_mem_right]
@@ -2116,7 +2116,7 @@ theorem starProjection_isSymmetric
 
 中文:
 定理 starProjection_isSymmetric
-  条件: [K.HasOrthogonalProjection]
+  条件: [K.有OrthogonalProjection]
   证明: inner_starProjection_left_eq_right K
 
 Depends on / 依赖: inner_starProjection_left_eq_right
@@ -2162,7 +2162,7 @@ theorem _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range
   rw [hp.isIdempoten
 
 中文:
-定理 _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection_range
+定理 _root_.线性映射.isSymmetricProjection_iff_eq_coe_starProjection_range
   条件: {p : E ->ₗ[𝕜] E}
   证明: by
   refine ⟨fun hp => ?_, fun ⟨h, hp⟩ => hp ▸ isSymmetricProjection_starProjection _⟩
@@ -2195,7 +2195,7 @@ lemma _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection
     by rintro ⟨_, _, rfl⟩; exact isSymmetricProjection_starProjection _⟩
 
 中文:
-引理 _root_.LinearMap.isSymmetricProjection_iff_eq_coe_starProjection
+引理 _root_.线性映射.isSymmetricProjection_iff_eq_coe_starProjection
   条件: {p : E ->ₗ[𝕜] E}
   证明: ⟨fun h => ⟨LinearMap.range p, p.isSymmetricProjection_iff_eq_coe_starProjection_range.mp h⟩,
     by rintro ⟨_, _, rfl⟩; exact isSymmetricProjection_starProjection _⟩
@@ -2222,7 +2222,7 @@ theorem starProjection_apply_eq_zero_iff
 
 中文:
 定理 starProjection_apply_eq_zero_iff
-  条件: [K.HasOrthogonalProjection] {v : E}
+  条件: [K.有OrthogonalProjection] {v : E}
   证明: by
   refine ⟨fun h w hw => ?_, fun hv => ?_⟩
   · rw [← starProjection_eq_self_iff.mpr hw, inner_starProjection_left_eq_right, h,
@@ -2251,7 +2251,7 @@ lemma re_inner_starProjection_eq_normSq
 
 中文:
 引理 re_inner_starProjection_eq_normSq
-  条件: [K.HasOrthogonalProjection] (v : E)
+  条件: [K.有OrthogonalProjection] (v : E)
   证明: by
   rw [starProjection_apply]; rw [re_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two]; rw [div_eq_iff (NeZero.ne' 2).symm]; rw [pow_two]; rw [add_sub_assoc]; rw [← eq_sub_iff_add_eq']; rw [coe_norm]; rw [← mul_sub_one]; rw [show (2 : Real) - 1 = 1 by norm_num]; rw [mul_one];
 
@@ -2274,7 +2274,7 @@ theorem orthogonalProjectionFn_norm_sq
 
 中文:
 定理 orthogonalProjectionFn_norm_sq
-  条件: [K.HasOrthogonalProjection] (v : E)
+  条件: [K.有OrthogonalProjection] (v : E)
   证明: by
   simpa [sq, add_comm] using K.norm_sq_eq_add_norm_sq_starProjection v
 
@@ -2297,7 +2297,7 @@ lemma re_inner_starProjection_nonneg
 
 中文:
 引理 re_inner_starProjection_nonneg
-  条件: [K.HasOrthogonalProjection] (v : E)
+  条件: [K.有OrthogonalProjection] (v : E)
   证明: by
   rw [re_inner_starProjection_eq_normSq K v]
   exact sq_nonneg ‖K.orthogonalProjectionOnto v‖

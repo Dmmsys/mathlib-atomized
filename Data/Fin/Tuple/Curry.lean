@@ -45,7 +45,7 @@ definition uncurry
 
 中文:
 定义 uncurry
-  签名: : {n : 自然数} -> {p : Fin n -> 类型u} -> {τ : 类型u} ->
+  签名: : {n : 自然数} -> {p : 有限集 n -> 类型u} -> {τ : 类型u} ->
 -/
 def uncurry : {n : Nat} -> {p : Fin n -> Type u} -> {τ : Type u} ->
     (f : Function.FromTypes p τ) -> ((i : Fin n) -> p i) -> τ
@@ -62,7 +62,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: : {n : 自然数} -> {p : Fin n -> 类型u} -> {τ : 类型u} ->
+  签名: : {n : 自然数} -> {p : 有限集 n -> 类型u} -> {τ : 类型u} ->
 -/
 def curry : {n : Nat} -> {p : Fin n -> Type u} -> {τ : Type u} ->
     (((i : Fin n) -> p i) -> τ) -> Function.FromTypes p τ
@@ -82,7 +82,7 @@ theorem uncurry_apply_cons
 
 中文:
 定理 uncurry_apply_cons
-  结论: {n : 自然数} {α} {p : Fin n -> 类型u} {τ : 类型u}
+  结论: {n : 自然数} {α} {p : 有限集 n -> 类型u} {τ : 类型u}
   证明: rfl
 
 @[simp low]
@@ -104,7 +104,7 @@ theorem uncurry_apply_succ
 
 中文:
 定理 uncurry_apply_succ
-  结论: {n : 自然数} {p : Fin (n + 1) -> 类型u} {τ : 类型u}
+  结论: {n : 自然数} {p : 有限集 (n + 1) -> 类型u} {τ : 类型u}
   证明: rfl
 
 @[simp]
@@ -126,7 +126,7 @@ theorem curry_apply_cons
 
 中文:
 定理 curry_apply_cons
-  结论: {n : 自然数} {α} {p : Fin n -> 类型u} {τ : 类型u}
+  结论: {n : 自然数} {α} {p : 有限集 n -> 类型u} {τ : 类型u}
   证明: rfl
 
 @[simp low]
@@ -146,7 +146,7 @@ theorem curry_apply_succ
 
 中文:
 定理 curry_apply_succ
-  结论: {n : 自然数} {p : Fin (n + 1) -> 类型u} {τ : 类型u}
+  结论: {n : 自然数} {p : 有限集 (n + 1) -> 类型u} {τ : 类型u}
   证明: rfl
 -/
 theorem curry_apply_succ {n : Nat} {p : Fin (n + 1) -> Type u} {τ : Type u}
@@ -172,7 +172,7 @@ theorem curry_uncurry
 
 中文:
 定理 curry_uncurry
-  条件: (f : Function.FromTypes p τ)
+  条件: (f : 函数.FromTypes p τ)
   结论: curry (uncurry f) = f
   证明: by
   induction n with
@@ -201,7 +201,7 @@ theorem uncurry_curry
 
 中文:
 定理 uncurry_curry
-  条件: (f : ((i : Fin n) -> p i) -> τ)
+  条件: (f : ((i : 有限集 n) -> p i) -> τ)
   证明: by
   ext args
   induction n with
@@ -232,7 +232,7 @@ definition curryEquiv
 
 中文:
 定义 curryEquiv
-  签名: (p : Fin n -> 类型u)
+  签名: (p : 有限集 n -> 类型u)
   定义体: curry
   invFun := uncurry
   left_inv := uncurry_curry
@@ -254,7 +254,7 @@ lemma curry_two_eq_curry
 
 中文:
 引理 curry_two_eq_curry
-  结论: {p : Fin 2 -> 类型u} {τ : 类型u}
+  结论: {p : 有限集 2 -> 类型u} {τ : 类型u}
   证明: rfl
 -/
 lemma curry_two_eq_curry {p : Fin 2 -> Type u} {τ : Type u}
@@ -271,7 +271,7 @@ lemma uncurry_two_eq_uncurry
 
 中文:
 引理 uncurry_two_eq_uncurry
-  结论: (p : Fin 2 -> 类型u) (τ : 类型u)
+  结论: (p : 有限集 2 -> 类型u) (τ : 类型u)
   证明: rfl
 -/
 lemma uncurry_two_eq_uncurry (p : Fin 2 -> Type u) (τ : Type u)
@@ -294,7 +294,7 @@ definition uncurry
 
 中文:
 定义 uncurry
-  签名: {n} (f : Function.OfArity α β n)
+  签名: {n} (f : 函数.OfArity α β n)
   定义体: FromTypes.uncurry f
 
 Depends on / 依赖: FromTypes, FromTypes.uncurry, uncurry
@@ -313,7 +313,7 @@ definition curry
 
 中文:
 定义 curry
-  签名: {n} (f : (Fin n -> α) -> β)
+  签名: {n} (f : (有限集 n -> α) -> β)
   定义体: FromTypes.curry f
 
 @[simp]
@@ -335,7 +335,7 @@ theorem curry_uncurry
 
 中文:
 定理 curry_uncurry
-  条件: {n} (f : Function.OfArity α β n)
+  条件: {n} (f : 函数.OfArity α β n)
   证明: FromTypes.curry_uncurry f
 
 @[simp]
@@ -356,7 +356,7 @@ theorem uncurry_curry
 
 中文:
 定理 uncurry_curry
-  条件: {n} (f : (Fin n -> α) -> β)
+  条件: {n} (f : (有限集 n -> α) -> β)
   证明: FromTypes.uncurry_curry f
 
 Depends on / 依赖: FromTypes, FromTypes.uncurry_curry, uncurry_curry
@@ -394,7 +394,7 @@ lemma curry_two_eq_curry
 
 中文:
 引理 curry_two_eq_curry
-  条件: {α β : 类型u} (f : ((i : Fin 2) -> α) -> β)
+  条件: {α β : 类型u} (f : ((i : 有限集 2) -> α) -> β)
   证明: FromTypes.curry_two_eq_curry f
 
 Depends on / 依赖: FromTypes, FromTypes.curry_two_eq_curry, curry_two_eq_curry

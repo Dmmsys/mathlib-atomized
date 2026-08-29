@@ -96,7 +96,7 @@ lemma exists_i₁
     exact hi i₂ rfl
 
 中文:
-引理 exists_i₁
+引理 存在_i₁
   条件: (i : ι) (hi : 对任意 i₂, e₂.f i₂ != i)
   证明: by
   obtain ⟨i₁, rfl⟩ | ⟨i₂, rfl⟩ := ac.union i
@@ -122,7 +122,7 @@ lemma exists_i₂
   proof: ac.symm.exists_i₁ i hi
 
 中文:
-引理 exists_i₂
+引理 存在_i₂
   条件: (i : ι) (hi : 对任意 i₁, e₁.f i₁ != i)
   证明: ac.symm.exists_i₁ i hi
 
@@ -174,7 +174,7 @@ lemma fromSum_bijective
 
 中文:
 引理 fromSum_bijective
-  结论: Function.Bijective (fromSum e₁ e₂)
+  结论: 函数.双射 (fromSum e₁ e₂)
   证明: by
   constructor
   · rintro (i₁ | i₂) (j₁ | j₂) h
@@ -233,7 +233,7 @@ lemma equiv_inl
 中文:
 引理 equiv_inl
   条件: (i₁ : ι₁)
-  结论: ac.equiv (Sum.inl i₁) = e₁.f i₁
+  结论: ac.equiv (和.inl i₁) = e₁.f i₁
   证明: rfl
 -/
 @[simp] lemma equiv_inl (i₁ : ι₁) : ac.equiv (Sum.inl i₁) = e₁.f i₁ := rfl
@@ -249,7 +249,7 @@ lemma equiv_inr
 中文:
 引理 equiv_inr
   条件: (i₂ : ι₂)
-  结论: ac.equiv (Sum.inr i₂) = e₂.f i₂
+  结论: ac.equiv (和.inr i₂) = e₂.f i₂
   证明: rfl
 -/
 @[simp] lemma equiv_inr (i₂ : ι₂) : ac.equiv (Sum.inr i₂) = e₂.f i₂ := rfl
@@ -335,7 +335,7 @@ lemma desc'_inl
 
 中文:
 引理 desc'_inl
-  条件: (i : ι₁ oplus ι₂) (i₁ : ι₁) (h : Sum.inl i₁ = i)
+  条件: (i : ι₁ oplus ι₂) (i₁ : ι₁) (h : 和.inl i₁ = i)
   证明: by subst h; rfl
 -/
 lemma desc'_inl (i : ι₁ oplus ι₂) (i₁ : ι₁) (h : Sum.inl i₁ = i) :
@@ -351,7 +351,7 @@ lemma desc'_inr
 
 中文:
 引理 desc'_inr
-  条件: (i : ι₁ oplus ι₂) (i₂ : ι₂) (h : Sum.inr i₂ = i)
+  条件: (i : ι₁ oplus ι₂) (i₂ : ι₂) (h : 和.inr i₂ = i)
   证明: by subst h; rfl
 -/
 lemma desc'_inr (i : ι₁ oplus ι₂) (i₂ : ι₂) (h : Sum.inr i₂ = i) :
@@ -565,7 +565,7 @@ lemma hom_ext'
 
 中文:
 引理 hom_ext'
-  结论: (φ : K ⟶ L) (hK : K.IsStrictlySupportedOutside e₂)
+  结论: (φ : K ⟶ L) (hK : K.是StrictlySupportedOutside e₂)
   证明: by
   ext i
   obtain ⟨i₁, rfl⟩ | ⟨i₂, rfl⟩ := ac.union i
@@ -597,7 +597,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: [K.IsStrictlySupported e₁] [L.IsStrictlySupported e₂] (φ : K ⟶ L)
+  条件: [K.是StrictlySupported e₁] [L.是StrictlySupported e₂] (φ : K ⟶ L)
   证明: by
   apply ac.hom_ext'
   · rw [ac.isStrictlySupportedOutside₂_iff]
@@ -627,7 +627,7 @@ definition Boundary
   body: c.Rel (e₁.f i₁) (e₂.f i₂)
 
 中文:
-定义 Boundary
+定义 边界
   签名: (_ : AreComplementary e₁ e₂) (i₁ : ι₁) (i₂ : ι₂)
   定义体: c.Rel (e₁.f i₁) (e₂.f i₂)
 
@@ -694,7 +694,7 @@ lemma fst_inj
 
 中文:
 引理 fst_inj
-  条件: {i₁ i₁' : ι₁} {i₂ : ι₂} (h : ac.Boundary i₁ i₂) (h' : ac.Boundary i₁' i₂)
+  条件: {i₁ i₁' : ι₁} {i₂ : ι₂} (h : ac.边界 i₁ i₂) (h' : ac.边界 i₁' i₂)
   证明: e₁.injective_f (c.prev_eq h h')
 
 Depends on / 依赖: c.prev_eq, injective_f, prev_eq
@@ -713,7 +713,7 @@ lemma snd_inj
 
 中文:
 引理 snd_inj
-  条件: {i₁ : ι₁} {i₂ i₂' : ι₂} (h : ac.Boundary i₁ i₂) (h' : ac.Boundary i₁ i₂')
+  条件: {i₁ : ι₁} {i₂ i₂' : ι₂} (h : ac.边界 i₁ i₂) (h' : ac.边界 i₁ i₂')
   证明: e₂.injective_f (c.next_eq h h')
 
 Depends on / 依赖: c.next_eq, injective_f, next_eq
@@ -737,7 +737,7 @@ lemma exists₁
   exact ⟨i₂, by simpa only [hi₂] using! h₁⟩
 
 中文:
-引理 exists₁
+引理 存在₁
   条件: {i₁ : ι₁} (h : e₁.BoundaryLE i₁)
   证明: by
   obtain ⟨h₁, h₂⟩ := h
@@ -767,7 +767,7 @@ lemma exists₂
   exact ⟨i₁, by simpa only [hi₁] using! h₁⟩
 
 中文:
-引理 exists₂
+引理 存在₂
   条件: {i₂ : ι₂} (h : e₂.BoundaryGE i₂)
   证明: by
   obtain ⟨h₁, h₂⟩ := h
@@ -871,7 +871,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : Subtype e₁.BoundaryLE ≃ Subtype e₂.BoundaryGE where
+  签名: : 子类型 e₁.BoundaryLE ≃ 子类型 e₂.BoundaryGE where
   定义体: fun ⟨i₁, h⟩ => ⟨_, (of_boundaryLE ac h).snd⟩
   invFun := fun ⟨i₂, h⟩ => ⟨_, (of_boundaryGE ac h).fst⟩
   left_inv := fun ⟨i₁, h⟩ => by
@@ -919,7 +919,7 @@ lemma embeddingUpInt_areComplementary
       exact Or.inr ⟨k, rfl⟩
 
 中文:
-引理 embeddingUpInt_areComplementary
+引理 embeddingUp整数_areComplementary
   条件: (n₀ n₁ : 整数) (h : n₀ + 1 = n₁)
   证明: by dsimp; lia
   union i := by
@@ -1010,7 +1010,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiIso (K.shortComplexTruncLEX₃ToTruncGE ac)
+  签名: 拟同构 (K.shortComplexTruncLEX₃ToTruncGE ac)
   定义体: by
     obtain ⟨i₁, rfl⟩ | ⟨i₂, rfl⟩ := ac.union i
     · have h₁ := ((ac.isSupportedOutside₁_iff (K.truncGE e₂)).2 inferInstance).exactAt i₁

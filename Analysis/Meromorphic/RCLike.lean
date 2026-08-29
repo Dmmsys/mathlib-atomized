@@ -32,8 +32,8 @@ theorem Meromorphic.exists_meromorphicOrderAt_ne_top_iff_forall
   simpa using (meromorphicOn_univ.2 hf).exists_meromorphicOrderAt_ne_top_iff_forall isConnected_univ
 
 中文:
-定理 Meromorphic.exists_meromorphicOrderAt_ne_top_iff_forall
-  条件: {f : 𝕜 -> E} (hf : Meromorphic f)
+定理 亚纯.存在_meromorphicOrderAt_ne_top_iff_对任意
+  条件: {f : 𝕜 -> E} (hf : 亚纯 f)
   证明: by
   simpa using (meromorphicOn_univ.2 hf).exists_meromorphicOrderAt_ne_top_iff_forall isConnected_univ
 

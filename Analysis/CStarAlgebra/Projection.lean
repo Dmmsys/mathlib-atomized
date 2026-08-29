@@ -47,7 +47,7 @@ lemma isStarProjection_iff_quasispectrum_subset_and_isSelfAdjoint
 
 中文:
 引理 isStarProjection_iff_quasispectrum_subset_and_isSelfAdjoint
-  结论: [Module 实数 A] [IsScalarTower 实数 A A]
+  结论: [模 实数 A] [标量塔 实数 A A]
   证明: (isStarProjection_iff p).eq ▸
     and_congr_left_iff.mpr fun h => isIdempotentElem_iff_quasispectrum_subset Real p h
 
@@ -151,7 +151,7 @@ lemma isStarProjection_iff_spectrum_subset_and_isSelfAdjoint
 
 中文:
 引理 isStarProjection_iff_spectrum_subset_and_isSelfAdjoint
-  结论: [Algebra 实数 A]
+  结论: [代数 实数 A]
   证明: (isStarProjection_iff p).eq ▸
     and_congr_left_iff.mpr fun h => isIdempotentElem_iff_spectrum_subset Real p h
 
@@ -174,7 +174,7 @@ theorem isStarProjection_iff_spectrum_subset_and_isStarNormal
 
 中文:
 定理 isStarProjection_iff_spectrum_subset_and_isStarNormal
-  结论: [Algebra Complex A]
+  结论: [代数 复形 A]
   证明: isStarProjection_iff_isIdempotentElem_and_isStarNormal (p := p).eq ▸
     and_congr_left_iff.mpr fun h => isIdempotentElem_iff_spectrum_subset Complex p h
 
@@ -208,7 +208,7 @@ lemma le_tfae
 
 中文:
 引理 le_tfae
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: by
   tfae_have 1 -> 2 := fun h => (hq.mul_right_and_mul_left_of_nonneg_of_le hp.nonneg h).2
   tfae_have 2 -> 3 := fun h => by
@@ -243,7 +243,7 @@ lemma le_iff_mul_eq_right
 
 中文:
 引理 le_iff_mul_eq_right
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: .out 0 1 hp.le_tfae hq
 
 Depends on / 依赖: hp.le_tfae, le_tfae
@@ -262,7 +262,7 @@ lemma le_iff_mul_eq_left
 
 中文:
 引理 le_iff_mul_eq_left
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: .out 0 2 hp.le_tfae hq
 
 Depends on / 依赖: hp.le_tfae, le_tfae
@@ -281,7 +281,7 @@ lemma le_iff_sub
 
 中文:
 引理 le_iff_sub
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: .out 0 3 hp.le_tfae hq
 
 Depends on / 依赖: hp.le_tfae, le_tfae
@@ -300,7 +300,7 @@ lemma le_iff_idempotent_sub
 
 中文:
 引理 le_iff_idempotent_sub
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q)
   证明: .out 0 4 hp.le_tfae hq
 
 Depends on / 依赖: hp.le_tfae, le_tfae
@@ -320,7 +320,7 @@ lemma commute_of_le
 
 中文:
 引理 commute_of_le
-  条件: (hp : IsStarProjection p) (hq : IsStarProjection q) (h : p <= q)
+  条件: (hp : 是StarProjection p) (hq : 是StarProjection q) (h : p <= q)
   证明: by
   rw [commute_iff_eq]; rw [hp.le_iff_mul_eq_right hq |>.mp h]; rw [hp.le_iff_mul_eq_left hq |>.mp h]
 

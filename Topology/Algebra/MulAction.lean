@@ -50,10 +50,10 @@ class ContinuousSMul
     - continuous_smul : Continuous fun p : M × X => p.1 • p.2
 
 中文:
-类 ContinuousSMul
-  参数: (M X : 类型) [SMul M X] [TopologicalSpace M] [TopologicalSpace X]
+类 连续标量乘法
+  参数: (M X : 类型) [标量乘法 M X] [拓扑空间 M] [拓扑空间 X]
   公理与运算 (1 个):
-    - continuous_smul : Continuous fun p : M × X => p.1 • p.2
+    - continuous_smul : 连续 fun p : M × X => p.1 • p.2
 -/
 class ContinuousSMul (M X : Type*) [SMul M X] [TopologicalSpace M] [TopologicalSpace X] :
     Prop where
@@ -72,10 +72,10 @@ class ContinuousVAdd
     - continuous_vadd : Continuous fun p : M × X => p.1 +ᵥ p.2
 
 中文:
-类 ContinuousVAdd
-  参数: (M X : 类型) [VAdd M X] [TopologicalSpace M] [TopologicalSpace X]
+类 连续向量加法
+  参数: (M X : 类型) [向量加法 M X] [拓扑空间 M] [拓扑空间 X]
   公理与运算 (1 个):
-    - continuous_vadd : Continuous fun p : M × X => p.1 +ᵥ p.2
+    - continuous_vadd : 连续 fun p : M × X => p.1 +ᵥ p.2
 -/
 class ContinuousVAdd (M X : Type*) [VAdd M X] [TopologicalSpace M] [TopologicalSpace X] :
     Prop where
@@ -109,8 +109,8 @@ lemma IsScalarTower.continuousSMul
 @[to_additive]
 
 中文:
-引理 IsScalarTower.continuousSMul
-  结论: {M : 类型} (N : 类型) {α : 类型} [Monoid N] [SMul M N]
+引理 标量塔.continuousSMul
+  结论: {M : 类型} (N : 类型) {α : 类型} [幺半群 N] [标量乘法 M N]
   证明: { continuous_smul := by
       suffices Continuous (fun p : M × α => (p.1 • (1 : N)) • p.2) by simpa
       fun_prop }
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousSMul (ULift M) X
+  签名: 连续标量乘法 (类型层提升 M) X
   定义体: ⟨(continuous_smul (M := M)).comp₂ (continuous_uliftDown.comp continuous_fst) continuous_snd⟩
 
 @[to_additive]
@@ -162,7 +162,7 @@ instance OrderDual.instContinuousSMul_right
 
 中文:
 实例 OrderDual.instContinuousSMul_right
-  签名: : ContinuousSMul M Xᵒᵈ where
+  签名: : 连续标量乘法 M Xᵒᵈ where
   定义体: continuous_smul (M := M) (X := X)
 
 @[to_additive]
@@ -185,7 +185,7 @@ instance OrderDual.instContinuousSMul_left
 
 中文:
 实例 OrderDual.instContinuousSMul_left
-  签名: : ContinuousSMul Mᵒᵈ X where
+  签名: : 连续标量乘法 Mᵒᵈ X where
   定义体: continuous_smul (M := M) (X := X)
 
 @[to_additive]
@@ -215,8 +215,8 @@ theorem ContinuousSMul.induced
 @[to_additive]
 
 中文:
-定理 ContinuousSMul.induced
-  结论: {R : 类型} {α : 类型} {β : 类型} {F : 类型} [FunLike F α β]
+定理 连续标量乘法.induced
+  结论: {R : 类型} {α : 类型} {β : 类型} {F : 类型} [函数状 F α β]
   证明: by
   let tα := tβ.induced f
   refine ⟨continuous_induced_rng.2 ?_⟩
@@ -248,8 +248,8 @@ theorem Filter.Tendsto.smul
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.smul
-  结论: {f : α -> M} {g : α -> X} {l : Filter α} {c : M} {a : X}
+定理 滤子.收敛.smul
+  结论: {f : α -> M} {g : α -> X} {l : 滤子 α} {c : M} {a : X}
   证明: (continuous_smul.tendsto _).comp (hf.prodMk_nhds hg)
 
 @[to_additive]
@@ -271,8 +271,8 @@ theorem Filter.Tendsto.smul_const
   proof: hf.smul tendsto_const_nhds
 
 中文:
-定理 Filter.Tendsto.smul_const
-  结论: {f : α -> M} {l : Filter α} {c : M} (hf : Tendsto f l (𝓝 c))
+定理 滤子.收敛.smul_const
+  结论: {f : α -> M} {l : 滤子 α} {c : M} (hf : 收敛 f l (𝓝 c))
   证明: hf.smul tendsto_const_nhds
 
 Depends on / 依赖: hf.smul, tendsto_const_nhds
@@ -363,9 +363,9 @@ theorem Continuous.smul
   proof: continuous_smul.comp (hf.prodMk hg)
 
 中文:
-定理 Continuous.smul
-  条件: (hf : Continuous f) (hg : Continuous g)
-  结论: Continuous (f • g)
+定理 连续.smul
+  条件: (hf : 连续 f) (hg : 连续 g)
+  结论: 连续 (f • g)
   证明: continuous_smul.comp (hf.prodMk hg)
 
 Depends on / 依赖: continuous_smul, continuous_smul.comp, hf.prodMk, prodMk
@@ -390,8 +390,8 @@ instance ContinuousSMul.op
 @[to_additive]
 
 中文:
-实例 ContinuousSMul.op
-  签名: [SMul Mᵐᵒᵖ X] [IsCentralScalar M X]
+实例 连续标量乘法.op
+  签名: [标量乘法 Mᵐᵒᵖ X] [中心标量 M X]
   定义体: ⟨by
     suffices Continuous fun p : M × X => MulOpposite.op p.fst • p.snd from
       this.comp (MulOpposite.continuous_unop.prodMap continuous_id)
@@ -421,7 +421,7 @@ continuous_smul.comp continuous_id.prodMap MulOpposite.continuous_unop⟩
 
 中文:
 实例 MulOpposite.continuousSMul
-  签名: : ContinuousSMul M Xᵐᵒᵖ
+  签名: : 连续标量乘法 M Xᵐᵒᵖ
   定义体: ⟨MulOpposite.continuous_op.comp
 continuous_smul.comp continuous_id.prodMap MulOpposite.continuous_unop⟩
 
@@ -467,8 +467,8 @@ theorem Inseparable.smul
 @[to_additive]
 
 中文:
-定理 Inseparable.smul
-  结论: {a b : M} {x y : X} (h₁ : Inseparable a b)
+定理 不可分.smul
+  结论: {a b : M} {x y : X} (h₁ : 不可分 a b)
   证明: (h₁.prod h₂).map continuous_smul
 
 @[to_additive]
@@ -491,8 +491,8 @@ lemma IsCompact.smul_set
 @[to_additive]
 
 中文:
-引理 IsCompact.smul_set
-  条件: {k : Set M} {u : Set X} (hk : IsCompact k) (hu : IsCompact u)
+引理 是紧集.smul_set
+  条件: {k : 集合 M} {u : 集合 X} (hk : 是紧集 k) (hu : 是紧集 u)
   证明: by
   rw [← Set.image_smul_prod]
   exact IsCompact.image (hk.prod hu) continuous_smul
@@ -518,7 +518,7 @@ lemma smul_set_closure_subset
 
 中文:
 引理 smul_set_closure_subset
-  条件: (K : Set M) (L : Set X)
+  条件: (K : 集合 M) (L : 集合 X)
   证明: Set.smul_subset_iff.2 fun _x hx _y hy => map_mem_closure₂ continuous_smul hx hy fun _a ha _b hb =>
     Set.smul_mem_smul ha hb
 
@@ -557,8 +557,8 @@ using (hf.comp continuous_fst).fun_smul hg.continuous.comp continuous_snd
 @[to_additive]
 
 中文:
-引理 Topology.IsInducing.continuousSMul
-  结论: {N : 类型} [SMul N Y] [TopologicalSpace N] {f : N -> M}
+引理 拓扑.是Inducing.continuousSMul
+  结论: {N : 类型} [标量乘法 N Y] [拓扑空间 N] {f : N -> M}
   证明: by
     simpa only [hg.continuous_iff, Function.comp_def, hsmul]
 using (hf.comp continuous_fst).fun_smul hg.continuous.comp continuous_snd
@@ -584,8 +584,8 @@ instance SMulMemClass.continuousSMul
   body: IsInducing.subtypeVal.continuousSMul continuous_id rfl
 
 中文:
-实例 SMulMemClass.continuousSMul
-  签名: {S : 类型} [SetLike S X] [SMulMemClass S M X] (s : S)
+实例 SMulMem类.continuousSMul
+  签名: {S : 类型} [集合状 S X] [SMulMem类 S M X] (s : S)
   定义体: IsInducing.subtypeVal.continuousSMul continuous_id rfl
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.continuousSMul, continuousSMul, continuous_id, subtypeVal
@@ -609,8 +609,8 @@ theorem Filter.Tendsto.smul_zero
   proof: smul_zero c (A := X) ▸ hf.smul hg
 
 中文:
-定理 Filter.Tendsto.smul_zero
-  结论: {f : α -> M} {g : α -> X} {l : Filter α} {c : M}
+定理 滤子.收敛.smul_zero
+  结论: {f : α -> M} {g : α -> X} {l : 滤子 α} {c : M}
   证明: smul_zero c (A := X) ▸ hf.smul hg
 -/
 protected theorem Filter.Tendsto.smul_zero {f : α -> M} {g : α -> X} {l : Filter α} {c : M}
@@ -633,8 +633,8 @@ theorem Filter.Tendsto.zero_smul
   proof: zero_smul M a ▸ hf.smul hg
 
 中文:
-定理 Filter.Tendsto.zero_smul
-  结论: {f : α -> M} {g : α -> X} {l : Filter α} {a : X}
+定理 滤子.收敛.zero_smul
+  结论: {f : α -> M} {g : α -> X} {l : 滤子 α} {a : X}
   证明: zero_smul M a ▸ hf.smul hg
 -/
 protected theorem Filter.Tendsto.zero_smul {f : α -> M} {g : α -> X} {l : Filter α} {a : X}
@@ -651,8 +651,8 @@ theorem Filter.Tendsto.zero_smul_const
   proof: hf.zero_smul tendsto_const_nhds
 
 中文:
-定理 Filter.Tendsto.zero_smul_const
-  结论: {f : α -> M} {l : Filter α}
+定理 滤子.收敛.zero_smul_const
+  结论: {f : α -> M} {l : 滤子 α}
   证明: hf.zero_smul tendsto_const_nhds
 -/
 protected theorem Filter.Tendsto.zero_smul_const {f : α -> M} {l : Filter α}
@@ -678,8 +678,8 @@ theorem Filter.Tendsto.one_smul
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.one_smul
-  结论: {f : α -> M} {g : α -> X} {l : Filter α} {a : X}
+定理 滤子.收敛.one_smul
+  结论: {f : α -> M} {g : α -> X} {l : 滤子 α} {a : X}
   证明: one_smul M a ▸ hf.smul hg
 
 @[to_additive]
@@ -701,8 +701,8 @@ theorem Filter.Tendsto.one_smul_const
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.one_smul_const
-  结论: {f : α -> M} {l : Filter α}
+定理 滤子.收敛.one_smul_const
+  结论: {f : α -> M} {l : 滤子 α}
   证明: hf.one_smul tendsto_const_nhds
 
 @[to_additive]
@@ -721,8 +721,8 @@ instance Units.continuousSMul
   body: IsInducing.id.continuousSMul Units.continuous_val rfl
 
 中文:
-实例 Units.continuousSMul
-  签名: : ContinuousSMul Mˣ X
+实例 单位群.continuousSMul
+  签名: : 连续标量乘法 Mˣ X
   定义体: IsInducing.id.continuousSMul Units.continuous_val rfl
 
 Depends on / 依赖: IsInducing, IsInducing.id.continuousSMul, Units.continuous_val, continuousSMul, continuous_val
@@ -746,7 +746,7 @@ theorem MulAction.continuousSMul_compHom
 @[to_additive]
 
 中文:
-定理 MulAction.continuousSMul_compHom
+定理 乘法作用.continuousSMul_compHom
   证明: MulAction.compHom _ f
     ContinuousSMul N X := by
   let _ : MulAction N X := MulAction.compHom _ f
@@ -773,8 +773,8 @@ instance Submonoid.continuousSMul
   body: IsInducing.id.continuousSMul continuous_subtype_val rfl
 
 中文:
-实例 Submonoid.continuousSMul
-  签名: {S : Submonoid M}
+实例 子幺半群.continuousSMul
+  签名: {S : 子幺半群 M}
   定义体: IsInducing.id.continuousSMul continuous_subtype_val rfl
 
 Depends on / 依赖: IsInducing, IsInducing.id.continuousSMul, continuousSMul, continuous_subtype_val
@@ -798,8 +798,8 @@ instance Subgroup.continuousSMul
   body: S.toSubmonoid.continuousSMul
 
 中文:
-实例 Subgroup.continuousSMul
-  签名: {S : Subgroup M}
+实例 子群.continuousSMul
+  签名: {S : 子群 M}
   定义体: S.toSubmonoid.continuousSMul
 
 Depends on / 依赖: S.toSubmonoid.continuousSMul, continuousSMul, toSubmonoid
@@ -820,8 +820,8 @@ lemma stabilizer_isOpen
 
 中文:
 引理 stabilizer_isOpen
-  条件: [DiscreteTopology X] (x : X)
-  结论: IsOpen (MulAction.stabilizer M x : Set M)
+  条件: [离散拓扑 X] (x : X)
+  结论: 是开集 (乘法作用.stabilizer M x : 集合 M)
   证明: IsOpen.preimage (f := fun g => g • x) (by fun_prop) (isOpen_discrete {x})
 
 Depends on / 依赖: IsOpen, IsOpen.preimage, fun_prop, isOpen_discrete, preimage
@@ -854,7 +854,7 @@ theorem continuousSMul_iff_stabilizer_isOpen
 
 中文:
 定理 continuousSMul_iff_stabilizer_isOpen
-  条件: [DiscreteTopology X]
+  条件: [离散拓扑 X]
   证明: by
   refine ⟨fun _ _ => stabilizer_isOpen .., fun h => ⟨?_⟩⟩
   rw [continuous_prod_of_discrete_right]
@@ -907,9 +907,9 @@ theorem Set.univ_smul_nhds_zero
   simp only [mem_compl_iff, mem_singleton_iff
 
 中文:
-定理 Set.univ_smul_nhds_zero
-  条件: {s : Set X} (hs : s in 𝓝 0)
-  结论: (univ : Set G₀) • s = Set.univ
+定理 集合.univ_smul_nhds_zero
+  条件: {s : 集合 X} (hs : s in 𝓝 0)
+  结论: (univ : 集合 G₀) • s = 集合.univ
   证明: by
   refine Set.eq_univ_of_forall fun x => ?_
   have : Tendsto (· • x) (𝓝 (0 : G₀)) (𝓝 0) :=
@@ -943,8 +943,8 @@ theorem Filter.top_smul_nhds_zero
   exact Set.univ_smul_nhds_zero hs
 
 中文:
-定理 Filter.top_smul_nhds_zero
-  结论: (⊤ : Filter G₀) • 𝓝 (0 : X) = ⊤
+定理 滤子.top_smul_nhds_zero
+  结论: (⊤ : 滤子 G₀) • 𝓝 (0 : X) = ⊤
   证明: by
   rw [(hasBasis_top.smul (basis_sets _)).eq_top_iff]
   rintro ⟨_, s⟩ ⟨-, hs⟩
@@ -972,8 +972,8 @@ instance Prod.continuousSMul
 @[to_additive]
 
 中文:
-实例 Prod.continuousSMul
-  签名: [SMul M X] [SMul M Y] [ContinuousSMul M X] [ContinuousSMul M Y]
+实例 积类型.continuousSMul
+  签名: [标量乘法 M X] [标量乘法 M Y] [连续标量乘法 M X] [连续标量乘法 M Y]
   定义体: ⟨(continuous_fst.smul (continuous_fst.comp continuous_snd)).prodMk
       (continuous_fst.smul (continuous_snd.comp continuous_snd))⟩
 
@@ -1024,7 +1024,7 @@ theorem continuousSMul_sInf
 
 中文:
 定理 continuousSMul_sInf
-  结论: {ts : Set (TopologicalSpace X)}
+  结论: {ts : 集合 (拓扑空间 X)}
   证明: let _ := sInf ts
   { continuous_smul := by
       -- Porting note: needs `( :)`
@@ -1058,7 +1058,7 @@ theorem continuousSMul_iInf
 
 中文:
 定理 continuousSMul_iInf
-  结论: {ts' : ι -> TopologicalSpace X}
+  结论: {ts' : ι -> 拓扑空间 X}
   证明: continuousSMul_sInf Set.forall_mem_range.mpr h
 
 Depends on / 依赖: Set.forall_mem_range.mpr, continuousSMul_sInf, forall_mem_range
@@ -1082,7 +1082,7 @@ theorem continuousSMul_inf
 
 中文:
 定理 continuousSMul_inf
-  结论: {t₁ t₂ : TopologicalSpace X} [@ContinuousSMul M X _ _ t₁]
+  结论: {t₁ t₂ : 拓扑空间 X} [@连续标量乘法 M X _ _ t₁]
   证明: by
   rw [inf_eq_iInf]
   refine continuousSMul_iInf fun b => ?_
@@ -1118,8 +1118,8 @@ theorem AddTorsor.connectedSpace
     toNonempty := inferInstance }
 
 中文:
-定理 AddTorsor.connectedSpace
-  结论: ConnectedSpace P
+定理 加法Torsor.connectedSpace
+  结论: 连通空间 P
   证明: { isPreconnected_univ := by
       convert!
         isPreconnected_univ.image (Equiv.vaddConst (Classical.arbitrary P) : G -> P)

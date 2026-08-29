@@ -75,7 +75,7 @@ theorem IsGδ.baireSpace_of_t2Space_locallyCompactSpace
 中文:
 定理 IsGδ.baireSpace_of_t2Space_locallyCompactSpace
   条件: (hG : IsGδ s)
-  结论: BaireSpace s
+  结论: Baire空间 s
   证明: by
   have : LocallyCompactSpace (closure s) := isClosed_closure.locallyCompactSpace
   have : BaireSpace (closure s) := .of_t2Space_locallyCompactSpace

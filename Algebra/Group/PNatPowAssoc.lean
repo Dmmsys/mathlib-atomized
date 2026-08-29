@@ -54,8 +54,8 @@ class PNatPowAssoc
     - ppow_one : forall (x : M), x ^ (1 : Nat+) = x
 
 中文:
-类 PNatPowAssoc
-  参数: (M : 类型) [Mul M] [Pow M 自然数+]
+类 P自然数PowAssoc
+  参数: (M : 类型) [乘法 M] [幂 M 自然数+]
   公理与运算 (2 个):
     - ppow_add : 对任意 (k n : 自然数+) (x : M), x ^ (k + n) = x ^ k * x ^ n
     - ppow_one : 对任意 (x : M), x ^ (1 : 自然数+) = x
@@ -219,8 +219,8 @@ instance Pi.instPNatPowAssoc
   ppow_one _ := by ext; simp
 
 中文:
-实例 Pi.instPNatPowAssoc
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Mul <| α i] [对任意 i, Pow (α i) 自然数+]
+实例 依赖函数类型.instP自然数PowAssoc
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 乘法 <| α i] [对任意 i, 幂 (α i) 自然数+]
   定义体: by ext; simp [ppow_add]
   ppow_one _ := by ext; simp
 
@@ -241,8 +241,8 @@ instance Prod.instPNatPowAssoc
   ppow_one _ := by ext <;> simp
 
 中文:
-实例 Prod.instPNatPowAssoc
-  签名: {N : 类型} [Mul M] [Pow M 自然数+] [P自然数PowAssoc M] [Mul N] [Pow N 自然数+]
+实例 积类型.instP自然数PowAssoc
+  签名: {N : 类型} [乘法 M] [幂 M 自然数+] [P自然数PowAssoc M] [乘法 N] [幂 N 自然数+]
   定义体: by ext <;> simp [ppow_add]
   ppow_one _ := by ext <;> simp
 
@@ -266,7 +266,7 @@ theorem ppow_eq_pow
 
 中文:
 定理 ppow_eq_pow
-  条件: [Monoid M] [Pow M 自然数+] [P自然数PowAssoc M] (x : M) (n : 自然数+)
+  条件: [幺半群 M] [幂 M 自然数+] [P自然数PowAssoc M] (x : M) (n : 自然数+)
   证明: by
   induction n with
   | one => rw [ppow_one, PNat.one_coe, pow_one]

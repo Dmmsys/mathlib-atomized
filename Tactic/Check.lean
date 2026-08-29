@@ -46,7 +46,7 @@ logInfoAt tk ← do if showImplicit then pure .signature c
 
 中文:
 定义 checkCoreAux
-  签名: (tk : Syntax) (term : Term) (showImplicit : 布尔)
+  签名: (tk : Syntax) (term : 项) (showImplicit : 布尔值)
   定义体: Term.withDeclName `_check do
   -- show signature for `#check id`/`#check @id`
   if let `($id:ident) := term then

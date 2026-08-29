@@ -69,8 +69,8 @@ structure IsExtreme
     - left_mem_of_mem_openSegment : forall ⦃x⦄, x in A -> forall ⦃y⦄, y in A -> forall ⦃z⦄, z in B -> z in openSegment 𝕜 x y -> x in B
 
 中文:
-结构 IsExtreme
-  参数: (A B : Set E)
+结构 是Extreme
+  参数: (A B : 集合 E)
   公理与运算 (2 个):
     - subset : B subseteq A
     - left_mem_of_mem_openSegment : 对任意 ⦃x⦄, x in A -> 对任意 ⦃y⦄, y in A -> 对任意 ⦃z⦄, z in B -> z in openSegment 𝕜 x y -> x in B
@@ -91,8 +91,8 @@ definition Set.extremePoints
 @[refl]
 
 中文:
-定义 Set.extremePoints
-  签名: (A : Set E)
+定义 集合.extremePoints
+  签名: (A : 集合 E)
   定义体: {x in A | forall ⦃x₁⦄, x₁ in A -> forall ⦃x₂⦄, x₂ in A -> x in openSegment 𝕜 x₁ x₂ -> x₁ = x}
 
 @[refl]
@@ -113,9 +113,9 @@ theorem IsExtreme.refl
   proof: ⟨Subset.rfl, fun _ hx₁A _ _ _ _ _ => hx₁A⟩
 
 中文:
-定理 IsExtreme.refl
-  条件: (A : Set E)
-  结论: IsExtreme 𝕜 A A
+定理 是Extreme.refl
+  条件: (A : 集合 E)
+  结论: 是Extreme 𝕜 A A
   证明: ⟨Subset.rfl, fun _ hx₁A _ _ _ _ _ => hx₁A⟩
 -/
 protected theorem IsExtreme.refl (A : Set E) : IsExtreme 𝕜 A A :=
@@ -132,8 +132,8 @@ theorem IsExtreme.rfl
   proof: IsExtreme.refl 𝕜 A
 
 中文:
-定理 IsExtreme.rfl
-  结论: IsExtreme 𝕜 A A
+定理 是Extreme.rfl
+  结论: 是Extreme 𝕜 A A
   证明: IsExtreme.refl 𝕜 A
 -/
 protected theorem IsExtreme.rfl : IsExtreme 𝕜 A A :=
@@ -150,8 +150,8 @@ theorem IsExtreme.right_mem_of_mem_openSegment
 @[trans]
 
 中文:
-定理 IsExtreme.right_mem_of_mem_openSegment
-  结论: (h : IsExtreme 𝕜 A B) {y z : E} (hx : x in A)
+定理 是Extreme.right_mem_of_mem_openSegment
+  结论: (h : 是Extreme 𝕜 A B) {y z : E} (hx : x in A)
   证明: h.left_mem_of_mem_openSegment hy hx hz by rwa [openSegment_symm]
 
 @[trans]
@@ -176,8 +176,8 @@ theorem IsExtreme.trans
     (hAB.right_mem_of_mem_openSegment hx₁A hx₂A (hBC.subset hxC) hx) hxC hx
 
 中文:
-定理 IsExtreme.trans
-  条件: (hAB : IsExtreme 𝕜 A B) (hBC : IsExtreme 𝕜 B C)
+定理 是Extreme.trans
+  条件: (hAB : 是Extreme 𝕜 A B) (hBC : 是Extreme 𝕜 B C)
   证明: by
   refine ⟨hBC.subset.trans hAB.subset, fun x₁ hx₁A x₂ hx₂A x hxC hx => ?_⟩
   exact hBC.left_mem_of_mem_openSegment
@@ -200,8 +200,8 @@ theorem IsExtreme.antisymm
   proof: ⟨fun _ _ hAB hBA => Subset.antisymm hBA.1 hAB.1⟩
 
 中文:
-定理 IsExtreme.antisymm
-  结论: Std.Antisymm (IsExtreme 𝕜 : Set E -> Set E -> 命题)
+定理 是Extreme.antisymm
+  结论: Std.反对称 (是Extreme 𝕜 : 集合 E -> 集合 E -> 命题)
   证明: ⟨fun _ _ hAB hBA => Subset.antisymm hBA.1 hAB.1⟩
 -/
 protected theorem IsExtreme.antisymm : Std.Antisymm (IsExtreme 𝕜 : Set E -> Set E -> Prop) :=
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPartialOrder (Set E) (IsExtreme 𝕜)
+  签名: 是偏序 (集合 E) (是Extreme 𝕜)
   定义体: IsExtreme.refl 𝕜
   trans _ _ _ := IsExtreme.trans
   __ := IsExtreme.antisymm
@@ -244,8 +244,8 @@ theorem IsExtreme.inter
     hAC.left_mem_of_mem_openSegment hx₁A hx₂A hxC hx⟩
 
 中文:
-定理 IsExtreme.inter
-  条件: (hAB : IsExtreme 𝕜 A B) (hAC : IsExtreme 𝕜 A C)
+定理 是Extreme.inter
+  条件: (hAB : 是Extreme 𝕜 A B) (hAC : 是Extreme 𝕜 A C)
   证明: by
   use Subset.trans inter_subset_left hAB.1
   rintro x₁ hx₁A x₂ hx₂A x ⟨hxB, hxC⟩ hx
@@ -270,8 +270,8 @@ theorem IsExtreme.mono
   proof: ⟨hCB, fun _ hx₁B _ hx₂B _ hxC hx => hAC.2 (hBA hx₁B) (hBA hx₂B) hxC hx⟩
 
 中文:
-定理 IsExtreme.mono
-  条件: (hAC : IsExtreme 𝕜 A C) (hBA : B subseteq A) (hCB : C subseteq B)
+定理 是Extreme.mono
+  条件: (hAC : 是Extreme 𝕜 A C) (hBA : B subseteq A) (hCB : C subseteq B)
   证明: ⟨hCB, fun _ hx₁B _ hx₂B _ hxC hx => hAC.2 (hBA hx₁B) (hBA hx₂B) hxC hx⟩
 -/
 protected theorem IsExtreme.mono (hAC : IsExtreme 𝕜 A C) (hBA : B subseteq A) (hCB : C subseteq B) :
@@ -291,8 +291,8 @@ theorem isExtreme_iInter
   exact fun i => (hAF i).2 hx₁A hx₂A (hxF i) hx
 
 中文:
-定理 isExtreme_iInter
-  结论: {ι : Sort*} [Nonempty ι] {F : ι -> Set E}
+定理 isExtreme_i整数er
+  结论: {ι : 类型层*} [非空 ι] {F : ι -> 集合 E}
   证明: by
   inhabit ι
   refine ⟨iInter_subset_of_subset default (hAF default).1, fun x₁ hx₁A x₂ hx₂A x hxF hx => ?_⟩
@@ -319,8 +319,8 @@ theorem isExtreme_biInter
   simpa only [iInter_subtype] using isExtreme_iInter fun i : F => hA _ i.2
 
 中文:
-定理 isExtreme_biInter
-  条件: {F : Set (Set E)} (hF : F.Nonempty) (hA : 对任意 B in F, IsExtreme 𝕜 A B)
+定理 isExtreme_bi整数er
+  条件: {F : 集合 (集合 E)} (hF : F.非空) (hA : 对任意 B in F, 是Extreme 𝕜 A B)
   证明: by
   have := hF.to_subtype
   simpa only [iInter_subtype] using isExtreme_iInter fun i : F => hA _ i.2
@@ -341,8 +341,8 @@ theorem isExtreme_sInter
   proof: by simpa [sInter_eq_biInter] using isExtreme_biInter hF hAF
 
 中文:
-定理 isExtreme_sInter
-  条件: {F : Set (Set E)} (hF : F.Nonempty) (hAF : 对任意 B in F, IsExtreme 𝕜 A B)
+定理 isExtreme_s整数er
+  条件: {F : 集合 (集合 E)} (hF : F.非空) (hAF : 对任意 B in F, 是Extreme 𝕜 A B)
   证明: by simpa [sInter_eq_biInter] using isExtreme_biInter hF hAF
 
 Depends on / 依赖: isExtreme_biInter, sInter_eq_biInter
@@ -410,7 +410,7 @@ alias ⟨IsExtreme.mem_extremePoints, _⟩ := isExtreme_singleton
 
 中文:
 引理 isExtreme_singleton
-  结论: IsExtreme 𝕜 A {x} ↔ x in A.extremePoints 𝕜
+  结论: 是Extreme 𝕜 A {x} ↔ x in A.extremePoints 𝕜
   证明: by
   simp [isExtreme_iff, extremePoints]
 
@@ -454,7 +454,7 @@ theorem extremePoints_empty
 
 中文:
 定理 extremePoints_empty
-  结论: (∅ : Set E).extremePoints 𝕜 = ∅
+  结论: (∅ : 集合 E).extremePoints 𝕜 = ∅
   证明: subset_empty_iff.1 extremePoints_subset
 
 @[simp]
@@ -475,7 +475,7 @@ theorem extremePoints_singleton
 
 中文:
 定理 extremePoints_singleton
-  结论: ({x} : Set E).extremePoints 𝕜 = {x}
+  结论: ({x} : 集合 E).extremePoints 𝕜 = {x}
   证明: extremePoints_subset.antisymm singleton_subset_iff.2 ⟨mem_singleton x, fun _ hx₁ _ _ _ => hx₁⟩
 
 Depends on / 依赖: antisymm, extremePoints_subset, extremePoints_subset.antisymm, mem_singleton, singleton_subset_iff
@@ -509,8 +509,8 @@ theorem IsExtreme.extremePoints_subset_extremePoints
   proof: fun _ => by simpa only [← isExtreme_singleton] using hAB.trans
 
 中文:
-定理 IsExtreme.extremePoints_subset_extremePoints
-  条件: (hAB : IsExtreme 𝕜 A B)
+定理 是Extreme.extremePoints_subset_extremePoints
+  条件: (hAB : 是Extreme 𝕜 A B)
   证明: fun _ => by simpa only [← isExtreme_singleton] using hAB.trans
 
 Depends on / 依赖: hAB.trans, isExtreme_singleton
@@ -531,8 +531,8 @@ theorem IsExtreme.extremePoints_eq
 @[nontriviality]
 
 中文:
-定理 IsExtreme.extremePoints_eq
-  条件: (hAB : IsExtreme 𝕜 A B)
+定理 是Extreme.extremePoints_eq
+  条件: (hAB : 是Extreme 𝕜 A B)
   证明: Subset.antisymm (fun _ hx => ⟨hx.1, hAB.extremePoints_subset_extremePoints hx⟩)
     (inter_extremePoints_subset_extremePoints_of_subset hAB.1)
 
@@ -556,9 +556,9 @@ lemma Set.extremePoints_eq_self
   proof: subset_antisymm extremePoints_subset fun _ h => ⟨h, fun _ _ _ _ _ => Subsingleton.elim ..⟩
 
 中文:
-引理 Set.extremePoints_eq_self
-  条件: [Subsingleton E] (A : Set E)
-  结论: Set.extremePoints 𝕜 A = A
+引理 集合.extremePoints_eq_self
+  条件: [子单例 E] (A : 集合 E)
+  结论: 集合.extremePoints 𝕜 A = A
   证明: subset_antisymm extremePoints_subset fun _ h => ⟨h, fun _ _ _ _ _ => Subsingleton.elim ..⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, extremePoints_subset, subset_antisymm
@@ -587,8 +587,8 @@ theorem IsExtreme.convex_sdiff
 @[simp]
 
 中文:
-定理 IsExtreme.convex_sdiff
-  条件: [IsOrderedRing 𝕜] (hA : Convex 𝕜 A) (hAB : IsExtreme 𝕜 A B)
+定理 是Extreme.convex_sdiff
+  条件: [是Ordered环 𝕜] (hA : 凸 𝕜 A) (hAB : 是Extreme 𝕜 A B)
   证明: convex_iff_openSegment_subset.2 fun _ ⟨hx₁A, hx₁B⟩ _ ⟨hx₂A, _⟩ _ hx =>
     ⟨hA.openSegment_subset hx₁A hx₂A hx, fun hxB => hx₁B (hAB.2 hx₁A hx₂A hxB hx)⟩
 
@@ -622,7 +622,7 @@ theorem extremePoints_prod
 
 中文:
 定理 extremePoints_prod
-  条件: (s : Set E) (t : Set F)
+  条件: (s : 集合 E) (t : 集合 F)
   证明: by
   ext ⟨x, y⟩
   refine (and_congr_right fun hx => ⟨fun h => ⟨?_, ?_⟩, fun h => ?_⟩).trans and_and_and_comm
@@ -669,7 +669,7 @@ theorem extremePoints_pi
 
 中文:
 定理 extremePoints_pi
-  条件: (s : 对任意 i, Set (M i))
+  条件: (s : 对任意 i, 集合 (M i))
   证明: by
   classical
   ext x
@@ -723,7 +723,7 @@ lemma image_extremePoints
 
 中文:
 引理 image_extremePoints
-  条件: (f : L) (s : Set E)
+  条件: (f : L) (s : 集合 E)
   证明: by
   ext b
   obtain ⟨a, rfl⟩ := EquivLike.surjective f b
@@ -767,7 +767,7 @@ theorem mem_extremePoints_iff_forall_segment
     rcases H (openSegment_subset_segment _ _ 
 
 中文:
-定理 mem_extremePoints_iff_forall_segment
+定理 mem_extremePoints_iff_对任意_segment
   结论: x in A.extremePoints 𝕜 ↔
   证明: by
   rw [mem_extremePoints]
@@ -809,8 +809,8 @@ theorem Convex.mem_extremePoints_iff_convex_sdiff
       ⟨hx₂, 
 
 中文:
-定理 Convex.mem_extremePoints_iff_convex_sdiff
-  条件: (hA : Convex 𝕜 A)
+定理 凸.mem_extremePoints_iff_convex_sdiff
+  条件: (hA : 凸 𝕜 A)
   证明: by
   use fun hx => ⟨hx.1, (isExtreme_singleton.2 hx).convex_sdiff hA⟩
   rintro ⟨hxA, hAx⟩
@@ -849,8 +849,8 @@ alias Convex.mem_extremePoints_iff_mem_diff_convexHull_diff :=
   Convex.mem_extremePoints_iff_mem_sdiff_convexHull_sdiff
 
 中文:
-定理 Convex.mem_extremePoints_iff_mem_sdiff_convexHull_sdiff
-  条件: (hA : Convex 𝕜 A)
+定理 凸.mem_extremePoints_iff_mem_sdiff_convexHull_sdiff
+  条件: (hA : 凸 𝕜 A)
   证明: by
   rw [hA.mem_extremePoints_iff_convex_sdiff]; rw [hA.convex_remove_iff_notMem_convexHull_remove]; rw [mem_sdiff]
 

@@ -117,7 +117,7 @@ instance hasCoeToMatrix
 
 中文:
 实例 hasCoeToMatrix
-  签名: : Coe (SpecialLinearGroup n R) (Matrix n n R)
+  签名: : Coe (SpecialLinearGroup n R) (矩阵 n n R)
   定义体: ⟨fun A => A.val⟩
 
 Depends on / 依赖: A.val
@@ -211,7 +211,7 @@ instance subsingleton_of_subsingleton
 
 中文:
 实例 subsingleton_of_subsingleton
-  签名: [Subsingleton n]
+  签名: [子单例 n]
   定义体: by
   refine ⟨fun ⟨A, hA⟩ ⟨B, hB⟩ => ?_⟩
   ext i j
@@ -238,7 +238,7 @@ instance hasInv
 
 中文:
 实例 hasInv
-  签名: : Inv (SpecialLinearGroup n R)
+  签名: : 取逆 (SpecialLinearGroup n R)
   定义体: ⟨fun A => ⟨adjugate A, by rw [det_adjugate, A.prop, one_pow]⟩⟩
 
 Depends on / 依赖: A.prop, adjugate, det_adjugate, one_pow
@@ -256,7 +256,7 @@ instance hasMul
 
 中文:
 实例 hasMul
-  签名: : Mul (SpecialLinearGroup n R)
+  签名: : 乘法 (SpecialLinearGroup n R)
   定义体: ⟨fun A B => ⟨A * B, by rw [det_mul, A.prop, B.prop, one_mul]⟩⟩
 
 Depends on / 依赖: A.prop, B.prop, det_mul, one_mul
@@ -274,7 +274,7 @@ instance hasOne
 
 中文:
 实例 hasOne
-  签名: : One (SpecialLinearGroup n R)
+  签名: : 幺 (SpecialLinearGroup n R)
   定义体: ⟨⟨1, det_one⟩⟩
 
 Depends on / 依赖: det_one
@@ -292,7 +292,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (SpecialLinearGroup n R) 自然数
+  签名: 幂 (SpecialLinearGroup n R) 自然数
   定义体: ⟨x ^ n, (det_pow _ _).trans x.prop.symm ▸ one_pow _⟩
 
 Depends on / 依赖: det_pow, one_pow, x.prop.symm
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SpecialLinearGroup n R)
+  签名: 可居 (SpecialLinearGroup n R)
   定义体: ⟨1⟩
 -/
 instance : Inhabited (SpecialLinearGroup n R) :=
@@ -325,8 +325,8 @@ instance [Fintype
   body: Subtype.fintype _
 
 中文:
-实例 [Fintype
-  签名: R] [DecidableEq R] : Fintype (SpecialLinearGroup n R)
+实例 [有限类型
+  签名: R] [DecidableEq R] : 有限类型 (SpecialLinearGroup n R)
   定义体: Subtype.fintype _
 
 Depends on / 依赖: Subtype, Subtype.fintype, fintype
@@ -341,8 +341,8 @@ instance [Finite
   body: Subtype.finite
 
 中文:
-实例 [Finite
-  签名: R] : Finite (SpecialLinearGroup n R)
+实例 [有限
+  签名: R] : 有限 (SpecialLinearGroup n R)
   定义体: Subtype.finite
 
 Depends on / 依赖: Subtype, Subtype.finite, finite
@@ -393,7 +393,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (A : Matrix n n R) (h : det A = 1)
+  条件: (A : 矩阵 n n R) (h : det A = 1)
   结论: ↑(⟨A, h⟩ : SpecialLinearGroup n R) = A
   证明: rfl
 
@@ -457,7 +457,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: (1 : SpecialLinearGroup n R) = (1 : Matrix n n R)
+  结论: (1 : SpecialLinearGroup n R) = (1 : 矩阵 n n R)
   证明: rfl
 
 @[simp]
@@ -541,7 +541,7 @@ theorem det_ne_zero
 
 中文:
 定理 det_ne_zero
-  条件: [Nontrivial R] (g : SpecialLinearGroup n R)
+  条件: [非平凡 R] (g : SpecialLinearGroup n R)
   结论: det ↑ₘg != 0
   证明: by
   rw [g.det_coe]
@@ -565,7 +565,7 @@ g.det_ne_zero det_eq_zero_of_row_eq_zero i by simp [h]
 
 中文:
 定理 row_ne_zero
-  条件: [Nontrivial R] (g : SpecialLinearGroup n R) (i : n)
+  条件: [非平凡 R] (g : SpecialLinearGroup n R) (i : n)
   结论: g i != 0
   证明: fun h =>
 g.det_ne_zero det_eq_zero_of_row_eq_zero i by simp [h]
@@ -585,7 +585,7 @@ instance monoid
 
 中文:
 实例 monoid
-  签名: : Monoid (SpecialLinearGroup n R)
+  签名: : 幺半群 (SpecialLinearGroup n R)
   定义体: Function.Injective.monoid _ Subtype.coe_injective coe_one coe_mul coe_pow
 
 Depends on / 依赖: Function, Function.Injective.monoid, Injective, Subtype, Subtype.coe_injective, coe_injective, coe_mul, coe_one, coe_pow, monoid
@@ -606,7 +606,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (SpecialLinearGroup n R)
+  签名: 群 (SpecialLinearGroup n R)
   定义体: { SpecialLinearGroup.monoid, SpecialLinearGroup.hasInv with
     inv_mul_cancel := fun A => by
       ext1
@@ -785,7 +785,7 @@ theorem center_eq_bot_of_subsingleton
 
 中文:
 定理 center_eq_bot_of_subsingleton
-  条件: [Subsingleton n]
+  条件: [子单例 n]
   证明: eq_bot_iff.mpr fun x _ => by rw [mem_bot, Subsingleton.elim x 1]
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, eq_bot_iff, eq_bot_iff.mpr, mem_bot
@@ -1060,7 +1060,7 @@ lemma map_intCast_injective
 
 中文:
 引理 map_intCast_injective
-  条件: [CharZero R]
+  条件: [特征零 R]
   证明: fun g h => by
   simp_rw [ext_iff, map_apply_coe, RingHom.mapMatrix_apply, Int.coe_castRingHom,
     Matrix.map_apply, Int.cast_inj]
@@ -1087,7 +1087,7 @@ lemma map_intCast_inj
 
 中文:
 引理 map_intCast_inj
-  条件: [CharZero R] {x y : SpecialLinearGroup n 整数}
+  条件: [特征零 R] {x y : SpecialLinearGroup n 整数}
   证明: map_intCast_injective.eq_iff
 
 Depends on / 依赖: eq_iff, map_intCast_injective, map_intCast_injective.eq_iff
@@ -1116,7 +1116,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (SpecialLinearGroup n R)
+  签名: : 取负 (SpecialLinearGroup n R)
   定义体: ⟨fun g => ⟨-g, by
     simpa [(@Fact.out <| Even <| Fintype.card n).neg_one_pow, g.det_coe]
       using det_smul (↑ₘg) (-1)⟩⟩
@@ -1143,7 +1143,7 @@ theorem coe_neg
 中文:
 定理 coe_neg
   条件: (g : SpecialLinearGroup n R)
-  结论: ↑(-g) = -(g : Matrix n n R)
+  结论: ↑(-g) = -(g : 矩阵 n n R)
   证明: rfl
 -/
 theorem coe_neg (g : SpecialLinearGroup n R) : ↑(-g) = -(g : Matrix n n R) :=
@@ -1161,7 +1161,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg (SpecialLinearGroup n R)
+  签名: 有DistribNeg (SpecialLinearGroup n R)
   定义体: Function.Injective.hasDistribNeg _ Subtype.coe_injective coe_neg coe_mul
 
 @[simp]
@@ -1294,8 +1294,8 @@ theorem fin_two_exists_eq_mk_of_apply_zero_one_eq_zero
   simp_rw [eq_inv_of_mul_eq_one_right had, hg]
 
 中文:
-定理 fin_two_exists_eq_mk_of_apply_zero_one_eq_zero
-  结论: {R : 类型} [Field R] (g : SL(2, R))
+定理 fin_two_存在_eq_mk_of_apply_zero_one_eq_zero
+  结论: {R : 类型} [域 R] (g : SL(2, R))
   证明: by
   induction g using Matrix.SpecialLinearGroup.fin_two_induction with | h a b c d h_det =>
   replace hg : c = 0 := by simpa using hg
@@ -1330,7 +1330,7 @@ lemma isCoprime_row
 
 中文:
 引理 isCoprime_row
-  条件: (A : SL(2, R)) (i : Fin 2)
+  条件: (A : SL(2, R)) (i : 有限集 2)
   结论: IsCoprime (A i 0) (A i 1)
   证明: by
   refine match i with
@@ -1364,7 +1364,7 @@ lemma isCoprime_col
 
 中文:
 引理 isCoprime_col
-  条件: (A : SL(2, R)) (j : Fin 2)
+  条件: (A : SL(2, R)) (j : 有限集 2)
   结论: IsCoprime (A 0 j) (A 1 j)
   证明: by
   refine match j with
@@ -1409,8 +1409,8 @@ lemma exists_SL2_col
     ring
 
 中文:
-引理 exists_SL2_col
-  条件: {a b : R} (hab : IsCoprime a b) (j : Fin 2)
+引理 存在_SL2_col
+  条件: {a b : R} (hab : IsCoprime a b) (j : 有限集 2)
   证明: by
   obtain ⟨u, v, h⟩ := hab
   refine match j with
@@ -1445,8 +1445,8 @@ lemma exists_SL2_row
     ring
 
 中文:
-引理 exists_SL2_row
-  条件: {a b : R} (hab : IsCoprime a b) (i : Fin 2)
+引理 存在_SL2_row
+  条件: {a b : R} (hab : IsCoprime a b) (i : 有限集 2)
   证明: by
   obtain ⟨u, v, h⟩ := hab
   refine match i with
@@ -1479,7 +1479,7 @@ lemma vecMulSL
 
 中文:
 引理 vecMulSL
-  条件: {v : Fin 2 -> R} (hab : IsCoprime (v 0) (v 1)) (A : SL(2, R))
+  条件: {v : 有限集 2 -> R} (hab : IsCoprime (v 0) (v 1)) (A : SL(2, R))
   证明: by
   obtain ⟨g, hg⟩ := hab.exists_SL2_row 0
   have : v = g 0 := funext fun t => by { fin_cases t <;> tauto }
@@ -1504,7 +1504,7 @@ lemma mulVecSL
 
 中文:
 引理 mulVecSL
-  条件: {v : Fin 2 -> R} (hab : IsCoprime (v 0) (v 1)) (A : SL(2, R))
+  条件: {v : 有限集 2 -> R} (hab : IsCoprime (v 0) (v 1)) (A : SL(2, R))
   证明: by
   simpa only [← vecMul_transpose] using! hab.vecMulSL A.transpose
 
@@ -1536,7 +1536,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction (Matrix.SpecialLinearGroup ι F) (ι -> F)
+  签名: 分配乘法作用 (矩阵.SpecialLinearGroup ι F) (ι -> F)
   定义体: m.1 • v
   smul_zero _ := smul_zero (M := Matrix ι ι F) _
   smul_add _ := smul_add (M := Matrix ι ι F) _
@@ -1560,7 +1560,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass (Matrix.SpecialLinearGroup ι F) F (ι -> F)
+  签名: 标量交换类 (矩阵.SpecialLinearGroup ι F) F (ι -> F)
   定义体: show m.1 • k • v = k • m.1 • v from smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -1872,7 +1872,7 @@ definition toSpecialLinearGroup
 
 中文:
 定义 toSpecialLinearGroup
-  签名: (t : TransvectionStruct ι F)
+  签名: (t : 平换结构 ι F)
   定义体: SpecialLinearGroup.transvection t.hij t.c
 
 Depends on / 依赖: SpecialLinearGroup, SpecialLinearGroup.transvection, t.hij, transvection
@@ -1893,7 +1893,7 @@ lemma toSpecialLinearGroup_def
 
 中文:
 引理 toSpecialLinearGroup_def
-  条件: (t : TransvectionStruct ι F)
+  条件: (t : 平换结构 ι F)
   证明: rfl
 
 @[simp]
@@ -1914,7 +1914,7 @@ lemma toSpecialLinearGroup_coe
 
 中文:
 引理 toSpecialLinearGroup_coe
-  条件: (t : TransvectionStruct ι F)
+  条件: (t : 平换结构 ι F)
   证明: rfl
 
 @[simp]
@@ -1964,7 +1964,7 @@ definition diag2n
 
 中文:
 定义 diag2n
-  签名: {ι : 类型} [Fintype ι] [DecidableEq ι] {i j : ι} (hij : i != j) (a : F)
+  签名: {ι : 类型} [有限类型 ι] [DecidableEq ι] {i j : ι} (hij : i != j) (a : F)
   定义体: ⟨diagonal (fun k => if k = i then a else if k = j then a⁻¹ else 1), by
     simp [Finset.prod_ite, hij.symm, Finset.card_eq_one (s := {x : ι | x = i}).2 ⟨i, by grind⟩,
       mul_inv_cancel₀ ha]⟩
@@ -1987,7 +1987,7 @@ lemma diag2n_coe
 
 中文:
 引理 diag2n_coe
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {i j : ι} (hij : i != j) (a : F)
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {i j : ι} (hij : i != j) (a : F)
   证明: rfl
 -/
 lemma diag2n_coe {ι : Type*} [Fintype ι] [DecidableEq ι] {i j : ι} (hij : i != j) (a : F)
@@ -2176,7 +2176,7 @@ definition coeMonoidHom
 
 中文:
 定义 coeMonoidHom
-  签名: : SpecialLinearGroup ι R ->* Matrix ι ι R where
+  签名: : SpecialLinearGroup ι R ->* 矩阵 ι ι R where
   定义体: Subtype.val
   map_one' := rfl
   map_mul' _ _ := rfl
@@ -2203,7 +2203,7 @@ lemma coeMonoidHom_apply
 中文:
 引理 coeMonoidHom_apply
   条件: (g : SpecialLinearGroup ι R)
-  结论: coeMonoidHom g = (g : Matrix ι ι R)
+  结论: coeMonoidHom g = (g : 矩阵 ι ι R)
   证明: rfl
 -/
 lemma coeMonoidHom_apply (g : SpecialLinearGroup ι R) : coeMonoidHom g = (g : Matrix ι ι R) := rfl
@@ -2218,7 +2218,7 @@ lemma coeMonoidHom_injective
 
 中文:
 引理 coeMonoidHom_injective
-  结论: Function.Injective (coeMonoidHom : SpecialLinearGroup ι R -> _)
+  结论: 函数.单射 (coeMonoidHom : SpecialLinearGroup ι R -> _)
   证明: Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
@@ -2369,7 +2369,7 @@ refine ⟨L, L', D, by simpa [hM] using M.2, Subtype.ext ?_⟩
     coeMonoidHom_apply, TransvectionStruct.toSpecialLinearG
 
 中文:
-定理 exists_list_transvec_mul_diagonal_mul_list_transvec
+定理 存在_list_transvec_mul_diagonal_mul_list_transvec
   条件: (M : SpecialLinearGroup ι F)
   证明: by
   obtain ⟨L, L', D, hM⟩ := Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec M.1
@@ -2403,7 +2403,7 @@ theorem diagonal_transvection_induction'
 
 中文:
 定理 diagonal_transvection_induction'
-  结论: [Nontrivial ι] (P : SpecialLinearGroup ι F -> 命题)
+  结论: [非平凡 ι] (P : SpecialLinearGroup ι F -> 命题)
   证明: by
   obtain ⟨i₀, j₀, hij₀⟩ := exists_pair_ne ι
   have hP1 : P 1 := transvection_coeff_zero (F := F) hij₀ ▸ htransvec i₀ j₀ hij₀ 0
@@ -2555,7 +2555,7 @@ lemma transvection_mem_commutator
 
 中文:
 引理 transvection_mem_commutator
-  结论: {a : F} (ha : a != 0) (hasq : a ^ 2 != 1) {i j : Fin 2} (h : i != j)
+  结论: {a : F} (ha : a != 0) (hasq : a ^ 2 != 1) {i j : 有限集 2} (h : i != j)
   证明: by
   fin_cases i
   · obtain rfl : j = 1 := by fin_cases j <;> tauto
@@ -2769,7 +2769,7 @@ theorem coe_T
 
 中文:
 定理 coe_T
-  结论: ↑T = (!![1, 1; 0, 1] : Matrix _ _ 整数)
+  结论: ↑T = (!![1, 1; 0, 1] : 矩阵 _ _ 整数)
   证明: rfl
 -/
 theorem coe_T : ↑T = (!![1, 1; 0, 1] : Matrix _ _ Int) :=
@@ -2930,7 +2930,7 @@ lemma S_mul_S_eq
 
 中文:
 引理 S_mul_S_eq
-  结论: (S : Matrix (Fin 2) (Fin 2) 整数) * S = -1
+  结论: (S : 矩阵 (有限集 2) (有限集 2) 整数) * S = -1
   证明: by
   simp only [S, Int.reduceNeg, cons_mul, Nat.succ_eq_add_one, Nat.reduceAdd,
     vecMul_cons, head_cons, zero_smul, tail_cons, neg_smul, one_smul, neg_cons, neg_zero, neg_empty,

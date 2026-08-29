@@ -75,7 +75,7 @@ definition encode
 
 中文:
 定义 encode
-  签名: {α : Sort*} [Countable α]
+  签名: {α : 类型层*} [可数 α]
   定义体: (Countable.exists_injective_nat α).choose
 
 Depends on / 依赖: Countable, Countable.exists_injective_nat, exists_injective_nat
@@ -93,7 +93,7 @@ theorem encode_injective
 
 中文:
 定理 encode_injective
-  条件: {α : Sort*} [Countable α]
+  条件: {α : 类型层*} [可数 α]
   证明: (Countable.exists_injective_nat α).choose_spec
 
 Depends on / 依赖: Countable, Countable.exists_injective_nat, choose_spec, exists_injective_nat
@@ -154,7 +154,7 @@ theorem pair_encode_step
 
 中文:
 定理 pair_encode_step
-  结论: {p : 命题} {α : Sort*} [Countable α]
+  结论: {p : 命题} {α : 类型层*} [可数 α]
   证明: cons_eq_imp fun ha => h (encode_injective ha)
 
 Depends on / 依赖: cons_eq_imp, encode_injective
@@ -182,8 +182,8 @@ definition mkToNatMatch
   `(match $[$discrs],* with $alts:matchAlt*)
 
 中文:
-定义 mkToNatMatch
-  签名: (ctx : Deriving.Context) (header : Header) (indVal : InductiveVal)
+定义 mkTo自然数Match
+  签名: (ctx : Deriving.余ntext) (header : Header) (indVal : InductiveVal)
   定义体: do
   let discrs ← mkDiscrs header indVal
   let alts ← mkAlts
@@ -240,8 +240,8 @@ definition mkToNatFuns
 res := res.push ← `(
 
 中文:
-定义 mkToNatFuns
-  签名: (ctx : Deriving.Context) (to自然数FnNames : Array Name)
+定义 mkTo自然数Funs
+  签名: (ctx : Deriving.余ntext) (to自然数FnNames : 数组 Name)
   定义体: do
   let mut res : Array (TSyntax `command) := #[]
   for i in [:toNatFnNames.size] do
@@ -296,7 +296,7 @@ definition mkInjThmMatch
 
 中文:
 定义 mkInjThmMatch
-  签名: (ctx : Deriving.Context) (header : Header) (indVal : InductiveVal)
+  签名: (ctx : Deriving.余ntext) (header : Header) (indVal : InductiveVal)
   定义体: do
   let discrs ← mkDiscrs header indVal
   let alts ← mkAlts
@@ -362,7 +362,7 @@ definition mkInjThms
 
 中文:
 定义 mkInjThms
-  签名: (ctx : Deriving.Context) (to自然数FnNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (to自然数FnNames : 数组 Name)
   定义体: do
   let mut res : Array (TSyntax `command) := #[]
   for i in [:toNatFnNames.size] do
@@ -414,7 +414,7 @@ definition mkCountableInstanceCmds
 
 中文:
 定义 mkCountableInstanceCmds
-  签名: (ctx : Deriving.Context) (typeNames : Array Name)
+  签名: (ctx : Deriving.余ntext) (typeNames : 数组 Name)
   定义体: do
   let mut instances := #[]
   for i in [:ctx.typeInfos.size] do
@@ -457,7 +457,7 @@ mkFreshUserName .str n' (s ++ "ToNat")
 
 中文:
 定义 mkCountableCmds
-  签名: (indVal : InductiveVal) (declNames : Array Name)
+  签名: (indVal : InductiveVal) (declNames : 数组 Name)
   定义体: do
   let ctx ← mkContext ``Countable "countable" indVal.name
   let toNatFunNames : Array Name ← ctx.auxFunNames.mapM fun name => do
@@ -496,7 +496,7 @@ definition mkCountableInstance
 
 中文:
 定义 mkCountableInstance
-  签名: (declNames : Array Name)
+  签名: (declNames : 数组 Name)
   定义体: do
   let mut seen : NameSet := {}
   let mut toVisit : Array InductiveVal := #[]

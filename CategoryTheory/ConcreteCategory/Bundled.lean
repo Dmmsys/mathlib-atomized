@@ -43,7 +43,7 @@ structure Bundled
     - str : c α  [default: by infer_instance]
 
 中文:
-结构 Bundled
+结构 打包
   参数: (c : 类型u -> 类型v)
   公理与运算 (2 个):
     - α : 类型u
@@ -93,7 +93,7 @@ instance coeSort
 
 中文:
 实例 coeSort
-  签名: : CoeSort (Bundled c) (类型u)
+  签名: : CoeSort (打包 c) (类型u)
   定义体: ⟨Bundled.α⟩
 
 Depends on / 依赖: Bundled
@@ -113,7 +113,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (α) (str)
-  结论: (@Bundled.mk c α str : 类型u) = α
+  结论: (@打包.mk c α str : 类型u) = α
   证明: rfl
 -/
 theorem coe_mk (α) (str) : (@Bundled.mk c α str : Type u) = α :=
@@ -129,7 +129,7 @@ abbreviation map
 
 中文:
 缩写 map
-  签名: (f : 对任意 {α}, c α -> d α) (b : Bundled c)
+  签名: (f : 对任意 {α}, c α -> d α) (b : 打包 c)
   定义体: ⟨b, f b.str⟩
 
 Depends on / 依赖: Finite, b.str

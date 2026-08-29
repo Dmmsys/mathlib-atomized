@@ -147,7 +147,7 @@ theorem IsPrefix.flatten
 
 中文:
 定理 IsPrefix.flatten
-  条件: {l₁ l₂ : List (List α)} (h : l₁ <+: l₂)
+  条件: {l₁ l₂ : 列表 (列表 α)} (h : l₁ <+: l₂)
   证明: by
   rcases h with ⟨l, rfl⟩
   simp
@@ -172,7 +172,7 @@ theorem IsPrefix.flatMap
 
 中文:
 定理 IsPrefix.flatMap
-  条件: (h : l₁ <+: l₂) (f : α -> List β)
+  条件: (h : l₁ <+: l₂) (f : α -> 列表 β)
   证明: (h.map _).flatten
 
 @[gcongr]
@@ -196,7 +196,7 @@ theorem IsSuffix.flatten
 
 中文:
 定理 IsSuffix.flatten
-  条件: {l₁ l₂ : List (List α)} (h : l₁ <:+ l₂)
+  条件: {l₁ l₂ : 列表 (列表 α)} (h : l₁ <:+ l₂)
   证明: by
   rcases h with ⟨l, rfl⟩
   simp
@@ -221,7 +221,7 @@ theorem IsSuffix.flatMap
 
 中文:
 定理 IsSuffix.flatMap
-  条件: (h : l₁ <:+ l₂) (f : α -> List β)
+  条件: (h : l₁ <:+ l₂) (f : α -> 列表 β)
   证明: (h.map _).flatten
 
 @[gcongr]
@@ -245,7 +245,7 @@ theorem IsInfix.flatten
 
 中文:
 定理 IsInfix.flatten
-  条件: {l₁ l₂ : List (List α)} (h : l₁ <:+: l₂)
+  条件: {l₁ l₂ : 列表 (列表 α)} (h : l₁ <:+: l₂)
   证明: by
   rcases h with ⟨l, l', rfl⟩
   simp
@@ -268,7 +268,7 @@ theorem IsInfix.flatMap
 
 中文:
 定理 IsInfix.flatMap
-  条件: (h : l₁ <:+: l₂) (f : α -> List β)
+  条件: (h : l₁ <:+: l₂) (f : α -> 列表 β)
   证明: (h.map _).flatten
 -/
 protected theorem IsInfix.flatMap (h : l₁ <:+: l₂) (f : α -> List β) :
@@ -289,7 +289,7 @@ lemma dropSlice_sublist
 
 中文:
 引理 dropSlice_sublist
-  条件: (n m : 自然数) (l : List α)
+  条件: (n m : 自然数) (l : 列表 α)
   结论: l.dropSlice n m <+ l
   证明: calc
     l.dropSlice n m = take n l ++ drop m (drop n l) := by rw [dropSlice_eq, drop_drop, Nat.add_comm]
@@ -315,7 +315,7 @@ lemma dropSlice_subset
 
 中文:
 引理 dropSlice_subset
-  条件: (n m : 自然数) (l : List α)
+  条件: (n m : 自然数) (l : 列表 α)
   结论: l.dropSlice n m subseteq l
   证明: (dropSlice_sublist n m l).subset
 
@@ -335,7 +335,7 @@ lemma mem_of_mem_dropSlice
 
 中文:
 引理 mem_of_mem_dropSlice
-  条件: {n m : 自然数} {l : List α} {a : α} (h : a in l.dropSlice n m)
+  条件: {n m : 自然数} {l : 列表 α} {a : α} (h : a in l.dropSlice n m)
   结论: a in l
   证明: dropSlice_subset n m l h
 
@@ -355,7 +355,7 @@ theorem tail_subset
 
 中文:
 定理 tail_subset
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: tail l subseteq l
   证明: (tail_sublist l).subset
 
@@ -401,7 +401,7 @@ theorem concat_get_prefix
 
 中文:
 定理 concat_get_prefix
-  条件: {x y : List α} (h : x <+: y) (hl : x.length < y.length)
+  条件: {x y : 列表 α} (h : x <+: y) (hl : x.length < y.length)
   证明: by
   use y.drop (x.length + 1)
   nth_rw 1 [List.prefix_iff_eq_take.mp h]
@@ -435,7 +435,7 @@ theorem prefix_append_drop
 
 中文:
 定理 prefix_append_drop
-  条件: {l₁ l₂ : List α} (h : l₁ <+: l₂)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ <+: l₂)
   证明: by
   induction l₂ generalizing l₁ with
   | nil => simp [List.prefix_nil.mp h]
@@ -496,7 +496,7 @@ theorem IsPrefix.reduceOption
 
 中文:
 定理 IsPrefix.reduceOption
-  条件: {l₁ l₂ : List (Option α)} (h : l₁ <+: l₂)
+  条件: {l₁ l₂ : 列表 (选项类型 α)} (h : l₁ <+: l₂)
   证明: h.filterMap id
 -/
 protected theorem IsPrefix.reduceOption {l₁ l₂ : List (Option α)} (h : l₁ <+: l₂) :
@@ -518,7 +518,7 @@ theorem singleton_infix_iff
 
 中文:
 定理 singleton_infix_iff
-  条件: (x : α) (xs : List α)
+  条件: (x : α) (xs : 列表 α)
   证明: by
   rw [List.mem_iff_append]; rw [List.IsInfix]
   congr! 4
@@ -577,7 +577,7 @@ theorem infix_singleton_iff
 
 中文:
 定理 infix_singleton_iff
-  条件: (xs : List α) (x : α)
+  条件: (xs : 列表 α) (x : α)
   证明: by
   match xs with
   | [] => simp
@@ -609,7 +609,7 @@ lemma infix_antisymm
 
 中文:
 引理 infix_antisymm
-  条件: {l₁ l₂ : List α} (h₁ : l₁ <:+: l₂) (h₂ : l₂ <:+: l₁)
+  条件: {l₁ l₂ : 列表 α} (h₁ : l₁ <:+: l₂) (h₂ : l₂ <:+: l₁)
   证明: h₁.sublist.antisymm h₂.sublist
 
 Depends on / 依赖: antisymm, sublist, sublist.antisymm
@@ -628,7 +628,7 @@ theorem IsPrefix.nodup
 
 中文:
 定理 IsPrefix.nodup
-  条件: {l₁ l₂ : List α} (h : l₁ <+: l₂) (hn : l₂.Nodup)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ <+: l₂) (hn : l₂.Nodup)
   证明: hn.sublist h.sublist
 -/
 protected theorem IsPrefix.nodup {l₁ l₂ : List α} (h : l₁ <+: l₂) (hn : l₂.Nodup) :
@@ -645,7 +645,7 @@ theorem IsInfix.nodup
 
 中文:
 定理 IsInfix.nodup
-  条件: {l₁ l₂ : List α} (h : l₁ <:+: l₂) (hn : l₂.Nodup)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ <:+: l₂) (hn : l₂.Nodup)
   证明: hn.sublist h.sublist
 -/
 protected theorem IsInfix.nodup {l₁ l₂ : List α} (h : l₁ <:+: l₂) (hn : l₂.Nodup) :
@@ -662,7 +662,7 @@ theorem IsSuffix.nodup
 
 中文:
 定理 IsSuffix.nodup
-  条件: {l₁ l₂ : List α} (h : l₁ <:+ l₂) (hn : l₂.Nodup)
+  条件: {l₁ l₂ : 列表 α} (h : l₁ <:+ l₂) (hn : l₂.Nodup)
   证明: hn.sublist h.sublist
 -/
 protected theorem IsSuffix.nodup {l₁ l₂ : List α} (h : l₁ <:+ l₂) (hn : l₂.Nodup) :
@@ -681,7 +681,7 @@ antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_
 
 中文:
 实例 :
-  签名: IsPartialOrder (List α) (· <+: ·)
+  签名: 是偏序 (列表 α) (· <+: ·)
   定义体: prefix_rfl
   trans _ _ _ := IsPrefix.trans
 antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_le
@@ -705,7 +705,7 @@ antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_
 
 中文:
 实例 :
-  签名: IsPartialOrder (List α) (· <:+ ·)
+  签名: 是偏序 (列表 α) (· <:+ ·)
   定义体: suffix_rfl
   trans _ _ _ := IsSuffix.trans
 antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_le
@@ -729,7 +729,7 @@ antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_
 
 中文:
 实例 :
-  签名: IsPartialOrder (List α) (· <:+: ·)
+  签名: 是偏序 (列表 α) (· <:+: ·)
   定义体: infix_rfl
   trans _ _ _ := IsInfix.trans
 antisymm _ _ h₁ h₂ := h₁.eq_of_length h₁.length_le.antisymm h₂.length_le
@@ -763,7 +763,7 @@ Or.inr by rw [eq_of_heq ba]; exact ⟨_, (mem_inits _ _).2 ⟨
 
 中文:
 定理 mem_inits
-  结论: 对任意 s t : List α, s in inits t ↔ s <+: t
+  结论: 对任意 s t : 列表 α, s in inits t ↔ s <+: t
   证明: (mem_inits _ _).1 hr
         rw [← hs]; rw [← ht]; exact ⟨s, rfl⟩,
       fun mi =>
@@ -804,7 +804,7 @@ theorem mem_tails
 
 中文:
 定理 mem_tails
-  结论: 对任意 s t : List α, s in tails t ↔ s <:+ t
+  结论: 对任意 s t : 列表 α, s in tails t ↔ s <:+ t
 -/
 theorem mem_tails : forall s t : List α, s in tails t ↔ s <:+ t
   | s, [] => by
@@ -835,7 +835,7 @@ theorem inits_cons
 
 中文:
 定理 inits_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: inits (a :: l) = [] :: l.inits.map fun t => a :: t
   证明: by
   simp
@@ -856,7 +856,7 @@ theorem tails_cons
 
 中文:
 定理 tails_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: tails (a :: l) = (a :: l) :: l.tails
   证明: by simp
 
@@ -874,7 +874,7 @@ theorem inits_append
 
 中文:
 定理 inits_append
-  结论: 对任意 s t : List α, inits (s ++ t) = s.inits ++ t.inits.tail.map fun l => s ++ l
+  结论: 对任意 s t : 列表 α, inits (s ++ t) = s.inits ++ t.inits.tail.map fun l => s ++ l
 -/
 theorem inits_append : forall s t : List α, inits (s ++ t) = s.inits ++ t.inits.tail.map fun l => s ++ l
   | [], [] => by simp
@@ -907,7 +907,7 @@ theorem inits_eq_tails
 
 中文:
 定理 inits_eq_tails
-  结论: 对任意 l : List α, l.inits = (reverse <| map reverse <| tails <| reverse l)
+  结论: 对任意 l : 列表 α, l.inits = (reverse <| map reverse <| tails <| reverse l)
 -/
 theorem inits_eq_tails : forall l : List α, l.inits = (reverse <| map reverse <| tails <| reverse l)
   | [] => by simp
@@ -922,7 +922,7 @@ theorem tails_eq_inits
 
 中文:
 定理 tails_eq_inits
-  结论: 对任意 l : List α, l.tails = (reverse <| map reverse <| inits <| reverse l)
+  结论: 对任意 l : 列表 α, l.tails = (reverse <| map reverse <| inits <| reverse l)
 -/
 theorem tails_eq_inits : forall l : List α, l.tails = (reverse <| map reverse <| inits <| reverse l)
   | [] => by simp
@@ -941,7 +941,7 @@ theorem inits_reverse
 
 中文:
 定理 inits_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: inits (reverse l) = reverse (map reverse l.tails)
   证明: by
   rw [tails_eq_inits l]
@@ -966,7 +966,7 @@ theorem tails_reverse
 
 中文:
 定理 tails_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: tails (reverse l) = reverse (map reverse l.inits)
   证明: by
   rw [inits_eq_tails l]
@@ -991,7 +991,7 @@ theorem map_reverse_inits
 
 中文:
 定理 map_reverse_inits
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: map reverse l.inits = (reverse <| tails <| reverse l)
   证明: by
   rw [inits_eq_tails l]
@@ -1018,7 +1018,7 @@ theorem map_reverse_tails
 
 中文:
 定理 map_reverse_tails
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: map reverse l.tails = (reverse <| inits <| reverse l)
   证明: by
   rw [tails_eq_inits l]
@@ -1049,7 +1049,7 @@ theorem length_tails
 
 中文:
 定理 length_tails
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (tails l) = length l + 1
   证明: by
   induction l with
@@ -1077,7 +1077,7 @@ theorem length_inits
 
 中文:
 定理 length_inits
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (inits l) = length l + 1
   证明: by simp [inits_eq_tails]
 
@@ -1104,7 +1104,7 @@ theorem getElem_tails
 
 中文:
 定理 getElem_tails
-  条件: (l : List α) (n : 自然数) (h : n < (tails l).length)
+  条件: (l : 列表 α) (n : 自然数) (h : n < (tails l).length)
   证明: by
   induction l generalizing n with
   | nil => simp
@@ -1138,7 +1138,7 @@ theorem get_tails
 
 中文:
 定理 get_tails
-  条件: (l : List α) (n : Fin (length (tails l)))
+  条件: (l : 列表 α) (n : 有限集 (length (tails l)))
   结论: (tails l).get n = l.drop n
   证明: by
   simp
@@ -1165,7 +1165,7 @@ theorem getElem_inits
 
 中文:
 定理 getElem_inits
-  条件: (l : List α) (n : 自然数) (h : n < length (inits l))
+  条件: (l : 列表 α) (n : 自然数) (h : n < length (inits l))
   证明: by
   induction l generalizing n with
   | nil => simp
@@ -1197,7 +1197,7 @@ theorem get_inits
 
 中文:
 定理 get_inits
-  条件: (l : List α) (n : Fin (length (inits l)))
+  条件: (l : 列表 α) (n : 有限集 (length (inits l)))
   结论: (inits l).get n = l.take n
   证明: by
   simp
@@ -1295,7 +1295,7 @@ theorem insert_eq_ite
 
 中文:
 定理 insert_eq_ite
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: insert a l = if a in l then l else a :: l
   证明: by
   simp only [← elem_iff]
@@ -1324,7 +1324,7 @@ theorem suffix_insert
 
 中文:
 定理 suffix_insert
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: l <:+ l.insert a
   证明: by
   by_cases h : a in l
@@ -1349,7 +1349,7 @@ theorem infix_insert
 
 中文:
 定理 infix_insert
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: l <:+: l.insert a
   证明: (suffix_insert a l).isInfix
 
@@ -1369,7 +1369,7 @@ theorem sublist_insert
 
 中文:
 定理 sublist_insert
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: l <+ l.insert a
   证明: (suffix_insert a l).sublist
 
@@ -1389,7 +1389,7 @@ theorem subset_insert
 
 中文:
 定理 subset_insert
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   结论: l subseteq l.insert a
   证明: (sublist_insert a l).subset
 

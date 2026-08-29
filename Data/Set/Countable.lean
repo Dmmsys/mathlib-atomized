@@ -50,8 +50,8 @@ definition Countable
 @[simp]
 
 中文:
-定义 Countable
-  签名: (s : Set α)
+定义 可数
+  签名: (s : 集合 α)
   定义体: Countable s
 
 @[simp]
@@ -70,8 +70,8 @@ theorem countable_coe_iff
 
 中文:
 定理 countable_coe_iff
-  条件: {s : Set α}
-  结论: Countable s ↔ s.Countable
+  条件: {s : 集合 α}
+  结论: 可数 s ↔ s.可数
   证明: .rfl
 -/
 theorem countable_coe_iff {s : Set α} : Countable s ↔ s.Countable := .rfl
@@ -87,8 +87,8 @@ theorem to_countable
 
 中文:
 定理 to_countable
-  条件: (s : Set α) [Countable s]
-  结论: s.Countable
+  条件: (s : 集合 α) [可数 s]
+  结论: s.可数
   证明: ‹_›
 -/
 theorem to_countable (s : Set α) [Countable s] : s.Countable := ‹_›
@@ -105,8 +105,8 @@ theorem countable_iff_exists_injective
   proof: countable_iff_exists_injective s
 
 中文:
-定理 countable_iff_exists_injective
-  条件: {s : Set α}
+定理 countable_iff_存在_injective
+  条件: {s : 集合 α}
   证明: countable_iff_exists_injective s
 -/
 protected theorem countable_iff_exists_injective {s : Set α} :
@@ -123,9 +123,9 @@ theorem countable_iff_exists_injOn
   proof: Set.countable_iff_exists_injective.trans exists_injOn_iff_injective.symm
 
 中文:
-定理 countable_iff_exists_injOn
-  条件: {s : Set α}
-  结论: s.Countable ↔ 存在 f : α -> 自然数, InjOn f s
+定理 countable_iff_存在_injOn
+  条件: {s : 集合 α}
+  结论: s.可数 ↔ 存在 f : α -> 自然数, 单射限制 f s
   证明: Set.countable_iff_exists_injective.trans exists_injOn_iff_injective.symm
 
 Depends on / 依赖: Set.countable_iff_exists_injective.trans, countable_iff_exists_injective, exists_injOn_iff_injective, exists_injOn_iff_injective.symm
@@ -146,8 +146,8 @@ alias ⟨Countable.nonempty_encodable, _⟩ := countable_iff_nonempty_encodable
 
 中文:
 定理 countable_iff_nonempty_encodable
-  条件: {s : Set α}
-  结论: s.Countable ↔ Nonempty (Encodable s)
+  条件: {s : 集合 α}
+  结论: s.可数 ↔ 非空 (可编码 s)
   证明: Encodable.nonempty_encodable.symm
 
 alias ⟨Countable.nonempty_encodable, _⟩ := countable_iff_nonempty_encodable
@@ -170,8 +170,8 @@ definition Countable.toEncodable
   body: Classical.choice hs.nonempty_encodable
 
 中文:
-定义 Countable.toEncodable
-  签名: {s : Set α} (hs : s.Countable)
+定义 可数.toEncodable
+  签名: {s : 集合 α} (hs : s.可数)
   定义体: Classical.choice hs.nonempty_encodable
 -/
 protected def Countable.toEncodable {s : Set α} (hs : s.Countable) : Encodable s :=
@@ -192,7 +192,7 @@ definition enumerateCountable
 
 中文:
 定义 enumerateCountable
-  签名: {s : Set α} (h : s.Countable) (default : α)
+  签名: {s : 集合 α} (h : s.可数) (default : α)
   定义体: fun n =>
   match @Encodable.decode s h.toEncodable n with
   | some y => y
@@ -215,7 +215,7 @@ theorem subset_range_enumerate
 
 中文:
 定理 subset_range_enumerate
-  条件: {s : Set α} (h : s.Countable) (default : α)
+  条件: {s : 集合 α} (h : s.可数) (default : α)
   证明: fun x hx =>
   ⟨@Encodable.encode s h.toEncodable ⟨x, hx⟩, by
     simp [enumerateCountable, Encodable.encodek]⟩
@@ -240,7 +240,7 @@ lemma range_enumerateCountable_subset
 
 中文:
 引理 range_enumerateCountable_subset
-  条件: {s : Set α} (h : s.Countable) (default : α)
+  条件: {s : 集合 α} (h : s.可数) (default : α)
   证明: by
   refine range_subset_iff.mpr (fun n => ?_)
   rw [enumerateCountable]
@@ -269,7 +269,7 @@ lemma range_enumerateCountable_of_mem
 
 中文:
 引理 range_enumerateCountable_of_mem
-  结论: {s : Set α} (h : s.Countable) {default : α}
+  结论: {s : 集合 α} (h : s.可数) {default : α}
   证明: subset_antisymm ((range_enumerateCountable_subset h _).trans_eq (insert_eq_of_mem h_mem))
     (subset_range_enumerate h default)
 
@@ -293,7 +293,7 @@ lemma enumerateCountable_mem
 
 中文:
 引理 enumerateCountable_mem
-  结论: {s : Set α} (h : s.Countable) {default : α} (h_mem : default in s)
+  结论: {s : 集合 α} (h : s.可数) {default : α} (h_mem : default in s)
   证明: by
   convert! mem_range_self n
   exact (range_enumerateCountable_of_mem h h_mem).symm
@@ -318,9 +318,9 @@ theorem Countable.mono
   proof: have := hs.to_subtype; (inclusion_injective h).countable
 
 中文:
-定理 Countable.mono
-  条件: {s₁ s₂ : Set α} (h : s₁ subseteq s₂) (hs : s₂.Countable)
-  结论: s₁.Countable
+定理 可数.mono
+  条件: {s₁ s₂ : 集合 α} (h : s₁ subseteq s₂) (hs : s₂.可数)
+  结论: s₁.可数
   证明: have := hs.to_subtype; (inclusion_injective h).countable
 
 Depends on / 依赖: countable, hs.to_subtype, inclusion_injective, to_subtype
@@ -339,8 +339,8 @@ theorem countable_range
 
 中文:
 定理 countable_range
-  条件: [Countable ι] (f : ι -> β)
-  结论: (range f).Countable
+  条件: [可数 ι] (f : ι -> β)
+  结论: (range f).可数
   证明: rangeFactorization_surjective.countable.to_set
 
 Depends on / 依赖: countable, rangeFactorization_surjective, rangeFactorization_surjective.countable.to_set, to_set
@@ -360,8 +360,8 @@ theorem countable_iff_exists_subset_range
     (countable_range f).mono hsf⟩
 
 中文:
-定理 countable_iff_exists_subset_range
-  条件: [Nonempty α] {s : Set α}
+定理 countable_iff_存在_subset_range
+  条件: [非空 α] {s : 集合 α}
   证明: ⟨fun h => by
     inhabit α
     exact ⟨enumerateCountable h default, subset_range_enumerate _ _⟩, fun ⟨f, hsf⟩ =>
@@ -387,8 +387,8 @@ theorem countable_iff_exists_surjective
 alias ⟨Countable.exists_surjective, _⟩ := Set.countable_iff_exists_surjective
 
 中文:
-定理 countable_iff_exists_surjective
-  条件: {s : Set α} (hs : s.Nonempty)
+定理 countable_iff_存在_surjective
+  条件: {s : 集合 α} (hs : s.非空)
   证明: @countable_iff_exists_surjective s hs.to_subtype
 
 alias ⟨Countable.exists_surjective, _⟩ := Set.countable_iff_exists_surjective
@@ -409,7 +409,7 @@ theorem countable_univ_iff
 
 中文:
 定理 countable_univ_iff
-  结论: (univ : Set α).Countable ↔ Countable α
+  结论: (univ : 集合 α).可数 ↔ 可数 α
   证明: countable_coe_iff.symm.trans (Equiv.Set.univ _).countable_iff
 
 Depends on / 依赖: Equiv.Set.univ, countable_coe_iff, countable_coe_iff.symm.trans, countable_iff
@@ -428,8 +428,8 @@ theorem countable_univ
 
 中文:
 定理 countable_univ
-  条件: [Countable α]
-  结论: (univ : Set α).Countable
+  条件: [可数 α]
+  结论: (univ : 集合 α).可数
   证明: to_countable univ
 
 Depends on / 依赖: to_countable
@@ -448,7 +448,7 @@ theorem not_countable_univ_iff
 
 中文:
 定理 not_countable_univ_iff
-  结论: ¬ (univ : Set α).Countable ↔ Uncountable α
+  结论: ¬ (univ : 集合 α).可数 ↔ 不可数 α
   证明: by
   rw [countable_univ_iff]; rw [not_countable_iff]
 
@@ -468,8 +468,8 @@ theorem not_countable_univ
 
 中文:
 定理 not_countable_univ
-  条件: [Uncountable α]
-  结论: ¬ (univ : Set α).Countable
+  条件: [不可数 α]
+  结论: ¬ (univ : 集合 α).可数
   证明: not_countable_univ_iff.2 ‹_›
 
 Depends on / 依赖: not_countable_univ_iff
@@ -489,8 +489,8 @@ theorem Countable.exists_eq_range
   rw [hf.range_comp]; rw [Subtype.range_coe]
 
 中文:
-定理 Countable.exists_eq_range
-  条件: {s : Set α} (hc : s.Countable) (hs : s.Nonempty)
+定理 可数.存在_eq_range
+  条件: {s : 集合 α} (hc : s.可数) (hs : s.非空)
   证明: by
   rcases hc.exists_surjective hs with ⟨f, hf⟩
   refine ⟨(↑) ∘ f, ?_⟩
@@ -514,7 +514,7 @@ theorem countable_empty
 
 中文:
 定理 countable_empty
-  结论: (∅ : Set α).Countable
+  结论: (∅ : 集合 α).可数
   证明: to_countable _
 -/
 @[simp] theorem countable_empty : (∅ : Set α).Countable := to_countable _
@@ -531,7 +531,7 @@ theorem countable_singleton
 中文:
 定理 countable_singleton
   条件: (a : α)
-  结论: ({a} : Set α).Countable
+  结论: ({a} : 集合 α).可数
   证明: to_countable _
 -/
 @[simp] theorem countable_singleton (a : α) : ({a} : Set α).Countable := to_countable _
@@ -549,9 +549,9 @@ theorem Countable.image
   apply countable_range
 
 中文:
-定理 Countable.image
-  条件: {s : Set α} (hs : s.Countable) (f : α -> β)
-  结论: (f '' s).Countable
+定理 可数.像
+  条件: {s : 集合 α} (hs : s.可数) (f : α -> β)
+  结论: (f '' s).可数
   证明: by
   rw [image_eq_range]
   have := hs.to_subtype
@@ -578,8 +578,8 @@ theorem Infinite.exists_subset_countable_infinite
 · exact infinite_range_of_injective Injective.comp Subtype.val_injective hf
 
 中文:
-定理 Infinite.exists_subset_countable_infinite
-  条件: {α : 类型u} {s : Set α} (hs : s.Infinite)
+定理 无限.存在_subset_countable_infinite
+  条件: {α : 类型u} {s : 集合 α} (hs : s.无限)
   证明: by
   obtain ⟨f, hf⟩ := Infinite.natEmbedding s hs
   refine ⟨range (Subtype.val ∘ f), ?_, ?_, ?_⟩
@@ -608,8 +608,8 @@ theorem MapsTo.countable_of_injOn
   this.countable
 
 中文:
-定理 MapsTo.countable_of_injOn
-  结论: {s : Set α} {t : Set β} {f : α -> β} (hf : MapsTo f s t)
+定理 映射到.countable_of_injOn
+  结论: {s : 集合 α} {t : 集合 β} {f : α -> β} (hf : 映射到 f s t)
   证明: have := ht.to_subtype
   have : Injective (hf.restrict f s t) := (injOn_iff_injective.1 hf').codRestrict _
   this.countable
@@ -631,8 +631,8 @@ theorem Countable.preimage_of_injOn
   proof: (mapsTo_preimage f s).countable_of_injOn hf hs
 
 中文:
-定理 Countable.preimage_of_injOn
-  结论: {s : Set β} (hs : s.Countable) {f : α -> β}
+定理 可数.preimage_of_injOn
+  结论: {s : 集合 β} (hs : s.可数) {f : α -> β}
   证明: (mapsTo_preimage f s).countable_of_injOn hf hs
 
 Depends on / 依赖: countable_of_injOn, mapsTo_preimage
@@ -650,8 +650,8 @@ theorem Countable.preimage
   proof: hs.preimage_of_injOn hf.injOn
 
 中文:
-定理 Countable.preimage
-  条件: {s : Set β} (hs : s.Countable) {f : α -> β} (hf : Injective f)
+定理 可数.原像
+  条件: {s : 集合 β} (hs : s.可数) {f : α -> β} (hf : 单射 f)
   证明: hs.preimage_of_injOn hf.injOn
 -/
 protected theorem Countable.preimage {s : Set β} (hs : s.Countable) {f : α -> β} (hf : Injective f) :
@@ -676,8 +676,8 @@ theorem exists_seq_iSup_eq_top_iff_countable
       rcases h wit
 
 中文:
-定理 exists_seq_iSup_eq_top_iff_countable
-  条件: [CompleteLattice α] {p : α -> 命题} (h : 存在 x, p x)
+定理 存在_seq_iSup_eq_top_iff_countable
+  条件: [完备格 α] {p : α -> 命题} (h : 存在 x, p x)
   证明: by
   constructor
   · rintro ⟨s, hps, hs⟩
@@ -717,8 +717,8 @@ theorem exists_seq_cover_iff_countable
   proof: exists_seq_iSup_eq_top_iff_countable h
 
 中文:
-定理 exists_seq_cover_iff_countable
-  条件: {p : Set α -> 命题} (h : 存在 s, p s)
+定理 存在_seq_cover_iff_countable
+  条件: {p : 集合 α -> 命题} (h : 存在 s, p s)
   证明: exists_seq_iSup_eq_top_iff_countable h
 
 Depends on / 依赖: exists_seq_iSup_eq_top_iff_countable
@@ -738,7 +738,7 @@ theorem countable_of_injective_of_countable_image
 
 中文:
 定理 countable_of_injective_of_countable_image
-  结论: {s : Set α} {f : α -> β} (hf : InjOn f s)
+  结论: {s : 集合 α} {f : α -> β} (hf : 单射限制 f s)
   证明: (mapsTo_image _ _).countable_of_injOn hf hs
 
 Depends on / 依赖: countable_of_injOn, mapsTo_image
@@ -762,7 +762,7 @@ theorem countable_iUnion
 
 中文:
 定理 countable_iUnion
-  条件: {t : ι -> Set α} [Countable ι] (ht : 对任意 i, (t i).Countable)
+  条件: {t : ι -> 集合 α} [可数 ι] (ht : 对任意 i, (t i).可数)
   证明: by
   have := fun i => (ht i).to_subtype
   rw [iUnion_eq_range_psigma]
@@ -789,7 +789,7 @@ theorem countable_iUnion_iff
 
 中文:
 定理 countable_iUnion_iff
-  条件: [Countable ι] {t : ι -> Set α}
+  条件: [可数 ι] {t : ι -> 集合 α}
   证明: ⟨fun h _ => h.mono subset_iUnion _ _, countable_iUnion⟩
 
 Depends on / 依赖: countable_iUnion, h.mono, subset_iUnion
@@ -809,8 +809,8 @@ theorem Countable.biUnion_iff
   rw [biUnion_eq_iUnion]; rw [countable_iUnion_iff]; rw [SetCoe.forall']
 
 中文:
-定理 Countable.biUnion_iff
-  条件: {s : Set α} {t : 对任意 a in s, Set β} (hs : s.Countable)
+定理 可数.biUnion_iff
+  条件: {s : 集合 α} {t : 对任意 a in s, 集合 β} (hs : s.可数)
   证明: by
   have := hs.to_subtype
   rw [biUnion_eq_iUnion]; rw [countable_iUnion_iff]; rw [SetCoe.forall']
@@ -837,8 +837,8 @@ alias ⟨_, Countable.sUnion⟩ := Countable.sUnion_iff
 @[simp]
 
 中文:
-定理 Countable.sUnion_iff
-  条件: {s : Set (Set α)} (hs : s.Countable)
+定理 可数.sUnion_iff
+  条件: {s : 集合 (集合 α)} (hs : s.可数)
   证明: by rw [sUnion_eq_biUnion, hs.biUnion_iff]
 
 alias ⟨_, Countable.biUnion⟩ := Countable.biUnion_iff
@@ -869,8 +869,8 @@ theorem countable_union
 
 中文:
 定理 countable_union
-  条件: {s t : Set α}
-  结论: (s union t).Countable ↔ s.Countable ∧ t.Countable
+  条件: {s t : 集合 α}
+  结论: (s union t).可数 ↔ s.可数 ∧ t.可数
   证明: by
   simp [union_eq_iUnion, and_comm]
 
@@ -889,9 +889,9 @@ theorem Countable.union
   proof: countable_union.2 ⟨hs, ht⟩
 
 中文:
-定理 Countable.union
-  条件: {s t : Set α} (hs : s.Countable) (ht : t.Countable)
-  结论: (s union t).Countable
+定理 可数.union
+  条件: {s t : 集合 α} (hs : s.可数) (ht : t.可数)
+  结论: (s union t).可数
   证明: countable_union.2 ⟨hs, ht⟩
 
 Depends on / 依赖: countable_union
@@ -913,9 +913,9 @@ theorem Countable.of_sdiff
 @[simp]
 
 中文:
-定理 Countable.of_sdiff
-  条件: {s t : Set α} (h : (s \ t).Countable) (ht : t.Countable)
-  结论: s.Countable
+定理 可数.of_sdiff
+  条件: {s t : 集合 α} (h : (s \ t).可数) (ht : t.可数)
+  结论: s.可数
   证明: (h.union ht).mono (subset_sdiff_union _ _)
 
 @[deprecated (since := "2026-06-03")] alias Countable.of_diff := Countable.of_sdiff
@@ -942,8 +942,8 @@ theorem countable_insert
 
 中文:
 定理 countable_insert
-  条件: {s : Set α} {a : α}
-  结论: (insert a s).Countable ↔ s.Countable
+  条件: {s : 集合 α} {a : α}
+  结论: (insert a s).可数 ↔ s.可数
   证明: by
   simp only [insert_eq, countable_union, countable_singleton, true_and]
 
@@ -962,9 +962,9 @@ theorem Countable.insert
   proof: countable_insert.2 h
 
 中文:
-定理 Countable.insert
-  条件: {s : Set α} (a : α) (h : s.Countable)
-  结论: (insert a s).Countable
+定理 可数.insert
+  条件: {s : 集合 α} (a : α) (h : s.可数)
+  结论: (insert a s).可数
   证明: countable_insert.2 h
 -/
 protected theorem Countable.insert {s : Set α} (a : α) (h : s.Countable) : (insert a s).Countable :=
@@ -982,9 +982,9 @@ theorem Finite.countable
 @[nontriviality]
 
 中文:
-定理 Finite.countable
-  条件: {s : Set α} (hs : s.Finite)
-  结论: s.Countable
+定理 有限.countable
+  条件: {s : 集合 α} (hs : s.有限)
+  结论: s.可数
   证明: have := hs.to_subtype; s.to_countable
 
 @[nontriviality]
@@ -1005,9 +1005,9 @@ theorem Countable.of_subsingleton
   proof: (Finite.of_subsingleton s).countable
 
 中文:
-定理 Countable.of_subsingleton
-  条件: [Subsingleton α] (s : Set α)
-  结论: s.Countable
+定理 可数.of_subsingleton
+  条件: [子单例 α] (s : 集合 α)
+  结论: s.可数
   证明: (Finite.of_subsingleton s).countable
 
 Depends on / 依赖: Finite, Finite.of_subsingleton, countable, of_subsingleton
@@ -1025,9 +1025,9 @@ theorem Subsingleton.countable
   proof: hs.finite.countable
 
 中文:
-定理 Subsingleton.countable
-  条件: {s : Set α} (hs : s.Subsingleton)
-  结论: s.Countable
+定理 子单例.countable
+  条件: {s : 集合 α} (hs : s.子单例)
+  结论: s.可数
   证明: hs.finite.countable
 
 Depends on / 依赖: countable, finite, hs.finite.countable
@@ -1046,8 +1046,8 @@ theorem countable_isTop
 
 中文:
 定理 countable_isTop
-  条件: (α : 类型) [PartialOrder α]
-  结论: { x : α | IsTop x }.Countable
+  条件: (α : 类型) [偏序 α]
+  结论: { x : α | IsTop x }.可数
   证明: (finite_isTop α).countable
 
 Depends on / 依赖: countable, finite_isTop
@@ -1066,8 +1066,8 @@ theorem countable_isBot
 
 中文:
 定理 countable_isBot
-  条件: (α : 类型) [PartialOrder α]
-  结论: { x : α | IsBot x }.Countable
+  条件: (α : 类型) [偏序 α]
+  结论: { x : α | IsBot x }.可数
   证明: (finite_isBot α).countable
 
 Depends on / 依赖: countable, finite_isBot
@@ -1094,7 +1094,7 @@ alia
 
 中文:
 定理 countable_ofPred_finite_subset
-  条件: {s : Set α} (hs : s.Countable)
+  条件: {s : 集合 α} (hs : s.可数)
   证明: by
   have := hs.to_subtype
   refine (countable_range fun t : Finset s => Subtype.val '' (t : Set s)).mono ?_
@@ -1133,9 +1133,9 @@ theorem Countable.ofPred_finite
 @[deprecated (since := "2026-07-09")] alias Countable.setOf_finite := Countable.ofPred_finite
 
 中文:
-定理 Countable.ofPred_finite
-  条件: [Countable α]
-  结论: {s : Set α | s.Finite}.Countable
+定理 可数.ofPred_finite
+  条件: [可数 α]
+  结论: {s : 集合 α | s.有限}.可数
   证明: by
   simpa using countable_ofPred_finite_subset countable_univ
 
@@ -1159,8 +1159,8 @@ theorem Countable.of_preimage_singleton
     Set.preimage_iUnion, Set.countable_iUnion h]
 
 中文:
-定理 Countable.of_preimage_singleton
-  结论: {f : α -> β} [Countable β]
+定理 可数.of_preimage_singleton
+  结论: {f : α -> β} [可数 β]
   证明: by
   simp_rw [← Set.countable_univ_iff, ← Set.preimage_univ (f := f), ← Set.iUnion_of_singleton,
     Set.preimage_iUnion, Set.countable_iUnion h]
@@ -1182,7 +1182,7 @@ theorem countable_univ_pi
 
 中文:
 定理 countable_univ_pi
-  结论: {π : α -> 类型} [Finite α] {s : 对任意 a, Set (π a)}
+  结论: {π : α -> 类型} [有限 α] {s : 对任意 a, 集合 (π a)}
   证明: have := fun a => (hs a).to_subtype; .of_equiv _ (Equiv.Set.univPi s).symm
 
 Depends on / 依赖: Equiv.Set.univPi, of_equiv, to_subtype, univPi
@@ -1202,7 +1202,7 @@ theorem countable_pi
 
 中文:
 定理 countable_pi
-  条件: {π : α -> 类型} [Finite α] {s : 对任意 a, Set (π a)} (hs : 对任意 a, (s a).Countable)
+  条件: {π : α -> 类型} [有限 α] {s : 对任意 a, 集合 (π a)} (hs : 对任意 a, (s a).可数)
   证明: by
   simpa only [← mem_univ_pi] using! countable_univ_pi hs
 
@@ -1221,8 +1221,8 @@ theorem Countable.prod
   proof: have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ (Equiv.Set.prod _ _).symm
 
 中文:
-定理 Countable.prod
-  条件: {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable)
+定理 可数.乘积
+  条件: {s : 集合 α} {t : 集合 β} (hs : s.可数) (ht : t.可数)
   证明: have := hs.to_subtype; have := ht.to_subtype; .of_equiv _ (Equiv.Set.prod _ _).symm
 -/
 protected theorem Countable.prod {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable) :
@@ -1240,8 +1240,8 @@ theorem Countable.image2
   exact (hs.prod ht).image _
 
 中文:
-定理 Countable.image2
-  结论: {s : Set α} {t : Set β} (hs : s.Countable) (ht : t.Countable)
+定理 可数.image2
+  结论: {s : 集合 α} {t : 集合 β} (hs : s.可数) (ht : t.可数)
   证明: by
   rw [← image_prod]
   exact (hs.prod ht).image _
@@ -1271,7 +1271,7 @@ theorem countable_ofPred_nonempty_of_disjoint
 
 中文:
 定理 countable_ofPred_nonempty_of_disjoint
-  结论: {f : β -> Set α}
+  结论: {f : β -> 集合 α}
   证明: by
   rw [← Set.countable_coe_iff] at hs ⊢
   have : forall t : {t // (f t).Nonempty}, exists x : s, x.1 in f t := by
@@ -1318,9 +1318,9 @@ theorem Finset.countable_toSet
   proof: s.finite_toSet.countable
 
 中文:
-定理 Finset.countable_toSet
-  条件: (s : Finset α)
-  结论: Set.Countable (↑s : Set α)
+定理 有限集.countable_toSet
+  条件: (s : 有限集 α)
+  结论: 集合.可数 (↑s : 集合 α)
   证明: s.finite_toSet.countable
 
 Depends on / 依赖: countable, finite_toSet, s.finite_toSet.countable

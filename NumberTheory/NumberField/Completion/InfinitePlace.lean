@@ -75,7 +75,7 @@ theorem isometry_embedding
 
 中文:
 定理 isometry_embedding
-  结论: Isometry (v.embedding.comp (WithAbs.equiv v.1).toRingHom)
+  结论: 等距 (v.embedding.comp (WithAbs.equiv v.1).toRingHom)
   证明: AddMonoidHomClass.isometry_of_norm _ fun x => by
     simpa using! v.norm_embedding_eq (WithAbs.equiv v.1 x)
 
@@ -95,7 +95,7 @@ theorem isometry_embedding_of_isReal
     simpa using! v.norm_embedding_of_isReal hv (WithAbs.equiv v.1 x)
 
 中文:
-定理 isometry_embedding_of_isReal
+定理 isometry_embedding_of_is实数
   条件: (hv : v.Is实数)
   证明: AddMonoidHomClass.isometry_of_norm _ fun x => by
     simpa using! v.norm_embedding_of_isReal hv (WithAbs.equiv v.1 x)
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompletableTopField (WithAbs v.1)
+  签名: 余mpletableTopField (WithAbs v.1)
   定义体: v.isometry_embedding.isUniformInducing.completableTopField
 
 Depends on / 依赖: completableTopField, isUniformInducing, isometry_embedding, v.isometry_embedding.isUniformInducing.completableTopField
@@ -136,11 +136,11 @@ structure Completion
     - toCompletion : v.1.Completion
 
 中文:
-结构 Completion
+结构 完备化
   参数: where
   公理与运算 (2 个):
     - ofCompletion : :
-    - toCompletion : v.1.Completion
+    - toCompletion : v.1.完备化
 -/
 structure Completion where
   /-- Wrap an element of `v.1.Completion` into `v.Completion`. -/
@@ -165,7 +165,7 @@ definition equivCompletion
 
 中文:
 定义 equivCompletion
-  签名: : v.Completion ≃ v.1.Completion where
+  签名: : v.完备化 ≃ v.1.完备化 where
   定义体: toCompletion
   invFun := ofCompletion
   left_inv _ := rfl
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedField v.Completion
+  签名: 赋范域 v.完备化
   定义体: fast_instance% (equivCompletion v).normedField
 
 Depends on / 依赖: equivCompletion, fast_instance, normedField
@@ -210,7 +210,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : v.Completion ≃+* v.1.Completion where
+  签名: : v.完备化 ≃+* v.1.完备化 where
   定义体: equivCompletion v
   map_mul' _ _ := rfl
   map_add' _ _ := rfl
@@ -232,7 +232,7 @@ lemma toCompletion_ofCompletion
 
 中文:
 引理 toCompletion_ofCompletion
-  条件: (x : v.1.Completion)
+  条件: (x : v.1.完备化)
   证明: rfl
 -/
 @[simp] lemma toCompletion_ofCompletion (x : v.1.Completion) :
@@ -247,7 +247,7 @@ lemma ofCompletion_toCompletion
 
 中文:
 引理 ofCompletion_toCompletion
-  条件: (x : v.Completion)
+  条件: (x : v.完备化)
   证明: rfl
 -/
 @[simp] lemma ofCompletion_toCompletion (x : v.Completion) :
@@ -263,7 +263,7 @@ lemma toCompletion_zero
 
 中文:
 引理 toCompletion_zero
-  结论: (0 : v.Completion).toCompletion = 0
+  结论: (0 : v.完备化).toCompletion = 0
   证明: rfl
 -/
 @[simp] lemma toCompletion_zero : (0 : v.Completion).toCompletion = 0 := rfl
@@ -277,7 +277,7 @@ lemma toCompletion_one
 
 中文:
 引理 toCompletion_one
-  结论: (1 : v.Completion).toCompletion = 1
+  结论: (1 : v.完备化).toCompletion = 1
   证明: rfl
 
 Depends on / 依赖: Countable, Countable.of_linearOrder_locallyFiniteOrder, LocallyFiniteOrder, of_linearOrder_locallyFiniteOrder
@@ -293,7 +293,7 @@ lemma toCompletion_add
 
 中文:
 引理 toCompletion_add
-  条件: (x y : v.Completion)
+  条件: (x y : v.完备化)
   证明: rfl
 -/
 @[simp] lemma toCompletion_add (x y : v.Completion) :
@@ -308,7 +308,7 @@ lemma toCompletion_mul
 
 中文:
 引理 toCompletion_mul
-  条件: (x y : v.Completion)
+  条件: (x y : v.完备化)
   证明: rfl
 -/
 @[simp] lemma toCompletion_mul (x y : v.Completion) :
@@ -325,7 +325,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: {v : InfinitePlace K} {x y : v.Completion}
+  结论: {v : InfinitePlace K} {x y : v.完备化}
   证明: by
   cases x; cases y; exact congrArg ofCompletion h
 -/
@@ -343,7 +343,7 @@ theorem toCompletion_surjective
 
 中文:
 定理 toCompletion_surjective
-  结论: Function.Surjective (toCompletion (v := v))
+  结论: 函数.满射 (toCompletion (v := v))
   证明: (equivCompletion v).surjective
 -/
 theorem toCompletion_surjective : Function.Surjective (toCompletion (v := v)) :=
@@ -359,7 +359,7 @@ theorem ofCompletion_surjective
 
 中文:
 定理 ofCompletion_surjective
-  结论: Function.Surjective (ofCompletion (v := v))
+  结论: 函数.满射 (ofCompletion (v := v))
   证明: (equivCompletion v).symm.surjective
 -/
 theorem ofCompletion_surjective : Function.Surjective (ofCompletion (v := v)) :=
@@ -376,7 +376,7 @@ lemma norm_toCompletion
 
 中文:
 引理 norm_toCompletion
-  条件: (x : v.Completion)
+  条件: (x : v.完备化)
   结论: ‖x.toCompletion‖ = ‖x‖
   证明: rfl
 -/
@@ -392,7 +392,7 @@ lemma norm_ofCompletion
 
 中文:
 引理 norm_ofCompletion
-  条件: (x : v.1.Completion)
+  条件: (x : v.1.完备化)
   证明: rfl
 -/
 @[simp] lemma norm_ofCompletion (x : v.1.Completion) :
@@ -408,7 +408,7 @@ theorem isometry_toCompletion
 
 中文:
 定理 isometry_toCompletion
-  结论: Isometry (toCompletion (v := v))
+  结论: 等距 (toCompletion (v := v))
   证明: Isometry.of_dist_eq fun _ _ => rfl
 -/
 theorem isometry_toCompletion : Isometry (toCompletion (v := v)) :=
@@ -425,7 +425,7 @@ definition isometryEquivCompletion
 
 中文:
 定义 isometryEquivCompletion
-  签名: : v.Completion ≃ᵢ v.1.Completion where
+  签名: : v.完备化 ≃ᵢ v.1.完备化 where
   定义体: equivCompletion v
   isometry_toFun := isometry_toCompletion v
 
@@ -445,7 +445,7 @@ theorem continuous_toCompletion
 
 中文:
 定理 continuous_toCompletion
-  结论: Continuous (toCompletion (v := v))
+  结论: 连续 (toCompletion (v := v))
   证明: (isometry_toCompletion v).continuous
 -/
 theorem continuous_toCompletion : Continuous (toCompletion (v := v)) :=
@@ -461,7 +461,7 @@ theorem continuous_ofCompletion
 
 中文:
 定理 continuous_ofCompletion
-  结论: Continuous (ofCompletion (v := v))
+  结论: 连续 (ofCompletion (v := v))
   证明: (isometryEquivCompletion v).symm.continuous
 -/
 theorem continuous_ofCompletion : Continuous (ofCompletion (v := v)) :=
@@ -478,7 +478,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSpace v.Completion
+  签名: 完备空间 v.完备化
   定义体: ((isometry_toCompletion v).isUniformInducing.completeSpace_congr
     (toCompletion_surjective v)).mpr inferInstance
 
@@ -498,7 +498,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited v.Completion
+  签名: 可居 v.完备化
   定义体: ⟨0⟩
 -/
 instance : Inhabited v.Completion := ⟨0⟩
@@ -513,7 +513,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (WithAbs v.1) v.Completion
+  签名: Coe (WithAbs v.1) v.完备化
   定义体: ofCompletion (x : v.1.Completion)
 
 Depends on / 依赖: Completion, ofCompletion
@@ -531,7 +531,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe K v.Completion
+  签名: Coe K v.完备化
   定义体: ofCompletion (k : v.1.Completion)
 
 Depends on / 依赖: Completion, ofCompletion
@@ -565,7 +565,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ((0 : K) : v.Completion) = 0
+  结论: ((0 : K) : v.完备化) = 0
   证明: by ext; simp
 -/
 @[norm_cast] lemma coe_zero : ((0 : K) : v.Completion) = 0 := by ext; simp
@@ -579,7 +579,7 @@ lemma coe_one
 
 中文:
 引理 coe_one
-  结论: ((1 : K) : v.Completion) = 1
+  结论: ((1 : K) : v.完备化) = 1
   证明: by ext; simp
 -/
 @[norm_cast] lemma coe_one : ((1 : K) : v.Completion) = 1 := by ext; simp
@@ -596,7 +596,7 @@ lemma coe_add
 中文:
 引理 coe_add
   条件: (x y : K)
-  结论: ((x + y : K) : v.Completion) = ↑x + ↑y
+  结论: ((x + y : K) : v.完备化) = ↑x + ↑y
   证明: by
   ext; simp [UniformSpace.Completion.coe_add]
 -/
@@ -615,7 +615,7 @@ lemma coe_mul
 中文:
 引理 coe_mul
   条件: (x y : K)
-  结论: ((x * y : K) : v.Completion) = ↑x * ↑y
+  结论: ((x * y : K) : v.完备化) = ↑x * ↑y
   证明: by
   ext; simp [UniformSpace.Completion.coe_mul]
 -/
@@ -632,7 +632,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : WithAbs v.1 -> v.Completion)
+  结论: 连续 ((↑) : WithAbs v.1 -> v.完备化)
   证明: (continuous_ofCompletion v).comp (UniformSpace.Completion.continuous_coe _)
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion.continuous_coe, continuous_coe, continuous_ofCompletion
@@ -651,7 +651,7 @@ theorem denseRange_coe
 
 中文:
 定理 denseRange_coe
-  结论: DenseRange ((↑) : WithAbs v.1 -> v.Completion)
+  结论: DenseRange ((↑) : WithAbs v.1 -> v.完备化)
   证明: (ofCompletion_surjective v).denseRange.comp UniformSpace.Completion.denseRange_coe
     (continuous_ofCompletion v)
 
@@ -675,7 +675,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {p : v.Completion -> 命题} (x : v.Completion) (hp : IsClosed {x | p x})
+  结论: {p : v.完备化 -> 命题} (x : v.完备化) (hp : 是闭集 {x | p x})
   证明: UniformSpace.Completion.induction_on (p := fun y => p (ofCompletion y)) x.toCompletion
     (hp.preimage (continuous_ofCompletion v)) ih
 
@@ -701,7 +701,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R v.Completion
+  签名: 代数 R v.完备化
   定义体: fast_instance% (equivCompletion v).algebra R
 
 Depends on / 依赖: algebra, equivCompletion, fast_instance
@@ -738,7 +738,7 @@ theorem algebraMap_apply
 中文:
 定理 algebraMap_apply
   条件: (k : K)
-  结论: algebraMap K v.Completion k = (k : v.Completion)
+  结论: algebraMap K v.完备化 k = (k : v.完备化)
   证明: rfl
 -/
 @[simp] theorem algebraMap_apply (k : K) : algebraMap K v.Completion k = (k : v.Completion) := rfl
@@ -785,7 +785,7 @@ lemma WithAbs.ratCast_equiv
 
 中文:
 引理 WithAbs.ratCast_equiv
-  条件: (v : InfinitePlace Rat) (x : WithAbs v.1)
+  条件: (v : InfinitePlace 有理数) (x : WithAbs v.1)
   证明: (eq_ratCast ((equiv v).symm.toRingHom.comp (UniformSpace.Completion.coeRingHom.comp
     (WithAbs.equiv v.1).symm.toRingHom)) _).symm
 
@@ -806,8 +806,8 @@ lemma Rat.norm_infinitePlace_completion
   rw [← (WithAbs.equiv v.1).apply_symm_apply x]; rw [WithAbs.ratCast_equiv]; rw [norm_coe]; rw [(WithAbs.equiv v.1).apply_symm_apply]; rw [Rat.infinitePlace_apply]
 
 中文:
-引理 Rat.norm_infinitePlace_completion
-  条件: (v : InfinitePlace Rat) (x : Rat)
+引理 有理数.norm_infinitePlace_completion
+  条件: (v : InfinitePlace 有理数) (x : 有理数)
   证明: by
   rw [← (WithAbs.equiv v.1).apply_symm_apply x]; rw [WithAbs.ratCast_equiv]; rw [norm_coe]; rw [(WithAbs.equiv v.1).apply_symm_apply]; rw [Rat.infinitePlace_apply]
 
@@ -828,7 +828,7 @@ instance locallyCompactSpace
 
 中文:
 实例 locallyCompactSpace
-  签名: : LocallyCompactSpace (v.Completion)
+  签名: : 局部紧空间 (v.完备化)
   定义体: letI := AbsoluteValue.Completion.locallyCompactSpace v.isometry_embedding
   (isometryEquivCompletion v).toHomeomorph.isClosedEmbedding.locallyCompactSpace
 
@@ -848,7 +848,7 @@ definition extensionEmbedding
 
 中文:
 定义 extensionEmbedding
-  签名: : v.Completion ->+* Complex
+  签名: : v.完备化 ->+* 复形
   定义体: v.isometry_embedding.extensionHom.comp (equiv v).toRingHom
 
 Depends on / 依赖: Set.Ici, extensionHom, isometry_embedding, toRingHom, v.isometry_embedding.extensionHom.comp, v.root
@@ -867,7 +867,7 @@ definition extensionEmbeddingOfIsReal
 @[simp]
 
 中文:
-定义 extensionEmbeddingOfIsReal
+定义 extensionEmbeddingOfIs实数
   签名: {v : InfinitePlace K} (hv : Is实数 v)
   定义体: (v.isometry_embedding_of_isReal hv).extensionHom.comp (equiv v).toRingHom
 
@@ -912,7 +912,7 @@ theorem extensionEmbeddingOfIsReal_coe
   proof: (v.isometry_embedding_of_isReal hv).extensionHom_coe _
 
 中文:
-定理 extensionEmbeddingOfIsReal_coe
+定理 extensionEmbeddingOfIs实数_coe
   条件: {v : InfinitePlace K} (hv : Is实数 v) (x : WithAbs v.1)
   证明: (v.isometry_embedding_of_isReal hv).extensionHom_coe _
 
@@ -932,7 +932,7 @@ theorem isometry_extensionEmbedding
 
 中文:
 定理 isometry_extensionEmbedding
-  结论: Isometry (extensionEmbedding v)
+  结论: 等距 (extensionEmbedding v)
   证明: v.isometry_embedding.completion_extension.comp (isometry_toCompletion v)
 
 Depends on / 依赖: completion_extension, isometry_embedding, isometry_toCompletion, v.isometry_embedding.completion_extension.comp
@@ -951,7 +951,7 @@ theorem isometry_extensionEmbeddingOfIsReal
 @[simp]
 
 中文:
-定理 isometry_extensionEmbeddingOfIsReal
+定理 isometry_extensionEmbeddingOfIs实数
   条件: {v : InfinitePlace K} (hv : Is实数 v)
   证明: (v.isometry_embedding_of_isReal hv).completion_extension.comp (isometry_toCompletion v)
 
@@ -979,8 +979,8 @@ theorem extensionEmbeddingOfIsReal_apply
   | ih a => simp
 
 中文:
-定理 extensionEmbeddingOfIsReal_apply
-  条件: {v : InfinitePlace K} (hv : Is实数 v) (x : v.Completion)
+定理 extensionEmbeddingOfIs实数_apply
+  条件: {v : InfinitePlace K} (hv : Is实数 v) (x : v.完备化)
   证明: by
   induction x using induction_on with
   | hp =>
@@ -1010,7 +1010,7 @@ theorem isClosed_image_extensionEmbedding
 
 中文:
 定理 isClosed_image_extensionEmbedding
-  结论: IsClosed (Set.range (extensionEmbedding v))
+  结论: 是闭集 (集合.range (extensionEmbedding v))
   证明: (isometry_extensionEmbedding v).isClosedEmbedding.isClosed_range
 
 Depends on / 依赖: isClosedEmbedding, isClosedEmbedding.isClosed_range, isClosed_range, isometry_extensionEmbedding
@@ -1027,7 +1027,7 @@ theorem isClosed_image_extensionEmbeddingOfIsReal
   proof: (isometry_extensionEmbeddingOfIsReal hv).isClosedEmbedding.isClosed_range
 
 中文:
-定理 isClosed_image_extensionEmbeddingOfIsReal
+定理 isClosed_image_extensionEmbeddingOfIs实数
   条件: {v : InfinitePlace K} (hv : Is实数 v)
   证明: (isometry_extensionEmbeddingOfIsReal hv).isClosedEmbedding.isClosed_range
 
@@ -1053,7 +1053,7 @@ theorem subfield_ne_real_of_isComplex
 
 中文:
 定理 subfield_ne_real_of_isComplex
-  条件: {v : InfinitePlace K} (hv : IsComplex v)
+  条件: {v : InfinitePlace K} (hv : 是复形 v)
   证明: by
   contrapose hv
   simp only [not_isComplex_iff_isReal, isReal_iff]
@@ -1086,7 +1086,7 @@ exact (Complex.subfield_eq_of_closed <| isClosed_image_extensionEmbedding v).res
 
 中文:
 定理 surjective_extensionEmbedding_of_isComplex
-  条件: {v : InfinitePlace K} (hv : IsComplex v)
+  条件: {v : InfinitePlace K} (hv : 是复形 v)
   证明: by
   rw [← RingHom.fieldRange_eq_top_iff]
 exact (Complex.subfield_eq_of_closed <| isClosed_image_extensionEmbedding v).resolve_left
@@ -1110,7 +1110,7 @@ theorem bijective_extensionEmbedding_of_isComplex
 
 中文:
 定理 bijective_extensionEmbedding_of_isComplex
-  条件: {v : InfinitePlace K} (hv : IsComplex v)
+  条件: {v : InfinitePlace K} (hv : 是复形 v)
   证明: ⟨(extensionEmbedding v).injective, surjective_extensionEmbedding_of_isComplex hv⟩
 
 Depends on / 依赖: extensionEmbedding, injective, surjective_extensionEmbedding_of_isComplex
@@ -1129,7 +1129,7 @@ definition ringEquivComplexOfIsComplex
 
 中文:
 定义 ringEquivComplexOfIsComplex
-  签名: {v : InfinitePlace K} (hv : IsComplex v)
+  签名: {v : InfinitePlace K} (hv : 是复形 v)
   定义体: RingEquiv.ofBijective _ (bijective_extensionEmbedding_of_isComplex hv)
 
 Depends on / 依赖: RingEquiv, RingEquiv.ofBijective, bijective_extensionEmbedding_of_isComplex, ofBijective
@@ -1147,7 +1147,7 @@ theorem ringEquivComplexOfIsComplex_apply
 
 中文:
 定理 ringEquivComplexOfIsComplex_apply
-  结论: {v : InfinitePlace K} (hv : IsComplex v)
+  结论: {v : InfinitePlace K} (hv : 是复形 v)
   证明: rfl
 -/
 @[simp] theorem ringEquivComplexOfIsComplex_apply {v : InfinitePlace K} (hv : IsComplex v)
@@ -1164,7 +1164,7 @@ definition isometryEquivComplexOfIsComplex
 
 中文:
 定义 isometryEquivComplexOfIsComplex
-  签名: {v : InfinitePlace K} (hv : IsComplex v)
+  签名: {v : InfinitePlace K} (hv : 是复形 v)
   定义体: ringEquivComplexOfIsComplex hv
   isometry_toFun := isometry_extensionEmbedding v
 
@@ -1186,7 +1186,7 @@ theorem surjective_extensionEmbeddingOfIsReal
   exact isClosed_image_extensionEmbeddingOfIsReal hv
 
 中文:
-定理 surjective_extensionEmbeddingOfIsReal
+定理 surjective_extensionEmbeddingOfIs实数
   条件: {v : InfinitePlace K} (hv : Is实数 v)
   证明: by
   rw [← RingHom.fieldRange_eq_top_iff]; rw [← Real.subfield_eq_of_closed]
@@ -1208,7 +1208,7 @@ theorem bijective_extensionEmbeddingOfIsReal
   proof: ⟨(extensionEmbeddingOfIsReal hv).injective, surjective_extensionEmbeddingOfIsReal hv⟩
 
 中文:
-定理 bijective_extensionEmbeddingOfIsReal
+定理 bijective_extensionEmbeddingOfIs实数
   条件: {v : InfinitePlace K} (hv : Is实数 v)
   证明: ⟨(extensionEmbeddingOfIsReal hv).injective, surjective_extensionEmbeddingOfIsReal hv⟩
 
@@ -1227,7 +1227,7 @@ definition ringEquivRealOfIsReal
   body: RingEquiv.ofBijective _ (bijective_extensionEmbeddingOfIsReal hv)
 
 中文:
-定义 ringEquivRealOfIsReal
+定义 ringEquiv实数OfIs实数
   签名: {v : InfinitePlace K} (hv : Is实数 v)
   定义体: RingEquiv.ofBijective _ (bijective_extensionEmbeddingOfIsReal hv)
 
@@ -1245,7 +1245,7 @@ theorem ringEquivRealOfIsReal_apply
   proof: rfl
 
 中文:
-定理 ringEquivRealOfIsReal_apply
+定理 ringEquiv实数OfIs实数_apply
   结论: {v : InfinitePlace K} (hv : Is实数 v)
   证明: rfl
 
@@ -1264,7 +1264,7 @@ definition isometryEquivRealOfIsReal
   isometry_toFun := isometry_extensionEmbeddingOfIsReal hv
 
 中文:
-定义 isometryEquivRealOfIsReal
+定义 isometryEquiv实数OfIs实数
   签名: {v : InfinitePlace K} (hv : Is实数 v)
   定义体: ringEquivRealOfIsReal hv
   isometry_toFun := isometry_extensionEmbeddingOfIsReal hv
@@ -1356,7 +1356,7 @@ theorem liesOver_extensionEmbedding
 
 中文:
 定理 liesOver_extensionEmbedding
-  结论: [ContinuousSMul v.Completion w.Completion]
+  结论: [连续标量乘法 v.完备化 w.完备化]
   证明: by
     ext x
     induction x using induction_on
@@ -1398,7 +1398,7 @@ theorem liesOver_conjugate_extensionEmbedding
 
 中文:
 定理 liesOver_conjugate_extensionEmbedding
-  结论: [ContinuousSMul v.Completion w.Completion]
+  结论: [连续标量乘法 v.完备化 w.完备化]
   证明: by
     ext x
     induction x using induction_on
@@ -1436,7 +1436,7 @@ theorem liesOver_extensionEmbedding_apply
 
 中文:
 定理 liesOver_extensionEmbedding_apply
-  结论: {φ : w.Completion ->+* Complex}
+  结论: {φ : w.完备化 ->+* 复形}
   证明: by
   simp_all [liesOver_iff, RingHom.ext_iff]
 
@@ -1467,7 +1467,7 @@ theorem isometry_algebraMap
 
 中文:
 定理 isometry_algebraMap
-  结论: Isometry (algebraMap (WithAbs v.1) (WithAbs w.1))
+  结论: 等距 (algebraMap (WithAbs v.1) (WithAbs w.1))
   证明: AddMonoidHomClass.isometry_of_norm _ fun x => by
     simpa [WithAbs.norm_eq_apply_ofAbs] using
       WithAbs.ofAbs_algebraMap v.1 w.1 x ▸ comp_of_comap_eq (comap_eq w v) x.ofAbs
@@ -1490,7 +1490,7 @@ theorem embedding_liesOver_of_isReal
   proof: (comap_eq w v ▸ comap_embedding_of_isReal _ (comap_eq w v ▸ h)).symm
 
 中文:
-定理 embedding_liesOver_of_isReal
+定理 embedding_liesOver_of_is实数
   条件: (h : v.Is实数)
   证明: (comap_eq w v ▸ comap_embedding_of_isReal _ (comap_eq w v ▸ h)).symm
 
@@ -1512,7 +1512,7 @@ theorem extensionEmbedding_liesOver_of_isReal
   proof: let := embedding_liesOver_of_isReal w h; liesOver_extensionEmbedding w v
 
 中文:
-定理 extensionEmbedding_liesOver_of_isReal
+定理 extensionEmbedding_liesOver_of_is实数
   条件: (h : v.Is实数)
   证明: let := embedding_liesOver_of_isReal w h; liesOver_extensionEmbedding w v
 

@@ -75,8 +75,8 @@ theorem IsCompact.extremePoints_nonempty
     by_con
 
 中文:
-定理 IsCompact.extremePoints_nonempty
-  条件: (hscomp : IsCompact s) (hsnemp : s.Nonempty)
+定理 是紧集.extremePoints_nonempty
+  条件: (hscomp : 是紧集 s) (hsnemp : s.非空)
   证明: by
   let S : Set (Set E) := { t | t.Nonempty ∧ IsClosed t ∧ IsExtreme Real s t }
   rsuffices ⟨t, ht⟩ : exists t, Minimal (· in S) t
@@ -133,7 +133,7 @@ theorem closure_convexHull_extremePoints
 
 中文:
 定理 closure_convexHull_extremePoints
-  条件: (hscomp : IsCompact s) (hAconv : Convex 实数 s)
+  条件: (hscomp : 是紧集 s) (hAconv : 凸 实数 s)
   证明: by
   apply (closure_minimal (convexHull_min extremePoints_subset hAconv) hscomp.isClosed).antisymm
   by_contra hs
@@ -173,7 +173,7 @@ hs.inter_right isClosed_singleton.preimage f.continuous
 
 中文:
 引理 surjOn_extremePoints_image
-  条件: (f : E ->ᴬ[实数] F) (hs : IsCompact s)
+  条件: (f : E ->ᴬ[实数] F) (hs : 是紧集 s)
   证明: by
   rintro w hw
   -- The fiber of `w` is nonempty and compact

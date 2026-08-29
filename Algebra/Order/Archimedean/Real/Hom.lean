@@ -34,7 +34,7 @@ instance Real.nonemptyOrderRingHom
   body: ⟨ConditionallyCompleteLinearOrderedField.inducedOrderRingHom α Real⟩
 
 中文:
-实例 Real.nonemptyOrderRingHom
+实例 实数.nonemptyOrderRingHom
   签名: (α : 类型)
   定义体: ⟨ConditionallyCompleteLinearOrderedField.inducedOrderRingHom α Real⟩
 
@@ -55,7 +55,7 @@ theorem ringHom_monotone
 
 中文:
 定理 ringHom_monotone
-  结论: {R S : 类型} [Ring R] [PartialOrder R] [IsOrderedAddMonoid R]
+  结论: {R S : 类型} [环 R] [偏序 R] [是OrderedAdd幺半群 R]
   证明: (monotone_iff_map_nonneg f).2 fun r h => by
     obtain ⟨s, rfl⟩ := hR r h; rw [map_mul]; apply mul_self_nonneg
 
@@ -80,8 +80,8 @@ instance Real.RingHom.unique
 @[simp]
 
 中文:
-实例 Real.RingHom.unique
-  签名: : Unique (实数 ->+* 实数) where
+实例 实数.环态射.unique
+  签名: : 唯一 (实数 ->+* 实数) where
   定义体: RingHom.id Real
   uniq f := congr_arg OrderRingHom.toRingHom (@Subsingleton.elim (Real ->+*o Real) _
       ⟨f, ringHom_monotone (fun _ => Real.isSquare_iff.mpr) f⟩ default)
@@ -105,8 +105,8 @@ theorem Real.ringHom_apply
   proof: DFunLike.congr_fun (Unique.eq_default (RingHomClass.toRingHom f)) r
 
 中文:
-定理 Real.ringHom_apply
-  条件: {F : 类型} [FunLike F 实数 实数] [RingHomClass F 实数 实数] (f : F) (r : 实数)
+定理 实数.ringHom_apply
+  条件: {F : 类型} [函数状 F 实数 实数] [环态射类 F 实数 实数] (f : F) (r : 实数)
   证明: DFunLike.congr_fun (Unique.eq_default (RingHomClass.toRingHom f)) r
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, RingHomClass, RingHomClass.toRingHom, Unique, Unique.eq_default, congr_fun, eq_default, toRingHom

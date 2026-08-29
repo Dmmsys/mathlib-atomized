@@ -40,8 +40,8 @@ theorem Submodule.FG.exists_rTensor_fg_inclusion_eq
     (Module.fgSystem.equiv_comp_of N), direct
 
 中文:
-定理 Submodule.FG.exists_rTensor_fg_inclusion_eq
-  结论: {N : Submodule R P} (hN : N.FG)
+定理 子模.FG.存在_rTensor_fg_inclusion_eq
+  结论: {N : 子模 R P} (hN : N.FG)
   证明: by
   lift N to {N : Submodule R P // N.FG} using hN
   apply_fun (Module.fgSystem.equiv R P).symm.toLinearMap.rTensor M at eq

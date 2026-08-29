@@ -49,7 +49,7 @@ structure Derivation
     - leibniz'((a b : A)) : toLinearMap (a * b) = a • toLinearMap b + b • toLinearMap a
 
 中文:
-结构 Derivation
+结构 导子
   参数: (R : 类型) (A : 类型) (M : 类型)
   继承: A ->ₗ[R] M
   公理与运算 (2 个):
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Derivation R A M) A M
+  签名: 函数状 (导子 R A M) A M
   定义体: D.toFun
   coe_injective D1 D2 h := by cases D1; cases D2; congr; exact DFunLike.coe_injective h
 
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoidHomClass (Derivation R A M) A M
+  签名: 加法幺半群态射类 (导子 R A M) A M
   定义体: D.toLinearMap.map_add'
   map_zero D := D.toLinearMap.map_zero
 
@@ -148,7 +148,7 @@ initialize_simps_projections Derivation (toFun -> apply)
 
 中文:
 定义 Simps.apply
-  签名: (D : Derivation R A M)
+  签名: (D : 导子 R A M)
   定义体: D
 
 initialize_simps_projections Derivation (toFun -> apply)
@@ -171,7 +171,7 @@ instance hasCoeToLinearMap
 
 中文:
 实例 hasCoeToLinearMap
-  签名: : Coe (Derivation R A M) (A ->ₗ[R] M)
+  签名: : Coe (导子 R A M) (A ->ₗ[R] M)
   定义体: ⟨fun D => D.toLinearMap⟩
 
 @[simp]
@@ -196,7 +196,7 @@ theorem mk_coe
 中文:
 定理 mk_coe
   条件: (f : A ->ₗ[R] M) (h₁ h₂)
-  结论: ((⟨f, h₁, h₂⟩ : Derivation R A M) : A -> M) = f
+  结论: ((⟨f, h₁, h₂⟩ : 导子 R A M) : A -> M) = f
   证明: rfl
 
 @[simp, norm_cast]
@@ -216,7 +216,7 @@ theorem coeFn_coe
 
 中文:
 定理 coeFn_coe
-  条件: (f : Derivation R A M)
+  条件: (f : 导子 R A M)
   结论: ⇑(f : A ->ₗ[R] M) = f
   证明: rfl
 -/
@@ -235,7 +235,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: @Function.Injective (Derivation R A M) (A -> M) DFunLike.coe
+  结论: @函数.单射 (导子 R A M) (A -> M) 依赖函数状.coe
   证明: DFunLike.coe_injective
 
 @[ext]
@@ -381,7 +381,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {S : 类型} [SMul S A] [SMul S M] [LinearMap.CompatibleSMul A M S R]
+  结论: {S : 类型} [标量乘法 S A] [标量乘法 S M] [线性映射.余mpatibleSMul A M S R]
   证明: D.toLinearMap.map_smul_of_tower r a
 
 @[simp]
@@ -555,8 +555,8 @@ theorem eqOn_adjoin
 
 中文:
 定理 eqOn_adjoin
-  条件: {s : Set A} (h : Set.EqOn D1 D2 s)
-  结论: Set.EqOn D1 D2 (adjoin R s)
+  条件: {s : 集合 A} (h : 集合.EqOn D1 D2 s)
+  结论: 集合.EqOn D1 D2 (adjoin R s)
   证明: fun _ hx =>
   Algebra.adjoin_induction (hx := hx) h
     (fun r => (D1.map_algebraMap r).trans (D2.map_algebraMap r).symm)
@@ -578,7 +578,7 @@ theorem ext_of_adjoin_eq_top
 
 中文:
 定理 ext_of_adjoin_eq_top
-  条件: (s : Set A) (hs : adjoin R s = ⊤) (h : Set.EqOn D1 D2 s)
+  条件: (s : 集合 A) (hs : adjoin R s = ⊤) (h : 集合.EqOn D1 D2 s)
   结论: D1 = D2
   证明: ext fun _ => eqOn_adjoin h hs.symm ▸ trivial
 
@@ -602,7 +602,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Derivation R A M)
+  签名: 零 (导子 R A M)
   定义体: ⟨{ toLinearMap := 0
       map_one_eq_zero' := rfl
       leibniz' := fun a b => by simp only [add_zero, LinearMap.zero_apply, smul_zero] }⟩
@@ -629,7 +629,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ⇑(0 : Derivation R A M) = 0
+  结论: ⇑(0 : 导子 R A M) = 0
   证明: rfl
 
 @[simp]
@@ -648,7 +648,7 @@ theorem coe_zero_linearMap
 
 中文:
 定理 coe_zero_linearMap
-  结论: ↑(0 : Derivation R A M) = (0 : A ->ₗ[R] M)
+  结论: ↑(0 : 导子 R A M) = (0 : A ->ₗ[R] M)
   证明: rfl
 -/
 theorem coe_zero_linearMap : ↑(0 : Derivation R A M) = (0 : A ->ₗ[R] M) :=
@@ -666,7 +666,7 @@ theorem zero_apply
 中文:
 定理 zero_apply
   条件: (a : A)
-  结论: (0 : Derivation R A M) a = 0
+  结论: (0 : 导子 R A M) a = 0
   证明: rfl
 -/
 theorem zero_apply (a : A) : (0 : Derivation R A M) a = 0 :=
@@ -688,7 +688,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Derivation R A M)
+  签名: 加法 (导子 R A M)
   定义体: ⟨fun D1 D2 =>
     { toLinearMap := D1 + D2
       map_one_eq_zero' := by simp
@@ -720,7 +720,7 @@ theorem coe_add
 
 中文:
 定理 coe_add
-  条件: (D1 D2 : Derivation R A M)
+  条件: (D1 D2 : 导子 R A M)
   结论: ⇑(D1 + D2) = D1 + D2
   证明: rfl
 
@@ -741,7 +741,7 @@ theorem coe_add_linearMap
 
 中文:
 定理 coe_add_linearMap
-  条件: (D1 D2 : Derivation R A M)
+  条件: (D1 D2 : 导子 R A M)
   结论: ↑(D1 + D2) = (D1 + D2 : A ->ₗ[R] M)
   证明: rfl
 -/
@@ -774,7 +774,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Derivation R A M)
+  签名: 可居 (导子 R A M)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (Derivation R A M) :=
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (Derivation R A M)
+  签名: 标量乘法 S (导子 R A M)
   定义体: ⟨fun r D =>
     { toLinearMap := r • D.1
       map_one_eq_zero' := by rw [LinearMap.smul_apply, coeFn_coe, D.map_one_eq_zero, smul_zero]
@@ -834,7 +834,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: (r : S) (D : Derivation R A M)
+  条件: (r : S) (D : 导子 R A M)
   结论: ⇑(r • D) = r • ⇑D
   证明: rfl
 
@@ -855,7 +855,7 @@ theorem coe_smul_linearMap
 
 中文:
 定理 coe_smul_linearMap
-  条件: (r : S) (D : Derivation R A M)
+  条件: (r : S) (D : 导子 R A M)
   结论: ↑(r • D) = r • (D : A ->ₗ[R] M)
   证明: rfl
 -/
@@ -873,7 +873,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: (r : S) (D : Derivation R A M)
+  条件: (r : S) (D : 导子 R A M)
   结论: (r • D) a = r • D a
   证明: rfl
 -/
@@ -890,7 +890,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (Derivation R A M)
+  签名: 加法交换幺半群 (导子 R A M)
   定义体: coe_injective.addCommMonoid _ coe_zero coe_add fun _ _ => rfl
 
 Depends on / 依赖: addCommMonoid, coe_add, coe_injective, coe_injective.addCommMonoid, coe_zero
@@ -912,7 +912,7 @@ definition coeFnAddMonoidHom
 
 中文:
 定义 coeFnAddMonoidHom
-  签名: : Derivation R A M ->+ A -> M where
+  签名: : 导子 R A M ->+ A -> M where
   定义体: (⇑)
   map_zero' := coe_zero
   map_add' := coe_add
@@ -936,7 +936,7 @@ lemma coeFnAddMonoidHom_apply
 
 中文:
 引理 coeFnAddMonoidHom_apply
-  条件: (D : Derivation R A M)
+  条件: (D : 导子 R A M)
   结论: coeFnAddMonoidHom D = D
   证明: rfl
 -/
@@ -952,7 +952,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction S (Derivation R A M)
+  签名: 分配乘法作用 S (导子 R A M)
   定义体: Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.distribMulAction, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, distribMulAction
@@ -969,8 +969,8 @@ instance [DistribMulAction
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [DistribMulAction
-  签名: Sᵐᵒᵖ M] [IsCentralScalar S M] :
+实例 [分配乘法作用
+  签名: Sᵐᵒᵖ M] [中心标量 S M] :
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -988,8 +988,8 @@ instance [SMul
   body: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T M] : IsScalarTower S T (Derivation R A M)
+实例 [标量乘法
+  签名: S T] [标量塔 S T M] : 标量塔 S T (导子 R A M)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_assoc _ _ _⟩
 
 Depends on / 依赖: smul_assoc
@@ -1006,8 +1006,8 @@ instance [SMulCommClass
   body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 中文:
-实例 [SMulCommClass
-  签名: S T M] : SMulCommClass S T (Derivation R A M)
+实例 [标量交换类
+  签名: S T M] : 标量交换类 S T (导子 R A M)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -1027,7 +1027,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {S : 类型} [Semiring S] [Module S M] [SMulCommClass R S M]
+  签名: {S : 类型} [半环 S] [模 S M] [标量交换类 R S M]
   定义体: Function.Injective.module S coeFnAddMonoidHom coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.module, Injective, coeFnAddMonoidHom, coe_injective, coe_smul, module
@@ -1057,8 +1057,8 @@ definition _root_.LinearMap.compDer
           LinearMap.coe_restrictScalars, L
 
 中文:
-定义 _root_.LinearMap.compDer
-  签名: : Derivation R A M ->ₗ[A] Derivation R A N where
+定义 _root_.线性映射.compDer
+  签名: : 导子 R A M ->ₗ[A] 导子 R A N where
   定义体: { toLinearMap := (f : M ->ₗ[R] N).comp (D : A ->ₗ[R] M)
       map_one_eq_zero' := by simp only [LinearMap.comp_apply, coeFn_coe, map_one_eq_zero, map_zero]
       leibniz' := fun a b => by
@@ -1129,7 +1129,7 @@ definition llcomp
 
 中文:
 定义 llcomp
-  签名: : (M ->ₗ[A] N) ->ₗ[A] Derivation R A M ->ₗ[A] Derivation R A N where
+  签名: : (M ->ₗ[A] N) ->ₗ[A] 导子 R A M ->ₗ[A] 导子 R A N where
   定义体: f.compDer
   map_add' f₁ f₂ := by ext; rfl
   map_smul' r D := by ext; rfl
@@ -1155,8 +1155,8 @@ definition _root_.LinearEquiv.compDer
 @[simp]
 
 中文:
-定义 _root_.LinearEquiv.compDer
-  签名: : Derivation R A M ≃ₗ[A] Derivation R A N
+定义 _root_.线性等价.compDer
+  签名: : 导子 R A M ≃ₗ[A] 导子 R A N
   定义体: { e.toLinearMap.compDer with
     invFun := e.symm.toLinearMap.compDer
     left_inv := fun D => by ext a; exact e.symm_apply_apply (D a)
@@ -1226,7 +1226,7 @@ definition compAlgebraMap
 
 中文:
 定义 compAlgebraMap
-  签名: [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
+  签名: [代数 A B] [标量塔 R A B] [标量塔 A B M]
   定义体: by simp
   leibniz' a b := by simp
   toLinearMap := d.toLinearMap.comp (IsScalarTower.toAlgHom R A B).toLinearMap
@@ -1255,7 +1255,7 @@ definition compAlgebraMapL
 
 中文:
 定义 compAlgebraMapL
-  签名: [Algebra A B] [IsScalarTower R A B] [IsScalarTower A B M]
+  签名: [代数 A B] [标量塔 R A B] [标量塔 A B M]
   定义体: d.compAlgebraMap A
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1287,7 +1287,7 @@ definition restrictScalars
 
 中文:
 定义 restrictScalars
-  签名: (d : Derivation S A M)
+  签名: (d : 导子 S A M)
   定义体: d.map_one_eq_zero
   leibniz' := d.leibniz
   toLinearMap := d.toLinearMap.restrictScalars R
@@ -1310,7 +1310,7 @@ lemma coe_restrictScalars
 
 中文:
 引理 coe_restrictScalars
-  条件: (d : Derivation S A M)
+  条件: (d : 导子 S A M)
   结论: ⇑(d.restrictScalars R) = ⇑d
   证明: rfl
 
@@ -1330,7 +1330,7 @@ lemma restrictScalars_apply
 
 中文:
 引理 restrictScalars_apply
-  条件: (d : Derivation S A M) (x : A)
+  条件: (d : 导子 S A M) (x : A)
   结论: d.restrictScalars R x = d x
   证明: rfl
 -/
@@ -1367,7 +1367,7 @@ definition liftOfRightInverse
 
 中文:
 定义 liftOfRightInverse
-  签名: {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
+  签名: {f : F} {f_inv : M -> A} (hf : 函数.右逆 f_inv f)
   定义体: f (d (f_inv x))
   map_add' x y := by
     suffices f (d (f_inv (x + y) - (f_inv x + f_inv y))) = 0 by simpa [sub_eq_zero]
@@ -1415,7 +1415,7 @@ lemma liftOfRightInverse_apply
 
 中文:
 引理 liftOfRightInverse_apply
-  结论: {f : F} {f_inv : M -> A} (hf : Function.RightInverse f_inv f)
+  结论: {f : F} {f_inv : M -> A} (hf : 函数.右逆 f_inv f)
   证明: by
   suffices f (d (f_inv (f x) - x)) = 0 by simpa [sub_eq_zero]
   apply hd
@@ -1443,7 +1443,7 @@ lemma liftOfRightInverse_eq
 
 中文:
 引理 liftOfRightInverse_eq
-  结论: {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : Function.RightInverse f_inv₁ f)
+  结论: {f : F} {f_inv₁ f_inv₂ : M -> A} (hf₁ : 函数.右逆 f_inv₁ f)
   证明: by
   ext _ _ x
   obtain ⟨x, rfl⟩ := hf₁.surjective x
@@ -1468,7 +1468,7 @@ abbreviation liftOfSurjective
 
 中文:
 缩写 liftOfSurjective
-  签名: {f : F} (hf : Function.Surjective f)
+  签名: {f : F} (hf : 函数.满射 f)
   定义体: d.liftOfRightInverse (Function.rightInverse_surjInv hf) hd
 
 Depends on / 依赖: Function, Function.rightInverse_surjInv, d.liftOfRightInverse, liftOfRightInverse, rightInverse_surjInv
@@ -1487,7 +1487,7 @@ lemma liftOfSurjective_apply
 
 中文:
 引理 liftOfSurjective_apply
-  结论: {f : F} (hf : Function.Surjective f)
+  结论: {f : F} (hf : 函数.满射 f)
   证明: by simp
 -/
 lemma liftOfSurjective_apply {f : F} (hf : Function.Surjective f)
@@ -1691,7 +1691,7 @@ theorem leibniz_invOf
 
 中文:
 定理 leibniz_invOf
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: D (⅟a) = -⅟a ^ 2 • D a
   证明: D.leibniz_of_mul_eq_one invOf_mul_self a
 
@@ -1867,7 +1867,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (Derivation R A M)
+  签名: 取负 (导子 R A M)
   定义体: ⟨fun D =>
     mk' (-D) fun a b => by
       simp only [LinearMap.neg_apply, smul_neg, neg_add_rev, leibniz, coeFn_coe, add_comm]⟩
@@ -1895,7 +1895,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  条件: (D : Derivation R A M)
+  条件: (D : 导子 R A M)
   结论: ⇑(-D) = -D
   证明: rfl
 
@@ -1916,7 +1916,7 @@ theorem coe_neg_linearMap
 
 中文:
 定理 coe_neg_linearMap
-  条件: (D : Derivation R A M)
+  条件: (D : 导子 R A M)
   结论: ↑(-D) = (-D : A ->ₗ[R] M)
   证明: rfl
 -/
@@ -1953,7 +1953,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Derivation R A M)
+  签名: 减法 (导子 R A M)
   定义体: ⟨fun D1 D2 =>
     mk' (D1 - D2 : A ->ₗ[R] M) fun a b => by
       simp only [LinearMap.sub_apply, leibniz, coeFn_coe, smul_sub, add_sub_add_comm]⟩
@@ -1981,7 +1981,7 @@ theorem coe_sub
 
 中文:
 定理 coe_sub
-  条件: (D1 D2 : Derivation R A M)
+  条件: (D1 D2 : 导子 R A M)
   结论: ⇑(D1 - D2) = D1 - D2
   证明: rfl
 
@@ -2002,7 +2002,7 @@ theorem coe_sub_linearMap
 
 中文:
 定理 coe_sub_linearMap
-  条件: (D1 D2 : Derivation R A M)
+  条件: (D1 D2 : 导子 R A M)
   结论: ↑(D1 - D2) = (D1 - D2 : A ->ₗ[R] M)
   证明: rfl
 -/
@@ -2035,7 +2035,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (Derivation R A M)
+  签名: 加法交换群 (导子 R A M)
   定义体: coe_injective.addCommGroup _ coe_zero coe_add coe_neg coe_sub (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: addCommGroup, coe_add, coe_injective, coe_injective.addCommGroup, coe_neg, coe_sub, coe_zero

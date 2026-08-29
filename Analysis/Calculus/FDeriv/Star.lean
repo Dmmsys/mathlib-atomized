@@ -49,8 +49,8 @@ theorem HasFDerivAtFilter.star
 @[fun_prop]
 
 中文:
-定理 HasFDerivAtFilter.star
-  条件: (h : HasFDerivAtFilter f f' L)
+定理 有FDerivAtFilter.star
+  条件: (h : 有FDerivAtFilter f f' L)
   证明: (starL' 𝕜 : F ≃L[𝕜] F).toContinuousLinearMap.hasFDerivAtFilter.comp h Filter.tendsto_map
 
 @[fun_prop]
@@ -115,8 +115,8 @@ theorem HasFDerivAt.star
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.star
-  条件: (h : HasFDerivAt f f' x)
+定理 在点处Fréchet可导.star
+  条件: (h : 在点处Fréchet可导 f f' x)
   证明: HasFDerivAtFilter.star h
 
 @[fun_prop]
@@ -268,8 +268,8 @@ theorem Differentiable.star
 @[simp]
 
 中文:
-定理 Differentiable.star
-  条件: (h : Differentiable 𝕜 f)
+定理 可微.star
+  条件: (h : 可微 𝕜 f)
   证明: fun x => (h x).star
 
 @[simp]
@@ -289,7 +289,7 @@ theorem differentiable_star_iff
 
 中文:
 定理 differentiable_star_iff
-  结论: (Differentiable 𝕜 fun y => star (f y)) ↔ Differentiable 𝕜 f
+  结论: (可微 𝕜 fun y => star (f y)) ↔ 可微 𝕜 f
   证明: (starL' 𝕜 : F ≃L[𝕜] F).comp_differentiable_iff
 
 Depends on / 依赖: comp_differentiable_iff
@@ -362,8 +362,8 @@ lemma HasFDerivAt.star_star
     (by simpa using hf)
 
 中文:
-引理 HasFDerivAt.star_star
-  条件: {f : E -> F} {z : E} {f' : E ->L[𝕜] F} (hf : HasFDerivAt f f' z)
+引理 在点处Fréchet可导.star_star
+  条件: {f : E -> F} {z : E} {f' : E ->L[𝕜] F} (hf : 在点处Fréchet可导 f f' z)
   证明: .comp_semilinear (starL 𝕜).toContinuousLinearMap (starL 𝕜).toContinuousLinearMap
     (by simpa using hf)
 

@@ -29,8 +29,8 @@ instance [Finite
   infer_instance
 
 中文:
-实例 [Finite
-  签名: α] [Finite β] : Finite (α oplus β)
+实例 [有限
+  签名: α] [有限 β] : 有限 (α oplus β)
   定义体: by
   have := Fintype.ofFinite α
   have := Fintype.ofFinite β
@@ -54,8 +54,8 @@ theorem sum_left
 
 中文:
 定理 sum_left
-  条件: (β) [Finite (α oplus β)]
-  结论: Finite α
+  条件: (β) [有限 (α oplus β)]
+  结论: 有限 α
   证明: of_injective (Sum.inl : α -> α oplus β) Sum.inl_injective
 
 Depends on / 依赖: Sum.inl, Sum.inl_injective, inl_injective, of_injective
@@ -74,8 +74,8 @@ theorem sum_right
 
 中文:
 定理 sum_right
-  条件: (α) [Finite (α oplus β)]
-  结论: Finite β
+  条件: (α) [有限 (α oplus β)]
+  结论: 有限 β
   证明: of_injective (Sum.inr : β -> α oplus β) Sum.inr_injective
 
 Depends on / 依赖: Sum.inr, Sum.inr_injective, inr_injective, of_injective
@@ -97,8 +97,8 @@ theorem psum_left
 
 中文:
 定理 psum_left
-  条件: {α β : Sort*} [Finite (α oplus' β)]
-  结论: Finite α
+  条件: {α β : 类型层*} [有限 (α oplus' β)]
+  结论: 有限 α
   证明: of_injective (PSum.inl : α -> α oplus' β) PSum.inl_injective
 
 Depends on / 依赖: PSum.inl, PSum.inl_injective, inl_injective, of_injective
@@ -117,8 +117,8 @@ theorem psum_right
 
 中文:
 定理 psum_right
-  条件: {α β : Sort*} [Finite (α oplus' β)]
-  结论: Finite β
+  条件: {α β : 类型层*} [有限 (α oplus' β)]
+  结论: 有限 β
   证明: of_injective (PSum.inr : β -> α oplus' β) PSum.inr_injective
 
 Depends on / 依赖: PSum.inr, PSum.inr_injective, inr_injective, of_injective

@@ -32,7 +32,7 @@ theorem star_prod
 
 中文:
 定理 star_prod
-  条件: [CommMonoid R] [StarMul R] {α : 类型} (s : Finset α) (f : α -> R)
+  条件: [交换幺半群 R] [StarMul R] {α : 类型} (s : 有限集 α) (f : α -> R)
   证明: map_prod (starMulAut : R ≃* R) _ _
 
 @[simp]
@@ -55,7 +55,7 @@ theorem star_sum
 
 中文:
 定理 star_sum
-  条件: [AddCommMonoid R] [StarAddMonoid R] {α : 类型} (s : Finset α) (f : α -> R)
+  条件: [加法交换幺半群 R] [StarAdd幺半群 R] {α : 类型} (s : 有限集 α) (f : α -> R)
   证明: map_sum (starAddEquiv : R ≃+ R) _ _
 
 @[aesop safe apply (rule_sets := [CStarAlgebra])]
@@ -79,7 +79,7 @@ theorem isSelfAdjoint_sum
 
 中文:
 定理 isSelfAdjoint_sum
-  结论: {ι : 类型} [AddCommMonoid R] [StarAddMonoid R] (s : Finset ι)
+  结论: {ι : 类型} [加法交换幺半群 R] [StarAdd幺半群 R] (s : 有限集 ι)
   证明: by
   simpa [IsSelfAdjoint, star_sum] using Finset.sum_congr rfl fun _ hi => h _ hi
 
@@ -105,7 +105,7 @@ theorem star_finsuppSum
 
 中文:
 定理 star_finsuppSum
-  结论: {ι : 类型} {M : 类型} [Zero M] [AddCommMonoid R] [StarAddMonoid R]
+  结论: {ι : 类型} {M : 类型} [零 M] [加法交换幺半群 R] [StarAdd幺半群 R]
   证明: by
   simp [Finsupp.sum]
 
@@ -129,7 +129,7 @@ theorem star_finsuppProd
 
 中文:
 定理 star_finsuppProd
-  结论: {ι : 类型} {M : 类型} [Zero M] [CommMonoid R] [StarMul R]
+  结论: {ι : 类型} {M : 类型} [零 M] [交换幺半群 R] [StarMul R]
   证明: by
   simp [Finsupp.prod]
 

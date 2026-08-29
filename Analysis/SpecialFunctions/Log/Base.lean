@@ -757,7 +757,7 @@ theorem surjOn_logb
 
 中文:
 定理 surjOn_logb
-  结论: SurjOn (logb b) (Ioi 0) univ
+  结论: 满射限制 (logb b) (左开右无界区间 0) univ
   证明: fun x _ =>
   ⟨b ^ x, rpow_pos_of_pos b_pos x, logb_rpow b_pos b_ne_one⟩
 -/
@@ -776,7 +776,7 @@ theorem logb_surjective
 
 中文:
 定理 logb_surjective
-  结论: Surjective (logb b)
+  结论: 满射 (logb b)
   证明: fun x => ⟨b ^ x, logb_rpow b_pos b_ne_one⟩
 
 @[simp]
@@ -820,7 +820,7 @@ theorem surjOn_logb'
 
 中文:
 定理 surjOn_logb'
-  结论: SurjOn (logb b) (Iio 0) univ
+  结论: 满射限制 (logb b) (左无界右开区间 0) univ
   证明: by
   intro x _
   use -b ^ x
@@ -1295,7 +1295,7 @@ theorem strictMonoOn_logb
 
 中文:
 定理 strictMonoOn_logb
-  结论: StrictMonoOn (logb b) (Set.Ioi 0)
+  结论: StrictMonoOn (logb b) (集合.左开右无界区间 0)
   证明: fun _ hx _ _ hxy =>
   logb_lt_logb hb hx hxy
 -/
@@ -1316,7 +1316,7 @@ theorem strictAntiOn_logb
 
 中文:
 定理 strictAntiOn_logb
-  结论: StrictAntiOn (logb b) (Set.Iio 0)
+  结论: StrictAntiOn (logb b) (集合.左无界右开区间 0)
   证明: by
   rintro x (hx : x < 0) y (hy : y < 0) hxy
   rw [← logb_abs b y]; rw [← logb_abs b x]
@@ -1341,7 +1341,7 @@ theorem logb_injOn_pos
 
 中文:
 定理 logb_injOn_pos
-  结论: Set.InjOn (logb b) (Set.Ioi 0)
+  结论: 集合.单射限制 (logb b) (集合.左开右无界区间 0)
   证明: (strictMonoOn_logb hb).injOn
 
 Depends on / 依赖: strictMonoOn_logb
@@ -1399,7 +1399,7 @@ theorem tendsto_logb_atTop
 
 中文:
 定理 tendsto_logb_atTop
-  结论: Tendsto (logb b) atTop atTop
+  结论: 收敛 (logb b) atTop atTop
   证明: Tendsto.atTop_div_const (log_pos hb) tendsto_log_atTop
 
 Depends on / 依赖: Tendsto, Tendsto.atTop_div_const, atTop_div_const, log_pos, tendsto_log_atTop
@@ -1773,7 +1773,7 @@ theorem strictAntiOn_logb_of_base_lt_one
 
 中文:
 定理 strictAntiOn_logb_of_base_lt_one
-  结论: StrictAntiOn (logb b) (Set.Ioi 0)
+  结论: StrictAntiOn (logb b) (集合.左开右无界区间 0)
   证明: fun _ hx _ _ hxy =>
   logb_lt_logb_of_base_lt_one b_pos b_lt_one hx hxy
 -/
@@ -1794,7 +1794,7 @@ theorem strictMonoOn_logb_of_base_lt_one
 
 中文:
 定理 strictMonoOn_logb_of_base_lt_one
-  结论: StrictMonoOn (logb b) (Set.Iio 0)
+  结论: StrictMonoOn (logb b) (集合.左无界右开区间 0)
   证明: by
   rintro x (hx : x < 0) y (hy : y < 0) hxy
   rw [← logb_abs b y]; rw [← logb_abs b x]
@@ -1819,7 +1819,7 @@ theorem logb_injOn_pos_of_base_lt_one
 
 中文:
 定理 logb_injOn_pos_of_base_lt_one
-  结论: Set.InjOn (logb b) (Set.Ioi 0)
+  结论: 集合.单射限制 (logb b) (集合.左开右无界区间 0)
   证明: (strictAntiOn_logb_of_base_lt_one b_pos b_lt_one).injOn
 
 Depends on / 依赖: b_lt_one, b_pos, strictAntiOn_logb_of_base_lt_one
@@ -1889,7 +1889,7 @@ theorem tendsto_logb_atTop_of_base_lt_one
 
 中文:
 定理 tendsto_logb_atTop_of_base_lt_one
-  结论: Tendsto (logb b) atTop atBot
+  结论: 收敛 (logb b) atTop atBot
   证明: by
   rw [tendsto_atTop_atBot]
   intro e
@@ -2184,7 +2184,7 @@ theorem tendsto_logb_nhdsNE_zero
 中文:
 定理 tendsto_logb_nhdsNE_zero
   条件: (hb : 1 < b)
-  结论: Tendsto (logb b) (𝓝[!=] 0) atBot
+  结论: 收敛 (logb b) (𝓝[!=] 0) atBot
   证明: tendsto_log_nhdsNE_zero.atBot_div_const (log_pos hb)
 
 Depends on / 依赖: atBot_div_const, log_pos, tendsto_log_nhdsNE_zero, tendsto_log_nhdsNE_zero.atBot_div_const
@@ -2223,7 +2223,7 @@ lemma tendsto_logb_nhdsGT_zero
 中文:
 引理 tendsto_logb_nhdsGT_zero
   条件: (hb : 1 < b)
-  结论: Tendsto (logb b) (𝓝[>] 0) atBot
+  结论: 收敛 (logb b) (𝓝[>] 0) atBot
   证明: tendsto_log_nhdsGT_zero.atBot_div_const (log_pos hb)
 
 Depends on / 依赖: atBot_div_const, log_pos, tendsto_log_nhdsGT_zero, tendsto_log_nhdsGT_zero.atBot_div_const
@@ -2316,7 +2316,7 @@ theorem continuous_logb
 
 中文:
 定理 continuous_logb
-  结论: Continuous fun x : { x : 实数 // x != 0 } => logb b x
+  结论: 连续 fun x : { x : 实数 // x != 0 } => logb b x
   证明: continuous_log.div_const _
 
 Depends on / 依赖: continuous_log, continuous_log.div_const, div_const
@@ -2336,7 +2336,7 @@ theorem continuous_logb'
 
 中文:
 定理 continuous_logb'
-  结论: Continuous fun x : { x : 实数 // 0 < x } => logb b x
+  结论: 连续 fun x : { x : 实数 // 0 < x } => logb b x
   证明: continuous_log'.div_const _
 
 Depends on / 依赖: continuous_log, div_const
@@ -2426,7 +2426,7 @@ theorem logb_prod
 
 中文:
 定理 logb_prod
-  条件: {α : 类型} (s : Finset α) (f : α -> 实数) (hf : 对任意 x in s, f x != 0)
+  条件: {α : 类型} (s : 有限集 α) (f : α -> 实数) (hf : 对任意 x in s, f x != 0)
   证明: by
   induction s using Finset.cons_induction_on with
   | empty => simp
@@ -2449,8 +2449,8 @@ theorem _root_.Finsupp.logb_prod
   proof: logb_prod _ _ fun _x hx h₀ => Finsupp.mem_support_iff.1 hx hg _ h₀
 
 中文:
-定理 _root_.Finsupp.logb_prod
-  结论: {α β : 类型} [Zero β] (f : α ->₀ β) (g : α -> β -> 实数)
+定理 _root_.有限支撑.logb_prod
+  结论: {α β : 类型} [零 β] (f : α ->₀ β) (g : α -> β -> 实数)
   证明: logb_prod _ _ fun _x hx h₀ => Finsupp.mem_support_iff.1 hx hg _ h₀
 -/
 protected theorem _root_.Finsupp.logb_prod {α β : Type*} [Zero β] (f : α ->₀ β) (g : α -> β -> Real)
@@ -2740,8 +2740,8 @@ theorem Filter.Tendsto.logb
   proof: (continuousAt_logb hx).tendsto.comp h
 
 中文:
-定理 Filter.Tendsto.logb
-  结论: {f : α -> 实数} {l : Filter α} {x : 实数}
+定理 滤子.收敛.logb
+  结论: {f : α -> 实数} {l : 滤子 α} {x : 实数}
   证明: (continuousAt_logb hx).tendsto.comp h
 
 Depends on / 依赖: continuousAt_logb, tendsto, tendsto.comp
@@ -2771,8 +2771,8 @@ nonrec theorem ContinuousWithinAt.logb (hf : ContinuousWithinAt f s a) (h₀ : f
     ContinuousWithinAt 
 
 中文:
-定理 Continuous.logb
-  条件: (hf : Continuous f) (h₀ : 对任意 x, f x != 0)
+定理 连续.logb
+  条件: (hf : 连续 f) (h₀ : 对任意 x, f x != 0)
   证明: continuousOn_logb.comp_continuous hf h₀
 
 @[fun_prop]
@@ -2883,7 +2883,7 @@ lemma Real.induction_Ico_mul
     rw [mem_Ico]; rw [← div_lt_iff₀ hx₀]; rw [← rpow_natCast]; rw [← logb_lt_iff_lt_rpow hr hx']; rw [Nat.
 
 中文:
-引理 Real.induction_Ico_mul
+引理 实数.induction_Ico_mul
   结论: {P : 实数 -> 命题} (x₀ r : 实数) (hr : 1 < r) (hx₀ : 0 < x₀)
   证明: by
   suffices forall n : Nat, forall x in Set.Ico x₀ (r ^ (n + 1) * x₀), P x by

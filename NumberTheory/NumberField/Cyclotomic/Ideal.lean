@@ -69,7 +69,7 @@ instance isPrime_span_zeta_sub_one
 
 中文:
 实例 isPrime_span_zeta_sub_one
-  签名: : IsPrime (span {hζ.to整数eger - 1})
+  签名: : 是素 (span {hζ.to整数eger - 1})
   定义体: by
   rw [span_singleton_prime]
   · exact hζ.zeta_sub_one_prime
@@ -100,7 +100,7 @@ theorem associated_norm_zeta_sub_one
 
 中文:
 定理 associated_norm_zeta_sub_one
-  结论: Associated (Algebra.norm 整数 (hζ.to整数eger - 1)) (p : 整数)
+  结论: Associated (代数.norm 整数 (hζ.to整数eger - 1)) (p : 整数)
   证明: by
   by_cases h : p = 2
   · cases k with
@@ -389,7 +389,7 @@ include hK in
 
 中文:
 定理 eq_span_zeta_sub_one_of_liesOver
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   have : P in primesOver 𝒑 (𝓞 K) := ⟨hP₁, hP₂⟩
   have : span {hζ.toInteger - 1} in primesOver 𝒑 (𝓞 K) :=
@@ -423,7 +423,7 @@ include hK in
 
 中文:
 定理 inertiaDeg_eq_of_prime_pow
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   rw [eq_span_zeta_sub_one_of_liesOver p k K hK.zeta_spec P]; rw [inertiaDeg_span_zeta_sub_one]
 
@@ -449,7 +449,7 @@ include hK in
 
 中文:
 定理 ramificationIdx_eq_of_prime_pow
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   rw [eq_span_zeta_sub_one_of_liesOver p k K hK.zeta_spec P]; rw [ramificationIdx_span_zeta_sub_one]
 
@@ -529,7 +529,7 @@ instance isPrime_span_zeta_sub_one'
 
 中文:
 实例 isPrime_span_zeta_sub_one'
-  签名: : IsPrime (span {hζ.to整数eger - 1})
+  签名: : 是素 (span {hζ.to整数eger - 1})
   定义体: by
   rw [← pow_one p] at hK hζ
   exact isPrime_span_zeta_sub_one p 0 hζ
@@ -588,7 +588,7 @@ omit [NumberField K] hK in
 
 中文:
 引理 associated_sub_one_of_isPrimitiveRoot
-  条件: [NeZero p] {η : K} (hη : IsPrimitiveRoot η p)
+  条件: [NeZero p] {η : K} (hη : 是PrimitiveRoot η p)
   证明: by
   obtain ⟨i, -, hi, hζη⟩ := hζ.isPrimitiveRoot_iff.mp hη
   rw [show hη.toInteger = hζ.toInteger ^ i from RingOfIntegers.ext hζη.symm]
@@ -776,7 +776,7 @@ include hK in
 
 中文:
 定理 eq_span_zeta_sub_one_of_liesOver'
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   rw [← pow_one p] at hK hζ
   exact eq_span_zeta_sub_one_of_liesOver p 0 K hζ P
@@ -804,7 +804,7 @@ include hK in
 
 中文:
 定理 inertiaDeg_eq_of_prime
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   rw [eq_span_zeta_sub_one_of_liesOver' p K hK.zeta_spec P]; rw [inertiaDeg_span_zeta_sub_one']
 
@@ -830,7 +830,7 @@ include hK in
 
 中文:
 定理 ramificationIdx_eq_of_prime
-  条件: (P : Ideal (𝓞 K)) [hP₁ : P.IsPrime] [hP₂ : P.LiesOver 𝒑]
+  条件: (P : 理想 (𝓞 K)) [hP₁ : P.是素] [hP₂ : P.LiesOver 𝒑]
   证明: by
   rw [eq_span_zeta_sub_one_of_liesOver' p K hK.zeta_spec P]; rw [ramificationIdx_span_zeta_sub_one']
 

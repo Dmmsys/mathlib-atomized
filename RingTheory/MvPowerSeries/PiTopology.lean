@@ -112,7 +112,7 @@ theorem instTopologicalSpace_mono
 
 中文:
 定理 instTopologicalSpace_mono
-  条件: (σ : 类型) {R : 类型} {t u : TopologicalSpace R} (htu : t <= u)
+  条件: (σ : 类型) {R : 类型} {t u : 拓扑空间 R} (htu : t <= u)
   证明: by
   change ⨅ i, _ <= ⨅ i, _
   gcongr
@@ -135,8 +135,8 @@ theorem instT0Space
 
 中文:
 定理 instT0Space
-  条件: [T0Space R]
-  结论: T0Space (MvPowerSeries σ R)
+  条件: [T0空间 R]
+  结论: T0空间 (MvPowerSeries σ R)
   证明: Pi.instT0Space
 
 Depends on / 依赖: Pi.instT0Space, instT0Space
@@ -156,8 +156,8 @@ theorem instT2Space
 
 中文:
 定理 instT2Space
-  条件: [T2Space R]
-  结论: T2Space (MvPowerSeries σ R)
+  条件: [T2空间 R]
+  结论: T2空间 (MvPowerSeries σ R)
   证明: Pi.t2Space
 
 Depends on / 依赖: Pi.t2Space, t2Space
@@ -177,7 +177,7 @@ theorem continuous_coeff
 
 中文:
 定理 continuous_coeff
-  条件: [Semiring R] (d : σ ->₀ 自然数)
+  条件: [半环 R] (d : σ ->₀ 自然数)
   证明: continuous_pi_iff.mp continuous_id d
 -/
 theorem continuous_coeff [Semiring R] (d : σ ->₀ Nat) :
@@ -196,8 +196,8 @@ theorem continuous_constantCoeff
 
 中文:
 定理 continuous_constantCoeff
-  条件: [Semiring R]
-  结论: Continuous (constantCoeff (σ := σ) (R := R))
+  条件: [半环 R]
+  结论: 连续 (constantCoeff (σ := σ) (R := R))
   证明: continuous_coeff (R := R) 0
 -/
 theorem continuous_constantCoeff [Semiring R] : Continuous (constantCoeff (σ := σ) (R := R)) :=
@@ -216,7 +216,7 @@ theorem tendsto_iff_coeff_tendsto
 
 中文:
 定理 tendsto_iff_coeff_tendsto
-  结论: [Semiring R] {ι : 类型}
+  结论: [半环 R] {ι : 类型}
   证明: by
   rw [nhds_pi]; rw [tendsto_pi]
   exact forall_congr' (fun d => Iff.rfl)
@@ -243,7 +243,7 @@ theorem tendsto_trunc'_atTop
 
 中文:
 定理 tendsto_trunc'_atTop
-  条件: [DecidableEq σ] [CommSemiring R] (f : MvPowerSeries σ R)
+  条件: [DecidableEq σ] [交换半环 R] (f : MvPowerSeries σ R)
   证明: by
   rw [tendsto_iff_coeff_tendsto]
   intro d
@@ -275,7 +275,7 @@ theorem tendsto_trunc_atTop
 
 中文:
 定理 tendsto_trunc_atTop
-  条件: [DecidableEq σ] [CommSemiring R] [Nonempty σ] (f : MvPowerSeries σ R)
+  条件: [DecidableEq σ] [交换半环 R] [非空 σ] (f : MvPowerSeries σ R)
   证明: by
   rw [tendsto_iff_coeff_tendsto]
   intro d
@@ -311,7 +311,7 @@ exact mem_closure_of_tendsto (tendsto_trunc'_atTop f) .of_forall fun _ => Set.me
 
 中文:
 定理 denseRange_toMvPowerSeries
-  条件: [CommSemiring R]
+  条件: [交换半环 R]
   证明: fun f => by
   classical
 exact mem_closure_of_tendsto (tendsto_trunc'_atTop f) .of_forall fun _ => Set.mem_range_self _
@@ -341,7 +341,7 @@ theorem instIsTopologicalSemiring
 
 中文:
 定理 instIsTopologicalSemiring
-  条件: [Semiring R] [IsTopologicalSemiring R]
+  条件: [半环 R] [是TopologicalSemiring R]
   证明: continuous_pi fun d => continuous_add.comp
     (((continuous_coeff R d).fst').prodMk (continuous_coeff R d).snd')
   continuous_mul := continuous_pi fun _ =>
@@ -372,7 +372,7 @@ theorem instIsTopologicalRing
 
 中文:
 定理 instIsTopologicalRing
-  条件: [Ring R] [IsTopologicalRing R]
+  条件: [环 R] [是拓扑环 R]
   证明: { instIsTopologicalSemiring σ R with
     continuous_neg := continuous_pi fun d => Continuous.comp continuous_neg
       (continuous_coeff R d) }
@@ -405,7 +405,7 @@ theorem continuous_C
 
 中文:
 定理 continuous_C
-  条件: [Semiring R]
+  条件: [半环 R]
   证明: by
   classical
   simp only [continuous_iff_continuousAt]
@@ -450,7 +450,7 @@ theorem variables_tendsto_zero
 
 中文:
 定理 variables_tendsto_zero
-  条件: [Semiring R]
+  条件: [半环 R]
   证明: by
   classical
   simp only [tendsto_iff_coeff_tendsto, coeff_X, coeff_zero]
@@ -488,7 +488,7 @@ theorem isTopologicallyNilpotent_of_constantCoeff_isNilpotent
 
 中文:
 定理 isTopologicallyNilpotent_of_constantCoeff_isNilpotent
-  结论: [CommSemiring R]
+  结论: [交换半环 R]
   证明: by
   obtain ⟨m, hm⟩ := hf
   simp_rw [IsTopologicallyNilpotent, tendsto_iff_coeff_tendsto, coeff_zero]
@@ -518,7 +518,7 @@ theorem isTopologicallyNilpotent_of_constantCoeff_zero
 
 中文:
 定理 isTopologicallyNilpotent_of_constantCoeff_zero
-  结论: [CommSemiring R]
+  结论: [交换半环 R]
   证明: by
   apply isTopologicallyNilpotent_of_constantCoeff_isNilpotent
   rw [hf]
@@ -602,7 +602,7 @@ theorem as_tsum
 
 中文:
 定理 as_tsum
-  条件: [T2Space R] (f : MvPowerSeries σ R)
+  条件: [T2空间 R] (f : MvPowerSeries σ R)
   证明: (HasSum.tsum_eq (hasSum_of_monomials_self _)).symm
 
 Depends on / 依赖: HasSum, HasSum.tsum_eq, hasSum_of_monomials_self, tsum_eq
@@ -939,7 +939,7 @@ theorem uniformContinuous_coeff
 
 中文:
 定理 uniformContinuous_coeff
-  条件: [Semiring R] (d : σ ->₀ 自然数)
+  条件: [半环 R] (d : σ ->₀ 自然数)
   证明: uniformContinuous_pi.mp uniformContinuous_id d
 
 Depends on / 依赖: uniformContinuous_id, uniformContinuous_pi, uniformContinuous_pi.mp
@@ -960,7 +960,7 @@ theorem instCompleteSpace
 
 中文:
 定理 instCompleteSpace
-  条件: [CompleteSpace R]
+  条件: [完备空间 R]
   证明: Pi.complete _
 
 Depends on / 依赖: Pi.complete, complete
@@ -980,7 +980,7 @@ theorem instIsUniformAddGroup
 
 中文:
 定理 instIsUniformAddGroup
-  条件: [AddGroup R] [IsUniformAddGroup R]
+  条件: [加法群 R] [是UniformAdd群 R]
   证明: Pi.instIsUniformAddGroup
 
 Depends on / 依赖: Pi.instIsUniformAddGroup, instIsUniformAddGroup

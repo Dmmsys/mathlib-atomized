@@ -27,7 +27,7 @@ instance instSuccOrder
 
 中文:
 实例 instSuccOrder
-  签名: : SuccOrder 自然数+
+  签名: : Succ序 自然数+
   定义体: .ofSuccLeIff (· + 1) Iff.rfl
 
 Depends on / 依赖: Iff.rfl, ofSuccLeIff
@@ -45,7 +45,7 @@ instance instSuccAddOrder
 
 中文:
 实例 instSuccAddOrder
-  签名: : SuccAddOrder 自然数+ where
+  签名: : SuccAdd序 自然数+ where
   定义体: rfl
 -/
 instance instSuccAddOrder : SuccAddOrder Nat+ where
@@ -63,7 +63,7 @@ instance instNoMaxOrder
 
 中文:
 实例 instNoMaxOrder
-  签名: : NoMaxOrder 自然数+ where
+  签名: : NoMax序 自然数+ where
   定义体: ⟨n + 1, lt_succ_self n⟩
 
 @[simp]

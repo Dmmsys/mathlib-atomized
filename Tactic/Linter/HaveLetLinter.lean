@@ -60,7 +60,7 @@ definition isHave?
 
 中文:
 定义 isHave?
-  签名: : Syntax -> 布尔
+  签名: : Syntax -> 布尔值
 -/
 def isHave? : Syntax -> Bool
   | .node _ ``Lean.Parser.Tactic.tacticHave__ _ => true
@@ -82,7 +82,7 @@ definition InfoTree.foldInfoM
 
 中文:
 定义 InfoTree.foldInfoM
-  签名: {α m} [Monad m] (f : ContextInfo -> Info -> α -> m α) (init : α)
+  签名: {α m} [单子 m] (f : ContextInfo -> Info -> α -> m α) (init : α)
   定义体: InfoTree.foldInfo (fun ctx i ma => do f ctx i (← ma)) (pure init)
 
 Depends on / 依赖: InfoTree, InfoTree.foldInfo, foldInfo
@@ -105,7 +105,7 @@ definition toFormat_propTypes
 
 中文:
 定义 toFormat_propTypes
-  签名: (ctx : ContextInfo) (lc : LocalContext) (es : Array (Expr × Name))
+  签名: (ctx : ContextInfo) (lc : LocalContext) (es : 数组 (Expr × Name))
   定义体: do
   ctx.runMetaM lc do
     es.filterMapM fun (e, name) => do
@@ -138,7 +138,7 @@ definition nonPropHaves
 
 中文:
 定义 nonPropHaves
-  签名: : InfoTree -> CommandElabM (Array (Syntax × Format))
+  签名: : InfoTree -> CommandElabM (数组 (Syntax × Format))
   定义体: InfoTree.foldInfoM (init := #[]) fun ctx info args => return args ++ (← (do
     let .ofTacticInfo i := info | return #[]
     let stx := i.stx

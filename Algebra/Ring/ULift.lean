@@ -39,7 +39,7 @@ instance mulZeroClass
 
 中文:
 实例 mulZeroClass
-  签名: {M₀ : 类型} [MulZeroClass M₀]
+  签名: {M₀ : 类型} [乘零类 M₀]
   定义体: (Equiv.ulift).injective (by simp)
   mul_zero _ := (Equiv.ulift).injective (by simp)
 
@@ -79,8 +79,8 @@ instance instNatCast
   body: ⟨(up ·)⟩
 
 中文:
-实例 instNatCast
-  签名: [自然数Cast R]
+实例 inst自然数Cast
+  签名: [自然数嵌入 R]
   定义体: ⟨(up ·)⟩
 -/
 instance instNatCast [NatCast R] : NatCast (ULift R) := ⟨(up ·)⟩
@@ -95,8 +95,8 @@ instance instIntCast
 @[simp, norm_cast]
 
 中文:
-实例 instIntCast
-  签名: [整数Cast R]
+实例 inst整数Cast
+  签名: [整数嵌入 R]
   定义体: ⟨(up ·)⟩
 
 @[simp, norm_cast]
@@ -117,7 +117,7 @@ theorem up_natCast
 
 中文:
 定理 up_natCast
-  条件: [自然数Cast R] (n : 自然数)
+  条件: [自然数嵌入 R] (n : 自然数)
   结论: up (n : R) = n
   证明: rfl
 
@@ -138,8 +138,8 @@ theorem up_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 up_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 up_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp, norm_cast]
@@ -162,7 +162,7 @@ theorem up_intCast
 
 中文:
 定理 up_intCast
-  条件: [整数Cast R] (n : 整数)
+  条件: [整数嵌入 R] (n : 整数)
   结论: up (n : R) = n
   证明: rfl
 
@@ -185,8 +185,8 @@ theorem down_natCast
 
 中文:
 定理 down_natCast
-  条件: [自然数Cast R] (n : 自然数)
-  结论: down (n : ULift R) = n
+  条件: [自然数嵌入 R] (n : 自然数)
+  结论: down (n : 类型层提升 R) = n
   证明: rfl
 
 @[simp]
@@ -206,8 +206,8 @@ theorem down_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 down_ofNat
-  条件: [自然数Cast R] (n : 自然数) [n.AtLeastTwo]
+定理 down_of自然数
+  条件: [自然数嵌入 R] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp, norm_cast]
@@ -228,8 +228,8 @@ theorem down_intCast
 
 中文:
 定理 down_intCast
-  条件: [整数Cast R] (n : 整数)
-  结论: down (n : ULift R) = n
+  条件: [整数嵌入 R] (n : 整数)
+  结论: down (n : 类型层提升 R) = n
   证明: rfl
 -/
 theorem down_intCast [IntCast R] (n : Int) : down (n : ULift R) = n :=
@@ -246,7 +246,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: congr_arg ULift.up Nat.cast_zero
   natCast_succ _ := congr_arg ULift.up (Nat.cast_succ _)
 
@@ -265,7 +265,7 @@ instance addCommMonoidWithOne
 
 中文:
 实例 addCommMonoidWithOne
-  签名: [AddCommMonoidWithOne R]
+  签名: [加法交换带幺幺半群 R]
 -/
 instance addCommMonoidWithOne [AddCommMonoidWithOne R] : AddCommMonoidWithOne (ULift R) where
 
@@ -280,7 +280,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: [AddGroupWithOne R]
+  签名: [加法带幺群 R]
   定义体: congr_arg ULift.up (Int.cast_natCast _)
   intCast_negSucc _ := congr_arg ULift.up (Int.cast_negSucc _)
 
@@ -299,7 +299,7 @@ instance addCommGroupWithOne
 
 中文:
 实例 addCommGroupWithOne
-  签名: [AddCommGroupWithOne R]
+  签名: [加法交换带幺群 R]
 -/
 instance addCommGroupWithOne [AddCommGroupWithOne R] : AddCommGroupWithOne (ULift R) where
 
@@ -312,7 +312,7 @@ instance nonUnitalNonAssocSemiring
 
 中文:
 实例 nonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
 -/
 instance nonUnitalNonAssocSemiring [NonUnitalNonAssocSemiring R] :
     NonUnitalNonAssocSemiring (ULift R) where
@@ -326,7 +326,7 @@ instance nonAssocSemiring
 
 中文:
 实例 nonAssocSemiring
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
 -/
 instance nonAssocSemiring [NonAssocSemiring R] : NonAssocSemiring (ULift R) where
 
@@ -339,7 +339,7 @@ instance nonUnitalSemiring
 
 中文:
 实例 nonUnitalSemiring
-  签名: [NonUnitalSemiring R]
+  签名: [非幺半环 R]
 -/
 instance nonUnitalSemiring [NonUnitalSemiring R] : NonUnitalSemiring (ULift R) where
 
@@ -352,7 +352,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: [Semiring R]
+  签名: [半环 R]
 -/
 instance semiring [Semiring R] : Semiring (ULift R) where
 
@@ -371,7 +371,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: [NonUnitalNonAssocSemiring R]
+  签名: [非幺非结合半环 R]
   定义体: ULift.down
   invFun := ULift.up
   map_mul' _ _ := rfl
@@ -398,7 +398,7 @@ instance nonUnitalCommSemiring
 
 中文:
 实例 nonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R]
+  签名: [非幺交换半环 R]
 -/
 instance nonUnitalCommSemiring [NonUnitalCommSemiring R] : NonUnitalCommSemiring (ULift R) where
 
@@ -411,7 +411,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
 -/
 instance commSemiring [CommSemiring R] : CommSemiring (ULift R) where
 
@@ -424,7 +424,7 @@ instance nonUnitalNonAssocRing
 
 中文:
 实例 nonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R]
+  签名: [非幺非结合环 R]
 -/
 instance nonUnitalNonAssocRing [NonUnitalNonAssocRing R] : NonUnitalNonAssocRing (ULift R) where
 
@@ -437,7 +437,7 @@ instance nonUnitalRing
 
 中文:
 实例 nonUnitalRing
-  签名: [NonUnitalRing R]
+  签名: [非幺环 R]
 -/
 instance nonUnitalRing [NonUnitalRing R] : NonUnitalRing (ULift R) where
 
@@ -450,7 +450,7 @@ instance nonAssocRing
 
 中文:
 实例 nonAssocRing
-  签名: [NonAssocRing R]
+  签名: [非结合环 R]
 -/
 instance nonAssocRing [NonAssocRing R] : NonAssocRing (ULift R) where
 
@@ -463,7 +463,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: [Ring R]
+  签名: [环 R]
 -/
 instance ring [Ring R] : Ring (ULift R) where
 
@@ -476,7 +476,7 @@ instance nonUnitalCommRing
 
 中文:
 实例 nonUnitalCommRing
-  签名: [NonUnitalCommRing R]
+  签名: [非幺交换环 R]
 
 Depends on / 依赖: h1.out.pow, h2.out.pow, isElliptic_iff
 -/
@@ -491,7 +491,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: [CommRing R]
+  签名: [交换环 R]
 -/
 instance commRing [CommRing R] : CommRing (ULift R) where
 
@@ -512,7 +512,7 @@ definition RingHom.ulift
   body: RingHom.comp ULift.ringEquiv.symm.toRingHom (f.comp ULift.ringEquiv.toRingHom)
 
 中文:
-定义 RingHom.ulift
+定义 环态射.ulift
   签名: (f : R ->+* S)
   定义体: RingHom.comp ULift.ringEquiv.symm.toRingHom (f.comp ULift.ringEquiv.toRingHom)
 
@@ -533,8 +533,8 @@ lemma RingHom.ulift_apply
 @[simp]
 
 中文:
-引理 RingHom.ulift_apply
-  条件: (f : R ->+* S) (x : ULift.{u₁} R)
+引理 环态射.ulift_apply
+  条件: (f : R ->+* S) (x : 类型层提升.{u₁} R)
   结论: f.ulift x = ⟨f x.down⟩
   证明: rfl
 
@@ -553,8 +553,8 @@ lemma RingHom.down_ulift_apply
   proof: rfl
 
 中文:
-引理 RingHom.down_ulift_apply
-  条件: (f : R ->+* S) (x : ULift.{u₁} R)
+引理 环态射.down_ulift_apply
+  条件: (f : R ->+* S) (x : 类型层提升.{u₁} R)
   证明: rfl
 -/
 lemma RingHom.down_ulift_apply (f : R ->+* S) (x : ULift.{u₁} R) :
@@ -570,7 +570,7 @@ lemma RingHom.comp_ulift_eq
   proof: rfl
 
 中文:
-引理 RingHom.comp_ulift_eq
+引理 环态射.comp_ulift_eq
   条件: (f : R ->+* S)
   证明: rfl
 -/

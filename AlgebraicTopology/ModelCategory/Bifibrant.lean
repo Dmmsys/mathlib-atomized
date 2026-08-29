@@ -42,7 +42,7 @@ definition cofibrantObjects
 
 中文:
 定义 cofibrantObjects
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: IsCofibrant
 
 Depends on / 依赖: IsCofibrant
@@ -159,7 +159,7 @@ lemma weakEquivalence_homMk_iff
 
 中文:
 引理 weakEquivalence_homMk_iff
-  结论: [CategoryWithWeakEquivalences C] {X Y : C}
+  结论: [带弱等价范畴 C] {X Y : C}
   证明: by
   simp only [weakEquivalence_iff]
   rfl
@@ -253,7 +253,7 @@ definition fibrantObjects
 
 中文:
 定义 fibrantObjects
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => IsFibrant X
 
 Depends on / 依赖: IsFibrant
@@ -370,7 +370,7 @@ lemma weakEquivalence_homMk_iff
 
 中文:
 引理 weakEquivalence_homMk_iff
-  结论: [CategoryWithWeakEquivalences C] {X Y : C}
+  结论: [带弱等价范畴 C] {X Y : C}
   证明: by
   simp only [weakEquivalence_iff]
   rfl
@@ -465,7 +465,7 @@ definition bifibrantObjects
 
 中文:
 定义 bifibrantObjects
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: cofibrantObjects C ⊓ fibrantObjects C
 
 Depends on / 依赖: cofibrantObjects, fibrantObjects
@@ -619,7 +619,7 @@ lemma weakEquivalence_homMk_iff
 
 中文:
 引理 weakEquivalence_homMk_iff
-  结论: [CategoryWithWeakEquivalences C] {X Y : C}
+  结论: [带弱等价范畴 C] {X Y : C}
   证明: by
   simp only [weakEquivalence_iff]
   rfl

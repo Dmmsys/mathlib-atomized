@@ -148,7 +148,7 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton α] (f : α -> α) (n : 自然数) (x : α)
+  条件: [子单例 α] (f : α -> α) (n : 自然数) (x : α)
   结论: IsPeriodicPt f n x
   证明: IsFixedPt.of_subsingleton _ _
 
@@ -555,7 +555,7 @@ theorem gcd
     exact ih (hn.mod hm) hm
 
 中文:
-定理 gcd
+定理 最大公约数
   条件: (hm : IsPeriodicPt f m x) (hn : IsPeriodicPt f n x)
   证明: by
   revert hm hn
@@ -1258,7 +1258,7 @@ theorem iterate_injOn_Iio_minimalPeriod
 
 中文:
 定理 iterate_injOn_Iio_minimalPeriod
-  结论: (Iio <| minimalPeriod f x).InjOn (f^[·] x)
+  结论: (左无界右开区间 <| minimalPeriod f x).单射限制 (f^[·] x)
   证明: fun _m hm _n hn hmn => (le_of_lt_minimalPeriod_of_iterate_eq hm hmn).antisymm
     (le_of_lt_minimalPeriod_of_iterate_eq hn hmn.symm)
 
@@ -1365,7 +1365,7 @@ theorem minimalPeriod_eq_one_of_subsingleton
 
 中文:
 定理 minimalPeriod_eq_one_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: minimalPeriod f x = 1
   证明: by
   simp [nontriviality]
@@ -1519,7 +1519,7 @@ theorem minimalPeriod_iterate_eq_div_gcd_aux
 
 中文:
 定理 minimalPeriod_iterate_eq_div_gcd_aux
-  条件: (h : 0 < gcd (minimalPeriod f x) n)
+  条件: (h : 0 < 最大公约数 (minimalPeriod f x) n)
   证明: by
   apply Nat.dvd_antisymm
   · apply IsPeriodicPt.minimalPeriod_dvd
@@ -1776,7 +1776,7 @@ theorem exists_iterate_apply_eq_of_mem_periodicPts
   simpa only [← mem_periodicOrbit_iff hx] using! iterate_mem_periodicOrbit hx 0
 
 中文:
-定理 exists_iterate_apply_eq_of_mem_periodicPts
+定理 存在_iterate_apply_eq_of_mem_periodicPts
   条件: (hx : x in periodicPts f)
   结论: 存在 n, f^[n] x = x
   证明: by
@@ -2064,7 +2064,7 @@ theorem isFixedPt_piMap
 
 中文:
 定理 isFixedPt_piMap
-  结论: IsFixedPt (Pi.map f) x ↔ 对任意 i, IsFixedPt (f i) (x i)
+  结论: IsFixedPt (依赖函数类型.map f) x ↔ 对任意 i, IsFixedPt (f i) (x i)
   证明: funext_iff
 
 Depends on / 依赖: funext_iff
@@ -2086,7 +2086,7 @@ theorem IsFixedPt.piMap
 中文:
 定理 IsFixedPt.piMap
   条件: (h : 对任意 i, IsFixedPt (f i) (x i))
-  结论: IsFixedPt (Pi.map f) x
+  结论: IsFixedPt (依赖函数类型.map f) x
   证明: isFixedPt_piMap.mpr h
 
 @[simp]
@@ -2108,7 +2108,7 @@ theorem isPeriodicPt_piMap
 
 中文:
 定理 isPeriodicPt_piMap
-  结论: IsPeriodicPt (Pi.map f) n x ↔ 对任意 i, IsPeriodicPt (f i) n (x i)
+  结论: IsPeriodicPt (依赖函数类型.map f) n x ↔ 对任意 i, IsPeriodicPt (f i) n (x i)
   证明: by
   simp [IsPeriodicPt]
 
@@ -2129,7 +2129,7 @@ theorem IsPeriodicPt.piMap
 中文:
 定理 IsPeriodicPt.piMap
   条件: (h : 对任意 i, IsPeriodicPt (f i) n (x i))
-  结论: IsPeriodicPt (Pi.map f) n x
+  结论: IsPeriodicPt (依赖函数类型.map f) n x
   证明: isPeriodicPt_piMap.mpr h
 
 Depends on / 依赖: isPeriodicPt_piMap, isPeriodicPt_piMap.mpr

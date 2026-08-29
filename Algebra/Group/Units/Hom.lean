@@ -61,8 +61,8 @@ theorem IsUnit.eq_on_inv
     (h.symm ▸ map_mul_eq_one g (hx.mul_inv_cancel))
 
 中文:
-定理 IsUnit.eq_on_inv
-  结论: {F G N} [DivisionMonoid G] [Monoid N] [FunLike F G N]
+定理 是单位.eq_on_inv
+  结论: {F G N} [Division幺半群 G] [幺半群 N] [函数状 F G N]
   证明: left_inv_eq_right_inv (map_mul_eq_one f hx.inv_mul_cancel)
     (h.symm ▸ map_mul_eq_one g (hx.mul_inv_cancel))
 
@@ -87,7 +87,7 @@ theorem eq_on_inv
 
 中文:
 定理 eq_on_inv
-  结论: {F G M} [Group G] [Monoid M] [FunLike F G M] [MonoidHomClass F G M]
+  结论: {F G M} [群 G] [幺半群 M] [函数状 F G M] [幺半群态射类 F G M]
   证明: (Group.isUnit x).eq_on_inv f g h
 
 Depends on / 依赖: Group.isUnit, eq_on_inv, isUnit
@@ -230,7 +230,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : M ->* N} (hf : Function.Injective f)
+  条件: {f : M ->* N} (hf : 函数.单射 f)
   证明: fun _ _ e => ext (hf (congr_arg val e))
 
 @[to_additive]
@@ -256,8 +256,8 @@ exact ⟨⟨u, v, hf.injective by simpa, hf.injective by simpa⟩, rfl⟩
 
 中文:
 定理 map_bijective
-  条件: {f : M ->* N} (hf : Function.Bijective f)
-  结论: Function.Bijective map f
+  条件: {f : M ->* N} (hf : 函数.双射 f)
+  结论: 函数.双射 map f
   证明: by
   refine ⟨map_injective hf.injective, ?_⟩
   rintro ⟨u, v, uv, vu⟩
@@ -285,7 +285,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (MonoidHom.id M) = MonoidHom.id Mˣ
+  结论: map (幺半群态射.id M) = 幺半群态射.id Mˣ
   证明: by ext; rfl
 -/
 theorem map_id : map (MonoidHom.id M) = MonoidHom.id Mˣ := by ext; rfl
@@ -345,7 +345,7 @@ theorem coeHom_injective
 
 中文:
 定理 coeHom_injective
-  结论: Function.Injective (coeHom M)
+  结论: 函数.单射 (coeHom M)
   证明: Units.val_injective
 
 Depends on / 依赖: Units.val_injective, val_injective
@@ -390,7 +390,7 @@ theorem _root_.map_units_inv
 
 中文:
 定理 _root_.map_units_inv
-  结论: {F : 类型} [FunLike F M α] [MonoidHomClass F M α]
+  结论: {F : 类型} [函数状 F M α] [幺半群态射类 F M α]
   证明: ((f : M ->* α).comp (Units.coeHom M)).map_inv u
 
 Depends on / 依赖: Units.coeHom, coeHom, map_inv
@@ -633,8 +633,8 @@ theorem map
 
 中文:
 定理 map
-  条件: [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x)
-  结论: IsUnit (f x)
+  条件: [幺半群态射类 F M N] (f : F) {x : M} (h : 是单位 x)
+  结论: 是单位 (f x)
   证明: by
   rcases h with ⟨y, rfl⟩; exact (Units.map (f : M ->* N) y).isUnit
 
@@ -658,7 +658,7 @@ theorem unit_map
 
 中文:
 定理 unit_map
-  条件: [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x)
+  条件: [幺半群态射类 F M N] (f : F) {x : M} (h : 是单位 x)
   证明: rfl
 
 @[to_additive]
@@ -680,7 +680,7 @@ theorem unit_inv_map
 
 中文:
 定理 unit_inv_map
-  条件: [MonoidHomClass F M N] (f : F) {x : M} (h : IsUnit x)
+  条件: [幺半群态射类 F M N] (f : F) {x : M} (h : 是单位 x)
   证明: Units.inv_eq_of_mul_eq_one_left by simp [← map_mul]
 
 @[to_additive]
@@ -703,7 +703,7 @@ theorem of_leftInverse
 
 中文:
 定理 of_leftInverse
-  结论: [MonoidHomClass G N M] {f : F} {x : M} (g : G)
+  结论: [幺半群态射类 G N M] {f : F} {x : M} (g : G)
   证明: by
   simpa only [hfg x] using h.map g
 
@@ -725,7 +725,7 @@ theorem _root_.isUnit_map_of_leftInverse
 
 中文:
 定理 _root_.isUnit_map_of_leftInverse
-  结论: [MonoidHomClass F M N] [MonoidHomClass G N M]
+  结论: [幺半群态射类 F M N] [幺半群态射类 G N M]
   证明: ⟨of_leftInverse g hfg, map _⟩
 
 Depends on / 依赖: of_leftInverse
@@ -751,7 +751,7 @@ definition liftRight
 
 中文:
 定义 liftRight
-  签名: (f : M ->* N) (hf : 对任意 x, IsUnit (f x))
+  签名: (f : M ->* N) (hf : 对任意 x, 是单位 (f x))
   定义体: (Units.liftRight f fun x => (hf x).unit) fun _ => rfl
 
 @[to_additive]
@@ -774,7 +774,7 @@ theorem coe_liftRight
 
 中文:
 定理 coe_liftRight
-  条件: (f : M ->* N) (hf : 对任意 x, IsUnit (f x)) (x)
+  条件: (f : M ->* N) (hf : 对任意 x, 是单位 (f x)) (x)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -795,7 +795,7 @@ theorem mul_liftRight_inv
 
 中文:
 定理 mul_liftRight_inv
-  条件: (f : M ->* N) (h : 对任意 x, IsUnit (f x)) (x)
+  条件: (f : M ->* N) (h : 对任意 x, 是单位 (f x)) (x)
   证明: Units.mul_liftRight_inv (by intro; rfl) x
 
 @[to_additive (attr := simp)]
@@ -818,7 +818,7 @@ theorem liftRight_inv_mul
 
 中文:
 定理 liftRight_inv_mul
-  条件: (f : M ->* N) (h : 对任意 x, IsUnit (f x)) (x)
+  条件: (f : M ->* N) (h : 对任意 x, 是单位 (f x)) (x)
   证明: Units.liftRight_inv_mul (by intro; rfl) x
 
 @[to_additive]
@@ -839,7 +839,7 @@ theorem liftRight_apply
 
 中文:
 定理 liftRight_apply
-  条件: (f : M ->* N) (hf : 对任意 x, IsUnit (f x)) (x : M)
+  条件: (f : M ->* N) (hf : 对任意 x, 是单位 (f x)) (x : M)
   证明: rfl
 -/
 theorem liftRight_apply (f : M ->* N) (hf : forall x, IsUnit (f x)) (x : M) :
@@ -865,10 +865,10 @@ class IsLocalHom
     - map_nonunit : forall a, IsUnit (f a) -> IsUnit a
 
 中文:
-类 IsLocalHom
+类 是Local态射
   参数: (f : F)
   公理与运算 (1 个):
-    - map_nonunit : 对任意 a, IsUnit (f a) -> IsUnit a
+    - map_nonunit : 对任意 a, 是单位 (f a) -> 是单位 a
 -/
 class IsLocalHom (f : F) : Prop where
   /-- A local homomorphism `f : R ⟶ S` will send nonunits of `R` to nonunits of `S`. -/
@@ -884,9 +884,9 @@ theorem IsUnit.of_map
   proof: IsLocalHom.map_nonunit a h
 
 中文:
-定理 IsUnit.of_map
-  条件: (f : F) [IsLocalHom f] (a : R) (h : IsUnit (f a))
-  结论: IsUnit a
+定理 是单位.of_map
+  条件: (f : F) [是Local态射 f] (a : R) (h : 是单位 (f a))
+  结论: 是单位 a
   证明: IsLocalHom.map_nonunit a h
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.map_nonunit, map_nonunit
@@ -911,8 +911,8 @@ theorem isUnit_map_iff
 
 中文:
 定理 isUnit_map_iff
-  条件: (f : F) [IsLocalHom f] (a : R)
-  结论: IsUnit (f a) ↔ IsUnit a
+  条件: (f : F) [是Local态射 f] (a : R)
+  结论: 是单位 (f a) ↔ 是单位 a
   证明: ⟨IsLocalHom.map_nonunit a, IsUnit.map f⟩
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.map_nonunit, IsUnit, IsUnit.map, map_nonunit
@@ -932,7 +932,7 @@ theorem isLocalHom_of_leftInverse
 
 中文:
 定理 isLocalHom_of_leftInverse
-  结论: [FunLike G S R] [MonoidHomClass G S R]
+  结论: [函数状 G S R] [幺半群态射类 G S R]
   证明: by rwa [isUnit_map_of_leftInverse g hfg] at ha
 
 @[instance]
@@ -953,8 +953,8 @@ theorem MonoidHom.isLocalHom_comp
   proof: IsLocalHom.map_nonunit a ∘ IsLocalHom.map_nonunit (f := g) (f a)
 
 中文:
-定理 MonoidHom.isLocalHom_comp
-  结论: (g : S ->* T) (f : R ->* S) [IsLocalHom g]
+定理 幺半群态射.isLocalHom_comp
+  结论: (g : S ->* T) (f : R ->* S) [是Local态射 g]
   证明: IsLocalHom.map_nonunit a ∘ IsLocalHom.map_nonunit (f := g) (f a)
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.map_nonunit, map_nonunit
@@ -975,7 +975,7 @@ theorem isLocalHom_toMonoidHom
 
 中文:
 定理 isLocalHom_toMonoidHom
-  条件: (f : F) [IsLocalHom f]
+  条件: (f : F) [是Local态射 f]
   证明: ⟨IsLocalHom.map_nonunit (f := f)⟩
 
 Depends on / 依赖: IsLocalHom, IsLocalHom.map_nonunit, map_nonunit
@@ -993,8 +993,8 @@ theorem MonoidHom.isLocalHom_of_comp
   proof: ⟨fun _ ha => (isUnit_map_iff (g.comp f) _).mp (ha.map g)⟩
 
 中文:
-定理 MonoidHom.isLocalHom_of_comp
-  条件: (f : R ->* S) (g : S ->* T) [IsLocalHom (g.comp f)]
+定理 幺半群态射.isLocalHom_of_comp
+  条件: (f : R ->* S) (g : S ->* T) [是Local态射 (g.comp f)]
   证明: ⟨fun _ ha => (isUnit_map_iff (g.comp f) _).mp (ha.map g)⟩
 
 Depends on / 依赖: g.comp, ha.map, isUnit_map_iff

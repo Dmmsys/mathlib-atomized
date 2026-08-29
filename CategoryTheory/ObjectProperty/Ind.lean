@@ -51,7 +51,7 @@ definition ind
 
 中文:
 定义 ind
-  签名: (P : Object命题erty C)
+  签名: (P : ObjectProperty C)
   定义体: fun X => exists (J : Type w) (_ : SmallCategory J) (_ : IsFiltered J)
     (pres : ColimitPresentation J X), forall i, P (pres.diag.obj i)
 
@@ -92,8 +92,8 @@ instance [P.Nonempty]
   body: .mono P.le_ind
 
 中文:
-实例 [P.Nonempty]
-  签名: : (ind.{w} P).Nonempty
+实例 [P.非空]
+  签名: : (ind.{w} P).非空
   定义体: .mono P.le_ind
 
 Depends on / 依赖: P.le_ind, le_ind
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.ind.IsClosedUnderIsomorphisms
+  签名: P.ind.在同构下封闭
   定义体: fun ⟨J, _, _, pres, h⟩ => ⟨J, ‹_›, ‹_›, pres.ofIso e, h⟩
 
 Depends on / 依赖: pres.ofIso
@@ -163,7 +163,7 @@ lemma of_essentiallySmall_index
 
 中文:
 引理 of_essentiallySmall_index
-  结论: {X : C} {J : 类型} [Category* J] [EssentiallySmall.{w} J]
+  结论: {X : C} {J : 类型} [范畴* J] [EssentiallySmall.{w} J]
   证明: ⟨SmallModel J, inferInstance, .of_equivalence (equivSmallModel _),
     pres.reindex (equivSmallModel _).inverse, fun _ => h _⟩
 
@@ -189,7 +189,7 @@ lemma ind_iff_exists
   · let incl : P.FullSubcategory ⥤ (isFinitelyPresentable.{
 
 中文:
-引理 ind_iff_exists
+引理 ind_iff_存在
   结论: (H : P <= isFinitelyPresentable.{w} C)
   证明: by
   refine ⟨fun ⟨J, _, _, pres, h⟩ Z g hZ => ?_, fun hfac => ?_⟩
@@ -246,7 +246,7 @@ lemma ind_inverseImage_le
 
 中文:
 引理 ind_inverseImage_le
-  条件: [PreservesFilteredColimitsOfSize.{w, w} F]
+  条件: [保持FilteredColimitsOfSize.{w, w} F]
   证明: by
   intro X ⟨J, _, _, pres, h⟩
   simp only [prop_inverseImage_iff]
@@ -274,7 +274,7 @@ lemma ind_inverseImage_eq_of_isEquivalence
 
 中文:
 引理 ind_inverseImage_eq_of_isEquivalence
-  条件: [P.IsClosedUnderIsomorphisms] [F.IsEquivalence]
+  条件: [P.在同构下封闭] [F.是等价]
   证明: by
   refine le_antisymm (ind_inverseImage_le _ _) fun X ⟨J, _, _, pres, h⟩ => ?_
   refine ⟨J, ‹_›, ‹_›, .ofIso (pres.map F.asEquivalence.inverse) ?_, fun j => ?_⟩
@@ -305,7 +305,7 @@ lemma ind_iff_of_equivalence
 
 中文:
 引理 ind_iff_of_equivalence
-  条件: (e : C ≌ D) [P.IsClosedUnderIsomorphisms] (X : D)
+  条件: (e : C ≌ D) [P.在同构下封闭] (X : D)
   证明: by
   dsimp only [ObjectProperty.ind]
   congr!
@@ -341,7 +341,7 @@ lemma ind_pi_of_ind
 
 中文:
 引理 ind_pi_of_ind
-  结论: {ι : Type w} [P.IsClosedUnderLimitsOfShape (Discrete ι)]
+  结论: {ι : 类型 w} [P.是ClosedUnderLimitsOfShape (离散 ι)]
   证明: by
   choose J _ _ pres hpres using hc
   obtain ⟨hc⟩ := IsIPCOfShape.nonempty_isColimit fun i => (pres i).isColimit

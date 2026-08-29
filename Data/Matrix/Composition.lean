@@ -45,7 +45,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : Matrix I J (Matrix K L R) ≃ Matrix (I × K) (J × L) R where
+  签名: : 矩阵 I J (矩阵 K L R) ≃ 矩阵 (I × K) (J × L) R where
   定义体: m ik.1 jl.1 ik.2 jl.2
   invFun n i j k l := n (i, k) (j, l)
 -/
@@ -69,7 +69,7 @@ theorem comp_one
 
 中文:
 定理 comp_one
-  条件: [DecidableEq I] [DecidableEq J] [Zero R] [One R]
+  条件: [DecidableEq I] [DecidableEq J] [零 R] [幺 R]
   结论: comp I I J J R 1 = 1
   证明: by
   ext; simp only [comp, Equiv.coe_fn_mk, one_apply, apply_ite]; aesop
@@ -89,7 +89,7 @@ theorem comp_map_map
 
 中文:
 定理 comp_map_map
-  条件: (M : Matrix I J (Matrix K L R)) (f : R -> R')
+  条件: (M : 矩阵 I J (矩阵 K L R)) (f : R -> R')
   证明: rfl
 -/
 theorem comp_map_map (M : Matrix I J (Matrix K L R)) (f : R -> R') :
@@ -187,7 +187,7 @@ theorem comp_diagonal_diagonal
 
 中文:
 定理 comp_diagonal_diagonal
-  条件: [DecidableEq I] [DecidableEq J] [Zero R] (d : I -> J -> R)
+  条件: [DecidableEq I] [DecidableEq J] [零 R] (d : I -> J -> R)
   证明: by
   ext ⟨i₁, j₁⟩ ⟨i₂, j₂⟩
   dsimp [comp_apply]
@@ -224,7 +224,7 @@ theorem comp_symm_diagonal
 
 中文:
 定理 comp_symm_diagonal
-  条件: [DecidableEq I] [DecidableEq J] [Zero R] (d : I × J -> R)
+  条件: [DecidableEq I] [DecidableEq J] [零 R] (d : I × J -> R)
   证明: (comp I I J J R).symm_apply_eq.2 (comp_diagonal_diagonal fun i j => d (i, j)).symm
 
 Depends on / 依赖: comp_diagonal_diagonal, symm_apply_eq
@@ -243,7 +243,7 @@ theorem comp_transpose
 
 中文:
 定理 comp_transpose
-  条件: (M : Matrix I J (Matrix K L R))
+  条件: (M : 矩阵 I J (矩阵 K L R))
   证明: rfl
 -/
 theorem comp_transpose (M : Matrix I J (Matrix K L R)) :
@@ -259,7 +259,7 @@ theorem comp_map_transpose
 
 中文:
 定理 comp_map_transpose
-  条件: (M : Matrix I J (Matrix K L R))
+  条件: (M : 矩阵 I J (矩阵 K L R))
   证明: rfl
 -/
 theorem comp_map_transpose (M : Matrix I J (Matrix K L R)) :
@@ -275,7 +275,7 @@ theorem comp_symm_transpose
 
 中文:
 定理 comp_symm_transpose
-  条件: (M : Matrix (I × K) (J × L) R)
+  条件: (M : 矩阵 (I × K) (J × L) R)
   证明: rfl
 -/
 theorem comp_symm_transpose (M : Matrix (I × K) (J × L) R) :
@@ -291,7 +291,7 @@ theorem transpose_comp
 
 中文:
 定理 transpose_comp
-  条件: (M : Matrix I J (Matrix K L R))
+  条件: (M : 矩阵 I J (矩阵 K L R))
   证明: rfl
 -/
 theorem transpose_comp (M : Matrix I J (Matrix K L R)) :
@@ -317,7 +317,7 @@ definition compAddEquiv
 
 中文:
 定义 compAddEquiv
-  签名: : Matrix I J (Matrix K L R) ≃+ Matrix (I × K) (J × L) R where
+  签名: : 矩阵 I J (矩阵 K L R) ≃+ 矩阵 (I × K) (J × L) R where
   定义体: comp I J K L R
   map_add' _ _ := rfl
 
@@ -340,7 +340,7 @@ theorem compAddEquiv_apply
 
 中文:
 定理 compAddEquiv_apply
-  条件: (M : Matrix I J (Matrix K L R))
+  条件: (M : 矩阵 I J (矩阵 K L R))
   证明: rfl
 
 @[simp]
@@ -359,7 +359,7 @@ theorem compAddEquiv_symm_apply
 
 中文:
 定理 compAddEquiv_symm_apply
-  条件: (M : Matrix (I × K) (J × L) R)
+  条件: (M : 矩阵 (I × K) (J × L) R)
   证明: rfl
 -/
 theorem compAddEquiv_symm_apply (M : Matrix (I × K) (J × L) R) :
@@ -384,7 +384,7 @@ definition compRingEquiv
 
 中文:
 定义 compRingEquiv
-  签名: : Matrix I I (Matrix J J R) ≃+* Matrix (I × J) (I × J) R where
+  签名: : 矩阵 I I (矩阵 J J R) ≃+* 矩阵 (I × J) (I × J) R where
   定义体: compAddEquiv I I J J R
 .trans .symm Fintype.sum_prod_type .. map_mul' _ _ := by ext; exact sum_apply ..
 
@@ -409,7 +409,7 @@ theorem compRingEquiv_apply
 
 中文:
 定理 compRingEquiv_apply
-  条件: (M : Matrix I I (Matrix J J R))
+  条件: (M : 矩阵 I I (矩阵 J J R))
   证明: rfl
 
 @[simp]
@@ -428,7 +428,7 @@ theorem compRingEquiv_symm_apply
 
 中文:
 定理 compRingEquiv_symm_apply
-  条件: (M : Matrix (I × J) (I × J) R)
+  条件: (M : 矩阵 (I × J) (I × J) R)
   证明: rfl
 -/
 theorem compRingEquiv_symm_apply (M : Matrix (I × J) (I × J) R) :
@@ -458,7 +458,7 @@ definition compLinearEquiv
 
 中文:
 定义 compLinearEquiv
-  签名: : Matrix I J (Matrix K L R) ≃ₗ[R₀] Matrix (I × K) (J × L) R where
+  签名: : 矩阵 I J (矩阵 K L R) ≃ₗ[R₀] 矩阵 (I × K) (J × L) R where
   定义体: compAddEquiv I J K L R
   map_smul' _ _ := rfl
 
@@ -489,7 +489,7 @@ definition compAlgEquiv
 
 中文:
 定义 compAlgEquiv
-  签名: : Matrix I I (Matrix J J R) ≃ₐ[K] Matrix (I × J) (I × J) R where
+  签名: : 矩阵 I I (矩阵 J J R) ≃ₐ[K] 矩阵 (I × J) (I × J) R where
   定义体: compRingEquiv I J R
   commutes' _ := comp_diagonal_diagonal _
 
@@ -514,7 +514,7 @@ theorem compAlgEquiv_apply
 
 中文:
 定理 compAlgEquiv_apply
-  条件: (M : Matrix I I (Matrix J J R))
+  条件: (M : 矩阵 I I (矩阵 J J R))
   证明: rfl
 
 @[simp]
@@ -535,7 +535,7 @@ theorem compAlgEquiv_symm_apply
 
 中文:
 定理 compAlgEquiv_symm_apply
-  条件: (M : Matrix (I × J) (I × J) R)
+  条件: (M : 矩阵 (I × J) (I × J) R)
   证明: rfl
 
 @[simp]
@@ -557,8 +557,8 @@ theorem isUnit_comp_iff
 
 中文:
 定理 isUnit_comp_iff
-  条件: {M : Matrix I I (Matrix J J R)}
-  结论: IsUnit (comp _ _ _ _ _ M) ↔ IsUnit M
+  条件: {M : 矩阵 I I (矩阵 J J R)}
+  结论: 是单位 (comp _ _ _ _ _ M) ↔ 是单位 M
   证明: isUnit_map_iff (compAlgEquiv _ _ _ Nat) M
 
 @[simp]
@@ -579,7 +579,7 @@ theorem isUnit_comp_symm_iff
 
 中文:
 定理 isUnit_comp_symm_iff
-  条件: {M : Matrix (I × J) (I × J) R}
+  条件: {M : 矩阵 (I × J) (I × J) R}
   证明: isUnit_map_iff (compAlgEquiv _ _ _ Nat).symm M
 
 Depends on / 依赖: compAlgEquiv, isUnit_map_iff

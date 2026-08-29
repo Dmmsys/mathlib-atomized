@@ -80,7 +80,7 @@ theorem _root_.LinearEquiv.toSpanNonzeroSingleton_homothety
   proof: LinearMap.toSpanSingleton_homothety _ _ _
 
 中文:
-定理 _root_.LinearEquiv.toSpanNonzeroSingleton_homothety
+定理 _root_.线性等价.toSpanNonzeroSingleton_homothety
   条件: (x : E) (h : x != 0) (c : 𝕜)
   证明: LinearMap.toSpanSingleton_homothety _ _ _
 

@@ -40,7 +40,7 @@ definition toTop₀
 
 中文:
 定义 toTop₀
-  签名: : CosimplicialObject TopCat.{0} where
+  签名: : CosimplicialObject 顶元素范畴.{0} where
   定义体: TopCat.of (stdSimplex Real (Fin (n.len + 1)))
   map f := TopCat.ofHom ⟨_, stdSimplex.continuous_map f⟩
 
@@ -63,7 +63,7 @@ definition toTop
 
 中文:
 定义 toTop
-  签名: : SimplexCategory ⥤ TopCat.{u}
+  签名: : 单纯形范畴 ⥤ 顶元素范畴.{u}
   定义体: toTop₀ ⋙ TopCat.uliftFunctor
 
 Depends on / 依赖: TopCat, TopCat.uliftFunctor, uliftFunctor
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (toTop₀.obj ⦋0⦌)
+  签名: 唯一 (toTop₀.obj ⦋0⦌)
   定义体: inferInstanceAs (Unique (stdSimplex Real (Fin 1)))
 
 Depends on / 依赖: Unique, stdSimplex
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (toTop.{u}.obj ⦋0⦌)
+  签名: 唯一 (toTop.{u}.obj ⦋0⦌)
   定义体: inferInstanceAs (Unique (ULift _))
 
 Depends on / 依赖: Unique

@@ -39,9 +39,9 @@ structure GroupTopology
   (no additional axioms)
 
 中文:
-结构 GroupTopology
-  参数: (α : 类型u) [Group α]
-  继承: TopologicalSpace α, IsTopologicalGroup α
+结构 群拓扑
+  参数: (α : 类型u) [群 α]
+  继承: 拓扑空间 α, 是拓扑群 α
   (无附加公理)
 -/
 structure GroupTopology (α : Type u) [Group α] : Type u
@@ -57,9 +57,9 @@ structure AddGroupTopology
   (no additional axioms)
 
 中文:
-结构 AddGroupTopology
-  参数: (α : 类型u) [AddGroup α]
-  继承: TopologicalSpace α, IsTopologicalAddGroup α
+结构 加法群拓扑
+  参数: (α : 类型u) [加法群 α]
+  继承: 拓扑空间 α, 是拓扑加群 α
   (无附加公理)
 -/
 structure AddGroupTopology (α : Type u) [AddGroup α] : Type u
@@ -87,7 +87,7 @@ theorem continuous_mul'
 
 中文:
 定理 continuous_mul'
-  条件: (g : GroupTopology α)
+  条件: (g : 群拓扑 α)
   证明: g.toTopologicalSpace
     Continuous fun p : α × α => p.1 * p.2 := by
   let := g.toTopologicalSpace
@@ -121,7 +121,7 @@ theorem continuous_inv'
 
 中文:
 定理 continuous_inv'
-  条件: (g : GroupTopology α)
+  条件: (g : 群拓扑 α)
   证明: g.toTopologicalSpace
     Continuous (Inv.inv : α -> α) := by
   let := g.toTopologicalSpace
@@ -180,7 +180,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  条件: {f g : GroupTopology α} (h : f.IsOpen = g.IsOpen)
+  条件: {f g : 群拓扑 α} (h : f.是开集 = g.是开集)
   结论: f = g
   证明: toTopologicalSpace_injective TopologicalSpace.ext h
 
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (GroupTopology α)
+  签名: 偏序 (群拓扑 α)
   定义体: PartialOrder.lift toTopologicalSpace toTopologicalSpace_injective
 
 @[to_additive (attr := simp)]
@@ -229,7 +229,7 @@ theorem toTopologicalSpace_le
 
 中文:
 定理 toTopologicalSpace_le
-  条件: {x y : GroupTopology α}
+  条件: {x y : 群拓扑 α}
   证明: Iff.rfl
 
 @[to_additive]
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (GroupTopology α)
+  签名: 顶元素 (群拓扑 α)
   定义体: let _t : TopologicalSpace α := ⊤
   ⟨{ continuous_mul := continuous_top
       continuous_inv := continuous_top }⟩
@@ -282,7 +282,7 @@ theorem toTopologicalSpace_top
 
 中文:
 定理 toTopologicalSpace_top
-  结论: (⊤ : GroupTopology α).toTopologicalSpace = ⊤
+  结论: (⊤ : 群拓扑 α).toTopologicalSpace = ⊤
   证明: rfl
 
 @[to_additive]
@@ -307,7 +307,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (GroupTopology α)
+  签名: 底元素 (群拓扑 α)
   定义体: let _t : TopologicalSpace α := ⊥
   ⟨{ continuous_mul := by
         have := discreteTopology_bot α
@@ -338,7 +338,7 @@ theorem toTopologicalSpace_bot
 
 中文:
 定理 toTopologicalSpace_bot
-  结论: (⊥ : GroupTopology α).toTopologicalSpace = ⊥
+  结论: (⊥ : 群拓扑 α).toTopologicalSpace = ⊥
   证明: rfl
 
 @[to_additive]
@@ -360,7 +360,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (GroupTopology α)
+  签名: 有界序 (群拓扑 α)
   定义体: show x.toTopologicalSpace <= ⊤ from le_top
   bot_le x := show ⊥ <= x.toTopologicalSpace from bot_le
 
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (GroupTopology α)
+  签名: 最小值 (群拓扑 α)
   定义体: ⟨x.1 ⊓ y.1, topologicalGroup_inf x.2 y.2⟩
 
 @[to_additive (attr := simp)]
@@ -407,7 +407,7 @@ theorem toTopologicalSpace_inf
 
 中文:
 定理 toTopologicalSpace_inf
-  条件: (x y : GroupTopology α)
+  条件: (x y : 群拓扑 α)
   证明: rfl
 
 @[to_additive]
@@ -429,7 +429,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeInf (GroupTopology α)
+  签名: SemilatticeInf (群拓扑 α)
   定义体: toTopologicalSpace_injective.semilatticeInf _ .rfl .rfl toTopologicalSpace_inf
 
 @[to_additive]
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (GroupTopology α)
+  签名: 可居 (群拓扑 α)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (GroupTopology α) :=
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (GroupTopology α)
+  签名: 下确界集 (群拓扑 α)
   定义体: ⟨sInf (toTopologicalSpace '' S), topologicalGroup_sInf forall_mem_image.2 fun t _ => t.2⟩
 
 @[to_additive (attr := simp)]
@@ -494,7 +494,7 @@ theorem toTopologicalSpace_sInf
 
 中文:
 定理 toTopologicalSpace_sInf
-  条件: (s : Set (GroupTopology α))
+  条件: (s : 集合 (群拓扑 α))
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -513,7 +513,7 @@ theorem toTopologicalSpace_iInf
 
 中文:
 定理 toTopologicalSpace_iInf
-  条件: {ι} (s : ι -> GroupTopology α)
+  条件: {ι} (s : ι -> 群拓扑 α)
   证明: congr_arg sInf (range_comp _ _).symm
 
 Depends on / 依赖: congr_arg, range_comp
@@ -553,7 +553,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (GroupTopology α)
+  签名: 余mpleteSemilatticeInf (群拓扑 α)
   定义体: { (inferInstance : InfSet (GroupTopology α)),
     (inferInstance : PartialOrder (GroupTopology α)) with
     isGLB_sInf _ := .of_image toTopologicalSpace_le (isGLB_sInf _) }
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (GroupTopology α)
+  签名: 完备格 (群拓扑 α)
   定义体: { (inferInstance : BoundedOrder (GroupTopology α)),
     (inferInstance : SemilatticeInf (GroupTopology α)),
     completeLatticeOfCompleteSemilatticeInf _ with
@@ -610,7 +610,7 @@ definition coinduced
 
 中文:
 定义 coinduced
-  签名: {α β : 类型} [t : TopologicalSpace α] [Group β] (f : α -> β)
+  签名: {α β : 类型} [t : 拓扑空间 α] [群 β] (f : α -> β)
   定义体: sInf { b : GroupTopology β | TopologicalSpace.coinduced f t <= b.toTopologicalSpace }
 
 Depends on / 依赖: GroupTopology, TopologicalSpace, TopologicalSpace.coinduced, b.toTopologicalSpace, coinduced, toTopologicalSpace
@@ -633,7 +633,7 @@ theorem coinduced_continuous
 
 中文:
 定理 coinduced_continuous
-  条件: {α β : 类型} [t : TopologicalSpace α] [Group β] (f : α -> β)
+  条件: {α β : 类型} [t : 拓扑空间 α] [群 β] (f : α -> β)
   证明: by
   rw [continuous_sInf_rng]
   rintro _ ⟨t', ht', rfl⟩

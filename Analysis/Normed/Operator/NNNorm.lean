@@ -84,7 +84,7 @@ theorem opNNNorm_subsingleton
 
 中文:
 定理 opNNNorm_subsingleton
-  条件: [Subsingleton E] (f : E ->SL[σ₁₂] F)
+  条件: [子单例 E] (f : E ->SL[σ₁₂] F)
   结论: ‖f‖₊ = 0
   证明: NNReal.eq f.opNorm_subsingleton
 
@@ -142,7 +142,7 @@ theorem opNNNorm_le_of_unit_nnnorm
 
 中文:
 定理 opNNNorm_le_of_unit_nnnorm
-  结论: [NormedAlgebra 实数 𝕜] {f : E ->SL[σ₁₂] F} {C : 实数>=0}
+  结论: [赋范代数 实数 𝕜] {f : E ->SL[σ₁₂] F} {C : 实数>=0}
   证明: opNorm_le_of_unit_norm C.coe_nonneg fun x hx => hf x by rwa [← NNReal.coe_eq_one]
 
 Depends on / 依赖: C.coe_nonneg, NNReal, NNReal.coe_eq_one, coe_eq_one, coe_nonneg, opNorm_le_of_unit_norm
@@ -513,7 +513,7 @@ theorem exists_mul_lt_apply_of_lt_opNNNorm
       (OrderBot.bddBelow _)
 
 中文:
-定理 exists_mul_lt_apply_of_lt_opNNNorm
+定理 存在_mul_lt_apply_of_lt_opNNNorm
   条件: (f : E ->SL[σ₁₂] F) {r : 实数>=0} (hr : r < ‖f‖₊)
   证明: by
   simpa only [not_forall, not_le, Set.mem_ofPred] using
@@ -539,7 +539,7 @@ theorem exists_mul_lt_of_lt_opNorm
   exact f.exists_mul_lt_apply_of_lt_opNNNorm hr
 
 中文:
-定理 exists_mul_lt_of_lt_opNorm
+定理 存在_mul_lt_of_lt_opNorm
   条件: (f : E ->SL[σ₁₂] F) {r : 实数} (hr₀ : 0 <= r) (hr : r < ‖f‖)
   证明: by
   lift r to Real>=0 using hr₀
@@ -601,7 +601,7 @@ theorem exists_lt_apply_of_lt_opNNNorm
   rw [← inv_inv ‖f y‖₊]; rw [NNReal.lt_inv_iff_mul_lt (inv_ne_zero hfy)]; rw [mul_assoc
 
 中文:
-定理 exists_lt_apply_of_lt_opNNNorm
+定理 存在_lt_apply_of_lt_opNNNorm
   结论: (f : E ->SL[σ₁₂] F) {r : 实数>=0}
   证明: by
   obtain ⟨y, hy⟩ := f.exists_mul_lt_apply_of_lt_opNNNorm hr
@@ -640,7 +640,7 @@ theorem exists_lt_apply_of_lt_opNorm
     exact f.exists_lt_apply_of_lt_opNNNorm hr
 
 中文:
-定理 exists_lt_apply_of_lt_opNorm
+定理 存在_lt_apply_of_lt_opNorm
   结论: (f : E ->SL[σ₁₂] F) {r : 实数}
   证明: by
   by_cases hr₀ : r < 0
@@ -794,8 +794,8 @@ theorem exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
     _ < ‖x‖
 
 中文:
-定理 exists_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
-  结论: [NormedAlgebra 实数 𝕜]
+定理 存在_nnnorm_eq_one_lt_apply_of_lt_opNNNorm
+  结论: [赋范代数 实数 𝕜]
   证明: by
   obtain ⟨x, hlt, hr⟩ := exists_lt_apply_of_lt_opNNNorm f hr
   obtain rfl | hx0 := eq_zero_or_nnnorm_pos x
@@ -836,7 +836,7 @@ theorem sSup_sphere_eq_nnnorm
 
 中文:
 定理 sSup_sphere_eq_nnnorm
-  条件: [NormedAlgebra 实数 𝕜] (f : E ->SL[σ₁₂] F)
+  条件: [赋范代数 实数 𝕜] (f : E ->SL[σ₁₂] F)
   证明: by
   cases subsingleton_or_nontrivial E
   · simp [sphere_eq_empty_of_subsingleton one_ne_zero]
@@ -870,7 +870,7 @@ theorem sSup_sphere_eq_norm
 
 中文:
 定理 sSup_sphere_eq_norm
-  条件: [NormedAlgebra 实数 𝕜] (f : E ->SL[σ₁₂] F)
+  条件: [赋范代数 实数 𝕜] (f : E ->SL[σ₁₂] F)
   证明: by
   simpa only [NNReal.coe_sSup, Set.image_image] using! NNReal.coe_inj.2 f.sSup_sphere_eq_nnnorm
 

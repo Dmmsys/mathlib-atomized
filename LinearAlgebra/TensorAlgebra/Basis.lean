@@ -53,7 +53,7 @@ definition equivFreeAlgebra
 
 中文:
 定义 equivFreeAlgebra
-  签名: (b : Basis κ R M)
+  签名: (b : 基 κ R M)
   定义体: AlgEquiv.ofAlgHom
     (TensorAlgebra.lift _ (Finsupp.linearCombination _ (FreeAlgebra.ι _) ∘ₗ b.repr.toLinearMap))
     (FreeAlgebra.lift _ (ι R ∘ b))
@@ -85,7 +85,7 @@ lemma equivFreeAlgebra_ι_apply
 
 中文:
 引理 equivFreeAlgebra_ι_apply
-  条件: (b : Basis κ R M) (i : κ)
+  条件: (b : 基 κ R M) (i : κ)
   证明: (TensorAlgebra.lift_ι_apply _ _).trans by simp
 
 @[simp]
@@ -107,7 +107,7 @@ lemma equivFreeAlgebra_symm_ι
 
 中文:
 引理 equivFreeAlgebra_symm_ι
-  条件: (b : Basis κ R M) (i : κ)
+  条件: (b : 基 κ R M) (i : κ)
   证明: (equivFreeAlgebra b).toEquiv.symm_apply_eq.mpr .symm equivFreeAlgebra_ι_apply b i
 
 Depends on / 依赖: equivFreeAlgebra, symm_apply_eq, toEquiv, toEquiv.symm_apply_eq.mpr
@@ -127,8 +127,8 @@ definition _root_.Module.Basis.tensorAlgebra
   body: (FreeAlgebra.basisFreeMonoid R κ).map (equivFreeAlgebra b).symm.toLinearEquiv
 
 中文:
-定义 _root_.Module.Basis.tensorAlgebra
-  签名: (b : Basis κ R M)
+定义 _root_.模.基.tensorAlgebra
+  签名: (b : 基 κ R M)
   定义体: (FreeAlgebra.basisFreeMonoid R κ).map (equivFreeAlgebra b).symm.toLinearEquiv
 
 Depends on / 依赖: FreeAlgebra, FreeAlgebra.basisFreeMonoid, basisFreeMonoid, equivFreeAlgebra, symm.toLinearEquiv, toLinearEquiv
@@ -148,7 +148,7 @@ instance instModuleFree
 
 中文:
 实例 instModuleFree
-  签名: [Module.Free R M]
+  签名: [模.自由 R M]
   定义体: let ⟨⟨_κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   .of_basis b.tensorAlgebra
 
@@ -169,7 +169,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: [NoZeroDivisors R] [Module.Free R M]
+  签名: [无零因子 R] [模.自由 R M]
   定义体: have ⟨⟨_, b⟩⟩ := ‹Module.Free R M›
   (equivFreeAlgebra b).toMulEquiv.noZeroDivisors
 
@@ -195,7 +195,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: [IsDomain R] [Module.Free R M]
+  签名: [是整环 R] [模.自由 R M]
   定义体: NoZeroDivisors.to_isDomain _
 
 Depends on / 依赖: NoZeroDivisors, NoZeroDivisors.to_isDomain, to_isDomain
@@ -218,7 +218,7 @@ lemma rank_eq
 
 中文:
 引理 rank_eq
-  条件: [Nontrivial R] [Module.Free R M]
+  条件: [非平凡 R] [模.自由 R M]
   证明: by
   let ⟨⟨κ, b⟩⟩ := Module.Free.exists_basis (R := R) (M := M)
   rw [(equivFreeAlgebra b).toLinearEquiv.rank_eq]; rw [FreeAlgebra.rank_eq]; rw [mk_list_eq_sum_pow]; rw [Basis.mk_eq_rank'' b]

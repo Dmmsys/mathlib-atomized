@@ -44,7 +44,7 @@ definition IsIdempotentElem
 
 中文:
 定义 IsIdempotentElem
-  签名: [Mul M] (a : M)
+  签名: [乘法 M] (a : M)
   定义体: a * a = a
 -/
 def IsIdempotentElem [Mul M] (a : M) : Prop := a * a = a
@@ -60,7 +60,7 @@ lemma isIdempotentElem_iff
 
 中文:
 引理 isIdempotentElem_iff
-  条件: [Mul M] {a : M}
+  条件: [乘法 M] {a : M}
   结论: IsIdempotentElem a ↔ a * a = a
   证明: Iff.rfl
 
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: One {a : M // IsIdempotentElem a}
+  签名: 幺 {a : M // IsIdempotentElem a}
   定义体: ⟨1, one⟩
 -/
 instance : One {a : M // IsIdempotentElem a} where one := ⟨1, one⟩
@@ -302,7 +302,7 @@ theorem iff_eq_one_of_isUnit
 
 中文:
 定理 iff_eq_one_of_isUnit
-  条件: (h : IsUnit a)
+  条件: (h : 是单位 a)
   结论: IsIdempotentElem a ↔ a = 1 where
   证明: by
     have ⟨q, eq⟩ := h.exists_left_inv
@@ -350,7 +350,7 @@ lemma map
 
 中文:
 引理 map
-  结论: {M N F} [Mul M] [Mul N] [FunLike F M N] [MulHomClass F M N] {e : M}
+  结论: {M N F} [乘法 M] [乘法 N] [函数状 F M N] [乘法态射类 F M N] {e : M}
   证明: by
   rw [IsIdempotentElem]; rw [← map_mul]; rw [he.eq]
 
@@ -370,7 +370,7 @@ lemma mul_mul_self
 
 中文:
 引理 mul_mul_self
-  结论: {M : 类型} [Semigroup M] {x : M}
+  结论: {M : 类型} [半群 M] {x : M}
   证明: mul_assoc y x x ▸ congrArg (y * ·) hx.eq
 
 Depends on / 依赖: hx.eq, mul_assoc
@@ -389,7 +389,7 @@ lemma mul_self_mul
 
 中文:
 引理 mul_self_mul
-  结论: {M : 类型} [Semigroup M] {x : M}
+  结论: {M : 类型} [半群 M] {x : M}
   证明: mul_assoc x x y ▸ congrArg (· * y) hx.eq
 
 Depends on / 依赖: hx.eq, mul_assoc

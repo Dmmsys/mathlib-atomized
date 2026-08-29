@@ -51,8 +51,8 @@ mem_compl.2 notMem_singleton.2 (hf _ hi).ne_bot ha).trans_eq ?_
     rw [card_compl]
 
 中文:
-定理 Finset.card_biUnion_le_of_intersecting
-  结论: (s : Finset ι) (f : ι -> Finset (Finset α))
+定理 有限集.card_biUnion_le_of_intersecting
+  结论: (s : 有限集 ι) (f : ι -> 有限集 (有限集 α))
   证明: by
   have : DecidableEq ι := by
     classical

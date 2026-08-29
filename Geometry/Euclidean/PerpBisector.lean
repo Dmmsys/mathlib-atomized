@@ -163,7 +163,7 @@ theorem perpBisector_nonempty
 
 中文:
 定理 perpBisector_nonempty
-  结论: (perpBisector p₁ p₂ : Set P).Nonempty
+  结论: (perpBisector p₁ p₂ : 集合 P).非空
   证明: ⟨_, midpoint_mem_perpBisector _ _⟩
 
 @[simp]
@@ -575,8 +575,8 @@ theorem Isometry.preimage_perpBisector
   ext x; simp [mem_perpBisector_iff_dist_eq, h.dist_eq]
 
 中文:
-定理 Isometry.preimage_perpBisector
-  条件: {f : P -> P'} (h : Isometry f) (p₁ p₂ : P)
+定理 等距.preimage_perpBisector
+  条件: {f : P -> P'} (h : 等距 f) (p₁ p₂ : P)
   证明: by
   ext x; simp [mem_perpBisector_iff_dist_eq, h.dist_eq]
 
@@ -595,8 +595,8 @@ theorem Isometry.mapsTo_perpBisector
   proof: (h.preimage_perpBisector p₁ p₂).ge
 
 中文:
-定理 Isometry.mapsTo_perpBisector
-  条件: {f : P -> P'} (h : Isometry f) (p₁ p₂ : P)
+定理 等距.mapsTo_perpBisector
+  条件: {f : P -> P'} (h : 等距 f) (p₁ p₂ : P)
   证明: (h.preimage_perpBisector p₁ p₂).ge
 
 Depends on / 依赖: h.preimage_perpBisector, preimage_perpBisector

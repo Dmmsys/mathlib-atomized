@@ -58,8 +58,8 @@ theorem exists_extension_norm_eq
   e
 
 中文:
-定理 exists_extension_norm_eq
-  条件: (p : Subspace 𝕜 E) (f : StrongDual 𝕜 p)
+定理 存在_extension_norm_eq
+  条件: (p : 子空间 𝕜 E) (f : StrongDual 𝕜 p)
   证明: by
   obtain ⟨g, hg, hl⟩ := by
     refine Module.Dual.exists_continuous_extension_of_le_seminorm p f
@@ -106,7 +106,7 @@ theorem exists_dual_vector
     
 
 中文:
-定理 exists_dual_vector
+定理 存在_dual_vector
   条件: (x : E) (h : ‖x‖ != 0)
   结论: 存在 g : StrongDual 𝕜 E, ‖g‖ = 1 ∧ g x = ‖x‖
   证明: by
@@ -148,7 +148,7 @@ theorem exists_dual_vector''
     exact ⟨g, hg.left.le, hg.right⟩
 
 中文:
-定理 exists_dual_vector''
+定理 存在_dual_vector''
   条件: (x : E)
   结论: 存在 g : StrongDual 𝕜 E, ‖g‖ <= 1 ∧ g x = ‖x‖
   证明: by
@@ -184,8 +184,8 @@ theorem exists_dual_vector'
   · exact exists_dual_vector 𝕜 x (norm_ne_zero_iff.mpr hx)
 
 中文:
-定理 exists_dual_vector'
-  条件: [Nontrivial E] (x : E)
+定理 存在_dual_vector'
+  条件: [非平凡 E] (x : E)
   结论: 存在 g : StrongDual 𝕜 E, ‖g‖ = 1 ∧ g x = ‖x‖
   证明: by
   by_cases hx : x = 0

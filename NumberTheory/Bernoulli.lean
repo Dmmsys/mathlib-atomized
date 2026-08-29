@@ -338,7 +338,7 @@ theorem sum_bernoulli'
 中文:
 定理 sum_bernoulli'
   条件: (n : 自然数)
-  结论: (∑ k in range n, (n.choose k : Rat) * bernoulli' k) = n
+  结论: (∑ k in range n, (n.choose k : 有理数) * bernoulli' k) = n
   证明: by
   cases n with | zero => simp | succ n =>
   suffices
@@ -372,7 +372,7 @@ definition bernoulli'PowerSeries
   body: mk fun n => algebraMap Rat A (bernoulli' n / n !)
 
 中文:
-定义 bernoulli'PowerSeries
+定义 bernoulli'幂级数
   定义体: mk fun n => algebraMap Rat A (bernoulli' n / n !)
 -/
 def bernoulli'PowerSeries :=
@@ -1017,7 +1017,7 @@ lemma sum_pow_add_indicator_eq_zero
 
 中文:
 引理 sum_pow_add_indicator_eq_zero
-  条件: {p : 自然数} (l : 自然数) [Fact p.Prime]
+  条件: {p : 自然数} (l : 自然数) [Fact p.素]
   证明: by
   have hbij : (∑ v in Ico 1 p, (v : ZMod p) ^ l) = ∑ u : (ZMod p)ˣ, (u : ZMod p) ^ l :=
     Finset.sum_bij'
@@ -1050,8 +1050,8 @@ abbreviation pIntegral
   body: Rat.padicValuation p x <= 1
 
 中文:
-缩写 pIntegral
-  签名: (p : 自然数) (x : Rat) [Fact p.Prime]
+缩写 p整数egral
+  签名: (p : 自然数) (x : 有理数) [Fact p.素]
   定义体: Rat.padicValuation p x <= 1
 -/
 private abbrev pIntegral (p : Nat) (x : Rat) [Fact p.Prime] : Prop := Rat.padicValuation p x <= 1
@@ -1065,8 +1065,8 @@ lemma pIntegral_mul
   proof: ((Rat.padicValuation p).map_mul x y).trans_le (mul_le_one' hx hy)
 
 中文:
-引理 pIntegral_mul
-  结论: {p : 自然数} [Fact p.Prime] {x y : Rat}
+引理 p整数egral_mul
+  结论: {p : 自然数} [Fact p.素] {x y : 有理数}
   证明: ((Rat.padicValuation p).map_mul x y).trans_le (mul_le_one' hx hy)
 -/
 private lemma pIntegral_mul {p : Nat} [Fact p.Prime] {x y : Rat}
@@ -1088,7 +1088,7 @@ lemma prod_one_div_prime_den_coprime
 
 中文:
 引理 prod_one_div_prime_den_coprime
-  条件: (k : 自然数) {p : 自然数} [Fact p.Prime]
+  条件: (k : 自然数) {p : 自然数} [Fact p.素]
   证明: by
   refine Nat.Coprime.prod_left fun q hq => ?_
   simp only [Finset.mem_filter, Finset.mem_range] at hq
@@ -1119,7 +1119,7 @@ lemma sum_one_div_prime_eq_indicator_div_add
 
 中文:
 引理 sum_one_div_prime_eq_indicator_div_add
-  条件: {k p : 自然数} (hk : k > 0) [Fact p.Prime]
+  条件: {k p : 自然数} (hk : k > 0) [Fact p.素]
   证明: by
   rw [Finset.sum_congr (Finset.filter_ne' (vonStaudtPrimes k) p) fun _ _ => rfl]
   by_cases hdvd : (p - 1) ∣ 2 * k
@@ -1154,8 +1154,8 @@ lemma pIntegral_pow_div
   have hdecomp : p
 
 中文:
-引理 pIntegral_pow_div
-  结论: {p M N : 自然数} [Fact p.Prime] (hM : M != 0)
+引理 p整数egral_pow_div
+  结论: {p M N : 自然数} [Fact p.素] (hM : M != 0)
   证明: by
   set e := M.factorization p
   set M' := M / p ^ e
@@ -1201,7 +1201,7 @@ lemma factorization_succ_le_sub_one
 
 中文:
 引理 factorization_succ_le_sub_one
-  条件: {p d : 自然数} [Fact p.Prime] (hd : d >= 2)
+  条件: {p d : 自然数} [Fact p.素] (hd : d >= 2)
   证明: by
   by_cases hcase : p = 2 ∧ d = 2
   · obtain ⟨rfl, rfl⟩ := hcase
@@ -1242,7 +1242,7 @@ lemma choose_two_mul_succ_mul_div_eq
 
 中文:
 引理 choose_two_mul_succ_mul_div_eq
-  条件: {k m : 自然数} (x : Rat) (hm_lt : m < k)
+  条件: {k m : 自然数} (x : 有理数) (hm_lt : m < k)
   证明: by
   rw [div_eq_div_iff (by norm_cast) (by norm_cast; lia)]; rw [mul_right_comm _ x]; rw [mul_right_comm _ x]
   refine congrArg (· * x) ?_
@@ -1272,8 +1272,8 @@ lemma pIntegral_choose_mul_pow_div
   rw [h
 
 中文:
-引理 pIntegral_choose_mul_pow_div
-  结论: {k m p : 自然数} (hm_lt : m < k) [Fact p.Prime]
+引理 p整数egral_choose_mul_pow_div
+  结论: {k m p : 自然数} (hm_lt : m < k) [Fact p.素]
   证明: by
   set d := 2 * k - 2 * m with hd_def
   have ⟨hd_plus_one_ne_zero, h_exp, hkm⟩ :
@@ -1308,8 +1308,8 @@ lemma pIntegral_bernoulli_even_term
   have hdecomp : bernoulli (2 * m) * ((2 * k + 1).c
 
 中文:
-引理 pIntegral_bernoulli_even_term
-  结论: {k m p : 自然数} (hm_lt : m < k) [Fact p.Prime]
+引理 p整数egral_bernoulli_even_term
+  结论: {k m p : 自然数} (hm_lt : m < k) [Fact p.素]
   证明: by
   have hp_ne : (p : Rat) != 0 := mod_cast (Nat.Prime.ne_zero Fact.out)
   set P := (p : Rat) ^ (2 * k - 2 * m - 1)
@@ -1363,8 +1363,8 @@ lemma pIntegral_faulhaber_sum
       (factorization_succ_le_sub_one (by lia) 
 
 中文:
-引理 pIntegral_faulhaber_sum
-  结论: {k p : 自然数} (hk : k > 0) [Fact p.Prime]
+引理 p整数egral_faulhaber_sum
+  结论: {k p : 自然数} (hk : k > 0) [Fact p.素]
   证明: by
   refine (Rat.padicValuation p).map_sum_le fun i hi => ?_
   rw [Finset.mem_range] at hi
@@ -1445,7 +1445,7 @@ lemma faulhaber_sum_div_prime_eq
 
 中文:
 引理 faulhaber_sum_div_prime_eq
-  条件: {k p : 自然数} [Fact p.Prime]
+  条件: {k p : 自然数} [Fact p.素]
   证明: by
   have hp_ne : (p : Rat) != 0 := mod_cast (Fact.out : p.Prime).ne_zero
   rw [Finset.sum_div]
@@ -1482,7 +1482,7 @@ lemma bernoulli_add_indicator_eq_sub
 
 中文:
 引理 bernoulli_add_indicator_eq_sub
-  条件: {k p : 自然数} (hk : k > 0) [Fact p.Prime]
+  条件: {k p : 自然数} (hk : k > 0) [Fact p.素]
   证明: by
   have hcast : (↑((∑ v in Ico 1 p, (v : Int) ^ (2 * k)) +
       (if (p - 1) ∣ 2 * k then 1 else 0)) : ZMod p) = 0 :=
@@ -1526,7 +1526,7 @@ lemma not_dvd_den_bernoulli_add_indicator
 
 中文:
 引理 not_dvd_den_bernoulli_add_indicator
-  条件: {k p : 自然数} (hk : k > 0) [Fact p.Prime]
+  条件: {k p : 自然数} (hk : k > 0) [Fact p.素]
   证明: by
   induction k using Nat.strong_induction_on with
   | _ k ih =>
@@ -1562,7 +1562,7 @@ lemma not_dvd_den_vonStaudt_sum
 
 中文:
 引理 not_dvd_den_vonStaudt_sum
-  条件: {k p : 自然数} (hk : k > 0) [Fact p.Prime]
+  条件: {k p : 自然数} (hk : k > 0) [Fact p.素]
   证明: by
   rw [sum_one_div_prime_eq_indicator_div_add (p := p) hk]; rw [← add_assoc]
   have hcop_ind := ((Nat.Prime.coprime_iff_not_dvd Fact.out).mpr

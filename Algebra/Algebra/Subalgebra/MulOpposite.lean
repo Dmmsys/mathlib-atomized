@@ -38,7 +38,7 @@ definition op
 
 中文:
 定义 op
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S.toSubsemiring.op
   algebraMap_mem' := S.algebraMap_mem
 -/
@@ -60,7 +60,7 @@ theorem mem_op
 
 中文:
 定理 mem_op
-  条件: {x : Aᵐᵒᵖ} {S : Subalgebra R A}
+  条件: {x : Aᵐᵒᵖ} {S : 子代数 R A}
   结论: x in S.op ↔ x.unop in S
   证明: Iff.rfl
 
@@ -81,7 +81,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (S : Subalgebra R Aᵐᵒᵖ)
+  签名: (S : 子代数 R Aᵐᵒᵖ)
   定义体: S.toSubsemiring.unop
   algebraMap_mem' := S.algebraMap_mem
 -/
@@ -105,7 +105,7 @@ theorem mem_unop
 
 中文:
 定理 mem_unop
-  条件: {x : A} {S : Subalgebra R Aᵐᵒᵖ}
+  条件: {x : A} {S : 子代数 R Aᵐᵒᵖ}
   结论: x in S.unop ↔ MulOpposite.op x in S
   证明: Iff.rfl
 
@@ -129,7 +129,7 @@ theorem unop_op
 
 中文:
 定理 unop_op
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   结论: S.op.unop = S
   证明: rfl
 
@@ -149,7 +149,7 @@ theorem op_unop
 
 中文:
 定理 op_unop
-  条件: (S : Subalgebra R Aᵐᵒᵖ)
+  条件: (S : 子代数 R Aᵐᵒᵖ)
   结论: S.unop.op = S
   证明: rfl
 -/
@@ -167,7 +167,7 @@ theorem op_le_iff
 
 中文:
 定理 op_le_iff
-  条件: {S₁ : Subalgebra R A} {S₂ : Subalgebra R Aᵐᵒᵖ}
+  条件: {S₁ : 子代数 R A} {S₂ : 子代数 R Aᵐᵒᵖ}
   结论: S₁.op <= S₂ ↔ S₁ <= S₂.unop
   证明: MulOpposite.op_surjective.forall
 
@@ -189,7 +189,7 @@ theorem le_op_iff
 
 中文:
 定理 le_op_iff
-  条件: {S₁ : Subalgebra R Aᵐᵒᵖ} {S₂ : Subalgebra R A}
+  条件: {S₁ : 子代数 R Aᵐᵒᵖ} {S₂ : 子代数 R A}
   结论: S₁ <= S₂.op ↔ S₁.unop <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -214,7 +214,7 @@ theorem op_le_op_iff
 
 中文:
 定理 op_le_op_iff
-  条件: {S₁ S₂ : Subalgebra R A}
+  条件: {S₁ S₂ : 子代数 R A}
   结论: S₁.op <= S₂.op ↔ S₁ <= S₂
   证明: MulOpposite.op_surjective.forall
 
@@ -237,7 +237,7 @@ theorem unop_le_unop_iff
 
 中文:
 定理 unop_le_unop_iff
-  条件: {S₁ S₂ : Subalgebra R Aᵐᵒᵖ}
+  条件: {S₁ S₂ : 子代数 R Aᵐᵒᵖ}
   结论: S₁.unop <= S₂.unop ↔ S₁ <= S₂
   证明: MulOpposite.unop_surjective.forall
 
@@ -264,7 +264,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : Subalgebra R A ≃o Subalgebra R Aᵐᵒᵖ where
+  签名: : 子代数 R A ≃o 子代数 R Aᵐᵒᵖ where
   定义体: Subalgebra.op
   invFun := Subalgebra.unop
   left_inv := unop_op
@@ -295,7 +295,7 @@ theorem op_bot
 
 中文:
 定理 op_bot
-  结论: (⊥ : Subalgebra R A).op = ⊥
+  结论: (⊥ : 子代数 R A).op = ⊥
   证明: opEquiv.map_bot
 
 @[simp]
@@ -317,7 +317,7 @@ theorem unop_bot
 
 中文:
 定理 unop_bot
-  结论: (⊥ : Subalgebra R Aᵐᵒᵖ).unop = ⊥
+  结论: (⊥ : 子代数 R Aᵐᵒᵖ).unop = ⊥
   证明: opEquiv.symm.map_bot
 
 @[simp]
@@ -339,7 +339,7 @@ theorem op_top
 
 中文:
 定理 op_top
-  结论: (⊤ : Subalgebra R A).op = ⊤
+  结论: (⊤ : 子代数 R A).op = ⊤
   证明: opEquiv.map_top
 
 @[simp]
@@ -359,7 +359,7 @@ theorem unop_top
 
 中文:
 定理 unop_top
-  结论: (⊤ : Subalgebra R Aᵐᵒᵖ).unop = ⊤
+  结论: (⊤ : 子代数 R Aᵐᵒᵖ).unop = ⊤
   证明: opEquiv.symm.map_top
 
 Depends on / 依赖: map_top, opEquiv, opEquiv.symm.map_top
@@ -377,7 +377,7 @@ theorem op_sup
 
 中文:
 定理 op_sup
-  条件: (S₁ S₂ : Subalgebra R A)
+  条件: (S₁ S₂ : 子代数 R A)
   结论: (S₁ ⊔ S₂).op = S₁.op ⊔ S₂.op
   证明: opEquiv.map_sup _ _
 
@@ -397,7 +397,7 @@ theorem unop_sup
 
 中文:
 定理 unop_sup
-  条件: (S₁ S₂ : Subalgebra R Aᵐᵒᵖ)
+  条件: (S₁ S₂ : 子代数 R Aᵐᵒᵖ)
   结论: (S₁ ⊔ S₂).unop = S₁.unop ⊔ S₂.unop
   证明: opEquiv.symm.map_sup _ _
 
@@ -417,7 +417,7 @@ theorem op_inf
 
 中文:
 定理 op_inf
-  条件: (S₁ S₂ : Subalgebra R A)
+  条件: (S₁ S₂ : 子代数 R A)
   结论: (S₁ ⊓ S₂).op = S₁.op ⊓ S₂.op
   证明: opEquiv.map_inf _ _
 
@@ -436,7 +436,7 @@ theorem unop_inf
 
 中文:
 定理 unop_inf
-  条件: (S₁ S₂ : Subalgebra R Aᵐᵒᵖ)
+  条件: (S₁ S₂ : 子代数 R Aᵐᵒᵖ)
   结论: (S₁ ⊓ S₂).unop = S₁.unop ⊓ S₂.unop
   证明: opEquiv.symm.map_inf _ _
 
@@ -456,7 +456,7 @@ theorem op_sSup
 
 中文:
 定理 op_sSup
-  条件: (S : Set (Subalgebra R A))
+  条件: (S : 集合 (子代数 R A))
   结论: (sSup S).op = sSup (.unop ⁻¹' S)
   证明: opEquiv.map_sSup_eq_sSup_symm_preimage _
 
@@ -476,7 +476,7 @@ theorem unop_sSup
 
 中文:
 定理 unop_sSup
-  条件: (S : Set (Subalgebra R Aᵐᵒᵖ))
+  条件: (S : 集合 (子代数 R Aᵐᵒᵖ))
   结论: (sSup S).unop = sSup (.op ⁻¹' S)
   证明: opEquiv.symm.map_sSup_eq_sSup_symm_preimage _
 
@@ -496,7 +496,7 @@ theorem op_sInf
 
 中文:
 定理 op_sInf
-  条件: (S : Set (Subalgebra R A))
+  条件: (S : 集合 (子代数 R A))
   结论: (sInf S).op = sInf (.unop ⁻¹' S)
   证明: opEquiv.map_sInf_eq_sInf_symm_preimage _
 
@@ -516,7 +516,7 @@ theorem unop_sInf
 
 中文:
 定理 unop_sInf
-  条件: (S : Set (Subalgebra R Aᵐᵒᵖ))
+  条件: (S : 集合 (子代数 R Aᵐᵒᵖ))
   结论: (sInf S).unop = sInf (.op ⁻¹' S)
   证明: opEquiv.symm.map_sInf_eq_sInf_symm_preimage _
 
@@ -536,7 +536,7 @@ theorem op_iSup
 
 中文:
 定理 op_iSup
-  条件: (S : ι -> Subalgebra R A)
+  条件: (S : ι -> 子代数 R A)
   结论: (iSup S).op = ⨆ i, (S i).op
   证明: opEquiv.map_iSup _
 
@@ -555,7 +555,7 @@ theorem unop_iSup
 
 中文:
 定理 unop_iSup
-  条件: (S : ι -> Subalgebra R Aᵐᵒᵖ)
+  条件: (S : ι -> 子代数 R Aᵐᵒᵖ)
   结论: (iSup S).unop = ⨆ i, (S i).unop
   证明: opEquiv.symm.map_iSup _
 
@@ -575,7 +575,7 @@ theorem op_iInf
 
 中文:
 定理 op_iInf
-  条件: (S : ι -> Subalgebra R A)
+  条件: (S : ι -> 子代数 R A)
   结论: (iInf S).op = ⨅ i, (S i).op
   证明: opEquiv.map_iInf _
 
@@ -594,7 +594,7 @@ theorem unop_iInf
 
 中文:
 定理 unop_iInf
-  条件: (S : ι -> Subalgebra R Aᵐᵒᵖ)
+  条件: (S : ι -> 子代数 R Aᵐᵒᵖ)
   结论: (iInf S).unop = ⨅ i, (S i).unop
   证明: opEquiv.symm.map_iInf _
 
@@ -619,7 +619,7 @@ theorem op_adjoin
 
 中文:
 定理 op_adjoin
-  条件: (s : Set A)
+  条件: (s : 集合 A)
   证明: by
   apply toSubsemiring_injective
   simp_rw [Algebra.adjoin, op_toSubsemiring, Subsemiring.op_closure, Set.preimage_union]
@@ -653,7 +653,7 @@ theorem unop_adjoin
 
 中文:
 定理 unop_adjoin
-  条件: (s : Set Aᵐᵒᵖ)
+  条件: (s : 集合 Aᵐᵒᵖ)
   证明: by
   apply toSubsemiring_injective
   simp_rw [Algebra.adjoin, unop_toSubsemiring, Subsemiring.unop_closure, Set.preimage_union]
@@ -682,7 +682,7 @@ definition linearEquivOp
 
 中文:
 定义 linearEquivOp
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S.toSubsemiring.addEquivOp
   map_smul' _ _ := rfl
 
@@ -705,7 +705,7 @@ definition algEquivOpMop
 
 中文:
 定义 algEquivOpMop
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S.toSubsemiring.ringEquivOpMop
   commutes' _ := rfl
 
@@ -728,7 +728,7 @@ definition mopAlgEquivOp
 
 中文:
 定义 mopAlgEquivOp
-  签名: (S : Subalgebra R A)
+  签名: (S : 子代数 R A)
   定义体: S.toSubsemiring.mopRingEquivOp
   commutes' _ := rfl
 
@@ -758,7 +758,7 @@ theorem op_toSubring
 
 中文:
 定理 op_toSubring
-  条件: (S : Subalgebra R A)
+  条件: (S : 子代数 R A)
   结论: S.op.toSubring = S.toSubring.op
   证明: rfl
 
@@ -778,7 +778,7 @@ theorem unop_toSubring
 
 中文:
 定理 unop_toSubring
-  条件: (S : Subalgebra R Aᵐᵒᵖ)
+  条件: (S : 子代数 R Aᵐᵒᵖ)
   结论: S.unop.toSubring = S.toSubring.unop
   证明: rfl
 -/

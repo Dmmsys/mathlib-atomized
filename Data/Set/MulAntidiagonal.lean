@@ -37,7 +37,7 @@ definition mulAntidiagonal
 
 中文:
 定义 mulAntidiagonal
-  签名: (s t : Set α) (a : α)
+  签名: (s t : 集合 α) (a : α)
   定义体: { x | x.1 in s ∧ x.2 in t ∧ x.1 * x.2 = a }
 
 @[to_additive (attr := simp)]
@@ -125,7 +125,7 @@ theorem swap_mem_mulAntidiagonal
 
 中文:
 定理 swap_mem_mulAntidiagonal
-  条件: [CommMagma α] {s t : Set α} {a : α} {x : α × α}
+  条件: [交换原群 α] {s t : 集合 α} {a : α} {x : α × α}
   证明: by
   simp [mul_comm, and_left_comm]
 
@@ -149,7 +149,7 @@ theorem swap_mem_mulAntidiagonal_aux
 
 中文:
 定理 swap_mem_mulAntidiagonal_aux
-  条件: [CommMagma α] {s t : Set α} {a : α} {x : α × α}
+  条件: [交换原群 α] {s t : 集合 α} {a : α} {x : α × α}
   证明: by
   simp [mul_comm, and_left_comm]
 
@@ -321,7 +321,7 @@ theorem finite_of_isPWO
 中文:
 定理 finite_of_isPWO
   条件: (hs : s.IsPWO) (ht : t.IsPWO) (a)
-  结论: (mulAntidiagonal s t a).Finite
+  结论: (mulAntidiagonal s t a).有限
   证明: by
   by_contra! h
   have h1 : (mulAntidiagonal s t a).PartiallyWellOrderedOn (Prod.fst ⁻¹'o (· <= ·)) :=
@@ -358,7 +358,7 @@ theorem finite_of_isWF
 
 中文:
 定理 finite_of_isWF
-  结论: {s t : Set α} (hs : s.IsWF) (ht : t.IsWF)
+  结论: {s t : 集合 α} (hs : s.IsWF) (ht : t.IsWF)
   证明: finite_of_isPWO hs.isPWO ht.isPWO a
 
 Depends on / 依赖: finite_of_isPWO, hs.isPWO, ht.isPWO

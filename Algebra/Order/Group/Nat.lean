@@ -32,7 +32,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid 自然数 where
+  签名: : 是OrderedAdd幺半群 自然数 where
   定义体: @Nat.add_le_add_right
 
 Depends on / 依赖: Nat.add_le_add_right, add_le_add_right, nsmul_le_nsmul_left
@@ -51,7 +51,7 @@ instance instIsOrderedCancelAddMonoid
 
 中文:
 实例 instIsOrderedCancelAddMonoid
-  签名: : IsOrderedCancelAddMonoid 自然数 where
+  签名: : 是OrderedCancelAdd幺半群 自然数 where
   定义体: @Nat.add_le_add_right
   le_of_add_le_add_left := @Nat.le_of_add_le_add_left
 
@@ -73,7 +73,7 @@ instance instCanonicallyOrderedAdd
 
 中文:
 实例 instCanonicallyOrderedAdd
-  签名: : CanonicallyOrderedAdd 自然数 where
+  签名: : 典范有序加法 自然数 where
   定义体: Nat.le_add_left
   le_self_add := Nat.le_add_right
   exists_add_of_le := Nat.exists_eq_add_of_le
@@ -130,7 +130,7 @@ lemma pow_left_strictMono
 中文:
 引理 pow_left_strictMono
   条件: (hn : n != 0)
-  结论: StrictMono (· ^ n : 自然数 -> 自然数)
+  结论: 严格递增 (· ^ n : 自然数 -> 自然数)
   证明: fun _ _ h => Nat.pow_lt_pow_left h hn
 
 Depends on / 依赖: zsmul_lt_zsmul_left
@@ -147,8 +147,8 @@ lemma _root_.StrictMono.nat_pow
   proof: (Nat.pow_left_strictMono hn).comp hf
 
 中文:
-引理 _root_.StrictMono.nat_pow
-  条件: [Preorder α] (hn : n != 0) (hf : StrictMono f)
+引理 _root_.严格递增.nat_pow
+  条件: [预序 α] (hn : n != 0) (hf : 严格递增 f)
   证明: (Nat.pow_left_strictMono hn).comp hf
 
 Depends on / 依赖: Nat.pow_left_strictMono, pow_left_strictMono

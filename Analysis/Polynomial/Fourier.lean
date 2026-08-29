@@ -52,7 +52,7 @@ definition toAddCircle
 
 中文:
 定义 toAddCircle
-  签名: : Complex[X] ->ₐ[Complex] C(AddCircle (2 * π), Complex)
+  签名: : 复形[X] ->ₐ[复形] C(AddCircle (2 * π), 复形)
   定义体: Polynomial.aeval { toFun c := c.toCircle }
 
 Depends on / 依赖: Polynomial, Polynomial.aeval, c.toCircle, toCircle
@@ -91,7 +91,7 @@ theorem toAddCircle_C_eq_smul_fourier_zero
 
 中文:
 定理 toAddCircle_C_eq_smul_fourier_zero
-  条件: {c : Complex}
+  条件: {c : 复形}
   结论: (C c).toAddCircle = c • fourier 0
   证明: by
   ext θ; simp [toAddCircle]
@@ -112,7 +112,7 @@ theorem toAddCircle_X_eq_fourier_one
 
 中文:
 定理 toAddCircle_X_eq_fourier_one
-  结论: (X : Complex[X]).toAddCircle = fourier 1
+  结论: (X : 复形[X]).toAddCircle = fourier 1
   证明: by
   ext θ; simp [toAddCircle]
 
@@ -134,7 +134,7 @@ theorem toAddCircle_X_pow_eq_fourier
 中文:
 定理 toAddCircle_X_pow_eq_fourier
   条件: {n : 自然数}
-  结论: (X ^ n : Complex[X]).toAddCircle = fourier n
+  结论: (X ^ n : 复形[X]).toAddCircle = fourier n
   证明: by
   ext θ; simp [toAddCircle, AddCircle.toCircle_nsmul]
 
@@ -154,7 +154,7 @@ theorem toAddCircle_monomial_eq_smul_fourier
 
 中文:
 定理 toAddCircle_monomial_eq_smul_fourier
-  条件: {n : 自然数} {c : Complex}
+  条件: {n : 自然数} {c : 复形}
   证明: by
   ext θ; simp [toAddCircle, AddCircle.toCircle_nsmul]
 

@@ -104,7 +104,7 @@ definition dimH
 
 中文:
 定义 dimH
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: by
   borelize X; exact ⨆ (d : Real>=0) (_ : @hausdorffMeasure X _ _ ⟨rfl⟩ d s = ∞), d
 -/
@@ -132,7 +132,7 @@ theorem dimH_def
 
 中文:
 定理 dimH_def
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: dimH s = ⨆ (d : 实数>=0) (_ : μH[d] s = ∞), (d : 实数>=0∞)
   证明: by
   borelize X; rw [dimH]
@@ -157,7 +157,7 @@ theorem hausdorffMeasure_of_lt_dimH
 
 中文:
 定理 hausdorffMeasure_of_lt_dimH
-  条件: {s : Set X} {d : 实数>=0} (h : ↑d < dimH s)
+  条件: {s : 集合 X} {d : 实数>=0} (h : ↑d < dimH s)
   结论: μH[d] s = ∞
   证明: by
   simp only [dimH_def, lt_iSup_iff] at h
@@ -184,7 +184,7 @@ theorem dimH_le
 
 中文:
 定理 dimH_le
-  条件: {s : Set X} {d : 实数>=0∞} (H : 对任意 d' : 实数>=0, μH[d'] s = ∞ -> ↑d' <= d)
+  条件: {s : 集合 X} {d : 实数>=0∞} (H : 对任意 d' : 实数>=0, μH[d'] s = ∞ -> ↑d' <= d)
   结论: dimH s <= d
   证明: (dimH_def s).trans_le iSup₂_le H
 
@@ -204,7 +204,7 @@ theorem dimH_le_of_hausdorffMeasure_ne_top
 
 中文:
 定理 dimH_le_of_hausdorffMeasure_ne_top
-  条件: {s : Set X} {d : 实数>=0} (h : μH[d] s != ∞)
+  条件: {s : 集合 X} {d : 实数>=0} (h : μH[d] s != ∞)
   结论: dimH s <= d
   证明: le_of_not_gt mt hausdorffMeasure_of_lt_dimH h
 
@@ -224,7 +224,7 @@ theorem le_dimH_of_hausdorffMeasure_eq_top
 
 中文:
 定理 le_dimH_of_hausdorffMeasure_eq_top
-  条件: {s : Set X} {d : 实数>=0} (h : μH[d] s = ∞)
+  条件: {s : 集合 X} {d : 实数>=0} (h : μH[d] s = ∞)
   证明: by
   rw [dimH_def]; exact le_iSup₂ (α := Real>=0∞) d h
 
@@ -250,7 +250,7 @@ exact (hausdorffMeasure_zero_or_top hd'd s).resolve_right fun h₂ => hsd'.not_g
 
 中文:
 定理 hausdorffMeasure_of_dimH_lt
-  条件: {s : Set X} {d : 实数>=0} (h : dimH s < d)
+  条件: {s : 集合 X} {d : 实数>=0} (h : dimH s < d)
   结论: μH[d] s = 0
   证明: by
   rw [dimH_def] at h
@@ -278,7 +278,7 @@ theorem measure_zero_of_dimH_lt
 
 中文:
 定理 measure_zero_of_dimH_lt
-  结论: {μ : Measure X} {d : 实数>=0} (h : μ ≪ μH[d]) {s : Set X}
+  结论: {μ : 测度 X} {d : 实数>=0} (h : μ ≪ μH[d]) {s : 集合 X}
   证明: h hausdorffMeasure_of_dimH_lt hd
 
 Depends on / 依赖: hausdorffMeasure_of_dimH_lt
@@ -298,7 +298,7 @@ theorem le_dimH_of_hausdorffMeasure_ne_zero
 
 中文:
 定理 le_dimH_of_hausdorffMeasure_ne_zero
-  条件: {s : Set X} {d : 实数>=0} (h : μH[d] s != 0)
+  条件: {s : 集合 X} {d : 实数>=0} (h : μH[d] s != 0)
   结论: ↑d <= dimH s
   证明: le_of_not_gt mt hausdorffMeasure_of_dimH_lt h
 
@@ -317,7 +317,7 @@ theorem dimH_of_hausdorffMeasure_ne_zero_ne_top
 
 中文:
 定理 dimH_of_hausdorffMeasure_ne_zero_ne_top
-  结论: {d : 实数>=0} {s : Set X} (h : μH[d] s != 0)
+  结论: {d : 实数>=0} {s : 集合 X} (h : μH[d] s != 0)
   证明: le_antisymm (dimH_le_of_hausdorffMeasure_ne_top h') (le_dimH_of_hausdorffMeasure_ne_zero h)
 
 Depends on / 依赖: dimH_le_of_hausdorffMeasure_ne_top, le_antisymm, le_dimH_of_hausdorffMeasure_ne_zero
@@ -346,7 +346,7 @@ theorem dimH_eq_iInf
 
 中文:
 定理 dimH_eq_iInf
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: dimH s = ⨅ (d : 实数>=0) (_ : μH[d] s = 0), (d : 实数>=0∞)
   证明: by
   apply le_antisymm
@@ -389,7 +389,7 @@ exact dimH_le fun d hd => le_dimH_of_hausdorffMeasure_eq_top top_unique hd ▸ m
 
 中文:
 定理 dimH_mono
-  条件: {s t : Set X} (h : s subseteq t)
+  条件: {s t : 集合 X} (h : s subseteq t)
   结论: dimH s <= dimH t
   证明: by
   borelize X
@@ -420,7 +420,7 @@ alias Set.Subsingleton.dimH_zero := dimH_subsingleton
 
 中文:
 定理 dimH_subsingleton
-  条件: {s : Set X} (h : s.Subsingleton)
+  条件: {s : 集合 X} (h : s.子单例)
   结论: dimH s = 0
   证明: by
   borelize X
@@ -455,7 +455,7 @@ theorem dimH_empty
 
 中文:
 定理 dimH_empty
-  结论: dimH (∅ : Set X) = 0
+  结论: dimH (∅ : 集合 X) = 0
   证明: subsingleton_empty.dimH_zero
 
 @[simp]
@@ -480,7 +480,7 @@ theorem dimH_singleton
 中文:
 定理 dimH_singleton
   条件: (x : X)
-  结论: dimH ({x} : Set X) = 0
+  结论: dimH ({x} : 集合 X) = 0
   证明: subsingleton_singleton.dimH_zero
 
 @[simp]
@@ -508,7 +508,7 @@ theorem dimH_iUnion
 
 中文:
 定理 dimH_iUnion
-  条件: {ι : Sort*} [Countable ι] (s : ι -> Set X)
+  条件: {ι : 类型层*} [可数 ι] (s : ι -> 集合 X)
   证明: by
   borelize X
   refine le_antisymm (dimH_le fun d hd => ?_) (iSup_le fun i => dimH_mono <| subset_iUnion _ _)
@@ -545,7 +545,7 @@ theorem dimH_bUnion
 
 中文:
 定理 dimH_bUnion
-  条件: {s : Set ι} (hs : s.Countable) (t : ι -> Set X)
+  条件: {s : 集合 ι} (hs : s.可数) (t : ι -> 集合 X)
   证明: by
   have := hs.toEncodable
   rw [biUnion_eq_iUnion]; rw [dimH_iUnion]; rw [← iSup_subtype'']
@@ -574,7 +574,7 @@ theorem dimH_sUnion
 
 中文:
 定理 dimH_sUnion
-  条件: {S : Set (Set X)} (hS : S.Countable)
+  条件: {S : 集合 (集合 X)} (hS : S.可数)
   结论: dimH (⋃₀ S) = ⨆ s in S, dimH s
   证明: by
   rw [sUnion_eq_biUnion]; rw [dimH_bUnion hS]
@@ -599,8 +599,8 @@ theorem dimH_union
 
 中文:
 定理 dimH_union
-  条件: (s t : Set X)
-  结论: dimH (s union t) = max (dimH s) (dimH t)
+  条件: (s t : 集合 X)
+  结论: dimH (s union t) = 最大值 (dimH s) (dimH t)
   证明: by
   rw [union_eq_iUnion]; rw [dimH_iUnion]; rw [iSup_bool_eq]; rw [cond]; rw [cond]
 
@@ -622,7 +622,7 @@ alias Set.Countable.dimH_zero := dimH_countable
 
 中文:
 定理 dimH_countable
-  条件: {s : Set X} (hs : s.Countable)
+  条件: {s : 集合 X} (hs : s.可数)
   结论: dimH s = 0
   证明: biUnion_of_singleton s ▸ by simp only [dimH_bUnion hs, dimH_singleton, ENNReal.iSup_zero]
 
@@ -650,7 +650,7 @@ alias Set.Finite.dimH_zero := dimH_finite
 
 中文:
 定理 dimH_finite
-  条件: {s : Set X} (hs : s.Finite)
+  条件: {s : 集合 X} (hs : s.有限)
   结论: dimH s = 0
   证明: hs.countable.dimH_zero
 
@@ -679,8 +679,8 @@ alias Finset.dimH_zero := dimH_coe_finset
 
 中文:
 定理 dimH_coe_finset
-  条件: (s : Finset X)
-  结论: dimH (s : Set X) = 0
+  条件: (s : 有限集 X)
+  结论: dimH (s : 集合 X) = 0
   证明: s.finite_toSet.dimH_zero
 
 alias Finset.dimH_zero := dimH_coe_finset
@@ -716,8 +716,8 @@ theorem exists_mem_nhdsWithin_lt_dimH_of_lt_dimH
 _ <= r := iSup₂_le fun x hx => htr x hSs hx
 
 中文:
-定理 exists_mem_nhdsWithin_lt_dimH_of_lt_dimH
-  条件: {s : Set X} {r : 实数>=0∞} (h : r < dimH s)
+定理 存在_mem_nhdsWithin_lt_dimH_of_lt_dimH
+  条件: {s : 集合 X} {r : 实数>=0∞} (h : r < dimH s)
   证明: by
   contrapose! h; choose! t htx htr using h
   rcases countable_cover_nhdsWithin htx with ⟨S, hSs, hSc, hSU⟩
@@ -753,7 +753,7 @@ theorem bsupr_limsup_dimH
 
 中文:
 定理 bsupr_limsup_dimH
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: ⨆ x in s, limsup dimH (𝓝[s] x).smallSets = dimH s
   证明: by
   refine le_antisymm (iSup₂_le fun x _ => ?_) ?_
@@ -789,7 +789,7 @@ theorem iSup_limsup_dimH
 
 中文:
 定理 iSup_limsup_dimH
-  条件: (s : Set X)
+  条件: (s : 集合 X)
   结论: ⨆ x, limsup dimH (𝓝[s] x).smallSets = dimH s
   证明: by
   refine le_antisymm (iSup_le fun x => ?_) ?_
@@ -870,7 +870,7 @@ theorem dimH_image_le
 
 中文:
 定理 dimH_image_le
-  条件: (h : HolderWith C r f) (hr : 0 < r) (s : Set X)
+  条件: (h : HolderWith C r f) (hr : 0 < r) (s : 集合 X)
   证明: (h.holderOnWith s).dimH_image_le hr
 
 Depends on / 依赖: dimH_image_le, h.holderOnWith, holderOnWith
@@ -915,7 +915,7 @@ theorem dimH_image_le_of_locally_holder_on
 
 中文:
 定理 dimH_image_le_of_locally_holder_on
-  结论: [SecondCountableTopology X] {r : 实数>=0} {f : X -> Y}
+  结论: [第二可数拓扑 X] {r : 实数>=0} {f : X -> Y}
   证明: by
   choose! C t htn hC using hf
   rcases countable_cover_nhdsWithin htn with ⟨u, hus, huc, huU⟩
@@ -947,7 +947,7 @@ theorem dimH_range_le_of_locally_holder_on
 
 中文:
 定理 dimH_range_le_of_locally_holder_on
-  结论: [SecondCountableTopology X] {r : 实数>=0} {f : X -> Y}
+  结论: [第二可数拓扑 X] {r : 实数>=0} {f : X -> Y}
   证明: by
   rw [← image_univ]
   refine dimH_image_le_of_locally_holder_on hr fun x _ => ?_
@@ -1002,7 +1002,7 @@ theorem dimH_image_le
 
 中文:
 定理 dimH_image_le
-  条件: (h : LipschitzWith K f) (s : Set X)
+  条件: (h : LipschitzWith K f) (s : 集合 X)
   结论: dimH (f '' s) <= dimH s
   证明: h.lipschitzOnWith.dimH_image_le
 
@@ -1023,7 +1023,7 @@ theorem dimH_range_le
 中文:
 定理 dimH_range_le
   条件: (h : LipschitzWith K f)
-  结论: dimH (range f) <= dimH (univ : Set X)
+  结论: dimH (range f) <= dimH (univ : 集合 X)
   证明: @image_univ _ _ f ▸ h.dimH_image_le univ
 
 Depends on / 依赖: dimH_image_le, h.dimH_image_le, image_univ
@@ -1046,7 +1046,7 @@ theorem dimH_image_le_of_locally_lipschitzOn
 
 中文:
 定理 dimH_image_le_of_locally_lipschitzOn
-  结论: [SecondCountableTopology X] {f : X -> Y} {s : Set X}
+  结论: [第二可数拓扑 X] {f : X -> Y} {s : 集合 X}
   证明: by
   have : forall x in s, exists C : Real>=0, exists t in 𝓝[s] x, HolderOnWith C 1 f t := by
     simpa only [holderOnWith_one] using hf
@@ -1073,7 +1073,7 @@ theorem dimH_range_le_of_locally_lipschitzOn
 
 中文:
 定理 dimH_range_le_of_locally_lipschitzOn
-  结论: [SecondCountableTopology X] {f : X -> Y}
+  结论: [第二可数拓扑 X] {f : X -> Y}
   证明: by
   rw [← image_univ]
   refine dimH_image_le_of_locally_lipschitzOn fun x _ => ?_
@@ -1107,7 +1107,7 @@ theorem dimH_preimage_le
 
 中文:
 定理 dimH_preimage_le
-  条件: (hf : AntilipschitzWith K f) (s : Set Y)
+  条件: (hf : AntilipschitzWith K f) (s : 集合 Y)
   结论: dimH (f ⁻¹' s) <= dimH s
   证明: by
   borelize X Y
@@ -1140,7 +1140,7 @@ theorem le_dimH_image
 
 中文:
 定理 le_dimH_image
-  条件: (hf : AntilipschitzWith K f) (s : Set X)
+  条件: (hf : AntilipschitzWith K f) (s : 集合 X)
   结论: dimH s <= dimH (f '' s)
   证明: calc
     dimH s <= dimH (f ⁻¹' f '' s) := dimH_mono (subset_preimage_image _ _)
@@ -1167,8 +1167,8 @@ theorem Isometry.dimH_image
   proof: le_antisymm (hf.lipschitz.dimH_image_le _) (hf.antilipschitz.le_dimH_image _)
 
 中文:
-定理 Isometry.dimH_image
-  条件: (hf : Isometry f) (s : Set X)
+定理 等距.dimH_image
+  条件: (hf : 等距 f) (s : 集合 X)
   结论: dimH (f '' s) = dimH s
   证明: le_antisymm (hf.lipschitz.dimH_image_le _) (hf.antilipschitz.le_dimH_image _)
 
@@ -1193,7 +1193,7 @@ theorem dimH_image
 
 中文:
 定理 dimH_image
-  条件: (e : X ≃ᵢ Y) (s : Set X)
+  条件: (e : X ≃ᵢ Y) (s : 集合 X)
   结论: dimH (e '' s) = dimH s
   证明: e.isometry.dimH_image s
 
@@ -1217,7 +1217,7 @@ theorem dimH_preimage
 
 中文:
 定理 dimH_preimage
-  条件: (e : X ≃ᵢ Y) (s : Set Y)
+  条件: (e : X ≃ᵢ Y) (s : 集合 Y)
   结论: dimH (e ⁻¹' s) = dimH s
   证明: by
   rw [← e.image_symm]; rw [e.symm.dimH_image]
@@ -1240,7 +1240,7 @@ theorem dimH_univ
 中文:
 定理 dimH_univ
   条件: (e : X ≃ᵢ Y)
-  结论: dimH (univ : Set X) = dimH (univ : Set Y)
+  结论: dimH (univ : 集合 X) = dimH (univ : 集合 Y)
   证明: by
   rw [← e.dimH_preimage univ]; rw [preimage_univ]
 
@@ -1271,7 +1271,7 @@ theorem dimH_image
 
 中文:
 定理 dimH_image
-  条件: (e : E ≃L[𝕜] F) (s : Set E)
+  条件: (e : E ≃L[𝕜] F) (s : 集合 E)
   结论: dimH (e '' s) = dimH s
   证明: le_antisymm (e.lipschitz.dimH_image_le s) by
     simpa only [e.symm_image_image] using e.symm.lipschitz.dimH_image_le (e '' s)
@@ -1297,7 +1297,7 @@ theorem dimH_preimage
 
 中文:
 定理 dimH_preimage
-  条件: (e : E ≃L[𝕜] F) (s : Set F)
+  条件: (e : E ≃L[𝕜] F) (s : 集合 F)
   结论: dimH (e ⁻¹' s) = dimH s
   证明: by
   rw [← e.image_symm_eq_preimage]; rw [e.symm.dimH_image]
@@ -1320,7 +1320,7 @@ theorem dimH_univ
 中文:
 定理 dimH_univ
   条件: (e : E ≃L[𝕜] F)
-  结论: dimH (univ : Set E) = dimH (univ : Set F)
+  结论: dimH (univ : 集合 E) = dimH (univ : 集合 F)
   证明: by
   rw [← e.dimH_preimage]; rw [preimage_univ]
 
@@ -1389,7 +1389,7 @@ theorem dimH_ball_pi_fin
 
 中文:
 定理 dimH_ball_pi_fin
-  条件: {n : 自然数} (x : Fin n -> 实数) {r : 实数} (hr : 0 < r)
+  条件: {n : 自然数} (x : 有限集 n -> 实数) {r : 实数} (hr : 0 < r)
   证明: by rw [dimH_ball_pi x hr, Fintype.card_fin]
 
 Depends on / 依赖: Fintype, Fintype.card_fin, card_fin, dimH_ball_pi
@@ -1410,8 +1410,8 @@ theorem dimH_univ_pi
 
 中文:
 定理 dimH_univ_pi
-  条件: (ι : 类型) [Fintype ι]
-  结论: dimH (univ : Set (ι -> 实数)) = Fintype.card ι
+  条件: (ι : 类型) [有限类型 ι]
+  结论: dimH (univ : 集合 (ι -> 实数)) = 有限类型.card ι
   证明: by
   simp only [← Metric.iUnion_ball_nat_succ (0 : ι -> Real), dimH_iUnion,
     dimH_ball_pi _ (Nat.cast_add_one_pos _), iSup_const]
@@ -1435,7 +1435,7 @@ theorem dimH_univ_pi_fin
 中文:
 定理 dimH_univ_pi_fin
   条件: (n : 自然数)
-  结论: dimH (univ : Set (Fin n -> 实数)) = n
+  结论: dimH (univ : 集合 (有限集 n -> 实数)) = n
   证明: by
   rw [dimH_univ_pi]; rw [Fintype.card_fin]
 
@@ -1461,7 +1461,7 @@ theorem dimH_of_mem_nhds
 
 中文:
 定理 dimH_of_mem_nhds
-  条件: {x : E} {s : Set E} (h : s in 𝓝 x)
+  条件: {x : E} {s : 集合 E} (h : s in 𝓝 x)
   结论: dimH s = finrank 实数 E
   证明: by
   have e : E ≃L[Real] Fin (finrank Real E) -> Real :=
@@ -1495,7 +1495,7 @@ theorem dimH_of_nonempty_interior
 
 中文:
 定理 dimH_of_nonempty_interior
-  条件: {s : Set E} (h : (interior s).Nonempty)
+  条件: {s : 集合 E} (h : (interior s).非空)
   结论: dimH s = finrank 实数 E
   证明: let ⟨_, hx⟩ := h
   dimH_of_mem_nhds (mem_interior_iff_mem_nhds.1 hx)
@@ -1520,8 +1520,8 @@ theorem Convex.dimH_eq_finrank_vectorSpan
     (image_preimage_eq_of_subset <| (subset_affineSpan Real s).trans Subtype.range_
 
 中文:
-定理 Convex.dimH_eq_finrank_vectorSpan
-  条件: {s : Set E} (hcvx : Convex 实数 s) (hne : s.Nonempty)
+定理 凸.dimH_eq_finrank_vectorSpan
+  条件: {s : 集合 E} (hcvx : 凸 实数 s) (hne : s.非空)
   证明: by
   have := hne.to_subtype
   let φ := AffineIsometryEquiv.constVSub Real
@@ -1554,7 +1554,7 @@ theorem dimH_univ_eq_finrank
 
 中文:
 定理 dimH_univ_eq_finrank
-  结论: dimH (univ : Set E) = finrank 实数 E
+  结论: dimH (univ : 集合 E) = finrank 实数 E
   证明: dimH_of_mem_nhds (@univ_mem _ (𝓝 0))
 
 Depends on / 依赖: dimH_of_mem_nhds, univ_mem
@@ -1573,7 +1573,7 @@ theorem dimH_univ
 
 中文:
 定理 dimH_univ
-  结论: dimH (univ : Set 实数) = 1
+  结论: dimH (univ : 集合 实数) = 1
   证明: by
   rw [dimH_univ_eq_finrank Real]; rw [Module.finrank_self]; rw [Nat.cast_one]
 
@@ -1598,7 +1598,7 @@ theorem dimH_lt_top
 
 中文:
 定理 dimH_lt_top
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: dimH s < ⊤
   证明: by calc
   dimH s <= dimH (univ : Set E) := dimH_mono (subset_univ s)
@@ -1623,7 +1623,7 @@ theorem dimH_ne_top
 
 中文:
 定理 dimH_ne_top
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: dimH s != ⊤
   证明: (dimH_lt_top s).ne
 
@@ -1646,7 +1646,7 @@ lemma hausdorffMeasure_of_finrank_lt
 
 中文:
 引理 hausdorffMeasure_of_finrank_lt
-  结论: [MeasurableSpace E] [BorelSpace E] {d : 实数}
+  结论: [可测空间 E] [Borel空间 E] {d : 实数}
   证明: by
   lift d to Real>=0 using (Nat.cast_nonneg _).trans hd.le
   rw [← measure_univ_eq_zero]
@@ -1708,8 +1708,8 @@ theorem dense_compl_of_dimH_lt_finrank
 
 中文:
 定理 dense_compl_of_dimH_lt_finrank
-  条件: {s : Set E} (hs : dimH s < finrank 实数 E)
-  结论: Dense sᶜ
+  条件: {s : 集合 E} (hs : dimH s < finrank 实数 E)
+  结论: 稠密 sᶜ
   证明: by
   refine fun x => mem_closure_iff_nhds.2 fun t ht => nonempty_iff_ne_empty.2 fun he => hs.not_ge ?_
   rw [← sdiff_eq]; rw [sdiff_eq_empty] at he
@@ -1744,7 +1744,7 @@ theorem ContDiffOn.dimH_image_le
 
 中文:
 定理 ContDiffOn.dimH_image_le
-  结论: {f : E -> F} {s t : Set E} (hf : ContDiffOn 实数 1 f s)
+  结论: {f : E -> F} {s t : 集合 E} (hf : ContDiffOn 实数 1 f s)
   证明: dimH_image_le_of_locally_lipschitzOn fun x hx =>
     let ⟨C, u, hu, hf⟩ := (hf x (ht hx)).exists_lipschitzOnWith hc
     ⟨C, u, nhdsWithin_mono _ ht hu, hf⟩
@@ -1770,8 +1770,8 @@ theorem ContDiff.dimH_range_le
     _ = finrank Real E := Real.dimH_univ_eq_finrank E
 
 中文:
-定理 ContDiff.dimH_range_le
-  条件: {f : E -> F} (h : ContDiff 实数 1 f)
+定理 连续可微.dimH_range_le
+  条件: {f : E -> F} (h : 连续可微 实数 1 f)
   结论: dimH (range f) <= finrank 实数 E
   证明: calc
     dimH (range f) = dimH (f '' univ) := by rw [image_univ]
@@ -1796,7 +1796,7 @@ theorem ContDiffOn.dense_compl_image_of_dimH_lt_finrank
 
 中文:
 定理 ContDiffOn.dense_compl_image_of_dimH_lt_finrank
-  结论: [FiniteDimensional 实数 F] {f : E -> F}
+  结论: [有限维 实数 F] {f : E -> F}
   证明: dense_compl_of_dimH_lt_finrank (h.dimH_image_le hc ht).trans_lt htF
 
 Depends on / 依赖: dense_compl_of_dimH_lt_finrank, dimH_image_le, h.dimH_image_le, trans_lt
@@ -1815,8 +1815,8 @@ theorem ContDiff.dense_compl_range_of_finrank_lt_finrank
   proof: dense_compl_of_dimH_lt_finrank h.dimH_range_le.trans_lt Nat.cast_lt.2 hEF
 
 中文:
-定理 ContDiff.dense_compl_range_of_finrank_lt_finrank
-  结论: [FiniteDimensional 实数 F] {f : E -> F}
+定理 连续可微.dense_compl_range_of_finrank_lt_finrank
+  结论: [有限维 实数 F] {f : E -> F}
   证明: dense_compl_of_dimH_lt_finrank h.dimH_range_le.trans_lt Nat.cast_lt.2 hEF
 
 Depends on / 依赖: Nat.cast_lt, cast_lt, dense_compl_of_dimH_lt_finrank, dimH_range_le, h.dimH_range_le.trans_lt, trans_lt

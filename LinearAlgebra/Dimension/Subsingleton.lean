@@ -32,8 +32,8 @@ theorem rank_subsingleton'
 
 中文:
 定理 rank_subsingleton'
-  条件: [Subsingleton M]
-  结论: Module.rank R M = 0
+  条件: [子单例 M]
+  结论: 模.rank R M = 0
   证明: by
   rw [Module.rank]; rw [← bot_eq_zero]; rw [eq_bot_iff]
   exact ciSup_le fun s => by simp [(linearIndependent_subsingleton_iff _).mp s.2]
@@ -54,7 +54,7 @@ theorem rank_punit
 
 中文:
 定理 rank_punit
-  结论: Module.rank R PUnit = 0
+  结论: 模.rank R 命题单元 = 0
   证明: rank_subsingleton' _ _
 
 Depends on / 依赖: _eq_lintegral_enorm, eLpNorm, hfg.mono, lintegral_congr_ae, rank_subsingleton
@@ -71,7 +71,7 @@ theorem rank_bot
 
 中文:
 定理 rank_bot
-  结论: Module.rank R (⊥ : Submodule R M) = 0
+  结论: 模.rank R (⊥ : 子模 R M) = 0
   证明: rank_subsingleton' _ _
 
 Depends on / 依赖: _eq_lintegral_enorm, eLpNorm, hfg.mono, lintegral_congr_ae, rank_subsingleton

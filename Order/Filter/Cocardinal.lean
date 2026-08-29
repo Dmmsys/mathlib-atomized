@@ -45,7 +45,7 @@ definition cocardinal
 
 中文:
 定义 cocardinal
-  签名: (hreg : c.IsRegular)
+  签名: (hreg : c.是正则)
   定义体: by
   apply ofCardinalUnion {s | Cardinal.mk s < c} (natCast_lt_aleph0.trans_le hreg.aleph0_le)
 · refine fun s hS hSc => lt_of_le_of_lt (mk_sUnion_le _) mul_lt_of_lt hreg.aleph0_le hS ?_
@@ -73,7 +73,7 @@ theorem mem_cocardinal
 
 中文:
 定理 mem_cocardinal
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -114,7 +114,7 @@ instance instCardinalInterFilter_cocardinal
 @[simp]
 
 中文:
-实例 instCardinalInterFilter_cocardinal
+实例 instCardinal整数erFilter_cocardinal
   签名: : Cardinal整数erFilter (cocardinal (α := α) hreg) c where
   定义体: by
     grw [mem_cocardinal, Set.compl_sInter, mk_sUnion_le]
@@ -168,7 +168,7 @@ theorem hasBasis_cocardinal
 
 中文:
 定理 hasBasis_cocardinal
-  结论: HasBasis (cocardinal α hreg) (fun s : Set α => #s < c) compl
+  结论: 有基 (cocardinal α hreg) (fun s : 集合 α => #s < c) compl
   证明: ⟨fun s =>
     ⟨fun h => ⟨sᶜ, h, (compl_compl s).subset⟩, fun ⟨_t, htf, hts⟩ => by
       have : #↑sᶜ < c := by
@@ -221,7 +221,7 @@ lemma frequently_cocardinal_mem
 
 中文:
 引理 frequently_cocardinal_mem
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: frequently_cocardinal
 
 @[simp]
@@ -242,7 +242,7 @@ lemma cocardinal_inf_principal_neBot_iff
 
 中文:
 引理 cocardinal_inf_principal_neBot_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: frequently_mem_iff_neBot.symm.trans frequently_cocardinal
 
 Depends on / 依赖: frequently_cocardinal, frequently_mem_iff_neBot, frequently_mem_iff_neBot.symm.trans
@@ -261,7 +261,7 @@ theorem compl_mem_cocardinal_of_card_lt
 
 中文:
 定理 compl_mem_cocardinal_of_card_lt
-  条件: {s : Set α} (hs : #s < c)
+  条件: {s : 集合 α} (hs : #s < c)
   证明: mem_cocardinal.2 (compl_compl s).symm ▸ hs
 
 Depends on / 依赖: compl_compl, mem_cocardinal
@@ -279,8 +279,8 @@ theorem _root_.Set.Finite.compl_mem_cocardinal
   proof: compl_mem_cocardinal_of_card_lt lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
 
 中文:
-定理 _root_.Set.Finite.compl_mem_cocardinal
-  条件: {s : Set α} (hs : s.Finite)
+定理 _root_.集合.有限.compl_mem_cocardinal
+  条件: {s : 集合 α} (hs : s.有限)
   证明: compl_mem_cocardinal_of_card_lt lt_of_lt_of_le (Finite.lt_aleph0 hs) (hreg.aleph0_le)
 
 Depends on / 依赖: Finite, Finite.lt_aleph0, aleph0_le, compl_mem_cocardinal_of_card_lt, hreg.aleph0_le, lt_aleph0, lt_of_lt_of_le
@@ -299,7 +299,7 @@ theorem eventually_cocardinal_notMem_of_card_lt
 
 中文:
 定理 eventually_cocardinal_notMem_of_card_lt
-  条件: {s : Set α} (hs : #s < c)
+  条件: {s : 集合 α} (hs : #s < c)
   证明: compl_mem_cocardinal_of_card_lt hs
 
 Depends on / 依赖: compl_mem_cocardinal_of_card_lt
@@ -317,8 +317,8 @@ theorem _root_.Finset.eventually_cocardinal_notMem
   proof: eventually_cocardinal_notMem_of_card_lt (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
 
 中文:
-定理 _root_.Finset.eventually_cocardinal_notMem
-  条件: (s : Finset α)
+定理 _root_.有限集.eventually_cocardinal_notMem
+  条件: (s : 有限集 α)
   证明: eventually_cocardinal_notMem_of_card_lt (finset_card_lt_aleph0 s).trans_le (hreg.aleph0_le)
 
 Depends on / 依赖: aleph0_le, eventually_cocardinal_notMem_of_card_lt, finset_card_lt_aleph0, hreg.aleph0_le, trans_le
@@ -359,7 +359,7 @@ abbreviation cocountable
 
 中文:
 缩写 cocountable
-  签名: : Filter α
+  签名: : 滤子 α
   定义体: cocardinal α Cardinal.isRegular_aleph_one
 
 Depends on / 依赖: Cardinal, Cardinal.isRegular_aleph_one, cocardinal, isRegular_aleph_one
@@ -378,8 +378,8 @@ theorem mem_cocountable
 
 中文:
 定理 mem_cocountable
-  条件: {s : Set α}
-  结论: s in cocountable ↔ (sᶜ : Set α).Countable
+  条件: {s : 集合 α}
+  结论: s in cocountable ↔ (sᶜ : 集合 α).可数
   证明: by
   rw [← Cardinal.le_aleph0_iff_set_countable]; rw [mem_cocardinal]; rw [lt_aleph_one_iff]
 

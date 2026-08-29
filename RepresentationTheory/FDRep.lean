@@ -67,7 +67,7 @@ abbreviation FDRep
 
 中文:
 缩写 FDRep
-  签名: (R : 类型u) (G : 类型v) [Ring R] [Monoid G]
+  签名: (R : 类型u) (G : 类型v) [环 R] [幺半群 G]
   定义体: Action (FGModuleCat.{u} R) G
 
 Depends on / 依赖: Action, FGModuleCat
@@ -191,7 +191,7 @@ lemma hom_hom_action_ρ
 中文:
 引理 hom_hom_action_ρ
   条件: (V : FDRep R G) (g : G)
-  结论: (Action.ρ V g).hom.hom = (ρ V g)
+  结论: (作用.ρ V g).hom.hom = (ρ V g)
   证明: rfl
 -/
 lemma hom_hom_action_ρ (V : FDRep R G) (g : G) : (Action.ρ V g).hom.hom = (ρ V g) := rfl
@@ -229,7 +229,7 @@ theorem Iso.conj_ρ
   cat_disch
 
 中文:
-定理 Iso.conj_ρ
+定理 同构.conj_ρ
   条件: {V W : FDRep R G} (i : V ≅ W) (g : G)
   证明: by
   rw [FDRep.isoToLinearEquiv]; rw [← hom_hom_action_ρ V]; rw [← FGModuleCat.Iso.conj_hom_eq_conj]; rw [Iso.conj_apply]; rw [← ModuleCat.hom_ofHom (W.ρ g)]; rw [← ModuleCat.hom_ext_iff]
@@ -257,7 +257,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: {V : 类型u} [AddCommGroup V] [Module R V] [Module.Finite R V]
+  签名: {V : 类型u} [加法交换群 V] [模 R V] [模.有限 R V]
   定义体: ⟨FGModuleCat.of R V, (MulEquiv.toMonoidHom (MulEquiv.symm InducedCategory.endEquiv)).comp
     ((ModuleCat.endRingEquiv (ModuleCat.of R V)).symm.toMonoidHom.comp ρ)⟩
 
@@ -280,7 +280,7 @@ theorem of_ρ'
 
 中文:
 定理 of_ρ'
-  条件: {V : 类型u} [AddCommGroup V] [Module R V] [Module.Finite R V] (ρ : G ->* V ->ₗ[R] V)
+  条件: {V : 类型u} [加法交换群 V] [模 R V] [模.有限 R V] (ρ : G ->* V ->ₗ[R] V)
   证明: rfl
 -/
 theorem of_ρ' {V : Type u} [AddCommGroup V] [Module R V] [Module.Finite R V] (ρ : G ->* V ->ₗ[R] V) :
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (FDRep R G) (Rep R G)
+  签名: 有Forget₂ (FDRep R G) (Rep R G)
   定义体: (forget₂ (FGModuleCat R) (ModuleCat R)).mapAction G ⋙ Rep.ActionToRep R G
 
 Depends on / 依赖: ActionToRep, FGModuleCat, ModuleCat, Rep.ActionToRep, mapAction
@@ -333,8 +333,8 @@ instance [IsNoetherianRing
   body: Limits.comp_preservesFiniteLimits _ _
 
 中文:
-实例 [IsNoetherianRing
-  签名: R] : PreservesFiniteLimits (forget₂ (FDRep R G) (Rep R G))
+实例 [是Noether环
+  签名: R] : 保持FiniteLimits (forget₂ (FDRep R G) (Rep R G))
   定义体: Limits.comp_preservesFiniteLimits _ _
 
 Depends on / 依赖: Limits, Limits.comp_preservesFiniteLimits, comp_preservesFiniteLimits
@@ -352,7 +352,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (forget₂ (FDRep R G) (Rep R G))
+  签名: 保持FiniteColimits (forget₂ (FDRep R G) (Rep R G))
   定义体: Limits.comp_preservesFiniteColimits _ _
 
 Depends on / 依赖: Limits, Limits.comp_preservesFiniteColimits, comp_preservesFiniteColimits
@@ -381,7 +381,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasKernels (FDRep k G)
+  签名: 有Kernels (FDRep k G)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -399,7 +399,7 @@ theorem finrank_hom_simple_simple
 
 中文:
 定理 finrank_hom_simple_simple
-  条件: [IsAlgClosed k] (V W : FDRep k G) [Simple V] [Simple W]
+  条件: [是代数闭 k] (V W : FDRep k G) [单 V] [单 W]
   证明: CategoryTheory.finrank_hom_simple_simple k V W
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.finrank_hom_simple_simple, finrank_hom_simple_simple
@@ -464,7 +464,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FDRep R G) (Rep R G)).Full
+  签名: (forget₂ (FDRep R G) (Rep R G)).满
   定义体: by
   dsimp [forget₂, HasForget₂.forget₂]
   infer_instance
@@ -487,7 +487,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FDRep R G) (Rep R G)).Faithful
+  签名: (forget₂ (FDRep R G) (Rep R G)).忠实
   定义体: by
   dsimp [forget₂, HasForget₂.forget₂]
   infer_instance

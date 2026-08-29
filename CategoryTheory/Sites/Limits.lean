@@ -72,7 +72,7 @@ definition multiforkEvaluationCone
 
 中文:
 定义 multiforkEvaluationCone
-  签名: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D)) (X : C)
+  签名: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D)) (X : C)
   定义体: S.pt
   π :=
     { app := fun k => (Presheaf.isLimitOfIsSheaf J (F.obj k).1 W (F.obj k).2).lift <|
@@ -132,7 +132,7 @@ definition isLimitMultiforkOfIsLimit
 
 中文:
 定义 isLimitMultiforkOfIsLimit
-  签名: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
+  签名: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D))
   定义体: Multifork.IsLimit.mk _
     (fun S => (isLimitOfPreserves ((evaluation Cᵒᵖ D).obj (op X)) hE).lift <|
       multiforkEvaluationCone F E X W S)
@@ -190,7 +190,7 @@ theorem isSheaf_of_isLimit
 
 中文:
 定理 isSheaf_of_isLimit
-  结论: (F : K ⥤ Sheaf J D) (E : Cone (F ⋙ sheafToPresheaf J D))
+  结论: (F : K ⥤ 层 J D) (E : 锥 (F ⋙ sheafToPresheaf J D))
   证明: by
   rw [Presheaf.isSheaf_iff_multifork]
   intro X S
@@ -217,7 +217,7 @@ instance :
 
 中文:
 实例 :
-  签名: Object命题erty.IsClosedUnderLimitsOfShape (Presheaf.IsSheaf J (A := D)) K
+  签名: ObjectProperty.是ClosedUnderLimitsOfShape (预层.是层 J (A := D)) K
   定义体: by
     rintro P ⟨h⟩
     let F : K ⥤ Sheaf J D := ObjectProperty.lift _ h.diag h.prop_diag_obj
@@ -238,7 +238,7 @@ instance createsLimitsOfShape
 
 中文:
 实例 createsLimitsOfShape
-  签名: : CreatesLimitsOfShape K (sheafToPresheaf J D) where
+  签名: : 创造形状极限 K (sheafToPresheaf J D) where
 -/
 instance createsLimitsOfShape : CreatesLimitsOfShape K (sheafToPresheaf J D) where
 
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimitsOfShape K (Sheaf J D)
+  签名: 有形状极限 K (层 J D)
   定义体: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape (sheafToPresheaf J D)
 
 Depends on / 依赖: hasLimitsOfShape_of_hasLimitsOfShape_createsLimitsOfShape, sheafToPresheaf
@@ -269,8 +269,8 @@ instance [HasFiniteProducts
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasFiniteProducts
-  签名: D] : HasFiniteProducts (Sheaf J D)
+实例 [有FiniteProducts
+  签名: D] : 有FiniteProducts (层 J D)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasFiniteProducts D] : HasFiniteProducts (Sheaf J D) :=
@@ -285,8 +285,8 @@ instance [HasFiniteLimits
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteLimits
-  签名: D] : HasFiniteLimits (Sheaf J D)
+实例 [有有限极限
+  签名: D] : 有有限极限 (层 J D)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasFiniteLimits D] : HasFiniteLimits (Sheaf J D) :=
@@ -304,7 +304,7 @@ instance createsLimits
 
 中文:
 实例 createsLimits
-  签名: [HasLimitsOfSize.{u₁, u₂} D]
+  签名: [有LimitsOfSize.{u₁, u₂} D]
   定义体: ⟨createsLimitsOfShape⟩
 
 Depends on / 依赖: createsLimitsOfShape
@@ -323,7 +323,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: [HasLimitsOfSize.{u₁, u₂} D]
+  签名: [有LimitsOfSize.{u₁, u₂} D]
   定义体: hasLimits_of_hasLimits_createsLimits (sheafToPresheaf J D)
 
 Depends on / 依赖: hasLimits_of_hasLimits_createsLimits, sheafToPresheaf
@@ -343,7 +343,7 @@ example {D : Type w} [Category.{max v u} D] [HasLimits D] :
     HasLimits (Sheaf J D) := inferInstance
 
 中文:
-实例 [HasFiniteLimits
+实例 [有有限极限
   签名: D] :
   定义体: inferInstance
 
@@ -377,7 +377,7 @@ definition sheafifyCocone
 
 中文:
 定义 sheafifyCocone
-  签名: {F : K ⥤ Sheaf J D}
+  签名: {F : K ⥤ 层 J D}
   定义体: (Cocone.precompose
     (Functor.isoWhiskerLeft F (asIso (sheafificationAdjunction J D).counit).symm).hom).obj
     ((presheafToSheaf J D).mapCocone E)
@@ -440,7 +440,7 @@ definition isColimitSheafifyCocone
 
 中文:
 定义 isColimitSheafifyCocone
-  签名: {F : K ⥤ Sheaf J D}
+  签名: {F : K ⥤ 层 J D}
   定义体: (IsColimit.precomposeHomEquiv _ ((presheafToSheaf J D).mapCocone E)).symm
     (isColimitOfPreserves _ hE)
 
@@ -461,8 +461,8 @@ instance [HasColimitsOfShape
     ⟨sheafifyCocone (colimit.cocone _), isColimitSheafifyCocone _ (colimit.isColimit _)⟩⟩
 
 中文:
-实例 [HasColimitsOfShape
-  签名: K D] : HasColimitsOfShape K (Sheaf J D)
+实例 [有形状余极限
+  签名: K D] : 有形状余极限 K (层 J D)
   定义体: ⟨fun _ => HasColimit.mk
     ⟨sheafifyCocone (colimit.cocone _), isColimitSheafifyCocone _ (colimit.isColimit _)⟩⟩
 
@@ -481,8 +481,8 @@ instance [HasFiniteCoproducts
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasFiniteCoproducts
-  签名: D] : HasFiniteCoproducts (Sheaf J D)
+实例 [有FiniteCoproducts
+  签名: D] : 有FiniteCoproducts (层 J D)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasFiniteCoproducts D] : HasFiniteCoproducts (Sheaf J D) :=
@@ -497,8 +497,8 @@ instance [HasFiniteColimits
   body: ⟨fun _ => inferInstance⟩
 
 中文:
-实例 [HasFiniteColimits
-  签名: D] : HasFiniteColimits (Sheaf J D)
+实例 [有有限余极限
+  签名: D] : 有有限余极限 (层 J D)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance [HasFiniteColimits D] : HasFiniteColimits (Sheaf J D) :=
@@ -513,8 +513,8 @@ instance [HasColimitsOfSize.{u₁,
   body: ⟨inferInstance⟩
 
 中文:
-实例 [HasColimitsOfSize.{u₁,
-  签名: u₂} D] : HasColimitsOfSize.{u₁, u₂} (Sheaf J D)
+实例 [有余limitsOfSize.{u₁,
+  签名: u₂} D] : 有余limitsOfSize.{u₁, u₂} (层 J D)
   定义体: ⟨inferInstance⟩
 -/
 instance [HasColimitsOfSize.{u₁, u₂} D] : HasColimitsOfSize.{u₁, u₂} (Sheaf J D) :=
@@ -544,7 +544,7 @@ definition createsColimitOfIsSheaf
 
 中文:
 定义 createsColimitOfIsSheaf
-  签名: (F : K ⥤ Sheaf J D)
+  签名: (F : K ⥤ 层 J D)
   定义体: createsColimitOfReflectsIso fun E hE =>
     { liftedCocone := ⟨⟨E.pt, h _ hE⟩,
 ⟨fun _ => ⟨E.ι.app _⟩, fun _ _ _ => Sheaf.hom_ext E.ι.naturality _⟩⟩

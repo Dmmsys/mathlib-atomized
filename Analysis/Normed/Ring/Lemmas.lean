@@ -38,8 +38,8 @@ theorem Filter.Tendsto.zero_mul_isBoundedUnder_le
   proof: hf.op_zero_isBoundedUnder_le hg (· * ·) norm_mul_le
 
 中文:
-定理 Filter.Tendsto.zero_mul_isBoundedUnder_le
-  结论: {f g : ι -> α} {l : Filter ι}
+定理 滤子.收敛.zero_mul_isBoundedUnder_le
+  结论: {f g : ι -> α} {l : 滤子 ι}
   证明: hf.op_zero_isBoundedUnder_le hg (· * ·) norm_mul_le
 
 Depends on / 依赖: hf.op_zero_isBoundedUnder_le, norm_mul_le, op_zero_isBoundedUnder_le
@@ -59,8 +59,8 @@ theorem Filter.isBoundedUnder_le_mul_tendsto_zero
     (norm_mul_le y x).trans_eq (mul_comm _ _)
 
 中文:
-定理 Filter.isBoundedUnder_le_mul_tendsto_zero
-  结论: {f g : ι -> α} {l : Filter ι}
+定理 滤子.isBoundedUnder_le_mul_tendsto_zero
+  结论: {f g : ι -> α} {l : 滤子 ι}
   证明: hg.op_zero_isBoundedUnder_le hf (flip (· * ·)) fun x y =>
     (norm_mul_le y x).trans_eq (mul_comm _ _)
 
@@ -87,8 +87,8 @@ norm_mul_le x y := NNReal.coe_mono calc
         sup_mul_le_mul_sup_of_nonne
 
 中文:
-实例 Pi.nonUnitalSeminormedRing
-  签名: {R : ι -> 类型} [Fintype ι]
+实例 依赖函数类型.nonUnitalSeminormedRing
+  签名: {R : ι -> 类型} [有限类型 ι]
   定义体: { seminormedAddCommGroup, nonUnitalRing with
 norm_mul_le x y := NNReal.coe_mono calc
       (univ.sup fun i => ‖x i * y i‖₊) <= univ.sup ((‖x ·‖₊) * (‖y ·‖₊)) :=
@@ -122,8 +122,8 @@ instance Pi.seminormedRing
   body: { Pi.nonUnitalSeminormedRing, Pi.ring with }
 
 中文:
-实例 Pi.seminormedRing
-  签名: {R : ι -> 类型} [Fintype ι] [对任意 i, SeminormedRing (R i)]
+实例 依赖函数类型.seminormedRing
+  签名: {R : ι -> 类型} [有限类型 ι] [对任意 i, Seminormed环 (R i)]
   定义体: { Pi.nonUnitalSeminormedRing, Pi.ring with }
 
 Depends on / 依赖: Pi.nonUnitalSeminormedRing, Pi.ring, nonUnitalSeminormedRing
@@ -141,8 +141,8 @@ lemma RingHom.isometry
   proof: AddMonoidHomClass.isometry_of_norm _ fun _ => RingHomIsometric.norm_map
 
 中文:
-引理 RingHom.isometry
-  结论: {𝕜₁ 𝕜₂ : 类型} [SeminormedRing 𝕜₁] [SeminormedRing 𝕜₂]
+引理 环态射.isometry
+  结论: {𝕜₁ 𝕜₂ : 类型} [Seminormed环 𝕜₁] [Seminormed环 𝕜₂]
   证明: AddMonoidHomClass.isometry_of_norm _ fun _ => RingHomIsometric.norm_map
 
 Depends on / 依赖: AddMonoidHomClass, AddMonoidHomClass.isometry_of_norm, RingHomIsometric, RingHomIsometric.norm_map, isometry_of_norm, norm_map
@@ -161,7 +161,7 @@ lemma RingHomIsometric.inv
 
 中文:
 引理 RingHomIsometric.inv
-  结论: {𝕜₁ 𝕜₂ : 类型} [SeminormedRing 𝕜₁] [SeminormedRing 𝕜₂]
+  结论: {𝕜₁ 𝕜₂ : 类型} [Seminormed环 𝕜₁] [Seminormed环 𝕜₂]
   证明: ⟨fun {x} => by rw [← RingHomIsometric.norm_map (σ := σ), RingHomInvPair.comp_apply_eq₂]⟩
 
 Depends on / 依赖: RingHomInvPair, RingHomInvPair.comp_apply_eq, RingHomIsometric, RingHomIsometric.norm_map, norm_map
@@ -209,8 +209,8 @@ instance Pi.nonUnitalNormedRing
   body: { Pi.nonUnitalSeminormedRing, Pi.normedAddCommGroup with }
 
 中文:
-实例 Pi.nonUnitalNormedRing
-  签名: {R : ι -> 类型} [Fintype ι] [对任意 i, NonUnitalNormedRing (R i)]
+实例 依赖函数类型.nonUnitalNormedRing
+  签名: {R : ι -> 类型} [有限类型 ι] [对任意 i, 非幺赋范环 (R i)]
   定义体: { Pi.nonUnitalSeminormedRing, Pi.normedAddCommGroup with }
 
 Depends on / 依赖: Pi.nonUnitalSeminormedRing, Pi.normedAddCommGroup, nonUnitalSeminormedRing, normedAddCommGroup
@@ -234,8 +234,8 @@ instance Pi.normedRing
   body: { Pi.seminormedRing, Pi.normedAddCommGroup with }
 
 中文:
-实例 Pi.normedRing
-  签名: {R : ι -> 类型} [Fintype ι] [对任意 i, NormedRing (R i)]
+实例 依赖函数类型.normedRing
+  签名: {R : ι -> 类型} [有限类型 ι] [对任意 i, 赋范环 (R i)]
   定义体: { Pi.seminormedRing, Pi.normedAddCommGroup with }
 
 Depends on / 依赖: Pi.normedAddCommGroup, Pi.seminormedRing, normedAddCommGroup, seminormedRing
@@ -259,8 +259,8 @@ instance Pi.nonUnitalSeminormedCommRing
   body: { Pi.nonUnitalSeminormedRing, Pi.nonUnitalCommRing with }
 
 中文:
-实例 Pi.nonUnitalSeminormedCommRing
-  签名: {R : ι -> 类型} [Fintype ι]
+实例 依赖函数类型.nonUnitalSeminormedCommRing
+  签名: {R : ι -> 类型} [有限类型 ι]
   定义体: { Pi.nonUnitalSeminormedRing, Pi.nonUnitalCommRing with }
 
 Depends on / 依赖: Pi.nonUnitalCommRing, Pi.nonUnitalSeminormedRing, nonUnitalCommRing, nonUnitalSeminormedRing
@@ -284,8 +284,8 @@ instance Pi.nonUnitalNormedCommRing
   body: { Pi.nonUnitalSeminormedCommRing, Pi.normedAddCommGroup with }
 
 中文:
-实例 Pi.nonUnitalNormedCommRing
-  签名: {R : ι -> 类型} [Fintype ι]
+实例 依赖函数类型.nonUnitalNormedCommRing
+  签名: {R : ι -> 类型} [有限类型 ι]
   定义体: { Pi.nonUnitalSeminormedCommRing, Pi.normedAddCommGroup with }
 
 Depends on / 依赖: Pi.nonUnitalSeminormedCommRing, Pi.normedAddCommGroup, nonUnitalSeminormedCommRing, normedAddCommGroup
@@ -309,8 +309,8 @@ instance Pi.seminormedCommRing
   body: { Pi.nonUnitalSeminormedCommRing, Pi.ring with }
 
 中文:
-实例 Pi.seminormedCommRing
-  签名: {R : ι -> 类型} [Fintype ι] [对任意 i, SeminormedCommRing (R i)]
+实例 依赖函数类型.seminormedCommRing
+  签名: {R : ι -> 类型} [有限类型 ι] [对任意 i, SeminormedComm环 (R i)]
   定义体: { Pi.nonUnitalSeminormedCommRing, Pi.ring with }
 
 Depends on / 依赖: Pi.nonUnitalSeminormedCommRing, Pi.ring, nonUnitalSeminormedCommRing
@@ -334,8 +334,8 @@ instance Pi.normedCommutativeRing
   body: { Pi.seminormedCommRing, Pi.normedAddCommGroup with }
 
 中文:
-实例 Pi.normedCommutativeRing
-  签名: {R : ι -> 类型} [Fintype ι] [对任意 i, NormedCommRing (R i)]
+实例 依赖函数类型.normedCommutativeRing
+  签名: {R : ι -> 类型} [有限类型 ι] [对任意 i, NormedComm环 (R i)]
   定义体: { Pi.seminormedCommRing, Pi.normedAddCommGroup with }
 
 Depends on / 依赖: Pi.normedAddCommGroup, Pi.seminormedCommRing, normedAddCommGroup, seminormedCommRing
@@ -384,8 +384,8 @@ instance [NonUnitalSeminormedRing
   norm_mul_le := Quotient.ind₂ norm_mul_le
 
 中文:
-实例 [NonUnitalSeminormedRing
-  签名: α] : NonUnitalNormedRing (SeparationQuotient α) where
+实例 [非幺Seminormed环
+  签名: α] : 非幺赋范环 (SeparationQuotient α) where
   定义体: inferInstance
   __ : NormedAddCommGroup (SeparationQuotient α) := inferInstance
   norm_mul_le := Quotient.ind₂ norm_mul_le
@@ -406,8 +406,8 @@ instance [NonUnitalSeminormedCommRing
   norm_mul_le := Quotient.ind₂ norm_mul_le
 
 中文:
-实例 [NonUnitalSeminormedCommRing
-  签名: α] : NonUnitalNormedCommRing (SeparationQuotient α) where
+实例 [非幺SeminormedComm环
+  签名: α] : 非幺NormedComm环 (SeparationQuotient α) where
   定义体: inferInstance
   __ : NormedAddCommGroup (SeparationQuotient α) := inferInstance
   norm_mul_le := Quotient.ind₂ norm_mul_le
@@ -428,8 +428,8 @@ instance [SeminormedRing
   norm_mul_le := Quotient.ind₂ norm_mul_le
 
 中文:
-实例 [SeminormedRing
-  签名: α] : NormedRing (SeparationQuotient α) where
+实例 [Seminormed环
+  签名: α] : 赋范环 (SeparationQuotient α) where
   定义体: inferInstance
   __ : NormedAddCommGroup (SeparationQuotient α) := inferInstance
   norm_mul_le := Quotient.ind₂ norm_mul_le
@@ -450,8 +450,8 @@ instance [SeminormedCommRing
   norm_mul_le := Quotient.ind₂ norm_mul_le
 
 中文:
-实例 [SeminormedCommRing
-  签名: α] : NormedCommRing (SeparationQuotient α) where
+实例 [SeminormedComm环
+  签名: α] : NormedComm环 (SeparationQuotient α) where
   定义体: inferInstance
   __ : NormedAddCommGroup (SeparationQuotient α) := inferInstance
   norm_mul_le := Quotient.ind₂ norm_mul_le
@@ -470,8 +470,8 @@ instance [SeminormedAddCommGroup
   body: norm_one (α := α)
 
 中文:
-实例 [SeminormedAddCommGroup
-  签名: α] [One α] [NormOneClass α] :
+实例 [SeminormedAddComm群
+  签名: α] [幺 α] [NormOne类 α] :
   定义体: norm_one (α := α)
 
 Depends on / 依赖: norm_one
@@ -534,8 +534,8 @@ instance Int.instNormedCommRing
   norm_mul_le m n := by simp only [norm, Int.cast_mul, abs_mul, le_rfl]
 
 中文:
-实例 Int.instNormedCommRing
-  签名: : NormedCommRing 整数 where
+实例 整数.instNormedCommRing
+  签名: : NormedComm环 整数 where
   定义体: instCommRing
   __ := instNormedAddCommGroup
   norm_mul_le m n := by simp only [norm, Int.cast_mul, abs_mul, le_rfl]
@@ -556,8 +556,8 @@ instance Int.instNormOneClass
   body: ⟨by simp [← Int.norm_cast_real]⟩
 
 中文:
-实例 Int.instNormOneClass
-  签名: : NormOneClass 整数
+实例 整数.instNormOneClass
+  签名: : NormOne类 整数
   定义体: ⟨by simp [← Int.norm_cast_real]⟩
 
 Depends on / 依赖: Int.norm_cast_real, norm_cast_real
@@ -574,8 +574,8 @@ instance Int.instNormMulClass
   body: ⟨fun a b => by simp [← Int.norm_cast_real, abs_mul]⟩
 
 中文:
-实例 Int.instNormMulClass
-  签名: : NormMulClass 整数
+实例 整数.instNormMulClass
+  签名: : NormMul类 整数
   定义体: ⟨fun a b => by simp [← Int.norm_cast_real, abs_mul]⟩
 
 Depends on / 依赖: Int.norm_cast_real, abs_mul, norm_cast_real

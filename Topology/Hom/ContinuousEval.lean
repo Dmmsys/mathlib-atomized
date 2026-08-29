@@ -31,10 +31,10 @@ class ContinuousEval
     - continuous_eval : Continuous fun fx : F × X => fx.1 fx.2
 
 中文:
-类 ContinuousEval
-  参数: (F : 类型) (X Y : outParam 类型) [FunLike F X Y]
+类 余ntinuousEval
+  参数: (F : 类型) (X Y : outParam 类型) [函数状 F X Y]
   公理与运算 (1 个):
-    - continuous_eval : Continuous fun fx : F × X => fx.1 fx.2
+    - continuous_eval : 连续 fun fx : F × X => fx.1 fx.2
 -/
 class ContinuousEval (F : Type*) (X Y : outParam Type*) [FunLike F X Y]
     [TopologicalSpace F] [TopologicalSpace X] [TopologicalSpace Y] : Prop where
@@ -57,8 +57,8 @@ theorem Continuous.eval
   proof: continuous_eval.comp (hf.prodMk hg)
 
 中文:
-定理 Continuous.eval
-  条件: (hf : Continuous f) (hg : Continuous g)
+定理 连续.eval
+  条件: (hf : 连续 f) (hg : 连续 g)
   证明: continuous_eval.comp (hf.prodMk hg)
 -/
 protected theorem Continuous.eval (hf : Continuous f) (hg : Continuous g) :
@@ -74,8 +74,8 @@ theorem ContinuousEval.of_continuous_forget
   proof: by simpa only [← hf] using hc.fst'.eval continuous_snd
 
 中文:
-定理 ContinuousEval.of_continuous_forget
-  结论: {F' : 类型} [FunLike F' X Y] [TopologicalSpace F']
+定理 余ntinuousEval.of_continuous_forget
+  结论: {F' : 类型} [函数状 F' X Y] [拓扑空间 F']
   证明: by simpa only [← hf] using hc.fst'.eval continuous_snd
 
 Depends on / 依赖: ContinuousEval, continuous_eval, continuous_snd, hc.fst
@@ -107,8 +107,8 @@ protected nonrec theorem ContinuousWithinAt.eval (hf : ContinuousWithinAt f s z)
 
 
 中文:
-定理 Filter.Tendsto.eval
-  结论: {α : 类型} {l : Filter α} {f : α -> F} {f₀ : F}
+定理 滤子.收敛.eval
+  结论: {α : 类型} {l : 滤子 α} {f : α -> F} {f₀ : F}
   证明: (ContinuousEval.continuous_eval.tendsto _).comp (hf.prodMk_nhds hg)
 
 protected nonrec theorem ContinuousAt.eval (hf : ContinuousAt f z) (hg : ContinuousAt g z) :

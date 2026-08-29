@@ -38,7 +38,7 @@ structure Pointed
 
 中文:
 结构 Pointed
-  参数: : Type (u + 1) where
+  参数: : 类型 (u + 1) where
   公理与运算 (2 个):
     - X : 类型u
     - point : X
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Pointed
+  签名: 可居 Pointed
   定义体: ⟨of ((), ())⟩
 -/
 instance : Inhabited Pointed :=
@@ -138,7 +138,7 @@ structure Hom
     - map_point : toFun X.point = Y.point
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : Pointed.{u})
   公理与运算 (2 个):
     - toFun : X -> Y
@@ -187,7 +187,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : Pointed.{u}} (f : Pointed.Hom X Y) (g : Pointed.Hom Y Z)
+  签名: {X Y Z : Pointed.{u}} (f : Pointed.态射 X Y) (g : Pointed.态射 Y Z)
   定义体: ⟨g.toFun ∘ f.toFun, by rw [Function.comp_apply, f.map_point, g.map_point]⟩
 
 Depends on / 依赖: Function, Function.comp_apply, comp_apply, f.map_point, f.toFun, g.map_point, g.toFun, map_point
@@ -209,7 +209,7 @@ instance largeCategory
 
 中文:
 实例 largeCategory
-  签名: : LargeCategory Pointed where
+  签名: : 大范畴 Pointed where
   定义体: Pointed.Hom
   id := Hom.id
   comp := @Hom.comp
@@ -231,7 +231,7 @@ lemma Hom.id_toFun'
   proof: rfl
 
 中文:
-引理 Hom.id_toFun'
+引理 态射.id_toFun'
   条件: (X : Pointed.{u})
   结论: (𝟙 X : X ⟶ X).toFun = _root_.id
   证明: rfl
@@ -247,7 +247,7 @@ lemma Hom.comp_toFun'
   proof: rfl
 
 中文:
-引理 Hom.comp_toFun'
+引理 态射.comp_toFun'
   条件: {X Y Z : Pointed.{u}} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
@@ -269,7 +269,7 @@ instance hasForget
 
 中文:
 实例 hasForget
-  签名: : ConcreteCategory Pointed fun X Y => { f : X -> Y // f X.point = Y.point } where
+  签名: : 余ncrete范畴 Pointed fun X Y => { f : X -> Y // f X.point = Y.point } where
   定义体: ⟨f.1, f.2⟩
   ofHom f := ⟨f.1, f.2⟩
 -/
@@ -292,7 +292,7 @@ definition Iso.mk
   inv_hom_id := Pointed.Hom.ext e.self_comp_symm
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : Pointed} (e : α ≃ β) (he : e α.point = β.point)
   定义体: ⟨e, he⟩
   inv := ⟨e.symm, e.symm_apply_eq.2 he.symm⟩

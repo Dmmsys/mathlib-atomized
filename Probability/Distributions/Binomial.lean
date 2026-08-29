@@ -149,7 +149,7 @@ instance isProbabilityMeasure_binomial
 
 中文:
 实例 isProbabilityMeasure_binomial
-  签名: : IsProbabilityMeasure Bin(n, p)
+  签名: : 是概率测度 Bin(n, p)
   定义体: isProbabilityMeasure_map by fun_prop
 
 Depends on / 依赖: fun_prop, isProbabilityMeasure_map
@@ -167,7 +167,7 @@ instance isProbabilityMeasure_map_cast_binomial
 
 中文:
 实例 isProbabilityMeasure_map_cast_binomial
-  签名: : IsProbabilityMeasure Bin(R, n, p)
+  签名: : 是概率测度 Bin(R, n, p)
   定义体: isProbabilityMeasure_map .of_discrete
 
 Depends on / 依赖: isProbabilityMeasure_map, of_discrete
@@ -189,7 +189,7 @@ lemma ae_le_of_hasLaw_binomial
 
 中文:
 引理 ae_le_of_hasLaw_binomial
-  条件: {X : Ω -> 自然数} (hX : HasLaw X Bin(n, p) P)
+  条件: {X : Ω -> 自然数} (hX : 有Law X Bin(n, p) P)
   结论: 对任意ᵐ ω ∂P, X ω <= n
   证明: by
   rw [hX.ae_iff (p := (· <= n)) <| by fun_prop]; rw [binomial]; rw [ae_map_iff (by fun_prop) (finite_Iic _).measurableSet]
@@ -260,7 +260,7 @@ lemma map_cast_binomial_real_singleton
 
 中文:
 引理 map_cast_binomial_real_singleton
-  条件: [MeasurableSingletonClass R] [CharZero R] (n k : 自然数) (p : I)
+  条件: [MeasurableSingleton类 R] [特征零 R] (n k : 自然数) (p : I)
   证明: by
   rw [map_measureReal_apply (by fun_prop) (by measurability)]
   convert binomial_real_singleton n k p
@@ -310,7 +310,7 @@ lemma map_cast_binomial_singleton
 
 中文:
 引理 map_cast_binomial_singleton
-  条件: [MeasurableSingletonClass R] [CharZero R] (n k : 自然数) (p : I)
+  条件: [MeasurableSingleton类 R] [特征零 R] (n k : 自然数) (p : I)
   证明: by
   rw [← ENNReal.ofReal_toReal (a := Bin(R]; rw [n]; rw [p) _) (by simp)]; rw [← measureReal_def]; rw [map_cast_binomial_real_singleton]
 
@@ -360,7 +360,7 @@ lemma map_cast_binomial_real_zero
 
 中文:
 引理 map_cast_binomial_real_zero
-  条件: [MeasurableSingletonClass R] [CharZero R] (n : 自然数) (p : I)
+  条件: [MeasurableSingleton类 R] [特征零 R] (n : 自然数) (p : I)
   证明: by
   rw [← Nat.cast_zero]; rw [map_cast_binomial_real_singleton]
   simp
@@ -408,7 +408,7 @@ lemma map_cast_binomial_real_self
 
 中文:
 引理 map_cast_binomial_real_self
-  条件: [MeasurableSingletonClass R] [CharZero R] (n : 自然数) (p : I)
+  条件: [MeasurableSingleton类 R] [特征零 R] (n : 自然数) (p : I)
   证明: by simp [map_cast_binomial_real_singleton]
 
 Depends on / 依赖: map_cast_binomial_real_singleton
@@ -494,7 +494,7 @@ lemma map_cast_binomial_eq_sum_dirac
 
 中文:
 引理 map_cast_binomial_eq_sum_dirac
-  条件: [MeasurableSingletonClass R] (n : 自然数) (p : I)
+  条件: [MeasurableSingleton类 R] (n : 自然数) (p : I)
   证明: by
   rw [binomial_eq_sum_dirac]; rw [Measure.map_finset_sum .of_discrete]
   exact Finset.sum_congr rfl fun _ _ => by rw [Measure.map_smul, map_dirac]
@@ -524,7 +524,7 @@ lemma integrable_map_cast_binomial
 
 中文:
 引理 integrable_map_cast_binomial
-  条件: [MeasurableSingletonClass R] (f : R -> E)
+  条件: [MeasurableSingleton类 R] (f : R -> E)
   证明: by
   simp [map_cast_binomial_eq_sum_dirac, integrable_finsetSum_measure, integrable_dirac,
     Integrable.smul_measure]
@@ -595,7 +595,7 @@ lemma integral_map_cast_binomial
 
 中文:
 引理 integral_map_cast_binomial
-  条件: [MeasurableSingletonClass R] (f : R -> E)
+  条件: [MeasurableSingleton类 R] (f : R -> E)
   证明: by
   rw [integral_map .of_discrete (integrable_map_cast_binomial f).aestronglyMeasurable]; rw [integral_binomial]
 

@@ -39,7 +39,7 @@ abbreviation equivReindex
 
 中文:
 缩写 equivReindex
-  签名: : (K ->+* Complex) ≃ ChooseBasisIndex 整数 (𝓞 K)
+  签名: : (K ->+* 复形) ≃ ChooseBasisIndex 整数 (𝓞 K)
   定义体: Fintype.equivOfCardEq by
     rw [Embeddings.card]; rw [← finrank_eq_card_chooseBasisIndex]; rw [RingOfIntegers.rank]
 
@@ -59,7 +59,7 @@ abbreviation basisMatrix
 
 中文:
 缩写 basisMatrix
-  签名: : Matrix (K ->+* Complex) (K ->+* Complex) Complex
+  签名: : 矩阵 (K ->+* 复形) (K ->+* 复形) 复形
   定义体: (Matrix.of fun i => latticeBasis K (equivReindex K i))
 
 Depends on / 依赖: Matrix, Matrix.of, equivReindex, latticeBasis
@@ -123,7 +123,7 @@ theorem det_of_basisMatrix_non_zero
 
 中文:
 定理 det_of_basisMatrix_non_zero
-  条件: [DecidableEq (K ->+* Complex)]
+  条件: [DecidableEq (K ->+* 复形)]
   结论: (basisMatrix K).det != 0
   证明: by
   rw [basisMatrix_eq_embeddingsMatrixReindex]; rw [← pow_ne_zero_iff two_ne_zero]
@@ -155,7 +155,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: (K ->+* Complex)] : Invertible (basisMatrix K)
+  签名: (K ->+* 复形)] : 可逆 (basisMatrix K)
   定义体: invertibleOfIsUnitDet _
     (Ne.isUnit (det_of_basisMatrix_non_zero K))
 
@@ -211,7 +211,7 @@ theorem inverse_basisMatrix_mulVec_eq_repr
 
 中文:
 定理 inverse_basisMatrix_mulVec_eq_repr
-  条件: [DecidableEq (K ->+* Complex)] (α : 𝓞 K)
+  条件: [DecidableEq (K ->+* 复形)] (α : 𝓞 K)
   证明: fun i => by
   rw [inv_mulVec_eq_vec (canonicalEmbedding_eq_basisMatrix_mulVec ((algebraMap (𝓞 K) K) α))]
 

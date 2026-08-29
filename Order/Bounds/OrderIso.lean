@@ -34,7 +34,7 @@ theorem upperBounds_image
 
 中文:
 定理 upperBounds_image
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: upperBounds (f '' s) = f '' upperBounds s
   证明: Subset.antisymm
     (fun x hx =>
@@ -62,7 +62,7 @@ theorem lowerBounds_image
 
 中文:
 定理 lowerBounds_image
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: lowerBounds (f '' s) = f '' lowerBounds s
   证明: @upperBounds_image αᵒᵈ βᵒᵈ _ _ f.dual _
 
@@ -86,7 +86,7 @@ theorem isLUB_image
 
 中文:
 定理 isLUB_image
-  条件: {s : Set α} {x : β}
+  条件: {s : 集合 α} {x : β}
   结论: IsLUB (f '' s) x ↔ IsLUB s (f.symm x)
   证明: ⟨fun h => IsLUB.of_image (by simp) ((f.apply_symm_apply x).symm ▸ h), fun h =>
 (IsLUB.of_image (by simp)) (f.symm_image_image s).symm ▸ h⟩
@@ -111,7 +111,7 @@ theorem isLUB_image'
 
 中文:
 定理 isLUB_image'
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: IsLUB (f '' s) (f x) ↔ IsLUB s x
   证明: by
   rw [isLUB_image]; rw [f.symm_apply_apply]
@@ -135,7 +135,7 @@ theorem isGLB_image
 
 中文:
 定理 isGLB_image
-  条件: {s : Set α} {x : β}
+  条件: {s : 集合 α} {x : β}
   结论: IsGLB (f '' s) x ↔ IsGLB s (f.symm x)
   证明: f.dual.isLUB_image
 
@@ -157,7 +157,7 @@ theorem isGLB_image'
 
 中文:
 定理 isGLB_image'
-  条件: {s : Set α} {x : α}
+  条件: {s : 集合 α} {x : α}
   结论: IsGLB (f '' s) (f x) ↔ IsGLB s x
   证明: f.dual.isLUB_image'
 
@@ -181,7 +181,7 @@ theorem isLUB_preimage
 
 中文:
 定理 isLUB_preimage
-  条件: {s : Set β} {x : α}
+  条件: {s : 集合 β} {x : α}
   结论: IsLUB (f ⁻¹' s) x ↔ IsLUB s (f x)
   证明: by
   rw [← f.symm_symm]; rw [← image_eq_preimage_symm]; rw [isLUB_image]
@@ -205,7 +205,7 @@ theorem isLUB_preimage'
 
 中文:
 定理 isLUB_preimage'
-  条件: {s : Set β} {x : β}
+  条件: {s : 集合 β} {x : β}
   结论: IsLUB (f ⁻¹' s) (f.symm x) ↔ IsLUB s x
   证明: by
   rw [isLUB_preimage]; rw [f.apply_symm_apply]
@@ -229,7 +229,7 @@ theorem isGLB_preimage
 
 中文:
 定理 isGLB_preimage
-  条件: {s : Set β} {x : α}
+  条件: {s : 集合 β} {x : α}
   结论: IsGLB (f ⁻¹' s) x ↔ IsGLB s (f x)
   证明: f.dual.isLUB_preimage
 
@@ -249,7 +249,7 @@ theorem isGLB_preimage'
 
 中文:
 定理 isGLB_preimage'
-  条件: {s : Set β} {x : β}
+  条件: {s : 集合 β} {x : β}
   结论: IsGLB (f ⁻¹' s) (f.symm x) ↔ IsGLB s x
   证明: f.dual.isLUB_preimage'
 

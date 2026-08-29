@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory TopCat.{u}
+  签名: CartesianMonoidal范畴 顶元素范畴.{u}
   定义体: .ofChosenFiniteProducts ⟨_, isTerminalPUnit⟩
     (fun X Y => ⟨prodBinaryFan X Y, X.prodBinaryFanIsLimit Y⟩)
 
@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory TopCat.{u}
+  签名: 辫范畴 顶元素范畴.{u}
   定义体: .ofCartesianMonoidalCategory
 
 @[simp]
@@ -80,7 +80,7 @@ theorem tensor_apply
 
 中文:
 定理 tensor_apply
-  条件: {W X Y Z : TopCat.{u}} (f : W ⟶ X) (g : Y ⟶ Z) (p : ↑(W otimes Y))
+  条件: {W X Y Z : 顶元素范畴.{u}} (f : W ⟶ X) (g : Y ⟶ Z) (p : ↑(W otimes Y))
   证明: rfl
 
 @[simp]
@@ -102,7 +102,7 @@ theorem whiskerLeft_apply
 
 中文:
 定理 whiskerLeft_apply
-  条件: (X : TopCat.{u}) {Y Z : TopCat.{u}} (f : Y ⟶ Z) (p : ↑(X otimes Y))
+  条件: (X : 顶元素范畴.{u}) {Y Z : 顶元素范畴.{u}} (f : Y ⟶ Z) (p : ↑(X otimes Y))
   证明: rfl
 
 @[simp]
@@ -124,7 +124,7 @@ theorem whiskerRight_apply
 
 中文:
 定理 whiskerRight_apply
-  条件: {Y Z : TopCat.{u}} (f : Y ⟶ Z) (X : TopCat.{u}) (p : ↑(Y otimes X))
+  条件: {Y Z : 顶元素范畴.{u}} (f : Y ⟶ Z) (X : 顶元素范畴.{u}) (p : ↑(Y otimes X))
   证明: rfl
 
 @[simp]
@@ -146,7 +146,7 @@ theorem leftUnitor_hom_apply
 
 中文:
 定理 leftUnitor_hom_apply
-  条件: {X : TopCat.{u}} {x : X} {p : PUnit.{u + 1}}
+  条件: {X : 顶元素范畴.{u}} {x : X} {p : 命题单元.{u + 1}}
   证明: rfl
 
 @[simp]
@@ -168,7 +168,7 @@ theorem leftUnitor_inv_apply
 
 中文:
 定理 leftUnitor_inv_apply
-  条件: {X : TopCat.{u}} {x : X}
+  条件: {X : 顶元素范畴.{u}} {x : X}
   证明: rfl
 
 @[simp]
@@ -190,7 +190,7 @@ theorem rightUnitor_hom_apply
 
 中文:
 定理 rightUnitor_hom_apply
-  条件: {X : TopCat.{u}} {x : X} {p : PUnit.{u + 1}}
+  条件: {X : 顶元素范畴.{u}} {x : X} {p : 命题单元.{u + 1}}
   证明: rfl
 
 @[simp]
@@ -212,7 +212,7 @@ theorem rightUnitor_inv_apply
 
 中文:
 定理 rightUnitor_inv_apply
-  条件: {X : TopCat.{u}} {x : X}
+  条件: {X : 顶元素范畴.{u}} {x : X}
   证明: rfl
 
 @[simp]
@@ -234,7 +234,7 @@ theorem associator_hom_apply
 
 中文:
 定理 associator_hom_apply
-  条件: {X Y Z : TopCat.{u}} {x : X} {y : Y} {z : Z}
+  条件: {X Y Z : 顶元素范畴.{u}} {x : X} {y : Y} {z : Z}
   证明: rfl
 
 @[simp]
@@ -254,7 +254,7 @@ theorem associator_inv_apply
 
 中文:
 定理 associator_inv_apply
-  条件: {X Y Z : TopCat.{u}} {x : X} {y : Y} {z : Z}
+  条件: {X Y Z : 顶元素范畴.{u}} {x : X} {y : Y} {z : Z}
   证明: rfl
 -/
 theorem associator_inv_apply {X Y Z : TopCat.{u}} {x : X} {y : Y} {z : Z} :
@@ -271,7 +271,7 @@ theorem associator_hom_apply_1
 
 中文:
 定理 associator_hom_apply_1
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 -/
 @[simp] theorem associator_hom_apply_1 {X Y Z : TopCat.{u}} {x} :
@@ -288,7 +288,7 @@ theorem associator_hom_apply_2_1
 
 中文:
 定理 associator_hom_apply_2_1
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 -/
 @[simp] theorem associator_hom_apply_2_1 {X Y Z : TopCat.{u}} {x} :
@@ -305,7 +305,7 @@ theorem associator_hom_apply_2_2
 
 中文:
 定理 associator_hom_apply_2_2
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 -/
 @[simp] theorem associator_hom_apply_2_2 {X Y Z : TopCat.{u}} {x} :
@@ -322,7 +322,7 @@ theorem associator_inv_apply_1_1
 
 中文:
 定理 associator_inv_apply_1_1
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 -/
 @[simp] theorem associator_inv_apply_1_1 {X Y Z : TopCat.{u}} {x} :
@@ -339,7 +339,7 @@ theorem associator_inv_apply_1_2
 
 中文:
 定理 associator_inv_apply_1_2
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 -/
 @[simp] theorem associator_inv_apply_1_2 {X Y Z : TopCat.{u}} {x} :
@@ -358,7 +358,7 @@ theorem associator_inv_apply_2
 
 中文:
 定理 associator_inv_apply_2
-  条件: {X Y Z : TopCat.{u}} {x}
+  条件: {X Y Z : 顶元素范畴.{u}} {x}
   证明: rfl
 
 @[simp]
@@ -380,7 +380,7 @@ theorem braiding_hom_apply
 
 中文:
 定理 braiding_hom_apply
-  条件: {X Y : TopCat.{u}} {x : X} {y : Y}
+  条件: {X Y : 顶元素范畴.{u}} {x : X} {y : Y}
   证明: rfl
 
 @[simp]
@@ -402,7 +402,7 @@ theorem braiding_inv_apply
 
 中文:
 定理 braiding_inv_apply
-  条件: {X Y : TopCat.{u}} {x : X} {y : Y}
+  条件: {X Y : 顶元素范畴.{u}} {x : X} {y : Y}
   证明: rfl
 
 @[simp]
@@ -422,7 +422,7 @@ theorem lift_apply
 
 中文:
 定理 lift_apply
-  条件: {X Y Z : TopCat.{u}} {f : X ⟶ Y} {g : X ⟶ Z} {x : X}
+  条件: {X Y Z : 顶元素范畴.{u}} {f : X ⟶ Y} {g : X ⟶ Z} {x : X}
   证明: rfl
 -/
 protected theorem lift_apply {X Y Z : TopCat.{u}} {f : X ⟶ Y} {g : X ⟶ Z} {x : X} :
@@ -439,7 +439,7 @@ definition I
 
 中文:
 定义 I
-  签名: : TopCat.{u}
+  签名: : 顶元素范畴.{u}
   定义体: TopCat.of (ULift unitInterval)
 
 Depends on / 依赖: TopCat, TopCat.of, unitInterval
@@ -456,7 +456,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyCompactSpace I
+  签名: 局部紧空间 I
   定义体: inferInstanceAs (LocallyCompactSpace (ULift unitInterval))
 
 Depends on / 依赖: LocallyCompactSpace, unitInterval
@@ -653,7 +653,7 @@ definition ι₀
 
 中文:
 定义 ι₀
-  签名: {X : TopCat.{u}}
+  签名: {X : 顶元素范畴.{u}}
   定义体: lift (𝟙 X) (const 0)
 
 @[reassoc (attr := simp)]
@@ -675,7 +675,7 @@ lemma ι₀_comp
 
 中文:
 引理 ι₀_comp
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   结论: ι₀ ≫ f ▷ _ = f ≫ ι₀
   证明: rfl
 
@@ -697,7 +697,7 @@ lemma ι₀_fst
 
 中文:
 引理 ι₀_fst
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   结论: ι₀ ≫ fst X _ = 𝟙 X
   证明: rfl
 
@@ -717,8 +717,8 @@ lemma ι₀_snd
 
 中文:
 引理 ι₀_snd
-  条件: (X : TopCat.{u})
-  结论: ι₀ ≫ snd X _ = TopCat.const 0
+  条件: (X : 顶元素范畴.{u})
+  结论: ι₀ ≫ snd X _ = 顶元素范畴.const 0
   证明: rfl
 -/
 lemma ι₀_snd (X : TopCat.{u}) : ι₀ ≫ snd X _ = TopCat.const 0 := rfl
@@ -734,7 +734,7 @@ lemma ι₀_apply
 
 中文:
 引理 ι₀_apply
-  条件: {X : TopCat.{u}} (x : X)
+  条件: {X : 顶元素范畴.{u}} (x : X)
   结论: ι₀ x = ⟨x, 0⟩
   证明: rfl
 -/
@@ -752,7 +752,7 @@ definition ι₁
 
 中文:
 定义 ι₁
-  签名: {X : TopCat.{u}}
+  签名: {X : 顶元素范畴.{u}}
   定义体: lift (𝟙 X) (const 1)
 
 @[reassoc (attr := simp)]
@@ -774,7 +774,7 @@ lemma ι₁_comp
 
 中文:
 引理 ι₁_comp
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   结论: ι₁ ≫ f ▷ _ = f ≫ ι₁
   证明: rfl
 
@@ -796,7 +796,7 @@ lemma ι₁_fst
 
 中文:
 引理 ι₁_fst
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   结论: ι₁ ≫ fst X _ = 𝟙 X
   证明: rfl
 
@@ -818,7 +818,7 @@ lemma ι₁_snd
 
 中文:
 引理 ι₁_snd
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   结论: ι₁ ≫ snd X _ = const 1
   证明: rfl
 
@@ -838,7 +838,7 @@ lemma ι₁_apply
 
 中文:
 引理 ι₁_apply
-  条件: {X : TopCat.{u}} (x : X)
+  条件: {X : 顶元素范畴.{u}} (x : X)
   结论: ι₁ x = ⟨x, 1⟩
   证明: rfl
 -/

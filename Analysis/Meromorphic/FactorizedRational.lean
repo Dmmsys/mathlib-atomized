@@ -307,7 +307,7 @@ theorem meromorphicNFOn
 
 中文:
 定理 meromorphicNFOn
-  条件: (d : 𝕜 -> 整数) (U : Set 𝕜)
+  条件: (d : 𝕜 -> 整数) (U : 集合 𝕜)
   证明: fun _ _ => meromorphicNFOn_univ d (trivial)
 
 Depends on / 依赖: meromorphicNFOn_univ
@@ -404,7 +404,7 @@ theorem divisor
 
 中文:
 定理 divisor
-  条件: {U : Set 𝕜} {D : locallyFinsuppWithin U 整数} (hD : D.support.Finite)
+  条件: {U : 集合 𝕜} {D : locallyFinsuppWithin U 整数} (hD : D.support.有限)
   证明: by
   ext z
   by_cases hz : z in U
@@ -693,7 +693,7 @@ theorem MeromorphicOn.extract_zeros_poles_log
 
 中文:
 定理 MeromorphicOn.extract_zeros_poles_log
-  结论: {f g : 𝕜 -> E} {D : Function.locallyFinsuppWithin U 整数}
+  结论: {f g : 𝕜 -> E} {D : 函数.locallyFinsuppWithin U 整数}
   证明: by
   -- Identify support of the sum in the goal
   have t₁ : (fun u => (D u * log ‖· - u‖)).support = D.support := by

@@ -93,7 +93,7 @@ theorem _root_.measurableEmbedding_const_smul
 中文:
 定理 _root_.measurableEmbedding_const_smul
   条件: (c : G)
-  结论: MeasurableEmbedding (c • · : α -> α)
+  结论: 可测嵌入 (c • · : α -> α)
   证明: (smul c).measurableEmbedding
 
 @[to_additive (attr := simp)]
@@ -290,7 +290,7 @@ theorem toEquiv_mulLeft
 中文:
 定理 toEquiv_mulLeft
   条件: (g : G)
-  结论: (mulLeft g).toEquiv = Equiv.mulLeft g
+  结论: (mulLeft g).toEquiv = 等价.mulLeft g
   证明: rfl
 
 @[to_additive]
@@ -311,7 +311,7 @@ theorem _root_.measurableEmbedding_mulLeft
 中文:
 定理 _root_.measurableEmbedding_mulLeft
   条件: (g : G)
-  结论: MeasurableEmbedding (g * ·)
+  结论: 可测嵌入 (g * ·)
   证明: (mulLeft g).measurableEmbedding
 
 Depends on / 依赖: measurableEmbedding, mulLeft
@@ -361,7 +361,7 @@ theorem _root_.measurableEmbedding_mulRight
 中文:
 定理 _root_.measurableEmbedding_mulRight
   条件: (g : G)
-  结论: MeasurableEmbedding fun x => x * g
+  结论: 可测嵌入 fun x => x * g
   证明: (mulRight g).measurableEmbedding
 
 @[to_additive (attr := simp)]
@@ -430,7 +430,7 @@ theorem toEquiv_mulRight
 中文:
 定理 toEquiv_mulRight
   条件: (g : G)
-  结论: (mulRight g).toEquiv = Equiv.mulRight g
+  结论: (mulRight g).toEquiv = 等价.mulRight g
   证明: rfl
 -/
 theorem toEquiv_mulRight (g : G) : (mulRight g).toEquiv = Equiv.mulRight g :=
@@ -527,7 +527,7 @@ theorem toEquiv_mulLeft₀
 中文:
 定理 toEquiv_mulLeft₀
   条件: {g : G₀} (hg : g != 0)
-  结论: (mulLeft₀ g hg).toEquiv = Equiv.mulLeft₀ g hg
+  结论: (mulLeft₀ g hg).toEquiv = 等价.mulLeft₀ g hg
   证明: rfl
 -/
 theorem toEquiv_mulLeft₀ {g : G₀} (hg : g != 0) : (mulLeft₀ g hg).toEquiv = Equiv.mulLeft₀ g hg :=
@@ -632,7 +632,7 @@ theorem toEquiv_mulRight₀
 中文:
 定理 toEquiv_mulRight₀
   条件: {g : G₀} (hg : g != 0)
-  结论: (mulRight₀ g hg).toEquiv = Equiv.mulRight₀ g hg
+  结论: (mulRight₀ g hg).toEquiv = 等价.mulRight₀ g hg
   证明: rfl
 -/
 theorem toEquiv_mulRight₀ {g : G₀} (hg : g != 0) : (mulRight₀ g hg).toEquiv = Equiv.mulRight₀ g hg :=
@@ -655,7 +655,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (G) [MeasurableSpace G] [InvolutiveInv G] [MeasurableInv G]
+  签名: (G) [可测空间 G] [InvolutiveInv G] [MeasurableInv G]
   定义体: Equiv.inv G
 
 @[to_additive (attr := simp)]
@@ -676,7 +676,7 @@ theorem symm_inv
 
 中文:
 定理 symm_inv
-  条件: {G} [MeasurableSpace G] [InvolutiveInv G] [MeasurableInv G]
+  条件: {G} [可测空间 G] [InvolutiveInv G] [MeasurableInv G]
   证明: rfl
 -/
 theorem symm_inv {G} [MeasurableSpace G] [InvolutiveInv G] [MeasurableInv G] :
@@ -806,7 +806,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction Gᵈᵐᵃ (Measure A)
+  签名: 分配乘法作用 Gᵈᵐᵃ (测度 A)
   定义体: μ.map (DomMulAct.mk.symm g⁻¹ • ·)
   one_smul μ := show μ.map _ = _ by simp
   mul_smul g g' μ := show μ.map _ = ((μ.map _).map _) by
@@ -843,7 +843,7 @@ lemma domSMul_apply
 
 中文:
 引理 domSMul_apply
-  条件: (μ : Measure A) (g : Gᵈᵐᵃ) (s : Set A)
+  条件: (μ : 测度 A) (g : Gᵈᵐᵃ) (s : 集合 A)
   证明: by
   refine ((MeasurableEquiv.smul ((DomMulAct.mk.symm g : G)⁻¹)).map_apply _).trans ?_
   congr 1
@@ -867,7 +867,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass 实数>=0 Gᵈᵐᵃ (Measure A)
+  签名: 标量交换类 实数>=0 Gᵈᵐᵃ (测度 A)
   定义体: show r • μ.map _ = (r • μ).map _ by simp
 
 Depends on / 依赖: Nat.ne_of_lt, _pos, inertiaDeg, ne_of_lt
@@ -885,7 +885,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass Gᵈᵐᵃ 实数>=0 (Measure A)
+  签名: 标量交换类 Gᵈᵐᵃ 实数>=0 (测度 A)
   定义体: .symm ..
 
 Depends on / 依赖: AlgHom, AlgHom.comp_algebraMap, LiesOver, P.LiesOver, P.comap, Quotient, Quotient.algEquivOfEqComap, _algebraMap, algEquivOfEqComap, algebraMap, comap_coe, comap_comap, comp_algebraMap, dif_neg, e.toAlgHom_toRingHom, eq.symm, finrank_eq, he.mp, inertiaDeg, toAlgHom_toRingHom

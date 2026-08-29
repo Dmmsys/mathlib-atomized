@@ -59,11 +59,11 @@ structure Kernel
     - measurable' : Measurable toFun
 
 中文:
-结构 Kernel
-  参数: (α β : 类型) [MeasurableSpace α] [MeasurableSpace β]
+结构 核
+  参数: (α β : 类型) [可测空间 α] [可测空间 β]
   公理与运算 (2 个):
-    - toFun : α -> Measure β
-    - measurable' : Measurable toFun
+    - toFun : α -> 测度 β
+    - measurable' : 可测 toFun
 -/
 structure Kernel (α β : Type*) [MeasurableSpace α] [MeasurableSpace β] where
   /-- The underlying function of a kernel.
@@ -99,7 +99,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (Kernel α β) α (Measure β) where
+  签名: : 函数状 (核 α β) α (测度 β) where
   定义体: toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -121,8 +121,8 @@ lemma measurable
 
 中文:
 引理 measurable
-  条件: (κ : Kernel α β)
-  结论: Measurable κ
+  条件: (κ : 核 α β)
+  结论: 可测 κ
   证明: κ.measurable'
 
 Depends on / 依赖: measurable
@@ -140,8 +140,8 @@ lemma aemeasurable
 
 中文:
 引理 aemeasurable
-  条件: (κ : Kernel α β) {μ : Measure α}
-  结论: AEMeasurable κ μ
+  条件: (κ : 核 α β) {μ : 测度 α}
+  结论: 几乎处处可测 κ μ
   证明: κ.measurable.aemeasurable
 
 Depends on / 依赖: aemeasurable, measurable, measurable.aemeasurable
@@ -161,7 +161,7 @@ initialize_simps_projections Kernel (toFun -> apply)
 
 中文:
 引理 coe_mk
-  条件: (f : α -> Measure β) (hf)
+  条件: (f : α -> 测度 β) (hf)
   结论: mk f hf = f
   证明: rfl
 
@@ -181,7 +181,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (Kernel α β) where zero
+  签名: : 零 (核 α β) where zero
   定义体: ⟨0, measurable_zero⟩
 
 Depends on / 依赖: measurable_zero
@@ -197,7 +197,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (Kernel α β) where add κ η
+  签名: : 加法 (核 α β) where add κ η
   定义体: ⟨κ + η, κ.2.add η.2⟩
 -/
 noncomputable instance instAdd : Add (Kernel α β) where add κ η := ⟨κ + η, κ.2.add η.2⟩
@@ -210,8 +210,8 @@ instance instSMulNat
   body: ⟨n • κ, (measurable_const (a := n)).smul κ.2⟩
 
 中文:
-实例 instSMulNat
-  签名: : SMul 自然数 (Kernel α β) where
+实例 instSMul自然数
+  签名: : 标量乘法 自然数 (核 α β) where
   定义体: ⟨n • κ, (measurable_const (a := n)).smul κ.2⟩
 
 Depends on / 依赖: measurable_const
@@ -229,7 +229,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (Kernel α β) α (Measure β)
+  签名: 是ZeroApply (核 α β) α (测度 β)
   定义体: rfl
 -/
 instance : IsZeroApply (Kernel α β) α (Measure β) where
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (Kernel α β) α (Measure β)
+  签名: 是加法Apply (核 α β) α (测度 β)
   定义体: rfl
 -/
 instance : IsAddApply (Kernel α β) α (Measure β) where
@@ -267,7 +267,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply 自然数 (Kernel α β) α (Measure β)
+  签名: 是SMulApply 自然数 (核 α β) α (测度 β)
   定义体: rfl
 
 @[deprecated (since := "2026-06-30")] alias coe_zero := FunLike.coe_zero
@@ -297,7 +297,7 @@ instance instAddCommMonoid
 
 中文:
 实例 instAddCommMonoid
-  签名: : AddCommMonoid (Kernel α β)
+  签名: : 加法交换幺半群 (核 α β)
   定义体: fast_instance% FunLike.addCommMonoid
 
 Depends on / 依赖: FunLike, FunLike.addCommMonoid, addCommMonoid, fast_instance
@@ -315,7 +315,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Kernel α β)
+  签名: : 偏序 (核 α β)
   定义体: .lift _ DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -344,7 +344,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: {α β : 类型} [MeasurableSpace α] [MeasurableSpace β]
+  签名: {α β : 类型} [可测空间 α] [可测空间 β]
   定义体: 0
   bot_le κ a := by simp only [zero_apply, Measure.zero_le]
 
@@ -383,7 +383,7 @@ theorem finsetSum_apply'
 
 中文:
 定理 finsetSum_apply'
-  条件: (I : Finset ι) (κ : ι -> Kernel α β) (a : α) (s : Set β)
+  条件: (I : 有限集 ι) (κ : ι -> 核 α β) (a : α) (s : 集合 β)
   证明: by rw [sum_apply, Measure.finsetSum_apply]
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply' := finsetSum_apply'
@@ -407,10 +407,10 @@ class IsMarkovKernel
     - isProbabilityMeasure : forall a, IsProbabilityMeasure (κ a)
 
 中文:
-类 IsMarkovKernel
-  参数: (κ : Kernel α β)
+类 是MarkovKernel
+  参数: (κ : 核 α β)
   公理与运算 (1 个):
-    - isProbabilityMeasure : 对任意 a, IsProbabilityMeasure (κ a)
+    - isProbabilityMeasure : 对任意 a, 是概率测度 (κ a)
 -/
 class IsMarkovKernel (κ : Kernel α β) : Prop where
   isProbabilityMeasure : forall a, IsProbabilityMeasure (κ a)
@@ -425,10 +425,10 @@ class IsZeroOrMarkovKernel
     - eq_zero_or_isMarkovKernel' : κ = 0 ∨ IsMarkovKernel κ
 
 中文:
-类 IsZeroOrMarkovKernel
-  参数: (κ : Kernel α β)
+类 是ZeroOrMarkovKernel
+  参数: (κ : 核 α β)
   公理与运算 (1 个):
-    - eq_zero_or_isMarkovKernel' : κ = 0 ∨ IsMarkovKernel κ
+    - eq_zero_or_isMarkovKernel' : κ = 0 ∨ 是MarkovKernel κ
 -/
 class IsZeroOrMarkovKernel (κ : Kernel α β) : Prop where
   eq_zero_or_isMarkovKernel' : κ = 0 ∨ IsMarkovKernel κ
@@ -443,10 +443,10 @@ class IsFiniteKernel
     - exists_univ_le : exists C : Real>=0∞, C < ∞ ∧ forall a, κ a Set.univ <= C
 
 中文:
-类 IsFiniteKernel
-  参数: (κ : Kernel α β)
+类 是FiniteKernel
+  参数: (κ : 核 α β)
   公理与运算 (1 个):
-    - exists_univ_le : 存在 C : 实数>=0∞, C < ∞ ∧ 对任意 a, κ a Set.univ <= C
+    - exists_univ_le : 存在 C : 实数>=0∞, C < ∞ ∧ 对任意 a, κ a 集合.univ <= C
 -/
 class IsFiniteKernel (κ : Kernel α β) : Prop where
   exists_univ_le : exists C : Real>=0∞, C < ∞ ∧ forall a, κ a Set.univ <= C
@@ -478,8 +478,8 @@ definition Kernel.bound
   body: ⨆ a, κ a Set.univ
 
 中文:
-定义 Kernel.bound
-  签名: (κ : Kernel α β)
+定义 核.bound
+  签名: (κ : 核 α β)
   定义体: ⨆ a, κ a Set.univ
 
 Depends on / 依赖: Set.univ
@@ -503,7 +503,7 @@ theorem bound_lt_top
 
 中文:
 定理 bound_lt_top
-  条件: (κ : Kernel α β) [h : IsFiniteKernel κ]
+  条件: (κ : 核 α β) [h : 是FiniteKernel κ]
   结论: κ.bound < ∞
   证明: by
   obtain ⟨C, hC, hle⟩ := h.exists_univ_le
@@ -527,7 +527,7 @@ theorem bound_ne_top
 
 中文:
 定理 bound_ne_top
-  条件: (κ : Kernel α β) [IsFiniteKernel κ]
+  条件: (κ : 核 α β) [是FiniteKernel κ]
   证明: κ.bound_lt_top.ne
 
 Depends on / 依赖: bound_lt_top, bound_lt_top.ne
@@ -547,7 +547,7 @@ theorem measure_le_bound
 
 中文:
 定理 measure_le_bound
-  条件: (κ : Kernel α β) (a : α) (s : Set β)
+  条件: (κ : 核 α β) (a : α) (s : 集合 β)
   证明: (measure_mono (Set.subset_univ s)).trans le_iSup (f := fun a => κ a .univ) a
 
 @[simp]
@@ -571,7 +571,7 @@ lemma bound_eq_zero_of_isEmpty
 
 中文:
 引理 bound_eq_zero_of_isEmpty
-  条件: [IsEmpty α] (κ : Kernel α β)
+  条件: [是空 α] (κ : 核 α β)
   证明: by simp [bound]
 
 @[simp]
@@ -592,7 +592,7 @@ lemma bound_eq_zero_of_isEmpty'
 
 中文:
 引理 bound_eq_zero_of_isEmpty'
-  条件: [IsEmpty β] (κ : Kernel α β)
+  条件: [是空 β] (κ : 核 α β)
   证明: by simp [bound, Subsingleton.elim _ (0 : Measure β)]
 
 @[simp]
@@ -614,7 +614,7 @@ lemma bound_zero
 
 中文:
 引理 bound_zero
-  结论: bound (0 : Kernel α β) = 0
+  结论: bound (0 : 核 α β) = 0
   证明: by
   simp [bound]
 -/
@@ -633,7 +633,7 @@ instance isFiniteKernel_zero
 
 中文:
 实例 isFiniteKernel_zero
-  签名: (α β : 类型) {_ : MeasurableSpace α} {_ : MeasurableSpace β}
+  签名: (α β : 类型) {_ : 可测空间 α} {_ : 可测空间 β}
   定义体: ⟨⟨0, ENNReal.coe_lt_top, fun _ => by simp⟩⟩
 
 Depends on / 依赖: ENNReal, ENNReal.coe_lt_top, coe_lt_top
@@ -653,8 +653,8 @@ instance IsFiniteKernel.add
   exact add_le_add (Kernel.measure_le_bound _ _ _) (Kernel.measure_le_bound _ _ _)
 
 中文:
-实例 IsFiniteKernel.add
-  签名: (κ η : Kernel α β) [IsFiniteKernel κ] [IsFiniteKernel η]
+实例 是FiniteKernel.add
+  签名: (κ η : 核 α β) [是FiniteKernel κ] [是FiniteKernel η]
   定义体: by
   refine ⟨⟨κ.bound + η.bound, ENNReal.add_lt_top.mpr ⟨κ.bound_lt_top, η.bound_lt_top⟩, fun a => ?_⟩⟩
   exact add_le_add (Kernel.measure_le_bound _ _ _) (Kernel.measure_le_bound _ _ _)
@@ -676,7 +676,7 @@ lemma isFiniteKernel_of_le
 
 中文:
 引理 isFiniteKernel_of_le
-  条件: {κ ν : Kernel α β} [hν : IsFiniteKernel ν] (hκν : κ <= ν)
+  条件: {κ ν : 核 α β} [hν : 是FiniteKernel ν] (hκν : κ <= ν)
   证明: ⟨ν.bound, ν.bound_lt_top, fun a => (hκν _ _).trans (ν.measure_le_bound a Set.univ)⟩
 
 Depends on / 依赖: Set.univ, bound_lt_top, measure_le_bound
@@ -696,8 +696,8 @@ instance IsMarkovKernel.is_probability_measure'
   body: IsMarkovKernel.isProbabilityMeasure a
 
 中文:
-实例 IsMarkovKernel.is_probability_measure'
-  签名: [IsMarkovKernel κ] (a : α)
+实例 是MarkovKernel.is_probability_measure'
+  签名: [是MarkovKernel κ] (a : α)
   定义体: IsMarkovKernel.isProbabilityMeasure a
 
 Depends on / 依赖: IsMarkovKernel, IsMarkovKernel.isProbabilityMeasure, isProbabilityMeasure
@@ -716,7 +716,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroOrMarkovKernel (0 : Kernel α β)
+  签名: 是ZeroOrMarkovKernel (0 : 核 α β)
   定义体: ⟨Or.inl rfl⟩
 
 Depends on / 依赖: Or.inl
@@ -742,8 +742,8 @@ instance IsFiniteKernel.isFiniteMeasure
   body: ⟨(κ.measure_le_bound a Set.univ).trans_lt κ.bound_lt_top⟩
 
 中文:
-实例 IsFiniteKernel.isFiniteMeasure
-  签名: [IsFiniteKernel κ] (a : α)
+实例 是FiniteKernel.isFiniteMeasure
+  签名: [是FiniteKernel κ] (a : α)
   定义体: ⟨(κ.measure_le_bound a Set.univ).trans_lt κ.bound_lt_top⟩
 
 Depends on / 依赖: Set.univ, bound_lt_top, measure_le_bound, trans_lt
@@ -772,7 +772,7 @@ lemma bound_eq_one
 
 中文:
 引理 bound_eq_one
-  条件: [Nonempty α] (κ : Kernel α β) [IsMarkovKernel κ]
+  条件: [非空 α] (κ : 核 α β) [是MarkovKernel κ]
   证明: by simp [bound]
 
 @[simp]
@@ -796,7 +796,7 @@ lemma bound_le_one
 
 中文:
 引理 bound_le_one
-  条件: (κ : Kernel α β) [IsZeroOrMarkovKernel κ]
+  条件: (κ : 核 α β) [是ZeroOrMarkovKernel κ]
   证明: by
   rcases isEmpty_or_nonempty α
   · simp
@@ -843,7 +843,7 @@ theorem ext_iff'
 
 中文:
 定理 ext_iff'
-  结论: κ = η ↔ 对任意 a s, MeasurableSet s -> κ a s = η a s
+  结论: κ = η ↔ 对任意 a s, 可测集 s -> κ a s = η a s
   证明: by
   simp_rw [Kernel.ext_iff, Measure.ext_iff]
 
@@ -866,7 +866,7 @@ theorem ext_fun
 
 中文:
 定理 ext_fun
-  条件: (h : 对任意 a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a)
+  条件: (h : 对任意 a f, 可测 f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a)
   证明: by
   ext a s hs
   specialize h a (s.indicator fun _ => 1) (Measurable.indicator measurable_const hs)
@@ -892,7 +892,7 @@ theorem ext_fun_iff
 
 中文:
 定理 ext_fun_iff
-  结论: κ = η ↔ 对任意 a f, Measurable f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a
+  结论: κ = η ↔ 对任意 a f, 可测 f -> ∫⁻ b, f b ∂κ a = ∫⁻ b, f b ∂η a
   证明: ⟨fun h a f _ => by rw [h], ext_fun⟩
 
 Depends on / 依赖: ext_fun
@@ -911,8 +911,8 @@ instance [IsEmpty
   body: by ext a s; simp [Set.eq_empty_of_isEmpty s]
 
 中文:
-实例 [IsEmpty
-  签名: β] : Subsingleton (Kernel α β) where
+实例 [是空
+  签名: β] : 子单例 (核 α β) where
   定义体: by ext a s; simp [Set.eq_empty_of_isEmpty s]
 
 Depends on / 依赖: Set.eq_empty_of_isEmpty, eq_empty_of_isEmpty
@@ -929,7 +929,7 @@ instance [IsEmpty
   body: by simp
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: α] (κ
   定义体: by simp
 -/
@@ -948,7 +948,7 @@ instance [IsEmpty
     simp [Set.eq_empty_of_isEmpty s]
 
 中文:
-实例 [IsEmpty
+实例 [是空
   签名: β] (κ
   定义体: by
     left
@@ -978,8 +978,8 @@ lemma not_isMarkovKernel_zero
 
 中文:
 引理 not_isMarkovKernel_zero
-  条件: [Nonempty α]
-  结论: ¬ IsMarkovKernel (0 : Kernel α β)
+  条件: [非空 α]
+  结论: ¬ 是MarkovKernel (0 : 核 α β)
   证明: by
   by_contra h
   let x : α := Nonempty.some inferInstance
@@ -1006,7 +1006,7 @@ theorem measurable_coe
 
 中文:
 定理 measurable_coe
-  条件: (κ : Kernel α β) {s : Set β} (hs : MeasurableSet s)
+  条件: (κ : 核 α β) {s : 集合 β} (hs : 可测集 s)
   证明: (Measure.measurable_coe hs).comp κ.measurable
 -/
 protected theorem measurable_coe (κ : Kernel α β) {s : Set β} (hs : MeasurableSet s) :
@@ -1025,7 +1025,7 @@ lemma apply_congr_of_mem_measurableAtom
 
 中文:
 引理 apply_congr_of_mem_measurableAtom
-  条件: (κ : Kernel α β) {y' y : α} (hy' : y' in measurableAtom y)
+  条件: (κ : 核 α β) {y' y : α} (hy' : y' in measurableAtom y)
   证明: by
   ext s hs
   exact mem_of_mem_measurableAtom hy' (κ.measurable_coe hs (measurableSet_singleton (κ y s))) rfl
@@ -1050,7 +1050,7 @@ lemma eq_zero_of_isEmpty_left
 
 中文:
 引理 eq_zero_of_isEmpty_left
-  条件: (κ : Kernel α β) [h : IsEmpty α]
+  条件: (κ : 核 α β) [h : 是空 α]
   结论: κ = 0
   证明: by
   ext a
@@ -1075,7 +1075,7 @@ lemma eq_zero_of_isEmpty_right
 
 中文:
 引理 eq_zero_of_isEmpty_right
-  条件: (κ : Kernel α β) [IsEmpty β]
+  条件: (κ : 核 α β) [是空 β]
   结论: κ = 0
   证明: by
   ext a
@@ -1103,7 +1103,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def sum [Countable ι] (κ : ι -> Kernel α β)
+  签名: def 求和 [可数 ι] (κ : ι -> 核 α β)
   定义体: Measure.sum fun n => κ n a
   measurable' := by
     refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
@@ -1127,7 +1127,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: [Countable ι] (κ : ι -> Kernel α β) (a : α)
+  条件: [可数 ι] (κ : ι -> 核 α β) (a : α)
   证明: rfl
 -/
 theorem sum_apply [Countable ι] (κ : ι -> Kernel α β) (a : α) :
@@ -1146,7 +1146,7 @@ theorem sum_apply'
 
 中文:
 定理 sum_apply'
-  条件: [Countable ι] (κ : ι -> Kernel α β) (a : α) {s : Set β} (hs : MeasurableSet s)
+  条件: [可数 ι] (κ : ι -> 核 α β) (a : α) {s : 集合 β} (hs : 可测集 s)
   证明: by rw [sum_apply κ a, Measure.sum_apply _ hs]
 
 @[simp]
@@ -1171,8 +1171,8 @@ theorem sum_zero
 
 中文:
 定理 sum_zero
-  条件: [Countable ι]
-  结论: (Kernel.sum fun _ : ι => (0 : Kernel α β)) = 0
+  条件: [可数 ι]
+  结论: (核.求和 fun _ : ι => (0 : 核 α β)) = 0
   证明: by
   ext a s hs
   rw [sum_apply' _ a hs]
@@ -1198,7 +1198,7 @@ theorem sum_comm
 
 中文:
 定理 sum_comm
-  条件: [Countable ι] (κ : ι -> ι -> Kernel α β)
+  条件: [可数 ι] (κ : ι -> ι -> 核 α β)
   证明: by
   ext a s; simp_rw [sum_apply]; rw [Measure.sum_comm]
 
@@ -1224,8 +1224,8 @@ theorem sum_fintype
 
 中文:
 定理 sum_fintype
-  条件: [Fintype ι] (κ : ι -> Kernel α β)
-  结论: Kernel.sum κ = ∑ i, κ i
+  条件: [有限类型 ι] (κ : ι -> 核 α β)
+  结论: 核.求和 κ = ∑ i, κ i
   证明: by
   ext a s hs
   simp only [sum_apply' κ a hs, finsetSum_apply' _ κ a s, tsum_fintype]
@@ -1249,7 +1249,7 @@ theorem sum_add
 
 中文:
 定理 sum_add
-  条件: [Countable ι] (κ η : ι -> Kernel α β)
+  条件: [可数 ι] (κ η : ι -> 核 α β)
   证明: by
   ext a s hs
   simp only [add_apply, sum_apply, Measure.sum_apply _ hs, Pi.add_apply,
@@ -1277,10 +1277,10 @@ class _root_.ProbabilityTheory.IsSFiniteKernel
     - tsum_finite : exists κs : Nat -> Kernel α β, (forall n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
 
 中文:
-类 _root_.ProbabilityTheory.IsSFiniteKernel
-  参数: (κ : Kernel α β)
+类 _root_.ProbabilityTheory.是SFiniteKernel
+  参数: (κ : 核 α β)
   公理与运算 (1 个):
-    - tsum_finite : 存在 κs : 自然数 -> Kernel α β, (对任意 n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
+    - tsum_finite : 存在 κs : 自然数 -> 核 α β, (对任意 n, 是FiniteKernel (κs n)) ∧ κ = 核.求和 κs
 -/
 class _root_.ProbabilityTheory.IsSFiniteKernel (κ : Kernel α β) : Prop where
   tsum_finite : exists κs : Nat -> Kernel α β, (forall n, IsFiniteKernel (κs n)) ∧ κ = Kernel.sum κs
@@ -1307,7 +1307,7 @@ definition seq
 
 中文:
 定义 seq
-  签名: (κ : Kernel α β) [h : IsSFiniteKernel κ]
+  签名: (κ : 核 α β) [h : 是SFiniteKernel κ]
   定义体: h.tsum_finite.choose
 
 Depends on / 依赖: h.tsum_finite.choose, tsum_finite
@@ -1326,8 +1326,8 @@ theorem kernel_sum_seq
 
 中文:
 定理 kernel_sum_seq
-  条件: (κ : Kernel α β) [h : IsSFiniteKernel κ]
-  结论: Kernel.sum (seq κ) = κ
+  条件: (κ : 核 α β) [h : 是SFiniteKernel κ]
+  结论: 核.求和 (seq κ) = κ
   证明: h.tsum_finite.choose_spec.2.symm
 
 Depends on / 依赖: choose_spec, h.tsum_finite.choose_spec, tsum_finite
@@ -1345,7 +1345,7 @@ theorem measure_sum_seq
 
 中文:
 定理 measure_sum_seq
-  条件: (κ : Kernel α β) [h : IsSFiniteKernel κ] (a : α)
+  条件: (κ : 核 α β) [h : 是SFiniteKernel κ] (a : α)
   证明: by rw [← Kernel.sum_apply, kernel_sum_seq κ]
 
 Depends on / 依赖: Finite, Kernel, Kernel.sum_apply, Module, Module.Finite, QuasiFinite, kernel_sum_seq, sum_apply
@@ -1363,7 +1363,7 @@ instance isFiniteKernel_seq
 
 中文:
 实例 isFiniteKernel_seq
-  签名: (κ : Kernel α β) [h : IsSFiniteKernel κ] (n : 自然数)
+  签名: (κ : 核 α β) [h : 是SFiniteKernel κ] (n : 自然数)
   定义体: h.tsum_finite.choose_spec.1 n
 
 Depends on / 依赖: choose_spec, h.tsum_finite.choose_spec, tsum_finite
@@ -1381,8 +1381,8 @@ instance _root_.ProbabilityTheory.IsSFiniteKernel.sFinite
   body: ⟨⟨fun n => seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
 
 中文:
-实例 _root_.ProbabilityTheory.IsSFiniteKernel.sFinite
-  签名: [IsSFiniteKernel κ] (a : α)
+实例 _root_.ProbabilityTheory.是SFiniteKernel.sFinite
+  签名: [是SFiniteKernel κ] (a : α)
   定义体: ⟨⟨fun n => seq κ n a, inferInstance, (measure_sum_seq κ a).symm⟩⟩
 
 Depends on / 依赖: measure_sum_seq
@@ -1402,8 +1402,8 @@ instance IsSFiniteKernel.add
   rw [sum_add]; rw [kernel_sum_seq κ]; rw [kernel_sum_seq η]
 
 中文:
-实例 IsSFiniteKernel.add
-  签名: (κ η : Kernel α β) [IsSFiniteKernel κ] [IsSFiniteKernel η]
+实例 是SFiniteKernel.add
+  签名: (κ η : 核 α β) [是SFiniteKernel κ] [是SFiniteKernel η]
   定义体: by
   refine ⟨⟨fun n => seq κ n + seq η n, fun n => inferInstance, ?_⟩⟩
   rw [sum_add]; rw [kernel_sum_seq κ]; rw [kernel_sum_seq η]
@@ -1432,8 +1432,8 @@ theorem IsSFiniteKernel.finsetSum
 
 
 中文:
-定理 IsSFiniteKernel.finsetSum
-  结论: {κs : ι -> Kernel α β} (I : Finset ι)
+定理 是SFiniteKernel.finsetSum
+  结论: {κs : ι -> 核 α β} (I : 有限集 ι)
   证明: by
   classical
   induction I using Finset.induction with
@@ -1477,7 +1477,7 @@ theorem isSFiniteKernel_sum_of_denumerable
 
 中文:
 定理 isSFiniteKernel_sum_of_denumerable
-  结论: [Denumerable ι] {κs : ι -> Kernel α β}
+  结论: [可枚举 ι] {κs : ι -> 核 α β}
   证明: by
   let e : Nat ≃ ι × Nat := (Denumerable.eqv (ι × Nat)).symm
   refine ⟨⟨fun n => seq (κs (e n).1) (e n).2, inferInstance, ?_⟩⟩
@@ -1516,7 +1516,7 @@ instance isSFiniteKernel_sum
 
 中文:
 实例 isSFiniteKernel_sum
-  签名: [Countable ι] {κs : ι -> Kernel α β}
+  签名: [可数 ι] {κs : ι -> 核 α β}
   定义体: by
   cases fintypeOrInfinite ι
   · rw [sum_fintype]

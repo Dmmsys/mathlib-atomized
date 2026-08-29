@@ -47,7 +47,7 @@ lemma Complex.ofReal_choose
   proof: Ring.map_choose (algebraMap Real Complex) _ _
 
 中文:
-引理 Complex.ofReal_choose
+引理 复形.of实数_choose
   条件: (a : 实数) (n : 自然数)
   证明: Ring.map_choose (algebraMap Real Complex) _ _
 
@@ -69,7 +69,7 @@ definition binomialSeries
 
 中文:
 定义 binomialSeries
-  签名: {𝕂 : 类型u} [Field 𝕂] [CharZero 𝕂] (𝔸 : 类型v)
+  签名: {𝕂 : 类型u} [域 𝕂] [特征零 𝕂] (𝔸 : 类型v)
   定义体: .ofScalars 𝔸 (Ring.choose a ·)
 
 @[simp]
@@ -93,7 +93,7 @@ theorem binomialSeries_apply
 
 中文:
 定理 binomialSeries_apply
-  结论: {𝕂 : 类型u} [Field 𝕂] [CharZero 𝕂] (𝔸 : 类型v)
+  结论: {𝕂 : 类型u} [域 𝕂] [特征零 𝕂] (𝔸 : 类型v)
   证明: by
   simp [binomialSeries, FormalMultilinearSeries.ofScalars]
 
@@ -119,7 +119,7 @@ theorem binomialSeries_eq_ordinaryHypergeometricSeries
 
 中文:
 定理 binomialSeries_eq_ordinaryHypergeometricSeries
-  结论: {𝕂 : 类型u} [Field 𝕂] [CharZero 𝕂]
+  结论: {𝕂 : 类型u} [域 𝕂] [特征零 𝕂]
   证明: by
   simp only [binomialSeries, ordinaryHypergeometricSeries,
     FormalMultilinearSeries.ofScalars_comp_neg_id]
@@ -183,7 +183,7 @@ theorem binomialSeries_radius_eq_one
 
 中文:
 定理 binomialSeries_radius_eq_one
-  结论: {𝕂 : 类型v} [RCLike 𝕂] {𝔸 : 类型u} [NormedDivisionRing 𝔸]
+  结论: {𝕂 : 类型v} [RCLike 𝕂] {𝔸 : 类型u} [NormedDivision环 𝔸]
   证明: by
   simp only [binomialSeries_eq_ordinaryHypergeometricSeries (b := (1 : 𝕂)) (by norm_cast; simp),
     FormalMultilinearSeries.radius_compNeg]
@@ -214,7 +214,7 @@ theorem binomialSeries_radius_ge_one
 
 中文:
 定理 binomialSeries_radius_ge_one
-  结论: {𝕂 : 类型} [RCLike 𝕂] {𝔸 : 类型} [NormedDivisionRing 𝔸]
+  结论: {𝕂 : 类型} [RCLike 𝕂] {𝔸 : 类型} [NormedDivision环 𝔸]
   证明: by
   by_cases ha : forall (k : Nat), a != k
   · rw [binomialSeries_radius_eq_one ha]
@@ -251,7 +251,7 @@ theorem one_add_cpow_hasFPowerSeriesOnBall_zero
 
 中文:
 定理 one_add_cpow_hasFPowerSeriesOnBall_zero
-  条件: {a : Complex}
+  条件: {a : 复形}
   证明: by
   suffices (binomialSeries Complex a = FormalMultilinearSeries.ofScalars Complex
       fun n => iteratedDeriv n (fun (x : Complex) => (1 + x) ^ a) 0 / n !) by
@@ -319,7 +319,7 @@ theorem one_add_cpow_hasFPowerSeriesAt_zero
 
 中文:
 定理 one_add_cpow_hasFPowerSeriesAt_zero
-  条件: {a : Complex}
+  条件: {a : 复形}
   证明: one_add_cpow_hasFPowerSeriesOnBall_zero.hasFPowerSeriesAt
 
 Depends on / 依赖: hasFPowerSeriesAt, one_add_cpow_hasFPowerSeriesOnBall_zero, one_add_cpow_hasFPowerSeriesOnBall_zero.hasFPowerSeriesAt
@@ -343,7 +343,7 @@ theorem one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
 
 中文:
 定理 one_div_one_sub_cpow_hasFPowerSeriesOnBall_zero
-  条件: (a : Complex)
+  条件: (a : 复形)
   证明: by
   have H : ((binomialSeries Complex (-a)).compContinuousLinearMap (-1)) =
       .ofScalars Complex fun n => Ring.choose (a + n - 1) n := by
@@ -411,7 +411,7 @@ theorem one_div_sub_pow_hasFPowerSeriesOnBall_zero
 
 中文:
 定理 one_div_sub_pow_hasFPowerSeriesOnBall_zero
-  条件: (a : 自然数) {z : Complex} (hz : z != 0)
+  条件: (a : 自然数) {z : 复形} (hz : z != 0)
   证明: by
   have := one_div_one_sub_pow_hasFPowerSeriesOnBall_zero a
   rw [← map_zero (z⁻¹ • 1 : Complex ->L[Complex] Complex)] at this
@@ -448,7 +448,7 @@ theorem one_div_sub_hasFPowerSeriesOnBall_zero
 
 中文:
 定理 one_div_sub_hasFPowerSeriesOnBall_zero
-  条件: {z : Complex} (hz : z != 0)
+  条件: {z : 复形} (hz : z != 0)
   证明: by
   simpa using one_div_sub_pow_hasFPowerSeriesOnBall_zero (a := 0) hz
 
@@ -469,7 +469,7 @@ theorem one_div_sub_sq_hasFPowerSeriesOnBall_zero
 
 中文:
 定理 one_div_sub_sq_hasFPowerSeriesOnBall_zero
-  条件: {z : Complex} (hz : z != 0)
+  条件: {z : 复形} (hz : z != 0)
   证明: by
   simpa [add_comm 1] using one_div_sub_pow_hasFPowerSeriesOnBall_zero 1 hz
 
@@ -533,7 +533,7 @@ theorem hasFPowerSeriesOnBall_ofScalars_mul_add_zero
 
 中文:
 定理 hasFPowerSeriesOnBall_ofScalars_mul_add_zero
-  条件: (a b : Complex)
+  条件: (a b : 复形)
   证明: by
   convert
     (one_div_one_sub_hasFPowerSeriesOnBall_zero.const_smul (c := b - a)).add
@@ -567,7 +567,7 @@ lemma one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero
 
 中文:
 引理 one_div_sub_sq_sub_one_div_sq_hasFPowerSeriesOnBall_zero
-  条件: (w x : Complex) (hw : w != x)
+  条件: (w x : 复形) (hw : w != x)
   证明: by
   rw [← Pi.sub_def]; rw [← Pi.sub_def]; rw [FormalMultilinearSeries.ofScalars_sub]
   refine .sub ?_ ?_

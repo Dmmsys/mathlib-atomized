@@ -68,7 +68,7 @@ fun _ _ h => embeddingToCardinal.injective congr_arg Prod.snd h
 
 中文:
 定义 wellOrderExtension
-  签名: : LinearOrder α
+  签名: : 线性序 α
   定义体: @LinearOrder.lift' α (Ordinal ×ₗ Cardinal) _ (fun a : α => (rank r a, embeddingToCardinal a))
 fun _ _ h => embeddingToCardinal.injective congr_arg Prod.snd h
 
@@ -89,7 +89,7 @@ instance wellOrderExtension.isWellFounded_lt
 
 中文:
 实例 wellOrderExtension.isWellFounded_lt
-  签名: : IsWellFounded α (wellOrderExtension r).lt
+  签名: : 是良基 α (wellOrderExtension r).lt
   定义体: ⟨InvImage.wf (fun a : α => (rank r a, embeddingToCardinal a))
     Ordinal.lt_wf.prod_lex Cardinal.lt_wf⟩
 
@@ -108,7 +108,7 @@ instance wellOrderExtension.isWellOrder_lt
 
 中文:
 实例 wellOrderExtension.isWellOrder_lt
-  签名: : IsWellOrder α (wellOrderExtension r).lt where
+  签名: : 是良序 α (wellOrderExtension r).lt where
 -/
 instance wellOrderExtension.isWellOrder_lt : IsWellOrder α (wellOrderExtension r).lt where
 
@@ -121,8 +121,8 @@ theorem exists_well_order_ge
   proof: ⟨(wellOrderExtension r).lt, fun _ _ h => Prod.Lex.left _ _ (rank_lt_of_rel h), ⟨⟩⟩
 
 中文:
-定理 exists_well_order_ge
-  结论: 存在 s, r <= s ∧ IsWellOrder α s
+定理 存在_well_order_ge
+  结论: 存在 s, r <= s ∧ 是良序 α s
   证明: ⟨(wellOrderExtension r).lt, fun _ _ h => Prod.Lex.left _ _ (rank_lt_of_rel h), ⟨⟩⟩
 
 Depends on / 依赖: Prod.Lex.left, rank_lt_of_rel, wellOrderExtension
@@ -156,8 +156,8 @@ instance [Inhabited
   body: ‹_›
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (WellOrderExtension α)
+实例 [可居
+  签名: α] : 可居 (WellOrderExtension α)
   定义体: ‹_›
 -/
 instance [Inhabited α] : Inhabited (WellOrderExtension α) := ‹_›
@@ -228,7 +228,7 @@ Prod.Lex.left _ _ IsWellFounded.rank_lt_of_rel h
 
 中文:
 定理 toWellOrderExtension_strictMono
-  条件: [Preorder α] [WellFoundedLT α]
+  条件: [预序 α] [WellFoundedLT α]
   证明: fun _ _ h =>
 Prod.Lex.left _ _ IsWellFounded.rank_lt_of_rel h
 -/

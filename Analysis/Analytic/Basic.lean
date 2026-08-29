@@ -79,12 +79,12 @@ structure HasFPowerSeriesOnBall
     - hasSum : forall {y}, y in Metric.eball (0 : E) r -> HasSum (fun n : Nat => p n fun _ : Fin n => y) (f (x + y))
 
 中文:
-结构 HasFPowerSeriesOnBall
+结构 有FPowerSeriesOnBall
   参数: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (x : E) (r : 实数>=0∞)
   公理与运算 (3 个):
     - r_le : r <= p.radius
     - r_pos : 0 < r
-    - hasSum : 对任意 {y}, y in Metric.eball (0 : E) r -> HasSum (fun n : 自然数 => p n fun _ : Fin n => y) (f (x + y))
+    - hasSum : 对任意 {y}, y in Metric.eball (0 : E) r -> HasSum (fun n : 自然数 => p n fun _ : 有限集 n => y) (f (x + y))
 -/
 structure HasFPowerSeriesOnBall (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (x : E) (r : Real>=0∞) :
     Prop where
@@ -105,12 +105,12 @@ structure HasFPowerSeriesWithinOnBall
     - hasSum : forall {y}, x + y in insert x s -> y in Metric.eball (0 : E) r -> HasSum (fun n : Nat => p n fun _ : Fin n => y) (f (x + y))
 
 中文:
-结构 HasFPowerSeriesWithinOnBall
-  参数: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (s : Set E)
+结构 有FPowerSeriesWithinOnBall
+  参数: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (s : 集合 E)
   公理与运算 (3 个):
     - r_le : r <= p.radius
     - r_pos : 0 < r
-    - hasSum : 对任意 {y}, x + y in insert x s -> y in Metric.eball (0 : E) r -> HasSum (fun n : 自然数 => p n fun _ : Fin n => y) (f (x + y))
+    - hasSum : 对任意 {y}, x + y in insert x s -> y in Metric.eball (0 : E) r -> HasSum (fun n : 自然数 => p n fun _ : 有限集 n => y) (f (x + y))
 -/
 structure HasFPowerSeriesWithinOnBall (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (s : Set E)
     (x : E) (r : Real>=0∞) : Prop where
@@ -150,7 +150,7 @@ definition HasFPowerSeriesWithinAt
 
 中文:
 定义 HasFPowerSeriesWithinAt
-  签名: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (s : Set E) (x : E)
+  签名: (f : E -> F) (p : FormalMultilinearSeries 𝕜 E F) (s : 集合 E) (x : E)
   定义体: exists r, HasFPowerSeriesWithinOnBall f p s x r
 
 Depends on / 依赖: HasFPowerSeriesWithinOnBall
@@ -194,7 +194,7 @@ definition AnalyticWithinAt
 
 中文:
 定义 AnalyticWithinAt
-  签名: (f : E -> F) (s : Set E) (x : E)
+  签名: (f : E -> F) (s : 集合 E) (x : E)
   定义体: exists p : FormalMultilinearSeries 𝕜 E F, HasFPowerSeriesWithinAt f p s x
 
 Depends on / 依赖: FormalMultilinearSeries, HasFPowerSeriesWithinAt
@@ -212,7 +212,7 @@ definition AnalyticOnNhd
 
 中文:
 定义 AnalyticOnNhd
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: forall x, x in s -> AnalyticAt 𝕜 f x
 
 Depends on / 依赖: AnalyticAt
@@ -230,7 +230,7 @@ definition AnalyticOn
 
 中文:
 定义 AnalyticOn
-  签名: (f : E -> F) (s : Set E)
+  签名: (f : E -> F) (s : 集合 E)
   定义体: forall x in s, AnalyticWithinAt 𝕜 f s x
 
 Depends on / 依赖: AnalyticWithinAt
@@ -253,8 +253,8 @@ theorem HasFPowerSeriesOnBall.hasFPowerSeriesAt
   proof: ⟨r, hf⟩
 
 中文:
-定理 HasFPowerSeriesOnBall.hasFPowerSeriesAt
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.hasFPowerSeriesAt
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: ⟨r, hf⟩
 -/
 theorem HasFPowerSeriesOnBall.hasFPowerSeriesAt (hf : HasFPowerSeriesOnBall f p x r) :
@@ -289,8 +289,8 @@ theorem HasFPowerSeriesOnBall.analyticAt
   proof: hf.hasFPowerSeriesAt.analyticAt
 
 中文:
-定理 HasFPowerSeriesOnBall.analyticAt
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.analyticAt
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   结论: AnalyticAt 𝕜 f x
   证明: hf.hasFPowerSeriesAt.analyticAt
 
@@ -307,7 +307,7 @@ theorem HasFPowerSeriesWithinOnBall.hasFPowerSeriesWithinAt
   proof: ⟨r, hf⟩
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.hasFPowerSeriesWithinAt
+定理 有FPowerSeriesWithinOnBall.hasFPowerSeriesWithinAt
   证明: ⟨r, hf⟩
 -/
 theorem HasFPowerSeriesWithinOnBall.hasFPowerSeriesWithinAt
@@ -339,8 +339,8 @@ theorem HasFPowerSeriesWithinOnBall.analyticWithinAt
   proof: hf.hasFPowerSeriesWithinAt.analyticWithinAt
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.analyticWithinAt
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+定理 有FPowerSeriesWithinOnBall.analyticWithinAt
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: hf.hasFPowerSeriesWithinAt.analyticWithinAt
 
 Depends on / 依赖: analyticWithinAt, hasFPowerSeriesWithinAt, hf.hasFPowerSeriesWithinAt.analyticWithinAt
@@ -362,8 +362,8 @@ theorem HasFPowerSeriesOnBall.comp_sub
       abel }
 
 中文:
-定理 HasFPowerSeriesOnBall.comp_sub
-  条件: (hf : HasFPowerSeriesOnBall f p x r) (y : E)
+定理 有FPowerSeriesOnBall.comp_sub
+  条件: (hf : 有FPowerSeriesOnBall f p x r) (y : E)
   证明: { r_le := hf.r_le
     r_pos := hf.r_pos
     hasSum := fun {z} hz => by
@@ -397,8 +397,8 @@ theorem HasFPowerSeriesWithinOnBall.comp_sub
     abel
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.comp_sub
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r) (y : E)
+定理 有FPowerSeriesWithinOnBall.comp_sub
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r) (y : E)
   证明: hf.r_le
   r_pos := hf.r_pos
   hasSum {z} hz1 hz2 := by
@@ -590,8 +590,8 @@ theorem HasFPowerSeriesWithinOnBall.hasSum_sub
   simpa only [add_sub_cancel] using hf.hasSum (by simpa only [add_sub_cancel] using hy.1) this
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.hasSum_sub
-  结论: (hf : HasFPowerSeriesWithinOnBall f p s x r) {y : E}
+定理 有FPowerSeriesWithinOnBall.hasSum_sub
+  结论: (hf : 有FPowerSeriesWithinOnBall f p s x r) {y : E}
   证明: by
   have : y - x in Metric.eball 0 r := by simpa [edist_eq_enorm_sub] using hy.2
   simpa only [add_sub_cancel] using hf.hasSum (by simpa only [add_sub_cancel] using hy.1) this
@@ -615,8 +615,8 @@ theorem HasFPowerSeriesOnBall.hasSum_sub
   simpa only [add_sub_cancel] using hf.hasSum this
 
 中文:
-定理 HasFPowerSeriesOnBall.hasSum_sub
-  结论: (hf : HasFPowerSeriesOnBall f p x r) {y : E}
+定理 有FPowerSeriesOnBall.hasSum_sub
+  结论: (hf : 有FPowerSeriesOnBall f p x r) {y : E}
   证明: by
   have : y - x in Metric.eball 0 r := by simpa [edist_eq_enorm_sub] using hy
   simpa only [add_sub_cancel] using hf.hasSum this
@@ -638,8 +638,8 @@ theorem HasFPowerSeriesOnBall.radius_pos
   proof: lt_of_lt_of_le hf.r_pos hf.r_le
 
 中文:
-定理 HasFPowerSeriesOnBall.radius_pos
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.radius_pos
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   结论: 0 < p.radius
   证明: lt_of_lt_of_le hf.r_pos hf.r_le
 
@@ -657,8 +657,8 @@ theorem HasFPowerSeriesWithinOnBall.radius_pos
   proof: lt_of_lt_of_le hf.r_pos hf.r_le
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.radius_pos
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+定理 有FPowerSeriesWithinOnBall.radius_pos
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: lt_of_lt_of_le hf.r_pos hf.r_le
 
 Depends on / 依赖: hf.r_le, hf.r_pos, lt_of_lt_of_le, r_le, r_pos
@@ -698,7 +698,7 @@ theorem HasFPowerSeriesWithinOnBall.of_le
   proof: ⟨le_trans hr hf.1, r'_pos, fun hy h'y => hf.hasSum hy (Metric.eball_subset_eball hr h'y)⟩
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.of_le
+定理 有FPowerSeriesWithinOnBall.of_le
   证明: ⟨le_trans hr hf.1, r'_pos, fun hy h'y => hf.hasSum hy (Metric.eball_subset_eball hr h'y)⟩
 
 Depends on / 依赖: Metric, Metric.eball_subset_eball, _pos, eball_subset_eball, hasSum, hf.hasSum, le_trans
@@ -717,8 +717,8 @@ theorem HasFPowerSeriesOnBall.mono
   proof: ⟨le_trans hr hf.1, r'_pos, fun hy => hf.hasSum (Metric.eball_subset_eball hr hy)⟩
 
 中文:
-定理 HasFPowerSeriesOnBall.mono
-  结论: (hf : HasFPowerSeriesOnBall f p x r) (r'_pos : 0 < r')
+定理 有FPowerSeriesOnBall.mono
+  结论: (hf : 有FPowerSeriesOnBall f p x r) (r'_pos : 0 < r')
   证明: ⟨le_trans hr hf.1, r'_pos, fun hy => hf.hasSum (Metric.eball_subset_eball hr hy)⟩
 
 Depends on / 依赖: Metric, Metric.eball_subset_eball, _pos, eball_subset_eball, hasSum, hf.hasSum, le_trans
@@ -745,7 +745,7 @@ lemma HasFPowerSeriesWithinOnBall.congr
     simpa [edist_eq_enorm_sub] using h'y
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.congr
+引理 有FPowerSeriesWithinOnBall.congr
   结论: {f g : E -> F} {p : FormalMultilinearSeries 𝕜 E F}
   证明: by
   refine ⟨h.r_le, h.r_pos, ?_⟩
@@ -786,7 +786,7 @@ lemma HasFPowerSeriesWithinOnBall.congr'
   exact h' ⟨hy, by simpa [edist_eq_enorm_sub] using h'y⟩
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.congr'
+引理 有FPowerSeriesWithinOnBall.congr'
   结论: {f g : E -> F} {p : FormalMultilinearSeries 𝕜 E F}
   证明: by
   refine ⟨h.r_le, h.r_pos, fun {y} hy h'y => ?_⟩
@@ -821,7 +821,7 @@ lemma HasFPowerSeriesWithinAt.congr
 
 中文:
 引理 HasFPowerSeriesWithinAt.congr
-  结论: {f g : E -> F} {p : FormalMultilinearSeries 𝕜 E F} {s : Set E}
+  结论: {f g : E -> F} {p : FormalMultilinearSeries 𝕜 E F} {s : 集合 E}
   证明: by
   rcases h with ⟨r, hr⟩
   obtain ⟨ε, εpos, hε⟩ : exists ε > 0, Metric.eball x ε inter s subseteq {y | g y = f y} :=
@@ -861,8 +861,8 @@ theorem HasFPowerSeriesOnBall.congr
       simpa [edist_eq_enorm_sub] using hy }
 
 中文:
-定理 HasFPowerSeriesOnBall.congr
-  结论: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.congr
+  结论: (hf : 有FPowerSeriesOnBall f p x r)
   证明: { r_le := hf.r_le
     r_pos := hf.r_pos
     hasSum := fun {y} hy => by
@@ -924,8 +924,8 @@ theorem HasFPowerSeriesWithinOnBall.unique
   (hf.hasSum_sub hy).unique (hg.hasSum_sub hy)
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.unique
-  结论: (hf : HasFPowerSeriesWithinOnBall f p s x r)
+定理 有FPowerSeriesWithinOnBall.unique
+  结论: (hf : 有FPowerSeriesWithinOnBall f p s x r)
   证明: fun _ hy =>
   (hf.hasSum_sub hy).unique (hg.hasSum_sub hy)
 -/
@@ -944,8 +944,8 @@ theorem HasFPowerSeriesOnBall.unique
   (hf.hasSum_sub hy).unique (hg.hasSum_sub hy)
 
 中文:
-定理 HasFPowerSeriesOnBall.unique
-  结论: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.unique
+  结论: (hf : 有FPowerSeriesOnBall f p x r)
   证明: fun _ hy =>
   (hf.hasSum_sub hy).unique (hg.hasSum_sub hy)
 -/
@@ -1003,8 +1003,8 @@ theorem HasFPowerSeriesOnBall.eventually_hasSum
   filter_upwards [Metric.eball_mem_nhds (0 : E) hf.r_pos] using fun _ => hf.hasSum
 
 中文:
-定理 HasFPowerSeriesOnBall.eventually_hasSum
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.eventually_hasSum
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   filter_upwards [Metric.eball_mem_nhds (0 : E) hf.r_pos] using fun _ => hf.hasSum
 
@@ -1046,8 +1046,8 @@ theorem HasFPowerSeriesOnBall.eventually_hasSum_sub
   filter_upwards [Metric.eball_mem_nhds x hf.r_pos] with y using hf.hasSum_sub
 
 中文:
-定理 HasFPowerSeriesOnBall.eventually_hasSum_sub
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.eventually_hasSum_sub
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   filter_upwards [Metric.eball_mem_nhds x hf.r_pos] with y using hf.hasSum_sub
 
@@ -1088,7 +1088,7 @@ theorem HasFPowerSeriesOnBall.eventually_eq_zero
   filter_upwards [hf.eventually_hasSum_sub] with z hz using hz.unique hasSum_zero
 
 中文:
-定理 HasFPowerSeriesOnBall.eventually_eq_zero
+定理 有FPowerSeriesOnBall.eventually_eq_zero
   证明: by
   filter_upwards [hf.eventually_hasSum_sub] with z hz using hz.unique hasSum_zero
 
@@ -1176,8 +1176,8 @@ lemma HasFPowerSeriesWithinOnBall.mono
   hasSum hy h'y := hf.hasSum (insert_subset_insert h hy) h'y
 
 中文:
-引理 HasFPowerSeriesWithinOnBall.mono
-  条件: (hf : HasFPowerSeriesWithinOnBall f p s x r) (h : t subseteq s)
+引理 有FPowerSeriesWithinOnBall.mono
+  条件: (hf : 有FPowerSeriesWithinOnBall f p s x r) (h : t subseteq s)
   证明: hf.r_le
   r_pos := hf.r_pos
   hasSum hy h'y := hf.hasSum (insert_subset_insert h hy) h'y
@@ -1201,8 +1201,8 @@ lemma HasFPowerSeriesOnBall.hasFPowerSeriesWithinOnBall
   exact hf.mono (subset_univ _)
 
 中文:
-引理 HasFPowerSeriesOnBall.hasFPowerSeriesWithinOnBall
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+引理 有FPowerSeriesOnBall.hasFPowerSeriesWithinOnBall
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   exact hf.mono (subset_univ _)
@@ -1403,8 +1403,8 @@ theorem HasFPowerSeriesWithinOnBall.coeff_zero
     exact ContinuousMultilinearMap.map_coord_zero _ (⟨0,
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.coeff_zero
-  结论: (hf : HasFPowerSeriesWithinOnBall f pf s x r)
+定理 有FPowerSeriesWithinOnBall.coeff_zero
+  结论: (hf : 有FPowerSeriesWithinOnBall f pf s x r)
   证明: by
   have v_eq : v = fun i => 0 := Subsingleton.elim _ _
   have zero_mem : (0 : E) in Metric.eball (0 : E) r := by simp [hf.r_pos]
@@ -1437,8 +1437,8 @@ theorem HasFPowerSeriesOnBall.coeff_zero
   exact hf.coeff_zero v
 
 中文:
-定理 HasFPowerSeriesOnBall.coeff_zero
-  结论: (hf : HasFPowerSeriesOnBall f pf x r)
+定理 有FPowerSeriesOnBall.coeff_zero
+  结论: (hf : 有FPowerSeriesOnBall f pf x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   exact hf.coeff_zero v
@@ -1461,7 +1461,7 @@ theorem HasFPowerSeriesWithinAt.coeff_zero
 
 中文:
 定理 HasFPowerSeriesWithinAt.coeff_zero
-  条件: (hf : HasFPowerSeriesWithinAt f pf s x) (v : Fin 0 -> E)
+  条件: (hf : HasFPowerSeriesWithinAt f pf s x) (v : 有限集 0 -> E)
   证明: let ⟨_, hrf⟩ := hf
   hrf.coeff_zero v
 
@@ -1483,7 +1483,7 @@ theorem HasFPowerSeriesAt.coeff_zero
 
 中文:
 定理 HasFPowerSeriesAt.coeff_zero
-  条件: (hf : HasFPowerSeriesAt f pf x) (v : Fin 0 -> E)
+  条件: (hf : HasFPowerSeriesAt f pf x) (v : 有限集 0 -> E)
   证明: let ⟨_, hrf⟩ := hf
   hrf.coeff_zero v
 
@@ -1642,7 +1642,7 @@ lemma AnalyticWithinAt.congr_of_eventuallyEq
 
 中文:
 引理 AnalyticWithinAt.congr_of_eventuallyEq
-  结论: {f g : E -> F} {s : Set E} {x : E}
+  结论: {f g : E -> F} {s : 集合 E} {x : E}
   证明: by
   rcases hf with ⟨p, hp⟩
   exact ⟨p, hp.congr hs hx⟩
@@ -1667,7 +1667,7 @@ lemma AnalyticWithinAt.congr_of_eventuallyEq_insert
 
 中文:
 引理 AnalyticWithinAt.congr_of_eventuallyEq_insert
-  结论: {f g : E -> F} {s : Set E} {x : E}
+  结论: {f g : E -> F} {s : 集合 E} {x : E}
   证明: by
   apply hf.congr_of_eventuallyEq (nhdsWithin_mono x (subset_insert x s) hs)
   apply mem_of_mem_nhdsWithin (mem_insert x s) hs
@@ -1690,7 +1690,7 @@ lemma AnalyticWithinAt.congr
 
 中文:
 引理 AnalyticWithinAt.congr
-  结论: {f g : E -> F} {s : Set E} {x : E}
+  结论: {f g : E -> F} {s : 集合 E} {x : E}
   证明: hf.congr_of_eventuallyEq hs.eventuallyEq_nhdsWithin hx
 
 Depends on / 依赖: congr_of_eventuallyEq, eventuallyEq_nhdsWithin, hf.congr_of_eventuallyEq, hs.eventuallyEq_nhdsWithin
@@ -1710,7 +1710,7 @@ lemma AnalyticOn.congr
 
 中文:
 引理 AnalyticOn.congr
-  结论: {f g : E -> F} {s : Set E}
+  结论: {f g : E -> F} {s : 集合 E}
   证明: fun x m => (hf x m).congr hs (hs m)
 -/
 lemma AnalyticOn.congr {f g : E -> F} {s : Set E}
@@ -1791,7 +1791,7 @@ theorem AnalyticOnNhd.mono
 
 中文:
 定理 AnalyticOnNhd.mono
-  条件: {s t : Set E} (hf : AnalyticOnNhd 𝕜 f t) (hst : s subseteq t)
+  条件: {s t : 集合 E} (hf : AnalyticOnNhd 𝕜 f t) (hst : s subseteq t)
   证明: fun z hz => hf z (hst hz)
 -/
 theorem AnalyticOnNhd.mono {s t : Set E} (hf : AnalyticOnNhd 𝕜 f t) (hst : s subseteq t) :
@@ -1848,7 +1848,7 @@ theorem AnalyticOnNhd.congr
 
 中文:
 定理 AnalyticOnNhd.congr
-  条件: (hs : IsOpen s) (hf : AnalyticOnNhd 𝕜 f s) (hg : s.EqOn f g)
+  条件: (hs : 是开集 s) (hf : AnalyticOnNhd 𝕜 f s) (hg : s.EqOn f g)
   证明: hf.congr' mem_nhdsSet_iff_forall.mpr
     (fun _ hz => eventuallyEq_iff_exists_mem.mpr ⟨s, hs.mem_nhds hz, hg⟩)
 
@@ -1870,7 +1870,7 @@ theorem analyticOnNhd_congr
 
 中文:
 定理 analyticOnNhd_congr
-  条件: (hs : IsOpen s) (h : s.EqOn f g)
+  条件: (hs : 是开集 s) (h : s.EqOn f g)
   结论: AnalyticOnNhd 𝕜 f s ↔
   证明: ⟨fun hf => hf.congr hs h, fun hg => hg.congr hs h.symm⟩
 
@@ -1935,7 +1935,7 @@ lemma AnalyticOn.mono
 
 中文:
 引理 AnalyticOn.mono
-  结论: {f : E -> F} {s t : Set E} (h : AnalyticOn 𝕜 f t)
+  结论: {f : E -> F} {s t : 集合 E} (h : AnalyticOn 𝕜 f t)
   证明: fun _ m => (h _ (hs m)).mono hs
 -/
 lemma AnalyticOn.mono {f : E -> F} {s t : Set E} (h : AnalyticOn 𝕜 f t)
@@ -1953,7 +1953,7 @@ theorem analyticWithinAt_insert
 
 中文:
 定理 analyticWithinAt_insert
-  条件: {f : E -> F} {s : Set E} {x y : E}
+  条件: {f : E -> F} {s : 集合 E} {x y : E}
   证明: by
   simp [AnalyticWithinAt]
 -/
@@ -1973,7 +1973,7 @@ lemma AnalyticOn.analyticAt
 
 中文:
 引理 AnalyticOn.analyticAt
-  结论: {f : E -> F} {z : E} {s : Set E} (hU : s in 𝓝 z)
+  结论: {f : E -> F} {z : E} {s : 集合 E} (hU : s in 𝓝 z)
   证明: by
   obtain ⟨p, hp⟩ := h z (mem_of_mem_nhds hU)
 .mp hp⟩ exact ⟨p, hasFPowerSeriesWithinAt_iff_of_nhds f p hU
@@ -2003,7 +2003,7 @@ theorem ContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall
       g.hasSum (h.hasSum hy h'y)
 
 中文:
-定理 ContinuousLinearMap.comp_hasFPowerSeriesWithinOnBall
+定理 连续线性映射.comp_hasFPowerSeriesWithinOnBall
   结论: (g : F ->L[𝕜] G)
   证明: h.r_le.trans (p.radius_le_radius_continuousLinearMap_comp _)
   r_pos := h.r_pos
@@ -2035,7 +2035,7 @@ theorem ContinuousLinearMap.comp_hasFPowerSeriesOnBall
   exact g.comp_hasFPowerSeriesWithinOnBall h
 
 中文:
-定理 ContinuousLinearMap.comp_hasFPowerSeriesOnBall
+定理 连续线性映射.comp_hasFPowerSeriesOnBall
   结论: (g : F ->L[𝕜] G)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at h ⊢
@@ -2061,7 +2061,7 @@ theorem ContinuousLinearMap.comp_analyticOn
   exact ⟨g.compFormalMultilinearSeries p, r, g.comp_hasFPowerSeriesWithinOnBall hp⟩
 
 中文:
-定理 ContinuousLinearMap.comp_analyticOn
+定理 连续线性映射.comp_analyticOn
   条件: (g : F ->L[𝕜] G) (h : AnalyticOn 𝕜 f s)
   证明: by
   rintro x hx
@@ -2087,7 +2087,7 @@ theorem ContinuousLinearMap.comp_analyticOnNhd
   exact ⟨g.compFormalMultilinearSeries p, r, g.comp_hasFPowerSeriesOnBall hp⟩
 
 中文:
-定理 ContinuousLinearMap.comp_analyticOnNhd
+定理 连续线性映射.comp_analyticOnNhd
   证明: by
   rintro x hx
   rcases h x hx with ⟨p, r, hp⟩
@@ -2111,7 +2111,7 @@ theorem HasFPowerSeriesWithinOnBall.tendsto_partialSum
   proof: (hf.hasSum h'y hy).tendsto_sum_nat
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendsto_partialSum
+定理 有FPowerSeriesWithinOnBall.tendsto_partialSum
   证明: (hf.hasSum h'y hy).tendsto_sum_nat
 
 Depends on / 依赖: hasSum, hf.hasSum, tendsto_sum_nat
@@ -2130,7 +2130,7 @@ theorem HasFPowerSeriesOnBall.tendsto_partialSum
   proof: (hf.hasSum hy).tendsto_sum_nat
 
 中文:
-定理 HasFPowerSeriesOnBall.tendsto_partialSum
+定理 有FPowerSeriesOnBall.tendsto_partialSum
   证明: (hf.hasSum hy).tendsto_sum_nat
 
 Depends on / 依赖: hasSum, hf.hasSum, tendsto_sum_nat
@@ -2181,7 +2181,7 @@ theorem HasFPowerSeriesWithinOnBall.tendsto_partialSum_prod
   appl
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendsto_partialSum_prod
+定理 有FPowerSeriesWithinOnBall.tendsto_partialSum_prod
   结论: {y : E}
   证明: by
   have A : Tendsto (fun (z : Nat × E) => p.partialSum z.1 y) (atTop ×ˢ 𝓝 y) (𝓝 (f (x + y))) := by
@@ -2265,7 +2265,7 @@ theorem HasFPowerSeriesOnBall.tendsto_partialSum_prod
   proof: (hf.hasFPowerSeriesWithinOnBall (s := univ)).tendsto_partialSum_prod hy (by simp)
 
 中文:
-定理 HasFPowerSeriesOnBall.tendsto_partialSum_prod
+定理 有FPowerSeriesOnBall.tendsto_partialSum_prod
   结论: {y : E}
   证明: (hf.hasFPowerSeriesWithinOnBall (s := univ)).tendsto_partialSum_prod hy (by simp)
 
@@ -2290,7 +2290,7 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx'
  
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.uniform_geometric_approx'
+定理 有FPowerSeriesWithinOnBall.uniform_geometric_approx'
   结论: {r' : 实数>=0}
   证明: by
   obtain ⟨a, ha, C, hC, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall n, ‖p n‖ * (r' : Real) ^ n <= C * a ^ n :=
@@ -2343,7 +2343,7 @@ theorem HasFPowerSeriesOnBall.uniform_geometric_approx'
   simpa using hf.uniform_geometric_approx' h
 
 中文:
-定理 HasFPowerSeriesOnBall.uniform_geometric_approx'
+定理 有FPowerSeriesOnBall.uniform_geometric_approx'
   结论: {r' : 实数>=0}
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
@@ -2371,7 +2371,7 @@ theorem HasFPowerSeriesWithinOnBall.uniform_geometric_approx
   refine ⟨a, ha, C, hC, fun y hy n ys => (hp y hy n
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.uniform_geometric_approx
+定理 有FPowerSeriesWithinOnBall.uniform_geometric_approx
   结论: {r' : 实数>=0}
   证明: by
   obtain ⟨a, ha, C, hC, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
@@ -2406,7 +2406,7 @@ theorem HasFPowerSeriesOnBall.uniform_geometric_approx
   simpa using hf.uniform_geometric_approx h
 
 中文:
-定理 HasFPowerSeriesOnBall.uniform_geometric_approx
+定理 有FPowerSeriesOnBall.uniform_geometric_approx
   结论: {r' : 实数>=0}
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
@@ -2494,7 +2494,7 @@ theorem HasFPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
       exists a in Ioo (0 : Real) 1, exists C > 0, forall n : Nat, ‖p n‖ * (r'
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
+定理 有FPowerSeriesWithinOnBall.isBigO_image_sub_image_sub_deriv_principal
   证明: by
   lift r' to Real>=0 using ne_top_of_lt hr
   rcases eq_zero_or_pos r' with (rfl | hr'0)
@@ -2573,7 +2573,7 @@ theorem HasFPowerSeriesOnBall.isBigO_image_sub_image_sub_deriv_principal
   simpa using hf.isBigO_image_sub_image_sub_deriv_principal hr
 
 中文:
-定理 HasFPowerSeriesOnBall.isBigO_image_sub_image_sub_deriv_principal
+定理 有FPowerSeriesOnBall.isBigO_image_sub_image_sub_deriv_principal
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.isBigO_image_sub_image_sub_deriv_principal hr
@@ -2600,7 +2600,7 @@ theorem HasFPowerSeriesWithinOnBall.image_sub_sub_deriv_le
   exact ⟨C, fun y ys hy z
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.image_sub_sub_deriv_le
+定理 有FPowerSeriesWithinOnBall.image_sub_sub_deriv_le
   证明: by
   have := hf.isBigO_image_sub_image_sub_deriv_principal hr
   simp only [isBigO_principal, mem_inter_iff, Metric.mem_eball, Prod.edist_eq, max_lt_iff, mem_prod,
@@ -2630,7 +2630,7 @@ theorem HasFPowerSeriesOnBall.image_sub_sub_deriv_le
   simpa only [mem_univ, insert_eq_of_mem, univ_inter] using hf.image_sub_sub_deriv_le hr
 
 中文:
-定理 HasFPowerSeriesOnBall.image_sub_sub_deriv_le
+定理 有FPowerSeriesOnBall.image_sub_sub_deriv_le
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa only [mem_univ, insert_eq_of_mem, univ_inter] using hf.image_sub_sub_deriv_le hr
@@ -2715,7 +2715,7 @@ theorem HasFPowerSeriesWithinOnBall.tendstoUniformlyOn
   have L : Tends
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendstoUniformlyOn
+定理 有FPowerSeriesWithinOnBall.tendstoUniformlyOn
   结论: {r' : 实数>=0}
   证明: by
   obtain ⟨a, ha, C, -, hp⟩ : exists a in Ioo (0 : Real) 1, exists C > 0, forall y in Metric.ball (0 : E) r', forall n,
@@ -2750,8 +2750,8 @@ theorem HasFPowerSeriesOnBall.tendstoUniformlyOn
   simpa using hf.tendstoUniformlyOn h
 
 中文:
-定理 HasFPowerSeriesOnBall.tendstoUniformlyOn
-  结论: {r' : 实数>=0} (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.tendstoUniformlyOn
+  结论: {r' : 实数>=0} (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.tendstoUniformlyOn h
@@ -2779,7 +2779,7 @@ theorem HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
     · exact inter_m
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
+定理 有FPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn
   证明: by
   intro u hu y hy
   rcases ENNReal.lt_iff_exists_nnreal_btwn.1 hy.2 with ⟨r', yr', hr'⟩
@@ -2815,8 +2815,8 @@ theorem HasFPowerSeriesOnBall.tendstoLocallyUniformlyOn
   simpa using hf.tendstoLocallyUniformlyOn
 
 中文:
-定理 HasFPowerSeriesOnBall.tendstoLocallyUniformlyOn
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.tendstoLocallyUniformlyOn
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.tendstoLocallyUniformlyOn
@@ -2842,7 +2842,7 @@ theorem HasFPowerSeriesWithinOnBall.tendstoUniformlyOn'
     simp [dist_eq_norm]
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendstoUniformlyOn'
+定理 有FPowerSeriesWithinOnBall.tendstoUniformlyOn'
   结论: {r' : 实数>=0}
   证明: by
   convert! (hf.tendstoUniformlyOn h).comp fun y => y - x using 1
@@ -2872,8 +2872,8 @@ theorem HasFPowerSeriesOnBall.tendstoUniformlyOn'
   simpa using hf.tendstoUniformlyOn' h
 
 中文:
-定理 HasFPowerSeriesOnBall.tendstoUniformlyOn'
-  结论: {r' : 实数>=0} (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.tendstoUniformlyOn'
+  结论: {r' : 实数>=0} (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.tendstoUniformlyOn' h
@@ -2900,7 +2900,7 @@ theorem HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn'
     simp [edist_eq_enorm_sub]
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn'
+定理 有FPowerSeriesWithinOnBall.tendstoLocallyUniformlyOn'
   证明: by
   have A : ContinuousOn (fun y : E => y - x) (insert x s inter Metric.eball (x : E) r) := by fun_prop
   convert! hf.tendstoLocallyUniformlyOn.comp (fun y : E => y - x) _ A using 1
@@ -2933,8 +2933,8 @@ theorem HasFPowerSeriesOnBall.tendstoLocallyUniformlyOn'
   simpa using hf.tendstoLocallyUniformlyOn'
 
 中文:
-定理 HasFPowerSeriesOnBall.tendstoLocallyUniformlyOn'
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.tendstoLocallyUniformlyOn'
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.tendstoLocallyUniformlyOn'
@@ -2957,7 +2957,7 @@ theorem HasFPowerSeriesWithinOnBall.continuousOn
       ((p.partialSum_continuous n).comp (continuous_id.sub continuous_const)).continuousOn
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.continuousOn
+定理 有FPowerSeriesWithinOnBall.continuousOn
   证明: hf.tendstoLocallyUniformlyOn'.continuousOn
     Frequently.of_forall fun n =>
       ((p.partialSum_continuous n).comp (continuous_id.sub continuous_const)).continuousOn
@@ -2980,8 +2980,8 @@ theorem HasFPowerSeriesOnBall.continuousOn
   simpa using hf.continuousOn
 
 中文:
-定理 HasFPowerSeriesOnBall.continuousOn
-  条件: (hf : HasFPowerSeriesOnBall f p x r)
+定理 有FPowerSeriesOnBall.continuousOn
+  条件: (hf : 有FPowerSeriesOnBall f p x r)
   证明: by
   rw [← hasFPowerSeriesWithinOnBall_univ] at hf
   simpa using hf.continuousOn
@@ -3001,7 +3001,7 @@ theorem HasFPowerSeriesWithinOnBall.continuousWithinAt_insert
   exact inter_mem_nhdsWithin _ (Metric.eball_mem_nhds x hf.r_pos)
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.continuousWithinAt_insert
+定理 有FPowerSeriesWithinOnBall.continuousWithinAt_insert
   证明: by
   apply (hf.continuousOn.continuousWithinAt (x := x) (by simp [hf.r_pos])).mono_of_mem_nhdsWithin
   exact inter_mem_nhdsWithin _ (Metric.eball_mem_nhds x hf.r_pos)
@@ -3020,7 +3020,7 @@ theorem HasFPowerSeriesWithinOnBall.continuousWithinAt
   proof: hf.continuousWithinAt_insert.mono (subset_insert x s)
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.continuousWithinAt
+定理 有FPowerSeriesWithinOnBall.continuousWithinAt
   证明: hf.continuousWithinAt_insert.mono (subset_insert x s)
 -/
 protected theorem HasFPowerSeriesWithinOnBall.continuousWithinAt
@@ -3189,7 +3189,7 @@ theorem AnalyticOnNhd.continuousOn
 
 中文:
 定理 AnalyticOnNhd.continuousOn
-  条件: {s : Set E} (hf : AnalyticOnNhd 𝕜 f s)
+  条件: {s : 集合 E} (hf : AnalyticOnNhd 𝕜 f s)
   证明: fun x hx => (hf x hx).continuousAt.continuousWithinAt
 -/
 protected theorem AnalyticOnNhd.continuousOn {s : Set E} (hf : AnalyticOnNhd 𝕜 f s) :
@@ -3206,7 +3206,7 @@ lemma AnalyticOn.continuousOn
 
 中文:
 引理 AnalyticOn.continuousOn
-  条件: {f : E -> F} {s : Set E} (h : AnalyticOn 𝕜 f s)
+  条件: {f : E -> F} {s : 集合 E} (h : AnalyticOn 𝕜 f s)
   证明: fun x m => (h x m).continuousWithinAt
 -/
 protected lemma AnalyticOn.continuousOn {f : E -> F} {s : Set E} (h : AnalyticOn 𝕜 f s) :
@@ -3226,7 +3226,7 @@ theorem AnalyticOnNhd.continuous
 中文:
 定理 AnalyticOnNhd.continuous
   条件: {f : E -> F} (fa : AnalyticOnNhd 𝕜 f univ)
-  结论: Continuous f
+  结论: 连续 f
   证明: by
   rw [← continuousOn_univ]; exact fa.continuousOn
 
@@ -3249,7 +3249,7 @@ theorem FormalMultilinearSeries.hasFPowerSeriesOnBall
 
 中文:
 定理 FormalMultilinearSeries.hasFPowerSeriesOnBall
-  结论: [CompleteSpace F]
+  结论: [完备空间 F]
   证明: { r_le := le_rfl
     r_pos := h
     hasSum := fun hy => by
@@ -3274,8 +3274,8 @@ theorem HasFPowerSeriesWithinOnBall.sum
   proof: (h.hasSum h'y hy).tsum_eq.symm
 
 中文:
-定理 HasFPowerSeriesWithinOnBall.sum
-  结论: (h : HasFPowerSeriesWithinOnBall f p s x r) {y : E}
+定理 有FPowerSeriesWithinOnBall.求和
+  结论: (h : 有FPowerSeriesWithinOnBall f p s x r) {y : E}
   证明: (h.hasSum h'y hy).tsum_eq.symm
 
 Depends on / 依赖: h.hasSum, hasSum, tsum_eq, tsum_eq.symm
@@ -3293,8 +3293,8 @@ theorem HasFPowerSeriesOnBall.sum
   proof: (h.hasSum hy).tsum_eq.symm
 
 中文:
-定理 HasFPowerSeriesOnBall.sum
-  结论: (h : HasFPowerSeriesOnBall f p x r) {y : E}
+定理 有FPowerSeriesOnBall.求和
+  结论: (h : 有FPowerSeriesOnBall f p x r) {y : E}
   证明: (h.hasSum hy).tsum_eq.symm
 
 Depends on / 依赖: h.hasSum, hasSum, tsum_eq, tsum_eq.symm
@@ -3316,7 +3316,7 @@ theorem FormalMultilinearSeries.continuousOn
 
 中文:
 定理 FormalMultilinearSeries.continuousOn
-  条件: [CompleteSpace F]
+  条件: [完备空间 F]
   证明: by
   rcases eq_zero_or_pos p.radius with h | h
   · simp [h, continuousOn_empty]

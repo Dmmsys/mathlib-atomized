@@ -105,7 +105,7 @@ lemma to_singleFunctor_obj_eq_zero_of_injective
 
 中文:
 引理 to_singleFunctor_obj_eq_zero_of_injective
-  结论: {I : C} [Injective I]
+  结论: {I : C} [单射 I]
   证明: by
   obtain ⟨L, _, g, ι, h, rfl⟩ := left_fac_of_isStrictlyGE φ i
   have hπ : IsSplitMono ι := by
@@ -162,7 +162,7 @@ lemma eq_zero_of_injective
 
 中文:
 引理 eq_zero_of_injective
-  结论: [HasExt.{w} C] {X I : C} {n : 自然数} [Injective I]
+  结论: [HasExt.{w} C] {X I : C} {n : 自然数} [单射 I]
   证明: by
   let K := (CochainComplex.singleFunctor C 0).obj X
   have := K.isStrictlyGE_of_ge (-n) 0 (by lia)
@@ -230,7 +230,7 @@ lemma hasExt_of_enoughInjectives
 
 中文:
 引理 hasExt_of_enoughInjectives
-  条件: [LocallySmall.{w} C] [EnoughInjectives C]
+  条件: [LocallySmall.{w} C] [有足够单射 C]
   结论: HasExt.{w} C
   证明: by
     let := HasDerivedCategory.standard C

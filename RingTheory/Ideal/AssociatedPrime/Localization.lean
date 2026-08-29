@@ -150,7 +150,7 @@ lemma comap_mem_associatedPrimes_of_mem_associatedPrimes_of_isLocalizedModule_of
 
 中文:
 引理 comap_mem_associatedPrimes_of_mem_associatedPrimes_of_isLocalizedModule_of_fg
-  结论: (p : Ideal R')
+  结论: (p : 理想 R')
   证明: by
   rcases ass with ⟨hp, x, hx⟩
   rcases fg with ⟨T, hT⟩
@@ -247,7 +247,7 @@ lemma minimalPrimes_annihilator_subset_associatedPrimes
 
 中文:
 引理 minimalPrimes_annihilator_subset_associatedPrimes
-  条件: [IsNoetherianRing R] [Module.Finite R M]
+  条件: [是Noether环 R] [模.有限 R M]
   证明: by
   intro p hp
   have prime := hp.isPrime

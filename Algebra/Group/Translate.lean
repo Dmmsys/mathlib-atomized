@@ -232,7 +232,7 @@ lemma translate_smul_right
 
 中文:
 引理 translate_smul_right
-  条件: [SMul H α] (a : G) (f : G -> α) (c : H)
+  条件: [标量乘法 H α] (a : G) (f : G -> α) (c : H)
   结论: τ a (c • f) = c • τ a f
   证明: rfl
 -/
@@ -249,7 +249,7 @@ lemma translate_zero_right
 
 中文:
 引理 translate_zero_right
-  条件: [Zero α] (a : G)
+  条件: [零 α] (a : G)
   结论: τ a (0 : G -> α) = 0
   证明: rfl
 -/
@@ -265,7 +265,7 @@ lemma translate_add_right
 
 中文:
 引理 translate_add_right
-  条件: [Add α] (a : G) (f g : G -> α)
+  条件: [加法 α] (a : G) (f g : G -> α)
   结论: τ a (f + g) = τ a f + τ a g
   证明: rfl
 -/
@@ -281,7 +281,7 @@ lemma translate_sub_right
 
 中文:
 引理 translate_sub_right
-  条件: [Sub α] (a : G) (f g : G -> α)
+  条件: [减法 α] (a : G) (f g : G -> α)
   结论: τ a (f - g) = τ a f - τ a g
   证明: rfl
 -/
@@ -297,7 +297,7 @@ lemma translate_neg_right
 
 中文:
 引理 translate_neg_right
-  条件: [Neg α] (a : G) (f : G -> α)
+  条件: [取负 α] (a : G) (f : G -> α)
   结论: τ a (-f) = -τ a f
   证明: rfl
 -/
@@ -316,7 +316,7 @@ lemma translate_sum_right
 
 中文:
 引理 translate_sum_right
-  条件: (a : G) (f : ι -> G -> M) (s : Finset ι)
+  条件: (a : G) (f : ι -> G -> M) (s : 有限集 ι)
   证明: by ext; simp
 -/
 lemma translate_sum_right (a : G) (f : ι -> G -> M) (s : Finset ι) :
@@ -333,7 +333,7 @@ lemma sum_translate
 
 中文:
 引理 sum_translate
-  条件: [Fintype G] (a : G) (f : G -> M)
+  条件: [有限类型 G] (a : G) (f : G -> M)
   结论: ∑ b, τ a f b = ∑ b, f b
   证明: Fintype.sum_equiv (Equiv.subRight _) _ _ fun _ => rfl
 
@@ -381,7 +381,7 @@ lemma translate_prod_right
 
 中文:
 引理 translate_prod_right
-  条件: (a : G) (f : ι -> G -> M) (s : Finset ι)
+  条件: (a : G) (f : ι -> G -> M) (s : 有限集 ι)
   证明: by ext; simp
 -/
 lemma translate_prod_right (a : G) (f : ι -> G -> M) (s : Finset ι) :

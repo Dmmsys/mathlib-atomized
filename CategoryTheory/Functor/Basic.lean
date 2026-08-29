@@ -50,8 +50,8 @@ structure Functor
     - map_comp : forall {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z), map (f ≫ g) = map f ≫ map g  [default: by cat_disch]
 
 中文:
-结构 Functor
-  参数: (C : 类型u₁) [Category.{v₁} C] (D : 类型u₂) [Category.{v₂} D]
+结构 函子
+  参数: (C : 类型u₁) [范畴.{v₁} C] (D : 类型u₂) [范畴.{v₂} D]
   公理与运算 (4 个):
     - obj : C -> D
     - map : 对任意 {X Y : C}, (X ⟶ Y) -> ((obj X) ⟶ (obj Y))
@@ -96,8 +96,8 @@ lemma Functor.map_comp_assoc
   grind
 
 中文:
-引理 Functor.map_comp_assoc
-  结论: {C : 类型u₁} [Category* C] {D : 类型u₂} [Category* D] (F : C ⥤ D)
+引理 函子.map_comp_assoc
+  结论: {C : 类型u₁} [范畴* C] {D : 类型u₂} [范畴* D] (F : C ⥤ D)
   证明: by
   grind
 -/
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (C ⥤ C)
+  签名: 可居 (C ⥤ C)
   定义体: ⟨Functor.id C⟩
 
 Depends on / 依赖: Functor, Functor.id
@@ -346,7 +346,7 @@ theorem map_dite
 
 中文:
 定理 map_dite
-  结论: (F : C ⥤ D) {X Y : C} {P : 命题} [Decidable P]
+  结论: (F : C ⥤ D) {X Y : C} {P : 命题} [可判定 P]
   证明: by
   cat_disch
 

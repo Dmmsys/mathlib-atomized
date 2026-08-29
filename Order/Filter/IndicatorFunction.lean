@@ -126,8 +126,8 @@ theorem Monotone.mulIndicator_eventuallyEq_iUnion
 @[to_additive]
 
 中文:
-定理 Monotone.mulIndicator_eventuallyEq_iUnion
-  结论: {ι} [Preorder ι] [One β] (s : ι -> Set α)
+定理 递增.mulIndicator_eventuallyEq_iUnion
+  结论: {ι} [预序 ι] [幺 β] (s : ι -> 集合 α)
   证明: by
   classical exact hs.piecewise_eventually_eq_iUnion f 1 a
 
@@ -152,8 +152,8 @@ theorem Monotone.tendsto_mulIndicator
 @[to_additive]
 
 中文:
-定理 Monotone.tendsto_mulIndicator
-  结论: {ι} [Preorder ι] [One β] (s : ι -> Set α) (hs : Monotone s)
+定理 递增.tendsto_mulIndicator
+  结论: {ι} [预序 ι] [幺 β] (s : ι -> 集合 α) (hs : 递增 s)
   证明: tendsto_pure.2 hs.mulIndicator_eventuallyEq_iUnion s f a
 
 @[to_additive]
@@ -178,8 +178,8 @@ theorem Antitone.mulIndicator_eventuallyEq_iInter
 @[to_additive]
 
 中文:
-定理 Antitone.mulIndicator_eventuallyEq_iInter
-  结论: {ι} [Preorder ι] [One β] (s : ι -> Set α)
+定理 递减.mulIndicator_eventuallyEq_i整数er
+  结论: {ι} [预序 ι] [幺 β] (s : ι -> 集合 α)
   证明: by
   classical exact hs.piecewise_eventually_eq_iInter f 1 a
 
@@ -204,8 +204,8 @@ theorem Antitone.tendsto_mulIndicator
 @[to_additive]
 
 中文:
-定理 Antitone.tendsto_mulIndicator
-  结论: {ι} [Preorder ι] [One β] (s : ι -> Set α) (hs : Antitone s)
+定理 递减.tendsto_mulIndicator
+  结论: {ι} [预序 ι] [幺 β] (s : ι -> 集合 α) (hs : 递减 s)
   证明: tendsto_pure.2 hs.mulIndicator_eventuallyEq_iInter s f a
 
 @[to_additive]
@@ -233,7 +233,7 @@ theorem mulIndicator_biUnion_finset_eventuallyEq
 
 中文:
 定理 mulIndicator_biUnion_finset_eventuallyEq
-  条件: {ι} [One β] (s : ι -> Set α) (f : α -> β) (a : α)
+  条件: {ι} [幺 β] (s : ι -> 集合 α) (f : α -> β) (a : α)
   证明: by
   rw [iUnion_eq_iUnion_finset s]
   apply Monotone.mulIndicator_eventuallyEq_iUnion
@@ -263,7 +263,7 @@ theorem tendsto_mulIndicator_biUnion_finset
 
 中文:
 定理 tendsto_mulIndicator_biUnion_finset
-  条件: {ι} [One β] (s : ι -> Set α) (f : α -> β) (a : α)
+  条件: {ι} [幺 β] (s : ι -> 集合 α) (f : α -> β) (a : α)
   证明: tendsto_pure.2 mulIndicator_biUnion_finset_eventuallyEq s f a
 
 @[to_additive]
@@ -287,8 +287,8 @@ theorem Filter.EventuallyEq.mulSupport
 @[to_additive]
 
 中文:
-定理 Filter.EventuallyEq.mulSupport
-  结论: [One β] {f g : α -> β} {l : Filter α}
+定理 滤子.EventuallyEq.mulSupport
+  结论: [幺 β] {f g : α -> β} {l : 滤子 α}
   证明: h.preimage ({1}ᶜ : Set β)
 
 @[to_additive]
@@ -310,8 +310,8 @@ theorem Filter.EventuallyEq.mulIndicator
 @[to_additive]
 
 中文:
-定理 Filter.EventuallyEq.mulIndicator
-  结论: [One β] {l : Filter α} {f g : α -> β} {s : Set α}
+定理 滤子.EventuallyEq.mulIndicator
+  结论: [幺 β] {l : 滤子 α} {f g : α -> β} {s : 集合 α}
   证明: mulIndicator_eventuallyEq (hfg.filter_mono inf_le_left) EventuallyEq.rfl
 
 @[to_additive]
@@ -332,8 +332,8 @@ theorem Filter.EventuallyEq.mulIndicator_one
 @[to_additive]
 
 中文:
-定理 Filter.EventuallyEq.mulIndicator_one
-  结论: [One β] {l : Filter α} {f : α -> β} {s : Set α}
+定理 滤子.EventuallyEq.mulIndicator_one
+  结论: [幺 β] {l : 滤子 α} {f : α -> β} {s : 集合 α}
   证明: hf.mulIndicator.trans by rw [mulIndicator_one']
 
 @[to_additive]
@@ -360,8 +360,8 @@ exact this.symm.trans h.mulSupport.trans this
 @[to_additive]
 
 中文:
-定理 Filter.EventuallyEq.of_mulIndicator
-  结论: [One β] {l : Filter α} {f : α -> β}
+定理 滤子.EventuallyEq.of_mulIndicator
+  结论: [幺 β] {l : 滤子 α} {f : α -> β}
   证明: by
   have : forall {s : Set α}, Function.mulSupport (s.mulIndicator f) =ᶠ[l] s := fun {s} => by
     rw [mulSupport_mulIndicator]
@@ -392,8 +392,8 @@ theorem Filter.EventuallyEq.of_mulIndicator_const
 @[to_additive]
 
 中文:
-定理 Filter.EventuallyEq.of_mulIndicator_const
-  结论: [One β] {l : Filter α} {c : β} (hc : c != 1)
+定理 滤子.EventuallyEq.of_mulIndicator_const
+  结论: [幺 β] {l : 滤子 α} {c : β} (hc : c != 1)
   证明: .of_mulIndicator (Eventually.of_forall fun _ => hc) h
 
 @[to_additive]
@@ -414,8 +414,8 @@ theorem Filter.mulIndicator_const_eventuallyEq
   proof: ⟨.of_mulIndicator_const hc, mulIndicator_eventuallyEq .rfl⟩
 
 中文:
-定理 Filter.mulIndicator_const_eventuallyEq
-  结论: [One β] {l : Filter α} {c : β} (hc : c != 1)
+定理 滤子.mulIndicator_const_eventuallyEq
+  结论: [幺 β] {l : 滤子 α} {c : β} (hc : c != 1)
   证明: ⟨.of_mulIndicator_const hc, mulIndicator_eventuallyEq .rfl⟩
 
 Depends on / 依赖: mulIndicator_eventuallyEq, of_mulIndicator_const

@@ -56,7 +56,7 @@ definition supported
 
 中文:
 定义 supported
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: { p | ↑p.support subseteq s }
   add_mem' {p q} hp hq := by
     classical
@@ -92,7 +92,7 @@ theorem mem_supported
 
 中文:
 定理 mem_supported
-  条件: {s : Set α} (p : α ->₀ M)
+  条件: {s : 集合 α} (p : α ->₀ M)
   结论: p in supported M R s ↔ ↑p.support subseteq s
   证明: Iff.rfl
 
@@ -112,7 +112,7 @@ theorem mem_supported'
 
 中文:
 定理 mem_supported'
-  条件: {s : Set α} (p : α ->₀ M)
+  条件: {s : 集合 α} (p : α ->₀ M)
   证明: by
   simp [mem_supported, Set.subset_def, not_imp_comm]
 
@@ -135,7 +135,7 @@ theorem mem_supported_support
 中文:
 定理 mem_supported_support
   条件: (p : α ->₀ M)
-  结论: p in Finsupp.supported M R (p.support : Set α)
+  结论: p in 有限支撑.supported M R (p.support : 集合 α)
   证明: by
   rw [Finsupp.mem_supported]
 
@@ -154,7 +154,7 @@ theorem single_mem_supported
 
 中文:
 定理 single_mem_supported
-  条件: {s : Set α} {a : α} (b : M) (h : a in s)
+  条件: {s : 集合 α} {a : α} (b : M) (h : a in s)
   证明: Set.Subset.trans support_single_subset (Finset.singleton_subset_set_iff.2 h)
 
 Depends on / 依赖: Finset, Finset.singleton_subset_set_iff, Set.Subset.trans, Subset, singleton_subset_set_iff, support_single_subset
@@ -180,7 +180,7 @@ theorem supported_eq_span_single
 
 中文:
 定理 supported_eq_span_single
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   refine (span_eq_of_le _ ?_ (SetLike.le_def.2 fun l hl => ?_)).symm
   · rintro _ ⟨_, hp, rfl⟩
@@ -215,7 +215,7 @@ refine ⟨fun h => ?_, fun h => Submodule.subset_span Set.mem_image_of_mem _ h�
 
 中文:
 引理 single_mem_span_single
-  条件: [Nontrivial R] {a : α} {s : Set α}
+  条件: [非平凡 R] {a : α} {s : 集合 α}
   证明: by
 refine ⟨fun h => ?_, fun h => Submodule.subset_span Set.mem_image_of_mem _ h⟩
   rw [← Finsupp.supported_eq_span_single]; rw [Finsupp.mem_supported]; rw [Finsupp.support_single _ (one_ne_zero' R)] at h
@@ -239,7 +239,7 @@ theorem span_le_supported_biUnion_support
 
 中文:
 定理 span_le_supported_biUnion_support
-  条件: (s : Set (α ->₀ M))
+  条件: (s : 集合 (α ->₀ M))
   证明: span_le.mpr fun _ h => subset_biUnion_of_mem h (u := (SetLike.coe ·.support))
 
 Depends on / 依赖: SetLike, SetLike.coe, span_le, span_le.mpr, subset_biUnion_of_mem, support
@@ -264,7 +264,7 @@ definition restrictDom
 
 中文:
 定义 restrictDom
-  签名: (s : Set α) [DecidablePred (· in s)]
+  签名: (s : 集合 α) [DecidablePred (· in s)]
   定义体: LinearMap.codRestrict _
     { toFun := filter (· in s)
       map_add' := fun _ _ => filter_add
@@ -295,7 +295,7 @@ theorem restrictDom_apply
 
 中文:
 定理 restrictDom_apply
-  条件: (s : Set α) (l : α ->₀ M) [DecidablePred (· in s)]
+  条件: (s : 集合 α) (l : α ->₀ M) [DecidablePred (· in s)]
   证明: rfl
 -/
 theorem restrictDom_apply (s : Set α) (l : α ->₀ M) [DecidablePred (· in s)] :
@@ -317,7 +317,7 @@ theorem restrictDom_comp_subtype
 
 中文:
 定理 restrictDom_comp_subtype
-  条件: (s : Set α) [DecidablePred (· in s)]
+  条件: (s : 集合 α) [DecidablePred (· in s)]
   证明: by
   ext l a
   by_cases h : a in s
@@ -344,7 +344,7 @@ Function.RightInverse.surjective LinearMap.congr_fun (restrictDom_comp_subtype s
 
 中文:
 定理 range_restrictDom
-  条件: (s : Set α) [DecidablePred (· in s)]
+  条件: (s : 集合 α) [DecidablePred (· in s)]
   证明: range_eq_top.2
 Function.RightInverse.surjective LinearMap.congr_fun (restrictDom_comp_subtype s)
 
@@ -369,7 +369,7 @@ theorem supported_mono
 
 中文:
 定理 supported_mono
-  条件: {s t : Set α} (st : s subseteq t)
+  条件: {s t : 集合 α} (st : s subseteq t)
   结论: supported M R s <= supported M R t
   证明: fun _ h =>
   Set.Subset.trans h st
@@ -392,7 +392,7 @@ theorem supported_empty
 
 中文:
 定理 supported_empty
-  结论: supported M R (∅ : Set α) = ⊥
+  结论: supported M R (∅ : 集合 α) = ⊥
   证明: eq_bot_iff.2 fun l h => (Submodule.mem_bot R).2 by ext; simp_all [mem_supported']
 
 @[simp]
@@ -413,7 +413,7 @@ theorem supported_univ
 
 中文:
 定理 supported_univ
-  结论: supported M R (Set.univ : Set α) = ⊤
+  结论: supported M R (集合.univ : 集合 α) = ⊤
   证明: eq_top_iff.2 fun _ _ => Set.subset_univ _
 
 Depends on / 依赖: Set.subset_univ, eq_top_iff, subset_univ
@@ -437,7 +437,7 @@ theorem supported_iUnion
 
 中文:
 定理 supported_iUnion
-  条件: {δ : 类型} (s : δ -> Set α)
+  条件: {δ : 类型} (s : δ -> 集合 α)
   证明: by
   refine le_antisymm ?_ (iSup_le fun i => supported_mono <| Set.subset_iUnion _ _)
   have := Classical.decPred fun x => x in ⋃ i, s i
@@ -480,7 +480,7 @@ theorem supported_union
 
 中文:
 定理 supported_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [Set.union_eq_iUnion]; rw [supported_iUnion]; rw [iSup_bool_eq]; rw [cond_true]; rw [cond_false]
 
@@ -499,8 +499,8 @@ theorem supported_iInter
   proof: Submodule.ext fun x => by simp [mem_supported, subset_iInter_iff]
 
 中文:
-定理 supported_iInter
-  条件: {ι : 类型} (s : ι -> Set α)
+定理 supported_i整数er
+  条件: {ι : 类型} (s : ι -> 集合 α)
   证明: Submodule.ext fun x => by simp [mem_supported, subset_iInter_iff]
 
 Depends on / 依赖: Submodule, Submodule.ext, mem_supported, subset_iInter_iff
@@ -520,7 +520,7 @@ theorem supported_inter
 
 中文:
 定理 supported_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [Set.inter_eq_iInter]; rw [supported_iInter]; rw [iInf_bool_eq]; rfl
 
@@ -540,7 +540,7 @@ theorem disjoint_supported_supported
 
 中文:
 定理 disjoint_supported_supported
-  条件: {s t : Set α} (h : Disjoint s t)
+  条件: {s t : 集合 α} (h : Disjoint s t)
   证明: disjoint_iff.2 by rw [← supported_inter, disjoint_iff_inter_eq_empty.1 h, supported_empty]
 
 Depends on / 依赖: disjoint_iff, disjoint_iff_inter_eq_empty, supported_empty, supported_inter
@@ -564,7 +564,7 @@ theorem disjoint_supported_supported_iff
 
 中文:
 定理 disjoint_supported_supported_iff
-  条件: [Nontrivial M] {s t : Set α}
+  条件: [非平凡 M] {s t : 集合 α}
   证明: by
   refine ⟨fun h => Set.disjoint_left.mpr fun x hx1 hx2 => ?_, disjoint_supported_supported⟩
   rcases exists_ne (0 : M) with ⟨y, hy⟩
@@ -593,7 +593,7 @@ lemma codisjoint_supported_supported
 
 中文:
 引理 codisjoint_supported_supported
-  条件: {s t : Set α} (h : Codisjoint s t)
+  条件: {s t : 集合 α} (h : Codisjoint s t)
   证明: by
   rw [codisjoint_iff]; rw [eq_top_iff]; rw [← supported_union]; rw [show s union t = .univ from codisjoint_iff.mp h]; rw [supported_univ]
 
@@ -618,7 +618,7 @@ lemma codisjoint_supported_supported_iff
 
 中文:
 引理 codisjoint_supported_supported_iff
-  条件: [Nontrivial M] {s t : Set α}
+  条件: [非平凡 M] {s t : 集合 α}
   证明: by
   refine ⟨fun h => codisjoint_iff.mpr (eq_top_iff.mpr fun a => ?_), codisjoint_supported_supported⟩
   obtain ⟨x, hx⟩ := exists_ne (0 : M)
@@ -656,7 +656,7 @@ definition supportedEquivFinsupp
 
 中文:
 定义 supportedEquivFinsupp
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: by
   let F : supported M R s ≃ (s ->₀ M) := restrictSupportEquiv s M
   refine F.toLinearEquiv ?_
@@ -688,7 +688,7 @@ theorem supportedEquivFinsupp_symm_apply_coe
 
 中文:
 定理 supportedEquivFinsupp_symm_apply_coe
-  结论: (s : Set α) [DecidablePred (· in s)]
+  结论: (s : 集合 α) [DecidablePred (· in s)]
   证明: by
   convert! restrictSupportEquiv_symm_apply_coe ..
 -/
@@ -707,7 +707,7 @@ theorem supportedEquivFinsupp_symm_single
 
 中文:
 定理 supportedEquivFinsupp_symm_single
-  条件: (s : Set α) (i : s) (a : M)
+  条件: (s : 集合 α) (i : s) (a : M)
   证明: by
   classical simp
 -/
@@ -734,7 +734,7 @@ theorem supported_comap_lmapDomain
 
 中文:
 定理 supported_comap_lmapDomain
-  条件: (f : α -> α') (s : Set α')
+  条件: (f : α -> α') (s : 集合 α')
   证明: by
   classical
   intro l (hl : (l.support : Set α) subseteq f ⁻¹' s)
@@ -773,7 +773,7 @@ theorem lmapDomain_supported
 
 中文:
 定理 lmapDomain_supported
-  条件: (f : α -> α') (s : Set α)
+  条件: (f : α -> α') (s : 集合 α)
   证明: by
   classical
   cases isEmpty_or_nonempty α
@@ -825,7 +825,7 @@ theorem lmapDomain_disjoint_ker
 
 中文:
 定理 lmapDomain_disjoint_ker
-  结论: (f : α -> α') {s : Set α}
+  结论: (f : α -> α') {s : 集合 α}
   证明: by
   rw [disjoint_iff_inf_le]
   rintro l ⟨h₁, h₂⟩
@@ -874,7 +874,7 @@ definition congr
 
 中文:
 定义 congr
-  签名: {α' : 类型} (s : Set α) (t : Set α') (e : s ≃ t)
+  签名: {α' : 类型} (s : 集合 α) (t : 集合 α') (e : s ≃ t)
   定义体: by
   haveI := Classical.decPred fun x => x in s
   haveI := Classical.decPred fun x => x in t

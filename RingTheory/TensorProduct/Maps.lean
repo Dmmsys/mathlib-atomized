@@ -57,7 +57,7 @@ definition lTensorAlgHom
 
 中文:
 定义 lTensorAlgHom
-  签名: : Module.End R M ->ₐ[R] Module.End R (N otimes[R] M)
+  签名: : 模.End R M ->ₐ[R] 模.End R (N otimes[R] M)
   定义体: .ofLinearMap (lTensorHom (M := N)) (lTensor_id N M) (lTensor_mul N)
 
 Depends on / 依赖: lTensorHom, lTensor_id, lTensor_mul, ofLinearMap
@@ -77,7 +77,7 @@ definition rTensorAlgHom
 
 中文:
 定义 rTensorAlgHom
-  签名: : Module.End R M ->ₐ[R] Module.End R (M otimes[R] N)
+  签名: : 模.End R M ->ₐ[R] 模.End R (M otimes[R] N)
   定义体: .ofLinearMap (rTensorHom (M := N)) (rTensor_id N M) (rTensor_mul N)
 
 Depends on / 依赖: ofLinearMap, rTensorHom, rTensor_id, rTensor_mul
@@ -125,7 +125,7 @@ lemma _root_.LinearMap.map_mul_of_map_mul_tmul
     exact hf _ _ _ _) x y
 
 中文:
-引理 _root_.LinearMap.map_mul_of_map_mul_tmul
+引理 _root_.线性映射.map_mul_of_map_mul_tmul
   结论: {f : A otimes[R] B ->ₗ[S] C}
   证明: f.map_mul_iff.2 (by
     -- these instances are needed by the statement of `ext`, but not by the current definition.
@@ -493,7 +493,7 @@ definition liftEquivRight
 
 中文:
 定义 liftEquivRight
-  签名: (C : 类型) [CommRing C] [Algebra R C] [Algebra S C] [IsScalarTower R S C]
+  签名: (C : 类型) [交换环 C] [代数 R C] [代数 S C] [标量塔 R S C]
   定义体: Algebra.TensorProduct.lift (Algebra.ofId _ _) f fun _ _ => .all _ _
   invFun f := AlgHom.comp (f.restrictScalars R) Algebra.TensorProduct.includeRight
   left_inv _ := by ext; simp
@@ -518,7 +518,7 @@ theorem restrictScalars_lift
 
 中文:
 定理 restrictScalars_lift
-  结论: [CommSemiring R'] [Algebra R R'] [Algebra R' S]
+  结论: [交换半环 R'] [代数 R R'] [代数 R' S]
   证明: rfl
 -/
 theorem restrictScalars_lift [CommSemiring R'] [Algebra R R'] [Algebra R' S]
@@ -582,7 +582,7 @@ theorem lid_tmul
 中文:
 定理 lid_tmul
   条件: (r : R) (a : A)
-  结论: TensorProduct.lid R A (r otimesₜ a) = r • a
+  结论: 张量积.lid R A (r otimesₜ a) = r • a
   证明: rfl
 -/
 theorem lid_tmul (r : R) (a : A) : TensorProduct.lid R A (r otimesₜ a) = r • a := rfl
@@ -601,7 +601,7 @@ theorem lid_symm_apply
 中文:
 定理 lid_symm_apply
   条件: (a : A)
-  结论: (TensorProduct.lid R A).symm a = 1 otimesₜ a
+  结论: (张量积.lid R A).symm a = 1 otimesₜ a
   证明: rfl
 -/
 theorem lid_symm_apply (a : A) : (TensorProduct.lid R A).symm a = 1 otimesₜ a := rfl
@@ -645,7 +645,7 @@ theorem rid_tmul
 中文:
 定理 rid_tmul
   条件: (r : R) (a : A)
-  结论: TensorProduct.rid R S A (a otimesₜ r) = r • a
+  结论: 张量积.rid R S A (a otimesₜ r) = r • a
   证明: rfl
 -/
 theorem rid_tmul (r : R) (a : A) : TensorProduct.rid R S A (a otimesₜ r) = r • a := rfl
@@ -664,7 +664,7 @@ theorem rid_symm_apply
 中文:
 定理 rid_symm_apply
   条件: (a : A)
-  结论: (TensorProduct.rid R S A).symm a = a otimesₜ 1
+  结论: (张量积.rid R S A).symm a = a otimesₜ 1
   证明: rfl
 -/
 theorem rid_symm_apply (a : A) : (TensorProduct.rid R S A).symm a = a otimesₜ 1 := rfl
@@ -681,7 +681,7 @@ lemma linearMap_comp_rid
 
 中文:
 引理 linearMap_comp_rid
-  结论: (Algebra.linearMap S (S otimes[R] B)).restrictScalars R ∘ₗ
+  结论: (代数.linearMap S (S otimes[R] B)).restrictScalars R ∘ₗ
   证明: by
   ext; simp
 -/
@@ -803,7 +803,7 @@ theorem mapOfCompatibleSMul_surjective
 
 中文:
 定理 mapOfCompatibleSMul_surjective
-  结论: Function.Surjective (mapOfCompatibleSMul R S T A B)
+  结论: 函数.满射 (mapOfCompatibleSMul R S T A B)
   证明: _root_.TensorProduct.mapOfCompatibleSMul_surjective R S T A B
 
 Depends on / 依赖: TensorProduct, _root_, _root_.TensorProduct.mapOfCompatibleSMul_surjective, mapOfCompatibleSMul_surjective
@@ -828,7 +828,7 @@ definition equivOfCompatibleSMul
 
 中文:
 定义 equivOfCompatibleSMul
-  签名: [CompatibleSMul S R A B]
+  签名: [余mpatibleSMul S R A B]
   定义体: mapOfCompatibleSMul R S T A B
   invFun := mapOfCompatibleSMul S R T A B
   __ := _root_.TensorProduct.equivOfCompatibleSMul R S T A B
@@ -1967,7 +1967,7 @@ theorem leftComm_toLinearEquiv
 
 中文:
 定理 leftComm_toLinearEquiv
-  结论: ↑(leftComm R A B C) = _root_.TensorProduct.leftComm R A B C
+  结论: ↑(leftComm R A B C) = _root_.张量积.leftComm R A B C
   证明: LinearEquiv.toLinearMap_injective (by ext; rfl)
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_injective, toLinearMap_injective
@@ -2130,7 +2130,7 @@ lemma includeLeft_bijective
 
 中文:
 引理 includeLeft_bijective
-  条件: (h : Function.Bijective (algebraMap R B))
+  条件: (h : 函数.双射 (algebraMap R B))
   证明: by
   have : (includeLeft : A ->ₐ[S] A otimes[R] B).comp (TensorProduct.rid R S A).toAlgHom =
       map (.id S A) (Algebra.ofId R B) := by ext; simp
@@ -2161,7 +2161,7 @@ lemma includeRight_bijective
 
 中文:
 引理 includeRight_bijective
-  条件: (h : Function.Bijective (algebraMap R A))
+  条件: (h : 函数.双射 (algebraMap R A))
   证明: by
   rw [← Function.Bijective.of_comp_iff' (TensorProduct.comm R A B).bijective]
   exact Algebra.TensorProduct.includeLeft_bijective (S := R) h
@@ -2314,7 +2314,7 @@ theorem lmul'_toLinearMap
 
 中文:
 定理 lmul'_toLinearMap
-  结论: (lmul' R : _ ->ₐ[R] S).toLinearMap = LinearMap.mul' R S
+  结论: (lmul' R : _ ->ₐ[R] S).toLinearMap = 线性映射.mul' R S
   证明: rfl
 
 @[simp]
@@ -2358,7 +2358,7 @@ theorem lmul'_comp_includeLeft
 
 中文:
 定理 lmul'_comp_includeLeft
-  结论: (lmul' R : _ ->ₐ[R] S).comp includeLeft = AlgHom.id R S
+  结论: (lmul' R : _ ->ₐ[R] S).comp includeLeft = 代数态射.id R S
   证明: AlgHom.ext mul_one
 
 @[simp]
@@ -2377,7 +2377,7 @@ theorem lmul'_comp_includeRight
 
 中文:
 定理 lmul'_comp_includeRight
-  结论: (lmul' R : _ ->ₐ[R] S).comp includeRight = AlgHom.id R S
+  结论: (lmul' R : _ ->ₐ[R] S).comp includeRight = 代数态射.id R S
   证明: AlgHom.ext one_mul
 -/
 theorem lmul'_comp_includeRight : (lmul' R : _ ->ₐ[R] S).comp includeRight = AlgHom.id R S :=
@@ -2413,7 +2413,7 @@ definition lmulEquiv
 
 中文:
 定义 lmulEquiv
-  签名: [CompatibleSMul R S S S]
+  签名: [余mpatibleSMul R S S S]
   定义体: .ofAlgHom (lmul'' R) includeLeft lmul'_comp_includeLeft AlgHom.ext fun x => x.induction_on
     (by simp) (fun x y => show (x * y) otimesₜ[R] 1 = x otimesₜ[R] y by
       rw [mul_comm]; rw [← smul_eq_mul]; rw [smul_tmul]; rw [smul_eq_mul]; rw [mul_one])
@@ -2437,7 +2437,7 @@ theorem lmulEquiv_eq_lidOfCompatibleSMul
 
 中文:
 定理 lmulEquiv_eq_lidOfCompatibleSMul
-  条件: [CompatibleSMul R S S S]
+  条件: [余mpatibleSMul R S S S]
   证明: AlgEquiv.coe_toAlgHom_injective by ext; rfl
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.coe_toAlgHom_injective, coe_toAlgHom_injective
@@ -2476,7 +2476,7 @@ theorem productMap_eq_comp_map
 
 中文:
 定理 productMap_eq_comp_map
-  结论: productMap f g = (lmul' R).comp (TensorProduct.map f g)
+  结论: productMap f g = (lmul' R).comp (张量积.map f g)
   证明: by
   ext <;> rfl
 
@@ -2711,7 +2711,7 @@ lemma mul'_bijective_of_surjective
 
 中文:
 引理 mul'_bijective_of_surjective
-  条件: (h : Function.Surjective (algebraMap R A))
+  条件: (h : 函数.满射 (algebraMap R A))
   证明: have : TensorProduct.CompatibleSMul R A A A := .of_algebraMap_surjective _ _ h
   (Algebra.TensorProduct.lmulEquiv R A).bijective
 -/
@@ -2786,8 +2786,8 @@ definition Subalgebra.baseChange
   body: AlgHom.range (Algebra.TensorProduct.map (AlgHom.id B B) C.val)
 
 中文:
-定义 Subalgebra.baseChange
-  签名: {R A : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+定义 子代数.baseChange
+  签名: {R A : 类型} [交换半环 R] [半环 A] [代数 R A]
   定义体: AlgHom.range (Algebra.TensorProduct.map (AlgHom.id B B) C.val)
 
 Depends on / 依赖: AlgHom, AlgHom.id, AlgHom.range, Algebra, Algebra.TensorProduct.map, C.val, TensorProduct
@@ -2809,7 +2809,7 @@ lemma Subalgebra.tmul_mem_baseChange
   proof: ⟨(b otimesₜ[R] ⟨x, hx⟩), rfl⟩
 
 中文:
-引理 Subalgebra.tmul_mem_baseChange
+引理 子代数.tmul_mem_baseChange
   条件: {x : A} (hx : x in C) (b : B)
   结论: b otimesₜ[R] x in C.baseChange B
   证明: ⟨(b otimesₜ[R] ⟨x, hx⟩), rfl⟩
@@ -2836,7 +2836,7 @@ definition Algebra.TensorProduct.uliftEquiv
       Algebra.TensorProduct.equivOfCompatibleSMul _ _ _ _ _)
 
 中文:
-定义 Algebra.TensorProduct.uliftEquiv
+定义 代数.张量积.uliftEquiv
   签名: :
   定义体: AlgEquiv.trans ULift.algEquiv
     (.trans (congr ULift.algEquiv.symm ULift.algEquiv.symm) <|
@@ -2862,7 +2862,7 @@ lemma Algebra.TensorProduct.uliftEquiv_tmul
   proof: rfl
 
 中文:
-引理 Algebra.TensorProduct.uliftEquiv_tmul
+引理 代数.张量积.uliftEquiv_tmul
   条件: (a : A) (b : B)
   证明: rfl
 -/
@@ -2881,8 +2881,8 @@ lemma Algebra.TensorProduct.down_uliftEquiv_symm_tmul
   proof: rfl
 
 中文:
-引理 Algebra.TensorProduct.down_uliftEquiv_symm_tmul
-  条件: (a : ULift A) (b : ULift B)
+引理 代数.张量积.down_uliftEquiv_symm_tmul
+  条件: (a : 类型层提升 A) (b : 类型层提升 B)
   证明: rfl
 -/
 lemma Algebra.TensorProduct.down_uliftEquiv_symm_tmul (a : ULift A) (b : ULift B) :
@@ -2899,8 +2899,8 @@ lemma Algebra.TensorProduct.uliftEquiv_symm_tmul
   proof: rfl
 
 中文:
-引理 Algebra.TensorProduct.uliftEquiv_symm_tmul
-  条件: (a : ULift A) (b : ULift B)
+引理 代数.张量积.uliftEquiv_symm_tmul
+  条件: (a : 类型层提升 A) (b : 类型层提升 B)
   证明: rfl
 -/
 lemma Algebra.TensorProduct.uliftEquiv_symm_tmul (a : ULift A) (b : ULift B) :
@@ -2918,7 +2918,7 @@ lemma Algebra.TensorProduct.lmul'_ulift
   ext <;> simp
 
 中文:
-引理 Algebra.TensorProduct.lmul'_ulift
+引理 代数.张量积.lmul'_ulift
   证明: by
   ext <;> simp
 -/

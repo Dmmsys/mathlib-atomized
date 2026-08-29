@@ -277,7 +277,7 @@ theorem cauchy_map_of_uniformCauchySeqOn_fderiv
 
 中文:
 定理 cauchy_map_of_uniformCauchySeqOn_fderiv
-  结论: {s : Set E} (hs : IsOpen s) (h's : IsPreconnected s)
+  结论: {s : 集合 E} (hs : 是开集 s) (h's : 是预连通 s)
   证明: by
   have : NeBot l := (cauchy_map_iff.1 hfg).1
   let t := { y | y in s ∧ Cauchy (map (fun n => f n y) l) }
@@ -509,7 +509,7 @@ theorem hasFDerivAt_of_tendstoLocallyUniformlyOn
 
 中文:
 定理 hasFDerivAt_of_tendstoLocallyUniformlyOn
-  结论: [NeBot l] {s : Set E} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 E} (hs : 是开集 s)
   证明: by
   have h1 : s in 𝓝 x := hs.mem_nhds hx
   have h3 : Set.univ ×ˢ s in l ×ˢ 𝓝 x := by simp only [h1, prod_mem_prod_iff, univ_mem, and_self_iff]
@@ -542,7 +542,7 @@ theorem hasFDerivAt_of_tendsto_locally_uniformly_on'
 
 中文:
 定理 hasFDerivAt_of_tendsto_locally_uniformly_on'
-  结论: [NeBot l] {s : Set E} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 E} (hs : 是开集 s)
   证明: by
   refine hasFDerivAt_of_tendstoLocallyUniformlyOn hs hf' (fun n z hz => ?_) hfg hx
   exact ((hf n z hz).differentiableAt (hs.mem_nhds hz)).hasFDerivAt
@@ -566,7 +566,7 @@ theorem hasFDerivAt_of_tendstoUniformlyOn
 
 中文:
 定理 hasFDerivAt_of_tendstoUniformlyOn
-  结论: [NeBot l] {s : Set E} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 E} (hs : 是开集 s)
   证明: hasFDerivAt_of_tendstoLocallyUniformlyOn hs hf'.tendstoLocallyUniformlyOn hf hfg hx
 
 Depends on / 依赖: hasFDerivAt_of_tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn
@@ -635,7 +635,7 @@ theorem UniformCauchySeqOnFilter.one_smulRight
 
 中文:
 定理 UniformCauchySeqOnFilter.one_smulRight
-  结论: {l' : Filter 𝕜}
+  结论: {l' : 滤子 𝕜}
   证明: by
   intro u hu
   simpa using hf' _ ((ContinuousLinearMap.smulRightL 𝕜 𝕜 G 1).uniformContinuous hu)
@@ -763,7 +763,7 @@ theorem hasDerivAt_of_tendstoLocallyUniformlyOn
 
 中文:
 定理 hasDerivAt_of_tendstoLocallyUniformlyOn
-  结论: [NeBot l] {s : Set 𝕜} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 𝕜} (hs : 是开集 s)
   证明: by
   have h1 : s in 𝓝 x := hs.mem_nhds hx
   have h2 : forallᶠ n : ι × 𝕜 in l ×ˢ 𝓝 x, HasDerivAt (f n.1) (f' n.1 n.2) n.2 :=
@@ -795,7 +795,7 @@ theorem hasDerivAt_of_tendsto_locally_uniformly_on'
 
 中文:
 定理 hasDerivAt_of_tendsto_locally_uniformly_on'
-  结论: [NeBot l] {s : Set 𝕜} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 𝕜} (hs : 是开集 s)
   证明: by
   refine hasDerivAt_of_tendstoLocallyUniformlyOn hs hf' ?_ hfg hx
   filter_upwards [hf] with n h z hz using ((h z hz).differentiableAt (hs.mem_nhds hz)).hasDerivAt
@@ -819,7 +819,7 @@ theorem hasDerivAt_of_tendstoUniformlyOn
 
 中文:
 定理 hasDerivAt_of_tendstoUniformlyOn
-  结论: [NeBot l] {s : Set 𝕜} (hs : IsOpen s)
+  结论: [NeBot l] {s : 集合 𝕜} (hs : 是开集 s)
   证明: hasDerivAt_of_tendstoLocallyUniformlyOn hs hf'.tendstoLocallyUniformlyOn hf hfg hx
 
 Depends on / 依赖: hasDerivAt_of_tendstoLocallyUniformlyOn, tendstoLocallyUniformlyOn

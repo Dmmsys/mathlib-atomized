@@ -35,7 +35,7 @@ definition commutatorElement
 
 中文:
 定义 commutatorElement
-  签名: {G : 类型} [Group G]
+  签名: {G : 类型} [群 G]
   定义体: ⟨fun g₁ g₂ => g₁ * g₂ * g₁⁻¹ * g₂⁻¹⟩
 -/
 def commutatorElement {G : Type*} [Group G] : Bracket G G :=
@@ -66,7 +66,7 @@ theorem commutatorElement_def
 
 中文:
 定理 commutatorElement_def
-  条件: {G : 类型} [Group G] (g₁ g₂ : G)
+  条件: {G : 类型} [群 G] (g₁ g₂ : G)
   证明: rfl
 -/
 theorem commutatorElement_def {G : Type*} [Group G] (g₁ g₂ : G) :

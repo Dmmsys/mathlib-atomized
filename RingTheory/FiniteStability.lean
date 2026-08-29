@@ -46,7 +46,7 @@ theorem baseChangeAux_surj
 
 中文:
 定理 baseChangeAux_surj
-  条件: {σ : 类型} {f : MvPolynomial σ R ->ₐ[R] A} (hf : Function.Surjective f)
+  条件: {σ : 类型} {f : 多元多项式 σ R ->ₐ[R] A} (hf : 函数.满射 f)
   证明: by
   change Function.Surjective (TensorProduct.map (AlgHom.id R B) f)
   apply TensorProduct.map_surjective
@@ -78,7 +78,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [hfa : FiniteType R A]
+  签名: [hfa : 有限型 R A]
   定义体: by
   rw [iff_quotient_mvPolynomial''] at *
   obtain ⟨n, f, hf⟩ := hfa
@@ -117,7 +117,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [FinitePresentation R A]
+  签名: [有限呈现 R A]
   定义体: by
   obtain ⟨n, f, hsurj, hfg⟩ := ‹FinitePresentation R A›
   let g : B otimes[R] MvPolynomial (Fin n) R ->ₐ[B] B otimes[R] A :=

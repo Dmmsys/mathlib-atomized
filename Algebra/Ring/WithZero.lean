@@ -30,7 +30,7 @@ instance instLeftDistribClass
 
 中文:
 实例 instLeftDistribClass
-  签名: [Mul α] [Add α] [LeftDistribClass α]
+  签名: [乘法 α] [加法 α] [LeftDistrib类 α]
   定义体: by
     cases a; · rfl
     cases b <;> cases c <;> try rfl
@@ -58,7 +58,7 @@ instance instRightDistribClass
 
 中文:
 实例 instRightDistribClass
-  签名: [Mul α] [Add α] [RightDistribClass α]
+  签名: [乘法 α] [加法 α] [RightDistrib类 α]
   定义体: by
     cases c; · simp
     cases a <;> cases b <;> try rfl
@@ -103,7 +103,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [Semiring α]
+  签名: [半环 α]
 -/
 instance instSemiring [Semiring α] : Semiring (WithZero α) where
 

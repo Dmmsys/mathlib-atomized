@@ -35,7 +35,7 @@ class IsInvariant
     - isInvariant : forall b : B, (forall g : G, g • b = b) -> exists a : A, algebraMap A B a = b
 
 中文:
-类 IsInvariant
+类 是不变
   参数: : 命题 where
   公理与运算 (1 个):
     - isInvariant : 对任意 b : B, (对任意 g : G, g • b = b) -> 存在 a : A, algebraMap A B a = b

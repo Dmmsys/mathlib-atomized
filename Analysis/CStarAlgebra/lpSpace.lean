@@ -29,8 +29,8 @@ instance [forall
   signature: i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
 
 中文:
-实例 [forall
-  签名: i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
+实例 [对任意
+  签名: i, 非幺CStar代数 (A i)] : 非幺CStar代数 (lp A ∞) where
 -/
 instance [forall i, NonUnitalCStarAlgebra (A i)] : NonUnitalCStarAlgebra (lp A ∞) where
 
@@ -42,8 +42,8 @@ instance [forall
   signature: i, NonUnitalCommCStarAlgebra (A i)] : NonUnitalCommCStarAlgebra (lp A ∞) where
 
 中文:
-实例 [forall
-  签名: i, NonUnitalCommCStarAlgebra (A i)] : NonUnitalCommCStarAlgebra (lp A ∞) where
+实例 [对任意
+  签名: i, 非幺交换CStar代数 (A i)] : 非幺交换CStar代数 (lp A ∞) where
 
 Depends on / 依赖: NormedDivisionRing, NormedDivisionRing.toNormedRing, toNormedRing
 -/
@@ -62,8 +62,8 @@ instance [forall
   norm_mul_le := norm_mul_le
 
 中文:
-实例 [forall
-  签名: i, Nontrivial (A i)] [对任意 i, CStarAlgebra (A i)] : NormedRing (lp A ∞) where
+实例 [对任意
+  签名: i, 非平凡 (A i)] [对任意 i, CStar代数 (A i)] : 赋范环 (lp A ∞) where
   定义体: dist_eq_norm_neg_add
   norm_mul_le := norm_mul_le
 
@@ -81,8 +81,8 @@ instance [forall
   signature: i, Nontrivial (A i)] [forall i, CommCStarAlgebra (A i)] : CommCStarAlgebra (lp A ∞) where
 
 中文:
-实例 [forall
-  签名: i, Nontrivial (A i)] [对任意 i, CommCStarAlgebra (A i)] : CommCStarAlgebra (lp A ∞) where
+实例 [对任意
+  签名: i, 非平凡 (A i)] [对任意 i, 交换CStar代数 (A i)] : 交换CStar代数 (lp A ∞) where
 
 Depends on / 依赖: NormOneClass, NormedDivisionRing, NormedDivisionRing.to_normOneClass, to_normOneClass
 -/

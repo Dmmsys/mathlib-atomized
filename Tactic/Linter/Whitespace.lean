@@ -211,7 +211,7 @@ definition pushFormatError
 
 中文:
 定义 pushFormatError
-  签名: (fs : Array FormatError) (f : FormatError)
+  签名: (fs : 数组 FormatError) (f : FormatError)
   定义体: -- If there are no errors already, we simply add the new one.
   if fs.isEmpty then fs.push f else
   let back := fs.back!
@@ -251,7 +251,7 @@ definition parallelScanAux
 
 中文:
 定义 parallelScanAux
-  签名: (as : Array FormatError) (L M : String.Slice)
+  签名: (as : 数组 FormatError) (L M : String.Slice)
   定义体: Id.run do
   if M.trimAscii.isEmpty then as else
   -- We try as hard as possible to scan the strings one character at a time.
@@ -430,7 +430,7 @@ definition getUnlintedRanges
 
 中文:
 定义 getUnlintedRanges
-  签名: (a : Array SyntaxNodeKind)
+  签名: (a : 数组 SyntaxNodeKind)
   定义体: args.foldl (init := curr) (·.union <| getUnlintedRanges a curr ·)
     if a.contains kind then
       new.insert (s.getRange?.getD default)
@@ -468,7 +468,7 @@ definition isOutside
 
 中文:
 定义 isOutside
-  签名: (rgs : Std.HashSet Lean.Syntax.Range) (rg : Lean.Syntax.Range)
+  签名: (rgs : Std.HashSet Lean.Syntax.值域) (rg : Lean.Syntax.值域)
   定义体: rgs.all fun {start := a, stop := b} => !(a <= rg.start && rg.stop <= b)
 
 Depends on / 依赖: rg.start, rg.stop, rgs.all

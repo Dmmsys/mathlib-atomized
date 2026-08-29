@@ -46,7 +46,7 @@ theorem take_one_drop_eq_of_lt_length
 
 中文:
 定理 take_one_drop_eq_of_lt_length
-  条件: {l : List α} {n : 自然数} (h : n < l.length)
+  条件: {l : 列表 α} {n : 自然数} (h : n < l.length)
   证明: by
   rw [drop_eq_getElem_cons h]; rw [take]; rw [take]
   simp
@@ -69,7 +69,7 @@ lemma take_eq_self_iff
 
 中文:
 引理 take_eq_self_iff
-  条件: (x : List α) {n : 自然数}
+  条件: (x : 列表 α) {n : 自然数}
   结论: x.take n = x ↔ x.length <= n
   证明: ⟨by grind, take_of_length_le⟩
 -/
@@ -88,7 +88,7 @@ lemma take_self_eq_iff
 
 中文:
 引理 take_self_eq_iff
-  条件: (x : List α) {n : 自然数}
+  条件: (x : 列表 α) {n : 自然数}
   结论: x = x.take n ↔ x.length <= n
   证明: by
   rw [Eq.comm]; rw [take_eq_self_iff]
@@ -107,7 +107,7 @@ lemma take_eq_left_iff
 
 中文:
 引理 take_eq_left_iff
-  条件: {x y : List α} {n : 自然数}
+  条件: {x y : 列表 α} {n : 自然数}
   证明: by
   simp [take_append, Nat.sub_eq_zero_iff_le, Or.comm]
 -/
@@ -126,7 +126,7 @@ lemma left_eq_take_iff
 
 中文:
 引理 left_eq_take_iff
-  条件: {x y : List α} {n : 自然数}
+  条件: {x y : 列表 α} {n : 自然数}
   证明: by
   rw [Eq.comm]; apply take_eq_left_iff
 -/
@@ -144,7 +144,7 @@ lemma drop_take_append_drop
 
 中文:
 引理 drop_take_append_drop
-  条件: (x : List α) (m n : 自然数)
+  条件: (x : 列表 α) (m n : 自然数)
   证明: by rw [← drop_drop, take_append_drop]
 -/
 @[simp] lemma drop_take_append_drop (x : List α) (m n : Nat) :
@@ -160,7 +160,7 @@ lemma drop_take_append_drop'
 
 中文:
 引理 drop_take_append_drop'
-  条件: (x : List α) (m n : 自然数)
+  条件: (x : 列表 α) (m n : 自然数)
   证明: by rw [Nat.add_comm, drop_take_append_drop]
 -/
 @[simp] lemma drop_take_append_drop' (x : List α) (m n : Nat) :
@@ -176,7 +176,7 @@ lemma take_concat_get'
 
 中文:
 引理 take_concat_get'
-  条件: (l : List α) (i : 自然数) (h : i < l.length)
+  条件: (l : 列表 α) (i : 自然数) (h : i < l.length)
   证明: by simp
 -/
 lemma take_concat_get' (l : List α) (i : Nat) (h : i < l.length) :
@@ -192,7 +192,7 @@ theorem cons_getElem_drop_succ
 
 中文:
 定理 cons_getElem_drop_succ
-  条件: {l : List α} {n : 自然数} {h : n < l.length}
+  条件: {l : 列表 α} {n : 自然数} {h : n < l.length}
   证明: (drop_eq_getElem_cons h).symm
 
 Depends on / 依赖: drop_eq_getElem_cons
@@ -211,7 +211,7 @@ theorem cons_get_drop_succ
 
 中文:
 定理 cons_get_drop_succ
-  条件: {l : List α} {n}
+  条件: {l : 列表 α} {n}
   证明: (drop_eq_getElem_cons n.2).symm
 
 Depends on / 依赖: drop_eq_getElem_cons
@@ -238,7 +238,7 @@ lemma drop_length_sub_one
 
 中文:
 引理 drop_length_sub_one
-  条件: {l : List α} (h : l != [])
+  条件: {l : 列表 α} (h : l != [])
   结论: l.drop (l.length - 1) = [l.getLast h]
   证明: by
   induction l with
@@ -274,8 +274,8 @@ theorem tail_iterate
 
 中文:
 定理 tail_iterate
-  条件: (l : List α) (n : 自然数)
-  结论: (List.tail^[n]) l = l.drop n
+  条件: (l : 列表 α) (n : 自然数)
+  结论: (列表.tail^[n]) l = l.drop n
   证明: by
   induction n generalizing l with
   | zero => rfl
@@ -423,7 +423,7 @@ theorem takeI_eq_take
 
 中文:
 定理 takeI_eq_take
-  结论: 对任意 {n} {l : List α}, n <= length l -> takeI n l = take n l
+  结论: 对任意 {n} {l : 列表 α}, n <= length l -> takeI n l = take n l
 -/
 theorem takeI_eq_take : forall {n} {l : List α}, n <= length l -> takeI n l = take n l
   | 0, _, _ => rfl
@@ -441,7 +441,7 @@ theorem takeI_left
 
 中文:
 定理 takeI_left
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   结论: takeI (length l₁) (l₁ ++ l₂) = l₁
   证明: (takeI_eq_take (by simp only [length_append, Nat.le_add_right])).trans take_left
 
@@ -462,7 +462,7 @@ theorem takeI_left'
 
 中文:
 定理 takeI_left'
-  条件: {l₁ l₂ : List α} {n} (h : length l₁ = n)
+  条件: {l₁ l₂ : 列表 α} {n} (h : length l₁ = n)
   结论: takeI n (l₁ ++ l₂) = l₁
   证明: by
   rw [← h]; apply takeI_left
@@ -504,7 +504,7 @@ theorem takeD_eq_take
 
 中文:
 定理 takeD_eq_take
-  结论: 对任意 {n} {l : List α} a, n <= length l -> takeD n l a = take n l
+  结论: 对任意 {n} {l : 列表 α} a, n <= length l -> takeD n l a = take n l
 -/
 theorem takeD_eq_take : forall {n} {l : List α} a, n <= length l -> takeD n l a = take n l
   | 0, _, _, _ => rfl
@@ -522,7 +522,7 @@ theorem takeD_left
 
 中文:
 定理 takeD_left
-  条件: (l₁ l₂ : List α) (a : α)
+  条件: (l₁ l₂ : 列表 α) (a : α)
   结论: takeD (length l₁) (l₁ ++ l₂) a = l₁
   证明: (takeD_eq_take a (by simp only [length_append, Nat.le_add_right])).trans take_left
 
@@ -543,7 +543,7 @@ theorem takeD_left'
 
 中文:
 定理 takeD_left'
-  条件: {l₁ l₂ : List α} {n} {a} (h : length l₁ = n)
+  条件: {l₁ l₂ : 列表 α} {n} {a} (h : length l₁ = n)
   结论: takeD n (l₁ ++ l₂) a = l₁
   证明: by
   rw [← h]; apply takeD_left
@@ -591,7 +591,7 @@ theorem span_eq_takeWhile_dropWhile
 
 中文:
 定理 span_eq_takeWhile_dropWhile
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: span p l = (takeWhile p l, dropWhile p l)
   证明: by
   simpa using! span.loop_eq_take_drop p l []
@@ -618,7 +618,7 @@ theorem dropSlice_eq
 
 中文:
 定理 dropSlice_eq
-  条件: (xs : List α) (n m : 自然数)
+  条件: (xs : 列表 α) (n m : 自然数)
   结论: dropSlice n m xs = xs.take n ++ xs.drop (n + m)
   证明: by
   induction n generalizing xs with cases xs with grind [dropSlice]
@@ -642,7 +642,7 @@ theorem length_dropSlice
 
 中文:
 定理 length_dropSlice
-  条件: (i j : 自然数) (xs : List α)
+  条件: (i j : 自然数) (xs : 列表 α)
   证明: by
   induction xs generalizing i j with cases i with grind [dropSlice]
 
@@ -662,7 +662,7 @@ theorem length_dropSlice_lt
 
 中文:
 定理 length_dropSlice_lt
-  条件: (i j : 自然数) (hj : 0 < j) (xs : List α) (hi : i < xs.length)
+  条件: (i j : 自然数) (hj : 0 < j) (xs : 列表 α) (hi : i < xs.length)
   证明: by grind
 -/
 theorem length_dropSlice_lt (i j : Nat) (hj : 0 < j) (xs : List α) (hi : i < xs.length) :

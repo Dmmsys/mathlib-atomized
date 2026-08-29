@@ -35,10 +35,10 @@ class AddAction.IsTopologicallyTransitive
     - exists_vadd_inter : forall {U V : Set α}, IsOpen U -> U.Nonempty -> IsOpen V -> V.Nonempty -> exists m : M, ((m +ᵥ U) inter V).Nonempty
 
 中文:
-类 AddAction.IsTopologicallyTransitive
-  参数: (M α : 类型) [AddMonoid M] [TopologicalSpace α]
+类 加法作用.是TopologicallyTransitive
+  参数: (M α : 类型) [加法幺半群 M] [拓扑空间 α]
   公理与运算 (1 个):
-    - exists_vadd_inter : 对任意 {U V : Set α}, IsOpen U -> U.Nonempty -> IsOpen V -> V.Nonempty -> 存在 m : M, ((m +ᵥ U) inter V).Nonempty
+    - exists_vadd_inter : 对任意 {U V : 集合 α}, 是开集 U -> U.非空 -> 是开集 V -> V.非空 -> 存在 m : M, ((m +ᵥ U) inter V).非空
 -/
 class AddAction.IsTopologicallyTransitive (M α : Type*) [AddMonoid M] [TopologicalSpace α]
     [AddAction M α] : Prop where
@@ -59,10 +59,10 @@ class MulAction.IsTopologicallyTransitive
     - exists_smul_inter : forall {U V : Set α}, IsOpen U -> U.Nonempty -> IsOpen V -> V.Nonempty -> exists m : M, ((m • U) inter V).Nonempty
 
 中文:
-类 MulAction.IsTopologicallyTransitive
-  参数: (M α : 类型) [Monoid M] [TopologicalSpace α]
+类 乘法作用.是TopologicallyTransitive
+  参数: (M α : 类型) [幺半群 M] [拓扑空间 α]
   公理与运算 (1 个):
-    - exists_smul_inter : 对任意 {U V : Set α}, IsOpen U -> U.Nonempty -> IsOpen V -> V.Nonempty -> 存在 m : M, ((m • U) inter V).Nonempty
+    - exists_smul_inter : 对任意 {U V : 集合 α}, 是开集 U -> U.非空 -> 是开集 V -> V.非空 -> 存在 m : M, ((m • U) inter V).非空
 -/
 class MulAction.IsTopologicallyTransitive (M α : Type*) [Monoid M] [TopologicalSpace α]
     [MulAction M α] : Prop where
@@ -84,7 +84,7 @@ theorem MulAction.isTopologicallyTransitive_iff
   proof: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 
 中文:
-定理 MulAction.isTopologicallyTransitive_iff
+定理 乘法作用.isTopologicallyTransitive_iff
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem MulAction.isTopologicallyTransitive_iff :
@@ -107,7 +107,7 @@ theorem MulAction.isTopologicallyTransitive_iff_dense_iUnion
   exact ⟨fun h _ h₁ h₂ _ h₃ h₄ => h h₁ h₂ h₃ h₄, fun h _ _ h₁ h₂ h₃ h₄ => h h₁ h₂ _ h₃ h₄⟩
 
 中文:
-定理 MulAction.isTopologicallyTransitive_iff_dense_iUnion
+定理 乘法作用.isTopologicallyTransitive_iff_dense_iUnion
   证明: by
   simp only [isTopologicallyTransitive_iff, inter_comm, dense_iff_inter_open, inter_iUnion,
     nonempty_iUnion]
@@ -140,7 +140,7 @@ theorem MulAction.isTopologicallyTransitive_iff_dense_iUnion_preimage
 @[to_additive]
 
 中文:
-定理 MulAction.isTopologicallyTransitive_iff_dense_iUnion_preimage
+定理 乘法作用.isTopologicallyTransitive_iff_dense_iUnion_preimage
   证明: by
   simp only [dense_iff_inter_open, inter_iUnion, nonempty_iUnion, ← image_inter_nonempty_iff]
   exact ⟨fun h _ h₁ h₂ _ h₃ h₄ => h.1 h₃ h₄ h₁ h₂, fun h => ⟨fun h₁ h₂ h₃ h₄ => h h₃ h₄ _ h₁ h₂⟩⟩
@@ -167,8 +167,8 @@ theorem IsOpen.dense_iUnion_smul
 @[to_additive]
 
 中文:
-定理 IsOpen.dense_iUnion_smul
-  结论: [h : IsTopologicallyTransitive M α] {U : Set α}
+定理 是开集.dense_iUnion_smul
+  结论: [h : 是TopologicallyTransitive M α] {U : 集合 α}
   证明: (isTopologicallyTransitive_iff_dense_iUnion M).mp h hUo hUne
 
 @[to_additive]
@@ -189,8 +189,8 @@ theorem IsOpen.dense_iUnion_preimage_smul
   proof: (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mp h hUo hUne
 
 中文:
-定理 IsOpen.dense_iUnion_preimage_smul
-  结论: [h : IsTopologicallyTransitive M α]
+定理 是开集.dense_iUnion_preimage_smul
+  结论: [h : 是TopologicallyTransitive M α]
   证明: (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mp h hUo hUne
 
 Depends on / 依赖: _spec, f.map_units, isTopologicallyTransitive_iff_dense_iUnion_preimage, map_eq_zero_iff, map_units, mul_left_inj, zero_mul
@@ -213,8 +213,8 @@ theorem IsOpen.dense_of_preimage_smul_invariant
   proof: .mono (by simpa only [iUnion_subset_iff]) (hUo.dense_iUnion_preimage_smul M hUne)
 
 中文:
-定理 IsOpen.dense_of_preimage_smul_invariant
-  结论: [IsTopologicallyTransitive M α] {U : Set α}
+定理 是开集.dense_of_preimage_smul_invariant
+  结论: [是TopologicallyTransitive M α] {U : 集合 α}
   证明: .mono (by simpa only [iUnion_subset_iff]) (hUo.dense_iUnion_preimage_smul M hUne)
 
 Depends on / 依赖: dense_iUnion_preimage_smul, hUo.dense_iUnion_preimage_smul, iUnion_subset_iff
@@ -241,7 +241,7 @@ theorem MulAction.isTopologicallyTransitive_iff_dense_of_preimage_invariant
   · exact nonempty_iUnion.mpr ⟨1, by simpa only [o
 
 中文:
-定理 MulAction.isTopologicallyTransitive_iff_dense_of_preimage_invariant
+定理 乘法作用.isTopologicallyTransitive_iff_dense_of_preimage_invariant
   证明: by
   refine ⟨fun _ _ h₀ h₁ h₂ => h₀.dense_of_preimage_smul_invariant M h₁ h₂, fun h₄ => ?_⟩
   refine (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mpr ?_
@@ -272,8 +272,8 @@ instance MulAction.isTopologicallyTransitive_of_isMinimal
   simp only [h.iUnion_preimage_smul M hn, dense_univ]
 
 中文:
-实例 MulAction.isTopologicallyTransitive_of_isMinimal
-  签名: [IsMinimal M α]
+实例 乘法作用.isTopologicallyTransitive_of_isMinimal
+  签名: [是极小 M α]
   定义体: by
   refine (isTopologicallyTransitive_iff_dense_iUnion_preimage M).mpr fun h hn => ?_
   simp only [h.iUnion_preimage_smul M hn, dense_univ]

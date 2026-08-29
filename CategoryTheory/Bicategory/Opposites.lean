@@ -479,7 +479,7 @@ whisker_exchange η θ := congrArg op
 
 中文:
 实例 bicategory
-  签名: : Bicategory.{w, v} Bᵒᵖ where
+  签名: : 双范畴.{w, v} Bᵒᵖ where
   定义体: homCategory
 whiskerLeft f g h η := op2 (unop2 η) ▷ f.unop
 whiskerRight η h := op2 h.unop ◁ unop2 η

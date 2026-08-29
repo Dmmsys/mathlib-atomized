@@ -185,7 +185,7 @@ definition OrderMonoidIso.toMultiplicative_toAdditive
 
 中文:
 定义 OrderMonoidIso.toMultiplicative_toAdditive
-  签名: {G : 类型} [CommMonoid G] [PartialOrder G]
+  签名: {G : 类型} [交换幺半群 G] [偏序 G]
   定义体: OrderAddMonoidIso.toMultiplicativeLeft OrderMonoidIso.toAdditive (.refl _)
 
 Depends on / 依赖: OrderAddMonoidIso, OrderAddMonoidIso.toMultiplicativeLeft, OrderMonoidIso, OrderMonoidIso.toAdditive, toAdditive, toMultiplicativeLeft
@@ -204,7 +204,7 @@ definition OrderAddMonoidIso.toAdditive_toMultiplicative
 
 中文:
 定义 OrderAddMonoidIso.toAdditive_toMultiplicative
-  签名: {G : 类型} [AddCommMonoid G] [PartialOrder G]
+  签名: {G : 类型} [加法交换幺半群 G] [偏序 G]
   定义体: OrderMonoidIso.toAdditiveLeft OrderAddMonoidIso.toMultiplicative (.refl _)
 
 Depends on / 依赖: OrderAddMonoidIso, OrderAddMonoidIso.toMultiplicative, OrderMonoidIso, OrderMonoidIso.toAdditiveLeft, toAdditiveLeft, toMultiplicative
@@ -222,7 +222,7 @@ instance Additive.instUniqueOrderAddMonoidIso
   body: OrderMonoidIso.toAdditive.symm.unique
 
 中文:
-实例 Additive.instUniqueOrderAddMonoidIso
+实例 加性.instUniqueOrderAddMonoidIso
   签名: {G H : 类型}
   定义体: OrderMonoidIso.toAdditive.symm.unique
 

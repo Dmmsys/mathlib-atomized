@@ -252,7 +252,7 @@ theorem fixedSubmodule_transvection_mul
 
 中文:
 定理 fixedSubmodule_transvection_mul
-  结论: {f : Dual K V} {v : V}
+  结论: {f : 对偶 K V} {v : V}
   证明: by
   symm
   suffices e.fixedSubmodule ⊔ K ∙ v <= (transvection hfv * e).fixedSubmodule by
@@ -335,7 +335,7 @@ omit [Module.Finite K V] in
 
 中文:
 定义 auxTransvection
-  签名: {f : Dual K V} {u : V}
+  签名: {f : 对偶 K V} {u : V}
   定义体: transvection (f := f) (v := u - e u) (by
     simp only [← LinearMap.mem_ker]
     apply hf
@@ -368,7 +368,7 @@ theorem auxTransvection_fixed
 
 中文:
 定理 auxTransvection_fixed
-  结论: {f : Dual K V} {u : V}
+  结论: {f : 对偶 K V} {u : V}
   证明: fun x hx => by
   simp [auxTransvection, LinearMap.transvection.apply, ← LinearMap.mem_ker, hf (mem_sup_left hx)]
 -/
@@ -398,7 +398,7 @@ theorem auxTransvection_mul_fixed
 
 中文:
 定理 auxTransvection_mul_fixed
-  结论: {f : Dual K V} {u : V}
+  结论: {f : 对偶 K V} {u : V}
   证明: by
   apply fixedSubmodule_transvection_mul
   · intro hu'
@@ -440,7 +440,7 @@ theorem finrank_quotient_sup_span_singleton
 
 中文:
 定理 finrank_quotient_sup_span_singleton
-  条件: {W : Submodule K V} {v : V} (hv : v ∉ W)
+  条件: {W : 子模 K V} {v : V} (hv : v ∉ W)
   证明: by
   have h1 := finrank_quotient_add_finrank (W ⊔ K ∙ v)
   have h2 := finrank_quotient_add_finrank W
@@ -473,7 +473,7 @@ theorem sup_span_singleton_lt_top
 
 中文:
 定理 sup_span_singleton_lt_top
-  结论: {W : Submodule K V} (v : V)
+  结论: {W : 子模 K V} (v : V)
   证明: by
   rw [lt_top_iff_ne_top]
   intro htop
@@ -510,7 +510,7 @@ theorem finrank_mod_auxTransvection_mul_fixed
 
 中文:
 定理 finrank_mod_auxTransvection_mul_fixed
-  结论: {f : Dual K V} {u : V}
+  结论: {f : 对偶 K V} {u : V}
   证明: by
   rw [auxTransvection_mul_fixed hfu]
   exact finrank_quotient_sup_span_singleton hu
@@ -676,7 +676,7 @@ theorem exists_dual_of_fixedReduce_ne_smul
       LinearMap.exists_mem_center_apply
 
 中文:
-定理 exists_dual_of_fixedReduce_ne_smul
+定理 存在_dual_of_fixedReduce_ne_smul
   证明: by
   -- Since `e.fixedReduce` is not a homothety, there is `v : V ⧸ e.fixedSubmodule` such
   -- that `v` and `e.fixedReduce v` are linearly independent.
@@ -737,8 +737,8 @@ theorem not_forall_fixedReduce_eq_smul
     subtracting the rela
 
 中文:
-定理 not_forall_fixedReduce_eq_smul
-  结论: {f g : Dual K V} {v : V} {a b : K}
+定理 not_对任意_fixedReduce_eq_smul
+  结论: {f g : 对偶 K V} {v : V} {a b : K}
   证明: by
   simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfv] at ha
   simp only [fixedReduce_eq_smul_iff, auxTransvection_mul_fixed hfgv] at hb

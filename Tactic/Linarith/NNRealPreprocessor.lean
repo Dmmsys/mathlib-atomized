@@ -34,7 +34,7 @@ definition isNNRealProp
   let (_, _, .const ``NNReal _, _, _) ← e.ineqOrNotIneq? | failure
 
 中文:
-定义 isNNRealProp
+定义 isNN实数Prop
   签名: (e : Expr)
   定义体: succeeds do
   let (_, _, .const ``NNReal _, _, _) ← e.ineqOrNotIneq? | failure
@@ -55,7 +55,7 @@ definition getNNRealToRealArg?
 @[deprecated (since := "2026-05-27")] alias isNNRealtoReal := getNNRealToRealArg?
 
 中文:
-定义 getNNRealToRealArg?
+定义 getNN实数To实数Arg?
   签名: (e : Expr)
   定义体: match e with
   | .app (.const ``NNReal.toReal _) n => some n
@@ -86,7 +86,7 @@ definition getNNRealCoes
     | (``HSub.hSub, #[_, _, _, _, a, b]) => getNNReal
 
 中文:
-定义 getNNRealCoes
+定义 getNN实数Coes
   签名: (e : Expr)
   定义体: match getNNRealToRealArg? e with
   | some x => [x]
@@ -120,7 +120,7 @@ definition mkToRealNonnegProof?
 @[deprecated (since := "2026-05-27")] alias mk_toReal_nonneg_prf := mkToRealNonnegProof?
 
 中文:
-定义 mkToRealNonnegProof?
+定义 mkTo实数NonnegProof?
   签名: (e : Expr)
   定义体: try commitIfNoEx (mkAppM ``NNReal.coe_nonneg #[e])
   catch e => do

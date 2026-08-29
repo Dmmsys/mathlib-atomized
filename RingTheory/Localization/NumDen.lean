@@ -47,7 +47,7 @@ theorem exists_reduced_fraction
   obtain ⟨_, b'_nonzero⟩ := mul_mem_nonZeroDivisors.mp b_
 
 中文:
-定理 exists_reduced_fraction
+定理 存在_reduced_fraction
   条件: (x : K)
   证明: by
   obtain ⟨⟨b, b_nonzero⟩, a, hab⟩ := exists_integer_multiple (nonZeroDivisors A) x
@@ -334,8 +334,8 @@ theorem isInteger_of_isUnit_den
   rw [← mul
 
 中文:
-定理 isInteger_of_isUnit_den
-  条件: {x : K} (h : IsUnit (den A x : A))
+定理 is整数eger_of_isUnit_den
+  条件: {x : K} (h : 是单位 (den A x : A))
   结论: Is整数eger A x
   证明: by
   obtain ⟨d, hd⟩ := h
@@ -381,7 +381,7 @@ theorem isUnit_den_iff
 中文:
 定理 isUnit_den_iff
   条件: (x : K)
-  结论: IsUnit (den A x : A) ↔ IsLocalization.Is整数eger A x where
+  结论: 是单位 (den A x : A) ↔ 是Localization.Is整数eger A x where
   证明: isInteger_of_isUnit_den
   mpr h := by
     have ⟨v, h⟩ := h
@@ -420,7 +420,7 @@ theorem isUnit_den_zero
 
 中文:
 定理 isUnit_den_zero
-  结论: IsUnit (den A (0 : K) : A)
+  结论: 是单位 (den A (0 : K) : A)
   证明: by
   simp [isUnit_den_iff, IsLocalization.isInteger_zero]
 

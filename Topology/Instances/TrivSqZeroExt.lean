@@ -51,7 +51,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (tsze R M)
+  签名: : 拓扑空间 (tsze R M)
   定义体: TopologicalSpace.induced fst ‹_› ⊓ TopologicalSpace.induced snd ‹_›
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.induced, induced
@@ -68,8 +68,8 @@ instance [T2Space
   body: Prod.t2Space
 
 中文:
-实例 [T2Space
-  签名: R] [T2Space M] : T2Space (tsze R M)
+实例 [T2空间
+  签名: R] [T2空间 M] : T2空间 (tsze R M)
   定义体: Prod.t2Space
 
 Depends on / 依赖: Prod.t2Space, t2Space
@@ -107,7 +107,7 @@ theorem nhds_inl
 
 中文:
 定理 nhds_inl
-  条件: [Zero M] (x : R)
+  条件: [零 M] (x : R)
   结论: 𝓝 (inl x : tsze R M) = 𝓝 x ×ˢ 𝓝 0
   证明: nhds_def _
 
@@ -133,7 +133,7 @@ nonrec theorem continuous_snd : Continuous (snd : tsze R M -> M) :=
 
 中文:
 定理 nhds_inr
-  条件: [Zero R] (m : M)
+  条件: [零 R] (m : M)
   结论: 𝓝 (inr m : tsze R M) = 𝓝 0 ×ˢ 𝓝 m
   证明: nhds_def _
 
@@ -165,8 +165,8 @@ theorem continuous_inl
 
 中文:
 定理 continuous_inl
-  条件: [Zero M]
-  结论: Continuous (inl : R -> tsze R M)
+  条件: [零 M]
+  结论: 连续 (inl : R -> tsze R M)
   证明: continuous_id.prodMk continuous_const
 
 Depends on / 依赖: continuous_const, continuous_id, continuous_id.prodMk, prodMk
@@ -185,8 +185,8 @@ theorem continuous_inr
 
 中文:
 定理 continuous_inr
-  条件: [Zero R]
-  结论: Continuous (inr : M -> tsze R M)
+  条件: [零 R]
+  结论: 连续 (inr : M -> tsze R M)
   证明: continuous_const.prodMk continuous_id
 
 Depends on / 依赖: continuous_const, continuous_const.prodMk, continuous_id, prodMk
@@ -204,9 +204,9 @@ theorem IsEmbedding.inl
   proof: .of_comp continuous_inl continuous_fst .id
 
 中文:
-定理 IsEmbedding.inl
-  条件: [Zero M]
-  结论: IsEmbedding (inl : R -> tsze R M)
+定理 是嵌入.inl
+  条件: [零 M]
+  结论: 是嵌入 (inl : R -> tsze R M)
   证明: .of_comp continuous_inl continuous_fst .id
 
 Depends on / 依赖: continuous_fst, continuous_inl, of_comp
@@ -224,9 +224,9 @@ theorem IsEmbedding.inr
   proof: .of_comp continuous_inr continuous_snd .id
 
 中文:
-定理 IsEmbedding.inr
-  条件: [Zero R]
-  结论: IsEmbedding (inr : M -> tsze R M)
+定理 是嵌入.inr
+  条件: [零 R]
+  结论: 是嵌入 (inr : M -> tsze R M)
   证明: .of_comp continuous_inr continuous_snd .id
 
 Depends on / 依赖: continuous_inr, continuous_snd, of_comp
@@ -248,7 +248,7 @@ definition fstCLM
 
 中文:
 定义 fstCLM
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ContinuousLinearMap.fst R R M with toFun := fst }
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.fst
@@ -268,7 +268,7 @@ definition sndCLM
 
 中文:
 定义 sndCLM
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ContinuousLinearMap.snd R R M with toFun := snd }
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.snd
@@ -288,7 +288,7 @@ definition inlCLM
 
 中文:
 定义 inlCLM
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ContinuousLinearMap.inl R R M with toFun := inl }
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inl
@@ -308,7 +308,7 @@ definition inrCLM
 
 中文:
 定义 inrCLM
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M]
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { ContinuousLinearMap.inr R R M with toFun := inr }
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.inr
@@ -327,8 +327,8 @@ instance [Add
   body: Prod.continuousAdd
 
 中文:
-实例 [Add
-  签名: R] [Add M] [ContinuousAdd R] [ContinuousAdd M] : ContinuousAdd (tsze R M)
+实例 [加法
+  签名: R] [加法 M] [连续加法 R] [连续加法 M] : 连续加法 (tsze R M)
   定义体: Prod.continuousAdd
 
 Depends on / 依赖: Prod.continuousAdd, continuousAdd
@@ -348,8 +348,8 @@ instance [Mul
           (continuous_snd.comp co
 
 中文:
-实例 [Mul
-  签名: R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M] [ContinuousMul R] [ContinuousSMul R M]
+实例 [乘法
+  签名: R] [加法 M] [标量乘法 R M] [标量乘法 Rᵐᵒᵖ M] [连续乘法 R] [连续标量乘法 R M]
   定义体: ⟨((continuous_fst.comp continuous_fst).mul (continuous_fst.comp continuous_snd)).prodMk
       ((continuous_fst.comp continuous_fst).smul (continuous_snd.comp continuous_snd)).add
         ((MulOpposite.continuous_op.comp <| continuous_fst.comp <| continuous_snd).smul
@@ -373,8 +373,8 @@ instance [Neg
   body: Prod.continuousNeg
 
 中文:
-实例 [Neg
-  签名: R] [Neg M] [ContinuousNeg R] [ContinuousNeg M] : ContinuousNeg (tsze R M)
+实例 [取负
+  签名: R] [取负 M] [连续取负 R] [连续取负 M] : 连续取负 (tsze R M)
   定义体: Prod.continuousNeg
 
 Depends on / 依赖: Prod.continuousNeg, continuousNeg
@@ -392,7 +392,7 @@ theorem topologicalSemiring
 
 中文:
 定理 topologicalSemiring
-  结论: [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
+  结论: [半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M]
   证明: { }
 -/
 theorem topologicalSemiring [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
@@ -407,8 +407,8 @@ instance [Ring
   signature: R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsTopologicalRing R]
 
 中文:
-实例 [Ring
-  签名: R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsTopologicalRing R]
+实例 [环
+  签名: R] [加法交换群 M] [模 R M] [模 Rᵐᵒᵖ M] [是拓扑环 R]
 -/
 instance [Ring R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsTopologicalRing R]
     [IsTopologicalAddGroup M] [ContinuousSMul R M] [ContinuousSMul Rᵐᵒᵖ M] :
@@ -423,8 +423,8 @@ instance [SMul
   body: Prod.continuousConstSMul
 
 中文:
-实例 [SMul
-  签名: S R] [SMul S M] [ContinuousConstSMul S R] [ContinuousConstSMul S M] :
+实例 [标量乘法
+  签名: S R] [标量乘法 S M] [连续常数标量乘法 S R] [连续常数标量乘法 S M] :
   定义体: Prod.continuousConstSMul
 
 Depends on / 依赖: Prod.continuousConstSMul, continuousConstSMul
@@ -442,8 +442,8 @@ instance [TopologicalSpace
   body: Prod.continuousSMul
 
 中文:
-实例 [TopologicalSpace
-  签名: S] [SMul S R] [SMul S M] [ContinuousSMul S R] [ContinuousSMul S M] :
+实例 [拓扑空间
+  签名: S] [标量乘法 S R] [标量乘法 S M] [连续标量乘法 S R] [连续标量乘法 S M] :
   定义体: Prod.continuousSMul
 
 Depends on / 依赖: Prod.continuousSMul, continuousSMul
@@ -464,7 +464,7 @@ theorem hasSum_inl
 
 中文:
 定理 hasSum_inl
-  条件: [AddCommMonoid R] [AddCommMonoid M] {f : α -> R} {a : R} (h : HasSum f a)
+  条件: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> R} {a : R} (h : HasSum f a)
   证明: h.map (⟨⟨inl, inl_zero _⟩, inl_add _⟩ : R ->+ tsze R M) continuous_inl
 
 Depends on / 依赖: continuous_inl, h.map, inl_add, inl_zero
@@ -483,7 +483,7 @@ theorem hasSum_inr
 
 中文:
 定理 hasSum_inr
-  条件: [AddCommMonoid R] [AddCommMonoid M] {f : α -> M} {a : M} (h : HasSum f a)
+  条件: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> M} {a : M} (h : HasSum f a)
   证明: h.map (⟨⟨inr, inr_zero _⟩, inr_add _⟩ : M ->+ tsze R M) continuous_inr
 
 Depends on / 依赖: continuous_inr, h.map, inr_add, inr_zero
@@ -502,7 +502,7 @@ theorem hasSum_fst
 
 中文:
 定理 hasSum_fst
-  结论: [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
+  结论: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> tsze R M} {a : tsze R M}
   证明: h.map (⟨⟨fst, fst_zero⟩, fst_add⟩ : tsze R M ->+ R) continuous_fst
 
 Depends on / 依赖: continuous_fst, fst_add, fst_zero, h.map
@@ -521,7 +521,7 @@ theorem hasSum_snd
 
 中文:
 定理 hasSum_snd
-  结论: [AddCommMonoid R] [AddCommMonoid M] {f : α -> tsze R M} {a : tsze R M}
+  结论: [加法交换幺半群 R] [加法交换幺半群 M] {f : α -> tsze R M} {a : tsze R M}
   证明: h.map (⟨⟨snd, snd_zero⟩, snd_add⟩ : tsze R M ->+ M) continuous_snd
 
 Depends on / 依赖: continuous_snd, h.map, snd_add, snd_zero
@@ -546,7 +546,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (tsze R M) where
+  签名: : 一致空间 (tsze R M) where
   定义体: instTopologicalSpace
   __ := instUniformSpaceProd
 
@@ -565,8 +565,8 @@ instance [CompleteSpace
   body: inferInstanceAs CompleteSpace (R × M)
 
 中文:
-实例 [CompleteSpace
-  签名: R] [CompleteSpace M] : CompleteSpace (tsze R M)
+实例 [完备空间
+  签名: R] [完备空间 M] : 完备空间 (tsze R M)
   定义体: inferInstanceAs CompleteSpace (R × M)
 
 Depends on / 依赖: CompleteSpace
@@ -583,8 +583,8 @@ instance [AddGroup
   body: inferInstanceAs IsUniformAddGroup (R × M)
 
 中文:
-实例 [AddGroup
-  签名: R] [AddGroup M] [IsUniformAddGroup R] [IsUniformAddGroup M] :
+实例 [加法群
+  签名: R] [加法群 M] [是UniformAdd群 R] [是UniformAdd群 M] :
   定义体: inferInstanceAs IsUniformAddGroup (R × M)
 
 Depends on / 依赖: IsUniformAddGroup
@@ -640,8 +640,8 @@ theorem uniformContinuous_inl
 
 中文:
 定理 uniformContinuous_inl
-  条件: [Zero M]
-  结论: UniformContinuous (inl : R -> tsze R M)
+  条件: [零 M]
+  结论: 一致连续 (inl : R -> tsze R M)
   证明: uniformContinuous_id.prodMk uniformContinuous_const
 
 Depends on / 依赖: prodMk, uniformContinuous_const, uniformContinuous_id, uniformContinuous_id.prodMk
@@ -660,8 +660,8 @@ theorem uniformContinuous_inr
 
 中文:
 定理 uniformContinuous_inr
-  条件: [Zero R]
-  结论: UniformContinuous (inr : M -> tsze R M)
+  条件: [零 R]
+  结论: 一致连续 (inr : M -> tsze R M)
   证明: uniformContinuous_const.prodMk uniformContinuous_id
 
 Depends on / 依赖: prodMk, uniformContinuous_const, uniformContinuous_const.prodMk, uniformContinuous_id

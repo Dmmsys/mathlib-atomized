@@ -27,7 +27,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace SignType
+  签名: 拓扑空间 SignType
   定义体: ⊥
 -/
 instance : TopologicalSpace SignType :=
@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology SignType
+  签名: 离散拓扑 SignType
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology SignType :=

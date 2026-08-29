@@ -58,7 +58,7 @@ definition dayConvolutionInternalHomDiagramFunctor
     { app c := F
 
 中文:
-定义 dayConvolutionInternalHomDiagramFunctor
+定义 dayConvolution整数ernalHomDiagramFunctor
   签名: (F : C ⥤ V)
   定义体: { obj c := Functor.whiskeringLeft₂ _ |>.obj F.op |>.obj
 .obj MonoidalClosed.internalHom (tensorRight c ⋙ G)
@@ -99,11 +99,11 @@ structure DayConvolutionInternalHom
     - isLimitWedge((c : C))
 
 中文:
-结构 DayConvolutionInternalHom
+结构 DayConvolution整数ernal态射
   参数: (F : C ⥤ V) (G : C ⥤ V) (H : C ⥤ V)
   公理与运算 (3 个):
     - π((c j : C)) : H.obj c ⟶ (ihom <| F.obj j).obj (G.obj <| j otimes c)
-    - hπ((c : C) ⦃i j) : C⦄ (f : i ⟶ j) : π c i ≫ (ihom (F.obj i)).map (G.map <| f ▷ c) = π c j ≫ (MonoidalClosed.pre <| F.map f).app (G.obj <| j otimes c)
+    - hπ((c : C) ⦃i j) : C⦄ (f : i ⟶ j) : π c i ≫ (ihom (F.obj i)).map (G.map <| f ▷ c) = π c j ≫ (幺半群闭.pre <| F.map f).app (G.obj <| j otimes c)
     - isLimitWedge((c : C))
 
 Depends on / 依赖: dayConvolutionInternalHomDiagramFunctor
@@ -156,7 +156,7 @@ have := congrArg (fun t => t.app j')
 
 中文:
 定义 map
-  签名: (ℌ : DayConvolution整数ernalHom F G H) {G' : C ⥤ V} {H' : C ⥤ V}
+  签名: (ℌ : DayConvolution整数ernal态射 F G H) {G' : C ⥤ V} {H' : C ⥤ V}
   定义体: Wedge.IsLimit.lift (ℌ'.isLimitWedge c)
     (fun j => (ℌ.π c j) ≫
       (dayConvolutionInternalHomDiagramFunctor
@@ -212,7 +212,7 @@ lemma map_app_comp_π
 
 中文:
 引理 map_app_comp_π
-  结论: (ℌ : DayConvolution整数ernalHom F G H)
+  结论: (ℌ : DayConvolution整数ernal态射 F G H)
   证明: by
   dsimp [map]
   rw [← Wedge.mk_ι
@@ -329,7 +329,7 @@ lemma ev_naturality_app
 
 中文:
 引理 ev_naturality_app
-  结论: {G' H' : C ⥤ V} (ℌ' : DayConvolution整数ernalHom F G' H')
+  结论: {G' H' : C ⥤ V} (ℌ' : DayConvolution整数ernal态射 F G' H')
   证明: by
 .homEquiv.injective apply DayConvolution.corepresentableBy F H
   dsimp
@@ -468,7 +468,7 @@ apply Wedge.IsLimit.hom_ext ℌ'.isLimitWedge c
 
 中文:
 引理 coev_naturality_app
-  结论: {G' H' : C ⥤ V} [DayConvolution F G'] (η : G ⟶ G')
+  结论: {G' H' : C ⥤ V} [Day卷积 F G'] (η : G ⟶ G')
   证明: by
   ext c
   dsimp
@@ -517,7 +517,7 @@ theorem left_triangle_components
 
 中文:
 定理 left_triangle_components
-  结论: (G : C ⥤ V) [DayConvolution F G]
+  结论: (G : C ⥤ V) [Day卷积 F G]
   证明: by
 .homEquiv.injective apply DayConvolution.corepresentableBy F G
   dsimp
@@ -553,7 +553,7 @@ apply Wedge.IsLimit.hom_ext ℌ.isLimitWedge c
 
 中文:
 定理 right_triangle_components
-  结论: (G : C ⥤ V) [DayConvolution F H]
+  结论: (G : C ⥤ V) [Day卷积 F H]
   证明: by
   ext c
 apply Wedge.IsLimit.hom_ext ℌ.isLimitWedge c

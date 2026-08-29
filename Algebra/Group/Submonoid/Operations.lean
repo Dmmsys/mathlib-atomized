@@ -101,8 +101,8 @@ definition Submonoid.toAddSubmonoid
   right_inv x := by ca
 
 中文:
-定义 Submonoid.toAddSubmonoid
-  签名: : Submonoid M ≃o AddSubmonoid (Additive M) where
+定义 子幺半群.toAddSubmonoid
+  签名: : 子幺半群 M ≃o 加法子幺半群 (加性 M) where
   定义体: { carrier := Additive.toMul ⁻¹' S
       zero_mem' := S.one_mem'
       add_mem' := fun ha hb => S.mul_mem' ha hb }
@@ -137,8 +137,8 @@ abbreviation AddSubmonoid.toSubmonoid'
   body: Submonoid.toAddSubmonoid.symm
 
 中文:
-缩写 AddSubmonoid.toSubmonoid'
-  签名: : AddSubmonoid (Additive M) ≃o Submonoid M
+缩写 加法子幺半群.toSubmonoid'
+  签名: : 加法子幺半群 (加性 M) ≃o 子幺半群 M
   定义体: Submonoid.toAddSubmonoid.symm
 
 Depends on / 依赖: Submonoid, Submonoid.toAddSubmonoid.symm, toAddSubmonoid
@@ -158,8 +158,8 @@ theorem Submonoid.toAddSubmonoid_closure
     (AddSubmonoid.closure_le.2 <| Submonoid.subset_closure (M := M))
 
 中文:
-定理 Submonoid.toAddSubmonoid_closure
-  条件: (S : Set M)
+定理 子幺半群.toAddSubmonoid_closure
+  条件: (S : 集合 M)
   证明: le_antisymm
     (Submonoid.toAddSubmonoid.le_symm_apply.1 <|
       Submonoid.closure_le.2 (AddSubmonoid.subset_closure (M := Additive M)))
@@ -187,8 +187,8 @@ theorem AddSubmonoid.toSubmonoid'_closure
     (Submonoid.closure_le.2 <| AddSubmonoid.subset_closure (M := Additive M))
 
 中文:
-定理 AddSubmonoid.toSubmonoid'_closure
-  条件: (S : Set (Additive M))
+定理 加法子幺半群.toSubmonoid'_closure
+  条件: (S : 集合 (加性 M))
   证明: le_antisymm
     (AddSubmonoid.toSubmonoid'.le_symm_apply.1 <|
       AddSubmonoid.closure_le.2 (Submonoid.subset_closure (M := M)))
@@ -228,8 +228,8 @@ definition AddSubmonoid.toSubmonoid
   right_in
 
 中文:
-定义 AddSubmonoid.toSubmonoid
-  签名: : AddSubmonoid A ≃o Submonoid (Multiplicative A) where
+定义 加法子幺半群.toSubmonoid
+  签名: : 加法子幺半群 A ≃o 子幺半群 (Multiplicative A) where
   定义体: { carrier := Multiplicative.toAdd ⁻¹' S
       one_mem' := S.zero_mem'
       mul_mem' := fun ha hb => S.add_mem' ha hb }
@@ -264,8 +264,8 @@ abbreviation Submonoid.toAddSubmonoid'
   body: AddSubmonoid.toSubmonoid.symm
 
 中文:
-缩写 Submonoid.toAddSubmonoid'
-  签名: : Submonoid (Multiplicative A) ≃o AddSubmonoid A
+缩写 子幺半群.toAddSubmonoid'
+  签名: : 子幺半群 (Multiplicative A) ≃o 加法子幺半群 A
   定义体: AddSubmonoid.toSubmonoid.symm
 
 Depends on / 依赖: AddSubmonoid, AddSubmonoid.toSubmonoid.symm, toSubmonoid
@@ -285,8 +285,8 @@ AddSubmonoid.closure_le.2 Submonoid.subset_closure (M := Multiplicative A))
     (Submonoid.closure_le.2 <| AddSubmonoid.subset_closure (M := A))
 
 中文:
-定理 AddSubmonoid.toSubmonoid_closure
-  条件: (S : Set A)
+定理 加法子幺半群.toSubmonoid_closure
+  条件: (S : 集合 A)
   证明: le_antisymm
     (AddSubmonoid.toSubmonoid.to_galoisConnection.l_le <|
 AddSubmonoid.closure_le.2 Submonoid.subset_closure (M := Multiplicative A))
@@ -314,8 +314,8 @@ Submonoid.closure_le.2 AddSubmonoid.subset_closure (M := A))
     (AddSubmonoid.closure_le.2 <| Submonoid.subset_closure (M := Multiplicative A))
 
 中文:
-定理 Submonoid.toAddSubmonoid'_closure
-  条件: (S : Set (Multiplicative A))
+定理 子幺半群.toAddSubmonoid'_closure
+  条件: (S : 集合 (Multiplicative A))
   证明: le_antisymm
     (Submonoid.toAddSubmonoid'.to_galoisConnection.l_le <|
 Submonoid.closure_le.2 AddSubmonoid.subset_closure (M := A))
@@ -358,7 +358,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : F) (S : Submonoid N)
+  签名: (f : F) (S : 子幺半群 N)
   定义体: f ⁻¹' S
   one_mem' := show f 1 in S by rw [map_one]; exact S.one_mem
   mul_mem' ha hb := show f (_ * _) in S by rw [map_mul]; exact S.mul_mem ha hb
@@ -385,8 +385,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (S : Submonoid N) (f : F)
-  结论: (S.comap f : Set M) = f ⁻¹' S
+  条件: (S : 子幺半群 N) (f : F)
+  结论: (S.comap f : 集合 M) = f ⁻¹' S
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -408,7 +408,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {S : Submonoid N} {f : F} {x : M}
+  条件: {S : 子幺半群 N} {f : F} {x : M}
   结论: x in S.comap f ↔ f x in S
   证明: Iff.rfl
 
@@ -432,7 +432,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (S : Submonoid P) (g : N ->* P) (f : M ->* N)
+  条件: (S : 子幺半群 P) (g : N ->* P) (f : M ->* N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -453,8 +453,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (S : Submonoid P)
-  结论: S.comap (MonoidHom.id P) = S
+  条件: (S : 子幺半群 P)
+  结论: S.comap (幺半群态射.id P) = S
   证明: ext (by simp)
 -/
 theorem comap_id (S : Submonoid P) : S.comap (MonoidHom.id P) = S :=
@@ -479,7 +479,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : F) (S : Submonoid M)
+  签名: (f : F) (S : 子幺半群 M)
   定义体: f '' S
   one_mem' := ⟨1, S.one_mem, map_one f⟩
   mul_mem' := by
@@ -510,8 +510,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (f : F) (S : Submonoid M)
-  结论: (S.map f : Set N) = f '' S
+  条件: (f : F) (S : 子幺半群 M)
+  结论: (S.map f : 集合 N) = f '' S
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -533,7 +533,7 @@ theorem map_coe_toMonoidHom
 
 中文:
 定理 map_coe_toMonoidHom
-  条件: (f : F) (S : Submonoid M)
+  条件: (f : F) (S : 子幺半群 M)
   结论: S.map (f : M ->* N) = S.map f
   证明: rfl
 
@@ -555,7 +555,7 @@ theorem map_coe_toMulEquiv
 
 中文:
 定理 map_coe_toMulEquiv
-  条件: {F} [EquivLike F M N] [MulEquivClass F M N] (f : F) (S : Submonoid M)
+  条件: {F} [等价状 F M N] [乘法等价类 F M N] (f : F) (S : 子幺半群 M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -578,7 +578,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : F} {S : Submonoid M} {y : N}
+  条件: {f : F} {S : 子幺半群 M} {y : N}
   结论: y in S.map f ↔ 存在 x in S, f x = y
   证明: Iff.rfl
 
@@ -602,7 +602,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: (f : F) {S : Submonoid M} {x : M} (hx : x in S)
+  条件: (f : F) {S : 子幺半群 M} {x : M} (hx : x in S)
   结论: f x in S.map f
   证明: mem_image_of_mem f hx
 
@@ -627,7 +627,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : F) (S : Submonoid M) (x : S)
+  条件: (f : F) (S : 子幺半群 M) (x : S)
   结论: f x in S.map f
   证明: mem_map_of_mem f x.2
 
@@ -676,7 +676,7 @@ theorem mem_map_iff_mem
 
 中文:
 定理 mem_map_iff_mem
-  条件: {f : F} (hf : Function.Injective f) {S : Submonoid M} {x : M}
+  条件: {f : F} (hf : 函数.单射 f) {S : 子幺半群 M} {x : M}
   证明: hf.mem_set_image
 
 @[to_additive]
@@ -700,7 +700,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : F} {S : Submonoid M} {T : Submonoid N}
+  条件: {f : F} {S : 子幺半群 M} {T : 子幺半群 N}
   证明: image_subset_iff
 
 @[to_additive]
@@ -749,7 +749,7 @@ theorem map_le_of_le_comap
 
 中文:
 定理 map_le_of_le_comap
-  条件: {T : Submonoid N} {f : F}
+  条件: {T : 子幺半群 N} {f : F}
   结论: S <= T.comap f -> S.map f <= T
   证明: (gc_map_comap f).l_le
 
@@ -774,7 +774,7 @@ theorem le_comap_of_map_le
 
 中文:
 定理 le_comap_of_map_le
-  条件: {T : Submonoid N} {f : F}
+  条件: {T : 子幺半群 N} {f : F}
   结论: S.map f <= T -> S <= T.comap f
   证明: (gc_map_comap f).le_u
 
@@ -824,7 +824,7 @@ theorem map_comap_le
 
 中文:
 定理 map_comap_le
-  条件: {S : Submonoid N} {f : F}
+  条件: {S : 子幺半群 N} {f : F}
   结论: (S.comap f).map f <= S
   证明: (gc_map_comap f).l_u_le _
 
@@ -850,7 +850,7 @@ theorem monotone_map
 中文:
 定理 monotone_map
   条件: {f : F}
-  结论: Monotone (map f)
+  结论: 递增 (map f)
   证明: (gc_map_comap f).monotone_l
 
 @[to_additive (attr := gcongr)]
@@ -875,7 +875,7 @@ theorem monotone_comap
 中文:
 定理 monotone_comap
   条件: {f : F}
-  结论: Monotone (comap f)
+  结论: 递增 (comap f)
   证明: (gc_map_comap f).monotone_u
 
 @[to_additive (attr := simp)]
@@ -924,7 +924,7 @@ theorem comap_map_comap
 
 中文:
 定理 comap_map_comap
-  条件: {S : Submonoid N} {f : F}
+  条件: {S : 子幺半群 N} {f : F}
   结论: ((S.comap f).map f).comap f = S.comap f
   证明: (gc_map_comap f).u_l_u_eq_u _
 
@@ -949,7 +949,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (S T : Submonoid M) (f : F)
+  条件: (S T : 子幺半群 M) (f : F)
   结论: (S ⊔ T).map f = S.map f ⊔ T.map f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).l_sup
 
@@ -974,7 +974,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : F) (s : ι -> Submonoid M)
+  条件: {ι : 类型层*} (f : F) (s : ι -> 子幺半群 M)
   结论: (iSup s).map f = ⨆ i, (s i).map f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).l_iSup
 
@@ -998,7 +998,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (S T : Submonoid M) (f : F) (hf : Function.Injective f)
+  条件: (S T : 子幺半群 M) (f : F) (hf : 函数.单射 f)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[to_additive]
@@ -1023,7 +1023,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : F) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : F) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -1051,7 +1051,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (S T : Submonoid N) (f : F)
+  条件: (S T : 子幺半群 N) (f : F)
   结论: (S ⊓ T).comap f = S.comap f ⊓ T.comap f
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).u_inf
 
@@ -1075,7 +1075,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : F) (s : ι -> Submonoid N)
+  条件: {ι : 类型层*} (f : F) (s : ι -> 子幺半群 N)
   证明: (gc_map_comap f : GaloisConnection (map f) (comap f)).u_iInf
 
 @[to_additive (attr := simp)]
@@ -1101,7 +1101,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : F)
-  结论: (⊥ : Submonoid M).map f = ⊥
+  结论: (⊥ : 子幺半群 M).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[to_additive]
@@ -1125,7 +1125,7 @@ lemma disjoint_map
 
 中文:
 引理 disjoint_map
-  条件: {f : F} (hf : Function.Injective f) {H K : Submonoid M} (h : Disjoint H K)
+  条件: {f : F} (hf : 函数.单射 f) {H K : 子幺半群 M} (h : Disjoint H K)
   证明: by
   rw [disjoint_iff]; rw [← map_inf _ _ f hf]; rw [disjoint_iff.mp h]; rw [map_bot]
 
@@ -1152,7 +1152,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : F)
-  结论: (⊤ : Submonoid N).comap f = ⊤
+  结论: (⊤ : 子幺半群 N).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 @[to_additive (attr := simp)]
@@ -1174,8 +1174,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (S : Submonoid M)
-  结论: S.map (MonoidHom.id M) = S
+  条件: (S : 子幺半群 M)
+  结论: S.map (幺半群态射.id M) = S
   证明: ext fun _ => ⟨fun ⟨_, h, rfl⟩ => h, fun h => ⟨_, h, rfl⟩⟩
 -/
 theorem map_id (S : Submonoid M) : S.map (MonoidHom.id M) = S :=
@@ -1197,7 +1197,7 @@ definition gciMapComap
 
 中文:
 定义 gciMapComap
-  签名: (hf : Function.Injective f)
+  签名: (hf : 函数.单射 f)
   定义体: (gc_map_comap f).toGaloisCoinsertion fun S x => by simp [mem_comap, mem_map, hf.eq_iff]
 
 Depends on / 依赖: eq_iff, gc_map_comap, hf.eq_iff, mem_comap, mem_map, toGaloisCoinsertion
@@ -1222,7 +1222,7 @@ theorem comap_map_eq_of_injective
 
 中文:
 定理 comap_map_eq_of_injective
-  条件: (S : Submonoid M)
+  条件: (S : 子幺半群 M)
   结论: (S.map f).comap f = S
   证明: (gciMapComap hf).u_l_eq _
 
@@ -1246,7 +1246,7 @@ theorem comap_surjective_of_injective
 
 中文:
 定理 comap_surjective_of_injective
-  结论: Function.Surjective (comap f)
+  结论: 函数.满射 (comap f)
   证明: (gciMapComap hf).u_surjective
 
 @[to_additive]
@@ -1269,7 +1269,7 @@ theorem map_injective_of_injective
 
 中文:
 定理 map_injective_of_injective
-  结论: Function.Injective (map f)
+  结论: 函数.单射 (map f)
   证明: (gciMapComap hf).l_injective
 
 @[to_additive]
@@ -1293,7 +1293,7 @@ theorem comap_inf_map_of_injective
 
 中文:
 定理 comap_inf_map_of_injective
-  条件: (S T : Submonoid M)
+  条件: (S T : 子幺半群 M)
   结论: (S.map f ⊓ T.map f).comap f = S ⊓ T
   证明: (gciMapComap hf).u_inf_l _ _
 
@@ -1318,7 +1318,7 @@ theorem comap_iInf_map_of_injective
 
 中文:
 定理 comap_iInf_map_of_injective
-  条件: (S : ι -> Submonoid M)
+  条件: (S : ι -> 子幺半群 M)
   结论: (⨅ i, (S i).map f).comap f = iInf S
   证明: (gciMapComap hf).u_iInf_l _
 
@@ -1343,7 +1343,7 @@ theorem comap_sup_map_of_injective
 
 中文:
 定理 comap_sup_map_of_injective
-  条件: (S T : Submonoid M)
+  条件: (S T : 子幺半群 M)
   结论: (S.map f ⊔ T.map f).comap f = S ⊔ T
   证明: (gciMapComap hf).u_sup_l _ _
 
@@ -1368,7 +1368,7 @@ theorem comap_iSup_map_of_injective
 
 中文:
 定理 comap_iSup_map_of_injective
-  条件: (S : ι -> Submonoid M)
+  条件: (S : ι -> 子幺半群 M)
   结论: (⨆ i, (S i).map f).comap f = iSup S
   证明: (gciMapComap hf).u_iSup_l _
 
@@ -1393,7 +1393,7 @@ theorem map_le_map_iff_of_injective
 
 中文:
 定理 map_le_map_iff_of_injective
-  条件: {S T : Submonoid M}
+  条件: {S T : 子幺半群 M}
   结论: S.map f <= T.map f ↔ S <= T
   证明: (gciMapComap hf).l_le_l_iff
 
@@ -1415,7 +1415,7 @@ theorem map_strictMono_of_injective
 
 中文:
 定理 map_strictMono_of_injective
-  结论: StrictMono (map f)
+  结论: 严格递增 (map f)
   证明: (gciMapComap hf).strictMono_l
 
 Depends on / 依赖: gciMapComap, strictMono_l
@@ -1443,7 +1443,7 @@ definition giMapComap
 
 中文:
 定义 giMapComap
-  签名: (hf : Function.Surjective f)
+  签名: (hf : 函数.满射 f)
   定义体: (gc_map_comap f).toGaloisInsertion fun S x h =>
     let ⟨y, hy⟩ := hf x
     mem_map.2 ⟨y, by simp [hy, h]⟩
@@ -1472,7 +1472,7 @@ theorem map_comap_eq_of_surjective
 
 中文:
 定理 map_comap_eq_of_surjective
-  条件: (S : Submonoid N)
+  条件: (S : 子幺半群 N)
   结论: (S.comap f).map f = S
   证明: (giMapComap hf).l_u_eq _
 
@@ -1496,7 +1496,7 @@ theorem map_surjective_of_surjective
 
 中文:
 定理 map_surjective_of_surjective
-  结论: Function.Surjective (map f)
+  结论: 函数.满射 (map f)
   证明: (giMapComap hf).l_surjective
 
 @[to_additive]
@@ -1519,7 +1519,7 @@ theorem comap_injective_of_surjective
 
 中文:
 定理 comap_injective_of_surjective
-  结论: Function.Injective (comap f)
+  结论: 函数.单射 (comap f)
   证明: (giMapComap hf).u_injective
 
 @[to_additive]
@@ -1543,7 +1543,7 @@ theorem map_inf_comap_of_surjective
 
 中文:
 定理 map_inf_comap_of_surjective
-  条件: (S T : Submonoid N)
+  条件: (S T : 子幺半群 N)
   结论: (S.comap f ⊓ T.comap f).map f = S ⊓ T
   证明: (giMapComap hf).l_inf_u _ _
 
@@ -1568,7 +1568,7 @@ theorem map_iInf_comap_of_surjective
 
 中文:
 定理 map_iInf_comap_of_surjective
-  条件: (S : ι -> Submonoid N)
+  条件: (S : ι -> 子幺半群 N)
   结论: (⨅ i, (S i).comap f).map f = iInf S
   证明: (giMapComap hf).l_iInf_u _
 
@@ -1593,7 +1593,7 @@ theorem map_sup_comap_of_surjective
 
 中文:
 定理 map_sup_comap_of_surjective
-  条件: (S T : Submonoid N)
+  条件: (S T : 子幺半群 N)
   结论: (S.comap f ⊔ T.comap f).map f = S ⊔ T
   证明: (giMapComap hf).l_sup_u _ _
 
@@ -1618,7 +1618,7 @@ theorem map_iSup_comap_of_surjective
 
 中文:
 定理 map_iSup_comap_of_surjective
-  条件: (S : ι -> Submonoid N)
+  条件: (S : ι -> 子幺半群 N)
   结论: (⨆ i, (S i).comap f).map f = iSup S
   证明: (giMapComap hf).l_iSup_u _
 
@@ -1643,7 +1643,7 @@ theorem comap_le_comap_iff_of_surjective
 
 中文:
 定理 comap_le_comap_iff_of_surjective
-  条件: {S T : Submonoid N}
+  条件: {S T : 子幺半群 N}
   结论: S.comap f <= T.comap f ↔ S <= T
   证明: (giMapComap hf).u_le_u_iff
 
@@ -1665,7 +1665,7 @@ theorem comap_strictMono_of_surjective
 
 中文:
 定理 comap_strictMono_of_surjective
-  结论: StrictMono (comap f)
+  结论: 严格递增 (comap f)
   证明: (giMapComap hf).strictMono_u
 
 Depends on / 依赖: giMapComap, strictMono_u
@@ -1695,7 +1695,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Submonoid M) ≃* M where
+  签名: : (⊤ : 子幺半群 M) ≃* M where
   定义体: x
   invFun x := ⟨x, mem_top x⟩
   left_inv x := x.eta _
@@ -1720,7 +1720,7 @@ theorem topEquiv_toMonoidHom
 
 中文:
 定理 topEquiv_toMonoidHom
-  结论: ((topEquiv : _ ≃* M) : _ ->* M) = (⊤ : Submonoid M).subtype
+  结论: ((topEquiv : _ ≃* M) : _ ->* M) = (⊤ : 子幺半群 M).subtype
   证明: rfl
 -/
 theorem topEquiv_toMonoidHom : ((topEquiv : _ ≃* M) : _ ->* M) = (⊤ : Submonoid M).subtype :=
@@ -1742,7 +1742,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (f : M ->* N) (hf : Function.Injective f)
+  签名: (f : M ->* N) (hf : 函数.单射 f)
   定义体: { Equiv.Set.image f S hf with map_mul' := fun _ _ => Subtype.ext (f.map_mul _ _) }
 
 @[to_additive (attr := simp)]
@@ -1765,7 +1765,7 @@ theorem coe_equivMapOfInjective_apply
 
 中文:
 定理 coe_equivMapOfInjective_apply
-  条件: (f : M ->* N) (hf : Function.Injective f) (x : S)
+  条件: (f : M ->* N) (hf : 函数.单射 f) (x : S)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1787,7 +1787,7 @@ theorem closure_closure_coe_preimage
 
 中文:
 定理 closure_closure_coe_preimage
-  条件: {s : Set M}
+  条件: {s : 集合 M}
   结论: closure (((↑) : closure s -> M) ⁻¹' s) = ⊤
   证明: eq_top_iff.2 fun x _ => Subtype.recOn x fun _ hx' =>
     closure_induction (fun _ h => subset_closure h) (one_mem _) (fun _ _ _ _ => mul_mem) hx'
@@ -1816,8 +1816,8 @@ definition prod
 @[to_additive (attr := norm_cast) coe_prod]
 
 中文:
-定义 prod
-  签名: (s : Submonoid M) (t : Submonoid N)
+定义 乘积
+  签名: (s : 子幺半群 M) (t : 子幺半群 N)
   定义体: s ×ˢ t
   one_mem' := ⟨s.one_mem, t.one_mem⟩
   mul_mem' hp hq := ⟨s.mul_mem hp.1 hq.1, t.mul_mem hp.2 hq.2⟩
@@ -1842,7 +1842,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (s : Submonoid M) (t : Submonoid N)
+  条件: (s : 子幺半群 M) (t : 子幺半群 N)
   证明: rfl
 
 @[to_additive mem_prod]
@@ -1864,7 +1864,7 @@ theorem mem_prod
 
 中文:
 定理 mem_prod
-  条件: {s : Submonoid M} {t : Submonoid N} {p : M × N}
+  条件: {s : 子幺半群 M} {t : 子幺半群 N} {p : M × N}
   证明: Iff.rfl
 
 @[to_additive prod_mono]
@@ -1888,7 +1888,7 @@ theorem prod_mono
 
 中文:
 定理 prod_mono
-  条件: {s₁ s₂ : Submonoid M} {t₁ t₂ : Submonoid N} (hs : s₁ <= s₂) (ht : t₁ <= t₂)
+  条件: {s₁ s₂ : 子幺半群 M} {t₁ t₂ : 子幺半群 N} (hs : s₁ <= s₂) (ht : t₁ <= t₂)
   证明: Set.prod_mono hs ht
 
 @[to_additive prod_top]
@@ -1913,8 +1913,8 @@ theorem prod_top
 
 中文:
 定理 prod_top
-  条件: (s : Submonoid M)
-  结论: s.prod (⊤ : Submonoid N) = s.comap (MonoidHom.fst M N)
+  条件: (s : 子幺半群 M)
+  结论: s.乘积 (⊤ : 子幺半群 N) = s.comap (幺半群态射.fst M N)
   证明: ext fun x => by simp [mem_prod, MonoidHom.coe_fst]
 
 @[to_additive top_prod]
@@ -1938,8 +1938,8 @@ theorem top_prod
 
 中文:
 定理 top_prod
-  条件: (s : Submonoid N)
-  结论: (⊤ : Submonoid M).prod s = s.comap (MonoidHom.snd M N)
+  条件: (s : 子幺半群 N)
+  结论: (⊤ : 子幺半群 M).乘积 s = s.comap (幺半群态射.snd M N)
   证明: ext fun x => by simp [mem_prod, MonoidHom.coe_snd]
 
 @[to_additive (attr := simp) top_prod_top]
@@ -1962,7 +1962,7 @@ theorem top_prod_top
 
 中文:
 定理 top_prod_top
-  结论: (⊤ : Submonoid M).prod (⊤ : Submonoid N) = ⊤
+  结论: (⊤ : 子幺半群 M).乘积 (⊤ : 子幺半群 N) = ⊤
   证明: (top_prod _).trans comap_top _
 
 @[to_additive bot_prod_bot]
@@ -1983,7 +1983,7 @@ theorem bot_prod_bot
 
 中文:
 定理 bot_prod_bot
-  结论: (⊥ : Submonoid M).prod (⊥ : Submonoid N) = ⊥
+  结论: (⊥ : 子幺半群 M).乘积 (⊥ : 子幺半群 N) = ⊥
   证明: SetLike.coe_injective by simp [coe_prod]
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, coe_prod
@@ -2005,7 +2005,7 @@ definition prodEquiv
 
 中文:
 定义 prodEquiv
-  签名: (s : Submonoid M) (t : Submonoid N)
+  签名: (s : 子幺半群 M) (t : 子幺半群 N)
   定义体: { (Equiv.Set.prod (s : Set M) (t : Set N)) with
     map_mul' := fun _ _ => rfl }
 
@@ -2033,8 +2033,8 @@ theorem map_inl
 
 中文:
 定理 map_inl
-  条件: (s : Submonoid M)
-  结论: s.map (inl M N) = s.prod ⊥
+  条件: (s : 子幺半群 M)
+  结论: s.map (inl M N) = s.乘积 ⊥
   证明: ext fun p =>
     ⟨fun ⟨_, hx, hp⟩ => hp ▸ ⟨hx, Set.mem_singleton 1⟩, fun ⟨hps, hp1⟩ =>
 ⟨p.1, hps, Prod.ext rfl (Set.eq_of_mem_singleton hp1).symm⟩⟩
@@ -2064,8 +2064,8 @@ theorem map_inr
 
 中文:
 定理 map_inr
-  条件: (s : Submonoid N)
-  结论: s.map (inr M N) = prod ⊥ s
+  条件: (s : 子幺半群 N)
+  结论: s.map (inr M N) = 乘积 ⊥ s
   证明: ext fun p =>
     ⟨fun ⟨_, hx, hp⟩ => hp ▸ ⟨Set.mem_singleton 1, hx⟩, fun ⟨hp1, hps⟩ =>
       ⟨p.2, hps, Prod.ext (Set.eq_of_mem_singleton hp1).symm rfl⟩⟩
@@ -2093,7 +2093,7 @@ theorem prod_bot_sup_bot_prod
 
 中文:
 定理 prod_bot_sup_bot_prod
-  条件: (s : Submonoid M) (t : Submonoid N)
+  条件: (s : 子幺半群 M) (t : 子幺半群 N)
   证明: (le_antisymm (sup_le (prod_mono (le_refl s) bot_le) (prod_mono bot_le (le_refl t))))
     fun p hp => Prod.fst_mul_snd p ▸ mul_mem
         ((le_sup_left : prod s ⊥ <= prod s ⊥ ⊔ prod ⊥ t) ⟨hp.1, Set.mem_singleton 1⟩)
@@ -2121,7 +2121,7 @@ theorem mem_map_equiv
 
 中文:
 定理 mem_map_equiv
-  条件: {f : M ≃* N} {K : Submonoid M} {x : N}
+  条件: {f : M ≃* N} {K : 子幺半群 M} {x : N}
   证明: Set.mem_image_equiv
 
 @[to_additive]
@@ -2145,7 +2145,7 @@ theorem map_equiv_eq_comap_symm
 
 中文:
 定理 map_equiv_eq_comap_symm
-  条件: (f : M ≃* N) (K : Submonoid M)
+  条件: (f : M ≃* N) (K : 子幺半群 M)
   证明: SetLike.coe_injective (f.toEquiv.image_eq_preimage_symm K)
 
 @[to_additive]
@@ -2169,7 +2169,7 @@ theorem comap_equiv_eq_map_symm
 
 中文:
 定理 comap_equiv_eq_map_symm
-  条件: (f : N ≃* M) (K : Submonoid M)
+  条件: (f : N ≃* M) (K : 子幺半群 M)
   证明: (map_equiv_eq_comap_symm f.symm K).symm
 
 @[to_additive (attr := simp)]
@@ -2195,7 +2195,7 @@ theorem map_equiv_top
 中文:
 定理 map_equiv_top
   条件: (f : M ≃* N)
-  结论: (⊤ : Submonoid M).map f = ⊤
+  结论: (⊤ : 子幺半群 M).map f = ⊤
   证明: SetLike.coe_injective Set.image_univ.trans f.surjective.range_eq
 
 @[to_additive le_prod_iff]
@@ -2227,7 +2227,7 @@ theorem le_prod_iff
 
 中文:
 定理 le_prod_iff
-  条件: {s : Submonoid M} {t : Submonoid N} {u : Submonoid (M × N)}
+  条件: {s : 子幺半群 M} {t : 子幺半群 N} {u : 子幺半群 (M × N)}
   证明: by
   constructor
   · intro h
@@ -2277,7 +2277,7 @@ theorem prod_le_iff
 
 中文:
 定理 prod_le_iff
-  条件: {s : Submonoid M} {t : Submonoid N} {u : Submonoid (M × N)}
+  条件: {s : 子幺半群 M} {t : 子幺半群 N} {u : 子幺半群 (M × N)}
   证明: by
   constructor
   · intro h
@@ -2332,7 +2332,7 @@ map_le_of_le_comap _ closure_le.2 fun _y hy => subset_closure ⟨hs, hy⟩⟩)
 
 中文:
 定理 closure_prod
-  条件: {s : Set M} {t : Set N} (hs : 1 in s) (ht : 1 in t)
+  条件: {s : 集合 M} {t : 集合 N} (hs : 1 in s) (ht : 1 in t)
   证明: le_antisymm
     (closure_le.2 <| Set.prod_subset_prod_iff.2 <| .inl ⟨subset_closure, subset_closure⟩)
     (prod_le_iff.2 ⟨
@@ -2368,8 +2368,8 @@ map_le_of_le_comap _ closure_le.2 fun _x hx => subset_closure ⟨hx, rfl⟩, by 
 
 中文:
 引理 closure_prod_one
-  条件: (s : Set M)
-  结论: closure (s ×ˢ ({1} : Set N)) = (closure s).prod ⊥
+  条件: (s : 集合 M)
+  结论: closure (s ×ˢ ({1} : 集合 N)) = (closure s).乘积 ⊥
   证明: le_antisymm
     (closure_le.2 <| Set.prod_subset_prod_iff.2 <| .inl ⟨subset_closure, .rfl⟩)
     (prod_le_iff.2 ⟨
@@ -2400,8 +2400,8 @@ map_le_of_le_comap _ closure_le.2 fun _y hy => subset_closure ⟨rfl, hy⟩⟩)
 
 中文:
 引理 closure_one_prod
-  条件: (t : Set N)
-  结论: closure (({1} : Set M) ×ˢ t) = .prod ⊥ (closure t)
+  条件: (t : 集合 N)
+  结论: closure (({1} : 集合 M) ×ˢ t) = .乘积 ⊥ (closure t)
   证明: le_antisymm
     (closure_le.2 <| Set.prod_subset_prod_iff.2 <| .inl ⟨.rfl, subset_closure⟩)
     (prod_le_iff.2 ⟨by simp,
@@ -2457,7 +2457,7 @@ and then finally define:
 
 中文:
 定义 copy
-  签名: (S : Submonoid M) (s : Set M) (hs : s = S)
+  签名: (S : 子幺半群 M) (s : 集合 M) (hs : s = S)
   定义体: { carrier := s,
     one_mem' := hs.symm ▸ S.one_mem',
     mul_mem' := hs.symm ▸ S.mul_mem' }
@@ -2533,7 +2533,7 @@ theorem coe_mrange
 中文:
 定理 coe_mrange
   条件: (f : F)
-  结论: (mrange f : Set N) = Set.range f
+  结论: (mrange f : 集合 N) = 集合.range f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2579,7 +2579,7 @@ lemma mrange_comp
 
 中文:
 引理 mrange_comp
-  条件: {O : 类型} [MulOneClass O] (f : N ->* O) (g : M ->* N)
+  条件: {O : 类型} [MulOne类 O] (f : N ->* O) (g : M ->* N)
   证明: SetLike.coe_injective Set.range_comp f _
 
 @[to_additive]
@@ -2604,7 +2604,7 @@ theorem mrange_eq_map
 中文:
 定理 mrange_eq_map
   条件: (f : F)
-  结论: mrange f = (⊤ : Submonoid M).map f
+  结论: mrange f = (⊤ : 子幺半群 M).map f
   证明: Submonoid.copy_eq _
 
 @[to_additive (attr := simp)]
@@ -2628,7 +2628,7 @@ theorem mrange_id
 
 中文:
 定理 mrange_id
-  结论: mrange (MonoidHom.id M) = ⊤
+  结论: mrange (幺半群态射.id M) = ⊤
   证明: by
   simp [mrange_eq_map]
 
@@ -2681,7 +2681,7 @@ theorem mrange_eq_top
 中文:
 定理 mrange_eq_top
   条件: {f : F}
-  结论: mrange f = (⊤ : Submonoid N) ↔ Surjective f
+  结论: mrange f = (⊤ : 子幺半群 N) ↔ 满射 f
   证明: SetLike.ext'_iff.trans Iff.trans (by rw [coe_mrange, coe_top]) Set.range_eq_univ
 
 @[to_additive (attr := simp) mrange_prodMap]
@@ -2702,7 +2702,7 @@ lemma mrange_prodMap
 
 中文:
 引理 mrange_prodMap
-  结论: {M' N' : 类型} [MulOneClass M'] [MulOneClass N'] (f : M ->* N)
+  结论: {M' N' : 类型} [MulOne类 M'] [MulOne类 N'] (f : M ->* N)
   证明: SetLike.coe_injective Set.range_prodMap
 
 Depends on / 依赖: Set.range_prodMap, SetLike, SetLike.coe_injective, coe_injective, range_prodMap
@@ -2727,7 +2727,7 @@ theorem mrange_eq_top_of_surjective
 
 中文:
 定理 mrange_eq_top_of_surjective
-  条件: (f : F) (hf : Function.Surjective f)
+  条件: (f : F) (hf : 函数.满射 f)
   证明: mrange_eq_top.2 hf
 
 @[to_additive]
@@ -2750,7 +2750,7 @@ theorem mclosure_preimage_le
 
 中文:
 定理 mclosure_preimage_le
-  条件: (f : F) (s : Set N)
+  条件: (f : F) (s : 集合 N)
   结论: closure (f ⁻¹' s) <= (closure s).comap f
   证明: closure_le.2 fun _ hx => SetLike.mem_coe.2 mem_comap.2 subset_closure hx
 
@@ -2778,7 +2778,7 @@ theorem map_mclosure
 
 中文:
 定理 map_mclosure
-  条件: (f : F) (s : Set M)
+  条件: (f : F) (s : 集合 M)
   结论: (closure s).map f = closure (f '' s)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Submonoid.gi N).gc (Submonoid.gi M).gc
     fun _ => rfl
@@ -2805,7 +2805,7 @@ theorem mclosure_range
 中文:
 定理 mclosure_range
   条件: (f : F)
-  结论: closure (Set.range f) = mrange f
+  结论: closure (集合.range f) = mrange f
   证明: by
   rw [← Set.image_univ]; rw [← map_mclosure]; rw [mrange_eq_map]; rw [closure_univ]
 
@@ -2828,7 +2828,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: {N S : 类型} [MulOneClass N] [SetLike S M] [SubmonoidClass S M] (f : M ->* N)
+  签名: {N S : 类型} [MulOne类 N] [集合状 S M] [子幺半群类 S M] (f : M ->* N)
   定义体: f.comp (SubmonoidClass.subtype _)
 
 @[to_additive (attr := simp)]
@@ -2856,7 +2856,7 @@ alias _root_.AddMonoidHom.restrict_apply := _root_.AddMonoidHom.domRestrict_appl
 
 中文:
 定理 domRestrict_apply
-  结论: {N S : 类型} [MulOneClass N] [SetLike S M] [SubmonoidClass S M]
+  结论: {N S : 类型} [MulOne类 N] [集合状 S M] [子幺半群类 S M]
   证明: rfl
 
 @[deprecated (since := "2026-07-19")] alias restrict_apply := domRestrict_apply
@@ -2891,7 +2891,7 @@ alias _root_.AddMonoidHom.restrict_eq_zero_iff := _root_.AddMonoidHom.domRestric
 
 中文:
 定理 domRestrict_eq_one_iff
-  结论: {N S : 类型} [MulOneClass N] {f : M ->* N} [SetLike S M]
+  结论: {N S : 类型} [MulOne类 N] {f : M ->* N} [集合状 S M]
   证明: by
   simp [MonoidHom.ext_iff]
 
@@ -2967,7 +2967,7 @@ alias _root_.AddMonoidHom.restrictHom := _root_.AddMonoidHom.domRestrictHom
 
 中文:
 定义 domRestrictHom
-  签名: {S : 类型} [SetLike S M] [SubmonoidClass S M] (M' : S) (A : 类型)
+  签名: {S : 类型} [集合状 S M] [子幺半群类 S M] (M' : S) (A : 类型)
   定义体: f.domRestrict M'
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -3009,7 +3009,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: {S} [SetLike S N] [SubmonoidClass S N] (f : M ->* N) (s : S) (h : 对任意 x, f x in s)
+  签名: {S} [集合状 S N] [子幺半群类 S N] (f : M ->* N) (s : S) (h : 对任意 x, f x in s)
   定义体: ⟨f n, h n⟩
   map_one' := Subtype.ext f.map_one
   map_mul' x y := Subtype.ext (f.map_mul x y)
@@ -3033,7 +3033,7 @@ lemma injective_codRestrict
 
 中文:
 引理 injective_codRestrict
-  结论: {S} [SetLike S N] [SubmonoidClass S N] (f : M ->* N) (s : S)
+  结论: {S} [集合状 S N] [子幺半群类 S N] (f : M ->* N) (s : S)
   证明: ⟨fun H _ _ hxy => H Subtype.ext hxy, fun H _ _ hxy => H (congr_arg Subtype.val hxy)⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, congr_arg
@@ -3057,7 +3057,7 @@ definition mrangeRestrict
 
 中文:
 定义 mrangeRestrict
-  签名: {N} [MulOneClass N] (f : M ->* N)
+  签名: {N} [MulOne类 N] (f : M ->* N)
   定义体: (f.codRestrict (mrange f)) fun x => ⟨x, rfl⟩
 
 @[to_additive (attr := simp)]
@@ -3080,7 +3080,7 @@ theorem coe_mrangeRestrict
 
 中文:
 定理 coe_mrangeRestrict
-  条件: {N} [MulOneClass N] (f : M ->* N) (x : M)
+  条件: {N} [MulOne类 N] (f : M ->* N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -3102,7 +3102,7 @@ theorem mrangeRestrict_surjective
 中文:
 定理 mrangeRestrict_surjective
   条件: (f : M ->* N)
-  结论: Function.Surjective f.mrangeRestrict
+  结论: 函数.满射 f.mrangeRestrict
   证明: fun ⟨_, ⟨x, rfl⟩⟩ => ⟨x, rfl⟩
 -/
 theorem mrangeRestrict_surjective (f : M ->* N) : Function.Surjective f.mrangeRestrict :=
@@ -3175,7 +3175,7 @@ theorem coe_mker
 中文:
 定理 coe_mker
   条件: (f : F)
-  结论: (mker f : Set M) = (f : M -> N) ⁻¹' {1}
+  结论: (mker f : 集合 M) = (f : M -> N) ⁻¹' {1}
   证明: rfl
 
 @[to_additive]
@@ -3244,7 +3244,7 @@ theorem comap_bot'
 中文:
 定理 comap_bot'
   条件: (f : F)
-  结论: (⊥ : Submonoid N).comap f = mker f
+  结论: (⊥ : 子幺半群 N).comap f = mker f
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3357,7 +3357,7 @@ theorem prod_map_comap_prod'
 
 中文:
 定理 prod_map_comap_prod'
-  结论: {M' : 类型} {N' : 类型} [MulOneClass M'] [MulOneClass N']
+  结论: {M' : 类型} {N' : 类型} [MulOne类 M'] [MulOne类 N']
   证明: SetLike.coe_injective Set.preimage_prod_map_prod f g _ _
 
 @[to_additive mker_prod_map]
@@ -3383,7 +3383,7 @@ theorem mker_prod_map
 
 中文:
 定理 mker_prod_map
-  结论: {M' : 类型} {N' : 类型} [MulOneClass M'] [MulOneClass N'] (f : M ->* N)
+  结论: {M' : 类型} {N' : 类型} [MulOne类 M'] [MulOne类 N'] (f : M ->* N)
   证明: by
   rw [← comap_bot']; rw [← comap_bot']; rw [← comap_bot']; rw [← prod_map_comap_prod']; rw [bot_prod_bot]
 
@@ -3464,7 +3464,7 @@ lemma mker_fst
 
 中文:
 引理 mker_fst
-  结论: mker (fst M N) = .prod ⊥ ⊤
+  结论: mker (fst M N) = .乘积 ⊥ ⊤
   证明: SetLike.ext fun _ => (iff_of_eq (and_true _)).symm
 
 @[to_additive (attr := simp)]
@@ -3484,7 +3484,7 @@ lemma mker_snd
 
 中文:
 引理 mker_snd
-  结论: mker (snd M N) = .prod ⊤ ⊥
+  结论: mker (snd M N) = .乘积 ⊤ ⊥
   证明: SetLike.ext fun _ => (iff_of_eq (true_and _)).symm
 
 Depends on / 依赖: SetLike, SetLike.ext, iff_of_eq, true_and
@@ -3508,7 +3508,7 @@ definition submonoidComap
 
 中文:
 定义 submonoidComap
-  签名: (f : M ->* N) (N' : Submonoid N)
+  签名: (f : M ->* N) (N' : 子幺半群 N)
   定义体: ⟨f x, x.2⟩
   map_one' := Subtype.ext f.map_one
   map_mul' x y := Subtype.ext (f.map_mul x y)
@@ -3536,7 +3536,7 @@ lemma submonoidComap_surjective_of_surjective
 
 中文:
 引理 submonoidComap_surjective_of_surjective
-  条件: (f : M ->* N) (N' : Submonoid N) (hf : Surjective f)
+  条件: (f : M ->* N) (N' : 子幺半群 N) (hf : 满射 f)
   证明: fun y => by
   obtain ⟨x, hx⟩ := hf y
   use ⟨x, mem_comap.mpr (hx ▸ y.2)⟩
@@ -3571,7 +3571,7 @@ map_mul' x y := Subtype.ext f.map_mul x y
 
 中文:
 定义 submonoidMap
-  签名: (f : M ->* N) (M' : Submonoid M)
+  签名: (f : M ->* N) (M' : 子幺半群 M)
   定义体: ⟨f x, ⟨x, x.2, rfl⟩⟩
 map_one' := Subtype.ext f.map_one
 map_mul' x y := Subtype.ext f.map_mul x y
@@ -3598,7 +3598,7 @@ theorem submonoidMap_surjective
 
 中文:
 定理 submonoidMap_surjective
-  条件: (f : M ->* N) (M' : Submonoid M)
+  条件: (f : M ->* N) (M' : 子幺半群 M)
   证明: by
   rintro ⟨_, x, hx, rfl⟩
   exact ⟨⟨x, hx⟩, rfl⟩
@@ -3622,7 +3622,7 @@ theorem submonoidMap_injective
 
 中文:
 定理 submonoidMap_injective
-  条件: {f : M ->* N} (hf : Injective f) (M' : Submonoid M)
+  条件: {f : M ->* N} (hf : 单射 f) (M' : 子幺半群 M)
   证明: by
   grind [Injective, submonoidMap_apply_coe]
 
@@ -3647,7 +3647,7 @@ lemma surjOn_iff_le_map
 
 中文:
 引理 surjOn_iff_le_map
-  条件: {f : M ->* N} {H : Submonoid M} {K : Submonoid N}
+  条件: {f : M ->* N} {H : 子幺半群 M} {K : 子幺半群 N}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3671,7 +3671,7 @@ theorem mrange_inl
 
 中文:
 定理 mrange_inl
-  结论: mrange (inl M N) = prod ⊤ ⊥
+  结论: mrange (inl M N) = 乘积 ⊤ ⊥
   证明: by simpa only [mrange_eq_map] using map_inl ⊤
 
 @[to_additive]
@@ -3693,7 +3693,7 @@ theorem mrange_inr
 
 中文:
 定理 mrange_inr
-  结论: mrange (inr M N) = prod ⊥ ⊤
+  结论: mrange (inr M N) = 乘积 ⊥ ⊤
   证明: by simpa only [mrange_eq_map] using map_inr ⊤
 
 @[to_additive]
@@ -3809,8 +3809,8 @@ theorem prod_eq_bot_iff
 
 中文:
 定理 prod_eq_bot_iff
-  条件: {s : Submonoid M} {t : Submonoid N}
-  结论: s.prod t = ⊥ ↔ s = ⊥ ∧ t = ⊥
+  条件: {s : 子幺半群 M} {t : 子幺半群 N}
+  结论: s.乘积 t = ⊥ ↔ s = ⊥ ∧ t = ⊥
   证明: by
   simp only [eq_bot_iff, prod_le_iff, (gc_map_comap _).le_iff_le, comap_bot', mker_inl, mker_inr]
 
@@ -3836,8 +3836,8 @@ theorem prod_eq_top_iff
 
 中文:
 定理 prod_eq_top_iff
-  条件: {s : Submonoid M} {t : Submonoid N}
-  结论: s.prod t = ⊤ ↔ s = ⊤ ∧ t = ⊤
+  条件: {s : 子幺半群 M} {t : 子幺半群 N}
+  结论: s.乘积 t = ⊤ ↔ s = ⊤ ∧ t = ⊤
   证明: by
   simp only [eq_top_iff, le_prod_iff, ← mrange_eq_map, mrange_fst, mrange_snd]
 
@@ -3883,7 +3883,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {S T : Submonoid M} (h : S <= T)
+  签名: {S T : 子幺半群 M} (h : S <= T)
   定义体: S.subtype.codRestrict _ fun x => h x.2
 
 @[to_additive (attr := simp)]
@@ -3907,7 +3907,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  条件: {S T : Submonoid M} (h : S <= T) (a : S)
+  条件: {S T : 子幺半群 M} (h : S <= T) (a : S)
   结论: (inclusion h a : M) = a
   证明: Set.coe_inclusion h a
 
@@ -3932,8 +3932,8 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {S T : Submonoid M} (h : S <= T)
-  结论: Function.Injective inclusion h
+  条件: {S T : 子幺半群 M} (h : S <= T)
+  结论: 函数.单射 inclusion h
   证明: Set.inclusion_injective h
 
 @[to_additive (attr := simp)]
@@ -3956,7 +3956,7 @@ lemma inclusion_inj
 
 中文:
 引理 inclusion_inj
-  条件: {S T : Submonoid M} (h : S <= T) {x y : S}
+  条件: {S T : 子幺半群 M} (h : S <= T) {x y : S}
   证明: (inclusion_injective h).eq_iff
 
 @[to_additive (attr := simp)]
@@ -3980,7 +3980,7 @@ theorem subtype_comp_inclusion
 
 中文:
 定理 subtype_comp_inclusion
-  条件: {S T : Submonoid M} (h : S <= T)
+  条件: {S T : 子幺半群 M} (h : S <= T)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -4003,7 +4003,7 @@ theorem mrange_subtype
 
 中文:
 定理 mrange_subtype
-  条件: (s : Submonoid M)
+  条件: (s : 子幺半群 M)
   结论: mrange s.subtype = s
   证明: SetLike.coe_injective (coe_mrange _).trans Subtype.range_coe
 
@@ -4049,7 +4049,7 @@ theorem eq_bot_iff_forall
 @[to_additive]
 
 中文:
-定理 eq_bot_iff_forall
+定理 eq_bot_iff_对任意
   结论: S = ⊥ ↔ 对任意 x in S, x = (1 : M)
   证明: SetLike.ext_iff.trans by simp +contextual [iff_def, S.one_mem]
 
@@ -4077,7 +4077,7 @@ simpa using congr_arg ((↑) : S -> M) Subsingleton.elim (⟨y, hy⟩ : S) 1
 
 中文:
 定理 eq_bot_of_subsingleton
-  条件: [Subsingleton S]
+  条件: [子单例 S]
   结论: S = ⊥
   证明: by
   rw [eq_bot_iff_forall]
@@ -4107,9 +4107,9 @@ theorem nontrivial_iff_exists_ne_one
     _ ↔ exists x in S, x != (1 : M) := by simp [Ne]
 
 中文:
-定理 nontrivial_iff_exists_ne_one
-  条件: (S : Submonoid M)
-  结论: Nontrivial S ↔ 存在 x in S, x != (1 : M)
+定理 nontrivial_iff_存在_ne_one
+  条件: (S : 子幺半群 M)
+  结论: 非平凡 S ↔ 存在 x in S, x != (1 : M)
   证明: calc
     Nontrivial S ↔ exists x : S, x != 1 := nontrivial_iff_exists_ne 1
     _ ↔ exists (x : _) (hx : x in S), (⟨x, hx⟩ : S) != ⟨1, S.one_mem⟩ := Subtype.exists
@@ -4138,8 +4138,8 @@ theorem bot_or_nontrivial
 
 中文:
 定理 bot_or_nontrivial
-  条件: (S : Submonoid M)
-  结论: S = ⊥ ∨ Nontrivial S
+  条件: (S : 子幺半群 M)
+  结论: S = ⊥ ∨ 非平凡 S
   证明: by
   simp only [eq_bot_iff_forall, nontrivial_iff_exists_ne_one, ← not_forall, ← Classical.not_imp,
     Classical.em]
@@ -4165,8 +4165,8 @@ theorem bot_or_exists_ne_one
 @[to_additive]
 
 中文:
-定理 bot_or_exists_ne_one
-  条件: (S : Submonoid M)
+定理 bot_or_存在_ne_one
+  条件: (S : 子幺半群 M)
   结论: S = ⊥ ∨ 存在 x in S, x != (1 : M)
   证明: S.bot_or_nontrivial.imp_right S.nontrivial_iff_exists_ne_one.mp
 
@@ -4189,7 +4189,7 @@ lemma codisjoint_map
 
 中文:
 引理 codisjoint_map
-  结论: {F : 类型} [FunLike F M N] [MonoidHomClass F M N] {f : F}
+  结论: {F : 类型} [函数状 F M N] [幺半群态射类 F M N] {f : F}
   证明: by
   rw [codisjoint_iff]; rw [← map_sup]; rw [codisjoint_iff.mp h]; rw [← MonoidHom.mrange_eq_map]; rw [mrange_eq_top_of_surjective _ hf]
 
@@ -4224,7 +4224,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (I : Set ι) (S : 对任意 i, Submonoid (M i))
+  签名: (I : 集合 ι) (S : 对任意 i, 子幺半群 (M i))
   定义体: I.pi fun i => (S i).carrier
   one_mem' i _ := (S i).one_mem
   mul_mem' hp hq i hI := (S i).mul_mem (hp i hI) (hq i hI)
@@ -4251,7 +4251,7 @@ theorem coe_pi
 
 中文:
 定理 coe_pi
-  条件: (I : Set ι) (S : 对任意 i, Submonoid (M i))
+  条件: (I : 集合 ι) (S : 对任意 i, 子幺半群 (M i))
   证明: rfl
 
 @[to_additive]
@@ -4273,7 +4273,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: (I : Set ι) {S : 对任意 i, Submonoid (M i)} {p : 对任意 i, M i}
+  条件: (I : 集合 ι) {S : 对任意 i, 子幺半群 (M i)} {p : 对任意 i, M i}
   证明: Iff.rfl
 
 @[to_additive]
@@ -4298,8 +4298,8 @@ theorem pi_top
 
 中文:
 定理 pi_top
-  条件: (I : Set ι)
-  结论: (pi I fun i => (⊤ : Submonoid (M i))) = ⊤
+  条件: (I : 集合 ι)
+  结论: (pi I fun i => (⊤ : 子幺半群 (M i))) = ⊤
   证明: ext fun x => by simp [mem_pi]
 
 @[to_additive]
@@ -4323,7 +4323,7 @@ theorem pi_empty
 
 中文:
 定理 pi_empty
-  条件: (H : 对任意 i, Submonoid (M i))
+  条件: (H : 对任意 i, 子幺半群 (M i))
   结论: pi ∅ H = ⊤
   证明: ext fun x => by simp [mem_pi]
 
@@ -4347,7 +4347,7 @@ theorem pi_bot
 
 中文:
 定理 pi_bot
-  结论: (pi Set.univ fun i => (⊥ : Submonoid (M i))) = ⊥
+  结论: (pi 集合.univ fun i => (⊥ : 子幺半群 (M i))) = ⊥
   证明: ext fun x => by simp [mem_pi, funext_iff]
 
 @[to_additive]
@@ -4370,7 +4370,7 @@ theorem le_pi_iff
 
 中文:
 定理 le_pi_iff
-  条件: {I : Set ι} {S : 对任意 i, Submonoid (M i)} {J : Submonoid (对任意 i, M i)}
+  条件: {I : 集合 ι} {S : 对任意 i, 子幺半群 (M i)} {J : 子幺半群 (对任意 i, M i)}
   证明: Set.subset_pi_iff
 
 @[to_additive (attr := simp)]
@@ -4394,7 +4394,7 @@ theorem mulSingle_mem_pi
 
 中文:
 定理 mulSingle_mem_pi
-  条件: [DecidableEq ι] {I : Set ι} {S : 对任意 i, Submonoid (M i)} (i : ι) (x : M i)
+  条件: [DecidableEq ι] {I : 集合 ι} {S : 对任意 i, 子幺半群 (M i)} (i : ι) (x : M i)
   证明: Set.update_mem_pi_iff_of_mem (one_mem (pi I _))
 
 @[to_additive]
@@ -4421,8 +4421,8 @@ theorem pi_eq_bot_iff
 
 中文:
 定理 pi_eq_bot_iff
-  条件: (S : 对任意 i, Submonoid (M i))
-  结论: pi Set.univ S = ⊥ ↔ 对任意 i, S i = ⊥
+  条件: (S : 对任意 i, 子幺半群 (M i))
+  结论: pi 集合.univ S = ⊥ ↔ 对任意 i, S i = ⊥
   证明: by
   simp_rw [SetLike.ext'_iff]
   exact Set.univ_pi_eq_singleton_iff
@@ -4448,7 +4448,7 @@ theorem le_comap_mulSingle_pi
 
 中文:
 定理 le_comap_mulSingle_pi
-  条件: [DecidableEq ι] (S : 对任意 i, Submonoid (M i)) {I i}
+  条件: [DecidableEq ι] (S : 对任意 i, 子幺半群 (M i)) {I i}
   证明: fun x hx => by simp [hx]
 
 @[to_additive]
@@ -4468,7 +4468,7 @@ theorem iSup_map_mulSingle_le
 
 中文:
 定理 iSup_map_mulSingle_le
-  条件: [DecidableEq ι] {I : Set ι} {S : 对任意 i, Submonoid (M i)}
+  条件: [DecidableEq ι] {I : 集合 ι} {S : 对任意 i, 子幺半群 (M i)}
   证明: iSup_le fun _ => map_le_iff_le_comap.mpr (le_comap_mulSingle_pi _)
 
 Depends on / 依赖: iSup_le, le_comap_mulSingle_pi, map_le_iff_le_comap, map_le_iff_le_comap.mpr
@@ -4492,8 +4492,8 @@ definition MonoidHom.restrict
   body: (f.domRestrict M').codRestrict N' SetLike.forall.mpr h
 
 中文:
-定义 MonoidHom.restrict
-  签名: {M' : Submonoid M} {N' : Submonoid N} {f : M ->* N}
+定义 幺半群态射.restrict
+  签名: {M' : 子幺半群 M} {N' : 子幺半群 N} {f : M ->* N}
   定义体: (f.domRestrict M').codRestrict N' SetLike.forall.mpr h
 
 Depends on / 依赖: SetLike, SetLike.forall.mpr, codRestrict, domRestrict, f.domRestrict
@@ -4510,8 +4510,8 @@ lemma MonoidHom.restrict_injective
   proof: fun _ _ h => Subtype.ext hf' Subtype.ext_iff.mp h
 
 中文:
-引理 MonoidHom.restrict_injective
-  结论: {M' : Submonoid M} {N' : Submonoid N} {f : M ->* N}
+引理 幺半群态射.restrict_injective
+  结论: {M' : 子幺半群 M} {N' : 子幺半群 N} {f : M ->* N}
   证明: fun _ _ h => Subtype.ext hf' Subtype.ext_iff.mp h
 -/
 @[to_additive] lemma MonoidHom.restrict_injective {M' : Submonoid M} {N' : Submonoid N} {f : M ->* N}
@@ -4570,7 +4570,7 @@ Subtype.ext
 
 中文:
 定义 ofLeftInverse'
-  签名: (f : M ->* N) {g : N -> M} (h : Function.LeftInverse g f)
+  签名: (f : M ->* N) {g : N -> M} (h : 函数.左逆 g f)
   定义体: { f.mrangeRestrict with
     toFun := f.mrangeRestrict
     invFun := g ∘ (MonoidHom.mrange f).subtype
@@ -4612,7 +4612,7 @@ definition submonoidMap
 
 中文:
 定义 submonoidMap
-  签名: (e : M ≃* N) (S : Submonoid M)
+  签名: (e : M ≃* N) (S : 子幺半群 M)
   定义体: { (e : M ≃ N).image S with map_mul' := fun _ _ => Subtype.ext (map_mul e _ _) }
 
 @[to_additive (attr := simp)]
@@ -4635,7 +4635,7 @@ theorem coe_submonoidMap_apply
 
 中文:
 定理 coe_submonoidMap_apply
-  条件: (e : M ≃* N) (S : Submonoid M) (g : S)
+  条件: (e : M ≃* N) (S : 子幺半群 M) (g : S)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -4655,7 +4655,7 @@ theorem submonoidMap_symm_apply
 
 中文:
 定理 submonoidMap_symm_apply
-  条件: (e : M ≃* N) (S : Submonoid M) (g : S.map (e : M ->* N))
+  条件: (e : M ≃* N) (S : 子幺半群 M) (g : S.map (e : M ->* N))
   证明: rfl
 -/
 theorem submonoidMap_symm_apply (e : M ≃* N) (S : Submonoid M) (g : S.map (e : M ->* N)) :
@@ -4678,7 +4678,7 @@ theorem Submonoid.equivMapOfInjective_coe_mulEquiv
 @[to_additive]
 
 中文:
-定理 Submonoid.equivMapOfInjective_coe_mulEquiv
+定理 子幺半群.equivMapOfInjective_coe_mulEquiv
   条件: (e : M ≃* N)
   证明: by
   ext
@@ -4701,8 +4701,8 @@ instance Submonoid.faithfulSMul
   body: ⟨fun h => Subtype.ext eq_of_smul_eq_smul h⟩
 
 中文:
-实例 Submonoid.faithfulSMul
-  签名: {M' α : 类型} [MulOneClass M'] [SMul M' α] {S : Submonoid M'}
+实例 子幺半群.faithfulSMul
+  签名: {M' α : 类型} [MulOne类 M'] [标量乘法 M' α] {S : 子幺半群 M'}
   定义体: ⟨fun h => Subtype.ext eq_of_smul_eq_smul h⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, eq_of_smul_eq_smul
@@ -4734,7 +4734,7 @@ definition unitsTypeEquivIsUnitSubmonoid
 
 中文:
 定义 unitsTypeEquivIsUnitSubmonoid
-  签名: {M : 类型} [Monoid M]
+  签名: {M : 类型} [幺半群 M]
   定义体: ⟨x, Units.isUnit x⟩
   invFun x := x.prop.unit
   left_inv _ := IsUnit.unit_of_val_units _
@@ -4773,8 +4773,8 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (f : F) (S : Submonoid N)
-  结论: (S.comap f).map f = S ⊓ MonoidHom.mrange f
+  条件: (f : F) (S : 子幺半群 N)
+  结论: (S.comap f).map f = S ⊓ 幺半群态射.mrange f
   证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
 
 @[to_additive]
@@ -4798,7 +4798,7 @@ theorem map_comap_eq_self
 
 中文:
 定理 map_comap_eq_self
-  条件: {f : F} {S : Submonoid N} (h : S <= MonoidHom.mrange f)
+  条件: {f : F} {S : 子幺半群 N} (h : S <= 幺半群态射.mrange f)
   证明: by
   simpa only [inf_of_le_left h] using map_comap_eq f S
 
@@ -4821,7 +4821,7 @@ theorem map_comap_eq_self_of_surjective
 
 中文:
 定理 map_comap_eq_self_of_surjective
-  条件: {f : F} (h : Function.Surjective f) {S : Submonoid N}
+  条件: {f : F} (h : 函数.满射 f) {S : 子幺半群 N}
   证明: map_comap_eq_self (MonoidHom.mrange_eq_top_of_surjective _ h ▸ le_top)
 
 Depends on / 依赖: MonoidHom, MonoidHom.mrange_eq_top_of_surjective, le_top, map_comap_eq_self, mrange_eq_top_of_surjective

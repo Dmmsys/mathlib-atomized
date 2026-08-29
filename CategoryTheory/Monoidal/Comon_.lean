@@ -50,7 +50,7 @@ class ComonObj
     - comul_assoc((X)) : comul ≫ X ◁ comul = comul ≫ (comul ▷ X) ≫ (α_ X X X).hom  [default: by cat_disch]
 
 中文:
-类 ComonObj
+类 余monObj
   参数: (X : C)
   公理与运算 (5 个):
     - counit : X ⟶ 𝟙_ C
@@ -96,7 +96,7 @@ definition instTensorUnit
 
 中文:
 定义 instTensorUnit
-  签名: (C : 类型u₁) [Category.{v₁} C] [MonoidalCategory.{v₁} C]
+  签名: (C : 类型u₁) [范畴.{v₁} C] [幺半群范畴.{v₁} C]
   定义体: 𝟙 _
   comul := (fun_ _).inv
   counit_comul := by simp
@@ -127,7 +127,7 @@ class IsComonHom
     - hom_comul((f)) : f ≫ Δ = Δ ≫ (f otimesₘ f)  [default: by cat_disch]
 
 中文:
-类 IsComonHom
+类 是余mon态射
   参数: (f : M ⟶ N)
   公理与运算 (2 个):
     - hom_counit((f)) : f ≫ ε = ε  [默认: by cat_disch]
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsComonHom (𝟙 M)
+  签名: 是余mon态射 (𝟙 M)
 -/
 instance : IsComonHom (𝟙 M) where
 
@@ -174,11 +174,11 @@ structure Comon
     - [comon : ComonObj X]
 
 中文:
-结构 Comon
+结构 余mon
   参数: where
   公理与运算 (2 个):
     - X : C
-    - [comon : ComonObj X]
+    - [comon : 余monObj X]
 -/
 structure Comon where
   /-- The underlying object of a comonoid object. -/
@@ -204,7 +204,7 @@ definition trivial
 
 中文:
 定义 trivial
-  签名: : Comon C
+  签名: : 余mon C
   定义体: mk (𝟙_ C)
 -/
 def trivial : Comon C := mk (𝟙_ C)
@@ -219,7 +219,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Comon C)
+  签名: 可居 (余mon C)
   定义体: ⟨trivial C⟩
 -/
 instance : Inhabited (Comon C) :=
@@ -297,7 +297,7 @@ theorem comul_assoc_flip
 
 中文:
 定理 comul_assoc_flip
-  条件: (X : C) [ComonObj X]
+  条件: (X : C) [余monObj X]
   证明: by
   simp
 
@@ -326,11 +326,11 @@ structure Hom
     - [isComonHom_hom : IsComonHom hom]
 
 中文:
-结构 Hom
-  参数: (M N : Comon C)
+结构 态射
+  参数: (M N : 余mon C)
   公理与运算 (2 个):
     - hom : M.X ⟶ N.X
-    - [isComonHom_hom : IsComonHom hom]
+    - [isComonHom_hom : 是余mon态射 hom]
 
 Depends on / 依赖: G.IsCoverDense, G.IsDenseSubsite, G.inducedTopology, IsCoverDense, IsDenseSubsite, inducedTopology, infer_instance, restrictedTopology_eq_inducedTopology
 -/
@@ -351,8 +351,8 @@ abbreviation Hom.mk'
   .mk f
 
 中文:
-缩写 Hom.mk'
-  签名: {M N : Comon C} (f : M.X ⟶ N.X)
+缩写 态射.mk'
+  签名: {M N : 余mon C} (f : M.X ⟶ N.X)
   定义体: have : IsComonHom f := ⟨f_counit, f_comul⟩
   .mk f
 
@@ -377,7 +377,7 @@ definition id
 
 中文:
 定义 id
-  签名: (M : Comon C)
+  签名: (M : 余mon C)
   定义体: 𝟙 M.X
 -/
 def id (M : Comon C) : Hom M M where
@@ -393,7 +393,7 @@ instance homInhabited
 
 中文:
 实例 homInhabited
-  签名: (M : Comon C)
+  签名: (M : 余mon C)
   定义体: ⟨id M⟩
 -/
 instance homInhabited (M : Comon C) : Inhabited (Hom M M) :=
@@ -411,7 +411,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {M N O : Comon C} (f : Hom M N) (g : Hom N O)
+  签名: {M N O : 余mon C} (f : 态射 M N) (g : 态射 N O)
   定义体: f.hom ≫ g.hom
 
 Depends on / 依赖: f.hom, g.hom
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Comon C)
+  签名: 范畴 (余mon C)
   定义体: Hom M N
   id := id
   comp f g := comp f g
@@ -454,7 +454,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {X Y : Comon C} {f g : X ⟶ Y} (w : f.hom = g.hom)
+  条件: {X Y : 余mon C} {f g : X ⟶ Y} (w : f.hom = g.hom)
   结论: f = g
   证明: Hom.ext w
 -/
@@ -473,8 +473,8 @@ theorem id_hom'
 
 中文:
 定理 id_hom'
-  条件: (M : Comon C)
-  结论: (𝟙 M : Hom M M).hom = 𝟙 M.X
+  条件: (M : 余mon C)
+  结论: (𝟙 M : 态射 M M).hom = 𝟙 M.X
   证明: rfl
 
 @[simp]
@@ -493,7 +493,7 @@ theorem comp_hom'
 
 中文:
 定理 comp_hom'
-  条件: {M N K : Comon C} (f : M ⟶ N) (g : N ⟶ K)
+  条件: {M N K : 余mon C} (f : M ⟶ N) (g : N ⟶ K)
   结论: (f ≫ g).hom = f.hom ≫ g.hom
   证明: rfl
 -/
@@ -517,7 +517,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : Comon C ⥤ C where
+  签名: : 余mon C ⥤ C where
   定义体: A.X
   map f := f.hom
 -/
@@ -536,7 +536,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (@forget C _ _).Faithful where
+  签名: : (@forget C _ _).忠实 where
 -/
 instance forget_faithful : (@forget C _ _).Faithful where
 
@@ -552,7 +552,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).ReflectsIsomorphisms
+  签名: (forget C).反映同构
   定义体: ⟨⟨{ hom := inv f.hom }, by cat_disch⟩⟩
 
 Depends on / 依赖: cat_disch, f.hom
@@ -576,7 +576,7 @@ definition mkIso'
 
 中文:
 定义 mkIso'
-  签名: {M N : Comon C} (f : M.X ≅ N.X) [IsComonHom f.hom]
+  签名: {M N : 余mon C} (f : M.X ≅ N.X) [是余mon态射 f.hom]
   定义体: Hom.mk f.hom
   inv := Hom.mk f.inv
 
@@ -601,7 +601,7 @@ definition mkIso
 
 中文:
 定义 mkIso
-  签名: {M N : Comon C} (f : M.X ≅ N.X) (f_counit : f.hom ≫ ε[N.X] = ε[M.X] := by cat_disch)
+  签名: {M N : 余mon C} (f : M.X ≅ N.X) (f_counit : f.hom ≫ ε[N.X] = ε[M.X] := by cat_disch)
   定义体: have : IsComonHom f.hom := ⟨f_counit, f_comul⟩
   ⟨⟨f.hom⟩, ⟨f.inv⟩, by cat_disch, by cat_disch⟩
 
@@ -631,7 +631,7 @@ instance uniqueHomToTrivial
 
 中文:
 实例 uniqueHomToTrivial
-  签名: (A : Comon C)
+  签名: (A : 余mon C)
   定义体: ε[A.X]
   default.isComonHom_hom.hom_comul := by simp [unitors_inv_equal]
   uniq f := by
@@ -661,7 +661,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasTerminal (Comon C)
+  签名: 有终止 (余mon C)
   定义体: hasTerminal_of_unique (trivial C)
 
 Depends on / 依赖: hasTerminal_of_unique
@@ -690,7 +690,7 @@ abbreviation ComonToMonOpOpObjMon
 
 中文:
 缩写 ComonToMonOpOpObjMon
-  签名: (A : Comon C)
+  签名: (A : 余mon C)
   定义体: ε[A.X].op
   mul := Δ[A.X].op
   one_mul := by
@@ -726,7 +726,7 @@ definition ComonToMonOpOpObj
 
 中文:
 定义 ComonToMonOpOpObj
-  签名: (A : Comon C)
+  签名: (A : 余mon C)
   定义体: op A.X
   mon := ComonToMonOpOpObjMon A
 -/
@@ -750,7 +750,7 @@ map := fun f => op
 
 中文:
 定义 ComonToMonOpOp
-  签名: : Comon C ⥤ (Mon Cᵒᵖ)ᵒᵖ where
+  签名: : 余mon C ⥤ (幺半群 Cᵒᵖ)ᵒᵖ where
   定义体: op (ComonToMonOpOpObj A)
 map := fun f => op
     { hom := f.hom.op
@@ -779,7 +779,7 @@ abbreviation MonOpOpToComonObjComon
 
 中文:
 缩写 MonOpOpToComonObjComon
-  签名: (A : Mon Cᵒᵖ)
+  签名: (A : 幺半群 Cᵒᵖ)
   定义体: η[A.X].unop
   comul := μ[A.X].unop
   counit_comul := by rw [← unop_whiskerRight, ← unop_comp, MonObj.one_mul]; rfl
@@ -807,7 +807,7 @@ definition MonOpOpToComonObj
 
 中文:
 定义 MonOpOpToComonObj
-  签名: (A : Mon Cᵒᵖ)
+  签名: (A : 幺半群 Cᵒᵖ)
   定义体: unop A.X
   comon := MonOpOpToComonObjComon A
 -/
@@ -836,7 +836,7 @@ definition MonOpOpToComon
 
 中文:
 定义 MonOpOpToComon
-  签名: : (Mon Cᵒᵖ)ᵒᵖ ⥤ Comon C where
+  签名: : (幺半群 Cᵒᵖ)ᵒᵖ ⥤ 余mon C where
   定义体: MonOpOpToComonObj (unop A)
   map := fun f =>
     { hom := f.unop.hom.unop
@@ -874,7 +874,7 @@ the simpNF linter complains about `monoidal_tensorObj_comon_counit` being `@
 
 中文:
 定义 Comon_EquivMon_OpOp
-  签名: : Comon C ≌ (Mon Cᵒᵖ)ᵒᵖ where
+  签名: : 余mon C ≌ (幺半群 Cᵒᵖ)ᵒᵖ where
   定义体: ComonToMonOpOp C
   inverse := MonOpOpToComon C
   unitIso := NatIso.ofComponents fun _ => .refl _
@@ -921,7 +921,7 @@ instance monoidal
 
 中文:
 实例 monoidal
-  签名: [BraidedCategory C]
+  签名: [辫范畴 C]
   定义体: Monoidal.transport (Comon_EquivMon_OpOp C).symm
 
 Depends on / 依赖: Comon_EquivMon_OpOp, Monoidal, Monoidal.transport, transport
@@ -942,7 +942,7 @@ theorem tensorObj_X
 
 中文:
 定理 tensorObj_X
-  条件: (A B : Comon C)
+  条件: (A B : 余mon C)
   结论: (A otimes B).X = A.X otimes B.X
   证明: rfl
 -/
@@ -962,7 +962,7 @@ theorem tensorObj_counit
 
 中文:
 定理 tensorObj_counit
-  条件: (A B : C) [ComonObj A] [ComonObj B]
+  条件: (A B : C) [余monObj A] [余monObj B]
   证明: rfl
 -/
 theorem tensorObj_counit (A B : C) [ComonObj A] [ComonObj B] :
@@ -980,7 +980,7 @@ theorem tensorObj_comul'
 
 中文:
 定理 tensorObj_comul'
-  条件: (A B : C) [ComonObj A] [ComonObj B]
+  条件: (A B : C) [余monObj A] [余monObj B]
   证明: by
   rfl
 -/
@@ -1006,7 +1006,7 @@ theorem tensorObj_comul
 
 中文:
 定理 tensorObj_comul
-  条件: (A B : C) [ComonObj A] [ComonObj B]
+  条件: (A B : C) [余monObj A] [余monObj B]
   证明: by
   simp [tensorObj_comul']
 
@@ -1030,7 +1030,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget C).Monoidal
+  签名: (forget C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -1083,7 +1083,7 @@ theorem forget_μ
 
 中文:
 定理 forget_μ
-  条件: (X Y : Comon C)
+  条件: (X Y : 余mon C)
   结论: «μ» (forget C) X Y = 𝟙 (X.X otimes Y.X)
   证明: rfl
 -/
@@ -1099,7 +1099,7 @@ theorem forget_δ
 
 中文:
 定理 forget_δ
-  条件: (X Y : Comon C)
+  条件: (X Y : 余mon C)
   结论: δ (forget C) X Y = 𝟙 (X.X otimes Y.X)
   证明: rfl
 -/
@@ -1129,7 +1129,7 @@ abbreviation obj.instComonObj
 
 中文:
 缩写 obj.instComonObj
-  签名: (A : C) [ComonObj A] (F : C ⥤ D) [F.OplaxMonoidal]
+  签名: (A : C) [余monObj A] (F : C ⥤ D) [F.反松弛幺半群]
   定义体: F.map ε[A] ≫ η F
   comul := F.map Δ[A] ≫ δ F _ _
   counit_comul := by
@@ -1167,7 +1167,7 @@ lemma obj.ε_def
 
 中文:
 引理 obj.ε_def
-  条件: (F : C ⥤ D) [F.OplaxMonoidal] (X : C) [ComonObj X]
+  条件: (F : C ⥤ D) [F.反松弛幺半群] (X : C) [余monObj X]
   证明: rfl
 -/
 @[reassoc, simp] lemma obj.ε_def (F : C ⥤ D) [F.OplaxMonoidal] (X : C) [ComonObj X] :
@@ -1184,7 +1184,7 @@ lemma obj.Δ_def
 
 中文:
 引理 obj.Δ_def
-  条件: (F : C ⥤ D) [F.OplaxMonoidal] (X : C) [ComonObj X]
+  条件: (F : C ⥤ D) [F.反松弛幺半群] (X : C) [余monObj X]
   证明: rfl
 -/
 @[reassoc, simp] lemma obj.Δ_def (F : C ⥤ D) [F.OplaxMonoidal] (X : C) [ComonObj X] :
@@ -1238,7 +1238,7 @@ definition mapComon
 
 中文:
 定义 mapComon
-  签名: (F : C ⥤ D) [F.OplaxMonoidal]
+  签名: (F : C ⥤ D) [F.反松弛幺半群]
   定义体: { X := F.obj A.X }
   map f :=
     { hom := F.map f.hom }
@@ -1272,8 +1272,8 @@ class IsCommComonObj
     - comul_comm((X)) : Δ ≫ (β_ X X).hom = Δ  [default: by cat_disch]
 
 中文:
-类 IsCommComonObj
-  参数: (X : C) [ComonObj X]
+类 是交换余monObj
+  参数: (X : C) [余monObj X]
   公理与运算 (1 个):
     - comul_comm((X)) : Δ ≫ (β_ X X).hom = Δ  [默认: by cat_disch]
 

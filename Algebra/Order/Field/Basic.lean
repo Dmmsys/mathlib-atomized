@@ -791,7 +791,7 @@ omit [IsStrictOrderedRing α] in
 中文:
 引理 monotone_div_right_of_nonneg
   条件: (ha : 0 <= a)
-  结论: Monotone (· / a)
+  结论: 递增 (· / a)
   证明: fun _b _c hbc => div_le_div_of_nonneg_right hbc ha
 
 omit [IsStrictOrderedRing α] in
@@ -816,7 +816,7 @@ omit [IsStrictOrderedRing α] in
 中文:
 引理 strictMono_div_right_of_pos
   条件: (ha : 0 < a)
-  结论: StrictMono (· / a)
+  结论: 严格递增 (· / a)
   证明: fun _b _c hbc => div_lt_div_of_pos_right hbc ha
 
 omit [IsStrictOrderedRing α] in
@@ -836,8 +836,8 @@ theorem Monotone.div_const
   proof: (monotone_div_right_of_nonneg hc).comp hf
 
 中文:
-定理 Monotone.div_const
-  结论: {β : 类型} [Preorder β] {f : β -> α} (hf : Monotone f) {c : α}
+定理 递增.div_const
+  结论: {β : 类型} [预序 β] {f : β -> α} (hf : 递增 f) {c : α}
   证明: (monotone_div_right_of_nonneg hc).comp hf
 
 Depends on / 依赖: monotone_div_right_of_nonneg
@@ -855,8 +855,8 @@ theorem StrictMono.div_const
   simpa only [div_eq_mul_inv] using hf.mul_const (inv_pos.2 hc)
 
 中文:
-定理 StrictMono.div_const
-  结论: {β : 类型} [Preorder β] {f : β -> α} (hf : StrictMono f) {c : α}
+定理 严格递增.div_const
+  结论: {β : 类型} [预序 β] {f : β -> α} (hf : 严格递增 f) {c : α}
   证明: by
   simpa only [div_eq_mul_inv] using hf.mul_const (inv_pos.2 hc)
 
@@ -888,7 +888,7 @@ theorem one_div_strictAntiOn
 
 中文:
 定理 one_div_strictAntiOn
-  结论: StrictAntiOn (fun x : α => 1 / x) (Set.Ioi 0)
+  结论: StrictAntiOn (fun x : α => 1 / x) (集合.左开右无界区间 0)
   证明: fun _ x1 _ y1 xy => (one_div_lt_one_div (Set.mem_Ioi.mp y1) (Set.mem_Ioi.mp x1)).mpr xy
 
 Depends on / 依赖: Set.mem_Ioi.mp, mem_Ioi, one_div_lt_one_div
@@ -957,7 +957,7 @@ theorem one_div_pow_anti
 中文:
 定理 one_div_pow_anti
   条件: (a1 : 1 <= a)
-  结论: Antitone fun n : 自然数 => 1 / a ^ n
+  结论: 递减 fun n : 自然数 => 1 / a ^ n
   证明: fun _ _ =>
   one_div_pow_le_one_div_pow_of_le a1
 -/
@@ -979,7 +979,7 @@ omit [IsStrictOrderedRing α] in
 中文:
 定理 one_div_pow_strictAnti
   条件: (a1 : 1 < a)
-  结论: StrictAnti fun n : 自然数 => 1 / a ^ n
+  结论: 严格递减 fun n : 自然数 => 1 / a ^ n
   证明: fun _ _ =>
   one_div_pow_lt_one_div_pow_of_lt a1
 
@@ -1000,7 +1000,7 @@ theorem inv_strictAntiOn
 
 中文:
 定理 inv_strictAntiOn
-  结论: StrictAntiOn (fun x : α => x⁻¹) (Set.Ioi 0)
+  结论: StrictAntiOn (fun x : α => x⁻¹) (集合.左开右无界区间 0)
   证明: fun _ hx _ hy xy =>
   (inv_lt_inv₀ hy hx).2 xy
 -/
@@ -1064,7 +1064,7 @@ theorem inv_pow_anti
 中文:
 定理 inv_pow_anti
   条件: (a1 : 1 <= a)
-  结论: Antitone fun n : 自然数 => (a ^ n)⁻¹
+  结论: 递减 fun n : 自然数 => (a ^ n)⁻¹
   证明: fun _ _ =>
   inv_pow_le_inv_pow_of_le a1
 -/
@@ -1084,7 +1084,7 @@ theorem inv_pow_strictAnti
 中文:
 定理 inv_pow_strictAnti
   条件: (a1 : 1 < a)
-  结论: StrictAnti fun n : 自然数 => (a ^ n)⁻¹
+  结论: 严格递减 fun n : 自然数 => (a ^ n)⁻¹
   证明: fun _ _ =>
   inv_pow_lt_inv_pow_of_lt a1
 -/
@@ -1107,7 +1107,7 @@ refine ⟨fun h _ hε => h.trans le_mul_of_one_le_right hb hε.le, fun h => ?_�
   rw [mul_div_cancel₀ _ hb.ne']
 
 中文:
-定理 le_iff_forall_one_lt_le_mul₀
+定理 le_iff_对任意_one_lt_le_mul₀
   结论: {α : 类型}
   证明: by
 refine ⟨fun h _ hε => h.trans le_mul_of_one_le_right hb hε.le, fun h => ?_⟩
@@ -1191,7 +1191,7 @@ theorem IsGLB.mul_left
 
 中文:
 定理 IsGLB.mul_left
-  条件: {s : Set α} (ha : 0 <= a) (hs : IsGLB s b)
+  条件: {s : 集合 α} (ha : 0 <= a) (hs : IsGLB s b)
   证明: by
   rcases lt_or_eq_of_le ha with (ha | rfl)
   · exact (OrderIso.mulLeft₀ _ ha).isGLB_image'.2 hs
@@ -1219,7 +1219,7 @@ theorem IsGLB.mul_right
 
 中文:
 定理 IsGLB.mul_right
-  条件: {s : Set α} (ha : 0 <= a) (hs : IsGLB s b)
+  条件: {s : 集合 α} (ha : 0 <= a) (hs : IsGLB s b)
   证明: by simpa [mul_comm] using hs.mul_left ha
 
 Depends on / 依赖: hs.mul_left, mul_comm, mul_left
@@ -1247,7 +1247,7 @@ theorem IsLUB.mul_left
 
 中文:
 定理 IsLUB.mul_left
-  条件: {s : Set α} (ha : 0 <= a) (hs : IsLUB s b)
+  条件: {s : 集合 α} (ha : 0 <= a) (hs : IsLUB s b)
   证明: by
   obtain ha | rfl := ha.lt_or_eq
   · exact (OrderIso.mulLeft₀ _ ha).isLUB_image'.2 hs
@@ -1283,7 +1283,7 @@ theorem IsLUB.mul_right
 
 中文:
 定理 IsLUB.mul_right
-  条件: {s : Set α} (ha : 0 <= a) (hs : IsLUB s b)
+  条件: {s : 集合 α} (ha : 0 <= a) (hs : IsLUB s b)
   证明: by simpa [mul_comm] using hs.mul_left ha
 
 Depends on / 依赖: hs.mul_left, mul_comm, mul_left
@@ -1311,7 +1311,7 @@ theorem exists_pos_mul_lt
   exact lt_max_iff.2 (Or.inl <| lt_add_one _)
 
 中文:
-定理 exists_pos_mul_lt
+定理 存在_pos_mul_lt
   条件: {a : α} (h : 0 < a) (b : α)
   结论: 存在 c : α, 0 < c ∧ b * c < a
   证明: by
@@ -1339,7 +1339,7 @@ theorem exists_pos_lt_mul
   ⟨c⁻¹, inv_pos.2 hc₀, by rwa [← div_eq_inv_mul, lt_div_iff₀ hc₀]⟩
 
 中文:
-定理 exists_pos_lt_mul
+定理 存在_pos_lt_mul
   条件: {a : α} (h : 0 < a) (b : α)
   结论: 存在 c : α, 0 < c ∧ b < c * a
   证明: let ⟨c, hc₀, hc⟩ := exists_pos_mul_lt h b;
@@ -1363,7 +1363,7 @@ theorem min_div_div_right
 中文:
 定理 min_div_div_right
   条件: {c : α} (hc : 0 <= c) (a b : α)
-  结论: min (a / c) (b / c) = min a b / c
+  结论: 最小值 (a / c) (b / c) = 最小值 a b / c
   证明: (monotone_div_right_of_nonneg hc).map_min.symm
 
 Depends on / 依赖: map_min, map_min.symm, monotone_div_right_of_nonneg
@@ -1383,7 +1383,7 @@ theorem max_div_div_right
 中文:
 定理 max_div_div_right
   条件: {c : α} (hc : 0 <= c) (a b : α)
-  结论: max (a / c) (b / c) = max a b / c
+  结论: 最大值 (a / c) (b / c) = 最大值 a b / c
   证明: (monotone_div_right_of_nonneg hc).map_max.symm
 
 Depends on / 依赖: map_max, map_max.symm, monotone_div_right_of_nonneg
@@ -2698,7 +2698,7 @@ theorem exists_add_lt_and_pos_of_lt
   proof: ⟨(a - b) / 2, add_sub_div_two_lt h, div_pos (sub_pos_of_lt h) zero_lt_two⟩
 
 中文:
-定理 exists_add_lt_and_pos_of_lt
+定理 存在_add_lt_and_pos_of_lt
   条件: (h : b < a)
   结论: 存在 c, b + c < a ∧ 0 < c
   证明: ⟨(a - b) / 2, add_sub_div_two_lt h, div_pos (sub_pos_of_lt h) zero_lt_two⟩
@@ -2923,7 +2923,7 @@ theorem le_of_forall_sub_le
     exists_add_lt_and_pos_of_lt h
 
 中文:
-定理 le_of_forall_sub_le
+定理 le_of_对任意_sub_le
   条件: (h : 对任意 ε > 0, b - ε <= a)
   结论: b <= a
   证明: by
@@ -2950,7 +2950,7 @@ lemma exists_lt_mul_left_of_nonneg
   exact ⟨a', ⟨(div_nonneg hc hb.le).trans ha'.le, a_a'⟩, (div_lt_iff₀ hb).1 ha'⟩
 
 中文:
-引理 exists_lt_mul_left_of_nonneg
+引理 存在_lt_mul_left_of_nonneg
   条件: {a b c : α} (ha : 0 <= a) (hc : 0 <= c) (h : c < a * b)
   证明: by
   have hb : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
@@ -2975,7 +2975,7 @@ lemma exists_lt_mul_right_of_nonneg
   exact exists_lt_mul_left_of_nonneg hb.le hc h
 
 中文:
-引理 exists_lt_mul_right_of_nonneg
+引理 存在_lt_mul_right_of_nonneg
   条件: {a b c : α} (ha : 0 <= a) (hc : 0 <= c) (h : c < a * b)
   证明: by
   have hb : 0 < b := pos_of_mul_pos_right (hc.trans_lt h) ha
@@ -3003,7 +3003,7 @@ lemma exists_mul_left_lt₀
     exact ⟨a', ha', (lt_div_iff₀ hb).1 hc'⟩
 
 中文:
-引理 exists_mul_left_lt₀
+引理 存在_mul_left_lt₀
   条件: {a b c : α} (hc : a * b < c)
   结论: 存在 a' > a, a' * b < c
   证明: by
@@ -3031,7 +3031,7 @@ lemma exists_mul_right_lt₀
   simp_rw [mul_comm a] at hc ⊢; exact exists_mul_left_lt₀ hc
 
 中文:
-引理 exists_mul_right_lt₀
+引理 存在_mul_right_lt₀
   条件: {a b c : α} (hc : a * b < c)
   结论: 存在 b' > b, a * b' < c
   证明: by
@@ -3054,7 +3054,7 @@ lemma le_mul_of_forall_lt₀
   exact (h a' ha' b' hb').trans hd.le
 
 中文:
-引理 le_mul_of_forall_lt₀
+引理 le_mul_of_对任意_lt₀
   条件: {a b c : α} (h : 对任意 a' > a, 对任意 b' > b, c <= a' * b')
   结论: c <= a * b
   证明: by
@@ -3086,7 +3086,7 @@ lemma mul_le_of_forall_lt_of_nonneg
   exact d_ab.le.trans (h a' ha'.1 ha'.2
 
 中文:
-引理 mul_le_of_forall_lt_of_nonneg
+引理 mul_le_of_对任意_lt_of_nonneg
   结论: {a b c : α} (ha : 0 <= a) (hc : 0 <= c)
   证明: by
   refine le_of_forall_lt_imp_le_of_dense fun d d_ab => ?_
@@ -3121,7 +3121,7 @@ theorem mul_self_inj_of_nonneg
 
 中文:
 定理 mul_self_inj_of_nonneg
-  结论: {α : 类型} [CommRing α] [NoZeroDivisors α] [PartialOrder α]
+  结论: {α : 类型} [交换环 α] [无零因子 α] [偏序 α]
   证明: by
   have := fun h => le_antisymm (neg_nonneg.mp h) b0
   grind [sq_sub_sq, mul_eq_zero, add_eq_zero_iff_eq_neg]
@@ -3146,7 +3146,7 @@ theorem min_div_div_right_of_nonpos
 中文:
 定理 min_div_div_right_of_nonpos
   条件: (hc : c <= 0) (a b : α)
-  结论: min (a / c) (b / c) = max a b / c
+  结论: 最小值 (a / c) (b / c) = 最大值 a b / c
   证明: Eq.symm Antitone.map_max fun _ _ => div_le_div_of_nonpos_of_le hc
 
 Depends on / 依赖: Antitone, Antitone.map_max, Eq.symm, div_le_div_of_nonpos_of_le, map_max
@@ -3168,7 +3168,7 @@ theorem max_div_div_right_of_nonpos
 中文:
 定理 max_div_div_right_of_nonpos
   条件: (hc : c <= 0) (a b : α)
-  结论: max (a / c) (b / c) = min a b / c
+  结论: 最大值 (a / c) (b / c) = 最小值 a b / c
   证明: Eq.symm Antitone.map_min fun _ _ => div_le_div_of_nonpos_of_le hc
 
 @[simp, grind =]
@@ -3342,7 +3342,7 @@ lemma div_nonneg_of_pos_of_nonneg
 
 中文:
 引理 div_nonneg_of_pos_of_nonneg
-  条件: [PosMulReflectLT α] (ha : 0 < a) (hb : 0 <= b)
+  条件: [正乘反映严格偏序 α] (ha : 0 < a) (hb : 0 <= b)
   证明: div_nonneg ha.le hb
 
 Depends on / 依赖: WithBot, WithZero, div_nonneg, ha.le, instLT
@@ -3361,7 +3361,7 @@ lemma div_nonneg_of_nonneg_of_pos
 
 中文:
 引理 div_nonneg_of_nonneg_of_pos
-  条件: [PosMulReflectLT α] (ha : 0 <= a) (hb : 0 < b)
+  条件: [正乘反映严格偏序 α] (ha : 0 <= a) (hb : 0 < b)
   证明: div_nonneg ha hb.le
 
 Depends on / 依赖: div_nonneg, hb.le
@@ -3420,7 +3420,7 @@ lemma zpow_zero_pos
 
 中文:
 引理 zpow_zero_pos
-  结论: {α : 类型} [Semifield α] [PartialOrder α] [IsStrictOrderedRing α]
+  结论: {α : 类型} [半域 α] [偏序 α] [是StrictOrdered环 α]
   证明: zero_lt_one.trans_eq (zpow_zero a).symm
 
 Depends on / 依赖: trans_eq, zero_lt_one, zero_lt_one.trans_eq, zpow_zero

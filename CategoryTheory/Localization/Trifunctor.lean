@@ -43,7 +43,7 @@ definition IsInvertedBy₃
 
 中文:
 定义 IsInvertedBy₃
-  签名: (W₁ : Morphism命题erty C₁) (W₂ : Morphism命题erty C₂)
+  签名: (W₁ : MorphismProperty C₁) (W₂ : MorphismProperty C₂)
   定义体: (W₁.prod (W₂.prod W₃)).IsInvertedBy (currying₃.functor.obj F)
 
 Depends on / 依赖: IsInvertedBy, functor, functor.obj
@@ -182,7 +182,7 @@ definition lift₃NatTrans
       (uncurry₃.obj F₂) (uncurry₃.obj F₁') (uncurry₃.obj F₂') (uncurry₃.map τ))
 
 中文:
-定义 lift₃NatTrans
+定义 lift₃自然数Trans
   签名: : F₁' ⟶ F₂'
   定义体: fullyFaithfulUncurry₃.preimage
     (liftNatTrans (L₁.prod (L₂.prod L₃)) (W₁.prod (W₂.prod W₃)) (uncurry₃.obj F₁)
@@ -212,7 +212,7 @@ theorem lift₃NatTrans_app_app_app
   exact liftNatTrans_app _ _ _ _ (uncurry₃.obj 
 
 中文:
-定理 lift₃NatTrans_app_app_app
+定理 lift₃自然数Trans_app_app_app
   条件: (X₁ : C₁) (X₂ : C₂) (X₃ : C₃)
   证明: by
   dsimp [lift₃NatTrans, fullyFaithfulUncurry₃, Equivalence.fullyFaithfulFunctor]
@@ -277,7 +277,7 @@ definition lift₃NatIso
   inv_hom_id := natTrans₃_ext L₁ L₂ L₃ W₁ W₂ W₃ (by cat_disch)
 
 中文:
-定义 lift₃NatIso
+定义 lift₃自然数Iso
   签名: : F₁' ≅ F₂' where
   定义体: lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₁ F₂ F₁' F₂' e.hom
   inv := lift₃NatTrans L₁ L₂ L₃ W₁ W₂ W₃ F₂ F₁ F₂' F₁' e.inv

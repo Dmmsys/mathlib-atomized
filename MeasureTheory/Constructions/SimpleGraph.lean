@@ -33,7 +33,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSpace (SimpleGraph V)
+  签名: 可测空间 (简单图 V)
   定义体: .comap Adj inferInstance
 -/
 instance : MeasurableSpace (SimpleGraph V) := .comap Adj inferInstance
@@ -51,7 +51,7 @@ lemma measurable_iff_adj
 
 中文:
 引理 measurable_iff_adj
-  条件: {Ω : 类型} {m : MeasurableSpace Ω} {G : Ω -> SimpleGraph V}
+  条件: {Ω : 类型} {m : 可测空间 Ω} {G : Ω -> 简单图 V}
   证明: by
   simp [measurable_comap_iff, measurable_pi_iff]
 
@@ -76,7 +76,7 @@ lemma measurable_adj
 
 中文:
 引理 measurable_adj
-  结论: Measurable (Adj : SimpleGraph V -> V -> V -> 命题)
+  结论: 可测 (伴随 : 简单图 V -> V -> V -> 命题)
   证明: comap_measurable _
 
 @[fun_prop]
@@ -98,7 +98,7 @@ lemma measurable_edgeSet
 
 中文:
 引理 measurable_edgeSet
-  结论: Measurable (edgeSet : SimpleGraph V -> Set (Sym2 V))
+  结论: 可测 (edgeSet : 简单图 V -> 集合 (Sym2 V))
   证明: measurable_set_iff.2 by rintro ⟨u, v⟩; simp only [mem_edgeSet]; fun_prop
 
 @[simp, fun_prop]
@@ -120,7 +120,7 @@ lemma measurable_fromEdgeSet
 
 中文:
 引理 measurable_fromEdgeSet
-  结论: Measurable (fromEdgeSet : Set (Sym2 V) -> SimpleGraph V)
+  结论: 可测 (fromEdgeSet : 集合 (Sym2 V) -> 简单图 V)
   证明: by
   simp only [measurable_iff_adj, fromEdgeSet_adj, ne_eq]; fun_prop
 
@@ -144,7 +144,7 @@ refine .and (hs.mem.comp measurable_fromEdgeSet) .forall fun e => .imp ?_ ?_ <;>
 
 中文:
 引理 measurableEmbedding_edgeSet
-  条件: [Countable V]
+  条件: [可数 V]
   证明: edgeSet_injective
   measurable := measurable_edgeSet
   measurableSet_image' s hs := by

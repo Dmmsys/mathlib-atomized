@@ -237,7 +237,7 @@ theorem hasFDerivAt_integral_of_dominated_loc_of_lip_interval
 
 中文:
 定理 hasFDerivAt_integral_of_dominated_loc_of_lip_interval
-  结论: [NormedSpace 实数 H] {μ : Measure 实数}
+  结论: [赋范空间 实数 H] {μ : 测度 实数}
   证明: by
   simp_rw [AEStronglyMeasurable.aestronglyMeasurable_uIoc_iff, eventually_and] at hF_meas hF'_meas
   rw [ae_restrict_uIoc_iff] at h_lip h_diff
@@ -336,7 +336,7 @@ theorem hasFDerivAt_integral_of_dominated_of_fderiv_le''
 
 中文:
 定理 hasFDerivAt_integral_of_dominated_of_fderiv_le''
-  结论: [NormedSpace 实数 H] {μ : Measure 实数}
+  结论: [赋范空间 实数 H] {μ : 测度 实数}
   证明: by
   rw [ae_restrict_uIoc_iff] at h_diff h_bound
   simp_rw [AEStronglyMeasurable.aestronglyMeasurable_uIoc_iff, eventually_and] at hF_meas hF'_meas

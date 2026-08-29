@@ -51,7 +51,7 @@ structure WittVector
   (no additional axioms)
 
 中文:
-结构 WittVector
+结构 Witt向量
   参数: (p : 自然数) (R : 类型)
   (无附加公理)
 -/
@@ -71,7 +71,7 @@ definition WittVector.mk
   body: mk' coeff
 
 中文:
-定义 WittVector.mk
+定义 Witt向量.mk
   签名: (p : 自然数) {R : 类型} (coeff : 自然数 -> R)
   定义体: mk' coeff
 -/
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor (WittVector p)
+  签名: 函子 (Witt向量 p)
   定义体: mk p (f ∘ v.coeff)
   mapConst a _ := mk p fun _ => a
 
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulFunctor (WittVector p)
+  签名: Lawful函子 (Witt向量 p)
   定义体: rfl
   id_map _ := rfl
   comp_map _ _ _ := rfl
@@ -217,7 +217,7 @@ definition wittZero
 
 中文:
 定义 wittZero
-  签名: : 自然数 -> MvPolynomial (Fin 0 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 0 × 自然数) 整数
   定义体: wittStructureInt p 0
 
 Depends on / 依赖: wittStructureInt
@@ -235,7 +235,7 @@ definition wittOne
 
 中文:
 定义 wittOne
-  签名: : 自然数 -> MvPolynomial (Fin 0 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 0 × 自然数) 整数
   定义体: wittStructureInt p 1
 
 Depends on / 依赖: wittStructureInt
@@ -253,7 +253,7 @@ definition wittAdd
 
 中文:
 定义 wittAdd
-  签名: : 自然数 -> MvPolynomial (Fin 2 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
   定义体: wittStructureInt p (X 0 + X 1)
 
 Depends on / 依赖: wittStructureInt
@@ -307,7 +307,7 @@ definition wittSub
 
 中文:
 定义 wittSub
-  签名: : 自然数 -> MvPolynomial (Fin 2 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
   定义体: wittStructureInt p (X 0 - X 1)
 
 Depends on / 依赖: wittStructureInt
@@ -325,7 +325,7 @@ definition wittMul
 
 中文:
 定义 wittMul
-  签名: : 自然数 -> MvPolynomial (Fin 2 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 2 × 自然数) 整数
   定义体: wittStructureInt p (X 0 * X 1)
 
 Depends on / 依赖: wittStructureInt
@@ -343,7 +343,7 @@ definition wittNeg
 
 中文:
 定义 wittNeg
-  签名: : 自然数 -> MvPolynomial (Fin 1 × 自然数) 整数
+  签名: : 自然数 -> 多元多项式 (有限集 1 × 自然数) 整数
   定义体: wittStructureInt p (-X 0)
 
 Depends on / 依赖: wittStructureInt
@@ -382,7 +382,7 @@ definition peval
 
 中文:
 定义 peval
-  签名: {k : 自然数} (φ : MvPolynomial (Fin k × 自然数) 整数) (x : Fin k -> 自然数 -> R)
+  签名: {k : 自然数} (φ : 多元多项式 (有限集 k × 自然数) 整数) (x : 有限集 k -> 自然数 -> R)
   定义体: aeval (Function.uncurry x) φ
 
 Depends on / 依赖: Function, Function.uncurry, uncurry
@@ -400,7 +400,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: {k : 自然数} (φ : 自然数 -> MvPolynomial (Fin k × 自然数) 整数) (x : Fin k -> 𝕎 R)
+  签名: {k : 自然数} (φ : 自然数 -> 多元多项式 (有限集 k × 自然数) 整数) (x : 有限集 k -> 𝕎 R)
   定义体: mk p fun n => peval (φ n) fun i => (x i).coeff
 -/
 def eval {k : Nat} (φ : Nat -> MvPolynomial (Fin k × Nat) Int) (x : Fin k -> 𝕎 R) : 𝕎 R :=
@@ -416,7 +416,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (𝕎 R)
+  签名: 零 (𝕎 R)
   定义体: ⟨eval (wittZero p) ![]⟩
 
 Depends on / 依赖: wittZero
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (𝕎 R)
+  签名: 可居 (𝕎 R)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (𝕎 R) :=
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (𝕎 R)
+  签名: 幺 (𝕎 R)
   定义体: ⟨eval (wittOne p) ![]⟩
 
 Depends on / 依赖: wittOne
@@ -468,7 +468,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (𝕎 R)
+  签名: 加法 (𝕎 R)
   定义体: ⟨fun x y => eval (wittAdd p) ![x, y]⟩
 
 Depends on / 依赖: wittAdd
@@ -486,7 +486,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (𝕎 R)
+  签名: 减法 (𝕎 R)
   定义体: ⟨fun x y => eval (wittSub p) ![x, y]⟩
 
 Depends on / 依赖: wittSub
@@ -503,8 +503,8 @@ instance hasNatScalar
   body: ⟨fun n x => eval (wittNSMul p n) ![x]⟩
 
 中文:
-实例 hasNatScalar
-  签名: : SMul 自然数 (𝕎 R)
+实例 has自然数Scalar
+  签名: : 标量乘法 自然数 (𝕎 R)
   定义体: ⟨fun n x => eval (wittNSMul p n) ![x]⟩
 
 Depends on / 依赖: wittNSMul
@@ -521,8 +521,8 @@ instance hasIntScalar
   body: ⟨fun n x => eval (wittZSMul p n) ![x]⟩
 
 中文:
-实例 hasIntScalar
-  签名: : SMul 整数 (𝕎 R)
+实例 has整数Scalar
+  签名: : 标量乘法 整数 (𝕎 R)
   定义体: ⟨fun n x => eval (wittZSMul p n) ![x]⟩
 
 Depends on / 依赖: wittZSMul
@@ -540,7 +540,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (𝕎 R)
+  签名: 乘法 (𝕎 R)
   定义体: ⟨fun x y => eval (wittMul p) ![x, y]⟩
 
 Depends on / 依赖: wittMul
@@ -558,7 +558,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (𝕎 R)
+  签名: 取负 (𝕎 R)
   定义体: ⟨fun x => eval (wittNeg p) ![x]⟩
 
 Depends on / 依赖: wittNeg
@@ -575,8 +575,8 @@ instance hasNatPow
   body: ⟨fun x n => eval (wittPow p n) ![x]⟩
 
 中文:
-实例 hasNatPow
-  签名: : Pow (𝕎 R) 自然数
+实例 has自然数Pow
+  签名: : 幂 (𝕎 R) 自然数
   定义体: ⟨fun x n => eval (wittPow p n) ![x]⟩
 
 Depends on / 依赖: wittPow
@@ -594,7 +594,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (𝕎 R)
+  签名: 自然数嵌入 (𝕎 R)
   定义体: ⟨Nat.unaryCast⟩
 
 Depends on / 依赖: Nat.unaryCast, unaryCast
@@ -612,7 +612,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (𝕎 R)
+  签名: 整数嵌入 (𝕎 R)
   定义体: ⟨Int.castDef⟩
 
 Depends on / 依赖: Int.castDef, castDef
@@ -1120,7 +1120,7 @@ theorem v2_coeff
 
 中文:
 定理 v2_coeff
-  条件: {p' R'} (x y : WittVector p' R') (i : Fin 2)
+  条件: {p' R'} (x y : Witt向量 p' R') (i : 有限集 2)
   证明: by fin_cases i <;> simp
 
 Depends on / 依赖: fin_cases
@@ -1334,7 +1334,7 @@ theorem wittAdd_vars
 中文:
 定理 wittAdd_vars
   条件: (n : 自然数)
-  结论: (wittAdd p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
+  结论: (wittAdd p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
   证明: wittStructureInt_vars _ _ _
 
 Depends on / 依赖: wittStructureInt_vars
@@ -1354,7 +1354,7 @@ theorem wittSub_vars
 中文:
 定理 wittSub_vars
   条件: (n : 自然数)
-  结论: (wittSub p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
+  结论: (wittSub p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
   证明: wittStructureInt_vars _ _ _
 
 Depends on / 依赖: wittStructureInt_vars
@@ -1374,7 +1374,7 @@ theorem wittMul_vars
 中文:
 定理 wittMul_vars
   条件: (n : 自然数)
-  结论: (wittMul p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
+  结论: (wittMul p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
   证明: wittStructureInt_vars _ _ _
 
 Depends on / 依赖: wittStructureInt_vars
@@ -1394,7 +1394,7 @@ theorem wittNeg_vars
 中文:
 定理 wittNeg_vars
   条件: (n : 自然数)
-  结论: (wittNeg p n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
+  结论: (wittNeg p n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
   证明: wittStructureInt_vars _ _ _
 
 Depends on / 依赖: wittStructureInt_vars
@@ -1452,7 +1452,7 @@ theorem wittPow_vars
 中文:
 定理 wittPow_vars
   条件: (m : 自然数) (n : 自然数)
-  结论: (wittPow p m n).vars subseteq Finset.univ ×ˢ Finset.range (n + 1)
+  结论: (wittPow p m n).vars subseteq 有限集.univ ×ˢ 有限集.range (n + 1)
   证明: wittStructureInt_vars _ _ _
 
 Depends on / 依赖: wittStructureInt_vars

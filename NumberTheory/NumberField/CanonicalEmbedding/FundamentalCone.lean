@@ -62,7 +62,7 @@ instance unitSMul
 
 中文:
 实例 unitSMul
-  签名: : SMul (𝓞 K)ˣ (mixedSpace K) where
+  签名: : 标量乘法 (𝓞 K)ˣ (mixedSpace K) where
   定义体: mixedEmbedding K u * x
 
 Depends on / 依赖: mixedEmbedding
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (𝓞 K)ˣ (mixedSpace K)
+  签名: 乘法作用 (𝓞 K)ˣ (mixedSpace K)
   定义体: fun _ => by simp_rw [unitSMul_smul, Units.coe_one, map_one, one_mul]
   mul_smul := fun _ _ _ => by simp_rw [unitSMul_smul, Units.coe_mul, map_mul, mul_assoc]
 
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulZeroClass (𝓞 K)ˣ (mixedSpace K)
+  签名: SMulZero类 (𝓞 K)ˣ (mixedSpace K)
   定义体: fun _ => by simp_rw [unitSMul_smul, mul_zero]
 
 Depends on / 依赖: mul_zero, simp_rw, unitSMul_smul
@@ -522,7 +522,7 @@ definition fundamentalCone
 
 中文:
 定义 fundamentalCone
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: logMap ⁻¹' (ZSpan.fundamentalDomain ((basisUnitLattice K).ofZLatticeBasis Real _)) \
       {x | mixedEmbedding.norm x = 0}
 
@@ -718,7 +718,7 @@ theorem exists_unit_smul_mem
   · obtain ⟨⟨e, h₁⟩, h₂, -⟩ := ZSpan.exist_unique
 
 中文:
-定理 exists_unit_smul_mem
+定理 存在_unit_smul_mem
   条件: (hx : mixedEmbedding.norm x != 0)
   证明: by
   classical
@@ -824,7 +824,7 @@ definition integerSet
 
 中文:
 定义 integerSet
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: fundamentalCone K inter mixedEmbedding.integerLattice K
 
 Depends on / 依赖: fundamentalCone, integerLattice, mixedEmbedding, mixedEmbedding.integerLattice
@@ -868,7 +868,7 @@ theorem existsUnique_preimage_of_mem_integerSet
   exact (mixedEmbedding_injective K).comp RingOfIntegers.coe_injective
 
 中文:
-定理 existsUnique_preimage_of_mem_integerSet
+定理 存在Unique_preimage_of_mem_integerSet
   条件: {a : mixedSpace K} (ha : a in integerSet K)
   证明: by
   obtain ⟨_, ⟨x, rfl⟩⟩ := mem_integerSet.mp ha
@@ -924,7 +924,7 @@ definition preimageOfMemIntegerSet
 @[simp]
 
 中文:
-定义 preimageOfMemIntegerSet
+定义 preimageOfMem整数egerSet
   签名: (a : integerSet K)
   定义体: ⟨(mem_integerSet.mp a.prop).2.choose, mem_nonZeroDivisors_of_ne_zero (by
   simp_rw [ne_eq, ← RingOfIntegers.coe_injective.eq_iff, ← (mixedEmbedding_injective K).eq_iff,
@@ -952,7 +952,7 @@ theorem mixedEmbedding_preimageOfMemIntegerSet
   rw [preimageOfMemIntegerSet]; rw [(mem_integerSet.mp a.prop).2.choose_spec]
 
 中文:
-定理 mixedEmbedding_preimageOfMemIntegerSet
+定理 mixedEmbedding_preimageOfMem整数egerSet
   条件: (a : integerSet K)
   证明: by
   rw [preimageOfMemIntegerSet]; rw [(mem_integerSet.mp a.prop).2.choose_spec]
@@ -974,7 +974,7 @@ theorem preimageOfMemIntegerSet_mixedEmbedding
     mixedEmbedding_preimageOfMemIntegerSet]
 
 中文:
-定理 preimageOfMemIntegerSet_mixedEmbedding
+定理 preimageOfMem整数egerSet_mixedEmbedding
   结论: {x : (𝓞 K)}
   证明: by
   simp_rw [RingOfIntegers.ext_iff, ← (mixedEmbedding_injective K).eq_iff,
@@ -1002,7 +1002,7 @@ theorem exists_unitSMul_mem_integerSet
   exact ⟨u, mem_integerSet.mpr ⟨hu, u * x, by simp_rw [unitSMul_smul, ← map_mul
 
 中文:
-定理 exists_unitSMul_mem_integerSet
+定理 存在_unitSMul_mem_integerSet
   结论: {x : mixedSpace K} (hx : x != 0)
   证明: by
   replace hx : mixedEmbedding.norm x != 0 :=
@@ -1058,7 +1058,7 @@ instance integerSetTorsionSMul
 
 中文:
 实例 integerSetTorsionSMul
-  签名: : SMul (torsion K) (integerSet K) where
+  签名: : 标量乘法 (torsion K) (integerSet K) where
   定义体: fun ⟨ζ, hζ⟩ ⟨x, hx⟩ => ⟨ζ • x, torsion_unitSMul_mem_integerSet hζ hx⟩
 
 Depends on / 依赖: torsion_unitSMul_mem_integerSet
@@ -1080,7 +1080,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (torsion K) (integerSet K)
+  签名: 乘法作用 (torsion K) (integerSet K)
   定义体: fun _ => by
     rw [Subtype.mk_eq_mk]; rw [integerSetTorsionSMul_smul_coe]; rw [OneMemClass.coe_one]; rw [one_smul]
   mul_smul := fun _ _ _ => by
@@ -1151,7 +1151,7 @@ definition quotIntNorm
 @[simp]
 
 中文:
-定义 quotIntNorm
+定义 quot整数Norm
   签名: :
   定义体: Quotient.lift (fun x => intNorm x) fun a b ⟨u, hu⟩ => by
     rw [← Nat.cast_inj (R := Real)]; rw [intNorm_coe]; rw [intNorm_coe]; rw [← hu]; rw [integerSetTorsionSMul_smul_coe]; rw [norm_unit_smul]
@@ -1176,7 +1176,7 @@ theorem quotIntNorm_apply
   proof: rfl
 
 中文:
-定理 quotIntNorm_apply
+定理 quot整数Norm_apply
   条件: (a : integerSet K)
   结论: quot整数Norm ⟦a⟧ = intNorm a
   证明: rfl
@@ -1547,7 +1547,7 @@ definition idealSet
 
 中文:
 定义 idealSet
-  签名: : Set (mixedSpace K)
+  签名: : 集合 (mixedSpace K)
   定义体: fundamentalCone K inter (mixedEmbedding.idealLattice K (FractionalIdeal.mk0 K J))
 
 Depends on / 依赖: FractionalIdeal, FractionalIdeal.mk0, fundamentalCone, idealLattice, mixedEmbedding, mixedEmbedding.idealLattice

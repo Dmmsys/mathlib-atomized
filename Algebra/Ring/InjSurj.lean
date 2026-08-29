@@ -44,7 +44,7 @@ theorem leftDistribClass
 
 中文:
 定理 leftDistribClass
-  结论: [Mul R] [Add R] [LeftDistribClass R] (add : 对任意 x y, f (x + y) = f x + f y)
+  结论: [乘法 R] [加法 R] [LeftDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
   证明: hf by simp only [*, left_distrib]
 
 Depends on / 依赖: left_distrib
@@ -63,7 +63,7 @@ theorem rightDistribClass
 
 中文:
 定理 rightDistribClass
-  结论: [Mul R] [Add R] [RightDistribClass R] (add : 对任意 x y, f (x + y) = f x + f y)
+  结论: [乘法 R] [加法 R] [RightDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
   证明: hf by simp only [*, right_distrib]
 
 Depends on / 依赖: right_distrib
@@ -109,7 +109,7 @@ mul_neg := fun x y => hf by rw [neg, mul, neg, mul_neg, mul] }
 
 中文:
 缩写 hasDistribNeg
-  签名: (f : S -> R) (hf : Injective f) [Mul R] [HasDistribNeg R]
+  签名: (f : S -> R) (hf : 单射 f) [乘法 R] [有DistribNeg R]
   定义体: { hf.involutiveNeg _ neg, ‹Mul S› with
 neg_mul := fun x y => hf by rw [neg, mul, neg, neg_mul, mul],
 mul_neg := fun x y => hf by rw [neg, mul, neg, mul_neg, mul] }
@@ -134,7 +134,7 @@ abbreviation addMonoidWithOne
 
 中文:
 缩写 addMonoidWithOne
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: { hf.addMonoid f zero add (swap nsmul) with
     natCast := Nat.cast,
     natCast_zero := hf (by rw [natCast, Nat.cast_zero, zero]),
@@ -160,7 +160,7 @@ abbreviation addCommMonoidWithOne
 
 中文:
 缩写 addCommMonoidWithOne
-  签名: {S} [Zero S] [One S] [Add S] [SMul 自然数 S] [自然数Cast S]
+  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [自然数嵌入 S]
   定义体: hf.addMonoidWithOne f zero one add nsmul natCast
   __ := hf.addCommMonoid _ zero add (swap nsmul)
 -/
@@ -185,7 +185,7 @@ abbreviation addGroupWithOne
 
 中文:
 缩写 addGroupWithOne
-  签名: {S} [Zero S] [One S] [Add S] [SMul 自然数 S] [Neg S] [Sub S]
+  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [取负 S] [减法 S]
   定义体: { hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul),
     hf.addMonoidWithOne f zero one add nsmul natCast with
     intCast := Int.cast,
@@ -215,7 +215,7 @@ abbreviation addCommGroupWithOne
 
 中文:
 缩写 addCommGroupWithOne
-  签名: {S} [Zero S] [One S] [Add S] [SMul 自然数 S] [Neg S] [Sub S]
+  签名: {S} [零 S] [幺 S] [加法 S] [标量乘法 自然数 S] [取负 S] [减法 S]
   定义体: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
     hf.addCommMonoid _ zero add (swap nsmul) with }
 -/
@@ -241,7 +241,7 @@ abbreviation nonUnitalNonAssocSemiring
 
 中文:
 缩写 nonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
+  签名: [非幺非结合半环 R] (zero : f 0 = 0)
   定义体: hf.addCommMonoid f zero add (swap nsmul)
   __ := hf.distrib f add mul
   __ := hf.mulZeroClass f zero mul
@@ -265,7 +265,7 @@ abbreviation nonUnitalSemiring
 
 中文:
 缩写 nonUnitalSemiring
-  签名: [NonUnitalSemiring R]
+  签名: [非幺半环 R]
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.semigroupWithZero f zero mul
 -/
@@ -289,7 +289,7 @@ abbreviation nonAssocSemiring
 
 中文:
 缩写 nonAssocSemiring
-  签名: [NonAssocSemiring R]
+  签名: [非结合半环 R]
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.mulZeroOneClass f zero one mul
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
@@ -315,7 +315,7 @@ abbreviation semiring
 
 中文:
 缩写 semiring
-  签名: [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [半环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.monoidWithZero f zero one mul npow
@@ -340,7 +340,7 @@ abbreviation nonUnitalNonAssocRing
 
 中文:
 缩写 nonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R] (f : S -> R)
+  签名: [非幺非结合环 R] (f : S -> R)
   定义体: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
   __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
 -/
@@ -364,7 +364,7 @@ abbreviation nonUnitalRing
 
 中文:
 缩写 nonUnitalRing
-  签名: [NonUnitalRing R]
+  签名: [非幺环 R]
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalSemiring f zero add mul nsmul
 -/
@@ -389,7 +389,7 @@ abbreviation nonAssocRing
 
 中文:
 缩写 nonAssocRing
-  签名: [NonAssocRing R]
+  签名: [非结合环 R]
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
@@ -419,7 +419,7 @@ abbreviation ring
 
 中文:
 缩写 ring
-  签名: [Ring R] (zero : f 0 = 0)
+  签名: [环 R] (zero : f 0 = 0)
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   -- zsmul included here explicitly to make sure it's picked correctly by `fast_instance%`.
   zsmul := fun n x => n • x
@@ -450,7 +450,7 @@ abbreviation nonUnitalNonAssocCommSemiring
 
 中文:
 缩写 nonUnitalNonAssocCommSemiring
-  签名: [NonUnitalNonAssocCommSemiring R]
+  签名: [非幺非结合交换半环 R]
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.commMagma f mul
 -/
@@ -473,7 +473,7 @@ abbreviation nonUnitalCommSemiring
 
 中文:
 缩写 nonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R] (f : S -> R)
+  签名: [非幺交换半环 R] (f : S -> R)
   定义体: hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.commSemigroup f mul
 -/
@@ -496,7 +496,7 @@ abbreviation nonAssocCommSemiring
 
 中文:
 缩写 nonAssocCommSemiring
-  签名: [NonAssocCommSemiring R] (f : S -> R)
+  签名: [非结合交换半环 R] (f : S -> R)
   定义体: hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.commMagma f mul
 
@@ -521,7 +521,7 @@ abbreviation commSemiring
 
 中文:
 缩写 commSemiring
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.commSemigroup f mul
 -/
@@ -545,7 +545,7 @@ abbreviation nonUnitalNonAssocCommRing
 
 中文:
 缩写 nonUnitalNonAssocCommRing
-  签名: [NonUnitalNonAssocCommRing R] (f : S -> R)
+  签名: [非幺非结合交换环 R] (f : S -> R)
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
 -/
@@ -569,7 +569,7 @@ abbreviation nonUnitalCommRing
 
 中文:
 缩写 nonUnitalCommRing
-  签名: [NonUnitalCommRing R] (f : S -> R)
+  签名: [非幺交换环 R] (f : S -> R)
   定义体: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 
@@ -595,7 +595,7 @@ abbreviation nonAssocCommRing
 
 中文:
 缩写 nonAssocCommRing
-  签名: [NonAssocCommRing R] (f : S -> R)
+  签名: [非结合交换环 R] (f : S -> R)
   定义体: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 -/
@@ -620,7 +620,7 @@ abbreviation commRing
 
 中文:
 缩写 commRing
-  签名: [CommRing R]
+  签名: [交换环 R]
   定义体: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.commMonoid f one mul npow
 -/
@@ -651,7 +651,7 @@ theorem leftDistribClass
 
 中文:
 定理 leftDistribClass
-  结论: [Mul R] [Add R] [LeftDistribClass R] (add : 对任意 x y, f (x + y) = f x + f y)
+  结论: [乘法 R] [加法 R] [LeftDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
   证明: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, left_distrib]
 
 Depends on / 依赖: Function, Function.surjective_eval, Function.update, IsLocalization, IsLocalization.Away, IsLocalization.away_of_isIdempotentElem_of_mul, IsOpenImmersion, IsOpenImmersion.of_isLocalization, Pi.evalRingHom, away_of_isIdempotentElem_of_mul, classical, congr_fun, evalRingHom, hf.forall, left_distrib, of_isLocalization, surjective_eval, toAlgebra, update
@@ -670,7 +670,7 @@ theorem rightDistribClass
 
 中文:
 定理 rightDistribClass
-  结论: [Mul R] [Add R] [RightDistribClass R] (add : 对任意 x y, f (x + y) = f x + f y)
+  结论: [乘法 R] [加法 R] [RightDistrib类 R] (add : 对任意 x y, f (x + y) = f x + f y)
   证明: hf.forall₃.2 fun x y z => by simp only [← add, ← mul, right_distrib]
 
 Depends on / 依赖: DFinsupp, DFinsupp.single, Ideal.eq_top_iff_one, PrimeSpectrum, PrimeSpectrum.ext_iff.mp, Set.disjoint_iff_forall_ne.mpr, asIdeal, classical, disjoint_iff_forall_ne, eq_top_iff_one, ext_iff, h.symm, hf.forall, isOpenImmersion_sigmaDesc, ne_top, right_distrib, single, x.asIdeal, y.asIdeal
@@ -716,7 +716,7 @@ abbreviation hasDistribNeg
 
 中文:
 缩写 hasDistribNeg
-  签名: [Mul R] [HasDistribNeg R]
+  签名: [乘法 R] [有DistribNeg R]
   定义体: { hf.involutiveNeg _ neg, ‹Mul S› with
     neg_mul := hf.forall₂.2 fun x y => by rw [← neg, ← mul, neg_mul, neg, mul]
     mul_neg := hf.forall₂.2 fun x y => by rw [← neg, ← mul, mul_neg, neg, mul] }
@@ -741,7 +741,7 @@ abbreviation addMonoidWithOne
 
 中文:
 缩写 addMonoidWithOne
-  签名: [AddMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [加法带幺幺半群 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: { hf.addMonoid f zero add (swap nsmul) with
     natCast := Nat.cast,
     natCast_zero := by rw [← natCast, Nat.cast_zero, zero]
@@ -766,7 +766,7 @@ abbreviation addCommMonoidWithOne
 
 中文:
 缩写 addCommMonoidWithOne
-  签名: [AddCommMonoidWithOne R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [加法交换带幺幺半群 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.addMonoidWithOne f zero one add nsmul natCast
   __ := hf.addCommMonoid _ zero add (swap nsmul)
 -/
@@ -791,7 +791,7 @@ abbreviation addGroupWithOne
 
 中文:
 缩写 addGroupWithOne
-  签名: [AddGroupWithOne R]
+  签名: [加法带幺群 R]
   定义体: { hf.addMonoidWithOne f zero one add nsmul natCast,
     hf.addGroup f zero add neg sub (swap nsmul) (swap zsmul) with
     intCast := Int.cast,
@@ -822,7 +822,7 @@ abbreviation addCommGroupWithOne
 
 中文:
 缩写 addCommGroupWithOne
-  签名: [AddCommGroupWithOne R]
+  签名: [加法交换带幺群 R]
   定义体: { hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast,
     hf.addCommMonoid _ zero add (swap nsmul) with }
 -/
@@ -846,7 +846,7 @@ abbreviation nonUnitalNonAssocSemiring
 
 中文:
 缩写 nonUnitalNonAssocSemiring
-  签名: [NonUnitalNonAssocSemiring R] (zero : f 0 = 0)
+  签名: [非幺非结合半环 R] (zero : f 0 = 0)
   定义体: hf.addCommMonoid f zero add (swap nsmul)
   __ := hf.distrib f add mul
   __ := hf.mulZeroClass f zero mul
@@ -872,7 +872,7 @@ abbreviation nonUnitalSemiring
 
 中文:
 缩写 nonUnitalSemiring
-  签名: [NonUnitalSemiring R] (zero : f 0 = 0)
+  签名: [非幺半环 R] (zero : f 0 = 0)
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.semigroupWithZero f zero mul
 
@@ -897,7 +897,7 @@ abbreviation nonAssocSemiring
 
 中文:
 缩写 nonAssocSemiring
-  签名: [NonAssocSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [非结合半环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.mulZeroOneClass f zero one mul
   __ := hf.addMonoidWithOne f zero one add nsmul natCast
@@ -925,7 +925,7 @@ abbreviation semiring
 
 中文:
 缩写 semiring
-  签名: [Semiring R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [半环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.monoidWithZero f zero one mul npow
@@ -950,7 +950,7 @@ abbreviation nonUnitalNonAssocRing
 
 中文:
 缩写 nonUnitalNonAssocRing
-  签名: [NonUnitalNonAssocRing R] (zero : f 0 = 0)
+  签名: [非幺非结合环 R] (zero : f 0 = 0)
   定义体: hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
   __ := hf.nonUnitalNonAssocSemiring f zero add mul nsmul
 -/
@@ -974,7 +974,7 @@ abbreviation nonUnitalRing
 
 中文:
 缩写 nonUnitalRing
-  签名: [NonUnitalRing R] (zero : f 0 = 0)
+  签名: [非幺环 R] (zero : f 0 = 0)
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalSemiring f zero add mul nsmul
 -/
@@ -999,7 +999,7 @@ abbreviation nonAssocRing
 
 中文:
 缩写 nonAssocRing
-  签名: [NonAssocRing R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [非结合环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.addCommGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
@@ -1026,7 +1026,7 @@ abbreviation ring
 
 中文:
 缩写 ring
-  签名: [Ring R] (zero : f 0 = 0) (one : f 1 = 1) (add : 对任意 x y, f (x + y) = f x + f y)
+  签名: [环 R] (zero : f 0 = 0) (one : f 1 = 1) (add : 对任意 x y, f (x + y) = f x + f y)
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.addGroupWithOne f zero one add neg sub nsmul zsmul natCast intCast
   __ := hf.addCommGroup f zero add neg sub (swap nsmul) (swap zsmul)
@@ -1055,7 +1055,7 @@ abbreviation nonUnitalNonAssocCommSemiring
 
 中文:
 缩写 nonUnitalNonAssocCommSemiring
-  签名: [NonUnitalNonAssocCommSemiring R] (zero : f 0 = 0)
+  签名: [非幺非结合交换半环 R] (zero : f 0 = 0)
   定义体: hf.nonUnitalNonAssocSemiring f zero add mul nsmul
   __ := hf.commMagma f mul
 
@@ -1079,7 +1079,7 @@ abbreviation nonUnitalCommSemiring
 
 中文:
 缩写 nonUnitalCommSemiring
-  签名: [NonUnitalCommSemiring R] (zero : f 0 = 0)
+  签名: [非幺交换半环 R] (zero : f 0 = 0)
   定义体: hf.nonUnitalSemiring f zero add mul nsmul
   __ := hf.commSemigroup f mul
 -/
@@ -1101,7 +1101,7 @@ abbreviation nonAssocCommSemiring
 
 中文:
 缩写 nonAssocCommSemiring
-  签名: [NonAssocCommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [非结合交换半环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonAssocSemiring f zero one add mul nsmul natCast
   __ := hf.commMagma f mul
 -/
@@ -1124,7 +1124,7 @@ abbreviation commSemiring
 
 中文:
 缩写 commSemiring
-  签名: [CommSemiring R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [交换半环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.semiring f zero one add mul nsmul npow natCast
   __ := hf.commSemigroup f mul
 -/
@@ -1147,7 +1147,7 @@ abbreviation nonUnitalNonAssocCommRing
 
 中文:
 缩写 nonUnitalNonAssocCommRing
-  签名: [NonUnitalNonAssocCommRing R]
+  签名: [非幺非结合交换环 R]
   定义体: hf.nonUnitalNonAssocRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommSemiring f zero add mul nsmul
 
@@ -1173,7 +1173,7 @@ abbreviation nonUnitalCommRing
 
 中文:
 缩写 nonUnitalCommRing
-  签名: [NonUnitalCommRing R] (zero : f 0 = 0)
+  签名: [非幺交换环 R] (zero : f 0 = 0)
   定义体: hf.nonUnitalRing f zero add mul neg sub nsmul zsmul
   __ := hf.nonUnitalNonAssocCommRing f zero add mul neg sub nsmul zsmul
 -/
@@ -1197,7 +1197,7 @@ abbreviation nonAssocCommRing
 
 中文:
 缩写 nonAssocCommRing
-  签名: [NonAssocCommRing R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [非结合交换环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.nonAssocRing f zero one add mul neg sub nsmul zsmul natCast intCast
   __ := hf.nonAssocCommSemiring f zero one add mul nsmul natCast
 -/
@@ -1221,7 +1221,7 @@ abbreviation commRing
 
 中文:
 缩写 commRing
-  签名: [CommRing R] (zero : f 0 = 0) (one : f 1 = 1)
+  签名: [交换环 R] (zero : f 0 = 0) (one : f 1 = 1)
   定义体: hf.ring f zero one add mul neg sub nsmul zsmul npow natCast intCast
   __ := hf.commMonoid f one mul npow
 -/
@@ -1248,7 +1248,7 @@ instance AddOpposite.instHasDistribNeg
 
 中文:
 实例 AddOpposite.instHasDistribNeg
-  签名: : HasDistribNeg Rᵃᵒᵖ
+  签名: : 有DistribNeg Rᵃᵒᵖ
   定义体: unop_injective.hasDistribNeg _ unop_neg unop_mul
 
 Depends on / 依赖: hasDistribNeg, unop_injective, unop_injective.hasDistribNeg, unop_mul, unop_neg

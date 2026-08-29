@@ -85,9 +85,9 @@ class MyIsoClass
   (no additional axioms)
 
 中文:
-类 MyIsoClass
+类 MyIso类
   参数: (F : 类型) (A B : outParam 类型) [MyClass A] [MyClass B]
-  继承: MyHomClass F A B
+  继承: My态射类 F A B
   (无附加公理)
 -/
 class MyIsoClass (F : Type*) (A B : outParam Type*) [MyClass A] [MyClass B]
@@ -109,7 +109,7 @@ instance :
 
 中文:
 实例 :
-  签名: MyIsoClass (MyIso A B) A B
+  签名: MyIso类 (MyIso A B) A B
   定义体: MyIso.map_op'
 
 Depends on / 依赖: MyIso.map_op, map_op
@@ -137,7 +137,7 @@ structure CoolerIso
     - (map_cool' : toFun CoolClass.cool = CoolClass.cool)
 
 中文:
-结构 CoolerIso
+结构 余olerIso
   参数: (A B : 类型) [CoolClass A] [CoolClass B]
   继承: MyIso A B
   公理与运算 (1 个):
@@ -157,9 +157,9 @@ class CoolerIsoClass
     - (map_cool : forall (f : F), f CoolClass.cool = CoolClass.cool)
 
 中文:
-类 CoolerIsoClass
+类 余olerIso类
   参数: (F : 类型) (A B : outParam 类型) [CoolClass A] [CoolClass B]
-  继承: MyIsoClass F A B
+  继承: MyIso类 F A B
   公理与运算 (1 个):
     - (map_cool : 对任意 (f : F), f CoolClass.cool = CoolClass.cool)
 -/
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (CoolerIso A B) A B
+  签名: 等价状 (余olerIso A B) A B
   定义体: f.toFun
   inv f := f.invFun
   left_inv f := f.left_inv
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoolerIsoClass (CoolerIso A B) A B
+  签名: 余olerIso类 (余olerIso A B) A B
   定义体: f.map_op'
   map_cool f := f.map_cool'
 
@@ -283,7 +283,7 @@ instead of linearly increasing the work per `MyIso`-related declaration.
 
 中文:
 引理 do_something
-  条件: {F : 类型} [EquivLike F A B] [MyIsoClass F A B] (f : F)
+  条件: {F : 类型} [等价状 F A B] [MyIso类 F A B] (f : F)
   结论: sorry
   证明: sorry
 ```
@@ -322,13 +322,13 @@ class EquivLike
     - coe_injective' : forall e g, coe e = coe g -> inv e = inv g -> e = g
 
 中文:
-类 EquivLike
-  参数: (E : Sort*) (α β : outParam (Sort*))
+类 等价状
+  参数: (E : 类型层*) (α β : outParam (类型层*))
   公理与运算 (5 个):
     - coe : E -> α -> β
     - inv : E -> β -> α
-    - left_inv : 对任意 e, Function.LeftInverse (inv e) (coe e)
-    - right_inv : 对任意 e, Function.RightInverse (inv e) (coe e)
+    - left_inv : 对任意 e, 函数.左逆 (inv e) (coe e)
+    - right_inv : 对任意 e, 函数.右逆 (inv e) (coe e)
     - coe_injective' : 对任意 e g, coe e = coe g -> inv e = inv g -> e = g
 -/
 class EquivLike (E : Sort*) (α β : outParam (Sort*)) where
@@ -360,7 +360,7 @@ theorem inv_injective
 
 中文:
 定理 inv_injective
-  结论: Function.Injective (EquivLike.inv : E -> β -> α)
+  结论: 函数.单射 (等价状.inv : E -> β -> α)
   证明: fun e g h =>
   coe_injective' e g ((right_inv e).eq_rightInverse (h.symm ▸ left_inv g)) h
 -/
@@ -429,7 +429,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : E)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: EmbeddingLike.injective e
 -/
 protected theorem injective (e : E) : Function.Injective e :=
@@ -447,7 +447,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : E)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: (right_inv e).surjective
 -/
 protected theorem surjective (e : E) : Function.Surjective e :=
@@ -465,7 +465,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : E)
-  结论: Function.Bijective (e : α -> β)
+  结论: 函数.双射 (e : α -> β)
   证明: ⟨EquivLike.injective e, EquivLike.surjective e⟩
 -/
 protected theorem bijective (e : E) : Function.Bijective (e : α -> β) :=
@@ -510,7 +510,7 @@ theorem injective_comp
 中文:
 定理 injective_comp
   条件: (e : E) (f : β -> γ)
-  结论: Function.Injective (f ∘ e) ↔ Function.Injective f
+  结论: 函数.单射 (f ∘ e) ↔ 函数.单射 f
   证明: Function.Injective.of_comp_iff' f (EquivLike.bijective e)
 
 @[simp]
@@ -535,7 +535,7 @@ theorem surjective_comp
 中文:
 定理 surjective_comp
   条件: (e : E) (f : β -> γ)
-  结论: Function.Surjective (f ∘ e) ↔ Function.Surjective f
+  结论: 函数.满射 (f ∘ e) ↔ 函数.满射 f
   证明: (EquivLike.surjective e).of_comp_iff f
 
 @[simp]
@@ -558,7 +558,7 @@ theorem bijective_comp
 中文:
 定理 bijective_comp
   条件: (e : E) (f : β -> γ)
-  结论: Function.Bijective (f ∘ e) ↔ Function.Bijective f
+  结论: 函数.双射 (f ∘ e) ↔ 函数.双射 f
   证明: (EquivLike.bijective e).of_comp_iff f
 
 Depends on / 依赖: EquivLike, EquivLike.bijective, bijective, of_comp_iff
@@ -632,7 +632,7 @@ theorem comp_injective
 中文:
 定理 comp_injective
   条件: (f : α -> β) (e : F)
-  结论: Function.Injective (e ∘ f) ↔ Function.Injective f
+  结论: 函数.单射 (e ∘ f) ↔ 函数.单射 f
   证明: EmbeddingLike.comp_injective f e
 
 @[simp]
@@ -657,7 +657,7 @@ theorem comp_surjective
 中文:
 定理 comp_surjective
   条件: (f : α -> β) (e : F)
-  结论: Function.Surjective (e ∘ f) ↔ Function.Surjective f
+  结论: 函数.满射 (e ∘ f) ↔ 函数.满射 f
   证明: Function.Surjective.of_comp_iff' (EquivLike.bijective e) f
 
 @[simp]
@@ -682,7 +682,7 @@ include β in
 中文:
 定理 comp_bijective
   条件: (f : α -> β) (e : F)
-  结论: Function.Bijective (e ∘ f) ↔ Function.Bijective f
+  结论: 函数.双射 (e ∘ f) ↔ 函数.双射 f
   证明: (EquivLike.bijective e).of_comp_iff' f
 
 include β in
@@ -704,8 +704,8 @@ lemma subsingleton_dom
 
 中文:
 引理 subsingleton_dom
-  条件: [Subsingleton α]
-  结论: Subsingleton E
+  条件: [子单例 α]
+  结论: 子单例 E
   证明: ⟨fun f g => DFunLike.ext f g fun _ => (right_inv f).injective Subsingleton.elim _ _⟩
 
 Depends on / 依赖: DFunLike, DFunLike.ext, Subsingleton, Subsingleton.elim, injective, right_inv

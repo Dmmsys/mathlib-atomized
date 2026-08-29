@@ -52,7 +52,7 @@ abbreviation HVertexOperator
 
 中文:
 缩写 HVertexOperator
-  签名: (Γ : 类型) [PartialOrder Γ] (R : 类型) [CommRing R]
+  签名: (Γ : 类型) [偏序 Γ] (R : 类型) [交换环 R]
   定义体: V ->ₗ[R] (HahnModule Γ R W)
 
 Depends on / 依赖: HahnModule
@@ -158,7 +158,7 @@ theorem coeff_inj
 
 中文:
 定理 coeff_inj
-  结论: Function.Injective (coeff : HVertexOperator Γ R V W ->ₗ[R] Γ -> (V ->ₗ[R] W))
+  结论: 函数.单射 (coeff : HVertexOperator Γ R V W ->ₗ[R] Γ -> (V ->ₗ[R] W))
   证明: by
   intro _ _ h
   ext v n
@@ -189,7 +189,7 @@ definition of_coeff
 
 中文:
 定义 of_coeff
-  签名: (f : Γ -> V ->ₗ[R] W) (hf : 对任意 (x : V), (Function.support (f · x)).IsPWO)
+  签名: (f : Γ -> V ->ₗ[R] W) (hf : 对任意 (x : V), (函数.support (f · x)).IsPWO)
   定义体: (of R) { coeff := fun g => f g x, isPWO_support' := hf x }
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp

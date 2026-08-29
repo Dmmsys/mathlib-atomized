@@ -91,7 +91,7 @@ definition ContinuousLinearMap.HasLeftInverse
   body: exists g : F ->L[R] E, LeftInverse g f
 
 中文:
-定义 ContinuousLinearMap.HasLeftInverse
+定义 连续线性映射.HasLeftInverse
   签名: (f : E ->L[R] F)
   定义体: exists g : F ->L[R] E, LeftInverse g f
 -/
@@ -107,7 +107,7 @@ definition ContinuousLinearMap.HasRightInverse
   body: exists g : F ->L[R] E, RightInverse g f
 
 中文:
-定义 ContinuousLinearMap.HasRightInverse
+定义 连续线性映射.HasRightInverse
   签名: (f : E ->L[R] F)
   定义体: exists g : F ->L[R] E, RightInverse g f
 -/
@@ -149,7 +149,7 @@ lemma leftInverse_leftInverse
 中文:
 引理 leftInverse_leftInverse
   条件: (h : f.HasLeftInverse)
-  结论: LeftInverse h.leftInverse f
+  结论: 左逆 h.leftInverse f
   证明: Classical.choose_spec h
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
@@ -172,7 +172,7 @@ example (h : f.HasLeftInverse) (x : E) : h.leftInverse (f x) = x :=
 中文:
 引理 injective
   条件: (h : f.HasLeftInverse)
-  结论: Injective f
+  结论: 单射 f
   证明: h.leftInverse_leftInverse.injective
 
 example (h : f.HasLeftInverse) (x : E) : h.leftInverse (f x) = x :=
@@ -212,7 +212,7 @@ lemma _root_.ContinuousLinearEquiv.hasLeftInverse
   proof: ⟨f.symm, rightInverse_of_comp (by simp)⟩
 
 中文:
-引理 _root_.ContinuousLinearEquiv.hasLeftInverse
+引理 _root_.连续线性等价.hasLeftInverse
   条件: (f : E ≃L[R] F)
   证明: ⟨f.symm, rightInverse_of_comp (by simp)⟩
 
@@ -235,7 +235,7 @@ lemma _root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse
     _ = f.symm y := f.hasLeftInverse.leftInverse_leftInverse (f.symm y)
 
 中文:
-引理 _root_.ContinuousLinearEquiv.leftInverse_hasLeftInverse
+引理 _root_.连续线性等价.leftInverse_hasLeftInverse
   条件: (f : E ≃L[R] F)
   证明: by
   ext y
@@ -421,7 +421,7 @@ lemma inl
 
 中文:
 引理 inl
-  结论: (ContinuousLinearMap.inl R F G).HasLeftInverse
+  结论: (连续线性映射.inl R F G).HasLeftInverse
   证明: by
   use ContinuousLinearMap.fst _ _ _
   intro x
@@ -445,7 +445,7 @@ lemma inr
 
 中文:
 引理 inr
-  结论: (ContinuousLinearMap.inr R F G).HasLeftInverse
+  结论: (连续线性映射.inr R F G).HasLeftInverse
   证明: by
   use ContinuousLinearMap.snd _ _ _
   intro x
@@ -478,7 +478,7 @@ lemma of_injective_of_finiteDimensional
 
 中文:
 引理 of_injective_of_finiteDimensional
-  结论: [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
+  结论: [完备空间 𝕜] [有限维 𝕜 F]
   证明: by
   -- An injective linear map has a linear inverse; this inverse is automatically continuous
   -- because its domain is finite-dimensional.
@@ -522,7 +522,7 @@ lemma closedComplemented_range
 中文:
 引理 closedComplemented_range
   条件: (hf : f.HasLeftInverse)
-  结论: Submodule.ClosedComplemented f.range
+  结论: 子模.ClosedComplemented f.range
   证明: by
   -- Idea of proof: let g be a left inverse for f. Then ker g is a closed subspace of F,
   -- and a complement to range f.
@@ -558,7 +558,7 @@ lemma isClosed_range
 
 中文:
 引理 isClosed_range
-  条件: (hf : f.HasLeftInverse) [IsTopologicalAddGroup F]
+  条件: (hf : f.HasLeftInverse) [是拓扑加群 F]
   证明: by
   -- `range f = ker (f ∘ g - id)` is closed since `f ∘ g - id` is continuous.
   rw [← f.range_toLinearMap]; rw [← f.coe_range]; rw [f.range_eq_ker_of_leftInverse (hf.leftInverse_leftInverse)]
@@ -602,7 +602,7 @@ omit [T1Space F] in
 中文:
 引理 isClosed_complement
   条件: (h : f.HasLeftInverse)
-  结论: IsClosed (X := F) h.complement
+  结论: 是闭集 (X := F) h.complement
   证明: h.closedComplemented_range.isClosed_complement
 
 omit [T1Space F] in
@@ -625,7 +625,7 @@ lemma isCompl_complement
 中文:
 引理 isCompl_complement
   条件: (h : f.HasLeftInverse)
-  结论: IsCompl f.range h.complement
+  结论: 是补集 f.range h.complement
   证明: h.closedComplemented_range.isCompl_complement
 
 Depends on / 依赖: closedComplemented_range, h.closedComplemented_range.isCompl_complement, isCompl_complement
@@ -715,7 +715,7 @@ lemma rightInverse_rightInverse
 中文:
 引理 rightInverse_rightInverse
   条件: (h : f.HasRightInverse)
-  结论: RightInverse h.rightInverse f
+  结论: 右逆 h.rightInverse f
   证明: Classical.choose_spec h
 
 Depends on / 依赖: Classical, Classical.choose_spec, choose_spec
@@ -735,7 +735,7 @@ lemma surjective
 中文:
 引理 surjective
   条件: (h : f.HasRightInverse)
-  结论: Surjective f
+  结论: 满射 f
   证明: h.rightInverse_rightInverse.surjective
 
 Depends on / 依赖: h.rightInverse_rightInverse.surjective, rightInverse_rightInverse, surjective
@@ -769,7 +769,7 @@ lemma _root_.ContinuousLinearEquiv.hasRightInverse
   proof: ⟨f.symm, rightInverse_of_comp (by simp)⟩
 
 中文:
-引理 _root_.ContinuousLinearEquiv.hasRightInverse
+引理 _root_.连续线性等价.hasRightInverse
   条件: (f : E ≃L[R] F)
   证明: ⟨f.symm, rightInverse_of_comp (by simp)⟩
 
@@ -790,7 +790,7 @@ lemma _root_.ContinuousLinearEquiv.rightInverse_hasRightInverse
 exact f.injective by simpa using f.hasRightInverse.rightInverse_rightInverse y
 
 中文:
-引理 _root_.ContinuousLinearEquiv.rightInverse_hasRightInverse
+引理 _root_.连续线性等价.rightInverse_hasRightInverse
   条件: (f : E ≃L[R] F)
   证明: by
   ext y
@@ -966,7 +966,7 @@ lemma fst
 
 中文:
 引理 fst
-  结论: (ContinuousLinearMap.fst R F G).HasRightInverse
+  结论: (连续线性映射.fst R F G).HasRightInverse
   证明: by
   use (ContinuousLinearMap.id _ _).prod 0
   intro x
@@ -990,7 +990,7 @@ lemma snd
 
 中文:
 引理 snd
-  结论: (ContinuousLinearMap.snd R F G).HasRightInverse
+  结论: (连续线性映射.snd R F G).HasRightInverse
   证明: by
   use ContinuousLinearMap.prod 0 (.id R G)
   intro x
@@ -1023,7 +1023,7 @@ lemma of_surjective_of_finiteDimensional
 
 中文:
 引理 of_surjective_of_finiteDimensional
-  结论: [CompleteSpace 𝕜] [FiniteDimensional 𝕜 F]
+  结论: [完备空间 𝕜] [有限维 𝕜 F]
   证明: by
   -- A surjective linear map has a linear inverse, which is automatically continuous
   -- because its domain is finite-dimensional.

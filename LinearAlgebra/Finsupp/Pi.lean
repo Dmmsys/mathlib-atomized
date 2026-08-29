@@ -50,7 +50,7 @@ definition uniqueLinearEquiv
 
 中文:
 定义 uniqueLinearEquiv
-  签名: [Subsingleton α] (a : α)
+  签名: [子单例 α] (a : α)
   定义体: uniqueAddEquiv a
   map_smul' _ _ := rfl
 
@@ -71,7 +71,7 @@ lemma uniqueLinearEquiv_symm_apply_apply
 
 中文:
 引理 uniqueLinearEquiv_symm_apply_apply
-  条件: (a : α) [Subsingleton α] (m : M) (b : α)
+  条件: (a : α) [子单例 α] (m : M) (b : α)
   证明: by simp [Subsingleton.elim b a]
 -/
 @[simp↓ high] lemma uniqueLinearEquiv_symm_apply_apply (a : α) [Subsingleton α] (m : M) (b : α) :
@@ -91,8 +91,8 @@ definition LinearEquiv.finsuppUnique
     map_smul' := fun _ _ => rfl }
 
 中文:
-定义 LinearEquiv.finsuppUnique
-  签名: (α : 类型) [Unique α]
+定义 线性等价.finsuppUnique
+  签名: (α : 类型) [唯一 α]
   定义体: { Finsupp.equivFunOnFinite.trans (Equiv.funUnique α M) with
     map_add' := fun _ _ => rfl
     map_smul' := fun _ _ => rfl }
@@ -116,8 +116,8 @@ theorem LinearEquiv.finsuppUnique_apply
   proof: rfl
 
 中文:
-定理 LinearEquiv.finsuppUnique_apply
-  条件: (α : 类型) [Unique α] (f : α ->₀ M)
+定理 线性等价.finsuppUnique_apply
+  条件: (α : 类型) [唯一 α] (f : α ->₀ M)
   证明: rfl
 -/
 theorem LinearEquiv.finsuppUnique_apply (α : Type*) [Unique α] (f : α ->₀ M) :
@@ -137,8 +137,8 @@ theorem LinearEquiv.finsuppUnique_symm_apply
     equivFunOnFinite, Function.update]
 
 中文:
-定理 LinearEquiv.finsuppUnique_symm_apply
-  条件: (α : 类型) [Unique α] (m : M)
+定理 线性等价.finsuppUnique_symm_apply
+  条件: (α : 类型) [唯一 α] (m : M)
   证明: by
   ext; simp [LinearEquiv.finsuppUnique, Equiv.funUnique, single, Pi.single,
     equivFunOnFinite, Function.update]
@@ -252,7 +252,7 @@ definition prodOfFinsuppNat
   body: Finsupp.lsum Nat fun n => ((.inr .. ∘ₗ f) ^ n) ∘ₗ .inl ..
 
 中文:
-定义 prodOfFinsuppNat
+定义 prodOfFinsupp自然数
   签名: : (自然数 ->₀ P) ->ₗ[R] P × M
   定义体: Finsupp.lsum Nat fun n => ((.inr .. ∘ₗ f) ^ n) ∘ₗ .inl ..
 
@@ -276,7 +276,7 @@ theorem fst_prodOfFinsuppNat
   simp [pow_succ']
 
 中文:
-定理 fst_prodOfFinsuppNat
+定理 fst_prodOfFinsupp自然数
   条件: (x : 自然数 ->₀ P)
   结论: (prodOfFinsupp自然数 f x).1 = x 0
   证明: by
@@ -307,7 +307,7 @@ theorem snd_prodOfFinsuppNat
   simp [pow_succ']
 
 中文:
-定理 snd_prodOfFinsuppNat
+定理 snd_prodOfFinsupp自然数
   条件: (x : 自然数 ->₀ P)
   证明: by
   simp_rw [prodOfFinsuppNat, coe_lsum, sum, Prod.snd_sum]
@@ -344,9 +344,9 @@ theorem prodOfFinsuppNat_injective
   rw [← x.single_add_erase 0]; rw [← y.single_ad
 
 中文:
-定理 prodOfFinsuppNat_injective
-  条件: (inj : Injective f)
-  结论: Injective (prodOfFinsupp自然数 f)
+定理 prodOfFinsupp自然数_injective
+  条件: (inj : 单射 f)
+  结论: 单射 (prodOfFinsupp自然数 f)
   证明: by
   intro x y
   let s := x.support union y.support
@@ -387,8 +387,8 @@ theorem exists_finsupp_nat_of_prod_injective
   proof: ⟨f ∘ₗ prodOfFinsuppNat f, inj.comp (prodOfFinsuppNat_injective inj)⟩
 
 中文:
-定理 exists_finsupp_nat_of_prod_injective
-  条件: (inj : Injective f)
+定理 存在_finsupp_nat_of_prod_injective
+  条件: (inj : 单射 f)
   证明: ⟨f ∘ₗ prodOfFinsuppNat f, inj.comp (prodOfFinsuppNat_injective inj)⟩
 
 Depends on / 依赖: inj.comp, prodOfFinsuppNat, prodOfFinsuppNat_injective
@@ -407,7 +407,7 @@ theorem exists_finsupp_nat_of_fin_fun_injective
 exists_finsupp_nat_of_prod_injective (f := f ∘ₗ e.symm.toLinearMap) inj.comp e.symm.injective
 
 中文:
-定理 exists_finsupp_nat_of_fin_fun_injective
+定理 存在_finsupp_nat_of_fin_fun_injective
   结论: {n : 自然数}
   证明: have e := LinearEquiv.piCongrLeft R (fun _ => P) (finSuccEquiv n) ≪≫ₗ .piOptionEquivProd _
 exists_finsupp_nat_of_prod_injective (f := f ∘ₗ e.symm.toLinearMap) inj.comp e.symm.injective
@@ -438,7 +438,7 @@ definition splittingOfFunOnFintypeSurjective
 
 中文:
 定义 splittingOfFunOnFintypeSurjective
-  签名: [Finite α] (f : M ->ₗ[R] α -> R) (s : Surjective f)
+  签名: [有限 α] (f : M ->ₗ[R] α -> R) (s : 满射 f)
   定义体: (Finsupp.lift _ _ _ fun x : α => (s (Finsupp.single x 1)).choose).comp
     (linearEquivFunOnFinite R R α).symm.toLinearMap
 
@@ -464,7 +464,7 @@ theorem splittingOfFunOnFintypeSurjective_splits
 
 中文:
 定理 splittingOfFunOnFintypeSurjective_splits
-  结论: [Finite α] (f : M ->ₗ[R] α -> R)
+  结论: [有限 α] (f : M ->ₗ[R] α -> R)
   证明: by
   classical
   ext x y
@@ -493,7 +493,7 @@ theorem leftInverse_splittingOfFunOnFintypeSurjective
 
 中文:
 定理 leftInverse_splittingOfFunOnFintypeSurjective
-  结论: [Finite α] (f : M ->ₗ[R] α -> R)
+  结论: [有限 α] (f : M ->ₗ[R] α -> R)
   证明: fun g =>
   LinearMap.congr_fun (splittingOfFunOnFintypeSurjective_splits f s) g
 -/
@@ -511,7 +511,7 @@ theorem splittingOfFunOnFintypeSurjective_injective
 
 中文:
 定理 splittingOfFunOnFintypeSurjective_injective
-  结论: [Finite α] (f : M ->ₗ[R] α -> R)
+  结论: [有限 α] (f : M ->ₗ[R] α -> R)
   证明: (leftInverse_splittingOfFunOnFintypeSurjective f s).injective
 
 Depends on / 依赖: injective, leftInverse_splittingOfFunOnFintypeSurjective
@@ -541,7 +541,7 @@ definition submodule
 
 中文:
 定义 submodule
-  签名: (S : α -> Submodule R M)
+  签名: (S : α -> 子模 R M)
   定义体: { x | forall i, x i in S i }
   add_mem' hx hy i := (S i).add_mem (hx i) (hy i)
   zero_mem' i := (S i).zero_mem
@@ -569,7 +569,7 @@ lemma mem_submodule_iff
 
 中文:
 引理 mem_submodule_iff
-  条件: (S : α -> Submodule R M) (x : α ->₀ M)
+  条件: (S : α -> 子模 R M) (x : α ->₀ M)
   证明: by
   rfl
 
@@ -593,7 +593,7 @@ lemma comap_lsingle_submodule
 
 中文:
 引理 comap_lsingle_submodule
-  条件: (p : α -> Submodule R M) (i : α)
+  条件: (p : α -> 子模 R M) (i : α)
   证明: by
   ext x
   refine ⟨fun hx => by simpa using hx i, fun hx j => ?_⟩
@@ -625,7 +625,7 @@ lemma submodule_eq_iSup
 
 中文:
 引理 submodule_eq_iSup
-  条件: (p : α -> Submodule R M)
+  条件: (p : α -> 子模 R M)
   证明: by
   refine le_antisymm ?_ ?_
   · intro x hx
@@ -660,7 +660,7 @@ lemma submodule_top
 
 中文:
 引理 submodule_top
-  结论: Finsupp.submodule (fun _ : α => (⊤ : Submodule R M)) = ⊤
+  结论: 有限支撑.submodule (fun _ : α => (⊤ : 子模 R M)) = ⊤
   证明: by
   ext
   simp
@@ -713,7 +713,7 @@ theorem range_mapRange_linearMap
 
 中文:
 定理 range_mapRange_linearMap
-  条件: (f : M ->ₗ[R] N) (hf : LinearMap.ker f = ⊥) (I : 类型)
+  条件: (f : M ->ₗ[R] N) (hf : 线性映射.ker f = ⊥) (I : 类型)
   证明: by
   ext x
   constructor
@@ -759,7 +759,7 @@ definition map
 
 中文:
 定义 map
-  签名: [Finite X] [Finite Y] (f : X -> Y) (s : X -> M)
+  签名: [有限 X] [有限 Y] (f : X -> Y) (s : X -> M)
   定义体: Finsupp.equivFunOnFinite (Finsupp.mapDomain f (Finsupp.equivFunOnFinite.symm s))
 
 Depends on / 依赖: Finsupp, Finsupp.equivFunOnFinite, Finsupp.equivFunOnFinite.symm, Finsupp.mapDomain, equivFunOnFinite, mapDomain
@@ -787,7 +787,7 @@ lemma map_apply_apply
 
 中文:
 引理 map_apply_apply
-  条件: [Fintype X] [Finite Y] [DecidableEq Y] (f : X -> Y) (s : X -> M) (y : Y)
+  条件: [有限类型 X] [有限 Y] [DecidableEq Y] (f : X -> Y) (s : X -> M) (y : Y)
   证明: by
   obtain ⟨s, rfl⟩ := Finsupp.equivFunOnFinite.surjective s
   dsimp [map]
@@ -825,7 +825,7 @@ lemma map_piSingle
 
 中文:
 引理 map_piSingle
-  结论: [Finite X] [Finite Y] [DecidableEq X] [DecidableEq Y]
+  结论: [有限 X] [有限 Y] [DecidableEq X] [DecidableEq Y]
   证明: by
   simp [map]
 -/
@@ -848,7 +848,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: [Finite X]
+  条件: [有限 X]
   结论: map (_root_.id : X -> X) (M := M) = _root_.id
   证明: by
   ext s
@@ -872,7 +872,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: [Finite X] [Finite Y] [Finite Z] (g : Y -> Z) (f : X -> Y)
+  条件: [有限 X] [有限 Y] [有限 Z] (g : Y -> Z) (f : X -> Y)
   证明: by
   ext s
   simp [map, Finsupp.mapDomain_comp]
@@ -901,7 +901,7 @@ definition linearMap
 
 中文:
 定义 linearMap
-  签名: [Finite X] [Finite Y] (f : X -> Y)
+  签名: [有限 X] [有限 Y] (f : X -> Y)
   定义体: (((Finsupp.linearEquivFunOnFinite R M Y)).comp (Finsupp.lmapDomain M R f)).comp
     (Finsupp.linearEquivFunOnFinite R M X).symm.toLinearMap
 
@@ -948,7 +948,7 @@ lemma linearMap_piSingle
 
 中文:
 引理 linearMap_piSingle
-  结论: [Finite X] [Finite Y] [DecidableEq X] [DecidableEq Y]
+  结论: [有限 X] [有限 Y] [DecidableEq X] [DecidableEq Y]
   证明: by
   apply map_piSingle
 
@@ -974,7 +974,7 @@ lemma linearMap_id
 
 中文:
 引理 linearMap_id
-  条件: [Finite X]
+  条件: [有限 X]
   结论: linearMap R M (_root_.id : X -> X) = .id
   证明: by
   classical
@@ -998,7 +998,7 @@ lemma linearMap_comp
 
 中文:
 引理 linearMap_comp
-  条件: [Finite X] [Finite Y] [Finite Z] (f : X -> Y) (g : Y -> Z)
+  条件: [有限 X] [有限 Y] [有限 Z] (f : X -> Y) (g : Y -> Z)
   证明: by
   classical
   aesop

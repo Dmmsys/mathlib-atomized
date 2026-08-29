@@ -76,7 +76,7 @@ lemma HasStandardEtaleSurjectionOn.mk
 
 中文:
 引理 HasStandardEtaleSurjectionOn.mk
-  结论: [IsStandardEtale R A]
+  结论: [是StandardEtale R A]
   证明: let P : StandardEtalePresentation R A := Nonempty.some inferInstance
   ⟨P.P, (((IsLocalization.algEquiv (.powers f) (Localization.Away f) Sf).restrictScalars R)
 .symm.toAlgHom).comp (φ.comp P.equivRing.symm.toAlgHom), by simpa⟩
@@ -164,7 +164,7 @@ theorem exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top_au
       P.ResidueField[X] ⧸ I.map (mapRingHom (algebraMap _ P.Residu
 
 中文:
-定理 exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top_aux₁
+定理 存在_hasStandardEtaleSurjectionOn_of_存在_adjoin_singleton_eq_top_aux₁
   证明: by
   have hx' : Function.Surjective (aeval (R := R) x) :=
     (AlgHom.range_eq_top _).mp ((adjoin_singleton_eq_range_aeval R x).symm.trans hx)
@@ -205,7 +205,7 @@ theorem exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top_au
   let := Localization.AtPrim
 
 中文:
-定理 exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top_aux₂
+定理 存在_hasStandardEtaleSurjectionOn_of_存在_adjoin_singleton_eq_top_aux₂
   证明: by
   let Q' : Ideal (P.Fiber S) :=
     (PrimeSpectrum.primesOverOrderIsoFiber R S P ⟨Q, ‹_›, ‹_›⟩).asIdeal
@@ -259,7 +259,7 @@ lemma exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top
   -- We shall show that `
 
 中文:
-引理 exists_hasStandardEtaleSurjectionOn_of_exists_adjoin_singleton_eq_top
+引理 存在_hasStandardEtaleSurjectionOn_of_存在_adjoin_singleton_eq_top
   证明: by
   cases subsingleton_or_nontrivial S
   · cases Ideal.IsPrime.ne_top' (Subsingleton.elim Q ⊤)
@@ -359,7 +359,7 @@ lemma exists_notMem_forall_ne_mem_and_adjoin_eq_top
   let : Module p.ResidueField (p.Fiber S) 
 
 中文:
-引理 exists_notMem_forall_ne_mem_and_adjoin_eq_top
+引理 存在_notMem_对任意_ne_mem_and_adjoin_eq_top
   证明: by
   let p := Q.under R
   #adaptation_note /-- Needed after nightly-2023-02-23 -/
@@ -449,7 +449,7 @@ lemma exists_primesOver_under_adjoin_eq_singleton_and_residueField_bijective
     IsUnramifiedAt.exists_notMem_forall_ne_mem_and_adj
 
 中文:
-引理 exists_primesOver_under_adjoin_eq_singleton_and_residueField_bijective
+引理 存在_primesOver_under_adjoin_eq_singleton_and_residueField_bijective
   证明: Localization.AtPrime.algebraOfLiesOver (Q.under R[x]) Q
       Function.Bijective (algebraMap (Q.under (R[x])).ResidueField
         Q.ResidueField) := by
@@ -501,7 +501,7 @@ lemma exists_hasStandardEtaleSurjectionOn_of_finite
   have : IsUnramifiedAt S' 
 
 中文:
-引理 exists_hasStandardEtaleSurjectionOn_of_finite
+引理 存在_hasStandardEtaleSurjectionOn_of_finite
   证明: by
   obtain ⟨x, hQ', hQ'Q⟩ :=
     exists_primesOver_under_adjoin_eq_singleton_and_residueField_bijective (R := R) Q
@@ -555,7 +555,7 @@ lemma exists_hasStandardEtaleSurjectionOn
         Set.ext_
 
 中文:
-引理 exists_hasStandardEtaleSurjectionOn
+引理 存在_hasStandardEtaleSurjectionOn
   证明: by
   wlog H : Unramified R S
   · obtain ⟨s, hsQ, hs⟩ := exists_formallyUnramified_of_isUnramifiedAt (R := R) Q
@@ -616,7 +616,7 @@ lemma IsEtaleAt.exists_isStandardEtale
     exact .trans (PrimeSpectrum.basicOpen_
 
 中文:
-引理 IsEtaleAt.exists_isStandardEtale
+引理 IsEtaleAt.存在_isStandardEtale
   证明: by
   obtain ⟨f, hfQ, h⟩ := exists_etale_of_isEtaleAt (R := R) Q
   obtain ⟨g, hgQ, hg⟩ := IsUnramifiedAt.exists_hasStandardEtaleSurjectionOn (R := R) Q
@@ -650,7 +650,7 @@ theorem IsSmoothAt.exists_isStandardEtale_mvPolynomial
   have := IsScalarTower.of_algebraMa
 
 中文:
-定理 IsSmoothAt.exists_isStandardEtale_mvPolynomial
+定理 IsSmoothAt.存在_isStandardEtale_mvPolynomial
   证明: by
   obtain ⟨f, hfp, H⟩ := IsSmoothAt.exists_notMem_isStandardSmooth R p
   obtain ⟨n, φ, hgC, hg⟩ := RingHom.IsStandardSmooth.exists_etale_mvPolynomial

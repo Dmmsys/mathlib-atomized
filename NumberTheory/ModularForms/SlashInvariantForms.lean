@@ -41,10 +41,10 @@ structure SlashInvariantForm
     - slash_action_eq' : forall γ in Γ, toFun ∣[k] γ = toFun
 
 中文:
-结构 SlashInvariantForm
+结构 斜不变形式
   参数: where
   公理与运算 (2 个):
-    - toFun : ℍ -> Complex
+    - toFun : ℍ -> 复形
     - slash_action_eq' : 对任意 γ in Γ, toFun ∣[k] γ = toFun
 -/
 structure SlashInvariantForm where
@@ -64,10 +64,10 @@ class SlashInvariantFormClass
     - slash_action_eq : forall (f : F), forall γ in Γ, (f : ℍ -> Complex) ∣[k] γ = f
 
 中文:
-类 SlashInvariantFormClass
-  参数: [FunLike F ℍ Complex]
+类 斜不变形式类
+  参数: [函数状 F ℍ 复形]
   公理与运算 (1 个):
-    - slash_action_eq : 对任意 (f : F), 对任意 γ in Γ, (f : ℍ -> Complex) ∣[k] γ = f
+    - slash_action_eq : 对任意 (f : F), 对任意 γ in Γ, (f : ℍ -> 复形) ∣[k] γ = f
 -/
 class SlashInvariantFormClass [FunLike F ℍ Complex] : Prop where
   slash_action_eq : forall (f : F), forall γ in Γ, (f : ℍ -> Complex) ∣[k] γ = f
@@ -88,8 +88,8 @@ definition SlashInvariantForm.Simps.coe
 initialize_simps_projections SlashInvariantForm (toFun -> coe, as_prefix coe)
 
 中文:
-定义 SlashInvariantForm.Simps.coe
-  签名: (f : SlashInvariantForm Γ k)
+定义 斜不变形式.Simps.coe
+  签名: (f : 斜不变形式 Γ k)
   定义体: f
 
 initialize_simps_projections SlashInvariantForm (toFun -> coe, as_prefix coe)
@@ -117,9 +117,9 @@ theorem SlashInvariantForm.toFun_eq_coe
 @[simp]
 
 中文:
-定理 SlashInvariantForm.toFun_eq_coe
-  条件: {f : SlashInvariantForm Γ k}
-  结论: f.toFun = (f : ℍ -> Complex)
+定理 斜不变形式.toFun_eq_coe
+  条件: {f : 斜不变形式 Γ k}
+  结论: f.toFun = (f : ℍ -> 复形)
   证明: rfl
 
 @[simp]
@@ -140,8 +140,8 @@ theorem SlashInvariantForm.coe_mk
 @[ext]
 
 中文:
-定理 SlashInvariantForm.coe_mk
-  条件: (f : ℍ -> Complex) (hf : 对任意 γ in Γ, f ∣[k] γ = f)
+定理 斜不变形式.coe_mk
+  条件: (f : ℍ -> 复形) (hf : 对任意 γ in Γ, f ∣[k] γ = f)
   结论: ⇑(mk f hf) = f
   证明: rfl
 
@@ -160,8 +160,8 @@ theorem SlashInvariantForm.ext
   proof: DFunLike.ext f g h
 
 中文:
-定理 SlashInvariantForm.ext
-  条件: {f g : SlashInvariantForm Γ k} (h : 对任意 x, f x = g x)
+定理 斜不变形式.ext
+  条件: {f g : 斜不变形式 Γ k} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -180,8 +180,8 @@ definition SlashInvariantForm.copy
   slash_action_eq' := h.symm ▸ f.slash_action_eq'
 
 中文:
-定义 SlashInvariantForm.copy
-  签名: (f : SlashInvariantForm Γ k) (f' : ℍ -> Complex) (h : f' = ⇑f)
+定义 斜不变形式.copy
+  签名: (f : 斜不变形式 Γ k) (f' : ℍ -> 复形) (h : f' = ⇑f)
   定义体: f'
   slash_action_eq' := h.symm ▸ f.slash_action_eq'
 -/
@@ -206,7 +206,7 @@ theorem slash_action_eqn
 
 中文:
 定理 slash_action_eqn
-  条件: [SlashInvariantFormClass F Γ k] (f : F) (γ) (hγ : γ in Γ)
+  条件: [斜不变形式类 F Γ k] (f : F) (γ) (hγ : γ in Γ)
   证明: SlashInvariantFormClass.slash_action_eq f γ hγ
 
 Depends on / 依赖: SlashInvariantFormClass, SlashInvariantFormClass.slash_action_eq, slash_action_eq
@@ -229,7 +229,7 @@ theorem slash_action_eqn'
 
 中文:
 定理 slash_action_eqn'
-  结论: {k : 整数} [Γ.HasDetOne] [SlashInvariantFormClass F Γ k]
+  结论: {k : 整数} [Γ.有DetOne] [斜不变形式类 F Γ k]
   证明: by
   have : f (γ • z) = f z * denom γ z ^ k := by
     simpa [slash_def, σ, mul_inv_eq_iff_eq_mul₀ (zpow_ne_zero _ (denom_ne_zero _ _)),
@@ -256,7 +256,7 @@ theorem slash_action_eqn''
 
 中文:
 定理 slash_action_eqn''
-  结论: {k : 整数} [Γ.HasDetOne] [SlashInvariantFormClass F Γ k]
+  结论: {k : 整数} [Γ.有DetOne] [斜不变形式类 F Γ k]
   证明: SlashInvariantForm.slash_action_eqn' f hγ z
 
 Depends on / 依赖: SlashInvariantForm, SlashInvariantForm.slash_action_eqn, slash_action_eqn
@@ -276,7 +276,7 @@ theorem slash_action_eqn_SL''
 
 中文:
 定理 slash_action_eqn_SL''
-  结论: {k : 整数} {Γ : Subgroup SL(2, 整数)} [SlashInvariantFormClass F Γ k]
+  结论: {k : 整数} {Γ : 子群 SL(2, 整数)} [斜不变形式类 F Γ k]
   证明: SlashInvariantForm.slash_action_eqn' f (by simpa using hγ) z
 
 Depends on / 依赖: SlashInvariantForm, SlashInvariantForm.slash_action_eqn, slash_action_eqn
@@ -296,8 +296,8 @@ instance [SlashInvariantFormClass
   body: ⟨fun f => { slash_action_eq' := slash_action_eqn f, .. }⟩
 
 中文:
-实例 [SlashInvariantFormClass
-  签名: F Γ k] : CoeTC F (SlashInvariantForm Γ k)
+实例 [斜不变形式类
+  签名: F Γ k] : CoeTC F (斜不变形式 Γ k)
   定义体: ⟨fun f => { slash_action_eq' := slash_action_eqn f, .. }⟩
 
 Depends on / 依赖: slash_action_eq, slash_action_eqn
@@ -318,7 +318,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (SlashInvariantForm Γ k)
+  签名: : 加法 (斜不变形式 Γ k)
   定义体: ⟨fun f g =>
     { toFun := f + g
       slash_action_eq' := fun γ hγ => by
@@ -346,7 +346,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAddApply (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是加法Apply (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_add := FunLike.coe_add
@@ -371,7 +371,7 @@ instance instZero
 
 中文:
 实例 instZero
-  签名: : Zero (SlashInvariantForm Γ k)
+  签名: : 零 (斜不变形式 Γ k)
   定义体: ⟨{toFun := 0
     slash_action_eq' := fun _ _ => SlashAction.zero_slash _ _}⟩
 
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是ZeroApply (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_zero := FunLike.coe_zero
@@ -422,7 +422,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul α (SlashInvariantForm Γ k) where
+  签名: : 标量乘法 α (斜不变形式 Γ k) where
   定义体: { toFun := c • ↑f
     slash_action_eq' γ hγ := by
       rw [← smul_one_smul Complex]
@@ -451,7 +451,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply α (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是SMulApply α (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smul := FunLike.coe_smul
@@ -482,8 +482,8 @@ instance instSMulReal
       rw [← smul_one_smul Real]; rw [← smul_one_smul Complex]; rw [smul_slash]; rw [Complex.real_smul]; rw [mul_one]; rw [σ_ofReal]; rw [slash_action_eqn _ _ hγ] }
 
 中文:
-实例 instSMulReal
-  签名: : SMul α (SlashInvariantForm Γ k) where
+实例 instSMul实数
+  签名: : 标量乘法 α (斜不变形式 Γ k) where
   定义体: { toFun := c • ↑f
     slash_action_eq' γ hγ := by
       rw [← smul_one_smul Real]; rw [← smul_one_smul Complex]; rw [smul_slash]; rw [Complex.real_smul]; rw [mul_one]; rw [σ_ofReal]; rw [slash_action_eqn _ _ hγ] }
@@ -510,7 +510,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply α (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是SMulApply α (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_smulReal := FunLike.coe_smul
@@ -538,7 +538,7 @@ instance instNeg
 
 中文:
 实例 instNeg
-  签名: : Neg (SlashInvariantForm Γ k)
+  签名: : 取负 (斜不变形式 Γ k)
   定义体: ⟨fun f =>
     { toFun := -f
       slash_action_eq' := fun γ hγ => by rw [SlashAction.neg_slash, slash_action_eqn f γ hγ] }⟩
@@ -564,7 +564,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是NegApply (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_neg := FunLike.coe_neg
@@ -588,7 +588,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (SlashInvariantForm Γ k)
+  签名: : 减法 (斜不变形式 Γ k)
   定义体: ⟨fun f g => f + -g⟩
 -/
 instance instSub : Sub (SlashInvariantForm Γ k) :=
@@ -608,7 +608,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (SlashInvariantForm Γ k) ℍ Complex
+  签名: 是SubApply (斜不变形式 Γ k) ℍ 复形
   定义体: rfl
 
 @[deprecated (since := "2026-07-10")] alias coe_sub := FunLike.coe_sub
@@ -636,7 +636,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (SlashInvariantForm Γ k)
+  签名: 加法交换群 (斜不变形式 Γ k)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[deprecated (since := "2026-07-10")] alias coeHom := FunLike.coeMonoidHom
@@ -661,7 +661,7 @@ instance instModuleComplex
 
 中文:
 实例 instModuleComplex
-  签名: [Γ.HasDetOne] {α : 类型} [Semiring α] [Module α Complex]
+  签名: [Γ.有DetOne] {α : 类型} [半环 α] [模 α 复形]
   定义体: FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, module
@@ -678,8 +678,8 @@ instance instModuleReal
   body: FunLike.module
 
 中文:
-实例 instModuleReal
-  签名: {α : 类型} [Semiring α] [Module α 实数] [Module α Complex] [IsScalarTower α 实数 Complex]
+实例 instModule实数
+  签名: {α : 类型} [半环 α] [模 α 实数] [模 α 复形] [标量塔 α 实数 复形]
   定义体: FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, module
@@ -700,7 +700,7 @@ definition const
 
 中文:
 定义 const
-  签名: [Γ.HasDetOne] (x : Complex)
+  签名: [Γ.有DetOne] (x : 复形)
   定义体: Function.const _ x
   slash_action_eq' g hg := by ext; simp [slash_def, σ, Subgroup.HasDetOne.det_eq hg]
 
@@ -723,8 +723,8 @@ definition constReal
     Subgroup.HasDetPlusMinusOne.abs_det hg, -Matrix.GeneralLinearGroup.val_det_apply]
 
 中文:
-定义 constReal
-  签名: [Γ.HasDetPlusMinusOne] (x : 实数)
+定义 const实数
+  签名: [Γ.有DetPlusMinusOne] (x : 实数)
   定义体: Function.const _ x
   slash_action_eq' g hg := funext fun τ => by simp [slash_apply,
     Subgroup.HasDetPlusMinusOne.abs_det hg, -Matrix.GeneralLinearGroup.val_det_apply]
@@ -747,8 +747,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : One (SlashInvariantForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 幺 (斜不变形式 Γ 0) where
   定义体: { constReal 1 with toFun := 1 }
 
 @[simp]
@@ -770,8 +770,8 @@ theorem one_coe_eq_one
 
 中文:
 定理 one_coe_eq_one
-  条件: [Γ.HasDetPlusMinusOne]
-  结论: ((1 : SlashInvariantForm Γ 0) : ℍ -> Complex) = 1
+  条件: [Γ.有DetPlusMinusOne]
+  结论: ((1 : 斜不变形式 Γ 0) : ℍ -> 复形) = 1
   证明: rfl
 -/
 theorem one_coe_eq_one [Γ.HasDetPlusMinusOne] : ((1 : SlashInvariantForm Γ 0) : ℍ -> Complex) = 1 :=
@@ -787,7 +787,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SlashInvariantForm Γ k)
+  签名: 可居 (斜不变形式 Γ k)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (SlashInvariantForm Γ k) :=
@@ -807,7 +807,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: [Γ.HasDetPlusMinusOne] {k₁ k₂ : 整数} (f : SlashInvariantForm Γ k₁)
+  签名: [Γ.有DetPlusMinusOne] {k₁ k₂ : 整数} (f : 斜不变形式 Γ k₁)
   定义体: f * g
   slash_action_eq' A hA := by simp [mul_slash, Subgroup.HasDetPlusMinusOne.abs_det hA,
     -Matrix.GeneralLinearGroup.val_det_apply, slash_action_eqn f A hA, slash_action_eqn g A hA]
@@ -831,7 +831,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: [Γ.HasDetPlusMinusOne] {k₁ k₂ : 整数} (f : SlashInvariantForm Γ k₁)
+  结论: [Γ.有DetPlusMinusOne] {k₁ k₂ : 整数} (f : 斜不变形式 Γ k₁)
   证明: rfl
 -/
 theorem coe_mul [Γ.HasDetPlusMinusOne] {k₁ k₂ : Int} (f : SlashInvariantForm Γ k₁)
@@ -853,8 +853,8 @@ definition prod
        Subgroup.HasDetPlusMinusOne.abs_det hA, SlashInvariantForm.slash_action_eqn (f _) A hA]
 
 中文:
-定义 prod
-  签名: {ι : Type} {s : Finset ι} {k : ι -> 整数} (m : 整数)
+定义 乘积
+  签名: {ι : 类型} {s : 有限集 ι} {k : ι -> 整数} (m : 整数)
   定义体: ∏ i in s, (f i)
   slash_action_eq' A hA := by
     simp [hm, prod_slash_sum_weights, -Matrix.GeneralLinearGroup.val_det_apply,
@@ -881,7 +881,7 @@ definition prodEqualWeights
 
 中文:
 定义 prodEqualWeights
-  签名: {ι : Type} {s : Finset ι} {k : 整数}
+  签名: {ι : 类型} {s : 有限集 ι} {k : 整数}
   定义体: prod (k := fun i => k) (s := s) (s.card * k) (by simp) f
 
 Depends on / 依赖: s.card
@@ -902,8 +902,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp, norm_cast]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : 自然数Cast (SlashInvariantForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 自然数嵌入 (斜不变形式 Γ 0) where
   定义体: constReal n
 
 @[simp, norm_cast]
@@ -925,8 +925,8 @@ theorem coe_natCast
 
 中文:
 定理 coe_natCast
-  条件: [Γ.HasDetPlusMinusOne] (n : 自然数)
-  结论: ⇑(n : SlashInvariantForm Γ 0) = n
+  条件: [Γ.有DetPlusMinusOne] (n : 自然数)
+  结论: ⇑(n : 斜不变形式 Γ 0) = n
   证明: rfl
 -/
 theorem coe_natCast [Γ.HasDetPlusMinusOne] (n : Nat) : ⇑(n : SlashInvariantForm Γ 0) = n := rfl
@@ -942,8 +942,8 @@ instance [Γ.HasDetPlusMinusOne]
 @[simp, norm_cast]
 
 中文:
-实例 [Γ.HasDetPlusMinusOne]
-  签名: : 整数Cast (SlashInvariantForm Γ 0) where
+实例 [Γ.有DetPlusMinusOne]
+  签名: : 整数嵌入 (斜不变形式 Γ 0) where
   定义体: constReal z
 
 @[simp, norm_cast]
@@ -965,8 +965,8 @@ theorem coe_intCast
 
 中文:
 定理 coe_intCast
-  条件: [Γ.HasDetPlusMinusOne] (z : 整数)
-  结论: ⇑(z : SlashInvariantForm Γ 0) = z
+  条件: [Γ.有DetPlusMinusOne] (z : 整数)
+  结论: ⇑(z : 斜不变形式 Γ 0) = z
   证明: rfl
 -/
 theorem coe_intCast [Γ.HasDetPlusMinusOne] (z : Int) : ⇑(z : SlashInvariantForm Γ 0) = z := rfl
@@ -987,7 +987,7 @@ definition translate
 
 中文:
 定义 translate
-  签名: [SlashInvariantFormClass F Γ k] (f : F) (g : GL (Fin 2) 实数)
+  签名: [斜不变形式类 F Γ k] (f : F) (g : GL (有限集 2) 实数)
   定义体: f ∣[k] g
   slash_action_eq' j hj := by
     rw [map_inv]; rw [Γ.mem_inv_pointwise_smul_iff]; rw [toConjAct_smul] at hj
@@ -1013,7 +1013,7 @@ lemma coe_translate
 
 中文:
 引理 coe_translate
-  条件: [SlashInvariantFormClass F Γ k] (f : F) (g : GL (Fin 2) 实数)
+  条件: [斜不变形式类 F Γ k] (f : F) (g : GL (有限集 2) 实数)
   证明: rfl
 -/
 lemma coe_translate [SlashInvariantFormClass F Γ k] (f : F) (g : GL (Fin 2) Real) :

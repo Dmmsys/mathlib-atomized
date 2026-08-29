@@ -93,7 +93,7 @@ theorem det_reflection
 
 中文:
 定理 det_reflection
-  结论: LinearMap.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜 Kᗮ
+  结论: 线性映射.det K.reflection.toLinearMap = (-1) ^ finrank 𝕜 Kᗮ
   证明: by
   by_cases hK : FiniteDimensional 𝕜 Kᗮ
   swap
@@ -164,7 +164,7 @@ theorem finrank_add_inf_finrank_orthogonal
 
 中文:
 定理 finrank_add_inf_finrank_orthogonal
-  结论: {K₁ K₂ : Submodule 𝕜 E}
+  结论: {K₁ K₂ : 子模 𝕜 E}
   证明: by
   have : FiniteDimensional 𝕜 K₁ := Submodule.finiteDimensional_of_le h
   have hd := Submodule.finrank_sup_add_finrank_inf_eq K₁ (K₁ᗮ ⊓ K₂)
@@ -193,7 +193,7 @@ theorem finrank_add_inf_finrank_orthogonal'
 
 中文:
 定理 finrank_add_inf_finrank_orthogonal'
-  结论: {K₁ K₂ : Submodule 𝕜 E}
+  结论: {K₁ K₂ : 子模 𝕜 E}
   证明: by
   rw [← add_right_inj (finrank 𝕜 K₁)]
   simp [Submodule.finrank_add_inf_finrank_orthogonal h, h_dim]
@@ -219,7 +219,7 @@ theorem finrank_add_finrank_orthogonal
 
 中文:
 定理 finrank_add_finrank_orthogonal
-  条件: [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E)
+  条件: [有限维 𝕜 E] (K : 子模 𝕜 E)
   证明: by
   convert! Submodule.finrank_add_inf_finrank_orthogonal (le_top : K <= ⊤) using 1
   · rw [inf_top_eq]
@@ -245,7 +245,7 @@ theorem finrank_add_finrank_orthogonal'
 
 中文:
 定理 finrank_add_finrank_orthogonal'
-  结论: [FiniteDimensional 𝕜 E] {K : Submodule 𝕜 E}
+  结论: [有限维 𝕜 E] {K : 子模 𝕜 E}
   证明: by
   rw [← add_right_inj (finrank 𝕜 K)]
   simp [Submodule.finrank_add_finrank_orthogonal, h_dim]
@@ -335,8 +335,8 @@ theorem LinearIsometryEquiv.reflections_generate_dim_aux
     refine ⟨[], rfl.le, show φ = 1 f
 
 中文:
-定理 LinearIsometryEquiv.reflections_generate_dim_aux
-  结论: [FiniteDimensional 实数 F] {n : 自然数}
+定理 线性等距等价.reflections_generate_dim_aux
+  结论: [有限维 实数 F] {n : 自然数}
   证明: by
   -- We prove this by strong induction on `n`, the dimension of the orthogonal complement of the
   -- fixed subspace of the endomorphism `φ`
@@ -428,8 +428,8 @@ theorem LinearIsometryEquiv.reflections_generate_dim
   ⟨l, hl₁.trans (finrank_le _), hl₂⟩
 
 中文:
-定理 LinearIsometryEquiv.reflections_generate_dim
-  条件: [FiniteDimensional 实数 F] (φ : F ≃ₗᵢ[实数] F)
+定理 线性等距等价.reflections_generate_dim
+  条件: [有限维 实数 F] (φ : F ≃ₗᵢ[实数] F)
   证明: let ⟨l, hl₁, hl₂⟩ := φ.reflections_generate_dim_aux le_rfl
   ⟨l, hl₁.trans (finrank_le _), hl₂⟩
 
@@ -456,8 +456,8 @@ theorem LinearIsometryEquiv.reflections_generate
   exact Subgroup.subset_closure ⟨a, hax⟩
 
 中文:
-定理 LinearIsometryEquiv.reflections_generate
-  条件: [FiniteDimensional 实数 F]
+定理 线性等距等价.reflections_generate
+  条件: [有限维 实数 F]
   证明: by
   rw [Subgroup.eq_top_iff']
   intro φ
@@ -497,8 +497,8 @@ theorem OrthogonalFamily.isInternal_iff_of_isComplete
     true_and, orthogonal_eq_bot_iff]
 
 中文:
-定理 OrthogonalFamily.isInternal_iff_of_isComplete
-  结论: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+定理 OrthogonalFamily.is整数ernal_iff_of_isComplete
+  结论: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
   证明: by
   have : CompleteSpace (↥(iSup V)) := hc.completeSpace_coe
   simp only [DirectSum.isInternal_submodule_iff_iSupIndep_and_iSup_eq_top, hV.independent,
@@ -523,8 +523,8 @@ theorem OrthogonalFamily.isInternal_iff
   hV.isInternal_iff_of_isComplete (completeSpace_coe_iff_isComplete.mp inferInstance)
 
 中文:
-定理 OrthogonalFamily.isInternal_iff
-  结论: [DecidableEq ι] [FiniteDimensional 𝕜 E]
+定理 OrthogonalFamily.is整数ernal_iff
+  结论: [DecidableEq ι] [有限维 𝕜 E]
   证明: haveI := FiniteDimensional.proper_rclike 𝕜 (↥(iSup V))
   hV.isInternal_iff_of_isComplete (completeSpace_coe_iff_isComplete.mp inferInstance)
 
@@ -554,7 +554,7 @@ theorem OrthogonalFamily.sum_projection_of_mem_iSup
 
 中文:
 定理 OrthogonalFamily.sum_projection_of_mem_iSup
-  结论: [Fintype ι] {V : ι -> Submodule 𝕜 E}
+  结论: [有限类型 ι] {V : ι -> 子模 𝕜 E}
   证明: by
   induction hx using iSup_induction' with
   | mem i x hx =>
@@ -600,7 +600,7 @@ theorem OrthogonalFamily.projection_directSum_coeAddHom
 
 中文:
 定理 OrthogonalFamily.projection_directSum_coeAddHom
-  结论: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+  结论: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
   证明: by
   induction x using DirectSum.induction_on with
   | zero => simp

@@ -37,7 +37,7 @@ definition IocProdIoc
 
 中文:
 定义 IocProdIoc
-  签名: (a b c : ι) (x : (Π i : Ioc a b, X i) × (Π i : Ioc b c, X i)) (i : Ioc a c)
+  签名: (a b c : ι) (x : (Π i : 左开右闭区间 a b, X i) × (Π i : 左开右闭区间 b c, X i)) (i : 左开右闭区间 a c)
   定义体: if h : i <= b
     then x.1 ⟨i, mem_Ioc.2 ⟨(mem_Ioc.1 i.2).1, h⟩⟩
     else x.2 ⟨i, mem_Ioc.2 ⟨not_le.1 h, (mem_Ioc.1 i.2).2⟩⟩
@@ -66,7 +66,7 @@ lemma measurable_IocProdIoc
 
 中文:
 引理 measurable_IocProdIoc
-  条件: [对任意 i, MeasurableSpace (X i)] {a b c : ι}
+  条件: [对任意 i, 可测空间 (X i)] {a b c : ι}
   证明: by
   refine measurable_pi_lambda _ (fun i => ?_)
   by_cases h : i <= b
@@ -96,7 +96,7 @@ definition IicProdIoc
 
 中文:
 定义 IicProdIoc
-  签名: (a b : ι) (x : (Π i : Iic a, X i) × (Π i : Ioc a b, X i)) (i : Iic b)
+  签名: (a b : ι) (x : (Π i : 左无界右闭区间 a, X i) × (Π i : 左开右闭区间 a b, X i)) (i : 左无界右闭区间 b)
   定义体: if h : i <= a
     then x.1 ⟨i, mem_Iic.2 h⟩
     else x.2 ⟨i, mem_Ioc.2 ⟨not_le.1 h, mem_Iic.1 i.2⟩⟩
@@ -194,7 +194,7 @@ lemma IicProdIoc_self
 中文:
 引理 IicProdIoc_self
   条件: (a : ι)
-  结论: IicProdIoc (X := X) a a = Prod.fst
+  结论: IicProdIoc (X := X) a a = 积类型.fst
   证明: by
   ext x i
   simp [IicProdIoc, mem_Iic.1 i.2]
@@ -272,7 +272,7 @@ lemma measurable_IicProdIoc
 中文:
 引理 measurable_IicProdIoc
   条件: {m n : ι}
-  结论: Measurable (IicProdIoc (X := X) m n)
+  结论: 可测 (IicProdIoc (X := X) m n)
   证明: by
   refine measurable_pi_lambda _ (fun i => ?_)
   by_cases h : i <= m
@@ -442,7 +442,7 @@ definition MeasurableEquiv.piSingleton
     refine measurable_pi_lambda _ (fun i => (Measura
 
 中文:
-定义 MeasurableEquiv.piSingleton
+定义 可测等价.piSingleton
   签名: (a : 自然数)
   定义体: (Nat.mem_Ioc_succ.1 i.2).symm ▸ x
   invFun x := x ⟨a + 1, right_mem_Ioc.2 a.lt_succ_self⟩
@@ -520,7 +520,7 @@ lemma _root_.IicProdIoc_preimage
 
 中文:
 引理 _root_.IicProdIoc_preimage
-  条件: {a b : ι} (hab : a <= b) (s : (i : Iic b) -> Set (X i))
+  条件: {a b : ι} (hab : a <= b) (s : (i : 左无界右闭区间 b) -> 集合 (X i))
   证明: by
   ext x
   simp only [Set.mem_preimage, Set.mem_pi, Set.mem_univ, IicProdIoc_def, forall_const,

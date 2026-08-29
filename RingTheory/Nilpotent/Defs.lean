@@ -42,8 +42,8 @@ theorem IsNilpotent.map
   rw [← map_pow]; rw [hr.choose_spec]; rw [map_zero]
 
 中文:
-定理 IsNilpotent.map
-  结论: [MonoidWithZero R] [MonoidWithZero S] {r : R} {F : 类型}
+定理 是幂零.map
+  结论: [带零幺半群 R] [带零幺半群 S] {r : R} {F : 类型}
   证明: by
   use hr.choose
   rw [← map_pow]; rw [hr.choose_spec]; rw [map_zero]
@@ -65,8 +65,8 @@ lemma IsNilpotent.map_iff
   proof: ⟨fun ⟨k, hk⟩ => ⟨k, (map_eq_zero_iff f hf).mp by rwa [map_pow]⟩, fun h => h.map f⟩
 
 中文:
-引理 IsNilpotent.map_iff
-  结论: [MonoidWithZero R] [MonoidWithZero S] {r : R} {F : 类型}
+引理 是幂零.map_iff
+  结论: [带零幺半群 R] [带零幺半群 S] {r : R} {F : 类型}
   证明: ⟨fun ⟨k, hk⟩ => ⟨k, (map_eq_zero_iff f hf).mp by rwa [map_pow]⟩, fun h => h.map f⟩
 
 Depends on / 依赖: h.map, map_eq_zero_iff, map_pow
@@ -85,8 +85,8 @@ theorem IsUnit.isNilpotent_mul_unit_of_commute_iff
   proof: exists_congr fun n => by rw [h_comm.mul_pow, (hu.pow n).mul_left_eq_zero]
 
 中文:
-定理 IsUnit.isNilpotent_mul_unit_of_commute_iff
-  结论: [MonoidWithZero R] {r u : R}
+定理 是单位.isNilpotent_mul_unit_of_commute_iff
+  结论: [带零幺半群 R] {r u : R}
   证明: exists_congr fun n => by rw [h_comm.mul_pow, (hu.pow n).mul_left_eq_zero]
 
 Depends on / 依赖: exists_congr, h_comm, h_comm.mul_pow, hu.pow, mul_left_eq_zero, mul_pow
@@ -105,8 +105,8 @@ theorem IsUnit.isNilpotent_unit_mul_of_commute_iff
   proof: h_comm ▸ hu.isNilpotent_mul_unit_of_commute_iff h_comm
 
 中文:
-定理 IsUnit.isNilpotent_unit_mul_of_commute_iff
-  结论: [MonoidWithZero R] {r u : R}
+定理 是单位.isNilpotent_unit_mul_of_commute_iff
+  结论: [带零幺半群 R] {r u : R}
   证明: h_comm ▸ hu.isNilpotent_mul_unit_of_commute_iff h_comm
 
 Depends on / 依赖: h_comm, hu.isNilpotent_mul_unit_of_commute_iff, isNilpotent_mul_unit_of_commute_iff
@@ -151,7 +151,7 @@ lemma nilpotencyClass_eq_zero_of_subsingleton
 
 中文:
 引理 nilpotencyClass_eq_zero_of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   证明: by
   let s : Set Nat := {k | x ^ k = 0}
   suffices s = univ by change sInf _ = 0; simp [s] at this; simp [this]
@@ -207,7 +207,7 @@ lemma pow_nilpotencyClass
 
 中文:
 引理 pow_nilpotencyClass
-  条件: (hx : IsNilpotent x)
+  条件: (hx : 是幂零 x)
   结论: x ^ (nilpotencyClass x) = 0
   证明: Nat.sInf_mem hx
 
@@ -259,7 +259,7 @@ lemma nilpotencyClass_zero
 
 中文:
 引理 nilpotencyClass_zero
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: nilpotencyClass_eq_succ_iff.mpr by constructor <;> simp
 -/
 @[simp] lemma nilpotencyClass_zero [Nontrivial R] :
@@ -280,7 +280,7 @@ lemma pos_nilpotencyClass_iff
 
 中文:
 引理 pos_nilpotencyClass_iff
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: by
   refine ⟨isNilpotent_of_pos_nilpotencyClass, fun hx => Nat.pos_of_ne_zero fun hx' => ?_⟩
   replace hx := pow_nilpotencyClass hx
@@ -304,7 +304,7 @@ lemma pow_pred_nilpotencyClass
 
 中文:
 引理 pow_pred_nilpotencyClass
-  条件: [Nontrivial R] (hx : IsNilpotent x)
+  条件: [非平凡 R] (hx : 是幂零 x)
   证明: (nilpotencyClass_eq_succ_iff.mp <| Nat.eq_add_of_sub_eq (pos_nilpotencyClass_iff.mpr hx) rfl).2
 
 Depends on / 依赖: Nat.eq_add_of_sub_eq, eq_add_of_sub_eq, nilpotencyClass_eq_succ_iff, nilpotencyClass_eq_succ_iff.mp, pos_nilpotencyClass_iff, pos_nilpotencyClass_iff.mpr
@@ -347,7 +347,7 @@ lemma nilpotencyClass_eq_one
 
 中文:
 引理 nilpotencyClass_eq_one
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   证明: ⟨eq_zero_of_nilpotencyClass_eq_one, fun hx => hx ▸ nilpotencyClass_zero⟩
 -/
 @[simp] lemma nilpotencyClass_eq_one [Nontrivial R] :
@@ -373,7 +373,7 @@ theorem isReduced_of_injective
 
 中文:
 定理 isReduced_of_injective
-  结论: [MonoidWithZero R] [MonoidWithZero S] {F : 类型}
+  结论: [带零幺半群 R] [带零幺半群 S] {F : 类型}
   证明: by
   constructor
   intro x hx
@@ -407,7 +407,7 @@ definition IsRadical
 
 中文:
 定义 IsRadical
-  签名: [Dvd R] [Pow R 自然数] (y : R)
+  签名: [Dvd R] [幂 R 自然数] (y : R)
   定义体: forall (n : Nat) (x), y ∣ x ^ n -> y ∣ x
 -/
 def IsRadical [Dvd R] [Pow R Nat] (y : R) : Prop :=
@@ -423,7 +423,7 @@ theorem isRadical_iff_pow_one_lt
 
 中文:
 定理 isRadical_iff_pow_one_lt
-  条件: [Monoid R] (k : 自然数) (hk : 1 < k)
+  条件: [幺半群 R] (k : 自然数) (hk : 1 < k)
   证明: ⟨(· k), k.pow_imp_self_of_one_lt hk _ fun _ _ h => .inl (dvd_mul_of_dvd_left h _)⟩
 
 Depends on / 依赖: dvd_mul_of_dvd_left, k.pow_imp_self_of_one_lt, pow_imp_self_of_one_lt
@@ -452,8 +452,8 @@ theorem isNilpotent_mul_right
 
 中文:
 定理 isNilpotent_mul_right
-  条件: (h_comm : Commute x y) (h : IsNilpotent x)
-  结论: IsNilpotent (x * y)
+  条件: (h_comm : Commute x y) (h : 是幂零 x)
+  结论: 是幂零 (x * y)
   证明: by
   obtain ⟨n, hn⟩ := h
   use n
@@ -479,8 +479,8 @@ theorem isNilpotent_mul_left
 
 中文:
 定理 isNilpotent_mul_left
-  条件: (h_comm : Commute x y) (h : IsNilpotent y)
-  结论: IsNilpotent (x * y)
+  条件: (h_comm : Commute x y) (h : 是幂零 y)
+  结论: 是幂零 (x * y)
   证明: by
   rw [h_comm.eq]
   exact h_comm.symm.isNilpotent_mul_right h

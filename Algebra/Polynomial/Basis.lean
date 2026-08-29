@@ -36,7 +36,7 @@ definition basisMonomials
 
 中文:
 定义 basisMonomials
-  签名: : Basis 自然数 R R[X]
+  签名: : 基 自然数 R R[X]
   定义体: .ofRepr (toFinsuppIsoLinear R).trans AddMonoidAlgebra.coeffLinearEquiv _
 
 @[simp]

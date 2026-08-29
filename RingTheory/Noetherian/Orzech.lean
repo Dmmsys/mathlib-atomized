@@ -49,7 +49,7 @@ exact LinearMap.ker_eq_bot.1 bot_unique
     f.ker_le_of_iterateMapComap_eq_succ i ⊥ n (H _ (Nat.le_succ _)) hf hi
 
 中文:
-定理 IsNoetherian.injective_of_surjective_of_injective
+定理 是Noether.injective_of_surjective_of_injective
   结论: (i f : N ->ₗ[R] M)
   证明: by
   have := isNoetherian_of_injective i hi
@@ -76,7 +76,7 @@ theorem IsNoetherian.injective_of_surjective_of_submodule
   proof: IsNoetherian.injective_of_surjective_of_injective N.subtype f N.injective_subtype hf
 
 中文:
-定理 IsNoetherian.injective_of_surjective_of_submodule
+定理 是Noether.injective_of_surjective_of_submodule
   证明: IsNoetherian.injective_of_surjective_of_injective N.subtype f N.injective_subtype hf
 
 Depends on / 依赖: IsNoetherian, IsNoetherian.injective_of_surjective_of_injective, N.injective_subtype, N.subtype, injective_of_surjective_of_injective, injective_subtype, subtype
@@ -94,7 +94,7 @@ theorem IsNoetherian.injective_of_surjective_endomorphism
   proof: IsNoetherian.injective_of_surjective_of_injective _ f (LinearEquiv.refl _ _).injective s
 
 中文:
-定理 IsNoetherian.injective_of_surjective_endomorphism
+定理 是Noether.injective_of_surjective_endomorphism
   结论: (f : M ->ₗ[R] M)
   证明: IsNoetherian.injective_of_surjective_of_injective _ f (LinearEquiv.refl _ _).injective s
 
@@ -113,7 +113,7 @@ theorem IsNoetherian.bijective_of_surjective_endomorphism
   proof: ⟨IsNoetherian.injective_of_surjective_endomorphism f s, s⟩
 
 中文:
-定理 IsNoetherian.bijective_of_surjective_endomorphism
+定理 是Noether.bijective_of_surjective_endomorphism
   结论: (f : M ->ₗ[R] M)
   证明: ⟨IsNoetherian.injective_of_surjective_endomorphism f s, s⟩
 
@@ -134,7 +134,7 @@ theorem IsNoetherian.subsingleton_of_prod_injective
   simpa using h (show LinearMap.fst R M N (0, x) = LinearMap.fst R M N (0, y) from rfl)
 
 中文:
-定理 IsNoetherian.subsingleton_of_prod_injective
+定理 是Noether.subsingleton_of_prod_injective
   结论: (f : M × N ->ₗ[R] M)
   证明: .intro fun x y => by
   have h := IsNoetherian.injective_of_surjective_of_injective f _ i LinearMap.fst_surjective
@@ -159,7 +159,7 @@ definition IsNoetherian.equivPUnitOfProdInjective
   .ofSubsingleton _ _
 
 中文:
-定义 IsNoetherian.equivPUnitOfProdInjective
+定义 是Noether.equivPUnitOfProdInjective
   签名: (f : M × N ->ₗ[R] M)
   定义体: haveI := IsNoetherian.subsingleton_of_prod_injective f i
   .ofSubsingleton _ _

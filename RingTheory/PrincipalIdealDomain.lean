@@ -63,7 +63,7 @@ instance bot_isPrincipal
 
 中文:
 实例 bot_isPrincipal
-  签名: : (⊥ : Submodule R M).IsPrincipal
+  签名: : (⊥ : 子模 R M).是Principal
   定义体: ⟨⟨0, by simp⟩⟩
 -/
 instance bot_isPrincipal : (⊥ : Submodule R M).IsPrincipal :=
@@ -79,7 +79,7 @@ instance top_isPrincipal
 
 中文:
 实例 top_isPrincipal
-  签名: : (⊤ : Submodule R R).IsPrincipal
+  签名: : (⊤ : 子模 R R).是Principal
   定义体: ⟨⟨1, Ideal.span_singleton_one.symm⟩⟩
 
 Depends on / 依赖: Ideal.span_singleton_one.symm, span_singleton_one
@@ -99,10 +99,10 @@ class IsBezout
     - isPrincipal_of_FG : forall I : Ideal R, I.FG -> I.IsPrincipal
 
 中文:
-类 IsBezout
+类 是Bezout
   参数: : 命题 where
   公理与运算 (1 个):
-    - isPrincipal_of_FG : 对任意 I : Ideal R, I.FG -> I.IsPrincipal
+    - isPrincipal_of_FG : 对任意 I : 理想 R, I.FG -> I.是Principal
 -/
 class IsBezout : Prop where
   /-- Any finitely generated ideal is principal. -/
@@ -140,8 +140,8 @@ theorem _root_.Ideal.span_singleton_generator
 @[simp]
 
 中文:
-定理 _root_.Ideal.span_singleton_generator
-  条件: (I : Ideal R) [I.IsPrincipal]
+定理 _root_.理想.span_singleton_generator
+  条件: (I : 理想 R) [I.是Principal]
   证明: Eq.symm (Classical.choose_spec (principal I))
 
 @[simp]
@@ -167,7 +167,7 @@ theorem generator_mem
 
 中文:
 定理 generator_mem
-  条件: (S : Submodule R M) [S.IsPrincipal]
+  条件: (S : 子模 R M) [S.是Principal]
   结论: generator S in S
   证明: by
   have : generator S in span R {generator S} := subset_span (mem_singleton _)
@@ -192,7 +192,7 @@ theorem mem_iff_eq_smul_generator
 
 中文:
 定理 mem_iff_eq_smul_generator
-  条件: (S : Submodule R M) [S.IsPrincipal] {x : M}
+  条件: (S : 子模 R M) [S.是Principal] {x : M}
   证明: by
   simp_rw [@eq_comm _ x, ← mem_span_singleton, span_singleton_generator]
 
@@ -214,7 +214,7 @@ theorem eq_bot_iff_generator_eq_zero
 
 中文:
 定理 eq_bot_iff_generator_eq_zero
-  条件: (S : Submodule R M) [S.IsPrincipal]
+  条件: (S : 子模 R M) [S.是Principal]
   证明: by rw [← @span_singleton_eq_bot R M, span_singleton_generator]
 
 @[simp]
@@ -235,7 +235,7 @@ theorem generator_bot
 
 中文:
 定理 generator_bot
-  结论: generator (⊥ : Submodule R M) = 0
+  结论: generator (⊥ : 子模 R M) = 0
   证明: (eq_bot_iff_generator_eq_zero ⊥).mp rfl
 
 Depends on / 依赖: eq_bot_iff_generator_eq_zero
@@ -254,7 +254,7 @@ lemma fg
 
 中文:
 引理 fg
-  条件: {S : Submodule R M} (h : S.IsPrincipal)
+  条件: {S : 子模 R M} (h : S.是Principal)
   结论: S.FG
   证明: ⟨{h.generator}, by simp only [Finset.coe_singleton, span_singleton_generator]⟩
 -/
@@ -289,7 +289,7 @@ theorem associated_generator_span_self
 
 中文:
 定理 associated_generator_span_self
-  条件: [IsDomain R] (r : R)
+  条件: [是整环 R] (r : R)
   证明: by
   rw [← Ideal.span_singleton_eq_span_singleton]
   exact Ideal.span_singleton_generator _
@@ -312,7 +312,7 @@ theorem mem_iff_generator_dvd
 
 中文:
 定理 mem_iff_generator_dvd
-  条件: (S : Ideal R) [S.IsPrincipal] {x : R}
+  条件: (S : 理想 R) [S.是Principal] {x : R}
   结论: x in S ↔ generator S ∣ x
   证明: (mem_iff_eq_smul_generator S).trans (exists_congr fun a => by simp only [mul_comm, smul_eq_mul])
 
@@ -333,7 +333,7 @@ theorem prime_generator_of_isPrime
 
 中文:
 定理 prime_generator_of_isPrime
-  结论: (S : Ideal R) [S.IsPrincipal] [is_prime : S.IsPrime]
+  结论: (S : 理想 R) [S.是Principal] [is_prime : S.是素]
   证明: ⟨fun h => ne_bot ((eq_bot_iff_generator_eq_zero S).2 h), fun h =>
     is_prime.ne_top (S.eq_top_of_isUnit_mem (generator_mem S) h), fun _ _ => by
     simpa only [← mem_iff_generator_dvd S] using is_prime.2⟩
@@ -359,7 +359,7 @@ theorem generator_map_dvd_of_mem
 
 中文:
 定理 generator_map_dvd_of_mem
-  结论: {N : Submodule R M} (ϕ : M ->ₗ[R] R) [(N.map ϕ).IsPrincipal] {x : M}
+  结论: {N : 子模 R M} (ϕ : M ->ₗ[R] R) [(N.map ϕ).是Principal] {x : M}
   证明: by
   rw [← mem_iff_generator_dvd]; rw [Submodule.mem_map]
   exact ⟨x, hx, rfl⟩
@@ -384,7 +384,7 @@ theorem generator_submoduleImage_dvd_of_mem
 
 中文:
 定理 generator_submoduleImage_dvd_of_mem
-  结论: {N O : Submodule R M} (hNO : N <= O) (ϕ : O ->ₗ[R] R)
+  结论: {N O : 子模 R M} (hNO : N <= O) (ϕ : O ->ₗ[R] R)
   证明: by
   rw [← mem_iff_generator_dvd]; rw [LinearMap.mem_submoduleImage_of_le hNO]
   exact ⟨x, hx, rfl⟩
@@ -410,7 +410,7 @@ theorem dvd_generator_span_iff
 
 中文:
 定理 dvd_generator_span_iff
-  条件: {r : R} {s : Set R} [(Ideal.span s).IsPrincipal]
+  条件: {r : R} {s : 集合 R} [(理想.span s).是Principal]
   证明: h.trans (mem_iff_generator_dvd _).mp (Ideal.subset_span hx)
   mpr h := have : (span R s).IsPrincipal := ‹_›
     span_induction h (dvd_zero _) (fun _ _ _ _ => dvd_add) (fun _ _ _ => (·.mul_left _))
@@ -446,7 +446,7 @@ instance span_pair_isPrincipal
 
 中文:
 实例 span_pair_isPrincipal
-  签名: [IsBezout R] (x y : R)
+  签名: [是Bezout R] (x y : R)
   定义体: by
   classical exact isPrincipal_of_FG (Ideal.span {x, y}) ⟨{x, y}, by simp⟩
 
@@ -466,7 +466,7 @@ definition gcd
   body: Submodule.IsPrincipal.generator (Ideal.span {x, y})
 
 中文:
-定义 gcd
+定义 最大公约数
   签名: : R
   定义体: Submodule.IsPrincipal.generator (Ideal.span {x, y})
 
@@ -484,7 +484,7 @@ theorem span_gcd
 
 中文:
 定理 span_gcd
-  结论: Ideal.span {gcd x y} = Ideal.span {x, y}
+  结论: 理想.span {最大公约数 x y} = 理想.span {x, y}
   证明: Ideal.span_singleton_generator _
 
 Depends on / 依赖: Ideal.span_singleton_generator, span_singleton_generator
@@ -506,7 +506,7 @@ theorem gcd_dvd_left
 
 中文:
 定理 gcd_dvd_left
-  结论: gcd x y ∣ x
+  结论: 最大公约数 x y ∣ x
   证明: (Submodule.IsPrincipal.mem_iff_generator_dvd _).mp (Ideal.subset_span (by simp))
 
 Depends on / 依赖: Ideal.subset_span, IsPrincipal, Submodule, Submodule.IsPrincipal.mem_iff_generator_dvd, mem_iff_generator_dvd, subset_span
@@ -524,7 +524,7 @@ theorem gcd_dvd_right
 
 中文:
 定理 gcd_dvd_right
-  结论: gcd x y ∣ y
+  结论: 最大公约数 x y ∣ y
   证明: (Submodule.IsPrincipal.mem_iff_generator_dvd _).mp (Ideal.subset_span (by simp))
 
 Depends on / 依赖: Ideal.subset_span, IsPrincipal, Submodule, Submodule.IsPrincipal.mem_iff_generator_dvd, mem_iff_generator_dvd, subset_span
@@ -548,7 +548,7 @@ theorem dvd_gcd
 中文:
 定理 dvd_gcd
   条件: (hx : z ∣ x) (hy : z ∣ y)
-  结论: z ∣ gcd x y
+  结论: z ∣ 最大公约数 x y
   证明: by
   rw [← Ideal.span_singleton_le_span_singleton] at hx hy ⊢
   rw [span_gcd]; rw [Ideal.span_insert]; rw [sup_le_iff]
@@ -571,7 +571,7 @@ theorem gcd_eq_sum
 
 中文:
 定理 gcd_eq_sum
-  结论: 存在 a b : R, a * x + b * y = gcd x y
+  结论: 存在 a b : R, a * x + b * y = 最大公约数 x y
   证明: Ideal.mem_span_pair.mp (by rw [← span_gcd]; apply Ideal.subset_span; simp)
 
 Depends on / 依赖: Ideal.mem_span_pair.mp, Ideal.subset_span, mem_span_pair, span_gcd, subset_span
@@ -639,7 +639,7 @@ definition toGCDDomain
 
 中文:
 定义 toGCDDomain
-  签名: [IsBezout R] [IsCancelMulZero R] [DecidableEq R]
+  签名: [是Bezout R] [是乘零消去 R] [DecidableEq R]
   定义体: gcdMonoidOfGCD (gcd · ·) (gcd_dvd_left · ·) (gcd_dvd_right · ·) dvd_gcd
 
 Depends on / 依赖: dvd_gcd, gcdMonoidOfGCD, gcd_dvd_left, gcd_dvd_right
@@ -657,8 +657,8 @@ instance [IsBezout
   classical exact ⟨toGCDDomain R⟩
 
 中文:
-实例 [IsBezout
-  签名: R] [IsCancelMulZero R] : IsGCDMonoid R
+实例 [是Bezout
+  签名: R] [是乘零消去 R] : IsGCDMonoid R
   定义体: by
   classical exact ⟨toGCDDomain R⟩
 
@@ -678,8 +678,8 @@ theorem associated_gcd_gcd
 
 中文:
 定理 associated_gcd_gcd
-  条件: [GCDMonoid R]
-  结论: Associated (IsBezout.gcd x y) (GCDMonoid.gcd x y)
+  条件: [最大公约数幺半群 R]
+  结论: Associated (是Bezout.最大公约数 x y) (最大公约数幺半群.最大公约数 x y)
   证明: gcd_greatest_associated (gcd_dvd_left _ _) (gcd_dvd_right _ _) (fun _ => dvd_gcd)
 
 Depends on / 依赖: dvd_gcd, gcd_dvd_left, gcd_dvd_right, gcd_greatest_associated
@@ -704,8 +704,8 @@ lemma Finset.gcd_eq_sum_mul
     rw [← hxy]; rw [add_mul]; rw [mul_comm x]; rw [mul_comm y] 
 
 中文:
-引理 Finset.gcd_eq_sum_mul
-  结论: {α : 类型} [CommRing R] [IsBezout R] [NormalizedGCDMonoid R]
+引理 有限集.gcd_eq_sum_mul
+  结论: {α : 类型} [交换环 R] [是Bezout R] [正规化最大公约数幺半群 R]
   证明: by classical
   induction s using Finset.induction with
   | empty => simp
@@ -757,7 +757,7 @@ theorem to_maximal_ideal
 
 中文:
 定理 to_maximal_ideal
-  结论: [CommRing R] [IsDomain R] [IsPrincipalIdealRing R] {S : Ideal R}
+  结论: [交换环 R] [是整环 R] [是主理想环 R] {S : 理想 R}
   证明: isMaximal_iff.2
     ⟨(ne_top_iff_one S).1 hpi.1, by
       intro T x hST hxS hxT
@@ -806,7 +806,7 @@ theorem mod_mem_iff
 
 中文:
 定理 mod_mem_iff
-  条件: {S : Ideal R} {x y : R} (hy : y in S)
+  条件: {S : 理想 R} {x y : R} (hy : y in S)
   结论: x % y in S ↔ x in S
   证明: ⟨fun hxy => div_add_mod x y ▸ S.add_mem (S.mul_mem_right _ hy) hxy, fun hx =>
     (mod_eq_sub_mul_div x y).symm ▸ S.sub_mem hx (S.mul_mem_right _ hy)⟩
@@ -855,8 +855,8 @@ theorem IsField.isPrincipalIdealRing
   proof: @EuclideanDomain.to_principal_ideal_domain R (@Field.toEuclideanDomain R h.toField)
 
 中文:
-定理 IsField.isPrincipalIdealRing
-  条件: {R : 类型} [Ring R] (h : IsField R)
+定理 是域.isPrincipalIdealRing
+  条件: {R : 类型} [环 R] (h : 是域 R)
   证明: @EuclideanDomain.to_principal_ideal_domain R (@Field.toEuclideanDomain R h.toField)
 
 Depends on / 依赖: EuclideanDomain, EuclideanDomain.to_principal_ideal_domain, Field.toEuclideanDomain, h.toField, toEuclideanDomain, toField, to_principal_ideal_domain
@@ -883,7 +883,7 @@ theorem isMaximal_of_irreducible
 
 中文:
 定理 isMaximal_of_irreducible
-  结论: [CommSemiring R] [IsPrincipalIdealRing R] {p : R}
+  结论: [交换半环 R] [是主理想环 R] {p : R}
   证明: ⟨⟨mt Ideal.span_singleton_eq_top.1 hp.1, fun I hI => by
       rcases principal I with ⟨a, rfl⟩
       rw [Ideal.submodule_span_eq]; rw [Ideal.span_singleton_eq_top]
@@ -909,7 +909,7 @@ theorem _root_.Ideal.irreducible_iff_isMaximal_span_singleton
   proof: ⟨isMaximal_of_irreducible, Ideal.irreducible_of_isMaximal_span_singleton hp⟩
 
 中文:
-定理 _root_.Ideal.irreducible_iff_isMaximal_span_singleton
+定理 _root_.理想.irreducible_iff_isMaximal_span_singleton
   证明: ⟨isMaximal_of_irreducible, Ideal.irreducible_of_isMaximal_span_singleton hp⟩
 
 Depends on / 依赖: Ideal.irreducible_of_isMaximal_span_singleton, irreducible_of_isMaximal_span_singleton, isMaximal_of_irreducible
@@ -976,7 +976,7 @@ theorem ne_zero_of_mem_factors
 
 中文:
 定理 ne_zero_of_mem_factors
-  结论: {R : 类型v} [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
+  结论: {R : 类型v} [交换环 R] [是整环 R] [是主理想环 R]
   证明: Irreducible.ne_zero ((factors_spec a ha).1 b hb)
 
 Depends on / 依赖: Irreducible, Irreducible.ne_zero, factors_spec, ne_zero
@@ -998,7 +998,7 @@ theorem mem_submonoid_of_factors_subset_of_units_subset
 
 中文:
 定理 mem_submonoid_of_factors_subset_of_units_subset
-  结论: (s : Submonoid R) {a : R} (ha : a != 0)
+  结论: (s : 子幺半群 R) {a : R} (ha : a != 0)
   证明: by
   rcases (factors_spec a ha).2 with ⟨c, hc⟩
   rw [← hc]
@@ -1022,7 +1022,7 @@ theorem ringHom_mem_submonoid_of_factors_subset_of_units_subset
 
 中文:
 定理 ringHom_mem_submonoid_of_factors_subset_of_units_subset
-  结论: {R S : 类型} [CommRing R]
+  结论: {R S : 类型} [交换环 R]
   证明: mem_submonoid_of_factors_subset_of_units_subset (s.comap f.toMonoidHom) ha h hf
 
 Depends on / 依赖: f.toMonoidHom, mem_submonoid_of_factors_subset_of_units_subset, s.comap, toMonoidHom
@@ -1059,8 +1059,8 @@ theorem Submodule.IsPrincipal.map
       rw [← Set.image_singleton]; rw [← map_span]; rw [span_singleton_generator]⟩⟩
 
 中文:
-定理 Submodule.IsPrincipal.map
-  结论: (f : M ->ₗ[R] N) {S : Submodule R M}
+定理 子模.是Principal.map
+  结论: (f : M ->ₗ[R] N) {S : 子模 R M}
   证明: ⟨⟨f (IsPrincipal.generator S), by
       rw [← Set.image_singleton]; rw [← map_span]; rw [span_singleton_generator]⟩⟩
 
@@ -1082,8 +1082,8 @@ theorem Submodule.IsPrincipal.of_comap
   exact hI.map f
 
 中文:
-定理 Submodule.IsPrincipal.of_comap
-  结论: (f : M ->ₗ[R] N) (hf : Function.Surjective f)
+定理 子模.是Principal.of_comap
+  结论: (f : M ->ₗ[R] N) (hf : 函数.满射 f)
   证明: by
   rw [← Submodule.map_comap_eq_of_surjective hf S]
   exact hI.map f
@@ -1105,8 +1105,8 @@ theorem Submodule.IsPrincipal.map_ringHom
       rw [Ideal.submodule_span_eq]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [Ideal.span_singleton_generator]⟩⟩
 
 中文:
-定理 Submodule.IsPrincipal.map_ringHom
-  结论: (f : F) {I : Ideal R}
+定理 子模.是Principal.map_ringHom
+  结论: (f : F) {I : 理想 R}
   证明: ⟨⟨f (IsPrincipal.generator I), by
       rw [Ideal.submodule_span_eq]; rw [← Set.image_singleton]; rw [← Ideal.map_span]; rw [Ideal.span_singleton_generator]⟩⟩
 
@@ -1128,8 +1128,8 @@ theorem Ideal.IsPrincipal.of_comap
   exact hI.map_ringHom f
 
 中文:
-定理 Ideal.IsPrincipal.of_comap
-  结论: (f : F) (hf : Function.Surjective f) (I : Ideal S)
+定理 理想.是Principal.of_comap
+  结论: (f : F) (hf : 函数.满射 f) (I : 理想 S)
   证明: by
   rw [← map_comap_of_surjective f hf I]
   exact hI.map_ringHom f
@@ -1150,8 +1150,8 @@ theorem IsPrincipalIdealRing.of_surjective
   proof: ⟨fun I => Ideal.IsPrincipal.of_comap f hf I⟩
 
 中文:
-定理 IsPrincipalIdealRing.of_surjective
-  结论: [IsPrincipalIdealRing R] (f : F)
+定理 是主理想环.of_surjective
+  结论: [是主理想环 R] (f : F)
   证明: ⟨fun I => Ideal.IsPrincipal.of_comap f hf I⟩
 
 Depends on / 依赖: Ideal.IsPrincipal.of_comap, IsPrincipal, of_comap
@@ -1194,7 +1194,7 @@ theorem isPrincipalIdealRing_pi_iff
 
 中文:
 定理 isPrincipalIdealRing_pi_iff
-  条件: {ι} [Finite ι] {R : ι -> 类型} [对任意 i, Semiring (R i)]
+  条件: {ι} [有限 ι] {R : ι -> 类型} [对任意 i, 半环 (R i)]
   证明: h.of_surjective (Pi.evalRingHom R i) (Function.surjective_eval _)
   mpr _ := inferInstance
 
@@ -1246,7 +1246,7 @@ theorem dvd_or_isCoprime
 
 中文:
 定理 dvd_or_isCoprime
-  条件: (x y : R) (h : Irreducible x)
+  条件: (x y : R) (h : 不可约 x)
   结论: x ∣ y ∨ IsCoprime x y
   证明: h.dvd_or_isRelPrime.imp_right IsRelPrime.isCoprime
 
@@ -1264,8 +1264,8 @@ theorem Irreducible.coprime_iff_not_dvd
   proof: by rw [← isRelPrime_iff_isCoprime, hp.isRelPrime_iff_not_dvd]
 
 中文:
-定理 Irreducible.coprime_iff_not_dvd
-  条件: {p n : R} (hp : Irreducible p)
+定理 不可约.coprime_iff_not_dvd
+  条件: {p n : R} (hp : 不可约 p)
   证明: by rw [← isRelPrime_iff_isCoprime, hp.isRelPrime_iff_not_dvd]
 
 Depends on / 依赖: hp.isRelPrime_iff_not_dvd, isRelPrime_iff_isCoprime, isRelPrime_iff_not_dvd
@@ -1283,8 +1283,8 @@ theorem Irreducible.dvd_iff_not_isCoprime
   proof: iff_not_comm.2 hp.coprime_iff_not_dvd
 
 中文:
-定理 Irreducible.dvd_iff_not_isCoprime
-  条件: {p n : R} (hp : Irreducible p)
+定理 不可约.dvd_iff_not_isCoprime
+  条件: {p n : R} (hp : 不可约 p)
   结论: p ∣ n ↔ ¬IsCoprime p n
   证明: iff_not_comm.2 hp.coprime_iff_not_dvd
 
@@ -1302,8 +1302,8 @@ theorem Irreducible.coprime_pow_of_not_dvd
   proof: (hp.coprime_iff_not_dvd.2 h).symm.pow_right
 
 中文:
-定理 Irreducible.coprime_pow_of_not_dvd
-  条件: {p a : R} (m : 自然数) (hp : Irreducible p) (h : ¬p ∣ a)
+定理 不可约.coprime_pow_of_not_dvd
+  条件: {p a : R} (m : 自然数) (hp : 不可约 p) (h : ¬p ∣ a)
   证明: (hp.coprime_iff_not_dvd.2 h).symm.pow_right
 
 Depends on / 依赖: coprime_iff_not_dvd, hp.coprime_iff_not_dvd, pow_right, symm.pow_right
@@ -1322,8 +1322,8 @@ theorem Irreducible.isCoprime_or_dvd
   proof: (_root_.em _).imp_right hp.dvd_iff_not_isCoprime.2
 
 中文:
-定理 Irreducible.isCoprime_or_dvd
-  条件: {p : R} (hp : Irreducible p) (i : R)
+定理 不可约.isCoprime_or_dvd
+  条件: {p : R} (hp : 不可约 p) (i : R)
   结论: IsCoprime p i ∨ p ∣ i
   证明: (_root_.em _).imp_right hp.dvd_iff_not_isCoprime.2
 
@@ -1350,7 +1350,7 @@ theorem IsBezout.span_gcd_eq_span_gcd
     (GCDMonoid.dvd_gcd (IsBezout.gcd_dvd_left _ _) <| IsBezout.gcd_dvd_right _ _)
 
 中文:
-定理 IsBezout.span_gcd_eq_span_gcd
+定理 是Bezout.span_gcd_eq_span_gcd
   条件: (x y : R)
   证明: by
   rw [Ideal.span_singleton_eq_span_singleton]
@@ -1380,7 +1380,7 @@ theorem span_gcd
 中文:
 定理 span_gcd
   条件: (x y : R)
-  结论: span {gcd x y} = span {x, y}
+  结论: span {最大公约数 x y} = span {x, y}
   证明: by
   rw [← IsBezout.span_gcd]; rw [IsBezout.span_gcd_eq_span_gcd]
 
@@ -1401,9 +1401,9 @@ theorem gcd_dvd_iff_exists
     Ideal.mem_span_singleton]
 
 中文:
-定理 gcd_dvd_iff_exists
+定理 gcd_dvd_iff_存在
   条件: (a b : R) {z}
-  结论: gcd a b ∣ z ↔ 存在 x y, z = a * x + b * y
+  结论: 最大公约数 a b ∣ z ↔ 存在 x y, z = a * x + b * y
   证明: by
   simp_rw [mul_comm a, mul_comm b, @eq_comm _ z, ← Ideal.mem_span_pair, ← span_gcd,
     Ideal.mem_span_singleton]
@@ -1425,9 +1425,9 @@ theorem exists_gcd_eq_mul_add_mul
   rw [← gcd_dvd_iff_exists]
 
 中文:
-定理 exists_gcd_eq_mul_add_mul
+定理 存在_gcd_eq_mul_add_mul
   条件: (a b : R)
-  结论: 存在 x y, gcd a b = a * x + b * y
+  结论: 存在 x y, 最大公约数 a b = a * x + b * y
   证明: by
   rw [← gcd_dvd_iff_exists]
 
@@ -1449,7 +1449,7 @@ theorem gcd_isUnit_iff
 中文:
 定理 gcd_isUnit_iff
   条件: (x y : R)
-  结论: IsUnit (gcd x y) ↔ IsCoprime x y
+  结论: 是单位 (最大公约数 x y) ↔ IsCoprime x y
   证明: by
   rw [IsCoprime]; rw [← Ideal.mem_span_pair]; rw [← span_gcd]; rw [← span_singleton_eq_top]; rw [eq_top_iff_one]
 
@@ -1470,8 +1470,8 @@ theorem Prime.coprime_iff_not_dvd
   proof: hp.irreducible.coprime_iff_not_dvd
 
 中文:
-定理 Prime.coprime_iff_not_dvd
-  条件: {p n : R} (hp : Prime p)
+定理 素.coprime_iff_not_dvd
+  条件: {p n : R} (hp : 素 p)
   结论: IsCoprime p n ↔ ¬p ∣ n
   证明: hp.irreducible.coprime_iff_not_dvd
 -/
@@ -1490,7 +1490,7 @@ theorem exists_associated_pow_of_mul_eq_pow'
   exact exists_associated_pow_of_mul_eq_pow ((gcd_isUnit_iff _ _).mpr hab) h
 
 中文:
-定理 exists_associated_pow_of_mul_eq_pow'
+定理 存在_associated_pow_of_mul_eq_pow'
   结论: {a b c : R} (hab : IsCoprime a b) {k : 自然数}
   证明: by
   classical
@@ -1517,7 +1517,7 @@ theorem exists_associated_pow_of_associated_pow_mul
 ((isCoprime_mul_unit_right_right u.isUnit a b).mpr hab) mul_assoc a _ _ ▸ hu
 
 中文:
-定理 exists_associated_pow_of_associated_pow_mul
+定理 存在_associated_pow_of_associated_pow_mul
   结论: {a b c : R} (hab : IsCoprime a b) {k : 自然数}
   证明: by
   obtain ⟨u, hu⟩ := h.symm
@@ -1610,7 +1610,7 @@ theorem nonPrincipals_eq_empty_iff
 
 中文:
 定理 nonPrincipals_eq_empty_iff
-  结论: nonPrincipals R = ∅ ↔ IsPrincipalIdealRing R
+  结论: nonPrincipals R = ∅ ↔ 是主理想环 R
   证明: by
   simp [Set.eq_empty_iff_forall_notMem, isPrincipalIdealRing_iff]
 
@@ -1634,7 +1634,7 @@ theorem nonPrincipals_zorn
 
 中文:
 定理 nonPrincipals_zorn
-  结论: (hR : ¬IsPrincipalIdealRing R) (c : Set (Ideal R))
+  结论: (hR : ¬是主理想环 R) (c : 集合 (理想 R))
   证明: by
   by_cases H : c.Nonempty
   · obtain ⟨K, hKmem⟩ := Set.nonempty_def.1 H
@@ -1665,8 +1665,8 @@ theorem exists_maximal_not_isPrincipal
   proof: zorn_le₀ _ (nonPrincipals_zorn hR)
 
 中文:
-定理 exists_maximal_not_isPrincipal
-  条件: (hR : ¬IsPrincipalIdealRing R)
+定理 存在_maximal_not_isPrincipal
+  条件: (hR : ¬是主理想环 R)
   证明: zorn_le₀ _ (nonPrincipals_zorn hR)
 
 Depends on / 依赖: nonPrincipals_zorn
@@ -1695,7 +1695,7 @@ lemma span_singleton_inf_span_singleton
 
 中文:
 引理 span_singleton_inf_span_singleton
-  条件: [EuclideanDomain R] [GCDMonoid R] (n m : R)
+  条件: [欧几里得整环 R] [最大公约数幺半群 R] (n m : R)
   证明: by
   rw [Ideal.ext_iff]
   intro x
@@ -1725,8 +1725,8 @@ lemma Ideal.exists_normalized_span_of_isPrincipal
   simp [Ideal.mem_span_singleton]
 
 中文:
-引理 Ideal.exists_normalized_span_of_isPrincipal
-  结论: {R : 类型} [CommSemiring R]
+引理 理想.存在_normalized_span_of_isPrincipal
+  结论: {R : 类型} [交换半环 R]
   证明: by
   obtain ⟨x, rfl⟩ := ‹I.IsPrincipal›
   refine ⟨normalize x, normalize_idem x, le_antisymm ?_ ?_⟩ <;>

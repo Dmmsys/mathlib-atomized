@@ -38,8 +38,8 @@ theorem Iso.eq_whisker
   proof: by rw [w]
 
 中文:
-定理 Iso.eq_whisker
-  结论: {C : 类型} [Category* C]
+定理 同构.eq_whisker
+  结论: {C : 类型} [范畴* C]
   证明: by rw [w]
 
 Depends on / 依赖: Icc_prod_eq, isCompact_Icc, isCompact_Icc.prod

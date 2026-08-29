@@ -64,8 +64,8 @@ theorem mk.eta
 
 中文:
 定理 mk.eta
-  条件: {p : PProd α β}
-  结论: PProd.mk p.1 p.2 = p
+  条件: {p : 命题积类型 α β}
+  结论: 命题积类型.mk p.1 p.2 = p
   证明: rfl
 
 @[simp]
@@ -86,8 +86,8 @@ theorem «forall»
 @[simp]
 
 中文:
-定理 «forall»
-  条件: {p : PProd α β -> 命题}
+定理 «对任意»
+  条件: {p : 命题积类型 α β -> 命题}
   结论: (对任意 x, p x) ↔ 对任意 a b, p ⟨a, b⟩
   证明: ⟨fun h a b => h ⟨a, b⟩, fun h ⟨a, b⟩ => h a b⟩
 
@@ -107,8 +107,8 @@ theorem «exists»
   proof: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
 
 中文:
-定理 «exists»
-  条件: {p : PProd α β -> 命题}
+定理 «存在»
+  条件: {p : 命题积类型 α β -> 命题}
   结论: (存在 x, p x) ↔ 存在 a b, p ⟨a, b⟩
   证明: ⟨fun ⟨⟨a, b⟩, h⟩ => ⟨a, b, h⟩, fun ⟨a, b, h⟩ => ⟨⟨a, b⟩, h⟩⟩
 -/
@@ -125,9 +125,9 @@ theorem forall'
   proof: PProd.forall
 
 中文:
-定理 forall'
+定理 对任意'
   条件: {p : α -> β -> 命题}
-  结论: (对任意 x : PProd α β, p x.1 x.2) ↔ 对任意 a b, p a b
+  结论: (对任意 x : 命题积类型 α β, p x.1 x.2) ↔ 对任意 a b, p a b
   证明: PProd.forall
 
 Depends on / 依赖: PProd.forall
@@ -145,9 +145,9 @@ theorem exists'
   proof: PProd.exists
 
 中文:
-定理 exists'
+定理 存在'
   条件: {p : α -> β -> 命题}
-  结论: (存在 x : PProd α β, p x.1 x.2) ↔ 存在 a b, p a b
+  结论: (存在 x : 命题积类型 α β, p x.1 x.2) ↔ 存在 a b, p a b
   证明: PProd.exists
 
 Depends on / 依赖: PProd.exists
@@ -169,8 +169,8 @@ theorem Function.Injective.pprod_map
   congr_arg₂ PProd.mk (hf A) (hg B)
 
 中文:
-定理 Function.Injective.pprod_map
-  条件: {f : α -> β} {g : γ -> δ} (hf : Injective f) (hg : Injective g)
+定理 函数.单射.pprod_map
+  条件: {f : α -> β} {g : γ -> δ} (hf : 单射 f) (hg : 单射 g)
   证明: fun _ _ h =>
   have A := congr_arg PProd.fst h
   have B := congr_arg PProd.snd h

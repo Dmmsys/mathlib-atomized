@@ -100,7 +100,7 @@ definition inl
 
 中文:
 定义 inl
-  签名: [Zero M] (r : R)
+  签名: [零 M] (r : R)
   定义体: (r, 0)
 -/
 def inl [Zero M] (r : R) : tsze R M :=
@@ -116,7 +116,7 @@ definition inr
 
 中文:
 定义 inr
-  签名: [Zero R] (m : M)
+  签名: [零 R] (m : M)
   定义体: (0, m)
 
 Depends on / 依赖: f.retract, isClosedImmersion_of_comp_eq_id, retract
@@ -247,7 +247,7 @@ theorem fst_inl
 
 中文:
 定理 fst_inl
-  条件: [Zero M] (r : R)
+  条件: [零 M] (r : R)
   结论: (inl r : tsze R M).fst = r
   证明: rfl
 
@@ -270,7 +270,7 @@ theorem snd_inl
 
 中文:
 定理 snd_inl
-  条件: [Zero M] (r : R)
+  条件: [零 M] (r : R)
   结论: (inl r : tsze R M).snd = 0
   证明: rfl
 
@@ -293,7 +293,7 @@ theorem fst_comp_inl
 
 中文:
 定理 fst_comp_inl
-  条件: [Zero M]
+  条件: [零 M]
   结论: fst ∘ (inl : R -> tsze R M) = id
   证明: rfl
 
@@ -314,7 +314,7 @@ theorem snd_comp_inl
 
 中文:
 定理 snd_comp_inl
-  条件: [Zero M]
+  条件: [零 M]
   结论: snd ∘ (inl : R -> tsze R M) = 0
   证明: rfl
 -/
@@ -341,7 +341,7 @@ theorem fst_inr
 
 中文:
 定理 fst_inr
-  条件: [Zero R] (m : M)
+  条件: [零 R] (m : M)
   结论: (inr m : tsze R M).fst = 0
   证明: rfl
 
@@ -366,7 +366,7 @@ theorem snd_inr
 
 中文:
 定理 snd_inr
-  条件: [Zero R] (m : M)
+  条件: [零 R] (m : M)
   结论: (inr m : tsze R M).snd = m
   证明: rfl
 
@@ -391,7 +391,7 @@ theorem fst_comp_inr
 
 中文:
 定理 fst_comp_inr
-  条件: [Zero R]
+  条件: [零 R]
   结论: fst ∘ (inr : M -> tsze R M) = 0
   证明: rfl
 
@@ -414,7 +414,7 @@ theorem snd_comp_inr
 
 中文:
 定理 snd_comp_inr
-  条件: [Zero R]
+  条件: [零 R]
   结论: snd ∘ (inr : M -> tsze R M) = id
   证明: rfl
 -/
@@ -434,8 +434,8 @@ theorem fst_surjective
 
 中文:
 定理 fst_surjective
-  条件: [Nonempty M]
-  结论: Function.Surjective (fst : tsze R M -> R)
+  条件: [非空 M]
+  结论: 函数.满射 (fst : tsze R M -> R)
   证明: Prod.fst_surjective
 
 Depends on / 依赖: Prod.fst_surjective, fst_surjective
@@ -454,8 +454,8 @@ theorem snd_surjective
 
 中文:
 定理 snd_surjective
-  条件: [Nonempty R]
-  结论: Function.Surjective (snd : tsze R M -> M)
+  条件: [非空 R]
+  结论: 函数.满射 (snd : tsze R M -> M)
   证明: Prod.snd_surjective
 
 Depends on / 依赖: Prod.snd_surjective, snd_surjective
@@ -474,8 +474,8 @@ theorem inl_injective
 
 中文:
 定理 inl_injective
-  条件: [Zero M]
-  结论: Function.Injective (inl : R -> tsze R M)
+  条件: [零 M]
+  结论: 函数.单射 (inl : R -> tsze R M)
   证明: Function.LeftInverse.injective fst_inl _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, fst_inl, injective
@@ -494,8 +494,8 @@ theorem inr_injective
 
 中文:
 定理 inr_injective
-  条件: [Zero R]
-  结论: Function.Injective (inr : M -> tsze R M)
+  条件: [零 R]
+  结论: 函数.单射 (inr : M -> tsze R M)
   证明: Function.LeftInverse.injective snd_inr _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, snd_inr
@@ -524,7 +524,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: [Inhabited R] [Inhabited M]
+  签名: [可居 R] [可居 M]
   定义体: inferInstanceAs Inhabited (R × M)
 
 Depends on / 依赖: Inhabited
@@ -542,7 +542,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: [Zero R] [Zero M]
+  签名: [零 R] [零 M]
   定义体: inferInstanceAs Zero (R × M)
 -/
 instance zero [Zero R] [Zero M] : Zero (tsze R M) :=
@@ -558,7 +558,7 @@ instance add
 
 中文:
 实例 add
-  签名: [Add R] [Add M]
+  签名: [加法 R] [加法 M]
   定义体: inferInstanceAs Add (R × M)
 -/
 instance add [Add R] [Add M] : Add (tsze R M) :=
@@ -574,7 +574,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: [Sub R] [Sub M]
+  签名: [减法 R] [减法 M]
   定义体: inferInstanceAs Sub (R × M)
 -/
 instance sub [Sub R] [Sub M] : Sub (tsze R M) :=
@@ -590,7 +590,7 @@ instance neg
 
 中文:
 实例 neg
-  签名: [Neg R] [Neg M]
+  签名: [取负 R] [取负 M]
   定义体: inferInstanceAs Neg (R × M)
 -/
 instance neg [Neg R] [Neg M] : Neg (tsze R M) :=
@@ -606,7 +606,7 @@ instance addSemigroup
 
 中文:
 实例 addSemigroup
-  签名: [AddSemigroup R] [AddSemigroup M]
+  签名: [加法半群 R] [加法半群 M]
   定义体: inferInstanceAs AddSemigroup (R × M)
 
 Depends on / 依赖: AddSemigroup
@@ -624,7 +624,7 @@ instance addZeroClass
 
 中文:
 实例 addZeroClass
-  签名: [AddZeroClass R] [AddZeroClass M]
+  签名: [加法零类 R] [加法零类 M]
   定义体: inferInstanceAs AddZeroClass (R × M)
 
 Depends on / 依赖: AddZeroClass
@@ -642,7 +642,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul S R] [SMul S M]
+  签名: [标量乘法 S R] [标量乘法 S M]
   定义体: inferInstanceAs SMul S (R × M)
 -/
 instance smul [SMul S R] [SMul S M] : SMul S (tsze R M) :=
@@ -659,7 +659,7 @@ __ : AddMonoid (tsze R M) := inferInstanceAs AddMonoid (R × M)
 
 中文:
 实例 addMonoid
-  签名: [AddMonoid R] [AddMonoid M]
+  签名: [加法幺半群 R] [加法幺半群 M]
   定义体: letI := smul (S := Nat) (R := R) (M := M); (· • ·)
 __ : AddMonoid (tsze R M) := inferInstanceAs AddMonoid (R × M)
 -/
@@ -678,7 +678,7 @@ __ : AddGroup (tsze R M) := inferInstanceAs AddGroup (R × M)
 
 中文:
 实例 addGroup
-  签名: [AddGroup R] [AddGroup M]
+  签名: [加法群 R] [加法群 M]
   定义体: letI := smul (S := Int) (R := R) (M := M); (· • ·)
 __ : AddGroup (tsze R M) := inferInstanceAs AddGroup (R × M)
 -/
@@ -696,7 +696,7 @@ instance addCommSemigroup
 
 中文:
 实例 addCommSemigroup
-  签名: [AddCommSemigroup R] [AddCommSemigroup M]
+  签名: [加法交换半群 R] [加法交换半群 M]
   定义体: inferInstanceAs AddCommSemigroup (R × M)
 
 Depends on / 依赖: AddCommSemigroup
@@ -714,7 +714,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: [AddCommMonoid R] [AddCommMonoid M]
+  签名: [加法交换幺半群 R] [加法交换幺半群 M]
   定义体: inferInstanceAs AddCommMonoid (R × M)
 
 Depends on / 依赖: AddCommMonoid
@@ -732,7 +732,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: [AddCommGroup R] [AddCommGroup M]
+  签名: [加法交换群 R] [加法交换群 M]
   定义体: inferInstanceAs AddCommGroup (R × M)
 
 Depends on / 依赖: AddCommGroup
@@ -750,7 +750,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul T R] [SMul T M] [SMul S R] [SMul S M] [SMul T S]
+  签名: [标量乘法 T R] [标量乘法 T M] [标量乘法 S R] [标量乘法 S M] [标量乘法 T S]
   定义体: inferInstanceAs IsScalarTower T S (R × M)
 
 Depends on / 依赖: IsScalarTower
@@ -769,7 +769,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMul T R] [SMul T M] [SMul S R] [SMul S M]
+  签名: [标量乘法 T R] [标量乘法 T M] [标量乘法 S R] [标量乘法 S M]
   定义体: inferInstanceAs SMulCommClass T S (R × M)
 
 Depends on / 依赖: SMulCommClass
@@ -788,7 +788,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul S R] [SMul S M] [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsCentralScalar S R]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M] [中心标量 S R]
   定义体: inferInstanceAs IsCentralScalar S (R × M)
 
 Depends on / 依赖: IsCentralScalar
@@ -807,7 +807,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: [Monoid S] [MulAction S R] [MulAction S M]
+  签名: [幺半群 S] [乘法作用 S R] [乘法作用 S M]
   定义体: inferInstanceAs MulAction S (R × M)
 
 Depends on / 依赖: MulAction
@@ -825,7 +825,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [Monoid S] [AddMonoid R] [AddMonoid M]
+  签名: [幺半群 S] [加法幺半群 R] [加法幺半群 M]
   定义体: inferInstanceAs DistribMulAction S (R × M)
 
 Depends on / 依赖: DistribMulAction
@@ -844,7 +844,7 @@ instance module
 
 中文:
 实例 module
-  签名: [Semiring S] [AddCommMonoid R] [AddCommMonoid M] [Module S R] [Module S M]
+  签名: [半环 S] [加法交换幺半群 R] [加法交换幺半群 M] [模 S R] [模 S M]
   定义体: inferInstanceAs Module S (R × M)
 
 Depends on / 依赖: Module
@@ -863,7 +863,7 @@ instance instNontrivial_of_left
 
 中文:
 实例 instNontrivial_of_left
-  签名: {R M : 类型} [Nontrivial R] [Nonempty M]
+  签名: {R M : 类型} [非平凡 R] [非空 M]
   定义体: inferInstanceAs Nontrivial (R × M)
 
 Depends on / 依赖: Nontrivial
@@ -884,7 +884,7 @@ instance instNontrivial_of_right
 
 中文:
 实例 instNontrivial_of_right
-  签名: {R M : 类型} [Nonempty R] [Nontrivial M]
+  签名: {R M : 类型} [非空 R] [非平凡 M]
   定义体: inferInstanceAs Nontrivial (R × M)
 
 @[simp]
@@ -909,7 +909,7 @@ theorem fst_zero
 
 中文:
 定理 fst_zero
-  条件: [Zero R] [Zero M]
+  条件: [零 R] [零 M]
   结论: (0 : tsze R M).fst = 0
   证明: rfl
 
@@ -934,7 +934,7 @@ theorem snd_zero
 
 中文:
 定理 snd_zero
-  条件: [Zero R] [Zero M]
+  条件: [零 R] [零 M]
   结论: (0 : tsze R M).snd = 0
   证明: rfl
 
@@ -959,7 +959,7 @@ theorem fst_add
 
 中文:
 定理 fst_add
-  条件: [Add R] [Add M] (x₁ x₂ : tsze R M)
+  条件: [加法 R] [加法 M] (x₁ x₂ : tsze R M)
   结论: (x₁ + x₂).fst = x₁.fst + x₂.fst
   证明: rfl
 
@@ -984,7 +984,7 @@ theorem snd_add
 
 中文:
 定理 snd_add
-  条件: [Add R] [Add M] (x₁ x₂ : tsze R M)
+  条件: [加法 R] [加法 M] (x₁ x₂ : tsze R M)
   结论: (x₁ + x₂).snd = x₁.snd + x₂.snd
   证明: rfl
 
@@ -1009,7 +1009,7 @@ theorem fst_neg
 
 中文:
 定理 fst_neg
-  条件: [Neg R] [Neg M] (x : tsze R M)
+  条件: [取负 R] [取负 M] (x : tsze R M)
   结论: (-x).fst = -x.fst
   证明: rfl
 
@@ -1034,7 +1034,7 @@ theorem snd_neg
 
 中文:
 定理 snd_neg
-  条件: [Neg R] [Neg M] (x : tsze R M)
+  条件: [取负 R] [取负 M] (x : tsze R M)
   结论: (-x).snd = -x.snd
   证明: rfl
 
@@ -1057,7 +1057,7 @@ theorem fst_sub
 
 中文:
 定理 fst_sub
-  条件: [Sub R] [Sub M] (x₁ x₂ : tsze R M)
+  条件: [减法 R] [减法 M] (x₁ x₂ : tsze R M)
   结论: (x₁ - x₂).fst = x₁.fst - x₂.fst
   证明: rfl
 
@@ -1080,7 +1080,7 @@ theorem snd_sub
 
 中文:
 定理 snd_sub
-  条件: [Sub R] [Sub M] (x₁ x₂ : tsze R M)
+  条件: [减法 R] [减法 M] (x₁ x₂ : tsze R M)
   结论: (x₁ - x₂).snd = x₁.snd - x₂.snd
   证明: rfl
 
@@ -1103,7 +1103,7 @@ theorem fst_smul
 
 中文:
 定理 fst_smul
-  条件: [SMul S R] [SMul S M] (s : S) (x : tsze R M)
+  条件: [标量乘法 S R] [标量乘法 S M] (s : S) (x : tsze R M)
   结论: (s • x).fst = s • x.fst
   证明: rfl
 
@@ -1126,7 +1126,7 @@ theorem snd_smul
 
 中文:
 定理 snd_smul
-  条件: [SMul S R] [SMul S M] (s : S) (x : tsze R M)
+  条件: [标量乘法 S R] [标量乘法 S M] (s : S) (x : tsze R M)
   结论: (s • x).snd = s • x.snd
   证明: rfl
 
@@ -1145,7 +1145,7 @@ theorem fst_sum
 
 中文:
 定理 fst_sum
-  条件: {ι} [AddCommMonoid R] [AddCommMonoid M] (s : Finset ι) (f : ι -> tsze R M)
+  条件: {ι} [加法交换幺半群 R] [加法交换幺半群 M] (s : 有限集 ι) (f : ι -> tsze R M)
   证明: Prod.fst_sum
 
 Depends on / 依赖: Prod.fst_sum, fst_sum
@@ -1164,7 +1164,7 @@ theorem snd_sum
 
 中文:
 定理 snd_sum
-  条件: {ι} [AddCommMonoid R] [AddCommMonoid M] (s : Finset ι) (f : ι -> tsze R M)
+  条件: {ι} [加法交换幺半群 R] [加法交换幺半群 M] (s : 有限集 ι) (f : ι -> tsze R M)
   证明: Prod.snd_sum
 
 Depends on / 依赖: Prod.snd_sum, snd_sum
@@ -1191,7 +1191,7 @@ theorem inl_zero
 
 中文:
 定理 inl_zero
-  条件: [Zero R] [Zero M]
+  条件: [零 R] [零 M]
   结论: (inl 0 : tsze R M) = 0
   证明: rfl
 
@@ -1213,7 +1213,7 @@ theorem inl_add
 
 中文:
 定理 inl_add
-  条件: [Add R] [AddZeroClass M] (r₁ r₂ : R)
+  条件: [加法 R] [加法零类 M] (r₁ r₂ : R)
   证明: ext rfl (add_zero 0).symm
 
 @[simp]
@@ -1238,7 +1238,7 @@ theorem inl_neg
 
 中文:
 定理 inl_neg
-  条件: [Neg R] [NegZeroClass M] (r : R)
+  条件: [取负 R] [NegZero类 M] (r : R)
   结论: (inl (-r) : tsze R M) = -inl r
   证明: ext rfl neg_zero.symm
 
@@ -1262,7 +1262,7 @@ theorem inl_sub
 
 中文:
 定理 inl_sub
-  条件: [Sub R] [SubNegZeroMonoid M] (r₁ r₂ : R)
+  条件: [减法 R] [SubNegZero幺半群 M] (r₁ r₂ : R)
   证明: ext rfl (sub_zero _).symm
 
 @[simp]
@@ -1284,7 +1284,7 @@ theorem inl_smul
 
 中文:
 定理 inl_smul
-  条件: [Monoid S] [AddMonoid M] [SMul S R] [DistribMulAction S M] (s : S) (r : R)
+  条件: [幺半群 S] [加法幺半群 M] [标量乘法 S R] [分配乘法作用 S M] (s : S) (r : R)
   证明: ext rfl (smul_zero s).symm
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.Over.w, Etale.of_comp, Y.hom, f.left, infer_instance, of_comp, smul_zero
@@ -1303,7 +1303,7 @@ theorem inl_sum
 
 中文:
 定理 inl_sum
-  条件: {ι} [AddCommMonoid R] [AddCommMonoid M] (s : Finset ι) (f : ι -> R)
+  条件: {ι} [加法交换幺半群 R] [加法交换幺半群 M] (s : 有限集 ι) (f : ι -> R)
   证明: map_sum (LinearMap.inl Nat _ _) _ _
 
 Depends on / 依赖: LinearMap, LinearMap.inl, map_sum
@@ -1332,7 +1332,7 @@ theorem inr_zero
 
 中文:
 定理 inr_zero
-  条件: [Zero R] [Zero M]
+  条件: [零 R] [零 M]
   结论: (inr 0 : tsze R M) = 0
   证明: rfl
 
@@ -1354,7 +1354,7 @@ theorem inr_add
 
 中文:
 定理 inr_add
-  条件: [AddZeroClass R] [Add M] (m₁ m₂ : M)
+  条件: [加法零类 R] [加法 M] (m₁ m₂ : M)
   证明: ext (add_zero 0).symm rfl
 
 @[simp]
@@ -1379,7 +1379,7 @@ theorem inr_neg
 
 中文:
 定理 inr_neg
-  条件: [NegZeroClass R] [Neg M] (m : M)
+  条件: [NegZero类 R] [取负 M] (m : M)
   结论: (inr (-m) : tsze R M) = -inr m
   证明: ext neg_zero.symm rfl
 
@@ -1403,7 +1403,7 @@ theorem inr_sub
 
 中文:
 定理 inr_sub
-  条件: [SubNegZeroMonoid R] [Sub M] (m₁ m₂ : M)
+  条件: [SubNegZero幺半群 R] [减法 M] (m₁ m₂ : M)
   证明: ext (sub_zero _).symm rfl
 
 @[simp]
@@ -1425,7 +1425,7 @@ theorem inr_smul
 
 中文:
 定理 inr_smul
-  条件: [Zero R] [SMulZeroClass S R] [SMul S M] (r : S) (m : M)
+  条件: [零 R] [SMulZero类 S R] [标量乘法 S M] (r : S) (m : M)
   证明: ext (smul_zero _).symm rfl
 
 Depends on / 依赖: smul_zero
@@ -1444,7 +1444,7 @@ theorem inr_sum
 
 中文:
 定理 inr_sum
-  条件: {ι} [AddCommMonoid R] [AddCommMonoid M] (s : Finset ι) (f : ι -> M)
+  条件: {ι} [加法交换幺半群 R] [加法交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
   证明: map_sum (LinearMap.inr Nat _ _) _ _
 
 Depends on / 依赖: LinearMap, LinearMap.inr, map_sum
@@ -1465,7 +1465,7 @@ theorem inl_fst_add_inr_snd_eq
 
 中文:
 定理 inl_fst_add_inr_snd_eq
-  条件: [AddZeroClass R] [AddZeroClass M] (x : tsze R M)
+  条件: [加法零类 R] [加法零类 M] (x : tsze R M)
   证明: ext (add_zero x.1) (zero_add x.2)
 
 Depends on / 依赖: add_zero, zero_add
@@ -1487,7 +1487,7 @@ theorem ind
 
 中文:
 定理 ind
-  结论: {R M} [AddZeroClass R] [AddZeroClass M] {P : TrivSqZeroExt R M -> 命题}
+  结论: {R M} [加法零类 R] [加法零类 M] {P : TrivSqZeroExt R M -> 命题}
   证明: inl_fst_add_inr_snd_eq x ▸ inl_add_inr x.1 x.2
 
 Depends on / 依赖: Y.prop, inl_add_inr, inl_fst_add_inr_snd_eq
@@ -1506,7 +1506,7 @@ theorem linearMap_ext
 
 中文:
 定理 linearMap_ext
-  结论: {N} [Semiring S] [AddCommMonoid R] [AddCommMonoid M] [AddCommMonoid N]
+  结论: {N} [半环 S] [加法交换幺半群 R] [加法交换幺半群 M] [加法交换幺半群 N]
   证明: LinearMap.prod_ext (LinearMap.ext hl) (LinearMap.ext hr)
 
 Depends on / 依赖: LinearMap, LinearMap.ext, LinearMap.prod_ext, prod_ext
@@ -1530,7 +1530,7 @@ definition inrHom
 
 中文:
 定义 inrHom
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { LinearMap.inr R R M with toFun := inr }
 
 Depends on / 依赖: LinearMap, LinearMap.inr
@@ -1550,7 +1550,7 @@ definition sndHom
 
 中文:
 定义 sndHom
-  签名: [Semiring R] [AddCommMonoid M] [Module R M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: { LinearMap.snd _ _ _ with toFun := snd }
 
 Depends on / 依赖: LinearMap, LinearMap.snd
@@ -1577,7 +1577,7 @@ instance one
 
 中文:
 实例 one
-  签名: [One R] [Zero M]
+  签名: [幺 R] [零 M]
   定义体: ⟨(1, 0)⟩
 -/
 instance one [One R] [Zero M] : One (tsze R M) :=
@@ -1595,7 +1595,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: [Mul R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M]
+  签名: [乘法 R] [加法 M] [标量乘法 R M] [标量乘法 Rᵐᵒᵖ M]
   定义体: ⟨fun x y => (x.1 * y.1, x.1 •> y.2 + x.2 <• y.1)⟩
 
 @[simp]
@@ -1617,7 +1617,7 @@ theorem fst_one
 
 中文:
 定理 fst_one
-  条件: [One R] [Zero M]
+  条件: [幺 R] [零 M]
   结论: (1 : tsze R M).fst = 1
   证明: rfl
 
@@ -1640,7 +1640,7 @@ theorem snd_one
 
 中文:
 定理 snd_one
-  条件: [One R] [Zero M]
+  条件: [幺 R] [零 M]
   结论: (1 : tsze R M).snd = 0
   证明: rfl
 
@@ -1662,7 +1662,7 @@ theorem fst_mul
 
 中文:
 定理 fst_mul
-  条件: [Mul R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M] (x₁ x₂ : tsze R M)
+  条件: [乘法 R] [加法 M] [标量乘法 R M] [标量乘法 Rᵐᵒᵖ M] (x₁ x₂ : tsze R M)
   证明: rfl
 
 @[simp]
@@ -1682,7 +1682,7 @@ theorem snd_mul
 
 中文:
 定理 snd_mul
-  条件: [Mul R] [Add M] [SMul R M] [SMul Rᵐᵒᵖ M] (x₁ x₂ : tsze R M)
+  条件: [乘法 R] [加法 M] [标量乘法 R M] [标量乘法 Rᵐᵒᵖ M] (x₁ x₂ : tsze R M)
   证明: rfl
 
 Depends on / 依赖: IsFinite, of_isIso
@@ -1709,7 +1709,7 @@ theorem inl_one
 
 中文:
 定理 inl_one
-  条件: [One R] [Zero M]
+  条件: [幺 R] [零 M]
   结论: (inl 1 : tsze R M) = 1
   证明: rfl
 
@@ -1731,7 +1731,7 @@ theorem inl_mul
 
 中文:
 定理 inl_mul
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: ext rfl show (0 : M) = r₁ •> (0 : M) + (0 : M) <• r₂ by rw [smul_zero, zero_add, smul_zero]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst, smul_zero, zero_add
@@ -1750,7 +1750,7 @@ theorem inl_mul_inl
 
 中文:
 定理 inl_mul_inl
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: (inl_mul M r₁ r₂).symm
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, inl_mul, pullback_snd
@@ -1777,7 +1777,7 @@ theorem inr_mul_inr
 
 中文:
 定理 inr_mul_inr
-  条件: [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M] (m₁ m₂ : M)
+  条件: [半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M] (m₁ m₂ : M)
   证明: ext (mul_zero _)
     show (0 : R) •> m₂ + m₁ <• (0 : R) = 0 by rw [zero_smul, zero_add, op_zero, zero_smul]
 
@@ -1801,7 +1801,7 @@ theorem inl_mul_inr
 
 中文:
 定理 inl_mul_inr
-  结论: [MonoidWithZero R] [AddMonoid M] [DistribMulAction R M]
+  结论: [带零幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   证明: ext (mul_zero r)
     show r • m + (0 : Rᵐᵒᵖ) • (0 : M) = r • m by rw [smul_zero, add_zero]
 
@@ -1823,7 +1823,7 @@ theorem inr_mul_inl
 
 中文:
 定理 inr_mul_inl
-  结论: [MonoidWithZero R] [AddMonoid M] [DistribMulAction R M]
+  结论: [带零幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   证明: ext (zero_mul r)
     show (0 : R) •> (0 : M) + m <• r = m <• r by rw [smul_zero, zero_add]
 
@@ -1844,7 +1844,7 @@ theorem inl_mul_eq_smul
 
 中文:
 定理 inl_mul_eq_smul
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: ext rfl (by dsimp; rw [smul_zero, add_zero])
 
 Depends on / 依赖: IsFinite, IsIntegralHom, add_zero, smul_zero
@@ -1864,7 +1864,7 @@ theorem mul_inl_eq_op_smul
 
 中文:
 定理 mul_inl_eq_op_smul
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: ext rfl (by dsimp; rw [smul_zero, zero_add])
 
 Depends on / 依赖: IsFinite, LocallyOfFiniteType, smul_zero, zero_add
@@ -1889,7 +1889,7 @@ ext (mul_one x.1)
 
 中文:
 实例 mulOneClass
-  签名: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   定义体: fun x =>
 ext (one_mul x.1)
       show (1 : R) •> x.2 + (0 : M) <• x.1 = x.2 by rw [one_smul, smul_zero, add_zero]
@@ -1920,7 +1920,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: [AddMonoidWithOne R] [AddMonoid M]
+  签名: [加法带幺幺半群 R] [加法幺半群 M]
   定义体: fun n => inl n
   natCast_zero := by simp [Nat.cast]
   natCast_succ := fun _ => by ext <;> simp [Nat.cast]
@@ -1946,7 +1946,7 @@ theorem fst_natCast
 
 中文:
 定理 fst_natCast
-  条件: [AddMonoidWithOne R] [AddMonoid M] (n : 自然数)
+  条件: [加法带幺幺半群 R] [加法幺半群 M] (n : 自然数)
   结论: (n : tsze R M).fst = n
   证明: rfl
 
@@ -1971,7 +1971,7 @@ theorem snd_natCast
 
 中文:
 定理 snd_natCast
-  条件: [AddMonoidWithOne R] [AddMonoid M] (n : 自然数)
+  条件: [加法带幺幺半群 R] [加法幺半群 M] (n : 自然数)
   结论: (n : tsze R M).snd = 0
   证明: rfl
 
@@ -1992,7 +1992,7 @@ theorem inl_natCast
 
 中文:
 定理 inl_natCast
-  条件: [AddMonoidWithOne R] [AddMonoid M] (n : 自然数)
+  条件: [加法带幺幺半群 R] [加法幺半群 M] (n : 自然数)
   结论: (inl n : tsze R M) = n
   证明: rfl
 -/
@@ -2013,7 +2013,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: [AddGroupWithOne R] [AddGroup M]
+  签名: [加法带幺群 R] [加法群 M]
   定义体: fun z => inl z
   intCast_ofNat := fun _n => ext (Int.cast_natCast _) rfl
   intCast_negSucc := fun _n => ext (Int.cast_negSucc _) neg_zero.symm
@@ -2039,7 +2039,7 @@ theorem fst_intCast
 
 中文:
 定理 fst_intCast
-  条件: [AddGroupWithOne R] [AddGroup M] (z : 整数)
+  条件: [加法带幺群 R] [加法群 M] (z : 整数)
   结论: (z : tsze R M).fst = z
   证明: rfl
 
@@ -2064,7 +2064,7 @@ theorem snd_intCast
 
 中文:
 定理 snd_intCast
-  条件: [AddGroupWithOne R] [AddGroup M] (z : 整数)
+  条件: [加法带幺群 R] [加法群 M] (z : 整数)
   结论: (z : tsze R M).snd = 0
   证明: rfl
 
@@ -2085,7 +2085,7 @@ theorem inl_intCast
 
 中文:
 定理 inl_intCast
-  条件: [AddGroupWithOne R] [AddGroup M] (z : 整数)
+  条件: [加法带幺群 R] [加法群 M] (z : 整数)
   结论: (inl z : tsze R M) = z
   证明: rfl
 -/
@@ -2109,7 +2109,7 @@ ext (mul_add x₁.1 x₂.1
 
 中文:
 实例 nonAssocSemiring
-  签名: [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M]
   定义体: fun x =>
 ext (zero_mul x.1)
       show (0 : R) •> x.2 + (0 : M) <• x.1 = 0 by rw [zero_smul, zero_add, smul_zero]
@@ -2149,7 +2149,7 @@ instance nonAssocRing
 
 中文:
 实例 nonAssocRing
-  签名: [Ring R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M]
+  签名: [环 R] [加法交换群 M] [模 R M] [模 Rᵐᵒᵖ M]
 -/
 instance nonAssocRing [Ring R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] :
     NonAssocRing (tsze R M) where
@@ -2166,8 +2166,8 @@ instance [Monoid
 @[simp]
 
 中文:
-实例 [Monoid
-  签名: R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M] :
+实例 [幺半群
+  签名: R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M] :
   定义体: ⟨fun x n =>
     ⟨x.fst ^ n, ((List.range n).map fun i => x.fst ^ (n.pred - i) •> x.snd <• x.fst ^ i).sum⟩⟩
 
@@ -2191,7 +2191,7 @@ theorem fst_pow
 
 中文:
 定理 fst_pow
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: rfl
 -/
 theorem fst_pow [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
@@ -2208,7 +2208,7 @@ theorem snd_pow_eq_sum
 
 中文:
 定理 snd_pow_eq_sum
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: rfl
 
 Depends on / 依赖: IsOpenImmersion, locallyOfFinitePresentation_of_isOpenImmersion
@@ -2234,7 +2234,7 @@ theorem snd_pow_of_smul_comm
 
 中文:
 定理 snd_pow_of_smul_comm
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   证明: by
   simp_rw [snd_pow_eq_sum, ← smul_comm (_ : R) (_ : Rᵐᵒᵖ), aux, smul_smul, ← pow_add]
   match n with
@@ -2276,7 +2276,7 @@ theorem snd_pow_of_smul_comm'
 
 中文:
 定理 snd_pow_of_smul_comm'
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M]
   证明: by
   rw [snd_pow_of_smul_comm _ _ h]; rw [snd_pow_of_smul_comm.aux _ h]
 
@@ -2302,7 +2302,7 @@ theorem snd_pow
 
 中文:
 定理 snd_pow
-  结论: [CommMonoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [交换幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: snd_pow_of_smul_comm _ _ (op_smul_eq_smul _ _)
 
 @[simp]
@@ -2324,7 +2324,7 @@ theorem inl_pow
 
 中文:
 定理 inl_pow
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M] (r : R)
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M] (r : R)
   证明: ext rfl by simp [snd_pow_eq_sum, List.map_const']
 
 Depends on / 依赖: List.map_const, map_const, snd_pow_eq_sum
@@ -2350,7 +2350,7 @@ ext (mul_assoc x.1 y.1 z.1)
 
 中文:
 实例 monoid
-  签名: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  签名: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   定义体: fun x y z =>
 ext (mul_assoc x.1 y.1 z.1)
       show
@@ -2392,7 +2392,7 @@ theorem fst_list_prod
 
 中文:
 定理 fst_list_prod
-  结论: [Monoid R] [AddMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: map_list_prod ({ toFun := fst, map_one' := fst_one, map_mul' := fst_mul } : tsze R M ->* R) _
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, fst_mul, fst_one, map_list_prod, map_mul, map_one, pullback_fst
@@ -2410,7 +2410,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: [Semiring R] [AddCommMonoid M]
+  签名: [半环 R] [加法交换幺半群 M]
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
 -/
@@ -2434,7 +2434,7 @@ theorem snd_list_prod
 
 中文:
 定理 snd_list_prod
-  结论: [Monoid R] [AddCommMonoid M] [DistribMulAction R M] [DistribMulAction Rᵐᵒᵖ M]
+  结论: [幺半群 R] [加法交换幺半群 M] [分配乘法作用 R M] [分配乘法作用 Rᵐᵒᵖ M]
   证明: by
   induction l with
   | nil => simp
@@ -2470,7 +2470,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: [Ring R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [SMulCommClass R Rᵐᵒᵖ M]
+  签名: [环 R] [加法交换群 M] [模 R M] [模 Rᵐᵒᵖ M] [标量交换类 R Rᵐᵒᵖ M]
 
 Depends on / 依赖: Scheme, Scheme.Hom.resLE, infer_instance
 -/
@@ -2491,7 +2491,7 @@ ext (mul_comm x₁.1 x₂.1)
 
 中文:
 实例 commMonoid
-  签名: [CommMonoid R] [AddCommMonoid M] [DistribMulAction R M]
+  签名: [交换幺半群 R] [加法交换幺半群 M] [分配乘法作用 R M]
   定义体: { TrivSqZeroExt.monoid with
     mul_comm := fun x₁ x₂ =>
 ext (mul_comm x₁.1 x₂.1)
@@ -2517,7 +2517,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: [CommSemiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
+  签名: [交换半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M]
 -/
 instance commSemiring [CommSemiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
     [IsCentralScalar R M] : CommSemiring (tsze R M) where
@@ -2531,7 +2531,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: [CommRing R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
+  签名: [交换环 R] [加法交换群 M] [模 R M] [模 Rᵐᵒᵖ M] [中心标量 R M]
 -/
 instance commRing [CommRing R] [AddCommGroup M] [Module R M] [Module Rᵐᵒᵖ M] [IsCentralScalar R M] :
     CommRing (tsze R M) where
@@ -2554,7 +2554,7 @@ definition inlHom
 
 中文:
 定义 inlHom
-  签名: [Semiring R] [AddCommMonoid M] [Module R M] [Module Rᵐᵒᵖ M]
+  签名: [半环 R] [加法交换幺半群 M] [模 R M] [模 Rᵐᵒᵖ M]
   定义体: inl
   map_one' := inl_one M
   map_mul' := inl_mul M
@@ -2584,7 +2584,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (tsze R M)
+  签名: : 取逆 (tsze R M)
   定义体: ⟨fun b => (b.1⁻¹, -(b.1⁻¹ •> b.2 <• b.1⁻¹))⟩
 -/
 instance instInv : Inv (tsze R M) :=
@@ -2647,7 +2647,7 @@ abbreviation invertibleFstOfInvertible
 
 中文:
 缩写 invertibleFstOfInvertible
-  签名: (x : tsze R M) [Invertible x]
+  签名: (x : tsze R M) [可逆 x]
   定义体: (⅟x).fst
   invOf_mul_self := by rw [← fst_mul, invOf_mul_self, fst_one]
   mul_invOf_self := by rw [← fst_mul, mul_invOf_self, fst_one]
@@ -2670,7 +2670,7 @@ theorem fst_invOf
 
 中文:
 定理 fst_invOf
-  条件: (x : tsze R M) [Invertible x] [Invertible x.fst]
+  条件: (x : tsze R M) [可逆 x] [可逆 x.fst]
   结论: (⅟x).fst = ⅟(x.fst)
   证明: by
   let := invertibleFstOfInvertible x
@@ -2758,7 +2758,7 @@ abbreviation invertibleOfInvertibleFst
 
 中文:
 缩写 invertibleOfInvertibleFst
-  签名: (x : tsze R M) [Invertible x.fst]
+  签名: (x : tsze R M) [可逆 x.fst]
   定义体: (⅟x.fst, -(⅟x.fst •> x.snd <• ⅟x.fst))
   invOf_mul_self := by
     convert! mul_left_eq_one _ _ (invOf_mul_self x.fst)
@@ -2791,7 +2791,7 @@ theorem snd_invOf
 
 中文:
 定理 snd_invOf
-  条件: (x : tsze R M) [Invertible x] [Invertible x.fst]
+  条件: (x : tsze R M) [可逆 x] [可逆 x.fst]
   证明: by
   let := invertibleOfInvertibleFst x
   convert! congr_arg (TrivSqZeroExt.snd (R := R) (M := M)) (_ : _ = ⅟x)
@@ -2850,7 +2850,7 @@ theorem isUnit_iff_isUnit_fst
 中文:
 定理 isUnit_iff_isUnit_fst
   条件: {x : tsze R M}
-  结论: IsUnit x ↔ IsUnit x.fst
+  结论: 是单位 x ↔ 是单位 x.fst
   证明: by
   simp only [← nonempty_invertible_iff_isUnit, (invertibleEquivInvertibleFst x).nonempty_congr]
 
@@ -2877,7 +2877,7 @@ theorem isUnit_inl_iff
 中文:
 定理 isUnit_inl_iff
   条件: {r : R}
-  结论: IsUnit (inl r : tsze R M) ↔ IsUnit r
+  结论: 是单位 (inl r : tsze R M) ↔ 是单位 r
   证明: by
   rw [isUnit_iff_isUnit_fst]; rw [fst_inl]
 
@@ -2902,7 +2902,7 @@ theorem isUnit_inr_iff
 中文:
 定理 isUnit_inr_iff
   条件: {m : M}
-  结论: IsUnit (inr m : tsze R M) ↔ Subsingleton R
+  结论: 是单位 (inr m : tsze R M) ↔ 子单例 R
   证明: by
   simp_rw [isUnit_iff_isUnit_fst, fst_inr, isUnit_zero_iff, subsingleton_iff_zero_eq_one]
 
@@ -3063,7 +3063,7 @@ theorem invOf_eq_inv
 
 中文:
 定理 invOf_eq_inv
-  条件: (x : tsze R M) [Invertible x]
+  条件: (x : tsze R M) [可逆 x]
   结论: ⅟x = x⁻¹
   证明: by
   let := invertibleFstOfInvertible x
@@ -3196,7 +3196,7 @@ theorem isUnit_inv_iff
 中文:
 定理 isUnit_inv_iff
   条件: {x : tsze R M}
-  结论: IsUnit x⁻¹ ↔ IsUnit x
+  结论: 是单位 x⁻¹ ↔ 是单位 x
   证明: by
   simp_rw [isUnit_iff_isUnit_fst, fst_inv, isUnit_iff_ne_zero, ne_eq, inv_eq_zero]
 
@@ -3257,7 +3257,7 @@ ext (Algebra.commutes _ _)
 
 中文:
 实例 algebra'
-  签名: : Algebra S (tsze R M) where
+  签名: : 代数 S (tsze R M) where
   定义体: (TrivSqZeroExt.inlHom R M).comp (algebraMap S R)
   commutes' := fun s x =>
 ext (Algebra.commutes _ _)
@@ -3292,7 +3292,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R' (tsze R' M)
+  签名: 代数 R' (tsze R' M)
   定义体: TrivSqZeroExt.algebra' _ _ _
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, TrivSqZeroExt, TrivSqZeroExt.algebra, algebra, pullback_snd
@@ -3400,7 +3400,7 @@ abbreviation algebraBase
 
 中文:
 缩写 algebraBase
-  签名: : Algebra (tsze R' M) R' where
+  签名: : 代数 (tsze R' M) R' where
   定义体: (fstHom R' R' M).toRingHom
   smul x r := x.fst * r
   commutes' _ _ := mul_comm ..
@@ -3425,7 +3425,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower R' (tsze R' M) R'
+  签名: 标量塔 R' (tsze R' M) R'
   定义体: mul_assoc ..
 
 Depends on / 依赖: IsZariskiLocalAtSource, IsZariskiLocalAtSource.sigmaDesc, mul_assoc, sigmaDesc
@@ -3484,7 +3484,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  条件: {A} [Semiring A] [Algebra R' A] ⦃f g
+  条件: {A} [半环 A] [代数 R' A] ⦃f g
   结论: tsze R' M ->ₐ[R'] A⦄
   证明: AlgHom.toLinearMap_injective
     linearMap_ext (fun _r => (f.commutes _).trans (g.commutes _).symm) h
@@ -3511,7 +3511,7 @@ theorem algHom_ext'
 
 中文:
 定理 algHom_ext'
-  条件: {A} [Semiring A] [Algebra S A] ⦃f g
+  条件: {A} [半环 A] [代数 S A] ⦃f g
   结论: tsze R M ->ₐ[S] A⦄
   证明: AlgHom.toLinearMap_injective
     linearMap_ext (AlgHom.congr_fun hinl) (LinearMap.congr_fun hinr)
@@ -4122,7 +4122,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (LinearMap.id : M ->ₗ[R'] M) = AlgHom.id R' _
+  结论: map (线性映射.id : M ->ₗ[R'] M) = 代数态射.id R' _
   证明: by
   apply algHom_ext
   simp only [map_inr, LinearMap.id_coe, id_eq, AlgHom.coe_id, forall_const]

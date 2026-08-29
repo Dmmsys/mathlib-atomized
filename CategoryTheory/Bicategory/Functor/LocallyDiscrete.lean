@@ -199,7 +199,7 @@ definition Functor.toPseudofunctor
 @[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor := Functor.toPseudofu
 
 中文:
-定义 Functor.toPseudofunctor
+定义 函子.toPseudofunctor
   签名: : LocallyDiscrete C ⥤ᵖ (LocallyDiscrete D)
   定义体: pseudofunctorOfIsLocallyDiscrete
     (fun ⟨X⟩ => .mk <| F.obj X) (fun ⟨f⟩ => (F.map f).toLoc)
@@ -234,7 +234,7 @@ abbreviation Functor.toOplaxFunctor
   body: F.toPseudofunctor.toOplax
 
 中文:
-缩写 Functor.toOplaxFunctor
+缩写 函子.toOplaxFunctor
   签名: : LocallyDiscrete C ⥤ᵒᵖᴸ (LocallyDiscrete D)
   定义体: F.toPseudofunctor.toOplax
 
@@ -271,7 +271,7 @@ definition Functor.toPseudofunctor'
 @[deprecated (since := "2026-02-08")] alias Functor.toPseudoFunctor' := Fu
 
 中文:
-定义 Functor.toPseudofunctor'
+定义 函子.toPseudofunctor'
   签名: : LocallyDiscrete I ⥤ᵖ B
   定义体: pseudofunctorOfIsLocallyDiscrete
     (fun ⟨X⟩ => F.obj X) (fun ⟨f⟩ => F.map f)
@@ -304,7 +304,7 @@ abbreviation Functor.toOplaxFunctor'
   body: F.toPseudofunctor'.toOplax
 
 中文:
-缩写 Functor.toOplaxFunctor'
+缩写 函子.toOplaxFunctor'
   签名: : LocallyDiscrete I ⥤ᵒᵖᴸ B
   定义体: F.toPseudofunctor'.toOplax
 
@@ -332,7 +332,7 @@ definition mkPseudofunctor
 
 中文:
 定义 mkPseudofunctor
-  签名: {B₀ C : 类型} [Category* B₀] [Bicategory C]
+  签名: {B₀ C : 类型} [范畴* B₀] [双范畴 C]
   定义体: pseudofunctorOfIsLocallyDiscrete (fun b => obj b.as) (fun f => map f.as)
     (fun _ => mapId _) (fun _ _ => mapComp _ _) (fun _ _ _ => map₂_associator _ _ _)
     (fun _ => map₂_left_unitor _) (fun _ => map₂_right_unitor _)

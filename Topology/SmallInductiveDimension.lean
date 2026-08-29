@@ -49,8 +49,8 @@ class inductive
 类 inductive
   参数: HasSmallInductiveDimensionLT.{u}
   公理与运算 (2 个):
-    - |(zero {X : 类型u} [TopologicalSpace X] [IsEmpty X]) : HasSmallInductiveDimensionLT X 0
-    - |(succ {X : 类型u} [TopologicalSpace X] (n : 自然数) (s : Set (Set X)) (hs : IsTopologicalBasis s) (h : 对任意 U in s, HasSmallInductiveDimensionLT (frontier U) n)) : HasSmallInductiveDimensionLT X (n + 1)
+    - |(zero {X : 类型u} [拓扑空间 X] [是空 X]) : HasSmallInductiveDimensionLT X 0
+    - |(succ {X : 类型u} [拓扑空间 X] (n : 自然数) (s : 集合 (集合 X)) (hs : 是TopologicalBasis s) (h : 对任意 U in s, HasSmallInductiveDimensionLT (frontier U) n)) : HasSmallInductiveDimensionLT X (n + 1)
 -/
 class inductive HasSmallInductiveDimensionLT.{u} :
   forall (X : Type u) [TopologicalSpace X], Nat -> Prop where
@@ -98,7 +98,7 @@ alias HasSmallInductiveDimensionLT_zero_iff := hasSmallInductiveDimensionLT_zero
 
 中文:
 定理 hasSmallInductiveDimensionLT_zero_iff
-  结论: HasSmallInductiveDimensionLT X 0 ↔ IsEmpty X
+  结论: HasSmallInductiveDimensionLT X 0 ↔ 是空 X
   证明: ⟨fun h => by cases h; assumption, fun _ => .zero⟩
 
 @[deprecated (since := "2026-06-21")]
@@ -462,7 +462,7 @@ theorem smallInductiveDimension_eq_bot
 
 中文:
 定理 smallInductiveDimension_eq_bot
-  结论: smallInductiveDimension X = ⊥ ↔ IsEmpty X
+  结论: smallInductiveDimension X = ⊥ ↔ 是空 X
   证明: by
   simp_rw [← hasSmallInductiveDimensionLT_zero_iff, ← smallInductiveDimension_lt_iff,
     WithBot.lt_coe_bot.symm, bot_eq_zero', Nat.cast_zero, WithBot.coe_zero]
@@ -486,7 +486,7 @@ theorem smallInductiveDimension_of_isEmpty
 
 中文:
 定理 smallInductiveDimension_of_isEmpty
-  条件: [IsEmpty X]
+  条件: [是空 X]
   结论: smallInductiveDimension X = ⊥
   证明: smallInductiveDimension_eq_bot.2 ‹_›
 

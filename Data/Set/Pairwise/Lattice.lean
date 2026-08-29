@@ -45,7 +45,7 @@ theorem pairwise_iUnion
 
 中文:
 定理 pairwise_iUnion
-  条件: {f : κ -> Set α} (hd : Directed (· subseteq ·) f)
+  条件: {f : κ -> 集合 α} (hd : Directed (· subseteq ·) f)
   证明: by
   constructor
   · intro H n
@@ -84,7 +84,7 @@ theorem pairwise_iUnion₂
 
 中文:
 定理 pairwise_iUnion₂
-  结论: {s : Set (Set α)} (hd : DirectedOn (· subseteq ·) s)
+  结论: {s : 集合 (集合 α)} (hd : DirectedOn (· subseteq ·) s)
   证明: by
   simp only [Set.Pairwise, mem_iUnion, exists_prop, forall_exists_index, and_imp]
   intro x S hS hx y T hT hy hne
@@ -110,7 +110,7 @@ theorem pairwise_iUnion₂_iff
 
 中文:
 定理 pairwise_iUnion₂_iff
-  条件: {s : Set (Set α)} (hd : DirectedOn (· subseteq ·) s)
+  条件: {s : 集合 (集合 α)} (hd : DirectedOn (· subseteq ·) s)
   证明: ⟨fun h a ha => h.mono subset_iUnion₂_of_subset a ha (by rfl), pairwise_iUnion₂ hd _⟩
 
 Depends on / 依赖: h.mono
@@ -130,7 +130,7 @@ theorem pairwise_sUnion
 
 中文:
 定理 pairwise_sUnion
-  条件: {r : α -> α -> 命题} {s : Set (Set α)} (hd : DirectedOn (· subseteq ·) s)
+  条件: {r : α -> α -> 命题} {s : 集合 (集合 α)} (hd : DirectedOn (· subseteq ·) s)
   证明: by
   rw [sUnion_eq_iUnion]; rw [pairwise_iUnion hd.directed_val]; rw [SetCoe.forall]
 
@@ -160,7 +160,7 @@ theorem pairwiseDisjoint_iUnion
 
 中文:
 定理 pairwiseDisjoint_iUnion
-  条件: {g : ι' -> Set ι} (h : Directed (· subseteq ·) g)
+  条件: {g : ι' -> 集合 ι} (h : Directed (· subseteq ·) g)
   证明: pairwise_iUnion h
 
 Depends on / 依赖: pairwise_iUnion
@@ -179,7 +179,7 @@ theorem pairwiseDisjoint_sUnion
 
 中文:
 定理 pairwiseDisjoint_sUnion
-  条件: {s : Set (Set ι)} (h : DirectedOn (· subseteq ·) s)
+  条件: {s : 集合 (集合 ι)} (h : DirectedOn (· subseteq ·) s)
   证明: pairwise_sUnion h
 
 Depends on / 依赖: pairwise_sUnion
@@ -213,7 +213,7 @@ theorem PairwiseDisjoint.biUnion
 
 中文:
 定理 PairwiseDisjoint.biUnion
-  结论: {s : Set ι'} {g : ι' -> Set ι} {f : ι -> α}
+  结论: {s : 集合 ι'} {g : ι' -> 集合 ι} {f : ι -> α}
   证明: by
   rintro a ha b hb hab
   simp_rw [Set.mem_iUnion] at ha hb
@@ -305,7 +305,7 @@ theorem pairwiseDisjoint_prod_left
 
 中文:
 定理 pairwiseDisjoint_prod_left
-  条件: {s : Set ι} {t : Set ι'} {f : ι × ι' -> α}
+  条件: {s : 集合 ι} {t : 集合 ι'} {f : ι × ι' -> α}
   证明: by
   refine
       ⟨fun h => ⟨fun i hi j hj hij => ?_, fun i hi j hj hij => ?_⟩, fun h => h.1.prod_left h.2⟩ <;>
@@ -346,7 +346,7 @@ theorem biUnion_sdiff_biUnion_eq
 
 中文:
 定理 biUnion_sdiff_biUnion_eq
-  条件: {s t : Set ι} {f : ι -> Set α} (h : (s union t).PairwiseDisjoint f)
+  条件: {s t : 集合 ι} {f : ι -> 集合 α} (h : (s union t).PairwiseDisjoint f)
   证明: by
   refine
     (biUnion_sdiff_biUnion_subset f s t).antisymm
@@ -382,7 +382,7 @@ unionEqSigmaOfDisjoint fun ⟨_i, hi⟩ ⟨_j, hj⟩ ne => h hi hj fun eq => ne 
 
 中文:
 定义 biUnionEqSigmaOfDisjoint
-  签名: {s : Set ι} {f : ι -> Set α} (h : s.PairwiseDisjoint f)
+  签名: {s : 集合 ι} {f : ι -> 集合 α} (h : s.PairwiseDisjoint f)
   定义体: (Equiv.setCongr (biUnion_eq_iUnion _ _)).trans
 unionEqSigmaOfDisjoint fun ⟨_i, hi⟩ ⟨_j, hj⟩ ne => h hi hj fun eq => ne Subtype.ext eq
 
@@ -407,7 +407,7 @@ lemma coe_biUnionEqSigmaOfDisjoint_symm_apply
 
 中文:
 引理 coe_biUnionEqSigmaOfDisjoint_symm_apply
-  结论: {α ι : 类型} {s : Set ι}
+  结论: {α ι : 类型} {s : 集合 ι}
   证明: by
   rfl
 
@@ -431,7 +431,7 @@ lemma coe_snd_biUnionEqSigmaOfDisjoint
 
 中文:
 引理 coe_snd_biUnionEqSigmaOfDisjoint
-  结论: {α ι : 类型} {s : Set ι}
+  结论: {α ι : 类型} {s : 集合 ι}
   证明: by
   simp [biUnionEqSigmaOfDisjoint]
 
@@ -458,7 +458,7 @@ lemma Set.pairwiseDisjoint_iff
     not_disjoint_iff_nonempty_inter]
 
 中文:
-引理 Set.pairwiseDisjoint_iff
+引理 集合.pairwiseDisjoint_iff
   证明: by
   simp [Set.PairwiseDisjoint, Set.Pairwise, Function.onFun, not_imp_comm (a := _ = _),
     not_disjoint_iff_nonempty_inter]
@@ -483,8 +483,8 @@ lemma Set.pairwiseDisjoint_pair_insert
   aesop (add simp [Set.Nonempty, Set.subset_def])
 
 中文:
-引理 Set.pairwiseDisjoint_pair_insert
-  条件: {s : Set α} {a : α} (ha : a ∉ s)
+引理 集合.pairwiseDisjoint_pair_insert
+  条件: {s : 集合 α} {a : α} (ha : a ∉ s)
   证明: by
   rw [pairwiseDisjoint_iff]
   rintro i hi j hj
@@ -514,7 +514,7 @@ theorem Set.PairwiseDisjoint.subset_of_biUnion_subset_biUnion
       (not_disjoint_iff.2 ⟨a, hai, haj⟩)]
 
 中文:
-定理 Set.PairwiseDisjoint.subset_of_biUnion_subset_biUnion
+定理 集合.PairwiseDisjoint.subset_of_biUnion_subset_biUnion
   结论: (h₀ : (s union t).PairwiseDisjoint f)
   证明: by
   rintro i hi
@@ -542,8 +542,8 @@ theorem Pairwise.subset_of_biUnion_subset_biUnion
   proof: Set.PairwiseDisjoint.subset_of_biUnion_subset_biUnion (h₀.set_pairwise _) h₁ h
 
 中文:
-定理 Pairwise.subset_of_biUnion_subset_biUnion
-  结论: (h₀ : Pairwise (Disjoint on f))
+定理 两两.subset_of_biUnion_subset_biUnion
+  结论: (h₀ : 两两 (Disjoint on f))
   证明: Set.PairwiseDisjoint.subset_of_biUnion_subset_biUnion (h₀.set_pairwise _) h₁ h
 
 Depends on / 依赖: PairwiseDisjoint, Set.PairwiseDisjoint.subset_of_biUnion_subset_biUnion, set_pairwise, subset_of_biUnion_subset_biUnion
@@ -563,8 +563,8 @@ theorem Pairwise.biUnion_injective
 (h₀.subset_of_biUnion_subset_biUnion fun _ _ => h₁ _) h.superset
 
 中文:
-定理 Pairwise.biUnion_injective
-  条件: (h₀ : Pairwise (Disjoint on f)) (h₁ : 对任意 i, (f i).Nonempty)
+定理 两两.biUnion_injective
+  条件: (h₀ : 两两 (Disjoint on f)) (h₁ : 对任意 i, (f i).非空)
   证明: fun _s _t h =>
 ((h₀.subset_of_biUnion_subset_biUnion fun _ _ => h₁ _) <| h.subset).antisymm
 (h₀.subset_of_biUnion_subset_biUnion fun _ _ => h₁ _) h.superset

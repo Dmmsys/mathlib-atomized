@@ -48,7 +48,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R A[X]
+  签名: : 余algebra R A[X]
   定义体: coeffEquiv.coalgebra _
 
 @[to_additive]
@@ -70,7 +70,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: [IsCocomm R A]
+  签名: [是余comm R A]
   定义体: coeffEquiv.coalgebraIsCocomm _
 
 @[to_additive (attr := simp)]
@@ -163,7 +163,7 @@ instance instCoalgebra
 
 中文:
 实例 instCoalgebra
-  签名: : Coalgebra R A[T;T⁻¹]
+  签名: : 余algebra R A[T;T⁻¹]
   定义体: inferInstanceAs Coalgebra R A[Int]
 
 Depends on / 依赖: Coalgebra
@@ -180,7 +180,7 @@ instance instIsCocomm
 
 中文:
 实例 instIsCocomm
-  签名: [IsCocomm R A]
+  签名: [是余comm R A]
   定义体: inferInstanceAs IsCocomm R A[Int]
 
 Depends on / 依赖: IsCocomm

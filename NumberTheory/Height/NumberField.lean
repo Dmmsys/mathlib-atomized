@@ -58,7 +58,7 @@ definition multisetInfinitePlace
 
 中文:
 定义 multisetInfinitePlace
-  签名: : Multiset (AbsoluteValue K 实数)
+  签名: : Multiset (绝对值 K 实数)
   定义体: .bind (.univ : Finset (InfinitePlace K)).val fun v => .replicate v.mult v.val
 
 @[simp]
@@ -80,7 +80,7 @@ lemma mem_multisetInfinitePlace
 
 中文:
 引理 mem_multisetInfinitePlace
-  条件: {v : AbsoluteValue K 实数}
+  条件: {v : 绝对值 K 实数}
   证明: by
   simp [multisetInfinitePlace, Multiset.mem_replicate, isInfinitePlace_iff, eq_comm (a := v)]
 
@@ -104,7 +104,7 @@ lemma count_multisetInfinitePlace_eq_mult
 
 中文:
 引理 count_multisetInfinitePlace_eq_mult
-  条件: [DecidableEq (AbsoluteValue K 实数)] (v : InfinitePlace K)
+  条件: [DecidableEq (绝对值 K 实数)] (v : InfinitePlace K)
   证明: by
   have : DecidableEq (InfinitePlace K) := Subtype.instDecidableEq
   simpa only [multisetInfinitePlace, Multiset.count_bind, Finset.sum_map_val,
@@ -135,7 +135,7 @@ lemma prod_multisetInfinitePlace_eq
 
 中文:
 引理 prod_multisetInfinitePlace_eq
-  条件: {M : 类型} [CommMonoid M] (f : AbsoluteValue K 实数 -> M)
+  条件: {M : 类型} [交换幺半群 M] (f : 绝对值 K 实数 -> M)
   证明: by
   classical
   rw [Finset.prod_multiset_map_count]
@@ -194,7 +194,7 @@ lemma prod_archAbsVal_eq
 
 中文:
 引理 prod_archAbsVal_eq
-  条件: {M : 类型} [CommMonoid M] (f : AbsoluteValue K 实数 -> M)
+  条件: {M : 类型} [交换幺半群 M] (f : 绝对值 K 实数 -> M)
   证明: prod_multisetInfinitePlace_eq f
 
 Depends on / 依赖: prod_multisetInfinitePlace_eq
@@ -213,7 +213,7 @@ lemma prod_nonarchAbsVal_eq
 
 中文:
 引理 prod_nonarchAbsVal_eq
-  条件: {M : 类型} [CommMonoid M] (f : AbsoluteValue K 实数 -> M)
+  条件: {M : 类型} [交换幺半群 M] (f : 绝对值 K 实数 -> M)
   证明: rfl
 -/
 lemma prod_nonarchAbsVal_eq {M : Type*} [CommMonoid M] (f : AbsoluteValue K Real -> M) :
@@ -238,7 +238,7 @@ lemma sum_archAbsVal_eq
 
 中文:
 引理 sum_archAbsVal_eq
-  条件: {M : 类型} [AddCommMonoid M] (f : AbsoluteValue K 实数 -> M)
+  条件: {M : 类型} [加法交换幺半群 M] (f : 绝对值 K 实数 -> M)
   证明: by
   classical
   rw [sum_multiset_map_count]
@@ -269,7 +269,7 @@ lemma sum_nonarchAbsVal_eq
 
 中文:
 引理 sum_nonarchAbsVal_eq
-  条件: {M : 类型} [AddCommMonoid M] (f : AbsoluteValue K 实数 -> M)
+  条件: {M : 类型} [加法交换幺半群 M] (f : 绝对值 K 实数 -> M)
   证明: rfl
 -/
 lemma sum_nonarchAbsVal_eq {M : Type*} [AddCommMonoid M] (f : AbsoluteValue K Real -> M) :
@@ -367,7 +367,7 @@ definition absMulHeight₁
 
 中文:
 定义 absMulHeight₁
-  签名: {K : 类型} [Field K] [CharZero K] (x : K)
+  签名: {K : 类型} [域 K] [特征零 K] (x : K)
   定义体: if hx : IsIntegral Rat x then
     haveI : FiniteDimensional Rat Rat⟮x⟯ := adjoin.finiteDimensional hx
     haveI : NumberField Rat⟮x⟯ := {}
@@ -393,7 +393,7 @@ definition absLogHeight₁
 
 中文:
 定义 absLogHeight₁
-  签名: {K : 类型} [Field K] [CharZero K] (x : K)
+  签名: {K : 类型} [域 K] [特征零 K] (x : K)
   定义体: (absMulHeight₁ x).log
 -/
 noncomputable def absLogHeight₁ {K : Type*} [Field K] [CharZero K] (x : K) : Real :=
@@ -444,7 +444,7 @@ lemma totalWeight_eq_finrank
 
 中文:
 引理 totalWeight_eq_finrank
-  结论: totalWeight K = Module.finrank Rat K
+  结论: totalWeight K = 模.finrank 有理数 K
   证明: by
   rw [totalWeight_eq_sum_mult]; rw [InfinitePlace.sum_mult_eq]
 
@@ -502,7 +502,7 @@ iSup_eq_bot.not.mpr not_forall.mpr ⟨Classical.ofNonempty, H _⟩
 
 中文:
 引理 absNorm_mul_finprod_finitePlace_eq_one_aux
-  条件: [Nonempty ι] (hx : 对任意 i, x i != 0)
+  条件: [非空 ι] (hx : 对任意 i, x i != 0)
   证明: by
   have H j : span {x j} != ⊥ := mt span_singleton_eq_bot.mp (hx j)
   have hx' : ⨆ i, span {x i} != ⊥ :=
@@ -674,7 +674,7 @@ lemma exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow
   set n := (span {(m : 𝓞 K)}).toAddSubgroup.relIndex (span {(m : 𝓞 K), r}).toAddSubgroup with hndef
 
 中文:
-引理 exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow
+引理 存在_nat_ne_zero_存在_integer_mul_eq_and_absNorm_span_eq_pow
   条件: (x : K)
   证明: by
 .mpr (.of_finite Rat x) have hx : IsAlgebraic Int x := IsFractionRing.isAlgebraic_iff Int _ _
@@ -762,7 +762,7 @@ lemma exists_nat_le_mulHeight₁
   rw [← mul_div_cancel_left₀ 
 
 中文:
-引理 exists_nat_le_mulHeight₁
+引理 存在_nat_le_mulHeight₁
   条件: (x : K)
   证明: by
   obtain ⟨n, hn, a, ha₁, ha₂⟩ := exists_nat_ne_zero_exists_integer_mul_eq_and_absNorm_span_eq_pow x
@@ -952,7 +952,7 @@ this.finite_iff_finite.mp finite_setOfPred_mulHeight_nat_le hn B
   refine .mk (fun a ha => ?_) (fun a _ b _ h =
 
 中文:
-引理 finite_setOfPred_isIntegral_nat_mul_and_mulHeight₁_le
+引理 finite_setOfPred_is整数egral_nat_mul_and_mulHeight₁_le
   条件: {n : 自然数} (hn : n != 0) (B : 实数)
   证明: by
   have hn' : (n : K) != 0 := mod_cast hn
@@ -996,7 +996,7 @@ theorem finite_setOfPred_mulHeight₁_le
 中文:
 定理 finite_setOfPred_mulHeight₁_le
   条件: (B : 实数)
-  结论: {x : K | mulHeight₁ x <= B}.Finite
+  结论: {x : K | mulHeight₁ x <= B}.有限
   证明: by
   have H : {x : K | mulHeight₁ x <= B} =
       ⋃ n : Fin ⌊B⌋₊, {x : K | IsIntegral Int ((n + 1) * x) ∧ mulHeight₁ x <= B} := by
@@ -1128,7 +1128,7 @@ lemma iSup_finitePlace_apply_eq_one_of_gcd_eq_one
 
 中文:
 引理 iSup_finitePlace_apply_eq_one_of_gcd_eq_one
-  条件: (v : FinitePlace Rat) (hx : Finset.univ.gcd x = 1)
+  条件: (v : FinitePlace 有理数) (hx : 有限集.univ.最大公约数 x = 1)
   证明: by
   have hv : IsNonarchimedean (v ·) := FinitePlace.add_le v
   have H (n : Int) : v n <= 1 := IsNonarchimedean.apply_intCast_le_one hv
@@ -1169,7 +1169,7 @@ lemma mulHeight_eq_max_abs_of_gcd_eq_one
 
 中文:
 引理 mulHeight_eq_max_abs_of_gcd_eq_one
-  条件: (hx : Finset.univ.gcd x = 1)
+  条件: (hx : 有限集.univ.最大公约数 x = 1)
   证明: by
   have hx₀ : Int.cast ∘ x != (0 : ι -> Rat) := by
     contrapose! hx
@@ -1203,7 +1203,7 @@ lemma logHeight_eq_max_abs_of_gcd_eq_one
 
 中文:
 引理 logHeight_eq_max_abs_of_gcd_eq_one
-  条件: (hx : Finset.univ.gcd x = 1)
+  条件: (hx : 有限集.univ.最大公约数 x = 1)
   证明: by
   rw [logHeight_eq_log_mulHeight]; rw [mulHeight_eq_max_abs_of_gcd_eq_one hx]
 
@@ -1230,7 +1230,7 @@ lemma mulHeight_self_one_eq_mulHeight_num_den
 
 中文:
 引理 mulHeight_self_one_eq_mulHeight_num_den
-  条件: (q : Rat)
+  条件: (q : 有理数)
   证明: by
   have hq₀ : (q.den : Rat) != 0 := mod_cast q.den_nz
   rw [← mulHeight_smul_eq_mulHeight _ hq₀]
@@ -1259,8 +1259,8 @@ Int.isCoprime_iff_gcd_eq_one.mp isCoprime
 
 中文:
 引理 mulHeight₁_eq_max
-  条件: (q : Rat)
-  结论: mulHeight₁ q = max q.num.natAbs q.den
+  条件: (q : 有理数)
+  结论: mulHeight₁ q = 最大值 q.num.natAbs q.den
   证明: by
   rw [mulHeight₁_eq_mulHeight]; rw [mulHeight_self_one_eq_mulHeight_num_den]; rw [← intCast_natCast q.den]
   have : (.univ : Finset (Fin 2)).gcd ![q.num, q.den] = 1 := by
@@ -1296,8 +1296,8 @@ lemma logHeight₁_eq_log_max
 
 中文:
 引理 logHeight₁_eq_log_max
-  条件: (q : Rat)
-  结论: logHeight₁ q = log ↑(max q.num.natAbs q.den)
+  条件: (q : 有理数)
+  结论: logHeight₁ q = log ↑(最大值 q.num.natAbs q.den)
   证明: by
   rw [logHeight₁_eq_log_mulHeight₁]; rw [mulHeight₁_eq_max]
 -/

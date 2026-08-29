@@ -96,7 +96,7 @@ theorem perm_symm_on_of_perm_on_finset
 
 中文:
 定理 perm_symm_on_of_perm_on_finset
-  结论: {s : Finset α} {f : Perm α} (h : 对任意 x in s, f x in s) {y : α}
+  结论: {s : 有限集 α} {f : 置换 α} (h : 对任意 x in s, f x in s) {y : α}
   证明: by
   have h0 : forall y in s, exists (x : _) (hx : x in s), y = (fun i (_ : i in s) => f i) x hx :=
     Finset.surj_on_of_inj_on_of_card_le (fun x hx => (fun i _ => f i) x hx) (fun a ha => h a ha)
@@ -131,7 +131,7 @@ Set.mem_toFinset.mp
 
 中文:
 定理 perm_symm_mapsTo_of_mapsTo
-  条件: (f : Perm α) {s : Set α} [Finite s] (h : Set.MapsTo f s s)
+  条件: (f : 置换 α) {s : 集合 α} [有限 s] (h : 集合.映射到 f s s)
   证明: by
   cases nonempty_fintype s
   exact fun x hx =>
@@ -164,7 +164,7 @@ theorem perm_symm_mapsTo_iff_mapsTo
 
 中文:
 定理 perm_symm_mapsTo_iff_mapsTo
-  条件: {f : Perm α} {s : Set α} [Finite s]
+  条件: {f : 置换 α} {s : 集合 α} [有限 s]
   证明: ⟨perm_symm_mapsTo_of_mapsTo f⁻¹, perm_symm_mapsTo_of_mapsTo f⟩
 
 Depends on / 依赖: perm_symm_mapsTo_of_mapsTo
@@ -185,7 +185,7 @@ theorem perm_symm_on_of_perm_on_finite
 
 中文:
 定理 perm_symm_on_of_perm_on_finite
-  结论: {f : Perm α} {p : α -> 命题} [Finite { x // p x }]
+  结论: {f : 置换 α} {p : α -> 命题} [有限 { x // p x }]
   证明: by
   have : Finite { x | p x } := by simpa
   simpa using perm_symm_mapsTo_of_mapsTo (s := {x | p x}) f h hx
@@ -209,7 +209,7 @@ abbreviation subtypePermOfFintype
 
 中文:
 缩写 subtypePermOfFintype
-  签名: (f : Perm α) {p : α -> 命题} [Finite { x // p x }]
+  签名: (f : 置换 α) {p : α -> 命题} [有限 { x // p x }]
   定义体: f.subtypePerm fun x => ⟨fun h₂ => f.symm_apply_apply x ▸ perm_symm_on_of_perm_on_finite h h₂, h x⟩
 
 @[simp]
@@ -231,7 +231,7 @@ theorem subtypePermOfFintype_apply
 
 中文:
 定理 subtypePermOfFintype_apply
-  结论: (f : Perm α) {p : α -> 命题} [Finite { x // p x }]
+  结论: (f : 置换 α) {p : α -> 命题} [有限 { x // p x }]
   证明: rfl
 -/
 theorem subtypePermOfFintype_apply (f : Perm α) {p : α -> Prop} [Finite { x // p x }]
@@ -248,7 +248,7 @@ theorem subtypePermOfFintype_one
 
 中文:
 定理 subtypePermOfFintype_one
-  结论: (p : α -> 命题) [Finite { x // p x }]
+  结论: (p : α -> 命题) [有限 { x // p x }]
   证明: rfl
 -/
 theorem subtypePermOfFintype_one (p : α -> Prop) [Finite { x // p x }]
@@ -278,7 +278,7 @@ theorem perm_mapsTo_inl_iff_mapsTo_inr
 
 中文:
 定理 perm_mapsTo_inl_iff_mapsTo_inr
-  条件: {m n : 类型} [Finite m] [Finite n] (σ : Perm (m oplus n))
+  条件: {m n : 类型} [有限 m] [有限 n] (σ : 置换 (m oplus n))
   证明: by
   constructor <;>
     ( intro h
@@ -329,7 +329,7 @@ theorem mem_sumCongrHom_range_of_perm_mapsTo_inl
 
 中文:
 定理 mem_sumCongrHom_range_of_perm_mapsTo_inl
-  结论: {m n : 类型} [Finite m] [Finite n]
+  结论: {m n : 类型} [有限 m] [有限 n]
   证明: by
   have h1 : forall x : m oplus n, (exists a : m, Sum.inl a = x) -> exists a : m, Sum.inl a = σ x := by
     rintro _ ⟨a, rfl⟩; exact h ⟨a, rfl⟩
@@ -386,7 +386,7 @@ theorem Disjoint.extendDomain
 
 中文:
 定理 Disjoint.extendDomain
-  结论: {p : β -> 命题} [DecidablePred p] (f : α ≃ Subtype p)
+  结论: {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
   证明: by
   intro b
   by_cases pb : p b
@@ -428,7 +428,7 @@ theorem Disjoint.isConj_mul
 
 中文:
 定理 Disjoint.isConj_mul
-  结论: [Finite α] {σ τ π ρ : Perm α} (hc1 : IsConj σ π)
+  结论: [有限 α] {σ τ π ρ : 置换 α} (hc1 : IsConj σ π)
   证明: by
   classical
   cases nonempty_fintype α
@@ -500,7 +500,7 @@ theorem apply_mem_fixedPoints_iff_mem_of_mem_centralizer
 
 中文:
 定理 apply_mem_fixedPoints_iff_mem_of_mem_centralizer
-  结论: {g p : Perm α}
+  结论: {g p : 置换 α}
   证明: by
   simp only [Subgroup.mem_centralizer_singleton_iff] at hp
   simp only [Function.mem_fixedPoints_iff]
@@ -532,7 +532,7 @@ lemma disjoint_ofSubtype_of_memFixedPoints_self
 
 中文:
 引理 disjoint_ofSubtype_of_memFixedPoints_self
-  结论: {g : Perm α}
+  结论: {g : 置换 α}
   证明: by
   rw [disjoint_iff_eq_or_eq]
   intro x
@@ -569,7 +569,7 @@ theorem support_pow_coprime
 
 中文:
 定理 support_pow_coprime
-  条件: {σ : Perm α} {n : 自然数} (h : 自然数.Coprime n (orderOf σ))
+  条件: {σ : 置换 α} {n : 自然数} (h : 自然数.Coprime n (orderOf σ))
   证明: by
   obtain ⟨m, hm⟩ := exists_pow_eq_self_of_coprime h
   exact
@@ -599,7 +599,7 @@ lemma ofSubtype_support_disjoint
 
 中文:
 引理 ofSubtype_support_disjoint
-  条件: {σ : Perm α} (x : Perm (Function.fixedPoints σ))
+  条件: {σ : 置换 α} (x : 置换 (函数.fixedPoints σ))
   证明: by
   rw [Finset.disjoint_iff_ne]
   rintro a ha b hb rfl
@@ -631,7 +631,7 @@ lemma disjoint_of_disjoint_support
 
 中文:
 引理 disjoint_of_disjoint_support
-  结论: {H K : Subgroup (Perm α)}
+  结论: {H K : 子群 (置换 α)}
   证明: by
   rw [disjoint_iff_inf_le]
   intro x ⟨hx1, hx2⟩
@@ -666,7 +666,7 @@ lemma support_closure_subset_union
 
 中文:
 引理 support_closure_subset_union
-  条件: (S : Set (Perm α))
+  条件: (S : 集合 (置换 α))
   证明: by
   apply closure_induction
   · exact fun x hx => Set.subset_iUnion₂_of_subset x hx subset_rfl
@@ -706,7 +706,7 @@ lemma disjoint_support_closure_of_disjoint_support
 
 中文:
 引理 disjoint_support_closure_of_disjoint_support
-  结论: {S T : Set (Perm α)}
+  结论: {S T : 集合 (置换 α)}
   证明: by
   intro a ha b hb
   have key1 := support_closure_subset_union S a ha
@@ -740,7 +740,7 @@ lemma disjoint_closure_of_disjoint_support
 
 中文:
 引理 disjoint_closure_of_disjoint_support
-  结论: {S T : Set (Perm α)}
+  结论: {S T : 集合 (置换 α)}
   证明: by
   apply disjoint_of_disjoint_support
   apply disjoint_support_closure_of_disjoint_support
@@ -774,7 +774,7 @@ theorem mem_range_ofSubtype_iff
 
 中文:
 定理 mem_range_ofSubtype_iff
-  条件: {p : α -> 命题} [DecidablePred p] {g : Perm α}
+  条件: {p : α -> 命题} [DecidablePred p] {g : 置换 α}
   证明: by
   constructor
   · rintro ⟨k, rfl⟩ x

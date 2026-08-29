@@ -189,7 +189,7 @@ theorem geom_mean_le_arith_mean
 
 中文:
 定理 geom_mean_le_arith_mean
-  结论: {ι : 类型} (s : Finset ι) (w : ι -> 实数) (z : ι -> 实数)
+  结论: {ι : 类型} (s : 有限集 ι) (w : ι -> 实数) (z : ι -> 实数)
   证明: by
   convert geom_mean_le_arith_mean_weighted s (fun i => (w i) / ∑ i in s, w i) z ?_ ?_ hz
   · rw [← finsetProd_rpow _ _ (fun i hi => rpow_nonneg (hz _ hi) _) _]
@@ -971,7 +971,7 @@ theorem harm_mean_le_geom_mean_weighted
 
 中文:
 定理 harm_mean_le_geom_mean_weighted
-  结论: (w z : ι -> 实数) (hs : s.Nonempty) (hw : 对任意 i in s, 0 < w i)
+  结论: (w z : ι -> 实数) (hs : s.非空) (hw : 对任意 i in s, 0 < w i)
   证明: by
   have : ∏ i in s, (1 / z) i ^ w i <= ∑ i in s, w i * (1 / z) i :=
     geom_mean_le_arith_mean_weighted s w (1 / z) (fun i hi => le_of_lt (hw i hi)) hw'
@@ -1016,7 +1016,7 @@ theorem harm_mean_le_geom_mean
 
 中文:
 定理 harm_mean_le_geom_mean
-  结论: {ι : 类型} (s : Finset ι) (hs : s.Nonempty) (w : ι -> 实数)
+  结论: {ι : 类型} (s : 有限集 ι) (hs : s.非空) (w : ι -> 实数)
   证明: by
   have := harm_mean_le_geom_mean_weighted s (fun i => (w i) / ∑ i in s, w i) z hs ?_ ?_ hz
   · set n := ∑ i in s, w i
@@ -1515,7 +1515,7 @@ lemma inner_le_weight_mul_Lp
 
 中文:
 引理 inner_le_weight_mul_Lp
-  条件: (s : Finset ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数>=0)
+  条件: (s : 有限集 ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数>=0)
   证明: by
   obtain rfl | hp := hp.eq_or_lt
   · simp
@@ -2199,7 +2199,7 @@ theorem Lr_rpow_le_Lp_mul_Lq_of_nonneg
 
 中文:
 定理 Lr_rpow_le_Lp_mul_Lq_of_nonneg
-  结论: {ι : 类型} (s : Finset ι) {f g : ι -> 实数} {p q r : 实数}
+  结论: {ι : 类型} (s : 有限集 ι) {f g : ι -> 实数} {p q r : 实数}
   证明: by
   convert Lr_rpow_le_Lp_mul_Lq s f g hpqr with i hi
   · rw [abs_of_nonneg (mul_nonneg (hf i hi) (hg i hi))]
@@ -2231,7 +2231,7 @@ lemma inner_le_weight_mul_Lp_of_nonneg
 
 中文:
 引理 inner_le_weight_mul_Lp_of_nonneg
-  结论: (s : Finset ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数)
+  结论: (s : 有限集 ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数)
   证明: by
   lift w to ι -> Real>=0 using hw
   lift f to ι -> Real>=0 using hf
@@ -2266,7 +2266,7 @@ lemma compact_inner_le_weight_mul_Lp_of_nonneg
 
 中文:
 引理 compact_inner_le_weight_mul_Lp_of_nonneg
-  结论: (s : Finset ι) {p : 实数} (hp : 1 <= p) {w f : ι -> 实数}
+  结论: (s : 有限集 ι) {p : 实数} (hp : 1 <= p) {w f : ι -> 实数}
   证明: by
   simp_rw [expect_eq_sum_div_card]
   rw [div_rpow]; rw [div_rpow]; rw [div_mul_div_comm]; rw [← rpow_add']; rw [sub_add_cancel]; rw [rpow_one]
@@ -2765,7 +2765,7 @@ lemma inner_le_weight_mul_Lp_of_nonneg
 
 中文:
 引理 inner_le_weight_mul_Lp_of_nonneg
-  条件: (s : Finset ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数>=0∞)
+  条件: (s : 有限集 ι) {p : 实数} (hp : 1 <= p) (w f : ι -> 实数>=0∞)
   证明: by
   obtain rfl | hp := hp.eq_or_lt
   · simp

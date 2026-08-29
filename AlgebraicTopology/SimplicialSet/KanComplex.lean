@@ -92,7 +92,7 @@ lemma exists_lift_of_kanComplex
   exact ⟨φ, hφ⟩
 
 中文:
-引理 exists_lift_of_kanComplex
+引理 存在_lift_of_kanComplex
   结论: [KanComplex X]
   证明: by
   obtain ⟨φ, hφ, _⟩ := hf.exists_lift (terminal.from _) (terminal.from _) (by simp)

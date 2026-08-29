@@ -115,7 +115,7 @@ theorem pairwise_one_le_dist
 
 中文:
 定理 pairwise_one_le_dist
-  结论: Pairwise fun m n : 整数 => 1 <= dist m n
+  结论: 两两 fun m n : 整数 => 1 <= dist m n
   证明: by
   intro m n hne
   rw [dist_eq]; norm_cast; rwa [← zero_add (1 : Int), Int.add_one_le_iff, abs_pos, sub_ne_zero]
@@ -136,7 +136,7 @@ theorem isUniformEmbedding_coe_real
 
 中文:
 定理 isUniformEmbedding_coe_real
-  结论: IsUniformEmbedding ((↑) : 整数 -> 实数)
+  结论: 是一致嵌入 ((↑) : 整数 -> 实数)
   证明: isUniformEmbedding_bot_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
 
 Depends on / 依赖: isUniformEmbedding_bot_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -154,7 +154,7 @@ theorem isClosedEmbedding_coe_real
 
 中文:
 定理 isClosedEmbedding_coe_real
-  结论: IsClosedEmbedding ((↑) : 整数 -> 实数)
+  结论: 是闭嵌入 ((↑) : 整数 -> 实数)
   证明: isClosedEmbedding_of_pairwise_le_dist zero_lt_one pairwise_one_le_dist
 
 Depends on / 依赖: isClosedEmbedding_of_pairwise_le_dist, pairwise_one_le_dist, zero_lt_one
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: MetricSpace 整数
+  签名: 度量空间 整数
   定义体: Int.isUniformEmbedding_coe_real.comapMetricSpace _
 
 Depends on / 依赖: Int.isUniformEmbedding_coe_real.comapMetricSpace, comapMetricSpace, isUniformEmbedding_coe_real
@@ -226,7 +226,7 @@ theorem ball_eq_Ioo
 中文:
 定理 ball_eq_Ioo
   条件: (x : 整数) (r : 实数)
-  结论: ball x r = Ioo ⌊↑x - r⌋ ⌈↑x + r⌉
+  结论: ball x r = 开区间 ⌊↑x - r⌋ ⌈↑x + r⌉
   证明: by
   rw [← preimage_ball]; rw [Real.ball_eq_Ioo]; rw [preimage_Ioo]
 
@@ -248,7 +248,7 @@ theorem closedBall_eq_Icc
 中文:
 定理 closedBall_eq_Icc
   条件: (x : 整数) (r : 实数)
-  结论: closedBall x r = Icc ⌈↑x - r⌉ ⌊↑x + r⌋
+  结论: closedBall x r = 闭区间 ⌈↑x - r⌉ ⌊↑x + r⌋
   证明: by
   rw [← preimage_closedBall]; rw [Real.closedBall_eq_Icc]; rw [preimage_Icc]
 
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: 命题erSpace 整数
+  签名: 真空间 整数
   定义体: ⟨fun x r => by
     rw [closedBall_eq_Icc]
     exact (Set.finite_Icc _ _).isCompact⟩
@@ -296,7 +296,7 @@ alias cobounded_eq := IsOrderBornology.cobounded_eq
 
 中文:
 实例 :
-  签名: IsOrderBornology 整数
+  签名: 是OrderBornology 整数
   定义体: .of_isCompactIcc 0 (by simp [Int.closedBall_eq_Icc]) (by simp [Int.closedBall_eq_Icc])
 
 @[deprecated (since := "2026-04-07")]
@@ -324,7 +324,7 @@ theorem cofinite_eq
 
 中文:
 定理 cofinite_eq
-  结论: (cofinite : Filter 整数) = atBot ⊔ atTop
+  结论: (cofinite : 滤子 整数) = atBot ⊔ atTop
   证明: by
   rw [← cocompact_eq_cofinite]; rw [cocompact_eq_atBot_atTop]
 

@@ -55,7 +55,7 @@ instance instMeasurableSpace
 
 中文:
 实例 instMeasurableSpace
-  签名: : MeasurableSpace (Measure α)
+  签名: : 可测空间 (测度 α)
   定义体: ⨆ (s : Set α) (_ : MeasurableSet s), (borel Real>=0∞).comap fun μ => μ s
 
 Depends on / 依赖: IsEmpty, IsWellOrder, MeasurableSet
@@ -74,8 +74,8 @@ theorem measurable_coe
 
 中文:
 定理 measurable_coe
-  条件: {s : Set α} (hs : MeasurableSet s)
-  结论: Measurable fun μ : Measure α => μ s
+  条件: {s : 集合 α} (hs : 可测集 s)
+  结论: 可测 fun μ : 测度 α => μ s
   证明: Measurable.of_comap_le le_iSup_of_le s le_iSup_of_le hs le_rfl
 
 Depends on / 依赖: Measurable, Measurable.of_comap_le, le_iSup_of_le, le_rfl, of_comap_le
@@ -95,7 +95,7 @@ MeasurableSpace.comap_le_iff_le_map.2 by rw [MeasurableSpace.map_comp]; exact h 
 
 中文:
 定理 measurable_of_measurable_coe
-  结论: (f : β -> Measure α)
+  结论: (f : β -> 测度 α)
   证明: Measurable.of_le_map
     iSup₂_le fun s hs =>
 MeasurableSpace.comap_le_iff_le_map.2 by rw [MeasurableSpace.map_comp]; exact h s hs
@@ -123,7 +123,7 @@ instance instMeasurableAdd₂
 
 中文:
 实例 instMeasurableAdd₂
-  签名: {α : 类型} {m : MeasurableSpace α}
+  签名: {α : 类型} {m : 可测空间 α}
   定义体: by
   refine ⟨Measure.measurable_of_measurable_coe _ fun s hs => ?_⟩
   simp_rw [Measure.coe_add, Pi.add_apply]
@@ -155,8 +155,8 @@ lemma _root_.Measurable.smul_measure
   fun_prop
 
 中文:
-引理 _root_.Measurable.smul_measure
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f) (μ : Measure β)
+引理 _root_.可测.smul_measure
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f) (μ : 测度 β)
   证明: by
   refine Measure.measurable_of_measurable_coe _ fun s hs => ?_
   simp only [Measure.smul_apply, smul_eq_mul]
@@ -180,7 +180,7 @@ theorem measurable_measure
 
 中文:
 定理 measurable_measure
-  条件: {μ : α -> Measure β}
+  条件: {μ : α -> 测度 β}
   证明: ⟨fun hμ _s hs => (measurable_coe hs).comp hμ, measurable_of_measurable_coe μ⟩
 
 Depends on / 依赖: measurable_coe, measurable_of_measurable_coe
@@ -207,8 +207,8 @@ theorem _root_.Measurable.measure_of_isPiSystem
   | iUnion f hfd hfm ihf =>
 
 中文:
-定理 _root_.Measurable.measure_of_isPiSystem
-  结论: {μ : α -> Measure β} [对任意 a, IsFiniteMeasure (μ a)]
+定理 _root_.可测.measure_of_isPiSystem
+  结论: {μ : α -> 测度 β} [对任意 a, 是有限测度 (μ a)]
   证明: by
   rw [measurable_measure]
   intro s hs
@@ -248,8 +248,8 @@ theorem _root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure
 @[fun_prop]
 
 中文:
-定理 _root_.Measurable.measure_of_isPiSystem_of_isProbabilityMeasure
-  结论: {μ : α -> Measure β}
+定理 _root_.可测.measure_of_isPiSystem_of_isProbabilityMeasure
+  结论: {μ : α -> 测度 β}
   证明: .measure_of_isPiSystem hgen hpi h_basic by simp
 
 @[fun_prop]
@@ -278,7 +278,7 @@ theorem measurable_map
 
 中文:
 定理 measurable_map
-  条件: (f : α -> β) (hf : Measurable f)
+  条件: (f : α -> β) (hf : 可测 f)
   证明: by
   refine measurable_of_measurable_coe _ fun s hs => ?_
   simp_rw [map_apply hf hs]
@@ -310,7 +310,7 @@ theorem measurable_dirac
 
 中文:
 定理 measurable_dirac
-  结论: Measurable (Measure.dirac : α -> Measure α)
+  结论: 可测 (测度.dirac : α -> 测度 α)
   证明: by
   refine measurable_of_measurable_coe _ fun s hs => ?_
   simp_rw [dirac_apply' _ hs]
@@ -340,7 +340,7 @@ theorem measurable_lintegral
 
 中文:
 定理 measurable_lintegral
-  条件: {f : α -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : α -> 实数>=0∞} (hf : 可测 f)
   证明: by
   simp only [lintegral_eq_iSup_eapprox_lintegral, hf, SimpleFunc.lintegral]
   refine .iSup fun n => Finset.measurable_fun_sum _ fun i _ => ?_
@@ -374,7 +374,7 @@ definition join
 
 中文:
 定义 join
-  签名: (m : Measure (Measure α))
+  签名: (m : 测度 (测度 α))
   定义体: Measure.ofMeasurable (fun s _ => ∫⁻ μ, μ s ∂m)
     (by simp only [measure_empty, lintegral_const, zero_mul])
     (by
@@ -407,7 +407,7 @@ theorem join_apply
 
 中文:
 定理 join_apply
-  条件: {m : Measure (Measure α)} {s : Set α} (hs : MeasurableSet s)
+  条件: {m : 测度 (测度 α)} {s : 集合 α} (hs : 可测集 s)
   证明: Measure.ofMeasurable_apply s hs
 
 Depends on / 依赖: Measure, Measure.ofMeasurable_apply, ofMeasurable_apply
@@ -431,7 +431,7 @@ theorem le_join_apply
 
 中文:
 定理 le_join_apply
-  条件: (m : Measure (Measure α)) (s : Set α)
+  条件: (m : 测度 (测度 α)) (s : 集合 α)
   结论: ∫⁻ μ, μ s ∂m <= join m s
   证明: by
   rw [measure_eq_iInf]
@@ -458,7 +458,7 @@ theorem join_smul
 
 中文:
 定理 join_smul
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (c : R)
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R)
   证明: by
   ext s hs
   simp [hs]
@@ -482,7 +482,7 @@ lemma join_sum
 
 中文:
 引理 join_sum
-  条件: {ι : 类型} (m : ι -> Measure (Measure α))
+  条件: {ι : 类型} (m : ι -> 测度 (测度 α))
   证明: by
   ext s hs
   simp_rw [sum_apply _ hs, join_apply hs, lintegral_sum_measure]
@@ -510,7 +510,7 @@ theorem join_dirac
 
 中文:
 定理 join_dirac
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: join (dirac μ) = μ
   证明: by
   ext s hs
@@ -538,7 +538,7 @@ theorem le_ae_join
 
 中文:
 定理 le_ae_join
-  条件: (m : Measure (Measure α))
+  条件: (m : 测度 (测度 α))
   结论: (ae m).bind ae <= ae m.join
   证明: by
   intro s hs
@@ -566,7 +566,7 @@ theorem ae_ae_of_ae_join
 
 中文:
 定理 ae_ae_of_ae_join
-  条件: {m : Measure (Measure α)} {p : α -> 命题} (h : 对任意ᵐ a ∂m.join, p a)
+  条件: {m : 测度 (测度 α)} {p : α -> 命题} (h : 对任意ᵐ a ∂m.join, p a)
   证明: le_ae_join m h
 
 Depends on / 依赖: le_ae_join
@@ -584,8 +584,8 @@ theorem _root_.AEMeasurable.ae_of_join
   proof: let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ => ⟨g, hgm, hμ⟩
 
 中文:
-定理 _root_.AEMeasurable.ae_of_join
-  结论: {m : Measure (Measure α)} {f : α -> β}
+定理 _root_.几乎处处可测.ae_of_join
+  结论: {m : 测度 (测度 α)} {f : α -> β}
   证明: let ⟨g, hgm, hg⟩ := h; (ae_ae_of_ae_join hg).mono fun _μ hμ => ⟨g, hgm, hμ⟩
 
 Depends on / 依赖: ae_ae_of_ae_join
@@ -608,7 +608,7 @@ theorem aemeasurable_lintegral
 
 中文:
 定理 aemeasurable_lintegral
-  结论: {m : Measure (Measure α)} {f : α -> 实数>=0∞}
+  结论: {m : 测度 (测度 α)} {f : α -> 实数>=0∞}
   证明: let ⟨g, hgm, hfg⟩ := h
   ⟨fun μ => ∫⁻ a, g a ∂μ, measurable_lintegral hgm,
     (ae_ae_of_ae_join hfg).mono fun _ => lintegral_congr_ae⟩
@@ -638,7 +638,7 @@ theorem join_zero
 
 中文:
 定理 join_zero
-  结论: (0 : Measure (Measure α)).join = 0
+  结论: (0 : 测度 (测度 α)).join = 0
   证明: by
   ext1 s hs
   simp [hs]
@@ -661,7 +661,7 @@ theorem measurable_join
 
 中文:
 定理 measurable_join
-  结论: Measurable (join : Measure (Measure α) -> Measure α)
+  结论: 可测 (join : 测度 (测度 α) -> 测度 α)
   证明: measurable_of_measurable_coe _ fun s hs => by
     simp only [join_apply hs, measurable_lintegral (measurable_coe hs)]
 
@@ -687,7 +687,7 @@ exact lintegral_congr_ae (ae_ae_of_ae_join hfg).mono fun μ hμ =>
 
 中文:
 定理 lintegral_join
-  条件: {m : Measure (Measure α)} {f : α -> 实数>=0∞} (hf : AEMeasurable f (join m))
+  条件: {m : 测度 (测度 α)} {f : α -> 实数>=0∞} (hf : 几乎处处可测 f (join m))
   证明: by
   wlog hfm : Measurable f generalizing f
   · rcases hf with ⟨g, hgm, hfg⟩
@@ -741,7 +741,7 @@ theorem lintegral_join_le
 
 中文:
 定理 lintegral_join_le
-  条件: (f : α -> 实数>=0∞) (m : Measure (Measure α))
+  条件: (f : α -> 实数>=0∞) (m : 测度 (测度 α))
   证明: by
   rcases exists_measurable_le_lintegral_eq (join m) f with ⟨g, hgm, hgf, hfg_int⟩
   rw [hfg_int]; rw [lintegral_join hgm.aemeasurable]
@@ -769,7 +769,7 @@ definition bind
 
 中文:
 定义 bind
-  签名: (m : Measure α) (f : α -> Measure β)
+  签名: (m : 测度 α) (f : α -> 测度 β)
   定义体: join (map f m)
 
 @[simp]
@@ -791,8 +791,8 @@ theorem bind_zero_left
 
 中文:
 定理 bind_zero_left
-  条件: (f : α -> Measure β)
-  结论: bind (0 : Measure α) f = 0
+  条件: (f : α -> 测度 β)
+  结论: bind (0 : 测度 α) f = 0
   证明: by simp [bind]
 
 @[simp]
@@ -811,7 +811,7 @@ theorem bind_apply
 
 中文:
 定理 bind_apply
-  结论: {m : Measure α} {f : α -> Measure β} {s : Set β} (hs : MeasurableSet s)
+  结论: {m : 测度 α} {f : α -> 测度 β} {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [bind]; rw [join_apply hs]; rw [lintegral_map' (measurable_coe hs).aemeasurable hf]
 
@@ -833,7 +833,7 @@ theorem bind_apply_le
 
 中文:
 定理 bind_apply_le
-  条件: {m : Measure α} (f : α -> Measure β) {s : Set β} (hs : MeasurableSet s)
+  条件: {m : 测度 α} (f : α -> 测度 β) {s : 集合 β} (hs : 可测集 s)
   证明: by
   rw [bind]; rw [join_apply hs]
   apply lintegral_map_le
@@ -855,7 +855,7 @@ theorem ae_ae_of_ae_bind
 
 中文:
 定理 ae_ae_of_ae_bind
-  结论: {m : Measure α} {f : α -> Measure β} {p : β -> 命题} (hf : AEMeasurable f m)
+  结论: {m : 测度 α} {f : α -> 测度 β} {p : β -> 命题} (hf : 几乎处处可测 f m)
   证明: ae_of_ae_map hf ae_ae_of_ae_join h
 
 Depends on / 依赖: ae_ae_of_ae_join, ae_of_ae_map
@@ -873,8 +873,8 @@ theorem _root_.AEMeasurable.ae_of_bind
   proof: ae_of_ae_map hf hg.ae_of_join
 
 中文:
-定理 _root_.AEMeasurable.ae_of_bind
-  结论: {γ : 类型} {_ : MeasurableSpace γ} {m : Measure α}
+定理 _root_.几乎处处可测.ae_of_bind
+  结论: {γ : 类型} {_ : 可测空间 γ} {m : 测度 α}
   证明: ae_of_ae_map hf hg.ae_of_join
 
 Depends on / 依赖: ae_of_ae_map, ae_of_join, hg.ae_of_join
@@ -896,7 +896,7 @@ theorem bind_congr_right
 
 中文:
 定理 bind_congr_right
-  条件: {μ : Measure α} {f g : α -> Measure β} (h : f =ᵐ[μ] g)
+  条件: {μ : 测度 α} {f g : α -> 测度 β} (h : f =ᵐ[μ] g)
   证明: congrArg join map_congr h
 
 @[simp]
@@ -920,8 +920,8 @@ lemma bind_const
 
 中文:
 引理 bind_const
-  条件: {m : Measure α} {ν : Measure β}
-  结论: m.bind (fun _ => ν) = m Set.univ • ν
+  条件: {m : 测度 α} {ν : 测度 β}
+  结论: m.bind (fun _ => ν) = m 集合.univ • ν
   证明: by
   simp [bind]
 -/
@@ -941,8 +941,8 @@ theorem bind_zero_right'
 
 中文:
 定理 bind_zero_right'
-  条件: (m : Measure α)
-  结论: bind m (fun _ => 0 : α -> Measure β) = 0
+  条件: (m : 测度 α)
+  结论: bind m (fun _ => 0 : α -> 测度 β) = 0
   证明: by simp
 
 @[simp]
@@ -963,8 +963,8 @@ theorem bind_zero_right
 
 中文:
 定理 bind_zero_right
-  条件: (m : Measure α)
-  结论: bind m (0 : α -> Measure β) = 0
+  条件: (m : 测度 α)
+  结论: bind m (0 : α -> 测度 β) = 0
   证明: bind_zero_right' m
 
 @[fun_prop]
@@ -984,7 +984,7 @@ theorem measurable_bind'
 
 中文:
 定理 measurable_bind'
-  条件: {g : α -> Measure β} (hg : Measurable g)
+  条件: {g : α -> 测度 β} (hg : 可测 g)
   证明: measurable_join.comp (measurable_map _ hg)
 
 Depends on / 依赖: measurable_join, measurable_join.comp, measurable_map
@@ -1004,7 +1004,7 @@ theorem aemeasurable_bind
 
 中文:
 定理 aemeasurable_bind
-  结论: {g : α -> Measure β} {m : Measure (Measure α)}
+  结论: {g : α -> 测度 β} {m : 测度 (测度 α)}
   证明: let ⟨f, hfm, hf⟩ := hg
   ⟨(bind · f), measurable_bind' hfm, (ae_ae_of_ae_join hf).mono fun _ => bind_congr_right⟩
 
@@ -1026,7 +1026,7 @@ theorem bind_sum
 
 中文:
 定理 bind_sum
-  结论: {ι : 类型} (m : ι -> Measure α) (f : α -> Measure β)
+  结论: {ι : 类型} (m : ι -> 测度 α) (f : α -> 测度 β)
   证明: by
   simp_rw [bind, map_sum h, join_sum]
 
@@ -1048,7 +1048,7 @@ lemma bind_smul
 
 中文:
 引理 bind_smul
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞] (c : R) (m : Measure α)
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞] (c : R) (m : 测度 α)
   证明: by
   simp_rw [bind, Measure.map_smul, join_smul]
 
@@ -1068,7 +1068,7 @@ theorem lintegral_bind
 
 中文:
 定理 lintegral_bind
-  结论: {m : Measure α} {μ : α -> Measure β} {f : β -> 实数>=0∞} (hμ : AEMeasurable μ m)
+  结论: {m : 测度 α} {μ : α -> 测度 β} {f : β -> 实数>=0∞} (hμ : 几乎处处可测 μ m)
   证明: (lintegral_join hf).trans (lintegral_map' (aemeasurable_lintegral hf) hμ)
 
 Depends on / 依赖: LinearOrder, WellFoundedLT, aemeasurable_lintegral, isWellOrder_lt, lintegral_join, lintegral_map
@@ -1087,7 +1087,7 @@ theorem lintegral_bind_le
 
 中文:
 定理 lintegral_bind_le
-  条件: (f : β -> 实数>=0∞) (m : Measure α) (μ : α -> Measure β)
+  条件: (f : β -> 实数>=0∞) (m : 测度 α) (μ : α -> 测度 β)
   证明: (lintegral_join_le _ _).trans (lintegral_map_le _ _)
 
 Depends on / 依赖: lintegral_join_le, lintegral_map_le
@@ -1113,7 +1113,7 @@ theorem bind_bind
 
 中文:
 定理 bind_bind
-  结论: {γ} [MeasurableSpace γ] {m : Measure α} {f : α -> Measure β} {g : β -> Measure γ}
+  结论: {γ} [可测空间 γ] {m : 测度 α} {f : α -> 测度 β} {g : β -> 测度 γ}
   证明: by
   ext1 s hs
   rw [bind_apply hs hg]; rw [lintegral_bind hf]; rw [bind_apply hs]
@@ -1149,7 +1149,7 @@ theorem dirac_bind
 
 中文:
 定理 dirac_bind
-  条件: {f : α -> Measure β} (hf : Measurable f) (a : α)
+  条件: {f : α -> 测度 β} (hf : 可测 f) (a : α)
   结论: bind (dirac a) f = f a
   证明: by
   simp [bind, map_dirac' hf]
@@ -1178,7 +1178,7 @@ theorem bind_dirac
 
 中文:
 定理 bind_dirac
-  条件: {m : Measure α}
+  条件: {m : 测度 α}
   结论: bind m dirac = m
   证明: by
   ext1 s hs
@@ -1207,7 +1207,7 @@ lemma bind_dirac_eq_map
 
 中文:
 引理 bind_dirac_eq_map
-  条件: (m : Measure α) {f : α -> β} (hf : Measurable f)
+  条件: (m : 测度 α) {f : α -> β} (hf : 可测 f)
   证明: by
   rw [← bind_dirac (m := m.map f)]; rw [bind]; rw [bind]; rw [map_map]; rw [Function.comp_def]
   exacts [measurable_dirac, hf]
@@ -1230,7 +1230,7 @@ theorem join_eq_bind
 
 中文:
 定理 join_eq_bind
-  条件: (μ : Measure (Measure α))
+  条件: (μ : 测度 (测度 α))
   结论: join μ = bind μ id
   证明: by rw [bind, map_id]
 
@@ -1251,7 +1251,7 @@ theorem join_map_map
 
 中文:
 定理 join_map_map
-  条件: {f : α -> β} (hf : Measurable f) (μ : Measure (Measure α))
+  条件: {f : α -> β} (hf : 可测 f) (μ : 测度 (测度 α))
   证明: by
   ext1 s hs
   rw [join_apply hs]; rw [map_apply hf hs]; rw [join_apply (hf hs)]; rw [lintegral_map (measurable_coe hs) (measurable_map f hf)]
@@ -1281,7 +1281,7 @@ theorem join_map_join
 
 中文:
 定理 join_map_join
-  条件: (μ : Measure (Measure (Measure α)))
+  条件: (μ : 测度 (测度 (测度 α)))
   结论: join (map join μ) = join (join μ)
   证明: by
   change bind μ join = join (join μ)
@@ -1310,7 +1310,7 @@ theorem join_map_dirac
 
 中文:
 定理 join_map_dirac
-  条件: (μ : Measure α)
+  条件: (μ : 测度 α)
   结论: join (map dirac μ) = μ
   证明: bind_dirac
 

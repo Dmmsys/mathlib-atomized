@@ -117,7 +117,7 @@ theorem emultiplicity_one
 
 中文:
 定理 emultiplicity_one
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: emultiplicity p 1 = 0
   证明: emultiplicity_of_one_right hp.prime.not_isUnit
 
@@ -136,7 +136,7 @@ theorem emultiplicity_mul
 
 中文:
 定理 emultiplicity_mul
-  条件: {p m n : 自然数} (hp : p.Prime)
+  条件: {p m n : 自然数} (hp : p.素)
   证明: _root_.emultiplicity_mul hp.prime
 
 Depends on / 依赖: _root_, _root_.emultiplicity_mul, emultiplicity_mul, hp.prime
@@ -155,7 +155,7 @@ theorem emultiplicity_pow
 
 中文:
 定理 emultiplicity_pow
-  条件: {p m n : 自然数} (hp : p.Prime)
+  条件: {p m n : 自然数} (hp : p.素)
   证明: _root_.emultiplicity_pow hp.prime
 
 Depends on / 依赖: _root_, _root_.emultiplicity_pow, emultiplicity_pow, hp.prime
@@ -175,7 +175,7 @@ theorem emultiplicity_self
 
 中文:
 定理 emultiplicity_self
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: emultiplicity p p = 1
   证明: (Nat.finiteMultiplicity_iff.2 ⟨hp.ne_one, hp.pos⟩).emultiplicity_self
 
@@ -195,7 +195,7 @@ theorem emultiplicity_pow_self
 
 中文:
 定理 emultiplicity_pow_self
-  条件: {p n : 自然数} (hp : p.Prime)
+  条件: {p n : 自然数} (hp : p.素)
   结论: emultiplicity p (p ^ n) = n
   证明: _root_.emultiplicity_pow_self hp.ne_zero hp.prime.not_isUnit n
 
@@ -218,7 +218,7 @@ theorem emultiplicity_factorial
 
 中文:
 定理 emultiplicity_factorial
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   证明: by
         rw [factorial_succ]; rw [hp.emultiplicity_mul]; rw [add_comm]
       _ = (∑ i in Ico 1 b, n / p ^ i : Nat) + #{i in Ico 1 b | p ^ i ∣ n + 1} := by
@@ -257,7 +257,7 @@ emultiplicity_factorial hp lt_succ_of_lt Nat.lt_add_one (log p n),
 
 中文:
 定理 sub_one_mul_multiplicity_factorial
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   simp only [multiplicity_eq_of_emultiplicity_eq_some <|
 emultiplicity_factorial hp lt_succ_of_lt Nat.lt_add_one (log p n),
@@ -292,7 +292,7 @@ theorem emultiplicity_factorial_mul_succ
 
 中文:
 定理 emultiplicity_factorial_mul_succ
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   have hp' := hp.prime
   have h0 : 2 <= p := hp.two_le
@@ -342,7 +342,7 @@ theorem emultiplicity_factorial_mul
 
 中文:
 定理 emultiplicity_factorial_mul
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   induction n with
   | zero => simp
@@ -380,7 +380,7 @@ theorem multiplicity_factorial_pow
 
 中文:
 定理 multiplicity_factorial_pow
-  条件: {n p : 自然数} (hp : p.Prime)
+  条件: {n p : 自然数} (hp : p.素)
   证明: by
   rw [← ENat.natCast_inj]; rw [← (Nat.finiteMultiplicity_iff.2
       ⟨hp.ne_one]; rw [(p ^ n).factorial_pos⟩).emultiplicity_eq_multiplicity]
@@ -411,7 +411,7 @@ theorem pow_dvd_factorial_iff
 
 中文:
 定理 pow_dvd_factorial_iff
-  条件: {p : 自然数} {n r b : 自然数} (hp : p.Prime) (hbn : log p n < b)
+  条件: {p : 自然数} {n r b : 自然数} (hp : p.素) (hbn : log p n < b)
   证明: by
   rw [← ENat.natCast_le_natCast]; rw [← hp.emultiplicity_factorial hbn]; rw [pow_dvd_iff_le_emultiplicity]
 
@@ -434,7 +434,7 @@ theorem emultiplicity_factorial_le_div_pred
 
 中文:
 定理 emultiplicity_factorial_le_div_pred
-  条件: {p : 自然数} (hp : p.Prime) (n : 自然数)
+  条件: {p : 自然数} (hp : p.素) (n : 自然数)
   证明: by
   rw [hp.emultiplicity_factorial (lt_succ_self _)]
   apply WithTop.coe_mono
@@ -463,7 +463,7 @@ theorem emultiplicity_choose'
 
 中文:
 定理 emultiplicity_choose'
-  条件: {p n k b : 自然数} (hp : p.Prime) (hnb : log p (n + k) < b)
+  条件: {p n k b : 自然数} (hp : p.素) (hnb : log p (n + k) < b)
   证明: by
   have h₁ :
       emultiplicity p (choose (n + k) k) + emultiplicity p (k ! * n !) =
@@ -501,7 +501,7 @@ theorem emultiplicity_choose
 
 中文:
 定理 emultiplicity_choose
-  条件: {p n k b : 自然数} (hp : p.Prime) (hkn : k <= n) (hnb : log p n < b)
+  条件: {p n k b : 自然数} (hp : p.素) (hkn : k <= n) (hnb : log p n < b)
   证明: by
   have := Nat.sub_add_cancel hkn
   convert! @emultiplicity_choose' p (n - k) k b hp _
@@ -526,7 +526,7 @@ theorem emultiplicity_le_emultiplicity_choose_add
 
 中文:
 定理 emultiplicity_le_emultiplicity_choose_add
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
 -/
 theorem emultiplicity_le_emultiplicity_choose_add {p : Nat} (hp : p.Prime) :
     forall n k : Nat, emultiplicity p n <= emultiplicity p (choose n k) + emultiplicity p k
@@ -557,7 +557,7 @@ theorem emultiplicity_choose_prime_pow_add_emultiplicity
 
 中文:
 定理 emultiplicity_choose_prime_pow_add_emultiplicity
-  结论: (hp : p.Prime) (hkn : k <= p ^ n)
+  结论: (hp : p.素) (hkn : k <= p ^ n)
   证明: le_antisymm
     (by
       have hdisj :
@@ -601,7 +601,7 @@ theorem emultiplicity_choose_prime_pow
 
 中文:
 定理 emultiplicity_choose_prime_pow
-  条件: {p n k : 自然数} (hp : p.Prime) (hkn : k <= p ^ n) (hk0 : k != 0)
+  条件: {p n k : 自然数} (hp : p.素) (hkn : k <= p ^ n) (hk0 : k != 0)
   证明: by
   push_cast
   rw [← emultiplicity_choose_prime_pow_add_emultiplicity hp hkn hk0]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [Nat.pos_of_ne_zero hk0⟩).emultiplicity_eq_multiplicity]; rw [(finiteMultiplicity_iff.2 ⟨hp.ne_one]; rw [choose_pos hkn⟩).emultiplicity_eq_multiplicity]
@@ -634,7 +634,7 @@ refine emultiplicity_ne_zero.1 fun h => hkp.not_ge Nat.le_of_dvd hk.bot_lt ?_
 
 中文:
 定理 dvd_choose_pow
-  条件: (hp : Prime p) (hk : k != 0) (hkp : k != p ^ n)
+  条件: (hp : 素 p) (hk : k != 0) (hkp : k != p ^ n)
   结论: p ∣ (p ^ n).choose k
   证明: by
   obtain hkp | hkp := hkp.symm.lt_or_gt
@@ -667,7 +667,7 @@ theorem dvd_choose_pow_iff
 
 中文:
 定理 dvd_choose_pow_iff
-  条件: (hp : Prime p)
+  条件: (hp : 素 p)
   结论: p ∣ (p ^ n).choose k ↔ k != 0 ∧ k != p ^ n
   证明: by
   refine ⟨fun h => ⟨?_, ?_⟩, fun h => dvd_choose_pow hp h.1 h.2⟩ <;> rintro rfl <;>

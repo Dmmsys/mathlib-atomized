@@ -47,7 +47,7 @@ instance range_Iio
 
 中文:
 实例 range_Iio
-  签名: : HasCountableSeparatingOn X (· in range Iio) s
+  签名: : 有余untableSeparatingOn X (· in range 左无界右开区间) s
   定义体: by
   constructor
   rcases TopologicalSpace.exists_countable_dense X with ⟨s, hsc, hsd⟩
@@ -91,7 +91,7 @@ instance range_Ioi
 
 中文:
 实例 range_Ioi
-  签名: : HasCountableSeparatingOn X (· in range Ioi) s
+  签名: : 有余untableSeparatingOn X (· in range 左开右无界区间) s
   定义体: .range_Iio (X := Xᵒᵈ)
 
 Depends on / 依赖: range_Iio
@@ -111,7 +111,7 @@ instance range_Iic
 
 中文:
 实例 range_Iic
-  签名: : HasCountableSeparatingOn X (· in range Iic) s
+  签名: : 有余untableSeparatingOn X (· in range 左无界右闭区间) s
   定义体: let ⟨t, htc, ht_sub, ht⟩ := (range_Ioi (X := X) (s := s)).1
   ⟨compl '' t, htc.image _, by simpa [← compl_inj_iff (x := Ioi _)] using ht_sub,
     by simpa [not_iff_not]⟩
@@ -133,7 +133,7 @@ instance range_Ici
 
 中文:
 实例 range_Ici
-  签名: : HasCountableSeparatingOn X (· in range Ici) s
+  签名: : 有余untableSeparatingOn X (· in range 左闭右无界区间) s
   定义体: range_Iic (X := Xᵒᵈ)
 
 Depends on / 依赖: range_Iic
@@ -157,7 +157,7 @@ lemma of_forall_eventually_lt_iff
   proof: of_forall_separating_preimage (· in range Iio) forall_mem_range.2 fun x => .set_eq (h x)
 
 中文:
-引理 of_forall_eventually_lt_iff
+引理 of_对任意_eventually_lt_iff
   条件: (h : 对任意 x, 对任意ᶠ a in l, f a < x ↔ g a < x)
   结论: f =ᶠ[l] g
   证明: of_forall_separating_preimage (· in range Iio) forall_mem_range.2 fun x => .set_eq (h x)
@@ -177,7 +177,7 @@ lemma of_forall_eventually_le_iff
   proof: of_forall_separating_preimage (· in range Iic) forall_mem_range.2 fun x => .set_eq (h x)
 
 中文:
-引理 of_forall_eventually_le_iff
+引理 of_对任意_eventually_le_iff
   条件: (h : 对任意 x, 对任意ᶠ a in l, f a <= x ↔ g a <= x)
   结论: f =ᶠ[l] g
   证明: of_forall_separating_preimage (· in range Iic) forall_mem_range.2 fun x => .set_eq (h x)
@@ -197,7 +197,7 @@ lemma of_forall_eventually_gt_iff
   proof: of_forall_eventually_lt_iff (X := Xᵒᵈ) h
 
 中文:
-引理 of_forall_eventually_gt_iff
+引理 of_对任意_eventually_gt_iff
   条件: (h : 对任意 x, 对任意ᶠ a in l, x < f a ↔ x < g a)
   结论: f =ᶠ[l] g
   证明: of_forall_eventually_lt_iff (X := Xᵒᵈ) h
@@ -217,7 +217,7 @@ lemma of_forall_eventually_ge_iff
   proof: of_forall_eventually_le_iff (X := Xᵒᵈ) h
 
 中文:
-引理 of_forall_eventually_ge_iff
+引理 of_对任意_eventually_ge_iff
   条件: (h : 对任意 x, 对任意ᶠ a in l, x <= f a ↔ x <= g a)
   结论: f =ᶠ[l] g
   证明: of_forall_eventually_le_iff (X := Xᵒᵈ) h

@@ -45,11 +45,11 @@ structure Compacts
     - isCompact' : IsCompact carrier
 
 中文:
-结构 Compacts
-  参数: (α : 类型) [TopologicalSpace α]
+结构 余mpacts
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (2 个):
-    - carrier : Set α
-    - isCompact' : IsCompact carrier
+    - carrier : 集合 α
+    - isCompact' : 是紧集 carrier
 -/
 structure Compacts (α : Type*) [TopologicalSpace α] where
   /-- the carrier set, i.e. the points in this set -/
@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Compacts α) α
+  签名: 集合状 (余mpacts α) α
   定义体: Compacts.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Compacts α)
+  签名: 偏序 (余mpacts α)
   定义体: .ofSetLike (Compacts α) α
 
 Depends on / 依赖: Compacts, ofSetLike
@@ -108,7 +108,7 @@ initialize_simps_projections Compacts (carrier -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: (s : Compacts α)
+  签名: (s : 余mpacts α)
   定义体: s
 
 initialize_simps_projections Compacts (carrier -> coe, as_prefix coe)
@@ -128,8 +128,8 @@ theorem isCompact
 
 中文:
 定理 isCompact
-  条件: (s : Compacts α)
-  结论: IsCompact (s : Set α)
+  条件: (s : 余mpacts α)
+  结论: 是紧集 (s : 集合 α)
   证明: s.isCompact'
 -/
 protected theorem isCompact (s : Compacts α) : IsCompact (s : Set α) :=
@@ -152,7 +152,7 @@ definition toCloseds
 
 中文:
 定义 toCloseds
-  签名: [T2Space α] (s : Compacts α)
+  签名: [T2空间 α] (s : 余mpacts α)
   定义体: ⟨s, s.isCompact.isClosed⟩
 
 @[simp]
@@ -173,7 +173,7 @@ theorem mem_toCloseds
 
 中文:
 定理 mem_toCloseds
-  条件: [T2Space α] {x : α} {s : Compacts α}
+  条件: [T2空间 α] {x : α} {s : 余mpacts α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -193,8 +193,8 @@ theorem toCloseds_injective
 
 中文:
 定理 toCloseds_injective
-  条件: [T2Space α]
-  结论: Function.Injective (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 函数.单射 (toCloseds (α := α))
   证明: .of_comp (f := SetLike.coe) SetLike.coe_injective
 -/
 theorem toCloseds_injective [T2Space α] : Function.Injective (toCloseds (α := α)) :=
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Set α) (Compacts α) (↑) IsCompact
+  签名: CanLift (集合 α) (余mpacts α) (↑) 是紧集
   定义体: ⟨⟨K, hK⟩, rfl⟩
 
 @[ext]
@@ -233,7 +233,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : Compacts α} (h : (s : Set α) = t)
+  条件: {s t : 余mpacts α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -256,8 +256,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Set α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 集合 α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 
 @[simp]
@@ -277,7 +277,7 @@ theorem carrier_eq_coe
 
 中文:
 定理 carrier_eq_coe
-  条件: (s : Compacts α)
+  条件: (s : 余mpacts α)
   结论: s.carrier = s
   证明: rfl
 -/
@@ -294,7 +294,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Compacts α)
+  签名: 最大值 (余mpacts α)
   定义体: ⟨fun s t => ⟨s union t, s.isCompact.union t.isCompact⟩⟩
 
 Depends on / 依赖: isCompact, s.isCompact.union, t.isCompact
@@ -311,8 +311,8 @@ instance [T2Space
   body: ⟨fun s t => ⟨s inter t, s.isCompact.inter t.isCompact⟩⟩
 
 中文:
-实例 [T2Space
-  签名: α] : Min (Compacts α)
+实例 [T2空间
+  签名: α] : 最小值 (余mpacts α)
   定义体: ⟨fun s t => ⟨s inter t, s.isCompact.inter t.isCompact⟩⟩
 
 Depends on / 依赖: isCompact, s.isCompact.inter, t.isCompact
@@ -329,8 +329,8 @@ instance [CompactSpace
   body: ⟨⟨univ, isCompact_univ⟩⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] : Top (Compacts α)
+实例 [紧空间
+  签名: α] : 顶元素 (余mpacts α)
   定义体: ⟨⟨univ, isCompact_univ⟩⟩
 
 Depends on / 依赖: isCompact_univ
@@ -348,7 +348,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Compacts α)
+  签名: 底元素 (余mpacts α)
   定义体: ⟨⟨∅, isCompact_empty⟩⟩
 
 Depends on / 依赖: isCompact_empty
@@ -366,7 +366,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (Compacts α)
+  签名: SemilatticeSup (余mpacts α)
   定义体: fast_instance% SetLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeSup, coe_injective, fast_instance, semilatticeSup
@@ -383,8 +383,8 @@ instance [T2Space
   body: fast_instance% SetLike.coe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 中文:
-实例 [T2Space
-  签名: α] : DistribLattice (Compacts α)
+实例 [T2空间
+  签名: α] : Distrib格 (余mpacts α)
   定义体: fast_instance% SetLike.coe_injective.distribLattice _ .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.distribLattice, coe_injective, distribLattice, fast_instance
@@ -402,7 +402,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (Compacts α)
+  签名: 有底序 (余mpacts α)
   定义体: fast_instance% OrderBot.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl
 
 Depends on / 依赖: OrderBot, OrderBot.lift, fast_instance
@@ -419,8 +419,8 @@ instance [CompactSpace
   body: fast_instance% BoundedOrder.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl rfl
 
 中文:
-实例 [CompactSpace
-  签名: α] : BoundedOrder (Compacts α)
+实例 [紧空间
+  签名: α] : 有界序 (余mpacts α)
   定义体: fast_instance% BoundedOrder.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl rfl
 
 Depends on / 依赖: BoundedOrder, BoundedOrder.lift, fast_instance
@@ -438,7 +438,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Compacts α)
+  签名: 可居 (余mpacts α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Compacts α) := ⟨⊥⟩
@@ -454,8 +454,8 @@ instance [IsEmpty
 @[simp]
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (Compacts α) where
+实例 [是空
+  签名: α] : 唯一 (余mpacts α) where
   定义体: Compacts.ext (Subsingleton.elim _ _)
 
 @[simp]
@@ -479,8 +479,8 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (s t : Compacts α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  条件: (s t : 余mpacts α)
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: rfl
 
 @[simp]
@@ -502,8 +502,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: [T2Space α] (s t : Compacts α)
-  结论: (↑(s ⊓ t) : Set α) = ↑s inter ↑t
+  条件: [T2空间 α] (s t : 余mpacts α)
+  结论: (↑(s ⊓ t) : 集合 α) = ↑s inter ↑t
   证明: rfl
 
 @[simp]
@@ -525,8 +525,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [CompactSpace α]
-  结论: (↑(⊤ : Compacts α) : Set α) = univ
+  条件: [紧空间 α]
+  结论: (↑(⊤ : 余mpacts α) : 集合 α) = univ
   证明: rfl
 
 @[simp]
@@ -547,7 +547,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: (↑(⊥ : Compacts α) : Set α) = ∅
+  结论: (↑(⊥ : 余mpacts α) : 集合 α) = ∅
   证明: rfl
 
 @[simp, norm_cast]
@@ -569,8 +569,8 @@ theorem coe_eq_empty
 
 中文:
 定理 coe_eq_empty
-  条件: {s : Compacts α}
-  结论: (s : Set α) = ∅ ↔ s = ⊥
+  条件: {s : 余mpacts α}
+  结论: (s : 集合 α) = ∅ ↔ s = ⊥
   证明: SetLike.coe_injective.eq_iff' rfl
 
 @[simp]
@@ -594,8 +594,8 @@ theorem coe_nonempty
 
 中文:
 定理 coe_nonempty
-  条件: {s : Compacts α}
-  结论: (s : Set α).Nonempty ↔ s != ⊥
+  条件: {s : 余mpacts α}
+  结论: (s : 集合 α).非空 ↔ s != ⊥
   证明: nonempty_iff_ne_empty.trans coe_eq_empty.not
 
 @[simp]
@@ -621,7 +621,7 @@ theorem coe_finset_sup
 
 中文:
 定理 coe_finset_sup
-  条件: {ι : 类型} {s : Finset ι} {f : ι -> Compacts α}
+  条件: {ι : 类型} {s : 有限集 ι} {f : ι -> 余mpacts α}
   证明: by
   refine Finset.cons_induction_on s rfl fun a s _ h => ?_
   simp_rw [Finset.sup_cons, coe_sup, sup_eq_union]
@@ -650,7 +650,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton α (Compacts α)
+  签名: 单例 α (余mpacts α)
   定义体: ⟨{x}, isCompact_singleton⟩
 
 @[simp]
@@ -675,7 +675,7 @@ theorem mem_singleton
 中文:
 定理 mem_singleton
   条件: (x y : α)
-  结论: x in ({y} : Compacts α) ↔ x = y
+  结论: x in ({y} : 余mpacts α) ↔ x = y
   证明: Iff.rfl
 
 @[simp]
@@ -697,7 +697,7 @@ theorem toCloseds_singleton
 
 中文:
 定理 toCloseds_singleton
-  条件: [T2Space α] (x : α)
+  条件: [T2空间 α] (x : α)
   结论: toCloseds {x} = {x}
   证明: rfl
 -/
@@ -716,7 +716,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Function.Injective ({·} : α -> Compacts α)
+  结论: 函数.单射 ({·} : α -> 余mpacts α)
   证明: .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
@@ -739,7 +739,7 @@ theorem singleton_inj
 中文:
 定理 singleton_inj
   条件: {x y : α}
-  结论: ({x} : Compacts α) = {y} ↔ x = y
+  结论: ({x} : 余mpacts α) = {y} ↔ x = y
   证明: singleton_injective.eq_iff
 
 Depends on / 依赖: eq_iff, singleton_injective, singleton_injective.eq_iff
@@ -764,8 +764,8 @@ theorem disjoint_coe_iff
 
 中文:
 定理 disjoint_coe_iff
-  条件: (K L : Compacts α)
-  结论: Disjoint (K : Set α) L ↔ Disjoint K L where
+  条件: (K L : 余mpacts α)
+  结论: Disjoint (K : 集合 α) L ↔ Disjoint K L where
   证明: .of_orderEmbedding (.ofMapLEIff SetLike.coe (fun _ _ => SetLike.coe_subset_coe)) h
   mpr h := by
     rw [Set.disjoint_iff]
@@ -799,8 +799,8 @@ instance [Nonempty
 @[simp]
 
 中文:
-实例 [Nonempty
-  签名: α] : Nontrivial (Compacts α)
+实例 [非空
+  签名: α] : 非平凡 (余mpacts α)
   定义体: by
   constructor
   obtain ⟨x⟩ := ‹Nonempty α›
@@ -831,7 +831,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (Compacts α) ↔ IsEmpty α
+  结论: 子单例 (余mpacts α) ↔ 是空 α
   证明: by
   refine ⟨fun h => ?_, fun _ => inferInstance⟩
   contrapose! h
@@ -858,7 +858,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (Compacts α) ↔ Nonempty α
+  结论: 非平凡 (余mpacts α) ↔ 非空 α
   证明: by
   rw [← not_subsingleton_iff_nontrivial]; rw [subsingleton_iff]; rw [not_isEmpty_iff]
 
@@ -879,7 +879,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (hf : Continuous f) (K : Compacts α)
+  签名: (f : α -> β) (hf : 连续 f) (K : 余mpacts α)
   定义体: ⟨f '' K.1, K.2.image hf⟩
 
 @[simp, norm_cast]
@@ -901,8 +901,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: {f : α -> β} (hf : Continuous f) (s : Compacts α)
-  结论: (s.map f hf : Set β) = f '' s
+  条件: {f : α -> β} (hf : 连续 f) (s : 余mpacts α)
+  结论: (s.map f hf : 集合 β) = f '' s
   证明: rfl
 
 @[simp]
@@ -922,7 +922,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (K : Compacts α)
+  条件: (K : 余mpacts α)
   结论: K.map id continuous_id = K
   证明: Compacts.ext Set.image_id _
 
@@ -941,7 +941,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: (f : β -> γ) (g : α -> β) (hf : Continuous f) (hg : Continuous g) (K : Compacts α)
+  条件: (f : β -> γ) (g : α -> β) (hf : 连续 f) (hg : 连续 g) (K : 余mpacts α)
   证明: Compacts.ext Set.image_comp _ _ _
 
 Depends on / 依赖: Compacts, Compacts.ext, Set.image_comp, image_comp
@@ -962,7 +962,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (hf : Continuous f) (hf' : Function.Injective f)
+  条件: {f : α -> β} (hf : 连续 f) (hf' : 函数.单射 f)
   证明: .of_comp (f := SetLike.coe) hf'.image_injective.comp SetLike.coe_injective
 
 @[simp]
@@ -987,8 +987,8 @@ theorem map_singleton
 
 中文:
 定理 map_singleton
-  条件: {f : α -> β} (hf : Continuous f) (x : α)
-  结论: Compacts.map f hf {x} = {f x}
+  条件: {f : α -> β} (hf : 连续 f) (x : α)
+  结论: 余mpacts.map f hf {x} = {f x}
   证明: Compacts.ext Set.image_singleton
 
 @[simp]
@@ -1012,7 +1012,7 @@ theorem map_injective_iff
 
 中文:
 定理 map_injective_iff
-  条件: {f : α -> β} (hf : Continuous f)
+  条件: {f : α -> β} (hf : 连续 f)
   证明: by
   refine ⟨fun h => .of_comp (f := ({·} : β -> Compacts β)) ?_, map_injective hf⟩
   simp_rw [Function.comp_def, ← map_singleton hf]
@@ -1041,7 +1041,7 @@ theorem range_map
 
 中文:
 定理 range_map
-  条件: {f : α -> β} (hf : Topology.IsInducing f)
+  条件: {f : α -> β} (hf : 拓扑.是Inducing f)
   证明: subset_antisymm
     (range_subset_iff.mpr fun _ => image_subset_range _ _)
     (fun L hL => ⟨
@@ -1116,7 +1116,7 @@ theorem equiv_refl
 
 中文:
 定理 equiv_refl
-  结论: Compacts.equiv (Homeomorph.refl α) = Equiv.refl _
+  结论: 余mpacts.equiv (同胚.refl α) = 等价.refl _
   证明: Equiv.ext map_id
 
 @[simp]
@@ -1163,7 +1163,7 @@ theorem equiv_symm
 中文:
 定理 equiv_symm
   条件: (f : α ≃ₜ β)
-  结论: Compacts.equiv f.symm = (Compacts.equiv f).symm
+  结论: 余mpacts.equiv f.symm = (余mpacts.equiv f).symm
   证明: rfl
 -/
 theorem equiv_symm (f : α ≃ₜ β) : Compacts.equiv f.symm = (Compacts.equiv f).symm :=
@@ -1179,7 +1179,7 @@ theorem coe_equiv_apply_eq_preimage
 
 中文:
 定理 coe_equiv_apply_eq_preimage
-  条件: (f : α ≃ₜ β) (K : Compacts α)
+  条件: (f : α ≃ₜ β) (K : 余mpacts α)
   证明: f.toEquiv.image_eq_preimage_symm K
 
 Depends on / 依赖: f.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -1200,7 +1200,7 @@ instance :
 
 中文:
 实例 :
-  签名: SProd (Compacts α) (Compacts β) (Compacts (α × β))
+  签名: SProd (余mpacts α) (余mpacts β) (余mpacts (α × β))
   定义体: { carrier := K ×ˢ L, isCompact' := IsCompact.prod K.2 L.2 }
 
 @[simp]
@@ -1223,7 +1223,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (K : Compacts α) (L : Compacts β)
+  条件: (K : 余mpacts α) (L : 余mpacts β)
   证明: rfl
 
 @[simp]
@@ -1246,7 +1246,7 @@ theorem toCloseds_prod
 
 中文:
 定理 toCloseds_prod
-  条件: [T2Space α] [T2Space β] (K : Compacts α) (L : Compacts β)
+  条件: [T2空间 α] [T2空间 β] (K : 余mpacts α) (L : 余mpacts β)
   证明: by
   rfl
 
@@ -1290,7 +1290,7 @@ definition compactNhds
 
 中文:
 定义 compactNhds
-  签名: (K : Compacts α)
+  签名: (K : 余mpacts α)
   定义体: {K' | forall (x : K), (K': Set α) in 𝓝 x.val}
 
 Depends on / 依赖: x.val
@@ -1308,7 +1308,7 @@ lemma subset_of_mem_compactNhds
 
 中文:
 引理 subset_of_mem_compactNhds
-  条件: {K K' : Compacts α} (h : K' in K.compactNhds)
+  条件: {K K' : 余mpacts α} (h : K' in K.compactNhds)
   证明: fun x hx => mem_of_mem_nhds (h ⟨x, hx⟩)
 
 Depends on / 依赖: mem_of_mem_nhds
@@ -1328,8 +1328,8 @@ lemma exists_open_set_nhds_of_compactsNhds
   exact ⟨⟨U, openU⟩, KsubU, UsubL⟩
 
 中文:
-引理 exists_open_set_nhds_of_compactsNhds
-  条件: {K : Compacts α} (L : K.compactNhds)
+引理 存在_open_set_nhds_of_compactsNhds
+  条件: {K : 余mpacts α} (L : K.compactNhds)
   证明: by
   obtain ⟨U, KsubU, openU, UsubL⟩ := exists_open_set_nhds (fun x hx => L.2 ⟨x, hx⟩)
   exact ⟨⟨U, openU⟩, KsubU, UsubL⟩
@@ -1350,8 +1350,8 @@ lemma exists_open_set_nhds_of_mem_compactsNhds
   proof: exists_open_set_nhds_of_compactsNhds ⟨K', h⟩
 
 中文:
-引理 exists_open_set_nhds_of_mem_compactsNhds
-  条件: {K K' : Compacts α} (h : K' in K.compactNhds)
+引理 存在_open_set_nhds_of_mem_compactsNhds
+  条件: {K K' : 余mpacts α} (h : K' in K.compactNhds)
   证明: exists_open_set_nhds_of_compactsNhds ⟨K', h⟩
 
 Depends on / 依赖: exists_open_set_nhds_of_compactsNhds
@@ -1370,7 +1370,7 @@ definition compactNhdsMkOfOpens
 
 中文:
 定义 compactNhdsMkOfOpens
-  签名: {K : Compacts α} (L : Compacts α) (U : Opens α)
+  签名: {K : 余mpacts α} (L : 余mpacts α) (U : Opens α)
   定义体: ⟨L, fun _ => Filter.mem_of_superset (IsOpen.mem_nhds U.is_open' (h1 (Subtype.coe_prop _))) h2⟩
 
 Depends on / 依赖: Filter, Filter.mem_of_superset, IsOpen, IsOpen.mem_nhds, Subtype, Subtype.coe_prop, U.is_open, coe_prop, is_open, mem_nhds, mem_of_superset
@@ -1393,7 +1393,7 @@ instance [T2Space
     Subtype.coe_le_coe.mp (le_inf (Subtype.coe_le_coe.mpr h) (Subtype.coe_le_coe.mpr k))
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: α] (K
   定义体: ⟨L.1 ⊓ M.1, fun x => Filter.inter_mem_iff.2 ⟨L.2 x, M.2 x⟩⟩
   inf_le_right _ _ := Subtype.coe_le_coe.mp inf_le_right
@@ -1420,7 +1420,7 @@ definition openNhds
 
 中文:
 定义 openNhds
-  签名: (K : Compacts α)
+  签名: (K : 余mpacts α)
   定义体: {U | (K : Set α) subseteq U}
 
 Depends on / 依赖: subseteq
@@ -1444,7 +1444,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (⊥ : Compacts α).openNhds
+  签名: 底元素 (⊥ : 余mpacts α).openNhds
   定义体: ⟨⊥, fun _ h => h⟩
 -/
 instance : Bot (⊥ : Compacts α).openNhds := ⟨⊥, fun _ h => h⟩
@@ -1459,7 +1459,7 @@ definition openRcNhds
 
 中文:
 定义 openRcNhds
-  签名: (K : Compacts α)
+  签名: (K : 余mpacts α)
   定义体: {U | IsCompact (closure (U : Set α )) ∧ (K : Set α) subseteq U}
 
 Depends on / 依赖: IsCompact, closure, subseteq
@@ -1477,7 +1477,7 @@ lemma subset_of_mem_openRcNhds
 
 中文:
 引理 subset_of_mem_openRcNhds
-  条件: {K : Compacts α} {U : Opens α} (h : U in K.openRcNhds)
+  条件: {K : 余mpacts α} {U : Opens α} (h : U in K.openRcNhds)
   证明: fun _ hx => h.right hx
 
 Depends on / 依赖: h.right
@@ -1496,7 +1496,7 @@ lemma isCompact_closure_of_mem_openRcNhds
 
 中文:
 引理 isCompact_closure_of_mem_openRcNhds
-  条件: {K : Compacts α} {U : Opens α} (h : U in K.openRcNhds)
+  条件: {K : 余mpacts α} {U : Opens α} (h : U in K.openRcNhds)
   证明: h.left
 
 Depends on / 依赖: h.left
@@ -1518,7 +1518,7 @@ U.isOpen.mem_nhds Compacts.subset_of_mem_openRcNhds h (by simp)
 
 中文:
 引理 closure_mem_compactNhds_of_mem_openRcNhds
-  结论: {K : Compacts α} {U : Opens α}
+  结论: {K : 余mpacts α} {U : Opens α}
   证明: by
   intro x
   have H : (U : Set α) in 𝓝 (x : α) :=
@@ -1545,7 +1545,7 @@ definition openRcNhdsToOpenNhds
 
 中文:
 定义 openRcNhdsToOpenNhds
-  签名: (K : Compacts α)
+  签名: (K : 余mpacts α)
   定义体: fun U => ⟨_, U.property.2⟩
 
 Depends on / 依赖: U.property, property
@@ -1563,7 +1563,7 @@ lemma openRcNhdsToOpenNhds_mono
 
 中文:
 引理 openRcNhdsToOpenNhds_mono
-  条件: (K : Compacts α)
+  条件: (K : 余mpacts α)
   证明: fun _ _ h => h
 -/
 lemma openRcNhdsToOpenNhds_mono (K : Compacts α) :
@@ -1579,7 +1579,7 @@ definition openRcNhdsToCompactNhds
 
 中文:
 定义 openRcNhdsToCompactNhds
-  签名: (K : Compacts α)
+  签名: (K : 余mpacts α)
   定义体: fun U => ⟨_, closure_mem_compactNhds_of_mem_openRcNhds (Subtype.coe_prop U)⟩
 
 Depends on / 依赖: Subtype, Subtype.coe_prop, closure_mem_compactNhds_of_mem_openRcNhds, coe_prop
@@ -1598,8 +1598,8 @@ lemma openRcNhdsToCompactNhds_mono
 
 中文:
 引理 openRcNhdsToCompactNhds_mono
-  条件: (K : Compacts α)
-  结论: Monotone K.openRcNhdsToCompactNhds
+  条件: (K : 余mpacts α)
+  结论: 递增 K.openRcNhdsToCompactNhds
   证明: fun _ _ h => closure_mono h
 
 Depends on / 依赖: closure_mono
@@ -1620,7 +1620,7 @@ isClosed_closure closure_inter_subset_inter_closure ..,
  subset_of_mem_openRcNhds (Subtype
 
 中文:
-实例 [T2Space
+实例 [T2空间
   签名: α] (K
   定义体: ⟨⟨U1 ⊓ U2, (isCompact_closure_of_mem_openRcNhds (Subtype.coe_prop U1) |>.inter
  isCompact_closure_of_mem_openRcNhds U2.coe_prop).of_isClosed_subset
@@ -1689,8 +1689,8 @@ definition Compacts.compactsInsideOfOpenNhds
   body: ⟨K, U.property⟩
 
 中文:
-定义 Compacts.compactsInsideOfOpenNhds
-  签名: {K : Compacts α} (U : K.openNhds)
+定义 余mpacts.compactsInsideOfOpenNhds
+  签名: {K : 余mpacts α} (U : K.openNhds)
   定义体: ⟨K, U.property⟩
 
 Depends on / 依赖: U.property, property
@@ -1712,10 +1712,10 @@ structure NonemptyCompacts
 
 中文:
 结构 NonemptyCompacts
-  参数: (α : 类型) [TopologicalSpace α]
-  继承: Compacts α
+  参数: (α : 类型) [拓扑空间 α]
+  继承: 余mpacts α
   公理与运算 (1 个):
-    - nonempty' : carrier.Nonempty
+    - nonempty' : carrier.非空
 -/
 structure NonemptyCompacts (α : Type*) [TopologicalSpace α] extends Compacts α where
   nonempty' : carrier.Nonempty
@@ -1736,7 +1736,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (NonemptyCompacts α) α
+  签名: 集合状 (NonemptyCompacts α) α
   定义体: s.carrier
   coe_injective s t h := by
     obtain ⟨⟨_, _⟩, _⟩ := s
@@ -1762,7 +1762,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (NonemptyCompacts α)
+  签名: 偏序 (NonemptyCompacts α)
   定义体: .ofSetLike (NonemptyCompacts α) α
 
 Depends on / 依赖: NonemptyCompacts, ofSetLike
@@ -1802,7 +1802,7 @@ theorem isCompact
 中文:
 定理 isCompact
   条件: (s : NonemptyCompacts α)
-  结论: IsCompact (s : Set α)
+  结论: 是紧集 (s : 集合 α)
   证明: s.isCompact'
 -/
 protected theorem isCompact (s : NonemptyCompacts α) : IsCompact (s : Set α) :=
@@ -1820,7 +1820,7 @@ theorem nonempty
 中文:
 定理 nonempty
   条件: (s : NonemptyCompacts α)
-  结论: (s : Set α).Nonempty
+  结论: (s : 集合 α).非空
   证明: s.nonempty'
 -/
 protected theorem nonempty (s : NonemptyCompacts α) : (s : Set α).Nonempty :=
@@ -1840,7 +1840,7 @@ definition toCloseds
 
 中文:
 定义 toCloseds
-  签名: [T2Space α] (s : NonemptyCompacts α)
+  签名: [T2空间 α] (s : NonemptyCompacts α)
   定义体: ⟨s, s.isCompact.isClosed⟩
 
 @[simp]
@@ -1863,7 +1863,7 @@ theorem toCloseds_toCompacts
 
 中文:
 定理 toCloseds_toCompacts
-  条件: [T2Space α] (s : NonemptyCompacts α)
+  条件: [T2空间 α] (s : NonemptyCompacts α)
   证明: rfl
 
 @[simp]
@@ -1883,7 +1883,7 @@ theorem mem_toCloseds
 
 中文:
 定理 mem_toCloseds
-  条件: [T2Space α] {x : α} {s : NonemptyCompacts α}
+  条件: [T2空间 α] {x : α} {s : NonemptyCompacts α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1905,8 +1905,8 @@ theorem toCloseds_injective
 
 中文:
 定理 toCloseds_injective
-  条件: [T2Space α]
-  结论: Function.Injective (toCloseds (α := α))
+  条件: [T2空间 α]
+  结论: 函数.单射 (toCloseds (α := α))
   证明: .of_comp (f := SetLike.coe) SetLike.coe_injective
 
 @[ext]
@@ -1928,7 +1928,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : NonemptyCompacts α} (h : (s : Set α) = t)
+  条件: {s t : NonemptyCompacts α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -1949,8 +1949,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Compacts α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 余mpacts α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 -/
 theorem coe_mk (s : Compacts α) (h) : (mk s h : Set α) = s :=
@@ -1993,7 +1993,7 @@ theorem coe_toCompacts
 中文:
 定理 coe_toCompacts
   条件: (s : NonemptyCompacts α)
-  结论: (s.toCompacts : Set α) = s
+  结论: (s.toCompacts : 集合 α) = s
   证明: rfl
 
 @[simp]
@@ -2032,7 +2032,7 @@ theorem toCompacts_injective
 
 中文:
 定理 toCompacts_injective
-  结论: Function.Injective (toCompacts (α := α))
+  结论: 函数.单射 (toCompacts (α := α))
   证明: .of_comp (f := SetLike.coe) SetLike.coe_injective
 
 @[simp]
@@ -2083,7 +2083,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (NonemptyCompacts α)
+  签名: 最大值 (NonemptyCompacts α)
   定义体: ⟨fun s t => ⟨s.toCompacts ⊔ t.toCompacts, s.nonempty.mono subset_union_left⟩⟩
 
 Depends on / 依赖: nonempty, s.nonempty.mono, s.toCompacts, subset_union_left, t.toCompacts, toCompacts
@@ -2100,8 +2100,8 @@ instance [CompactSpace
   body: ⟨⟨⊤, univ_nonempty⟩⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] [Nonempty α] : Top (NonemptyCompacts α)
+实例 [紧空间
+  签名: α] [非空 α] : 顶元素 (NonemptyCompacts α)
   定义体: ⟨⟨⊤, univ_nonempty⟩⟩
 
 Depends on / 依赖: univ_nonempty
@@ -2138,8 +2138,8 @@ instance [CompactSpace
 @[simp]
 
 中文:
-实例 [CompactSpace
-  签名: α] [Nonempty α] : OrderTop (NonemptyCompacts α)
+实例 [紧空间
+  签名: α] [非空 α] : 有顶序 (NonemptyCompacts α)
   定义体: fast_instance% OrderTop.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl
 
 @[simp]
@@ -2164,7 +2164,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (s t : NonemptyCompacts α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: rfl
 
 @[simp]
@@ -2208,8 +2208,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [CompactSpace α] [Nonempty α]
-  结论: (↑(⊤ : NonemptyCompacts α) : Set α) = univ
+  条件: [紧空间 α] [非空 α]
+  结论: (↑(⊤ : NonemptyCompacts α) : 集合 α) = univ
   证明: rfl
 
 @[simps! singleton_coe singleton_toCompacts]
@@ -2230,7 +2230,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton α (NonemptyCompacts α)
+  签名: 单例 α (NonemptyCompacts α)
   定义体: ⟨{x}, singleton_nonempty x⟩
 
 @[simp]
@@ -2277,7 +2277,7 @@ theorem toCloseds_singleton
 
 中文:
 定理 toCloseds_singleton
-  条件: [T2Space α] (x : α)
+  条件: [T2空间 α] (x : α)
   结论: toCloseds {x} = {x}
   证明: rfl
 -/
@@ -2296,7 +2296,7 @@ theorem singleton_injective
 
 中文:
 定理 singleton_injective
-  结论: Function.Injective ({·} : α -> NonemptyCompacts α)
+  结论: 函数.单射 ({·} : α -> NonemptyCompacts α)
   证明: .of_comp (f := SetLike.coe) Set.singleton_injective
 
 @[simp]
@@ -2336,8 +2336,8 @@ instance [Inhabited
   body: ⟨{default}⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (NonemptyCompacts α)
+实例 [可居
+  签名: α] : 可居 (NonemptyCompacts α)
   定义体: ⟨{default}⟩
 -/
 instance [Inhabited α] : Inhabited (NonemptyCompacts α) :=
@@ -2354,8 +2354,8 @@ instance [IsEmpty
 @[simp]
 
 中文:
-实例 [IsEmpty
-  签名: α] : IsEmpty (NonemptyCompacts α)
+实例 [是空
+  签名: α] : 是空 (NonemptyCompacts α)
   定义体: ⟨fun K => not_isEmpty_iff.mpr K.nonempty.to_type ‹_›⟩
 
 @[simp]
@@ -2376,7 +2376,7 @@ theorem isEmpty_iff
 
 中文:
 定理 isEmpty_iff
-  结论: IsEmpty (NonemptyCompacts α) ↔ IsEmpty α
+  结论: 是空 (NonemptyCompacts α) ↔ 是空 α
   证明: ⟨fun _ => Function.isEmpty ({·} : α -> NonemptyCompacts α), fun _ => inferInstance⟩
 
 Depends on / 依赖: Function, Function.isEmpty, NonemptyCompacts, isEmpty
@@ -2395,8 +2395,8 @@ instance [Nonempty
 @[simp]
 
 中文:
-实例 [Nonempty
-  签名: α] : Nonempty (NonemptyCompacts α)
+实例 [非空
+  签名: α] : 非空 (NonemptyCompacts α)
   定义体: .map ({·}) ‹_›
 
 @[simp]
@@ -2416,7 +2416,7 @@ theorem nonempty_iff
 
 中文:
 定理 nonempty_iff
-  结论: Nonempty (NonemptyCompacts α) ↔ Nonempty α
+  结论: 非空 (NonemptyCompacts α) ↔ 非空 α
   证明: by
   simp_rw [← not_isEmpty_iff, isEmpty_iff]
 
@@ -2438,8 +2438,8 @@ instance [Subsingleton
 @[simp]
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (NonemptyCompacts α)
+实例 [子单例
+  签名: α] : 子单例 (NonemptyCompacts α)
   定义体: by
   refine ⟨fun K L => NonemptyCompacts.ext ?_⟩
   rw [Subsingleton.eq_univ_of_nonempty K.nonempty]; rw [Subsingleton.eq_univ_of_nonempty L.nonempty]
@@ -2463,7 +2463,7 @@ theorem subsingleton_iff
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (NonemptyCompacts α) ↔ Subsingleton α
+  结论: 子单例 (NonemptyCompacts α) ↔ 子单例 α
   证明: ⟨fun _ => singleton_injective.subsingleton, fun _ => inferInstance⟩
 
 Depends on / 依赖: singleton_injective, singleton_injective.subsingleton, subsingleton
@@ -2480,8 +2480,8 @@ instance [Unique
   body: .mk' _
 
 中文:
-实例 [Unique
-  签名: α] : Unique (NonemptyCompacts α)
+实例 [唯一
+  签名: α] : 唯一 (NonemptyCompacts α)
   定义体: .mk' _
 -/
 instance [Unique α] : Unique (NonemptyCompacts α) :=
@@ -2498,8 +2498,8 @@ instance [Nontrivial
 @[simp]
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial (NonemptyCompacts α)
+实例 [非平凡
+  签名: α] : 非平凡 (NonemptyCompacts α)
   定义体: singleton_injective.nontrivial
 
 @[simp]
@@ -2521,7 +2521,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (NonemptyCompacts α) ↔ Nontrivial α
+  结论: 非平凡 (NonemptyCompacts α) ↔ 非平凡 α
   证明: by
   simp_rw [← not_subsingleton_iff_nontrivial, subsingleton_iff]
 
@@ -2544,7 +2544,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (hf : Continuous f) (K : NonemptyCompacts α)
+  签名: (f : α -> β) (hf : 连续 f) (K : NonemptyCompacts α)
   定义体: ⟨K.toCompacts.map f hf, K.nonempty.image f⟩
 
 @[simp, norm_cast]
@@ -2565,7 +2565,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: {f : α -> β} (hf : Continuous f) (s : NonemptyCompacts α)
+  条件: {f : α -> β} (hf : 连续 f) (s : NonemptyCompacts α)
   证明: rfl
 
 @[simp]
@@ -2612,7 +2612,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: (f : β -> γ) (g : α -> β) (hf : Continuous f) (hg : Continuous g)
+  结论: (f : β -> γ) (g : α -> β) (hf : 连续 f) (hg : 连续 g)
   证明: by
   ext
   simp
@@ -2637,7 +2637,7 @@ theorem map_singleton
 
 中文:
 定理 map_singleton
-  条件: {f : α -> β} (hf : Continuous f) (x : α)
+  条件: {f : α -> β} (hf : 连续 f) (x : α)
   证明: by
   ext
   simp
@@ -2659,7 +2659,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : α -> β} (hf : Continuous f) (hf' : Function.Injective f)
+  条件: {f : α -> β} (hf : 连续 f) (hf' : 函数.单射 f)
   证明: .of_comp (f := SetLike.coe) hf'.image_injective.comp SetLike.coe_injective
 
 @[simp]
@@ -2682,7 +2682,7 @@ theorem map_injective_iff
 
 中文:
 定理 map_injective_iff
-  条件: {f : α -> β} (hf : Continuous f)
+  条件: {f : α -> β} (hf : 连续 f)
   证明: ⟨fun h => .of_comp (f := ({·} : β -> NonemptyCompacts β)) fun _ _ _ =>
     singleton_injective (h (by simp_all)), map_injective hf⟩
 
@@ -2709,7 +2709,7 @@ theorem range_map
 
 中文:
 定理 range_map
-  条件: {f : α -> β} (hf : Topology.IsInducing f)
+  条件: {f : α -> β} (hf : 拓扑.是Inducing f)
   证明: subset_antisymm
     (range_subset_iff.mpr fun _ => image_subset_range _ _)
     (fun L hL => ⟨
@@ -2846,7 +2846,7 @@ theorem toCloseds_prod
 
 中文:
 定理 toCloseds_prod
-  条件: [T2Space α] [T2Space β] (K : NonemptyCompacts α) (L : NonemptyCompacts β)
+  条件: [T2空间 α] [T2空间 β] (K : NonemptyCompacts α) (L : NonemptyCompacts β)
   证明: by
   rfl
 
@@ -2888,7 +2888,7 @@ definition toCompactsOrderEmbedding
 
 中文:
 定义 toCompactsOrderEmbedding
-  签名: : NonemptyCompacts α ↪o Compacts α
+  签名: : NonemptyCompacts α ↪o 余mpacts α
   定义体: .ofMapLEIff toCompacts fun _ _ => .rfl
 
 @[simp]
@@ -2933,10 +2933,10 @@ structure PositiveCompacts
 
 中文:
 结构 PositiveCompacts
-  参数: (α : 类型) [TopologicalSpace α]
-  继承: Compacts α
+  参数: (α : 类型) [拓扑空间 α]
+  继承: 余mpacts α
   公理与运算 (1 个):
-    - interior_nonempty' : (interior carrier).Nonempty
+    - interior_nonempty' : (interior carrier).非空
 -/
 structure PositiveCompacts (α : Type*) [TopologicalSpace α] extends Compacts α where
   interior_nonempty' : (interior carrier).Nonempty
@@ -2957,7 +2957,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (PositiveCompacts α) α
+  签名: 集合状 (PositiveCompacts α) α
   定义体: s.carrier
   coe_injective s t h := by
     obtain ⟨⟨_, _⟩, _⟩ := s
@@ -2983,7 +2983,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (PositiveCompacts α)
+  签名: 偏序 (PositiveCompacts α)
   定义体: .ofSetLike (PositiveCompacts α) α
 
 Depends on / 依赖: PositiveCompacts, ofSetLike
@@ -3023,7 +3023,7 @@ theorem isCompact
 中文:
 定理 isCompact
   条件: (s : PositiveCompacts α)
-  结论: IsCompact (s : Set α)
+  结论: 是紧集 (s : 集合 α)
   证明: s.isCompact'
 -/
 protected theorem isCompact (s : PositiveCompacts α) : IsCompact (s : Set α) :=
@@ -3041,7 +3041,7 @@ theorem interior_nonempty
 中文:
 定理 interior_nonempty
   条件: (s : PositiveCompacts α)
-  结论: (interior (s : Set α)).Nonempty
+  结论: (interior (s : 集合 α)).非空
   证明: s.interior_nonempty'
 
 Depends on / 依赖: interior_nonempty, s.interior_nonempty
@@ -3061,7 +3061,7 @@ theorem nonempty
 中文:
 定理 nonempty
   条件: (s : PositiveCompacts α)
-  结论: (s : Set α).Nonempty
+  结论: (s : 集合 α).非空
   证明: s.interior_nonempty.mono interior_subset
 -/
 protected theorem nonempty (s : PositiveCompacts α) : (s : Set α).Nonempty :=
@@ -3103,7 +3103,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : PositiveCompacts α} (h : (s : Set α) = t)
+  条件: {s t : PositiveCompacts α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -3124,8 +3124,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Compacts α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 余mpacts α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 -/
 theorem coe_mk (s : Compacts α) (h) : (mk s h : Set α) = s :=
@@ -3166,7 +3166,7 @@ theorem coe_toCompacts
 中文:
 定理 coe_toCompacts
   条件: (s : PositiveCompacts α)
-  结论: (s.toCompacts : Set α) = s
+  结论: (s.toCompacts : 集合 α) = s
   证明: rfl
 -/
 theorem coe_toCompacts (s : PositiveCompacts α) : (s.toCompacts : Set α) = s :=
@@ -3184,7 +3184,7 @@ s.interior_nonempty.mono interior_mono subset_union_left⟩⟩
 
 中文:
 实例 :
-  签名: Max (PositiveCompacts α)
+  签名: 最大值 (PositiveCompacts α)
   定义体: ⟨fun s t =>
     ⟨s.toCompacts ⊔ t.toCompacts,
 s.interior_nonempty.mono interior_mono subset_union_left⟩⟩
@@ -3205,8 +3205,8 @@ instance [CompactSpace
   body: ⟨⟨⊤, interior_univ.symm.subst univ_nonempty⟩⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] [Nonempty α] : Top (PositiveCompacts α)
+实例 [紧空间
+  签名: α] [非空 α] : 顶元素 (PositiveCompacts α)
   定义体: ⟨⟨⊤, interior_univ.symm.subst univ_nonempty⟩⟩
 
 Depends on / 依赖: interior_univ, interior_univ.symm.subst, univ_nonempty
@@ -3243,8 +3243,8 @@ instance [CompactSpace
 @[simp]
 
 中文:
-实例 [CompactSpace
-  签名: α] [Nonempty α] : OrderTop (PositiveCompacts α)
+实例 [紧空间
+  签名: α] [非空 α] : 有顶序 (PositiveCompacts α)
   定义体: fast_instance% OrderTop.lift ((↑) : _ -> Set α) (fun _ _ => id) rfl
 
 @[simp]
@@ -3269,7 +3269,7 @@ theorem coe_sup
 中文:
 定理 coe_sup
   条件: (s t : PositiveCompacts α)
-  结论: (↑(s ⊔ t) : Set α) = ↑s union ↑t
+  结论: (↑(s ⊔ t) : 集合 α) = ↑s union ↑t
   证明: rfl
 
 @[simp]
@@ -3289,8 +3289,8 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  条件: [CompactSpace α] [Nonempty α]
-  结论: (↑(⊤ : PositiveCompacts α) : Set α) = univ
+  条件: [紧空间 α] [非空 α]
+  结论: (↑(⊤ : PositiveCompacts α) : 集合 α) = univ
   证明: rfl
 -/
 theorem coe_top [CompactSpace α] [Nonempty α] : (↑(⊤ : PositiveCompacts α) : Set α) = univ :=
@@ -3310,7 +3310,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (hf : Continuous f) (hf' : IsOpenMap f) (K : PositiveCompacts α)
+  签名: (f : α -> β) (hf : 连续 f) (hf' : 是开映射 f) (K : PositiveCompacts α)
   定义体: { Compacts.map f hf K.toCompacts with
     interior_nonempty' :=
       (K.interior_nonempty'.image _).mono (hf'.image_interior_subset K.toCompacts) }
@@ -3336,7 +3336,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: {f : α -> β} (hf : Continuous f) (hf' : IsOpenMap f) (s : PositiveCompacts α)
+  条件: {f : α -> β} (hf : 连续 f) (hf' : 是开映射 f) (s : PositiveCompacts α)
   证明: rfl
 
 @[simp]
@@ -3358,7 +3358,7 @@ theorem map_id
 中文:
 定理 map_id
   条件: (K : PositiveCompacts α)
-  结论: K.map id continuous_id IsOpenMap.id = K
+  结论: K.map id continuous_id 是开映射.id = K
   证明: PositiveCompacts.ext Set.image_id _
 
 Depends on / 依赖: PositiveCompacts, PositiveCompacts.ext, Set.image_id, image_id
@@ -3376,7 +3376,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: (f : β -> γ) (g : α -> β) (hf : Continuous f) (hg : Continuous g) (hf' : IsOpenMap f)
+  结论: (f : β -> γ) (g : α -> β) (hf : 连续 f) (hg : 连续 g) (hf' : 是开映射 f)
   证明: PositiveCompacts.ext Set.image_comp _ _ _
 
 Depends on / 依赖: PositiveCompacts, PositiveCompacts.ext, Set.image_comp, image_comp
@@ -3397,8 +3397,8 @@ theorem _root_.exists_positiveCompacts_subset
   ⟨⟨⟨K, hKc⟩, ⟨x, hxK⟩⟩, hKU⟩
 
 中文:
-定理 _root_.exists_positiveCompacts_subset
-  结论: [LocallyCompactSpace α] {U : Set α} (ho : IsOpen U)
+定理 _root_.存在_positiveCompacts_subset
+  结论: [局部紧空间 α] {U : 集合 α} (ho : 是开集 U)
   证明: let ⟨x, hx⟩ := hn
   let ⟨K, hKc, hxK, hKU⟩ := exists_compact_subset ho hx
   ⟨⟨⟨K, hKc⟩, ⟨x, hxK⟩⟩, hKU⟩
@@ -3421,8 +3421,8 @@ theorem _root_.IsOpen.exists_positiveCompacts_closure_subset
   ⟨K, K.isCompact.closure_subset_of_isOpen ho hKU⟩
 
 中文:
-定理 _root_.IsOpen.exists_positiveCompacts_closure_subset
-  结论: [R1Space α] [LocallyCompactSpace α]
+定理 _root_.是开集.存在_positiveCompacts_closure_subset
+  结论: [R1空间 α] [局部紧空间 α]
   证明: let ⟨K, hKU⟩ := exists_positiveCompacts_subset ho hn
   ⟨K, K.isCompact.closure_subset_of_isOpen ho hKU⟩
 
@@ -3442,8 +3442,8 @@ instance [CompactSpace
   body: ⟨⊤⟩
 
 中文:
-实例 [CompactSpace
-  签名: α] [Nonempty α] : Inhabited (PositiveCompacts α)
+实例 [紧空间
+  签名: α] [非空 α] : 可居 (PositiveCompacts α)
   定义体: ⟨⊤⟩
 -/
 instance [CompactSpace α] [Nonempty α] : Inhabited (PositiveCompacts α) :=
@@ -3462,7 +3462,7 @@ instance nonempty'
 
 中文:
 实例 nonempty'
-  签名: [WeaklyLocallyCompactSpace α] [Nonempty α]
+  签名: [WeaklyLocallyCompact空间 α] [非空 α]
   定义体: by
   inhabit α
   rcases exists_compact_mem_nhds (default : α) with ⟨K, hKc, hK⟩
@@ -3540,11 +3540,11 @@ structure CompactOpens
     - isOpen' : IsOpen carrier
 
 中文:
-结构 CompactOpens
-  参数: (α : 类型) [TopologicalSpace α]
-  继承: Compacts α
+结构 余mpactOpens
+  参数: (α : 类型) [拓扑空间 α]
+  继承: 余mpacts α
   公理与运算 (1 个):
-    - isOpen' : IsOpen carrier
+    - isOpen' : 是开集 carrier
 -/
 structure CompactOpens (α : Type*) [TopologicalSpace α] extends Compacts α where
   isOpen' : IsOpen carrier
@@ -3565,7 +3565,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (CompactOpens α) α
+  签名: 集合状 (余mpactOpens α) α
   定义体: s.carrier
   coe_injective s t h := by
     obtain ⟨⟨_, _⟩, _⟩ := s
@@ -3591,7 +3591,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (CompactOpens α)
+  签名: 偏序 (余mpactOpens α)
   定义体: .ofSetLike (CompactOpens α) α
 
 Depends on / 依赖: CompactOpens, ofSetLike
@@ -3610,7 +3610,7 @@ initialize_simps_projections CompactOpens (carrier -> coe, as_prefix coe, as_pre
 
 中文:
 定义 Simps.coe
-  签名: (s : CompactOpens α)
+  签名: (s : 余mpactOpens α)
   定义体: s
 
 initialize_simps_projections CompactOpens (carrier -> coe, as_prefix coe, as_prefix toCompacts)
@@ -3630,8 +3630,8 @@ theorem isCompact
 
 中文:
 定理 isCompact
-  条件: (s : CompactOpens α)
-  结论: IsCompact (s : Set α)
+  条件: (s : 余mpactOpens α)
+  结论: 是紧集 (s : 集合 α)
   证明: s.isCompact'
 -/
 protected theorem isCompact (s : CompactOpens α) : IsCompact (s : Set α) :=
@@ -3648,8 +3648,8 @@ theorem isOpen
 
 中文:
 定理 isOpen
-  条件: (s : CompactOpens α)
-  结论: IsOpen (s : Set α)
+  条件: (s : 余mpactOpens α)
+  结论: 是开集 (s : 集合 α)
   证明: s.isOpen'
 -/
 protected theorem isOpen (s : CompactOpens α) : IsOpen (s : Set α) :=
@@ -3667,7 +3667,7 @@ definition toOpens
 
 中文:
 定义 toOpens
-  签名: (s : CompactOpens α)
+  签名: (s : 余mpactOpens α)
   定义体: ⟨s, s.isOpen⟩
 
 Depends on / 依赖: isOpen, s.isOpen
@@ -3688,7 +3688,7 @@ definition toClopens
 
 中文:
 定义 toClopens
-  签名: [T2Space α] (s : CompactOpens α)
+  签名: [T2空间 α] (s : 余mpactOpens α)
   定义体: ⟨s, s.isCompact.isClosed, s.isOpen⟩
 
 @[ext]
@@ -3712,7 +3712,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : CompactOpens α} (h : (s : Set α) = t)
+  条件: {s t : 余mpactOpens α} (h : (s : 集合 α) = t)
   结论: s = t
   证明: SetLike.ext' h
 
@@ -3733,8 +3733,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Compacts α) (h)
-  结论: (mk s h : Set α) = s
+  条件: (s : 余mpacts α) (h)
+  结论: (mk s h : 集合 α) = s
   证明: rfl
 -/
 theorem coe_mk (s : Compacts α) (h) : (mk s h : Set α) = s :=
@@ -3750,7 +3750,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (CompactOpens α)
+  签名: 最大值 (余mpactOpens α)
   定义体: ⟨fun s t => ⟨s.toCompacts ⊔ t.toCompacts, s.isOpen.union t.isOpen⟩⟩
 
 Depends on / 依赖: isOpen, s.isOpen.union, s.toCompacts, t.isOpen, t.toCompacts, toCompacts
@@ -3768,7 +3768,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (CompactOpens α)
+  签名: 底元素 (余mpactOpens α)
   定义体: ⟨⊥, isOpen_empty⟩
 
 Depends on / 依赖: isOpen_empty
@@ -3786,8 +3786,8 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: (s t : CompactOpens α)
-  结论: ↑(s ⊔ t) = (s union t : Set α)
+  条件: (s t : 余mpactOpens α)
+  结论: ↑(s ⊔ t) = (s union t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sup (s t : CompactOpens α) : ↑(s ⊔ t) = (s union t : Set α) := rfl
@@ -3801,7 +3801,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ↑(⊥ : CompactOpens α) = (∅ : Set α)
+  结论: ↑(⊥ : 余mpactOpens α) = (∅ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_bot : ↑(⊥ : CompactOpens α) = (∅ : Set α) := rfl
@@ -3816,7 +3816,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (CompactOpens α)
+  签名: SemilatticeSup (余mpactOpens α)
   定义体: fast_instance% SetLike.coe_injective.semilatticeSup _ .rfl .rfl coe_sup
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeSup, coe_injective, coe_sup, fast_instance, semilatticeSup
@@ -3836,7 +3836,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (CompactOpens α)
+  签名: 有底序 (余mpactOpens α)
   定义体: fast_instance% OrderBot.lift ((↑) : _ -> Set α) (fun _ _ => id) coe_bot
 
 @[simp]
@@ -3859,7 +3859,7 @@ lemma coe_finsetSup
 
 中文:
 引理 coe_finsetSup
-  条件: {ι : 类型} {f : ι -> CompactOpens α} {s : Finset ι}
+  条件: {ι : 类型} {f : ι -> 余mpactOpens α} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on <;> simp [*]
@@ -3881,7 +3881,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CompactOpens α)
+  签名: 可居 (余mpactOpens α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (CompactOpens α) :=
@@ -3900,7 +3900,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (CompactOpens α) where
+  签名: : 最小值 (余mpactOpens α) where
   定义体: ⟨⟨U inter V, QuasiSeparatedSpace.inter_isCompact U.1.1 V.1.1 U.2 U.1.2 V.2 V.1.2⟩, U.2.inter V.2⟩
 
 Depends on / 依赖: QuasiSeparatedSpace, QuasiSeparatedSpace.inter_isCompact, inter_isCompact
@@ -3920,8 +3920,8 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: (s t : CompactOpens α)
-  结论: ↑(s ⊓ t) = (s inter t : Set α)
+  条件: (s t : 余mpactOpens α)
+  结论: ↑(s ⊓ t) = (s inter t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inf (s t : CompactOpens α) : ↑(s ⊓ t) = (s inter t : Set α) := rfl
@@ -3936,7 +3936,7 @@ instance instSemilatticeInf
 
 中文:
 实例 instSemilatticeInf
-  签名: : SemilatticeInf (CompactOpens α)
+  签名: : SemilatticeInf (余mpactOpens α)
   定义体: fast_instance% SetLike.coe_injective.semilatticeInf _ .rfl .rfl coe_inf
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.semilatticeInf, coe_inf, coe_injective, fast_instance, semilatticeInf
@@ -3959,7 +3959,7 @@ instance instSDiff
 
 中文:
 实例 instSDiff
-  签名: : SDiff (CompactOpens α) where
+  签名: : 对称差 (余mpactOpens α) where
   定义体: ⟨⟨s \ t, s.isCompact.diff t.isOpen⟩, s.isOpen.sdiff t.isCompact.isClosed⟩
 
 Depends on / 依赖: isClosed, isCompact, isOpen, s.isCompact.diff, s.isOpen.sdiff, t.isCompact.isClosed, t.isOpen
@@ -3978,8 +3978,8 @@ lemma coe_sdiff
 
 中文:
 引理 coe_sdiff
-  条件: (s t : CompactOpens α)
-  结论: ↑(s \ t) = (s \ t : Set α)
+  条件: (s t : 余mpactOpens α)
+  结论: ↑(s \ t) = (s \ t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_sdiff (s t : CompactOpens α) : ↑(s \ t) = (s \ t : Set α) := rfl
@@ -3994,8 +3994,8 @@ instance instGeneralizedBooleanAlgebra
     .rfl .rfl coe_sup coe_inf coe_bot coe_sdiff
 
 中文:
-实例 instGeneralizedBooleanAlgebra
-  签名: : Generalized布尔eanAlgebra (CompactOpens α)
+实例 instGeneralized布尔eanAlgebra
+  签名: : Generalized布尔ean代数 (余mpactOpens α)
   定义体: fast_instance% SetLike.coe_injective.generalizedBooleanAlgebra _
     .rfl .rfl coe_sup coe_inf coe_bot coe_sdiff
 
@@ -4020,7 +4020,7 @@ instance instTop
 
 中文:
 实例 instTop
-  签名: : Top (CompactOpens α) where top
+  签名: : 顶元素 (余mpactOpens α) where top
   定义体: ⟨⊤, isOpen_univ⟩
 
 Depends on / 依赖: isOpen_univ
@@ -4037,7 +4037,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ↑(⊤ : CompactOpens α) = (univ : Set α)
+  结论: ↑(⊤ : 余mpactOpens α) = (univ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : ↑(⊤ : CompactOpens α) = (univ : Set α) := rfl
@@ -4052,7 +4052,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: : BoundedOrder (CompactOpens α)
+  签名: : 有界序 (余mpactOpens α)
   定义体: fast_instance% BoundedOrder.lift ((↑) : _ -> Set α) (fun _ _ => id) coe_top coe_bot
 
 Depends on / 依赖: BoundedOrder, BoundedOrder.lift, coe_bot, coe_top, fast_instance
@@ -4073,7 +4073,7 @@ instance instCompl
 
 中文:
 实例 instCompl
-  签名: : Compl (CompactOpens α) where
+  签名: : 补集 (余mpactOpens α) where
   定义体: ⟨⟨sᶜ, s.isOpen.isClosed_compl.isCompact⟩, s.isCompact.isClosed.isOpen_compl⟩
 
 Depends on / 依赖: isClosed, isClosed_compl, isCompact, isOpen, isOpen_compl, s.isCompact.isClosed.isOpen_compl, s.isOpen.isClosed_compl.isCompact
@@ -4093,7 +4093,7 @@ instance instHImp
 
 中文:
 实例 instHImp
-  签名: : HImp (CompactOpens α) where
+  签名: : HImp (余mpactOpens α) where
   定义体: ⟨⟨s ⇨ t, IsClosed.isCompact
     (by simpa [himp_eq] using t.isCompact.isClosed.union s.isOpen.isClosed_compl)⟩,
     by simpa [himp_eq] using t.isOpen.union s.isCompact.isClosed.isOpen_compl⟩
@@ -4116,8 +4116,8 @@ lemma coe_compl
 
 中文:
 引理 coe_compl
-  条件: (s : CompactOpens α)
-  结论: ↑sᶜ = (sᶜ : Set α)
+  条件: (s : 余mpactOpens α)
+  结论: ↑sᶜ = (sᶜ : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_compl (s : CompactOpens α) : ↑sᶜ = (sᶜ : Set α) := rfl
@@ -4132,8 +4132,8 @@ lemma coe_himp
 
 中文:
 引理 coe_himp
-  条件: (s t : CompactOpens α)
-  结论: ↑(s ⇨ t) = (s ⇨ t : Set α)
+  条件: (s t : 余mpactOpens α)
+  结论: ↑(s ⇨ t) = (s ⇨ t : 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_himp (s t : CompactOpens α) : ↑(s ⇨ t) = (s ⇨ t : Set α) := rfl
@@ -4148,8 +4148,8 @@ instance instBooleanAlgebra
     .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl coe_sdiff coe_himp
 
 中文:
-实例 instBooleanAlgebra
-  签名: : 布尔eanAlgebra (CompactOpens α)
+实例 inst布尔eanAlgebra
+  签名: : 布尔代数 (余mpactOpens α)
   定义体: fast_instance% SetLike.coe_injective.booleanAlgebra _
     .rfl .rfl coe_sup coe_inf coe_top coe_bot coe_compl coe_sdiff coe_himp
 
@@ -4175,7 +4175,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (hf : Continuous f) (hf' : IsOpenMap f) (s : CompactOpens α)
+  签名: (f : α -> β) (hf : 连续 f) (hf' : 是开映射 f) (s : 余mpactOpens α)
   定义体: ⟨s.toCompacts.map f hf, hf' _ s.isOpen⟩
 
 @[simp, norm_cast]
@@ -4198,7 +4198,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: {f : α -> β} (hf : Continuous f) (hf' : IsOpenMap f) (s : CompactOpens α)
+  条件: {f : α -> β} (hf : 连续 f) (hf' : 是开映射 f) (s : 余mpactOpens α)
   证明: rfl
 
 @[simp]
@@ -4219,8 +4219,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (K : CompactOpens α)
-  结论: K.map id continuous_id IsOpenMap.id = K
+  条件: (K : 余mpactOpens α)
+  结论: K.map id continuous_id 是开映射.id = K
   证明: CompactOpens.ext Set.image_id _
 
 Depends on / 依赖: CompactOpens, CompactOpens.ext, Set.image_id, image_id
@@ -4238,7 +4238,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: (f : β -> γ) (g : α -> β) (hf : Continuous f) (hg : Continuous g) (hf' : IsOpenMap f)
+  结论: (f : β -> γ) (g : α -> β) (hf : 连续 f) (hg : 连续 g) (hf' : 是开映射 f)
   证明: CompactOpens.ext Set.image_comp _ _ _
 
 Depends on / 依赖: CompactOpens, CompactOpens.ext, Set.image_comp, image_comp
@@ -4260,7 +4260,7 @@ instance :
 
 中文:
 实例 :
-  签名: SProd (CompactOpens α) (CompactOpens β) (CompactOpens (α × β))
+  签名: SProd (余mpactOpens α) (余mpactOpens β) (余mpactOpens (α × β))
   定义体: { K.toCompacts ×ˢ L.toCompacts with isOpen' := K.isOpen.prod L.isOpen }
 
 @[simp]
@@ -4281,7 +4281,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: (K : CompactOpens α) (L : CompactOpens β)
+  条件: (K : 余mpactOpens α) (L : 余mpactOpens β)
   证明: rfl
 -/
 theorem coe_prod (K : CompactOpens α) (L : CompactOpens β) :

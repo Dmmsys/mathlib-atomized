@@ -112,7 +112,7 @@ alias singularChainComplexFunctor_map_homology_eq_of_simplicialHomotopy :=
 
 中文:
 定理 congr_sSetHomologyMap
-  结论: [CategoryWithHomology C]
+  结论: [带同调范畴 C]
   证明: (H.sSetChainComplexMap R).homologyMap_eq n
 
 @[deprecated (since := "2026-03-24")]
@@ -181,7 +181,7 @@ alias congr_homologyMap_singularChainComplexFunctor := congr_homologyMap
 
 中文:
 定理 congr_homologyMap
-  结论: [CategoryWithHomology C]
+  结论: [带同调范畴 C]
   证明: (H.chainComplexMap R).homologyMap_eq n
 
 @[deprecated (since := "2026-04-05")]

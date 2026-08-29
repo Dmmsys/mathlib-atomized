@@ -278,7 +278,7 @@ AlgHom.coe_ringHom_injective IsLocalization.ringHom_ext (Algebra.algebraMapSubmo
 
 中文:
 定理 galLift_comp
-  条件: [Algebra.IsAlgebraic K L₂] (σ : B ->ₐ[A] B₂) (σ' : B₂ ->ₐ[A] B₃)
+  条件: [代数.是代数 K L₂] (σ : B ->ₐ[A] B₂) (σ' : B₂ ->ₐ[A] B₃)
   证明: have := (IsFractionRing.injective A K).isDomain
   have := IsIntegralClosure.isLocalization A K L B
 AlgHom.coe_ringHom_injective IsLocalization.ringHom_ext (Algebra.algebraMapSubmonoid B A⁰)
@@ -370,7 +370,7 @@ definition galLiftEquiv
 
 中文:
 定义 galLiftEquiv
-  签名: [Algebra.IsAlgebraic K L₂] (σ : B ≃ₐ[A] B₂)
+  签名: [代数.是代数 K L₂] (σ : B ≃ₐ[A] B₂)
   定义体: AlgEquiv.ofAlgHom (galLift K L L₂ σ.toAlgHom) (galLift K L₂ L σ.symm.toAlgHom)
   (by simp [← galLift_comp]) (by simp [← galLift_comp])
 
@@ -391,7 +391,7 @@ theorem galLiftEquiv_algebraMap_apply
 
 中文:
 定理 galLiftEquiv_algebraMap_apply
-  条件: [Algebra.IsAlgebraic K L₂] (σ : B ≃ₐ[A] B₂) (x : B)
+  条件: [代数.是代数 K L₂] (σ : B ≃ₐ[A] B₂) (x : B)
   证明: by
   simp [galLiftEquiv]
 
@@ -601,7 +601,7 @@ lemma prod_galRestrict_eq_norm
 
 中文:
 引理 prod_galRestrict_eq_norm
-  条件: [IsGalois K L] [Is整数egrallyClosed A] (x : B)
+  条件: [是Galois K L] [是整闭 A] (x : B)
   证明: by
   apply IsIntegralClosure.algebraMap_injective B A L
   rw [← IsScalarTower.algebraMap_apply]; rw [IsScalarTower.algebraMap_eq A K L]
@@ -657,8 +657,8 @@ definition Algebra.intTraceAux
           (IsIntegral.algebraMap 
 
 中文:
-定义 Algebra.intTraceAux
-  签名: [Is整数egrallyClosed A]
+定义 代数.intTraceAux
+  签名: [是整闭 A]
   定义体: (IsIntegralClosure.equiv A (integralClosure A K) K A).toLinearMap.comp
     ((((Algebra.trace K L).restrictScalars A).comp
       (IsScalarTower.toAlgHom A B L).toLinearMap).codRestrict
@@ -686,8 +686,8 @@ lemma Algebra.map_intTraceAux
   proof: IsIntegralClosure.algebraMap_equiv A (integralClosure A K) K A _
 
 中文:
-引理 Algebra.map_intTraceAux
-  条件: [Is整数egrallyClosed A] (x : B)
+引理 代数.map_intTraceAux
+  条件: [是整闭 A] (x : B)
   证明: IsIntegralClosure.algebraMap_equiv A (integralClosure A K) K A _
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.algebraMap_equiv, algebraMap_equiv, integralClosure
@@ -717,7 +717,7 @@ definition Algebra.intTrace
   haveI : IsLo
 
 中文:
-定义 Algebra.intTrace
+定义 代数.intTrace
   签名: : B ->ₗ[A] A
   定义体: haveI : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
@@ -756,7 +756,7 @@ lemma Algebra.algebraMap_intTrace
   have : Is
 
 中文:
-引理 Algebra.algebraMap_intTrace
+引理 代数.algebraMap_intTrace
   条件: (x : B)
   证明: by
   have : IsIntegralClosure B A (FractionRing B) :=
@@ -801,7 +801,7 @@ lemma Algebra.algebraMap_intTrace_fractionRing
   have : Is
 
 中文:
-引理 Algebra.algebraMap_intTrace_fractionRing
+引理 代数.algebraMap_intTrace_fractionRing
   条件: (x : B)
   证明: by
   have : IsIntegralClosure B A (FractionRing B) :=
@@ -845,9 +845,9 @@ lemma Algebra.intTrace_eq_trace
   h
 
 中文:
-引理 Algebra.intTrace_eq_trace
-  条件: [Module.Free A B]
-  结论: Algebra.intTrace A B = Algebra.trace A B
+引理 代数.intTrace_eq_trace
+  条件: [模.自由 A B]
+  结论: 代数.intTrace A B = 代数.trace A B
   证明: by
   ext x
   have : IsIntegralClosure B A (FractionRing B) :=
@@ -893,7 +893,7 @@ lemma Algebra.intTrace_eq_of_isLocalization
     IsIntegralClosure.of_i
 
 中文:
-引理 Algebra.intTrace_eq_of_isLocalization
+引理 代数.intTrace_eq_of_isLocalization
   证明: by
   by_cases hM : 0 in M
   · subsingleton [IsLocalization.uniqueOfZeroMem (S := Aₘ) hM]
@@ -967,7 +967,7 @@ definition Algebra.intNormAux
   map_mul' := fun x y => by simpa using IsIntegralClosure.mk'_mul _ _ _ _ _
 
 中文:
-定义 Algebra.intNormAux
+定义 代数.intNormAux
   签名: :
   定义体: fun s => IsIntegralClosure.mk' (R := A) A (Algebra.norm K (algebraMap B L s))
     (isIntegral_norm K <| IsIntegral.map (IsScalarTower.toAlgHom A B L)
@@ -999,7 +999,7 @@ lemma Algebra.map_intNormAux
   exact IsIntegralClosure.algebraMap_mk' _ _ _
 
 中文:
-引理 Algebra.map_intNormAux
+引理 代数.map_intNormAux
   条件: (x : B)
   证明: by
   dsimp [Algebra.intNormAux]
@@ -1028,7 +1028,7 @@ definition Algebra.intNorm
   body: Algebra.intNormAux A (FractionRing A) (FractionRing B) B
 
 中文:
-定义 Algebra.intNorm
+定义 代数.intNorm
   签名: : B ->* A
   定义体: Algebra.intNormAux A (FractionRing A) (FractionRing B) B
 
@@ -1051,7 +1051,7 @@ lemma Algebra.algebraMap_intNorm
   apply Algebra.norm_eq_of_equiv_equiv (Fract
 
 中文:
-引理 Algebra.algebraMap_intNorm
+引理 代数.algebraMap_intNorm
   条件: (x : B)
   证明: by
   have := IsIntegralClosure.isFractionRing_of_finite_extension A K L B
@@ -1081,7 +1081,7 @@ lemma Algebra.algebraMap_intNorm_fractionRing
   proof: Algebra.map_intNormAux x
 
 中文:
-引理 Algebra.algebraMap_intNorm_fractionRing
+引理 代数.algebraMap_intNorm_fractionRing
   条件: (x : B)
   证明: Algebra.map_intNormAux x
 
@@ -1105,8 +1105,8 @@ theorem Algebra.intNorm_intNorm
   rw [algebraMap_intNorm_fractionRing]; rw [algebraMap_intNorm_fractionRing]; rw [algebraMap_intNorm_fractionRing]; rw [Algebra.norm_norm]
 
 中文:
-定理 Algebra.intNorm_intNorm
-  结论: {C : 类型} [CommRing C] [IsDomain C] [Is整数egrallyClosed C]
+定理 代数.intNorm_intNorm
+  结论: {C : 类型} [交换环 C] [是整环 C] [是整闭 C]
   证明: by
   apply FaithfulSMul.algebraMap_injective A (FractionRing A)
   rw [algebraMap_intNorm_fractionRing]; rw [algebraMap_intNorm_fractionRing]; rw [algebraMap_intNorm_fractionRing]; rw [Algebra.norm_norm]
@@ -1136,8 +1136,8 @@ lemma Algebra.intNorm_eq_norm
 @[simp]
 
 中文:
-引理 Algebra.intNorm_eq_norm
-  条件: [Module.Free A B] [Module.Finite A B]
+引理 代数.intNorm_eq_norm
+  条件: [模.自由 A B] [模.有限 A B]
   证明: by
   ext x
   have : IsIntegralClosure B A (FractionRing B) :=
@@ -1171,8 +1171,8 @@ lemma Algebra.intNorm_zero
   simp
 
 中文:
-引理 Algebra.intNorm_zero
-  条件: [FiniteDimensional (FractionRing A) (FractionRing B)]
+引理 代数.intNorm_zero
+  条件: [有限维 (FractionRing A) (FractionRing B)]
   证明: by
   have : IsIntegralClosure B A (FractionRing B) :=
     IsIntegralClosure.of_isIntegrallyClosed _ _ _
@@ -1206,8 +1206,8 @@ theorem Algebra.intNorm_map_algEquiv
 @[simp]
 
 中文:
-定理 Algebra.intNorm_map_algEquiv
-  结论: [IsDomain B₂] [Is整数egrallyClosed B₂] [Algebra.Is整数egral A B₂]
+定理 代数.intNorm_map_algEquiv
+  结论: [是整环 B₂] [是整闭 B₂] [代数.是整 A B₂]
   证明: by
   apply FaithfulSMul.algebraMap_injective A (FractionRing A)
   rw [algebraMap_intNorm_fractionRing]; rw [algebraMap_intNorm_fractionRing]; rw [← galLiftEquiv_algebraMap_apply (FractionRing A) (FractionRing B)]; rw [norm_eq_of_algEquiv]
@@ -1236,8 +1236,8 @@ lemma Algebra.intNorm_eq_zero
   simp only [algebraMap_intNorm_fractionRing, map_zero, norm_eq_zero_iff]
 
 中文:
-引理 Algebra.intNorm_eq_zero
-  条件: [FiniteDimensional (FractionRing A) (FractionRing B)] {x : B}
+引理 代数.intNorm_eq_zero
+  条件: [有限维 (FractionRing A) (FractionRing B)] {x : B}
   证明: by
   rw [← (IsFractionRing.injective A (FractionRing A)).eq_iff]; rw [← (IsFractionRing.injective B (FractionRing B)).eq_iff]
   simp only [algebraMap_intNorm_fractionRing, map_zero, norm_eq_zero_iff]
@@ -1258,8 +1258,8 @@ lemma Algebra.intNorm_ne_zero
   proof: by simp
 
 中文:
-引理 Algebra.intNorm_ne_zero
-  条件: [FiniteDimensional (FractionRing A) (FractionRing B)] {x : B}
+引理 代数.intNorm_ne_zero
+  条件: [有限维 (FractionRing A) (FractionRing B)] {x : B}
   证明: by simp
 -/
 lemma Algebra.intNorm_ne_zero [FiniteDimensional (FractionRing A) (FractionRing B)] {x : B} :
@@ -1285,8 +1285,8 @@ lemma Algebra.intNorm_eq_of_isLocalization
   let f : Aₘ ->+* K := IsLocalization.map _ (T := A⁰) (RingHom
 
 中文:
-引理 Algebra.intNorm_eq_of_isLocalization
-  结论: [FiniteDimensional (FractionRing A) (FractionRing B)]
+引理 代数.intNorm_eq_of_isLocalization
+  结论: [有限维 (FractionRing A) (FractionRing B)]
   证明: by
   by_cases hM : 0 in M
   · subsingleton [IsLocalization.uniqueOfZeroMem (S := Aₘ) hM]
@@ -1347,8 +1347,8 @@ lemma Algebra.algebraMap_intNorm_of_isGalois
   convert! (prod_galRestrict_eq_norm A (FractionRing A) (FractionRing B
 
 中文:
-引理 Algebra.algebraMap_intNorm_of_isGalois
-  条件: [IsGalois (FractionRing A) (FractionRing B)] {x : B}
+引理 代数.algebraMap_intNorm_of_isGalois
+  条件: [是Galois (FractionRing A) (FractionRing B)] {x : B}
   证明: by
   have : FiniteDimensional (FractionRing A) (FractionRing B) := .of_isLocalization A B A⁰
   rw [← (galRestrict A (FractionRing A) (FractionRing B) B).toEquiv.prod_comp]
@@ -1383,7 +1383,7 @@ theorem Algebra.dvd_algebraMap_intNorm_self
   suffices IsIntegral A ((algebraMap B L x)⁻¹ * (algebraMap A L
 
 中文:
-定理 Algebra.dvd_algebraMap_intNorm_self
+定理 代数.dvd_algebraMap_intNorm_self
   条件: (x : B)
   结论: x ∣ algebraMap A B (intNorm A B x)
   证明: by

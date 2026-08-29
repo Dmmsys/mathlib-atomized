@@ -48,9 +48,9 @@ lemma Ne.isUnit_C
   proof: Polynomial.isUnit_C.mpr hu.isUnit
 
 中文:
-引理 Ne.isUnit_C
+引理 不等.isUnit_C
   条件: {u : k} (hu : u != 0)
-  结论: IsUnit (C u)
+  结论: 是单位 (C u)
   证明: Polynomial.isUnit_C.mpr hu.isUnit
 -/
 private lemma Ne.isUnit_C {u : k} (hu : u != 0) : IsUnit (C u) :=
@@ -152,7 +152,7 @@ theorem Polynomial.flt_catalan_deriv
   hav
 
 中文:
-定理 Polynomial.flt_catalan_deriv
+定理 多项式.flt_catalan_deriv
   证明: by
   have hbc : IsCoprime b c := by apply rot_coprime heq <;> assumption
   have hca : IsCoprime c a := by
@@ -275,7 +275,7 @@ theorem Polynomial.flt_catalan_aux
       e
 
 中文:
-定理 Polynomial.flt_catalan_aux
+定理 多项式.flt_catalan_aux
   证明: by
   rcases eq_or_ne (ringChar k) 0 with ch0 | chn0
   -- characteristic zero
@@ -353,7 +353,7 @@ theorem Polynomial.flt_catalan
     apply rot_coprime heq' hbc <;>
 
 中文:
-定理 Polynomial.flt_catalan
+定理 多项式.flt_catalan
   证明: by
   -- WLOG argument: essentially three times flt_catalan_aux
   have hbc : IsCoprime b c := by
@@ -400,7 +400,7 @@ theorem Polynomial.flt
   simp_rw [
 
 中文:
-定理 Polynomial.flt
+定理 多项式.flt
   证明: by
   have hn' : 0 < n := by linarith
   rw [← sub_eq_zero]; rw [← one_mul (a ^ n)]; rw [← one_mul (b ^ n)]; rw [← one_mul (c ^ n)]; rw [sub_eq_add_neg]; rw [← neg_mul] at heq

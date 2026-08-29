@@ -36,8 +36,8 @@ instance Real.punctured_nhds_module_neBot
   body: Module.punctured_nhds_neBot Real E x
 
 中文:
-实例 Real.punctured_nhds_module_neBot
-  签名: {E : 类型} [AddCommGroup E] [TopologicalSpace E]
+实例 实数.punctured_nhds_module_neBot
+  签名: {E : 类型} [加法交换群 E] [拓扑空间 E]
   定义体: Module.punctured_nhds_neBot Real E x
 
 Depends on / 依赖: Module, Module.punctured_nhds_neBot, punctured_nhds_neBot
@@ -111,7 +111,7 @@ theorem dist_smul_add_one_sub_smul_le
 
 中文:
 定理 dist_smul_add_one_sub_smul_le
-  条件: {r : 实数} {x y : E} (h : r in Icc 0 1)
+  条件: {r : 实数} {x y : E} (h : r in 闭区间 0 1)
   证明: calc
     dist (r • x + (1 - r) • y) x = ‖1 - r‖ * ‖x - y‖ := by
       simp_rw [dist_eq_norm', ← norm_smul, sub_smul, one_smul, smul_sub, ← sub_sub, ← sub_add,
@@ -325,7 +325,7 @@ theorem exists_norm_eq
 @[simp]
 
 中文:
-定理 exists_norm_eq
+定理 存在_norm_eq
   条件: {c : 实数} (hc : 0 <= c)
   结论: 存在 x : E, ‖x‖ = c
   证明: by
@@ -353,7 +353,7 @@ theorem range_norm
 
 中文:
 定理 range_norm
-  结论: range (norm : E -> 实数) = Ici 0
+  结论: range (norm : E -> 实数) = 左闭右无界区间 0
   证明: Subset.antisymm (range_subset_iff.2 norm_nonneg) fun _ => exists_norm_eq E
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, exists_norm_eq, norm_nonneg, range_subset_iff
@@ -374,7 +374,7 @@ theorem nnnorm_surjective
 
 中文:
 定理 nnnorm_surjective
-  结论: Surjective (nnnorm : E -> 实数>=0)
+  结论: 满射 (nnnorm : E -> 实数>=0)
   证明: fun c =>
   (exists_norm_eq E c.coe_nonneg).imp fun _ h => NNReal.eq h
 
@@ -419,9 +419,9 @@ theorem NormedSpace.sphere_nonempty
   exact ⟨x + y, by simpa using hy⟩
 
 中文:
-定理 NormedSpace.sphere_nonempty
+定理 赋范空间.sphere_nonempty
   条件: {x : E} {r : 实数}
-  结论: (sphere x r).Nonempty ↔ 0 <= r
+  结论: (sphere x r).非空 ↔ 0 <= r
   证明: by
   refine ⟨fun h => nonempty_closedBall.1 (h.mono sphere_subset_closedBall), fun hr => ?_⟩
   obtain ⟨y, hy⟩ := exists_norm_eq E hr

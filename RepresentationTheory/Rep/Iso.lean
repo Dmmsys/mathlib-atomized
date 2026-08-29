@@ -70,7 +70,7 @@ abbreviation diagonalSuccIsoFree
 
 中文:
 缩写 diagonalSuccIsoFree
-  签名: : diagonal k G (n + 1) ≅ free k G (Fin n -> G)
+  签名: : diagonal k G (n + 1) ≅ free k G (有限集 n -> G)
   定义体: diagonalSuccIsoTensorTrivial k G n ≪≫ leftRegularTensorTrivialIsoFree k G (Fin n -> G)
 
 Depends on / 依赖: diagonalSuccIsoTensorTrivial, leftRegularTensorTrivialIsoFree
@@ -130,7 +130,7 @@ theorem to_Module_monoidAlgebra_map_aux
 
 中文:
 定理 to_Module_monoidAlgebra_map_aux
-  结论: {k G : 类型} [CommRing k] [Monoid G] (V W : 类型)
+  结论: {k G : 类型} [交换环 k] [幺半群 G] (V W : 类型)
   证明: by
   apply MonoidAlgebra.induction_on r
   · intro g
@@ -195,7 +195,7 @@ definition toModuleMonoidAlgebra
 
 中文:
 定义 toModuleMonoidAlgebra
-  签名: : Rep.{w} k G ⥤ ModuleCat k[G] where
+  签名: : Rep.{w} k G ⥤ 模范畴 k[G] where
   定义体: ModuleCat.of _ V.ρ.asModule
   map f := toModuleMonoidAlgebraMap f
 
@@ -221,7 +221,7 @@ definition ofModuleMonoidAlgebra
 
 中文:
 定义 ofModuleMonoidAlgebra
-  签名: : ModuleCat k[G] ⥤ Rep.{w} k G where
+  签名: : 模范畴 k[G] ⥤ Rep.{w} k G where
   定义体: Rep.of (Representation.ofModule M)
   map f := ofHom {
     __ := f.hom
@@ -249,7 +249,7 @@ theorem ofModuleMonoidAlgebra_obj_coe
 
 中文:
 定理 ofModuleMonoidAlgebra_obj_coe
-  条件: (M : ModuleCat.{w} k[G])
+  条件: (M : 模范畴.{w} k[G])
   证明: rfl
 -/
 theorem ofModuleMonoidAlgebra_obj_coe (M : ModuleCat.{w} k[G]) :
@@ -266,7 +266,7 @@ theorem ofModuleMonoidAlgebra_obj_ρ
 
 中文:
 定理 ofModuleMonoidAlgebra_obj_ρ
-  条件: (M : ModuleCat.{w} k[G])
+  条件: (M : 模范畴.{w} k[G])
   证明: rfl
 -/
 theorem ofModuleMonoidAlgebra_obj_ρ (M : ModuleCat.{w} k[G]) :
@@ -286,7 +286,7 @@ definition counitIsoAddEquiv
 
 中文:
 定义 counitIsoAddEquiv
-  签名: {M : ModuleCat.{w} k[G]}
+  签名: {M : 模范畴.{w} k[G]}
   定义体: by
   dsimp [ofModuleMonoidAlgebra, toModuleMonoidAlgebra]
   exact (Representation.ofModule M).asModuleEquiv.toAddEquiv.trans
@@ -339,7 +339,7 @@ definition counitIso
 
 中文:
 定义 counitIso
-  签名: (M : ModuleCat.{w} k[G])
+  签名: (M : 模范畴.{w} k[G])
   定义体: LinearEquiv.toModuleIso
     { counitIsoAddEquiv with
       map_smul' := fun r x => by
@@ -425,7 +425,7 @@ definition equivalenceModuleMonoidAlgebra
 
 中文:
 定义 equivalenceModuleMonoidAlgebra
-  签名: : Rep.{w} k G ≌ ModuleCat k[G] where
+  签名: : Rep.{w} k G ≌ 模范畴 k[G] where
   定义体: toModuleMonoidAlgebra
   inverse := ofModuleMonoidAlgebra
   unitIso := NatIso.ofComponents (fun V => unitIso V) (by cat_disch)
@@ -449,7 +449,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toModuleMonoidAlgebra.{w} (k := k) (G := G)).IsEquivalence
+  签名: (toModuleMonoidAlgebra.{w} (k := k) (G := G)).是等价
   定义体: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_functor
 
 Depends on / 依赖: IsEquivalence
@@ -467,7 +467,7 @@ instance :
 
 中文:
 实例 :
-  签名: (ofModuleMonoidAlgebra (k := k) (G := G)).IsEquivalence
+  签名: (ofModuleMonoidAlgebra (k := k) (G := G)).是等价
   定义体: (equivalenceModuleMonoidAlgebra (k := k) (G := G)).isEquivalence_inverse
 
 Depends on / 依赖: IsEquivalence
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryTheory.EnoughProjectives (Rep.{max w u} k G)
+  签名: 范畴论.有足够投射 (Rep.{最大值 w u} k G)
   定义体: equivalenceModuleMonoidAlgebra.enoughProjectives_iff.2 ModuleCat.enoughProjectives.{max w u}
 
 Depends on / 依赖: ModuleCat, ModuleCat.enoughProjectives, enoughProjectives, enoughProjectives_iff, equivalenceModuleMonoidAlgebra, equivalenceModuleMonoidAlgebra.enoughProjectives_iff
@@ -509,7 +509,7 @@ instance free_projective
 
 中文:
 实例 free_projective
-  签名: {α : Type (max w u)}
+  签名: {α : 类型 (最大值 w u)}
   定义体: equivalenceModuleMonoidAlgebra.toAdjunction.projective_of_map_projective _
     @ModuleCat.projective_of_free _ _
       (ModuleCat.of k[G] (Representation.free k G α).asModule)
@@ -578,7 +578,7 @@ instance trivial_projective_of_subsingleton
 
 中文:
 实例 trivial_projective_of_subsingleton
-  签名: [Subsingleton G]
+  签名: [子单例 G]
   定义体: Projective.of_iso (ofMulActionSubsingletonIsoTrivial _ _ (Fin 1 -> G)) diagonal_succ_projective
 
 Depends on / 依赖: Projective, Projective.of_iso, diagonal_succ_projective, ofMulActionSubsingletonIsoTrivial, of_iso

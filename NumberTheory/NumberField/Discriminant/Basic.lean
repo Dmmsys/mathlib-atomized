@@ -57,7 +57,7 @@ theorem discr_eq_basisMatrix_det_sq
 
 中文:
 定理 discr_eq_basisMatrix_det_sq
-  条件: [DecidableEq (K ->+* Complex)]
+  条件: [DecidableEq (K ->+* 复形)]
   证明: by
   rw [← Rat.cast_intCast]; rw [coe_discr]; rw [basisMatrix_eq_embeddingsMatrixReindex]; rw [← Algebra.discr_eq_det_embeddingsMatrixReindex_pow_two]; rw [← (equivReindex K).symm_symm]; rw [Algebra.discr_reindex]; rw [eq_ratCast]
 
@@ -134,7 +134,7 @@ theorem rootDiscr_def
 
 中文:
 定理 rootDiscr_def
-  结论: rootDiscr K = |discr K| ^ (finrank Rat K : 实数)⁻¹
+  结论: rootDiscr K = |discr K| ^ (finrank 有理数 K : 实数)⁻¹
   证明: by
   rw [rootDiscr]
 
@@ -154,7 +154,7 @@ theorem rootDiscr_rat
 
 中文:
 定理 rootDiscr_rat
-  结论: rootDiscr Rat = 1
+  结论: rootDiscr 有理数 = 1
   证明: by
   simp [rootDiscr_def]
 
@@ -178,7 +178,7 @@ theorem _root_.NumberField.mixedEmbedding.volume_fundamentalDomain_latticeBasis
   let M := (mixedEmbedding.stdBasis K).toMatrix ((latticeBa
 
 中文:
-定理 _root_.NumberField.mixedEmbedding.volume_fundamentalDomain_latticeBasis
+定理 _root_.数域.mixedEmbedding.volume_fundamentalDomain_latticeBasis
   证明: by
   let f : Module.Free.ChooseBasisIndex Int (𝓞 K) ≃ (K ->+* Complex) :=
     (canonicalEmbedding.latticeBasis K).indexEquiv (Pi.basisFun Complex _)
@@ -225,7 +225,7 @@ theorem _root_.NumberField.mixedEmbedding.covolume_integerLattice
   rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqr
 
 中文:
-定理 _root_.NumberField.mixedEmbedding.covolume_integerLattice
+定理 _root_.数域.mixedEmbedding.covolume_integerLattice
   证明: by
   rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_integerLattice K)]; rw [measureReal_def]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; rw [ENNReal.toReal_inv]; rw [toReal_ofNat]; rw [ENNReal.coe_toReal]; rw [Real.coe_sqr
 
@@ -247,7 +247,7 @@ theorem _root_.NumberField.mixedEmbedding.covolume_idealLattice
   rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; r
 
 中文:
-定理 _root_.NumberField.mixedEmbedding.covolume_idealLattice
+定理 _root_.数域.mixedEmbedding.covolume_idealLattice
   条件: (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
   证明: by
   rw [ZLattice.covolume_eq_measure_fundamentalDomain _ _ (fundamentalDomain_idealLattice K I)]; rw [measureReal_def]; rw [volume_fundamentalDomain_fractionalIdealLatticeBasis]; rw [volume_fundamentalDomain_latticeBasis]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_pow]; r
@@ -275,7 +275,7 @@ theorem exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
     rw [convexBody
 
 中文:
-定理 exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
+定理 存在_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr
   条件: (I : (FractionalIdeal (𝓞 K)⁰ K)ˣ)
   证明: by
   classical
@@ -345,7 +345,7 @@ theorem exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr
   exact h_nm
 
 中文:
-定理 exists_ne_zero_mem_ringOfIntegers_of_norm_le_mul_sqrt_discr
+定理 存在_ne_zero_mem_ringOf整数egers_of_norm_le_mul_sqrt_discr
   证明: by
   obtain ⟨_, h_mem, h_nz, h_nm⟩ := exists_ne_zero_mem_ideal_of_norm_le_mul_sqrt_discr K ↑1
   obtain ⟨a, rfl⟩ := (FractionalIdeal.mem_one_iff _).mp h_mem
@@ -411,7 +411,7 @@ theorem abs_discr_ge_of_isTotallyComplex
 
 中文:
 定理 abs_discr_ge_of_isTotallyComplex
-  条件: [IsTotallyComplex K]
+  条件: [是TotallyComplex K]
   证明: by
   have := abs_discr_ge' K
   rwa [← IsTotallyComplex.finrank] at this
@@ -437,7 +437,7 @@ theorem abs_discr_rpow_ge_of_isTotallyComplex
 
 中文:
 定理 abs_discr_rpow_ge_of_isTotallyComplex
-  条件: [IsTotallyComplex K]
+  条件: [是TotallyComplex K]
   证明: by
   have h : 0 < (finrank Rat K : Real) := Nat.cast_pos.mpr finrank_pos
   rw [← Real.rpow_le_rpow_iff (z := finrank Rat K) (by positivity) (by positivity) h]; rw [Real.div_rpow
@@ -470,7 +470,7 @@ theorem abs_discr_ge
 
 中文:
 定理 abs_discr_ge
-  条件: (h : 1 < finrank Rat K)
+  条件: (h : 1 < finrank 有理数 K)
   证明: by
   refine le_trans ?_ (abs_discr_ge' K)
   -- The sequence `a n` is a lower bound for `|discr K|`. We prove below by induction a uniform
@@ -530,7 +530,7 @@ theorem abs_discr_gt_two
 
 中文:
 定理 abs_discr_gt_two
-  条件: (h : 1 < finrank Rat K)
+  条件: (h : 1 < finrank 有理数 K)
   结论: 2 < |discr K|
   证明: by
   rw [← Nat.succ_le_iff] at h
@@ -605,7 +605,7 @@ refine Set.finite_coe_iff.mp Finite.of_injective
 
 中文:
 定理 finite_of_finite_generating_set
-  结论: {p : 整数ermediateField Rat A -> 命题}
+  结论: {p : 中间域 有理数 A -> 命题}
   证明: by
   rw [← Set.finite_coe_iff] at hT
 refine Set.finite_coe_iff.mp Finite.of_injective
@@ -766,7 +766,7 @@ theorem natDegree_le_rankOfDiscrBdd
 
 中文:
 定理 natDegree_le_rankOfDiscrBdd
-  条件: (a : 𝓞 K) (h : Rat⟮(a : K)⟯ = ⊤)
+  条件: (a : 𝓞 K) (h : 有理数⟮(a : K)⟯ = ⊤)
   证明: by
   rw [Field.primitive_element_iff_minpoly_natDegree_eq]; rw [minpoly.isIntegrallyClosed_eq_field_fractions' Rat a.isIntegral_coe]; rw [(minpoly.monic a.isIntegral_coe).natDegree_map] at h
   exact h.symm ▸ rank_le_rankOfDiscrBdd hK
@@ -797,7 +797,7 @@ theorem finite_of_discr_bdd_of_isReal
   refine
 
 中文:
-定理 finite_of_discr_bdd_of_isReal
+定理 finite_of_discr_bdd_of_is实数
   证明: by
   classical
   -- The bound on the degree of the generating polynomials
@@ -947,7 +947,7 @@ theorem _root_.NumberField.finite_of_discr_bdd
   have : NumberField K := @NumberField.mk _ _ inferInsta
 
 中文:
-定理 _root_.NumberField.finite_of_discr_bdd
+定理 _root_.数域.finite_of_discr_bdd
   证明: by
   refine Set.Finite.subset (Set.Finite.union (finite_of_discr_bdd_of_isReal A N)
     (finite_of_discr_bdd_of_isComplex A N)) ?_

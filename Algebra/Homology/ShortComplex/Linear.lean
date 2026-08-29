@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (S₁ ⟶ S₂)
+  签名: 标量乘法 R (S₁ ⟶ S₂)
   定义体: { τ₁ := a • φ.τ₁
       τ₂ := a • φ.τ₂
       τ₃ := a • φ.τ₃ }
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (S₁ ⟶ S₂)
+  签名: 模 R (S₁ ⟶ S₂)
   定义体: by cat_disch
   one_smul := by cat_disch
   smul_zero := by cat_disch
@@ -145,7 +145,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (ShortComplex C)
+  签名: 线性 R (短复形 C)
 -/
 instance : Linear R (ShortComplex C) where
 
@@ -287,7 +287,7 @@ instance leftHomologyFunctor_linear
 
 中文:
 实例 leftHomologyFunctor_linear
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance leftHomologyFunctor_linear [HasKernels C] [HasCokernels C] :
     Functor.Linear R (leftHomologyFunctor C) where
@@ -301,7 +301,7 @@ instance cyclesFunctor_linear
 
 中文:
 实例 cyclesFunctor_linear
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance cyclesFunctor_linear [HasKernels C] [HasCokernels C] :
     Functor.Linear R (cyclesFunctor C) where
@@ -450,7 +450,7 @@ instance rightHomologyFunctor_linear
 
 中文:
 实例 rightHomologyFunctor_linear
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance rightHomologyFunctor_linear [HasKernels C] [HasCokernels C] :
     Functor.Linear R (rightHomologyFunctor C) where
@@ -464,7 +464,7 @@ instance opcyclesFunctor_linear
 
 中文:
 实例 opcyclesFunctor_linear
-  签名: [HasKernels C] [HasCokernels C]
+  签名: [有Kernels C] [有余kernels C]
 -/
 instance opcyclesFunctor_linear [HasKernels C] [HasCokernels C] :
     Functor.Linear R (opcyclesFunctor C) where
@@ -537,7 +537,7 @@ lemma homologyMap_smul
 
 中文:
 引理 homologyMap_smul
-  条件: [S₁.HasHomology] [S₂.HasHomology]
+  条件: [S₁.有同调] [S₂.有同调]
   证明: homologyMap'_smul _ _ _
 
 Depends on / 依赖: _smul, homologyMap
@@ -555,7 +555,7 @@ instance homologyFunctor_linear
 
 中文:
 实例 homologyFunctor_linear
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
 -/
 instance homologyFunctor_linear [CategoryWithHomology C] :
     Functor.Linear R (homologyFunctor C) where
@@ -588,8 +588,8 @@ definition Homotopy.smul
     simp only
 
 中文:
-定义 Homotopy.smul
-  签名: {φ₁ φ₂ : S₁ ⟶ S₂} (h : Homotopy φ₁ φ₂) (a : R)
+定义 同伦.smul
+  签名: {φ₁ φ₂ : S₁ ⟶ S₂} (h : 同伦 φ₁ φ₂) (a : R)
   定义体: a • h.h₀
   h₁ := a • h.h₁
   h₂ := a • h.h₂

@@ -82,8 +82,8 @@ structure Convert.CheapConfig
 
 中文:
 结构 Convert.CheapConfig
-  参数: extends Congr!.Config
-  继承: Congr!.Config
+  参数: extends 余ngr!.余nfig
+  继承: 余ngr!.余nfig
   公理与运算 (2 个):
     - postTransparency : = .reducible
     - sameFun : = true
@@ -108,8 +108,8 @@ structure Convert.ExpensiveConfig
 
 中文:
 结构 Convert.ExpensiveConfig
-  参数: extends Congr!.Config
-  继承: Congr!.Config
+  参数: extends 余ngr!.余nfig
+  继承: 余ngr!.余nfig
   (无附加公理)
 -/
 structure Convert.ExpensiveConfig extends Congr!.Config where
@@ -136,7 +136,7 @@ definition Convert.elabConfig
 
 中文:
 定义 Convert.elabConfig
-  签名: (expensive : 布尔) (stx : Syntax)
+  签名: (expensive : 布尔值) (stx : Syntax)
   定义体: do
   -- Implement overridable fields by choosing to elaborate one of two structures,
   -- which have different defaults (that can later be overridden by the user).
@@ -169,7 +169,7 @@ definition Lean.MVarId.convert
 
 中文:
 定义 Lean.MVarId.convert
-  签名: (e : Expr) (symm : 布尔)
+  签名: (e : Expr) (symm : 布尔值)
   定义体: g.withContext do
   let src ← inferType e
   let tgt ← g.getType
@@ -207,7 +207,7 @@ definition Lean.MVarId.convertLocalDecl
 
 中文:
 定义 Lean.MVarId.convertLocalDecl
-  签名: (g : MVarId) (fvarId : FVarId) (typeNew : Expr) (symm : 布尔)
+  签名: (g : MVarId) (fvarId : FVarId) (typeNew : Expr) (symm : 布尔值)
   定义体: g.withContext do
   let typeOld ← fvarId.getType
   let v ← mkFreshExprMVar (← mkAppM ``Eq
@@ -309,7 +309,7 @@ definition elabTermForConvert
 
 中文:
 定义 elabTermForConvert
-  签名: (term : Syntax) (expectedType? : Option Expr)
+  签名: (term : Syntax) (expectedType? : 选项类型 Expr)
   定义体: do
   withCollectingNewGoalsFrom (parentTag := ← getMainTag) (tagSuffix := `convert)
       (allowNaturalHoles := true) do

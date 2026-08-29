@@ -46,7 +46,7 @@ theorem Filter.map_atTop_finsetProd_le_of_prod_eq
 alias Filter.map_atTop_finset_sum_le_of_sum_eq := Filter.map_atTop_finsetSum_le_of_s
 
 中文:
-定理 Filter.map_atTop_finsetProd_le_of_prod_eq
+定理 滤子.map_atTop_finsetProd_le_of_prod_eq
   结论: {f : α -> M} {g : β -> M}
   证明: by
   refine ((atTop_basis.map _).le_basis_iff (atTop_basis.map _)).2 fun b _ => ?_
@@ -97,7 +97,7 @@ theorem Function.Injective.map_atTop_finsetProd_eq
     refine (prod_subset subset_union_lef
 
 中文:
-定理 Function.Injective.map_atTop_finsetProd_eq
+定理 函数.单射.map_atTop_finsetProd_eq
   结论: {g : α -> β}
   证明: by
   have := Classical.decEq β

@@ -94,7 +94,7 @@ definition UniformConvergenceCLM
 
 中文:
 定义 UniformConvergenceCLM
-  签名: [TopologicalSpace F] (_ : Set (Set E))
+  签名: [拓扑空间 F] (_ : 集合 (集合 E))
   定义体: E ->SL[σ] F
 -/
 def UniformConvergenceCLM [TopologicalSpace F] (_ : Set (Set E)) := E ->SL[σ] F
@@ -125,7 +125,7 @@ definition ofFun
 
 中文:
 定义 ofFun
-  签名: [TopologicalSpace F] (𝔖 : Set (Set E))
+  签名: [拓扑空间 F] (𝔖 : 集合 (集合 E))
   定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 -/
 def ofFun [TopologicalSpace F] (𝔖 : Set (Set E)) : (E ->SL[σ] F) ≃ (E ->SLᵤ[σ, 𝔖] F) :=
@@ -143,7 +143,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: [TopologicalSpace F] (𝔖 : Set (Set E))
+  签名: [拓扑空间 F] (𝔖 : 集合 (集合 E))
   定义体: inferInstanceAs FunLike (E ->SL[σ] F) E F
 
 @[ext]
@@ -165,7 +165,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [TopologicalSpace F] {𝔖 : Set (Set E)} {f g : E ->SLᵤ[σ, 𝔖] F}
+  结论: [拓扑空间 F] {𝔖 : 集合 (集合 E)} {f g : E ->SLᵤ[σ, 𝔖] F}
   证明: DFunLike.ext f g h
 
 Depends on / 依赖: DFunLike, DFunLike.ext
@@ -184,7 +184,7 @@ instance instContinuousSemilinearMapClass
 
 中文:
 实例 instContinuousSemilinearMapClass
-  签名: [TopologicalSpace F] (𝔖 : Set (Set E))
+  签名: [拓扑空间 F] (𝔖 : 集合 (集合 E))
   定义体: inferInstanceAs ContinuousSemilinearMapClass (E ->SL[σ] F) σ E F
 
 Depends on / 依赖: ContinuousSemilinearMapClass
@@ -204,7 +204,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E))
+  签名: [拓扑空间 F] [是拓扑加群 F] (𝔖 : 集合 (集合 E))
   定义体: (@UniformOnFun.topologicalSpace E F (IsTopologicalAddGroup.rightUniformSpace F) 𝔖).induced
     (DFunLike.coe : (E ->SLᵤ[σ, 𝔖] F) -> (E ->ᵤ[𝔖] F))
 
@@ -228,7 +228,7 @@ theorem topologicalSpace_eq
 
 中文:
 定理 topologicalSpace_eq
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: by
   rw [instTopologicalSpace]
   congr
@@ -256,7 +256,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: [UniformSpace F] [IsUniformAddGroup F]
+  签名: [一致空间 F] [是UniformAdd群 F]
   定义体: UniformSpace.replaceTopology
     ((UniformOnFun.uniformSpace E F 𝔖).comap (UniformOnFun.ofFun 𝔖 ∘ DFunLike.coe))
     (by
@@ -284,7 +284,7 @@ theorem uniformSpace_eq
 
 中文:
 定理 uniformSpace_eq
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: by
   rw [instUniformSpace]; rw [UniformSpace.replaceTopology_eq]
 
@@ -309,7 +309,7 @@ theorem uniformity_toTopologicalSpace_eq
 
 中文:
 定理 uniformity_toTopologicalSpace_eq
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: rfl
 -/
 theorem uniformity_toTopologicalSpace_eq [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E)) :
@@ -327,7 +327,7 @@ theorem isUniformInducing_coeFn
 
 中文:
 定理 isUniformInducing_coeFn
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: ⟨rfl⟩
 
 Depends on / 依赖: DFunLike, DFunLike.coe, UniformOnFun, UniformOnFun.ofFun
@@ -346,7 +346,7 @@ theorem isUniformEmbedding_coeFn
 
 中文:
 定理 isUniformEmbedding_coeFn
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: ⟨isUniformInducing_coeFn .., DFunLike.coe_injective⟩
 
 Depends on / 依赖: DFunLike, DFunLike.coe, UniformOnFun, UniformOnFun.ofFun
@@ -365,7 +365,7 @@ theorem isEmbedding_coeFn
 
 中文:
 定理 isEmbedding_coeFn
-  条件: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  条件: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   证明: IsUniformEmbedding.isEmbedding (isUniformEmbedding_coeFn _ _ _)
 -/
 theorem isEmbedding_coeFn [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E)) :
@@ -389,7 +389,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E))
+  签名: [拓扑空间 F] [是拓扑加群 F] (𝔖 : 集合 (集合 E))
   定义体: inferInstanceAs AddCommGroup (E ->SL[σ] F)
 
 Depends on / 依赖: AddCommGroup
@@ -409,8 +409,8 @@ instance [TopologicalSpace
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
 
 中文:
-实例 [TopologicalSpace
-  签名: F] [IsTopologicalAddGroup F] (𝔖
+实例 [拓扑空间
+  签名: F] [是拓扑加群 F] (𝔖
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias neg_apply := neg_apply
@@ -434,8 +434,8 @@ instance [TopologicalSpace
 @[deprecated (since := "2026-06-10")] protected alias sum_apply := sum_apply
 
 中文:
-实例 [TopologicalSpace
-  签名: F] [IsTopologicalAddGroup F] (𝔖
+实例 [拓扑空间
+  签名: F] [是拓扑加群 F] (𝔖
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias add_apply := add_apply
@@ -461,8 +461,8 @@ instance [TopologicalSpace
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
 
 中文:
-实例 [TopologicalSpace
-  签名: F] [IsTopologicalAddGroup F] (𝔖
+实例 [拓扑空间
+  签名: F] [是拓扑加群 F] (𝔖
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias sub_apply := sub_apply
@@ -484,8 +484,8 @@ instance [TopologicalSpace
 @[deprecated (since := "2026-06-10")] protected alias coe_zero := FunLike.coe_zero
 
 中文:
-实例 [TopologicalSpace
-  签名: F] [IsTopologicalAddGroup F] (𝔖
+实例 [拓扑空间
+  签名: F] [是拓扑加群 F] (𝔖
   定义体: rfl
 
 @[deprecated (since := "2026-06-10")] protected alias coe_zero := FunLike.coe_zero
@@ -509,7 +509,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: [UniformSpace F] [IsUniformAddGroup F] (𝔖 : Set (Set E))
+  签名: [一致空间 F] [是UniformAdd群 F] (𝔖 : 集合 (集合 E))
   定义体: by
   let φ : (E ->SLᵤ[σ, 𝔖] F) ->+ E ->ᵤ[𝔖] F :=
     ⟨⟨(DFunLike.coe : (E ->SLᵤ[σ, 𝔖] F) -> E ->ᵤ[𝔖] F), rfl⟩, fun _ _ => rfl⟩
@@ -536,7 +536,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 F] [是拓扑加群 F]
   定义体: by
   let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -564,7 +564,7 @@ theorem continuousEvalConst
 
 中文:
 定理 continuousEvalConst
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: by
     let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
     have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -596,7 +596,7 @@ theorem t2Space
 
 中文:
 定理 t2Space
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F] [T2Space F]
+  结论: [拓扑空间 F] [是拓扑加群 F] [T2空间 F]
   证明: by
   let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -622,7 +622,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: (M : 类型) [Monoid M] [DistribMulAction M F] [SMulCommClass 𝕜₂ M F]
+  签名: (M : 类型) [幺半群 M] [分配乘法作用 M F] [标量交换类 𝕜₂ M F]
   定义体: inferInstanceAs DistribMulAction M (E ->SL[σ] F)
 
 Depends on / 依赖: DistribMulAction
@@ -649,7 +649,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: (R : 类型) [Semiring R] [Module R F] [SMulCommClass 𝕜₂ R F]
+  签名: (R : 类型) [半环 R] [模 R F] [标量交换类 𝕜₂ R F]
   定义体: inferInstanceAs Module R (E ->SL[σ] F)
 
 Depends on / 依赖: Module
@@ -675,7 +675,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul S T] [IsScalarTower S T F] (𝔖 : Set (Set E))
+  签名: [标量乘法 S T] [标量塔 S T F] (𝔖 : 集合 (集合 E))
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -693,7 +693,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulCommClass S T F] (𝔖 : Set (Set E))
+  签名: [标量交换类 S T F] (𝔖 : 集合 (集合 E))
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -754,7 +754,7 @@ theorem hasBasis_nhds_zero_of_basis
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: by
   let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -784,7 +784,7 @@ theorem hasBasis_nhds_zero
 
 中文:
 定理 hasBasis_nhds_zero
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: hasBasis_nhds_zero_of_basis σ F 𝔖 h𝔖₁ h𝔖₂ (𝓝 0).basis_sets
 
 Depends on / 依赖: basis_sets, hasBasis_nhds_zero_of_basis
@@ -810,7 +810,7 @@ theorem nhds_zero_eq_of_basis
 
 中文:
 定理 nhds_zero_eq_of_basis
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E))
+  结论: [拓扑空间 F] [是拓扑加群 F] (𝔖 : 集合 (集合 E))
   证明: by
   let : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -839,7 +839,7 @@ theorem nhds_zero_eq
 
 中文:
 定理 nhds_zero_eq
-  条件: [TopologicalSpace F] [IsTopologicalAddGroup F] (𝔖 : Set (Set E))
+  条件: [拓扑空间 F] [是拓扑加群 F] (𝔖 : 集合 (集合 E))
   证明: nhds_zero_eq_of_basis _ _ _ (𝓝 0).basis_sets
 
 Depends on / 依赖: basis_sets, nhds_zero_eq_of_basis
@@ -863,7 +863,7 @@ theorem eventually_nhds_zero_mapsTo
 
 中文:
 定理 eventually_nhds_zero_mapsTo
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: by
   rw [nhds_zero_eq]
   apply_rules [mem_iInf_of_mem, mem_principal_self]
@@ -893,7 +893,7 @@ theorem isVonNBounded_image2_apply
 
 中文:
 定理 isVonNBounded_image2_apply
-  结论: {R : 类型} [SeminormedRing R]
+  结论: {R : 类型} [Seminormed环 R]
   证明: by
   intro U hU
   filter_upwards [hS (eventually_nhds_zero_mapsTo σ hs hU)] with c hc
@@ -933,7 +933,7 @@ theorem isVonNBounded_iff
 
 中文:
 定理 isVonNBounded_iff
-  结论: {R : 类型} [NormedDivisionRing R]
+  结论: {R : 类型} [NormedDivision环 R]
   证明: by
   refine ⟨fun hS s hs => isVonNBounded_image2_apply hS hs, fun h => ?_⟩
   simp_rw [isVonNBounded_iff_absorbing_le, nhds_zero_eq, le_iInf_iff, le_principal_iff]
@@ -1021,7 +1021,7 @@ theorem tendsto_iff_tendstoUniformlyOn
 
 中文:
 定理 tendsto_iff_tendstoUniformlyOn
-  结论: {ι : 类型} {p : Filter ι} [UniformSpace F]
+  结论: {ι : 类型} {p : 滤子 ι} [一致空间 F]
   证明: by
   rw [(isEmbedding_coeFn σ F 𝔖).tendsto_nhds_iff]; rw [UniformOnFun.tendsto_iff_tendstoUniformlyOn]
   rfl
@@ -1098,7 +1098,7 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  结论: [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F]
+  结论: [一致空间 F] [是UniformAdd群 F] [连续标量乘法 𝕜₂ F] [完备空间 F]
   证明: by
   wlog hF : T2Space F generalizing F
   · rw [(isUniformInducing_postcomp σ (SeparationQuotient.mkCLM 𝕜₂ F)
@@ -1139,7 +1139,7 @@ theorem uniformSpace_mono
 
 中文:
 定理 uniformSpace_mono
-  条件: [UniformSpace F] [IsUniformAddGroup F] (h : 𝔖₂ subseteq 𝔖₁)
+  条件: [一致空间 F] [是UniformAdd群 F] (h : 𝔖₂ subseteq 𝔖₁)
   证明: by
   simp_rw [uniformSpace_eq]
   exact UniformSpace.comap_mono (UniformOnFun.mono (le_refl _) h)
@@ -1165,7 +1165,7 @@ theorem topologicalSpace_mono
 
 中文:
 定理 topologicalSpace_mono
-  条件: [TopologicalSpace F] [IsTopologicalAddGroup F] (h : 𝔖₂ subseteq 𝔖₁)
+  条件: [拓扑空间 F] [是拓扑加群 F] (h : 𝔖₂ subseteq 𝔖₁)
   证明: by
   let := IsTopologicalAddGroup.rightUniformSpace F
   have : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
@@ -1199,7 +1199,7 @@ rcases mem_nhds_prod_iff.mp hB.tendsto' (0 : G × E) 0 (by simp) hU
 
 中文:
 定理 continuous_of_continuous_uncurry
-  结论: [AddCommGroup G]
+  结论: [加法交换群 G]
   证明: by
   apply continuous_of_tendsto_nhds_zero
   suffices forall s in 𝔖, forall U in 𝓝 0, forallᶠ (g : G) in 𝓝 0, forall e in s, B g e in U by
@@ -1245,7 +1245,7 @@ definition _root_.ContinuousLinearMap.toUniformConvergenceCLM
   body: LinearEquiv.refl _ _
 
 中文:
-定义 _root_.ContinuousLinearMap.toUniformConvergenceCLM
+定义 _root_.连续线性映射.toUniformConvergenceCLM
   签名: :
   定义体: LinearEquiv.refl _ _
 
@@ -1269,7 +1269,7 @@ lemma _root_.ContinuousLinearMap.toUniformConvergenceCLM_apply
 @[simp]
 
 中文:
-引理 _root_.ContinuousLinearMap.toUniformConvergenceCLM_apply
+引理 _root_.连续线性映射.toUniformConvergenceCLM_apply
   条件: {A : E ->SL[σ] F} {x : E}
   证明: rfl
 
@@ -1287,7 +1287,7 @@ lemma _root_.ContinuousLinearMap.toUniformConvergenceCLM_symm_apply
   proof: rfl
 
 中文:
-引理 _root_.ContinuousLinearMap.toUniformConvergenceCLM_symm_apply
+引理 _root_.连续线性映射.toUniformConvergenceCLM_symm_apply
   证明: rfl
 -/
 lemma _root_.ContinuousLinearMap.toUniformConvergenceCLM_symm_apply
@@ -1331,7 +1331,7 @@ definition precompUniformConvergenceCLM
 
 中文:
 定义 precompUniformConvergenceCLM
-  签名: [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
+  签名: [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G]
   定义体: f.comp L
   map_add' f g := add_comp f g L
   map_smul' a f := smul_comp a f L
@@ -1383,7 +1383,7 @@ definition postcompUniformConvergenceCLM
 
 中文:
 定义 postcompUniformConvergenceCLM
-  签名: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
+  签名: [是拓扑加群 F] [是拓扑加群 G]
   定义体: L.comp f
   map_add' := comp_add L
   map_smul' := comp_smulₛₗ L
@@ -1445,7 +1445,7 @@ definition UniformConvergenceCLM.piEquivL
 
 中文:
 定义 UniformConvergenceCLM.piEquivL
-  签名: (𝔖 : Set (Set E))
+  签名: (𝔖 : 集合 (集合 E))
   定义体: letI : forall i, UniformSpace (F i) := fun i => IsTopologicalAddGroup.rightUniformSpace (F i)
   haveI : forall i, IsUniformAddGroup (F i) := fun i => isUniformAddGroup_of_addCommGroup
   { toFun F := ContinuousLinearMap.pi F
@@ -1487,7 +1487,7 @@ lemma UniformConvergenceCLM.piEquivL_apply
 
 中文:
 引理 UniformConvergenceCLM.piEquivL_apply
-  结论: (𝔖 : Set (Set E))
+  结论: (𝔖 : 集合 (集合 E))
   证明: rfl
 
 @[simp]
@@ -1508,7 +1508,7 @@ lemma UniformConvergenceCLM.piEquivL_symm_apply
 
 中文:
 引理 UniformConvergenceCLM.piEquivL_symm_apply
-  结论: (𝔖 : Set (Set E))
+  结论: (𝔖 : 集合 (集合 E))
   证明: rfl
 -/
 lemma UniformConvergenceCLM.piEquivL_symm_apply (𝔖 : Set (Set E))

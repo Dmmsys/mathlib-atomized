@@ -38,7 +38,7 @@ definition toAddGrp
 
 中文:
 定义 toAddGrp
-  签名: : GrpCat ⥤ AddGrpCat where
+  签名: : 群范畴 ⥤ 加法群范畴 where
   定义体: AddGrpCat.of (Additive X)
   map {_} {_} f := AddGrpCat.ofHom f.hom.toAdditive
 
@@ -66,7 +66,7 @@ definition toAddCommGrp
 
 中文:
 定义 toAddCommGrp
-  签名: : CommGrpCat ⥤ AddCommGrpCat where
+  签名: : 交换群范畴 ⥤ 加法交换群范畴 where
   定义体: AddCommGrpCat.of (Additive X)
   map {_} {_} f := AddCommGrpCat.ofHom f.hom.toAdditive
 
@@ -94,7 +94,7 @@ definition toGrp
 
 中文:
 定义 toGrp
-  签名: : AddGrpCat ⥤ GrpCat where
+  签名: : 加法群范畴 ⥤ 群范畴 where
   定义体: GrpCat.of (Multiplicative X)
   map {_} {_} f := GrpCat.ofHom f.hom.toMultiplicative
 
@@ -122,7 +122,7 @@ definition toCommGrp
 
 中文:
 定义 toCommGrp
-  签名: : AddCommGrpCat ⥤ CommGrpCat where
+  签名: : 加法交换群范畴 ⥤ 交换群范畴 where
   定义体: CommGrpCat.of (Multiplicative X)
   map {_} {_} f := CommGrpCat.ofHom f.hom.toMultiplicative
 
@@ -150,7 +150,7 @@ definition groupAddGroupEquivalence
 
 中文:
 定义 groupAddGroupEquivalence
-  签名: : GrpCat ≌ AddGrpCat where
+  签名: : 群范畴 ≌ 加法群范畴 where
   定义体: GrpCat.toAddGrp
   inverse := AddGrpCat.toGrp
   unitIso := Iso.refl _
@@ -180,7 +180,7 @@ definition commGroupAddCommGroupEquivalence
 
 中文:
 定义 commGroupAddCommGroupEquivalence
-  签名: : CommGrpCat ≌ AddCommGrpCat where
+  签名: : 交换群范畴 ≌ 加法交换群范畴 where
   定义体: CommGrpCat.toAddCommGrp
   inverse := AddCommGrpCat.toCommGrp
   unitIso := Iso.refl _

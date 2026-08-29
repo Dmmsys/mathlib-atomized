@@ -86,15 +86,15 @@ inductive Code
     - fix: Code -> Code
 
 中文:
-归纳类型 Code
+归纳类型 余de
   构造子 (7 个):
     - zero': 
     - succ: 
     - tail: 
-    - cons: Code -> Code -> Code
-    - comp: Code -> Code -> Code
-    - case: Code -> Code -> Code
-    - fix: Code -> Code
+    - cons: 余de -> 余de -> 余de
+    - comp: 余de -> 余de -> 余de
+    - case: 余de -> 余de -> 余de
+    - fix: 余de -> 余de
 -/
 inductive Code
   | zero'
@@ -114,8 +114,8 @@ definition Code.eval
   signature: : Code -> List Nat ->. List Nat
 
 中文:
-定义 Code.eval
-  签名: : Code -> List 自然数 ->. List 自然数
+定义 余de.eval
+  签名: : 余de -> 列表 自然数 ->. 列表 自然数
 -/
 def Code.eval : Code -> List Nat ->. List Nat
   | Code.zero' => fun v => pure (0 :: v)
@@ -284,7 +284,7 @@ definition nil
 
 中文:
 定义 nil
-  签名: : Code
+  签名: : 余de
   定义体: tail.comp succ
 
 @[simp]
@@ -324,7 +324,7 @@ definition id
 
 中文:
 定义 id
-  签名: : Code
+  签名: : 余de
   定义体: tail.comp zero'
 
 @[simp]
@@ -364,7 +364,7 @@ definition head
 
 中文:
 定义 head
-  签名: : Code
+  签名: : 余de
   定义体: cons id nil
 
 @[simp]
@@ -402,7 +402,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: : Code
+  签名: : 余de
   定义体: cons zero' nil
 
 @[simp]
@@ -440,7 +440,7 @@ definition pred
 
 中文:
 定义 pred
-  签名: : Code
+  签名: : 余de
   定义体: case zero head
 
 @[simp]
@@ -481,7 +481,7 @@ definition rfind
 
 中文:
 定义 rfind
-  签名: (f : Code)
+  签名: (f : 余de)
   定义体: comp pred comp (fix <| cons f <| cons succ tail) zero'
 -/
 def rfind (f : Code) : Code :=
@@ -503,7 +503,7 @@ let F := case id comp (comp (comp tail tail) (fix G)) zero'
 
 中文:
 定义 prec
-  签名: (f g : Code)
+  签名: (f g : 余de)
   定义体: let G :=
 cons tail
 cons succ
@@ -544,8 +544,8 @@ c.eval v.1 = Subtype.val < > List.Vector.mOfFn fun i => g i v
   | zero => exact
 
 中文:
-定理 exists_code.comp
-  结论: {m n} {f : List.Vector 自然数 n ->. 自然数} {g : Fin n -> List.Vector 自然数 m ->. 自然数}
+定理 存在_code.comp
+  结论: {m n} {f : 列表.Vector 自然数 n ->. 自然数} {g : 有限集 n -> 列表.Vector 自然数 m ->. 自然数}
   证明: by
   rsuffices ⟨cg, hg⟩ :
     exists c : Code, forall v : List.Vector Nat m,
@@ -604,8 +604,8 @@ theorem exists_code
       ·
 
 中文:
-定理 exists_code
-  条件: {n} {f : List.Vector 自然数 n ->. 自然数} (hf : 自然数.Partrec' f)
+定理 存在_code
+  条件: {n} {f : 列表.Vector 自然数 n ->. 自然数} (hf : 自然数.Partrec' f)
   证明: by
   induction hf with
   | prim hf =>
@@ -781,13 +781,13 @@ inductive Cont
     - fix: Code -> Cont -> Cont
 
 中文:
-归纳类型 Cont
+归纳类型 余nt
   构造子 (5 个):
     - halt: 
-    - cons₁: Code -> List 自然数 -> Cont -> Cont
-    - cons₂: List 自然数 -> Cont -> Cont
-    - comp: Code -> Cont -> Cont
-    - fix: Code -> Cont -> Cont
+    - cons₁: 余de -> 列表 自然数 -> 余nt -> 余nt
+    - cons₂: 列表 自然数 -> 余nt -> 余nt
+    - comp: 余de -> 余nt -> 余nt
+    - fix: 余de -> 余nt -> 余nt
 -/
 inductive Cont
   | halt
@@ -805,8 +805,8 @@ definition Cont.eval
   signature: : Cont -> List Nat ->. List Nat
 
 中文:
-定义 Cont.eval
-  签名: : Cont -> List 自然数 ->. List 自然数
+定义 余nt.eval
+  签名: : 余nt -> 列表 自然数 ->. 列表 自然数
 -/
 def Cont.eval : Cont -> List Nat ->. List Nat
   | Cont.halt => pure
@@ -829,8 +829,8 @@ inductive Cfg
 中文:
 归纳类型 Cfg
   构造子 (2 个):
-    - halt: List 自然数 -> Cfg
-    - ret: Cont -> List 自然数 -> Cfg
+    - halt: 列表 自然数 -> Cfg
+    - ret: 余nt -> 列表 自然数 -> Cfg
 -/
 inductive Cfg
   | halt : List Nat -> Cfg
@@ -846,7 +846,7 @@ definition stepNormal
 
 中文:
 定义 stepNormal
-  签名: : Code -> Cont -> List 自然数 -> Cfg
+  签名: : 余de -> 余nt -> 列表 自然数 -> Cfg
 -/
 def stepNormal : Code -> Cont -> List Nat -> Cfg
   | Code.zero' => fun k v => Cfg.ret k (0::v)
@@ -867,7 +867,7 @@ definition stepRet
 
 中文:
 定义 stepRet
-  签名: : Cont -> List 自然数 -> Cfg
+  签名: : 余nt -> 列表 自然数 -> Cfg
 -/
 def stepRet : Cont -> List Nat -> Cfg
   | Cont.halt, v => Cfg.halt v
@@ -885,7 +885,7 @@ definition step
 
 中文:
 定义 step
-  签名: : Cfg -> Option Cfg
+  签名: : Cfg -> 选项类型 Cfg
 -/
 def step : Cfg -> Option Cfg
   | Cfg.halt _ => none
@@ -899,8 +899,8 @@ definition Cont.then
   signature: : Cont -> Cont -> Cont
 
 中文:
-定义 Cont.then
-  签名: : Cont -> Cont -> Cont
+定义 余nt.then
+  签名: : 余nt -> 余nt -> 余nt
 
 Depends on / 依赖: Preorder, WellFoundedLT, to_wellFoundedLT
 -/
@@ -929,8 +929,8 @@ theorem Cont.then_eval
    
 
 中文:
-定理 Cont.then_eval
-  条件: {k k' : Cont} {v}
+定理 余nt.then_eval
+  条件: {k k' : 余nt} {v}
   结论: (k.then k').eval v = k.eval v >>= k'.eval
   证明: by
   induction k generalizing v with
@@ -962,7 +962,7 @@ definition Cfg.then
 
 中文:
 定义 Cfg.then
-  签名: : Cfg -> Cont -> Cfg
+  签名: : Cfg -> 余nt -> Cfg
 -/
 def Cfg.then : Cfg -> Cont -> Cfg
   | Cfg.halt v => fun k' => stepRet k' v
@@ -984,7 +984,7 @@ theorem stepNormal_then
 
 中文:
 定理 stepNormal_then
-  条件: (c) (k k' : Cont) (v)
+  条件: (c) (k k' : 余nt) (v)
   证明: by
   induction c generalizing k v with simp only [stepNormal, *]
   | cons c c' ih _ => rw [← ih, Cont.then]
@@ -1027,7 +1027,7 @@ theorem stepRet_then
 
 中文:
 定理 stepRet_then
-  条件: {k k' : Cont} {v}
+  条件: {k k' : 余nt} {v}
   结论: stepRet (k.then k') v = (stepRet k v).then k'
   证明: by
   induction k generalizing v with simp only [Cont.then, stepRet, *]
@@ -1071,8 +1071,8 @@ definition Code.Ok
     Code.eval c v >>= fun v => StateTransition.eval step (Cfg.ret k v)
 
 中文:
-定义 Code.Ok
-  签名: (c : Code)
+定义 余de.Ok
+  签名: (c : 余de)
   定义体: forall k v, StateTransition.eval step (stepNormal c k v) =
     Code.eval c v >>= fun v => StateTransition.eval step (Cfg.ret k v)
 
@@ -1093,8 +1093,8 @@ theorem Code.Ok.zero
   exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.single rfl, rfl⟩)
 
 中文:
-定理 Code.Ok.zero
-  条件: {c} (h : Code.Ok c) {v}
+定理 余de.Ok.zero
+  条件: {c} (h : 余de.Ok c) {v}
   证明: by
   rw [h]; rw [← bind_pure_comp]; congr; funext v
   exact Part.eq_some_iff.2 (mem_eval.2 ⟨ReflTransGen.single rfl, rfl⟩)
@@ -1168,7 +1168,7 @@ theorem cont_eval_fix
 
 中文:
 定理 cont_eval_fix
-  条件: {f k v} (fok : Code.Ok f)
+  条件: {f k v} (fok : 余de.Ok f)
   证明: by
   refine Part.ext fun x => ?_
   simp only [Part.bind_eq_bind, Part.mem_bind_iff]
@@ -1272,7 +1272,7 @@ theorem code_is_ok
 中文:
 定理 code_is_ok
   条件: (c)
-  结论: Code.Ok c
+  结论: 余de.Ok c
   证明: by
   induction c with (intro k v; rw [stepNormal])
   | cons f fs IHf IHfs =>
@@ -1319,7 +1319,7 @@ theorem stepNormal_eval
 中文:
 定理 stepNormal_eval
   条件: (c v)
-  结论: eval step (stepNormal c Cont.halt v) = Cfg.halt < > c.eval v
+  结论: eval step (stepNormal c 余nt.halt v) = Cfg.halt < > c.eval v
   证明: (code_is_ok c).zero
 
 Depends on / 依赖: code_is_ok

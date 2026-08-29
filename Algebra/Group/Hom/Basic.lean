@@ -133,7 +133,7 @@ theorem coe_invMonoidHom
 
 中文:
 定理 coe_invMonoidHom
-  结论: (invMonoidHom : α -> α) = Inv.inv
+  结论: (invMonoidHom : α -> α) = 取逆.inv
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -203,8 +203,8 @@ instance [One
 @[to_additive (attr := norm_cast)]
 
 中文:
-实例 [One
-  签名: M] [MulOneClass N] : Mul (OneHom M N) where
+实例 [幺
+  签名: M] [MulOne类 N] : 乘法 (幺态射 M N) where
   定义体: { toFun m := f m * g m
       map_one' := by simp }
 
@@ -231,7 +231,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: {M N} [One M] [MulOneClass N] (f g : OneHom M N)
+  条件: {M N} [幺 M] [MulOne类 N] (f g : 幺态射 M N)
   结论: ⇑(f * g) = ⇑f * ⇑g
   证明: rfl
 
@@ -252,7 +252,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: {M N} [One M] [MulOneClass N] (f g : OneHom M N) (x : M)
+  条件: {M N} [幺 M] [MulOne类 N] (f g : 幺态射 M N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -271,7 +271,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  条件: [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : OneHom M N)
+  条件: [幺 M] [幺 N] [MulOne类 P] (g₁ g₂ : 幺态射 N P) (f : 幺态射 M N)
   证明: rfl
 -/
 theorem mul_comp [One M] [One N] [MulOneClass P] (g₁ g₂ : OneHom N P) (f : OneHom M N) :
@@ -293,8 +293,8 @@ instance [One
 @[to_additive (attr := norm_cast)]
 
 中文:
-实例 [One
-  签名: M] [InvOneClass N] : Inv (OneHom M N) where
+实例 [幺
+  签名: M] [InvOne类 N] : 取逆 (幺态射 M N) where
   定义体: { toFun m := (f m)⁻¹
       map_one' := by simp }
 
@@ -321,7 +321,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: {M N} [One M] [InvOneClass N] (f : OneHom M N)
+  条件: {M N} [幺 M] [InvOne类 N] (f : 幺态射 M N)
   结论: ⇑(f⁻¹) = (⇑f)⁻¹
   证明: rfl
 
@@ -342,7 +342,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: {M N} [One M] [InvOneClass N] (f : OneHom M N) (x : M)
+  条件: {M N} [幺 M] [InvOne类 N] (f : 幺态射 M N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -361,7 +361,7 @@ theorem inv_comp
 
 中文:
 定理 inv_comp
-  条件: [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M N)
+  条件: [幺 M] [幺 N] [InvOne类 P] (g : 幺态射 N P) (f : 幺态射 M N)
   证明: rfl
 -/
 theorem inv_comp [One M] [One N] [InvOneClass P] (g : OneHom N P) (f : OneHom M N) :
@@ -383,8 +383,8 @@ instance [One
 @[to_additive (attr := norm_cast)]
 
 中文:
-实例 [One
-  签名: M] [DivisionMonoid N] : Div (OneHom M N) where
+实例 [幺
+  签名: M] [Division幺半群 N] : 除法 (幺态射 M N) where
   定义体: { toFun m := f m / g m
       map_one' := by simp }
 
@@ -411,7 +411,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: {M N} [One M] [DivisionMonoid N] (f g : OneHom M N)
+  条件: {M N} [幺 M] [Division幺半群 N] (f g : 幺态射 M N)
   结论: ⇑(f / g) = ⇑f / ⇑g
   证明: rfl
 
@@ -432,7 +432,7 @@ theorem div_apply
 
 中文:
 定理 div_apply
-  条件: {M N} [One M] [DivisionMonoid N] (f g : OneHom M N) (x : M)
+  条件: {M N} [幺 M] [Division幺半群 N] (f g : 幺态射 M N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -451,7 +451,7 @@ theorem div_comp
 
 中文:
 定理 div_comp
-  条件: [One M] [One N] [DivisionMonoid P] (g₁ g₂ : OneHom N P) (f : OneHom M N)
+  条件: [幺 M] [幺 N] [Division幺半群 P] (g₁ g₂ : 幺态射 N P) (f : 幺态射 M N)
   证明: rfl
 -/
 theorem div_comp [One M] [One N] [DivisionMonoid P] (g₁ g₂ : OneHom N P) (f : OneHom M N) :
@@ -480,8 +480,8 @@ instance [Mul
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Mul
-  签名: M] [CommSemigroup N] : Mul (M ->ₙ* N)
+实例 [乘法
+  签名: M] [交换半群 N] : 乘法 (M ->ₙ* N)
   定义体: ⟨fun f g =>
     { toFun := fun m => f m * g m,
       map_mul' := fun x y => by
@@ -512,7 +512,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: {M N} [Mul M] [CommSemigroup N] (f g : M ->ₙ* N) (x : M)
+  条件: {M N} [乘法 M] [交换半群 N] (f g : M ->ₙ* N) (x : M)
   证明: rfl
 
 @[to_additive]
@@ -533,7 +533,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  条件: [Mul M] [Mul N] [CommSemigroup P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* N)
+  条件: [乘法 M] [乘法 N] [交换半群 P] (g₁ g₂ : N ->ₙ* P) (f : M ->ₙ* N)
   证明: rfl
 
 @[to_additive]
@@ -554,7 +554,7 @@ theorem comp_mul
 
 中文:
 定理 comp_mul
-  条件: [Mul M] [CommSemigroup N] [CommSemigroup P] (g : N ->ₙ* P) (f₁ f₂ : M ->ₙ* N)
+  条件: [乘法 M] [交换半群 N] [交换半群 P] (g : N ->ₙ* P) (f₁ f₂ : M ->ₙ* N)
   证明: by
   ext
   simp
@@ -587,7 +587,7 @@ mul_inv_eq_one.1 h _ by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]�
 
 中文:
 定理 _root_.injective_iff_map_eq_one
-  结论: {G H} [Group G] [MulOneClass H]
+  结论: {G H} [群 G] [MulOne类 H]
   证明: ⟨fun h _ => (map_eq_one_iff f h).mp, fun h x y hxy =>
 mul_inv_eq_one.1 h _ by rw [map_mul, hxy, ← map_mul, mul_inv_cancel, map_one]⟩
 
@@ -617,7 +617,7 @@ theorem _root_.injective_iff_map_eq_one'
 
 中文:
 定理 _root_.injective_iff_map_eq_one'
-  结论: {G H} [Group G] [MulOneClass H]
+  结论: {G H} [群 G] [MulOne类 H]
   证明: (injective_iff_map_eq_one f).trans
     forall_congr' fun _ => ⟨fun h => ⟨h, fun H => H.symm ▸ map_one f⟩, Iff.mp⟩
 
@@ -654,7 +654,7 @@ definition ofMapMulInv
 
 中文:
 定义 ofMapMulInv
-  签名: {H : 类型} [Group H] (f : G -> H)
+  签名: {H : 类型} [群 H] (f : G -> H)
   定义体: (mk' f) fun x y =>
     calc
       f (x * y) = f x * (f <| 1 * 1⁻¹ * y⁻¹)⁻¹ := by
@@ -688,7 +688,7 @@ theorem coe_of_map_mul_inv
 
 中文:
 定理 coe_of_map_mul_inv
-  结论: {H : 类型} [Group H] (f : G -> H)
+  结论: {H : 类型} [群 H] (f : G -> H)
   证明: rfl
 -/
 theorem coe_of_map_mul_inv {H : Type*} [Group H] (f : G -> H)
@@ -709,7 +709,7 @@ definition ofMapDiv
 
 中文:
 定义 ofMapDiv
-  签名: {H : 类型} [Group H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
+  签名: {H : 类型} [群 H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
   定义体: ofMapMulInv f (by simpa only [div_eq_mul_inv] using hf)
 
 @[to_additive (attr := simp)]
@@ -730,7 +730,7 @@ theorem coe_of_map_div
 
 中文:
 定理 coe_of_map_div
-  条件: {H : 类型} [Group H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
+  条件: {H : 类型} [群 H] (f : G -> H) (hf : 对任意 x y, f (x / y) = f x / f y)
   证明: rfl
 -/
 theorem coe_of_map_div {H : Type*} [Group H] (f : G -> H) (hf : forall x y, f (x / y) = f x / f y) :
@@ -758,7 +758,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (M ->* N)
+  签名: : 乘法 (M ->* N)
   定义体: ⟨fun f g =>
     { toFun := fun m => f m * g m,
       map_one' := by simp,
@@ -812,7 +812,7 @@ lemma mul_comp
 
 中文:
 引理 mul_comp
-  条件: [MulOneClass P] (g₁ g₂ : M ->* N) (f : P ->* M)
+  条件: [MulOne类 P] (g₁ g₂ : M ->* N) (f : P ->* M)
   证明: rfl
 
 @[to_additive]
@@ -833,7 +833,7 @@ lemma comp_mul
 
 中文:
 引理 comp_mul
-  条件: [CommMonoid P] (g : N ->* P) (f₁ f₂ : M ->* N)
+  条件: [交换幺半群 P] (g : N ->* P) (f₁ f₂ : M ->* N)
   证明: by
   ext
   simp
@@ -862,7 +862,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (M ->* G)
+  签名: 取逆 (M ->* G)
   定义体: mk' (fun g => (f g)⁻¹) fun a b => by simp_rw [← mul_inv, f.map_mul]
 
 Depends on / 依赖: f.map_mul, map_mul, mul_inv, simp_rw
@@ -952,7 +952,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (M ->* G)
+  签名: 除法 (M ->* G)
   定义体: mk' (fun x => f x / g x) fun a b => by
     simp [div_eq_mul_inv, mul_assoc, mul_left_comm, mul_comm]
 
@@ -1043,7 +1043,7 @@ definition commGroupOfInjective
 
 中文:
 定义 commGroupOfInjective
-  签名: [Group G] [CommGroup H] (f : G ->* H) (hf : Function.Injective f)
+  签名: [群 G] [交换群 H] (f : G ->* H) (hf : 函数.单射 f)
   定义体: ⟨by simp_rw [← hf.eq_iff, map_mul, mul_comm, implies_true]⟩
 
 Depends on / 依赖: eq_iff, hf.eq_iff, implies_true, map_mul, mul_comm, simp_rw
@@ -1064,7 +1064,7 @@ definition commGroupOfSurjective
 
 中文:
 定义 commGroupOfSurjective
-  签名: [CommGroup G] [Group H] (f : G ->* H) (hf : Function.Surjective f)
+  签名: [交换群 G] [群 H] (f : G ->* H) (hf : 函数.满射 f)
   定义体: ⟨by simp_rw [hf.forall₂, ← map_mul, mul_comm, implies_true]⟩
 
 Depends on / 依赖: hf.forall, implies_true, map_mul, mul_comm, simp_rw

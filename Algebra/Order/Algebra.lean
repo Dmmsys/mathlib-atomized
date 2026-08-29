@@ -48,8 +48,8 @@ theorem IsOrderedModule.of_algebraMap_mono
   proof: .of_smul_one_mono (by simpa [Algebra.smul_def] using h)
 
 中文:
-定理 IsOrderedModule.of_algebraMap_mono
-  结论: [PosMulMono β] [MulPosMono β]
+定理 是Ordered模.of_algebraMap_mono
+  结论: [正乘递增 β] [乘正递增 β]
   证明: .of_smul_one_mono (by simpa [Algebra.smul_def] using h)
 
 Depends on / 依赖: Algebra, Algebra.smul_def, of_smul_one_mono, smul_def
@@ -76,7 +76,7 @@ lemma algebraMap_mono
 
 中文:
 引理 algebraMap_mono
-  结论: Monotone (algebraMap α β)
+  结论: 递增 (algebraMap α β)
   证明: by
   simpa [Algebra.smul_def] using smul_one_mono (α := α) β
 
@@ -120,7 +120,7 @@ theorem isOrderedModule_iff_algebraMap_mono
 
 中文:
 定理 isOrderedModule_iff_algebraMap_mono
-  条件: [PosMulMono β] [MulPosMono β]
+  条件: [正乘递增 β] [乘正递增 β]
   证明: by
   simp [isOrderedModule_iff_smul_one_mono, Algebra.smul_def]
 
@@ -145,7 +145,7 @@ lemma algebraMap_le_algebraMap
 
 中文:
 引理 algebraMap_le_algebraMap
-  条件: [SMulPosMono α β] [SMulPosReflectLE α β] {a₁ a₂ : α}
+  条件: [标量乘正递增 α β] [标量乘正反映偏序 α β] {a₁ a₂ : α}
   证明: by
   simp [Algebra.algebraMap_eq_smul_one]
 
@@ -170,7 +170,7 @@ lemma algebraMap_strictMono
 
 中文:
 引理 algebraMap_strictMono
-  结论: StrictMono (algebraMap α β)
+  结论: 严格递增 (algebraMap α β)
   证明: by
   simpa [Algebra.smul_def] using smul_one_strictMono (α := α) β
 
@@ -214,7 +214,7 @@ lemma algebraMap_lt_algebraMap
 
 中文:
 引理 algebraMap_lt_algebraMap
-  条件: [SMulPosReflectLT α β] {a₁ a₂ : α}
+  条件: [标量乘正反映严格偏序 α β] {a₁ a₂ : α}
   证明: by
   simp [Algebra.algebraMap_eq_smul_one]
 

@@ -41,8 +41,8 @@ definition Basis.piTensorProduct
 @[simp]
 
 中文:
-定义 Basis.piTensorProduct
-  签名: [Finite ι] (b : Π i, Basis (κ i) R (M i))
+定义 基.piTensorProduct
+  签名: [有限 ι] (b : Π i, 基 (κ i) R (M i))
   定义体: haveI := Fintype.ofFinite ι
   Finsupp.basisSingleOne.map
     ((PiTensorProduct.congr (fun i => (b i).repr)) ≪≫ₗ
@@ -75,8 +75,8 @@ theorem Basis.piTensorProduct_repr_tprod_apply
 @[simp]
 
 中文:
-定理 Basis.piTensorProduct_repr_tprod_apply
-  结论: [Fintype ι] (b : Π i, Basis (κ i) R (M i))
+定理 基.piTensorProduct_repr_tprod_apply
+  结论: [有限类型 ι] (b : Π i, 基 (κ i) R (M i))
   证明: by
   rw [piTensorProduct]; rw [Subsingleton.elim (Fintype.ofFinite ι) ‹_›]
   simp
@@ -105,8 +105,8 @@ theorem Basis.piTensorProduct_apply
   simp [Finsupp.single_apply, Fintype.prod_ite_zero, ← funext_iff]
 
 中文:
-定理 Basis.piTensorProduct_apply
-  条件: [Finite ι] (b : Π i, Basis (κ i) R (M i)) (p : Π i, κ i)
+定理 基.piTensorProduct_apply
+  条件: [有限 ι] (b : Π i, 基 (κ i) R (M i)) (p : Π i, κ i)
   证明: by
   have := Fintype.ofFinite ι
   classical

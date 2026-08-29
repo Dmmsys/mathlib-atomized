@@ -51,7 +51,7 @@ definition IsAlgebraic
   body: exists p : R[X], p != 0 ∧ aeval x p = 0
 
 中文:
-定义 IsAlgebraic
+定义 是代数
   签名: (x : A)
   定义体: exists p : R[X], p != 0 ∧ aeval x p = 0
 -/
@@ -67,7 +67,7 @@ definition Transcendental
   body: ¬IsAlgebraic R x
 
 中文:
-定义 Transcendental
+定义 超越
   签名: (x : A)
   定义体: ¬IsAlgebraic R x
 
@@ -111,8 +111,8 @@ definition Subalgebra.IsAlgebraic
   body: forall x in S, IsAlgebraic R x
 
 中文:
-定义 Subalgebra.IsAlgebraic
-  签名: (S : Subalgebra R A)
+定义 子代数.是代数
+  签名: (S : 子代数 R A)
   定义体: forall x in S, IsAlgebraic R x
 -/
 protected def Subalgebra.IsAlgebraic (S : Subalgebra R A) : Prop :=
@@ -131,10 +131,10 @@ class Algebra.IsAlgebraic
     - isAlgebraic : forall x : A, IsAlgebraic R x
 
 中文:
-类 Algebra.IsAlgebraic
+类 代数.是代数
   参数: : 命题 where
   公理与运算 (1 个):
-    - isAlgebraic : 对任意 x : A, IsAlgebraic R x
+    - isAlgebraic : 对任意 x : A, 是代数 R x
 -/
 protected class Algebra.IsAlgebraic : Prop where
   isAlgebraic : forall x : A, IsAlgebraic R x
@@ -150,10 +150,10 @@ class Algebra.Transcendental
     - transcendental : exists x : A, Transcendental R x
 
 中文:
-类 Algebra.Transcendental
+类 代数.超越
   参数: : 命题 where
   公理与运算 (1 个):
-    - transcendental : 存在 x : A, Transcendental R x
+    - transcendental : 存在 x : A, 超越 R x
 -/
 protected class Algebra.Transcendental : Prop where
   transcendental : exists x : A, Transcendental R x
@@ -171,9 +171,9 @@ lemma Algebra.nontrivial_of_isAlgebraic
   exact .of_polynomial_ne hp
 
 中文:
-引理 Algebra.nontrivial_of_isAlgebraic
-  条件: [Algebra.IsAlgebraic R A]
-  结论: Nontrivial R
+引理 代数.nontrivial_of_isAlgebraic
+  条件: [代数.是代数 R A]
+  结论: 非平凡 R
   证明: by
   obtain ⟨p, hp, -⟩ := Algebra.IsAlgebraic.isAlgebraic (R := R) (0 : A)
   exact .of_polynomial_ne hp
@@ -193,8 +193,8 @@ lemma Algebra.isAlgebraic_def
   proof: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 
 中文:
-引理 Algebra.isAlgebraic_def
-  结论: Algebra.IsAlgebraic R A ↔ 对任意 x : A, IsAlgebraic R x
+引理 代数.isAlgebraic_def
+  结论: 代数.是代数 R A ↔ 对任意 x : A, 是代数 R x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma Algebra.isAlgebraic_def : Algebra.IsAlgebraic R A ↔ forall x : A, IsAlgebraic R x :=
@@ -209,8 +209,8 @@ lemma Algebra.transcendental_def
   proof: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 
 中文:
-引理 Algebra.transcendental_def
-  结论: Algebra.Transcendental R A ↔ 存在 x : A, Transcendental R x
+引理 代数.transcendental_def
+  结论: 代数.超越 R A ↔ 存在 x : A, 超越 R x
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma Algebra.transcendental_def : Algebra.Transcendental R A ↔ exists x : A, Transcendental R x :=
@@ -225,7 +225,7 @@ theorem Algebra.transcendental_iff_not_isAlgebraic
   simp [isAlgebraic_def, transcendental_def, Transcendental]
 
 中文:
-定理 Algebra.transcendental_iff_not_isAlgebraic
+定理 代数.transcendental_iff_not_isAlgebraic
   证明: by
   simp [isAlgebraic_def, transcendental_def, Transcendental]
 
@@ -250,8 +250,8 @@ theorem Subalgebra.isAlgebraic_iff
   rw [← aeval_algHom_apply]; rw [S.va
 
 中文:
-定理 Subalgebra.isAlgebraic_iff
-  条件: (S : Subalgebra R A)
+定理 子代数.isAlgebraic_iff
+  条件: (S : 子代数 R A)
   证明: by
   delta Subalgebra.IsAlgebraic
   rw [Subtype.forall']; rw [Algebra.isAlgebraic_def]
@@ -282,8 +282,8 @@ theorem Algebra.isAlgebraic_iff
   simp only [Algebra.isAlgebraic_def, Algebra.mem_top, forall_prop_of_true]
 
 中文:
-定理 Algebra.isAlgebraic_iff
-  结论: Algebra.IsAlgebraic R A ↔ (⊤ : Subalgebra R A).IsAlgebraic
+定理 代数.isAlgebraic_iff
+  结论: 代数.是代数 R A ↔ (⊤ : 子代数 R A).是代数
   证明: by
   delta Subalgebra.IsAlgebraic
   simp only [Algebra.isAlgebraic_def, Algebra.mem_top, forall_prop_of_true]

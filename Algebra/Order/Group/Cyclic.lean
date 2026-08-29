@@ -51,8 +51,8 @@ exact absurd ha.symm (H.nontrivial_iff_ne_bot).mp inferInstance
     rw [Subgroup.
 
 中文:
-引理 exists_generator_lt_one
-  结论: 存在 (a : G), a < 1 ∧ Subgroup.zpowers a = H
+引理 存在_generator_lt_one
+  结论: 存在 (a : G), a < 1 ∧ 子群.zpowers a = H
   证明: by
   obtain ⟨a, ha⟩ := H.isCyclic_iff_exists_zpowers_eq_top.mp hH
   obtain ha1 | rfl | ha1 := lt_trichotomy a 1
@@ -130,7 +130,7 @@ lemma genLTOne_zpowers_eq_top
 
 中文:
 引理 genLTOne_zpowers_eq_top
-  结论: Subgroup.zpowers H.genLTOne = H
+  结论: 子群.zpowers H.genLTOne = H
   证明: H.exists_generator_lt_one.choose_spec.2
 
 Depends on / 依赖: H.exists_generator_lt_one.choose_spec, choose_spec, exists_generator_lt_one
@@ -178,7 +178,7 @@ lemma genLTOne_unique
 
 中文:
 引理 genLTOne_unique
-  条件: {g : G} (hg : g < 1) (hH : Subgroup.zpowers g = H)
+  条件: {g : G} (hg : g < 1) (hH : 子群.zpowers g = H)
   结论: g = H.genLTOne
   证明: by
   have hg' : ¬ IsOfFinOrder g := not_isOfFinOrder_of_isMulTorsionFree (ne_of_lt hg)
@@ -279,7 +279,7 @@ lemma genLTOne_eq_of_top
 
 中文:
 引理 genLTOne_eq_of_top
-  结论: genLTOne G = (⊤ : Subgroup G).genLTOne
+  结论: genLTOne G = (⊤ : 子群 G).genLTOne
   证明: rfl
 -/
 lemma genLTOne_eq_of_top : genLTOne G = (⊤ : Subgroup G).genLTOne := rfl
@@ -295,7 +295,7 @@ lemma genLTOne_unique
 
 中文:
 引理 genLTOne_unique
-  条件: {g : G} (hg : g < 1) (htop : Subgroup.zpowers g = ⊤)
+  条件: {g : G} (hg : g < 1) (htop : 子群.zpowers g = ⊤)
   结论: g = genLTOne G
   证明: (⊤ : Subgroup G).genLTOne_unique hg htop
 

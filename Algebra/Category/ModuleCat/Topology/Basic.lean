@@ -49,13 +49,13 @@ structure TopModuleCat
     - [continuousSMul : ContinuousSMul R carrier]
 
 中文:
-结构 TopModuleCat
-  参数: extends ModuleCat.{v} R
-  继承: ModuleCat.{v} R
+结构 顶元素模范畴
+  参数: extends 模范畴.{v} R
+  继承: 模范畴.{v} R
   公理与运算 (3 个):
-    - [topologicalSpace : TopologicalSpace carrier]
-    - [isTopologicalAddGroup : IsTopologicalAddGroup carrier]
-    - [continuousSMul : ContinuousSMul R carrier]
+    - [topologicalSpace : 拓扑空间 carrier]
+    - [isTopologicalAddGroup : 是拓扑加群 carrier]
+    - [continuousSMul : 连续标量乘法 R carrier]
 -/
 structure TopModuleCat extends ModuleCat.{v} R where
   /-- The underlying topological space. -/
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (TopModuleCat.{v} R) (类型v)
+  签名: CoeSort (顶元素模范畴.{v} R) (类型v)
   定义体: ⟨fun M => M.toModuleCat⟩
 
 Depends on / 依赖: M.toModuleCat, toModuleCat
@@ -96,7 +96,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (M : 类型v) [AddCommGroup M] [Module R M] [TopologicalSpace M] [ContinuousAdd M]
+  签名: (M : 类型v) [加法交换群 M] [模 R M] [拓扑空间 M] [连续加法 M]
   定义体: have : ContinuousNeg M := ⟨by convert! continuous_const_smul (-1 : R) (T := M); ext; simp⟩
   have : IsTopologicalAddGroup M := ⟨⟩
   ⟨.of R M⟩
@@ -119,7 +119,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  结论: (M : 类型v) [AddCommGroup M] [Module R M] [TopologicalSpace M] [ContinuousAdd M]
+  结论: (M : 类型v) [加法交换群 M] [模 R M] [拓扑空间 M] [连续加法 M]
   证明: rfl
 -/
 lemma coe_of (M : Type v) [AddCommGroup M] [Module R M] [TopologicalSpace M] [ContinuousAdd M]
@@ -137,8 +137,8 @@ structure Hom
     - hom' : X ->L[R] Y
 
 中文:
-结构 Hom
-  参数: (X Y : TopModuleCat.{v} R)
+结构 态射
+  参数: (X Y : 顶元素模范畴.{v} R)
   公理与运算 (2 个):
     - private(ofHom') : :
     - hom' : X ->L[R] Y
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (TopModuleCat R)
+  签名: 范畴 (顶元素模范畴 R)
   定义体: Hom
   id M := ⟨ContinuousLinearMap.id R M⟩
   comp φ ψ := ⟨ψ.hom' ∘L φ.hom'⟩
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (TopModuleCat R) (· ->L[R] ·)
+  签名: 余ncrete范畴 (顶元素模范畴 R) (· ->L[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.ofHom'
 
@@ -207,8 +207,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := TopModuleCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : TopModuleCat R} (f : X.Hom Y)
+缩写 态射.hom
+  签名: {X Y : 顶元素模范畴 R} (f : X.态射 Y)
   定义体: ConcreteCategory.hom (C := TopModuleCat R) f
 -/
 abbrev Hom.hom {X Y : TopModuleCat R} (f : X.Hom Y) : X ->L[R] Y :=
@@ -266,7 +266,7 @@ lemma ofHom_hom
 
 中文:
 引理 ofHom_hom
-  条件: {X Y : TopModuleCat R} (f : X.Hom Y)
+  条件: {X Y : 顶元素模范畴 R} (f : X.态射 Y)
   结论: ofHom f.hom = f
   证明: rfl
 -/
@@ -282,7 +282,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : TopModuleCat R} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 顶元素模范畴 R} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 -/
 @[simp] lemma hom_comp {X Y Z : TopModuleCat R} (f : X ⟶ Y) (g : Y ⟶ Z) :
@@ -299,7 +299,7 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: (X : TopModuleCat R)
+  条件: (X : 顶元素模范畴 R)
   结论: hom (𝟙 X) = .id _ _
   证明: rfl
 -/
@@ -316,8 +316,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : TopModuleCat.{v} R) (f : A.Hom B)
+定义 态射.Simps.hom
+  签名: (A B : 顶元素模范畴.{v} R) (f : A.态射 B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -339,7 +339,7 @@ definition ofIso
 
 中文:
 定义 ofIso
-  签名: {X Y : TopModuleCat R} (e : X ≃L[R] Y)
+  签名: {X Y : 顶元素模范畴 R} (e : X ≃L[R] Y)
   定义体: ⟨ofHom e.toContinuousLinearMap, ofHom e.symm.toContinuousLinearMap,
     by ext; exact e.symm_apply_apply _, by ext; exact e.apply_symm_apply _⟩
 
@@ -361,7 +361,7 @@ definition _root_.CategoryTheory.Iso.toContinuousLinearEquiv
   right_inv x := by cat_disch
 
 中文:
-定义 _root_.CategoryTheory.Iso.toContinuousLinearEquiv
+定义 _root_.范畴论.同构.toContinuousLinearEquiv
   定义体: e.hom.hom
   invFun := e.inv.hom
   left_inv x := by cat_disch
@@ -392,7 +392,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (TopModuleCat R)
+  签名: 预加性 (顶元素模范畴 R)
   定义体: ConcreteCategory.ext (ContinuousLinearMap.comp_add _ _ _)
   comp_add _ _ _ _ _ _ := ConcreteCategory.ext (ContinuousLinearMap.add_comp _ _ _)
 
@@ -540,7 +540,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear S (TopModuleCat S)
+  签名: 线性 S (顶元素模范畴 S)
   定义体: ConcreteCategory.ext (ContinuousLinearMap.comp_smul _ _ _)
   comp_smul _ _ _ _ _ _ := ConcreteCategory.ext (ContinuousLinearMap.smul_comp _ _ _)
 
@@ -564,7 +564,7 @@ lemma hom_smul
 
 中文:
 引理 hom_smul
-  条件: {M₁ M₂ : TopModuleCat S} (s : S) (φ : M₁ ⟶ M₂)
+  条件: {M₁ M₂ : 顶元素模范畴 S} (s : S) (φ : M₁ ⟶ M₂)
   结论: (s • φ).hom = s • φ.hom
   证明: rfl
 
@@ -588,7 +588,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (TopModuleCat R) (ModuleCat R)
+  签名: 有Forget₂ (顶元素模范畴 R) (模范畴 R)
   定义体: { obj M := ModuleCat.of R M
     map φ := ModuleCat.ofHom φ.hom }
 
@@ -610,7 +610,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (TopModuleCat R) TopCat
+  签名: 有Forget₂ (顶元素模范畴 R) 顶元素范畴
   定义体: { obj M := .of M
     map φ := TopCat.ofHom ⟨φ, φ.1.2⟩ }
 
@@ -637,7 +637,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (TopModuleCat R) TopCat).ReflectsIsomorphisms
+  签名: (forget₂ (顶元素模范畴 R) 顶元素范畴).反映同构
   定义体: by
     let e : X ≃L[R] Y :=
       { __ := f.hom, __ := TopCat.homeoOfIso (asIso ((forget₂ (TopModuleCat R) TopCat).map f)) }
@@ -668,7 +668,7 @@ lemma hom_forget₂_TopCat_map
 
 中文:
 引理 hom_forget₂_TopCat_map
-  条件: {X Y : TopModuleCat R} (f : X ⟶ Y)
+  条件: {X Y : 顶元素模范畴 R} (f : X ⟶ Y)
   证明: rfl
 
 @[simp]
@@ -688,8 +688,8 @@ lemma forget₂_TopCat_obj
 
 中文:
 引理 forget₂_TopCat_obj
-  条件: {X : TopModuleCat R}
-  结论: ((forget₂ _ TopCat).obj X : Type _) = X
+  条件: {X : 顶元素模范畴 R}
+  结论: ((forget₂ _ 顶元素范畴).obj X : 类型 _) = X
   证明: rfl
 -/
 lemma forget₂_TopCat_obj {X : TopModuleCat R} : ((forget₂ _ TopCat).obj X : Type _) = X := rfl
@@ -716,7 +716,7 @@ definition coinduced
 
 中文:
 定义 coinduced
-  签名: : TopModuleCat R
+  签名: : 顶元素模范畴 R
   定义体: letI : TopologicalSpace M := sInf { t | @ContinuousSMul R M _ _ t ∧ @ContinuousAdd M t _ ∧
       forall i, (X i).topologicalSpace.coinduced (f i) <= t }
   have : ContinuousAdd M := continuousAdd_sInf fun _ hs => hs.2.1
@@ -767,7 +767,7 @@ definition ofCocone
 
 中文:
 定义 ofCocone
-  签名: {J : 类型} [Category* J] {F : J ⥤ TopModuleCat R}
+  签名: {J : 类型} [范畴* J] {F : J ⥤ 顶元素模范畴 R}
   定义体: coinduced c.ι.app
   ι :=
   { app := toCoinduced c.ι.app,
@@ -796,7 +796,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: {J : 类型} [Category* J] {F : J ⥤ TopModuleCat R}
+  签名: {J : 类型} [范畴* J] {F : J ⥤ 顶元素模范畴 R}
   定义体: ofHom (X := (ofCocone c).pt) ⟨(hc.desc ((forget₂ _ _).mapCocone s)).hom, by
     rw [continuous_iff_le_induced]
     refine sInf_le ⟨continuousSMul_induced (M₂ := s.pt) (hc.desc ((forget₂ _ _).mapCocone s)).hom,
@@ -839,7 +839,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits (TopModuleCat.{v} R)
+  签名: 有余极限 (顶元素模范畴.{v} R)
 -/
 instance : HasColimits (TopModuleCat.{v} R) where
 
@@ -864,7 +864,7 @@ definition induced
 
 中文:
 定义 induced
-  签名: : TopModuleCat R
+  签名: : 顶元素模范畴 R
   定义体: letI : TopologicalSpace M := ⨅ i, (X i).topologicalSpace.induced (f i)
   have : ContinuousAdd M := continuousAdd_iInf fun _ => continuousAdd_induced _
   have : ContinuousSMul R M := continuousSMul_iInf fun _ => continuousSMul_induced _
@@ -912,7 +912,7 @@ definition ofCone
 
 中文:
 定义 ofCone
-  签名: {J : 类型} [Category* J] {F : J ⥤ TopModuleCat R}
+  签名: {J : 类型} [范畴* J] {F : J ⥤ 顶元素模范畴 R}
   定义体: induced c.π.app
   π :=
   { app := fromInduced c.π.app,
@@ -943,7 +943,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: {J : 类型} [Category* J] {F : J ⥤ TopModuleCat R}
+  签名: {J : 类型} [范畴* J] {F : J ⥤ 顶元素模范畴 R}
   定义体: ofHom (Y := (ofCone c).pt) ⟨(hc.lift ((forget₂ _ _).mapCone s)).hom, by
     rw [continuous_iff_coinduced_le]
     refine le_iInf fun i => ?_
@@ -981,7 +981,7 @@ instance hasLimit_of_hasLimit_forget₂
 
 中文:
 实例 hasLimit_of_hasLimit_forget₂
-  签名: {J : 类型} [Category* J] {F : J ⥤ TopModuleCat.{v} R}
+  签名: {J : 类型} [范畴* J] {F : J ⥤ 顶元素模范畴.{v} R}
   定义体: ⟨_, isLimit (limit.isLimit _)⟩
 
 Depends on / 依赖: isLimit, limit.isLimit
@@ -1004,7 +1004,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits (TopModuleCat.{v} R)
+  签名: 有极限 (顶元素模范畴.{v} R)
   定义体: ⟨fun _ => hasLimit_of_hasLimit_forget₂⟩
 -/
 instance : HasLimits (TopModuleCat.{v} R) where
@@ -1033,7 +1033,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimits (forget₂ (TopModuleCat.{v} R) TopCat.{v})
+  签名: PreservesLimits (forget₂ (顶元素模范畴.{v} R) 顶元素范畴.{v})
 -/
 instance : PreservesLimits (forget₂ (TopModuleCat.{v} R) TopCat.{v}) where
 
@@ -1060,7 +1060,7 @@ definition withModuleTopology
 
 中文:
 定义 withModuleTopology
-  签名: : ModuleCat R ⥤ TopModuleCat R where
+  签名: : 模范畴 R ⥤ 顶元素模范畴 R where
   定义体: letI := moduleTopology R X
     letI := IsModuleTopology.topologicalAddGroup R X
     .of R X
@@ -1097,7 +1097,7 @@ definition withModuleTopologyAdj
 
 中文:
 定义 withModuleTopologyAdj
-  签名: : withModuleTopology R ⊣ forget₂ (TopModuleCat R) (ModuleCat R) where
+  签名: : withModuleTopology R ⊣ forget₂ (顶元素模范畴 R) (模范畴 R) where
   定义体: 𝟙 _
   counit :=
   { app X := ofHom (X := (withModuleTopology R).obj (.of R X))
@@ -1119,7 +1119,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (TopModuleCat R) (ModuleCat R)).IsRightAdjoint
+  签名: (forget₂ (顶元素模范畴 R) (模范畴 R)).是右伴随
   定义体: ⟨_, ⟨withModuleTopologyAdj R⟩⟩
 
 Depends on / 依赖: withModuleTopologyAdj
@@ -1135,7 +1135,7 @@ instance :
 
 中文:
 实例 :
-  签名: (withModuleTopology R).IsLeftAdjoint
+  签名: (withModuleTopology R).是左伴随
   定义体: ⟨_, ⟨withModuleTopologyAdj R⟩⟩
 
 Depends on / 依赖: withModuleTopologyAdj
@@ -1159,7 +1159,7 @@ definition indiscrete
 
 中文:
 定义 indiscrete
-  签名: : ModuleCat.{v} R ⥤ TopModuleCat.{v} R where
+  签名: : 模范畴.{v} R ⥤ 顶元素模范畴.{v} R where
   定义体: letI : TopologicalSpace X := ⊤
     haveI : ContinuousAdd X := ⟨by rw [continuous_iff_coinduced_le]; exact le_top⟩
     haveI : ContinuousSMul R X := ⟨by rw [continuous_iff_coinduced_le]; exact le_top⟩
@@ -1195,7 +1195,7 @@ definition indiscreteAdj
 
 中文:
 定义 indiscreteAdj
-  签名: : forget₂ (TopModuleCat.{v} R) (ModuleCat.{v} R) ⊣ indiscrete.{v} R where
+  签名: : forget₂ (顶元素模范畴.{v} R) (模范畴.{v} R) ⊣ indiscrete.{v} R where
   定义体: 𝟙 _
   unit := { app X := ConcreteCategory.ofHom (C := TopModuleCat R)
               ⟨.id, by rw [continuous_iff_coinduced_le]; exact le_top⟩ }
@@ -1215,7 +1215,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (TopModuleCat.{v} R) (ModuleCat.{v} R)).IsLeftAdjoint
+  签名: (forget₂ (顶元素模范畴.{v} R) (模范畴.{v} R)).是左伴随
   定义体: ⟨_, ⟨indiscreteAdj R⟩⟩
 
 Depends on / 依赖: indiscreteAdj
@@ -1231,7 +1231,7 @@ instance :
 
 中文:
 实例 :
-  签名: (indiscrete.{v} R).IsRightAdjoint
+  签名: (indiscrete.{v} R).是右伴随
   定义体: ⟨_, ⟨indiscreteAdj R⟩⟩
 
 Depends on / 依赖: indiscreteAdj
@@ -1255,7 +1255,7 @@ definition freeObj
 
 中文:
 定义 freeObj
-  签名: (X : TopCat.{v})
+  签名: (X : 顶元素范畴.{v})
   定义体: letI : TopologicalSpace (X ->₀ R) := sInf
     { t | @ContinuousSMul R _ _ _ t ∧ @ContinuousAdd _ t _ ∧
       X.str.coinduced (Finsupp.single · 1) <= t }
@@ -1284,7 +1284,7 @@ lemma coe_freeObj
 
 中文:
 引理 coe_freeObj
-  条件: (X : TopCat.{v})
+  条件: (X : 顶元素范畴.{v})
   结论: freeObj R X = (X ->₀ R)
   证明: rfl
 -/
@@ -1308,7 +1308,7 @@ definition freeMap
 
 中文:
 定义 freeMap
-  签名: {X Y : TopCat.{v}} (f : X ⟶ Y)
+  签名: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y)
   定义体: ConcreteCategory.ofHom ⟨Finsupp.lmapDomain _ _ f.hom, by
     rw [continuous_iff_coinduced_le]
     refine le_sInf fun (τ : TopologicalSpace (_ ->₀ R)) ⟨hτ₁, hτ₂, hτ₃⟩ => ?_
@@ -1342,7 +1342,7 @@ lemma freeMap_map
 
 中文:
 引理 freeMap_map
-  条件: {X Y : TopCat.{v}} (f : X ⟶ Y) (v : X ->₀ R)
+  条件: {X Y : 顶元素范畴.{v}} (f : X ⟶ Y) (v : X ->₀ R)
   证明: rfl
 -/
 lemma freeMap_map {X Y : TopCat.{v}} (f : X ⟶ Y) (v : X ->₀ R) :
@@ -1364,7 +1364,7 @@ definition free
 
 中文:
 定义 free
-  签名: : TopCat.{v} ⥤ TopModuleCat.{max v u} R
+  签名: : 顶元素范畴.{v} ⥤ 顶元素模范畴.{最大值 v u} R
   定义体: { obj := freeObj R
     map f := freeMap R f
     map_id M := by ext x; exact DFunLike.congr_fun (Finsupp.lmapDomain_id _ _) x
@@ -1397,7 +1397,7 @@ definition freeAdj
 
 中文:
 定义 freeAdj
-  签名: : free.{max v u} R ⊣ forget₂ (TopModuleCat.{max v u} R) TopCat.{max v u} where
+  签名: : free.{最大值 v u} R ⊣ forget₂ (顶元素模范畴.{最大值 v u} R) 顶元素范畴.{最大值 v u} where
   定义体: { app X := TopCat.ofHom ⟨(Finsupp.single · 1),
       continuous_iff_coinduced_le.mpr (le_sInf fun _ h => h.2.2)⟩,
     naturality {X Y} f := by ext x; simp [freeMap_map] }
@@ -1446,7 +1446,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (TopModuleCat.{max v u} R) TopCat).IsRightAdjoint
+  签名: (forget₂ (顶元素模范畴.{最大值 v u} R) 顶元素范畴).是右伴随
   定义体: ⟨_, ⟨freeAdj R⟩⟩
 
 Depends on / 依赖: freeAdj
@@ -1462,7 +1462,7 @@ instance :
 
 中文:
 实例 :
-  签名: (free.{max v u} R).IsLeftAdjoint
+  签名: (free.{最大值 v u} R).是左伴随
   定义体: ⟨_, ⟨freeAdj R⟩⟩
 
 Depends on / 依赖: freeAdj
@@ -1488,7 +1488,7 @@ definition endRingEquiv
 
 中文:
 定义 endRingEquiv
-  签名: (M : TopModuleCat R)
+  签名: (M : 顶元素模范畴 R)
   定义体: TopModuleCat.Hom.hom
   invFun := TopModuleCat.ofHom
   map_mul' _ _ := rfl

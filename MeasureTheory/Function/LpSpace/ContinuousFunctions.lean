@@ -37,8 +37,8 @@ definition MeasureTheory.Lp.boundedContinuousFunction
     ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E)).range (Lp E p μ)
 
 中文:
-定义 MeasureTheory.Lp.boundedContinuousFunction
-  签名: : AddSubgroup (Lp E p μ)
+定义 测度论.Lp.boundedContinuousFunction
+  签名: : 加法子群 (Lp E p μ)
   定义体: AddSubgroup.addSubgroupOf
     ((ContinuousMap.toAEEqFunAddHom μ).comp (toContinuousMapAddMonoidHom α E)).range (Lp E p μ)
 
@@ -57,7 +57,7 @@ theorem MeasureTheory.Lp.mem_boundedContinuousFunction_iff
   proof: AddSubgroup.mem_addSubgroupOf
 
 中文:
-定理 MeasureTheory.Lp.mem_boundedContinuousFunction_iff
+定理 测度论.Lp.mem_boundedContinuousFunction_iff
   条件: {f : Lp E p μ}
   证明: AddSubgroup.mem_addSubgroupOf
 
@@ -309,7 +309,7 @@ theorem toLp_norm_le
 
 中文:
 定理 toLp_norm_le
-  条件: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [NormedSpace 𝕜 E]
+  条件: {𝕜 : 类型} [NontriviallyNormedField 𝕜] [赋范空间 𝕜 E]
   证明: LinearMap.mkContinuous_norm_le _ (measureUnivNNReal μ ^ p.toReal⁻¹).coe_nonneg _
 
 Depends on / 依赖: LinearMap, LinearMap.mkContinuous_norm_le, coe_nonneg, measureUnivNNReal, mkContinuous_norm_le, p.toReal, toReal
@@ -332,7 +332,7 @@ theorem toLp_inj
 
 中文:
 定理 toLp_inj
-  条件: {f g : α ->ᵇ E} [μ.IsOpenPosMeasure]
+  条件: {f g : α ->ᵇ E} [μ.是OpenPosMeasure]
   证明: by
   refine ⟨fun h => ?_, by tauto⟩
   rw [← DFunLike.coe_fn_eq]; rw [← (map_continuous f).ae_eq_iff_eq μ (map_continuous g)]
@@ -358,7 +358,7 @@ theorem toLp_injective
 
 中文:
 定理 toLp_injective
-  条件: [μ.IsOpenPosMeasure]
+  条件: [μ.是OpenPosMeasure]
   证明: fun _f _g hfg => (toLp_inj μ).mp hfg
 
 Depends on / 依赖: toLp_inj
@@ -522,7 +522,7 @@ theorem toLp_injective
 
 中文:
 定理 toLp_injective
-  条件: [μ.IsOpenPosMeasure]
+  条件: [μ.是OpenPosMeasure]
   证明: (BoundedContinuousFunction.toLp_injective _).comp (linearIsometryBoundedOfCompact α E 𝕜).injective
 
 Depends on / 依赖: BoundedContinuousFunction, BoundedContinuousFunction.toLp_injective, injective, linearIsometryBoundedOfCompact, toLp_injective
@@ -541,7 +541,7 @@ theorem toLp_inj
 
 中文:
 定理 toLp_inj
-  条件: {f g : C(α, E)} [μ.IsOpenPosMeasure]
+  条件: {f g : C(α, E)} [μ.是OpenPosMeasure]
   证明: (toLp_injective μ).eq_iff
 -/
 theorem toLp_inj {f g : C(α, E)} [μ.IsOpenPosMeasure] :
@@ -562,7 +562,7 @@ theorem hasSum_of_hasSum_Lp
 
 中文:
 定理 hasSum_of_hasSum_Lp
-  结论: {β : 类型} [μ.IsOpenPosMeasure]
+  结论: {β : 类型} [μ.是OpenPosMeasure]
   证明: by
   convert! Summable.hasSum hg
   exact toLp_injective μ (hg2.unique ((toLp p μ 𝕜).hasSum <| Summable.hasSum hg))
@@ -629,7 +629,7 @@ lemma memLp
 
 中文:
 引理 memLp
-  条件: (𝕜' : 类型) [NormedField 𝕜'] [NormedSpace 𝕜' E] (f : C(α, E))
+  条件: (𝕜' : 类型) [赋范域 𝕜'] [赋范空间 𝕜' E] (f : C(α, E))
   证明: by
   have := Lp.mem_Lp_iff_memLp.mp (Subtype.val_prop (f.toLp p μ 𝕜'))
   rwa [coe_toLp, memLp_congr_ae (coeFn_toAEEqFun _ _)] at this

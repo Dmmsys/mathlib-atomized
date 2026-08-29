@@ -102,7 +102,7 @@ lemma indToCoindAux_of_not_rel
 
 中文:
 引理 indToCoindAux_of_not_rel
-  条件: (g g₁ : G) (a : A) (h : ¬(QuotientGroup.rightRel S).r g₁ g)
+  条件: (g g₁ : G) (a : A) (h : ¬(商群.rightRel S).r g₁ g)
   证明: by
   simp [indToCoindAux, dif_neg h]
 
@@ -408,7 +408,7 @@ lemma coindToInd_indToCoind
 
 中文:
 引理 coindToInd_indToCoind
-  结论: A.indToCoind ∘ₗ A.coindToInd = LinearMap.id
+  结论: A.indToCoind ∘ₗ A.coindToInd = 线性映射.id
   证明: by
   ext g a
   simp only [LinearMap.coe_comp, Function.comp_apply, LinearMap.id_coe, id_eq]
@@ -452,7 +452,7 @@ lemma indToCoind_coindToInd
 
 中文:
 引理 indToCoind_coindToInd
-  结论: A.coindToInd ∘ₗ A.indToCoind = LinearMap.id
+  结论: A.coindToInd ∘ₗ A.indToCoind = 线性映射.id
   证明: by
   ext g a
   simp only [LinearMap.comp_apply, AlgebraTensorModule.curry_apply,
@@ -492,7 +492,7 @@ definition indCoindIso
 
 中文:
 定义 indCoindIso
-  签名: (A : Rep.{max w u} k S)
+  签名: (A : Rep.{最大值 w u} k S)
   定义体: mkIso (.mk (.ofLinearMap (indToCoind A) (coindToInd A)
     (coindToInd_indToCoind A) (indToCoind_coindToInd A)) <| fun g => by ext; simp)
 
@@ -521,7 +521,7 @@ definition indCoindNatIso
     simp [indToCoind, indMap, indToCoindAux_comm]
 
 中文:
-定义 indCoindNatIso
+定义 indCoind自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun (A : Rep k S) => indCoindIso A) fun f => by
     simp only [indFunctor_obj, coindFunctor_obj];
@@ -596,7 +596,7 @@ lemma resIndAdjunction_counit_app
 
 中文:
 引理 resIndAdjunction_counit_app
-  条件: (A : Rep.{max w u v} k S)
+  条件: (A : Rep.{最大值 w u v} k S)
   证明: rfl
 
 @[simp]
@@ -617,7 +617,7 @@ lemma resIndAdjunction_unit_app
 
 中文:
 引理 resIndAdjunction_unit_app
-  条件: (B : Rep.{max w u v} k G)
+  条件: (B : Rep.{最大值 w u v} k G)
   证明: rfl
 -/
 lemma resIndAdjunction_unit_app (B : Rep.{max w u v} k G) :
@@ -637,7 +637,7 @@ lemma resIndAdjunction_homEquiv_apply
 
 中文:
 引理 resIndAdjunction_homEquiv_apply
-  结论: (A : Rep.{max w u v} k S)
+  结论: (A : Rep.{最大值 w u v} k S)
   证明: by
   rw [resIndAdjunction]; rw [Adjunction.homEquiv_ofNatIsoRight_apply]
   simp [resCoindHomEquiv]
@@ -661,7 +661,7 @@ lemma resIndAdjunction_homEquiv_symm_apply
 
 中文:
 引理 resIndAdjunction_homEquiv_symm_apply
-  结论: (A : Rep.{max w u v} k S)
+  结论: (A : Rep.{最大值 w u v} k S)
   证明: rfl
 -/
 lemma resIndAdjunction_homEquiv_symm_apply (A : Rep.{max w u v} k S)
@@ -731,7 +731,7 @@ lemma coindResAdjunction_counit_app
 
 中文:
 引理 coindResAdjunction_counit_app
-  条件: (B : Rep.{max w u v} k G)
+  条件: (B : Rep.{最大值 w u v} k G)
   证明: rfl
 -/
 lemma coindResAdjunction_counit_app (B : Rep.{max w u v} k G) :
@@ -754,7 +754,7 @@ lemma coindResAdjunction_unit_app
 
 中文:
 引理 coindResAdjunction_unit_app
-  条件: (A : Rep.{max w u v} k S)
+  条件: (A : Rep.{最大值 w u v} k S)
   证明: by
   ext
   simp [coindResAdjunction]
@@ -778,7 +778,7 @@ lemma coindResAdjunction_homEquiv_apply
 
 中文:
 引理 coindResAdjunction_homEquiv_apply
-  结论: (A : Rep.{max w u v} k S)
+  结论: (A : Rep.{最大值 w u v} k S)
   证明: by
   rfl
 -/
@@ -800,7 +800,7 @@ lemma coindResAdjunction_homEquiv_symm_apply
 
 中文:
 引理 coindResAdjunction_homEquiv_symm_apply
-  结论: (A : Rep.{max w u v} k S)
+  结论: (A : Rep.{最大值 w u v} k S)
   证明: by
   simp [coindResAdjunction, indResHomEquiv, indResAdjunction,
     Adjunction.homEquiv_ofNatIsoLeft_symm_apply _]

@@ -131,7 +131,7 @@ lemma isRightAdjointOfStructuredArrowInitials
 
 中文:
 引理 isRightAdjointOfStructuredArrowInitials
-  结论: G.IsRightAdjoint where
+  结论: G.是右伴随 where
   证明: ⟨_, ⟨adjunctionOfStructuredArrowInitials G⟩⟩
 
 Depends on / 依赖: adjunctionOfStructuredArrowInitials
@@ -248,7 +248,7 @@ lemma isLeftAdjoint_of_costructuredArrowTerminals
 
 中文:
 引理 isLeftAdjoint_of_costructuredArrowTerminals
-  结论: G.IsLeftAdjoint where
+  结论: G.是左伴随 where
   证明: ⟨rightAdjointOfCostructuredArrowTerminals G, ⟨Adjunction.adjunctionOfEquivRight _ _⟩⟩
 
 Depends on / 依赖: Adjunction, Adjunction.adjunctionOfEquivRight, adjunctionOfEquivRight, rightAdjointOfCostructuredArrowTerminals

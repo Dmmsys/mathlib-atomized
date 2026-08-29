@@ -72,7 +72,7 @@ lemma precomp_apply
 
 中文:
 引理 precomp_apply
-  条件: {i : ι} (f : C(X i, Z)) (g : ContinuousMapGeneratedBy X Z T)
+  条件: {i : ι} (f : C(X i, Z)) (g : 余ntinuousMapGeneratedBy X Z T)
   证明: rfl
 -/
 lemma precomp_apply {i : ι} (f : C(X i, Z)) (g : ContinuousMapGeneratedBy X Z T) :
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (ContinuousMapGeneratedBy X Z T)
+  签名: 拓扑空间 (余ntinuousMapGeneratedBy X Z T)
   定义体: ⨅ (i : ι) (f : C(X i, Z)), .induced (precomp f) inferInstance
 
 Depends on / 依赖: induced, precomp
@@ -109,7 +109,7 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: {A : 类型} [TopologicalSpace A] {φ : A -> ContinuousMapGeneratedBy X Z T}
+  条件: {A : 类型} [拓扑空间 A] {φ : A -> 余ntinuousMapGeneratedBy X Z T}
   证明: by
   simp only [continuous_iInf_rng, continuous_induced_rng]
 
@@ -136,7 +136,7 @@ lemma continuous_precomp
 中文:
 引理 continuous_precomp
   条件: {i : ι} (f : C(X i, Z))
-  结论: Continuous (precomp (T := T) f)
+  结论: 连续 (precomp (T := T) f)
   证明: by
   rw [continuous_iff_le_induced]
   exact (iInf_le _ i).trans (iInf_le _ _)
@@ -162,7 +162,7 @@ lemma continuousGeneratedBy_iff_uncurry
 
 中文:
 引理 continuousGeneratedBy_iff_uncurry
-  结论: [对任意 i, LocallyCompactSpace (X i)]
+  结论: [对任意 i, 局部紧空间 (X i)]
   证明: by
   simp only [continuousGeneratedBy_def, continuous_iff]
   exact forall_congr' (fun i₁ => forall_congr' (fun f₁ =>
@@ -200,7 +200,7 @@ lemma continuousGeneratedBy_dom_prod_iff
 
 中文:
 引理 continuousGeneratedBy_dom_prod_iff
-  结论: [对任意 i j, IsGeneratedBy X (X i × X j)]
+  结论: [对任意 i j, 是GeneratedBy X (X i × X j)]
   证明: by
   refine ⟨fun h i₁ f₁ i₂ f₂ => ?_, fun h => ?_⟩
   · rw [IsGeneratedBy.continuous_iff X]
@@ -287,7 +287,7 @@ lemma curryEquiv_apply_apply
 
 中文:
 引理 curryEquiv_apply_apply
-  条件: (g : ContinuousMapGeneratedBy X (Y × Z) T) (y : Y) (z : Z)
+  条件: (g : 余ntinuousMapGeneratedBy X (Y × Z) T) (y : Y) (z : Z)
   证明: rfl
 
 @[simp]
@@ -306,7 +306,7 @@ lemma curryEquiv_symm_apply
 
 中文:
 引理 curryEquiv_symm_apply
-  结论: (g : ContinuousMapGeneratedBy X Z (ContinuousMapGeneratedBy X Y T))
+  结论: (g : 余ntinuousMapGeneratedBy X Z (余ntinuousMapGeneratedBy X Y T))
   证明: rfl
 -/
 lemma curryEquiv_symm_apply (g : ContinuousMapGeneratedBy X Z (ContinuousMapGeneratedBy X Y T))
@@ -325,7 +325,7 @@ definition ev
 
 中文:
 定义 ev
-  签名: : ContinuousMapGeneratedBy X (Y × ContinuousMapGeneratedBy X Y Z) Z
+  签名: : 余ntinuousMapGeneratedBy X (Y × 余ntinuousMapGeneratedBy X Y Z) Z
   定义体: curryEquiv.symm .id
 
 @[simp]
@@ -346,7 +346,7 @@ lemma ev_apply
 
 中文:
 引理 ev_apply
-  条件: (y : Y) (f : ContinuousMapGeneratedBy X Y Z)
+  条件: (y : Y) (f : 余ntinuousMapGeneratedBy X Y Z)
   证明: rfl
 -/
 lemma ev_apply (y : Y) (f : ContinuousMapGeneratedBy X Y Z) :
@@ -364,7 +364,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: (p : ContinuousMapGeneratedBy X Z T)
+  签名: (p : 余ntinuousMapGeneratedBy X Z T)
   定义体: curryEquiv (p.comp ev)
 
 @[simp]
@@ -387,7 +387,7 @@ lemma postcomp_apply
 
 中文:
 引理 postcomp_apply
-  条件: (p : ContinuousMapGeneratedBy X Z T) (g : ContinuousMapGeneratedBy X Y Z)
+  条件: (p : 余ntinuousMapGeneratedBy X Z T) (g : 余ntinuousMapGeneratedBy X Y Z)
   证明: rfl
 -/
 lemma postcomp_apply (p : ContinuousMapGeneratedBy X Z T) (g : ContinuousMapGeneratedBy X Y Z) :

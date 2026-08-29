@@ -55,7 +55,7 @@ abbreviation IsLocalization.AtPrime
   body: IsLocalization P.primeCompl S
 
 中文:
-缩写 IsLocalization.AtPrime
+缩写 是Localization.AtPrime
   定义体: IsLocalization P.primeCompl S
 -/
 protected abbrev IsLocalization.AtPrime :=
@@ -92,8 +92,8 @@ theorem AtPrime.nontrivial
 
 中文:
 定理 AtPrime.nontrivial
-  条件: [IsLocalization.AtPrime S P]
-  结论: Nontrivial S
+  条件: [是Localization.AtPrime S P]
+  结论: 非平凡 S
   证明: nontrivial_of_ne (0 : S) 1 fun hze => by
     rw [← (algebraMap R S).map_one]; rw [← (algebraMap R S).map_zero] at hze
     obtain ⟨t, ht⟩ := (eq_iff_exists P.primeCompl S).1 hze
@@ -125,8 +125,8 @@ theorem AtPrime.isLocalRing
 
 中文:
 定理 AtPrime.isLocalRing
-  条件: [IsLocalization.AtPrime S P]
-  结论: IsLocalRing S
+  条件: [是Localization.AtPrime S P]
+  结论: 是局部环 S
   证明: letI := AtPrime.nontrivial S P -- Can't be a local instance because we can't figure out `P`.
   IsLocalRing.of_nonunits_add
     (by
@@ -173,7 +173,7 @@ instance isDomain_of_local_atPrime
 
 中文:
 实例 isDomain_of_local_atPrime
-  签名: {P : Ideal A} (_ : P.IsPrime)
+  签名: {P : 理想 A} (_ : P.是素)
   定义体: isDomain_localization P.primeCompl_le_nonZeroDivisors
 
 Depends on / 依赖: P.primeCompl_le_nonZeroDivisors, isDomain_localization, primeCompl_le_nonZeroDivisors
@@ -196,7 +196,7 @@ instance AtPrime.isLocalRing
 
 中文:
 实例 AtPrime.isLocalRing
-  签名: : IsLocalRing (Localization P.primeCompl)
+  签名: : 是局部环 (Localization P.primeCompl)
   定义体: IsLocalization.AtPrime.isLocalRing (Localization P.primeCompl) P
 -/
 instance AtPrime.isLocalRing : IsLocalRing (Localization P.primeCompl) :=
@@ -219,8 +219,8 @@ theorem _root_.IsLocalization.AtPrime.faithfulSMul
 exact fun ⟨_, h⟩ => .of_ne_zero by aesop
 
 中文:
-定理 _root_.IsLocalization.AtPrime.faithfulSMul
-  结论: (R : 类型) [CommRing R] [NoZeroDivisors R]
+定理 _root_.是Localization.AtPrime.faithfulSMul
+  结论: (R : 类型) [交换环 R] [无零因子 R]
   证明: by
   rw [faithfulSMul_iff_algebraMap_injective]; rw [IsLocalization.injective_iff_isRegular P.primeCompl]
 exact fun ⟨_, h⟩ => .of_ne_zero by aesop
@@ -254,7 +254,7 @@ theorem isDomain_of_atPrime
 
 中文:
 定理 isDomain_of_atPrime
-  结论: (S : 类型) [CommSemiring S] [Algebra A S]
+  结论: (S : 类型) [交换半环 S] [代数 A S]
   证明: isDomain_of_le_nonZeroDivisors S P.primeCompl_le_nonZeroDivisors
 
 Depends on / 依赖: P.primeCompl_le_nonZeroDivisors, isDomain_of_le_nonZeroDivisors, primeCompl_le_nonZeroDivisors
@@ -283,7 +283,7 @@ definition orderIsoOfPrime
 
 中文:
 定义 orderIsoOfPrime
-  签名: : { p : Ideal S // p.IsPrime } ≃o { p : Ideal R // p.IsPrime ∧ p <= I }
+  签名: : { p : 理想 S // p.是素 } ≃o { p : 理想 R // p.是素 ∧ p <= I }
   定义体: (IsLocalization.orderIsoOfPrime I.primeCompl S).trans .setCongr _ _
     show Set.ofPred _ = Set.ofPred _
     by ext; simp [Ideal.primeCompl, ← le_compl_iff_disjoint_left]
@@ -306,7 +306,7 @@ definition primeSpectrumOrderIso
 
 中文:
 定义 primeSpectrumOrderIso
-  签名: : PrimeSpectrum S ≃o Set.Iic (⟨I, hI⟩ : PrimeSpectrum R)
+  签名: : 素谱 S ≃o 集合.左无界右闭区间 (⟨I, hI⟩ : 素谱 R)
   定义体: (PrimeSpectrum.equivSubtype S).trans (orderIsoOfPrime S I).trans
     ⟨⟨fun p => ⟨⟨p, p.2.1⟩, p.2.2⟩, fun p => ⟨p.1.1, p.1.2, p.2⟩, fun _ => rfl, fun _ => rfl⟩, .rfl⟩
 -/
@@ -329,7 +329,7 @@ theorem isUnit_to_map_iff
 中文:
 定理 isUnit_to_map_iff
   条件: (x : R)
-  结论: IsUnit ((algebraMap R S) x) ↔ x in I.primeCompl
+  结论: 是单位 ((algebraMap R S) x) ↔ x in I.primeCompl
   证明: ⟨fun h hx =>
 (isPrime_of_isPrime_disjoint I.primeCompl S I hI disjoint_compl_left).ne_top
       (Ideal.map (algebraMap R S) I).eq_top_of_isUnit_mem (Ideal.mem_map_of_mem _ hx) h,
@@ -357,7 +357,7 @@ theorem to_map_mem_maximal_iff
 
 中文:
 定理 to_map_mem_maximal_iff
-  条件: (x : R) (h : IsLocalRing S := isLocalRing S I)
+  条件: (x : R) (h : 是局部环 S := isLocalRing S I)
   证明: not_iff_not.mp by
     simpa only [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff, Classical.not_not] using!
       isUnit_to_map_iff S I x
@@ -382,7 +382,7 @@ theorem under_maximalIdeal
 
 中文:
 定理 under_maximalIdeal
-  条件: (h : IsLocalRing S := isLocalRing S I)
+  条件: (h : 是局部环 S := isLocalRing S I)
   证明: Ideal.ext fun x => by simpa only [Ideal.mem_comap] using to_map_mem_maximal_iff _ I x
 
 @[deprecated (since := "2026-04-09")] alias comap_maximalIdeal := under_maximalIdeal
@@ -405,7 +405,7 @@ instance liesOver_maximalIdeal
 
 中文:
 实例 liesOver_maximalIdeal
-  签名: (h : IsLocalRing S := isLocalRing S I)
+  签名: (h : 是局部环 S := isLocalRing S I)
   定义体: (Ideal.liesOver_iff _ _).mpr (under_maximalIdeal _ _).symm
 
 Depends on / 依赖: isLocalRing
@@ -427,7 +427,7 @@ theorem isUnit_mk'_iff
 中文:
 定理 isUnit_mk'_iff
   条件: (x : R) (y : I.primeCompl)
-  结论: IsUnit (mk' S x y) ↔ x in I.primeCompl
+  结论: 是单位 (mk' S x y) ↔ x in I.primeCompl
   证明: ⟨fun h hx => mk'_mem_iff.mpr ((to_map_mem_maximal_iff S I x).mpr hx) h, fun h =>
     isUnit_iff_exists_inv.mpr ⟨mk' S ↑y ⟨x, h⟩, mk'_mul_mk'_eq_one ⟨x, h⟩ y⟩⟩
 
@@ -449,7 +449,7 @@ theorem mk'_mem_maximal_iff
 
 中文:
 定理 mk'_mem_maximal_iff
-  条件: (x : R) (y : I.primeCompl) (h : IsLocalRing S := isLocalRing S I)
+  条件: (x : R) (y : I.primeCompl) (h : 是局部环 S := isLocalRing S I)
   证明: not_iff_not.mp by
     simpa only [IsLocalRing.mem_maximalIdeal, mem_nonunits_iff, Classical.not_not] using!
       isUnit_mk'_iff S I x y
@@ -534,7 +534,7 @@ lemma AtPrime.eq_maximalIdeal_iff_under_eq
 
 中文:
 引理 AtPrime.eq_maximalIdeal_iff_under_eq
-  条件: {J : Ideal (Localization.AtPrime I)}
+  条件: {J : 理想 (Localization.AtPrime I)}
   证明: le_antisymm (IsLocalRing.le_maximalIdeal (fun hJ => (hI.ne_top (h.symm ▸ hJ ▸ rfl)))) by
     simpa [← AtPrime.map_eq_maximalIdeal, ← h] using Ideal.map_comap_le
   mpr h := h.symm ▸ AtPrime.under_maximalIdeal
@@ -566,7 +566,7 @@ theorem le_comap_primeCompl_iff
 
 中文:
 定理 le_comap_primeCompl_iff
-  条件: {J : Ideal P} [J.IsPrime] {f : R ->+* P}
+  条件: {J : 理想 P} [J.是素] {f : R ->+* P}
   证明: ⟨fun h x hx => by
     contrapose hx
     exact h hx,
@@ -595,7 +595,7 @@ definition localRingHom
 
 中文:
 定义 localRingHom
-  签名: (J : Ideal P) [J.IsPrime] (f : R ->+* P) (hIJ : I = J.comap f)
+  签名: (J : 理想 P) [J.是素] (f : R ->+* P) (hIJ : I = J.comap f)
   定义体: IsLocalization.map (Localization.AtPrime J) f (le_comap_primeCompl_iff.mpr (ge_of_eq hIJ))
 
 @[simp]
@@ -619,7 +619,7 @@ theorem localRingHom_to_map
 
 中文:
 定理 localRingHom_to_map
-  结论: (J : Ideal P) [J.IsPrime] (f : R ->+* P) (hIJ : I = J.comap f)
+  结论: (J : 理想 P) [J.是素] (f : R ->+* P) (hIJ : I = J.comap f)
   证明: map_eq _ _
 
 @[simp]
@@ -643,7 +643,7 @@ theorem localRingHom_mk'
 
 中文:
 定理 localRingHom_mk'
-  结论: (J : Ideal P) [J.IsPrime] (f : R ->+* P) (hIJ : I = J.comap f) (x : R)
+  结论: (J : 理想 P) [J.是素] (f : R ->+* P) (hIJ : I = J.comap f) (x : R)
   证明: map_mk' _ _ _
 
 @[simp]
@@ -671,7 +671,7 @@ theorem localRingHom_mk
 
 中文:
 定理 localRingHom_mk
-  结论: (J : Ideal P) [J.IsPrime] (f : R ->+* P) (hIJ : I = J.comap f) (x : R)
+  结论: (J : 理想 P) [J.是素] (f : R ->+* P) (hIJ : I = J.comap f) (x : R)
   证明: by
   simp_rw [mk_eq_mk', localRingHom_mk']
 
@@ -699,7 +699,7 @@ theorem isLocalHom_localRingHom
 
 中文:
 定理 isLocalHom_localRingHom
-  结论: (J : Ideal P) [hJ : J.IsPrime] (f : R ->+* P)
+  结论: (J : 理想 P) [hJ : J.是素] (f : R ->+* P)
   证明: IsLocalHom.mk fun x hx => by
     rcases IsLocalization.exists_mk'_eq I.primeCompl x with ⟨r, s, rfl⟩
     rw [localRingHom_mk'] at hx
@@ -728,7 +728,7 @@ theorem localRingHom_unique
 
 中文:
 定理 localRingHom_unique
-  结论: (J : Ideal P) [J.IsPrime] (f : R ->+* P) (hIJ : I = J.comap f)
+  结论: (J : 理想 P) [J.是素] (f : R ->+* P) (hIJ : I = J.comap f)
   证明: map_unique _ _ hj
 
 @[simp]
@@ -751,7 +751,7 @@ theorem localRingHom_id
 
 中文:
 定理 localRingHom_id
-  结论: localRingHom I I (RingHom.id R) (Ideal.comap_id I).symm = RingHom.id _
+  结论: localRingHom I I (环态射.id R) (理想.comap_id I).symm = 环态射.id _
   证明: localRingHom_unique _ _ _ _ fun _ => rfl
 
 Depends on / 依赖: localRingHom_unique
@@ -771,7 +771,7 @@ theorem localRingHom_comp
 
 中文:
 定理 localRingHom_comp
-  结论: {S : 类型} [CommSemiring S] (J : Ideal S) [hJ : J.IsPrime] (K : Ideal P)
+  结论: {S : 类型} [交换半环 S] (J : 理想 S) [hJ : J.是素] (K : 理想 P)
   证明: localRingHom_unique _ _ _ _ fun r => by
     simp only [Function.comp_apply, RingHom.coe_comp, localRingHom_to_map]
 
@@ -800,7 +800,7 @@ definition localRingEquiv
 
 中文:
 定义 localRingEquiv
-  签名: (J : Ideal P) [J.IsPrime] (f : R ≃+* P) (hIJ : I = J.comap f)
+  签名: (J : 理想 P) [J.是素] (f : R ≃+* P) (hIJ : I = J.comap f)
   定义体: localRingHom I J f hIJ
   invFun := localRingHom J I f.symm
     (by rw [hIJ, ← Ideal.comap_coe f, Ideal.comap_comap, RingEquiv.comp_symm, Ideal.comap_id])
@@ -831,7 +831,7 @@ definition localAlgHom
 
 中文:
 定义 localAlgHom
-  签名: [Algebra R P] (I : Ideal S) [I.IsPrime] (J : Ideal P) [J.IsPrime]
+  签名: [代数 R P] (I : 理想 S) [I.是素] (J : 理想 P) [J.是素]
   定义体: localRingHom I J f.toRingHom hIJ
   commutes' r := by
     simp [IsScalarTower.algebraMap_apply R S (Localization.AtPrime I),
@@ -858,7 +858,7 @@ lemma localAlgHom_apply
 
 中文:
 引理 localAlgHom_apply
-  结论: [Algebra R P] (I : Ideal S) [I.IsPrime] (J : Ideal P) [J.IsPrime]
+  结论: [代数 R P] (I : 理想 S) [I.是素] (J : 理想 P) [J.是素]
   证明: rfl
 -/
 @[simp] lemma localAlgHom_apply [Algebra R P] (I : Ideal S) [I.IsPrime] (J : Ideal P) [J.IsPrime]
@@ -881,7 +881,7 @@ definition localAlgEquiv
 
 中文:
 定义 localAlgEquiv
-  签名: [Algebra R P] (I : Ideal S) [I.IsPrime] (J : Ideal P) [J.IsPrime]
+  签名: [代数 R P] (I : 理想 S) [I.是素] (J : 理想 P) [J.是素]
   定义体: localAlgHom I J f.toAlgHom hIJ
   __ := localRingEquiv I J f.toRingEquiv hIJ
 
@@ -984,10 +984,10 @@ class IsLiesOverAlgebra
     - algebraMap_eq : algebraMap (Localization.AtPrime p) (Localization.AtPrime P) = Localization.localRingHom p P (algebraMap A B) Ideal.LiesOver.over
 
 中文:
-类 IsLiesOverAlgebra
-  参数: (p : Ideal A) [p.IsPrime] (P : Ideal B) [P.IsPrime] [P.LiesOver p]
+类 是LiesOver代数
+  参数: (p : 理想 A) [p.是素] (P : 理想 B) [P.是素] [P.LiesOver p]
   公理与运算 (1 个):
-    - algebraMap_eq : algebraMap (Localization.AtPrime p) (Localization.AtPrime P) = Localization.localRingHom p P (algebraMap A B) Ideal.LiesOver.over
+    - algebraMap_eq : algebraMap (Localization.AtPrime p) (Localization.AtPrime P) = Localization.localRingHom p P (algebraMap A B) 理想.LiesOver.over
 -/
 class IsLiesOverAlgebra (p : Ideal A) [p.IsPrime] (P : Ideal B) [P.IsPrime] [P.LiesOver p]
     [Algebra (Localization.AtPrime p) (Localization.AtPrime P)] : Prop where
@@ -1049,7 +1049,7 @@ theorem mapPiEvalRingHom_bijective
 
 中文:
 定理 mapPiEvalRingHom_bijective
-  结论: Function.Bijective (mapPiEvalRingHom I)
+  结论: 函数.双射 (mapPiEvalRingHom I)
   证明: Localization.mapPiEvalRingHom_bijective _
 
 Depends on / 依赖: Localization, Localization.mapPiEvalRingHom_bijective, mapPiEvalRingHom_bijective
@@ -1180,8 +1180,8 @@ lemma Ideal.isPrime_map_of_isLocalizationAtPrime
   apply IsLocalization.isPrime_of_isPrime_disjoint q.primeCompl _ p (by simpa) disj
 
 中文:
-引理 Ideal.isPrime_map_of_isLocalizationAtPrime
-  条件: {p : Ideal R} [p.IsPrime] (hpq : p <= q)
+引理 理想.isPrime_map_of_isLocalizationAtPrime
+  条件: {p : 理想 R} [p.是素] (hpq : p <= q)
   证明: by
   have disj : Disjoint (q.primeCompl : Set R) p := by
     simp [Ideal.primeCompl, ← le_compl_iff_disjoint_left, hpq]
@@ -1208,8 +1208,8 @@ lemma Ideal.under_map_of_isLocalizationAtPrime
   exact IsLocalization.under_map_of_isPrime_disjoint _ _ (by simpa) disj
 
 中文:
-引理 Ideal.under_map_of_isLocalizationAtPrime
-  条件: {p : Ideal R} [p.IsPrime] (hpq : p <= q)
+引理 理想.under_map_of_isLocalizationAtPrime
+  条件: {p : 理想 R} [p.是素] (hpq : p <= q)
   证明: by
   have disj : Disjoint (q.primeCompl : Set R) p := by
     simp [Ideal.primeCompl, ← le_compl_iff_disjoint_left, hpq]
@@ -1235,7 +1235,7 @@ fun ⦃x⦄ a => a⟩, fun i => Subtype.ext PrimeSpectrum.ext
   (IsLocalization.AtPrime.primeSpectrumOrderIso S p).subsingleton
 
 中文:
-引理 IsLocalization.subsingleton_primeSpectrum_of_mem_minimalPrimes
+引理 是Localization.subsingleton_primeSpectrum_of_mem_minimalPrimes
   证明: have := hp.1.1
   have : Unique (Set.Iic (⟨p, hp.1.1⟩ : PrimeSpectrum R)) := ⟨⟨⟨p, hp.1.1⟩, by exact
 fun ⦃x⦄ a => a⟩, fun i => Subtype.ext PrimeSpectrum.ext
@@ -1265,7 +1265,7 @@ lemma IsLocalization.liesOver_of_isPrime_of_disjoint
   rw [under_under]; rw [← under_under (B := S)]; rw [under_map_of_isPrime_disjoint _ _ ‹_› disj]; rw [LiesOver.over
 
 中文:
-引理 IsLocalization.liesOver_of_isPrime_of_disjoint
+引理 是Localization.liesOver_of_isPrime_of_disjoint
   结论: {R' S' : 类型}
   证明: by
   suffices h : Ideal.map (algebraMap R R') (under R (under R' (P.map (algebraMap S S')))) =
@@ -1301,8 +1301,8 @@ obtain ⟨m, maxm, hm⟩ := exists_le_maximal J by
     IsLocalization.map_under M S m]
 
 中文:
-引理 Ideal.IsMaximal.of_isLocalization_of_disjoint
-  结论: [IsLocalization M S] {J : Ideal S}
+引理 理想.是极大.of_isLocalization_of_disjoint
+  结论: [是Localization M S] {J : 理想 S}
   证明: by
 obtain ⟨m, maxm, hm⟩ := exists_le_maximal J by
     rintro rfl
@@ -1344,8 +1344,8 @@ theorem isPrime_map_of_liesOver
 
 中文:
 定理 isPrime_map_of_liesOver
-  条件: [P.IsPrime] [P.LiesOver p]
-  结论: (P.map (algebraMap S Sₚ)).IsPrime
+  条件: [P.是素] [P.LiesOver p]
+  结论: (P.map (algebraMap S Sₚ)).是素
   证明: isPrime_of_isPrime_disjoint _ _ _ inferInstance (Ideal.disjoint_primeCompl_of_liesOver P p)
 
 Depends on / 依赖: Ideal.disjoint_primeCompl_of_liesOver, disjoint_primeCompl_of_liesOver, isPrime_of_isPrime_disjoint
@@ -1388,7 +1388,7 @@ instance isMaximal_map
 
 中文:
 实例 isMaximal_map
-  签名: : (p.map (algebraMap R Rₚ)).IsMaximal
+  签名: : (p.map (algebraMap R Rₚ)).是极大
   定义体: by
   rw [map_eq_maximalIdeal]
   exact maximalIdeal.isMaximal Rₚ
@@ -1411,7 +1411,7 @@ theorem under_map_of_isMaximal
 
 中文:
 定理 under_map_of_isMaximal
-  条件: [P.IsMaximal] [P.LiesOver p]
+  条件: [P.是极大] [P.LiesOver p]
   证明: comap_map_eq_self_of_isMaximal _ (isPrime_map_of_liesOver S p Sₚ P).ne_top
 
 @[deprecated (since := "2026-04-09")] alias comap_map_of_isMaximal := under_map_of_isMaximal
@@ -1440,7 +1440,7 @@ lemma under_maximalIdeal_pow
 
 中文:
 引理 under_maximalIdeal_pow
-  条件: [p.IsMaximal] (n : 自然数)
+  条件: [p.是极大] (n : 自然数)
   证明: by
   ext
   rw [mem_comap]; rw [← map_eq_maximalIdeal p Rₚ]; rw [← Ideal.map_pow]; rw [algebraMap_mem_map_algebraMap_iff p.primeCompl Rₚ]
@@ -1681,7 +1681,7 @@ lemma under_map_eq_map
 
 中文:
 引理 under_map_eq_map
-  结论: (Ideal.map (algebraMap R Sₚ) p).under S = pS
+  结论: (理想.map (algebraMap R Sₚ) p).under S = pS
   证明: by
   rw [IsScalarTower.algebraMap_eq R S Sₚ]; rw [← Ideal.map_map]; rw [eq_comm]
   apply Ideal.le_comap_map.antisymm
@@ -1791,7 +1791,7 @@ lemma map_eq_top_of_not_le
 
 中文:
 引理 map_eq_top_of_not_le
-  结论: {I : Ideal R} {p : Ideal R} [p.IsPrime] [IsLocalization.AtPrime S p]
+  结论: {I : 理想 R} {p : 理想 R} [p.是素] [是Localization.AtPrime S p]
   证明: by
   apply IsLocalization.map_eq_top_of_not_subset p.primeCompl
   simpa [SetLike.le_def, Set.not_subset_iff_exists_mem_notMem] using hle

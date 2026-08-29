@@ -49,7 +49,7 @@ definition powAddExpansion
 
 中文:
 定义 powAddExpansion
-  签名: {R : 类型} [CommSemiring R] (x y : R)
+  签名: {R : 类型} [交换半环 R] (x y : R)
   定义体: (powAddExpansion x y (n + 1))
     exists x * z + (n + 1) * x ^ n + z * y
     calc

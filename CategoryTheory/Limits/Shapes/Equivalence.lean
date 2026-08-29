@@ -37,7 +37,7 @@ theorem hasInitial_of_equivalence
 
 中文:
 定理 hasInitial_of_equivalence
-  条件: (e : D ⥤ C) [e.IsEquivalence] [HasInitial C]
+  条件: (e : D ⥤ C) [e.是等价] [HasInitial C]
   结论: HasInitial D
   证明: Adjunction.hasColimitsOfShape_of_equivalence e
 
@@ -57,7 +57,7 @@ theorem Equivalence.hasInitial_iff
     fun (_ : HasInitial D) => hasInitial_of_equivalence e.functor⟩
 
 中文:
-定理 Equivalence.hasInitial_iff
+定理 等价.hasInitial_iff
   条件: (e : C ≌ D)
   结论: HasInitial C ↔ HasInitial D
   证明: ⟨fun (_ : HasInitial C) => hasInitial_of_equivalence e.inverse,
@@ -80,8 +80,8 @@ theorem hasTerminal_of_equivalence
 
 中文:
 定理 hasTerminal_of_equivalence
-  条件: (e : D ⥤ C) [e.IsEquivalence] [HasTerminal C]
-  结论: HasTerminal D
+  条件: (e : D ⥤ C) [e.是等价] [有终止 C]
+  结论: 有终止 D
   证明: Adjunction.hasLimitsOfShape_of_equivalence e
 
 Depends on / 依赖: Adjunction, Adjunction.hasLimitsOfShape_of_equivalence, hasLimitsOfShape_of_equivalence
@@ -100,9 +100,9 @@ theorem Equivalence.hasTerminal_iff
     fun (_ : HasTerminal D) => hasTerminal_of_equivalence e.functor⟩
 
 中文:
-定理 Equivalence.hasTerminal_iff
+定理 等价.hasTerminal_iff
   条件: (e : C ≌ D)
-  结论: HasTerminal C ↔ HasTerminal D
+  结论: 有终止 C ↔ 有终止 D
   证明: ⟨fun (_ : HasTerminal C) => hasTerminal_of_equivalence e.inverse,
     fun (_ : HasTerminal D) => hasTerminal_of_equivalence e.functor⟩
 

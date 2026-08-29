@@ -37,8 +37,8 @@ definition max
   body: sup s (↑)
 
 中文:
-定义 max
-  签名: (s : Finset α)
+定义 最大值
+  签名: (s : 有限集 α)
   定义体: sup s (↑)
 -/
 protected def max (s : Finset α) : WithBot α :=
@@ -55,8 +55,8 @@ theorem max_eq_sup_coe
 
 中文:
 定理 max_eq_sup_coe
-  条件: {s : Finset α}
-  结论: s.max = s.sup (↑)
+  条件: {s : 有限集 α}
+  结论: s.最大值 = s.上确界 (↑)
   证明: rfl
 -/
 theorem max_eq_sup_coe {s : Finset α} : s.max = s.sup (↑) :=
@@ -75,8 +75,8 @@ theorem max_eq_sup_withBot
 
 中文:
 定理 max_eq_sup_withBot
-  条件: (s : Finset α)
-  结论: s.max = sup s (↑)
+  条件: (s : 有限集 α)
+  结论: s.最大值 = 上确界 s (↑)
   证明: rfl
 
 @[simp]
@@ -97,7 +97,7 @@ theorem max_empty
 
 中文:
 定理 max_empty
-  结论: (∅ : Finset α).max = ⊥
+  结论: (∅ : 有限集 α).最大值 = ⊥
   证明: rfl
 
 @[simp, grind =]
@@ -119,8 +119,8 @@ theorem max_insert
 
 中文:
 定理 max_insert
-  条件: {a : α} {s : Finset α}
-  结论: (insert a s).max = max ↑a s.max
+  条件: {a : α} {s : 有限集 α}
+  结论: (insert a s).最大值 = 最大值 ↑a s.最大值
   证明: fold_insert_idem
 
 @[simp]
@@ -145,7 +145,7 @@ theorem max_singleton
 中文:
 定理 max_singleton
   条件: {a : α}
-  结论: Finset.max {a} = (a : WithBot α)
+  结论: 有限集.最大值 {a} = (a : WithBot α)
   证明: by
   rw [← insert_empty_eq]
   exact max_insert
@@ -186,8 +186,8 @@ theorem max_of_mem
 
 中文:
 定理 max_of_mem
-  条件: {s : Finset α} {a : α} (h : a in s)
-  结论: 存在 b : α, s.max = b
+  条件: {s : 有限集 α} {a : α} (h : a in s)
+  结论: 存在 b : α, s.最大值 = b
   证明: let ⟨b, h, _⟩ := WithBot.le_iff_forall.1 (le_sup (α := WithBot α) h) _ rfl; ⟨b, h⟩
 
 Depends on / 依赖: WithBot, WithBot.le_iff_forall, le_iff_forall, le_sup
@@ -207,8 +207,8 @@ theorem max_of_nonempty
 
 中文:
 定理 max_of_nonempty
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: 存在 a : α, s.max = a
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: 存在 a : α, s.最大值 = a
   证明: let ⟨_, h⟩ := h
   max_of_mem h
 
@@ -232,8 +232,8 @@ theorem max_eq_bot
 
 中文:
 定理 max_eq_bot
-  条件: {s : Finset α}
-  结论: s.max = ⊥ ↔ s = ∅
+  条件: {s : 有限集 α}
+  结论: s.最大值 = ⊥ ↔ s = ∅
   证明: ⟨fun h => s.eq_empty_or_nonempty.elim id fun H => by
       obtain ⟨a, ha⟩ := max_of_nonempty H
       rw [h] at ha; cases ha; , -- the `;` is needed since the `cases` syntax allows `cases a, b`
@@ -261,8 +261,8 @@ theorem mem_of_max
 
 中文:
 定理 mem_of_max
-  条件: {s : Finset α}
-  结论: 对任意 {a : α}, s.max = a -> a in s
+  条件: {s : 有限集 α}
+  结论: 对任意 {a : α}, s.最大值 = a -> a in s
   证明: by
   induction s using Finset.induction_on with
   | empty => intro _ H; cases H
@@ -286,8 +286,8 @@ theorem le_max
 
 中文:
 定理 le_max
-  条件: {a : α} {s : Finset α} (as : a in s)
-  结论: ↑a <= s.max
+  条件: {a : α} {s : 有限集 α} (as : a in s)
+  结论: ↑a <= s.最大值
   证明: le_sup as
 
 Depends on / 依赖: le_sup
@@ -306,7 +306,7 @@ theorem notMem_of_max_lt_coe
 
 中文:
 定理 notMem_of_max_lt_coe
-  条件: {a : α} {s : Finset α} (h : s.max < a)
+  条件: {a : α} {s : 有限集 α} (h : s.最大值 < a)
   结论: a ∉ s
   证明: mt le_max h.not_ge
 
@@ -326,7 +326,7 @@ theorem le_max_of_eq
 
 中文:
 定理 le_max_of_eq
-  条件: {s : Finset α} {a b : α} (h₁ : a in s) (h₂ : s.max = b)
+  条件: {s : 有限集 α} {a b : α} (h₁ : a in s) (h₂ : s.最大值 = b)
   结论: a <= b
   证明: WithBot.coe_le_coe.mp (le_max h₁).trans h₂.le
 
@@ -346,7 +346,7 @@ theorem notMem_of_max_lt
 
 中文:
 定理 notMem_of_max_lt
-  条件: {s : Finset α} {a b : α} (h₁ : b < a) (h₂ : s.max = ↑b)
+  条件: {s : 有限集 α} {a b : α} (h₁ : b < a) (h₂ : s.最大值 = ↑b)
   结论: a ∉ s
   证明: Finset.notMem_of_max_lt_coe h₂.trans_lt WithBot.coe_lt_coe.mpr h₁
 
@@ -368,8 +368,8 @@ theorem max_union
 
 中文:
 定理 max_union
-  条件: {s t : Finset α}
-  结论: (s union t).max = s.max ⊔ t.max
+  条件: {s t : 有限集 α}
+  结论: (s union t).最大值 = s.最大值 ⊔ t.最大值
   证明: sup_union
 
 @[gcongr]
@@ -390,8 +390,8 @@ theorem max_mono
 
 中文:
 定理 max_mono
-  条件: {s t : Finset α} (st : s subseteq t)
-  结论: s.max <= t.max
+  条件: {s t : 有限集 α} (st : s subseteq t)
+  结论: s.最大值 <= t.最大值
   证明: sup_mono st
 
 Depends on / 依赖: sup_mono
@@ -411,7 +411,7 @@ theorem max_le
 
 中文:
 定理 max_le
-  条件: {M : WithBot α} {s : Finset α} (st : 对任意 a in s, (a : WithBot α) <= M)
+  条件: {M : WithBot α} {s : 有限集 α} (st : 对任意 a in s, (a : WithBot α) <= M)
   证明: Finset.sup_le st
 
 @[simp]
@@ -434,8 +434,8 @@ lemma max_le_iff
 
 中文:
 引理 max_le_iff
-  条件: {m : WithBot α} {s : Finset α}
-  结论: s.max <= m ↔ 对任意 a in s, a <= m
+  条件: {m : WithBot α} {s : 有限集 α}
+  结论: s.最大值 <= m ↔ 对任意 a in s, a <= m
   证明: Finset.sup_le_iff
 
 @[simp]
@@ -455,8 +455,8 @@ lemma max_eq_top
 
 中文:
 引理 max_eq_top
-  条件: [OrderTop α] {s : Finset α}
-  结论: s.max = ⊤ ↔ ⊤ in s
+  条件: [有顶序 α] {s : 有限集 α}
+  结论: s.最大值 = ⊤ ↔ ⊤ in s
   证明: Finset.sup_eq_top_iff.trans by simp
 -/
 protected lemma max_eq_top [OrderTop α] {s : Finset α} : s.max = ⊤ ↔ ⊤ in s :=
@@ -471,8 +471,8 @@ definition min
   body: inf s (↑)
 
 中文:
-定义 min
-  签名: (s : Finset α)
+定义 最小值
+  签名: (s : 有限集 α)
   定义体: inf s (↑)
 -/
 protected def min (s : Finset α) : WithTop α :=
@@ -491,8 +491,8 @@ theorem min_eq_inf_withTop
 
 中文:
 定理 min_eq_inf_withTop
-  条件: (s : Finset α)
-  结论: s.min = inf s (↑)
+  条件: (s : 有限集 α)
+  结论: s.最小值 = 下确界 s (↑)
   证明: rfl
 
 @[simp]
@@ -513,7 +513,7 @@ theorem min_empty
 
 中文:
 定理 min_empty
-  结论: (∅ : Finset α).min = ⊤
+  结论: (∅ : 有限集 α).最小值 = ⊤
   证明: rfl
 
 @[simp]
@@ -535,8 +535,8 @@ theorem min_insert
 
 中文:
 定理 min_insert
-  条件: {a : α} {s : Finset α}
-  结论: (insert a s).min = min (↑a) s.min
+  条件: {a : α} {s : 有限集 α}
+  结论: (insert a s).最小值 = 最小值 (↑a) s.最小值
   证明: fold_insert_idem
 
 @[simp]
@@ -561,7 +561,7 @@ theorem min_singleton
 中文:
 定理 min_singleton
   条件: {a : α}
-  结论: Finset.min {a} = (a : WithTop α)
+  结论: 有限集.最小值 {a} = (a : WithTop α)
   证明: by
   rw [← insert_empty_eq]
   exact min_insert
@@ -602,8 +602,8 @@ theorem min_of_mem
 
 中文:
 定理 min_of_mem
-  条件: {s : Finset α} {a : α} (h : a in s)
-  结论: 存在 b : α, s.min = b
+  条件: {s : 有限集 α} {a : α} (h : a in s)
+  结论: 存在 b : α, s.最小值 = b
   证明: let ⟨b, h, _⟩ := WithTop.le_iff_forall.1 (inf_le (α := WithTop α) h) _ rfl; ⟨b, h⟩
 
 Depends on / 依赖: WithTop, WithTop.le_iff_forall, inf_le, le_iff_forall
@@ -625,8 +625,8 @@ theorem min_of_nonempty
 
 中文:
 定理 min_of_nonempty
-  条件: {s : Finset α} (h : s.Nonempty)
-  结论: 存在 a : α, s.min = a
+  条件: {s : 有限集 α} (h : s.非空)
+  结论: 存在 a : α, s.最小值 = a
   证明: let ⟨_, h⟩ := h
   min_of_mem h
 
@@ -651,8 +651,8 @@ theorem min_eq_top
 
 中文:
 定理 min_eq_top
-  条件: {s : Finset α}
-  结论: s.min = ⊤ ↔ s = ∅
+  条件: {s : 有限集 α}
+  结论: s.最小值 = ⊤ ↔ s = ∅
   证明: by
   simp [Finset.min, eq_empty_iff_forall_notMem]
 
@@ -672,8 +672,8 @@ theorem mem_of_min
 
 中文:
 定理 mem_of_min
-  条件: {s : Finset α}
-  结论: 对任意 {a : α}, s.min = a -> a in s
+  条件: {s : 有限集 α}
+  结论: 对任意 {a : α}, s.最小值 = a -> a in s
   证明: @mem_of_max αᵒᵈ _ s
 
 Depends on / 依赖: mem_of_max
@@ -692,8 +692,8 @@ theorem min_le
 
 中文:
 定理 min_le
-  条件: {a : α} {s : Finset α} (as : a in s)
-  结论: s.min <= a
+  条件: {a : α} {s : 有限集 α} (as : a in s)
+  结论: s.最小值 <= a
   证明: inf_le as
 
 Depends on / 依赖: inf_le
@@ -712,7 +712,7 @@ theorem notMem_of_coe_lt_min
 
 中文:
 定理 notMem_of_coe_lt_min
-  条件: {a : α} {s : Finset α} (h : ↑a < s.min)
+  条件: {a : α} {s : 有限集 α} (h : ↑a < s.最小值)
   结论: a ∉ s
   证明: mt min_le h.not_ge
 
@@ -732,7 +732,7 @@ theorem min_le_of_eq
 
 中文:
 定理 min_le_of_eq
-  条件: {s : Finset α} {a b : α} (h₁ : b in s) (h₂ : s.min = a)
+  条件: {s : 有限集 α} {a b : α} (h₁ : b in s) (h₂ : s.最小值 = a)
   结论: a <= b
   证明: WithTop.coe_le_coe.mp h₂.ge.trans (min_le h₁)
 
@@ -752,7 +752,7 @@ theorem notMem_of_lt_min
 
 中文:
 定理 notMem_of_lt_min
-  条件: {s : Finset α} {a b : α} (h₁ : a < b) (h₂ : s.min = ↑b)
+  条件: {s : 有限集 α} {a b : α} (h₁ : a < b) (h₂ : s.最小值 = ↑b)
   结论: a ∉ s
   证明: Finset.notMem_of_coe_lt_min (WithTop.coe_lt_coe.mpr h₁).trans_eq h₂.symm
 
@@ -774,8 +774,8 @@ theorem min_union
 
 中文:
 定理 min_union
-  条件: {s t : Finset α}
-  结论: (s union t).min = s.min ⊓ t.min
+  条件: {s t : 有限集 α}
+  结论: (s union t).最小值 = s.最小值 ⊓ t.最小值
   证明: inf_union
 
 @[gcongr]
@@ -796,8 +796,8 @@ theorem min_mono
 
 中文:
 定理 min_mono
-  条件: {s t : Finset α} (st : s subseteq t)
-  结论: t.min <= s.min
+  条件: {s t : 有限集 α} (st : s subseteq t)
+  结论: t.最小值 <= s.最小值
   证明: inf_mono st
 
 Depends on / 依赖: inf_mono
@@ -818,8 +818,8 @@ theorem le_min
 
 中文:
 定理 le_min
-  条件: {m : WithTop α} {s : Finset α} (st : 对任意 a : α, a in s -> m <= a)
-  结论: m <= s.min
+  条件: {m : WithTop α} {s : 有限集 α} (st : 对任意 a : α, a in s -> m <= a)
+  结论: m <= s.最小值
   证明: Finset.le_inf st
 
 @[simp]
@@ -841,8 +841,8 @@ theorem le_min_iff
 
 中文:
 定理 le_min_iff
-  条件: {m : WithTop α} {s : Finset α}
-  结论: m <= s.min ↔ 对任意 a in s, m <= a
+  条件: {m : WithTop α} {s : 有限集 α}
+  结论: m <= s.最小值 ↔ 对任意 a in s, m <= a
   证明: Finset.le_inf_iff
 
 @[simp]
@@ -862,8 +862,8 @@ theorem min_eq_bot
 
 中文:
 定理 min_eq_bot
-  条件: [OrderBot α] {s : Finset α}
-  结论: s.min = ⊥ ↔ ⊥ in s
+  条件: [有底序 α] {s : 有限集 α}
+  结论: s.最小值 = ⊥ ↔ ⊥ in s
   证明: Finset.max_eq_top (α := αᵒᵈ)
 -/
 protected theorem min_eq_bot [OrderBot α] {s : Finset α} : s.min = ⊥ ↔ ⊥ in s :=
@@ -878,8 +878,8 @@ definition min'
   body: inf' s H id
 
 中文:
-定义 min'
-  签名: (s : Finset α) (H : s.Nonempty)
+定义 最小值'
+  签名: (s : 有限集 α) (H : s.非空)
   定义体: inf' s H id
 -/
 def min' (s : Finset α) (H : s.Nonempty) : α :=
@@ -894,8 +894,8 @@ definition max'
   body: sup' s H id
 
 中文:
-定义 max'
-  签名: (s : Finset α) (H : s.Nonempty)
+定义 最大值'
+  签名: (s : 有限集 α) (H : s.非空)
   定义体: sup' s H id
 -/
 def max' (s : Finset α) (H : s.Nonempty) : α :=
@@ -912,8 +912,8 @@ theorem min'_mem
   proof: mem_of_min by simp only [Finset.min, min', id_eq, coe_inf', Function.comp_def]
 
 中文:
-定理 min'_mem
-  结论: s.min' H in s
+定理 最小值'_mem
+  结论: s.最小值' H in s
   证明: mem_of_min by simp only [Finset.min, min', id_eq, coe_inf', Function.comp_def]
 -/
 theorem min'_mem : s.min' H in s :=
@@ -929,9 +929,9 @@ theorem min'_le
   proof: min_le_of_eq H2 (WithTop.coe_untop _ _).symm
 
 中文:
-定理 min'_le
+定理 最小值'_le
   条件: (x) (H2 : x in s)
-  结论: s.min' ⟨x, H2⟩ <= x
+  结论: s.最小值' ⟨x, H2⟩ <= x
   证明: min_le_of_eq H2 (WithTop.coe_untop _ _).symm
 -/
 theorem min'_le (x) (H2 : x in s) : s.min' ⟨x, H2⟩ <= x :=
@@ -949,7 +949,7 @@ theorem le_min'
 中文:
 定理 le_min'
   条件: (x) (H2 : 对任意 y in s, x <= y)
-  结论: x <= s.min' H
+  结论: x <= s.最小值' H
   证明: H2 _ min'_mem _ _
 
 Depends on / 依赖: _mem
@@ -969,7 +969,7 @@ theorem isLeast_min'
 
 中文:
 定理 isLeast_min'
-  结论: IsLeast (↑s) (s.min' H)
+  结论: IsLeast (↑s) (s.最小值' H)
   证明: ⟨min'_mem _ _, min'_le _⟩
 
 @[simp]
@@ -992,7 +992,7 @@ theorem le_min'_iff
 中文:
 定理 le_min'_iff
   条件: {x}
-  结论: x <= s.min' H ↔ 对任意 y in s, x <= y
+  结论: x <= s.最小值' H ↔ 对任意 y in s, x <= y
   证明: le_isGLB_iff (isLeast_min' s H).isGLB
 -/
 theorem le_min'_iff {x} : x <= s.min' H ↔ forall y in s, x <= y :=
@@ -1010,9 +1010,9 @@ theorem min'_singleton
   proof: by simp [min']
 
 中文:
-定理 min'_singleton
+定理 最小值'_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).min' (singleton_nonempty _) = a
+  结论: ({a} : 有限集 α).最小值' (singleton_nonempty _) = a
   证明: by simp [min']
 -/
 theorem min'_singleton (a : α) : ({a} : Finset α).min' (singleton_nonempty _) = a := by simp [min']
@@ -1026,8 +1026,8 @@ theorem max'_mem
   proof: mem_of_max by simp only [max', Finset.max, id_eq, coe_sup', Function.comp_def]
 
 中文:
-定理 max'_mem
-  结论: s.max' H in s
+定理 最大值'_mem
+  结论: s.最大值' H in s
   证明: mem_of_max by simp only [max', Finset.max, id_eq, coe_sup', Function.comp_def]
 -/
 theorem max'_mem : s.max' H in s :=
@@ -1045,7 +1045,7 @@ theorem le_max'
 中文:
 定理 le_max'
   条件: (x) (H2 : x in s)
-  结论: x <= s.max' ⟨x, H2⟩
+  结论: x <= s.最大值' ⟨x, H2⟩
   证明: le_max_of_eq H2 (WithBot.coe_unbot _ _).symm
 
 Depends on / 依赖: WithBot, WithBot.coe_unbot, coe_unbot, le_max_of_eq
@@ -1063,9 +1063,9 @@ theorem max'_le
   proof: H2 _ max'_mem _ _
 
 中文:
-定理 max'_le
+定理 最大值'_le
   条件: (x) (H2 : 对任意 y in s, y <= x)
-  结论: s.max' H <= x
+  结论: s.最大值' H <= x
   证明: H2 _ max'_mem _ _
 -/
 theorem max'_le (x) (H2 : forall y in s, y <= x) : s.max' H <= x :=
@@ -1083,7 +1083,7 @@ theorem isGreatest_max'
 
 中文:
 定理 isGreatest_max'
-  结论: IsGreatest (↑s) (s.max' H)
+  结论: IsGreatest (↑s) (s.最大值' H)
   证明: ⟨max'_mem _ _, le_max' _⟩
 
 @[simp]
@@ -1106,9 +1106,9 @@ theorem max'_le_iff
 @[simp]
 
 中文:
-定理 max'_le_iff
+定理 最大值'_le_iff
   条件: {x}
-  结论: s.max' H <= x ↔ 对任意 y in s, y <= x
+  结论: s.最大值' H <= x ↔ 对任意 y in s, y <= x
   证明: isLUB_le_iff (isGreatest_max' s H).isLUB
 
 @[simp]
@@ -1129,9 +1129,9 @@ theorem max'_lt_iff
 @[simp]
 
 中文:
-定理 max'_lt_iff
+定理 最大值'_lt_iff
   条件: {x}
-  结论: s.max' H < x ↔ 对任意 y in s, y < x
+  结论: s.最大值' H < x ↔ 对任意 y in s, y < x
   证明: ⟨fun Hlt y hy => (s.le_max' y hy).trans_lt Hlt, fun H => H _ s.max'_mem _⟩
 
 @[simp]
@@ -1150,7 +1150,7 @@ theorem lt_min'_iff
 
 中文:
 定理 lt_min'_iff
-  结论: x < s.min' H ↔ 对任意 y in s, x < y
+  结论: x < s.最小值' H ↔ 对任意 y in s, x < y
   证明: @max'_lt_iff αᵒᵈ _ _ H _
 
 Depends on / 依赖: _lt_iff
@@ -1167,8 +1167,8 @@ theorem max'_eq_sup'
   proof: rfl
 
 中文:
-定理 max'_eq_sup'
-  结论: s.max' H = s.sup' H id
+定理 最大值'_eq_sup'
+  结论: s.最大值' H = s.上确界' H id
   证明: rfl
 -/
 theorem max'_eq_sup' : s.max' H = s.sup' H id := rfl
@@ -1182,8 +1182,8 @@ theorem min'_eq_inf'
   proof: rfl
 
 中文:
-定理 min'_eq_inf'
-  结论: s.min' H = s.inf' H id
+定理 最小值'_eq_inf'
+  结论: s.最小值' H = s.下确界' H id
   证明: rfl
 -/
 theorem min'_eq_inf' : s.min' H = s.inf' H id := rfl
@@ -1200,9 +1200,9 @@ theorem max'_singleton
   proof: by simp [max']
 
 中文:
-定理 max'_singleton
+定理 最大值'_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).max' (singleton_nonempty _) = a
+  结论: ({a} : 有限集 α).最大值' (singleton_nonempty _) = a
   证明: by simp [max']
 -/
 theorem max'_singleton (a : α) : ({a} : Finset α).max' (singleton_nonempty _) = a := by simp [max']
@@ -1217,9 +1217,9 @@ lemma min'_eq_iff
   proof: ⟨(· ▸ ⟨min'_mem _ _, min'_le _⟩), fun h => le_antisymm (min'_le _ _ h.1) (le_min' _ _ _ h.2)⟩
 
 中文:
-引理 min'_eq_iff
+引理 最小值'_eq_iff
   条件: (a : α)
-  结论: s.min' H = a ↔ a in s ∧ 对任意 (b : α), b in s -> a <= b
+  结论: s.最小值' H = a ↔ a in s ∧ 对任意 (b : α), b in s -> a <= b
   证明: ⟨(· ▸ ⟨min'_mem _ _, min'_le _⟩), fun h => le_antisymm (min'_le _ _ h.1) (le_min' _ _ _ h.2)⟩
 
 Depends on / 依赖: dvd_mul, pp.dvd_mul
@@ -1237,9 +1237,9 @@ lemma max'_eq_iff
   proof: ⟨(· ▸ ⟨max'_mem _ _, le_max' _⟩), fun h => le_antisymm (max'_le _ _ _ h.2) (le_max' _ _ h.1)⟩
 
 中文:
-引理 max'_eq_iff
+引理 最大值'_eq_iff
   条件: (a : α)
-  结论: s.max' H = a ↔ a in s ∧ 对任意 (b : α), b in s -> b <= a
+  结论: s.最大值' H = a ↔ a in s ∧ 对任意 (b : α), b in s -> b <= a
   证明: ⟨(· ▸ ⟨max'_mem _ _, le_max' _⟩), fun h => le_antisymm (max'_le _ _ _ h.2) (le_max' _ _ h.1)⟩
 
 Depends on / 依赖: dvd_of_dvd_pow, pp.prime.dvd_of_dvd_pow
@@ -1257,9 +1257,9 @@ theorem min'_le_max'
   proof: min'_le _ _ (max'_mem _ _)
 
 中文:
-定理 min'_le_max'
-  条件: (hs : s.Nonempty)
-  结论: s.min' hs <= s.max' hs
+定理 最小值'_le_max'
+  条件: (hs : s.非空)
+  结论: s.最小值' hs <= s.最大值' hs
   证明: min'_le _ _ (max'_mem _ _)
 -/
 theorem min'_le_max' (hs : s.Nonempty) : s.min' hs <= s.max' hs := min'_le _ _ (max'_mem _ _)
@@ -1273,7 +1273,7 @@ theorem min'_lt_max'
   proof: isGLB_lt_isLUB_of_ne (s.isLeast_min' _).isGLB (s.isGreatest_max' _).isLUB H1 H2 H3
 
 中文:
-定理 min'_lt_max'
+定理 最小值'_lt_max'
   条件: {i j} (H1 : i in s) (H2 : j in s) (H3 : i != j)
   证明: isGLB_lt_isLUB_of_ne (s.isLeast_min' _).isGLB (s.isGreatest_max' _).isLUB H1 H2 H3
 -/
@@ -1292,7 +1292,7 @@ theorem min'_lt_max'_of_card
   exact s.min'_lt_max' ha hb hab
 
 中文:
-定理 min'_lt_max'_of_card
+定理 最小值'_lt_max'_of_card
   条件: (h₂ : 1 < card s)
   证明: by
   rcases one_lt_card.1 h₂ with ⟨a, ha, b, hb, hab⟩
@@ -1312,8 +1312,8 @@ theorem max'_union
   proof: sup'_union h₁ h₂ id
 
 中文:
-定理 max'_union
-  条件: {s₁ s₂ : Finset α} (h₁ : s₁.Nonempty) (h₂ : s₂.Nonempty)
+定理 最大值'_union
+  条件: {s₁ s₂ : 有限集 α} (h₁ : s₁.非空) (h₂ : s₂.非空)
   证明: sup'_union h₁ h₂ id
 -/
 theorem max'_union {s₁ s₂ : Finset α} (h₁ : s₁.Nonempty) (h₂ : s₂.Nonempty) :
@@ -1328,8 +1328,8 @@ theorem min'_union
   proof: inf'_union h₁ h₂ id
 
 中文:
-定理 min'_union
-  条件: {s₁ s₂ : Finset α} (h₁ : s₁.Nonempty) (h₂ : s₂.Nonempty)
+定理 最小值'_union
+  条件: {s₁ s₂ : 有限集 α} (h₁ : s₁.非空) (h₂ : s₂.非空)
   证明: inf'_union h₁ h₂ id
 -/
 theorem min'_union {s₁ s₂ : Finset α} (h₁ : s₁.Nonempty) (h₂ : s₂.Nonempty) :
@@ -1348,8 +1348,8 @@ theorem map_ofDual_min
 
 中文:
 定理 map_ofDual_min
-  条件: (s : Finset αᵒᵈ)
-  结论: s.min.map ofDual = (s.image ofDual).max
+  条件: (s : 有限集 αᵒᵈ)
+  结论: s.最小值.map ofDual = (s.像 ofDual).最大值
   证明: by
   rw [max_eq_sup_withBot]; rw [sup_image]
   exact congr_fun WithBot.map_id _
@@ -1373,8 +1373,8 @@ theorem map_ofDual_max
 
 中文:
 定理 map_ofDual_max
-  条件: (s : Finset αᵒᵈ)
-  结论: s.max.map ofDual = (s.image ofDual).min
+  条件: (s : 有限集 αᵒᵈ)
+  结论: s.最大值.map ofDual = (s.像 ofDual).最小值
   证明: by
   rw [min_eq_inf_withTop]; rw [inf_image]
   exact congr_fun WithTop.map_id _
@@ -1398,8 +1398,8 @@ theorem map_toDual_min
 
 中文:
 定理 map_toDual_min
-  条件: (s : Finset α)
-  结论: s.min.map toDual = (s.image toDual).max
+  条件: (s : 有限集 α)
+  结论: s.最小值.map toDual = (s.像 toDual).最大值
   证明: by
   rw [max_eq_sup_withBot]; rw [sup_image]
   exact congr_fun WithBot.map_id _
@@ -1423,8 +1423,8 @@ theorem map_toDual_max
 
 中文:
 定理 map_toDual_max
-  条件: (s : Finset α)
-  结论: s.max.map toDual = (s.image toDual).min
+  条件: (s : 有限集 α)
+  结论: s.最大值.map toDual = (s.像 toDual).最小值
   证明: by
   rw [min_eq_inf_withTop]; rw [inf_image]
   exact congr_fun WithTop.map_id _
@@ -1446,7 +1446,7 @@ theorem ofDual_min'
 
 中文:
 定理 ofDual_min'
-  条件: {s : Finset αᵒᵈ} (hs : s.Nonempty)
+  条件: {s : 有限集 αᵒᵈ} (hs : s.非空)
   证明: by
   simp [min'_eq_inf', max'_eq_sup']
 
@@ -1467,7 +1467,7 @@ theorem ofDual_max'
 
 中文:
 定理 ofDual_max'
-  条件: {s : Finset αᵒᵈ} (hs : s.Nonempty)
+  条件: {s : 有限集 αᵒᵈ} (hs : s.非空)
   证明: by
   simp [min'_eq_inf', max'_eq_sup']
 
@@ -1488,7 +1488,7 @@ theorem toDual_min'
 
 中文:
 定理 toDual_min'
-  条件: {s : Finset α} (hs : s.Nonempty)
+  条件: {s : 有限集 α} (hs : s.非空)
   证明: by
   simp [min'_eq_inf', max'_eq_sup']
 
@@ -1509,7 +1509,7 @@ theorem toDual_max'
 
 中文:
 定理 toDual_max'
-  条件: {s : Finset α} (hs : s.Nonempty)
+  条件: {s : 有限集 α} (hs : s.非空)
   证明: by
   simp [min'_eq_inf', max'_eq_sup']
 
@@ -1528,8 +1528,8 @@ theorem max'_subset
   proof: le_max' _ _ (hst (s.max'_mem H))
 
 中文:
-定理 max'_subset
-  条件: {s t : Finset α} (H : s.Nonempty) (hst : s subseteq t)
+定理 最大值'_subset
+  条件: {s t : 有限集 α} (H : s.非空) (hst : s subseteq t)
   证明: le_max' _ _ (hst (s.max'_mem H))
 -/
 theorem max'_subset {s t : Finset α} (H : s.Nonempty) (hst : s subseteq t) :
@@ -1545,8 +1545,8 @@ theorem min'_subset
   proof: min'_le _ _ (hst (s.min'_mem H))
 
 中文:
-定理 min'_subset
-  条件: {s t : Finset α} (H : s.Nonempty) (hst : s subseteq t)
+定理 最小值'_subset
+  条件: {s t : 有限集 α} (H : s.非空) (hst : s subseteq t)
   证明: min'_le _ _ (hst (s.min'_mem H))
 -/
 theorem min'_subset {s t : Finset α} (H : s.Nonempty) (hst : s subseteq t) :
@@ -1564,8 +1564,8 @@ theorem max'_insert
     exact (isGreatest_max' _ _).insert _
 
 中文:
-定理 max'_insert
-  条件: (a : α) (s : Finset α) (H : s.Nonempty)
+定理 最大值'_insert
+  条件: (a : α) (s : 有限集 α) (H : s.非空)
   证明: (isGreatest_max' _ _).unique by
     rw [coe_insert]
     exact (isGreatest_max' _ _).insert _
@@ -1587,8 +1587,8 @@ theorem min'_insert
     exact (isLeast_min' _ _).insert _
 
 中文:
-定理 min'_insert
-  条件: (a : α) (s : Finset α) (H : s.Nonempty)
+定理 最小值'_insert
+  条件: (a : α) (s : 有限集 α) (H : s.非空)
   证明: (isLeast_min' _ _).unique by
     rw [coe_insert]
     exact (isLeast_min' _ _).insert _
@@ -1609,7 +1609,7 @@ lemma min'_pair
   simp
 
 中文:
-引理 min'_pair
+引理 最小值'_pair
   条件: (a b : α)
   证明: by
   simp
@@ -1628,7 +1628,7 @@ lemma max'_pair
   simp
 
 中文:
-引理 max'_pair
+引理 最大值'_pair
   条件: (a b : α)
   证明: by
   simp
@@ -1647,7 +1647,7 @@ theorem lt_max'_of_mem_erase_max'
 
 中文:
 定理 lt_max'_of_mem_erase_max'
-  条件: [DecidableEq α] {a : α} (ha : a in s.erase (s.max' H))
+  条件: [DecidableEq α] {a : α} (ha : a in s.erase (s.最大值' H))
   证明: lt_of_le_of_ne (le_max' _ _ (mem_of_mem_erase ha)) ne_of_mem_of_not_mem ha notMem_erase _ _
 
 Depends on / 依赖: le_max, lt_of_le_of_ne, mem_of_mem_erase, ne_of_mem_of_not_mem, notMem_erase
@@ -1665,8 +1665,8 @@ theorem min'_lt_of_mem_erase_min'
   proof: @lt_max'_of_mem_erase_max' αᵒᵈ _ s H _ a ha
 
 中文:
-定理 min'_lt_of_mem_erase_min'
-  条件: [DecidableEq α] {a : α} (ha : a in s.erase (s.min' H))
+定理 最小值'_lt_of_mem_erase_min'
+  条件: [DecidableEq α] {a : α} (ha : a in s.erase (s.最小值' H))
   证明: @lt_max'_of_mem_erase_max' αᵒᵈ _ s H _ a ha
 
 Depends on / 依赖: Irreducible, Irreducible.ne_zero, ne_zero
@@ -1688,8 +1688,8 @@ theorem max'_image
 exact .symm apply_sup'_eq_sup'_comp _ _ fun _ _ => hf.map_max
 
 中文:
-定理 max'_image
-  结论: [LinearOrder β] {f : α -> β} (hf : Monotone f) (s : Finset α)
+定理 最大值'_image
+  结论: [线性序 β] {f : α -> β} (hf : 递增 f) (s : 有限集 α)
   证明: by
   simp only [max', sup'_image]
 exact .symm apply_sup'_eq_sup'_comp _ _ fun _ _ => hf.map_max
@@ -1708,8 +1708,8 @@ lemma _root_.Monotone.map_finset_max'
   proof: .symm max'_image hf ..
 
 中文:
-引理 _root_.Monotone.map_finset_max'
-  结论: [LinearOrder β] {f : α -> β} (hf : Monotone f) {s : Finset α}
+引理 _root_.递增.map_finset_max'
+  结论: [线性序 β] {f : α -> β} (hf : 递增 f) {s : 有限集 α}
   证明: .symm max'_image hf ..
 
 Depends on / 依赖: _image
@@ -1731,8 +1731,8 @@ theorem min'_image
 exact .symm apply_inf'_eq_inf'_comp _ _ fun _ _ => hf.map_min
 
 中文:
-定理 min'_image
-  结论: [LinearOrder β] {f : α -> β} (hf : Monotone f) (s : Finset α)
+定理 最小值'_image
+  结论: [线性序 β] {f : α -> β} (hf : 递增 f) (s : 有限集 α)
   证明: by
   simp only [min', inf'_image]
 exact .symm apply_inf'_eq_inf'_comp _ _ fun _ _ => hf.map_min
@@ -1751,8 +1751,8 @@ lemma _root_.Monotone.map_finset_min'
   proof: .symm min'_image hf ..
 
 中文:
-引理 _root_.Monotone.map_finset_min'
-  结论: [LinearOrder β] {f : α -> β} (hf : Monotone f) {s : Finset α}
+引理 _root_.递增.map_finset_min'
+  结论: [线性序 β] {f : α -> β} (hf : 递增 f) {s : 有限集 α}
   证明: .symm min'_image hf ..
 
 Depends on / 依赖: _image
@@ -1772,8 +1772,8 @@ theorem coe_max'
 
 中文:
 定理 coe_max'
-  条件: {s : Finset α} (hs : s.Nonempty)
-  结论: ↑(s.max' hs) = s.max
+  条件: {s : 有限集 α} (hs : s.非空)
+  结论: ↑(s.最大值' hs) = s.最大值
   证明: coe_sup' hs id
 
 Depends on / 依赖: coe_sup, hp.one_lt.ne, one_lt
@@ -1792,8 +1792,8 @@ theorem coe_min'
 
 中文:
 定理 coe_min'
-  条件: {s : Finset α} (hs : s.Nonempty)
-  结论: ↑(s.min' hs) = s.min
+  条件: {s : 有限集 α} (hs : s.非空)
+  结论: ↑(s.最小值' hs) = s.最小值
   证明: coe_inf' hs id
 
 Depends on / 依赖: coe_inf
@@ -1811,7 +1811,7 @@ theorem max_mem_image_coe
 
 中文:
 定理 max_mem_image_coe
-  条件: {s : Finset α} (hs : s.Nonempty)
+  条件: {s : 有限集 α} (hs : s.非空)
   证明: mem_image.2 ⟨max' s hs, max'_mem _ _, coe_max' hs⟩
 
 Depends on / 依赖: _mem, coe_max, mem_image
@@ -1830,7 +1830,7 @@ theorem min_mem_image_coe
 
 中文:
 定理 min_mem_image_coe
-  条件: {s : Finset α} (hs : s.Nonempty)
+  条件: {s : 有限集 α} (hs : s.非空)
   证明: mem_image.2 ⟨min' s hs, min'_mem _ _, coe_min' hs⟩
 
 Depends on / 依赖: _mem, coe_min, mem_image
@@ -1849,7 +1849,7 @@ theorem max_mem_insert_bot_image_coe
 
 中文:
 定理 max_mem_insert_bot_image_coe
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: mem_insert.2 s.eq_empty_or_nonempty.imp max_eq_bot.2 max_mem_image_coe
 
 Depends on / 依赖: eq_empty_or_nonempty, max_eq_bot, max_mem_image_coe, mem_insert, s.eq_empty_or_nonempty.imp
@@ -1868,7 +1868,7 @@ theorem min_mem_insert_top_image_coe
 
 中文:
 定理 min_mem_insert_top_image_coe
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: mem_insert.2 s.eq_empty_or_nonempty.imp min_eq_top.2 min_mem_image_coe
 
 Depends on / 依赖: eq_empty_or_nonempty, mem_insert, min_eq_top, min_mem_image_coe, s.eq_empty_or_nonempty.imp
@@ -1887,9 +1887,9 @@ theorem max'_erase_ne_self
   proof: ne_of_mem_erase (max'_mem _ s0)
 
 中文:
-定理 max'_erase_ne_self
-  条件: {s : Finset α} (s0 : (s.erase x).Nonempty)
-  结论: (s.erase x).max' s0 != x
+定理 最大值'_erase_ne_self
+  条件: {s : 有限集 α} (s0 : (s.erase x).非空)
+  结论: (s.erase x).最大值' s0 != x
   证明: ne_of_mem_erase (max'_mem _ s0)
 -/
 theorem max'_erase_ne_self {s : Finset α} (s0 : (s.erase x).Nonempty) : (s.erase x).max' s0 != x :=
@@ -1905,9 +1905,9 @@ theorem min'_erase_ne_self
   proof: ne_of_mem_erase (min'_mem _ s0)
 
 中文:
-定理 min'_erase_ne_self
-  条件: {s : Finset α} (s0 : (s.erase x).Nonempty)
-  结论: (s.erase x).min' s0 != x
+定理 最小值'_erase_ne_self
+  条件: {s : 有限集 α} (s0 : (s.erase x).非空)
+  结论: (s.erase x).最小值' s0 != x
   证明: ne_of_mem_erase (min'_mem _ s0)
 -/
 theorem min'_erase_ne_self {s : Finset α} (s0 : (s.erase x).Nonempty) : (s.erase x).min' s0 != x :=
@@ -1929,8 +1929,8 @@ theorem max_erase_ne_self
 
 中文:
 定理 max_erase_ne_self
-  条件: {s : Finset α}
-  结论: (s.erase x).max != x
+  条件: {s : 有限集 α}
+  结论: (s.erase x).最大值 != x
   证明: by
   by_cases! s0 : (s.erase x).Nonempty
   · refine ne_of_eq_of_ne (coe_max' s0).symm ?_
@@ -1961,8 +1961,8 @@ theorem min_erase_ne_self
 
 中文:
 定理 min_erase_ne_self
-  条件: {s : Finset α}
-  结论: (s.erase x).min != x
+  条件: {s : 有限集 α}
+  结论: (s.erase x).最小值 != x
   证明: by
   apply mt (congr_arg (WithTop.map toDual))
   rw [map_toDual_min]; rw [image_erase toDual.injective]; rw [WithTop.map_coe]
@@ -1986,8 +1986,8 @@ theorem exists_next_right
 ⟨min' _ Hne, aux.1, by simp, fun z hzs hz => min'_le _ _ mem_filter.2 ⟨hzs, by simpa⟩⟩
 
 中文:
-定理 exists_next_right
-  条件: {x : α} {s : Finset α} (h : 存在 y in s, x < y)
+定理 存在_next_right
+  条件: {x : α} {s : 有限集 α} (h : 存在 y in s, x < y)
   证明: have Hne : (s.filter (x < ·)).Nonempty := h.imp fun y hy => mem_filter.2 (by simpa)
   have aux := mem_filter.1 (min'_mem _ Hne)
 ⟨min' _ Hne, aux.1, by simp, fun z hzs hz => min'_le _ _ mem_filter.2 ⟨hzs, by simpa⟩⟩
@@ -2009,8 +2009,8 @@ theorem exists_next_left
   proof: @exists_next_right αᵒᵈ _ x s h
 
 中文:
-定理 exists_next_left
-  条件: {x : α} {s : Finset α} (h : 存在 y in s, y < x)
+定理 存在_next_left
+  条件: {x : α} {s : 有限集 α} (h : 存在 y in s, y < x)
   证明: @exists_next_right αᵒᵈ _ x s h
 
 Depends on / 依赖: exists_next_right
@@ -2034,7 +2034,7 @@ exact ⟨b, hbt, hxb, hba.trans_le
 
 中文:
 定理 card_le_of_interleaved
-  结论: {s t : Finset α}
+  结论: {s t : 有限集 α}
   证明: by
   replace h : forallᵉ (x in s) (y in s), x < y -> exists z in t, x < z ∧ z < y := by
     intro x hx y hy hxy
@@ -2085,7 +2085,7 @@ alias card_le_diff_of_interleaved := card_le_sdiff_of_interleaved
 
 中文:
 定理 card_le_sdiff_of_interleaved
-  结论: {s t : Finset α}
+  结论: {s t : 有限集 α}
   证明: card_le_of_interleaved fun x hx y hy hxy hs =>
     let ⟨z, hzt, hxz, hzy⟩ := h x hx y hy hxy hs
     ⟨z, mem_sdiff.2 ⟨hzt, fun hzs => hs z hzs ⟨hxz, hzy⟩⟩, hxz, hzy⟩
@@ -2272,8 +2272,8 @@ theorem exists_max_image
   exact ⟨x, hx, fun x' hx' => le_max_of_eq (mem_image_of_mem f hx') hy⟩
 
 中文:
-定理 exists_max_image
-  条件: (s : Finset β) (f : β -> α) (h : s.Nonempty)
+定理 存在_max_image
+  条件: (s : 有限集 β) (f : β -> α) (h : s.非空)
   证明: by
   obtain ⟨y, hy⟩ := max_of_nonempty (h.image f)
   rcases mem_image.mp (mem_of_max hy) with ⟨x, hx, rfl⟩
@@ -2296,8 +2296,8 @@ theorem exists_min_image
   proof: @exists_max_image αᵒᵈ β _ s f h
 
 中文:
-定理 exists_min_image
-  条件: (s : Finset β) (f : β -> α) (h : s.Nonempty)
+定理 存在_min_image
+  条件: (s : 有限集 β) (f : β -> α) (h : s.非空)
   证明: @exists_max_image αᵒᵈ β _ s f h
 
 Depends on / 依赖: exists_max_image
@@ -2324,7 +2324,7 @@ theorem isGLB_iff_isLeast
 
 中文:
 定理 isGLB_iff_isLeast
-  条件: [LinearOrder α] (i : α) (s : Finset α) (hs : s.Nonempty)
+  条件: [线性序 α] (i : α) (s : 有限集 α) (hs : s.非空)
   证明: by
   refine ⟨fun his => ?_, IsLeast.isGLB⟩
   suffices i = min' s hs by
@@ -2354,7 +2354,7 @@ theorem isLUB_iff_isGreatest
 
 中文:
 定理 isLUB_iff_isGreatest
-  条件: [LinearOrder α] (i : α) (s : Finset α) (hs : s.Nonempty)
+  条件: [线性序 α] (i : α) (s : 有限集 α) (hs : s.非空)
   证明: @isGLB_iff_isLeast αᵒᵈ _ i s hs
 
 Depends on / 依赖: isGLB_iff_isLeast
@@ -2375,7 +2375,7 @@ theorem isGLB_mem
 
 中文:
 定理 isGLB_mem
-  结论: [LinearOrder α] {i : α} (s : Finset α) (his : IsGLB (s : Set α) i)
+  结论: [线性序 α] {i : α} (s : 有限集 α) (his : IsGLB (s : 集合 α) i)
   证明: by
   rw [← mem_coe]
   exact ((isGLB_iff_isLeast i s hs).mp his).1
@@ -2397,7 +2397,7 @@ theorem isLUB_mem
 
 中文:
 定理 isLUB_mem
-  结论: [LinearOrder α] {i : α} (s : Finset α) (his : IsLUB (s : Set α) i)
+  结论: [线性序 α] {i : α} (s : 有限集 α) (his : IsLUB (s : 集合 α) i)
   证明: @isGLB_mem αᵒᵈ _ i s his hs
 
 Depends on / 依赖: isGLB_mem
@@ -2420,8 +2420,8 @@ theorem Multiset.exists_max_image
   exact ⟨y, mem_toFinset.mp hys, fun _ hz => hy _ (mem_toFinset.mpr hz)⟩
 
 中文:
-定理 Multiset.exists_max_image
-  结论: {α R : 类型} [LinearOrder R] (f : α -> R) {s : Multiset α}
+定理 Multiset.存在_max_image
+  结论: {α R : 类型} [线性序 R] (f : α -> R) {s : Multiset α}
   证明: by
   classical
   obtain ⟨y, hys, hy⟩ := Finset.exists_max_image s.toFinset f (toFinset_nonempty.mpr hs)
@@ -2444,8 +2444,8 @@ theorem Multiset.exists_min_image
   proof: @exists_max_image α Rᵒᵈ _ f s hs
 
 中文:
-定理 Multiset.exists_min_image
-  结论: {α R : 类型} [LinearOrder R] (f : α -> R) {s : Multiset α}
+定理 Multiset.存在_min_image
+  结论: {α R : 类型} [线性序 R] (f : α -> R) {s : Multiset α}
   证明: @exists_max_image α Rᵒᵈ _ f s hs
 
 Depends on / 依赖: exists_max_image

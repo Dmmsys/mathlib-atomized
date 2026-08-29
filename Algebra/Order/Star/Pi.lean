@@ -35,8 +35,8 @@ instance Pi.instStarOrderedRing
       simp only [Set.mem_range, funext_iff, mul_apply, s
 
 中文:
-实例 Pi.instStarOrderedRing
-  签名: : StarOrderedRing (Π i, A i) where
+实例 依赖函数类型.instStarOrderedRing
+  签名: : StarOrdered环 (Π i, A i) where
   定义体: by
     have : closure (Set.range fun s : Π i, A i => star s * s) =
         pi Set.univ fun i => (closure <| Set.range fun s : A i => star s * s) := by

@@ -37,7 +37,7 @@ lemma essentiallySmall_of_finiteType
 
 中文:
 引理 essentiallySmall_of_finiteType
-  结论: [Object命题erty.EssentiallySmall.{u} Q]
+  结论: [ObjectProperty.EssentiallySmall.{u} Q]
   证明: by
   obtain ⟨Q', _, hQ'Q, hQQ'⟩ := ObjectProperty.EssentiallySmall.exists_small_le Q
   let f (S : Σ R : Subtype Q', FGAlgCatSkeleton R) : CommRingCat := .of S.2.eval.obj
@@ -77,7 +77,7 @@ lemma essentiallySmall_of_localizationAway
 
 中文:
 引理 essentiallySmall_of_localizationAway
-  结论: [Object命题erty.EssentiallySmall.{u} Q]
+  结论: [ObjectProperty.EssentiallySmall.{u} Q]
   证明: by
   obtain ⟨Q', _, hQ'Q, hQQ'⟩ := ObjectProperty.EssentiallySmall.exists_small_le Q
   let f (S : Σ (n : Nat) (R : Fin n -> Subtype Q'), Subring (Π i, (R i).1)) : CommRingCat := .of S.2.2

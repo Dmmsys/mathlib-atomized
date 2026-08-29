@@ -63,7 +63,7 @@ definition Equiv.lpPiLp
   invFun f := ⟨ofLp f, Memℓp.all f⟩
 
 中文:
-定义 Equiv.lpPiLp
+定义 等价.lpPiLp
   签名: : lp E p ≃ PiLp p E where
   定义体: toLp p ⇑f
   invFun f := ⟨ofLp f, Memℓp.all f⟩
@@ -84,7 +84,7 @@ theorem coe_equiv_lpPiLp
 中文:
 定理 coe_equiv_lpPiLp
   条件: (f : lp E p)
-  结论: Equiv.lpPiLp f = ⇑f
+  结论: 等价.lpPiLp f = ⇑f
   证明: rfl
 -/
 theorem coe_equiv_lpPiLp (f : lp E p) : Equiv.lpPiLp f = ⇑f :=
@@ -102,7 +102,7 @@ theorem coe_equiv_lpPiLp_symm
 中文:
 定理 coe_equiv_lpPiLp_symm
   条件: (f : PiLp p E)
-  结论: (Equiv.lpPiLp.symm f : 对任意 i, E i) = f
+  结论: (等价.lpPiLp.symm f : 对任意 i, E i) = f
   证明: rfl
 -/
 theorem coe_equiv_lpPiLp_symm (f : PiLp p E) : (Equiv.lpPiLp.symm f : forall i, E i) = f :=
@@ -117,7 +117,7 @@ definition AddEquiv.lpPiLp
   body: { Equiv.lpPiLp with map_add' := fun _f _g => rfl }
 
 中文:
-定义 AddEquiv.lpPiLp
+定义 加法等价.lpPiLp
   签名: : lp E p ≃+ PiLp p E
   定义体: { Equiv.lpPiLp with map_add' := fun _f _g => rfl }
 
@@ -138,7 +138,7 @@ theorem coe_addEquiv_lpPiLp
 中文:
 定理 coe_addEquiv_lpPiLp
   条件: (f : lp E p)
-  结论: AddEquiv.lpPiLp f = ⇑f
+  结论: 加法等价.lpPiLp f = ⇑f
   证明: rfl
 -/
 theorem coe_addEquiv_lpPiLp (f : lp E p) : AddEquiv.lpPiLp f = ⇑f :=
@@ -178,8 +178,8 @@ theorem equiv_lpPiLp_norm
 
 中文:
 定理 equiv_lpPiLp_norm
-  条件: [Fintype α] (f : lp E p)
-  结论: ‖Equiv.lpPiLp f‖ = ‖f‖
+  条件: [有限类型 α] (f : lp E p)
+  结论: ‖等价.lpPiLp f‖ = ‖f‖
   证明: by
   rcases p.trichotomy with (rfl | rfl | h)
   · simp [Equiv.lpPiLp, PiLp.norm_eq_card, lp.norm_eq_card_dsupport]
@@ -287,7 +287,7 @@ definition AddEquiv.lpBCF
   map_add' _f _g := rfl
 
 中文:
-定义 AddEquiv.lpBCF
+定义 加法等价.lpBCF
   签名: : lp (fun _ : α => E) ∞ ≃+ (α ->ᵇ E) where
   定义体: ofNormedAddCommGroupDiscrete f ‖f‖ le_ciSup (memℓp_infty_iff.mp f.prop)
   invFun f := ⟨⇑f, f.bddAbove_range_norm_comp⟩
@@ -313,7 +313,7 @@ theorem coe_addEquiv_lpBCF
 中文:
 定理 coe_addEquiv_lpBCF
   条件: (f : lp (fun _ : α => E) ∞)
-  结论: (AddEquiv.lpBCF f : α -> E) = f
+  结论: (加法等价.lpBCF f : α -> E) = f
   证明: rfl
 -/
 theorem coe_addEquiv_lpBCF (f : lp (fun _ : α => E) ∞) : (AddEquiv.lpBCF f : α -> E) = f :=
@@ -331,7 +331,7 @@ theorem coe_addEquiv_lpBCF_symm
 中文:
 定理 coe_addEquiv_lpBCF_symm
   条件: (f : α ->ᵇ E)
-  结论: (AddEquiv.lpBCF.symm f : α -> E) = f
+  结论: (加法等价.lpBCF.symm f : α -> E) = f
   证明: rfl
 -/
 theorem coe_addEquiv_lpBCF_symm (f : α ->ᵇ E) : (AddEquiv.lpBCF.symm f : α -> E) = f :=
@@ -416,7 +416,7 @@ definition RingEquiv.lpBCF
     map_mul' := fun _f _g => rfl }
 
 中文:
-定义 RingEquiv.lpBCF
+定义 环等价.lpBCF
   签名: : lp (fun _ : α => R) ∞ ≃+* (α ->ᵇ R)
   定义体: { @AddEquiv.lpBCF _ R _ _ _ with
     map_mul' := fun _f _g => rfl }
@@ -439,7 +439,7 @@ theorem coe_ringEquiv_lpBCF
 中文:
 定理 coe_ringEquiv_lpBCF
   条件: (f : lp (fun _ : α => R) ∞)
-  结论: (RingEquiv.lpBCF f : α -> R) = f
+  结论: (环等价.lpBCF f : α -> R) = f
   证明: rfl
 -/
 theorem coe_ringEquiv_lpBCF (f : lp (fun _ : α => R) ∞) : (RingEquiv.lpBCF f : α -> R) = f :=
@@ -457,7 +457,7 @@ theorem coe_ringEquiv_lpBCF_symm
 中文:
 定理 coe_ringEquiv_lpBCF_symm
   条件: (f : α ->ᵇ R)
-  结论: (RingEquiv.lpBCF.symm f : α -> R) = f
+  结论: (环等价.lpBCF.symm f : α -> R) = f
   证明: rfl
 -/
 theorem coe_ringEquiv_lpBCF_symm (f : α ->ᵇ R) : (RingEquiv.lpBCF.symm f : α -> R) = f :=
@@ -477,7 +477,7 @@ definition AlgEquiv.lpBCF
   body: { RingEquiv.lpBCF with commutes' := fun _k => rfl }
 
 中文:
-定义 AlgEquiv.lpBCF
+定义 代数等价.lpBCF
   签名: : lp (fun _ : α => A) ∞ ≃ₐ[𝕜] α ->ᵇ A
   定义体: { RingEquiv.lpBCF with commutes' := fun _k => rfl }
 
@@ -501,7 +501,7 @@ theorem coe_algEquiv_lpBCF
 中文:
 定理 coe_algEquiv_lpBCF
   条件: (f : lp (fun _ : α => A) ∞)
-  结论: (AlgEquiv.lpBCF α 𝕜 f : α -> A) = f
+  结论: (代数等价.lpBCF α 𝕜 f : α -> A) = f
   证明: rfl
 -/
 theorem coe_algEquiv_lpBCF (f : lp (fun _ : α => A) ∞) : (AlgEquiv.lpBCF α 𝕜 f : α -> A) = f :=
@@ -519,7 +519,7 @@ theorem coe_algEquiv_lpBCF_symm
 中文:
 定理 coe_algEquiv_lpBCF_symm
   条件: (f : α ->ᵇ A)
-  结论: ((AlgEquiv.lpBCF α 𝕜).symm f : α -> A) = f
+  结论: ((代数等价.lpBCF α 𝕜).symm f : α -> A) = f
   证明: rfl
 -/
 theorem coe_algEquiv_lpBCF_symm (f : α ->ᵇ A) : ((AlgEquiv.lpBCF α 𝕜).symm f : α -> A) = f :=

@@ -36,10 +36,10 @@ class FinEnum
 
 中文:
 类 FinEnum
-  参数: (α : Sort*)
+  参数: (α : 类型层*)
   公理与运算 (3 个):
     - card : 自然数
-    - equiv : α ≃ Fin card
+    - equiv : α ≃ 有限集 card
     - [decEq : DecidableEq α]
 -/
 class FinEnum (α : Sort*) where
@@ -95,7 +95,7 @@ definition ofNodupList
 
 中文:
 定义 ofNodupList
-  签名: [DecidableEq α] (xs : List α) (h : 对任意 x : α, x in xs) (h' : List.Nodup xs)
+  签名: [DecidableEq α] (xs : 列表 α) (h : 对任意 x : α, x in xs) (h' : 列表.Nodup xs)
   定义体: xs.length
   equiv :=
     ⟨fun x => ⟨xs.idxOf x, by rw [List.idxOf_lt_length_iff]; apply h⟩, xs.get, fun x => by simp,
@@ -122,7 +122,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: [DecidableEq α] (xs : List α) (h : 对任意 x : α, x in xs)
+  签名: [DecidableEq α] (xs : 列表 α) (h : 对任意 x : α, x in xs)
   定义体: ofNodupList xs.dedup (by simp [*]) (List.nodup_dedup _)
 
 Depends on / 依赖: List.nodup_dedup, nodup_dedup, ofNodupList, xs.dedup
@@ -140,7 +140,7 @@ lemma card_ofList
 
 中文:
 引理 card_ofList
-  条件: [DecidableEq α] (xs : List α) (h : 对任意 x : α, x in xs)
+  条件: [DecidableEq α] (xs : 列表 α) (h : 对任意 x : α, x in xs)
   证明: rfl
 -/
 lemma card_ofList [DecidableEq α] (xs : List α) (h : forall x : α, x in xs) :
@@ -207,7 +207,7 @@ theorem nodup_toList
 中文:
 定理 nodup_toList
   条件: [FinEnum α]
-  结论: List.Nodup (toList α)
+  结论: 列表.Nodup (toList α)
   证明: by
   simp only [toList]; apply List.Nodup.map <;> [apply Equiv.injective; apply List.nodup_finRange]
 
@@ -228,7 +228,7 @@ definition ofSurjective
 
 中文:
 定义 ofSurjective
-  签名: {β} (f : β -> α) [DecidableEq α] [FinEnum β] (h : Surjective f)
+  签名: {β} (f : β -> α) [DecidableEq α] [FinEnum β] (h : 满射 f)
   定义体: ofList ((toList β).map f) (by intro; simpa using h _)
 
 Depends on / 依赖: ofList, toList
@@ -253,7 +253,7 @@ definition ofInjective
 
 中文:
 定义 ofInjective
-  签名: {α β} (f : α -> β) [DecidableEq α] [FinEnum β] (h : Injective f)
+  签名: {α β} (f : α -> β) [DecidableEq α] [FinEnum β] (h : 单射 f)
   定义体: ofList ((toList β).filterMap (partialInv f))
     (by
       intro x
@@ -283,7 +283,7 @@ instance _root_.ULift.instFinEnum
 @[simp]
 
 中文:
-实例 _root_.ULift.instFinEnum
+实例 _root_.类型层提升.instFinEnum
   签名: [FinEnum α]
   定义体: ⟨card α, Equiv.ulift.trans equiv⟩
 
@@ -306,8 +306,8 @@ theorem card_ulift
 
 中文:
 定理 card_ulift
-  条件: [FinEnum (ULift α)] [FinEnum α]
-  结论: card (ULift α) = card α
+  条件: [FinEnum (类型层提升 α)] [FinEnum α]
+  结论: card (类型层提升 α) = card α
   证明: .trans equiv⟩ Fin.equiv_iff_eq.mp ⟨equiv.symm.trans Equiv.ulift
 
 Depends on / 依赖: Equiv.ulift, Fin.equiv_iff_eq.mp, equiv.symm.trans, equiv_iff_eq
@@ -328,7 +328,7 @@ lemma equiv_up
 
 中文:
 引理 equiv_up
-  结论: equiv (ULift.up a) = equiv a
+  结论: equiv (类型层提升.up a) = equiv a
   证明: rfl
 -/
 @[simp] lemma equiv_up : equiv (ULift.up a) = equiv a := rfl
@@ -356,7 +356,7 @@ lemma up_equiv_symm
 
 中文:
 引理 up_equiv_symm
-  结论: ULift.up (equiv.symm i) = (equiv (α := ULift α)).symm i
+  结论: 类型层提升.up (equiv.symm i) = (equiv (α := 类型层提升 α)).symm i
   证明: rfl
 -/
 @[simp] lemma up_equiv_symm : ULift.up (equiv.symm i) = (equiv (α := ULift α)).symm i := rfl
@@ -370,7 +370,7 @@ lemma down_equiv_symm
 
 中文:
 引理 down_equiv_symm
-  结论: ((equiv (α := ULift α)).symm i).down = equiv.symm i
+  结论: ((equiv (α := 类型层提升 α)).symm i).down = equiv.symm i
   证明: rfl
 -/
 @[simp] lemma down_equiv_symm : ((equiv (α := ULift α)).symm i).down = equiv.symm i := rfl
@@ -387,7 +387,7 @@ instance pempty
 
 中文:
 实例 pempty
-  签名: : FinEnum PEmpty
+  签名: : FinEnum 命题空
   定义体: ofList [] fun x => PEmpty.elim x
 
 Depends on / 依赖: PEmpty, PEmpty.elim, ofList
@@ -405,7 +405,7 @@ lemma card_pempty
 
 中文:
 引理 card_pempty
-  结论: FinEnum.card PEmpty = 0
+  结论: FinEnum.card 命题空 = 0
   证明: rfl
 
 Depends on / 依赖: binaryRec, binaryRec_eq, dif_pos
@@ -422,7 +422,7 @@ instance empty
 
 中文:
 实例 empty
-  签名: : FinEnum Empty
+  签名: : FinEnum 空
   定义体: ofList [] fun x => Empty.elim x
 
 Depends on / 依赖: Empty.elim, ofList
@@ -440,7 +440,7 @@ lemma card_empty
 
 中文:
 引理 card_empty
-  结论: FinEnum.card Empty = 0
+  结论: FinEnum.card 空 = 0
   证明: rfl
 -/
 @[simp] lemma card_empty : FinEnum.card Empty = 0 := rfl
@@ -455,7 +455,7 @@ instance punit
 
 中文:
 实例 punit
-  签名: : FinEnum PUnit
+  签名: : FinEnum 命题单元
   定义体: ofList [PUnit.unit] fun x => by simp
 
 Depends on / 依赖: PUnit.unit, ofList
@@ -473,7 +473,7 @@ lemma card_punit
 
 中文:
 引理 card_punit
-  结论: FinEnum.card PUnit = 1
+  结论: FinEnum.card 命题单元 = 1
   证明: rfl
 -/
 @[simp] lemma card_punit : FinEnum.card PUnit = 1 := rfl
@@ -487,7 +487,7 @@ instance prod
   body: ofList (toList α ×ˢ toList β) fun x => by cases x; simp
 
 中文:
-实例 prod
+实例 乘积
   签名: {β} [FinEnum α] [FinEnum β]
   定义体: ofList (toList α ×ˢ toList β) fun x => by cases x; simp
 
@@ -505,7 +505,7 @@ instance sum
   body: ofList ((toList α).map Sum.inl ++ (toList β).map Sum.inr) fun x => by cases x <;> simp
 
 中文:
-实例 sum
+实例 求和
   签名: {β} [FinEnum α] [FinEnum β]
   定义体: ofList ((toList α).map Sum.inl ++ (toList β).map Sum.inr) fun x => by cases x <;> simp
 
@@ -548,8 +548,8 @@ theorem card_fin
 
 中文:
 定理 card_fin
-  条件: {n} [FinEnum (Fin n)]
-  结论: card (Fin n) = n
+  条件: {n} [FinEnum (有限集 n)]
+  结论: card (有限集 n) = n
   证明: Fin.equiv_iff_eq.mp ⟨equiv.symm⟩
 
 Depends on / 依赖: Fin.equiv_iff_eq.mp, equiv.symm, equiv_iff_eq
@@ -565,8 +565,8 @@ instance Quotient.enum
   body: FinEnum.ofSurjective Quotient.mk'' fun x => Quotient.inductionOn x fun x => ⟨x, rfl⟩
 
 中文:
-实例 Quotient.enum
-  签名: [FinEnum α] (s : Setoid α) [DecidableRel ((· ≈ ·) : α -> α -> 命题)]
+实例 商.enum
+  签名: [FinEnum α] (s : 集合等价关系 α) [DecidableRel ((· ≈ ·) : α -> α -> 命题)]
   定义体: FinEnum.ofSurjective Quotient.mk'' fun x => Quotient.inductionOn x fun x => ⟨x, rfl⟩
 
 Depends on / 依赖: FinEnum, FinEnum.ofSurjective, Quotient, Quotient.inductionOn, Quotient.mk, inductionOn, ofSurjective
@@ -583,7 +583,7 @@ definition Finset.enum
   signature: [DecidableEq α]
 
 中文:
-定义 Finset.enum
+定义 有限集.enum
   签名: [DecidableEq α]
 -/
 def Finset.enum [DecidableEq α] : List α -> List (Finset α)
@@ -609,8 +609,8 @@ theorem Finset.mem_enum
       simp only [or_if
 
 中文:
-定理 Finset.mem_enum
-  条件: [DecidableEq α] (s : Finset α) (xs : List α)
+定理 有限集.mem_enum
+  条件: [DecidableEq α] (s : 有限集 α) (xs : 列表 α)
   证明: by
   induction xs generalizing s with
   | nil => simp [enum, eq_empty_iff_forall_notMem]
@@ -642,7 +642,7 @@ instance Finset.finEnum
   body: ofList (Finset.enum (toList α)) (by simp)
 
 中文:
-实例 Finset.finEnum
+实例 有限集.finEnum
   签名: [FinEnum α]
   定义体: ofList (Finset.enum (toList α)) (by simp)
 
@@ -661,7 +661,7 @@ instance Subtype.finEnum
     (by rintro ⟨x, h⟩; simpa)
 
 中文:
-实例 Subtype.finEnum
+实例 子类型.finEnum
   签名: [FinEnum α] (p : α -> 命题) [DecidablePred p]
   定义体: ofList ((toList α).filterMap fun x => if h : p x then some ⟨_, h⟩ else none)
     (by rintro ⟨x, h⟩; simpa)
@@ -685,7 +685,7 @@ instance PSigma.finEnum
   body: FinEnum.ofEquiv _ (Equiv.psigmaEquivSigma _)
 
 中文:
-实例 PSigma.finEnum
+实例 命题和类型.finEnum
   签名: [FinEnum α] [对任意 a, FinEnum (β a)]
   定义体: FinEnum.ofEquiv _ (Equiv.psigmaEquivSigma _)
 
@@ -704,8 +704,8 @@ instance PSigma.finEnumPropLeft
   else ofList [] fun ⟨a, _⟩ => (h a).elim
 
 中文:
-实例 PSigma.finEnumPropLeft
-  签名: {α : 命题} {β : α -> 类型v} [对任意 a, FinEnum (β a)] [Decidable α]
+实例 命题和类型.finEnumPropLeft
+  签名: {α : 命题} {β : α -> 类型v} [对任意 a, FinEnum (β a)] [可判定 α]
   定义体: if h : α then ofList ((toList (β h)).map <| PSigma.mk h) fun ⟨a, Ba⟩ => by simp
   else ofList [] fun ⟨a, _⟩ => (h a).elim
 
@@ -726,8 +726,8 @@ instance PSigma.finEnumPropRight
     ⟨fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨_, _⟩ => rfl, fun ⟨_, _⟩ => rfl⟩
 
 中文:
-实例 PSigma.finEnumPropRight
-  签名: {β : α -> 命题} [FinEnum α] [对任意 a, Decidable (β a)]
+实例 命题和类型.finEnumPropRight
+  签名: {β : α -> 命题} [FinEnum α] [对任意 a, 可判定 (β a)]
   定义体: FinEnum.ofEquiv { a // β a }
     ⟨fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨_, _⟩ => rfl, fun ⟨_, _⟩ => rfl⟩
 
@@ -748,8 +748,8 @@ instance PSigma.finEnumPropProp
   else ofList [] fun a => (h ⟨a.fst, a.snd⟩).elim
 
 中文:
-实例 PSigma.finEnumPropProp
-  签名: {α : 命题} {β : α -> 命题} [Decidable α] [对任意 a, Decidable (β a)]
+实例 命题和类型.finEnumPropProp
+  签名: {α : 命题} {β : α -> 命题} [可判定 α] [对任意 a, 可判定 (β a)]
   定义体: if h : exists a, β a then ofList [⟨h.fst, h.snd⟩] (by simp)
   else ofList [] fun a => (h ⟨a.fst, a.snd⟩).elim
 
@@ -792,8 +792,8 @@ theorem card_eq_fintypeCard
 
 中文:
 定理 card_eq_fintypeCard
-  条件: {α : 类型u} [FinEnum α] [Fintype α]
-  结论: card α = Fintype.card α
+  条件: {α : 类型u} [FinEnum α] [有限类型 α]
+  结论: card α = 有限类型.card α
   证明: .inductionOn (fun h => Fin.equiv_iff_eq.mp ⟨equiv.symm.trans h⟩) Fintype.truncEquivFin α
 
 Depends on / 依赖: Fin.equiv_iff_eq.mp, Fintype, Fintype.truncEquivFin, equiv.symm.trans, equiv_iff_eq, inductionOn, truncEquivFin
@@ -842,7 +842,7 @@ theorem card_eq_zero_iff
 中文:
 定理 card_eq_zero_iff
   条件: {α : 类型u} [FinEnum α]
-  结论: card α = 0 ↔ IsEmpty α
+  结论: card α = 0 ↔ 是空 α
   证明: .trans Fintype.card_eq_zero_iff Eq.congr_left card_eq_fintypeCard
 
 Depends on / 依赖: Eq.congr_left, Fintype, Fintype.card_eq_zero_iff, card_eq_fintypeCard, card_eq_zero_iff, congr_left
@@ -861,7 +861,7 @@ theorem card_eq_zero
 
 中文:
 定理 card_eq_zero
-  条件: {α : 类型u} [FinEnum α] [IsEmpty α]
+  条件: {α : 类型u} [FinEnum α] [是空 α]
   结论: card α = 0
   证明: card_eq_zero_iff.mpr ‹_›
 
@@ -882,7 +882,7 @@ theorem card_pos_iff
 中文:
 定理 card_pos_iff
   条件: {α : 类型u} [FinEnum α]
-  结论: 0 < card α ↔ Nonempty α
+  结论: 0 < card α ↔ 非空 α
   证明: card_eq_fintypeCard (α := α) ▸ Fintype.card_pos_iff
 
 Depends on / 依赖: Fintype, Fintype.card_pos_iff, card_eq_fintypeCard, card_pos_iff
@@ -901,7 +901,7 @@ lemma card_pos
 
 中文:
 引理 card_pos
-  条件: {α : 类型} [FinEnum α] [Nonempty α]
+  条件: {α : 类型} [FinEnum α] [非空 α]
   结论: 0 < card α
   证明: card_pos_iff.mpr ‹_›
 
@@ -921,7 +921,7 @@ lemma card_ne_zero
 
 中文:
 引理 card_ne_zero
-  条件: {α : 类型} [FinEnum α] [Nonempty α]
+  条件: {α : 类型} [FinEnum α] [非空 α]
   结论: card α != 0
   证明: card_pos.ne'
 
@@ -940,7 +940,7 @@ theorem card_eq_one
 
 中文:
 定理 card_eq_one
-  条件: (α : 类型u) [FinEnum α] [Unique α]
+  条件: (α : 类型u) [FinEnum α] [唯一 α]
   结论: card α = 1
   证明: card_eq_fintypeCard.trans Fintype.card_eq_one_iff_nonempty_unique.mpr ⟨‹_›⟩
 
@@ -966,8 +966,8 @@ exact congrArg (α ≃ Fin ·) card_eq_zero
       exact ‹IsEmpty α›.elim x
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (FinEnum α) where
+实例 [是空
+  签名: α] : 唯一 (FinEnum α) where
   定义体: ⟨0, Equiv.equivOfIsEmpty α (Fin 0)⟩
   uniq e := by
     change FinEnum.mk e.1 e.2 = _
@@ -1004,7 +1004,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: [IsEmpty α]
+  签名: [是空 α]
   定义体: default
 -/
 def ofIsEmpty [IsEmpty α] : FinEnum α := default
@@ -1025,8 +1025,8 @@ exact congrArg (α ≃ Fin ·) card_eq_one α
     · subsingleton
 
 中文:
-实例 [Unique
-  签名: α] : Unique (FinEnum α) where
+实例 [唯一
+  签名: α] : 唯一 (FinEnum α) where
   定义体: ⟨1, Equiv.ofUnique α (Fin 1)⟩
   uniq e := by
     change FinEnum.mk e.1 e.2 = _
@@ -1061,7 +1061,7 @@ definition ofUnique
 
 中文:
 定义 ofUnique
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: default
 -/
 def ofUnique [Unique α] : FinEnum α := default
@@ -1243,7 +1243,7 @@ lemma card_UInt8
   proof: rfl
 
 中文:
-引理 card_UInt8
+引理 card_U整数8
   结论: card U整数8 = 2 ^ 8
   证明: rfl
 -/
@@ -1257,7 +1257,7 @@ lemma card_UInt16
   proof: rfl
 
 中文:
-引理 card_UInt16
+引理 card_U整数16
   结论: card U整数16 = 2 ^ 16
   证明: rfl
 -/
@@ -1271,7 +1271,7 @@ lemma card_UInt32
   proof: rfl
 
 中文:
-引理 card_UInt32
+引理 card_U整数32
   结论: card U整数32 = 2 ^ 32
   证明: rfl
 -/
@@ -1285,7 +1285,7 @@ lemma card_UInt64
   proof: rfl
 
 中文:
-引理 card_UInt64
+引理 card_U整数64
   结论: card U整数64 = 2 ^ 64
   证明: rfl
 -/
@@ -1299,7 +1299,7 @@ lemma card_Int8
   proof: rfl
 
 中文:
-引理 card_Int8
+引理 card_整数8
   结论: card 整数8 = 2 ^ 8
   证明: rfl
 -/
@@ -1313,7 +1313,7 @@ lemma card_Int16
   proof: rfl
 
 中文:
-引理 card_Int16
+引理 card_整数16
   结论: card 整数16 = 2 ^ 16
   证明: rfl
 -/
@@ -1327,7 +1327,7 @@ lemma card_Int32
   proof: rfl
 
 中文:
-引理 card_Int32
+引理 card_整数32
   结论: card 整数32 = 2 ^ 32
   证明: rfl
 -/
@@ -1341,7 +1341,7 @@ lemma card_Int64
   proof: rfl
 
 中文:
-引理 card_Int64
+引理 card_整数64
   结论: card 整数64 = 2 ^ 64
   证明: rfl
 -/
@@ -1379,7 +1379,7 @@ theorem mem_pi_toList
 
 中文:
 定理 mem_pi_toList
-  结论: (xs : List α)
+  结论: (xs : 列表 α)
   证明: (mem_pi _ _).mpr fun _ _ => mem_toList _
 
 Depends on / 依赖: mem_pi, mem_toList
@@ -1397,7 +1397,7 @@ definition Pi.enum
   body: (pi (toList α) fun x => toList (β x)).map (fun f x => f x (mem_toList _))
 
 中文:
-定义 Pi.enum
+定义 依赖函数类型.enum
   签名: (β : α -> 类型) [对任意 a, FinEnum (β a)]
   定义体: (pi (toList α) fun x => toList (β x)).map (fun f x => f x (mem_toList _))
 
@@ -1415,7 +1415,7 @@ theorem Pi.mem_enum
   proof: by simpa [Pi.enum] using ⟨fun a _ => f a, mem_pi_toList _ _, rfl⟩
 
 中文:
-定理 Pi.mem_enum
+定理 依赖函数类型.mem_enum
   条件: (f : 对任意 a, β a)
   证明: by simpa [Pi.enum] using ⟨fun a _ => f a, mem_pi_toList _ _, rfl⟩
 
@@ -1433,7 +1433,7 @@ instance Pi.finEnum
   body: ofList (Pi.enum _) fun _ => Pi.mem_enum _
 
 中文:
-实例 Pi.finEnum
+实例 依赖函数类型.finEnum
   签名: : FinEnum (对任意 a, β a)
   定义体: ofList (Pi.enum _) fun _ => Pi.mem_enum _
 
@@ -1454,7 +1454,7 @@ instance pfunFinEnum
 
 中文:
 实例 pfunFinEnum
-  签名: (p : 命题) [Decidable p] (α : p -> Type) [对任意 hp, FinEnum (α hp)]
+  签名: (p : 命题) [可判定 p] (α : p -> 类型) [对任意 hp, FinEnum (α hp)]
   定义体: if hp : p then
     ofList ((toList (α hp)).map fun x _ => x) (by intro x; simpa using ⟨x hp, rfl⟩)
   else ofList [fun hp' => (hp hp').elim] (by simp [funext_iff, hp])

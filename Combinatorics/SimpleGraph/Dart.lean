@@ -36,7 +36,7 @@ structure Dart
   参数: extends V × V
   继承: V × V
   公理与运算 (1 个):
-    - adj : G.Adj fst snd
+    - adj : G.伴随 fst snd
 -/
 structure Dart extends V × V where
   adj : G.Adj fst snd
@@ -153,7 +153,7 @@ theorem Dart.toProd_injective
 
 中文:
 定理 Dart.toProd_injective
-  结论: Function.Injective (Dart.toProd : G.Dart -> V × V)
+  结论: 函数.单射 (Dart.toProd : G.Dart -> V × V)
   证明: Dart.ext
 
 Depends on / 依赖: Dart.ext
@@ -173,7 +173,7 @@ instance Dart.fintype
 
 中文:
 实例 Dart.fintype
-  签名: [Fintype V] [DecidableRel G.Adj]
+  签名: [有限类型 V] [DecidableRel G.伴随]
   定义体: Fintype.ofEquiv (Σ v, G.neighborSet v)
     { toFun := fun s => ⟨(s.fst, s.snd), s.snd.property⟩
       invFun := fun d => ⟨d.fst, d.snd, d.adj⟩ }
@@ -220,7 +220,7 @@ theorem Dart.edge_mk
 
 中文:
 定理 Dart.edge_mk
-  条件: {p : V × V} (h : G.Adj p.1 p.2)
+  条件: {p : V × V} (h : G.伴随 p.1 p.2)
   结论: (Dart.mk p h).edge = s(p.1, p.2)
   证明: rfl
 
@@ -288,7 +288,7 @@ theorem Dart.symm_mk
 
 中文:
 定理 Dart.symm_mk
-  条件: {p : V × V} (h : G.Adj p.1 p.2)
+  条件: {p : V × V} (h : G.伴随 p.1 p.2)
   结论: (Dart.mk p h).symm = Dart.mk p.swap h.symm
   证明: rfl
 
@@ -381,7 +381,7 @@ theorem Dart.symm_involutive
 
 中文:
 定理 Dart.symm_involutive
-  结论: Function.Involutive (Dart.symm : G.Dart -> G.Dart)
+  结论: 函数.对合 (Dart.symm : G.Dart -> G.Dart)
   证明: Dart.symm_symm
 
 Depends on / 依赖: Dart.symm_symm, symm_symm
@@ -531,7 +531,7 @@ Subtype.ext by
 中文:
 定理 dartOfNeighborSet_injective
   条件: (v : V)
-  结论: Function.Injective (G.dartOfNeighborSet v)
+  结论: 函数.单射 (G.dartOfNeighborSet v)
   证明: fun e₁ e₂ h =>
 Subtype.ext by
     injection h with h'
@@ -557,7 +557,7 @@ instance nonempty_dart_top
 
 中文:
 实例 nonempty_dart_top
-  签名: [Nontrivial V]
+  签名: [非平凡 V]
   定义体: by
   obtain ⟨v, w, h⟩ := exists_pair_ne V
   exact ⟨⟨(v, w), h⟩⟩

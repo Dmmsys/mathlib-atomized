@@ -112,7 +112,7 @@ definition preinclusion
 
 中文:
 定义 preinclusion
-  签名: (B : 类型u) [Quiver.{v} B]
+  签名: (B : 类型u) [箭图.{v} B]
   定义体: a.as
   map {a b} f := (@inclusionPath B _ a.as b.as).obj f
   map₂ η := (inclusionPath _ _).map η
@@ -158,7 +158,7 @@ theorem preinclusion_map₂
 
 中文:
 定理 preinclusion_map₂
-  条件: {a b : B} (f g : Discrete (Path.{v} a b)) (η : f ⟶ g)
+  条件: {a b : B} (f g : 离散 (道路.{v} a b)) (η : f ⟶ g)
   证明: rfl
 -/
 theorem preinclusion_map₂ {a b : B} (f g : Discrete (Path.{v} a b)) (η : f ⟶ g) :
@@ -261,7 +261,7 @@ theorem normalizeAux_id
 
 中文:
 定理 normalizeAux_id
-  条件: {a : B} {b : FreeBicategory B} (p : Path a b)
+  条件: {a : B} {b : FreeBicategory B} (p : 道路 a b)
   证明: rfl
 -/
 @[simp] theorem normalizeAux_id {a : B} {b : FreeBicategory B} (p : Path a b) :
@@ -298,7 +298,7 @@ theorem normalizeIso_id
 
 中文:
 定理 normalizeIso_id
-  条件: {a : B} {b : FreeBicategory B} (p : Path a b)
+  条件: {a : B} {b : FreeBicategory B} (p : 道路 a b)
   证明: rfl
 -/
 @[simp] theorem normalizeIso_id {a : B} {b : FreeBicategory B} (p : Path a b) :
@@ -338,7 +338,7 @@ theorem normalizeAux_congr
 
 中文:
 定理 normalizeAux_congr
-  条件: {a b c : B} (p : Path a b) {f g : Hom b c} (η : f ⟶ g)
+  条件: {a b c : B} (p : 道路 a b) {f g : 态射 b c} (η : f ⟶ g)
   证明: by
   rcases η with ⟨η'⟩
   apply @congr_fun _ _ fun p => normalizeAux p f
@@ -385,7 +385,7 @@ theorem normalize_naturality
 
 中文:
 定理 normalize_naturality
-  条件: {a b c : B} (p : Path a b) {f g : Hom b c} (η : f ⟶ g)
+  条件: {a b c : B} (p : 道路 a b) {f g : 态射 b c} (η : f ⟶ g)
   证明: by
   rcases η with ⟨η'⟩; clear η
   induction η' with
@@ -440,7 +440,7 @@ theorem normalizeAux_nil_comp
 
 中文:
 定理 normalizeAux_nil_comp
-  条件: {a b c : B} (f : Hom a b) (g : Hom b c)
+  条件: {a b c : B} (f : 态射 a b) (g : 态射 b c)
   证明: by
   induction g generalizing a with
   | id => rfl
@@ -470,7 +470,7 @@ mapComp f g := eqToIso Discrete.ext normalizeAux_nil_comp f g
 
 中文:
 定义 normalize
-  签名: (B : 类型u) [Quiver.{v} B]
+  签名: (B : 类型u) [箭图.{v} B]
   定义体: ⟨a⟩
   map f := ⟨normalizeAux nil f⟩
 map₂ η := eqToHom Discrete.ext normalizeAux_congr nil η
@@ -614,7 +614,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: (B : 类型u) [Quiver.{v} B]
+  签名: (B : 类型u) [箭图.{v} B]
   定义体: { -- All the conditions for 2-morphisms are trivial thanks to the coherence theorem!
     preinclusion B with
     mapId := fun _ => Iso.refl _

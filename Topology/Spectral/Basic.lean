@@ -44,8 +44,8 @@ class SpectralSpace
   (no additional axioms)
 
 中文:
-类 SpectralSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 谱空间
+  参数: (X : 类型) [拓扑空间 X]
   (无附加公理)
 -/
 class SpectralSpace (X : Type*) [TopologicalSpace X] : Prop extends
@@ -62,7 +62,7 @@ theorem Topology.IsOpenEmbedding.spectralSpace
   __ := hf.isEmbedding.t0Space
 
 中文:
-定理 Topology.IsOpenEmbedding.spectralSpace
+定理 拓扑.是开嵌入.spectralSpace
   证明: hf.quasiSober
   __ := hf.prespectralSpace
   __ := hf.quasiSeparatedSpace

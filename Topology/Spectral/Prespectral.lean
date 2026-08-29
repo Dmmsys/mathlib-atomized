@@ -36,10 +36,10 @@ class PrespectralSpace
     - isTopologicalBasis : IsTopologicalBasis { U : Set X | IsOpen U ∧ IsCompact U }
 
 中文:
-类 PrespectralSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 Prespectral空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isTopologicalBasis : IsTopologicalBasis { U : Set X | IsOpen U ∧ IsCompact U }
+    - isTopologicalBasis : 是TopologicalBasis { U : 集合 X | 是开集 U ∧ 是紧集 U }
 -/
 class PrespectralSpace (X : Type*) [TopologicalSpace X] : Prop where
   isTopologicalBasis : IsTopologicalBasis { U : Set X | IsOpen U ∧ IsCompact U }
@@ -54,8 +54,8 @@ lemma PrespectralSpace.of_isTopologicalBasis
     fun s hs => ⟨basis.isOpen hs, isCompact_basis s hs⟩
 
 中文:
-引理 PrespectralSpace.of_isTopologicalBasis
-  结论: {B : Set (Set X)}
+引理 Prespectral空间.of_isTopologicalBasis
+  结论: {B : 集合 (集合 X)}
   证明: basis.of_isOpen_of_subset (fun _ h => h.1)
     fun s hs => ⟨basis.isOpen hs, isCompact_basis s hs⟩
 
@@ -76,8 +76,8 @@ lemma PrespectralSpace.of_isTopologicalBasis'
   proof: .of_isTopologicalBasis basis (by simp_all)
 
 中文:
-引理 PrespectralSpace.of_isTopologicalBasis'
-  结论: {ι : 类型} {b : ι -> Set X}
+引理 Prespectral空间.of_isTopologicalBasis'
+  结论: {ι : 类型} {b : ι -> 集合 X}
   证明: .of_isTopologicalBasis basis (by simp_all)
 
 Depends on / 依赖: of_isTopologicalBasis
@@ -114,7 +114,7 @@ lemma PrespectralSpace.of_isOpenCover
   exact fun i V hV hV' => hV'.image continuous_subtype_val
 
 中文:
-引理 PrespectralSpace.of_isOpenCover
+引理 Prespectral空间.of_isOpenCover
   证明: by
   refine .of_isTopologicalBasis (hU.isTopologicalBasis fun i => isTopologicalBasis) ?_
   simp only [Set.mem_iUnion, Set.mem_image, Set.mem_ofPred_eq, forall_exists_index, and_imp,
@@ -143,8 +143,8 @@ lemma PrespectralSpace.of_isInducing
     exact hf'.isCompact_preimage_of_isOpen h₁ h₂)
 
 中文:
-引理 PrespectralSpace.of_isInducing
-  结论: [PrespectralSpace Y]
+引理 Prespectral空间.of_isInducing
+  结论: [Prespectral空间 Y]
   证明: .of_isTopologicalBasis (PrespectralSpace.isTopologicalBasis.isInducing hf) (by
     simp only [Set.mem_image, Set.mem_ofPred_eq, forall_exists_index, and_imp]
     rintro _ U h₁ h₂ rfl
@@ -168,8 +168,8 @@ lemma PrespectralSpace.of_isClosedEmbedding
   proof: .of_isInducing f hf.isInducing hf.isProperMap.isSpectralMap
 
 中文:
-引理 PrespectralSpace.of_isClosedEmbedding
-  结论: [PrespectralSpace Y]
+引理 Prespectral空间.of_isClosedEmbedding
+  结论: [Prespectral空间 Y]
   证明: .of_isInducing f hf.isInducing hf.isProperMap.isSpectralMap
 
 Depends on / 依赖: hf.isInducing, hf.isProperMap.isSpectralMap, isInducing, isProperMap, isSpectralMap, of_isInducing
@@ -191,8 +191,8 @@ apply isTopologicalBasis_of_isOpen_of_nhds (fun U hU => hU.1) fun x U hx hU => ?
         (hf.isOpen_iff_image_isOpen
 
 中文:
-引理 Topology.IsOpenEmbedding.prespectralSpace
-  结论: [PrespectralSpace Y]
+引理 拓扑.是开嵌入.prespectralSpace
+  结论: [Prespectral空间 Y]
   证明: by
 apply isTopologicalBasis_of_isOpen_of_nhds (fun U hU => hU.1) fun x U hx hU => ?_
     obtain ⟨V, ⟨hoV, hcV⟩, hfx, hVf⟩ : exists V in {V | IsOpen V ∧ IsCompact V}, f x in V ∧ V subseteq f '' U :=
@@ -225,8 +225,8 @@ instance PrespectralSpace.sigma
     exact hV.2.image continuous_sigmaMk
 
 中文:
-实例 PrespectralSpace.sigma
-  签名: {ι : 类型} (X : ι -> 类型) [对任意 i, TopologicalSpace (X i)]
+实例 Prespectral空间.sigma
+  签名: {ι : 类型} (X : ι -> 类型) [对任意 i, 拓扑空间 (X i)]
   定义体: .of_isTopologicalBasis (IsTopologicalBasis.sigma fun i => isTopologicalBasis) fun U hU => by
     simp_rw [Set.mem_iUnion] at hU
     obtain ⟨i, V, hV, rfl⟩ := hU
@@ -255,8 +255,8 @@ lemma PrespectralSpace.isBasis_opens
   exact ⟨fun ⟨V, hV, heq⟩ => heq ▸ ⟨V.2, hV⟩, fun h => ⟨⟨s, h.1⟩, h.2, rfl⟩⟩
 
 中文:
-引理 PrespectralSpace.isBasis_opens
-  条件: [PrespectralSpace X]
+引理 Prespectral空间.isBasis_opens
+  条件: [Prespectral空间 X]
   证明: by
   dsimp only [TopologicalSpace.Opens.IsBasis]
   convert! isTopologicalBasis (X := X)
@@ -287,8 +287,8 @@ definition PrespectralSpace.opensEquiv
       exact fun _ => id
 
 中文:
-定义 PrespectralSpace.opensEquiv
-  签名: [PrespectralSpace X]
+定义 Prespectral空间.opensEquiv
+  签名: [Prespectral空间 X]
   定义体: ⟨⟨{ V | (V : Set X) subseteq U }, fun U₁ U₂ h₁ h₂ => subset_trans (α := Set X) h₁ h₂⟩,
     ⟨⊥, by simp⟩, fun U₁ h₁ U₂ h₂ => ⟨U₁ ⊔ U₂, by aesop, le_sup_left, le_sup_right⟩⟩
   invFun I := ⨆ U in I, U.toOpens
@@ -343,8 +343,8 @@ lemma IsOpenMap.exists_opens_image_eq_of_prespectralSpace
 obtain ⟨i,
 
 中文:
-引理 IsOpenMap.exists_opens_image_eq_of_prespectralSpace
-  结论: [PrespectralSpace X] {f : X -> Y}
+引理 是开映射.存在_opens_image_eq_of_prespectralSpace
+  结论: [Prespectral空间 X] {f : X -> Y}
   证明: by
   obtain ⟨Us, hUs, heq⟩ := TopologicalSpace.Opens.isBasis_iff_cover.mp
     (PrespectralSpace.isBasis_opens X) ⟨f ⁻¹' U, hU.preimage hfc⟩
@@ -391,8 +391,8 @@ lemma PrespectralSpace.exists_isCompact_and_isOpen_between
       Set.
 
 中文:
-引理 PrespectralSpace.exists_isCompact_and_isOpen_between
-  结论: [PrespectralSpace X] {K U : Set X}
+引理 Prespectral空间.存在_isCompact_and_isOpen_between
+  结论: [Prespectral空间 X] {K U : 集合 X}
   证明: by
   refine hK.induction_on ⟨∅, by simp⟩ (fun s t hst ⟨W, Wc, Wo, hKW, hWU⟩ => ?_) ?_ ?_
   · use W, Wc, Wo, subset_trans hst hKW, hWU
@@ -430,8 +430,8 @@ lemma PrespectralSpace.exists_isClosed_of_not_isPreirreducible
     use x, hx.2, hx.1, fun h₂ =
 
 中文:
-引理 PrespectralSpace.exists_isClosed_of_not_isPreirreducible
-  结论: [PrespectralSpace X] (Z : Set X)
+引理 Prespectral空间.存在_isClosed_of_not_isPreirreducible
+  结论: [Prespectral空间 X] (Z : 集合 X)
   证明: by
   simp only [IsPreirreducible, not_forall] at hZ
   rcases hZ with ⟨U₁, U₂, hU₁, hU₂, hU₁Z, hU₂Z, hU₁₂⟩

@@ -103,10 +103,10 @@ class Final
     - out((d : D)) : IsConnected (StructuredArrow d F)
 
 中文:
-类 Final
+类 终
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out((d : D)) : IsConnected (StructuredArrow d F)
+    - out((d : D)) : 是连通 (结构化箭头 d F)
 -/
 class Final (F : C ⥤ D) : Prop where
   out (d : D) : IsConnected (StructuredArrow d F)
@@ -123,10 +123,10 @@ class Initial
     - out((d : D)) : IsConnected (CostructuredArrow F d)
 
 中文:
-类 Initial
+类 初始
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out((d : D)) : IsConnected (CostructuredArrow F d)
+    - out((d : D)) : 是连通 (CostructuredArrow F d)
 -/
 class Initial (F : C ⥤ D) : Prop where
   out (d : D) : IsConnected (CostructuredArrow F d)
@@ -143,7 +143,7 @@ instance final_op_of_initial
 
 中文:
 实例 final_op_of_initial
-  签名: (F : C ⥤ D) [Initial F]
+  签名: (F : C ⥤ D) [初始 F]
   定义体: isConnected_of_equivalent (costructuredArrowOpEquivalence F (unop d))
 
 Depends on / 依赖: costructuredArrowOpEquivalence, isConnected_of_equivalent
@@ -161,7 +161,7 @@ instance initial_op_of_final
 
 中文:
 实例 initial_op_of_final
-  签名: (F : C ⥤ D) [Final F]
+  签名: (F : C ⥤ D) [终 F]
   定义体: isConnected_of_equivalent (structuredArrowOpEquivalence F (unop d))
 
 Depends on / 依赖: isConnected_of_equivalent, structuredArrowOpEquivalence
@@ -183,8 +183,8 @@ theorem final_of_initial_op
 
 中文:
 定理 final_of_initial_op
-  条件: (F : C ⥤ D) [Initial F.op]
-  结论: Final F
+  条件: (F : C ⥤ D) [初始 F.op]
+  结论: 终 F
   证明: {
     out := fun d =>
       @isConnected_of_isConnected_op _ _
@@ -212,8 +212,8 @@ theorem initial_of_final_op
 
 中文:
 定理 initial_of_final_op
-  条件: (F : C ⥤ D) [Final F.op]
-  结论: Initial F
+  条件: (F : C ⥤ D) [终 F.op]
+  结论: 初始 F
   证明: {
     out := fun d =>
       @isConnected_of_isConnected_op _ _
@@ -247,7 +247,7 @@ theorem final_of_adjunction
 中文:
 定理 final_of_adjunction
   条件: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  结论: Final R
+  结论: 终 R
   证明: { out := fun c =>
       let u : StructuredArrow c R := StructuredArrow.mk (adj.unit.app c)
       @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
@@ -289,7 +289,7 @@ theorem initial_of_adjunction
 中文:
 定理 initial_of_adjunction
   条件: {L : C ⥤ D} {R : D ⥤ C} (adj : L ⊣ R)
-  结论: Initial L
+  结论: 初始 L
   证明: { out := fun d =>
       let u : CostructuredArrow L d := CostructuredArrow.mk (adj.counit.app d)
       @zigzag_isConnected _ _ ⟨u⟩ fun f g =>
@@ -329,8 +329,8 @@ theorem final_of_natIso
 
 中文:
 定理 final_of_natIso
-  条件: {F F' : C ⥤ D} [Final F] (i : F ≅ F')
-  结论: Final F' where
+  条件: {F F' : C ⥤ D} [终 F] (i : F ≅ F')
+  结论: 终 F' where
   证明: isConnected_of_equivalent (StructuredArrow.mapNatIso i)
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.mapNatIso, isConnected_of_equivalent, mapNatIso
@@ -350,7 +350,7 @@ theorem final_natIso_iff
 中文:
 定理 final_natIso_iff
   条件: {F F' : C ⥤ D} (i : F ≅ F')
-  结论: Final F ↔ Final F'
+  结论: 终 F ↔ 终 F'
   证明: ⟨fun _ => final_of_natIso i, fun _ => final_of_natIso i.symm⟩
 
 Depends on / 依赖: final_of_natIso, i.symm
@@ -369,8 +369,8 @@ theorem initial_of_natIso
 
 中文:
 定理 initial_of_natIso
-  条件: {F F' : C ⥤ D} [Initial F] (i : F ≅ F')
-  结论: Initial F' where
+  条件: {F F' : C ⥤ D} [初始 F] (i : F ≅ F')
+  结论: 初始 F' where
   证明: isConnected_of_equivalent (CostructuredArrow.mapNatIso i)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.mapNatIso, isConnected_of_equivalent, mapNatIso
@@ -390,7 +390,7 @@ theorem initial_natIso_iff
 中文:
 定理 initial_natIso_iff
   条件: {F F' : C ⥤ D} (i : F ≅ F')
-  结论: Initial F ↔ Initial F'
+  结论: 初始 F ↔ 初始 F'
   证明: ⟨fun _ => initial_of_natIso i, fun _ => initial_of_natIso i.symm⟩
 
 Depends on / 依赖: i.symm, initial_of_natIso
@@ -458,7 +458,7 @@ definition induction
 
 中文:
 定义 induction
-  签名: {d : D} (Z : 对任意 (X : C) (_ : d ⟶ F.obj X), Sort*)
+  签名: {d : D} (Z : 对任意 (X : C) (_ : d ⟶ F.obj X), 类型层*)
   定义体: by
   apply Nonempty.some
   refine isPreconnected_induction (Z := fun Y : StructuredArrow d F => Z Y.right Y.hom)
@@ -505,7 +505,7 @@ definition extendCocone
 
 中文:
 定义 extendCocone
-  签名: : Cocone (F ⋙ G) ⥤ Cocone G where
+  签名: : 余锥 (F ⋙ G) ⥤ 余锥 G where
   定义体: { pt := c.pt
       ι :=
         { app := fun X => G.map (homToLift F X) ≫ c.ι.app (lift F X)
@@ -556,7 +556,7 @@ lemma extendCocone_obj_ι_app'
 
 中文:
 引理 extendCocone_obj_ι_app'
-  条件: (c : Cocone (F ⋙ G)) {X : D} {Y : C} (f : X ⟶ F.obj Y)
+  条件: (c : 余锥 (F ⋙ G)) {X : D} {Y : C} (f : X ⟶ F.obj Y)
   证明: by
   apply induction (k₀ := f) (z := rfl) F fun Z g =>
     G.map g ≫ c.ι.app Z = G.map f ≫ c.ι.app Y
@@ -597,7 +597,7 @@ theorem colimit_cocone_comp_aux
 
 中文:
 定理 colimit_cocone_comp_aux
-  条件: (s : Cocone (F ⋙ G)) (j : C)
+  条件: (s : 余锥 (F ⋙ G)) (j : C)
   证明: by
   -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
   -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
@@ -645,7 +645,7 @@ definition coconesEquiv
 
 中文:
 定义 coconesEquiv
-  签名: : Cocone (F ⋙ G) ≌ Cocone G where
+  签名: : 余锥 (F ⋙ G) ≌ 余锥 G where
   定义体: extendCocone
   inverse := Cocone.whiskering F
   unitIso := NatIso.ofComponents fun c => Cocone.ext (Iso.refl _)
@@ -671,7 +671,7 @@ definition isColimitWhiskerEquiv
 
 中文:
 定义 isColimitWhiskerEquiv
-  签名: (t : Cocone G)
+  签名: (t : 余锥 G)
   定义体: IsColimit.ofCoconeEquiv (coconesEquiv F G).symm
 
 Depends on / 依赖: HasLimitsOfShape, HasWeakLimitsOfShape, IsColimit, IsColimit.ofCoconeEquiv, coconesEquiv, ofCoconeEquiv
@@ -689,7 +689,7 @@ definition isColimitExtendCoconeEquiv
 
 中文:
 定义 isColimitExtendCoconeEquiv
-  签名: (t : Cocone (F ⋙ G))
+  签名: (t : 余锥 (F ⋙ G))
   定义体: IsColimit.ofCoconeEquiv (coconesEquiv F G)
 
 Depends on / 依赖: IsColimit, IsColimit.ofCoconeEquiv, coconesEquiv, ofCoconeEquiv
@@ -711,7 +711,7 @@ definition colimitCoconeComp
 
 中文:
 定义 colimitCoconeComp
-  签名: (t : ColimitCocone G)
+  签名: (t : 余极限余锥 G)
   定义体: _
   isColimit := (isColimitWhiskerEquiv F _).symm t.isColimit
 -/
@@ -760,7 +760,7 @@ instance colimit_pre_isIso
 
 中文:
 实例 colimit_pre_isIso
-  签名: [HasColimit G]
+  签名: [有余极限 G]
   定义体: by
   simp only [colimit.pre_eq (colimitCoconeComp F (getColimitCocone G)) (getColimitCocone G),
     colimitCoconeComp_cocone, IsColimit.desc_self]
@@ -792,7 +792,7 @@ definition colimitIso
 
 中文:
 定义 colimitIso
-  签名: [HasColimit G]
+  签名: [有余极限 G]
   定义体: asIso (colimit.pre G F)
 
 @[reassoc (attr := simp)]
@@ -816,7 +816,7 @@ theorem ι_colimitIso_hom
 
 中文:
 定理 ι_colimitIso_hom
-  条件: [HasColimit G] (X : C)
+  条件: [有余极限 G] (X : C)
   证明: by
   simp [colimitIso]
 
@@ -840,7 +840,7 @@ theorem ι_colimitIso_inv
 
 中文:
 定理 ι_colimitIso_inv
-  条件: [HasColimit G] (X : C)
+  条件: [有余极限 G] (X : C)
   证明: by
   simp [colimitIso]
 
@@ -866,7 +866,7 @@ definition colimIso
 
 中文:
 定义 colimIso
-  签名: [HasColimitsOfShape D E] [HasColimitsOfShape C E]
+  签名: [有形状余极限 D E] [有形状余极限 C E]
   定义体: NatIso.ofComponents (fun G => colimitIso F G) fun f => by
     simp only [comp_obj, whiskeringLeft_obj_obj, colim_obj, comp_map, whiskeringLeft_obj_map,
       colim_map, colimitIso_hom]
@@ -898,7 +898,7 @@ definition colimitCoconeOfComp
 
 中文:
 定义 colimitCoconeOfComp
-  签名: (t : ColimitCocone (F ⋙ G))
+  签名: (t : 余极限余锥 (F ⋙ G))
   定义体: extendCocone.obj t.cocone
   isColimit := (isColimitExtendCoconeEquiv F _).symm t.isColimit
 
@@ -919,8 +919,8 @@ theorem hasColimit_of_comp
 
 中文:
 定理 hasColimit_of_comp
-  条件: [HasColimit (F ⋙ G)]
-  结论: HasColimit G
+  条件: [有余极限 (F ⋙ G)]
+  结论: 有余极限 G
   证明: HasColimit.mk (colimitCoconeOfComp F (getColimitCocone (F ⋙ G)))
 
 Depends on / 依赖: HasColimit, HasColimit.mk, colimitCoconeOfComp, getColimitCocone
@@ -960,7 +960,7 @@ theorem preservesColimit_of_comp
 
 中文:
 定理 preservesColimit_of_comp
-  结论: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   证明: by
     refine ⟨isColimitWhiskerEquiv F _ ?_⟩
     let hc' := isColimitOfPreserves H ((isColimitWhiskerEquiv F _).symm hc)
@@ -990,7 +990,7 @@ theorem reflectsColimit_of_comp
 
 中文:
 定理 reflectsColimit_of_comp
-  结论: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   证明: by
     refine ⟨isColimitWhiskerEquiv F _ (isColimitOfReflects H ?_)⟩
     let hc' := (isColimitWhiskerEquiv F _).symm hc
@@ -1022,7 +1022,7 @@ definition createsColimitOfComp
 
 中文:
 定义 createsColimitOfComp
-  签名: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  签名: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   定义体: (reflectsColimit_of_comp F).reflects
   lifts {c} hc := by
     refine ⟨(extendCocone (F := F)).obj (liftColimit ((isColimitWhiskerEquiv F _).symm hc)), ?_⟩
@@ -1054,8 +1054,8 @@ include F in
 
 中文:
 定理 hasColimitsOfShape_of_final
-  条件: [HasColimitsOfShape C E]
-  结论: HasColimitsOfShape D E where
+  条件: [有形状余极限 C E]
+  结论: 有形状余极限 D E where
   证明: fun _ => hasColimit_of_comp F
 
 include F in
@@ -1078,7 +1078,7 @@ include F in
 
 中文:
 定理 preservesColimitsOfShape_of_final
-  结论: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   证明: preservesColimit_of_comp F
 
 include F in
@@ -1102,7 +1102,7 @@ include F in
 
 中文:
 定理 reflectsColimitsOfShape_of_final
-  结论: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   证明: reflectsColimit_of_comp F
 
 include F in
@@ -1127,7 +1127,7 @@ definition createsColimitsOfShapeOfFinal
 
 中文:
 定义 createsColimitsOfShapeOfFinal
-  签名: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  签名: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   定义体: createsColimitOfComp F
 
 Depends on / 依赖: createsColimitOfComp
@@ -1282,8 +1282,8 @@ definition Final.colimitCompCoyonedaIso
   body: asIso (colimit.pre (coyoneda.obj (op d)) F) ≪≫ Coyoneda.colimitCoyonedaIso (op d)
 
 中文:
-定义 Final.colimitCompCoyonedaIso
-  签名: (d : D) [IsIso (colimit.pre (coyoneda.obj (op d)) F)]
+定义 终.colimitCompCoyonedaIso
+  签名: (d : D) [是同构 (colimit.pre (coyoneda.obj (op d)) F)]
   定义体: asIso (colimit.pre (coyoneda.obj (op d)) F) ≪≫ Coyoneda.colimitCoyonedaIso (op d)
 
 Depends on / 依赖: Coyoneda, Coyoneda.colimitCoyonedaIso, colimit, colimit.pre, colimitCoyonedaIso, coyoneda, coyoneda.obj
@@ -1309,7 +1309,7 @@ theorem final_iff_isIso_colimit_pre
 
 中文:
 定理 final_iff_isIso_colimit_pre
-  结论: Final F ↔ 对任意 G : D ⥤ 类型v, IsIso (colimit.pre G F)
+  结论: 终 F ↔ 对任意 G : D ⥤ 类型v, 是同构 (colimit.pre G F)
   证明: ⟨fun _ => inferInstance,
    fun _ => final_of_colimit_comp_coyoneda_iso_pUnit _ fun _ => Final.colimitCompCoyonedaIso _ _⟩
 
@@ -1388,7 +1388,7 @@ definition induction
 
 中文:
 定义 induction
-  签名: {d : D} (Z : 对任意 (X : C) (_ : F.obj X ⟶ d), Sort*)
+  签名: {d : D} (Z : 对任意 (X : C) (_ : F.obj X ⟶ d), 类型层*)
   定义体: by
   apply Nonempty.some
   apply
@@ -1448,7 +1448,7 @@ definition extendCone
 
 中文:
 定义 extendCone
-  签名: : Cone (F ⋙ G) ⥤ Cone G where
+  签名: : 锥 (F ⋙ G) ⥤ 锥 G where
   定义体: { pt := c.pt
       π :=
         { app := fun d => c.π.app (lift F d) ≫ G.map (homToLift F d)
@@ -1497,7 +1497,7 @@ lemma extendCone_obj_π_app'
 
 中文:
 引理 extendCone_obj_π_app'
-  条件: (c : Cone (F ⋙ G)) {X : C} {Y : D} (f : F.obj X ⟶ Y)
+  条件: (c : 锥 (F ⋙ G)) {X : C} {Y : D} (f : F.obj X ⟶ Y)
   证明: by
   apply induction (k₀ := f) (z := rfl) F fun Z g =>
     c.π.app Z ≫ G.map g = c.π.app X ≫ G.map f
@@ -1537,7 +1537,7 @@ theorem limit_cone_comp_aux
 
 中文:
 定理 limit_cone_comp_aux
-  条件: (s : Cone (F ⋙ G)) (j : C)
+  条件: (s : 锥 (F ⋙ G)) (j : C)
   证明: by
   -- This point is that this would be true if we took `lift (F.obj j)` to just be `j`
   -- and `homToLift (F.obj j)` to be `𝟙 (F.obj j)`.
@@ -1585,7 +1585,7 @@ definition conesEquiv
 
 中文:
 定义 conesEquiv
-  签名: : Cone (F ⋙ G) ≌ Cone G where
+  签名: : 锥 (F ⋙ G) ≌ 锥 G where
   定义体: extendCone
   inverse := Cone.whiskering F
   unitIso := NatIso.ofComponents fun c => Cone.ext (Iso.refl _)
@@ -1611,7 +1611,7 @@ definition isLimitWhiskerEquiv
 
 中文:
 定义 isLimitWhiskerEquiv
-  签名: (t : Cone G)
+  签名: (t : 锥 G)
   定义体: IsLimit.ofConeEquiv (conesEquiv F G).symm
 
 Depends on / 依赖: IsLimit, IsLimit.ofConeEquiv, conesEquiv, ofConeEquiv
@@ -1629,7 +1629,7 @@ definition isLimitExtendConeEquiv
 
 中文:
 定义 isLimitExtendConeEquiv
-  签名: (t : Cone (F ⋙ G))
+  签名: (t : 锥 (F ⋙ G))
   定义体: IsLimit.ofConeEquiv (conesEquiv F G)
 
 Depends on / 依赖: IsLimit, IsLimit.ofConeEquiv, conesEquiv, ofConeEquiv
@@ -1650,7 +1650,7 @@ definition limitConeComp
 
 中文:
 定义 limitConeComp
-  签名: (t : LimitCone G)
+  签名: (t : 极限锥 G)
   定义体: _
   isLimit := (isLimitWhiskerEquiv F _).symm t.isLimit
 -/
@@ -1700,7 +1700,7 @@ instance limit_pre_isIso
 
 中文:
 实例 limit_pre_isIso
-  签名: [HasLimit G]
+  签名: [有极限 G]
   定义体: by
   rw [limit.pre_eq (limitConeComp F (getLimitCone G)) (getLimitCone G)]
   simp only [limitConeComp_cone, Cone.whisker_pt, limitConeComp_isLimit, IsLimit.lift_self,
@@ -1732,7 +1732,7 @@ definition limitIso
 
 中文:
 定义 limitIso
-  签名: [HasLimit G]
+  签名: [有极限 G]
   定义体: (asIso (limit.pre G F)).symm
 
 Depends on / 依赖: limit.pre
@@ -1755,7 +1755,7 @@ definition limIso
 
 中文:
 定义 limIso
-  签名: [HasLimitsOfShape D E] [HasLimitsOfShape C E]
+  签名: [有形状极限 D E] [有形状极限 C E]
   定义体: Iso.symm NatIso.ofComponents (fun G => (limitIso F G).symm) fun f => by
     simp only [comp_obj, whiskeringLeft_obj_obj, lim_obj, comp_map, whiskeringLeft_obj_map, lim_map,
       Iso.symm_hom, limitIso_inv]
@@ -1785,7 +1785,7 @@ definition limitConeOfComp
 
 中文:
 定义 limitConeOfComp
-  签名: (t : LimitCone (F ⋙ G))
+  签名: (t : 极限锥 (F ⋙ G))
   定义体: extendCone.obj t.cone
   isLimit := (isLimitExtendConeEquiv F _).symm t.isLimit
 
@@ -1806,8 +1806,8 @@ theorem hasLimit_of_comp
 
 中文:
 定理 hasLimit_of_comp
-  条件: [HasLimit (F ⋙ G)]
-  结论: HasLimit G
+  条件: [有极限 (F ⋙ G)]
+  结论: 有极限 G
   证明: HasLimit.mk (limitConeOfComp F (getLimitCone (F ⋙ G)))
 
 Depends on / 依赖: HasEqualizers, HasLimit, HasLimit.mk, HasWeakEqualizersOfHasEqualizers, getLimitCone, limitConeOfComp
@@ -1847,7 +1847,7 @@ theorem preservesLimit_of_comp
 
 中文:
 定理 preservesLimit_of_comp
-  结论: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   证明: by
     refine ⟨isLimitWhiskerEquiv F _ ?_⟩
     let hc' := isLimitOfPreserves H ((isLimitWhiskerEquiv F _).symm hc)
@@ -1877,7 +1877,7 @@ theorem reflectsLimit_of_comp
 
 中文:
 定理 reflectsLimit_of_comp
-  结论: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  结论: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   证明: by
     refine ⟨isLimitWhiskerEquiv F _ (isLimitOfReflects H ?_)⟩
     let hc' := (isLimitWhiskerEquiv F _).symm hc
@@ -1909,7 +1909,7 @@ definition createsLimitOfComp
 
 中文:
 定义 createsLimitOfComp
-  签名: {B : 类型u₄} [Category.{v₄} B] {H : E ⥤ B}
+  签名: {B : 类型u₄} [范畴.{v₄} B] {H : E ⥤ B}
   定义体: (reflectsLimit_of_comp F).reflects
   lifts {c} hc := by
     refine ⟨(extendCone (F := F)).obj (liftLimit ((isLimitWhiskerEquiv F _).symm hc)), ?_⟩
@@ -1941,8 +1941,8 @@ include F in
 
 中文:
 定理 hasLimitsOfShape_of_initial
-  条件: [HasLimitsOfShape C E]
-  结论: HasLimitsOfShape D E where
+  条件: [有形状极限 C E]
+  结论: 有形状极限 D E where
   证明: fun _ => hasLimit_of_comp F
 
 include F in
@@ -1965,7 +1965,7 @@ include F in
 
 中文:
 定理 preservesLimitsOfShape_of_initial
-  结论: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   证明: preservesLimit_of_comp F
 
 include F in
@@ -1989,7 +1989,7 @@ include F in
 
 中文:
 定理 reflectsLimitsOfShape_of_initial
-  结论: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  结论: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   证明: reflectsLimit_of_comp F
 
 include F in
@@ -2014,7 +2014,7 @@ definition createsLimitsOfShapeOfInitial
 
 中文:
 定义 createsLimitsOfShapeOfInitial
-  签名: {B : 类型u₄} [Category.{v₄} B] (H : E ⥤ B)
+  签名: {B : 类型u₄} [范畴.{v₄} B] (H : E ⥤ B)
   定义体: createsLimitOfComp F
 
 Depends on / 依赖: createsLimitOfComp
@@ -2041,8 +2041,8 @@ theorem final_of_comp_full_faithful
 
 中文:
 定理 final_of_comp_full_faithful
-  条件: [Full G] [Faithful G] [Final (F ⋙ G)]
-  结论: Final F where
+  条件: [满 G] [忠实 G] [终 (F ⋙ G)]
+  结论: 终 F where
   证明: isConnected_of_equivalent (StructuredArrow.post d F G).asEquivalence.symm
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.post, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
@@ -2061,8 +2061,8 @@ theorem initial_of_comp_full_faithful
 
 中文:
 定理 initial_of_comp_full_faithful
-  条件: [Full G] [Faithful G] [Initial (F ⋙ G)]
-  结论: Initial F where
+  条件: [满 G] [忠实 G] [初始 (F ⋙ G)]
+  结论: 初始 F where
   证明: isConnected_of_equivalent (CostructuredArrow.post F G d).asEquivalence.symm
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.post, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
@@ -2083,8 +2083,8 @@ theorem final_comp_equivalence
 
 中文:
 定理 final_comp_equivalence
-  条件: [Final F] [IsEquivalence G]
-  结论: Final (F ⋙ G)
+  条件: [终 F] [是等价 G]
+  结论: 终 (F ⋙ G)
   证明: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
   have : Final ((F ⋙ G) ⋙ G.inv) := final_of_natIso i
   final_of_comp_full_faithful (F ⋙ G) G.inv
@@ -2109,8 +2109,8 @@ theorem initial_comp_equivalence
 
 中文:
 定理 initial_comp_equivalence
-  条件: [Initial F] [IsEquivalence G]
-  结论: Initial (F ⋙ G)
+  条件: [初始 F] [是等价 G]
+  结论: 初始 (F ⋙ G)
   证明: let i : F ≅ (F ⋙ G) ⋙ G.inv := isoWhiskerLeft F G.asEquivalence.unitIso
   have : Initial ((F ⋙ G) ⋙ G.inv) := initial_of_natIso i
   initial_of_comp_full_faithful (F ⋙ G) G.inv
@@ -2133,8 +2133,8 @@ theorem final_equivalence_comp
 
 中文:
 定理 final_equivalence_comp
-  条件: [IsEquivalence F] [Final G]
-  结论: Final (F ⋙ G) where
+  条件: [是等价 F] [终 G]
+  结论: 终 (F ⋙ G) where
   证明: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence.symm
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.pre, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
@@ -2153,8 +2153,8 @@ theorem initial_equivalence_comp
 
 中文:
 定理 initial_equivalence_comp
-  条件: [IsEquivalence F] [Initial G]
-  结论: Initial (F ⋙ G) where
+  条件: [是等价 F] [初始 G]
+  结论: 初始 (F ⋙ G) where
   证明: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence.symm
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, asEquivalence, asEquivalence.symm, isConnected_of_equivalent
@@ -2173,8 +2173,8 @@ theorem final_of_equivalence_comp
 
 中文:
 定理 final_of_equivalence_comp
-  条件: [IsEquivalence F] [Final (F ⋙ G)]
-  结论: Final G where
+  条件: [是等价 F] [终 (F ⋙ G)]
+  结论: 终 G where
   证明: isConnected_of_equivalent (StructuredArrow.pre d F G).asEquivalence
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.pre, asEquivalence, isConnected_of_equivalent
@@ -2193,8 +2193,8 @@ theorem initial_of_equivalence_comp
 
 中文:
 定理 initial_of_equivalence_comp
-  条件: [IsEquivalence F] [Initial (F ⋙ G)]
-  结论: Initial G where
+  条件: [是等价 F] [初始 (F ⋙ G)]
+  结论: 初始 G where
   证明: isConnected_of_equivalent (CostructuredArrow.pre F G d).asEquivalence
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.pre, asEquivalence, isConnected_of_equivalent
@@ -2213,8 +2213,8 @@ theorem final_iff_comp_equivalence
 
 中文:
 定理 final_iff_comp_equivalence
-  条件: [IsEquivalence G]
-  结论: Final F ↔ Final (F ⋙ G)
+  条件: [是等价 G]
+  结论: 终 F ↔ 终 (F ⋙ G)
   证明: ⟨fun _ => final_comp_equivalence _ _, fun _ => final_of_comp_full_faithful _ G⟩
 
 Depends on / 依赖: final_comp_equivalence, final_of_comp_full_faithful
@@ -2233,8 +2233,8 @@ theorem final_iff_equivalence_comp
 
 中文:
 定理 final_iff_equivalence_comp
-  条件: [IsEquivalence F]
-  结论: Final G ↔ Final (F ⋙ G)
+  条件: [是等价 F]
+  结论: 终 G ↔ 终 (F ⋙ G)
   证明: ⟨fun _ => final_equivalence_comp _ _, fun _ => final_of_equivalence_comp F _⟩
 
 Depends on / 依赖: final_equivalence_comp, final_of_equivalence_comp
@@ -2253,8 +2253,8 @@ theorem initial_iff_comp_equivalence
 
 中文:
 定理 initial_iff_comp_equivalence
-  条件: [IsEquivalence G]
-  结论: Initial F ↔ Initial (F ⋙ G)
+  条件: [是等价 G]
+  结论: 初始 F ↔ 初始 (F ⋙ G)
   证明: ⟨fun _ => initial_comp_equivalence _ _, fun _ => initial_of_comp_full_faithful _ G⟩
 
 Depends on / 依赖: initial_comp_equivalence, initial_of_comp_full_faithful
@@ -2273,8 +2273,8 @@ theorem initial_iff_equivalence_comp
 
 中文:
 定理 initial_iff_equivalence_comp
-  条件: [IsEquivalence F]
-  结论: Initial G ↔ Initial (F ⋙ G)
+  条件: [是等价 F]
+  结论: 初始 G ↔ 初始 (F ⋙ G)
   证明: ⟨fun _ => initial_equivalence_comp _ _, fun _ => initial_of_equivalence_comp F _⟩
 
 Depends on / 依赖: initial_equivalence_comp, initial_of_equivalence_comp
@@ -2297,7 +2297,7 @@ instance final_comp
 
 中文:
 实例 final_comp
-  签名: [hF : Final F] [hG : Final G]
+  签名: [hF : 终 F] [hG : 终 G]
   定义体: by
   let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
@@ -2333,7 +2333,7 @@ instance initial_comp
 
 中文:
 实例 initial_comp
-  签名: [Initial F] [Initial G]
+  签名: [初始 F] [初始 G]
   定义体: by
   suffices Final (F ⋙ G).op from initial_of_final_op _
   exact final_comp F.op G.op
@@ -2360,8 +2360,8 @@ theorem final_of_final_comp
 
 中文:
 定理 final_of_final_comp
-  条件: [hF : Final F] [hFG : Final (F ⋙ G)]
-  结论: Final G
+  条件: [hF : 终 F] [hFG : 终 (F ⋙ G)]
+  结论: 终 G
   证明: by
   let s₁ : C ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} C := AsSmall.equiv
   let s₂ : D ≌ AsSmall.{max u₁ v₁ u₂ v₂ u₃ v₃} D := AsSmall.equiv
@@ -2400,8 +2400,8 @@ theorem initial_of_initial_comp
 
 中文:
 定理 initial_of_initial_comp
-  条件: [Initial F] [Initial (F ⋙ G)]
-  结论: Initial G
+  条件: [初始 F] [初始 (F ⋙ G)]
+  结论: 初始 G
   证明: by
   suffices Final G.op from initial_of_final_op _
   have : Final (F.op ⋙ G.op) := show Final (F ⋙ G).op from inferInstance
@@ -2426,8 +2426,8 @@ theorem final_of_comp_full_faithful'
 
 中文:
 定理 final_of_comp_full_faithful'
-  条件: [Full G] [Faithful G] [Final (F ⋙ G)]
-  结论: Final G
+  条件: [满 G] [忠实 G] [终 (F ⋙ G)]
+  结论: 终 G
   证明: have := final_of_comp_full_faithful F G
   final_of_final_comp F G
 
@@ -2449,8 +2449,8 @@ theorem initial_of_comp_full_faithful'
 
 中文:
 定理 initial_of_comp_full_faithful'
-  条件: [Full G] [Faithful G] [Initial (F ⋙ G)]
-  结论: Initial G
+  条件: [满 G] [忠实 G] [初始 (F ⋙ G)]
+  结论: 初始 G
   证明: have := initial_of_comp_full_faithful F G
   initial_of_initial_comp F G
 
@@ -2470,7 +2470,7 @@ theorem final_iff_comp_final_full_faithful
 
 中文:
 定理 final_iff_comp_final_full_faithful
-  条件: [Final G] [Full G] [Faithful G]
+  条件: [终 G] [满 G] [忠实 G]
   证明: ⟨fun _ => final_comp _ _, fun _ => final_of_comp_full_faithful F G⟩
 
 Depends on / 依赖: final_comp, final_of_comp_full_faithful
@@ -2489,7 +2489,7 @@ theorem initial_iff_comp_initial_full_faithful
 
 中文:
 定理 initial_iff_comp_initial_full_faithful
-  条件: [Initial G] [Full G] [Faithful G]
+  条件: [初始 G] [满 G] [忠实 G]
   证明: ⟨fun _ => initial_comp _ _, fun _ => initial_of_comp_full_faithful F G⟩
 
 Depends on / 依赖: initial_comp, initial_of_comp_full_faithful
@@ -2509,8 +2509,8 @@ theorem final_iff_final_comp
 
 中文:
 定理 final_iff_final_comp
-  条件: [Final F]
-  结论: Final G ↔ Final (F ⋙ G)
+  条件: [终 F]
+  结论: 终 G ↔ 终 (F ⋙ G)
   证明: ⟨fun _ => final_comp _ _, fun _ => final_of_final_comp F G⟩
 
 Depends on / 依赖: final_comp, final_of_final_comp
@@ -2529,8 +2529,8 @@ theorem initial_iff_initial_comp
 
 中文:
 定理 initial_iff_initial_comp
-  条件: [Initial F]
-  结论: Initial G ↔ Initial (F ⋙ G)
+  条件: [初始 F]
+  结论: 初始 G ↔ 初始 (F ⋙ G)
   证明: ⟨fun _ => initial_comp _ _, fun _ => initial_of_initial_comp F G⟩
 
 Depends on / 依赖: initial_comp, initial_of_initial_comp
@@ -2559,8 +2559,8 @@ lemma final_fromPUnit_of_isTerminal
 
 中文:
 引理 final_fromPUnit_of_isTerminal
-  条件: (hc : Limits.IsTerminal c)
-  结论: (fromPUnit c).Final where
+  条件: (hc : Limits.是终止 c)
+  结论: (fromPUnit c).终 where
   证明: by
     let : Inhabited (StructuredArrow c' (fromPUnit c)) := ⟨.mk (Y := default) (hc.from c')⟩
     let : Subsingleton (StructuredArrow c' (fromPUnit c)) :=
@@ -2592,7 +2592,7 @@ lemma initial_fromPUnit_of_isInitial
 中文:
 引理 initial_fromPUnit_of_isInitial
   条件: (hc : Limits.IsInitial c)
-  结论: (fromPUnit c).Initial where
+  结论: (fromPUnit c).初始 where
   证明: by
     let : Inhabited (CostructuredArrow (fromPUnit c) c') := ⟨.mk (Y := default) (hc.to c')⟩
     let : Subsingleton (CostructuredArrow (fromPUnit c) c') :=
@@ -2620,7 +2620,7 @@ instance [HasTerminal
   have : ((fromPUnit.{0} (⊤_ C)) ⋙ F).Final := final_of_natIso (F := fromPUnit.{0} (F
 
 中文:
-实例 [HasTerminal
+实例 [有终止
   签名: C] {D
   定义体: have : (fromPUnit.{0} (⊤_ C)).Final := final_fromPUnit_of_isTerminal terminalIsTerminal
   have : (fromPUnit.{0} (F.obj (⊤_ C))).Final := final_fromPUnit_of_isTerminal
@@ -2713,8 +2713,8 @@ theorem IsFilteredOrEmpty.of_final
     let P : StructuredArrow X F -> Prop := fun h => exists (Z : C) (q₁ : h.righ
 
 中文:
-定理 IsFilteredOrEmpty.of_final
-  条件: (F : C ⥤ D) [Final F] [IsFilteredOrEmpty C]
+定理 是FilteredOrEmpty.of_final
+  条件: (F : C ⥤ D) [终 F] [是FilteredOrEmpty C]
   证明: ⟨F.obj (IsFiltered.max (Final.lift F X) (Final.lift F Y)),
     Final.homToLift F X ≫ F.map (IsFiltered.leftToMax _ _),
     ⟨Final.homToLift F Y ≫ F.map (IsFiltered.rightToMax _ _), trivial⟩⟩
@@ -2756,9 +2756,9 @@ theorem IsFiltered.of_final
   nonempty := Nonempty.map F.obj IsFiltered.nonempty }
 
 中文:
-定理 IsFiltered.of_final
-  条件: (F : C ⥤ D) [Final F] [IsFiltered C]
-  结论: IsFiltered D
+定理 是Filtered.of_final
+  条件: (F : C ⥤ D) [终 F] [是Filtered C]
+  结论: 是Filtered D
   证明: { IsFilteredOrEmpty.of_final F with
   nonempty := Nonempty.map F.obj IsFiltered.nonempty }
 
@@ -2778,8 +2778,8 @@ theorem IsCofilteredOrEmpty.of_initial
   isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
 
 中文:
-定理 IsCofilteredOrEmpty.of_initial
-  条件: (F : C ⥤ D) [Initial F] [IsCofilteredOrEmpty C]
+定理 是余filteredOrEmpty.of_initial
+  条件: (F : C ⥤ D) [初始 F] [是余filteredOrEmpty C]
   证明: have : IsFilteredOrEmpty Dᵒᵖ := IsFilteredOrEmpty.of_final F.op
   isCofilteredOrEmpty_of_isFilteredOrEmpty_op _
 
@@ -2801,9 +2801,9 @@ theorem IsCofiltered.of_initial
   isCofiltered_of_isFiltered_op _
 
 中文:
-定理 IsCofiltered.of_initial
-  条件: (F : C ⥤ D) [Initial F] [IsCofiltered C]
-  结论: IsCofiltered D
+定理 是余filtered.of_initial
+  条件: (F : C ⥤ D) [初始 F] [是余filtered C]
+  结论: 是余filtered D
   证明: have : IsFiltered Dᵒᵖ := IsFiltered.of_final F.op
   isCofiltered_of_isFiltered_op _
 
@@ -2835,8 +2835,8 @@ instance StructuredArrow.final_pre
   exact Final.out f.right
 
 中文:
-实例 StructuredArrow.final_pre
-  签名: (T : C ⥤ D) [Final T] (S : D ⥤ E) (X : E)
+实例 结构化箭头.final_pre
+  签名: (T : C ⥤ D) [终 T] (S : D ⥤ E) (X : E)
   定义体: by
   refine ⟨fun f => ?_⟩
   rw [isConnected_iff_of_equivalence (StructuredArrow.preEquivalence T f)]
@@ -2863,7 +2863,7 @@ instance CostructuredArrow.initial_pre
 
 中文:
 实例 CostructuredArrow.initial_pre
-  签名: (T : C ⥤ D) [Initial T] (S : D ⥤ E) (X : E)
+  签名: (T : C ⥤ D) [初始 T] (S : D ⥤ E) (X : E)
   定义体: by
   refine ⟨fun f => ?_⟩
   rw [isConnected_iff_of_equivalence (CostructuredArrow.preEquivalence T f)]
@@ -2948,7 +2948,7 @@ instance Grothendieck.final_pre
 
 中文:
 实例 Grothendieck.final_pre
-  签名: [hG : Final G]
+  签名: [hG : 终 G]
   定义体: by
   constructor
   rintro ⟨d, f⟩
@@ -3000,7 +3000,7 @@ definition Grothendieck.fiberwiseColimitMapCompEquivalence
 
 中文:
 定义 Grothendieck.fiberwiseColimitMapCompEquivalence
-  签名: {C : 类型u₁} [Category.{v₁} C]
+  签名: {C : 类型u₁} [范畴.{v₁} C]
   定义体: NatIso.ofComponents
     (fun X =>
       HasColimit.isoOfNatIso ((Functor.associator _ _ _).symm ≪≫
@@ -3052,7 +3052,7 @@ lemma Grothendieck.final_map_small
 
 中文:
 引理 Grothendieck.final_map_small
-  结论: {C : 类型u₁} [SmallCategory C] {F G : C ⥤ Cat.{u₁, u₁}}
+  结论: {C : 类型u₁} [小范畴 C] {F G : C ⥤ Cat.{u₁, u₁}}
   证明: by
   rw [final_iff_isIso_colimit_pre]
   intro H
@@ -3136,8 +3136,8 @@ instance [F.Final]
   body: fun ⟨d, d'⟩ => isConnected_of_equivalent (StructuredArrow.prodEquivalence d d' F G).symm
 
 中文:
-实例 [F.Final]
-  签名: [G.Final]
+实例 [F.终]
+  签名: [G.终]
   定义体: fun ⟨d, d'⟩ => isConnected_of_equivalent (StructuredArrow.prodEquivalence d d' F G).symm
 
 Depends on / 依赖: StructuredArrow, StructuredArrow.prodEquivalence, isConnected_of_equivalent, prodEquivalence
@@ -3154,8 +3154,8 @@ instance [F.Initial]
   body: fun ⟨d, d'⟩ => isConnected_of_equivalent (CostructuredArrow.prodEquivalence F G d d').symm
 
 中文:
-实例 [F.Initial]
-  签名: [G.Initial]
+实例 [F.初始]
+  签名: [G.初始]
   定义体: fun ⟨d, d'⟩ => isConnected_of_equivalent (CostructuredArrow.prodEquivalence F G d d').symm
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.prodEquivalence, HasPullbacks, HasWeakPullbacksOfHasPullbacks, isConnected_of_equivalent, prodEquivalence
@@ -3183,7 +3183,7 @@ theorem initial_ι
 
 中文:
 定理 initial_ι
-  结论: {C : 类型u₁} [Category.{v₁} C] (P : Object命题erty C)
+  结论: {C : 类型u₁} [范畴.{v₁} C] (P : ObjectProperty C)
   证明: .mk fun d => by
   by_cases hd : P d
   · have : Nonempty (CostructuredArrow P.ι d) := ⟨⟨d, hd⟩, ⟨⟨⟩⟩, 𝟙 _⟩
@@ -3226,8 +3226,8 @@ definition Limits.IsLimit.overPost
   letI hc'' : IsLimit c'' :=
 
 中文:
-定义 Limits.IsLimit.overPost
-  签名: {c : Cone D} (hc : IsLimit c) (j : J)
+定义 Limits.是极限.overPost
+  签名: {c : 锥 D} (hc : 是极限 c) (j : J)
   定义体: by
   haveI : Nonempty (Over j) := ⟨Over.mk (𝟙 j)⟩
   letI c'' := Over.liftCone (Over.forget j ⋙ D) (X := D.obj j)
@@ -3264,8 +3264,8 @@ definition Limits.IsColimit.underPost
     (c.whisker (CategoryTheory.Under.forget j)) (c.ι.app j) (by c
 
 中文:
-定义 Limits.IsColimit.underPost
-  签名: {c : Cocone D} (hc : IsColimit c) (j : J)
+定义 Limits.是余极限.underPost
+  签名: {c : 余锥 D} (hc : 是余极限 c) (j : J)
   定义体: by
   haveI : Nonempty (Under j) := ⟨CategoryTheory.Under.mk (𝟙 j)⟩
   letI c'' := Under.liftCocone (CategoryTheory.Under.forget j ⋙ D) (X := D.obj j)

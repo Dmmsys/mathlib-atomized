@@ -71,18 +71,18 @@ structure Basis
     - lie_e_f_ne((i j : ι) (hij : i != j)) : ⁅e i, f j⁆ = 0
 
 中文:
-结构 Basis
-  参数: (ι : 类型) {R L : 类型} [Finite ι] [CommRing R] [LieRing L] [LieAlgebra R L]
+结构 基
+  参数: (ι : 类型) {R L : 类型} [有限 ι] [交换环 R] [Lie环 L] [Lie代数 R L]
   公理与运算 (13 个):
-    - A : Matrix ι ι 整数
+    - A : 矩阵 ι ι 整数
     - h : ι -> L
     - e : ι -> L
     - f : ι -> L
     - cartan_eq_lieSpan : H = lieSpan R L (range h)
     - span_ef : lieSpan R L (range e union range f) = ⊤
     - linInd : LinearIndependent R h
-    - nondegen : A.Nondegenerate -- TODO Replace with `(b.A.det : R) ≠ 0` to support positive char
-    - sl2((i : ι)) : IsSl2Triple (h i) (e i) (f i)
+    - nondegen : A.非退化 -- TODO Replace with `(b.A.det : R) ≠ 0` to support positive char
+    - sl2((i : ι)) : 是Sl2Triple (h i) (e i) (f i)
     - lie_h_h((i j : ι)) : ⁅h i, h j⁆ = 0
     - lie_h_e((i j : ι)) : ⁅h j, e i⁆ = A i j • e i
     - lie_h_f((i j : ι)) : ⁅h j, f i⁆ = -A i j • f i
@@ -130,7 +130,7 @@ lemma A_diag_eq_two
 
 中文:
 引理 A_diag_eq_two
-  条件: [IsAddTorsionFree L] (i : ι)
+  条件: [是加法无挠 L] (i : ι)
   结论: b.A i i = 2
   证明: by
   have : NoZeroSMulDivisors Int L := IsAddTorsionFree.to_noZeroSMulDivisors_int
@@ -223,7 +223,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: : Basis ι H where
+  签名: : 基 ι H where
   定义体: b.A
   h := -b.h
   e := b.f
@@ -368,7 +368,7 @@ definition borelUpper
 
 中文:
 定义 borelUpper
-  签名: : LieSubmodule R H L where
+  签名: : Lie子模 R H L where
   定义体: lieSpan R L range b.e
   lie_mem {x y} hy := by
     obtain ⟨x, hx⟩ := x
@@ -393,7 +393,7 @@ definition borelLower
 
 中文:
 定义 borelLower
-  签名: : LieSubmodule R H L where
+  签名: : Lie子模 R H L where
   定义体: lieSpan R L range b.f
   lie_mem := b.symm.borelUpper.lie_mem
 
@@ -671,7 +671,7 @@ lemma linearIndependent_baseSupp
 
 中文:
 引理 linearIndependent_baseSupp
-  条件: [IsDomain R] [CharZero R]
+  条件: [是整环 R] [特征零 R]
   证明: by
   classical
   have : ((Int.castRingHom R).mapMatrix b.A).Nondegenerate := by
@@ -1086,8 +1086,8 @@ lemma isCartanSubalgebra
 
 中文:
 引理 isCartanSubalgebra
-  条件: [IsNoetherian R L]
-  结论: H.IsCartanSubalgebra
+  条件: [是Noether R L]
+  结论: H.是Cartan子代数
   证明: by
   let := b.isLieAbelian_cartan
   rw [← eq_rootSpace_zero_iff_isCartan]; rw [b.cartan_eq]

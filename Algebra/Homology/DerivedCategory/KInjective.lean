@@ -76,7 +76,7 @@ lemma quasiIso_iff
 
 中文:
 引理 quasiIso_iff
-  条件: {K L : CochainComplex C 整数} [K.IsKInjective] [L.IsKInjective] (f : K ⟶ L)
+  条件: {K L : 上链复形 C 整数} [K.是KInjective] [L.是KInjective] (f : K ⟶ L)
   证明: by
   refine ⟨fun _ => ?_, fun hf => homotopyEquivalences_le_quasiIso _ _ _ hf⟩
   rw [← HomotopyCategory.inverseImage_quotient_isomorphisms]; rw [MorphismProperty.inverseImage_iff]; rw [MorphismProperty.isomorphisms.iff]
@@ -116,7 +116,7 @@ lemma bijective_toSmallShiftedHom_of_isKInjective
 
 中文:
 引理 bijective_toSmallShiftedHom_of_isKInjective
-  条件: [L.IsKInjective]
+  条件: [L.是KInjective]
   证明: by
   let := HasDerivedCategory.standard C
   rw [← Function.Bijective.of_comp_iff'
@@ -151,7 +151,7 @@ definition equivOfIsKInjective
 
 中文:
 定义 equivOfIsKInjective
-  签名: [L.IsKInjective]
+  签名: [L.是KInjective]
   定义体: Equiv.ofBijective _ (bijective_toSmallShiftedHom_of_isKInjective _ _ _)
 
 Depends on / 依赖: Equiv.ofBijective, bijective_toSmallShiftedHom_of_isKInjective, ofBijective
@@ -176,7 +176,7 @@ lemma quasiIso_iff_of_injective
 
 中文:
 引理 quasiIso_iff_of_injective
-  结论: {K L : CochainComplex C 自然数}
+  结论: {K L : 上链复形 C 自然数}
   证明: by
   rw [← quasiIso_extendMap_iff _ ComplexShape.embeddingUpNat]; rw [CochainComplex.IsKInjective.quasiIso_iff]; rw [homotopyEquivalences_extendMap_iff]
 

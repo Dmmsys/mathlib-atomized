@@ -55,11 +55,11 @@ structure PreAbstractSimplicialComplex
     - isRelLowerSet_faces : IsRelLowerSet faces Finset.Nonempty
 
 中文:
-结构 PreAbstractSimplicialComplex
+结构 预抽象单纯复形
   参数: where
   公理与运算 (2 个):
-    - faces : Set (Finset ι)
-    - isRelLowerSet_faces : IsRelLowerSet faces Finset.Nonempty
+    - faces : 集合 (有限集 ι)
+    - isRelLowerSet_faces : IsRelLowerSet faces 有限集.非空
 -/
 structure PreAbstractSimplicialComplex where
   /-- the faces of this simplicial complex: currently, given by their spanning vertices -/
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (PreAbstractSimplicialComplex ι) (Finset ι)
+  签名: 集合状 (预抽象单纯复形 ι) (有限集 ι)
   定义体: K.faces
   coe_injective K _ _ := by
     cases K
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (PreAbstractSimplicialComplex ι)
+  签名: 最小值 (预抽象单纯复形 ι)
   定义体: { faces := K.faces inter L.faces
       isRelLowerSet_faces := IsRelLowerSet.inter K.isRelLowerSet_faces L.isRelLowerSet_faces }
 
@@ -130,7 +130,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (PreAbstractSimplicialComplex ι)
+  签名: 最大值 (预抽象单纯复形 ι)
   定义体: { faces := K.faces union L.faces
       isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces L.isRelLowerSet_faces }
 
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (PreAbstractSimplicialComplex ι)
+  签名: LE (预抽象单纯复形 ι)
   定义体: K.faces subseteq L.faces
 
 Depends on / 依赖: K.faces, L.faces, subseteq
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: LT (PreAbstractSimplicialComplex ι)
+  签名: LT (预抽象单纯复形 ι)
   定义体: K.faces ⊂ L.faces
 
 Depends on / 依赖: K.faces, L.faces
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsConcreteLE (PreAbstractSimplicialComplex ι) (Finset ι)
+  签名: 是余ncreteLE (预抽象单纯复形 ι) (有限集 ι)
   定义体: .rfl
 -/
 instance : IsConcreteLE (PreAbstractSimplicialComplex ι) (Finset ι) where
@@ -203,7 +203,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (PreAbstractSimplicialComplex ι)
+  签名: 偏序 (预抽象单纯复形 ι)
   定义体: PartialOrder.lift (fun K => K.faces) (fun _ _ => PreAbstractSimplicialComplex.ext)
 
 Depends on / 依赖: K.faces, PartialOrder, PartialOrder.lift, PreAbstractSimplicialComplex, PreAbstractSimplicialComplex.ext
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (PreAbstractSimplicialComplex ι)
+  签名: 上确界集 (预抽象单纯复形 ι)
   定义体: { faces := ⋃ K in s, K.faces
       isRelLowerSet_faces := IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces }
 
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (PreAbstractSimplicialComplex ι)
+  签名: 下确界集 (预抽象单纯复形 ι)
   定义体: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
       isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
         grind [IsRelLowerSet.mem_of_le, isRelLowerSet_faces, mem_iInter] }
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (PreAbstractSimplicialComplex ι)
+  签名: 顶元素 (预抽象单纯复形 ι)
   定义体: { faces := { s | s.Nonempty }
       isRelLowerSet_faces := fun {_} hs => ⟨hs, fun _ _ ht => ht⟩ }
 
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (PreAbstractSimplicialComplex ι)
+  签名: 底元素 (预抽象单纯复形 ι)
   定义体: { faces := { _s | False }
       isRelLowerSet_faces := isRelLowerSet_empty }
 
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeSup (PreAbstractSimplicialComplex ι)
+  签名: 余mpleteSemilatticeSup (预抽象单纯复形 ι)
   定义体: .of_image SetLike.coe_subset_coe isLUB_biSup
 
 Depends on / 依赖: SetLike, SetLike.coe_subset_coe, coe_subset_coe, isLUB_biSup, of_image
@@ -331,7 +331,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (PreAbstractSimplicialComplex ι)
+  签名: 余mpleteSemilatticeInf (预抽象单纯复形 ι)
   定义体: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
       fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
 
@@ -360,7 +360,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (PreAbstractSimplicialComplex ι)
+  签名: 完备格 (预抽象单纯复形 ι)
   定义体: min
   inf_le_left _ _ := Set.inter_subset_left
   inf_le_right _ _ := Set.inter_subset_right
@@ -400,7 +400,7 @@ definition map
 
 中文:
 定义 map
-  签名: {α β : 类型} [DecidableEq β] (K : PreAbstractSimplicialComplex α) (f : α -> β)
+  签名: {α β : 类型} [DecidableEq β] (K : 预抽象单纯复形 α) (f : α -> β)
   定义体: K.faces.image (fun s => s.image f)
   isRelLowerSet_faces := fun {x} h => by
     simp only [Set.mem_image] at h ⊢
@@ -442,9 +442,9 @@ structure AbstractSimplicialComplex
     - singleton_mem : forall v : ι, {v} in faces
 
 中文:
-结构 AbstractSimplicialComplex
-  参数: extends PreAbstractSimplicialComplex ι
-  继承: PreAbstractSimplicialComplex ι
+结构 抽象单纯复形
+  参数: extends 预抽象单纯复形 ι
+  继承: 预抽象单纯复形 ι
   公理与运算 (1 个):
     - singleton_mem : 对任意 v : ι, {v} in faces
 -/
@@ -460,7 +460,7 @@ definition PreAbstractSimplicialComplex.toAbstractSimplicialComplex
   body: { K with singleton_mem := h }
 
 中文:
-定义 PreAbstractSimplicialComplex.toAbstractSimplicialComplex
+定义 预抽象单纯复形.toAbstractSimplicialComplex
   定义体: { K with singleton_mem := h }
 
 Depends on / 依赖: singleton_mem
@@ -484,7 +484,7 @@ definition PreAbstractSimplicialComplex.addSingletons
     
 
 中文:
-定义 PreAbstractSimplicialComplex.addSingletons
+定义 预抽象单纯复形.addSingletons
   定义体: { faces := K.faces union { s | exists v, s = {v} }
     isRelLowerSet_faces := IsRelLowerSet.union K.isRelLowerSet_faces (fun {x} ⟨v, hv⟩ => by
       constructor
@@ -525,7 +525,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (AbstractSimplicialComplex ι) (Finset ι)
+  签名: 集合状 (抽象单纯复形 ι) (有限集 ι)
   定义体: K.faces
   coe_injective _ _ _ := by
     ext
@@ -550,7 +550,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (AbstractSimplicialComplex ι)
+  签名: 最小值 (抽象单纯复形 ι)
   定义体: { K.toPreAbstractSimplicialComplex ⊓ L.toPreAbstractSimplicialComplex with
       singleton_mem v := ⟨K.singleton_mem v, L.singleton_mem v⟩ }
 
@@ -572,7 +572,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (AbstractSimplicialComplex ι)
+  签名: 最大值 (抽象单纯复形 ι)
   定义体: { K.toPreAbstractSimplicialComplex ⊔ L.toPreAbstractSimplicialComplex with
       singleton_mem v := Or.inl (K.singleton_mem v) }
 
@@ -593,7 +593,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE (AbstractSimplicialComplex ι)
+  签名: LE (抽象单纯复形 ι)
   定义体: K.faces subseteq L.faces
 
 Depends on / 依赖: K.faces, L.faces, subseteq
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: LT (AbstractSimplicialComplex ι)
+  签名: LT (抽象单纯复形 ι)
   定义体: K.faces ⊂ L.faces
 
 Depends on / 依赖: K.faces, L.faces
@@ -629,7 +629,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsConcreteLE (AbstractSimplicialComplex ι) (Finset ι)
+  签名: 是余ncreteLE (抽象单纯复形 ι) (有限集 ι)
   定义体: .rfl
 -/
 instance : IsConcreteLE (AbstractSimplicialComplex ι) (Finset ι) where
@@ -645,7 +645,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (AbstractSimplicialComplex ι)
+  签名: 偏序 (抽象单纯复形 ι)
   定义体: PartialOrder.lift (fun K => K.faces) (fun _ _ => AbstractSimplicialComplex.ext)
 
 Depends on / 依赖: AbstractSimplicialComplex, AbstractSimplicialComplex.ext, K.faces, PartialOrder, PartialOrder.lift
@@ -685,7 +685,7 @@ theorem toPreAbstractSimplicialComplex_le_iff
 
 中文:
 定理 toPreAbstractSimplicialComplex_le_iff
-  条件: {K L : AbstractSimplicialComplex ι}
+  条件: {K L : 抽象单纯复形 ι}
   证明: Iff.rfl
 
 @[simp]
@@ -707,7 +707,7 @@ theorem toPreAbstractSimplicialComplex_lt_iff
 
 中文:
 定理 toPreAbstractSimplicialComplex_lt_iff
-  条件: {K L : AbstractSimplicialComplex ι}
+  条件: {K L : 抽象单纯复形 ι}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -732,7 +732,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (AbstractSimplicialComplex ι)
+  签名: 上确界集 (抽象单纯复形 ι)
   定义体: { faces := (⋃ K in s, K.faces) union { t | exists v, t = {v} }
       isRelLowerSet_faces := IsRelLowerSet.union
         (IsRelLowerSet.iUnion₂ fun K _ => K.isRelLowerSet_faces)
@@ -772,7 +772,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (AbstractSimplicialComplex ι)
+  签名: 下确界集 (抽象单纯复形 ι)
   定义体: { faces := (⋂ K in s, K.faces) inter { t | t.Nonempty }
       isRelLowerSet_faces := fun {_} ⟨hx, hn⟩ => by
         grind [IsRelLowerSet.mem_of_le, PreAbstractSimplicialComplex.isRelLowerSet_faces,
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (AbstractSimplicialComplex ι)
+  签名: 顶元素 (抽象单纯复形 ι)
   定义体: { (⊤ : PreAbstractSimplicialComplex ι) with
       singleton_mem _ := Finset.singleton_nonempty _ }
 
@@ -845,7 +845,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (AbstractSimplicialComplex ι)
+  签名: 底元素 (抽象单纯复形 ι)
   定义体: { faces := { s | exists v, s = {v} }
       isRelLowerSet_faces := fun {x} ⟨v, hv⟩ => by
         constructor
@@ -891,7 +891,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeSup (AbstractSimplicialComplex ι)
+  签名: 余mpleteSemilatticeSup (抽象单纯复形 ι)
   定义体: by
     constructor
     · intro K hK _ ht
@@ -934,7 +934,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (AbstractSimplicialComplex ι)
+  签名: 余mpleteSemilatticeInf (抽象单纯复形 ι)
   定义体: ⟨fun _ hK => Set.inter_subset_left.trans (Set.biInter_subset_of_mem hK),
       fun K hK _ ht => ⟨Set.mem_iInter₂.mpr fun _ hL => hK hL ht, (K.isRelLowerSet_faces ht).1⟩⟩
 
@@ -963,7 +963,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (AbstractSimplicialComplex ι)
+  签名: 完备格 (抽象单纯复形 ι)
   定义体: min
   inf_le_left _ _ := Set.inter_subset_left
   inf_le_right _ _ := Set.inter_subset_right

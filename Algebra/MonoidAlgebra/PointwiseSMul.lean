@@ -38,7 +38,7 @@ theorem mem_smulAntidiagonal_of_group
 
 中文:
 定理 mem_smulAntidiagonal_of_group
-  结论: [Group G] [MulAction G P] [Semiring R] [Zero V]
+  结论: [群 G] [乘法作用 G P] [半环 R] [零 V]
   证明: by
   rw [Finset.mem_smulAntidiagonal]; rw [eq_inv_smul_iff]; rw [Function.mem_support]; rw [Finset.mem_coe]; rw [Finsupp.mem_support_iff]
 
@@ -75,7 +75,7 @@ theorem smul_eq
 
 中文:
 定理 smul_eq
-  结论: [SMul G P] [IsLeftCancelSMul G P] [Semiring R] [AddCommMonoid V] [SMulWithZero R V]
+  结论: [标量乘法 G P] [是左消去标量乘法 G P] [半环 R] [加法交换幺半群 V] [带零标量乘法 R V]
   证明: rfl
 
 @[to_additive (dont_translate := R) smul_apply_addAction]
@@ -105,7 +105,7 @@ theorem smul_apply_mulAction
 
 中文:
 定理 smul_apply_mulAction
-  结论: [Group G] [MulAction G P] [Semiring R] [AddCommMonoid V]
+  结论: [群 G] [乘法作用 G P] [半环 R] [加法交换幺半群 V]
   证明: by
   have hp : ((f.coeff.support : Set G).smulAntidiagonal (Function.support x) p).Finite :=
     Set.SMulAntidiagonal.finite_of_finite_fst f.coeff.support.finite_toSet x.support p

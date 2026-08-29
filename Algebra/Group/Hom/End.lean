@@ -40,7 +40,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: (M) [AddCommMonoid M]
+  签名: (M) [加法交换幺半群 M]
   定义体: n • (1 : AddMonoid.End M)
   natCast_zero := AddMonoid.nsmul_zero _
   natCast_succ n := AddMonoid.nsmul_succ n 1
@@ -65,8 +65,8 @@ lemma natCast_apply
 
 中文:
 引理 natCast_apply
-  条件: [AddCommMonoid M] (n : 自然数) (m : M)
-  结论: (↑n : AddMonoid.End M) m = n • m
+  条件: [加法交换幺半群 M] (n : 自然数) (m : M)
+  结论: (↑n : 加法幺半群.End M) m = n • m
   证明: rfl
 -/
 lemma natCast_apply [AddCommMonoid M] (n : Nat) (m : M) : (↑n : AddMonoid.End M) m = n • m := rfl
@@ -80,8 +80,8 @@ lemma ofNat_apply
   proof: rfl
 
 中文:
-引理 ofNat_apply
-  条件: [AddCommMonoid M] (n : 自然数) [n.AtLeastTwo] (m : M)
+引理 of自然数_apply
+  条件: [加法交换幺半群 M] (n : 自然数) [n.AtLeastTwo] (m : M)
   证明: rfl
 -/
 @[simp] lemma ofNat_apply [AddCommMonoid M] (n : Nat) [n.AtLeastTwo] (m : M) :
@@ -102,7 +102,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: [AddCommMonoid M]
+  签名: [加法交换幺半群 M]
   定义体: fast_instance% { AddMonoid.End.instMonoid M,
     AddMonoidHom.instAddCommMonoid,
     AddMonoid.End.instAddMonoidWithOne M with
@@ -137,7 +137,7 @@ example [AddCommGroup M] :
 
 中文:
 实例 instRing
-  签名: [AddCommGroup M]
+  签名: [加法交换群 M]
   定义体: fast_instance% { AddMonoid.End.instSemiring, AddMonoid.End.instAddCommGroup with
     intCast := fun z => z • (1 : AddMonoid.End M),
     intCast_ofNat := natCast_zsmul _,

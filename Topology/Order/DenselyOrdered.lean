@@ -39,8 +39,8 @@ theorem closure_Ioi'
 
 中文:
 定理 closure_Ioi'
-  条件: {a : α} (h : (Ioi a).Nonempty)
-  结论: closure (Ioi a) = Ici a
+  条件: {a : α} (h : (左开右无界区间 a).非空)
+  结论: closure (左开右无界区间 a) = 左闭右无界区间 a
   证明: by
   apply Subset.antisymm
   · exact closure_minimal Ioi_subset_Ici_self isClosed_Ici
@@ -68,8 +68,8 @@ theorem closure_Ioi
 
 中文:
 定理 closure_Ioi
-  条件: (a : α) [NoMaxOrder α]
-  结论: closure (Ioi a) = Ici a
+  条件: (a : α) [NoMax序 α]
+  结论: closure (左开右无界区间 a) = 左闭右无界区间 a
   证明: closure_Ioi' nonempty_Ioi
 
 Depends on / 依赖: closure_Ioi, nonempty_Ioi
@@ -88,8 +88,8 @@ theorem closure_Iio'
 
 中文:
 定理 closure_Iio'
-  条件: (h : (Iio a).Nonempty)
-  结论: closure (Iio a) = Iic a
+  条件: (h : (左无界右开区间 a).非空)
+  结论: closure (左无界右开区间 a) = 左无界右闭区间 a
   证明: closure_Ioi' (α := αᵒᵈ) h
 
 Depends on / 依赖: closure_Ioi
@@ -110,8 +110,8 @@ theorem closure_Iio
 
 中文:
 定理 closure_Iio
-  条件: (a : α) [NoMinOrder α]
-  结论: closure (Iio a) = Iic a
+  条件: (a : α) [NoMin序 α]
+  结论: closure (左无界右开区间 a) = 左无界右闭区间 a
   证明: closure_Iio' nonempty_Iio
 
 Depends on / 依赖: closure_Iio, nonempty_Iio
@@ -132,7 +132,7 @@ theorem IsMax.of_disjoint_nhds_Ioi
 
 中文:
 定理 IsMax.of_disjoint_nhds_Ioi
-  结论: {x : α} {u : Set α} (hu : u in nhds x)
+  结论: {x : α} {u : 集合 α} (hu : u in 邻域滤子 x)
   证明: by
   by_contra hx
   exact (mem_closure_iff_nhds.mp (closure_Ioi' (not_isMax_iff.mp hx) ▸ self_mem_Ici) u hu).ne_empty
@@ -156,7 +156,7 @@ theorem IsMin.of_disjoint_nhds_Iio
 
 中文:
 定理 IsMin.of_disjoint_nhds_Iio
-  结论: {x : α} {u : Set α} (hu : u in nhds x)
+  结论: {x : α} {u : 集合 α} (hu : u in 邻域滤子 x)
   证明: IsMax.of_disjoint_nhds_Ioi (α := αᵒᵈ) hu hd
 
 Depends on / 依赖: IsMax.of_disjoint_nhds_Ioi, of_disjoint_nhds_Ioi
@@ -178,7 +178,7 @@ theorem nonempty_nhds_inter_Ioi
 
 中文:
 定理 nonempty_nhds_inter_Ioi
-  条件: {x : α} {u : Set α} (hu : u in nhds x) (hx : ¬IsMax x)
+  条件: {x : α} {u : 集合 α} (hu : u in 邻域滤子 x) (hx : ¬IsMax x)
   证明: by
   by_contra h
   exact hx (IsMax.of_disjoint_nhds_Ioi hu (Set.disjoint_iff_inter_eq_empty.mpr
@@ -202,7 +202,7 @@ theorem nonempty_nhds_inter_Iio
 
 中文:
 定理 nonempty_nhds_inter_Iio
-  条件: {x : α} {u : Set α} (hu : u in nhds x) (hx : ¬IsMin x)
+  条件: {x : α} {u : 集合 α} (hu : u in 邻域滤子 x) (hx : ¬IsMin x)
   证明: nonempty_nhds_inter_Ioi (α := αᵒᵈ) hu hx
 
 Depends on / 依赖: nonempty_nhds_inter_Ioi
@@ -231,7 +231,7 @@ theorem closure_Ioo
 中文:
 定理 closure_Ioo
   条件: {a b : α} (hab : a != b)
-  结论: closure (Ioo a b) = Icc a b
+  结论: closure (开区间 a b) = 闭区间 a b
   证明: by
   apply Subset.antisymm
   · exact closure_minimal Ioo_subset_Icc_self isClosed_Icc
@@ -294,7 +294,7 @@ theorem closure_Ioc
 中文:
 定理 closure_Ioc
   条件: {a b : α} (hab : a != b)
-  结论: closure (Ioc a b) = Icc a b
+  结论: closure (左开右闭区间 a b) = 闭区间 a b
   证明: by
   apply Subset.antisymm
   · exact closure_minimal Ioc_subset_Icc_self isClosed_Icc
@@ -352,7 +352,7 @@ theorem closure_Ico
 中文:
 定理 closure_Ico
   条件: {a b : α} (hab : a != b)
-  结论: closure (Ico a b) = Icc a b
+  结论: closure (左闭右开区间 a b) = 闭区间 a b
   证明: by
   apply Subset.antisymm
   · exact closure_minimal Ico_subset_Icc_self isClosed_Icc
@@ -382,8 +382,8 @@ theorem interior_Ici'
 
 中文:
 定理 interior_Ici'
-  条件: {a : α} (ha : (Iio a).Nonempty)
-  结论: interior (Ici a) = Ioi a
+  条件: {a : α} (ha : (左无界右开区间 a).非空)
+  结论: interior (左闭右无界区间 a) = 左开右无界区间 a
   证明: by
   rw [← compl_Iio]; rw [interior_compl]; rw [closure_Iio' ha]; rw [compl_Iic]
 
@@ -405,8 +405,8 @@ theorem interior_Ici
 
 中文:
 定理 interior_Ici
-  条件: [NoMinOrder α] {a : α}
-  结论: interior (Ici a) = Ioi a
+  条件: [NoMin序 α] {a : α}
+  结论: interior (左闭右无界区间 a) = 左开右无界区间 a
   证明: interior_Ici' nonempty_Iio
 
 @[simp]
@@ -428,8 +428,8 @@ theorem interior_Iic'
 
 中文:
 定理 interior_Iic'
-  条件: {a : α} (ha : (Ioi a).Nonempty)
-  结论: interior (Iic a) = Iio a
+  条件: {a : α} (ha : (左开右无界区间 a).非空)
+  结论: interior (左无界右闭区间 a) = 左无界右开区间 a
   证明: interior_Ici' (α := αᵒᵈ) ha
 
 Depends on / 依赖: interior_Ici
@@ -450,8 +450,8 @@ theorem interior_Iic
 
 中文:
 定理 interior_Iic
-  条件: [NoMaxOrder α] {a : α}
-  结论: interior (Iic a) = Iio a
+  条件: [NoMax序 α] {a : α}
+  结论: interior (左无界右闭区间 a) = 左无界右开区间 a
   证明: interior_Iic' nonempty_Ioi
 
 @[simp]
@@ -476,8 +476,8 @@ theorem interior_Icc
 
 中文:
 定理 interior_Icc
-  条件: [NoMinOrder α] [NoMaxOrder α] {a b : α}
-  结论: interior (Icc a b) = Ioo a b
+  条件: [NoMin序 α] [NoMax序 α] {a b : α}
+  结论: interior (闭区间 a b) = 开区间 a b
   证明: by
   rw [← Ici_inter_Iic]; rw [interior_inter]; rw [interior_Ici]; rw [interior_Iic]; rw [Ioi_inter_Iio]
 
@@ -502,7 +502,7 @@ theorem Icc_mem_nhds_iff
 
 中文:
 定理 Icc_mem_nhds_iff
-  条件: [NoMinOrder α] [NoMaxOrder α] {a b x : α}
+  条件: [NoMin序 α] [NoMax序 α] {a b x : α}
   证明: by
   rw [← interior_Icc]; rw [mem_interior_iff_mem_nhds]
 
@@ -529,8 +529,8 @@ theorem interior_Ico
 
 中文:
 定理 interior_Ico
-  条件: [NoMinOrder α] {a b : α}
-  结论: interior (Ico a b) = Ioo a b
+  条件: [NoMin序 α] {a b : α}
+  结论: interior (左闭右开区间 a b) = 开区间 a b
   证明: by
   rw [← Ici_inter_Iio]; rw [interior_inter]; rw [interior_Ici]; rw [interior_Iio]; rw [Ioi_inter_Iio]
 
@@ -556,8 +556,8 @@ theorem Ico_mem_nhds_iff
 
 中文:
 定理 Ico_mem_nhds_iff
-  条件: [NoMinOrder α] {a b x : α}
-  结论: Ico a b in 𝓝 x ↔ x in Ioo a b
+  条件: [NoMin序 α] {a b x : α}
+  结论: 左闭右开区间 a b in 𝓝 x ↔ x in 开区间 a b
   证明: by
   rw [← interior_Ico]; rw [mem_interior_iff_mem_nhds]
 
@@ -583,8 +583,8 @@ theorem interior_Ioc
 
 中文:
 定理 interior_Ioc
-  条件: [NoMaxOrder α] {a b : α}
-  结论: interior (Ioc a b) = Ioo a b
+  条件: [NoMax序 α] {a b : α}
+  结论: interior (左开右闭区间 a b) = 开区间 a b
   证明: by
   rw [← Ioi_inter_Iic]; rw [interior_inter]; rw [interior_Ioi]; rw [interior_Iic]; rw [Ioi_inter_Iio]
 
@@ -608,8 +608,8 @@ theorem Ioc_mem_nhds_iff
 
 中文:
 定理 Ioc_mem_nhds_iff
-  条件: [NoMaxOrder α] {a b x : α}
-  结论: Ioc a b in 𝓝 x ↔ x in Ioo a b
+  条件: [NoMax序 α] {a b x : α}
+  结论: 左开右闭区间 a b in 𝓝 x ↔ x in 开区间 a b
   证明: by
   rw [← interior_Ioc]; rw [mem_interior_iff_mem_nhds]
 
@@ -634,7 +634,7 @@ theorem closure_interior_Icc
 中文:
 定理 closure_interior_Icc
   条件: {a b : α} (h : a != b)
-  结论: closure (interior (Icc a b)) = Icc a b
+  结论: closure (interior (闭区间 a b)) = 闭区间 a b
   证明: (closure_minimal interior_subset isClosed_Icc).antisymm
     calc
       Icc a b = closure (Ioo a b) := (closure_Ioo h).symm
@@ -669,7 +669,7 @@ theorem Ioc_subset_closure_interior
 中文:
 定理 Ioc_subset_closure_interior
   条件: (a b : α)
-  结论: Ioc a b subseteq closure (interior (Ioc a b))
+  结论: 左开右闭区间 a b subseteq closure (interior (左开右闭区间 a b))
   证明: by
   rcases eq_or_ne a b with (rfl | h)
   · simp
@@ -706,7 +706,7 @@ theorem Ico_subset_closure_interior
 中文:
 定理 Ico_subset_closure_interior
   条件: (a b : α)
-  结论: Ico a b subseteq closure (interior (Ico a b))
+  结论: 左闭右开区间 a b subseteq closure (interior (左闭右开区间 a b))
   证明: by
   simpa only [Ioc_toDual] using!
     Ioc_subset_closure_interior (OrderDual.toDual b) (OrderDual.toDual a)
@@ -732,8 +732,8 @@ theorem frontier_Ici'
 
 中文:
 定理 frontier_Ici'
-  条件: {a : α} (ha : (Iio a).Nonempty)
-  结论: frontier (Ici a) = {a}
+  条件: {a : α} (ha : (左无界右开区间 a).非空)
+  结论: frontier (左闭右无界区间 a) = {a}
   证明: by
   simp [frontier, ha]
 
@@ -755,8 +755,8 @@ theorem frontier_Ici
 
 中文:
 定理 frontier_Ici
-  条件: [NoMinOrder α] {a : α}
-  结论: frontier (Ici a) = {a}
+  条件: [NoMin序 α] {a : α}
+  结论: frontier (左闭右无界区间 a) = {a}
   证明: frontier_Ici' nonempty_Iio
 
 @[simp]
@@ -779,8 +779,8 @@ theorem frontier_Iic'
 
 中文:
 定理 frontier_Iic'
-  条件: {a : α} (ha : (Ioi a).Nonempty)
-  结论: frontier (Iic a) = {a}
+  条件: {a : α} (ha : (左开右无界区间 a).非空)
+  结论: frontier (左无界右闭区间 a) = {a}
   证明: by
   simp [frontier, ha]
 
@@ -802,8 +802,8 @@ theorem frontier_Iic
 
 中文:
 定理 frontier_Iic
-  条件: [NoMaxOrder α] {a : α}
-  结论: frontier (Iic a) = {a}
+  条件: [NoMax序 α] {a : α}
+  结论: frontier (左无界右闭区间 a) = {a}
   证明: frontier_Iic' nonempty_Ioi
 
 @[simp]
@@ -826,8 +826,8 @@ theorem frontier_Ioi'
 
 中文:
 定理 frontier_Ioi'
-  条件: {a : α} (ha : (Ioi a).Nonempty)
-  结论: frontier (Ioi a) = {a}
+  条件: {a : α} (ha : (左开右无界区间 a).非空)
+  结论: frontier (左开右无界区间 a) = {a}
   证明: by
   simp [frontier, closure_Ioi' ha]
 
@@ -849,8 +849,8 @@ theorem frontier_Ioi
 
 中文:
 定理 frontier_Ioi
-  条件: [NoMaxOrder α] {a : α}
-  结论: frontier (Ioi a) = {a}
+  条件: [NoMax序 α] {a : α}
+  结论: frontier (左开右无界区间 a) = {a}
   证明: frontier_Ioi' nonempty_Ioi
 
 @[simp]
@@ -873,8 +873,8 @@ theorem frontier_Iio'
 
 中文:
 定理 frontier_Iio'
-  条件: {a : α} (ha : (Iio a).Nonempty)
-  结论: frontier (Iio a) = {a}
+  条件: {a : α} (ha : (左无界右开区间 a).非空)
+  结论: frontier (左无界右开区间 a) = {a}
   证明: by
   simp [frontier, closure_Iio' ha]
 
@@ -896,8 +896,8 @@ theorem frontier_Iio
 
 中文:
 定理 frontier_Iio
-  条件: [NoMinOrder α] {a : α}
-  结论: frontier (Iio a) = {a}
+  条件: [NoMin序 α] {a : α}
+  结论: frontier (左无界右开区间 a) = {a}
   证明: frontier_Iio' nonempty_Iio
 
 @[simp]
@@ -920,7 +920,7 @@ theorem frontier_Icc
 
 中文:
 定理 frontier_Icc
-  条件: [NoMinOrder α] [NoMaxOrder α] {a b : α} (h : a <= b)
+  条件: [NoMin序 α] [NoMax序 α] {a b : α} (h : a <= b)
   证明: by simp [frontier, h, Icc_sdiff_Ioo_same]
 
 @[simp]
@@ -946,7 +946,7 @@ theorem frontier_Ioo
 中文:
 定理 frontier_Ioo
   条件: {a b : α} (h : a < b)
-  结论: frontier (Ioo a b) = {a, b}
+  结论: frontier (开区间 a b) = {a, b}
   证明: by
   rw [frontier]; rw [closure_Ioo h.ne]; rw [interior_Ioo]; rw [Icc_sdiff_Ioo_same h.le]
 
@@ -972,8 +972,8 @@ theorem frontier_Ico
 
 中文:
 定理 frontier_Ico
-  条件: [NoMinOrder α] {a b : α} (h : a < b)
-  结论: frontier (Ico a b) = {a, b}
+  条件: [NoMin序 α] {a b : α} (h : a < b)
+  结论: frontier (左闭右开区间 a b) = {a, b}
   证明: by
   rw [frontier]; rw [closure_Ico h.ne]; rw [interior_Ico]; rw [Icc_sdiff_Ioo_same h.le]
 
@@ -997,8 +997,8 @@ theorem frontier_Ioc
 
 中文:
 定理 frontier_Ioc
-  条件: [NoMaxOrder α] {a b : α} (h : a < b)
-  结论: frontier (Ioc a b) = {a, b}
+  条件: [NoMax序 α] {a b : α} (h : a < b)
+  结论: frontier (左开右闭区间 a b) = {a, b}
   证明: by
   rw [frontier]; rw [closure_Ioc h.ne]; rw [interior_Ioc]; rw [Icc_sdiff_Ioo_same h.le]
 
@@ -1017,7 +1017,7 @@ theorem nhdsWithin_Ioi_neBot'
 
 中文:
 定理 nhdsWithin_Ioi_neBot'
-  条件: {a b : α} (H₁ : (Ioi a).Nonempty) (H₂ : a <= b)
+  条件: {a b : α} (H₁ : (左开右无界区间 a).非空) (H₂ : a <= b)
   证明: mem_closure_iff_nhdsWithin_neBot.1 by rwa [closure_Ioi' H₁]
 
 Depends on / 依赖: closure_Ioi, mem_closure_iff_nhdsWithin_neBot
@@ -1037,8 +1037,8 @@ theorem nhdsWithin_Ioi_neBot
 
 中文:
 定理 nhdsWithin_Ioi_neBot
-  条件: [NoMaxOrder α] {a b : α} (H : a <= b)
-  结论: NeBot (𝓝[Ioi a] b)
+  条件: [NoMax序 α] {a b : α} (H : a <= b)
+  结论: NeBot (𝓝[左开右无界区间 a] b)
   证明: nhdsWithin_Ioi_neBot' nonempty_Ioi H
 
 Depends on / 依赖: nhdsWithin_Ioi_neBot, nonempty_Ioi
@@ -1056,7 +1056,7 @@ theorem nhdsGT_neBot_of_exists_gt
   proof: nhdsWithin_Ioi_neBot' H (le_refl a)
 
 中文:
-定理 nhdsGT_neBot_of_exists_gt
+定理 nhdsGT_neBot_of_存在_gt
   条件: {a : α} (H : 存在 b, a < b)
   结论: NeBot (𝓝[>] a)
   证明: nhdsWithin_Ioi_neBot' H (le_refl a)
@@ -1076,7 +1076,7 @@ instance nhdsGT_neBot
 
 中文:
 实例 nhdsGT_neBot
-  签名: [NoMaxOrder α] (a : α)
+  签名: [NoMax序 α] (a : α)
   定义体: nhdsWithin_Ioi_neBot le_rfl
 
 Depends on / 依赖: le_rfl, nhdsWithin_Ioi_neBot
@@ -1093,7 +1093,7 @@ theorem nhdsWithin_Iio_neBot'
 
 中文:
 定理 nhdsWithin_Iio_neBot'
-  条件: {b c : α} (H₁ : (Iio c).Nonempty) (H₂ : b <= c)
+  条件: {b c : α} (H₁ : (左无界右开区间 c).非空) (H₂ : b <= c)
   证明: mem_closure_iff_nhdsWithin_neBot.1 by rwa [closure_Iio' H₁]
 
 Depends on / 依赖: closure_Iio, mem_closure_iff_nhdsWithin_neBot
@@ -1113,8 +1113,8 @@ theorem nhdsWithin_Iio_neBot
 
 中文:
 定理 nhdsWithin_Iio_neBot
-  条件: [NoMinOrder α] {a b : α} (H : a <= b)
-  结论: NeBot (𝓝[Iio b] a)
+  条件: [NoMin序 α] {a b : α} (H : a <= b)
+  结论: NeBot (𝓝[左无界右开区间 b] a)
   证明: nhdsWithin_Iio_neBot' nonempty_Iio H
 
 Depends on / 依赖: nhdsWithin_Iio_neBot, nonempty_Iio
@@ -1134,7 +1134,7 @@ theorem nhdsLT_neBot_of_exists_lt
 @[deprecated (since := "2026-01-16")] alias nhdsWithin_Iio_self_neBot' := nhdsLT_neBot_of_exists_lt
 
 中文:
-定理 nhdsLT_neBot_of_exists_lt
+定理 nhdsLT_neBot_of_存在_lt
   条件: {b : α} (H : 存在 a, a < b)
   结论: NeBot (𝓝[<] b)
   证明: nhdsWithin_Iio_neBot' H (le_refl b)
@@ -1158,7 +1158,7 @@ instance nhdsLT_neBot
 
 中文:
 实例 nhdsLT_neBot
-  签名: [NoMinOrder α] (a : α)
+  签名: [NoMin序 α] (a : α)
   定义体: nhdsWithin_Iio_neBot (le_refl a)
 
 Depends on / 依赖: le_refl, nhdsWithin_Iio_neBot
@@ -1177,7 +1177,7 @@ theorem right_nhdsWithin_Ico_neBot
 中文:
 定理 right_nhdsWithin_Ico_neBot
   条件: {a b : α} (H : a < b)
-  结论: NeBot (𝓝[Ico a b] b)
+  结论: NeBot (𝓝[左闭右开区间 a b] b)
   证明: (isLUB_Ico H).nhdsWithin_neBot (nonempty_Ico.2 H)
 
 Depends on / 依赖: isLUB_Ico, nhdsWithin_neBot, nonempty_Ico
@@ -1197,7 +1197,7 @@ theorem left_nhdsWithin_Ioc_neBot
 中文:
 定理 left_nhdsWithin_Ioc_neBot
   条件: {a b : α} (H : a < b)
-  结论: NeBot (𝓝[Ioc a b] a)
+  结论: NeBot (𝓝[左开右闭区间 a b] a)
   证明: (isGLB_Ioc H).nhdsWithin_neBot (nonempty_Ioc.2 H)
 
 Depends on / 依赖: isGLB_Ioc, nhdsWithin_neBot, nonempty_Ioc
@@ -1217,7 +1217,7 @@ theorem left_nhdsWithin_Ioo_neBot
 中文:
 定理 left_nhdsWithin_Ioo_neBot
   条件: {a b : α} (H : a < b)
-  结论: NeBot (𝓝[Ioo a b] a)
+  结论: NeBot (𝓝[开区间 a b] a)
   证明: (isGLB_Ioo H).nhdsWithin_neBot (nonempty_Ioo.2 H)
 
 Depends on / 依赖: isGLB_Ioo, nhdsWithin_neBot, nonempty_Ioo
@@ -1237,7 +1237,7 @@ theorem right_nhdsWithin_Ioo_neBot
 中文:
 定理 right_nhdsWithin_Ioo_neBot
   条件: {a b : α} (H : a < b)
-  结论: NeBot (𝓝[Ioo a b] b)
+  结论: NeBot (𝓝[开区间 a b] b)
   证明: (isLUB_Ioo H).nhdsWithin_neBot (nonempty_Ioo.2 H)
 
 Depends on / 依赖: isLUB_Ioo, nhdsWithin_neBot, nonempty_Ioo
@@ -1270,9 +1270,9 @@ lemma DenselyOrdered.subsingleton_of_discreteTopology
   grind => have : b in Ioo a b; finish
 
 中文:
-引理 DenselyOrdered.subsingleton_of_discreteTopology
-  条件: [DiscreteTopology α]
-  结论: Subsingleton α
+引理 稠密序.subsingleton_of_discreteTopology
+  条件: [离散拓扑 α]
+  结论: 子单例 α
   证明: by
   suffices forall a b : α, b <= a from ⟨fun a b => le_antisymm (this b a) (this a b)⟩
   intro a b
@@ -1303,8 +1303,8 @@ theorem Dense.exists_countable_dense_subset_no_bot_top
   · exact htd.sdiff_finite ((subsingleton_isBot α).finite.union (su
 
 中文:
-定理 Dense.exists_countable_dense_subset_no_bot_top
-  结论: [Nontrivial α] {s : Set α} [SeparableSpace s]
+定理 稠密.存在_countable_dense_subset_no_bot_top
+  结论: [非平凡 α] {s : 集合 α} [可分空间 s]
   证明: by
   rcases hs.exists_countable_dense_subset with ⟨t, hts, htc, htd⟩
   refine ⟨t \ ({ x | IsBot x } union { x | IsTop x }), ?_, ?_, ?_, fun x hx => ?_, fun x hx => ?_⟩
@@ -1336,8 +1336,8 @@ theorem exists_countable_dense_no_bot_top
   simpa using dense_univ.exists_countable_dense_subset_no_bot_top
 
 中文:
-定理 exists_countable_dense_no_bot_top
-  条件: [SeparableSpace α] [Nontrivial α]
+定理 存在_countable_dense_no_bot_top
+  条件: [可分空间 α] [非平凡 α]
   证明: by
   simpa using dense_univ.exists_countable_dense_subset_no_bot_top
 
@@ -1365,7 +1365,7 @@ theorem isClosed_Ico_iff
 中文:
 定理 isClosed_Ico_iff
   条件: {a b : α}
-  结论: IsClosed (Set.Ico a b) ↔ b <= a
+  结论: 是闭集 (集合.左闭右开区间 a b) ↔ b <= a
   证明: by
   refine ⟨fun h => le_of_not_gt fun hab => ?_, by simp_all⟩
   have := h.closure_eq
@@ -1398,7 +1398,7 @@ theorem isClosed_Ioc_iff
 中文:
 定理 isClosed_Ioc_iff
   条件: {a b : α}
-  结论: IsClosed (Set.Ioc a b) ↔ b <= a
+  结论: 是闭集 (集合.左开右闭区间 a b) ↔ b <= a
   证明: by
   refine ⟨fun h => le_of_not_gt fun hab => ?_, by simp_all⟩
   have := h.closure_eq
@@ -1431,7 +1431,7 @@ theorem isClosed_Ioo_iff
 中文:
 定理 isClosed_Ioo_iff
   条件: {a b : α}
-  结论: IsClosed (Set.Ioo a b) ↔ b <= a
+  结论: 是闭集 (集合.开区间 a b) ↔ b <= a
   证明: by
   refine ⟨fun h => le_of_not_gt fun hab => ?_, by simp_all⟩
   have := h.closure_eq

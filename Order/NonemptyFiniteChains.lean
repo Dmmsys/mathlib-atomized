@@ -43,10 +43,10 @@ structure NonemptyFiniteChains
 
 中文:
 结构 NonemptyFiniteChains
-  参数: (X : 类型u) [PartialOrder X]
+  参数: (X : 类型u) [偏序 X]
   公理与运算 (3 个):
-    - finset : Finset X
-    - nonempty : finset.Nonempty  [默认: by simp]
+    - finset : 有限集 X
+    - nonempty : finset.非空  [默认: by simp]
     - comparable((a b : finset)) : a <= b ∨ b <= a
 
 Depends on / 依赖: comparable, finset
@@ -228,8 +228,8 @@ definition PartOrd.nonemptyFiniteChainsFunctor
   map f := PartOrd.ofHom (NonemptyFiniteChains.orderHomMap f.hom)
 
 中文:
-定义 PartOrd.nonemptyFiniteChainsFunctor
-  签名: : PartOrd.{u} ⥤ PartOrd.{u} where
+定义 偏序.nonemptyFiniteChainsFunctor
+  签名: : 偏序.{u} ⥤ 偏序.{u} where
   定义体: .of (NonemptyFiniteChains X)
   map f := PartOrd.ofHom (NonemptyFiniteChains.orderHomMap f.hom)
 

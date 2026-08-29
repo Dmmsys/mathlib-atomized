@@ -35,10 +35,10 @@ structure Polygon
     - vertices : Fin n -> P
 
 中文:
-结构 Polygon
+结构 多边形
   参数: (P : 类型) (n : 自然数)
   公理与运算 (1 个):
-    - vertices : Fin n -> P
+    - vertices : 有限集 n -> P
 -/
 structure Polygon (P : Type*) (n : Nat) where
   /-- The vertices of the polygon, indexed by `Fin n`. -/
@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (Polygon P n) (fun _ => Fin n -> P)
+  签名: CoeFun (多边形 P n) (fun _ => 有限集 n -> P)
   定义体: Polygon.vertices
 
 Depends on / 依赖: Polygon, Polygon.vertices, vertices
@@ -76,7 +76,7 @@ definition HasNondegenerateEdges
 
 中文:
 定义 HasNondegenerateEdges
-  签名: (poly : Polygon P n)
+  签名: (poly : 多边形 P n)
   定义体: forall i : Fin n, poly i != poly (finRotate n i)
 
 Depends on / 依赖: finRotate
@@ -98,7 +98,7 @@ theorem HasNondegenerateEdges.two_le
 
 中文:
 定理 HasNondegenerateEdges.two_le
-  结论: [NeZero n] {poly : Polygon P n}
+  结论: [NeZero n] {poly : 多边形 P n}
   证明: by
   by_contra! hlt
   interval_cases n
@@ -127,7 +127,7 @@ definition edgePath
 
 中文:
 定义 edgePath
-  签名: (poly : Polygon P n) (i : Fin n)
+  签名: (poly : 多边形 P n) (i : 有限集 n)
   定义体: AffineMap.lineMap (poly i) (poly (finRotate n i))
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap, finRotate, lineMap
@@ -146,7 +146,7 @@ definition edgeSet
 
 中文:
 定义 edgeSet
-  签名: [PartialOrder R] (poly : Polygon P n) (i : Fin n)
+  签名: [偏序 R] (poly : 多边形 P n) (i : 有限集 n)
   定义体: affineSegment R (poly i) (poly (finRotate n i))
 
 Depends on / 依赖: affineSegment, finRotate
@@ -165,7 +165,7 @@ theorem edgeSet_eq_image_edgePath
 
 中文:
 定理 edgeSet_eq_image_edgePath
-  条件: [PartialOrder R] (poly : Polygon P n) (i : Fin n)
+  条件: [偏序 R] (poly : 多边形 P n) (i : 有限集 n)
   证明: rfl
 -/
 theorem edgeSet_eq_image_edgePath [PartialOrder R] (poly : Polygon P n) (i : Fin n) :
@@ -182,7 +182,7 @@ definition boundary
 
 中文:
 定义 boundary
-  签名: [PartialOrder R] (poly : Polygon P n)
+  签名: [偏序 R] (poly : 多边形 P n)
   定义体: ⋃ i, poly.edgeSet R i
 
 Depends on / 依赖: edgeSet, poly.edgeSet
@@ -201,7 +201,7 @@ definition HasNondegenerateVertices
 
 中文:
 定义 HasNondegenerateVertices
-  签名: [NeZero n] (poly : Polygon P n)
+  签名: [NeZero n] (poly : 多边形 P n)
   定义体: forall i : Fin n, AffineIndependent R ![poly i, poly (i + 1), poly (i + 2)]
 
 Depends on / 依赖: AffineIndependent
@@ -222,7 +222,7 @@ theorem HasNondegenerateVertices.hasNondegenerateEdges
 
 中文:
 定理 HasNondegenerateVertices.hasNondegenerateEdges
-  结论: [NeZero n] [Nontrivial R]
+  结论: [NeZero n] [非平凡 R]
   证明: by
   obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   intro i
@@ -251,7 +251,7 @@ theorem HasNondegenerateVertices.three_le
 
 中文:
 定理 HasNondegenerateVertices.three_le
-  结论: [NeZero n] [Nontrivial R] {poly : Polygon P n}
+  结论: [NeZero n] [非平凡 R] {poly : 多边形 P n}
   证明: by
   have := h.hasNondegenerateEdges.two_le
   by_contra! hlt
@@ -292,7 +292,7 @@ definition toPolygon
 
 中文:
 定义 toPolygon
-  签名: : Affine.Triangle R P ↪ Polygon P 3 where
+  签名: : 仿射.Triangle R P ↪ 多边形 P 3 where
   定义体: ⟨t.points⟩
   inj' t₁ t₂ h := by
     apply Simplex.ext
@@ -322,7 +322,7 @@ lemma toPolygon_vertices
 
 中文:
 引理 toPolygon_vertices
-  条件: (t : Affine.Triangle R P)
+  条件: (t : 仿射.Triangle R P)
   结论: (t.toPolygon).vertices = t.points
   证明: rfl
 -/
@@ -351,7 +351,7 @@ definition toTriangle
 
 中文:
 定义 toTriangle
-  签名: (p : Polygon P 3) (h : p.HasNondegenerateVertices R)
+  签名: (p : 多边形 P 3) (h : p.HasNondegenerateVertices R)
   定义体: ⟨p.vertices, by
     have : p.vertices = ![p.vertices 0, p.vertices 1, p.vertices 2] := List.ofFn_inj.mp rfl
     rw [this]
@@ -379,7 +379,7 @@ lemma toTriangle_points
 
 中文:
 引理 toTriangle_points
-  条件: (p : Polygon P 3) (h : p.HasNondegenerateVertices R)
+  条件: (p : 多边形 P 3) (h : p.HasNondegenerateVertices R)
   证明: rfl
 -/
 lemma toTriangle_points (p : Polygon P 3) (h : p.HasNondegenerateVertices R) :
@@ -398,7 +398,7 @@ lemma toTriangle_toPolygon
 
 中文:
 引理 toTriangle_toPolygon
-  条件: (poly : Polygon P 3) (h : poly.HasNondegenerateVertices R)
+  条件: (poly : 多边形 P 3) (h : poly.HasNondegenerateVertices R)
   证明: by
   rfl
 -/
@@ -429,7 +429,7 @@ theorem toPolygon_hasNondegenerateVertices
 
 中文:
 定理 toPolygon_hasNondegenerateVertices
-  条件: (t : Affine.Triangle R P)
+  条件: (t : 仿射.Triangle R P)
   证明: by
   have ht : t.points = ![t.points 0, t.points 1, t.points 2] := List.ofFn_inj.mp rfl
   have h : AffineIndependent R ![t.points 0, t.points 1, t.points 2] := by
@@ -462,7 +462,7 @@ lemma toPolygon_toTriangle
 
 中文:
 引理 toPolygon_toTriangle
-  条件: (t : Affine.Triangle R P)
+  条件: (t : 仿射.Triangle R P)
   证明: by
   rfl
 -/

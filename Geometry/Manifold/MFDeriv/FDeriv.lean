@@ -94,8 +94,8 @@ theorem ModelWithCorners.uniqueMDiffOn
 @[simp, mfld_simps]
 
 中文:
-定理 ModelWithCorners.uniqueMDiffOn
-  结论: {H : 类型} [TopologicalSpace H]
+定理 带角模型.uniqueMDiffOn
+  结论: {H : 类型} [拓扑空间 H]
   证明: I.uniqueDiffOn.uniqueMDiffOn
 
 @[simp, mfld_simps]
@@ -171,7 +171,7 @@ alias ⟨HasMFDerivAt.hasFDerivAt, HasFDerivAt.hasMFDerivAt⟩ := hasMFDerivAt_i
 
 中文:
 定理 hasMFDerivAt_iff_hasFDerivAt
-  结论: HasMFDerivAt% f x f' ↔ HasFDerivAt f f' x
+  结论: HasMFDerivAt% f x f' ↔ 在点处Fréchet可导 f f' x
   证明: by
   rw [← hasMFDerivWithinAt_univ]; rw [hasMFDerivWithinAt_iff_hasFDerivWithinAt]; rw [hasFDerivWithinAt_univ]
 
@@ -294,7 +294,7 @@ alias ⟨MDifferentiable.differentiable, Differentiable.mdifferentiable⟩ :=
 
 中文:
 定理 mdifferentiable_iff_differentiable
-  结论: MDiff f ↔ Differentiable 𝕜 f
+  结论: MDiff f ↔ 可微 𝕜 f
   证明: by
   simp only [MDifferentiable, Differentiable, mdifferentiableAt_iff_differentiableAt]
 

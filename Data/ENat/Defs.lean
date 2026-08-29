@@ -24,8 +24,8 @@ definition ENat
 @[inherit_doc] notation "Nat∞" => ENat
 
 中文:
-定义 ENat
-  签名: : Type
+定义 E自然数
+  签名: : 类型
   定义体: WithTop Nat deriving Top, Inhabited
 
 @[inherit_doc] notation "Nat∞" => ENat
@@ -47,8 +47,8 @@ instance instNatCast
   body: ⟨WithTop.some⟩
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast 自然数∞
+实例 inst自然数Cast
+  签名: : 自然数嵌入 自然数∞
   定义体: ⟨WithTop.some⟩
 
 Depends on / 依赖: WithTop, WithTop.some
@@ -66,7 +66,7 @@ definition recTopCoe
 
 中文:
 定义 recTopCoe
-  签名: {C : 自然数∞ -> Sort*} (top : C ⊤) (coe : 对任意 a : 自然数, C a)
+  签名: {C : 自然数∞ -> 类型层*} (top : C ⊤) (coe : 对任意 a : 自然数, C a)
 -/
 def recTopCoe {C : Nat∞ -> Sort*} (top : C ⊤) (coe : forall a : Nat, C a) : forall n : Nat∞, C n
   | none => top
@@ -85,7 +85,7 @@ theorem recTopCoe_top
 
 中文:
 定理 recTopCoe_top
-  条件: {C : 自然数∞ -> Sort*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
+  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a)
   证明: rfl
 
 @[simp]
@@ -107,7 +107,7 @@ theorem recTopCoe_natCast
 
 中文:
 定理 recTopCoe_natCast
-  条件: {C : 自然数∞ -> Sort*} (d : C ⊤) (f : 对任意 a : 自然数, C a) (x : 自然数)
+  条件: {C : 自然数∞ -> 类型层*} (d : C ⊤) (f : 对任意 a : 自然数, C a) (x : 自然数)
   证明: rfl
 
 @[deprecated (since := "2026-07-17")] alias recTopCoe_coe := recTopCoe_natCast

@@ -50,7 +50,7 @@ structure ObjectProperty
 结构 ObjectProperty
   参数: where
   公理与运算 (1 个):
-    - prop((X : B)) : CategoryTheory.Object命题erty (F.obj X)
+    - prop((X : B)) : 范畴论.ObjectProperty (F.obj X)
 -/
 protected structure ObjectProperty where
   /-- A property of objects in the category `F.obj X` for all `X : B`. -/
@@ -87,8 +87,8 @@ class IsClosedUnderMapObj
     - map_obj((P) {X Y : B} {M : F.obj X} (hM : P.prop X M) (f : X ⟶ Y)) : P.prop Y ((F.map f).toFunctor.obj M)
 
 中文:
-类 IsClosedUnderMapObj
-  参数: (P : F.Object命题erty)
+类 是ClosedUnderMapObj
+  参数: (P : F.ObjectProperty)
   公理与运算 (1 个):
     - map_obj((P) {X Y : B} {M : F.obj X} (hM : P.prop X M) (f : X ⟶ Y)) : P.prop Y ((F.map f).toFunctor.obj M)
 -/
@@ -108,10 +108,10 @@ class IsClosedUnderIsomorphisms
     - isClosedUnderIsomorphisms((X : B)) : (P.prop X).IsClosedUnderIsomorphisms
 
 中文:
-类 IsClosedUnderIsomorphisms
+类 在同构下封闭
   参数: : 命题 where
   公理与运算 (1 个):
-    - isClosedUnderIsomorphisms((X : B)) : (P.prop X).IsClosedUnderIsomorphisms
+    - isClosedUnderIsomorphisms((X : B)) : (P.prop X).在同构下封闭
 -/
 class IsClosedUnderIsomorphisms : Prop where
   isClosedUnderIsomorphisms (X : B) : (P.prop X).IsClosedUnderIsomorphisms

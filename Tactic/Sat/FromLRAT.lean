@@ -77,7 +77,7 @@ definition Literal.ofInt
   body: if i < 0 then Literal.neg (-i-1).toNat else Literal.pos (i-1).toNat
 
 中文:
-定义 Literal.ofInt
+定义 Literal.of整数
   签名: (i : 整数)
   定义体: if i < 0 then Literal.neg (-i-1).toNat else Literal.pos (i-1).toNat
 
@@ -301,7 +301,7 @@ definition Valuation
   body: Nat -> Prop
 
 中文:
-定义 Valuation
+定义 赋值
   定义体: Nat -> Prop
 -/
 def Valuation := Nat -> Prop
@@ -314,8 +314,8 @@ definition Valuation.neg
   signature: (v : Valuation)
 
 中文:
-定义 Valuation.neg
-  签名: (v : Valuation)
+定义 赋值.neg
+  签名: (v : 赋值)
 -/
 def Valuation.neg (v : Valuation) : Literal -> Prop
   | Literal.pos i => ¬ v i
@@ -329,8 +329,8 @@ definition Valuation.satisfies
   signature: (v : Valuation)
 
 中文:
-定义 Valuation.satisfies
-  签名: (v : Valuation)
+定义 赋值.satisfies
+  签名: (v : 赋值)
 -/
 def Valuation.satisfies (v : Valuation) : Clause -> Prop
   | [] => False
@@ -347,8 +347,8 @@ structure Valuation.satisfies_fmla
     - prop : forall c, c in f -> v.satisfies c
 
 中文:
-结构 Valuation.satisfies_fmla
-  参数: (v : Valuation) (f : Fmla)
+结构 赋值.satisfies_fmla
+  参数: (v : 赋值) (f : Fmla)
   公理与运算 (1 个):
     - prop : 对任意 c, c in f -> v.satisfies c
 -/
@@ -403,8 +403,8 @@ theorem Valuation.by_cases
 | Literal.neg _ => h₁ h₂
 
 中文:
-定理 Valuation.by_cases
-  结论: {v : Valuation} {l}
+定理 赋值.by_cases
+  结论: {v : 赋值} {l}
   证明: match l with
 | Literal.pos _ => h₂ h₁
 | Literal.neg _ => h₁ h₂
@@ -425,8 +425,8 @@ definition Valuation.implies
   signature: (v : Valuation) (p : Prop)
 
 中文:
-定义 Valuation.implies
-  签名: (v : Valuation) (p : 命题)
+定义 赋值.implies
+  签名: (v : 赋值) (p : 命题)
 -/
 def Valuation.implies (v : Valuation) (p : Prop) : List Prop -> Nat -> Prop
   | [], _ => p
@@ -441,8 +441,8 @@ definition Valuation.mk
   signature: : List Prop -> Valuation
 
 中文:
-定义 Valuation.mk
-  签名: : List 命题 -> Valuation
+定义 赋值.mk
+  签名: : 列表 命题 -> 赋值
 -/
 def Valuation.mk : List Prop -> Valuation
   | [], _ => False
@@ -468,9 +468,9 @@ theorem Valuation.mk_implies
     induct
 
 中文:
-定理 Valuation.mk_implies
+定理 赋值.mk_implies
   条件: {p} {as ps} (as₁)
-  结论: as = List.reverseAux as₁ ps ->
+  结论: as = 列表.reverseAux as₁ ps ->
   证明: by
   induction ps generalizing as₁ with
   | nil => exact fun _ => id
@@ -507,7 +507,7 @@ structure Fmla.reify
 
 中文:
 结构 Fmla.reify
-  参数: (v : Valuation) (f : Fmla) (p : 命题)
+  参数: (v : 赋值) (f : Fmla) (p : 命题)
   公理与运算 (1 个):
     - prop : ¬ v.satisfies_fmla f -> p
 -/
@@ -576,7 +576,7 @@ structure Clause.reify
 
 中文:
 结构 Clause.reify
-  参数: (v : Valuation) (c : Clause) (p : 命题)
+  参数: (v : 赋值) (c : Clause) (p : 命题)
   公理与运算 (1 个):
     - prop : ¬ v.satisfies c -> p
 -/
@@ -613,7 +613,7 @@ structure Literal.reify
 
 中文:
 结构 Literal.reify
-  参数: (v : Valuation) (l : Literal) (p : 命题)
+  参数: (v : 赋值) (l : Literal) (p : 命题)
   公理与运算 (1 个):
     - prop : v.neg l -> p
 -/
@@ -650,7 +650,7 @@ theorem Clause.reify_zero
 
 中文:
 定理 Clause.reify_zero
-  结论: Clause.reify v Clause.nil True
+  结论: Clause.reify v Clause.nil 真
   证明: ⟨fun _ => trivial⟩
 -/
 theorem Clause.reify_zero : Clause.reify v Clause.nil True := ⟨fun _ => trivial⟩
@@ -727,7 +727,7 @@ structure Clause
 结构 Clause
   参数: where
   公理与运算 (3 个):
-    - lits : Array 整数
+    - lits : 数组 整数
     - expr : Expr
     - proof : Expr
 -/
@@ -755,7 +755,7 @@ definition buildClause
 
 中文:
 定义 buildClause
-  签名: (arr : Array 整数)
+  签名: (arr : 数组 整数)
   定义体: let nil := mkConst ``Sat.Clause.nil
   let cons := mkConst ``Sat.Clause.cons
   arr.foldr (fun i e => mkApp2 cons (toExpr <| Sat.Literal.ofInt i) e) nil
@@ -782,7 +782,7 @@ definition buildConj
 
 中文:
 定义 buildConj
-  签名: (arr : Array (Array 整数)) (start stop : 自然数)
+  签名: (arr : 数组 (数组 整数)) (start stop : 自然数)
   定义体: match stop - start with
   | 0 => panic! "empty"
   | 1 => mkApp (mkConst ``Sat.Fmla.one) (buildClause arr[start]!)
@@ -819,7 +819,7 @@ definition buildClauses
 
 中文:
 定义 buildClauses
-  签名: (arr : Array (Array 整数)) (ctx : Expr) (start stop : 自然数)
+  签名: (arr : 数组 (数组 整数)) (ctx : Expr) (start stop : 自然数)
   定义体: match stop - start with
   | 0 => panic! "empty"
   | 1 =>
@@ -864,7 +864,7 @@ structure LClause
 结构 LClause
   参数: where
   公理与运算 (3 个):
-    - lits : Array 整数
+    - lits : 数组 整数
     - expr : Expr
     - depth : 自然数
 
@@ -984,8 +984,8 @@ inductive LRATStep
 中文:
 归纳类型 LRATStep
   构造子 (2 个):
-    - /--: An addition step, with the clause ID, the clause literal list, and the proof trace -/ add (id : 自然数) (lits : Array 整数) (proof : Array 整数) : LRATStep
-    - /--: A (multiple) deletion step, which deletes all the listed clause IDs from the context -/ del (ids : Array 自然数) : LRATStep
+    - /--: An addition step, with the clause ID, the clause literal list, and the proof trace -/ add (id : 自然数) (lits : 数组 整数) (proof : 数组 整数) : LRATStep
+    - /--: A (multiple) deletion step, which deletes all the listed clause IDs from the context -/ del (ids : 数组 自然数) : LRATStep
 -/
 inductive LRATStep
   | /-- An addition step, with the clause ID, the clause literal list, and the proof trace -/
@@ -1011,7 +1011,7 @@ definition buildProof
 
 中文:
 定义 buildProof
-  签名: (arr : Array (Array 整数)) (ctx ctx' : Expr)
+  签名: (arr : 数组 (数组 整数)) (ctx ctx' : Expr)
   定义体: do
   let p := mkApp (mkConst ``Sat.Fmla.subsumes_self) ctx
   let mut db := (buildClauses arr ctx 0 arr.size ctx' p default).2
@@ -1148,7 +1148,7 @@ definition parseNat
   body: Json.Parser.natMaybeZero
 
 中文:
-定义 parseNat
+定义 parse自然数
   签名: : String.Parser 自然数
   定义体: Json.Parser.natMaybeZero
 
@@ -1166,7 +1166,7 @@ definition parseInt
 if (← peek!) = '-' then skip; pure -(← parseNat) else parseNat
 
 中文:
-定义 parseInt
+定义 parse整数
   签名: : String.Parser 整数
   定义体: do
 if (← peek!) = '-' then skip; pure -(← parseNat) else parseNat
@@ -1186,8 +1186,8 @@ definition parseInts
   | n => parseInts (arr.push n)
 
 中文:
-定义 parseInts
-  签名: (arr : Array 整数 := #[])
+定义 parse整数s
+  签名: (arr : 数组 整数 := #[])
   定义体: do
   match ← parseInt <* ws with
   | 0 => pure arr
@@ -1210,8 +1210,8 @@ definition parseNats
   | n => parseNats (arr.push n)
 
 中文:
-定义 parseNats
-  签名: (arr : Array 自然数 := #[])
+定义 parse自然数s
+  签名: (arr : 数组 自然数 := #[])
   定义体: do
   match ← parseNat <* ws with
   | 0 => pure arr
@@ -1239,7 +1239,7 @@ definition parseDimacs
 
 中文:
 定义 parseDimacs
-  签名: : String.Parser (自然数 × Array (Array 整数))
+  签名: : String.Parser (自然数 × 数组 (数组 整数))
   定义体: do
   pstring "p cnf" *> ws
   let nvars ← parseNat <* ws
@@ -1271,7 +1271,7 @@ else ws; pure LRATStep.add step (← parseInts) (← parseInts)
 
 中文:
 定义 parseLRAT
-  签名: : String.Parser (Array LRATStep)
+  签名: : String.Parser (数组 LRATStep)
   定义体: many do
   let step ← parseNat <* ws
 if (← peek!) = 'd' then skip <* ws; pure LRATStep.del (← parseNats)

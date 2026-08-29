@@ -76,8 +76,8 @@ exact .symm forall_congr' fun _ =>
     Equiv.forall_congr (InnerProductSpace.toDual 𝕜 F) fun _ => Iff.rfl
 
 中文:
-引理 tendsto_iff_forall_inner_apply_tendsto
-  结论: {α : 类型} {l : Filter α}
+引理 tendsto_iff_对任意_inner_apply_tendsto
+  结论: {α : 类型} {l : 滤子 α}
   证明: by
   simp_rw [tendsto_iff_forall_dual_apply_tendsto]
 exact .symm forall_congr' fun _ =>
@@ -101,8 +101,8 @@ lemma le_nhds_iff_forall_inner_apply_le_nhds
   proof: tendsto_iff_forall_inner_apply_tendsto (f := id)
 
 中文:
-引理 le_nhds_iff_forall_inner_apply_le_nhds
-  结论: {l : Filter (E ->WOT[𝕜] F)}
+引理 le_nhds_iff_对任意_inner_apply_le_nhds
+  结论: {l : 滤子 (E ->WOT[𝕜] F)}
   证明: tendsto_iff_forall_inner_apply_tendsto (f := id)
 
 Depends on / 依赖: tendsto_iff_forall_inner_apply_tendsto
@@ -121,7 +121,7 @@ lemma continuousWithinAt_iff
 
 中文:
 引理 continuousWithinAt_iff
-  结论: {α : 类型} [TopologicalSpace α]
+  结论: {α : 类型} [拓扑空间 α]
   证明: tendsto_iff_forall_inner_apply_tendsto
 
 Depends on / 依赖: tendsto_iff_forall_inner_apply_tendsto
@@ -141,7 +141,7 @@ lemma continuousAt_iff
 
 中文:
 引理 continuousAt_iff
-  条件: {α : 类型} [TopologicalSpace α] {f : α -> E ->WOT[𝕜] F} {a : α}
+  条件: {α : 类型} [拓扑空间 α] {f : α -> E ->WOT[𝕜] F} {a : α}
   证明: tendsto_iff_forall_inner_apply_tendsto
 
 Depends on / 依赖: tendsto_iff_forall_inner_apply_tendsto
@@ -161,7 +161,7 @@ lemma continuousOn_iff
 
 中文:
 引理 continuousOn_iff
-  条件: {α : 类型} [TopologicalSpace α] {f : α -> E ->WOT[𝕜] F} {s : Set α}
+  条件: {α : 类型} [拓扑空间 α] {f : α -> E ->WOT[𝕜] F} {s : 集合 α}
   证明: by
   simp_rw [ContinuousOn, forall_comm (α := E), forall_comm (α := F), continuousWithinAt_iff]
 
@@ -187,7 +187,7 @@ lemma continuous_iff
 
 中文:
 引理 continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] {f : α -> E ->WOT[𝕜] F}
+  条件: {α : 类型} [拓扑空间 α] {f : α -> E ->WOT[𝕜] F}
   证明: by
   simp_rw [continuous_iff_continuousAt, forall_comm (α := E), forall_comm (α := F),
     continuousAt_iff]
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing (F ->WOT[𝕜] F)
+  签名: 对合环 (F ->WOT[𝕜] F)
   定义体: equiv.starRing
 
 Depends on / 依赖: equiv.starRing, starRing
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarModule 𝕜 (F ->WOT[𝕜] F)
+  签名: 对合模 𝕜 (F ->WOT[𝕜] F)
   定义体: equiv.starModule 𝕜
 
 Depends on / 依赖: equiv.starModule, starModule
@@ -274,7 +274,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousStar (F ->WOT[𝕜] F)
+  签名: 余ntinuousStar (F ->WOT[𝕜] F)
   定义体: by
     simp_rw [continuous_iff, star_apply, ContinuousLinearMap.star_eq_adjoint,
       ContinuousLinearMap.adjoint_inner_right, coe_toCLM]

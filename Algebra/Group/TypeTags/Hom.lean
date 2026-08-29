@@ -42,8 +42,8 @@ definition AddMonoidHom.toMultiplicative
 @[simp, norm_cast]
 
 中文:
-定义 AddMonoidHom.toMultiplicative
-  签名: [AddZeroClass α] [AddZeroClass β]
+定义 加法幺半群态射.toMultiplicative
+  签名: [加法零类 α] [加法零类 β]
   定义体: {
     toFun := fun a => ofAdd (f a.toAdd)
     map_mul' := f.map_add
@@ -82,8 +82,8 @@ lemma AddMonoidHom.coe_toMultiplicative
 @[simp]
 
 中文:
-引理 AddMonoidHom.coe_toMultiplicative
-  条件: [AddZeroClass α] [AddZeroClass β] (f : α ->+ β)
+引理 加法幺半群态射.coe_toMultiplicative
+  条件: [加法零类 α] [加法零类 β] (f : α ->+ β)
   证明: rfl
 
 @[simp]
@@ -102,8 +102,8 @@ lemma AddMonoidHom.toMultiplicative_id
   proof: rfl
 
 中文:
-引理 AddMonoidHom.toMultiplicative_id
-  条件: [AddZeroClass α]
+引理 加法幺半群态射.toMultiplicative_id
+  条件: [加法零类 α]
   结论: (id α).toMultiplicative = .id _
   证明: rfl
 -/
@@ -131,8 +131,8 @@ definition MonoidHom.toAdditive
 @[simp, norm_cast]
 
 中文:
-定义 MonoidHom.toAdditive
-  签名: [MulOneClass α] [MulOneClass β]
+定义 幺半群态射.toAdditive
+  签名: [MulOne类 α] [MulOne类 β]
   定义体: {
     toFun := fun a => ofMul (f a.toMul)
     map_add' := f.map_mul
@@ -169,8 +169,8 @@ lemma MonoidHom.coe_toAdditive
   proof: rfl
 
 中文:
-引理 MonoidHom.coe_toAdditive
-  条件: [MulOneClass α] [MulOneClass β] (f : α ->* β)
+引理 幺半群态射.coe_toAdditive
+  条件: [MulOne类 α] [MulOne类 β] (f : α ->* β)
   证明: rfl
 -/
 lemma MonoidHom.coe_toAdditive [MulOneClass α] [MulOneClass β] (f : α ->* β) :
@@ -186,8 +186,8 @@ lemma MonoidHom.toAdditive_id
   proof: rfl
 
 中文:
-引理 MonoidHom.toAdditive_id
-  条件: [MulOneClass α]
+引理 幺半群态射.toAdditive_id
+  条件: [MulOne类 α]
   结论: (id α).toAdditive = .id _
   证明: rfl
 
@@ -217,8 +217,8 @@ definition AddMonoidHom.toMultiplicativeRight
 @[simp, norm_cast]
 
 中文:
-定义 AddMonoidHom.toMultiplicativeRight
-  签名: [MulOneClass α] [AddZeroClass β]
+定义 加法幺半群态射.toMultiplicativeRight
+  签名: [MulOne类 α] [加法零类 β]
   定义体: {
     toFun := fun a => ofAdd (f (ofMul a))
     map_mul' := f.map_add
@@ -255,8 +255,8 @@ lemma AddMonoidHom.coe_toMultiplicativeRight
   proof: rfl
 
 中文:
-引理 AddMonoidHom.coe_toMultiplicativeRight
-  结论: [MulOneClass α] [AddZeroClass β]
+引理 加法幺半群态射.coe_toMultiplicativeRight
+  结论: [MulOne类 α] [加法零类 β]
   证明: rfl
 -/
 lemma AddMonoidHom.coe_toMultiplicativeRight [MulOneClass α] [AddZeroClass β]
@@ -275,8 +275,8 @@ definition MonoidHom.toAdditiveLeft
 @[simp, norm_cast]
 
 中文:
-定义 MonoidHom.toAdditiveLeft
-  签名: [MulOneClass α] [AddZeroClass β]
+定义 幺半群态射.toAdditiveLeft
+  签名: [MulOne类 α] [加法零类 β]
   定义体: AddMonoidHom.toMultiplicativeRight.symm
 
 @[simp, norm_cast]
@@ -297,8 +297,8 @@ lemma MonoidHom.coe_toAdditiveLeft
   proof: rfl
 
 中文:
-引理 MonoidHom.coe_toAdditiveLeft
-  条件: [MulOneClass α] [AddZeroClass β] (f : α ->* Multiplicative β)
+引理 幺半群态射.coe_toAdditiveLeft
+  条件: [MulOne类 α] [加法零类 β] (f : α ->* Multiplicative β)
   证明: rfl
 -/
 lemma MonoidHom.coe_toAdditiveLeft [MulOneClass α] [AddZeroClass β] (f : α ->* Multiplicative β) :
@@ -326,8 +326,8 @@ definition AddMonoidHom.toMultiplicativeLeft
 @[simp, norm_cast]
 
 中文:
-定义 AddMonoidHom.toMultiplicativeLeft
-  签名: [AddZeroClass α] [MulOneClass β]
+定义 加法幺半群态射.toMultiplicativeLeft
+  签名: [加法零类 α] [MulOne类 β]
   定义体: {
     toFun := fun a => (f a.toAdd).toMul
     map_mul' := f.map_add
@@ -364,8 +364,8 @@ lemma AddMonoidHom.coe_toMultiplicativeLeft
   proof: rfl
 
 中文:
-引理 AddMonoidHom.coe_toMultiplicativeLeft
-  条件: [AddZeroClass α] [MulOneClass β] (f : α ->+ Additive β)
+引理 加法幺半群态射.coe_toMultiplicativeLeft
+  条件: [加法零类 α] [MulOne类 β] (f : α ->+ 加性 β)
   证明: rfl
 -/
 lemma AddMonoidHom.coe_toMultiplicativeLeft [AddZeroClass α] [MulOneClass β] (f : α ->+ Additive β) :
@@ -384,8 +384,8 @@ definition MonoidHom.toAdditiveRight
 @[simp, norm_cast]
 
 中文:
-定义 MonoidHom.toAdditiveRight
-  签名: [AddZeroClass α] [MulOneClass β]
+定义 幺半群态射.toAdditiveRight
+  签名: [加法零类 α] [MulOne类 β]
   定义体: AddMonoidHom.toMultiplicativeLeft.symm
 
 @[simp, norm_cast]
@@ -406,8 +406,8 @@ lemma MonoidHom.coe_toAdditiveRight
   proof: rfl
 
 中文:
-引理 MonoidHom.coe_toAdditiveRight
-  条件: [AddZeroClass α] [MulOneClass β] (f : Multiplicative α ->* β)
+引理 幺半群态射.coe_toAdditiveRight
+  条件: [加法零类 α] [MulOne类 β] (f : Multiplicative α ->* β)
   证明: rfl
 -/
 lemma MonoidHom.coe_toAdditiveRight [AddZeroClass α] [MulOneClass β] (f : Multiplicative α ->* β) :
@@ -428,7 +428,7 @@ lemma Multiplicative.monoidHom_ext
 
 中文:
 引理 Multiplicative.monoidHom_ext
-  结论: [AddZeroClass α] [MulOneClass β]
+  结论: [加法零类 α] [MulOne类 β]
   证明: MonoidHom.toAdditiveRight.injective h
 
 Depends on / 依赖: MonoidHom, MonoidHom.toAdditiveRight.injective, injective, toAdditiveRight
@@ -451,8 +451,8 @@ lemma Additive.addMonoidHom_ext
   proof: AddMonoidHom.toMultiplicativeRight.injective h
 
 中文:
-引理 Additive.addMonoidHom_ext
-  结论: [MulOneClass α] [AddZeroClass β]
+引理 加性.addMonoidHom_ext
+  结论: [MulOne类 α] [加法零类 β]
   证明: AddMonoidHom.toMultiplicativeRight.injective h
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.toMultiplicativeRight.injective, injective, toMultiplicativeRight
@@ -474,7 +474,7 @@ lemma AddMonoidHom.toMultiplicative_add
   proof: rfl
 
 中文:
-引理 AddMonoidHom.toMultiplicative_add
+引理 加法幺半群态射.toMultiplicative_add
   条件: (f g : M ->+ N)
   证明: rfl
 -/
@@ -493,8 +493,8 @@ definition AddMonoidHom.toMultiplicativeLeftAddEquiv
   map_add' _ _ := rfl
 
 中文:
-定义 AddMonoidHom.toMultiplicativeLeftAddEquiv
-  签名: [AddMonoid M] [CommMonoid N]
+定义 加法幺半群态射.toMultiplicativeLeftAddEquiv
+  签名: [加法幺半群 M] [交换幺半群 N]
   定义体: AddMonoidHom.toMultiplicativeLeft.trans Additive.ofMul
   map_add' _ _ := rfl
 
@@ -515,8 +515,8 @@ definition AddMonoidHom.toMultiplicativeRightAddEquiv
   map_add' _ _ := rfl
 
 中文:
-定义 AddMonoidHom.toMultiplicativeRightAddEquiv
-  签名: [Monoid M] [AddCommMonoid N]
+定义 加法幺半群态射.toMultiplicativeRightAddEquiv
+  签名: [幺半群 M] [加法交换幺半群 N]
   定义体: AddMonoidHom.toMultiplicativeRight.trans Additive.ofMul
   map_add' _ _ := rfl
 
@@ -537,8 +537,8 @@ definition MonoidHom.toAdditiveLeftMulEquiv
   map_mul' _ _ := rfl
 
 中文:
-定义 MonoidHom.toAdditiveLeftMulEquiv
-  签名: [Monoid M] [AddCommMonoid N]
+定义 幺半群态射.toAdditiveLeftMulEquiv
+  签名: [幺半群 M] [加法交换幺半群 N]
   定义体: MonoidHom.toAdditiveLeft.trans Multiplicative.ofAdd
   map_mul' _ _ := rfl
 
@@ -559,8 +559,8 @@ definition MonoidHom.toAdditiveRightMulEquiv
   map_mul' _ _ := rfl
 
 中文:
-定义 MonoidHom.toAdditiveRightMulEquiv
-  签名: [AddMonoid M] [CommMonoid N]
+定义 幺半群态射.toAdditiveRightMulEquiv
+  签名: [加法幺半群 M] [交换幺半群 N]
   定义体: MonoidHom.toAdditiveRight.trans Multiplicative.ofAdd
   map_mul' _ _ := rfl
 

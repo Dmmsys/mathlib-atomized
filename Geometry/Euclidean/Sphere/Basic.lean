@@ -61,8 +61,8 @@ structure Sphere
     - radius : Real
 
 中文:
-结构 Sphere
-  参数: [MetricSpace P]
+结构 球面
+  参数: [度量空间 P]
   公理与运算 (2 个):
     - center : P
     - radius : 实数
@@ -88,8 +88,8 @@ instance [Nonempty
   body: ⟨⟨Classical.arbitrary P, 0⟩⟩
 
 中文:
-实例 [Nonempty
-  签名: P] : Nonempty (Sphere P)
+实例 [非空
+  签名: P] : 非空 (球面 P)
   定义体: ⟨⟨Classical.arbitrary P, 0⟩⟩
 
 Depends on / 依赖: Classical, Classical.arbitrary, arbitrary
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe (Sphere P) (Set P)
+  签名: Coe (球面 P) (集合 P)
   定义体: ⟨fun s => Metric.sphere s.center s.radius⟩
 
 Depends on / 依赖: Metric, Metric.sphere, center, radius, s.center, s.radius, sphere
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership P (Sphere P)
+  签名: Membership P (球面 P)
   定义体: ⟨fun s p => p in (s : Set P)⟩
 -/
 instance : Membership P (Sphere P) :=
@@ -141,9 +141,9 @@ theorem Sphere.mk_center
   proof: rfl
 
 中文:
-定理 Sphere.mk_center
+定理 球面.mk_center
   条件: (c : P) (r : 实数)
-  结论: (⟨c, r⟩ : Sphere P).center = c
+  结论: (⟨c, r⟩ : 球面 P).center = c
   证明: rfl
 -/
 theorem Sphere.mk_center (c : P) (r : Real) : (⟨c, r⟩ : Sphere P).center = c :=
@@ -161,9 +161,9 @@ theorem Sphere.mk_radius
 @[simp]
 
 中文:
-定理 Sphere.mk_radius
+定理 球面.mk_radius
   条件: (c : P) (r : 实数)
-  结论: (⟨c, r⟩ : Sphere P).radius = r
+  结论: (⟨c, r⟩ : 球面 P).radius = r
   证明: rfl
 
 @[simp]
@@ -185,9 +185,9 @@ theorem Sphere.mk_center_radius
 @[simp]
 
 中文:
-定理 Sphere.mk_center_radius
-  条件: (s : Sphere P)
-  结论: (⟨s.center, s.radius⟩ : Sphere P) = s
+定理 球面.mk_center_radius
+  条件: (s : 球面 P)
+  结论: (⟨s.center, s.radius⟩ : 球面 P) = s
   证明: by
   ext <;> rfl
 
@@ -207,9 +207,9 @@ theorem Sphere.coe_mk
   proof: rfl
 
 中文:
-定理 Sphere.coe_mk
+定理 球面.coe_mk
   条件: (c : P) (r : 实数)
-  结论: ↑(⟨c, r⟩ : Sphere P) = Metric.sphere c r
+  结论: ↑(⟨c, r⟩ : 球面 P) = Metric.sphere c r
   证明: rfl
 -/
 theorem Sphere.coe_mk (c : P) (r : Real) : ↑(⟨c, r⟩ : Sphere P) = Metric.sphere c r :=
@@ -228,9 +228,9 @@ theorem Sphere.mem_coe
 @[simp]
 
 中文:
-定理 Sphere.mem_coe
-  条件: {p : P} {s : Sphere P}
-  结论: p in (s : Set P) ↔ p in s
+定理 球面.mem_coe
+  条件: {p : P} {s : 球面 P}
+  结论: p in (s : 集合 P) ↔ p in s
   证明: Iff.rfl
 
 @[simp]
@@ -251,8 +251,8 @@ theorem Sphere.mem_coe'
   proof: Iff.rfl
 
 中文:
-定理 Sphere.mem_coe'
-  条件: {p : P} {s : Sphere P}
+定理 球面.mem_coe'
+  条件: {p : P} {s : 球面 P}
   结论: dist p s.center = s.radius ↔ p in s
   证明: Iff.rfl
 
@@ -272,7 +272,7 @@ theorem mem_sphere
 
 中文:
 定理 mem_sphere
-  条件: {p : P} {s : Sphere P}
+  条件: {p : P} {s : 球面 P}
   结论: p in s ↔ dist p s.center = s.radius
   证明: Iff.rfl
 
@@ -292,7 +292,7 @@ theorem mem_sphere'
 
 中文:
 定理 mem_sphere'
-  条件: {p : P} {s : Sphere P}
+  条件: {p : P} {s : 球面 P}
   结论: p in s ↔ dist s.center p = s.radius
   证明: Metric.mem_sphere'
 
@@ -312,7 +312,7 @@ theorem subset_sphere
 
 中文:
 定理 subset_sphere
-  条件: {ps : Set P} {s : Sphere P}
+  条件: {ps : 集合 P} {s : 球面 P}
   结论: ps subseteq s ↔ 对任意 p in ps, p in s
   证明: Iff.rfl
 
@@ -331,7 +331,7 @@ theorem dist_of_mem_subset_sphere
 
 中文:
 定理 dist_of_mem_subset_sphere
-  结论: {p : P} {ps : Set P} {s : Sphere P} (hp : p in ps)
+  结论: {p : P} {ps : 集合 P} {s : 球面 P} (hp : p in ps)
   证明: mem_sphere.1 (Sphere.mem_coe.1 (Set.mem_of_mem_of_subset hp hps))
 
 Depends on / 依赖: Set.mem_of_mem_of_subset, Sphere, Sphere.mem_coe, mem_coe, mem_of_mem_of_subset, mem_sphere
@@ -350,7 +350,7 @@ theorem dist_of_mem_subset_mk_sphere
 
 中文:
 定理 dist_of_mem_subset_mk_sphere
-  结论: {p c : P} {ps : Set P} {r : 实数} (hp : p in ps)
+  结论: {p c : P} {ps : 集合 P} {r : 实数} (hp : p in ps)
   证明: dist_of_mem_subset_sphere hp hps
 
 Depends on / 依赖: dist_of_mem_subset_sphere
@@ -369,8 +369,8 @@ theorem Sphere.ne_iff
   rw [← not_and_or]; rw [← Sphere.ext_iff]
 
 中文:
-定理 Sphere.ne_iff
-  条件: {s₁ s₂ : Sphere P}
+定理 球面.ne_iff
+  条件: {s₁ s₂ : 球面 P}
   证明: by
   rw [← not_and_or]; rw [← Sphere.ext_iff]
 
@@ -392,8 +392,8 @@ theorem Sphere.center_eq_iff_eq_of_mem
   rw [← hs₁]; rw [← hs₂]; rw [h]
 
 中文:
-定理 Sphere.center_eq_iff_eq_of_mem
-  条件: {s₁ s₂ : Sphere P} {p : P} (hs₁ : p in s₁) (hs₂ : p in s₂)
+定理 球面.center_eq_iff_eq_of_mem
+  条件: {s₁ s₂ : 球面 P} {p : P} (hs₁ : p in s₁) (hs₂ : p in s₂)
   证明: by
   refine ⟨fun h => Sphere.ext h ?_, fun h => h ▸ rfl⟩
   rw [mem_sphere] at hs₁ hs₂
@@ -416,8 +416,8 @@ theorem Sphere.center_ne_iff_ne_of_mem
   proof: (Sphere.center_eq_iff_eq_of_mem hs₁ hs₂).not
 
 中文:
-定理 Sphere.center_ne_iff_ne_of_mem
-  条件: {s₁ s₂ : Sphere P} {p : P} (hs₁ : p in s₁) (hs₂ : p in s₂)
+定理 球面.center_ne_iff_ne_of_mem
+  条件: {s₁ s₂ : 球面 P} {p : P} (hs₁ : p in s₁) (hs₂ : p in s₂)
   证明: (Sphere.center_eq_iff_eq_of_mem hs₁ hs₂).not
 
 Depends on / 依赖: Sphere, Sphere.center_eq_iff_eq_of_mem, center_eq_iff_eq_of_mem
@@ -437,7 +437,7 @@ theorem dist_center_eq_dist_center_of_mem_sphere
 
 中文:
 定理 dist_center_eq_dist_center_of_mem_sphere
-  结论: {p₁ p₂ : P} {s : Sphere P} (hp₁ : p₁ in s)
+  结论: {p₁ p₂ : P} {s : 球面 P} (hp₁ : p₁ in s)
   证明: by
   rw [mem_sphere.1 hp₁]; rw [mem_sphere.1 hp₂]
 
@@ -458,7 +458,7 @@ theorem dist_center_eq_dist_center_of_mem_sphere'
 
 中文:
 定理 dist_center_eq_dist_center_of_mem_sphere'
-  结论: {p₁ p₂ : P} {s : Sphere P} (hp₁ : p₁ in s)
+  结论: {p₁ p₂ : P} {s : 球面 P} (hp₁ : p₁ in s)
   证明: by
   rw [mem_sphere'.1 hp₁]; rw [mem_sphere'.1 hp₂]
 
@@ -478,8 +478,8 @@ lemma Sphere.radius_nonneg_of_mem
   proof: Metric.nonneg_of_mem_sphere h
 
 中文:
-引理 Sphere.radius_nonneg_of_mem
-  条件: {s : Sphere P} {p : P} (h : p in s)
+引理 球面.radius_nonneg_of_mem
+  条件: {s : 球面 P} {p : P} (h : p in s)
   结论: 0 <= s.radius
   证明: Metric.nonneg_of_mem_sphere h
 
@@ -499,8 +499,8 @@ lemma Sphere.center_mem_iff
   simp [mem_sphere, eq_comm]
 
 中文:
-引理 Sphere.center_mem_iff
-  条件: {s : Sphere P}
+引理 球面.center_mem_iff
+  条件: {s : 球面 P}
   结论: s.center in s ↔ s.radius = 0
   证明: by
   simp [mem_sphere, eq_comm]
@@ -518,8 +518,8 @@ lemma Sphere.ne_center_of_mem_of_mem_of_ne
   grind [dist_eq_zero, mem_sphere']
 
 中文:
-引理 Sphere.ne_center_of_mem_of_mem_of_ne
-  结论: {s : Sphere P} {p q : P}
+引理 球面.ne_center_of_mem_of_mem_of_ne
+  结论: {s : 球面 P} {p q : P}
   证明: by
   grind [dist_eq_zero, mem_sphere']
 
@@ -539,7 +539,7 @@ definition Cospherical
 
 中文:
 定义 Cospherical
-  签名: (ps : Set P)
+  签名: (ps : 集合 P)
   定义体: exists (center : P) (radius : Real), forall p in ps, dist p center = radius
 
 Depends on / 依赖: center, radius
@@ -557,7 +557,7 @@ theorem cospherical_def
 
 中文:
 定理 cospherical_def
-  条件: (ps : Set P)
+  条件: (ps : 集合 P)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -580,8 +580,8 @@ theorem cospherical_iff_exists_sphere
     exact ⟨s.center, s.radius, h⟩
 
 中文:
-定理 cospherical_iff_exists_sphere
-  条件: {ps : Set P}
+定理 cospherical_iff_存在_sphere
+  条件: {ps : 集合 P}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rcases h with ⟨c, r, h⟩
@@ -609,9 +609,9 @@ theorem Sphere.cospherical
   proof: cospherical_iff_exists_sphere.2 ⟨s, Set.Subset.rfl⟩
 
 中文:
-定理 Sphere.cospherical
-  条件: (s : Sphere P)
-  结论: Cospherical (s : Set P)
+定理 球面.cospherical
+  条件: (s : 球面 P)
+  结论: Cospherical (s : 集合 P)
   证明: cospherical_iff_exists_sphere.2 ⟨s, Set.Subset.rfl⟩
 
 Depends on / 依赖: Set.Subset.rfl, Subset, cospherical_iff_exists_sphere
@@ -631,7 +631,7 @@ theorem Cospherical.subset
 
 中文:
 定理 Cospherical.subset
-  条件: {ps₁ ps₂ : Set P} (hs : ps₁ subseteq ps₂) (hc : Cospherical ps₂)
+  条件: {ps₁ ps₂ : 集合 P} (hs : ps₁ subseteq ps₂) (hc : Cospherical ps₂)
   证明: by
   rcases hc with ⟨c, r, hcr⟩
   exact ⟨c, r, fun p hp => hcr p (hs hp)⟩
@@ -653,8 +653,8 @@ theorem cospherical_empty
 
 中文:
 定理 cospherical_empty
-  条件: [Nonempty P]
-  结论: Cospherical (∅ : Set P)
+  条件: [非空 P]
+  结论: Cospherical (∅ : 集合 P)
   证明: let ⟨p⟩ := ‹Nonempty P›
   ⟨p, 0, fun _ => False.elim⟩
 
@@ -678,7 +678,7 @@ theorem cospherical_singleton
 中文:
 定理 cospherical_singleton
   条件: (p : P)
-  结论: Cospherical ({p} : Set P)
+  结论: Cospherical ({p} : 集合 P)
   证明: by
   use p
   simp
@@ -700,8 +700,8 @@ theorem _root_.Isometry.cospherical
   rw [hf.dist_eq]; rw [hc p hp]
 
 中文:
-定理 _root_.Isometry.cospherical
-  结论: {E F : 类型} [MetricSpace E] [MetricSpace F] {f : E -> F}
+定理 _root_.等距.cospherical
+  结论: {E F : 类型} [度量空间 E] [度量空间 F] {f : E -> F}
   证明: by
   rcases hps with ⟨c, r, hc⟩
   refine ⟨f c, r, ?_⟩
@@ -735,7 +735,7 @@ theorem Cospherical.inclusion
 
 中文:
 定理 Cospherical.inclusion
-  结论: {S₁ S₂ : AffineSubspace 实数 P} [Nonempty S₁] {ps : Set S₁}
+  结论: {S₁ S₂ : 仿射子空间 实数 P} [非空 S₁] {ps : 集合 S₁}
   证明: by
   refine Isometry.cospherical ?_ hps
   exact S₁.subtypeₐᵢ.isometry
@@ -760,7 +760,7 @@ omit [NormedSpace Real V] in
 
 中文:
 定理 Cospherical.subtype_val
-  结论: {S : AffineSubspace 实数 P} [Nonempty S] {ps : Set S}
+  结论: {S : 仿射子空间 实数 P} [非空 S] {ps : 集合 S}
   证明: Isometry.cospherical S.subtypeₐᵢ.isometry hps
 
 omit [NormedSpace Real V] in
@@ -783,7 +783,7 @@ theorem norm_vsub_center_eq_radius
 
 中文:
 定理 norm_vsub_center_eq_radius
-  条件: {s : Sphere P} {p : P} (hp : p in s)
+  条件: {s : 球面 P} {p : P} (hp : p in s)
   证明: by
   rw [← dist_eq_norm_vsub']; exact mem_sphere'.mp hp
 
@@ -809,9 +809,9 @@ lemma Sphere.nonempty_iff
 include V in
 
 中文:
-引理 Sphere.nonempty_iff
-  条件: [Nontrivial V] {s : Sphere P}
-  结论: (s : Set P).Nonempty ↔ 0 <= s.radius
+引理 球面.nonempty_iff
+  条件: [非平凡 V] {s : 球面 P}
+  结论: (s : 集合 P).非空 ↔ 0 <= s.radius
   证明: by
   refine ⟨fun ⟨p, hp⟩ => radius_nonneg_of_mem hp, fun h => ?_⟩
   obtain ⟨v, hv⟩ := (NormedSpace.sphere_nonempty (x := (0 : V)) (r := s.radius)).2 h
@@ -844,7 +844,7 @@ theorem cospherical_pair
 中文:
 定理 cospherical_pair
   条件: (p₁ p₂ : P)
-  结论: Cospherical ({p₁, p₂} : Set P)
+  结论: Cospherical ({p₁, p₂} : 集合 P)
   证明: ⟨midpoint Real p₁ p₂, ‖(2 : Real)‖⁻¹ * dist p₁ p₂, by
     rintro p (rfl | rfl | _)
     · rw [dist_comm, dist_midpoint_left (𝕜 := Real)]
@@ -869,8 +869,8 @@ structure Concyclic
     - Coplanar : Coplanar Real ps
 
 中文:
-结构 Concyclic
-  参数: (ps : Set P)
+结构 余ncyclic
+  参数: (ps : 集合 P)
   公理与运算 (2 个):
     - Cospherical : Cospherical ps
     - Coplanar : Coplanar 实数 ps
@@ -889,9 +889,9 @@ theorem Concyclic.subset
   proof: ⟨h.1.subset hs, h.2.subset hs⟩
 
 中文:
-定理 Concyclic.subset
-  条件: {ps₁ ps₂ : Set P} (hs : ps₁ subseteq ps₂) (h : Concyclic ps₂)
-  结论: Concyclic ps₁
+定理 余ncyclic.subset
+  条件: {ps₁ ps₂ : 集合 P} (hs : ps₁ subseteq ps₂) (h : 余ncyclic ps₂)
+  结论: 余ncyclic ps₁
   证明: ⟨h.1.subset hs, h.2.subset hs⟩
 
 Depends on / 依赖: subset
@@ -909,7 +909,7 @@ theorem concyclic_empty
 
 中文:
 定理 concyclic_empty
-  结论: Concyclic (∅ : Set P)
+  结论: 余ncyclic (∅ : 集合 P)
   证明: ⟨cospherical_empty, coplanar_empty Real P⟩
 
 Depends on / 依赖: coplanar_empty, cospherical_empty
@@ -929,7 +929,7 @@ theorem concyclic_singleton
 中文:
 定理 concyclic_singleton
   条件: (p : P)
-  结论: Concyclic ({p} : Set P)
+  结论: 余ncyclic ({p} : 集合 P)
   证明: ⟨cospherical_singleton p, coplanar_singleton Real p⟩
 
 Depends on / 依赖: coplanar_singleton, cospherical_singleton
@@ -949,7 +949,7 @@ theorem concyclic_pair
 中文:
 定理 concyclic_pair
   条件: (p₁ p₂ : P)
-  结论: Concyclic ({p₁, p₂} : Set P)
+  结论: 余ncyclic ({p₁, p₂} : 集合 P)
   证明: ⟨cospherical_pair p₁ p₂, coplanar_pair Real p₁ p₂⟩
 
 Depends on / 依赖: coplanar_pair, cospherical_pair
@@ -970,8 +970,8 @@ structure IsDiameter
     - midpoint_eq_center : midpoint Real p₁ p₂ = s.center
 
 中文:
-结构 IsDiameter
-  参数: (s : Sphere P) (p₁ p₂ : P)
+结构 是Diameter
+  参数: (s : 球面 P) (p₁ p₂ : P)
   公理与运算 (2 个):
     - left_mem : p₁ in s
     - midpoint_eq_center : midpoint 实数 p₁ p₂ = s.center
@@ -993,8 +993,8 @@ lemma IsDiameter.right_mem
   rw [mem_sphere]; rw [← mem_sphere.1 h.left_mem]; rw [← h.midpoint_eq_center]; rw [dist_left_midpoint_eq_dist_right_midpoint]
 
 中文:
-引理 IsDiameter.right_mem
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.right_mem
+  条件: (h : s.是Diameter p₁ p₂)
   结论: p₂ in s
   证明: by
   rw [mem_sphere]; rw [← mem_sphere.1 h.left_mem]; rw [← h.midpoint_eq_center]; rw [dist_left_midpoint_eq_dist_right_midpoint]
@@ -1014,9 +1014,9 @@ lemma IsDiameter.symm
   proof: ⟨h.right_mem, midpoint_comm (R := Real) p₁ p₂ ▸ h.midpoint_eq_center⟩
 
 中文:
-引理 IsDiameter.symm
-  条件: (h : s.IsDiameter p₁ p₂)
-  结论: s.IsDiameter p₂ p₁
+引理 是Diameter.symm
+  条件: (h : s.是Diameter p₁ p₂)
+  结论: s.是Diameter p₂ p₁
   证明: ⟨h.right_mem, midpoint_comm (R := Real) p₁ p₂ ▸ h.midpoint_eq_center⟩
 -/
 protected lemma IsDiameter.symm (h : s.IsDiameter p₁ p₂) : s.IsDiameter p₂ p₁ :=
@@ -1032,7 +1032,7 @@ lemma isDiameter_comm
 
 中文:
 引理 isDiameter_comm
-  结论: s.IsDiameter p₁ p₂ ↔ s.IsDiameter p₂ p₁
+  结论: s.是Diameter p₁ p₂ ↔ s.是Diameter p₂ p₁
   证明: ⟨IsDiameter.symm, IsDiameter.symm⟩
 
 Depends on / 依赖: IsDiameter, IsDiameter.symm
@@ -1082,8 +1082,8 @@ lemma IsDiameter.pointReflection_center_left
   rw [← h.midpoint_eq_center]; rw [Equiv.pointReflection_midpoint_left]
 
 中文:
-引理 IsDiameter.pointReflection_center_left
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.pointReflection_center_left
+  条件: (h : s.是Diameter p₁ p₂)
   证明: by
   rw [← h.midpoint_eq_center]; rw [Equiv.pointReflection_midpoint_left]
 
@@ -1103,8 +1103,8 @@ lemma IsDiameter.pointReflection_center_right
   rw [← h.midpoint_eq_center]; rw [Equiv.pointReflection_midpoint_right]
 
 中文:
-引理 IsDiameter.pointReflection_center_right
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.pointReflection_center_right
+  条件: (h : s.是Diameter p₁ p₂)
   证明: by
   rw [← h.midpoint_eq_center]; rw [Equiv.pointReflection_midpoint_right]
 
@@ -1160,8 +1160,8 @@ lemma IsDiameter.right_eq_of_isDiameter
   rw [← h₁₂.pointReflection_center_left]; rw [← h₁₃.pointReflection_center_left]
 
 中文:
-引理 IsDiameter.right_eq_of_isDiameter
-  条件: (h₁₂ : s.IsDiameter p₁ p₂) (h₁₃ : s.IsDiameter p₁ p₃)
+引理 是Diameter.right_eq_of_isDiameter
+  条件: (h₁₂ : s.是Diameter p₁ p₂) (h₁₃ : s.是Diameter p₁ p₃)
   证明: by
   rw [← h₁₂.pointReflection_center_left]; rw [← h₁₃.pointReflection_center_left]
 
@@ -1181,8 +1181,8 @@ lemma IsDiameter.left_eq_of_isDiameter
   rw [← h₁₃.pointReflection_center_right]; rw [← h₂₃.pointReflection_center_right]
 
 中文:
-引理 IsDiameter.left_eq_of_isDiameter
-  条件: (h₁₃ : s.IsDiameter p₁ p₃) (h₂₃ : s.IsDiameter p₂ p₃)
+引理 是Diameter.left_eq_of_isDiameter
+  条件: (h₁₃ : s.是Diameter p₁ p₃) (h₂₃ : s.是Diameter p₂ p₃)
   证明: by
   rw [← h₁₃.pointReflection_center_right]; rw [← h₂₃.pointReflection_center_right]
 
@@ -1204,8 +1204,8 @@ lemma IsDiameter.dist_left_right
   simp
 
 中文:
-引理 IsDiameter.dist_left_right
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.dist_left_right
+  条件: (h : s.是Diameter p₁ p₂)
   结论: dist p₁ p₂ = 2 * s.radius
   证明: by
   rw [← mem_sphere.1 h.left_mem]; rw [← h.midpoint_eq_center]; rw [dist_left_midpoint]
@@ -1227,8 +1227,8 @@ lemma IsDiameter.dist_left_right_div_two
   simp [h.dist_left_right]
 
 中文:
-引理 IsDiameter.dist_left_right_div_two
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.dist_left_right_div_two
+  条件: (h : s.是Diameter p₁ p₂)
   证明: by
   simp [h.dist_left_right]
 
@@ -1250,8 +1250,8 @@ lemma IsDiameter.left_eq_right_iff
   simp
 
 中文:
-引理 IsDiameter.left_eq_right_iff
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.left_eq_right_iff
+  条件: (h : s.是Diameter p₁ p₂)
   结论: p₁ = p₂ ↔ s.radius = 0
   证明: by
   rw [← dist_eq_zero]; rw [h.dist_left_right]
@@ -1272,8 +1272,8 @@ lemma IsDiameter.left_ne_right_iff_radius_ne_zero
   proof: h.left_eq_right_iff.not
 
 中文:
-引理 IsDiameter.left_ne_right_iff_radius_ne_zero
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.left_ne_right_iff_radius_ne_zero
+  条件: (h : s.是Diameter p₁ p₂)
   证明: h.left_eq_right_iff.not
 
 Depends on / 依赖: h.left_eq_right_iff.not, left_eq_right_iff
@@ -1293,8 +1293,8 @@ lemma IsDiameter.left_ne_right_iff_radius_pos
   simp [radius_nonneg_of_mem h.left_mem, eq_comm]
 
 中文:
-引理 IsDiameter.left_ne_right_iff_radius_pos
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.left_ne_right_iff_radius_pos
+  条件: (h : s.是Diameter p₁ p₂)
   证明: by
   rw [h.left_ne_right_iff_radius_ne_zero]; rw [lt_iff_le_and_ne]
   simp [radius_nonneg_of_mem h.left_mem, eq_comm]
@@ -1318,8 +1318,8 @@ lemma IsDiameter.wbtw
   exact wbtw_midpoint _ _ _
 
 中文:
-引理 IsDiameter.wbtw
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.wbtw
+  条件: (h : s.是Diameter p₁ p₂)
   结论: Wbtw 实数 p₁ s.center p₂
   证明: by
   rw [← h.midpoint_eq_center]
@@ -1340,8 +1340,8 @@ lemma IsDiameter.sbtw
   exact sbtw_midpoint_of_ne _ (h.left_ne_right_iff_radius_ne_zero.2 hr)
 
 中文:
-引理 IsDiameter.sbtw
-  条件: (h : s.IsDiameter p₁ p₂) (hr : s.radius != 0)
+引理 是Diameter.sbtw
+  条件: (h : s.是Diameter p₁ p₂) (hr : s.radius != 0)
   证明: by
   rw [← h.midpoint_eq_center]
   exact sbtw_midpoint_of_ne _ (h.left_ne_right_iff_radius_ne_zero.2 hr)
@@ -1379,7 +1379,7 @@ lemma isDiameter_ofDiameter
 中文:
 引理 isDiameter_ofDiameter
   条件: (p₁ p₂ : P)
-  结论: (Sphere.ofDiameter p₁ p₂).IsDiameter p₁ p₂
+  结论: (球面.ofDiameter p₁ p₂).是Diameter p₁ p₂
   证明: ⟨by simp [Sphere.ofDiameter, mem_sphere, inv_mul_eq_div], rfl⟩
 
 Depends on / 依赖: Sphere, Sphere.ofDiameter, inv_mul_eq_div, mem_sphere, ofDiameter
@@ -1400,8 +1400,8 @@ lemma IsDiameter.ofDiameter_eq
   · simp [Sphere.ofDiameter, ← h.dist_left_right_div_two]
 
 中文:
-引理 IsDiameter.ofDiameter_eq
-  条件: (h : s.IsDiameter p₁ p₂)
+引理 是Diameter.ofDiameter_eq
+  条件: (h : s.是Diameter p₁ p₂)
   结论: .ofDiameter p₁ p₂ = s
   证明: by
   ext
@@ -1425,7 +1425,7 @@ lemma isDiameter_iff_ofDiameter_eq
 
 中文:
 引理 isDiameter_iff_ofDiameter_eq
-  结论: s.IsDiameter p₁ p₂ ↔ .ofDiameter p₁ p₂ = s
+  结论: s.是Diameter p₁ p₂ ↔ .ofDiameter p₁ p₂ = s
   证明: ⟨IsDiameter.ofDiameter_eq, by rintro rfl; exact isDiameter_ofDiameter _ _⟩
 
 Depends on / 依赖: IsDiameter, IsDiameter.ofDiameter_eq, isDiameter_ofDiameter, ofDiameter_eq
@@ -1462,7 +1462,7 @@ theorem Cospherical.subtype_val_iff
 
 中文:
 定理 Cospherical.subtype_val_iff
-  结论: {S : AffineSubspace 实数 P} [Nonempty S]
+  结论: {S : 仿射子空间 实数 P} [非空 S]
   证明: by
   refine ⟨fun h => ?_, Cospherical.subtype_val⟩
   rcases ps.eq_empty_or_nonempty with rfl | ⟨p₀, hp₀⟩
@@ -1502,7 +1502,7 @@ theorem Cospherical.inclusion_iff
 
 中文:
 定理 Cospherical.inclusion_iff
-  结论: {S₁ S₂ : AffineSubspace 实数 P} [Nonempty S₁] {ps : Set S₁}
+  结论: {S₁ S₂ : 仿射子空间 实数 P} [非空 S₁] {ps : 集合 S₁}
   证明: by
   have : Nonempty S₂ := by obtain ⟨p⟩ := ‹Nonempty S₁›; exact ⟨⟨p, hS p.property⟩⟩
   simp [(Cospherical.subtype_val_iff (S := S₂) (ps := AffineSubspace.inclusion hS '' ps)).symm,
@@ -1536,7 +1536,7 @@ theorem Cospherical.affineIndependent
 
 中文:
 定理 Cospherical.affineIndependent
-  结论: {s : Set P} (hs : Cospherical s) {p : Fin 3 -> P}
+  结论: {s : 集合 P} (hs : Cospherical s) {p : 有限集 3 -> P}
   证明: by
   rw [affineIndependent_iff_not_collinear]
   intro hc
@@ -1600,7 +1600,7 @@ theorem Cospherical.affineIndependent_of_mem_of_ne
 
 中文:
 定理 Cospherical.affineIndependent_of_mem_of_ne
-  结论: {s : Set P} (hs : Cospherical s) {p₁ p₂ p₃ : P}
+  结论: {s : 集合 P} (hs : Cospherical s) {p₁ p₂ p₃ : P}
   证明: by
   refine hs.affineIndependent ?_ ?_
   · simp [h₁, h₂, h₃, Set.insert_subset_iff]
@@ -1629,7 +1629,7 @@ theorem Cospherical.affineIndependent_of_ne
 
 中文:
 定理 Cospherical.affineIndependent_of_ne
-  结论: {p₁ p₂ p₃ : P} (hs : Cospherical ({p₁, p₂, p₃} : Set P))
+  结论: {p₁ p₂ p₃ : P} (hs : Cospherical ({p₁, p₂, p₃} : 集合 P))
   证明: hs.affineIndependent_of_mem_of_ne (Set.mem_insert _ _)
     (Set.mem_insert_of_mem _ (Set.mem_insert _ _))
     (Set.mem_insert_of_mem _ (Set.mem_insert_of_mem _ (Set.mem_singleton _))) h₁₂ h₁₃ h₂₃
@@ -1653,7 +1653,7 @@ theorem inner_vsub_vsub_of_mem_sphere_of_mem_sphere
 
 中文:
 定理 inner_vsub_vsub_of_mem_sphere_of_mem_sphere
-  结论: {p₁ p₂ : P} {s₁ s₂ : Sphere P} (hp₁s₁ : p₁ in s₁)
+  结论: {p₁ p₂ : P} {s₁ s₂ : 球面 P} (hp₁s₁ : p₁ in s₁)
   证明: inner_vsub_vsub_of_dist_eq_of_dist_eq (dist_center_eq_dist_center_of_mem_sphere hp₁s₁ hp₂s₁)
     (dist_center_eq_dist_center_of_mem_sphere hp₁s₂ hp₂s₂)
 
@@ -1676,8 +1676,8 @@ theorem Sphere.inner_vsub_center_midpoint_vsub
     (dist_center_eq_dist_center_of_mem_sphere hp₁ hp₂)
 
 中文:
-定理 Sphere.inner_vsub_center_midpoint_vsub
-  结论: {p₁ p₂ : P} {s : Sphere P}
+定理 球面.inner_vsub_center_midpoint_vsub
+  结论: {p₁ p₂ : P} {s : 球面 P}
   证明: inner_vsub_vsub_of_dist_eq_of_dist_eq
     (dist_left_midpoint_eq_dist_right_midpoint p₁ p₂)
     (dist_center_eq_dist_center_of_mem_sphere hp₁ hp₂)
@@ -1707,8 +1707,8 @@ have ht₁' : t < 1 := lt_of_le_of_ne ht₁ fun h => hne₂ by
     rw [← hpt]; rw [h]; rw [AffineMap.lineMap_apply_o
 
 中文:
-定理 Sphere.dist_center_lt_radius_of_sbtw
-  结论: {p₁ p₂ p : P} {s : Sphere P}
+定理 球面.dist_center_lt_radius_of_sbtw
+  结论: {p₁ p₂ p : P} {s : 球面 P}
   证明: by
   set o := s.center
   obtain ⟨⟨t, ⟨ht₀, ht₁⟩, hpt⟩, hne₁, hne₂⟩ := hp
@@ -1754,8 +1754,8 @@ theorem Sphere.dist_center_midpoint_lt_radius
   proof: s.dist_center_lt_radius_of_sbtw hp₁ hp₂ (sbtw_midpoint_of_ne Real hp₁p₂)
 
 中文:
-定理 Sphere.dist_center_midpoint_lt_radius
-  结论: {p₁ p₂ : P} {s : Sphere P}
+定理 球面.dist_center_midpoint_lt_radius
+  结论: {p₁ p₂ : P} {s : 球面 P}
   证明: s.dist_center_lt_radius_of_sbtw hp₁ hp₂ (sbtw_midpoint_of_ne Real hp₁p₂)
 
 Depends on / 依赖: dist_center_lt_radius_of_sbtw, s.dist_center_lt_radius_of_sbtw, sbtw_midpoint_of_ne
@@ -1776,7 +1776,7 @@ theorem eq_of_mem_sphere_of_mem_sphere_of_mem_of_finrank_eq_two
 
 中文:
 定理 eq_of_mem_sphere_of_mem_sphere_of_mem_of_finrank_eq_two
-  结论: {s : AffineSubspace 实数 P}
+  结论: {s : 仿射子空间 实数 P}
   证明: eq_of_dist_eq_of_dist_eq_of_mem_of_finrank_eq_two hd hs₁ hs₂ hp₁s hp₂s hps
     ((Sphere.center_ne_iff_ne_of_mem hps₁ hps₂).2 hs) hp hp₁s₁ hp₂s₁ hps₁ hp₁s₂ hp₂s₂ hps₂
 
@@ -1801,7 +1801,7 @@ theorem eq_of_mem_sphere_of_mem_sphere_of_finrank_eq_two
 
 中文:
 定理 eq_of_mem_sphere_of_mem_sphere_of_finrank_eq_two
-  结论: [FiniteDimensional 实数 V]
+  结论: [有限维 实数 V]
   证明: eq_of_dist_eq_of_dist_eq_of_finrank_eq_two hd ((Sphere.center_ne_iff_ne_of_mem hps₁ hps₂).2 hs) hp
     hp₁s₁ hp₂s₁ hps₁ hp₁s₂ hp₂s₂ hps₂
 
@@ -1830,7 +1830,7 @@ theorem inner_pos_or_eq_of_dist_le_radius
 
 中文:
 定理 inner_pos_or_eq_of_dist_le_radius
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   by_cases h : p₁ = p₂; · exact Or.inr h
   refine Or.inl ?_
@@ -1878,7 +1878,7 @@ theorem inner_nonneg_of_dist_le_radius
 
 中文:
 定理 inner_nonneg_of_dist_le_radius
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   rcases inner_pos_or_eq_of_dist_le_radius hp₁ hp₂ with (h | rfl)
   · exact h.le
@@ -1906,7 +1906,7 @@ theorem inner_pos_of_dist_lt_radius
 
 中文:
 定理 inner_pos_of_dist_lt_radius
-  结论: {s : Sphere P} {p₁ p₂ : P} (hp₁ : p₁ in s)
+  结论: {s : 球面 P} {p₁ p₂ : P} (hp₁ : p₁ in s)
   证明: by
   by_cases h : p₁ = p₂
   · rw [h, mem_sphere] at hp₁
@@ -1937,7 +1937,7 @@ theorem inner_vsub_center_vsub_pos
 
 中文:
 定理 inner_vsub_center_vsub_pos
-  结论: {p₁ p₂ : P} {s : Sphere P}
+  结论: {p₁ p₂ : P} {s : 球面 P}
   证明: by
   have hp₁' : ‖p₁ -ᵥ s.center‖ = s.radius := norm_vsub_center_eq_radius hp₁
   have hp₂' : ‖p₂ -ᵥ s.center‖ = s.radius := norm_vsub_center_eq_radius hp₂
@@ -1968,7 +1968,7 @@ theorem wbtw_of_collinear_of_dist_center_le_radius
 
 中文:
 定理 wbtw_of_collinear_of_dist_center_le_radius
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P}
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P}
   证明: h.wbtw_of_dist_eq_of_dist_le hp₁ hp₂ hp₃ hp₁p₃
 
 Depends on / 依赖: h.wbtw_of_dist_eq_of_dist_le, wbtw_of_dist_eq_of_dist_le
@@ -1988,7 +1988,7 @@ theorem sbtw_of_collinear_of_dist_center_lt_radius
 
 中文:
 定理 sbtw_of_collinear_of_dist_center_lt_radius
-  结论: {s : Sphere P} {p₁ p₂ p₃ : P}
+  结论: {s : 球面 P} {p₁ p₂ p₃ : P}
   证明: h.sbtw_of_dist_eq_of_dist_lt hp₁ hp₂ hp₃ hp₁p₃
 
 Depends on / 依赖: h.sbtw_of_dist_eq_of_dist_lt, sbtw_of_dist_eq_of_dist_lt

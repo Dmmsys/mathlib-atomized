@@ -140,7 +140,7 @@ theorem isPositive_iff_complex
 
 中文:
 定理 isPositive_iff_complex
-  条件: (T : E' ->ₗ[Complex] E')
+  条件: (T : E' ->ₗ[复形] E')
   证明: by
   simp_rw [IsPositive, forall_and, isSymmetric_iff_inner_map_self_real,
     conj_eq_iff_re, re_to_complex, Complex.coe_algebraMap]
@@ -164,7 +164,7 @@ theorem IsPositive.isSelfAdjoint
 
 中文:
 定理 IsPositive.isSelfAdjoint
-  条件: [FiniteDimensional 𝕜 E] {T : E ->ₗ[𝕜] E} (hT : IsPositive T)
+  条件: [有限维 𝕜 E] {T : E ->ₗ[𝕜] E} (hT : IsPositive T)
   证明: (isSymmetric_iff_isSelfAdjoint _).mp hT.isSymmetric
 
 Depends on / 依赖: hT.isSymmetric, isSymmetric, isSymmetric_iff_isSelfAdjoint
@@ -182,7 +182,7 @@ theorem IsPositive.adjoint_eq
 
 中文:
 定理 IsPositive.adjoint_eq
-  条件: [FiniteDimensional 𝕜 E] {T : E ->ₗ[𝕜] E} (hT : IsPositive T)
+  条件: [有限维 𝕜 E] {T : E ->ₗ[𝕜] E} (hT : IsPositive T)
   证明: hT.isSelfAdjoint
 
 Depends on / 依赖: hT.isSelfAdjoint, isSelfAdjoint
@@ -373,7 +373,7 @@ theorem isPositive_ofNat
 @[aesop safe apply]
 
 中文:
-定理 isPositive_ofNat
+定理 isPositive_of自然数
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: IsPositive (of自然数(n) : E ->ₗ[𝕜] E)
   证明: isPositive_natCast
@@ -425,7 +425,7 @@ theorem isPositive_sum
 
 中文:
 定理 isPositive_sum
-  结论: {ι : 类型} {T : ι -> (E ->ₗ[𝕜] E)} (s : Finset ι)
+  结论: {ι : 类型} {T : ι -> (E ->ₗ[𝕜] E)} (s : 有限集 ι)
   证明: by
   refine ⟨isSymmetric_sum s fun _ hi => (hT _ hi).isSymmetric, fun _ => ?_⟩
   simpa [sum_inner] using Finset.sum_nonneg fun _ hi => (hT _ hi).re_inner_nonneg_left _
@@ -539,7 +539,7 @@ theorem IsPositive.nonneg_eigenvalues
 
 中文:
 定理 IsPositive.nonneg_eigenvalues
-  结论: [FiniteDimensional 𝕜 E]
+  结论: [有限维 𝕜 E]
   证明: by
   simpa only [hT.isSymmetric.apply_eigenvectorBasis, inner_smul_real_left, RCLike.smul_re,
     inner_self_eq_norm_sq, OrthonormalBasis.norm_eq_one, one_pow, mul_one]
@@ -573,7 +573,7 @@ instance instLoewnerPartialOrder
 
 中文:
 实例 instLoewnerPartialOrder
-  签名: : PartialOrder (E ->ₗ[𝕜] E) where
+  签名: : 偏序 (E ->ₗ[𝕜] E) where
   定义体: (g - f).IsPositive
   le_refl _ := by simp
   le_trans _ _ _ h₁ h₂ := by simpa using h₁.add h₂
@@ -648,7 +648,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid (E ->ₗ[𝕜] E)
+  签名: 是OrderedAdd幺半群 (E ->ₗ[𝕜] E)
   定义体: by simpa [le_def]
 
 Depends on / 依赖: le_def
@@ -729,8 +729,8 @@ theorem _root_.Matrix.isPositive_toEuclideanLin_iff
     RCLike.nonneg_iff (K :=
 
 中文:
-定理 _root_.Matrix.isPositive_toEuclideanLin_iff
-  结论: {n : 类型} [Fintype n] [DecidableEq n]
+定理 _root_.矩阵.isPositive_toEuclideanLin_iff
+  结论: {n : 类型} [有限类型 n] [DecidableEq n]
   证明: by
   simp_rw [LinearMap.IsPositive, Matrix.isSymmetric_toEuclideanLin_iff, inner_re_symm,
     EuclideanSpace.inner_eq_star_dotProduct, Matrix.ofLp_toLpLin, Matrix.toLin'_apply,
@@ -760,7 +760,7 @@ theorem posSemidef_toMatrix_iff
 
 中文:
 定理 posSemidef_toMatrix_iff
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι]
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
   rw [← Matrix.isPositive_toEuclideanLin_iff]
   convert! isPositive_linearIsometryEquiv_conj_iff b.repr
@@ -786,8 +786,8 @@ theorem IsSymmetricProjection.isPositive
   proof: hp.isIdempotentElem.isPositive_iff_isSymmetric.mpr hp.isSymmetric
 
 中文:
-定理 IsSymmetricProjection.isPositive
-  条件: {p : E ->ₗ[𝕜] E} (hp : p.IsSymmetricProjection)
+定理 是SymmetricProjection.isPositive
+  条件: {p : E ->ₗ[𝕜] E} (hp : p.是SymmetricProjection)
   证明: hp.isIdempotentElem.isPositive_iff_isSymmetric.mpr hp.isSymmetric
 
 Depends on / 依赖: hp.isIdempotentElem.isPositive_iff_isSymmetric.mpr, hp.isSymmetric, isIdempotentElem, isPositive_iff_isSymmetric, isSymmetric
@@ -810,7 +810,7 @@ theorem IsSymmetricProjection.le_iff_range_le_range
     rw [Module.End.mul_apply]; rw [hT.isSymme
 
 中文:
-定理 IsSymmetricProjection.le_iff_range_le_range
+定理 是SymmetricProjection.le_iff_range_le_range
   结论: {p q : E ->ₗ[𝕜] E}
   证明: by
   refine ⟨fun ⟨h1, h2⟩ a ha => ?_, fun hpq => (hp.sub_of_range_le_range hq hpq).isPositive⟩
@@ -973,7 +973,7 @@ theorem isPositive_def'
 
 中文:
 定理 isPositive_def'
-  条件: [CompleteSpace E] {T : E ->L[𝕜] E}
+  条件: [完备空间 E] {T : E ->L[𝕜] E}
   证明: by
   simp [IsPositive, isSelfAdjoint_iff_isSymmetric, LinearMap.IsSymmetric]
 
@@ -1009,7 +1009,7 @@ theorem IsPositive.isSelfAdjoint
 
 中文:
 定理 IsPositive.isSelfAdjoint
-  条件: [CompleteSpace E] {T : E ->L[𝕜] E} (hT : IsPositive T)
+  条件: [完备空间 E] {T : E ->L[𝕜] E} (hT : IsPositive T)
   证明: hT.isSymmetric.isSelfAdjoint
 -/
 theorem IsPositive.isSelfAdjoint [CompleteSpace E] {T : E ->L[𝕜] E} (hT : IsPositive T) :
@@ -1057,7 +1057,7 @@ lemma _root_.LinearMap.isPositive_toContinuousLinearMap_iff
   proof: Iff.rfl
 
 中文:
-引理 _root_.LinearMap.isPositive_toContinuousLinearMap_iff
+引理 _root_.线性映射.isPositive_toContinuousLinearMap_iff
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1135,7 +1135,7 @@ theorem isPositive_iff'
 
 中文:
 定理 isPositive_iff'
-  条件: [CompleteSpace E] (T : E ->L[𝕜] E)
+  条件: [完备空间 E] (T : E ->L[𝕜] E)
   证明: by
   simp [isSelfAdjoint_iff_isSymmetric, isPositive_iff]
 
@@ -1285,7 +1285,7 @@ theorem isPositive_ofNat
 @[aesop safe apply]
 
 中文:
-定理 isPositive_ofNat
+定理 isPositive_of自然数
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: IsPositive (of自然数(n) : E ->L[𝕜] E)
   证明: isPositive_natCast
@@ -1327,7 +1327,7 @@ theorem isPositive_sum
 
 中文:
 定理 isPositive_sum
-  结论: {ι : 类型} {T : ι -> (E ->L[𝕜] E)} (s : Finset ι)
+  结论: {ι : 类型} {T : ι -> (E ->L[𝕜] E)} (s : 有限集 ι)
   证明: (isPositive_toLinearMap_iff _).mp by simp [LinearMap.isPositive_sum s hT]
 
 @[aesop safe apply]
@@ -1374,7 +1374,7 @@ theorem IsPositive.conj_adjoint
 
 中文:
 定理 IsPositive.conj_adjoint
-  结论: [CompleteSpace E] [CompleteSpace F] {T : E ->L[𝕜] E}
+  结论: [完备空间 E] [完备空间 F] {T : E ->L[𝕜] E}
   证明: by
   refine isPositive_def'.mpr ⟨hT.isSelfAdjoint.conj_adjoint S, fun x => ?_⟩
   rw [reApplyInnerSelf]; rw [comp_apply]; rw [← adjoint_inner_right]
@@ -1401,7 +1401,7 @@ theorem isPositive_self_comp_adjoint
 
 中文:
 定理 isPositive_self_comp_adjoint
-  条件: [CompleteSpace E] [CompleteSpace F] (S : E ->L[𝕜] F)
+  条件: [完备空间 E] [完备空间 F] (S : E ->L[𝕜] F)
   证明: by
   simpa using! isPositive_one.conj_adjoint S
 
@@ -1426,7 +1426,7 @@ theorem IsPositive.adjoint_conj
 
 中文:
 定理 IsPositive.adjoint_conj
-  结论: [CompleteSpace E] [CompleteSpace F] {T : E ->L[𝕜] E}
+  结论: [完备空间 E] [完备空间 F] {T : E ->L[𝕜] E}
   证明: by
   convert! hT.conj_adjoint (S†)
   rw [adjoint_adjoint]
@@ -1449,7 +1449,7 @@ theorem isPositive_adjoint_comp_self
 
 中文:
 定理 isPositive_adjoint_comp_self
-  条件: [CompleteSpace E] [CompleteSpace F] (S : E ->L[𝕜] F)
+  条件: [完备空间 E] [完备空间 F] (S : E ->L[𝕜] F)
   证明: by
   simpa using! isPositive_one.adjoint_conj S
 
@@ -1476,7 +1476,7 @@ theorem _root_.LinearMap.IsPositive.conj_adjoint
     ((T.isPositive_toContinuousLinearMap_iff.mpr hT).conj_adjoint S.toContinuousLinearMap)
 
 中文:
-定理 _root_.LinearMap.IsPositive.conj_adjoint
+定理 _root_.线性映射.IsPositive.conj_adjoint
   结论: {T : E ->ₗ[𝕜] E}
   证明: by
   have := FiniteDimensional.complete 𝕜 E
@@ -1505,7 +1505,7 @@ theorem _root_.LinearMap.isPositive_self_comp_adjoint
 @[aesop safe apply]
 
 中文:
-定理 _root_.LinearMap.isPositive_self_comp_adjoint
+定理 _root_.线性映射.isPositive_self_comp_adjoint
   条件: (S : E ->ₗ[𝕜] F)
   证明: by
   simpa using! LinearMap.isPositive_one.conj_adjoint S
@@ -1530,7 +1530,7 @@ theorem _root_.LinearMap.IsPositive.adjoint_conj
   rw [LinearMap.adjoint_adjoint]
 
 中文:
-定理 _root_.LinearMap.IsPositive.adjoint_conj
+定理 _root_.线性映射.IsPositive.adjoint_conj
   结论: {T : E ->ₗ[𝕜] E}
   证明: by
   convert! hT.conj_adjoint S.adjoint
@@ -1553,7 +1553,7 @@ theorem _root_.LinearMap.isPositive_adjoint_comp_self
   simpa using! LinearMap.isPositive_one.adjoint_conj S
 
 中文:
-定理 _root_.LinearMap.isPositive_adjoint_comp_self
+定理 _root_.线性映射.isPositive_adjoint_comp_self
   条件: (S : E ->ₗ[𝕜] F)
   证明: by
   simpa using! LinearMap.isPositive_one.adjoint_conj S
@@ -1581,7 +1581,7 @@ theorem IsPositive.conj_starProjection
 
 中文:
 定理 IsPositive.conj_starProjection
-  结论: (U : Submodule 𝕜 E) {T : E ->L[𝕜] E} (hT : T.IsPositive)
+  结论: (U : 子模 𝕜 E) {T : E ->L[𝕜] E} (hT : T.IsPositive)
   证明: by
   simp only [isPositive_iff, IsSymmetric, toLinearMap_comp, LinearMap.coe_comp, coe_coe,
     Function.comp_apply, comp_apply]
@@ -1653,8 +1653,8 @@ lemma antilipschitz_of_forall_le_inner_map
 exact (h 
 
 中文:
-引理 antilipschitz_of_forall_le_inner_map
-  结论: {H : 类型} [NormedAddCommGroup H]
+引理 antilipschitz_of_对任意_le_inner_map
+  结论: {H : 类型} [赋范交换加群 H]
   证明: by
   refine f.antilipschitz_of_bound (K := c⁻¹) fun x => ?_
   rw [NNReal.coe_inv]; rw [inv_mul_eq_div]; rw [le_div_iff₀ (by exact_mod_cast hc)]
@@ -1692,8 +1692,8 @@ lemma isUnit_of_forall_le_norm_inner_map
   have : ‖x‖ ^ 2 *
 
 中文:
-引理 isUnit_of_forall_le_norm_inner_map
-  结论: [CompleteSpace E] (f : E ->L[𝕜] E) {c : 实数>=0} (hc : 0 < c)
+引理 isUnit_of_对任意_le_norm_inner_map
+  结论: [完备空间 E] (f : E ->L[𝕜] E) {c : 实数>=0} (hc : 0 < c)
   证明: by
   rw [isUnit_iff_bijective]; rw [bijective_iff_dense_range_and_antilipschitz]
   have h_anti : AntilipschitzWith c⁻¹ f := antilipschitz_of_forall_le_inner_map f hc h
@@ -1729,7 +1729,7 @@ theorem isPositive_iff_complex
 
 中文:
 定理 isPositive_iff_complex
-  条件: (T : E' ->L[Complex] E')
+  条件: (T : E' ->L[复形] E')
   证明: by
   simp [← isPositive_toLinearMap_iff, LinearMap.isPositive_iff_complex]
 
@@ -1756,7 +1756,7 @@ instance instLoewnerPartialOrder
 
 中文:
 实例 instLoewnerPartialOrder
-  签名: : PartialOrder (E ->L[𝕜] E) where
+  签名: : 偏序 (E ->L[𝕜] E) where
   定义体: (g - f).IsPositive
   le_refl _ := by simp
   le_trans _ _ _ h₁ h₂ := by simpa using h₁.add h₂
@@ -1846,7 +1846,7 @@ theorem IsIdempotentElem.isPositive_iff_isSelfAdjoint
 
 中文:
 定理 IsIdempotentElem.isPositive_iff_isSelfAdjoint
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   rw [← isPositive_toLinearMap_iff]; rw [IsIdempotentElem.isPositive_iff_isSymmetric hp.toLinearMap]
   exact isSelfAdjoint_iff_isSymmetric.symm
@@ -1873,7 +1873,7 @@ theorem IsPositive.of_isStarProjection
 
 中文:
 定理 IsPositive.of_isStarProjection
-  结论: [CompleteSpace E] {p : E ->L[𝕜] E}
+  结论: [完备空间 E] {p : E ->L[𝕜] E}
   证明: hp.isIdempotentElem.isPositive_iff_isSelfAdjoint.mpr hp.isSelfAdjoint
 
 Depends on / 依赖: hp.isIdempotentElem.isPositive_iff_isSelfAdjoint.mpr, hp.isSelfAdjoint, isIdempotentElem, isPositive_iff_isSelfAdjoint, isSelfAdjoint
@@ -1897,7 +1897,7 @@ theorem IsIdempotentElem.TFAE
 
 中文:
 定理 IsIdempotentElem.TFAE
-  条件: [CompleteSpace E] {p : E ->L[𝕜] E} (hp : IsIdempotentElem p)
+  条件: [完备空间 E] {p : E ->L[𝕜] E} (hp : IsIdempotentElem p)
   证明: by
   tfae_have 2 ↔ 3 := hp.isSelfAdjoint_iff_isStarNormal.symm
   tfae_have 3 ↔ 4 := hp.isPositive_iff_isSelfAdjoint.symm
@@ -1932,8 +1932,8 @@ theorem Submodule.starProjection_le_starProjection_iff
     toLinearMap_starProjection_eq_isComplProjection, range_projection]
 
 中文:
-定理 Submodule.starProjection_le_starProjection_iff
-  结论: {U V : Submodule 𝕜 E}
+定理 子模.starProjection_le_starProjection_iff
+  结论: {U V : 子模 𝕜 E}
   证明: by
   simp_rw [← coe_le_coe_iff, isSymmetricProjection_starProjection _
 .le_iff_range_le_range isSymmetricProjection_starProjection _,
@@ -1958,8 +1958,8 @@ theorem Submodule.starProjection_inj
   simp only [le_antisymm_iff, ← starProjection_le_starProjection_iff]
 
 中文:
-定理 Submodule.starProjection_inj
-  结论: {U V : Submodule 𝕜 E}
+定理 子模.starProjection_inj
+  结论: {U V : 子模 𝕜 E}
   证明: by
   simp only [le_antisymm_iff, ← starProjection_le_starProjection_iff]
 
@@ -1982,7 +1982,7 @@ theorem LinearMap.IsPositive.toLinearMap_symm
   rwa [← T.symm.coe_toLinearMap, ← hT.isSymmetric.toLinearMap_symm] at this
 
 中文:
-定理 LinearMap.IsPositive.toLinearMap_symm
+定理 线性映射.IsPositive.toLinearMap_symm
   条件: {T : E ≃ₗ[𝕜] E} (hT : T.IsPositive)
   证明: by
   refine ⟨hT.isSymmetric.toLinearMap_symm, fun x => ?_⟩
@@ -2006,7 +2006,7 @@ theorem LinearEquiv.isPositive_symm_iff
   proof: ⟨.toLinearMap_symm, .toLinearMap_symm⟩
 
 中文:
-定理 LinearEquiv.isPositive_symm_iff
+定理 线性等价.isPositive_symm_iff
   条件: {T : E ≃ₗ[𝕜] E}
   证明: ⟨.toLinearMap_symm, .toLinearMap_symm⟩
 -/
@@ -2025,7 +2025,7 @@ lemma InnerProductSpace.isPositive_rankOne_self
   simp
 
 中文:
-引理 InnerProductSpace.isPositive_rankOne_self
+引理 内积空间.isPositive_rankOne_self
   条件: (x : E)
   证明: by
   simp_rw [ContinuousLinearMap.isPositive_iff, isSymmetric_rankOne_self, rankOne_apply,
@@ -2052,8 +2052,8 @@ theorem ContinuousLinearMap.isPositive_iff_eq_sum_rankOne
   simp_rw
 
 中文:
-定理 ContinuousLinearMap.isPositive_iff_eq_sum_rankOne
-  条件: [FiniteDimensional 𝕜 E] {T : E ->L[𝕜] E}
+定理 连续线性映射.isPositive_iff_eq_sum_rankOne
+  条件: [有限维 𝕜 E] {T : E ->L[𝕜] E}
   证明: by
   refine ⟨fun hT => ?_, fun ⟨m, u, hT⟩ => hT ▸ isPositive_sum _ fun _ _ => isPositive_rankOne_self _⟩
   let a (i : Fin (Module.finrank 𝕜 E)) : E :=
@@ -2090,8 +2090,8 @@ theorem Matrix.posSemidef_iff_eq_sum_vecMulVec
     ContinuousLinearMap.toLinearMap_sum, map_sum, symm_
 
 中文:
-定理 Matrix.posSemidef_iff_eq_sum_vecMulVec
-  条件: {n : 类型} [Finite n] {M : Matrix n n 𝕜}
+定理 矩阵.posSemidef_iff_eq_sum_vecMulVec
+  条件: {n : 类型} [有限 n] {M : 矩阵 n n 𝕜}
   证明: by
   classical
   have := Fintype.ofFinite n

@@ -152,7 +152,7 @@ theorem eval_monomial_one_add_sub
 
 中文:
 定理 eval_monomial_one_add_sub
-  条件: [CommRing S] (d : 自然数) (y : S)
+  条件: [交换环 S] (d : 自然数) (y : S)
   证明: by
   have cast_succ : (d + 1 : S) = ((d.succ : Nat) : S) := by simp only [Nat.cast_succ]
   rw [cast_succ]; rw [eval_monomial]; rw [eval_monomial]; rw [add_comm]; rw [add_pow]
@@ -361,7 +361,7 @@ theorem map_monic_ne_zero
 
 中文:
 定理 map_monic_ne_zero
-  条件: (hp : p.Monic) [Nontrivial S]
+  条件: (hp : p.Monic) [非平凡 S]
   结论: p.map f != 0
   证明: fun h =>
   f.map_one_ne_zero ((map_monic_eq_zero_iff hp).mp h _)
@@ -709,7 +709,7 @@ lemma isUnit_of_isUnit_leadingCoeff_of_isUnit_map
 
 中文:
 引理 isUnit_of_isUnit_leadingCoeff_of_isUnit_map
-  结论: (hf : IsUnit f.leadingCoeff)
+  结论: (hf : 是单位 f.leadingCoeff)
   证明: by
   have dz := degree_eq_zero_of_isUnit H
   rw [degree_map_eq_of_leadingCoeff_ne_zero] at dz

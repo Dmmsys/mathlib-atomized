@@ -37,11 +37,11 @@ inductive DihedralGroup
     - sr: ZMod n -> DihedralGroup n
 
 中文:
-归纳类型 DihedralGroup
+归纳类型 Dihedral群
   参数: (n : 自然数)
   构造子 (2 个):
-    - r: ZMod n -> DihedralGroup n
-    - sr: ZMod n -> DihedralGroup n
+    - r: ZMod n -> Dihedral群 n
+    - sr: ZMod n -> Dihedral群 n
 -/
 inductive DihedralGroup (n : Nat) : Type
   | r : ZMod n -> DihedralGroup n
@@ -62,7 +62,7 @@ definition mul
 
 中文:
 定义 mul
-  签名: : DihedralGroup n -> DihedralGroup n -> DihedralGroup n
+  签名: : Dihedral群 n -> Dihedral群 n -> Dihedral群 n
 -/
 private def mul : DihedralGroup n -> DihedralGroup n -> DihedralGroup n
   | r i, r j => r (i + j)
@@ -81,7 +81,7 @@ definition one
 
 中文:
 定义 one
-  签名: : DihedralGroup n
+  签名: : Dihedral群 n
   定义体: r 0
 -/
 private def one : DihedralGroup n :=
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (DihedralGroup n)
+  签名: 可居 (Dihedral群 n)
   定义体: ⟨one⟩
 -/
 instance : Inhabited (DihedralGroup n) :=
@@ -115,7 +115,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: : DihedralGroup n -> DihedralGroup n
+  签名: : Dihedral群 n -> Dihedral群 n
 -/
 private def inv : DihedralGroup n -> DihedralGroup n
   | r i => r (-i)
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (DihedralGroup n)
+  签名: 群 (Dihedral群 n)
   定义体: mul
   mul_assoc := by rintro (a | a) (b | b) (c | c) <;> simp only [(· * ·), mul] <;> ring_nf
   one := one
@@ -323,7 +323,7 @@ theorem r_zero
 
 中文:
 定理 r_zero
-  结论: r 0 = (1 : DihedralGroup n)
+  结论: r 0 = (1 : Dihedral群 n)
   证明: rfl
 -/
 theorem r_zero : r 0 = (1 : DihedralGroup n) :=
@@ -341,7 +341,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : DihedralGroup n) = r 0
+  结论: (1 : Dihedral群 n) = r 0
   证明: rfl
 
 @[simp]
@@ -421,7 +421,7 @@ definition equivSum
 
 中文:
 定义 equivSum
-  签名: : DihedralGroup n ≃ (ZMod n) oplus (ZMod n) where
+  签名: : Dihedral群 n ≃ (ZMod n) oplus (ZMod n) where
   定义体: by rintro (x | x) <;> rfl
   right_inv := by rintro (x | x) <;> rfl
 
@@ -447,7 +447,7 @@ instance [NeZero
 
 中文:
 实例 [NeZero
-  签名: n] : Fintype (DihedralGroup n)
+  签名: n] : 有限类型 (Dihedral群 n)
   定义体: Fintype.ofEquiv _ equivSum.symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, equivSum, equivSum.symm, ofEquiv
@@ -465,7 +465,7 @@ instance :
 
 中文:
 实例 :
-  签名: Infinite (DihedralGroup 0)
+  签名: 无限 (Dihedral群 0)
   定义体: equivSum.symm.infinite_iff.mp inferInstance
 
 Depends on / 依赖: equivSum, equivSum.symm.infinite_iff.mp, infinite_iff
@@ -483,7 +483,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nontrivial (DihedralGroup n)
+  签名: 非平凡 (Dihedral群 n)
   定义体: ⟨⟨r 0, sr 0, by by_contra h; injection h⟩⟩
 
 Depends on / 依赖: injection
@@ -504,7 +504,7 @@ theorem card
 中文:
 定理 card
   条件: [NeZero n]
-  结论: Fintype.card (DihedralGroup n) = 2 * n
+  结论: 有限类型.card (Dihedral群 n) = 2 * n
   证明: by
   rw [← Fintype.card_eq.mpr ⟨equivSum.symm⟩]; rw [Fintype.card_sum]; rw [ZMod.card]; rw [two_mul]
 
@@ -526,7 +526,7 @@ theorem nat_card
 
 中文:
 定理 nat_card
-  结论: 自然数.card (DihedralGroup n) = 2 * n
+  结论: 自然数.card (Dihedral群 n) = 2 * n
   证明: by
   cases n
   · rw [Nat.card_eq_zero_of_infinite]
@@ -552,7 +552,7 @@ theorem r_one_pow
 中文:
 定理 r_one_pow
   条件: (k : 自然数)
-  结论: (r 1 : DihedralGroup n) ^ k = r k
+  结论: (r 1 : Dihedral群 n) ^ k = r k
   证明: by
   simp only [r_pow, one_mul]
 
@@ -574,7 +574,7 @@ theorem r_one_zpow
 中文:
 定理 r_one_zpow
   条件: (k : 整数)
-  结论: (r 1 : DihedralGroup n) ^ k = r k
+  结论: (r 1 : Dihedral群 n) ^ k = r k
   证明: by
   simp only [r_zpow, one_mul]
 
@@ -675,7 +675,7 @@ orderOf_dvd_of_pow_eq_one @r_one_pow_n n).lt_or_eq.resolve_left
 
 中文:
 定理 orderOf_r_one
-  结论: orderOf (r 1 : DihedralGroup n) = n
+  结论: orderOf (r 1 : Dihedral群 n) = n
   证明: by
   rcases eq_zero_or_neZero n with (rfl | hn)
   · rw [orderOf_eq_zero_iff']
@@ -720,7 +720,7 @@ theorem orderOf_r
 中文:
 定理 orderOf_r
   条件: [NeZero n] (i : ZMod n)
-  结论: orderOf (r i) = n / 自然数.gcd n i.val
+  结论: orderOf (r i) = n / 自然数.最大公约数 n i.val
   证明: by
   conv_lhs => rw [← ZMod.natCast_zmod_val i]
   rw [← r_one_pow]; rw [orderOf_pow]; rw [orderOf_r_one]
@@ -748,7 +748,7 @@ theorem exponent
 
 中文:
 定理 exponent
-  结论: Monoid.exponent (DihedralGroup n) = lcm n 2
+  结论: 幺半群.exponent (Dihedral群 n) = 最小公倍数 n 2
   证明: by
   rcases eq_zero_or_neZero n with (rfl | hn)
   · exact Monoid.exponent_eq_zero_of_order_zero orderOf_r_one
@@ -789,7 +789,7 @@ simpa using Nat.le_of_dvd Nat.zero_lt_two Nat.dvd_of_mod_eq_zero this
 
 中文:
 引理 not_commutative
-  结论: 对任意 {n : 自然数}, n != 1 -> n != 2 -> ¬IsMulCommutative (DihedralGroup n)
+  结论: 对任意 {n : 自然数}, n != 1 -> n != 2 -> ¬是MulCommutative (Dihedral群 n)
   证明: h'.is_comm.comm (r 1) (sr 0)
     rw [r_mul_sr]; rw [zero_sub]; rw [sr_mul_r]; rw [zero_add]; rw [sr.injEq]; rw [neg_eq_iff_add_eq_zero]; rw [one_add_one_eq_two]; rw [← ZMod.val_eq_zero]; rw [ZMod.val_two_eq_two_mod] at this
 simpa using Nat.le_of_dvd Nat.zero_lt_two Nat.dvd_of_mod_eq_zero this
@@ -814,7 +814,7 @@ lemma commutative_iff
 
 中文:
 引理 commutative_iff
-  结论: IsMulCommutative (DihedralGroup n) ↔ n = 1 ∨ n = 2 where
+  结论: 是MulCommutative (Dihedral群 n) ↔ n = 1 ∨ n = 2 where
   证明: by contrapose!; rintro ⟨h1, h2⟩; exact not_commutative h1 h2
   mpr := by rintro (rfl | rfl) <;> exact ⟨⟨by decide⟩⟩
 
@@ -839,7 +839,7 @@ lemma not_isCyclic
 中文:
 引理 not_isCyclic
   条件: (h1 : n != 1)
-  结论: ¬ IsCyclic (DihedralGroup n)
+  结论: ¬ 是循环 (Dihedral群 n)
   证明: fun h => by
   by_cases h2 : n = 2
   · simpa [exponent, card, h2] using h.exponent_eq_card
@@ -863,7 +863,7 @@ lemma isCyclic_iff
 
 中文:
 引理 isCyclic_iff
-  结论: IsCyclic (DihedralGroup n) ↔ n = 1 where
+  结论: 是循环 (Dihedral群 n) ↔ n = 1 where
   证明: not_imp_not.mp not_isCyclic
   mpr h := h ▸ isCyclic_of_prime_card (p := 2) nat_card
 
@@ -884,7 +884,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsKleinFour (DihedralGroup 2)
+  签名: 是KleinFour (Dihedral群 2)
   定义体: DihedralGroup.nat_card
   exponent_two := DihedralGroup.exponent
 

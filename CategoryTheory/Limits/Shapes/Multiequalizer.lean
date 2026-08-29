@@ -52,8 +52,8 @@ structure MulticospanShape
 结构 MulticospanShape
   参数: where
   公理与运算 (4 个):
-    - L : Type w
-    - R : Type w'
+    - L : 类型 w
+    - R : 类型 w'
     - fst : R -> L
     - snd : R -> L
 -/
@@ -83,8 +83,8 @@ definition MulticospanShape.prod
   snd := _root_.Prod.snd
 
 中文:
-定义 MulticospanShape.prod
-  签名: (ι : Type w)
+定义 MulticospanShape.乘积
+  签名: (ι : 类型 w)
   定义体: ι
   R := ι × ι
   fst := _root_.Prod.fst
@@ -113,8 +113,8 @@ structure MultispanShape
 结构 MultispanShape
   参数: where
   公理与运算 (4 个):
-    - L : Type w
-    - R : Type w'
+    - L : 类型 w
+    - R : 类型 w'
     - fst : L -> R
     - snd : L -> R
 -/
@@ -144,8 +144,8 @@ definition MultispanShape.prod
   snd := _root_.Prod.snd
 
 中文:
-定义 MultispanShape.prod
-  签名: (ι : Type w)
+定义 MultispanShape.乘积
+  签名: (ι : 类型 w)
   定义体: ι × ι
   R := ι
   fst := _root_.Prod.fst
@@ -174,7 +174,7 @@ definition MultispanShape.ofLinearOrder
 
 中文:
 定义 MultispanShape.ofLinearOrder
-  签名: (ι : Type w) [LinearOrder ι]
+  签名: (ι : 类型 w) [线性序 ι]
   定义体: {x : ι × ι | x.1 < x.2}
   R := ι
   fst x := x.1.1
@@ -197,7 +197,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (MultispanShape.ofLinearOrder 布尔).L
+  签名: 唯一 (MultispanShape.ofLinearOrder 布尔值).L
   定义体: ⟨⟨False, True⟩, by simp⟩
   uniq := by rintro ⟨⟨(_ | _), (_ | _)⟩, _⟩ <;> tauto
 -/
@@ -260,8 +260,8 @@ instance [Inhabited
   body: ⟨left default⟩
 
 中文:
-实例 [Inhabited
-  签名: J.L] : Inhabited (WalkingMulticospan J)
+实例 [可居
+  签名: J.L] : 可居 (WalkingMulticospan J)
   定义体: ⟨left default⟩
 -/
 instance [Inhabited J.L] : Inhabited (WalkingMulticospan J) :=
@@ -281,12 +281,12 @@ inductive Hom
     - snd: (b) : Hom (left (J.snd b)) (right b)
 
 中文:
-归纳类型 Hom
-  参数: : 对任意 _ _ : WalkingMulticospan J, Type max w w'
+归纳类型 态射
+  参数: : 对任意 _ _ : WalkingMulticospan J, 类型 最大值 w w'
   构造子 (3 个):
-    - id: (A) : Hom A A
-    - fst: (b) : Hom (left (J.fst b)) (right b)
-    - snd: (b) : Hom (left (J.snd b)) (right b)
+    - id: (A) : 态射 A A
+    - fst: (b) : 态射 (left (J.fst b)) (right b)
+    - snd: (b) : 态射 (left (J.snd b)) (right b)
 -/
 inductive Hom : forall _ _ : WalkingMulticospan J, Type max w w'
   | id (A) : Hom A A
@@ -304,8 +304,8 @@ definition Hom.comp
   signature: : forall {A B C : WalkingMulticospan J} (_ : Hom A B) (_ : Hom B C), Hom A C
 
 中文:
-定义 Hom.comp
-  签名: : 对任意 {A B C : WalkingMulticospan J} (_ : Hom A B) (_ : Hom B C), Hom A C
+定义 态射.comp
+  签名: : 对任意 {A B C : WalkingMulticospan J} (_ : 态射 A B) (_ : 态射 B C), 态射 A C
 -/
 def Hom.comp : forall {A B C : WalkingMulticospan J} (_ : Hom A B) (_ : Hom B C), Hom A C
   | _, _, _, Hom.id X, f => f
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (WalkingMulticospan J)
+  签名: 小范畴 (WalkingMulticospan J)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -368,7 +368,7 @@ lemma Hom.id_eq_id
 @[simp]
 
 中文:
-引理 Hom.id_eq_id
+引理 态射.id_eq_id
   条件: (X : WalkingMulticospan J)
   证明: rfl
 
@@ -387,7 +387,7 @@ lemma Hom.comp_eq_comp
   proof: rfl
 
 中文:
-引理 Hom.comp_eq_comp
+引理 态射.comp_eq_comp
   结论: {X Y Z : WalkingMulticospan J}
   证明: rfl
 -/
@@ -408,7 +408,7 @@ definition functorExt
 
 中文:
 定义 functorExt
-  签名: {C : 类型} [Category* C] {F G : WalkingMulticospan J ⥤ C}
+  签名: {C : 类型} [范畴* C] {F G : WalkingMulticospan J ⥤ C}
   定义体: NatIso.ofComponents (fun j => match j with | .left i => left i | .right i => right i) by
     rintro _ _ ⟨_⟩ <;> simp [wl, wr]
 
@@ -438,7 +438,7 @@ lemma functor_ext
 
 中文:
 引理 functor_ext
-  结论: {C : 类型} [Category* C] {F G : WalkingMulticospan J ⥤ C}
+  结论: {C : 类型} [范畴* C] {F G : WalkingMulticospan J ⥤ C}
   证明: Functor.ext_of_iso
     (functorExt (fun _ => eqToIso (left _)) (fun _ => eqToIso (right _)) wl wr)
     (by rintro (_ | _) <;> grind) (by rintro (_ | _) <;> simp)
@@ -470,8 +470,8 @@ instance [Inhabited
   body: ⟨left default⟩
 
 中文:
-实例 [Inhabited
-  签名: J.L] : Inhabited (WalkingMultispan J)
+实例 [可居
+  签名: J.L] : 可居 (WalkingMultispan J)
   定义体: ⟨left default⟩
 -/
 instance [Inhabited J.L] : Inhabited (WalkingMultispan J) :=
@@ -512,12 +512,12 @@ inductive Hom
     - snd: (a) : Hom (left a) (right (J.snd a))
 
 中文:
-归纳类型 Hom
-  参数: : 对任意 _ _ : WalkingMultispan J, Type max w w'
+归纳类型 态射
+  参数: : 对任意 _ _ : WalkingMultispan J, 类型 最大值 w w'
   构造子 (3 个):
-    - id: (A) : Hom A A
-    - fst: (a) : Hom (left a) (right (J.fst a))
-    - snd: (a) : Hom (left a) (right (J.snd a))
+    - id: (A) : 态射 A A
+    - fst: (a) : 态射 (left a) (right (J.fst a))
+    - snd: (a) : 态射 (left a) (right (J.snd a))
 -/
 inductive Hom : forall _ _ : WalkingMultispan J, Type max w w'
   | id (A) : Hom A A
@@ -535,8 +535,8 @@ definition Hom.comp
   signature: : forall {A B C : WalkingMultispan J} (_ : Hom A B) (_ : Hom B C), Hom A C
 
 中文:
-定义 Hom.comp
-  签名: : 对任意 {A B C : WalkingMultispan J} (_ : Hom A B) (_ : Hom B C), Hom A C
+定义 态射.comp
+  签名: : 对任意 {A B C : WalkingMultispan J} (_ : 态射 A B) (_ : 态射 B C), 态射 A C
 -/
 def Hom.comp : forall {A B C : WalkingMultispan J} (_ : Hom A B) (_ : Hom B C), Hom A C
   | _, _, _, Hom.id X, f => f
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (WalkingMultispan J)
+  签名: 小范畴 (WalkingMultispan J)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -600,9 +600,9 @@ lemma Hom.id_eq_id
 @[simp]
 
 中文:
-引理 Hom.id_eq_id
+引理 态射.id_eq_id
   条件: (X : WalkingMultispan J)
-  结论: Hom.id X = 𝟙 X
+  结论: 态射.id X = 𝟙 X
   证明: rfl
 
 @[simp]
@@ -619,7 +619,7 @@ lemma Hom.comp_eq_comp
   proof: rfl
 
 中文:
-引理 Hom.comp_eq_comp
+引理 态射.comp_eq_comp
   结论: {X Y Z : WalkingMultispan J}
   证明: rfl
 -/
@@ -640,7 +640,7 @@ definition functorExt
 
 中文:
 定义 functorExt
-  签名: {C : 类型} [Category* C] {F G : WalkingMultispan J ⥤ C}
+  签名: {C : 类型} [范畴* C] {F G : WalkingMultispan J ⥤ C}
   定义体: NatIso.ofComponents (fun j => match j with | .left i => left i | .right i => right i) by
     rintro _ _ ⟨_⟩ <;> simp [wl, wr]
 
@@ -977,7 +977,7 @@ theorem multicospan_map_fst
 中文:
 定理 multicospan_map_fst
   条件: (a)
-  结论: I.multicospan.map (WalkingMulticospan.Hom.fst a) = I.fst a
+  结论: I.multicospan.map (WalkingMulticospan.态射.fst a) = I.fst a
   证明: rfl
 
 @[simp]
@@ -998,7 +998,7 @@ theorem multicospan_map_snd
 中文:
 定理 multicospan_map_snd
   条件: (a)
-  结论: I.multicospan.map (WalkingMulticospan.Hom.snd a) = I.snd a
+  结论: I.multicospan.map (WalkingMulticospan.态射.snd a) = I.snd a
   证明: rfl
 -/
 theorem multicospan_map_snd (a) : I.multicospan.map (WalkingMulticospan.Hom.snd a) = I.snd a :=
@@ -1014,7 +1014,7 @@ definition fstPiMapOfIsLimit
 
 中文:
 定义 fstPiMapOfIsLimit
-  签名: (c : Fan I.left) {d : Fan I.right} (hd : IsLimit d)
+  签名: (c : Fan I.left) {d : Fan I.right} (hd : 是极限 d)
   定义体: Fan.IsLimit.lift hd fun i => c.proj _ ≫ I.fst i
 
 Depends on / 依赖: Fan.IsLimit.lift, I.fst, IsLimit, c.proj
@@ -1034,7 +1034,7 @@ definition sndPiMapOfIsLimit
 
 中文:
 定义 sndPiMapOfIsLimit
-  签名: (c : Fan I.left) {d : Fan I.right} (hd : IsLimit d)
+  签名: (c : Fan I.left) {d : Fan I.right} (hd : 是极限 d)
   定义体: Fan.IsLimit.lift hd fun i => c.proj _ ≫ I.snd i
 
 @[reassoc (attr := simp)]
@@ -1058,7 +1058,7 @@ lemma fstPiMapOfIsLimit_proj
 
 中文:
 引理 fstPiMapOfIsLimit_proj
-  条件: (c : Fan I.left) {d : Fan I.right} (hd : IsLimit d) (i)
+  条件: (c : Fan I.left) {d : Fan I.right} (hd : 是极限 d) (i)
   证明: by
   simp [fstPiMapOfIsLimit]
 
@@ -1082,7 +1082,7 @@ lemma sndPiMapOfIsLimit_proj
 
 中文:
 引理 sndPiMapOfIsLimit_proj
-  条件: (c : Fan I.left) {d : Fan I.right} (hd : IsLimit d) (i)
+  条件: (c : Fan I.left) {d : Fan I.right} (hd : 是极限 d) (i)
   证明: by
   simp [sndPiMapOfIsLimit]
 
@@ -1170,7 +1170,7 @@ theorem fstPiMap_π
 中文:
 定理 fstPiMap_π
   条件: (b)
-  结论: I.fstPiMap ≫ Pi.π I.right b = Pi.π I.left _ ≫ I.fst b
+  结论: I.fstPiMap ≫ 依赖函数类型.π I.right b = 依赖函数类型.π I.left _ ≫ I.fst b
   证明: fstPiMapOfIsLimit_proj ..
 
 @[reassoc (attr := simp)]
@@ -1193,7 +1193,7 @@ theorem sndPiMap_π
 中文:
 定理 sndPiMap_π
   条件: (b)
-  结论: I.sndPiMap ≫ Pi.π I.right b = Pi.π I.left _ ≫ I.snd b
+  结论: I.sndPiMap ≫ 依赖函数类型.π I.right b = 依赖函数类型.π I.left _ ≫ I.snd b
   证明: sndPiMapOfIsLimit_proj ..
 
 Depends on / 依赖: sndPiMapOfIsLimit_proj
@@ -1337,7 +1337,7 @@ theorem multispan_map_fst
 中文:
 定理 multispan_map_fst
   条件: (a)
-  结论: I.multispan.map (WalkingMultispan.Hom.fst a) = I.fst a
+  结论: I.multispan.map (WalkingMultispan.态射.fst a) = I.fst a
   证明: rfl
 
 @[simp]
@@ -1358,7 +1358,7 @@ theorem multispan_map_snd
 中文:
 定理 multispan_map_snd
   条件: (a)
-  结论: I.multispan.map (WalkingMultispan.Hom.snd a) = I.snd a
+  结论: I.multispan.map (WalkingMultispan.态射.snd a) = I.snd a
   证明: rfl
 -/
 theorem multispan_map_snd (a) : I.multispan.map (WalkingMultispan.Hom.snd a) = I.snd a :=
@@ -1374,7 +1374,7 @@ definition fstSigmaMapOfIsColimit
 
 中文:
 定义 fstSigmaMapOfIsColimit
-  签名: {c : Cofan I.left} (d : Cofan I.right) (hc : IsColimit c)
+  签名: {c : Cofan I.left} (d : Cofan I.right) (hc : 是余极限 c)
   定义体: Cofan.IsColimit.desc hc fun i => I.fst i ≫ d.inj _
 
 Depends on / 依赖: Cofan.IsColimit.desc, I.fst, IsColimit, d.inj
@@ -1395,7 +1395,7 @@ definition sndSigmaMapOfIsColimit
 
 中文:
 定义 sndSigmaMapOfIsColimit
-  签名: {c : Cofan I.left} (d : Cofan I.right) (hc : IsColimit c)
+  签名: {c : Cofan I.left} (d : Cofan I.right) (hc : 是余极限 c)
   定义体: Cofan.IsColimit.desc hc fun i => I.snd i ≫ d.inj _
 
 @[reassoc (attr := simp)]
@@ -1420,7 +1420,7 @@ lemma inj_fstSigmaMapOfIsColimit
 
 中文:
 引理 inj_fstSigmaMapOfIsColimit
-  条件: {c : Cofan I.left} (d : Cofan I.right) (hc : IsColimit c) (i)
+  条件: {c : Cofan I.left} (d : Cofan I.right) (hc : 是余极限 c) (i)
   证明: by
   simp [fstSigmaMapOfIsColimit]
 
@@ -1444,7 +1444,7 @@ lemma inj_sndSigmaMapOfIsColimit
 
 中文:
 引理 inj_sndSigmaMapOfIsColimit
-  条件: {c : Cofan I.left} (d : Cofan I.right) (hc : IsColimit c) (i)
+  条件: {c : Cofan I.left} (d : Cofan I.right) (hc : 是余极限 c) (i)
   证明: by
   simp [sndSigmaMapOfIsColimit]
 
@@ -1532,7 +1532,7 @@ theorem ι_fstSigmaMap
 中文:
 定理 ι_fstSigmaMap
   条件: (b)
-  结论: Sigma.ι I.left b ≫ I.fstSigmaMap = I.fst b ≫ Sigma.ι I.right _
+  结论: 依赖和类型.ι I.left b ≫ I.fstSigmaMap = I.fst b ≫ 依赖和类型.ι I.right _
   证明: inj_fstSigmaMapOfIsColimit ..
 
 @[reassoc (attr := simp)]
@@ -1555,7 +1555,7 @@ theorem ι_sndSigmaMap
 中文:
 定理 ι_sndSigmaMap
   条件: (b)
-  结论: Sigma.ι I.left b ≫ I.sndSigmaMap = I.snd b ≫ Sigma.ι I.right _
+  结论: 依赖和类型.ι I.left b ≫ I.sndSigmaMap = I.snd b ≫ 依赖和类型.ι I.right _
   证明: inj_sndSigmaMapOfIsColimit ..
 
 Depends on / 依赖: inj_sndSigmaMapOfIsColimit
@@ -1918,7 +1918,7 @@ definition IsLimit.mk
       apply hm }
 
 中文:
-定义 IsLimit.mk
+定义 是极限.mk
   签名: (lift : 对任意 E : Multifork I, E.pt ⟶ K.pt)
   定义体: { lift
     fac := by
@@ -1971,8 +1971,8 @@ lemma IsLimit.hom_ext
     rw [app_right_eq_ι_comp_fst]; rw [reassoc_of% h]
 
 中文:
-引理 IsLimit.hom_ext
-  结论: (hK : IsLimit K) {T : C} {f g : T ⟶ K.pt}
+引理 是极限.hom_ext
+  结论: (hK : 是极限 K) {T : C} {f g : T ⟶ K.pt}
   证明: by
   apply hK.hom_ext
   rintro (_ | b)
@@ -2000,8 +2000,8 @@ definition IsLimit.lift
   body: hK.lift (Multifork.ofι _ _ k hk)
 
 中文:
-定义 IsLimit.lift
-  签名: (hK : IsLimit K) {T : C} (k : 对任意 a, T ⟶ I.left a)
+定义 是极限.lift
+  签名: (hK : 是极限 K) {T : C} (k : 对任意 a, T ⟶ I.left a)
   定义体: hK.lift (Multifork.ofι _ _ k hk)
 
 Depends on / 依赖: Multifork, Multifork.of, adjunction, hK.lift, ihom.adjunction, isLeftAdjoint
@@ -2022,8 +2022,8 @@ lemma IsLimit.fac
   proof: hK.fac _ _
 
 中文:
-引理 IsLimit.fac
-  结论: (hK : IsLimit K) {T : C} (k : 对任意 a, T ⟶ I.left a)
+引理 是极限.fac
+  结论: (hK : 是极限 K) {T : C} (k : 对任意 a, T ⟶ I.left a)
   证明: hK.fac _ _
 
 Depends on / 依赖: hK.fac
@@ -2217,7 +2217,7 @@ theorem ofPiFork_ι
 
 中文:
 定理 ofPiFork_ι
-  条件: (a : Fork (I.fstPiMapOfIsLimit c hd) (I.sndPiMapOfIsLimit c hd)) (i)
+  条件: (a : 叉 (I.fstPiMapOfIsLimit c hd) (I.sndPiMapOfIsLimit c hd)) (i)
   证明: rfl
 
 @[simp]
@@ -2396,7 +2396,7 @@ definition multiforkEquivPiFork
 
 中文:
 定义 multiforkEquivPiFork
-  签名: : Multifork I ≌ Fork I.fstPiMap I.sndPiMap
+  签名: : Multifork I ≌ 叉 I.fstPiMap I.sndPiMap
   定义体: multiforkEquivPiForkOfIsLimit I (limit.isLimit _) (limit.isLimit _)
 
 Depends on / 依赖: isLimit, limit.isLimit, multiforkEquivPiForkOfIsLimit
@@ -2448,7 +2448,7 @@ definition multiforkOfParallelHomsEquivFork
 
 中文:
 定义 multiforkOfParallelHomsEquivFork
-  签名: (J : MulticospanShape) [Unique J.L] [Unique J.R] {X Y : C}
+  签名: (J : MulticospanShape) [唯一 J.L] [唯一 J.R] {X Y : C}
   定义体: by
   refine (multiforkEquivPiForkOfIsLimit _
       (Fan.isLimitMkOfUnique (Iso.refl X) _) (Fan.isLimitMkOfUnique (Iso.refl Y) _)).trans
@@ -2483,7 +2483,7 @@ lemma multiforkOfParallelHomsEquivFork_functor_obj_ι
 
 中文:
 引理 multiforkOfParallelHomsEquivFork_functor_obj_ι
-  结论: (J : MulticospanShape) [Unique J.L]
+  结论: (J : MulticospanShape) [唯一 J.L]
   证明: Fan.IsLimit.fac (Fan.isLimitMkOfUnique (Iso.refl X) J.L) _ default
 
 Depends on / 依赖: Fan.IsLimit.fac, Fan.isLimitMkOfUnique, IsLimit, Iso.refl, isLimitMkOfUnique
@@ -2507,7 +2507,7 @@ lemma multiforkOfParallelHomsEquivFork_inverse_obj_ι
 
 中文:
 引理 multiforkOfParallelHomsEquivFork_inverse_obj_ι
-  结论: (J : MulticospanShape) [Unique J.L]
+  结论: (J : MulticospanShape) [唯一 J.L]
   证明: by
   simp [multiforkOfParallelHomsEquivFork]
 
@@ -2745,7 +2745,7 @@ definition IsColimit.mk
       apply hm }
 
 中文:
-定义 IsColimit.mk
+定义 是余极限.mk
   签名: (desc : 对任意 E : Multicofork I, K.pt ⟶ E.pt)
   定义体: { desc
     fac := by
@@ -2795,8 +2795,8 @@ lemma IsColimit.hom_ext
   rintro (_ | _) <;> simp [h]
 
 中文:
-引理 IsColimit.hom_ext
-  结论: (hK : IsColimit K) {T : C} {f g : K.pt ⟶ T}
+引理 是余极限.hom_ext
+  结论: (hK : 是余极限 K) {T : C} {f g : K.pt ⟶ T}
   证明: by
   apply hK.hom_ext
   rintro (_ | _) <;> simp [h]
@@ -2819,8 +2819,8 @@ definition IsColimit.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsColimit.desc
-  签名: (hK : IsColimit K) {T : C} (k : 对任意 a, I.right a ⟶ T)
+定义 是余极限.desc
+  签名: (hK : 是余极限 K) {T : C} (k : 对任意 a, I.right a ⟶ T)
   定义体: hK.desc (Multicofork.ofπ _ _ k hk)
 
 @[reassoc (attr := simp)]
@@ -2842,8 +2842,8 @@ lemma IsColimit.fac
   proof: hK.fac _ _
 
 中文:
-引理 IsColimit.fac
-  结论: (hK : IsColimit K) {T : C} (k : 对任意 a, I.right a ⟶ T)
+引理 是余极限.fac
+  结论: (hK : 是余极限 K) {T : C} (k : 对任意 a, I.right a ⟶ T)
   证明: hK.fac _ _
 
 Depends on / 依赖: hK.fac
@@ -3556,7 +3556,7 @@ theorem ιPi_π
 中文:
 定理 ιPi_π
   条件: (a)
-  结论: ιPi I ≫ Pi.π I.left a = ι I a
+  结论: ιPi I ≫ 依赖函数类型.π I.left a = ι I a
   证明: by
   rw [ιPi]; rw [Category.assoc]; rw [← Iso.eq_inv_comp]; rw [isoEqualizer]
   simp only [limit.isoLimitCone_inv_π,
@@ -3581,7 +3581,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (ιPi I)
+  签名: 单态射 (ιPi I)
   定义体: mono_comp _ _
 
 Depends on / 依赖: mono_comp
@@ -3879,7 +3879,7 @@ theorem ι_sigmaπ
 中文:
 定理 ι_sigmaπ
   条件: (b)
-  结论: Sigma.ι I.right b ≫ sigmaπ I = π I b
+  结论: 依赖和类型.ι I.right b ≫ sigmaπ I = π I b
   证明: by
   rw [sigmaπ]; rw [← Category.assoc]; rw [Iso.comp_inv_eq]; rw [isoCoequalizer]
   simp
@@ -3902,7 +3902,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (sigmaπ I)
+  签名: 满态射 (sigmaπ I)
   定义体: epi_comp _ _
 
 Depends on / 依赖: epi_comp
@@ -3929,7 +3929,7 @@ definition WalkingMultispan.inclusionOfLinearOrder
 
 中文:
 定义 WalkingMultispan.inclusionOfLinearOrder
-  签名: (ι : Type w) [LinearOrder ι]
+  签名: (ι : 类型 w) [线性序 ι]
   定义体: MultispanIndex.multispan
     { left j := .left j.1
       right i := .right i
@@ -4130,7 +4130,7 @@ definition isColimitToLinearOrder
 
 中文:
 定义 isColimitToLinearOrder
-  签名: (c : Multicofork I) (hc : IsColimit c) (h : I.SymmStruct)
+  签名: (c : Multicofork I) (hc : 是余极限 c) (h : I.SymmStruct)
   定义体: Multicofork.IsColimit.mk _ (fun s => hc.desc (ofLinearOrder s h))
     (fun s _ => hc.fac (ofLinearOrder s h) _)
     (fun s m hm => Multicofork.IsColimit.hom_ext hc (fun i => by

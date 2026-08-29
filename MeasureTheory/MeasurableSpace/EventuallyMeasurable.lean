@@ -56,7 +56,7 @@ definition eventuallyMeasurableSpace
 
 中文:
 定义 eventuallyMeasurableSpace
-  签名: (l : Filter α) [Countable整数erFilter l]
+  签名: (l : 滤子 α) [余untable整数erFilter l]
   定义体: exists t, MeasurableSet t ∧ s =ᶠ[l] t
   measurableSet_empty := ⟨∅, MeasurableSet.empty, EventuallyEq.refl _ _ ⟩
   measurableSet_compl := fun _ ⟨t, ht, hts⟩ => ⟨tᶜ, ht.compl, hts.compl⟩
@@ -84,7 +84,7 @@ definition EventuallyMeasurableSet
 
 中文:
 定义 EventuallyMeasurableSet
-  签名: (l : Filter α) [Countable整数erFilter l] (s : Set α)
+  签名: (l : 滤子 α) [余untable整数erFilter l] (s : 集合 α)
   定义体: @MeasurableSet _ (eventuallyMeasurableSpace m l) s
 
 Depends on / 依赖: MeasurableSet, eventuallyMeasurableSpace
@@ -104,8 +104,8 @@ theorem MeasurableSet.eventuallyMeasurableSet
   proof: ⟨s, hs, EventuallyEq.refl _ _⟩
 
 中文:
-定理 MeasurableSet.eventuallyMeasurableSet
-  条件: (hs : MeasurableSet s)
+定理 可测集.eventuallyMeasurableSet
+  条件: (hs : 可测集 s)
   证明: ⟨s, hs, EventuallyEq.refl _ _⟩
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.refl
@@ -186,7 +186,7 @@ instance eventuallyMeasurableSingleton
 
 中文:
 实例 eventuallyMeasurableSingleton
-  签名: [MeasurableSingletonClass α]
+  签名: [MeasurableSingleton类 α]
   定义体: @MeasurableSingletonClass.mk _ (_) fun x => (MeasurableSet.singleton x).eventuallyMeasurableSet
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.singleton, MeasurableSingletonClass, MeasurableSingletonClass.mk, eventuallyMeasurableSet, singleton
@@ -232,8 +232,8 @@ theorem Measurable.eventuallyMeasurable
   proof: hf.le le_eventuallyMeasurableSpace
 
 中文:
-定理 Measurable.eventuallyMeasurable
-  条件: (hf : Measurable f)
+定理 可测.eventuallyMeasurable
+  条件: (hf : 可测 f)
   结论: EventuallyMeasurable m l f
   证明: hf.le le_eventuallyMeasurableSpace
 
@@ -251,8 +251,8 @@ theorem Measurable.comp_eventuallyMeasurable
   proof: hh.comp hf
 
 中文:
-定理 Measurable.comp_eventuallyMeasurable
-  条件: (hh : Measurable h) (hf : EventuallyMeasurable m l f)
+定理 可测.comp_eventuallyMeasurable
+  条件: (hh : 可测 h) (hf : EventuallyMeasurable m l f)
   证明: hh.comp hf
 
 Depends on / 依赖: hh.comp
@@ -289,7 +289,7 @@ theorem Measurable.eventuallyMeasurable_of_eventuallyEq
   proof: hf.eventuallyMeasurable.congr hgf
 
 中文:
-定理 Measurable.eventuallyMeasurable_of_eventuallyEq
+定理 可测.eventuallyMeasurable_of_eventuallyEq
   证明: hf.eventuallyMeasurable.congr hgf
 
 Depends on / 依赖: eventuallyMeasurable, hf.eventuallyMeasurable.congr

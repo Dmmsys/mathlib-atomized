@@ -105,7 +105,7 @@ structure DyckWord
 结构 DyckWord
   参数: where
   公理与运算 (3 个):
-    - toList : List DyckStep
+    - toList : 列表 DyckStep
     - count_U_eq_count_D : toList.count U = toList.count D
     - count_D_le_count_U(i) : (toList.take i).count D <= (toList.take i).count U
 -/
@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe DyckWord (List DyckStep)
+  签名: Coe DyckWord (列表 DyckStep)
   定义体: ⟨DyckWord.toList⟩
 
 Depends on / 依赖: DyckWord, DyckWord.toList, toList
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add DyckWord
+  签名: 加法 DyckWord
   定义体: ⟨p ++ q, by
     simp only [count_append, p.count_U_eq_count_D, q.count_U_eq_count_D], by
     simp only [take_append, count_append]
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero DyckWord
+  签名: 零 DyckWord
   定义体: ⟨[], by simp, by simp⟩
 -/
 instance : Zero DyckWord := ⟨[], by simp, by simp⟩
@@ -193,7 +193,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCancelMonoid DyckWord
+  签名: 加法消去幺半群 DyckWord
   定义体: by ext1; exact append_nil _
   zero_add p := by ext1; rfl
   add_assoc p q r := by ext1; apply append_assoc
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (AddUnits DyckWord)
+  签名: 唯一 (加法单位群 DyckWord)
   定义体: by
     obtain ⟨a, b, h, -⟩ := p
     obtain ⟨ha, hb⟩ := append_eq_nil_iff.mp (toList_eq_nil.mpr h)
@@ -1387,7 +1387,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder DyckWord
+  签名: 预序 DyckWord
   定义体: Relation.ReflTransGen (fun p q => p = q.insidePart ∨ p = q.outsidePart)
   le_refl _ := Relation.ReflTransGen.refl
   le_trans _ _ _ := Relation.ReflTransGen.trans
@@ -1540,7 +1540,7 @@ exact DyckWord.ext h₁.eq_of_length h₁.length_le.antisymm h₂.length_le
 
 中文:
 实例 :
-  签名: PartialOrder DyckWord
+  签名: 偏序 DyckWord
   定义体: by
     have h₁ := infix_of_le pq
     have h₂ := infix_of_le qp
@@ -1594,7 +1594,7 @@ lemma monotone_semilength
 
 中文:
 引理 monotone_semilength
-  结论: Monotone semilength
+  结论: 递增 semilength
   证明: fun p q pq => by
   induction pq with
   | refl => rfl
@@ -1636,7 +1636,7 @@ lemma strictMono_semilength
 
 中文:
 引理 strictMono_semilength
-  结论: StrictMono semilength
+  结论: 严格递增 semilength
   证明: fun p q pq => by
   obtain ⟨plq, pnq⟩ := lt_iff_le_and_ne.mp pq
   apply lt_of_le_of_ne (monotone_semilength plq)
@@ -1694,7 +1694,7 @@ definition ofTree
 
 中文:
 定义 ofTree
-  签名: : BinaryTree Unit -> DyckWord
+  签名: : BinaryTree 单元 -> DyckWord
 -/
 def ofTree : BinaryTree Unit -> DyckWord
   | BinaryTree.nil => 0
@@ -1773,7 +1773,7 @@ definition equivTree
 
 中文:
 定义 equivTree
-  签名: : DyckWord ≃ BinaryTree Unit where
+  签名: : DyckWord ≃ BinaryTree 单元 where
   定义体: toTree
   invFun := ofTree
   left_inv := ofTree_toTree

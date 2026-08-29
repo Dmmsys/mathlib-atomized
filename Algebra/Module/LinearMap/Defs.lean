@@ -74,8 +74,8 @@ structure IsLinearMap
     - map_smul : forall (c : R) (x), f (c • x) = c • f x
 
 中文:
-结构 IsLinearMap
-  参数: (R : 类型u) {M : 类型v} {M₂ : Type w} [Semiring R] [AddCommMonoid M]
+结构 是线性映射
+  参数: (R : 类型u) {M : 类型v} {M₂ : 类型 w} [半环 R] [加法交换幺半群 M]
   公理与运算 (2 个):
     - map_add : 对任意 x y, f (x + y) = f x + f y
     - map_smul : 对任意 (c : R) (x), f (c • x) = c • f x
@@ -98,8 +98,8 @@ structure LinearMap
   (no additional axioms)
 
 中文:
-结构 LinearMap
-  参数: {R S : 类型} [Semiring R] [Semiring S] (σ : R ->+* S) (M : 类型)
+结构 线性映射
+  参数: {R S : 类型} [半环 R] [半环 S] (σ : R ->+* S) (M : 类型)
   (无附加公理)
 -/
 structure LinearMap {R S : Type*} [Semiring R] [Semiring S] (σ : R ->+* S) (M : Type*)
@@ -128,9 +128,9 @@ class SemilinearMapClass
   (no additional axioms)
 
 中文:
-类 SemilinearMapClass
-  参数: (F : 类型) {R S : outParam 类型} [Semiring R] [Semiring S]
-  继承: AddHomClass F M M₂, MulActionSemiHomClass F σ M M₂
+类 半线性映射类
+  参数: (F : 类型) {R S : outParam 类型} [半环 R] [半环 S]
+  继承: 加法态射类 F M M₂, MulActionSemi态射类 F σ M M₂
   (无附加公理)
 -/
 class SemilinearMapClass (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
@@ -152,7 +152,7 @@ abbreviation LinearMapClass
   body: SemilinearMapClass F (RingHom.id R) M M₂
 
 中文:
-缩写 LinearMapClass
+缩写 线性映射类
   签名: (F : 类型) (R : outParam 类型) (M M₂ : 类型)
   定义体: SemilinearMapClass F (RingHom.id R) M M₂
 
@@ -172,8 +172,8 @@ lemma LinearMapClass.map_smul
   proof: by rw [map_smul]
 
 中文:
-引理 LinearMapClass.map_smul
-  结论: {R M M₂ : outParam 类型} [Semiring R] [AddCommMonoid M]
+引理 线性映射类.map_smul
+  结论: {R M M₂ : outParam 类型} [半环 R] [加法交换幺半群 M]
   证明: by rw [map_smul]
 -/
 protected lemma LinearMapClass.map_smul {R M M₂ : outParam Type*} [Semiring R] [AddCommMonoid M]
@@ -334,7 +334,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (M ->ₛₗ[σ] M₃) M M₃ where
+  签名: : 函数状 (M ->ₛₗ[σ] M₃) M M₃ where
   定义体: f.toFun
   coe_injective f g h := by
     cases f
@@ -367,7 +367,7 @@ instance semilinearMapClass
 
 中文:
 实例 semilinearMapClass
-  签名: : SemilinearMapClass (M ->ₛₗ[σ] M₃) σ M M₃ where
+  签名: : 半线性映射类 (M ->ₛₗ[σ] M₃) σ M M₃ where
   定义体: f.map_add'
   map_smulₛₗ := LinearMap.map_smul'
 
@@ -390,7 +390,7 @@ lemma coe_coe
 
 中文:
 引理 coe_coe
-  条件: {F : 类型} [FunLike F M M₃] [SemilinearMapClass F σ M M₃] {f : F}
+  条件: {F : 类型} [函数状 F M M₃] [半线性映射类 F σ M M₃] {f : F}
   证明: rfl
 -/
 lemma coe_coe {F : Type*} [FunLike F M M₃] [SemilinearMapClass F σ M M₃] {f : F} :
@@ -572,7 +572,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: {σ : R ->+* S} (f : AddHom M M₃) (h)
+  条件: {σ : R ->+* S} (f : 加法半群态射 M M₃) (h)
   证明: rfl
 
 @[simp]
@@ -592,7 +592,7 @@ theorem coe_addHom_mk
 
 中文:
 定理 coe_addHom_mk
-  条件: {σ : R ->+* S} (f : AddHom M M₃) (h)
+  条件: {σ : R ->+* S} (f : 加法半群态射 M M₃) (h)
   证明: rfl
 -/
 theorem coe_addHom_mk {σ : R ->+* S} (f : AddHom M M₃) (h) :
@@ -609,7 +609,7 @@ theorem coe_semilinearMap
 
 中文:
 定理 coe_semilinearMap
-  条件: {F : 类型} [FunLike F M M₃] [SemilinearMapClass F σ M M₃] (f : F)
+  条件: {F : 类型} [函数状 F M M₃] [半线性映射类 F σ M M₃] (f : F)
   证明: rfl
 -/
 theorem coe_semilinearMap {F : Type*} [FunLike F M M₃] [SemilinearMapClass F σ M M₃] (f : F) :
@@ -629,7 +629,7 @@ theorem toLinearMap_injective
 
 中文:
 定理 toLinearMap_injective
-  结论: {F : 类型} [FunLike F M M₃] [SemilinearMapClass F σ M M₃]
+  结论: {F : 类型} [函数状 F M M₃] [半线性映射类 F σ M M₃]
   证明: by
   apply DFunLike.ext
   intro m
@@ -697,7 +697,7 @@ theorem id_coe
 
 中文:
 定理 id_coe
-  结论: ((LinearMap.id : M ->ₗ[R] M) : M -> M) = _root_.id
+  结论: ((线性映射.id : M ->ₗ[R] M) : M -> M) = _root_.id
   证明: rfl
 -/
 theorem id_coe : ((LinearMap.id : M ->ₗ[R] M) : M -> M) = _root_.id :=
@@ -779,7 +779,7 @@ theorem isLinear
 
 中文:
 定理 isLinear
-  结论: IsLinearMap R fₗ
+  结论: 是线性映射 R fₗ
   证明: ⟨fₗ.map_add', fₗ.map_smul'⟩
 
 Depends on / 依赖: map_add, map_smul
@@ -799,7 +799,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective (DFunLike.coe : (M ->ₛₗ[σ] M₃) -> _)
+  结论: 单射 (依赖函数状.coe : (M ->ₛₗ[σ] M₃) -> _)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -985,7 +985,7 @@ theorem map_eq_zero_iff
 
 中文:
 定理 map_eq_zero_iff
-  条件: (h : Function.Injective f) {x : M}
+  条件: (h : 函数.单射 f) {x : M}
   结论: f x = 0 ↔ x = 0
   证明: _root_.map_eq_zero_iff f h
 -/
@@ -1004,8 +1004,8 @@ class CompatibleSMul
     - map_smul : forall (fₗ : M ->ₗ[S] M₂) (c : R) (x : M), fₗ (c • x) = c • fₗ x
 
 中文:
-类 CompatibleSMul
-  参数: (R S : 类型) [Semiring S] [SMul R M] [Module S M] [SMul R M₂]
+类 余mpatibleSMul
+  参数: (R S : 类型) [半环 S] [标量乘法 R M] [模 S M] [标量乘法 R M₂]
   公理与运算 (1 个):
     - map_smul : 对任意 (fₗ : M ->ₗ[S] M₂) (c : R) (x : M), fₗ (c • x) = c • fₗ x
 -/
@@ -1036,8 +1036,8 @@ instance IsScalarTower.compatibleSMul'
 @[simp]
 
 中文:
-实例 IsScalarTower.compatibleSMul'
-  签名: [SMul R S] [IsScalarTower R S M]
+实例 标量塔.compatibleSMul'
+  签名: [标量乘法 R S] [标量塔 R S M]
   定义体: (IsScalarTower.smulHomClass R S M (S ->ₗ[S] M)).map_smulₛₗ
 
 @[simp]
@@ -1059,7 +1059,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  条件: [CompatibleSMul M M₂ R S] (fₗ : M ->ₗ[S] M₂) (c : R) (x : M)
+  条件: [余mpatibleSMul M M₂ R S] (fₗ : M ->ₗ[S] M₂) (c : R) (x : M)
   证明: CompatibleSMul.map_smul fₗ c x
 
 Depends on / 依赖: CompatibleSMul, CompatibleSMul.map_smul, map_smul
@@ -1077,8 +1077,8 @@ theorem _root_.LinearMapClass.map_smul_of_tower
   proof: LinearMap.CompatibleSMul.map_smul (fₗ : M ->ₗ[S] M₂) c x
 
 中文:
-定理 _root_.LinearMapClass.map_smul_of_tower
-  结论: {F : 类型} [CompatibleSMul M M₂ R S]
+定理 _root_.线性映射类.map_smul_of_tower
+  结论: {F : 类型} [余mpatibleSMul M M₂ R S]
   证明: LinearMap.CompatibleSMul.map_smul (fₗ : M ->ₗ[S] M₂) c x
 
 Depends on / 依赖: CompatibleSMul, LinearMap, LinearMap.CompatibleSMul.map_smul, map_smul
@@ -1099,7 +1099,7 @@ theorem isScalarTower_of_injective
 
 中文:
 定理 isScalarTower_of_injective
-  结论: [SMul R S] [CompatibleSMul M M₂ R S] [IsScalarTower R S M₂]
+  结论: [标量乘法 R S] [余mpatibleSMul M M₂ R S] [标量塔 R S M₂]
   证明: hf by rw [f.map_smul_of_tower r, map_smul, map_smul, smul_assoc]
 
 Depends on / 依赖: f.map_smul_of_tower, map_smul, map_smul_of_tower, smul_assoc
@@ -1143,7 +1143,7 @@ theorem isLinearMap_of_compatibleSMul
 
 中文:
 定理 isLinearMap_of_compatibleSMul
-  结论: [Module S M] [Module S M₂] [CompatibleSMul M M₂ R S]
+  结论: [模 S M] [模 S M₂] [余mpatibleSMul M M₂ R S]
   证明: map_add f
   map_smul := map_smul_of_tower f
 
@@ -1170,7 +1170,7 @@ omit [Module R M₂] in
 
 中文:
 定义 toAddMonoidHom
-  签名: {modM₁ : Module R M₁} {modM₂ : Module S M₂} {σ : R ->+* S} (f : M₁ ->ₛₗ[σ] M₂)
+  签名: {modM₁ : 模 R M₁} {modM₂ : 模 S M₂} {σ : R ->+* S} (f : M₁ ->ₛₗ[σ] M₂)
   定义体: f
   map_zero' := f.map_zero
   map_add' := f.map_add
@@ -1196,7 +1196,7 @@ lemma toAddMonoidHom_coe
 
 中文:
 引理 toAddMonoidHom_coe
-  结论: {modM₁ : Module R M₁} {modM₂ : Module S M₂} {σ : R ->+* S}
+  结论: {modM₁ : 模 R M₁} {modM₂ : 模 S M₂} {σ : R ->+* S}
   证明: rfl
 -/
 lemma toAddMonoidHom_coe {modM₁ : Module R M₁} {modM₂ : Module S M₂} {σ : R ->+* S}
@@ -1366,7 +1366,7 @@ lemma restrictScalars_id
 
 中文:
 引理 restrictScalars_id
-  条件: [CompatibleSMul M M R S]
+  条件: [余mpatibleSMul M M R S]
   证明: rfl
 
 Depends on / 依赖: restrictScalars
@@ -1429,7 +1429,7 @@ definition _root_.RingHom.toSemilinearMap
     map_smul' := f.map_mul }
 
 中文:
-定义 _root_.RingHom.toSemilinearMap
+定义 _root_.环态射.toSemilinearMap
   签名: (f : R ->+* S)
   定义体: { f with
     map_smul' := f.map_mul }
@@ -1450,7 +1450,7 @@ theorem _root_.RingHom.coe_toSemilinearMap
   proof: rfl
 
 中文:
-定理 _root_.RingHom.coe_toSemilinearMap
+定理 _root_.环态射.coe_toSemilinearMap
   条件: (f : R ->+* S)
   结论: ⇑f.toSemilinearMap = f
   证明: rfl
@@ -1615,8 +1615,8 @@ lemma _root_.Function.Surjective.injective_linearMapComp_right
 @[simp]
 
 中文:
-引理 _root_.Function.Surjective.injective_linearMapComp_right
-  条件: (hg : Surjective g)
+引理 _root_.函数.满射.injective_linearMapComp_right
+  条件: (hg : 满射 g)
   证明: fun _ _ h => ext hg.forall.2 (LinearMap.ext_iff.1 h)
 
 @[simp]
@@ -1639,7 +1639,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: (hg : Surjective g)
+  条件: (hg : 满射 g)
   结论: f.comp g = f'.comp g ↔ f = f'
   证明: hg.injective_linearMapComp_right.eq_iff
 
@@ -1657,8 +1657,8 @@ lemma _root_.Function.Injective.injective_linearMapComp_left
   proof: fun g₁ g₂ (h : f.comp g₁ = f.comp g₂) => ext fun x => hf by rw [← comp_apply, h, comp_apply]
 
 中文:
-引理 _root_.Function.Injective.injective_linearMapComp_left
-  条件: (hf : Injective f)
+引理 _root_.函数.单射.injective_linearMapComp_left
+  条件: (hf : 单射 f)
   证明: fun g₁ g₂ (h : f.comp g₁ = f.comp g₂) => ext fun x => hf by rw [← comp_apply, h, comp_apply]
 
 Depends on / 依赖: comp_apply, f.comp
@@ -1682,7 +1682,7 @@ theorem surjective_comp_left_of_exists_rightInverse
 @[simp]
 
 中文:
-定理 surjective_comp_left_of_exists_rightInverse
+定理 surjective_comp_left_of_存在_rightInverse
   结论: {σ₃₂ : R₃ ->+* R₂}
   证明: by
   intro h
@@ -1715,7 +1715,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: f.comp g = f.comp g' ↔ g = g'
   证明: hf.injective_linearMapComp_left.eq_iff
 
@@ -1748,7 +1748,7 @@ definition inverse
 
 中文:
 定义 inverse
-  签名: (f : M ->ₛₗ[σ] M₂) (g : M₂ -> M) (h₁ : LeftInverse g f) (h₂ : RightInverse g f)
+  签名: (f : M ->ₛₗ[σ] M₂) (g : M₂ -> M) (h₁ : 左逆 g f) (h₂ : 右逆 g f)
   定义体: by
   dsimp [LeftInverse, Function.RightInverse] at h₁ h₂
   exact
@@ -1784,7 +1784,7 @@ theorem injective_of_comp_eq_id
 
 中文:
 定理 injective_of_comp_eq_id
-  结论: Injective f
+  结论: 单射 f
   证明: .of_comp (f := g) by simp_rw [← coe_comp, h, id_coe, bijective_id.1]
 
 Depends on / 依赖: bijective_id, coe_comp, id_coe, of_comp, simp_rw
@@ -1802,7 +1802,7 @@ theorem surjective_of_comp_eq_id
 
 中文:
 定理 surjective_of_comp_eq_id
-  结论: Surjective g
+  结论: 满射 g
   证明: .of_comp (g := f) by simp_rw [← coe_comp, h, id_coe, bijective_id.2]
 
 Depends on / 依赖: bijective_id, coe_comp, id_coe, of_comp, simp_rw
@@ -1867,8 +1867,8 @@ instance CompatibleSMul.intModule
     | pred n ih => simp [sub_smul]⟩
 
 中文:
-实例 CompatibleSMul.intModule
-  签名: {S : 类型} [Semiring S] [Module S M] [Module S M₂]
+实例 余mpatibleSMul.intModule
+  签名: {S : 类型} [半环 S] [模 S M] [模 S M₂]
   定义体: ⟨fun fₗ c x => by
     induction c with
     | zero => simp
@@ -1894,8 +1894,8 @@ instance CompatibleSMul.units
   body: ⟨fun fₗ c x => (CompatibleSMul.map_smul fₗ (c : R) x :)⟩
 
 中文:
-实例 CompatibleSMul.units
-  签名: {R S : 类型} [Monoid R] [MulAction R M] [MulAction R M₂]
+实例 余mpatibleSMul.units
+  签名: {R S : 类型} [幺半群 R] [乘法作用 R M] [乘法作用 R M₂]
   定义体: ⟨fun fₗ c x => (CompatibleSMul.map_smul fₗ (c : R) x :)⟩
 
 Depends on / 依赖: CompatibleSMul, CompatibleSMul.map_smul, map_smul
@@ -1926,7 +1926,7 @@ definition compHom.toLinearMap
 
 中文:
 定义 compHom.toLinearMap
-  签名: {R S : 类型} [Semiring R] [Semiring S] (g : R ->+* S)
+  签名: {R S : 类型} [半环 R] [半环 S] (g : R ->+* S)
   定义体: compHom S g; R ->ₗ[R] S :=
   letI := compHom S g
   { toFun := (g : R -> S)
@@ -1959,7 +1959,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilinearMapClass (M ->ₑ+[σ.toMonoidHom] M₂) σ M M₂
+  签名: 半线性映射类 (M ->ₑ+[σ.toMonoidHom] M₂) σ M M₂
 -/
 instance : SemilinearMapClass (M ->ₑ+[σ.toMonoidHom] M₂) σ M M₂ where
 
@@ -1972,7 +1972,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearMapClass (M ->+[R] M₃) R M M₃
+  签名: 线性映射类 (M ->+[R] M₃) R M M₃
 -/
 instance : LinearMapClass (M ->+[R] M₃) R M M₃ where
 
@@ -2043,7 +2043,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (f : M -> M₂) (lin : IsLinearMap R f)
+  签名: (f : M -> M₂) (lin : 是线性映射 R f)
   定义体: f
   map_add' := lin.1
   map_smul' := lin.2
@@ -2067,7 +2067,7 @@ theorem mk'_apply
 
 中文:
 定理 mk'_apply
-  条件: {f : M -> M₂} (lin : IsLinearMap R f) (x : M)
+  条件: {f : M -> M₂} (lin : 是线性映射 R f) (x : M)
   结论: mk' f lin x = f x
   证明: rfl
 -/
@@ -2087,7 +2087,7 @@ theorem isLinearMap_smul
 
 中文:
 定理 isLinearMap_smul
-  条件: {R M : 类型} [CommSemiring R] [AddCommMonoid M] [Module R M] (c : R)
+  条件: {R M : 类型} [交换半环 R] [加法交换幺半群 M] [模 R M] (c : R)
   证明: by
   refine IsLinearMap.mk (smul_add c) ?_
   intro _ _
@@ -2111,7 +2111,7 @@ theorem isLinearMap_smul'
 
 中文:
 定理 isLinearMap_smul'
-  条件: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M] (a : M)
+  条件: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M] (a : M)
   证明: IsLinearMap.mk (fun x y => add_smul x y a) fun x y => mul_smul x y a
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.mk, add_smul, mul_smul
@@ -2131,7 +2131,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  条件: {f : M -> M₂} (lin : IsLinearMap R f)
+  条件: {f : M -> M₂} (lin : 是线性映射 R f)
   结论: f (0 : M) = (0 : M₂)
   证明: (lin.mk' f).map_zero
 
@@ -2157,7 +2157,7 @@ theorem isLinearMap_neg
 
 中文:
 定理 isLinearMap_neg
-  结论: IsLinearMap R fun z : M => -z
+  结论: 是线性映射 R fun z : M => -z
   证明: IsLinearMap.mk neg_add fun x y => (smul_neg x y).symm
 
 Depends on / 依赖: IsLinearMap, IsLinearMap.mk, neg_add, smul_neg
@@ -2176,7 +2176,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  条件: {f : M -> M₂} (lin : IsLinearMap R f) (x : M)
+  条件: {f : M -> M₂} (lin : 是线性映射 R f) (x : M)
   结论: f (-x) = -f x
   证明: (lin.mk' f).map_neg x
 
@@ -2196,7 +2196,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  条件: {f : M -> M₂} (lin : IsLinearMap R f) (x y : M)
+  条件: {f : M -> M₂} (lin : 是线性映射 R f) (x y : M)
   结论: f (x - y) = f x - f y
   证明: (lin.mk' f).map_sub x y
 
@@ -2220,8 +2220,8 @@ definition AddMonoidHom.toNatLinearMap
   map_smul' := map_nsmul f
 
 中文:
-定义 AddMonoidHom.toNatLinearMap
-  签名: [AddCommMonoid M] [AddCommMonoid M₂] (f : M ->+ M₂)
+定义 加法幺半群态射.to自然数LinearMap
+  签名: [加法交换幺半群 M] [加法交换幺半群 M₂] (f : M ->+ M₂)
   定义体: f
   map_add' := f.map_add
   map_smul' := map_nsmul f
@@ -2246,8 +2246,8 @@ theorem AddMonoidHom.toNatLinearMap_injective
 @[simp]
 
 中文:
-定理 AddMonoidHom.toNatLinearMap_injective
-  条件: [AddCommMonoid M] [AddCommMonoid M₂]
+定理 加法幺半群态射.to自然数LinearMap_injective
+  条件: [加法交换幺半群 M] [加法交换幺半群 M₂]
   证明: by
   intro f g h
   ext x
@@ -2273,8 +2273,8 @@ theorem AddMonoidHom.coe_toNatLinearMap
   proof: rfl
 
 中文:
-定理 AddMonoidHom.coe_toNatLinearMap
-  条件: [AddCommMonoid M] [AddCommMonoid M₂] (f : M ->+ M₂)
+定理 加法幺半群态射.coe_to自然数LinearMap
+  条件: [加法交换幺半群 M] [加法交换幺半群 M₂] (f : M ->+ M₂)
   证明: rfl
 -/
 theorem AddMonoidHom.coe_toNatLinearMap [AddCommMonoid M] [AddCommMonoid M₂] (f : M ->+ M₂) :
@@ -2292,8 +2292,8 @@ definition AddMonoidHom.toIntLinearMap
   map_smul' := map_zsmul f
 
 中文:
-定义 AddMonoidHom.toIntLinearMap
-  签名: [AddCommGroup M] [AddCommGroup M₂] (f : M ->+ M₂)
+定义 加法幺半群态射.to整数LinearMap
+  签名: [加法交换群 M] [加法交换群 M₂] (f : M ->+ M₂)
   定义体: f
   map_add' := f.map_add
   map_smul' := map_zsmul f
@@ -2317,8 +2317,8 @@ theorem AddMonoidHom.toIntLinearMap_injective
 @[simp]
 
 中文:
-定理 AddMonoidHom.toIntLinearMap_injective
-  条件: [AddCommGroup M] [AddCommGroup M₂]
+定理 加法幺半群态射.to整数LinearMap_injective
+  条件: [加法交换群 M] [加法交换群 M₂]
   证明: by
   intro f g h
   ext x
@@ -2344,8 +2344,8 @@ theorem AddMonoidHom.coe_toIntLinearMap
   proof: rfl
 
 中文:
-定理 AddMonoidHom.coe_toIntLinearMap
-  条件: [AddCommGroup M] [AddCommGroup M₂] (f : M ->+ M₂)
+定理 加法幺半群态射.coe_to整数LinearMap
+  条件: [加法交换群 M] [加法交换群 M₂] (f : M ->+ M₂)
   证明: rfl
 -/
 theorem AddMonoidHom.coe_toIntLinearMap [AddCommGroup M] [AddCommGroup M₂] (f : M ->+ M₂) :
@@ -2378,7 +2378,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul S (M ->ₛₗ[σ₁₂] M₂)
+  签名: 标量乘法 S (M ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨fun a f =>
     { toFun := a • (f : M -> M₂)
       map_add' := fun x y => by simp only [Pi.smul_apply, f.map_add, smul_add]
@@ -2445,8 +2445,8 @@ instance [SMulCommClass
   body: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 中文:
-实例 [SMulCommClass
-  签名: S T M₂] : SMulCommClass S T (M ->ₛₗ[σ₁₂] M₂)
+实例 [标量交换类
+  签名: S T M₂] : 标量交换类 S T (M ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨fun _ _ _ => ext fun _ => smul_comm _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -2465,8 +2465,8 @@ instance [SMul
   body: ext fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: S T] [IsScalarTower S T M₂] : IsScalarTower S T (M ->ₛₗ[σ₁₂] M₂) where
+实例 [标量乘法
+  签名: S T] [标量塔 S T M₂] : 标量塔 S T (M ->ₛₗ[σ₁₂] M₂) where
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -2483,8 +2483,8 @@ instance [DistribSMul
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [DistribSMul
-  签名: Sᵐᵒᵖ M₂] [SMulCommClass R₂ Sᵐᵒᵖ M₂] [IsCentralScalar S M₂] :
+实例 [分配标量乘法
+  签名: Sᵐᵒᵖ M₂] [标量交换类 R₂ Sᵐᵒᵖ M₂] [中心标量 S M₂] :
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -2518,7 +2518,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ->ₛₗ[σ₁₂] M₂)
+  签名: 零 (M ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨{ toFun := 0
       map_add' := by simp
       map_smul' := by simp }⟩
@@ -2633,7 +2633,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (M ->ₛₗ[σ₁₂] M₂)
+  签名: 可居 (M ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨0⟩
 
 @[simp]
@@ -2669,7 +2669,7 @@ instance uniqueOfLeft
 
 中文:
 实例 uniqueOfLeft
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: { (inferInstance : Inhabited (M ->ₛₗ[σ₁₂] M₂)) with
     uniq := fun f => ext fun x => by rw [Subsingleton.elim x 0, map_zero, map_zero] }
 
@@ -2689,7 +2689,7 @@ instance uniqueOfRight
 
 中文:
 实例 uniqueOfRight
-  签名: [Subsingleton M₂]
+  签名: [子单例 M₂]
   定义体: coe_injective.unique
 
 Depends on / 依赖: coe_injective, coe_injective.unique, unique
@@ -2709,7 +2709,7 @@ fun h => hf.ne ne by simp [h]
 
 中文:
 定理 ne_zero_of_injective
-  条件: [Nontrivial M] {f : M ->ₛₗ[σ₁₂] M₂} (hf : Injective f)
+  条件: [非平凡 M] {f : M ->ₛₗ[σ₁₂] M₂} (hf : 单射 f)
   结论: f != 0
   证明: have ⟨x, ne⟩ := exists_ne (0 : M)
 fun h => hf.ne ne by simp [h]
@@ -2734,7 +2734,7 @@ theorem ne_zero_of_surjective
 
 中文:
 定理 ne_zero_of_surjective
-  条件: [Nontrivial M₂] {f : M ->ₛₗ[σ₁₂] M₂} (hf : Surjective f)
+  条件: [非平凡 M₂] {f : M ->ₛₗ[σ₁₂] M₂} (hf : 满射 f)
   结论: f != 0
   证明: by
   have ⟨y, ne⟩ := exists_ne (0 : M₂)
@@ -2763,7 +2763,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (M ->ₛₗ[σ₁₂] M₂)
+  签名: 加法 (M ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨fun f g =>
     { toFun := f + g
       map_add' := by simp [add_comm, add_left_comm]
@@ -2846,7 +2846,7 @@ instance addMonoid
 
 中文:
 实例 addMonoid
-  签名: : AddMonoid (M ->ₛₗ[σ₁₂] M₂)
+  签名: : 加法幺半群 (M ->ₛₗ[σ₁₂] M₂)
   定义体: fast_instance%
   DFunLike.coe_injective.addMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -2866,7 +2866,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (M ->ₛₗ[σ₁₂] M₂)
+  签名: : 加法交换幺半群 (M ->ₛₗ[σ₁₂] M₂)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommMonoid _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -2888,7 +2888,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M ->ₛₗ[σ₁₂] N₂)
+  签名: 取负 (M ->ₛₗ[σ₁₂] N₂)
   定义体: ⟨fun f =>
     { toFun := -f
       map_add' := by simp [add_comm]
@@ -3005,7 +3005,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (M ->ₛₗ[σ₁₂] N₂)
+  签名: 减法 (M ->ₛₗ[σ₁₂] N₂)
   定义体: ⟨fun f g =>
     { toFun := f - g
       map_add' := fun x y => by simp only [Pi.sub_apply, map_add, add_sub_add_comm]
@@ -3088,7 +3088,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (M ->ₛₗ[σ₁₂] N₂)
+  签名: : 加法交换群 (M ->ₛₗ[σ₁₂] N₂)
   定义体: fast_instance%
   DFunLike.coe_injective.addCommGroup _ rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
     (fun _ _ => rfl) fun _ _ => rfl
@@ -3162,7 +3162,7 @@ theorem identityMapOfZeroModuleIsZero
 
 中文:
 定理 identityMapOfZeroModuleIsZero
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   结论: id (R := R₁) (M := M) = 0
   证明: Subsingleton.eq_zero id
 -/
@@ -3196,7 +3196,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribMulAction S (M ->ₛₗ[σ₁₂] M₂)
+  签名: 分配乘法作用 S (M ->ₛₗ[σ₁₂] M₂)
   定义体: ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
   smul_add _ _ _ := ext fun _ => smul_add _ _ _
@@ -3238,7 +3238,7 @@ theorem comp_smul
 
 中文:
 定理 comp_smul
-  结论: [Module R M₂] [Module R M₃] [SMulCommClass R S M₂] [DistribMulAction S M₃]
+  结论: [模 R M₂] [模 R M₃] [标量交换类 R S M₂] [分配乘法作用 S M₃]
   证明: ext fun _ => g.map_smul_of_tower _ _
 
 Depends on / 依赖: g.map_smul_of_tower, map_smul_of_tower
@@ -3265,7 +3265,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module S (M ->ₛₗ[σ₁₂] M₂) where
+  签名: : 模 S (M ->ₛₗ[σ₁₂] M₂) where
   定义体: ext fun _ => add_smul _ _ _
   zero_smul _ := ext fun _ => zero_smul _ _
 
@@ -3339,7 +3339,7 @@ theorem restrictScalars_neg
 
 中文:
 定理 restrictScalars_neg
-  结论: {M N : 类型} [AddCommMonoid M] [AddCommGroup N]
+  结论: {M N : 类型} [加法交换幺半群 M] [加法交换群 N]
   证明: rfl
 -/
 theorem restrictScalars_neg {M N : Type*} [AddCommMonoid M] [AddCommGroup N]
@@ -3384,7 +3384,7 @@ lemma restrictScalars_comp
 
 中文:
 引理 restrictScalars_comp
-  结论: [AddCommMonoid P] [Module S P] [Module R P]
+  结论: [加法交换幺半群 P] [模 S P] [模 R P]
   证明: rfl
 
 @[simp]
@@ -3405,7 +3405,7 @@ lemma restrictScalars_trans
 
 中文:
 引理 restrictScalars_trans
-  结论: {T : 类型} [Semiring T] [Module T M] [Module T N]
+  结论: {T : 类型} [半环 T] [模 T M] [模 T N]
   证明: rfl
 -/
 lemma restrictScalars_trans {T : Type*} [Semiring T] [Module T M] [Module T N]
@@ -3509,7 +3509,7 @@ theorem toAddMonoidHom_mulLeft
 中文:
 定理 toAddMonoidHom_mulLeft
   条件: (a : A)
-  结论: (mulLeft R a : A ->+ A) = AddMonoidHom.mulLeft a
+  结论: (mulLeft R a : A ->+ A) = 加法幺半群态射.mulLeft a
   证明: rfl
 -/
 theorem toAddMonoidHom_mulLeft (a : A) : (mulLeft R a : A ->+ A) = AddMonoidHom.mulLeft a := rfl
@@ -3598,7 +3598,7 @@ theorem toAddMonoidHom_mulRight
 中文:
 定理 toAddMonoidHom_mulRight
   条件: (a : A)
-  结论: (mulRight R a : A ->+ A) = AddMonoidHom.mulRight a
+  结论: (mulRight R a : A ->+ A) = 加法幺半群态射.mulRight a
   证明: rfl
 -/
 theorem toAddMonoidHom_mulRight (a : A) : (mulRight R a : A ->+ A) = AddMonoidHom.mulRight a := rfl

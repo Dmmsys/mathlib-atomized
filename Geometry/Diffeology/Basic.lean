@@ -168,15 +168,15 @@ class DiffeologicalSpace
     - isOpen_iff_preimages_plots({u : Set X}) : dTopology.IsOpen u ↔ forall {n : Nat}, forall p in plots n, IsOpen (p ⁻¹' u)  [default: by rfl]
 
 中文:
-类 DiffeologicalSpace
+类 Diffeological空间
   参数: (X : 类型)
   公理与运算 (6 个):
-    - plots((n : 自然数)) : Set (𝔼ⁿ -> X)
+    - plots((n : 自然数)) : 集合 (𝔼ⁿ -> X)
     - constant_plots({n : 自然数} (x : X)) : (fun _ => x) in plots n
-    - plot_reparam({n m : 自然数} {p : 𝔼ᵐ -> X} {f : 𝔼ⁿ -> 𝔼ᵐ} (hp : p in plots m) (hf : ContDiff 实数 ∞ f)) : p ∘ f in plots n
-    - locality({n : 自然数} {p : 𝔼ⁿ -> X} (hp : 对任意 x : 𝔼ⁿ, 存在 u : Set 𝔼ⁿ, IsOpen u ∧ x in u ∧ 对任意 {m : 自然数} {f : 𝔼ᵐ -> 𝔼ⁿ}, (对任意 x, f x in u) -> ContDiff 实数 ∞ f -> p ∘ f in plots m)) : p in plots n
-    - dTopology : TopologicalSpace X  [默认: { IsOpen u := forall ⦃n : Nat⦄, forall p in plots n, IsOpen ]
-    - isOpen_iff_preimages_plots({u : Set X}) : dTopology.IsOpen u ↔ 对任意 {n : 自然数}, 对任意 p in plots n, IsOpen (p ⁻¹' u)  [默认: by rfl]
+    - plot_reparam({n m : 自然数} {p : 𝔼ᵐ -> X} {f : 𝔼ⁿ -> 𝔼ᵐ} (hp : p in plots m) (hf : 连续可微 实数 ∞ f)) : p ∘ f in plots n
+    - locality({n : 自然数} {p : 𝔼ⁿ -> X} (hp : 对任意 x : 𝔼ⁿ, 存在 u : 集合 𝔼ⁿ, 是开集 u ∧ x in u ∧ 对任意 {m : 自然数} {f : 𝔼ᵐ -> 𝔼ⁿ}, (对任意 x, f x in u) -> 连续可微 实数 ∞ f -> p ∘ f in plots m)) : p in plots n
+    - dTopology : 拓扑空间 X  [默认: { IsOpen u := forall ⦃n : Nat⦄, forall p in plots n, IsOpen ]
+    - isOpen_iff_preimages_plots({u : 集合 X}) : dTopology.是开集 u ↔ 对任意 {n : 自然数}, 对任意 p in plots n, 是开集 (p ⁻¹' u)  [默认: by rfl]
 -/
 class DiffeologicalSpace (X : Type*) where
   /-- The plots `EuclideanSpace ℝ (Fin n) → X` representing the smooth ways to map
@@ -271,8 +271,8 @@ theorem _root_.DiffeologicalSpace.ext
 @[fun_prop]
 
 中文:
-定理 _root_.DiffeologicalSpace.ext
-  结论: {X : 类型} {d₁ d₂ : DiffeologicalSpace X}
+定理 _root_.Diffeological空间.ext
+  结论: {X : 类型} {d₁ d₂ : Diffeological空间 X}
   证明: by
   obtain ⟨p₁, _, _, _, t₁, h₁⟩ := d₁
   obtain ⟨p₂, _, _, _, t₂, h₂⟩ := d₂
@@ -319,7 +319,7 @@ lemma isPlot_reparam
 
 中文:
 引理 isPlot_reparam
-  条件: {n m : 自然数} {p : 𝔼ᵐ -> X} {f : 𝔼ⁿ -> 𝔼ᵐ} (hp : IsPlot p) (hf : ContDiff 实数 ∞ f)
+  条件: {n m : 自然数} {p : 𝔼ᵐ -> X} {f : 𝔼ⁿ -> 𝔼ᵐ} (hp : IsPlot p) (hf : 连续可微 实数 ∞ f)
   证明: DiffeologicalSpace.plot_reparam hp hf
 
 Depends on / 依赖: DiffeologicalSpace, DiffeologicalSpace.plot_reparam, plot_reparam
@@ -377,7 +377,7 @@ lemma isOpen_iff_preimages_plots
 
 中文:
 引理 isOpen_iff_preimages_plots
-  条件: {u : Set X}
+  条件: {u : 集合 X}
   证明: DiffeologicalSpace.isOpen_iff_preimages_plots
 
 Depends on / 依赖: DiffeologicalSpace, DiffeologicalSpace.isOpen_iff_preimages_plots, isOpen_iff_preimages_plots
@@ -567,7 +567,7 @@ definition replaceDTopology
 
 中文:
 定义 replaceDTopology
-  签名: {X : 类型} (d : DiffeologicalSpace X)
+  签名: {X : 类型} (d : Diffeological空间 X)
   定义体: t
   isOpen_iff_preimages_plots := by intro _; rw [← d.isOpen_iff_preimages_plots, ← h]
   __ := d
@@ -589,7 +589,7 @@ lemma replaceDTopology_eq
 
 中文:
 引理 replaceDTopology_eq
-  结论: {X : 类型} {d : DiffeologicalSpace X}
+  结论: {X : 类型} {d : Diffeological空间 X}
   证明: by
   ext; rfl
 -/
@@ -615,18 +615,18 @@ structure CorePlotsOn
     - isOpen_iff_preimages_plots({u : Set X}) : dTopology.IsOpen u ↔ forall {n : Nat}, forall p : 𝔼ⁿ -> X, isPlot p -> IsOpen (p ⁻¹' u)  [default: by rfl]
 
 中文:
-结构 CorePlotsOn
+结构 余rePlotsOn
   参数: (X : 类型)
   公理与运算 (9 个):
-    - isPlotOn({n : 自然数} {u : Set 𝔼ⁿ} (hu : IsOpen u)) : (𝔼ⁿ -> X) -> 命题
-    - isPlotOn_congr({n : 自然数} {u : Set 𝔼ⁿ} (hu : IsOpen u) {p q : 𝔼ⁿ -> X} (h : Set.EqOn p q u)) : isPlotOn hu p ↔ isPlotOn hu q
+    - isPlotOn({n : 自然数} {u : 集合 𝔼ⁿ} (hu : 是开集 u)) : (𝔼ⁿ -> X) -> 命题
+    - isPlotOn_congr({n : 自然数} {u : 集合 𝔼ⁿ} (hu : 是开集 u) {p q : 𝔼ⁿ -> X} (h : 集合.EqOn p q u)) : isPlotOn hu p ↔ isPlotOn hu q
     - isPlot({n : 自然数}) : (𝔼ⁿ -> X) -> 命题  [默认: fun p => isPlotOn isOpen_univ p]
     - isPlotOn_univ({n : 自然数} {p : 𝔼ⁿ -> X}) : isPlotOn isOpen_univ p ↔ isPlot p  [默认: by simp]
     - isPlot_const({n : 自然数} (x : X)) : isPlot fun (_ : 𝔼ⁿ) => x
-    - isPlotOn_reparam({n m : 自然数} {u : Set 𝔼ⁿ} {v : Set 𝔼ᵐ} {hu : IsOpen u} (hv : IsOpen v) {p : 𝔼ⁿ -> X} {f : 𝔼ᵐ -> 𝔼ⁿ} (h : Set.MapsTo f v u) (hp : isPlotOn hu p) (hf : ContDiffOn 实数 ∞ f v)) : isPlotOn hv (p ∘ f)
-    - locality({n : 自然数} {u : Set 𝔼ⁿ} (hu : IsOpen u) {p : 𝔼ⁿ -> X} (hp : 对任意 x in u, 存在 (v : Set _) (hv : IsOpen v), x in v ∧ isPlotOn hv p)) : isPlotOn hu p
-    - dTopology : TopologicalSpace X  [默认: { IsOpen u := forall ⦃n : Nat⦄, forall p : 𝔼ⁿ -> X, isPlot p]
-    - isOpen_iff_preimages_plots({u : Set X}) : dTopology.IsOpen u ↔ 对任意 {n : 自然数}, 对任意 p : 𝔼ⁿ -> X, isPlot p -> IsOpen (p ⁻¹' u)  [默认: by rfl]
+    - isPlotOn_reparam({n m : 自然数} {u : 集合 𝔼ⁿ} {v : 集合 𝔼ᵐ} {hu : 是开集 u} (hv : 是开集 v) {p : 𝔼ⁿ -> X} {f : 𝔼ᵐ -> 𝔼ⁿ} (h : 集合.映射到 f v u) (hp : isPlotOn hu p) (hf : ContDiffOn 实数 ∞ f v)) : isPlotOn hv (p ∘ f)
+    - locality({n : 自然数} {u : 集合 𝔼ⁿ} (hu : 是开集 u) {p : 𝔼ⁿ -> X} (hp : 对任意 x in u, 存在 (v : 集合 _) (hv : 是开集 v), x in v ∧ isPlotOn hv p)) : isPlotOn hu p
+    - dTopology : 拓扑空间 X  [默认: { IsOpen u := forall ⦃n : Nat⦄, forall p : 𝔼ⁿ -> X, isPlot p]
+    - isOpen_iff_preimages_plots({u : 集合 X}) : dTopology.是开集 u ↔ 对任意 {n : 自然数}, 对任意 p : 𝔼ⁿ -> X, isPlot p -> 是开集 (p ⁻¹' u)  [默认: by rfl]
 
 Depends on / 依赖: isOpen_univ, isPlotOn
 -/
@@ -682,7 +682,7 @@ refine d.isPlotOn_univ.mp d.locality _ fun x _ => ?_
 
 中文:
 定义 ofCorePlotsOn
-  签名: {X : 类型} (d : DiffeologicalSpace.CorePlotsOn X)
+  签名: {X : 类型} (d : Diffeological空间.余rePlotsOn X)
   定义体: {p | d.isPlot p}
   constant_plots _ := d.isPlot_const _
 plot_reparam hp hf := d.isPlotOn_univ.mp
@@ -735,8 +735,8 @@ class IsDTopologyCompatible
     - dTop_eq((X)) : dTopology = t
 
 中文:
-类 IsDTopologyCompatible
-  参数: (X : 类型) [t : TopologicalSpace X] [DiffeologicalSpace X]
+类 是DTopologyCompatible
+  参数: (X : 类型) [t : 拓扑空间 X] [Diffeological空间 X]
   公理与运算 (1 个):
     - dTop_eq((X)) : dTopology = t
 
@@ -782,10 +782,10 @@ class IsContDiffCompatible
     - isPlot_iff({n : Nat} {p : 𝔼ⁿ -> X}) : IsPlot p ↔ ContDiff Real ∞ p
 
 中文:
-类 IsContDiffCompatible
+类 是余ntDiffCompatible
   参数: (X : 类型)
   公理与运算 (1 个):
-    - isPlot_iff({n : 自然数} {p : 𝔼ⁿ -> X}) : IsPlot p ↔ ContDiff 实数 ∞ p
+    - isPlot_iff({n : 自然数} {p : 𝔼ⁿ -> X}) : IsPlot p ↔ 连续可微 实数 ∞ p
 -/
 class IsContDiffCompatible (X : Type*)
     [NormedAddCommGroup X] [NormedSpace Real X] [DiffeologicalSpace X] : Prop where
@@ -810,7 +810,7 @@ definition _root_.NormedSpace.toDiffeology
     isPlotOn_reparam := fun _ _ _ h hp hf => hp.co
 
 中文:
-定义 _root_.NormedSpace.toDiffeology
+定义 _root_.赋范空间.toDiffeology
   签名: (X : 类型)
   定义体: .ofCorePlotsOn {
     isPlotOn := fun {_ u} _ p => ContDiffOn Real ∞ p u
@@ -855,7 +855,7 @@ lemma _root_.NormedSpace.isContDiffCompatible_iff_eq_toDiffeology
   proof: ⟨fun _ => by ext n p; exact IsContDiffCompatible.isPlot_iff, fun h => h ▸ inferInstance⟩
 
 中文:
-引理 _root_.NormedSpace.isContDiffCompatible_iff_eq_toDiffeology
+引理 _root_.赋范空间.isContDiffCompatible_iff_eq_toDiffeology
   结论: {X : 类型}
   证明: ⟨fun _ => by ext n p; exact IsContDiffCompatible.isPlot_iff, fun h => h ▸ inferInstance⟩
 
@@ -881,7 +881,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiffeologicalSpace 实数
+  签名: Diffeological空间 实数
   定义体: NormedSpace.toDiffeology _
 
 Depends on / 依赖: NormedSpace, NormedSpace.toDiffeology, toDiffeology
@@ -1012,7 +1012,7 @@ theorem isPlot_iff_contDiff
 中文:
 定理 isPlot_iff_contDiff
   条件: {p : 𝔼ⁿ -> X}
-  结论: IsPlot p ↔ ContDiff 实数 ∞ p
+  结论: IsPlot p ↔ 连续可微 实数 ∞ p
   证明: IsContDiffCompatible.isPlot_iff
 
 @[fun_prop]
@@ -1035,8 +1035,8 @@ theorem _root_.ContDiff.isPlot
 @[fun_prop]
 
 中文:
-定理 _root_.ContDiff.isPlot
-  条件: {p : 𝔼ⁿ -> X} (hp : ContDiff 实数 ∞ p)
+定理 _root_.连续可微.isPlot
+  条件: {p : 𝔼ⁿ -> X} (hp : 连续可微 实数 ∞ p)
   结论: IsPlot p
   证明: isPlot_iff_contDiff.2 hp
 
@@ -1060,7 +1060,7 @@ theorem IsPlot.contDiff
 中文:
 定理 IsPlot.contDiff
   条件: {p : 𝔼ⁿ -> X} (hp : IsPlot p)
-  结论: ContDiff 实数 ∞ p
+  结论: 连续可微 实数 ∞ p
   证明: isPlot_iff_contDiff.1 hp
 
 @[fun_prop]
@@ -1081,8 +1081,8 @@ theorem _root_.ContDiff.dSmooth
 @[fun_prop]
 
 中文:
-定理 _root_.ContDiff.dSmooth
-  条件: {f : X -> Y} (hf : ContDiff 实数 ∞ f)
+定理 _root_.连续可微.dSmooth
+  条件: {f : X -> Y} (hf : 连续可微 实数 ∞ f)
   结论: DSmooth f
   证明: fun _ _ hp => (hf.comp hp.contDiff).isPlot
 
@@ -1105,7 +1105,7 @@ theorem DSmooth.contDiff
 
 中文:
 定理 DSmooth.contDiff
-  条件: [FiniteDimensional 实数 X] {f : X -> Y} (hf : DSmooth f)
+  条件: [有限维 实数 X] {f : X -> Y} (hf : DSmooth f)
   证明: by
   let g := toEuclidean (E := X)
   rw [← Function.comp_id f]; rw [← g.symm_comp_self]
@@ -1128,8 +1128,8 @@ theorem dSmooth_iff_contDiff
 
 中文:
 定理 dSmooth_iff_contDiff
-  条件: [FiniteDimensional 实数 X] {f : X -> Y}
-  结论: DSmooth f ↔ ContDiff 实数 ∞ f
+  条件: [有限维 实数 X] {f : X -> Y}
+  结论: DSmooth f ↔ 连续可微 实数 ∞ f
   证明: ⟨DSmooth.contDiff, ContDiff.dSmooth⟩
 
 Depends on / 依赖: ContDiff, ContDiff.dSmooth, DSmooth, DSmooth.contDiff, contDiff, dSmooth
@@ -1157,7 +1157,7 @@ definition toPlots
 
 中文:
 定义 toPlots
-  签名: (_ : DiffeologicalSpace X)
+  签名: (_ : Diffeological空间 X)
   定义体: {p | IsPlot p.2}
 
 Depends on / 依赖: IsPlot
@@ -1176,7 +1176,7 @@ lemma injective_toPlots
 
 中文:
 引理 injective_toPlots
-  结论: Function.Injective (@toPlots X)
+  结论: 函数.单射 (@toPlots X)
   证明: fun d d' h => by
   ext n p; exact Set.ext_iff.1 h ⟨n, p⟩
 
@@ -1201,7 +1201,7 @@ definition generateFrom
 
 中文:
 定义 generateFrom
-  签名: (g : Set ((n : 自然数) × (𝔼ⁿ -> X)))
+  签名: (g : 集合 ((n : 自然数) × (𝔼ⁿ -> X)))
   定义体: {p | forall (d : DiffeologicalSpace X), g subseteq d.toPlots -> ⟨n, p⟩ in d.toPlots}
   constant_plots {n} x := fun _ _ => constant_plots x
   plot_reparam {n m p f} := fun hp hf d hd => @d.plot_reparam n m p f (hp _ hd) hf
@@ -1228,7 +1228,7 @@ lemma self_subset_toPlots_generateFrom
 
 中文:
 引理 self_subset_toPlots_generateFrom
-  条件: (g : Set ((n : 自然数) × (𝔼ⁿ -> X)))
+  条件: (g : 集合 ((n : 自然数) × (𝔼ⁿ -> X)))
   证明: fun _ hd _ h => h hd
 -/
 lemma self_subset_toPlots_generateFrom (g : Set ((n : Nat) × (𝔼ⁿ -> X))) :
@@ -1245,7 +1245,7 @@ lemma isPlot_generatedFrom_of_mem
 
 中文:
 引理 isPlot_generatedFrom_of_mem
-  结论: {g : Set ((n : 自然数) × (𝔼ⁿ -> X))} {n : 自然数} {p : 𝔼ⁿ -> X}
+  结论: {g : 集合 ((n : 自然数) × (𝔼ⁿ -> X))} {n : 自然数} {p : 𝔼ⁿ -> X}
   证明: self_subset_toPlots_generateFrom g hp
 
 Depends on / 依赖: self_subset_toPlots_generateFrom
@@ -1264,7 +1264,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (DiffeologicalSpace X)
+  签名: 偏序 (Diffeological空间 X)
   定义体: PartialOrder.lift _ injective_toPlots
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, injective_toPlots
@@ -1282,7 +1282,7 @@ lemma le_def
 
 中文:
 引理 le_def
-  条件: {d₁ d₂ : DiffeologicalSpace X}
+  条件: {d₁ d₂ : Diffeological空间 X}
   结论: d₁ <= d₂ ↔ d₁.toPlots subseteq d₂.toPlots
   证明: Iff.rfl
 
@@ -1301,7 +1301,7 @@ lemma le_iff
 
 中文:
 引理 le_iff
-  条件: {d₁ d₂ : DiffeologicalSpace X}
+  条件: {d₁ d₂ : Diffeological空间 X}
   结论: d₁ <= d₂ ↔ 对任意 n, d₁.plots n subseteq d₂.plots n
   证明: le_def.trans ⟨fun h n p h' => (h h' : ⟨n, p⟩ in d₂.toPlots), fun h _ hp => h _ hp⟩
 
@@ -1321,7 +1321,7 @@ lemma le_iff'
 
 中文:
 引理 le_iff'
-  条件: {d₁ d₂ : DiffeologicalSpace X}
+  条件: {d₁ d₂ : Diffeological空间 X}
   结论: d₁ <= d₂ ↔
   证明: le_iff
 
@@ -1340,7 +1340,7 @@ lemma generateFrom_le_iff_subset_toPlots
 
 中文:
 引理 generateFrom_le_iff_subset_toPlots
-  结论: {g : Set ((n : 自然数) × (𝔼ⁿ -> X))}
+  结论: {g : 集合 ((n : 自然数) × (𝔼ⁿ -> X))}
   证明: ⟨fun h => (self_subset_toPlots_generateFrom g).trans h, fun h _ hp => hp _ h⟩
 
 Depends on / 依赖: self_subset_toPlots_generateFrom
@@ -1359,7 +1359,7 @@ lemma generateFrom_le_iff
 
 中文:
 引理 generateFrom_le_iff
-  条件: {g : Set ((n : 自然数) × (𝔼ⁿ -> X))} {d : DiffeologicalSpace X}
+  条件: {g : 集合 ((n : 自然数) × (𝔼ⁿ -> X))} {d : Diffeological空间 X}
   证明: generateFrom_le_iff_subset_toPlots.trans ⟨fun h _ _ hp => h hp, fun h _ hp => h _ _ hp⟩
 
 Depends on / 依赖: generateFrom_le_iff_subset_toPlots, generateFrom_le_iff_subset_toPlots.trans
@@ -1386,7 +1386,7 @@ definition mkOfClosure
 
 中文:
 定义 mkOfClosure
-  签名: (g : Set ((n : 自然数) × (𝔼ⁿ -> X))) (hg : (generateFrom g).toPlots = g)
+  签名: (g : 集合 ((n : 自然数) × (𝔼ⁿ -> X))) (hg : (generateFrom g).toPlots = g)
   定义体: {p | ⟨n, p⟩ in g}
   constant_plots := hg ▸ (generateFrom g).constant_plots
   plot_reparam := hg ▸ (generateFrom g).plot_reparam
@@ -1412,7 +1412,7 @@ lemma mkOfClosure_eq_generateFrom
 
 中文:
 引理 mkOfClosure_eq_generateFrom
-  结论: {g : Set ((n : 自然数) × (𝔼ⁿ -> X))}
+  结论: {g : 集合 ((n : 自然数) × (𝔼ⁿ -> X))}
   证明: injective_toPlots hg.symm
 
 Depends on / 依赖: hg.symm, injective_toPlots
@@ -1480,7 +1480,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (DiffeologicalSpace X)
+  签名: 完备格 (Diffeological空间 X)
   定义体: (giGenerateFrom X).liftCompleteLattice
 
 @[gcongr, mono]
@@ -1500,7 +1500,7 @@ theorem generateFrom_mono
 
 中文:
 定理 generateFrom_mono
-  条件: {g₁ g₂ : Set ((n : 自然数) × (𝔼ⁿ -> X))} (h : g₁ subseteq g₂)
+  条件: {g₁ g₂ : 集合 ((n : 自然数) × (𝔼ⁿ -> X))} (h : g₁ subseteq g₂)
   证明: (gc_generateFrom _).monotone_l h
 
 Depends on / 依赖: gc_generateFrom, monotone_l
@@ -1519,7 +1519,7 @@ theorem generateFrom_toPlots
 
 中文:
 定理 generateFrom_toPlots
-  条件: (d : DiffeologicalSpace X)
+  条件: (d : Diffeological空间 X)
   证明: (giGenerateFrom X).l_u_eq d
 
 Depends on / 依赖: giGenerateFrom, l_u_eq
@@ -1555,7 +1555,7 @@ theorem generateFrom_surjective
 
 中文:
 定理 generateFrom_surjective
-  结论: Function.Surjective (@generateFrom X)
+  结论: 函数.满射 (@generateFrom X)
   证明: (giGenerateFrom X).l_surjective
 
 Depends on / 依赖: giGenerateFrom, l_surjective
@@ -1573,7 +1573,7 @@ theorem generateFrom_union
 
 中文:
 定理 generateFrom_union
-  条件: (g₁ g₂ : Set ((n : 自然数) × (𝔼ⁿ -> X)))
+  条件: (g₁ g₂ : 集合 ((n : 自然数) × (𝔼ⁿ -> X)))
   证明: (gc_generateFrom X).l_sup
 
 Depends on / 依赖: gc_generateFrom, l_sup
@@ -1592,7 +1592,7 @@ theorem generateFrom_iUnion
 
 中文:
 定理 generateFrom_iUnion
-  条件: {ι : 类型} {g : ι -> Set ((n : 自然数) × (𝔼ⁿ -> X))}
+  条件: {ι : 类型} {g : ι -> 集合 ((n : 自然数) × (𝔼ⁿ -> X))}
   证明: (gc_generateFrom X).l_iSup
 
 Depends on / 依赖: gc_generateFrom, l_iSup
@@ -1611,7 +1611,7 @@ theorem generateFrom_sUnion
 
 中文:
 定理 generateFrom_sUnion
-  条件: {G : Set (Set ((n : 自然数) × (𝔼ⁿ -> X)))}
+  条件: {G : 集合 (集合 ((n : 自然数) × (𝔼ⁿ -> X)))}
   证明: (gc_generateFrom X).l_sSup
 
 Depends on / 依赖: gc_generateFrom, l_sSup
@@ -1630,7 +1630,7 @@ theorem toPlots_inf
 
 中文:
 定理 toPlots_inf
-  条件: (d₁ d₂ : DiffeologicalSpace X)
+  条件: (d₁ d₂ : Diffeological空间 X)
   证明: rfl
 -/
 theorem toPlots_inf (d₁ d₂ : DiffeologicalSpace X) :
@@ -1646,7 +1646,7 @@ theorem toPlots_iInf
 
 中文:
 定理 toPlots_iInf
-  条件: {ι : 类型} {D : ι -> DiffeologicalSpace X}
+  条件: {ι : 类型} {D : ι -> Diffeological空间 X}
   证明: (gc_generateFrom X).u_iInf
 
 Depends on / 依赖: gc_generateFrom, u_iInf
@@ -1666,7 +1666,7 @@ theorem toPlots_sInf
 
 中文:
 定理 toPlots_sInf
-  条件: {D : Set (DiffeologicalSpace X)}
+  条件: {D : 集合 (Diffeological空间 X)}
   结论: (sInf D).toPlots = ⋂ d in D, d.toPlots
   证明: (gc_generateFrom X).u_sInf
 
@@ -1685,7 +1685,7 @@ theorem generateFrom_union_toPlots
 
 中文:
 定理 generateFrom_union_toPlots
-  条件: (d₁ d₂ : DiffeologicalSpace X)
+  条件: (d₁ d₂ : Diffeological空间 X)
   证明: (giGenerateFrom X).l_sup_u _ _
 
 Depends on / 依赖: giGenerateFrom, l_sup_u
@@ -1704,7 +1704,7 @@ theorem generateFrom_iUnion_toPlots
 
 中文:
 定理 generateFrom_iUnion_toPlots
-  条件: {ι : 类型} (D : ι -> DiffeologicalSpace X)
+  条件: {ι : 类型} (D : ι -> Diffeological空间 X)
   证明: (giGenerateFrom X).l_iSup_u _
 
 Depends on / 依赖: giGenerateFrom, l_iSup_u
@@ -1723,7 +1723,7 @@ theorem generateFrom_inter_toPlots
 
 中文:
 定理 generateFrom_inter_toPlots
-  条件: (d₁ d₂ : DiffeologicalSpace X)
+  条件: (d₁ d₂ : Diffeological空间 X)
   证明: (giGenerateFrom X).l_inf_u _ _
 
 Depends on / 依赖: giGenerateFrom, l_inf_u
@@ -1741,8 +1741,8 @@ theorem generateFrom_iInter_toPlots
   proof: (giGenerateFrom X).l_iInf_u _
 
 中文:
-定理 generateFrom_iInter_toPlots
-  条件: {ι : 类型} (D : ι -> DiffeologicalSpace X)
+定理 generateFrom_i整数er_toPlots
+  条件: {ι : 类型} (D : ι -> Diffeological空间 X)
   证明: (giGenerateFrom X).l_iInf_u _
 
 Depends on / 依赖: giGenerateFrom, l_iInf_u
@@ -1760,7 +1760,7 @@ theorem generateFrom_iInter_of_generateFrom_eq_self
   proof: (giGenerateFrom X).l_iInf_of_u_l_eq_self G hG
 
 中文:
-定理 generateFrom_iInter_of_generateFrom_eq_self
+定理 generateFrom_i整数er_of_generateFrom_eq_self
   结论: {ι : 类型}
   证明: (giGenerateFrom X).l_iInf_of_u_l_eq_self G hG
 
@@ -1782,7 +1782,7 @@ theorem isPlot_inf_iff
 
 中文:
 定理 isPlot_inf_iff
-  条件: {d₁ d₂ : DiffeologicalSpace X} {n : 自然数} {p : 𝔼ⁿ -> X}
+  条件: {d₁ d₂ : Diffeological空间 X} {n : 自然数} {p : 𝔼ⁿ -> X}
   证明: Set.ext_iff.1 (toPlots_inf d₁ d₂) ⟨n, p⟩
 
 Depends on / 依赖: Set.ext_iff, ext_iff, toPlots_inf
@@ -1801,7 +1801,7 @@ theorem isPlot_iInf_iff
 
 中文:
 定理 isPlot_iInf_iff
-  条件: {ι : 类型} {D : ι -> DiffeologicalSpace X} {n : 自然数} {p : 𝔼ⁿ -> X}
+  条件: {ι : 类型} {D : ι -> Diffeological空间 X} {n : 自然数} {p : 𝔼ⁿ -> X}
   证明: (Set.ext_iff.1 (toPlots_iInf (D := D)) ⟨n, p⟩).trans Set.mem_iInter
 
 Depends on / 依赖: Set.ext_iff, Set.mem_iInter, ext_iff, mem_iInter, toPlots_iInf
@@ -1820,7 +1820,7 @@ theorem isPlot_sInf_iff
 
 中文:
 定理 isPlot_sInf_iff
-  条件: {D : Set (DiffeologicalSpace X)} {n : 自然数} {p : 𝔼ⁿ -> X}
+  条件: {D : 集合 (Diffeological空间 X)} {n : 自然数} {p : 𝔼ⁿ -> X}
   证明: (Set.ext_iff.1 (toPlots_sInf (D := D)) ⟨n, p⟩).trans Set.mem_iInter₂
 
 Depends on / 依赖: Set.ext_iff, Set.mem_iInter, ext_iff, toPlots_sInf

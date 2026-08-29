@@ -37,7 +37,7 @@ instance normedAddCommGroup
 
 中文:
 实例 normedAddCommGroup
-  签名: : NormedAddCommGroup PUnit where
+  签名: : 赋范交换加群 命题单元 where
   定义体: Function.const _ 0
   dist_eq _ _ := rfl
 
@@ -58,7 +58,7 @@ lemma norm_eq_zero
 
 中文:
 引理 norm_eq_zero
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   结论: ‖x‖ = 0
   证明: rfl
 -/
@@ -82,7 +82,7 @@ instance norm
 
 中文:
 实例 norm
-  签名: : Norm (ULift E) where norm x
+  签名: : 范数 (类型层提升 E) where norm x
   定义体: ‖x.down‖
 
 Depends on / 依赖: x.down
@@ -100,7 +100,7 @@ lemma norm_def
 
 中文:
 引理 norm_def
-  条件: (x : ULift E)
+  条件: (x : 类型层提升 E)
   结论: ‖x‖ = ‖x.down‖
   证明: rfl
 -/
@@ -118,7 +118,7 @@ lemma norm_up
 中文:
 引理 norm_up
   条件: (x : E)
-  结论: ‖ULift.up x‖ = ‖x‖
+  结论: ‖类型层提升.up x‖ = ‖x‖
   证明: rfl
 -/
 @[simp] lemma norm_up (x : E) : ‖ULift.up x‖ = ‖x‖ := rfl
@@ -134,7 +134,7 @@ lemma norm_down
 
 中文:
 引理 norm_down
-  条件: (x : ULift E)
+  条件: (x : 类型层提升 E)
   结论: ‖x.down‖ = ‖x‖
   证明: rfl
 -/
@@ -155,7 +155,7 @@ instance nnnorm
 
 中文:
 实例 nnnorm
-  签名: : NNNorm (ULift E) where nnnorm x
+  签名: : NN范数 (类型层提升 E) where nnnorm x
   定义体: ‖x.down‖₊
 
 Depends on / 依赖: x.down
@@ -173,7 +173,7 @@ lemma nnnorm_def
 
 中文:
 引理 nnnorm_def
-  条件: (x : ULift E)
+  条件: (x : 类型层提升 E)
   结论: ‖x‖₊ = ‖x.down‖₊
   证明: rfl
 -/
@@ -191,7 +191,7 @@ lemma nnnorm_up
 中文:
 引理 nnnorm_up
   条件: (x : E)
-  结论: ‖ULift.up x‖₊ = ‖x‖₊
+  结论: ‖类型层提升.up x‖₊ = ‖x‖₊
   证明: rfl
 -/
 @[simp] lemma nnnorm_up (x : E) : ‖ULift.up x‖₊ = ‖x‖₊ := rfl
@@ -207,7 +207,7 @@ lemma nnnorm_down
 
 中文:
 引理 nnnorm_down
-  条件: (x : ULift E)
+  条件: (x : 类型层提升 E)
   结论: ‖x.down‖₊ = ‖x‖₊
   证明: rfl
 -/
@@ -231,7 +231,7 @@ instance seminormedGroup
 
 中文:
 实例 seminormedGroup
-  签名: [SeminormedGroup E]
+  签名: [半赋范群 E]
   定义体: SeminormedGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
@@ -263,7 +263,7 @@ instance seminormedCommGroup
 
 中文:
 实例 seminormedCommGroup
-  签名: [SeminormedCommGroup E]
+  签名: [SeminormedComm群 E]
   定义体: SeminormedCommGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
@@ -296,7 +296,7 @@ instance normedGroup
 
 中文:
 实例 normedGroup
-  签名: [NormedGroup E]
+  签名: [赋范群 E]
   定义体: NormedGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
@@ -329,7 +329,7 @@ instance normedCommGroup
 
 中文:
 实例 normedCommGroup
-  签名: [NormedCommGroup E]
+  签名: [NormedComm群 E]
   定义体: NormedCommGroup.induced _ _
   { toFun := ULift.down,
     map_one' := rfl,
@@ -365,8 +365,8 @@ instance Additive.toNorm
   body: ‹Norm E›
 
 中文:
-实例 Additive.toNorm
-  签名: : Norm (Additive E)
+实例 加性.toNorm
+  签名: : 范数 (加性 E)
   定义体: ‹Norm E›
 -/
 instance Additive.toNorm : Norm (Additive E) := ‹Norm E›
@@ -380,7 +380,7 @@ instance Multiplicative.toNorm
 
 中文:
 实例 Multiplicative.toNorm
-  签名: : Norm (Multiplicative E)
+  签名: : 范数 (Multiplicative E)
   定义体: ‹Norm E›
 -/
 instance Multiplicative.toNorm : Norm (Multiplicative E) := ‹Norm E›
@@ -396,7 +396,7 @@ lemma norm_toMul
 
 中文:
 引理 norm_toMul
-  条件: (x : Additive E)
+  条件: (x : 加性 E)
   结论: ‖(x.toMul : E)‖ = ‖x‖
   证明: rfl
 -/
@@ -467,8 +467,8 @@ instance Additive.toNNNorm
   body: ‹NNNorm E›
 
 中文:
-实例 Additive.toNNNorm
-  签名: : NNNorm (Additive E)
+实例 加性.toNNNorm
+  签名: : NN范数 (加性 E)
   定义体: ‹NNNorm E›
 
 Depends on / 依赖: NNNorm
@@ -485,7 +485,7 @@ instance Multiplicative.toNNNorm
 
 中文:
 实例 Multiplicative.toNNNorm
-  签名: : NNNorm (Multiplicative E)
+  签名: : NN范数 (Multiplicative E)
   定义体: ‹NNNorm E›
 
 Depends on / 依赖: NNNorm
@@ -503,7 +503,7 @@ lemma nnnorm_toMul
 
 中文:
 引理 nnnorm_toMul
-  条件: (x : Additive E)
+  条件: (x : 加性 E)
   结论: ‖(x.toMul : E)‖₊ = ‖x‖₊
   证明: rfl
 -/
@@ -571,8 +571,8 @@ instance Additive.seminormedAddGroup
   body: dist_eq_norm_inv_mul x.toMul y.toMul
 
 中文:
-实例 Additive.seminormedAddGroup
-  签名: [SeminormedGroup E]
+实例 加性.seminormedAddGroup
+  签名: [半赋范群 E]
   定义体: dist_eq_norm_inv_mul x.toMul y.toMul
 
 Depends on / 依赖: dist_eq_norm_inv_mul, x.toMul, y.toMul
@@ -591,7 +591,7 @@ instance Multiplicative.seminormedGroup
 
 中文:
 实例 Multiplicative.seminormedGroup
-  签名: [SeminormedAddGroup E]
+  签名: [半赋范加群 E]
   定义体: dist_eq_norm_neg_add x.toAdd y.toAdd
 
 Depends on / 依赖: dist_eq_norm_neg_add, x.toAdd, y.toAdd
@@ -610,8 +610,8 @@ instance Additive.seminormedCommGroup
     add_comm := add_comm }
 
 中文:
-实例 Additive.seminormedCommGroup
-  签名: [SeminormedCommGroup E]
+实例 加性.seminormedCommGroup
+  签名: [SeminormedComm群 E]
   定义体: { Additive.seminormedAddGroup with
     add_comm := add_comm }
 
@@ -633,7 +633,7 @@ instance Multiplicative.seminormedAddCommGroup
 
 中文:
 实例 Multiplicative.seminormedAddCommGroup
-  签名: [SeminormedAddCommGroup E]
+  签名: [SeminormedAddComm群 E]
   定义体: { Multiplicative.seminormedGroup with
     mul_comm := mul_comm }
 
@@ -654,8 +654,8 @@ instance Additive.normedAddGroup
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 Additive.normedAddGroup
-  签名: [NormedGroup E]
+实例 加性.normedAddGroup
+  签名: [赋范群 E]
   定义体: { Additive.seminormedAddGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -676,7 +676,7 @@ instance Multiplicative.normedGroup
 
 中文:
 实例 Multiplicative.normedGroup
-  签名: [NormedAddGroup E]
+  签名: [赋范加群 E]
   定义体: { Multiplicative.seminormedGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -697,8 +697,8 @@ instance Additive.normedAddCommGroup
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 Additive.normedAddCommGroup
-  签名: [NormedCommGroup E]
+实例 加性.normedAddCommGroup
+  签名: [NormedComm群 E]
   定义体: { Additive.seminormedAddGroup with
     add_comm := add_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
@@ -722,7 +722,7 @@ instance Multiplicative.normedCommGroup
 
 中文:
 实例 Multiplicative.normedCommGroup
-  签名: [NormedAddCommGroup E]
+  签名: [赋范交换加群 E]
   定义体: { Multiplicative.seminormedGroup with
     mul_comm := mul_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
@@ -755,7 +755,7 @@ instance OrderDual.toNorm
 
 中文:
 实例 OrderDual.toNorm
-  签名: : Norm Eᵒᵈ where
+  签名: : 范数 Eᵒᵈ where
   定义体: ‖ofDual x‖
 
 Depends on / 依赖: ofDual
@@ -812,7 +812,7 @@ instance OrderDual.toNNNorm
 
 中文:
 实例 OrderDual.toNNNorm
-  签名: : NNNorm Eᵒᵈ where
+  签名: : NN范数 Eᵒᵈ where
   定义体: ‖ofDual x‖₊
 
 Depends on / 依赖: ofDual
@@ -895,8 +895,8 @@ instance Prod.toNorm
   body: ‖x.1‖ ⊔ ‖x.2‖
 
 中文:
-实例 Prod.toNorm
-  签名: : Norm (E × F) where norm x
+实例 积类型.toNorm
+  签名: : 范数 (E × F) where norm x
   定义体: ‖x.1‖ ⊔ ‖x.2‖
 -/
 instance Prod.toNorm : Norm (E × F) where norm x := ‖x.1‖ ⊔ ‖x.2‖
@@ -911,9 +911,9 @@ lemma Prod.norm_def
   proof: rfl
 
 中文:
-引理 Prod.norm_def
+引理 积类型.norm_def
   条件: (x : E × F)
-  结论: ‖x‖ = max ‖x.1‖ ‖x.2‖
+  结论: ‖x‖ = 最大值 ‖x.1‖ ‖x.2‖
   证明: rfl
 -/
 lemma Prod.norm_def (x : E × F) : ‖x‖ = max ‖x.1‖ ‖x.2‖ := rfl
@@ -928,9 +928,9 @@ lemma Prod.norm_mk
   proof: rfl
 
 中文:
-引理 Prod.norm_mk
+引理 积类型.norm_mk
   条件: (x : E) (y : F)
-  结论: ‖(x, y)‖ = max ‖x‖ ‖y‖
+  结论: ‖(x, y)‖ = 最大值 ‖x‖ ‖y‖
   证明: rfl
 -/
 @[simp] lemma Prod.norm_mk (x : E) (y : F) : ‖(x, y)‖ = max ‖x‖ ‖y‖ := rfl
@@ -1006,8 +1006,8 @@ instance Prod.seminormedGroup
   body: by simp [Prod.norm_def, Prod.dist_eq, dist_eq_norm_inv_mul]
 
 中文:
-实例 Prod.seminormedGroup
-  签名: : SeminormedGroup (E × F) where
+实例 积类型.seminormedGroup
+  签名: : 半赋范群 (E × F) where
   定义体: by simp [Prod.norm_def, Prod.dist_eq, dist_eq_norm_inv_mul]
 
 Depends on / 依赖: Prod.dist_eq, Prod.norm_def, dist_eq, dist_eq_norm_inv_mul, norm_def
@@ -1029,9 +1029,9 @@ lemma Prod.nnnorm_def'
   proof: rfl
 
 中文:
-引理 Prod.nnnorm_def'
+引理 积类型.nnnorm_def'
   条件: (x : E × F)
-  结论: ‖x‖₊ = max ‖x.1‖₊ ‖x.2‖₊
+  结论: ‖x‖₊ = 最大值 ‖x.1‖₊ ‖x.2‖₊
   证明: rfl
 -/
 lemma Prod.nnnorm_def' (x : E × F) : ‖x‖₊ = max ‖x.1‖₊ ‖x.2‖₊ := rfl
@@ -1048,9 +1048,9 @@ lemma Prod.nnnorm_mk'
   proof: rfl
 
 中文:
-引理 Prod.nnnorm_mk'
+引理 积类型.nnnorm_mk'
   条件: (x : E) (y : F)
-  结论: ‖(x, y)‖₊ = max ‖x‖₊ ‖y‖₊
+  结论: ‖(x, y)‖₊ = 最大值 ‖x‖₊ ‖y‖₊
   证明: rfl
 -/
 lemma Prod.nnnorm_mk' (x : E) (y : F) : ‖(x, y)‖₊ = max ‖x‖₊ ‖y‖₊ := rfl
@@ -1072,7 +1072,7 @@ instance seminormedCommGroup
 
 中文:
 实例 seminormedCommGroup
-  签名: [SeminormedCommGroup E] [SeminormedCommGroup F]
+  签名: [SeminormedComm群 E] [SeminormedComm群 F]
   定义体: { Prod.seminormedGroup with
     mul_comm := mul_comm }
 
@@ -1096,7 +1096,7 @@ instance normedGroup
 
 中文:
 实例 normedGroup
-  签名: [NormedGroup E] [NormedGroup F]
+  签名: [赋范群 E] [赋范群 F]
   定义体: { Prod.seminormedGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -1120,7 +1120,7 @@ instance normedCommGroup
 
 中文:
 实例 normedCommGroup
-  签名: [NormedCommGroup E] [NormedCommGroup F]
+  签名: [NormedComm群 E] [NormedComm群 F]
   定义体: { Prod.seminormedGroup with
     mul_comm := mul_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
@@ -1159,8 +1159,8 @@ congr_arg (Finset.sup Finset.univ) funext fun a =>
 @[to_additive Pi.norm_def]
 
 中文:
-实例 Pi.seminormedGroup
-  签名: : SeminormedGroup (对任意 i, G i) where
+实例 依赖函数类型.seminormedGroup
+  签名: : 半赋范群 (对任意 i, G i) where
   定义体: ↑(Finset.univ.sup fun b => ‖f b‖₊)
   dist_eq x y :=
 congr_arg (toReal : Real>=0 -> Real)
@@ -1190,8 +1190,8 @@ lemma Pi.norm_def'
 @[to_additive Pi.nnnorm_def]
 
 中文:
-引理 Pi.norm_def'
-  结论: ‖f‖ = ↑(Finset.univ.sup fun b => ‖f b‖₊)
+引理 依赖函数类型.norm_def'
+  结论: ‖f‖ = ↑(有限集.univ.上确界 fun b => ‖f b‖₊)
   证明: rfl
 
 @[to_additive Pi.nnnorm_def]
@@ -1208,8 +1208,8 @@ lemma Pi.nnnorm_def'
   proof: Subtype.eta _ _
 
 中文:
-引理 Pi.nnnorm_def'
-  结论: ‖f‖₊ = Finset.univ.sup fun b => ‖f b‖₊
+引理 依赖函数类型.nnnorm_def'
+  结论: ‖f‖₊ = 有限集.univ.上确界 fun b => ‖f b‖₊
   证明: Subtype.eta _ _
 
 Depends on / 依赖: Subtype, Subtype.eta
@@ -1288,7 +1288,7 @@ hr (norm_nonneg' _).trans h Classical.arbitrary _
 
 中文:
 引理 pi_norm_le_iff_of_nonempty'
-  条件: [Nonempty ι]
+  条件: [非空 ι]
   结论: ‖f‖ <= r ↔ 对任意 b, ‖f b‖ <= r
   证明: by
   by_cases hr : 0 <= r
@@ -1476,7 +1476,7 @@ lemma pi_norm_const'
 
 中文:
 引理 pi_norm_const'
-  条件: [Nonempty ι] (a : E)
+  条件: [非空 ι] (a : E)
   结论: ‖fun _i : ι => a‖ = ‖a‖
   证明: by
   simpa only [← dist_one_right] using! dist_pi_const a 1
@@ -1502,7 +1502,7 @@ lemma pi_nnnorm_const'
 
 中文:
 引理 pi_nnnorm_const'
-  条件: [Nonempty ι] (a : E)
+  条件: [非空 ι] (a : E)
   结论: ‖fun _i : ι => a‖₊ = ‖a‖₊
   证明: NNReal.eq pi_norm_const' a
 
@@ -1529,7 +1529,7 @@ lemma pi_norm_comp_le'
 
 中文:
 引理 pi_norm_comp_le'
-  条件: [Fintype F] (g : ι -> E) (f : F -> ι)
+  条件: [有限类型 F] (g : ι -> E) (f : F -> ι)
   结论: ‖g ∘ f‖ <= ‖g‖
   证明: by
   rw [pi_norm_le_iff_of_nonneg' (by positivity)]
@@ -1563,8 +1563,8 @@ lemma IsGreatest.pi_norm'
 
 中文:
 引理 IsGreatest.pi_norm'
-  条件: [Nonempty ι] (f : ι -> E)
-  结论: IsGreatest (Set.range (‖f ·‖)) ‖f‖
+  条件: [非空 ι] (f : ι -> E)
+  结论: IsGreatest (集合.range (‖f ·‖)) ‖f‖
   证明: by
   constructor
   · rw [Pi.norm_def' f]
@@ -1602,8 +1602,8 @@ lemma Function.Surjective.pi_norm_comp'
   exact h ▸ norm_le_pi_norm' (g ∘ f) y
 
 中文:
-引理 Function.Surjective.pi_norm_comp'
-  结论: [Fintype F] {f : ι -> F} (hf : Function.Surjective f)
+引理 函数.满射.pi_norm_comp'
+  结论: [有限类型 F] {f : ι -> F} (hf : 函数.满射 f)
   证明: by
   obtain (h | h) := isEmpty_or_nonempty F
   · have : IsEmpty ι := f.isEmpty
@@ -1637,8 +1637,8 @@ lemma Pi.sum_norm_apply_le_norm'
   proof: Finset.sum_le_card_nsmul _ _ _ fun i _hi => norm_le_pi_norm' _ i
 
 中文:
-引理 Pi.sum_norm_apply_le_norm'
-  结论: ∑ i, ‖f i‖ <= Fintype.card ι • ‖f‖
+引理 依赖函数类型.sum_norm_apply_le_norm'
+  结论: ∑ i, ‖f i‖ <= 有限类型.card ι • ‖f‖
   证明: Finset.sum_le_card_nsmul _ _ _ fun i _hi => norm_le_pi_norm' _ i
 
 Depends on / 依赖: Finset, Finset.sum_le_card_nsmul, norm_le_pi_norm, sum_le_card_nsmul
@@ -1658,8 +1658,8 @@ lemma Pi.sum_nnnorm_apply_le_nnnorm'
   proof: (NNReal.coe_sum ..).trans_le Pi.sum_norm_apply_le_norm' _
 
 中文:
-引理 Pi.sum_nnnorm_apply_le_nnnorm'
-  结论: ∑ i, ‖f i‖₊ <= Fintype.card ι • ‖f‖₊
+引理 依赖函数类型.sum_nnnorm_apply_le_nnnorm'
+  结论: ∑ i, ‖f i‖₊ <= 有限类型.card ι • ‖f‖₊
   证明: (NNReal.coe_sum ..).trans_le Pi.sum_norm_apply_le_norm' _
 
 Depends on / 依赖: NNReal, NNReal.coe_sum, Pi.sum_norm_apply_le_norm, coe_sum, sum_norm_apply_le_norm, trans_le
@@ -1681,8 +1681,8 @@ instance Pi.seminormedCommGroup
     mul_comm := mul_comm }
 
 中文:
-实例 Pi.seminormedCommGroup
-  签名: [对任意 i, SeminormedCommGroup (G i)]
+实例 依赖函数类型.seminormedCommGroup
+  签名: [对任意 i, SeminormedComm群 (G i)]
   定义体: { Pi.seminormedGroup with
     mul_comm := mul_comm }
 
@@ -1704,8 +1704,8 @@ instance Pi.normedGroup
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 Pi.normedGroup
-  签名: [对任意 i, NormedGroup (G i)]
+实例 依赖函数类型.normedGroup
+  签名: [对任意 i, 赋范群 (G i)]
   定义体: { Pi.seminormedGroup with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -1728,8 +1728,8 @@ instance Pi.normedCommGroup
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
 中文:
-实例 Pi.normedCommGroup
-  签名: [对任意 i, NormedCommGroup (G i)]
+实例 依赖函数类型.normedCommGroup
+  签名: [对任意 i, NormedComm群 (G i)]
   定义体: { Pi.seminormedGroup with
     mul_comm := mul_comm
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
@@ -1755,8 +1755,8 @@ theorem Pi.nnnorm_single
   simp [Pi.nnnorm_def, H, Pi.single_apply, Finset.sup_ite, Finset.filter_eq']
 
 中文:
-定理 Pi.nnnorm_single
-  条件: [DecidableEq ι] [对任意 i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
+定理 依赖函数类型.nnnorm_single
+  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
   证明: by
   have H : forall b, ‖single i y b‖₊ = single (M := fun _ => Real>=0) i ‖y‖₊ b := by
     intro b
@@ -1783,8 +1783,8 @@ lemma Pi.enorm_single
   proof: by simp [enorm, Pi.nnnorm_single]
 
 中文:
-引理 Pi.enorm_single
-  条件: [DecidableEq ι] [对任意 i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
+引理 依赖函数类型.enorm_single
+  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
   证明: by simp [enorm, Pi.nnnorm_single]
 
 Depends on / 依赖: Pi.nnnorm_single, nnnorm_single
@@ -1801,8 +1801,8 @@ theorem Pi.norm_single
   proof: congr_arg Subtype.val Pi.nnnorm_single y
 
 中文:
-定理 Pi.norm_single
-  条件: [DecidableEq ι] [对任意 i, NormedAddCommGroup (G i)] {i : ι} (y : G i)
+定理 依赖函数类型.norm_single
+  条件: [DecidableEq ι] [对任意 i, 赋范交换加群 (G i)] {i : ι} (y : G i)
   证明: congr_arg Subtype.val Pi.nnnorm_single y
 
 Depends on / 依赖: Pi.nnnorm_single, Subtype, Subtype.val, congr_arg, nnnorm_single
@@ -1829,7 +1829,7 @@ instance instSeminormedAddGroup
 
 中文:
 实例 instSeminormedAddGroup
-  签名: [SeminormedAddGroup E]
+  签名: [半赋范加群 E]
   定义体: instPseudoMetricSpace
   norm x := ‖x.unop‖
   dist_eq _ _ := dist_eq_norm_neg_add _ _
@@ -1852,7 +1852,7 @@ lemma norm_op
 
 中文:
 引理 norm_op
-  条件: [SeminormedAddGroup E] (a : E)
+  条件: [半赋范加群 E] (a : E)
   结论: ‖MulOpposite.op a‖ = ‖a‖
   证明: rfl
 -/
@@ -1869,7 +1869,7 @@ lemma norm_unop
 
 中文:
 引理 norm_unop
-  条件: [SeminormedAddGroup E] (a : Eᵐᵒᵖ)
+  条件: [半赋范加群 E] (a : Eᵐᵒᵖ)
   结论: ‖MulOpposite.unop a‖ = ‖a‖
   证明: rfl
 -/
@@ -1886,7 +1886,7 @@ lemma nnnorm_op
 
 中文:
 引理 nnnorm_op
-  条件: [SeminormedAddGroup E] (a : E)
+  条件: [半赋范加群 E] (a : E)
   结论: ‖MulOpposite.op a‖₊ = ‖a‖₊
   证明: rfl
 -/
@@ -1903,7 +1903,7 @@ lemma nnnorm_unop
 
 中文:
 引理 nnnorm_unop
-  条件: [SeminormedAddGroup E] (a : Eᵐᵒᵖ)
+  条件: [半赋范加群 E] (a : Eᵐᵒᵖ)
   结论: ‖MulOpposite.unop a‖₊ = ‖a‖₊
   证明: rfl
 -/
@@ -1920,7 +1920,7 @@ instance instNormedAddGroup
 
 中文:
 实例 instNormedAddGroup
-  签名: [NormedAddGroup E]
+  签名: [赋范加群 E]
   定义体: instMetricSpace
   __ := instSeminormedAddGroup
 
@@ -1940,7 +1940,7 @@ instance instSeminormedAddCommGroup
 
 中文:
 实例 instSeminormedAddCommGroup
-  签名: [SeminormedAddCommGroup E]
+  签名: [SeminormedAddComm群 E]
   定义体: dist_eq_norm_neg_add _ _
 
 Depends on / 依赖: dist_eq_norm_neg_add
@@ -1959,7 +1959,7 @@ instance instNormedAddCommGroup
 
 中文:
 实例 instNormedAddCommGroup
-  签名: [NormedAddCommGroup E]
+  签名: [赋范交换加群 E]
   定义体: instSeminormedAddCommGroup
   __ := instNormedAddGroup
 

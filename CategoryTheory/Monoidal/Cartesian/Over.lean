@@ -815,7 +815,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Over.pullback f).Braided
+  签名: (Over.pullback f).辫
   定义体: .ofChosenFiniteProducts _
 
 @[simp]
@@ -837,7 +837,7 @@ lemma η_pullback_left
 
 中文:
 引理 η_pullback_left
-  结论: (OplaxMonoidal.η (Over.pullback f)).left = (pullback.snd (𝟙 _) f)
+  结论: (反松弛幺半群.η (Over.pullback f)).left = (pullback.snd (𝟙 _) f)
   证明: rfl
 
 @[simp]
@@ -857,7 +857,7 @@ lemma ε_pullback_left
 
 中文:
 引理 ε_pullback_left
-  结论: (LaxMonoidal.ε (Over.pullback f)).left = inv (pullback.snd (𝟙 _) f)
+  结论: (松弛幺半群.ε (Over.pullback f)).left = inv (pullback.snd (𝟙 _) f)
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
   rw [← η_pullback_left]; rw [← Over.comp_left]; rw [Monoidal.η_ε]; rw [Over.id_left]
@@ -1187,7 +1187,7 @@ instance isCommMonObj_mk_pullbackSnd
 
 中文:
 实例 isCommMonObj_mk_pullbackSnd
-  签名: [MonObj (Over.mk f)] [IsCommMonObj (Over.mk f)]
+  签名: [MonObj (Over.mk f)] [是交换MonObj (Over.mk f)]
   定义体: ((Over.pullback g).mapCommMon.obj <| .mk <| .mk f).comm
 
 Depends on / 依赖: Over.pullback, mapCommMon, mapCommMon.obj, pullback

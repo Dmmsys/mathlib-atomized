@@ -104,8 +104,8 @@ lemma Integrable.summable_integral
   exact hf.2.ne
 
 中文:
-引理 Integrable.summable_integral
-  条件: (hf : 整数egrable f (Measure.sum μ))
+引理 可积.summable_integral
+  条件: (hf : 可积 f (测度.求和 μ))
   证明: by
   convert! ENNReal.summable_toReal (f := fun i => ∫⁻ x, ‖f x‖ₑ ∂μ i) ?_ with i
   · rw [← integral_toReal ?_ (by simp)]
@@ -186,7 +186,7 @@ lemma Integrable.summable_of_dirac
   simpa using hf.summable_integral
 
 中文:
-引理 Integrable.summable_of_dirac
+引理 可积.summable_of_dirac
   证明: by
   simpa using hf.summable_integral
 
@@ -244,7 +244,7 @@ theorem hasSum_integral_measure
 
 中文:
 定理 hasSum_integral_measure
-  条件: (hf : 整数egrable f (Measure.sum μ))
+  条件: (hf : 可积 f (测度.求和 μ))
   证明: by
   have hfi : forall i, Integrable f (μ i) := fun i => hf.mono_measure (Measure.le_sum _ _)
   simp only [HasSum, ← integral_finsetSum_measure fun i _ => hfi i]
@@ -285,7 +285,7 @@ theorem integral_sum_measure
 
 中文:
 定理 integral_sum_measure
-  条件: (hf : 整数egrable f (Measure.sum μ))
+  条件: (hf : 可积 f (测度.求和 μ))
   证明: (hasSum_integral_measure hf).tsum_eq.symm
 
 Depends on / 依赖: hasSum_integral_measure, tsum_eq, tsum_eq.symm
@@ -315,7 +315,7 @@ lemma integral_sum_dirac
 
 中文:
 引理 integral_sum_dirac
-  条件: [FiniteDimensional 实数 E] (hc : 对任意 i, c i != ∞)
+  条件: [有限维 实数 E] (hc : 对任意 i, c i != ∞)
   证明: by
   by_cases hf : Integrable f (.sum (fun i => (c i) • .dirac (x i)))
   · rw [integral_sum_measure hf]
@@ -349,7 +349,7 @@ lemma hasSum_integral_sum_dirac
 
 中文:
 引理 hasSum_integral_sum_dirac
-  结论: [CompleteSpace E] (hc : 对任意 i, c i != ∞)
+  结论: [完备空间 E] (hc : 对任意 i, c i != ∞)
   证明: by
   simpa using hasSum_integral_measure (integrable_sum_dirac hc hf)
 
@@ -371,7 +371,7 @@ lemma integral_sum_dirac_eq_tsum
 
 中文:
 引理 integral_sum_dirac_eq_tsum
-  结论: [CompleteSpace E] (hc : 对任意 i, c i != ∞)
+  结论: [完备空间 E] (hc : 对任意 i, c i != ∞)
   证明: (hasSum_integral_sum_dirac hc hf).tsum_eq.symm
 
 Depends on / 依赖: hasSum_integral_sum_dirac, tsum_eq, tsum_eq.symm
@@ -403,7 +403,7 @@ theorem integral_countable
 
 中文:
 定理 integral_countable
-  条件: [Countable X] (hf : 整数egrable f μ)
+  条件: [可数 X] (hf : 可积 f μ)
   证明: by
   rw [← Measure.sum_smul_dirac μ] at hf
   rw [← Measure.sum_smul_dirac μ]; rw [integral_sum_measure hf]
@@ -437,8 +437,8 @@ theorem setIntegral_countable
     · exact Integrable.aestronglyMeasurable 
 
 中文:
-定理 setIntegral_countable
-  条件: (f : X -> E) {s : Set X} (hs : s.Countable) (hf : 整数egrableOn f s μ)
+定理 set整数egral_countable
+  条件: (f : X -> E) {s : 集合 X} (hs : s.可数) (hf : 整数egrableOn f s μ)
   证明: by
   have hi : Countable { x // x in s } := Iff.mpr countable_coe_iff hs
   have hf' : Integrable (fun (x : s) => f x) (Measure.comap Subtype.val μ) := by
@@ -476,8 +476,8 @@ theorem setIntegral_finset
 @[deprecated (since := "2026-03-09")] alias integral_finset := setIntegral_finset
 
 中文:
-定理 setIntegral_finset
-  条件: (s : Finset X) (hf : 整数egrableOn f s μ)
+定理 set整数egral_finset
+  条件: (s : 有限集 X) (hf : 整数egrableOn f s μ)
   证明: by
   rw [setIntegral_countable _ s.countable_toSet hf]; rw [← Finset.tsum_subtype']
 
@@ -504,7 +504,7 @@ theorem integral_fintype
 
 中文:
 定理 integral_fintype
-  条件: [Fintype X] (hf : 整数egrable f μ)
+  条件: [有限类型 X] (hf : 可积 f μ)
   证明: by
   -- NB: Integrable f does not follow from Fintype, because the measure itself could be non-finite
   rw [← setIntegral_finset .univ]; rw [Finset.coe_univ]; rw [Measure.restrict_univ]
@@ -526,7 +526,7 @@ lemma integral_count
 
 中文:
 引理 integral_count
-  条件: [Fintype X] (f : X -> E)
+  条件: [有限类型 X] (f : X -> E)
   证明: by simp [integral_fintype]
 -/
 @[simp] lemma integral_count [Fintype X] (f : X -> E) :

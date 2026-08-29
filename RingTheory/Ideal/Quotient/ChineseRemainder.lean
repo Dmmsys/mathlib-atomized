@@ -36,7 +36,7 @@ lemma pi_mkQ_rTensor
 
 中文:
 引理 pi_mkQ_rTensor
-  条件: [Fintype ι] [DecidableEq ι]
+  条件: [有限类型 ι] [DecidableEq ι]
   证明: by
   ext; simp [LinearMap.pi, LinearEquiv.piCongrRight]
 

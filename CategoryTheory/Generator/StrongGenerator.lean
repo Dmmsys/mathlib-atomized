@@ -162,7 +162,7 @@ lemma isIso_of_mono
 中文:
 引理 isIso_of_mono
   条件: ⦃X Y
-  结论: C⦄ (i : X ⟶ Y) [Mono i]
+  结论: C⦄ (i : X ⟶ Y) [单态射 i]
   证明: (isStrongGenerator_iff.1 hP).2 i hi
 
 Depends on / 依赖: isStrongGenerator_iff
@@ -182,7 +182,7 @@ lemma exists_of_subobject_ne_top
   exact hA (hP.subobject_eq_top this)
 
 中文:
-引理 exists_of_subobject_ne_top
+引理 存在_of_subobject_ne_top
   条件: {X : C} {A : Subobject X} (hA : A != ⊤)
   证明: by
   by_contra!
@@ -206,8 +206,8 @@ lemma exists_of_mono_not_isIso
   exact hi (hP.isIso_of_mono i this)
 
 中文:
-引理 exists_of_mono_not_isIso
-  条件: {X Y : C} (i : X ⟶ Y) [Mono i] (hi : ¬ IsIso i)
+引理 存在_of_mono_not_isIso
+  条件: {X Y : C} (i : X ⟶ Y) [单态射 i] (hi : ¬ 是同构 i)
   证明: by
   by_contra!
   exact hi (hP.isIso_of_mono i this)
@@ -239,7 +239,7 @@ lemma mk_of_exists_extremalEpi
     replace hi (j : ι) := hi (s j) (hs j) (c.inj j ≫ p)
 
 中文:
-引理 mk_of_exists_extremalEpi
+引理 mk_of_存在_extremalEpi
   证明: by
   rw [isStrongGenerator_iff]
   refine ⟨IsSeparating.mk_of_exists_epi.{w} (fun X => ?_), fun X Y i _ hi => ?_⟩
@@ -301,7 +301,7 @@ lemma isStrongGenerator_iff_exists_extremalEpi
   refine ⟨_, fun j => ((equiv
 
 中文:
-引理 isStrongGenerator_iff_exists_extremalEpi
+引理 isStrongGenerator_iff_存在_extremalEpi
   证明: by
   refine ⟨fun hP X => ?_, fun hP => .mk_of_exists_extremalEpi hP⟩
   have := hasCoproductsOfShape_of_small.{w} C (CostructuredArrow P.ι X)
@@ -342,7 +342,7 @@ lemma IsStrongGenerator.mk_of_exists_colimitsOfShape
   choose φ hφ using fun j => hi _ (p.prop_diag_obj j) (p.ι.a
 
 中文:
-引理 IsStrongGenerator.mk_of_exists_colimitsOfShape
+引理 IsStrongGenerator.mk_of_存在_colimitsOfShape
   证明: by
   rw [isStrongGenerator_iff]
   refine ⟨IsSeparating.mk_of_exists_colimitsOfShape hP, fun X Y i _ hi => ?_⟩

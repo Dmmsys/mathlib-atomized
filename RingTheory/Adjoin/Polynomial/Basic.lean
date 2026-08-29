@@ -55,8 +55,8 @@ theorem _root_.Polynomial.adjoin_X
   exact S.sum_mem fun n _hn => S.smul_mem (S.pow_mem (subset_adjoin rfl) _) _
 
 中文:
-定理 _root_.Polynomial.adjoin_X
-  结论: adjoin R ({X} : Set R[X]) = ⊤
+定理 _root_.多项式.adjoin_X
+  结论: adjoin R ({X} : 集合 R[X]) = ⊤
   证明: by
   refine top_unique fun p _hp => ?_
   set S := adjoin R ({X} : Set R[X])
@@ -108,7 +108,7 @@ theorem _root_.Polynomial.aeval_mem_adjoin_singleton
   simp [adjoin_singleton_eq_range_aeval]
 
 中文:
-定理 _root_.Polynomial.aeval_mem_adjoin_singleton
+定理 _root_.多项式.aeval_mem_adjoin_singleton
   结论: aeval x p in adjoin R {x}
   证明: by
   simp [adjoin_singleton_eq_range_aeval]
@@ -133,7 +133,7 @@ theorem adjoin_mem_exists_aeval
   simp_all
 
 中文:
-定理 adjoin_mem_exists_aeval
+定理 adjoin_mem_存在_aeval
   条件: {a : A} (h : a in R[x])
   证明: by
   rw [Algebra.adjoin_singleton_eq_range_aeval] at h
@@ -159,7 +159,7 @@ theorem adjoin_eq_exists_aeval
   simp_all
 
 中文:
-定理 adjoin_eq_exists_aeval
+定理 adjoin_eq_存在_aeval
   条件: (a : R[x])
   证明: by
   have : (a : A) in R[x] := by simp
@@ -244,7 +244,7 @@ instance instCommRingAdjoinSingleton
 
 中文:
 实例 instCommRingAdjoinSingleton
-  签名: {R A : 类型} [CommRing R] [Ring A] [Algebra R A] (x : A)
+  签名: {R A : 类型} [交换环 R] [环 A] [代数 R A] (x : A)
 -/
 instance instCommRingAdjoinSingleton {R A : Type*} [CommRing R] [Ring A] [Algebra R A] (x : A) :
 CommRing R[x] where

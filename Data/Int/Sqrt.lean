@@ -74,7 +74,7 @@ theorem exists_mul_self
   proof: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, ← Int.natCast_mul, natAbs_mul_self], fun h => ⟨sqrt x, h⟩⟩
 
 中文:
-定理 exists_mul_self
+定理 存在_mul_self
   条件: (x : 整数)
   结论: (存在 n, n * n = x) ↔ sqrt x * sqrt x = x
   证明: ⟨fun ⟨n, hn⟩ => by rw [← hn, sqrt_eq, ← Int.natCast_mul, natAbs_mul_self], fun h => ⟨sqrt x, h⟩⟩
@@ -143,7 +143,7 @@ theorem sqrt_ofNat
   proof: sqrt_natCast _
 
 中文:
-定理 sqrt_ofNat
+定理 sqrt_of自然数
   条件: (n : 自然数)
   结论: 整数.sqrt of自然数(n) = 自然数.sqrt of自然数(n)
   证明: sqrt_natCast _

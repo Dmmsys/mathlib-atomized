@@ -49,7 +49,7 @@ abbreviation Cocone.tensor₂
   body: (curriedTensor C).mapCocone₂ c₁ c₂
 
 中文:
-缩写 Cocone.tensor₂
+缩写 余锥.tensor₂
   签名: :
   定义体: (curriedTensor C).mapCocone₂ c₁ c₂
 
@@ -68,8 +68,8 @@ definition IsColimit.tensor₂
   body: isColimitOfPreserves₂ (curriedTensor C) hc₁ hc₂
 
 中文:
-定义 IsColimit.tensor₂
-  签名: [PreservesColimit₂ F₁ F₂ (curriedTensor C)]
+定义 是余极限.tensor₂
+  签名: [保持余limit₂ F₁ F₂ (curriedTensor C)]
   定义体: isColimitOfPreserves₂ (curriedTensor C) hc₁ hc₂
 
 Depends on / 依赖: curriedTensor
@@ -99,8 +99,8 @@ definition Cocone.tensor
   ι.app j := c₁.ι.app j otimesₘ c₂.ι.app j
 
 中文:
-定义 Cocone.tensor
-  签名: : Cocone (F₁ otimes F₂) where
+定义 余锥.tensor
+  签名: : 余锥 (F₁ otimes F₂) where
   定义体: c₁.pt otimes c₂.pt
   ι.app j := c₁.ι.app j otimesₘ c₂.ι.app j
 
@@ -126,8 +126,8 @@ definition IsColimit.tensor
   · exact Cocone.ext (Iso.refl _)
 
 中文:
-定义 IsColimit.tensor
-  签名: [PreservesColimit₂ F₁ F₂ (curriedTensor C)] [IsSifted J]
+定义 是余极限.tensor
+  签名: [保持余limit₂ F₁ F₂ (curriedTensor C)] [是Sifted J]
   定义体: by
   refine (IsColimit.equivOfNatIsoOfIso ?_ _ _ ?_).1
     ((Functor.Final.isColimitWhiskerEquiv (Functor.diag J) _).2 (hc₁.tensor₂ hc₂))

@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (Presheaf C X)
+  签名: 交换 (预层 C X)
   定义体: inferInstanceAs (Abelian (_ ⥤ _))
 
 Depends on / 依赖: Abelian
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian (Sheaf C X)
+  签名: 交换 (层 C X)
   定义体: inferInstanceAs (Abelian (CategoryTheory.Sheaf _ _))
 
 Depends on / 依赖: Abelian, CategoryTheory, CategoryTheory.Sheaf
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Sheaf.forget C X).Additive
+  签名: (层.forget C X).加性
 -/
 instance : (Sheaf.forget C X).Additive where
 
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.PreservesFiniteLimits (forget C X ⋙ stalkFunctor C p₀)
+  签名: Limits.保持FiniteLimits (forget C X ⋙ stalkFunctor C p₀)
   定义体: have : (forget C X ⋙ stalkFunctor C p₀).PreservesHomology := by
     simp only [(forget C X ⋙ stalkFunctor C p₀).exact_tfae.out 2 0]
     intro S h
@@ -169,7 +169,7 @@ lemma isZero_iff_stalkFunctor_obj_isZero
 
 中文:
 引理 isZero_iff_stalkFunctor_obj_isZero
-  条件: (F : Sheaf C X)
+  条件: (F : 层 C X)
   证明: by
   refine ⟨fun h _ => Functor.map_isZero _ h, ?_⟩
   intro h
@@ -211,7 +211,7 @@ theorem exact_iff_stalkFunctor_map_exact
 
 中文:
 定理 exact_iff_stalkFunctor_map_exact
-  条件: (S : ShortComplex (Sheaf C X))
+  条件: (S : 短复形 (层 C X))
   证明: by
   constructor
   · intro h x

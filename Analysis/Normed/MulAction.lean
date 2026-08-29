@@ -197,8 +197,8 @@ instance NonUnitalSeminormedRing.isBoundedSMul
   dist_pair_smul' x₁ x₂ y := by simpa [sub_mul, dist_eq_norm] using norm_mul_le (x₁ - x₂) y
 
 中文:
-实例 NonUnitalSeminormedRing.isBoundedSMul
-  签名: [NonUnitalSeminormedRing α]
+实例 非幺Seminormed环.isBoundedSMul
+  签名: [非幺Seminormed环 α]
   定义体: by simpa [mul_sub, dist_eq_norm] using norm_mul_le x (y₁ - y₂)
   dist_pair_smul' x₁ x₂ y := by simpa [sub_mul, dist_eq_norm] using norm_mul_le (x₁ - x₂) y
 
@@ -221,8 +221,8 @@ instance NonUnitalSeminormedRing.isBoundedSMulOpposite
     simpa [mul_sub, dist_eq_norm, mul_comm] using! norm_mul_le y (x₁ - x₂).unop
 
 中文:
-实例 NonUnitalSeminormedRing.isBoundedSMulOpposite
-  签名: [NonUnitalSeminormedRing α]
+实例 非幺Seminormed环.isBoundedSMulOpposite
+  签名: [非幺Seminormed环 α]
   定义体: by
     simpa [sub_mul, dist_eq_norm, mul_comm] using! norm_mul_le (y₁ - y₂) x.unop
   dist_pair_smul' x₁ x₂ y := by
@@ -251,7 +251,7 @@ theorem IsBoundedSMul.of_norm_smul_le
     dist_pair_smul' := fun a₁ a₂ b => by simpa [sub_smul, dist_eq_norm] using h (a₁ - a₂) b }
 
 中文:
-定理 IsBoundedSMul.of_norm_smul_le
+定理 是BoundedSMul.of_norm_smul_le
   条件: (h : 对任意 (r : α) (x : β), ‖r • x‖ <= ‖r‖ * ‖x‖)
   证明: { dist_smul_pair' := fun a b₁ b₂ => by simpa [smul_sub, dist_eq_norm] using h a (b₁ - b₂)
     dist_pair_smul' := fun a₁ a₂ b => by simpa [sub_smul, dist_eq_norm] using h (a₁ - a₂) b }
@@ -272,7 +272,7 @@ theorem IsBoundedSMul.of_enorm_smul_le
   proof: .of_norm_smul_le (by simpa [enorm_eq_nnnorm, ← ENNReal.coe_mul, ENNReal.coe_le_coe] using! h)
 
 中文:
-定理 IsBoundedSMul.of_enorm_smul_le
+定理 是BoundedSMul.of_enorm_smul_le
   条件: (h : 对任意 (r : α) (x : β), ‖r • x‖ₑ <= ‖r‖ₑ * ‖x‖ₑ)
   证明: .of_norm_smul_le (by simpa [enorm_eq_nnnorm, ← ENNReal.coe_mul, ENNReal.coe_le_coe] using! h)
 
@@ -291,7 +291,7 @@ theorem IsBoundedSMul.of_nnnorm_smul_le
   proof: .of_norm_smul_le h
 
 中文:
-定理 IsBoundedSMul.of_nnnorm_smul_le
+定理 是BoundedSMul.of_nnnorm_smul_le
   条件: (h : 对任意 (r : α) (x : β), ‖r • x‖₊ <= ‖r‖₊ * ‖x‖₊)
   证明: .of_norm_smul_le h
 
@@ -314,8 +314,8 @@ class NormSMulClass
     - norm_smul((r : α) (x : β)) : ‖r • x‖ = ‖r‖ * ‖x‖
 
 中文:
-类 NormSMulClass
-  参数: (α β : 类型) [Norm α] [Norm β] [SMul α β]
+类 NormSMul类
+  参数: (α β : 类型) [范数 α] [范数 β] [标量乘法 α β]
   公理与运算 (1 个):
     - norm_smul((r : α) (x : β)) : ‖r • x‖ = ‖r‖ * ‖x‖
 -/
@@ -332,7 +332,7 @@ lemma norm_smul
 
 中文:
 引理 norm_smul
-  条件: [Norm α] [Norm β] [SMul α β] [NormSMulClass α β] (r : α) (x : β)
+  条件: [范数 α] [范数 β] [标量乘法 α β] [NormSMul类 α β] (r : α) (x : β)
   证明: NormSMulClass.norm_smul r x
 
 Depends on / 依赖: NormSMulClass, NormSMulClass.norm_smul, norm_smul
@@ -359,8 +359,8 @@ class ENormSMulClass
     - enorm_smul((r : α) (x : β)) : ‖r • x‖ₑ = ‖r‖ₑ * ‖x‖ₑ
 
 中文:
-类 ENormSMulClass
-  参数: (α β : 类型) [ENorm α] [ENorm β] [SMul α β]
+类 ENormSMul类
+  参数: (α β : 类型) [E范数 α] [E范数 β] [标量乘法 α β]
   公理与运算 (1 个):
     - enorm_smul((r : α) (x : β)) : ‖r • x‖ₑ = ‖r‖ₑ * ‖x‖ₑ
 -/
@@ -377,7 +377,7 @@ lemma enorm_smul
 
 中文:
 引理 enorm_smul
-  条件: [ENorm α] [ENorm β] [SMul α β] [ENormSMulClass α β] (r : α) (x : β)
+  条件: [E范数 α] [E范数 β] [标量乘法 α β] [ENormSMul类 α β] (r : α) (x : β)
   证明: ENormSMulClass.enorm_smul r x
 
 Depends on / 依赖: ENormSMulClass, ENormSMulClass.enorm_smul, enorm_smul
@@ -397,7 +397,7 @@ theorem NormSMulClass.of_nnnorm_smul
   proof: congr_arg NNReal.toReal (h r b)
 
 中文:
-定理 NormSMulClass.of_nnnorm_smul
+定理 NormSMul类.of_nnnorm_smul
   条件: (h : 对任意 (r : α) (x : β), ‖r • x‖₊ = ‖r‖₊ * ‖x‖₊)
   证明: congr_arg NNReal.toReal (h r b)
 
@@ -442,8 +442,8 @@ instance Pi.instNormSMulClass
     simp [nnnorm_def, ← coe_nnnorm, nnnorm_smul, ← NNReal.coe_mul, NNReal.mul_finset_sup]
 
 中文:
-实例 Pi.instNormSMulClass
-  签名: {ι : 类型} {β : ι -> 类型} [Fintype ι]
+实例 依赖函数类型.instNormSMulClass
+  签名: {ι : 类型} {β : ι -> 类型} [有限类型 ι]
   定义体: by
     simp [nnnorm_def, ← coe_nnnorm, nnnorm_smul, ← NNReal.coe_mul, NNReal.mul_finset_sup]
 
@@ -465,8 +465,8 @@ instance Prod.instNormSMulClass
     nnnorm_smul r, ← NNReal.coe_mul, NNReal.mul_sup]
 
 中文:
-实例 Prod.instNormSMulClass
-  签名: {γ : 类型} [SeminormedAddGroup γ] [SMul α γ] [NormSMulClass α γ]
+实例 积类型.instNormSMulClass
+  签名: {γ : 类型} [半赋范加群 γ] [标量乘法 α γ] [NormSMul类 α γ]
   定义体: fun r ⟨v₁, v₂⟩ => by simp only [smul_def, ← coe_nnnorm, nnnorm_def,
     nnnorm_smul r, ← NNReal.coe_mul, NNReal.mul_sup]
 
@@ -486,8 +486,8 @@ instance ULift.instNormSMulClass
   body: norm_smul r v.down
 
 中文:
-实例 ULift.instNormSMulClass
-  签名: : NormSMulClass α (ULift β) where
+实例 类型层提升.instNormSMulClass
+  签名: : NormSMul类 α (类型层提升 β) where
   定义体: norm_smul r v.down
 
 Depends on / 依赖: norm_smul, v.down
@@ -574,8 +574,8 @@ instance NormSMulClass.toIsBoundedSMul
   body: .of_norm_smul_le fun r x => (norm_smul r x).le
 
 中文:
-实例 NormSMulClass.toIsBoundedSMul
-  签名: : IsBoundedSMul α β
+实例 NormSMul类.toIsBoundedSMul
+  签名: : 是BoundedSMul α β
   定义体: .of_norm_smul_le fun r x => (norm_smul r x).le
 
 Depends on / 依赖: norm_smul, of_norm_smul_le
@@ -606,8 +606,8 @@ lemma NormedDivisionRing.toNormSMulClass
       _ = ‖r • x‖ := by rw [norm_inv, ← mul_assoc, m
 
 中文:
-引理 NormedDivisionRing.toNormSMulClass
-  结论: NormSMulClass α β where
+引理 NormedDivision环.toNormSMulClass
+  结论: NormSMul类 α β where
   证明: by
     by_cases h : r = 0
     · simp [h, zero_smul α x]

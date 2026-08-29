@@ -43,7 +43,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.quasiIso C (ComplexShape.up 整数)).HasLeftCalculusOfFractions
+  签名: (HomotopyCategory.quasiIso C (余mplexShape.up 整数)).有LeftCalculusOfFractions
   定义体: by
   rw [HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic]
   infer_instance
@@ -66,7 +66,7 @@ instance :
 
 中文:
 实例 :
-  签名: (HomotopyCategory.quasiIso C (ComplexShape.up 整数)).HasRightCalculusOfFractions
+  签名: (HomotopyCategory.quasiIso C (余mplexShape.up 整数)).有RightCalculusOfFractions
   定义体: by
   rw [HomotopyCategory.quasiIso_eq_trW_subcategoryAcyclic]
   infer_instance
@@ -93,7 +93,7 @@ lemma right_fac
 
 中文:
 引理 right_fac
-  条件: {X Y : CochainComplex C 整数} (f : Q.obj X ⟶ Q.obj Y)
+  条件: {X Y : 上链复形 C 整数} (f : Q.obj X ⟶ Q.obj Y)
   证明: by
   have ⟨φ, hφ⟩ := Localization.exists_rightFraction Qh (HomotopyCategory.quasiIso C _) f
   obtain ⟨X', s, hs, g, rfl⟩ := φ.cases
@@ -130,7 +130,7 @@ lemma left_fac
 
 中文:
 引理 left_fac
-  条件: {X Y : CochainComplex C 整数} (f : Q.obj X ⟶ Q.obj Y)
+  条件: {X Y : 上链复形 C 整数} (f : Q.obj X ⟶ Q.obj Y)
   证明: by
   have ⟨φ, hφ⟩ := Localization.exists_leftFraction Qh (HomotopyCategory.quasiIso C _) f
   obtain ⟨X', g, s, hs, rfl⟩ := φ.cases
@@ -167,7 +167,7 @@ lemma right_fac_of_isStrictlyLE
 
 中文:
 引理 right_fac_of_isStrictlyLE
-  结论: {X Y : CochainComplex C 整数} (f : Q.obj X ⟶ Q.obj Y) (n : 整数)
+  结论: {X Y : 上链复形 C 整数} (f : Q.obj X ⟶ Q.obj Y) (n : 整数)
   证明: by
   obtain ⟨X', s, hs, g, rfl⟩ := right_fac f
   have : IsIso (Q.map (CochainComplex.truncLEMap s n)) := by
@@ -209,7 +209,7 @@ lemma left_fac_of_isStrictlyGE
 
 中文:
 引理 left_fac_of_isStrictlyGE
-  结论: {X Y : CochainComplex C 整数} (f : Q.obj X ⟶ Q.obj Y) (n : 整数)
+  结论: {X Y : 上链复形 C 整数} (f : Q.obj X ⟶ Q.obj Y) (n : 整数)
   证明: by
   obtain ⟨Y', g, s, hs, rfl⟩ := left_fac f
   have : IsIso (Q.map (CochainComplex.truncGEMap s n)) := by
@@ -346,7 +346,7 @@ lemma subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE
 
 中文:
 引理 subsingleton_hom_of_isStrictlyLE_of_isStrictlyGE
-  结论: (X Y : CochainComplex C 整数)
+  结论: (X Y : 上链复形 C 整数)
   证明: by
   suffices forall (f : Q.obj X ⟶ Q.obj Y), f = 0 from ⟨by simp [this]⟩
   intro f

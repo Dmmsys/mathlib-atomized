@@ -121,22 +121,22 @@ structure Congr!.Config
     - beqEq : Bool  [default: true]
 
 中文:
-结构 Congr!.Config
+结构 余ngr!.余nfig
   参数: where
   公理与运算 (13 个):
-    - closePre : 布尔  [默认: true]
-    - closePost : 布尔  [默认: true]
+    - closePre : 布尔值  [默认: true]
+    - closePost : 布尔值  [默认: true]
     - transparency : TransparencyMode  [默认: TransparencyMode.reducible]
     - preTransparency : TransparencyMode  [默认: TransparencyMode.reducible]
     - postTransparency : TransparencyMode  [默认: TransparencyMode.default]
-    - preferLHS : 布尔  [默认: true]
-    - partialApp : 布尔  [默认: true]
-    - sameFun : 布尔  [默认: false]
-    - maxArgs : Option 自然数  [默认: none]
-    - typeEqs : 布尔  [默认: false]
-    - etaExpand : 布尔  [默认: false]
-    - useCongrSimp : 布尔  [默认: false]
-    - beqEq : 布尔  [默认: true]
+    - preferLHS : 布尔值  [默认: true]
+    - partialApp : 布尔值  [默认: true]
+    - sameFun : 布尔值  [默认: false]
+    - maxArgs : 选项类型 自然数  [默认: none]
+    - typeEqs : 布尔值  [默认: false]
+    - etaExpand : 布尔值  [默认: false]
+    - useCongrSimp : 布尔值  [默认: false]
+    - beqEq : 布尔值  [默认: true]
 
 Depends on / 依赖: applying, before, congruence, lemmas
 -/
@@ -243,8 +243,8 @@ definition Congr!.Config.unfoldSameFun
   postTransparency := .default
 
 中文:
-定义 Congr!.Config.unfoldSameFun
-  签名: : Congr!.Config where
+定义 余ngr!.余nfig.unfoldSameFun
+  签名: : 余ngr!.余nfig where
   定义体: false
   sameFun := true
   transparency := .default
@@ -267,8 +267,8 @@ definition Congr!.Config.numArgsOk
   body: numArgs <= config.maxArgs.getD numArgs
 
 中文:
-定义 Congr!.Config.numArgsOk
-  签名: (config : Config) (numArgs : 自然数)
+定义 余ngr!.余nfig.numArgsOk
+  签名: (config : 余nfig) (numArgs : 自然数)
   定义体: numArgs <= config.maxArgs.getD numArgs
 -/
 def Congr!.Config.numArgsOk (config : Config) (numArgs : Nat) : Bool :=
@@ -283,8 +283,8 @@ definition Congr!.Config.maxArgsFor
   body: min numArgs (config.maxArgs.getD numArgs)
 
 中文:
-定义 Congr!.Config.maxArgsFor
-  签名: (config : Config) (numArgs : 自然数)
+定义 余ngr!.余nfig.maxArgsFor
+  签名: (config : 余nfig) (numArgs : 自然数)
   定义体: min numArgs (config.maxArgs.getD numArgs)
 -/
 def Congr!.Config.maxArgsFor (config : Config) (numArgs : Nat) : Nat :=
@@ -344,7 +344,7 @@ definition Congr!.plausiblyEqualTypes
     -- This is redundant, but it saves carrying out the remaining check
 
 中文:
-定义 Congr!.plausiblyEqualTypes
+定义 余ngr!.plausiblyEqualTypes
   签名: (ty1 ty2 : Expr) (maxDepth : 自然数 := 5)
   定义体: match maxDepth with
   | 0 => return false
@@ -409,7 +409,7 @@ definition Lean.MVarId.smartHCongr?
 
 中文:
 定义 Lean.MVarId.smartHCongr?
-  签名: (config : Congr!.Config) (mvarId : MVarId)
+  签名: (config : 余ngr!.余nfig) (mvarId : MVarId)
   定义体: mvarId.withContext do
     mvarId.checkNotAssigned `congr!
     commitWhenSome? do
@@ -538,7 +538,7 @@ definition Lean.MVarId.congrSimp?
 
 中文:
 定义 Lean.MVarId.congrSimp?
-  签名: (config : Congr!.Config) (mvarId : MVarId)
+  签名: (config : 余ngr!.余nfig) (mvarId : MVarId)
   定义体: mvarId.withContext do
     mvarId.checkNotAssigned `congrSimp?
     let some (_, lhs, rhs) := (← withReducible mvarId.getType').eq? | return none
@@ -598,7 +598,7 @@ definition Lean.MVarId.userCongr?
 
 中文:
 定义 Lean.MVarId.userCongr?
-  签名: (config : Congr!.Config) (mvarId : MVarId)
+  签名: (config : 余ngr!.余nfig) (mvarId : MVarId)
   定义体: mvarId.withContext do
     mvarId.checkNotAssigned `userCongr?
     let some (lhs, rhs) := (← withReducible mvarId.getType').eqOrIff? | return none
@@ -724,7 +724,7 @@ theorem implies_congr'
 
 中文:
 定理 implies_congr'
-  条件: {α α' : Sort u} {β β' : Sort v} (h : α = α') (h' : α' -> β = β')
+  条件: {α α' : 类型层 u} {β β' : 类型层 v} (h : α = α') (h' : α' -> β = β')
   证明: by
   cases h
   change (forall (x : α), (fun _ => β) x) = _
@@ -881,11 +881,11 @@ structure CongrState
     - patterns : List (TSyntax `rintroPat)
 
 中文:
-结构 CongrState
+结构 余ngrState
   参数: where
   公理与运算 (2 个):
-    - goals : Array MVarId
-    - patterns : List (TSyntax `rintroPat)
+    - goals : 数组 MVarId
+    - patterns : 列表 (TSyntax `rintroPat)
 -/
 structure CongrState where
   /-- Accumulated goals that `congr!` could not handle. -/
@@ -923,7 +923,7 @@ definition CongrMetaM.nextPattern
 
 中文:
 定义 CongrMetaM.nextPattern
-  签名: : CongrMetaM (Option (TSyntax `rintroPat))
+  签名: : CongrMetaM (选项类型 (TSyntax `rintroPat))
   定义体: do
   modifyGet fun s =>
     if let p :: ps := s.patterns then
@@ -950,7 +950,7 @@ theorem heq_imp_of_eq_imp
 
 中文:
 定理 heq_imp_of_eq_imp
-  结论: {α : Sort*} {x y : α} {p : x ≍ y -> 命题}
+  结论: {α : 类型层*} {x y : α} {p : x ≍ y -> 命题}
   证明: by
   cases he
   exact h rfl
@@ -1074,7 +1074,7 @@ definition Lean.MVarId.preCongr!
 
 中文:
 定义 Lean.MVarId.preCongr!
-  签名: (mvarId : MVarId) (tryClose : 布尔)
+  签名: (mvarId : MVarId) (tryClose : 布尔值)
   定义体: do
   -- Next, turn `HEq` and `Iff` into `Eq`
   let mvarId ← mvarId.heqOfEq
@@ -1120,7 +1120,7 @@ definition Lean.MVarId.congrCore!
 
 中文:
 定义 Lean.MVarId.congrCore!
-  签名: (config : Congr!.Config) (mvarId : MVarId)
+  签名: (config : 余ngr!.余nfig) (mvarId : MVarId)
   定义体: do
   mvarId.checkNotAssigned `congr!
   let s ← saveState
@@ -1168,7 +1168,7 @@ definition Lean.MVarId.postCongr!
 
 中文:
 定义 Lean.MVarId.postCongr!
-  签名: (config : Congr!.Config) (mvarId : MVarId)
+  签名: (config : 余ngr!.余nfig) (mvarId : MVarId)
   定义体: withTransparency config.postTransparency do
   let some mvarId ← mvarId.preCongr! config.closePost | return none
   -- Convert `p = q` to `p ↔ q`, which is likely the more useful form:

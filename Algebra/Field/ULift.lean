@@ -34,7 +34,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: [NNRatCast α]
+  签名: [非负有理数嵌入 α]
   定义体: up q
 -/
 instance instNNRatCast [NNRatCast α] : NNRatCast (ULift α) where nnratCast q := up q
@@ -48,7 +48,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: [RatCast α]
+  签名: [有理数嵌入 α]
   定义体: up q
 -/
 instance instRatCast [RatCast α] : RatCast (ULift α) where ratCast q := up q
@@ -64,7 +64,7 @@ lemma up_nnratCast
 
 中文:
 引理 up_nnratCast
-  条件: [NNRatCast α] (q : Rat>=0)
+  条件: [非负有理数嵌入 α] (q : 有理数>=0)
   结论: up (q : α) = q
   证明: rfl
 -/
@@ -80,8 +80,8 @@ lemma down_nnratCast
 
 中文:
 引理 down_nnratCast
-  条件: [NNRatCast α] (q : Rat>=0)
-  结论: down (q : ULift α) = q
+  条件: [非负有理数嵌入 α] (q : 有理数>=0)
+  结论: down (q : 类型层提升 α) = q
   证明: rfl
 -/
 @[simp, norm_cast] lemma down_nnratCast [NNRatCast α] (q : Rat>=0) : down (q : ULift α) = q := rfl
@@ -96,7 +96,7 @@ lemma up_ratCast
 
 中文:
 引理 up_ratCast
-  条件: [RatCast α] (q : Rat)
+  条件: [有理数嵌入 α] (q : 有理数)
   结论: up (q : α) = q
   证明: rfl
 -/
@@ -112,8 +112,8 @@ lemma down_ratCast
 
 中文:
 引理 down_ratCast
-  条件: [RatCast α] (q : Rat)
-  结论: down (q : ULift α) = q
+  条件: [有理数嵌入 α] (q : 有理数)
+  结论: down (q : 类型层提升 α) = q
   证明: rfl
 -/
 @[simp, norm_cast] lemma down_ratCast [RatCast α] (q : Rat) : down (q : ULift α) = q := rfl
@@ -130,7 +130,7 @@ nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
 
 中文:
 实例 divisionSemiring
-  签名: [DivisionSemiring α]
+  签名: [除半环 α]
   定义体: up (DivisionSemiring.nnqsmul q x.down)
 nnqsmul_def _ _ := congrArg up DivisionSemiring.nnqsmul_def _ _
 nnratCast_def _ := congrArg up DivisionSemiring.nnratCast_def _
@@ -152,7 +152,7 @@ instance semifield
 
 中文:
 实例 semifield
-  签名: [Semifield α]
+  签名: [半域 α]
   定义体: { ULift.divisionSemiring, ULift.commGroupWithZero with }
 
 Depends on / 依赖: ULift.commGroupWithZero, ULift.divisionSemiring, commGroupWithZero, divisionSemiring
@@ -176,7 +176,7 @@ qsmul_def _ _ := congrArg up DivisionRing
 
 中文:
 实例 divisionRing
-  签名: [DivisionRing α]
+  签名: [除环 α]
   定义体: ring
   __ := groupWithZero
   nnqsmul q x := up (DivisionSemiring.nnqsmul q x.down)
@@ -205,7 +205,7 @@ instance field
 
 中文:
 实例 field
-  签名: [Field α]
+  签名: [域 α]
   定义体: {}
 -/
 instance field [Field α] : Field (ULift α) := {}

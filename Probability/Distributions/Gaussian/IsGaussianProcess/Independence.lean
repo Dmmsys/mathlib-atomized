@@ -75,7 +75,7 @@ lemma iIndepFun_of_covariance_strongDual
 
 中文:
 引理 iIndepFun_of_covariance_strongDual
-  结论: [NormedSpace 实数 E]
+  结论: [赋范空间 实数 E]
   证明: by
   have := hX.isProbabilityMeasure
   classical
@@ -121,7 +121,7 @@ lemma iIndepFun_of_covariance_inner
 
 中文:
 引理 iIndepFun_of_covariance_inner
-  结论: [InnerProductSpace 实数 E]
+  结论: [内积空间 实数 E]
   证明: hX.iIndepFun_of_covariance_strongDual mX fun t₁ t₂ ht s₁ s₂ L₁ L₂ => by
     simpa using! h t₁ t₂ ht s₁ s₂ ((toDual Real E).symm L₁) ((toDual Real E).symm L₂)
 
@@ -182,7 +182,7 @@ lemma indepFun_of_covariance_strongDual
 
 中文:
 引理 indepFun_of_covariance_strongDual
-  结论: [NormedSpace 实数 E]
+  结论: [赋范空间 实数 E]
   证明: by
   have := hXY.isProbabilityMeasure
   refine IndepFun.process_indepFun_process₀ mX mY fun I J =>
@@ -227,7 +227,7 @@ lemma indepFun_of_covariance_inner
 
 中文:
 引理 indepFun_of_covariance_inner
-  结论: [InnerProductSpace 实数 E]
+  结论: [内积空间 实数 E]
   证明: hXY.indepFun_of_covariance_strongDual mX mY fun s t L₁ L₂ => by
     simpa using! h s t ((toDual Real E).symm L₁) ((toDual Real E).symm L₂)
 

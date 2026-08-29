@@ -97,7 +97,7 @@ structure AECover
 
 中文:
 结构 AECover
-  参数: (φ : ι -> Set α)
+  参数: (φ : ι -> 集合 α)
   公理与运算 (1 个):
     - ae_eventually_mem : 对任意ᵐ x ∂μ, 对任意ᶠ i in l, x in φ i
 -/
@@ -124,7 +124,7 @@ theorem inter
 
 中文:
 定理 inter
-  条件: {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ)
+  条件: {φ ψ : ι -> 集合 α} (hφ : AECover μ l φ) (hψ : AECover μ l ψ)
   证明: hψ.1.mp hφ.1.mono fun _ => Eventually.and
   measurableSet _ := (hφ.2 _).inter (hψ.2 _)
 
@@ -145,7 +145,7 @@ theorem superset
 
 中文:
 定理 superset
-  结论: {φ ψ : ι -> Set α} (hφ : AECover μ l φ) (hsub : 对任意 i, φ i subseteq ψ i)
+  结论: {φ ψ : ι -> 集合 α} (hφ : AECover μ l φ) (hsub : 对任意 i, φ i subseteq ψ i)
   证明: ⟨hφ.1.mono fun _x hx => hx.mono fun i hi => hsub i hi, hmeas⟩
 
 Depends on / 依赖: hx.mono
@@ -164,7 +164,7 @@ theorem mono_ac
 
 中文:
 定理 mono_ac
-  条件: {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ)
+  条件: {ν : 测度 α} {φ : ι -> 集合 α} (hφ : AECover μ l φ) (hle : ν ≪ μ)
   证明: ⟨hle hφ.1, hφ.2⟩
 -/
 theorem mono_ac {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν ≪ μ) :
@@ -180,7 +180,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {ν : Measure α} {φ : ι -> Set α} (hφ : AECover μ l φ) (hle : ν <= μ)
+  条件: {ν : 测度 α} {φ : ι -> 集合 α} (hφ : AECover μ l φ) (hle : ν <= μ)
   证明: hφ.mono_ac hle.absolutelyContinuous
 
 Depends on / 依赖: absolutelyContinuous, hle.absolutelyContinuous, mono_ac
@@ -207,7 +207,7 @@ theorem aecover_ball
 
 中文:
 定理 aecover_ball
-  条件: {x : α} {r : ι -> 实数} (hr : Tendsto r l atTop)
+  条件: {x : α} {r : ι -> 实数} (hr : 收敛 r l atTop)
   证明: Metric.isOpen_ball.measurableSet
   ae_eventually_mem := by
     filter_upwards with y
@@ -235,7 +235,7 @@ theorem aecover_closedBall
 
 中文:
 定理 aecover_closedBall
-  条件: {x : α} {r : ι -> 实数} (hr : Tendsto r l atTop)
+  条件: {x : α} {r : ι -> 实数} (hr : 收敛 r l atTop)
   证明: Metric.isClosed_closedBall.measurableSet
   ae_eventually_mem := by
     filter_upwards with y
@@ -269,8 +269,8 @@ theorem aecover_Ici
 
 中文:
 定理 aecover_Ici
-  条件: (ha : Tendsto a l atBot)
-  结论: AECover μ l fun i => Ici (a i) where
+  条件: (ha : 收敛 a l atBot)
+  结论: AECover μ l fun i => 左闭右无界区间 (a i) where
   证明: ae_of_all μ ha.eventually_le_atBot
   measurableSet _ := measurableSet_Ici
 
@@ -291,8 +291,8 @@ theorem aecover_Iic
 
 中文:
 定理 aecover_Iic
-  条件: (hb : Tendsto b l atTop)
-  结论: AECover μ l fun i => Iic b i
+  条件: (hb : 收敛 b l atTop)
+  结论: AECover μ l fun i => 左无界右闭区间 b i
   证明: aecover_Ici (α := αᵒᵈ) hb
 
 Depends on / 依赖: aecover_Ici
@@ -310,7 +310,7 @@ theorem aecover_Icc
 
 中文:
 定理 aecover_Icc
-  条件: (ha : Tendsto a l atBot) (hb : Tendsto b l atTop)
+  条件: (ha : 收敛 a l atBot) (hb : 收敛 b l atTop)
   证明: (aecover_Ici ha).inter (aecover_Iic hb)
 
 Depends on / 依赖: aecover_Ici, aecover_Iic
@@ -341,8 +341,8 @@ include hb in
 
 中文:
 定理 aecover_Ioi
-  条件: [NoMinOrder α]
-  结论: AECover μ l fun i => Ioi (a i) where
+  条件: [NoMin序 α]
+  结论: AECover μ l fun i => 左开右无界区间 (a i) where
   证明: ae_of_all μ ha.eventually_lt_atBot
   measurableSet _ := measurableSet_Ioi
 
@@ -368,8 +368,8 @@ include ha hb
 
 中文:
 定理 aecover_Iio
-  条件: [NoMaxOrder α]
-  结论: AECover μ l fun i => Iio (b i)
+  条件: [NoMax序 α]
+  结论: AECover μ l fun i => 左无界右开区间 (b i)
   证明: aecover_Ioi (α := αᵒᵈ) hb
 
 include ha hb
@@ -391,8 +391,8 @@ theorem aecover_Ioo
 
 中文:
 定理 aecover_Ioo
-  条件: [NoMinOrder α] [NoMaxOrder α]
-  结论: AECover μ l fun i => Ioo (a i) (b i)
+  条件: [NoMin序 α] [NoMax序 α]
+  结论: AECover μ l fun i => 开区间 (a i) (b i)
   证明: (aecover_Ioi ha).inter (aecover_Iio hb)
 
 Depends on / 依赖: aecover_Iio, aecover_Ioi
@@ -411,8 +411,8 @@ theorem aecover_Ioc
 
 中文:
 定理 aecover_Ioc
-  条件: [NoMinOrder α]
-  结论: AECover μ l fun i => Ioc (a i) (b i)
+  条件: [NoMin序 α]
+  结论: AECover μ l fun i => 左开右闭区间 (a i) (b i)
   证明: (aecover_Ioi ha).inter (aecover_Iic hb)
 
 Depends on / 依赖: aecover_Iic, aecover_Ioi
@@ -431,8 +431,8 @@ theorem aecover_Ico
 
 中文:
 定理 aecover_Ico
-  条件: [NoMaxOrder α]
-  结论: AECover μ l fun i => Ico (a i) (b i)
+  条件: [NoMax序 α]
+  结论: AECover μ l fun i => 左闭右开区间 (a i) (b i)
   证明: (aecover_Ici ha).inter (aecover_Iio hb)
 
 Depends on / 依赖: aecover_Ici, aecover_Iio
@@ -463,7 +463,7 @@ include hb in
 
 中文:
 定理 aecover_Ioi_of_Ioi
-  结论: AECover (μ.restrict (Ioi A)) l fun i => Ioi (a i) where
+  结论: AECover (μ.restrict (左开右无界区间 A)) l fun i => 左开右无界区间 (a i) where
   证明: (ae_restrict_mem measurableSet_Ioi).mono fun _x hx => ha.eventually
     eventually_lt_nhds hx
   measurableSet _ := measurableSet_Ioi
@@ -490,7 +490,7 @@ include ha in
 
 中文:
 定理 aecover_Iio_of_Iio
-  结论: AECover (μ.restrict (Iio B)) l fun i => Iio (b i)
+  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左无界右开区间 (b i)
   证明: aecover_Ioi_of_Ioi (α := αᵒᵈ) hb
 
 include ha in
@@ -513,7 +513,7 @@ include hb in
 
 中文:
 定理 aecover_Ioi_of_Ici
-  结论: AECover (μ.restrict (Ioi A)) l fun i => Ici (a i)
+  结论: AECover (μ.restrict (左开右无界区间 A)) l fun i => 左闭右无界区间 (a i)
   证明: (aecover_Ioi_of_Ioi ha).superset (fun _ => Ioi_subset_Ici_self) fun _ => measurableSet_Ici
 
 include hb in
@@ -536,7 +536,7 @@ include hb hc in
 
 中文:
 定理 aecover_Iio_of_Iic
-  结论: AECover (μ.restrict (Iio B)) l fun i => Iic (b i)
+  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左无界右闭区间 (b i)
   证明: aecover_Ioi_of_Ici (α := αᵒᵈ) hb
 
 include hb hc in
@@ -563,7 +563,7 @@ include hd in
 
 中文:
 定理 aecover_Iio_of_Ico
-  结论: AECover (μ.restrict (Iio B)) l fun i => Ico (c i) (b i) where
+  结论: AECover (μ.restrict (左无界右开区间 B)) l fun i => 左闭右开区间 (c i) (b i) where
   证明: by
     refine (ae_restrict_mem measurableSet_Iio).mono fun _x hx => ?_
     simp only [mem_Ico, eventually_and]
@@ -599,8 +599,8 @@ include ha hb in
 
 中文:
 定理 aecover_Ici_of_Ico
-  条件: [NoMaxOrder α]
-  结论: AECover (μ.restrict (Ici B)) l fun i => Ico B (d i) where
+  条件: [NoMax序 α]
+  结论: AECover (μ.restrict (左闭右无界区间 B)) l fun i => 左闭右开区间 B (d i) where
   证明: by
     refine (ae_restrict_mem measurableSet_Ici).mono fun _x hx => ?_
     simp only [mem_Ico, eventually_and]
@@ -632,7 +632,7 @@ include ha hb in
 
 中文:
 定理 aecover_Ioo_of_Ioo
-  结论: AECover (μ.restrict <| Ioo A B) l fun i => Ioo (a i) (b i)
+  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 开区间 (a i) (b i)
   证明: ((aecover_Ioi_of_Ioi ha).mono <| Measure.restrict_mono Ioo_subset_Ioi_self le_rfl).inter
     ((aecover_Iio_of_Iio hb).mono <| Measure.restrict_mono Ioo_subset_Iio_self le_rfl)
 
@@ -657,7 +657,7 @@ include ha hb in
 
 中文:
 定理 aecover_Ioo_of_Icc
-  结论: AECover (μ.restrict <| Ioo A B) l fun i => Icc (a i) (b i)
+  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 闭区间 (a i) (b i)
   证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Icc_self) fun _ => measurableSet_Icc
 
 include ha hb in
@@ -680,7 +680,7 @@ include ha hb in
 
 中文:
 定理 aecover_Ioo_of_Ico
-  结论: AECover (μ.restrict <| Ioo A B) l fun i => Ico (a i) (b i)
+  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 左闭右开区间 (a i) (b i)
   证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ico_self) fun _ => measurableSet_Ico
 
 include ha hb in
@@ -701,7 +701,7 @@ theorem aecover_Ioo_of_Ioc
 
 中文:
 定理 aecover_Ioo_of_Ioc
-  结论: AECover (μ.restrict <| Ioo A B) l fun i => Ioc (a i) (b i)
+  结论: AECover (μ.restrict <| 开区间 A B) l fun i => 左开右闭区间 (a i) (b i)
   证明: (aecover_Ioo_of_Ioo ha hb).superset (fun _ => Ioo_subset_Ioc_self) fun _ => measurableSet_Ioc
 
 Depends on / 依赖: Ioo_subset_Ioc_self, aecover_Ioo_of_Ioo, measurableSet_Ioc, superset
@@ -721,7 +721,7 @@ theorem aecover_Ioc_of_Icc
 
 中文:
 定理 aecover_Ioc_of_Icc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
@@ -740,7 +740,7 @@ theorem aecover_Ioc_of_Ico
 
 中文:
 定理 aecover_Ioc_of_Ico
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
@@ -759,7 +759,7 @@ theorem aecover_Ioc_of_Ioc
 
 中文:
 定理 aecover_Ioc_of_Ioc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
@@ -778,7 +778,7 @@ theorem aecover_Ioc_of_Ioo
 
 中文:
 定理 aecover_Ioc_of_Ioo
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ioc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
@@ -797,7 +797,7 @@ theorem aecover_Ico_of_Icc
 
 中文:
 定理 aecover_Ico_of_Icc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
@@ -816,7 +816,7 @@ theorem aecover_Ico_of_Ico
 
 中文:
 定理 aecover_Ico_of_Ico
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
@@ -835,7 +835,7 @@ theorem aecover_Ico_of_Ioc
 
 中文:
 定理 aecover_Ico_of_Ioc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
@@ -854,7 +854,7 @@ theorem aecover_Ico_of_Ioo
 
 中文:
 定理 aecover_Ico_of_Ioo
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Ico).ge
 
 Depends on / 依赖: Ioo_ae_eq_Ico, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
@@ -873,7 +873,7 @@ theorem aecover_Icc_of_Icc
 
 中文:
 定理 aecover_Icc_of_Icc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Icc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Icc, restrict_congr_set
@@ -892,7 +892,7 @@ theorem aecover_Icc_of_Ico
 
 中文:
 定理 aecover_Icc_of_Ico
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ico ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ico, restrict_congr_set
@@ -911,7 +911,7 @@ theorem aecover_Icc_of_Ioc
 
 中文:
 定理 aecover_Icc_of_Ioc
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioc ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioc, restrict_congr_set
@@ -930,7 +930,7 @@ theorem aecover_Icc_of_Ioo
 
 中文:
 定理 aecover_Icc_of_Ioo
-  条件: (ha : Tendsto a l (𝓝 A)) (hb : Tendsto b l (𝓝 B))
+  条件: (ha : 收敛 a l (𝓝 A)) (hb : 收敛 b l (𝓝 B))
   证明: (aecover_Ioo_of_Ioo ha hb).mono (Measure.restrict_congr_set Ioo_ae_eq_Icc).ge
 
 Depends on / 依赖: Ioo_ae_eq_Icc, Measure, Measure.restrict_congr_set, aecover_Ioo_of_Ioo, restrict_congr_set
@@ -951,7 +951,7 @@ theorem AECover.restrict
 
 中文:
 定理 AECover.restrict
-  条件: {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α}
+  条件: {φ : ι -> 集合 α} (hφ : AECover μ l φ) {s : 集合 α}
   证明: hφ.mono Measure.restrict_le_self
 -/
 protected theorem AECover.restrict {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α} :
@@ -969,7 +969,7 @@ theorem aecover_restrict_of_ae_imp
 
 中文:
 定理 aecover_restrict_of_ae_imp
-  结论: {s : Set α} {φ : ι -> Set α} (hs : MeasurableSet s)
+  结论: {s : 集合 α} {φ : ι -> 集合 α} (hs : 可测集 s)
   证明: by rwa [ae_restrict_iff' hs]
   measurableSet := measurable
 
@@ -993,7 +993,7 @@ theorem AECover.inter_restrict
 
 中文:
 定理 AECover.inter_restrict
-  结论: {φ : ι -> Set α} (hφ : AECover μ l φ) {s : Set α}
+  结论: {φ : ι -> 集合 α} (hφ : AECover μ l φ) {s : 集合 α}
   证明: aecover_restrict_of_ae_imp hs
     (hφ.ae_eventually_mem.mono fun _x hx hxs => hx.mono fun _i hi => ⟨hi, hxs⟩) fun i =>
     (hφ.measurableSet i).inter hs
@@ -1017,7 +1017,7 @@ tendsto_const_nhds.congr' hx.mono fun _n hn => (indicator_of_mem hn _).symm
 
 中文:
 定理 AECover.ae_tendsto_indicator
-  结论: {β : 类型} [Zero β] [TopologicalSpace β] (f : α -> β)
+  结论: {β : 类型} [零 β] [拓扑空间 β] (f : α -> β)
   证明: hφ.ae_eventually_mem.mono fun _x hx =>
 tendsto_const_nhds.congr' hx.mono fun _n hn => (indicator_of_mem hn _).symm
 
@@ -1044,7 +1044,7 @@ theorem AECover.aemeasurable
 
 中文:
 定理 AECover.aemeasurable
-  结论: {β : 类型} [MeasurableSpace β] [l.IsCountablyGenerated] [l.NeBot]
+  结论: {β : 类型} [可测空间 β] [l.是余untablyGenerated] [l.NeBot]
   证明: by
   obtain ⟨u, hu⟩ := l.exists_seq_tendsto
   have := aemeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
@@ -1077,7 +1077,7 @@ theorem AECover.aestronglyMeasurable
 
 中文:
 定理 AECover.aestronglyMeasurable
-  结论: {β : 类型} [TopologicalSpace β] [PseudoMetrizableSpace β]
+  结论: {β : 类型} [拓扑空间 β] [PseudoMetrizable空间 β]
   证明: by
   obtain ⟨u, hu⟩ := l.exists_seq_tendsto
   have := aestronglyMeasurable_iUnion_iff.mpr fun n : Nat => hfm (u n)
@@ -1107,7 +1107,7 @@ theorem AECover.comp_tendsto
 
 中文:
 定理 AECover.comp_tendsto
-  结论: {α ι ι' : 类型} [MeasurableSpace α] {μ : Measure α} {l : Filter ι}
+  结论: {α ι ι' : 类型} [可测空间 α] {μ : 测度 α} {l : 滤子 ι}
   证明: hφ.ae_eventually_mem.mono fun _x hx => hu.eventually hx
   measurableSet i := hφ.measurableSet (u i)
 
@@ -1134,7 +1134,7 @@ theorem AECover.biUnion_Iic_aecover
 
 中文:
 定理 AECover.biUnion_Iic_aecover
-  条件: [Preorder ι] {φ : ι -> Set α} (hφ : AECover μ atTop φ)
+  条件: [预序 ι] {φ : ι -> 集合 α} (hφ : AECover μ atTop φ)
   证明: hφ.superset (fun _ => subset_biUnion_of_mem self_mem_Iic) fun _ => .biUnion (to_countable _)
     fun _ _ => (hφ.2 _)
 
@@ -1156,8 +1156,8 @@ theorem AECover.biInter_Ici_aecover
   measurableSet _ := .biInter (to_countable _) fun n _ => hφ.measurableSet n
 
 中文:
-定理 AECover.biInter_Ici_aecover
-  结论: [Preorder ι] {φ : ι -> Set α}
+定理 AECover.bi整数er_Ici_aecover
+  结论: [预序 ι] {φ : ι -> 集合 α}
   证明: hφ.ae_eventually_mem.mono fun x h => by
     simpa only [mem_iInter, mem_Ici, eventually_forall_ge_atTop]
   measurableSet _ := .biInter (to_countable _) fun n _ => hφ.measurableSet n
@@ -1190,7 +1190,7 @@ theorem lintegral_tendsto_of_monotone_of_nat
 
 中文:
 定理 lintegral_tendsto_of_monotone_of_nat
-  结论: {φ : 自然数 -> Set α} (hφ : AECover μ atTop φ)
+  结论: {φ : 自然数 -> 集合 α} (hφ : AECover μ atTop φ)
   证明: let F n := (φ n).indicator f
   have key₁ : forall n, AEMeasurable (F n) μ := fun n => hfm.indicator (hφ.measurableSet n)
   have key₂ : forallᵐ x : α ∂μ, Monotone fun n => F n x := ae_of_all _ fun x _i _j hij => by
@@ -1222,7 +1222,7 @@ theorem AECover.lintegral_tendsto_of_nat
 
 中文:
 定理 AECover.lintegral_tendsto_of_nat
-  结论: {φ : 自然数 -> Set α} (hφ : AECover μ atTop φ) {f : α -> 实数>=0∞}
+  结论: {φ : 自然数 -> 集合 α} (hφ : AECover μ atTop φ) {f : α -> 实数>=0∞}
   证明: by
   have lim₁ := lintegral_tendsto_of_monotone_of_nat hφ.biInter_Ici_aecover
     (fun i j hij => biInter_subset_biInter_left (Ici_subset_Ici.mpr hij)) hfm
@@ -1251,7 +1251,7 @@ theorem AECover.lintegral_tendsto_of_countably_generated
 
 中文:
 定理 AECover.lintegral_tendsto_of_countably_generated
-  结论: [l.IsCountablyGenerated] {φ : ι -> Set α}
+  结论: [l.是余untablyGenerated] {φ : ι -> 集合 α}
   证明: tendsto_of_seq_tendsto fun _u hu => (hφ.comp_tendsto hu).lintegral_tendsto_of_nat hfm
 
 Depends on / 依赖: comp_tendsto, lintegral_tendsto_of_nat, tendsto_of_seq_tendsto
@@ -1271,7 +1271,7 @@ theorem AECover.lintegral_eq_of_tendsto
 
 中文:
 定理 AECover.lintegral_eq_of_tendsto
-  结论: [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
+  结论: [l.NeBot] [l.是余untablyGenerated] {φ : ι -> 集合 α}
   证明: tendsto_nhds_unique (hφ.lintegral_tendsto_of_countably_generated hfm) htendsto
 
 Depends on / 依赖: htendsto, lintegral_tendsto_of_countably_generated, tendsto_nhds_unique
@@ -1295,7 +1295,7 @@ theorem AECover.iSup_lintegral_eq_of_countably_generated
 
 中文:
 定理 AECover.iSup_lintegral_eq_of_countably_generated
-  结论: [Nonempty ι] [l.NeBot]
+  结论: [非空 ι] [l.NeBot]
   证明: by
   have := hφ.lintegral_tendsto_of_countably_generated hfm
   refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt
@@ -1330,7 +1330,7 @@ theorem AECover.integrable_of_lintegral_enorm_bounded
 
 中文:
 定理 AECover.integrable_of_lintegral_enorm_bounded
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: by
   refine ⟨hfm, (le_of_tendsto ?_ hbounded).trans_lt ENNReal.ofReal_lt_top⟩
   exact hφ.lintegral_tendsto_of_countably_generated hfm.enorm
@@ -1357,7 +1357,7 @@ theorem AECover.integrable_of_lintegral_enorm_tendsto
 
 中文:
 定理 AECover.integrable_of_lintegral_enorm_tendsto
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: by
   refine hφ.integrable_of_lintegral_enorm_bounded (max 1 (I + 1)) hfm ?_
   refine htendsto.eventually (ge_mem_nhds ?_)
@@ -1386,7 +1386,7 @@ theorem AECover.integrable_of_lintegral_enorm_bounded'
 
 中文:
 定理 AECover.integrable_of_lintegral_enorm_bounded'
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: hφ.integrable_of_lintegral_enorm_bounded I hfm
     (by simpa only [ENNReal.ofReal_coe_nnreal] using hbounded)
 
@@ -1409,7 +1409,7 @@ theorem AECover.integrable_of_lintegral_enorm_tendsto'
 
 中文:
 定理 AECover.integrable_of_lintegral_enorm_tendsto'
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: hφ.integrable_of_lintegral_enorm_tendsto I hfm
     (by simpa only [ENNReal.ofReal_coe_nnreal] using htendsto)
 
@@ -1437,7 +1437,7 @@ theorem AECover.integrable_of_integral_norm_bounded
 
 中文:
 定理 AECover.integrable_of_integral_norm_bounded
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: by
   have hfm : AEStronglyMeasurable f μ :=
     hφ.aestronglyMeasurable fun i => (hfi i).aestronglyMeasurable
@@ -1474,7 +1474,7 @@ theorem AECover.integrable_of_integral_norm_tendsto
 
 中文:
 定理 AECover.integrable_of_integral_norm_tendsto
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
   hφ.integrable_of_integral_norm_bounded I' hfi hI'
 
@@ -1497,7 +1497,7 @@ theorem AECover.integrable_of_integral_bounded_of_nonneg_ae
 
 中文:
 定理 AECover.integrable_of_integral_bounded_of_nonneg_ae
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: hφ.integrable_of_integral_norm_bounded I hfi hbounded.mono fun _i hi =>
     (integral_congr_ae <| ae_restrict_of_ae <| hnng.mono fun _ => Real.norm_of_nonneg).le.trans hi
 
@@ -1520,7 +1520,7 @@ theorem AECover.integrable_of_integral_tendsto_of_nonneg_ae
 
 中文:
 定理 AECover.integrable_of_integral_tendsto_of_nonneg_ae
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: let ⟨I', hI'⟩ := htendsto.isBoundedUnder_le
   hφ.integrable_of_integral_bounded_of_nonneg_ae I' hfi hnng hI'
 
@@ -1553,7 +1553,7 @@ theorem AECover.integral_tendsto_of_countably_generated
 
 中文:
 定理 AECover.integral_tendsto_of_countably_generated
-  结论: [l.IsCountablyGenerated] {φ : ι -> Set α}
+  结论: [l.是余untablyGenerated] {φ : ι -> 集合 α}
   证明: suffices h : Tendsto (fun i => ∫ x : α, (φ i).indicator f x ∂μ) l (𝓝 (∫ x : α, f x ∂μ)) from by
     convert! h using 2; rw [integral_indicator (hφ.measurableSet _)]
   tendsto_integral_filter_of_dominated_convergence (fun x => ‖f x‖)
@@ -1581,7 +1581,7 @@ theorem AECover.integral_eq_of_tendsto
 
 中文:
 定理 AECover.integral_eq_of_tendsto
-  结论: [l.NeBot] [l.IsCountablyGenerated] {φ : ι -> Set α}
+  结论: [l.NeBot] [l.是余untablyGenerated] {φ : ι -> 集合 α}
   证明: tendsto_nhds_unique (hφ.integral_tendsto_of_countably_generated hfi) h
 
 Depends on / 依赖: integral_tendsto_of_countably_generated, tendsto_nhds_unique
@@ -1602,7 +1602,7 @@ theorem AECover.integral_eq_of_tendsto_of_nonneg_ae
 
 中文:
 定理 AECover.integral_eq_of_tendsto_of_nonneg_ae
-  结论: [l.NeBot] [l.IsCountablyGenerated]
+  结论: [l.NeBot] [l.是余untablyGenerated]
   证明: have hfi' : Integrable f μ := hφ.integrable_of_integral_tendsto_of_nonneg_ae I hfi hnng htendsto
   hφ.integral_eq_of_tendsto I hfi' htendsto
 
@@ -1636,7 +1636,7 @@ theorem integrable_of_intervalIntegral_norm_bounded
   rwa [← intervalIntegral.integral_of_le (hai.trans hbi)]
 
 中文:
-定理 integrable_of_intervalIntegral_norm_bounded
+定理 integrable_of_interval整数egral_norm_bounded
   结论: (I : 实数)
   证明: by
   have hφ : AECover μ l _ := aecover_Ioc ha hb
@@ -1666,7 +1666,7 @@ theorem integrable_of_intervalIntegral_norm_tendsto
   integrable_of_intervalIntegral_norm_bounded I' hfi ha hb hI'
 
 中文:
-定理 integrable_of_intervalIntegral_norm_tendsto
+定理 integrable_of_interval整数egral_norm_tendsto
   结论: (I : 实数)
   证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrable_of_intervalIntegral_norm_bounded I' hfi ha hb hI'
@@ -1695,7 +1695,7 @@ theorem integrableOn_Iic_of_intervalIntegral_norm_bounded
   refine hφ.integrable_of_integral_norm_bounded I hf
 
 中文:
-定理 integrableOn_Iic_of_intervalIntegral_norm_bounded
+定理 integrableOn_Iic_of_interval整数egral_norm_bounded
   结论: (I b : 实数)
   证明: by
   have hφ : AECover (μ.restrict <| Iic b) l _ := aecover_Ioi ha
@@ -1730,7 +1730,7 @@ theorem integrableOn_Iic_of_intervalIntegral_norm_tendsto
   integrableOn_Iic_of_intervalIntegral_norm_bounded I' b hfi ha hI'
 
 中文:
-定理 integrableOn_Iic_of_intervalIntegral_norm_tendsto
+定理 integrableOn_Iic_of_interval整数egral_norm_tendsto
   结论: (I b : 实数)
   证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrableOn_Iic_of_intervalIntegral_norm_bounded I' b hfi ha hI'
@@ -1758,7 +1758,7 @@ theorem integrableOn_Ioi_of_intervalIntegral_norm_bounded
   refine hφ.integrable_of_integral_
 
 中文:
-定理 integrableOn_Ioi_of_intervalIntegral_norm_bounded
+定理 integrableOn_Ioi_of_interval整数egral_norm_bounded
   结论: (I a : 实数)
   证明: by
   have hφ : AECover (μ.restrict <| Ioi a) l _ := aecover_Iic hb
@@ -1793,7 +1793,7 @@ theorem integrableOn_Ioi_of_intervalIntegral_norm_tendsto
   integrableOn_Ioi_of_intervalIntegral_norm_bounded I' a hfi hb hI'
 
 中文:
-定理 integrableOn_Ioi_of_intervalIntegral_norm_tendsto
+定理 integrableOn_Ioi_of_interval整数egral_norm_tendsto
   结论: (I a : 实数)
   证明: let ⟨I', hI'⟩ := h.isBoundedUnder_le
   integrableOn_Ioi_of_intervalIntegral_norm_bounded I' a hfi hb hI'
@@ -1824,7 +1824,7 @@ theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded
   · exact inter_subset_left
 
 中文:
-定理 integrableOn_Ioc_of_intervalIntegral_norm_bounded
+定理 integrableOn_Ioc_of_interval整数egral_norm_bounded
   结论: {I a₀ b₀ : 实数}
   证明: by
   refine (aecover_Ioc_of_Ioc ha hb).integrable_of_integral_norm_bounded I
@@ -1862,7 +1862,7 @@ theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_left
   proof: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi ha tendsto_const_nhds h
 
 中文:
-定理 integrableOn_Ioc_of_intervalIntegral_norm_bounded_left
+定理 integrableOn_Ioc_of_interval整数egral_norm_bounded_left
   结论: {I a₀ b : 实数}
   证明: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi ha tendsto_const_nhds h
 
@@ -1882,7 +1882,7 @@ theorem integrableOn_Ioc_of_intervalIntegral_norm_bounded_right
   proof: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi tendsto_const_nhds hb h
 
 中文:
-定理 integrableOn_Ioc_of_intervalIntegral_norm_bounded_right
+定理 integrableOn_Ioc_of_interval整数egral_norm_bounded_right
   结论: {I a b₀ : 实数}
   证明: integrableOn_Ioc_of_intervalIntegral_norm_bounded hfi tendsto_const_nhds hb h
 
@@ -1915,8 +1915,8 @@ theorem intervalIntegral_tendsto_integral
   exact (intervalIntegral.integral_of_
 
 中文:
-定理 intervalIntegral_tendsto_integral
-  结论: (hfi : 整数egrable f μ) (ha : Tendsto a l atBot)
+定理 interval整数egral_tendsto_integral
+  结论: (hfi : 可积 f μ) (ha : 收敛 a l atBot)
   证明: by
   let φ i := Ioc (a i) (b i)
   have hφ : AECover μ l φ := aecover_Ioc ha hb
@@ -1950,8 +1950,8 @@ theorem intervalIntegral_tendsto_integral_Iic
   rw [intervalIntegral.integral_of_le hai]; rw [Measure.restrict_restri
 
 中文:
-定理 intervalIntegral_tendsto_integral_Iic
-  结论: (b : 实数) (hfi : 整数egrableOn f (Iic b) μ)
+定理 interval整数egral_tendsto_integral_Iic
+  结论: (b : 实数) (hfi : 整数egrableOn f (左无界右闭区间 b) μ)
   证明: by
   let φ i := Ioi (a i)
   have hφ : AECover (μ.restrict <| Iic b) l φ := aecover_Ioi ha
@@ -1986,7 +1986,7 @@ theorem tendsto_integral_Iic_zero
 
 中文:
 定理 tendsto_integral_Iic_zero
-  条件: (ha : Tendsto a l atBot)
+  条件: (ha : 收敛 a l atBot)
   证明: by
   by_cases! h : forall b, ¬ IntegrableOn f (Iic b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
@@ -2018,7 +2018,7 @@ theorem tendsto_integral_Ico_integral_Iio
 
 中文:
 定理 tendsto_integral_Ico_integral_Iio
-  结论: (b : 实数) (hfi : 整数egrableOn f (Iio b) μ)
+  结论: (b : 实数) (hfi : 整数egrableOn f (左无界右开区间 b) μ)
   证明: ((aecover_Iio_of_Ico tendsto_const_nhds ha).integral_tendsto_of_countably_generated hfi).congr'
     (by simp)
 
@@ -2046,7 +2046,7 @@ theorem tendsto_integral_Iio_zero
 
 中文:
 定理 tendsto_integral_Iio_zero
-  条件: (ha : Tendsto a l atBot)
+  条件: (ha : 收敛 a l atBot)
   证明: by
   by_cases! h : forall b, ¬ IntegrableOn f (Iio b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
@@ -2083,8 +2083,8 @@ theorem intervalIntegral_tendsto_integral_Ioi
   rw [intervalIntegral.integral_of_le hbi]; rw [Measure.restrict_restri
 
 中文:
-定理 intervalIntegral_tendsto_integral_Ioi
-  结论: (a : 实数) (hfi : 整数egrableOn f (Ioi a) μ)
+定理 interval整数egral_tendsto_integral_Ioi
+  结论: (a : 实数) (hfi : 整数egrableOn f (左开右无界区间 a) μ)
   证明: by
   let φ i := Iic (b i)
   have hφ : AECover (μ.restrict <| Ioi a) l φ := aecover_Iic hb
@@ -2119,7 +2119,7 @@ theorem tendsto_integral_Ioi_zero
 
 中文:
 定理 tendsto_integral_Ioi_zero
-  条件: (hb : Tendsto b l atTop)
+  条件: (hb : 收敛 b l atTop)
   证明: by
   by_cases! h : forall a, ¬ IntegrableOn f (Ioi a) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (b i))).symm)
@@ -2150,7 +2150,7 @@ theorem tendsto_integral_Ico_integral_Ici
 
 中文:
 定理 tendsto_integral_Ico_integral_Ici
-  结论: (b : 实数) (hfi : 整数egrableOn f (Ici b) μ)
+  结论: (b : 实数) (hfi : 整数egrableOn f (左闭右无界区间 b) μ)
   证明: ((aecover_Ici_of_Ico ha).integral_tendsto_of_countably_generated hfi).congr' (by simp)
 
 Depends on / 依赖: aecover_Ici_of_Ico, integral_tendsto_of_countably_generated
@@ -2176,7 +2176,7 @@ theorem tendsto_integral_Ici_zero
 
 中文:
 定理 tendsto_integral_Ici_zero
-  条件: (ha : Tendsto a l atTop)
+  条件: (ha : 收敛 a l atTop)
   证明: by
   by_cases! h : forall b, ¬ IntegrableOn f (Ici b) μ
   · exact tendsto_const_nhds.congr (fun i => (integral_undef (h (a i))).symm)
@@ -2225,7 +2225,7 @@ theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi
 
 中文:
 定理 tendsto_limUnder_of_hasDerivAt_of_integrableOn_Ioi
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   suffices exists a, Tendsto f atTop (𝓝 a) from tendsto_nhds_limUnder this
   suffices CauchySeq f from cauchySeq_tendsto_of_complete this
@@ -2342,7 +2342,7 @@ theorem integral_Ioi_of_hasDerivAt_of_tendsto
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_tendsto
-  结论: (hcont : ContinuousWithinAt f (Ici a) a)
+  结论: (hcont : ContinuousWithinAt f (左闭右无界区间 a) a)
   证明: by
   have hcont : ContinuousOn f (Ici a) := by
     intro x hx
@@ -2386,7 +2386,7 @@ theorem integral_Ioi_of_hasDerivAt_of_tendsto'
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_tendsto'
-  结论: (hderiv : 对任意 x in Ici a, HasDerivAt f (f' x) x)
+  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 f (f' x) x)
   证明: by
   refine integral_Ioi_of_hasDerivAt_of_tendsto ?_ (fun x hx => hderiv x hx.out.le)
     f'int hf
@@ -2415,7 +2415,7 @@ theorem _root_.HasCompactSupport.integral_Ioi_deriv_eq
 
 中文:
 定理 _root_.HasCompactSupport.integral_Ioi_deriv_eq
-  结论: (hf : ContDiff 实数 1 f)
+  结论: (hf : 连续可微 实数 1 f)
   证明: by
 .hasDerivAt have := fun x (_ : x in Ioi b) => hf.differentiable one_ne_zero x
   rw [integral_Ioi_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [zero_sub]
@@ -2449,7 +2449,7 @@ theorem integrableOn_Ioi_deriv_of_nonneg
 
 中文:
 定理 integrableOn_Ioi_deriv_of_nonneg
-  结论: (hcont : ContinuousWithinAt g (Ici a) a)
+  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
   证明: by
   have hcont : ContinuousOn g (Ici a) := by
     intro x hx
@@ -2502,7 +2502,7 @@ theorem integrableOn_Ioi_deriv_of_nonneg'
 
 中文:
 定理 integrableOn_Ioi_deriv_of_nonneg'
-  结论: (hderiv : 对任意 x in Ici a, HasDerivAt g (g' x) x)
+  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
   证明: by
   refine integrableOn_Ioi_deriv_of_nonneg ?_ (fun x hx => hderiv x hx.out.le) g'pos hg
   exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
@@ -2525,7 +2525,7 @@ theorem integral_Ioi_of_hasDerivAt_of_nonneg
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_nonneg
-  结论: (hcont : ContinuousWithinAt g (Ici a) a)
+  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
   证明: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
     (integrableOn_Ioi_deriv_of_nonneg hcont hderiv g'pos hg) hg
 
@@ -2548,7 +2548,7 @@ theorem integral_Ioi_of_hasDerivAt_of_nonneg'
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_nonneg'
-  结论: (hderiv : 对任意 x in Ici a, HasDerivAt g (g' x) x)
+  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
   证明: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonneg' hderiv g'pos hg)
     hg
 
@@ -2572,7 +2572,7 @@ theorem integrableOn_Ioi_deriv_of_nonpos
 
 中文:
 定理 integrableOn_Ioi_deriv_of_nonpos
-  结论: (hcont : ContinuousWithinAt g (Ici a) a)
+  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
   证明: by
   apply integrable_neg_iff.1
   exact integrableOn_Ioi_deriv_of_nonneg hcont.neg (fun x hx => (hderiv x hx).neg)
@@ -2599,7 +2599,7 @@ theorem integrableOn_Ioi_deriv_of_nonpos'
 
 中文:
 定理 integrableOn_Ioi_deriv_of_nonpos'
-  结论: (hderiv : 对任意 x in Ici a, HasDerivAt g (g' x) x)
+  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
   证明: by
   refine integrableOn_Ioi_deriv_of_nonpos ?_ (fun x hx => hderiv x hx.out.le) g'neg hg
   exact (hderiv a self_mem_Ici).continuousAt.continuousWithinAt
@@ -2622,7 +2622,7 @@ theorem integral_Ioi_of_hasDerivAt_of_nonpos
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_nonpos
-  结论: (hcont : ContinuousWithinAt g (Ici a) a)
+  结论: (hcont : ContinuousWithinAt g (左闭右无界区间 a) a)
   证明: integral_Ioi_of_hasDerivAt_of_tendsto hcont hderiv
     (integrableOn_Ioi_deriv_of_nonpos hcont hderiv g'neg hg) hg
 
@@ -2645,7 +2645,7 @@ theorem integral_Ioi_of_hasDerivAt_of_nonpos'
 
 中文:
 定理 integral_Ioi_of_hasDerivAt_of_nonpos'
-  结论: (hderiv : 对任意 x in Ici a, HasDerivAt g (g' x) x)
+  结论: (hderiv : 对任意 x in 左闭右无界区间 a, 在点处可导 g (g' x) x)
   证明: integral_Ioi_of_hasDerivAt_of_tendsto' hderiv (integrableOn_Ioi_deriv_of_nonpos' hderiv g'neg hg)
     hg
 
@@ -2680,7 +2680,7 @@ theorem tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic
 
 中文:
 定理 tendsto_limUnder_of_hasDerivAt_of_integrableOn_Iic
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   suffices exists a, Tendsto f atBot (𝓝 a) from tendsto_nhds_limUnder this
   let g := f ∘ (fun x => -x)
@@ -2774,7 +2774,7 @@ theorem integral_Iic_of_hasDerivAt_of_tendsto
 
 中文:
 定理 integral_Iic_of_hasDerivAt_of_tendsto
-  结论: (hcont : ContinuousWithinAt f (Iic a) a)
+  结论: (hcont : ContinuousWithinAt f (左无界右闭区间 a) a)
   证明: by
   have hcont : ContinuousOn f (Iic a) := by
     intro x hx
@@ -2843,7 +2843,7 @@ theorem _root_.HasCompactSupport.integral_Iic_deriv_eq
 
 中文:
 定理 _root_.HasCompactSupport.integral_Iic_deriv_eq
-  结论: (hf : ContDiff 实数 1 f)
+  结论: (hf : 连续可微 实数 1 f)
   证明: by
 .hasDerivAt have := fun x (_ : x in Iio b) => hf.differentiable one_ne_zero x
   rw [integral_Iic_of_hasDerivAt_of_tendsto hf.continuous.continuousWithinAt this]; rw [sub_zero]
@@ -2921,7 +2921,7 @@ theorem integral_of_hasDerivAt_of_tendsto
 
 中文:
 定理 integral_of_hasDerivAt_of_tendsto
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   rw [← setIntegral_univ]; rw [← Set.Iic_union_Ioi (a := 0)]; rw [setIntegral_union (Iic_disjoint_Ioi le_rfl) measurableSet_Ioi hf'.integrableOn hf'.integrableOn]; rw [integral_Iic_of_hasDerivAt_of_tendsto' (fun x _ => hderiv x) hf'.integrableOn hbot]; rw [integral_Ioi_of_hasDerivAt_of_tendsto' (
 
@@ -3389,7 +3389,7 @@ theorem integrableOn_Ioi_comp_rpow_iff
 
 中文:
 定理 integrableOn_Ioi_comp_rpow_iff
-  条件: [NormedSpace 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
+  条件: [赋范空间 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
   证明: by
   let S := Ioi (0 : Real)
   have a1 : forall x : Real, x in S -> HasDerivWithinAt (fun t : Real => t ^ p) (p * x ^ (p - 1)) S x :=
@@ -3435,7 +3435,7 @@ theorem integrableOn_Ioi_comp_rpow_iff'
 
 中文:
 定理 integrableOn_Ioi_comp_rpow_iff'
-  条件: [NormedSpace 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
+  条件: [赋范空间 实数 E] (f : 实数 -> E) {p : 实数} (hp : p != 0)
   证明: by
   simpa only [← integrableOn_Ioi_comp_rpow_iff f hp, mul_smul] using!
     (integrable_smul_iff (abs_pos.mpr hp).ne' _).symm
@@ -3525,7 +3525,7 @@ theorem integral_bilinear_hasDerivAt_eq_sub
 
 中文:
 定理 integral_bilinear_hasDerivAt_eq_sub
-  结论: [CompleteSpace G]
+  结论: [完备空间 G]
   证明: integral_of_hasDerivAt_of_tendsto (fun x => L.hasDerivAt_of_bilinear (hu x) (hv x))
     huv h_bot h_top
 
@@ -3553,7 +3553,7 @@ theorem integral_bilinear_hasDerivAt_right_eq_sub
 
 中文:
 定理 integral_bilinear_hasDerivAt_right_eq_sub
-  结论: [CompleteSpace G]
+  结论: [完备空间 G]
   证明: by
   rw [eq_sub_iff_add_eq]; rw [← integral_add huv' hu'v]
   exact integral_bilinear_hasDerivAt_eq_sub hu hv (huv'.add hu'v) h_bot h_top
@@ -3634,7 +3634,7 @@ theorem integral_deriv_mul_eq_sub
 
 中文:
 定理 integral_deriv_mul_eq_sub
-  结论: [CompleteSpace A]
+  结论: [完备空间 A]
   证明: by
   refine integral_of_hasDerivAt_of_tendsto (fun x => ?_) huv h_bot h_top
   simpa [add_comm] using! (ContinuousLinearMap.mul Real A).hasDerivAt_of_bilinear (hu x) (hv x)
@@ -3661,7 +3661,7 @@ theorem integral_mul_deriv_eq_deriv_mul
 
 中文:
 定理 integral_mul_deriv_eq_deriv_mul
-  结论: [CompleteSpace A]
+  结论: [完备空间 A]
   证明: integral_bilinear_hasDerivAt_right_eq_sub (L := ContinuousLinearMap.mul Real A)
     hu hv huv' hu'v h_bot h_top
 

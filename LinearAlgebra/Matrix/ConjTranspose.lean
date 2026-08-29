@@ -47,7 +47,7 @@ scoped postfix:1024 "ᴴ" => Matrix.conjTranspose
 
 中文:
 定义 conjTranspose
-  签名: [Star α] (M : Matrix m n α)
+  签名: [对合 α] (M : 矩阵 m n α)
   定义体: M.transpose.map star
 
 @[inherit_doc]
@@ -76,7 +76,7 @@ lemma conjTranspose_single
 
 中文:
 引理 conjTranspose_single
-  结论: [DecidableEq n] [DecidableEq m] [AddMonoid α]
+  结论: [DecidableEq n] [DecidableEq m] [加法幺半群 α]
   证明: by
   change (single i j a).transpose.map starAddEquiv = single j i (star a)
   simp
@@ -106,7 +106,7 @@ theorem diagonal_conjTranspose
 
 中文:
 定理 diagonal_conjTranspose
-  条件: [AddMonoid α] [StarAddMonoid α] (v : n -> α)
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (v : n -> α)
   证明: by
   rw [conjTranspose]; rw [diagonal_transpose]; rw [diagonal_map (star_zero _)]
   rfl
@@ -128,7 +128,7 @@ theorem map_diagonal_star
 
 中文:
 定理 map_diagonal_star
-  条件: [AddMonoid α] [StarAddMonoid α] (x : n -> α)
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (x : n -> α)
   证明: diagonal_map (star_zero _)
 
 Depends on / 依赖: diagonal_map, star_zero
@@ -151,7 +151,7 @@ theorem diag_conjTranspose
 
 中文:
 定理 diag_conjTranspose
-  条件: [Star α] (A : Matrix n n α)
+  条件: [对合 α] (A : 矩阵 n n α)
   证明: rfl
 -/
 theorem diag_conjTranspose [Star α] (A : Matrix n n α) :
@@ -169,7 +169,7 @@ theorem diag_map_star
 
 中文:
 定理 diag_map_star
-  条件: [Star α] (A : Matrix n n α)
+  条件: [对合 α] (A : 矩阵 n n α)
   结论: diag (A.map star) = star (diag A)
   证明: rfl
 -/
@@ -254,7 +254,7 @@ theorem star_mulVec
 
 中文:
 定理 star_mulVec
-  条件: [Fintype n] [StarRing α] (M : Matrix m n α) (v : n -> α)
+  条件: [有限类型 n] [对合环 α] (M : 矩阵 m n α) (v : n -> α)
   证明: funext fun _ => (star_dotProduct_star _ _).symm
 
 Depends on / 依赖: star_dotProduct_star
@@ -273,7 +273,7 @@ theorem star_vecMul
 
 中文:
 定理 star_vecMul
-  条件: [Fintype m] [StarRing α] (M : Matrix m n α) (v : m -> α)
+  条件: [有限类型 m] [对合环 α] (M : 矩阵 m n α) (v : m -> α)
   证明: funext fun _ => (star_dotProduct_star _ _).symm
 
 Depends on / 依赖: star_dotProduct_star
@@ -292,7 +292,7 @@ theorem mulVec_conjTranspose
 
 中文:
 定理 mulVec_conjTranspose
-  条件: [Fintype m] [StarRing α] (A : Matrix m n α) (x : m -> α)
+  条件: [有限类型 m] [对合环 α] (A : 矩阵 m n α) (x : m -> α)
   证明: funext fun _ => star_dotProduct _ _
 
 Depends on / 依赖: star_dotProduct
@@ -311,7 +311,7 @@ theorem vecMul_conjTranspose
 
 中文:
 定理 vecMul_conjTranspose
-  条件: [Fintype n] [StarRing α] (A : Matrix m n α) (x : n -> α)
+  条件: [有限类型 n] [对合环 α] (A : 矩阵 m n α) (x : n -> α)
   证明: funext fun _ => dotProduct_star _ _
 
 Depends on / 依赖: dotProduct_star
@@ -333,7 +333,7 @@ theorem conjTranspose_vecMulVec
 
 中文:
 定理 conjTranspose_vecMulVec
-  条件: [Mul α] [StarMul α] (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [StarMul α] (w : m -> α) (v : n -> α)
   证明: ext fun _ _ => star_mul _ _
 
 Depends on / 依赖: star_mul
@@ -353,7 +353,7 @@ theorem map_vecMulVec_star
 
 中文:
 定理 map_vecMulVec_star
-  条件: [Mul α] [StarMul α] (w : m -> α) (v : n -> α)
+  条件: [乘法 α] [StarMul α] (w : m -> α) (v : n -> α)
   证明: by
   rw [← conjTranspose_vecMulVec]; rfl
 -/
@@ -382,7 +382,7 @@ theorem conjTranspose_apply
 
 中文:
 定理 conjTranspose_apply
-  条件: [Star α] (M : Matrix m n α) (i j)
+  条件: [对合 α] (M : 矩阵 m n α) (i j)
   证明: rfl
 
 @[simp]
@@ -403,7 +403,7 @@ theorem conjTranspose_conjTranspose
 
 中文:
 定理 conjTranspose_conjTranspose
-  条件: [InvolutiveStar α] (M : Matrix m n α)
+  条件: [InvolutiveStar α] (M : 矩阵 m n α)
   结论: Mᴴᴴ = M
   证明: Matrix.ext by simp
 
@@ -442,7 +442,7 @@ theorem conjTranspose_transpose
 
 中文:
 定理 conjTranspose_transpose
-  条件: [Star α] (M : Matrix m n α)
+  条件: [对合 α] (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem conjTranspose_transpose [Star α] (M : Matrix m n α) :
@@ -459,7 +459,7 @@ theorem transpose_conjTranspose
 
 中文:
 定理 transpose_conjTranspose
-  条件: [Star α] (M : Matrix m n α)
+  条件: [对合 α] (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem transpose_conjTranspose [Star α] (M : Matrix m n α) :
@@ -476,7 +476,7 @@ theorem conjTranspose_transpose_eq_transpose_conjTranspose
 
 中文:
 定理 conjTranspose_transpose_eq_transpose_conjTranspose
-  条件: [Star α] (M : Matrix m n α)
+  条件: [对合 α] (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem conjTranspose_transpose_eq_transpose_conjTranspose [Star α] (M : Matrix m n α) :
@@ -515,7 +515,7 @@ theorem conjTranspose_inj
 
 中文:
 定理 conjTranspose_inj
-  条件: [InvolutiveStar α] {A B : Matrix m n α}
+  条件: [InvolutiveStar α] {A B : 矩阵 m n α}
   结论: Aᴴ = Bᴴ ↔ A = B
   证明: conjTranspose_injective.eq_iff
 
@@ -535,7 +535,7 @@ theorem conjTranspose_eq_diagonal
 
 中文:
 定理 conjTranspose_eq_diagonal
-  结论: [DecidableEq n] [AddMonoid α] [StarAddMonoid α]
+  结论: [DecidableEq n] [加法幺半群 α] [StarAdd幺半群 α]
   证明: (conjTranspose_involutive n α).eq_iff.trans by rw [diagonal_conjTranspose]
 
 Depends on / 依赖: conjTranspose_involutive, diagonal_conjTranspose, eq_iff, eq_iff.trans
@@ -557,7 +557,7 @@ theorem map_star_eq_diagonal
 
 中文:
 定理 map_star_eq_diagonal
-  结论: [DecidableEq n] [AddMonoid α] [StarAddMonoid α]
+  结论: [DecidableEq n] [加法幺半群 α] [StarAdd幺半群 α]
   证明: .eq_iff.trans by rw [map_diagonal_star] map_involutive star_involutive
 
 @[simp]
@@ -580,8 +580,8 @@ theorem conjTranspose_zero
 
 中文:
 定理 conjTranspose_zero
-  条件: [AddMonoid α] [StarAddMonoid α]
-  结论: (0 : Matrix m n α)ᴴ = 0
+  条件: [加法幺半群 α] [StarAdd幺半群 α]
+  结论: (0 : 矩阵 m n α)ᴴ = 0
   证明: Matrix.ext by simp
 
 @[simp]
@@ -603,7 +603,7 @@ theorem conjTranspose_eq_zero
 
 中文:
 定理 conjTranspose_eq_zero
-  条件: [AddMonoid α] [StarAddMonoid α] {M : Matrix m n α}
+  条件: [加法幺半群 α] [StarAdd幺半群 α] {M : 矩阵 m n α}
   证明: by
   rw [← conjTranspose_inj (A := M)]; rw [conjTranspose_zero]
 
@@ -625,7 +625,7 @@ theorem map_star_eq_zero
 
 中文:
 定理 map_star_eq_zero
-  条件: [AddMonoid α] [StarAddMonoid α] {M : Matrix m n α}
+  条件: [加法幺半群 α] [StarAdd幺半群 α] {M : 矩阵 m n α}
   证明: by simp [← ext_iff]
 
 @[simp]
@@ -647,7 +647,7 @@ theorem conjTranspose_one
 
 中文:
 定理 conjTranspose_one
-  条件: [DecidableEq n] [NonAssocSemiring α] [StarRing α]
+  条件: [DecidableEq n] [非结合半环 α] [对合环 α]
   证明: by
   simp [conjTranspose]
 
@@ -670,7 +670,7 @@ theorem conjTranspose_eq_one
 
 中文:
 定理 conjTranspose_eq_one
-  条件: [DecidableEq n] [NonAssocSemiring α] [StarRing α] {M : Matrix n n α}
+  条件: [DecidableEq n] [非结合半环 α] [对合环 α] {M : 矩阵 n n α}
   证明: (conjTranspose_involutive n α).eq_iff.trans by rw [conjTranspose_one]
 
 Depends on / 依赖: conjTranspose_involutive, conjTranspose_one, eq_iff, eq_iff.trans
@@ -691,7 +691,7 @@ theorem map_star_eq_one
 
 中文:
 定理 map_star_eq_one
-  结论: [DecidableEq n] [NonAssocSemiring α] [StarRing α]
+  结论: [DecidableEq n] [非结合半环 α] [对合环 α]
   证明: .eq_iff.trans by simp map_involutive star_involutive
 
 @[simp]
@@ -714,7 +714,7 @@ theorem conjTranspose_natCast
 
 中文:
 定理 conjTranspose_natCast
-  条件: [DecidableEq n] [NonAssocSemiring α] [StarRing α] (d : 自然数)
+  条件: [DecidableEq n] [非结合半环 α] [对合环 α] (d : 自然数)
   证明: by
   simp [conjTranspose, Matrix.map_natCast, diagonal_natCast]
 
@@ -739,7 +739,7 @@ theorem map_natCast_star
 
 中文:
 定理 map_natCast_star
-  条件: [DecidableEq n] [NonAssocSemiring α] [StarRing α] (d : 自然数)
+  条件: [DecidableEq n] [非结合半环 α] [对合环 α] (d : 自然数)
   证明: by simp [Matrix.map_natCast, diagonal_natCast]
 
 @[simp]
@@ -760,7 +760,7 @@ theorem conjTranspose_eq_natCast
 
 中文:
 定理 conjTranspose_eq_natCast
-  结论: [DecidableEq n] [NonAssocSemiring α] [StarRing α]
+  结论: [DecidableEq n] [非结合半环 α] [对合环 α]
   证明: (conjTranspose_involutive n α).eq_iff.trans by rw [conjTranspose_natCast]
 
 Depends on / 依赖: conjTranspose_involutive, conjTranspose_natCast, eq_iff, eq_iff.trans
@@ -782,7 +782,7 @@ theorem map_star_eq_natCast
 
 中文:
 定理 map_star_eq_natCast
-  结论: [DecidableEq n] [NonAssocSemiring α] [StarRing α]
+  结论: [DecidableEq n] [非结合半环 α] [对合环 α]
   证明: (map_involutive star_involutive).eq_iff.trans by rw [map_natCast_star]
 
 @[simp]
@@ -801,8 +801,8 @@ theorem conjTranspose_ofNat
   proof: conjTranspose_natCast _
 
 中文:
-定理 conjTranspose_ofNat
-  结论: [DecidableEq n] [NonAssocSemiring α] [StarRing α] (d : 自然数)
+定理 conjTranspose_of自然数
+  结论: [DecidableEq n] [非结合半环 α] [对合环 α] (d : 自然数)
   证明: conjTranspose_natCast _
 
 Depends on / 依赖: conjTranspose_natCast
@@ -822,8 +822,8 @@ theorem map_ofNat_star
 @[simp]
 
 中文:
-定理 map_ofNat_star
-  结论: [DecidableEq n] [NonAssocSemiring α] [StarRing α] (d : 自然数)
+定理 map_of自然数_star
+  结论: [DecidableEq n] [非结合半环 α] [对合环 α] (d : 自然数)
   证明: map_natCast_star _
 
 @[simp]
@@ -841,8 +841,8 @@ theorem conjTranspose_eq_ofNat
   proof: conjTranspose_eq_natCast
 
 中文:
-定理 conjTranspose_eq_ofNat
-  结论: [DecidableEq n] [Semiring α] [StarRing α]
+定理 conjTranspose_eq_of自然数
+  结论: [DecidableEq n] [半环 α] [对合环 α]
   证明: conjTranspose_eq_natCast
 
 Depends on / 依赖: conjTranspose_eq_natCast
@@ -863,8 +863,8 @@ theorem map_star_eq_ofNat
 @[simp]
 
 中文:
-定理 map_star_eq_ofNat
-  结论: [DecidableEq n] [Semiring α] [StarRing α] {M : Matrix n n α}
+定理 map_star_eq_of自然数
+  结论: [DecidableEq n] [半环 α] [对合环 α] {M : 矩阵 n n α}
   证明: map_star_eq_natCast
 
 @[simp]
@@ -884,7 +884,7 @@ theorem conjTranspose_intCast
 
 中文:
 定理 conjTranspose_intCast
-  条件: [DecidableEq n] [Ring α] [StarRing α] (d : 整数)
+  条件: [DecidableEq n] [环 α] [对合环 α] (d : 整数)
   证明: by
   simp [conjTranspose, Matrix.map_intCast, diagonal_intCast]
 
@@ -906,7 +906,7 @@ theorem map_intCast_star
 
 中文:
 定理 map_intCast_star
-  条件: [DecidableEq n] [Ring α] [StarRing α] (d : 整数)
+  条件: [DecidableEq n] [环 α] [对合环 α] (d : 整数)
   证明: by simp [Matrix.map_intCast, diagonal_intCast]
 
 @[simp]
@@ -926,7 +926,7 @@ theorem conjTranspose_eq_intCast
 
 中文:
 定理 conjTranspose_eq_intCast
-  结论: [DecidableEq n] [Ring α] [StarRing α]
+  结论: [DecidableEq n] [环 α] [对合环 α]
   证明: (conjTranspose_involutive n α).eq_iff.trans
     by rw [conjTranspose_intCast]
 
@@ -950,7 +950,7 @@ theorem map_star_eq_intCast
 
 中文:
 定理 map_star_eq_intCast
-  结论: [DecidableEq n] [Ring α] [StarRing α]
+  结论: [DecidableEq n] [环 α] [对合环 α]
   证明: (map_involutive star_involutive).eq_iff.trans by rw [map_intCast_star]
 
 @[simp]
@@ -972,7 +972,7 @@ theorem conjTranspose_add
 
 中文:
 定理 conjTranspose_add
-  条件: [AddMonoid α] [StarAddMonoid α] (M N : Matrix m n α)
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (M N : 矩阵 m n α)
   证明: Matrix.ext by simp
 
 @[simp]
@@ -994,7 +994,7 @@ theorem conjTranspose_sub
 
 中文:
 定理 conjTranspose_sub
-  条件: [AddGroup α] [StarAddMonoid α] (M N : Matrix m n α)
+  条件: [加法群 α] [StarAdd幺半群 α] (M N : 矩阵 m n α)
   证明: Matrix.ext by simp
 
 Depends on / 依赖: Matrix, Matrix.ext
@@ -1027,7 +1027,7 @@ theorem conjTranspose_smul
 
 中文:
 定理 conjTranspose_smul
-  结论: [Star R] [Star α] [SMul R α] [StarModule R α] (c : R)
+  结论: [对合 R] [对合 α] [标量乘法 R α] [对合模 R α] (c : R)
   证明: Matrix.ext fun _ _ => star_smul _ _
 
 @[simp]
@@ -1049,7 +1049,7 @@ theorem conjTranspose_smul_non_comm
 
 中文:
 定理 conjTranspose_smul_non_comm
-  结论: [Star R] [Star α] [SMul R α] [SMul Rᵐᵒᵖ α] (c : R)
+  结论: [对合 R] [对合 α] [标量乘法 R α] [标量乘法 Rᵐᵒᵖ α] (c : R)
   证明: Matrix.ext by simp [h]
 
 Depends on / 依赖: Matrix, Matrix.ext
@@ -1069,7 +1069,7 @@ theorem conjTranspose_smul_self
 
 中文:
 定理 conjTranspose_smul_self
-  条件: [Mul α] [StarMul α] (c : α) (M : Matrix m n α)
+  条件: [乘法 α] [StarMul α] (c : α) (M : 矩阵 m n α)
   证明: conjTranspose_smul_non_comm c M star_mul
 
 Depends on / 依赖: conjTranspose_smul_non_comm, star_mul
@@ -1089,7 +1089,7 @@ theorem conjTranspose_nsmul
 
 中文:
 定理 conjTranspose_nsmul
-  条件: [AddMonoid α] [StarAddMonoid α] (c : 自然数) (M : Matrix m n α)
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (c : 自然数) (M : 矩阵 m n α)
   证明: by
   simp
 -/
@@ -1110,7 +1110,7 @@ theorem conjTranspose_zsmul
 
 中文:
 定理 conjTranspose_zsmul
-  条件: [AddGroup α] [StarAddMonoid α] (c : 整数) (M : Matrix m n α)
+  条件: [加法群 α] [StarAdd幺半群 α] (c : 整数) (M : 矩阵 m n α)
   证明: by
   simp
 
@@ -1133,7 +1133,7 @@ theorem conjTranspose_natCast_smul
 
 中文:
 定理 conjTranspose_natCast_smul
-  结论: [Semiring R] [AddCommMonoid α] [StarAddMonoid α] [Module R α]
+  结论: [半环 R] [加法交换幺半群 α] [StarAdd幺半群 α] [模 R α]
   证明: Matrix.ext by simp
 
 @[simp]
@@ -1156,8 +1156,8 @@ theorem conjTranspose_ofNat_smul
 @[simp]
 
 中文:
-定理 conjTranspose_ofNat_smul
-  结论: [Semiring R] [AddCommMonoid α] [StarAddMonoid α] [Module R α]
+定理 conjTranspose_of自然数_smul
+  结论: [半环 R] [加法交换幺半群 α] [StarAdd幺半群 α] [模 R α]
   证明: conjTranspose_natCast_smul c M
 
 @[simp]
@@ -1182,7 +1182,7 @@ theorem conjTranspose_intCast_smul
 
 中文:
 定理 conjTranspose_intCast_smul
-  结论: [Ring R] [AddCommGroup α] [StarAddMonoid α] [Module R α] (c : 整数)
+  结论: [环 R] [加法交换群 α] [StarAdd幺半群 α] [模 R α] (c : 整数)
   证明: Matrix.ext by simp
 
 @[simp]
@@ -1206,7 +1206,7 @@ theorem conjTranspose_inv_natCast_smul
 
 中文:
 定理 conjTranspose_inv_natCast_smul
-  结论: [DivisionSemiring R] [AddCommMonoid α] [StarAddMonoid α]
+  结论: [除半环 R] [加法交换幺半群 α] [StarAdd幺半群 α]
   证明: Matrix.ext by simp
 
 @[simp]
@@ -1229,8 +1229,8 @@ theorem conjTranspose_inv_ofNat_smul
 @[simp]
 
 中文:
-定理 conjTranspose_inv_ofNat_smul
-  结论: [DivisionSemiring R] [AddCommMonoid α] [StarAddMonoid α]
+定理 conjTranspose_inv_of自然数_smul
+  结论: [除半环 R] [加法交换幺半群 α] [StarAdd幺半群 α]
   证明: conjTranspose_inv_natCast_smul c M
 
 @[simp]
@@ -1255,7 +1255,7 @@ theorem conjTranspose_inv_intCast_smul
 
 中文:
 定理 conjTranspose_inv_intCast_smul
-  结论: [DivisionRing R] [AddCommGroup α] [StarAddMonoid α]
+  结论: [除环 R] [加法交换群 α] [StarAdd幺半群 α]
   证明: Matrix.ext by simp
 
 @[simp]
@@ -1277,7 +1277,7 @@ theorem conjTranspose_ratCast_smul
 
 中文:
 定理 conjTranspose_ratCast_smul
-  结论: [DivisionRing R] [AddCommGroup α] [StarAddMonoid α] [Module R α]
+  结论: [除环 R] [加法交换群 α] [StarAdd幺半群 α] [模 R α]
   证明: Matrix.ext by simp
 
 Depends on / 依赖: Matrix, Matrix.ext
@@ -1298,7 +1298,7 @@ theorem conjTranspose_rat_smul
 
 中文:
 定理 conjTranspose_rat_smul
-  结论: [AddCommGroup α] [StarAddMonoid α] [Module Rat α] (c : Rat)
+  结论: [加法交换群 α] [StarAdd幺半群 α] [模 有理数 α] (c : 有理数)
   证明: Matrix.ext by simp
 
 @[simp]
@@ -1322,7 +1322,7 @@ theorem conjTranspose_mul
 
 中文:
 定理 conjTranspose_mul
-  结论: [Fintype n] [NonUnitalNonAssocSemiring α] [StarRing α] (M : Matrix m n α)
+  结论: [有限类型 n] [非幺非结合半环 α] [对合环 α] (M : 矩阵 m n α)
   证明: Matrix.ext by simp [mul_apply]
 
 @[simp]
@@ -1345,7 +1345,7 @@ theorem conjTranspose_neg
 
 中文:
 定理 conjTranspose_neg
-  条件: [AddGroup α] [StarAddMonoid α] (M : Matrix m n α)
+  条件: [加法群 α] [StarAdd幺半群 α] (M : 矩阵 m n α)
   结论: (-M)ᴴ = -Mᴴ
   证明: Matrix.ext by simp
 
@@ -1364,7 +1364,7 @@ theorem conjTranspose_map
 
 中文:
 定理 conjTranspose_map
-  结论: [Star α] [Star β] {A : Matrix m n α} (f : α -> β)
+  结论: [对合 α] [对合 β] {A : 矩阵 m n α} (f : α -> β)
   证明: Matrix.ext fun _ _ => hf _
 
 Depends on / 依赖: Matrix, Matrix.ext
@@ -1386,7 +1386,7 @@ theorem conjTranspose_eq_transpose_of_trivial
 
 中文:
 定理 conjTranspose_eq_transpose_of_trivial
-  条件: [Star α] [TrivialStar α] (A : Matrix m n α)
+  条件: [对合 α] [TrivialStar α] (A : 矩阵 m n α)
   证明: Matrix.ext fun _ _ => star_trivial _
 
 Depends on / 依赖: Matrix, Matrix.ext, star_trivial
@@ -1414,7 +1414,7 @@ definition conjTransposeAddEquiv
 
 中文:
 定义 conjTransposeAddEquiv
-  签名: [AddMonoid α] [StarAddMonoid α]
+  签名: [加法幺半群 α] [StarAdd幺半群 α]
   定义体: conjTranspose
   invFun := conjTranspose
   left_inv := conjTranspose_conjTranspose
@@ -1443,7 +1443,7 @@ theorem conjTransposeAddEquiv_symm
 
 中文:
 定理 conjTransposeAddEquiv_symm
-  条件: [AddMonoid α] [StarAddMonoid α]
+  条件: [加法幺半群 α] [StarAdd幺半群 α]
   证明: rfl
 -/
 theorem conjTransposeAddEquiv_symm [AddMonoid α] [StarAddMonoid α] :
@@ -1462,7 +1462,7 @@ theorem conjTranspose_list_sum
 
 中文:
 定理 conjTranspose_list_sum
-  条件: [AddMonoid α] [StarAddMonoid α] (l : List (Matrix m n α))
+  条件: [加法幺半群 α] [StarAdd幺半群 α] (l : 列表 (矩阵 m n α))
   证明: map_list_sum (conjTransposeAddEquiv m n α) l
 
 Depends on / 依赖: conjTransposeAddEquiv, map_list_sum
@@ -1481,7 +1481,7 @@ theorem conjTranspose_multiset_sum
 
 中文:
 定理 conjTranspose_multiset_sum
-  结论: [AddCommMonoid α] [StarAddMonoid α]
+  结论: [加法交换幺半群 α] [StarAdd幺半群 α]
   证明: (conjTransposeAddEquiv m n α).toAddMonoidHom.map_multiset_sum s
 
 Depends on / 依赖: conjTransposeAddEquiv, map_multiset_sum, toAddMonoidHom, toAddMonoidHom.map_multiset_sum
@@ -1500,7 +1500,7 @@ theorem conjTranspose_sum
 
 中文:
 定理 conjTranspose_sum
-  结论: [AddCommMonoid α] [StarAddMonoid α] {ι : 类型} (s : Finset ι)
+  结论: [加法交换幺半群 α] [StarAdd幺半群 α] {ι : 类型} (s : 有限集 ι)
   证明: map_sum (conjTransposeAddEquiv m n α) _ s
 
 Depends on / 依赖: conjTransposeAddEquiv, map_sum
@@ -1526,7 +1526,7 @@ definition conjTransposeLinearEquiv
 
 中文:
 定义 conjTransposeLinearEquiv
-  签名: [CommSemiring R] [StarRing R] [AddCommMonoid α] [StarAddMonoid α]
+  签名: [交换半环 R] [对合环 R] [加法交换幺半群 α] [StarAdd幺半群 α]
   定义体: conjTransposeAddEquiv m n α
   map_smul' := conjTranspose_smul
 
@@ -1550,7 +1550,7 @@ theorem conjTransposeLinearEquiv_symm
 
 中文:
 定理 conjTransposeLinearEquiv_symm
-  结论: [CommSemiring R] [StarRing R] [AddCommMonoid α]
+  结论: [交换半环 R] [对合环 R] [加法交换幺半群 α]
   证明: rfl
 -/
 theorem conjTransposeLinearEquiv_symm [CommSemiring R] [StarRing R] [AddCommMonoid α]
@@ -1571,8 +1571,8 @@ instance [Star
   body: conjTranspose
 
 中文:
-实例 [Star
-  签名: α] : Star (Matrix n n α) where star
+实例 [对合
+  签名: α] : 对合 (矩阵 n n α) where star
   定义体: conjTranspose
 
 Depends on / 依赖: conjTranspose
@@ -1592,7 +1592,7 @@ theorem star_eq_conjTranspose
 
 中文:
 定理 star_eq_conjTranspose
-  条件: [Star α] (M : Matrix m m α)
+  条件: [对合 α] (M : 矩阵 m m α)
   结论: star M = Mᴴ
   证明: rfl
 
@@ -1613,7 +1613,7 @@ theorem star_apply
 
 中文:
 定理 star_apply
-  条件: [Star α] (M : Matrix n n α) (i j)
+  条件: [对合 α] (M : 矩阵 n n α) (i j)
   结论: (star M) i j = star (M j i)
   证明: rfl
 -/
@@ -1630,7 +1630,7 @@ instance [InvolutiveStar
 
 中文:
 实例 [InvolutiveStar
-  签名: α] : InvolutiveStar (Matrix n n α) where
+  签名: α] : InvolutiveStar (矩阵 n n α) where
   定义体: conjTranspose_conjTranspose
 
 Depends on / 依赖: conjTranspose_conjTranspose
@@ -1647,8 +1647,8 @@ instance [AddMonoid
   body: conjTranspose_add
 
 中文:
-实例 [AddMonoid
-  签名: α] [StarAddMonoid α] : StarAddMonoid (Matrix n n α) where
+实例 [加法幺半群
+  签名: α] [StarAdd幺半群 α] : StarAdd幺半群 (矩阵 n n α) where
   定义体: conjTranspose_add
 
 Depends on / 依赖: conjTranspose_add
@@ -1665,8 +1665,8 @@ instance [Star
   body: conjTranspose_smul
 
 中文:
-实例 [Star
-  签名: α] [Star β] [SMul α β] [StarModule α β] : StarModule α (Matrix n n β) where
+实例 [对合
+  签名: α] [对合 β] [标量乘法 α β] [对合模 α β] : 对合模 α (矩阵 n n β) where
   定义体: conjTranspose_smul
 
 Depends on / 依赖: conjTranspose_smul
@@ -1686,8 +1686,8 @@ instance [Fintype
 @[deprecated (since := "2026-04-20")] protected alias star_mul := StarMul.star_mul
 
 中文:
-实例 [Fintype
-  签名: n] [NonUnitalNonAssocSemiring α] [StarRing α] : StarRing (Matrix n n α) where
+实例 [有限类型
+  签名: n] [非幺非结合半环 α] [对合环 α] : 对合环 (矩阵 n n α) where
   定义体: conjTranspose_add
   star_mul := conjTranspose_mul
 
@@ -1714,7 +1714,7 @@ theorem conjTranspose_submatrix
 
 中文:
 定理 conjTranspose_submatrix
-  结论: [Star α] (A : Matrix m n α) (r : l -> m)
+  结论: [对合 α] (A : 矩阵 m n α) (r : l -> m)
   证明: ext fun _ _ => rfl
 -/
 theorem conjTranspose_submatrix [Star α] (A : Matrix m n α) (r : l -> m)
@@ -1731,7 +1731,7 @@ theorem conjTranspose_reindex
 
 中文:
 定理 conjTranspose_reindex
-  条件: [Star α] (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α)
+  条件: [对合 α] (eₘ : m ≃ l) (eₙ : n ≃ o) (M : 矩阵 m n α)
   证明: rfl
 -/
 theorem conjTranspose_reindex [Star α] (eₘ : m ≃ l) (eₙ : n ≃ o) (M : Matrix m n α) :
@@ -1755,7 +1755,7 @@ map_mul' M N := (congrArg MulOpposite.op <| conjTranspose_mul M N).trans MulOppo
 
 中文:
 定义 conjTransposeRingEquiv
-  签名: [NonUnitalNonAssocSemiring α] [StarRing α] [Fintype m]
+  签名: [非幺非结合半环 α] [对合环 α] [有限类型 m]
   定义体: (conjTransposeAddEquiv m m α).trans MulOpposite.opAddEquiv
 map_mul' M N := (congrArg MulOpposite.op <| conjTranspose_mul M N).trans MulOpposite.op_mul ..
   map_star' _ := rfl
@@ -1781,7 +1781,7 @@ theorem conjTranspose_pow
 
 中文:
 定理 conjTranspose_pow
-  结论: [Semiring α] [StarRing α] [Fintype m] [DecidableEq m] (M : Matrix m m α)
+  结论: [半环 α] [对合环 α] [有限类型 m] [DecidableEq m] (M : 矩阵 m m α)
   证明: MulOpposite.op_injective map_pow (conjTransposeRingEquiv m α) M k
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_injective, conjTransposeRingEquiv, map_pow, op_injective
@@ -1800,7 +1800,7 @@ theorem conjTranspose_list_prod
 
 中文:
 定理 conjTranspose_list_prod
-  结论: [Semiring α] [StarRing α] [Fintype m] [DecidableEq m]
+  结论: [半环 α] [对合环 α] [有限类型 m] [DecidableEq m]
   证明: (conjTransposeRingEquiv m α).unop_map_list_prod l
 
 Depends on / 依赖: conjTransposeRingEquiv, unop_map_list_prod
@@ -1825,7 +1825,7 @@ definition conjTransposeAlgEquiv
 
 中文:
 定义 conjTransposeAlgEquiv
-  签名: [Fintype n] [CommSemiring R] [StarRing R] [TrivialStar R] [Semiring α]
+  签名: [有限类型 n] [交换半环 R] [对合环 R] [TrivialStar R] [半环 α]
   定义体: conjTransposeRingEquiv n α
   map_smul' r M := by
     change conjTransposeRingEquiv n α (r • M) = r • conjTransposeRingEquiv n α M

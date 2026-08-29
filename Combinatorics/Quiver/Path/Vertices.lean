@@ -50,7 +50,7 @@ lemma end_cons
 
 中文:
 引理 end_cons
-  条件: {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   结论: (p.cons e).end = c
   证明: rfl
 -/
@@ -86,7 +86,7 @@ lemma vertices_nil
 中文:
 引理 vertices_nil
   条件: (a : V)
-  结论: (nil : Path a a).vertices = [a]
+  结论: (nil : 道路 a a).vertices = [a]
   证明: rfl
 
 @[simp]
@@ -104,7 +104,7 @@ lemma vertices_cons
 
 中文:
 引理 vertices_cons
-  条件: {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   证明: rfl
 -/
 lemma vertices_cons {a b c : V} (p : Path a b) (e : b ⟶ c) :
@@ -122,7 +122,7 @@ lemma mem_vertices_cons
 
 中文:
 引理 mem_vertices_cons
-  结论: {a b c : V} (p : Path a b)
+  结论: {a b c : V} (p : 道路 a b)
   证明: by
   simp only [vertices_cons]
   simp_all only [concat_eq_append, mem_append, mem_cons, not_mem_nil, or_false]
@@ -149,7 +149,7 @@ lemma verticesSet_nil
 中文:
 引理 verticesSet_nil
   条件: {a : V}
-  结论: {v | v in (nil : Path a a).vertices} = {a}
+  结论: {v | v in (nil : 道路 a a).vertices} = {a}
   证明: by
   simp only [vertices_nil, mem_singleton, Set.ext_iff, Set.mem_singleton_iff]
   exact fun x => Set.mem_ofPred
@@ -176,7 +176,7 @@ lemma vertices_length
 
 中文:
 引理 vertices_length
-  条件: {V : 类型} [Quiver V] {a b : V} (p : Path a b)
+  条件: {V : 类型} [箭图 V] {a b : V} (p : 道路 a b)
   证明: by
   induction p with
   | nil => simp
@@ -202,7 +202,7 @@ lemma length_vertices_pos
 
 中文:
 引理 length_vertices_pos
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   证明: by simp
 -/
 lemma length_vertices_pos {a b : V} (p : Path a b) :
@@ -220,7 +220,7 @@ lemma vertices_ne_nil
 
 中文:
 引理 vertices_ne_nil
-  条件: {a : V} {b : V} (p : Path a b)
+  条件: {a : V} {b : V} (p : 道路 a b)
   结论: p.vertices != []
   证明: by
   simp [← length_pos_iff_ne_nil]
@@ -244,7 +244,7 @@ lemma start_mem_vertices
 
 中文:
 引理 start_mem_vertices
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   结论: a in p.vertices
   证明: by
   induction p with
@@ -272,7 +272,7 @@ lemma vertices_head?
 
 中文:
 引理 vertices_head?
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   结论: p.vertices.head? = some a
   证明: by
   induction p with
@@ -303,7 +303,7 @@ lemma vertices_head_eq
 
 中文:
 引理 vertices_head_eq
-  条件: {a b : V} (p : Path a b) (h : p.vertices != [] := p.vertices_ne_nil)
+  条件: {a b : V} (p : 道路 a b) (h : p.vertices != [] := p.vertices_ne_nil)
   证明: by
   induction p with
   | nil => simp only [vertices_nil, head_cons]
@@ -336,7 +336,7 @@ lemma getElem_vertices_zero
 
 中文:
 引理 getElem_vertices_zero
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   结论: p.vertices[0] = a
   证明: by
   induction p with
@@ -366,7 +366,7 @@ lemma vertices_getLast
 
 中文:
 引理 vertices_getLast
-  条件: {a b : V} (p : Path a b) (h : p.vertices != [] := p.vertices_ne_nil)
+  条件: {a b : V} (p : 道路 a b) (h : p.vertices != [] := p.vertices_ne_nil)
   证明: by
   induction p with
   | nil => simp only [vertices_nil, getLast_singleton]
@@ -396,7 +396,7 @@ lemma dropLast_append_end_eq
 
 中文:
 引理 dropLast_append_end_eq
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   证明: by
   simp_rw [← p.vertices_getLast p.vertices_ne_nil, dropLast_concat_getLast]
 
@@ -422,7 +422,7 @@ lemma vertices_comp
 
 中文:
 引理 vertices_comp
-  条件: {a b c : V} (p : Path a b) (q : Path b c)
+  条件: {a b c : V} (p : 道路 a b) (q : 道路 b c)
   证明: by
   induction q with
   | nil => simp
@@ -445,7 +445,7 @@ lemma length_eq_zero_iff
 
 中文:
 引理 length_eq_zero_iff
-  条件: {a : V} (p : Path a a)
+  条件: {a : V} (p : 道路 a a)
   证明: by
   cases p <;> tauto
 -/
@@ -466,7 +466,7 @@ lemma vertices_comp_get_length_eq
 
 中文:
 引理 vertices_comp_get_length_eq
-  结论: {a b c : V} (p₁ : Path a c) (p₂ : Path c b)
+  结论: {a b c : V} (p₁ : 道路 a c) (p₂ : 道路 c b)
   证明: by
   simp
 
@@ -538,7 +538,7 @@ lemma nil_of_comp_eq_nil_left
 
 中文:
 引理 nil_of_comp_eq_nil_left
-  结论: {a b : V} {p : Path a b} {q : Path b a}
+  结论: {a b : V} {p : 道路 a b} {q : 道路 b a}
   证明: by
   have hlen : (p.comp q).length = 0 := by
     simpa using congrArg Path.length h
@@ -571,7 +571,7 @@ lemma nil_of_comp_eq_nil_right
 
 中文:
 引理 nil_of_comp_eq_nil_right
-  结论: {a b : V} {p : Path a b} {q : Path b a}
+  结论: {a b : V} {p : 道路 a b} {q : 道路 b a}
   证明: by
   have hlen : (p.comp q).length = 0 := by
     simpa using congrArg Path.length h
@@ -605,7 +605,7 @@ lemma comp_eq_nil_iff
 
 中文:
 引理 comp_eq_nil_iff
-  条件: {a b : V} {p : Path a b} {q : Path b a}
+  条件: {a b : V} {p : 道路 a b} {q : 道路 b a}
   证明: by
   refine ⟨fun h => ⟨nil_of_comp_eq_nil_left h, nil_of_comp_eq_nil_right h⟩, fun ⟨hp, hq⟩ => ?_⟩
   induction p with
@@ -639,7 +639,7 @@ lemma end_mem_vertices
 
 中文:
 引理 end_mem_vertices
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   结论: b in p.vertices
   证明: by
   have h₁ : p.vertices.getLast (vertices_ne_nil p) = b :=
@@ -680,7 +680,7 @@ theorem exists_eq_comp_of_le_length
       exact ⟨d, p₁
 
 中文:
-定理 exists_eq_comp_of_le_length
+定理 存在_eq_comp_of_le_length
   条件: {n : 自然数} (hn : n <= p.length)
   证明: by
   induction p generalizing n with
@@ -723,7 +723,7 @@ theorem exists_eq_comp_and_length_eq_of_lt_length
   exact ⟨v, p₁, p₂, rfl, rfl, by simp⟩
 
 中文:
-定理 exists_eq_comp_and_length_eq_of_lt_length
+定理 存在_eq_comp_and_length_eq_of_lt_length
   条件: (n : 自然数) (hn : n < p.vertices.length)
   证明: by
   have hn_le_len : n <= p.length := by
@@ -756,7 +756,7 @@ theorem exists_eq_comp_of_mem_vertices
   exact ⟨p₁, p₂, hp⟩
 
 中文:
-定理 exists_eq_comp_of_mem_vertices
+定理 存在_eq_comp_of_mem_vertices
   条件: {v : V} (hv : v in p.vertices)
   证明: by
   obtain ⟨n, hn, rfl⟩ : exists n, exists hn : n < p.vertices.length, v = p.vertices[n] :=
@@ -791,7 +791,7 @@ theorem exists_eq_comp_and_notMem_tail_of_mem_vertices
     have hv' 
 
 中文:
-定理 exists_eq_comp_and_notMem_tail_of_mem_vertices
+定理 存在_eq_comp_and_notMem_tail_of_mem_vertices
   条件: {v : V} (hv : v in p.vertices)
   证明: by
   induction p with

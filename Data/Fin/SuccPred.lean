@@ -51,7 +51,7 @@ lemma succ_injective
 中文:
 引理 succ_injective
   条件: (n : 自然数)
-  结论: Injective (@Fin.succ n)
+  结论: 单射 (@有限集.succ n)
   证明: fun a b => by simp [Fin.ext_iff]
 
 @[simp]
@@ -71,9 +71,9 @@ theorem exists_succ_eq
   proof: ⟨fun ⟨_, hy⟩ => hy ▸ succ_ne_zero _, x.cases (fun h => h.irrefl.elim) (fun _ _ => ⟨_, rfl⟩)⟩
 
 中文:
-定理 exists_succ_eq
-  条件: {x : Fin (n + 1)}
-  结论: (存在 y, Fin.succ y = x) ↔ x != 0
+定理 存在_succ_eq
+  条件: {x : 有限集 (n + 1)}
+  结论: (存在 y, 有限集.succ y = x) ↔ x != 0
   证明: ⟨fun ⟨_, hy⟩ => hy ▸ succ_ne_zero _, x.cases (fun h => h.irrefl.elim) (fun _ _ => ⟨_, rfl⟩)⟩
 
 Depends on / 依赖: h.irrefl.elim, irrefl, succ_ne_zero, x.cases
@@ -92,8 +92,8 @@ theorem exists_succ_eq_of_ne_zero
 @[simp]
 
 中文:
-定理 exists_succ_eq_of_ne_zero
-  条件: {x : Fin (n + 1)} (h : x != 0)
+定理 存在_succ_eq_of_ne_zero
+  条件: {x : 有限集 (n + 1)} (h : x != 0)
   证明: exists_succ_eq.mpr h
 
 @[simp]
@@ -119,7 +119,7 @@ theorem succ_zero_eq_one'
 中文:
 定理 succ_zero_eq_one'
   条件: [NeZero n]
-  结论: Fin.succ (0 : Fin n) = 1
+  结论: 有限集.succ (0 : 有限集 n) = 1
   证明: by
   cases n
   · exact (NeZero.ne 0 rfl).elim
@@ -144,7 +144,7 @@ theorem one_pos'
 中文:
 定理 one_pos'
   条件: [NeZero n]
-  结论: (0 : Fin (n + 1)) < 1
+  结论: (0 : 有限集 (n + 1)) < 1
   证明: succ_zero_eq_one' (n := n) ▸ succ_pos _
 
 Depends on / 依赖: succ_pos, succ_zero_eq_one
@@ -162,7 +162,7 @@ theorem zero_ne_one'
 中文:
 定理 zero_ne_one'
   条件: [NeZero n]
-  结论: (0 : Fin (n + 1)) != 1
+  结论: (0 : 有限集 (n + 1)) != 1
   证明: Fin.ne_of_lt one_pos'
 
 Depends on / 依赖: Fin.ne_of_lt, ne_of_lt, one_pos
@@ -189,7 +189,7 @@ theorem succ_one_eq_two'
 中文:
 定理 succ_one_eq_two'
   条件: [NeZero n]
-  结论: Fin.succ (1 : Fin (n + 1)) = 2
+  结论: 有限集.succ (1 : 有限集 (n + 1)) = 2
   证明: by
   cases n
   · exact (NeZero.ne 0 rfl).elim
@@ -221,7 +221,7 @@ theorem le_zero_iff'
 
 中文:
 定理 le_zero_iff'
-  条件: {n : 自然数} [NeZero n] {k : Fin n}
+  条件: {n : 自然数} [NeZero n] {k : 有限集 n}
   结论: k <= 0 ↔ k = 0
   证明: ⟨fun h => Fin.ext by rw [Nat.eq_zero_of_le_zero h]; rfl, by rintro rfl; exact Nat.le_refl _⟩
 
@@ -243,7 +243,7 @@ lemma castLE_inj
 
 中文:
 引理 castLE_inj
-  条件: {hmn : m <= n} {a b : Fin m}
+  条件: {hmn : m <= n} {a b : 有限集 m}
   结论: castLE hmn a = castLE hmn b ↔ a = b
   证明: by
   simp [Fin.ext_iff]
@@ -262,7 +262,7 @@ lemma castAdd_inj
 
 中文:
 引理 castAdd_inj
-  条件: {a b : Fin m}
+  条件: {a b : 有限集 m}
   结论: castAdd n a = castAdd n b ↔ a = b
   证明: by simp [Fin.ext_iff]
 -/
@@ -282,7 +282,7 @@ lemma castLE_injective
 中文:
 引理 castLE_injective
   条件: (hmn : m <= n)
-  结论: Injective (castLE hmn)
+  结论: 单射 (castLE hmn)
   证明: fun _ _ hab => Fin.ext (congr_arg val hab :)
 
 Depends on / 依赖: Fin.ext, congr_arg
@@ -302,7 +302,7 @@ lemma castAdd_injective
 中文:
 引理 castAdd_injective
   条件: (m n : 自然数)
-  结论: Injective (@Fin.castAdd m n)
+  结论: 单射 (@有限集.castAdd m n)
   证明: castLE_injective _
 
 Depends on / 依赖: castLE_injective
@@ -321,7 +321,7 @@ lemma castSucc_injective
 中文:
 引理 castSucc_injective
   条件: (n : 自然数)
-  结论: Injective (@Fin.castSucc n)
+  结论: 单射 (@有限集.castSucc n)
   证明: castAdd_injective _ _
 
 Depends on / 依赖: castAdd_injective
@@ -338,7 +338,7 @@ lemma castLE_castSucc
 
 中文:
 引理 castLE_castSucc
-  条件: {n m} (i : Fin n) (h : n + 1 <= m)
+  条件: {n m} (i : 有限集 n) (h : n + 1 <= m)
   证明: rfl
 -/
 @[simp] lemma castLE_castSucc {n m} (i : Fin n) (h : n + 1 <= m) :
@@ -376,7 +376,7 @@ lemma castLE_rfl
 中文:
 引理 castLE_rfl
   条件: (n : 自然数)
-  结论: Fin.castLE (le_refl n) = id
+  结论: 有限集.castLE (le_refl n) = id
   证明: rfl
 
 @[simp]
@@ -399,7 +399,7 @@ theorem range_castLE
 中文:
 定理 range_castLE
   条件: {n k : 自然数} (h : n <= k)
-  结论: Set.range (castLE h) = { i : Fin k | (i : 自然数) < n }
+  结论: 集合.range (castLE h) = { i : 有限集 k | (i : 自然数) < n }
   证明: Set.ext fun x => ⟨fun ⟨y, hy⟩ => hy ▸ y.2, fun hx => ⟨⟨x, hx⟩, rfl⟩⟩
 
 @[simp]
@@ -422,7 +422,7 @@ theorem coe_of_injective_castLE_symm
 
 中文:
 定理 coe_of_injective_castLE_symm
-  条件: {n k : 自然数} (h : n <= k) (i : Fin k) (hi)
+  条件: {n k : 自然数} (h : n <= k) (i : 有限集 k) (hi)
   证明: by
   rw [← val_castLE h]
   exact congr_arg Fin.val (Equiv.apply_ofInjective_symm _ _)
@@ -446,7 +446,7 @@ theorem leftInverse_cast
 中文:
 定理 leftInverse_cast
   条件: (eq : n = m)
-  结论: LeftInverse (Fin.cast eq.symm) (Fin.cast eq)
+  结论: 左逆 (有限集.cast eq.symm) (有限集.cast eq)
   证明: fun _ => rfl
 -/
 theorem leftInverse_cast (eq : n = m) : LeftInverse (Fin.cast eq.symm) (Fin.cast eq) :=
@@ -466,7 +466,7 @@ theorem rightInverse_cast
 中文:
 定理 rightInverse_cast
   条件: (eq : n = m)
-  结论: RightInverse (Fin.cast eq.symm) (Fin.cast eq)
+  结论: 右逆 (有限集.cast eq.symm) (有限集.cast eq)
   证明: fun _ => rfl
 
 @[simp]
@@ -489,7 +489,7 @@ theorem cast_inj
 
 中文:
 定理 cast_inj
-  条件: (eq : n = m) {a b : Fin n}
+  条件: (eq : n = m) {a b : 有限集 n}
   结论: a.cast eq = b.cast eq ↔ a = b
   证明: by
   simp [← val_inj]
@@ -515,7 +515,7 @@ theorem cast_lt_cast
 
 中文:
 定理 cast_lt_cast
-  条件: (eq : n = m) {a b : Fin n}
+  条件: (eq : n = m) {a b : 有限集 n}
   结论: a.cast eq < b.cast eq ↔ a < b
   证明: Iff.rfl
 
@@ -538,7 +538,7 @@ theorem cast_le_cast
 
 中文:
 定理 cast_le_cast
-  条件: (eq : n = m) {a b : Fin n}
+  条件: (eq : n = m) {a b : 有限集 n}
   结论: a.cast eq <= b.cast eq ↔ a <= b
   证明: Iff.rfl
 
@@ -586,7 +586,7 @@ theorem _root_.finCongr_symm_apply
 
 中文:
 定理 _root_.finCongr_symm_apply
-  条件: (eq : n = m) (a : Fin m)
+  条件: (eq : n = m) (a : 有限集 m)
   证明: rfl
 
 Depends on / 依赖: List.Nodup.filter, Quot.induction_on, filter, induction_on
@@ -627,7 +627,7 @@ lemma _root_.finCongr_refl
 中文:
 引理 _root_.finCongr_refl
   条件: (h : n = n := rfl)
-  结论: finCongr h = Equiv.refl (Fin n)
+  结论: finCongr h = 等价.refl (有限集 n)
   证明: by ext; simp
 
 Depends on / 依赖: Equiv.refl, finCongr
@@ -662,7 +662,7 @@ lemma _root_.finCongr_apply_coe
 
 中文:
 引理 _root_.finCongr_apply_coe
-  条件: (h : m = n) (k : Fin m)
+  条件: (h : m = n) (k : 有限集 m)
   结论: (finCongr h k : 自然数) = k
   证明: rfl
 -/
@@ -679,7 +679,7 @@ lemma _root_.finCongr_symm_apply_coe
 
 中文:
 引理 _root_.finCongr_symm_apply_coe
-  条件: (h : m = n) (k : Fin n)
+  条件: (h : m = n) (k : 有限集 n)
   结论: ((finCongr h).symm k : 自然数) = k
   证明: rfl
 
@@ -717,7 +717,7 @@ theorem cast_eq_cast
 中文:
 定理 cast_eq_cast
   条件: (h : n = m)
-  结论: (Fin.cast h : Fin n -> Fin m) = _root_.cast (h ▸ rfl)
+  结论: (有限集.cast h : 有限集 n -> 有限集 m) = _root_.cast (h ▸ rfl)
   证明: by
   grind
 
@@ -737,7 +737,7 @@ theorem castSucc_le_succ
 
 中文:
 定理 castSucc_le_succ
-  条件: {n} (i : Fin n)
+  条件: {n} (i : 有限集 n)
   结论: i.castSucc <= i.succ
   证明: Nat.le_succ i
 
@@ -756,7 +756,7 @@ theorem castSucc_le_castSucc_iff
 
 中文:
 定理 castSucc_le_castSucc_iff
-  条件: {a b : Fin n}
+  条件: {a b : 有限集 n}
   结论: castSucc a <= castSucc b ↔ a <= b
   证明: .rfl
 
@@ -776,7 +776,7 @@ theorem succ_le_castSucc_iff
 
 中文:
 定理 succ_le_castSucc_iff
-  条件: {a b : Fin n}
+  条件: {a b : 有限集 n}
   结论: succ a <= castSucc b ↔ a < b
   证明: by
   rw [le_castSucc_iff]; rw [succ_lt_succ_iff]
@@ -798,7 +798,7 @@ theorem castSucc_lt_succ_iff
 
 中文:
 定理 castSucc_lt_succ_iff
-  条件: {a b : Fin n}
+  条件: {a b : 有限集 n}
   结论: castSucc a < succ b ↔ a <= b
   证明: by
   rw [castSucc_lt_iff_succ_le]; rw [succ_le_succ_iff]
@@ -819,7 +819,7 @@ theorem le_of_castSucc_lt_of_succ_lt
 
 中文:
 定理 le_of_castSucc_lt_of_succ_lt
-  结论: {a b : Fin (n + 1)} {i : Fin n}
+  结论: {a b : 有限集 (n + 1)} {i : 有限集 n}
   证明: by
   simp [Fin.lt_def, -val_fin_lt] at *; lia
 
@@ -842,7 +842,7 @@ theorem castSucc_lt_or_lt_succ
 
 中文:
 定理 castSucc_lt_or_lt_succ
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   结论: castSucc i < p ∨ p < i.succ
   证明: by
   simp [Fin.lt_def, -val_fin_lt]
@@ -867,7 +867,7 @@ theorem succ_le_or_le_castSucc
 
 中文:
 定理 succ_le_or_le_castSucc
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   结论: succ i <= p ∨ p <= i.castSucc
   证明: by
   rw [le_castSucc_iff]; rw [← castSucc_lt_iff_succ_le]
@@ -889,7 +889,7 @@ theorem eq_castSucc_of_ne_last
 
 中文:
 定理 eq_castSucc_of_ne_last
-  条件: {x : Fin (n + 1)} (h : x != (last _))
+  条件: {x : 有限集 (n + 1)} (h : x != (last _))
   证明: exists_castSucc_eq.mpr h
 
 Depends on / 依赖: exists_castSucc_eq, exists_castSucc_eq.mpr
@@ -906,8 +906,8 @@ theorem forall_fin_succ'
   proof: ⟨fun H => ⟨fun _ => H _, H _⟩, fun ⟨H0, H1⟩ i => Fin.lastCases H1 H0 i⟩
 
 中文:
-定理 forall_fin_succ'
-  条件: {P : Fin (n + 1) -> 命题}
+定理 对任意_fin_succ'
+  条件: {P : 有限集 (n + 1) -> 命题}
   证明: ⟨fun H => ⟨fun _ => H _, H _⟩, fun ⟨H0, H1⟩ i => Fin.lastCases H1 H0 i⟩
 
 Depends on / 依赖: Fin.lastCases, lastCases
@@ -929,7 +929,7 @@ theorem eq_castSucc_or_eq_last
 
 中文:
 定理 eq_castSucc_or_eq_last
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: i.lastCases (Or.inr rfl) (Or.inl ⟨·, rfl⟩)
 
 @[simp]
@@ -951,7 +951,7 @@ theorem castSucc_ne_last
 
 中文:
 定理 castSucc_ne_last
-  条件: {n : 自然数} (i : Fin n)
+  条件: {n : 自然数} (i : 有限集 n)
   结论: i.castSucc != .last n
   证明: Fin.ne_of_lt i.castSucc_lt_last
 
@@ -970,8 +970,8 @@ theorem exists_fin_succ'
    fun h => h.elim (fun ⟨i, hi⟩ => ⟨i.castSucc, hi⟩) (fun h => ⟨.last _, h⟩)⟩
 
 中文:
-定理 exists_fin_succ'
-  条件: {P : Fin (n + 1) -> 命题}
+定理 存在_fin_succ'
+  条件: {P : 有限集 (n + 1) -> 命题}
   证明: ⟨fun ⟨i, h⟩ => Fin.lastCases Or.inr (fun i hi => Or.inl ⟨i, hi⟩) i h,
    fun h => h.elim (fun ⟨i, hi⟩ => ⟨i.castSucc, hi⟩) (fun h => ⟨.last _, h⟩)⟩
 
@@ -1001,7 +1001,7 @@ theorem castSucc_zero'
 中文:
 定理 castSucc_zero'
   条件: [NeZero n]
-  结论: castSucc (0 : Fin n) = 0
+  结论: castSucc (0 : 有限集 n) = 0
   证明: rfl
 
 @[simp]
@@ -1020,7 +1020,7 @@ theorem castSucc_pos_iff
 
 中文:
 定理 castSucc_pos_iff
-  条件: [NeZero n] {i : Fin n}
+  条件: [NeZero n] {i : 有限集 n}
   结论: 0 < castSucc i ↔ 0 < i
   证明: by simp [← val_pos_iff]
 
@@ -1048,7 +1048,7 @@ theorem castSucc_ne_zero_of_lt
 
 中文:
 定理 castSucc_ne_zero_of_lt
-  条件: {p i : Fin n} (h : p < i)
+  条件: {p i : 有限集 n} (h : p < i)
   结论: castSucc i != 0
   证明: by
   cases n
@@ -1073,7 +1073,7 @@ theorem succ_ne_last_iff
 
 中文:
 定理 succ_ne_last_iff
-  条件: (a : Fin (n + 1))
+  条件: (a : 有限集 (n + 1))
   结论: succ a != last (n + 1) ↔ a != last n
   证明: not_iff_not.mpr succ_eq_last_succ
 
@@ -1094,7 +1094,7 @@ theorem succ_ne_last_of_lt
 
 中文:
 定理 succ_ne_last_of_lt
-  条件: {p i : Fin n} (h : i < p)
+  条件: {p i : 有限集 n} (h : i < p)
   结论: succ i != last n
   证明: by
   grind
@@ -1117,8 +1117,8 @@ theorem coe_eq_castSucc
 
 中文:
 定理 coe_eq_castSucc
-  条件: {a : Fin n}
-  结论: ((a : 自然数) : Fin (n + 1)) = castSucc a
+  条件: {a : 有限集 n}
+  结论: ((a : 自然数) : 有限集 (n + 1)) = castSucc a
   证明: by
   ext
   exact val_cast_of_lt (Nat.lt_succ_of_lt a.is_lt)
@@ -1144,8 +1144,8 @@ theorem coe_succ_lt_iff_lt
 
 中文:
 定理 coe_succ_lt_iff_lt
-  条件: {n : 自然数} {j k : Fin n}
-  结论: (j : Fin (n + 1)) < k ↔ j < k
+  条件: {n : 自然数} {j k : 有限集 n}
+  结论: (j : 有限集 (n + 1)) < k ↔ j < k
   证明: by
   simp only [coe_eq_castSucc, castSucc_lt_castSucc_iff]
 
@@ -1171,7 +1171,7 @@ theorem range_castSucc
 中文:
 定理 range_castSucc
   条件: {n : 自然数}
-  结论: Set.range (castSucc : Fin n -> Fin n.succ) =
+  结论: 集合.range (castSucc : 有限集 n -> 有限集 n.succ) =
   证明: range_castLE (by lia)
 
 @[simp]
@@ -1194,7 +1194,7 @@ theorem coe_of_injective_castSucc_symm
 
 中文:
 定理 coe_of_injective_castSucc_symm
-  条件: {n : 自然数} (i : Fin n.succ) (hi)
+  条件: {n : 自然数} (i : 有限集 n.succ) (hi)
   证明: by
   rw [← val_castSucc]
   exact congr_arg val (Equiv.apply_ofInjective_symm _ _)
@@ -1217,7 +1217,7 @@ theorem castSucc_castAdd
 
 中文:
 定理 castSucc_castAdd
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: castSucc (castAdd m i) = castAdd (m + 1) i
   证明: rfl
 -/
@@ -1236,7 +1236,7 @@ theorem succ_castAdd
 
 中文:
 定理 succ_castAdd
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: succ (castAdd m i) =
   证明: by
   split_ifs with h
@@ -1261,7 +1261,7 @@ theorem succ_natAdd
 
 中文:
 定理 succ_natAdd
-  条件: (i : Fin m)
+  条件: (i : 有限集 m)
   结论: succ (natAdd n i) = natAdd n (succ i)
   证明: rfl
 -/
@@ -1278,7 +1278,7 @@ theorem sub_castAdd_eq_castAdd_sub_of_le
 
 中文:
 定理 sub_castAdd_eq_castAdd_sub_of_le
-  条件: {n : 自然数} {a b : Fin n} (h : b <= a)
+  条件: {n : 自然数} {a b : 有限集 n} (h : b <= a)
   证明: by
   grind [Fin.sub_val_of_le]
 
@@ -1298,7 +1298,7 @@ theorem sub_castSucc_eq_castSucc_sub_of_le
 
 中文:
 定理 sub_castSucc_eq_castSucc_sub_of_le
-  条件: {n : 自然数} {a b : Fin n} (h : b <= a)
+  条件: {n : 自然数} {a b : 有限集 n} (h : b <= a)
   证明: sub_castAdd_eq_castAdd_sub_of_le h
 
 Depends on / 依赖: sub_castAdd_eq_castAdd_sub_of_le
@@ -1342,7 +1342,7 @@ theorem pred_last
 
 中文:
 定理 pred_last
-  条件: (h := Fin.ext_iff.not.2 last_pos'.ne')
+  条件: (h := 有限集.ext_iff.not.2 last_pos'.ne')
   证明: by simp_rw [← succ_last, pred_succ]
 
 Depends on / 依赖: Fin.ext_iff.not, ext_iff, last_pos
@@ -1362,7 +1362,7 @@ theorem pred_lt_iff
 
 中文:
 定理 pred_lt_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != 0)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != 0)
   结论: pred i hi < j ↔ i < succ j
   证明: by
   rw [← succ_lt_succ_iff]; rw [succ_pred]
@@ -1383,7 +1383,7 @@ theorem lt_pred_iff
 
 中文:
 定理 lt_pred_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != 0)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != 0)
   结论: j < pred i hi ↔ succ j < i
   证明: by
   rw [← succ_lt_succ_iff]; rw [succ_pred]
@@ -1404,7 +1404,7 @@ theorem pred_le_iff
 
 中文:
 定理 pred_le_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != 0)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != 0)
   结论: pred i hi <= j ↔ i <= succ j
   证明: by
   rw [← succ_le_succ_iff]; rw [succ_pred]
@@ -1425,7 +1425,7 @@ theorem le_pred_iff
 
 中文:
 定理 le_pred_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != 0)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != 0)
   结论: j <= pred i hi ↔ succ j <= i
   证明: by
   rw [← succ_le_succ_iff]; rw [succ_pred]
@@ -1445,7 +1445,7 @@ theorem castSucc_pred_eq_pred_castSucc
 
 中文:
 定理 castSucc_pred_eq_pred_castSucc
-  条件: {a : Fin (n + 1)} (ha : a != 0)
+  条件: {a : 有限集 (n + 1)} (ha : a != 0)
   证明: rfl
 -/
 theorem castSucc_pred_eq_pred_castSucc {a : Fin (n + 1)} (ha : a != 0) :
@@ -1462,7 +1462,7 @@ theorem castSucc_pred_add_one_eq
 
 中文:
 定理 castSucc_pred_add_one_eq
-  条件: {a : Fin (n + 1)} (ha : a != 0)
+  条件: {a : 有限集 (n + 1)} (ha : a != 0)
   证明: by
   simp
 -/
@@ -1481,7 +1481,7 @@ theorem le_pred_castSucc_iff
 
 中文:
 定理 le_pred_castSucc_iff
-  条件: {a b : Fin (n + 1)} (ha : castSucc a != 0)
+  条件: {a b : 有限集 (n + 1)} (ha : castSucc a != 0)
   证明: by
   rw [le_pred_iff]; rw [succ_le_castSucc_iff]
 
@@ -1502,7 +1502,7 @@ theorem pred_castSucc_lt_iff
 
 中文:
 定理 pred_castSucc_lt_iff
-  条件: {a b : Fin (n + 1)} (ha : castSucc a != 0)
+  条件: {a b : 有限集 (n + 1)} (ha : castSucc a != 0)
   证明: by
   rw [pred_lt_iff]; rw [castSucc_lt_succ_iff]
 
@@ -1522,7 +1522,7 @@ theorem pred_castSucc_lt
 
 中文:
 定理 pred_castSucc_lt
-  条件: {a : Fin (n + 1)} (ha : castSucc a != 0)
+  条件: {a : 有限集 (n + 1)} (ha : castSucc a != 0)
   证明: by rw [pred_castSucc_lt_iff, le_def]
 
 Depends on / 依赖: le_def, pred_castSucc_lt_iff
@@ -1541,7 +1541,7 @@ theorem le_castSucc_pred_iff
 
 中文:
 定理 le_castSucc_pred_iff
-  条件: {a b : Fin (n + 1)} (ha : a != 0)
+  条件: {a b : 有限集 (n + 1)} (ha : a != 0)
   证明: by
   rw [castSucc_pred_eq_pred_castSucc]; rw [le_pred_castSucc_iff]
 
@@ -1562,7 +1562,7 @@ theorem castSucc_pred_lt_iff
 
 中文:
 定理 castSucc_pred_lt_iff
-  条件: {a b : Fin (n + 1)} (ha : a != 0)
+  条件: {a b : 有限集 (n + 1)} (ha : a != 0)
   证明: by
   rw [castSucc_pred_eq_pred_castSucc]; rw [pred_castSucc_lt_iff]
 
@@ -1582,7 +1582,7 @@ theorem castSucc_pred_lt
 
 中文:
 定理 castSucc_pred_lt
-  条件: {a : Fin (n + 1)} (ha : a != 0)
+  条件: {a : 有限集 (n + 1)} (ha : a != 0)
   证明: by rw [castSucc_pred_lt_iff, le_def]
 
 Depends on / 依赖: castSucc_pred_lt_iff, le_def
@@ -1606,7 +1606,7 @@ definition castPred
 
 中文:
 定义 castPred
-  签名: (i : Fin (n + 1)) (h : i != last n)
+  签名: (i : 有限集 (n + 1)) (h : i != last n)
   定义体: castLT i (val_lt_last h)
 
 @[simp]
@@ -1626,7 +1626,7 @@ lemma castLT_eq_castPred
 
 中文:
 引理 castLT_eq_castPred
-  条件: (i : Fin (n + 1)) (h : i < last _) (h' := Fin.ext_iff.not.2 h.ne)
+  条件: (i : 有限集 (n + 1)) (h : i < last _) (h' := 有限集.ext_iff.not.2 h.ne)
   证明: rfl
 
 @[simp]
@@ -1650,7 +1650,7 @@ lemma coe_castPred
 
 中文:
 引理 coe_castPred
-  条件: (i : Fin (n + 1)) (h : i != last _)
+  条件: (i : 有限集 (n + 1)) (h : i != last _)
   结论: (castPred i h : 自然数) = i
   证明: rfl
 
@@ -1671,7 +1671,7 @@ theorem castPred_castSucc
 
 中文:
 定理 castPred_castSucc
-  条件: {i : Fin n} (h' := Fin.ext_iff.not.2 (castSucc_lt_last i).ne)
+  条件: {i : 有限集 n} (h' := 有限集.ext_iff.not.2 (castSucc_lt_last i).ne)
   证明: rfl
 
 @[simp]
@@ -1694,7 +1694,7 @@ theorem castSucc_castPred
 
 中文:
 定理 castSucc_castPred
-  条件: (i : Fin (n + 1)) (h : i != last n)
+  条件: (i : 有限集 (n + 1)) (h : i != last n)
   证明: by
   rcases exists_castSucc_eq.mpr h with ⟨y, rfl⟩
   rw [castPred_castSucc]
@@ -1718,7 +1718,7 @@ theorem castPred_eq_iff_eq_castSucc
 
 中文:
 定理 castPred_eq_iff_eq_castSucc
-  条件: (i : Fin (n + 1)) (hi : i != last _) (j : Fin n)
+  条件: (i : 有限集 (n + 1)) (hi : i != last _) (j : 有限集 n)
   证明: ⟨fun h => by rw [← h, castSucc_castPred], fun h => by simp_rw [h, castPred_castSucc]⟩
 
 @[simp]
@@ -1764,7 +1764,7 @@ theorem castPred_le_castPred_iff
 
 中文:
 定理 castPred_le_castPred_iff
-  条件: {i j : Fin (n + 1)} {hi : i != last n} {hj : j != last n}
+  条件: {i j : 有限集 (n + 1)} {hi : i != last n} {hj : j != last n}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1787,7 +1787,7 @@ theorem castPred_le_castPred
 
 中文:
 定理 castPred_le_castPred
-  条件: {i j : Fin (n + 1)} (h : i <= j) (hj : j != last n)
+  条件: {i j : 有限集 (n + 1)} (h : i <= j) (hj : j != last n)
   证明: h
 
 @[simp]
@@ -1808,7 +1808,7 @@ theorem castPred_lt_castPred_iff
 
 中文:
 定理 castPred_lt_castPred_iff
-  条件: {i j : Fin (n + 1)} {hi : i != last n} {hj : j != last n}
+  条件: {i j : 有限集 (n + 1)} {hi : i != last n} {hj : j != last n}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1829,7 +1829,7 @@ theorem castPred_lt_castPred
 
 中文:
 定理 castPred_lt_castPred
-  条件: {i j : Fin (n + 1)} (h : i < j) (hj : j != last n)
+  条件: {i j : 有限集 (n + 1)} (h : i < j) (hj : j != last n)
   证明: h
 -/
 theorem castPred_lt_castPred {i j : Fin (n + 1)} (h : i < j) (hj : j != last n) :
@@ -1846,7 +1846,7 @@ theorem castPred_lt_iff
 
 中文:
 定理 castPred_lt_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != last n)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != last n)
   证明: by
   rw [← castSucc_lt_castSucc_iff]; rw [castSucc_castPred]
 
@@ -1867,7 +1867,7 @@ theorem lt_castPred_iff
 
 中文:
 定理 lt_castPred_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != last n)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != last n)
   证明: by
   rw [← castSucc_lt_castSucc_iff]; rw [castSucc_castPred]
 
@@ -1888,7 +1888,7 @@ theorem castPred_le_iff
 
 中文:
 定理 castPred_le_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != last n)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != last n)
   证明: by
   rw [← castSucc_le_castSucc_iff]; rw [castSucc_castPred]
 
@@ -1911,7 +1911,7 @@ theorem le_castPred_iff
 
 中文:
 定理 le_castPred_iff
-  条件: {j : Fin n} {i : Fin (n + 1)} (hi : i != last n)
+  条件: {j : 有限集 n} {i : 有限集 (n + 1)} (hi : i != last n)
   证明: by
   rw [← castSucc_le_castSucc_iff]; rw [castSucc_castPred]
 
@@ -1937,7 +1937,7 @@ theorem castPred_inj
 
 中文:
 定理 castPred_inj
-  条件: {i j : Fin (n + 1)} {hi : i != last n} {hj : j != last n}
+  条件: {i j : 有限集 (n + 1)} {hi : i != last n} {hj : j != last n}
   证明: by
   simp_rw [Fin.ext_iff, le_antisymm_iff, ← le_def, castPred_le_castPred_iff]
 
@@ -1982,7 +1982,7 @@ theorem castPred_eq_zero
 
 中文:
 定理 castPred_eq_zero
-  条件: [NeZero n] {i : Fin (n + 1)} (h : i != last n)
+  条件: [NeZero n] {i : 有限集 (n + 1)} (h : i != last n)
   证明: by
   rw [← castPred_zero]; rw [castPred_inj]
 
@@ -2004,7 +2004,7 @@ theorem castPred_ne_zero
 
 中文:
 定理 castPred_ne_zero
-  条件: [NeZero n] {i : Fin (n + 1)} (h₁ : i != last n) (h₂ : i != 0)
+  条件: [NeZero n] {i : 有限集 (n + 1)} (h₁ : i != last n) (h₂ : i != 0)
   证明: (castPred_eq_zero h₁).not.mpr h₂
 
 @[simp]
@@ -2053,7 +2053,7 @@ theorem succ_castPred_eq_castPred_succ
 
 中文:
 定理 succ_castPred_eq_castPred_succ
-  结论: {a : Fin (n + 1)} (ha : a != last n)
+  结论: {a : 有限集 (n + 1)} (ha : a != last n)
   证明: rfl
 
 Depends on / 依赖: a.succ_ne_last_iff.mpr, succ_ne_last_iff
@@ -2075,7 +2075,7 @@ theorem succ_castPred_eq_add_one
 
 中文:
 定理 succ_castPred_eq_add_one
-  条件: {a : Fin (n + 1)} (ha : a != last n)
+  条件: {a : 有限集 (n + 1)} (ha : a != last n)
   证明: by
   cases a using lastCases
   · exact (ha rfl).elim
@@ -2100,7 +2100,7 @@ theorem castpred_succ_le_iff
 
 中文:
 定理 castpred_succ_le_iff
-  条件: {a b : Fin (n + 1)} (ha : succ a != last (n + 1))
+  条件: {a b : 有限集 (n + 1)} (ha : succ a != last (n + 1))
   证明: by
   rw [castPred_le_iff]; rw [succ_le_castSucc_iff]
 
@@ -2121,7 +2121,7 @@ theorem lt_castPred_succ_iff
 
 中文:
 定理 lt_castPred_succ_iff
-  条件: {a b : Fin (n + 1)} (ha : succ a != last (n + 1))
+  条件: {a b : 有限集 (n + 1)} (ha : succ a != last (n + 1))
   证明: by
   rw [lt_castPred_iff]; rw [castSucc_lt_succ_iff]
 
@@ -2141,7 +2141,7 @@ theorem lt_castPred_succ
 
 中文:
 定理 lt_castPred_succ
-  条件: {a : Fin (n + 1)} (ha : succ a != last (n + 1))
+  条件: {a : 有限集 (n + 1)} (ha : succ a != last (n + 1))
   证明: by rw [lt_castPred_succ_iff, le_def]
 
 Depends on / 依赖: le_def, lt_castPred_succ_iff
@@ -2160,7 +2160,7 @@ theorem succ_castPred_le_iff
 
 中文:
 定理 succ_castPred_le_iff
-  条件: {a b : Fin (n + 1)} (ha : a != last n)
+  条件: {a b : 有限集 (n + 1)} (ha : a != last n)
   证明: by
   rw [succ_castPred_eq_castPred_succ ha]; rw [castpred_succ_le_iff]
 
@@ -2181,7 +2181,7 @@ theorem lt_succ_castPred_iff
 
 中文:
 定理 lt_succ_castPred_iff
-  条件: {a b : Fin (n + 1)} (ha : a != last n)
+  条件: {a b : 有限集 (n + 1)} (ha : a != last n)
   证明: by
   rw [succ_castPred_eq_castPred_succ ha]; rw [lt_castPred_succ_iff]
 
@@ -2201,7 +2201,7 @@ theorem lt_succ_castPred
 
 中文:
 定理 lt_succ_castPred
-  条件: {a : Fin (n + 1)} (ha : a != last n)
+  条件: {a : 有限集 (n + 1)} (ha : a != last n)
   证明: by rw [lt_succ_castPred_iff, le_def]
 
 Depends on / 依赖: le_def, lt_succ_castPred_iff
@@ -2220,7 +2220,7 @@ theorem castPred_le_pred_iff
 
 中文:
 定理 castPred_le_pred_iff
-  条件: {a b : Fin (n + 1)} (ha : a != last n) (hb : b != 0)
+  条件: {a b : 有限集 (n + 1)} (ha : a != last n) (hb : b != 0)
   证明: by
   rw [le_pred_iff]; rw [succ_castPred_le_iff]
 
@@ -2241,7 +2241,7 @@ theorem pred_lt_castPred_iff
 
 中文:
 定理 pred_lt_castPred_iff
-  条件: {a b : Fin (n + 1)} (ha : a != 0) (hb : b != last n)
+  条件: {a b : 有限集 (n + 1)} (ha : a != 0) (hb : b != last n)
   证明: by
   rw [lt_castPred_iff]; rw [castSucc_pred_lt_iff ha]
 
@@ -2262,7 +2262,7 @@ theorem pred_lt_castPred
 
 中文:
 定理 pred_lt_castPred
-  条件: {a : Fin (n + 1)} (h₁ : a != 0) (h₂ : a != last n)
+  条件: {a : 有限集 (n + 1)} (h₁ : a != 0) (h₂ : a != last n)
   证明: by
   rw [pred_lt_castPred_iff]; rw [le_def]
 
@@ -2284,7 +2284,7 @@ theorem val_sub_castLT_of_le
 
 中文:
 定理 val_sub_castLT_of_le
-  条件: {a b : Fin m} (ha : a.val < n) (h : b <= a)
+  条件: {a b : 有限集 m} (ha : a.val < n) (h : b <= a)
   证明: by
   have : b.castLT (lt_of_le_of_lt h ha) <= a.castLT ha := by simpa [← val_fin_le] using h
   simp [sub_val_of_le, h, this]
@@ -2308,7 +2308,7 @@ theorem sub_castLT_eq_castLT_sub_of_le
 
 中文:
 定理 sub_castLT_eq_castLT_sub_of_le
-  条件: {a b : Fin m} (ha : a.val < n) (h : b <= a)
+  条件: {a b : 有限集 m} (ha : a.val < n) (h : b <= a)
   证明: by
   rw [Fin.ext_iff]
   exact val_sub_castLT_of_le ha h
@@ -2335,7 +2335,7 @@ theorem val_sub_castLT_of_lt
 
 中文:
 定理 val_sub_castLT_of_lt
-  条件: {a b : Fin m} (hb : b < n) (h : a < b)
+  条件: {a b : 有限集 m} (hb : b < n) (h : a < b)
   证明: by
   simp only [val_sub, val_castLT]
   repeat rw [Nat.mod_eq_of_lt (by omega)]
@@ -2361,7 +2361,7 @@ theorem val_sub_castPred_of_le
 
 中文:
 定理 val_sub_castPred_of_le
-  结论: {a b : Fin (n + 1)} (ha : a != last n)
+  结论: {a b : 有限集 (n + 1)} (ha : a != last n)
   证明: val_sub_castLT_of_le (lt_last_iff_ne_last.mpr ha) h
 
 Depends on / 依赖: lt_last_iff_ne_last, lt_last_iff_ne_last.mpr, val_sub_castLT_of_le
@@ -2381,7 +2381,7 @@ theorem sub_castPred_eq_castPred_sub_of_le
 
 中文:
 定理 sub_castPred_eq_castPred_sub_of_le
-  结论: {a b : Fin (n + 1)} (ha : a != last n)
+  结论: {a b : 有限集 (n + 1)} (ha : a != last n)
   证明: sub_castLT_eq_castLT_sub_of_le (lt_last_iff_ne_last.mpr ha) h
 
 Depends on / 依赖: lt_last_iff_ne_last, lt_last_iff_ne_last.mpr, sub_castLT_eq_castLT_sub_of_le
@@ -2405,7 +2405,7 @@ theorem val_sub_castPred_of_ge
 
 中文:
 定理 val_sub_castPred_of_ge
-  结论: {a b : Fin (n + 1)} (hb : b != last n)
+  结论: {a b : 有限集 (n + 1)} (hb : b != last n)
   证明: by
   obtain (rfl | h') := Fin.eq_or_lt_of_le h
   · simp [val_sub, Nat.sub_add_cancel a.is_le]
@@ -2435,7 +2435,7 @@ definition succAbove
 
 中文:
 定义 succAbove
-  签名: (p : Fin (n + 1)) (i : Fin n)
+  签名: (p : 有限集 (n + 1)) (i : 有限集 n)
   定义体: if castSucc i < p then i.castSucc else i.succ
 
 Depends on / 依赖: castSucc, i.castSucc, i.succ
@@ -2453,7 +2453,7 @@ lemma succAbove_of_castSucc_lt
 
 中文:
 引理 succAbove_of_castSucc_lt
-  条件: (p : Fin (n + 1)) (i : Fin n) (h : castSucc i < p)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n) (h : castSucc i < p)
   证明: if_pos h
 
 Depends on / 依赖: if_pos
@@ -2471,7 +2471,7 @@ lemma succAbove_of_succ_le
 
 中文:
 引理 succAbove_of_succ_le
-  条件: (p : Fin (n + 1)) (i : Fin n) (h : succ i <= p)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n) (h : succ i <= p)
   证明: succAbove_of_castSucc_lt _ _ (castSucc_lt_iff_succ_le.mpr h)
 
 Depends on / 依赖: castSucc_lt_iff_succ_le, castSucc_lt_iff_succ_le.mpr, succAbove_of_castSucc_lt
@@ -2490,7 +2490,7 @@ lemma succAbove_of_le_castSucc
 
 中文:
 引理 succAbove_of_le_castSucc
-  条件: (p : Fin (n + 1)) (i : Fin n) (h : p <= castSucc i)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n) (h : p <= castSucc i)
   证明: if_neg (Fin.not_lt.2 h)
 
 Depends on / 依赖: Fin.not_lt, if_neg, not_lt
@@ -2508,7 +2508,7 @@ lemma succAbove_of_lt_succ
 
 中文:
 引理 succAbove_of_lt_succ
-  条件: (p : Fin (n + 1)) (i : Fin n) (h : p < succ i)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n) (h : p < succ i)
   证明: succAbove_of_le_castSucc _ _ (le_castSucc_iff.mpr h)
 
 Depends on / 依赖: le_castSucc_iff, le_castSucc_iff.mpr, succAbove_of_le_castSucc
@@ -2527,7 +2527,7 @@ lemma succAbove_succ_of_lt
 
 中文:
 引理 succAbove_succ_of_lt
-  条件: (p i : Fin n) (h : p < i)
+  条件: (p i : 有限集 n) (h : p < i)
   结论: succAbove p.succ i = i.succ
   证明: succAbove_of_lt_succ _ _ (succ_lt_succ_iff.mpr h)
 
@@ -2547,7 +2547,7 @@ lemma succAbove_succ_of_le
 
 中文:
 引理 succAbove_succ_of_le
-  条件: (p i : Fin n) (h : i <= p)
+  条件: (p i : 有限集 n) (h : i <= p)
   结论: succAbove p.succ i = i.castSucc
   证明: succAbove_of_succ_le _ _ (succ_le_succ_iff.mpr h)
 
@@ -2567,7 +2567,7 @@ lemma succAbove_succ_self
 
 中文:
 引理 succAbove_succ_self
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: j.succ.succAbove j = j.castSucc
   证明: succAbove_succ_of_le _ _ Fin.le_rfl
 -/
@@ -2585,7 +2585,7 @@ lemma succAbove_castSucc_of_lt
 
 中文:
 引理 succAbove_castSucc_of_lt
-  条件: (p i : Fin n) (h : i < p)
+  条件: (p i : 有限集 n) (h : i < p)
   结论: succAbove p.castSucc i = i.castSucc
   证明: succAbove_of_castSucc_lt _ _ (castSucc_lt_castSucc_iff.2 h)
 
@@ -2605,7 +2605,7 @@ lemma succAbove_castSucc_of_le
 
 中文:
 引理 succAbove_castSucc_of_le
-  条件: (p i : Fin n) (h : p <= i)
+  条件: (p i : 有限集 n) (h : p <= i)
   结论: succAbove p.castSucc i = i.succ
   证明: succAbove_of_le_castSucc _ _ (castSucc_le_castSucc_iff.2 h)
 
@@ -2625,7 +2625,7 @@ lemma succAbove_castSucc_self
 
 中文:
 引理 succAbove_castSucc_self
-  条件: (j : Fin n)
+  条件: (j : 有限集 n)
   结论: succAbove j.castSucc j = j.succ
   证明: succAbove_castSucc_of_le _ _ Fin.le_rfl
 -/
@@ -2643,7 +2643,7 @@ lemma succAbove_pred_of_lt
 
 中文:
 引理 succAbove_pred_of_lt
-  条件: (p i : Fin (n + 1)) (h : p < i)
+  条件: (p i : 有限集 (n + 1)) (h : p < i)
   证明: by
   rw [succAbove_of_lt_succ _ _ (succ_pred _ _ ▸ h)]; rw [succ_pred]
 
@@ -2663,7 +2663,7 @@ lemma succAbove_pred_of_le
 
 中文:
 引理 succAbove_pred_of_le
-  条件: (p i : Fin (n + 1)) (h : i <= p) (hi : i != 0)
+  条件: (p i : 有限集 (n + 1)) (h : i <= p) (hi : i != 0)
   证明: succAbove_of_succ_le _ _ (succ_pred _ _ ▸ h)
 
 Depends on / 依赖: succAbove_of_succ_le, succ_pred
@@ -2681,7 +2681,7 @@ lemma succAbove_pred_self
 
 中文:
 引理 succAbove_pred_self
-  条件: (p : Fin (n + 1)) (h : p != 0)
+  条件: (p : 有限集 (n + 1)) (h : p != 0)
   证明: succAbove_pred_of_le _ _ Fin.le_rfl h
 -/
 @[simp] lemma succAbove_pred_self (p : Fin (n + 1)) (h : p != 0) :
@@ -2698,7 +2698,7 @@ lemma succAbove_castPred_of_lt
 
 中文:
 引理 succAbove_castPred_of_lt
-  条件: (p i : Fin (n + 1)) (h : i < p)
+  条件: (p i : 有限集 (n + 1)) (h : i < p)
   证明: by
   rw [succAbove_of_castSucc_lt _ _ (castSucc_castPred _ _ ▸ h)]; rw [castSucc_castPred]
 
@@ -2718,7 +2718,7 @@ lemma succAbove_castPred_of_le
 
 中文:
 引理 succAbove_castPred_of_le
-  条件: (p i : Fin (n + 1)) (h : p <= i) (hi : i != last n)
+  条件: (p i : 有限集 (n + 1)) (h : p <= i) (hi : i != last n)
   证明: succAbove_of_le_castSucc _ _ (castSucc_castPred _ _ ▸ h)
 
 Depends on / 依赖: castSucc_castPred, succAbove_of_le_castSucc
@@ -2737,7 +2737,7 @@ lemma succAbove_castPred_self
 
 中文:
 引理 succAbove_castPred_self
-  条件: (p : Fin (n + 1)) (h : p != last n)
+  条件: (p : 有限集 (n + 1)) (h : p != last n)
   证明: succAbove_castPred_of_le _ _ Fin.le_rfl h
 
 Depends on / 依赖: Fin.le_rfl, le_rfl, succAbove_castPred_of_le
@@ -2766,7 +2766,7 @@ lemma succAbove_ne
 
 中文:
 引理 succAbove_ne
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   结论: p.succAbove i != p
   证明: by
   rcases p.castSucc_lt_or_lt_succ i with (h | h)
@@ -2798,7 +2798,7 @@ lemma ne_succAbove
 
 中文:
 引理 ne_succAbove
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   结论: p != p.succAbove i
   证明: (succAbove_ne _ _).symm
 
@@ -2825,7 +2825,7 @@ cases hi Nat.lt_trans i.castSucc_lt_succ hj
 
 中文:
 引理 succAbove_right_injective
-  结论: Injective p.succAbove
+  结论: 单射 p.succAbove
   证明: by
   rintro i j hij
   unfold succAbove at hij
@@ -2887,7 +2887,7 @@ lemma succAbove_ne_zero_zero
 
 中文:
 引理 succAbove_ne_zero_zero
-  条件: [NeZero n] {a : Fin (n + 1)} (ha : a != 0)
+  条件: [NeZero n] {a : 有限集 (n + 1)} (ha : a != 0)
   结论: a.succAbove 0 = 0
   证明: by
   rw [Fin.succAbove_of_castSucc_lt]
@@ -2912,7 +2912,7 @@ lemma succAbove_eq_zero_iff
 
 中文:
 引理 succAbove_eq_zero_iff
-  条件: [NeZero n] {a : Fin (n + 1)} {b : Fin n} (ha : a != 0)
+  条件: [NeZero n] {a : 有限集 (n + 1)} {b : 有限集 n} (ha : a != 0)
   证明: by
   rw [← succAbove_ne_zero_zero ha]; rw [succAbove_right_inj]
 
@@ -2932,7 +2932,7 @@ lemma succAbove_ne_zero
 
 中文:
 引理 succAbove_ne_zero
-  条件: [NeZero n] {a : Fin (n + 1)} {b : Fin n} (ha : a != 0) (hb : b != 0)
+  条件: [NeZero n] {a : 有限集 (n + 1)} {b : 有限集 n} (ha : a != 0) (hb : b != 0)
   证明: mt (succAbove_eq_zero_iff ha).mp hb
 
 Depends on / 依赖: succAbove_eq_zero_iff
@@ -2950,7 +2950,7 @@ lemma succAbove_zero
 
 中文:
 引理 succAbove_zero
-  结论: succAbove (0 : Fin (n + 1)) = Fin.succ
+  结论: succAbove (0 : 有限集 (n + 1)) = 有限集.succ
   证明: rfl
 -/
 @[simp] lemma succAbove_zero : succAbove (0 : Fin (n + 1)) = Fin.succ := rfl
@@ -2966,7 +2966,7 @@ lemma succAbove_zero_apply
 
 中文:
 引理 succAbove_zero_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: succAbove 0 i = succ i
   证明: by rw [succAbove_zero]
 
@@ -2985,7 +2985,7 @@ lemma succAbove_ne_last_last
 
 中文:
 引理 succAbove_ne_last_last
-  条件: {a : Fin (n + 2)} (h : a != last (n + 1))
+  条件: {a : 有限集 (n + 2)} (h : a != last (n + 1))
   证明: by
   rw [succAbove_of_lt_succ _ _ (succ_last _ ▸ lt_last_iff_ne_last.2 h)]; rw [succ_last]
 -/
@@ -3004,7 +3004,7 @@ lemma succAbove_eq_last_iff
 
 中文:
 引理 succAbove_eq_last_iff
-  条件: {a : Fin (n + 2)} {b : Fin (n + 1)} (ha : a != last _)
+  条件: {a : 有限集 (n + 2)} {b : 有限集 (n + 1)} (ha : a != last _)
   证明: by
   rw [← succAbove_ne_last_last ha]; rw [succAbove_right_inj]
 
@@ -3024,7 +3024,7 @@ lemma succAbove_ne_last
 
 中文:
 引理 succAbove_ne_last
-  条件: {a : Fin (n + 2)} {b : Fin (n + 1)} (ha : a != last _) (hb : b != last _)
+  条件: {a : 有限集 (n + 2)} {b : 有限集 (n + 1)} (ha : a != last _) (hb : b != last _)
   证明: mt (succAbove_eq_last_iff ha).mp hb
 
 Depends on / 依赖: succAbove_eq_last_iff
@@ -3061,7 +3061,7 @@ lemma succAbove_last_apply
 
 中文:
 引理 succAbove_last_apply
-  条件: (i : Fin n)
+  条件: (i : 有限集 n)
   结论: succAbove (last n) i = castSucc i
   证明: by rw [succAbove_last]
 
@@ -3083,7 +3083,7 @@ exact Fin.not_lt.2 Fin.le_of_lt H
 
 中文:
 引理 succAbove_lt_iff_castSucc_lt
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by
   rcases castSucc_lt_or_lt_succ p i with H | H
   · rwa [iff_true_right H, succAbove_of_castSucc_lt _ _ H]
@@ -3110,7 +3110,7 @@ lemma succAbove_lt_iff_succ_le
 
 中文:
 引理 succAbove_lt_iff_succ_le
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by
   rw [succAbove_lt_iff_castSucc_lt]; rw [castSucc_lt_iff_succ_le]
 
@@ -3134,7 +3134,7 @@ exact Fin.not_lt.2 Fin.le_of_lt H
 
 中文:
 引理 lt_succAbove_iff_le_castSucc
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by
   rcases castSucc_lt_or_lt_succ p i with H | H
   · rw [iff_false_right (Fin.not_le.2 H), succAbove_of_castSucc_lt _ _ H]
@@ -3160,7 +3160,7 @@ lemma lt_succAbove_iff_lt_castSucc
 
 中文:
 引理 lt_succAbove_iff_lt_castSucc
-  条件: (p : Fin (n + 1)) (i : Fin n)
+  条件: (p : 有限集 (n + 1)) (i : 有限集 n)
   证明: by rw [lt_succAbove_iff_le_castSucc, le_castSucc_iff]
 
 Depends on / 依赖: le_castSucc_iff, lt_succAbove_iff_le_castSucc
@@ -3182,7 +3182,7 @@ lemma succAbove_pos
 
 中文:
 引理 succAbove_pos
-  条件: [NeZero n] (p : Fin (n + 1)) (i : Fin n) (h : 0 < i)
+  条件: [NeZero n] (p : 有限集 (n + 1)) (i : 有限集 n) (h : 0 < i)
   结论: 0 < p.succAbove i
   证明: by
   by_cases H : castSucc i < p
@@ -3207,7 +3207,7 @@ lemma castPred_succAbove
 
 中文:
 引理 castPred_succAbove
-  结论: (x : Fin n) (y : Fin (n + 1)) (h : castSucc x < y)
+  结论: (x : 有限集 n) (y : 有限集 (n + 1)) (h : castSucc x < y)
   证明: by
   rw [castPred_eq_iff_eq_castSucc]; rw [succAbove_of_castSucc_lt _ _ h]
 
@@ -3228,7 +3228,7 @@ lemma pred_succAbove
 
 中文:
 引理 pred_succAbove
-  结论: (x : Fin n) (y : Fin (n + 1)) (h : y <= castSucc x)
+  结论: (x : 有限集 n) (y : 有限集 (n + 1)) (h : y <= castSucc x)
   证明: by simp only [succAbove_of_le_castSucc _ _ h, pred_succ]
 
 Depends on / 依赖: Fin.ne_zero_of_lt, lt_succAbove_iff_le_castSucc, ne_zero_of_lt
@@ -3249,8 +3249,8 @@ lemma exists_succAbove_eq
   exacts [⟨_, succAbove_castPred_of_lt _ _ hxy⟩, ⟨_, succAbove_pred_of_lt _ _ hyx⟩]
 
 中文:
-引理 exists_succAbove_eq
-  条件: {x y : Fin (n + 1)} (h : x != y)
+引理 存在_succAbove_eq
+  条件: {x y : 有限集 (n + 1)} (h : x != y)
   结论: 存在 z, y.succAbove z = x
   证明: by
   obtain hxy | hyx := Fin.lt_or_lt_of_ne h
@@ -3272,8 +3272,8 @@ lemma exists_succAbove_eq_iff
   proof: ⟨by rintro ⟨y, rfl⟩; exact succAbove_ne _ _, exists_succAbove_eq⟩
 
 中文:
-引理 exists_succAbove_eq_iff
-  条件: {x y : Fin (n + 1)}
+引理 存在_succAbove_eq_iff
+  条件: {x y : 有限集 (n + 1)}
   结论: (存在 z, x.succAbove z = y) ↔ y != x
   证明: ⟨by rintro ⟨y, rfl⟩; exact succAbove_ne _ _, exists_succAbove_eq⟩
 -/
@@ -3291,8 +3291,8 @@ lemma range_succAbove
 
 中文:
 引理 range_succAbove
-  条件: (p : Fin (n + 1))
-  结论: Set.range p.succAbove = {p}ᶜ
+  条件: (p : 有限集 (n + 1))
+  结论: 集合.range p.succAbove = {p}ᶜ
   证明: Set.ext fun _ => exists_succAbove_eq_iff
 -/
 @[simp] lemma range_succAbove (p : Fin (n + 1)) : Set.range p.succAbove = {p}ᶜ :=
@@ -3311,7 +3311,7 @@ lemma range_succ
 中文:
 引理 range_succ
   条件: (n : 自然数)
-  结论: Set.range (Fin.succ : Fin n -> Fin (n + 1)) = {0}ᶜ
+  结论: 集合.range (有限集.succ : 有限集 n -> 有限集 (n + 1)) = {0}ᶜ
   证明: by
   rw [← succAbove_zero]; rw [range_succAbove]
 -/
@@ -3329,7 +3329,7 @@ lemma succAbove_left_injective
 
 中文:
 引理 succAbove_left_injective
-  结论: Injective (@succAbove n)
+  结论: 单射 (@succAbove n)
   证明: fun _ _ h => by
   simpa [range_succAbove] using congr_arg (fun f : Fin n -> Fin (n + 1) => (Set.range f)ᶜ) h
 
@@ -3349,7 +3349,7 @@ lemma succAbove_left_inj
 
 中文:
 引理 succAbove_left_inj
-  条件: {x y : Fin (n + 1)}
+  条件: {x y : 有限集 (n + 1)}
   结论: x.succAbove = y.succAbove ↔ x = y
   证明: succAbove_left_injective.eq_iff
 -/
@@ -3367,8 +3367,8 @@ lemma zero_succAbove
 
 中文:
 引理 zero_succAbove
-  条件: {n : 自然数} (i : Fin n)
-  结论: (0 : Fin (n + 1)).succAbove i = i.succ
+  条件: {n : 自然数} (i : 有限集 n)
+  结论: (0 : 有限集 (n + 1)).succAbove i = i.succ
   证明: rfl
 -/
 @[simp] lemma zero_succAbove {n : Nat} (i : Fin n) : (0 : Fin (n + 1)).succAbove i = i.succ := rfl
@@ -3384,7 +3384,7 @@ lemma succ_succAbove_zero
 
 中文:
 引理 succ_succAbove_zero
-  条件: {n : 自然数} [NeZero n] (i : Fin n)
+  条件: {n : 自然数} [NeZero n] (i : 有限集 n)
   结论: succAbove i.succ 0 = 0
   证明: by simp
 -/
@@ -3403,7 +3403,7 @@ lemma succ_succAbove_succ
 
 中文:
 引理 succ_succAbove_succ
-  条件: {n : 自然数} (i : Fin (n + 1)) (j : Fin n)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: by
   obtain h | h := i.lt_or_ge (succ j)
   · rw [succAbove_of_lt_succ _ _ h, succAbove_succ_of_lt _ _ h]
@@ -3430,7 +3430,7 @@ lemma castSucc_succAbove_castSucc
 
 中文:
 引理 castSucc_succAbove_castSucc
-  条件: {n : 自然数} {i : Fin (n + 1)} {j : Fin n}
+  条件: {n : 自然数} {i : 有限集 (n + 1)} {j : 有限集 n}
   证明: by
   rcases i.le_or_gt (castSucc j) with (h | h)
   · rw [succAbove_of_le_castSucc _ _ h, succAbove_castSucc_of_le _ _ h, succ_castSucc]
@@ -3455,7 +3455,7 @@ lemma pred_succAbove_pred
 
 中文:
 引理 pred_succAbove_pred
-  结论: {a : Fin (n + 2)} {b : Fin (n + 1)} (ha : a != 0) (hb : b != 0)
+  结论: {a : 有限集 (n + 2)} {b : 有限集 (n + 1)} (ha : a != 0) (hb : b != 0)
   证明: by
   simp_rw [← succ_inj (b := pred (succAbove a b) hk), ← succ_succAbove_succ, succ_pred]
 
@@ -3478,7 +3478,7 @@ lemma castPred_succAbove_castPred
 
 中文:
 引理 castPred_succAbove_castPred
-  结论: {a : Fin (n + 2)} {b : Fin (n + 1)} (ha : a != last (n + 1))
+  结论: {a : 有限集 (n + 2)} {b : 有限集 (n + 1)} (ha : a != last (n + 1))
   证明: by
   simp_rw [← castSucc_inj (b := (a.succAbove b).castPred hk), ← castSucc_succAbove_castSucc,
     castSucc_castPred]
@@ -3503,7 +3503,7 @@ lemma one_succAbove_zero
 中文:
 引理 one_succAbove_zero
   条件: {n : 自然数}
-  结论: (1 : Fin (n + 2)).succAbove 0 = 0
+  结论: (1 : 有限集 (n + 2)).succAbove 0 = 0
   证明: rfl
 -/
 lemma one_succAbove_zero {n : Nat} : (1 : Fin (n + 2)).succAbove 0 = 0 := rfl
@@ -3520,7 +3520,7 @@ lemma succ_succAbove_one
 
 中文:
 引理 succ_succAbove_one
-  条件: {n : 自然数} [NeZero n] (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (i : 有限集 (n + 1))
   证明: by
   rw [← succ_zero_eq_one']
   exact succ_succAbove_succ i 0
@@ -3541,7 +3541,7 @@ lemma one_succAbove_succ
 
 中文:
 引理 one_succAbove_succ
-  条件: {n : 自然数} (j : Fin n)
+  条件: {n : 自然数} (j : 有限集 n)
   证明: by
   have := succ_succAbove_succ 0 j; rwa [succ_zero_eq_one, zero_succAbove] at this
 -/
@@ -3563,7 +3563,7 @@ lemma one_succAbove_one
 中文:
 引理 one_succAbove_one
   条件: {n : 自然数}
-  结论: (1 : Fin (n + 3)).succAbove 1 = 2
+  结论: (1 : 有限集 (n + 3)).succAbove 1 = 2
   证明: by
   simpa only [succ_zero_eq_one, val_zero, zero_succAbove, succ_one_eq_two]
     using succ_succAbove_succ (0 : Fin (n + 2)) (0 : Fin (n + 1))
@@ -3588,7 +3588,7 @@ definition predAbove
 
 中文:
 定义 predAbove
-  签名: (p : Fin n) (i : Fin (n + 1))
+  签名: (p : 有限集 n) (i : 有限集 (n + 1))
   定义体: if h : castSucc p < i
   then pred i (Fin.ne_zero_of_lt h)
   else castPred i (Fin.ne_of_lt <| Fin.lt_of_le_of_lt (Fin.not_lt.1 h) (castSucc_lt_last _))
@@ -3610,7 +3610,7 @@ lemma predAbove_of_le_castSucc
 
 中文:
 引理 predAbove_of_le_castSucc
-  条件: (p : Fin n) (i : Fin (n + 1)) (h : i <= castSucc p)
+  条件: (p : 有限集 n) (i : 有限集 (n + 1)) (h : i <= castSucc p)
   证明: dif_neg Fin.not_lt.2 h
 
 Depends on / 依赖: Fin.not_lt, dif_neg, not_lt
@@ -3629,7 +3629,7 @@ lemma predAbove_of_lt_succ
 
 中文:
 引理 predAbove_of_lt_succ
-  条件: (p : Fin n) (i : Fin (n + 1)) (h : i < succ p)
+  条件: (p : 有限集 n) (i : 有限集 (n + 1)) (h : i < succ p)
   证明: predAbove_of_le_castSucc _ _ (le_castSucc_iff.mpr h)
 
 Depends on / 依赖: le_castSucc_iff, le_castSucc_iff.mpr, predAbove_of_le_castSucc
@@ -3648,7 +3648,7 @@ lemma predAbove_of_castSucc_lt
 
 中文:
 引理 predAbove_of_castSucc_lt
-  条件: (p : Fin n) (i : Fin (n + 1)) (h : castSucc p < i)
+  条件: (p : 有限集 n) (i : 有限集 (n + 1)) (h : castSucc p < i)
   证明: dif_pos h
 
 Depends on / 依赖: dif_pos
@@ -3666,7 +3666,7 @@ lemma predAbove_of_succ_le
 
 中文:
 引理 predAbove_of_succ_le
-  条件: (p : Fin n) (i : Fin (n + 1)) (h : succ p <= i)
+  条件: (p : 有限集 n) (i : 有限集 (n + 1)) (h : succ p <= i)
   证明: predAbove_of_castSucc_lt _ _ (castSucc_lt_iff_succ_le.mpr h)
 
 Depends on / 依赖: castSucc_lt_iff_succ_le, castSucc_lt_iff_succ_le.mpr, predAbove_of_castSucc_lt
@@ -3686,7 +3686,7 @@ lemma predAbove_succ_of_lt
 
 中文:
 引理 predAbove_succ_of_lt
-  条件: (p i : Fin n) (h : i < p)
+  条件: (p i : 有限集 n) (h : i < p)
   证明: by
   rw [predAbove_of_lt_succ _ _ (succ_lt_succ_iff.mpr h)]
 
@@ -3708,7 +3708,7 @@ lemma predAbove_succ_of_le
 
 中文:
 引理 predAbove_succ_of_le
-  条件: (p i : Fin n) (h : p <= i)
+  条件: (p i : 有限集 n) (h : p <= i)
   结论: p.predAbove (succ i) = i
   证明: by
   rw [predAbove_of_succ_le _ _ (succ_le_succ_iff.mpr h)]; rw [pred_succ]
@@ -3729,7 +3729,7 @@ lemma predAbove_succ_self
 
 中文:
 引理 predAbove_succ_self
-  条件: (p : Fin n)
+  条件: (p : 有限集 n)
   结论: p.predAbove (succ p) = p
   证明: predAbove_succ_of_le _ _ Fin.le_rfl
 -/
@@ -3747,7 +3747,7 @@ lemma predAbove_castSucc_of_lt
 
 中文:
 引理 predAbove_castSucc_of_lt
-  条件: (p i : Fin n) (h : p < i)
+  条件: (p i : 有限集 n) (h : p < i)
   证明: by
   rw [predAbove_of_castSucc_lt _ _ (castSucc_lt_castSucc_iff.2 h)]
 
@@ -3769,7 +3769,7 @@ lemma predAbove_castSucc_of_le
 
 中文:
 引理 predAbove_castSucc_of_le
-  条件: (p i : Fin n) (h : i <= p)
+  条件: (p i : 有限集 n) (h : i <= p)
   结论: p.predAbove (castSucc i) = i
   证明: by
   rw [predAbove_of_le_castSucc _ _ (castSucc_le_castSucc_iff.mpr h)]; rw [castPred_castSucc]
@@ -3790,7 +3790,7 @@ lemma predAbove_castSucc_self
 
 中文:
 引理 predAbove_castSucc_self
-  条件: (p : Fin n)
+  条件: (p : 有限集 n)
   结论: p.predAbove (castSucc p) = p
   证明: predAbove_castSucc_of_le _ _ Fin.le_rfl
 -/
@@ -3808,7 +3808,7 @@ lemma predAbove_pred_of_lt
 
 中文:
 引理 predAbove_pred_of_lt
-  条件: (p i : Fin (n + 1)) (h : i < p)
+  条件: (p i : 有限集 (n + 1)) (h : i < p)
   证明: by
   rw [predAbove_of_lt_succ _ _ (succ_pred _ _ ▸ h)]
 
@@ -3829,7 +3829,7 @@ lemma predAbove_pred_of_le
 
 中文:
 引理 predAbove_pred_of_le
-  条件: (p i : Fin (n + 1)) (h : p <= i) (hp : p != 0)
+  条件: (p i : 有限集 (n + 1)) (h : p <= i) (hp : p != 0)
   证明: by
   rw [predAbove_of_succ_le _ _ (succ_pred _ _ ▸ h)]
 
@@ -3851,7 +3851,7 @@ lemma predAbove_pred_self
 
 中文:
 引理 predAbove_pred_self
-  条件: (p : Fin (n + 1)) (hp : p != 0)
+  条件: (p : 有限集 (n + 1)) (hp : p != 0)
   结论: (pred p hp).predAbove p = pred p hp
   证明: predAbove_pred_of_le _ _ Fin.le_rfl hp
 
@@ -3871,7 +3871,7 @@ lemma predAbove_castPred_of_lt
 
 中文:
 引理 predAbove_castPred_of_lt
-  条件: (p i : Fin (n + 1)) (h : p < i)
+  条件: (p i : 有限集 (n + 1)) (h : p < i)
   证明: by
   rw [predAbove_of_castSucc_lt _ _ (castSucc_castPred _ _ ▸ h)]
 
@@ -3892,7 +3892,7 @@ lemma predAbove_castPred_of_le
 
 中文:
 引理 predAbove_castPred_of_le
-  条件: (p i : Fin (n + 1)) (h : i <= p) (hp : p != last n)
+  条件: (p i : 有限集 (n + 1)) (h : i <= p) (hp : p != last n)
   证明: by
   rw [predAbove_of_le_castSucc _ _ (castSucc_castPred _ _ ▸ h)]
 
@@ -3913,7 +3913,7 @@ lemma predAbove_castPred_self
 
 中文:
 引理 predAbove_castPred_self
-  条件: (p : Fin (n + 1)) (hp : p != last n)
+  条件: (p : 有限集 (n + 1)) (hp : p != last n)
   证明: predAbove_castPred_of_le _ _ Fin.le_rfl hp
 
 Depends on / 依赖: Fin.le_rfl, le_rfl, predAbove_castPred_of_le
@@ -3935,8 +3935,8 @@ lemma predAbove_right_zero
 
 中文:
 引理 predAbove_right_zero
-  条件: [NeZero n] {i : Fin n}
-  结论: predAbove (i : Fin n) 0 = 0
+  条件: [NeZero n] {i : 有限集 n}
+  结论: predAbove (i : 有限集 n) 0 = 0
   证明: by
   cases n
   · exact i.elim0
@@ -3959,7 +3959,7 @@ lemma predAbove_zero_succ
 
 中文:
 引理 predAbove_zero_succ
-  条件: [NeZero n] {i : Fin n}
+  条件: [NeZero n] {i : 有限集 n}
   结论: predAbove 0 i.succ = i
   证明: by
   rw [predAbove_succ_of_le _ _ (Fin.zero_le _)]
@@ -3981,7 +3981,7 @@ lemma predAbove_zero_of_ne_zero
 
 中文:
 引理 predAbove_zero_of_ne_zero
-  条件: [NeZero n] {i : Fin (n + 1)} (hi : i != 0)
+  条件: [NeZero n] {i : 有限集 (n + 1)} (hi : i != 0)
   证明: by
   obtain ⟨y, rfl⟩ := exists_succ_eq.2 hi
   exact predAbove_zero_succ
@@ -4003,7 +4003,7 @@ lemma succ_predAbove_zero
 
 中文:
 引理 succ_predAbove_zero
-  条件: [NeZero n] {j : Fin (n + 1)} (h : j != 0)
+  条件: [NeZero n] {j : 有限集 (n + 1)} (h : j != 0)
   结论: succ (predAbove 0 j) = j
   证明: by
   simp [h]
@@ -4024,7 +4024,7 @@ lemma predAbove_zero
 
 中文:
 引理 predAbove_zero
-  条件: [NeZero n] {i : Fin (n + 1)}
+  条件: [NeZero n] {i : 有限集 (n + 1)}
   证明: by
   split_ifs with hi
   · rw [hi, predAbove_right_zero]
@@ -4050,7 +4050,7 @@ lemma predAbove_right_last
 
 中文:
 引理 predAbove_right_last
-  条件: {i : Fin (n + 1)}
+  条件: {i : 有限集 (n + 1)}
   结论: predAbove i (last (n + 1)) = last n
   证明: by
   rw [predAbove_of_castSucc_lt _ _ (castSucc_lt_last _)]; rw [pred_last]
@@ -4070,7 +4070,7 @@ lemma predAbove_last_castSucc
 
 中文:
 引理 predAbove_last_castSucc
-  条件: {i : Fin (n + 1)}
+  条件: {i : 有限集 (n + 1)}
   结论: predAbove (last n) (i.castSucc) = i
   证明: by
   rw [predAbove_of_le_castSucc _ _ (castSucc_le_castSucc_iff.mpr (le_last _))]; rw [castPred_castSucc]
@@ -4093,7 +4093,7 @@ lemma predAbove_last_of_ne_last
 
 中文:
 引理 predAbove_last_of_ne_last
-  条件: {i : Fin (n + 2)} (hi : i != last (n + 1))
+  条件: {i : 有限集 (n + 2)} (hi : i != last (n + 1))
   证明: by
   rw [← exists_castSucc_eq] at hi
   rcases hi with ⟨y, rfl⟩
@@ -4118,7 +4118,7 @@ lemma predAbove_last_apply
 
 中文:
 引理 predAbove_last_apply
-  条件: {i : Fin (n + 2)}
+  条件: {i : 有限集 (n + 2)}
   证明: by
   split_ifs with hi
   · rw [hi, predAbove_right_last]
@@ -4147,7 +4147,7 @@ lemma predAbove_surjective
 
 中文:
 引理 predAbove_surjective
-  条件: {n : 自然数} (p : Fin n)
+  条件: {n : 自然数} (p : 有限集 n)
   证明: by
   intro i
   by_cases hi : i <= p
@@ -4181,7 +4181,7 @@ lemma succAbove_predAbove
 
 中文:
 引理 succAbove_predAbove
-  条件: {p : Fin n} {i : Fin (n + 1)} (h : i != castSucc p)
+  条件: {p : 有限集 n} {i : 有限集 (n + 1)} (h : i != castSucc p)
   证明: by
   obtain h | h := Fin.lt_or_lt_of_ne h
   · rw [predAbove_of_le_castSucc _ _ (Fin.le_of_lt h), succAbove_castPred_of_lt _ _ h]
@@ -4213,7 +4213,7 @@ lemma succ_succAbove_predAbove
 
 中文:
 引理 succ_succAbove_predAbove
-  条件: {n : 自然数} {p : Fin n} {i : Fin (n + 1)} (h : i != p.succ)
+  条件: {n : 自然数} {p : 有限集 n} {i : 有限集 (n + 1)} (h : i != p.succ)
   证明: by
   obtain h | h := Fin.lt_or_lt_of_ne h
   · rw [predAbove_of_le_castSucc _ _ (le_castSucc_iff.2 h),
@@ -4248,7 +4248,7 @@ lemma predAbove_succAbove
 
 中文:
 引理 predAbove_succAbove
-  条件: (p : Fin n) (i : Fin n)
+  条件: (p : 有限集 n) (i : 有限集 n)
   结论: p.predAbove ((castSucc p).succAbove i) = i
   证明: by
   obtain h | h := p.le_or_gt i
@@ -4275,7 +4275,7 @@ lemma succ_predAbove_succ
 
 中文:
 引理 succ_predAbove_succ
-  条件: (a : Fin n) (b : Fin (n + 1))
+  条件: (a : 有限集 n) (b : 有限集 (n + 1))
   证明: by
   obtain h | h := Fin.le_or_gt (succ a) b
   · rw [predAbove_of_castSucc_lt _ _ h, predAbove_succ_of_le _ _ h, succ_pred]
@@ -4301,7 +4301,7 @@ lemma castSucc_predAbove_castSucc
 
 中文:
 引理 castSucc_predAbove_castSucc
-  条件: {n : 自然数} (a : Fin n) (b : Fin (n + 1))
+  条件: {n : 自然数} (a : 有限集 n) (b : 有限集 (n + 1))
   证明: by
   obtain h | h := a.castSucc.lt_or_ge b
   · rw [predAbove_of_castSucc_lt _ _ h, predAbove_castSucc_of_lt _ _ h,
@@ -4331,7 +4331,7 @@ theorem predAbove_predAbove_succAbove
 
 中文:
 定理 predAbove_predAbove_succAbove
-  条件: {n : 自然数} (i : Fin (n + 1)) (j : Fin n)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: by
   cases j.castSucc.lt_or_le i with
   | inl h =>
@@ -4366,7 +4366,7 @@ theorem succAbove_succAbove_predAbove
 
 中文:
 定理 succAbove_succAbove_predAbove
-  条件: {n : 自然数} (i : Fin (n + 1)) (j : Fin n)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (j : 有限集 n)
   证明: by
   cases Fin.lt_or_le j.castSucc i with
   | inl h => rw [succAbove_of_castSucc_lt _ _ h, succAbove_predAbove (Fin.ne_of_gt h)]

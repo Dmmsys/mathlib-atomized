@@ -263,7 +263,7 @@ theorem gronwallBound_continuous_ε
 中文:
 定理 gronwallBound_continuous_ε
   条件: (δ K x : 实数)
-  结论: Continuous fun ε => gronwallBound δ K ε x
+  结论: 连续 fun ε => gronwallBound δ K ε x
   证明: by
   by_cases hK : K = 0
   · simp only [gronwallBound_K0, hK]

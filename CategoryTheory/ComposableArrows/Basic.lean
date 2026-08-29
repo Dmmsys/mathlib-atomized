@@ -290,7 +290,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: : Fin 2 -> C
+  签名: : 有限集 2 -> C
 -/
 def obj : Fin 2 -> C
   | ⟨0, _⟩ => X₀
@@ -310,7 +310,7 @@ definition map
 
 中文:
 定义 map
-  签名: : 对任意 (i j : Fin 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
+  签名: : 对任意 (i j : 有限集 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
 -/
 def map : forall (i j : Fin 2) (_ : i <= j), obj X₀ X₁ i ⟶ obj X₀ X₁ j
   | ⟨0, _⟩, ⟨0, _⟩, _ => 𝟙 _
@@ -330,7 +330,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (i : Fin 2)
+  条件: (i : 有限集 2)
   结论: map f i i (by simp) = 𝟙 _
   证明: match i with
     | 0 => rfl
@@ -354,7 +354,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {i j k : Fin 2} (hij : i <= j) (hjk : j <= k)
+  条件: {i j k : 有限集 2} (hij : i <= j) (hjk : j <= k)
   证明: by
   obtain rfl | rfl : i = j ∨ j = k := by lia
   · rw [map_id, id_comp]
@@ -918,7 +918,7 @@ definition arrowEquiv
 
 中文:
 定义 arrowEquiv
-  签名: : ComposableArrows C 1 ≃ Arrow C where
+  签名: : ComposableArrows C 1 ≃ 箭头 C where
   定义体: Arrow.mk F.hom
   invFun f := mk₁ f.hom
   left_inv F := ComposableArrows.ext₁ rfl rfl (by simp)
@@ -947,7 +947,7 @@ definition obj
 
 中文:
 定义 obj
-  签名: : Fin (n + 1 + 1) -> C
+  签名: : 有限集 (n + 1 + 1) -> C
 -/
 def obj : Fin (n + 1 + 1) -> C
   | ⟨0, _⟩ => X
@@ -1022,7 +1022,7 @@ definition map
 
 中文:
 定义 map
-  签名: : 对任意 (i j : Fin (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
+  签名: : 对任意 (i j : 有限集 (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
 -/
 def map : forall (i j : Fin (n + 1 + 1)) (_ : i <= j), obj F X i ⟶ obj F X j
   | ⟨0, _⟩, ⟨0, _⟩, _ => 𝟙 X
@@ -1182,7 +1182,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (i : Fin (n + 1 + 1))
+  条件: (i : 有限集 (n + 1 + 1))
   结论: map F f i i (by simp) = 𝟙 _
   证明: by
   obtain ⟨_ | _, hi⟩ := i <;> simp
@@ -1215,7 +1215,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {i j k : Fin (n + 1 + 1)} (hij : i <= j) (hjk : j <= k)
+  条件: {i j k : 有限集 (n + 1 + 1)} (hij : i <= j) (hjk : j <= k)
   证明: by
   obtain ⟨i, hi⟩ := i
   obtain ⟨j, hj⟩ := j
@@ -1418,7 +1418,7 @@ definition whiskerLeft
 
 中文:
 定义 whiskerLeft
-  签名: (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1))
+  签名: (F : ComposableArrows C m) (Φ : 有限集 (n + 1) ⥤ 有限集 (m + 1))
   定义体: Φ ⋙ F
 -/
 def whiskerLeft (F : ComposableArrows C m) (Φ : Fin (n + 1) ⥤ Fin (m + 1)) :
@@ -1438,7 +1438,7 @@ definition whiskerLeftFunctor
 
 中文:
 定义 whiskerLeftFunctor
-  签名: (Φ : Fin (n + 1) ⥤ Fin (m + 1))
+  签名: (Φ : 有限集 (n + 1) ⥤ 有限集 (m + 1))
   定义体: F.whiskerLeft Φ
   map f := Functor.whiskerLeft Φ f
 
@@ -1461,7 +1461,7 @@ definition _root_.Fin.succFunctor
   map {_ _} hij := homOfLE (Fin.succ_le_succ_iff.2 (leOfHom hij))
 
 中文:
-定义 _root_.Fin.succFunctor
+定义 _root_.有限集.succFunctor
   签名: (n : 自然数)
   定义体: i.succ
   map {_ _} hij := homOfLE (Fin.succ_le_succ_iff.2 (leOfHom hij))
@@ -1484,7 +1484,7 @@ definition _root_.Fin.natAddLEFunctor
   map {_ _} hij := homOfLE (by rw [Fin.le_iff_val_le_val]; simpa using (leOfHom hij))
 
 中文:
-定义 _root_.Fin.natAddLEFunctor
+定义 _root_.有限集.natAddLEFunctor
   签名: {n k l : 自然数} (h : k + l <= n)
   定义体: fun ⟨i, _⟩ => ⟨k + i , by lia⟩
   map {_ _} hij := homOfLE (by rw [Fin.le_iff_val_le_val]; simpa using (leOfHom hij))
@@ -1625,7 +1625,7 @@ definition _root_.Fin.castSuccFunctor
   map hij := hij
 
 中文:
-定义 _root_.Fin.castSuccFunctor
+定义 _root_.有限集.castSuccFunctor
   签名: (n : 自然数)
   定义体: i.castSucc
   map hij := hij
@@ -2916,7 +2916,7 @@ lemma mkOfObjOfMapSucc_exists
       | ⟨i + 
 
 中文:
-引理 mkOfObjOfMapSucc_exists
+引理 mkOfObjOfMapSucc_存在
   结论: 存在 (F : ComposableArrows C n) (e : 对任意 i, F.obj i ≅ obj i),
   证明: by
   induction n with
@@ -2979,7 +2979,7 @@ lemma mkOfObjOfMapSucc_obj
 
 中文:
 引理 mkOfObjOfMapSucc_obj
-  条件: (i : Fin (n + 1))
+  条件: (i : 有限集 (n + 1))
   证明: rfl
 -/
 lemma mkOfObjOfMapSucc_obj (i : Fin (n + 1)) :
@@ -3078,7 +3078,7 @@ definition Functor.mapComposableArrows
   body: (whiskeringRight _ _ _).obj G
 
 中文:
-定义 Functor.mapComposableArrows
+定义 函子.mapComposableArrows
   签名: :
   定义体: (whiskeringRight _ _ _).obj G
 
@@ -3100,7 +3100,7 @@ definition Functor.mapComposableArrowsObjMk₁Iso
   body: isoMk₁ (Iso.refl _) (Iso.refl _)
 
 中文:
-定义 Functor.mapComposableArrowsObjMk₁Iso
+定义 函子.mapComposableArrowsObjMk₁Iso
   签名: {X Y : C} (f : X ⟶ Y)
   定义体: isoMk₁ (Iso.refl _) (Iso.refl _)
 
@@ -3125,7 +3125,7 @@ definition Functor.mapComposableArrowsObjMk₂Iso
 suppress_compilation in
 
 中文:
-定义 Functor.mapComposableArrowsObjMk₂Iso
+定义 函子.mapComposableArrowsObjMk₂Iso
   签名: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z)
   定义体: isoMk₂ (Iso.refl _) (Iso.refl _) (Iso.refl _)
 
@@ -3147,7 +3147,7 @@ definition Functor.mapComposableArrowsOpIso
   body: Iso.refl _
 
 中文:
-定义 Functor.mapComposableArrowsOpIso
+定义 函子.mapComposableArrowsOpIso
   签名: :
   定义体: Iso.refl _
 

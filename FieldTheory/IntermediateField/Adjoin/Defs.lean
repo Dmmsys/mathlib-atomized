@@ -44,7 +44,7 @@ definition adjoin
 
 中文:
 定义 adjoin
-  签名: : 整数ermediateField F E
+  签名: : 中间域 F E
   定义体: { Subfield.closure (Set.range (algebraMap F E) union S) with
     algebraMap_mem' := fun x => Subfield.subset_closure (Or.inl (Set.mem_range_self x)) }
 
@@ -118,7 +118,7 @@ theorem adjoin_le_iff
 
 中文:
 定理 adjoin_le_iff
-  条件: {S : Set E} {T : 整数ermediateField F E}
+  条件: {S : 集合 E} {T : 中间域 F E}
   结论: adjoin F S <= T ↔ S subseteq T
   证明: ⟨fun H => le_trans (le_trans Set.subset_union_right Subfield.subset_closure) H, fun H =>
     (@Subfield.closure_le E _ (Set.range (algebraMap F E) union S) T.toSubfield).mpr
@@ -142,7 +142,7 @@ theorem gc
 
 中文:
 定理 gc
-  结论: GaloisConnection (adjoin F : Set E -> 整数ermediateField F E)
+  结论: GaloisConnection (adjoin F : 集合 E -> 中间域 F E)
   证明: fun _ _ =>
   adjoin_le_iff
 -/
@@ -163,7 +163,7 @@ le_l_u S := (IntermediateField.gc (S : Set E) (adjoin F S)).1 le_rfl
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (adjoin F : Set E -> 整数ermediateField F E)
+  签名: : Galois嵌入 (adjoin F : 集合 E -> 中间域 F E)
   定义体: (adjoin F s).copy s le_antisymm (gc.le_u_l s) hs
   gc := IntermediateField.gc
 le_l_u S := (IntermediateField.gc (S : Set E) (adjoin F S)).1 le_rfl
@@ -192,7 +192,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (整数ermediateField F E)
+  签名: 完备格 (中间域 F E)
   定义体: GaloisInsertion.liftCompleteLattice IntermediateField.gi
   bot :=
     { toSubalgebra := ⊥
@@ -225,8 +225,8 @@ theorem sup_def
 
 中文:
 定理 sup_def
-  条件: (S T : 整数ermediateField F E)
-  结论: S ⊔ T = adjoin F (S union T : Set E)
+  条件: (S T : 中间域 F E)
+  结论: S ⊔ T = adjoin F (S union T : 集合 E)
   证明: rfl
 -/
 theorem sup_def (S T : IntermediateField F E) : S ⊔ T = adjoin F (S union T : Set E) := rfl
@@ -241,7 +241,7 @@ theorem sSup_def
 
 中文:
 定理 sSup_def
-  条件: (S : Set (整数ermediateField F E))
+  条件: (S : 集合 (中间域 F E))
   证明: rfl
 -/
 theorem sSup_def (S : Set (IntermediateField F E)) :
@@ -257,7 +257,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (整数ermediateField F E)
+  签名: 可居 (中间域 F E)
   定义体: ⟨⊤⟩
 -/
 instance : Inhabited (IntermediateField F E) :=
@@ -274,7 +274,7 @@ uniq := fun _ => toSubalgebra_injective Subsingleton.elim _ _ }
 
 中文:
 实例 :
-  签名: Unique (整数ermediateField F F)
+  签名: 唯一 (中间域 F F)
   定义体: { (inferInstance : Inhabited (IntermediateField F F)) with
 uniq := fun _ => toSubalgebra_injective Subsingleton.elim _ _ }
 
@@ -294,7 +294,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ↑(⊥ : 整数ermediateField F E) = Set.range (algebraMap F E)
+  结论: ↑(⊥ : 中间域 F E) = 集合.range (algebraMap F E)
   证明: rfl
 -/
 theorem coe_bot : ↑(⊥ : IntermediateField F E) = Set.range (algebraMap F E) := rfl
@@ -313,7 +313,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : E}
-  结论: x in (⊥ : 整数ermediateField F E) ↔ x in Set.range (algebraMap F E)
+  结论: x in (⊥ : 中间域 F E) ↔ x in 集合.range (algebraMap F E)
   证明: Iff.rfl
 
 @[simp]
@@ -334,7 +334,7 @@ theorem bot_toSubalgebra
 
 中文:
 定理 bot_toSubalgebra
-  结论: (⊥ : 整数ermediateField F E).toSubalgebra = ⊥
+  结论: (⊥ : 中间域 F E).toSubalgebra = ⊥
   证明: rfl
 -/
 theorem bot_toSubalgebra : (⊥ : IntermediateField F E).toSubalgebra = ⊥ := rfl
@@ -351,7 +351,7 @@ theorem bot_toSubfield
 
 中文:
 定理 bot_toSubfield
-  结论: (⊥ : 整数ermediateField F E).toSubfield = (algebraMap F E).fieldRange
+  结论: (⊥ : 中间域 F E).toSubfield = (algebraMap F E).fieldRange
   证明: rfl
 
 @[simp]
@@ -372,7 +372,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ↑(⊤ : 整数ermediateField F E) = (Set.univ : Set E)
+  结论: ↑(⊤ : 中间域 F E) = (集合.univ : 集合 E)
   证明: rfl
 
 @[simp]
@@ -395,7 +395,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: {x : E}
-  结论: x in (⊤ : 整数ermediateField F E)
+  结论: x in (⊤ : 中间域 F E)
   证明: trivial
 
 @[simp]
@@ -416,7 +416,7 @@ theorem top_toSubalgebra
 
 中文:
 定理 top_toSubalgebra
-  结论: (⊤ : 整数ermediateField F E).toSubalgebra = ⊤
+  结论: (⊤ : 中间域 F E).toSubalgebra = ⊤
   证明: rfl
 
 @[simp]
@@ -437,7 +437,7 @@ theorem top_toSubfield
 
 中文:
 定理 top_toSubfield
-  结论: (⊤ : 整数ermediateField F E).toSubfield = ⊤
+  结论: (⊤ : 中间域 F E).toSubfield = ⊤
   证明: rfl
 
 @[simp, norm_cast]
@@ -459,8 +459,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (S T : 整数ermediateField F E)
-  结论: (↑(S ⊓ T) : Set E) = (S : Set E) inter T
+  条件: (S T : 中间域 F E)
+  结论: (↑(S ⊓ T) : 集合 E) = (S : 集合 E) inter T
   证明: rfl
 
 @[simp]
@@ -482,7 +482,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {S T : 整数ermediateField F E} {x : E}
+  条件: {S T : 中间域 F E} {x : E}
   结论: x in S ⊓ T ↔ x in S ∧ x in T
   证明: Iff.rfl
 
@@ -506,7 +506,7 @@ theorem inf_toSubalgebra
 
 中文:
 定理 inf_toSubalgebra
-  条件: (S T : 整数ermediateField F E)
+  条件: (S T : 中间域 F E)
   证明: rfl
 
 @[simp]
@@ -528,7 +528,7 @@ theorem inf_toSubfield
 
 中文:
 定理 inf_toSubfield
-  条件: (S T : 整数ermediateField F E)
+  条件: (S T : 中间域 F E)
   证明: rfl
 
 @[simp]
@@ -556,7 +556,7 @@ theorem sup_toSubfield
 
 中文:
 定理 sup_toSubfield
-  条件: (S T : 整数ermediateField F E)
+  条件: (S T : 中间域 F E)
   证明: by
   rw [← S.toSubfield.closure_eq]; rw [← T.toSubfield.closure_eq]; rw [← Subfield.closure_union]
   simp_rw [sup_def, adjoin_toSubfield, coe_toSubfield]
@@ -592,8 +592,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (整数ermediateField F E))
-  结论: (↑(sInf S) : Set E) = ⋂ s in S, ↑s
+  条件: (S : 集合 (中间域 F E))
+  结论: (↑(sInf S) : 集合 E) = ⋂ s in S, ↑s
   证明: show sInf ((fun (x : IntermediateField F E) => (x : Set E)) '' S) = ⋂ s in S, ↑s by simp
 
 @[simp, grind =]
@@ -618,7 +618,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (整数ermediateField F E)} {x : E}
+  条件: {S : 集合 (中间域 F E)} {x : E}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: by
   simpa only [Set.mem_iInter] using! Set.ext_iff.1 (coe_sInf S) x
@@ -643,7 +643,7 @@ theorem sInf_toSubalgebra
 
 中文:
 定理 sInf_toSubalgebra
-  条件: (S : Set (整数ermediateField F E))
+  条件: (S : 集合 (中间域 F E))
   证明: SetLike.coe_injective by simp
 
 @[simp]
@@ -667,7 +667,7 @@ theorem sInf_toSubfield
 
 中文:
 定理 sInf_toSubfield
-  条件: (S : Set (整数ermediateField F E))
+  条件: (S : 集合 (中间域 F E))
   证明: SetLike.coe_injective by simp
 
 @[simp]
@@ -697,7 +697,7 @@ theorem sSup_toSubfield
 
 中文:
 定理 sSup_toSubfield
-  条件: (S : Set (整数ermediateField F E)) (hS : S.Nonempty)
+  条件: (S : 集合 (中间域 F E)) (hS : S.非空)
   证明: by
   have h : toSubfield '' S = Subfield.closure '' SetLike.coe '' S := by
     rw [Set.image_image]
@@ -739,8 +739,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} (S : ι -> 整数ermediateField F E)
-  结论: (↑(iInf S) : Set E) = ⋂ i, S i
+  条件: {ι : 类型层*} (S : ι -> 中间域 F E)
+  结论: (↑(iInf S) : 集合 E) = ⋂ i, S i
   证明: by
   simp [iInf]
 
@@ -762,7 +762,7 @@ theorem iInf_toSubalgebra
 
 中文:
 定理 iInf_toSubalgebra
-  条件: {ι : Sort*} (S : ι -> 整数ermediateField F E)
+  条件: {ι : 类型层*} (S : ι -> 中间域 F E)
   证明: SetLike.coe_injective by simp [iInf]
 
 @[simp]
@@ -786,7 +786,7 @@ theorem iInf_toSubfield
 
 中文:
 定理 iInf_toSubfield
-  条件: {ι : Sort*} (S : ι -> 整数ermediateField F E)
+  条件: {ι : 类型层*} (S : ι -> 中间域 F E)
   证明: SetLike.coe_injective by simp [iInf]
 
 @[simp]
@@ -809,7 +809,7 @@ theorem iSup_toSubfield
 
 中文:
 定理 iSup_toSubfield
-  条件: {ι : Sort*} [Nonempty ι] (S : ι -> 整数ermediateField F E)
+  条件: {ι : 类型层*} [非空 ι] (S : ι -> 中间域 F E)
   证明: by
   simp only [iSup, Set.range_nonempty, sSup_toSubfield, ← Set.range_comp, Function.comp_def]
 
@@ -831,7 +831,7 @@ definition botEquiv
 
 中文:
 定义 botEquiv
-  签名: : (⊥ : 整数ermediateField F E) ≃ₐ[F] F
+  签名: : (⊥ : 中间域 F E) ≃ₐ[F] F
   定义体: (Subalgebra.equivOfEq _ _ bot_toSubalgebra).trans (Algebra.botEquiv F E)
 
 Depends on / 依赖: Algebra, Algebra.botEquiv, Subalgebra, Subalgebra.equivOfEq, botEquiv, bot_toSubalgebra, equivOfEq
@@ -856,7 +856,7 @@ theorem botEquiv_def
 中文:
 定理 botEquiv_def
   条件: (x : F)
-  结论: botEquiv F E (algebraMap F (⊥ : 整数ermediateField F E) x) = x
+  结论: botEquiv F E (algebraMap F (⊥ : 中间域 F E) x) = x
   证明: by
   simp
 
@@ -894,7 +894,7 @@ instance algebraOverBot
 
 中文:
 实例 algebraOverBot
-  签名: : Algebra (⊥ : 整数ermediateField F E) F
+  签名: : 代数 (⊥ : 中间域 F E) F
   定义体: (IntermediateField.botEquiv F E).toAlgHom.toRingHom.toAlgebra
 
 Depends on / 依赖: IntermediateField, IntermediateField.botEquiv, botEquiv, toAlgHom, toAlgHom.toRingHom.toAlgebra, toAlgebra, toRingHom
@@ -932,7 +932,7 @@ instance isScalarTower_over_bot
 
 中文:
 实例 isScalarTower_over_bot
-  签名: : IsScalarTower (⊥ : 整数ermediateField F E) F E
+  签名: : 标量塔 (⊥ : 中间域 F E) F E
   定义体: IsScalarTower.of_algebraMap_eq
     (by
       intro x
@@ -962,7 +962,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : 整数ermediateField F E) ≃ₐ[F] E
+  签名: : (⊤ : 中间域 F E) ≃ₐ[F] E
   定义体: Subalgebra.topEquiv
 
 Depends on / 依赖: Subalgebra, Subalgebra.topEquiv, topEquiv
@@ -983,7 +983,7 @@ theorem restrictScalars_bot_eq_self
 
 中文:
 定理 restrictScalars_bot_eq_self
-  条件: (K : 整数ermediateField F E)
+  条件: (K : 中间域 F E)
   证明: SetLike.coe_injective Subtype.range_coe
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, Subtype, Subtype.range_coe, coe_injective, range_coe
@@ -1007,7 +1007,7 @@ theorem restrictScalars_top
 
 中文:
 定理 restrictScalars_top
-  结论: (⊤ : 整数ermediateField F E).restrictScalars K = ⊤
+  结论: (⊤ : 中间域 F E).restrictScalars K = ⊤
   证明: rfl
 
 @[simp]
@@ -1027,7 +1027,7 @@ theorem restrictScalars_eq_top_iff
 
 中文:
 定理 restrictScalars_eq_top_iff
-  条件: {L : 整数ermediateField F E}
+  条件: {L : 中间域 F E}
   证明: by
   simp [SetLike.ext_iff]
 
@@ -1106,7 +1106,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (s t : 整数ermediateField F E) (f : E ->ₐ[F] K)
+  条件: (s t : 中间域 F E) (f : E ->ₐ[F] K)
   结论: (s ⊔ t).map f = s.map f ⊔ t.map f
   证明: (gc_map_comap f).l_sup
 
@@ -1125,7 +1125,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : E ->ₐ[F] K) (s : ι -> 整数ermediateField F E)
+  条件: {ι : 类型层*} (f : E ->ₐ[F] K) (s : ι -> 中间域 F E)
   证明: (gc_map_comap f).l_iSup
 
 Depends on / 依赖: gc_map_comap, l_iSup
@@ -1144,7 +1144,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (s t : 整数ermediateField F E) (f : E ->ₐ[F] K)
+  条件: (s t : 中间域 F E) (f : E ->ₐ[F] K)
   证明: SetLike.coe_injective (Set.image_inter f.injective)
 
 Depends on / 依赖: Set.image_inter, SetLike, SetLike.coe_injective, coe_injective, f.injective, image_inter, injective
@@ -1164,7 +1164,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  条件: {ι : Sort*} [Nonempty ι] (f : E ->ₐ[F] K) (s : ι -> 整数ermediateField F E)
+  条件: {ι : 类型层*} [非空 ι] (f : E ->ₐ[F] K) (s : ι -> 中间域 F E)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective f.injective).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -1185,7 +1185,7 @@ theorem _root_.AlgHom.fieldRange_eq_map
   proof: SetLike.ext' Set.image_univ.symm
 
 中文:
-定理 _root_.AlgHom.fieldRange_eq_map
+定理 _root_.代数态射.fieldRange_eq_map
   条件: (f : E ->ₐ[F] K)
   证明: SetLike.ext' Set.image_univ.symm
 
@@ -1204,8 +1204,8 @@ theorem _root_.AlgHom.map_fieldRange
   proof: SetLike.ext' (Set.range_comp g f).symm
 
 中文:
-定理 _root_.AlgHom.map_fieldRange
-  结论: {L : 类型} [Field L] [Algebra F L]
+定理 _root_.代数态射.map_fieldRange
+  结论: {L : 类型} [域 L] [代数 F L]
   证明: SetLike.ext' (Set.range_comp g f).symm
 
 Depends on / 依赖: Set.range_comp, SetLike, SetLike.ext, range_comp
@@ -1225,7 +1225,7 @@ theorem _root_.AlgHom.fieldRange_eq_top
 @[simp]
 
 中文:
-定理 _root_.AlgHom.fieldRange_eq_top
+定理 _root_.代数态射.fieldRange_eq_top
   条件: {f : E ->ₐ[F] K}
   证明: SetLike.ext'_iff.trans Set.range_eq_univ
 
@@ -1247,7 +1247,7 @@ theorem _root_.AlgEquiv.fieldRange_eq_top
   proof: AlgHom.fieldRange_eq_top.mpr f.surjective
 
 中文:
-定理 _root_.AlgEquiv.fieldRange_eq_top
+定理 _root_.代数等价.fieldRange_eq_top
   条件: (f : E ≃ₐ[F] K)
   证明: AlgHom.fieldRange_eq_top.mpr f.surjective
 
@@ -1310,7 +1310,7 @@ theorem adjoin.range_algebraMap_subset
 
 中文:
 定理 adjoin.range_algebraMap_subset
-  结论: Set.range (algebraMap F E) subseteq adjoin F S
+  结论: 集合.range (algebraMap F E) subseteq adjoin F S
   证明: set_range_subset (adjoin F S)
 
 Depends on / 依赖: adjoin, set_range_subset
@@ -1374,7 +1374,7 @@ theorem mem_adjoin_of_mem
 
 中文:
 定理 mem_adjoin_of_mem
-  条件: {S : Set E} {s : E} (hs : s in S)
+  条件: {S : 集合 E} {s : E} (hs : s in S)
   结论: s in adjoin F S
   证明: subset_adjoin F S hs
 
@@ -1394,7 +1394,7 @@ hs mem_adjoin_of_mem F h
 
 中文:
 定理 notMem_of_notMem_adjoin
-  条件: {S : Set E} {s : E} (hs : s ∉ adjoin F S)
+  条件: {S : 集合 E} {s : E} (hs : s ∉ adjoin F S)
   结论: s ∉ S
   证明: fun h =>
 hs mem_adjoin_of_mem F h
@@ -1435,7 +1435,7 @@ theorem adjoin.mono
 
 中文:
 定理 adjoin.mono
-  条件: (T : Set E) (h : S subseteq T)
+  条件: (T : 集合 E) (h : S subseteq T)
   结论: adjoin F S <= adjoin F T
   证明: GaloisConnection.monotone_l gc h
 
@@ -1456,8 +1456,8 @@ theorem adjoin_contains_field_as_subfield
 
 中文:
 定理 adjoin_contains_field_as_subfield
-  条件: (F : Subfield E)
-  结论: (F : Set E) subseteq adjoin F S
+  条件: (F : 子域 E)
+  结论: (F : 集合 E) subseteq adjoin F S
   证明: fun x hx =>
   adjoin.algebraMap_mem F S ⟨x, hx⟩
 -/
@@ -1475,7 +1475,7 @@ theorem subset_adjoin_of_subset_left
 
 中文:
 定理 subset_adjoin_of_subset_left
-  条件: {F : Subfield E} {T : Set E} (HT : T subseteq F)
+  条件: {F : 子域 E} {T : 集合 E} (HT : T subseteq F)
   结论: T subseteq adjoin F S
   证明: fun x hx => (adjoin F S).algebraMap_mem ⟨x, HT hx⟩
 
@@ -1498,7 +1498,7 @@ theorem subset_adjoin_of_subset_right
 
 中文:
 定理 subset_adjoin_of_subset_right
-  条件: {T : Set E} (H : T subseteq S)
+  条件: {T : 集合 E} (H : T subseteq S)
   结论: T subseteq adjoin F S
   证明: fun _ hx =>
   subset_adjoin F S (H hx)
@@ -1522,8 +1522,8 @@ theorem adjoin_empty
 
 中文:
 定理 adjoin_empty
-  条件: (F E : 类型) [Field F] [Field E] [Algebra F E]
-  结论: adjoin F (∅ : Set E) = ⊥
+  条件: (F E : 类型) [域 F] [域 E] [代数 F E]
+  结论: adjoin F (∅ : 集合 E) = ⊥
   证明: eq_bot_iff.mpr (adjoin_le_iff.mpr (Set.empty_subset _))
 
 @[simp]
@@ -1544,7 +1544,7 @@ theorem adjoin_univ
 
 中文:
 定理 adjoin_univ
-  条件: (F E : 类型) [Field F] [Field E] [Algebra F E]
+  条件: (F E : 类型) [域 F] [域 E] [代数 F E]
   证明: eq_top_iff.mpr subset_adjoin _ _
 
 Depends on / 依赖: eq_top_iff, eq_top_iff.mpr, subset_adjoin
@@ -1564,7 +1564,7 @@ theorem adjoin_union
 
 中文:
 定理 adjoin_union
-  条件: {S T : Set E}
+  条件: {S T : 集合 E}
   结论: adjoin F (S union T) = adjoin F S ⊔ adjoin F T
   证明: gc.l_sup
 
@@ -1584,7 +1584,7 @@ theorem adjoin_le_subfield
 
 中文:
 定理 adjoin_le_subfield
-  条件: {K : Subfield E} (HF : Set.range (algebraMap F E) subseteq K) (HS : S subseteq K)
+  条件: {K : 子域 E} (HF : 集合.range (algebraMap F E) subseteq K) (HS : S subseteq K)
   证明: by
   simpa using ⟨HF, HS⟩
 -/
@@ -1604,7 +1604,7 @@ theorem adjoin_subset_adjoin_iff
 
 中文:
 定理 adjoin_subset_adjoin_iff
-  条件: {F' : 类型} [Field F'] [Algebra F' E] {S S' : Set E}
+  条件: {F' : 类型} [域 F'] [代数 F' E] {S S' : 集合 E}
   证明: ⟨fun h => ⟨(adjoin.range_algebraMap_subset _ _).trans h,
     (subset_adjoin _ _).trans h⟩, fun ⟨hF, hS⟩ =>
       (Subfield.closure_le (t := (adjoin F' S').toSubfield)).mpr (Set.union_subset hF hS)⟩
@@ -1634,7 +1634,7 @@ theorem adjoin_adjoin_left
 
 中文:
 定理 adjoin_adjoin_left
-  条件: (T : Set E)
+  条件: (T : 集合 E)
   证明: by
   rw [SetLike.ext'_iff]
   change (adjoin (adjoin F S) T : Set E) = _
@@ -1674,7 +1674,7 @@ lemma adjoin_adjoin_right
 
 中文:
 引理 adjoin_adjoin_right
-  条件: {K : 类型} [Field K] [Algebra K F] [Algebra K E] [IsScalarTower K F E]
+  条件: {K : 类型} [域 K] [代数 K F] [代数 K E] [标量塔 K F E]
   证明: by
   refine le_antisymm ?_ (adjoin.mono F S (adjoin K S) (subset_adjoin K S))
   rw [adjoin_le_iff]; rw [← (adjoin F S).coe_restrictScalars K]; rw [SetLike.coe_subset_coe]
@@ -1723,7 +1723,7 @@ theorem adjoin_adjoin_comm
 
 中文:
 定理 adjoin_adjoin_comm
-  条件: (T : Set E)
+  条件: (T : 集合 E)
   证明: by
   rw [adjoin_adjoin_left]; rw [adjoin_adjoin_left]; rw [Set.union_comm]
 
@@ -1747,7 +1747,7 @@ theorem adjoin_map
 
 中文:
 定理 adjoin_map
-  条件: {E' : 类型} [Field E'] [Algebra F E'] (f : E ->ₐ[F] E')
+  条件: {E' : 类型} [域 E'] [代数 F E'] (f : E ->ₐ[F] E')
   证明: le_antisymm
     (map_le_iff_le_comap.mpr <| adjoin_le_iff.mpr fun x hx => subset_adjoin _ _ ⟨x, hx, rfl⟩)
     (adjoin_le_iff.mpr <| Set.monotone_image <| subset_adjoin _ _)
@@ -1773,7 +1773,7 @@ theorem lift_adjoin
 
 中文:
 定理 lift_adjoin
-  条件: (K : 整数ermediateField F E) (S : Set K)
+  条件: (K : 中间域 F E) (S : 集合 K)
   证明: adjoin_map _ _ _
 
 Depends on / 依赖: adjoin_map
@@ -1795,7 +1795,7 @@ theorem lift_adjoin_simple
 
 中文:
 定理 lift_adjoin_simple
-  条件: (K : 整数ermediateField F E) (α : K)
+  条件: (K : 中间域 F E) (α : K)
   证明: by
   simp only [lift_adjoin, Set.image_singleton]
 
@@ -1820,7 +1820,7 @@ theorem lift_bot
 
 中文:
 定理 lift_bot
-  条件: (K : 整数ermediateField F E)
+  条件: (K : 中间域 F E)
   证明: map_bot _
 
 @[simp]
@@ -1841,7 +1841,7 @@ theorem lift_top
 
 中文:
 定理 lift_top
-  条件: (K : 整数ermediateField F E)
+  条件: (K : 中间域 F E)
   证明: by rw [lift, ← AlgHom.fieldRange_eq_map, fieldRange_val]
 
 Depends on / 依赖: AlgHom, AlgHom.fieldRange_eq_map, fieldRange_eq_map, fieldRange_val
@@ -1860,7 +1860,7 @@ theorem lift_sup
 
 中文:
 定理 lift_sup
-  条件: (K : 整数ermediateField F E) (L L' : 整数ermediateField F K)
+  条件: (K : 中间域 F E) (L L' : 中间域 F K)
   证明: by
   simp [lift, map_sup]
 
@@ -1883,7 +1883,7 @@ theorem lift_inf
 
 中文:
 定理 lift_inf
-  条件: (K : 整数ermediateField F E) (L L' : 整数ermediateField F K)
+  条件: (K : 中间域 F E) (L L' : 中间域 F K)
   证明: by
   simp [lift, map_inf]
 
@@ -1906,7 +1906,7 @@ theorem adjoin_self
 
 中文:
 定理 adjoin_self
-  条件: (K : 整数ermediateField F E)
+  条件: (K : 中间域 F E)
   证明: le_antisymm (adjoin_le_iff.2 fun _ => id) (subset_adjoin F _)
 
 Depends on / 依赖: adjoin_le_iff, le_antisymm, subset_adjoin
@@ -1925,7 +1925,7 @@ theorem restrictScalars_adjoin
 
 中文:
 定理 restrictScalars_adjoin
-  条件: (K : 整数ermediateField F E) (S : Set E)
+  条件: (K : 中间域 F E) (S : 集合 E)
   证明: by
   rw [← adjoin_self _ K]; rw [adjoin_adjoin_left]; rw [adjoin_self _ K]
 
@@ -1949,7 +1949,7 @@ exact le_antisymm (adjoin.mono F S _ Set.subset_union_right) adjoin_le_iff.2
 
 中文:
 定理 extendScalars_adjoin
-  条件: {K : 整数ermediateField F E} {S : Set E} (h : K <= adjoin F S)
+  条件: {K : 中间域 F E} {S : 集合 E} (h : K <= adjoin F S)
   证明: restrictScalars_injective F by
   rw [extendScalars_restrictScalars]; rw [restrictScalars_adjoin]
 exact le_antisymm (adjoin.mono F S _ Set.subset_union_right) adjoin_le_iff.2
@@ -1974,7 +1974,7 @@ theorem restrictScalars_adjoin_eq_sup
 
 中文:
 定理 restrictScalars_adjoin_eq_sup
-  条件: (K : 整数ermediateField F E) (S : Set E)
+  条件: (K : 中间域 F E) (S : 集合 E)
   证明: by
   rw [restrictScalars_adjoin]; rw [adjoin_union]; rw [adjoin_self]
 
@@ -1995,7 +1995,7 @@ theorem adjoin_iUnion
 
 中文:
 定理 adjoin_iUnion
-  条件: {ι} (f : ι -> Set E)
+  条件: {ι} (f : ι -> 集合 E)
   结论: adjoin F (⋃ i, f i) = ⨆ i, adjoin F (f i)
   证明: gc.l_iSup
 
@@ -2015,7 +2015,7 @@ theorem iSup_eq_adjoin
 
 中文:
 定理 iSup_eq_adjoin
-  条件: {ι} (f : ι -> 整数ermediateField F E)
+  条件: {ι} (f : ι -> 中间域 F E)
   证明: by
   simp_rw [adjoin_iUnion, adjoin_self]
 
@@ -2074,7 +2074,7 @@ theorem adjoin_induction
 
 中文:
 定理 adjoin_induction
-  结论: {s : Set E} {p : 对任意 x in adjoin F s, 命题}
+  结论: {s : 集合 E} {p : 对任意 x in adjoin F s, 命题}
   证明: Subfield.closure_induction
     (fun x hx => Or.casesOn hx (fun ⟨x, hx⟩ => hx ▸ algebraMap x) (mem x))
     (by simp_rw [← (Algebra.algebraMap F E).map_one]; exact algebraMap 1) add
@@ -2114,7 +2114,7 @@ theorem adjoin_algHom_ext
 
 中文:
 定理 adjoin_algHom_ext
-  条件: {s : Set E} ⦃φ₁ φ₂
+  条件: {s : 集合 E} ⦃φ₁ φ₂
   结论: adjoin F s ->ₐ[F] K⦄
   证明: AlgHom.ext fun ⟨x, hx⟩ => adjoin_induction _ h (fun _ => φ₂.commutes _ ▸ φ₁.commutes _)
     (fun _ _ _ _ h₁ h₂ => by convert! congr_arg₂ (· + ·) h₁ h₂ <;> rw [← map_add] <;> rfl)
@@ -2143,7 +2143,7 @@ theorem algHom_ext_of_eq_adjoin
 
 中文:
 定理 algHom_ext_of_eq_adjoin
-  结论: {S : 整数ermediateField F E} {s : Set E} (hS : S = adjoin F s)
+  结论: {S : 中间域 F E} {s : 集合 E} (hS : S = adjoin F s)
   证明: by
   subst hS; exact adjoin_algHom_ext F h
 
@@ -2347,7 +2347,7 @@ theorem adjoin_simple_le_iff
 
 中文:
 定理 adjoin_simple_le_iff
-  条件: {K : 整数ermediateField F E}
+  条件: {K : 中间域 F E}
   结论: F⟮α⟯ <= K ↔ α in K
   证明: by simp
 -/
@@ -2389,7 +2389,7 @@ definition RingHom.adjoinAlgebraMap
       simp)
 
 中文:
-定义 RingHom.adjoinAlgebraMap
+定义 环态射.adjoinAlgebraMap
   签名: : A⟮b⟯ ->+* A⟮((algebraMap B C) b)⟯
   定义体: RingHom.codRestrict (((Algebra.ofId B C).restrictScalars A).comp (IntermediateField.val A⟮b⟯)) _
     (fun x => by
@@ -2416,7 +2416,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A⟮b⟯ A⟮(algebraMap B C) b⟯
+  签名: 代数 A⟮b⟯ A⟮(algebraMap B C) b⟯
   定义体: RingHom.toAlgebra (RingHom.adjoinAlgebraMap _)
 
 Depends on / 依赖: RingHom, RingHom.adjoinAlgebraMap, RingHom.toAlgebra, adjoinAlgebraMap, toAlgebra
@@ -2434,7 +2434,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower A⟮b⟯ A⟮(algebraMap B C) b⟯ C
+  签名: 标量塔 A⟮b⟯ A⟮(algebraMap B C) b⟯ C
   定义体: IsScalarTower.of_algebraMap_eq' rfl
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.of_algebraMap_eq, of_algebraMap_eq
@@ -2462,7 +2462,7 @@ theorem adjoin_eq_bot_iff
 
 中文:
 定理 adjoin_eq_bot_iff
-  结论: adjoin F S = ⊥ ↔ S subseteq (⊥ : 整数ermediateField F E)
+  结论: adjoin F S = ⊥ ↔ S subseteq (⊥ : 中间域 F E)
   证明: by
   rw [eq_bot_iff]; rw [adjoin_le_iff]
 
@@ -2484,7 +2484,7 @@ theorem adjoin_simple_eq_bot_iff
 
 中文:
 定理 adjoin_simple_eq_bot_iff
-  结论: F⟮α⟯ = ⊥ ↔ α in (⊥ : 整数ermediateField F E)
+  结论: F⟮α⟯ = ⊥ ↔ α in (⊥ : 中间域 F E)
   证明: by
   simp
 
@@ -2610,7 +2610,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (S : 整数ermediateField F E)
+  签名: (S : 中间域 F E)
   定义体: exists t : Finset E, adjoin F ↑t = S
 
 Depends on / 依赖: Finset, adjoin
@@ -2629,8 +2629,8 @@ theorem fg_adjoin_finset
 
 中文:
 定理 fg_adjoin_finset
-  条件: (t : Finset E)
-  结论: (adjoin F (↑t : Set E)).FG
+  条件: (t : 有限集 E)
+  结论: (adjoin F (↑t : 集合 E)).FG
   证明: ⟨t, rfl⟩
 -/
 theorem fg_adjoin_finset (t : Finset E) : (adjoin F (↑t : Set E)).FG :=
@@ -2647,8 +2647,8 @@ theorem fg_def
 
 中文:
 定理 fg_def
-  条件: {S : 整数ermediateField F E}
-  结论: S.FG ↔ 存在 t : Set E, Set.Finite t ∧ adjoin F t = S
+  条件: {S : 中间域 F E}
+  结论: S.FG ↔ 存在 t : 集合 E, 集合.有限 t ∧ adjoin F t = S
   证明: Iff.symm Set.exists_finite_iff_finset
 
 Depends on / 依赖: Iff.symm, Set.exists_finite_iff_finset, exists_finite_iff_finset
@@ -2667,7 +2667,7 @@ theorem fg_adjoin_of_finite
 
 中文:
 定理 fg_adjoin_of_finite
-  条件: {t : Set E} (h : Set.Finite t)
+  条件: {t : 集合 E} (h : 集合.有限 t)
   结论: (adjoin F t).FG
   证明: fg_def.mpr ⟨t, h, rfl⟩
 
@@ -2686,7 +2686,7 @@ theorem fg_bot
 
 中文:
 定理 fg_bot
-  结论: (⊥ : 整数ermediateField F E).FG
+  结论: (⊥ : 中间域 F E).FG
   证明: ⟨∅, by simp only [Finset.coe_empty, adjoin_empty]⟩
 
 Depends on / 依赖: Finset, Finset.coe_empty, adjoin_empty, coe_empty
@@ -2708,7 +2708,7 @@ theorem fg_sup
 
 中文:
 定理 fg_sup
-  条件: {S T : 整数ermediateField F E} (hS : S.FG) (hT : T.FG)
+  条件: {S T : 中间域 F E} (hS : S.FG) (hT : T.FG)
   结论: (S ⊔ T).FG
   证明: by
   obtain ⟨s, rfl⟩ := hS; obtain ⟨t, rfl⟩ := hT
@@ -2735,7 +2735,7 @@ theorem fg_iSup
 
 中文:
 定理 fg_iSup
-  条件: {ι : Sort*} [Finite ι] {S : ι -> 整数ermediateField F E} (h : 对任意 i, (S i).FG)
+  条件: {ι : 类型层*} [有限 ι] {S : ι -> 中间域 F E} (h : 对任意 i, (S i).FG)
   证明: by
   choose s hs using h
   simp_rw [← hs, ← adjoin_iUnion]
@@ -2759,7 +2759,7 @@ theorem _root_.Field.fg_iff_fg_top_bot
     ← toSubfield_inj, Subfield.algebraMap_ofSubfield, Subfield.closure_union]
 
 中文:
-定理 _root_.Field.fg_iff_fg_top_bot
+定理 _root_.域.fg_iff_fg_top_bot
   证明: by
   simp [Field.fg_iff, fg_def, Set.exists_finite_iff_finset,
     ← toSubfield_inj, Subfield.algebraMap_ofSubfield, Subfield.closure_union]
@@ -2786,7 +2786,7 @@ theorem induction_on_adjoin_finset
 
 中文:
 定理 induction_on_adjoin_finset
-  结论: (S : Finset E) (P : 整数ermediateField F E -> 命题) (base : P ⊥)
+  结论: (S : 有限集 E) (P : 中间域 F E -> 命题) (base : P ⊥)
   证明: by
   classical
   refine Finset.induction_on' S ?_ (fun _ _ ha _ _ h => ?_)
@@ -2817,7 +2817,7 @@ theorem induction_on_adjoin_fg
 
 中文:
 定理 induction_on_adjoin_fg
-  结论: (P : 整数ermediateField F E -> 命题) (base : P ⊥)
+  结论: (P : 中间域 F E -> 命题) (base : P ⊥)
   证明: by
   obtain ⟨S, rfl⟩ := hK
   exact induction_on_adjoin_finset S P base fun K x _ hK => ih K x hK
@@ -2848,7 +2848,7 @@ theorem map_comap_eq
 
 中文:
 定理 map_comap_eq
-  条件: (f : L ->ₐ[K] L') (S : 整数ermediateField K L')
+  条件: (f : L ->ₐ[K] L') (S : 中间域 K L')
   证明: SetLike.coe_injective Set.image_preimage_eq_inter_range
 
 Depends on / 依赖: Set.image_preimage_eq_inter_range, SetLike, SetLike.coe_injective, coe_injective, image_preimage_eq_inter_range
@@ -2868,7 +2868,7 @@ theorem map_comap_eq_self
 
 中文:
 定理 map_comap_eq_self
-  条件: {f : L ->ₐ[K] L'} {S : 整数ermediateField K L'} (h : S <= f.fieldRange)
+  条件: {f : L ->ₐ[K] L'} {S : 中间域 K L'} (h : S <= f.fieldRange)
   证明: by
   simpa only [inf_of_le_left h] using map_comap_eq f S
 
@@ -2888,7 +2888,7 @@ theorem map_comap_eq_self_of_surjective
 
 中文:
 定理 map_comap_eq_self_of_surjective
-  结论: {f : L ->ₐ[K] L'} (hf : Function.Surjective f)
+  结论: {f : L ->ₐ[K] L'} (hf : 函数.满射 f)
   证明: SetLike.coe_injective (Set.image_preimage_eq _ hf)
 
 Depends on / 依赖: Set.image_preimage_eq, SetLike, SetLike.coe_injective, coe_injective, image_preimage_eq
@@ -2908,7 +2908,7 @@ theorem comap_map
 
 中文:
 定理 comap_map
-  条件: (f : L ->ₐ[K] L') (S : 整数ermediateField K L)
+  条件: (f : L ->ₐ[K] L') (S : 中间域 K L)
   结论: (S.map f).comap f = S
   证明: SetLike.coe_injective (Set.preimage_image_eq _ f.injective)
 

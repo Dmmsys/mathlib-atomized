@@ -157,7 +157,7 @@ theorem doubleFactorial_eq_prod_even
 
 中文:
 定理 doubleFactorial_eq_prod_even
-  结论: 对任意 n : 自然数, (2 * n)‼ = ∏ i in Finset.range n, 2 * (i + 1)
+  结论: 对任意 n : 自然数, (2 * n)‼ = ∏ i in 有限集.range n, 2 * (i + 1)
 -/
 theorem doubleFactorial_eq_prod_even : forall n : Nat, (2 * n)‼ = ∏ i in Finset.range n, 2 * (i + 1)
   | 0 => rfl

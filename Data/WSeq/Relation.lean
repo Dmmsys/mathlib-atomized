@@ -370,7 +370,7 @@ instance LiftRel.trans
 
 中文:
 实例 LiftRel.trans
-  签名: (R : α -> α -> 命题) [IsTrans α R]
+  签名: (R : α -> α -> 命题) [是Trans α R]
   定义体: by
   refine ⟨fun s t u h1 h2 => ?_⟩
   refine ⟨fun s u => exists t, LiftRel R s t ∧ LiftRel R t u, ⟨t, h1, h2⟩, fun {s u} h => ?_⟩
@@ -425,8 +425,8 @@ theorem LiftRel.equiv
 
 中文:
 定理 LiftRel.equiv
-  条件: (R : α -> α -> 命题) (H : Equivalence R)
-  结论: Equivalence (LiftRel R) where
+  条件: (R : α -> α -> 命题) (H : 等价 R)
+  结论: 等价 (LiftRel R) where
   证明: @LiftRel.refl α R H.stdRefl
 .symm _ _ symm := @LiftRel.symm α R H.stdSymm
 .trans _ _ _ trans := @LiftRel.trans α R H.isTrans
@@ -449,7 +449,7 @@ definition Equiv
 @[refl]
 
 中文:
-定义 Equiv
+定义 等价
   签名: : WSeq α -> WSeq α -> 命题
   定义体: LiftRel Eq
 
@@ -476,7 +476,7 @@ theorem Equiv.refl
 @[symm]
 
 中文:
-定理 Equiv.refl
+定理 等价.refl
   结论: 对任意 s : WSeq α, s ~ʷ s
   证明: .refl LiftRel.refl Eq
 
@@ -497,7 +497,7 @@ theorem Equiv.symm
 @[trans]
 
 中文:
-定理 Equiv.symm
+定理 等价.symm
   结论: 对任意 {s t : WSeq α}, s ~ʷ t -> t ~ʷ s
   证明: .symm _ _ LiftRel.symm Eq
 
@@ -516,7 +516,7 @@ theorem Equiv.trans
   proof: .trans _ _ _ LiftRel.trans Eq
 
 中文:
-定理 Equiv.trans
+定理 等价.trans
   结论: 对任意 {s t u : WSeq α}, s ~ʷ t -> t ~ʷ u -> s ~ʷ u
   证明: .trans _ _ _ LiftRel.trans Eq
 -/
@@ -532,8 +532,8 @@ theorem Equiv.equivalence
   proof: ⟨@Equiv.refl _, @Equiv.symm _, @Equiv.trans _⟩
 
 中文:
-定理 Equiv.equivalence
-  结论: Equivalence (@Equiv α)
+定理 等价.equivalence
+  结论: 等价 (@等价 α)
   证明: ⟨@Equiv.refl _, @Equiv.symm _, @Equiv.trans _⟩
 -/
 theorem Equiv.equivalence : Equivalence (@Equiv α) :=
@@ -615,7 +615,7 @@ theorem exists_of_liftRel_left
   exact ⟨b, get?_mem (Computation.mem_map (Prod.fst.{v, v} <$> ·) td), ab⟩
 
 中文:
-定理 exists_of_liftRel_left
+定理 存在_of_liftRel_left
   条件: {R : α -> β -> 命题} {s t} (H : LiftRel R s t) {a} (h : a in s)
   证明: by
   let ⟨n, h⟩ := exists_get?_of_mem h
@@ -643,7 +643,7 @@ theorem exists_of_liftRel_right
 @[simp]
 
 中文:
-定理 exists_of_liftRel_right
+定理 存在_of_liftRel_right
   条件: {R : α -> β -> 命题} {s t} (H : LiftRel R s t) {b} (h : b in t)
   证明: by rw [← LiftRel.swap] at H; exact exists_of_liftRel_left H h
 
@@ -1091,7 +1091,7 @@ theorem Equiv.ext
       · injection mem_u
 
 中文:
-定理 Equiv.ext
+定理 等价.ext
   条件: {s t : WSeq α} (h : 对任意 n, get? s n ~ get? t n)
   结论: s ~ʷ t
   证明: ⟨fun s t => forall n, get? s n ~ get? t n, h, fun {s t} h => by
@@ -1383,7 +1383,7 @@ theorem join_congr
 
 中文:
 定理 join_congr
-  条件: {S T : WSeq (WSeq α)} (h : LiftRel Equiv S T)
+  条件: {S T : WSeq (WSeq α)} (h : LiftRel 等价 S T)
   结论: join S ~ʷ join T
   证明: liftRel_join _ h
 

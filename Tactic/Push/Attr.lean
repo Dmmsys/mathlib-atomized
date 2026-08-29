@@ -88,7 +88,7 @@ definition Head.ofExpr?
 
 中文:
 定义 Head.ofExpr?
-  签名: : Expr -> Option Head
+  签名: : Expr -> 选项类型 Head
 -/
 def Head.ofExpr? : Expr -> Option Head
   | .app f _ => f.getAppFn.constName?.map .const
@@ -119,7 +119,7 @@ definition isPullThm
 
 中文:
 定义 isPullThm
-  签名: (declName : Name) (inv : 布尔)
+  签名: (declName : Name) (inv : 布尔值)
   定义体: do
   let cinfo ← getConstInfo declName
   forallTelescope cinfo.type fun _ type => do

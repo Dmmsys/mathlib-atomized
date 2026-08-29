@@ -157,7 +157,7 @@ definition Minimal
   body: Fermat42 a b c ∧ forall a1 b1 c1 : Int, Fermat42 a1 b1 c1 -> Int.natAbs c <= Int.natAbs c1
 
 中文:
-定义 Minimal
+定义 极小
   签名: (a b c : 整数)
   定义体: Fermat42 a b c ∧ forall a1 b1 c1 : Int, Fermat42 a1 b1 c1 -> Int.natAbs c <= Int.natAbs c1
 
@@ -184,9 +184,9 @@ theorem exists_minimal
   have m_mem : m in S := Nat.find_spec
 
 中文:
-定理 exists_minimal
+定理 存在_minimal
   条件: {a b c : 整数} (h : Fermat42 a b c)
-  结论: 存在 a0 b0 c0, Minimal a0 b0 c0
+  结论: 存在 a0 b0 c0, 极小 a0 b0 c0
   证明: by
   classical
   let S : Set Nat := { n | exists s : Int × Int × Int, Fermat42 s.1 s.2.1 s.2.2 ∧ n = Int.natAbs s.2.2 }
@@ -233,7 +233,7 @@ theorem coprime_of_minimal
 
 中文:
 定理 coprime_of_minimal
-  条件: {a b c : 整数} (h : Minimal a b c)
+  条件: {a b c : 整数} (h : 极小 a b c)
   结论: IsCoprime a b
   证明: by
   apply Int.isCoprime_iff_gcd_eq_one.mpr
@@ -277,7 +277,7 @@ theorem minimal_comm
 中文:
 定理 minimal_comm
   条件: {a b c : 整数}
-  结论: Minimal a b c -> Minimal b a c
+  结论: 极小 a b c -> 极小 b a c
   证明: fun ⟨h1, h2⟩ =>
   ⟨Fermat42.comm.mp h1, h2⟩
 -/
@@ -302,7 +302,7 @@ theorem neg_of_minimal
 中文:
 定理 neg_of_minimal
   条件: {a b c : 整数}
-  结论: Minimal a b c -> Minimal a b (-c)
+  结论: 极小 a b c -> 极小 a b (-c)
   证明: by
   rintro ⟨⟨ha, hb, heq⟩, h2⟩
   constructor
@@ -336,7 +336,7 @@ theorem exists_odd_minimal
         Int.dvd_coe_gcd (Int.dvd_of_emod_eq_zero hap) (Int.dvd_of_emod_eq_zero h
 
 中文:
-定理 exists_odd_minimal
+定理 存在_odd_minimal
   条件: {a b c : 整数} (h : Fermat42 a b c)
   证明: by
   obtain ⟨a0, b0, c0, hf⟩ := exists_minimal h
@@ -378,7 +378,7 @@ theorem exists_pos_odd_minimal
     exact neg_pos.mpr h1
 
 中文:
-定理 exists_pos_odd_minimal
+定理 存在_pos_odd_minimal
   条件: {a b c : 整数} (h : Fermat42 a b c)
   证明: by
   obtain ⟨a0, b0, c0, hf, hc⟩ := exists_odd_minimal h
@@ -415,7 +415,7 @@ theorem Int.isCoprime_of_sq_sum
   exact (IsCoprime.mul_left h2 h2).mul_add_left_left r
 
 中文:
-定理 Int.isCoprime_of_sq_sum
+定理 整数.isCoprime_of_sq_sum
   条件: {r s : 整数} (h2 : IsCoprime s r)
   结论: IsCoprime (r ^ 2 + s ^ 2) r
   证明: by
@@ -439,7 +439,7 @@ theorem Int.isCoprime_of_sq_sum'
   rw [add_comm]; apply Int.isCoprime_of_sq_sum h
 
 中文:
-定理 Int.isCoprime_of_sq_sum'
+定理 整数.isCoprime_of_sq_sum'
   条件: {r s : 整数} (h : IsCoprime r s)
   证明: by
   apply IsCoprime.mul_right (Int.isCoprime_of_sq_sum (isCoprime_comm.mp h))
@@ -473,8 +473,8 @@ theorem not_minimal
 
 中文:
 定理 not_minimal
-  条件: {a b c : 整数} (h : Minimal a b c) (ha2 : a % 2 = 1) (hc : 0 < c)
-  结论: False
+  条件: {a b c : 整数} (h : 极小 a b c) (ha2 : a % 2 = 1) (hc : 0 < c)
+  结论: 假
   证明: by
   -- Use the fact that a ^ 2, b ^ 2, c form a pythagorean triple to obtain m and n such that
   -- a ^ 2 = m ^ 2 - n ^ 2, b ^ 2 = 2 * m * n and c = m ^ 2 + n ^ 2

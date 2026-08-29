@@ -61,8 +61,8 @@ definition ULift.upFunctor
   map f := f
 
 中文:
-定义 ULift.upFunctor
-  签名: : C ⥤ ULift.{u₂} C where
+定义 类型层提升.upFunctor
+  签名: : C ⥤ 类型层提升.{u₂} C where
   定义体: ULift.up
   map f := f
 
@@ -84,8 +84,8 @@ definition ULift.downFunctor
   map f := f
 
 中文:
-定义 ULift.downFunctor
-  签名: : ULift.{u₂} C ⥤ C where
+定义 类型层提升.downFunctor
+  签名: : 类型层提升.{u₂} C ⥤ C where
   定义体: ULift.down
   map f := f
 
@@ -115,8 +115,8 @@ definition ULift.equivalence
       inv := { app := fun _ => 𝟙 _ } }
 
 中文:
-定义 ULift.equivalence
-  签名: : C ≌ ULift.{u₂} C where
+定义 类型层提升.equivalence
+  签名: : C ≌ 类型层提升.{u₂} C where
   定义体: ULift.upFunctor
   inverse := ULift.downFunctor
   unitIso :=
@@ -273,7 +273,7 @@ instance ULiftHom.category
 
 中文:
 实例 ULiftHom.category
-  签名: : Category.{max v₂ v₁} (ULiftHom.{v₂} C) where
+  签名: : 范畴.{最大值 v₂ v₁} (ULiftHom.{v₂} C) where
   定义体: ULift.{v₂} A.objDown ⟶ B.objDown
   id _ := ⟨𝟙 _⟩
   comp f g := ⟨f.down ≫ g.down⟩
@@ -400,7 +400,7 @@ instance :
 
 中文:
 实例 :
-  签名: SmallCategory (AsSmall.{w₁} C)
+  签名: 小范畴 (AsSmall.{w₁} C)
   定义体: ULift.{max w₁ u₁} X.down ⟶ Y.down
   id _ := ⟨𝟙 _⟩
   comp f g := ⟨f.down ≫ g.down⟩
@@ -545,8 +545,8 @@ instance [Inhabited
   body: ⟨⟨default⟩⟩
 
 中文:
-实例 [Inhabited
-  签名: C] : Inhabited (AsSmall C)
+实例 [可居
+  签名: C] : 可居 (AsSmall C)
   定义体: ⟨⟨default⟩⟩
 -/
 instance [Inhabited C] : Inhabited (AsSmall C) :=

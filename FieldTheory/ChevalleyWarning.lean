@@ -69,8 +69,8 @@ theorem MvPolynomial.sum_eval_eq_zero
   obtain ⟨i, h
 
 中文:
-定理 MvPolynomial.sum_eval_eq_zero
-  结论: (f : MvPolynomial σ K)
+定理 多元多项式.sum_eval_eq_zero
+  结论: (f : 多元多项式 σ K)
   证明: by
   have : DecidableEq K := Classical.decEq K
   calc
@@ -145,7 +145,7 @@ theorem char_dvd_card_solutions_of_sum_lt
 
 中文:
 定理 char_dvd_card_solutions_of_sum_lt
-  结论: {s : Finset ι} {f : ι -> MvPolynomial σ K}
+  结论: {s : 有限集 ι} {f : ι -> 多元多项式 σ K}
   证明: by
   have hq : 0 < q - 1 := by rw [← Fintype.card_units, Fintype.card_pos_iff]; exact ⟨1⟩
   let S : Finset (σ -> K) := {x | forall i in s, eval x (f i) = 0}
@@ -218,7 +218,7 @@ theorem char_dvd_card_solutions_of_fintype_sum_lt
 
 中文:
 定理 char_dvd_card_solutions_of_fintype_sum_lt
-  结论: [Fintype ι] {f : ι -> MvPolynomial σ K}
+  结论: [有限类型 ι] {f : ι -> 多元多项式 σ K}
   证明: by
   simpa using char_dvd_card_solutions_of_sum_lt p h
 
@@ -243,7 +243,7 @@ theorem char_dvd_card_solutions
 
 中文:
 定理 char_dvd_card_solutions
-  条件: {f : MvPolynomial σ K} (h : f.totalDegree < Fintype.card σ)
+  条件: {f : 多元多项式 σ K} (h : f.totalDegree < 有限类型.card σ)
   证明: by
   let F : Unit -> MvPolynomial σ K := fun _ => f
   have : (∑ i : Unit, (F i).totalDegree) < Fintype.card σ := h
@@ -272,7 +272,7 @@ theorem char_dvd_card_solutions_of_add_lt
 
 中文:
 定理 char_dvd_card_solutions_of_add_lt
-  结论: {f₁ f₂ : MvPolynomial σ K}
+  结论: {f₁ f₂ : 多元多项式 σ K}
   证明: by
   let F : Bool -> MvPolynomial σ K := fun b => cond b f₂ f₁
   have : (∑ b : Bool, (F b).totalDegree) < Fintype.card σ := (add_comm _ _).trans_lt h

@@ -47,7 +47,7 @@ lemma isNilpotent_C_mul_pow_X_of_isNilpotent
 
 中文:
 引理 isNilpotent_C_mul_pow_X_of_isNilpotent
-  条件: (n : 自然数) (hnil : IsNilpotent r)
+  条件: (n : 自然数) (hnil : 是幂零 r)
   证明: by
   refine Commute.isNilpotent_mul_right (commute_X_pow _ _).symm ?_
   obtain ⟨m, hm⟩ := hnil
@@ -75,7 +75,7 @@ lemma isNilpotent_pow_X_mul_C_of_isNilpotent
 
 中文:
 引理 isNilpotent_pow_X_mul_C_of_isNilpotent
-  条件: (n : 自然数) (hnil : IsNilpotent r)
+  条件: (n : 自然数) (hnil : 是幂零 r)
   证明: by
   rw [commute_X_pow]
   exact isNilpotent_C_mul_pow_X_of_isNilpotent n hnil
@@ -288,7 +288,7 @@ theorem isUnit_of_coeff_isUnit_isNilpotent
 
 中文:
 定理 isUnit_of_coeff_isUnit_isNilpotent
-  结论: (hunit : IsUnit (P.coeff 0))
+  结论: (hunit : 是单位 (P.coeff 0))
   证明: by
   induction h : P.natDegree using Nat.strong_induction_on generalizing P with | _ k hind
   by_cases hdeg : P.natDegree = 0
@@ -340,7 +340,7 @@ theorem coeff_isUnit_isNilpotent_of_isUnit
 
 中文:
 定理 coeff_isUnit_isNilpotent_of_isUnit
-  条件: (hunit : IsUnit P)
+  条件: (hunit : 是单位 P)
   证明: by
   obtain ⟨Q, hQ⟩ := IsUnit.exists_right_inv hunit
   constructor
@@ -463,7 +463,7 @@ theorem not_isUnit_of_natDegree_pos_of_isReduced
 
 中文:
 定理 not_isUnit_of_natDegree_pos_of_isReduced
-  结论: [IsReduced R] (p : R[X])
+  结论: [是既约 R] (p : R[X])
   证明: by
   simp only [ne_eq, isNilpotent_iff_eq_zero, not_and, not_forall, exists_prop,
     Polynomial.isUnit_iff_coeff_isUnit_isNilpotent]
@@ -495,7 +495,7 @@ theorem not_isUnit_of_degree_pos_of_isReduced
 
 中文:
 定理 not_isUnit_of_degree_pos_of_isReduced
-  结论: [IsReduced R] (p : R[X])
+  结论: [是既约 R] (p : R[X])
   证明: not_isUnit_of_natDegree_pos_of_isReduced _ (natDegree_pos_iff_degree_pos.mpr hpl)
 
 Depends on / 依赖: natDegree_pos_iff_degree_pos, natDegree_pos_iff_degree_pos.mpr, not_isUnit_of_natDegree_pos_of_isReduced
@@ -514,7 +514,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (C : _ ->+* Polynomial R)
+  签名: 是Local态射 (C : _ ->+* 多项式 R)
   定义体: by simp +contextual [isUnit_iff_coeff_isUnit_isNilpotent, coeff_C]
 
 Depends on / 依赖: coeff_C, contextual, isUnit_iff_coeff_isUnit_isNilpotent
@@ -532,7 +532,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (algebraMap R (Polynomial R))
+  签名: 是Local态射 (algebraMap R (多项式 R))
   定义体: inferInstanceAs (IsLocalHom C)
 
 Depends on / 依赖: IsLocalHom
@@ -559,7 +559,7 @@ lemma isNilpotent_aeval_sub_of_isNilpotent_sub
 
 中文:
 引理 isNilpotent_aeval_sub_of_isNilpotent_sub
-  条件: (h : IsNilpotent (a - b))
+  条件: (h : 是幂零 (a - b))
   证明: by
   simp only [← eval_map_algebraMap]
   have ⟨c, hc⟩ := evalSubFactor (map (algebraMap R S) P) a b

@@ -168,7 +168,7 @@ theorem quadraticChar_card_card
 
 中文:
 定理 quadraticChar_card_card
-  结论: [DecidableEq F] (hF : ringChar F != 2) {F' : 类型} [Field F']
+  结论: [DecidableEq F] (hF : ringChar F != 2) {F' : 类型} [域 F']
   证明: by
   let χ := (quadraticChar F).ringHomComp (algebraMap Int F')
   have hχ₁ : χ != 1 := by
@@ -208,7 +208,7 @@ theorem quadraticChar_odd_prime
 
 中文:
 定理 quadraticChar_odd_prime
-  结论: [DecidableEq F] (hF : ringChar F != 2) {p : 自然数} [Fact p.Prime]
+  结论: [DecidableEq F] (hF : ringChar F != 2) {p : 自然数} [Fact p.素]
   证明: by
   rw [← quadraticChar_neg_one hF]
   have h := quadraticChar_card_card hF (ne_of_eq_of_ne (ringChar_zmod_n p) hp₁)
@@ -240,7 +240,7 @@ theorem FiniteField.isSquare_odd_prime_iff
 
 中文:
 定理 FiniteField.isSquare_odd_prime_iff
-  结论: (hF : ringChar F != 2) {p : 自然数} [Fact p.Prime]
+  结论: (hF : ringChar F != 2) {p : 自然数} [Fact p.素]
   证明: by
   classical
   rcases eq_or_ne (ringChar F) p with rfl | hFp

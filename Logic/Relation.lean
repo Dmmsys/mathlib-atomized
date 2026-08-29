@@ -155,7 +155,7 @@ theorem refl_iff_eq_le
 
 中文:
 定理 refl_iff_eq_le
-  结论: Std.Refl r ↔ Eq <= r
+  结论: Std.Refl r ↔ 相等 <= r
   证明: by
   unfold Pi.hasLe Prop.le
   grind [Std.Refl]
@@ -187,7 +187,7 @@ theorem irrefl_iff_le_ne
 
 中文:
 定理 irrefl_iff_le_ne
-  结论: Std.Irrefl r ↔ r <= Ne
+  结论: Std.Irrefl r ↔ r <= 不等
   证明: by
   unfold Pi.hasLe Prop.le
   grind [Std.Irrefl]
@@ -379,8 +379,8 @@ instance IsTrans.comap
 @[deprecated (since := "2026-02-21")] alias Transitive.comap := IsTrans.comap
 
 中文:
-实例 IsTrans.comap
-  签名: [IsTrans β r] (f : α -> β)
+实例 是Trans.comap
+  签名: [是Trans β r] (f : α -> β)
   定义体: trans_of r
 
 @[deprecated (since := "2026-02-21")] alias Transitive.comap := IsTrans.comap
@@ -400,8 +400,8 @@ instance IsEquiv.comap
   signature: [IsEquiv β r] (f : α -> β)
 
 中文:
-实例 IsEquiv.comap
-  签名: [IsEquiv β r] (f : α -> β)
+实例 Is等价.comap
+  签名: [Is等价 β r] (f : α -> β)
 -/
 instance IsEquiv.comap [IsEquiv β r] (f : α -> β) : IsEquiv α (r on f) where
 
@@ -415,9 +415,9 @@ theorem Equivalence.comap
   proof: ⟨fun a => h.refl (f a), h.symm, h.trans⟩
 
 中文:
-定理 Equivalence.comap
-  条件: (h : Equivalence r) (f : α -> β)
-  结论: Equivalence (r on f)
+定理 等价.comap
+  条件: (h : 等价 r) (f : α -> β)
+  结论: 等价 (r on f)
   证明: ⟨fun a => h.refl (f a), h.symm, h.trans⟩
 
 Depends on / 依赖: h.refl, h.symm, h.trans
@@ -447,7 +447,7 @@ local infixr:80 " ∘r " => Relation.Comp
 @[simp]
 
 中文:
-定义 Comp
+定义 复合
   签名: (r : α -> β -> 命题) (p : β -> γ -> 命题) (a : α) (c : γ)
   定义体: exists b, r a b ∧ p b c
 
@@ -690,7 +690,7 @@ definition Fibration
   body: forall ⦃a b⦄, rβ b (f a) -> exists a', rα a' a ∧ f a' = b
 
 中文:
-定义 Fibration
+定义 纤维化
   定义体: forall ⦃a b⦄, rβ b (f a) -> exists a', rα a' a ∧ f a' = b
 -/
 def Fibration :=
@@ -713,7 +713,7 @@ theorem _root_.Acc.of_fibration
 
 中文:
 定理 _root_.Acc.of_fibration
-  条件: (fib : Fibration rα rβ f) {a} (ha : Acc rα a)
+  条件: (fib : 纤维化 rα rβ f) {a} (ha : Acc rα a)
   结论: Acc rβ (f a)
   证明: by
   induction ha with | intro a _ ih => ?_
@@ -789,7 +789,7 @@ lemma map_apply
 
 中文:
 引理 map_apply
-  结论: Relation.Map r f g c d ↔ 存在 a b, r a b ∧ f a = c ∧ g b = d
+  结论: 关系.Map r f g c d ↔ 存在 a b, r a b ∧ f a = c ∧ g b = d
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -830,7 +830,7 @@ lemma map_apply_apply
 
 中文:
 引理 map_apply_apply
-  条件: (hf : Injective f) (hg : Injective g) (r : α -> β -> 命题) (a : α) (b : β)
+  条件: (hf : 单射 f) (hg : 单射 g) (r : α -> β -> 命题) (a : α) (b : β)
   证明: by simp [Relation.Map, hf.eq_iff, hg.eq_iff]
 
 Depends on / 依赖: Relation, Relation.Map, eq_iff, hf.eq_iff, hg.eq_iff
@@ -850,7 +850,7 @@ lemma map_id_id
 中文:
 引理 map_id_id
   条件: (r : α -> β -> 命题)
-  结论: Relation.Map r id id = r
+  结论: 关系.Map r id id = r
   证明: by ext; simp [Relation.Map]
 -/
 @[simp] lemma map_id_id (r : α -> β -> Prop) : Relation.Map r id id = r := by ext; simp [Relation.Map]
@@ -864,8 +864,8 @@ instance [Decidable
   body: ‹Decidable _›
 
 中文:
-实例 [Decidable
-  签名: (存在 a b, r a b ∧ f a = c ∧ g b = d)] : Decidable (Relation.Map r f g c d)
+实例 [可判定
+  签名: (存在 a b, r a b ∧ f a = c ∧ g b = d)] : 可判定 (关系.Map r f g c d)
   定义体: ‹Decidable _›
 
 Depends on / 依赖: Decidable
@@ -887,7 +887,7 @@ lemma _root_.Std.Refl.map
 
 中文:
 引理 _root_.Std.Refl.map
-  条件: {r : α -> α -> 命题} [Std.Refl r] {f : α -> β} (hf : f.Surjective)
+  条件: {r : α -> α -> 命题} [Std.Refl r] {f : α -> β} (hf : f.满射)
   证明: by
     obtain ⟨y, rfl⟩ := hf x
     exact ⟨y, y, refl y, rfl, rfl⟩
@@ -946,8 +946,8 @@ exact ⟨x, z, trans_of r hxy trans_of r (hf y y' <| hy' ▸ hy) hyz, hx, hz⟩
 @[deprecated (since := "2026-02-21")] alias map_transitive := isTrans_map
 
 中文:
-引理 _root_.IsTrans.map
-  结论: {r : α -> α -> 命题} [IsTrans α r] {f : α -> β}
+引理 _root_.是Trans.map
+  结论: {r : α -> α -> 命题} [是Trans α r] {f : α -> β}
   证明: by
   refine ⟨fun _ _ _ ⟨x, y, hxy, hx, hy⟩ ⟨y', z, hyz, hy', hz⟩ => ?_⟩
 exact ⟨x, z, trans_of r hxy trans_of r (hf y y' <| hy' ▸ hy) hyz, hx, hz⟩
@@ -979,7 +979,7 @@ lemma map_equivalence
 
 中文:
 引理 map_equivalence
-  结论: {r : α -> α -> 命题} (hr : Equivalence r) (f : α -> β) (hf : f.Surjective)
+  结论: {r : α -> α -> 命题} (hr : 等价 r) (f : α -> β) (hf : f.满射)
   证明: hr.stdRefl.map hf
   symm := @(hr.stdSymm.map f |>.symm)
   trans := @(hr.isTrans.map hf_ker |>.trans)
@@ -1023,7 +1023,7 @@ lemma le_onFun_map
 中文:
 引理 le_onFun_map
   条件: {r : α -> α -> 命题} (f : α -> β)
-  结论: r <= (Relation.Map r f f on f)
+  结论: r <= (关系.Map r f f on f)
   证明: by
   unfold Pi.hasLe Prop.le
   grind [Relation.Map]
@@ -1046,7 +1046,7 @@ lemma onFun_map_eq_of_injective
 
 中文:
 引理 onFun_map_eq_of_injective
-  条件: {r : α -> α -> 命题} {f : α -> β} (hinj : f.Injective)
+  条件: {r : α -> α -> 命题} {f : α -> β} (hinj : f.单射)
   证明: by
   ext x y
   exact ⟨fun ⟨x', y', hr, hx, hy⟩ => hinj hx ▸ hinj hy ▸ hr, fun h => ⟨x, y, h, rfl, rfl⟩⟩
@@ -1070,7 +1070,7 @@ lemma map_onFun_le
 中文:
 引理 map_onFun_le
   条件: {r : β -> β -> 命题} (f : α -> β)
-  结论: Relation.Map (r on f) f f <= r
+  结论: 关系.Map (r on f) f f <= r
   证明: by
   unfold Pi.hasLe Prop.le
   grind [Relation.Map]
@@ -1095,7 +1095,7 @@ lemma map_onFun_eq_of_surjective
 
 中文:
 引理 map_onFun_eq_of_surjective
-  条件: {r : β -> β -> 命题} {f : α -> β} (hsurj : f.Surjective)
+  条件: {r : β -> β -> 命题} {f : α -> β} (hsurj : f.满射)
   证明: by
   ext x y
   have _ := hsurj x
@@ -1382,8 +1382,8 @@ instance [IsTrans
     exact single (trans_of r h₁ h₂)
 
 中文:
-实例 [IsTrans
-  签名: α r] : IsPreorder α (ReflGen r) where
+实例 [是Trans
+  签名: α r] : 是预序 α (ReflGen r) where
   定义体: by
     obtain (rfl | h₂) := h₂
     · exact h₁
@@ -2320,7 +2320,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrans α (TransGen r)
+  签名: 是Trans α (TransGen r)
   定义体: TransGen.trans
 
 Depends on / 依赖: TransGen, TransGen.trans
@@ -2338,7 +2338,7 @@ instance [Std.Refl
 
 中文:
 实例 [Std.Refl
-  签名: r] : IsPreorder α (TransGen r) where
+  签名: r] : 是预序 α (TransGen r) where
   定义体: .single (refl x)
 
 Depends on / 依赖: single
@@ -2498,7 +2498,7 @@ theorem symmGen_of_total
 
 中文:
 定理 symmGen_of_total
-  条件: [Std.Total r] (a b : α)
+  条件: [Std.全 r] (a b : α)
   结论: SymmGen r a b
   证明: Std.Total.total a b
 
@@ -2605,7 +2605,7 @@ theorem transGen_eq_self
 
 中文:
 定理 transGen_eq_self
-  条件: [IsTrans α r]
+  条件: [是Trans α r]
   结论: TransGen r = r
   证明: funext₂ fun a b => propext
     ⟨fun h => by
@@ -2637,7 +2637,7 @@ theorem transitive_transGen
 
 中文:
 定理 transitive_transGen
-  结论: IsTrans α (TransGen r)
+  结论: 是Trans α (TransGen r)
   证明: inferInstance
 
 @[deprecated transGen_eq_self (since := "2026-03-27"), grind =]
@@ -2788,7 +2788,7 @@ lemma transGen_minimal
 
 中文:
 引理 transGen_minimal
-  条件: {r' : α -> α -> 命题} [IsTrans α r'] (h : r <= r')
+  条件: {r' : α -> α -> 命题} [是Trans α r'] (h : r <= r')
   结论: TransGen r <= r'
   证明: by
   simpa [transGen_eq_self] using TransGen.mono h
@@ -2976,7 +2976,7 @@ theorem reflTransGen_eq_self
 
 中文:
 定理 reflTransGen_eq_self
-  条件: [Std.Refl r] [IsTrans α r]
+  条件: [Std.Refl r] [是Trans α r]
   结论: ReflTransGen r = r
   证明: funext₂ fun a b => propext
     ⟨fun h => by
@@ -3038,7 +3038,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder α (ReflTransGen r)
+  签名: 是预序 α (ReflTransGen r)
   定义体: @ReflTransGen.refl α r
   trans := @ReflTransGen.trans α r
 
@@ -3083,7 +3083,7 @@ theorem transitive_reflTransGen
 
 中文:
 定理 transitive_reflTransGen
-  结论: IsTrans α (ReflTransGen r)
+  结论: 是Trans α (ReflTransGen r)
   证明: inferInstance
 
 @[deprecated reflTransGen_eq_self (since := "2026-03-27"), grind =]
@@ -3333,7 +3333,7 @@ lemma reflTransGen_eq_reflGen
 
 中文:
 引理 reflTransGen_eq_reflGen
-  条件: [IsTrans α r]
+  条件: [是Trans α r]
   结论: ReflTransGen r = ReflGen r
   证明: by
   rw [← reflGen_transGen]; rw [transGen_eq_self]
@@ -3361,7 +3361,7 @@ theorem is_equivalence
 
 中文:
 定理 is_equivalence
-  结论: Equivalence (@EqvGen α r)
+  结论: 等价 (@EqvGen α r)
   证明: Equivalence.mk EqvGen.refl (EqvGen.symm _ _) (EqvGen.trans _ _ _)
 
 .isEquiv instance : IsEquiv α (EqvGen r) := is_equivalence _
@@ -3388,7 +3388,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: : Setoid α
+  签名: : 集合等价关系 α
   定义体: Setoid.mk _ (EqvGen.is_equivalence r)
 
 Depends on / 依赖: EqvGen, EqvGen.is_equivalence, Setoid, Setoid.mk, is_equivalence
@@ -3443,7 +3443,7 @@ lemma eqvGen_le
 
 中文:
 引理 eqvGen_le
-  条件: {r r' : α -> α -> 命题} [IsEquiv α r'] (h : r <= r')
+  条件: {r r' : α -> α -> 命题} [Is等价 α r'] (h : r <= r')
   结论: EqvGen r <= r'
 -/
 lemma eqvGen_le {r r' : α -> α -> Prop} [IsEquiv α r'] (h : r <= r') : EqvGen r <= r'
@@ -3725,7 +3725,7 @@ definition Join
   body: fun a b => exists c, r a c ∧ r b c
 
 中文:
-定义 Join
+定义 并
   签名: (r : α -> α -> 命题)
   定义体: fun a b => exists c, r a c ∧ r b c
 -/
@@ -3804,7 +3804,7 @@ theorem le_join_of_refl
 中文:
 定理 le_join_of_refl
   条件: [Std.Refl r]
-  结论: r <= Join r
+  结论: r <= 并 r
   证明: fun _ b hab => ⟨b, hab, refl b⟩
 
 @[deprecated (since := "2026-06-30")] alias join_of_single := le_join_of_refl
@@ -3825,8 +3825,8 @@ instance Join.symm
 @[deprecated (since := "2026-06-10")] alias symmetric_join := Join.symm
 
 中文:
-实例 Join.symm
-  签名: : Std.Symm (Join r) where
+实例 并.symm
+  签名: : Std.Symm (并 r) where
   定义体: fun ⟨c, hac, hcb⟩ => ⟨c, hcb, hac⟩
 
 @[deprecated (since := "2026-06-10")] alias symmetric_join := Join.symm
@@ -3847,7 +3847,7 @@ instance Join.refl
 @[deprecated (since := "2026-06-10")] alias reflexive_join := Join.refl
 
 中文:
-实例 Join.refl
+实例 并.refl
   签名: [Std.Refl r]
   定义体: ⟨a, _root_.refl a, _root_.refl a⟩
 
@@ -3872,7 +3872,7 @@ theorem isTrans_join
 
 中文:
 定理 isTrans_join
-  条件: [IsTrans α r] (h : 对任意 a b c, r a b -> r a c -> Join r b c)
+  条件: [是Trans α r] (h : 对任意 a b c, r a b -> r a c -> 并 r b c)
   证明: ⟨fun _a b _c ⟨x, hax, hbx⟩ ⟨y, hby, hcy⟩ =>
   let ⟨z, hxz, hyz⟩ := h b x y hbx hby
   ⟨z, trans_of r hax hxz, trans_of r hcy hyz⟩⟩
@@ -3899,7 +3899,7 @@ theorem equivalence_join
 
 中文:
 定理 equivalence_join
-  条件: [IsPreorder α r] (h : 对任意 a b c, r a b -> r a c -> Join r b c)
+  条件: [是预序 α r] (h : 对任意 a b c, r a b -> r a c -> 并 r b c)
   证明: .trans _ _ _⟩ ⟨Join.refl.refl, Join.symm.symm _ _, isTrans_join h
 
 Depends on / 依赖: Join.refl.refl, Join.symm.symm, isTrans_join
@@ -3938,7 +3938,7 @@ theorem join_le_of_equivalence_of_le
 
 中文:
 定理 join_le_of_equivalence_of_le
-  条件: {r' : α -> α -> 命题} (hr : Equivalence r) (h : r' <= r)
+  条件: {r' : α -> α -> 命题} (hr : 等价 r) (h : r' <= r)
   证明: fun a b ⟨c, hac, hbc⟩ => hr.trans (h a c hac) (hr.symm <| h b c hbc)
 
 @[deprecated (since := "2026-06-30")] alias join_of_equivalence := join_le_of_equivalence_of_le
@@ -3968,7 +3968,7 @@ alias reflTransGen_of_transitive_reflexive := reflTransGen_le_of_le
 
 中文:
 定理 reflTransGen_le_of_le
-  结论: {r' : α -> α -> 命题} [Std.Refl r] [IsTrans α r]
+  结论: {r' : α -> α -> 命题} [Std.Refl r] [是Trans α r]
   证明: by
   simpa [reflTransGen_eq_self] using ReflTransGen.mono h
 
@@ -4003,7 +4003,7 @@ alias reflTransGen_of_equivalence := reflTransGen_le_of_equivalence_of_le
 
 中文:
 定理 reflTransGen_le_of_equivalence_of_le
-  条件: {r' : α -> α -> 命题} (hr : Equivalence r)
+  条件: {r' : α -> α -> 命题} (hr : 等价 r)
   证明: @reflTransGen_le_of_le _ _ _ hr.stdRefl hr.isTrans
 
 @[deprecated (since := "2026-06-30")]
@@ -4039,8 +4039,8 @@ theorem Quot.eqvGen_exact
     (Quot.lift (Quotient.mk (EqvGen.setoid r)) (fun x y h => Quot.sound (EqvGen.rel x y h))) H)
 
 中文:
-定理 Quot.eqvGen_exact
-  条件: (H : Quot.mk r a = Quot.mk r b)
+定理 商.eqvGen_exact
+  条件: (H : 商.mk r a = 商.mk r b)
   结论: EqvGen r a b
   证明: @Quotient.exact _ (EqvGen.setoid r) a b (congrArg
     (Quot.lift (Quotient.mk (EqvGen.setoid r)) (fun x y h => Quot.sound (EqvGen.rel x y h))) H)
@@ -4066,9 +4066,9 @@ theorem Quot.eqvGen_sound
     H
 
 中文:
-定理 Quot.eqvGen_sound
+定理 商.eqvGen_sound
   条件: (H : EqvGen r a b)
-  结论: Quot.mk r a = Quot.mk r b
+  结论: 商.mk r a = 商.mk r b
   证明: EqvGen.rec
     (fun _ _ h => Quot.sound h)
     (fun _ => rfl)
@@ -4104,8 +4104,8 @@ theorem Equivalence.eqvGen_iff
     (EqvGen.rel a b)
 
 中文:
-定理 Equivalence.eqvGen_iff
-  条件: (h : Equivalence r)
+定理 等价.eqvGen_iff
+  条件: (h : 等价 r)
   结论: EqvGen r a b ↔ r a b
   证明: Iff.intro
     (by
@@ -4140,8 +4140,8 @@ theorem Equivalence.eqvGen_eq
   proof: funext fun _ => funext fun _ => propext h.eqvGen_iff
 
 中文:
-定理 Equivalence.eqvGen_eq
-  条件: (h : Equivalence r)
+定理 等价.eqvGen_eq
+  条件: (h : 等价 r)
   结论: EqvGen r = r
   证明: funext fun _ => funext fun _ => propext h.eqvGen_iff
 

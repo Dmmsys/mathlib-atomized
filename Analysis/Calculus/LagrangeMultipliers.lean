@@ -89,7 +89,7 @@ theorem IsLocalExtrOn.exists_linear_map_of_hasStrictFDerivAt
     ((LinearEquiv.refl Real (F ->ₗ[Real] Real)).prodCongr (LinearMap.ringLma
 
 中文:
-定理 IsLocalExtrOn.exists_linear_map_of_hasStrictFDerivAt
+定理 IsLocalExtrOn.存在_linear_map_of_hasStrictFDerivAt
   证明: by
   rcases Submodule.exists_le_ker_of_lt_top _
       (lt_top_iff_ne_top.2 <| hextr.range_ne_top_of_hasStrictFDerivAt hf' hφ') with
@@ -138,7 +138,7 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d
     have H₁ : Λ (f' x) = f' x * Λ 1 :
 
 中文:
-定理 IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d
+定理 IsLocalExtrOn.存在_multipliers_of_hasStrictFDerivAt_1d
   结论: {f : E -> 实数} {f' : StrongDual 实数 E}
   证明: by
   obtain ⟨Λ, Λ₀, hΛ, hfΛ⟩ := hextr.exists_linear_map_of_hasStrictFDerivAt hf' hφ'
@@ -183,8 +183,8 @@ theorem IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt
   rcases (Linea
 
 中文:
-定理 IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt
-  结论: {ι : 类型} [Fintype ι]
+定理 IsLocalExtrOn.存在_multipliers_of_hasStrictFDerivAt
+  结论: {ι : 类型} [有限类型 ι]
   证明: by
   let := Classical.decEq ι
   replace hextr : IsLocalExtrOn φ {x | (fun i => f i x) = fun i => f i x₀} x₀ := by
@@ -227,7 +227,7 @@ theorem IsLocalExtrOn.linear_dependent_of_hasStrictFDerivAt
 
 中文:
 定理 IsLocalExtrOn.linear_dependent_of_hasStrictFDerivAt
-  结论: {ι : 类型} [Finite ι] {f : ι -> E -> 实数}
+  结论: {ι : 类型} [有限 ι] {f : ι -> E -> 实数}
   证明: by
   cases nonempty_fintype ι
   rw [Fintype.linearIndependent_iff]; push Not

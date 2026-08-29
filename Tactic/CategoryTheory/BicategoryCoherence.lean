@@ -45,7 +45,7 @@ class LiftHom
     - lift : of.obj a ⟶ of.obj b
 
 中文:
-类 LiftHom
+类 Lift态射
   参数: {a b : B} (f : a ⟶ b)
   公理与运算 (1 个):
     - lift : of.obj a ⟶ of.obj b
@@ -65,7 +65,7 @@ instance liftHomId
 
 中文:
 实例 liftHomId
-  签名: : LiftHom (𝟙 a) where lift
+  签名: : Lift态射 (𝟙 a) where lift
   定义体: 𝟙 (of.obj a)
 
 Depends on / 依赖: of.obj
@@ -82,7 +82,7 @@ instance liftHomComp
 
 中文:
 实例 liftHomComp
-  签名: (f : a ⟶ b) (g : b ⟶ c) [LiftHom f] [LiftHom g]
+  签名: (f : a ⟶ b) (g : b ⟶ c) [Lift态射 f] [Lift态射 g]
   定义体: LiftHom.lift f ≫ LiftHom.lift g
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -103,9 +103,9 @@ class LiftHom₂
 
 中文:
 类 LiftHom₂
-  参数: {f g : a ⟶ b} [LiftHom f] [LiftHom g] (η : f ⟶ g)
+  参数: {f g : a ⟶ b} [Lift态射 f] [Lift态射 g] (η : f ⟶ g)
   公理与运算 (1 个):
-    - lift : LiftHom.lift f ⟶ LiftHom.lift g
+    - lift : Lift态射.lift f ⟶ Lift态射.lift g
 -/
 class LiftHom₂ {f g : a ⟶ b} [LiftHom f] [LiftHom g] (η : f ⟶ g) where
   /-- A lift of a 2-morphism to the free bicategory.
@@ -122,7 +122,7 @@ instance liftHom₂Id
 
 中文:
 实例 liftHom₂Id
-  签名: (f : a ⟶ b) [LiftHom f]
+  签名: (f : a ⟶ b) [Lift态射 f]
   定义体: 𝟙 _
 -/
 instance liftHom₂Id (f : a ⟶ b) [LiftHom f] : LiftHom₂ (𝟙 f) where
@@ -138,7 +138,7 @@ instance liftHom₂LeftUnitorHom
 
 中文:
 实例 liftHom₂LeftUnitorHom
-  签名: (f : a ⟶ b) [LiftHom f]
+  签名: (f : a ⟶ b) [Lift态射 f]
   定义体: (fun_ (LiftHom.lift f)).hom
 
 Depends on / 依赖: LiftHom, LiftHom.lift, fun_
@@ -156,7 +156,7 @@ instance liftHom₂LeftUnitorInv
 
 中文:
 实例 liftHom₂LeftUnitorInv
-  签名: (f : a ⟶ b) [LiftHom f]
+  签名: (f : a ⟶ b) [Lift态射 f]
   定义体: (fun_ (LiftHom.lift f)).inv
 
 Depends on / 依赖: LiftHom, LiftHom.lift, fun_
@@ -174,7 +174,7 @@ instance liftHom₂RightUnitorHom
 
 中文:
 实例 liftHom₂RightUnitorHom
-  签名: (f : a ⟶ b) [LiftHom f]
+  签名: (f : a ⟶ b) [Lift态射 f]
   定义体: (ρ_ (LiftHom.lift f)).hom
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -192,7 +192,7 @@ instance liftHom₂RightUnitorInv
 
 中文:
 实例 liftHom₂RightUnitorInv
-  签名: (f : a ⟶ b) [LiftHom f]
+  签名: (f : a ⟶ b) [Lift态射 f]
   定义体: (ρ_ (LiftHom.lift f)).inv
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -210,7 +210,7 @@ instance liftHom₂AssociatorHom
 
 中文:
 实例 liftHom₂AssociatorHom
-  签名: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) [LiftHom f] [LiftHom g]
+  签名: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) [Lift态射 f] [Lift态射 g]
   定义体: (α_ (LiftHom.lift f) (LiftHom.lift g) (LiftHom.lift h)).hom
 
 Depends on / 依赖: EqOnSource, LiftHom, LiftHom.lift, PartialEquiv, PartialEquiv.EqOnSource.symm
@@ -229,7 +229,7 @@ instance liftHom₂AssociatorInv
 
 中文:
 实例 liftHom₂AssociatorInv
-  签名: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) [LiftHom f] [LiftHom g]
+  签名: (f : a ⟶ b) (g : b ⟶ c) (h : c ⟶ d) [Lift态射 f] [Lift态射 g]
   定义体: (α_ (LiftHom.lift f) (LiftHom.lift g) (LiftHom.lift h)).inv
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -248,7 +248,7 @@ instance liftHom₂Comp
 
 中文:
 实例 liftHom₂Comp
-  签名: {f g h : a ⟶ b} [LiftHom f] [LiftHom g] [LiftHom h] (η : f ⟶ g) (θ : g ⟶ h)
+  签名: {f g h : a ⟶ b} [Lift态射 f] [Lift态射 g] [Lift态射 h] (η : f ⟶ g) (θ : g ⟶ h)
   定义体: LiftHom₂.lift η ≫ LiftHom₂.lift θ
 
 Depends on / 依赖: h.symm
@@ -267,7 +267,7 @@ instance liftHom₂WhiskerLeft
 
 中文:
 实例 liftHom₂WhiskerLeft
-  签名: (f : a ⟶ b) [LiftHom f] {g h : b ⟶ c} (η : g ⟶ h) [LiftHom g]
+  签名: (f : a ⟶ b) [Lift态射 f] {g h : b ⟶ c} (η : g ⟶ h) [Lift态射 g]
   定义体: LiftHom.lift f ◁ LiftHom₂.lift η
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -286,7 +286,7 @@ instance liftHom₂WhiskerRight
 
 中文:
 实例 liftHom₂WhiskerRight
-  签名: {f g : a ⟶ b} (η : f ⟶ g) [LiftHom f] [LiftHom g] [LiftHom₂ η]
+  签名: {f g : a ⟶ b} (η : f ⟶ g) [Lift态射 f] [Lift态射 g] [LiftHom₂ η]
   定义体: LiftHom₂.lift η ▷ LiftHom.lift h
 
 Depends on / 依赖: LiftHom, LiftHom.lift
@@ -375,7 +375,7 @@ theorem assoc_liftHom₂
 
 中文:
 定理 assoc_liftHom₂
-  结论: {f g h i : a ⟶ b} [LiftHom f] [LiftHom g] [LiftHom h]
+  结论: {f g h i : a ⟶ b} [Lift态射 f] [Lift态射 g] [Lift态射 h]
   证明: (Category.assoc _ _ _).symm
 
 Depends on / 依赖: Category, Category.assoc, EqOnSource, PartialEquiv, PartialEquiv.EqOnSource.restr

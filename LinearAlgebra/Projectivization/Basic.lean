@@ -50,7 +50,7 @@ definition projectivizationSetoid
 
 中文:
 定义 projectivizationSetoid
-  签名: : Setoid { v : V // v != 0 }
+  签名: : 集合等价关系 { v : V // v != 0 }
   定义体: (MulAction.orbitRel Kˣ V).comap (↑)
 
 Depends on / 依赖: MulAction, MulAction.orbitRel, orbitRel
@@ -150,8 +150,8 @@ instance [Nontrivial
   ⟨mk K v hv⟩
 
 中文:
-实例 [Nontrivial
-  签名: V] : Nonempty (ℙ K V)
+实例 [非平凡
+  签名: V] : 非空 (ℙ K V)
   定义体: let ⟨v, hv⟩ := exists_ne (0 : V)
   ⟨mk K v hv⟩
 
@@ -363,7 +363,7 @@ theorem exists_smul_eq_mk_rep
   proof: (mk_eq_mk_iff K _ _ (rep_nonzero _) hv).1 (mk_rep _)
 
 中文:
-定理 exists_smul_eq_mk_rep
+定理 存在_smul_eq_mk_rep
   条件: (v : V) (hv : v != 0)
   结论: 存在 a : Kˣ, a • v = (mk K v hv).rep
   证明: (mk_eq_mk_iff K _ _ (rep_nonzero _) hv).1 (mk_rep _)
@@ -519,7 +519,7 @@ definition equivSubmodule
 
 中文:
 定义 equivSubmodule
-  签名: : ℙ K V ≃ { H : Submodule K V // finrank K H = 1 }
+  签名: : ℙ K V ≃ { H : 子模 K V // finrank K H = 1 }
   定义体: (Equiv.ofInjective _ submodule_injective).trans .subtypeEquiv (.refl _) fun H => by
     refine ⟨fun ⟨v, hv⟩ => hv ▸ v.finrank_submodule, fun h => ?_⟩
     rcases finrank_eq_one_iff'.1 h with ⟨v : H, hv₀, hv : forall w : H, _⟩
@@ -552,7 +552,7 @@ definition mk''
 
 中文:
 定义 mk''
-  签名: (H : Submodule K V) (h : finrank K H = 1)
+  签名: (H : 子模 K V) (h : finrank K H = 1)
   定义体: (equivSubmodule K V).symm ⟨H, h⟩
 
 @[simp]
@@ -576,7 +576,7 @@ theorem submodule_mk''
 
 中文:
 定理 submodule_mk''
-  条件: (H : Submodule K V) (h : finrank K H = 1)
+  条件: (H : 子模 K V) (h : finrank K H = 1)
   结论: (mk'' H h).submodule = H
   证明: congr_arg Subtype.val (equivSubmodule K V).apply_symm_apply ⟨H, h⟩
 
@@ -625,7 +625,7 @@ definition map
 
 中文:
 定义 map
-  签名: {σ : K ->+* L} (f : V ->ₛₗ[σ] W) (hf : Function.Injective f)
+  签名: {σ : K ->+* L} (f : V ->ₛₗ[σ] W) (hf : 函数.单射 f)
   定义体: Quotient.map' (fun v => ⟨f v, fun c => v.2 (hf (by simp [c]))⟩)
     (by
       rintro ⟨u, hu⟩ ⟨v, hv⟩ ⟨a, ha⟩
@@ -653,7 +653,7 @@ theorem map_mk
 
 中文:
 定理 map_mk
-  条件: {σ : K ->+* L} (f : V ->ₛₗ[σ] W) (hf : Function.Injective f) (v : V) (hv : v != 0)
+  条件: {σ : K ->+* L} (f : V ->ₛₗ[σ] W) (hf : 函数.单射 f) (v : V) (hv : v != 0)
   证明: rfl
 -/
 theorem map_mk {σ : K ->+* L} (f : V ->ₛₗ[σ] W) (hf : Function.Injective f) (v : V) (hv : v != 0) :
@@ -712,7 +712,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (LinearMap.id : V ->ₗ[K] V) (LinearEquiv.refl K V).injective = id
+  结论: map (线性映射.id : V ->ₗ[K] V) (线性等价.refl K V).injective = id
   证明: by
   ext ⟨v⟩
   rfl
@@ -738,7 +738,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: {F U : 类型} [DivisionRing F] [AddCommGroup U] [Module F U] {σ : K ->+* L}
+  结论: {F U : 类型} [除环 F] [加法交换群 U] [模 F U] {σ : K ->+* L}
   证明: by
   ext ⟨v⟩
   rfl

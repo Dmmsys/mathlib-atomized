@@ -74,7 +74,7 @@ theorem Algebra.traceForm_toMatrix_powerBasis
   ext; rw [traceForm_toMatrix, of_apply, pow_add, h.basis_eq_pow, h.basis_eq_pow]
 
 中文:
-定理 Algebra.traceForm_toMatrix_powerBasis
+定理 代数.traceForm_toMatrix_powerBasis
   条件: (h : PowerBasis R S)
   证明: by
   ext; rw [traceForm_toMatrix, of_apply, pow_add, h.basis_eq_pow, h.basis_eq_pow]
@@ -107,7 +107,7 @@ theorem PowerBasis.trace_gen_eq_nextCoeff_minpoly
 
 中文:
 定理 PowerBasis.trace_gen_eq_nextCoeff_minpoly
-  条件: [Nontrivial S] (pb : PowerBasis K S)
+  条件: [非平凡 S] (pb : PowerBasis K S)
   证明: by
   have d_pos : 0 < pb.dim := PowerBasis.dim_pos pb
   have d_pos' : 0 < (minpoly K pb.gen).natDegree := by simpa
@@ -137,7 +137,7 @@ theorem PowerBasis.trace_gen_eq_sum_roots
 
 中文:
 定理 PowerBasis.trace_gen_eq_sum_roots
-  结论: [Nontrivial S] (pb : PowerBasis K S)
+  结论: [非平凡 S] (pb : PowerBasis K S)
   证明: by
   rw [PowerBasis.trace_gen_eq_nextCoeff_minpoly]; rw [map_neg]; rw [← nextCoeff_map_eq]; rw [hf.nextCoeff_eq_neg_sum_roots_of_monic
       ((minpoly.monic (PowerBasis.isIntegral_gen _)).map _)]; rw [neg_neg]
@@ -170,7 +170,7 @@ theorem trace_gen_eq_zero
 
 中文:
 定理 trace_gen_eq_zero
-  条件: {x : L} (hx : ¬Is整数egral K x)
+  条件: {x : L} (hx : ¬是整 K x)
   证明: by
   rw [trace_eq_zero_of_not_exists_basis]; rw [LinearMap.zero_apply]
   contrapose hx
@@ -245,7 +245,7 @@ theorem trace_eq_trace_adjoin
 
 中文:
 定理 trace_eq_trace_adjoin
-  条件: [FiniteDimensional K L] (x : L)
+  条件: [有限维 K L] (x : L)
   证明: by
   rw [← trace_trace (S := K⟮x⟯)]
   conv in x => rw [← AdjoinSimple.algebraMap_gen K x]
@@ -271,7 +271,7 @@ simpa [minpoly_gen K x] using PowerBasis.trace_gen_eq_nextCoeff_minpoly adjoin.p
 
 中文:
 定理 trace_adjoinSimpleGen
-  条件: {x : L} (hx : Is整数egral K x)
+  条件: {x : L} (hx : 是整 K x)
   证明: by
 simpa [minpoly_gen K x] using PowerBasis.trace_gen_eq_nextCoeff_minpoly adjoin.powerBasis hx
 
@@ -292,7 +292,7 @@ theorem trace_eq_finrank_mul_minpoly_nextCoeff
 
 中文:
 定理 trace_eq_finrank_mul_minpoly_nextCoeff
-  条件: [FiniteDimensional K L] (x : L)
+  条件: [有限维 K L] (x : L)
   证明: by
   rw [trace_eq_trace_adjoin]; rw [trace_adjoinSimpleGen (.of_finite K x)]; rw [Algebra.smul_def]; rfl
 
@@ -315,7 +315,7 @@ theorem trace_eq_sum_roots
 
 中文:
 定理 trace_eq_sum_roots
-  结论: [FiniteDimensional K L] {x : L}
+  结论: [有限维 K L] {x : L}
   证明: by
   rw [trace_eq_trace_adjoin K x]; rw [Algebra.smul_def]; rw [map_mul]; rw [← Algebra.smul_def]; rw [IntermediateField.AdjoinSimple.trace_gen_eq_sum_roots _ hF]; rw [IsScalarTower.algebraMap_smul]
 
@@ -351,8 +351,8 @@ theorem Algebra.isIntegral_trace
     use minpoly R x, minpoly.moni
 
 中文:
-定理 Algebra.isIntegral_trace
-  条件: [FiniteDimensional L F] {x : F} (hx : Is整数egral R x)
+定理 代数.is整数egral_trace
+  条件: [有限维 L F] {x : F} (hx : 是整 R x)
   证明: by
   have hx' : IsIntegral L x := hx.tower_top
   rw [← isIntegral_algebraMap_iff (algebraMap L (AlgebraicClosure F)).injective]; rw [trace_eq_sum_roots]
@@ -386,8 +386,8 @@ lemma Algebra.trace_eq_of_algEquiv
   congr; ext; simp
 
 中文:
-引理 Algebra.trace_eq_of_algEquiv
-  结论: {A B C : 类型} [CommRing A] [CommRing B] [CommRing C]
+引理 代数.trace_eq_of_algEquiv
+  结论: {A B C : 类型} [交换环 A] [交换环 B] [交换环 C]
   证明: by
   simp_rw [Algebra.trace_apply, ← LinearMap.trace_conj' _ e.toLinearEquiv]
   congr; ext; simp
@@ -416,8 +416,8 @@ lemma Algebra.trace_eq_of_ringEquiv
     rw [Algebra.trace_eq_matrix_trace b]; rw [Algebra.trace_eq_matrix_trace (b.mapC
 
 中文:
-引理 Algebra.trace_eq_of_ringEquiv
-  结论: {A B C : 类型} [CommRing A] [CommRing B] [CommRing C]
+引理 代数.trace_eq_of_ringEquiv
+  结论: {A B C : 类型} [交换环 A] [交换环 B] [交换环 C]
   证明: by
   classical
   by_cases h : exists s : Finset C, Nonempty (Basis s B C)
@@ -458,8 +458,8 @@ lemma Algebra.trace_eq_of_equiv_equiv
   rfl
 
 中文:
-引理 Algebra.trace_eq_of_equiv_equiv
-  结论: {A₁ B₁ A₂ B₂ : 类型} [CommRing A₁] [CommRing B₁]
+引理 代数.trace_eq_of_equiv_equiv
+  结论: {A₁ B₁ A₂ B₂ : 类型} [交换环 A₁] [交换环 B₁]
   证明: by
   let := (RingHom.comp (e₂ : B₁ ->+* B₂) (algebraMap A₁ B₁)).toAlgebra
   let e' : B₁ ≃ₐ[A₁] B₂ := { e₂ with commutes' := fun _ => rfl }
@@ -535,7 +535,7 @@ theorem sum_embeddings_eq_finrank_mul
 
 中文:
 定理 sum_embeddings_eq_finrank_mul
-  结论: [FiniteDimensional K F] [Algebra.IsSeparable K F]
+  结论: [有限维 K F] [代数.是可分 K F]
   证明: by
   have : FiniteDimensional L F := FiniteDimensional.right K L F
   have : Algebra.IsSeparable L F := Algebra.isSeparable_tower_top_of_isSeparable K L F
@@ -575,7 +575,7 @@ theorem trace_eq_sum_embeddings
 
 中文:
 定理 trace_eq_sum_embeddings
-  条件: [FiniteDimensional K L] [Algebra.IsSeparable K L] {x : L}
+  条件: [有限维 K L] [代数.是可分 K L] {x : L}
   证明: by
   have hx := Algebra.IsSeparable.isIntegral K x
   let pb := adjoin.powerBasis hx
@@ -608,7 +608,7 @@ theorem trace_eq_sum_automorphisms
 
 中文:
 定理 trace_eq_sum_automorphisms
-  条件: (x : L) [FiniteDimensional K L] [IsGalois K L]
+  条件: (x : L) [有限维 K L] [是Galois K L]
   证明: by
   apply FaithfulSMul.algebraMap_injective L (AlgebraicClosure L)
   rw [_root_.map_sum (algebraMap L (AlgebraicClosure L))]
@@ -651,8 +651,8 @@ lemma Algebra.trace_eq_zero_of_not_isSeparable
   · lift x to separableClosure K L using hx
 
 中文:
-引理 Algebra.trace_eq_zero_of_not_isSeparable
-  条件: (H : ¬ Algebra.IsSeparable K L)
+引理 代数.trace_eq_zero_of_not_isSeparable
+  条件: (H : ¬ 代数.是可分 K L)
   证明: by
   obtain ⟨p, hp⟩ := ExpChar.exists K
   have := expChar_ne_zero K p
@@ -772,7 +772,7 @@ theorem traceMatrix_reindex
 
 中文:
 定理 traceMatrix_reindex
-  条件: {κ' : 类型} (b : Basis κ A B) (f : κ ≃ κ')
+  条件: {κ' : 类型} (b : 基 κ A B) (f : κ ≃ κ')
   证明: by ext (x y); simp
 -/
 theorem traceMatrix_reindex {κ' : Type*} (b : Basis κ A B) (f : κ ≃ κ') :
@@ -794,7 +794,7 @@ theorem traceMatrix_of_matrix_vecMul
 
 中文:
 定理 traceMatrix_of_matrix_vecMul
-  条件: [Fintype κ] (b : κ -> B) (P : Matrix κ κ A)
+  条件: [有限类型 κ] (b : κ -> B) (P : 矩阵 κ κ A)
   证明: by
   ext (α β)
   rw [traceMatrix_apply]; rw [vecMul]; rw [dotProduct]; rw [vecMul]; rw [dotProduct]; rw [Matrix.mul_apply]; rw [BilinForm.sum_left]; rw [Fintype.sum_congr _ _ fun i : κ =>
@@ -832,7 +832,7 @@ theorem traceMatrix_of_matrix_mulVec
 
 中文:
 定理 traceMatrix_of_matrix_mulVec
-  条件: [Fintype κ] (b : κ -> B) (P : Matrix κ κ A)
+  条件: [有限类型 κ] (b : κ -> B) (P : 矩阵 κ κ A)
   证明: by
   refine AddEquiv.injective (transposeAddEquiv κ κ A) ?_
   rw [transposeAddEquiv_apply]; rw [transposeAddEquiv_apply]; rw [← vecMul_transpose]; rw [← transpose_map]; rw [traceMatrix_of_matrix_vecMul]; rw [transpose_transpose]
@@ -856,7 +856,7 @@ theorem traceMatrix_of_basis
 
 中文:
 定理 traceMatrix_of_basis
-  条件: [Fintype κ] [DecidableEq κ] (b : Basis κ A B)
+  条件: [有限类型 κ] [DecidableEq κ] (b : 基 κ A B)
   证明: by
   ext (i j)
   rw [traceMatrix_apply]; rw [traceForm_apply]; rw [traceForm_toMatrix]
@@ -886,7 +886,7 @@ theorem traceMatrix_of_basis_mulVec
 
 中文:
 定理 traceMatrix_of_basis_mulVec
-  条件: [Fintype ι] (b : Basis ι A B) (z : B)
+  条件: [有限类型 ι] (b : 基 ι A B) (z : B)
   证明: by
   ext i
   rw [← replicateCol_apply (ι := Fin 1) (traceMatrix A b *ᵥ b.equivFun z) i 0]; rw [replicateCol_mulVec]; rw [Matrix.mul_apply]; rw [traceMatrix]
@@ -1041,7 +1041,7 @@ theorem traceMatrix_eq_embeddingsMatrixReindex_mul_trans
 
 中文:
 定理 traceMatrix_eq_embeddingsMatrixReindex_mul_trans
-  条件: [Fintype κ] (e : κ ≃ (L ->ₐ[K] E))
+  条件: [有限类型 κ] (e : κ ≃ (L ->ₐ[K] E))
   证明: by
   rw [traceMatrix_eq_embeddingsMatrix_mul_trans]; rw [embeddingsMatrixReindex]; rw [reindex_apply]; rw [transpose_submatrix]; rw [← submatrix_mul_transpose_submatrix]; rw [← Equiv.coe_refl]; rw [Equiv.refl_symm]
 
@@ -1077,7 +1077,7 @@ theorem det_traceMatrix_ne_zero'
 
 中文:
 定理 det_traceMatrix_ne_zero'
-  条件: [Algebra.IsSeparable K L]
+  条件: [代数.是可分 K L]
   结论: det (traceMatrix K pb.basis) != 0
   证明: by
   suffices algebraMap K (AlgebraicClosure L) (det (traceMatrix K pb.basis)) != 0 by
@@ -1118,7 +1118,7 @@ theorem det_traceForm_ne_zero
 
 中文:
 定理 det_traceForm_ne_zero
-  结论: [Algebra.IsSeparable K L] [Fintype ι] [DecidableEq ι]
+  结论: [代数.是可分 K L] [有限类型 ι] [DecidableEq ι]
   证明: by
   have : FiniteDimensional K L := b.finiteDimensional_of_finite
   let pb : PowerBasis K L := Field.powerBasisOfFiniteOfSeparable _ _
@@ -1167,7 +1167,7 @@ theorem traceForm_nondegenerate
 
 中文:
 定理 traceForm_nondegenerate
-  条件: [FiniteDimensional K L] [Algebra.IsSeparable K L]
+  条件: [有限维 K L] [代数.是可分 K L]
   证明: BilinForm.nondegenerate_of_det_ne_zero (traceForm K L) _
     (det_traceForm_ne_zero (Module.finBasis K L))
 
@@ -1195,7 +1195,7 @@ theorem traceForm_nondegenerate_tfae
 
 中文:
 定理 traceForm_nondegenerate_tfae
-  条件: [FiniteDimensional K L]
+  条件: [有限维 K L]
   证明: by
   tfae_have 1 -> 3 := fun _ => traceForm_nondegenerate K L
   tfae_have 3 -> 2 := fun H₁ H₂ => H₁.ne_zero (by ext; simp [H₂])
@@ -1220,8 +1220,8 @@ theorem Algebra.trace_ne_zero
   proof: ((traceForm_nondegenerate_tfae K L).out 0 1).mp ‹_›
 
 中文:
-定理 Algebra.trace_ne_zero
-  条件: [FiniteDimensional K L] [Algebra.IsSeparable K L]
+定理 代数.trace_ne_zero
+  条件: [有限维 K L] [代数.是可分 K L]
   证明: ((traceForm_nondegenerate_tfae K L).out 0 1).mp ‹_›
 
 Depends on / 依赖: traceForm_nondegenerate_tfae
@@ -1243,8 +1243,8 @@ theorem Algebra.trace_surjective
   exact Algebra.trace_ne_zero K L
 
 中文:
-定理 Algebra.trace_surjective
-  条件: [FiniteDimensional K L] [Algebra.IsSeparable K L]
+定理 代数.trace_surjective
+  条件: [有限维 K L] [代数.是可分 K L]
   证明: by
   rw [← LinearMap.range_eq_top]
   apply (IsSimpleOrder.eq_bot_or_eq_top (α := Ideal K) _).resolve_left
@@ -1276,7 +1276,7 @@ lemma isNilpotent_trace_of_isNilpotent
 
 中文:
 引理 isNilpotent_trace_of_isNilpotent
-  结论: {R S : 类型} [CommRing R] [CommRing S] [Algebra R S] {x : S}
+  结论: {R S : 类型} [交换环 R] [交换环 S] [代数 R S] {x : S}
   证明: LinearMap.isNilpotent_trace_of_isNilpotent (hx.map (lmul R S))
 
 Depends on / 依赖: LinearMap, LinearMap.isNilpotent_trace_of_isNilpotent, hx.map, isNilpotent_trace_of_isNilpotent
@@ -1305,7 +1305,7 @@ definition Module.Basis.traceDual
   body: (traceForm K L).dualBasis (traceForm_nondegenerate K L) b
 
 中文:
-定义 Module.Basis.traceDual
+定义 模.基.traceDual
   签名: :
   定义体: (traceForm K L).dualBasis (traceForm_nondegenerate K L) b
 
@@ -1325,7 +1325,7 @@ theorem Module.Basis.traceDual_def
 @[simp]
 
 中文:
-定理 Module.Basis.traceDual_def
+定理 模.基.traceDual_def
   证明: rfl
 
 @[simp]
@@ -1345,7 +1345,7 @@ theorem Module.Basis.traceDual_repr_apply
 @[simp]
 
 中文:
-定理 Module.Basis.traceDual_repr_apply
+定理 模.基.traceDual_repr_apply
   条件: (x : L) (i : ι)
   证明: (traceForm K L).dualBasis_repr_apply _ b _ i
 
@@ -1369,7 +1369,7 @@ theorem Module.Basis.trace_traceDual_mul
 @[simp]
 
 中文:
-定理 Module.Basis.trace_traceDual_mul
+定理 模.基.trace_traceDual_mul
   条件: (i j : ι)
   证明: (traceForm K L).apply_dualBasis_left _ _ i j
 
@@ -1393,7 +1393,7 @@ theorem Module.Basis.trace_mul_traceDual
 @[simp]
 
 中文:
-定理 Module.Basis.trace_mul_traceDual
+定理 模.基.trace_mul_traceDual
   条件: (i j : ι)
   证明: (traceForm K L).apply_dualBasis_right _ (traceForm_isSymm K) _ i j
 
@@ -1414,7 +1414,7 @@ theorem Module.Basis.traceDual_traceDual
   proof: (traceForm K L).dualBasis_dualBasis _ (traceForm_isSymm K) _
 
 中文:
-定理 Module.Basis.traceDual_traceDual
+定理 模.基.traceDual_traceDual
   证明: (traceForm K L).dualBasis_dualBasis _ (traceForm_isSymm K) _
 
 Depends on / 依赖: dualBasis_dualBasis, traceForm, traceForm_isSymm
@@ -1433,7 +1433,7 @@ theorem Module.Basis.traceDual_involutive
   proof: (traceForm K L).dualBasis_involutive _ (traceForm_isSymm K)
 
 中文:
-定理 Module.Basis.traceDual_involutive
+定理 模.基.traceDual_involutive
   证明: (traceForm K L).dualBasis_involutive _ (traceForm_isSymm K)
 
 Depends on / 依赖: dualBasis_involutive, traceForm, traceForm_isSymm
@@ -1450,7 +1450,7 @@ theorem Module.Basis.traceDual_injective
   proof: (traceForm K L).dualBasis_injective _ (traceForm_isSymm K)
 
 中文:
-定理 Module.Basis.traceDual_injective
+定理 模.基.traceDual_injective
   证明: (traceForm K L).dualBasis_injective _ (traceForm_isSymm K)
 
 Depends on / 依赖: dualBasis_injective, traceForm, traceForm_isSymm
@@ -1471,8 +1471,8 @@ theorem Module.Basis.traceDual_inj
   proof: (traceDual_injective K L).eq_iff
 
 中文:
-定理 Module.Basis.traceDual_inj
-  条件: {b' : Basis ι K L}
+定理 模.基.traceDual_inj
+  条件: {b' : 基 ι K L}
   证明: (traceDual_injective K L).eq_iff
 
 Depends on / 依赖: eq_iff, traceDual_injective
@@ -1495,7 +1495,7 @@ theorem Module.Basis.traceDual_eq_iff
   proof: (traceForm K L).dualBasis_eq_iff (traceForm_nondegenerate K L) b v
 
 中文:
-定理 Module.Basis.traceDual_eq_iff
+定理 模.基.traceDual_eq_iff
   条件: {v : ι -> L}
   证明: (traceForm K L).dualBasis_eq_iff (traceForm_nondegenerate K L) b v
 
@@ -1521,7 +1521,7 @@ lemma Module.Basis.traceDual_powerBasis_eq
   simp only [Polynomial.ma
 
 中文:
-引理 Module.Basis.traceDual_powerBasis_eq
+引理 模.基.traceDual_powerBasis_eq
   条件: (pb : PowerBasis K L) (i)
   证明: by
   revert i

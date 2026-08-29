@@ -76,8 +76,8 @@ definition Subgroup.toAddSubgroup
   map_rel_iff' := Iff.rfl
 
 中文:
-定义 Subgroup.toAddSubgroup
-  签名: : Subgroup G ≃o AddSubgroup (Additive G) where
+定义 子群.toAddSubgroup
+  签名: : 子群 G ≃o 加法子群 (加性 G) where
   定义体: { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
   invFun S := { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
   left_inv x := by cases x; rfl
@@ -102,8 +102,8 @@ lemma Additive.mem_toAddSubgroup
   proof: .rfl
 
 中文:
-引理 Additive.mem_toAddSubgroup
-  条件: (S : Subgroup G) (g : Additive G)
+引理 加性.mem_toAddSubgroup
+  条件: (S : 子群 G) (g : 加性 G)
   证明: .rfl
 -/
 @[simp] lemma Additive.mem_toAddSubgroup (S : Subgroup G) (g : Additive G) :
@@ -119,8 +119,8 @@ abbreviation AddSubgroup.toSubgroup'
   body: Subgroup.toAddSubgroup.symm
 
 中文:
-缩写 AddSubgroup.toSubgroup'
-  签名: : AddSubgroup (Additive G) ≃o Subgroup G
+缩写 加法子群.toSubgroup'
+  签名: : 加法子群 (加性 G) ≃o 子群 G
   定义体: Subgroup.toAddSubgroup.symm
 
 Depends on / 依赖: Subgroup, Subgroup.toAddSubgroup.symm, toAddSubgroup
@@ -137,8 +137,8 @@ lemma AddSubgroup.mem_toSubgroup'
   proof: .rfl
 
 中文:
-引理 AddSubgroup.mem_toSubgroup'
-  条件: (S : AddSubgroup (Additive G)) (g : G)
+引理 加法子群.mem_toSubgroup'
+  条件: (S : 加法子群 (加性 G)) (g : G)
   证明: .rfl
 -/
 @[simp] lemma AddSubgroup.mem_toSubgroup' (S : AddSubgroup (Additive G)) (g : G) :
@@ -161,8 +161,8 @@ definition AddSubgroup.toSubgroup
   map_rel_iff' := Iff.rfl
 
 中文:
-定义 AddSubgroup.toSubgroup
-  签名: : AddSubgroup A ≃o Subgroup (Multiplicative A) where
+定义 加法子群.toSubgroup
+  签名: : 加法子群 A ≃o 子群 (Multiplicative A) where
   定义体: { AddSubmonoid.toSubmonoid S.toAddSubmonoid with inv_mem' := S.neg_mem' }
   invFun S := { Submonoid.toAddSubmonoid S.toSubmonoid with neg_mem' := S.inv_mem' }
   left_inv x := by cases x; rfl
@@ -188,7 +188,7 @@ lemma Multiplicative.mem_toSubgroup
 
 中文:
 引理 Multiplicative.mem_toSubgroup
-  条件: (S : AddSubgroup A) (a : Multiplicative A)
+  条件: (S : 加法子群 A) (a : Multiplicative A)
   证明: .rfl
 -/
 @[simp] lemma Multiplicative.mem_toSubgroup (S : AddSubgroup A) (a : Multiplicative A) :
@@ -204,8 +204,8 @@ abbreviation Subgroup.toAddSubgroup'
   body: AddSubgroup.toSubgroup.symm
 
 中文:
-缩写 Subgroup.toAddSubgroup'
-  签名: : Subgroup (Multiplicative A) ≃o AddSubgroup A
+缩写 子群.toAddSubgroup'
+  签名: : 子群 (Multiplicative A) ≃o 加法子群 A
   定义体: AddSubgroup.toSubgroup.symm
 
 Depends on / 依赖: AddSubgroup, AddSubgroup.toSubgroup.symm, toSubgroup
@@ -222,8 +222,8 @@ lemma Subgroup.mem_toAddSubgroup'
   proof: .rfl
 
 中文:
-引理 Subgroup.mem_toAddSubgroup'
-  条件: (S : Subgroup (Multiplicative A)) (a : A)
+引理 子群.mem_toAddSubgroup'
+  条件: (S : 子群 (Multiplicative A)) (a : A)
   证明: .rfl
 -/
 @[simp] lemma Subgroup.mem_toAddSubgroup' (S : Subgroup (Multiplicative A)) (a : A) :
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (Subgroup G)
+  签名: 顶元素 (子群 G)
   定义体: ⟨{ (⊤ : Submonoid G) with inv_mem' := fun _ => Set.mem_univ _ }⟩
 
 Depends on / 依赖: Set.mem_univ, Submonoid, inv_mem, mem_univ
@@ -273,7 +273,7 @@ definition topEquiv
 
 中文:
 定义 topEquiv
-  签名: : (⊤ : Subgroup G) ≃* G
+  签名: : (⊤ : 子群 G) ≃* G
   定义体: Submonoid.topEquiv
 
 Depends on / 依赖: Submonoid, Submonoid.topEquiv, topEquiv
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (Subgroup G)
+  签名: 底元素 (子群 G)
   定义体: ⟨{ (⊥ : Submonoid G) with inv_mem' := by simp}⟩
 
 @[to_additive]
@@ -318,7 +318,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Subgroup G)
+  签名: 可居 (子群 G)
   定义体: ⟨⊥⟩
 
 @[to_additive (attr := simp)]
@@ -341,7 +341,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : G}
-  结论: x in (⊥ : Subgroup G) ↔ x = 1
+  结论: x in (⊥ : 子群 G) ↔ x = 1
   证明: Iff.rfl
 
 @[to_additive (attr := simp)]
@@ -366,7 +366,7 @@ theorem mem_top
 中文:
 定理 mem_top
   条件: (x : G)
-  结论: x in (⊤ : Subgroup G)
+  结论: x in (⊤ : 子群 G)
   证明: Set.mem_univ x
 
 @[to_additive (attr := simp, norm_cast)]
@@ -389,7 +389,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : Subgroup G) : Set G) = Set.univ
+  结论: ((⊤ : 子群 G) : 集合 G) = 集合.univ
   证明: rfl
 
 @[to_additive (attr := simp, norm_cast)]
@@ -410,7 +410,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : Subgroup G) : Set G) = {1}
+  结论: ((⊥ : 子群 G) : 集合 G) = {1}
   证明: rfl
 
 @[to_additive]
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (⊥ : Subgroup G)
+  签名: 唯一 (⊥ : 子群 G)
   定义体: ⟨⟨1⟩, fun g => Subtype.ext g.2⟩
 
 @[to_additive (attr := simp)]
@@ -454,7 +454,7 @@ theorem top_toSubmonoid
 
 中文:
 定理 top_toSubmonoid
-  结论: (⊤ : Subgroup G).toSubmonoid = ⊤
+  结论: (⊤ : 子群 G).toSubmonoid = ⊤
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -475,7 +475,7 @@ theorem bot_toSubmonoid
 
 中文:
 定理 bot_toSubmonoid
-  结论: (⊥ : Subgroup G).toSubmonoid = ⊥
+  结论: (⊥ : 子群 G).toSubmonoid = ⊥
   证明: rfl
 
 @[to_additive]
@@ -495,7 +495,7 @@ theorem eq_bot_iff_forall
 @[to_additive]
 
 中文:
-定理 eq_bot_iff_forall
+定理 eq_bot_iff_对任意
   结论: H = ⊥ ↔ 对任意 x in H, x = (1 : G)
   证明: toSubmonoid_injective.eq_iff.symm.trans Submonoid.eq_bot_iff_forall _
 
@@ -523,7 +523,7 @@ theorem eq_bot_of_subsingleton
 
 中文:
 定理 eq_bot_of_subsingleton
-  条件: [Subsingleton H]
+  条件: [子单例 H]
   结论: H = ⊥
   证明: by
   rw [Subgroup.eq_bot_iff_forall]
@@ -553,8 +553,8 @@ theorem coe_eq_univ
 
 中文:
 定理 coe_eq_univ
-  条件: {H : Subgroup G}
-  结论: (H : Set G) = Set.univ ↔ H = ⊤
+  条件: {H : 子群 G}
+  结论: (H : 集合 G) = 集合.univ ↔ H = ⊤
   证明: (SetLike.ext'_iff.trans (by rfl)).symm
 
 @[to_additive]
@@ -583,8 +583,8 @@ theorem coe_eq_singleton
 
 中文:
 定理 coe_eq_singleton
-  条件: {H : Subgroup G}
-  结论: (存在 g : G, (H : Set G) = {g}) ↔ H = ⊥
+  条件: {H : 子群 G}
+  结论: (存在 g : G, (H : 集合 G) = {g}) ↔ H = ⊥
   证明: ⟨fun ⟨g, hg⟩ =>
     haveI : Subsingleton (H : Set G) := by
       rw [hg]
@@ -619,9 +619,9 @@ theorem nontrivial_iff_exists_ne_one
 @[to_additive]
 
 中文:
-定理 nontrivial_iff_exists_ne_one
-  条件: (H : Subgroup G)
-  结论: Nontrivial H ↔ 存在 x in H, x != (1 : G)
+定理 nontrivial_iff_存在_ne_one
+  条件: (H : 子群 G)
+  结论: 非平凡 H ↔ 存在 x in H, x != (1 : G)
   证明: by
   rw [Subtype.nontrivial_iff_exists_ne (fun x => x in H) (1 : H)]
   simp
@@ -647,8 +647,8 @@ theorem exists_ne_one_of_nontrivial
 @[to_additive]
 
 中文:
-定理 exists_ne_one_of_nontrivial
-  条件: (H : Subgroup G) [Nontrivial H]
+定理 存在_ne_one_of_nontrivial
+  条件: (H : 子群 G) [非平凡 H]
   证明: by
   rwa [← Subgroup.nontrivial_iff_exists_ne_one]
 
@@ -674,8 +674,8 @@ theorem nontrivial_iff_ne_bot
 
 中文:
 定理 nontrivial_iff_ne_bot
-  条件: (H : Subgroup G)
-  结论: Nontrivial H ↔ H != ⊥
+  条件: (H : 子群 G)
+  结论: 非平凡 H ↔ H != ⊥
   证明: by
   rw [nontrivial_iff_exists_ne_one]; rw [ne_eq]; rw [eq_bot_iff_forall]
   simp only [ne_eq, not_forall, exists_prop]
@@ -701,8 +701,8 @@ theorem bot_or_nontrivial
 
 中文:
 定理 bot_or_nontrivial
-  条件: (H : Subgroup G)
-  结论: H = ⊥ ∨ Nontrivial H
+  条件: (H : 子群 G)
+  结论: H = ⊥ ∨ 非平凡 H
   证明: by
   have := nontrivial_iff_ne_bot H
   tauto
@@ -729,8 +729,8 @@ theorem bot_or_exists_ne_one
 @[to_additive]
 
 中文:
-定理 bot_or_exists_ne_one
-  条件: (H : Subgroup G)
+定理 bot_or_存在_ne_one
+  条件: (H : 子群 G)
   结论: H = ⊥ ∨ 存在 x in H, x != (1 : G)
   证明: by
   convert! H.bot_or_nontrivial
@@ -757,8 +757,8 @@ lemma ne_bot_iff_exists_ne_one
   simp only [ne_eq, Subtype.exists, mk_eq_one, exists_prop]
 
 中文:
-引理 ne_bot_iff_exists_ne_one
-  条件: {H : Subgroup G}
+引理 ne_bot_iff_存在_ne_one
+  条件: {H : 子群 G}
   结论: H != ⊥ ↔ 存在 a : ↥H, a != 1
   证明: by
   rw [← nontrivial_iff_ne_bot]; rw [nontrivial_iff_exists_ne_one]
@@ -786,7 +786,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Subgroup G)
+  签名: 最小值 (子群 G)
   定义体: ⟨fun H₁ H₂ =>
     { H₁.toSubmonoid ⊓ H₂.toSubmonoid with
       inv_mem' := fun ⟨hx, hx'⟩ => ⟨H₁.inv_mem hx, H₂.inv_mem hx'⟩ }⟩
@@ -814,8 +814,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (p p' : Subgroup G)
-  结论: ((p ⊓ p' : Subgroup G) : Set G) = (p : Set G) inter p'
+  条件: (p p' : 子群 G)
+  结论: ((p ⊓ p' : 子群 G) : 集合 G) = (p : 集合 G) inter p'
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -837,7 +837,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {p p' : Subgroup G} {x : G}
+  条件: {p p' : 子群 G} {x : G}
   结论: x in p ⊓ p' ↔ x in p ∧ x in p'
   证明: Iff.rfl
 
@@ -864,7 +864,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Subgroup G)
+  签名: 下确界集 (子群 G)
   定义体: ⟨fun s =>
     { (⨅ S in s, Subgroup.toSubmonoid S).copy (⋂ S in s, ↑S) (by simp) with
       inv_mem' := fun {x} hx =>
@@ -894,8 +894,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (H : Set (Subgroup G))
-  结论: ((sInf H : Subgroup G) : Set G) = ⋂ s in H, ↑s
+  条件: (H : 集合 (子群 G))
+  结论: ((sInf H : 子群 G) : 集合 G) = ⋂ s in H, ↑s
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -917,7 +917,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {S : Set (Subgroup G)} {x : G}
+  条件: {S : 集合 (子群 G)} {x : G}
   结论: x in sInf S ↔ 对任意 p in S, x in p
   证明: Set.mem_iInter₂
 
@@ -943,7 +943,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {S : ι -> Subgroup G} {x : G}
+  条件: {ι : 类型层*} {S : ι -> 子群 G} {x : G}
   结论: x in ⨅ i, S i ↔ 对任意 i, x in S i
   证明: by
   simp only [iInf, mem_sInf, Set.forall_mem_range]
@@ -968,8 +968,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} {S : ι -> Subgroup G}
-  结论: (↑(⨅ i, S i) : Set G) = ⋂ i, S i
+  条件: {ι : 类型层*} {S : ι -> 子群 G}
+  结论: (↑(⨅ i, S i) : 集合 G) = ⋂ i, S i
   证明: by
   simp only [iInf, coe_sInf, Set.biInter_range]
 
@@ -997,7 +997,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subgroup G)
+  签名: 完备格 (子群 G)
   定义体: { completeLatticeOfInf (Subgroup G) fun _s =>
       IsGLB.of_image SetLike.coe_subset_coe isGLB_biInf with
     bot := ⊥
@@ -1035,7 +1035,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : Subgroup G}
+  条件: {S T : 子群 G}
   结论: 对任意 {x : G}, x in S -> x in S ⊔ T
   证明: have : S <= S ⊔ T := le_sup_left; fun h => this h
 
@@ -1060,7 +1060,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : Subgroup G}
+  条件: {S T : 子群 G}
   结论: 对任意 {x : G}, x in T -> x in S ⊔ T
   证明: have : T <= S ⊔ T := le_sup_right; fun h => this h
 
@@ -1085,7 +1085,7 @@ theorem mul_mem_sup
 
 中文:
 定理 mul_mem_sup
-  条件: {S T : Subgroup G} {x y : G} (hx : x in S) (hy : y in T)
+  条件: {S T : 子群 G} {x y : G} (hx : x in S) (hy : y in T)
   结论: x * y in S ⊔ T
   证明: (S ⊔ T).mul_mem (mem_sup_left hx) (mem_sup_right hy)
 
@@ -1109,7 +1109,7 @@ theorem mem_iSup_of_mem
 
 中文:
 定理 mem_iSup_of_mem
-  条件: {ι : Sort*} {S : ι -> Subgroup G} (i : ι)
+  条件: {ι : 类型层*} {S : ι -> 子群 G} (i : ι)
   证明: have : S i <= iSup S := le_iSup _ _; fun h => this h
 
 @[to_additive]
@@ -1133,7 +1133,7 @@ theorem mem_sSup_of_mem
 
 中文:
 定理 mem_sSup_of_mem
-  条件: {S : Set (Subgroup G)} {s : Subgroup G} (hs : s in S)
+  条件: {S : 集合 (子群 G)} {s : 子群 G} (hs : s in S)
   证明: have : s <= sSup S := le_sSup hs; fun h => this h
 
 @[to_additive (attr := simp)]
@@ -1162,7 +1162,7 @@ mem_bot.mp Subsingleton.elim (⊤ : Subgroup G) ⊥ ▸ mem_top i
 
 中文:
 定理 subsingleton_iff
-  结论: Subsingleton (Subgroup G) ↔ Subsingleton G
+  结论: 子单例 (子群 G) ↔ 子单例 G
   证明: ⟨fun _ =>
     ⟨fun x y =>
       have : forall i : G, i = 1 := fun i =>
@@ -1197,7 +1197,7 @@ theorem nontrivial_iff
 
 中文:
 定理 nontrivial_iff
-  结论: Nontrivial (Subgroup G) ↔ Nontrivial G
+  结论: 非平凡 (子群 G) ↔ 非平凡 G
   证明: not_iff_not.mp
     ((not_nontrivial_iff_subsingleton.trans subsingleton_iff).trans
       not_nontrivial_iff_subsingleton.symm)
@@ -1223,8 +1223,8 @@ instance [Subsingleton
 @[to_additive]
 
 中文:
-实例 [Subsingleton
-  签名: G] : Unique (Subgroup G)
+实例 [子单例
+  签名: G] : 唯一 (子群 G)
   定义体: ⟨⟨⊥⟩, fun a => @Subsingleton.elim _ (subsingleton_iff.mpr ‹_›) a _⟩
 
 @[to_additive]
@@ -1246,8 +1246,8 @@ instance [Nontrivial
 @[to_additive]
 
 中文:
-实例 [Nontrivial
-  签名: G] : Nontrivial (Subgroup G)
+实例 [非平凡
+  签名: G] : 非平凡 (子群 G)
   定义体: nontrivial_iff.mpr ‹_›
 
 @[to_additive]
@@ -1271,8 +1271,8 @@ instance [Nontrivial
 @[to_additive]
 
 中文:
-实例 [Nontrivial
-  签名: G] : Nontrivial (⊤
+实例 [非平凡
+  签名: G] : 非平凡 (⊤
   定义体: by
   rw [nontrivial_iff_ne_bot]
   exact top_ne_bot
@@ -1316,7 +1316,7 @@ definition closure
 
 中文:
 定义 closure
-  签名: (k : Set G)
+  签名: (k : 集合 G)
   定义体: sInf { K | k subseteq K }
 
 Depends on / 依赖: subseteq
@@ -1339,7 +1339,7 @@ theorem mem_closure
 中文:
 定理 mem_closure
   条件: {x : G}
-  结论: x in closure k ↔ 对任意 K : Subgroup G, k subseteq K -> x in K
+  结论: x in closure k ↔ 对任意 K : 子群 G, k subseteq K -> x in K
   证明: mem_sInf
 
 Depends on / 依赖: mem_sInf
@@ -1385,7 +1385,7 @@ theorem mem_closure_of_mem
 
 中文:
 定理 mem_closure_of_mem
-  条件: {s : Set G} {x : G} (hx : x in s)
+  条件: {s : 集合 G} {x : G} (hx : x in s)
   结论: x in closure s
   证明: subset_closure hx
 
@@ -1578,7 +1578,7 @@ theorem closure_closure_coe_preimage
 
 中文:
 定理 closure_closure_coe_preimage
-  条件: {k : Set G}
+  条件: {k : 集合 G}
   结论: closure (((↑) : closure k -> G) ⁻¹' k) = ⊤
   证明: eq_top_iff.2 fun x _ => Subtype.recOn x fun _ hx' =>
     closure_induction (fun _ h => subset_closure h) (one_mem _) (fun _ _ _ _ => mul_mem)
@@ -1607,7 +1607,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (@closure G _) (↑) where
+  签名: : Galois嵌入 (@closure G _) (↑) where
   定义体: closure s
   gc s t := @closure_le _ _ t s
   le_l_u _s := subset_closure
@@ -1636,7 +1636,7 @@ theorem closure_mono
 中文:
 定理 closure_mono
   条件: ⦃h k
-  结论: Set G⦄ (h' : h subseteq k) : closure h <= closure k
+  结论: 集合 G⦄ (h' : h subseteq k) : closure h <= closure k
   证明: (Subgroup.gi G).gc.monotone_l h'
 
 Depends on / 依赖: Subgroup, Subgroup.gi, gc.monotone_l, monotone_l
@@ -1658,7 +1658,7 @@ theorem closure_eq
 
 中文:
 定理 closure_eq
-  结论: closure (K : Set G) = K
+  结论: closure (K : 集合 G) = K
   证明: (Subgroup.gi G).l_u_eq K
 
 @[to_additive (attr := simp)]
@@ -1681,7 +1681,7 @@ theorem closure_empty
 
 中文:
 定理 closure_empty
-  结论: closure (∅ : Set G) = ⊥
+  结论: closure (∅ : 集合 G) = ⊥
   证明: (Subgroup.gi G).gc.l_bot
 
 @[to_additive (attr := simp)]
@@ -1704,7 +1704,7 @@ theorem closure_univ
 
 中文:
 定理 closure_univ
-  结论: closure (univ : Set G) = ⊤
+  结论: closure (univ : 集合 G) = ⊤
   证明: @coe_top G _ ▸ closure_eq ⊤
 
 @[to_additive]
@@ -1728,7 +1728,7 @@ theorem closure_union
 
 中文:
 定理 closure_union
-  条件: (s t : Set G)
+  条件: (s t : 集合 G)
   结论: closure (s union t) = closure s ⊔ closure t
   证明: (Subgroup.gi G).gc.l_sup
 
@@ -1754,8 +1754,8 @@ theorem sup_eq_closure
 
 中文:
 定理 sup_eq_closure
-  条件: (H H' : Subgroup G)
-  结论: H ⊔ H' = closure ((H : Set G) union (H' : Set G))
+  条件: (H H' : 子群 G)
+  结论: H ⊔ H' = closure ((H : 集合 G) union (H' : 集合 G))
   证明: by
   simp_rw [closure_union, closure_eq]
 
@@ -1780,7 +1780,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: {ι} (s : ι -> Set G)
+  条件: {ι} (s : ι -> 集合 G)
   结论: closure (⋃ i, s i) = ⨆ i, closure (s i)
   证明: (Subgroup.gi G).gc.l_iSup
 
@@ -1824,7 +1824,7 @@ theorem iSup_eq_closure
 
 中文:
 定理 iSup_eq_closure
-  条件: {ι : Sort*} (p : ι -> Subgroup G)
+  条件: {ι : 类型层*} (p : ι -> 子群 G)
   证明: by simp_rw [closure_iUnion, closure_eq]
 
 Depends on / 依赖: closure_eq, closure_iUnion, simp_rw
@@ -1858,7 +1858,7 @@ theorem mem_closure_singleton
 中文:
 定理 mem_closure_singleton
   条件: {x y : G}
-  结论: y in closure ({x} : Set G) ↔ 存在 n : 整数, x ^ n = y
+  结论: y in closure ({x} : 集合 G) ↔ 存在 n : 整数, x ^ n = y
   证明: by
   refine
     ⟨fun hy => closure_induction ?_ ?_ ?_ ?_ hy, fun ⟨n, hn⟩ =>
@@ -1899,7 +1899,7 @@ theorem closure_singleton_one
 
 中文:
 定理 closure_singleton_one
-  结论: closure ({1} : Set G) = ⊥
+  结论: closure ({1} : 集合 G) = ⊥
   证明: by
   simp [eq_bot_iff_forall, mem_closure_singleton]
 
@@ -1926,7 +1926,7 @@ lemma mem_closure_singleton_self
 中文:
 引理 mem_closure_singleton_self
   条件: (x : G)
-  结论: x in closure ({x} : Set G)
+  结论: x in closure ({x} : 集合 G)
   证明: by
   simpa [-subset_closure] using subset_closure (k := {x})
 
@@ -1951,8 +1951,8 @@ theorem le_closure_toSubmonoid
 
 中文:
 定理 le_closure_toSubmonoid
-  条件: (S : Set G)
-  结论: Submonoid.closure S <= (closure S).toSubmonoid
+  条件: (S : 集合 G)
+  结论: 子幺半群.closure S <= (closure S).toSubmonoid
   证明: Submonoid.closure_le.2 subset_closure
 
 @[to_additive]
@@ -1975,7 +1975,7 @@ theorem closure_eq_top_of_mclosure_eq_top
 
 中文:
 定理 closure_eq_top_of_mclosure_eq_top
-  条件: {S : Set G} (h : Submonoid.closure S = ⊤)
+  条件: {S : 集合 G} (h : 子幺半群.closure S = ⊤)
   证明: (eq_top_iff' _).2 fun _ => le_closure_toSubmonoid _ h.symm ▸ trivial
 
 @[to_additive (attr := simp)]
@@ -2002,7 +2002,7 @@ theorem closure_insert_one
 
 中文:
 定理 closure_insert_one
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure (insert 1 s) = closure s
   证明: by
   rw [insert_eq]; rw [closure_union]
@@ -2031,7 +2031,7 @@ theorem closure_union_one
 
 中文:
 定理 closure_union_one
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure (s union {1}) = closure s
   证明: by
   rw [union_singleton]; rw [closure_insert_one]
@@ -2058,7 +2058,7 @@ theorem closure_sdiff_one
 
 中文:
 定理 closure_sdiff_one
-  条件: (s : Set G)
+  条件: (s : 集合 G)
   结论: closure (s \ {1}) = closure s
   证明: by
   rw [← closure_union_one (s \ {1})]; rw [sdiff_union_self]; rw [closure_union_one]
@@ -2084,7 +2084,7 @@ theorem toAddSubgroup_closure
 
 中文:
 定理 toAddSubgroup_closure
-  条件: (S : Set G)
+  条件: (S : 集合 G)
   证明: le_antisymm (toAddSubgroup.le_symm_apply.mp <|
       (closure_le _).mpr (AddSubgroup.subset_closure (G := Additive G)))
     ((AddSubgroup.closure_le _).mpr (subset_closure (G := G)))
@@ -2106,8 +2106,8 @@ theorem _root_.AddSubgroup.toSubgroup_closure
   proof: Subgroup.toAddSubgroup.injective (Subgroup.toAddSubgroup_closure _).symm
 
 中文:
-定理 _root_.AddSubgroup.toSubgroup_closure
-  条件: {A : 类型} [AddGroup A] (S : Set A)
+定理 _root_.加法子群.toSubgroup_closure
+  条件: {A : 类型} [加法群 A] (S : 集合 A)
   证明: Subgroup.toAddSubgroup.injective (Subgroup.toAddSubgroup_closure _).symm
 
 Depends on / 依赖: Subgroup, Subgroup.toAddSubgroup.injective, Subgroup.toAddSubgroup_closure, injective, toAddSubgroup, toAddSubgroup_closure
@@ -2128,7 +2128,7 @@ theorem toAddSubgroup'_closure
 
 中文:
 定理 toAddSubgroup'_closure
-  条件: {A : 类型} [AddGroup A] (S : Set (Multiplicative A))
+  条件: {A : 类型} [加法群 A] (S : 集合 (Multiplicative A))
   证明: le_antisymm (toAddSubgroup'.to_galoisConnection.l_le <|
 (closure_le _).mpr AddSubgroup.subset_closure (G := A))
     ((AddSubgroup.closure_le _).mpr <| Subgroup.subset_closure (G := Multiplicative A))
@@ -2150,8 +2150,8 @@ theorem _root_.AddSubgroup.toSubgroup'_closure
 @[to_additive]
 
 中文:
-定理 _root_.AddSubgroup.toSubgroup'_closure
-  条件: (S : Set (Additive G))
+定理 _root_.加法子群.toSubgroup'_closure
+  条件: (S : 集合 (加性 G))
   证明: congr_arg AddSubgroup.toSubgroup' (toAddSubgroup'_closure _).symm
 
 @[to_additive]
@@ -2178,7 +2178,7 @@ theorem mem_biSup_of_directedOn
 
 中文:
 定理 mem_biSup_of_directedOn
-  结论: {ι} {p : ι -> 命题} {K : ι -> Subgroup G} {i : ι} (hp : p i)
+  结论: {ι} {p : ι -> 命题} {K : ι -> 子群 G} {i : ι} (hp : p i)
   证明: by
   -- Could use the `Submonoid` version, but we limit the imports here
   refine ⟨?_, fun ⟨i, hi', hi⟩ => ?_⟩
@@ -2221,7 +2221,7 @@ theorem mem_iSup_of_directed
 
 中文:
 定理 mem_iSup_of_directed
-  结论: {ι} [hι : Nonempty ι] {K : ι -> Subgroup G} (hK : Directed (· <= ·) K)
+  结论: {ι} [hι : 非空 ι] {K : ι -> 子群 G} (hK : Directed (· <= ·) K)
   证明: by
   have : iSup K = ⨆ i : PLift ι, ⨆ (_ : True), K i.down := by simp [iSup_plift_down]
   rw [this]; rw [mem_biSup_of_directedOn trivial]
@@ -2262,7 +2262,7 @@ theorem mem_iSup_prop
 
 中文:
 定理 mem_iSup_prop
-  条件: {p : 命题} {K : p -> Subgroup G} {x : G}
+  条件: {p : 命题} {K : p -> 子群 G} {x : G}
   证明: by
   by_cases h : p <;>
   simp +contextual [h]
@@ -2289,7 +2289,7 @@ theorem coe_iSup_of_directed
 
 中文:
 定理 coe_iSup_of_directed
-  条件: {ι} [Nonempty ι] {S : ι -> Subgroup G} (hS : Directed (· <= ·) S)
+  条件: {ι} [非空 ι] {S : ι -> 子群 G} (hS : Directed (· <= ·) S)
   证明: Set.ext fun x => by simp [mem_iSup_of_directed hS]
 
 @[to_additive]
@@ -2315,7 +2315,7 @@ theorem mem_sSup_of_directedOn
 
 中文:
 定理 mem_sSup_of_directedOn
-  结论: {K : Set (Subgroup G)} (Kne : K.Nonempty) (hK : DirectedOn (· <= ·) K)
+  结论: {K : 集合 (子群 G)} (Kne : K.非空) (hK : DirectedOn (· <= ·) K)
   证明: by
   have : Nonempty K := Kne.to_subtype
   simp only [sSup_eq_iSup', mem_iSup_of_directed hK.directed_val, SetCoe.exists, exists_prop]
@@ -2348,7 +2348,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {ι : Sort*} [Nonempty ι]
+  结论: {ι : 类型层*} [非空 ι]
   证明: by
   refine .of_setLike_mul_comm ?_
   simp_rw [← SetLike.mem_coe, coe_iSup_of_directed dir, Set.mem_iUnion,
@@ -2382,7 +2382,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: {ι : 类型} [Nonempty ι] [Preorder ι] [IsDirectedOrder ι]
+  签名: {ι : 类型} [非空 ι] [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone
@@ -2471,7 +2471,7 @@ lemma forall_mem_sup
 @[to_additive, simp high]
 
 中文:
-引理 forall_mem_sup
+引理 对任意_mem_sup
   证明: by
   grind [mem_sup]
 
@@ -2495,7 +2495,7 @@ lemma exists_mem_sup
 @[to_additive]
 
 中文:
-引理 exists_mem_sup
+引理 存在_mem_sup
   证明: by
   simp [mem_sup]
 
@@ -2526,7 +2526,7 @@ theorem mem_sup_of_normal_right
 
 中文:
 定理 mem_sup_of_normal_right
-  条件: {s t : Subgroup G} [ht : t.Normal] {x : G}
+  条件: {s t : 子群 G} [ht : t.正规] {x : G}
   证明: by
   constructor
   · intro hx; rw [sup_eq_closure] at hx
@@ -2573,7 +2573,7 @@ theorem mem_sup_of_normal_left
 
 中文:
 定理 mem_sup_of_normal_left
-  条件: {s t : Subgroup G} [hs : s.Normal] {x : G}
+  条件: {s t : 子群 G} [hs : s.正规] {x : G}
   证明: by
   have h := (sup_comm t s) ▸ mem_sup_of_normal_right (s := t) (t := s) (x := x)
   exact h.trans
@@ -2634,7 +2634,7 @@ theorem disjoint_def
 
 中文:
 定理 disjoint_def
-  条件: {H₁ H₂ : Subgroup G}
+  条件: {H₁ H₂ : 子群 G}
   结论: Disjoint H₁ H₂ ↔ 对任意 {x : G}, x in H₁ -> x in H₂ -> x = 1
   证明: disjoint_iff_inf_le.trans by simp only [SetLike.le_def, mem_inf, mem_bot, and_imp]
 
@@ -2658,7 +2658,7 @@ theorem disjoint_def'
 
 中文:
 定理 disjoint_def'
-  条件: {H₁ H₂ : Subgroup G}
+  条件: {H₁ H₂ : 子群 G}
   证明: disjoint_def.trans ⟨fun h _x _y hx hy hxy => h hx hxy.symm ▸ hy, fun h _x hx hx' => h hx hx' rfl⟩
 
 @[to_additive]
@@ -2686,7 +2686,7 @@ theorem disjoint_iff_mul_eq_one
 
 中文:
 定理 disjoint_iff_mul_eq_one
-  条件: {H₁ H₂ : Subgroup G}
+  条件: {H₁ H₂ : 子群 G}
   证明: disjoint_def'.trans
     ⟨fun h x y hx hy hxy =>
       let hx1 : x = 1 := h hx (H₂.inv_mem hy) (eq_inv_iff_mul_eq_one.mpr hxy)
@@ -2721,7 +2721,7 @@ theorem mul_injective_of_disjoint
 
 中文:
 定理 mul_injective_of_disjoint
-  条件: {H₁ H₂ : Subgroup G} (h : Disjoint H₁ H₂)
+  条件: {H₁ H₂ : 子群 G} (h : Disjoint H₁ H₂)
   证明: by
   intro x y hxy
   rw [← inv_mul_eq_iff_eq_mul]; rw [← mul_assoc]; rw [← mul_inv_eq_one]; rw [mul_assoc] at hxy

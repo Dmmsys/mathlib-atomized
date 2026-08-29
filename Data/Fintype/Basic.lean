@@ -42,7 +42,7 @@ instance Fin.fintype
   body: ⟨⟨List.finRange n, List.nodup_finRange n⟩, List.mem_finRange⟩
 
 中文:
-实例 Fin.fintype
+实例 有限集.fintype
   签名: (n : 自然数)
   定义体: ⟨⟨List.finRange n, List.nodup_finRange n⟩, List.mem_finRange⟩
 
@@ -61,9 +61,9 @@ theorem Fin.univ_def
   proof: rfl
 
 中文:
-定理 Fin.univ_def
+定理 有限集.univ_def
   条件: (n : 自然数)
-  结论: (univ : Finset (Fin n)) = ⟨List.finRange n, List.nodup_finRange n⟩
+  结论: (univ : 有限集 (有限集 n)) = ⟨列表.finRange n, 列表.nodup_finRange n⟩
   证明: rfl
 -/
 theorem Fin.univ_def (n : Nat) : (univ : Finset (Fin n)) = ⟨List.finRange n, List.nodup_finRange n⟩ :=
@@ -78,8 +78,8 @@ theorem Finset.univ_fin2
   proof: rfl
 
 中文:
-定理 Finset.univ_fin2
-  结论: (univ : Finset (Fin 2)) = {0, 1}
+定理 有限集.univ_fin2
+  结论: (univ : 有限集 (有限集 2)) = {0, 1}
   证明: rfl
 -/
 theorem Finset.univ_fin2 : (univ : Finset (Fin 2)) = {0, 1} := rfl
@@ -94,9 +94,9 @@ theorem Finset.val_univ_fin
   proof: rfl
 
 中文:
-定理 Finset.val_univ_fin
+定理 有限集.val_univ_fin
   条件: (n : 自然数)
-  结论: (Finset.univ : Finset (Fin n)).val = List.finRange n
+  结论: (有限集.univ : 有限集 (有限集 n)).val = 列表.finRange n
   证明: rfl
 -/
 theorem Finset.val_univ_fin (n : Nat) : (Finset.univ : Finset (Fin n)).val = List.finRange n := rfl
@@ -114,8 +114,8 @@ theorem nonempty_fintype
 
 中文:
 定理 nonempty_fintype
-  条件: (α : 类型) [Finite α]
-  结论: Nonempty (Fintype α)
+  条件: (α : 类型) [有限 α]
+  结论: 非空 (有限类型 α)
   证明: by
   rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
   exact ⟨.ofEquiv _ e.symm⟩
@@ -137,9 +137,9 @@ theorem List.toFinset_finRange
   ext; simp
 
 中文:
-定理 List.toFinset_finRange
+定理 列表.toFinset_finRange
   条件: (n : 自然数)
-  结论: (List.finRange n).toFinset = Finset.univ
+  结论: (列表.finRange n).toFinset = 有限集.univ
   证明: by
   ext; simp
 -/
@@ -156,8 +156,8 @@ theorem Fin.univ_val_map
   simp [List.ofFn_eq_map, univ_def]
 
 中文:
-定理 Fin.univ_val_map
-  条件: {n : 自然数} (f : Fin n -> α)
+定理 有限集.univ_val_map
+  条件: {n : 自然数} (f : 有限集 n -> α)
   证明: by
   simp [List.ofFn_eq_map, univ_def]
 -/
@@ -175,8 +175,8 @@ theorem Fin.univ_image_def
   simp [Finset.image]
 
 中文:
-定理 Fin.univ_image_def
-  条件: {n : 自然数} [DecidableEq α] (f : Fin n -> α)
+定理 有限集.univ_image_def
+  条件: {n : 自然数} [DecidableEq α] (f : 有限集 n -> α)
   证明: by
   simp [Finset.image]
 
@@ -198,8 +198,8 @@ theorem Fin.univ_map_def
 @[simp]
 
 中文:
-定理 Fin.univ_map_def
-  条件: {n : 自然数} (f : Fin n ↪ α)
+定理 有限集.univ_map_def
+  条件: {n : 自然数} (f : 有限集 n ↪ α)
   证明: by
   simp [Finset.map]
 
@@ -226,9 +226,9 @@ theorem Fin.image_succAbove_univ
 @[simp]
 
 中文:
-定理 Fin.image_succAbove_univ
-  条件: {n : 自然数} (i : Fin (n + 1))
-  结论: univ.image i.succAbove = {i}ᶜ
+定理 有限集.image_succAbove_univ
+  条件: {n : 自然数} (i : 有限集 (n + 1))
+  结论: univ.像 i.succAbove = {i}ᶜ
   证明: by
   ext m
   simp
@@ -253,9 +253,9 @@ theorem Fin.image_succ_univ
 @[simp]
 
 中文:
-定理 Fin.image_succ_univ
+定理 有限集.image_succ_univ
   条件: (n : 自然数)
-  结论: (univ : Finset (Fin n)).image Fin.succ = {0}ᶜ
+  结论: (univ : 有限集 (有限集 n)).像 有限集.succ = {0}ᶜ
   证明: by
   rw [← Fin.succAbove_zero]; rw [Fin.image_succAbove_univ]
 
@@ -277,7 +277,7 @@ theorem Fin.image_castSucc
   rw [← Fin.succAbove_last]; rw [Fin.image_succAbove_univ]
 
 中文:
-定理 Fin.image_castSucc
+定理 有限集.image_castSucc
   条件: (n : 自然数)
   证明: by
   rw [← Fin.succAbove_last]; rw [Fin.image_succAbove_univ]
@@ -300,7 +300,7 @@ theorem Fin.univ_succ
   simp [map_eq_image]
 
 中文:
-定理 Fin.univ_succ
+定理 有限集.univ_succ
   条件: (n : 自然数)
   证明: by
   simp [map_eq_image]
@@ -322,7 +322,7 @@ theorem Fin.univ_castSuccEmb
   simp [map_eq_image]
 
 中文:
-定理 Fin.univ_castSuccEmb
+定理 有限集.univ_castSuccEmb
   条件: (n : 自然数)
   证明: by
   simp [map_eq_image]
@@ -344,8 +344,8 @@ theorem Fin.univ_succAbove
   simp [map_eq_image]
 
 中文:
-定理 Fin.univ_succAbove
-  条件: (n : 自然数) (p : Fin (n + 1))
+定理 有限集.univ_succAbove
+  条件: (n : 自然数) (p : 有限集 (n + 1))
   证明: by
   simp [map_eq_image]
 
@@ -365,8 +365,8 @@ theorem Fin.univ_image_get
   simp [univ_image_def]
 
 中文:
-定理 Fin.univ_image_get
-  条件: [DecidableEq α] (l : List α)
+定理 有限集.univ_image_get
+  条件: [DecidableEq α] (l : 列表 α)
   证明: by
   simp [univ_image_def]
 -/
@@ -384,8 +384,8 @@ theorem Fin.univ_image_getElem'
   simp only [univ_image_def, List.ofFn_getElem_eq_map]
 
 中文:
-定理 Fin.univ_image_getElem'
-  条件: [DecidableEq β] (l : List α) (f : α -> β)
+定理 有限集.univ_image_getElem'
+  条件: [DecidableEq β] (l : 列表 α) (f : α -> β)
   证明: by
   simp only [univ_image_def, List.ofFn_getElem_eq_map]
 -/
@@ -403,8 +403,8 @@ theorem Fin.univ_image_get'
   simp
 
 中文:
-定理 Fin.univ_image_get'
-  条件: [DecidableEq β] (l : List α) (f : α -> β)
+定理 有限集.univ_image_get'
+  条件: [DecidableEq β] (l : 列表 α) (f : α -> β)
   证明: by
   simp
 -/
@@ -422,8 +422,8 @@ lemma Fin.eq_iff_eq_zero_iff
   proof: ⟨by rintro rfl; rfl, fin_two_eq_of_eq_zero_iff⟩
 
 中文:
-引理 Fin.eq_iff_eq_zero_iff
-  条件: (a b : Fin 2)
+引理 有限集.eq_iff_eq_zero_iff
+  条件: (a b : 有限集 2)
   结论: a = b ↔ (a = 0 ↔ b = 0)
   证明: ⟨by rintro rfl; rfl, fin_two_eq_of_eq_zero_iff⟩
 
@@ -441,8 +441,8 @@ instance Unique.fintype
   body: Fintype.ofSubsingleton default
 
 中文:
-实例 Unique.fintype
-  签名: {α : 类型} [Unique α]
+实例 唯一.fintype
+  签名: {α : 类型} [唯一 α]
   定义体: Fintype.ofSubsingleton default
 
 Depends on / 依赖: Fintype, Fintype.ofSubsingleton, ofSubsingleton
@@ -459,7 +459,7 @@ instance Fintype.subtypeEq
   body: Fintype.subtype {y} (by simp)
 
 中文:
-实例 Fintype.subtypeEq
+实例 有限类型.subtypeEq
   签名: (y : α)
   定义体: Fintype.subtype {y} (by simp)
 
@@ -477,7 +477,7 @@ instance Fintype.subtypeEq'
   body: Fintype.subtype {y} (by simp [eq_comm])
 
 中文:
-实例 Fintype.subtypeEq'
+实例 有限类型.subtypeEq'
   签名: (y : α)
   定义体: Fintype.subtype {y} (by simp [eq_comm])
 
@@ -495,8 +495,8 @@ theorem Fintype.univ_empty
   proof: rfl
 
 中文:
-定理 Fintype.univ_empty
-  结论: @univ Empty _ = ∅
+定理 有限类型.univ_empty
+  结论: @univ 空 _ = ∅
   证明: rfl
 -/
 theorem Fintype.univ_empty : @univ Empty _ = ∅ :=
@@ -511,8 +511,8 @@ theorem Fintype.univ_pempty
   proof: rfl
 
 中文:
-定理 Fintype.univ_pempty
-  结论: @univ PEmpty _ = ∅
+定理 有限类型.univ_pempty
+  结论: @univ 命题空 _ = ∅
   证明: rfl
 -/
 theorem Fintype.univ_pempty : @univ PEmpty _ = ∅ :=
@@ -527,8 +527,8 @@ instance Unit.fintype
   body: Fintype.ofSubsingleton ()
 
 中文:
-实例 Unit.fintype
-  签名: : Fintype Unit
+实例 单元.fintype
+  签名: : 有限类型 单元
   定义体: Fintype.ofSubsingleton ()
 
 Depends on / 依赖: Fintype, Fintype.ofSubsingleton, ofSubsingleton
@@ -545,8 +545,8 @@ theorem Fintype.univ_unit
   proof: rfl
 
 中文:
-定理 Fintype.univ_unit
-  结论: @univ Unit _ = {()}
+定理 有限类型.univ_unit
+  结论: @univ 单元 _ = {()}
   证明: rfl
 -/
 theorem Fintype.univ_unit : @univ Unit _ = {()} :=
@@ -561,8 +561,8 @@ instance PUnit.fintype
   body: Fintype.ofSubsingleton PUnit.unit
 
 中文:
-实例 PUnit.fintype
-  签名: : Fintype PUnit
+实例 命题单元.fintype
+  签名: : 有限类型 命题单元
   定义体: Fintype.ofSubsingleton PUnit.unit
 
 Depends on / 依赖: Fintype, Fintype.ofSubsingleton, PUnit.unit, ofSubsingleton
@@ -581,8 +581,8 @@ theorem Fintype.univ_punit
 @[simp]
 
 中文:
-定理 Fintype.univ_punit
-  结论: @univ PUnit _ = {PUnit.unit}
+定理 有限类型.univ_punit
+  结论: @univ 命题单元 _ = {命题单元.unit}
   证明: rfl
 
 @[simp]
@@ -600,8 +600,8 @@ theorem Fintype.univ_bool
   proof: rfl
 
 中文:
-定理 Fintype.univ_bool
-  结论: @univ 布尔 _ = {true, false}
+定理 有限类型.univ_bool
+  结论: @univ 布尔值 _ = {true, false}
   证明: rfl
 -/
 theorem Fintype.univ_bool : @univ Bool _ = {true, false} :=
@@ -618,8 +618,8 @@ definition Fintype.prodLeft
   body: ⟨(@univ (α × β) _).image Prod.fst, fun a => by simp⟩
 
 中文:
-定义 Fintype.prodLeft
-  签名: {α β} [DecidableEq α] [Fintype (α × β)] [Nonempty β]
+定义 有限类型.prodLeft
+  签名: {α β} [DecidableEq α] [有限类型 (α × β)] [非空 β]
   定义体: ⟨(@univ (α × β) _).image Prod.fst, fun a => by simp⟩
 
 Depends on / 依赖: Prod.fst
@@ -638,8 +638,8 @@ definition Fintype.prodRight
   body: ⟨(@univ (α × β) _).image Prod.snd, fun b => by simp⟩
 
 中文:
-定义 Fintype.prodRight
-  签名: {α β} [DecidableEq β] [Fintype (α × β)] [Nonempty α]
+定义 有限类型.prodRight
+  签名: {α β} [DecidableEq β] [有限类型 (α × β)] [非空 α]
   定义体: ⟨(@univ (α × β) _).image Prod.snd, fun b => by simp⟩
 
 Depends on / 依赖: Prod.snd
@@ -656,8 +656,8 @@ instance ULift.fintype
   body: Fintype.ofEquiv _ Equiv.ulift.symm
 
 中文:
-实例 ULift.fintype
-  签名: (α : 类型) [Fintype α]
+实例 类型层提升.fintype
+  签名: (α : 类型) [有限类型 α]
   定义体: Fintype.ofEquiv _ Equiv.ulift.symm
 
 Depends on / 依赖: Equiv.ulift.symm, Fintype, Fintype.ofEquiv, ofEquiv
@@ -674,8 +674,8 @@ instance PLift.fintype
   body: Fintype.ofEquiv _ Equiv.plift.symm
 
 中文:
-实例 PLift.fintype
-  签名: (α : 类型) [Fintype α]
+实例 命题层提升.fintype
+  签名: (α : 类型) [有限类型 α]
   定义体: Fintype.ofEquiv _ Equiv.plift.symm
 
 Depends on / 依赖: Equiv.plift.symm, Fintype, Fintype.ofEquiv, ofEquiv
@@ -692,8 +692,8 @@ instance PLift.fintypeProp
   body: ⟨if h : p then {⟨h⟩} else ∅, fun ⟨h⟩ => by simp [h]⟩
 
 中文:
-实例 PLift.fintypeProp
-  签名: (p : 命题) [Decidable p]
+实例 命题层提升.fintypeProp
+  签名: (p : 命题) [可判定 p]
   定义体: ⟨if h : p then {⟨h⟩} else ∅, fun ⟨h⟩ => by simp [h]⟩
 -/
 instance PLift.fintypeProp (p : Prop) [Decidable p] : Fintype (PLift p) :=
@@ -708,8 +708,8 @@ instance Quotient.fintype
   body: Fintype.ofSurjective Quotient.mk'' Quotient.mk''_surjective
 
 中文:
-实例 Quotient.fintype
-  签名: [Fintype α] (s : Setoid α) [DecidableRel ((· ≈ ·) : α -> α -> 命题)]
+实例 商.fintype
+  签名: [有限类型 α] (s : 集合等价关系 α) [DecidableRel ((· ≈ ·) : α -> α -> 命题)]
   定义体: Fintype.ofSurjective Quotient.mk'' Quotient.mk''_surjective
 
 Depends on / 依赖: Fintype, Fintype.ofSurjective, Quotient, Quotient.mk, _surjective, ofSurjective
@@ -728,8 +728,8 @@ instance PSigma.fintypePropLeft
   else ⟨∅, fun x => (h x.1).elim⟩
 
 中文:
-实例 PSigma.fintypePropLeft
-  签名: {α : 命题} {β : α -> 类型} [Decidable α] [对任意 a, Fintype (β a)]
+实例 命题和类型.fintypePropLeft
+  签名: {α : 命题} {β : α -> 类型} [可判定 α] [对任意 a, 有限类型 (β a)]
   定义体: if h : α then Fintype.ofEquiv (β h) ⟨fun x => ⟨h, x⟩, PSigma.snd, fun _ => rfl, fun ⟨_, _⟩ => rfl⟩
   else ⟨∅, fun x => (h x.1).elim⟩
 
@@ -750,8 +750,8 @@ instance PSigma.fintypePropRight
     ⟨fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨_, _⟩ => rfl, fun ⟨_, _⟩ => rfl⟩
 
 中文:
-实例 PSigma.fintypePropRight
-  签名: {α : 类型} {β : α -> 命题} [对任意 a, Decidable (β a)] [Fintype α]
+实例 命题和类型.fintypePropRight
+  签名: {α : 类型} {β : α -> 命题} [对任意 a, 可判定 (β a)] [有限类型 α]
   定义体: Fintype.ofEquiv { a // β a }
     ⟨fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨x, y⟩ => ⟨x, y⟩, fun ⟨_, _⟩ => rfl, fun ⟨_, _⟩ => rfl⟩
 
@@ -772,8 +772,8 @@ instance PSigma.fintypePropProp
     (h ⟨x, y⟩).elim⟩
 
 中文:
-实例 PSigma.fintypePropProp
-  签名: {α : 命题} {β : α -> 命题} [Decidable α] [对任意 a, Decidable (β a)]
+实例 命题和类型.fintypePropProp
+  签名: {α : 命题} {β : α -> 命题} [可判定 α] [对任意 a, 可判定 (β a)]
   定义体: if h : exists a, β a then ⟨{⟨h.fst, h.snd⟩}, fun ⟨_, _⟩ => by simp⟩ else ⟨∅, fun ⟨x, y⟩ =>
     (h ⟨x, y⟩).elim⟩
 
@@ -796,7 +796,7 @@ instance pfunFintype
 
 中文:
 实例 pfunFintype
-  签名: (p : 命题) [Decidable p] (α : p -> 类型) [对任意 hp, Fintype (α hp)]
+  签名: (p : 命题) [可判定 p] (α : p -> 类型) [对任意 hp, 有限类型 (α hp)]
   定义体: if hp : p then Fintype.ofEquiv (α hp) ⟨fun a _ => a, fun f => f hp, fun _ => rfl, fun _ => rfl⟩
   else ⟨singleton fun h => (hp h).elim, fun h => mem_singleton.2
     (funext fun x => by contradiction)⟩
@@ -848,7 +848,7 @@ definition truncOfNonemptyFintype
 
 中文:
 定义 truncOfNonemptyFintype
-  签名: (α) [Nonempty α] [Fintype α]
+  签名: (α) [非空 α] [有限类型 α]
   定义体: truncOfMultisetExistsMem Finset.univ.val (by simp)
 
 Depends on / 依赖: Finset, Finset.univ.val, truncOfMultisetExistsMem
@@ -866,7 +866,7 @@ definition truncSigmaOfExists
 
 中文:
 定义 truncSigmaOfExists
-  签名: {α} [Fintype α] {P : α -> 命题} [DecidablePred P] (h : 存在 a, P a)
+  签名: {α} [有限类型 α] {P : α -> 命题} [DecidablePred P] (h : 存在 a, P a)
   定义体: @truncOfNonemptyFintype (Σ' a, P a) ((Exists.elim h) fun a ha => ⟨⟨a, ha⟩⟩) _
 
 Depends on / 依赖: Exists, Exists.elim, truncOfNonemptyFintype
@@ -896,7 +896,7 @@ theorem count_univ
 中文:
 定理 count_univ
   条件: [DecidableEq α] (a : α)
-  结论: count a Finset.univ.val = 1
+  结论: count a 有限集.univ.val = 1
   证明: count_eq_one_of_mem Finset.univ.nodup (Finset.mem_univ _)
 
 @[simp]
@@ -996,7 +996,7 @@ theorem exists_seq_of_forall_finset_exists
   
 
 中文:
-定理 exists_seq_of_forall_finset_exists
+定理 存在_seq_of_对任意_finset_存在
   结论: {α : 类型} (P : α -> 命题) (r : α -> α -> 命题)
   证明: by
   classical
@@ -1049,7 +1049,7 @@ theorem exists_seq_of_forall_finset_exists'
   grind +splitIndPred
 
 中文:
-定理 exists_seq_of_forall_finset_exists'
+定理 存在_seq_of_对任意_finset_存在'
   结论: {α : 类型} (P : α -> 命题) (r : α -> α -> 命题)
   证明: by
   rcases exists_seq_of_forall_finset_exists P r h with ⟨f, hf, hf'⟩

@@ -68,7 +68,7 @@ instance :
 
 中文:
 实例 :
-  签名: (restrictScalars.{v} α).Additive
+  签名: (restrictScalars.{v} α).加性
 -/
 instance : (restrictScalars.{v} α).Additive where
 

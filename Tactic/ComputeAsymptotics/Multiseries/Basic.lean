@@ -47,7 +47,7 @@ definition Multiseries.const
 
 中文:
 定义 Multiseries.const
-  签名: (basis_hd : 实数 -> 实数) (basis_tl : Basis) (c : 实数)
+  签名: (basis_hd : 实数 -> 实数) (basis_tl : 基) (c : 实数)
   定义体: .cons 0 (const basis_tl c) .nil
 
 Depends on / 依赖: basis_tl
@@ -68,7 +68,7 @@ definition const
 
 中文:
 定义 const
-  签名: (basis : Basis) (c : 实数)
+  签名: (basis : 基) (c : 实数)
   定义体: match basis with
   | [] => ofReal c
   | List.cons basis_hd basis_tl => mk (Multiseries.const basis_hd basis_tl c) (fun _ => c)
@@ -94,7 +94,7 @@ definition zero
 
 中文:
 定义 zero
-  签名: {basis : Basis}
+  签名: {basis : 基}
   定义体: match basis with
   | [] => ofReal 0
   | List.cons _ _ => mk .nil (fun _ => 0)
@@ -126,7 +126,7 @@ definition Multiseries.one
 
 中文:
 定义 Multiseries.one
-  签名: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  签名: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   定义体: Multiseries.const _ _ 1
 
 Depends on / 依赖: Multiseries, Multiseries.const
@@ -146,7 +146,7 @@ mutual
 
 中文:
 定义 one
-  签名: {basis : Basis}
+  签名: {basis : 基}
   定义体: const basis 1
 
 mutual
@@ -168,7 +168,7 @@ definition Multiseries.monomialRpow
 
 中文:
 定义 Multiseries.monomialRpow
-  签名: (basis_hd : 实数 -> 实数) (basis_tl : Basis) (n : 自然数) (r : 实数)
+  签名: (basis_hd : 实数 -> 实数) (basis_tl : 基) (n : 自然数) (r : 实数)
   定义体: match n with
   | 0 => .cons r one .nil
   | m + 1 => .cons 0 (monomialRpow _ m r) .nil
@@ -194,7 +194,7 @@ definition monomialRpow
 
 中文:
 定义 monomialRpow
-  签名: (basis : Basis) (n : 自然数) (r : 实数)
+  签名: (basis : 基) (n : 自然数) (r : 实数)
   定义体: match basis with
   | [] => default
   | List.cons basis_hd basis_tl =>
@@ -220,7 +220,7 @@ definition Multiseries.monomial
 
 中文:
 定义 Multiseries.monomial
-  签名: (basis_hd : 实数 -> 实数) (basis_tl : Basis) (n : 自然数)
+  签名: (basis_hd : 实数 -> 实数) (basis_tl : 基) (n : 自然数)
   定义体: Multiseries.monomialRpow _ _ n 1
 
 Depends on / 依赖: Multiseries, Multiseries.monomialRpow, monomialRpow
@@ -239,7 +239,7 @@ definition monomial
 
 中文:
 定义 monomial
-  签名: (basis : Basis) (n : 自然数)
+  签名: (basis : 基) (n : 自然数)
   定义体: monomialRpow _ n 1
 
 Depends on / 依赖: monomialRpow
@@ -279,7 +279,7 @@ theorem Multiseries.zero_def
 
 中文:
 定理 Multiseries.zero_def
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: rfl
 -/
 theorem Multiseries.zero_def {basis_hd : Real -> Real} {basis_tl : Basis} :
@@ -325,7 +325,7 @@ theorem const_toFun'
 
 中文:
 定理 const_toFun'
-  条件: {basis : Basis} {c : 实数}
+  条件: {basis : 基} {c : 实数}
   结论: (const basis c).toFun = fun _ => c
   证明: by
   match basis with
@@ -382,7 +382,7 @@ theorem zero_toFun
 
 中文:
 定理 zero_toFun
-  条件: {basis : Basis}
+  条件: {basis : 基}
   结论: (@zero basis).toFun = 0
   证明: by
   match basis with
@@ -437,7 +437,7 @@ theorem one_toFun
 
 中文:
 定理 one_toFun
-  条件: {basis : Basis}
+  条件: {basis : 基}
   结论: (@one basis).toFun = 1
   证明: by
   simp [one]
@@ -463,7 +463,7 @@ mutual
 
 中文:
 定理 one_seq
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   simp [one, Multiseries.one, const]
 
@@ -489,7 +489,7 @@ theorem Multiseries.const_sorted
 
 中文:
 定理 Multiseries.const_sorted
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {c : 实数}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {c : 实数}
   证明: by
   simp only [Multiseries.const]
   exact const_sorted.cons_nil
@@ -515,7 +515,7 @@ theorem const_sorted
 
 中文:
 定理 const_sorted
-  条件: {basis : Basis} {c : 实数}
+  条件: {basis : 基} {c : 实数}
   证明: by
   cases basis with
   | nil => constructor
@@ -547,7 +547,7 @@ theorem zero_sorted
 
 中文:
 定理 zero_sorted
-  条件: {basis : Basis}
+  条件: {basis : 基}
   结论: (0 : MultiseriesExpansion basis).Sorted
   证明: by
   cases basis with
@@ -571,7 +571,7 @@ theorem Multiseries.one_sorted
 
 中文:
 定理 Multiseries.one_sorted
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: Multiseries.const_sorted
 
 Depends on / 依赖: Multiseries, Multiseries.const_sorted, const_sorted
@@ -591,7 +591,7 @@ theorem one_sorted
 
 中文:
 定理 one_sorted
-  条件: {basis : Basis}
+  条件: {basis : 基}
   结论: one.Sorted (basis := basis)
   证明: const_sorted
 -/
@@ -614,7 +614,7 @@ exact Majorized.const h_basis.tendsto_atTop (by simp)
 
 中文:
 定理 const_approximates
-  条件: {c : 实数} {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {c : 实数} {basis : 基} (h_basis : WellFormedBasis basis)
   证明: by
   cases basis with
   | nil => simp
@@ -647,7 +647,7 @@ theorem zero_approximates
 
 中文:
 定理 zero_approximates
-  条件: {basis : Basis}
+  条件: {basis : 基}
   证明: by
   cases basis with
   | nil => simp [zero]
@@ -673,7 +673,7 @@ theorem one_approximates
 
 中文:
 定理 one_approximates
-  条件: {basis : Basis} (h_basis : WellFormedBasis basis)
+  条件: {basis : 基} (h_basis : WellFormedBasis basis)
   证明: const_approximates h_basis
 
 @[simp]
@@ -700,7 +700,7 @@ theorem monomialRpow_toFun
 
 中文:
 定理 monomialRpow_toFun
-  条件: {basis : Basis} {n : Fin (List.length basis)} {r : 实数}
+  条件: {basis : 基} {n : 有限集 (列表.length basis)} {r : 实数}
   证明: by
   cases basis with
   | nil => grind
@@ -730,7 +730,7 @@ mutual
 
 中文:
 定理 monomialRpow_seq
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {n : 自然数} {r : 实数}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {n : 自然数} {r : 实数}
   证明: by
   simp [monomialRpow]
 
@@ -761,7 +761,7 @@ theorem Multiseries.monomialRpow_sorted
 
 中文:
 定理 Multiseries.monomialRpow_sorted
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {n : 自然数} {r : 实数}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {n : 自然数} {r : 实数}
   证明: by
   cases n with
   | zero =>
@@ -797,7 +797,7 @@ theorem monomialRpow_sorted
 
 中文:
 定理 monomialRpow_sorted
-  条件: {basis : Basis} {n : 自然数} {r : 实数}
+  条件: {basis : 基} {n : 自然数} {r : 实数}
   证明: by
   cases basis with
   | nil => constructor
@@ -834,7 +834,7 @@ theorem monomialRpow_approximates
 
 中文:
 定理 monomialRpow_approximates
-  结论: {basis : Basis} {n : Fin (List.length basis)} {r : 实数}
+  结论: {basis : 基} {n : 有限集 (列表.length basis)} {r : 实数}
   证明: by
   cases basis with
   | nil => simp
@@ -882,7 +882,7 @@ theorem monomial_toFun
 
 中文:
 定理 monomial_toFun
-  条件: {basis : Basis} {n : 自然数} (h : n < basis.length)
+  条件: {basis : 基} {n : 自然数} (h : n < basis.length)
   证明: by
   let n' : Fin basis.length := ⟨n, h⟩
   conv_lhs => rw [show n = n'.val by simp [n']]
@@ -913,7 +913,7 @@ theorem monomial_toFun'
 
 中文:
 定理 monomial_toFun'
-  条件: {basis : Basis} {n : Fin basis.length}
+  条件: {basis : 基} {n : 有限集 basis.length}
   证明: by
   simp
 
@@ -934,7 +934,7 @@ theorem monomial_seq
 
 中文:
 定理 monomial_seq
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {n : 自然数}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {n : 自然数}
   证明: monomialRpow_seq
 
 Depends on / 依赖: monomialRpow_seq
@@ -953,7 +953,7 @@ theorem Multiseries.monomial_sorted
 
 中文:
 定理 Multiseries.monomial_sorted
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {n : 自然数}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {n : 自然数}
   证明: Multiseries.monomialRpow_sorted
 
 Depends on / 依赖: Multiseries, Multiseries.monomialRpow_sorted, monomialRpow_sorted
@@ -973,7 +973,7 @@ theorem monomial_sorted
 
 中文:
 定理 monomial_sorted
-  条件: {basis : Basis} {n : 自然数}
+  条件: {basis : 基} {n : 自然数}
   结论: (monomial basis n).Sorted
   证明: monomialRpow_sorted
 
@@ -992,7 +992,7 @@ theorem monomial_approximates
 
 中文:
 定理 monomial_approximates
-  结论: {basis : Basis} {n : Fin (List.length basis)}
+  结论: {basis : 基} {n : 有限集 (列表.length basis)}
   证明: monomialRpow_approximates h_basis
 
 Depends on / 依赖: h_basis, monomialRpow_approximates

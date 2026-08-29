@@ -59,7 +59,7 @@ structure InducingFunctorData
 
 中文:
 结构 InducingFunctorData
-  参数: [MonoidalCategoryStruct D] (F : D ⥤ C)
+  参数: [幺半群范畴结构 D] (F : D ⥤ C)
   公理与运算 (8 个):
     - μIso : 对任意 X Y, F.obj X otimes F.obj Y ≅ F.obj (X otimes Y)
     - whiskerLeft_eq : 对任意 (X : D) {Y₁ Y₂ : D} (f : Y₁ ⟶ Y₂), F.map (X ◁ f) = (μIso _ _).inv ≫ (F.obj X ◁ F.map f) ≫ (μIso _ _).hom  [默认: by cat_disch]
@@ -124,7 +124,7 @@ tensorHom_comp_tensorHom f₁ f₂ g₁ g₂ := F.map_inj
 
 中文:
 定义 induced
-  签名: [MonoidalCategoryStruct D] (F : D ⥤ C) [F.Faithful]
+  签名: [幺半群范畴结构 D] (F : D ⥤ C) [F.忠实]
   定义体: F.map_injective by
     rw [fData.tensorHom_eq]; rw [Functor.map_comp]; rw [fData.whiskerRight_eq]; rw [fData.whiskerLeft_eq]
     simp only [tensorHom_def, assoc, Iso.hom_inv_id_assoc]
@@ -179,7 +179,7 @@ definition fromInducedCoreMonoidal
 
 中文:
 定义 fromInducedCoreMonoidal
-  签名: [MonoidalCategoryStruct D] (F : D ⥤ C) [F.Faithful]
+  签名: [幺半群范畴结构 D] (F : D ⥤ C) [F.忠实]
   定义体: induced F fData
     F.CoreMonoidal := by
   letI := induced F fData
@@ -219,7 +219,7 @@ instance fromInducedMonoidal
 
 中文:
 实例 fromInducedMonoidal
-  签名: [MonoidalCategoryStruct D] (F : D ⥤ C) [F.Faithful]
+  签名: [幺半群范畴结构 D] (F : D ⥤ C) [F.忠实]
   定义体: induced F fData
     F.Monoidal :=
   letI := induced F fData
@@ -413,7 +413,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceTransported e).inverse.Monoidal
+  签名: (equivalenceTransported e).inverse.幺半群
   定义体: by
   dsimp +instances only [Transported.instMonoidalCategory]
   infer_instance
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceTransported e).symm.functor.Monoidal
+  签名: (equivalenceTransported e).symm.functor.幺半群
   定义体: inferInstanceAs (equivalenceTransported e).inverse.Monoidal
 
 Depends on / 依赖: Monoidal, equivalenceTransported, inverse, inverse.Monoidal
@@ -452,7 +452,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceTransported e).functor.Monoidal
+  签名: (equivalenceTransported e).functor.幺半群
   定义体: (equivalenceTransported e).symm.inverseMonoidal
 
 Depends on / 依赖: equivalenceTransported, inverseMonoidal, symm.inverseMonoidal
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceTransported e).symm.inverse.Monoidal
+  签名: (equivalenceTransported e).symm.inverse.幺半群
   定义体: inferInstanceAs (equivalenceTransported e).functor.Monoidal
 
 Depends on / 依赖: Monoidal, equivalenceTransported, functor, functor.Monoidal
@@ -490,7 +490,7 @@ instance :
 
 中文:
 实例 :
-  签名: (equivalenceTransported e).symm.IsMonoidal
+  签名: (equivalenceTransported e).symm.是幺半群
   定义体: by
   infer_instance
 
@@ -509,7 +509,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal (equivalenceTransported e).unit
+  签名: 自然变换.是幺半群 (equivalenceTransported e).unit
   定义体: inferInstanceAs (NatTrans.IsMonoidal (equivalenceTransported e).symm.counitIso.inv)
 
 Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, counitIso, equivalenceTransported, symm.counitIso.inv
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.IsMonoidal (equivalenceTransported e).counit
+  签名: 自然变换.是幺半群 (equivalenceTransported e).counit
   定义体: inferInstanceAs (NatTrans.IsMonoidal (equivalenceTransported e).symm.unitIso.inv)
 
 Depends on / 依赖: IsMonoidal, NatTrans, NatTrans.IsMonoidal, equivalenceTransported, symm.unitIso.inv, unitIso

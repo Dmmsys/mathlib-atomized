@@ -62,8 +62,8 @@ theorem comap_prime
 
 中文:
 定理 comap_prime
-  条件: (hinv : 对任意 a, g (f a : N) = a) (hp : Prime (f p))
-  结论: Prime p
+  条件: (hinv : 对任意 a, g (f a : N) = a) (hp : 素 (f p))
+  结论: 素 p
   证明: ⟨fun h => hp.1 by simp [h], fun h => hp.2.1 h.map f, fun a b h => by
     refine
         (hp.2.2 (f a) (f b) <| by
@@ -97,8 +97,8 @@ theorem MulEquiv.prime_iff
 fun h => (comap_prime e.symm e fun a => by simp) (e.symm_apply_apply p).substr h⟩
 
 中文:
-定理 MulEquiv.prime_iff
-  条件: {E : 类型} [EquivLike E M N] [MulEquivClass E M N] (e : E)
+定理 乘法等价.prime_iff
+  条件: {E : 类型} [等价状 E M N] [乘法等价类 E M N] (e : E)
   证明: by
   let e := MulEquivClass.toMulEquiv e
   exact ⟨comap_prime e e.symm fun a => by simp,
@@ -128,7 +128,7 @@ theorem prime_units_mul
 中文:
 定理 prime_units_mul
   条件: (u : Mˣ)
-  结论: Prime (↑u * y) ↔ Prime y
+  结论: 素 (↑u * y) ↔ 素 y
   证明: by simp [Prime]
 -/
 theorem prime_units_mul (u : Mˣ) : Prime (↑u * y) ↔ Prime y := by simp [Prime]
@@ -145,8 +145,8 @@ theorem prime_isUnit_mul
 
 中文:
 定理 prime_isUnit_mul
-  条件: (h : IsUnit x)
-  结论: Prime (x * y) ↔ Prime y
+  条件: (h : 是单位 x)
+  结论: 素 (x * y) ↔ 素 y
   证明: let ⟨u, hu⟩ := h
   hu ▸ prime_units_mul u
 
@@ -169,7 +169,7 @@ theorem prime_mul_units
 中文:
 定理 prime_mul_units
   条件: (u : Mˣ)
-  结论: Prime (y * ↑u) ↔ Prime y
+  结论: 素 (y * ↑u) ↔ 素 y
   证明: by
   rw [mul_comm]; rw [prime_units_mul]
 
@@ -190,8 +190,8 @@ theorem prime_mul_isUnit
 
 中文:
 定理 prime_mul_isUnit
-  条件: (h : IsUnit x)
-  结论: Prime (y * x) ↔ Prime y
+  条件: (h : 是单位 x)
+  结论: 素 (y * x) ↔ 素 y
   证明: let ⟨u, hu⟩ := h
   hu ▸ prime_mul_units u
 
@@ -221,8 +221,8 @@ theorem Prime.left_dvd_or_dvd_right_of_dvd_mul
     exact Or.inr (hc.symm ▸ dvd_mul_right _ _)
 
 中文:
-定理 Prime.left_dvd_or_dvd_right_of_dvd_mul
-  结论: {p : M} (hp : Prime p)
+定理 素.left_dvd_or_dvd_right_of_dvd_mul
+  结论: {p : M} (hp : 素 p)
   证明: by
   rintro ⟨c, hc⟩
   rcases hp.2.2 a c (hc ▸ dvd_mul_right _ _) with (h | ⟨x, rfl⟩)
@@ -258,8 +258,8 @@ theorem Prime.pow_dvd_of_dvd_mul_left
     rwa [← mul_dvd_mul_iff_left (pow_ne_zero n hp.ne_zero), ← 
 
 中文:
-定理 Prime.pow_dvd_of_dvd_mul_left
-  结论: {p a b : M} (hp : Prime p)
+定理 素.pow_dvd_of_dvd_mul_left
+  结论: {p a b : M} (hp : 素 p)
   证明: by
   induction n with
   | zero =>
@@ -296,8 +296,8 @@ theorem Prime.pow_dvd_of_dvd_mul_right
   exact hp.pow_dvd_of_dvd_mul_left n h h'
 
 中文:
-定理 Prime.pow_dvd_of_dvd_mul_right
-  结论: {p a b : M} (hp : Prime p)
+定理 素.pow_dvd_of_dvd_mul_right
+  结论: {p a b : M} (hp : 素 p)
   证明: by
   rw [mul_comm] at h'
   exact hp.pow_dvd_of_dvd_mul_left n h h'
@@ -324,7 +324,7 @@ theorem Prime.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
   -- Then we can div
 
 中文:
-定理 Prime.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
+定理 素.dvd_of_pow_dvd_pow_mul_pow_of_square_not_dvd
   结论: {p a b : M}
   证明: by
   -- Suppose `p ∣ b`, write `b = p * x` and `hy : a ^ n.succ * b ^ n = p ^ n.succ * y`.
@@ -363,7 +363,7 @@ theorem prime_pow_succ_dvd_mul
 
 中文:
 定理 prime_pow_succ_dvd_mul
-  结论: {p x y : M} (h : Prime p)
+  结论: {p x y : M} (h : 素 p)
   证明: by
   rw [or_iff_not_imp_right]
   exact fun a => Prime.pow_dvd_of_dvd_mul_right h (i + 1) a hxy
@@ -392,7 +392,7 @@ theorem succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
 
 中文:
 定理 succ_dvd_or_succ_dvd_of_succ_sum_dvd_mul
-  条件: (hp : Prime p) {a b : M} {k l : 自然数}
+  条件: (hp : 素 p) {a b : M} {k l : 自然数}
   证明: fun ⟨x, hx⟩ ⟨y, hy⟩ ⟨z, hz⟩ =>
   have h : p ^ (k + l) * (x * y) = p ^ (k + l) * (p * z) := by
     simpa [mul_comm, pow_add, hx, hy, mul_assoc, mul_left_comm] using hz
@@ -423,8 +423,8 @@ theorem Prime.not_isSquare
   proof: hp.irreducible.not_isSquare
 
 中文:
-定理 Prime.not_isSquare
-  条件: (hp : Prime p)
+定理 素.not_isSquare
+  条件: (hp : 素 p)
   结论: ¬IsSquare p
   证明: hp.irreducible.not_isSquare
 
@@ -445,7 +445,7 @@ theorem IsSquare.not_prime
 中文:
 定理 IsSquare.not_prime
   条件: (ha : IsSquare a)
-  结论: ¬Prime a
+  结论: ¬素 a
   证明: fun h => h.not_isSquare ha
 
 Depends on / 依赖: h.not_isSquare, not_isSquare
@@ -465,7 +465,7 @@ theorem not_prime_pow
 中文:
 定理 not_prime_pow
   条件: {n : 自然数} (hn : n != 1)
-  结论: ¬Prime (a ^ n)
+  结论: ¬素 (a ^ n)
   证明: fun hp =>
   not_irreducible_pow hn hp.irreducible
 -/
@@ -488,7 +488,7 @@ theorem DvdNotUnit.isUnit_of_irreducible_right
 
 中文:
 定理 DvdNotUnit.isUnit_of_irreducible_right
-  结论: [CommMonoidWithZero M] {p q : M}
+  结论: [带零交换幺半群 M] {p q : M}
   证明: by
   obtain ⟨_, x, hx, hx'⟩ := h
   exact ((irreducible_iff.1 hq).right hx').resolve_right hx
@@ -513,7 +513,7 @@ alias not_irreducible_of_not_unit_dvdNotUnit := not_irreducible_of_not_isUnit_of
 
 中文:
 定理 not_irreducible_of_not_isUnit_of_dvdNotUnit
-  结论: [CommMonoidWithZero M] {p q : M}
+  结论: [带零交换幺半群 M] {p q : M}
   证明: mt h.isUnit_of_irreducible_right hp
 
 @[deprecated (since := "2026-08-02")]
@@ -543,7 +543,7 @@ alias DvdNotUnit.not_unit := DvdNotUnit.not_isUnit
 
 中文:
 定理 DvdNotUnit.not_isUnit
-  条件: [CommMonoidWithZero M] {p q : M} (hp : DvdNotUnit p q)
+  条件: [带零交换幺半群 M] {p q : M} (hp : DvdNotUnit p q)
   证明: by
   obtain ⟨-, x, hx, rfl⟩ := hp
   exact fun hc => hx (isUnit_iff_dvd_one.mpr (dvd_of_mul_left_dvd (isUnit_iff_dvd_one.mp hc)))
@@ -608,7 +608,7 @@ theorem pow_injective_of_not_isUnit
 
 中文:
 定理 pow_injective_of_not_isUnit
-  结论: {q : M} (hq : ¬IsUnit q)
+  结论: {q : M} (hq : ¬是单位 q)
   证明: by
   refine .of_lt_imp_ne fun n m h => DvdNotUnit.ne ⟨pow_ne_zero n hq', q ^ (m - n), ?_, ?_⟩
   · exact not_isUnit_of_not_isUnit_dvd hq (dvd_pow (dvd_refl _) (Nat.sub_pos_of_lt h).ne')
@@ -632,7 +632,7 @@ theorem pow_inj_of_not_isUnit
 
 中文:
 定理 pow_inj_of_not_isUnit
-  结论: {q : M} (hq : ¬IsUnit q)
+  结论: {q : M} (hq : ¬是单位 q)
   证明: (pow_injective_of_not_isUnit hq hq').eq_iff
 
 Depends on / 依赖: eq_iff, pow_injective_of_not_isUnit

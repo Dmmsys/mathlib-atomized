@@ -76,7 +76,7 @@ definition totalLengthFilter
 
 中文:
 定义 totalLengthFilter
-  签名: : Filter (自然数 × (自然数 -> X × X))
+  签名: : 滤子 (自然数 × (自然数 -> X × X))
   定义体: Filter.comap
   (fun E => ∑ i in Finset.range E.1, dist (E.2 i).1 (E.2 i).2) (𝓝 0)
 
@@ -100,7 +100,7 @@ lemma hasBasis_totalLengthFilter
 
 中文:
 引理 hasBasis_totalLengthFilter
-  结论: totalLengthFilter.HasBasis (fun (ε : 实数) => 0 < ε)
+  结论: totalLengthFilter.有基 (fun (ε : 实数) => 0 < ε)
   证明: by
   convert! Filter.HasBasis.comap (α := Real) _ (nhds_basis_Ioo_pos _) using 1
   ext ε E
@@ -332,7 +332,7 @@ definition _root_.AbsolutelyContinuousOnInterval
     (totalLengthFilter ⊓ 𝓟 (disjWithin a b)) (𝓝 0)
 
 中文:
-定义 _root_.AbsolutelyContinuousOnInterval
+定义 _root_.AbsolutelyContinuousOn整数erval
   签名: (f : 实数 -> X) (a b : 实数)
   定义体: Tendsto (fun E => ∑ i in Finset.range E.1, dist (f (E.2 i).1) (f (E.2 i).2))
     (totalLengthFilter ⊓ 𝓟 (disjWithin a b)) (𝓝 0)
@@ -355,7 +355,7 @@ theorem _root_.absolutelyContinuousOnInterval_iff
     imp.swap, abs_of_nonneg (Finset.sum_nonneg (fun _ _ => dist_nonneg))]
 
 中文:
-定理 _root_.absolutelyContinuousOnInterval_iff
+定理 _root_.absolutelyContinuousOn整数erval_iff
   条件: (f : 实数 -> X) (a b : 实数)
   证明: by
   simp [AbsolutelyContinuousOnInterval, Metric.tendsto_nhds,
@@ -532,7 +532,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  结论: {M : 类型} [SeminormedRing M] [Module M F] [NormSMulClass M F]
+  结论: {M : 类型} [Seminormed环 M] [模 M F] [NormSMul类 M F]
   证明: by
   apply squeeze_zero (fun t => ?_) (fun t => ?_) (by simpa using hf.const_mul ‖α‖)
   · exact Finset.sum_nonneg (fun i hi => by positivity)
@@ -664,7 +664,7 @@ theorem exists_bound
   proof: isCompact_Icc.exists_bound_of_continuousOn (hf.continuousOn)
 
 中文:
-定理 exists_bound
+定理 存在_bound
   条件: (hf : AbsolutelyContinuousOn整数erval f a b)
   证明: isCompact_Icc.exists_bound_of_continuousOn (hf.continuousOn)
 
@@ -694,7 +694,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {M : 类型} [SeminormedRing M] [Module M F] [NormSMulClass M F]
+  结论: {M : 类型} [Seminormed环 M] [模 M F] [NormSMul类 M F]
   证明: by
   obtain ⟨C, hC⟩ := hf.exists_bound
   obtain ⟨D, hD⟩ := hg.exists_bound
@@ -774,7 +774,7 @@ theorem _root_.LipschitzOnWith.absolutelyContinuousOnInterval
       have := hfK (hnI₁.left i hi).left (hnI₁.left i hi).ri
 
 中文:
-定理 _root_.LipschitzOnWith.absolutelyContinuousOnInterval
+定理 _root_.LipschitzOnWith.absolutelyContinuousOn整数erval
   结论: {f : 实数 -> X} {K : 实数>=0}
   证明: by
   rw [absolutelyContinuousOnInterval_iff]
@@ -816,8 +816,8 @@ theorem _root_.ContDiffOn.absolutelyContinuousOnInterval
   exact hK.absolutelyContinuousOnInterval
 
 中文:
-定理 _root_.ContDiffOn.absolutelyContinuousOnInterval
-  结论: {E : 类型} [NormedAddCommGroup E]
+定理 _root_.ContDiffOn.absolutelyContinuousOn整数erval
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   obtain ⟨K, hK⟩ := hf.exists_lipschitzOnWith (by decide) (convex_Icc _ _) isCompact_Icc
   exact hK.absolutelyContinuousOnInterval
@@ -979,7 +979,7 @@ theorem _root_.IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegra
   let s := fun E : Nat × (Nat -> Real × Real) => ⋃ i in Finset.ra
 
 中文:
-定理 _root_.IntervalIntegrable.absolutelyContinuousOnInterval_intervalIntegral
+定理 _root_.整数erval整数egrable.absolutelyContinuousOn整数erval_interval整数egral
   结论: {f : 实数 -> 实数}
   证明: by
   -- Step 1: Use `MeasureTheory.tendsto_setLIntegral_zero` to conclude that the function sending

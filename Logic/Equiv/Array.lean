@@ -71,8 +71,8 @@ instance Array.encodable
   body: Encodable.ofEquiv _ (Equiv.arrayEquivList _)
 
 中文:
-实例 Array.encodable
-  签名: {α} [Encodable α]
+实例 数组.encodable
+  签名: {α} [可编码 α]
   定义体: Encodable.ofEquiv _ (Equiv.arrayEquivList _)
 
 Depends on / 依赖: Encodable, Encodable.ofEquiv, Equiv.arrayEquivList, arrayEquivList, ofEquiv
@@ -89,8 +89,8 @@ instance Array.countable
   body: Countable.of_equiv _ (Equiv.arrayEquivList α).symm
 
 中文:
-实例 Array.countable
-  签名: {α} [Countable α]
+实例 数组.countable
+  签名: {α} [可数 α]
   定义体: Countable.of_equiv _ (Equiv.arrayEquivList α).symm
 
 Depends on / 依赖: Countable, Countable.of_equiv, Equiv.arrayEquivList, arrayEquivList, of_equiv

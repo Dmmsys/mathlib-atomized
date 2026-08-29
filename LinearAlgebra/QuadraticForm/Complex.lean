@@ -32,7 +32,7 @@ theorem equivalent_sum_squares
 
 中文:
 定理 equivalent_sum_squares
-  结论: {M : 类型} [AddCommGroup M] [Module Complex M] [FiniteDimensional Complex M]
+  结论: {M : 类型} [加法交换群 M] [模 复形 M] [有限维 复形 M]
   证明: equivalent_weightedSumSquares_of_isAlgClosed Q hQ
 
 @[deprecated "Use QuadraticForm.equivalent_of_isAlgClosed" (since := "2026-01-19")]
@@ -55,7 +55,7 @@ theorem complex_equivalent
 
 中文:
 定理 complex_equivalent
-  结论: {M : 类型} [AddCommGroup M] [Module Complex M]
+  结论: {M : 类型} [加法交换群 M] [模 复形 M]
   证明: equivalent_of_isAlgClosed Q₁ Q₂ hQ₁ hQ₂
 
 Depends on / 依赖: equivalent_of_isAlgClosed

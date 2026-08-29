@@ -201,7 +201,7 @@ theorem lex_swap
 
 中文:
 定理 lex_swap
-  结论: Lex (Function.swap r) s a b ↔ Lex r (fun i => Function.swap (s i)) b a
+  结论: Lex (函数.swap r) s a b ↔ Lex r (fun i => 函数.swap (s i)) b a
   证明: by
   constructor <;>
     · rintro (⟨a, b, h⟩ | ⟨a, b, h⟩)
@@ -225,7 +225,7 @@ instance [forall
   body: ⟨fun ⟨_, _⟩ => Lex.right _ _ refl _⟩
 
 中文:
-实例 [forall
+实例 [对任意
   签名: i, Std.Refl (s i)] : Std.Refl (Lex r s)
   定义体: ⟨fun ⟨_, _⟩ => Lex.right _ _ refl _⟩
 
@@ -278,8 +278,8 @@ instance [IsTrans
     · exact Lex.right _ _ (_root_.trans hab hc)⟩
 
 中文:
-实例 [IsTrans
-  签名: ι r] [对任意 i, IsTrans (α i) (s i)] : IsTrans _ (Lex r s)
+实例 [是Trans
+  签名: ι r] [对任意 i, 是Trans (α i) (s i)] : 是Trans _ (Lex r s)
   定义体: ⟨by
     rintro _ _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, c, hk⟩ | ⟨_, c, hc⟩)
     · exact Lex.left _ _ (_root_.trans hij hk)
@@ -342,7 +342,7 @@ instance [Std.Asymm
 
 中文:
 实例 [Std.Asymm
-  签名: r] [对任意 i, Std.Antisymm (s i)] : Std.Antisymm (Lex r s)
+  签名: r] [对任意 i, Std.反对称 (s i)] : Std.反对称 (Lex r s)
   定义体: ⟨by
     rintro _ _ (⟨a, b, hij⟩ | ⟨a, b, hab⟩) (⟨_, _, hji⟩ | ⟨_, _, hba⟩)
     · exact (asymm hij hji).elim
@@ -376,8 +376,8 @@ instance [Std.Trichotomous
     · exact Or.inr (Lex.left _ _ hji)⟩
 
 中文:
-实例 [Std.Trichotomous
-  签名: r] [对任意 i, Std.Total (s i)] : Std.Total (Lex r s)
+实例 [Std.三歧
+  签名: r] [对任意 i, Std.全 (s i)] : Std.全 (Lex r s)
   定义体: ⟨by
     rintro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j
@@ -415,8 +415,8 @@ instance [Std.Trichotomous
       ·
 
 中文:
-实例 [Std.Trichotomous
-  签名: r] [对任意 i, Std.Trichotomous (s i)] : Std.Trichotomous (Lex r s)
+实例 [Std.三歧
+  签名: r] [对任意 i, Std.三歧 (s i)] : Std.三歧 (Lex r s)
   定义体: Std.trichotomous_of_rel_or_eq_or_rel_swap by
     rintro ⟨i, a⟩ ⟨j, b⟩
     obtain hij | rfl | hji := trichotomous_of r i j

@@ -65,8 +65,8 @@ instance Module.Free.linearMap
   body: Module.Free.of_equiv (linearMapEquivFun R S M N).symm
 
 中文:
-实例 Module.Free.linearMap
-  签名: [Module.Free S N]
+实例 模.自由.linearMap
+  签名: [模.自由 S N]
   定义体: Module.Free.of_equiv (linearMapEquivFun R S M N).symm
 
 Depends on / 依赖: Module, Module.Free.of_equiv, linearMapEquivFun, of_equiv
@@ -83,8 +83,8 @@ instance Module.Finite.linearMap
   body: Module.Finite.equiv (linearMapEquivFun R S M N).symm
 
 中文:
-实例 Module.Finite.linearMap
-  签名: [Module.Finite S N]
+实例 模.有限.linearMap
+  签名: [模.有限 S N]
   定义体: Module.Finite.equiv (linearMapEquivFun R S M N).symm
 
 Depends on / 依赖: Finite, Module, Module.Finite.equiv, linearMapEquivFun
@@ -104,7 +104,7 @@ theorem Module.rank_linearMap
   rw [(linearMapEquivFun R S M N).rank_eq]; rw [rank_fun_eq_lift_mul]; rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_rank R]; rw [lift_natCast]
 
 中文:
-定理 Module.rank_linearMap
+定理 模.rank_linearMap
   证明: by
   rw [(linearMapEquivFun R S M N).rank_eq]; rw [rank_fun_eq_lift_mul]; rw [← finrank_eq_card_chooseBasisIndex]; rw [← finrank_eq_rank R]; rw [lift_natCast]
 
@@ -123,7 +123,7 @@ theorem Module.finrank_linearMap
   simp_rw [finrank, rank_linearMap, toNat_mul, toNat_lift]
 
 中文:
-定理 Module.finrank_linearMap
+定理 模.finrank_linearMap
   证明: by
   simp_rw [finrank, rank_linearMap, toNat_mul, toNat_lift]
 
@@ -144,7 +144,7 @@ theorem Module.rank_linearMap_self
   rw [rank_linearMap]; rw [rank_self]; rw [lift_one]; rw [mul_one]
 
 中文:
-定理 Module.rank_linearMap_self
+定理 模.rank_linearMap_self
   证明: by
   rw [rank_linearMap]; rw [rank_self]; rw [lift_one]; rw [mul_one]
 
@@ -164,7 +164,7 @@ theorem Module.finrank_linearMap_self
   rw [finrank_linearMap]; rw [finrank_self]; rw [mul_one]
 
 中文:
-定理 Module.finrank_linearMap_self
+定理 模.finrank_linearMap_self
   结论: finrank S (M ->ₗ[R] S) = finrank R M
   证明: by
   rw [finrank_linearMap]; rw [finrank_self]; rw [mul_one]
@@ -190,8 +190,8 @@ instance Finite.algHom
   body: (linearIndependent_algHom_toLinearMap K M L).finite
 
 中文:
-实例 Finite.algHom
-  签名: : Finite (M ->ₐ[K] L)
+实例 有限.algHom
+  签名: : 有限 (M ->ₐ[K] L)
   定义体: (linearIndependent_algHom_toLinearMap K M L).finite
 
 Depends on / 依赖: finite, linearIndependent_algHom_toLinearMap
@@ -217,7 +217,7 @@ theorem cardinalMk_algHom_le_rank
 
 中文:
 定理 cardinalMk_algHom_le_rank
-  结论: #(M ->ₐ[K] L) <= lift.{v} (Module.rank K M)
+  结论: #(M ->ₐ[K] L) <= lift.{v} (模.rank K M)
   证明: by
   convert! (linearIndependent_algHom_toLinearMap K M L).cardinal_lift_le_rank
   · rw [lift_id]
@@ -276,8 +276,8 @@ instance Module.Finite.addMonoidHom
   body: Module.Finite.equiv (addMonoidHomLequivInt Int).symm
 
 中文:
-实例 Module.Finite.addMonoidHom
-  签名: [Module.Finite 整数 N]
+实例 模.有限.addMonoidHom
+  签名: [模.有限 整数 N]
   定义体: Module.Finite.equiv (addMonoidHomLequivInt Int).symm
 
 Depends on / 依赖: Finite, Module, Module.Finite.equiv, addMonoidHomLequivInt
@@ -295,8 +295,8 @@ instance Module.Free.addMonoidHom
   Module.Free.of_equiv (addMonoidHomLequivInt Int).symm
 
 中文:
-实例 Module.Free.addMonoidHom
-  签名: [Module.Free 整数 N]
+实例 模.自由.addMonoidHom
+  签名: [模.自由 整数 N]
   定义体: letI : Module.Free Int (M ->ₗ[Int] N) := Module.Free.linearMap _ _ _ _
   Module.Free.of_equiv (addMonoidHomLequivInt Int).symm
 

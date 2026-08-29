@@ -85,7 +85,7 @@ theorem monomial_eq_smul
 中文:
 定理 monomial_eq_smul
   条件: (a : R) (n : 自然数)
-  结论: Polynomial.monomial n a = a • (.X ^ n)
+  结论: 多项式.monomial n a = a • (.X ^ n)
   证明: by
   rw [← Polynomial.C_mul_X_pow_eq_monomial]; rw [Polynomial.smul_eq_C_mul]
 
@@ -222,7 +222,7 @@ pure ←
 
 中文:
 定义 cleanup
-  签名: (cfg : RingNF.Config) (r : Simp.Result)
+  签名: (cfg : RingNF.余nfig) (r : Simp.Result)
   定义体: do
   match cfg.mode with
   | .raw => pure r

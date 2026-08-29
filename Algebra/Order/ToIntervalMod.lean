@@ -74,7 +74,7 @@ theorem sub_toIcoDiv_zsmul_mem_Ico
 中文:
 定理 sub_toIcoDiv_zsmul_mem_Ico
   条件: (a b : α)
-  结论: b - toIcoDiv hp a b • p in Set.Ico a (a + p)
+  结论: b - toIcoDiv hp a b • p in 集合.左闭右开区间 a (a + p)
   证明: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_spec.1
 
 Depends on / 依赖: choose_spec, existsUnique_sub_zsmul_mem_Ico
@@ -94,7 +94,7 @@ alias ⟨_, toIcoDiv_eq_of_sub_zsmul_mem_Ico⟩ := toIcoDiv_eq_iff
 
 中文:
 定理 toIcoDiv_eq_iff
-  结论: toIcoDiv hp a b = n ↔ b - n • p in Set.Ico a (a + p)
+  结论: toIcoDiv hp a b = n ↔ b - n • p in 集合.左闭右开区间 a (a + p)
   证明: (existsUnique_sub_zsmul_mem_Ico hp b a).choose_eq_iff
 
 alias ⟨_, toIcoDiv_eq_of_sub_zsmul_mem_Ico⟩ := toIcoDiv_eq_iff
@@ -136,7 +136,7 @@ theorem sub_toIocDiv_zsmul_mem_Ioc
 中文:
 定理 sub_toIocDiv_zsmul_mem_Ioc
   条件: (a b : α)
-  结论: b - toIocDiv hp a b • p in Set.Ioc a (a + p)
+  结论: b - toIocDiv hp a b • p in 集合.左开右闭区间 a (a + p)
   证明: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_spec.1
 
 Depends on / 依赖: choose_spec, existsUnique_sub_zsmul_mem_Ioc
@@ -156,7 +156,7 @@ alias ⟨_, toIocDiv_eq_of_sub_zsmul_mem_Ioc⟩ := toIocDiv_eq_iff
 
 中文:
 定理 toIocDiv_eq_iff
-  结论: toIocDiv hp a b = n ↔ b - n • p in Set.Ioc a (a + p)
+  结论: toIocDiv hp a b = n ↔ b - n • p in 集合.左开右闭区间 a (a + p)
   证明: (existsUnique_sub_zsmul_mem_Ioc hp b a).choose_eq_iff
 
 alias ⟨_, toIocDiv_eq_of_sub_zsmul_mem_Ioc⟩ := toIocDiv_eq_iff
@@ -216,7 +216,7 @@ theorem toIcoMod_mem_Ico
 中文:
 定理 toIcoMod_mem_Ico
   条件: (a b : α)
-  结论: toIcoMod hp a b in Set.Ico a (a + p)
+  结论: toIcoMod hp a b in 集合.左闭右开区间 a (a + p)
   证明: sub_toIcoDiv_zsmul_mem_Ico hp a b
 
 Depends on / 依赖: sub_toIcoDiv_zsmul_mem_Ico
@@ -238,7 +238,7 @@ theorem toIcoMod_mem_Ico'
 中文:
 定理 toIcoMod_mem_Ico'
   条件: (b : α)
-  结论: toIcoMod hp 0 b in Set.Ico 0 p
+  结论: toIcoMod hp 0 b in 集合.左闭右开区间 0 p
   证明: by
   convert! toIcoMod_mem_Ico hp 0 b
   exact (zero_add p).symm
@@ -261,7 +261,7 @@ theorem toIocMod_mem_Ioc
 中文:
 定理 toIocMod_mem_Ioc
   条件: (a b : α)
-  结论: toIocMod hp a b in Set.Ioc a (a + p)
+  结论: toIocMod hp a b in 集合.左开右闭区间 a (a + p)
   证明: sub_toIocDiv_zsmul_mem_Ioc hp a b
 
 Depends on / 依赖: sub_toIocDiv_zsmul_mem_Ioc
@@ -686,7 +686,7 @@ theorem toIcoMod_eq_iff
 
 中文:
 定理 toIcoMod_eq_iff
-  结论: toIcoMod hp a b = c ↔ c in Set.Ico a (a + p) ∧ 存在 z : 整数, b = c + z • p
+  结论: toIcoMod hp a b = c ↔ c in 集合.左闭右开区间 a (a + p) ∧ 存在 z : 整数, b = c + z • p
   证明: by
   refine
     ⟨fun h =>
@@ -726,7 +726,7 @@ theorem toIocMod_eq_iff
 
 中文:
 定理 toIocMod_eq_iff
-  结论: toIocMod hp a b = c ↔ c in Set.Ioc a (a + p) ∧ 存在 z : 整数, b = c + z • p
+  结论: toIocMod hp a b = c ↔ c in 集合.左开右闭区间 a (a + p) ∧ 存在 z : 整数, b = c + z • p
   证明: by
   refine
     ⟨fun h =>
@@ -3336,7 +3336,7 @@ theorem modEq_iff_forall_notMem_Ioo_mod
   proof: (tfae_modEq hp a b).out 0 1
 
 中文:
-定理 modEq_iff_forall_notMem_Ioo_mod
+定理 modEq_iff_对任意_notMem_Ioo_mod
   证明: (tfae_modEq hp a b).out 0 1
 
 Depends on / 依赖: tfae_modEq
@@ -3598,7 +3598,7 @@ theorem toIcoMod_eq_self
 
 中文:
 定理 toIcoMod_eq_self
-  结论: toIcoMod hp a b = b ↔ b in Set.Ico a (a + p)
+  结论: toIcoMod hp a b = b ↔ b in 集合.左闭右开区间 a (a + p)
   证明: by
   rw [toIcoMod_eq_iff]; rw [and_iff_left]
   exact ⟨0, by simp⟩
@@ -3623,7 +3623,7 @@ theorem toIocMod_eq_self
 
 中文:
 定理 toIocMod_eq_self
-  结论: toIocMod hp a b = b ↔ b in Set.Ioc a (a + p)
+  结论: toIocMod hp a b = b ↔ b in 集合.左开右闭区间 a (a + p)
   证明: by
   rw [toIocMod_eq_iff]; rw [and_iff_left]
   exact ⟨0, by simp⟩
@@ -3744,7 +3744,7 @@ theorem toIcoMod_periodic
 中文:
 定理 toIcoMod_periodic
   条件: (a : α)
-  结论: Function.Periodic (toIcoMod hp a) p
+  结论: 函数.周期 (toIcoMod hp a) p
   证明: toIcoMod_add_right hp a
 
 Depends on / 依赖: toIcoMod_add_right
@@ -3764,7 +3764,7 @@ theorem toIocMod_periodic
 中文:
 定理 toIocMod_periodic
   条件: (a : α)
-  结论: Function.Periodic (toIocMod hp a) p
+  结论: 函数.周期 (toIocMod hp a) p
   证明: toIocMod_add_right hp a
 
 Depends on / 依赖: toIocMod_add_right
@@ -4328,7 +4328,7 @@ instance :
 
 中文:
 实例 :
-  签名: Btw (α ⧸ AddSubgroup.zmultiples p)
+  签名: Btw (α ⧸ 加法子群.zmultiples p)
   定义体: (equivIcoMod hp'.out 0 (x₂ - x₁) : α) <= equivIocMod hp'.out 0 (x₃ - x₁)
 
 Depends on / 依赖: equivIcoMod, equivIocMod
@@ -4395,7 +4395,7 @@ instance circularPreorder
 
 中文:
 实例 circularPreorder
-  签名: : CircularPreorder (α ⧸ AddSubgroup.zmultiples p) where
+  签名: : 循环预序 (α ⧸ 加法子群.zmultiples p) where
   定义体: show _ <= _ by simp [sub_self, hp'.out.le]
   btw_cyclic_left {x₁ x₂ x₃} h := by
     induction x₁ using QuotientAddGroup.induction_on
@@ -4441,7 +4441,7 @@ instance circularOrder
 
 中文:
 实例 circularOrder
-  签名: : CircularOrder (α ⧸ AddSubgroup.zmultiples p)
+  签名: : Circular序 (α ⧸ 加法子群.zmultiples p)
   定义体: { QuotientAddGroup.circularPreorder with
     btw_antisymm := fun {x₁ x₂ x₃} h₁₂₃ h₃₂₁ => by
       induction x₁ using QuotientAddGroup.induction_on
@@ -4846,7 +4846,7 @@ theorem toIcoDiv_add_ofNat_mul
 @[simp]
 
 中文:
-定理 toIcoDiv_add_ofNat_mul
+定理 toIcoDiv_add_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoDiv_add_natCast_mul hp a b m
 
@@ -4920,7 +4920,7 @@ theorem toIcoDiv_add_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIcoDiv_add_ofNat_mul'
+定理 toIcoDiv_add_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoDiv_add_natCast_mul' hp a b m
 
@@ -4994,7 +4994,7 @@ theorem toIocDiv_add_ofNat_mul
 @[simp]
 
 中文:
-定理 toIocDiv_add_ofNat_mul
+定理 toIocDiv_add_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocDiv_add_natCast_mul hp a b m
 
@@ -5068,7 +5068,7 @@ theorem toIocDiv_add_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIocDiv_add_ofNat_mul'
+定理 toIocDiv_add_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocDiv_add_natCast_mul' hp a b m
 
@@ -5140,7 +5140,7 @@ theorem toIcoDiv_ofNat_mul_add
   proof: toIcoDiv_natCast_mul_add hp a b m
 
 中文:
-定理 toIcoDiv_ofNat_mul_add
+定理 toIcoDiv_of自然数_mul_add
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoDiv_natCast_mul_add hp a b m
 
@@ -5212,7 +5212,7 @@ theorem toIocDiv_ofNat_mul_add
   proof: toIocDiv_natCast_mul_add hp a b m
 
 中文:
-定理 toIocDiv_ofNat_mul_add
+定理 toIocDiv_of自然数_mul_add
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocDiv_natCast_mul_add hp a b m
 
@@ -5286,7 +5286,7 @@ theorem toIcoDiv_sub_ofNat_mul
 @[simp]
 
 中文:
-定理 toIcoDiv_sub_ofNat_mul
+定理 toIcoDiv_sub_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoDiv_sub_natCast_mul hp a b m
 
@@ -5360,7 +5360,7 @@ theorem toIcoDiv_sub_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIcoDiv_sub_ofNat_mul'
+定理 toIcoDiv_sub_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoDiv_sub_natCast_mul' hp a b m
 
@@ -5434,7 +5434,7 @@ theorem toIocDiv_sub_ofNat_mul
 @[simp]
 
 中文:
-定理 toIocDiv_sub_ofNat_mul
+定理 toIocDiv_sub_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocDiv_sub_natCast_mul hp a b m
 
@@ -5508,7 +5508,7 @@ theorem toIocDiv_sub_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIocDiv_sub_ofNat_mul'
+定理 toIocDiv_sub_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocDiv_sub_natCast_mul' hp a b m
 
@@ -5582,7 +5582,7 @@ theorem toIcoMod_add_ofNat_mul
 @[simp]
 
 中文:
-定理 toIcoMod_add_ofNat_mul
+定理 toIcoMod_add_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: mod_cast toIcoMod_add_intCast_mul hp a b m
 
@@ -5656,7 +5656,7 @@ theorem toIcoMod_add_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIcoMod_add_ofNat_mul'
+定理 toIcoMod_add_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoMod_add_natCast_mul' hp a b m
 
@@ -5730,7 +5730,7 @@ theorem toIocMod_add_ofNat_mul
 @[simp]
 
 中文:
-定理 toIocMod_add_ofNat_mul
+定理 toIocMod_add_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_add_natCast_mul hp a b m
 
@@ -5804,7 +5804,7 @@ theorem toIocMod_add_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIocMod_add_ofNat_mul'
+定理 toIocMod_add_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_add_natCast_mul' hp a b m
 
@@ -5878,7 +5878,7 @@ theorem toIcoMod_ofNat_mul_add
 @[simp]
 
 中文:
-定理 toIcoMod_ofNat_mul_add
+定理 toIcoMod_of自然数_mul_add
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoMod_natCast_mul_add hp a b m
 
@@ -5952,7 +5952,7 @@ theorem toIcoMod_ofNat_mul_add'
 @[simp]
 
 中文:
-定理 toIcoMod_ofNat_mul_add'
+定理 toIcoMod_of自然数_mul_add'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoMod_natCast_mul_add' hp a b m
 
@@ -6026,7 +6026,7 @@ theorem toIocMod_ofNat_mul_add
 @[simp]
 
 中文:
-定理 toIocMod_ofNat_mul_add
+定理 toIocMod_of自然数_mul_add
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_natCast_mul_add hp a b m
 
@@ -6100,7 +6100,7 @@ theorem toIocMod_ofNat_mul_add'
 @[simp]
 
 中文:
-定理 toIocMod_ofNat_mul_add'
+定理 toIocMod_of自然数_mul_add'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_natCast_mul_add' hp a b m
 
@@ -6174,7 +6174,7 @@ theorem toIcoMod_sub_ofNat_mul
 @[simp]
 
 中文:
-定理 toIcoMod_sub_ofNat_mul
+定理 toIcoMod_sub_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoMod_sub_natCast_mul hp a b m
 
@@ -6248,7 +6248,7 @@ theorem toIcoMod_sub_ofNat_mul'
 @[simp]
 
 中文:
-定理 toIcoMod_sub_ofNat_mul'
+定理 toIcoMod_sub_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIcoMod_sub_natCast_mul' hp a b m
 
@@ -6322,7 +6322,7 @@ theorem toIocMod_sub_ofNat_mul
 @[simp]
 
 中文:
-定理 toIocMod_sub_ofNat_mul
+定理 toIocMod_sub_of自然数_mul
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_sub_natCast_mul hp a b m
 
@@ -6394,7 +6394,7 @@ theorem toIocMod_sub_ofNat_mul'
   proof: toIocMod_sub_natCast_mul' hp a b m
 
 中文:
-定理 toIocMod_sub_ofNat_mul'
+定理 toIocMod_sub_of自然数_mul'
   条件: (a b : R) (m : 自然数) [m.AtLeastTwo]
   证明: toIocMod_sub_natCast_mul' hp a b m
 
@@ -6627,7 +6627,7 @@ theorem iUnion_Ioc_add_zsmul
 
 中文:
 定理 iUnion_Ioc_add_zsmul
-  结论: ⋃ n : 整数, Ioc (a + n • p) (a + (n + 1) • p) = univ
+  结论: ⋃ n : 整数, 左开右闭区间 (a + n • p) (a + (n + 1) • p) = univ
   证明: by
   refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
   rcases sub_toIocDiv_zsmul_mem_Ioc hp a b with ⟨hl, hr⟩
@@ -6659,7 +6659,7 @@ theorem iUnion_Ico_add_zsmul
 
 中文:
 定理 iUnion_Ico_add_zsmul
-  结论: ⋃ n : 整数, Ico (a + n • p) (a + (n + 1) • p) = univ
+  结论: ⋃ n : 整数, 左闭右开区间 (a + n • p) (a + (n + 1) • p) = univ
   证明: by
   refine eq_univ_iff_forall.mpr fun b => mem_iUnion.mpr ?_
   rcases sub_toIcoDiv_zsmul_mem_Ico hp a b with ⟨hl, hr⟩
@@ -6688,7 +6688,7 @@ theorem iUnion_Icc_add_zsmul
 
 中文:
 定理 iUnion_Icc_add_zsmul
-  结论: ⋃ n : 整数, Icc (a + n • p) (a + (n + 1) • p) = univ
+  结论: ⋃ n : 整数, 闭区间 (a + n • p) (a + (n + 1) • p) = univ
   证明: by
   simpa only [iUnion_Ioc_add_zsmul hp a, univ_subset_iff] using
     iUnion_mono fun n : Int => (Ioc_subset_Icc_self : Ioc (a + n • p) (a + (n + 1) • p) subseteq Icc _ _)
@@ -6710,7 +6710,7 @@ theorem iUnion_Ioc_zsmul
 
 中文:
 定理 iUnion_Ioc_zsmul
-  结论: ⋃ n : 整数, Ioc (n • p) ((n + 1) • p) = univ
+  结论: ⋃ n : 整数, 左开右闭区间 (n • p) ((n + 1) • p) = univ
   证明: by
   simpa only [zero_add] using iUnion_Ioc_add_zsmul hp 0
 
@@ -6730,7 +6730,7 @@ theorem iUnion_Ico_zsmul
 
 中文:
 定理 iUnion_Ico_zsmul
-  结论: ⋃ n : 整数, Ico (n • p) ((n + 1) • p) = univ
+  结论: ⋃ n : 整数, 左闭右开区间 (n • p) ((n + 1) • p) = univ
   证明: by
   simpa only [zero_add] using iUnion_Ico_add_zsmul hp 0
 
@@ -6750,7 +6750,7 @@ theorem iUnion_Icc_zsmul
 
 中文:
 定理 iUnion_Icc_zsmul
-  结论: ⋃ n : 整数, Icc (n • p) ((n + 1) • p) = univ
+  结论: ⋃ n : 整数, 闭区间 (n • p) ((n + 1) • p) = univ
   证明: by
   simpa only [zero_add] using iUnion_Icc_add_zsmul hp 0
 
@@ -6777,7 +6777,7 @@ theorem iUnion_Ioc_add_intCast
 
 中文:
 定理 iUnion_Ioc_add_intCast
-  结论: ⋃ n : 整数, Ioc (a + n) (a + n + 1) = Set.univ
+  结论: ⋃ n : 整数, 左开右闭区间 (a + n) (a + n + 1) = 集合.univ
   证明: by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Ioc_add_zsmul zero_lt_one a
@@ -6800,7 +6800,7 @@ theorem iUnion_Ico_add_intCast
 
 中文:
 定理 iUnion_Ico_add_intCast
-  结论: ⋃ n : 整数, Ico (a + n) (a + n + 1) = Set.univ
+  结论: ⋃ n : 整数, 左闭右开区间 (a + n) (a + n + 1) = 集合.univ
   证明: by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Ico_add_zsmul zero_lt_one a
@@ -6823,7 +6823,7 @@ theorem iUnion_Icc_add_intCast
 
 中文:
 定理 iUnion_Icc_add_intCast
-  结论: ⋃ n : 整数, Icc (a + n) (a + n + 1) = Set.univ
+  结论: ⋃ n : 整数, 闭区间 (a + n) (a + n + 1) = 集合.univ
   证明: by
   simpa only [zsmul_one, Int.cast_add, Int.cast_one, ← add_assoc] using
     iUnion_Icc_add_zsmul zero_lt_one a
@@ -6847,7 +6847,7 @@ theorem iUnion_Ioc_intCast
 
 中文:
 定理 iUnion_Ioc_intCast
-  结论: ⋃ n : 整数, Ioc (n : α) (n + 1) = Set.univ
+  结论: ⋃ n : 整数, 左开右闭区间 (n : α) (n + 1) = 集合.univ
   证明: by
   simpa only [zero_add] using iUnion_Ioc_add_intCast (0 : α)
 
@@ -6867,7 +6867,7 @@ theorem iUnion_Ico_intCast
 
 中文:
 定理 iUnion_Ico_intCast
-  结论: ⋃ n : 整数, Ico (n : α) (n + 1) = Set.univ
+  结论: ⋃ n : 整数, 左闭右开区间 (n : α) (n + 1) = 集合.univ
   证明: by
   simpa only [zero_add] using iUnion_Ico_add_intCast (0 : α)
 
@@ -6887,7 +6887,7 @@ theorem iUnion_Icc_intCast
 
 中文:
 定理 iUnion_Icc_intCast
-  结论: ⋃ n : 整数, Icc (n : α) (n + 1) = Set.univ
+  结论: ⋃ n : 整数, 闭区间 (n : α) (n + 1) = 集合.univ
   证明: by
   simpa only [zero_add] using iUnion_Icc_add_intCast (0 : α)
 

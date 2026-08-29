@@ -57,7 +57,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def mapPreimageDelta (hf : Function.Surjective f) (x : AdicCauchySequence I N)
+  签名: def mapPreimageDelta (hf : 函数.满射 f) (x : AdicCauchySequence I N)
   定义体: have h : f (yₙ - y) in Submodule.map f (I ^ n • ⊤ : Submodule R M) := by
     rw [Submodule.map_smul'']; rw [Submodule.map_top]; rw [LinearMap.range_eq_top.2 hf]; rw [map_sub]; rw [hyₙ]; rw [hy]; rw [← Submodule.neg_mem_iff]; rw [neg_sub]; rw [← SModEq.sub_mem]
     exact AdicCauchySequence.mk_eq_mk (
@@ -84,7 +84,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def mapPreimage (hf : Function.Surjective f) (x : AdicCauchySequence I N)
+  签名: def mapPreimage (hf : 函数.满射 f) (x : AdicCauchySequence I N)
   定义体: (hf (x (n + 1))).choose
       have hy := (hf (x (n + 1))).choose_spec
       let ⟨yₙ, (hyₙ : f yₙ = x n)⟩ := mapPreimage hf x n
@@ -119,8 +119,8 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (hf : Function.Surjective f)
-  结论: Function.Surjective (map I f)
+  条件: (hf : 函数.满射 f)
+  结论: 函数.满射 (map I f)
   证明: fun y => by
   apply AdicCompletion.induction_on I N y (fun b => ?_)
   let a := mapPreimage hf b
@@ -167,7 +167,7 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: {f : M ->ₗ[R] N} (hf : Function.Injective f)
+  条件: {f : M ->ₗ[R] N} (hf : 函数.单射 f)
   证明: by
   obtain ⟨k, hk⟩ := Ideal.exists_pow_inf_eq_pow_smul I (range f)
   rw [← LinearMap.ker_eq_bot]; rw [LinearMap.ker_eq_bot']
@@ -334,7 +334,7 @@ theorem map_exact
 
 中文:
 定理 map_exact
-  结论: Function.Exact (map I f) (map I g)
+  结论: 函数.正合 (map I f) (map I g)
   证明: by
   refine LinearMap.exact_of_comp_eq_zero_of_ker_le_range ?_ (fun y => ?_)
   · rw [map_comp, hfg.linearMap_comp_eq_zero, AdicCompletion.map_zero]

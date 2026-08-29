@@ -51,12 +51,12 @@ structure IsAdmissible
     - exists_partition' : forall (n : Nat) {ε : Real} (_ : 0 < ε) {b : R} (_ : b != 0) (A : Fin n -> R), exists t : Fin n -> Fin (card ε), forall i₀ i₁, t i₀ = t i₁ -> (abv (A i₁ % b - A i₀ % b) : Real) < abv b • ε
 
 中文:
-结构 IsAdmissible
-  参数: extends IsEuclidean abv
-  继承: IsEuclidean abv
+结构 是Admissible
+  参数: extends 是Euclidean abv
+  继承: 是Euclidean abv
   公理与运算 (2 个):
     - card : 实数 -> 自然数
-    - exists_partition' : 对任意 (n : 自然数) {ε : 实数} (_ : 0 < ε) {b : R} (_ : b != 0) (A : Fin n -> R), 存在 t : Fin n -> Fin (card ε), 对任意 i₀ i₁, t i₀ = t i₁ -> (abv (A i₁ % b - A i₀ % b) : 实数) < abv b • ε
+    - exists_partition' : 对任意 (n : 自然数) {ε : 实数} (_ : 0 < ε) {b : R} (_ : b != 0) (A : 有限集 n -> R), 存在 t : 有限集 n -> 有限集 (card ε), 对任意 i₀ i₁, t i₀ = t i₁ -> (abv (A i₁ % b - A i₀ % b) : 实数) < abv b • ε
 -/
 structure IsAdmissible extends IsEuclidean abv where
   /-- The cardinality required for a given `ε`. -/
@@ -85,8 +85,8 @@ theorem exists_partition
     simp only [e.symm_apply_apply]
 
 中文:
-定理 exists_partition
-  结论: {ι : 类型} [Finite ι] {ε : 实数} (hε : 0 < ε) {b : R} (hb : b != 0)
+定理 存在_partition
+  结论: {ι : 类型} [有限 ι] {ε : 实数} (hε : 0 < ε) {b : R} (hb : b != 0)
   证明: by
   rcases Finite.exists_equiv_fin ι with ⟨n, ⟨e⟩⟩
   obtain ⟨t, ht⟩ := h.exists_partition' n hε hb (A ∘ e.symm)
@@ -127,8 +127,8 @@ theorem exists_approx_aux
   -- of more than `M ^ n` rema
 
 中文:
-定理 exists_approx_aux
-  条件: (n : 自然数) (h : abv.IsAdmissible)
+定理 存在_approx_aux
+  条件: (n : 自然数) (h : abv.是Admissible)
   证明: by
   have := Classical.decEq R
   induction n with
@@ -202,8 +202,8 @@ theorem exists_approx
   convert! h (e k) <;> simp only [e.symm_apply_apply]
 
 中文:
-定理 exists_approx
-  结论: {ι : 类型} [Fintype ι] {ε : 实数} (hε : 0 < ε) {b : R} (hb : b != 0)
+定理 存在_approx
+  结论: {ι : 类型} [有限类型 ι] {ε : 实数} (hε : 0 < ε) {b : R} (hb : b != 0)
   证明: by
   let e := Fintype.equivFin ι
   obtain ⟨i₀, i₁, ne, h⟩ := h.exists_approx_aux (Fintype.card ι) hε hb fun x y => A x (e.symm y)

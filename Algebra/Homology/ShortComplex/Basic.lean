@@ -43,7 +43,7 @@ structure ShortComplex
     - zero : f ≫ g = 0  [default: by cat_disch]
 
 中文:
-结构 ShortComplex
+结构 短复形
   参数: where
   公理与运算 (6 个):
     - {X₁ : C}
@@ -89,8 +89,8 @@ structure Hom
     - comm₂₃ : τ₂ ≫ S₂.g = S₁.g ≫ τ₃  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (S₁ S₂ : ShortComplex C)
+结构 态射
+  参数: (S₁ S₂ : 短复形 C)
   公理与运算 (5 个):
     - τ₁ : S₁.X₁ ⟶ S₂.X₁
     - τ₂ : S₁.X₂ ⟶ S₂.X₂
@@ -130,8 +130,8 @@ definition Hom.id
   τ₃ := 𝟙 _
 
 中文:
-定义 Hom.id
-  签名: : Hom S S where
+定义 态射.id
+  签名: : 态射 S S where
   定义体: 𝟙 _
   τ₂ := 𝟙 _
   τ₃ := 𝟙 _
@@ -154,8 +154,8 @@ definition Hom.comp
   τ₃ := φ₁₂.τ₃ ≫ φ₂₃.τ₃
 
 中文:
-定义 Hom.comp
-  签名: (φ₁₂ : Hom S₁ S₂) (φ₂₃ : Hom S₂ S₃)
+定义 态射.comp
+  签名: (φ₁₂ : 态射 S₁ S₂) (φ₂₃ : 态射 S₂ S₃)
   定义体: φ₁₂.τ₁ ≫ φ₂₃.τ₁
   τ₂ := φ₁₂.τ₂ ≫ φ₂₃.τ₂
   τ₃ := φ₁₂.τ₃ ≫ φ₂₃.τ₃
@@ -179,7 +179,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (ShortComplex C)
+  签名: 范畴 (短复形 C)
   定义体: Hom
   id := Hom.id
   comp := Hom.comp
@@ -225,7 +225,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: {S₁ S₂ : ShortComplex C} (τ₁ : S₁.X₁ ⟶ S₂.X₁) (τ₂ : S₁.X₂ ⟶ S₂.X₂)
+  签名: {S₁ S₂ : 短复形 C} (τ₁ : S₁.X₁ ⟶ S₂.X₁) (τ₂ : S₁.X₂ ⟶ S₂.X₂)
   定义体: ⟨τ₁, τ₂, τ₃, comm₁₂, comm₂₃⟩
 -/
 def homMk {S₁ S₂ : ShortComplex C} (τ₁ : S₁.X₁ ⟶ S₂.X₁) (τ₂ : S₁.X₂ ⟶ S₂.X₂)
@@ -242,7 +242,7 @@ lemma id_τ₁
 
 中文:
 引理 id_τ₁
-  结论: Hom.τ₁ (𝟙 S) = 𝟙 _
+  结论: 态射.τ₁ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_τ₁ : Hom.τ₁ (𝟙 S) = 𝟙 _ := rfl
@@ -256,7 +256,7 @@ lemma id_τ₂
 
 中文:
 引理 id_τ₂
-  结论: Hom.τ₂ (𝟙 S) = 𝟙 _
+  结论: 态射.τ₂ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_τ₂ : Hom.τ₂ (𝟙 S) = 𝟙 _ := rfl
@@ -270,7 +270,7 @@ lemma id_τ₃
 
 中文:
 引理 id_τ₃
-  结论: Hom.τ₃ (𝟙 S) = 𝟙 _
+  结论: 态射.τ₃ (𝟙 S) = 𝟙 _
   证明: rfl
 -/
 @[simp] lemma id_τ₃ : Hom.τ₃ (𝟙 S) = 𝟙 _ := rfl
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (S₁ ⟶ S₂)
+  签名: 零 (S₁ ⟶ S₂)
   定义体: ⟨{ τ₁ := 0, τ₂ := 0, τ₃ := 0 }⟩
 -/
 instance : Zero (S₁ ⟶ S₂) := ⟨{ τ₁ := 0, τ₂ := 0, τ₃ := 0 }⟩
@@ -349,7 +349,7 @@ lemma zero_τ₁
 
 中文:
 引理 zero_τ₁
-  结论: Hom.τ₁ (0 : S₁ ⟶ S₂) = 0
+  结论: 态射.τ₁ (0 : S₁ ⟶ S₂) = 0
   证明: rfl
 -/
 @[simp] lemma zero_τ₁ : Hom.τ₁ (0 : S₁ ⟶ S₂) = 0 := rfl
@@ -363,7 +363,7 @@ lemma zero_τ₂
 
 中文:
 引理 zero_τ₂
-  结论: Hom.τ₂ (0 : S₁ ⟶ S₂) = 0
+  结论: 态射.τ₂ (0 : S₁ ⟶ S₂) = 0
   证明: rfl
 -/
 @[simp] lemma zero_τ₂ : Hom.τ₂ (0 : S₁ ⟶ S₂) = 0 := rfl
@@ -377,7 +377,7 @@ lemma zero_τ₃
 
 中文:
 引理 zero_τ₃
-  结论: Hom.τ₃ (0 : S₁ ⟶ S₂) = 0
+  结论: 态射.τ₃ (0 : S₁ ⟶ S₂) = 0
   证明: rfl
 -/
 @[simp] lemma zero_τ₃ : Hom.τ₃ (0 : S₁ ⟶ S₂) = 0 := rfl
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasZeroMorphisms (ShortComplex C)
+  签名: 有ZeroMorphisms (短复形 C)
 -/
 instance : HasZeroMorphisms (ShortComplex C) where
 
@@ -410,7 +410,7 @@ definition π₁
 
 中文:
 定义 π₁
-  签名: : ShortComplex C ⥤ C where
+  签名: : 短复形 C ⥤ C where
   定义体: S.X₁
   map f := f.τ₁
 -/
@@ -431,7 +431,7 @@ definition π₂
 
 中文:
 定义 π₂
-  签名: : ShortComplex C ⥤ C where
+  签名: : 短复形 C ⥤ C where
   定义体: S.X₂
   map f := f.τ₂
 -/
@@ -452,7 +452,7 @@ definition π₃
 
 中文:
 定义 π₃
-  签名: : ShortComplex C ⥤ C where
+  签名: : 短复形 C ⥤ C where
   定义体: S.X₃
   map f := f.τ₃
 -/
@@ -469,7 +469,7 @@ instance preservesZeroMorphisms_π₁
 
 中文:
 实例 preservesZeroMorphisms_π₁
-  签名: : Functor.PreservesZeroMorphisms (π₁ : _ ⥤ C) where
+  签名: : 函子.保持ZeroMorphisms (π₁ : _ ⥤ C) where
 -/
 instance preservesZeroMorphisms_π₁ : Functor.PreservesZeroMorphisms (π₁ : _ ⥤ C) where
 /--
@@ -481,7 +481,7 @@ instance preservesZeroMorphisms_π₂
 
 中文:
 实例 preservesZeroMorphisms_π₂
-  签名: : Functor.PreservesZeroMorphisms (π₂ : _ ⥤ C) where
+  签名: : 函子.保持ZeroMorphisms (π₂ : _ ⥤ C) where
 -/
 instance preservesZeroMorphisms_π₂ : Functor.PreservesZeroMorphisms (π₂ : _ ⥤ C) where
 /--
@@ -493,7 +493,7 @@ instance preservesZeroMorphisms_π₃
 
 中文:
 实例 preservesZeroMorphisms_π₃
-  签名: : Functor.PreservesZeroMorphisms (π₃ : _ ⥤ C) where
+  签名: : 函子.保持ZeroMorphisms (π₃ : _ ⥤ C) where
 -/
 instance preservesZeroMorphisms_π₃ : Functor.PreservesZeroMorphisms (π₃ : _ ⥤ C) where
 
@@ -567,7 +567,7 @@ definition map
 
 中文:
 定义 map
-  签名: (F : C ⥤ D) [F.PreservesZeroMorphisms]
+  签名: (F : C ⥤ D) [F.保持ZeroMorphisms]
   定义体: ShortComplex.mk (F.map S.f) (F.map S.g) (by rw [← F.map_comp, S.zero, F.map_zero])
 
 Depends on / 依赖: F.map, F.map_comp, F.map_zero, S.zero, ShortComplex, ShortComplex.mk, map_comp, map_zero
@@ -586,7 +586,7 @@ lemma map_id
 
 中文:
 引理 map_id
-  条件: (S : ShortComplex C)
+  条件: (S : 短复形 C)
   结论: S.map (𝟭 C) = S
   证明: rfl
 -/
@@ -602,7 +602,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  结论: (S : ShortComplex C)
+  结论: (S : 短复形 C)
   证明: rfl
 -/
 @[simp] lemma map_comp (S : ShortComplex C)
@@ -624,8 +624,8 @@ definition mapNatTrans
   τ₃ := τ.app _
 
 中文:
-定义 mapNatTrans
-  签名: {F G : C ⥤ D} [F.PreservesZeroMorphisms] [G.PreservesZeroMorphisms] (τ : F ⟶ G)
+定义 map自然数Trans
+  签名: {F G : C ⥤ D} [F.保持ZeroMorphisms] [G.保持ZeroMorphisms] (τ : F ⟶ G)
   定义体: τ.app _
   τ₂ := τ.app _
   τ₃ := τ.app _
@@ -650,8 +650,8 @@ definition mapNatIso
   inv := S.mapNatTrans τ.inv
 
 中文:
-定义 mapNatIso
-  签名: {F G : C ⥤ D} [F.PreservesZeroMorphisms] [G.PreservesZeroMorphisms] (τ : F ≅ G)
+定义 map自然数Iso
+  签名: {F G : C ⥤ D} [F.保持ZeroMorphisms] [G.保持ZeroMorphisms] (τ : F ≅ G)
   定义体: S.mapNatTrans τ.hom
   inv := S.mapNatTrans τ.inv
 
@@ -685,8 +685,8 @@ definition _root_.CategoryTheory.Functor.mapShortComplex
         simp only [← F.map_comp, φ.comm₂₃] }
 
 中文:
-定义 _root_.CategoryTheory.Functor.mapShortComplex
-  签名: (F : C ⥤ D) [F.PreservesZeroMorphisms]
+定义 _root_.范畴论.函子.mapShortComplex
+  签名: (F : C ⥤ D) [F.保持ZeroMorphisms]
   定义体: S.map F
   map φ :=
     { τ₁ := F.map φ.τ₁
@@ -764,8 +764,8 @@ lemma isIso_of_isIso
 
 中文:
 引理 isIso_of_isIso
-  条件: (f : S₁ ⟶ S₂) [IsIso f.τ₁] [IsIso f.τ₂] [IsIso f.τ₃]
-  结论: IsIso f
+  条件: (f : S₁ ⟶ S₂) [是同构 f.τ₁] [是同构 f.τ₂] [是同构 f.τ₃]
+  结论: 是同构 f
   证明: (isoMk (asIso f.τ₁) (asIso f.τ₂) (asIso f.τ₃)).isIso_hom
 
 Depends on / 依赖: isIso_hom
@@ -811,7 +811,7 @@ definition fFunctor
 
 中文:
 定义 fFunctor
-  签名: : ShortComplex C ⥤ Arrow C where
+  签名: : 短复形 C ⥤ 箭头 C where
   定义体: .mk S.f
   map {S T} f := Arrow.homMk f.τ₁ f.τ₂ f.comm₁₂
 -/
@@ -830,7 +830,7 @@ definition gFunctor
 
 中文:
 定义 gFunctor
-  签名: : ShortComplex C ⥤ Arrow C where
+  签名: : 短复形 C ⥤ 箭头 C where
   定义体: .mk S.g
   map {S T} f := Arrow.homMk f.τ₂ f.τ₃ f.comm₂₃
 -/
@@ -850,7 +850,7 @@ definition op
 
 中文:
 定义 op
-  签名: : ShortComplex Cᵒᵖ
+  签名: : 短复形 Cᵒᵖ
   定义体: mk S.g.op S.f.op (by simp only [← op_comp, S.zero]; rfl)
 
 Depends on / 依赖: S.f.op, S.g.op, S.zero, op_comp
@@ -933,7 +933,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (S : ShortComplex Cᵒᵖ)
+  签名: (S : 短复形 Cᵒᵖ)
   定义体: mk S.g.unop S.f.unop (by simp only [← unop_comp, S.zero]; rfl)
 
 Depends on / 依赖: S.f.unop, S.g.unop, S.zero, unop_comp
@@ -964,7 +964,7 @@ definition unopMap
 
 中文:
 定义 unopMap
-  签名: {S₁ S₂ : ShortComplex Cᵒᵖ} (φ : S₁ ⟶ S₂)
+  签名: {S₁ S₂ : 短复形 Cᵒᵖ} (φ : S₁ ⟶ S₂)
   定义体: φ.τ₃.unop
   τ₂ := φ.τ₂.unop
   τ₃ := φ.τ₁.unop
@@ -1000,7 +1000,7 @@ lemma unopMap_id
 
 中文:
 引理 unopMap_id
-  条件: (S : ShortComplex Cᵒᵖ)
+  条件: (S : 短复形 Cᵒᵖ)
   结论: unopMap (𝟙 S) = 𝟙 S.unop
   证明: rfl
 -/
@@ -1021,7 +1021,7 @@ definition opFunctor
 
 中文:
 定义 opFunctor
-  签名: : (ShortComplex C)ᵒᵖ ⥤ ShortComplex Cᵒᵖ where
+  签名: : (短复形 C)ᵒᵖ ⥤ 短复形 Cᵒᵖ where
   定义体: (Opposite.unop S).op
   map φ := opMap φ.unop
 
@@ -1044,7 +1044,7 @@ definition unopFunctor
 
 中文:
 定义 unopFunctor
-  签名: : ShortComplex Cᵒᵖ ⥤ (ShortComplex C)ᵒᵖ where
+  签名: : 短复形 Cᵒᵖ ⥤ (短复形 C)ᵒᵖ where
   定义体: Opposite.op (S.unop)
   map φ := (unopMap φ).op
 
@@ -1071,7 +1071,7 @@ definition opEquiv
 
 中文:
 定义 opEquiv
-  签名: : (ShortComplex C)ᵒᵖ ≌ ShortComplex Cᵒᵖ where
+  签名: : (短复形 C)ᵒᵖ ≌ 短复形 Cᵒᵖ where
   定义体: opFunctor C
   inverse := unopFunctor C
   unitIso := Iso.refl _
@@ -1098,7 +1098,7 @@ abbreviation unopOp
 
 中文:
 缩写 unopOp
-  签名: (S : ShortComplex Cᵒᵖ)
+  签名: (S : 短复形 Cᵒᵖ)
   定义体: (opEquiv C).counitIso.app S
 
 Depends on / 依赖: counitIso, counitIso.app, opEquiv, pushoutIsoUnopPullback
@@ -1116,7 +1116,7 @@ abbreviation opUnop
 
 中文:
 缩写 opUnop
-  签名: (S : ShortComplex C)
+  签名: (S : 短复形 C)
   定义体: Iso.unop ((opEquiv C).unitIso.app (Opposite.op S))
 
 Depends on / 依赖: Iso.unop, Opposite, Opposite.op, opEquiv, unitIso, unitIso.app

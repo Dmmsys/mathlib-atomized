@@ -623,7 +623,7 @@ theorem map_P
 
 中文:
 定理 map_P
-  结论: {D : 类型} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
+  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
   证明: by
   induction q with
   | zero =>
@@ -660,7 +660,7 @@ theorem map_Q
 
 中文:
 定理 map_Q
-  结论: {D : 类型} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
+  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
   证明: by
   rw [← add_right_inj (G.map ((P q : K[X] ⟶ _).f n)), ← G.map_add, map_P G X q n, P_add_Q_f,
     P_add_Q_f]

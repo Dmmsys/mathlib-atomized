@@ -44,10 +44,10 @@ class SupConvergenceClass
     - tendsto_coe_atTop_isLUB : forall (a : α) (s : Set α), IsLUB s a -> Tendsto ((↑) : s -> α) atTop (𝓝 a)
 
 中文:
-类 SupConvergenceClass
-  参数: (α : 类型) [Preorder α] [TopologicalSpace α]
+类 SupConvergence类
+  参数: (α : 类型) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
-    - tendsto_coe_atTop_isLUB : 对任意 (a : α) (s : Set α), IsLUB s a -> Tendsto ((↑) : s -> α) atTop (𝓝 a)
+    - tendsto_coe_atTop_isLUB : 对任意 (a : α) (s : 集合 α), IsLUB s a -> 收敛 ((↑) : s -> α) atTop (𝓝 a)
 -/
 class SupConvergenceClass (α : Type*) [Preorder α] [TopologicalSpace α] : Prop where
   /-- proof that a monotone function tends to `𝓝 a` as `x → ∞` -/
@@ -64,10 +64,10 @@ class InfConvergenceClass
     - tendsto_coe_atBot_isGLB : forall (a : α) (s : Set α), IsGLB s a -> Tendsto ((↑) : s -> α) atBot (𝓝 a)
 
 中文:
-类 InfConvergenceClass
-  参数: (α : 类型) [Preorder α] [TopologicalSpace α]
+类 InfConvergence类
+  参数: (α : 类型) [预序 α] [拓扑空间 α]
   公理与运算 (1 个):
-    - tendsto_coe_atBot_isGLB : 对任意 (a : α) (s : Set α), IsGLB s a -> Tendsto ((↑) : s -> α) atBot (𝓝 a)
+    - tendsto_coe_atBot_isGLB : 对任意 (a : α) (s : 集合 α), IsGLB s a -> 收敛 ((↑) : s -> α) atBot (𝓝 a)
 -/
 class InfConvergenceClass (α : Type*) [Preorder α] [TopologicalSpace α] : Prop where
   /-- proof that a monotone function tends to `𝓝 a` as `x → -∞` -/
@@ -84,7 +84,7 @@ instance OrderDual.supConvergenceClass
 
 中文:
 实例 OrderDual.supConvergenceClass
-  签名: [Preorder α] [TopologicalSpace α] [InfConvergenceClass α]
+  签名: [预序 α] [拓扑空间 α] [InfConvergence类 α]
   定义体: ⟨‹InfConvergenceClass α›.1⟩
 
 Depends on / 依赖: InfConvergenceClass
@@ -103,7 +103,7 @@ instance OrderDual.infConvergenceClass
 
 中文:
 实例 OrderDual.infConvergenceClass
-  签名: [Preorder α] [TopologicalSpace α] [SupConvergenceClass α]
+  签名: [预序 α] [拓扑空间 α] [SupConvergence类 α]
   定义体: ⟨‹SupConvergenceClass α›.1⟩
 
 Depends on / 依赖: SupConvergenceClass
@@ -147,7 +147,7 @@ theorem tendsto_atTop_isLUB
 
 中文:
 定理 tendsto_atTop_isLUB
-  条件: (h_mono : Monotone f) (ha : IsLUB (Set.range f) a)
+  条件: (h_mono : 递增 f) (ha : IsLUB (集合.range f) a)
   证明: by
   suffices Tendsto (rangeFactorization f) atTop atTop from
     (SupConvergenceClass.tendsto_coe_atTop_isLUB _ _ ha).comp this
@@ -171,7 +171,7 @@ theorem tendsto_atBot_isLUB
 
 中文:
 定理 tendsto_atBot_isLUB
-  条件: (h_anti : Antitone f) (ha : IsLUB (Set.range f) a)
+  条件: (h_anti : 递减 f) (ha : IsLUB (集合.range f) a)
   证明: by convert! tendsto_atTop_isLUB h_anti.dual_left ha using 1
 
 Depends on / 依赖: convert, dual_left, h_anti, h_anti.dual_left, tendsto_atTop_isLUB
@@ -195,7 +195,7 @@ theorem tendsto_atBot_isGLB
 
 中文:
 定理 tendsto_atBot_isGLB
-  条件: (h_mono : Monotone f) (ha : IsGLB (Set.range f) a)
+  条件: (h_mono : 递增 f) (ha : IsGLB (集合.range f) a)
   证明: by convert! tendsto_atTop_isLUB h_mono.dual ha.dual using 1
 
 Depends on / 依赖: convert, h_mono, h_mono.dual, ha.dual, tendsto_atTop_isLUB
@@ -213,7 +213,7 @@ theorem tendsto_atTop_isGLB
 
 中文:
 定理 tendsto_atTop_isGLB
-  条件: (h_anti : Antitone f) (ha : IsGLB (Set.range f) a)
+  条件: (h_anti : 递减 f) (ha : IsGLB (集合.range f) a)
   证明: by convert! tendsto_atBot_isLUB h_anti.dual ha.dual using 1
 
 Depends on / 依赖: convert, h_anti, h_anti.dual, ha.dual, tendsto_atBot_isLUB
@@ -242,7 +242,7 @@ exact tendsto_atTop_isLUB h_mono
 
 中文:
 定理 tendsto_atTop_ciSup
-  条件: (h_mono : Monotone f) (hbdd : BddAbove <| range f)
+  条件: (h_mono : 递增 f) (hbdd : BddAbove <| range f)
   证明: by
   obtain (h | h) := eq_or_ne atTop (⊥ : Filter ι)
   · simp [h]
@@ -270,7 +270,7 @@ theorem tendsto_atBot_ciSup
 
 中文:
 定理 tendsto_atBot_ciSup
-  条件: (h_anti : Antitone f) (hbdd : BddAbove <| range f)
+  条件: (h_anti : 递减 f) (hbdd : BddAbove <| range f)
   证明: by convert! tendsto_atTop_ciSup h_anti.dual hbdd.dual using 1
 
 Depends on / 依赖: convert, h_anti, h_anti.dual, hbdd.dual, tendsto_atTop_ciSup
@@ -294,7 +294,7 @@ theorem tendsto_atBot_ciInf
 
 中文:
 定理 tendsto_atBot_ciInf
-  条件: (h_mono : Monotone f) (hbdd : BddBelow <| range f)
+  条件: (h_mono : 递增 f) (hbdd : BddBelow <| range f)
   证明: by convert! tendsto_atTop_ciSup h_mono.dual hbdd.dual using 1
 
 Depends on / 依赖: convert, h_mono, h_mono.dual, hbdd.dual, tendsto_atTop_ciSup
@@ -312,7 +312,7 @@ theorem tendsto_atTop_ciInf
 
 中文:
 定理 tendsto_atTop_ciInf
-  条件: (h_anti : Antitone f) (hbdd : BddBelow <| range f)
+  条件: (h_anti : 递减 f) (hbdd : BddBelow <| range f)
   证明: by convert! tendsto_atBot_ciSup h_anti.dual hbdd.dual using 1
 
 Depends on / 依赖: convert, h_anti, h_anti.dual, hbdd.dual, tendsto_atBot_ciSup
@@ -337,8 +337,8 @@ theorem tendsto_atTop_iSup
 
 中文:
 定理 tendsto_atTop_iSup
-  条件: (h_mono : Monotone f)
-  结论: Tendsto f atTop (𝓝 (⨆ i, f i))
+  条件: (h_mono : 递增 f)
+  结论: 收敛 f atTop (𝓝 (⨆ i, f i))
   证明: tendsto_atTop_ciSup h_mono (OrderTop.bddAbove _)
 
 Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, h_mono, tendsto_atTop_ciSup
@@ -357,8 +357,8 @@ theorem tendsto_atBot_iSup
 
 中文:
 定理 tendsto_atBot_iSup
-  条件: (h_anti : Antitone f)
-  结论: Tendsto f atBot (𝓝 (⨆ i, f i))
+  条件: (h_anti : 递减 f)
+  结论: 收敛 f atBot (𝓝 (⨆ i, f i))
   证明: tendsto_atBot_ciSup h_anti (OrderTop.bddAbove _)
 
 Depends on / 依赖: OrderTop, OrderTop.bddAbove, bddAbove, h_anti, tendsto_atBot_ciSup
@@ -383,8 +383,8 @@ theorem tendsto_atBot_iInf
 
 中文:
 定理 tendsto_atBot_iInf
-  条件: (h_mono : Monotone f)
-  结论: Tendsto f atBot (𝓝 (⨅ i, f i))
+  条件: (h_mono : 递增 f)
+  结论: 收敛 f atBot (𝓝 (⨅ i, f i))
   证明: tendsto_atBot_ciInf h_mono (OrderBot.bddBelow _)
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, h_mono, tendsto_atBot_ciInf
@@ -403,8 +403,8 @@ theorem tendsto_atTop_iInf
 
 中文:
 定理 tendsto_atTop_iInf
-  条件: (h_anti : Antitone f)
-  结论: Tendsto f atTop (𝓝 (⨅ i, f i))
+  条件: (h_anti : 递减 f)
+  结论: 收敛 f atTop (𝓝 (⨅ i, f i))
   证明: tendsto_atTop_ciInf h_anti (OrderBot.bddBelow _)
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, h_anti, tendsto_atTop_ciInf
@@ -431,7 +431,7 @@ instance Prod.supConvergenceClass
     t
 
 中文:
-实例 Prod.supConvergenceClass
+实例 积类型.supConvergenceClass
   定义体: by
   constructor
   rintro ⟨a, b⟩ s h
@@ -464,8 +464,8 @@ instance [Preorder
   body: show InfConvergenceClass (αᵒᵈ × βᵒᵈ)ᵒᵈ from OrderDual.infConvergenceClass
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [TopologicalSpace α] [TopologicalSpace β] [InfConvergenceClass α]
+实例 [预序
+  签名: α] [预序 β] [拓扑空间 α] [拓扑空间 β] [InfConvergence类 α]
   定义体: show InfConvergenceClass (αᵒᵈ × βᵒᵈ)ᵒᵈ from OrderDual.infConvergenceClass
 
 Depends on / 依赖: InfConvergenceClass, OrderDual, OrderDual.infConvergenceClass, infConvergenceClass
@@ -485,7 +485,7 @@ instance Pi.supConvergenceClass
   exact tendsto_pi_nhds.2 fun i => tendsto_atTop_isLUB ((monotone_eval _).domRestrict _) (h i)
 
 中文:
-实例 Pi.supConvergenceClass
+实例 依赖函数类型.supConvergenceClass
   定义体: by
   refine ⟨fun f s h => ?_⟩
   simp only [isLUB_pi, ← range_domRestrict] at h
@@ -508,7 +508,7 @@ instance Pi.infConvergenceClass
   body: show InfConvergenceClass (forall i, (α i)ᵒᵈ)ᵒᵈ from OrderDual.infConvergenceClass
 
 中文:
-实例 Pi.infConvergenceClass
+实例 依赖函数类型.infConvergenceClass
   定义体: show InfConvergenceClass (forall i, (α i)ᵒᵈ)ᵒᵈ from OrderDual.infConvergenceClass
 
 Depends on / 依赖: InfConvergenceClass, OrderDual, OrderDual.infConvergenceClass, infConvergenceClass
@@ -527,8 +527,8 @@ instance Pi.supConvergenceClass'
   body: supConvergenceClass
 
 中文:
-实例 Pi.supConvergenceClass'
-  签名: {ι : 类型} [Preorder α] [TopologicalSpace α]
+实例 依赖函数类型.supConvergenceClass'
+  签名: {ι : 类型} [预序 α] [拓扑空间 α]
   定义体: supConvergenceClass
 
 Depends on / 依赖: supConvergenceClass
@@ -546,8 +546,8 @@ instance Pi.infConvergenceClass'
   body: Pi.infConvergenceClass
 
 中文:
-实例 Pi.infConvergenceClass'
-  签名: {ι : 类型} [Preorder α] [TopologicalSpace α]
+实例 依赖函数类型.infConvergenceClass'
+  签名: {ι : 类型} [预序 α] [拓扑空间 α]
   定义体: Pi.infConvergenceClass
 
 Depends on / 依赖: Pi.infConvergenceClass, infConvergenceClass
@@ -571,7 +571,7 @@ else Or.inl tendsto_atTop_atTop_of_monotone' h_mono H
 
 中文:
 定理 tendsto_atTop_of_monotone
-  结论: {ι α : 类型} [Preorder ι] [TopologicalSpace α]
+  结论: {ι α : 类型} [预序 ι] [拓扑空间 α]
   证明: by
   classical
   exact if H : BddAbove (range f) then Or.inr ⟨_, tendsto_atTop_ciSup h_mono H⟩
@@ -602,7 +602,7 @@ theorem tendsto_atTop_of_antitone
 
 中文:
 定理 tendsto_atTop_of_antitone
-  结论: {ι α : 类型} [Preorder ι] [TopologicalSpace α]
+  结论: {ι α : 类型} [预序 ι] [拓扑空间 α]
   证明: tendsto_atTop_of_monotone (α := αᵒᵈ) h_mono
 
 @[deprecated (since := "2026-01-22")] alias tendsto_of_antitone := tendsto_atTop_of_antitone
@@ -626,7 +626,7 @@ theorem tendsto_atBot_of_monotone
 
 中文:
 定理 tendsto_atBot_of_monotone
-  结论: {ι α : 类型} [Preorder ι] [TopologicalSpace α]
+  结论: {ι α : 类型} [预序 ι] [拓扑空间 α]
   证明: tendsto_atTop_of_monotone (ι := ιᵒᵈ) (α := αᵒᵈ) h_mono.dual
 
 Depends on / 依赖: h_mono, h_mono.dual, tendsto_atTop_of_monotone
@@ -646,7 +646,7 @@ theorem tendsto_atBot_of_antitone
 
 中文:
 定理 tendsto_atBot_of_antitone
-  结论: {ι α : 类型} [Preorder ι] [TopologicalSpace α]
+  结论: {ι α : 类型} [预序 ι] [拓扑空间 α]
   证明: tendsto_atTop_of_antitone (ι := ιᵒᵈ) (α := αᵒᵈ) h_mono.dual
 
 Depends on / 依赖: h_mono, h_mono.dual, tendsto_atTop_of_antitone
@@ -671,7 +671,7 @@ theorem tendsto_iff_tendsto_subseq_of_monotone
 
 中文:
 定理 tendsto_iff_tendsto_subseq_of_monotone
-  结论: {ι₁ ι₂ α : 类型} [SemilatticeSup ι₁] [Preorder ι₂]
+  结论: {ι₁ ι₂ α : 类型} [SemilatticeSup ι₁] [预序 ι₂]
   证明: by
   constructor <;> intro h
   · exact h.comp hg
@@ -701,7 +701,7 @@ theorem tendsto_iff_tendsto_subseq_of_antitone
 
 中文:
 定理 tendsto_iff_tendsto_subseq_of_antitone
-  结论: {ι₁ ι₂ α : 类型} [SemilatticeSup ι₁] [Preorder ι₂]
+  结论: {ι₁ ι₂ α : 类型} [SemilatticeSup ι₁] [预序 ι₂]
   证明: tendsto_iff_tendsto_subseq_of_monotone (α := αᵒᵈ) hf hg
 
 Depends on / 依赖: tendsto_iff_tendsto_subseq_of_monotone
@@ -723,8 +723,8 @@ theorem Monotone.ge_of_tendsto
   _root_.ge_of_tendsto ha ((eventually_ge_atTop b).mono fun _ hxy => hf hxy)
 
 中文:
-定理 Monotone.ge_of_tendsto
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+定理 递增.ge_of_tendsto
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: haveI : Nonempty β := Nonempty.intro b
   _root_.ge_of_tendsto ha ((eventually_ge_atTop b).mono fun _ hxy => hf hxy)
 
@@ -746,8 +746,8 @@ theorem Monotone.le_of_tendsto
   proof: hf.dual.ge_of_tendsto ha b
 
 中文:
-定理 Monotone.le_of_tendsto
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+定理 递增.le_of_tendsto
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: hf.dual.ge_of_tendsto ha b
 
 Depends on / 依赖: ge_of_tendsto, hf.dual.ge_of_tendsto
@@ -767,8 +767,8 @@ theorem Antitone.le_of_tendsto
   proof: hf.dual_right.ge_of_tendsto ha b
 
 中文:
-定理 Antitone.le_of_tendsto
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+定理 递减.le_of_tendsto
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: hf.dual_right.ge_of_tendsto ha b
 
 Depends on / 依赖: dual_right, ge_of_tendsto, hf.dual_right.ge_of_tendsto
@@ -788,8 +788,8 @@ theorem Antitone.ge_of_tendsto
   proof: hf.dual_right.le_of_tendsto ha b
 
 中文:
-定理 Antitone.ge_of_tendsto
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+定理 递减.ge_of_tendsto
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: hf.dual_right.le_of_tendsto ha b
 
 Depends on / 依赖: dual_right, hf.dual_right.le_of_tendsto, le_of_tendsto
@@ -814,7 +814,7 @@ theorem isLUB_of_tendsto_atTop
 
 中文:
 定理 isLUB_of_tendsto_atTop
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: by
   constructor
   · rintro _ ⟨b, rfl⟩
@@ -841,7 +841,7 @@ theorem isGLB_of_tendsto_atBot
 
 中文:
 定理 isGLB_of_tendsto_atBot
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: isLUB_of_tendsto_atTop (α := αᵒᵈ) (β := βᵒᵈ) hf.dual ha
 
 Depends on / 依赖: hf.dual, isLUB_of_tendsto_atTop
@@ -861,7 +861,7 @@ theorem isLUB_of_tendsto_atBot
 
 中文:
 定理 isLUB_of_tendsto_atBot
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: isLUB_of_tendsto_atTop (α := α) (β := βᵒᵈ) hf.dual_left ha
 
 Depends on / 依赖: dual_left, hf.dual_left, isLUB_of_tendsto_atTop
@@ -881,7 +881,7 @@ theorem isGLB_of_tendsto_atTop
 
 中文:
 定理 isGLB_of_tendsto_atTop
-  结论: [TopologicalSpace α] [Preorder α] [OrderClosedTopology α]
+  结论: [拓扑空间 α] [预序 α] [OrderClosed拓扑 α]
   证明: isGLB_of_tendsto_atBot (α := α) (β := βᵒᵈ) hf.dual_left ha
 
 Depends on / 依赖: dual_left, hf.dual_left, isGLB_of_tendsto_atBot
@@ -901,7 +901,7 @@ theorem iSup_eq_of_tendsto
 
 中文:
 定理 iSup_eq_of_tendsto
-  结论: {α β} [TopologicalSpace α] [CompleteLinearOrder α] [OrderTopology α]
+  结论: {α β} [拓扑空间 α] [完备线性序 α] [Order拓扑 α]
   证明: tendsto_nhds_unique (tendsto_atTop_iSup hf)
 
 Depends on / 依赖: tendsto_atTop_iSup, tendsto_nhds_unique
@@ -921,7 +921,7 @@ theorem iInf_eq_of_tendsto
 
 中文:
 定理 iInf_eq_of_tendsto
-  结论: {α} [TopologicalSpace α] [CompleteLinearOrder α] [OrderTopology α]
+  结论: {α} [拓扑空间 α] [完备线性序 α] [Order拓扑 α]
   证明: tendsto_nhds_unique (tendsto_atTop_iInf hf)
 
 Depends on / 依赖: tendsto_atTop_iInf, tendsto_nhds_unique
@@ -944,7 +944,7 @@ theorem iSup_eq_iSup_subseq_of_monotone
 
 中文:
 定理 iSup_eq_iSup_subseq_of_monotone
-  结论: {ι₁ ι₂ α : 类型} [Preorder ι₂] [CompleteLattice α]
+  结论: {ι₁ ι₂ α : 类型} [预序 ι₂] [完备格 α]
   证明: le_antisymm
     (iSup_mono' fun i =>
       Exists.imp (fun j (hj : i <= φ j) => hf hj) (hφ.eventually <| eventually_ge_atTop i).exists)
@@ -973,7 +973,7 @@ theorem iSup_eq_iSup_subseq_of_antitone
 
 中文:
 定理 iSup_eq_iSup_subseq_of_antitone
-  结论: {ι₁ ι₂ α : 类型} [Preorder ι₂] [CompleteLattice α]
+  结论: {ι₁ ι₂ α : 类型} [预序 ι₂] [完备格 α]
   证明: le_antisymm
     (iSup_mono' fun i =>
       Exists.imp (fun j (hj : φ j <= i) => hf hj) (hφ.eventually <| eventually_le_atBot i).exists)
@@ -999,7 +999,7 @@ theorem iInf_eq_iInf_subseq_of_monotone
 
 中文:
 定理 iInf_eq_iInf_subseq_of_monotone
-  结论: {ι₁ ι₂ α : 类型} [Preorder ι₂] [CompleteLattice α]
+  结论: {ι₁ ι₂ α : 类型} [预序 ι₂] [完备格 α]
   证明: iSup_eq_iSup_subseq_of_monotone hf.dual hφ
 
 Depends on / 依赖: hf.dual, iSup_eq_iSup_subseq_of_monotone
@@ -1019,7 +1019,7 @@ theorem iInf_eq_iInf_subseq_of_antitone
 
 中文:
 定理 iInf_eq_iInf_subseq_of_antitone
-  结论: {ι₁ ι₂ α : 类型} [Preorder ι₂] [CompleteLattice α]
+  结论: {ι₁ ι₂ α : 类型} [预序 ι₂] [完备格 α]
   证明: iSup_eq_iSup_subseq_of_antitone hf.dual hφ
 
 Depends on / 依赖: hf.dual, iSup_eq_iSup_subseq_of_antitone

@@ -48,7 +48,7 @@ theorem ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear_aux
     the space
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear_aux
+定理 连续线性映射.norm_iteratedFDerivWithin_le_of_bilinear_aux
   结论: {Du Eu Fu Gu : 类型u}
   证明: by
   /- We argue by induction on `n`. The bound is trivial for `n = 0`. For `n + 1`, we write
@@ -146,7 +146,7 @@ theorem ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear
   le
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear
+定理 连续线性映射.norm_iteratedFDerivWithin_le_of_bilinear
   结论: (B : E ->L[𝕜] F ->L[𝕜] G)
   证明: by
   /- We reduce the bound to the case where all spaces live in the same universe (in which we
@@ -243,7 +243,7 @@ theorem ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear
     (mem_univ x) hn
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear
+定理 连续线性映射.norm_iteratedFDeriv_le_of_bilinear
   结论: (B : E ->L[𝕜] F ->L[𝕜] G) {f : D -> E}
   证明: by
   simp_rw [← iteratedFDerivWithin_univ]
@@ -271,7 +271,7 @@ theorem ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear_of_le_one
   exact mul_le_of_le_one_left (by positivity) hB
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDerivWithin_le_of_bilinear_of_le_one
+定理 连续线性映射.norm_iteratedFDerivWithin_le_of_bilinear_of_le_one
   证明: by
   apply (B.norm_iteratedFDerivWithin_le_of_bilinear hf hg hs hx hn).trans
   exact mul_le_of_le_one_left (by positivity) hB
@@ -299,7 +299,7 @@ theorem ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear_of_le_one
     uniqueDiffOn_univ (mem_univ x) hn hB
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDeriv_le_of_bilinear_of_le_one
+定理 连续线性映射.norm_iteratedFDeriv_le_of_bilinear_of_le_one
   结论: (B : E ->L[𝕜] F ->L[𝕜] G)
   证明: by
   simp_rw [← iteratedFDerivWithin_univ]
@@ -362,7 +362,7 @@ theorem norm_iteratedFDeriv_smul_le
 
 中文:
 定理 norm_iteratedFDeriv_smul_le
-  结论: {f : E -> 𝕜'} {g : E -> F} {N : 自然数∞ω} (hf : ContDiff 𝕜 N f)
+  结论: {f : E -> 𝕜'} {g : E -> F} {N : 自然数∞ω} (hf : 连续可微 𝕜 N f)
   证明: (ContinuousLinearMap.lsmul 𝕜 𝕜' : 𝕜' ->L[𝕜] F ->L[𝕜] F).norm_iteratedFDeriv_le_of_bilinear_of_le_one
     hf hg x hn ContinuousLinearMap.opNorm_lsmul_le
 
@@ -424,7 +424,7 @@ theorem norm_iteratedFDeriv_mul_le
 
 中文:
 定理 norm_iteratedFDeriv_mul_le
-  结论: {f : E -> A} {g : E -> A} {N : 自然数∞ω} (hf : ContDiff 𝕜 N f)
+  结论: {f : E -> A} {g : E -> A} {N : 自然数∞ω} (hf : 连续可微 𝕜 N f)
   证明: by
   simp_rw [← iteratedFDerivWithin_univ]
   exact norm_iteratedFDerivWithin_mul_le
@@ -462,7 +462,7 @@ theorem norm_iteratedFDerivWithin_prod_le
 
 中文:
 定理 norm_iteratedFDerivWithin_prod_le
-  结论: [DecidableEq ι] [NormOneClass A'] {u : Finset ι}
+  结论: [DecidableEq ι] [NormOne类 A'] {u : 有限集 ι}
   证明: by
   induction u using Finset.induction generalizing n with
   | empty =>
@@ -531,7 +531,7 @@ theorem norm_iteratedFDeriv_prod_le
 
 中文:
 定理 norm_iteratedFDeriv_prod_le
-  结论: [DecidableEq ι] [NormOneClass A'] {u : Finset ι}
+  结论: [DecidableEq ι] [NormOne类 A'] {u : 有限集 ι}
   证明: by
   simpa [iteratedFDerivWithin_univ] using
     norm_iteratedFDerivWithin_prod_le (fun i hi => (hf i hi).contDiffOn) uniqueDiffOn_univ
@@ -566,7 +566,7 @@ theorem norm_iteratedFDerivWithin_comp_le_aux
 
 中文:
 定理 norm_iteratedFDerivWithin_comp_le_aux
-  结论: {Fu Gu : 类型u} [NormedAddCommGroup Fu]
+  结论: {Fu Gu : 类型u} [赋范交换加群 Fu]
   证明: by
   /- We argue by induction on `n`, using that `D^(n+1) (g ∘ f) = D^n (g ' ∘ f ⬝ f')`. The successive
     derivatives of `g' ∘ f` are controlled thanks to the inductive assumption, and those of `f'` are
@@ -682,7 +682,7 @@ theorem norm_iteratedFDerivWithin_comp_le
 
 中文:
 定理 norm_iteratedFDerivWithin_comp_le
-  结论: {g : F -> G} {f : E -> F} {n : 自然数} {s : Set E} {t : Set F}
+  结论: {g : F -> G} {f : E -> F} {n : 自然数} {s : 集合 E} {t : 集合 F}
   证明: by
   /- We reduce the bound to the case where all spaces live in the same universe (in which we
     already have proved the result), by using linear isometries between the spaces and their `ULift`
@@ -812,7 +812,7 @@ theorem norm_iteratedFDerivWithin_clm_apply
 
 中文:
 定理 norm_iteratedFDerivWithin_clm_apply
-  结论: {f : E -> F ->L[𝕜] G} {g : E -> F} {s : Set E} {x : E}
+  结论: {f : E -> F ->L[𝕜] G} {g : E -> F} {s : 集合 E} {x : E}
   证明: by
   let B : (F ->L[𝕜] G) ->L[𝕜] F ->L[𝕜] G := ContinuousLinearMap.flip (ContinuousLinearMap.apply 𝕜 G)
   have hB : ‖B‖ <= 1 := by
@@ -876,7 +876,7 @@ theorem ContinuousLinearMap.norm_iteratedFDerivWithin_comp_left
   rwa [← L.iteratedFDerivWithin_comp_left hf hs hx hn] at h
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDerivWithin_comp_left
+定理 连续线性映射.norm_iteratedFDerivWithin_comp_left
   结论: (L : F ->L[𝕜] G) {f : E -> F}
   证明: by
   have h := L.norm_compContinuousMultilinearMap_le (iteratedFDerivWithin 𝕜 n f s x)
@@ -903,7 +903,7 @@ theorem ContinuousLinearMap.norm_iteratedFDeriv_comp_left
     hn
 
 中文:
-定理 ContinuousLinearMap.norm_iteratedFDeriv_comp_left
+定理 连续线性映射.norm_iteratedFDeriv_comp_left
   结论: (L : F ->L[𝕜] G) {f : E -> F} {x : E}
   证明: by
   simp only [← iteratedFDerivWithin_univ]
@@ -934,7 +934,7 @@ theorem norm_iteratedFDerivWithin_clm_apply_const
 
 中文:
 定理 norm_iteratedFDerivWithin_clm_apply_const
-  结论: {f : E -> F ->L[𝕜] G} {c : F} {s : Set E} {x : E}
+  结论: {f : E -> F ->L[𝕜] G} {c : F} {s : 集合 E} {x : E}
   证明: by
   apply ((ContinuousLinearMap.apply 𝕜 G c).norm_iteratedFDerivWithin_comp_left hf hs hx hn).trans
   gcongr

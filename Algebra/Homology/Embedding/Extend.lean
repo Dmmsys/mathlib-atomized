@@ -46,7 +46,7 @@ definition X
 
 中文:
 定义 X
-  签名: : Option ι -> C
+  签名: : 选项类型 ι -> C
 -/
 noncomputable def X : Option ι -> C
   | some x => K.X x
@@ -62,7 +62,7 @@ definition XIso
 
 中文:
 定义 XIso
-  签名: {i : Option ι} {j : ι} (hj : i = some j)
+  签名: {i : 选项类型 ι} {j : ι} (hj : i = some j)
   定义体: eqToIso (by subst hj; rfl)
 
 Depends on / 依赖: HasHomology, K.op.truncGE, e.op, eqToIso, truncGE, unop.HasHomology
@@ -82,7 +82,7 @@ lemma isZero_X
 
 中文:
 引理 isZero_X
-  条件: {i : Option ι} (hi : i = none)
+  条件: {i : 选项类型 ι} (hi : i = none)
   证明: by
   subst hi
   exact Limits.isZero_zero _
@@ -106,7 +106,7 @@ definition XOpIso
 
 中文:
 定义 XOpIso
-  签名: (i : Option ι)
+  签名: (i : 选项类型 ι)
   定义体: match i with
   | some _ => Iso.refl _
   | none => IsZero.iso (isZero_X _ rfl) (isZero_X K rfl).op
@@ -127,7 +127,7 @@ definition d
 
 中文:
 定义 d
-  签名: : 对任意 (i j : Option ι), extend.X K i ⟶ extend.X K j
+  签名: : 对任意 (i j : 选项类型 ι), extend.X K i ⟶ extend.X K j
 -/
 noncomputable def d : forall (i j : Option ι), extend.X K i ⟶ extend.X K j
   | none, _ => 0
@@ -144,7 +144,7 @@ lemma d_none_eq_zero
 
 中文:
 引理 d_none_eq_zero
-  条件: (i j : Option ι) (hi : i = none)
+  条件: (i j : 选项类型 ι) (hi : i = none)
   证明: by subst hi; rfl
 -/
 lemma d_none_eq_zero (i j : Option ι) (hi : i = none) :
@@ -160,7 +160,7 @@ lemma d_none_eq_zero'
 
 中文:
 引理 d_none_eq_zero'
-  条件: (i j : Option ι) (hj : j = none)
+  条件: (i j : 选项类型 ι) (hj : j = none)
   证明: by subst hj; cases i <;> rfl
 -/
 lemma d_none_eq_zero' (i j : Option ι) (hj : j = none) :
@@ -179,7 +179,7 @@ lemma d_eq
 
 中文:
 引理 d_eq
-  条件: {i j : Option ι} {a b : ι} (hi : i = some a) (hj : j = some b)
+  条件: {i j : 选项类型 ι} {a b : ι} (hi : i = some a) (hj : j = some b)
   证明: by
   subst hi hj
   simp [XIso, X, d]
@@ -210,7 +210,7 @@ lemma XOpIso_hom_d_op
 
 中文:
 引理 XOpIso_hom_d_op
-  条件: (i j : Option ι)
+  条件: (i j : 选项类型 ι)
   证明: match i, j with
   | none, _ => by
       simp only [d_none_eq_zero, d_none_eq_zero', comp_zero, zero_comp, op_zero]
@@ -247,7 +247,7 @@ definition mapX
 
 中文:
 定义 mapX
-  签名: : 对任意 (i : Option ι), X K i ⟶ X L i
+  签名: : 对任意 (i : 选项类型 ι), X K i ⟶ X L i
 -/
 noncomputable def mapX : forall (i : Option ι), X K i ⟶ X L i
   | some i => φ.f i
@@ -269,7 +269,7 @@ lemma mapX_some
 
 中文:
 引理 mapX_some
-  条件: {i : Option ι} {a : ι} (hi : i = some a)
+  条件: {i : 选项类型 ι} {a : ι} (hi : i = some a)
   证明: by
   subst hi
   dsimp [XIso, X]
@@ -295,7 +295,7 @@ lemma mapX_none
 
 中文:
 引理 mapX_none
-  条件: {i : Option ι} (hi : i = none)
+  条件: {i : 选项类型 ι} (hi : i = none)
   证明: by subst hi; rfl
 -/
 lemma mapX_none {i : Option ι} (hi : i = none) :
@@ -320,7 +320,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: : HomologicalComplex C c' where
+  签名: : 同调复形 C c' where
   定义体: extend.X K (e.r i')
   d i' j' := extend.d K (e.r i') (e.r j')
   shape i' j' h := by
@@ -422,7 +422,7 @@ instance :
 
 中文:
 实例 :
-  签名: (K.extend e).IsStrictlySupported e
+  签名: (K.extend e).是StrictlySupported e
   定义体: K.isZero_extend_X e i' hi'
 
 Depends on / 依赖: K.isZero_extend_X, isZero_extend_X
@@ -468,7 +468,7 @@ lemma extend_d_from_eq_zero
 
 中文:
 引理 extend_d_from_eq_zero
-  条件: (i' j' : ι') (i : ι) (hi : e.f i = i') (hi' : ¬ c.Rel i (c.next i))
+  条件: (i' j' : ι') (i : ι) (hi : e.f i = i') (hi' : ¬ c.关系 i (c.next i))
   证明: by
   obtain hj' | ⟨j, hj⟩ := (e.r j').eq_none_or_eq_some
   · exact extend.d_none_eq_zero' _ _ _ hj'
@@ -504,7 +504,7 @@ lemma extend_d_to_eq_zero
 
 中文:
 引理 extend_d_to_eq_zero
-  条件: (i' j' : ι') (j : ι) (hj : e.f j = j') (hj' : ¬ c.Rel (c.prev j) j)
+  条件: (i' j' : ι') (j : ι) (hj : e.f j = j') (hj' : ¬ c.关系 (c.prev j) j)
   证明: by
   obtain hi' | ⟨i, hi⟩ := (e.r i').eq_none_or_eq_some
   · exact extend.d_none_eq_zero _ _ _ hi'
@@ -828,7 +828,7 @@ lemma extendMap_add
 
 中文:
 引理 extendMap_add
-  结论: [Preadditive C] {K L : HomologicalComplex C c} (φ φ' : K ⟶ L)
+  结论: [预加性 C] {K L : 同调复形 C c} (φ φ' : K ⟶ L)
   证明: by
   ext i'
   by_cases hi' : exists i, e.f i = i'
@@ -1010,7 +1010,7 @@ instance [HasZeroMorphisms
   · exact (isZero_extend_X K e i' hi').projective
 
 中文:
-实例 [HasZeroMorphisms
+实例 [有ZeroMorphisms
   签名: C] (e
   定义体: by
   by_cases! hi' : exists i, e.f i = i'
@@ -1040,7 +1040,7 @@ instance [HasZeroMorphisms
   · exact (isZero_extend_X K e i' hi').injective
 
 中文:
-实例 [HasZeroMorphisms
+实例 [有ZeroMorphisms
   签名: C] (e
   定义体: by
   by_cases! hi' : exists i, e.f i = i'
@@ -1079,7 +1079,7 @@ definition extendFunctor
 
 中文:
 定义 extendFunctor
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: K.extend e
   map φ := HomologicalComplex.extendMap φ e
 
@@ -1098,8 +1098,8 @@ instance [HasZeroMorphisms
   signature: C] : (e.extendFunctor C).PreservesZeroMorphisms where
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : (e.extendFunctor C).PreservesZeroMorphisms where
+实例 [有ZeroMorphisms
+  签名: C] : (e.extendFunctor C).保持ZeroMorphisms where
 -/
 instance [HasZeroMorphisms C] : (e.extendFunctor C).PreservesZeroMorphisms where
 
@@ -1111,8 +1111,8 @@ instance [Preadditive
   signature: C] : (e.extendFunctor C).Additive where
 
 中文:
-实例 [Preadditive
-  签名: C] : (e.extendFunctor C).Additive where
+实例 [预加性
+  签名: C] : (e.extendFunctor C).加性 where
 -/
 instance [Preadditive C] : (e.extendFunctor C).Additive where
 
@@ -1131,7 +1131,7 @@ definition fullyFaithfulExtendFunctor
 
 中文:
 定义 fullyFaithfulExtendFunctor
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: { f i := (K.extendXIso e rfl).inv ≫ φ.f (e.f i) ≫ (L.extendXIso e rfl).hom
       comm' i j h := by
         have := φ.comm (e.f i) (e.f j)
@@ -1167,8 +1167,8 @@ instance [HasZeroMorphisms
   body: (e.fullyFaithfulExtendFunctor C).faithful
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : (e.extendFunctor C).Faithful
+实例 [有ZeroMorphisms
+  签名: C] : (e.extendFunctor C).忠实
   定义体: (e.fullyFaithfulExtendFunctor C).faithful
 
 Depends on / 依赖: e.fullyFaithfulExtendFunctor, faithful, fullyFaithfulExtendFunctor
@@ -1185,8 +1185,8 @@ instance [HasZeroMorphisms
   body: (e.fullyFaithfulExtendFunctor C).full
 
 中文:
-实例 [HasZeroMorphisms
-  签名: C] : (e.extendFunctor C).Full
+实例 [有ZeroMorphisms
+  签名: C] : (e.extendFunctor C).满
   定义体: (e.fullyFaithfulExtendFunctor C).full
 
 Depends on / 依赖: e.fullyFaithfulExtendFunctor, fullyFaithfulExtendFunctor

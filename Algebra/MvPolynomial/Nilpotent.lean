@@ -41,7 +41,7 @@ theorem isNilpotent_iff_of_fintype
 
 中文:
 定理 isNilpotent_iff_of_fintype
-  条件: [Finite σ]
+  条件: [有限 σ]
   证明: by
   classical
   -- Note: including `Fintype.ofFinite σ` in the entire context interferes with the `rw` below.
@@ -80,7 +80,7 @@ theorem isNilpotent_iff
 
 中文:
 定理 isNilpotent_iff
-  结论: IsNilpotent P ↔ 对任意 i, IsNilpotent (P.coeff i)
+  结论: 是幂零 P ↔ 对任意 i, 是幂零 (P.coeff i)
   证明: by
   obtain ⟨n, f, hf, P, rfl⟩ := P.exists_fin_rename
   rw [IsNilpotent.map_iff (rename_injective _ hf)]; rw [MvPolynomial.isNilpotent_iff_of_fintype]
@@ -109,8 +109,8 @@ instance [IsReduced
   simp [isReduced_iff, isNilpotent_iff, MvPolynomial.ext_iff]
 
 中文:
-实例 [IsReduced
-  签名: R] : IsReduced (MvPolynomial σ R)
+实例 [是既约
+  签名: R] : 是既约 (多元多项式 σ R)
   定义体: by
   simp [isReduced_iff, isNilpotent_iff, MvPolynomial.ext_iff]
 
@@ -135,7 +135,7 @@ theorem isUnit_iff
 
 中文:
 定理 isUnit_iff
-  结论: IsUnit P ↔ IsUnit (P.coeff 0) ∧ 对任意 i != 0, IsNilpotent (P.coeff i)
+  结论: 是单位 P ↔ 是单位 (P.coeff 0) ∧ 对任意 i != 0, 是幂零 (P.coeff i)
   证明: by
   classical
   refine ⟨fun H => ⟨H.map constantCoeff, ?_⟩, fun ⟨h₁, h₂⟩ => ?_⟩
@@ -172,7 +172,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (C : _ ->+* MvPolynomial σ R)
+  签名: 是Local态射 (C : _ ->+* 多元多项式 σ R)
   定义体: by simp +contextual [isUnit_iff]
 
 Depends on / 依赖: contextual, isUnit_iff
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (algebraMap R (MvPolynomial σ R))
+  签名: 是Local态射 (algebraMap R (多元多项式 σ R))
   定义体: inferInstanceAs (IsLocalHom C)
 
 Depends on / 依赖: IsLocalHom
@@ -211,7 +211,7 @@ theorem isUnit_iff_totalDegree_of_isReduced
 
 中文:
 定理 isUnit_iff_totalDegree_of_isReduced
-  条件: [IsReduced R]
+  条件: [是既约 R]
   证明: by
   convert! isUnit_iff (P := P)
   rw [totalDegree_eq_zero_iff]
@@ -239,7 +239,7 @@ theorem isUnit_iff_eq_C_of_isReduced
 
 中文:
 定理 isUnit_iff_eq_C_of_isReduced
-  条件: [IsReduced R]
+  条件: [是既约 R]
   证明: by
   rw [isUnit_iff_totalDegree_of_isReduced]; rw [totalDegree_eq_zero_iff_eq_C]
   refine ⟨fun H => ⟨_, H⟩, ?_⟩

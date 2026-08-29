@@ -41,8 +41,8 @@ map {X Y} f := MonCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
 
 中文:
-定义 MonCat.shrinkFunctor
-  签名: (F : C ⥤ MonCat.{w'}) [对任意 X, Small.{w} (F.obj X)]
+定义 幺半群范畴.shrinkFunctor
+  签名: (F : C ⥤ 幺半群范畴.{w'}) [对任意 X, Small.{w} (F.obj X)]
   定义体: MonCat.of (Shrink.{w} (F.obj X))
 map {X Y} f := MonCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
@@ -72,8 +72,8 @@ definition MonCat.shrinkFunctorMap
       congr($((FunctorToTypes.shrinkMap.{w} (Functor.whiskerRight τ (forget _))).naturality f) x)
 
 中文:
-定义 MonCat.shrinkFunctorMap
-  签名: {F G : C ⥤ MonCat.{w'}} (τ : F ⟶ G)
+定义 幺半群范畴.shrinkFunctorMap
+  签名: {F G : C ⥤ 幺半群范畴.{w'}} (τ : F ⟶ G)
   定义体: MonCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (τ.app X).hom).comp Shrink.mulEquiv.toMonoidHom
   naturality X Y f := by

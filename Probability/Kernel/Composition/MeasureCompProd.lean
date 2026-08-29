@@ -55,7 +55,7 @@ scoped[ProbabilityTheory] infixl:100 " otimesₘ " => MeasureTheory.Measure.comp
 
 中文:
 定义 compProd
-  签名: (μ : Measure α) (κ : Kernel α β)
+  签名: (μ : 测度 α) (κ : 核 α β)
   定义体: (Kernel.const Unit μ otimesₖ Kernel.prodMkLeft Unit κ) ()
 
 @[inherit_doc]
@@ -86,7 +86,7 @@ lemma compProd_of_not_sfinite
 
 中文:
 引理 compProd_of_not_sfinite
-  条件: (μ : Measure α) (κ : Kernel α β) (h : ¬ SFinite μ)
+  条件: (μ : 测度 α) (κ : 核 α β) (h : ¬ SFinite μ)
   证明: by
   rw [compProd]; rw [Kernel.compProd_of_not_isSFiniteKernel_left]; rw [zero_apply]
   rwa [Kernel.isSFiniteKernel_const]
@@ -113,7 +113,7 @@ lemma compProd_of_not_isSFiniteKernel
 
 中文:
 引理 compProd_of_not_isSFiniteKernel
-  条件: (μ : Measure α) (κ : Kernel α β) (h : ¬ IsSFiniteKernel κ)
+  条件: (μ : 测度 α) (κ : 核 α β) (h : ¬ 是SFiniteKernel κ)
   证明: by
   rw [compProd]; rw [Kernel.compProd_of_not_isSFiniteKernel_right]; rw [zero_apply]
   rwa [Kernel.isSFiniteKernel_prodMkLeft_unit]
@@ -138,7 +138,7 @@ lemma compProd_apply
 
 中文:
 引理 compProd_apply
-  条件: [SFinite μ] [IsSFiniteKernel κ] {s : Set (α × β)} (hs : MeasurableSet s)
+  条件: [SFinite μ] [是SFiniteKernel κ] {s : 集合 (α × β)} (hs : 可测集 s)
   证明: by
   simp_rw [compProd, Kernel.compProd_apply hs, Kernel.const_apply, Kernel.prodMkLeft_apply']
 
@@ -163,7 +163,7 @@ lemma compProd_apply_univ
 
 中文:
 引理 compProd_apply_univ
-  条件: [SFinite μ] [IsMarkovKernel κ]
+  条件: [SFinite μ] [是MarkovKernel κ]
   结论: (μ otimesₘ κ) univ = μ univ
   证明: by
   simp [compProd]
@@ -184,7 +184,7 @@ lemma compProd_apply_prod
 
 中文:
 引理 compProd_apply_prod
-  结论: [SFinite μ] [IsSFiniteKernel κ]
+  结论: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   simp [compProd, Kernel.compProd_apply_prod hs ht]
 
@@ -209,7 +209,7 @@ lemma compProd_congr
 
 中文:
 引理 compProd_congr
-  条件: [IsSFiniteKernel κ] [IsSFiniteKernel η] (h : κ =ᵐ[μ] η)
+  条件: [是SFiniteKernel κ] [是SFiniteKernel η] (h : κ =ᵐ[μ] η)
   证明: by
   rw [compProd]; rw [compProd]
   congr 1
@@ -236,8 +236,8 @@ lemma compProd_zero_left
 
 中文:
 引理 compProd_zero_left
-  条件: (κ : Kernel α β)
-  结论: (0 : Measure α) otimesₘ κ = 0
+  条件: (κ : 核 α β)
+  结论: (0 : 测度 α) otimesₘ κ = 0
   证明: by simp [compProd]
 -/
 @[simp] lemma compProd_zero_left (κ : Kernel α β) : (0 : Measure α) otimesₘ κ = 0 := by simp [compProd]
@@ -253,8 +253,8 @@ lemma compProd_zero_right
 
 中文:
 引理 compProd_zero_right
-  条件: (μ : Measure α)
-  结论: μ otimesₘ (0 : Kernel α β) = 0
+  条件: (μ : 测度 α)
+  结论: μ otimesₘ (0 : 核 α β) = 0
   证明: by simp [compProd]
 -/
 @[simp] lemma compProd_zero_right (μ : Measure α) : μ otimesₘ (0 : Kernel α β) = 0 := by simp [compProd]
@@ -276,7 +276,7 @@ lemma compProd_eq_zero_iff
 
 中文:
 引理 compProd_eq_zero_iff
-  条件: [SFinite μ] [IsSFiniteKernel κ]
+  条件: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · simp_rw [← measure_univ_eq_zero]
@@ -309,7 +309,7 @@ lemma _root_.ProbabilityTheory.Kernel.compProd_apply_eq_compProd_sectR
   simp_rw [Kernel.compProd_apply hs, compProd_apply hs, Kernel.sectR_apply]
 
 中文:
-引理 _root_.ProbabilityTheory.Kernel.compProd_apply_eq_compProd_sectR
+引理 _root_.ProbabilityTheory.核.compProd_apply_eq_compProd_sectR
   结论: {γ : 类型}
   证明: by
   ext s hs
@@ -342,7 +342,7 @@ lemma compProd_id
 中文:
 引理 compProd_id
   条件: [SFinite μ]
-  结论: μ otimesₘ Kernel.id = μ.map Function.diag
+  结论: μ otimesₘ 核.id = μ.map 函数.diag
   证明: by
   ext s hs
   rw [compProd_apply hs]; rw [map_apply (measurable_id.prod measurable_id) hs]
@@ -395,7 +395,7 @@ lemma ae_ae_of_ae_compProd
 
 中文:
 引理 ae_ae_of_ae_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ] {p : α × β -> 命题}
+  结论: [SFinite μ] [是SFiniteKernel κ] {p : α × β -> 命题}
   证明: by
   convert! Kernel.ae_ae_of_ae_compProd h -- Much faster with `convert`
 
@@ -416,7 +416,7 @@ lemma ae_compProd_iff
 
 中文:
 引理 ae_compProd_iff
-  结论: [SFinite μ] [IsSFiniteKernel κ] {p : α × β -> 命题}
+  结论: [SFinite μ] [是SFiniteKernel κ] {p : α × β -> 命题}
   证明: Kernel.ae_compProd_iff hp
 
 Depends on / 依赖: Kernel, Kernel.ae_compProd_iff, ae_compProd_iff
@@ -436,7 +436,7 @@ lemma ae_compProd_of_ae_fst
 
 中文:
 引理 ae_compProd_of_ae_fst
-  结论: (κ : Kernel α β) {p : α -> 命题} (hp : MeasurableSet {x | p x})
+  结论: (κ : 核 α β) {p : α -> 命题} (hp : 可测集 {x | p x})
   证明: ae_compProd_of_ae_ae (measurable_fst hp) by filter_upwards [h] with a ha using by simp [ha]
 
 Depends on / 依赖: ae_compProd_of_ae_ae, filter_upwards, measurable_fst
@@ -456,7 +456,7 @@ lemma ae_eq_compProd_of_ae_eq_fst
 
 中文:
 引理 ae_eq_compProd_of_ae_eq_fst
-  结论: {γ : 类型} {mγ : MeasurableSpace γ} [MeasurableEq γ]
+  结论: {γ : 类型} {mγ : 可测空间 γ} [MeasurableEq γ]
   证明: ae_compProd_of_ae_fst κ (measurableSet_eq_fun hf hg) h
 
 Depends on / 依赖: ae_compProd_of_ae_fst, measurableSet_eq_fun
@@ -481,7 +481,7 @@ lemma compProd_const
 
 中文:
 引理 compProd_const
-  条件: {ν : Measure β} [SFinite μ] [SFinite ν]
+  条件: {ν : 测度 β} [SFinite μ] [SFinite ν]
   证明: by
   ext s hs
   simp_rw [compProd_apply hs, prod_apply hs, Kernel.const_apply]
@@ -506,7 +506,7 @@ lemma compProd_add_left
 
 中文:
 引理 compProd_add_left
-  条件: (μ ν : Measure α) [SFinite μ] [SFinite ν] (κ : Kernel α β)
+  条件: (μ ν : 测度 α) [SFinite μ] [SFinite ν] (κ : 核 α β)
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   · simp_rw [Measure.compProd, Kernel.const_add, Kernel.compProd_add_left, _root_.add_apply]
@@ -533,7 +533,7 @@ lemma compProd_add_right
 
 中文:
 引理 compProd_add_right
-  结论: (μ : Measure α) (κ η : Kernel α β)
+  结论: (μ : 测度 α) (κ η : 核 α β)
   证明: by
   by_cases hμ : SFinite μ
   · simp_rw [Measure.compProd, Kernel.prodMkLeft_add, Kernel.compProd_add_right, _root_.add_apply]
@@ -560,7 +560,7 @@ lemma compProd_sum_left
 
 中文:
 引理 compProd_sum_left
-  条件: {ι : 类型} [Countable ι] {μ : ι -> Measure α} [对任意 i, SFinite (μ i)]
+  条件: {ι : 类型} [可数 ι] {μ : ι -> 测度 α} [对任意 i, SFinite (μ i)]
   证明: by
   rw [compProd]; rw [← Kernel.sum_const]; rw [Kernel.compProd_sum_left]
   rfl
@@ -586,7 +586,7 @@ lemma compProd_sum_right
 
 中文:
 引理 compProd_sum_right
-  结论: {ι : 类型} [Countable ι] {κ : ι -> Kernel α β}
+  结论: {ι : 类型} [可数 ι] {κ : ι -> 核 α β}
   证明: by
   rw [compProd]; rw [← Kernel.sum_prodMkLeft]; rw [Kernel.compProd_sum_right]
   rfl
@@ -614,7 +614,7 @@ lemma fst_compProd
 
 中文:
 引理 fst_compProd
-  条件: (μ : Measure α) [SFinite μ] (κ : Kernel α β) [IsMarkovKernel κ]
+  条件: (μ : 测度 α) [SFinite μ] (κ : 核 α β) [是MarkovKernel κ]
   证明: by
   ext s
   rw [compProd]; rw [Measure.fst]; rw [← Kernel.fst_apply]; rw [Kernel.fst_compProd]; rw [Kernel.const_apply]
@@ -638,7 +638,7 @@ lemma compProd_smul_left
 
 中文:
 引理 compProd_smul_left
-  条件: (a : 实数>=0∞) [SFinite μ] [IsSFiniteKernel κ]
+  条件: (a : 实数>=0∞) [SFinite μ] [是SFiniteKernel κ]
   证明: by
   ext s hs
   simp only [compProd_apply hs, lintegral_smul_measure, smul_apply, smul_eq_mul]
@@ -664,7 +664,7 @@ lemma lintegral_compProd
 
 中文:
 引理 lintegral_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ]
+  结论: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   rw [compProd]; rw [Kernel.lintegral_compProd _ _ _ hf]
   simp
@@ -688,8 +688,8 @@ lemma setLIntegral_compProd
   simp
 
 中文:
-引理 setLIntegral_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ]
+引理 setL整数egral_compProd
+  结论: [SFinite μ] [是SFiniteKernel κ]
   证明: by
   rw [compProd]; rw [Kernel.setLIntegral_compProd _ _ _ hf hs ht]
   simp
@@ -716,7 +716,7 @@ lemma dirac_compProd_apply
 
 中文:
 引理 dirac_compProd_apply
-  结论: [MeasurableSingletonClass α] {a : α} [IsSFiniteKernel κ]
+  结论: [MeasurableSingleton类 α] {a : α} [是SFiniteKernel κ]
   证明: by
   rw [compProd_apply hs]; rw [lintegral_dirac]
 
@@ -738,7 +738,7 @@ lemma dirac_unit_compProd
 
 中文:
 引理 dirac_unit_compProd
-  条件: (κ : Kernel Unit β) [IsSFiniteKernel κ]
+  条件: (κ : 核 单元 β) [是SFiniteKernel κ]
   证明: by
   ext s hs; rw [dirac_compProd_apply hs, Measure.map_apply measurable_prodMk_left hs]
 
@@ -759,7 +759,7 @@ lemma dirac_unit_compProd_const
 
 中文:
 引理 dirac_unit_compProd_const
-  条件: (μ : Measure β) [SFinite μ]
+  条件: (μ : 测度 β) [SFinite μ]
   证明: by
   rw [dirac_unit_compProd]; rw [Kernel.const_apply]
 
@@ -779,7 +779,7 @@ lemma snd_dirac_unit_compProd_const
 
 中文:
 引理 snd_dirac_unit_compProd_const
-  条件: (μ : Measure β) [SFinite μ]
+  条件: (μ : 测度 β) [SFinite μ]
   证明: by simp
 
 Depends on / 依赖: HasSubst, MvPowerSeries, MvPowerSeries.HasSubst.zero, hasSubst_iff
@@ -814,8 +814,8 @@ instance [IsFiniteMeasure
   rw [compProd]; infer_instance
 
 中文:
-实例 [IsFiniteMeasure
-  签名: μ] [IsFiniteKernel κ] : IsFiniteMeasure (μ otimesₘ κ)
+实例 [是有限测度
+  签名: μ] [是FiniteKernel κ] : 是有限测度 (μ otimesₘ κ)
   定义体: by
   rw [compProd]; infer_instance
 
@@ -834,8 +834,8 @@ instance [IsProbabilityMeasure
   rw [compProd]; infer_instance
 
 中文:
-实例 [IsProbabilityMeasure
-  签名: μ] [IsMarkovKernel κ] : IsProbabilityMeasure (μ otimesₘ κ)
+实例 [是概率测度
+  签名: μ] [是MarkovKernel κ] : 是概率测度 (μ otimesₘ κ)
   定义体: by
   rw [compProd]; infer_instance
 
@@ -855,8 +855,8 @@ instance [IsZeroOrProbabilityMeasure
   exact IsZeroOrMarkovKernel.isZeroOrProbabilityMeasure ()
 
 中文:
-实例 [IsZeroOrProbabilityMeasure
-  签名: μ] [IsZeroOrMarkovKernel κ] :
+实例 [是ZeroOrProbabilityMeasure
+  签名: μ] [是ZeroOrMarkovKernel κ] :
   定义体: by
   rw [compProd]
   exact IsZeroOrMarkovKernel.isZeroOrProbabilityMeasure ()
@@ -889,7 +889,7 @@ lemma compProd_assoc
 
 中文:
 引理 compProd_assoc
-  条件: {γ : 类型} {mγ : MeasurableSpace γ} {η : Kernel (α × β) γ}
+  条件: {γ : 类型} {mγ : 可测空间 γ} {η : 核 (α × β) γ}
   证明: by
   by_cases hμ : SFinite μ
   swap; · simp [hμ]
@@ -932,7 +932,7 @@ lemma compProd_assoc'
 
 中文:
 引理 compProd_assoc'
-  条件: {γ : 类型} {mγ : MeasurableSpace γ} {η : Kernel (α × β) γ}
+  条件: {γ : 类型} {mγ : 可测空间 γ} {η : 核 (α × β) γ}
   证明: by
   simp [← Measure.compProd_assoc]
 
@@ -960,7 +960,7 @@ lemma AbsolutelyContinuous.compProd_left
 
 中文:
 引理 AbsolutelyContinuous.compProd_left
-  条件: [SFinite ν] (hμν : μ ≪ ν) (κ : Kernel α β)
+  条件: [SFinite ν] (hμν : μ ≪ ν) (κ : 核 α β)
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   · have : SFinite μ := sFinite_of_absolutelyContinuous hμν
@@ -996,7 +996,7 @@ lemma AbsolutelyContinuous.compProd_right
 
 中文:
 引理 AbsolutelyContinuous.compProd_right
-  结论: [SFinite μ] [IsSFiniteKernel η]
+  结论: [SFinite μ] [是SFiniteKernel η]
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   · refine Measure.AbsolutelyContinuous.mk fun s hs hs_zero => ?_
@@ -1027,7 +1027,7 @@ lemma AbsolutelyContinuous.compProd
 
 中文:
 引理 AbsolutelyContinuous.compProd
-  结论: [SFinite ν] [IsSFiniteKernel η]
+  结论: [SFinite ν] [是SFiniteKernel η]
   证明: have : SFinite μ := sFinite_of_absolutelyContinuous hμν
   (Measure.AbsolutelyContinuous.compProd_right hκη).trans (hμν.compProd_left _)
 
@@ -1056,7 +1056,7 @@ lemma absolutelyContinuous_of_compProd
 
 中文:
 引理 absolutelyContinuous_of_compProd
-  结论: [SFinite μ] [IsSFiniteKernel κ] [h_zero : 对任意 a, NeZero (κ a)]
+  结论: [SFinite μ] [是SFiniteKernel κ] [h_zero : 对任意 a, NeZero (κ a)]
   证明: by
   refine Measure.AbsolutelyContinuous.mk (fun s hs hs0 => ?_)
   have h1 : (ν otimesₘ η) (s ×ˢ univ) = 0 := by
@@ -1125,7 +1125,7 @@ lemma AbsolutelyContinuous.compProd_of_compProd
 
 中文:
 引理 AbsolutelyContinuous.compProd_of_compProd
-  结论: [SFinite ν] [IsSFiniteKernel η]
+  结论: [SFinite ν] [是SFiniteKernel η]
   证明: by
   by_cases hμ : SFinite μ
   swap; · rw [compProd_of_not_sfinite _ _ hμ]; simp
@@ -1167,8 +1167,8 @@ lemma MutuallySingular.compProd_of_left
   swap; · rw 
 
 中文:
-引理 MutuallySingular.compProd_of_left
-  条件: (hμν : μ ⟂ₘ ν) (κ η : Kernel α β)
+引理 互奇异.compProd_of_left
+  条件: (hμν : μ ⟂ₘ ν) (κ η : 核 α β)
   证明: by
   by_cases hμ : SFinite μ
   swap; · rw [compProd_of_not_sfinite _ _ hμ]; simp
@@ -1213,7 +1213,7 @@ lemma mutuallySingular_of_mutuallySingular_compProd
 
 中文:
 引理 mutuallySingular_of_mutuallySingular_compProd
-  结论: {ξ : Measure α}
+  结论: {ξ : 测度 α}
   证明: by
   have hs : MeasurableSet h.nullSet := h.measurableSet_nullSet
   have hμ_zero : (μ otimesₘ κ) h.nullSet = 0 := h.measure_nullSet
@@ -1255,7 +1255,7 @@ lemma mutuallySingular_compProd_left_iff
 
 中文:
 引理 mutuallySingular_compProd_left_iff
-  结论: [SFinite μ] [SigmaFinite ν]
+  结论: [SFinite μ] [σ有限 ν]
   证明: by
   refine ⟨fun h => ?_, fun h => h.compProd_of_left _ _⟩
   rw [← withDensity_rnDeriv_eq_zero]
@@ -1295,7 +1295,7 @@ lemma AbsolutelyContinuous.mutuallySingular_compProd_iff
 
 中文:
 引理 AbsolutelyContinuous.mutuallySingular_compProd_iff
-  结论: [SigmaFinite μ] [SigmaFinite ν]
+  结论: [σ有限 μ] [σ有限 ν]
   证明: by
   conv_lhs => rw [ν.haveLebesgueDecomposition_add μ]
   rw [compProd_add_left]; rw [MutuallySingular.add_right_iff]
@@ -1330,7 +1330,7 @@ lemma mutuallySingular_compProd_iff
 
 中文:
 引理 mutuallySingular_compProd_iff
-  条件: [SigmaFinite μ] [SigmaFinite ν]
+  条件: [σ有限 μ] [σ有限 ν]
   证明: by
   conv_lhs => rw [μ.haveLebesgueDecomposition_add ν]
   rw [compProd_add_left]; rw [MutuallySingular.add_left_iff]
@@ -1371,7 +1371,7 @@ lemma absolutelyContinuous_compProd_of_compProd
 
 中文:
 引理 absolutelyContinuous_compProd_of_compProd
-  结论: [SigmaFinite μ] [SigmaFinite ν]
+  结论: [σ有限 μ] [σ有限 ν]
   证明: by
   rw [ν.haveLebesgueDecomposition_add μ]; rw [compProd_add_left]; rw [add_comm] at hκη
   have h := absolutelyContinuous_of_add_of_mutuallySingular hκη

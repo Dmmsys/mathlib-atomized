@@ -38,14 +38,14 @@ structure TopCommRingCat
     - [isTopologicalRing : IsTopologicalRing α]
 
 中文:
-结构 TopCommRingCat
+结构 TopComm环范畴
   参数: where
   公理与运算 (5 个):
     - of : :
     - α : 类型u
-    - [isCommRing : CommRing α]
-    - [isTopologicalSpace : TopologicalSpace α]
-    - [isTopologicalRing : IsTopologicalRing α]
+    - [isCommRing : 交换环 α]
+    - [isTopologicalSpace : 拓扑空间 α]
+    - [isTopologicalRing : 是拓扑环 α]
 -/
 structure TopCommRingCat where
   /-- Construct a bundled `TopCommRingCat` from the underlying type and the appropriate typeclasses.
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited TopCommRingCat
+  签名: 可居 TopComm环范畴
   定义体: ⟨⟨PUnit⟩⟩
 -/
 instance : Inhabited TopCommRingCat :=
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort TopCommRingCat (类型u)
+  签名: CoeSort TopComm环范畴 (类型u)
   定义体: ⟨TopCommRingCat.α⟩
 
 Depends on / 依赖: TopCommRingCat
@@ -124,7 +124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category TopCommRingCat.{u}
+  签名: 范畴 TopComm环范畴.{u}
   定义体: { f : R ->+* S // Continuous f }
   id R := ⟨RingHom.id R, by rw [RingHom.id]; dsimp; fun_prop⟩
   comp f g :=
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory TopCommRingCat.{u} fun R S => { f : R ->+* S // Continuous f }
+  签名: 余ncrete范畴 TopComm环范畴.{u} fun R S => { f : R ->+* S // 连续 f }
   定义体: f
   ofHom f := f
 -/
@@ -181,7 +181,7 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (X : 类型u) [CommRing X] [TopologicalSpace X] [IsTopologicalRing X]
+  条件: (X : 类型u) [交换环 X] [拓扑空间 X] [是拓扑环 X]
   证明: rfl
 -/
 theorem coe_of (X : Type u) [CommRing X] [TopologicalSpace X] [IsTopologicalRing X] :
@@ -198,7 +198,7 @@ instance hasForgetToCommRingCat
 
 中文:
 实例 hasForgetToCommRingCat
-  签名: : HasForget₂ TopCommRingCat CommRingCat
+  签名: : 有Forget₂ TopComm环范畴 交换环范畴
   定义体: HasForget₂.mk' (fun R => CommRingCat.of R) (fun _ => rfl)
     (fun f => CommRingCat.ofHom f.val) HEq.rfl
 
@@ -218,7 +218,7 @@ instance forgetToCommRingCatTopologicalSpace
 
 中文:
 实例 forgetToCommRingCatTopologicalSpace
-  签名: (R : TopCommRingCat)
+  签名: (R : TopComm环范畴)
   定义体: R.isTopologicalSpace
 
 Depends on / 依赖: R.isTopologicalSpace, isTopologicalSpace
@@ -237,7 +237,7 @@ instance hasForgetToTopCat
 
 中文:
 实例 hasForgetToTopCat
-  签名: : HasForget₂ TopCommRingCat TopCat
+  签名: : 有Forget₂ TopComm环范畴 顶元素范畴
   定义体: HasForget₂.mk' (fun R => TopCat.of R) (fun _ => rfl) (fun f => TopCat.ofHom ⟨⇑f.1, f.2⟩) HEq.rfl
 
 Depends on / 依赖: HEq.rfl, TopCat, TopCat.of, TopCat.ofHom
@@ -255,7 +255,7 @@ instance forgetToTopCatCommRing
 
 中文:
 实例 forgetToTopCatCommRing
-  签名: (R : TopCommRingCat)
+  签名: (R : TopComm环范畴)
   定义体: R.isCommRing
 
 Depends on / 依赖: R.isCommRing, isCommRing
@@ -274,7 +274,7 @@ instance forgetToTopCatTopologicalRing
 
 中文:
 实例 forgetToTopCatTopologicalRing
-  签名: (R : TopCommRingCat)
+  签名: (R : TopComm环范畴)
   定义体: R.isTopologicalRing
 
 Depends on / 依赖: R.isTopologicalRing, isTopologicalRing
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ TopCommRingCat.{u} TopCat.{u}).ReflectsIsomorphisms
+  签名: (forget₂ TopComm环范畴.{u} 顶元素范畴.{u}).反映同构
   定义体: by
     -- We have an isomorphism in `TopCat`,
     let i_Top := asIso ((forget₂ TopCommRingCat TopCat).map f)

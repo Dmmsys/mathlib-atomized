@@ -36,8 +36,8 @@ definition inf
 termination_by wellFounded_lt.wrap i
 
 中文:
-定义 inf
-  签名: [WellFoundedLT ι] (s : Set (Πₗ i, α i)) (i : ι)
+定义 下确界
+  签名: [WellFoundedLT ι] (s : 集合 (Πₗ i, α i)) (i : ι)
   定义体: ⨅ e : {e in s | forall j < i, e j = inf s j}, e.1 i
 termination_by wellFounded_lt.wrap i
 -/
@@ -58,7 +58,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Πₗ i, α i)
+  签名: 下确界集 (Πₗ i, α i)
   定义体: toLex (inf s)
 -/
 instance : InfSet (Πₗ i, α i) where
@@ -75,7 +75,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: (s : Set (Πₗ i, α i)) (i : ι)
+  条件: (s : 集合 (Πₗ i, α i)) (i : ι)
   证明: by
   simp [sInf, inf]
 -/
@@ -95,7 +95,7 @@ theorem sInf_apply_le
 
 中文:
 定理 sInf_apply_le
-  结论: {s : Set (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
+  结论: {s : 集合 (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
   证明: by
   rw [sInf_apply]
   exact sInf_le ⟨⟨e, he, h⟩, rfl⟩
@@ -120,7 +120,7 @@ theorem le_sInf_apply
 
 中文:
 定理 le_sInf_apply
-  结论: {s : Set (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
+  结论: {s : 集合 (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
   证明: by
   rw [sInf_apply]
   apply le_sInf
@@ -153,7 +153,7 @@ refine ha.2.not_ge le_sInf_apply fun f hf hf' => apply_le_of_toLex (h hf) ?_
 
 中文:
 定理 isGLB_sInf
-  条件: {s : Set (Πₗ i, α i)}
+  条件: {s : 集合 (Πₗ i, α i)}
   结论: IsGLB s (sInf s)
   证明: by
   refine ⟨fun e he => ?_, fun e h => ?_⟩
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Πₗ i, α i)
+  签名: 上确界集 (Πₗ i, α i)
   定义体: sInf (α := Πₗ i, (α i)ᵒᵈ) s
 -/
 instance : SupSet (Πₗ i, α i) where
@@ -204,7 +204,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: (s : Set (Πₗ i, α i)) (i : ι)
+  条件: (s : 集合 (Πₗ i, α i)) (i : ι)
   证明: sInf_apply (α := fun i => (α i)ᵒᵈ) ..
 
 Depends on / 依赖: sInf_apply
@@ -223,7 +223,7 @@ theorem le_sSup_apply
 
 中文:
 定理 le_sSup_apply
-  结论: {s : Set (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
+  结论: {s : 集合 (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
   证明: sInf_apply_le (α := fun i => (α i)ᵒᵈ) he h
 
 Depends on / 依赖: sInf_apply_le
@@ -242,7 +242,7 @@ theorem sSup_apply_le
 
 中文:
 定理 sSup_apply_le
-  结论: {s : Set (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
+  结论: {s : 集合 (Πₗ i, α i)} {i : ι} {e : Πₗ i, α i}
   证明: le_sInf_apply (α := fun i => (α i)ᵒᵈ) h
 
 Depends on / 依赖: le_sInf_apply
@@ -270,7 +270,7 @@ refine ha.2.not_ge sSup_apply_le fun f hf hf' => apply_le_of_toLex (h hf) ?_
 
 中文:
 定理 isLUB_sSup
-  条件: {s : Set (Πₗ i, α i)}
+  条件: {s : 集合 (Πₗ i, α i)}
   结论: IsLUB s (sSup s)
   证明: by
   refine ⟨fun e he => ?_, fun e h => ?_⟩
@@ -303,7 +303,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (Πₗ i, α i) where
+  签名: : 完备格 (Πₗ i, α i) where
   定义体: by exact isLUB_sSup
   isGLB_sInf _ := by exact isGLB_sInf
 
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder (Πₗ i, α i)
+  签名: 完备线性序 (Πₗ i, α i)
   定义体: linearOrder
   __ := completeLattice
   __ := LinearOrder.toBiheytingAlgebra _
@@ -356,7 +356,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (Colex ((i : ι) -> α i))
+  签名: 下确界集 (Colex ((i : ι) -> α i))
   定义体: sInf (α := Πₗ i : ιᵒᵈ, α i) s
 -/
 instance : InfSet (Colex ((i : ι) -> α i)) where
@@ -373,7 +373,7 @@ theorem sInf_apply
 
 中文:
 定理 sInf_apply
-  条件: (s : Set (Colex ((i : ι) -> α i))) (i : ι)
+  条件: (s : 集合 (Colex ((i : ι) -> α i))) (i : ι)
   证明: Lex.sInf_apply (ι := ιᵒᵈ) s i
 
 Depends on / 依赖: Lex.sInf_apply, sInf_apply
@@ -393,7 +393,7 @@ theorem sInf_apply_le
 
 中文:
 定理 sInf_apply_le
-  结论: {s : Set (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
+  结论: {s : 集合 (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
   证明: Lex.sInf_apply_le (ι := ιᵒᵈ) he h
 
 Depends on / 依赖: Lex.sInf_apply_le, sInf_apply_le
@@ -413,7 +413,7 @@ theorem le_sInf_apply
 
 中文:
 定理 le_sInf_apply
-  结论: {s : Set (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
+  结论: {s : 集合 (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
   证明: Lex.le_sInf_apply (ι := ιᵒᵈ) h
 
 Depends on / 依赖: Lex.le_sInf_apply, le_sInf_apply
@@ -436,7 +436,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (Colex ((i : ι) -> α i))
+  签名: 上确界集 (Colex ((i : ι) -> α i))
   定义体: sSup (α := Πₗ i : ιᵒᵈ, α i) s
 -/
 instance : SupSet (Colex ((i : ι) -> α i)) where
@@ -453,7 +453,7 @@ theorem sSup_apply
 
 中文:
 定理 sSup_apply
-  条件: (s : Set (Colex ((i : ι) -> α i))) (i : ι)
+  条件: (s : 集合 (Colex ((i : ι) -> α i))) (i : ι)
   证明: Lex.sSup_apply (ι := ιᵒᵈ) s i
 
 Depends on / 依赖: Lex.sSup_apply, sSup_apply
@@ -473,7 +473,7 @@ theorem le_sSup_apply
 
 中文:
 定理 le_sSup_apply
-  结论: {s : Set (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
+  结论: {s : 集合 (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
   证明: Lex.le_sSup_apply (ι := ιᵒᵈ) he h
 
 Depends on / 依赖: Lex.le_sSup_apply, le_sSup_apply
@@ -493,7 +493,7 @@ theorem sSup_apply_le
 
 中文:
 定理 sSup_apply_le
-  结论: {s : Set (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
+  结论: {s : 集合 (Colex ((i : ι) -> α i))} {i : ι} {e : Colex ((i : ι) -> α i)}
   证明: Lex.sSup_apply_le (ι := ιᵒᵈ) h
 
 Depends on / 依赖: Lex.sSup_apply_le, sSup_apply_le
@@ -514,7 +514,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (Colex ((i : ι) -> α i)) where
+  签名: : 完备格 (Colex ((i : ι) -> α i)) where
   定义体: by exact Lex.isLUB_sSup (ι := ιᵒᵈ)
   isGLB_sInf _ := by exact Lex.isGLB_sInf (ι := ιᵒᵈ)
 
@@ -536,7 +536,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder (Colex ((i : ι) -> α i))
+  签名: 完备线性序 (Colex ((i : ι) -> α i))
   定义体: linearOrder
   __ := completeLattice
   __ := LinearOrder.toBiheytingAlgebra _

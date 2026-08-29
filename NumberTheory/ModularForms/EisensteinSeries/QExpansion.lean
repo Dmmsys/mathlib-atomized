@@ -66,7 +66,7 @@ lemma iteratedDerivWithin_cexp_aux
 
 中文:
 引理 iteratedDerivWithin_cexp_aux
-  条件: (k m : 自然数) (p : 实数) {S : Set Complex} (hs : IsOpen S)
+  条件: (k m : 自然数) (p : 实数) {S : 集合 复形} (hs : 是开集 S)
   证明: by
   apply EqOn.trans (iteratedDerivWithin_of_isOpen hs)
   intro x hx
@@ -103,7 +103,7 @@ lemma aux_IsBigO_mul
 
 中文:
 引理 aux_IsBigO_mul
-  结论: (k l : 自然数) (p : 实数) {f : 自然数 -> Complex}
+  结论: (k l : 自然数) (p : 实数) {f : 自然数 -> 复形}
   证明: by
   have h0 : (fun n : Nat => (2 * π * I * n / p) ^ k) =O[atTop] fun n => ((n ^ k) : Real) := by
     have h1 : (fun n : Nat => (2 * π * I * n / p) ^ k) =
@@ -142,7 +142,7 @@ theorem summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
 
 中文:
 定理 summableLocallyUniformlyOn_iteratedDerivWithin_smul_cexp
-  结论: (k l : 自然数) {f : 自然数 -> Complex} {p : 实数}
+  结论: (k l : 自然数) {f : 自然数 -> 复形} {p : 实数}
   证明: by
   apply SummableLocallyUniformlyOn_of_locally_bounded isOpen_upperHalfPlaneSet
   intro K hK hKc
@@ -226,7 +226,7 @@ lemma differentiableAt_iteratedDerivWithin_cexp
 
 中文:
 引理 differentiableAt_iteratedDerivWithin_cexp
-  结论: (n a : 自然数) {s : Set Complex} (hs : IsOpen s)
+  结论: (n a : 自然数) {s : 集合 复形} (hs : 是开集 s)
   证明: by
   apply DifferentiableOn.differentiableAt _ (hs.mem_nhds hr)
   suffices DifferentiableOn Complex (iteratedDeriv a (fun z => cexp (2 * π * I * z) ^ n)) s by
@@ -558,7 +558,7 @@ lemma eisSummand_of_gammaSet_eq_divIntMap
   simp [← mul_inv, ← mul_zpow, mul_add, mul_assoc]
 
 中文:
-引理 eisSummand_of_gammaSet_eq_divIntMap
+引理 eisSummand_of_gammaSet_eq_div整数Map
   条件: (k : 整数) (z : ℍ) {n : 自然数} (v : gammaSet 1 n 0)
   证明: by
   simp_rw [eisSummand]

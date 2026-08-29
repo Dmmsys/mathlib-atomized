@@ -35,8 +35,8 @@ definition AddUnits.mulLeft
   neg_val := by simp [← mul_add]
 
 中文:
-定义 AddUnits.mulLeft
-  签名: : AddUnits R where
+定义 加法单位群.mulLeft
+  签名: : 加法单位群 R where
   定义体: y * x.val
   neg := y * x.neg
   val_neg := by simp [← mul_add]
@@ -60,8 +60,8 @@ definition AddUnits.mulRight
   neg_val := by simp [← add_mul]
 
 中文:
-定义 AddUnits.mulRight
-  签名: : AddUnits R where
+定义 加法单位群.mulRight
+  签名: : 加法单位群 R where
   定义体: x.val * y
   neg := x.neg * y
   val_neg := by simp [← add_mul]
@@ -86,7 +86,7 @@ theorem AddUnits.neg_mulLeft
   proof: rfl
 
 中文:
-定理 AddUnits.neg_mulLeft
+定理 加法单位群.neg_mulLeft
   结论: -(x.mulLeft y) = (-x).mulLeft y
   证明: rfl
 -/
@@ -100,7 +100,7 @@ theorem AddUnits.neg_mulRight
   proof: rfl
 
 中文:
-定理 AddUnits.neg_mulRight
+定理 加法单位群.neg_mulRight
   结论: -(x.mulRight y) = (-x).mulRight y
   证明: rfl
 -/
@@ -119,8 +119,8 @@ theorem AddUnits.neg_mul_eq_mul_neg
   simp [← mul_add]
 
 中文:
-定理 AddUnits.neg_mul_eq_mul_neg
-  条件: {x y : AddUnits R}
+定理 加法单位群.neg_mul_eq_mul_neg
+  条件: {x y : 加法单位群 R}
   结论: (↑(-x) * y : R) = x * ↑(-y)
   证明: by
   rw [← neg_eq_val_neg]; rw [← val_neg_mulRight]
@@ -147,8 +147,8 @@ theorem AddUnits.neg_mul_neg
   simp [neg_mul_eq_mul_neg]
 
 中文:
-定理 AddUnits.neg_mul_neg
-  条件: {x y : AddUnits R}
+定理 加法单位群.neg_mul_neg
+  条件: {x y : 加法单位群 R}
   结论: ↑(-x) * ↑(-y) = (x * y : R)
   证明: by
   rw [← val_mulLeft]; rw [← val_mulLeft]; rw [← AddUnits.ext_iff]; rw [← neg_inj]; rw [← y.neg_mulLeft]; rw [neg_neg]
@@ -218,7 +218,7 @@ definition invertibleNeg
 
 中文:
 定义 invertibleNeg
-  签名: [Mul R] [One R] [HasDistribNeg R] (a : R) [Invertible a]
+  签名: [乘法 R] [幺 R] [有DistribNeg R] (a : R) [可逆 a]
   定义体: ⟨-⅟a, by simp, by simp⟩
 
 @[simp]
@@ -239,7 +239,7 @@ theorem invOf_neg
 
 中文:
 定理 invOf_neg
-  条件: [Monoid R] [HasDistribNeg R] (a : R) [Invertible a] [Invertible (-a)]
+  条件: [幺半群 R] [有DistribNeg R] (a : R) [可逆 a] [可逆 (-a)]
   证明: invOf_eq_right_inv (by simp)
 
 @[simp]
@@ -265,7 +265,7 @@ theorem one_sub_invOf_two
 
 中文:
 定理 one_sub_invOf_two
-  条件: [Ring R] [Invertible (2 : R)]
+  条件: [环 R] [可逆 (2 : R)]
   结论: 1 - (⅟2 : R) = ⅟2
   证明: (isUnit_of_invertible (2 : R)).mul_right_inj.1 by
     rw [mul_sub]; rw [mul_invOf_self]; rw [mul_one]; rw [← one_add_one_eq_two]; rw [add_sub_cancel_right]
@@ -289,7 +289,7 @@ theorem invOf_two_add_invOf_two
 
 中文:
 定理 invOf_two_add_invOf_two
-  条件: [NonAssocSemiring R] [Invertible (2 : R)]
+  条件: [非结合半环 R] [可逆 (2 : R)]
   证明: by rw [← two_mul, mul_invOf_self]
 
 Depends on / 依赖: mul_invOf_self, two_mul
@@ -307,7 +307,7 @@ theorem pos_of_invertible_cast
 
 中文:
 定理 pos_of_invertible_cast
-  条件: [NonAssocSemiring R] [Nontrivial R] (n : 自然数) [Invertible (n : R)]
+  条件: [非结合半环 R] [非平凡 R] (n : 自然数) [可逆 (n : R)]
   证明: Nat.zero_lt_of_ne_zero fun h => Invertible.ne_zero (n : R) (h ▸ Nat.cast_zero)
 
 Depends on / 依赖: Invertible, Invertible.ne_zero, Nat.cast_zero, Nat.zero_lt_of_ne_zero, cast_zero, ne_zero, zero_lt_of_ne_zero
@@ -327,7 +327,7 @@ theorem invOf_add_invOf
 
 中文:
 定理 invOf_add_invOf
-  条件: [Semiring R] (a b : R) [Invertible a] [Invertible b]
+  条件: [半环 R] (a b : R) [可逆 a] [可逆 b]
   证明: by
   rw [mul_add]; rw [invOf_mul_self]; rw [add_mul]; rw [one_mul]; rw [mul_assoc]; rw [mul_invOf_self]; rw [mul_one]; rw [add_comm]
 
@@ -348,7 +348,7 @@ theorem invOf_sub_invOf
 
 中文:
 定理 invOf_sub_invOf
-  条件: [Ring R] (a b : R) [Invertible a] [Invertible b]
+  条件: [环 R] (a b : R) [可逆 a] [可逆 b]
   证明: by
   rw [mul_sub]; rw [invOf_mul_self]; rw [sub_mul]; rw [one_mul]; rw [mul_assoc]; rw [mul_invOf_self]; rw [mul_one]
 
@@ -372,7 +372,7 @@ lemma neg_add_eq_mul_invOf_mul_same_iff
 
 中文:
 引理 neg_add_eq_mul_invOf_mul_same_iff
-  条件: [Ring R] {a b : R} [Invertible a] [Invertible b]
+  条件: [环 R] {a b : R} [可逆 a] [可逆 b]
   证明: calc -(b + a) = a * ⅟b * a
       ↔ -a = b + a * ⅟b * a := ⟨by grind, fun h => by simp [h]⟩
     _ ↔ -a = a * ⅟a * b + a * ⅟b * a := by rw [mul_invOf_self, one_mul]
@@ -403,7 +403,7 @@ lemma neg_one_eq_invOf_mul_add_invOf_mul_iff
 
 中文:
 引理 neg_one_eq_invOf_mul_add_invOf_mul_iff
-  结论: [Ring R] {a b : R} [Invertible a]
+  结论: [环 R] {a b : R} [可逆 a]
   证明: by
   calc ⅟(a + b) = ⅟a + ⅟b
       ↔ ⅟(a + b) * (a + b) = (⅟a + ⅟b) * (a + b) := by rw [mul_left_inj_of_invertible]
@@ -440,7 +440,7 @@ theorem eq_of_invOf_add_eq_invOf_add_invOf
 
 中文:
 定理 eq_of_invOf_add_eq_invOf_add_invOf
-  结论: [Ring R] {a b : R} [Invertible a] [Invertible b]
+  结论: [环 R] {a b : R} [可逆 a] [可逆 b]
   证明: by
   have h' := neg_one_eq_invOf_mul_add_invOf_mul_iff.mp h
   have h_a_binv_a : -(b + a) = a * ⅟b * a := neg_add_eq_mul_invOf_mul_same_iff.mpr h'
@@ -477,8 +477,8 @@ theorem Ring.inverse_add_inverse
     simp [inverse_non_unit, ha, hb]
 
 中文:
-定理 Ring.inverse_add_inverse
-  条件: [Semiring R] {a b : R} (h : IsUnit a ↔ IsUnit b)
+定理 环.inverse_add_inverse
+  条件: [半环 R] {a b : R} (h : 是单位 a ↔ 是单位 b)
   证明: by
   by_cases ha : IsUnit a
   · have hb := h.mp ha
@@ -516,8 +516,8 @@ theorem Ring.inverse_sub_inverse
     simp [inverse_non_unit, ha, hb]
 
 中文:
-定理 Ring.inverse_sub_inverse
-  条件: [Ring R] {a b : R} (h : IsUnit a ↔ IsUnit b)
+定理 环.inverse_sub_inverse
+  条件: [环 R] {a b : R} (h : 是单位 a ↔ 是单位 b)
   证明: by
   by_cases ha : IsUnit a
   · have hb := h.mp ha

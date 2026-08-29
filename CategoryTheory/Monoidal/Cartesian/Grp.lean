@@ -48,7 +48,7 @@ definition GrpObj.ofRepresentableBy
 
 中文:
 定义 GrpObj.ofRepresentableBy
-  签名: (F : Cᵒᵖ ⥤ GrpCat.{w}) (α : (F ⋙ forget _).RepresentableBy X)
+  签名: (F : Cᵒᵖ ⥤ 群范畴.{w}) (α : (F ⋙ forget _).可表示 X)
   定义体: MonObj.ofRepresentableBy X (F ⋙ forget₂ GrpCat MonCat) α
   inv := α.homEquiv'.symm (α.homEquiv (𝟙 _))⁻¹
   left_inv := by
@@ -101,8 +101,8 @@ scoped[CategoryTheory.AddMonObj] attribute [instance] Hom.addGroup
 @[to_additive]
 
 中文:
-缩写 Hom.group
-  签名: : Group (X ⟶ G) where
+缩写 态射.group
+  签名: : 群 (X ⟶ G) where
   定义体: f ≫ ι
   inv_mul_cancel f := calc
     lift (f ≫ ι) f ≫ μ
@@ -135,7 +135,7 @@ lemma Hom.inv_def
   proof: rfl
 
 中文:
-引理 Hom.inv_def
+引理 态射.inv_def
   条件: (f : X ⟶ G)
   结论: f⁻¹ = f ≫ ι
   证明: rfl
@@ -157,7 +157,7 @@ definition yonedaGrpObj
 
 中文:
 定义 yonedaGrpObj
-  签名: : Cᵒᵖ ⥤ GrpCat.{v} where
+  签名: : Cᵒᵖ ⥤ 群范畴.{v} where
   定义体: GrpCat.of (unop X ⟶ G)
   map φ := GrpCat.ofHom ((yonedaMonObj G).map φ).hom
 
@@ -182,7 +182,7 @@ definition yonedaGrpObjRepresentableBy
 
 中文:
 定义 yonedaGrpObjRepresentableBy
-  签名: : (yonedaGrpObj G ⋙ forget _).RepresentableBy G
+  签名: : (yonedaGrpObj G ⋙ forget _).可表示 G
   定义体: Functor.representableByEquiv.symm (.refl _)
 
 Depends on / 依赖: Functor, Functor.representableByEquiv.symm, representableByEquiv
@@ -241,7 +241,7 @@ fun φ => G
 
 中文:
 定义 yonedaGrpObjIsoOfRepresentableBy
-  签名: (F : Cᵒᵖ ⥤ GrpCat.{v}) (α : (F ⋙ forget _).RepresentableBy X)
+  签名: (F : Cᵒᵖ ⥤ 群范畴.{v}) (α : (F ⋙ forget _).可表示 X)
   定义体: GrpObj.ofRepresentableBy X F α
     yonedaGrpObj X ≅ F :=
   letI := GrpObj.ofRepresentableBy X F α
@@ -281,7 +281,7 @@ definition yonedaGrp
 
 中文:
 定义 yonedaGrp
-  签名: : Grp C ⥤ Cᵒᵖ ⥤ GrpCat.{v} where
+  签名: : 群 C ⥤ Cᵒᵖ ⥤ 群范畴.{v} where
   定义体: yonedaGrpObj G.X
   map {G H} ψ := { app Y := GrpCat.ofHom ((yonedaMon.map ψ.hom).app Y).hom }
 
@@ -333,7 +333,7 @@ definition yonedaGrpFullyFaithful
 
 中文:
 定义 yonedaGrpFullyFaithful
-  签名: : yonedaGrp (C := C).FullyFaithful where
+  签名: : yonedaGrp (C := C).满忠实 where
   定义体: Grp.homMk' (yonedaMonFullyFaithful.preimage ((Functor.whiskerRight α (forget₂ GrpCat MonCat))))
   map_preimage {G H} α := by
     ext X : 3
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: yonedaGrp (C := C).Full
+  签名: yonedaGrp (C := C).满
   定义体: yonedaGrpFullyFaithful.full
 @[to_additive]
 
@@ -387,7 +387,7 @@ instance :
 
 中文:
 实例 :
-  签名: yonedaGrp (C := C).Faithful
+  签名: yonedaGrp (C := C).忠实
   定义体: yonedaGrpFullyFaithful.faithful
 
 @[to_additive]
@@ -453,7 +453,7 @@ lemma GrpObj.inv_comp
 
 中文:
 引理 GrpObj.inv_comp
-  条件: (f : X ⟶ G) (g : G ⟶ H) [IsMonHom g]
+  条件: (f : X ⟶ G) (g : G ⟶ H) [是幺半群态射 g]
   结论: f⁻¹ ≫ g = (f ≫ g)⁻¹
   证明: by
   simp [Hom.inv_def]
@@ -478,7 +478,7 @@ lemma GrpObj.div_comp
 
 中文:
 引理 GrpObj.div_comp
-  条件: (f g : X ⟶ G) (h : G ⟶ H) [IsMonHom h]
+  条件: (f g : X ⟶ G) (h : G ⟶ H) [是幺半群态射 h]
   证明: ((yonedaGrp.map (Grp.homMk (A := .mk G) (B := .mk H) h)).app (op X)).hom.map_div f g
 
 @[to_additive (attr := reassoc)]
@@ -502,7 +502,7 @@ lemma GrpObj.zpow_comp
 
 中文:
 引理 GrpObj.zpow_comp
-  条件: (f : X ⟶ G) (n : 整数) (g : G ⟶ H) [IsMonHom g]
+  条件: (f : X ⟶ G) (n : 整数) (g : G ⟶ H) [是幺半群态射 g]
   证明: ((yonedaGrp.map (Grp.homMk (A := .mk G) (B := .mk H) g)).app (op X)).hom.map_zpow f n
 
 @[to_additive (attr := reassoc)]
@@ -636,8 +636,8 @@ lemma Functor.map_inv'
   rw [eq_inv_iff_mul_eq_one]; rw [← Functor.map_mul]; rw [inv_mul_cancel]; rw [Functor.map_one]
 
 中文:
-引理 Functor.map_inv'
-  结论: {D : 类型} [Category* D] [CartesianMonoidalCategory D] (F : C ⥤ D)
+引理 函子.map_inv'
+  结论: {D : 类型} [范畴* D] [CartesianMonoidal范畴 D] (F : C ⥤ D)
   证明: by
   rw [eq_inv_iff_mul_eq_one]; rw [← Functor.map_mul]; rw [inv_mul_cancel]; rw [Functor.map_one]
 
@@ -809,8 +809,8 @@ instance [IsCommMonObj
   mul_hom := by simp [GrpObj.mul_inv_rev]
 
 中文:
-实例 [IsCommMonObj
-  签名: G] : IsMonHom ι[G] where
+实例 [是交换MonObj
+  签名: G] : 是幺半群态射 ι[G] where
   定义体: by simp [one_eq_one, ← Hom.inv_def]
   mul_hom := by simp [GrpObj.mul_inv_rev]
 
@@ -830,7 +830,7 @@ instance [IsCommMonObj
   signature: G] {f
 
 中文:
-实例 [IsCommMonObj
+实例 [是交换MonObj
   签名: G] {f
 -/
 instance [IsCommMonObj G] {f : M ⟶ G} [IsMonHom f] : IsMonHom f⁻¹ where
@@ -877,7 +877,7 @@ lemma hom_one
 
 中文:
 引理 hom_one
-  条件: (H : Grp C) [IsCommMonObj H.X]
+  条件: (H : 群 C) [是交换MonObj H.X]
   结论: η[H].hom.hom = η[H.X]
   证明: rfl
 @[to_additive (attr := simp)]
@@ -895,7 +895,7 @@ lemma hom_mul
 
 中文:
 引理 hom_mul
-  条件: (H : Grp C) [IsCommMonObj H.X]
+  条件: (H : 群 C) [是交换MonObj H.X]
   结论: μ[H].hom.hom = μ[H.X]
   证明: rfl
 -/
@@ -1066,7 +1066,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCommMonObj H
+  签名: 是交换MonObj H
 -/
 instance : IsCommMonObj H where
 
@@ -1079,7 +1079,7 @@ instance [IsCommMonObj
   signature: G.X] (f
 
 中文:
-实例 [IsCommMonObj
+实例 [是交换MonObj
   签名: G.X] (f
 -/
 instance [IsCommMonObj G.X] (f : G ⟶ H) : IsMonHom f where
@@ -1098,8 +1098,8 @@ abbreviation Hom.commGroup
   signature: [IsCommMonObj G]
 
 中文:
-缩写 Hom.commGroup
-  签名: [IsCommMonObj G]
+缩写 态射.commGroup
+  签名: [是交换MonObj G]
 -/
 abbrev Hom.commGroup [IsCommMonObj G] : CommGroup (X ⟶ G) where
 
@@ -1121,7 +1121,7 @@ lemma GrpObj.conj_eq_snd_of_isCommMonObj
 
 中文:
 引理 GrpObj.conj_eq_snd_of_isCommMonObj
-  条件: [IsCommMonObj G]
+  条件: [是交换MonObj G]
   结论: conj G = snd G G
   证明: by
   simp [conj]

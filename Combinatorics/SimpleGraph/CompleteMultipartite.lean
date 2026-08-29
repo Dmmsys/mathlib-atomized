@@ -73,7 +73,7 @@ definition IsCompleteMultipartite
 
 中文:
 定义 IsCompleteMultipartite
-  签名: (G : SimpleGraph α)
+  签名: (G : 简单图 α)
   定义体: IsTrans α (¬ G.Adj · ·)
 
 Depends on / 依赖: G.Adj, IsTrans
@@ -90,7 +90,7 @@ theorem bot_isCompleteMultipartite
 
 中文:
 定理 bot_isCompleteMultipartite
-  结论: (⊥ : SimpleGraph α).IsCompleteMultipartite
+  结论: (⊥ : 简单图 α).IsCompleteMultipartite
   证明: ⟨by simp⟩
 -/
 theorem bot_isCompleteMultipartite : (⊥ : SimpleGraph α).IsCompleteMultipartite :=
@@ -261,12 +261,12 @@ structure IsPathGraph3Compl
     - not_adj_snd : ¬ G.Adj v w₂
 
 中文:
-结构 IsPathGraph3Compl
+结构 是PathGraph3Compl
   参数: (v w₁ w₂ : α)
   公理与运算 (3 个):
-    - adj : G.Adj w₁ w₂
-    - not_adj_fst : ¬ G.Adj v w₁
-    - not_adj_snd : ¬ G.Adj v w₂
+    - adj : G.伴随 w₁ w₂
+    - not_adj_fst : ¬ G.伴随 v w₁
+    - not_adj_snd : ¬ G.伴随 v w₂
 -/
 structure IsPathGraph3Compl (v w₁ w₂ : α) : Prop where
   adj : G.Adj w₁ w₂
@@ -291,7 +291,7 @@ lemma ne_fst
 
 中文:
 引理 ne_fst
-  条件: (h2 : G.IsPathGraph3Compl v w₁ w₂)
+  条件: (h2 : G.是PathGraph3Compl v w₁ w₂)
   结论: v != w₁
   证明: fun h => h2.not_adj_snd (h.symm ▸ h2.adj)
 
@@ -316,7 +316,7 @@ lemma ne_snd
 
 中文:
 引理 ne_snd
-  条件: (h2 : G.IsPathGraph3Compl v w₁ w₂)
+  条件: (h2 : G.是PathGraph3Compl v w₁ w₂)
   结论: v != w₂
   证明: fun h => h2.not_adj_fst (h ▸ h2.adj.symm)
 
@@ -339,7 +339,7 @@ lemma fst_ne_snd
 
 中文:
 引理 fst_ne_snd
-  条件: (h2 : G.IsPathGraph3Compl v w₁ w₂)
+  条件: (h2 : G.是PathGraph3Compl v w₁ w₂)
   结论: w₁ != w₂
   证明: h2.adj.ne
 
@@ -360,8 +360,8 @@ lemma symm
 
 中文:
 引理 symm
-  条件: (h : G.IsPathGraph3Compl v w₁ w₂)
-  结论: G.IsPathGraph3Compl v w₂ w₁
+  条件: (h : G.是PathGraph3Compl v w₁ w₂)
+  结论: G.是PathGraph3Compl v w₂ w₁
   证明: by
   obtain ⟨h1, h2, h3⟩ := h
   exact ⟨h1.symm, h3, h2⟩
@@ -386,7 +386,7 @@ lemma exists_isPathGraph3Compl_of_not_isCompleteMultipartite
   exact ⟨_, _, _, h3, h1, h2⟩
 
 中文:
-引理 exists_isPathGraph3Compl_of_not_isCompleteMultipartite
+引理 存在_isPathGraph3Compl_of_not_isCompleteMultipartite
   条件: (h : ¬ IsCompleteMultipartite G)
   证明: by
   apply mt IsTrans.mk at h
@@ -414,7 +414,7 @@ lemma not_isCompleteMultipartite_iff_exists_isPathGraph3Compl
    fun ⟨_, _, _, h1, h2, h3⟩ => fun h => h.trans _ _ _ (by rwa [adj_comm] at h2) h3 h1⟩
 
 中文:
-引理 not_isCompleteMultipartite_iff_exists_isPathGraph3Compl
+引理 not_isCompleteMultipartite_iff_存在_isPathGraph3Compl
   证明: ⟨fun h => G.exists_isPathGraph3Compl_of_not_isCompleteMultipartite h,
    fun ⟨_, _, _, h1, h2, h3⟩ => fun h => h.trans _ _ _ (by rwa [adj_comm] at h2) h3 h1⟩
 
@@ -449,8 +449,8 @@ definition IsPathGraph3Compl.pathGraph3ComplEmbedding
     
 
 中文:
-定义 IsPathGraph3Compl.pathGraph3ComplEmbedding
-  签名: {v w₁ w₂ : α} (h : G.IsPathGraph3Compl v w₁ w₂)
+定义 是PathGraph3Compl.pathGraph3ComplEmbedding
+  签名: {v w₁ w₂ : α} (h : G.是PathGraph3Compl v w₁ w₂)
   定义体: fun x =>
     match x with
     | 0 => w₁
@@ -559,7 +559,7 @@ theorem IsCompleteMultipartite.comap
 
 中文:
 定理 IsCompleteMultipartite.comap
-  条件: {β : 类型} {H : SimpleGraph β} (f : H ↪g G)
+  条件: {β : 类型} {H : 简单图 β} (f : H ↪g G)
   证明: by
   intro h; contrapose h
   exact not_isCompleteMultipartite_of_pathGraph3ComplEmbedding
@@ -878,7 +878,7 @@ theorem isContained_completeEquipartiteGraph_of_colorable
 
 中文:
 定理 isContained_completeEquipartiteGraph_of_colorable
-  结论: {n : 自然数} (C : G.Coloring (Fin n))
+  结论: {n : 自然数} (C : G.染色 (有限集 n))
   证明: by
   have (c : Fin n) : Nonempty (C.colorClass c ↪ Fin t) := by
     rw [Embedding.nonempty_iff_card_le]; rw [Fintype.card_fin]
@@ -935,13 +935,13 @@ structure CompleteEquipartiteSubgraph
     - isCompleteBetween : (parts : Set (Finset V)).Pairwise (G.IsCompleteBetween · ·)
 
 中文:
-结构 CompleteEquipartiteSubgraph
-  参数: (G : SimpleGraph V) (r t : 自然数)
+结构 余mpleteEquipartiteSubgraph
+  参数: (G : 简单图 V) (r t : 自然数)
   公理与运算 (4 个):
-    - parts : Finset (Finset V)
+    - parts : 有限集 (有限集 V)
     - card_parts : #parts = r ∨ t = 0
     - card_mem_parts({p}) : p in parts -> #p = t
-    - isCompleteBetween : (parts : Set (Finset V)).Pairwise (G.IsCompleteBetween · ·)
+    - isCompleteBetween : (parts : 集合 (有限集 V)).两两 (G.IsCompleteBetween · ·)
 -/
 structure CompleteEquipartiteSubgraph (G : SimpleGraph V) (r t : Nat) where
   /-- The parts in a complete equipartite subgraph. -/
@@ -987,7 +987,7 @@ G.irrefl K.isCompleteBetween h₁ h₂ hne h₁' h₂'
 
 中文:
 定理 disjoint
-  结论: (K.parts : Set (Finset V)).Pairwise Disjoint
+  结论: (K.parts : 集合 (有限集 V)).两两 Disjoint
   证明: fun _ h₁ _ h₂ hne => Finset.disjoint_left.mpr fun _ h₁' h₂' =>
 G.irrefl K.isCompleteBetween h₁ h₂ hne h₁' h₂'
 
@@ -1007,7 +1007,7 @@ definition verts
 
 中文:
 定义 verts
-  签名: : Finset V
+  签名: : 有限集 V
   定义体: K.parts.disjiUnion id K.disjoint
 
 Depends on / 依赖: K.disjoint, K.parts.disjiUnion, disjiUnion, disjoint
@@ -1076,7 +1076,7 @@ definition toCopy
 
 中文:
 定义 toCopy
-  签名: : Copy (completeEquipartiteGraph r t) G
+  签名: : 余py (completeEquipartiteGraph r t) G
   定义体: by
   by_cases ht : t = 0
   · rw [completeEquipartiteGraph_eq_bot_iff.mpr <| .inr ht]
@@ -1131,7 +1131,7 @@ definition ofCopy
 
 中文:
 定义 ofCopy
-  签名: (f : Copy (completeEquipartiteGraph r t) G)
+  签名: (f : 余py (completeEquipartiteGraph r t) G)
   定义体: by
   by_cases ht : t = 0
   · exact ⟨∅, .inr ht, by simp, by simp⟩

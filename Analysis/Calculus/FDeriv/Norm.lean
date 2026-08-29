@@ -61,7 +61,7 @@ theorem not_differentiableAt_norm_zero
 
 中文:
 定理 not_differentiableAt_norm_zero
-  条件: [Nontrivial E]
+  条件: [非平凡 E]
   证明: by
   obtain ⟨x, hx⟩ := NormedSpace.exists_lt_norm Real E 0
   intro h
@@ -281,7 +281,7 @@ theorem HasFDerivAt.hasFDerivAt_norm_smul
   conve
 
 中文:
-定理 HasFDerivAt.hasFDerivAt_norm_smul
+定理 在点处Fréchet可导.hasFDerivAt_norm_smul
   证明: by
   have h1 : HasFDerivAt (fun y => t⁻¹ • y) (t⁻¹ • ContinuousLinearMap.id Real E) (t • x) :=
 .const_smul t⁻¹ hasFDerivAt_id (t • x)
@@ -314,7 +314,7 @@ theorem HasFDerivAt.hasFDerivAt_norm_smul_neg
   simpa [ht] using h.hasFDerivAt_norm_smul ht.ne
 
 中文:
-定理 HasFDerivAt.hasFDerivAt_norm_smul_neg
+定理 在点处Fréchet可导.hasFDerivAt_norm_smul_neg
   证明: by
   simpa [ht] using h.hasFDerivAt_norm_smul ht.ne
 
@@ -334,7 +334,7 @@ theorem HasFDerivAt.hasFDerivAt_norm_smul_pos
   simpa [ht] using h.hasFDerivAt_norm_smul ht.ne'
 
 中文:
-定理 HasFDerivAt.hasFDerivAt_norm_smul_pos
+定理 在点处Fréchet可导.hasFDerivAt_norm_smul_pos
   证明: by
   simpa [ht] using h.hasFDerivAt_norm_smul ht.ne'
 
@@ -548,7 +548,7 @@ theorem norm_fderiv_norm
 
 中文:
 定理 norm_fderiv_norm
-  条件: [Nontrivial E] (h : DifferentiableAt 实数 (‖·‖) x)
+  条件: [非平凡 E] (h : DifferentiableAt 实数 (‖·‖) x)
   证明: by
   have : x != 0 := fun hx => not_differentiableAt_norm_zero E (hx ▸ h)
   refine le_antisymm (NNReal.coe_one ▸ norm_fderiv_le_of_lipschitz Real lipschitzWith_one_norm) ?_

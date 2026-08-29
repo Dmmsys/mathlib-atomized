@@ -34,7 +34,7 @@ definition variationOnFromTo
 
 中文:
 定义 variationOnFromTo
-  签名: (f : α -> E) (s : Set α) (a b : α)
+  签名: (f : α -> E) (s : 集合 α) (a b : α)
   定义体: if a <= b then (eVariationOn f (s inter Icc a b)).toReal else -(eVariationOn f (s inter Icc b a)).toReal
 
 Depends on / 依赖: eVariationOn, toReal
@@ -229,7 +229,7 @@ theorem add
 
 中文:
 定理 add
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
   证明: by
   symm
   refine additive_of_total (· <= · : α -> α -> Prop) (variationOnFromTo f s) (· in s) ?_ ?_ ha hb hc
@@ -259,7 +259,7 @@ theorem sub_right
 
 中文:
 定理 sub_right
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
   证明: by
   rw [← variationOnFromTo.add hf ha hc hb]; rw [add_sub_cancel_left]
 -/
@@ -279,7 +279,7 @@ theorem sub_left
 
 中文:
 定理 sub_left
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s) {a b c : α}
   证明: by
   rw [← variationOnFromTo.add hf ha hc hb]; rw [add_sub_cancel_right]
 -/
@@ -339,7 +339,7 @@ theorem eq_left_iff
 
 中文:
 定理 eq_left_iff
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: by
   simp only [← variationOnFromTo.add hf ha hb hc, left_eq_add]
 -/
@@ -359,7 +359,7 @@ theorem eq_zero_iff_of_le
 
 中文:
 定理 eq_zero_iff_of_le
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: by
   rw [variationOnFromTo.eq_of_le _ _ ab]; rw [ENNReal.toReal_eq_zero_iff]; rw [or_iff_left (hf a b ha hb)]; rw [eVariationOn.eq_zero_iff]
 -/
@@ -380,7 +380,7 @@ theorem eq_zero_iff_of_ge
 
 中文:
 定理 eq_zero_iff_of_ge
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: by
   rw [variationOnFromTo.eq_of_ge _ _ ba]; rw [neg_eq_zero]; rw [ENNReal.toReal_eq_zero_iff]; rw [or_iff_left (hf b a hb ha)]; rw [eVariationOn.eq_zero_iff]
 -/
@@ -405,7 +405,7 @@ theorem eq_zero_iff
 
 中文:
 定理 eq_zero_iff
-  结论: {f : α -> E} {s : Set α} (hf : LocallyBoundedVariationOn f s) {a b : α}
+  结论: {f : α -> E} {s : 集合 α} (hf : LocallyBoundedVariationOn f s) {a b : α}
   证明: by
   rcases le_total a b with (ab | ba)
   · rw [uIcc_of_le ab]
@@ -495,7 +495,7 @@ lemma abs_sub_le_sub_of_le
 
 中文:
 引理 abs_sub_le_sub_of_le
-  结论: {f : α -> 实数} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> 实数} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: calc
   _ = dist (f b) (f c) := by rw [dist_comm, Real.dist_eq]
   _ <= variationOnFromTo f s b c := by
@@ -532,7 +532,7 @@ theorem add_self_monotoneOn
 
 中文:
 定理 add_self_monotoneOn
-  结论: {f : α -> 实数} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> 实数} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: by
   rintro b bs c cs bc
   suffices f b - f c <= variationOnFromTo f s a c - variationOnFromTo f s a b by simp; linarith
@@ -563,7 +563,7 @@ theorem sub_self_monotoneOn
 
 中文:
 定理 sub_self_monotoneOn
-  结论: {f : α -> 实数} {s : Set α} (hf : LocallyBoundedVariationOn f s)
+  结论: {f : α -> 实数} {s : 集合 α} (hf : LocallyBoundedVariationOn f s)
   证明: by
   rintro b bs c cs bc
   rw [Pi.sub_apply]; rw [Pi.sub_apply]; rw [le_sub_iff_add_le]; rw [add_comm_sub]; rw [← le_sub_iff_add_le']
@@ -594,7 +594,7 @@ theorem comp_eq_of_monotoneOn
 
 中文:
 定理 comp_eq_of_monotoneOn
-  结论: {β : 类型} [LinearOrder β] (f : α -> E) {t : Set β}
+  结论: {β : 类型} [线性序 β] (f : α -> E) {t : 集合 β}
   证明: by
   rcases le_total x y with (h | h)
   · rw [variationOnFromTo.eq_of_le _ _ h, variationOnFromTo.eq_of_le _ _ (hφ hx hy h),
@@ -627,7 +627,7 @@ theorem tendsto_left
 
 中文:
 定理 tendsto_left
-  结论: {E : 类型} [PseudoMetricSpace E] [TopologicalSpace α] [OrderTopology α]
+  结论: {E : 类型} [伪度量空间 E] [拓扑空间 α] [Order拓扑 α]
   证明: by
   suffices H : Tendsto (fun x => variationOnFromTo f s a b - variationOnFromTo f s x b)
       (𝓝[s inter Iio b] b) (𝓝 (variationOnFromTo f s a b - dist (f b) l)) by
@@ -672,7 +672,7 @@ theorem tendsto_right
 
 中文:
 定理 tendsto_right
-  结论: {E : 类型} [PseudoMetricSpace E] [TopologicalSpace α] [OrderTopology α]
+  结论: {E : 类型} [伪度量空间 E] [拓扑空间 α] [Order拓扑 α]
   证明: by
   suffices H : Tendsto (fun x => variationOnFromTo f s a b + variationOnFromTo f s b x)
       (𝓝[s inter Ioi b] b) (𝓝 (variationOnFromTo f s a b + dist (f b) l)) by
@@ -718,7 +718,7 @@ theorem leftLim_eq
 
 中文:
 定理 leftLim_eq
-  结论: {E : 类型} [PseudoMetricSpace E] [CompleteSpace E]
+  结论: {E : 类型} [伪度量空间 E] [完备空间 E]
   证明: by
   let : TopologicalSpace α := Preorder.topology α
   have : OrderTopology α := ⟨rfl⟩
@@ -761,7 +761,7 @@ theorem rightLim_eq
 
 中文:
 定理 rightLim_eq
-  结论: {E : 类型} [PseudoMetricSpace E] [CompleteSpace E]
+  结论: {E : 类型} [伪度量空间 E] [完备空间 E]
   证明: by
   let : TopologicalSpace α := Preorder.topology α
   have : OrderTopology α := ⟨rfl⟩
@@ -867,8 +867,8 @@ theorem LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn'
     fun x => (variationOnFromTo f s c x - f x
 
 中文:
-定理 LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn'
-  结论: {f : α -> 实数} {s : Set α}
+定理 LocallyBoundedVariationOn.存在_monotoneOn_sub_monotoneOn'
+  结论: {f : α -> 实数} {s : 集合 α}
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | ⟨c, cs⟩)
   · refine ⟨f, 0, subsingleton_empty.monotoneOn _, subsingleton_empty.monotoneOn _,
@@ -913,8 +913,8 @@ theorem LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn
   exact ⟨p, q, hp, hq, h'f⟩
 
 中文:
-定理 LocallyBoundedVariationOn.exists_monotoneOn_sub_monotoneOn
-  结论: {f : α -> 实数} {s : Set α}
+定理 LocallyBoundedVariationOn.存在_monotoneOn_sub_monotoneOn
+  结论: {f : α -> 实数} {s : 集合 α}
   证明: by
   rcases h.exists_monotoneOn_sub_monotoneOn' with ⟨p, q, hp, hq, h'f, -⟩
   exact ⟨p, q, hp, hq, h'f⟩

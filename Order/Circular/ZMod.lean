@@ -27,7 +27,7 @@ instance :
 
 中文:
 实例 :
-  签名: CircularOrder 整数
+  签名: Circular序 整数
   定义体: LinearOrder.toCircularOrder _
 
 Depends on / 依赖: LinearOrder, LinearOrder.toCircularOrder, toCircularOrder
@@ -45,7 +45,7 @@ lemma Int.btw_iff
   proof: .rfl
 
 中文:
-引理 Int.btw_iff
+引理 整数.btw_iff
   结论: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
   证明: .rfl
 -/
@@ -59,7 +59,7 @@ lemma Int.sbtw_iff
   proof: .rfl
 
 中文:
-引理 Int.sbtw_iff
+引理 整数.sbtw_iff
   结论: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
   证明: .rfl
 -/
@@ -78,7 +78,7 @@ lemma Fin.btw_iff
   proof: .rfl
 
 中文:
-引理 Fin.btw_iff
+引理 有限集.btw_iff
   结论: btw a b c ↔ a <= b ∧ b <= c ∨ b <= c ∧ c <= a ∨ c <= a ∧ a <= b
   证明: .rfl
 -/
@@ -92,7 +92,7 @@ lemma Fin.sbtw_iff
   proof: .rfl
 
 中文:
-引理 Fin.sbtw_iff
+引理 有限集.sbtw_iff
   结论: sbtw a b c ↔ a < b ∧ b < c ∨ b < c ∧ c < a ∨ c < a ∧ a < b
   证明: .rfl
 -/
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: 对任意 (n : 自然数), CircularOrder (ZMod n)
+  签名: 对任意 (n : 自然数), Circular序 (ZMod n)
 -/
 instance : forall (n : Nat), CircularOrder (ZMod n)
 | 0 => inferInstanceAs CircularOrder Int

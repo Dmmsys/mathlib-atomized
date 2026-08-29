@@ -40,7 +40,7 @@ instance hasEnoughRootsOfUnity
 
 中文:
 实例 hasEnoughRootsOfUnity
-  签名: : HasEnoughRootsOfUnity F n where
+  签名: : 有EnoughRootsOfUnity F n where
   定义体: by
     have : NeZero n := .of_neZero_natCast F
     have := isCyclotomicExtension {n} F fun _ h _ => Set.mem_singleton_iff.mp h ▸ ‹NeZero (n : F)›
@@ -71,7 +71,7 @@ instance hasEnoughRootsOfUnity_pow
 
 中文:
 实例 hasEnoughRootsOfUnity_pow
-  签名: : HasEnoughRootsOfUnity F (n ^ k)
+  签名: : 有EnoughRootsOfUnity F (n ^ k)
   定义体: have : NeZero ((n ^ k : Nat) : F) := by exact_mod_cast ‹NeZero (n : F)›.pow
   inferInstance
 
@@ -97,7 +97,7 @@ instance hasEnoughRootsOfUnity
 
 中文:
 实例 hasEnoughRootsOfUnity
-  签名: : HasEnoughRootsOfUnity (AlgebraicClosure F) n
+  签名: : 有EnoughRootsOfUnity (代数闭包 F) n
   定义体: have : NeZero (n : AlgebraicClosure F) :=
     ‹NeZero (n : F)›.of_injective (algebraMap F (AlgebraicClosure F)).injective
   inferInstance
@@ -121,7 +121,7 @@ instance hasEnoughRootsOfUnity_pow
 
 中文:
 实例 hasEnoughRootsOfUnity_pow
-  签名: : HasEnoughRootsOfUnity (AlgebraicClosure F) (n ^ k)
+  签名: : 有EnoughRootsOfUnity (代数闭包 F) (n ^ k)
   定义体: have : NeZero (n : AlgebraicClosure F) :=
     ‹NeZero (n : F)›.of_injective (algebraMap F (AlgebraicClosure F)).injective
   inferInstance
@@ -149,7 +149,7 @@ instance hasEnoughRootsOfUnity
 
 中文:
 实例 hasEnoughRootsOfUnity
-  签名: : HasEnoughRootsOfUnity (SeparableClosure F) n
+  签名: : 有EnoughRootsOfUnity (可分闭包 F) n
   定义体: have : NeZero (n : SeparableClosure F) :=
     ‹NeZero (n : F)›.of_injective (algebraMap F (SeparableClosure F)).injective
   inferInstance
@@ -173,7 +173,7 @@ instance hasEnoughRootsOfUnity_pow
 
 中文:
 实例 hasEnoughRootsOfUnity_pow
-  签名: : HasEnoughRootsOfUnity (SeparableClosure F) (n ^ k)
+  签名: : 有EnoughRootsOfUnity (可分闭包 F) (n ^ k)
   定义体: have : NeZero (n : SeparableClosure F) :=
     ‹NeZero (n : F)›.of_injective (algebraMap F (SeparableClosure F)).injective
   inferInstance

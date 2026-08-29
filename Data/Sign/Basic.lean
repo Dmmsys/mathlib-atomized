@@ -38,7 +38,7 @@ lemma intCast_cast
 
 中文:
 引理 intCast_cast
-  条件: {α : 类型} [AddGroupWithOne α] (s : SignType)
+  条件: {α : 类型} [加法带幺群 α] (s : SignType)
   结论: ((s : 整数) : α) = s
   证明: map_cast' _ Int.cast_one Int.cast_zero (@Int.cast_one α _ ▸ Int.cast_neg 1) _
 
@@ -170,7 +170,7 @@ definition castHom
 
 中文:
 定义 castHom
-  签名: {α} [MulZeroOneClass α] [HasDistribNeg α]
+  签名: {α} [乘零幺类 α] [有DistribNeg α]
   定义体: cast
   map_zero' := rfl
   map_one' := rfl
@@ -193,7 +193,7 @@ theorem univ_eq
 
 中文:
 定理 univ_eq
-  结论: (Finset.univ : Finset SignType) = {0, -1, 1}
+  结论: (有限集.univ : 有限集 SignType) = {0, -1, 1}
   证明: by
   decide
 -/
@@ -214,7 +214,7 @@ theorem range_eq
 中文:
 定理 range_eq
   条件: {α} (f : SignType -> α)
-  结论: Set.range f = {f zero, f neg, f pos}
+  结论: 集合.range f = {f zero, f neg, f pos}
   证明: by
   classical rw [← Fintype.coe_image_univ, univ_eq]
   simp [Finset.coe_insert]
@@ -235,7 +235,7 @@ lemma coe_mul
 
 中文:
 引理 coe_mul
-  条件: {α} [MulZeroOneClass α] [HasDistribNeg α] (a b : SignType)
+  条件: {α} [乘零幺类 α] [有DistribNeg α] (a b : SignType)
   证明: map_mul SignType.castHom _ _
 -/
 @[simp, norm_cast] lemma coe_mul {α} [MulZeroOneClass α] [HasDistribNeg α] (a b : SignType) :
@@ -252,7 +252,7 @@ lemma coe_pow
 
 中文:
 引理 coe_pow
-  条件: {α} [MonoidWithZero α] [HasDistribNeg α] (a : SignType) (k : 自然数)
+  条件: {α} [带零幺半群 α] [有DistribNeg α] (a : SignType) (k : 自然数)
   证明: map_pow SignType.castHom _ _
 -/
 @[simp, norm_cast] lemma coe_pow {α} [MonoidWithZero α] [HasDistribNeg α] (a : SignType) (k : Nat) :
@@ -269,7 +269,7 @@ lemma coe_zpow
 
 中文:
 引理 coe_zpow
-  条件: {α} [GroupWithZero α] [HasDistribNeg α] (a : SignType) (k : 整数)
+  条件: {α} [带零群 α] [有DistribNeg α] (a : SignType) (k : 整数)
   证明: map_zpow₀ SignType.castHom _ _
 -/
 @[simp, norm_cast] lemma coe_zpow {α} [GroupWithZero α] [HasDistribNeg α] (a : SignType) (k : Int) :
@@ -294,7 +294,7 @@ lemma sign_intCast
 
 中文:
 引理 sign_intCast
-  结论: {α : 类型} [Ring α] [PartialOrder α] [IsOrderedRing α]
+  结论: {α : 类型} [环 α] [偏序 α] [是Ordered环 α]
   证明: by
   simp only [sign_apply, Int.cast_pos, Int.cast_lt_zero]
 
@@ -503,7 +503,7 @@ theorem sign_sum
 
 中文:
 定理 sign_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> α} (hs : s.Nonempty) (t : SignType)
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> α} (hs : s.非空) (t : SignType)
   证明: by
   cases t
   · simp_rw [zero_eq_zero, sign_eq_zero_iff] at h ⊢
@@ -547,8 +547,8 @@ theorem exists_signed_sum_aux
     simp [sum_sigma, hx, ← Int.sign_eq_sign, Int.sign_mul_abs, mul_comm |
 
 中文:
-定理 exists_signed_sum_aux
-  条件: [DecidableEq α] (s : Finset α) (f : α -> 整数)
+定理 存在_signed_sum_aux
+  条件: [DecidableEq α] (s : 有限集 α) (f : α -> 整数)
   证明: by
   refine
     ⟨(Σ _ : { x // x in s }, Nat), Finset.univ.sigma fun a => range (f a).natAbs,
@@ -581,8 +581,8 @@ theorem exists_signed_sum
 (sum_attach t fun b => ite (g b = a) (sgn b : Int) 0).trans hf _ ha⟩
 
 中文:
-定理 exists_signed_sum
-  条件: [DecidableEq α] (s : Finset α) (f : α -> 整数)
+定理 存在_signed_sum
+  条件: [DecidableEq α] (s : 有限集 α) (f : α -> 整数)
   证明: let ⟨β, t, sgn, g, hg, ht, hf⟩ := exists_signed_sum_aux s f
   ⟨t, inferInstance, fun b => sgn b, fun b => g b, fun b => hg b, by simp [ht], fun a ha =>
 (sum_attach t fun b => ite (g b = a) (sgn b : Int) 0).trans hf _ ha⟩
@@ -613,8 +613,8 @@ theorem exists_signed_sum'
         ?_, by simp [hβ, h], fun a ha => by simp [h
 
 中文:
-定理 exists_signed_sum'
-  结论: [Nonempty α] [DecidableEq α] (s : Finset α) (f : α -> 整数)
+定理 存在_signed_sum'
+  结论: [非空 α] [DecidableEq α] (s : 有限集 α) (f : α -> 整数)
   证明: by
   obtain ⟨β, _, sgn, g, hg, hβ, hf⟩ := exists_signed_sum s f
   refine

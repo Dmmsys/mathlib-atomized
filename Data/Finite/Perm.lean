@@ -47,7 +47,7 @@ theorem card_perm
 
 中文:
 定理 card_perm
-  结论: 自然数.card (Perm α) = (自然数.card α)!
+  结论: 自然数.card (置换 α) = (自然数.card α)!
   证明: by
   classical
   have := Fintype.ofFinite α

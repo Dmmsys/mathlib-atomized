@@ -39,7 +39,7 @@ definition InnerProductSpace.canonicalContravariantTensor
   body: lift (innerₗ E)
 
 中文:
-定义 InnerProductSpace.canonicalContravariantTensor
+定义 内积空间.canonicalContravariantTensor
   签名: :
   定义体: lift (innerₗ E)
 -/
@@ -55,8 +55,8 @@ definition InnerProductSpace.canonicalCovariantTensor
   body: ∑ i, ((stdOrthonormalBasis Real E) i) otimesₜ[Real] ((stdOrthonormalBasis Real E) i)
 
 中文:
-定义 InnerProductSpace.canonicalCovariantTensor
-  签名: [FiniteDimensional 实数 E]
+定义 内积空间.canonicalCovariantTensor
+  签名: [有限维 实数 E]
   定义体: ∑ i, ((stdOrthonormalBasis Real E) i) otimesₜ[Real] ((stdOrthonormalBasis Real E) i)
 
 Depends on / 依赖: stdOrthonormalBasis
@@ -80,8 +80,8 @@ theorem InnerProductSpace.canonicalCovariantTensor_eq_sum
     simp only [orthonormal_i
 
 中文:
-定理 InnerProductSpace.canonicalCovariantTensor_eq_sum
-  结论: [FiniteDimensional 实数 E]
+定理 内积空间.canonicalCovariantTensor_eq_sum
+  结论: [有限维 实数 E]
   证明: by
   let w := stdOrthonormalBasis Real E
   calc ∑ m, w m otimesₜ[Real] w m

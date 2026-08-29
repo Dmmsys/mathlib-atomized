@@ -560,7 +560,7 @@ theorem sum_inner
 
 中文:
 定理 sum_inner
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> E) (x : E)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> E) (x : E)
   证明: map_sum ((innerₛₗ 𝕜).flip x) _ _
 
 Depends on / 依赖: map_sum
@@ -579,7 +579,7 @@ theorem inner_sum
 
 中文:
 定理 inner_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> E) (x : E)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> E) (x : E)
   证明: map_sum (innerₛₗ 𝕜 x) _ _
 
 Depends on / 依赖: map_sum
@@ -598,8 +598,8 @@ theorem Finsupp.sum_inner
   simp [sum, sum_inner]
 
 中文:
-定理 Finsupp.sum_inner
-  结论: {ι : 类型} {M : 类型} [Zero M] (l : ι ->₀ M)
+定理 有限支撑.sum_inner
+  结论: {ι : 类型} {M : 类型} [零 M] (l : ι ->₀ M)
   证明: by
   simp [sum, sum_inner]
 -/
@@ -617,8 +617,8 @@ theorem Finsupp.inner_sum
   simp [sum, inner_sum]
 
 中文:
-定理 Finsupp.inner_sum
-  结论: {ι : 类型} {M : 类型} [Zero M] (l : ι ->₀ M)
+定理 有限支撑.inner_sum
+  结论: {ι : 类型} {M : 类型} [零 M] (l : ι ->₀ M)
   证明: by
   simp [sum, inner_sum]
 -/
@@ -636,7 +636,7 @@ theorem DFinsupp.sum_inner
   simp +contextual only [DFinsupp.sum, sum_inner]
 
 中文:
-定理 DFinsupp.sum_inner
+定理 直和有限支撑.sum_inner
   结论: {ι : 类型} [DecidableEq ι] {α : ι -> 类型}
   证明: by
   simp +contextual only [DFinsupp.sum, sum_inner]
@@ -658,7 +658,7 @@ theorem DFinsupp.inner_sum
 @[simp]
 
 中文:
-定理 DFinsupp.inner_sum
+定理 直和有限支撑.inner_sum
   结论: {ι : 类型} [DecidableEq ι] {α : ι -> 类型}
   证明: by
   simp +contextual only [DFinsupp.sum, inner_sum]
@@ -816,7 +816,7 @@ theorem inner_self_ofReal_re
 @[simp]
 
 中文:
-定理 inner_self_ofReal_re
+定理 inner_self_of实数_re
   条件: (x : E)
   结论: (re ⟪x, x⟫ : 𝕜) = ⟪x, x⟫
   证明: ((RCLike.is_real_TFAE (⟪x, x⟫ : 𝕜)).out 2 3).2 (inner_self_im (𝕜 := 𝕜) x)
@@ -891,7 +891,7 @@ theorem inner_self_ofReal_norm
   exact inner_self_ofReal_re _
 
 中文:
-定理 inner_self_ofReal_norm
+定理 inner_self_of实数_norm
   条件: (x : E)
   结论: (‖⟪x, x⟫‖ : 𝕜) = ⟪x, x⟫
   证明: by
@@ -1297,7 +1297,7 @@ theorem inner_eq_ofReal_norm_sq_left_iff
   rw [inner_sub_right]; rw [sub_eq_zero]; rw [inner_self_eq_norm_sq_to_K]; rw [eq_comm]
 
 中文:
-定理 inner_eq_ofReal_norm_sq_left_iff
+定理 inner_eq_of实数_norm_sq_left_iff
   条件: {v w : E}
   结论: ⟪v, w⟫_𝕜 = ‖v‖ ^ 2 ↔ ⟪v, v - w⟫_𝕜 = 0
   证明: by
@@ -1339,7 +1339,7 @@ theorem inner_eq_ofReal_norm_sq_right_iff
   rw [inner_sub_left]; rw [sub_eq_zero]; rw [inner_self_eq_norm_sq_to_K]; rw [eq_comm]
 
 中文:
-定理 inner_eq_ofReal_norm_sq_right_iff
+定理 inner_eq_of实数_norm_sq_right_iff
   条件: {v w : E}
   结论: ⟪v, w⟫_𝕜 = ‖w‖ ^ 2 ↔ ⟪v - w, w⟫_𝕜 = 0
   证明: by
@@ -2742,7 +2742,7 @@ theorem inner_sum_smul_sum_smul_of_sum_eq_zero
 
 中文:
 定理 inner_sum_smul_sum_smul_of_sum_eq_zero
-  结论: {ι₁ : 类型} {s₁ : Finset ι₁} {w₁ : ι₁ -> 实数}
+  结论: {ι₁ : 类型} {s₁ : 有限集 ι₁} {w₁ : ι₁ -> 实数}
   证明: by
   simp_rw [sum_inner, inner_sum, real_inner_smul_left, real_inner_smul_right,
     real_inner_eq_norm_mul_self_add_norm_mul_self_sub_norm_sub_mul_self_div_two, ← div_sub_div_same,
@@ -3470,8 +3470,8 @@ abbreviation InnerProductSpace.induced
  
 
 中文:
-缩写 InnerProductSpace.induced
-  签名: {F : 类型} [FunLike F G E] [LinearMapClass F 𝕜 G E] (f : F)
+缩写 内积空间.induced
+  签名: {F : 类型} [函数状 F G E] [线性映射类 F 𝕜 G E] (f : F)
   定义体: SeminormedAddCommGroup.induced G E f
     InnerProductSpace 𝕜 G :=
   letI := SeminormedAddCommGroup.induced G E f
@@ -3535,7 +3535,7 @@ instance RCLike.innerProductSpace
 
 中文:
 实例 RCLike.innerProductSpace
-  签名: : InnerProductSpace 𝕜 𝕜 where
+  签名: : 内积空间 𝕜 𝕜 where
   定义体: y * star x
   norm_sq_eq_re_inner x := by rw [star_def, mul_conj, ← ofReal_pow, ofReal_re]
   conj_inner_symm x y := by rw [star_def, map_mul, starRingEnd_self_apply, mul_comm]
@@ -3611,8 +3611,8 @@ definition Inner.rclikeToReal
   body: re ⟪x, y⟫
 
 中文:
-定义 Inner.rclikeToReal
-  签名: : Inner 实数 E where inner x y
+定义 内积.rclikeTo实数
+  签名: : 内积 实数 E where inner x y
   定义体: re ⟪x, y⟫
 -/
 def Inner.rclikeToReal : Inner Real E where inner x y := re ⟪x, y⟫
@@ -3633,8 +3633,8 @@ abbreviation InnerProductSpace.rclikeToReal
     smul_left := fun x y
 
 中文:
-缩写 InnerProductSpace.rclikeToReal
-  签名: : InnerProductSpace 实数 E
+缩写 内积空间.rclikeTo实数
+  签名: : 内积空间 实数 E
   定义体: { Inner.rclikeToReal 𝕜 E,
     NormedSpace.restrictScalars Real 𝕜 E with
     norm_sq_eq_re_inner := norm_sq_eq_re_inner
@@ -3711,8 +3711,8 @@ definition InnerProductSpace.complexToReal
   body: InnerProductSpace.rclikeToReal Complex G
 
 中文:
-定义 InnerProductSpace.complexToReal
-  签名: [SeminormedAddCommGroup G] [InnerProductSpace Complex G]
+定义 内积空间.complexTo实数
+  签名: [SeminormedAddComm群 G] [内积空间 复形 G]
   定义体: InnerProductSpace.rclikeToReal Complex G
 
 Depends on / 依赖: InnerProductSpace, InnerProductSpace.rclikeToReal, rclikeToReal
@@ -3733,7 +3733,7 @@ instance :
 
 中文:
 实例 :
-  签名: InnerProductSpace 实数 Complex
+  签名: 内积空间 实数 复形
   定义体: InnerProductSpace.complexToReal
 
 @[simp]
@@ -3753,8 +3753,8 @@ theorem Complex.inner
   proof: rfl
 
 中文:
-定理 Complex.inner
-  条件: (w z : Complex)
+定理 复形.inner
+  条件: (w z : 复形)
   结论: ⟪w, z⟫_实数 = (z * conj w).re
   证明: rfl
 -/
@@ -3779,8 +3779,8 @@ instance RCLike.toInnerProductSpaceReal
     show re (_ * _) = _ * re (_ 
 
 中文:
-实例 RCLike.toInnerProductSpaceReal
-  签名: : InnerProductSpace 实数 𝕜 where
+实例 RCLike.toInnerProductSpace实数
+  签名: : 内积空间 实数 𝕜 where
   定义体: Inner.rclikeToReal 𝕜 𝕜
   norm_sq_eq_re_inner := norm_sq_eq_re_inner
   conj_inner_symm x y := inner_re_symm ..
@@ -3819,7 +3819,7 @@ theorem Real.inner_apply
   proof: by rw [mul_comm]; rfl
 
 中文:
-定理 Real.inner_apply
+定理 实数.inner_apply
   条件: (x y : 实数)
   结论: inner 实数 x y = x * y
   证明: by rw [mul_comm]; rfl
@@ -3842,7 +3842,7 @@ lemma isSymm_inner
 
 中文:
 引理 isSymm_inner
-  结论: LinearMap.IsSymm (innerₗ E) where
+  结论: 线性映射.是Symm (innerₗ E) where
   证明: by simp [real_inner_comm]
 
 Depends on / 依赖: real_inner_comm
@@ -3860,7 +3860,7 @@ lemma isNonneg_inner
 
 中文:
 引理 isNonneg_inner
-  结论: LinearMap.IsNonneg (innerₗ E) where
+  结论: 线性映射.是Nonneg (innerₗ E) where
   证明: by simp
 -/
 lemma isNonneg_inner : LinearMap.IsNonneg (innerₗ E) where
@@ -3877,7 +3877,7 @@ lemma isPosSemidef_inner
 
 中文:
 引理 isPosSemidef_inner
-  结论: LinearMap.IsPosSemidef (innerₗ E) where
+  结论: 线性映射.是PosSemidef (innerₗ E) where
   证明: isSymm_inner
   isNonneg := isNonneg_inner
 

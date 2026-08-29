@@ -38,7 +38,7 @@ lemma card_le_card_mul_left₀
 
 中文:
 引理 card_le_card_mul_left₀
-  条件: [IsLeftCancelMulZero α] (has : a in s) (ha : a != 0)
+  条件: [是左消去MulZero α] (has : a in s) (ha : a != 0)
   结论: #t <= #(s * t)
   证明: card_le_card_mul_left_of_injective has (mul_right_injective₀ ha)
 
@@ -58,7 +58,7 @@ lemma card_le_card_mul_right₀
 
 中文:
 引理 card_le_card_mul_right₀
-  条件: [IsRightCancelMulZero α] (hat : a in t) (ha : a != 0)
+  条件: [是右消去MulZero α] (hat : a in t) (ha : a != 0)
   结论: #s <= #(s * t)
   证明: card_le_card_mul_right_of_injective hat (mul_left_injective₀ ha)
 
@@ -84,7 +84,7 @@ lemma card_le_card_mul_self₀
 
 中文:
 引理 card_le_card_mul_self₀
-  条件: [IsLeftCancelMulZero α]
+  条件: [是左消去MulZero α]
   结论: #s <= #(s * s)
   证明: by
   obtain hs | hs := (s.erase 0).eq_empty_or_nonempty
@@ -121,7 +121,7 @@ lemma mul_zero_subset
 
 中文:
 引理 mul_zero_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s * 0 subseteq 0
   证明: by simp [subset_iff, mem_mul]
 
@@ -139,7 +139,7 @@ lemma zero_mul_subset
 
 中文:
 引理 zero_mul_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: 0 * s subseteq 0
   证明: by simp [subset_iff, mem_mul]
 
@@ -157,8 +157,8 @@ lemma Nonempty.mul_zero
   proof: s.mul_zero_subset.antisymm by simpa [mem_mul] using! hs
 
 中文:
-引理 Nonempty.mul_zero
-  条件: (hs : s.Nonempty)
+引理 非空.mul_zero
+  条件: (hs : s.非空)
   结论: s * 0 = 0
   证明: s.mul_zero_subset.antisymm by simpa [mem_mul] using! hs
 
@@ -177,8 +177,8 @@ lemma Nonempty.zero_mul
   proof: s.zero_mul_subset.antisymm by simpa [mem_mul] using! hs
 
 中文:
-引理 Nonempty.zero_mul
-  条件: (hs : s.Nonempty)
+引理 非空.zero_mul
+  条件: (hs : s.非空)
   结论: 0 * s = 0
   证明: s.zero_mul_subset.antisymm by simpa [mem_mul] using! hs
 
@@ -203,7 +203,7 @@ lemma div_zero_subset
 
 中文:
 引理 div_zero_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s / 0 subseteq 0
   证明: by simp [subset_iff, mem_div]
 
@@ -222,7 +222,7 @@ lemma zero_div_subset
 
 中文:
 引理 zero_div_subset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: 0 / s subseteq 0
   证明: by simp [subset_iff, mem_div]
 
@@ -240,8 +240,8 @@ lemma Nonempty.div_zero
   proof: s.div_zero_subset.antisymm by simpa [mem_div] using! hs
 
 中文:
-引理 Nonempty.div_zero
-  条件: (hs : s.Nonempty)
+引理 非空.div_zero
+  条件: (hs : s.非空)
   结论: s / 0 = 0
   证明: s.div_zero_subset.antisymm by simpa [mem_div] using! hs
 
@@ -260,8 +260,8 @@ lemma Nonempty.zero_div
   proof: s.zero_div_subset.antisymm by simpa [mem_div] using! hs
 
 中文:
-引理 Nonempty.zero_div
-  条件: (hs : s.Nonempty)
+引理 非空.zero_div
+  条件: (hs : s.非空)
   结论: 0 / s = 0
   证明: s.zero_div_subset.antisymm by simpa [mem_div] using! hs
 
@@ -280,7 +280,7 @@ lemma inv_zero
 
 中文:
 引理 inv_zero
-  结论: (0 : Finset α)⁻¹ = 0
+  结论: (0 : 有限集 α)⁻¹ = 0
   证明: by ext; simp
 -/
 @[simp] protected lemma inv_zero : (0 : Finset α)⁻¹ = 0 := by ext; simp

@@ -40,7 +40,7 @@ have : ReflTransGen r n m := ih fun i hi => h i ⟨hi.1, hi.2.trans_le le_succ m
 
 中文:
 定理 reflTransGen_of_succ_of_le
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ico n m, r i (succ i))
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左闭右开区间 n m, r i (succ i))
   证明: by
   revert h; refine Succ.rec ?_ ?_ hnm
   · intro _
@@ -76,7 +76,7 @@ theorem reflTransGen_of_succ_of_ge
 
 中文:
 定理 reflTransGen_of_succ_of_ge
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ico m n, r (succ i) i)
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左闭右开区间 m n, r (succ i) i)
   证明: by
   rw [← reflTransGen_swap]
   exact reflTransGen_of_succ_of_le (swap r) h hmn
@@ -99,7 +99,7 @@ theorem transGen_of_succ_of_lt
 
 中文:
 定理 transGen_of_succ_of_lt
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ico n m, r i (succ i))
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左闭右开区间 n m, r i (succ i))
   证明: (reflTransGen_iff_eq_or_transGen.mp <| reflTransGen_of_succ_of_le r h hnm.le).resolve_left
     hnm.ne'
 
@@ -121,7 +121,7 @@ theorem transGen_of_succ_of_gt
 
 中文:
 定理 transGen_of_succ_of_gt
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ico m n, r (succ i) i)
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左闭右开区间 m n, r (succ i) i)
   证明: (reflTransGen_iff_eq_or_transGen.mp <| reflTransGen_of_succ_of_ge r h hmn.le).resolve_left
     hmn.ne
 
@@ -148,7 +148,7 @@ theorem reflTransGen_of_succ
 
 中文:
 定理 reflTransGen_of_succ
-  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in Ico n m, r i (succ i))
+  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in 左闭右开区间 n m, r i (succ i))
   证明: (le_total n m).elim (reflTransGen_of_succ_of_le r h1) reflTransGen_of_succ_of_ge r h2
 
 Depends on / 依赖: le_total, reflTransGen_of_succ_of_ge, reflTransGen_of_succ_of_le
@@ -167,7 +167,7 @@ theorem transGen_of_succ_of_ne
 
 中文:
 定理 transGen_of_succ_of_ne
-  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in Ico n m, r i (succ i))
+  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in 左闭右开区间 n m, r i (succ i))
   证明: (reflTransGen_iff_eq_or_transGen.mp (reflTransGen_of_succ r h1 h2)).resolve_left hnm.symm
 
 Depends on / 依赖: hnm.symm, reflTransGen_iff_eq_or_transGen, reflTransGen_iff_eq_or_transGen.mp, reflTransGen_of_succ, resolve_left
@@ -225,7 +225,7 @@ theorem reflTransGen_of_pred_of_ge
 
 中文:
 定理 reflTransGen_of_pred_of_ge
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ioc m n, r i (pred i))
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左开右闭区间 m n, r i (pred i))
   证明: reflTransGen_of_succ_of_le (α := αᵒᵈ) r (fun x hx => h x ⟨hx.2, hx.1⟩) hnm
 
 Depends on / 依赖: reflTransGen_of_succ_of_le
@@ -244,7 +244,7 @@ theorem reflTransGen_of_pred_of_le
 
 中文:
 定理 reflTransGen_of_pred_of_le
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ioc n m, r (pred i) i)
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左开右闭区间 n m, r (pred i) i)
   证明: reflTransGen_of_succ_of_ge (α := αᵒᵈ) r (fun x hx => h x ⟨hx.2, hx.1⟩) hmn
 
 Depends on / 依赖: reflTransGen_of_succ_of_ge
@@ -263,7 +263,7 @@ theorem transGen_of_pred_of_gt
 
 中文:
 定理 transGen_of_pred_of_gt
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ioc m n, r i (pred i))
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左开右闭区间 m n, r i (pred i))
   证明: transGen_of_succ_of_lt (α := αᵒᵈ) r (fun x hx => h x ⟨hx.2, hx.1⟩) hnm
 
 Depends on / 依赖: transGen_of_succ_of_lt
@@ -282,7 +282,7 @@ theorem transGen_of_pred_of_lt
 
 中文:
 定理 transGen_of_pred_of_lt
-  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in Ioc n m, r (pred i) i)
+  结论: (r : α -> α -> 命题) {n m : α} (h : 对任意 i in 左开右闭区间 n m, r (pred i) i)
   证明: transGen_of_succ_of_gt (α := αᵒᵈ) r (fun x hx => h x ⟨hx.2, hx.1⟩) hmn
 
 Depends on / 依赖: transGen_of_succ_of_gt
@@ -308,7 +308,7 @@ theorem reflTransGen_of_pred
 
 中文:
 定理 reflTransGen_of_pred
-  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in Ioc m n, r i (pred i))
+  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in 左开右闭区间 m n, r i (pred i))
   证明: reflTransGen_of_succ (α := αᵒᵈ) r (fun x hx => h1 x ⟨hx.2, hx.1⟩) fun x hx =>
     h2 x ⟨hx.2, hx.1⟩
 
@@ -330,7 +330,7 @@ theorem transGen_of_pred_of_ne
 
 中文:
 定理 transGen_of_pred_of_ne
-  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in Ioc m n, r i (pred i))
+  结论: (r : α -> α -> 命题) {n m : α} (h1 : 对任意 i in 左开右闭区间 m n, r i (pred i))
   证明: transGen_of_succ_of_ne (α := αᵒᵈ) r (fun x hx => h1 x ⟨hx.2, hx.1⟩)
     (fun x hx => h2 x ⟨hx.2, hx.1⟩) hnm
 

@@ -65,8 +65,8 @@ structure ContinuousLinearMapWOT
     - toCLM : E ->SL[σ] F
 
 中文:
-结构 ContinuousLinearMapWOT
-  参数: {𝕜₁ 𝕜₂ : 类型} [Semiring 𝕜₁] [Semiring 𝕜₂] (σ : 𝕜₁ ->+* 𝕜₂)
+结构 余ntinuousLinearMapWOT
+  参数: {𝕜₁ 𝕜₂ : 类型} [半环 𝕜₁] [半环 𝕜₂] (σ : 𝕜₁ ->+* 𝕜₂)
   公理与运算 (2 个):
     - ofCLM : :
     - toCLM : E ->SL[σ] F
@@ -158,7 +158,7 @@ lemma toCLM_injective
 
 中文:
 引理 toCLM_injective
-  结论: Function.Injective (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
+  结论: 函数.单射 (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
   证明: equiv.injective
 
 @[simp]
@@ -179,7 +179,7 @@ lemma toCLM_surjective
 
 中文:
 引理 toCLM_surjective
-  结论: Function.Surjective (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
+  结论: 函数.满射 (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
   证明: equiv.surjective
 
 Depends on / 依赖: equiv.surjective, surjective
@@ -199,7 +199,7 @@ lemma toCLM_bijective
 
 中文:
 引理 toCLM_bijective
-  结论: Function.Bijective (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
+  结论: 函数.双射 (toCLM : (E ->SWOT[σ] F) -> E ->SL[σ] F)
   证明: equiv.bijective
 
 @[simp]
@@ -222,7 +222,7 @@ lemma ofCLM_injective
 
 中文:
 引理 ofCLM_injective
-  结论: Function.Injective (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
+  结论: 函数.单射 (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
   证明: equiv.symm.injective
 
 @[simp]
@@ -243,7 +243,7 @@ lemma ofCLM_surjective
 
 中文:
 引理 ofCLM_surjective
-  结论: Function.Surjective (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
+  结论: 函数.满射 (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
   证明: equiv.symm.surjective
 
 Depends on / 依赖: equiv.symm.surjective, surjective
@@ -261,7 +261,7 @@ lemma ofCLM_bijective
 
 中文:
 引理 ofCLM_bijective
-  结论: Function.Bijective (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
+  结论: 函数.双射 (ofCLM : (E ->SL[σ] F) -> E ->SWOT[σ] F)
   证明: equiv.symm.bijective
 
 Depends on / 依赖: bijective, equiv.symm.bijective
@@ -279,7 +279,7 @@ instance instAddCommGroup
 
 中文:
 实例 instAddCommGroup
-  签名: [IsTopologicalAddGroup F]
+  签名: [是拓扑加群 F]
   定义体: equiv.addCommGroup
 
 Depends on / 依赖: addCommGroup, equiv.addCommGroup
@@ -298,7 +298,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: {S : 类型} [DistribSMul S F] [SMulCommClass 𝕜₂ S F] [ContinuousConstSMul S F]
+  签名: {S : 类型} [分配标量乘法 S F] [标量交换类 𝕜₂ S F] [连续常数标量乘法 S F]
   定义体: equiv.smul S
 
 Depends on / 依赖: equiv.smul
@@ -317,7 +317,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: {S : 类型} [Semiring S] [Module S F] [SMulCommClass 𝕜₂ S F]
+  签名: {S : 类型} [半环 S] [模 S F] [标量交换类 𝕜₂ S F]
   定义体: equiv.module S
 
 Depends on / 依赖: equiv.module, module
@@ -337,7 +337,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: {S T : 类型} [DistribSMul S F] [SMulCommClass 𝕜₂ S F]
+  签名: {S T : 类型} [分配标量乘法 S F] [标量交换类 𝕜₂ S F]
   定义体: equiv.isScalarTower S T
 
 Depends on / 依赖: equiv.isScalarTower, isScalarTower
@@ -358,7 +358,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: {S T : 类型} [DistribSMul S F] [SMulCommClass 𝕜₂ S F]
+  签名: {S T : 类型} [分配标量乘法 S F] [标量交换类 𝕜₂ S F]
   定义体: equiv.smulCommClass S T
 
 Depends on / 依赖: equiv.smulCommClass, smulCommClass
@@ -379,7 +379,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: {S : 类型} [Semiring S] [Module S F] [SMulCommClass 𝕜₂ S F]
+  签名: {S : 类型} [半环 S] [模 S F] [标量交换类 𝕜₂ S F]
   定义体: equiv.isCentralScalar S
 
 Depends on / 依赖: equiv.isCentralScalar, isCentralScalar
@@ -399,7 +399,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: [IsTopologicalAddGroup E]
+  签名: [是拓扑加群 E]
   定义体: equiv.ring
 
 Depends on / 依赖: equiv.ring
@@ -417,7 +417,7 @@ instance instAlgebra
 
 中文:
 实例 instAlgebra
-  签名: {S : 类型} [CommSemiring S] [Module S E] [SMulCommClass 𝕜₁ S E] [SMul S 𝕜₁]
+  签名: {S : 类型} [交换半环 S] [模 S E] [标量交换类 𝕜₁ S E] [标量乘法 S 𝕜₁]
   定义体: equiv.algebra S
 
 Depends on / 依赖: algebra, equiv.algebra
@@ -439,7 +439,7 @@ definition addEquiv
 
 中文:
 定义 addEquiv
-  签名: [IsTopologicalAddGroup F]
+  签名: [是拓扑加群 F]
   定义体: equiv.addEquiv
 
 Depends on / 依赖: addEquiv, equiv.addEquiv
@@ -459,7 +459,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: (S : 类型) [Semiring S] [Module S F] [SMulCommClass 𝕜₂ S F]
+  签名: (S : 类型) [半环 S] [模 S F] [标量交换类 𝕜₂ S F]
   定义体: equiv.linearEquiv S
 
 Depends on / 依赖: equiv.linearEquiv, linearEquiv
@@ -481,7 +481,7 @@ definition ringEquiv
 
 中文:
 定义 ringEquiv
-  签名: [IsTopologicalAddGroup E]
+  签名: [是拓扑加群 E]
   定义体: equiv.ringEquiv
 
 Depends on / 依赖: equiv.ringEquiv, ringEquiv
@@ -501,7 +501,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: (S : 类型) [CommSemiring S] [Module S E] [SMulCommClass 𝕜₁ S E] [SMul S 𝕜₁]
+  签名: (S : 类型) [交换半环 S] [模 S E] [标量交换类 𝕜₁ S E] [标量乘法 S 𝕜₁]
   定义体: equiv.algEquiv S
 
 Depends on / 依赖: algEquiv, equiv.algEquiv
@@ -524,7 +524,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (E ->SWOT[σ] F) E F where
+  签名: : 函数状 (E ->SWOT[σ] F) E F where
   定义体: toCLM f
   coe_injective := DFunLike.coe_injective.comp toCLM_injective
 
@@ -588,7 +588,7 @@ instance instContinuousLinearMapClass
 
 中文:
 实例 instContinuousLinearMapClass
-  签名: : ContinuousSemilinearMapClass (E ->SWOT[σ] F) σ E F where
+  签名: : 连续半线性映射类 (E ->SWOT[σ] F) σ E F where
   定义体: by simp [← coe_toCLM]
   map_smulₛₗ f r x := by simp [← coe_toCLM]
   map_continuous f := f.toCLM.continuous
@@ -1349,7 +1349,7 @@ instance instTopologicalSpace
 
 中文:
 实例 instTopologicalSpace
-  签名: : TopologicalSpace (E ->SWOT[σ] F)
+  签名: : 拓扑空间 (E ->SWOT[σ] F)
   定义体: .induced (inducingFn _ _ _) Pi.topologicalSpace
 
 @[fun_prop]
@@ -1370,7 +1370,7 @@ lemma continuous_inducingFn
 
 中文:
 引理 continuous_inducingFn
-  结论: Continuous (inducingFn σ E F)
+  结论: 连续 (inducingFn σ E F)
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -1393,7 +1393,7 @@ lemma continuous_dual_apply
 中文:
 引理 continuous_dual_apply
   条件: (x : E) (y : F⋆)
-  结论: Continuous fun (A : E ->SWOT[σ] F) => y (A x)
+  结论: 连续 fun (A : E ->SWOT[σ] F) => y (A x)
   证明: by
   refine (continuous_pi_iff.mp continuous_inducingFn) ⟨x, y⟩
 
@@ -1417,7 +1417,7 @@ lemma continuous_of_dual_apply_continuous
 
 中文:
 引理 continuous_of_dual_apply_continuous
-  结论: {α : 类型} [TopologicalSpace α] {g : α -> E ->SWOT[σ] F}
+  结论: {α : 类型} [拓扑空间 α] {g : α -> E ->SWOT[σ] F}
   证明: continuous_induced_rng.2 (continuous_pi_iff.mpr fun p => h p.1 p.2)
 
 @[fun_prop]
@@ -1441,7 +1441,7 @@ lemma isInducing_inducingFn
 
 中文:
 引理 isInducing_inducingFn
-  结论: IsInducing (inducingFn σ E F)
+  结论: 是Inducing (inducingFn σ E F)
   证明: ⟨rfl⟩
 
 @[fun_prop]
@@ -1464,7 +1464,7 @@ lemma isEmbedding_inducingFn
 中文:
 引理 isEmbedding_inducingFn
   条件: [SeparatingDual 𝕜₂ F]
-  结论: IsEmbedding (inducingFn σ E F)
+  结论: 是嵌入 (inducingFn σ E F)
   证明: by
   refine Function.Injective.isEmbedding_induced fun A B hAB => ?_
   rw [ContinuousLinearMapWOT.ext_dual_iff]
@@ -1488,8 +1488,8 @@ lemma tendsto_iff_forall_dual_apply_tendsto
   simp [isInducing_inducingFn.tendsto_nhds_iff, tendsto_pi_nhds]
 
 中文:
-引理 tendsto_iff_forall_dual_apply_tendsto
-  结论: {α : 类型} {l : Filter α} {f : α -> E ->SWOT[σ] F}
+引理 tendsto_iff_对任意_dual_apply_tendsto
+  结论: {α : 类型} {l : 滤子 α} {f : α -> E ->SWOT[σ] F}
   证明: by
   simp [isInducing_inducingFn.tendsto_nhds_iff, tendsto_pi_nhds]
 
@@ -1509,8 +1509,8 @@ lemma le_nhds_iff_forall_dual_apply_le_nhds
   proof: tendsto_iff_forall_dual_apply_tendsto (f := id)
 
 中文:
-引理 le_nhds_iff_forall_dual_apply_le_nhds
-  条件: {l : Filter (E ->SWOT[σ] F)} {A : E ->SWOT[σ] F}
+引理 le_nhds_iff_对任意_dual_apply_le_nhds
+  条件: {l : 滤子 (E ->SWOT[σ] F)} {A : E ->SWOT[σ] F}
   证明: tendsto_iff_forall_dual_apply_tendsto (f := id)
 
 Depends on / 依赖: tendsto_iff_forall_dual_apply_tendsto
@@ -1555,7 +1555,7 @@ instance instContinuousSMul
 
 中文:
 实例 instContinuousSMul
-  签名: {S : 类型} [Semiring S] [Module S F] [SMulCommClass 𝕜₂ S F]
+  签名: {S : 类型} [半环 S] [模 S F] [标量交换类 𝕜₂ S F]
   定义体: .induced (inducingFn σ E F).restrictScalars S
 
 Depends on / 依赖: induced, inducingFn, restrictScalars
@@ -1576,7 +1576,7 @@ instance instIsTopologicalAddGroup
 
 中文:
 实例 instIsTopologicalAddGroup
-  签名: : IsTopologicalAddGroup (E ->SWOT[σ] F) where
+  签名: : 是拓扑加群 (E ->SWOT[σ] F) where
   定义体: .induced (inducingFn σ E F)
   toContinuousNeg := .induced (inducingFn σ E F)
 
@@ -1596,7 +1596,7 @@ instance instUniformSpace
 
 中文:
 实例 instUniformSpace
-  签名: : UniformSpace (E ->SWOT[σ] F)
+  签名: : 一致空间 (E ->SWOT[σ] F)
   定义体: .comap (inducingFn σ E F) inferInstance
 
 Depends on / 依赖: inducingFn
@@ -1613,7 +1613,7 @@ instance instIsUniformAddGroup
 
 中文:
 实例 instIsUniformAddGroup
-  签名: : IsUniformAddGroup (E ->SWOT[σ] F)
+  签名: : 是UniformAdd群 (E ->SWOT[σ] F)
   定义体: .comap (inducingFn σ E F)
 
 Depends on / 依赖: add_le, eq_zero_of_map_eq_zero, inducingFn, map_mul, map_one, map_zero, norm_add_le, norm_eq_zero, norm_eq_zero.mp, norm_mul, norm_neg, norm_one, norm_zero
@@ -1725,7 +1725,7 @@ instance instLocallyConvexSpace
 
 中文:
 实例 instLocallyConvexSpace
-  签名: [NormedSpace 实数 𝕜₂] [Module 实数 (E ->SWOT[σ] F)]
+  签名: [赋范空间 实数 𝕜₂] [模 实数 (E ->SWOT[σ] F)]
   定义体: withSeminorms.toLocallyConvexSpace
 
 Depends on / 依赖: toLocallyConvexSpace, withSeminorms, withSeminorms.toLocallyConvexSpace
@@ -1783,7 +1783,7 @@ definition _root_.ContinuousLinearMap.WOTofCLM
 alias ContinuousLinearMap.toWOTCLM := ContinuousLinearMap.WOTofCLM
 
 中文:
-定义 _root_.ContinuousLinearMap.WOTofCLM
+定义 _root_.连续线性映射.WOTofCLM
   签名: : (E ->SL[σ] F) ->L[𝕜₂] (E ->SWOT[σ] F) where
   定义体: linearEquiv 𝕜₂
   cont := continuous_ofCLM
@@ -1978,7 +1978,7 @@ lemma mul_eq_comp
 
 中文:
 引理 mul_eq_comp
-  条件: [IsTopologicalAddGroup F] (f g : F ->WOT[𝕜₂] F)
+  条件: [是拓扑加群 F] (f g : F ->WOT[𝕜₂] F)
   结论: f * g = f.comp g
   证明: rfl
 
@@ -1997,7 +1997,7 @@ lemma continuous_precomp
 
 中文:
 引理 continuous_precomp
-  条件: [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] (f : E ->SWOT[σ₁₂] F)
+  条件: [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G] (f : E ->SWOT[σ₁₂] F)
   证明: continuous_of_dual_apply_continuous fun _ _ => continuous_dual_apply ..
 
 Depends on / 依赖: continuous_dual_apply, continuous_of_dual_apply_continuous
@@ -2121,7 +2121,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSemitopologicalRing (F ->WOT[𝕜₂] F)
+  签名: 是Semitopological环 (F ->WOT[𝕜₂] F)
   定义体: by simp_rw [mul_eq_comp]; fun_prop
   continuous_mul_const {_} := by simp_rw [mul_eq_comp]; fun_prop
 

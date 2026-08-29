@@ -222,7 +222,7 @@ theorem continuous_selfAdjointPart
 
 中文:
 定理 continuous_selfAdjointPart
-  条件: [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A]
+  条件: [连续加法 A] [余ntinuousStar A] [连续常数标量乘法 R A]
   证明: ((continuous_const_smul _).comp <| continuous_id.add continuous_star).subtype_mk _
 
 @[fun_prop]
@@ -244,7 +244,7 @@ theorem continuous_skewAdjointPart
 
 中文:
 定理 continuous_skewAdjointPart
-  条件: [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A]
+  条件: [余ntinuousSub A] [余ntinuousStar A] [连续常数标量乘法 R A]
   证明: ((continuous_const_smul _).comp <| continuous_id.sub continuous_star).subtype_mk _
 
 @[fun_prop]
@@ -266,7 +266,7 @@ theorem continuous_decomposeProdAdjoint
 
 中文:
 定理 continuous_decomposeProdAdjoint
-  结论: [IsTopologicalAddGroup A] [ContinuousStar A]
+  结论: [是拓扑加群 A] [余ntinuousStar A]
   证明: (continuous_selfAdjointPart R A).prodMk (continuous_skewAdjointPart R A)
 
 @[fun_prop]
@@ -288,7 +288,7 @@ theorem continuous_decomposeProdAdjoint_symm
 
 中文:
 定理 continuous_decomposeProdAdjoint_symm
-  条件: [ContinuousAdd A]
+  条件: [连续加法 A]
   证明: (continuous_subtype_val.comp continuous_fst).add (continuous_subtype_val.comp continuous_snd)
 
 Depends on / 依赖: continuous_fst, continuous_snd, continuous_subtype_val, continuous_subtype_val.comp
@@ -309,7 +309,7 @@ definition selfAdjointPartL
 
 中文:
 定义 selfAdjointPartL
-  签名: [ContinuousAdd A] [ContinuousStar A] [ContinuousConstSMul R A]
+  签名: [连续加法 A] [余ntinuousStar A] [连续常数标量乘法 R A]
   定义体: selfAdjointPart R
 
 Depends on / 依赖: selfAdjointPart
@@ -332,7 +332,7 @@ definition skewAdjointPartL
 
 中文:
 定义 skewAdjointPartL
-  签名: [ContinuousSub A] [ContinuousStar A] [ContinuousConstSMul R A]
+  签名: [余ntinuousSub A] [余ntinuousStar A] [连续常数标量乘法 R A]
   定义体: skewAdjointPart R
 
 #adaptation_note
@@ -358,8 +358,8 @@ definition StarModule.decomposeProdAdjointL
   body: StarModule.decomposeProdAdjoint R A
 
 中文:
-定义 StarModule.decomposeProdAdjointL
-  签名: [IsTopologicalAddGroup A] [ContinuousStar A]
+定义 对合模.decomposeProdAdjointL
+  签名: [是拓扑加群 A] [余ntinuousStar A]
   定义体: StarModule.decomposeProdAdjoint R A
 
 Depends on / 依赖: StarModule, StarModule.decomposeProdAdjoint, decomposeProdAdjoint

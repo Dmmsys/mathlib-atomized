@@ -115,7 +115,7 @@ definition withTreeCtx
 
 中文:
 定义 withTreeCtx
-  签名: (ctx : Core.Context)
+  签名: (ctx : 核.余ntext)
   定义体: { ctx with maxHeartbeats := 0, diag := getDiag ctx.options }
 -/
 private def withTreeCtx (ctx : Core.Context) : Core.Context :=
@@ -208,7 +208,7 @@ definition findMatches
 
 中文:
 定义 findMatches
-  签名: (ext : EnvExtension (IO.Ref (Option (RefinedDiscrTree α))))
+  签名: (ext : EnvExtension (IO.Ref (选项类型 (RefinedDiscrTree α))))
   定义体: do
   let moduleMatches ← findModuleMatches (← createModuleTreeRef addEntry) ty
   let importMatches ← findImportMatches ext addEntry ty constantsPerTask capacityPerTask

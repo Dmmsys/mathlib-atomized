@@ -37,11 +37,11 @@ inductive Path
     - cons: forall {b c : V}, Path a b -> (b ⟶ c) -> Path a c
 
 中文:
-归纳类型 Path
-  参数: {V : 类型u} [Quiver.{v} V] (a : V)
+归纳类型 道路
+  参数: {V : 类型u} [箭图.{v} V] (a : V)
   构造子 (2 个):
-    - nil: Path a a
-    - cons: 对任意 {b c : V}, Path a b -> (b ⟶ c) -> Path a c
+    - nil: 道路 a a
+    - cons: 对任意 {b c : V}, 道路 a b -> (b ⟶ c) -> 道路 a c
 -/
 inductive Path {V : Type u} [Quiver.{v} V] (a : V) : V -> Type max u v
   | nil : Path a a
@@ -59,8 +59,8 @@ definition Hom.toPath
   body: Path.nil.cons e
 
 中文:
-定义 Hom.toPath
-  签名: {V} [Quiver V] {a b : V} (e : a ⟶ b)
+定义 态射.toPath
+  签名: {V} [箭图 V] {a b : V} (e : a ⟶ b)
   定义体: Path.nil.cons e
 
 Depends on / 依赖: Path.nil.cons
@@ -83,8 +83,8 @@ lemma nil_ne_cons
 
 中文:
 引理 nil_ne_cons
-  条件: (p : Path a b) (e : b ⟶ a)
-  结论: Path.nil != p.cons e
+  条件: (p : 道路 a b) (e : b ⟶ a)
+  结论: 道路.nil != p.cons e
   证明: fun h => by injection h
 
 Depends on / 依赖: injection
@@ -103,8 +103,8 @@ lemma cons_ne_nil
 
 中文:
 引理 cons_ne_nil
-  条件: (p : Path a b) (e : b ⟶ a)
-  结论: p.cons e != Path.nil
+  条件: (p : 道路 a b) (e : b ⟶ a)
+  结论: p.cons e != 道路.nil
   证明: fun h => by injection h
 
 Depends on / 依赖: injection
@@ -122,7 +122,7 @@ lemma obj_eq_of_cons_eq_cons
 
 中文:
 引理 obj_eq_of_cons_eq_cons
-  结论: {p : Path a b} {p' : Path a c}
+  结论: {p : 道路 a b} {p' : 道路 a c}
   证明: by injection h
 
 Depends on / 依赖: injection
@@ -140,7 +140,7 @@ lemma heq_of_cons_eq_cons
 
 中文:
 引理 heq_of_cons_eq_cons
-  结论: {p : Path a b} {p' : Path a c}
+  结论: {p : 道路 a b} {p' : 道路 a c}
   证明: by injection h
 
 Depends on / 依赖: injection
@@ -158,7 +158,7 @@ lemma hom_heq_of_cons_eq_cons
 
 中文:
 引理 hom_heq_of_cons_eq_cons
-  结论: {p : Path a b} {p' : Path a c}
+  结论: {p : 道路 a b} {p' : 道路 a c}
   证明: by injection h
 
 Depends on / 依赖: injection
@@ -199,7 +199,7 @@ theorem length_nil
 中文:
 定理 length_nil
   条件: {a : V}
-  结论: (nil : Path a a).length = 0
+  结论: (nil : 道路 a a).length = 0
   证明: rfl
 
 @[simp]
@@ -219,7 +219,7 @@ theorem length_cons
 
 中文:
 定理 length_cons
-  条件: (a b c : V) (p : Path a b) (e : b ⟶ c)
+  条件: (a b c : V) (p : 道路 a b) (e : b ⟶ c)
   结论: (p.cons e).length = p.length + 1
   证明: rfl
 -/
@@ -240,7 +240,7 @@ theorem eq_of_length_zero
 
 中文:
 定理 eq_of_length_zero
-  条件: (p : Path a b) (hzero : p.length = 0)
+  条件: (p : 道路 a b) (hzero : p.length = 0)
   结论: a = b
   证明: by
   cases p
@@ -270,7 +270,7 @@ theorem eq_nil_of_length_zero
 
 中文:
 定理 eq_nil_of_length_zero
-  条件: (p : Path a a) (hzero : p.length = 0)
+  条件: (p : 道路 a a) (hzero : p.length = 0)
   结论: p = nil
   证明: by
   cases p
@@ -330,7 +330,7 @@ theorem comp_cons
 
 中文:
 定理 comp_cons
-  条件: {a b c d : V} (p : Path a b) (q : Path b c) (e : c ⟶ d)
+  条件: {a b c d : V} (p : 道路 a b) (q : 道路 b c) (e : c ⟶ d)
   证明: rfl
 
 @[simp]
@@ -353,8 +353,8 @@ theorem comp_nil
 
 中文:
 定理 comp_nil
-  条件: {a b : V} (p : Path a b)
-  结论: p.comp Path.nil = p
+  条件: {a b : V} (p : 道路 a b)
+  结论: p.comp 道路.nil = p
   证明: rfl
 
 @[simp]
@@ -374,7 +374,7 @@ theorem nil_comp
 中文:
 定理 nil_comp
   条件: {a : V}
-  结论: 对任意 {b} (p : Path a b), Path.nil.comp p = p
+  结论: 对任意 {b} (p : 道路 a b), 道路.nil.comp p = p
 -/
 theorem nil_comp {a : V} : forall {b} (p : Path a b), Path.nil.comp p = p
   | _, nil => rfl
@@ -408,8 +408,8 @@ theorem length_comp
 
 中文:
 定理 length_comp
-  条件: (p : Path a b)
-  结论: 对任意 {c} (q : Path b c), (p.comp q).length = p.length + q.length
+  条件: (p : 道路 a b)
+  结论: 对任意 {c} (q : 道路 b c), (p.comp q).length = p.length + q.length
 -/
 theorem length_comp (p : Path a b) : forall {c} (q : Path b c), (p.comp q).length = p.length + q.length
   | _, nil => rfl
@@ -437,7 +437,7 @@ theorem comp_inj
 
 中文:
 定理 comp_inj
-  条件: {p₁ p₂ : Path a b} {q₁ q₂ : Path b c} (hq : q₁.length = q₂.length)
+  条件: {p₁ p₂ : 道路 a b} {q₁ q₂ : 道路 b c} (hq : q₁.length = q₂.length)
   证明: by
   refine ⟨fun h => ?_, by rintro ⟨rfl, rfl⟩; rfl⟩
   induction q₁ with
@@ -483,7 +483,7 @@ theorem comp_inj'
 
 中文:
 定理 comp_inj'
-  条件: {p₁ p₂ : Path a b} {q₁ q₂ : Path b c} (h : p₁.length = p₂.length)
+  条件: {p₁ p₂ : 道路 a b} {q₁ q₂ : 道路 b c} (h : p₁.length = p₂.length)
   证明: ⟨fun h_eq => (comp_inj <| Nat.add_left_cancel (n := p₂.length) <|
     by simpa [h] using congr_arg length h_eq).1 h_eq,
    by rintro ⟨rfl, rfl⟩; rfl⟩
@@ -507,8 +507,8 @@ theorem comp_injective_left
 
 中文:
 定理 comp_injective_left
-  条件: (q : Path b c)
-  结论: Injective fun p : Path a b => p.comp q
+  条件: (q : 道路 b c)
+  结论: 单射 fun p : 道路 a b => p.comp q
   证明: fun _ _ h => ((comp_inj rfl).1 h).1
 
 Depends on / 依赖: comp_inj
@@ -529,8 +529,8 @@ theorem comp_injective_right
 
 中文:
 定理 comp_injective_right
-  条件: (p : Path a b)
-  结论: Injective (p.comp : Path b c -> Path a c)
+  条件: (p : 道路 a b)
+  结论: 单射 (p.comp : 道路 b c -> 道路 a c)
   证明: fun _ _ h => ((comp_inj' rfl).1 h).2
 
 @[simp]
@@ -554,7 +554,7 @@ theorem comp_inj_left
 
 中文:
 定理 comp_inj_left
-  条件: {p₁ p₂ : Path a b} {q : Path b c}
+  条件: {p₁ p₂ : 道路 a b} {q : 道路 b c}
   结论: p₁.comp q = p₂.comp q ↔ p₁ = p₂
   证明: q.comp_injective_left.eq_iff
 
@@ -577,7 +577,7 @@ theorem comp_inj_right
 
 中文:
 定理 comp_inj_right
-  条件: {p : Path a b} {q₁ q₂ : Path b c}
+  条件: {p : 道路 a b} {q₁ q₂ : 道路 b c}
   结论: p.comp q₁ = p.comp q₂ ↔ q₁ = q₂
   证明: p.comp_injective_right.eq_iff
 
@@ -605,7 +605,7 @@ lemma eq_toPath_comp_of_length_eq_succ
 
 中文:
 引理 eq_toPath_comp_of_length_eq_succ
-  结论: (p : Path a b) {n : 自然数}
+  结论: (p : 道路 a b) {n : 自然数}
   证明: by
   induction p generalizing n with
   | nil => simp at hp
@@ -655,7 +655,7 @@ lemma length_ne_zero_iff_eq_comp
 
 中文:
 引理 length_ne_zero_iff_eq_comp
-  条件: (p : Path a b)
+  条件: (p : 道路 a b)
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · have h_len : p.length = (p.length - 1) + 1 := by lia
@@ -718,7 +718,7 @@ lemma comp_toPath_eq_cons
 
 中文:
 引理 comp_toPath_eq_cons
-  条件: {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   证明: rfl
 -/
 @[simp] lemma comp_toPath_eq_cons {a b c : V} (p : Path a b) (e : b ⟶ c) :
@@ -738,7 +738,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : 对任意 {b : V}, Path a b -> List V
+  签名: : 对任意 {b : V}, 道路 a b -> 列表 V
 -/
 def toList : forall {b : V}, Path a b -> List V
   | _, nil => []
@@ -757,8 +757,8 @@ theorem toList_comp
 
 中文:
 定理 toList_comp
-  条件: (p : Path a b)
-  结论: 对任意 {c} (q : Path b c), (p.comp q).toList = q.toList ++ p.toList
+  条件: (p : 道路 a b)
+  结论: 对任意 {c} (q : 道路 b c), (p.comp q).toList = q.toList ++ p.toList
 -/
 theorem toList_comp (p : Path a b) : forall {c} (q : Path b c), (p.comp q).toList = q.toList ++ p.toList
   | _, nil => by simp
@@ -810,7 +810,7 @@ theorem toList_injective
 中文:
 定理 toList_injective
   条件: (a : V)
-  结论: 对任意 b, Injective (toList : Path a b -> List V)
+  结论: 对任意 b, 单射 (toList : 道路 a b -> 列表 V)
   证明: h
     simp [toList_injective _ _ hAC, eq_iff_true_of_subsingleton]
 
@@ -837,7 +837,7 @@ theorem toList_inj
 
 中文:
 定理 toList_inj
-  条件: {p q : Path a b}
+  条件: {p q : 道路 a b}
   结论: p.toList = q.toList ↔ p = q
   证明: (toList_injective _ _).eq_iff
 
@@ -1064,7 +1064,7 @@ theorem Reachable.elim
 
 中文:
 定理 Reachable.elim
-  条件: {p : 命题} (h : Reachable a b) (hp : Path a b -> p)
+  条件: {p : 命题} (h : Reachable a b) (hp : 道路 a b -> p)
   结论: p
   证明: Nonempty.elim h hp
 
@@ -1145,7 +1145,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder V Reachable
+  签名: 是预序 V Reachable
   定义体: .refl
   trans _ _ _ := .trans
 -/
@@ -1163,8 +1163,8 @@ theorem Path.reachable
   proof: ⟨p⟩
 
 中文:
-定理 Path.reachable
-  条件: (p : Path a b)
+定理 道路.reachable
+  条件: (p : 道路 a b)
   结论: Reachable a b
   证明: ⟨p⟩
 -/
@@ -1180,7 +1180,7 @@ theorem Hom.reachable
   proof: ⟨e.toPath⟩
 
 中文:
-定理 Hom.reachable
+定理 态射.reachable
   条件: (e : a ⟶ b)
   结论: Reachable a b
   证明: ⟨e.toPath⟩
@@ -1227,7 +1227,7 @@ theorem mapPath_nil
 中文:
 定理 mapPath_nil
   条件: (a : V)
-  结论: F.mapPath (Path.nil : Path a a) = Path.nil
+  结论: F.mapPath (道路.nil : 道路 a a) = 道路.nil
   证明: rfl
 
 @[simp]
@@ -1248,7 +1248,7 @@ theorem mapPath_cons
 
 中文:
 定理 mapPath_cons
-  条件: {a b c : V} (p : Path a b) (e : b ⟶ c)
+  条件: {a b c : V} (p : 道路 a b) (e : b ⟶ c)
   证明: rfl
 
 @[simp]
@@ -1267,7 +1267,7 @@ theorem mapPath_comp
 
 中文:
 定理 mapPath_comp
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
 
 Depends on / 依赖: mapRange, map_zero
 -/
@@ -1310,7 +1310,7 @@ theorem mapPath_id
 中文:
 定理 mapPath_id
   条件: {a b : V}
-  结论: (p : Path a b) -> (𝟭q V).mapPath p = p
+  结论: (p : 道路 a b) -> (𝟭q V).mapPath p = p
 -/
 theorem mapPath_id {a b : V} : (p : Path a b) -> (𝟭q V).mapPath p = p
   | Path.nil => rfl
@@ -1333,7 +1333,7 @@ theorem mapPath_comp_apply
 
 中文:
 定理 mapPath_comp_apply
-  条件: {a b : V} (p : Path a b)
+  条件: {a b : V} (p : 道路 a b)
   证明: by
   induction p with
   | nil => rfl

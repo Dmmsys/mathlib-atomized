@@ -44,8 +44,8 @@ lemma toReal_condLExp
   refine ae_eq_condExp_of_forall_setIntegral_eq hm (E := Real) ?_ ?_ ?_ ?_ (μ
 
 中文:
-引理 toReal_condLExp
-  结论: (m : MeasurableSpace 𝓧) {m𝓧 : MeasurableSpace 𝓧} {μ : Measure 𝓧}
+引理 to实数_condLExp
+  结论: (m : 可测空间 𝓧) {m𝓧 : 可测空间 𝓧} {μ : 测度 𝓧}
   证明: by
   by_cases hm : m <= m𝓧
   swap; · simp [condLExp_of_not_le hm, condExp_of_not_le hm]; rfl
@@ -87,8 +87,8 @@ lemma condLExp_ofReal
   have A : μ[fun x => (ENNReal.ofReal (f x)).toReal | m] =ᵐ[μ] μ[f | m] := by
 
 中文:
-引理 condLExp_ofReal
-  结论: (m : MeasurableSpace 𝓧) {m𝓧 : MeasurableSpace 𝓧} {μ : Measure 𝓧}
+引理 condLExp_of实数
+  结论: (m : 可测空间 𝓧) {m𝓧 : 可测空间 𝓧} {μ : 测度 𝓧}
   证明: by
   by_cases hm : m <= m𝓧
   swap; · simp [condLExp_of_not_le hm, condExp_of_not_le hm]; rfl
@@ -140,7 +140,7 @@ lemma condLExp_enorm
 
 中文:
 引理 condLExp_enorm
-  结论: (m : MeasurableSpace 𝓧) {m𝓧 : MeasurableSpace 𝓧} {μ : Measure 𝓧}
+  结论: (m : 可测空间 𝓧) {m𝓧 : 可测空间 𝓧} {μ : 测度 𝓧}
   证明: by
   have A : μ⁻[fun x => ENNReal.ofReal (f x) | m] =ᵐ[μ] μ⁻[fun x => ‖f x‖ₑ | m] := by
     apply condLExp_congr_ae

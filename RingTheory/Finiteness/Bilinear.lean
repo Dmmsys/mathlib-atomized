@@ -39,7 +39,7 @@ theorem FG.map₂
 
 中文:
 定理 FG.map₂
-  结论: (f : M ->ₗ[R] N ->ₗ[R] P) {p : Submodule R M} {q : Submodule R N} (hp : p.FG)
+  结论: (f : M ->ₗ[R] N ->ₗ[R] P) {p : 子模 R M} {q : 子模 R N} (hp : p.FG)
   证明: let ⟨sm, hfm, hm⟩ := fg_def.1 hp
   let ⟨sn, hfn, hn⟩ := fg_def.1 hq
   fg_def.2

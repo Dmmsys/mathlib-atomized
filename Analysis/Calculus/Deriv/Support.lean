@@ -70,9 +70,9 @@ theorem HasDerivAt.of_notMem_tsupport
   proof: (HasStrictDerivAt.of_notMem_tsupport h).hasDerivAt
 
 中文:
-定理 HasDerivAt.of_notMem_tsupport
+定理 在点处可导.of_notMem_tsupport
   条件: (h : x ∉ tsupport f)
-  结论: HasDerivAt f 0 x
+  结论: 在点处可导 f 0 x
   证明: (HasStrictDerivAt.of_notMem_tsupport h).hasDerivAt
 
 Depends on / 依赖: HasStrictDerivAt, HasStrictDerivAt.of_notMem_tsupport, hasDerivAt, of_notMem_tsupport
@@ -90,7 +90,7 @@ theorem HasDerivWithinAt.of_notMem_tsupport
 
 中文:
 定理 HasDerivWithinAt.of_notMem_tsupport
-  条件: {s : Set 𝕜} (h : x ∉ tsupport f)
+  条件: {s : 集合 𝕜} (h : x ∉ tsupport f)
   证明: (HasDerivAt.of_notMem_tsupport h).hasDerivWithinAt
 
 Depends on / 依赖: HasDerivAt, HasDerivAt.of_notMem_tsupport, hasDerivWithinAt, of_notMem_tsupport

@@ -31,7 +31,7 @@ example [Module.Finite A B] : Module.Finite (A ⧸ P.under A) (B ⧸ P) := infer
 
 中文:
 实例 module_finite_of_liesOver
-  签名: [Module.Finite A B]
+  签名: [模.有限 A B]
   定义体: Module.Finite.of_restrictScalars_finite A (A ⧸ p) (B ⧸ P)
 
 example [Module.Finite A B] : Module.Finite (A ⧸ P.under A) (B ⧸ P) := inferInstance
@@ -53,7 +53,7 @@ instance algebra_finiteType_of_liesOver
 
 中文:
 实例 algebra_finiteType_of_liesOver
-  签名: [Algebra.FiniteType A B]
+  签名: [代数.有限型 A B]
   定义体: Algebra.FiniteType.of_restrictScalars_finiteType A (A ⧸ p) (B ⧸ P)
 
 Depends on / 依赖: Algebra, Algebra.FiniteType.of_restrictScalars_finiteType, FiniteType, of_restrictScalars_finiteType
@@ -72,7 +72,7 @@ instance isNoetherian_of_liesOver
 
 中文:
 实例 isNoetherian_of_liesOver
-  签名: [IsNoetherian A B]
+  签名: [是Noether A B]
   定义体: isNoetherian_of_tower A inferInstance
 
 Depends on / 依赖: isNoetherian_of_tower
@@ -92,7 +92,7 @@ isNoetherian_of_surjective (Ideal.Quotient.mkₐ A _).toLinearMap
 
 中文:
 实例 QuotientMapQuotient.isNoetherian
-  签名: [IsNoetherian A B]
+  签名: [是Noether A B]
   定义体: isNoetherian_of_tower A
 isNoetherian_of_surjective (Ideal.Quotient.mkₐ A _).toLinearMap
       LinearMap.range_eq_top.mpr Ideal.Quotient.mk_surjective

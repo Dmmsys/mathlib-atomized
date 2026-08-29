@@ -87,11 +87,11 @@ structure GlueData
     - f_open : forall i j, IsOpenImmersion (f i j)
 
 中文:
-结构 GlueData
-  参数: extends CategoryTheory.GlueData (PresheafedSpace.{v, u, v} C)
-  继承: CategoryTheory.GlueData (PresheafedSpace.{v, u, v} C)
+结构 粘合数据
+  参数: extends 范畴论.粘合数据 (Presheafed空间.{v, u, v} C)
+  继承: 范畴论.粘合数据 (Presheafed空间.{v, u, v} C)
   公理与运算 (1 个):
-    - f_open : 对任意 i j, IsOpenImmersion (f i j)
+    - f_open : 对任意 i j, 是开浸入 (f i j)
 -/
 structure GlueData extends CategoryTheory.GlueData (PresheafedSpace.{v, u, v} C) where
   f_open : forall i j, IsOpenImmersion (f i j)
@@ -128,7 +128,7 @@ abbreviation toTopGlueData
 
 中文:
 缩写 toTopGlueData
-  签名: : TopCat.GlueData
+  签名: : 顶元素范畴.粘合数据
   定义体: { f_open := fun i j => (D.f_open i j).base_open
     toGlueData := 𝖣.mapGlueData (forget C) }
 
@@ -153,8 +153,8 @@ theorem ι_isOpenEmbedding
 
 中文:
 定理 ι_isOpenEmbedding
-  条件: [HasLimits C] (i : D.J)
-  结论: IsOpenEmbedding (𝖣.ι i).base
+  条件: [有极限 C] (i : D.J)
+  结论: 是开嵌入 (𝖣.ι i).base
   证明: by
   rw [← show _ = (𝖣.ι i).base from 𝖣.ι_gluedIso_inv (PresheafedSpace.forget _) _]; rw [TopCat.coe_comp]
   exact (TopCat.homeoOfIso (𝖣.gluedIso (PresheafedSpace.forget _)).symm).isOpenEmbedding.comp
@@ -182,7 +182,7 @@ theorem pullback_base
 
 中文:
 定理 pullback_base
-  条件: (i j k : D.J) (S : Set (D.V (i, j)).carrier)
+  条件: (i j k : D.J) (S : 集合 (D.V (i, j)).carrier)
   证明: by
   have eq₁ : _ = (π₁ i, j, k).base := PreservesPullback.iso_hom_fst (forget C) _ _
   have eq₂ : _ = (π₂ i, j, k).base := PreservesPullback.iso_hom_snd (forget C) _ _
@@ -1039,11 +1039,11 @@ structure GlueData
     - f_open : forall i j, SheafedSpace.IsOpenImmersion (f i j)
 
 中文:
-结构 GlueData
-  参数: extends CategoryTheory.GlueData (SheafedSpace.{u, v, v} C)
-  继承: CategoryTheory.GlueData (SheafedSpace.{u, v, v} C)
+结构 粘合数据
+  参数: extends 范畴论.粘合数据 (Sheafed空间.{u, v, v} C)
+  继承: 范畴论.粘合数据 (Sheafed空间.{u, v, v} C)
   公理与运算 (1 个):
-    - f_open : 对任意 i j, SheafedSpace.IsOpenImmersion (f i j)
+    - f_open : 对任意 i j, Sheafed空间.是开浸入 (f i j)
 -/
 structure GlueData extends CategoryTheory.GlueData (SheafedSpace.{u, v, v} C) where
   f_open : forall i j, SheafedSpace.IsOpenImmersion (f i j)
@@ -1068,7 +1068,7 @@ abbreviation toPresheafedSpaceGlueData
 
 中文:
 缩写 toPresheafedSpaceGlueData
-  签名: : PresheafedSpace.GlueData C
+  签名: : Presheafed空间.粘合数据 C
   定义体: { f_open := D.f_open
     toGlueData := 𝖣.mapGlueData forgetToPresheafedSpace }
 
@@ -1204,11 +1204,11 @@ structure GlueData
     - f_open : forall i j, LocallyRingedSpace.IsOpenImmersion (f i j)
 
 中文:
-结构 GlueData
-  参数: extends CategoryTheory.GlueData LocallyRingedSpace
-  继承: CategoryTheory.GlueData LocallyRingedSpace
+结构 粘合数据
+  参数: extends 范畴论.粘合数据 LocallyRinged空间
+  继承: 范畴论.粘合数据 LocallyRinged空间
   公理与运算 (1 个):
-    - f_open : 对任意 i j, LocallyRingedSpace.IsOpenImmersion (f i j)
+    - f_open : 对任意 i j, LocallyRinged空间.是开浸入 (f i j)
 -/
 structure GlueData extends CategoryTheory.GlueData LocallyRingedSpace where
   f_open : forall i j, LocallyRingedSpace.IsOpenImmersion (f i j)
@@ -1232,7 +1232,7 @@ abbreviation toSheafedSpaceGlueData
 
 中文:
 缩写 toSheafedSpaceGlueData
-  签名: : SheafedSpace.GlueData CommRingCat
+  签名: : Sheafed空间.粘合数据 交换环范畴
   定义体: { f_open := D.f_open
     toGlueData := 𝖣.mapGlueData forgetToSheafedSpace }
 

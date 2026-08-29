@@ -54,8 +54,8 @@ definition prod
   body: ∏ a in f.support, g a (f a)
 
 中文:
-定义 prod
-  签名: [Zero M] [CommMonoid N] (f : α ->₀ M) (g : α -> M -> N)
+定义 乘积
+  签名: [零 M] [交换幺半群 N] (f : α ->₀ M) (g : α -> M -> N)
   定义体: ∏ a in f.support, g a (f a)
 
 Depends on / 依赖: f.support, support
@@ -80,7 +80,7 @@ lemma prod_fun_one
 中文:
 引理 prod_fun_one
   条件: (f : α ->₀ M)
-  结论: f.prod (fun _ _ => (1 : N)) = 1
+  结论: f.乘积 (fun _ _ => (1 : N)) = 1
   证明: by simp [prod]
 
 @[to_additive]
@@ -102,7 +102,7 @@ theorem prod_of_support_subset
 
 中文:
 定理 prod_of_support_subset
-  结论: (f : α ->₀ M) {s : Finset α} (hs : f.support subseteq s) (g : α -> M -> N)
+  结论: (f : α ->₀ M) {s : 有限集 α} (hs : f.support subseteq s) (g : α -> M -> N)
   证明: by
   refine Finset.prod_subset hs fun x hxs hx => h x hxs ▸ (congr_arg (g x) ?_)
   exact notMem_support_iff.1 hx
@@ -129,7 +129,7 @@ theorem prod_fintype
 
 中文:
 定理 prod_fintype
-  条件: [Fintype α] (f : α ->₀ M) (g : α -> M -> N) (h : 对任意 i, g i 0 = 1)
+  条件: [有限类型 α] (f : α ->₀ M) (g : α -> M -> N) (h : 对任意 i, g i 0 = 1)
   证明: f.prod_of_support_subset (subset_univ _) g fun x _ => h x
 
 @[to_additive (attr := simp)]
@@ -213,7 +213,7 @@ lemma prod_onFinset
 
 中文:
 引理 prod_onFinset
-  条件: (s : Finset α) (f : α -> M) (hf) (g : α -> M -> N) (hg : 对任意 i in s, g i 0 = 1)
+  条件: (s : 有限集 α) (f : α -> M) (hf) (g : α -> M -> N) (hg : 对任意 i in s, g i 0 = 1)
   证明: prod_of_support_subset _ support_onFinset_subset _ hg
 
 @[to_additive (attr := simp)]
@@ -239,7 +239,7 @@ theorem prod_zero_index
 中文:
 定理 prod_zero_index
   条件: {h : α -> M -> N}
-  结论: (0 : α ->₀ M).prod h = 1
+  结论: (0 : α ->₀ M).乘积 h = 1
   证明: rfl
 
 @[to_additive]
@@ -285,7 +285,7 @@ theorem prod_finsetProd_comm
 
 中文:
 定理 prod_finsetProd_comm
-  条件: {s : Finset β} (f : α ->₀ M) (h : α -> M -> β -> N)
+  条件: {s : 有限集 β} (f : α ->₀ M) (h : α -> M -> β -> N)
   证明: Finset.prod_comm
 
 @[to_additive (attr := simp)]
@@ -331,7 +331,7 @@ theorem sum_ite_self_eq
 
 中文:
 定理 sum_ite_self_eq
-  条件: [DecidableEq α] {N : 类型} [AddCommMonoid N] (f : α ->₀ N) (a : α)
+  条件: [DecidableEq α] {N : 类型} [加法交换幺半群 N] (f : α ->₀ N) (a : α)
   证明: by
   simp_all
 -/
@@ -355,7 +355,7 @@ theorem if_mem_support
 
 中文:
 定理 if_mem_support
-  条件: [DecidableEq α] {N : 类型} [Zero N] (f : α ->₀ N) (a : α)
+  条件: [DecidableEq α] {N : 类型} [零 N] (f : α ->₀ N) (a : α)
   证明: by
   simp only [mem_support_iff, ne_eq, ite_eq_left_iff, not_not]
   exact fun h => h.symm
@@ -406,7 +406,7 @@ theorem sum_ite_self_eq'
 
 中文:
 定理 sum_ite_self_eq'
-  条件: [DecidableEq α] {N : 类型} [AddCommMonoid N] (f : α ->₀ N) (a : α)
+  条件: [DecidableEq α] {N : 类型} [加法交换幺半群 N] (f : α ->₀ N) (a : α)
   证明: by
   simp
 
@@ -429,7 +429,7 @@ theorem prod_pow
 
 中文:
 定理 prod_pow
-  条件: [Fintype α] (f : α ->₀ 自然数) (g : α -> N)
+  条件: [有限类型 α] (f : α ->₀ 自然数) (g : α -> N)
   证明: f.prod_fintype _ fun _ => pow_zero _
 
 @[to_additive (attr := simp)]
@@ -451,7 +451,7 @@ theorem prod_zpow
 
 中文:
 定理 prod_zpow
-  条件: {N} [DivisionCommMonoid N] [Fintype α] (f : α ->₀ 整数) (g : α -> N)
+  条件: {N} [DivisionComm幺半群 N] [有限类型 α] (f : α ->₀ 整数) (g : α -> N)
   证明: f.prod_fintype _ fun _ => zpow_zero _
 
 Depends on / 依赖: f.prod_fintype, prod_fintype, zpow_zero
@@ -475,7 +475,7 @@ theorem onFinset_prod
 
 中文:
 定理 onFinset_prod
-  结论: {s : Finset α} {f : α -> M} {g : α -> M -> N} (hf : 对任意 a, f a != 0 -> a in s)
+  结论: {s : 有限集 α} {f : α -> M} {g : α -> M -> N} (hf : 对任意 a, f a != 0 -> a in s)
   证明: Finset.prod_subset support_onFinset_subset by simp +contextual [*]
 
 Depends on / 依赖: Finset, Finset.prod_subset, contextual, prod_subset, support_onFinset_subset
@@ -567,8 +567,8 @@ theorem _root_.SubmonoidClass.finsuppProd_mem
   proof: prod_mem fun _i hi => h _ (Finsupp.mem_support_iff.mp hi)
 
 中文:
-定理 _root_.SubmonoidClass.finsuppProd_mem
-  结论: {S : 类型} [SetLike S N] [SubmonoidClass S N]
+定理 _root_.子幺半群类.finsuppProd_mem
+  结论: {S : 类型} [集合状 S N] [子幺半群类 S N]
   证明: prod_mem fun _i hi => h _ (Finsupp.mem_support_iff.mp hi)
 
 Depends on / 依赖: Finsupp, Finsupp.mem_support_iff.mp, mem_support_iff, prod_mem
@@ -684,7 +684,7 @@ lemma prod_unique
 
 中文:
 引理 prod_unique
-  条件: [Unique α] {f : α ->₀ M} {g : α -> M -> N} (h₁ : f default = 0 -> g default 0 = 1)
+  条件: [唯一 α] {f : α ->₀ M} {g : α -> M -> N} (h₁ : f default = 0 -> g default 0 = 1)
   证明: prod_eq_single _ (fun a => by simp [Subsingleton.elim a default]) h₁
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, prod_eq_single
@@ -710,7 +710,7 @@ lemma prod_eq_zero_iff
 
 中文:
 引理 prod_eq_zero_iff
-  结论: f.prod g = 0 ↔ 存在 i in f.support, g i (f i) = 0
+  结论: f.乘积 g = 0 ↔ 存在 i in f.support, g i (f i) = 0
   证明: Finset.prod_eq_zero_iff
 
 Depends on / 依赖: Finset, Finset.prod_eq_zero_iff, prod_eq_zero_iff
@@ -726,7 +726,7 @@ lemma prod_ne_zero_iff
 
 中文:
 引理 prod_ne_zero_iff
-  结论: f.prod g != 0 ↔ 对任意 i in f.support, g i (f i) != 0
+  结论: f.乘积 g != 0 ↔ 对任意 i in f.support, g i (f i) != 0
   证明: Finset.prod_ne_zero_iff
 
 Depends on / 依赖: Finset, Finset.prod_ne_zero_iff, S.smul_mem, Subalgebra, Subalgebra.instSubsemiringClass, instSubsemiringClass, neg_mem, neg_one_smul, prod_ne_zero_iff, smul_mem
@@ -749,7 +749,7 @@ theorem map_finsuppProd
 
 中文:
 定理 map_finsuppProd
-  结论: [Zero M] [CommMonoid N] [CommMonoid P] {H : 类型}
+  结论: [零 M] [交换幺半群 N] [交换幺半群 P] {H : 类型}
   证明: map_prod h _ _
 
 @[to_additive]
@@ -773,8 +773,8 @@ theorem MonoidHom.coe_finsuppProd
 @[to_additive (attr := simp)]
 
 中文:
-定理 MonoidHom.coe_finsuppProd
-  结论: [Zero β] [MulOneClass N] [CommMonoid P] (f : α ->₀ β)
+定理 幺半群态射.coe_finsuppProd
+  结论: [零 β] [MulOne类 N] [交换幺半群 P] (f : α ->₀ β)
   证明: MonoidHom.coe_finsetProd _ _
 
 @[to_additive (attr := simp)]
@@ -795,8 +795,8 @@ theorem MonoidHom.finsuppProd_apply
   proof: MonoidHom.finsetProd_apply _ _ _
 
 中文:
-定理 MonoidHom.finsuppProd_apply
-  结论: [Zero β] [MulOneClass N] [CommMonoid P] (f : α ->₀ β)
+定理 幺半群态射.finsuppProd_apply
+  结论: [零 β] [MulOne类 N] [交换幺半群 P] (f : α ->₀ β)
   证明: MonoidHom.finsetProd_apply _ _ _
 
 Depends on / 依赖: MonoidHom, MonoidHom.finsetProd_apply, finsetProd_apply
@@ -818,7 +818,7 @@ theorem single_multiset_sum
 
 中文:
 定理 single_multiset_sum
-  条件: [AddCommMonoid M] (s : Multiset M) (a : α)
+  条件: [加法交换幺半群 M] (s : Multiset M) (a : α)
   证明: Multiset.induction_on s (single_zero _) fun a s ih => by
     rw [Multiset.sum_cons]; rw [single_add]; rw [ih]; rw [Multiset.map_cons]; rw [Multiset.sum_cons]
 
@@ -845,7 +845,7 @@ theorem single_finsetSum
 
 中文:
 定理 single_finsetSum
-  条件: [AddCommMonoid M] (s : Finset ι) (f : ι -> M) (a : α)
+  条件: [加法交换幺半群 M] (s : 有限集 ι) (f : ι -> M) (a : α)
   证明: by
   trans
   · apply single_multiset_sum
@@ -877,7 +877,7 @@ theorem single_sum
 
 中文:
 定理 single_sum
-  条件: [Zero M] [AddCommMonoid N] (s : ι ->₀ M) (f : ι -> M -> N) (a : α)
+  条件: [零 M] [加法交换幺半群 N] (s : ι ->₀ M) (f : ι -> M -> N) (a : α)
   证明: single_finsetSum _ _ _
 
 @[to_additive]
@@ -899,7 +899,7 @@ theorem prod_neg_index
 
 中文:
 定理 prod_neg_index
-  结论: [SubtractionMonoid G] [CommMonoid M] {g : α ->₀ G} {h : α -> G -> M}
+  结论: [Subtraction幺半群 G] [交换幺半群 M] {g : α ->₀ G} {h : α -> G -> M}
   证明: prod_mapRange_index h0
 
 Depends on / 依赖: prod_mapRange_index
@@ -922,7 +922,7 @@ theorem finsetSum_apply
 
 中文:
 定理 finsetSum_apply
-  条件: [AddCommMonoid N] (S : Finset ι) (f : ι -> α ->₀ N) (a : α)
+  条件: [加法交换幺半群 N] (S : 有限集 ι) (f : ι -> α ->₀ N) (a : α)
   证明: map_sum (applyAddHom a) _ _
 
 @[deprecated (since := "2026-04-08")] alias finset_sum_apply := finsetSum_apply
@@ -948,7 +948,7 @@ theorem sum_apply
 
 中文:
 定理 sum_apply
-  条件: [Zero M] [AddCommMonoid N] {f : α ->₀ M} {g : α -> M -> β ->₀ N} {a₂ : β}
+  条件: [零 M] [加法交换幺半群 N] {f : α ->₀ M} {g : α -> M -> β ->₀ N} {a₂ : β}
   证明: finsetSum_apply _ _ _
 
 Depends on / 依赖: finsetSum_apply
@@ -969,7 +969,7 @@ theorem coe_finsetSum
 
 中文:
 定理 coe_finsetSum
-  条件: [AddCommMonoid N] (S : Finset ι) (f : ι -> α ->₀ N)
+  条件: [加法交换幺半群 N] (S : 有限集 ι) (f : ι -> α ->₀ N)
   证明: map_sum (coeFnAddHom : (α ->₀ N) ->+ _) _ _
 
 @[deprecated (since := "2026-04-08")] alias coe_finset_sum := coe_finsetSum
@@ -990,7 +990,7 @@ theorem coe_sum
 
 中文:
 定理 coe_sum
-  条件: [Zero M] [AddCommMonoid N] (f : α ->₀ M) (g : α -> M -> β ->₀ N)
+  条件: [零 M] [加法交换幺半群 N] (f : α ->₀ M) (g : α -> M -> β ->₀ N)
   证明: coe_finsetSum _ _
 -/
 @[simp, norm_cast] theorem coe_sum [Zero M] [AddCommMonoid N] (f : α ->₀ M) (g : α -> M -> β ->₀ N) :
@@ -1011,7 +1011,7 @@ theorem support_sum
 
 中文:
 定理 support_sum
-  条件: [DecidableEq β] [Zero M] [AddCommMonoid N] {f : α ->₀ M} {g : α -> M -> β ->₀ N}
+  条件: [DecidableEq β] [零 M] [加法交换幺半群 N] {f : α ->₀ M} {g : α -> M -> β ->₀ N}
   证明: by
   have : forall c, (f.sum fun a b => g a b c) != 0 -> exists a, f a != 0 ∧ ¬(g a (f a)) c = 0 := fun a₁ h =>
     let ⟨a, ha, ne⟩ := Finset.exists_ne_zero_of_sum_ne_zero h
@@ -1045,7 +1045,7 @@ theorem support_finsetSum
 
 中文:
 定理 support_finsetSum
-  条件: [DecidableEq β] [AddCommMonoid M] {s : Finset α} {f : α -> β ->₀ M}
+  条件: [DecidableEq β] [加法交换幺半群 M] {s : 有限集 α} {f : α -> β ->₀ M}
   证明: by
   rw [← Finset.sup_eq_biUnion]
   induction s using Finset.cons_induction_on with
@@ -1088,7 +1088,7 @@ theorem sum_eq_one_iff
 中文:
 定理 sum_eq_one_iff
   条件: (d : α ->₀ 自然数)
-  结论: sum d (fun _ n => n) = 1 ↔ 存在 a, d = single a 1
+  结论: 求和 d (fun _ n => n) = 1 ↔ 存在 a, d = single a 1
   证明: by
   classical
   refine ⟨fun h1 => ?_, ?_⟩
@@ -1130,7 +1130,7 @@ theorem prod_mul
 
 中文:
 定理 prod_mul
-  条件: [Zero M] [CommMonoid N] {f : α ->₀ M} {h₁ h₂ : α -> M -> N}
+  条件: [零 M] [交换幺半群 N] {f : α ->₀ M} {h₁ h₂ : α -> M -> N}
   证明: Finset.prod_mul_distrib
 
 @[to_additive (attr := simp)]
@@ -1154,7 +1154,7 @@ theorem prod_inv
 
 中文:
 定理 prod_inv
-  条件: [Zero M] [CommGroup G] {f : α ->₀ M} {h : α -> M -> G}
+  条件: [零 M] [交换群 G] {f : α ->₀ M} {h : α -> M -> G}
   证明: (map_prod (MonoidHom.id G)⁻¹ _ _).symm
 
 @[simp]
@@ -1176,7 +1176,7 @@ theorem sum_sub
 
 中文:
 定理 sum_sub
-  条件: [Zero M] [SubtractionCommMonoid G] {f : α ->₀ M} {h₁ h₂ : α -> M -> G}
+  条件: [零 M] [SubtractionComm幺半群 G] {f : α ->₀ M} {h₁ h₂ : α -> M -> G}
   证明: Finset.sum_sub_distrib ..
 
 Depends on / 依赖: Finset, Finset.sum_sub_distrib, sum_sub_distrib
@@ -1205,7 +1205,7 @@ theorem prod_add_index
 
 中文:
 定理 prod_add_index
-  结论: [DecidableEq α] [AddZeroClass M] [CommMonoid N] {f g : α ->₀ M}
+  结论: [DecidableEq α] [加法零类 M] [交换幺半群 N] {f g : α ->₀ M}
   证明: by
   rw [Finsupp.prod_of_support_subset f subset_union_left h h_zero]; rw [Finsupp.prod_of_support_subset g subset_union_right h h_zero]; rw [←
     Finset.prod_mul_distrib]; rw [Finsupp.prod_of_support_subset (f + g) Finsupp.support_add h h_zero]
@@ -1241,7 +1241,7 @@ theorem prod_add_index'
 
 中文:
 定理 prod_add_index'
-  结论: [AddZeroClass M] [CommMonoid N] {f g : α ->₀ M} {h : α -> M -> N}
+  结论: [加法零类 M] [交换幺半群 N] {f g : α ->₀ M} {h : α -> M -> N}
   证明: by
   classical exact prod_add_index (fun a _ => h_zero a) fun a _ => h_add a
 
@@ -1267,7 +1267,7 @@ theorem sum_hom_add_index
 
 中文:
 定理 sum_hom_add_index
-  条件: [AddZeroClass M] [AddCommMonoid N] {f g : α ->₀ M} (h : α -> M ->+ N)
+  条件: [加法零类 M] [加法交换幺半群 N] {f g : α ->₀ M} (h : α -> M ->+ N)
   证明: sum_add_index' (fun a => (h a).map_zero) fun a => (h a).map_add
 
 @[simp]
@@ -1289,7 +1289,7 @@ theorem prod_hom_add_index
 
 中文:
 定理 prod_hom_add_index
-  结论: [AddZeroClass M] [CommMonoid N] {f g : α ->₀ M}
+  结论: [加法零类 M] [交换幺半群 N] {f g : α ->₀ M}
   证明: prod_add_index' (fun a => (h a).map_one) fun a => (h a).map_mul
 
 Depends on / 依赖: map_mul, map_one, prod_add_index
@@ -1319,7 +1319,7 @@ definition liftAddHom
 
 中文:
 定义 liftAddHom
-  签名: [AddZeroClass M] [AddCommMonoid N]
+  签名: [加法零类 M] [加法交换幺半群 N]
   定义体: { toFun f := f.sum (F ·)
       map_zero' := Finsupp.sum_zero_index
       map_add' f g := Finsupp.sum_hom_add_index F }
@@ -1355,7 +1355,7 @@ theorem liftAddHom_apply
 
 中文:
 定理 liftAddHom_apply
-  条件: [AddZeroClass M] [AddCommMonoid N] (F : α -> M ->+ N) (f : α ->₀ M)
+  条件: [加法零类 M] [加法交换幺半群 N] (F : α -> M ->+ N) (f : α ->₀ M)
   证明: rfl
 
 @[simp]
@@ -1377,7 +1377,7 @@ theorem liftAddHom_symm_apply
 
 中文:
 定理 liftAddHom_symm_apply
-  条件: [AddZeroClass M] [AddCommMonoid N] (F : (α ->₀ M) ->+ N) (x : α)
+  条件: [加法零类 M] [加法交换幺半群 N] (F : (α ->₀ M) ->+ N) (x : α)
   证明: rfl
 
 Depends on / 依赖: F.comp, singleAddHom
@@ -1398,7 +1398,7 @@ theorem liftAddHom_symm_apply_apply
 
 中文:
 定理 liftAddHom_symm_apply_apply
-  结论: [AddZeroClass M] [AddCommMonoid N] (F : (α ->₀ M) ->+ N) (x : α)
+  结论: [加法零类 M] [加法交换幺半群 N] (F : (α ->₀ M) ->+ N) (x : α)
   证明: rfl
 
 @[simp]
@@ -1422,7 +1422,7 @@ theorem liftAddHom_singleAddHom
 
 中文:
 定理 liftAddHom_singleAddHom
-  条件: [AddCommMonoid M]
+  条件: [加法交换幺半群 M]
   证明: liftAddHom.toEquiv.eq_symm_apply.1 rfl
 
 @[simp]
@@ -1446,8 +1446,8 @@ theorem sum_single
 
 中文:
 定理 sum_single
-  条件: [AddCommMonoid M] (f : α ->₀ M)
-  结论: f.sum single = f
+  条件: [加法交换幺半群 M] (f : α ->₀ M)
+  结论: f.求和 single = f
   证明: DFunLike.congr_fun liftAddHom_singleAddHom f
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, liftAddHom_singleAddHom
@@ -1472,7 +1472,7 @@ theorem univ_sum_single
 
 中文:
 定理 univ_sum_single
-  条件: [Fintype α] [AddCommMonoid M] (f : α ->₀ M)
+  条件: [有限类型 α] [加法交换幺半群 M] (f : α ->₀ M)
   证明: by
   classical
   refine DFunLike.coe_injective ?_
@@ -1503,7 +1503,7 @@ theorem univ_sum_single_apply
 
 中文:
 定理 univ_sum_single_apply
-  条件: [AddCommMonoid M] [Fintype α] (i : α) (m : M)
+  条件: [加法交换幺半群 M] [有限类型 α] (i : α) (m : M)
   证明: by
   classical rw [single, coe_mk, Finset.sum_pi_single']
   simp
@@ -1531,7 +1531,7 @@ theorem univ_sum_single_apply'
 
 中文:
 定理 univ_sum_single_apply'
-  条件: [AddCommMonoid M] [Fintype α] (i : α) (m : M)
+  条件: [加法交换幺半群 M] [有限类型 α] (i : α) (m : M)
   证明: by
   simp_rw [single, coe_mk]
   classical rw [Finset.sum_pi_single]
@@ -1580,7 +1580,7 @@ theorem equivFunOnFinite_symm_eq_sum
 
 中文:
 定理 equivFunOnFinite_symm_eq_sum
-  条件: [Fintype α] [AddCommMonoid M] (f : α -> M)
+  条件: [有限类型 α] [加法交换幺半群 M] (f : α -> M)
   证明: (univ_sum_single _).symm
 
 Depends on / 依赖: univ_sum_single
@@ -1599,7 +1599,7 @@ theorem coe_univ_sum_single
 
 中文:
 定理 coe_univ_sum_single
-  条件: [Fintype α] [AddCommMonoid M] (f : α -> M)
+  条件: [有限类型 α] [加法交换幺半群 M] (f : α -> M)
   证明: congrArg _ (equivFunOnFinite_symm_eq_sum f).symm
 
 Depends on / 依赖: equivFunOnFinite_symm_eq_sum
@@ -1619,7 +1619,7 @@ theorem equivFunOnFinite_symm_sum
 
 中文:
 定理 equivFunOnFinite_symm_sum
-  条件: [Fintype α] [AddCommMonoid M] (f : α -> M)
+  条件: [有限类型 α] [加法交换幺半群 M] (f : α -> M)
   证明: by
   rw [equivFunOnFinite_symm_eq_sum]; rw [sum_fintype _ _ fun _ => rfl]; rw [coe_univ_sum_single]
 
@@ -1641,7 +1641,7 @@ theorem liftAddHom_apply_single
 
 中文:
 定理 liftAddHom_apply_single
-  结论: [AddZeroClass M] [AddCommMonoid N] (f : α -> M ->+ N) (a : α)
+  结论: [加法零类 M] [加法交换幺半群 N] (f : α -> M ->+ N) (a : α)
   证明: sum_single_index (f a).map_zero
 
 @[simp]
@@ -1663,7 +1663,7 @@ theorem liftAddHom_comp_single
 
 中文:
 定理 liftAddHom_comp_single
-  条件: [AddZeroClass M] [AddCommMonoid N] (f : α -> M ->+ N) (a : α)
+  条件: [加法零类 M] [加法交换幺半群 N] (f : α -> M ->+ N) (a : α)
   证明: AddMonoidHom.ext fun b => liftAddHom_apply_single f a b
 
 Depends on / 依赖: singleAddHom
@@ -1684,7 +1684,7 @@ theorem comp_liftAddHom
 
 中文:
 定理 comp_liftAddHom
-  结论: [AddZeroClass M] [AddCommMonoid N] [AddCommMonoid P] (g : N ->+ P)
+  结论: [加法零类 M] [加法交换幺半群 N] [加法交换幺半群 P] (g : N ->+ P)
   证明: liftAddHom.symm_apply_eq.1
     funext fun a => by
       rw [liftAddHom_symm_apply]; rw [AddMonoidHom.comp_assoc]; rw [liftAddHom_comp_single]
@@ -1710,7 +1710,7 @@ theorem sum_sub_index
 
 中文:
 定理 sum_sub_index
-  结论: [AddGroup β] [AddCommGroup γ] {f g : α ->₀ β} {h : α -> β -> γ}
+  结论: [加法群 β] [加法交换群 γ] {f g : α ->₀ β} {h : α -> β -> γ}
   证明: ((liftAddHom (α := α) (M := β) (N := γ)) fun a =>
     AddMonoidHom.ofMapSub (h a) (h_sub a)).map_sub f g
 
@@ -1738,7 +1738,7 @@ theorem prod_embDomain
 
 中文:
 定理 prod_embDomain
-  条件: [Zero M] [CommMonoid N] {v : α ->₀ M} {f : α ↪ β} {g : β -> M -> N}
+  条件: [零 M] [交换幺半群 N] {v : α ->₀ M} {f : α ↪ β} {g : β -> M -> N}
   证明: by
   rw [prod]; rw [prod]; rw [support_embDomain]; rw [Finset.prod_map]
   simp_rw [embDomain_apply_self]
@@ -1769,7 +1769,7 @@ alias prod_finset_su
 
 中文:
 定理 prod_finsetSum_index
-  结论: [AddCommMonoid M] [CommMonoid N] {s : Finset ι} {g : ι -> α ->₀ M}
+  结论: [加法交换幺半群 M] [交换幺半群 N] {s : 有限集 ι} {g : ι -> α ->₀ M}
   证明: Finset.cons_induction_on s rfl fun a s has ih => by
     rw [prod_cons]; rw [ih]; rw [sum_cons]; rw [prod_add_index' h_zero h_add]
 
@@ -1802,7 +1802,7 @@ theorem prod_sum_index
 
 中文:
 定理 prod_sum_index
-  结论: [Zero M] [AddCommMonoid N] [CommMonoid P] {f : α ->₀ M}
+  结论: [零 M] [加法交换幺半群 N] [交换幺半群 P] {f : α ->₀ M}
   证明: (prod_finsetSum_index h_zero h_add).symm
 
 Depends on / 依赖: h_add, h_zero, prod_finsetSum_index
@@ -1824,7 +1824,7 @@ theorem multiset_sum_sum_index
 
 中文:
 定理 multiset_sum_sum_index
-  结论: [AddCommMonoid M] [AddCommMonoid N] (f : Multiset (α ->₀ M))
+  结论: [加法交换幺半群 M] [加法交换幺半群 N] (f : Multiset (α ->₀ M))
   证明: Multiset.induction_on f rfl fun a s ih => by
     rw [Multiset.sum_cons]; rw [Multiset.map_cons]; rw [Multiset.sum_cons]; rw [sum_add_index' h₀ h₁]; rw [ih]
 
@@ -1897,7 +1897,7 @@ theorem multiset_map_sum
 
 中文:
 定理 multiset_map_sum
-  条件: [Zero M] {f : α ->₀ M} {m : β -> γ} {h : α -> M -> Multiset β}
+  条件: [零 M] {f : α ->₀ M} {m : β -> γ} {h : α -> M -> Multiset β}
   证明: map_sum (Multiset.mapAddMonoidHom m) _ f.support
 
 Depends on / 依赖: Algebra, Multiset, Multiset.mapAddMonoidHom, f.support, mapAddMonoidHom, map_sum, support, toAlgebra
@@ -1916,7 +1916,7 @@ theorem multiset_sum_sum
 
 中文:
 定理 multiset_sum_sum
-  条件: [Zero M] [AddCommMonoid N] {f : α ->₀ M} {h : α -> M -> Multiset N}
+  条件: [零 M] [加法交换幺半群 N] {f : α ->₀ M} {h : α -> M -> Multiset N}
   证明: map_sum Multiset.sumAddMonoidHom _ f.support
 
 Depends on / 依赖: Multiset, Multiset.sumAddMonoidHom, f.support, map_sum, sumAddMonoidHom, support
@@ -1947,7 +1947,7 @@ theorem prod_add_index_of_disjoint
 
 中文:
 定理 prod_add_index_of_disjoint
-  结论: [AddCommMonoid M] {f1 f2 : α ->₀ M}
+  结论: [加法交换幺半群 M] {f1 f2 : α ->₀ M}
   证明: by
   have :
     forall {f1 f2 : α ->₀ M},
@@ -1987,7 +1987,7 @@ theorem prod_dvd_prod_of_subset_of_dvd
 
 中文:
 定理 prod_dvd_prod_of_subset_of_dvd
-  结论: [Zero M] [CommMonoid N] {f1 f2 : α ->₀ M}
+  结论: [零 M] [交换幺半群 N] {f1 f2 : α ->₀ M}
   证明: by
   classical
     simp only [Finsupp.prod]
@@ -2023,7 +2023,7 @@ lemma indicator_eq_sum_attach_single
 
 中文:
 引理 indicator_eq_sum_attach_single
-  条件: [AddCommMonoid M] {s : Finset α} (f : 对任意 a in s, M)
+  条件: [加法交换幺半群 M] {s : 有限集 α} (f : 对任意 a in s, M)
   证明: by
   rw [← sum_single (indicator s f)]; rw [sum]; rw [sum_subset (support_indicator_subset _ _)]; rw [← sum_attach]
   · refine Finset.sum_congr rfl (fun _ _ => ?_)
@@ -2053,7 +2053,7 @@ lemma indicator_eq_sum_single
 
 中文:
 引理 indicator_eq_sum_single
-  条件: [AddCommMonoid M] (s : Finset α) (f : α -> M)
+  条件: [加法交换幺半群 M] (s : 有限集 α) (f : α -> M)
   证明: (indicator_eq_sum_attach_single _).trans sum_attach _ fun x => single x (f x)
 
 @[to_additive (attr := simp)]
@@ -2080,7 +2080,7 @@ lemma prod_indicator_index_eq_prod_attach
 
 中文:
 引理 prod_indicator_index_eq_prod_attach
-  结论: [Zero M] [CommMonoid N]
+  结论: [零 M] [交换幺半群 N]
   证明: by
   rw [prod_of_support_subset _ (support_indicator_subset _ _) h h_zero]; rw [← prod_attach]
   refine Finset.prod_congr rfl (fun _ _ => ?_)
@@ -2110,7 +2110,7 @@ lemma prod_attach_index
 
 中文:
 引理 prod_attach_index
-  条件: [CommMonoid N] {s : Finset α} (f : α -> M) {h : α -> M -> N}
+  条件: [交换幺半群 N] {s : 有限集 α} (f : α -> M) {h : α -> M -> N}
   证明: prod_attach _ fun x => h x (f x)
 
 @[to_additive]
@@ -2135,7 +2135,7 @@ lemma prod_indicator_index
 
 中文:
 引理 prod_indicator_index
-  结论: [Zero M] [CommMonoid N]
+  结论: [零 M] [交换幺半群 N]
   证明: by
   simp +contextual [h_zero]
 
@@ -2159,8 +2159,8 @@ lemma prod_mul_eq_prod_mul_of_exists
   exact Finset.prod_mul_eq_prod_mul_of_exists a ha h
 
 中文:
-引理 prod_mul_eq_prod_mul_of_exists
-  结论: [Zero M] [CommMonoid N]
+引理 prod_mul_eq_prod_mul_of_存在
+  结论: [零 M] [交换幺半群 N]
   证明: by
   exact Finset.prod_mul_eq_prod_mul_of_exists a ha h
 
@@ -2184,7 +2184,7 @@ theorem Finset.sum_apply'
   proof: map_sum (Finsupp.applyAddHom i) f s
 
 中文:
-定理 Finset.sum_apply'
+定理 有限集.sum_apply'
   结论: (∑ k in s, f k) i = ∑ k in s, f k i
   证明: map_sum (Finsupp.applyAddHom i) f s
 
@@ -2202,8 +2202,8 @@ theorem Finsupp.sum_apply'
   proof: Finset.sum_apply _ _ _
 
 中文:
-定理 Finsupp.sum_apply'
-  结论: g.sum k x = g.sum fun i b => k i b x
+定理 有限支撑.sum_apply'
+  结论: g.求和 k x = g.求和 fun i b => k i b x
   证明: Finset.sum_apply _ _ _
 
 Depends on / 依赖: Finset, Finset.sum_apply, sum_apply
@@ -2225,8 +2225,8 @@ theorem Finsupp.sum_apply''
   | insert i s hi ih => simp [sum_insert hi, hadd, ih]
 
 中文:
-定理 Finsupp.sum_apply''
-  结论: {A F : 类型} [AddZeroClass A] [AddCommMonoid F] [FunLike F γ B]
+定理 有限支撑.sum_apply''
+  结论: {A F : 类型} [加法零类 A] [加法交换幺半群 F] [函数状 F γ B]
   证明: by
   classical
   unfold Finsupp.sum
@@ -2259,7 +2259,7 @@ theorem Finsupp.sum_mul
   proof: by simp only [Finsupp.sum, Finset.sum_mul]
 
 中文:
-定理 Finsupp.sum_mul
+定理 有限支撑.sum_mul
   条件: (b : S) (s : α ->₀ R) {f : α -> R -> S}
   证明: by simp only [Finsupp.sum, Finset.sum_mul]
 
@@ -2277,7 +2277,7 @@ theorem Finsupp.mul_sum
   proof: by simp only [Finsupp.sum, Finset.mul_sum]
 
 中文:
-定理 Finsupp.mul_sum
+定理 有限支撑.mul_sum
   条件: (b : S) (s : α ->₀ R) {f : α -> R -> S}
   证明: by simp only [Finsupp.sum, Finset.mul_sum]
 
@@ -2298,7 +2298,7 @@ lemma Multiset.card_finsuppSum
 
 中文:
 引理 Multiset.card_finsuppSum
-  条件: [Zero M] (f : ι ->₀ M) (g : ι -> M -> Multiset α)
+  条件: [零 M] (f : ι ->₀ M) (g : ι -> M -> Multiset α)
   证明: map_finsuppSum cardHom ..
 -/
 @[simp] lemma Multiset.card_finsuppSum [Zero M] (f : ι ->₀ M) (g : ι -> M -> Multiset α) :

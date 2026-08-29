@@ -68,10 +68,10 @@ class HasExtension
     - val_isEquiv_comap : vR.IsEquiv vA.comap (algebraMap R A)
 
 中文:
-类 HasExtension
+类 有扩张
   参数: : 命题 where
   公理与运算 (1 个):
-    - val_isEquiv_comap : vR.IsEquiv vA.comap (algebraMap R A)
+    - val_isEquiv_comap : vR.Is等价 vA.comap (algebraMap R A)
 -/
 class HasExtension : Prop where
   /-- The valuation `vR` on `R` is equivalent to the comap of the valuation `vA` on `A` -/
@@ -228,7 +228,7 @@ instance id
 
 中文:
 实例 id
-  签名: : vR.HasExtension vR where
+  签名: : vR.有扩张 vR where
   定义体: by
     simp only [Algebra.algebraMap_self, comap_id, IsEquiv.refl]
 
@@ -257,7 +257,7 @@ theorem ofComapInteger
     simp_rw [← Valuation.mem_integer_iff, ← h, Subring.mem_comap, mem_integer_iff, comap_apply]
 
 中文:
-定理 ofComapInteger
+定理 ofComap整数eger
   条件: (h : vA.integer.comap (algebraMap K A) = vK.integer)
   证明: by
     rw [isEquiv_iff_val_le_one]
@@ -287,8 +287,8 @@ instance instAlgebraInteger
   smul_def' _ _ := Su
 
 中文:
-实例 instAlgebraInteger
-  签名: : Algebra vR.integer vA.integer where
+实例 instAlgebra整数eger
+  签名: : 代数 vR.integer vA.integer where
   定义体: ⟨r • a,
     Algebra.smul_def r (a : A) ▸ mul_mem ((val_map_le_one_iff vR vA _).mpr r.2) a.2⟩
   algebraMap := (algebraMap R A).restrict vR.integer vA.integer
@@ -382,8 +382,8 @@ instance instIsScalarTowerInteger
     exact mul_assoc _ _ _
 
 中文:
-实例 instIsScalarTowerInteger
-  签名: : IsScalarTower vR.integer vA.integer A where
+实例 instIsScalarTower整数eger
+  签名: : 标量塔 vR.integer vA.integer A where
   定义体: by
     simp only [Algebra.smul_def]
     exact mul_assoc _ _ _
@@ -404,8 +404,8 @@ instance instIsTorsionFreeInteger
   body: .of_smul_eq_zero by simp
 
 中文:
-实例 instIsTorsionFreeInteger
-  签名: [IsDomain R] [IsTorsionFree R A]
+实例 instIsTorsionFree整数eger
+  签名: [是整环 R] [是无挠 R A]
   定义体: .of_smul_eq_zero by simp
 
 Depends on / 依赖: of_smul_eq_zero
@@ -425,7 +425,7 @@ theorem algebraMap_injective
 
 中文:
 定理 algebraMap_injective
-  条件: [vK.HasExtension vA] [Nontrivial A]
+  条件: [vK.有扩张 vA] [非平凡 A]
   证明: FaithfulSMul.algebraMap_injective _ _
 
 @[instance]
@@ -450,8 +450,8 @@ theorem instIsLocalHomValuationInteger
       exact (val_map_eq_one_iff vR vS _).mp hr
 
 中文:
-定理 instIsLocalHomValuationInteger
-  结论: {S ΓS : 类型} [CommRing S]
+定理 instIsLocalHomValuation整数eger
+  结论: {S ΓS : 类型} [交换环 S]
   证明: by
     apply (Valuation.integer.integers (v := vR)).isUnit_of_one
     · exact (isUnit_map_iff (algebraMap R S) _).mp (hr.map (algebraMap _ S))
@@ -520,7 +520,7 @@ instance instAlgebra_valuationSubring
 
 中文:
 实例 instAlgebra_valuationSubring
-  签名: : Algebra K₀ L₀
+  签名: : 代数 K₀ L₀
   定义体: inferInstanceAs (Algebra vK.integer vL.integer)
 
 @[simp]
@@ -557,7 +557,7 @@ instance instIsScalarTower_valuationSubring
 
 中文:
 实例 instIsScalarTower_valuationSubring
-  签名: : IsScalarTower K₀ K L
+  签名: : 标量塔 K₀ K L
   定义体: inferInstanceAs (IsScalarTower vK.integer K L)
 
 Depends on / 依赖: IsScalarTower, integer, vK.integer
@@ -575,7 +575,7 @@ instance instIsScalarTower_valuationSubring'
 
 中文:
 实例 instIsScalarTower_valuationSubring'
-  签名: : IsScalarTower K₀ L₀ L
+  签名: : 标量塔 K₀ L₀ L
   定义体: instIsScalarTowerInteger
 
 Depends on / 依赖: instIsScalarTowerInteger
@@ -593,7 +593,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (algebraMap K₀ L₀)
+  签名: 是Local态射 (algebraMap K₀ L₀)
   定义体: instIsLocalHomValuationInteger
 
 Depends on / 依赖: instIsLocalHomValuationInteger
@@ -648,7 +648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ideal.LiesOver (maximalIdeal L₀) (maximalIdeal K₀)
+  签名: 理想.LiesOver (maximalIdeal L₀) (maximalIdeal K₀)
   定义体: ⟨(maximalIdeal_comap_algebraMap_eq_maximalIdeal _ _).symm⟩
 
 Depends on / 依赖: maximalIdeal_comap_algebraMap_eq_maximalIdeal

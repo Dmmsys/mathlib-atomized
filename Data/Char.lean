@@ -34,7 +34,7 @@ le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq
 
 中文:
 实例 :
-  签名: LinearOrder Char
+  签名: 线性序 Char
   定义体: fun _ => @le_refl Nat _ _
   le_trans := fun _ _ _ => @le_trans Nat _ _ _ _
 le_antisymm := fun _ _ h₁ h₂ => Char.ext UInt32.eq_of_toBitVec_eq

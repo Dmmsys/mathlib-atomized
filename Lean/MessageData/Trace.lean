@@ -137,7 +137,7 @@ definition dedupByString
 
 中文:
 定义 dedupByString
-  签名: (msgs : Array MessageData)
+  签名: (msgs : 数组 MessageData)
   定义体: do
   let mut seen : Std.HashSet String := {}
   let mut unique : Array MessageData := #[]

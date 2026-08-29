@@ -34,7 +34,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: : AddMonoidWithOne 自然数 where
+  签名: : 加法带幺幺半群 自然数 where
   定义体: n
   natCast_zero := rfl
   natCast_succ _ := rfl
@@ -55,7 +55,7 @@ instance instAddCommMonoidWithOne
 
 中文:
 实例 instAddCommMonoidWithOne
-  签名: : AddCommMonoidWithOne 自然数 where
+  签名: : 加法交换带幺幺半群 自然数 where
   定义体: instAddMonoidWithOne
   __ := instAddCommMonoid
 
@@ -98,7 +98,7 @@ instance instNonUnitalNonAssocSemiring
 
 中文:
 实例 instNonUnitalNonAssocSemiring
-  签名: : NonUnitalNonAssocSemiring 自然数 where
+  签名: : 非幺非结合半环 自然数 where
   定义体: instAddCommMonoid
   __ := instDistrib
   __ := instMulZeroClass
@@ -121,7 +121,7 @@ instance instNonUnitalSemiring
 
 中文:
 实例 instNonUnitalSemiring
-  签名: : NonUnitalSemiring 自然数 where
+  签名: : 非幺半环 自然数 where
   定义体: instNonUnitalNonAssocSemiring
   __ := instSemigroupWithZero
 
@@ -143,7 +143,7 @@ instance instNonAssocSemiring
 
 中文:
 实例 instNonAssocSemiring
-  签名: : NonAssocSemiring 自然数 where
+  签名: : 非结合半环 自然数 where
   定义体: instNonUnitalNonAssocSemiring
   __ := instMulZeroOneClass
   __ := instAddCommMonoidWithOne
@@ -167,7 +167,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: : Semiring 自然数 where
+  签名: : 半环 自然数 where
   定义体: instNonUnitalSemiring
   __ := instNonAssocSemiring
   __ := instMonoidWithZero
@@ -190,7 +190,7 @@ instance instCommSemiring
 
 中文:
 实例 instCommSemiring
-  签名: : CommSemiring 自然数 where
+  签名: : 交换半环 自然数 where
   定义体: instSemiring
   __ := instCommMonoid
 
@@ -210,7 +210,7 @@ instance instCharZero
 
 中文:
 实例 instCharZero
-  签名: : CharZero 自然数 where cast_injective
+  签名: : 特征零 自然数 where cast_injective
   定义体: Function.injective_id
 
 Depends on / 依赖: Function, Function.injective_id, injective_id
@@ -226,7 +226,7 @@ instance instIsDomain
 
 中文:
 实例 instIsDomain
-  签名: : IsDomain 自然数 where
+  签名: : 是整环 自然数 where
 -/
 instance instIsDomain : IsDomain Nat where
 

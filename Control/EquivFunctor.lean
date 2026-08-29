@@ -36,11 +36,11 @@ class EquivFunctor
     - map_trans' : forall {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k  [default: by rfl]
 
 中文:
-类 EquivFunctor
+类 等价函子
   参数: (f : 类型u₀ -> 类型u₁)
   公理与运算 (3 个):
     - map : 对任意 {α β}, α ≃ β -> f α -> f β
-    - map_refl' : 对任意 α, map (Equiv.refl α) = @id (f α)  [默认: by rfl]
+    - map_refl' : 对任意 α, map (等价.refl α) = @id (f α)  [默认: by rfl]
     - map_trans' : 对任意 {α β γ} (k : α ≃ β) (h : β ≃ γ), map (k.trans h) = map h ∘ map k  [默认: by rfl]
 -/
 class EquivFunctor (f : Type u₀ -> Type u₁) where
@@ -115,7 +115,7 @@ theorem mapEquiv_apply
 中文:
 定理 mapEquiv_apply
   条件: (x : f α)
-  结论: mapEquiv f e x = EquivFunctor.map e x
+  结论: mapEquiv f e x = 等价函子.map e x
   证明: rfl
 -/
 theorem mapEquiv_apply (x : f α) : mapEquiv f e x = EquivFunctor.map e x :=
@@ -135,7 +135,7 @@ theorem mapEquiv_symm_apply
 中文:
 定理 mapEquiv_symm_apply
   条件: (y : f β)
-  结论: (mapEquiv f e).symm y = EquivFunctor.map e.symm y
+  结论: (mapEquiv f e).symm y = 等价函子.map e.symm y
   证明: rfl
 
 @[simp]
@@ -159,7 +159,7 @@ theorem mapEquiv_refl
 中文:
 定理 mapEquiv_refl
   条件: (α)
-  结论: mapEquiv f (Equiv.refl α) = Equiv.refl (f α)
+  结论: mapEquiv f (等价.refl α) = 等价.refl (f α)
   证明: by
   ext; simp [mapEquiv]
 

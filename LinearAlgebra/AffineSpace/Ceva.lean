@@ -47,7 +47,7 @@ lemma exists_affineCombination_eq_smul_eq_aux
   obtain ⟨i', 
 
 中文:
-引理 exists_affineCombination_eq_smul_eq_aux
+引理 存在_affineCombination_eq_smul_eq_aux
   结论: {p : ι -> P} (hp : AffineIndependent k p)
   证明: by
   classical
@@ -112,8 +112,8 @@ lemma exists_affineCombination_eq_smul_eq
     by_ca
 
 中文:
-引理 exists_affineCombination_eq_smul_eq
-  结论: {p : ι -> P} (hp : AffineIndependent k p) {s : Set ι}
+引理 存在_affineCombination_eq_smul_eq
+  结论: {p : ι -> P} (hp : AffineIndependent k p) {s : 集合 ι}
   证明: by
   classical
   let fsx : s -> Finset ι := fun i => insert (i : ι) (fs i)
@@ -170,8 +170,8 @@ lemma exists_affineCombination_eq_smul_eq_of_fintype
     exact (Finset.affineCombination_indicator_subset _ _ (by sim
 
 中文:
-引理 exists_affineCombination_eq_smul_eq_of_fintype
-  结论: [Fintype ι] {p : ι -> P}
+引理 存在_affineCombination_eq_smul_eq_of_fintype
+  结论: [有限类型 ι] {p : ι -> P}
   证明: by
   classical
   obtain ⟨w'', fs'', hw'', hw''p', hi⟩ := hp.exists_affineCombination_eq_smul_eq hs hw hp'
@@ -229,7 +229,7 @@ lemma prod_eq_prod_one_sub_of_mem_line_point_lineMap
 
 中文:
 引理 prod_eq_prod_one_sub_of_mem_line_point_lineMap
-  结论: {t : Triangle k P} {r : Fin 3 -> k} {p' : P}
+  结论: {t : Triangle k P} {r : 有限集 3 -> k} {p' : P}
   证明: by
   rcases subsingleton_or_nontrivial k
   · exact Subsingleton.elim _ _
@@ -320,7 +320,7 @@ lemma prod_div_one_sub_eq_one_of_mem_line_point_lineMap
 
 中文:
 引理 prod_div_one_sub_eq_one_of_mem_line_point_lineMap
-  结论: {t : Triangle k P} {r : Fin 3 -> k}
+  结论: {t : Triangle k P} {r : 有限集 3 -> k}
   证明: by
   rw [Finset.prod_div_distrib]; rw [← prod_eq_prod_one_sub_of_mem_line_point_lineMap hp']; rw [div_self]
   exact Finset.prod_ne_zero_iff.2 fun _ _ => hr0 _

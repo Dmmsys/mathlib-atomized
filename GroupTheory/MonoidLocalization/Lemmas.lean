@@ -35,7 +35,7 @@ theorem surj_pi_of_finite
 
 中文:
 定理 surj_pi_of_finite
-  结论: {M N F ι : 类型} [Finite ι]
+  结论: {M N F ι : 类型} [有限 ι]
   证明: by
   choose x hx using hf.surj
   have ⟨_⟩ := nonempty_fintype ι

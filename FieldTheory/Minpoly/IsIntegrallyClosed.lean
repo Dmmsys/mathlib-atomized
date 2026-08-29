@@ -54,8 +54,8 @@ theorem isIntegrallyClosed_eq_field_fractions
   · exact (monic hs).map _
 
 中文:
-定理 isIntegrallyClosed_eq_field_fractions
-  条件: [IsDomain S] {s : S} (hs : Is整数egral R s)
+定理 is整数egrallyClosed_eq_field_fractions
+  条件: [是整环 S] {s : S} (hs : 是整 R s)
   证明: by
   refine (eq_of_irreducible_of_monic ?_ ?_ ?_).symm
   · exact ((monic hs).irreducible_iff_irreducible_map_fraction_map).1 (irreducible hs)
@@ -82,8 +82,8 @@ theorem isIntegrallyClosed_eq_field_fractions'
   rw [← isIntegrallyClosed_eq_field_fractions K L hs]; rw [algebraMap_eq (IsFractionRing.injective S L)]
 
 中文:
-定理 isIntegrallyClosed_eq_field_fractions'
-  结论: [IsDomain S] [Algebra K S] [IsScalarTower R K S]
+定理 is整数egrallyClosed_eq_field_fractions'
+  结论: [是整环 S] [代数 K S] [标量塔 R K S]
   证明: by
   let L := FractionRing S
   rw [← isIntegrallyClosed_eq_field_fractions K L hs]; rw [algebraMap_eq (IsFractionRing.injective S L)]
@@ -114,8 +114,8 @@ theorem isIntegrallyClosed_dvd
     refine dvd_sub (minpoly.
 
 中文:
-定理 isIntegrallyClosed_dvd
-  结论: {s : S} (hs : Is整数egral R s) {p : R[X]}
+定理 is整数egrallyClosed_dvd
+  结论: {s : S} (hs : 是整 R s) {p : R[X]}
   证明: by
   let K := FractionRing R
   let L := FractionRing S
@@ -154,8 +154,8 @@ theorem isIntegrallyClosed_dvd_iff
       aeval_eq_zero_of_dvd_aeval_eq_zero hp (minpoly.aeval R s)⟩
 
 中文:
-定理 isIntegrallyClosed_dvd_iff
-  条件: {s : S} (hs : Is整数egral R s) (p : R[X])
+定理 is整数egrallyClosed_dvd_iff
+  条件: {s : S} (hs : 是整 R s) (p : R[X])
   证明: ⟨fun hp => isIntegrallyClosed_dvd hs hp, fun hp => by
     simpa only [RingHom.mem_ker, RingHom.coe_comp, coe_evalRingHom, coe_mapRingHom,
       Function.comp_apply, eval_map_algebraMap] using
@@ -183,7 +183,7 @@ theorem ker_eval
 
 中文:
 定理 ker_eval
-  条件: {s : S} (hs : Is整数egral R s)
+  条件: {s : S} (hs : 是整 R s)
   证明: by
   ext p
   simp_rw [RingHom.mem_ker, AlgHom.toRingHom_eq_coe, AlgHom.coe_toRingHom,
@@ -212,7 +212,7 @@ theorem IsIntegrallyClosed.degree_le_of_ne_zero
   exact natDegree_le_of_dvd ((isIntegrallyClosed_dvd_iff hs _).mp hp) hp0
 
 中文:
-定理 IsIntegrallyClosed.degree_le_of_ne_zero
+定理 是整闭.degree_le_of_ne_zero
   结论: {s : S} {p : R[X]}
   证明: by
   by_cases! hs : ¬IsIntegral R s
@@ -245,7 +245,7 @@ theorem IsIntegrallyClosed.isIntegral_iff_isUnit_leadingCoeff
     simpa [smul_smul] using (isIntegral_leadingCoeff_smul _ _ hp).smul ((isUn
 
 中文:
-定理 IsIntegrallyClosed.isIntegral_iff_isUnit_leadingCoeff
+定理 是整闭.is整数egral_iff_isUnit_leadingCoeff
   结论: {x : S} {p : R[X]}
   证明: by
     obtain ⟨p, rfl⟩ := isIntegrallyClosed_dvd int_x hp
@@ -281,7 +281,7 @@ theorem _root_.IsIntegrallyClosed.minpoly.unique
   · exact le_antisymm (min R s hmo hP) (Pmin (minpoly R s) (monic hs) (ae
 
 中文:
-定理 _root_.IsIntegrallyClosed.minpoly.unique
+定理 _root_.是整闭.minpoly.unique
   结论: {s : S} {P : R[X]} (hmo : P.Monic)
   证明: by
   have hs : IsIntegral R s := ⟨P, hmo, hP⟩
@@ -314,7 +314,7 @@ theorem IsIntegrallyClosed.unique_of_degree_le_degree_minpoly
   proof: IsIntegrallyClosed.minpoly.unique hmo hp fun _ qm hq => pmin.trans min _ _ qm hq
 
 中文:
-定理 IsIntegrallyClosed.unique_of_degree_le_degree_minpoly
+定理 是整闭.unique_of_degree_le_degree_minpoly
   结论: {s : S} {p : R[X]} (hmo : p.Monic)
   证明: IsIntegrallyClosed.minpoly.unique hmo hp fun _ qm hq => pmin.trans min _ _ qm hq
 
@@ -338,7 +338,7 @@ theorem IsIntegrallyClosed.isIntegral_iff_leadingCoeff_dvd
 apply WithBot.le_of_add_le_add_left Polynomial.degree
 
 中文:
-定理 IsIntegrallyClosed.isIntegral_iff_leadingCoeff_dvd
+定理 是整闭.is整数egral_iff_leadingCoeff_dvd
   结论: {s : S} {p : R[X]} (hp : p.aeval s = 0)
   证明: by
   refine ⟨fun hInt => ?_, fun ⟨q, hMul⟩ => minpoly.ne_zero_iff.mp ?_⟩
@@ -389,9 +389,9 @@ theorem prime_of_isIntegrallyClosed
   exact eq_zero_
 
 中文:
-定理 prime_of_isIntegrallyClosed
-  条件: {x : S} (hx : Is整数egral R x)
-  结论: Prime (minpoly R x)
+定理 prime_of_is整数egrallyClosed
+  条件: {x : S} (hx : 是整 R x)
+  结论: 素 (minpoly R x)
   证明: by
   refine
     ⟨(minpoly.monic hx).ne_zero,
@@ -426,8 +426,8 @@ lemma _root_.IsIntegrallyClosed.minpoly_smul
   rw [← minpoly.isIntegrallyClosed_eq_field_fractions K L (hs.smul r)]; rw [map_scaleRoots _ _ _ (by simpa [minpoly.ne_zero_iff])
 
 中文:
-引理 _root_.IsIntegrallyClosed.minpoly_smul
-  条件: {r : R} (hr : r != 0) {s : S} (hs : Is整数egral R s)
+引理 _root_.是整闭.minpoly_smul
+  条件: {r : R} (hr : r != 0) {s : S} (hs : 是整 R s)
   证明: by
   let K := FractionRing R
   let L := FractionRing S
@@ -480,8 +480,8 @@ theorem ToAdjoin.injective
 
 中文:
 定理 ToAdjoin.injective
-  条件: (hx : Is整数egral R x)
-  结论: Function.Injective (Minpoly.toAdjoin R x)
+  条件: (hx : 是整 R x)
+  结论: 函数.单射 (Minpoly.toAdjoin R x)
   证明: by
   refine (injective_iff_map_eq_zero _).2 fun P₁ hP₁ => ?_
   obtain ⟨P, rfl⟩ := mk_surjective P₁
@@ -507,7 +507,7 @@ definition equivAdjoin
 
 中文:
 定义 equivAdjoin
-  签名: (hx : Is整数egral R x)
+  签名: (hx : 是整 R x)
   定义体: AlgEquiv.ofBijective (Minpoly.toAdjoin R x)
     ⟨minpoly.ToAdjoin.injective hx, Minpoly.toAdjoin.surjective R x⟩
 
@@ -533,7 +533,7 @@ theorem equivAdjoin_toAlgHom
 
 中文:
 定理 equivAdjoin_toAlgHom
-  条件: (hx : Is整数egral R x)
+  条件: (hx : 是整 R x)
   结论: equivAdjoin hx = Minpoly.toAdjoin R x
   证明: rfl
 
@@ -553,7 +553,7 @@ theorem coe_equivAdjoin
 
 中文:
 定理 coe_equivAdjoin
-  条件: (hx : Is整数egral R x)
+  条件: (hx : 是整 R x)
   结论: ⇑(equivAdjoin hx) = Minpoly.toAdjoin R x
   证明: rfl
 -/
@@ -570,8 +570,8 @@ definition _root_.Algebra.adjoin.powerBasis'
 @[simp]
 
 中文:
-定义 _root_.Algebra.adjoin.powerBasis'
-  签名: (hx : Is整数egral R x)
+定义 _root_.代数.adjoin.powerBasis'
+  签名: (hx : 是整 R x)
   定义体: PowerBasis.map (AdjoinRoot.powerBasis' (minpoly.monic hx)) (minpoly.equivAdjoin hx)
 
 @[simp]
@@ -592,8 +592,8 @@ theorem _root_.Algebra.adjoin.powerBasis'_dim
   proof: rfl
 
 中文:
-定理 _root_.Algebra.adjoin.powerBasis'_dim
-  条件: (hx : Is整数egral R x)
+定理 _root_.代数.adjoin.powerBasis'_dim
+  条件: (hx : 是整 R x)
   证明: rfl
 -/
 theorem _root_.Algebra.adjoin.powerBasis'_dim (hx : IsIntegral R x) :
@@ -611,8 +611,8 @@ theorem _root_.Algebra.adjoin.powerBasis'_gen
   rw [Algebra.adjoin.powerBasis']; rw [PowerBasis.map_gen]; rw [AdjoinRoot.powerBasis'_gen]; rw [equivAdjoin]; rw [AlgEquiv.ofBijective_apply]; rw [Minpoly.toAdjoin]; rw [liftAlgHom_root]
 
 中文:
-定理 _root_.Algebra.adjoin.powerBasis'_gen
-  条件: (hx : Is整数egral R x)
+定理 _root_.代数.adjoin.powerBasis'_gen
+  条件: (hx : 是整 R x)
   证明: by
   rw [Algebra.adjoin.powerBasis']; rw [PowerBasis.map_gen]; rw [AdjoinRoot.powerBasis'_gen]; rw [equivAdjoin]; rw [AlgEquiv.ofBijective_apply]; rw [Minpoly.toAdjoin]; rw [liftAlgHom_root]
 -/
@@ -630,7 +630,7 @@ definition _root_.PowerBasis.ofAdjoinEqTop'
 
 中文:
 定义 _root_.PowerBasis.ofAdjoinEqTop'
-  签名: {x : S} (hx : Is整数egral R x)
+  签名: {x : S} (hx : 是整 R x)
   定义体: (adjoin.powerBasis' hx).map ((Subalgebra.equivOfEq _ _ hx').trans Subalgebra.topEquiv)
 
 Depends on / 依赖: Subalgebra, Subalgebra.equivOfEq, Subalgebra.topEquiv, adjoin, adjoin.powerBasis, equivOfEq, powerBasis, topEquiv
@@ -660,7 +660,7 @@ theorem _root_.PowerBasis.ofAdjoinEqTop'_dim
 
 中文:
 定理 _root_.PowerBasis.ofAdjoinEqTop'_dim
-  结论: {x : S} (hx : Is整数egral R x)
+  结论: {x : S} (hx : 是整 R x)
   证明: rfl
 
 @[simp]
@@ -681,7 +681,7 @@ theorem _root_.PowerBasis.ofAdjoinEqTop'_gen
 
 中文:
 定理 _root_.PowerBasis.ofAdjoinEqTop'_gen
-  结论: {x : S} (hx : Is整数egral R x)
+  结论: {x : S} (hx : 是整 R x)
   证明: by
   simp [PowerBasis.ofAdjoinEqTop']
 -/
@@ -708,7 +708,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra A (integralClosure A L)
+  签名: 代数 A (integralClosure A L)
   定义体: Subalgebra.algebra (integralClosure A L)
 
 Depends on / 依赖: Subalgebra, Subalgebra.algebra, algebra, integralClosure
@@ -724,7 +724,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul A (integralClosure A L)
+  签名: 标量乘法 A (integralClosure A L)
   定义体: Algebra.toSMul
 
 Depends on / 依赖: Algebra, Algebra.toSMul, toSMul
@@ -740,7 +740,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower A ((integralClosure A L)) L
+  签名: 标量塔 A ((integralClosure A L)) L
   定义体: IsScalarTower.subalgebra' A L L (integralClosure A L)
 
 Depends on / 依赖: IsScalarTower, IsScalarTower.subalgebra, integralClosure, subalgebra

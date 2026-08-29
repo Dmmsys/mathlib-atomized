@@ -115,10 +115,10 @@ class IsTrivial
     - out : forall g, ρ g = LinearMap.id  [default: by aesop]
 
 中文:
-类 IsTrivial
+类 是平凡
   参数: (ρ : Representation k G V)
   公理与运算 (1 个):
-    - out : 对任意 g, ρ g = LinearMap.id  [默认: by aesop]
+    - out : 对任意 g, ρ g = 线性映射.id  [默认: by aesop]
 -/
 class IsTrivial (ρ : Representation k G V) : Prop where
   out : forall g, ρ g = LinearMap.id := by aesop
@@ -132,7 +132,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTrivial (trivial k G V)
+  签名: 是平凡 (trivial k G V)
 -/
 instance : IsTrivial (trivial k G V) where
 
@@ -147,7 +147,7 @@ theorem isTrivial_def
 
 中文:
 定理 isTrivial_def
-  条件: (ρ : Representation k G V) [IsTrivial ρ] (g : G)
+  条件: (ρ : Representation k G V) [是平凡 ρ] (g : G)
   证明: IsTrivial.out g
 
 Depends on / 依赖: IsTrivial, IsTrivial.out
@@ -165,7 +165,7 @@ theorem isTrivial_apply
 
 中文:
 定理 isTrivial_apply
-  条件: (ρ : Representation k G V) [IsTrivial ρ] (g : G) (x : V)
+  条件: (ρ : Representation k G V) [是平凡 ρ] (g : G) (x : V)
   证明: congr($(isTrivial_def ρ g) x)
 
 Depends on / 依赖: isTrivial_def
@@ -283,7 +283,7 @@ definition asAlgebraHom
 
 中文:
 定义 asAlgebraHom
-  签名: : k[G] ->ₐ[k] Module.End k V
+  签名: : k[G] ->ₐ[k] 模.End k V
   定义体: lift k _ G ρ
 -/
 noncomputable def asAlgebraHom : k[G] ->ₐ[k] Module.End k V := lift k _ G ρ
@@ -341,7 +341,7 @@ theorem asAlgebraHom_single_one
 中文:
 定理 asAlgebraHom_single_one
   条件: (g : G)
-  结论: asAlgebraHom ρ (MonoidAlgebra.single g 1) = ρ g
+  结论: asAlgebraHom ρ (幺半群代数.single g 1) = ρ g
   证明: by simp
 -/
 theorem asAlgebraHom_single_one (g : G) : asAlgebraHom ρ (MonoidAlgebra.single g 1) = ρ g := by simp
@@ -425,7 +425,7 @@ instance [Module.Finite
   body: .equiv ρ.asModuleEquiv.symm
 
 中文:
-实例 [Module.Finite
+实例 [模.有限
   签名: k V] (ρ
   定义体: .equiv ρ.asModuleEquiv.symm
 
@@ -448,7 +448,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module k[G] ρ.asModule
+  签名: 模 k[G] ρ.asModule
   定义体: Module.compHom V (asAlgebraHom ρ).toRingHom
 
 @[simp]
@@ -539,7 +539,7 @@ definition ofModule'
 
 中文:
 定义 ofModule'
-  签名: (M : 类型) [AddCommMonoid M] [Module k M] [Module k[G] M]
+  签名: (M : 类型) [加法交换幺半群 M] [模 k M] [模 k[G] M]
   定义体: (MonoidAlgebra.lift k (M ->ₗ[k] M) G).symm (Algebra.lsmul k k M)
 
 Depends on / 依赖: Algebra, Algebra.lsmul, MonoidAlgebra, MonoidAlgebra.lift
@@ -731,7 +731,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower k k[G] ρ.asModule
+  签名: 标量塔 k k[G] ρ.asModule
   定义体: by
     revert t
     apply x.induction_on
@@ -774,7 +774,7 @@ definition norm
 
 中文:
 定义 norm
-  签名: : Module.End k V
+  签名: : 模.End k V
   定义体: ∑ g : G, ρ g
 
 @[simp]
@@ -910,7 +910,7 @@ definition subrepresentation
 
 中文:
 定义 subrepresentation
-  签名: (W : Submodule k V) (le_comap : 对任意 g, W <= W.comap (ρ g))
+  签名: (W : 子模 k V) (le_comap : 对任意 g, W <= W.comap (ρ g))
   定义体: (ρ g).restrict le_comap g
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -945,7 +945,7 @@ definition quotient
 
 中文:
 定义 quotient
-  签名: (W : Submodule k V) (le_comap : 对任意 g, W <= W.comap (ρ g))
+  签名: (W : 子模 k V) (le_comap : 对任意 g, W <= W.comap (ρ g))
   定义体: Submodule.mapQ _ _ (ρ g) le_comap g
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -979,7 +979,7 @@ lemma apply_eq_of_coe_eq
 
 中文:
 引理 apply_eq_of_coe_eq
-  条件: [IsTrivial (ρ.comp S.subtype)] (g h : G) (hgh : (g : G ⧸ S) = h)
+  条件: [是平凡 (ρ.comp S.subtype)] (g h : G) (hgh : (g : G ⧸ S) = h)
   证明: by
   ext x
   apply (ρ.apply_bijective g⁻¹).1
@@ -1013,7 +1013,7 @@ definition ofQuotient
 
 中文:
 定义 ofQuotient
-  签名: [IsTrivial (ρ.comp S.subtype)]
+  签名: [是平凡 (ρ.comp S.subtype)]
   定义体: (QuotientGroup.con S).lift ρ by
     rintro x y ⟨⟨z, hz⟩, rfl⟩
     ext w
@@ -1043,7 +1043,7 @@ lemma ofQuotient_coe_apply
 
 中文:
 引理 ofQuotient_coe_apply
-  条件: [IsTrivial (ρ.comp S.subtype)] (g : G) (x : V)
+  条件: [是平凡 (ρ.comp S.subtype)] (g : G) (x : V)
   证明: rfl
 -/
 lemma ofQuotient_coe_apply [IsTrivial (ρ.comp S.subtype)] (g : G) (x : V) :
@@ -1067,7 +1067,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup ρ.asModule
+  签名: 加法交换群 ρ.asModule
   定义体: inferInstanceAs AddCommGroup V
 
 Depends on / 依赖: AddCommGroup
@@ -1287,7 +1287,7 @@ theorem norm_ofDistribMulAction_eq
 
 中文:
 定理 norm_ofDistribMulAction_eq
-  结论: {G : 类型} [Group G] [Fintype G]
+  结论: {G : 类型} [群 G] [有限类型 G]
   证明: by
   simp [norm]
 -/
@@ -1311,7 +1311,7 @@ definition ofMulDistribMulAction
 
 中文:
 定义 ofMulDistribMulAction
-  签名: : Representation 整数 M (Additive G)
+  签名: : Representation 整数 M (加性 G)
   定义体: (addMonoidEndRingEquivInt (Additive G) : AddMonoid.End (Additive G) ->* _).comp
     ((monoidEndToAdditive G : _ ->* _).comp (MulDistribMulAction.toMonoidEnd M G))
 
@@ -1333,7 +1333,7 @@ theorem ofMulDistribMulAction_apply_apply
 
 中文:
 定理 ofMulDistribMulAction_apply_apply
-  条件: (g : M) (a : Additive G)
+  条件: (g : M) (a : 加性 G)
   证明: rfl
 
 @[simp]
@@ -1353,7 +1353,7 @@ theorem norm_ofMulDistribMulAction_eq
 
 中文:
 定理 norm_ofMulDistribMulAction_eq
-  结论: {G M : Type} [Group G] [Fintype G]
+  结论: {G M : 类型} [群 G] [有限类型 G]
   证明: by
   simp [norm]
 -/
@@ -1389,7 +1389,7 @@ theorem coeff_ofMulAction
 
 中文:
 定理 coeff_ofMulAction
-  条件: {H : 类型} [MulAction G H] (g : G) (f : k[H]) (h : H)
+  条件: {H : 类型} [乘法作用 G H] (g : G) (f : k[H]) (h : H)
   证明: by
   conv_lhs => rw [← smul_inv_smul g h]
   set h' := g⁻¹ • h
@@ -1424,7 +1424,7 @@ instance :
 
 中文:
 实例 :
-  签名: HMul k[G] (ofMulAction k G G).asModule k[G]
+  签名: 异质乘法 k[G] (ofMulAction k G G).asModule k[G]
   定义体: x * (ofMulAction k G G).asModuleEquiv y
 
 Depends on / 依赖: asModuleEquiv, ofMulAction
@@ -1512,7 +1512,7 @@ definition asGroupHom
 
 中文:
 定义 asGroupHom
-  签名: : G ->* Units (V ->ₗ[k] V)
+  签名: : G ->* 单位群 (V ->ₗ[k] V)
   定义体: MonoidHom.toHomUnits ρ
 
 Depends on / 依赖: MonoidHom, MonoidHom.toHomUnits, toHomUnits
@@ -1661,7 +1661,7 @@ lemma coeff_of_leftRegular_of_generator
 
 中文:
 引理 coeff_of_leftRegular_of_generator
-  结论: (g : G) (hg : 对任意 x, x in Subgroup.zpowers g)
+  结论: (g : G) (hg : 对任意 x, x in 子群.zpowers g)
   证明: by
   rw [MonoidAlgebra.ext_iff]; rw [Finsupp.ext_iff] at hx
   rcases hg γ with ⟨i, rfl⟩
@@ -1752,7 +1752,7 @@ definition prod
   map_mul' g h := by simp [prodMap_mul]
 
 中文:
-定义 prod
+定义 乘积
   签名: : Representation k G (V × W) where
   定义体: (ρV g).prodMap (ρW g)
   map_one' := by simp
@@ -1822,7 +1822,7 @@ theorem tprod_apply
 中文:
 定理 tprod_apply
   条件: (g : G)
-  结论: (ρV otimes ρW) g = TensorProduct.map (ρV g) (ρW g)
+  结论: (ρV otimes ρW) g = 张量积.map (ρV g) (ρW g)
   证明: rfl
 -/
 theorem tprod_apply (g : G) : (ρV otimes ρW) g = TensorProduct.map (ρV g) (ρW g) :=
@@ -1965,7 +1965,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : Representation k G (Module.Dual k V) where
+  签名: : Representation k G (模.对偶 k V) where
   定义体: { toFun := fun f => f ∘ₗ ρV g⁻¹
       map_add' := fun f₁ f₂ => by simp only [add_comp]
       map_smul' r f := by ext; simp }
@@ -1997,7 +1997,7 @@ theorem dual_apply
 中文:
 定理 dual_apply
   条件: (g : G)
-  结论: (dual ρV) g = Module.Dual.transpose (R := k) (ρV g⁻¹)
+  结论: (dual ρV) g = 模.对偶.transpose (R := k) (ρV g⁻¹)
   证明: rfl
 -/
 theorem dual_apply (g : G) : (dual ρV) g = Module.Dual.transpose (R := k) (ρV g⁻¹) :=
@@ -2098,7 +2098,7 @@ abbreviation free
 
 中文:
 缩写 free
-  签名: (k G : 类型) [CommSemiring k] [Monoid G] (α : 类型)
+  签名: (k G : 类型) [交换半环 k] [幺半群 G] (α : 类型)
   定义体: finsupp (leftRegular k G) α
 
 Depends on / 依赖: finsupp, leftRegular
@@ -2187,7 +2187,7 @@ definition freeAsModuleBasis
 
 中文:
 定义 freeAsModuleBasis
-  签名: : Basis α k[G] (free k G α).asModule where
+  签名: : 基 α k[G] (free k G α).asModule where
   定义体: (finsuppLEquivFreeAsModule k G α).symm
 
 Depends on / 依赖: finsuppLEquivFreeAsModule
@@ -2205,7 +2205,7 @@ theorem free_asModule_free
 
 中文:
 定理 free_asModule_free
-  结论: Module.Free k[G] (free k G α).asModule
+  结论: 模.自由 k[G] (free k G α).asModule
   证明: Module.Free.of_basis (freeAsModuleBasis k G α)
 
 Depends on / 依赖: Module, Module.Free.of_basis, freeAsModuleBasis, of_basis

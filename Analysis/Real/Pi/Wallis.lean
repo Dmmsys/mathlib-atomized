@@ -266,7 +266,7 @@ theorem tendsto_W_nhds_pi_div_two
 
 中文:
 定理 tendsto_W_nhds_pi_div_two
-  结论: Tendsto W atTop (𝓝 <| π / 2)
+  结论: 收敛 W atTop (𝓝 <| π / 2)
   证明: by
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le ?_ tendsto_const_nhds le_W W_le
   have : 𝓝 (π / 2) = 𝓝 ((1 - 0) * (π / 2)) := by rw [sub_zero, one_mul]
@@ -303,7 +303,7 @@ theorem Real.tendsto_prod_pi_div_two
   proof: Real.Wallis.tendsto_W_nhds_pi_div_two
 
 中文:
-定理 Real.tendsto_prod_pi_div_two
+定理 实数.tendsto_prod_pi_div_two
   证明: Real.Wallis.tendsto_W_nhds_pi_div_two
 
 Depends on / 依赖: Real.Wallis.tendsto_W_nhds_pi_div_two, Wallis, tendsto_W_nhds_pi_div_two

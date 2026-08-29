@@ -79,7 +79,7 @@ class IsRankOneDiscrete
     - exists_generator_lt_one' : exists (γ : Γˣ), zpowers γ = (valueGroup (.ofClass v)) ∧ γ < 1
 
 中文:
-类 IsRankOneDiscrete
+类 是RankOneDiscrete
   参数: : 命题 where
   公理与运算 (1 个):
     - exists_generator_lt_one' : 存在 (γ : Γˣ), zpowers γ = (valueGroup (.ofClass v)) ∧ γ < 1
@@ -100,7 +100,7 @@ lemma exists_generator_lt_one
   proof: exists_generator_lt_one'
 
 中文:
-引理 exists_generator_lt_one
+引理 存在_generator_lt_one
   结论: 存在 (γ : Γˣ), zpowers γ = valueGroup (.ofClass v) ∧ γ < 1
   证明: exists_generator_lt_one'
 
@@ -212,7 +212,7 @@ lemma generator_zpowers_eq_range
 
 中文:
 引理 generator_zpowers_eq_range
-  条件: (K : 类型) [Field K] (w : Valuation K Γ) [IsRankOneDiscrete w]
+  条件: (K : 类型) [域 K] (w : 赋值 K Γ) [是RankOneDiscrete w]
   证明: by
   simp [generator_zpowers_eq_valueGroup, valueGroup_eq_range]
 
@@ -235,7 +235,7 @@ lemma generator_mem_range
 
 中文:
 引理 generator_mem_range
-  条件: (K : 类型) [Field K] (w : Valuation K Γ) [IsRankOneDiscrete w]
+  条件: (K : 类型) [域 K] (w : 赋值 K Γ) [是RankOneDiscrete w]
   证明: by
   apply sdiff_subset
   rw [← generator_zpowers_eq_range]
@@ -351,7 +351,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCyclic valueGroup (.ofClass v)
+  签名: 是循环 valueGroup (.ofClass v)
   定义体: by
   rw [← generator_zpowers_eq_valueGroup]
   exact isCyclic_zpowers (generator v)
@@ -380,7 +380,7 @@ instance :
 
 中文:
 实例 :
-  签名: v.IsNontrivial
+  签名: v.是非平凡
   定义体: by
   apply IsNontrivial.mk
   by_contra! h1
@@ -448,7 +448,7 @@ theorem generator_eq_exp_neg_one_of_mem_range
 
 中文:
 定理 generator_eq_exp_neg_one_of_mem_range
-  条件: (hπ : exp (-1) in Set.range v)
+  条件: (hπ : exp (-1) in 集合.range v)
   证明: by
   rw [← Valuation.IsRankOneDiscrete.valueGroup_genLTOne_eq_generator]
   suffices Units.mk0 (exp (-1)) (by simp) = (Subgroup.genLTOne (valueGroup (.ofClass v))) by
@@ -489,7 +489,7 @@ lemma generator_eq_exp_neg_one_of_surjective
 
 中文:
 引理 generator_eq_exp_neg_one_of_surjective
-  条件: (hsurj : Function.Surjective v)
+  条件: (hsurj : 函数.满射 v)
   证明: generator_eq_exp_neg_one_of_mem_range (by aesop)
 
 @[deprecated generator_eq_exp_neg_one_of_surjective (since := "2026-04-01")]
@@ -511,7 +511,7 @@ lemma generator_eq_neg_exp_one_of_surjective
 
 中文:
 引理 generator_eq_neg_exp_one_of_surjective
-  条件: (hsurj : Function.Surjective v)
+  条件: (hsurj : 函数.满射 v)
   证明: generator_eq_exp_neg_one_of_surjective hsurj
 
 Depends on / 依赖: generator_eq_exp_neg_one_of_surjective
@@ -730,7 +730,7 @@ structure Uniformizer
     - valuation_gt_one : v.IsUniformizer val
 
 中文:
-结构 Uniformizer
+结构 一致化子
   参数: where
   公理与运算 (2 个):
     - val : v.integer
@@ -779,7 +779,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe v.Uniformizer v.integer
+  签名: Coe v.一致化子 v.integer
   定义体: ⟨fun π => π.val⟩
 -/
 instance : Coe v.Uniformizer v.integer := ⟨fun π => π.val⟩
@@ -795,7 +795,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: (π : Uniformizer v)
+  条件: (π : 一致化子 v)
   结论: π.1.1 != 0
   证明: π.2.ne_zero
 
@@ -825,7 +825,7 @@ theorem IsUniformizer.not_isUnit
 中文:
 定理 IsUniformizer.not_isUnit
   条件: {π : v.integer} (hπ : IsUniformizer v π)
-  结论: ¬ IsUnit π
+  结论: ¬ 是单位 π
   证明: fun h => ne_of_gt hπ.val_lt_one (Integers.one_of_isUnit (integer.integers v) h).symm
 
 Depends on / 依赖: Integers, Integers.one_of_isUnit, integer, integer.integers, integers, ne_of_gt, one_of_isUnit, val_lt_one
@@ -850,8 +850,8 @@ instance IsRankOneDiscrete.mk'
     (valueGroup (.ofClass v)).genLTOne_lt_one⟩⟩
 
 中文:
-实例 IsRankOneDiscrete.mk'
-  签名: : IsRankOneDiscrete v
+实例 是RankOneDiscrete.mk'
+  签名: : 是RankOneDiscrete v
   定义体: ⟨(valueGroup (.ofClass v)).genLTOne, ⟨(valueGroup (.ofClass v)).genLTOne_zpowers_eq_top,
     (valueGroup (.ofClass v)).genLTOne_lt_one⟩⟩
 
@@ -892,7 +892,7 @@ theorem exists_isUniformizer_of_isCyclic_of_nontrivial
     exact mem_image_of_mem Unit
 
 中文:
-定理 exists_isUniformizer_of_isCyclic_of_nontrivial
+定理 存在_isUniformizer_of_isCyclic_of_nontrivial
   结论: 存在 π : K₀, IsUniformizer v (π : K)
   证明: by
   simp only [IsUniformizer.iff, Subtype.exists, mem_valuationSubring_iff, exists_prop]
@@ -926,7 +926,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (Uniformizer v)
+  签名: 非空 (一致化子 v)
   定义体: ⟨⟨(exists_isUniformizer_of_isCyclic_of_nontrivial v).choose,
     (exists_isUniformizer_of_isCyclic_of_nontrivial v).choose_spec⟩⟩
 
@@ -1022,8 +1022,8 @@ theorem exists_pow_Uniformizer
   rw [π.2.zpowers_e
 
 中文:
-定理 exists_pow_Uniformizer
-  条件: {r : K₀} (hr : r != 0) (π : Uniformizer v)
+定理 存在_pow_Uniformizer
+  条件: {r : K₀} (hr : r != 0) (π : 一致化子 v)
   证明: by
   have hr₀ : v r != 0 := by rw [ne_eq, zero_iff, Subring.coe_eq_zero_iff]; exact hr
   set vr : Γˣ := Units.mk0 (v r) hr₀ with hvr_def
@@ -1087,8 +1087,8 @@ theorem Uniformizer.is_generator
 
 
 中文:
-定理 Uniformizer.is_generator
-  条件: (π : Uniformizer v)
+定理 一致化子.is_generator
+  条件: (π : 一致化子 v)
   证明: by
   apply (maximalIdeal.isMaximal _).eq_of_le
   · intro h
@@ -1151,7 +1151,7 @@ theorem pow_Uniformizer_is_pow_generator
 
 中文:
 定理 pow_Uniformizer_is_pow_generator
-  条件: (π : Uniformizer v) (n : 自然数)
+  条件: (π : 一致化子 v) (n : 自然数)
   证明: by
   rw [← Ideal.span_singleton_pow]; rw [Uniformizer.is_generator]
 
@@ -1182,7 +1182,7 @@ theorem valuationSubring_not_isField
 
 中文:
 定理 valuationSubring_not_isField
-  结论: [Nontrivial (valueGroup (.ofClass v))]
+  结论: [非平凡 (valueGroup (.ofClass v))]
   证明: by
   obtain ⟨π, hπ⟩ := exists_isUniformizer_of_isCyclic_of_nontrivial v
   rintro ⟨-, -, h⟩
@@ -1221,7 +1221,7 @@ theorem isUniformizer_of_maximalIdeal_eq_span
 
 中文:
 定理 isUniformizer_of_maximalIdeal_eq_span
-  结论: [v.IsRankOneDiscrete] {r : K₀}
+  结论: [v.是RankOneDiscrete] {r : K₀}
   证明: by
   have hr₀ : r != 0 := by
     intro h
@@ -1263,7 +1263,7 @@ theorem ideal_isPrincipal
 
 中文:
 定理 ideal_isPrincipal
-  结论: [IsCyclic (valueGroup (.ofClass v))]
+  结论: [是循环 (valueGroup (.ofClass v))]
   证明: by
   suffices forall P : Ideal K₀, P.IsPrime -> Submodule.IsPrincipal P by
     exact (IsPrincipalIdealRing.of_prime this).principal I
@@ -1305,7 +1305,7 @@ theorem valuationSubring_isPrincipalIdealRing
 
 中文:
 定理 valuationSubring_isPrincipalIdealRing
-  结论: [IsCyclic (valueGroup (.ofClass v))]
+  结论: [是循环 (valueGroup (.ofClass v))]
   证明: ⟨(ideal_isPrincipal v ·)⟩
 
 Depends on / 依赖: ideal_isPrincipal
@@ -1326,7 +1326,7 @@ instance valuationSubring_isDiscreteValuationRing
 
 中文:
 实例 valuationSubring_isDiscreteValuationRing
-  签名: [IsCyclic (valueGroup (.ofClass v))]
+  签名: [是循环 (valueGroup (.ofClass v))]
   定义体: valuationSubring_isPrincipalIdealRing v
   toIsLocalRing := inferInstance
   not_a_field' := by rw [ne_eq, ← isField_iff_maximalIdeal_eq]; exact valuationSubring_not_isField v

@@ -37,8 +37,8 @@ structure SemiSimplexCategory
     - len : Nat
 
 中文:
-结构 SemiSimplexCategory
-  参数: : Type where
+结构 SemiSimplex范畴
+  参数: : 类型 where
   公理与运算 (2 个):
     - mk : :
     - len : 自然数
@@ -63,8 +63,8 @@ definition Hom
   body: Fin (n.len + 1) ↪o Fin (m.len + 1)
 
 中文:
-定义 Hom
-  签名: (n m : SemiSimplexCategory)
+定义 态射
+  签名: (n m : SemiSimplex范畴)
   定义体: Fin (n.len + 1) ↪o Fin (m.len + 1)
 
 Depends on / 依赖: m.len, n.len
@@ -83,7 +83,7 @@ instance smallCategory
 
 中文:
 实例 smallCategory
-  签名: : SmallCategory.{0} SemiSimplexCategory where
+  签名: : 小范畴.{0} SemiSimplex范畴 where
   定义体: Hom
   id _ := .refl _
   comp f g := f.trans g
@@ -105,7 +105,7 @@ definition homEquiv
 
 中文:
 定义 homEquiv
-  签名: {n m : SemiSimplexCategory}
+  签名: {n m : SemiSimplex范畴}
   定义体: .refl _
 
 @[simp]
@@ -127,7 +127,7 @@ lemma homEquiv_id
 
 中文:
 引理 homEquiv_id
-  条件: (a : SemiSimplexCategory)
+  条件: (a : SemiSimplex范畴)
   证明: rfl
 
 @[simp]
@@ -146,7 +146,7 @@ lemma homEquiv_comp
 
 中文:
 引理 homEquiv_comp
-  条件: {a b c : SemiSimplexCategory} (f : a ⟶ b) (g : b ⟶ c)
+  条件: {a b c : SemiSimplex范畴} (f : a ⟶ b) (g : b ⟶ c)
   证明: rfl
 -/
 lemma homEquiv_comp {a b c : SemiSimplexCategory} (f : a ⟶ b) (g : b ⟶ c) :
@@ -165,7 +165,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: {a b : SemiSimplexCategory} {f g : a ⟶ b}
+  结论: {a b : SemiSimplex范畴} {f g : a ⟶ b}
   证明: homEquiv.injective h
 
 Depends on / 依赖: homEquiv, homEquiv.injective, injective
@@ -187,7 +187,7 @@ definition toSimplexCategory
 
 中文:
 定义 toSimplexCategory
-  签名: : SemiSimplexCategory ⥤ SimplexCategory where
+  签名: : SemiSimplex范畴 ⥤ 单纯形范畴 where
   定义体: ⦋n.len⦌
   map f := SimplexCategory.Hom.mk (homEquiv f).toOrderHom
 
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: toSimplexCategory.Faithful
+  签名: toSimplexCategory.忠实
   定义体: by
     ext : 2
     apply ConcreteCategory.congr_hom h
@@ -263,7 +263,7 @@ definition homOfMono
 
 中文:
 定义 homOfMono
-  签名: {n m : SemiSimplexCategory}
+  签名: {n m : SemiSimplex范畴}
   定义体: homEquiv.symm (OrderEmbedding.ofStrictMono f.toOrderHom
     ((SimplexCategory.Hom.toOrderHom f).monotone.strictMono_of_injective
       (by rwa [← SimplexCategory.mono_iff_injective])))
@@ -290,7 +290,7 @@ lemma toSimplexCategory_map_homOfMono
 
 中文:
 引理 toSimplexCategory_map_homOfMono
-  结论: {n m : SemiSimplexCategory}
+  结论: {n m : SemiSimplex范畴}
   证明: by
   aesop
 -/

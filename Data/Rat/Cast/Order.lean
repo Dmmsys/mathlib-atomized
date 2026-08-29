@@ -31,7 +31,7 @@ theorem castHom_rat
 
 中文:
 定理 castHom_rat
-  结论: castHom Rat = RingHom.id Rat
+  结论: castHom 有理数 = 环态射.id 有理数
   证明: RingHom.ext cast_id
 
 Depends on / 依赖: RingHom, RingHom.ext, cast_id
@@ -86,7 +86,7 @@ theorem cast_strictMono
 
 中文:
 定理 cast_strictMono
-  结论: StrictMono ((↑) : Rat -> K)
+  结论: 严格递增 ((↑) : 有理数 -> K)
   证明: fun p q => by
   simpa only [sub_pos, cast_sub] using cast_pos_of_pos (K := K) (q := q - p)
 
@@ -108,7 +108,7 @@ theorem cast_mono
 
 中文:
 定理 cast_mono
-  结论: Monotone ((↑) : Rat -> K)
+  结论: 递增 ((↑) : 有理数 -> K)
   证明: cast_strictMono.monotone
 
 Depends on / 依赖: cast_strictMono, cast_strictMono.monotone, monotone
@@ -128,7 +128,7 @@ definition castOrderEmbedding
 
 中文:
 定义 castOrderEmbedding
-  签名: : Rat ↪o K
+  签名: : 有理数 ↪o K
   定义体: OrderEmbedding.ofStrictMono (↑) cast_strictMono
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, cast_strictMono, ofStrictMono
@@ -245,8 +245,8 @@ theorem cast_le_natCast
 
 中文:
 定理 cast_le_natCast
-  条件: {m : Rat} {n : 自然数}
-  结论: (m : K) <= n ↔ m <= (n : Rat)
+  条件: {m : 有理数} {n : 自然数}
+  结论: (m : K) <= n ↔ m <= (n : 有理数)
   证明: by
   rw [← cast_le (K := K)]; rw [cast_natCast]
 
@@ -272,8 +272,8 @@ theorem natCast_le_cast
 
 中文:
 定理 natCast_le_cast
-  条件: {m : 自然数} {n : Rat}
-  结论: (m : K) <= n ↔ (m : Rat) <= n
+  条件: {m : 自然数} {n : 有理数}
+  结论: (m : K) <= n ↔ (m : 有理数) <= n
   证明: by
   rw [← cast_le (K := K)]; rw [cast_natCast]
 
@@ -299,8 +299,8 @@ theorem cast_le_intCast
 
 中文:
 定理 cast_le_intCast
-  条件: {m : Rat} {n : 整数}
-  结论: (m : K) <= n ↔ m <= (n : Rat)
+  条件: {m : 有理数} {n : 整数}
+  结论: (m : K) <= n ↔ m <= (n : 有理数)
   证明: by
   rw [← cast_le (K := K)]; rw [cast_intCast]
 
@@ -326,8 +326,8 @@ theorem intCast_le_cast
 
 中文:
 定理 intCast_le_cast
-  条件: {m : 整数} {n : Rat}
-  结论: (m : K) <= n ↔ (m : Rat) <= n
+  条件: {m : 整数} {n : 有理数}
+  结论: (m : K) <= n ↔ (m : 有理数) <= n
   证明: by
   rw [← cast_le (K := K)]; rw [cast_intCast]
 
@@ -353,8 +353,8 @@ theorem cast_lt_natCast
 
 中文:
 定理 cast_lt_natCast
-  条件: {m : Rat} {n : 自然数}
-  结论: (m : K) < n ↔ m < (n : Rat)
+  条件: {m : 有理数} {n : 自然数}
+  结论: (m : K) < n ↔ m < (n : 有理数)
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_natCast]
 
@@ -380,8 +380,8 @@ theorem natCast_lt_cast
 
 中文:
 定理 natCast_lt_cast
-  条件: {m : 自然数} {n : Rat}
-  结论: (m : K) < n ↔ (m : Rat) < n
+  条件: {m : 自然数} {n : 有理数}
+  结论: (m : K) < n ↔ (m : 有理数) < n
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_natCast]
 
@@ -407,8 +407,8 @@ theorem cast_lt_intCast
 
 中文:
 定理 cast_lt_intCast
-  条件: {m : Rat} {n : 整数}
-  结论: (m : K) < n ↔ m < (n : Rat)
+  条件: {m : 有理数} {n : 整数}
+  结论: (m : K) < n ↔ m < (n : 有理数)
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_intCast]
 
@@ -434,8 +434,8 @@ theorem intCast_lt_cast
 
 中文:
 定理 intCast_lt_cast
-  条件: {m : 整数} {n : Rat}
-  结论: (m : K) < n ↔ (m : Rat) < n
+  条件: {m : 整数} {n : 有理数}
+  结论: (m : K) < n ↔ (m : 有理数) < n
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_intCast]
 
@@ -460,8 +460,8 @@ lemma cast_min
 
 中文:
 引理 cast_min
-  条件: (p q : Rat)
-  结论: (↑(min p q) : K) = min (p : K) (q : K)
+  条件: (p q : 有理数)
+  结论: (↑(最小值 p q) : K) = 最小值 (p : K) (q : K)
   证明: (@cast_mono K _).map_min
 
 @[simp, norm_cast]
@@ -482,8 +482,8 @@ lemma cast_max
 
 中文:
 引理 cast_max
-  条件: (p q : Rat)
-  结论: (↑(max p q) : K) = max (p : K) (q : K)
+  条件: (p q : 有理数)
+  结论: (↑(最大值 p q) : K) = 最大值 (p : K) (q : K)
   证明: (@cast_mono K _).map_max
 
 Depends on / 依赖: cast_mono, map_max
@@ -501,8 +501,8 @@ lemma cast_abs
 
 中文:
 引理 cast_abs
-  条件: (q : Rat)
-  结论: ((|q| : Rat) : K) = |(q : K)|
+  条件: (q : 有理数)
+  结论: ((|q| : 有理数) : K) = |(q : K)|
   证明: by simp [abs_eq_max_neg]
 -/
 @[simp, norm_cast] lemma cast_abs (q : Rat) : ((|q| : Rat) : K) = |(q : K)| := by simp [abs_eq_max_neg]
@@ -523,8 +523,8 @@ theorem preimage_cast_Icc
 
 中文:
 定理 preimage_cast_Icc
-  条件: (p q : Rat)
-  结论: (↑) ⁻¹' Icc (p : K) q = Icc p q
+  条件: (p q : 有理数)
+  结论: (↑) ⁻¹' 闭区间 (p : K) q = 闭区间 p q
   证明: castOrderEmbedding.preimage_Icc ..
 
 @[simp]
@@ -548,8 +548,8 @@ theorem preimage_cast_Ico
 
 中文:
 定理 preimage_cast_Ico
-  条件: (p q : Rat)
-  结论: (↑) ⁻¹' Ico (p : K) q = Ico p q
+  条件: (p q : 有理数)
+  结论: (↑) ⁻¹' 左闭右开区间 (p : K) q = 左闭右开区间 p q
   证明: castOrderEmbedding.preimage_Ico ..
 
 @[simp]
@@ -573,8 +573,8 @@ theorem preimage_cast_Ioc
 
 中文:
 定理 preimage_cast_Ioc
-  条件: (p q : Rat)
-  结论: (↑) ⁻¹' Ioc (p : K) q = Ioc p q
+  条件: (p q : 有理数)
+  结论: (↑) ⁻¹' 左开右闭区间 (p : K) q = 左开右闭区间 p q
   证明: castOrderEmbedding.preimage_Ioc p q
 
 @[simp]
@@ -598,8 +598,8 @@ theorem preimage_cast_Ioo
 
 中文:
 定理 preimage_cast_Ioo
-  条件: (p q : Rat)
-  结论: (↑) ⁻¹' Ioo (p : K) q = Ioo p q
+  条件: (p q : 有理数)
+  结论: (↑) ⁻¹' 开区间 (p : K) q = 开区间 p q
   证明: castOrderEmbedding.preimage_Ioo p q
 
 @[simp]
@@ -623,8 +623,8 @@ theorem preimage_cast_Ici
 
 中文:
 定理 preimage_cast_Ici
-  条件: (q : Rat)
-  结论: (↑) ⁻¹' Ici (q : K) = Ici q
+  条件: (q : 有理数)
+  结论: (↑) ⁻¹' 左闭右无界区间 (q : K) = 左闭右无界区间 q
   证明: castOrderEmbedding.preimage_Ici q
 
 @[simp]
@@ -648,8 +648,8 @@ theorem preimage_cast_Iic
 
 中文:
 定理 preimage_cast_Iic
-  条件: (q : Rat)
-  结论: (↑) ⁻¹' Iic (q : K) = Iic q
+  条件: (q : 有理数)
+  结论: (↑) ⁻¹' 左无界右闭区间 (q : K) = 左无界右闭区间 q
   证明: castOrderEmbedding.preimage_Iic q
 
 @[simp]
@@ -673,8 +673,8 @@ theorem preimage_cast_Ioi
 
 中文:
 定理 preimage_cast_Ioi
-  条件: (q : Rat)
-  结论: (↑) ⁻¹' Ioi (q : K) = Ioi q
+  条件: (q : 有理数)
+  结论: (↑) ⁻¹' 左开右无界区间 (q : K) = 左开右无界区间 q
   证明: castOrderEmbedding.preimage_Ioi q
 
 @[simp]
@@ -698,8 +698,8 @@ theorem preimage_cast_Iio
 
 中文:
 定理 preimage_cast_Iio
-  条件: (q : Rat)
-  结论: (↑) ⁻¹' Iio (q : K) = Iio q
+  条件: (q : 有理数)
+  结论: (↑) ⁻¹' 左无界右开区间 (q : K) = 左无界右开区间 q
   证明: castOrderEmbedding.preimage_Iio q
 
 @[simp]
@@ -723,7 +723,7 @@ theorem preimage_cast_uIcc
 
 中文:
 定理 preimage_cast_uIcc
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
   证明: (castOrderEmbedding (K := K)).preimage_uIcc p q
 
@@ -746,7 +746,7 @@ theorem preimage_cast_uIoc
 
 中文:
 定理 preimage_cast_uIoc
-  条件: (p q : Rat)
+  条件: (p q : 有理数)
   结论: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
   证明: (castOrderEmbedding (K := K)).preimage_uIoc p q
 
@@ -778,7 +778,7 @@ theorem cast_strictMono
 
 中文:
 定理 cast_strictMono
-  结论: StrictMono ((↑) : Rat>=0 -> K)
+  结论: 严格递增 ((↑) : 有理数>=0 -> K)
   证明: fun p q h => by
   rwa [NNRat.cast_def, NNRat.cast_def, div_lt_div_iff₀, ← Nat.cast_mul, ← Nat.cast_mul,
     Nat.cast_lt (α := K), ← NNRat.lt_def]
@@ -806,7 +806,7 @@ theorem cast_mono
 
 中文:
 定理 cast_mono
-  结论: Monotone ((↑) : Rat>=0 -> K)
+  结论: 递增 ((↑) : 有理数>=0 -> K)
   证明: cast_strictMono.monotone
 
 Depends on / 依赖: cast_strictMono, cast_strictMono.monotone, monotone
@@ -826,7 +826,7 @@ definition castOrderEmbedding
 
 中文:
 定义 castOrderEmbedding
-  签名: : Rat>=0 ↪o K
+  签名: : 有理数>=0 ↪o K
   定义体: OrderEmbedding.ofStrictMono (↑) cast_strictMono
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.ofStrictMono, cast_strictMono, ofStrictMono
@@ -988,7 +988,7 @@ lemma cast_le_ofNat
   simp [← cast_le (K := K)]
 
 中文:
-引理 cast_le_ofNat
+引理 cast_le_of自然数
   结论: (p : K) <= of自然数(n) ↔ p <= Of自然数.of自然数 n
   证明: by
   simp [← cast_le (K := K)]
@@ -1006,7 +1006,7 @@ lemma ofNat_le_cast
   simp [← cast_le (K := K)]
 
 中文:
-引理 ofNat_le_cast
+引理 of自然数_le_cast
   结论: of自然数(n) <= (p : K) ↔ Of自然数.of自然数 n <= p
   证明: by
   simp [← cast_le (K := K)]
@@ -1024,7 +1024,7 @@ lemma cast_lt_ofNat
   simp [← cast_lt (K := K)]
 
 中文:
-引理 cast_lt_ofNat
+引理 cast_lt_of自然数
   结论: (p : K) < of自然数(n) ↔ p < Of自然数.of自然数 n
   证明: by
   simp [← cast_lt (K := K)]
@@ -1042,7 +1042,7 @@ lemma ofNat_lt_cast
   simp [← cast_lt (K := K)]
 
 中文:
-引理 ofNat_lt_cast
+引理 of自然数_lt_cast
   结论: of自然数(n) < (p : K) ↔ Of自然数.of自然数 n < p
   证明: by
   simp [← cast_lt (K := K)]
@@ -1067,8 +1067,8 @@ theorem cast_le_natCast
 
 中文:
 定理 cast_le_natCast
-  条件: {m : Rat>=0} {n : 自然数}
-  结论: (m : K) <= n ↔ m <= (n : Rat>=0)
+  条件: {m : 有理数>=0} {n : 自然数}
+  结论: (m : K) <= n ↔ m <= (n : 有理数>=0)
   证明: by
   rw [← cast_le (K := K)]; rw [cast_natCast]
 
@@ -1094,8 +1094,8 @@ theorem natCast_le_cast
 
 中文:
 定理 natCast_le_cast
-  条件: {m : 自然数} {n : Rat>=0}
-  结论: (m : K) <= n ↔ (m : Rat>=0) <= n
+  条件: {m : 自然数} {n : 有理数>=0}
+  结论: (m : K) <= n ↔ (m : 有理数>=0) <= n
   证明: by
   rw [← cast_le (K := K)]; rw [cast_natCast]
 
@@ -1121,8 +1121,8 @@ theorem cast_lt_natCast
 
 中文:
 定理 cast_lt_natCast
-  条件: {m : Rat>=0} {n : 自然数}
-  结论: (m : K) < n ↔ m < (n : Rat>=0)
+  条件: {m : 有理数>=0} {n : 自然数}
+  结论: (m : K) < n ↔ m < (n : 有理数>=0)
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_natCast]
 
@@ -1146,8 +1146,8 @@ theorem natCast_lt_cast
 
 中文:
 定理 natCast_lt_cast
-  条件: {m : 自然数} {n : Rat>=0}
-  结论: (m : K) < n ↔ (m : Rat>=0) < n
+  条件: {m : 自然数} {n : 有理数>=0}
+  结论: (m : K) < n ↔ (m : 有理数>=0) < n
   证明: by
   rw [← cast_lt (K := K)]; rw [cast_natCast]
 
@@ -1167,8 +1167,8 @@ lemma cast_min
 
 中文:
 引理 cast_min
-  条件: (p q : Rat>=0)
-  结论: (↑(min p q) : K) = min (p : K) (q : K)
+  条件: (p q : 有理数>=0)
+  结论: (↑(最小值 p q) : K) = 最小值 (p : K) (q : K)
   证明: (@cast_mono K _).map_min
 -/
 @[simp, norm_cast] lemma cast_min (p q : Rat>=0) : (↑(min p q) : K) = min (p : K) (q : K) :=
@@ -1185,8 +1185,8 @@ lemma cast_max
 
 中文:
 引理 cast_max
-  条件: (p q : Rat>=0)
-  结论: (↑(max p q) : K) = max (p : K) (q : K)
+  条件: (p q : 有理数>=0)
+  结论: (↑(最大值 p q) : K) = 最大值 (p : K) (q : K)
   证明: (@cast_mono K _).map_max
 -/
 @[simp, norm_cast] lemma cast_max (p q : Rat>=0) : (↑(max p q) : K) = max (p : K) (q : K) :=
@@ -1208,8 +1208,8 @@ theorem preimage_cast_Icc
 
 中文:
 定理 preimage_cast_Icc
-  条件: (p q : Rat>=0)
-  结论: (↑) ⁻¹' Icc (p : K) q = Icc p q
+  条件: (p q : 有理数>=0)
+  结论: (↑) ⁻¹' 闭区间 (p : K) q = 闭区间 p q
   证明: castOrderEmbedding.preimage_Icc ..
 
 @[simp]
@@ -1233,8 +1233,8 @@ theorem preimage_cast_Ico
 
 中文:
 定理 preimage_cast_Ico
-  条件: (p q : Rat>=0)
-  结论: (↑) ⁻¹' Ico (p : K) q = Ico p q
+  条件: (p q : 有理数>=0)
+  结论: (↑) ⁻¹' 左闭右开区间 (p : K) q = 左闭右开区间 p q
   证明: castOrderEmbedding.preimage_Ico ..
 
 @[simp]
@@ -1258,8 +1258,8 @@ theorem preimage_cast_Ioc
 
 中文:
 定理 preimage_cast_Ioc
-  条件: (p q : Rat>=0)
-  结论: (↑) ⁻¹' Ioc (p : K) q = Ioc p q
+  条件: (p q : 有理数>=0)
+  结论: (↑) ⁻¹' 左开右闭区间 (p : K) q = 左开右闭区间 p q
   证明: castOrderEmbedding.preimage_Ioc p q
 
 @[simp]
@@ -1283,8 +1283,8 @@ theorem preimage_cast_Ioo
 
 中文:
 定理 preimage_cast_Ioo
-  条件: (p q : Rat>=0)
-  结论: (↑) ⁻¹' Ioo (p : K) q = Ioo p q
+  条件: (p q : 有理数>=0)
+  结论: (↑) ⁻¹' 开区间 (p : K) q = 开区间 p q
   证明: castOrderEmbedding.preimage_Ioo p q
 
 @[simp]
@@ -1308,8 +1308,8 @@ theorem preimage_cast_Ici
 
 中文:
 定理 preimage_cast_Ici
-  条件: (p : Rat>=0)
-  结论: (↑) ⁻¹' Ici (p : K) = Ici p
+  条件: (p : 有理数>=0)
+  结论: (↑) ⁻¹' 左闭右无界区间 (p : K) = 左闭右无界区间 p
   证明: castOrderEmbedding.preimage_Ici p
 
 @[simp]
@@ -1333,8 +1333,8 @@ theorem preimage_cast_Iic
 
 中文:
 定理 preimage_cast_Iic
-  条件: (p : Rat>=0)
-  结论: (↑) ⁻¹' Iic (p : K) = Iic p
+  条件: (p : 有理数>=0)
+  结论: (↑) ⁻¹' 左无界右闭区间 (p : K) = 左无界右闭区间 p
   证明: castOrderEmbedding.preimage_Iic p
 
 @[simp]
@@ -1358,8 +1358,8 @@ theorem preimage_cast_Ioi
 
 中文:
 定理 preimage_cast_Ioi
-  条件: (p : Rat>=0)
-  结论: (↑) ⁻¹' Ioi (p : K) = Ioi p
+  条件: (p : 有理数>=0)
+  结论: (↑) ⁻¹' 左开右无界区间 (p : K) = 左开右无界区间 p
   证明: castOrderEmbedding.preimage_Ioi p
 
 @[simp]
@@ -1383,8 +1383,8 @@ theorem preimage_cast_Iio
 
 中文:
 定理 preimage_cast_Iio
-  条件: (p : Rat>=0)
-  结论: (↑) ⁻¹' Iio (p : K) = Iio p
+  条件: (p : 有理数>=0)
+  结论: (↑) ⁻¹' 左无界右开区间 (p : K) = 左无界右开区间 p
   证明: castOrderEmbedding.preimage_Iio p
 
 @[simp]
@@ -1408,7 +1408,7 @@ theorem preimage_cast_uIcc
 
 中文:
 定理 preimage_cast_uIcc
-  条件: (p q : Rat>=0)
+  条件: (p q : 有理数>=0)
   结论: (↑) ⁻¹' uIcc (p : K) q = uIcc p q
   证明: (castOrderEmbedding (K := K)).preimage_uIcc p q
 
@@ -1431,7 +1431,7 @@ theorem preimage_cast_uIoc
 
 中文:
 定理 preimage_cast_uIoc
-  条件: (p q : Rat>=0)
+  条件: (p q : 有理数>=0)
   结论: (↑) ⁻¹' uIoc (p : K) q = uIoc p q
   证明: (castOrderEmbedding (K := K)).preimage_uIoc p q
 

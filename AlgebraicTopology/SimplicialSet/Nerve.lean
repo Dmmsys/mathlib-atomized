@@ -46,7 +46,7 @@ definition nerve
 
 中文:
 定义 nerve
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: ComposableArrows C (Δ.unop.len)
   map f := ↾fun x => x.whiskerLeft (SimplexCategory.toCat.map f.unop).toFunctor
   -- `aesop` can prove these but is slow, help it out:
@@ -83,7 +83,7 @@ definition nerveMap
 
 中文:
 定义 nerveMap
-  签名: {C D : 类型u} [Category.{v} C] [Category.{v} D] (F : C ⥤ D)
+  签名: {C D : 类型u} [范畴.{v} C] [范畴.{v} D] (F : C ⥤ D)
   定义体: { app _ := ↾fun X => (F.mapComposableArrows _).obj X }
 
 Depends on / 依赖: F.mapComposableArrows, mapComposableArrows
@@ -168,7 +168,7 @@ definition nerveEquiv
 
 中文:
 定义 nerveEquiv
-  签名: {C : 类型u} [Category.{v} C]
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: f.obj ⟨0, by lia⟩
   invFun f := ComposableArrows.mk₀ f
   left_inv f := ComposableArrows.ext₀ rfl
@@ -198,7 +198,7 @@ definition representableBy
 
 中文:
 定义 representableBy
-  签名: {n : 自然数} (α : 类型u) [Preorder α] (e : α ≃o Fin (n + 1))
+  签名: {n : 自然数} (α : 类型u) [预序 α] (e : α ≃o 有限集 (n + 1))
   定义体: SimplexCategory.homEquivFunctor.trans
     { toFun F := F ⋙ e.symm.monotone.functor
       invFun F := F ⋙ e.monotone.functor
@@ -229,7 +229,7 @@ lemma δ_obj
 
 中文:
 引理 δ_obj
-  条件: {n : 自然数} (i : Fin (n + 2)) (x : ComposableArrows C (n + 1)) (j : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (x : ComposableArrows C (n + 1)) (j : 有限集 (n + 1))
   证明: rfl
 -/
 lemma δ_obj {n : Nat} (i : Fin (n + 2)) (x : ComposableArrows C (n + 1)) (j : Fin (n + 1)) :
@@ -246,7 +246,7 @@ lemma σ_obj
 
 中文:
 引理 σ_obj
-  条件: {n : 自然数} (i : Fin (n + 1)) (x : ComposableArrows C n) (j : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (x : ComposableArrows C n) (j : 有限集 (n + 2))
   证明: rfl
 -/
 lemma σ_obj {n : Nat} (i : Fin (n + 1)) (x : ComposableArrows C n) (j : Fin (n + 2)) :
@@ -265,7 +265,7 @@ lemma δ₀_eq
 中文:
 引理 δ₀_eq
   条件: {x : ComposableArrows C (n + 1)}
-  结论: (nerve C).δ (0 : Fin (n + 2)) x = x.δ₀
+  结论: (nerve C).δ (0 : 有限集 (n + 2)) x = x.δ₀
   证明: rfl
 -/
 lemma δ₀_eq {x : ComposableArrows C (n + 1)} : (nerve C).δ (0 : Fin (n + 2)) x = x.δ₀ := rfl
@@ -284,7 +284,7 @@ lemma σ₀_mk₀_eq
 中文:
 引理 σ₀_mk₀_eq
   条件: (x : C)
-  结论: (nerve C).σ (0 : Fin 1) (.mk₀ x) = .mk₁ (𝟙 x)
+  结论: (nerve C).σ (0 : 有限集 1) (.mk₀ x) = .mk₁ (𝟙 x)
   证明: ComposableArrows.ext₁ rfl rfl (by simp; rfl)
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.ext
@@ -366,7 +366,7 @@ lemma ext_of_isThin
 
 中文:
 引理 ext_of_isThin
-  结论: [Quiver.IsThin C] {n : SimplexCategoryᵒᵖ} {x y : (nerve C).obj n}
+  结论: [箭图.IsThin C] {n : SimplexCategoryᵒᵖ} {x y : (nerve C).obj n}
   证明: ComposableArrows.ext (by simp [h]) (by subsingleton)
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.ext, subsingleton
@@ -393,7 +393,7 @@ lemma left_edge
 
 中文:
 引理 left_edge
-  条件: {x y : ComposableArrows C 0} (e : (nerve C).Edge x y)
+  条件: {x y : ComposableArrows C 0} (e : (nerve C).边 x y)
   证明: by
   simp only [← e.src_eq]
   rfl
@@ -420,7 +420,7 @@ lemma right_edge
 
 中文:
 引理 right_edge
-  条件: {x y : ComposableArrows C 0} (e : (nerve C).Edge x y)
+  条件: {x y : ComposableArrows C 0} (e : (nerve C).边 x y)
   证明: by
   simp only [← e.tgt_eq]
   rfl
@@ -520,7 +520,7 @@ lemma mk₁_homEquiv_apply
 
 中文:
 引理 mk₁_homEquiv_apply
-  条件: {x y : ComposableArrows C 0} (e : (nerve C).Edge x y)
+  条件: {x y : ComposableArrows C 0} (e : (nerve C).边 x y)
   证明: by
   simp [homEquiv, ComposableArrows.mk₁_eqToHom_comp, ComposableArrows.mk₁_comp_eqToHom]
 
@@ -798,7 +798,7 @@ lemma homEquiv_edgeMk_map_nerveMap
 
 中文:
 引理 homEquiv_edgeMk_map_nerveMap
-  结论: {D : 类型u} [Category.{v} D] {x y : C}
+  结论: {D : 类型u} [范畴.{v} D] {x y : C}
   证明: by
   simp [homEquiv, nerveMap_app]
 
@@ -827,8 +827,8 @@ definition PartOrd.nerveFunctor
   map f := nerveMap f.hom.monotone.functor
 
 中文:
-定义 PartOrd.nerveFunctor
-  签名: : PartOrd.{u} ⥤ SSet.{u} where
+定义 偏序.nerveFunctor
+  签名: : 偏序.{u} ⥤ SSet.{u} where
   定义体: nerve X
   map f := nerveMap f.hom.monotone.functor
 -/

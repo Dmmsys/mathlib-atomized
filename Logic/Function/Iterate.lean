@@ -45,8 +45,8 @@ definition Nat.iterate
   signature: {α : Sort u} (op : α -> α)
 
 中文:
-定义 Nat.iterate
-  签名: {α : Sort u} (op : α -> α)
+定义 自然数.iterate
+  签名: {α : 类型层 u} (op : α -> α)
 -/
 def Nat.iterate {α : Sort u} (op : α -> α) : Nat -> α -> α
   | 0, a => a
@@ -294,9 +294,9 @@ theorem Injective.iterate
   proof: Nat.recOn n injective_id fun _ ihn => ihn.comp Hinj
 
 中文:
-定理 Injective.iterate
-  条件: (Hinj : Injective f) (n : 自然数)
-  结论: Injective f^[n]
+定理 单射.iterate
+  条件: (Hinj : 单射 f) (n : 自然数)
+  结论: 单射 f^[n]
   证明: Nat.recOn n injective_id fun _ ihn => ihn.comp Hinj
 
 Depends on / 依赖: Nat.recOn, ihn.comp, injective_id
@@ -314,9 +314,9 @@ theorem Surjective.iterate
   proof: Nat.recOn n surjective_id fun _ ihn => ihn.comp Hsurj
 
 中文:
-定理 Surjective.iterate
-  条件: (Hsurj : Surjective f) (n : 自然数)
-  结论: Surjective f^[n]
+定理 满射.iterate
+  条件: (Hsurj : 满射 f) (n : 自然数)
+  结论: 满射 f^[n]
   证明: Nat.recOn n surjective_id fun _ ihn => ihn.comp Hsurj
 
 Depends on / 依赖: Nat.recOn, ihn.comp, surjective_id
@@ -334,9 +334,9 @@ theorem Bijective.iterate
   proof: ⟨Hbij.1.iterate n, Hbij.2.iterate n⟩
 
 中文:
-定理 Bijective.iterate
-  条件: (Hbij : Bijective f) (n : 自然数)
-  结论: Bijective f^[n]
+定理 双射.iterate
+  条件: (Hbij : 双射 f) (n : 自然数)
+  结论: 双射 f^[n]
   证明: ⟨Hbij.1.iterate n, Hbij.2.iterate n⟩
 
 Depends on / 依赖: iterate
@@ -716,7 +716,7 @@ definition Iterate.rec
 
 中文:
 定义 Iterate.rec
-  签名: (motive : α -> Sort*) {a : α} (arg : motive a)
+  签名: (motive : α -> 类型层*) {a : α} (arg : motive a)
   定义体: match n with
   | 0 => arg
   | m + 1 => Iterate.rec motive (app _ arg) app m
@@ -739,7 +739,7 @@ theorem Iterate.rec_zero
 
 中文:
 定理 Iterate.rec_zero
-  结论: (motive : α -> Sort*) {f : α -> α} (app : 对任意 a, motive a -> motive (f a))
+  结论: (motive : α -> 类型层*) {f : α -> α} (app : 对任意 a, motive a -> motive (f a))
   证明: rfl
 -/
 theorem Iterate.rec_zero (motive : α -> Sort*) {f : α -> α} (app : forall a, motive a -> motive (f a))
@@ -759,8 +759,8 @@ theorem LeftInverse.iterate
     exact ihn.comp hg
 
 中文:
-定理 LeftInverse.iterate
-  条件: {g : α -> α} (hg : LeftInverse g f) (n : 自然数)
+定理 左逆.iterate
+  条件: {g : α -> α} (hg : 左逆 g f) (n : 自然数)
   证明: Nat.recOn n (fun _ => rfl) fun n ihn => by
     rw [iterate_succ']; rw [iterate_succ]
     exact ihn.comp hg
@@ -782,8 +782,8 @@ theorem RightInverse.iterate
   proof: LeftInverse.iterate hg n
 
 中文:
-定理 RightInverse.iterate
-  条件: {g : α -> α} (hg : RightInverse g f) (n : 自然数)
+定理 右逆.iterate
+  条件: {g : α -> α} (hg : 右逆 g f) (n : 自然数)
   证明: LeftInverse.iterate hg n
 
 Depends on / 依赖: LeftInverse, LeftInverse.iterate, iterate
@@ -845,7 +845,7 @@ alias ⟨iterate_cancel_of_add, _⟩ := iterate_add_eq_iterate
 
 中文:
 引理 iterate_add_eq_iterate
-  条件: (hf : Injective f)
+  条件: (hf : 单射 f)
   结论: f^[m + n] a = f^[n] a ↔ f^[m] a = a
   证明: Iff.trans (by rw [← iterate_add_apply, Nat.add_comm]) (hf.iterate n).eq_iff
 
@@ -872,7 +872,7 @@ lemma iterate_cancel
 
 中文:
 引理 iterate_cancel
-  条件: (hf : Injective f) (ha : f^[m] a = f^[n] a)
+  条件: (hf : 单射 f) (ha : f^[m] a = f^[n] a)
   结论: f^[m - n] a = a
   证明: by
   obtain h | h := Nat.le_total m n
@@ -898,7 +898,7 @@ theorem involutive_iff_iter_2_eq_id
 中文:
 定理 involutive_iff_iter_2_eq_id
   条件: {α} {f : α -> α}
-  结论: Involutive f ↔ f^[2] = id
+  结论: 对合 f ↔ f^[2] = id
   证明: funext_iff.symm
 
 Depends on / 依赖: funext_iff, funext_iff.symm
@@ -925,7 +925,7 @@ theorem foldl_const
 
 中文:
 定理 foldl_const
-  条件: (f : α -> α) (a : α) (l : List β)
+  条件: (f : α -> α) (a : α) (l : 列表 β)
   证明: by
   induction l generalizing a with
   | nil => rfl
@@ -950,7 +950,7 @@ theorem foldr_const
 中文:
 定理 foldr_const
   条件: (f : β -> β) (b : β)
-  结论: 对任意 l : List α, l.foldr (fun _ => f) b = f^[l.length] b
+  结论: 对任意 l : 列表 α, l.foldr (fun _ => f) b = f^[l.length] b
 -/
 theorem foldr_const (f : β -> β) (b : β) : forall l : List α, l.foldr (fun _ => f) b = f^[l.length] b
   | [] => rfl

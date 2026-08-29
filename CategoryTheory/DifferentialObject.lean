@@ -46,7 +46,7 @@ structure DifferentialObject
     - d_squared : d ≫ d⟦(1 : S)⟧' = 0  [default: by cat_disch]
 
 中文:
-结构 DifferentialObject
+结构 微分对象
   参数: where
   公理与运算 (3 个):
     - obj : C
@@ -82,8 +82,8 @@ structure Hom
     - comm : X.d ≫ f⟦1⟧' = f ≫ Y.d  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (X Y : DifferentialObject S C)
+结构 态射
+  参数: (X Y : 微分对象 S C)
   公理与运算 (2 个):
     - f : X.obj ⟶ Y.obj
     - comm : X.d ≫ f⟦1⟧' = f ≫ Y.d  [默认: by cat_disch]
@@ -111,7 +111,7 @@ definition id
 
 中文:
 定义 id
-  签名: (X : DifferentialObject S C)
+  签名: (X : 微分对象 S C)
   定义体: 𝟙 X.obj
 
 Depends on / 依赖: X.obj
@@ -131,7 +131,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {X Y Z : DifferentialObject S C} (f : Hom X Y) (g : Hom Y Z)
+  签名: {X Y Z : 微分对象 S C} (f : 态射 X Y) (g : 态射 Y Z)
   定义体: f.f ≫ g.f
 -/
 def comp {X Y Z : DifferentialObject S C} (f : Hom X Y) (g : Hom Y Z) : Hom X Z where
@@ -153,7 +153,7 @@ instance categoryOfDifferentialObjects
 
 中文:
 实例 categoryOfDifferentialObjects
-  签名: : Category (DifferentialObject S C) where
+  签名: : 范畴 (微分对象 S C) where
   定义体: Hom
   id := Hom.id
   comp f g := Hom.comp f g
@@ -179,7 +179,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {A B : DifferentialObject S C} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
+  条件: {A B : 微分对象 S C} {f g : A ⟶ B} (w : f.f = g.f := by cat_disch)
   结论: f = g
   证明: Hom.ext w
 
@@ -204,7 +204,7 @@ theorem id_f
 
 中文:
 定理 id_f
-  条件: (X : DifferentialObject S C)
+  条件: (X : 微分对象 S C)
   结论: (𝟙 X : X ⟶ X).f = 𝟙 X.obj
   证明: rfl
 
@@ -225,7 +225,7 @@ theorem comp_f
 
 中文:
 定理 comp_f
-  条件: {X Y Z : DifferentialObject S C} (f : X ⟶ Y) (g : Y ⟶ Z)
+  条件: {X Y Z : 微分对象 S C} (f : X ⟶ Y) (g : Y ⟶ Z)
   证明: rfl
 
 @[simp]
@@ -248,7 +248,7 @@ theorem eqToHom_f
 
 中文:
 定理 eqToHom_f
-  条件: {X Y : DifferentialObject S C} (h : X = Y)
+  条件: {X Y : 微分对象 S C} (h : X = Y)
   证明: by
   subst h
   rw [eqToHom_refl]; rw [eqToHom_refl]
@@ -275,7 +275,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : DifferentialObject S C ⥤ C where
+  签名: : 微分对象 S C ⥤ C where
   定义体: X.obj
   map f := f.f
 
@@ -294,7 +294,7 @@ instance forget_faithful
 
 中文:
 实例 forget_faithful
-  签名: : (forget S C).Faithful where
+  签名: : (forget S C).忠实 where
 -/
 instance forget_faithful : (forget S C).Faithful where
 
@@ -317,7 +317,7 @@ theorem zero_f
 
 中文:
 定理 zero_f
-  条件: (P Q : DifferentialObject S C)
+  条件: (P Q : 微分对象 S C)
   结论: (0 : P ⟶ Q).f = 0
   证明: rfl
 -/
@@ -332,7 +332,7 @@ instance hasZeroMorphisms
 
 中文:
 实例 hasZeroMorphisms
-  签名: : HasZeroMorphisms (DifferentialObject S C) where
+  签名: : 有ZeroMorphisms (微分对象 S C) where
 -/
 instance hasZeroMorphisms : HasZeroMorphisms (DifferentialObject S C) where
 
@@ -355,7 +355,7 @@ definition isoApp
 
 中文:
 定义 isoApp
-  签名: {X Y : DifferentialObject S C} (f : X ≅ Y)
+  签名: {X Y : 微分对象 S C} (f : X ≅ Y)
   定义体: f.hom.f
   inv := f.inv.f
   hom_inv_id := by rw [← comp_f, Iso.hom_inv_id, id_f]
@@ -385,8 +385,8 @@ theorem isoApp_refl
 
 中文:
 定理 isoApp_refl
-  条件: (X : DifferentialObject S C)
-  结论: isoApp (Iso.refl X) = Iso.refl X.obj
+  条件: (X : 微分对象 S C)
+  结论: isoApp (同构.refl X) = 同构.refl X.obj
   证明: rfl
 
 @[simp]
@@ -407,7 +407,7 @@ theorem isoApp_symm
 
 中文:
 定理 isoApp_symm
-  条件: {X Y : DifferentialObject S C} (f : X ≅ Y)
+  条件: {X Y : 微分对象 S C} (f : X ≅ Y)
   结论: isoApp f.symm = (isoApp f).symm
   证明: rfl
 
@@ -427,7 +427,7 @@ theorem isoApp_trans
 
 中文:
 定理 isoApp_trans
-  条件: {X Y Z : DifferentialObject S C} (f : X ≅ Y) (g : Y ≅ Z)
+  条件: {X Y Z : 微分对象 S C} (f : X ≅ Y) (g : Y ≅ Z)
   证明: rfl
 -/
 theorem isoApp_trans {X Y Z : DifferentialObject S C} (f : X ≅ Y) (g : Y ≅ Z) :
@@ -450,7 +450,7 @@ definition mkIso
 
 中文:
 定义 mkIso
-  签名: {X Y : DifferentialObject S C} (f : X.obj ≅ Y.obj) (hf : X.d ≫ f.hom⟦1⟧' = f.hom ≫ Y.d)
+  签名: {X Y : 微分对象 S C} (f : X.obj ≅ Y.obj) (hf : X.d ≫ f.hom⟦1⟧' = f.hom ≫ Y.d)
   定义体: ⟨f.hom, hf⟩
   inv := ⟨f.inv, by
     rw [← Functor.mapIso_inv]; rw [Iso.comp_inv_eq]; rw [Category.assoc]; rw [Iso.eq_inv_comp]; rw [Functor.mapIso_hom]; rw [hf]⟩
@@ -557,7 +557,7 @@ instance hasZeroObject
 
 中文:
 实例 hasZeroObject
-  签名: : HasZeroObject (DifferentialObject S C) where
+  签名: : 有ZeroObject (微分对象 S C) where
   定义体: ⟨{ obj := 0, d := 0 },
     { unique_to := fun X => ⟨⟨⟨{ f := 0 }⟩, fun f => by ext⟩⟩,
       unique_from := fun X => ⟨⟨⟨{ f := 0 }⟩, fun f => by ext⟩⟩ }⟩
@@ -588,7 +588,7 @@ abbreviation HomSubtype
 
 中文:
 缩写 HomSubtype
-  签名: (X Y : DifferentialObject S C)
+  签名: (X Y : 微分对象 S C)
   定义体: { f : FC X.obj Y.obj // X.d ≫ (ConcreteCategory.ofHom f)⟦1⟧' = (ConcreteCategory.ofHom f) ≫ Y.d }
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, X.obj, Y.obj
@@ -643,7 +643,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasForget₂ (DifferentialObject S C) C
+  签名: 有Forget₂ (微分对象 S C) C
   定义体: forget S C
 
 Depends on / 依赖: forget
@@ -749,7 +749,7 @@ definition shiftZero
 
 中文:
 定义 shiftZero
-  签名: : shiftFunctor C (0 : S) ≅ 𝟭 (DifferentialObject S C)
+  签名: : shiftFunctor C (0 : S) ≅ 𝟭 (微分对象 S C)
   定义体: by
   refine NatIso.ofComponents (fun X => mkIso ((shiftFunctorZero C S).app X.obj) ?_) (fun f => ?_)
   · erw [← NatTrans.naturality]
@@ -788,7 +788,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (DifferentialObject S C) S
+  签名: 有Shift (微分对象 S C) S
   定义体: hasShiftMk _ _
     { F := shiftFunctor C
       zero := shiftZero C

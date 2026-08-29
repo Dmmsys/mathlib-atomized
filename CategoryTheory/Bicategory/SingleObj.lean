@@ -52,7 +52,7 @@ deriving Inhabited
 
 中文:
 定义 MonoidalSingleObj
-  签名: (C : 类型u) [Category.{v} C] [MonoidalCategory C]
+  签名: (C : 类型u) [范畴.{v} C] [幺半群范畴 C]
   定义体: Unit
 deriving Inhabited
 -/
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bicategory (MonoidalSingleObj C)
+  签名: 双范畴 (MonoidalSingleObj C)
   定义体: C
   id _ := 𝟙_ C
   comp X Y := tensorObj X Y
@@ -161,7 +161,7 @@ instance :
 
 中文:
 实例 :
-  签名: (endMonoidalStarFunctor C).Monoidal
+  签名: (endMonoidalStarFunctor C).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal
     { εIso := Iso.refl _
       μIso := fun _ _ => Iso.refl _ }
@@ -223,7 +223,7 @@ instance endMonoidalStarFunctor_isEquivalence
 
 中文:
 实例 endMonoidalStarFunctor_isEquivalence
-  签名: : (endMonoidalStarFunctor C).IsEquivalence
+  签名: : (endMonoidalStarFunctor C).是等价
   定义体: (endMonoidalStarFunctorEquivalence C).isEquivalence_functor
 
 Depends on / 依赖: endMonoidalStarFunctorEquivalence, isEquivalence_functor

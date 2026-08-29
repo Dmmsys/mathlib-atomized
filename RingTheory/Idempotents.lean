@@ -60,11 +60,11 @@ structure OrthogonalIdempotents
     - ortho : Pairwise (e · * e · = 0)
 
 中文:
-结构 OrthogonalIdempotents
+结构 正交幂等
   参数: : 命题 where
   公理与运算 (2 个):
     - idem : 对任意 i, IsIdempotentElem (e i)
-    - ortho : Pairwise (e · * e · = 0)
+    - ortho : 两两 (e · * e · = 0)
 -/
 structure OrthogonalIdempotents : Prop where
   idem : forall i, IsIdempotentElem (e i)
@@ -84,8 +84,8 @@ lemma OrthogonalIdempotents.mul_eq
   · exact he.ortho ‹_›
 
 中文:
-引理 OrthogonalIdempotents.mul_eq
-  条件: [DecidableEq I] (he : OrthogonalIdempotents e) (i j)
+引理 正交幂等.mul_eq
+  条件: [DecidableEq I] (he : 正交幂等 e) (i j)
   证明: by
   split
   · simp [*, (he.idem j).eq]
@@ -108,7 +108,7 @@ lemma OrthogonalIdempotents.iff_mul_eq
   proof: ⟨mul_eq, fun H => ⟨fun i => by simpa using! H i i, fun i j e => by simpa [e] using! H i j⟩⟩
 
 中文:
-引理 OrthogonalIdempotents.iff_mul_eq
+引理 正交幂等.iff_mul_eq
   条件: [DecidableEq I]
   证明: ⟨mul_eq, fun H => ⟨fun i => by simpa using! H i i, fun i j e => by simpa [e] using! H i j⟩⟩
 
@@ -129,8 +129,8 @@ lemma OrthogonalIdempotents.isIdempotentElem_sum
   simp [IsIdempotentElem, Finset.sum_mul, Finset.mul_sum, he.mul_eq]
 
 中文:
-引理 OrthogonalIdempotents.isIdempotentElem_sum
-  条件: (he : OrthogonalIdempotents e) {s : Finset I}
+引理 正交幂等.isIdempotentElem_sum
+  条件: (he : 正交幂等 e) {s : 有限集 I}
   证明: by
   classical
   simp [IsIdempotentElem, Finset.sum_mul, Finset.mul_sum, he.mul_eq]
@@ -153,8 +153,8 @@ lemma OrthogonalIdempotents.mul_sum_of_mem
   simp [Finset.mul_sum, he.mul_eq, h]
 
 中文:
-引理 OrthogonalIdempotents.mul_sum_of_mem
-  结论: (he : OrthogonalIdempotents e)
+引理 正交幂等.mul_sum_of_mem
+  结论: (he : 正交幂等 e)
   证明: by
   classical
   simp [Finset.mul_sum, he.mul_eq, h]
@@ -177,8 +177,8 @@ lemma OrthogonalIdempotents.mul_sum_of_notMem
   simp [Finset.mul_sum, he.mul_eq, h]
 
 中文:
-引理 OrthogonalIdempotents.mul_sum_of_notMem
-  结论: (he : OrthogonalIdempotents e)
+引理 正交幂等.mul_sum_of_notMem
+  结论: (he : 正交幂等 e)
   证明: by
   classical
   simp [Finset.mul_sum, he.mul_eq, h]
@@ -201,8 +201,8 @@ lemma OrthogonalIdempotents.map
   simp [iff_mul_eq, he.mul_eq, ← map_mul f, apply_ite f]
 
 中文:
-引理 OrthogonalIdempotents.map
-  条件: (he : OrthogonalIdempotents e)
+引理 正交幂等.map
+  条件: (he : 正交幂等 e)
   证明: by
   classical
   simp [iff_mul_eq, he.mul_eq, ← map_mul f, apply_ite f]
@@ -225,8 +225,8 @@ lemma OrthogonalIdempotents.map_injective_iff
   simp [iff_mul_eq, ← hf.eq_iff, apply_ite]
 
 中文:
-引理 OrthogonalIdempotents.map_injective_iff
-  条件: (hf : Function.Injective f)
+引理 正交幂等.map_injective_iff
+  条件: (hf : 函数.单射 f)
   证明: by
   classical
   simp [iff_mul_eq, ← hf.eq_iff, apply_ite]
@@ -249,8 +249,8 @@ lemma OrthogonalIdempotents.embedding
   simp [iff_mul_eq, he.mul_eq]
 
 中文:
-引理 OrthogonalIdempotents.embedding
-  条件: (he : OrthogonalIdempotents e) {J} (i : J ↪ I)
+引理 正交幂等.embedding
+  条件: (he : 正交幂等 e) {J} (i : J ↪ I)
   证明: by
   classical
   simp [iff_mul_eq, he.mul_eq]
@@ -273,7 +273,7 @@ lemma OrthogonalIdempotents.equiv
   simp [iff_mul_eq, i.forall_congr_left]
 
 中文:
-引理 OrthogonalIdempotents.equiv
+引理 正交幂等.equiv
   条件: {J} (i : J ≃ I)
   证明: by
   classical
@@ -296,8 +296,8 @@ lemma OrthogonalIdempotents.unique
   simp only [orthogonalIdempotents_iff, Unique.forall_iff, Subsingleton.pairwise, and_true]
 
 中文:
-引理 OrthogonalIdempotents.unique
-  条件: [Unique I]
+引理 正交幂等.unique
+  条件: [唯一 I]
   证明: by
   simp only [orthogonalIdempotents_iff, Unique.forall_iff, Subsingleton.pairwise, and_true]
 
@@ -323,8 +323,8 @@ lemma OrthogonalIdempotents.option
     · simpa only [Option.el
 
 中文:
-引理 OrthogonalIdempotents.option
-  结论: (he : OrthogonalIdempotents e) [Fintype I] (x)
+引理 正交幂等.option
+  结论: (he : 正交幂等 e) [有限类型 I] (x)
   证明: i.rec hx he.idem
   ortho i j ne := by
     classical
@@ -369,9 +369,9 @@ structure CompleteOrthogonalIdempotents
     - complete : ∑ i, e i = 1
 
 中文:
-结构 CompleteOrthogonalIdempotents
+结构 余mpleteOrthogonalIdempotents
   参数: (e : I -> R)
-  继承: OrthogonalIdempotents e
+  继承: 正交幂等 e
   公理与运算 (1 个):
     - complete : ∑ i, e i = 1
 -/
@@ -391,7 +391,7 @@ lemma CompleteOrthogonalIdempotents.iff_ortho_complete
     at complete
 
 中文:
-引理 CompleteOrthogonalIdempotents.iff_ortho_complete
+引理 余mpleteOrthogonalIdempotents.iff_ortho_complete
   证明: by
   rw [completeOrthogonalIdempotents_iff]; rw [orthogonalIdempotents_iff]; rw [and_assoc]; rw [and_iff_right_of_imp]
   intro ⟨ortho, complete⟩ i
@@ -419,7 +419,7 @@ lemma CompleteOrthogonalIdempotents.pair_iff'ₛ
   simp [iff_ortho_complete, Pairwise, Fin.forall_fin_two, and_assoc]
 
 中文:
-引理 CompleteOrthogonalIdempotents.pair_iff'ₛ
+引理 余mpleteOrthogonalIdempotents.pair_iff'ₛ
   条件: {x y : R}
   证明: by
   simp [iff_ortho_complete, Pairwise, Fin.forall_fin_two, and_assoc]
@@ -440,8 +440,8 @@ lemma CompleteOrthogonalIdempotents.pair_iffₛ
   rw [pair_iff'ₛ]; rw [and_left_comm]; rw [and_iff_right_of_imp]; exact (mul_comm x y ▸ ·.1)
 
 中文:
-引理 CompleteOrthogonalIdempotents.pair_iffₛ
-  条件: {R} [CommSemiring R] {x y : R}
+引理 余mpleteOrthogonalIdempotents.pair_iffₛ
+  条件: {R} [交换半环 R] {x y : R}
   证明: by
   rw [pair_iff'ₛ]; rw [and_left_comm]; rw [and_iff_right_of_imp]; exact (mul_comm x y ▸ ·.1)
 
@@ -462,8 +462,8 @@ lemma CompleteOrthogonalIdempotents.unique_iff
   exact (· ▸ IsIdempotentElem.one)
 
 中文:
-引理 CompleteOrthogonalIdempotents.unique_iff
-  条件: [Unique I]
+引理 余mpleteOrthogonalIdempotents.unique_iff
+  条件: [唯一 I]
   证明: by
   rw [completeOrthogonalIdempotents_iff]; rw [OrthogonalIdempotents.unique]; rw [Fintype.sum_unique]; rw [and_iff_right_iff_imp]
   exact (· ▸ IsIdempotentElem.one)
@@ -490,8 +490,8 @@ lemma CompleteOrthogonalIdempotents.single
   · simp [hi]
 
 中文:
-引理 CompleteOrthogonalIdempotents.single
-  结论: {I : 类型} [Fintype I] [DecidableEq I]
+引理 余mpleteOrthogonalIdempotents.single
+  结论: {I : 类型} [有限类型 I] [DecidableEq I]
   证明: by
   refine ⟨⟨by simp [IsIdempotentElem, ← Pi.single_mul], ?_⟩, Finset.univ_sum_single 1⟩
   intro i j hij
@@ -522,8 +522,8 @@ lemma CompleteOrthogonalIdempotents.map
   complete := by simp only [Function.comp_apply, ← map_sum, he.complete, map_one]
 
 中文:
-引理 CompleteOrthogonalIdempotents.map
-  条件: (he : CompleteOrthogonalIdempotents e)
+引理 余mpleteOrthogonalIdempotents.map
+  条件: (he : 余mpleteOrthogonalIdempotents e)
   证明: he.toOrthogonalIdempotents.map f
   complete := by simp only [Function.comp_apply, ← map_sum, he.complete, map_one]
 
@@ -545,8 +545,8 @@ lemma CompleteOrthogonalIdempotents.map_injective_iff
     OrthogonalIdempotents.map_injective_iff f hf]
 
 中文:
-引理 CompleteOrthogonalIdempotents.map_injective_iff
-  条件: (hf : Function.Injective f)
+引理 余mpleteOrthogonalIdempotents.map_injective_iff
+  条件: (hf : 函数.单射 f)
   证明: by
   simp [completeOrthogonalIdempotents_iff, ← hf.eq_iff,
     OrthogonalIdempotents.map_injective_iff f hf]
@@ -571,8 +571,8 @@ lemma CompleteOrthogonalIdempotents.equiv
 @[nontriviality]
 
 中文:
-引理 CompleteOrthogonalIdempotents.equiv
-  条件: {J} [Fintype J] (i : J ≃ I)
+引理 余mpleteOrthogonalIdempotents.equiv
+  条件: {J} [有限类型 J] (i : J ≃ I)
   证明: by
   simp only [completeOrthogonalIdempotents_iff, OrthogonalIdempotents.equiv, Function.comp_apply,
     Fintype.sum_equiv i _ e (fun _ => rfl)]
@@ -596,8 +596,8 @@ lemma CompleteOrthogonalIdempotents.of_subsingleton
   proof: ⟨⟨fun _ => Subsingleton.elim _ _, fun _ _ _ => Subsingleton.elim _ _⟩, Subsingleton.elim _ _⟩
 
 中文:
-引理 CompleteOrthogonalIdempotents.of_subsingleton
-  条件: [Subsingleton R]
+引理 余mpleteOrthogonalIdempotents.of_subsingleton
+  条件: [子单例 R]
   证明: ⟨⟨fun _ => Subsingleton.elim _ _, fun _ _ _ => Subsingleton.elim _ _⟩, Subsingleton.elim _ _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -666,7 +666,7 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
   have
 
 中文:
-定理 exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
+定理 存在_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
   证明: by
   obtain ⟨e₁, rfl⟩ := he
   cases subsingleton_or_nontrivial R
@@ -718,7 +718,7 @@ theorem exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
   · rw [map_mul, map_sub, map_one, sub_mul, 
 
 中文:
-定理 exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
+定理 存在_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent
   证明: by
   obtain ⟨e', h₁, rfl, h₂⟩ := exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent_aux
     f h e₁ he he₁ e₂ he₂ he₁e₂
@@ -751,8 +751,8 @@ theorem exists_isIdempotentElem_eq_of_ker_isNilpotent
   simpa using exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent f h e he he' 0 .zero (by simp)
 
 中文:
-定理 exists_isIdempotentElem_eq_of_ker_isNilpotent
-  结论: (h : 对任意 x in RingHom.ker f, IsNilpotent x)
+定理 存在_isIdempotentElem_eq_of_ker_isNilpotent
+  结论: (h : 对任意 x in 环态射.ker f, 是幂零 x)
   证明: by
   simpa using exists_isIdempotentElem_mul_eq_zero_of_ker_isNilpotent f h e he he' 0 .zero (by simp)
 
@@ -778,7 +778,7 @@ lemma OrthogonalIdempotents.lift_of_isNilpotent_ker_aux
       exists_isIdemp
 
 中文:
-引理 OrthogonalIdempotents.lift_of_isNilpotent_ker_aux
+引理 正交幂等.lift_of_isNilpotent_ker_aux
   证明: by
   induction n with
   | zero => refine ⟨0, ⟨finZeroElim, finZeroElim⟩, funext finZeroElim⟩
@@ -823,8 +823,8 @@ lemma OrthogonalIdempotents.lift_of_isNilpotent_ker
     by ext x; simpa using congr_fun h₂ (Fintype.equivFin I x)⟩
 
 中文:
-引理 OrthogonalIdempotents.lift_of_isNilpotent_ker
-  结论: [Finite I]
+引理 正交幂等.lift_of_isNilpotent_ker
+  结论: [有限 I]
   证明: by
   cases nonempty_fintype I
   obtain ⟨e', h₁, h₂⟩ := lift_of_isNilpotent_ker_aux f h
@@ -856,7 +856,7 @@ lemma CompleteOrthogonalIdempotents.pair_iff
   simp [mul_sub, sub_mul, IsIdempotentElem, sub_eq_zero, eq_comm]
 
 中文:
-引理 CompleteOrthogonalIdempotents.pair_iff
+引理 余mpleteOrthogonalIdempotents.pair_iff
   条件: {x y : R}
   证明: by
   rw [pair_iff'ₛ]; rw [← eq_sub_iff_add_eq']; rw [← and_assoc]; rw [and_congr_left_iff]
@@ -880,7 +880,7 @@ lemma CompleteOrthogonalIdempotents.of_isIdempotentElem
   proof: pair_iff.mpr ⟨he, rfl⟩
 
 中文:
-引理 CompleteOrthogonalIdempotents.of_isIdempotentElem
+引理 余mpleteOrthogonalIdempotents.of_isIdempotentElem
   条件: {e : R} (he : IsIdempotentElem e)
   证明: pair_iff.mpr ⟨he, rfl⟩
 
@@ -905,8 +905,8 @@ lemma CompleteOrthogonalIdempotents.option
     exact sub_add_cancel _ _
 
 中文:
-引理 CompleteOrthogonalIdempotents.option
-  条件: (he : OrthogonalIdempotents e)
+引理 余mpleteOrthogonalIdempotents.option
+  条件: (he : 正交幂等 e)
   证明: he.option _ he.isIdempotentElem_sum.one_sub
     (by simp [sub_mul, he.isIdempotentElem_sum.eq]) (by simp [mul_sub, he.isIdempotentElem_sum.eq])
   complete := by
@@ -940,7 +940,7 @@ lemma CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
   obtain ⟨e', h₁, h₂⟩ := Orthogonal
 
 中文:
-引理 CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
+引理 余mpleteOrthogonalIdempotents.lift_of_isNilpotent_ker_aux
   证明: by
   cases subsingleton_or_nontrivial R
   · choose e' he' using he'
@@ -986,7 +986,7 @@ lemma CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker
     by ext x; simpa using congr_fun h₂ (Fintype.equivFin I x)⟩
 
 中文:
-引理 CompleteOrthogonalIdempotents.lift_of_isNilpotent_ker
+引理 余mpleteOrthogonalIdempotents.lift_of_isNilpotent_ker
   证明: by
   obtain ⟨e', h₁, h₂⟩ := lift_of_isNilpotent_ker_aux f h
     ((equiv (Fintype.equivFin I).symm).mpr he) (fun _ => he' _)
@@ -1063,7 +1063,7 @@ theorem CompleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
     simpa [RingHom.mem_ker, sub_eq_zero] using congr_fun h₂.symm i
 
 中文:
-定理 CompleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
+定理 余mpleteOrthogonalIdempotents.of_ker_isNilpotent_of_isMulCentral
   证明: by
   obtain ⟨e', h₁, h₂⟩ := lift_of_isNilpotent_ker f h he'' (fun _ => ⟨_, rfl⟩)
   obtain rfl : e = e' := by
@@ -1132,8 +1132,8 @@ theorem existsUnique_isIdempotentElem_eq_of_ker_isNilpotent
       (h _ (by rw [RingHom.mem_ker, map_sub, hx', sub_self]))⟩
 
 中文:
-定理 existsUnique_isIdempotentElem_eq_of_ker_isNilpotent
-  结论: (h : 对任意 x in RingHom.ker f, IsNilpotent x)
+定理 存在Unique_isIdempotentElem_eq_of_ker_isNilpotent
+  结论: (h : 对任意 x in 环态射.ker f, 是幂零 x)
   证明: by
   obtain ⟨e', he₂, rfl⟩ := exists_isIdempotentElem_eq_of_ker_isNilpotent f h e he he'
   exact ⟨e', ⟨he₂, rfl⟩, fun x ⟨hx, hx'⟩ =>
@@ -1165,8 +1165,8 @@ lemma OrthogonalIdempotents.surjective_pi
   intro i j hi
 
 中文:
-引理 OrthogonalIdempotents.surjective_pi
-  结论: {I : 类型} [Finite I] {e : I -> R}
+引理 正交幂等.surjective_pi
+  结论: {I : 类型} [有限 I] {e : I -> R}
   证明: by
   suffices Pairwise fun i j => IsCoprime (Ideal.span {1 - e i}) (Ideal.span {1 - e j}) by
     intro x
@@ -1202,7 +1202,7 @@ lemma OrthogonalIdempotents.prod_one_sub
     simp [ih, sub_mul, mul_sub, he.mul_sum_of_notMem has, sub_sub]
 
 中文:
-引理 OrthogonalIdempotents.prod_one_sub
+引理 正交幂等.prod_one_sub
   结论: {I : 类型} {e : I -> R}
   证明: by
   induction s using Finset.cons_induction with
@@ -1232,8 +1232,8 @@ theorem CompleteOrthogonalIdempotents.of_ker_isNilpotent
     (fun _ => Semigroup.mem_center_iff.mpr (mul_comm · _)) he'
 
 中文:
-定理 CompleteOrthogonalIdempotents.of_ker_isNilpotent
-  结论: (h : 对任意 x in RingHom.ker f, IsNilpotent x)
+定理 余mpleteOrthogonalIdempotents.of_ker_isNilpotent
+  结论: (h : 对任意 x in 环态射.ker f, 是幂零 x)
   证明: of_ker_isNilpotent_of_isMulCentral f h he
     (fun _ => Semigroup.mem_center_iff.mpr (mul_comm · _)) he'
 
@@ -1255,7 +1255,7 @@ lemma CompleteOrthogonalIdempotents.prod_one_sub
   rw [he.1.prod_one_sub]; rw [he.complete]; rw [sub_self]
 
 中文:
-引理 CompleteOrthogonalIdempotents.prod_one_sub
+引理 余mpleteOrthogonalIdempotents.prod_one_sub
   证明: by
   rw [he.1.prod_one_sub]; rw [he.complete]; rw [sub_self]
 
@@ -1275,7 +1275,7 @@ lemma CompleteOrthogonalIdempotents.of_prod_one_sub
   complete := by rwa [he.prod_one_sub, sub_eq_zero, eq_comm] at he'
 
 中文:
-引理 CompleteOrthogonalIdempotents.of_prod_one_sub
+引理 余mpleteOrthogonalIdempotents.of_prod_one_sub
   证明: he
   complete := by rwa [he.prod_one_sub, sub_eq_zero, eq_comm] at he'
 -/
@@ -1302,8 +1302,8 @@ lemma CompleteOrthogonalIdempotents.bijective_pi
     rw [← this
 
 中文:
-引理 CompleteOrthogonalIdempotents.bijective_pi
-  条件: (he : CompleteOrthogonalIdempotents e)
+引理 余mpleteOrthogonalIdempotents.bijective_pi
+  条件: (he : 余mpleteOrthogonalIdempotents e)
   证明: by
   classical
   refine ⟨?_, he.1.surjective_pi⟩
@@ -1344,8 +1344,8 @@ lemma CompleteOrthogonalIdempotents.bijective_pi'
   exact h
 
 中文:
-引理 CompleteOrthogonalIdempotents.bijective_pi'
-  条件: (he : CompleteOrthogonalIdempotents (1 - e ·))
+引理 余mpleteOrthogonalIdempotents.bijective_pi'
+  条件: (he : 余mpleteOrthogonalIdempotents (1 - e ·))
   证明: by
   obtain ⟨e', rfl, h⟩ : exists e' : I -> R, (e' = e) ∧ Function.Bijective (RingHom.pi fun i =>
       Ideal.Quotient.mk (Ideal.span {e' i})) := ⟨_, funext (by simp), he.bijective_pi⟩
@@ -1369,7 +1369,7 @@ lemma RingHom.pi_bijective_of_isIdempotentElem
       ⟨fun i => (he i).one_sub, he₁⟩ (by simpa using he₂)).bijective_pi'
 
 中文:
-引理 RingHom.pi_bijective_of_isIdempotentElem
+引理 环态射.pi_bijective_of_isIdempotentElem
   结论: (e : I -> R)
   证明: (CompleteOrthogonalIdempotents.of_prod_one_sub
       ⟨fun i => (he i).one_sub, he₁⟩ (by simpa using he₂)).bijective_pi'
@@ -1401,7 +1401,7 @@ lemma RingHom.prod_bijective_of_isIdempotentElem
     fin_cases i <;>
 
 中文:
-引理 RingHom.prod_bijective_of_isIdempotentElem
+引理 环态射.prod_bijective_of_isIdempotentElem
   结论: {e f : R} (he : IsIdempotentElem e)
   证明: by
   let o (i : Fin 2) : R := match i with
@@ -1447,7 +1447,7 @@ definition AlgEquiv.prodQuotientOfIsIdempotentElem
     RingHom.prod_bijective_of_isIdempotentElem he hf hef₁ hef₂
 
 中文:
-定义 AlgEquiv.prodQuotientOfIsIdempotentElem
+定义 代数等价.prodQuotientOfIsIdempotentElem
   定义体: AlgEquiv.ofBijective ((Ideal.Quotient.mkₐ _ _).prod (Ideal.Quotient.mkₐ _ _))
     RingHom.prod_bijective_of_isIdempotentElem he hf hef₁ hef₂
 
@@ -1475,7 +1475,7 @@ lemma CompleteOrthogonalIdempotents.exists_eq_comp_of_ker_eq_span
     · dsimp; linear_combi
 
 中文:
-引理 CompleteOrthogonalIdempotents.exists_eq_comp_of_ker_eq_span
+引理 余mpleteOrthogonalIdempotents.存在_eq_comp_of_ker_eq_span
   证明: by
   choose e' he' using hef
   choose k hk using fun i => Ideal.mem_span_singleton.mp
@@ -1534,7 +1534,7 @@ definition corner
 
 中文:
 定义 corner
-  签名: : Subsemigroup R where
+  签名: : 子半群 R where
   定义体: Set.range (e * · * e)
   mul_mem' := by rintro _ _ ⟨a, rfl⟩ ⟨b, rfl⟩; exact ⟨a * e * e * b, by simp_rw [mul_assoc]⟩
 
@@ -1582,7 +1582,7 @@ lemma mem_corner_iff_mul_left
 
 中文:
 引理 mem_corner_iff_mul_left
-  条件: (hc : IsMulCentral e) {r : R}
+  条件: (hc : 是MulCentral e) {r : R}
   结论: r in corner e ↔ e * r = r
   证明: by
   rw [mem_corner_iff idem]; rw [and_iff_left_of_imp]; intro; rwa [← hc.comm]
@@ -1604,7 +1604,7 @@ lemma mem_corner_iff_mul_right
 
 中文:
 引理 mem_corner_iff_mul_right
-  条件: (hc : IsMulCentral e) {r : R}
+  条件: (hc : 是MulCentral e) {r : R}
   结论: r in corner e ↔ r * e = r
   证明: by
   rw [mem_corner_iff_mul_left idem hc]; rw [hc.comm]
@@ -1625,7 +1625,7 @@ lemma mem_corner_iff_mem_range_mul_left
 
 中文:
 引理 mem_corner_iff_mem_range_mul_left
-  条件: (hc : IsMulCentral e) {r : R}
+  条件: (hc : 是MulCentral e) {r : R}
   证明: by
   simp_rw [corner, mem_mk, Set.mem_range, ← (hc.comm _).eq, ← mul_assoc, idem.eq]
 
@@ -1646,7 +1646,7 @@ lemma mem_corner_iff_mem_range_mul_right
 
 中文:
 引理 mem_corner_iff_mem_range_mul_right
-  条件: (hc : IsMulCentral e) {r : R}
+  条件: (hc : 是MulCentral e) {r : R}
   证明: by
   simp_rw [mem_corner_iff_mem_range_mul_left idem hc, (hc.comm _).eq]
 
@@ -1689,8 +1689,8 @@ definition NonUnitalSubsemiring.corner
   zero_mem' := ⟨0, by simp_rw [mul_zero, zero_mul]⟩
 
 中文:
-定义 NonUnitalSubsemiring.corner
-  签名: [NonUnitalSemiring R]
+定义 NonUnital子半环.corner
+  签名: [非幺半环 R]
   定义体: Subsemigroup.corner e
   add_mem' := by rintro _ _ ⟨a, rfl⟩ ⟨b, rfl⟩; exact ⟨a + b, by simp_rw [mul_add, add_mul]⟩
   zero_mem' := ⟨0, by simp_rw [mul_zero, zero_mul]⟩
@@ -1712,8 +1712,8 @@ definition NonUnitalRing.corner
   neg_mem' := by rintro _ ⟨a, rfl⟩; exact ⟨-a, by simp_rw [mul_neg, neg_mul]⟩
 
 中文:
-定义 NonUnitalRing.corner
-  签名: [NonUnitalRing R]
+定义 非幺环.corner
+  签名: [非幺环 R]
   定义体: NonUnitalSubsemiring.corner e
   neg_mem' := by rintro _ ⟨a, rfl⟩; exact ⟨-a, by simp_rw [mul_neg, neg_mul]⟩
 
@@ -1735,7 +1735,7 @@ instance [NonUnitalSemiring
   mul_one r := Subtype.ext ((Subsemigroup.mem_corner_iff idem).mp r.2).2
 
 中文:
-实例 [NonUnitalSemiring
+实例 [非幺半环
   签名: R] (idem
   定义体: inferInstanceAs NonUnitalSemiring (NonUnitalSubsemiring.corner e)
   one := ⟨e, e, by simp_rw [idem.eq]⟩
@@ -1762,7 +1762,7 @@ instance [NonUnitalCommSemiring
 inferInstanceAs NonUnitalCommSemiring (NonUnitalSubsemiring.corner e)
 
 中文:
-实例 [NonUnitalCommSemiring
+实例 [非幺交换半环
   签名: R] (idem
   定义体: inferInstance
   __ : NonUnitalCommSemiring idem.Corner :=
@@ -1783,7 +1783,7 @@ instance [NonUnitalRing
 __ : NonUnitalRing idem.Corner := inferInstanceAs NonUnitalRing (NonUnitalRing.corner e)
 
 中文:
-实例 [NonUnitalRing
+实例 [非幺环
   签名: R] (idem
   定义体: inferInstance
 __ : NonUnitalRing idem.Corner := inferInstanceAs NonUnitalRing (NonUnitalRing.corner e)
@@ -1803,7 +1803,7 @@ instance [NonUnitalCommRing
 inferInstanceAs NonUnitalCommRing (NonUnitalRing.corner e)
 
 中文:
-实例 [NonUnitalCommRing
+实例 [非幺交换环
   签名: R] (idem
   定义体: inferInstance
   __ : NonUnitalCommRing idem.Corner :=
@@ -1832,8 +1832,8 @@ right_inv r := funext fun i => Subtype.ext by
   
 
 中文:
-定义 CompleteOrthogonalIdempotents.ringEquivOfIsMulCentral
-  签名: [Semiring R]
+定义 余mpleteOrthogonalIdempotents.ringEquivOfIsMulCentral
+  签名: [半环 R]
   定义体: ⟨_, r, rfl⟩
   invFun r := ∑ i, (r i).1
   left_inv r := by
@@ -1875,8 +1875,8 @@ definition CompleteOrthogonalIdempotents.ringEquivOfComm
   body: he.ringEquivOfIsMulCentral fun _ => Semigroup.mem_center_iff.mpr fun _ => mul_comm ..
 
 中文:
-定义 CompleteOrthogonalIdempotents.ringEquivOfComm
-  签名: [CommSemiring R]
+定义 余mpleteOrthogonalIdempotents.ringEquivOfComm
+  签名: [交换半环 R]
   定义体: he.ringEquivOfIsMulCentral fun _ => Semigroup.mem_center_iff.mpr fun _ => mul_comm ..
 
 Depends on / 依赖: Semigroup, Semigroup.mem_center_iff.mpr, he.ringEquivOfIsMulCentral, mem_center_iff, mul_comm, ringEquivOfIsMulCentral
@@ -1899,7 +1899,7 @@ lemma Ideal.mem_map_span_singleton_iff_of_isIdempotentElem
   linear_combination he.eq * t - (
 
 中文:
-引理 Ideal.mem_map_span_singleton_iff_of_isIdempotentElem
+引理 理想.mem_map_span_singleton_iff_of_isIdempotentElem
   证明: by
   simp only [Ideal.mem_map_iff_of_surjective _ Ideal.Quotient.mk_surjective,
     Ideal.Quotient.mk_eq_mk_iff_sub_mem, Ideal.mem_span_singleton]

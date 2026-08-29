@@ -37,7 +37,7 @@ theorem get_mem
 
 中文:
 定理 get_mem
-  条件: (i : Fin n) (v : Vector α n)
+  条件: (i : 有限集 n) (v : Vector α n)
   结论: v.get i in v.toList
   证明: List.get_mem _ _
 

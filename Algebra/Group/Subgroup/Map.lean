@@ -83,7 +83,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: {N : 类型} [Group N] (f : G ->* N) (H : Subgroup N)
+  签名: {N : 类型} [群 N] (f : G ->* N) (H : 子群 N)
   定义体: { H.toSubmonoid.comap f with
     carrier := f ⁻¹' H
     inv_mem' := fun {a} ha => show f a⁻¹ in H by rw [f.map_inv]; exact H.inv_mem ha }
@@ -111,8 +111,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (K : Subgroup N) (f : G ->* N)
-  结论: (K.comap f : Set G) = f ⁻¹' K
+  条件: (K : 子群 N) (f : G ->* N)
+  结论: (K.comap f : 集合 G) = f ⁻¹' K
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -134,7 +134,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {K : Subgroup N} {f : G ->* N} {x : G}
+  条件: {K : 子群 N} {f : G ->* N} {x : G}
   结论: x in K.comap f ↔ f x in K
   证明: Iff.rfl
 
@@ -159,7 +159,7 @@ theorem comap_mono
 
 中文:
 定理 comap_mono
-  条件: {f : G ->* N} {K K' : Subgroup N}
+  条件: {f : G ->* N} {K K' : 子群 N}
   结论: K <= K' -> comap f K <= comap f K'
   证明: preimage_mono
 
@@ -183,7 +183,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (K : Subgroup P) (g : N ->* P) (f : G ->* N)
+  条件: (K : 子群 P) (g : N ->* P) (f : G ->* N)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -208,8 +208,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (K : Subgroup N)
-  结论: K.comap (MonoidHom.id _) = K
+  条件: (K : 子群 N)
+  结论: K.comap (幺半群态射.id _) = K
   证明: by
   ext
   rfl
@@ -233,7 +233,7 @@ theorem toAddSubgroup_comap
 
 中文:
 定理 toAddSubgroup_comap
-  条件: {G₂ : 类型} [Group G₂] (f : G ->* G₂) (s : Subgroup G₂)
+  条件: {G₂ : 类型} [群 G₂] (f : G ->* G₂) (s : 子群 G₂)
   证明: rfl
 
 @[simp]
@@ -251,8 +251,8 @@ theorem _root_.AddSubgroup.toSubgroup_comap
   proof: rfl
 
 中文:
-定理 _root_.AddSubgroup.toSubgroup_comap
-  结论: {A A₂ : 类型} [AddGroup A] [AddGroup A₂]
+定理 _root_.加法子群.toSubgroup_comap
+  结论: {A A₂ : 类型} [加法群 A] [加法群 A₂]
   证明: rfl
 -/
 theorem _root_.AddSubgroup.toSubgroup_comap {A A₂ : Type*} [AddGroup A] [AddGroup A₂]
@@ -279,7 +279,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : G ->* N) (H : Subgroup G)
+  签名: (f : G ->* N) (H : 子群 G)
   定义体: { H.toSubmonoid.map f with
     carrier := f '' H
     inv_mem' := by
@@ -311,8 +311,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (f : G ->* N) (K : Subgroup G)
-  结论: (K.map f : Set N) = f '' K
+  条件: (f : G ->* N) (K : 子群 G)
+  结论: (K.map f : 集合 N) = f '' K
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -333,7 +333,7 @@ theorem map_toSubmonoid
 
 中文:
 定理 map_toSubmonoid
-  条件: (f : G ->* G') (K : Subgroup G)
+  条件: (f : G ->* G') (K : 子群 G)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -355,7 +355,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : G ->* N} {K : Subgroup G} {y : N}
+  条件: {f : G ->* N} {K : 子群 G} {y : N}
   结论: y in K.map f ↔ 存在 x in K, f x = y
   证明: Iff.rfl
 
@@ -379,7 +379,7 @@ theorem mem_map_of_mem
 
 中文:
 定理 mem_map_of_mem
-  条件: (f : G ->* N) {K : Subgroup G} {x : G} (hx : x in K)
+  条件: (f : G ->* N) {K : 子群 G} {x : G} (hx : x in K)
   结论: f x in K.map f
   证明: mem_image_of_mem f hx
 
@@ -404,7 +404,7 @@ theorem apply_coe_mem_map
 
 中文:
 定理 apply_coe_mem_map
-  条件: (f : G ->* N) (K : Subgroup G) (x : K)
+  条件: (f : G ->* N) (K : 子群 G) (x : K)
   结论: f x in K.map f
   证明: mem_map_of_mem f x.prop
 
@@ -429,7 +429,7 @@ theorem map_mono
 
 中文:
 定理 map_mono
-  条件: {f : G ->* N} {K K' : Subgroup G}
+  条件: {f : G ->* N} {K K' : 子群 G}
   结论: K <= K' -> map f K <= map f K'
   证明: image_mono
 
@@ -453,7 +453,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: K.map (MonoidHom.id G) = K
+  结论: K.map (幺半群态射.id G) = K
   证明: SetLike.coe_injective image_id _
 
 @[to_additive]
@@ -530,7 +530,7 @@ theorem mem_map_equiv
 
 中文:
 定理 mem_map_equiv
-  条件: {f : G ≃* N} {K : Subgroup G} {x : N}
+  条件: {f : G ≃* N} {K : 子群 G} {x : N}
   证明: Set.mem_image_equiv
 
 @[to_additive (attr := simp 1100)]
@@ -554,7 +554,7 @@ theorem mem_map_iff_mem
 
 中文:
 定理 mem_map_iff_mem
-  条件: {f : G ->* N} (hf : Function.Injective f) {K : Subgroup G} {x : G}
+  条件: {f : G ->* N} (hf : 函数.单射 f) {K : 子群 G} {x : G}
   证明: hf.mem_set_image
 
 @[to_additive]
@@ -578,7 +578,7 @@ theorem map_equiv_eq_comap_symm'
 
 中文:
 定理 map_equiv_eq_comap_symm'
-  条件: (f : G ≃* N) (K : Subgroup G)
+  条件: (f : G ≃* N) (K : 子群 G)
   证明: SetLike.coe_injective (f.toEquiv.image_eq_preimage_symm K)
 
 @[to_additive]
@@ -602,7 +602,7 @@ theorem map_equiv_eq_comap_symm
 
 中文:
 定理 map_equiv_eq_comap_symm
-  条件: (f : G ≃* N) (K : Subgroup G)
+  条件: (f : G ≃* N) (K : 子群 G)
   证明: map_equiv_eq_comap_symm' _ _
 
 @[to_additive]
@@ -626,7 +626,7 @@ theorem comap_equiv_eq_map_symm
 
 中文:
 定理 comap_equiv_eq_map_symm
-  条件: (f : N ≃* G) (K : Subgroup G)
+  条件: (f : N ≃* G) (K : 子群 G)
   证明: (map_equiv_eq_comap_symm f.symm K).symm
 
 @[to_additive]
@@ -650,7 +650,7 @@ theorem comap_equiv_eq_map_symm'
 
 中文:
 定理 comap_equiv_eq_map_symm'
-  条件: (f : N ≃* G) (K : Subgroup G)
+  条件: (f : N ≃* G) (K : 子群 G)
   证明: (map_equiv_eq_comap_symm f.symm K).symm
 
 @[to_additive]
@@ -679,7 +679,7 @@ theorem map_symm_eq_iff_map_eq
 
 中文:
 定理 map_symm_eq_iff_map_eq
-  条件: {H : Subgroup N} {e : G ≃* N}
+  条件: {H : 子群 N} {e : G ≃* N}
   证明: by
   constructor <;> rintro rfl
   · rw [map_map, ← MulEquiv.coe_monoidHom_trans, MulEquiv.symm_trans_self,
@@ -712,7 +712,7 @@ theorem map_le_iff_le_comap
 
 中文:
 定理 map_le_iff_le_comap
-  条件: {f : G ->* N} {K : Subgroup G} {H : Subgroup N}
+  条件: {f : G ->* N} {K : 子群 G} {H : 子群 N}
   证明: image_subset_iff
 
 @[to_additive]
@@ -762,7 +762,7 @@ theorem map_sup
 
 中文:
 定理 map_sup
-  条件: (H K : Subgroup G) (f : G ->* N)
+  条件: (H K : 子群 G) (f : G ->* N)
   结论: (H ⊔ K).map f = H.map f ⊔ K.map f
   证明: (gc_map_comap f).l_sup
 
@@ -786,7 +786,7 @@ theorem map_iSup
 
 中文:
 定理 map_iSup
-  条件: {ι : Sort*} (f : G ->* N) (s : ι -> Subgroup G)
+  条件: {ι : 类型层*} (f : G ->* N) (s : ι -> 子群 G)
   证明: (gc_map_comap f).l_iSup
 
 @[to_additive]
@@ -810,7 +810,7 @@ theorem map_inf
 
 中文:
 定理 map_inf
-  条件: (H K : Subgroup G) (f : G ->* N) (hf : Function.Injective f)
+  条件: (H K : 子群 G) (f : G ->* N) (hf : 函数.单射 f)
   证明: SetLike.coe_injective (Set.image_inter hf)
 
 @[to_additive]
@@ -835,7 +835,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  结论: {ι : Sort*} [Nonempty ι] (f : G ->* N) (hf : Function.Injective f)
+  结论: {ι : 类型层*} [非空 ι] (f : G ->* N) (hf : 函数.单射 f)
   证明: by
   apply SetLike.coe_injective
   simpa using (Set.injOn_of_injective hf).image_iInter_eq (s := SetLike.coe ∘ s)
@@ -862,7 +862,7 @@ theorem comap_sup_comap_le
 
 中文:
 定理 comap_sup_comap_le
-  条件: (H K : Subgroup N) (f : G ->* N)
+  条件: (H K : 子群 N) (f : G ->* N)
   证明: Monotone.le_map_sup (fun _ _ => comap_mono) H K
 
 @[to_additive]
@@ -886,7 +886,7 @@ theorem iSup_comap_le
 
 中文:
 定理 iSup_comap_le
-  条件: {ι : Sort*} (f : G ->* N) (s : ι -> Subgroup N)
+  条件: {ι : 类型层*} (f : G ->* N) (s : ι -> 子群 N)
   证明: Monotone.le_map_iSup fun _ _ => comap_mono
 
 @[to_additive]
@@ -911,7 +911,7 @@ theorem comap_inf
 
 中文:
 定理 comap_inf
-  条件: (H K : Subgroup N) (f : G ->* N)
+  条件: (H K : 子群 N) (f : G ->* N)
   结论: (H ⊓ K).comap f = H.comap f ⊓ K.comap f
   证明: (gc_map_comap f).u_inf
 
@@ -935,7 +935,7 @@ theorem comap_iInf
 
 中文:
 定理 comap_iInf
-  条件: {ι : Sort*} (f : G ->* N) (s : ι -> Subgroup N)
+  条件: {ι : 类型层*} (f : G ->* N) (s : ι -> 子群 N)
   证明: (gc_map_comap f).u_iInf
 
 @[to_additive]
@@ -960,7 +960,7 @@ theorem map_inf_le
 
 中文:
 定理 map_inf_le
-  条件: (H K : Subgroup G) (f : G ->* N)
+  条件: (H K : 子群 G) (f : G ->* N)
   结论: map f (H ⊓ K) <= map f H ⊓ map f K
   证明: le_inf (map_mono inf_le_left) (map_mono inf_le_right)
 
@@ -986,7 +986,7 @@ theorem map_inf_eq
 
 中文:
 定理 map_inf_eq
-  条件: (H K : Subgroup G) (f : G ->* N) (hf : Function.Injective f)
+  条件: (H K : 子群 G) (f : G ->* N) (hf : 函数.单射 f)
   证明: by
   rw [← SetLike.coe_set_eq]
   simp [Set.image_inter hf]
@@ -1015,7 +1015,7 @@ theorem map_bot
 中文:
 定理 map_bot
   条件: (f : G ->* N)
-  结论: (⊥ : Subgroup G).map f = ⊥
+  结论: (⊥ : 子群 G).map f = ⊥
   证明: (gc_map_comap f).l_bot
 
 @[to_additive]
@@ -1039,7 +1039,7 @@ lemma disjoint_map
 
 中文:
 引理 disjoint_map
-  条件: {f : G ->* N} (hf : Function.Injective f) {H K : Subgroup G} (h : Disjoint H K)
+  条件: {f : G ->* N} (hf : 函数.单射 f) {H K : 子群 G} (h : Disjoint H K)
   证明: by
   rw [disjoint_iff]; rw [← map_inf _ _ f hf]; rw [disjoint_iff.mp h]; rw [map_bot]
 
@@ -1069,8 +1069,8 @@ theorem map_top_of_surjective
 
 中文:
 定理 map_top_of_surjective
-  条件: (f : G ->* N) (h : Function.Surjective f)
-  结论: Subgroup.map f ⊤ = ⊤
+  条件: (f : G ->* N) (h : 函数.满射 f)
+  结论: 子群.map f ⊤ = ⊤
   证明: by
   rw [eq_top_iff]
   intro x _
@@ -1101,7 +1101,7 @@ lemma codisjoint_map
 
 中文:
 引理 codisjoint_map
-  结论: {f : G ->* N} (hf : Function.Surjective f)
+  结论: {f : G ->* N} (hf : 函数.满射 f)
   证明: by
   rw [codisjoint_iff]; rw [← map_sup]; rw [codisjoint_iff.mp h]; rw [map_top_of_surjective _ hf]
 
@@ -1126,7 +1126,7 @@ lemma map_equiv_top
 
 中文:
 引理 map_equiv_top
-  条件: {F : 类型} [EquivLike F G N] [MulEquivClass F G N] (f : F)
+  条件: {F : 类型} [等价状 F G N] [乘法等价类 F G N] (f : F)
   证明: map_top_of_surjective _ (EquivLike.surjective f)
 
 @[to_additive (attr := simp)]
@@ -1150,7 +1150,7 @@ theorem comap_top
 中文:
 定理 comap_top
   条件: (f : G ->* N)
-  结论: (⊤ : Subgroup N).comap f = ⊤
+  结论: (⊤ : 子群 N).comap f = ⊤
   证明: (gc_map_comap f).u_top
 
 Depends on / 依赖: gc_map_comap, u_top
@@ -1170,7 +1170,7 @@ definition subgroupOf
 
 中文:
 定义 subgroupOf
-  签名: (H K : Subgroup G)
+  签名: (H K : 子群 G)
   定义体: H.comap K.subtype
 
 Depends on / 依赖: H.comap, K.subtype, subtype
@@ -1195,7 +1195,7 @@ definition subgroupOfEquivOfLe
 
 中文:
 定义 subgroupOfEquivOfLe
-  签名: {G : 类型} [Group G] {H K : Subgroup G} (h : H <= K)
+  签名: {G : 类型} [群 G] {H K : 子群 G} (h : H <= K)
   定义体: ⟨g.1, g.2⟩
   invFun g := ⟨⟨g.1, h g.2⟩, g.2⟩
   map_mul' _g _h := rfl
@@ -1221,7 +1221,7 @@ lemma subgroupOf_mono
 
 中文:
 引理 subgroupOf_mono
-  条件: {H₁ H₂ : Subgroup G} (H₃ : Subgroup G) (h : H₁ <= H₂)
+  条件: {H₁ H₂ : 子群 G} (H₃ : 子群 G) (h : H₁ <= H₂)
   证明: comap_mono h
 
 @[to_additive (attr := simp)]
@@ -1246,7 +1246,7 @@ theorem comap_subtype
 
 中文:
 定理 comap_subtype
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   结论: H.comap K.subtype = H.subgroupOf K
   证明: rfl
 
@@ -1268,7 +1268,7 @@ theorem comap_inclusion_subgroupOf
 
 中文:
 定理 comap_inclusion_subgroupOf
-  条件: {K₁ K₂ : Subgroup G} (h : K₁ <= K₂) (H : Subgroup G)
+  条件: {K₁ K₂ : 子群 G} (h : K₁ <= K₂) (H : 子群 G)
   证明: rfl
 
 @[to_additive]
@@ -1291,8 +1291,8 @@ theorem coe_subgroupOf
 
 中文:
 定理 coe_subgroupOf
-  条件: (H K : Subgroup G)
-  结论: (H.subgroupOf K : Set K) = K.subtype ⁻¹' H
+  条件: (H K : 子群 G)
+  结论: (H.subgroupOf K : 集合 K) = K.subtype ⁻¹' H
   证明: rfl
 
 @[to_additive]
@@ -1312,7 +1312,7 @@ theorem mem_subgroupOf
 
 中文:
 定理 mem_subgroupOf
-  条件: {H K : Subgroup G} {h : K}
+  条件: {H K : 子群 G} {h : K}
   结论: h in H.subgroupOf K ↔ (h : G) in H
   证明: Iff.rfl
 
@@ -1336,7 +1336,7 @@ theorem subgroupOf_map_subtype
 
 中文:
 定理 subgroupOf_map_subtype
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   结论: (H.subgroupOf K).map K.subtype = H ⊓ K
   证明: SetLike.ext' .trans ?_; apply Set.inter_comm by refine Subtype.image_preimage_coe _ _
 
@@ -1361,7 +1361,7 @@ theorem map_subgroupOf_eq_of_le
 
 中文:
 定理 map_subgroupOf_eq_of_le
-  条件: {H K : Subgroup G} (h : H <= K)
+  条件: {H K : 子群 G} (h : H <= K)
   证明: by
   rwa [subgroupOf_map_subtype, inf_eq_left]
 
@@ -1386,7 +1386,7 @@ theorem bot_subgroupOf
 
 中文:
 定理 bot_subgroupOf
-  结论: (⊥ : Subgroup G).subgroupOf H = ⊥
+  结论: (⊥ : 子群 G).subgroupOf H = ⊥
   证明: Eq.symm (Subgroup.ext fun _g => Subtype.ext_iff)
 
 @[to_additive (attr := simp)]
@@ -1409,7 +1409,7 @@ theorem top_subgroupOf
 
 中文:
 定理 top_subgroupOf
-  结论: (⊤ : Subgroup G).subgroupOf H = ⊤
+  结论: (⊤ : 子群 G).subgroupOf H = ⊤
   证明: rfl
 
 @[to_additive]
@@ -1500,7 +1500,7 @@ theorem subgroupOf_inj
 
 中文:
 定理 subgroupOf_inj
-  条件: {H₁ H₂ K : Subgroup G}
+  条件: {H₁ H₂ K : 子群 G}
   证明: by
   simpa only [SetLike.ext_iff, mem_inf, mem_subgroupOf, and_congr_left_iff] using Subtype.forall
 
@@ -1526,7 +1526,7 @@ theorem inf_subgroupOf_right
 
 中文:
 定理 inf_subgroupOf_right
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   结论: (H ⊓ K).subgroupOf K = H.subgroupOf K
   证明: subgroupOf_inj.2 (inf_right_idem _ _)
 
@@ -1552,7 +1552,7 @@ theorem inf_subgroupOf_left
 
 中文:
 定理 inf_subgroupOf_left
-  条件: (H K : Subgroup G)
+  条件: (H K : 子群 G)
   结论: (K ⊓ H).subgroupOf K = H.subgroupOf K
   证明: by
   rw [inf_comm]; rw [inf_subgroupOf_right]
@@ -1579,7 +1579,7 @@ theorem subgroupOf_eq_bot
 
 中文:
 定理 subgroupOf_eq_bot
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   结论: H.subgroupOf K = ⊥ ↔ Disjoint H K
   证明: by
   rw [disjoint_iff]; rw [← bot_subgroupOf]; rw [subgroupOf_inj]; rw [bot_inf_eq]
@@ -1604,7 +1604,7 @@ theorem subgroupOf_eq_top
 
 中文:
 定理 subgroupOf_eq_top
-  条件: {H K : Subgroup G}
+  条件: {H K : 子群 G}
   结论: H.subgroupOf K = ⊤ ↔ K <= H
   证明: by
   rw [← top_subgroupOf]; rw [subgroupOf_inj]; rw [top_inf_eq]; rw [inf_eq_right]
@@ -1628,8 +1628,8 @@ instance [IsMulCommutative
 @[to_additive]
 
 中文:
-实例 [IsMulCommutative
-  签名: G] : IsMulCommutative H
+实例 [是MulCommutative
+  签名: G] : 是MulCommutative H
   定义体: IsMulCommutative.of_setLike_mul_comm fun a _ b _ => mul_comm' a b
 
 @[to_additive]
@@ -1655,7 +1655,7 @@ instance map_isMulCommutative
 
 中文:
 实例 map_isMulCommutative
-  签名: (f : G ->* G') [IsMulCommutative H]
+  签名: (f : G ->* G') [是MulCommutative H]
   定义体: by
   refine .of_setLike_mul_comm ?_
   rintro - ⟨a, ha, rfl⟩ - ⟨b, hb, rfl⟩
@@ -1684,7 +1684,7 @@ theorem comap_injective_isMulCommutative
 
 中文:
 定理 comap_injective_isMulCommutative
-  条件: {f : G' ->* G} (hf : Injective f) [IsMulCommutative H]
+  条件: {f : G' ->* G} (hf : 单射 f) [是MulCommutative H]
   证明: .of_setLike_mul_comm fun a (ha : f a in H) b (hb : f b in H) => hf by
     simpa using setLike_mul_comm ha hb
 
@@ -1708,7 +1708,7 @@ instance subgroupOf_isMulCommutative
 
 中文:
 实例 subgroupOf_isMulCommutative
-  签名: [IsMulCommutative H]
+  签名: [是MulCommutative H]
   定义体: H.comap_injective_isMulCommutative Subtype.coe_injective
 
 Depends on / 依赖: H.comap_injective_isMulCommutative, Subtype, Subtype.coe_injective, coe_injective, comap_injective_isMulCommutative
@@ -1784,7 +1784,7 @@ lemma coe_comapSubgroup
 中文:
 引理 coe_comapSubgroup
   条件: (e : G ≃* H)
-  结论: comapSubgroup e = Subgroup.comap e.toMonoidHom
+  结论: comapSubgroup e = 子群.comap e.toMonoidHom
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1839,7 +1839,7 @@ definition mapSubgroup
 
 中文:
 定义 mapSubgroup
-  签名: {H : 类型} [Group H] (f : G ≃* H)
+  签名: {H : 类型} [群 H] (f : G ≃* H)
   定义体: Subgroup.map f
   invFun := Subgroup.map f.symm
   left_inv sg := by simp [Subgroup.map_map]
@@ -1876,7 +1876,7 @@ lemma coe_mapSubgroup
 中文:
 引理 coe_mapSubgroup
   条件: (e : G ≃* H)
-  结论: mapSubgroup e = Subgroup.map e.toMonoidHom
+  结论: mapSubgroup e = 子群.map e.toMonoidHom
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1922,7 +1922,7 @@ lemma comap_toSubmonoid
 
 中文:
 引理 comap_toSubmonoid
-  条件: (e : G ≃* N) (s : Subgroup N)
+  条件: (e : G ≃* N) (s : 子群 N)
   证明: rfl
 
 @[to_additive]
@@ -1944,7 +1944,7 @@ theorem map_comap_le
 
 中文:
 定理 map_comap_le
-  条件: (H : Subgroup N)
+  条件: (H : 子群 N)
   结论: map f (comap f H) <= H
   证明: (gc_map_comap f).l_u_le _
 
@@ -1969,7 +1969,7 @@ theorem le_comap_map
 
 中文:
 定理 le_comap_map
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   结论: H <= comap f (map f H)
   证明: (gc_map_comap f).le_u_l _
 
@@ -1991,7 +1991,7 @@ theorem map_eq_comap_of_inverse
 
 中文:
 定理 map_eq_comap_of_inverse
-  结论: {f : G ->* N} {g : N ->* G} (hl : Function.LeftInverse g f)
+  结论: {f : G ->* N} {g : N ->* G} (hl : 函数.左逆 g f)
   证明: SetLike.ext' by rw [coe_map, coe_comap, Set.image_eq_preimage_of_inverse hl hr]
 
 Depends on / 依赖: Set.image_eq_preimage_of_inverse, SetLike, SetLike.ext, coe_comap, coe_map, image_eq_preimage_of_inverse
@@ -2017,7 +2017,7 @@ definition equivMapOfInjective
 
 中文:
 定义 equivMapOfInjective
-  签名: (H : Subgroup G) (f : G ->* N) (hf : Function.Injective f)
+  签名: (H : 子群 G) (f : G ->* N) (hf : 函数.单射 f)
   定义体: { Equiv.Set.image f H hf with map_mul' := fun _ _ => Subtype.ext (f.map_mul _ _) }
 
 @[to_additive (attr := simp)]
@@ -2039,7 +2039,7 @@ theorem coe_equivMapOfInjective_apply
 
 中文:
 定理 coe_equivMapOfInjective_apply
-  结论: (H : Subgroup G) (f : G ->* N) (hf : Function.Injective f)
+  结论: (H : 子群 G) (f : G ->* N) (hf : 函数.单射 f)
   证明: rfl
 -/
 theorem coe_equivMapOfInjective_apply (H : Subgroup G) (f : G ->* N) (hf : Function.Injective f)
@@ -2067,7 +2067,7 @@ definition subgroupComap
 
 中文:
 定义 subgroupComap
-  签名: (f : G ->* G') (H' : Subgroup G')
+  签名: (f : G ->* G') (H' : 子群 G')
   定义体: f.submonoidComap H'.toSubmonoid
 
 @[to_additive]
@@ -2088,7 +2088,7 @@ lemma subgroupComap_surjective_of_surjective
 
 中文:
 引理 subgroupComap_surjective_of_surjective
-  条件: (f : G ->* G') (H' : Subgroup G') (hf : Surjective f)
+  条件: (f : G ->* G') (H' : 子群 G') (hf : 满射 f)
   证明: f.submonoidComap_surjective_of_surjective H'.toSubmonoid hf
 
 Depends on / 依赖: f.submonoidComap_surjective_of_surjective, submonoidComap_surjective_of_surjective, toSubmonoid
@@ -2111,7 +2111,7 @@ definition subgroupMap
 
 中文:
 定义 subgroupMap
-  签名: (f : G ->* G') (H : Subgroup G)
+  签名: (f : G ->* G') (H : 子群 G)
   定义体: f.submonoidMap H.toSubmonoid
 
 @[to_additive]
@@ -2132,7 +2132,7 @@ theorem subgroupMap_surjective
 
 中文:
 定理 subgroupMap_surjective
-  条件: (f : G ->* G') (H : Subgroup G)
+  条件: (f : G ->* G') (H : 子群 G)
   证明: f.submonoidMap_surjective H.toSubmonoid
 
 Depends on / 依赖: H.toSubmonoid, f.submonoidMap_surjective, submonoidMap_surjective, toSubmonoid
@@ -2229,7 +2229,7 @@ definition subgroupMap
 
 中文:
 定义 subgroupMap
-  签名: (e : G ≃* G') (H : Subgroup G)
+  签名: (e : G ≃* G') (H : 子群 G)
   定义体: MulEquiv.submonoidMap (e : G ≃* G') H.toSubmonoid
 
 @[to_additive (attr := simp)]
@@ -2252,7 +2252,7 @@ theorem coe_subgroupMap_apply
 
 中文:
 定理 coe_subgroupMap_apply
-  条件: (e : G ≃* G') (H : Subgroup G) (g : H)
+  条件: (e : G ≃* G') (H : 子群 G) (g : H)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2272,7 +2272,7 @@ theorem subgroupMap_symm_apply
 
 中文:
 定理 subgroupMap_symm_apply
-  条件: (e : G ≃* G') (H : Subgroup G) (g : H.map (e : G ->* G'))
+  条件: (e : G ≃* G') (H : 子群 G) (g : H.map (e : G ->* G'))
   证明: rfl
 -/
 theorem subgroupMap_symm_apply (e : G ≃* G') (H : Subgroup G) (g : H.map (e : G ->* G')) :
@@ -2297,7 +2297,7 @@ theorem closure_preimage_le
 
 中文:
 定理 closure_preimage_le
-  条件: (f : G ->* N) (s : Set N)
+  条件: (f : G ->* N) (s : 集合 N)
   结论: closure (f ⁻¹' s) <= (closure s).comap f
   证明: (closure_le _).2 fun x hx => by rw [SetLike.mem_coe, mem_comap]; exact subset_closure hx
 
@@ -2323,7 +2323,7 @@ theorem map_closure
 
 中文:
 定理 map_closure
-  条件: (f : G ->* N) (s : Set G)
+  条件: (f : G ->* N) (s : 集合 G)
   结论: (closure s).map f = closure (f '' s)
   证明: Set.image_preimage.l_comm_of_u_comm (gc_map_comap f) (Subgroup.gi N).gc (Subgroup.gi G).gc
     fun _ => rfl
@@ -2351,7 +2351,7 @@ lemma surjOn_iff_le_map
 
 中文:
 引理 surjOn_iff_le_map
-  条件: {f : G ->* N} {H : Subgroup G} {K : Subgroup N}
+  条件: {f : G ->* N} {H : 子群 G} {K : 子群 N}
   证明: Iff.rfl
 
 @[to_additive (attr := simp)]
@@ -2375,7 +2375,7 @@ theorem equivMapOfInjective_coe_mulEquiv
 
 中文:
 定理 equivMapOfInjective_coe_mulEquiv
-  条件: (H : Subgroup G) (e : G ≃* G')
+  条件: (H : 子群 G) (e : G ≃* G')
   证明: by
   ext
   rfl

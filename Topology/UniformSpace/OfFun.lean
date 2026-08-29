@@ -45,7 +45,7 @@ comp := le_iInf₂ fun
 
 中文:
 定义 ofFun
-  签名: [AddCommMonoid M] [PartialOrder M]
+  签名: [加法交换幺半群 M] [偏序 M]
   定义体: .ofCore
     { uniformity := ⨅ r > 0, 𝓟 { x | d x.1 x.2 < r }
 refl := le_iInf₂ fun r hr => principal_mono.2 by simp [Set.subset_def, *]
@@ -82,7 +82,7 @@ theorem hasBasis_ofFun
 
 中文:
 定理 hasBasis_ofFun
-  结论: [AddCommMonoid M] [LinearOrder M]
+  结论: [加法交换幺半群 M] [线性序 M]
   证明: hasBasis_biInf_principal'
     (fun ε₁ h₁ ε₂ h₂ => ⟨min ε₁ ε₂, lt_min h₁ h₂, fun _x hx => lt_of_lt_of_le hx (min_le_left _ _),
       fun _x hx => lt_of_lt_of_le hx (min_le_right _ _)⟩) h₀
@@ -119,7 +119,7 @@ definition ofFunOfHasBasis
 
 中文:
 定义 ofFunOfHasBasis
-  签名: [t : TopologicalSpace X] [AddCommMonoid M] [LinearOrder M]
+  签名: [t : 拓扑空间 X] [加法交换幺半群 M] [线性序 M]
   定义体: t
   nhds_eq_comap_uniformity x :=
 (basis x).eq_of_same_basis

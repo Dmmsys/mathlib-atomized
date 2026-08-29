@@ -81,7 +81,7 @@ definition hittingAfter
 
 中文:
 定义 hittingAfter
-  签名: (u : ι -> Ω -> β) (s : Set β) (n : ι)
+  签名: (u : ι -> Ω -> β) (s : 集合 β) (n : ι)
   定义体: fun x => if exists j, n <= j ∧ u j x in s then (sInf {i : ι | n <= i ∧ u i x in s} : ι) else ⊤
 -/
 noncomputable def hittingAfter (u : ι -> Ω -> β) (s : Set β) (n : ι) :
@@ -99,7 +99,7 @@ theorem hittingBtwn_def
 
 中文:
 定理 hittingBtwn_def
-  条件: (u : ι -> Ω -> β) (s : Set β) (n m : ι)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (n m : ι)
   证明: rfl
 -/
 theorem hittingBtwn_def (u : ι -> Ω -> β) (s : Set β) (n m : ι) :
@@ -120,7 +120,7 @@ lemma hittingAfter_def
 
 中文:
 引理 hittingAfter_def
-  条件: (u : ι -> Ω -> β) (s : Set β) (n : ι)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (n : ι)
   证明: rfl
 
 @[simp]
@@ -194,7 +194,7 @@ lemma hittingBtwn_univ
 
 中文:
 引理 hittingBtwn_univ
-  条件: {ι : 类型} [ConditionallyCompleteLinearOrder ι] {u : ι -> Ω -> β} (n m : ι)
+  条件: {ι : 类型} [条件完备线性序 ι] {u : ι -> Ω -> β} (n m : ι)
   证明: by
   ext ω
   simp only [hittingBtwn_def, Set.mem_Icc, Set.mem_univ, and_true, Set.ofPred_true, Set.inter_univ]
@@ -226,7 +226,7 @@ lemma hittingAfter_univ
 
 中文:
 引理 hittingAfter_univ
-  条件: {ι : 类型} [ConditionallyCompleteLattice ι] {u : ι -> Ω -> β} (n : ι)
+  条件: {ι : 类型} [条件完备格 ι] {u : ι -> Ω -> β} (n : ι)
   证明: by
   ext ω
   classical
@@ -543,8 +543,8 @@ theorem le_hittingBtwn_of_exists
   simp at h_exists
 
 中文:
-定理 le_hittingBtwn_of_exists
-  条件: {m : ι} (h_存在 : 存在 j in Set.Icc n m, u j ω in s)
+定理 le_hittingBtwn_of_存在
+  条件: {m : ι} (h_存在 : 存在 j in 集合.闭区间 n m, u j ω in s)
   证明: by
   refine le_hittingBtwn ?_ ω
   by_contra h
@@ -572,7 +572,7 @@ theorem hittingBtwn_mem_Icc
 中文:
 定理 hittingBtwn_mem_Icc
   条件: {m : ι} (hnm : n <= m) (ω : Ω)
-  结论: hittingBtwn u s n m ω in Set.Icc n m
+  结论: hittingBtwn u s n m ω in 集合.闭区间 n m
   证明: ⟨le_hittingBtwn hnm ω, hittingBtwn_le ω⟩
 
 Depends on / 依赖: hittingBtwn_le, le_hittingBtwn
@@ -597,7 +597,7 @@ theorem hittingBtwn_mem_set
 
 中文:
 定理 hittingBtwn_mem_set
-  条件: [WellFoundedLT ι] {m : ι} (h_存在 : 存在 j in Set.Icc n m, u j ω in s)
+  条件: [WellFoundedLT ι] {m : ι} (h_存在 : 存在 j in 集合.闭区间 n m, u j ω in s)
   证明: by
   simp_rw [hittingBtwn, if_pos h_exists]
   have h_nonempty : (Set.Icc n m inter {i : ι | u i ω in s}).Nonempty := by
@@ -780,7 +780,7 @@ theorem hittingBtwn_le_iff_of_exists
       re
 
 中文:
-定理 hittingBtwn_le_iff_of_exists
+定理 hittingBtwn_le_iff_of_存在
   结论: [WellFoundedLT ι] {m : ι}
   证明: by
   constructor <;> intro h'
@@ -995,7 +995,7 @@ theorem hittingBtwn_eq_hittingBtwn_of_exists
     · exact csInf_le bdd
 
 中文:
-定理 hittingBtwn_eq_hittingBtwn_of_exists
+定理 hittingBtwn_eq_hittingBtwn_of_存在
   结论: {m₁ m₂ : ι} (h : m₁ <= m₂)
   证明: by
   simp only [hittingBtwn, if_pos h']
@@ -1043,7 +1043,7 @@ lemma hittingBtwn_anti
 中文:
 引理 hittingBtwn_anti
   条件: (u : ι -> Ω -> β) (n m : ι)
-  结论: Antitone (hittingBtwn u · n m)
+  结论: 递减 (hittingBtwn u · n m)
   证明: by
   intro E F hEF ω
   simp only [hittingBtwn_def]
@@ -1092,7 +1092,7 @@ lemma hittingAfter_anti
 中文:
 引理 hittingAfter_anti
   条件: (u : ι -> Ω -> β) (n : ι)
-  结论: Antitone (hittingAfter u · n)
+  结论: 递减 (hittingAfter u · n)
   证明: by
   intro E F hEF ω
   simp only [hittingAfter_def]
@@ -1174,7 +1174,7 @@ theorem hittingBtwn_mono_right
 
 中文:
 定理 hittingBtwn_mono_right
-  条件: (u : ι -> Ω -> β) (s : Set β) (n : ι)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (n : ι)
   证明: by
   intro m₁ m₂ hm
   by_cases h : exists j in Set.Icc n m₁, u j ω in s
@@ -1220,7 +1220,7 @@ lemma hittingBtwn_mono_left
 
 中文:
 引理 hittingBtwn_mono_left
-  条件: (u : ι -> Ω -> β) (s : Set β) (m : ι)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (m : ι)
   证明: by
   intro n n' hnn' ω
   simp only [hittingBtwn]
@@ -1268,8 +1268,8 @@ lemma hittingAfter_mono
 
 中文:
 引理 hittingAfter_mono
-  条件: (u : ι -> Ω -> β) (s : Set β)
-  结论: Monotone (hittingAfter u s)
+  条件: (u : ι -> Ω -> β) (s : 集合 β)
+  结论: 递增 (hittingAfter u s)
   证明: by
   intro n m hnm ω
   simp only [hittingAfter]
@@ -1306,7 +1306,7 @@ lemma hittingBtwn_apply_mono_right
 
 中文:
 引理 hittingBtwn_apply_mono_right
-  条件: (u : ι -> Ω -> β) (s : Set β) (n : ι) (ω : Ω)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (n : ι) (ω : Ω)
   证明: fun _ _ hnn' => hittingBtwn_mono_right u s n hnn'
 
 Depends on / 依赖: hittingBtwn_mono_right
@@ -1324,7 +1324,7 @@ lemma hittingBtwn_apply_mono_left
 
 中文:
 引理 hittingBtwn_apply_mono_left
-  条件: (u : ι -> Ω -> β) (s : Set β) (m : ι) (ω : Ω)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (m : ι) (ω : Ω)
   证明: fun _ _ hnn' => hittingBtwn_mono_left u s m hnn' ω
 
 Depends on / 依赖: hittingBtwn_mono_left
@@ -1342,7 +1342,7 @@ lemma hittingAfter_apply_mono
 
 中文:
 引理 hittingAfter_apply_mono
-  条件: (u : ι -> Ω -> β) (s : Set β) (ω : Ω)
+  条件: (u : ι -> Ω -> β) (s : 集合 β) (ω : Ω)
   证明: fun _ _ hnm => hittingAfter_mono u s hnm ω
 
 Depends on / 依赖: hittingAfter_mono
@@ -1368,7 +1368,7 @@ theorem Adapted.isStoppingTime_hittingBtwn
 
 中文:
 定理 Adapted.isStoppingTime_hittingBtwn
-  结论: [ConditionallyCompleteLinearOrder ι] [WellFoundedLT ι]
+  结论: [条件完备线性序 ι] [WellFoundedLT ι]
   证明: by
   intro i
   rcases le_or_gt n' i with hi | hi
@@ -1412,7 +1412,7 @@ theorem Adapted.isStoppingTime_hittingAfter
 
 中文:
 定理 Adapted.isStoppingTime_hittingAfter
-  结论: [ConditionallyCompleteLinearOrder ι]
+  结论: [条件完备线性序 ι]
   证明: by
   intro i
   have h_set_eq_Union : {ω | hittingAfter u s n ω <= i} = ⋃ j in Set.Icc n i, u j ⁻¹' s := by
@@ -1452,7 +1452,7 @@ theorem stoppedValue_hittingBtwn_mem
 
 中文:
 定理 stoppedValue_hittingBtwn_mem
-  结论: [ConditionallyCompleteLinearOrder ι] [WellFoundedLT ι]
+  结论: [条件完备线性序 ι] [WellFoundedLT ι]
   证明: by
   simp only [stoppedValue, hittingBtwn, if_pos h]
   obtain ⟨j, hj₁, hj₂⟩ := h
@@ -1487,7 +1487,7 @@ theorem Adapted.isStoppingTime_hittingBtwn_isStoppingTime
 
 中文:
 定理 Adapted.isStoppingTime_hittingBtwn_isStoppingTime
-  结论: [ConditionallyCompleteLinearOrder ι]
+  结论: [条件完备线性序 ι]
   证明: by
   intro n
   have h₁ : {x | hittingBtwn u s (τ x).untopA N x <= n} =
@@ -1588,7 +1588,7 @@ lemma hittingAfter_eq_sInf
 
 中文:
 引理 hittingAfter_eq_sInf
-  条件: [对任意 ω, Decidable (存在 j, u j ω in s)] (ω : Ω)
+  条件: [对任意 ω, 可判定 (存在 j, u j ω in s)] (ω : Ω)
   证明: by
   simp [hittingAfter]
 

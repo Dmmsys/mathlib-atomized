@@ -75,7 +75,7 @@ termination_by o
 
 中文:
 定义 veblenWith
-  签名: (f : Ordinal.{u} -> Ordinal.{u}) (o : Ordinal.{u})
+  签名: (f : 序数.{u} -> 序数.{u}) (o : 序数.{u})
   定义体: if o = 0 then f else derivFamily fun (⟨x, _⟩ : Iio o) => veblenWith f x
 termination_by o
 
@@ -100,7 +100,7 @@ theorem veblenWith_zero
 
 中文:
 定理 veblenWith_zero
-  条件: (f : Ordinal -> Ordinal)
+  条件: (f : 序数 -> 序数)
   结论: veblenWith f 0 = f
   证明: by
   rw [veblenWith]; rw [if_pos rfl]
@@ -121,7 +121,7 @@ theorem veblenWith_of_ne_zero
 
 中文:
 定理 veblenWith_of_ne_zero
-  条件: (f : Ordinal -> Ordinal) (h : o != 0)
+  条件: (f : 序数 -> 序数) (h : o != 0)
   证明: by
   rw [veblenWith]; rw [if_neg h]
 
@@ -144,8 +144,8 @@ theorem isNormal_veblenWith'
 
 中文:
 定理 isNormal_veblenWith'
-  条件: (f : Ordinal -> Ordinal) (h : o != 0)
-  结论: IsNormal (veblenWith f o)
+  条件: (f : 序数 -> 序数) (h : o != 0)
+  结论: 是正规 (veblenWith f o)
   证明: by
   rw [veblenWith_of_ne_zero f h]
   exact isNormal_derivFamily _
@@ -173,8 +173,8 @@ theorem isNormal_veblenWith
 
 中文:
 定理 isNormal_veblenWith
-  条件: (o : Ordinal)
-  结论: IsNormal (veblenWith f o)
+  条件: (o : 序数)
+  结论: 是正规 (veblenWith f o)
   证明: by
   obtain rfl | h := eq_or_ne o 0
   · rwa [veblenWith_zero]
@@ -223,7 +223,7 @@ theorem veblenWith_veblenWith_of_lt
 
 中文:
 定理 veblenWith_veblenWith_of_lt
-  条件: (h : o₁ < o₂) (a : Ordinal)
+  条件: (h : o₁ < o₂) (a : 序数)
   证明: by
   apply (mem_range_veblenWith hf h.ne_bot).1 _ _ h
   simp
@@ -309,7 +309,7 @@ theorem veblenWith_add_one
 
 中文:
 定理 veblenWith_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: veblenWith f (o + 1) = deriv (veblenWith f o)
   证明: by
   rw [deriv_eq_enumOrd (isNormal_veblenWith hf o)]; rw [veblenWith_of_ne_zero f (add_pos_of_right zero_lt_one _).ne']; rw [derivFamily_eq_enumOrd]
@@ -372,7 +372,7 @@ theorem veblenWith_succ
 
 中文:
 定理 veblenWith_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: veblenWith f (succ o) = deriv (veblenWith f o)
   证明: veblenWith_add_one hf o
 
@@ -394,8 +394,8 @@ theorem veblenWith_right_strictMono
 
 中文:
 定理 veblenWith_right_strictMono
-  条件: (o : Ordinal)
-  结论: StrictMono (veblenWith f o)
+  条件: (o : 序数)
+  结论: 严格递增 (veblenWith f o)
   证明: (isNormal_veblenWith hf o).strictMono
 
 @[simp]
@@ -460,8 +460,8 @@ theorem veblenWith_injective
 
 中文:
 定理 veblenWith_injective
-  条件: (o : Ordinal)
-  结论: Function.Injective (veblenWith f o)
+  条件: (o : 序数)
+  结论: 函数.单射 (veblenWith f o)
   证明: (veblenWith_right_strictMono hf o).injective
 
 @[simp]
@@ -501,7 +501,7 @@ theorem right_le_veblenWith
 
 中文:
 定理 right_le_veblenWith
-  条件: (o a : Ordinal)
+  条件: (o a : 序数)
   结论: a <= veblenWith f o a
   证明: (veblenWith_right_strictMono hf o).le_apply
 
@@ -525,8 +525,8 @@ theorem veblenWith_left_monotone
 
 中文:
 定理 veblenWith_left_monotone
-  条件: (a : Ordinal)
-  结论: Monotone (veblenWith f · a)
+  条件: (a : 序数)
+  结论: 递增 (veblenWith f · a)
   证明: by
   rw [monotone_iff_forall_lt]
   intro o₁ o₂ h
@@ -597,7 +597,7 @@ theorem veblenWith_zero_strictMono
 中文:
 定理 veblenWith_zero_strictMono
   条件: (hp : 0 < f 0)
-  结论: StrictMono (veblenWith f · 0)
+  结论: 严格递增 (veblenWith f · 0)
   证明: by
   intro o₁ o₂ h
   dsimp only
@@ -682,7 +682,7 @@ theorem left_le_veblenWith
 
 中文:
 定理 left_le_veblenWith
-  条件: (hp : 0 < f 0) (o a : Ordinal)
+  条件: (hp : 0 < f 0) (o a : 序数)
   结论: o <= veblenWith f o a
   证明: (veblenWith_zero_strictMono hf hp).le_apply.trans
     (veblenWith_right_strictMono hf _).monotone zero_le
@@ -712,7 +712,7 @@ theorem isNormal_veblenWith_zero
 中文:
 定理 isNormal_veblenWith_zero
   条件: (hp : 0 < f 0)
-  结论: IsNormal (veblenWith f · 0)
+  结论: 是正规 (veblenWith f · 0)
   证明: by
   rw [isNormal_iff]
   refine ⟨veblenWith_zero_strictMono hf hp, fun o ho a IH => ?_⟩
@@ -956,7 +956,7 @@ definition veblen
 
 中文:
 定义 veblen
-  签名: : Ordinal.{u} -> Ordinal.{u} -> Ordinal.{u}
+  签名: : 序数.{u} -> 序数.{u} -> 序数.{u}
   定义体: veblenWith (ω ^ ·)
 
 @[simp]
@@ -999,7 +999,7 @@ theorem veblen_zero_apply
 
 中文:
 定理 veblen_zero_apply
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: veblen 0 a = ω ^ a
   证明: by
   rw [veblen_zero]
@@ -1021,7 +1021,7 @@ theorem veblen_of_ne_zero
 中文:
 定理 veblen_of_ne_zero
   条件: (h : o != 0)
-  结论: veblen o = derivFamily fun x : Iio o => veblen x.1
+  结论: veblen o = derivFamily fun x : 左无界右开区间 o => veblen x.1
   证明: veblenWith_of_ne_zero _ h
 
 Depends on / 依赖: veblenWith_of_ne_zero
@@ -1040,8 +1040,8 @@ theorem isNormal_veblen
 
 中文:
 定理 isNormal_veblen
-  条件: (o : Ordinal)
-  结论: IsNormal (veblen o)
+  条件: (o : 序数)
+  结论: 是正规 (veblen o)
   证明: isNormal_veblenWith (isNormal_opow one_lt_omega0) o
 
 Depends on / 依赖: isNormal_opow, isNormal_veblenWith, one_lt_omega0
@@ -1080,7 +1080,7 @@ theorem veblen_veblen_of_lt
 
 中文:
 定理 veblen_veblen_of_lt
-  条件: (h : o₁ < o₂) (a : Ordinal)
+  条件: (h : o₁ < o₂) (a : 序数)
   结论: veblen o₁ (veblen o₂ a) = veblen o₂ a
   证明: veblenWith_veblenWith_of_lt (isNormal_opow one_lt_omega0) h a
 
@@ -1120,8 +1120,8 @@ theorem veblen_mem_range_opow
 
 中文:
 定理 veblen_mem_range_opow
-  条件: (o a : Ordinal)
-  结论: veblen o a in range (ω ^ · : Ordinal -> Ordinal)
+  条件: (o a : 序数)
+  结论: veblen o a in range (ω ^ · : 序数 -> 序数)
   证明: veblenWith_mem_range (isNormal_opow one_lt_omega0)
 
 Depends on / 依赖: isNormal_opow, one_lt_omega0, veblenWith_mem_range
@@ -1142,7 +1142,7 @@ theorem veblen_add_one
 
 中文:
 定理 veblen_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: veblen (o + 1) = deriv (veblen o)
   证明: veblenWith_add_one (isNormal_opow one_lt_omega0) o
 
@@ -1165,7 +1165,7 @@ theorem veblen_succ
 
 中文:
 定理 veblen_succ
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: veblen (succ o) = deriv (veblen o)
   证明: veblen_add_one o
 
@@ -1187,8 +1187,8 @@ theorem veblen_right_strictMono
 
 中文:
 定理 veblen_right_strictMono
-  条件: (o : Ordinal)
-  结论: StrictMono (veblen o)
+  条件: (o : 序数)
+  结论: 严格递增 (veblen o)
   证明: veblenWith_right_strictMono (isNormal_opow one_lt_omega0) o
 
 @[simp]
@@ -1253,8 +1253,8 @@ theorem veblen_injective
 
 中文:
 定理 veblen_injective
-  条件: (o : Ordinal)
-  结论: Function.Injective (veblen o)
+  条件: (o : 序数)
+  结论: 函数.单射 (veblen o)
   证明: veblenWith_injective (isNormal_opow one_lt_omega0) o
 
 @[simp]
@@ -1294,7 +1294,7 @@ theorem right_le_veblen
 
 中文:
 定理 right_le_veblen
-  条件: (o a : Ordinal)
+  条件: (o a : 序数)
   结论: a <= veblen o a
   证明: right_le_veblenWith (isNormal_opow one_lt_omega0) o a
 
@@ -1316,8 +1316,8 @@ theorem veblen_left_monotone
 
 中文:
 定理 veblen_left_monotone
-  条件: (o : Ordinal)
-  结论: Monotone (veblen · o)
+  条件: (o : 序数)
+  结论: 递增 (veblen · o)
   证明: veblenWith_left_monotone (isNormal_opow one_lt_omega0) o
 
 @[simp]
@@ -1358,7 +1358,7 @@ theorem veblen_zero_strictMono
 
 中文:
 定理 veblen_zero_strictMono
-  结论: StrictMono (veblen · 0)
+  结论: 严格递增 (veblen · 0)
   证明: veblenWith_zero_strictMono (isNormal_opow one_lt_omega0) (by simp)
 
 @[simp]
@@ -1444,7 +1444,7 @@ theorem left_le_veblen
 
 中文:
 定理 left_le_veblen
-  条件: (o a : Ordinal)
+  条件: (o a : 序数)
   结论: o <= veblen o a
   证明: left_le_veblenWith (isNormal_opow one_lt_omega0) (by simp) o a
 
@@ -1463,7 +1463,7 @@ theorem isNormal_veblen_zero
 
 中文:
 定理 isNormal_veblen_zero
-  结论: IsNormal (veblen · 0)
+  结论: 是正规 (veblen · 0)
   证明: isNormal_veblenWith_zero (isNormal_opow one_lt_omega0) (by simp)
 
 Depends on / 依赖: isNormal_opow, isNormal_veblenWith_zero, one_lt_omega0
@@ -1560,7 +1560,7 @@ theorem lt_veblen
 
 中文:
 定理 lt_veblen
-  条件: (a : Ordinal)
+  条件: (a : 序数)
   结论: a < veblen a a
   证明: by
   obtain rfl | h := eq_zero_or_pos a
@@ -1666,7 +1666,7 @@ definition invVeblen₁
 
 中文:
 定义 invVeblen₁
-  签名: (x : Ordinal)
+  签名: (x : 序数)
   定义体: sInf {y | veblen y x != x}
 
 Depends on / 依赖: veblen
@@ -1707,7 +1707,7 @@ theorem invVeblen₁_le
 
 中文:
 定理 invVeblen₁_le
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: invVeblen₁ x <= x
   证明: csInf_le' (lt_veblen x).ne'
 
@@ -1727,7 +1727,7 @@ theorem lt_veblen_invVeblen₁
 
 中文:
 定理 lt_veblen_invVeblen₁
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: x < veblen (invVeblen₁ x) x
   证明: (right_le_veblen ..).lt_of_ne' (csInf_mem (s := {y | veblen y x != x}) ⟨x, (lt_veblen x).ne'⟩)
 
@@ -1908,7 +1908,7 @@ definition invVeblen₂
 
 中文:
 定义 invVeblen₂
-  签名: (x : Ordinal)
+  签名: (x : 序数)
   定义体: Classical.choose ((mem_range_veblen_iff_le_invVeblen₁ (x := x)).2 le_rfl)
 
 @[simp]
@@ -1930,7 +1930,7 @@ theorem veblen_invVeblen₁_invVeblen₂
 
 中文:
 定理 veblen_invVeblen₁_invVeblen₂
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: veblen (invVeblen₁ x) (invVeblen₂ x) = ω ^ x
   证明: Classical.choose_spec (mem_range_veblen_iff_le_invVeblen₁.2 le_rfl)
 
@@ -2052,7 +2052,7 @@ theorem invVeblen₂_lt
 
 中文:
 定理 invVeblen₂_lt
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: invVeblen₂ x < ω ^ x
   证明: by
   rw [invVeblen₂_lt_iff]; rw [opow_lt_veblen_opow_iff]
@@ -2079,7 +2079,7 @@ theorem invVeblen₂_le
 
 中文:
 定理 invVeblen₂_le
-  条件: (x : Ordinal)
+  条件: (x : 序数)
   结论: invVeblen₂ x <= x
   证明: by
   obtain h | h := eq_zero_or_pos (invVeblen₁ x)
@@ -2256,7 +2256,7 @@ theorem epsilon_eq_deriv
 
 中文:
 定理 epsilon_eq_deriv
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ε_ o = deriv (fun a => ω ^ a) o
   证明: by
   simpa [epsilon] using congrFun (veblen_add_one 0) o
@@ -2307,7 +2307,7 @@ theorem epsilon_succ_eq_nfp
 
 中文:
 定理 epsilon_succ_eq_nfp
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ε_ (succ o) = nfp (fun a => ω ^ a) (succ (ε_ o))
   证明: by
   rw [epsilon_eq_deriv]; rw [epsilon_eq_deriv]; rw [deriv_succ]
@@ -2368,7 +2368,7 @@ theorem omega0_opow_epsilon
 
 中文:
 定理 omega0_opow_epsilon
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ω ^ ε_ o = ε_ o
   证明: by
   rw [epsilon_eq_deriv]; rw [deriv_fp (isNormal_opow one_lt_omega0)]
@@ -2457,7 +2457,7 @@ apply lt_of_lt_of_le _ (veblen_right_strictMono _).monotone zero_le
 
 中文:
 定理 omega0_lt_epsilon
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ω < ε_ o
   证明: by
 apply lt_of_lt_of_le _ (veblen_right_strictMono _).monotone zero_le
@@ -2480,7 +2480,7 @@ theorem natCast_lt_epsilon
 
 中文:
 定理 natCast_lt_epsilon
-  条件: (n : 自然数) (o : Ordinal)
+  条件: (n : 自然数) (o : 序数)
   结论: n < ε_ o
   证明: (natCast_lt_omega0 n).trans omega0_lt_epsilon o
 
@@ -2500,7 +2500,7 @@ theorem epsilon_pos
 
 中文:
 定理 epsilon_pos
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: 0 < ε_ o
   证明: veblen_pos
 
@@ -2562,7 +2562,7 @@ recommended_spelling "gamma" for "Γ_ " in [gamma, «termΓ_»]
 
 中文:
 定义 gamma
-  签名: : Ordinal -> Ordinal
+  签名: : 序数 -> 序数
   定义体: deriv (veblen · 0)
 
 @[inherit_doc] scoped notation "Γ_ " => gamma
@@ -2591,7 +2591,7 @@ theorem isNormal_gamma
 
 中文:
 定理 isNormal_gamma
-  结论: IsNormal gamma
+  结论: 是正规 gamma
   证明: isNormal_deriv _
 
 Depends on / 依赖: isNormal_deriv
@@ -2627,7 +2627,7 @@ theorem strictMono_gamma
 
 中文:
 定理 strictMono_gamma
-  结论: StrictMono gamma
+  结论: 严格递增 gamma
   证明: isNormal_gamma.strictMono
 
 Depends on / 依赖: isNormal_gamma, isNormal_gamma.strictMono, strictMono
@@ -2647,7 +2647,7 @@ theorem monotone_gamma
 
 中文:
 定理 monotone_gamma
-  结论: Monotone gamma
+  结论: 递增 gamma
   证明: isNormal_gamma.monotone
 
 @[simp]
@@ -2738,7 +2738,7 @@ theorem veblen_gamma_zero
 
 中文:
 定理 veblen_gamma_zero
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: veblen (Γ_ o) 0 = Γ_ o
   证明: deriv_fp isNormal_veblen_zero o
 
@@ -2785,7 +2785,7 @@ theorem gamma_succ_eq_nfp
 
 中文:
 定理 gamma_succ_eq_nfp
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: Γ_ (succ o) = nfp (veblen · 0) (succ (Γ_ o))
   证明: deriv_succ _ _
 
@@ -2910,7 +2910,7 @@ alias epsilon0_lt_gamma := epsilon_zero_lt_gamma
 
 中文:
 定理 epsilon_zero_lt_gamma
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ε₀ < Γ_ o
   证明: by
   apply (gamma_le_gamma.2 zero_le).trans_lt'
@@ -2939,7 +2939,7 @@ theorem omega0_lt_gamma
 
 中文:
 定理 omega0_lt_gamma
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: ω < Γ_ o
   证明: (omega0_lt_epsilon 0).trans (epsilon_zero_lt_gamma o)
 
@@ -3033,7 +3033,7 @@ theorem invVeblen₁_gamma
 
 中文:
 定理 invVeblen₁_gamma
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: invVeblen₁ (Γ_ o) = Γ_ o
   证明: by
   rw [← veblen_gamma_zero]; rw [invVeblen₁_veblen veblen_pos]; rw [veblen_gamma_zero]
@@ -3058,7 +3058,7 @@ theorem invVeblen₂_gamma
 
 中文:
 定理 invVeblen₂_gamma
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: invVeblen₂ (Γ_ o) = 0
   证明: by
   rw [← veblen_gamma_zero]; rw [invVeblen₂_veblen gamma_ne_zero veblen_pos]

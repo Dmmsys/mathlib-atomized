@@ -39,7 +39,7 @@ definition offDiag
 
 中文:
 定义 offDiag
-  签名: (l : List α)
+  签名: (l : 列表 α)
   定义体: l.zipIdx.flatMap fun (x, n) => map (Prod.mk x) l.eraseIdx n
 
 @[simp]
@@ -60,7 +60,7 @@ theorem offDiag_nil
 
 中文:
 定理 offDiag_nil
-  结论: offDiag ([] : List α) = []
+  结论: offDiag ([] : 列表 α) = []
   证明: rfl
 -/
 theorem offDiag_nil : offDiag ([] : List α) = [] := rfl
@@ -82,7 +82,7 @@ theorem offDiag_cons_perm
 
 中文:
 定理 offDiag_cons_perm
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   simp only [offDiag, zipIdx_cons']
   have : map (fun x => (x.fst, a)) l.zipIdx = map (·, a) l := by
@@ -136,7 +136,7 @@ length_eraseIdx_of_lt snd_lt_of_mem_zipIdx hx
 
 中文:
 定理 length_offDiag'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length l.offDiag = length l * (length l - 1)
   证明: by
   have : forall x in l.zipIdx, length (eraseIdx l x.2) = length l - 1 := fun x hx =>
@@ -165,7 +165,7 @@ theorem length_offDiag
 
 中文:
 定理 length_offDiag
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length l.offDiag = length l ^ 2 - length l
   证明: by
   simp [length_offDiag', Nat.mul_sub, Nat.pow_two]
@@ -224,7 +224,7 @@ theorem count_offDiag_eq_mul_sub_ite
 
 中文:
 定理 count_offDiag_eq_mul_sub_ite
-  条件: [DecidableEq α] (l : List α) (a b : α)
+  条件: [DecidableEq α] (l : 列表 α) (a b : α)
   证明: by
   induction l with
   | nil => simp
@@ -266,8 +266,8 @@ theorem Perm.offDiag
   classical simp_all [perm_iff_count, count_offDiag_eq_mul_sub_ite]
 
 中文:
-定理 Perm.offDiag
-  条件: {l₁ l₂ : List α} (h : l₁ ~ l₂)
+定理 置换.offDiag
+  条件: {l₁ l₂ : 列表 α} (h : l₁ ~ l₂)
   结论: l₁.offDiag ~ l₂.offDiag
   证明: by
   classical simp_all [perm_iff_count, count_offDiag_eq_mul_sub_ite]
@@ -423,7 +423,7 @@ theorem map_prodMap_offDiag
 
 中文:
 定理 map_prodMap_offDiag
-  条件: {β : 类型} (f : α -> β) (l : List α)
+  条件: {β : 类型} (f : α -> β) (l : 列表 α)
   证明: by
   simp [offDiag, map_flatMap, zipIdx_map, flatMap_map, eraseIdx_map, Function.comp_def]
 

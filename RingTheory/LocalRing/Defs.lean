@@ -39,12 +39,12 @@ class IsLocalRing
     - isUnit_or_isUnit_of_add_one({a b : R} (h : a + b = 1)) : IsUnit a ∨ IsUnit b
 
 中文:
-类 IsLocalRing
-  参数: (R : 类型) [Semiring R]
-  继承: Nontrivial R
+类 是局部环
+  参数: (R : 类型) [半环 R]
+  继承: 非平凡 R
   公理与运算 (2 个):
     - of_is_unit_or_is_unit_of_add_one : :
-    - isUnit_or_isUnit_of_add_one({a b : R} (h : a + b = 1)) : IsUnit a ∨ IsUnit b
+    - isUnit_or_isUnit_of_add_one({a b : R} (h : a + b = 1)) : 是单位 a ∨ 是单位 b
 -/
 class IsLocalRing (R : Type*) [Semiring R] : Prop extends Nontrivial R where
   of_is_unit_or_is_unit_of_add_one ::

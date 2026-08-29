@@ -39,8 +39,8 @@ abbreviation IsPrimary
   body: Submodule.IsPrimary I
 
 中文:
-缩写 IsPrimary
-  签名: (I : Ideal R)
+缩写 是准素
+  签名: (I : 理想 R)
   定义体: Submodule.IsPrimary I
 
 Depends on / 依赖: IsPrimary, Submodule, Submodule.IsPrimary
@@ -61,7 +61,7 @@ lemma isPrimary_iff
 
 中文:
 引理 isPrimary_iff
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: by
   rw [IsPrimary]; rw [Submodule.IsPrimary]; rw [forall_comm]
   simp only [mul_comm, mem_radical_iff,
@@ -86,9 +86,9 @@ theorem IsPrime.isPrimary
   ⟨hi.1, fun {_ _} hxy => (hi.mem_or_mem hxy).imp id fun hyi => le_radical hyi⟩
 
 中文:
-定理 IsPrime.isPrimary
-  条件: {I : Ideal R} (hi : IsPrime I)
-  结论: I.IsPrimary
+定理 是素.isPrimary
+  条件: {I : 理想 R} (hi : 是素 I)
+  结论: I.是准素
   证明: isPrimary_iff.mpr
   ⟨hi.1, fun {_ _} hxy => (hi.mem_or_mem hxy).imp id fun hyi => le_radical hyi⟩
 
@@ -109,8 +109,8 @@ theorem isPrime_radical
 
 中文:
 定理 isPrime_radical
-  条件: {I : Ideal R} (hi : I.IsPrimary)
-  结论: IsPrime (radical I)
+  条件: {I : 理想 R} (hi : I.是准素)
+  结论: 是素 (radical I)
   证明: I.colon_univ ▸ hi.isPrime_radical_colon
 
 Depends on / 依赖: I.colon_univ, colon_univ, hi.isPrime_radical_colon, isPrime_radical_colon
@@ -136,7 +136,7 @@ theorem isPrimary_of_isMaximal_radical
 
 中文:
 定理 isPrimary_of_isMaximal_radical
-  条件: {I : Ideal R} (hi : IsMaximal (radical I))
+  条件: {I : 理想 R} (hi : 是极大 (radical I))
   证明: by
   rw [isPrimary_iff]
   constructor
@@ -173,8 +173,8 @@ theorem IsPrimary.inf
   proof: Submodule.IsPrimary.inf hi hj (by simpa)
 
 中文:
-定理 IsPrimary.inf
-  结论: {I J : Ideal R} (hi : I.IsPrimary) (hj : J.IsPrimary)
+定理 是准素.下确界
+  结论: {I J : 理想 R} (hi : I.是准素) (hj : J.是准素)
   证明: Submodule.IsPrimary.inf hi hj (by simpa)
 
 Depends on / 依赖: IsPrimary, Submodule, Submodule.IsPrimary.inf
@@ -196,7 +196,7 @@ alias isPrimary_finset_inf := isPrimary_finsetInf
 
 中文:
 引理 isPrimary_finsetInf
-  结论: {ι} {s : Finset ι} {f : ι -> Ideal R} {i : ι} (hi : i in s)
+  结论: {ι} {s : 有限集 ι} {f : ι -> 理想 R} {i : ι} (hi : i in s)
   证明: Submodule.isPrimary_finsetInf hi hs (by simpa)
 
 @[deprecated (since := "2026-01-19")]
@@ -227,9 +227,9 @@ lemma IsPrimary.comap
   exact h
 
 中文:
-引理 IsPrimary.comap
-  条件: {I : Ideal S} (hI : I.IsPrimary) (φ : R ->+* S)
-  结论: (I.comap φ).IsPrimary
+引理 是准素.comap
+  条件: {I : 理想 S} (hI : I.是准素) (φ : R ->+* S)
+  结论: (I.comap φ).是准素
   证明: by
   rw [isPrimary_iff] at hI ⊢
   refine hI.imp (comap_ne_top φ) fun h => ?_

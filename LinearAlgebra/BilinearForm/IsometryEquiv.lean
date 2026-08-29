@@ -46,8 +46,8 @@ structure IsometryEquiv
     - map_app' : forall n m, B₂ (toFun n) (toFun m) = B₁ n m
 
 中文:
-结构 IsometryEquiv
-  参数: (B₁ : LinearMap.BilinForm R M₁) (B₂ : LinearMap.BilinForm R M₂)
+结构 等距等价
+  参数: (B₁ : 线性映射.BilinForm R M₁) (B₂ : 线性映射.BilinForm R M₂)
   继承: M₁ ≃ₗ[R] M₂
   公理与运算 (1 个):
     - map_app' : 对任意 n m, B₂ (toFun n) (toFun m) = B₁ n m
@@ -66,7 +66,7 @@ definition Equivalent
 
 中文:
 定义 Equivalent
-  签名: (B₁ : LinearMap.BilinForm R M₁) (B₂ : LinearMap.BilinForm R M₂)
+  签名: (B₁ : 线性映射.BilinForm R M₁) (B₂ : 线性映射.BilinForm R M₂)
   定义体: Nonempty (B₁.IsometryEquiv B₂)
 
 Depends on / 依赖: IsometryEquiv, Nonempty
@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (B₁.IsometryEquiv B₂) M₁ M₂
+  签名: 等价状 (B₁.等距等价 B₂) M₁ M₂
   定义体: f.toLinearEquiv
   inv f := f.toLinearEquiv.symm
   left_inv f := f.toLinearEquiv.left_inv
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearEquivClass (B₁.IsometryEquiv B₂) R M₁ M₂
+  签名: LinearEquivClass (B₁.等距等价 B₂) R M₁ M₂
   定义体: map_add f.toLinearEquiv
   map_smulₛₗ f := map_smulₛₗ f.toLinearEquiv
 
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeOut (B₁.IsometryEquiv B₂) (M₁ ≃ₗ[R] M₂)
+  签名: CoeOut (B₁.等距等价 B₂) (M₁ ≃ₗ[R] M₂)
   定义体: ⟨IsometryEquiv.toLinearEquiv⟩
 
 @[simp]
@@ -167,7 +167,7 @@ theorem coe_toLinearEquiv
 
 中文:
 定理 coe_toLinearEquiv
-  条件: (f : B₁.IsometryEquiv B₂)
+  条件: (f : B₁.等距等价 B₂)
   结论: ⇑(f : M₁ ≃ₗ[R] M₂) = f
   证明: rfl
 
@@ -188,7 +188,7 @@ theorem map_app
 
 中文:
 定理 map_app
-  条件: (f : B₁.IsometryEquiv B₂) (m n : M₁)
+  条件: (f : B₁.等距等价 B₂) (m n : M₁)
   结论: B₂ (f n) (f m) = B₁ n m
   证明: f.map_app' n m
 
@@ -209,7 +209,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (B : LinearMap.BilinForm R M)
+  签名: (B : 线性映射.BilinForm R M)
   定义体: { LinearEquiv.refl R M with map_app' := fun _ _ => rfl }
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.refl, map_app
@@ -232,7 +232,7 @@ definition symm
 
 中文:
 定义 symm
-  签名: (f : B₁.IsometryEquiv B₂)
+  签名: (f : B₁.等距等价 B₂)
   定义体: { (f : M₁ ≃ₗ[R] M₂).symm with
     map_app' := by
       intro _ _; rw [← f.map_app]; congr
@@ -259,7 +259,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: (f : B₁.IsometryEquiv B₂) (g : B₂.IsometryEquiv B₃)
+  签名: (f : B₁.等距等价 B₂) (g : B₂.等距等价 B₃)
   定义体: { (f : M₁ ≃ₗ[R] M₂).trans (g : M₂ ≃ₗ[R] M₃) with
     map_app' := by intro n m; rw [← f.map_app, ← g.map_app]; rfl }
 
@@ -282,7 +282,7 @@ definition toIsometry
 
 中文:
 定义 toIsometry
-  签名: (g : B₁.IsometryEquiv B₂)
+  签名: (g : B₁.等距等价 B₂)
   定义体: g x
   __ := g
 -/
@@ -311,7 +311,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: (Q : LinearMap.BilinForm R M)
+  条件: (Q : 线性映射.BilinForm R M)
   结论: Q.Equivalent Q
   证明: ⟨IsometryEquiv.refl Q⟩
 
@@ -384,7 +384,7 @@ definition isometryEquivOfCompLinearEquiv
 
 中文:
 定义 isometryEquivOfCompLinearEquiv
-  签名: (B : LinearMap.BilinForm R M) (f : M₁ ≃ₗ[R] M)
+  签名: (B : 线性映射.BilinForm R M) (f : M₁ ≃ₗ[R] M)
   定义体: { f.symm with
     map_app' := by
       intro _ _

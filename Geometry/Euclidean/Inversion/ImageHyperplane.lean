@@ -209,7 +209,7 @@ theorem mapsTo_inversion_affineSubspace_of_mem
 
 中文:
 定理 mapsTo_inversion_affineSubspace_of_mem
-  条件: {p : AffineSubspace 实数 P} (hp : c in p)
+  条件: {p : 仿射子空间 实数 P} (hp : c in p)
   证明: fun _ => AffineMap.lineMap_mem _ hp
 
 Depends on / 依赖: AffineMap, AffineMap.lineMap_mem, lineMap_mem
@@ -228,7 +228,7 @@ theorem image_inversion_affineSubspace_of_mem
 
 中文:
 定理 image_inversion_affineSubspace_of_mem
-  条件: {p : AffineSubspace 实数 P} (hR : R != 0) (hp : c in p)
+  条件: {p : 仿射子空间 实数 P} (hR : R != 0) (hp : c in p)
   证明: (mapsTo_inversion_affineSubspace_of_mem hp).image_subset.antisymm fun x hx =>
     ⟨inversion c R x, mapsTo_inversion_affineSubspace_of_mem hp hx, inversion_inversion _ hR _⟩
 

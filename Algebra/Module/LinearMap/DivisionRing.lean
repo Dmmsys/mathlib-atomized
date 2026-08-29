@@ -40,7 +40,7 @@ protected alias ⟨_, surjective⟩ := surjective_iff_ne_zero
 
 中文:
 定理 surjective_iff_ne_zero
-  条件: [DivisionSemiring R] [Module R M] {f : M ->ₗ[R] R}
+  条件: [除半环 R] [模 R M] {f : M ->ₗ[R] R}
   证明: by
   refine ⟨ne_zero_of_surjective, fun hf z => ?_⟩
   obtain ⟨y, hy⟩ : exists y, f y != 0 := by simpa [Ne, LinearMap.ext_iff] using hf
@@ -72,7 +72,7 @@ theorem range_smulRight_apply_of_surjective
 
 中文:
 定理 range_smulRight_apply_of_surjective
-  结论: [Semiring R] [Module R M] [Module R M₁]
+  结论: [半环 R] [模 R M] [模 R M₁]
   证明: Submodule.ext fun z => by
   simp_rw [mem_range, smulRight_apply, Submodule.mem_span_singleton]
   refine ⟨fun ⟨w, hw⟩ => ⟨f w, hw ▸ rfl⟩, fun ⟨w, hw⟩ => ?_⟩
@@ -99,7 +99,7 @@ theorem range_smulRight_apply
 
 中文:
 定理 range_smulRight_apply
-  结论: [DivisionSemiring R] [Module R M] [Module R M₁]
+  结论: [除半环 R] [模 R M] [模 R M₁]
   证明: range_smulRight_apply_of_surjective (f.surjective hf) x
 
 Depends on / 依赖: f.surjective, range_smulRight_apply_of_surjective, surjective

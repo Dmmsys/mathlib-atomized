@@ -127,8 +127,8 @@ theorem Subsingleton.conformalAt
   proof: ⟨0, hasFDerivAt_of_subsingleton _ _, isConformalMap_of_subsingleton _⟩
 
 中文:
-定理 Subsingleton.conformalAt
-  条件: [Subsingleton X] (f : X -> Y) (x : X)
+定理 子单例.conformalAt
+  条件: [子单例 X] (f : X -> Y) (x : X)
   结论: ConformalAt f x
   证明: ⟨0, hasFDerivAt_of_subsingleton _ _, isConformalMap_of_subsingleton _⟩
 
@@ -215,7 +215,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: {f g : X -> Y} {x : X} {u : Set X} (hx : x in u) (hu : IsOpen u) (hf : ConformalAt f x)
+  结论: {f g : X -> Y} {x : X} {u : 集合 X} (hx : x in u) (hu : 是开集 u) (hf : ConformalAt f x)
   证明: let ⟨f', hfderiv, hf'⟩ := hf
   ⟨f', hfderiv.congr_of_eventuallyEq ((hu.eventually_mem hx).mono h), hf'⟩
 
@@ -287,7 +287,7 @@ definition Conformal
   body: forall x : X, ConformalAt f x
 
 中文:
-定义 Conformal
+定义 共形
   签名: (f : X -> Y)
   定义体: forall x : X, ConformalAt f x
 
@@ -306,7 +306,7 @@ theorem conformal_id
 
 中文:
 定理 conformal_id
-  结论: Conformal (id : X -> X)
+  结论: 共形 (id : X -> X)
   证明: fun x => conformalAt_id x
 
 Depends on / 依赖: conformalAt_id
@@ -326,7 +326,7 @@ theorem conformal_const_smul
 中文:
 定理 conformal_const_smul
   条件: {c : 实数} (h : c != 0)
-  结论: Conformal fun x : X => c • x
+  结论: 共形 fun x : X => c • x
   证明: fun x =>
   conformalAt_const_smul h x
 -/
@@ -346,7 +346,7 @@ theorem conformalAt
 
 中文:
 定理 conformalAt
-  条件: {f : X -> Y} (h : Conformal f) (x : X)
+  条件: {f : X -> Y} (h : 共形 f) (x : X)
   结论: ConformalAt f x
   证明: h x
 -/
@@ -365,8 +365,8 @@ theorem differentiable
 
 中文:
 定理 differentiable
-  条件: {f : X -> Y} (h : Conformal f)
-  结论: Differentiable 实数 f
+  条件: {f : X -> Y} (h : 共形 f)
+  结论: 可微 实数 f
   证明: fun x =>
   (h x).differentiableAt
 -/
@@ -384,8 +384,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: {f : X -> Y} {g : Y -> Z} (hf : Conformal f) (hg : Conformal g)
-  结论: Conformal (g ∘ f)
+  条件: {f : X -> Y} {g : Y -> Z} (hf : 共形 f) (hg : 共形 g)
+  结论: 共形 (g ∘ f)
   证明: fun x => (hg <| f x).comp x (hf x)
 -/
 theorem comp {f : X -> Y} {g : Y -> Z} (hf : Conformal f) (hg : Conformal g) : Conformal (g ∘ f) :=
@@ -402,8 +402,8 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  条件: {f : X -> Y} (hf : Conformal f) {c : 实数} (hc : c != 0)
-  结论: Conformal (c • f)
+  条件: {f : X -> Y} (hf : 共形 f) {c : 实数} (hc : c != 0)
+  结论: 共形 (c • f)
   证明: fun x => (hf x).const_smul hc
 
 Depends on / 依赖: const_smul

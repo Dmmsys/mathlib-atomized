@@ -53,7 +53,7 @@ abbreviation Basis
   body: List (Real -> Real)
 
 中文:
-缩写 Basis
+缩写 基
   定义体: List (Real -> Real)
 -/
 abbrev Basis := List (Real -> Real)
@@ -70,7 +70,7 @@ definition MultiseriesExpansion
 
 中文:
 定义 MultiseriesExpansion
-  签名: (basis : Basis)
+  签名: (basis : 基)
   定义体: match basis with
   | [] => Real
   | .cons _ basis_tl => Seq (Real × MultiseriesExpansion basis_tl) × (Real -> Real)
@@ -106,7 +106,7 @@ definition Multiseries
 
 中文:
 定义 Multiseries
-  签名: (basis_hd : 实数 -> 实数) (basis_tl : Basis)
+  签名: (basis_hd : 实数 -> 实数) (basis_tl : 基)
   定义体: Seq (Real × MultiseriesExpansion basis_tl)
 
 Depends on / 依赖: MultiseriesExpansion, basis_tl
@@ -183,7 +183,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {basis_hd basis_tl} {motive : Multiseries basis_hd basis_tl -> Sort*}
+  签名: {basis_hd basis_tl} {motive : Multiseries basis_hd basis_tl -> 类型层*}
   定义体: Stream'.Seq.recOn _ nil fun _ _ => cons _ _ _
 
 Depends on / 依赖: Seq.recOn, Stream
@@ -319,9 +319,9 @@ class FriendlyOperationClass
   (no additional axioms)
 
 中文:
-类 FriendlyOperationClass
+类 FriendlyOperation类
   参数: {basis_hd basis_tl} {γ : 类型}
-  继承: Seq.FriendlyOperationClass op
+  继承: 序列.FriendlyOperation类 op
   (无附加公理)
 -/
 class FriendlyOperationClass {basis_hd basis_tl} {γ : Type*}
@@ -339,7 +339,7 @@ theorem FriendlyOperationClass.mk'
   exact ⟨h⟩
 
 中文:
-定理 FriendlyOperationClass.mk'
+定理 FriendlyOperation类.mk'
   结论: {basis_hd basis_tl} {γ : 类型}
   证明: by
   suffices Seq.FriendlyOperationClass op by constructor
@@ -509,7 +509,7 @@ theorem eq_of_bisim
 
 中文:
 定理 eq_of_bisim
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {x y : Multiseries basis_hd basis_tl}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {x y : Multiseries basis_hd basis_tl}
   证明: Seq.eq_of_bisim' motive base (by grind [nil, cons])
 
 Depends on / 依赖: Seq.eq_of_bisim, eq_of_bisim, motive
@@ -532,7 +532,7 @@ theorem eq_of_bisim_strong
 
 中文:
 定理 eq_of_bisim_strong
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: Seq.eq_of_bisim_strong motive base (by grind [nil, cons])
 
 Depends on / 依赖: Seq.eq_of_bisim_strong, eq_of_bisim_strong, motive
@@ -555,7 +555,7 @@ theorem FriendlyOperationClass.FriendlyOperation
   proof: h.friend c
 
 中文:
-定理 FriendlyOperationClass.FriendlyOperation
+定理 FriendlyOperation类.FriendlyOperation
   结论: {basis_hd basis_tl} {γ : 类型}
   证明: h.friend c
 
@@ -762,7 +762,7 @@ theorem FriendlyOperationClass.comp
   constructor
 
 中文:
-定理 FriendlyOperationClass.comp
+定理 FriendlyOperation类.comp
   结论: {basis_hd basis_tl} {γ γ' : 类型}
   证明: by
   have : Seq.FriendlyOperationClass (fun c => op (g c)) := Seq.FriendlyOperationClass.comp _ _
@@ -792,7 +792,7 @@ theorem eq_of_bisim_friend
 
 中文:
 定理 eq_of_bisim_friend
-  结论: {γ : 类型} {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {γ : 类型} {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   apply Seq.FriendlyOperationClass.eq_of_bisim (op := op) motive base
   peel step with x y ih h
@@ -840,7 +840,7 @@ theorem cons_ne_nil
 
 中文:
 定理 cons_ne_nil
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: by
   intro h
   simp only [cons, nil] at h
@@ -869,7 +869,7 @@ theorem nil_ne_cons
 
 中文:
 定理 nil_ne_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: cons_ne_nil.symm
 
 Depends on / 依赖: cons_ne_nil, cons_ne_nil.symm
@@ -893,7 +893,7 @@ theorem cons_eq_cons
 
 中文:
 定理 cons_eq_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp1 exp2 : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp1 exp2 : 实数}
   证明: by
   rw [cons]; rw [cons]; rw [Seq.cons_eq_cons]
   grind
@@ -1054,7 +1054,7 @@ theorem destruct_nil
 
 中文:
 定理 destruct_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   simp [destruct, nil]
 
@@ -1077,7 +1077,7 @@ theorem destruct_cons
 
 中文:
 定理 destruct_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: by
   simp [destruct, cons]
 
@@ -1101,7 +1101,7 @@ theorem destruct_eq_none
 
 中文:
 定理 destruct_eq_none
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {ms : Multiseries basis_hd basis_tl}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {ms : Multiseries basis_hd basis_tl}
   证明: by
   apply Stream'.Seq.destruct_eq_none
   simpa [destruct] using h
@@ -1129,7 +1129,7 @@ theorem destruct_eq_cons
 
 中文:
 定理 destruct_eq_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {ms : Multiseries basis_hd basis_tl}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {ms : Multiseries basis_hd basis_tl}
   证明: by
   apply Stream'.Seq.destruct_eq_cons
   rw [destruct_eq_destruct_map]; rw [h]
@@ -1158,7 +1158,7 @@ theorem head_nil
 
 中文:
 定理 head_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   simp [head, nil]
 -/
@@ -1179,7 +1179,7 @@ theorem head_cons
 
 中文:
 定理 head_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: by
   simp [head, cons]
 -/
@@ -1202,7 +1202,7 @@ theorem tail_nil
 
 中文:
 定理 tail_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   simp [tail, nil]
 -/
@@ -1223,7 +1223,7 @@ theorem tail_cons
 
 中文:
 定理 tail_cons
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: by
   simp [tail, cons]
 -/
@@ -1352,7 +1352,7 @@ theorem notMem_nil
 
 中文:
 定理 notMem_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {x : 实数 × MultiseriesExpansion basis_tl}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {x : 实数 × MultiseriesExpansion basis_tl}
   证明: Seq.notMem_nil _
 
 @[simp]
@@ -1376,7 +1376,7 @@ theorem mem_cons_iff
 
 中文:
 定理 mem_cons_iff
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {exp : 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {exp : 实数}
   证明: Seq.mem_cons_iff
 
 @[simp]
@@ -1403,7 +1403,7 @@ theorem Pairwise_nil
 
 中文:
 定理 Pairwise_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {R}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {R}
   证明: by
   simp [nil]
 
@@ -1425,7 +1425,7 @@ theorem Pairwise_cons_nil
 
 中文:
 定理 Pairwise_cons_nil
-  条件: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {R exp coef}
+  条件: {basis_hd : 实数 -> 实数} {basis_tl : 基} {R exp coef}
   证明: by
   simp [cons, nil]
 -/
@@ -1446,7 +1446,7 @@ definition ofReal
   body: c
 
 中文:
-定义 ofReal
+定义 of实数
   签名: (c : 实数)
   定义体: c
 -/
@@ -1461,7 +1461,7 @@ definition toReal
   body: ms
 
 中文:
-定义 toReal
+定义 to实数
   签名: (ms : MultiseriesExpansion [])
   定义体: ms
 -/
@@ -1496,7 +1496,7 @@ definition toFun
 
 中文:
 定义 toFun
-  签名: {basis : Basis} (ms : MultiseriesExpansion basis)
+  签名: {basis : 基} (ms : MultiseriesExpansion basis)
   定义体: match basis with
   | [] => fun _ => ms.toReal
   | .cons _ _ => ms.2
@@ -1541,7 +1541,7 @@ definition recOn
 
 中文:
 定义 recOn
-  签名: {basis_hd basis_tl} {motive : MultiseriesExpansion (basis_hd :: basis_tl) -> Sort*}
+  签名: {basis_hd basis_tl} {motive : MultiseriesExpansion (basis_hd :: basis_tl) -> 类型层*}
   定义体: by
   let ⟨s, f⟩ := ms
   cases s with
@@ -1707,7 +1707,7 @@ theorem ofReal_toReal
 @[simp]
 
 中文:
-定理 ofReal_toReal
+定理 of实数_to实数
   条件: (x : 实数)
   结论: (of实数 x).to实数 = x
   证明: rfl
@@ -1729,7 +1729,7 @@ theorem toReal_ofReal
 @[simp]
 
 中文:
-定理 toReal_ofReal
+定理 to实数_of实数
   条件: (ms : MultiseriesExpansion [])
   结论: of实数 ms.to实数 = ms
   证明: rfl
@@ -2070,10 +2070,10 @@ inductive Sorted
 
 中文:
 归纳类型 Sorted
-  参数: : {basis : Basis} -> (MultiseriesExpansion basis) -> 命题
+  参数: : {basis : 基} -> (MultiseriesExpansion basis) -> 命题
   构造子 (2 个):
     - const: (ms : MultiseriesExpansion []) : ms.Sorted
-    - seq: {hd} {tl} (ms : MultiseriesExpansion (hd :: tl)) (h_coef : 对任意 x in ms.seq, x.2.Sorted) (h_Pairwise : Seq.Pairwise (· > ·) ms.seq) : ms.Sorted
+    - seq: {hd} {tl} (ms : MultiseriesExpansion (hd :: tl)) (h_coef : 对任意 x in ms.seq, x.2.Sorted) (h_Pairwise : 序列.两两 (· > ·) ms.seq) : ms.Sorted
 -/
 inductive Sorted : {basis : Basis} -> (MultiseriesExpansion basis) -> Prop
 | const (ms : MultiseriesExpansion []) : ms.Sorted
@@ -2718,7 +2718,7 @@ theorem neg_leadingExp_tendsto_zero
 
 中文:
 定理 neg_leadingExp_tendsto_zero
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基}
   证明: by
   cases ms
   · exact Tendsto.congr' h_approx.elim_nil.symm tendsto_const_nhds
@@ -2748,7 +2748,7 @@ theorem nil_tendsto_zero
 
 中文:
 定理 nil_tendsto_zero
-  结论: {basis_hd : 实数 -> 实数} {basis_tl : Basis} {f : 实数 -> 实数}
+  结论: {basis_hd : 实数 -> 实数} {basis_tl : 基} {f : 实数 -> 实数}
   证明: neg_leadingExp_tendsto_zero (by simp) h
 
 Depends on / 依赖: basis_hd, basis_tl

@@ -43,7 +43,7 @@ _ = _ := prod_congr rfl fun i hi => congr_arg _ mulIndicator_of_mem hi f
 
 中文:
 引理 prod_mulIndicator_subset_of_eq_one
-  结论: [One α] (f : ι -> α) (g : ι -> α -> β) {s t : Finset ι}
+  结论: [幺 α] (f : ι -> α) (g : ι -> α -> β) {s t : 有限集 ι}
   证明: by
   calc
     _ = ∏ i in s, g i (mulIndicator ↑s f i) := by rw [prod_subset h fun i _ hn => by simp [hn, hg]]
@@ -74,7 +74,7 @@ lemma prod_mulIndicator_subset
 
 中文:
 引理 prod_mulIndicator_subset
-  条件: (f : ι -> β) {s t : Finset ι} (h : s subseteq t)
+  条件: (f : ι -> β) {s t : 有限集 ι} (h : s subseteq t)
   证明: prod_mulIndicator_subset_of_eq_one _ (fun _ => id) h fun _ => rfl
 
 @[to_additive]
@@ -102,7 +102,7 @@ refine (prod_filter_mul_prod_filter_not s (fun i => g i in t i) _).symm.trans
 
 中文:
 引理 prod_mulIndicator_eq_prod_filter
-  结论: (s : Finset ι) (f : ι -> κ -> β) (t : ι -> Set κ) (g : ι -> κ)
+  结论: (s : 有限集 ι) (f : ι -> κ -> β) (t : ι -> 集合 κ) (g : ι -> κ)
   证明: by
 refine (prod_filter_mul_prod_filter_not s (fun i => g i in t i) _).symm.trans
      Eq.trans (congr_arg₂ (· * ·) ?_ ?_) (mul_one _)
@@ -135,7 +135,7 @@ lemma prod_mulIndicator_eq_prod_inter
 
 中文:
 引理 prod_mulIndicator_eq_prod_inter
-  条件: [DecidableEq ι] (s t : Finset ι) (f : ι -> β)
+  条件: [DecidableEq ι] (s t : 有限集 ι) (f : ι -> β)
   证明: by
   rw [← filter_mem_eq_inter]; rw [prod_mulIndicator_eq_prod_filter]; rfl
 
@@ -160,7 +160,7 @@ lemma mulIndicator_prod
 
 中文:
 引理 mulIndicator_prod
-  条件: (s : Finset ι) (t : Set κ) (f : ι -> κ -> β)
+  条件: (s : 有限集 ι) (t : 集合 κ) (f : ι -> κ -> β)
   证明: map_prod (mulIndicatorHom _ _) _ _
 
 @[to_additive]
@@ -189,7 +189,7 @@ lemma mulIndicator_biUnion
 
 中文:
 引理 mulIndicator_biUnion
-  结论: (s : Finset ι) (t : ι -> Set κ) {f : κ -> β}
+  结论: (s : 有限集 ι) (t : ι -> 集合 κ) {f : κ -> β}
   证明: by
   induction s using Finset.cons_induction with
   | empty => simp
@@ -225,7 +225,7 @@ lemma mulIndicator_biUnion_apply
 
 中文:
 引理 mulIndicator_biUnion_apply
-  结论: (s : Finset ι) (t : ι -> Set κ) {f : κ -> β}
+  结论: (s : 有限集 ι) (t : ι -> 集合 κ) {f : κ -> β}
   证明: by
   rw [mulIndicator_biUnion s t h]
 

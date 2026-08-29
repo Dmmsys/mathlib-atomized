@@ -76,8 +76,8 @@ definition prod
 @[to_additive (attr := simp)]
 
 中文:
-定义 prod
-  签名: [CommMonoid M] (s : Finset ι) (f : ι -> M)
+定义 乘积
+  签名: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
   定义体: (s.1.map f).prod
 
 @[to_additive (attr := simp)]
@@ -98,7 +98,7 @@ theorem prod_mk
 
 中文:
 定理 prod_mk
-  条件: [CommMonoid M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M)
+  条件: [交换幺半群 M] (s : Multiset ι) (hs : s.Nodup) (f : ι -> M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -120,8 +120,8 @@ theorem prod_val
 
 中文:
 定理 prod_val
-  条件: [CommMonoid M] (s : Finset M)
-  结论: s.1.prod = s.prod id
+  条件: [交换幺半群 M] (s : 有限集 M)
+  结论: s.1.乘积 = s.乘积 id
   证明: by
   rw [Finset.prod]; rw [Multiset.map_id]
 
@@ -295,12 +295,12 @@ inductive FinsetResult
 归纳类型 FinsetResult
   参数: where
   构造子 (6 个):
-    - finset: (s : Term)
+    - finset: (s : 项)
     - univ: 
-    - Iio: (n : Term)
-    - Iic: (n : Term)
-    - Ioi: (n : Term)
-    - Ici: (n : Term)
+    - Iio: (n : 项)
+    - Iic: (n : 项)
+    - Ioi: (n : 项)
+    - Ici: (n : 项)
 -/
 private inductive FinsetResult where
   | finset (s : Term)
@@ -325,7 +325,7 @@ structure FinsetFilterResult
   参数: where
   公理与运算 (2 个):
     - finset : FinsetResult
-    - filter : Option Term
+    - filter : 选项类型 项
 -/
 private structure FinsetFilterResult where
   finset : FinsetResult
@@ -445,7 +445,7 @@ theorem prod_eq_multiset_prod
 
 中文:
 定理 prod_eq_multiset_prod
-  条件: [CommMonoid M] (s : Finset ι) (f : ι -> M)
+  条件: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -468,8 +468,8 @@ lemma prod_map_val
 
 中文:
 引理 prod_map_val
-  条件: [CommMonoid M] (s : Finset ι) (f : ι -> M)
-  结论: (s.1.map f).prod = ∏ a in s, f a
+  条件: [交换幺半群 M] (s : 有限集 ι) (f : ι -> M)
+  结论: (s.1.map f).乘积 = ∏ a in s, f a
   证明: rfl
 
 @[simp]
@@ -490,7 +490,7 @@ theorem sum_multiset_singleton
 
 中文:
 定理 sum_multiset_singleton
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: ∑ a in s, {a} = s.val
   证明: by
   simp only [sum_eq_multiset_sum, Multiset.sum_map_singleton]
@@ -514,7 +514,7 @@ theorem map_prod
 
 中文:
 定理 map_prod
-  结论: [CommMonoid M] [CommMonoid N] {G : 类型} [FunLike G M N] [MonoidHomClass G M N]
+  结论: [交换幺半群 M] [交换幺半群 N] {G : 类型} [函数状 G M N] [幺半群态射类 G M N]
   证明: by
   simp only [Finset.prod_eq_multiset_prod, map_multiset_prod, Multiset.map_map]; rfl
 
@@ -563,7 +563,7 @@ theorem prod_empty'
 
 中文:
 定理 prod_empty'
-  结论: Finset.prod (∅ : Finset ι) = fun (_ : ι -> M) => 1
+  结论: 有限集.乘积 (∅ : 有限集 ι) = fun (_ : ι -> M) => 1
   证明: rfl
 
 @[to_additive]
@@ -586,7 +586,7 @@ theorem prod_of_isEmpty
 
 中文:
 定理 prod_of_isEmpty
-  条件: [IsEmpty ι] (s : Finset ι)
+  条件: [是空 ι] (s : 有限集 ι)
   结论: ∏ i in s, f i = 1
   证明: by
   rw [eq_empty_of_isEmpty s]; rw [prod_empty]
@@ -635,7 +635,7 @@ theorem prod_map
 
 中文:
 定理 prod_map
-  条件: (s : Finset ι) (e : ι ↪ κ) (f : κ -> M)
+  条件: (s : 有限集 ι) (e : ι ↪ κ) (f : κ -> M)
   证明: by
   rw [Finset.prod]; rw [Finset.map_val]; rw [Multiset.map_map]; rfl
 
@@ -659,7 +659,7 @@ theorem prod_map'
 
 中文:
 定理 prod_map'
-  条件: (s : Finset ι) (e : ι ↪ κ)
+  条件: (s : 有限集 ι) (e : ι ↪ κ)
   证明: by
   funext f
   simp
@@ -686,8 +686,8 @@ theorem prod_map_toList
 
 中文:
 定理 prod_map_toList
-  条件: (s : Finset ι) (f : ι -> M)
-  结论: (s.toList.map f).prod = s.prod f
+  条件: (s : 有限集 ι) (f : ι -> M)
+  结论: (s.toList.map f).乘积 = s.乘积 f
   证明: by
   rw [Finset.prod]; rw [← Multiset.prod_coe]; rw [← Multiset.map_coe]; rw [Finset.coe_toList]
 
@@ -710,7 +710,7 @@ theorem prod_toList
 
 中文:
 定理 prod_toList
-  条件: {M : 类型} [CommMonoid M] (s : Finset M)
+  条件: {M : 类型} [交换幺半群 M] (s : 有限集 M)
   证明: by
   simpa using! s.prod_map_toList id
 
@@ -736,8 +736,8 @@ theorem _root_.Equiv.Perm.prod_comp
 @[to_additive]
 
 中文:
-定理 _root_.Equiv.Perm.prod_comp
-  结论: (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> M)
+定理 _root_.等价.置换.prod_comp
+  结论: (σ : 等价.置换 ι) (s : 有限集 ι) (f : ι -> M)
   证明: by
   convert! (prod_map s σ.toEmbedding f).symm
   exact (map_perm hs).symm
@@ -763,8 +763,8 @@ theorem _root_.Equiv.Perm.prod_comp'
   rw [Equiv.symm_apply_apply]
 
 中文:
-定理 _root_.Equiv.Perm.prod_comp'
-  结论: (σ : Equiv.Perm ι) (s : Finset ι) (f : ι -> ι -> M)
+定理 _root_.等价.置换.prod_comp'
+  结论: (σ : 等价.置换 ι) (s : 有限集 ι) (f : ι -> ι -> M)
   证明: by
   convert! σ.prod_comp s (fun x => f x (σ.symm x)) hs
   rw [Equiv.symm_apply_apply]
@@ -891,7 +891,7 @@ lemma prod_nbij
 
 中文:
 引理 prod_nbij
-  结论: (i : ι -> κ) (hi : 对任意 a in s, i a in t) (i_inj : (s : Set ι).InjOn i)
+  结论: (i : ι -> κ) (hi : 对任意 a in s, i a in t) (i_inj : (s : 集合 ι).单射限制 i)
   证明: prod_bij (fun a _ => i a) hi i_inj (by simpa using! i_surj) h
 
 Depends on / 依赖: i_inj, i_surj, prod_bij
@@ -982,7 +982,7 @@ lemma prod_bijective
 
 中文:
 引理 prod_bijective
-  结论: (e : ι -> κ) (he : e.Bijective) (hst : 对任意 i, i in s ↔ e i in t)
+  结论: (e : ι -> κ) (he : e.双射) (hst : 对任意 i, i in s ↔ e i in t)
   证明: prod_equiv (.ofBijective e he) hst hfg
 
 Depends on / 依赖: ofBijective, prod_equiv
@@ -1006,7 +1006,7 @@ theorem prod_hom_rel
 
 中文:
 定理 prod_hom_rel
-  结论: [CommMonoid N] {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N} {s : Finset ι}
+  结论: [交换幺半群 N] {r : M -> N -> 命题} {f : ι -> M} {g : ι -> N} {s : 有限集 ι}
   证明: by
   delta Finset.prod
   apply Multiset.prod_hom_rel <;> assumption
@@ -1055,7 +1055,7 @@ theorem prod_ite_index
 
 中文:
 定理 prod_ite_index
-  条件: (p : 命题) [Decidable p] (s t : Finset ι) (f : ι -> M)
+  条件: (p : 命题) [可判定 p] (s t : 有限集 ι) (f : ι -> M)
   证明: apply_ite (fun s => ∏ x in s, f x) _ _ _
 
 @[to_additive (attr := simp)]
@@ -1080,7 +1080,7 @@ theorem prod_ite_irrel
 
 中文:
 定理 prod_ite_irrel
-  条件: (p : 命题) [Decidable p] (s : Finset ι) (f g : ι -> M)
+  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f g : ι -> M)
   证明: by
   split_ifs with h <;> rfl
 
@@ -1106,7 +1106,7 @@ theorem prod_dite_irrel
 
 中文:
 定理 prod_dite_irrel
-  条件: (p : 命题) [Decidable p] (s : Finset ι) (f : p -> ι -> M) (g : ¬p -> ι -> M)
+  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : p -> ι -> M) (g : ¬p -> ι -> M)
   证明: by
   split_ifs with h <;> rfl
 
@@ -1133,7 +1133,7 @@ theorem ite_prod_one
 
 中文:
 定理 ite_prod_one
-  条件: (p : 命题) [Decidable p] (s : Finset ι) (f : ι -> M)
+  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : ι -> M)
   证明: by
   simp only [prod_ite_irrel, prod_const_one]
 
@@ -1159,7 +1159,7 @@ theorem ite_one_prod
 
 中文:
 定理 ite_one_prod
-  条件: (p : 命题) [Decidable p] (s : Finset ι) (f : ι -> M)
+  条件: (p : 命题) [可判定 p] (s : 有限集 ι) (f : ι -> M)
   证明: by
   simp only [prod_ite_irrel, prod_const_one]
 
@@ -1186,7 +1186,7 @@ theorem nonempty_of_prod_ne_one
 中文:
 定理 nonempty_of_prod_ne_one
   条件: (h : ∏ x in s, f x != 1)
-  结论: s.Nonempty
+  结论: s.非空
   证明: s.eq_empty_or_nonempty.elim (fun H => False.elim <| h <| H.symm ▸ prod_empty) id
 
 @[to_additive]
@@ -1229,7 +1229,7 @@ theorem sum_filter_count_eq_countP
 
 中文:
 定理 sum_filter_count_eq_countP
-  条件: [DecidableEq ι] (p : ι -> 命题) [DecidablePred p] (l : List ι)
+  条件: [DecidableEq ι] (p : ι -> 命题) [DecidablePred p] (l : 列表 ι)
   证明: by
   simp [Finset.sum, sum_map_count_dedup_filter_eq_countP p l]
 
@@ -1281,7 +1281,7 @@ theorem prod_induction
 
 中文:
 定理 prod_induction
-  结论: {M : 类型} [CommMonoid M] (f : ι -> M) (p : M -> 命题)
+  结论: {M : 类型} [交换幺半群 M] (f : ι -> M) (p : M -> 命题)
   证明: Multiset.prod_induction _ _ hom unit (Multiset.forall_mem_map_iff.mpr base)
 
 Depends on / 依赖: Multiset, Multiset.forall_mem_map_iff.mpr, Multiset.prod_induction, forall_mem_map_iff, prod_induction
@@ -1308,7 +1308,7 @@ theorem prod_induction_nonempty
 
 中文:
 定理 prod_induction_nonempty
-  结论: {M : 类型} [CommMonoid M] (f : ι -> M) (p : M -> 命题)
+  结论: {M : 类型} [交换幺半群 M] (f : ι -> M) (p : M -> 命题)
   证明: Multiset.prod_induction_nonempty p hom (by simp [nonempty_iff_ne_empty.mp nonempty])
     (Multiset.forall_mem_map_iff.mpr base)
 
@@ -1334,7 +1334,7 @@ theorem prod_pow
 
 中文:
 定理 prod_pow
-  条件: (s : Finset ι) (n : 自然数) (f : ι -> M)
+  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> M)
   结论: ∏ x in s, f x ^ n = (∏ x in s, f x) ^ n
   证明: Multiset.prod_map_pow
 
@@ -1353,7 +1353,7 @@ theorem prod_dvd_prod_of_subset
 
 中文:
 定理 prod_dvd_prod_of_subset
-  结论: {ι M : 类型} [CommMonoid M] (s t : Finset ι) (f : ι -> M)
+  结论: {ι M : 类型} [交换幺半群 M] (s t : 有限集 ι) (f : ι -> M)
   证明: Multiset.prod_dvd_prod_of_le Multiset.map_le_map by simpa
 
 Depends on / 依赖: Multiset, Multiset.map_le_map, Multiset.prod_dvd_prod_of_le, map_le_map, prod_dvd_prod_of_le
@@ -1514,7 +1514,7 @@ theorem prod_zpow
 
 中文:
 定理 prod_zpow
-  条件: (f : ι -> G) (s : Finset ι) (n : 整数)
+  条件: (f : ι -> G) (s : 有限集 ι) (n : 整数)
   结论: ∏ a in s, f a ^ n = (∏ a in s, f a) ^ n
   证明: Multiset.prod_map_zpow
 
@@ -1535,7 +1535,7 @@ theorem sum_nat_mod
 
 中文:
 定理 sum_nat_mod
-  条件: (s : Finset ι) (n : 自然数) (f : ι -> 自然数)
+  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> 自然数)
   证明: (Multiset.sum_nat_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
 
 Depends on / 依赖: Finset, Finset.sum, Multiset, Multiset.map_map, Multiset.sum_nat_mod, map_map, sum_nat_mod
@@ -1554,7 +1554,7 @@ theorem prod_nat_mod
 
 中文:
 定理 prod_nat_mod
-  条件: (s : Finset ι) (n : 自然数) (f : ι -> 自然数)
+  条件: (s : 有限集 ι) (n : 自然数) (f : ι -> 自然数)
   证明: (Multiset.prod_nat_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
 
 Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_map, Multiset.prod_nat_mod, map_map, prod_nat_mod
@@ -1573,7 +1573,7 @@ theorem sum_int_mod
 
 中文:
 定理 sum_int_mod
-  条件: (s : Finset ι) (n : 整数) (f : ι -> 整数)
+  条件: (s : 有限集 ι) (n : 整数) (f : ι -> 整数)
   证明: (Multiset.sum_int_mod _ _).trans by rw [Finset.sum, Multiset.map_map]; rfl
 
 Depends on / 依赖: Finset, Finset.sum, Multiset, Multiset.map_map, Multiset.sum_int_mod, map_map, sum_int_mod
@@ -1592,7 +1592,7 @@ theorem prod_int_mod
 
 中文:
 定理 prod_int_mod
-  条件: (s : Finset ι) (n : 整数) (f : ι -> 整数)
+  条件: (s : 有限集 ι) (n : 整数) (f : ι -> 整数)
   证明: (Multiset.prod_int_mod _ _).trans by rw [Finset.prod, Multiset.map_map]; rfl
 
 Depends on / 依赖: Finset, Finset.prod, Multiset, Multiset.map_map, Multiset.prod_int_mod, map_map, prod_int_mod
@@ -1635,7 +1635,7 @@ alias _root_.Function.Bijective.finset_sum := _root_.Function.Bijective.finsetSu
 
 中文:
 引理 prod_bijective
-  结论: (e : ι -> κ) (he : e.Bijective) (f : ι -> M) (g : κ -> M)
+  结论: (e : ι -> κ) (he : e.双射) (f : ι -> M) (g : κ -> M)
   证明: prod_equiv (.ofBijective e he) (by simp) (by simp [h])
 
 @[to_additive] alias _root_.Function.Bijective.finsetProd := prod_bijective
@@ -1702,8 +1702,8 @@ lemma _root_.Function.Bijective.prod_comp
 @[to_additive]
 
 中文:
-引理 _root_.Function.Bijective.prod_comp
-  条件: {e : ι -> κ} (he : e.Bijective) (g : κ -> M)
+引理 _root_.函数.双射.prod_comp
+  条件: {e : ι -> κ} (he : e.双射) (g : κ -> M)
   证明: prod_bijective _ he _ _ fun _ => rfl
 
 @[to_additive]
@@ -1726,7 +1726,7 @@ lemma _root_.Equiv.prod_comp
 @[to_additive]
 
 中文:
-引理 _root_.Equiv.prod_comp
+引理 _root_.等价.prod_comp
   条件: (e : ι ≃ κ) (g : κ -> M)
   结论: ∏ i, g (e i) = ∏ i, g i
   证明: prod_equiv e _ _ fun _ => rfl
@@ -1750,7 +1750,7 @@ theorem prod_empty
 
 中文:
 定理 prod_empty
-  条件: [IsEmpty ι] (f : ι -> M)
+  条件: [是空 ι] (f : ι -> M)
   结论: ∏ x : ι, f x = 1
   证明: prod_of_isEmpty _
 
@@ -1777,7 +1777,7 @@ lemma prod_attach_univ
 
 中文:
 引理 prod_attach_univ
-  条件: [Fintype ι] (f : {i // i in @univ ι _} -> M)
+  条件: [有限类型 ι] (f : {i // i in @univ ι _} -> M)
   证明: Fintype.prod_equiv (Equiv.subtypeUnivEquiv mem_univ) _ _ by simp
 
 @[to_additive]
@@ -1801,7 +1801,7 @@ theorem prod_erase_attach
 
 中文:
 定理 prod_erase_attach
-  条件: [DecidableEq ι] {s : Finset ι} (f : ι -> M) (i : ↑s)
+  条件: [DecidableEq ι] {s : 有限集 ι} (f : ι -> M) (i : ↑s)
   证明: by
   rw [← Function.Embedding.coe_subtype]; rw [← prod_map]
   simp [attach_map_val]
@@ -1829,7 +1829,7 @@ lemma card_sum
 
 中文:
 引理 card_sum
-  条件: (s : Finset ι) (f : ι -> Multiset α)
+  条件: (s : 有限集 ι) (f : ι -> Multiset α)
   结论: card (∑ i in s, f i) = ∑ i in s, card (f i)
   证明: map_sum cardHom ..
 
@@ -1853,7 +1853,7 @@ theorem disjoint_list_sum_left
 
 中文:
 定理 disjoint_list_sum_left
-  条件: {a : Multiset α} {l : List (Multiset α)}
+  条件: {a : Multiset α} {l : 列表 (Multiset α)}
   证明: by
   induction l with
   | nil =>
@@ -1882,7 +1882,7 @@ theorem disjoint_list_sum_right
 
 中文:
 定理 disjoint_list_sum_right
-  条件: {a : Multiset α} {l : List (Multiset α)}
+  条件: {a : Multiset α} {l : 列表 (Multiset α)}
   证明: by
   simpa only [disjoint_comm (a := a)] using disjoint_list_sum_left
 
@@ -1952,7 +1952,7 @@ theorem disjoint_finsetSum_left
 
 中文:
 定理 disjoint_finsetSum_left
-  条件: {i : Finset ι} {f : ι -> Multiset α} {a : Multiset α}
+  条件: {i : 有限集 ι} {f : ι -> Multiset α} {a : Multiset α}
   证明: by
   convert! @disjoint_sum_left _ a (map f i.val)
   simp
@@ -1981,7 +1981,7 @@ theorem disjoint_finsetSum_right
 
 中文:
 定理 disjoint_finsetSum_right
-  结论: {i : Finset ι} {f : ι -> Multiset α}
+  结论: {i : 有限集 ι} {f : ι -> Multiset α}
   证明: by
   simpa only [disjoint_comm] using disjoint_finsetSum_left
 
@@ -2009,7 +2009,7 @@ theorem count_sum'
 
 中文:
 定理 count_sum'
-  条件: {s : Finset ι} {a : α} {f : ι -> Multiset α}
+  条件: {s : 有限集 ι} {a : α} {f : ι -> Multiset α}
   证明: by
   dsimp only [Finset.sum]
   rw [count_sum]
@@ -2034,7 +2034,7 @@ theorem toFinset_prod_dvd_prod
 
 中文:
 定理 toFinset_prod_dvd_prod
-  条件: [DecidableEq M] [CommMonoid M] (S : Multiset M)
+  条件: [DecidableEq M] [交换幺半群 M] (S : Multiset M)
   证明: by
   rw [Finset.prod_eq_multiset_prod]
   refine Multiset.prod_dvd_prod_of_le ?_
@@ -2060,8 +2060,8 @@ theorem Units.coe_prod
   proof: map_prod (Units.coeHom M) _ _
 
 中文:
-定理 Units.coe_prod
-  条件: [CommMonoid M] (f : α -> Mˣ) (s : Finset α)
+定理 单位群.coe_prod
+  条件: [交换幺半群 M] (f : α -> Mˣ) (s : 有限集 α)
   证明: map_prod (Units.coeHom M) _ _
 
 Depends on / 依赖: Units.coeHom, coeHom, map_prod
@@ -2093,8 +2093,8 @@ theorem ofMul_list_prod
 
 中文:
 定理 ofMul_list_prod
-  条件: (s : List M)
-  结论: ofMul s.prod = (s.map ofMul).sum
+  条件: (s : 列表 M)
+  结论: ofMul s.乘积 = (s.map ofMul).求和
   证明: by simp [ofMul]; rfl
 -/
 theorem ofMul_list_prod (s : List M) : ofMul s.prod = (s.map ofMul).sum := by simp [ofMul]; rfl
@@ -2113,8 +2113,8 @@ theorem toMul_list_sum
 
 中文:
 定理 toMul_list_sum
-  条件: (s : List (Additive M))
-  结论: s.sum.toMul = (s.map toMul).prod
+  条件: (s : 列表 (加性 M))
+  结论: s.求和.toMul = (s.map toMul).乘积
   证明: by
   simp [toMul, ofMul]; rfl
 -/
@@ -2140,8 +2140,8 @@ theorem ofAdd_list_prod
 
 中文:
 定理 ofAdd_list_prod
-  条件: (s : List M)
-  结论: ofAdd s.sum = (s.map ofAdd).prod
+  条件: (s : 列表 M)
+  结论: ofAdd s.求和 = (s.map ofAdd).乘积
   证明: by simp [ofAdd]; rfl
 -/
 theorem ofAdd_list_prod (s : List M) : ofAdd s.sum = (s.map ofAdd).prod := by simp [ofAdd]; rfl
@@ -2160,8 +2160,8 @@ theorem toAdd_list_sum
 
 中文:
 定理 toAdd_list_sum
-  条件: (s : List (Multiplicative M))
-  结论: s.prod.toAdd = (s.map toAdd).sum
+  条件: (s : 列表 (Multiplicative M))
+  结论: s.乘积.toAdd = (s.map toAdd).求和
   证明: by
   simp [toAdd, ofAdd]; rfl
 -/
@@ -2189,7 +2189,7 @@ theorem ofMul_multiset_prod
 中文:
 定理 ofMul_multiset_prod
   条件: (s : Multiset M)
-  结论: ofMul s.prod = (s.map ofMul).sum
+  结论: ofMul s.乘积 = (s.map ofMul).求和
   证明: by
   simp [ofMul]; rfl
 -/
@@ -2212,8 +2212,8 @@ theorem toMul_multiset_sum
 
 中文:
 定理 toMul_multiset_sum
-  条件: (s : Multiset (Additive M))
-  结论: s.sum.toMul = (s.map toMul).prod
+  条件: (s : Multiset (加性 M))
+  结论: s.求和.toMul = (s.map toMul).乘积
   证明: by
   simp [toMul, ofMul]; rfl
 
@@ -2236,7 +2236,7 @@ theorem ofMul_prod
 
 中文:
 定理 ofMul_prod
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: ofMul (∏ i in s, f i) = ∑ i in s, ofMul (f i)
   证明: rfl
 
@@ -2256,7 +2256,7 @@ theorem toMul_sum
 
 中文:
 定理 toMul_sum
-  条件: (s : Finset ι) (f : ι -> Additive M)
+  条件: (s : 有限集 ι) (f : ι -> 加性 M)
   证明: rfl
 -/
 theorem toMul_sum (s : Finset ι) (f : ι -> Additive M) :
@@ -2284,7 +2284,7 @@ theorem ofAdd_multiset_prod
 中文:
 定理 ofAdd_multiset_prod
   条件: (s : Multiset M)
-  结论: ofAdd s.sum = (s.map ofAdd).prod
+  结论: ofAdd s.求和 = (s.map ofAdd).乘积
   证明: by
   simp [ofAdd]; rfl
 -/
@@ -2330,7 +2330,7 @@ theorem ofAdd_sum
 
 中文:
 定理 ofAdd_sum
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: ofAdd (∑ i in s, f i) = ∏ i in s, ofAdd (f i)
   证明: rfl
 
@@ -2350,7 +2350,7 @@ theorem toAdd_prod
 
 中文:
 定理 toAdd_prod
-  条件: (s : Finset ι) (f : ι -> Multiplicative M)
+  条件: (s : 有限集 ι) (f : ι -> Multiplicative M)
   证明: rfl
 -/
 theorem toAdd_prod (s : Finset ι) (f : ι -> Multiplicative M) :

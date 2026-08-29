@@ -34,9 +34,9 @@ structure Polynomial.IsDistinguishedAt
     - monic : f.Monic
 
 中文:
-结构 Polynomial.IsDistinguishedAt
-  参数: (f : R[X]) (I : Ideal R)
-  继承: f.IsWeaklyEisensteinAt I
+结构 多项式.是DistinguishedAt
+  参数: (f : R[X]) (I : 理想 R)
+  继承: f.是WeaklyEisensteinAt I
   公理与运算 (1 个):
     - monic : f.Monic
 -/
@@ -56,7 +56,7 @@ lemma mul
 
 中文:
 引理 mul
-  条件: {f f' : R[X]} {I : Ideal R} (hf : f.IsDistinguishedAt I) (hf' : f'.IsDistinguishedAt I)
+  条件: {f f' : R[X]} {I : 理想 R} (hf : f.是DistinguishedAt I) (hf' : f'.是DistinguishedAt I)
   证明: ⟨hf.toIsWeaklyEisensteinAt.mul hf'.toIsWeaklyEisensteinAt, hf.monic.mul hf'.monic⟩
 
 Depends on / 依赖: hf.monic.mul, hf.toIsWeaklyEisensteinAt.mul, toIsWeaklyEisensteinAt
@@ -81,7 +81,7 @@ lemma map_eq_X_pow
 
 中文:
 引理 map_eq_X_pow
-  条件: {f : R[X]} {I : Ideal R} (distinguish : f.IsDistinguishedAt I)
+  条件: {f : R[X]} {I : 理想 R} (distinguish : f.是DistinguishedAt I)
   证明: by
   ext i
   by_cases ne : i = f.natDegree
@@ -120,7 +120,7 @@ lemma map_ne_zero_of_eq_mul
 
 中文:
 引理 map_ne_zero_of_eq_mul
-  结论: (distinguish : g.IsDistinguishedAt I)
+  结论: (distinguish : g.是DistinguishedAt I)
   证明: fun H => by
   have mapf : f.map (Ideal.Quotient.mk I) = (Polynomial.X ^ g.natDegree : (R ⧸ I)[X]) *
       h.map (Ideal.Quotient.mk I) := by
@@ -152,7 +152,7 @@ lemma degree_eq_coe_lift_order_map
 
 中文:
 引理 degree_eq_coe_lift_order_map
-  结论: (distinguish : g.IsDistinguishedAt I)
+  结论: (distinguish : g.是DistinguishedAt I)
   证明: by
   have : Nontrivial R := _root_.nontrivial_iff.mpr
     ⟨0, PowerSeries.constantCoeff h, ne_of_mem_of_not_mem I.zero_mem notMem⟩
@@ -188,7 +188,7 @@ exact ENat.natCast_lift _ order_finite_iff_ne_zero.2
 
 中文:
 引理 coe_natDegree_eq_order_map
-  结论: (distinguish : g.IsDistinguishedAt I)
+  结论: (distinguish : g.是DistinguishedAt I)
   证明: by
   rw [natDegree]; rw [distinguish.degree_eq_coe_lift_order_map f h notMem eq]
 exact ENat.natCast_lift _ order_finite_iff_ne_zero.2

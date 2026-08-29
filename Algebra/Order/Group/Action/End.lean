@@ -32,7 +32,7 @@ instance applyMulAction
 
 中文:
 实例 applyMulAction
-  签名: : MulAction (r ->r r) α where
+  签名: : 乘法作用 (r ->r r) α where
   定义体: (⇑)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -69,7 +69,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (r ->r r) α where eq_of_smul_eq_smul h
+  签名: : 忠实标量乘法 (r ->r r) α where eq_of_smul_eq_smul h
   定义体: RelHom.ext h
 
 Depends on / 依赖: RelHom, RelHom.ext
@@ -93,7 +93,7 @@ instance applyMulAction
 
 中文:
 实例 applyMulAction
-  签名: : MulAction (r ↪r r) α where
+  签名: : 乘法作用 (r ↪r r) α where
   定义体: (⇑)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -130,7 +130,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (r ↪r r) α where eq_of_smul_eq_smul h
+  签名: : 忠实标量乘法 (r ↪r r) α where eq_of_smul_eq_smul h
   定义体: ext h
 -/
 instance apply_faithfulSMul : FaithfulSMul (r ↪r r) α where eq_of_smul_eq_smul h := ext h
@@ -152,7 +152,7 @@ instance applyMulAction
 
 中文:
 实例 applyMulAction
-  签名: : MulAction (r ≃r r) α where
+  签名: : 乘法作用 (r ≃r r) α where
   定义体: (⇑)
   one_smul _ := rfl
   mul_smul _ _ _ := rfl
@@ -189,7 +189,7 @@ instance apply_faithfulSMul
 
 中文:
 实例 apply_faithfulSMul
-  签名: : FaithfulSMul (r ≃r r) α where eq_of_smul_eq_smul h
+  签名: : 忠实标量乘法 (r ≃r r) α where eq_of_smul_eq_smul h
   定义体: RelIso.ext h
 
 Depends on / 依赖: RelIso, RelIso.ext

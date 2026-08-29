@@ -32,7 +32,7 @@ lemma isIso_iff_isOpenImmersion_and_surjective
 
 中文:
 引理 isIso_iff_isOpenImmersion_and_surjective
-  条件: {X Y : Scheme.{u}} (f : X ⟶ Y)
+  条件: {X Y : 概形.{u}} (f : X ⟶ Y)
   证明: by
   rw [surjective_iff]; rw [← TopCat.epi_iff_surjective]; rw [isIso_iff_isOpenImmersion_and_epi_base]
 
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasAffine命题erty (isomorphisms Scheme) fun X _ f _ => IsAffine X ∧ IsIso (f.appTop)
+  签名: 有AffineProperty (isomorphisms 概形) fun X _ f _ => 是仿射 X ∧ 是同构 (f.appTop)
   定义体: by
   convert! HasAffineProperty.of_isZariskiLocalAtTarget (isomorphisms Scheme) with X Y f hY
   exact ⟨fun ⟨_, _⟩ => (arrow_mk_iso_iff (isomorphisms _) (arrowIsoSpecΓOfIsAffine f)).mpr
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZariskiLocalAtTarget (monomorphisms Scheme)
+  签名: IsZariskiLocalAtTarget (monomorphisms 概形)
   定义体: diagonal_isomorphisms (C := Scheme).symm ▸ inferInstance
 
 Depends on / 依赖: Scheme, diagonal_isomorphisms
@@ -167,7 +167,7 @@ lemma isIso_SpecMap_iff
 
 中文:
 引理 isIso_SpecMap_iff
-  条件: {R S : CommRingCat.{u}} {f : R ⟶ S}
+  条件: {R S : 交换环范畴.{u}} {f : R ⟶ S}
   证明: by
   rw [← ConcreteCategory.isIso_iff_bijective]
   refine ⟨fun h => ?_, fun h => inferInstance⟩

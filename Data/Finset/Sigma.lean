@@ -51,7 +51,7 @@ definition sigma
 
 中文:
 定义 sigma
-  签名: : Finset (Σ i, α i)
+  签名: : 有限集 (Σ i, α i)
   定义体: ⟨_, s.nodup.sigma fun i => (t i).nodup⟩
 -/
 protected def sigma : Finset (Σ i, α i) :=
@@ -97,7 +97,7 @@ theorem coe_sigma
 
 中文:
 定理 coe_sigma
-  条件: (s : Finset ι) (t : 对任意 i, Finset (α i))
+  条件: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: Set.ext fun _ => mem_sigma
 
 @[simp]
@@ -124,7 +124,7 @@ alias ⟨_, Aesop.sigma_nonempty_of_exists_nonempty⟩ := sigma_nonempty
 
 中文:
 定理 sigma_nonempty
-  结论: (s.sigma t).Nonempty ↔ 存在 i in s, (t i).Nonempty
+  结论: (s.sigma t).非空 ↔ 存在 i in s, (t i).非空
   证明: by simp [Finset.Nonempty]
 
 @[aesop safe apply (rule_sets := [finsetNonempty])]
@@ -255,7 +255,7 @@ theorem sigma_eq_biUnion
 
 中文:
 定理 sigma_eq_biUnion
-  条件: [DecidableEq (Σ i, α i)] (s : Finset ι) (t : 对任意 i, Finset (α i))
+  条件: [DecidableEq (Σ i, α i)] (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: by
   ext ⟨x, y⟩
   simp [and_left_comm]
@@ -279,7 +279,7 @@ lemma filter_sigma
 
 中文:
 引理 filter_sigma
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i)) (p : (i : ι) × α i -> 命题)
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i)) (p : (i : ι) × α i -> 命题)
   证明: by
   ext ⟨i, a⟩
   simp [Finset.mem_filter, Finset.mem_sigma, and_assoc]
@@ -302,7 +302,7 @@ lemma filter_sigma'
 
 中文:
 引理 filter_sigma'
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i)) (p : (i : ι) -> α i -> 命题)
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i)) (p : (i : ι) -> α i -> 命题)
   证明: by
   simp [filter_sigma]
 
@@ -329,7 +329,7 @@ le_sup mem_sigma.2 ⟨hi, ha⟩⟩
 
 中文:
 定理 sup_sigma
-  条件: [SemilatticeSup β] [OrderBot β]
+  条件: [SemilatticeSup β] [有底序 β]
   证明: by
   simp only [le_antisymm_iff, Finset.sup_le_iff, mem_sigma, and_imp, Sigma.forall]
   exact
@@ -355,7 +355,7 @@ theorem inf_sigma
 
 中文:
 定理 inf_sigma
-  条件: [SemilatticeInf β] [OrderTop β]
+  条件: [SemilatticeInf β] [有顶序 β]
   证明: @sup_sigma _ _ βᵒᵈ _ _ _ _ _
 
 Depends on / 依赖: sup_sigma
@@ -375,7 +375,7 @@ theorem _root_.biSup_finsetSigma
 
 中文:
 定理 _root_.biSup_finsetSigma
-  结论: [CompleteLattice β] (s : Finset ι) (t : 对任意 i, Finset (α i))
+  结论: [完备格 β] (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: by
   simp_rw [← Finset.iSup_coe, Finset.coe_sigma, biSup_sigma]
 
@@ -395,7 +395,7 @@ theorem _root_.biSup_finsetSigma'
 
 中文:
 定理 _root_.biSup_finsetSigma'
-  结论: [CompleteLattice β] (s : Finset ι) (t : 对任意 i, Finset (α i))
+  结论: [完备格 β] (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: Eq.symm (biSup_finsetSigma _ _ _)
 
 Depends on / 依赖: Eq.symm, biSup_finsetSigma
@@ -414,7 +414,7 @@ theorem _root_.biInf_finsetSigma
 
 中文:
 定理 _root_.biInf_finsetSigma
-  结论: [CompleteLattice β] (s : Finset ι) (t : 对任意 i, Finset (α i))
+  结论: [完备格 β] (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: biSup_finsetSigma (β := βᵒᵈ) _ _ _
 
 Depends on / 依赖: biSup_finsetSigma
@@ -433,7 +433,7 @@ theorem _root_.biInf_finsetSigma'
 
 中文:
 定理 _root_.biInf_finsetSigma'
-  结论: [CompleteLattice β] (s : Finset ι) (t : 对任意 i, Finset (α i))
+  结论: [完备格 β] (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: Eq.symm (biInf_finsetSigma _ _ _)
 
 Depends on / 依赖: Eq.symm, biInf_finsetSigma
@@ -451,8 +451,8 @@ theorem _root_.Set.biUnion_finsetSigma
   proof: biSup_finsetSigma _ _ _
 
 中文:
-定理 _root_.Set.biUnion_finsetSigma
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i))
+定理 _root_.集合.biUnion_finsetSigma
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: biSup_finsetSigma _ _ _
 
 Depends on / 依赖: biSup_finsetSigma
@@ -470,8 +470,8 @@ theorem _root_.Set.biUnion_finsetSigma'
   proof: biSup_finsetSigma' _ _ _
 
 中文:
-定理 _root_.Set.biUnion_finsetSigma'
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i))
+定理 _root_.集合.biUnion_finsetSigma'
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: biSup_finsetSigma' _ _ _
 
 Depends on / 依赖: biSup_finsetSigma
@@ -489,8 +489,8 @@ theorem _root_.Set.biInter_finsetSigma
   proof: biInf_finsetSigma _ _ _
 
 中文:
-定理 _root_.Set.biInter_finsetSigma
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i))
+定理 _root_.集合.bi整数er_finsetSigma
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: biInf_finsetSigma _ _ _
 
 Depends on / 依赖: biInf_finsetSigma
@@ -508,8 +508,8 @@ theorem _root_.Set.biInter_finsetSigma'
   proof: biInf_finsetSigma' _ _ _
 
 中文:
-定理 _root_.Set.biInter_finsetSigma'
-  结论: (s : Finset ι) (t : 对任意 i, Finset (α i))
+定理 _root_.集合.bi整数er_finsetSigma'
+  结论: (s : 有限集 ι) (t : 对任意 i, 有限集 (α i))
   证明: biInf_finsetSigma' _ _ _
 
 Depends on / 依赖: biInf_finsetSigma
@@ -534,7 +534,7 @@ definition sigmaLift
 
 中文:
 定义 sigmaLift
-  签名: (f : 对任意 ⦃i⦄, α i -> β i -> Finset (γ i)) (a : Sigma α) (b : Sigma β)
+  签名: (f : 对任意 ⦃i⦄, α i -> β i -> 有限集 (γ i)) (a : 依赖和类型 α) (b : 依赖和类型 β)
   定义体: dite (a.1 = b.1) (fun h => (f (h ▸ a.2) b.2).map <| Embedding.sigmaMk _) fun _ => ∅
 
 Depends on / 依赖: Embedding, Embedding.sigmaMk, sigmaMk
@@ -562,7 +562,7 @@ theorem mem_sigmaLift
 
 中文:
 定理 mem_sigmaLift
-  结论: (f : 对任意 ⦃i⦄, α i -> β i -> Finset (γ i)) (a : Sigma α) (b : Sigma β)
+  结论: (f : 对任意 ⦃i⦄, α i -> β i -> 有限集 (γ i)) (a : 依赖和类型 α) (b : 依赖和类型 β)
   证明: by
   obtain ⟨⟨i, a⟩, j, b⟩ := a, b
   obtain rfl | h := Decidable.eq_or_ne i j
@@ -609,7 +609,7 @@ theorem mk_mem_sigmaLift
 
 中文:
 定理 mk_mem_sigmaLift
-  结论: (f : 对任意 ⦃i⦄, α i -> β i -> Finset (γ i)) (i : ι) (a : α i) (b : β i)
+  结论: (f : 对任意 ⦃i⦄, α i -> β i -> 有限集 (γ i)) (i : ι) (a : α i) (b : β i)
   证明: by
   rw [sigmaLift]; rw [dif_pos rfl]; rw [mem_map]
   refine ⟨?_, fun hx => ⟨_, hx, rfl⟩⟩
@@ -637,7 +637,7 @@ theorem notMem_sigmaLift_of_ne_left
 
 中文:
 定理 notMem_sigmaLift_of_ne_left
-  结论: (f : 对任意 ⦃i⦄, α i -> β i -> Finset (γ i)) (a : Sigma α)
+  结论: (f : 对任意 ⦃i⦄, α i -> β i -> 有限集 (γ i)) (a : 依赖和类型 α)
   证明: by
   rw [mem_sigmaLift]
   exact fun H => h H.fst
@@ -661,7 +661,7 @@ theorem notMem_sigmaLift_of_ne_right
 
 中文:
 定理 notMem_sigmaLift_of_ne_right
-  结论: (f : 对任意 ⦃i⦄, α i -> β i -> Finset (γ i)) {a : Sigma α}
+  结论: (f : 对任意 ⦃i⦄, α i -> β i -> 有限集 (γ i)) {a : 依赖和类型 α}
   证明: by
   rw [mem_sigmaLift]
   exact fun H => h H.snd.fst

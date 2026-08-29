@@ -89,7 +89,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {σ τ : p.Gal} (h : 对任意 x in p.rootSet p.SplittingField, σ x = τ x)
+  条件: {σ τ : p.Gal} (h : 对任意 x in p.rootSet p.分裂域, σ x = τ x)
   结论: σ = τ
   证明: by
   refine
@@ -155,7 +155,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Fact p.Splits] : Unique p.Gal
+  签名: : Fact p.Splits] : 唯一 p.Gal
   定义体: uniqueGalOfSplits _ h.1
 
 Depends on / 依赖: uniqueGalOfSplits
@@ -174,7 +174,7 @@ instance uniqueGalZero
 
 中文:
 实例 uniqueGalZero
-  签名: : Unique (0 : F[X]).Gal
+  签名: : 唯一 (0 : F[X]).Gal
   定义体: uniqueGalOfSplits _ (by simp)
 
 Depends on / 依赖: uniqueGalOfSplits
@@ -193,7 +193,7 @@ instance uniqueGalOne
 
 中文:
 实例 uniqueGalOne
-  签名: : Unique (1 : F[X]).Gal
+  签名: : 唯一 (1 : F[X]).Gal
   定义体: uniqueGalOfSplits _ Splits.one
 
 Depends on / 依赖: Splits, Splits.one, uniqueGalOfSplits
@@ -231,7 +231,7 @@ instance uniqueGalX
 
 中文:
 实例 uniqueGalX
-  签名: : Unique (X : F[X]).Gal
+  签名: : 唯一 (X : F[X]).Gal
   定义体: uniqueGalOfSplits _ Splits.X
 
 Depends on / 依赖: Splits, Splits.X, uniqueGalOfSplits
@@ -287,7 +287,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Fact ((p.map (algebraMap F E)).Splits)] : Algebra p.SplittingField E
+  签名: : Fact ((p.map (algebraMap F E)).Splits)] : 代数 p.分裂域 E
   定义体: (IsSplittingField.lift p.SplittingField p h.1).toRingHom.toAlgebra
 
 Depends on / 依赖: IsSplittingField, IsSplittingField.lift, SplittingField, p.SplittingField, toAlgebra, toRingHom, toRingHom.toAlgebra
@@ -306,7 +306,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Fact ((p.map (algebraMap F E)).Splits)] : IsScalarTower F p.SplittingField E
+  签名: : Fact ((p.map (algebraMap F E)).Splits)] : 标量塔 F p.分裂域 E
   定义体: IsScalarTower.of_algebraMap_eq fun x =>
     ((IsSplittingField.lift p.SplittingField p h.1).commutes x).symm
 
@@ -350,7 +350,7 @@ theorem restrict_surjective
 
 中文:
 定理 restrict_surjective
-  条件: [Fact ((p.map (algebraMap F E)).Splits)] [Normal F E]
+  条件: [Fact ((p.map (algebraMap F E)).Splits)] [正规 F E]
   证明: AlgEquiv.restrictNormalHom_surjective E
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.restrictNormalHom_surjective, restrictNormalHom_surjective
@@ -451,7 +451,7 @@ instance galActionAux
 
 中文:
 实例 galActionAux
-  签名: : MulAction p.Gal (rootSet p p.SplittingField) where
+  签名: : 乘法作用 p.Gal (rootSet p p.分裂域) where
   定义体: Set.MapsTo.restrict ϕ _ _ rootSet_mapsTo ϕ.toAlgHom
   one_smul _ := by ext; rfl
   mul_smul _ _ _ := by ext; rfl
@@ -536,7 +536,7 @@ lemma galAction_isPretransitive
 
 中文:
 引理 galAction_isPretransitive
-  条件: [Fact ((p.map (algebraMap F E)).Splits)] (hp : Irreducible p)
+  条件: [Fact ((p.map (algebraMap F E)).Splits)] (hp : 不可约 p)
   证明: by
   refine ⟨fun x y => ?_⟩
   have hx := minpoly.eq_of_irreducible hp (mem_rootSet.mp ((rootsEquivRoots p E).symm x).2).2
@@ -721,7 +721,7 @@ theorem restrictDvd_def
 
 中文:
 定理 restrictDvd_def
-  条件: [Decidable (q = 0)] (hpq : p ∣ q)
+  条件: [可判定 (q = 0)] (hpq : p ∣ q)
   证明: by
   unfold restrictDvd
   congr
@@ -804,7 +804,7 @@ theorem restrictProd_injective
 
 中文:
 定理 restrictProd_injective
-  结论: Function.Injective (restrictProd p q)
+  结论: 函数.单射 (restrictProd p q)
   证明: by
   by_cases hpq : p * q = 0
   · have : Unique (p * q).Gal := by rw [hpq]; infer_instance
@@ -1027,8 +1027,8 @@ theorem card_of_separable
 
 中文:
 定理 card_of_separable
-  条件: (hp : p.Separable)
-  结论: 自然数.card p.Gal = finrank F p.SplittingField
+  条件: (hp : p.可分)
+  结论: 自然数.card p.Gal = finrank F p.分裂域
   证明: haveI : IsGalois F p.SplittingField := IsGalois.of_separable_splitting_field hp
   IsGalois.card_aut_eq_finrank F p.SplittingField
 
@@ -1054,7 +1054,7 @@ theorem prime_degree_dvd_card
 
 中文:
 定理 prime_degree_dvd_card
-  条件: [CharZero F] (p_irr : Irreducible p) (p_deg : p.natDegree.Prime)
+  条件: [特征零 F] (p_irr : 不可约 p) (p_deg : p.natDegree.素)
   证明: by
   rw [Gal.card_of_separable p_irr.separable]
   have hp : p.degree != 0 := fun h =>

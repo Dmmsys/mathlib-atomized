@@ -51,7 +51,7 @@ definition toFinset
 
 中文:
 定义 toFinset
-  签名: (s : Set α) [Fintype s]
+  签名: (s : 集合 α) [有限类型 s]
   定义体: (@Finset.univ s _).map Function.Embedding.subtype _
 
 @[congr]
@@ -74,7 +74,7 @@ theorem toFinset_congr
 
 中文:
 定理 toFinset_congr
-  条件: {s t : Set α} [Fintype s] [Fintype t] (h : s = t)
+  条件: {s t : 集合 α} [有限类型 s] [有限类型 t] (h : s = t)
   证明: by subst h; congr!
 
 @[simp, grind =]
@@ -95,7 +95,7 @@ theorem mem_toFinset
 
 中文:
 定理 mem_toFinset
-  条件: {s : Set α} [Fintype s] {a : α}
+  条件: {s : 集合 α} [有限类型 s] {a : α}
   结论: a in s.toFinset ↔ a in s
   证明: by
   simp [toFinset]
@@ -116,7 +116,7 @@ theorem toFinset_ofFinset
 
 中文:
 定理 toFinset_ofFinset
-  条件: {p : Set α} (s : Finset α) (H : 对任意 x, x in s ↔ x in p)
+  条件: {p : 集合 α} (s : 有限集 α) (H : 对任意 x, x in s ↔ x in p)
   证明: Finset.ext fun x => by rw [@mem_toFinset _ _ (id _), H]
 
 Depends on / 依赖: Finset, Finset.ext, mem_toFinset
@@ -137,7 +137,7 @@ definition decidableMemOfFintype
 
 中文:
 定义 decidableMemOfFintype
-  签名: [DecidableEq α] (s : Set α) [Fintype s] (a)
+  签名: [DecidableEq α] (s : 集合 α) [有限类型 s] (a)
   定义体: decidable_of_iff _ mem_toFinset
 
 @[simp]
@@ -161,8 +161,8 @@ theorem coe_toFinset
 
 中文:
 定理 coe_toFinset
-  条件: (s : Set α) [Fintype s]
-  结论: (↑s.toFinset : Set α) = s
+  条件: (s : 集合 α) [有限类型 s]
+  结论: (↑s.toFinset : 集合 α) = s
   证明: Set.ext fun _ => mem_toFinset
 
 @[simp]
@@ -190,8 +190,8 @@ alias ⟨_, Aesop.toFinset_nonempty_of_nonempty⟩ := toFinset_nonempty
 
 中文:
 定理 toFinset_nonempty
-  条件: {s : Set α} [Fintype s]
-  结论: s.toFinset.Nonempty ↔ s.Nonempty
+  条件: {s : 集合 α} [有限类型 s]
+  结论: s.toFinset.非空 ↔ s.非空
   证明: by
   rw [← Finset.coe_nonempty]; rw [coe_toFinset]
 
@@ -222,7 +222,7 @@ theorem toFinset_inj
 
 中文:
 定理 toFinset_inj
-  条件: {s t : Set α} [Fintype s] [Fintype t]
+  条件: {s t : 集合 α} [有限类型 s] [有限类型 t]
   结论: s.toFinset = t.toFinset ↔ s = t
   证明: ⟨fun h => by rw [← s.coe_toFinset, h, t.coe_toFinset], fun h => by simp [h]⟩
 
@@ -248,7 +248,7 @@ theorem toFinset_subset_toFinset
 
 中文:
 定理 toFinset_subset_toFinset
-  条件: [Fintype s] [Fintype t]
+  条件: [有限类型 s] [有限类型 t]
   结论: s.toFinset subseteq t.toFinset ↔ s subseteq t
   证明: by
   simp [Finset.subset_iff, Set.subset_def]
@@ -275,7 +275,7 @@ theorem toFinset_ssubset
 
 中文:
 定理 toFinset_ssubset
-  条件: [Fintype s] {t : Finset α}
+  条件: [有限类型 s] {t : 有限集 α}
   结论: s.toFinset ⊂ t ↔ s ⊂ t
   证明: by
   rw [← Finset.coe_ssubset]; rw [coe_toFinset]
@@ -302,7 +302,7 @@ theorem subset_toFinset
 
 中文:
 定理 subset_toFinset
-  条件: {s : Finset α} [Fintype t]
+  条件: {s : 有限集 α} [有限类型 t]
   结论: s subseteq t.toFinset ↔ ↑s subseteq t
   证明: by
   rw [← Finset.coe_subset]; rw [coe_toFinset]
@@ -329,7 +329,7 @@ theorem ssubset_toFinset
 
 中文:
 定理 ssubset_toFinset
-  条件: {s : Finset α} [Fintype t]
+  条件: {s : 有限集 α} [有限类型 t]
   结论: s ⊂ t.toFinset ↔ ↑s ⊂ t
   证明: by
   rw [← Finset.coe_ssubset]; rw [coe_toFinset]
@@ -356,7 +356,7 @@ theorem toFinset_ssubset_toFinset
 
 中文:
 定理 toFinset_ssubset_toFinset
-  条件: [Fintype s] [Fintype t]
+  条件: [有限类型 s] [有限类型 t]
   结论: s.toFinset ⊂ t.toFinset ↔ s ⊂ t
   证明: by
   simp only [Finset.ssubset_def, toFinset_subset_toFinset, ssubset_def]
@@ -388,7 +388,7 @@ alias ⟨_, toFinset_strict_mono⟩ := toFinset_ssubset_toFinset
 
 中文:
 定理 toFinset_subset
-  条件: [Fintype s] {t : Finset α}
+  条件: [有限类型 s] {t : 有限集 α}
   结论: s.toFinset subseteq t ↔ s subseteq t
   证明: by
   rw [← Finset.coe_subset]; rw [coe_toFinset]
@@ -423,7 +423,7 @@ theorem disjoint_toFinset
 
 中文:
 定理 disjoint_toFinset
-  条件: [Fintype s] [Fintype t]
+  条件: [有限类型 s] [有限类型 t]
   证明: by simp only [← disjoint_coe, coe_toFinset]
 
 @[simp]
@@ -446,8 +446,8 @@ theorem toFinset_nontrivial
 
 中文:
 定理 toFinset_nontrivial
-  条件: [Fintype s]
-  结论: s.toFinset.Nontrivial ↔ s.Nontrivial
+  条件: [有限类型 s]
+  结论: s.toFinset.非平凡 ↔ s.非平凡
   证明: by
   rw [Finset.Nontrivial]; rw [coe_toFinset]
 
@@ -468,8 +468,8 @@ theorem subsingleton_toFinset_iff
 
 中文:
 定理 subsingleton_toFinset_iff
-  条件: [Fintype s]
-  结论: Subsingleton s.toFinset ↔ s.Subsingleton
+  条件: [有限类型 s]
+  结论: 子单例 s.toFinset ↔ s.子单例
   证明: by
   simp
 -/
@@ -496,7 +496,7 @@ theorem toFinset_inter
 
 中文:
 定理 toFinset_inter
-  条件: [Fintype (s inter t : Set _)]
+  条件: [有限类型 (s inter t : 集合 _)]
   结论: (s inter t).toFinset = s.toFinset inter t.toFinset
   证明: by
   ext
@@ -524,7 +524,7 @@ theorem toFinset_union
 
 中文:
 定理 toFinset_union
-  条件: [Fintype (s union t : Set _)]
+  条件: [有限类型 (s union t : 集合 _)]
   结论: (s union t).toFinset = s.toFinset union t.toFinset
   证明: by
   ext
@@ -552,7 +552,7 @@ theorem toFinset_sdiff
 
 中文:
 定理 toFinset_sdiff
-  条件: [Fintype (s \ t : Set _)]
+  条件: [有限类型 (s \ t : 集合 _)]
   结论: (s \ t).toFinset = s.toFinset \ t.toFinset
   证明: by
   ext
@@ -582,7 +582,7 @@ theorem toFinset_symmDiff
 
 中文:
 定理 toFinset_symmDiff
-  条件: [Fintype (s ∆ t : Set _)]
+  条件: [有限类型 (s ∆ t : 集合 _)]
   证明: by
   ext
   simp [mem_symmDiff, Finset.mem_symmDiff]
@@ -610,7 +610,7 @@ theorem toFinset_compl
 
 中文:
 定理 toFinset_compl
-  条件: [Fintype α] [Fintype (sᶜ : Set _)]
+  条件: [有限类型 α] [有限类型 (sᶜ : 集合 _)]
   结论: sᶜ.toFinset = s.toFinsetᶜ
   证明: by
   ext
@@ -638,8 +638,8 @@ theorem toFinset_empty
 
 中文:
 定理 toFinset_empty
-  条件: [Fintype (∅ : Set α)]
-  结论: (∅ : Set α).toFinset = ∅
+  条件: [有限类型 (∅ : 集合 α)]
+  结论: (∅ : 集合 α).toFinset = ∅
   证明: by
   ext
   simp
@@ -665,7 +665,7 @@ theorem toFinset_univ
 
 中文:
 定理 toFinset_univ
-  条件: [Fintype α] [Fintype (Set.univ : Set α)]
+  条件: [有限类型 α] [有限类型 (集合.univ : 集合 α)]
   证明: by
   ext
   simp
@@ -693,7 +693,7 @@ theorem toFinset_eq_empty
 
 中文:
 定理 toFinset_eq_empty
-  条件: [Fintype s]
+  条件: [有限类型 s]
   结论: s.toFinset = ∅ ↔ s = ∅
   证明: by
   let A : Fintype (∅ : Set α) := Fintype.ofIsEmpty
@@ -722,8 +722,8 @@ theorem toFinset_eq_univ
 
 中文:
 定理 toFinset_eq_univ
-  条件: [Fintype α] [Fintype s]
-  结论: s.toFinset = Finset.univ ↔ s = univ
+  条件: [有限类型 α] [有限类型 s]
+  结论: s.toFinset = 有限集.univ ↔ s = univ
   证明: by
   rw [← coe_inj]; rw [coe_toFinset]; rw [coe_univ]
 
@@ -749,7 +749,7 @@ theorem toFinset_ofPred
 
 中文:
 定理 toFinset_ofPred
-  条件: [Fintype α] (p : α -> 命题) [DecidablePred p] [Fintype { x | p x }]
+  条件: [有限类型 α] (p : α -> 命题) [DecidablePred p] [有限类型 { x | p x }]
   证明: by
   ext
   simp
@@ -775,7 +775,7 @@ theorem toFinset_ssubset_univ
 
 中文:
 定理 toFinset_ssubset_univ
-  条件: [Fintype α] {s : Set α} [Fintype s]
+  条件: [有限类型 α] {s : 集合 α} [有限类型 s]
   证明: by simp
 
 @[simp]
@@ -796,7 +796,7 @@ theorem toFinset_image
 
 中文:
 定理 toFinset_image
-  条件: [DecidableEq β] (f : α -> β) (s : Set α) [Fintype s] [Fintype (f '' s)]
+  条件: [DecidableEq β] (f : α -> β) (s : 集合 α) [有限类型 s] [有限类型 (f '' s)]
   证明: Finset.coe_injective by simp
 
 @[simp]
@@ -822,7 +822,7 @@ theorem toFinset_range
 
 中文:
 定理 toFinset_range
-  条件: [DecidableEq α] [Fintype β] (f : β -> α) [Fintype (Set.range f)]
+  条件: [DecidableEq α] [有限类型 β] (f : β -> α) [有限类型 (集合.range f)]
   证明: by
   ext
   simp
@@ -850,8 +850,8 @@ theorem toFinset_singleton
 
 中文:
 定理 toFinset_singleton
-  条件: (a : α) [Fintype ({a} : Set α)]
-  结论: ({a} : Set α).toFinset = {a}
+  条件: (a : α) [有限类型 ({a} : 集合 α)]
+  结论: ({a} : 集合 α).toFinset = {a}
   证明: by
   ext
   simp
@@ -875,7 +875,7 @@ theorem toFinset_insert
 
 中文:
 定理 toFinset_insert
-  结论: [DecidableEq α] {a : α} {s : Set α} [Fintype (insert a s : Set α)]
+  结论: [DecidableEq α] {a : α} {s : 集合 α} [有限类型 (insert a s : 集合 α)]
   证明: by
   ext
   simp
@@ -897,7 +897,7 @@ theorem filter_mem_univ_eq_toFinset
 
 中文:
 定理 filter_mem_univ_eq_toFinset
-  条件: [Fintype α] (s : Set α) [Fintype s] [DecidablePred (· in s)]
+  条件: [有限类型 α] (s : 集合 α) [有限类型 s] [DecidablePred (· in s)]
   证明: by
   ext
   rw [mem_filter_univ]; rw [mem_toFinset]
@@ -922,9 +922,9 @@ theorem Finset.toFinset_coe
   proof: ext fun _ => Set.mem_toFinset
 
 中文:
-定理 Finset.toFinset_coe
-  条件: (s : Finset α) [Fintype (s : Set α)]
-  结论: (s : Set α).toFinset = s
+定理 有限集.toFinset_coe
+  条件: (s : 有限集 α) [有限类型 (s : 集合 α)]
+  结论: (s : 集合 α).toFinset = s
   证明: ext fun _ => Set.mem_toFinset
 
 Depends on / 依赖: Set.mem_toFinset, mem_toFinset
@@ -947,8 +947,8 @@ instance Finset.fintypeCoeSort
 @[simp]
 
 中文:
-实例 Finset.fintypeCoeSort
-  签名: {α : 类型u} (s : Finset α)
+实例 有限集.fintypeCoeSort
+  签名: {α : 类型u} (s : 有限集 α)
   定义体: ⟨s.attach, s.mem_attach⟩
 
 @[simp]
@@ -969,9 +969,9 @@ theorem Finset.univ_eq_attach
   proof: rfl
 
 中文:
-定理 Finset.univ_eq_attach
-  条件: {α : 类型u} (s : Finset α)
-  结论: (univ : Finset s) = s.attach
+定理 有限集.univ_eq_attach
+  条件: {α : 类型u} (s : 有限集 α)
+  结论: (univ : 有限集 s) = s.attach
   证明: rfl
 -/
 theorem Finset.univ_eq_attach {α : Type u} (s : Finset α) : (univ : Finset s) = s.attach :=
@@ -989,8 +989,8 @@ theorem Fintype.coe_image_univ
   simp
 
 中文:
-定理 Fintype.coe_image_univ
-  条件: [Fintype α] [DecidableEq β] {f : α -> β}
+定理 有限类型.coe_image_univ
+  条件: [有限类型 α] [DecidableEq β] {f : α -> β}
   证明: by
   simp
 -/
@@ -1007,8 +1007,8 @@ instance List.Subtype.fintype
   body: Fintype.ofList l.attach l.mem_attach
 
 中文:
-实例 List.Subtype.fintype
-  签名: [DecidableEq α] (l : List α)
+实例 列表.子类型.fintype
+  签名: [DecidableEq α] (l : 列表 α)
   定义体: Fintype.ofList l.attach l.mem_attach
 
 Depends on / 依赖: Fintype, Fintype.ofList, attach, l.attach, l.mem_attach, mem_attach, ofList
@@ -1025,7 +1025,7 @@ instance Multiset.Subtype.fintype
   body: Fintype.ofMultiset s.attach s.mem_attach
 
 中文:
-实例 Multiset.Subtype.fintype
+实例 Multiset.子类型.fintype
   签名: [DecidableEq α] (s : Multiset α)
   定义体: Fintype.ofMultiset s.attach s.mem_attach
 
@@ -1043,8 +1043,8 @@ instance Finset.Subtype.fintype
   body: ⟨s.attach, s.mem_attach⟩
 
 中文:
-实例 Finset.Subtype.fintype
-  签名: (s : Finset α)
+实例 有限集.子类型.fintype
+  签名: (s : 有限集 α)
   定义体: ⟨s.attach, s.mem_attach⟩
 
 Depends on / 依赖: attach, mem_attach, s.attach, s.mem_attach
@@ -1062,7 +1062,7 @@ instance FinsetCoe.fintype
 
 中文:
 实例 FinsetCoe.fintype
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: Finset.Subtype.fintype s
 
 Depends on / 依赖: Finset, Finset.Subtype.fintype, Subtype, fintype
@@ -1080,9 +1080,9 @@ theorem Finset.attach_eq_univ
   proof: rfl
 
 中文:
-定理 Finset.attach_eq_univ
-  条件: {s : Finset α}
-  结论: s.attach = Finset.univ
+定理 有限集.attach_eq_univ
+  条件: {s : 有限集 α}
+  结论: s.attach = 有限集.univ
   证明: rfl
 -/
 theorem Finset.attach_eq_univ {s : Finset α} : s.attach = Finset.univ :=
@@ -1100,8 +1100,8 @@ instance Prop.fintype
 @[simp]
 
 中文:
-实例 Prop.fintype
-  签名: : Fintype 命题
+实例 命题.fintype
+  签名: : 有限类型 命题
   定义体: ⟨⟨{True, False}, by simp⟩, by simpa using em⟩
 
 @[simp]
@@ -1119,8 +1119,8 @@ theorem Fintype.univ_Prop
   proof: Finset.eq_of_veq by simp; rfl
 
 中文:
-定理 Fintype.univ_Prop
-  结论: (Finset.univ : Finset 命题) = {True, False}
+定理 有限类型.univ_Prop
+  结论: (有限集.univ : 有限集 命题) = {真, 假}
   证明: Finset.eq_of_veq by simp; rfl
 
 Depends on / 依赖: Finset, Finset.eq_of_veq, eq_of_veq
@@ -1137,8 +1137,8 @@ instance Subtype.fintype
   body: Fintype.subtype (univ.filter p) (by simp)
 
 中文:
-实例 Subtype.fintype
-  签名: (p : α -> 命题) [DecidablePred p] [Fintype α]
+实例 子类型.fintype
+  签名: (p : α -> 命题) [DecidablePred p] [有限类型 α]
   定义体: Fintype.subtype (univ.filter p) (by simp)
 
 Depends on / 依赖: Fintype, Fintype.subtype, filter, subtype, univ.filter
@@ -1158,7 +1158,7 @@ definition setFintype
 
 中文:
 定义 setFintype
-  签名: [Fintype α] (s : Set α) [DecidablePred (· in s)]
+  签名: [有限类型 α] (s : 集合 α) [DecidablePred (· in s)]
   定义体: Subtype.fintype fun x => x in s
 
 Depends on / 依赖: Subtype, Subtype.fintype, fintype
@@ -1182,7 +1182,7 @@ definition finsetEquivSet
 
 中文:
 定义 finsetEquivSet
-  签名: : Finset α ≃ Set α where
+  签名: : 有限集 α ≃ 集合 α where
   定义体: (↑)
   invFun := by classical exact fun s => s.toFinset
   left_inv s := by convert! Finset.toFinset_coe s
@@ -1204,7 +1204,7 @@ lemma coe_finsetEquivSet
 
 中文:
 引理 coe_finsetEquivSet
-  结论: ⇑finsetEquivSet = ((↑) : Finset α -> Set α)
+  结论: ⇑finsetEquivSet = ((↑) : 有限集 α -> 集合 α)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_finsetEquivSet : ⇑finsetEquivSet = ((↑) : Finset α -> Set α) := rfl
@@ -1220,7 +1220,7 @@ lemma finsetEquivSet_apply
 
 中文:
 引理 finsetEquivSet_apply
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: finsetEquivSet s = s
   证明: rfl
 -/
@@ -1237,7 +1237,7 @@ lemma finsetEquivSet_symm_apply
 
 中文:
 引理 finsetEquivSet_symm_apply
-  条件: (s : Set α) [Fintype s]
+  条件: (s : 集合 α) [有限类型 s]
   证明: by simp [finsetEquivSet]
 -/
 @[simp] lemma finsetEquivSet_symm_apply (s : Set α) [Fintype s] :
@@ -1259,7 +1259,7 @@ definition finsetOrderIsoSet
 
 中文:
 定义 finsetOrderIsoSet
-  签名: : Finset α ≃o Set α where
+  签名: : 有限集 α ≃o 集合 α where
   定义体: finsetEquivSet
   map_rel_iff' := Finset.coe_subset
 
@@ -1282,7 +1282,7 @@ lemma coe_finsetOrderIsoSet
 
 中文:
 引理 coe_finsetOrderIsoSet
-  结论: ⇑finsetOrderIsoSet = ((↑) : Finset α -> Set α)
+  结论: ⇑finsetOrderIsoSet = ((↑) : 有限集 α -> 集合 α)
   证明: rfl
 -/
 lemma coe_finsetOrderIsoSet : ⇑finsetOrderIsoSet = ((↑) : Finset α -> Set α) := rfl
@@ -1313,7 +1313,7 @@ theorem mem_image_univ_iff_mem_range
 
 中文:
 定理 mem_image_univ_iff_mem_range
-  结论: {α β : 类型} [Fintype α] [DecidableEq β] {f : α -> β}
+  结论: {α β : 类型} [有限类型 α] [DecidableEq β] {f : α -> β}
   证明: by simp
 -/
 theorem mem_image_univ_iff_mem_range {α β : Type*} [Fintype α] [DecidableEq β] {f : α -> β}

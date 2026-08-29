@@ -63,7 +63,7 @@ definition support
 
 中文:
 定义 support
-  签名: (μ : Measure X)
+  签名: (μ : 测度 X)
   定义体: {x : X | existsᶠ u in (𝓝 x).smallSets, 0 < μ u}
 -/
 protected def support (μ : Measure X) : Set X := {x : X | existsᶠ u in (𝓝 x).smallSets, 0 < μ u}
@@ -79,8 +79,8 @@ theorem _root_.Filter.HasBasis.mem_measureSupport
   proof: hl.frequently_smallSets pos_mono
 
 中文:
-定理 _root_.Filter.HasBasis.mem_measureSupport
-  结论: {ι : Sort*} {p : ι -> 命题}
+定理 _root_.滤子.有基.mem_measureSupport
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: hl.frequently_smallSets pos_mono
 
 Depends on / 依赖: frequently_smallSets, hl.frequently_smallSets, pos_mono
@@ -120,7 +120,7 @@ lemma mem_support_iff_forall
   proof: (𝓝 x).basis_sets.mem_measureSupport
 
 中文:
-引理 mem_support_iff_forall
+引理 mem_support_iff_对任意
   条件: (x : X)
   结论: x in μ.support ↔ 对任意 U in 𝓝 x, 0 < μ U
   证明: (𝓝 x).basis_sets.mem_measureSupport
@@ -142,8 +142,8 @@ lemma support_eq_univ
 
 中文:
 引理 support_eq_univ
-  条件: [μ.IsOpenPosMeasure]
-  结论: μ.support = Set.univ
+  条件: [μ.是OpenPosMeasure]
+  结论: μ.support = 集合.univ
   证明: by
   simpa [Set.eq_univ_iff_forall, mem_support_iff_forall] using fun _ _ => μ.measure_pos_of_mem_nhds
 
@@ -162,7 +162,7 @@ lemma AbsolutelyContinuous.support_mono
 
 中文:
 引理 AbsolutelyContinuous.support_mono
-  条件: {μ ν : Measure X} (hμν : μ ≪ ν)
+  条件: {μ ν : 测度 X} (hμν : μ ≪ ν)
   证明: fun _ hx => hx.mp .of_forall hμν.pos_mono
 
 Depends on / 依赖: hx.mp, of_forall, pos_mono
@@ -182,7 +182,7 @@ lemma support_mono
 
 中文:
 引理 support_mono
-  条件: {ν : Measure X} (h : μ <= ν)
+  条件: {ν : 测度 X} (h : μ <= ν)
   结论: μ.support subseteq ν.support
   证明: h.absolutelyContinuous.support_mono
 
@@ -225,8 +225,8 @@ theorem _root_.Filter.HasBasis.notMem_measureSupport
 @[simp]
 
 中文:
-定理 _root_.Filter.HasBasis.notMem_measureSupport
-  结论: {ι : Sort*} {p : ι -> 命题}
+定理 _root_.滤子.有基.notMem_measureSupport
+  结论: {ι : 类型层*} {p : ι -> 命题}
   证明: by
   simp [hl.mem_measureSupport]
 
@@ -250,7 +250,7 @@ lemma support_zero
 
 中文:
 引理 support_zero
-  结论: (0 : Measure X).support = ∅
+  结论: (0 : 测度 X).support = ∅
   证明: by simp [Measure.support]
 
 Depends on / 依赖: Measure, Measure.support, support
@@ -269,7 +269,7 @@ lemma support_add
 
 中文:
 引理 support_add
-  条件: (μ ν : Measure X)
+  条件: (μ ν : 测度 X)
   结论: (μ + ν).support = μ.support union ν.support
   证明: by
   ext; simp [mem_support_iff]
@@ -290,7 +290,7 @@ lemma notMem_support_iff_exists
   simp [mem_support_iff_forall]
 
 中文:
-引理 notMem_support_iff_exists
+引理 notMem_support_iff_存在
   条件: {x : X}
   结论: x ∉ μ.support ↔ 存在 U in 𝓝 x, μ U = 0
   证明: by
@@ -311,7 +311,7 @@ lemma support_eq_forall_isOpen
   simp [Set.ext_iff, nhds_basis_opens _ |>.mem_measureSupport]
 
 中文:
-引理 support_eq_forall_isOpen
+引理 support_eq_对任意_isOpen
   结论: μ.support =
   证明: by
   simp [Set.ext_iff, nhds_basis_opens _ |>.mem_measureSupport]
@@ -336,8 +336,8 @@ lemma isClosed_support
 
 中文:
 引理 isClosed_support
-  条件: {μ : Measure X}
-  结论: IsClosed μ.support
+  条件: {μ : 测度 X}
+  结论: 是闭集 μ.support
   证明: by
   simp_rw [isClosed_iff_frequently, nhds_basis_opens _ |>.mem_measureSupport,
 .frequently_iff] nhds_basis_opens _
@@ -361,8 +361,8 @@ lemma isOpen_compl_support
 
 中文:
 引理 isOpen_compl_support
-  条件: {μ : Measure X}
-  结论: IsOpen μ.supportᶜ
+  条件: {μ : 测度 X}
+  结论: 是开集 μ.supportᶜ
   证明: isOpen_compl_iff.mpr μ.isClosed_support
 
 Depends on / 依赖: isClosed_support, isOpen_compl_iff, isOpen_compl_iff.mpr
@@ -380,7 +380,7 @@ lemma subset_compl_support_of_isOpen
 
 中文:
 引理 subset_compl_support_of_isOpen
-  条件: {t : Set X} (ht : IsOpen t) (h : μ t = 0)
+  条件: {t : 集合 X} (ht : 是开集 t) (h : μ t = 0)
   证明: fun _ hx => notMem_support_iff_exists.mpr ⟨t, ht.mem_nhds hx, h⟩
 
 Depends on / 依赖: Fintype, Fintype.toBoundedOrder, ht.mem_nhds, mem_nhds, notMem_support_iff_exists, notMem_support_iff_exists.mpr, toBoundedOrder
@@ -399,7 +399,7 @@ lemma support_subset_of_isClosed
 
 中文:
 引理 support_subset_of_isClosed
-  条件: {t : Set X} (ht : IsClosed t) (h : t in ae μ)
+  条件: {t : 集合 X} (ht : 是闭集 t) (h : t in ae μ)
   证明: Set.compl_subset_compl.mp subset_compl_support_of_isOpen ht.isOpen_compl h
 
 Depends on / 依赖: Set.compl_subset_compl.mp, compl_subset_compl, ht.isOpen_compl, isOpen_compl, subset_compl_support_of_isOpen
@@ -421,7 +421,7 @@ lemma compl_support_eq_sUnion
 
 中文:
 引理 compl_support_eq_sUnion
-  结论: μ.supportᶜ = ⋃₀ {t : Set X | IsOpen t ∧ μ t = 0}
+  结论: μ.supportᶜ = ⋃₀ {t : 集合 X | 是开集 t ∧ μ t = 0}
   证明: by
   ext x
   simp only [Set.mem_compl_iff, Set.mem_sUnion, Set.mem_ofPred_eq, and_right_comm,
@@ -445,8 +445,8 @@ lemma support_eq_sInter
   all_goals simp [Set.compl_sUnion, compl_involutive.image_eq_preimage_symm]
 
 中文:
-引理 support_eq_sInter
-  结论: μ.support = ⋂₀ {t : Set X | IsClosed t ∧ μ tᶜ = 0}
+引理 support_eq_s整数er
+  结论: μ.support = ⋂₀ {t : 集合 X | 是闭集 t ∧ μ tᶜ = 0}
   证明: by
   convert! congr($(compl_support_eq_sUnion (μ := μ))ᶜ)
   all_goals simp [Set.compl_sUnion, compl_involutive.image_eq_preimage_symm]
@@ -475,7 +475,7 @@ lemma measure_eq_zero_of_isCompact_subset_compl_support
 
 中文:
 引理 measure_eq_zero_of_isCompact_subset_compl_support
-  结论: {K : Set X} (hK : IsCompact K)
+  结论: {K : 集合 X} (hK : 是紧集 K)
   证明: by
   refine hK.induction_on measure_empty ?_ ?_ ?_
   · exact fun _ _ hst ht => measure_mono_null hst ht
@@ -550,7 +550,7 @@ lemma support_mem_ae_of_innerRegular
 
 中文:
 引理 support_mem_ae_of_innerRegular
-  条件: [OpensMeasurableSpace X] [μ.InnerRegular]
+  条件: [OpensMeasurable空间 X] [μ.内正则]
   证明: support_mem_ae_of_innerRegularWRT_isCompact_isOpen fun _ hU r hr =>
     InnerRegular.innerRegular hU.measurableSet r hr
 
@@ -573,7 +573,7 @@ lemma measure_compl_support_of_innerRegular
 
 中文:
 引理 measure_compl_support_of_innerRegular
-  条件: [OpensMeasurableSpace X] [μ.InnerRegular]
+  条件: [OpensMeasurable空间 X] [μ.内正则]
   证明: support_mem_ae_of_innerRegular
 
 Depends on / 依赖: support_mem_ae_of_innerRegular
@@ -592,7 +592,7 @@ lemma support_mem_ae_of_regular
 
 中文:
 引理 support_mem_ae_of_regular
-  条件: [μ.Regular]
+  条件: [μ.正则]
   结论: μ.support in ae μ
   证明: support_mem_ae_of_innerRegularWRT_isCompact_isOpen Regular.innerRegular
 
@@ -614,7 +614,7 @@ lemma measure_compl_support_of_regular
 
 中文:
 引理 measure_compl_support_of_regular
-  条件: [μ.Regular]
+  条件: [μ.正则]
   结论: μ μ.supportᶜ = 0
   证明: support_mem_ae_of_regular
 
@@ -712,7 +712,7 @@ lemma nonempty_inter_support_of_pos
 
 中文:
 引理 nonempty_inter_support_of_pos
-  条件: {s : Set X} (hμ : 0 < μ s)
+  条件: {s : 集合 X} (hμ : 0 < μ s)
   证明: by
   rw [← Set.not_disjoint_iff_nonempty_inter]
   contrapose! hμ
@@ -774,7 +774,7 @@ lemma nonempty_support
 中文:
 引理 nonempty_support
   条件: (hμ : μ != 0)
-  结论: μ.support.Nonempty
+  结论: μ.support.非空
   证明: Nonempty.right nonempty_inter_support_of_pos measure_univ_pos.mpr hμ
 
 Depends on / 依赖: Nonempty, Nonempty.right, measure_univ_pos, measure_univ_pos.mpr, nonempty_inter_support_of_pos
@@ -795,7 +795,7 @@ lemma nonempty_support_iff
 
 中文:
 引理 nonempty_support_iff
-  结论: μ.support.Nonempty ↔ μ != 0
+  结论: μ.support.非空 ↔ μ != 0
   证明: ⟨fun h e => (not_nonempty_iff_eq_empty.mpr <| congrArg Measure.support e |>.trans
  support_zero) h, fun h => nonempty_support h⟩
 
@@ -846,7 +846,7 @@ lemma mem_support_restrict
 
 中文:
 引理 mem_support_restrict
-  条件: {s : Set X} {x : X}
+  条件: {s : 集合 X} {x : X}
   证明: by
   rw [nhds_basis_opens x |>.mem_measureSupport]; rw [(nhdsWithin_basis_open x s).frequently_smallSets pos_mono]
   grind [IsOpen.measurableSet, restrict_apply]
@@ -875,7 +875,7 @@ lemma interior_inter_support
 
 中文:
 引理 interior_inter_support
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rintro x ⟨hxs, hxμ⟩
   rw [mem_support_restrict]; rw [(nhdsWithin_basis_open x s).frequently_smallSets pos_mono]
@@ -912,7 +912,7 @@ lemma support_restrict_subset
 
 中文:
 引理 support_restrict_subset
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   refine Set.subset_inter (support_subset_of_isClosed isClosed_closure ?_)
     (support_mono restrict_le_self)

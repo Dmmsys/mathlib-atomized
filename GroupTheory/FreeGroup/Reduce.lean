@@ -48,7 +48,7 @@ definition reduce
 
 中文:
 定义 reduce
-  签名: : (L : List (α × 布尔)) -> List (α × 布尔)
+  签名: : (L : 列表 (α × 布尔值)) -> 列表 (α × 布尔值)
   定义体: List.rec [] fun hd1 _tl1 ih =>
     List.casesOn ih [hd1] fun hd2 tl2 =>
       if hd1.1 = hd2.1 ∧ hd1.2 = not hd2.2 then tl2 else hd1 :: hd2 :: tl2
@@ -70,7 +70,7 @@ lemma reduce_nil
 
 中文:
 引理 reduce_nil
-  结论: reduce ([] : List (α × 布尔)) = []
+  结论: reduce ([] : 列表 (α × 布尔值)) = []
   证明: rfl
 -/
 @[to_additive (attr := simp)] lemma reduce_nil : reduce ([] : List (α × Bool)) = [] := rfl
@@ -87,7 +87,7 @@ lemma reduce_singleton
 
 中文:
 引理 reduce_singleton
-  条件: (s : α × 布尔)
+  条件: (s : α × 布尔值)
   结论: reduce [s] = [s]
   证明: rfl
 
@@ -137,7 +137,7 @@ theorem reduce_replicate
 
 中文:
 定理 reduce_replicate
-  条件: (n : 自然数) (x : α × 布尔)
+  条件: (n : 自然数) (x : α × 布尔值)
   证明: by
   induction n with
   | zero => simp [reduce]
@@ -312,7 +312,7 @@ theorem reduce.min
     exact reduce.not H2
 
 中文:
-定理 reduce.min
+定理 reduce.最小值
   条件: (H : Red (reduce L₁) L₂)
   结论: reduce L₁ = L₂
   证明: by
@@ -581,7 +581,7 @@ definition toWord
 
 中文:
 定义 toWord
-  签名: : FreeGroup α -> List (α × 布尔)
+  签名: : 自由群 α -> 列表 (α × 布尔值)
   定义体: Quot.lift reduce fun _L₁ _L₂ H => reduce.Step.eq H
 
 @[to_additive]
@@ -604,7 +604,7 @@ theorem mk_toWord
 
 中文:
 定理 mk_toWord
-  结论: 对任意 {x : FreeGroup α}, mk (toWord x) = x
+  结论: 对任意 {x : 自由群 α}, mk (toWord x) = x
   证明: by rintro ⟨L⟩; exact reduce.self
 
 @[to_additive]
@@ -627,7 +627,7 @@ theorem toWord_injective
 
 中文:
 定理 toWord_injective
-  结论: Function.Injective (toWord : FreeGroup α -> List (α × 布尔))
+  结论: 函数.单射 (toWord : 自由群 α -> 列表 (α × 布尔值))
   证明: by
   rintro ⟨L₁⟩ ⟨L₂⟩; exact reduce.exact
 
@@ -652,7 +652,7 @@ theorem toWord_inj
 
 中文:
 定理 toWord_inj
-  条件: {x y : FreeGroup α}
+  条件: {x y : 自由群 α}
   结论: toWord x = toWord y ↔ x = y
   证明: toWord_injective.eq_iff
 
@@ -722,7 +722,7 @@ theorem reduce_toWord
 
 中文:
 定理 reduce_toWord
-  结论: 对任意 x : FreeGroup α, reduce (toWord x) = toWord x
+  结论: 对任意 x : 自由群 α, reduce (toWord x) = toWord x
   证明: by
   rintro ⟨L⟩
   exact reduce.idem
@@ -748,7 +748,7 @@ theorem toWord_one
 
 中文:
 定理 toWord_one
-  结论: (1 : FreeGroup α).toWord = []
+  结论: (1 : 自由群 α).toWord = []
   证明: rfl
 
 @[to_additive]
@@ -772,7 +772,7 @@ theorem toWord_mul
 
 中文:
 定理 toWord_mul
-  条件: (x y : FreeGroup α)
+  条件: (x y : 自由群 α)
   结论: toWord (x * y) = reduce (toWord x ++ toWord y)
   证明: by
   rw [← mk_toWord (x := x)]; rw [← mk_toWord (x := y)]
@@ -801,7 +801,7 @@ theorem toWord_pow
 
 中文:
 定理 toWord_pow
-  条件: (x : FreeGroup α) (n : 自然数)
+  条件: (x : 自由群 α) (n : 自然数)
   证明: by
   rw [← mk_toWord (x := x)]
   simp
@@ -832,7 +832,7 @@ theorem toWord_of_pow
 中文:
 定理 toWord_of_pow
   条件: (a : α) (n : 自然数)
-  结论: (of a ^ n).toWord = List.replicate n (a, true)
+  结论: (of a ^ n).toWord = 列表.replicate n (a, true)
   证明: by
   rw [of]; rw [pow_mk]; rw [List.flatten_replicate_singleton]; rw [toWord]
   exact reduce_replicate _ _
@@ -859,7 +859,7 @@ theorem toWord_eq_nil_iff
 
 中文:
 定理 toWord_eq_nil_iff
-  条件: {x : FreeGroup α}
+  条件: {x : 自由群 α}
   结论: x.toWord = [] ↔ x = 1
   证明: toWord_injective.eq_iff' toWord_one
 
@@ -889,7 +889,7 @@ theorem reduce_invRev
 
 中文:
 定理 reduce_invRev
-  条件: {w : List (α × 布尔)}
+  条件: {w : 列表 (α × 布尔值)}
   结论: reduce (invRev w) = invRev (reduce w)
   证明: by
   apply reduce.min
@@ -925,7 +925,7 @@ theorem toWord_inv
 
 中文:
 定理 toWord_inv
-  条件: (x : FreeGroup α)
+  条件: (x : 自由群 α)
   结论: x⁻¹.toWord = invRev x.toWord
   证明: by
   rcases x with ⟨L⟩
@@ -979,7 +979,7 @@ theorem reduce_cons_reduce
 
 中文:
 定理 reduce_cons_reduce
-  条件: (a : α × 布尔)
+  条件: (a : α × 布尔值)
   结论: reduce (a :: reduce L) = reduce (a :: L)
   证明: by
   simp
@@ -1029,7 +1029,7 @@ lemma toWord_mul_sublist
 
 中文:
 引理 toWord_mul_sublist
-  条件: (x y : FreeGroup α)
+  条件: (x y : 自由群 α)
   结论: (x * y).toWord <+ x.toWord ++ y.toWord
   证明: by
   refine Red.sublist ?_
@@ -1083,7 +1083,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableEq (FreeGroup α)
+  签名: DecidableEq (自由群 α)
   定义体: toWord_injective.decidableEq
 
 Depends on / 依赖: decidableEq, toWord_injective, toWord_injective.decidableEq
@@ -1132,7 +1132,7 @@ definition Red.enum
 
 中文:
 定义 Red.enum
-  签名: (L₁ : List (α × 布尔))
+  签名: (L₁ : 列表 (α × 布尔值))
   定义体: List.filter (Red L₁) (List.sublists L₁)
 
 Depends on / 依赖: List.filter, List.sublists, filter, sublists
@@ -1151,7 +1151,7 @@ theorem Red.enum.sound
 
 中文:
 定理 Red.enum.sound
-  条件: (H : L₂ in List.filter (Red L₁) (List.sublists L₁))
+  条件: (H : L₂ in 列表.filter (Red L₁) (列表.sublists L₁))
   结论: Red L₁ L₂
   证明: of_decide_eq_true (@List.of_mem_filter _ _ L₂ _ H)
 
@@ -1200,8 +1200,8 @@ theorem IsReduced.reduce_eq
 @[to_additive]
 
 中文:
-定理 IsReduced.reduce_eq
-  条件: (h : IsReduced L)
+定理 是既约.reduce_eq
+  条件: (h : 是既约 L)
   结论: reduce L = L
   证明: by
   rw [← h.red_iff_eq]
@@ -1233,9 +1233,9 @@ theorem IsReduced.of_reduce_eq
 @[to_additive]
 
 中文:
-定理 IsReduced.of_reduce_eq
+定理 是既约.of_reduce_eq
   条件: (h : reduce L = L)
-  结论: IsReduced L
+  结论: 是既约 L
   证明: by
   rw [IsReduced]; rw [List.isChain_iff_forall_rel_of_append_cons_cons]
   rintro ⟨x₁, x₂⟩ ⟨y₁, y₂⟩ l₁ l₂ hl rfl
@@ -1268,7 +1268,7 @@ theorem isReduced_iff_reduce_eq
 
 中文:
 定理 isReduced_iff_reduce_eq
-  结论: IsReduced L ↔ reduce L = L where
+  结论: 是既约 L ↔ reduce L = L where
   证明: h.reduce_eq
   mpr := .of_reduce_eq
 
@@ -1293,8 +1293,8 @@ theorem isReduced_toWord
 
 中文:
 定理 isReduced_toWord
-  条件: {x : FreeGroup α}
-  结论: IsReduced x.toWord
+  条件: {x : 自由群 α}
+  结论: 是既约 x.toWord
   证明: by
   simp [isReduced_iff_reduce_eq]
 
@@ -1349,8 +1349,8 @@ instance [Nonempty
   body: let ⟨x⟩ := ‹Nonempty α›; ⟨1, of x, one_ne_of x⟩
 
 中文:
-实例 [Nonempty
-  签名: α] : Nontrivial (FreeGroup α) where
+实例 [非空
+  签名: α] : 非平凡 (自由群 α) where
   定义体: let ⟨x⟩ := ‹Nonempty α›; ⟨1, of x, one_ne_of x⟩
 
 Depends on / 依赖: Nonempty, one_ne_of
@@ -1376,7 +1376,7 @@ definition norm
 
 中文:
 定义 norm
-  签名: (x : FreeGroup α)
+  签名: (x : 自由群 α)
   定义体: x.toWord.length
 
 @[to_additive (attr := simp)]
@@ -1401,7 +1401,7 @@ theorem norm_inv_eq
 
 中文:
 定理 norm_inv_eq
-  条件: {x : FreeGroup α}
+  条件: {x : 自由群 α}
   结论: norm x⁻¹ = norm x
   证明: by
   simp only [norm, toWord_inv, invRev_length]
@@ -1428,7 +1428,7 @@ theorem norm_eq_zero
 
 中文:
 定理 norm_eq_zero
-  条件: {x : FreeGroup α}
+  条件: {x : 自由群 α}
   结论: norm x = 0 ↔ x = 1
   证明: by
   simp only [norm, List.length_eq_zero_iff, toWord_eq_nil_iff]
@@ -1453,7 +1453,7 @@ theorem norm_one
 
 中文:
 定理 norm_one
-  结论: norm (1 : FreeGroup α) = 0
+  结论: norm (1 : 自由群 α) = 0
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1524,7 +1524,7 @@ theorem norm_mul_le
 
 中文:
 定理 norm_mul_le
-  条件: (x y : FreeGroup α)
+  条件: (x y : 自由群 α)
   结论: norm (x * y) <= norm x + norm y
   证明: calc
     norm (x * y) = norm (mk (x.toWord ++ y.toWord)) := by rw [← mul_mk, mk_toWord, mk_toWord]
@@ -1582,8 +1582,8 @@ exact Function.RightInverse.surjective norm_of_pow a
 
 中文:
 定理 norm_surjective
-  条件: [Nonempty α]
-  结论: Function.Surjective (norm (α := α))
+  条件: [非空 α]
+  结论: 函数.满射 (norm (α := α))
   证明: by
   let ⟨a⟩ := ‹Nonempty α›
 exact Function.RightInverse.surjective norm_of_pow a

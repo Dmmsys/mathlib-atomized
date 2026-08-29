@@ -49,7 +49,7 @@ theorem free_and_finite_fin
 
 中文:
 定理 free_and_finite_fin
-  结论: (n : 自然数) (N : Fin n -> 类型) [对任意 i, AddCommGroup (N i)]
+  结论: (n : 自然数) (N : 有限集 n -> 类型) [对任意 i, 加法交换群 (N i)]
   证明: by
   induction n with
   | zero =>
@@ -126,8 +126,8 @@ instance _root_.Module.Finite.multilinearMap
   body: free_and_finite.2
 
 中文:
-实例 _root_.Module.Finite.multilinearMap
-  签名: : Module.Finite R (MultilinearMap R M₁ M₂)
+实例 _root_.模.有限.multilinearMap
+  签名: : 模.有限 R (多重线性映射 R M₁ M₂)
   定义体: free_and_finite.2
 
 Depends on / 依赖: free_and_finite
@@ -144,8 +144,8 @@ instance _root_.Module.Free.multilinearMap
   body: free_and_finite.1
 
 中文:
-实例 _root_.Module.Free.multilinearMap
-  签名: : Module.Free R (MultilinearMap R M₁ M₂)
+实例 _root_.模.自由.multilinearMap
+  签名: : 模.自由 R (多重线性映射 R M₁ M₂)
   定义体: free_and_finite.1
 
 Depends on / 依赖: free_and_finite

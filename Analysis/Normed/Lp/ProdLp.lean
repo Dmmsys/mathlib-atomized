@@ -746,7 +746,7 @@ instance instProdNorm
 
 中文:
 实例 instProdNorm
-  签名: : Norm (WithLp p (α × β)) where
+  签名: : 范数 (WithLp p (α × β)) where
   定义体: if _hp : p = 0 then
       (if ‖f.fst‖ = 0 then 0 else 1) + (if ‖f.snd‖ = 0 then 0 else 1)
     else if p = ∞ then
@@ -878,7 +878,7 @@ definition prodPseudoEMetricAux
 
 中文:
 定义 prodPseudoEMetricAux
-  签名: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  签名: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   定义体: prod_edist_self p
   edist_comm := prod_edist_comm p
   edist_triangle f g h := by
@@ -928,7 +928,7 @@ theorem prod_sup_edist_ne_top_aux
 
 中文:
 定理 prod_sup_edist_ne_top_aux
-  结论: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  结论: [伪度量空间 α] [伪度量空间 β]
   证明: ne_of_lt by simp [edist, PseudoMetricSpace.edist_dist]
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.edist_dist, edist_dist, ne_of_lt
@@ -958,7 +958,7 @@ abbreviation prodPseudoMetricAux
 
 中文:
 缩写 prodPseudoMetricAux
-  签名: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  签名: [伪度量空间 α] [伪度量空间 β]
   定义体: PseudoEMetricSpace.toPseudoMetricSpaceOfDist dist
     (fun f g => by
       rcases p.dichotomy with (rfl | h)
@@ -1007,7 +1007,7 @@ theorem edist_proj_le_edist_aux
 
 中文:
 定理 edist_proj_le_edist_aux
-  结论: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  结论: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   rcases p.dichotomy with (rfl | h)
   · simp [prod_edist_eq_sup]
@@ -1052,7 +1052,7 @@ lemma prod_lipschitzWith_ofLp_aux
 
 中文:
 引理 prod_lipschitzWith_ofLp_aux
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   intro x y
   change max _ _ <= _
@@ -1083,7 +1083,7 @@ lemma prod_antilipschitzWith_ofLp_aux
 
 中文:
 引理 prod_antilipschitzWith_ofLp_aux
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   intro x y
   rcases p.dichotomy with (rfl | h)
@@ -1123,7 +1123,7 @@ lemma isUniformInducing_ofLp_aux
 
 中文:
 引理 isUniformInducing_ofLp_aux
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: (prod_antilipschitzWith_ofLp_aux p α β).isUniformInducing
     (prod_lipschitzWith_ofLp_aux p α β).uniformContinuous
 -/
@@ -1145,7 +1145,7 @@ lemma prod_uniformity_aux
 
 中文:
 引理 prod_uniformity_aux
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: by
   rw [← (isUniformInducing_ofLp_aux p α β).comap_uniformity]
   rfl
@@ -1165,7 +1165,7 @@ instance instProdBornology
 
 中文:
 实例 instProdBornology
-  签名: (p : 实数>=0∞) (α β : 类型) [Bornology α] [Bornology β]
+  签名: (p : 实数>=0∞) (α β : 类型) [有界结构 α] [有界结构 β]
   定义体: Bornology.induced ofLp
 
 Depends on / 依赖: Bornology, Bornology.induced, induced
@@ -1185,7 +1185,7 @@ lemma prod_cobounded_aux
 
 中文:
 引理 prod_cobounded_aux
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  条件: [伪度量空间 α] [伪度量空间 β]
   证明: le_antisymm (prod_antilipschitzWith_ofLp_aux p α β).tendsto_cobounded.le_comap
       (prod_lipschitzWith_ofLp_aux p α β).comap_cobounded_le
 -/
@@ -1214,7 +1214,7 @@ instance instProdTopologicalSpace
 
 中文:
 实例 instProdTopologicalSpace
-  签名: : TopologicalSpace (WithLp p (α × β))
+  签名: : 拓扑空间 (WithLp p (α × β))
   定义体: instTopologicalSpaceProd.induced ofLp
 
 @[continuity, fun_prop]
@@ -1237,7 +1237,7 @@ lemma prod_continuous_toLp
 
 中文:
 引理 prod_continuous_toLp
-  结论: Continuous (@toLp p (α × β))
+  结论: 连续 (@toLp p (α × β))
   证明: continuous_induced_rng.2 continuous_id
 
 @[continuity, fun_prop]
@@ -1258,7 +1258,7 @@ lemma prod_continuous_ofLp
 
 中文:
 引理 prod_continuous_ofLp
-  结论: Continuous (@ofLp p (α × β))
+  结论: 连续 (@ofLp p (α × β))
   证明: continuous_induced_dom
 
 Depends on / 依赖: continuous_induced_dom
@@ -1320,7 +1320,7 @@ lemma continuous_fst
 
 中文:
 引理 continuous_fst
-  结论: Continuous (@WithLp.fst p α β)
+  结论: 连续 (@WithLp.fst p α β)
   证明: continuous_fst.comp prod_continuous_ofLp ..
 
 @[fun_prop]
@@ -1339,7 +1339,7 @@ lemma continuous_snd
 
 中文:
 引理 continuous_snd
-  结论: Continuous (@WithLp.snd p α β)
+  结论: 连续 (@WithLp.snd p α β)
   证明: continuous_snd.comp prod_continuous_ofLp ..
 -/
 protected lemma continuous_snd : Continuous (@WithLp.snd p α β) :=
@@ -1357,7 +1357,7 @@ instance instProdT0Space
 
 中文:
 实例 instProdT0Space
-  签名: : T0Space (WithLp p (α × β))
+  签名: : T0空间 (WithLp p (α × β))
   定义体: (homeomorphProd p α β).symm.t0Space
 
 Depends on / 依赖: homeomorphProd, symm.t0Space, t0Space
@@ -1377,7 +1377,7 @@ instance secondCountableTopology
 
 中文:
 实例 secondCountableTopology
-  签名: : SecondCountableTopology (WithLp p (α × β))
+  签名: : 第二可数拓扑 (WithLp p (α × β))
   定义体: (homeomorphProd p α β).secondCountableTopology
 
 Depends on / 依赖: homeomorphProd, secondCountableTopology
@@ -1403,7 +1403,7 @@ instance instProdUniformSpace
 
 中文:
 实例 instProdUniformSpace
-  签名: : UniformSpace (WithLp p (α × β))
+  签名: : 一致空间 (WithLp p (α × β))
   定义体: instUniformSpaceProd.comap ofLp
 
 @[fun_prop]
@@ -1426,7 +1426,7 @@ lemma prod_uniformContinuous_toLp
 
 中文:
 引理 prod_uniformContinuous_toLp
-  结论: UniformContinuous (@toLp p (α × β))
+  结论: 一致连续 (@toLp p (α × β))
   证明: uniformContinuous_comap' uniformContinuous_id
 
 @[fun_prop]
@@ -1447,7 +1447,7 @@ lemma prod_uniformContinuous_ofLp
 
 中文:
 引理 prod_uniformContinuous_ofLp
-  结论: UniformContinuous (@ofLp p (α × β))
+  结论: 一致连续 (@ofLp p (α × β))
   证明: uniformContinuous_comap
 
 Depends on / 依赖: uniformContinuous_comap
@@ -1530,7 +1530,7 @@ instance instProdCompleteSpace
 
 中文:
 实例 instProdCompleteSpace
-  签名: : CompleteSpace (WithLp p (α × β))
+  签名: : 完备空间 (WithLp p (α × β))
   定义体: (uniformEquivProd p α β).completeSpace_iff.2 inferInstance
 
 Depends on / 依赖: completeSpace_iff, uniformEquivProd
@@ -1647,7 +1647,7 @@ instance instProdPseudoEMetricSpace
 
 中文:
 实例 instProdPseudoEMetricSpace
-  签名: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  签名: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   定义体: (prodPseudoEMetricAux p α β).replaceUniformity (prod_uniformity_aux p α β).symm
 
 Depends on / 依赖: prodPseudoEMetricAux, prod_uniformity_aux, replaceUniformity
@@ -1666,7 +1666,7 @@ instance instProdEMetricSpace
 
 中文:
 实例 instProdEMetricSpace
-  签名: [EMetricSpace α] [EMetricSpace β]
+  签名: [广义度量空间 α] [广义度量空间 β]
   定义体: EMetricSpace.ofT0PseudoEMetricSpace (WithLp p (α × β))
 
 Depends on / 依赖: EMetricSpace, EMetricSpace.ofT0PseudoEMetricSpace, WithLp, ofT0PseudoEMetricSpace
@@ -1688,7 +1688,7 @@ instance instProdPseudoMetricSpace
 
 中文:
 实例 instProdPseudoMetricSpace
-  签名: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  签名: [伪度量空间 α] [伪度量空间 β]
   定义体: ((prodPseudoMetricAux p α β).replaceUniformity
     (prod_uniformity_aux p α β).symm).replaceBornology
     fun s => Filter.ext_iff.1 (prod_cobounded_aux p α β).symm sᶜ
@@ -1711,7 +1711,7 @@ instance instProdMetricSpace
 
 中文:
 实例 instProdMetricSpace
-  签名: [MetricSpace α] [MetricSpace β]
+  签名: [度量空间 α] [度量空间 β]
   定义体: MetricSpace.ofT0PseudoMetricSpace _
 
 Depends on / 依赖: MetricSpace, MetricSpace.ofT0PseudoMetricSpace, ofT0PseudoMetricSpace
@@ -1733,7 +1733,7 @@ theorem prod_nndist_eq_add
 
 中文:
 定理 prod_nndist_eq_add
-  结论: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  结论: [伪度量空间 α] [伪度量空间 β]
   证明: NNReal.eq by
     push_cast
     exact prod_dist_eq_add (p.toReal_pos_iff_ne_top.mpr hp) _ _
@@ -1759,7 +1759,7 @@ theorem prod_nndist_eq_sup
 
 中文:
 定理 prod_nndist_eq_sup
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : WithLp ∞ (α × β))
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : WithLp ∞ (α × β))
   证明: NNReal.eq by
     push_cast
     exact prod_dist_eq_sup _ _
@@ -1782,7 +1782,7 @@ theorem edist_fst_le
 
 中文:
 定理 edist_fst_le
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β] (x y : WithLp p (α × β))
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β] (x y : WithLp p (α × β))
   证明: (edist_proj_le_edist_aux p x y).1
 
 Depends on / 依赖: edist_proj_le_edist_aux
@@ -1801,7 +1801,7 @@ theorem edist_snd_le
 
 中文:
 定理 edist_snd_le
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β] (x y : WithLp p (α × β))
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β] (x y : WithLp p (α × β))
   证明: (edist_proj_le_edist_aux p x y).2
 
 Depends on / 依赖: edist_proj_le_edist_aux
@@ -1821,7 +1821,7 @@ theorem nndist_fst_le
 
 中文:
 定理 nndist_fst_le
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : WithLp p (α × β))
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : WithLp p (α × β))
   证明: by
   simpa [← coe_nnreal_ennreal_nndist] using edist_fst_le x y
 
@@ -1842,7 +1842,7 @@ theorem nndist_snd_le
 
 中文:
 定理 nndist_snd_le
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : WithLp p (α × β))
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : WithLp p (α × β))
   证明: by
   simpa [← coe_nnreal_ennreal_nndist] using edist_snd_le x y
 
@@ -1862,7 +1862,7 @@ theorem dist_fst_le
 
 中文:
 定理 dist_fst_le
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : WithLp p (α × β))
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : WithLp p (α × β))
   证明: nndist_fst_le x y
 
 Depends on / 依赖: nndist_fst_le
@@ -1881,7 +1881,7 @@ theorem dist_snd_le
 
 中文:
 定理 dist_snd_le
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : WithLp p (α × β))
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : WithLp p (α × β))
   证明: nndist_snd_le x y
 
 Depends on / 依赖: nndist_snd_le
@@ -1902,7 +1902,7 @@ lemma prod_lipschitzWith_ofLp
 
 中文:
 引理 prod_lipschitzWith_ofLp
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: prod_lipschitzWith_ofLp_aux p α β
 
 Depends on / 依赖: prod_lipschitzWith_ofLp_aux
@@ -1921,7 +1921,7 @@ lemma prod_antilipschitzWith_toLp
 
 中文:
 引理 prod_antilipschitzWith_toLp
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: (prod_lipschitzWith_ofLp p α β).to_rightInverse (ofLp_toLp p)
 
 Depends on / 依赖: ofLp_toLp, prod_lipschitzWith_ofLp, to_rightInverse
@@ -1940,7 +1940,7 @@ lemma prod_antilipschitzWith_ofLp
 
 中文:
 引理 prod_antilipschitzWith_ofLp
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: prod_antilipschitzWith_ofLp_aux p α β
 
 Depends on / 依赖: prod_antilipschitzWith_ofLp_aux
@@ -1959,7 +1959,7 @@ lemma prod_lipschitzWith_toLp
 
 中文:
 引理 prod_lipschitzWith_toLp
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: (prod_antilipschitzWith_ofLp p α β).to_rightInverse (ofLp_toLp p)
 
 Depends on / 依赖: ofLp_toLp, prod_antilipschitzWith_ofLp, to_rightInverse
@@ -1982,7 +1982,7 @@ lemma prod_isometry_ofLp_infty
 
 中文:
 引理 prod_isometry_ofLp_infty
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: fun x y =>
   le_antisymm (by simpa only [ENNReal.coe_one, one_mul] using prod_lipschitzWith_ofLp ∞ α β x y)
     (by
@@ -2017,7 +2017,7 @@ instance instProdSeminormedAddCommGroup
 
 中文:
 实例 instProdSeminormedAddCommGroup
-  签名: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
+  签名: [SeminormedAddComm群 α] [SeminormedAddComm群 β]
   定义体: by
     rcases p.dichotomy with (rfl | h)
     · simp only [prod_dist_eq_sup, prod_norm_eq_sup, dist_eq_norm, ← norm_neg_add]
@@ -2052,7 +2052,7 @@ lemma isUniformInducing_toLp
 
 中文:
 引理 isUniformInducing_toLp
-  条件: [PseudoEMetricSpace α] [PseudoEMetricSpace β]
+  条件: [PseudoEMetric空间 α] [PseudoEMetric空间 β]
   证明: (prod_antilipschitzWith_toLp p α β).isUniformInducing
     (prod_lipschitzWith_toLp p α β).uniformContinuous
 
@@ -2077,7 +2077,7 @@ theorem enorm_fst_le
 
 中文:
 定理 enorm_fst_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using edist_fst_le x 0
 
@@ -2098,7 +2098,7 @@ theorem enorm_snd_le
 
 中文:
 定理 enorm_snd_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using edist_snd_le x 0
 
@@ -2119,7 +2119,7 @@ theorem nnnorm_fst_le
 
 中文:
 定理 nnnorm_fst_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using nndist_fst_le x 0
 
@@ -2140,7 +2140,7 @@ theorem nnnorm_snd_le
 
 中文:
 定理 nnnorm_snd_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using nndist_snd_le x 0
 
@@ -2161,7 +2161,7 @@ theorem norm_fst_le
 
 中文:
 定理 norm_fst_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using dist_fst_le x 0
 
@@ -2182,7 +2182,7 @@ theorem norm_snd_le
 
 中文:
 定理 norm_snd_le
-  条件: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β] (x : WithLp p (α × β))
+  条件: [SeminormedAddComm群 α] [SeminormedAddComm群 β] (x : WithLp p (α × β))
   证明: by
   simpa using dist_snd_le x 0
 
@@ -2212,7 +2212,7 @@ example [NormedAdd
 
 中文:
 实例 instProdNormedAddCommGroup
-  签名: [NormedAddCommGroup α] [NormedAddCommGroup β]
+  签名: [赋范交换加群 α] [赋范交换加群 β]
   定义体: { instProdSeminormedAddCommGroup p α β with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -2260,7 +2260,7 @@ theorem prod_norm_eq_of_nat
 
 中文:
 定理 prod_norm_eq_of_nat
-  条件: [Norm α] [Norm β] (n : 自然数) (h : p = n) (f : WithLp p (α × β))
+  条件: [范数 α] [范数 β] (n : 自然数) (h : p = n) (f : WithLp p (α × β))
   证明: by
   have := p.toReal_pos_iff_ne_top.mpr (ne_of_eq_of_ne h <| ENNReal.natCast_ne_top n)
   simp only [one_div, h, Real.rpow_natCast, ENNReal.toReal_natCast,
@@ -2965,7 +2965,7 @@ instance instProdIsBoundedSMul
 
 中文:
 实例 instProdIsBoundedSMul
-  签名: : IsBoundedSMul 𝕜 (WithLp p (α × β))
+  签名: : 是BoundedSMul 𝕜 (WithLp p (α × β))
   定义体: .of_nnnorm_smul_le fun c f => by
     rcases p.dichotomy with (rfl | hp)
     · simp only [← prod_nnnorm_ofLp, ofLp_smul]
@@ -3033,7 +3033,7 @@ instance instProdNormSMulClass
 
 中文:
 实例 instProdNormSMulClass
-  签名: [SeminormedRing 𝕜] [Module 𝕜 α] [Module 𝕜 β]
+  签名: [Seminormed环 𝕜] [模 𝕜 α] [模 𝕜 β]
   定义体: .of_nnnorm_smul fun c f => by
     rcases p.dichotomy with (rfl | hp)
     · simp only [← prod_nnnorm_ofLp, WithLp.ofLp_smul, nnnorm_smul]
@@ -3070,7 +3070,7 @@ definition idemFst
 
 中文:
 定义 idemFst
-  签名: : AddMonoid.End (WithLp p (α × β)) where
+  签名: : 加法幺半群.End (WithLp p (α × β)) where
   定义体: toLp p (x.fst, 0)
   map_zero' := by simp
   map_add' := by simp [← toLp_add]
@@ -3094,7 +3094,7 @@ definition idemSnd
 
 中文:
 定义 idemSnd
-  签名: : AddMonoid.End (WithLp p (α × β)) where
+  签名: : 加法幺半群.End (WithLp p (α × β)) where
   定义体: toLp p (0, x.snd)
   map_zero' := by simp
   map_add' := by simp [← toLp_add]
@@ -3178,7 +3178,7 @@ lemma idemFst_compl
 
 中文:
 引理 idemFst_compl
-  结论: (1 : AddMonoid.End (WithLp p (α × β))) - idemFst = idemSnd
+  结论: (1 : 加法幺半群.End (WithLp p (α × β))) - idemFst = idemSnd
   证明: by
   rw [← idemFst_add_idemSnd]; rw [add_sub_cancel_left]
 
@@ -3198,7 +3198,7 @@ lemma idemSnd_compl
 
 中文:
 引理 idemSnd_compl
-  结论: (1 : AddMonoid.End (WithLp p (α × β))) - idemSnd = idemFst
+  结论: (1 : 加法幺半群.End (WithLp p (α × β))) - idemSnd = idemFst
   证明: by
   rw [← idemFst_add_idemSnd]; rw [add_sub_cancel_right]
 
@@ -3294,7 +3294,7 @@ instance instProdNormedSpace
 
 中文:
 实例 instProdNormedSpace
-  签名: [NormedField 𝕜] [NormedSpace 𝕜 α] [NormedSpace 𝕜 β]
+  签名: [赋范域 𝕜] [赋范空间 𝕜 α] [赋范空间 𝕜 β]
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -3333,7 +3333,7 @@ abbreviation pseudoMetricSpaceToProd
 
 中文:
 缩写 pseudoMetricSpaceToProd
-  签名: [PseudoMetricSpace α] [PseudoMetricSpace β]
+  签名: [伪度量空间 α] [伪度量空间 β]
   定义体: (isUniformInducing_toLp p α β).comapPseudoMetricSpace.replaceBornology
     fun s => Filter.ext_iff.1
       (le_antisymm (prod_antilipschitzWith_toLp p α β).tendsto_cobounded.le_comap
@@ -3358,7 +3358,7 @@ lemma dist_pseudoMetricSpaceToProd
 
 中文:
 引理 dist_pseudoMetricSpaceToProd
-  条件: [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : α × β)
+  条件: [伪度量空间 α] [伪度量空间 β] (x y : α × β)
   证明: rfl
 -/
 lemma dist_pseudoMetricSpaceToProd [PseudoMetricSpace α] [PseudoMetricSpace β] (x y : α × β) :
@@ -3377,7 +3377,7 @@ abbreviation seminormedAddCommGroupToProd
 
 中文:
 缩写 seminormedAddCommGroupToProd
-  签名: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
+  签名: [SeminormedAddComm群 α] [SeminormedAddComm群 β]
   定义体: ‖toLp p x‖
   toPseudoMetricSpace := pseudoMetricSpaceToProd p α β
   dist_eq x y := by
@@ -3400,7 +3400,7 @@ lemma norm_seminormedAddCommGroupToProd
 
 中文:
 引理 norm_seminormedAddCommGroupToProd
-  结论: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
+  结论: [SeminormedAddComm群 α] [SeminormedAddComm群 β]
   证明: rfl
 -/
 lemma norm_seminormedAddCommGroupToProd [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
@@ -3417,7 +3417,7 @@ lemma nnnorm_seminormedAddCommGroupToProd
 
 中文:
 引理 nnnorm_seminormedAddCommGroupToProd
-  结论: [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
+  结论: [SeminormedAddComm群 α] [SeminormedAddComm群 β]
   证明: rfl
 -/
 lemma nnnorm_seminormedAddCommGroupToProd [SeminormedAddCommGroup α] [SeminormedAddCommGroup β]
@@ -3528,7 +3528,7 @@ abbreviation normedAddCommGroupToProd
 
 中文:
 缩写 normedAddCommGroupToProd
-  签名: [NormedAddCommGroup α] [NormedAddCommGroup β]
+  签名: [赋范交换加群 α] [赋范交换加群 β]
   定义体: ‖toLp p x‖
   toPseudoMetricSpace := pseudoMetricSpaceToProd p α β
   dist_eq x y := by
@@ -3573,8 +3573,8 @@ theorem Isometry.withLpProdMap
   · simp [WithLp.prod_edist_eq_add hp, hf.edist_eq, hg.edist_eq]
 
 中文:
-定理 Isometry.withLpProdMap
-  条件: {f : α -> α'} (hf : Isometry f) {g : β -> β'} (hg : Isometry g)
+定理 等距.withLpProdMap
+  条件: {f : α -> α'} (hf : 等距 f) {g : β -> β'} (hg : 等距 g)
   证明: by
   intro _ _
   rcases p.trichotomy with rfl | rfl | hp
@@ -3749,7 +3749,7 @@ definition withLpProdUnique
 
 中文:
 定义 withLpProdUnique
-  签名: [Unique β]
+  签名: [唯一 β]
   定义体: (WithLp.equiv _ _).trans (Equiv.prodUnique _ _)
   isometry_toFun x y : edist x.fst y.fst = edist x y := by
     rcases p.trichotomy with rfl | rfl | hp
@@ -3779,7 +3779,7 @@ theorem coe_withLpProdUnique
 
 中文:
 定理 coe_withLpProdUnique
-  条件: [Unique β]
+  条件: [唯一 β]
   结论: ⇑(withLpProdUnique p α β) = WithLp.fst
   证明: rfl
 -/
@@ -3798,7 +3798,7 @@ definition withLpUniqueProd
 
 中文:
 定义 withLpUniqueProd
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: (withLpProdComm p α β).trans (withLpProdUnique p β α)
 
 Depends on / 依赖: withLpProdComm, withLpProdUnique
@@ -3817,7 +3817,7 @@ theorem coe_withLpUniqueProd
 
 中文:
 定理 coe_withLpUniqueProd
-  条件: [Unique α]
+  条件: [唯一 α]
   结论: ⇑(withLpUniqueProd p α β) = WithLp.snd
   证明: rfl
 -/
@@ -3851,7 +3851,7 @@ definition LinearIsometry.withLpProdMap
     ((f.toLinearMap.prodMap g.toLinearMap).withLpMap p).map_zero
 
 中文:
-定义 LinearIsometry.withLpProdMap
+定义 线性等距.withLpProdMap
   签名: (f : α ->ₗᵢ[𝕜] α') (g : β ->ₗᵢ[𝕜] β')
   定义体: (f.toLinearMap.prodMap g.toLinearMap).withLpMap p
   norm_map' := (f.isometry.withLpProdMap p g.isometry).norm_map_of_map_zero
@@ -3998,7 +3998,7 @@ definition withLpProdUnique
 
 中文:
 定义 withLpProdUnique
-  签名: [Unique β]
+  签名: [唯一 β]
   定义体: (WithLp.linearEquiv _ _ _).trans LinearEquiv.prodUnique
   norm_map' := (IsometryEquiv.withLpProdUnique _ _ _).isometry.norm_map_of_map_zero rfl
 
@@ -4019,7 +4019,7 @@ theorem coe_withLpProdUnique
 
 中文:
 定理 coe_withLpProdUnique
-  条件: [Unique β]
+  条件: [唯一 β]
   结论: ⇑(withLpProdUnique p 𝕜 α β) = WithLp.fst
   证明: rfl
 -/
@@ -4038,7 +4038,7 @@ definition withLpUniqueProd
 
 中文:
 定义 withLpUniqueProd
-  签名: [Unique α]
+  签名: [唯一 α]
   定义体: (withLpProdComm p 𝕜 α β).trans (withLpProdUnique p 𝕜 β α)
 
 Depends on / 依赖: withLpProdComm, withLpProdUnique
@@ -4057,7 +4057,7 @@ theorem coe_withLpUniqueProd
 
 中文:
 定理 coe_withLpUniqueProd
-  条件: [Unique α]
+  条件: [唯一 α]
   结论: ⇑(withLpUniqueProd p 𝕜 α β) = WithLp.snd
   证明: rfl
 -/

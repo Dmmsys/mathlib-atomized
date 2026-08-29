@@ -55,9 +55,9 @@ class Quasicategory₂
 类 Quasicategory₂
   参数: (X : Truncated 2)
   公理与运算 (3 个):
-    - fill21({x₀ x₁ x₂ : X _⦋0⦌₂} (e₀₁ : Edge x₀ x₁) (e₁₂ : Edge x₁ x₂)) : Nonempty (Σ e₀₂ : Edge x₀ x₂, CompStruct e₀₁ e₁₂ e₀₂)
-    - fill31({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : Edge x₀ x₁} {e₁₂ : Edge x₁ x₂} {e₂₃ : Edge x₂ x₃} {e₀₂ : Edge x₀ x₂} {e₁₃ : Edge x₁ x₃} {e₀₃ : Edge x₀ x₃} (f₃ : CompStruct e₀₁ e₁₂ e₀₂) (f₀ : CompStruct e₁₂ e₂₃ e₁₃) (f₂ : CompStruct e₀₁ e₁₃ e₀₃)) : Nonempty (CompStruct e₀₂ e₂₃ e₀₃)
-    - fill32({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : Edge x₀ x₁} {e₁₂ : Edge x₁ x₂} {e₂₃ : Edge x₂ x₃} {e₀₂ : Edge x₀ x₂} {e₁₃ : Edge x₁ x₃} {e₀₃ : Edge x₀ x₃} (f₃ : CompStruct e₀₁ e₁₂ e₀₂) (f₀ : CompStruct e₁₂ e₂₃ e₁₃) (f₁ : CompStruct e₀₂ e₂₃ e₀₃)) : Nonempty (CompStruct e₀₁ e₁₃ e₀₃)
+    - fill21({x₀ x₁ x₂ : X _⦋0⦌₂} (e₀₁ : 边 x₀ x₁) (e₁₂ : 边 x₁ x₂)) : 非空 (Σ e₀₂ : 边 x₀ x₂, 余mpStruct e₀₁ e₁₂ e₀₂)
+    - fill31({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : 边 x₀ x₁} {e₁₂ : 边 x₁ x₂} {e₂₃ : 边 x₂ x₃} {e₀₂ : 边 x₀ x₂} {e₁₃ : 边 x₁ x₃} {e₀₃ : 边 x₀ x₃} (f₃ : 余mpStruct e₀₁ e₁₂ e₀₂) (f₀ : 余mpStruct e₁₂ e₂₃ e₁₃) (f₂ : 余mpStruct e₀₁ e₁₃ e₀₃)) : 非空 (余mpStruct e₀₂ e₂₃ e₀₃)
+    - fill32({x₀ x₁ x₂ x₃ : X _⦋0⦌₂} {e₀₁ : 边 x₀ x₁} {e₁₂ : 边 x₁ x₂} {e₂₃ : 边 x₂ x₃} {e₀₂ : 边 x₀ x₂} {e₁₃ : 边 x₁ x₃} {e₀₃ : 边 x₀ x₃} (f₃ : 余mpStruct e₀₁ e₁₂ e₀₂) (f₀ : 余mpStruct e₁₂ e₂₃ e₁₃) (f₁ : 余mpStruct e₀₂ e₂₃ e₀₃)) : 非空 (余mpStruct e₀₁ e₁₃ e₀₃)
 -/
 class Quasicategory₂ (X : Truncated 2) where
   fill21 {x₀ x₁ x₂ : X _⦋0⦌₂}
@@ -88,7 +88,7 @@ abbreviation HomotopicL
 
 中文:
 缩写 HomotopicL
-  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
+  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : 边 x y)
   定义体: Nonempty (CompStruct f (id y) g)
 
 Depends on / 依赖: CompStruct, Nonempty
@@ -106,7 +106,7 @@ abbreviation HomotopicR
 
 中文:
 缩写 HomotopicR
-  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : Edge x y)
+  签名: {X : Truncated 2} {x y : X _⦋0⦌₂} (f g : 边 x y)
   定义体: Nonempty (CompStruct (id x) f g)
 
 Depends on / 依赖: CompStruct, Nonempty
@@ -128,7 +128,7 @@ lemma HomotopicL.refl
 
 中文:
 引理 HomotopicL.refl
-  条件: {x y : X _⦋0⦌₂} {f : Edge x y}
+  条件: {x y : X _⦋0⦌₂} {f : 边 x y}
   结论: HomotopicL f f
   证明: ⟨compId f⟩
 
@@ -148,7 +148,7 @@ lemma HomotopicL.symm
 
 中文:
 引理 HomotopicL.symm
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicL f g)
+  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y} (hfg : HomotopicL f g)
   证明: by
   rcases hfg with ⟨hfg⟩
   exact Quasicategory₂.fill31 hfg (idComp (id y)) (compId f)
@@ -173,7 +173,7 @@ lemma HomotopicL.trans
 
 中文:
 引理 HomotopicL.trans
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicL f g)
+  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : 边 x y} (hfg : HomotopicL f g)
   证明: by
   rcases hfg with ⟨hfg⟩
   rcases hgh with ⟨hgh⟩
@@ -198,7 +198,7 @@ lemma HomotopicR.refl
 
 中文:
 引理 HomotopicR.refl
-  条件: {x y : X _⦋0⦌₂} {f : Edge x y}
+  条件: {x y : X _⦋0⦌₂} {f : 边 x y}
   结论: HomotopicR f f
   证明: ⟨idComp f⟩
 
@@ -218,7 +218,7 @@ lemma HomotopicR.symm
 
 中文:
 引理 HomotopicR.symm
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y} (hfg : HomotopicR f g)
+  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y} (hfg : HomotopicR f g)
   证明: by
   rcases hfg with ⟨hfg⟩
   exact Quasicategory₂.fill32 (idComp (id x)) hfg (idComp f)
@@ -243,7 +243,7 @@ lemma HomotopicR.trans
 
 中文:
 引理 HomotopicR.trans
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : Edge x y} (hfg : HomotopicR f g)
+  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g h : 边 x y} (hfg : HomotopicR f g)
   证明: by
   rcases hfg with ⟨hfg⟩
   rcases hgh with ⟨hgh⟩
@@ -269,7 +269,7 @@ lemma HomotopicL.homotopicR
 
 中文:
 引理 HomotopicL.homotopicR
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
+  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
   证明: by
   rcases h with ⟨h⟩
   exact Quasicategory₂.fill32 (idComp f) (compId f) h
@@ -293,7 +293,7 @@ lemma HomotopicR.homotopicL
 
 中文:
 引理 HomotopicR.homotopicL
-  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
+  结论: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
   证明: by
   rcases h with ⟨h⟩
   exact Quasicategory₂.fill31 (idComp f) (compId f) h
@@ -315,7 +315,7 @@ theorem homotopicL_iff_homotopicR
 
 中文:
 定理 homotopicL_iff_homotopicR
-  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : Edge x y}
+  条件: [Quasicategory₂ X] {x y : X _⦋0⦌₂} {f g : 边 x y}
   证明: ⟨HomotopicL.homotopicR, HomotopicR.homotopicL⟩
 
 Depends on / 依赖: HomotopicL, HomotopicL.homotopicR, HomotopicR, HomotopicR.homotopicL, homotopicL, homotopicR
@@ -344,8 +344,8 @@ lemma Edge.CompStruct.comp_unique
   exact Quasicategory₂.fill31 s (compId g) s₂
 
 中文:
-引理 Edge.CompStruct.comp_unique
-  结论: {f f' : Edge x y} {g g' : Edge y z} {h h' : Edge x z}
+引理 边.余mpStruct.comp_unique
+  结论: {f f' : 边 x y} {g g' : 边 y z} {h h' : 边 x z}
   证明: by
   rcases hg.homotopicR with ⟨hg⟩
   rcases hf with ⟨hf⟩
@@ -373,8 +373,8 @@ definition Edge.comp
   body: (Quasicategory₂.fill21 f g).some.1
 
 中文:
-定义 Edge.comp
-  签名: (f : Edge x y) (g : Edge y z)
+定义 边.comp
+  签名: (f : 边 x y) (g : 边 y z)
   定义体: (Quasicategory₂.fill21 f g).some.1
 
 Depends on / 依赖: fill21
@@ -391,8 +391,8 @@ definition Edge.compStruct
   body: (Quasicategory₂.fill21 f g).some.2
 
 中文:
-定义 Edge.compStruct
-  签名: (f : Edge x y) (g : Edge y z)
+定义 边.compStruct
+  签名: (f : 边 x y) (g : 边 y z)
   定义体: (Quasicategory₂.fill21 f g).some.2
 
 Depends on / 依赖: fill21
@@ -451,7 +451,7 @@ definition Hom
   body: Quotient (instSetoidEdge x.pt y.pt)
 
 中文:
-定义 Hom
+定义 态射
   签名: (x y : HomotopyCategory₂ A)
   定义体: Quotient (instSetoidEdge x.pt y.pt)
 
@@ -507,7 +507,7 @@ lemma mk_surjective
 
 中文:
 引理 mk_surjective
-  结论: Function.Surjective (mk : A _⦋0⦌₂ -> _)
+  结论: 函数.满射 (mk : A _⦋0⦌₂ -> _)
   证明: fun ⟨x⟩ => ⟨x, rfl⟩
 -/
 lemma mk_surjective : Function.Surjective (mk : A _⦋0⦌₂ -> _) :=
@@ -523,7 +523,7 @@ definition homMk
 
 中文:
 定义 homMk
-  签名: (f : Edge x y)
+  签名: (f : 边 x y)
   定义体: ⟦f⟧
 -/
 def homMk (f : Edge x y) : mk x ⟶ mk y := ⟦f⟧
@@ -538,7 +538,7 @@ lemma homMk_surjective
 
 中文:
 引理 homMk_surjective
-  结论: Function.Surjective (homMk : Edge x y -> _)
+  结论: 函数.满射 (homMk : 边 x y -> _)
   证明: Quotient.mk_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk_surjective, mk_surjective
@@ -562,7 +562,7 @@ lemma homMk_id
 中文:
 引理 homMk_id
   条件: (x : HomotopyCategory₂ A)
-  结论: homMk (Edge.id x.pt) = 𝟙 x
+  结论: homMk (边.id x.pt) = 𝟙 x
   证明: rfl
 -/
 lemma homMk_id (x : HomotopyCategory₂ A) : homMk (Edge.id x.pt) = 𝟙 x := rfl
@@ -581,7 +581,7 @@ lemma HomotopicL.congr_homotopyCategory₂HomMk
 
 中文:
 引理 HomotopicL.congr_homotopyCategory₂HomMk
-  条件: {f g : Edge x y} (h : HomotopicL f g)
+  条件: {f g : 边 x y} (h : HomotopicL f g)
   证明: Quotient.sound h
 
 Depends on / 依赖: Quotient, Quotient.sound
@@ -599,7 +599,7 @@ lemma HomotopicR.congr_homotopyCategory₂HomMk
 
 中文:
 引理 HomotopicR.congr_homotopyCategory₂HomMk
-  条件: {f g : Edge x y} (h : HomotopicR f g)
+  条件: {f g : 边 x y} (h : HomotopicR f g)
   证明: Quotient.sound h.homotopicL
 
 Depends on / 依赖: Quotient, Quotient.sound, h.homotopicL, homotopicL
@@ -616,8 +616,8 @@ lemma Edge.CompStruct.homotopyCategory₂_fac
   proof: (comp_unique (compStruct _ _) s .refl .refl).congr_homotopyCategory₂HomMk
 
 中文:
-引理 Edge.CompStruct.homotopyCategory₂_fac
-  结论: {f : Edge x y} {g : Edge y z} {h : Edge x z}
+引理 边.余mpStruct.homotopyCategory₂_fac
+  结论: {f : 边 x y} {g : 边 y z} {h : 边 x z}
   证明: (comp_unique (compStruct _ _) s .refl .refl).congr_homotopyCategory₂HomMk
 
 Depends on / 依赖: compStruct, comp_unique
@@ -638,7 +638,7 @@ definition Edge.CompStruct.ofHomotopyCategory₂Fac
   exact (Quasicategory₂.fill32 (compStruct f g) (compId g) fac.some).some
 
 中文:
-定义 Edge.CompStruct.ofHomotopyCategory₂Fac
+定义 边.余mpStruct.ofHomotopyCategory₂Fac
   定义体: by
   dsimp [homMk, CategoryStruct.comp] at fac
   rw [Quotient.eq_iff_equiv] at fac
@@ -664,8 +664,8 @@ lemma Edge.CompStruct.nonempty_iff
 noncomputable
 
 中文:
-引理 Edge.CompStruct.nonempty_iff
-  条件: {f : Edge x y} {g : Edge y z} {h : Edge x z}
+引理 边.余mpStruct.nonempty_iff
+  条件: {f : 边 x y} {g : 边 y z} {h : 边 x z}
   证明: ⟨fun ⟨h⟩ => h.homotopyCategory₂_fac, fun h => ⟨.ofHomotopyCategory₂Fac h⟩⟩
 
 noncomputable
@@ -695,7 +695,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (HomotopyCategory₂ A)
+  签名: 范畴 (HomotopyCategory₂ A)
   定义体: by
     rintro _ _ ⟨f⟩
     exact ((compStruct _ f).comp_unique (idComp _) .refl .refl).congr_homotopyCategory₂HomMk

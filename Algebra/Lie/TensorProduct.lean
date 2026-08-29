@@ -77,7 +77,7 @@ instance lieRingModule
 
 中文:
 实例 lieRingModule
-  签名: : LieRingModule L (M otimes[R] N) where
+  签名: : Lie环模 L (M otimes[R] N) where
   定义体: hasBracketAux x
   add_lie x y t := by
     simp only [hasBracketAux, LinearMap.lTensor_add, LinearMap.rTensor_add, map_add,
@@ -125,7 +125,7 @@ instance lieModule
 
 中文:
 实例 lieModule
-  签名: : LieModule R L (M otimes[R] N) where
+  签名: : Lie模 R L (M otimes[R] N) where
   定义体: by
     change hasBracketAux (c • x) _ = c • hasBracketAux _ _
     simp only [hasBracketAux, smul_add, LinearMap.rTensor_smul, LinearMap.smul_apply,
@@ -357,7 +357,7 @@ definition mapIncl
 
 中文:
 定义 mapIncl
-  签名: (M' : LieSubmodule R L M) (N' : LieSubmodule R L N)
+  签名: (M' : Lie子模 R L M) (N' : Lie子模 R L N)
   定义体: map M'.incl N'.incl
 
 @[simp]
@@ -378,7 +378,7 @@ theorem mapIncl_def
 
 中文:
 定理 mapIncl_def
-  条件: (M' : LieSubmodule R L M) (N' : LieSubmodule R L N)
+  条件: (M' : Lie子模 R L M) (N' : Lie子模 R L N)
   证明: rfl
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mk_neg, map_neg, mk_neg

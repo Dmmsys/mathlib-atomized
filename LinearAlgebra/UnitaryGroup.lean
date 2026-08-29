@@ -64,7 +64,7 @@ abbreviation unitaryGroup
 
 中文:
 缩写 unitaryGroup
-  签名: : Submonoid (Matrix n n α)
+  签名: : 子幺半群 (矩阵 n n α)
   定义体: unitary (Matrix n n α)
 
 Depends on / 依赖: Matrix, unitary
@@ -93,7 +93,7 @@ theorem mem_unitaryGroup_iff
 
 中文:
 定理 mem_unitaryGroup_iff
-  结论: A in Matrix.unitaryGroup n α ↔ A * star A = 1
+  结论: A in 矩阵.unitaryGroup n α ↔ A * star A = 1
   证明: by
   refine ⟨And.right, fun hA => ⟨?_, hA⟩⟩
   simpa only [mul_eq_one_comm] using hA
@@ -116,7 +116,7 @@ theorem mem_unitaryGroup_iff'
 
 中文:
 定理 mem_unitaryGroup_iff'
-  结论: A in Matrix.unitaryGroup n α ↔ star A * A = 1
+  结论: A in 矩阵.unitaryGroup n α ↔ star A * A = 1
   证明: by
   refine ⟨And.left, fun hA => ⟨hA, ?_⟩⟩
   rwa [mul_eq_one_comm] at hA
@@ -140,7 +140,7 @@ theorem det_of_mem_unitary
 
 中文:
 定理 det_of_mem_unitary
-  条件: {A : Matrix n n α} (hA : A in Matrix.unitaryGroup n α)
+  条件: {A : 矩阵 n n α} (hA : A in 矩阵.unitaryGroup n α)
   证明: by
   constructor
   · simpa [star, det_transpose] using congr_arg det hA.1
@@ -169,7 +169,7 @@ theorem kronecker_mem_unitary
 
 中文:
 定理 kronecker_mem_unitary
-  结论: {R m : 类型} [Semiring R] [StarRing R] [Fintype m]
+  结论: {R m : 类型} [半环 R] [对合环 R] [有限类型 m]
   证明: by
   simp_rw [Unitary.mem_iff, star_eq_conjTranspose, conjTranspose_kronecker']
   constructor <;> ext <;> simp only [mul_apply, submatrix_apply, kroneckerMap_apply, Prod.fst_swap,
@@ -211,7 +211,7 @@ theorem _root_.Unitary.tmul_mem
   simp [Unitary.mem_iff, hU, hV, Algebra.TensorProduct.one_def]
 
 中文:
-定理 _root_.Unitary.tmul_mem
+定理 _root_.酉.tmul_mem
   条件: {U : A} {V : B} (hU : U in unitary A) (hV : V in unitary B)
   证明: by
   simp [Unitary.mem_iff, hU, hV, Algebra.TensorProduct.one_def]
@@ -234,7 +234,7 @@ theorem kroneckerTMul_mem_unitary
 
 中文:
 定理 kroneckerTMul_mem_unitary
-  结论: {m : 类型} [Fintype m] [DecidableEq m] {U : Matrix m m A}
+  结论: {m : 类型} [有限类型 m] [DecidableEq m] {U : 矩阵 m m A}
   证明: by
   simp_rw [Unitary.mem_iff, star_eq_conjTranspose] at hU hV ⊢
   simp [conjTranspose_kroneckerTMul, ← mul_kroneckerTMul_mul, hU, hV]
@@ -261,7 +261,7 @@ instance coeMatrix
 
 中文:
 实例 coeMatrix
-  签名: : Coe (unitaryGroup n α) (Matrix n n α)
+  签名: : Coe (unitaryGroup n α) (矩阵 n n α)
   定义体: ⟨Subtype.val⟩
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -384,7 +384,7 @@ theorem det_isUnit
 中文:
 定理 det_isUnit
   条件: (A : unitaryGroup n α)
-  结论: IsUnit (A : Matrix n n α).det
+  结论: 是单位 (A : 矩阵 n n α).det
   证明: .mp (Unitary.toUnits A).isUnit isUnit_iff_isUnit_det _
 
 Depends on / 依赖: Unitary, Unitary.toUnits, isUnit, isUnit_iff_isUnit_det, toUnits
@@ -406,7 +406,7 @@ theorem inv_val
 
 中文:
 定理 inv_val
-  结论: ↑A⁻¹ = (star A : Matrix n n α)
+  结论: ↑A⁻¹ = (star A : 矩阵 n n α)
   证明: rfl
 -/
 @[simp] theorem inv_val : ↑A⁻¹ = (star A : Matrix n n α) := rfl
@@ -421,7 +421,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  结论: ⇑A⁻¹ = (star A : Matrix n n α)
+  结论: ⇑A⁻¹ = (star A : 矩阵 n n α)
   证明: rfl
 -/
 @[simp] theorem inv_apply : ⇑A⁻¹ = (star A : Matrix n n α) := rfl
@@ -466,7 +466,7 @@ theorem one_val
 
 中文:
 定理 one_val
-  结论: ↑(1 : unitaryGroup n α) = (1 : Matrix n n α)
+  结论: ↑(1 : unitaryGroup n α) = (1 : 矩阵 n n α)
   证明: rfl
 -/
 @[simp] theorem one_val : ↑(1 : unitaryGroup n α) = (1 : Matrix n n α) := rfl
@@ -483,7 +483,7 @@ theorem one_apply
 
 中文:
 定理 one_apply
-  结论: ⇑(1 : unitaryGroup n α) = (1 : Matrix n n α)
+  结论: ⇑(1 : unitaryGroup n α) = (1 : 矩阵 n n α)
   证明: rfl
 
 @[simp]
@@ -522,7 +522,7 @@ theorem toLin'_one
 
 中文:
 定理 toLin'_one
-  结论: toLin' (1 : unitaryGroup n α) = LinearMap.id
+  结论: toLin' (1 : unitaryGroup n α) = 线性映射.id
   证明: Matrix.toLin'_one
 -/
 theorem toLin'_one : toLin' (1 : unitaryGroup n α) = LinearMap.id :=
@@ -701,8 +701,8 @@ theorem _root_.Matrix.transpose_mem_unitaryGroup_iff
   simp
 
 中文:
-定理 _root_.Matrix.transpose_mem_unitaryGroup_iff
-  条件: {U : Matrix n n α}
+定理 _root_.矩阵.transpose_mem_unitaryGroup_iff
+  条件: {U : 矩阵 n n α}
   证明: by
   conv_rhs => rw [mem_unitaryGroup_iff']
   rw [mem_unitaryGroup_iff]; rw [show star Uᵀ = (star U)ᵀ by rfl]; rw [← transpose_mul]; rw [← transpose_inj]
@@ -726,8 +726,8 @@ theorem _root_.Matrix.map_star_mem_unitaryGroup_iff
   simp [← conjTranspose_transpose, transpose_mem_unitaryGroup_iff, ← star_eq_conjTranspose]
 
 中文:
-定理 _root_.Matrix.map_star_mem_unitaryGroup_iff
-  条件: {U : Matrix n n α}
+定理 _root_.矩阵.map_star_mem_unitaryGroup_iff
+  条件: {U : 矩阵 n n α}
   证明: by
   simp [← conjTranspose_transpose, transpose_mem_unitaryGroup_iff, ← star_eq_conjTranspose]
 
@@ -822,7 +822,7 @@ definition specialUnitaryGroup
 
 中文:
 定义 specialUnitaryGroup
-  签名: : Submonoid (Matrix n n α)
+  签名: : 子幺半群 (矩阵 n n α)
   定义体: unitaryGroup n α ⊓ MonoidHom.mker detMonoidHom
 
 Depends on / 依赖: MonoidHom, MonoidHom.mker, detMonoidHom, unitaryGroup
@@ -922,7 +922,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (specialUnitaryGroup n α)
+  签名: 取逆 (specialUnitaryGroup n α)
   定义体: star
 -/
 instance : Inv (specialUnitaryGroup n α) where inv := star
@@ -955,7 +955,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (specialUnitaryGroup n α)
+  签名: 群 (specialUnitaryGroup n α)
   定义体: Subtype.ext A.prop.1.1
 
 Depends on / 依赖: A.prop, Subtype, Subtype.ext
@@ -999,7 +999,7 @@ theorem mem_orthogonalGroup_iff
 
 中文:
 定理 mem_orthogonalGroup_iff
-  条件: {A : Matrix n n R}
+  条件: {A : 矩阵 n n R}
   证明: mem_unitaryGroup_iff
 
 Depends on / 依赖: mem_unitaryGroup_iff
@@ -1018,7 +1018,7 @@ theorem mem_orthogonalGroup_iff'
 
 中文:
 定理 mem_orthogonalGroup_iff'
-  条件: {A : Matrix n n R}
+  条件: {A : 矩阵 n n R}
   证明: mem_unitaryGroup_iff'
 
 Depends on / 依赖: mem_unitaryGroup_iff
@@ -1045,7 +1045,7 @@ abbreviation specialOrthogonalGroup
 
 中文:
 缩写 specialOrthogonalGroup
-  签名: : Submonoid (Matrix n n R)
+  签名: : 子幺半群 (矩阵 n n R)
   定义体: specialUnitaryGroup n R
 
 Depends on / 依赖: specialUnitaryGroup
@@ -1123,7 +1123,7 @@ lemma mem_specialOrthogonalGroup_fin_two_iff
 
 中文:
 引理 mem_specialOrthogonalGroup_fin_two_iff
-  条件: {M : Matrix (Fin 2) (Fin 2) R}
+  条件: {M : 矩阵 (有限集 2) (有限集 2) R}
   证明: by
   rw [← M.etaExpand_eq]
   exact of_mem_specialOrthogonalGroup_fin_two_iff

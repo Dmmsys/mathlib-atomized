@@ -47,9 +47,9 @@ class GdistribMulAction
     - smul_zero({i j} (a : A i)) : smul a (0 : M j) = 0
 
 中文:
-类 GdistribMulAction
-  参数: [AddMonoid ιA] [VAdd ιA ιB] [GMonoid A] [对任意 i, AddMonoid (M i)]
-  继承: GMulAction A M
+类 GdistribMul作用
+  参数: [加法幺半群 ιA] [向量加法 ιA ιB] [G幺半群 A] [对任意 i, 加法幺半群 (M i)]
+  继承: GMul作用 A M
   公理与运算 (2 个):
     - smul_add({i j} (a : A i) (b c : M j)) : smul a (b + c) = smul a b + smul a c
     - smul_zero({i j} (a : A i)) : smul a (0 : M j) = 0
@@ -72,8 +72,8 @@ class Gmodule
 
 中文:
 类 Gmodule
-  参数: [AddMonoid ιA] [VAdd ιA ιB] [对任意 i, AddMonoid (A i)] [对任意 i, AddMonoid (M i)] [GMonoid A]
-  继承: GdistribMulAction A M
+  参数: [加法幺半群 ιA] [向量加法 ιA ιB] [对任意 i, 加法幺半群 (A i)] [对任意 i, 加法幺半群 (M i)] [G幺半群 A]
+  继承: GdistribMul作用 A M
   公理与运算 (2 个):
     - add_smul({i j} (a a' : A i) (b : M j)) : smul (a + a') b = smul a b + smul a' b
     - zero_smul({i j} (b : M j)) : smul (0 : A i) b = 0
@@ -97,7 +97,7 @@ instance GSemiring.toGmodule
 
 中文:
 实例 GSemiring.toGmodule
-  签名: [AddMonoid ιA] [对任意 i : ιA, AddCommMonoid (A i)]
+  签名: [加法幺半群 ιA] [对任意 i : ιA, 加法交换幺半群 (A i)]
   定义体: { GMonoid.toGMulAction A with
     smul_add := fun _ _ _ => h.mul_add _ _ _
     smul_zero := fun _ => h.mul_zero _
@@ -132,7 +132,7 @@ definition gsmulHom
 
 中文:
 定义 gsmulHom
-  签名: [GMonoid A] [Gmodule A M] {i j}
+  签名: [G幺半群 A] [Gmodule A M] {i j}
   定义体: { toFun := fun b => GSMul.smul a b
       map_zero' := GdistribMulAction.smul_zero _
       map_add' := GdistribMulAction.smul_add _ }
@@ -163,7 +163,7 @@ toAddMonoid fun _j => AddMonoidHom.flip (of M _).compHom.comp gsmulHom A M
 
 中文:
 定义 smulAddMonoidHom
-  签名: [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
+  签名: [DecidableEq ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M]
   定义体: toAddMonoid fun _i =>
 AddMonoidHom.flip
 toAddMonoid fun _j => AddMonoidHom.flip (of M _).compHom.comp gsmulHom A M
@@ -192,7 +192,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M] :
+  签名: ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M] :
   定义体: smulAddMonoidHom A M x y
 
 @[simp]
@@ -216,7 +216,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  结论: [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
+  结论: [DecidableEq ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M]
   证明: rfl
 
 @[simp]
@@ -237,7 +237,7 @@ theorem smulAddMonoidHom_apply_of_of
 
 中文:
 定理 smulAddMonoidHom_apply_of_of
-  结论: [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
+  结论: [DecidableEq ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M]
   证明: by
   simp [smulAddMonoidHom]
 
@@ -258,7 +258,7 @@ theorem of_smul_of
 
 中文:
 定理 of_smul_of
-  结论: [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
+  结论: [DecidableEq ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M]
   证明: by simp
 -/
 theorem of_smul_of [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
@@ -283,7 +283,7 @@ theorem one_smul'
 
 中文:
 定理 one_smul'
-  结论: [DecidableEq ιA] [DecidableEq ιB] [GMonoid A] [Gmodule A M]
+  结论: [DecidableEq ιA] [DecidableEq ιB] [G幺半群 A] [Gmodule A M]
   证明: by
   suffices smulAddMonoidHom A M 1 = AddMonoidHom.id (⨁ i, M i) from DFunLike.congr_fun this x
   apply DirectSum.addHom_ext; intro i xi
@@ -414,7 +414,7 @@ instance gmulAction
 
 中文:
 实例 gmulAction
-  签名: [AddMonoid M] [DistribMulAction A M] [SetLike σ M] [SetLike.GradedMonoid 𝓐]
+  签名: [加法幺半群 M] [分配乘法作用 A M] [集合状 σ M] [集合状.分次幺半群 𝓐]
   定义体: { SetLike.toGSMul 𝓐 𝓜 with
     one_smul := fun ⟨_i, _m⟩ => Sigma.subtype_ext (zero_vadd _ _) (one_smul _ _)
     mul_smul := fun ⟨_i, _a⟩ ⟨_j, _a'⟩ ⟨_k, _b⟩ =>
@@ -441,7 +441,7 @@ smul_zero := fun _a => Subtype.ext smul_zero _ }
 
 中文:
 实例 gdistribMulAction
-  签名: [AddMonoid M] [DistribMulAction A M] [SetLike σ M]
+  签名: [加法幺半群 M] [分配乘法作用 A M] [集合状 σ M]
   定义体: { SetLike.gmulAction 𝓐 𝓜 with
 smul_add := fun _a _b _c => Subtype.ext smul_add _ _ _
 smul_zero := fun _a => Subtype.ext smul_zero _ }
@@ -471,7 +471,7 @@ zero_smul := fun _b => Subtype.ext zero_smul _ _ }
 
 中文:
 实例 gmodule
-  签名: : DirectSum.Gmodule (fun i => 𝓐 i) fun i => 𝓜 i
+  签名: : 直和.Gmodule (fun i => 𝓐 i) fun i => 𝓜 i
   定义体: { SetLike.gdistribMulAction 𝓐 𝓜 with
     smul := fun x y => ⟨(x : A) • (y : M), SetLike.GradedSMul.smul_mem x.2 y.2⟩
 add_smul := fun _a _a' _b => Subtype.ext add_smul _ _ _
@@ -508,7 +508,7 @@ definition isModule
 
 中文:
 定义 isModule
-  签名: : Module A (⨁ i, 𝓜 i)
+  签名: : 模 A (⨁ i, 𝓜 i)
   定义体: { Module.compHom _ (DirectSum.decomposeRingEquiv 𝓐 : A ≃+* ⨁ i, 𝓐 i).toRingHom with
     smul := fun a b => DirectSum.decompose 𝓐 a • b }
 
@@ -535,7 +535,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: [DirectSum.Decomposition 𝓜]
+  签名: [直和.分解 𝓜]
   定义体: by
   letI h := isModule 𝓐 𝓜
   refine ⟨⟨(DirectSum.decomposeAddEquiv 𝓜).toAddHom, ?_⟩,

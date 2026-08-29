@@ -49,8 +49,8 @@ structure IsRegular
     - le_cof_ord : c <= c.ord.cof
 
 中文:
-结构 IsRegular
-  参数: (c : Cardinal)
+结构 是正则
+  参数: (c : 基数)
   公理与运算 (2 个):
     - aleph0_le : ℵ₀ <= c
     - le_cof_ord : c <= c.ord.cof
@@ -73,8 +73,8 @@ theorem IsRegular.cof_ord
 @[deprecated (since := "2026-03-22")] alias IsRegular.cof_eq := IsRegular.cof_ord
 
 中文:
-定理 IsRegular.cof_ord
-  条件: (H : c.IsRegular)
+定理 是正则.cof_ord
+  条件: (H : c.是正则)
   结论: c.ord.cof = c
   证明: (cof_ord_le c).antisymm H.2
 
@@ -98,8 +98,8 @@ theorem IsRegular.cof_omega_eq
   rw [← ord_aleph]; rw [H.cof_ord]
 
 中文:
-定理 IsRegular.cof_omega_eq
-  条件: {o : Ordinal} (H : (ℵ_ o).IsRegular)
+定理 是正则.cof_omega_eq
+  条件: {o : 序数} (H : (ℵ_ o).是正则)
   结论: (ω_ o).cof = ℵ_ o
   证明: by
   rw [← ord_aleph]; rw [H.cof_ord]
@@ -119,8 +119,8 @@ theorem IsRegular.pos
   proof: aleph0_pos.trans_le H.1
 
 中文:
-定理 IsRegular.pos
-  条件: (H : c.IsRegular)
+定理 是正则.pos
+  条件: (H : c.是正则)
   结论: 0 < c
   证明: aleph0_pos.trans_le H.1
 
@@ -139,8 +139,8 @@ theorem IsRegular.nat_lt
   proof: lt_of_lt_of_le natCast_lt_aleph0 H.aleph0_le
 
 中文:
-定理 IsRegular.nat_lt
-  条件: (H : c.IsRegular) (n : 自然数)
+定理 是正则.nat_lt
+  条件: (H : c.是正则) (n : 自然数)
   结论: n < c
   证明: lt_of_lt_of_le natCast_lt_aleph0 H.aleph0_le
 
@@ -161,8 +161,8 @@ theorem IsRegular.ord_pos
   exact H.pos
 
 中文:
-定理 IsRegular.ord_pos
-  条件: (H : c.IsRegular)
+定理 是正则.ord_pos
+  条件: (H : c.是正则)
   结论: 0 < c.ord
   证明: by
   rw [Cardinal.lt_ord]; rw [card_zero]
@@ -187,8 +187,8 @@ theorem isRegular_cof
 
 中文:
 定理 isRegular_cof
-  条件: {o : Ordinal} (h : IsSuccLimit o)
-  结论: IsRegular o.cof
+  条件: {o : 序数} (h : 是SuccLimit o)
+  结论: 是正则 o.cof
   证明: by
   refine ⟨?_, (cof_ord_cof o).ge⟩
   rwa [aleph0_le_cof_iff, one_lt_cof_iff]
@@ -209,8 +209,8 @@ lemma IsRegular.ne_zero
   proof: H.pos.ne'
 
 中文:
-引理 IsRegular.ne_zero
-  条件: (H : c.IsRegular)
+引理 是正则.ne_zero
+  条件: (H : c.是正则)
   结论: c != 0
   证明: H.pos.ne'
 -/
@@ -227,7 +227,7 @@ theorem isRegular_aleph0
 
 中文:
 定理 isRegular_aleph0
-  结论: IsRegular ℵ₀
+  结论: 是正则 ℵ₀
   证明: ⟨le_rfl, by simp⟩
 
 Depends on / 依赖: Quotient, Quotient.ind, dist_smul_pair, le_rfl
@@ -245,7 +245,7 @@ lemma fact_isRegular_aleph0
 
 中文:
 引理 fact_isRegular_aleph0
-  结论: Fact (IsRegular ℵ₀) where
+  结论: Fact (是正则 ℵ₀) where
   证明: isRegular_aleph0
 
 Depends on / 依赖: isRegular_aleph0
@@ -274,8 +274,8 @@ theorem isRegular_succ
 
 中文:
 定理 isRegular_succ
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
-  结论: IsRegular (succ c)
+  条件: {c : 基数} (hc : ℵ₀ <= c)
+  结论: 是正则 (succ c)
   证明: by
   have hc₀ := hc.trans (le_succ c)
   use hc₀
@@ -316,7 +316,7 @@ theorem isRegular_aleph_one
 
 中文:
 定理 isRegular_aleph_one
-  结论: IsRegular ℵ₁
+  结论: 是正则 ℵ₁
   证明: by
   rw [← succ_aleph0]
   exact isRegular_succ le_rfl
@@ -362,8 +362,8 @@ theorem _root_.Ordinal.iSup_lt_omega_one
 alias iSup_sequence_lt_omega_one := Ordinal.iSup_lt_omega_one
 
 中文:
-定理 _root_.Ordinal.iSup_lt_omega_one
-  条件: {α : 类型} [Countable α] {f : α -> Ordinal}
+定理 _root_.序数.iSup_lt_omega_one
+  条件: {α : 类型} [可数 α] {f : α -> 序数}
   证明: Ordinal.lift_iSup_lt_of_lt_cof (by simp)
 
 @[deprecated (since := "2026-03-23")]
@@ -393,8 +393,8 @@ theorem isRegular_preAleph_add_one
 
 中文:
 定理 isRegular_preAleph_add_one
-  条件: {o : Ordinal} (h : ω <= o)
-  结论: IsRegular (preAleph (o + 1))
+  条件: {o : 序数} (h : ω <= o)
+  结论: 是正则 (preAleph (o + 1))
   证明: by
   rw [← succ_preAleph]
   exact isRegular_succ (aleph0_le_preAleph.2 h)
@@ -419,8 +419,8 @@ theorem isRegular_preAleph_succ
 
 中文:
 定理 isRegular_preAleph_succ
-  条件: {o : Ordinal} (h : ω <= o)
-  结论: IsRegular (preAleph (succ o))
+  条件: {o : 序数} (h : ω <= o)
+  结论: 是正则 (preAleph (succ o))
   证明: isRegular_preAleph_add_one h
 
 Depends on / 依赖: isRegular_preAleph_add_one
@@ -439,7 +439,7 @@ theorem cof_preOmega_add_one
 
 中文:
 定理 cof_preOmega_add_one
-  条件: {o : Ordinal} (h : ω <= o)
+  条件: {o : 序数} (h : ω <= o)
   证明: by
   rw [← ord_preAleph]; rw [(isRegular_preAleph_add_one h).cof_ord]
 
@@ -464,8 +464,8 @@ theorem isRegular_aleph_add_one
 
 中文:
 定理 isRegular_aleph_add_one
-  条件: (o : Ordinal)
-  结论: IsRegular (ℵ_ (o + 1))
+  条件: (o : 序数)
+  结论: 是正则 (ℵ_ (o + 1))
   证明: by
   rw [← succ_aleph]
   exact isRegular_succ (aleph0_le_aleph o)
@@ -492,8 +492,8 @@ theorem isRegular_aleph_succ
 
 中文:
 定理 isRegular_aleph_succ
-  条件: (o : Ordinal)
-  结论: IsRegular (ℵ_ (succ o))
+  条件: (o : 序数)
+  结论: 是正则 (ℵ_ (succ o))
   证明: isRegular_aleph_add_one o
 
 @[simp]
@@ -515,7 +515,7 @@ theorem cof_omega_add_one
 
 中文:
 定理 cof_omega_add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: (ω_ (o + 1)).cof = ℵ_ (o + 1)
   证明: (isRegular_aleph_add_one o).cof_omega_eq
 
@@ -539,8 +539,8 @@ lemma IsRegular.lift
 @[simp]
 
 中文:
-引理 IsRegular.lift
-  条件: {κ : Cardinal.{v}} (h : κ.IsRegular)
+引理 是正则.lift
+  条件: {κ : 基数.{v}} (h : κ.是正则)
   证明: by
   obtain ⟨h₁, h₂⟩ := h
   constructor
@@ -571,7 +571,7 @@ lemma isRegular_lift_iff
 
 中文:
 引理 isRegular_lift_iff
-  条件: {κ : Cardinal.{v}}
+  条件: {κ : 基数.{v}}
   证明: ⟨fun ⟨h₁, h₂⟩ => ⟨by simpa using h₁, by simpa [← lift_le.{u, v}]⟩, fun h => h.lift⟩
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
@@ -597,7 +597,7 @@ theorem lsub_lt_ord_lift_of_isRegular
 
 中文:
 定理 lsub_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
+  结论: {ι} {f : ι -> 序数} {c} (hc : 是正则 c)
   证明: by
   apply lift_iSup_add_one_lt_of_lt_cof _ hf
   rwa [lift_umax, c.ord.lift_id', hc.cof_ord]
@@ -624,7 +624,7 @@ theorem lsub_lt_ord_of_isRegular
 
 中文:
 定理 lsub_lt_ord_of_isRegular
-  条件: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
+  条件: {ι} {f : ι -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
   证明: iSup_add_one_lt_of_lt_cof (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
@@ -650,7 +650,7 @@ theorem iSup_lt_ord_lift_of_isRegular
 
 中文:
 定理 iSup_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c)
+  结论: {ι} {f : ι -> 序数} {c} (hc : 是正则 c)
   证明: by
   apply Ordinal.lift_iSup_lt_of_lt_cof _ hf
   rwa [lift_umax, Ordinal.lift_id', hc.cof_ord]
@@ -677,7 +677,7 @@ theorem iSup_lt_ord_of_isRegular
 
 中文:
 定理 iSup_lt_ord_of_isRegular
-  条件: {ι} {f : ι -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
+  条件: {ι} {f : ι -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
   证明: Ordinal.iSup_lt_of_lt_cof (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
@@ -701,7 +701,7 @@ theorem blsub_lt_ord_lift_of_isRegular
 
 中文:
 定理 blsub_lt_ord_lift_of_isRegular
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c} (hc : IsRegular c)
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
   证明: blsub_lt_ord_lift (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_add_one_lt_of_lt_cof (since := "2026-03-22")]
@@ -726,7 +726,7 @@ theorem blsub_lt_ord_of_isRegular
 
 中文:
 定理 blsub_lt_ord_of_isRegular
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c} (hc : IsRegular c)
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
   证明: blsub_lt_ord (by rwa [hc.cof_ord])
 
 @[deprecated iSup_lt_ord_lift_of_isRegular (since := "2026-03-22")]
@@ -750,7 +750,7 @@ theorem bsup_lt_ord_lift_of_isRegular
 
 中文:
 定理 bsup_lt_ord_lift_of_isRegular
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c} (hc : IsRegular c)
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
   证明: bsup_lt_ord_lift (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
@@ -775,7 +775,7 @@ theorem bsup_lt_ord_of_isRegular
 
 中文:
 定理 bsup_lt_ord_of_isRegular
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c} (hc : IsRegular c)
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c} (hc : 是正则 c)
   证明: bsup_lt_ord (by rwa [hc.cof_ord])
 
 @[deprecated lift_iSup_lt_of_lt_cof_ord (since := "2026-03-22")]
@@ -801,7 +801,7 @@ theorem iSup_lt_lift_of_isRegular
 
 中文:
 定理 iSup_lt_lift_of_isRegular
-  结论: {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c)
+  结论: {ι} {f : ι -> 基数} {c} (hc : 是正则 c)
   证明: by
   apply lift_iSup_lt_of_lt_cof_ord _ hf
   rwa [lift_umax, c.lift_id', hc.cof_ord]
@@ -826,7 +826,7 @@ theorem iSup_lt_of_isRegular
 
 中文:
 定理 iSup_lt_of_isRegular
-  条件: {ι} {f : ι -> Cardinal} {c} (hc : IsRegular c) (hι : #ι < c)
+  条件: {ι} {f : ι -> 基数} {c} (hc : 是正则 c) (hι : #ι < c)
   证明: iSup_lt_of_lt_cof_ord (by rwa [hc.cof_ord])
 
 Depends on / 依赖: cof_ord, hc.cof_ord, iSup_lt_of_lt_cof_ord
@@ -848,7 +848,7 @@ apply (sum_le_lift_mk_mul_iSup _).trans_lt
 
 中文:
 定理 sum_lt_lift_of_isRegular
-  结论: {ι : 类型u} {f : ι -> Cardinal} (hc : IsRegular c)
+  结论: {ι : 类型u} {f : ι -> 基数} (hc : 是正则 c)
   证明: by
 apply (sum_le_lift_mk_mul_iSup _).trans_lt
     mul_lt_of_lt hc.1 hι (lift_iSup_lt_of_lt_cof_ord _ hf)
@@ -874,7 +874,7 @@ theorem sum_lt_of_isRegular
 
 中文:
 定理 sum_lt_of_isRegular
-  结论: {ι : 类型u} {f : ι -> Cardinal} (hc : IsRegular c)
+  结论: {ι : 类型u} {f : ι -> 基数} (hc : 是正则 c)
   证明: sum_lt_lift_of_isRegular.{u, u} hc (by rwa [lift_id])
 
 @[simp]
@@ -898,7 +898,7 @@ theorem card_lt_of_card_iUnion_lt
 
 中文:
 定理 card_lt_of_card_iUnion_lt
-  结论: {ι : 类型u} {α : 类型u} {t : ι -> Set α} {c : Cardinal}
+  结论: {ι : 类型u} {α : 类型u} {t : ι -> 集合 α} {c : 基数}
   证明: lt_of_le_of_lt (Cardinal.mk_le_mk_of_subset <| subset_iUnion _ _) h
 
 @[simp]
@@ -925,8 +925,8 @@ theorem card_iUnion_lt_iff_forall_of_isRegular
   · rwa [hc.cof_ord]
 
 中文:
-定理 card_iUnion_lt_iff_forall_of_isRegular
-  结论: {ι : 类型u} {α : 类型u} {t : ι -> Set α}
+定理 card_iUnion_lt_iff_对任意_of_isRegular
+  结论: {ι : 类型u} {α : 类型u} {t : ι -> 集合 α}
   证明: by
   refine ⟨card_lt_of_card_iUnion_lt, fun h => ?_⟩
   apply lt_of_le_of_lt (Cardinal.mk_sUnion_le _)
@@ -959,7 +959,7 @@ theorem card_lt_of_card_biUnion_lt
 
 中文:
 定理 card_lt_of_card_biUnion_lt
-  结论: {α β : 类型u} {s : Set α} {t : 对任意 a in s, Set β} {c : Cardinal}
+  结论: {α β : 类型u} {s : 集合 α} {t : 对任意 a in s, 集合 β} {c : 基数}
   证明: by
   rw [biUnion_eq_iUnion] at h
   have := card_lt_of_card_iUnion_lt h
@@ -983,8 +983,8 @@ theorem card_biUnion_lt_iff_forall_of_isRegular
   rw [biUnion_eq_iUnion]; rw [card_iUnion_lt_iff_forall_of_isRegular hc hs]; rw [SetCoe.forall']
 
 中文:
-定理 card_biUnion_lt_iff_forall_of_isRegular
-  结论: {α β : 类型u} {s : Set α} {t : 对任意 a in s, Set β}
+定理 card_biUnion_lt_iff_对任意_of_isRegular
+  结论: {α β : 类型u} {s : 集合 α} {t : 对任意 a in s, 集合 β}
   证明: by
   rw [biUnion_eq_iUnion]; rw [card_iUnion_lt_iff_forall_of_isRegular hc hs]; rw [SetCoe.forall']
 
@@ -1008,7 +1008,7 @@ theorem nfpFamily_lt_ord_lift_of_isRegular
 
 中文:
 定理 nfpFamily_lt_ord_lift_of_isRegular
-  结论: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
+  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
   证明: by
   apply nfpFamily_lt_ord_lift _ _ hf ha <;> rw [hc.cof_ord]
   · exact lt_of_le_of_ne hc.1 hc'.symm
@@ -1033,7 +1033,7 @@ theorem nfpFamily_lt_ord_of_isRegular
 
 中文:
 定理 nfpFamily_lt_ord_of_isRegular
-  结论: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
+  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
   证明: nfpFamily_lt_ord_lift_of_isRegular hc (by rwa [lift_id]) hc' hf
 
 Depends on / 依赖: lift_id, nfpFamily_lt_ord_lift_of_isRegular
@@ -1053,7 +1053,7 @@ theorem nfp_lt_ord_of_isRegular
 
 中文:
 定理 nfp_lt_ord_of_isRegular
-  结论: {f : Ordinal -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
+  结论: {f : 序数 -> 序数} {c} (hc : 是正则 c) (hc' : c != ℵ₀)
   证明: nfp_lt_ord (by rw [hc.cof_ord]; exact lt_of_le_of_ne hc.1 hc'.symm) hf
 
 Depends on / 依赖: MetricSpace, T0Space, _root_, _root_.MetricSpace.instT0Space, cof_ord, hc.cof_ord, instT0Space, lt_of_le_of_ne, nfp_lt_ord
@@ -1083,7 +1083,7 @@ theorem derivFamily_lt_ord_lift
 
 中文:
 定理 derivFamily_lt_ord_lift
-  结论: {ι : 类型u} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c)
+  结论: {ι : 类型u} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c)
   证明: by
   have hω : ℵ₀ < c.ord.cof := by
     rw [hc.cof_ord]
@@ -1132,7 +1132,7 @@ theorem derivFamily_lt_ord
 
 中文:
 定理 derivFamily_lt_ord
-  结论: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : IsRegular c) (hι : #ι < c)
+  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : 是正则 c) (hι : #ι < c)
   证明: derivFamily_lt_ord_lift hc (by rwa [lift_id]) hc' hf
 
 Depends on / 依赖: derivFamily_lt_ord_lift, lift_id
@@ -1153,7 +1153,7 @@ theorem deriv_lt_ord
 
 中文:
 定理 deriv_lt_ord
-  结论: {f : Ordinal.{u} -> Ordinal} {c} (hc : IsRegular c) (hc' : c != ℵ₀)
+  结论: {f : 序数.{u} -> 序数} {c} (hc : 是正则 c) (hc' : c != ℵ₀)
   证明: derivFamily_lt_ord_lift hc
     (by simpa using Cardinal.one_lt_aleph0.trans (lt_of_le_of_ne hc.1 hc'.symm)) hc' fun _ => hf
 
@@ -1179,8 +1179,8 @@ structure IsSingular
     - cof_ord_ne : c.ord.cof != c
 
 中文:
-结构 IsSingular
-  参数: (c : Cardinal)
+结构 是奇异
+  参数: (c : 基数)
   公理与运算 (2 个):
     - aleph0_le : ℵ₀ <= c
     - cof_ord_ne : c.ord.cof != c
@@ -1201,8 +1201,8 @@ theorem IsSingular.cof_ord_lt
   proof: (cof_ord_le c).lt_of_ne hc.cof_ord_ne
 
 中文:
-定理 IsSingular.cof_ord_lt
-  条件: (hc : c.IsSingular)
+定理 是奇异.cof_ord_lt
+  条件: (hc : c.是奇异)
   结论: c.ord.cof < c
   证明: (cof_ord_le c).lt_of_ne hc.cof_ord_ne
 
@@ -1221,8 +1221,8 @@ theorem IsSingular.natCast_lt
   proof: natCast_lt_aleph0.trans_le hc.aleph0_le
 
 中文:
-定理 IsSingular.natCast_lt
-  条件: (hc : c.IsSingular) (n : 自然数)
+定理 是奇异.natCast_lt
+  条件: (hc : c.是奇异) (n : 自然数)
   结论: n < c
   证明: natCast_lt_aleph0.trans_le hc.aleph0_le
 
@@ -1241,8 +1241,8 @@ theorem IsSingular.pos
   proof: hc.natCast_lt 0
 
 中文:
-定理 IsSingular.pos
-  条件: (hc : c.IsSingular)
+定理 是奇异.pos
+  条件: (hc : c.是奇异)
   结论: 0 < c
   证明: hc.natCast_lt 0
 
@@ -1261,9 +1261,9 @@ theorem IsSingular.not_isRegular
   proof: fun hc' => hc'.le_cof_ord.not_gt hc.cof_ord_lt
 
 中文:
-定理 IsSingular.not_isRegular
-  条件: (hc : c.IsSingular)
-  结论: ¬ c.IsRegular
+定理 是奇异.not_isRegular
+  条件: (hc : c.是奇异)
+  结论: ¬ c.是正则
   证明: fun hc' => hc'.le_cof_ord.not_gt hc.cof_ord_lt
 
 Depends on / 依赖: cof_ord_lt, hc.cof_ord_lt, le_cof_ord, le_cof_ord.not_gt, not_gt
@@ -1283,9 +1283,9 @@ theorem IsRegular.not_isSingular
 @[simp]
 
 中文:
-定理 IsRegular.not_isSingular
-  条件: (hc : c.IsRegular)
-  结论: ¬ c.IsSingular
+定理 是正则.not_isSingular
+  条件: (hc : c.是正则)
+  结论: ¬ c.是奇异
   证明: imp_not_comm.1 IsSingular.not_isRegular hc
 
 @[simp]
@@ -1308,7 +1308,7 @@ theorem not_isSingular_aleph0
 
 中文:
 定理 not_isSingular_aleph0
-  结论: ¬ IsSingular ℵ₀
+  结论: ¬ 是奇异 ℵ₀
   证明: isRegular_aleph0.not_isSingular
 
 @[simp]
@@ -1331,7 +1331,7 @@ theorem not_isSingular_aleph_one
 
 中文:
 定理 not_isSingular_aleph_one
-  结论: ¬ IsSingular ℵ₁
+  结论: ¬ 是奇异 ℵ₁
   证明: isRegular_aleph_one.not_isSingular
 
 @[simp]
@@ -1361,8 +1361,8 @@ theorem not_isSingular_succ
 
 中文:
 定理 not_isSingular_succ
-  条件: (c : Cardinal)
-  结论: ¬ IsSingular (succ c)
+  条件: (c : 基数)
+  结论: ¬ 是奇异 (succ c)
   证明: by
   obtain hc | hc := lt_or_ge c ℵ₀
   · obtain ⟨n, rfl⟩ := lt_aleph0.1 hc
@@ -1396,8 +1396,8 @@ theorem not_isRegular_aleph_add_one
 
 中文:
 定理 not_isRegular_aleph_add_one
-  条件: (o : Ordinal)
-  结论: ¬ IsSingular (ℵ_ (o + 1))
+  条件: (o : 序数)
+  结论: ¬ 是奇异 (ℵ_ (o + 1))
   证明: by
   simp [← succ_aleph]
 
@@ -1420,9 +1420,9 @@ theorem IsSingular.isSuccLimit
   exact not_isSingular_succ c hc
 
 中文:
-定理 IsSingular.isSuccLimit
-  条件: (hc : IsSingular c)
-  结论: IsSuccLimit c
+定理 是奇异.isSuccLimit
+  条件: (hc : 是奇异 c)
+  结论: 是SuccLimit c
   证明: by
   rw [Cardinal.isSuccLimit_iff]; rw [isSuccPrelimit_iff_succ_ne]
   refine ⟨hc.pos.ne', ?_⟩
@@ -1451,7 +1451,7 @@ theorem isRegular_or_isSingular
 中文:
 定理 isRegular_or_isSingular
   条件: (h : ℵ₀ <= c)
-  结论: c.IsRegular ∨ c.IsSingular
+  结论: c.是正则 ∨ c.是奇异
   证明: by
   rw [isSingular_iff]; rw [← (cof_ord_le c).lt_iff_ne]; rw [← not_le]
   tauto
@@ -1475,7 +1475,7 @@ theorem lt_aleph0_or_isRegular_or_isSingular
 
 中文:
 定理 lt_aleph0_or_isRegular_or_isSingular
-  结论: c < ℵ₀ ∨ c.IsRegular ∨ c.IsSingular
+  结论: c < ℵ₀ ∨ c.是正则 ∨ c.是奇异
   证明: by
   have := isRegular_or_isSingular (c := c)
   rw [← not_le]
@@ -1498,9 +1498,9 @@ theorem IsSingular.of_not_isRegular
   proof: (isRegular_or_isSingular h₀).resolve_left hc
 
 中文:
-定理 IsSingular.of_not_isRegular
-  条件: (h₀ : ℵ₀ <= c) (hc : ¬ IsRegular c)
-  结论: IsSingular c
+定理 是奇异.of_not_isRegular
+  条件: (h₀ : ℵ₀ <= c) (hc : ¬ 是正则 c)
+  结论: 是奇异 c
   证明: (isRegular_or_isSingular h₀).resolve_left hc
 
 Depends on / 依赖: isRegular_or_isSingular, resolve_left
@@ -1518,9 +1518,9 @@ theorem IsRegular.of_not_isSingular
   proof: (isRegular_or_isSingular h₀).resolve_right hc
 
 中文:
-定理 IsRegular.of_not_isSingular
-  条件: (h₀ : ℵ₀ <= c) (hc : ¬ IsSingular c)
-  结论: IsRegular c
+定理 是正则.of_not_isSingular
+  条件: (h₀ : ℵ₀ <= c) (hc : ¬ 是奇异 c)
+  结论: 是正则 c
   证明: (isRegular_or_isSingular h₀).resolve_right hc
 
 Depends on / 依赖: isRegular_or_isSingular, resolve_right
@@ -1544,8 +1544,8 @@ theorem isSingular_aleph_iff
 
 中文:
 定理 isSingular_aleph_iff
-  条件: {o : Ordinal}
-  结论: (ℵ_ o).IsSingular ↔ IsSuccLimit o ∧ o.cof < ℵ_ o
+  条件: {o : 序数}
+  结论: (ℵ_ o).是奇异 ↔ 是SuccLimit o ∧ o.cof < ℵ_ o
   证明: by
   obtain rfl | ⟨a, rfl⟩ | ho := zero_or_succ_or_isSuccLimit o
   · simp
@@ -1572,9 +1572,9 @@ theorem IsSingular.isSuccLimit_of_aleph
   proof: (isSingular_aleph_iff.1 hc).1
 
 中文:
-定理 IsSingular.isSuccLimit_of_aleph
-  条件: {o : Ordinal} (hc : IsSingular (ℵ_ o))
-  结论: IsSuccLimit o
+定理 是奇异.isSuccLimit_of_aleph
+  条件: {o : 序数} (hc : 是奇异 (ℵ_ o))
+  结论: 是SuccLimit o
   证明: (isSingular_aleph_iff.1 hc).1
 
 Depends on / 依赖: isSingular_aleph_iff
@@ -1592,7 +1592,7 @@ theorem isSingular_aleph_omega0
 
 中文:
 定理 isSingular_aleph_omega0
-  结论: (ℵ_ ω).IsSingular
+  结论: (ℵ_ ω).是奇异
   证明: by simp [isSingular_aleph_iff]
 
 Depends on / 依赖: isSingular_aleph_iff
@@ -1613,8 +1613,8 @@ theorem IsSingular.aleph_omega0_le
   exact omega0_le_of_isSuccLimit hc.1
 
 中文:
-定理 IsSingular.aleph_omega0_le
-  条件: (hc : IsSingular c)
+定理 是奇异.aleph_omega0_le
+  条件: (hc : 是奇异 c)
   结论: ℵ_ ω <= c
   证明: by
   obtain ⟨o, rfl⟩ := mem_range_aleph_iff.2 hc.aleph0_le
@@ -1644,8 +1644,8 @@ structure IsInaccessible
     - isStrongPrelimit : IsStrongPrelimit c
 
 中文:
-结构 IsInaccessible
-  参数: (c : Cardinal)
+结构 是Inaccessible
+  参数: (c : 基数)
   公理与运算 (3 个):
     - aleph0_lt : ℵ₀ < c
     - le_cof_ord : c <= c.ord.cof
@@ -1669,8 +1669,8 @@ theorem IsInaccessible.nat_lt
   proof: natCast_lt_aleph0.trans h.1
 
 中文:
-定理 IsInaccessible.nat_lt
-  条件: (h : IsInaccessible c) (n : 自然数)
+定理 是Inaccessible.nat_lt
+  条件: (h : 是Inaccessible c) (n : 自然数)
   结论: n < c
   证明: natCast_lt_aleph0.trans h.1
 
@@ -1689,8 +1689,8 @@ theorem IsInaccessible.pos
   proof: aleph0_pos.trans h.1
 
 中文:
-定理 IsInaccessible.pos
-  条件: (h : IsInaccessible c)
+定理 是Inaccessible.pos
+  条件: (h : 是Inaccessible c)
   结论: 0 < c
   证明: aleph0_pos.trans h.1
 
@@ -1709,8 +1709,8 @@ theorem IsInaccessible.ne_zero
   proof: h.pos.ne'
 
 中文:
-定理 IsInaccessible.ne_zero
-  条件: (h : IsInaccessible c)
+定理 是Inaccessible.ne_zero
+  条件: (h : 是Inaccessible c)
   结论: c != 0
   证明: h.pos.ne'
 
@@ -1729,9 +1729,9 @@ theorem IsInaccessible.isRegular
   proof: ⟨h.aleph0_lt.le, h.le_cof_ord⟩
 
 中文:
-定理 IsInaccessible.isRegular
-  条件: (h : IsInaccessible c)
-  结论: IsRegular c
+定理 是Inaccessible.isRegular
+  条件: (h : 是Inaccessible c)
+  结论: 是正则 c
   证明: ⟨h.aleph0_lt.le, h.le_cof_ord⟩
 
 Depends on / 依赖: aleph0_lt, h.aleph0_lt.le, h.le_cof_ord, le_cof_ord
@@ -1749,9 +1749,9 @@ theorem IsInaccessible.isStrongLimit
   proof: ⟨h.ne_zero, h.isStrongPrelimit⟩
 
 中文:
-定理 IsInaccessible.isStrongLimit
-  条件: {c : Cardinal} (h : IsInaccessible c)
-  结论: IsStrongLimit c
+定理 是Inaccessible.isStrongLimit
+  条件: {c : 基数} (h : 是Inaccessible c)
+  结论: 是StrongLimit c
   证明: ⟨h.ne_zero, h.isStrongPrelimit⟩
 
 Depends on / 依赖: h.isStrongPrelimit, h.ne_zero, isStrongPrelimit, ne_zero
@@ -1769,9 +1769,9 @@ theorem IsInaccessible.isSuccLimit
   proof: h.isStrongLimit.isSuccLimit
 
 中文:
-定理 IsInaccessible.isSuccLimit
-  条件: {c : Cardinal} (h : IsInaccessible c)
-  结论: IsSuccLimit c
+定理 是Inaccessible.isSuccLimit
+  条件: {c : 基数} (h : 是Inaccessible c)
+  结论: 是SuccLimit c
   证明: h.isStrongLimit.isSuccLimit
 
 Depends on / 依赖: h.isStrongLimit.isSuccLimit, isStrongLimit, isSuccLimit
@@ -1790,7 +1790,7 @@ theorem isInaccessible_def
 
 中文:
 定理 isInaccessible_def
-  结论: IsInaccessible c ↔ ℵ₀ < c ∧ IsRegular c ∧ IsStrongLimit c where
+  结论: 是Inaccessible c ↔ ℵ₀ < c ∧ 是正则 c ∧ 是StrongLimit c where
   证明: ⟨h.aleph0_lt, h.isRegular, h.isStrongLimit⟩
   mpr := fun ⟨h₁, h₂, h₃⟩ => ⟨h₁, h₂.2, h₃.isStrongPrelimit⟩
 
@@ -1809,8 +1809,8 @@ theorem IsInaccessible.univ
   proof: ⟨aleph0_lt_univ, by simp, IsStrongLimit.univ.isStrongPrelimit⟩
 
 中文:
-定理 IsInaccessible.univ
-  结论: IsInaccessible univ.{u, v}
+定理 是Inaccessible.univ
+  结论: 是Inaccessible univ.{u, v}
   证明: ⟨aleph0_lt_univ, by simp, IsStrongLimit.univ.isStrongPrelimit⟩
 
 Depends on / 依赖: IsStrongLimit, IsStrongLimit.univ.isStrongPrelimit, aleph0_lt_univ, isStrongPrelimit
@@ -1835,8 +1835,8 @@ theorem IsInaccessible.preBeth_ord
   
 
 中文:
-定理 IsInaccessible.preBeth_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.preBeth_ord
+  条件: (hc : 是Inaccessible c)
   结论: preBeth c.ord = c
   证明: by
   apply (preBeth_strictMono.comp ord_strictMono).le_apply.antisymm'
@@ -1873,8 +1873,8 @@ theorem IsInaccessible.beth_ord
   exact hc.aleph0_lt
 
 中文:
-定理 IsInaccessible.beth_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.beth_ord
+  条件: (hc : 是Inaccessible c)
   结论: ℶ_ c.ord = c
   证明: by
   rw [← preBeth_of_omega0_sq_le (le_of_lt _)]; rw [hc.preBeth_ord]
@@ -1899,8 +1899,8 @@ theorem IsInaccessible.preAleph_ord
     (preAleph.strictMono.comp ord_strictMono).le_apply
 
 中文:
-定理 IsInaccessible.preAleph_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.preAleph_ord
+  条件: (hc : 是Inaccessible c)
   结论: preAleph c.ord = c
   证明: ((preAleph_le_preBeth _).trans hc.preBeth_ord.le).antisymm
     (preAleph.strictMono.comp ord_strictMono).le_apply
@@ -1922,8 +1922,8 @@ theorem IsInaccessible.preAleph_symm_eq_ord
   rw [OrderIso.symm_apply_eq]; rw [hc.preAleph_ord]
 
 中文:
-定理 IsInaccessible.preAleph_symm_eq_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.preAleph_symm_eq_ord
+  条件: (hc : 是Inaccessible c)
   结论: preAleph.symm c = c.ord
   证明: by
   rw [OrderIso.symm_apply_eq]; rw [hc.preAleph_ord]
@@ -1943,8 +1943,8 @@ theorem IsInaccessible.aleph_ord
   proof: ((aleph_le_beth _).trans hc.beth_ord.le).antisymm (aleph.strictMono.comp ord_strictMono).le_apply
 
 中文:
-定理 IsInaccessible.aleph_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.aleph_ord
+  条件: (hc : 是Inaccessible c)
   结论: ℵ_ c.ord = c
   证明: ((aleph_le_beth _).trans hc.beth_ord.le).antisymm (aleph.strictMono.comp ord_strictMono).le_apply
 
@@ -1964,8 +1964,8 @@ theorem IsInaccessible.preOmega_ord
   rw [← ord_preAleph]; rw [hc.preAleph_ord]
 
 中文:
-定理 IsInaccessible.preOmega_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.preOmega_ord
+  条件: (hc : 是Inaccessible c)
   结论: preOmega c.ord = c.ord
   证明: by
   rw [← ord_preAleph]; rw [hc.preAleph_ord]
@@ -1988,8 +1988,8 @@ theorem IsInaccessible.omega_ord
 @[simp]
 
 中文:
-定理 IsInaccessible.omega_ord
-  条件: (hc : IsInaccessible c)
+定理 是Inaccessible.omega_ord
+  条件: (hc : 是Inaccessible c)
   结论: ω_ c.ord = c.ord
   证明: by
   rw [← ord_aleph]; rw [hc.aleph_ord]
@@ -2015,7 +2015,7 @@ theorem preBeth_univ
 
 中文:
 定理 preBeth_univ
-  结论: preBeth Ordinal.univ.{u, v} = univ.{u, v}
+  结论: preBeth 序数.univ.{u, v} = univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.preBeth_ord
 
@@ -2040,7 +2040,7 @@ theorem beth_univ
 
 中文:
 定理 beth_univ
-  结论: ℶ_ Ordinal.univ.{u, v} = univ.{u, v}
+  结论: ℶ_ 序数.univ.{u, v} = univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.beth_ord
 
@@ -2065,7 +2065,7 @@ theorem preAleph_univ
 
 中文:
 定理 preAleph_univ
-  结论: preAleph Ordinal.univ.{u, v} = univ.{u, v}
+  结论: preAleph 序数.univ.{u, v} = univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.preAleph_ord
 
@@ -2090,7 +2090,7 @@ theorem preAleph_symm_univ
 
 中文:
 定理 preAleph_symm_univ
-  结论: preAleph.symm univ.{u, v} = Ordinal.univ.{u, v}
+  结论: preAleph.symm univ.{u, v} = 序数.univ.{u, v}
   证明: by
   simp [OrderIso.symm_apply_eq]
 
@@ -2115,7 +2115,7 @@ theorem aleph_univ
 
 中文:
 定理 aleph_univ
-  结论: ℵ_ Ordinal.univ.{u, v} = univ.{u, v}
+  结论: ℵ_ 序数.univ.{u, v} = univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.aleph_ord
 
@@ -2139,8 +2139,8 @@ theorem _root_.Ordinal.preOmega_univ
 @[simp]
 
 中文:
-定理 _root_.Ordinal.preOmega_univ
-  结论: preOmega Ordinal.univ.{u, v} = Ordinal.univ.{u, v}
+定理 _root_.序数.preOmega_univ
+  结论: preOmega 序数.univ.{u, v} = 序数.univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.preOmega_ord
 
@@ -2162,8 +2162,8 @@ theorem _root_.Ordinal.omega_univ
   simpa using IsInaccessible.univ.omega_ord
 
 中文:
-定理 _root_.Ordinal.omega_univ
-  结论: ω_ Ordinal.univ.{u, v} = Ordinal.univ.{u, v}
+定理 _root_.序数.omega_univ
+  结论: ω_ 序数.univ.{u, v} = 序数.univ.{u, v}
   证明: by
   simpa using IsInaccessible.univ.omega_ord
 

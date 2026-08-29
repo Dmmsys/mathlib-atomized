@@ -29,7 +29,7 @@ instance canonicallyOrderedAdd
 
 中文:
 实例 canonicallyOrderedAdd
-  签名: : CanonicallyOrderedAdd PUnit where
+  签名: : 典范有序加法 命题单元 where
   定义体: ⟨unit, by subsingleton⟩
   le_add_self _ _ := trivial
   le_self_add _ _ := trivial
@@ -52,7 +52,7 @@ instance isOrderedCancelAddMonoid
 
 中文:
 实例 isOrderedCancelAddMonoid
-  签名: : IsOrderedCancelAddMonoid PUnit where
+  签名: : 是OrderedCancelAdd幺半群 命题单元 where
   定义体: trivial
   add_le_add_left := by intros; rfl
 -/
@@ -73,7 +73,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommMonoidWithTop PUnit
+  签名: LinearOrderedAddComm幺半群带顶 命题单元
   定义体: ()
   le_top _ := le_rfl
   top_add' _ := rfl

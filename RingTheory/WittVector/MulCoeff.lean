@@ -250,7 +250,7 @@ definition polyOfInterest
     X (1, n + 1) * rename (Prod.mk (0 : Fin 2)) (wittPolynomial p Int (n + 1))
 
 中文:
-定义 polyOfInterest
+定义 polyOf整数erest
   签名: (n : 自然数)
   定义体: wittMul p (n + 1) + (p : 𝕄) ^ (n + 1) * X (0, n + 1) * X (1, n + 1) -
     X (0, n + 1) * rename (Prod.mk (1 : Fin 2)) (wittPolynomial p Int (n + 1)) -
@@ -281,7 +281,7 @@ theorem mul_polyOfInterest_aux1
      
 
 中文:
-定理 mul_polyOfInterest_aux1
+定理 mul_polyOf整数erest_aux1
   条件: (n : 自然数)
   证明: by
   simp only [wittPolyProd]
@@ -324,7 +324,7 @@ theorem mul_polyOfInterest_aux2
   rfl
 
 中文:
-定理 mul_polyOfInterest_aux2
+定理 mul_polyOf整数erest_aux2
   条件: (n : 自然数)
   证明: by
   convert! mul_polyOfInterest_aux1 p n
@@ -356,7 +356,7 @@ theorem mul_polyOfInterest_aux3
     rw [sum_range_succ]; rw [← C_mul_X_pow_eq_monomial]; rw [tsub_self]; rw [pow_zero]; 
 
 中文:
-定理 mul_polyOfInterest_aux3
+定理 mul_polyOf整数erest_aux3
   条件: (p n : 自然数)
   结论: wittPolyProd p (n + 1) =
   证明: by
@@ -404,7 +404,7 @@ theorem mul_polyOfInterest_aux4
   exact mul_polyOfInterest_aux3 _ _
 
 中文:
-定理 mul_polyOfInterest_aux4
+定理 mul_polyOf整数erest_aux4
   条件: (n : 自然数)
   证明: by
   rw [← add_sub_assoc]; rw [eq_sub_iff_add_eq]; rw [mul_polyOfInterest_aux2]
@@ -433,7 +433,7 @@ theorem mul_polyOfInterest_aux5
   ring
 
 中文:
-定理 mul_polyOfInterest_aux5
+定理 mul_polyOf整数erest_aux5
   条件: (n : 自然数)
   证明: by
   simp only [polyOfInterest, mul_sub, mul_add, sub_eq_iff_eq_add']
@@ -462,7 +462,7 @@ theorem mul_polyOfInterest_vars
   · apply wittPolyProdRemainder_vars
 
 中文:
-定理 mul_polyOfInterest_vars
+定理 mul_polyOf整数erest_vars
   条件: (n : 自然数)
   证明: by
   rw [mul_polyOfInterest_aux5]
@@ -495,7 +495,7 @@ theorem polyOfInterest_vars_eq
   exact mod_cast hp.out.ne_zero
 
 中文:
-定理 polyOfInterest_vars_eq
+定理 polyOf整数erest_vars_eq
   条件: (n : 自然数)
   结论: (polyOf整数erest p n).vars =
   证明: by
@@ -526,7 +526,7 @@ theorem polyOfInterest_vars
   rw [polyOfInterest_vars_eq]; apply mul_polyOfInterest_vars
 
 中文:
-定理 polyOfInterest_vars
+定理 polyOf整数erest_vars
   条件: (n : 自然数)
   结论: (polyOf整数erest p n).vars subseteq univ ×ˢ range (n + 1)
   证明: by
@@ -552,7 +552,7 @@ theorem peval_polyOfInterest
     map_add, map_po
 
 中文:
-定理 peval_polyOfInterest
+定理 peval_polyOf整数erest
   条件: (n : 自然数) (x y : 𝕎 k)
   证明: by
   simp only [polyOfInterest, peval,
@@ -593,7 +593,7 @@ theorem peval_polyOfInterest'
       (0 : k) ^ x * y.coeff x ^ p ^ (
 
 中文:
-定理 peval_polyOfInterest'
+定理 peval_polyOf整数erest'
   条件: (n : 自然数) (x y : 𝕎 k)
   证明: by
   rw [peval_polyOfInterest]

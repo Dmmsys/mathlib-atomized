@@ -34,10 +34,10 @@ class ErgodicVAdd
 
 中文:
 类 ErgodicVAdd
-  参数: (G α : 类型) [VAdd G α] {_ : MeasurableSpace α} (μ : Measure α)
-  继承: VAddInvariantMeasure G α μ
+  参数: (G α : 类型) [向量加法 G α] {_ : 可测空间 α} (μ : 测度 α)
+  继承: 向量加不变测度 G α μ
   公理与运算 (1 个):
-    - aeconst_of_forall_preimage_vadd_ae_eq({s : Set α}) : MeasurableSet s -> (对任意 g : G, (g +ᵥ ·) ⁻¹' s =ᵐ[μ] s) -> EventuallyConst s (ae μ)
+    - aeconst_of_forall_preimage_vadd_ae_eq({s : 集合 α}) : 可测集 s -> (对任意 g : G, (g +ᵥ ·) ⁻¹' s =ᵐ[μ] s) -> EventuallyConst s (ae μ)
 -/
 class ErgodicVAdd (G α : Type*) [VAdd G α] {_ : MeasurableSpace α} (μ : Measure α) : Prop
     extends VAddInvariantMeasure G α μ where
@@ -63,10 +63,10 @@ class ErgodicSMul
 
 中文:
 类 ErgodicSMul
-  参数: (G α : 类型) [SMul G α] {_ : MeasurableSpace α} (μ : Measure α)
-  继承: SMulInvariantMeasure G α μ
+  参数: (G α : 类型) [标量乘法 G α] {_ : 可测空间 α} (μ : 测度 α)
+  继承: 标量乘不变测度 G α μ
   公理与运算 (1 个):
-    - aeconst_of_forall_preimage_smul_ae_eq({s : Set α}) : MeasurableSet s -> (对任意 g : G, (g • ·) ⁻¹' s =ᵐ[μ] s) -> EventuallyConst s (ae μ)
+    - aeconst_of_forall_preimage_smul_ae_eq({s : 集合 α}) : 可测集 s -> (对任意 g : G, (g • ·) ⁻¹' s =ᵐ[μ] s) -> EventuallyConst s (ae μ)
 -/
 class ErgodicSMul (G α : Type*) [SMul G α] {_ : MeasurableSpace α} (μ : Measure α) : Prop
     extends SMulInvariantMeasure G α μ where
@@ -94,8 +94,8 @@ theorem aeconst_of_forall_preimage_smul_ae_eq
   exact tendsto_smul_ae _ _ hst.symm
 
 中文:
-定理 aeconst_of_forall_preimage_smul_ae_eq
-  结论: [SMul G α] [ErgodicSMul G α μ] {s : Set α}
+定理 aeconst_of_对任意_preimage_smul_ae_eq
+  结论: [标量乘法 G α] [ErgodicSMul G α μ] {s : 集合 α}
   证明: by
   rcases hm with ⟨t, htm, hst⟩
   refine .congr ?_ hst.symm
@@ -131,7 +131,7 @@ theorem aeconst_of_forall_smul_ae_eq
 @[to_additive]
 
 中文:
-定理 aeconst_of_forall_smul_ae_eq
+定理 aeconst_of_对任意_smul_ae_eq
   条件: (hm : NullMeasurableSet s μ) (h : 对任意 g : G, g • s =ᵐ[μ] s)
   证明: aeconst_of_forall_preimage_smul_ae_eq G hm fun g => by
     simpa only [preimage_smul] using h g⁻¹
@@ -154,7 +154,7 @@ theorem _root_.MulAction.aeconst_of_aestabilizer_eq_top
   proof: aeconst_of_forall_smul_ae_eq G hm (Subgroup.eq_top_iff' _).1 h
 
 中文:
-定理 _root_.MulAction.aeconst_of_aestabilizer_eq_top
+定理 _root_.乘法作用.aeconst_of_aestabilizer_eq_top
   证明: aeconst_of_forall_smul_ae_eq G hm (Subgroup.eq_top_iff' _).1 h
 
 Depends on / 依赖: Subgroup, Subgroup.eq_top_iff, aeconst_of_forall_smul_ae_eq, eq_top_iff
@@ -176,7 +176,7 @@ theorem _root_.ErgodicSMul.of_aestabilizer
 
 中文:
 定理 _root_.ErgodicSMul.of_aestabilizer
-  结论: [Group G] [MulAction G α] [SMulInvariantMeasure G α μ]
+  结论: [群 G] [乘法作用 G α] [标量乘不变测度 G α μ]
   证明: ⟨fun hm hs => h _ hm (Subgroup.eq_top_iff' _).2 fun g => by
     simpa only [preimage_smul_inv] using! hs g⁻¹⟩
 
@@ -206,7 +206,7 @@ exact h.quasiErgodic.aeconst_
 
 中文:
 定理 ergodicSMul_iterateMulAct
-  条件: {f : α -> α} (hf : Measurable f)
+  条件: {f : α -> α} (hf : 可测 f)
   证明: by
   simp only [ergodicSMul_iff, smulInvariantMeasure_iterateMulAct, hf]
   refine ⟨fun ⟨h₁, h₂⟩ => ⟨h₁, ⟨?_⟩⟩, fun h => ⟨h.1, ?_⟩⟩

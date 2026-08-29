@@ -100,7 +100,7 @@ theorem involute_comp_involute
 
 中文:
 定理 involute_comp_involute
-  结论: involute.comp involute = AlgHom.id R (CliffordAlgebra Q)
+  结论: involute.comp involute = 代数态射.id R (CliffordAlgebra Q)
   证明: by
   ext; simp
 -/
@@ -119,7 +119,7 @@ theorem involute_involutive
 
 中文:
 定理 involute_involutive
-  结论: Function.Involutive (involute : _ -> CliffordAlgebra Q)
+  结论: 函数.对合 (involute : _ -> CliffordAlgebra Q)
   证明: AlgHom.congr_fun involute_comp_involute
 
 @[simp]
@@ -427,7 +427,7 @@ theorem reverse_involutive
 
 中文:
 定理 reverse_involutive
-  结论: Function.Involutive (reverse (Q := Q))
+  结论: 函数.对合 (reverse (Q := Q))
   证明: AlgHom.congr_fun reverseOpEquiv.symm_comp
 
 @[simp]
@@ -544,7 +544,7 @@ theorem reverse_involute_commute
 
 中文:
 定理 reverse_involute_commute
-  结论: Function.Commute (reverse (Q := Q)) involute
+  结论: 函数.Commute (reverse (Q := Q)) involute
   证明: LinearMap.congr_fun reverse_comp_involute
 
 Depends on / 依赖: involute
@@ -631,7 +631,7 @@ theorem submodule_map_involute_eq_comap
 
 中文:
 定理 submodule_map_involute_eq_comap
-  条件: (p : Submodule R (CliffordAlgebra Q))
+  条件: (p : 子模 R (CliffordAlgebra Q))
   证明: Submodule.map_equiv_eq_comap_symm involuteEquiv.toLinearEquiv _
 
 @[simp]
@@ -758,7 +758,7 @@ theorem submodule_map_reverse_eq_comap
 
 中文:
 定理 submodule_map_reverse_eq_comap
-  条件: (p : Submodule R (CliffordAlgebra Q))
+  条件: (p : 子模 R (CliffordAlgebra Q))
   证明: Submodule.map_equiv_eq_comap_symm (reverseEquiv : _ ≃ₗ[R] _) _
 
 @[simp]
@@ -830,7 +830,7 @@ theorem submodule_map_mul_reverse
 
 中文:
 定理 submodule_map_mul_reverse
-  条件: (p q : Submodule R (CliffordAlgebra Q))
+  条件: (p q : 子模 R (CliffordAlgebra Q))
   证明: by
   simp_rw [reverse, Submodule.map_comp, Submodule.map_mul, Submodule.map_unop_mul]
 
@@ -853,7 +853,7 @@ theorem submodule_comap_mul_reverse
 
 中文:
 定理 submodule_comap_mul_reverse
-  条件: (p q : Submodule R (CliffordAlgebra Q))
+  条件: (p q : 子模 R (CliffordAlgebra Q))
   证明: by
   simp_rw [← submodule_map_reverse_eq_comap, submodule_map_mul_reverse]
 
@@ -876,7 +876,7 @@ theorem submodule_map_pow_reverse
 
 中文:
 定理 submodule_map_pow_reverse
-  条件: (p : Submodule R (CliffordAlgebra Q)) (n : 自然数)
+  条件: (p : 子模 R (CliffordAlgebra Q)) (n : 自然数)
   证明: by
   simp_rw [reverse, Submodule.map_comp, Submodule.map_pow, Submodule.map_unop_pow]
 
@@ -900,7 +900,7 @@ theorem submodule_comap_pow_reverse
 
 中文:
 定理 submodule_comap_pow_reverse
-  条件: (p : Submodule R (CliffordAlgebra Q)) (n : 自然数)
+  条件: (p : 子模 R (CliffordAlgebra Q)) (n : 自然数)
   证明: by
   simp_rw [← submodule_map_reverse_eq_comap, submodule_map_pow_reverse]
 

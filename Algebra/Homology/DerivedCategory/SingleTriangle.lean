@@ -81,7 +81,7 @@ definition singleTriangle
 
 中文:
 定义 singleTriangle
-  签名: : Triangle (DerivedCategory C)
+  签名: : Triangle (导出范畴 C)
   定义体: Triangle.mk ((singleFunctor C 0).map S.f)
     ((singleFunctor C 0).map S.g) hS.singleδ
 

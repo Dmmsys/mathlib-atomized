@@ -49,7 +49,7 @@ lemma isSheaf_pointwiseColimit
 
 中文:
 引理 isSheaf_pointwiseColimit
-  结论: [PreservesFiniteProducts (colim (J := J) (C := A))]
+  结论: [保持FiniteProducts (colim (J := J) (C := A))]
   证明: by
   rw [Presheaf.isSheaf_iff_preservesFiniteProducts]
   dsimp only [pointwiseCocone_pt]
@@ -81,8 +81,8 @@ instance [Preadditive
     apply preservesBiproductsOfShape_of_preservesCoproductsOfShape
 
 中文:
-实例 [Preadditive
-  签名: A] : PreservesFiniteProducts (colim (J := J) (C := A)) where
+实例 [预加性
+  签名: A] : 保持FiniteProducts (colim (J := J) (C := A)) where
   定义体: by
     apply +allowSynthFailures preservesProductsOfShape_of_preservesBiproductsOfShape
     apply preservesBiproductsOfShape_of_preservesCoproductsOfShape
@@ -106,7 +106,7 @@ instance [PreservesFiniteProducts
     rw [Presheaf.isSheaf_of_iso_if
 
 中文:
-实例 [PreservesFiniteProducts
+实例 [保持FiniteProducts
   签名: (colim (J := J) (C := A))] :
   定义体: by
     suffices CreatesColimit G (sheafToPresheaf (extensiveTopology C) A) from inferInstance
@@ -134,8 +134,8 @@ instance [Preadditive
   body: inferInstance
 
 中文:
-实例 [Preadditive
-  签名: A] [HasFiniteColimits A] :
+实例 [预加性
+  签名: A] [有有限余极限 A] :
   定义体: inferInstance
 -/
 instance [Preadditive A] [HasFiniteColimits A] :

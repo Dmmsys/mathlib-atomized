@@ -39,7 +39,7 @@ theorem ediam_smul_le
 
 中文:
 定理 ediam_smul_le
-  条件: (c : 𝕜) (s : Set E)
+  条件: (c : 𝕜) (s : 集合 E)
   结论: ediam (c • s) <= ‖c‖₊ • ediam s
   证明: (lipschitzWith_smul c).ediam_image_le s
 
@@ -73,7 +73,7 @@ theorem ediam_smul₀
 
 中文:
 定理 ediam_smul₀
-  条件: (c : 𝕜) (s : Set E)
+  条件: (c : 𝕜) (s : 集合 E)
   结论: ediam (c • s) = ‖c‖₊ • ediam s
   证明: by
   refine le_antisymm (ediam_smul_le c s) ?_
@@ -108,7 +108,7 @@ theorem diam_smul₀
 
 中文:
 定理 diam_smul₀
-  条件: (c : 𝕜) (x : Set E)
+  条件: (c : 𝕜) (x : 集合 E)
   结论: diam (c • x) = ‖c‖ * diam x
   证明: by
   simp_rw [diam, ediam_smul₀, ENNReal.toReal_smul, NNReal.smul_def, coe_nnnorm, smul_eq_mul]
@@ -135,7 +135,7 @@ theorem infEDist_smul₀
 
 中文:
 定理 infEDist_smul₀
-  条件: {c : 𝕜} (hc : c != 0) (s : Set E) (x : E)
+  条件: {c : 𝕜} (hc : c != 0) (s : 集合 E) (x : E)
   证明: by
   simp_rw [infEDist]
   have : Function.Surjective ((c • ·) : E -> E) :=
@@ -172,7 +172,7 @@ theorem infDist_smul₀
 
 中文:
 定理 infDist_smul₀
-  条件: {c : 𝕜} (hc : c != 0) (s : Set E) (x : E)
+  条件: {c : 𝕜} (hc : c != 0) (s : 集合 E) (x : E)
   证明: by
   simp_rw [Metric.infDist, infEDist_smul₀ hc s, ENNReal.toReal_smul, NNReal.smul_def, coe_nnnorm,
     smul_eq_mul]
@@ -314,7 +314,7 @@ theorem set_smul_sphere_zero
 
 中文:
 定理 set_smul_sphere_zero
-  条件: {s : Set 𝕜} (hs : 0 ∉ s) (r : 实数)
+  条件: {s : 集合 𝕜} (hs : 0 ∉ s) (r : 实数)
   证明: calc
     s • sphere (0 : E) r = ⋃ c in s, c • sphere (0 : E) r := iUnion_smul_left_image.symm
     _ = ⋃ c in s, sphere (0 : E) (‖c‖ * r) := iUnion₂_congr fun c hc => by
@@ -341,8 +341,8 @@ theorem Bornology.IsBounded.smul₀
   proof: (lipschitzWith_smul c).isBounded_image hs
 
 中文:
-定理 Bornology.IsBounded.smul₀
-  条件: {s : Set E} (hs : IsBounded s) (c : 𝕜)
+定理 有界结构.IsBounded.smul₀
+  条件: {s : 集合 E} (hs : IsBounded s) (c : 𝕜)
   结论: IsBounded (c • s)
   证明: (lipschitzWith_smul c).isBounded_image hs
 
@@ -364,7 +364,7 @@ theorem eventually_singleton_add_smul_subset
 
 中文:
 定理 eventually_singleton_add_smul_subset
-  结论: {x : E} {s : Set E} (hs : Bornology.IsBounded s)
+  结论: {x : E} {s : 集合 E} (hs : 有界结构.IsBounded s)
   证明: by
   obtain ⟨ε, εpos, hε⟩ : exists ε : Real, 0 < ε ∧ closedBall x ε subseteq u := nhds_basis_closedBall.mem_iff.1 hu
   obtain ⟨R, Rpos, hR⟩ : exists R : Real, 0 < R ∧ s subseteq closedBall 0 R := hs.subset_closedBall_lt 0 0
@@ -460,7 +460,7 @@ theorem exists_dist_eq
   simp [dist_eq_norm, ← hab, add_smul, ← smul_sub, norm_smul_of_nonneg, ha, hb]
 
 中文:
-定理 exists_dist_eq
+定理 存在_dist_eq
   条件: (x z : E) {a b : 实数} (ha : 0 <= a) (hb : 0 <= b) (hab : a + b = 1)
   证明: by
   use a • x + b • z
@@ -493,7 +493,7 @@ theorem exists_dist_le_le
     fun 
 
 中文:
-定理 exists_dist_le_le
+定理 存在_dist_le_le
   条件: (hδ : 0 <= δ) (hε : 0 <= ε) (h : dist x z <= ε + δ)
   证明: by
   obtain rfl | hε' := hε.eq_or_lt
@@ -535,7 +535,7 @@ theorem exists_dist_le_lt
   rw [← div_lt_one (add_
 
 中文:
-定理 exists_dist_le_lt
+定理 存在_dist_le_lt
   条件: (hδ : 0 <= δ) (hε : 0 < ε) (h : dist x z < ε + δ)
   证明: by
   refine (exists_dist_eq x z (div_nonneg hε.le <| add_nonneg hε.le hδ)
@@ -570,7 +570,7 @@ theorem exists_dist_lt_le
   exact ⟨y, by simp [dist_comm x y, dist_comm y z, *]⟩
 
 中文:
-定理 exists_dist_lt_le
+定理 存在_dist_lt_le
   条件: (hδ : 0 < δ) (hε : 0 <= ε) (h : dist x z < ε + δ)
   证明: by
   obtain ⟨y, yz, xy⟩ :=
@@ -601,7 +601,7 @@ theorem exists_dist_lt_lt
   rw [← div_lt_one (add_pos hε h
 
 中文:
-定理 exists_dist_lt_lt
+定理 存在_dist_lt_lt
   条件: (hδ : 0 < δ) (hε : 0 < ε) (h : dist x z < ε + δ)
   证明: by
   refine (exists_dist_eq x z (div_nonneg hε.le <| add_nonneg hε.le hδ.le)
@@ -765,7 +765,7 @@ theorem infEDist_thickening
 
 中文:
 定理 infEDist_thickening
-  条件: (hδ : 0 < δ) (s : Set E) (x : E)
+  条件: (hδ : 0 < δ) (s : 集合 E) (x : E)
   证明: by
   obtain hs | hs := lt_or_ge (infEDist x s) (ENNReal.ofReal δ)
   · rw [infEDist_zero_of_mem, tsub_eq_zero_of_le hs.le]
@@ -821,7 +821,7 @@ theorem thickening_thickening
 
 中文:
 定理 thickening_thickening
-  条件: (hε : 0 < ε) (hδ : 0 < δ) (s : Set E)
+  条件: (hε : 0 < ε) (hδ : 0 < δ) (s : 集合 E)
   证明: (thickening_thickening_subset _ _ _).antisymm fun x => by
     simp_rw [mem_thickening_iff]
     rintro ⟨z, hz, hxz⟩
@@ -855,7 +855,7 @@ theorem cthickening_thickening
 
 中文:
 定理 cthickening_thickening
-  条件: (hε : 0 <= ε) (hδ : 0 < δ) (s : Set E)
+  条件: (hε : 0 <= ε) (hδ : 0 < δ) (s : 集合 E)
   证明: (cthickening_thickening_subset hε _ _).antisymm fun x => by
     simp_rw [mem_cthickening_iff, ENNReal.ofReal_add hε hδ.le, infEDist_thickening hδ]
     exact tsub_le_iff_right.2
@@ -883,7 +883,7 @@ theorem closure_thickening
 
 中文:
 定理 closure_thickening
-  条件: (hδ : 0 < δ) (s : Set E)
+  条件: (hδ : 0 < δ) (s : 集合 E)
   证明: by
   rw [← cthickening_zero]; rw [cthickening_thickening le_rfl hδ]; rw [zero_add]
 
@@ -914,7 +914,7 @@ alias infEdist_cthickening := infEDist_cthickening
 
 中文:
 定理 infEDist_cthickening
-  条件: (δ : 实数) (s : Set E) (x : E)
+  条件: (δ : 实数) (s : 集合 E) (x : E)
   证明: by
   obtain hδ | hδ := le_or_gt δ 0
   · rw [cthickening_of_nonpos hδ, infEDist_closure, ofReal_of_nonpos hδ, tsub_zero]
@@ -952,7 +952,7 @@ theorem thickening_cthickening
 
 中文:
 定理 thickening_cthickening
-  条件: (hε : 0 < ε) (hδ : 0 <= δ) (s : Set E)
+  条件: (hε : 0 < ε) (hδ : 0 <= δ) (s : 集合 E)
   证明: by
   obtain rfl | hδ := hδ.eq_or_lt
   · rw [cthickening_zero, thickening_closure, add_zero]
@@ -983,7 +983,7 @@ theorem cthickening_cthickening
 
 中文:
 定理 cthickening_cthickening
-  条件: (hε : 0 <= ε) (hδ : 0 <= δ) (s : Set E)
+  条件: (hε : 0 <= ε) (hδ : 0 <= δ) (s : 集合 E)
   证明: (cthickening_cthickening_subset hε hδ _).antisymm fun x => by
     simp_rw [mem_cthickening_iff, ENNReal.ofReal_add hε hδ, infEDist_cthickening]
     exact tsub_le_iff_right.2
@@ -1235,7 +1235,7 @@ theorem closedBall_add_closedBall
 
 中文:
 定理 closedBall_add_closedBall
-  条件: [命题erSpace E] (hε : 0 <= ε) (hδ : 0 <= δ) (a b : E)
+  条件: [真空间 E] (hε : 0 <= ε) (hδ : 0 <= δ) (a b : E)
   证明: by
   rw [(isCompact_closedBall _ _).add_closedBall hδ b]; rw [cthickening_closedBall hδ hε a]; rw [Metric.vadd_closedBall]; rw [vadd_eq_add]; rw [add_comm]; rw [add_comm δ]
 
@@ -1256,7 +1256,7 @@ theorem closedBall_sub_closedBall
 
 中文:
 定理 closedBall_sub_closedBall
-  条件: [命题erSpace E] (hε : 0 <= ε) (hδ : 0 <= δ) (a b : E)
+  条件: [真空间 E] (hε : 0 <= ε) (hδ : 0 <= δ) (a b : E)
   证明: by
   rw [sub_eq_add_neg]; rw [neg_closedBall]; rw [closedBall_add_closedBall hε hδ]; rw [sub_eq_add_neg]
 
@@ -1357,7 +1357,7 @@ theorem smul_sphere
 
 中文:
 定理 smul_sphere
-  条件: [Nontrivial E] (c : 𝕜) (x : E) {r : 实数} (hr : 0 <= r)
+  条件: [非平凡 E] (c : 𝕜) (x : E) {r : 实数} (hr : 0 <= r)
   证明: by
   rcases eq_or_ne c 0 with (rfl | hc)
   · simp [zero_smul_set, Set.singleton_zero, hr]

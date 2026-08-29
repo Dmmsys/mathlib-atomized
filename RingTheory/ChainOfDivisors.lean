@@ -61,7 +61,7 @@ theorem Associates.isAtom_iff
 中文:
 定理 Associates.isAtom_iff
   条件: {p : Associates M} (h₁ : p != 0)
-  结论: IsAtom p ↔ Irreducible p
+  结论: IsAtom p ↔ 不可约 p
   证明: ⟨fun hp =>
     ⟨by simpa only [Associates.isUnit_iff_eq_one] using! hp.1, fun a b h =>
       (hp.le_iff.mp ⟨_, h⟩).casesOn (fun ha => Or.inl (a.isUnit_iff_eq_one.mpr ha)) fun ha =>
@@ -110,8 +110,8 @@ theorem exists_chain_of_prime_pow
         ⟨pow_ne_zero n hp.ne_
 
 中文:
-定理 exists_chain_of_prime_pow
-  条件: {p : Associates M} {n : 自然数} (hn : n != 0) (hp : Prime p)
+定理 存在_chain_of_prime_pow
+  条件: {p : Associates M} {n : 自然数} (hn : n != 0) (hp : 素 p)
   证明: by
   refine ⟨fun i => p ^ (i : Nat), ?_, fun n m h => ?_, @fun y => ⟨fun h => ?_, ?_⟩⟩
   · dsimp only
@@ -151,7 +151,7 @@ theorem element_of_chain_not_isUnit_of_index_ne_zero
 
 中文:
 定理 element_of_chain_not_isUnit_of_index_ne_zero
-  结论: {n : 自然数} {i : Fin (n + 1)} (i_pos : i != 0)
+  结论: {n : 自然数} {i : 有限集 (n + 1)} (i_pos : i != 0)
   证明: DvdNotUnit.not_isUnit
     (Associates.dvdNotUnit_iff_lt.2
       (h₁ <| show (0 : Fin (n + 1)) < i from Fin.pos_iff_ne_zero.mpr i_pos))
@@ -177,7 +177,7 @@ theorem first_of_chain_isUnit
 
 中文:
 定理 first_of_chain_isUnit
-  结论: {q : Associates M} {n : 自然数} {c : Fin (n + 1) -> Associates M}
+  结论: {q : Associates M} {n : 自然数} {c : 有限集 (n + 1) -> Associates M}
   证明: by
   obtain ⟨i, hr⟩ := h₂.mp one_le
   rw [Associates.isUnit_iff_eq_one]; rw [← Associates.le_one_iff]; rw [hr]
@@ -485,7 +485,7 @@ theorem factor_orderIso_map_one_eq_bot
 
 中文:
 定理 factor_orderIso_map_one_eq_bot
-  结论: [IsCancelMulZero N] {m : Associates M} {n : Associates N}
+  结论: [是乘零消去 N] {m : Associates M} {n : Associates N}
   证明: by
   let : OrderBot { l : Associates M // l <= m } := Subtype.orderBot bot_le
   let : OrderBot { l : Associates N // l <= n } := Subtype.orderBot bot_le
@@ -520,7 +520,7 @@ theorem coe_factor_orderIso_map_eq_one_iff
 
 中文:
 定理 coe_factor_orderIso_map_eq_one_iff
-  结论: [IsCancelMulZero N]
+  结论: [是乘零消去 N]
   证明: ⟨fun hu => by
     rw [show u = (d.symm ⟨d ⟨u]; rw [hu'⟩]; rw [(d ⟨u]; rw [hu'⟩).prop⟩) by
         simp only [Subtype.coe_eta]; rw [OrderIso.symm_apply_apply]; rw [Subtype.coe_mk]]

@@ -67,7 +67,7 @@ instance decidableMemIio
 
 中文:
 实例 decidableMemIio
-  签名: [Decidable (x < b)]
+  签名: [可判定 (x < b)]
   定义体: by assumption
 
 @[to_dual]
@@ -87,7 +87,7 @@ instance decidableMemIic
 
 中文:
 实例 decidableMemIic
-  签名: [Decidable (x <= b)]
+  签名: [可判定 (x <= b)]
   定义体: by assumption
 
 @[to_dual self (reorder := a b, 6 7)]
@@ -105,7 +105,7 @@ instance decidableMemIoo
 
 中文:
 实例 decidableMemIoo
-  签名: [Decidable (a < x)] [Decidable (x < b)]
+  签名: [可判定 (a < x)] [可判定 (x < b)]
   定义体: instDecidableAnd
 
 Depends on / 依赖: instDecidableAnd
@@ -125,7 +125,7 @@ instance decidableMemIco
 
 中文:
 实例 decidableMemIco
-  签名: [Decidable (a <= x)] [Decidable (x < b)]
+  签名: [可判定 (a <= x)] [可判定 (x < b)]
   定义体: instDecidableAnd
 
 @[to_dual self (reorder := a b, 6 7)]
@@ -148,7 +148,7 @@ instance decidableMemIcc
 
 中文:
 实例 decidableMemIcc
-  签名: [Decidable (a <= x)] [Decidable (x <= b)]
+  签名: [可判定 (a <= x)] [可判定 (x <= b)]
   定义体: instDecidableAnd
 
 @[to_dual existing (reorder := a b, 6 7)]
@@ -169,7 +169,7 @@ instance decidableMemIoc
 
 中文:
 实例 decidableMemIoc
-  签名: [Decidable (a < x)] [Decidable (x <= b)]
+  签名: [可判定 (a < x)] [可判定 (x <= b)]
   定义体: instDecidableAnd
 
 Depends on / 依赖: instDecidableAnd
@@ -187,7 +187,7 @@ theorem self_notMem_Iio
 
 中文:
 定理 self_notMem_Iio
-  结论: a ∉ Iio a
+  结论: a ∉ 左无界右开区间 a
   证明: by simp
 -/
 @[to_dual] theorem self_notMem_Iio : a ∉ Iio a := by simp
@@ -203,7 +203,7 @@ theorem self_mem_Iic
 
 中文:
 定理 self_mem_Iic
-  结论: a in Iic a
+  结论: a in 左无界右闭区间 a
   证明: by simp
 
 @[to_dual right_notMem_Ioo]
@@ -223,7 +223,7 @@ theorem left_notMem_Ioo
 
 中文:
 定理 left_notMem_Ioo
-  结论: a ∉ Ioo a b
+  结论: a ∉ 开区间 a b
   证明: by simp
 
 @[to_dual right_notMem_Ico]
@@ -241,7 +241,7 @@ theorem left_notMem_Ioc
 
 中文:
 定理 left_notMem_Ioc
-  结论: a ∉ Ioc a b
+  结论: a ∉ 左开右闭区间 a b
   证明: by simp
 -/
 theorem left_notMem_Ioc : a ∉ Ioc a b := by simp
@@ -256,7 +256,7 @@ theorem left_mem_Ico
 
 中文:
 定理 left_mem_Ico
-  结论: a in Ico a b ↔ a < b
+  结论: a in 左闭右开区间 a b ↔ a < b
   证明: by simp
 -/
 @[to_dual right_mem_Ioc] theorem left_mem_Ico : a in Ico a b ↔ a < b := by simp
@@ -272,7 +272,7 @@ theorem left_mem_Icc
 
 中文:
 定理 left_mem_Icc
-  结论: a in Icc a b ↔ a <= b
+  结论: a in 闭区间 a b ↔ a <= b
   证明: by simp
 
 @[to_dual (attr := simp)]
@@ -292,7 +292,7 @@ theorem Iio_toDual
 
 中文:
 定理 Iio_toDual
-  结论: Iio (toDual a) = ofDual ⁻¹' Ioi a
+  结论: 左无界右开区间 (toDual a) = ofDual ⁻¹' 左开右无界区间 a
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -313,7 +313,7 @@ theorem Iic_toDual
 
 中文:
 定理 Iic_toDual
-  结论: Iic (toDual a) = ofDual ⁻¹' Ici a
+  结论: 左无界右闭区间 (toDual a) = ofDual ⁻¹' 左闭右无界区间 a
   证明: rfl
 
 @[simp, to_dual self]
@@ -334,7 +334,7 @@ theorem Icc_toDual
 
 中文:
 定理 Icc_toDual
-  结论: Icc (toDual a) (toDual b) = ofDual ⁻¹' Icc b a
+  结论: 闭区间 (toDual a) (toDual b) = ofDual ⁻¹' 闭区间 b a
   证明: Set.ext fun _ => and_comm
 
 @[to_dual (attr := simp)]
@@ -357,7 +357,7 @@ theorem Ico_toDual
 
 中文:
 定理 Ico_toDual
-  结论: Ico (toDual a) (toDual b) = ofDual ⁻¹' Ioc b a
+  结论: 左闭右开区间 (toDual a) (toDual b) = ofDual ⁻¹' 左开右闭区间 b a
   证明: Set.ext fun _ => and_comm
 
 @[simp, to_dual self]
@@ -380,7 +380,7 @@ theorem Ioo_toDual
 
 中文:
 定理 Ioo_toDual
-  结论: Ioo (toDual a) (toDual b) = ofDual ⁻¹' Ioo b a
+  结论: 开区间 (toDual a) (toDual b) = ofDual ⁻¹' 开区间 b a
   证明: Set.ext fun _ => and_comm
 
 @[to_dual (attr := simp)]
@@ -405,7 +405,7 @@ theorem Iio_ofDual
 中文:
 定理 Iio_ofDual
   条件: {x : αᵒᵈ}
-  结论: Iio (ofDual x) = toDual ⁻¹' Ioi x
+  结论: 左无界右开区间 (ofDual x) = toDual ⁻¹' 左开右无界区间 x
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -428,7 +428,7 @@ theorem Iic_ofDual
 中文:
 定理 Iic_ofDual
   条件: {x : αᵒᵈ}
-  结论: Iic (ofDual x) = toDual ⁻¹' Ici x
+  结论: 左无界右闭区间 (ofDual x) = toDual ⁻¹' 左闭右无界区间 x
   证明: rfl
 
 @[simp, to_dual self]
@@ -451,7 +451,7 @@ theorem Icc_ofDual
 中文:
 定理 Icc_ofDual
   条件: {x y : αᵒᵈ}
-  结论: Icc (ofDual y) (ofDual x) = toDual ⁻¹' Icc x y
+  结论: 闭区间 (ofDual y) (ofDual x) = toDual ⁻¹' 闭区间 x y
   证明: Set.ext fun _ => and_comm
 
 @[to_dual (attr := simp)]
@@ -476,7 +476,7 @@ theorem Ico_ofDual
 中文:
 定理 Ico_ofDual
   条件: {x y : αᵒᵈ}
-  结论: Ico (ofDual y) (ofDual x) = toDual ⁻¹' Ioc x y
+  结论: 左闭右开区间 (ofDual y) (ofDual x) = toDual ⁻¹' 左开右闭区间 x y
   证明: Set.ext fun _ => and_comm
 
 @[simp, to_dual self]
@@ -501,7 +501,7 @@ theorem Ioo_ofDual
 中文:
 定理 Ioo_ofDual
   条件: {x y : αᵒᵈ}
-  结论: Ioo (ofDual y) (ofDual x) = toDual ⁻¹' Ioo x y
+  结论: 开区间 (ofDual y) (ofDual x) = toDual ⁻¹' 开区间 x y
   证明: Set.ext fun _ => and_comm
 
 @[to_dual (attr := simp)]
@@ -525,8 +525,8 @@ theorem nonempty_Iio
 
 中文:
 定理 nonempty_Iio
-  条件: [NoMinOrder α]
-  结论: (Iio a).Nonempty
+  条件: [NoMin序 α]
+  结论: (左无界右开区间 a).非空
   证明: exists_lt a
 
 @[to_dual (attr := simp)]
@@ -549,7 +549,7 @@ theorem nonempty_Iic
 
 中文:
 定理 nonempty_Iic
-  结论: (Iic a).Nonempty
+  结论: (左无界右闭区间 a).非空
   证明: ⟨a, self_mem_Iic⟩
 
 @[simp, to_dual self]
@@ -572,7 +572,7 @@ theorem nonempty_Icc
 
 中文:
 定理 nonempty_Icc
-  结论: (Icc a b).Nonempty ↔ a <= b
+  结论: (闭区间 a b).非空 ↔ a <= b
   证明: ⟨fun ⟨_, hx⟩ => hx.1.trans hx.2, fun h => ⟨a, left_mem_Icc.2 h⟩⟩
 
 @[to_dual (attr := simp)]
@@ -596,7 +596,7 @@ theorem nonempty_Ico
 
 中文:
 定理 nonempty_Ico
-  结论: (Ico a b).Nonempty ↔ a < b
+  结论: (左闭右开区间 a b).非空 ↔ a < b
   证明: ⟨fun ⟨_, hx⟩ => hx.1.trans_lt hx.2, fun h => ⟨a, left_mem_Ico.2 h⟩⟩
 
 
@@ -620,8 +620,8 @@ theorem nonempty_Ioo
 
 中文:
 定理 nonempty_Ioo
-  条件: [DenselyOrdered α]
-  结论: (Ioo a b).Nonempty ↔ a < b
+  条件: [稠密序 α]
+  结论: (开区间 a b).非空 ↔ a < b
   证明: ⟨fun ⟨_, ha, hb⟩ => ha.trans hb, exists_between⟩
 
 Depends on / 依赖: exists_between, ha.trans
@@ -641,7 +641,7 @@ instance nonempty_Iio_subtype
 
 中文:
 实例 nonempty_Iio_subtype
-  签名: [NoMinOrder α]
+  签名: [NoMin序 α]
   定义体: Nonempty.to_subtype nonempty_Iio
 
 Depends on / 依赖: Nonempty, Nonempty.to_subtype, nonempty_Iio, to_subtype
@@ -663,7 +663,7 @@ instance nonempty_Iic_subtype
 
 中文:
 实例 nonempty_Iic_subtype
-  签名: : Nonempty (Iic a)
+  签名: : 非空 (左无界右闭区间 a)
   定义体: Nonempty.to_subtype nonempty_Iic
 
 @[to_dual self]
@@ -688,7 +688,7 @@ theorem nonempty_Icc_subtype
 中文:
 定理 nonempty_Icc_subtype
   条件: (h : a <= b)
-  结论: Nonempty (Icc a b)
+  结论: 非空 (闭区间 a b)
   证明: Nonempty.to_subtype (nonempty_Icc.mpr h)
 
 @[to_dual]
@@ -713,7 +713,7 @@ theorem nonempty_Ioc_subtype
 中文:
 定理 nonempty_Ioc_subtype
   条件: (h : a < b)
-  结论: Nonempty (Ioc a b)
+  结论: 非空 (左开右闭区间 a b)
   证明: Nonempty.to_subtype (nonempty_Ioc.mpr h)
 
 @[to_dual self]
@@ -737,8 +737,8 @@ theorem nonempty_Ioo_subtype
 
 中文:
 定理 nonempty_Ioo_subtype
-  条件: [DenselyOrdered α] (h : a < b)
-  结论: Nonempty (Ioo a b)
+  条件: [稠密序 α] (h : a < b)
+  结论: 非空 (开区间 a b)
   证明: Nonempty.to_subtype (nonempty_Ioo.mpr h)
 
 @[to_additive (attr := simp)]
@@ -763,8 +763,8 @@ theorem Iio_one_eq_empty
 
 中文:
 定理 Iio_one_eq_empty
-  条件: [One α] [IsBotOneClass α]
-  结论: Set.Iio (1 : α) = ∅
+  条件: [幺 α] [是BotOne类 α]
+  结论: 集合.左无界右开区间 (1 : α) = ∅
   证明: by
   ext; simp
 
@@ -787,7 +787,7 @@ instance isEmpty_Iio_one
 
 中文:
 实例 isEmpty_Iio_one
-  签名: [One α] [IsBotOneClass α]
+  签名: [幺 α] [是BotOne类 α]
   定义体: by
   simp
 
@@ -810,8 +810,8 @@ instance [NoMinOrder
 @[to_dual]
 
 中文:
-实例 [NoMinOrder
-  签名: α] : NoMinOrder (Iio a)
+实例 [NoMin序
+  签名: α] : NoMin序 (左无界右开区间 a)
   定义体: ⟨fun a =>
     let ⟨b, hb⟩ := exists_lt (a : α)
     ⟨⟨b, lt_trans hb a.2⟩, hb⟩⟩
@@ -839,8 +839,8 @@ instance [NoMinOrder
 @[simp, to_dual self]
 
 中文:
-实例 [NoMinOrder
-  签名: α] : NoMinOrder (Iic a)
+实例 [NoMin序
+  签名: α] : NoMin序 (左无界右闭区间 a)
   定义体: ⟨fun a =>
     let ⟨b, hb⟩ := exists_lt (a : α)
     ⟨⟨b, hb.le.trans a.2⟩, hb⟩⟩
@@ -869,7 +869,7 @@ theorem Icc_eq_empty
 中文:
 定理 Icc_eq_empty
   条件: (h : ¬a <= b)
-  结论: Icc a b = ∅
+  结论: 闭区间 a b = ∅
   证明: eq_empty_iff_forall_notMem.2 fun _ ⟨ha, hb⟩ => h (ha.trans hb)
 
 @[to_dual (attr := simp)]
@@ -894,7 +894,7 @@ theorem Ico_eq_empty
 中文:
 定理 Ico_eq_empty
   条件: (h : ¬a < b)
-  结论: Ico a b = ∅
+  结论: 左闭右开区间 a b = ∅
   证明: eq_empty_iff_forall_notMem.2 fun _ hab => h (hab.1.trans_lt hab.2)
 
 @[simp, to_dual self]
@@ -919,7 +919,7 @@ theorem Ioo_eq_empty
 中文:
 定理 Ioo_eq_empty
   条件: (h : ¬a < b)
-  结论: Ioo a b = ∅
+  结论: 开区间 a b = ∅
   证明: eq_empty_iff_forall_notMem.2 fun _ ⟨ha, hb⟩ => h (ha.trans hb)
 
 @[simp, to_dual self]
@@ -944,7 +944,7 @@ theorem Icc_eq_empty_of_lt
 中文:
 定理 Icc_eq_empty_of_lt
   条件: (h : b < a)
-  结论: Icc a b = ∅
+  结论: 闭区间 a b = ∅
   证明: Icc_eq_empty h.not_ge
 
 @[to_dual (attr := simp)]
@@ -969,7 +969,7 @@ theorem Ico_eq_empty_of_le
 中文:
 定理 Ico_eq_empty_of_le
   条件: (h : b <= a)
-  结论: Ico a b = ∅
+  结论: 左闭右开区间 a b = ∅
   证明: Ico_eq_empty h.not_gt
 
 @[simp, to_dual self]
@@ -994,7 +994,7 @@ theorem Ioo_eq_empty_of_le
 中文:
 定理 Ioo_eq_empty_of_le
   条件: (h : b <= a)
-  结论: Ioo a b = ∅
+  结论: 开区间 a b = ∅
   证明: Ioo_eq_empty h.not_gt
 
 @[to_dual]
@@ -1017,7 +1017,7 @@ theorem Ico_self
 中文:
 定理 Ico_self
   条件: (a : α)
-  结论: Ico a a = ∅
+  结论: 左闭右开区间 a a = ∅
   证明: Ico_eq_empty lt_irrefl _
 
 Depends on / 依赖: Ico_eq_empty, lt_irrefl
@@ -1037,7 +1037,7 @@ theorem Ioo_self
 中文:
 定理 Ioo_self
   条件: (a : α)
-  结论: Ioo a a = ∅
+  结论: 开区间 a a = ∅
   证明: Ioo_eq_empty lt_irrefl _
 
 Depends on / 依赖: Ioo_eq_empty, lt_irrefl
@@ -1062,7 +1062,7 @@ theorem Iio_subset_Iio
 中文:
 定理 Iio_subset_Iio
   条件: (h : a <= b)
-  结论: Iio a subseteq Iio b
+  结论: 左无界右开区间 a subseteq 左无界右开区间 b
   证明: fun _ hx => lt_of_lt_of_le hx h
 
 Depends on / 依赖: lt_of_lt_of_le
@@ -1088,7 +1088,7 @@ theorem Iio_ssubset_Iio
 中文:
 定理 Iio_ssubset_Iio
   条件: (h : a < b)
-  结论: Iio a ⊂ Iio b
+  结论: 左无界右开区间 a ⊂ 左无界右开区间 b
   证明: (ssubset_iff_of_subset (Iio_subset_Iio h.le)).mpr ⟨a, h, lt_irrefl a⟩
 
 @[to_dual (attr := simp, gcongr)]
@@ -1111,7 +1111,7 @@ theorem Iic_subset_Iic
 
 中文:
 定理 Iic_subset_Iic
-  结论: Iic a subseteq Iic b ↔ a <= b
+  结论: 左无界右闭区间 a subseteq 左无界右闭区间 b ↔ a <= b
   证明: ⟨fun h => h self_mem_Ici, fun h _ hx => hx.trans h⟩
 
 @[to_dual (attr := simp, gcongr)]
@@ -1138,7 +1138,7 @@ theorem Iic_ssubset_Iic
 
 中文:
 定理 Iic_ssubset_Iic
-  结论: Iic a ⊂ Iic b ↔ a < b where
+  结论: 左无界右闭区间 a ⊂ 左无界右闭区间 b ↔ a < b where
   证明: by
     obtain ⟨ab, c, cb, ac⟩ := ssubset_iff_exists.mp h
     exact lt_of_le_not_ge (Iic_subset_Iic.mp ab) (fun h' => ac (cb.trans h'))
@@ -1169,7 +1169,7 @@ theorem Iic_subset_Iio
 
 中文:
 定理 Iic_subset_Iio
-  结论: Iic a subseteq Iio b ↔ a < b
+  结论: 左无界右闭区间 a subseteq 左无界右开区间 b ↔ a < b
   证明: ⟨fun h => h self_mem_Iic, fun h _ hx => lt_of_le_of_lt hx h⟩
 
 @[to_dual]
@@ -1190,7 +1190,7 @@ theorem Iio_subset_Iic_self
 
 中文:
 定理 Iio_subset_Iic_self
-  结论: Iio a subseteq Iic a
+  结论: 左无界右开区间 a subseteq 左无界右闭区间 a
   证明: fun _ hx => le_of_lt hx
 
 Depends on / 依赖: le_of_lt
@@ -1216,7 +1216,7 @@ theorem Iio_subset_Iic
 中文:
 定理 Iio_subset_Iic
   条件: (h : a <= b)
-  结论: Iio a subseteq Iic b
+  结论: 左无界右开区间 a subseteq 左无界右闭区间 b
   证明: (Iio_subset_Iio h).trans Iio_subset_Iic_self
 
 @[to_dual]
@@ -1239,7 +1239,7 @@ theorem Iio_ssubset_Iic_self
 
 中文:
 定理 Iio_ssubset_Iic_self
-  结论: Iio a ⊂ Iic a
+  结论: 左无界右开区间 a ⊂ 左无界右闭区间 a
   证明: ⟨Iio_subset_Iic_self, fun h => (h le_rfl).false⟩
 
 @[gcongr, to_dual self (reorder := a₁ b₁, a₂ b₂, ha hb)]
@@ -1267,7 +1267,7 @@ to_dual_name_hint Left Right
 中文:
 定理 Ioo_subset_Ioo
   条件: (ha : a₂ <= a₁) (hb : b₁ <= b₂)
-  结论: Ioo a₁ b₁ subseteq Ioo a₂ b₂
+  结论: 开区间 a₁ b₁ subseteq 开区间 a₂ b₂
   证明: fun _ ⟨hx₁, hx₂⟩ =>
   ⟨ha.trans_lt hx₁, hx₂.trans_le hb⟩
 
@@ -1295,7 +1295,7 @@ theorem Ioo_subset_Ioo_left
 中文:
 定理 Ioo_subset_Ioo_left
   条件: (h : a₁ <= a₂)
-  结论: Ioo a₂ b subseteq Ioo a₁ b
+  结论: 开区间 a₂ b subseteq 开区间 a₁ b
   证明: Ioo_subset_Ioo h le_rfl
 
 @[to_dual (attr := gcongr) (reorder := ha hb)]
@@ -1321,7 +1321,7 @@ theorem Ico_subset_Ico
 中文:
 定理 Ico_subset_Ico
   条件: (ha : a₂ <= a₁) (hb : b₁ <= b₂)
-  结论: Ico a₁ b₁ subseteq Ico a₂ b₂
+  结论: 左闭右开区间 a₁ b₁ subseteq 左闭右开区间 a₂ b₂
   证明: fun _ hx =>
   ⟨ha.trans hx.1, hx.2.trans_le hb⟩
 
@@ -1345,7 +1345,7 @@ theorem Ico_subset_Ico_left
 中文:
 定理 Ico_subset_Ico_left
   条件: (h : a₁ <= a₂)
-  结论: Ico a₂ b subseteq Ico a₁ b
+  结论: 左闭右开区间 a₂ b subseteq 左闭右开区间 a₁ b
   证明: Ico_subset_Ico h le_rfl
 
 @[to_dual]
@@ -1370,7 +1370,7 @@ theorem Ioc_subset_Ioc_left
 中文:
 定理 Ioc_subset_Ioc_left
   条件: (h : a₁ <= a₂)
-  结论: Ioc a₂ b subseteq Ioc a₁ b
+  结论: 左开右闭区间 a₂ b subseteq 左开右闭区间 a₁ b
   证明: Ioc_subset_Ioc h le_rfl
 
 @[gcongr, to_dual self (reorder := a₁ b₁, a₂ b₂, ha hb)]
@@ -1396,7 +1396,7 @@ theorem Icc_subset_Icc
 中文:
 定理 Icc_subset_Icc
   条件: (ha : a₂ <= a₁) (hb : b₁ <= b₂)
-  结论: Icc a₁ b₁ subseteq Icc a₂ b₂
+  结论: 闭区间 a₁ b₁ subseteq 闭区间 a₂ b₂
   证明: fun _ ⟨hx₁, hx₂⟩ =>
   ⟨ha.trans hx₁, le_trans hx₂ hb⟩
 
@@ -1420,7 +1420,7 @@ theorem Icc_subset_Icc_left
 中文:
 定理 Icc_subset_Icc_left
   条件: (h : a₁ <= a₂)
-  结论: Icc a₂ b subseteq Icc a₁ b
+  结论: 闭区间 a₂ b subseteq 闭区间 a₁ b
   证明: Icc_subset_Icc h le_rfl
 
 @[to_dual (reorder := ha hb)]
@@ -1446,7 +1446,7 @@ theorem Icc_ssubset_Icc_left
 中文:
 定理 Icc_ssubset_Icc_left
   条件: (h₂ : a₂ <= b₂) (ha : a₂ < a₁) (hb : b₁ <= b₂)
-  结论: Icc a₁ b₁ ⊂ Icc a₂ b₂
+  结论: 闭区间 a₁ b₁ ⊂ 闭区间 a₂ b₂
   证明: (ssubset_iff_of_subset (Icc_subset_Icc (le_of_lt ha) hb)).mpr
     ⟨a₂, left_mem_Icc.mpr h₂, not_and.mpr fun f _ => lt_irrefl a₂ (ha.trans_le f)⟩
 
@@ -1474,7 +1474,7 @@ theorem Ico_subset_Ioo
 中文:
 定理 Ico_subset_Ioo
   条件: (ha : a₂ < a₁) (hb : b₁ <= b₂)
-  结论: Ico a₁ b₁ subseteq Ioo a₂ b₂
+  结论: 左闭右开区间 a₁ b₁ subseteq 开区间 a₂ b₂
   证明: fun _ hx =>
   ⟨ha.trans_le hx.1, hx.2.trans_le hb⟩
 
@@ -1498,7 +1498,7 @@ theorem Ico_subset_Ioo_left
 中文:
 定理 Ico_subset_Ioo_left
   条件: (h : a₁ < a₂)
-  结论: Ico a₂ b subseteq Ioo a₁ b
+  结论: 左闭右开区间 a₂ b subseteq 开区间 a₁ b
   证明: Ico_subset_Ioo h le_rfl
 
 @[to_dual (reorder := ha hb)]
@@ -1524,7 +1524,7 @@ theorem Icc_subset_Ioc
 中文:
 定理 Icc_subset_Ioc
   条件: (ha : a₂ < a₁) (hb : b₁ <= b₂)
-  结论: Icc a₁ b₁ subseteq Ioc a₂ b₂
+  结论: 闭区间 a₁ b₁ subseteq 左开右闭区间 a₂ b₂
   证明: fun _ hx =>
   ⟨ha.trans_le hx.1, hx.2.trans hb⟩
 
@@ -1548,7 +1548,7 @@ theorem Icc_subset_Ioc_left
 中文:
 定理 Icc_subset_Ioc_left
   条件: (h : a₁ < a₂)
-  结论: Icc a₂ b subseteq Ioc a₁ b
+  结论: 闭区间 a₂ b subseteq 左开右闭区间 a₁ b
   证明: Icc_subset_Ioc h le_rfl
 
 @[to_dual self (reorder := a₁ b₁, a₂ b₂, ha hb)]
@@ -1571,7 +1571,7 @@ theorem Icc_subset_Ioo
 中文:
 定理 Icc_subset_Ioo
   条件: (ha : a₂ < a₁) (hb : b₁ < b₂)
-  结论: Icc a₁ b₁ subseteq Ioo a₂ b₂
+  结论: 闭区间 a₁ b₁ subseteq 开区间 a₂ b₂
   证明: (Icc_subset_Ioc_left ha).trans (Ioc_subset_Ioo_right hb)
 
 Depends on / 依赖: Icc_subset_Ioc_left, Ioc_subset_Ioo_right
@@ -1589,7 +1589,7 @@ theorem Ico_subset_Iio_self
 
 中文:
 定理 Ico_subset_Iio_self
-  结论: Ico a b subseteq Iio b
+  结论: 左闭右开区间 a b subseteq 左无界右开区间 b
   证明: fun _ => And.right
 -/
 @[to_dual] theorem Ico_subset_Iio_self : Ico a b subseteq Iio b := fun _ => And.right
@@ -1603,7 +1603,7 @@ theorem Ioo_subset_Iio_self
 
 中文:
 定理 Ioo_subset_Iio_self
-  结论: Ioo a b subseteq Iio b
+  结论: 开区间 a b subseteq 左无界右开区间 b
   证明: fun _ => And.right
 -/
 @[to_dual] theorem Ioo_subset_Iio_self : Ioo a b subseteq Iio b := fun _ => And.right
@@ -1617,7 +1617,7 @@ theorem Ioc_subset_Iic_self
 
 中文:
 定理 Ioc_subset_Iic_self
-  结论: Ioc a b subseteq Iic b
+  结论: 左开右闭区间 a b subseteq 左无界右闭区间 b
   证明: fun _ => And.right
 -/
 @[to_dual] theorem Ioc_subset_Iic_self : Ioc a b subseteq Iic b := fun _ => And.right
@@ -1631,7 +1631,7 @@ theorem Icc_subset_Iic_self
 
 中文:
 定理 Icc_subset_Iic_self
-  结论: Icc a b subseteq Iic b
+  结论: 闭区间 a b subseteq 左无界右闭区间 b
   证明: fun _ => And.right
 -/
 @[to_dual] theorem Icc_subset_Iic_self : Icc a b subseteq Iic b := fun _ => And.right
@@ -1646,7 +1646,7 @@ theorem Ioo_subset_Ico_self
 
 中文:
 定理 Ioo_subset_Ico_self
-  结论: Ioo a b subseteq Ico a b
+  结论: 开区间 a b subseteq 左闭右开区间 a b
   证明: fun _ => And.imp_left le_of_lt
 -/
 @[to_dual] theorem Ioo_subset_Ico_self : Ioo a b subseteq Ico a b := fun _ => And.imp_left le_of_lt
@@ -1662,7 +1662,7 @@ theorem Ioc_subset_Icc_self
 
 中文:
 定理 Ioc_subset_Icc_self
-  结论: Ioc a b subseteq Icc a b
+  结论: 左开右闭区间 a b subseteq 闭区间 a b
   证明: fun _ => And.imp_left le_of_lt
 
 @[to_dual self]
@@ -1682,7 +1682,7 @@ theorem Ioo_subset_Icc_self
 
 中文:
 定理 Ioo_subset_Icc_self
-  结论: Ioo a b subseteq Icc a b
+  结论: 开区间 a b subseteq 闭区间 a b
   证明: Ioo_subset_Ico_self.trans Ico_subset_Icc_self
 
 @[to_dual none]
@@ -1708,7 +1708,7 @@ theorem Icc_subset_Icc_iff
 中文:
 定理 Icc_subset_Icc_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Icc a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
+  结论: 闭区间 a₁ b₁ subseteq 闭区间 a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ <= b₂
   证明: ⟨fun h => ⟨(h ⟨le_rfl, h₁⟩).1, (h ⟨h₁, le_rfl⟩).2⟩, fun ⟨h, h'⟩ _ hx =>
     ⟨h.trans hx.1, hx.2.trans h'⟩⟩
 
@@ -1736,7 +1736,7 @@ theorem Icc_subset_Ioo_iff
 中文:
 定理 Icc_subset_Ioo_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Ioo a₂ b₂ ↔ a₂ < a₁ ∧ b₁ < b₂
+  结论: 闭区间 a₁ b₁ subseteq 开区间 a₂ b₂ ↔ a₂ < a₁ ∧ b₁ < b₂
   证明: ⟨fun h => ⟨(h ⟨le_rfl, h₁⟩).1, (h ⟨h₁, le_rfl⟩).2⟩, fun ⟨h, h'⟩ _ hx =>
     ⟨h.trans_le hx.1, hx.2.trans_lt h'⟩⟩
 
@@ -1764,7 +1764,7 @@ theorem Icc_subset_Ico_iff
 中文:
 定理 Icc_subset_Ico_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Ico a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ < b₂
+  结论: 闭区间 a₁ b₁ subseteq 左闭右开区间 a₂ b₂ ↔ a₂ <= a₁ ∧ b₁ < b₂
   证明: ⟨fun h => ⟨(h ⟨le_rfl, h₁⟩).1, (h ⟨h₁, le_rfl⟩).2⟩, fun ⟨h, h'⟩ _ hx =>
     ⟨h.trans hx.1, hx.2.trans_lt h'⟩⟩
 
@@ -1792,7 +1792,7 @@ theorem Icc_subset_Ioc_iff
 中文:
 定理 Icc_subset_Ioc_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Ioc a₂ b₂ ↔ a₂ < a₁ ∧ b₁ <= b₂
+  结论: 闭区间 a₁ b₁ subseteq 左开右闭区间 a₂ b₂ ↔ a₂ < a₁ ∧ b₁ <= b₂
   证明: ⟨fun h => ⟨(h ⟨le_rfl, h₁⟩).1, (h ⟨h₁, le_rfl⟩).2⟩, fun ⟨h, h'⟩ _ hx =>
     ⟨h.trans_le hx.1, hx.2.trans h'⟩⟩
 
@@ -1819,7 +1819,7 @@ theorem Icc_subset_Ioi_iff
 中文:
 定理 Icc_subset_Ioi_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Ioi a₂ ↔ a₂ < a₁
+  结论: 闭区间 a₁ b₁ subseteq 左开右无界区间 a₂ ↔ a₂ < a₁
   证明: ⟨fun h => h ⟨le_rfl, h₁⟩, fun h _ hx => h.trans_le hx.1⟩
 
 @[to_dual]
@@ -1842,7 +1842,7 @@ theorem Icc_subset_Ici_iff
 中文:
 定理 Icc_subset_Ici_iff
   条件: (h₁ : a₁ <= b₁)
-  结论: Icc a₁ b₁ subseteq Ici a₂ ↔ a₂ <= a₁
+  结论: 闭区间 a₁ b₁ subseteq 左闭右无界区间 a₂ ↔ a₂ <= a₁
   证明: ⟨fun h => h ⟨le_rfl, h₁⟩, fun h _ hx => h.trans hx.1⟩
 
 Depends on / 依赖: h.trans, le_rfl
@@ -1860,7 +1860,7 @@ theorem Ici_inter_Iic
 
 中文:
 定理 Ici_inter_Iic
-  结论: Ici a inter Iic b = Icc a b
+  结论: 左闭右无界区间 a inter 左无界右闭区间 b = 闭区间 a b
   证明: rfl
 -/
 @[to_dual] theorem Ici_inter_Iic : Ici a inter Iic b = Icc a b := rfl
@@ -1874,7 +1874,7 @@ theorem Ici_inter_Iio
 
 中文:
 定理 Ici_inter_Iio
-  结论: Ici a inter Iio b = Ico a b
+  结论: 左闭右无界区间 a inter 左无界右开区间 b = 左闭右开区间 a b
   证明: rfl
 -/
 @[to_dual] theorem Ici_inter_Iio : Ici a inter Iio b = Ico a b := rfl
@@ -1888,7 +1888,7 @@ theorem Ioi_inter_Iic
 
 中文:
 定理 Ioi_inter_Iic
-  结论: Ioi a inter Iic b = Ioc a b
+  结论: 左开右无界区间 a inter 左无界右闭区间 b = 左开右闭区间 a b
   证明: rfl
 -/
 @[to_dual] theorem Ioi_inter_Iic : Ioi a inter Iic b = Ioc a b := rfl
@@ -1902,7 +1902,7 @@ theorem Ioi_inter_Iio
 
 中文:
 定理 Ioi_inter_Iio
-  结论: Ioi a inter Iio b = Ioo a b
+  结论: 左开右无界区间 a inter 左无界右开区间 b = 开区间 a b
   证明: rfl
 -/
 @[to_dual] theorem Ioi_inter_Iio : Ioi a inter Iio b = Ioo a b := rfl
@@ -1918,8 +1918,8 @@ theorem mem_Icc_of_Ioo
 
 中文:
 定理 mem_Icc_of_Ioo
-  条件: (h : x in Ioo a b)
-  结论: x in Icc a b
+  条件: (h : x in 开区间 a b)
+  结论: x in 闭区间 a b
   证明: Ioo_subset_Icc_self h
 -/
 @[to_dual self] theorem mem_Icc_of_Ioo (h : x in Ioo a b) : x in Icc a b := Ioo_subset_Icc_self h
@@ -1934,8 +1934,8 @@ theorem mem_Ico_of_Ioo
 
 中文:
 定理 mem_Ico_of_Ioo
-  条件: (h : x in Ioo a b)
-  结论: x in Ico a b
+  条件: (h : x in 开区间 a b)
+  结论: x in 左闭右开区间 a b
   证明: Ioo_subset_Ico_self h
 -/
 @[to_dual] theorem mem_Ico_of_Ioo (h : x in Ioo a b) : x in Ico a b := Ioo_subset_Ico_self h
@@ -1950,8 +1950,8 @@ theorem mem_Icc_of_Ioc
 
 中文:
 定理 mem_Icc_of_Ioc
-  条件: (h : x in Ioc a b)
-  结论: x in Icc a b
+  条件: (h : x in 左开右闭区间 a b)
+  结论: x in 闭区间 a b
   证明: Ioc_subset_Icc_self h
 -/
 @[to_dual] theorem mem_Icc_of_Ioc (h : x in Ioc a b) : x in Icc a b := Ioc_subset_Icc_self h
@@ -1968,8 +1968,8 @@ theorem mem_Iic_of_Iio
 
 中文:
 定理 mem_Iic_of_Iio
-  条件: (h : x in Iio a)
-  结论: x in Iic a
+  条件: (h : x in 左无界右开区间 a)
+  结论: x in 左无界右闭区间 a
   证明: Iio_subset_Iic_self h
 
 @[to_dual self]
@@ -1990,7 +1990,7 @@ theorem Icc_eq_empty_iff
 
 中文:
 定理 Icc_eq_empty_iff
-  结论: Icc a b = ∅ ↔ ¬a <= b
+  结论: 闭区间 a b = ∅ ↔ ¬a <= b
   证明: by
   contrapose!; exact nonempty_Icc
 
@@ -2015,7 +2015,7 @@ theorem Ico_eq_empty_iff
 
 中文:
 定理 Ico_eq_empty_iff
-  结论: Ico a b = ∅ ↔ ¬a < b
+  结论: 左闭右开区间 a b = ∅ ↔ ¬a < b
   证明: by
   contrapose!; exact nonempty_Ico
 
@@ -2041,8 +2041,8 @@ theorem Ioo_eq_empty_iff
 
 中文:
 定理 Ioo_eq_empty_iff
-  条件: [DenselyOrdered α]
-  结论: Ioo a b = ∅ ↔ ¬a < b
+  条件: [稠密序 α]
+  结论: 开区间 a b = ∅ ↔ ¬a < b
   证明: by
   contrapose!; exact nonempty_Ioo
 
@@ -2068,7 +2068,7 @@ theorem _root_.IsTop.Iic_eq
 中文:
 定理 _root_.IsTop.Iic_eq
   条件: (h : IsTop a)
-  结论: Iic a = univ
+  结论: 左无界右闭区间 a = univ
   证明: eq_univ_of_forall h
 
 @[to_dual (attr := simp)]
@@ -2094,7 +2094,7 @@ theorem Iio_eq_empty_iff
 
 中文:
 定理 Iio_eq_empty_iff
-  结论: Iio a = ∅ ↔ IsMin a
+  结论: 左无界右开区间 a = ∅ ↔ IsMin a
   证明: by
   simp only [isMin_iff_forall_not_lt, eq_empty_iff_forall_notMem, mem_Iio]
 
@@ -2122,7 +2122,7 @@ lemma Iio_nonempty
 
 中文:
 引理 Iio_nonempty
-  结论: (Iio a).Nonempty ↔ ¬ IsMin a
+  结论: (左无界右开区间 a).非空 ↔ ¬ IsMin a
   证明: by simp [nonempty_iff_ne_empty]
 
 @[to_dual]
@@ -2146,7 +2146,7 @@ theorem Iic_inter_Ioc_of_le
 中文:
 定理 Iic_inter_Ioc_of_le
   条件: (h : a <= c)
-  结论: Iic a inter Ioc b c = Ioc b a
+  结论: 左无界右闭区间 a inter 左开右闭区间 b c = 左开右闭区间 b a
   证明: ext fun _ => ⟨fun H => ⟨H.2.1, H.1⟩, fun H => ⟨H.2, H.1, H.2.trans h⟩⟩
 
 @[to_dual notMem_Icc_of_gt]
@@ -2169,7 +2169,7 @@ theorem notMem_Icc_of_lt
 中文:
 定理 notMem_Icc_of_lt
   条件: (ha : c < a)
-  结论: c ∉ Icc a b
+  结论: c ∉ 闭区间 a b
   证明: fun h => ha.not_ge h.1
 
 @[to_dual notMem_Ioc_of_gt]
@@ -2197,7 +2197,7 @@ theorem notMem_Ico_of_lt
 中文:
 定理 notMem_Ico_of_lt
   条件: (ha : c < a)
-  结论: c ∉ Ico a b
+  结论: c ∉ 左闭右开区间 a b
   证明: fun h => ha.not_ge h.1
 
 @[deprecated (since := "2026-02-10")] alias notMem_Ioi_self := self_notMem_Ioi
@@ -2229,7 +2229,7 @@ theorem notMem_Ioc_of_le
 中文:
 定理 notMem_Ioc_of_le
   条件: (ha : c <= a)
-  结论: c ∉ Ioc a b
+  结论: c ∉ 左开右闭区间 a b
   证明: fun h => lt_irrefl _ h.1.trans_le ha
 
 @[to_dual notMem_Ioo_of_ge]
@@ -2251,7 +2251,7 @@ theorem notMem_Ioo_of_le
 中文:
 定理 notMem_Ioo_of_le
   条件: (ha : c <= a)
-  结论: c ∉ Ioo a b
+  结论: c ∉ 开区间 a b
   证明: fun h => lt_irrefl _ h.1.trans_le ha
 
 Depends on / 依赖: lt_irrefl, trans_le
@@ -2271,7 +2271,7 @@ theorem Icc_eq_Ioc_same_iff
 
 中文:
 定理 Icc_eq_Ioc_same_iff
-  结论: Icc a b = Ioc a b ↔ ¬a <= b where
+  结论: 闭区间 a b = 左开右闭区间 a b ↔ ¬a <= b where
   证明: by simpa using Set.ext_iff.mp h a
   mpr h := by rw [Icc_eq_empty h, Ioc_eq_empty (mt le_of_lt h)]
 -/
@@ -2289,7 +2289,7 @@ theorem Ioc_eq_Icc_same_iff
 
 中文:
 定理 Ioc_eq_Icc_same_iff
-  结论: Ioc a b = Icc a b ↔ ¬a <= b
+  结论: 左开右闭区间 a b = 闭区间 a b ↔ ¬a <= b
   证明: eq_comm.trans Icc_eq_Ioc_same_iff
 -/
 @[to_dual (attr := simp)] theorem Ioc_eq_Icc_same_iff : Ioc a b = Icc a b ↔ ¬a <= b :=
@@ -2306,7 +2306,7 @@ theorem Icc_eq_Ioo_same_iff
 
 中文:
 定理 Icc_eq_Ioo_same_iff
-  结论: Icc a b = Ioo a b ↔ ¬a <= b where
+  结论: 闭区间 a b = 开区间 a b ↔ ¬a <= b where
   证明: by simpa using Set.ext_iff.mp h b
   mpr h := by rw [Icc_eq_empty h, Ioo_eq_empty (mt le_of_lt h)]
 -/
@@ -2324,7 +2324,7 @@ theorem Ioo_eq_Icc_same_iff
 
 中文:
 定理 Ioo_eq_Icc_same_iff
-  结论: Ioo a b = Icc a b ↔ ¬a <= b
+  结论: 开区间 a b = 闭区间 a b ↔ ¬a <= b
   证明: eq_comm.trans Icc_eq_Ioo_same_iff
 -/
 @[simp, to_dual self] theorem Ioo_eq_Icc_same_iff : Ioo a b = Icc a b ↔ ¬a <= b :=
@@ -2341,7 +2341,7 @@ theorem Ioc_eq_Ico_same_iff
 
 中文:
 定理 Ioc_eq_Ico_same_iff
-  结论: Ioc a b = Ico a b ↔ ¬a < b where
+  结论: 左开右闭区间 a b = 左闭右开区间 a b ↔ ¬a < b where
   证明: by simpa using Set.ext_iff.mp h a
   mpr h := by rw [Ioc_eq_empty h, Ico_eq_empty h]
 -/
@@ -2360,7 +2360,7 @@ theorem Ioo_eq_Ioc_same_iff
 
 中文:
 定理 Ioo_eq_Ioc_same_iff
-  结论: Ioo a b = Ioc a b ↔ ¬a < b where
+  结论: 开区间 a b = 左开右闭区间 a b ↔ ¬a < b where
   证明: by simpa using Set.ext_iff.mp h b
   mpr h := by rw [Ioo_eq_empty h, Ioc_eq_empty h]
 -/
@@ -2378,7 +2378,7 @@ theorem Ioc_eq_Ioo_same_iff
 
 中文:
 定理 Ioc_eq_Ioo_same_iff
-  结论: Ioc a b = Ioo a b ↔ ¬a < b
+  结论: 左开右闭区间 a b = 开区间 a b ↔ ¬a < b
   证明: eq_comm.trans Ioo_eq_Ioc_same_iff
 -/
 @[to_dual (attr := simp)] theorem Ioc_eq_Ioo_same_iff : Ioc a b = Ioo a b ↔ ¬a < b :=
@@ -2398,8 +2398,8 @@ lemma Ici_one_eq_univ
 
 中文:
 引理 Ici_one_eq_univ
-  条件: [One α] [IsBotOneClass α]
-  结论: Ici (1 : α) = univ
+  条件: [幺 α] [是BotOne类 α]
+  结论: 左闭右无界区间 (1 : α) = univ
   证明: by ext; simp
 -/
 lemma Ici_one_eq_univ [One α] [IsBotOneClass α] : Ici (1 : α) = univ := by ext; simp
@@ -2423,7 +2423,7 @@ theorem Icc_self
 中文:
 定理 Icc_self
   条件: (a : α)
-  结论: Icc a a = {a}
+  结论: 闭区间 a a = {a}
   证明: Set.ext by simp [Icc, le_antisymm_iff, and_comm]
 
 Depends on / 依赖: Set.ext, and_comm, le_antisymm_iff
@@ -2444,7 +2444,7 @@ uniq y := Subtype.ext by simpa using y.2
 
 中文:
 实例 instIccUnique
-  签名: : Unique (Icc a a) where
+  签名: : 唯一 (闭区间 a a) where
   定义体: ⟨a, by simp⟩
 uniq y := Subtype.ext by simpa using y.2
 
@@ -2474,7 +2474,7 @@ eq_of_mem_singleton h ▸ right_mem_Icc.2 hab⟩
 
 中文:
 定理 Icc_eq_singleton_iff
-  结论: Icc a b = {c} ↔ a = c ∧ b = c
+  结论: 闭区间 a b = {c} ↔ a = c ∧ b = c
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · have hab : a <= b := nonempty_Icc.1 (h.symm.subst <| singleton_nonempty c)
@@ -2513,7 +2513,7 @@ lemma subsingleton_Icc_of_ge
 中文:
 引理 subsingleton_Icc_of_ge
   条件: (hba : b <= a)
-  结论: Set.Subsingleton (Icc a b)
+  结论: 集合.子单例 (闭区间 a b)
   证明: fun _x ⟨hax, hxb⟩ _y ⟨hay, hyb⟩ => le_antisymm
     (le_imp_le_of_le_of_le hxb hay hba) (le_imp_le_of_le_of_le hyb hax hba)
 
@@ -2541,7 +2541,7 @@ lemma subsingleton_Icc_iff
 
 中文:
 引理 subsingleton_Icc_iff
-  条件: {α : 类型} [LinearOrder α] {a b : α}
+  条件: {α : 类型} [线性序 α] {a b : α}
   证明: by
   refine ⟨fun h => ?_, subsingleton_Icc_of_ge⟩
   contrapose! h
@@ -2572,7 +2572,7 @@ theorem Icc_sdiff_left
 
 中文:
 定理 Icc_sdiff_left
-  结论: Icc a b \ {a} = Ioc a b
+  结论: 闭区间 a b \ {a} = 左开右闭区间 a b
   证明: ext fun x => by simp [lt_iff_le_and_ne, eq_comm, and_right_comm]
 
 @[deprecated (since := "2026-06-03")] alias Icc_diff_left := Icc_sdiff_left
@@ -2601,7 +2601,7 @@ theorem Ico_sdiff_left
 
 中文:
 定理 Ico_sdiff_left
-  结论: Ico a b \ {a} = Ioo a b
+  结论: 左闭右开区间 a b \ {a} = 开区间 a b
   证明: ext fun x => by simp [and_right_comm, ← lt_iff_le_and_ne, eq_comm]
 
 @[deprecated (since := "2026-06-03")] alias Ico_diff_left := Ico_sdiff_left
@@ -2631,7 +2631,7 @@ theorem Icc_sdiff_both
 
 中文:
 定理 Icc_sdiff_both
-  结论: Icc a b \ {a, b} = Ioo a b
+  结论: 闭区间 a b \ {a, b} = 开区间 a b
   证明: by
   rw [insert_eq]; rw [← sdiff_sdiff]; rw [Icc_sdiff_left]; rw [Ioc_sdiff_right]
 
@@ -2661,7 +2661,7 @@ theorem Iic_sdiff_right
 
 中文:
 定理 Iic_sdiff_right
-  结论: Iic a \ {a} = Iio a
+  结论: 左无界右闭区间 a \ {a} = 左无界右开区间 a
   证明: ext fun x => by simp [lt_iff_le_and_ne]
 
 @[deprecated (since := "2026-06-03")] alias Iic_diff_right := Iic_sdiff_right
@@ -2693,7 +2693,7 @@ theorem Ico_sdiff_Ioo_same
 中文:
 定理 Ico_sdiff_Ioo_same
   条件: (h : a < b)
-  结论: Ico a b \ Ioo a b = {a}
+  结论: 左闭右开区间 a b \ 开区间 a b = {a}
   证明: by
   rw [← Ico_sdiff_left]; rw [sdiff_sdiff_cancel_left (singleton_subset_iff.2 <| left_mem_Ico.2 h)]
 
@@ -2726,7 +2726,7 @@ theorem Icc_sdiff_Ico_same
 中文:
 定理 Icc_sdiff_Ico_same
   条件: (h : a <= b)
-  结论: Icc a b \ Ico a b = {b}
+  结论: 闭区间 a b \ 左闭右开区间 a b = {b}
   证明: by
   rw [← Icc_sdiff_right]; rw [sdiff_sdiff_cancel_left (singleton_subset_iff.2 <| right_mem_Icc.2 h)]
 
@@ -2760,7 +2760,7 @@ theorem Icc_sdiff_Ioo_same
 中文:
 定理 Icc_sdiff_Ioo_same
   条件: (h : a <= b)
-  结论: Icc a b \ Ioo a b = {a, b}
+  结论: 闭区间 a b \ 开区间 a b = {a, b}
   证明: by
   rw [← Icc_sdiff_both]; rw [sdiff_sdiff_cancel_left]
   simp [insert_subset_iff, h]
@@ -2793,7 +2793,7 @@ theorem Iic_sdiff_Iio_same
 
 中文:
 定理 Iic_sdiff_Iio_same
-  结论: Iic a \ Iio a = {a}
+  结论: 左无界右闭区间 a \ 左无界右开区间 a = {a}
   证明: by
   rw [← Iic_sdiff_right]; rw [sdiff_sdiff_cancel_left (singleton_subset_iff.2 self_mem_Iic)]
 
@@ -2821,7 +2821,7 @@ theorem Iio_union_right
 
 中文:
 定理 Iio_union_right
-  结论: Iio a union {a} = Iic a
+  结论: 左无界右开区间 a union {a} = 左无界右闭区间 a
   证明: ext fun _ => le_iff_lt_or_eq.symm
 
 @[to_dual]
@@ -2847,7 +2847,7 @@ theorem Ioo_union_left
 中文:
 定理 Ioo_union_left
   条件: (hab : a < b)
-  结论: Ioo a b union {a} = Ico a b
+  结论: 开区间 a b union {a} = 左闭右开区间 a b
   证明: by
   rw [← Ico_sdiff_left]; rw [sdiff_union_self]; rw [union_eq_self_of_subset_right (singleton_subset_iff.2 <| left_mem_Ico.2 hab)]
 
@@ -2877,7 +2877,7 @@ theorem Ioo_union_both
 中文:
 定理 Ioo_union_both
   条件: (h : a <= b)
-  结论: Ioo a b union {a, b} = Icc a b
+  结论: 开区间 a b union {a, b} = 闭区间 a b
   证明: by
   have : (Icc a b \ {a, b}) union {a, b} = Icc a b := sdiff_union_of_subset fun
     | x, .inl rfl => left_mem_Icc.mpr h
@@ -2910,7 +2910,7 @@ theorem Ioc_union_left
 中文:
 定理 Ioc_union_left
   条件: (hab : a <= b)
-  结论: Ioc a b union {a} = Icc a b
+  结论: 左开右闭区间 a b union {a} = 闭区间 a b
   证明: by
   rw [← Icc_sdiff_left]; rw [sdiff_union_self]; rw [union_eq_self_of_subset_right (singleton_subset_iff.2 <| left_mem_Icc.2 hab)]
 
@@ -2937,7 +2937,7 @@ theorem Ico_insert_right
 中文:
 定理 Ico_insert_right
   条件: (h : a <= b)
-  结论: insert b (Ico a b) = Icc a b
+  结论: insert b (左闭右开区间 a b) = 闭区间 a b
   证明: by
   rw [insert_eq]; rw [union_comm]; rw [Ico_union_right h]
 
@@ -2964,7 +2964,7 @@ theorem Ioo_insert_left
 中文:
 定理 Ioo_insert_left
   条件: (h : a < b)
-  结论: insert a (Ioo a b) = Ico a b
+  结论: insert a (开区间 a b) = 左闭右开区间 a b
   证明: by
   rw [insert_eq]; rw [union_comm]; rw [Ioo_union_left h]
 
@@ -2988,7 +2988,7 @@ theorem Iio_insert
 
 中文:
 定理 Iio_insert
-  结论: insert a (Iio a) = Iic a
+  结论: insert a (左无界右开区间 a) = 左无界右闭区间 a
   证明: ext fun _ => le_iff_eq_or_lt.symm
 
 @[to_dual]
@@ -3013,7 +3013,7 @@ Or.inr Subset.antisymm (fun _ hx => lt_of_le_of_ne (hc hx) fun heq => h <| heq.s
 
 中文:
 定理 mem_Iic_Iio_of_subset_of_subset
-  条件: {s : Set α} (ho : Iio a subseteq s) (hc : s subseteq Iic a)
+  条件: {s : 集合 α} (ho : 左无界右开区间 a subseteq s) (hc : s subseteq 左无界右闭区间 a)
   证明: by_cases
     (fun h : a in s =>
 Or.inl Subset.antisymm hc by rw [← Iio_union_right, union_subset_iff]; simp [*])
@@ -3046,7 +3046,7 @@ theorem mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
 
 中文:
 定理 mem_Icc_Ico_Ioc_Ioo_of_subset_of_subset
-  条件: {s : Set α} (ho : Ioo a b subseteq s) (hc : s subseteq Icc a b)
+  条件: {s : 集合 α} (ho : 开区间 a b subseteq s) (hc : s subseteq 闭区间 a b)
   证明: by
   by_cases ha : a in s <;> by_cases hb : b in s
   · refine Or.inl (Subset.antisymm hc ?_)
@@ -3089,8 +3089,8 @@ theorem eq_left_or_mem_Ioo_of_mem_Ico
 
 中文:
 定理 eq_left_or_mem_Ioo_of_mem_Ico
-  条件: {x : α} (hmem : x in Ico a b)
-  结论: x = a ∨ x in Ioo a b
+  条件: {x : α} (hmem : x in 左闭右开区间 a b)
+  结论: x = a ∨ x in 开区间 a b
   证明: hmem.1.eq_or_lt'.imp_right fun h => ⟨h, hmem.2⟩
 
 @[to_dual none]
@@ -3113,7 +3113,7 @@ theorem eq_endpoints_or_mem_Ioo_of_mem_Icc
 
 中文:
 定理 eq_endpoints_or_mem_Ioo_of_mem_Icc
-  条件: {x : α} (hmem : x in Icc a b)
+  条件: {x : α} (hmem : x in 闭区间 a b)
   证明: hmem.1.eq_or_lt'.imp_right fun h => eq_right_or_mem_Ioo_of_mem_Ioc ⟨h, hmem.2⟩
 
 @[to_dual]
@@ -3139,7 +3139,7 @@ theorem _root_.IsMin.Iic_eq
 中文:
 定理 _root_.IsMin.Iic_eq
   条件: (h : IsMin a)
-  结论: Iic a = {a}
+  结论: 左无界右闭区间 a = {a}
   证明: eq_singleton_iff_unique_mem.2 ⟨self_mem_Ici, fun _ => h.eq_of_le⟩
 
 @[to_dual]
@@ -3163,7 +3163,7 @@ theorem Iic_injective
 
 中文:
 定理 Iic_injective
-  结论: Injective (Iic : α -> Set α)
+  结论: 单射 (左无界右闭区间 : α -> 集合 α)
   证明: fun _ _ =>
   eq_of_forall_le_iff ∘ Set.ext_iff.1
 
@@ -3185,7 +3185,7 @@ theorem Iic_inj
 
 中文:
 定理 Iic_inj
-  结论: Iic a = Iic b ↔ a = b
+  结论: 左无界右闭区间 a = 左无界右闭区间 b ↔ a = b
   证明: Iic_injective.eq_iff
 
 @[simp, to_dual none]
@@ -3212,7 +3212,7 @@ theorem Icc_inter_Icc_eq_singleton
 中文:
 定理 Icc_inter_Icc_eq_singleton
   条件: (hab : a <= b) (hbc : b <= c)
-  结论: Icc a b inter Icc b c = {b}
+  结论: 闭区间 a b inter 闭区间 b c = {b}
   证明: by
   rw [← Ici_inter_Iic]; rw [← Iic_inter_Ici]; rw [inter_inter_inter_comm]; rw [Iic_inter_Ici]
   simp [hab, hbc]
@@ -3283,8 +3283,8 @@ theorem Ici_top
 
 中文:
 定理 Ici_top
-  条件: [PartialOrder α] [OrderTop α]
-  结论: Ici (⊤ : α) = {⊤}
+  条件: [偏序 α] [有顶序 α]
+  结论: 左闭右无界区间 (⊤ : α) = {⊤}
   证明: isMax_top.Ici_eq
 
 @[to_dual]
@@ -3306,8 +3306,8 @@ theorem Iio_top
 
 中文:
 定理 Iio_top
-  条件: [PartialOrder α] [OrderTop α]
-  结论: Iio (⊤ : α) = {⊤}ᶜ
+  条件: [偏序 α] [有顶序 α]
+  结论: 左无界右开区间 (⊤ : α) = {⊤}ᶜ
   证明: ext fun _ => lt_top_iff_ne_top
 
 Depends on / 依赖: lt_top_iff_ne_top
@@ -3330,7 +3330,7 @@ theorem Ioi_top
 
 中文:
 定理 Ioi_top
-  结论: Ioi (⊤ : α) = ∅
+  结论: 左开右无界区间 (⊤ : α) = ∅
   证明: isMax_top.Ioi_eq
 
 @[to_dual (attr := simp)]
@@ -3353,7 +3353,7 @@ theorem Iic_top
 
 中文:
 定理 Iic_top
-  结论: Iic (⊤ : α) = univ
+  结论: 左无界右闭区间 (⊤ : α) = univ
   证明: isTop_top.Iic_eq
 
 @[to_dual (attr := simp)]
@@ -3376,7 +3376,7 @@ theorem Icc_top
 
 中文:
 定理 Icc_top
-  结论: Icc a ⊤ = Ici a
+  结论: 闭区间 a ⊤ = 左闭右无界区间 a
   证明: by simp [← Ici_inter_Iic]
 
 @[to_dual (attr := simp)]
@@ -3396,7 +3396,7 @@ theorem Ioc_top
 
 中文:
 定理 Ioc_top
-  结论: Ioc a ⊤ = Ioi a
+  结论: 左开右闭区间 a ⊤ = 左开右无界区间 a
   证明: by simp [← Ioi_inter_Iic]
 
 Depends on / 依赖: Ioi_inter_Iic
@@ -3416,8 +3416,8 @@ theorem Icc_bot_top
 
 中文:
 定理 Icc_bot_top
-  条件: [Preorder α] [BoundedOrder α]
-  结论: Icc (⊥ : α) ⊤ = univ
+  条件: [预序 α] [有界序 α]
+  结论: 闭区间 (⊥ : α) ⊤ = univ
   证明: by simp
 -/
 theorem Icc_bot_top [Preorder α] [BoundedOrder α] : Icc (⊥ : α) ⊤ = univ := by simp
@@ -3445,7 +3445,7 @@ theorem Iic_inter_Iic
 中文:
 定理 Iic_inter_Iic
   条件: {a b : α}
-  结论: Iic a inter Iic b = Iic (a ⊓ b)
+  结论: 左无界右闭区间 a inter 左无界右闭区间 b = 左无界右闭区间 (a ⊓ b)
   证明: by
   ext x
   simp [Iic]
@@ -3470,7 +3470,7 @@ theorem Ioc_inter_Iic
 中文:
 定理 Ioc_inter_Iic
   条件: (a b c : α)
-  结论: Ioc a b inter Iic c = Ioc a (b ⊓ c)
+  结论: 左开右闭区间 a b inter 左无界右闭区间 c = 左开右闭区间 a (b ⊓ c)
   证明: by
   rw [← Ioi_inter_Iic]; rw [← Ioi_inter_Iic]; rw [inter_assoc]; rw [Iic_inter_Iic]
 
@@ -3495,7 +3495,7 @@ theorem Icc_inter_Icc
 
 中文:
 定理 Icc_inter_Icc
-  结论: Icc a₁ b₁ inter Icc a₂ b₂ = Icc (a₁ ⊔ a₂) (b₁ ⊓ b₂)
+  结论: 闭区间 a₁ b₁ inter 闭区间 a₂ b₂ = 闭区间 (a₁ ⊔ a₂) (b₁ ⊓ b₂)
   证明: by
   simp only [Ici_inter_Iic.symm, Ici_inter_Ici.symm, Iic_inter_Iic.symm]; ac_rfl
 
@@ -3527,7 +3527,7 @@ theorem Iic_prod_Iic
 中文:
 定理 Iic_prod_Iic
   条件: (a : α) (b : β)
-  结论: Iic a ×ˢ Iic b = Iic (a, b)
+  结论: 左无界右闭区间 a ×ˢ 左无界右闭区间 b = 左无界右闭区间 (a, b)
   证明: rfl
 
 @[to_dual]
@@ -3550,7 +3550,7 @@ theorem Iic_prod_eq
 中文:
 定理 Iic_prod_eq
   条件: (a : α × β)
-  结论: Iic a = Iic a.1 ×ˢ Iic a.2
+  结论: 左无界右闭区间 a = 左无界右闭区间 a.1 ×ˢ 左无界右闭区间 a.2
   证明: rfl
 
 @[simp, to_dual self]
@@ -3575,7 +3575,7 @@ theorem Icc_prod_Icc
 中文:
 定理 Icc_prod_Icc
   条件: (a₁ a₂ : α) (b₁ b₂ : β)
-  结论: Icc a₁ a₂ ×ˢ Icc b₁ b₂ = Icc (a₁, b₁) (a₂, b₂)
+  结论: 闭区间 a₁ a₂ ×ˢ 闭区间 b₁ b₂ = 闭区间 (a₁, b₁) (a₂, b₂)
   证明: by
   ext ⟨x, y⟩
   simp [and_assoc, and_left_comm]
@@ -3601,7 +3601,7 @@ theorem Icc_prod_eq
 中文:
 定理 Icc_prod_eq
   条件: (a b : α × β)
-  结论: Icc a b = Icc a.1 b.1 ×ˢ Icc a.2 b.2
+  结论: 闭区间 a b = 闭区间 a.1 b.1 ×ˢ 闭区间 a.2 b.2
   证明: by simp
 -/
 theorem Icc_prod_eq (a b : α × β) : Icc a b = Icc a.1 b.1 ×ˢ Icc a.2 b.2 := by simp
@@ -3629,7 +3629,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMinOrder (Ioo x y)
+  签名: NoMin序 (开区间 x y)
   定义体: ⟨fun ⟨a, ha⟩ => by
     rcases exists_between ha.1 with ⟨b, hb₁, hb₂⟩
     exact ⟨⟨b, mem_Ioo.mpr ⟨hb₁, hb₂.trans ha.2⟩⟩, hb₂⟩⟩
@@ -3658,7 +3658,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMinOrder (Ioc x y)
+  签名: NoMin序 (左开右闭区间 x y)
   定义体: ⟨fun ⟨a, ha⟩ => by
     rcases exists_between ha.1 with ⟨b, hb₁, hb₂⟩
     exact ⟨⟨b, mem_Ioc.mpr ⟨hb₁, hb₂.le.trans ha.2⟩⟩, hb₂⟩⟩
@@ -3685,7 +3685,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMinOrder (Ioi x)
+  签名: NoMin序 (左开右无界区间 x)
   定义体: ⟨fun ⟨a, ha⟩ => by
     rcases exists_between ha with ⟨b, hb₁, hb₂⟩
     exact ⟨⟨b, hb₁⟩, hb₂⟩⟩
@@ -3710,7 +3710,7 @@ lemma Iic_False
 
 中文:
 引理 Iic_False
-  结论: Iic False = {False}
+  结论: 左无界右闭区间 假 = {假}
   证明: by aesop
 -/
 @[simp] lemma Iic_False : Iic False = {False} := by aesop
@@ -3724,7 +3724,7 @@ lemma Iic_True
 
 中文:
 引理 Iic_True
-  结论: Iic True = univ
+  结论: 左无界右闭区间 真 = univ
   证明: by aesop
 -/
 @[simp] lemma Iic_True : Iic True = univ := by aesop
@@ -3738,7 +3738,7 @@ lemma Ici_False
 
 中文:
 引理 Ici_False
-  结论: Ici False = univ
+  结论: 左闭右无界区间 假 = univ
   证明: by aesop
 -/
 @[simp] lemma Ici_False : Ici False = univ := by aesop
@@ -3752,7 +3752,7 @@ lemma Ici_True
 
 中文:
 引理 Ici_True
-  结论: Ici True = {True}
+  结论: 左闭右无界区间 真 = {真}
   证明: by aesop
 -/
 @[simp] lemma Ici_True : Ici True = {True} := by aesop
@@ -3766,7 +3766,7 @@ lemma Iio_False
 
 中文:
 引理 Iio_False
-  结论: Iio False = ∅
+  结论: 左无界右开区间 假 = ∅
   证明: by aesop
 
 Depends on / 依赖: I_le_J, Ideal.span_mono, Iio_True, Ioi_False, Set.image_mono, image_mono, lt_iff_le_not_ge, span_mono
@@ -3782,7 +3782,7 @@ lemma Iio_True
 
 中文:
 引理 Iio_True
-  结论: Iio True = {False}
+  结论: 左无界右开区间 真 = {假}
   证明: by aesop (add simp [Ioi, lt_iff_le_not_ge])
 
 Depends on / 依赖: Ideal.span_le, image_preimage_subset, span_le
@@ -3798,7 +3798,7 @@ lemma Ioi_False
 
 中文:
 引理 Ioi_False
-  结论: Ioi False = {True}
+  结论: 左开右无界区间 假 = {真}
   证明: by aesop (add simp [Ioi, lt_iff_le_not_ge])
 -/
 @[simp] lemma Ioi_False : Ioi False = {True} := by aesop (add simp [Ioi, lt_iff_le_not_ge])
@@ -3812,7 +3812,7 @@ lemma Ioi_True
 
 中文:
 引理 Ioi_True
-  结论: Ioi True = ∅
+  结论: 左开右无界区间 真 = ∅
   证明: by aesop
 -/
 lemma Ioi_True : Ioi True = ∅ := by aesop

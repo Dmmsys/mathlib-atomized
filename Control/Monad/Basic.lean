@@ -57,7 +57,7 @@ theorem map_eq_bind_pure_comp
 
 中文:
 定理 map_eq_bind_pure_comp
-  结论: (m : 类型u -> 类型v) [Monad m] [LawfulMonad m]
+  结论: (m : 类型u -> 类型v) [单子 m] [合法单子 m]
   证明: (bind_pure_comp f x).symm
 
 Depends on / 依赖: bind_pure_comp
@@ -78,7 +78,7 @@ universe u₀ u₁ v₀ v₁
 
 中文:
 定义 StateT.eval
-  签名: {m : 类型u -> 类型v} [Functor m] (cmd : StateT σ m α) (s : σ)
+  签名: {m : 类型u -> 类型v} [函子 m] (cmd : StateT σ m α) (s : σ)
   定义体: Prod.fst < > cmd.run s
 
 universe u₀ u₁ v₀ v₁

@@ -38,8 +38,8 @@ structure Sequential
 结构 Sequential
   参数: where
   公理与运算 (2 个):
-    - toTop : TopCat.{u} -- TODO: turn this into `extends`
-    - [is_sequential : SequentialSpace toTop]
+    - toTop : 顶元素范畴.{u} -- TODO: turn this into `extends`
+    - [is_sequential : Sequential空间 toTop]
 -/
 structure Sequential where
   /-- The underlying topological space of an object of `Sequential`. -/
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Sequential.{u}
+  签名: 可居 Sequential.{u}
   定义体: ⟨{ toTop := TopCat.of (ULift (Fin 37)) }⟩
 
 Depends on / 依赖: TopCat, TopCat.of
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{u, u + 1} Sequential.{u}
+  签名: 范畴.{u, u + 1} Sequential.{u}
   定义体: inferInstanceAs Category (InducedCategory _ toTop)
 
 Depends on / 依赖: Category, InducedCategory
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory.{u} Sequential.{u} (C(·, ·))
+  签名: 余ncrete范畴.{u} Sequential.{u} (C(·, ·))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTop) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory
@@ -158,7 +158,7 @@ definition sequentialToTop
 
 中文:
 定义 sequentialToTop
-  签名: : Sequential.{u} ⥤ TopCat.{u}
+  签名: : Sequential.{u} ⥤ 顶元素范畴.{u}
   定义体: inducedFunctor _
 
 Depends on / 依赖: inducedFunctor
@@ -176,7 +176,7 @@ definition fullyFaithfulSequentialToTop
 
 中文:
 定义 fullyFaithfulSequentialToTop
-  签名: : sequentialToTop.FullyFaithful
+  签名: : sequentialToTop.满忠实
   定义体: fullyFaithfulInducedFunctor _
 
 Depends on / 依赖: fullyFaithfulInducedFunctor
@@ -194,7 +194,7 @@ instance :
 
 中文:
 实例 :
-  签名: sequentialToTop.{u}.Full
+  签名: sequentialToTop.{u}.满
   定义体: inferInstanceAs (inducedFunctor _).Full
 
 Depends on / 依赖: inducedFunctor
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: sequentialToTop.{u}.Faithful
+  签名: sequentialToTop.{u}.忠实
   定义体: inferInstanceAs (inducedFunctor _).Faithful
 
 Depends on / 依赖: Faithful, inducedFunctor

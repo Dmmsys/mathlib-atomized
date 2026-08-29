@@ -45,7 +45,7 @@ definition yonedaPresheaf
 
 中文:
 定义 yonedaPresheaf
-  签名: : Cᵒᵖ ⥤ Type (max w w') where
+  签名: : Cᵒᵖ ⥤ 类型 (最大值 w w') where
   定义体: C(F.obj (unop X), Y)
   map f := ↾fun g => ContinuousMap.comp g (F.map f.unop).hom
 
@@ -72,7 +72,7 @@ definition yonedaPresheaf'
 
 中文:
 定义 yonedaPresheaf'
-  签名: : TopCat.{w}ᵒᵖ ⥤ Type (max w w') where
+  签名: : 顶元素范畴.{w}ᵒᵖ ⥤ 类型 (最大值 w w') where
   定义体: C((unop X).1, Y)
   map f := ↾fun g => ContinuousMap.comp g
     (ConcreteCategory.hom f.unop)
@@ -112,7 +112,7 @@ theorem piComparison_fac
 
 中文:
 定理 piComparison_fac
-  条件: {α : Type} (X : α -> TopCat)
+  条件: {α : 类型} (X : α -> 顶元素范畴)
   证明: by
   rw [← Category.assoc]; rw [Iso.eq_comp_inv]
   ext
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteProducts (yonedaPresheaf'.{w, w'} Y)
+  签名: 保持FiniteProducts (yonedaPresheaf'.{w, w'} Y)
   定义体: { preservesLimit := fun {K} =>
       have : forall {α : Type} (X : α -> TopCat), PreservesLimit (Discrete.functor (fun x => op (X x)))
           (yonedaPresheaf'.{w, w'} Y) := fun X => @PreservesProduct.of_iso_comparison _ _ _ _

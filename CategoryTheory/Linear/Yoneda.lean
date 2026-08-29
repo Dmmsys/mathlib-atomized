@@ -50,7 +50,7 @@ definition linearYoneda
 
 中文:
 定义 linearYoneda
-  签名: : C ⥤ Cᵒᵖ ⥤ ModuleCat R where
+  签名: : C ⥤ Cᵒᵖ ⥤ 模范畴 R where
   定义体: { obj := fun Y => ModuleCat.of R (unop Y ⟶ X)
       map := fun f => ModuleCat.ofHom (Linear.leftComp R _ f.unop) }
   map {X₁ X₂} f :=
@@ -85,7 +85,7 @@ definition linearCoyoneda
 
 中文:
 定义 linearCoyoneda
-  签名: : Cᵒᵖ ⥤ C ⥤ ModuleCat R where
+  签名: : Cᵒᵖ ⥤ C ⥤ 模范畴 R where
   定义体: { obj := fun X => ModuleCat.of R (unop Y ⟶ X)
       map := fun f => ModuleCat.ofHom (Linear.rightComp R _ f) }
   map {Y₁ Y₂} f :=
@@ -220,7 +220,7 @@ instance full_linearYoneda
 
 中文:
 实例 full_linearYoneda
-  签名: : (linearYoneda R C).Full
+  签名: : (linearYoneda R C).满
   定义体: let _ : Functor.Full (linearYoneda R C ⋙ (whiskeringRight _ _ _).obj
     (forget (ModuleCat.{v} R))) := Yoneda.yoneda_full
   Functor.Full.of_comp_faithful (linearYoneda R C)
@@ -247,7 +247,7 @@ instance full_linearCoyoneda
 
 中文:
 实例 full_linearCoyoneda
-  签名: : (linearCoyoneda R C).Full
+  签名: : (linearCoyoneda R C).满
   定义体: let _ : Functor.Full (linearCoyoneda R C ⋙ (whiskeringRight _ _ _).obj
     (forget (ModuleCat.{v} R))) := Coyoneda.coyoneda_full
   Functor.Full.of_comp_faithful (linearCoyoneda R C)
@@ -271,7 +271,7 @@ instance faithful_linearYoneda
 
 中文:
 实例 faithful_linearYoneda
-  签名: : (linearYoneda R C).Faithful
+  签名: : (linearYoneda R C).忠实
   定义体: Functor.Faithful.of_comp_eq (whiskering_linearYoneda R C)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_eq, of_comp_eq, whiskering_linearYoneda
@@ -289,7 +289,7 @@ instance faithful_linearCoyoneda
 
 中文:
 实例 faithful_linearCoyoneda
-  签名: : (linearCoyoneda R C).Faithful
+  签名: : (linearCoyoneda R C).忠实
   定义体: Functor.Faithful.of_comp_eq (whiskering_linearCoyoneda R C)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_comp_eq, of_comp_eq, whiskering_linearCoyoneda

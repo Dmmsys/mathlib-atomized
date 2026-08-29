@@ -57,7 +57,7 @@ abbreviation Path
   body: List GoTo
 
 中文:
-缩写 Path
+缩写 道路
   定义体: List GoTo
 
 Depends on / 依赖: Algebra, F.obj, G.obj, Localization
@@ -89,7 +89,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited VarQ
+  签名: 可居 VarQ
   定义体: ⟨default, default, default⟩
 -/
 instance : Inhabited VarQ where
@@ -118,7 +118,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited HypQ
+  签名: 可居 HypQ
   定义体: ⟨default, default⟩
 -/
 instance : Inhabited HypQ where
@@ -138,7 +138,7 @@ definition assertUnreachable
 
 中文:
 定义 assertUnreachable
-  签名: {α : Type} (context : String)
+  签名: {α : 类型} (context : String)
   定义体: do
   let e := s!"existsAndEq: internal error, unreachable case has occurred:\n{context}."
   logError e
@@ -168,7 +168,7 @@ definition mkNestedExists
 
 中文:
 定义 mkNestedExists
-  签名: (fvars : List VarQ) (body : Q(命题))
+  签名: (fvars : 列表 VarQ) (body : Q(命题))
   定义体: do
   match fvars with
   | [] => pure body
@@ -208,7 +208,7 @@ definition findEqPath
 
 中文:
 定义 findEqPath
-  签名: {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(命题))
+  签名: {u : Level} {α : Q(类型层 u)} (a : Q($α)) (P : Q(命题))
   定义体: do
   match_expr P with
   | Eq _ x y =>
@@ -255,7 +255,7 @@ definition findEq
 
 中文:
 定义 findEq
-  签名: {u : Level} {α : Q(Sort u)} (a : Q($α)) (P : Q(命题)) (path : Path)
+  签名: {u : Level} {α : Q(类型层 u)} (a : Q($α)) (P : Q(命题)) (path : 道路)
   定义体: do
    go a P path
 
@@ -312,7 +312,7 @@ let _ : β =Q γ := ⟨⟩
 
 中文:
 定义 withNestedExistsElim
-  签名: {P body goal : Q(命题)} (exs : List VarQ) (h : Q($P))
+  签名: {P body goal : Q(命题)} (exs : 列表 VarQ) (h : Q($P))
   定义体: do
   match exs with
   | [] =>
@@ -356,7 +356,7 @@ definition mkAfterToBefore
 
 中文:
 定义 mkAfterToBefore
-  签名: {u : Level} {α : Q(Sort u)} {p : Q($α -> 命题)}
+  签名: {u : Level} {α : Q(类型层 u)} {p : Q($α -> 命题)}
   定义体: do
   withLocalDeclQ .anonymous .default P' fun (h : Q($P')) => do
     let pf : Q(exists a, $p a) ← withNestedExistsElim fvars h fun (h : Q($newBody)) => do
@@ -427,7 +427,7 @@ let _ : γ =Q β := ⟨⟩
 
 中文:
 定义 withExistsElimAlongPathImp
-  签名: {u : Level} {α : Q(Sort u)}
+  签名: {u : Level} {α : Q(类型层 u)}
   定义体: do
   match P with
   | ~q(@Exists $β $pb) =>
@@ -489,7 +489,7 @@ definition withExistsElimAlongPath
 
 中文:
 定义 withExistsElimAlongPath
-  签名: {u : Level} {α : Q(Sort u)}
+  签名: {u : Level} {α : Q(类型层 u)}
   定义体: withExistsElimAlongPathImp h exs path [] act
 
 Depends on / 依赖: withExistsElimAlongPathImp
@@ -519,8 +519,8 @@ let _ : β =Q γ := ⟨⟩
     return q(Exists.int
 
 中文:
-定义 withNestedExistsIntro
-  签名: {P body : Q(命题)} (exs : List VarQ)
+定义 withNestedExists整数ro
+  签名: {P body : Q(命题)} (exs : 列表 VarQ)
   定义体: do
   match exs with
   | [] =>
@@ -561,7 +561,7 @@ definition mkBeforeToAfter
 
 中文:
 定义 mkBeforeToAfter
-  签名: {u : Level} {α : Q(Sort u)} {p : Q($α -> 命题)}
+  签名: {u : Level} {α : Q(类型层 u)} {p : Q($α -> 命题)}
   定义体: do
   withLocalDeclQ .anonymous .default q(exists a, $p a) fun h => do
   withLocalDeclQ .anonymous .default q($α) fun a => do

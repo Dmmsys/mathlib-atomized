@@ -44,9 +44,9 @@ theorem List.smul_sum
   proof: map_list_sum (DistribSMul.toAddMonoidHom N r) l
 
 中文:
-定理 List.smul_sum
-  条件: {r : M} {l : List N}
-  结论: r • l.sum = (l.map (r • ·)).sum
+定理 列表.smul_sum
+  条件: {r : M} {l : 列表 N}
+  结论: r • l.求和 = (l.map (r • ·)).求和
   证明: map_list_sum (DistribSMul.toAddMonoidHom N r) l
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_list_sum, toAddMonoidHom
@@ -70,9 +70,9 @@ theorem List.smul_prod'
   proof: map_list_prod (MulDistribMulAction.toMonoidHom N r) l
 
 中文:
-定理 List.smul_prod'
-  条件: {r : M} {l : List N}
-  结论: r • l.prod = (l.map (r • ·)).prod
+定理 列表.smul_prod'
+  条件: {r : M} {l : 列表 N}
+  结论: r • l.乘积 = (l.map (r • ·)).乘积
   证明: map_list_prod (MulDistribMulAction.toMonoidHom N r) l
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMonoidHom, map_list_prod, toMonoidHom
@@ -98,7 +98,7 @@ theorem Multiset.smul_sum
 中文:
 定理 Multiset.smul_sum
   条件: {s : Multiset N}
-  结论: r • s.sum = (s.map (r • ·)).sum
+  结论: r • s.求和 = (s.map (r • ·)).求和
   证明: (DistribSMul.toAddMonoidHom N r).map_multiset_sum s
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_multiset_sum, toAddMonoidHom
@@ -115,8 +115,8 @@ theorem Finset.smul_sum
   proof: map_sum (DistribSMul.toAddMonoidHom N r) f s
 
 中文:
-定理 Finset.smul_sum
-  条件: {f : γ -> N} {s : Finset γ}
+定理 有限集.smul_sum
+  条件: {f : γ -> N} {s : 有限集 γ}
   证明: map_sum (DistribSMul.toAddMonoidHom N r) f s
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_sum, toAddMonoidHom
@@ -135,7 +135,7 @@ theorem smul_finsum_mem
 
 中文:
 定理 smul_finsum_mem
-  条件: {f : γ -> N} {s : Set γ} (hs : s.Finite)
+  条件: {f : γ -> N} {s : 集合 γ} (hs : s.有限)
   证明: (DistribSMul.toAddMonoidHom N r).map_finsum_mem f hs
 
 Depends on / 依赖: DistribSMul, DistribSMul.toAddMonoidHom, map_finsum_mem, toAddMonoidHom
@@ -162,7 +162,7 @@ theorem Multiset.smul_prod'
 中文:
 定理 Multiset.smul_prod'
   条件: {r : M} {s : Multiset N}
-  结论: r • s.prod = (s.map (r • ·)).prod
+  结论: r • s.乘积 = (s.map (r • ·)).乘积
   证明: (MulDistribMulAction.toMonoidHom N r).map_multiset_prod s
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMonoidHom, map_multiset_prod, toMonoidHom
@@ -179,8 +179,8 @@ theorem Finset.smul_prod'
   proof: map_prod (MulDistribMulAction.toMonoidHom N r) f s
 
 中文:
-定理 Finset.smul_prod'
-  条件: {r : M} {f : γ -> N} {s : Finset γ}
+定理 有限集.smul_prod'
+  条件: {r : M} {f : γ -> N} {s : 有限集 γ}
   证明: map_prod (MulDistribMulAction.toMonoidHom N r) f s
 
 Depends on / 依赖: MulDistribMulAction, MulDistribMulAction.toMonoidHom, map_prod, toMonoidHom
@@ -202,7 +202,7 @@ theorem smul_finprod'
 
 中文:
 定理 smul_finprod'
-  条件: {ι : Sort*} [Finite ι] {f : ι -> N} (r : M)
+  条件: {ι : 类型层*} [有限 ι] {f : ι -> N} (r : M)
   证明: by
   cases nonempty_fintype (PLift ι)
   simp only [finprod_eq_prod_plift_of_mulSupport_subset (s := Finset.univ) (by simp),
@@ -229,8 +229,8 @@ theorem Finset.smul_prod_perm
   exact Finset.prod_bijective (g * ·) (Group.mulLeft_bijective g) (by simp) (fun _ _ => rfl)
 
 中文:
-定理 Finset.smul_prod_perm
-  条件: [Fintype G] (b : N) (g : G)
+定理 有限集.smul_prod_perm
+  条件: [有限类型 G] (b : N) (g : G)
   证明: by
   simp only [smul_prod', smul_smul]
   exact Finset.prod_bijective (g * ·) (Group.mulLeft_bijective g) (by simp) (fun _ _ => rfl)
@@ -254,7 +254,7 @@ theorem smul_finprod_perm
 
 中文:
 定理 smul_finprod_perm
-  条件: [Finite G] (b : N) (g : G)
+  条件: [有限 G] (b : N) (g : G)
   证明: by
   cases nonempty_fintype G
   simp only [finprod_eq_prod_of_fintype, Finset.smul_prod_perm]
@@ -284,7 +284,7 @@ theorem smul_prod
 
 中文:
 定理 smul_prod
-  结论: [Monoid M] [MulOneClass N] [MulAction M N] [IsScalarTower M N N]
+  结论: [幺半群 M] [MulOne类 N] [乘法作用 M N] [标量塔 M N N]
   证明: by
   induction l with
   | nil => simp
@@ -314,7 +314,7 @@ theorem smul_prod
 
 中文:
 定理 smul_prod
-  结论: [Monoid M] [CommMonoid N] [MulAction M N] [IsScalarTower M N N]
+  结论: [幺半群 M] [交换幺半群 N] [乘法作用 M N] [标量塔 M N N]
   证明: Quot.induction_on s by simp [List.smul_prod]
 
 Depends on / 依赖: List.smul_prod, Quot.induction_on, induction_on, smul_prod

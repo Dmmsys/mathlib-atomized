@@ -115,7 +115,7 @@ theorem mulMap_map_comp_eq
 
 中文:
 定理 mulMap_map_comp_eq
-  条件: {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T)
+  条件: {T : 类型 w} [半环 T] [代数 R T] (f : S ->ₐ[R] T)
   证明: by
   ext
   simp only [TensorProduct.AlgebraTensorModule.curry_apply,
@@ -145,7 +145,7 @@ theorem coe_mulMap_comp_eq
 
 中文:
 定理 coe_mulMap_comp_eq
-  条件: {T : Type w} [Semiring T] [Algebra R T] (f : S ->ₐ[R] T)
+  条件: {T : 类型 w} [半环 T] [代数 R T] (f : S ->ₐ[R] T)
   证明: congr(⇑($(mulMap_map_comp_eq M N f)))
 
 Depends on / 依赖: mulMap_map_comp_eq
@@ -216,7 +216,7 @@ theorem mulMap_comp_rTensor
 
 中文:
 定理 mulMap_comp_rTensor
-  条件: {M' : Submodule R S} (hM : M' <= M)
+  条件: {M' : 子模 R S} (hM : M' <= M)
   证明: TensorProduct.ext' fun _ _ => rfl
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext
@@ -236,7 +236,7 @@ theorem mulMap_comp_lTensor
 
 中文:
 定理 mulMap_comp_lTensor
-  条件: {N' : Submodule R S} (hN : N' <= N)
+  条件: {N' : 子模 R S} (hN : N' <= N)
   证明: TensorProduct.ext' fun _ _ => rfl
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext
@@ -256,7 +256,7 @@ theorem mulMap_comp_map_inclusion
 
 中文:
 定理 mulMap_comp_map_inclusion
-  条件: {M' N' : Submodule R S} (hM : M' <= M) (hN : N' <= N)
+  条件: {M' N' : 子模 R S} (hM : M' <= M) (hN : N' <= N)
   证明: TensorProduct.ext' fun _ _ => rfl
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext
@@ -275,7 +275,7 @@ theorem mulMap_eq_mul'_comp_mapIncl
 
 中文:
 定理 mulMap_eq_mul'_comp_mapIncl
-  结论: mulMap M N = .mul' R S ∘ₗ TensorProduct.mapIncl M N
+  结论: mulMap M N = .mul' R S ∘ₗ 张量积.mapIncl M N
   证明: TensorProduct.ext' fun _ _ => rfl
 
 Depends on / 依赖: TensorProduct, TensorProduct.ext, cg_def, fg_def
@@ -299,7 +299,7 @@ theorem mulMap_range
 
 中文:
 定理 mulMap_range
-  结论: LinearMap.range (mulMap M N) = M * N
+  结论: 线性映射.range (mulMap M N) = M * N
   证明: by
   refine le_antisymm ?_ (mul_le.2 fun m hm n hn => ⟨⟨m, hm⟩ otimesₜ[R] ⟨n, hn⟩, rfl⟩)
   rintro _ ⟨x, rfl⟩
@@ -367,7 +367,7 @@ theorem mulMap'_surjective
 
 中文:
 定理 mulMap'_surjective
-  结论: Function.Surjective (mulMap' M N)
+  结论: 函数.满射 (mulMap' M N)
   证明: by
   simp_rw [mulMap', LinearMap.coe_comp, LinearEquiv.coe_coe, EquivLike.comp_surjective,
     LinearMap.surjective_rangeRestrict]
@@ -388,7 +388,7 @@ definition lTensorOne'
 
 中文:
 定义 lTensorOne'
-  签名: : (⊥ : Subalgebra R S) otimes[R] N ->ₗ[R] N
+  签名: : (⊥ : 子代数 R S) otimes[R] N ->ₗ[R] N
   定义体: show Subalgebra.toSubmodule ⊥ otimes[R] N ->ₗ[R] N from
     (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, one_mul])).toLinearMap ∘ₗ
       (mulMap _ N).rangeRestrict
@@ -464,7 +464,7 @@ definition lTensorOne
 
 中文:
 定义 lTensorOne
-  签名: : (⊥ : Subalgebra R S) otimes[R] N ≃ₗ[R] N
+  签名: : (⊥ : 子代数 R S) otimes[R] N ≃ₗ[R] N
   定义体: LinearEquiv.ofLinearMap N.lTensorOne' (TensorProduct.mk R (⊥ : Subalgebra R S) N 1)
 (by ext; simp) TensorProduct.ext' fun r n => by
   change 1 otimesₜ[R] lTensorOne' N _ = r otimesₜ[R] n
@@ -574,7 +574,7 @@ definition rTensorOne'
 
 中文:
 定义 rTensorOne'
-  签名: : M otimes[R] (⊥ : Subalgebra R S) ->ₗ[R] M
+  签名: : M otimes[R] (⊥ : 子代数 R S) ->ₗ[R] M
   定义体: show M otimes[R] Subalgebra.toSubmodule ⊥ ->ₗ[R] M from
     (LinearEquiv.ofEq _ _ (by rw [Algebra.toSubmodule_bot, mulMap_range, mul_one])).toLinearMap ∘ₗ
       (mulMap M _).rangeRestrict
@@ -652,7 +652,7 @@ definition rTensorOne
 
 中文:
 定义 rTensorOne
-  签名: : M otimes[R] (⊥ : Subalgebra R S) ≃ₗ[R] M
+  签名: : M otimes[R] (⊥ : 子代数 R S) ≃ₗ[R] M
   定义体: LinearEquiv.ofLinearMap M.rTensorOne' ((TensorProduct.comm R _ _).toLinearMap ∘ₗ
     TensorProduct.mk R (⊥ : Subalgebra R S) M 1) (by ext; simp) <| TensorProduct.ext' fun n r => by
   change rTensorOne' M _ otimesₜ[R] 1 = n otimesₜ[R] r
@@ -875,7 +875,7 @@ theorem mulMap_comm
 
 中文:
 定理 mulMap_comm
-  结论: mulMap N M = (mulMap M N).comp (TensorProduct.comm R N M).toLinearMap
+  结论: mulMap N M = (mulMap M N).comp (张量积.comm R N M).toLinearMap
   证明: mulMap_comm_of_commute M N fun _ _ => mul_comm _ _
 
 Depends on / 依赖: mulMap_comm_of_commute, mul_comm

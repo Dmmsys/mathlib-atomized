@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive (Ind C)
+  签名: 预加性 (Ind C)
   定义体: .ofFullyFaithful (((Ind.leftExactFunctorEquivalence C).trans
     (AddCommGrpCat.leftExactFunctorForgetEquivalence _).symm).fullyFaithfulFunctor.comp
       (ObjectProperty.fullyFaithfulι _))
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteBiproducts (Ind C)
+  签名: 有FiniteBiproducts (Ind C)
   定义体: HasFiniteBiproducts.of_hasFiniteCoproducts
 
 Depends on / 依赖: HasFiniteBiproducts, HasFiniteBiproducts.of_hasFiniteCoproducts, of_hasFiniteCoproducts

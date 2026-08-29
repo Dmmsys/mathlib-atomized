@@ -46,10 +46,10 @@ class BoundedSub
     - isBounded_sub : forall {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s - t)
 
 中文:
-类 BoundedSub
-  参数: (R : 类型) [Bornology R] [Sub R]
+类 有界减法
+  参数: (R : 类型) [有界结构 R] [减法 R]
   公理与运算 (1 个):
-    - isBounded_sub : 对任意 {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s - t)
+    - isBounded_sub : 对任意 {s t : 集合 R}, 有界结构.IsBounded s -> 有界结构.IsBounded t -> 有界结构.IsBounded (s - t)
 -/
 class BoundedSub (R : Type*) [Bornology R] [Sub R] : Prop where
   isBounded_sub : forall {s t : Set R},
@@ -67,7 +67,7 @@ lemma isBounded_sub
 
 中文:
 引理 isBounded_sub
-  结论: [Bornology R] [Sub R] [BoundedSub R] {s t : Set R}
+  结论: [有界结构 R] [减法 R] [有界减法 R] {s t : 集合 R}
   证明: BoundedSub.isBounded_sub hs ht
 
 Depends on / 依赖: BoundedSub, BoundedSub.isBounded_sub, isBounded_sub
@@ -92,7 +92,7 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
 
 中文:
 引理 sub_bounded_of_bounded_of_bounded
-  结论: {X : 类型} [PseudoMetricSpace R] [Sub R] [BoundedSub R]
+  结论: {X : 类型} [伪度量空间 R] [减法 R] [有界减法 R]
   证明: by
 obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
     isBounded_sub (Metric.isBounded_range_iff.mpr f_bdd) (Metric.isBounded_range_iff.mpr g_bdd)
@@ -127,7 +127,7 @@ lemma boundedSub_of_lipschitzWith_sub
 
 中文:
 引理 boundedSub_of_lipschitzWith_sub
-  结论: [PseudoMetricSpace R] [Sub R] {K : NN实数}
+  结论: [伪度量空间 R] [减法 R] {K : 非负实数}
   证明: by
     have bdd : Bornology.IsBounded (s ×ˢ t) := Bornology.IsBounded.prod s_bdd t_bdd
     convert! lip.isBounded_image bdd
@@ -163,10 +163,10 @@ class BoundedAdd
     - isBounded_add : forall {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s + t)
 
 中文:
-类 BoundedAdd
-  参数: (R : 类型) [Bornology R] [Add R]
+类 有界加法
+  参数: (R : 类型) [有界结构 R] [加法 R]
   公理与运算 (1 个):
-    - isBounded_add : 对任意 {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s + t)
+    - isBounded_add : 对任意 {s t : 集合 R}, 有界结构.IsBounded s -> 有界结构.IsBounded t -> 有界结构.IsBounded (s + t)
 -/
 class BoundedAdd (R : Type*) [Bornology R] [Add R] : Prop where
   isBounded_add : forall {s t : Set R},
@@ -186,10 +186,10 @@ class BoundedMul
     - isBounded_mul : forall {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s * t)
 
 中文:
-类 BoundedMul
-  参数: (R : 类型) [Bornology R] [Mul R]
+类 有界乘法
+  参数: (R : 类型) [有界结构 R] [乘法 R]
   公理与运算 (1 个):
-    - isBounded_mul : 对任意 {s t : Set R}, Bornology.IsBounded s -> Bornology.IsBounded t -> Bornology.IsBounded (s * t)
+    - isBounded_mul : 对任意 {s t : 集合 R}, 有界结构.IsBounded s -> 有界结构.IsBounded t -> 有界结构.IsBounded (s * t)
 -/
 class BoundedMul (R : Type*) [Bornology R] [Mul R] : Prop where
   isBounded_mul : forall {s t : Set R},
@@ -210,7 +210,7 @@ lemma isBounded_mul
 
 中文:
 引理 isBounded_mul
-  结论: [Bornology R] [Mul R] [BoundedMul R] {s t : Set R}
+  结论: [有界结构 R] [乘法 R] [有界乘法 R] {s t : 集合 R}
   证明: BoundedMul.isBounded_mul hs ht
 
 @[to_additive]
@@ -242,7 +242,7 @@ lemma isBounded_pow
 
 中文:
 引理 isBounded_pow
-  结论: {R : 类型} [Bornology R] [Monoid R] [BoundedMul R] {s : Set R}
+  结论: {R : 类型} [有界结构 R] [幺半群 R] [有界乘法 R] {s : 集合 R}
   证明: by
   induction n with
   | zero =>
@@ -293,7 +293,7 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
 
 中文:
 引理 mul_bounded_of_bounded_of_bounded
-  结论: {X : 类型} [PseudoMetricSpace R] [Mul R] [BoundedMul R]
+  结论: {X : 类型} [伪度量空间 R] [乘法 R] [有界乘法 R]
   证明: by
 obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp
     isBounded_mul (Metric.isBounded_range_iff.mpr f_bdd) (Metric.isBounded_range_iff.mpr g_bdd)
@@ -332,8 +332,8 @@ instance [PseudoMetricSpace
     · intro ⟨a, a_in_s, b, b_in
 
 中文:
-实例 [PseudoMetricSpace
-  签名: R] [Monoid R] [LipschitzMul R] : BoundedMul R where
+实例 [伪度量空间
+  签名: R] [幺半群 R] [Lipschitz乘法 R] : 有界乘法 R where
   定义体: by
     have bdd : Bornology.IsBounded (s ×ˢ t) := Bornology.IsBounded.prod s_bdd t_bdd
     obtain ⟨C, mul_lip⟩ := ‹LipschitzMul R›.lipschitz_mul
@@ -377,7 +377,7 @@ lemma SeminormedAddCommGroup.lipschitzWith_sub
   norm_num
 
 中文:
-引理 SeminormedAddCommGroup.lipschitzWith_sub
+引理 SeminormedAddComm群.lipschitzWith_sub
   证明: by
   convert! LipschitzWith.prod_fst.sub LipschitzWith.prod_snd
   norm_num
@@ -399,7 +399,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedSub R
+  签名: 有界减法 R
   定义体: boundedSub_of_lipschitzWith_sub SeminormedAddCommGroup.lipschitzWith_sub
 
 Depends on / 依赖: SeminormedAddCommGroup, SeminormedAddCommGroup.lipschitzWith_sub, boundedSub_of_lipschitzWith_sub, lipschitzWith_sub
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedMul R
+  签名: 有界乘法 R
   定义体: by
     obtain ⟨Af, hAf⟩ := (Metric.isBounded_iff_subset_closedBall 0).mp hs
     obtain ⟨Ag, hAg⟩ := (Metric.isBounded_iff_subset_closedBall 0).mp ht
@@ -624,7 +624,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedSub 实数>=0
+  签名: 有界减法 实数>=0
   定义体: boundedSub_of_lipschitzWith_sub NNReal.lipschitzWith_sub
 
 Depends on / 依赖: NNReal, NNReal.lipschitzWith_sub, boundedSub_of_lipschitzWith_sub, lipschitzWith_sub
@@ -647,7 +647,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedMul 实数>=0
+  签名: 有界乘法 实数>=0
   定义体: by
     obtain ⟨Af, hAf⟩ := (isBounded_iff_subset_closedBall 0).mp hs
     obtain ⟨Ag, hAg⟩ := (isBounded_iff_subset_closedBall 0).mp ht

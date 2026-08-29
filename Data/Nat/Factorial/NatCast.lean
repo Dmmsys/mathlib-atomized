@@ -45,7 +45,7 @@ theorem natCast_factorial_of_le
 
 中文:
 定理 natCast_factorial_of_le
-  结论: {n : 自然数} (hn_fac : IsUnit (n ! : A))
+  结论: {n : 自然数} (hn_fac : 是单位 (n ! : A))
   证明: by
   obtain ⟨k, rfl⟩ := exists_add_of_le hmn
   clear hmn
@@ -80,7 +80,7 @@ theorem natCast_factorial_of_lt
 
 中文:
 定理 natCast_factorial_of_lt
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1)! : A))
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1)! : A))
   证明: hn_fac.natCast_factorial_of_le le_sub_one_of_lt hmn
 
 Depends on / 依赖: hn_fac, hn_fac.natCast_factorial_of_le, le_sub_one_of_lt, natCast_factorial_of_le
@@ -102,7 +102,7 @@ theorem natCast_factorial_of_algebra
 
 中文:
 定理 natCast_factorial_of_algebra
-  条件: (K : 类型) [Semifield K] [CharZero K] [Algebra K A] (n : 自然数)
+  条件: (K : 类型) [半域 K] [特征零 K] [代数 K A] (n : 自然数)
   证明: by
   suffices IsUnit (n ! : K) by
     simpa using this.map (algebraMap K A)
@@ -140,7 +140,7 @@ theorem natCast_factorial_iff_of_charP
 中文:
 定理 natCast_factorial_iff_of_charP
   条件: {n : 自然数}
-  结论: IsUnit (n ! : A) ↔ n < p
+  结论: 是单位 (n ! : A) ↔ n < p
   证明: by
   have hp : p.Prime := Fact.out
   induction n with
@@ -227,7 +227,7 @@ theorem natCast_factorial_of_isNilpotent
 
 中文:
 定理 natCast_factorial_of_isNilpotent
-  条件: [Fact p.Prime] (h : n < p)
+  条件: [Fact p.素] (h : n < p)
   证明: by
   induction n with
   | zero => simp
@@ -269,8 +269,8 @@ lemma Nat.castChoose_eq
   exacts [Nat.le_add_right k.1 k.2, N
 
 中文:
-引理 Nat.castChoose_eq
-  结论: {A : 类型} [CommSemiring A] {m : 自然数} {k : 自然数 × 自然数}
+引理 自然数.castChoose_eq
+  结论: {A : 类型} [交换半环 A] {m : 自然数} {k : 自然数 × 自然数}
   证明: by
   rw [Finset.mem_antidiagonal] at hk
   subst hk

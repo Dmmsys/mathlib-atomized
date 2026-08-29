@@ -51,7 +51,7 @@ structure WithVal
 
 中文:
 结构 WithVal
-  参数: [Ring R] (v : Valuation R Γ₀)
+  参数: [环 R] (v : 赋值 R Γ₀)
   公理与运算 (2 个):
     - toVal((v)) : :
     - ofVal : R
@@ -121,7 +121,7 @@ lemma ofVal_surjective
 
 中文:
 引理 ofVal_surjective
-  结论: Function.Surjective (ofVal (v := v))
+  结论: 函数.满射 (ofVal (v := v))
   证明: Function.RightInverse.surjective ofVal_toVal _
 -/
 lemma ofVal_surjective : Function.Surjective (ofVal (v := v)) :=
@@ -137,7 +137,7 @@ lemma toVal_surjective
 
 中文:
 引理 toVal_surjective
-  结论: Function.Surjective (toVal v)
+  结论: 函数.满射 (toVal v)
   证明: Function.RightInverse.surjective toVal_ofVal _
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toVal_ofVal
@@ -155,7 +155,7 @@ lemma ofVal_injective
 
 中文:
 引理 ofVal_injective
-  结论: Function.Injective (ofVal (v := v))
+  结论: 函数.单射 (ofVal (v := v))
   证明: Function.LeftInverse.injective toVal_ofVal _
 -/
 lemma ofVal_injective : Function.Injective (ofVal (v := v)) :=
@@ -171,7 +171,7 @@ lemma toVal_injective
 
 中文:
 引理 toVal_injective
-  结论: Function.Injective (toVal v)
+  结论: 函数.单射 (toVal v)
   证明: Function.LeftInverse.injective ofVal_toVal _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofVal_toVal
@@ -189,7 +189,7 @@ lemma ofVal_bijective
 
 中文:
 引理 ofVal_bijective
-  结论: Function.Bijective (ofVal (v := v))
+  结论: 函数.双射 (ofVal (v := v))
   证明: ⟨ofVal_injective v, ofVal_surjective v⟩
 -/
 lemma ofVal_bijective : Function.Bijective (ofVal (v := v)) :=
@@ -205,7 +205,7 @@ lemma toVal_bijective
 
 中文:
 引理 toVal_bijective
-  结论: Function.Bijective (toVal v)
+  结论: 函数.双射 (toVal v)
   证明: ⟨toVal_injective v, toVal_surjective v⟩
 
 Depends on / 依赖: toVal_injective, toVal_surjective
@@ -224,7 +224,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (WithVal v)
+  签名: 零 (WithVal v)
   定义体: toVal _ 0
 -/
 instance : Zero (WithVal v) where zero := toVal _ 0
@@ -238,7 +238,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (WithVal v)
+  签名: 幺 (WithVal v)
   定义体: toVal _ 1
 -/
 instance : One (WithVal v) where one := toVal _ 1
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (WithVal v)
+  签名: 加法 (WithVal v)
   定义体: toVal _ (x.ofVal + y.ofVal)
 
 Depends on / 依赖: x.ofVal, y.ofVal
@@ -268,7 +268,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (WithVal v)
+  签名: 减法 (WithVal v)
   定义体: toVal _ (x.ofVal - y.ofVal)
 
 Depends on / 依赖: x.ofVal, y.ofVal
@@ -284,7 +284,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (WithVal v)
+  签名: 取负 (WithVal v)
   定义体: toVal _ (-x.ofVal)
 
 Depends on / 依赖: x.ofVal
@@ -300,7 +300,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (WithVal v)
+  签名: 乘法 (WithVal v)
   定义体: toVal _ (x.ofVal * y.ofVal)
 
 Depends on / 依赖: x.ofVal, y.ofVal
@@ -317,7 +317,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (WithVal v) 自然数
+  签名: 幂 (WithVal v) 自然数
   定义体: toVal _ (x.ofVal ^ n)
 
 Depends on / 依赖: x.ofVal
@@ -333,7 +333,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (WithVal v)
+  签名: 自然数嵌入 (WithVal v)
   定义体: toVal _ n
 -/
 instance : NatCast (WithVal v) where natCast n := toVal _ n
@@ -347,7 +347,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (WithVal v)
+  签名: 整数嵌入 (WithVal v)
   定义体: toVal _ z
 -/
 instance : IntCast (WithVal v) where intCast z := toVal _ z
@@ -593,7 +593,7 @@ theorem toVal_smul
 
 中文:
 定理 toVal_smul
-  条件: {S} [SMul S R] (s : S) (r : R)
+  条件: {S} [标量乘法 S R] (s : S) (r : R)
   结论: toVal v (s • r) = s • toVal v r
   证明: rfl
 -/
@@ -610,7 +610,7 @@ theorem ofVal_smul
 
 中文:
 定理 ofVal_smul
-  条件: {S} [SMul S R] (s : S) (x : WithVal v)
+  条件: {S} [标量乘法 S R] (s : S) (x : WithVal v)
   结论: ofVal (s • x) = s • ofVal x
   证明: rfl
 -/
@@ -707,7 +707,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WithVal v)
+  签名: 可居 (WithVal v)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (WithVal v) := ⟨0⟩
@@ -721,7 +721,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithVal v)
+  签名: 预序 (WithVal v)
   定义体: .lift (v ∘ ofVal)
 -/
 instance : Preorder (WithVal v) := .lift (v ∘ ofVal)
@@ -737,7 +737,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {v : Valuation R Γ₀} {a b : WithVal v}
+  条件: {v : 赋值 R Γ₀} {a b : WithVal v}
   结论: a <= b ↔ v a.ofVal <= v b.ofVal
   证明: .rfl
 -/
@@ -754,7 +754,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: {v : Valuation R Γ₀} {a b : WithVal v}
+  条件: {v : 赋值 R Γ₀} {a b : WithVal v}
   结论: a < b ↔ v a.ofVal < v b.ofVal
   证明: .rfl
 -/
@@ -865,7 +865,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  条件: {T : 类型} [Ring T] (u : Valuation T Γ₀) (f : S ->+* T) (g : R ->+* S)
+  条件: {T : 类型} [环 T] (u : 赋值 T Γ₀) (f : S ->+* T) (g : R ->+* S)
   证明: rfl
 -/
 @[simp] theorem map_comp {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : S ->+* T) (g : R ->+* S) :
@@ -957,7 +957,7 @@ theorem congr_trans
 
 中文:
 定理 congr_trans
-  条件: {T : 类型} [Ring T] (u : Valuation T Γ₀) (f : R ≃+* S) (g : S ≃+* T)
+  条件: {T : 类型} [环 T] (u : 赋值 T Γ₀) (f : R ≃+* S) (g : S ≃+* T)
   证明: rfl
 -/
 theorem congr_trans {T : Type*} [Ring T] (u : Valuation T Γ₀) (f : R ≃+* S) (g : S ≃+* T) :
@@ -1005,7 +1005,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation (WithVal v) Γ₀
+  签名: : 赋值 (WithVal v) Γ₀
   定义体: v.comap (equiv v)
 
 Depends on / 依赖: v.comap
@@ -1056,7 +1056,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valued (WithVal v) Γ₀
+  签名: 赋值 (WithVal v) Γ₀
   定义体: Valued.mk' (valuation v)
 
 Depends on / 依赖: Valued, Valued.mk, valuation
@@ -1075,7 +1075,7 @@ theorem apply_ofVal
 中文:
 定理 apply_ofVal
   条件: (r : WithVal v)
-  结论: v r.ofVal = Valued.v r
+  结论: v r.ofVal = 赋值.v r
   证明: rfl
 -/
 theorem apply_ofVal (r : WithVal v) : v r.ofVal = Valued.v r := rfl
@@ -1092,7 +1092,7 @@ theorem val_apply_equiv
 中文:
 定理 val_apply_equiv
   条件: (r : WithVal v)
-  结论: v (equiv v r) = Valued.v r
+  结论: v (equiv v r) = 赋值.v r
   证明: rfl
 -/
 theorem val_apply_equiv (r : WithVal v) : v (equiv v r) = Valued.v r := rfl
@@ -1112,7 +1112,7 @@ theorem valued_toVal
 中文:
 定理 valued_toVal
   条件: (r : R)
-  结论: Valued.v (toVal v r) = v r
+  结论: 赋值.v (toVal v r) = v r
   证明: rfl
 
 @[deprecated (since := "2026-03-02")] alias apply_equiv := apply_ofVal
@@ -1132,8 +1132,8 @@ instance [CharZero
   body: .of_addMonoidHom (equiv v).symm.toAddMonoidHom (by simp) (equiv v).symm.injective
 
 中文:
-实例 [CharZero
-  签名: R] : CharZero (WithVal v)
+实例 [特征零
+  签名: R] : 特征零 (WithVal v)
   定义体: .of_addMonoidHom (equiv v).symm.toAddMonoidHom (by simp) (equiv v).symm.injective
 
 Depends on / 依赖: injective, of_addMonoidHom, symm.injective, symm.toAddMonoidHom, toAddMonoidHom
@@ -1168,7 +1168,7 @@ instance :
 
 中文:
 实例 :
-  签名: (valuation v).Compatible
+  签名: (valuation v).余mpatible
   定义体: .ofValuation (valuation v)
 
 Depends on / 依赖: ofValuation, valuation
@@ -1190,7 +1190,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsValuativeTopology (WithVal v)
+  签名: 是赋值拓扑 (WithVal v)
   定义体: by
     simp only [Set.image_add_left, Set.preimage_ofPred_eq, Valued.mem_nhds]
     let e := ValuativeRel.ValueGroupWithZero.orderMonoidIso (valuation v)
@@ -1225,7 +1225,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (WithVal v)
+  签名: 交换环 (WithVal v)
   定义体: fast_instance% (equiv v).commRing
 
 Depends on / 依赖: commRing, fast_instance
@@ -1247,8 +1247,8 @@ instance [SMul
   body: ofVal x • s
 
 中文:
-实例 [SMul
-  签名: R S] : SMul (WithVal v) S where
+实例 [标量乘法
+  签名: R S] : 标量乘法 (WithVal v) S where
   定义体: ofVal x • s
 -/
 instance [SMul R S] : SMul (WithVal v) S where
@@ -1265,7 +1265,7 @@ theorem smul_left_def
 
 中文:
 定理 smul_left_def
-  条件: [SMul R S] (x : WithVal v) (s : S)
+  条件: [标量乘法 R S] (x : WithVal v) (s : S)
   结论: x • s = ofVal x • s
   证明: rfl
 -/
@@ -1280,8 +1280,8 @@ instance [SMul
   body: ofVal_injective v FaithfulSMul.eq_of_smul_eq_smul h
 
 中文:
-实例 [SMul
-  签名: R S] [FaithfulSMul R S] : FaithfulSMul (WithVal v) S where
+实例 [标量乘法
+  签名: R S] [忠实标量乘法 R S] : 忠实标量乘法 (WithVal v) S where
   定义体: ofVal_injective v FaithfulSMul.eq_of_smul_eq_smul h
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, eq_of_smul_eq_smul, ofVal_injective
@@ -1300,7 +1300,7 @@ theorem smul_right_def
 
 中文:
 定理 smul_right_def
-  条件: [SMul S R] (s : S) (x : WithVal v)
+  条件: [标量乘法 S R] (s : S) (x : WithVal v)
   结论: s • x = toVal v (s • ofVal x)
   证明: rfl
 -/
@@ -1317,8 +1317,8 @@ instance [SMul
     exact FaithfulSMul.eq_of_smul_eq_smul fun r => h (toVal v r)
 
 中文:
-实例 [SMul
-  签名: S R] [FaithfulSMul S R] : FaithfulSMul S (WithVal v) where
+实例 [标量乘法
+  签名: S R] [忠实标量乘法 S R] : 忠实标量乘法 S (WithVal v) where
   定义体: by
     simp only [smul_right_def, toVal.injEq] at h
     exact FaithfulSMul.eq_of_smul_eq_smul fun r => h (toVal v r)
@@ -1351,8 +1351,8 @@ instance [AddCommMonoid
   body: fast_instance% .compHom S (equiv v).toRingHom
 
 中文:
-实例 [AddCommMonoid
-  签名: S] [Module R S] : Module (WithVal v) S
+实例 [加法交换幺半群
+  签名: S] [模 R S] : 模 (WithVal v) S
   定义体: fast_instance% .compHom S (equiv v).toRingHom
 
 Depends on / 依赖: compHom, fast_instance, toRingHom
@@ -1369,8 +1369,8 @@ instance [AddCommMonoid
   body: .of_restrictScalars_finite R (WithVal v) S
 
 中文:
-实例 [AddCommMonoid
-  签名: S] [Module R S] [Module.Finite R S] :
+实例 [加法交换幺半群
+  签名: S] [模 R S] [模.有限 R S] :
   定义体: .of_restrictScalars_finite R (WithVal v) S
 
 Depends on / 依赖: WithVal, of_restrictScalars_finite
@@ -1387,8 +1387,8 @@ instance [Semiring
   body: fast_instance% (equiv v).module S
 
 中文:
-实例 [Semiring
-  签名: S] [Module S R] : Module S (WithVal v)
+实例 [半环
+  签名: S] [模 S R] : 模 S (WithVal v)
   定义体: fast_instance% (equiv v).module S
 
 Depends on / 依赖: fast_instance, module
@@ -1459,7 +1459,7 @@ instance [Module.Finite
   body: .equiv (linearEquiv R v).symm
 
 中文:
-实例 [Module.Finite
+实例 [模.有限
   签名: R S] :
   定义体: .equiv (linearEquiv R v).symm
 
@@ -1490,7 +1490,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra (WithVal v) S
+  签名: 代数 (WithVal v) S
   定义体: fast_instance% {
   algebraMap.toFun r := algebraMap R S (ofVal r)
   __ := Algebra.compHom S (equiv v).toRingHom }
@@ -1530,7 +1530,7 @@ theorem algebraMap_left_injective
 
 中文:
 定理 algebraMap_left_injective
-  条件: (h : Function.Injective (algebraMap R S))
+  条件: (h : 函数.单射 (algebraMap R S))
   证明: h.comp (ofVal_injective v)
 
 Depends on / 依赖: h.comp, ofVal_injective
@@ -1556,7 +1556,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra R (WithVal v)
+  签名: 代数 R (WithVal v)
   定义体: fast_instance% {
   (equiv v).algebra R with
   algebraMap.toFun r := toVal v (algebraMap R S r) }
@@ -1593,7 +1593,7 @@ theorem algebraMap_right_injective
 
 中文:
 定理 algebraMap_right_injective
-  条件: (h : Function.Injective (algebraMap R S))
+  条件: (h : 函数.单射 (algebraMap R S))
   证明: (toVal_injective v).comp h
 
 Depends on / 依赖: toVal_injective
@@ -1677,7 +1677,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (WithVal v)
+  签名: 除法 (WithVal v)
   定义体: toVal _ (x.ofVal / y.ofVal)
 
 Depends on / 依赖: x.ofVal, y.ofVal
@@ -1693,7 +1693,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (WithVal v)
+  签名: 取逆 (WithVal v)
   定义体: toVal _ x.ofVal⁻¹
 
 Depends on / 依赖: x.ofVal
@@ -1709,7 +1709,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (WithVal v) 整数
+  签名: 幂 (WithVal v) 整数
   定义体: toVal _ (x.ofVal ^ z)
 
 Depends on / 依赖: x.ofVal
@@ -1725,7 +1725,7 @@ instance :
 
 中文:
 实例 :
-  签名: NNRatCast (WithVal v)
+  签名: 非负有理数嵌入 (WithVal v)
   定义体: toVal _ q
 -/
 instance : NNRatCast (WithVal v) where nnratCast q := toVal _ q
@@ -1739,7 +1739,7 @@ instance :
 
 中文:
 实例 :
-  签名: RatCast (WithVal v)
+  签名: 有理数嵌入 (WithVal v)
   定义体: toVal _ q
 -/
 instance : RatCast (WithVal v) where ratCast q := toVal _ q
@@ -1857,7 +1857,7 @@ lemma toVal_nnratCast
 
 中文:
 引理 toVal_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: toVal v q = q
   证明: rfl
 -/
@@ -1874,7 +1874,7 @@ lemma ofVal_nnratCast
 
 中文:
 引理 ofVal_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ofVal (q : WithVal v) = q
   证明: rfl
 -/
@@ -1891,7 +1891,7 @@ lemma toVal_ratCast
 
 中文:
 引理 toVal_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: toVal v q = q
   证明: rfl
 -/
@@ -1908,7 +1908,7 @@ lemma ofVal_ratCast
 
 中文:
 引理 ofVal_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ofVal (q : WithVal v) = q
   证明: rfl
 -/
@@ -1924,7 +1924,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivisionRing (WithVal v)
+  签名: 除环 (WithVal v)
   定义体: fast_instance% (equiv v).divisionRing
 
 Depends on / 依赖: divisionRing, fast_instance
@@ -1951,8 +1951,8 @@ instance [NumberField
   signature: R] : NumberField (WithVal v) where
 
 中文:
-实例 [NumberField
-  签名: R] : NumberField (WithVal v) where
+实例 [数域
+  签名: R] : 数域 (WithVal v) where
 -/
 instance [NumberField R] : NumberField (WithVal v) where
 
@@ -1978,7 +1978,7 @@ definition equivWithVal
 
 中文:
 定义 equivWithVal
-  签名: (v : Valuation R Γ₀) (w : Valuation R Γ'₀)
+  签名: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀)
   定义体: (equiv v).trans (equiv w).symm
 
 @[deprecated WithVal.congr_symm (since := "2026-01-27")]
@@ -2000,7 +2000,7 @@ theorem equivWithVal_symm
 
 中文:
 定理 equivWithVal_symm
-  条件: (v : Valuation R Γ₀) (w : Valuation R Γ'₀)
+  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀)
   证明: rfl
 
 @[deprecated "Use `WithVal.congr_apply` instead" (since := "2026-01-27")]
@@ -2021,7 +2021,7 @@ theorem equivWithVal_apply
 
 中文:
 定理 equivWithVal_apply
-  条件: (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal v}
+  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀) {x : WithVal v}
   证明: by simp
 
 @[deprecated "Use `WithVal.congr_symm_apply` instead" (since := "2026-01-27")]
@@ -2040,7 +2040,7 @@ theorem equivWithVal_symm_apply
 
 中文:
 定理 equivWithVal_symm_apply
-  条件: (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal w}
+  条件: (v : 赋值 R Γ₀) (w : 赋值 R Γ'₀) {x : WithVal w}
   证明: by simp
 -/
 theorem equivWithVal_symm_apply (v : Valuation R Γ₀) (w : Valuation R Γ'₀) {x : WithVal w} :
@@ -2065,7 +2065,7 @@ theorem valueGroup_eq
 
 中文:
 定理 valueGroup_eq
-  结论: valueGroup (.ofClass (Valued.v (R := WithVal v))) =
+  结论: valueGroup (.ofClass (赋值.v (R := WithVal v))) =
   证明: by
   simp [valueGroup, valueMonoid, ← (WithVal.ofVal_surjective v).range_comp]
   rfl
@@ -2112,7 +2112,7 @@ theorem strictMono_valueGroupEquiv
 
 中文:
 定理 strictMono_valueGroupEquiv
-  结论: StrictMono (valueGroupEquiv v)
+  结论: 严格递增 (valueGroupEquiv v)
   证明: fun _ _ _ => by simpa
 -/
 theorem strictMono_valueGroupEquiv : StrictMono (valueGroupEquiv v) :=
@@ -2128,7 +2128,7 @@ theorem strictMono_valueGroupEquiv_symm
 
 中文:
 定理 strictMono_valueGroupEquiv_symm
-  结论: StrictMono (valueGroupEquiv v).symm
+  结论: 严格递增 (valueGroupEquiv v).symm
   证明: fun _ _ _ => by simpa
 -/
 theorem strictMono_valueGroupEquiv_symm : StrictMono (valueGroupEquiv v).symm :=
@@ -2160,7 +2160,7 @@ definition valueGroupOrderIso₀
 
 中文:
 定义 valueGroupOrderIso₀
-  签名: : ValueGroup₀ (.ofClass (Valued.v (R := WithVal v))) ≃*o
+  签名: : ValueGroup₀ (.ofClass (赋值.v (R := WithVal v))) ≃*o
   定义体: WithZero.map' (valueGroupEquiv v)
   invFun := WithZero.map' (valueGroupEquiv v).symm
   left_inv x := by
@@ -2302,7 +2302,7 @@ abbreviation Completion
   body: UniformSpace.Completion (WithVal v)
 
 中文:
-缩写 Completion
+缩写 完备化
   定义体: UniformSpace.Completion (WithVal v)
 
 Depends on / 依赖: Completion, UniformSpace, UniformSpace.Completion, WithVal
@@ -2333,8 +2333,8 @@ definition IsEquiv.orderRingIso
 @[simp]
 
 中文:
-定义 IsEquiv.orderRingIso
-  签名: (h : v.IsEquiv w)
+定义 Is等价.orderRingIso
+  签名: (h : v.Is等价 w)
   定义体: WithVal.congr v w (.refl R)
   map_le_map_iff' := h.symm ..
 
@@ -2359,8 +2359,8 @@ theorem IsEquiv.orderRingIso_apply
 @[simp]
 
 中文:
-定理 IsEquiv.orderRingIso_apply
-  条件: (h : v.IsEquiv w) (x : WithVal v)
+定理 Is等价.orderRingIso_apply
+  条件: (h : v.Is等价 w) (x : WithVal v)
   证明: rfl
 
 @[simp]
@@ -2378,8 +2378,8 @@ theorem IsEquiv.orderRingIso_symm_apply
   proof: rfl
 
 中文:
-定理 IsEquiv.orderRingIso_symm_apply
-  条件: (h : v.IsEquiv w) (x : WithVal w)
+定理 Is等价.orderRingIso_symm_apply
+  条件: (h : v.Is等价 w) (x : WithVal w)
   证明: rfl
 -/
 theorem IsEquiv.orderRingIso_symm_apply (h : v.IsEquiv w) (x : WithVal w) :
@@ -2402,8 +2402,8 @@ theorem IsEquiv.uniformContinuous_equiv
   use .mk0 ((instValued v).v
 
 中文:
-定理 IsEquiv.uniformContinuous_equiv
-  结论: [hval : Valued R Γ₀'] (hv : Valued.v = w)
+定理 Is等价.uniformContinuous_equiv
+  结论: [hval : 赋值 R Γ₀'] (hv : 赋值.v = w)
   证明: by
   refine uniformContinuous_of_continuousAt_zero _ ?_
   simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
@@ -2451,8 +2451,8 @@ theorem IsEquiv.uniformContinuous_equiv_symm
   have h' : w.restrict.IsEqu
 
 中文:
-定理 IsEquiv.uniformContinuous_equiv_symm
-  结论: [hval : Valued R Γ₀'] (hv : Valued.v = w)
+定理 Is等价.uniformContinuous_equiv_symm
+  结论: [hval : 赋值 R Γ₀'] (hv : 赋值.v = w)
   证明: by
   refine uniformContinuous_of_continuousAt_zero _ ?_
   simp_rw [ContinuousAt, map_zero, (Valued.hasBasis_nhds_zero _ _).tendsto_iff
@@ -2503,8 +2503,8 @@ lemma IsEquiv.uniformContinuous
   simp_rw [Continuous
 
 中文:
-引理 IsEquiv.uniformContinuous
-  条件: (h : v.IsEquiv w)
+引理 Is等价.uniformContinuous
+  条件: (h : v.Is等价 w)
   证明: by
   have h_val : ((Valued.mk' v).v).IsEquiv (Valued.mk' w).v := h
   have h_res : v.restrict.IsEquiv w.restrict := h_val.restrict
@@ -2548,8 +2548,8 @@ theorem IsEquiv.uniformContinuous_congr
   have hR : @UniformContinuous R R (Valued.mk' w).toUnifo
 
 中文:
-定理 IsEquiv.uniformContinuous_congr
-  条件: (h : v.IsEquiv w)
+定理 Is等价.uniformContinuous_congr
+  条件: (h : v.Is等价 w)
   证明: by
   have hcomp : WithVal.congr v w (.refl R) = _ := RingEquiv.ext_iff.mpr (congrFun rfl)
   have h1 := IsEquiv.uniformContinuous_equiv (hval := Valued.mk' w) rfl h
@@ -2584,8 +2584,8 @@ definition IsEquiv.uniformEquiv
   uniformContinuous_invFun := h.symm.uniformContinuous_congr
 
 中文:
-定义 IsEquiv.uniformEquiv
-  签名: (h : v.IsEquiv w)
+定义 Is等价.uniformEquiv
+  签名: (h : v.Is等价 w)
   定义体: WithVal.congr v w (.refl R)
   uniformContinuous_toFun := h.uniformContinuous_congr
   uniformContinuous_invFun := h.symm.uniformContinuous_congr
@@ -2609,7 +2609,7 @@ definition _root_.WithVal.uniformEquiv
 
 中文:
 定义 _root_.WithVal.uniformEquiv
-  签名: [Valued R Γ₀'] (hV : Valued.v = w) (h : v.IsEquiv w)
+  签名: [赋值 R Γ₀'] (hV : 赋值.v = w) (h : v.Is等价 w)
   定义体: WithVal.equiv v
   uniformContinuous_toFun := h.uniformContinuous_equiv hV
   uniformContinuous_invFun := h.symm.uniformContinuous_equiv_symm hV
@@ -2633,8 +2633,8 @@ theorem exists_div_eq_of_surjective
   exact ⟨r, 1, by simp [hr]⟩
 
 中文:
-定理 exists_div_eq_of_surjective
-  结论: {K : 类型} [DivisionRing K] {Γ₀ : 类型}
+定理 存在_div_eq_of_surjective
+  结论: {K : 类型} [除环 K] {Γ₀ : 类型}
   证明: by
   obtain ⟨r, hr⟩ := hv γ
   exact ⟨r, 1, by simp [hr]⟩
@@ -2660,8 +2660,8 @@ theorem restrict_exists_div_eq
     simpa [← hr] using embedding_strictMono (WithZero.pos_iff_ne_zero.mpr (Units.ne_zero γ))⟩
 
 中文:
-定理 restrict_exists_div_eq
-  结论: {K : 类型} [DivisionRing K] {Γ₀ : 类型}
+定理 restrict_存在_div_eq
+  结论: {K : 类型} [除环 K] {Γ₀ : 类型}
   证明: by
   obtain ⟨r, hr⟩ := ValueGroup₀.restrict₀_surjective (.ofClass v) γ
   exact ⟨r, 1, by
@@ -2699,8 +2699,8 @@ theorem IsEquiv.valuedCompletion_le_one_iff
         (Valued
 
 中文:
-定理 IsEquiv.valuedCompletion_le_one_iff
-  结论: {K : 类型} [Field K] {v : Valuation K Γ₀}
+定理 Is等价.valuedCompletion_le_one_iff
+  结论: {K : 类型} [域 K] {v : 赋值 K Γ₀}
   证明: by
   induction x using induction_on with
   | hp =>
@@ -2771,7 +2771,7 @@ definition withValEquiv
 
 中文:
 定义 withValEquiv
-  签名: (R : 类型) [CommRing R] [Algebra R K] [Is整数egralClosure R 整数 K]
+  签名: (R : 类型) [交换环 R] [代数 R K] [是整闭包 R 整数 K]
   定义体: NumberField.RingOfIntegers.equiv R
 
 Depends on / 依赖: NumberField, NumberField.RingOfIntegers.equiv, RingOfIntegers
@@ -2797,8 +2797,8 @@ definition Rat.ringOfIntegersWithValEquiv
   body: NumberField.RingOfIntegers.withValEquiv v Int
 
 中文:
-定义 Rat.ringOfIntegersWithValEquiv
-  签名: (v : Valuation Rat Γ₀)
+定义 有理数.ringOf整数egersWithValEquiv
+  签名: (v : 赋值 有理数 Γ₀)
   定义体: NumberField.RingOfIntegers.withValEquiv v Int
 
 Depends on / 依赖: NumberField, NumberField.RingOfIntegers.withValEquiv, RingOfIntegers, withValEquiv

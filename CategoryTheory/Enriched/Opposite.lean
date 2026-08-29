@@ -55,8 +55,8 @@ instance EnrichedCategory.opposite
     exact E
 
 中文:
-实例 EnrichedCategory.opposite
-  签名: : EnrichedCategory V Cᵒᵖ where
+实例 Enriched范畴.opposite
+  签名: : Enriched范畴 V Cᵒᵖ where
   定义体: EnrichedCategory.Hom x.unop y.unop
   id x := EnrichedCategory.id x.unop
   comp z y x := (β_ _ _).hom ≫ EnrichedCategory.comp (x.unop) (y.unop) (z.unop)
@@ -100,7 +100,7 @@ lemma eComp_op_eq
 
 中文:
 引理 eComp_op_eq
-  条件: {C : 类型u} [EnrichedCategory V C] (x y z : Cᵒᵖ)
+  条件: {C : 类型u} [Enriched范畴 V C] (x y z : Cᵒᵖ)
   证明: rfl
 -/
 lemma eComp_op_eq {C : Type u} [EnrichedCategory V C] (x y z : Cᵒᵖ) :
@@ -122,7 +122,7 @@ lemma tensorHom_eComp_op_eq
 
 中文:
 引理 tensorHom_eComp_op_eq
-  结论: {C : 类型u} [EnrichedCategory V C] {x y z : Cᵒᵖ} {v w : V}
+  结论: {C : 类型u} [Enriched范畴 V C] {x y z : Cᵒᵖ} {v w : V}
   证明: by
   rw [eComp_op_eq]
   exact braiding_naturality_assoc f g _
@@ -258,8 +258,8 @@ instance EnrichedOrdinaryCategory.opposite
     exact homEquiv_comp g.unop f.unop
 
 中文:
-实例 EnrichedOrdinaryCategory.opposite
-  签名: {D : 类型u} [Category.{v} D]
+实例 EnrichedOrdinary范畴.opposite
+  签名: {D : 类型u} [范畴.{v} D]
   定义体: Quiver.Hom.opEquiv.symm.trans homEquiv
   homEquiv_id x := homEquiv_id (x.unop)
   homEquiv_comp f g := by

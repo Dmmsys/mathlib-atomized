@@ -55,7 +55,7 @@ definition splitCenterBox
 
 中文:
 定义 splitCenterBox
-  签名: (I : Box ι) (s : Set ι)
+  签名: (I : Box ι) (s : 集合 ι)
   定义体: s.piecewise (fun i => (I.lower i + I.upper i) / 2) I.lower
   upper := s.piecewise I.upper fun i => (I.lower i + I.upper i) / 2
   lower_lt_upper i := by
@@ -87,7 +87,7 @@ theorem mem_splitCenterBox
 
 中文:
 定理 mem_splitCenterBox
-  条件: {s : Set ι} {y : ι -> 实数}
+  条件: {s : 集合 ι} {y : ι -> 实数}
   证明: by
   simp only [splitCenterBox, mem_def, ← forall_and]
   refine forall_congr' fun i => ?_
@@ -120,7 +120,7 @@ theorem splitCenterBox_le
 
 中文:
 定理 splitCenterBox_le
-  条件: (I : Box ι) (s : Set ι)
+  条件: (I : Box ι) (s : 集合 ι)
   结论: I.splitCenterBox s <= I
   证明: fun _ hx => (mem_splitCenterBox.1 hx).1
 
@@ -144,7 +144,7 @@ theorem disjoint_splitCenterBox
 
 中文:
 定理 disjoint_splitCenterBox
-  条件: (I : Box ι) {s t : Set ι} (h : s != t)
+  条件: (I : Box ι) {s t : 集合 ι} (h : s != t)
   证明: by
   rw [disjoint_iff_inf_le]
   rintro y ⟨hs, ht⟩; apply h
@@ -177,7 +177,7 @@ theorem injective_splitCenterBox
 中文:
 定理 injective_splitCenterBox
   条件: (I : Box ι)
-  结论: Injective I.splitCenterBox
+  结论: 单射 I.splitCenterBox
   证明: fun _ _ H =>
   by_contra fun Hne => (I.disjoint_splitCenterBox Hne).ne (nonempty_coe _).ne_empty (H ▸ rfl)
 
@@ -198,7 +198,7 @@ theorem exists_mem_splitCenterBox
     ⟨{ i | (I.lower i + I.upper i) / 2 < x i }, mem_splitCenterBox.2 ⟨hx, fun _ => Iff.rfl⟩⟩⟩
 
 中文:
-定理 exists_mem_splitCenterBox
+定理 存在_mem_splitCenterBox
   条件: {I : Box ι} {x : ι -> 实数}
   结论: (存在 s, x in I.splitCenterBox s) ↔ x in I
   证明: ⟨fun ⟨s, hs⟩ => I.splitCenterBox_le s hs, fun hx =>
@@ -251,7 +251,7 @@ theorem iUnion_coe_splitCenterBox
 中文:
 定理 iUnion_coe_splitCenterBox
   条件: (I : Box ι)
-  结论: ⋃ s, (I.splitCenterBox s : Set (ι -> 实数)) = I
+  结论: ⋃ s, (I.splitCenterBox s : 集合 (ι -> 实数)) = I
   证明: by
   ext x
   simp
@@ -274,7 +274,7 @@ theorem upper_sub_lower_splitCenterBox
 
 中文:
 定理 upper_sub_lower_splitCenterBox
-  条件: (I : Box ι) (s : Set ι) (i : ι)
+  条件: (I : Box ι) (s : 集合 ι) (i : ι)
   证明: by
   by_cases i in s <;> simp [field, splitCenterBox, *] <;> ring
 

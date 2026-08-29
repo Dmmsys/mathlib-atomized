@@ -38,8 +38,8 @@ definition preimage
 @[simp]
 
 中文:
-定义 preimage
-  签名: (s : Finset β) (f : α -> β) (hf : Set.InjOn f (f ⁻¹' ↑s))
+定义 原像
+  签名: (s : 有限集 β) (f : α -> β) (hf : 集合.单射限制 f (f ⁻¹' ↑s))
   定义体: (s.finite_toSet.preimage hf).toFinset
 
 @[simp]
@@ -62,7 +62,7 @@ theorem mem_preimage
 
 中文:
 定理 mem_preimage
-  条件: {f : α -> β} {s : Finset β} {hf : Set.InjOn f (f ⁻¹' ↑s)} {x : α}
+  条件: {f : α -> β} {s : 有限集 β} {hf : 集合.单射限制 f (f ⁻¹' ↑s)} {x : α}
   证明: Set.Finite.mem_toFinset _
 
 @[simp, norm_cast]
@@ -86,7 +86,7 @@ theorem coe_preimage
 
 中文:
 定理 coe_preimage
-  条件: {f : α -> β} (s : Finset β) (hf : Set.InjOn f (f ⁻¹' ↑s))
+  条件: {f : α -> β} (s : 有限集 β) (hf : 集合.单射限制 f (f ⁻¹' ↑s))
   证明: Set.Finite.coe_toFinset _
 
 @[simp]
@@ -112,7 +112,7 @@ theorem preimage_empty
 中文:
 定理 preimage_empty
   条件: {f : α -> β}
-  结论: preimage ∅ f (by simp [InjOn]) = ∅
+  结论: 原像 ∅ f (by simp [单射限制]) = ∅
   证明: Finset.coe_injective (by simp)
 
 @[simp]
@@ -136,8 +136,8 @@ theorem preimage_univ
 
 中文:
 定理 preimage_univ
-  条件: {f : α -> β} [Fintype α] [Fintype β] (hf)
-  结论: preimage univ f hf = univ
+  条件: {f : α -> β} [有限类型 α] [有限类型 β] (hf)
+  结论: 原像 univ f hf = univ
   证明: Finset.coe_injective (by simp)
 
 @[simp]
@@ -159,7 +159,7 @@ theorem disjoint_preimage
 
 中文:
 定理 disjoint_preimage
-  结论: {f : α -> β} {s t : Finset β}
+  结论: {f : α -> β} {s t : 有限集 β}
   证明: by
   grind [not_disjoint_iff, mem_preimage]
 
@@ -182,7 +182,7 @@ theorem preimage_inter
 
 中文:
 定理 preimage_inter
-  结论: [DecidableEq α] [DecidableEq β] {f : α -> β} {s t : Finset β}
+  结论: [DecidableEq α] [DecidableEq β] {f : α -> β} {s t : 有限集 β}
   证明: Finset.coe_injective (by simp)
 
 Depends on / 依赖: Finset, Finset.coe_injective, PosNum, coe_injective
@@ -208,7 +208,7 @@ theorem preimage_union
 
 中文:
 定理 preimage_union
-  条件: [DecidableEq α] [DecidableEq β] {f : α -> β} {s t : Finset β} (hst)
+  条件: [DecidableEq α] [DecidableEq β] {f : α -> β} {s t : 有限集 β} (hst)
   证明: Finset.coe_injective (by simp)
 
 @[simp]
@@ -232,7 +232,7 @@ theorem preimage_compl'
 
 中文:
 定理 preimage_compl'
-  结论: [DecidableEq α] [DecidableEq β] [Fintype α] [Fintype β] {f : α -> β}
+  结论: [DecidableEq α] [DecidableEq β] [有限类型 α] [有限类型 β] {f : α -> β}
   证明: Finset.coe_injective (by simp)
 
 Depends on / 依赖: Finset, Finset.coe_injective, coe_injective
@@ -255,7 +255,7 @@ theorem preimage_compl
 
 中文:
 定理 preimage_compl
-  结论: [DecidableEq α] [DecidableEq β] [Fintype α] [Fintype β] {f : α -> β}
+  结论: [DecidableEq α] [DecidableEq β] [有限类型 α] [有限类型 β] {f : α -> β}
   证明: preimage_compl' _ _ _
 
 @[simp]
@@ -279,8 +279,8 @@ lemma preimage_map
 
 中文:
 引理 preimage_map
-  条件: (f : α ↪ β) (s : Finset α)
-  结论: (s.map f).preimage f f.injective.injOn = s
+  条件: (f : α ↪ β) (s : 有限集 α)
+  结论: (s.map f).原像 f f.injective.injOn = s
   证明: coe_injective by simp only [coe_preimage, coe_map, Set.preimage_image_eq _ f.injective]
 
 Depends on / 依赖: CoeHTCT, Set.preimage_image_eq, coe_injective, coe_map, coe_preimage, f.injective, injective, numNatCoe, preimage_image_eq
@@ -299,7 +299,7 @@ theorem monotone_preimage
 
 中文:
 定理 monotone_preimage
-  条件: {f : α -> β} (h : Injective f)
+  条件: {f : α -> β} (h : 单射 f)
   证明: fun _ _ H _ hx =>
   mem_preimage.2 (H <| mem_preimage.1 hx)
 -/
@@ -317,7 +317,7 @@ theorem image_subset_iff_subset_preimage
 
 中文:
 定理 image_subset_iff_subset_preimage
-  结论: [DecidableEq β] {f : α -> β} {s : Finset α} {t : Finset β}
+  结论: [DecidableEq β] {f : α -> β} {s : 有限集 α} {t : 有限集 β}
   证明: image_subset_iff.trans by simp only [subset_iff, mem_preimage]
 
 Depends on / 依赖: image_subset_iff, image_subset_iff.trans, mem_preimage, subset_iff
@@ -337,7 +337,7 @@ theorem map_subset_iff_subset_preimage
 
 中文:
 定理 map_subset_iff_subset_preimage
-  条件: {f : α ↪ β} {s : Finset α} {t : Finset β}
+  条件: {f : α ↪ β} {s : 有限集 α} {t : 有限集 β}
   证明: by
   classical rw [map_eq_image, image_subset_iff_subset_preimage]
 
@@ -357,7 +357,7 @@ lemma card_preimage
 
 中文:
 引理 card_preimage
-  条件: (s : Finset β) (f : α -> β) (hf) [DecidablePred (· in Set.range f)]
+  条件: (s : 有限集 β) (f : α -> β) (hf) [DecidablePred (· in 集合.range f)]
   证明: card_nbij f (by simp [Set.MapsTo]) (by simpa) (fun b hb => by aesop)
 
 Depends on / 依赖: MapsTo, Set.MapsTo, card_nbij
@@ -378,7 +378,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  结论: [DecidableEq β] (f : α -> β) (s : Finset β) [对任意 x, Decidable (x in Set.range f)]
+  结论: [DecidableEq β] (f : α -> β) (s : 有限集 β) [对任意 x, 可判定 (x in 集合.range f)]
   证明: Finset.coe_inj.1 by
     simp only [coe_image, coe_preimage, coe_filter, Set.image_preimage_eq_inter_range,
       ← Set.sep_mem_eq]; rfl
@@ -426,7 +426,7 @@ theorem image_preimage_of_bij
 
 中文:
 定理 image_preimage_of_bij
-  结论: [DecidableEq β] (f : α -> β) (s : Finset β)
+  结论: [DecidableEq β] (f : α -> β) (s : 有限集 β)
   证明: Finset.coe_inj.1 by simpa using hf.image_eq
 
 Depends on / 依赖: Finset, Finset.coe_inj, coe_inj, hf.image_eq, image_eq
@@ -445,7 +445,7 @@ theorem image_preimage_of_bijective
 
 中文:
 定理 image_preimage_of_bijective
-  结论: [DecidableEq β] {f : α -> β} (s : Finset β)
+  结论: [DecidableEq β] {f : α -> β} (s : 有限集 β)
   证明: image_preimage_of_bij f s hf.bijOn_preimage
 
 Depends on / 依赖: bijOn_preimage, hf.bijOn_preimage, image_preimage_of_bij
@@ -465,7 +465,7 @@ lemma preimage_subset_of_subset_image
 
 中文:
 引理 preimage_subset_of_subset_image
-  结论: [DecidableEq β] {f : α -> β} {s : Finset β} {t : Finset α}
+  结论: [DecidableEq β] {f : α -> β} {s : 有限集 β} {t : 有限集 α}
   证明: by
   rw [← coe_subset]; rw [coe_preimage]; exact Set.preimage_subset (mod_cast hs) hf
 
@@ -485,7 +485,7 @@ theorem preimage_subset
 
 中文:
 定理 preimage_subset
-  条件: {f : α ↪ β} {s : Finset β} {t : Finset α} (hs : s subseteq t.map f)
+  条件: {f : α ↪ β} {s : 有限集 β} {t : 有限集 α} (hs : s subseteq t.map f)
   证明: fun _ h => (mem_map' f).1 (hs (mem_preimage.1 h))
 
 Depends on / 依赖: mem_map, mem_preimage
@@ -505,7 +505,7 @@ theorem subset_map_iff
 
 中文:
 定理 subset_map_iff
-  条件: {f : α ↪ β} {s : Finset β} {t : Finset α}
+  条件: {f : α ↪ β} {s : 有限集 β} {t : 有限集 α}
   证明: by
   classical
   simp_rw [map_eq_image, subset_image_iff, eq_comm]
@@ -530,7 +530,7 @@ theorem image_eq_iff_eq_preimage
 
 中文:
 定理 image_eq_iff_eq_preimage
-  结论: [DecidableEq β] {s : Finset α} {t : Finset β}
+  结论: [DecidableEq β] {s : 有限集 α} {t : 有限集 β}
   证明: by
   rw [← image_inj hf.injective]; rw [t.image_preimage_of_bijective hf]
 
@@ -559,7 +559,7 @@ theorem sup_preimage_self
 
 中文:
 定理 sup_preimage_self
-  结论: {α β : 类型} [Nonempty α] [SemilatticeSup β] [OrderBot β]
+  结论: {α β : 类型} [非空 α] [SemilatticeSup β] [有底序 β]
   证明: by
   classical
   have hfinvs : forall x in s, (f ∘ invFunOn f (f ⁻¹' ↑s)) x = id x := hf.invOn_invFunOn.2
@@ -595,7 +595,7 @@ lemma sup_preimage_val_id
 
 中文:
 引理 sup_preimage_val_id
-  结论: [Lattice α] [OrderBot α] {P : α -> 命题}
+  结论: [格 α] [有底序 α] {P : α -> 命题}
   证明: Subtype.semilatticeSup Psup
     letI := Subtype.orderBot Pbot
     (t.preimage Subtype.val Subtype.val_injective.injOn).sup id =
@@ -633,7 +633,7 @@ theorem sigma_preimage_mk
 
 中文:
 定理 sigma_preimage_mk
-  条件: {β : α -> 类型} [DecidableEq α] (s : Finset (Σ a, β a)) (t : Finset α)
+  条件: {β : α -> 类型} [DecidableEq α] (s : 有限集 (Σ a, β a)) (t : 有限集 α)
   证明: by
   ext x
   simp [and_comm]
@@ -656,7 +656,7 @@ theorem sigma_preimage_mk_of_subset
 
 中文:
 定理 sigma_preimage_mk_of_subset
-  结论: {β : α -> 类型} [DecidableEq α] (s : Finset (Σ a, β a))
+  结论: {β : α -> 类型} [DecidableEq α] (s : 有限集 (Σ a, β a))
   证明: by
   rw [sigma_preimage_mk]; rw [filter_true_of_mem <| image_subset_iff.1 ht]
 
@@ -677,7 +677,7 @@ theorem sigma_image_fst_preimage_mk
 
 中文:
 定理 sigma_image_fst_preimage_mk
-  条件: {β : α -> 类型} [DecidableEq α] (s : Finset (Σ a, β a))
+  条件: {β : α -> 类型} [DecidableEq α] (s : 有限集 (Σ a, β a))
   证明: s.sigma_preimage_mk_of_subset (Subset.refl _)
 
 Depends on / 依赖: Subset, Subset.refl, s.sigma_preimage_mk_of_subset, sigma_preimage_mk_of_subset
@@ -698,7 +698,7 @@ lemma preimage_inl
 
 中文:
 引理 preimage_inl
-  条件: (s : Finset (α oplus β))
+  条件: (s : 有限集 (α oplus β))
   证明: by
   ext x; simp
 -/
@@ -717,7 +717,7 @@ lemma preimage_inr
 
 中文:
 引理 preimage_inr
-  条件: (s : Finset (α oplus β))
+  条件: (s : 有限集 (α oplus β))
   证明: by
   ext x; simp
 -/
@@ -746,7 +746,7 @@ definition restrictPreimageFinset
 
 中文:
 定义 restrictPreimageFinset
-  签名: (e : α ≃ β) (s : Finset β)
+  签名: (e : α ≃ β) (s : 有限集 β)
   定义体: ⟨e a, Finset.mem_preimage.1 a.2⟩
   invFun b := ⟨e.symm b, by simp⟩
   left_inv _ := by simp
@@ -771,7 +771,7 @@ lemma image_symm_eq_preimage_of_finset
 
 中文:
 引理 image_symm_eq_preimage_of_finset
-  条件: [DecidableEq α] (e : α ≃ β) (s : Finset β)
+  条件: [DecidableEq α] (e : α ≃ β) (s : 有限集 β)
   证明: by
   grind [Finset.mem_preimage]
 
@@ -791,7 +791,7 @@ lemma image_eq_preimage_symm_of_finset
 
 中文:
 引理 image_eq_preimage_symm_of_finset
-  条件: [DecidableEq β] (e : α ≃ β) (s : Finset α)
+  条件: [DecidableEq β] (e : α ≃ β) (s : 有限集 α)
   证明: e.symm.image_symm_eq_preimage_of_finset s
 
 Depends on / 依赖: e.symm.image_symm_eq_preimage_of_finset, image_symm_eq_preimage_of_finset
@@ -816,8 +816,8 @@ lemma Finset.restrict_comp_piCongrLeft
     Equiv.restrictPreimageFinset_symm_apply_coe]
 
 中文:
-引理 Finset.restrict_comp_piCongrLeft
-  条件: {π : β -> 类型} (s : Finset β) (e : α ≃ β)
+引理 有限集.restrict_comp_piCongrLeft
+  条件: {π : β -> 类型} (s : 有限集 β) (e : α ≃ β)
   证明: by
   ext x b
   simp only [comp_apply, restrict, Equiv.piCongrLeft_apply_eq_cast,

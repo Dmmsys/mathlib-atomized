@@ -48,9 +48,9 @@ class NormedSpace
     - norm_smul_le : forall (a : 𝕜) (b : E), ‖a • b‖ <= ‖a‖ * ‖b‖
 
 中文:
-类 NormedSpace
-  参数: (𝕜 : 类型) (E : 类型) [NormedField 𝕜] [SeminormedAddCommGroup E]
-  继承: Module 𝕜 E
+类 赋范空间
+  参数: (𝕜 : 类型) (E : 类型) [赋范域 𝕜] [SeminormedAddComm群 E]
+  继承: 模 𝕜 E
   公理与运算 (1 个):
     - norm_smul_le : 对任意 (a : 𝕜) (b : E), ‖a • b‖ <= ‖a‖ * ‖b‖
 -/
@@ -77,8 +77,8 @@ instance NormedSpace.toIsBoundedSMul
   body: inferInstance
 
 中文:
-实例 NormedSpace.toIsBoundedSMul
-  签名: : IsBoundedSMul 𝕜 E
+实例 赋范空间.toIsBoundedSMul
+  签名: : 是BoundedSMul 𝕜 E
   定义体: inferInstance
 -/
 instance NormedSpace.toIsBoundedSMul : IsBoundedSMul 𝕜 E := inferInstance
@@ -92,8 +92,8 @@ instance NormedField.toNormedSpace
   body: norm_mul_le a b
 
 中文:
-实例 NormedField.toNormedSpace
-  签名: : NormedSpace 𝕜 𝕜 where norm_smul_le a b
+实例 赋范域.toNormedSpace
+  签名: : 赋范空间 𝕜 𝕜 where norm_smul_le a b
   定义体: norm_mul_le a b
 
 Depends on / 依赖: norm_mul_le
@@ -134,7 +134,7 @@ theorem norm_intCast_eq_abs_mul_norm_one
 
 中文:
 定理 norm_intCast_eq_abs_mul_norm_one
-  条件: (α) [SeminormedRing α] [NormSMulClass 整数 α] (n : 整数)
+  条件: (α) [Seminormed环 α] [NormSMul类 整数 α] (n : 整数)
   证明: by
   rw [← zsmul_one]; rw [norm_smul]; rw [Int.norm_eq_abs]; rw [Int.cast_abs]
 
@@ -157,7 +157,7 @@ theorem norm_natCast_eq_mul_norm_one
 
 中文:
 定理 norm_natCast_eq_mul_norm_one
-  条件: (α) [SeminormedRing α] [NormSMulClass 整数 α] (n : 自然数)
+  条件: (α) [Seminormed环 α] [NormSMul类 整数 α] (n : 自然数)
   证明: by
   simpa using norm_intCast_eq_abs_mul_norm_one α n
 
@@ -181,7 +181,7 @@ lemma norm_natCast
 
 中文:
 引理 norm_natCast
-  结论: {α : 类型} [SeminormedRing α] [NormOneClass α] [NormSMulClass 整数 α]
+  结论: {α : 类型} [Seminormed环 α] [NormOne类 α] [NormSMul类 整数 α]
   证明: by
   simpa using norm_natCast_eq_mul_norm_one α a
 
@@ -225,8 +225,8 @@ theorem Filter.Tendsto.zero_smul_isBoundedUnder_le
   proof: hf.op_zero_isBoundedUnder_le hg (· • ·) norm_smul_le
 
 中文:
-定理 Filter.Tendsto.zero_smul_isBoundedUnder_le
-  结论: {f : α -> 𝕜} {g : α -> E} {l : Filter α}
+定理 滤子.收敛.zero_smul_isBoundedUnder_le
+  结论: {f : α -> 𝕜} {g : α -> E} {l : 滤子 α}
   证明: hf.op_zero_isBoundedUnder_le hg (· • ·) norm_smul_le
 
 Depends on / 依赖: hf.op_zero_isBoundedUnder_le, norm_smul_le, op_zero_isBoundedUnder_le
@@ -246,8 +246,8 @@ theorem Filter.IsBoundedUnder.smul_tendsto_zero
     (norm_smul_le y x).trans_eq (mul_comm _ _)
 
 中文:
-定理 Filter.IsBoundedUnder.smul_tendsto_zero
-  结论: {f : α -> 𝕜} {g : α -> E} {l : Filter α}
+定理 滤子.IsBoundedUnder.smul_tendsto_zero
+  结论: {f : α -> 𝕜} {g : α -> E} {l : 滤子 α}
   证明: hg.op_zero_isBoundedUnder_le hf (flip (· • ·)) fun x y =>
     (norm_smul_le y x).trans_eq (mul_comm _ _)
 
@@ -273,7 +273,7 @@ instance NormedSpace.discreteTopology_zmultiples
     refine ⟨Metric.ball 0 
 
 中文:
-实例 NormedSpace.discreteTopology_zmultiples
+实例 赋范空间.discreteTopology_zmultiples
   定义体: by
   have : IsAddTorsionFree E := .of_module_rat E
   rcases eq_or_ne e 0 with (rfl | he)
@@ -411,8 +411,8 @@ instance ULift.normedSpace
     norm_smul_le := fun s x => (norm_smul_le s x.down :) }
 
 中文:
-实例 ULift.normedSpace
-  签名: : NormedSpace 𝕜 (ULift E)
+实例 类型层提升.normedSpace
+  签名: : 赋范空间 𝕜 (类型层提升 E)
   定义体: { __ := ULift.seminormedAddCommGroup (E := E),
     __ := ULift.module'
     norm_smul_le := fun s x => (norm_smul_le s x.down :) }
@@ -435,8 +435,8 @@ instance Prod.normedSpace
       simp only [norm_smul, Prod.norm_def, le_rfl] }
 
 中文:
-实例 Prod.normedSpace
-  签名: : NormedSpace 𝕜 (E × F)
+实例 积类型.normedSpace
+  签名: : 赋范空间 𝕜 (E × F)
   定义体: { Prod.seminormedAddCommGroup (E := E) (F := F), Prod.instModule with
     norm_smul_le := fun s x => by
       simp only [norm_smul, Prod.norm_def, le_rfl] }
@@ -460,8 +460,8 @@ instance Pi.normedSpace
     exact Finset.sup_mono_fun fun _ _ => norm_smul_le a _
 
 中文:
-实例 Pi.normedSpace
-  签名: {ι : 类型} {E : ι -> 类型} [Fintype ι] [对任意 i, SeminormedAddCommGroup (E i)]
+实例 依赖函数类型.normedSpace
+  签名: {ι : 类型} {E : ι -> 类型} [有限类型 ι] [对任意 i, SeminormedAddComm群 (E i)]
   定义体: by
     simp_rw [← coe_nnnorm, ← NNReal.coe_mul, NNReal.coe_le_coe, Pi.nnnorm_def,
       NNReal.mul_finset_sup]
@@ -486,7 +486,7 @@ instance SeparationQuotient.instNormedSpace
 
 中文:
 实例 SeparationQuotient.instNormedSpace
-  签名: : NormedSpace 𝕜 (SeparationQuotient E) where
+  签名: : 赋范空间 𝕜 (SeparationQuotient E) where
   定义体: norm_smul_le
 
 Depends on / 依赖: norm_smul_le
@@ -504,7 +504,7 @@ instance MulOpposite.instNormedSpace
 
 中文:
 实例 MulOpposite.instNormedSpace
-  签名: : NormedSpace 𝕜 Eᵐᵒᵖ where
+  签名: : 赋范空间 𝕜 Eᵐᵒᵖ where
   定义体: norm_smul_le _ x.unop
 
 Depends on / 依赖: norm_smul_le, x.unop
@@ -521,8 +521,8 @@ instance Submodule.normedSpace
   body: norm_smul_le c (x : E)
 
 中文:
-实例 Submodule.normedSpace
-  签名: {𝕜 R : 类型} [SMul 𝕜 R] [NormedField 𝕜] [Ring R] {E : 类型}
+实例 子模.normedSpace
+  签名: {𝕜 R : 类型} [标量乘法 𝕜 R] [赋范域 𝕜] [环 R] {E : 类型}
   定义体: norm_smul_le c (x : E)
 
 Depends on / 依赖: norm_smul_le
@@ -551,8 +551,8 @@ abbreviation NormedSpace.induced
   { norm_smul_le a b := by simpa only [← map_smul f a b] using! norm_smul_le a (f b) }
 
 中文:
-缩写 NormedSpace.induced
-  签名: {F : 类型} (𝕜 E G : 类型) [NormedField 𝕜] [AddCommGroup E] [Module 𝕜 E]
+缩写 赋范空间.induced
+  签名: {F : 类型} (𝕜 E G : 类型) [赋范域 𝕜] [加法交换群 E] [模 𝕜 E]
   定义体: letI := SeminormedAddCommGroup.induced E G f
   { norm_smul_le a b := by simpa only [← map_smul f a b] using! norm_smul_le a (f b) }
 
@@ -585,7 +585,7 @@ theorem NormedSpace.exists_lt_norm
   rwa [norm_pos_iff]
 
 中文:
-定理 NormedSpace.exists_lt_norm
+定理 赋范空间.存在_lt_norm
   条件: (c : 实数)
   结论: 存在 x : E, c < ‖x‖
   证明: by
@@ -616,8 +616,8 @@ theorem NormedSpace.unbounded_univ
   hx.not_ge (hR x trivial)
 
 中文:
-定理 NormedSpace.unbounded_univ
-  结论: ¬Bornology.IsBounded (univ : Set E)
+定理 赋范空间.unbounded_univ
+  结论: ¬有界结构.IsBounded (univ : 集合 E)
   证明: fun h =>
   let ⟨R, hR⟩ := isBounded_iff_forall_norm_le.1 h
   let ⟨x, hx⟩ := NormedSpace.exists_lt_norm 𝕜 E R
@@ -639,7 +639,7 @@ lemma NormedSpace.cobounded_neBot
   exact NormedSpace.unbounded_univ 𝕜 E
 
 中文:
-引理 NormedSpace.cobounded_neBot
+引理 赋范空间.cobounded_neBot
   结论: NeBot (cobounded E)
   证明: by
   rw [neBot_iff]; rw [Ne]; rw [cobounded_eq_bot_iff]; rw [← isBounded_univ]
@@ -681,8 +681,8 @@ theorem NormedSpace.noncompactSpace
     r
 
 中文:
-定理 NormedSpace.noncompactSpace
-  结论: NoncompactSpace E
+定理 赋范空间.noncompactSpace
+  结论: Noncompact空间 E
   证明: by
   by_cases! H : exists c : 𝕜, c != 0 ∧ ‖c‖ != 1
   · let := NontriviallyNormedField.ofNormNeOne H
@@ -722,8 +722,8 @@ class NormedAlgebra
     - norm_smul_le : forall (r : 𝕜) (x : 𝕜'), ‖r • x‖ <= ‖r‖ * ‖x‖
 
 中文:
-类 NormedAlgebra
-  参数: (𝕜 : 类型) (𝕜' : 类型) [NormedField 𝕜] [SeminormedRing 𝕜']
+类 赋范代数
+  参数: (𝕜 : 类型) (𝕜' : 类型) [赋范域 𝕜] [Seminormed环 𝕜']
   公理与运算 (1 个):
     - norm_smul_le : 对任意 (r : 𝕜) (x : 𝕜'), ‖r • x‖ <= ‖r‖ * ‖x‖
 -/
@@ -822,7 +822,7 @@ theorem norm_algebraMap'
 
 中文:
 定理 norm_algebraMap'
-  条件: [NormOneClass 𝕜'] (x : 𝕜)
+  条件: [NormOne类 𝕜'] (x : 𝕜)
   结论: ‖algebraMap 𝕜 𝕜' x‖ = ‖x‖
   证明: by
   rw [norm_algebraMap]; rw [norm_one]; rw [mul_one]
@@ -846,8 +846,8 @@ theorem Algebra.norm_smul_one_eq_norm
   simp [norm_smul]
 
 中文:
-定理 Algebra.norm_smul_one_eq_norm
-  条件: [NormOneClass 𝕜'] (x : 𝕜)
+定理 代数.norm_smul_one_eq_norm
+  条件: [NormOne类 𝕜'] (x : 𝕜)
   结论: ‖x • (1 : 𝕜')‖ = ‖x‖
   证明: by
   simp [norm_smul]
@@ -870,7 +870,7 @@ theorem nnnorm_algebraMap'
 
 中文:
 定理 nnnorm_algebraMap'
-  条件: [NormOneClass 𝕜'] (x : 𝕜)
+  条件: [NormOne类 𝕜'] (x : 𝕜)
   结论: ‖algebraMap 𝕜 𝕜' x‖₊ = ‖x‖₊
   证明: Subtype.ext norm_algebraMap' _ _
 
@@ -892,7 +892,7 @@ theorem dist_algebraMap'
 
 中文:
 定理 dist_algebraMap'
-  条件: [NormOneClass 𝕜'] (x y : 𝕜)
+  条件: [NormOne类 𝕜'] (x y : 𝕜)
   证明: by
   simp only [dist_eq_norm, ← map_sub, norm_algebraMap']
 
@@ -974,7 +974,7 @@ theorem tendsto_algebraMap_cobounded
 
 中文:
 定理 tendsto_algebraMap_cobounded
-  结论: (𝕜 𝕜' : 类型) [NormedField 𝕜] [SeminormedRing 𝕜']
+  结论: (𝕜 𝕜' : 类型) [赋范域 𝕜] [Seminormed环 𝕜']
   证明: by
   intro c hc
   rw [mem_map]
@@ -1006,8 +1006,8 @@ theorem algebraMap_isometry
 
 中文:
 定理 algebraMap_isometry
-  条件: [NormOneClass 𝕜']
-  结论: Isometry (algebraMap 𝕜 𝕜')
+  条件: [NormOne类 𝕜']
+  结论: 等距 (algebraMap 𝕜 𝕜')
   证明: by
   refine Isometry.of_dist_eq fun x y => ?_
   rw [dist_eq_norm]; rw [dist_eq_norm]; rw [← map_sub]; rw [norm_algebraMap']
@@ -1027,8 +1027,8 @@ instance NormedAlgebra.id
   body: { NormedField.toNormedSpace, Algebra.id 𝕜 with }
 
 中文:
-实例 NormedAlgebra.id
-  签名: : NormedAlgebra 𝕜 𝕜
+实例 赋范代数.id
+  签名: : 赋范代数 𝕜 𝕜
   定义体: { NormedField.toNormedSpace, Algebra.id 𝕜 with }
 
 Depends on / 依赖: Algebra, Algebra.id, NormedField, NormedField.toNormedSpace, toNormedSpace
@@ -1047,7 +1047,7 @@ instance normedAlgebraRat
 
 中文:
 实例 normedAlgebraRat
-  签名: {𝕜} [NormedDivisionRing 𝕜] [CharZero 𝕜] [NormedAlgebra 实数 𝕜]
+  签名: {𝕜} [NormedDivision环 𝕜] [特征零 𝕜] [赋范代数 实数 𝕜]
   定义体: by
     rw [← smul_one_smul Real q x]; rw [Rat.smul_one_eq_cast]; rw [norm_smul]; rw [Rat.norm_cast_real]
 
@@ -1067,8 +1067,8 @@ instance PUnit.normedAlgebra
   body: by simp only [norm_eq_zero, mul_zero, le_refl]
 
 中文:
-实例 PUnit.normedAlgebra
-  签名: : NormedAlgebra 𝕜 PUnit where
+实例 命题单元.normedAlgebra
+  签名: : 赋范代数 𝕜 命题单元 where
   定义体: by simp only [norm_eq_zero, mul_zero, le_refl]
 
 Depends on / 依赖: le_refl, mul_zero, norm_eq_zero
@@ -1086,7 +1086,7 @@ instance :
 
 中文:
 实例 :
-  签名: NormedAlgebra 𝕜 (ULift 𝕜')
+  签名: 赋范代数 𝕜 (类型层提升 𝕜')
   定义体: { ULift.normedSpace, ULift.algebra with }
 
 Depends on / 依赖: ULift.algebra, ULift.normedSpace, algebra, normedSpace
@@ -1103,8 +1103,8 @@ instance Prod.normedAlgebra
   body: { Prod.normedSpace, Prod.algebra 𝕜 E F with }
 
 中文:
-实例 Prod.normedAlgebra
-  签名: {E F : 类型} [SeminormedRing E] [SeminormedRing F] [NormedAlgebra 𝕜 E]
+实例 积类型.normedAlgebra
+  签名: {E F : 类型} [Seminormed环 E] [Seminormed环 F] [赋范代数 𝕜 E]
   定义体: { Prod.normedSpace, Prod.algebra 𝕜 E F with }
 
 Depends on / 依赖: Prod.algebra, Prod.normedSpace, algebra, normedSpace
@@ -1122,8 +1122,8 @@ instance Pi.normedAlgebra
   body: { Pi.normedSpace, Pi.algebra _ E with }
 
 中文:
-实例 Pi.normedAlgebra
-  签名: {ι : 类型} {E : ι -> 类型} [Fintype ι] [对任意 i, SeminormedRing (E i)]
+实例 依赖函数类型.normedAlgebra
+  签名: {ι : 类型} {E : ι -> 类型} [有限类型 ι] [对任意 i, Seminormed环 (E i)]
   定义体: { Pi.normedSpace, Pi.algebra _ E with }
 
 Depends on / 依赖: Pi.algebra, Pi.normedSpace, algebra, normedSpace
@@ -1145,7 +1145,7 @@ instance SeparationQuotient.instNormedAlgebra
 
 中文:
 实例 SeparationQuotient.instNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (SeparationQuotient E) where
+  签名: : 赋范代数 𝕜 (SeparationQuotient E) where
   定义体: inferInstance
   __ : Algebra 𝕜 (SeparationQuotient E) := inferInstance
 -/
@@ -1164,7 +1164,7 @@ instance MulOpposite.instNormedAlgebra
 
 中文:
 实例 MulOpposite.instNormedAlgebra
-  签名: {E : 类型} [SeminormedRing E] [NormedAlgebra 𝕜 E]
+  签名: {E : 类型} [Seminormed环 E] [赋范代数 𝕜 E]
   定义体: instAlgebra
   __ := instNormedSpace
 
@@ -1187,8 +1187,8 @@ abbreviation NormedAlgebra.induced
   ⟨fun a b => show ‖f (a • b)‖ <= ‖a‖ * ‖f b‖ from (map_smul f a b).symm ▸ norm_smul_le a (f b)⟩
 
 中文:
-缩写 NormedAlgebra.induced
-  签名: {F : 类型} (𝕜 R S : 类型) [NormedField 𝕜] [Ring R] [Algebra 𝕜 R]
+缩写 赋范代数.induced
+  签名: {F : 类型} (𝕜 R S : 类型) [赋范域 𝕜] [环 R] [代数 𝕜 R]
   定义体: letI := SeminormedRing.induced R S f
   ⟨fun a b => show ‖f (a • b)‖ <= ‖a‖ * ‖f b‖ from (map_smul f a b).symm ▸ norm_smul_le a (f b)⟩
 
@@ -1210,8 +1210,8 @@ instance Subalgebra.toNormedAlgebra
   body: fast_instance% NormedAlgebra.induced 𝕜 S A S.val
 
 中文:
-实例 Subalgebra.toNormedAlgebra
-  签名: {𝕜 A : 类型} [SeminormedRing A] [NormedField 𝕜]
+实例 子代数.toNormedAlgebra
+  签名: {𝕜 A : 类型} [Seminormed环 A] [赋范域 𝕜]
   定义体: fast_instance% NormedAlgebra.induced 𝕜 S A S.val
 
 Depends on / 依赖: NormedAlgebra, NormedAlgebra.induced, S.val, fast_instance, induced
@@ -1244,7 +1244,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : SeminormedAddCommGroup E] :
+  签名: : SeminormedAddComm群 E] :
   定义体: I
 -/
 instance [I : SeminormedAddCommGroup E] :
@@ -1261,7 +1261,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NormedAddCommGroup E] :
+  签名: : 赋范交换加群 E] :
   定义体: I
 -/
 instance [I : NormedAddCommGroup E] :
@@ -1278,7 +1278,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NonUnitalSeminormedRing E] :
+  签名: : 非幺Seminormed环 E] :
   定义体: I
 -/
 instance [I : NonUnitalSeminormedRing E] :
@@ -1295,7 +1295,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NonUnitalNormedRing E] :
+  签名: : 非幺赋范环 E] :
   定义体: I
 -/
 instance [I : NonUnitalNormedRing E] :
@@ -1312,7 +1312,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : SeminormedRing E] :
+  签名: : Seminormed环 E] :
   定义体: I
 -/
 instance [I : SeminormedRing E] :
@@ -1329,7 +1329,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NormedRing E] :
+  签名: : 赋范环 E] :
   定义体: I
 -/
 instance [I : NormedRing E] :
@@ -1346,7 +1346,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NonUnitalSeminormedCommRing E] :
+  签名: : 非幺SeminormedComm环 E] :
   定义体: I
 -/
 instance [I : NonUnitalSeminormedCommRing E] :
@@ -1363,7 +1363,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NonUnitalNormedCommRing E] :
+  签名: : 非幺NormedComm环 E] :
   定义体: I
 -/
 instance [I : NonUnitalNormedCommRing E] :
@@ -1380,7 +1380,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : SeminormedCommRing E] :
+  签名: : SeminormedComm环 E] :
   定义体: I
 -/
 instance [I : SeminormedCommRing E] :
@@ -1397,7 +1397,7 @@ instance [I
 
 中文:
 实例 [I
-  签名: : NormedCommRing E] :
+  签名: : NormedComm环 E] :
   定义体: I
 -/
 instance [I : NormedCommRing E] :
@@ -1433,8 +1433,8 @@ definition NormedSpace.restrictScalars
 (norm_smul_le (algebraMap 𝕜 𝕜' c) (_ : E)).trans_eq by rw [norm_algebraMap'] }
 
 中文:
-定义 NormedSpace.restrictScalars
-  签名: : NormedSpace 𝕜 E
+定义 赋范空间.restrictScalars
+  签名: : 赋范空间 𝕜 E
   定义体: { Module.restrictScalars 𝕜 𝕜' E with
     norm_smul_le := fun c x =>
 (norm_smul_le (algebraMap 𝕜 𝕜' c) (_ : E)).trans_eq by rw [norm_algebraMap'] }
@@ -1457,8 +1457,8 @@ theorem NormedSpace.restrictScalars_eq
   apply algebraMap_smul
 
 中文:
-定理 NormedSpace.restrictScalars_eq
-  结论: {E : 类型} [SeminormedAddCommGroup E]
+定理 赋范空间.restrictScalars_eq
+  结论: {E : 类型} [SeminormedAddComm群 E]
   证明: by
   ext
   apply algebraMap_smul
@@ -1481,7 +1481,7 @@ instance RestrictScalars.normedSpace
 
 中文:
 实例 RestrictScalars.normedSpace
-  签名: : NormedSpace 𝕜 (RestrictScalars 𝕜 𝕜' E)
+  签名: : 赋范空间 𝕜 (RestrictScalars 𝕜 𝕜' E)
   定义体: fast_instance% NormedSpace.restrictScalars 𝕜 𝕜' E
 
 Depends on / 依赖: NormedSpace, NormedSpace.restrictScalars, fast_instance, restrictScalars
@@ -1504,8 +1504,8 @@ definition Module.RestrictScalars.normedSpaceOrig
   body: I
 
 中文:
-定义 Module.RestrictScalars.normedSpaceOrig
-  签名: {𝕜 : 类型} {𝕜' : 类型} {E : 类型} [NormedField 𝕜']
+定义 模.RestrictScalars.normedSpaceOrig
+  签名: {𝕜 : 类型} {𝕜' : 类型} {E : 类型} [赋范域 𝕜']
   定义体: I
 -/
 def Module.RestrictScalars.normedSpaceOrig {𝕜 : Type*} {𝕜' : Type*} {E : Type*} [NormedField 𝕜']
@@ -1539,8 +1539,8 @@ definition NormedAlgebra.restrictScalars
   body: { NormedSpace.restrictScalars 𝕜 𝕜' E, Algebra.restrictScalars 𝕜 𝕜' E with }
 
 中文:
-定义 NormedAlgebra.restrictScalars
-  签名: : NormedAlgebra 𝕜 E
+定义 赋范代数.restrictScalars
+  签名: : 赋范代数 𝕜 E
   定义体: { NormedSpace.restrictScalars 𝕜 𝕜' E, Algebra.restrictScalars 𝕜 𝕜' E with }
 
 Depends on / 依赖: Algebra, Algebra.restrictScalars, NormedSpace, NormedSpace.restrictScalars, restrictScalars
@@ -1558,7 +1558,7 @@ instance RestrictScalars.normedAlgebra
 
 中文:
 实例 RestrictScalars.normedAlgebra
-  签名: : NormedAlgebra 𝕜 (RestrictScalars 𝕜 𝕜' E)
+  签名: : 赋范代数 𝕜 (RestrictScalars 𝕜 𝕜' E)
   定义体: fast_instance% NormedAlgebra.restrictScalars 𝕜 𝕜' E
 
 Depends on / 依赖: NormedAlgebra, NormedAlgebra.restrictScalars, fast_instance, restrictScalars
@@ -1581,8 +1581,8 @@ definition Module.RestrictScalars.normedAlgebraOrig
   body: I
 
 中文:
-定义 Module.RestrictScalars.normedAlgebraOrig
-  签名: {𝕜 : 类型} {𝕜' : 类型} {E : 类型} [NormedField 𝕜']
+定义 模.RestrictScalars.normedAlgebraOrig
+  签名: {𝕜 : 类型} {𝕜' : 类型} {E : 类型} [赋范域 𝕜']
   定义体: I
 -/
 def Module.RestrictScalars.normedAlgebraOrig {𝕜 : Type*} {𝕜' : Type*} {E : Type*} [NormedField 𝕜']
@@ -1617,8 +1617,8 @@ structure SeminormedSpace.Core
     - norm_triangle((x y : E)) : ‖x + y‖ <= ‖x‖ + ‖y‖
 
 中文:
-结构 SeminormedSpace.Core
-  参数: (𝕜 : 类型) (E : 类型) [NormedField 𝕜] [AddCommGroup E]
+结构 半赋范空间.核
+  参数: (𝕜 : 类型) (E : 类型) [赋范域 𝕜] [加法交换群 E]
   公理与运算 (3 个):
     - norm_nonneg((x : E)) : 0 <= ‖x‖
     - norm_smul((c : 𝕜) (x : E)) : ‖c • x‖ = ‖c‖ * ‖x‖
@@ -1648,8 +1648,8 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCore
     have : -y + x = (-1 : 𝕜) • (-x + y) := by simp;
 
 中文:
-缩写 PseudoMetricSpace.ofSeminormedSpaceCore
-  签名: {𝕜 E : 类型} [NormedField 𝕜] [AddCommGroup E]
+缩写 伪度量空间.ofSeminormedSpaceCore
+  签名: {𝕜 E : 类型} [赋范域 𝕜] [加法交换群 E]
   定义体: ‖-x + y‖
   dist_self x := by
     show ‖-x + x‖ = 0
@@ -1692,8 +1692,8 @@ abbreviation PseudoEMetricSpace.ofSeminormedSpaceCore
   body: (PseudoMetricSpace.ofSeminormedSpaceCore core).toPseudoEMetricSpace
 
 中文:
-缩写 PseudoEMetricSpace.ofSeminormedSpaceCore
-  签名: {𝕜 E : 类型} [NormedField 𝕜]
+缩写 PseudoEMetric空间.ofSeminormedSpaceCore
+  签名: {𝕜 E : 类型} [赋范域 𝕜]
   定义体: (PseudoMetricSpace.ofSeminormedSpaceCore core).toPseudoEMetricSpace
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore, toPseudoEMetricSpace
@@ -1712,8 +1712,8 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCoreReplaceUniformity
   body: .replaceUniformity (.ofSeminormedSpaceCore core) H
 
 中文:
-缩写 PseudoMetricSpace.ofSeminormedSpaceCoreReplaceUniformity
-  签名: {𝕜 E : 类型} [NormedField 𝕜]
+缩写 伪度量空间.ofSeminormedSpaceCoreReplaceUniformity
+  签名: {𝕜 E : 类型} [赋范域 𝕜]
   定义体: .replaceUniformity (.ofSeminormedSpaceCore core) H
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore
@@ -1735,8 +1735,8 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCoreReplaceTopology
   body: .replaceTopology (.ofSeminormedSpaceCore core) H
 
 中文:
-缩写 PseudoMetricSpace.ofSeminormedSpaceCoreReplaceTopology
-  签名: {𝕜 E : 类型} [NormedField 𝕜]
+缩写 伪度量空间.ofSeminormedSpaceCoreReplaceTopology
+  签名: {𝕜 E : 类型} [赋范域 𝕜]
   定义体: .replaceTopology (.ofSeminormedSpaceCore core) H
 
 Depends on / 依赖: ofSeminormedSpaceCore, replaceTopology
@@ -1759,8 +1759,8 @@ abbreviation PseudoMetricSpace.ofSeminormedSpaceCoreReplaceAll
   body: .replaceBornology (.replaceUniformity (.ofSeminormedSpaceCore core) HU) HB
 
 中文:
-缩写 PseudoMetricSpace.ofSeminormedSpaceCoreReplaceAll
-  签名: {𝕜 E : 类型} [NormedField 𝕜]
+缩写 伪度量空间.ofSeminormedSpaceCoreReplaceAll
+  签名: {𝕜 E : 类型} [赋范域 𝕜]
   定义体: .replaceBornology (.replaceUniformity (.ofSeminormedSpaceCore core) HU) HB
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore
@@ -1784,8 +1784,8 @@ abbreviation SeminormedAddCommGroup.ofCore
   body: { PseudoMetricSpace.ofSeminormedSpaceCore core with }
 
 中文:
-缩写 SeminormedAddCommGroup.ofCore
-  签名: {𝕜 : 类型} {E : 类型} [NormedField 𝕜] [AddCommGroup E]
+缩写 SeminormedAddComm群.ofCore
+  签名: {𝕜 : 类型} {E : 类型} [赋范域 𝕜] [加法交换群 E]
   定义体: { PseudoMetricSpace.ofSeminormedSpaceCore core with }
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore
@@ -1803,8 +1803,8 @@ abbreviation SeminormedAddCommGroup.ofCoreReplaceUniformity
   body: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceUniformity core H with }
 
 中文:
-缩写 SeminormedAddCommGroup.ofCoreReplaceUniformity
-  签名: {𝕜 : 类型} {E : 类型} [NormedField 𝕜]
+缩写 SeminormedAddComm群.ofCoreReplaceUniformity
+  签名: {𝕜 : 类型} {E : 类型} [赋范域 𝕜]
   定义体: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceUniformity core H with }
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore
@@ -1826,8 +1826,8 @@ abbreviation SeminormedAddCommGroup.ofCoreReplaceTopology
   body: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceTopology core H with }
 
 中文:
-缩写 SeminormedAddCommGroup.ofCoreReplaceTopology
-  签名: {𝕜 : 类型} {E : 类型} [NormedField 𝕜]
+缩写 SeminormedAddComm群.ofCoreReplaceTopology
+  签名: {𝕜 : 类型} {E : 类型} [赋范域 𝕜]
   定义体: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceTopology core H with }
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.ofSeminormedSpaceCoreReplaceTopology, ofSeminormedSpaceCoreReplaceTopology
@@ -1850,8 +1850,8 @@ abbreviation SeminormedAddCommGroup.ofCoreReplaceAll
   body: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceAll core HU HB with }
 
 中文:
-缩写 SeminormedAddCommGroup.ofCoreReplaceAll
-  签名: {𝕜 : 类型} {E : 类型} [NormedField 𝕜]
+缩写 SeminormedAddComm群.ofCoreReplaceAll
+  签名: {𝕜 : 类型} {E : 类型} [赋范域 𝕜]
   定义体: { PseudoMetricSpace.ofSeminormedSpaceCoreReplaceAll core HU HB with }
 
 Depends on / 依赖: PseudoEMetricSpace, PseudoEMetricSpace.ofSeminormedSpaceCore, ofSeminormedSpaceCore
@@ -1877,9 +1877,9 @@ structure NormedSpace.Core
     - norm_eq_zero_iff((x : E)) : ‖x‖ = 0 ↔ x = 0
 
 中文:
-结构 NormedSpace.Core
+结构 赋范空间.核
   参数: (𝕜 : 类型) (E : 类型)
-  继承: SeminormedSpace.Core 𝕜 E
+  继承: 半赋范空间.核 𝕜 E
   公理与运算 (1 个):
     - norm_eq_zero_iff((x : E)) : ‖x‖ = 0 ↔ x = 0
 -/
@@ -1904,8 +1904,8 @@ abbreviation NormedAddCommGroup.ofCore
       exact h }
 
 中文:
-缩写 NormedAddCommGroup.ofCore
-  签名: (core : NormedSpace.Core 𝕜 E)
+缩写 赋范交换加群.ofCore
+  签名: (core : 赋范空间.核 𝕜 E)
   定义体: { SeminormedAddCommGroup.ofCore core.toCore with
     eq_of_dist_eq_zero := by
       let := SeminormedAddCommGroup.ofCore core.toCore
@@ -1937,8 +1937,8 @@ abbreviation NormedAddCommGroup.ofCoreReplaceUniformity
       exact h }
 
 中文:
-缩写 NormedAddCommGroup.ofCoreReplaceUniformity
-  签名: [U : UniformSpace E] (core : NormedSpace.Core 𝕜 E)
+缩写 赋范交换加群.ofCoreReplaceUniformity
+  签名: [U : 一致空间 E] (core : 赋范空间.核 𝕜 E)
   定义体: { SeminormedAddCommGroup.ofCoreReplaceUniformity core.toCore H with
     eq_of_dist_eq_zero := by
       let := SeminormedAddCommGroup.ofCore core.toCore
@@ -1973,8 +1973,8 @@ abbreviation NormedAddCommGroup.ofCoreReplaceTopology
       exact h }
 
 中文:
-缩写 NormedAddCommGroup.ofCoreReplaceTopology
-  签名: [T : TopologicalSpace E]
+缩写 赋范交换加群.ofCoreReplaceTopology
+  签名: [T : 拓扑空间 E]
   定义体: { SeminormedAddCommGroup.ofCoreReplaceTopology core.toCore H with
     eq_of_dist_eq_zero := by
       let := SeminormedAddCommGroup.ofCore core.toCore
@@ -2011,8 +2011,8 @@ abbreviation NormedAddCommGroup.ofCoreReplaceAll
       exact h }
 
 中文:
-缩写 NormedAddCommGroup.ofCoreReplaceAll
-  签名: [U : UniformSpace E] [B : Bornology E]
+缩写 赋范交换加群.ofCoreReplaceAll
+  签名: [U : 一致空间 E] [B : 有界结构 E]
   定义体: { SeminormedAddCommGroup.ofCoreReplaceAll core.toCore HU HB with
     eq_of_dist_eq_zero := by
       let := SeminormedAddCommGroup.ofCore core.toCore
@@ -2045,8 +2045,8 @@ abbreviation NormedSpace.ofCore
   body: by rw [core.norm_smul r x]
 
 中文:
-缩写 NormedSpace.ofCore
-  签名: {𝕜 : 类型} {E : 类型} [NormedField 𝕜] [SeminormedAddCommGroup E]
+缩写 赋范空间.ofCore
+  签名: {𝕜 : 类型} {E : 类型} [赋范域 𝕜] [SeminormedAddComm群 E]
   定义体: by rw [core.norm_smul r x]
 
 Depends on / 依赖: core.norm_smul, norm_smul
@@ -2074,7 +2074,7 @@ lemma AddMonoidHom.continuous_of_isBounded_nhds_zero
   simp only [subset_def, mem_
 
 中文:
-引理 AddMonoidHom.continuous_of_isBounded_nhds_zero
+引理 加法幺半群态射.continuous_of_isBounded_nhds_zero
   结论: (f : G ->+ H) (hs : s in 𝓝 (0 : G))
   证明: by
   obtain ⟨δ, hδ, hUε⟩ := Metric.mem_nhds_iff.mp hs

@@ -36,7 +36,7 @@ theorem of_isUnit_or_isUnit_of_isUnit_add
 
 中文:
 定理 of_isUnit_or_isUnit_of_isUnit_add
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: ⟨fun {a b} hab => h a b hab.symm ▸ isUnit_one⟩
 
 Depends on / 依赖: hab.symm, isUnit_one
@@ -55,7 +55,7 @@ theorem of_nonunits_add
 
 中文:
 定理 of_nonunits_add
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: or_iff_not_and_not.2 fun H => h a b H.1 H.2 hab.symm ▸ isUnit_one
 
 Depends on / 依赖: hab.symm, isUnit_one, or_iff_not_and_not
@@ -81,8 +81,8 @@ theorem isUnit_or_isUnit_of_isUnit_add
 
 中文:
 定理 isUnit_or_isUnit_of_isUnit_add
-  条件: {a b : R} (h : IsUnit (a + b))
-  结论: IsUnit a ∨ IsUnit b
+  条件: {a b : R} (h : 是单位 (a + b))
+  结论: 是单位 a ∨ 是单位 b
   证明: by
   rcases h with ⟨u, hu⟩
   rw [← Units.inv_mul_eq_one]; rw [mul_add] at hu
@@ -128,7 +128,7 @@ definition nonunitsAddSubmonoid
 
 中文:
 定义 nonunitsAddSubmonoid
-  签名: : AddSubmonoid R where
+  签名: : 加法子幺半群 R where
   定义体: nonunits R
   zero_mem' := by simp
   add_mem' := nonunits_add
@@ -148,8 +148,8 @@ theorem exists_of_isUnit_sum
   contrapose! h; exact (nonunitsAddSubmonoid R).sum_mem h
 
 中文:
-定理 exists_of_isUnit_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> R}
+定理 存在_of_isUnit_sum
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> R}
   证明: by
   contrapose! h; exact (nonunitsAddSubmonoid R).sum_mem h
 
@@ -183,8 +183,8 @@ fun H : 0 = 1 => Imax.1.1 I.eq_top_iff_one.2 H ▸ I.zero_mem)
 
 中文:
 定理 of_unique_max_ideal
-  条件: (h : 存在! I : Ideal R, I.IsMaximal)
-  结论: IsLocalRing R
+  条件: (h : 存在! I : 理想 R, I.是极大)
+  结论: 是局部环 R
   证明: @of_nonunits_add _ _
     (nontrivial_of_ne (0 : R) 1 <|
       let ⟨I, Imax, _⟩ := h
@@ -225,8 +225,8 @@ theorem of_unique_nonzero_prime
 
 中文:
 定理 of_unique_nonzero_prime
-  条件: (h : 存在! P : Ideal R, P != ⊥ ∧ Ideal.IsPrime P)
-  结论: IsLocalRing R
+  条件: (h : 存在! P : 理想 R, P != ⊥ ∧ 理想.是素 P)
+  结论: 是局部环 R
   证明: of_unique_max_ideal
     (by
       rcases h with ⟨P, ⟨hPnonzero, hPnot_top, _⟩, hPunique⟩
@@ -262,7 +262,7 @@ theorem of_isUnit_or_isUnit_one_sub_self
 
 中文:
 定理 of_isUnit_or_isUnit_one_sub_self
-  条件: [Nontrivial R] (h : 对任意 a : R, IsUnit a ∨ IsUnit (1 - a))
+  条件: [非平凡 R] (h : 对任意 a : R, 是单位 a ∨ 是单位 (1 - a))
   证明: ⟨fun {a b} hab => add_sub_cancel_left a b ▸ hab.symm ▸ h a⟩
 
 Depends on / 依赖: add_sub_cancel_left, hab.symm
@@ -289,7 +289,7 @@ theorem isUnit_or_isUnit_one_sub_self
 中文:
 定理 isUnit_or_isUnit_one_sub_self
   条件: (a : R)
-  结论: IsUnit a ∨ IsUnit (1 - a)
+  结论: 是单位 a ∨ 是单位 (1 - a)
   证明: isUnit_or_isUnit_of_isUnit_add (add_sub_cancel a 1).symm ▸ isUnit_one
 
 Depends on / 依赖: add_sub_cancel, isUnit_one, isUnit_or_isUnit_of_isUnit_add
@@ -309,7 +309,7 @@ theorem isUnit_of_mem_nonunits_one_sub_self
 中文:
 定理 isUnit_of_mem_nonunits_one_sub_self
   条件: (a : R) (h : 1 - a in nonunits R)
-  结论: IsUnit a
+  结论: 是单位 a
   证明: or_iff_not_imp_right.1 (isUnit_or_isUnit_one_sub_self a) h
 
 Depends on / 依赖: isUnit_or_isUnit_one_sub_self, or_iff_not_imp_right
@@ -329,7 +329,7 @@ theorem isUnit_one_sub_self_of_mem_nonunits
 中文:
 定理 isUnit_one_sub_self_of_mem_nonunits
   条件: (a : R) (h : a in nonunits R)
-  结论: IsUnit (1 - a)
+  结论: 是单位 (1 - a)
   证明: or_iff_not_imp_left.1 (isUnit_or_isUnit_one_sub_self a) h
 
 Depends on / 依赖: isUnit_or_isUnit_one_sub_self, or_iff_not_imp_left
@@ -352,7 +352,7 @@ apply (isUnit_or_isUnit_one_sub_self a).imp RingHom.isUnit_map _
 
 中文:
 定理 of_surjective'
-  条件: [Ring S] [Nontrivial S] (f : R ->+* S) (hf : Function.Surjective f)
+  条件: [环 S] [非平凡 S] (f : R ->+* S) (hf : 函数.满射 f)
   证明: of_isUnit_or_isUnit_one_sub_self (by
     intro b
     obtain ⟨a, rfl⟩ := hf b

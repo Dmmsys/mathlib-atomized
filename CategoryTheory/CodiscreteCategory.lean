@@ -50,7 +50,7 @@ structure Codiscrete
     - as : α
 
 中文:
-结构 Codiscrete
+结构 余discrete
   参数: (α : 类型u)
   公理与运算 (1 个):
     - as : α
@@ -71,9 +71,9 @@ theorem Codiscrete.mk_as
   proof: rfl
 
 中文:
-定理 Codiscrete.mk_as
-  条件: {α : 类型u} (X : Codiscrete α)
-  结论: Codiscrete.mk X.as = X
+定理 余discrete.mk_as
+  条件: {α : 类型u} (X : 余discrete α)
+  结论: 余discrete.mk X.as = X
   证明: rfl
 -/
 theorem Codiscrete.mk_as {α : Type u} (X : Codiscrete α) : Codiscrete.mk X.as = X := rfl
@@ -128,7 +128,7 @@ definition iso
 
 中文:
 定义 iso
-  签名: {A : 类型u} (x y : Codiscrete A)
+  签名: {A : 类型u} (x y : 余discrete A)
   定义体: ()
   inv := ()
 -/
@@ -147,7 +147,7 @@ lemma eq_id
 
 中文:
 引理 eq_id
-  条件: {A : 类型u} {x : Codiscrete A} (f : x ⟶ x)
+  条件: {A : 类型u} {x : 余discrete A} (f : x ⟶ x)
   结论: f = 𝟙 _
   证明: rfl
 -/
@@ -164,7 +164,7 @@ lemma eq_iso_hom
 
 中文:
 引理 eq_iso_hom
-  条件: {A : 类型u} {x y : Codiscrete A} (f : x ⟶ y)
+  条件: {A : 类型u} {x y : 余discrete A} (f : x ⟶ y)
   结论: f = (iso x y).hom
   证明: rfl
 -/
@@ -183,7 +183,7 @@ lemma eq_iso_inv
 
 中文:
 引理 eq_iso_inv
-  条件: {A : 类型u} {x y : Codiscrete A} (f : x ⟶ y)
+  条件: {A : 类型u} {x y : 余discrete A} (f : x ⟶ y)
   结论: f = (iso y x).inv
   证明: rfl
 
@@ -205,7 +205,7 @@ instance uniqueHom
 
 中文:
 实例 uniqueHom
-  签名: {A : 类型u} (x y : Codiscrete A)
+  签名: {A : 类型u} (x y : 余discrete A)
   定义体: (iso x y).hom
   uniq _ := rfl
 
@@ -227,7 +227,7 @@ instance uniqueIso
 
 中文:
 实例 uniqueIso
-  签名: {A : 类型u} (x y : Codiscrete A)
+  签名: {A : 类型u} (x y : 余discrete A)
   定义体: iso x y
   uniq _ := rfl
 -/
@@ -269,7 +269,7 @@ definition invFunctor
 
 中文:
 定义 invFunctor
-  签名: (F : C ⥤ Codiscrete A)
+  签名: (F : C ⥤ 余discrete A)
   定义体: Codiscrete.as ∘ F.obj
 
 Depends on / 依赖: Codiscrete, Codiscrete.as, F.obj
@@ -286,7 +286,7 @@ definition natTrans
 
 中文:
 定义 natTrans
-  签名: {F G : C ⥤ Codiscrete A}
+  签名: {F G : C ⥤ 余discrete A}
   定义体: ⟨⟩
 -/
 def natTrans {F G : C ⥤ Codiscrete A} : F ⟶ G where
@@ -303,7 +303,7 @@ definition natIso
 
 中文:
 定义 natIso
-  签名: {F G : C ⥤ Codiscrete A}
+  签名: {F G : C ⥤ 余discrete A}
   定义体: natTrans
   inv := natTrans
 
@@ -326,7 +326,7 @@ definition natIsoFunctor
 
 中文:
 定义 natIsoFunctor
-  签名: {F : C ⥤ Codiscrete A}
+  签名: {F : C ⥤ 余discrete A}
   定义体: Iso.refl _
 
 Depends on / 依赖: Iso.refl
@@ -416,7 +416,7 @@ definition equivFunctorToCodiscrete
 
 中文:
 定义 equivFunctorToCodiscrete
-  签名: {C : 类型u} [Category.{v} C] {A : Type w}
+  签名: {C : 类型u} [范畴.{v} C] {A : 类型 w}
   定义体: functor
   invFun := invFunctor
 
@@ -463,7 +463,7 @@ definition unitApp
 
 中文:
 定义 unitApp
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: functor id
 
 Depends on / 依赖: functor
@@ -529,7 +529,7 @@ lemma left_triangle_components
 
 中文:
 引理 left_triangle_components
-  条件: (C : 类型u) [Category.{v} C]
+  条件: (C : 类型u) [范畴.{v} C]
   证明: rfl
 -/
 lemma left_triangle_components (C : Type u) [Category.{v} C] :

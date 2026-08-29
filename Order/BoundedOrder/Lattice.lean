@@ -148,7 +148,7 @@ theorem min_bot_left
 中文:
 定理 min_bot_left
   条件: (a : α)
-  结论: min ⊥ a = ⊥
+  结论: 最小值 ⊥ a = ⊥
   证明: bot_inf_eq _
 -/
 @[to_dual] theorem min_bot_left (a : α) : min ⊥ a = ⊥ := bot_inf_eq _
@@ -164,7 +164,7 @@ theorem min_bot_right
 中文:
 定理 min_bot_right
   条件: (a : α)
-  结论: min a ⊥ = ⊥
+  结论: 最小值 a ⊥ = ⊥
   证明: inf_bot_eq _
 -/
 @[to_dual] theorem min_bot_right (a : α) : min a ⊥ = ⊥ := inf_bot_eq _
@@ -181,7 +181,7 @@ theorem max_bot_left
 中文:
 定理 max_bot_left
   条件: (a : α)
-  结论: max ⊥ a = a
+  结论: 最大值 ⊥ a = a
   证明: bot_sup_eq _
 -/
 @[to_dual] theorem max_bot_left (a : α) : max ⊥ a = a := bot_sup_eq _
@@ -197,7 +197,7 @@ theorem max_bot_right
 中文:
 定理 max_bot_right
   条件: (a : α)
-  结论: max a ⊥ = a
+  结论: 最大值 a ⊥ = a
   证明: sup_bot_eq _
 -/
 @[to_dual] theorem max_bot_right (a : α) : max a ⊥ = a := sup_bot_eq _
@@ -216,7 +216,7 @@ theorem max_eq_bot
 中文:
 定理 max_eq_bot
   条件: {a b : α}
-  结论: max a b = ⊥ ↔ a = ⊥ ∧ b = ⊥
+  结论: 最大值 a b = ⊥ ↔ a = ⊥ ∧ b = ⊥
   证明: sup_eq_bot_iff
 
 @[to_dual (attr := simp)]
@@ -239,7 +239,7 @@ theorem min_eq_bot
 中文:
 定理 min_eq_bot
   条件: {a b : α}
-  结论: min a b = ⊥ ↔ a = ⊥ ∨ b = ⊥
+  结论: 最小值 a b = ⊥ ↔ a = ⊥ ∨ b = ⊥
   证明: by
   simp_rw [← le_bot_iff, inf_le_iff]
 
@@ -264,7 +264,7 @@ lemma min_ne_bot
 中文:
 引理 min_ne_bot
   条件: {a b : α} (ha : a != ⊥) (hb : b != ⊥)
-  结论: min a b != ⊥
+  结论: 最小值 a b != ⊥
   证明: by
   grind
 -/
@@ -297,7 +297,7 @@ theorem WellFoundedGT.induction_top
 
 中文:
 定理 WellFoundedGT.induction_top
-  结论: [Preorder α] [WellFoundedGT α] [OrderTop α]
+  结论: [预序 α] [WellFoundedGT α] [有顶序 α]
   证明: by
   contrapose! hexists
   intro M

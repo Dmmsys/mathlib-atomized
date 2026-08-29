@@ -94,7 +94,7 @@ definition asLimitCone
 
 中文:
 定义 asLimitCone
-  签名: : CategoryTheory.Limits.Cone X.diagram
+  签名: : 范畴论.Limits.锥 X.diagram
   定义体: { pt := X
     π := { app := fun S => CompHausLike.ofHom (Y := X.diagram.obj S) _
             ⟨S.proj, IsLocallyConstant.continuous (S.proj_isLocallyConstant)⟩ } }
@@ -124,7 +124,7 @@ instance isIso_asLimitCone_lift
 
 中文:
 实例 isIso_asLimitCone_lift
-  签名: : IsIso ((limitConeIsLimit.{u, u} X.diagram).lift X.asLimitCone)
+  签名: : 是同构 ((limitConeIsLimit.{u, u} X.diagram).lift X.asLimitCone)
   定义体: CompHausLike.isIso_of_bijective _
     (by
       refine ⟨fun a b h => ?_, fun a => ?_⟩
@@ -201,7 +201,7 @@ definition asLimit
 
 中文:
 定义 asLimit
-  签名: : CategoryTheory.Limits.IsLimit X.asLimitCone
+  签名: : 范畴论.Limits.是极限 X.asLimitCone
   定义体: Limits.IsLimit.ofIsoLimit (limitConeIsLimit _) X.asLimitConeIso.symm
 
 Depends on / 依赖: IsLimit, Limits, Limits.IsLimit.ofIsoLimit, X.asLimitConeIso.symm, asLimitConeIso, limitConeIsLimit, ofIsoLimit
@@ -219,7 +219,7 @@ definition lim
 
 中文:
 定义 lim
-  签名: : Limits.LimitCone X.diagram
+  签名: : Limits.极限锥 X.diagram
   定义体: ⟨X.asLimitCone, X.asLimit⟩
 
 Depends on / 依赖: X.asLimit, X.asLimitCone, asLimit, asLimitCone

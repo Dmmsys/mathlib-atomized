@@ -49,7 +49,7 @@ abbreviation eta_q
 
 中文:
 缩写 eta_q
-  签名: (n : 自然数) (z : Complex)
+  签名: (n : 自然数) (z : 复形)
   定义体: (𝕢 1 z) ^ (n + 1)
 -/
 noncomputable abbrev eta_q (n : Nat) (z : Complex) := (𝕢 1 z) ^ (n + 1)
@@ -67,7 +67,7 @@ lemma eta_q_eq_cexp
 
 中文:
 引理 eta_q_eq_cexp
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   结论: eta_q n z = cexp (2 * π * I * (n + 1) * z)
   证明: by
   simp [eta_q, Periodic.qParam, ← Complex.exp_nsmul]
@@ -91,7 +91,7 @@ lemma eta_q_eq_pow
 
 中文:
 引理 eta_q_eq_pow
-  条件: (n : 自然数) (z : Complex)
+  条件: (n : 自然数) (z : 复形)
   结论: eta_q n z = cexp (2 * π * I * z) ^ (n + 1)
   证明: by
   simp [eta_q, Periodic.qParam]
@@ -116,7 +116,7 @@ lemma one_sub_eta_q_ne_zero
 
 中文:
 引理 one_sub_eta_q_ne_zero
-  条件: (n : 自然数) {z : Complex} (hz : z in ℍₒ)
+  条件: (n : 自然数) {z : 复形} (hz : z in ℍₒ)
   结论: 1 - eta_q n z != 0
   证明: by
   rw [eta_q_eq_cexp]; rw [sub_ne_zero]
@@ -142,7 +142,7 @@ definition eta
 
 中文:
 定义 eta
-  签名: (z : Complex)
+  签名: (z : 复形)
   定义体: 𝕢 24 z * ∏' n, (1 - eta_q n z)
 
 Depends on / 依赖: eta_q
@@ -164,7 +164,7 @@ lemma multipliable_one_sub_pow
 
 中文:
 引理 multipliable_one_sub_pow
-  条件: {q : Complex} (hq : ‖q‖ < 1)
+  条件: {q : 复形} (hq : ‖q‖ < 1)
   证明: by
   apply multipliable_one_add_of_summable (f := fun n => -q ^ (n + 1))
   simpa using (summable_nat_add_iff 1).mpr (summable_geometric_of_lt_one (norm_nonneg _) hq)
@@ -322,7 +322,7 @@ lemma eta_tprod_ne_zero
 
 中文:
 引理 eta_tprod_ne_zero
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   结论: ∏' n, (1 - eta_q n z) != 0
   证明: by
   refine tprod_one_add_ne_zero_of_summable (f := fun n => -eta_q n z) ?_ ?_
@@ -347,7 +347,7 @@ lemma eta_ne_zero
 
 中文:
 引理 eta_ne_zero
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   结论: η z != 0
   证明: mul_ne_zero (Periodic.qParam_ne_zero z) (eta_tprod_ne_zero hz)
 
@@ -369,7 +369,7 @@ lemma logDeriv_one_sub_cexp
 
 中文:
 引理 logDeriv_one_sub_cexp
-  条件: (r : Complex)
+  条件: (r : 复形)
   结论: logDeriv (fun z => 1 - r * cexp z) =
   证明: by
   ext z
@@ -395,7 +395,7 @@ lemma logDeriv_one_sub_mul_cexp_comp
 
 中文:
 引理 logDeriv_one_sub_mul_cexp_comp
-  条件: (r : Complex) {g : Complex -> Complex} (hg : Differentiable Complex g)
+  条件: (r : 复形) {g : 复形 -> 复形} (hg : 可微 复形 g)
   证明: by
   ext y
   rw [logDeriv_comp (by fun_prop) (hg y)]; rw [logDeriv_one_sub_cexp]
@@ -425,7 +425,7 @@ theorem one_sub_eta_logDeriv_eq
 
 中文:
 定理 one_sub_eta_logDeriv_eq
-  条件: (z : Complex) (n : 自然数)
+  条件: (z : 复形) (n : 自然数)
   证明: by
   have h2 : (fun x => 1 - cexp (2 * ↑π * I * (n + 1) * x)) =
       ((fun z => 1 - 1 * cexp z) ∘ fun x => 2 * ↑π * I * (n + 1) * x) := by aesop
@@ -454,7 +454,7 @@ lemma tsum_logDeriv_eta_q
 
 中文:
 引理 tsum_logDeriv_eta_q
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ∑' n, logDeriv (fun x => 1 - eta_q n x) z =
   证明: by
   rw [tsum_congr (one_sub_eta_logDeriv_eq z)]; rw [← tsum_mul_left]
@@ -480,7 +480,7 @@ lemma differentiableAt_eta_tprod
 
 中文:
 引理 differentiableAt_eta_tprod
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   证明: by
   have hq : 𝕢 1 z in Metric.ball 0 1 := by simpa using norm_qParam_lt_one 1 ⟨z, hz⟩
   exact (differentiableOn_tprod_one_sub_pow.differentiableAt
@@ -504,7 +504,7 @@ theorem differentiableAt_eta_of_mem_upperHalfPlaneSet
 
 中文:
 定理 differentiableAt_eta_of_mem_upperHalfPlaneSet
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   证明: .mul (by fun_prop) (differentiableAt_eta_tprod hz)
 
 Depends on / 依赖: differentiableAt_eta_tprod, fun_prop
@@ -529,7 +529,7 @@ lemma logDeriv_qParam
 
 中文:
 引理 logDeriv_qParam
-  条件: (h : 实数) (z : Complex)
+  条件: (h : 实数) (z : 复形)
   结论: logDeriv (𝕢 h) z = 2 * π * I / h
   证明: by
   have : 𝕢 h = cexp ∘ ((2 * π * I / h) * ·) := by
@@ -560,7 +560,7 @@ lemma summable_logDeriv_one_sub_eta_q
 
 中文:
 引理 summable_logDeriv_one_sub_eta_q
-  条件: {z : Complex} (hz : z in ℍₒ)
+  条件: {z : 复形} (hz : z in ℍₒ)
   证明: by
   have := summable_norm_pow_mul_geometric_div_one_sub 1 (norm_qParam_lt_one 1 ⟨z, hz⟩)
   convert! ((summable_nat_add_iff 1).mpr this).mul_left (-2 * π * I) using 1 with n

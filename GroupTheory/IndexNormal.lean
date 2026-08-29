@@ -44,7 +44,7 @@ theorem normal_of_index_eq_one
 中文:
 定理 normal_of_index_eq_one
   条件: (hH : H.index = 1)
-  结论: H.Normal
+  结论: H.正规
   证明: by
   rw [index_eq_one] at hH
   rw [hH]
@@ -69,7 +69,7 @@ theorem normal_of_index_eq_two
 中文:
 定理 normal_of_index_eq_two
   条件: (hH : H.index = 2)
-  结论: H.Normal where
+  结论: H.正规 where
   证明: by simp_rw [mul_mem_iff_of_index_two hH, hxH, iff_true, inv_mem_iff]
 
 Depends on / 依赖: iff_true, inv_mem_iff, mul_mem_iff_of_index_two, simp_rw

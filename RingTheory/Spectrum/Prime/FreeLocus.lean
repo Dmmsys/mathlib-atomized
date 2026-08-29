@@ -55,7 +55,7 @@ definition freeLocus
 
 中文:
 定义 freeLocus
-  签名: : Set (PrimeSpectrum R)
+  签名: : 集合 (素谱 R)
   定义体: { p | Module.Free (Localization.AtPrime p.asIdeal) (LocalizedModule p.asIdeal.primeCompl M) }
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, LocalizedModule, Module, Module.Free, asIdeal, p.asIdeal, p.asIdeal.primeCompl, primeCompl
@@ -103,7 +103,7 @@ lemma mem_freeLocus_of_isLocalization
 
 中文:
 引理 mem_freeLocus_of_isLocalization
-  结论: (p : PrimeSpectrum R)
+  结论: (p : 素谱 R)
   证明: by
   set e := (IsLocalization.algEquiv p.asIdeal.primeCompl
       (Localization.AtPrime p.asIdeal) Rₚ).toRingEquiv
@@ -140,7 +140,7 @@ lemma mem_freeLocus_iff_tensor
 
 中文:
 引理 mem_freeLocus_iff_tensor
-  结论: (p : PrimeSpectrum R)
+  结论: (p : 素谱 R)
   证明: by
   exact mem_freeLocus_of_isLocalization p Rₚ (f := TensorProduct.mk R Rₚ M 1)
 
@@ -164,7 +164,7 @@ lemma freeLocus_congr
 
 中文:
 引理 freeLocus_congr
-  条件: {M'} [AddCommGroup M'] [Module R M'] (e : M ≃ₗ[R] M')
+  条件: {M'} [加法交换群 M'] [模 R M'] (e : M ≃ₗ[R] M')
   证明: by
   ext p
   exact mem_freeLocus_of_isLocalization _ _ _
@@ -197,7 +197,7 @@ lemma comap_freeLocus_le
 
 中文:
 引理 comap_freeLocus_le
-  条件: {A} [CommRing A] [Algebra R A]
+  条件: {A} [交换环 A] [代数 R A]
   证明: by
   intro p hp
   let Rₚ := Localization.AtPrime (comap (algebraMap R A) p).asIdeal
@@ -242,7 +242,7 @@ lemma freeLocus_localization
 
 中文:
 引理 freeLocus_localization
-  条件: (S : Submonoid R)
+  条件: (S : 子幺半群 R)
   证明: by
   ext p
   simp only [Set.mem_preimage]
@@ -318,7 +318,7 @@ lemma freeLocus_eq_univ_iff
 
 中文:
 引理 freeLocus_eq_univ_iff
-  条件: [Module.FinitePresentation R M]
+  条件: [模.有限呈现 R M]
   证明: by
   simp_rw [Set.eq_univ_iff_forall, mem_freeLocus]
   exact ⟨fun H => Module.projective_of_localization_maximal fun I hI =>
@@ -344,7 +344,7 @@ lemma freeLocus_eq_univ
 
 中文:
 引理 freeLocus_eq_univ
-  条件: [Module.Finite R M] [Module.Flat R M]
+  条件: [模.有限 R M] [模.平坦 R M]
   证明: by
   simp_rw [Set.eq_univ_iff_forall, mem_freeLocus]
   exact fun x => Module.free_of_flat_of_isLocalRing
@@ -367,7 +367,7 @@ lemma basicOpen_subset_freeLocus_iff
 
 中文:
 引理 basicOpen_subset_freeLocus_iff
-  条件: [Module.FinitePresentation R M] {f : R}
+  条件: [模.有限呈现 R M] {f : R}
   证明: by
   rw [← freeLocus_eq_univ_iff]; rw [freeLocus_localization]; rw [Set.preimage_eq_univ_iff]; rw [localization_away_comap_range _ f]
 
@@ -394,7 +394,7 @@ lemma isOpen_freeLocus
 
 中文:
 引理 isOpen_freeLocus
-  条件: [Module.FinitePresentation R M]
+  条件: [模.有限呈现 R M]
   证明: by
   refine isOpen_iff_forall_mem_open.mpr fun x hx => ?_
   have : Module.Free _ _ := hx
@@ -427,7 +427,7 @@ definition rankAtStalk
 
 中文:
 定义 rankAtStalk
-  签名: (p : PrimeSpectrum R)
+  签名: (p : 素谱 R)
   定义体: Module.finrank (Localization.AtPrime p.asIdeal) (LocalizedModule p.asIdeal.primeCompl M)
 
 Depends on / 依赖: AtPrime, Localization, Localization.AtPrime, LocalizedModule, Module, Module.finrank, asIdeal, finrank, p.asIdeal, p.asIdeal.primeCompl, primeCompl
@@ -450,7 +450,7 @@ lemma isLocallyConstant_rankAtStalk_freeLocus
 
 中文:
 引理 isLocallyConstant_rankAtStalk_freeLocus
-  条件: [Module.FinitePresentation R M]
+  条件: [模.有限呈现 R M]
   证明: by
   refine (IsLocallyConstant.iff_exists_open _).mpr fun ⟨x, hx⟩ => ?_
   have : Module.Free _ _ := hx
@@ -513,7 +513,7 @@ lemma isLocallyConstant_rankAtStalk
 
 中文:
 引理 isLocallyConstant_rankAtStalk
-  条件: [Module.FinitePresentation R M] [Module.Flat R M]
+  条件: [模.有限呈现 R M] [模.平坦 R M]
   证明: by
   let e : freeLocus R M ≃ₜ PrimeSpectrum R :=
     (Homeomorph.setCongr freeLocus_eq_univ).trans (Homeomorph.Set.univ (PrimeSpectrum R))
@@ -542,7 +542,7 @@ lemma rankAtStalk_eq_zero_of_subsingleton
 
 中文:
 引理 rankAtStalk_eq_zero_of_subsingleton
-  条件: [Subsingleton M]
+  条件: [子单例 M]
   证明: by
   ext p
   exact Module.finrank_zero_of_subsingleton
@@ -590,7 +590,7 @@ lemma rankAtStalk_eq_of_equiv
 
 中文:
 引理 rankAtStalk_eq_of_equiv
-  条件: {N : 类型} [AddCommGroup N] [Module R N] (e : M ≃ₗ[R] N)
+  条件: {N : 类型} [加法交换群 N] [模 R N] (e : M ≃ₗ[R] N)
   证明: by
   ext p
   exact IsLocalizedModule.mapEquiv p.asIdeal.primeCompl
@@ -621,7 +621,7 @@ lemma rankAtStalk_eq_finrank_of_free
 
 中文:
 引理 rankAtStalk_eq_finrank_of_free
-  条件: [Module.Free R M]
+  条件: [模.自由 R M]
   证明: by
   ext p
   simp [rankAtStalk, finrank_of_isLocalizedModule_of_free _ p.asIdeal.primeCompl
@@ -647,7 +647,7 @@ lemma rankAtStalk_self
 
 中文:
 引理 rankAtStalk_self
-  条件: [Nontrivial R]
+  条件: [非平凡 R]
   结论: rankAtStalk (R := R) R = 1
   证明: by
   simp
@@ -672,7 +672,7 @@ lemma rankAtStalk_pi
 
 中文:
 引理 rankAtStalk_pi
-  结论: {ι : 类型} [Finite ι] (M : ι -> 类型)
+  结论: {ι : 类型} [有限 ι] (M : ι -> 类型)
   证明: by
   cases nonempty_fintype ι
   let f : (Π i, M i) ->ₗ[R] Π i, LocalizedModule p.asIdeal.primeCompl (M i) :=
@@ -712,7 +712,7 @@ lemma rankAtStalk_eq_finrank_tensorProduct
 
 中文:
 引理 rankAtStalk_eq_finrank_tensorProduct
-  条件: (p : PrimeSpectrum R)
+  条件: (p : 素谱 R)
   证明: by
   let e : LocalizedModule p.asIdeal.primeCompl M ≃ₗ[Localization.AtPrime p.asIdeal]
       Localization.AtPrime p.asIdeal otimes[R] M :=
@@ -748,7 +748,7 @@ lemma rankAtStalk_eq_zero_iff_notMem_support
 
 中文:
 引理 rankAtStalk_eq_zero_iff_notMem_support
-  条件: (p : PrimeSpectrum R)
+  条件: (p : 素谱 R)
   证明: by
   rw [notMem_support_iff]
   refine ⟨fun h => ?_, fun h => Module.finrank_zero_of_subsingleton⟩
@@ -776,7 +776,7 @@ lemma rankAtStalk_pos_iff_mem_support
 
 中文:
 引理 rankAtStalk_pos_iff_mem_support
-  条件: (p : PrimeSpectrum R)
+  条件: (p : 素谱 R)
   证明: Nat.pos_iff_ne_zero.trans (rankAtStalk_eq_zero_iff_notMem_support _).not_left
 
 Depends on / 依赖: Nat.pos_iff_ne_zero.trans, not_left, pos_iff_ne_zero, rankAtStalk_eq_zero_iff_notMem_support
@@ -829,7 +829,7 @@ lemma rankAtStalk_prod
 
 中文:
 引理 rankAtStalk_prod
-  结论: (N : 类型) [AddCommGroup N] [Module R N]
+  结论: (N : 类型) [加法交换群 N] [模 R N]
   证明: by
   ext p
   let e : LocalizedModule p.asIdeal.primeCompl (M × N) ≃ₗ[Localization.AtPrime p.asIdeal]
@@ -865,7 +865,7 @@ lemma rankAtStalk_baseChange
 
 中文:
 引理 rankAtStalk_baseChange
-  条件: {S : 类型} [CommRing S] [Algebra R S] (p : PrimeSpectrum S)
+  条件: {S : 类型} [交换环 S] [代数 R S] (p : 素谱 S)
   证明: by
   let q : PrimeSpectrum R := p.comap (algebraMap R S)
   let := Localization.AtPrime.algebraOfLiesOver q.asIdeal p.asIdeal
@@ -901,7 +901,7 @@ lemma rankAtStalk_isBaseChange
 
 中文:
 引理 rankAtStalk_isBaseChange
-  结论: {S Mₛ : 类型} [CommRing S] [Algebra R S] [AddCommGroup Mₛ]
+  结论: {S Mₛ : 类型} [交换环 S] [代数 R S] [加法交换群 Mₛ]
   证明: by
   simp [rankAtStalk_eq_of_equiv hf.equiv.symm, rankAtStalk_baseChange]
 
@@ -928,7 +928,7 @@ lemma rankAtStalk_eq_of_le_of_finite_of_flat
 
 中文:
 引理 rankAtStalk_eq_of_le_of_finite_of_flat
-  条件: {p q : PrimeSpectrum R} (hpq : p <= q)
+  条件: {p q : 素谱 R} (hpq : p <= q)
   证明: by
   let S := Localization.AtPrime q.asIdeal
   obtain ⟨P, rfl⟩ : p in Set.range (PrimeSpectrum.comap (algebraMap R S)) := by
@@ -958,7 +958,7 @@ lemma rankAtStalk_eq_of_le_of_finite_of_flat'
 
 中文:
 引理 rankAtStalk_eq_of_le_of_finite_of_flat'
-  结论: {p q : Ideal R} [hp : p.IsPrime] [hq : q.IsPrime]
+  结论: {p q : 理想 R} [hp : p.是素] [hq : q.是素]
   证明: rankAtStalk_eq_of_le_of_finite_of_flat M hpq
 
 Depends on / 依赖: rankAtStalk_eq_of_le_of_finite_of_flat
@@ -982,7 +982,7 @@ lemma rankAtStalk_tensorProduct
 
 中文:
 引理 rankAtStalk_tensorProduct
-  结论: (N : 类型) [AddCommGroup N] [Module R N] [Module.Finite R N]
+  结论: (N : 类型) [加法交换群 N] [模 R N] [模.有限 R N]
   证明: by
   ext p
   let e : Localization.AtPrime p.asIdeal otimes[R] (M otimes[R] N) ≃ₗ[Localization.AtPrime p.asIdeal]
@@ -1014,7 +1014,7 @@ lemma rankAtStalk_tensorProduct_of_isScalarTower
 
 中文:
 引理 rankAtStalk_tensorProduct_of_isScalarTower
-  结论: {S : 类型} [CommRing S] [Algebra R S]
+  结论: {S : 类型} [交换环 S] [代数 R S]
   证明: by
   simp [rankAtStalk_eq_of_equiv (AlgebraTensorModule.cancelBaseChange R S S N M).symm,
     rankAtStalk_tensorProduct, rankAtStalk_baseChange]
@@ -1043,7 +1043,7 @@ lemma rankAtStalk_eq
 
 中文:
 引理 rankAtStalk_eq
-  条件: (p : PrimeSpectrum R)
+  条件: (p : 素谱 R)
   证明: by
   let k := p.asIdeal.ResidueField
   let e : k otimes[Localization.AtPrime p.asIdeal] (Localization.AtPrime p.asIdeal otimes[R] M) ≃ₗ[k]
@@ -1070,8 +1070,8 @@ lemma _root_.Ideal.finrank_fiber_eq_rankAtStalk
   proof: (rankAtStalk_eq ⟨p, hp⟩).symm
 
 中文:
-引理 _root_.Ideal.finrank_fiber_eq_rankAtStalk
-  条件: (p : Ideal R) [hp : p.IsPrime]
+引理 _root_.理想.finrank_fiber_eq_rankAtStalk
+  条件: (p : 理想 R) [hp : p.是素]
   证明: (rankAtStalk_eq ⟨p, hp⟩).symm
 
 Depends on / 依赖: rankAtStalk_eq
@@ -1093,8 +1093,8 @@ lemma _root_.Ideal.finrank_fiber_eq_finrank
   rw [p.finrank_fiber_eq_rankAtStalk]; rw [rankAtStalk]; rw [← (isBaseChange Rp Mp K).finrank_eq]; rw [(((LocalizedModule.equivTensorProduct p.primeCompl M).baseChange Rp K Mp _)).finrank_eq]; rw 
 
 中文:
-引理 _root_.Ideal.finrank_fiber_eq_finrank
-  条件: [IsDomain R] (p : Ideal R) [p.IsPrime]
+引理 _root_.理想.finrank_fiber_eq_finrank
+  条件: [是整环 R] (p : 理想 R) [p.是素]
   证明: by
   let K := FractionRing R
   let Rp := Localization.AtPrime p

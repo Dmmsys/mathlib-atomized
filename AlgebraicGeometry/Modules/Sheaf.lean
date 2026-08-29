@@ -61,7 +61,7 @@ definition Hom
   body: SheafOfModules.Hom M N
 
 中文:
-定义 Hom
+定义 态射
   签名: (M N : X.Modules)
   定义体: SheafOfModules.Hom M N
 
@@ -80,7 +80,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category X.Modules
+  签名: 范畴 X.Modules
   定义体: Modules.Hom
   __ := (inferInstance : Category (SheafOfModules.{u} X.ringCatSheaf))
 
@@ -100,7 +100,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian X.Modules
+  签名: 交换 X.Modules
   定义体: inferInstanceAs Abelian (SheafOfModules.{u} X.ringCatSheaf)
 
 Depends on / 依赖: Abelian, SheafOfModules, X.ringCatSheaf, ringCatSheaf
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits X.Modules
+  签名: 有极限 X.Modules
   定义体: inferInstanceAs (HasLimits (SheafOfModules X.ringCatSheaf))
 
 Depends on / 依赖: HasLimits, SheafOfModules, X.ringCatSheaf, ringCatSheaf
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasColimits X.Modules
+  签名: 有余极限 X.Modules
   定义体: inferInstanceAs (HasColimits (SheafOfModules X.ringCatSheaf))
 
 Depends on / 依赖: HasColimits, SheafOfModules, X.ringCatSheaf, ringCatSheaf
@@ -153,7 +153,7 @@ definition toPresheafOfModules
 
 中文:
 定义 toPresheafOfModules
-  签名: : X.Modules ⥤ X.PresheafOfModules
+  签名: : X.Modules ⥤ X.预模层
   定义体: SheafOfModules.forget _
 
 Depends on / 依赖: SheafOfModules, SheafOfModules.forget, forget
@@ -170,7 +170,7 @@ definition fullyFaithfulToPresheafOfModules
 
 中文:
 定义 fullyFaithfulToPresheafOfModules
-  签名: : (Modules.toPresheafOfModules X).FullyFaithful
+  签名: : (Modules.toPresheafOfModules X).满忠实
   定义体: SheafOfModules.fullyFaithfulForget _
 
 Depends on / 依赖: SheafOfModules, SheafOfModules.fullyFaithfulForget, fullyFaithfulForget
@@ -188,7 +188,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheafOfModules X).Full
+  签名: (toPresheafOfModules X).满
   定义体: fullyFaithfulToPresheafOfModules.full
 
 Depends on / 依赖: fullyFaithfulToPresheafOfModules, fullyFaithfulToPresheafOfModules.full
@@ -204,7 +204,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheafOfModules X).Faithful
+  签名: (toPresheafOfModules X).忠实
   定义体: fullyFaithfulToPresheafOfModules.faithful
 
 Depends on / 依赖: faithful, fullyFaithfulToPresheafOfModules, fullyFaithfulToPresheafOfModules.faithful
@@ -220,7 +220,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheafOfModules X).IsRightAdjoint
+  签名: (toPresheafOfModules X).是右伴随
   定义体: (PresheafOfModules.sheafificationAdjunction (𝟙 X.ringCatSheaf.obj)).isRightAdjoint
 
 Depends on / 依赖: PresheafOfModules, PresheafOfModules.sheafificationAdjunction, X.ringCatSheaf.obj, isRightAdjoint, ringCatSheaf, sheafificationAdjunction
@@ -239,7 +239,7 @@ definition toPresheaf
 
 中文:
 定义 toPresheaf
-  签名: : X.Modules ⥤ TopCat.Presheaf Ab X
+  签名: : X.Modules ⥤ 顶元素范畴.预层 Ab X
   定义体: toPresheafOfModules X ⋙ PresheafOfModules.toPresheaf _
 
 Depends on / 依赖: PresheafOfModules, PresheafOfModules.toPresheaf, toPresheaf, toPresheafOfModules
@@ -257,7 +257,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheaf X).Faithful
+  签名: (toPresheaf X).忠实
   定义体: .comp _ (PresheafOfModules.toPresheaf _)
 
 Depends on / 依赖: Finset, Finset.card_compl, PresheafOfModules, PresheafOfModules.toPresheaf, boundary_eq_iSup, card_compl, hasDimensionLT_face, hasDimensionLT_iSup_iff, stdSimplex, stdSimplex.hasDimensionLT_face, toPresheaf
@@ -289,7 +289,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toPresheaf X).ReflectsIsomorphisms
+  签名: (toPresheaf X).反映同构
   定义体: reflectsIsomorphisms_comp _ (PresheafOfModules.toPresheaf _)
 
 Depends on / 依赖: PresheafOfModules, PresheafOfModules.toPresheaf, reflectsIsomorphisms_comp, toPresheaf
@@ -333,7 +333,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module Γ(X, U) Γ(M, U)
+  签名: 模 Γ(X, U) Γ(M, U)
   定义体: (M.val.obj (.op U)).isModule
 
 Depends on / 依赖: M.val.obj, isModule
@@ -434,7 +434,7 @@ definition Hom.mapPresheaf
   body: (toPresheaf X).map φ
 
 中文:
-定义 Hom.mapPresheaf
+定义 态射.mapPresheaf
   签名: (φ : M ⟶ N)
   定义体: (toPresheaf X).map φ
 
@@ -452,7 +452,7 @@ definition Hom.app
   body: (forget₂ _ _).map (φ.val.app (.op U))
 
 中文:
-定义 Hom.app
+定义 态射.app
   签名: (φ : M ⟶ N) (U : X.Opens)
   定义体: (forget₂ _ _).map (φ.val.app (.op U))
 
@@ -492,7 +492,7 @@ lemma Hom.app_smul
   proof: (φ.val.app (.op U)).hom.map_smul r x
 
 中文:
-引理 Hom.app_smul
+引理 态射.app_smul
   条件: (φ : M ⟶ N) (r : Γ(X, U)) (x : Γ(M, U))
   证明: (φ.val.app (.op U)).hom.map_smul r x
 
@@ -512,7 +512,7 @@ lemma Hom.add_app
   proof: rfl
 
 中文:
-引理 Hom.add_app
+引理 态射.add_app
   条件: (φ ψ : M ⟶ N)
   结论: (φ + ψ).app U = φ.app U + ψ.app U
   证明: rfl
@@ -528,7 +528,7 @@ lemma Hom.sub_app
   proof: rfl
 
 中文:
-引理 Hom.sub_app
+引理 态射.sub_app
   条件: (φ ψ : M ⟶ N)
   结论: (φ - ψ).app U = φ.app U - ψ.app U
   证明: rfl
@@ -543,7 +543,7 @@ lemma Hom.zero_app
   proof: rfl
 
 中文:
-引理 Hom.zero_app
+引理 态射.zero_app
   结论: (0 : M ⟶ N).app U = 0
   证明: rfl
 -/
@@ -558,7 +558,7 @@ lemma Hom.id_app
   proof: rfl
 
 中文:
-引理 Hom.id_app
+引理 态射.id_app
   条件: (M : X.Modules)
   结论: (𝟙 M :).app U = 𝟙 _
   证明: rfl
@@ -576,7 +576,7 @@ lemma Hom.comp_app
 @[ext]
 
 中文:
-引理 Hom.comp_app
+引理 态射.comp_app
   条件: (φ : M ⟶ N) (ψ : N ⟶ K)
   结论: (φ ≫ ψ).app U = φ.app U ≫ ψ.app U
   证明: rfl
@@ -628,7 +628,7 @@ lemma isSheaf
 中文:
 引理 isSheaf
   条件: (M : X.Modules)
-  结论: M.presheaf.IsSheaf
+  结论: M.presheaf.是层
   证明: SheafOfModules.isSheaf M
 
 Depends on / 依赖: SheafOfModules, SheafOfModules.isSheaf, isSheaf
@@ -676,7 +676,7 @@ lemma Hom.isIso_iff_isIso_app
   simp [Opposite.op_surjective.forall]
 
 中文:
-引理 Hom.isIso_iff_isIso_app
+引理 态射.isIso_iff_isIso_app
   条件: {M N : X.Modules} {φ : M ⟶ N}
   证明: by
   rw [← isIso_iff_of_reflects_iso _ (toPresheaf X)]; rw [NatTrans.isIso_iff_isIso_app]
@@ -700,8 +700,8 @@ instance [IsIso
 @[simp, push ←]
 
 中文:
-实例 [IsIso
-  签名: φ] : IsIso (φ.app U)
+实例 [是同构
+  签名: φ] : 是同构 (φ.app U)
   定义体: Hom.isIso_iff_isIso_app.mp ‹_› _
 
 @[simp, push ←]
@@ -724,7 +724,7 @@ lemma inv_app
 
 中文:
 引理 inv_app
-  条件: [IsIso φ]
+  条件: [是同构 φ]
   结论: (inv φ).app U = inv (φ.app U)
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -877,7 +877,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pullback f).IsLeftAdjoint
+  签名: (pullback f).是左伴随
   定义体: (pullbackPushforwardAdjunction f).isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, pullbackPushforwardAdjunction
@@ -893,7 +893,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward f).IsRightAdjoint
+  签名: (pushforward f).是右伴随
   定义体: (pullbackPushforwardAdjunction f).isRightAdjoint
 
 Depends on / 依赖: isRightAdjoint, pullbackPushforwardAdjunction
@@ -909,7 +909,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward f).Additive
+  签名: (pushforward f).加性
   定义体: Functor.additive_of_preservesBinaryBiproducts _
 
 Depends on / 依赖: Functor, Functor.additive_of_preservesBinaryBiproducts, additive_of_preservesBinaryBiproducts
@@ -926,7 +926,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pullback f).Additive
+  签名: (pullback f).加性
   定义体: Functor.additive_of_preservesBinaryBiproducts _
 
 Depends on / 依赖: Functor, Functor.additive_of_preservesBinaryBiproducts, additive_of_preservesBinaryBiproducts
@@ -1402,7 +1402,7 @@ abbreviation restrict
 
 中文:
 缩写 restrict
-  签名: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f]
+  签名: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f]
   定义体: (restrictFunctor f).obj M
 
 Depends on / 依赖: restrictFunctor
@@ -1539,7 +1539,7 @@ lemma restrict_obj
 
 中文:
 引理 restrict_obj
-  条件: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] (U)
+  条件: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f] (U)
   证明: rfl
 -/
 lemma restrict_obj (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] (U) :
@@ -1555,7 +1555,7 @@ lemma restrict_map
 
 中文:
 引理 restrict_map
-  条件: (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] {U V} (i : U ⟶ V)
+  条件: (M : Y.Modules) (f : X ⟶ Y) [是开浸入 f] {U V} (i : U ⟶ V)
   证明: rfl
 -/
 lemma restrict_map (M : Y.Modules) (f : X ⟶ Y) [IsOpenImmersion f] {U V} (i : U ⟶ V) :
@@ -1577,7 +1577,7 @@ refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_)
 
 中文:
 定义 restrictUnitIso
-  签名: (f : X ⟶ Y) [IsOpenImmersion f]
+  签名: (f : X ⟶ Y) [是开浸入 f]
   定义体: by
 refine (fullyFaithfulForget _).preimageIso PresheafOfModules.isoMk (fun U => ?_) ?_
   · refine ModuleCat.isoMk
@@ -1679,7 +1679,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (restrictAdjunction f).counit
+  签名: 是同构 (restrictAdjunction f).counit
   定义体: inferInstanceAs (IsIso <| (restrictFunctorAdjCounitIso f).hom)
 
 Depends on / 依赖: restrictFunctorAdjCounitIso
@@ -1697,7 +1697,7 @@ instance :
 
 中文:
 实例 :
-  签名: (restrictFunctor f).IsLeftAdjoint
+  签名: (restrictFunctor f).是左伴随
   定义体: (restrictAdjunction f).isLeftAdjoint
 
 Depends on / 依赖: isLeftAdjoint, restrictAdjunction
@@ -1713,7 +1713,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward f).Full
+  签名: (pushforward f).满
   定义体: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.full
 
 Depends on / 依赖: fullyFaithfulROfIsIsoCounit, fullyFaithfulROfIsIsoCounit.full, restrictAdjunction
@@ -1731,7 +1731,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward f).Faithful
+  签名: (pushforward f).忠实
   定义体: (restrictAdjunction f).fullyFaithfulROfIsIsoCounit.faithful
 
 @[simp]
@@ -1951,7 +1951,7 @@ definition restrictFunctorCongr
 
 中文:
 定义 restrictFunctorCongr
-  签名: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f] [IsOpenImmersion g]
+  签名: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f] [是开浸入 g]
   定义体: SheafOfModules.pushforwardNatIso _ (NatIso.ofComponents fun _ => eqToIso (by simp [hf])) ≪≫
     SheafOfModules.pushforwardCongr (by ext : 3; subst hf; simp)
 
@@ -1977,7 +1977,7 @@ lemma restrictFunctorCongr_hom_app_app
 
 中文:
 引理 restrictFunctorCongr_hom_app_app
-  结论: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
+  结论: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f]
   证明: rfl
 
 @[simp]
@@ -1997,7 +1997,7 @@ lemma restrictFunctorCongr_inv_app_app
 
 中文:
 引理 restrictFunctorCongr_inv_app_app
-  结论: {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
+  结论: {f g : X ⟶ Y} (hf : f = g) [是开浸入 f]
   证明: rfl
 -/
 lemma restrictFunctorCongr_inv_app_app {f g : X ⟶ Y} (hf : f = g) [IsOpenImmersion f]
@@ -2018,7 +2018,7 @@ definition restrictStalkNatIso
 @[simp]
 
 中文:
-定义 restrictStalkNatIso
+定义 restrictStalk自然数Iso
   签名: (x : X)
   定义体: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
   (toPresheaf _ ⋙ (Functor.whiskeringLeft (OpenNhds (f x))ᵒᵖ Y.Opensᵒᵖ Ab).obj
@@ -2050,7 +2050,7 @@ lemma germ_restrictStalkNatIso_hom_app
     ((OpenNhds.inclusion ((ConcreteCategory.hom f.base) x)).op ⋙ M.presheaf) _
 
 中文:
-引理 germ_restrictStalkNatIso_hom_app
+引理 germ_restrictStalk自然数Iso_hom_app
   条件: (x : X) (M : Y.Modules) (hxU : x in U)
   证明: haveI := Functor.initial_of_adjunction (f.isOpenEmbedding.adjunctionNhds x)
   Functor.Final.ι_colimitIso_hom
@@ -2081,7 +2081,7 @@ lemma germ_restrictStalkNatIso_inv_app
   simp
 
 中文:
-引理 germ_restrictStalkNatIso_inv_app
+引理 germ_restrictStalk自然数Iso_inv_app
   条件: (x : X) (M : Y.Modules) (hxU : x in U)
   证明: by
   rw [← germ_restrictStalkNatIso_hom_app f x M hxU]; rw [Category.assoc]; rw [← NatTrans.comp_app]; rw [Iso.hom_inv_id]
@@ -2112,7 +2112,7 @@ definition sheafComposePushforwardComp
 
 中文:
 定义 sheafComposePushforwardComp
-  签名: {R S : CommRingCat.{u}} (φ : R ⟶ S)
+  签名: {R S : 交换环范畴.{u}} (φ : R ⟶ S)
   定义体: by
   refine NatIso.ofComponents (fun M => ObjectProperty.isoMk _ ?_) ?_
   · refine NatIso.ofComponents (fun U => ?_) ?_
@@ -2150,7 +2150,7 @@ definition overEquiv
 
 中文:
 定义 overEquiv
-  签名: {X : Scheme.{u}} (U : X.Opens)
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: TopologicalSpace.Opens.sheafOfModulesEquivOver _ _
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.Opens.sheafOfModulesEquivOver, sheafOfModulesEquivOver
@@ -2179,7 +2179,7 @@ inferInstanceAs
 
 中文:
 定义 overMapCompOverEquiv
-  签名: {X : Scheme.{u}} {U V : X.Opens} (f : V ⟶ U)
+  签名: {X : 概形.{u}} {U V : X.Opens} (f : V ⟶ U)
   定义体: by
   haveI : (Hom.opensFunctor (X.homOfLE <| leOfHom f)).IsContinuous
       (Opens.grothendieckTopology V.toScheme) (Opens.grothendieckTopology U.carrier) :=
@@ -2243,7 +2243,7 @@ definition overFunctorEquiv
 
 中文:
 定义 overFunctorEquiv
-  签名: {X : Scheme.{u}} (U : X.Opens)
+  签名: {X : 概形.{u}} (U : X.Opens)
   定义体: by
   have : ((Opens.overEquivalence U).symm.functor ⋙ Over.forget U).IsContinuous
       (Opens.grothendieckTopology ↥U) (Opens.grothendieckTopology ↥X) :=

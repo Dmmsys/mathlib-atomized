@@ -59,7 +59,7 @@ theorem isAlgClosure_of_transcendence_basis
 
 中文:
 定理 isAlgClosure_of_transcendence_basis
-  条件: [IsAlgClosed K] (hv : IsTranscendenceBasis R v)
+  条件: [是代数闭 K] (hv : IsTranscendenceBasis R v)
   证明: letI := RingHom.domain_nontrivial (algebraMap R K)
   { isAlgClosed := by infer_instance
     isAlgebraic := hv.isAlgebraic }
@@ -90,7 +90,7 @@ definition equivOfTranscendenceBasis
 
 中文:
 定义 equivOfTranscendenceBasis
-  签名: [IsAlgClosed K] [IsAlgClosed L] (e : ι ≃ κ)
+  签名: [是代数闭 K] [是代数闭 L] (e : ι ≃ κ)
   定义体: by
   letI := isAlgClosure_of_transcendence_basis v hv
   letI := isAlgClosure_of_transcendence_basis w hw
@@ -200,7 +200,7 @@ theorem cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt
 
 中文:
 定理 cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: have : ℵ₀ <= Cardinal.lift.{max u v} #ι := le_of_not_gt fun h => not_le_of_gt
 (show ℵ₀ < Cardinal.lift.{max u w} #K by simpa)
     calc
@@ -242,7 +242,7 @@ theorem cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt'
 
 中文:
 定理 cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt'
-  结论: [Nontrivial R]
+  结论: [非平凡 R]
   证明: by
   simpa using cardinal_eq_cardinal_transcendence_basis_of_aleph0_lt v' hv hR hK
 
@@ -272,7 +272,7 @@ theorem ringEquiv_of_equiv_of_charZero
 
 中文:
 定理 ringEquiv_of_equiv_of_charZero
-  结论: [CharZero K] [CharZero L] (hK : ℵ₀ < #K)
+  结论: [特征零 K] [特征零 L] (hK : ℵ₀ < #K)
   证明: by
   obtain ⟨s, hs⟩ := exists_isTranscendenceBasis Int K
   obtain ⟨t, ht⟩ := exists_isTranscendenceBasis Int L
@@ -313,7 +313,7 @@ theorem ringEquiv_of_Cardinal_eq_of_charP
 
 中文:
 定理 ringEquiv_of_Cardinal_eq_of_charP
-  结论: (p : 自然数) [Fact p.Prime] [CharP K p] [CharP L p]
+  结论: (p : 自然数) [Fact p.素] [特征p K p] [特征p L p]
   证明: by
   let : Algebra (ZMod p) K := ZMod.algebra _ _
   let : Algebra (ZMod p) L := ZMod.algebra _ _
@@ -355,7 +355,7 @@ theorem ringEquiv_of_equiv_of_char_eq
 
 中文:
 定理 ringEquiv_of_equiv_of_char_eq
-  结论: (p : 自然数) [CharP K p] [CharP L p] (hK : ℵ₀ < #K)
+  结论: (p : 自然数) [特征p K p] [特征p L p] (hK : ℵ₀ < #K)
   证明: by
   rcases CharP.char_is_prime_or_zero K p with (hp | hp)
   · have : Fact p.Prime := ⟨hp⟩

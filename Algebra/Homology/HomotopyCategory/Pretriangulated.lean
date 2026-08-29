@@ -61,7 +61,7 @@ definition triangle
 
 中文:
 定义 triangle
-  签名: : Triangle (CochainComplex C 整数)
+  签名: : Triangle (上链复形 C 整数)
   定义体: Triangle.mk φ (inr φ) (Cocycle.homOf ((-fst φ).rightShift 1 0 (zero_add 1)))
 
 Depends on / 依赖: Cocycle, Cocycle.homOf, Triangle, Triangle.mk, rightShift, zero_add
@@ -173,7 +173,7 @@ abbreviation triangleh
 
 中文:
 缩写 triangleh
-  签名: : Triangle (HomotopyCategory C (ComplexShape.up 整数))
+  签名: : Triangle (HomotopyCategory C (余mplexShape.up 整数))
   定义体: (HomotopyCategory.quotient _ _).mapTriangle.obj (triangle φ)
 
 Depends on / 依赖: HomotopyCategory, HomotopyCategory.quotient, mapTriangle, mapTriangle.obj, quotient, triangle
@@ -192,7 +192,7 @@ definition homotopyToZeroOfId
 
 中文:
 定义 homotopyToZeroOfId
-  签名: : Homotopy (𝟙 (mappingCone (𝟙 K))) 0
+  签名: : 同伦 (𝟙 (mappingCone (𝟙 K))) 0
   定义体: descHomotopy (𝟙 K) _ _ 0 (inl _) (by simp) (by simp)
 
 Depends on / 依赖: descHomotopy
@@ -392,7 +392,7 @@ lemma map_eq_mapOfHomotopy
 
 中文:
 引理 map_eq_mapOfHomotopy
-  结论: map φ₁ φ₂ a b comm = mapOfHomotopy (Homotopy.ofEq comm)
+  结论: map φ₁ φ₂ a b comm = mapOfHomotopy (同伦.ofEq comm)
   证明: by
   simp [map, mapOfHomotopy]
 
@@ -1036,7 +1036,7 @@ definition distinguishedTriangles
 
 中文:
 定义 distinguishedTriangles
-  签名: : Set (Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  签名: : 集合 (Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   定义体: {T | exists (X Y : CochainComplex C Int) (φ : X ⟶ Y),
     Nonempty (T ≅ CochainComplex.mappingCone.triangleh φ)}
 
@@ -1060,7 +1060,7 @@ lemma isomorphic_distinguished
 
 中文:
 引理 isomorphic_distinguished
-  结论: (T₁ : Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  结论: (T₁ : Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   证明: by
   obtain ⟨X, Y, f, ⟨e'⟩⟩ := hT₁
   exact ⟨X, Y, f, ⟨e ≪≫ e'⟩⟩
@@ -1089,7 +1089,7 @@ lemma contractible_distinguished
 
 中文:
 引理 contractible_distinguished
-  条件: (X : HomotopyCategory C (ComplexShape.up 整数))
+  条件: (X : HomotopyCategory C (余mplexShape.up 整数))
   证明: by
   obtain ⟨X⟩ := X
   refine ⟨_, _, 𝟙 X, ⟨?_⟩⟩
@@ -1119,7 +1119,7 @@ lemma distinguished_cocone_triangle
 
 中文:
 引理 distinguished_cocone_triangle
-  条件: {X Y : HomotopyCategory C (ComplexShape.up 整数)} (f : X ⟶ Y)
+  条件: {X Y : HomotopyCategory C (余mplexShape.up 整数)} (f : X ⟶ Y)
   证明: by
   obtain ⟨f, rfl⟩ := (quotient _ _).map_surjective f
   exact ⟨_, _, _, ⟨_, _, f, ⟨Iso.refl _⟩⟩⟩
@@ -1144,7 +1144,7 @@ lemma rotate_distinguished_triangle'
 
 中文:
 引理 rotate_distinguished_triangle'
-  结论: (T : Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  结论: (T : Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   证明: by
   obtain ⟨K, L, φ, ⟨e⟩⟩ := hT
   exact ⟨_, _, _, ⟨(rotate _).mapIso e ≪≫ CochainComplex.mappingCone.rotateTrianglehIso φ⟩⟩
@@ -1168,7 +1168,7 @@ lemma shift_distinguished_triangle
 
 中文:
 引理 shift_distinguished_triangle
-  结论: (T : Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  结论: (T : Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   证明: by
   obtain ⟨K, L, φ, ⟨e⟩⟩ := hT
   exact ⟨_, _, _, ⟨Functor.mapIso _ e ≪≫ CochainComplex.mappingCone.shiftTrianglehIso φ n⟩⟩
@@ -1194,7 +1194,7 @@ lemma invRotate_distinguished_triangle'
 
 中文:
 引理 invRotate_distinguished_triangle'
-  结论: (T : Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  结论: (T : Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   证明: isomorphic_distinguished _
     (shift_distinguished_triangle _ (rotate_distinguished_triangle' _
       (rotate_distinguished_triangle' _ hT)) _) _
@@ -1224,7 +1224,7 @@ lemma rotate_distinguished_triangle
 
 中文:
 引理 rotate_distinguished_triangle
-  条件: (T : Triangle (HomotopyCategory C (ComplexShape.up 整数)))
+  条件: (T : Triangle (HomotopyCategory C (余mplexShape.up 整数)))
   证明: by
   constructor
   · exact rotate_distinguished_triangle' T
@@ -1326,7 +1326,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pretriangulated (HomotopyCategory C (ComplexShape.up 整数))
+  签名: 预三角 (HomotopyCategory C (余mplexShape.up 整数))
   定义体: Pretriangulated.distinguishedTriangles C
   isomorphic_distinguished := Pretriangulated.isomorphic_distinguished
   contractible_distinguished := Pretriangulated.contractible_distinguished
@@ -1356,7 +1356,7 @@ lemma mappingCone_triangleh_distinguished
 
 中文:
 引理 mappingCone_triangleh_distinguished
-  条件: {X Y : CochainComplex C 整数} (f : X ⟶ Y)
+  条件: {X Y : 上链复形 C 整数} (f : X ⟶ Y)
   证明: ⟨_, _, f, ⟨Iso.refl _⟩⟩
 
 Depends on / 依赖: Iso.refl

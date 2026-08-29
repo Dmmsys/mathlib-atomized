@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChartedSpace Complex ℍ
+  签名: Charted空间 复形 ℍ
   定义体: isOpenEmbedding_coe.singletonChartedSpace
 
 Depends on / 依赖: isOpenEmbedding_coe, isOpenEmbedding_coe.singletonChartedSpace, singletonChartedSpace
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsManifold 𝓘(Complex) ω ℍ
+  签名: 是流形 𝓘(复形) ω ℍ
   定义体: isOpenEmbedding_coe.isManifold_singleton
 
 Depends on / 依赖: isManifold_singleton, isOpenEmbedding_coe, isOpenEmbedding_coe.isManifold_singleton
@@ -81,7 +81,7 @@ theorem contMDiff_coe
 
 中文:
 定理 contMDiff_coe
-  结论: CMDiff n ((↑) : ℍ -> Complex)
+  结论: CMDiff n ((↑) : ℍ -> 复形)
   证明: fun _ => contMDiffAt_extChartAt
 
 Depends on / 依赖: contMDiffAt_extChartAt
@@ -99,7 +99,7 @@ theorem mdifferentiable_coe
 
 中文:
 定理 mdifferentiable_coe
-  结论: MDiff ((↑) : ℍ -> Complex)
+  结论: MDiff ((↑) : ℍ -> 复形)
   证明: contMDiff_coe.mdifferentiable one_ne_zero
 
 Depends on / 依赖: contMDiff_coe, contMDiff_coe.mdifferentiable, mdifferentiable, one_ne_zero
@@ -126,7 +126,7 @@ lemma contMDiffAt_ofComplex
 
 中文:
 引理 contMDiffAt_ofComplex
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   结论: CMDiffAt n ofComplex z
   证明: by
   rw [contMDiffAt_iff]
@@ -161,7 +161,7 @@ lemma mdifferentiableAt_ofComplex
 
 中文:
 引理 mdifferentiableAt_ofComplex
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   结论: MDiffAt ofComplex z
   证明: (contMDiffAt_ofComplex hz).mdifferentiableAt one_ne_zero
 
@@ -184,7 +184,7 @@ lemma contMDiffAt_iff
 
 中文:
 引理 contMDiffAt_iff
-  条件: {f : ℍ -> Complex} {τ : ℍ}
+  条件: {f : ℍ -> 复形} {τ : ℍ}
   证明: by
   rw [← contMDiffAt_iff_contDiffAt]
   refine ⟨fun hf => ?_, fun hf => ?_⟩
@@ -214,7 +214,7 @@ lemma mdifferentiableAt_iff
 
 中文:
 引理 mdifferentiableAt_iff
-  条件: {f : ℍ -> Complex} {τ : ℍ}
+  条件: {f : ℍ -> 复形} {τ : ℍ}
   证明: by
   rw [← mdifferentiableAt_iff_differentiableAt]
   refine ⟨fun hf => ?_, fun hf => ?_⟩
@@ -242,7 +242,7 @@ fun h ⟨z, hz⟩ => mdifferentiableAt_iff.mpr (h z hz).differentiableAt
 
 中文:
 引理 mdifferentiable_iff
-  条件: {f : ℍ -> Complex}
+  条件: {f : ℍ -> 复形}
   证明: ⟨fun h z hz => (mdifferentiableAt_iff.mp (h ⟨z, hz⟩)).differentiableWithinAt,
 fun h ⟨z, hz⟩ => mdifferentiableAt_iff.mpr (h z hz).differentiableAt
  isOpen_upperHalfPlaneSet.mem_nhds hz⟩
@@ -266,7 +266,7 @@ lemma contMDiff_num
 
 中文:
 引理 contMDiff_num
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: CMDiff n (fun τ : ℍ => num g τ)
   证明: (contMDiff_const.mul contMDiff_coe).add contMDiff_const
 
@@ -286,7 +286,7 @@ lemma contMDiff_denom
 
 中文:
 引理 contMDiff_denom
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: CMDiff n (fun τ : ℍ => denom g τ)
   证明: (contMDiff_const.mul contMDiff_coe).add contMDiff_const
 
@@ -310,8 +310,8 @@ lemma contMDiff_denom_zpow
 
 中文:
 引理 contMDiff_denom_zpow
-  条件: (g : GL (Fin 2) 实数) (k : 整数)
-  结论: CMDiff n (denom g · ^ k : ℍ -> Complex)
+  条件: (g : GL (有限集 2) 实数) (k : 整数)
+  结论: CMDiff n (denom g · ^ k : ℍ -> 复形)
   证明: by
   intro τ
   have : AnalyticAt Complex (· ^ k) (denom g τ) := (differentiableOn_zpow k _ (by tauto)).analyticOnNhd
@@ -338,7 +338,7 @@ lemma contMDiff_inv_denom
 
 中文:
 引理 contMDiff_inv_denom
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: CMDiff n (fun τ : ℍ => (denom g τ)⁻¹)
   证明: by
   simpa using contMDiff_denom_zpow g (-1)
@@ -362,7 +362,7 @@ lemma contMDiff_smul
 
 中文:
 引理 contMDiff_smul
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.det.val)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.det.val)
   结论: CMDiff n (fun τ : ℍ => g • τ)
   证明: by
   intro τ
@@ -387,7 +387,7 @@ lemma mdifferentiable_num
 
 中文:
 引理 mdifferentiable_num
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: MDiff (fun τ : ℍ => num g τ)
   证明: (contMDiff_num g).mdifferentiable one_ne_zero
 
@@ -407,7 +407,7 @@ lemma mdifferentiable_denom
 
 中文:
 引理 mdifferentiable_denom
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: MDiff (fun τ : ℍ => denom g τ)
   证明: (contMDiff_denom g).mdifferentiable one_ne_zero
 
@@ -427,8 +427,8 @@ lemma mdifferentiable_denom_zpow
 
 中文:
 引理 mdifferentiable_denom_zpow
-  条件: (g : GL (Fin 2) 实数) (k : 整数)
-  结论: MDiff (denom g · ^ k : ℍ -> Complex)
+  条件: (g : GL (有限集 2) 实数) (k : 整数)
+  结论: MDiff (denom g · ^ k : ℍ -> 复形)
   证明: (contMDiff_denom_zpow g k).mdifferentiable one_ne_zero
 
 Depends on / 依赖: contMDiff_denom_zpow, mdifferentiable, one_ne_zero
@@ -447,7 +447,7 @@ lemma mdifferentiable_inv_denom
 
 中文:
 引理 mdifferentiable_inv_denom
-  条件: (g : GL (Fin 2) 实数)
+  条件: (g : GL (有限集 2) 实数)
   结论: MDiff (fun τ : ℍ => (denom g τ)⁻¹)
   证明: (contMDiff_inv_denom g).mdifferentiable one_ne_zero
 
@@ -467,7 +467,7 @@ lemma mdifferentiable_smul
 
 中文:
 引理 mdifferentiable_smul
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.det.val)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.det.val)
   结论: MDiff (fun τ : ℍ => g • τ)
   证明: (contMDiff_smul hg).mdifferentiable one_ne_zero
 
@@ -492,7 +492,7 @@ lemma eq_zero_of_frequently
 
 中文:
 引理 eq_zero_of_frequently
-  条件: {f : ℍ -> Complex} (hf : MDiff f) {τ : ℍ} (hτ : 存在ᶠ z in 𝓝[!=] τ, f z = 0)
+  条件: {f : ℍ -> 复形} (hf : MDiff f) {τ : ℍ} (hτ : 存在ᶠ z in 𝓝[!=] τ, f z = 0)
   证明: by
   rw [mdifferentiable_iff] at hf
   have := hf.analyticOnNhd isOpen_upperHalfPlaneSet
@@ -529,7 +529,7 @@ lemma mul_eq_zero_iff
 
 中文:
 引理 mul_eq_zero_iff
-  条件: {f g : ℍ -> Complex} (hf : MDiff f) (hg : MDiff g)
+  条件: {f g : ℍ -> 复形} (hf : MDiff f) (hg : MDiff g)
   结论: f * g = 0 ↔ f = 0 ∨ g = 0
   证明: ⟨fun hfg => (frequently_or_distrib.mp <| .of_forall <| by simpa using congrFun hfg).imp
     (eq_zero_of_frequently (τ := I) hf) (eq_zero_of_frequently hg), by grind⟩
@@ -554,7 +554,7 @@ have : existsᶠ τ in 𝓝[!=] I, ∏ i in s, f i τ = 0 := .of_forall by simpa
 
 中文:
 引理 prod_eq_zero_iff
-  结论: {ι : 类型} {f : ι -> ℍ -> Complex} {s : Finset ι}
+  结论: {ι : 类型} {f : ι -> ℍ -> 复形} {s : 有限集 ι}
   证明: by
   refine ⟨fun h0 => ?_, fun ⟨i, hi, hi'⟩ => Finset.prod_eq_zero hi hi'⟩
 have : existsᶠ τ in 𝓝[!=] I, ∏ i in s, f i τ = 0 := .of_forall by simpa using congrFun h0
@@ -598,7 +598,7 @@ lemma hasDerivAt_denom_zpow
 
 中文:
 引理 hasDerivAt_denom_zpow
-  条件: (g : GL (Fin 2) 实数) (k : 整数) (τ : ℍ)
+  条件: (g : GL (有限集 2) 实数) (k : 整数) (τ : ℍ)
   证明: by
   have hd : HasDerivAt (denom g ·) (g 1 0) τ := by
 .add_const (g 1 1 : Complex) .const_mul _ simpa [denom] using hasDerivAt_id _
@@ -624,7 +624,7 @@ lemma deriv_denom_zpow
 
 中文:
 引理 deriv_denom_zpow
-  条件: (g : GL (Fin 2) 实数) (k : 整数) (τ : ℍ)
+  条件: (g : GL (有限集 2) 实数) (k : 整数) (τ : ℍ)
   证明: (hasDerivAt_denom_zpow g k τ).deriv
 
 Depends on / 依赖: hasDerivAt_denom_zpow
@@ -649,7 +649,7 @@ lemma hasStrictDerivAt_smul
 
 中文:
 引理 hasStrictDerivAt_smul
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
   证明: by
   suffices HasStrictDerivAt (num g / denom g) (g.val.det / denom g τ ^ 2) τ by
     refine this.congr_of_eventuallyEq ?_
@@ -682,7 +682,7 @@ lemma deriv_smul
 
 中文:
 引理 deriv_smul
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
   证明: .deriv .hasDerivAt hasStrictDerivAt_smul hg τ
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_smul
@@ -705,7 +705,7 @@ lemma deriv_smul_ne_zero
 
 中文:
 引理 deriv_smul_ne_zero
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
   证明: by
   rw [deriv_smul hg]
   apply div_ne_zero
@@ -735,7 +735,7 @@ lemma analyticAt_smul
 
 中文:
 引理 analyticAt_smul
-  条件: {g : GL (Fin 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
+  条件: {g : GL (有限集 2) 实数} (hg : 0 < g.val.det) (τ : ℍ)
   证明: by
   refine DifferentiableOn.analyticAt (fun z hz => ?_) (isOpen_upperHalfPlaneSet.mem_nhds τ.im_pos)
   apply DifferentiableAt.differentiableWithinAt
@@ -768,7 +768,7 @@ lemma meromorphicOrderAt_comp_smul
 
 中文:
 引理 meromorphicOrderAt_comp_smul
-  条件: {f : ℍ -> Complex} {τ : ℍ} {g : GL (Fin 2) 实数} (hg : 0 < g.val.det)
+  条件: {f : ℍ -> 复形} {τ : ℍ} {g : GL (有限集 2) 实数} (hg : 0 < g.val.det)
   证明: by
   let G z : Complex := ↑(g • ofComplex z)
   let F z := f (ofComplex z)
@@ -808,7 +808,7 @@ definition smulFDeriv
 
 中文:
 定义 smulFDeriv
-  签名: (g : GL (Fin 2) 实数) (z : Complex)
+  签名: (g : GL (有限集 2) 实数) (z : 复形)
   定义体: (σ g) ∘L (ContinuousLinearMap.toSpanSingleton Complex (g.det.val / denom g z ^ 2)).restrictScalars Real
 
 @[simp]
@@ -833,7 +833,7 @@ theorem smulFDeriv_J_mul
 
 中文:
 定理 smulFDeriv_J_mul
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   证明: by
   ext
   by_cases hg : 0 < g.val.det
@@ -864,7 +864,7 @@ lemma det_smulFDeriv
 
 中文:
 引理 det_smulFDeriv
-  条件: (g : GL (Fin 2) 实数) (z : Complex)
+  条件: (g : GL (有限集 2) 实数) (z : 复形)
   证明: by
   simp only [smulFDeriv, σ]
   rcases g.det_ne_zero.lt_or_gt with h | h
@@ -901,7 +901,7 @@ lemma hasStrictFDerivAt_smul
 
 中文:
 引理 hasStrictFDerivAt_smul
-  条件: (g : GL (Fin 2) 实数) (τ : ℍ)
+  条件: (g : GL (有限集 2) 实数) (τ : ℍ)
   证明: by
   wlog hg : 0 < g.det.val generalizing g
   · replace hg := g.det.ne_zero.lt_or_gt.resolve_right hg

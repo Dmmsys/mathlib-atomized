@@ -69,10 +69,10 @@ structure ConvexCone
     - add_mem' : forall ⦃x⦄ (_ : x in carrier) ⦃y⦄ (_ : y in carrier), x + y in carrier
 
 中文:
-结构 ConvexCone
-  参数: [AddCommMonoid M] [SMul R M]
+结构 余nvexCone
+  参数: [加法交换幺半群 M] [标量乘法 R M]
   公理与运算 (3 个):
-    - carrier : Set M
+    - carrier : 集合 M
     - smul_mem' : 对任意 ⦃c : R⦄, 0 < c -> 对任意 ⦃x : M⦄, x in carrier -> c • x in carrier
     - add_mem' : 对任意 ⦃x⦄ (_ : x in carrier) ⦃y⦄ (_ : y in carrier), x + y in carrier
 -/
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (ConvexCone R M) M
+  签名: 集合状 (余nvexCone R M) M
   定义体: carrier
   coe_injective C₁ C₂ h := by cases C₁; congr!
 
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (ConvexCone R M)
+  签名: 偏序 (余nvexCone R M)
   定义体: .ofSetLike (ConvexCone R M) M
 
 Depends on / 依赖: ConvexCone, ofSetLike
@@ -143,7 +143,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (s : Set M) (h₁ h₂)
+  条件: (s : 集合 M) (h₁ h₂)
   结论: ↑(mk (R := R) s h₁ h₂) = s
   证明: rfl
 -/
@@ -234,7 +234,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMemClass (ConvexCone R M) M
+  签名: 加法Mem类 (余nvexCone R M) M
   定义体: add_mem' _ ha hb
 
 Depends on / 依赖: add_mem
@@ -253,7 +253,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (C : ConvexCone R M) (s : Set M) (hs : s = C)
+  签名: (C : 余nvexCone R M) (s : 集合 M) (hs : s = C)
   定义体: s
   add_mem' := hs.symm ▸ C.add_mem'
   smul_mem' := by simpa [hs] using! C.smul_mem'
@@ -274,7 +274,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  条件: (C : ConvexCone R M) (s : Set M) (hs)
+  条件: (C : 余nvexCone R M) (s : 集合 M) (hs)
   结论: C.copy s hs = C
   证明: SetLike.coe_injective hs
 
@@ -296,7 +296,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (ConvexCone R M)
+  签名: 下确界集 (余nvexCone R M)
   定义体: ⟨⋂ C in S, C, fun _r hr _x hx => mem_biInter fun C hC => C.smul_mem hr mem_iInter₂.1 hx C hC,
       fun _ hx _ hy =>
       mem_biInter fun C hC => add_mem (mem_iInter₂.1 hx C hC) (mem_iInter₂.1 hy C hC)⟩
@@ -323,8 +323,8 @@ lemma coe_sInf
 
 中文:
 引理 coe_sInf
-  条件: (S : Set (ConvexCone R M))
-  结论: ↑(sInf S) = ⋂ C in S, (C : Set M)
+  条件: (S : 集合 (余nvexCone R M))
+  结论: ↑(sInf S) = ⋂ C in S, (C : 集合 M)
   证明: rfl
 -/
 lemma coe_sInf (S : Set (ConvexCone R M)) : ↑(sInf S) = ⋂ C in S, (C : Set M) := rfl
@@ -342,7 +342,7 @@ lemma mem_sInf
 
 中文:
 引理 mem_sInf
-  条件: {S : Set (ConvexCone R M)}
+  条件: {S : 集合 (余nvexCone R M)}
   结论: x in sInf S ↔ 对任意 C in S, x in C
   证明: mem_iInter₂
 
@@ -365,8 +365,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} (f : ι -> ConvexCone R M)
-  结论: ↑(iInf f) = ⋂ i, (f i : Set M)
+  条件: {ι : 类型层*} (f : ι -> 余nvexCone R M)
+  结论: ↑(iInf f) = ⋂ i, (f i : 集合 M)
   证明: by
   simp [iInf]
 
@@ -387,7 +387,7 @@ lemma mem_iInf
 
 中文:
 引理 mem_iInf
-  条件: {ι : Sort*} {f : ι -> ConvexCone R M}
+  条件: {ι : 类型层*} {f : ι -> 余nvexCone R M}
   结论: x in iInf f ↔ 对任意 i, x in f i
   证明: mem_iInter₂.trans by simp
 -/
@@ -404,7 +404,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteSemilatticeInf (ConvexCone R M)
+  签名: 余mpleteSemilatticeInf (余nvexCone R M)
   定义体: .of_image SetLike.coe_subset_coe isGLB_biInf
 
 Depends on / 依赖: SetLike, SetLike.coe_subset_coe, coe_subset_coe, isGLB_biInf, of_image
@@ -423,7 +423,7 @@ definition hull
 
 中文:
 定义 hull
-  签名: : ConvexCone R M
+  签名: : 余nvexCone R M
   定义体: sInf {C : ConvexCone R M | s subseteq C}
 
 Depends on / 依赖: ConvexCone, subseteq
@@ -491,7 +491,7 @@ lemma gc_hull_coe
 
 中文:
 引理 gc_hull_coe
-  结论: GaloisConnection (hull R : Set M -> ConvexCone R M) (↑)
+  结论: GaloisConnection (hull R : 集合 M -> 余nvexCone R M) (↑)
   证明: fun _C _s => hull_le_iff
 
 Depends on / 依赖: hull_le_iff
@@ -512,7 +512,7 @@ choice s hs := (hull R s).copy s subset_hull.antisymm hs
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (hull R : Set M -> ConvexCone R M) (↑) where
+  签名: : Galois嵌入 (hull R : 集合 M -> 余nvexCone R M) (↑) where
   定义体: gc_hull_coe
   le_l_u _ := subset_hull
 choice s hs := (hull R s).copy s subset_hull.antisymm hs
@@ -534,7 +534,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (ConvexCone R M)
+  签名: 底元素 (余nvexCone R M)
   定义体: ⟨⟨∅, fun _ _ _ => False.elim, fun _ => False.elim⟩⟩
 
 Depends on / 依赖: False.elim
@@ -552,7 +552,7 @@ lemma notMem_bot
 
 中文:
 引理 notMem_bot
-  结论: x ∉ (⊥ : ConvexCone R M)
+  结论: x ∉ (⊥ : 余nvexCone R M)
   证明: id
 -/
 @[simp] lemma notMem_bot : x ∉ (⊥ : ConvexCone R M) := id
@@ -569,7 +569,7 @@ lemma coe_bot
 
 中文:
 引理 coe_bot
-  结论: ↑(⊥ : ConvexCone R M) = (∅ : Set M)
+  结论: ↑(⊥ : 余nvexCone R M) = (∅ : 集合 M)
   证明: rfl
 
 @[simp, norm_cast]
@@ -587,7 +587,7 @@ lemma coe_eq_empty
 
 中文:
 引理 coe_eq_empty
-  结论: (C : Set M) = ∅ ↔ C = ⊥
+  结论: (C : 集合 M) = ∅ ↔ C = ⊥
   证明: by rw [← coe_bot (R := R)]; norm_cast
 
 Depends on / 依赖: coe_bot
@@ -607,7 +607,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (ConvexCone R M)
+  签名: 完备格 (余nvexCone R M)
   定义体: ⊥
   bot_le _ := empty_subset _
   __ := instCompleteSemilatticeInf
@@ -630,7 +630,7 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  结论: (C₁ ⊓ C₂) = (C₁ inter C₂ : Set M)
+  结论: (C₁ ⊓ C₂) = (C₁ inter C₂ : 集合 M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_inf : (C₁ ⊓ C₂) = (C₁ inter C₂ : Set M) := rfl
@@ -660,7 +660,7 @@ lemma mem_top
 
 中文:
 引理 mem_top
-  结论: x in (⊤ : ConvexCone R M)
+  结论: x in (⊤ : 余nvexCone R M)
   证明: mem_univ x
 -/
 @[simp] lemma mem_top : x in (⊤ : ConvexCone R M) := mem_univ x
@@ -675,7 +675,7 @@ lemma coe_top
 
 中文:
 引理 coe_top
-  结论: ↑(⊤ : ConvexCone R M) = (univ : Set M)
+  结论: ↑(⊤ : 余nvexCone R M) = (univ : 集合 M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_top : ↑(⊤ : ConvexCone R M) = (univ : Set M) := rfl
@@ -691,7 +691,7 @@ lemma disjoint_coe
 
 中文:
 引理 disjoint_coe
-  结论: Disjoint (C₁ : Set M) C₂ ↔ Disjoint C₁ C₂
+  结论: Disjoint (C₁ : 集合 M) C₂ ↔ Disjoint C₁ C₂
   证明: by
   simp [disjoint_iff, ← coe_inf]
 -/
@@ -708,7 +708,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (ConvexCone R M)
+  签名: 可居 (余nvexCone R M)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (ConvexCone R M) := ⟨⊥⟩
@@ -729,7 +729,7 @@ theorem convex
 
 中文:
 定理 convex
-  结论: Convex R (C : Set M)
+  结论: 凸 R (C : 集合 M)
   证明: convex_iff_forall_pos.2 fun _ hx _ hy _ _ ha hb _ => add_mem (C.smul_mem ha hx) (C.smul_mem hb hy)
 -/
 protected theorem convex : Convex R (C : Set M) :=
@@ -757,7 +757,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : M ->ₗ[R] N) (C : ConvexCone R M)
+  签名: (f : M ->ₗ[R] N) (C : 余nvexCone R M)
   定义体: f '' C
   smul_mem' := fun c hc _ ⟨x, hx, hy⟩ => hy ▸ f.map_smul c x ▸ mem_image_of_mem f (C.smul_mem hc hx)
   add_mem' := fun _ ⟨x₁, hx₁, hy₁⟩ _ ⟨x₂, hx₂, hy₂⟩ =>
@@ -785,8 +785,8 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  条件: (C : ConvexCone R M) (f : M ->ₗ[R] N)
-  结论: (C.map f : Set N) = f '' C
+  条件: (C : 余nvexCone R M) (f : M ->ₗ[R] N)
+  结论: (C.map f : 集合 N) = f '' C
   证明: rfl
 
 @[simp]
@@ -806,7 +806,7 @@ theorem mem_map
 
 中文:
 定理 mem_map
-  条件: {f : M ->ₗ[R] N} {C : ConvexCone R M} {y : N}
+  条件: {f : M ->ₗ[R] N} {C : 余nvexCone R M} {y : N}
   结论: y in C.map f ↔ 存在 x in C, f x = y
   证明: Set.mem_image f C y
 
@@ -827,7 +827,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  条件: (g : N ->ₗ[R] O) (f : M ->ₗ[R] N) (C : ConvexCone R M)
+  条件: (g : N ->ₗ[R] O) (f : M ->ₗ[R] N) (C : 余nvexCone R M)
   证明: SetLike.coe_injective image_image g f C
 
 @[simp]
@@ -850,8 +850,8 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: (C : ConvexCone R M)
-  结论: C.map LinearMap.id = C
+  条件: (C : 余nvexCone R M)
+  结论: C.map 线性映射.id = C
   证明: SetLike.coe_injective image_id _
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective, image_id
@@ -877,7 +877,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : M ->ₗ[R] N) (C : ConvexCone R N)
+  签名: (f : M ->ₗ[R] N) (C : 余nvexCone R N)
   定义体: f ⁻¹' C
   smul_mem' c hc x hx := by
     rw [mem_preimage]; rw [f.map_smul c]
@@ -911,8 +911,8 @@ theorem coe_comap
 
 中文:
 定理 coe_comap
-  条件: (f : M ->ₗ[R] N) (C : ConvexCone R N)
-  结论: (C.comap f : Set M) = f ⁻¹' C
+  条件: (f : M ->ₗ[R] N) (C : 余nvexCone R N)
+  结论: (C.comap f : 集合 M) = f ⁻¹' C
   证明: rfl
 
 @[simp]
@@ -932,8 +932,8 @@ theorem comap_id
 
 中文:
 定理 comap_id
-  条件: (C : ConvexCone R M)
-  结论: C.comap LinearMap.id = C
+  条件: (C : 余nvexCone R M)
+  结论: C.comap 线性映射.id = C
   证明: rfl
 -/
 theorem comap_id (C : ConvexCone R M) : C.comap LinearMap.id = C :=
@@ -951,7 +951,7 @@ theorem comap_comap
 
 中文:
 定理 comap_comap
-  条件: (g : N ->ₗ[R] O) (f : M ->ₗ[R] N) (C : ConvexCone R O)
+  条件: (g : N ->ₗ[R] O) (f : M ->ₗ[R] N) (C : 余nvexCone R O)
   证明: rfl
 
 @[simp]
@@ -972,7 +972,7 @@ theorem mem_comap
 
 中文:
 定理 mem_comap
-  条件: {f : M ->ₗ[R] N} {C : ConvexCone R N} {x : M}
+  条件: {f : M ->ₗ[R] N} {C : 余nvexCone R N} {x : M}
   结论: x in C.comap f ↔ f x in C
   证明: Iff.rfl
 
@@ -1038,7 +1038,7 @@ definition Pointed
 
 中文:
 定义 Pointed
-  签名: (C : ConvexCone R M)
+  签名: (C : 余nvexCone R M)
   定义体: (0 : M) in C
 -/
 def Pointed (C : ConvexCone R M) : Prop := (0 : M) in C
@@ -1053,7 +1053,7 @@ definition Blunt
 
 中文:
 定义 Blunt
-  签名: (C : ConvexCone R M)
+  签名: (C : 余nvexCone R M)
   定义体: (0 : M) ∉ C
 -/
 def Blunt (C : ConvexCone R M) : Prop := (0 : M) ∉ C
@@ -1137,8 +1137,8 @@ definition Flat
   body: exists x in C, x != (0 : G) ∧ -x in C
 
 中文:
-定义 Flat
-  签名: (C : ConvexCone R G)
+定义 平坦
+  签名: (C : 余nvexCone R G)
   定义体: exists x in C, x != (0 : G) ∧ -x in C
 -/
 def Flat (C : ConvexCone R G) : Prop := exists x in C, x != (0 : G) ∧ -x in C
@@ -1153,7 +1153,7 @@ definition Salient
 
 中文:
 定义 Salient
-  签名: (C : ConvexCone R G)
+  签名: (C : 余nvexCone R G)
   定义体: forall x in C, x != (0 : G) -> -x ∉ C
 -/
 def Salient (C : ConvexCone R G) : Prop := forall x in C, x != (0 : G) -> -x ∉ C
@@ -1168,7 +1168,7 @@ theorem salient_iff_not_flat
 
 中文:
 定理 salient_iff_not_flat
-  结论: C.Salient ↔ ¬ C.Flat
+  结论: C.Salient ↔ ¬ C.平坦
   证明: by simp [Salient, Flat]
 
 Depends on / 依赖: Salient
@@ -1184,9 +1184,9 @@ theorem Flat.mono
   statement: C₁.Flat -> C₂.Flat
 
 中文:
-定理 Flat.mono
+定理 平坦.mono
   条件: (h : C₁ <= C₂)
-  结论: C₁.Flat -> C₂.Flat
+  结论: C₁.平坦 -> C₂.平坦
 -/
 theorem Flat.mono (h : C₁ <= C₂) : C₁.Flat -> C₂.Flat
   | ⟨x, hxS, hx, hnxS⟩ => ⟨x, h hxS, hx, h hnxS⟩
@@ -1222,8 +1222,8 @@ theorem Flat.pointed
   exact add_mem hx hxneg
 
 中文:
-定理 Flat.pointed
-  条件: (hC : C.Flat)
+定理 平坦.pointed
+  条件: (hC : C.平坦)
   结论: C.Pointed
   证明: by
   obtain ⟨x, hx, _, hxneg⟩ := hC
@@ -1274,7 +1274,7 @@ definition toPreorder
 
 中文:
 定义 toPreorder
-  签名: (C : ConvexCone R G) (h₁ : C.Pointed)
+  签名: (C : 余nvexCone R G) (h₁ : C.Pointed)
   定义体: y - x in C
   le_refl x := by rw [sub_self x]; exact h₁
   le_trans x y z xy zy := by simpa using add_mem zy xy
@@ -1303,7 +1303,7 @@ definition toPartialOrder
 
 中文:
 定义 toPartialOrder
-  签名: (C : ConvexCone R G) (h₁ : C.Pointed) (h₂ : C.Salient)
+  签名: (C : 余nvexCone R G) (h₁ : C.Pointed) (h₂ : C.Salient)
   定义体: { toPreorder C h₁ with
     le_antisymm := by
       intro a b ab ba
@@ -1338,7 +1338,7 @@ lemma to_isOrderedAddMonoid
 
 中文:
 引理 to_isOrderedAddMonoid
-  条件: (C : ConvexCone R G) (h₁ : C.Pointed) (h₂ : C.Salient)
+  条件: (C : 余nvexCone R G) (h₁ : C.Pointed) (h₂ : C.Salient)
   证明: toPartialOrder C h₁ h₂
     IsOrderedAddMonoid G where
   __ := toPartialOrder C h₁ h₂
@@ -1370,7 +1370,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ConvexCone R M)
+  签名: 零 (余nvexCone R M)
   定义体: ⟨⟨0, fun _ _ => by simp, fun _ => by simp⟩⟩
 -/
 instance : Zero (ConvexCone R M) :=
@@ -1386,7 +1386,7 @@ lemma mem_zero
 
 中文:
 引理 mem_zero
-  结论: x in (0 : ConvexCone R M) ↔ x = 0
+  结论: x in (0 : 余nvexCone R M) ↔ x = 0
   证明: .rfl
 -/
 @[simp] lemma mem_zero : x in (0 : ConvexCone R M) ↔ x = 0 := .rfl
@@ -1401,7 +1401,7 @@ lemma coe_zero
 
 中文:
 引理 coe_zero
-  结论: ((0 : ConvexCone R M) : Set M) = 0
+  结论: ((0 : 余nvexCone R M) : 集合 M) = 0
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_zero : ((0 : ConvexCone R M) : Set M) = 0 := rfl
@@ -1416,7 +1416,7 @@ theorem pointed_zero
 
 中文:
 定理 pointed_zero
-  结论: (0 : ConvexCone R M).Pointed
+  结论: (0 : 余nvexCone R M).Pointed
   证明: by rw [Pointed, mem_zero]
 
 Depends on / 依赖: Pointed, mem_zero
@@ -1441,7 +1441,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add (ConvexCone R M) where
+  签名: : 加法 (余nvexCone R M) where
   定义体: {
     carrier := C₁ + C₂
     smul_mem' := by
@@ -1475,8 +1475,8 @@ lemma coe_add
 
 中文:
 引理 coe_add
-  条件: (C₁ C₂ : ConvexCone R M)
-  结论: ↑(C₁ + C₂) = (C₁ + C₂ : Set M)
+  条件: (C₁ C₂ : 余nvexCone R M)
+  结论: ↑(C₁ + C₂) = (C₁ + C₂ : 集合 M)
   证明: rfl
 -/
 @[simp, norm_cast] lemma coe_add (C₁ C₂ : ConvexCone R M) : ↑(C₁ + C₂) = (C₁ + C₂ : Set M) := rfl
@@ -1506,7 +1506,7 @@ instance instAddZeroClass
 
 中文:
 实例 instAddZeroClass
-  签名: : AddZeroClass (ConvexCone R M) where
+  签名: : 加法零类 (余nvexCone R M) where
   定义体: by ext; simp
   add_zero _ := by ext; simp
 
@@ -1527,7 +1527,7 @@ add_comm _ _ := SetLike.coe_injective add_comm _ _
 
 中文:
 实例 instAddCommSemigroup
-  签名: : AddCommSemigroup (ConvexCone R M) where
+  签名: : 加法交换半群 (余nvexCone R M) where
   定义体: SetLike.coe_injective add_assoc _ _ _
 add_comm _ _ := SetLike.coe_injective add_comm _ _
 
@@ -1553,7 +1553,7 @@ definition IsReproducing
 
 中文:
 定义 IsReproducing
-  签名: (C : ConvexCone R M)
+  签名: (C : 余nvexCone R M)
   定义体: (C : Set M) - (C : Set M) = Set.univ
 
 Depends on / 依赖: Set.univ
@@ -1571,7 +1571,7 @@ theorem IsReproducing.of_univ_subset
 
 中文:
 定理 IsReproducing.of_univ_subset
-  结论: {C : ConvexCone R M}
+  结论: {C : 余nvexCone R M}
   证明: Set.eq_univ_iff_forall.mpr fun _ => h (Set.mem_univ _)
 
 Depends on / 依赖: Set.eq_univ_iff_forall.mpr, Set.mem_univ, eq_univ_iff_forall, mem_univ
@@ -1590,7 +1590,7 @@ lemma IsReproducing.sub_eq_univ
 
 中文:
 引理 IsReproducing.sub_eq_univ
-  条件: {C : ConvexCone R M} (hC : C.IsReproducing)
+  条件: {C : 余nvexCone R M} (hC : C.IsReproducing)
   证明: hC
 -/
 lemma IsReproducing.sub_eq_univ {C : ConvexCone R M} (hC : C.IsReproducing) :
@@ -1617,8 +1617,8 @@ definition IsGenerating
   body: Submodule.span R (C : Set M) = ⊤
 
 中文:
-定义 IsGenerating
-  签名: (C : ConvexCone R M)
+定义 是Generating
+  签名: (C : 余nvexCone R M)
   定义体: Submodule.span R (C : Set M) = ⊤
 
 Depends on / 依赖: Submodule, Submodule.span
@@ -1638,8 +1638,8 @@ theorem IsGenerating.of_top_le_span
   proof: eq_top_iff.mpr h
 
 中文:
-定理 IsGenerating.of_top_le_span
-  条件: {C : ConvexCone R M} (h : ⊤ <= Submodule.span R (C : Set M))
+定理 是Generating.of_top_le_span
+  条件: {C : 余nvexCone R M} (h : ⊤ <= 子模.span R (C : 集合 M))
   证明: eq_top_iff.mpr h
 
 Depends on / 依赖: eq_top_iff, eq_top_iff.mpr
@@ -1659,8 +1659,8 @@ lemma IsGenerating.span_eq_top
   proof: hC
 
 中文:
-引理 IsGenerating.span_eq_top
-  条件: {C : ConvexCone R M} (hC : C.IsGenerating)
+引理 是Generating.span_eq_top
+  条件: {C : 余nvexCone R M} (hC : C.是Generating)
   证明: hC
 -/
 lemma IsGenerating.span_eq_top {C : ConvexCone R M} (hC : C.IsGenerating) :
@@ -1678,8 +1678,8 @@ lemma IsGenerating.top_le_span
   proof: hC.span_eq_top.ge
 
 中文:
-引理 IsGenerating.top_le_span
-  条件: {C : ConvexCone R M} (hC : C.IsGenerating)
+引理 是Generating.top_le_span
+  条件: {C : 余nvexCone R M} (hC : C.是Generating)
   证明: hC.span_eq_top.ge
 
 Depends on / 依赖: hC.span_eq_top.ge, span_eq_top
@@ -1701,7 +1701,7 @@ theorem isGenerating_top
 
 中文:
 定理 isGenerating_top
-  结论: (⊤ : ConvexCone R M).IsGenerating
+  结论: (⊤ : 余nvexCone R M).是Generating
   证明: by
   simp
 -/
@@ -1722,7 +1722,7 @@ theorem isGenerating_bot_iff
 
 中文:
 定理 isGenerating_bot_iff
-  结论: (⊥ : ConvexCone R M).IsGenerating ↔ Subsingleton M
+  结论: (⊥ : 余nvexCone R M).是Generating ↔ 子单例 M
   证明: by
   simpa only [IsGenerating, coe_bot, Submodule.span_empty, ← Submodule.subsingleton_iff R] using
     subsingleton_iff_bot_eq_top
@@ -1746,8 +1746,8 @@ theorem isGenerating_bot
 
 中文:
 定理 isGenerating_bot
-  条件: [Subsingleton M]
-  结论: (⊥ : ConvexCone R M).IsGenerating
+  条件: [子单例 M]
+  结论: (⊥ : 余nvexCone R M).是Generating
   证明: isGenerating_bot_iff.mpr inferInstance
 
 Depends on / 依赖: isGenerating_bot_iff, isGenerating_bot_iff.mpr
@@ -1768,8 +1768,8 @@ theorem IsGenerating.mono
   exact hgen.trans (Submodule.span_mono h)
 
 中文:
-定理 IsGenerating.mono
-  条件: {C₁ C₂ : ConvexCone R M} (h : C₁ <= C₂) (hgen : C₁.IsGenerating)
+定理 是Generating.mono
+  条件: {C₁ C₂ : 余nvexCone R M} (h : C₁ <= C₂) (hgen : C₁.是Generating)
   证明: by
   rw [IsGenerating]; rw [← top_le_iff] at hgen ⊢
   exact hgen.trans (Submodule.span_mono h)
@@ -1798,7 +1798,7 @@ theorem IsReproducing.span_eq_top
 
 中文:
 定理 IsReproducing.span_eq_top
-  结论: {R : 类型} {M : 类型} [Ring R] [PartialOrder R]
+  结论: {R : 类型} {M : 类型} [环 R] [偏序 R]
   证明: by
   rw [eq_top_iff]
   rintro x -
@@ -1837,7 +1837,7 @@ theorem IsReproducing.of_span_eq_top
 
 中文:
 定理 IsReproducing.of_span_eq_top
-  结论: {R : 类型} {M : 类型} [Ring R] [LinearOrder R]
+  结论: {R : 类型} {M : 类型} [环 R] [线性序 R]
   证明: by
   rw [IsReproducing]; rw [Set.eq_univ_iff_forall]
   intro x
@@ -1899,7 +1899,7 @@ alias isGenerating_iff_isReproducing := IsReproducing.span_eq_top
 
 中文:
 定理 span_eq_top_iff_isReproducing
-  结论: {R : 类型} {M : 类型} [Ring R] [LinearOrder R]
+  结论: {R : 类型} {M : 类型} [环 R] [线性序 R]
   证明: ⟨.of_span_eq_top, IsReproducing.span_eq_top⟩
 
 @[deprecated (since := "2026-03-30")]
@@ -1943,7 +1943,7 @@ lemma mem_hull_of_convex
 
 中文:
 引理 mem_hull_of_convex
-  条件: (hs : Convex 𝕜 s)
+  条件: (hs : 凸 𝕜 s)
   结论: x in hull 𝕜 s ↔ 存在 r : 𝕜, 0 < r ∧ x in r • s where
   证明: hull_min (C := {
               carrier := {y | exists r : 𝕜, 0 < r ∧ y in r • s}
@@ -1984,7 +1984,7 @@ lemma coe_hull_of_convex
 
 中文:
 引理 coe_hull_of_convex
-  条件: (hs : Convex 𝕜 s)
+  条件: (hs : 凸 𝕜 s)
   结论: hull 𝕜 s = {x | 存在 r : 𝕜, 0 < r ∧ x in r • s}
   证明: by
   ext; exact mem_hull_of_convex hs
@@ -2009,7 +2009,7 @@ lemma disjoint_hull_left_of_convex
 
 中文:
 引理 disjoint_hull_left_of_convex
-  条件: (hs : Convex 𝕜 s)
+  条件: (hs : 凸 𝕜 s)
   结论: Disjoint (hull 𝕜 s) C ↔ Disjoint s C where
   证明: by rw [← disjoint_coe]; exact .mono_left subset_hull
   mpr := by
@@ -2038,7 +2038,7 @@ lemma disjoint_hull_right_of_convex
 
 中文:
 引理 disjoint_hull_right_of_convex
-  条件: (hs : Convex 𝕜 s)
+  条件: (hs : 凸 𝕜 s)
   结论: Disjoint C (hull 𝕜 s) ↔ Disjoint ↑C s
   证明: by
   rw [disjoint_comm]; rw [disjoint_hull_left_of_convex hs]; rw [disjoint_comm]
@@ -2076,7 +2076,7 @@ definition toConvexCone
 
 中文:
 定义 toConvexCone
-  签名: (C : Submodule R M)
+  签名: (C : 子模 R M)
   定义体: C
   smul_mem' c _ _ hx := C.smul_mem c hx
   add_mem' _ hx _ hy := C.add_mem hx hy
@@ -2097,8 +2097,8 @@ lemma coe_toConvexCone
 
 中文:
 引理 coe_toConvexCone
-  条件: (C : Submodule R M)
-  结论: C.toConvexCone = (C : Set M)
+  条件: (C : 子模 R M)
+  结论: C.toConvexCone = (C : 集合 M)
   证明: rfl
 -/
 @[simp] lemma coe_toConvexCone (C : Submodule R M) : C.toConvexCone = (C : Set M) := rfl
@@ -2148,7 +2148,7 @@ lemma toConvexCone_bot
 
 中文:
 引理 toConvexCone_bot
-  结论: (⊥ : Submodule R M).toConvexCone = 0
+  结论: (⊥ : 子模 R M).toConvexCone = 0
   证明: rfl
 -/
 @[simp] lemma toConvexCone_bot : (⊥ : Submodule R M).toConvexCone = 0 := rfl
@@ -2164,7 +2164,7 @@ lemma toConvexCone_top
 
 中文:
 引理 toConvexCone_top
-  结论: (⊤ : Submodule R M).toConvexCone = ⊤
+  结论: (⊤ : 子模 R M).toConvexCone = ⊤
   证明: rfl
 
 @[simp]
@@ -2184,7 +2184,7 @@ lemma toConvexCone_inf
 
 中文:
 引理 toConvexCone_inf
-  条件: (C₁ C₂ : Submodule R M)
+  条件: (C₁ C₂ : 子模 R M)
   证明: rfl
 
 @[simp]
@@ -2204,7 +2204,7 @@ lemma pointed_toConvexCone
 
 中文:
 引理 pointed_toConvexCone
-  条件: (C : Submodule R M)
+  条件: (C : 子模 R M)
   结论: C.toConvexCone.Pointed
   证明: C.zero_mem
 
@@ -2239,7 +2239,7 @@ definition positive
 
 中文:
 定义 positive
-  签名: : ConvexCone R M where
+  签名: : 余nvexCone R M where
   定义体: Set.Ici 0
   smul_mem' _ hc _ (hx : _ <= _) := smul_nonneg hc.le hx
   add_mem' _ (hx : _ <= _) _ (hy : _ <= _) := add_nonneg hx hy
@@ -2278,7 +2278,7 @@ theorem coe_positive
 
 中文:
 定理 coe_positive
-  结论: ↑(positive R M) = Set.Ici (0 : M)
+  结论: ↑(positive R M) = 集合.左闭右无界区间 (0 : M)
   证明: rfl
 -/
 theorem coe_positive : ↑(positive R M) = Set.Ici (0 : M) :=
@@ -2295,7 +2295,7 @@ simpa using add_pos_of_nonneg_of_pos hx_nonpos hx_nonneg.lt_of_ne' hx_ne_zero
 
 中文:
 引理 salient_positive
-  结论: {G : 类型} [AddCommGroup G] [PartialOrder G] [IsOrderedAddMonoid G]
+  结论: {G : 类型} [加法交换群 G] [偏序 G] [是OrderedAdd幺半群 G]
   证明: fun x hx_nonneg hx_ne_zero hx_nonpos => lt_irrefl (0 : G) by
 simpa using add_pos_of_nonneg_of_pos hx_nonpos hx_nonneg.lt_of_ne' hx_ne_zero
 
@@ -2345,7 +2345,7 @@ definition strictlyPositive
 
 中文:
 定义 strictlyPositive
-  签名: : ConvexCone R M where
+  签名: : 余nvexCone R M where
   定义体: Set.Ioi 0
   smul_mem' _ hc _ (hx : _ < _) := smul_pos hc hx
   add_mem' _ hx _ hy := add_pos hx hy
@@ -2387,7 +2387,7 @@ theorem coe_strictlyPositive
 
 中文:
 定理 coe_strictlyPositive
-  结论: ↑(strictlyPositive R M) = Set.Ioi (0 : M)
+  结论: ↑(strictlyPositive R M) = 集合.左开右无界区间 (0 : M)
   证明: rfl
 -/
 theorem coe_strictlyPositive : ↑(strictlyPositive R M) = Set.Ioi (0 : M) :=
@@ -2476,7 +2476,7 @@ definition toCone
 
 中文:
 定义 toCone
-  签名: (s : Set M) (hs : Convex 𝕜 s)
+  签名: (s : 集合 M) (hs : 凸 𝕜 s)
   定义体: by
   apply ConvexCone.mk (⋃ (c : 𝕜) (_ : 0 < c), c • s) <;> simp only [mem_iUnion, mem_smul_set]
   · rintro c c_pos _ ⟨c', c'_pos, x, hx, rfl⟩
@@ -2595,7 +2595,7 @@ theorem toCone_isLeast
 
 中文:
 定理 toCone_isLeast
-  结论: IsLeast { t : ConvexCone 𝕜 M | s subseteq t } (hs.toCone s)
+  结论: IsLeast { t : 余nvexCone 𝕜 M | s subseteq t } (hs.toCone s)
   证明: by
   refine ⟨hs.subset_toCone, fun t ht x hx => ?_⟩
   rcases hs.mem_toCone.1 hx with ⟨c, hc, y, hy, rfl⟩
@@ -2621,7 +2621,7 @@ theorem toCone_eq_sInf
 
 中文:
 定理 toCone_eq_sInf
-  结论: hs.toCone s = sInf { t : ConvexCone 𝕜 M | s subseteq t }
+  结论: hs.toCone s = sInf { t : 余nvexCone 𝕜 M | s subseteq t }
   证明: hs.toCone_isLeast.isGLB.sInf_eq.symm
 
 Depends on / 依赖: hs.toCone_isLeast.isGLB.sInf_eq.symm, sInf_eq, toCone_isLeast
@@ -2647,7 +2647,7 @@ theorem convexHull_toCone_isLeast
 
 中文:
 定理 convexHull_toCone_isLeast
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: by
   convert! (convex_convexHull 𝕜 s).toCone_isLeast using 1
   ext t
@@ -2674,7 +2674,7 @@ theorem convexHull_toCone_eq_sInf
 
 中文:
 定理 convexHull_toCone_eq_sInf
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   证明: Eq.symm IsGLB.sInf_eq IsLeast.isGLB convexHull_toCone_isLeast s
 
 Depends on / 依赖: Eq.symm, IsGLB.sInf_eq, IsLeast, IsLeast.isGLB, convexHull_toCone_isLeast, sInf_eq

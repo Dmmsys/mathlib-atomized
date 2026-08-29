@@ -85,8 +85,8 @@ theorem exists_continuous_eLpNorm_sub_le_of_closed
   obtain ⟨V, sV, V_open, h'V, hV⟩ : exists (V : Set α), V 
 
 中文:
-定理 exists_continuous_eLpNorm_sub_le_of_closed
-  结论: [μ.OuterRegular] (hp : p != ∞) {s u : Set α}
+定理 存在_continuous_eLpNorm_sub_le_of_closed
+  结论: [μ.外正则] (hp : p != ∞) {s u : 集合 α}
   证明: by
   obtain ⟨η, η_pos, hη⟩ :
       exists η : Real>=0, 0 < η ∧ forall s : Set α, μ s <= η -> eLpNorm (s.indicator fun _x => c) p μ <= ε :=
@@ -163,7 +163,7 @@ theorem MemLp.exists_hasCompactSupport_eLpNorm_sub_le
   -- It suffices to check that the set of functions we consider approximates chara
 
 中文:
-定理 MemLp.exists_hasCompactSupport_eLpNorm_sub_le
+定理 MemLp.存在_hasCompactSupport_eLpNorm_sub_le
   证明: by
   suffices H :
       exists g : α -> E, eLpNorm (f - g) p μ <= ε ∧ Continuous g ∧ MemLp g p μ ∧ HasCompactSupport g by
@@ -239,7 +239,7 @@ theorem MemLp.exists_hasCompactSupport_integral_rpow_sub_le
   rcases hf.exists_hasCompactSupport_eLp
 
 中文:
-定理 MemLp.exists_hasCompactSupport_integral_rpow_sub_le
+定理 MemLp.存在_hasCompactSupport_integral_rpow_sub_le
   证明: by
   have I : 0 < ε ^ (1 / p) := Real.rpow_pos_of_pos hε _
   have A : ENNReal.ofReal (ε ^ (1 / p)) != 0 := by
@@ -279,7 +279,7 @@ theorem Integrable.exists_hasCompactSupport_lintegral_sub_le
   exact hf.exists_hasCompactSupport_eLpNorm_sub_le ENNReal.one_ne_top hε
 
 中文:
-定理 Integrable.exists_hasCompactSupport_lintegral_sub_le
+定理 可积.存在_hasCompactSupport_lintegral_sub_le
   证明: by
   simp only [← memLp_one_iff_integrable, ← eLpNorm_one_eq_lintegral_enorm] at hf ⊢
   exact hf.exists_hasCompactSupport_eLpNorm_sub_le ENNReal.one_ne_top hε
@@ -305,7 +305,7 @@ theorem Integrable.exists_hasCompactSupport_integral_sub_le
   simpa using hf.exists_hasCompactSupport_integral_rpow_sub_le zero_lt_one hε
 
 中文:
-定理 Integrable.exists_hasCompactSupport_integral_sub_le
+定理 可积.存在_hasCompactSupport_integral_sub_le
   证明: by
   simp only [← memLp_one_iff_integrable, ← ENNReal.ofReal_one]
     at hf ⊢
@@ -336,7 +336,7 @@ theorem MemLp.exists_boundedContinuous_eLpNorm_sub_le
   -- It suffices to check that the set of functions we cons
 
 中文:
-定理 MemLp.exists_boundedContinuous_eLpNorm_sub_le
+定理 MemLp.存在_boundedContinuous_eLpNorm_sub_le
   结论: [μ.WeaklyRegular] (hp : p != ∞) {f : α -> E}
   证明: by
   suffices H :
@@ -410,7 +410,7 @@ theorem MemLp.exists_boundedContinuous_integral_rpow_sub_le
   rcases hf.exists_boundedContinuous_eLp
 
 中文:
-定理 MemLp.exists_boundedContinuous_integral_rpow_sub_le
+定理 MemLp.存在_boundedContinuous_integral_rpow_sub_le
   结论: [μ.WeaklyRegular] {p : 实数} (hp : 0 < p)
   证明: by
   have I : 0 < ε ^ (1 / p) := Real.rpow_pos_of_pos hε _
@@ -447,7 +447,7 @@ theorem Integrable.exists_boundedContinuous_lintegral_sub_le
   exact hf.exists_boundedContinuous_eLpNorm_sub_le ENNReal.one_ne_top hε
 
 中文:
-定理 Integrable.exists_boundedContinuous_lintegral_sub_le
+定理 可积.存在_boundedContinuous_lintegral_sub_le
   结论: [μ.WeaklyRegular] {f : α -> E}
   证明: by
   simp only [← memLp_one_iff_integrable, ← eLpNorm_one_eq_lintegral_enorm] at hf ⊢
@@ -473,7 +473,7 @@ theorem Integrable.exists_boundedContinuous_integral_sub_le
   simpa using hf.exists_boundedContinuous_integral_rpow_sub_le zero_lt_one hε
 
 中文:
-定理 Integrable.exists_boundedContinuous_integral_sub_le
+定理 可积.存在_boundedContinuous_integral_sub_le
   结论: [μ.WeaklyRegular] {f : α -> E}
   证明: by
   simp only [← memLp_one_iff_integrable, ← ENNReal.ofReal_one]
@@ -574,7 +574,7 @@ theorem toLp_denseRange
 
 中文:
 定理 toLp_denseRange
-  条件: [μ.WeaklyRegular] [IsFiniteMeasure μ] (hp : p != ∞)
+  条件: [μ.WeaklyRegular] [是有限测度 μ] (hp : p != ∞)
   证明: by
   simpa only [← range_toLp p μ (𝕜 := 𝕜)]
     using! MeasureTheory.Lp.boundedContinuousFunction_dense E μ hp
@@ -603,7 +603,7 @@ theorem toLp_denseRange
 
 中文:
 定理 toLp_denseRange
-  条件: [CompactSpace α] [μ.WeaklyRegular] [IsFiniteMeasure μ] (hp : p != ∞)
+  条件: [紧空间 α] [μ.WeaklyRegular] [是有限测度 μ] (hp : p != ∞)
   证明: by
   refine (BoundedContinuousFunction.toLp_denseRange _ _ 𝕜 hp).mono ?_
   refine range_subset_iff.2 fun f => ?_

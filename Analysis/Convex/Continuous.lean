@@ -132,7 +132,7 @@ lemma ConvexOn.exists_lipschitzOnWith_of_isBounded
   exact ⟨_, hf.lipschitzOnWith_of_abs_le (sub_pos.
 
 中文:
-引理 ConvexOn.exists_lipschitzOnWith_of_isBounded
+引理 ConvexOn.存在_lipschitzOnWith_of_isBounded
   结论: (hf : ConvexOn 实数 (ball x₀ r) f) (hr : r' < r)
   证明: by
   rw [isBounded_iff_subset_ball 0] at hf'
@@ -164,7 +164,7 @@ lemma ConcaveOn.exists_lipschitzOnWith_of_isBounded
   simpa using hf.neg.exists_lipschitzOnWith_of_isBounded hr hf'
 
 中文:
-引理 ConcaveOn.exists_lipschitzOnWith_of_isBounded
+引理 ConcaveOn.存在_lipschitzOnWith_of_isBounded
   结论: (hf : ConcaveOn 实数 (ball x₀ r) f) (hr : r' < r)
   证明: by
   replace hf' : IsBounded ((-f) '' ball x₀ r) := by convert! hf'.neg; ext; simp [neg_eq_iff_eq_neg]
@@ -265,7 +265,7 @@ exact fun h => ⟨x₀, hx₀, h.continuousAt hC.mem_nhds hx₀⟩
 
 中文:
 引理 ConvexOn.continuousOn_tfae
-  条件: (hC : IsOpen C) (hC' : C.Nonempty) (hf : ConvexOn 实数 C f)
+  条件: (hC : 是开集 C) (hC' : C.非空) (hf : ConvexOn 实数 C f)
   结论: TFAE [
   证明: by
   tfae_have 1 -> 2 := LocallyLipschitzOn.continuousOn
@@ -342,7 +342,7 @@ lemma ConcaveOn.continuousOn_tfae
 
 中文:
 引理 ConcaveOn.continuousOn_tfae
-  条件: (hC : IsOpen C) (hC' : C.Nonempty) (hf : ConcaveOn 实数 C f)
+  条件: (hC : 是开集 C) (hC' : C.非空) (hf : ConcaveOn 实数 C f)
   结论: TFAE [
   证明: by
   have := hf.neg.continuousOn_tfae hC hC'
@@ -377,7 +377,7 @@ lemma ConvexOn.locallyLipschitzOn_iff_continuousOn
 
 中文:
 引理 ConvexOn.locallyLipschitzOn_iff_continuousOn
-  条件: (hC : IsOpen C) (hf : ConvexOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConvexOn 实数 C f)
   证明: by
   obtain rfl | hC' := C.eq_empty_or_nonempty
   · simp
@@ -402,7 +402,7 @@ lemma ConcaveOn.locallyLipschitzOn_iff_continuousOn
 
 中文:
 引理 ConcaveOn.locallyLipschitzOn_iff_continuousOn
-  条件: (hC : IsOpen C) (hf : ConcaveOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConcaveOn 实数 C f)
   证明: by
   simpa using hf.neg.locallyLipschitzOn_iff_continuousOn hC
 
@@ -429,7 +429,7 @@ lemma ConvexOn.locallyLipschitzOn
 
 中文:
 引理 ConvexOn.locallyLipschitzOn
-  条件: (hC : IsOpen C) (hf : ConvexOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConvexOn 实数 C f)
   证明: by
   obtain rfl | ⟨x₀, hx₀⟩ := C.eq_empty_or_nonempty
   · simp
@@ -457,7 +457,7 @@ lemma ConcaveOn.locallyLipschitzOn
 
 中文:
 引理 ConcaveOn.locallyLipschitzOn
-  条件: (hC : IsOpen C) (hf : ConcaveOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConcaveOn 实数 C f)
   证明: by simpa using hf.neg.locallyLipschitzOn hC
 -/
 protected lemma ConcaveOn.locallyLipschitzOn (hC : IsOpen C) (hf : ConcaveOn Real C f) :
@@ -473,7 +473,7 @@ lemma ConvexOn.continuousOn
 
 中文:
 引理 ConvexOn.continuousOn
-  条件: (hC : IsOpen C) (hf : ConvexOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConvexOn 实数 C f)
   证明: (hf.locallyLipschitzOn hC).continuousOn
 -/
 protected lemma ConvexOn.continuousOn (hC : IsOpen C) (hf : ConvexOn Real C f) :
@@ -489,7 +489,7 @@ lemma ConcaveOn.continuousOn
 
 中文:
 引理 ConcaveOn.continuousOn
-  条件: (hC : IsOpen C) (hf : ConcaveOn 实数 C f)
+  条件: (hC : 是开集 C) (hf : ConcaveOn 实数 C f)
   证明: (hf.locallyLipschitzOn hC).continuousOn
 -/
 protected lemma ConcaveOn.continuousOn (hC : IsOpen C) (hf : ConcaveOn Real C f) :
@@ -645,7 +645,7 @@ lemma ConvexOn.continuousOn_Ici
 
 中文:
 引理 ConvexOn.continuousOn_Ici
-  结论: {f : 实数 -> 实数} {y : 实数} (hf_cvx : ConvexOn 实数 (Ici y) f)
+  结论: {f : 实数 -> 实数} {y : 实数} (hf_cvx : ConvexOn 实数 (左闭右无界区间 y) f)
   证明: by
   intro x hx
   rcases eq_or_lt_of_le (α := Real) hx with rfl | hxy
@@ -679,7 +679,7 @@ lemma ConcaveOn.continuousOn_Ici
 
 中文:
 引理 ConcaveOn.continuousOn_Ici
-  结论: {f : 实数 -> 实数} {y : 实数} (hf_cnv : ConcaveOn 实数 (Ici y) f)
+  结论: {f : 实数 -> 实数} {y : 实数} (hf_cnv : ConcaveOn 实数 (左闭右无界区间 y) f)
   证明: by
   simpa using hf_cnv.neg.continuousOn_Ici hf_cont.neg
 
@@ -707,7 +707,7 @@ lemma ConvexOn.continuousOn_Iic
 
 中文:
 引理 ConvexOn.continuousOn_Iic
-  结论: {f : 实数 -> 实数} {y : 实数} (hf_cvx : ConvexOn 实数 (Iic y) f)
+  结论: {f : 实数 -> 实数} {y : 实数} (hf_cvx : ConvexOn 实数 (左无界右闭区间 y) f)
   证明: by
   intro x hx
   rcases eq_or_lt_of_le (α := Real) hx with rfl | hxy
@@ -741,7 +741,7 @@ lemma ConcaveOn.continuousOn_Iic
 
 中文:
 引理 ConcaveOn.continuousOn_Iic
-  结论: {f : 实数 -> 实数} {y : 实数} (hf_cnv : ConcaveOn 实数 (Iic y) f)
+  结论: {f : 实数 -> 实数} {y : 实数} (hf_cnv : ConcaveOn 实数 (左无界右闭区间 y) f)
   证明: by
   simpa using hf_cnv.neg.continuousOn_Iic hf_cont.neg
 
@@ -769,7 +769,7 @@ lemma ConvexOn.continuousOn_Ioc
 
 中文:
 引理 ConvexOn.continuousOn_Ioc
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (Ioc y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (左开右闭区间 y z) f)
   证明: by
   intro x hx
   rcases eq_or_lt_of_le (α := Real) hx.2 with rfl | hxz
@@ -804,7 +804,7 @@ lemma ConcaveOn.continuousOn_Ioc
 
 中文:
 引理 ConcaveOn.continuousOn_Ioc
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (Ioc y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (左开右闭区间 y z) f)
   证明: by
   simpa using hf_cnv.neg.continuousOn_Ioc hf_cont.neg
 
@@ -832,7 +832,7 @@ lemma ConvexOn.continuousOn_Ico
 
 中文:
 引理 ConvexOn.continuousOn_Ico
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (Ico y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (左闭右开区间 y z) f)
   证明: by
   intro x hx
   rcases eq_or_lt_of_le (α := Real) hx.1 with rfl | hyx
@@ -867,7 +867,7 @@ lemma ConcaveOn.continuousOn_Ico
 
 中文:
 引理 ConcaveOn.continuousOn_Ico
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (Ico y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (左闭右开区间 y z) f)
   证明: by
   simpa using hf_cnv.neg.continuousOn_Ico hf_cont.neg
 
@@ -896,7 +896,7 @@ lemma ConvexOn.continuousOn_Icc
 
 中文:
 引理 ConvexOn.continuousOn_Icc
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (Icc y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cvx : ConvexOn 实数 (闭区间 y z) f)
   证明: by
   suffices ContinuousOn f (Ico y z) ∧ ContinuousOn f (Ioc y z) by
     intro x hx
@@ -937,7 +937,7 @@ lemma ConcaveOn.continuousOn_Icc
 
 中文:
 引理 ConcaveOn.continuousOn_Icc
-  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (Icc y z) f)
+  结论: {f : 实数 -> 实数} {y z : 实数} (hf_cnv : ConcaveOn 实数 (闭区间 y z) f)
   证明: by
   simpa using hf_cnv.neg.continuousOn_Icc hyz hfy.neg hfz.neg
 

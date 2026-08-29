@@ -94,7 +94,7 @@ instance :
 
 中文:
 实例 :
-  签名: CreatesLimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
+  签名: 创造形状极限 J (forget₂ (FGModuleCat k) (模范畴.{v} k))
   定义体: forget₂CreatesLimit F
 -/
 instance : CreatesLimitsOfShape J (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where
@@ -115,7 +115,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasFiniteLimits (FGModuleCat.{v} k)
+  签名: 有有限极限 (FGModuleCat.{v} k)
   定义体: inferInstance
 -/
 instance : HasFiniteLimits (FGModuleCat.{v} k) where
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k))
+  签名: 保持FiniteLimits (forget₂ (FGModuleCat k) (模范畴.{v} k))
   定义体: inferInstance
 -/
 instance : PreservesFiniteLimits (forget₂ (FGModuleCat k) (ModuleCat.{v} k)) where

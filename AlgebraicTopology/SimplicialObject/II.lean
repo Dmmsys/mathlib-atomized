@@ -50,7 +50,7 @@ definition finset
 
 中文:
 定义 finset
-  签名: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2))
+  签名: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2))
   定义体: Finset.univ.filter (fun i => i = Fin.last _ ∨
     exists (h : i != Fin.last _), x <= (f (i.castPred h)).castSucc)
 
@@ -73,7 +73,7 @@ lemma mem_finset_iff
 
 中文:
 引理 mem_finset_iff
-  条件: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2)) (i : Fin (n + 2))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2)) (i : 有限集 (n + 2))
   证明: by
   simp [finset]
 
@@ -100,7 +100,7 @@ lemma last_mem_finset
 
 中文:
 引理 last_mem_finset
-  条件: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2))
   证明: by
   simp [mem_finset_iff]
 
@@ -143,7 +143,7 @@ lemma nonempty_finset
 
 中文:
 引理 nonempty_finset
-  条件: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2))
   证明: ⟨Fin.last _, by simp [mem_finset_iff]⟩
 
 Depends on / 依赖: Fin.last, mem_finset_iff
@@ -162,7 +162,7 @@ definition map'
 
 中文:
 定义 map'
-  签名: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2))
+  签名: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2))
   定义体: (finset f x).min' (nonempty_finset f x)
 
 Depends on / 依赖: finset, nonempty_finset
@@ -189,7 +189,7 @@ lemma map'_eq_last_iff
 
 中文:
 引理 map'_eq_last_iff
-  条件: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2))
   证明: by
   simp only [map', Finset.min'_eq_iff, last_mem_finset, Fin.last_le_iff, true_and]
   constructor
@@ -233,7 +233,7 @@ lemma map'_eq_castSucc_iff
 
 中文:
 引理 map'_eq_castSucc_iff
-  条件: (f : Fin (n + 1) ->o Fin (m + 1)) (x : Fin (m + 2)) (y : Fin (n + 1))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1)) (x : 有限集 (m + 2)) (y : 有限集 (n + 1))
   证明: by
   simp only [map', Finset.min'_eq_iff, castSucc_mem_finset_iff, and_congr_right_iff]
   intro h
@@ -275,7 +275,7 @@ lemma map'_last
 
 中文:
 引理 map'_last
-  条件: (f : Fin (n + 1) ->o Fin (m + 1))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1))
   证明: by
   simp [map'_eq_last_iff]
 
@@ -299,7 +299,7 @@ lemma map'_zero
 
 中文:
 引理 map'_zero
-  条件: (f : Fin (n + 1) ->o Fin (m + 1))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1))
   证明: by
   simp [← Fin.castSucc_zero, -Fin.castSucc_zero', map'_eq_castSucc_iff]
 
@@ -325,8 +325,8 @@ lemma map'_id
 
 中文:
 引理 map'_id
-  条件: (x : Fin (n + 2))
-  结论: map' OrderHom.id x = x
+  条件: (x : 有限集 (n + 2))
+  结论: map' 序态射.id x = x
   证明: by
   obtain ⟨x, rfl⟩ | rfl := Fin.eq_castSucc_or_eq_last x
   · rw [map'_eq_castSucc_iff]
@@ -356,7 +356,7 @@ lemma map'_map'
 
 中文:
 引理 map'_map'
-  结论: {p : 自然数} (f : Fin (n + 1) ->o Fin (m + 1))
+  结论: {p : 自然数} (f : 有限集 (n + 1) ->o 有限集 (m + 1))
   证明: by
   obtain ⟨x, rfl⟩ | rfl := Fin.eq_castSucc_or_eq_last x
   · obtain ⟨y, hy⟩ | hx := Fin.eq_castSucc_or_eq_last (map' g x.castSucc)
@@ -409,7 +409,7 @@ lemma map'_succAboveOrderEmb
 
 中文:
 引理 map'_succAboveOrderEmb
-  条件: {n : 自然数} (i : Fin (n + 2)) (x : Fin (n + 3))
+  条件: {n : 自然数} (i : 有限集 (n + 2)) (x : 有限集 (n + 3))
   证明: by
   obtain ⟨x, rfl⟩ | rfl := x.eq_castSucc_or_eq_last
   · by_cases! hx : x <= i
@@ -465,7 +465,7 @@ lemma map'_predAbove
 
 中文:
 引理 map'_predAbove
-  条件: {n : 自然数} (i : Fin (n + 1)) (x : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (x : 有限集 (n + 2))
   证明: by
   obtain ⟨x, rfl⟩ | rfl := x.eq_castSucc_or_eq_last
   · by_cases! hi : i < x
@@ -520,7 +520,7 @@ lemma monotone_map'
 
 中文:
 引理 monotone_map'
-  条件: (f : Fin (n + 1) ->o Fin (m + 1))
+  条件: (f : 有限集 (n + 1) ->o 有限集 (m + 1))
   证明: by
   intro x y hxy
   exact Finset.min'_subset _ (fun z hz => by
@@ -609,7 +609,7 @@ lemma II_δ
 
 中文:
 引理 II_δ
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: Quiver.Hom.unop_inj (by ext : 3; apply II.map'_succAboveOrderEmb)
 
 @[simp]
@@ -631,7 +631,7 @@ lemma II_σ
 
 中文:
 引理 II_σ
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: Quiver.Hom.unop_inj (by ext x : 3; apply II.map'_predAbove)
 
 Depends on / 依赖: II.map, Quiver, Quiver.Hom.unop_inj, _predAbove, unop_inj

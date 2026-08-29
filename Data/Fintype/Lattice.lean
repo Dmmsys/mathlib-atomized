@@ -38,8 +38,8 @@ theorem sup_univ_eq_iSup
 
 中文:
 定理 sup_univ_eq_iSup
-  条件: [CompleteLattice β] (f : α -> β)
-  结论: Finset.univ.sup f = iSup f
+  条件: [完备格 β] (f : α -> β)
+  结论: 有限集.univ.上确界 f = iSup f
   证明: (sup_eq_iSup _ f).trans congr_arg _ funext fun _ => iSup_pos (mem_univ _)
 
 Depends on / 依赖: congr_arg, iSup_pos, mem_univ, sup_eq_iSup
@@ -60,8 +60,8 @@ theorem inf_univ_eq_iInf
 
 中文:
 定理 inf_univ_eq_iInf
-  条件: [CompleteLattice β] (f : α -> β)
-  结论: Finset.univ.inf f = iInf f
+  条件: [完备格 β] (f : α -> β)
+  结论: 有限集.univ.下确界 f = iInf f
   证明: @sup_univ_eq_iSup _ βᵒᵈ _ _ (f : α -> βᵒᵈ)
 
 @[simp]
@@ -85,7 +85,7 @@ theorem fold_inf_univ
 
 中文:
 定理 fold_inf_univ
-  条件: [SemilatticeInf α] [OrderBot α] (a : α)
+  条件: [SemilatticeInf α] [有底序 α] (a : α)
   证明: eq_bot_iff.2
 ((Finset.fold_op_rel_iff_and <| @le_inf_iff α _).1 le_rfl).2 ⊥ Finset.mem_univ _
 
@@ -109,7 +109,7 @@ theorem fold_sup_univ
 
 中文:
 定理 fold_sup_univ
-  条件: [SemilatticeSup α] [OrderTop α] (a : α)
+  条件: [SemilatticeSup α] [有顶序 α] (a : α)
   证明: @fold_inf_univ αᵒᵈ _ _ _ _
 
 Depends on / 依赖: fold_inf_univ
@@ -128,7 +128,7 @@ lemma mem_inf
 
 中文:
 引理 mem_inf
-  条件: [DecidableEq α] {s : Finset ι} {f : ι -> Finset α} {a : α}
+  条件: [DecidableEq α] {s : 有限集 ι} {f : ι -> 有限集 α} {a : α}
   证明: by induction s using Finset.cons_induction <;> simp [*]
 
 Depends on / 依赖: Finset, Finset.cons_induction, cons_induction
@@ -151,8 +151,8 @@ theorem Finite.exists_max
   simpa using exists_max_image univ f univ_nonempty
 
 中文:
-定理 Finite.exists_max
-  条件: [Finite α] [Nonempty α] [LinearOrder β] (f : α -> β)
+定理 有限.存在_max
+  条件: [有限 α] [非空 α] [线性序 β] (f : α -> β)
   证明: by
   cases nonempty_fintype α
   simpa using exists_max_image univ f univ_nonempty
@@ -175,8 +175,8 @@ theorem Finite.exists_min
   simpa using exists_min_image univ f univ_nonempty
 
 中文:
-定理 Finite.exists_min
-  条件: [Finite α] [Nonempty α] [LinearOrder β] (f : α -> β)
+定理 有限.存在_min
+  条件: [有限 α] [非空 α] [线性序 β] (f : α -> β)
   证明: by
   cases nonempty_fintype α
   simpa using exists_min_image univ f univ_nonempty

@@ -44,7 +44,7 @@ definition Nat.ModEq
 notation:50 a " ≡ " b " [MOD " n "]" => Nat.ModEq n a b
 
 中文:
-定义 Nat.ModEq
+定义 自然数.ModEq
   签名: (n a b : 自然数)
   定义体: a % n = b % n
 
@@ -149,7 +149,7 @@ alias ⟨_root_.Nat.ModEq.of_natCast, _⟩ := natCast_modEq_natCast
 
 中文:
 定理 natCast_modEq_natCast
-  条件: [CharZero M] {a b n : 自然数}
+  条件: [特征零 M] {a b n : 自然数}
   结论: a ≡ b [PMOD (n : M)] ↔ a ≡ b [MOD n]
   证明: by
   simpa using map_modEq_iff (Nat.castAddMonoidHom M) Nat.cast_injective
@@ -180,7 +180,7 @@ instance :
 
 中文:
 实例 :
-  签名: Decidable (ModEq n a b)
+  签名: 可判定 (ModEq n a b)
   定义体: inferInstanceAs Decidable (a % n = b % n)
 
 Depends on / 依赖: Decidable
@@ -1672,7 +1672,7 @@ theorem modEq_iff_exists_eq_add
   exact exists_congr (fun _ => Nat.sub_eq_iff_eq_add' h)
 
 中文:
-定理 modEq_iff_exists_eq_add
+定理 modEq_iff_存在_eq_add
   条件: (h : a <= b)
   结论: a ≡ b [MOD n] ↔ 存在 (t : 自然数), b = a + n * t
   证明: by
@@ -1778,7 +1778,7 @@ theorem gcd_eq
 中文:
 定理 gcd_eq
   条件: (h : a ≡ b [MOD m])
-  结论: gcd a m = gcd b m
+  结论: 最大公约数 a m = 最大公约数 b m
   证明: by
   have h1 := gcd_dvd_right a m
   have h2 := gcd_dvd_right b m
@@ -1862,7 +1862,7 @@ lemma cancel_left_div_gcd
 中文:
 引理 cancel_left_div_gcd
   条件: (hm : 0 < m) (h : c * a ≡ c * b [MOD m])
-  结论: a ≡ b [MOD m / gcd m c]
+  结论: a ≡ b [MOD m / 最大公约数 m c]
   证明: by
   let d := gcd m c
   have hmd := gcd_dvd_left m c
@@ -1903,7 +1903,7 @@ lemma cancel_right_div_gcd
 中文:
 引理 cancel_right_div_gcd
   条件: (hm : 0 < m) (h : a * c ≡ b * c [MOD m])
-  结论: a ≡ b [MOD m / gcd m c]
+  结论: a ≡ b [MOD m / 最大公约数 m c]
   证明: by
   apply cancel_left_div_gcd hm
   simpa [mul_comm] using h
@@ -1969,7 +1969,7 @@ lemma cancel_left_of_coprime
 
 中文:
 引理 cancel_left_of_coprime
-  条件: (hmc : gcd m c = 1) (h : c * a ≡ c * b [MOD m])
+  条件: (hmc : 最大公约数 m c = 1) (h : c * a ≡ c * b [MOD m])
   结论: a ≡ b [MOD m]
   证明: by
   rcases m.eq_zero_or_pos with (rfl | hm)
@@ -2000,7 +2000,7 @@ lemma cancel_right_of_coprime
 
 中文:
 引理 cancel_right_of_coprime
-  条件: (hmc : gcd m c = 1) (h : a * c ≡ b * c [MOD m])
+  条件: (hmc : 最大公约数 m c = 1) (h : a * c ≡ b * c [MOD m])
   结论: a ≡ b [MOD m]
   证明: cancel_left_of_coprime hmc by simpa [mul_comm] using h
 
@@ -2031,7 +2031,7 @@ definition chineseRemainder'
 
 中文:
 定义 chineseRemainder'
-  签名: (h : a ≡ b [MOD gcd n m])
+  签名: (h : a ≡ b [MOD 最大公约数 n m])
   定义体: if hn : n = 0 then ⟨a, by
     rw [hn]; rw [gcd_zero_left] at h; constructor
     · rfl
@@ -2114,7 +2114,7 @@ theorem chineseRemainder'_lt_lcm
 
 中文:
 定理 chineseRemainder'_lt_lcm
-  条件: (h : a ≡ b [MOD gcd n m]) (hn : n != 0) (hm : m != 0)
+  条件: (h : a ≡ b [MOD 最大公约数 n m]) (hn : n != 0) (hm : m != 0)
   证明: by
   dsimp only [chineseRemainder']
   rw [dif_neg hn]; rw [dif_neg hm]; rw [Subtype.coe_mk]; rw [xgcd_val]; rw [← Int.toNat_natCast (lcm n m)]
@@ -2159,7 +2159,7 @@ theorem mod_lcm
 中文:
 定理 mod_lcm
   条件: (hn : a ≡ b [MOD n]) (hm : a ≡ b [MOD m])
-  结论: a ≡ b [MOD lcm n m]
+  结论: a ≡ b [MOD 最小公倍数 n m]
   证明: Nat.modEq_iff_dvd.mpr Int.coe_lcm_dvd (Nat.modEq_iff_dvd.mp hn) (Nat.modEq_iff_dvd.mp hm)
 
 Depends on / 依赖: Int.coe_lcm_dvd, Nat.modEq_iff_dvd.mp, Nat.modEq_iff_dvd.mpr, coe_lcm_dvd, modEq_iff_dvd

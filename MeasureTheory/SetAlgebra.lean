@@ -65,8 +65,8 @@ structure IsSetAlgebra
     - union_mem : forall ⦃s t⦄, s in 𝒜 -> t in 𝒜 -> s union t in 𝒜
 
 中文:
-结构 IsSetAlgebra
-  参数: (𝒜 : Set (Set α))
+结构 是集合代数
+  参数: (𝒜 : 集合 (集合 α))
   公理与运算 (3 个):
     - empty_mem : ∅ in 𝒜
     - compl_mem : 对任意 ⦃s⦄, s in 𝒜 -> sᶜ in 𝒜
@@ -90,7 +90,7 @@ theorem univ_mem
 
 中文:
 定理 univ_mem
-  条件: (h𝒜 : IsSetAlgebra 𝒜)
+  条件: (h𝒜 : 是集合代数 𝒜)
   结论: univ in 𝒜
   证明: compl_empty ▸ h𝒜.compl_mem h𝒜.empty_mem
 
@@ -110,7 +110,7 @@ theorem inter_mem
 
 中文:
 定理 inter_mem
-  条件: (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
+  条件: (h𝒜 : 是集合代数 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
   证明: inter_eq_compl_compl_union_compl .. ▸
     h𝒜.compl_mem (h𝒜.union_mem (h𝒜.compl_mem s_mem) (h𝒜.compl_mem t_mem))
 
@@ -133,7 +133,7 @@ theorem sdiff_mem
 
 中文:
 定理 sdiff_mem
-  条件: (h𝒜 : IsSetAlgebra 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
+  条件: (h𝒜 : 是集合代数 𝒜) (s_mem : s in 𝒜) (t_mem : t in 𝒜)
   证明: h𝒜.inter_mem s_mem (h𝒜.compl_mem t_mem)
 
 @[deprecated (since := "2026-06-03")] alias diff_mem := sdiff_mem
@@ -158,8 +158,8 @@ theorem isSetRing
 
 中文:
 定理 isSetRing
-  条件: (h𝒜 : IsSetAlgebra 𝒜)
-  结论: IsSetRing 𝒜 where
+  条件: (h𝒜 : 是集合代数 𝒜)
+  结论: 是集合环 𝒜 where
   证明: h𝒜.empty_mem
   union_mem := h𝒜.union_mem
   sdiff_mem := fun _ _ => h𝒜.sdiff_mem
@@ -181,7 +181,7 @@ theorem biUnion_mem
 
 中文:
 定理 biUnion_mem
-  结论: {ι : 类型} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
+  结论: {ι : 类型} (h𝒜 : 是集合代数 𝒜) {s : ι -> 集合 α} (S : 有限集 ι)
   证明: h𝒜.isSetRing.biUnion_mem S hs
 
 Depends on / 依赖: biUnion_mem, isSetRing, isSetRing.biUnion_mem
@@ -202,8 +202,8 @@ theorem biInter_mem
   · exact h𝒜.isSetRing.biInter_mem S h hs
 
 中文:
-定理 biInter_mem
-  结论: {ι : 类型} (h𝒜 : IsSetAlgebra 𝒜) {s : ι -> Set α} (S : Finset ι)
+定理 bi整数er_mem
+  结论: {ι : 类型} (h𝒜 : 是集合代数 𝒜) {s : ι -> 集合 α} (S : 有限集 ι)
   证明: by
   by_cases! h : S = ∅
   · rw [h, ← Finset.set_biInter_coe, Finset.coe_empty, biInter_empty]
@@ -238,13 +238,13 @@ inductive generateSetAlgebra
     - union: (s t : Set α) (hs : generateSetAlgebra 𝒜 s) (ht : generateSetAlgebra 𝒜 t) : generateSetAlgebra 𝒜 (s union t)
 
 中文:
-归纳类型 generateSetAlgebra
-  参数: {α : 类型} (𝒜 : Set (Set α))
+归纳类型 generateSet代数
+  参数: {α : 类型} (𝒜 : 集合 (集合 α))
   构造子 (4 个):
-    - base: (s : Set α) (s_mem : s in 𝒜) : generateSetAlgebra 𝒜 s
-    - empty: generateSetAlgebra 𝒜 ∅
-    - compl: (s : Set α) (hs : generateSetAlgebra 𝒜 s) : generateSetAlgebra 𝒜 sᶜ
-    - union: (s t : Set α) (hs : generateSetAlgebra 𝒜 s) (ht : generateSetAlgebra 𝒜 t) : generateSetAlgebra 𝒜 (s union t)
+    - base: (s : 集合 α) (s_mem : s in 𝒜) : generateSet代数 𝒜 s
+    - empty: generateSet代数 𝒜 ∅
+    - compl: (s : 集合 α) (hs : generateSet代数 𝒜 s) : generateSet代数 𝒜 sᶜ
+    - union: (s t : 集合 α) (hs : generateSet代数 𝒜 s) (ht : generateSet代数 𝒜 t) : generateSet代数 𝒜 (s union t)
 -/
 inductive generateSetAlgebra {α : Type*} (𝒜 : Set (Set α)) : Set (Set α)
   | base (s : Set α) (s_mem : s in 𝒜) : generateSetAlgebra 𝒜 s
@@ -286,7 +286,7 @@ theorem self_subset_generateSetAlgebra
 
 中文:
 定理 self_subset_generateSetAlgebra
-  结论: 𝒜 subseteq generateSetAlgebra 𝒜
+  结论: 𝒜 subseteq generateSet代数 𝒜
   证明: fun _ => generateSetAlgebra.base _
 
 Depends on / 依赖: generateSetAlgebra, generateSetAlgebra.base
@@ -355,7 +355,7 @@ theorem generateSetAlgebra_mono
 
 中文:
 定理 generateSetAlgebra_mono
-  条件: {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
+  条件: {ℬ : 集合 (集合 α)} (h : 𝒜 subseteq ℬ)
   证明: by
   intro s hs
   induction hs with
@@ -393,7 +393,7 @@ theorem generateSetAlgebra_subset
 
 中文:
 定理 generateSetAlgebra_subset
-  结论: {ℬ : Set (Set α)} (h : 𝒜 subseteq ℬ)
+  结论: {ℬ : 集合 (集合 α)} (h : 𝒜 subseteq ℬ)
   证明: by
   intro s hs
   induction hs with
@@ -423,7 +423,7 @@ theorem generateSetAlgebra_subset_self
 
 中文:
 定理 generateSetAlgebra_subset_self
-  条件: (h𝒜 : IsSetAlgebra 𝒜)
+  条件: (h𝒜 : 是集合代数 𝒜)
   证明: h𝒜.generateSetAlgebra_subset subset_rfl
 
 Depends on / 依赖: generateSetAlgebra_subset, subset_rfl
@@ -442,8 +442,8 @@ theorem generateSetAlgebra_eq
 
 中文:
 定理 generateSetAlgebra_eq
-  条件: (h𝒜 : IsSetAlgebra 𝒜)
-  结论: generateSetAlgebra 𝒜 = 𝒜
+  条件: (h𝒜 : 是集合代数 𝒜)
+  结论: generateSet代数 𝒜 = 𝒜
   证明: Subset.antisymm h𝒜.generateSetAlgebra_subset_self self_subset_generateSetAlgebra
 
 Depends on / 依赖: Subset, Subset.antisymm, antisymm, generateSetAlgebra_subset_self, self_subset_generateSetAlgebra
@@ -471,7 +471,7 @@ theorem mem_generateSetAlgebra_elim
 
 中文:
 定理 mem_generateSetAlgebra_elim
-  条件: (s_mem : s in generateSetAlgebra 𝒜)
+  条件: (s_mem : s in generateSet代数 𝒜)
   证明: by
   induction s_mem with
   | base u u_mem =>
@@ -544,7 +544,7 @@ theorem countable_generateSetAlgebra
 
 中文:
 定理 countable_generateSetAlgebra
-  条件: (h : 𝒜.Countable)
+  条件: (h : 𝒜.可数)
   证明: by
   let ℬ := {s | s in 𝒜} union {s | sᶜ in 𝒜}
   have count_ℬ : ℬ.Countable := by

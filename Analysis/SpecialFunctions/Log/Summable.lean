@@ -103,7 +103,7 @@ lemma summable_log_one_add_of_summable
 
 中文:
 引理 summable_log_one_add_of_summable
-  条件: {f : ι -> Complex} (hf : Summable f)
+  条件: {f : ι -> 复形} (hf : Summable f)
   证明: by
   apply (hf.norm.mul_left (3 / 2)).of_norm_bounded_eventually
   filter_upwards [hf.norm.tendsto_cofinite_zero.eventually_le_const one_half_pos] with i hi
@@ -428,8 +428,8 @@ lemma Finset.norm_prod_one_add_sub_one_le
         (∏ i in t]; rw [(1 + f i) - 1) + f x * ∏ x in t]; rw [(1 + f
 
 中文:
-引理 Finset.norm_prod_one_add_sub_one_le
-  条件: (t : Finset ι) (f : ι -> R)
+引理 有限集.norm_prod_one_add_sub_one_le
+  条件: (t : 有限集 ι) (f : ι -> R)
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -506,7 +506,7 @@ refine CompleteSpace.complete Metric.cauchy_iff.mpr ⟨by infer_instance, fun ε
 
 中文:
 引理 multipliable_one_add_of_summable
-  结论: [CompleteSpace R]
+  结论: [完备空间 R]
   证明: by
   classical
 refine CompleteSpace.complete Metric.cauchy_iff.mpr ⟨by infer_instance, fun ε hε => ?_⟩
@@ -558,7 +558,7 @@ alias summable_finset_prod_of_summable_norm := summable_finsetProd_of_summable_n
 
 中文:
 引理 summable_finsetProd_of_summable_norm
-  条件: [CompleteSpace R] (hf : Summable (fun i => ‖f i‖))
+  条件: [完备空间 R] (hf : Summable (fun i => ‖f i‖))
   证明: (summable_finsetProd_of_summable_nonneg (fun _ => norm_nonneg _) hf).of_norm_bounded
     fun _ => Finset.norm_prod_le _ _
 
@@ -628,7 +628,7 @@ lemma tprod_one_add_ne_zero_of_summable
 
 中文:
 引理 tprod_one_add_ne_zero_of_summable
-  结论: [CompleteSpace R] [NormMulClass R]
+  结论: [完备空间 R] [NormMul类 R]
   证明: by
   rw [← norm_ne_zero_iff]; rw [Multipliable.norm_tprod]
   · rw [← Real.rexp_tsum_eq_tprod (fun i => norm_pos_iff.mpr <| hf i) hu.summable_log_norm_one_add]

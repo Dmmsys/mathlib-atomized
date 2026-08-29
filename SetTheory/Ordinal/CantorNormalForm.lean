@@ -59,7 +59,7 @@ decreasing_by exact mod_opow_log_lt_self b h
 
 中文:
 定义 rec
-  签名: (b : Ordinal) {C : Ordinal -> Sort*} (H0 : C 0)
+  签名: (b : 序数) {C : 序数 -> 类型层*} (H0 : C 0)
   定义体: if h : o = 0 then h ▸ H0 else H o h (CNF.rec b H0 H (o % b ^ log b o))
 termination_by o
 decreasing_by exact mod_opow_log_lt_self b h
@@ -84,7 +84,7 @@ theorem rec_zero
 
 中文:
 定理 rec_zero
-  结论: {C : Ordinal -> Sort*} (b : Ordinal) (H0 : C 0)
+  结论: {C : 序数 -> 类型层*} (b : 序数) (H0 : C 0)
   证明: by
   rw [CNF.rec]; rw [dif_pos rfl]
 
@@ -105,7 +105,7 @@ theorem rec_pos
 
 中文:
 定理 rec_pos
-  结论: (b : Ordinal) {o : Ordinal} {C : Ordinal -> Sort*} (ho : o != 0) (H0 : C 0)
+  结论: (b : 序数) {o : 序数} {C : 序数 -> 类型层*} (ho : o != 0) (H0 : C 0)
   证明: by
   rw [CNF.rec]; rw [dif_neg]
 
@@ -134,8 +134,8 @@ definition _root_.Ordinal.CNF
 @[simp]
 
 中文:
-定义 _root_.Ordinal.CNF
-  签名: (b o : Ordinal)
+定义 _root_.序数.CNF
+  签名: (b o : 序数)
   定义体: CNF.rec b [] (fun o _ IH => (log b o, o / b ^ log b o)::IH) o
 
 @[simp]
@@ -157,7 +157,7 @@ theorem zero_right
 
 中文:
 定理 zero_right
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: CNF b 0 = []
   证明: rec_zero b _ _
 
@@ -176,7 +176,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: {b o : Ordinal} (ho : o != 0)
+  条件: {b o : 序数} (ho : o != 0)
   证明: rec_pos b ho _ _
 -/
 protected theorem ne_zero {b o : Ordinal} (ho : o != 0) :
@@ -199,7 +199,7 @@ theorem opow_mul_add
 
 中文:
 定理 opow_mul_add
-  结论: {b e x y : Ordinal}
+  结论: {b e x y : 序数}
   证明: by
   have hb' := hb.ne_bot
   rw [CNF.ne_zero]
@@ -230,7 +230,7 @@ theorem zero_left
 
 中文:
 定理 zero_left
-  条件: {o : Ordinal} (ho : o != 0)
+  条件: {o : 序数} (ho : o != 0)
   结论: CNF 0 o = [(0, o)]
   证明: by
   simp [CNF.ne_zero ho]
@@ -250,7 +250,7 @@ theorem one_left
 
 中文:
 定理 one_left
-  条件: {o : Ordinal} (ho : o != 0)
+  条件: {o : 序数} (ho : o != 0)
   结论: CNF 1 o = [(0, o)]
   证明: by
   simp [CNF.ne_zero ho]
@@ -271,7 +271,7 @@ theorem of_le_one
 
 中文:
 定理 of_le_one
-  条件: {b o : Ordinal} (hb : b <= 1) (ho : o != 0)
+  条件: {b o : 序数} (hb : b <= 1) (ho : o != 0)
   结论: CNF b o = [(0, o)]
   证明: by
   rcases Order.le_one_iff.1 hb with (rfl | rfl)
@@ -293,7 +293,7 @@ theorem of_lt
 
 中文:
 定理 of_lt
-  条件: {b o : Ordinal} (ho : o != 0) (hb : o < b)
+  条件: {b o : 序数} (ho : o != 0) (hb : o < b)
   结论: CNF b o = [(0, o)]
   证明: by
   rw [CNF.ne_zero ho]; rw [log_eq_zero hb]; rw [opow_zero]; rw [div_one]; rw [mod_one]; rw [zero_right]
@@ -316,7 +316,7 @@ theorem foldr
 
 中文:
 定理 foldr
-  条件: (b o : Ordinal)
+  条件: (b o : 序数)
   结论: (CNF b o).foldr (fun p r => b ^ p.1 * p.2 + r) 0 = o
   证明: by
   refine CNF.rec b ?_ ?_ o
@@ -347,7 +347,7 @@ theorem fst_le_log
 
 中文:
 定理 fst_le_log
-  条件: {b o : Ordinal.{u}} {x : Ordinal × Ordinal}
+  条件: {b o : 序数.{u}} {x : 序数 × 序数}
   结论: x in CNF b o -> x.1 <= log b o
   证明: by
   refine CNF.rec b ?_ (fun o ho H => ?_) o
@@ -386,7 +386,7 @@ alias lt_snd := snd_pos
 
 中文:
 定理 snd_pos
-  条件: {b o : Ordinal.{u}} {x : Ordinal × Ordinal}
+  条件: {b o : 序数.{u}} {x : 序数 × 序数}
   结论: x in CNF b o -> 0 < x.2
   证明: by
   refine CNF.rec b (by simp) (fun o ho IH => ?_) o
@@ -427,7 +427,7 @@ theorem snd_lt
 
 中文:
 定理 snd_lt
-  条件: {b o : Ordinal.{u}} (hb : 1 < b) {x : Ordinal × Ordinal}
+  条件: {b o : 序数.{u}} (hb : 1 < b) {x : 序数 × 序数}
   证明: by
   refine CNF.rec b ?_ (fun o ho IH => ?_) o
   · simp
@@ -470,8 +470,8 @@ theorem sortedGT
 
 中文:
 定理 sortedGT
-  条件: (b o : Ordinal)
-  结论: ((CNF b o).map Prod.fst).SortedGT
+  条件: (b o : 序数)
+  结论: ((CNF b o).map 积类型.fst).SortedGT
   证明: by
   simp_rw [sortedGT_iff_pairwise]
   refine CNF.rec b ?_ (fun o ho IH => ?_) o
@@ -517,8 +517,8 @@ theorem nodupKeys
 
 中文:
 定理 nodupKeys
-  条件: (b o : Ordinal)
-  结论: (map Prod.toSigma (CNF b o)).NodupKeys
+  条件: (b o : 序数)
+  结论: (map 积类型.toSigma (CNF b o)).NodupKeys
   证明: by
   rw [NodupKeys]; rw [List.keys]; rw [map_map]; rw [Prod.fst_comp_toSigma]
   exact (CNF.sortedGT ..).nodup
@@ -544,7 +544,7 @@ definition coeff
 
 中文:
 定义 coeff
-  签名: (b o : Ordinal)
+  签名: (b o : 序数)
   定义体: lookupFinsupp ⟨_, nodupKeys b o⟩
 
 Depends on / 依赖: lookupFinsupp, nodupKeys
@@ -568,7 +568,7 @@ theorem support_coeff
 
 中文:
 定理 support_coeff
-  条件: (b o : Ordinal)
+  条件: (b o : 序数)
   证明: by
   rw [coeff]; rw [lookupFinsupp_support]; rw [filter_eq_self.2]
   · simp [List.keys]
@@ -598,7 +598,7 @@ theorem coeff_of_mem_CNF
 
 中文:
 定理 coeff_of_mem_CNF
-  条件: {b o e c : Ordinal} (h : ⟨e, c⟩ in CNF b o)
+  条件: {b o e c : 序数} (h : ⟨e, c⟩ in CNF b o)
   证明: by
   rw [coeff]; rw [lookupFinsupp_apply]; rw [mem_lookup_iff.2]; rw [Option.getD_some]
   simpa
@@ -624,7 +624,7 @@ alias coeff_of_not_mem_CNF := coeff_of_notMem_CNF
 
 中文:
 定理 coeff_of_notMem_CNF
-  条件: {b o e : Ordinal} (h : e ∉ (CNF b o).map Prod.fst)
+  条件: {b o e : 序数} (h : e ∉ (CNF b o).map 积类型.fst)
   证明: by
   rwa [← notMem_support_iff, support_coeff, mem_toFinset]
 
@@ -658,7 +658,7 @@ theorem coeff_eq_zero_of_lt
 
 中文:
 定理 coeff_eq_zero_of_lt
-  条件: {b o e : Ordinal} (h : o < b ^ e)
+  条件: {b o e : 序数} (h : o < b ^ e)
   结论: coeff b o e = 0
   证明: by
   apply coeff_of_notMem_CNF
@@ -695,7 +695,7 @@ theorem coeff_zero_apply
 
 中文:
 定理 coeff_zero_apply
-  条件: (b e : Ordinal)
+  条件: (b e : 序数)
   结论: coeff b 0 e = 0
   证明: by
   apply coeff_of_notMem_CNF
@@ -723,7 +723,7 @@ theorem coeff_zero_right
 
 中文:
 定理 coeff_zero_right
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: coeff b 0 = 0
   证明: by
   ext e
@@ -759,7 +759,7 @@ theorem coeff_of_le_one
 
 中文:
 定理 coeff_of_le_one
-  条件: {b : Ordinal} (hb : b <= 1) (o : Ordinal)
+  条件: {b : 序数} (hb : b <= 1) (o : 序数)
   结论: coeff b o = single 0 o
   证明: by
   ext a
@@ -805,7 +805,7 @@ theorem coeff_zero_left
 
 中文:
 定理 coeff_zero_left
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: coeff 0 o = single 0 o
   证明: coeff_of_le_one zero_le_one o
 
@@ -828,7 +828,7 @@ theorem coeff_one_left
 
 中文:
 定理 coeff_one_left
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: coeff 1 o = single 0 o
   证明: coeff_of_le_one le_rfl o
 
@@ -857,7 +857,7 @@ theorem coeff_opow_mul_add
 
 中文:
 定理 coeff_opow_mul_add
-  结论: {b e x y : Ordinal}
+  结论: {b e x y : 序数}
   证明: by
   ext e'
   rw [add_apply]
@@ -909,7 +909,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: (b : Ordinal) (f : Ordinal ->₀ Ordinal)
+  签名: (b : 序数) (f : 序数 ->₀ 序数)
   定义体: (f.support.sort (· >= ·)).foldr (fun p r => b ^ p * f p + r) 0
 
 @[simp]
@@ -932,7 +932,7 @@ theorem eval_zero_right
 
 中文:
 定理 eval_zero_right
-  条件: (b : Ordinal)
+  条件: (b : 序数)
   结论: eval b 0 = 0
   证明: by
   simp [eval]
@@ -957,7 +957,7 @@ theorem eval_single_add'
 
 中文:
 定理 eval_single_add'
-  结论: (b : Ordinal) {e x : Ordinal} {f : Ordinal ->₀ Ordinal}
+  结论: (b : 序数) {e x : 序数} {f : 序数 ->₀ 序数}
   证明: by
   obtain rfl | hx := eq_or_ne x 0; · simp
   have hf : f e = 0 := by
@@ -997,7 +997,7 @@ theorem eval_single
 
 中文:
 定理 eval_single
-  条件: (b e x : Ordinal)
+  条件: (b e x : 序数)
   结论: eval b (.single e x) = b ^ e * x
   证明: by
   simpa using eval_single_add' b (f := 0)
@@ -1024,7 +1024,7 @@ theorem eval_single_add
 
 中文:
 定理 eval_single_add
-  结论: (b : Ordinal) {e x : Ordinal} {f : Ordinal ->₀ Ordinal}
+  结论: (b : 序数) {e x : 序数} {f : 序数 ->₀ 序数}
   证明: by
   cases f using Finsupp.induction_on_max with
   | zero => simp
@@ -1067,7 +1067,7 @@ obtain he₂ | he₂ := Finset.mem_union.1 support_add he₂
 
 中文:
 定理 eval_add
-  结论: (b : Ordinal) {f₁ f₂ : Ordinal ->₀ Ordinal}
+  结论: (b : 序数) {f₁ f₂ : 序数 ->₀ 序数}
   证明: by
   induction f₁ using Finsupp.induction_on_max with
   | zero => simp
@@ -1113,7 +1113,7 @@ theorem eval_lt
 
 中文:
 定理 eval_lt
-  结论: {b e : Ordinal} {f : Ordinal ->₀ Ordinal}
+  结论: {b e : 序数} {f : 序数 ->₀ 序数}
   证明: by
   induction f using Finsupp.induction_on_max generalizing e with
   | zero =>
@@ -1170,7 +1170,7 @@ theorem eval_coeff
 
 中文:
 定理 eval_coeff
-  条件: (b o : Ordinal)
+  条件: (b o : 序数)
   结论: eval b (coeff b o) = o
   证明: by
   conv_rhs => rw [← CNF.foldr b o]
@@ -1211,7 +1211,7 @@ theorem coeff_eval
 
 中文:
 定理 coeff_eval
-  条件: {b : Ordinal} (hb : 1 < b) {f : Ordinal ->₀ Ordinal} (hf : 对任意 e, f e < b)
+  条件: {b : 序数} (hb : 1 < b) {f : 序数 ->₀ 序数} (hf : 对任意 e, f e < b)
   证明: by
   induction f using Finsupp.induction_on_max with
   | zero => simp
@@ -1256,8 +1256,8 @@ theorem coeff_injective
 
 中文:
 定理 coeff_injective
-  条件: (b : Ordinal)
-  结论: Function.Injective (coeff b)
+  条件: (b : 序数)
+  结论: 函数.单射 (coeff b)
   证明: Function.LeftInverse.injective fun _ => eval_coeff ..
 
 @[simp]
@@ -1279,7 +1279,7 @@ theorem coeff_inj
 
 中文:
 定理 coeff_inj
-  条件: {b x y : Ordinal}
+  条件: {b x y : 序数}
   结论: coeff b x = coeff b y ↔ x = y
   证明: (coeff_injective b).eq_iff
 

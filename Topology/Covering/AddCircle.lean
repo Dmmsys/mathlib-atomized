@@ -104,7 +104,7 @@ theorem isAddQuotientCoveringMap_zsmul
 
 中文:
 定理 isAddQuotientCoveringMap_zsmul
-  条件: {n : 整数} (hn : IsUnit (n : 𝕜))
+  条件: {n : 整数} (hn : 是单位 (n : 𝕜))
   证明: by
   refine hn.isQuotientMap_zsmul (QuotientAddGroup.mk' _) isQuotientMap_quotient_mk'
 .isAddQuotientCoveringMap_of_isDiscrete_ker_addMonoidHom
@@ -136,7 +136,7 @@ theorem isAddQuotientCoveringMap_nsmul
 
 中文:
 定理 isAddQuotientCoveringMap_nsmul
-  条件: {n : 自然数} (hn : IsUnit (n : 𝕜))
+  条件: {n : 自然数} (hn : 是单位 (n : 𝕜))
   证明: by
   convert! isAddQuotientCoveringMap_zsmul p (n := n) (mod_cast hn)
   all_goals ext; simp
@@ -160,7 +160,7 @@ theorem isAddQuotientCoveringMap_zsmul_of_ne_zero
 
 中文:
 定理 isAddQuotientCoveringMap_zsmul_of_ne_zero
-  条件: [Algebra Rat 𝕜] (n : 整数) [NeZero n]
+  条件: [代数 有理数 𝕜] (n : 整数) [NeZero n]
   证明: isAddQuotientCoveringMap_zsmul p (n := n) by
     convert! (Int.cast_ne_zero.mpr <| NeZero.ne n).isUnit.map (algebraMap Rat 𝕜); simp
 
@@ -183,7 +183,7 @@ theorem isAddQuotientCoveringMap_nsmul_of_ne_zero
 
 中文:
 定理 isAddQuotientCoveringMap_nsmul_of_ne_zero
-  条件: [Algebra Rat 𝕜] (n : 自然数) [NeZero n]
+  条件: [代数 有理数 𝕜] (n : 自然数) [NeZero n]
   证明: isAddQuotientCoveringMap_nsmul p (n := n) by
     convert! (Nat.cast_ne_zero.mpr <| NeZero.ne n).isUnit.map (algebraMap Rat 𝕜); simp
 

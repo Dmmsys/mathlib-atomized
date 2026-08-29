@@ -64,7 +64,7 @@ structure ConditionallyCompleteLinearOrderedField
   (no additional axioms)
 
 中文:
-结构 ConditionallyCompleteLinearOrderedField
+结构 余nditionallyCompleteLinearOrderedField
   参数: (α : 类型)
   (无附加公理)
 
@@ -153,7 +153,7 @@ theorem mem_cutMap_iff
 
 中文:
 定理 mem_cutMap_iff
-  结论: b in cutMap β a ↔ 存在 q : Rat, (q : α) < a ∧ (q : β) = b
+  结论: b in cutMap β a ↔ 存在 q : 有理数, (q : α) < a ∧ (q : β) = b
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -171,7 +171,7 @@ theorem coe_mem_cutMap_iff
 
 中文:
 定理 coe_mem_cutMap_iff
-  条件: [CharZero β]
+  条件: [特征零 β]
   结论: (q : β) in cutMap β a ↔ (q : α) < a
   证明: Rat.cast_injective.mem_set_image
 
@@ -193,7 +193,7 @@ theorem cutMap_self
 中文:
 定理 cutMap_self
   条件: (a : α)
-  结论: cutMap α a = Iio a inter range (Rat.cast : Rat -> α)
+  结论: cutMap α a = 左无界右开区间 a inter range (有理数.cast : 有理数 -> α)
   证明: by
   grind [mem_cutMap_iff]
 
@@ -219,8 +219,8 @@ theorem cutMap_coe
 
 中文:
 定理 cutMap_coe
-  条件: (q : Rat)
-  结论: cutMap β (q : α) = Rat.cast '' {r : Rat | (r : β) < q}
+  条件: (q : 有理数)
+  结论: cutMap β (q : α) = 有理数.cast '' {r : 有理数 | (r : β) < q}
   证明: by
   simp_rw [cutMap, Rat.cast_lt]
 
@@ -244,7 +244,7 @@ theorem cutMap_nonempty
 中文:
 定理 cutMap_nonempty
   条件: (a : α)
-  结论: (cutMap β a).Nonempty
+  结论: (cutMap β a).非空
   证明: Nonempty.image _ exists_rat_lt a
 
 Depends on / 依赖: Nonempty, Nonempty.image, exists_rat_lt
@@ -374,7 +374,7 @@ theorem inducedMap_mono
 
 中文:
 定理 inducedMap_mono
-  结论: Monotone (inducedMap α β)
+  结论: 递增 (inducedMap α β)
   证明: fun _ _ h =>
   csSup_le_csSup (cutMap_bddAbove β _) (cutMap_nonempty β _) (cutMap_mono β h)
 -/
@@ -402,7 +402,7 @@ theorem inducedMap_rat
 
 中文:
 定理 inducedMap_rat
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: inducedMap α β (q : α) = q
   证明: by
   refine csSup_eq_of_forall_le_of_forall_lt_exists_gt
@@ -538,7 +538,7 @@ fun ⟨q, hbq, hqa⟩ => hbq.trans by rwa [coe_lt_inducedMap_iff]⟩
 
 中文:
 定理 lt_inducedMap_iff
-  结论: b < inducedMap α β a ↔ 存在 q : Rat, b < q ∧ (q : α) < a
+  结论: b < inducedMap α β a ↔ 存在 q : 有理数, b < q ∧ (q : α) < a
   证明: ⟨fun h => (exists_rat_btwn h).imp fun _ => And.imp_right coe_lt_inducedMap_iff.1,
 fun ⟨q, hbq, hqa⟩ => hbq.trans by rwa [coe_lt_inducedMap_iff]⟩
 
@@ -706,7 +706,7 @@ theorem exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
   refine ⟨(q ^ 2 : Rat), coe_m
 
 中文:
-定理 exists_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
+定理 存在_mem_cutMap_mul_self_of_lt_inducedMap_mul_self
   结论: (ha : 0 < a) (b : β)
   证明: by
   obtain hb | hb := lt_or_ge b 0

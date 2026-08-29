@@ -73,7 +73,7 @@ definition encard
 
 中文:
 定义 encard
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ENat.card s
 
 Depends on / 依赖: ENat.card
@@ -109,8 +109,8 @@ theorem _root_.ENat.card_coe_set_eq
   proof: rfl
 
 中文:
-定理 _root_.ENat.card_coe_set_eq
-  条件: (s : Set α)
+定理 _root_.E自然数.card_coe_set_eq
+  条件: (s : 集合 α)
   结论: E自然数.card s = s.encard
   证明: rfl
 -/
@@ -128,8 +128,8 @@ theorem Finite.encard_eq_coe_toFinset_card
   rw [encard]; rw [ENat.card_eq_coe_fintype_card]; rw [toFinite_toFinset]; rw [toFinset_card]
 
 中文:
-定理 Finite.encard_eq_coe_toFinset_card
-  条件: (h : s.Finite)
+定理 有限.encard_eq_coe_toFinset_card
+  条件: (h : s.有限)
   结论: s.encard = h.toFinset.card
   证明: by
   have := h.fintype
@@ -154,7 +154,7 @@ theorem encard_eq_coe_toFinset_card
 
 中文:
 定理 encard_eq_coe_toFinset_card
-  条件: (s : Set α) [Fintype s]
+  条件: (s : 集合 α) [有限类型 s]
   结论: encard s = s.toFinset.card
   证明: by
   have h := toFinite s
@@ -176,9 +176,9 @@ theorem toENat_cardinalMk
   proof: rfl
 
 中文:
-定理 toENat_cardinalMk
-  条件: (s : Set α)
-  结论: (Cardinal.mk s).toE自然数 = s.encard
+定理 toE自然数_cardinalMk
+  条件: (s : 集合 α)
+  结论: (基数.mk s).toE自然数 = s.encard
   证明: rfl
 -/
 @[simp] theorem toENat_cardinalMk (s : Set α) : (Cardinal.mk s).toENat = s.encard := rfl
@@ -192,7 +192,7 @@ theorem toENat_cardinalMk_subtype
   proof: rfl
 
 中文:
-定理 toENat_cardinalMk_subtype
+定理 toE自然数_cardinalMk_subtype
   条件: (P : α -> 命题)
   证明: rfl
 -/
@@ -213,8 +213,8 @@ theorem coe_fintypeCard
 
 中文:
 定理 coe_fintypeCard
-  条件: [Fintype s]
-  结论: Fintype.card s = s.encard
+  条件: [有限类型 s]
+  结论: 有限类型.card s = s.encard
   证明: by
   simp [encard_eq_coe_toFinset_card]
 
@@ -234,7 +234,7 @@ theorem encard_coe_eq_coe_finsetCard
 
 中文:
 定理 encard_coe_eq_coe_finsetCard
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by
   rw [Finite.encard_eq_coe_toFinset_card (Finset.finite_toSet s)]; simp
 -/
@@ -254,8 +254,8 @@ theorem Infinite.encard_eq
   rw [encard]; rw [ENat.card_eq_top_of_infinite]
 
 中文:
-定理 Infinite.encard_eq
-  条件: {s : Set α} (h : s.Infinite)
+定理 无限.encard_eq
+  条件: {s : 集合 α} (h : s.无限)
   结论: s.encard = ⊤
   证明: by
   have := h.to_subtype
@@ -294,7 +294,7 @@ theorem encard_empty
 
 中文:
 定理 encard_empty
-  结论: (∅ : Set α).encard = 0
+  结论: (∅ : 集合 α).encard = 0
   证明: by
   rw [encard_eq_zero]
 -/
@@ -314,7 +314,7 @@ theorem nonempty_of_encard_ne_zero
 中文:
 定理 nonempty_of_encard_ne_zero
   条件: (h : s.encard != 0)
-  结论: s.Nonempty
+  结论: s.非空
   证明: by
   rwa [nonempty_iff_ne_empty, Ne, ← encard_eq_zero]
 
@@ -334,7 +334,7 @@ theorem encard_ne_zero
 
 中文:
 定理 encard_ne_zero
-  结论: s.encard != 0 ↔ s.Nonempty
+  结论: s.encard != 0 ↔ s.非空
   证明: by
   rw [ne_eq]; rw [encard_eq_zero]; rw [nonempty_iff_ne_empty]
 
@@ -356,7 +356,7 @@ protected alias ⟨_, Nonempty.encard_pos⟩ := encard_pos
 
 中文:
 定理 encard_pos
-  结论: 0 < s.encard ↔ s.Nonempty
+  结论: 0 < s.encard ↔ s.非空
   证明: by
   rw [pos_iff_ne_zero]; rw [encard_ne_zero]
 
@@ -400,7 +400,7 @@ theorem encard_singleton
 中文:
 定理 encard_singleton
   条件: (e : α)
-  结论: ({e} : Set α).encard = 1
+  结论: ({e} : 集合 α).encard = 1
   证明: by
   rw [encard]; rw [ENat.card_eq_coe_fintype_card]; rw [card_singleton]; rw [Nat.cast_eq_one]
 -/
@@ -502,8 +502,8 @@ theorem Finite.encard_lt_top
     exact lt_tsub_iff_right.1 ht'
 
 中文:
-定理 Finite.encard_lt_top
-  条件: (h : s.Finite)
+定理 有限.encard_lt_top
+  条件: (h : s.有限)
   结论: s.encard < ⊤
   证明: by
   induction s, h using Set.Finite.induction_on with
@@ -531,8 +531,8 @@ theorem Finite.encard_eq_coe
   proof: (ENat.natCast_toNat h.encard_lt_top.ne).symm
 
 中文:
-定理 Finite.encard_eq_coe
-  条件: (h : s.Finite)
+定理 有限.encard_eq_coe
+  条件: (h : s.有限)
   结论: s.encard = E自然数.to自然数 s.encard
   证明: (ENat.natCast_toNat h.encard_lt_top.ne).symm
 
@@ -551,8 +551,8 @@ theorem Finite.exists_encard_eq_coe
   proof: ⟨_, h.encard_eq_coe⟩
 
 中文:
-定理 Finite.exists_encard_eq_coe
-  条件: (h : s.Finite)
+定理 有限.存在_encard_eq_coe
+  条件: (h : s.有限)
   结论: 存在 (n : 自然数), s.encard = n
   证明: ⟨_, h.encard_eq_coe⟩
 
@@ -571,7 +571,7 @@ theorem encard_lt_top_iff
 
 中文:
 定理 encard_lt_top_iff
-  结论: s.encard < ⊤ ↔ s.Finite
+  结论: s.encard < ⊤ ↔ s.有限
   证明: ⟨fun h => by_contra fun h' => h.ne (Infinite.encard_eq h'), Finite.encard_lt_top⟩
 -/
 @[simp] theorem encard_lt_top_iff : s.encard < ⊤ ↔ s.Finite :=
@@ -591,7 +591,7 @@ alias ⟨_, encard_eq_top⟩ := encard_eq_top_iff
 
 中文:
 定理 encard_eq_top_iff
-  结论: s.encard = ⊤ ↔ s.Infinite
+  结论: s.encard = ⊤ ↔ s.无限
   证明: by
   contrapose!
   rw [← lt_top_iff_ne_top]; rw [encard_lt_top_iff]
@@ -615,7 +615,7 @@ theorem encard_ne_top_iff
 
 中文:
 定理 encard_ne_top_iff
-  结论: s.encard != ⊤ ↔ s.Finite
+  结论: s.encard != ⊤ ↔ s.有限
   证明: by
   simp
 -/
@@ -635,7 +635,7 @@ theorem finite_of_encard_le_coe
 中文:
 定理 finite_of_encard_le_coe
   条件: {k : 自然数} (h : s.encard <= k)
-  结论: s.Finite
+  结论: s.有限
   证明: by
   rw [← encard_lt_top_iff]; exact h.trans_lt (WithTop.coe_lt_top _)
 
@@ -656,7 +656,7 @@ theorem finite_of_encard_eq_coe
 中文:
 定理 finite_of_encard_eq_coe
   条件: {k : 自然数} (h : s.encard = k)
-  结论: s.Finite
+  结论: s.有限
   证明: finite_of_encard_le_coe h.le
 
 Depends on / 依赖: finite_of_encard_le_coe, h.le
@@ -679,7 +679,7 @@ theorem encard_le_coe_iff
 中文:
 定理 encard_le_coe_iff
   条件: {k : 自然数}
-  结论: s.encard <= k ↔ s.Finite ∧ 存在 (n₀ : 自然数), s.encard = n₀ ∧ n₀ <= k
+  结论: s.encard <= k ↔ s.有限 ∧ 存在 (n₀ : 自然数), s.encard = n₀ ∧ n₀ <= k
   证明: ⟨fun h => ⟨finite_of_encard_le_coe h, by rwa [ENat.le_natCast_iff] at h⟩,
     fun ⟨_,⟨n₀,hs, hle⟩⟩ => by rwa [hs, Nat.cast_le]⟩
 
@@ -707,7 +707,7 @@ theorem encard_prod
 
 中文:
 定理 encard_prod
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   结论: (s ×ˢ t).encard = s.encard * t.encard
   证明: by
   unfold encard
@@ -734,7 +734,7 @@ theorem encard_pi_eq_prod_encard
 
 中文:
 定理 encard_pi_eq_prod_encard
-  条件: [h : Fintype α] {ι : α -> 类型} {s : 对任意 i : α, Set (ι i)}
+  条件: [h : 有限类型 α] {ι : α -> 类型} {s : 对任意 i : α, 集合 (ι i)}
   证明: by
   unfold encard ENat.card
   simp [Cardinal.mk_congr (Equiv.Set.univPi s), Cardinal.prod_eq_of_fintype]
@@ -801,7 +801,7 @@ theorem encard_mono
 中文:
 定理 encard_mono
   条件: {α : 类型}
-  结论: Monotone (encard : Set α -> 自然数∞)
+  结论: 递增 (encard : 集合 α -> 自然数∞)
   证明: fun _ _ => encard_le_encard
 
 Depends on / 依赖: encard_le_encard
@@ -854,7 +854,7 @@ theorem encard_sdiff
 
 中文:
 定理 encard_sdiff
-  条件: (h : s subseteq t) (hs : s.Finite)
+  条件: (h : s subseteq t) (hs : s.有限)
   证明: by
   rw [← @Set.encard_sdiff_add_encard_of_subset _ s t h]
   exact (ENat.addLECancellable_of_ne_top <| encard_ne_top_iff.mpr hs).eq_tsub_of_add_eq rfl
@@ -881,7 +881,7 @@ theorem one_le_encard_iff_nonempty
 
 中文:
 定理 one_le_encard_iff_nonempty
-  结论: 1 <= s.encard ↔ s.Nonempty
+  结论: 1 <= s.encard ↔ s.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rw [Ne]; rw [← encard_eq_zero]; rw [Order.one_le_iff_ne_zero]
 -/
@@ -917,7 +917,7 @@ alias encard_diff_add_encard_inter := encard_sdiff_add_encard_inter
 
 中文:
 定理 encard_sdiff_add_encard_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [← encard_union_eq disjoint_sdiff_inter]; rw [sdiff_union_inter]
 
@@ -944,7 +944,7 @@ theorem encard_union_add_encard_inter
 
 中文:
 定理 encard_union_add_encard_inter
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   rw [← sdiff_union_self]; rw [encard_union_eq disjoint_sdiff_left]; rw [add_right_comm]; rw [encard_sdiff_add_encard_inter]
 
@@ -969,7 +969,7 @@ alias encard_eq_encard_iff_encard_diff_eq_encard_diff :=
 
 中文:
 定理 encard_eq_encard_iff_encard_sdiff_eq_encard_sdiff
-  条件: (h : (s inter t).Finite)
+  条件: (h : (s inter t).有限)
   证明: by
   rw [← encard_sdiff_add_encard_inter s t]; rw [← encard_sdiff_add_encard_inter t s]; rw [inter_comm t s]; rw [(ENat.addLECancellable_of_lt_top h.encard_lt_top).inj_left]
 
@@ -1002,7 +1002,7 @@ alias encard_le_encard_iff_encard_diff_le_encard_diff :=
 
 中文:
 定理 encard_le_encard_iff_encard_sdiff_le_encard_sdiff
-  条件: (h : (s inter t).Finite)
+  条件: (h : (s inter t).有限)
   证明: by
   rw [← encard_sdiff_add_encard_inter s t]; rw [← encard_sdiff_add_encard_inter t s]; rw [inter_comm t s]; rw [ENat.add_le_add_iff_right h.encard_lt_top.ne]
 
@@ -1035,7 +1035,7 @@ alias encard_lt_encard_iff_encard_diff_lt_encard_diff :=
 
 中文:
 定理 encard_lt_encard_iff_encard_sdiff_lt_encard_sdiff
-  条件: (h : (s inter t).Finite)
+  条件: (h : (s inter t).有限)
   证明: by
   rw [← encard_sdiff_add_encard_inter s t]; rw [← encard_sdiff_add_encard_inter t s]; rw [inter_comm t s]; rw [ENat.add_lt_add_iff_right h.encard_lt_top.ne]
 
@@ -1065,7 +1065,7 @@ theorem encard_union_le
 
 中文:
 定理 encard_union_le
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s union t).encard <= s.encard + t.encard
   证明: by
   rw [← encard_union_add_encard_inter]; exact le_self_add
@@ -1088,7 +1088,7 @@ theorem finite_iff_finite_of_encard_eq_encard
 中文:
 定理 finite_iff_finite_of_encard_eq_encard
   条件: (h : s.encard = t.encard)
-  结论: s.Finite ↔ t.Finite
+  结论: s.有限 ↔ t.有限
   证明: by
   rw [← encard_lt_top_iff]; rw [← encard_lt_top_iff]; rw [h]
 
@@ -1124,8 +1124,8 @@ theorem Finite.finite_of_encard_le
   proof: encard_lt_top_iff.1 (h.trans_lt hs.encard_lt_top)
 
 中文:
-定理 Finite.finite_of_encard_le
-  结论: {s : Set α} {t : Set β} (hs : s.Finite)
+定理 有限.finite_of_encard_le
+  结论: {s : 集合 α} {t : 集合 β} (hs : s.有限)
   证明: encard_lt_top_iff.1 (h.trans_lt hs.encard_lt_top)
 
 Depends on / 依赖: encard_lt_top, encard_lt_top_iff, h.trans_lt, hs.encard_lt_top, trans_lt
@@ -1148,8 +1148,8 @@ lemma Finite.eq_of_subset_of_encard_le'
   exact hst.antisymm 
 
 中文:
-引理 Finite.eq_of_subset_of_encard_le'
-  条件: (ht : t.Finite) (hst : s subseteq t) (hts : t.encard <= s.encard)
+引理 有限.eq_of_subset_of_encard_le'
+  条件: (ht : t.有限) (hst : s subseteq t) (hts : t.encard <= s.encard)
   证明: by
   rw [← zero_add (a := encard s)]; rw [← encard_sdiff_add_encard_of_subset hst] at hts
   have hdiff :=
@@ -1176,8 +1176,8 @@ theorem Finite.eq_of_subset_of_encard_le
   proof: (hs.finite_of_encard_le hts).eq_of_subset_of_encard_le' hst hts
 
 中文:
-定理 Finite.eq_of_subset_of_encard_le
-  结论: (hs : s.Finite) (hst : s subseteq t)
+定理 有限.eq_of_subset_of_encard_le
+  结论: (hs : s.有限) (hst : s subseteq t)
   证明: (hs.finite_of_encard_le hts).eq_of_subset_of_encard_le' hst hts
 
 Depends on / 依赖: eq_of_subset_of_encard_le, finite_of_encard_le, hs.finite_of_encard_le
@@ -1196,8 +1196,8 @@ theorem Finite.encard_lt_encard
   proof: (encard_mono h.subset).lt_of_ne fun he => h.ne (hs.eq_of_subset_of_encard_le h.subset he.symm.le)
 
 中文:
-定理 Finite.encard_lt_encard
-  条件: (hs : s.Finite) (h : s ⊂ t)
+定理 有限.encard_lt_encard
+  条件: (hs : s.有限) (h : s ⊂ t)
   结论: s.encard < t.encard
   证明: (encard_mono h.subset).lt_of_ne fun he => h.ne (hs.eq_of_subset_of_encard_le h.subset he.symm.le)
 
@@ -1217,8 +1217,8 @@ theorem encard_strictMono
 
 中文:
 定理 encard_strictMono
-  条件: [Finite α]
-  结论: StrictMono (encard : Set α -> 自然数∞)
+  条件: [有限 α]
+  结论: 严格递增 (encard : 集合 α -> 自然数∞)
   证明: fun _ _ h => (toFinite _).encard_lt_encard h
 
 Depends on / 依赖: encard_lt_encard, toFinite
@@ -1235,8 +1235,8 @@ theorem Finite.encard_strictMonoOn
   proof: fun _ hs _ _ hlt => hs.encard_lt_encard hlt
 
 中文:
-定理 Finite.encard_strictMonoOn
-  结论: StrictMonoOn (α := Set α) encard (Set.ofPred Set.Finite)
+定理 有限.encard_strictMonoOn
+  结论: StrictMonoOn (α := 集合 α) encard (集合.ofPred 集合.有限)
   证明: fun _ hs _ _ hlt => hs.encard_lt_encard hlt
 
 Depends on / 依赖: Finite, Set.Finite, Set.ofPred, encard, ofPred
@@ -1254,8 +1254,8 @@ theorem Finite.encard_lt_card
   proof: encard_univ α ▸ hfin.encard_lt_encard (ssubset_univ_iff.mpr hne)
 
 中文:
-定理 Finite.encard_lt_card
-  条件: (hfin : s.Finite) (hne : s != univ)
+定理 有限.encard_lt_card
+  条件: (hfin : s.有限) (hne : s != univ)
   结论: s.encard < E自然数.card α
   证明: encard_univ α ▸ hfin.encard_lt_encard (ssubset_univ_iff.mpr hne)
 
@@ -1278,7 +1278,7 @@ theorem encard_sdiff_add_encard
 
 中文:
 定理 encard_sdiff_add_encard
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s \ t).encard + t.encard = (s union t).encard
   证明: by
   rw [← encard_union_eq disjoint_sdiff_left]; rw [sdiff_union_self]
@@ -1306,7 +1306,7 @@ alias encard_le_encard_diff_add_encard := encard_le_encard_sdiff_add_encard
 
 中文:
 定理 encard_le_encard_sdiff_add_encard
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s.encard <= (s \ t).encard + t.encard
   证明: (encard_mono subset_union_left).trans_eq (encard_sdiff_add_encard _ _).symm
 
@@ -1336,7 +1336,7 @@ alias tsub_encard_le_encard_diff := tsub_encard_le_encard_sdiff
 
 中文:
 定理 tsub_encard_le_encard_sdiff
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: s.encard - t.encard <= (s \ t).encard
   证明: by
   rw [tsub_le_iff_left]; rw [add_comm]; apply encard_le_encard_sdiff_add_encard
@@ -1364,8 +1364,8 @@ theorem encard_add_encard_compl
 
 中文:
 定理 encard_add_encard_compl
-  条件: (s : Set α)
-  结论: s.encard + sᶜ.encard = (univ : Set α).encard
+  条件: (s : 集合 α)
+  结论: s.encard + sᶜ.encard = (univ : 集合 α).encard
   证明: by
   rw [← encard_union_eq disjoint_compl_right]; rw [union_compl_self]
 
@@ -1392,7 +1392,7 @@ theorem encard_insert_le
 
 中文:
 定理 encard_insert_le
-  条件: (s : Set α) (x : α)
+  条件: (s : 集合 α) (x : α)
   结论: (insert x s).encard <= s.encard + 1
   证明: by
   rw [← union_singleton]; rw [← encard_singleton x]; apply encard_union_le
@@ -1413,7 +1413,7 @@ theorem one_le_encard_insert
 
 中文:
 定理 one_le_encard_insert
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 1 <= (insert a s).encard
   证明: Order.one_le_iff_ne_zero.mpr encard_ne_zero_of_mem (mem_insert a s)
 
@@ -1434,7 +1434,7 @@ theorem encard_singleton_inter
 
 中文:
 定理 encard_singleton_inter
-  条件: (s : Set α) (x : α)
+  条件: (s : 集合 α) (x : α)
   结论: ({x} inter s).encard <= 1
   证明: by
   grw [← encard_singleton x, inter_subset_left]
@@ -1518,7 +1518,7 @@ alias encard_tsub_one_le_encard_diff_singleton := encard_tsub_one_le_encard_sdif
 
 中文:
 定理 encard_tsub_one_le_encard_sdiff_singleton
-  条件: (s : Set α) (x : α)
+  条件: (s : 集合 α) (x : α)
   证明: by
   rw [← encard_singleton x]; apply tsub_encard_le_encard_sdiff
 
@@ -1627,7 +1627,7 @@ theorem eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
 
 中文:
 定理 eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   refine s.eq_empty_or_nonempty.elim Or.inl (Or.inr ∘ fun ⟨a,ha⟩ =>
     (s.finite_or_infinite.elim (fun hfin => Or.inr ⟨a, ha, ?_⟩) (Or.inl ∘ Infinite.encard_eq)))
@@ -1664,7 +1664,7 @@ theorem encard_pair
 中文:
 定理 encard_pair
   条件: {x y : α} (hne : x != y)
-  结论: ({x, y} : Set α).encard = 2
+  结论: ({x, y} : 集合 α).encard = 2
   证明: by
   rw [encard_insert_of_notMem (by simpa)]; rw [← one_add_one_eq_two]; rw [encard_singleton]
 
@@ -1763,7 +1763,7 @@ theorem encard_le_one_iff_subsingleton
 
 中文:
 定理 encard_le_one_iff_subsingleton
-  结论: s.encard <= 1 ↔ s.Subsingleton
+  结论: s.encard <= 1 ↔ s.子单例
   证明: by
   rw [encard_le_one_iff]; rw [Set.Subsingleton]
   tauto
@@ -1785,7 +1785,7 @@ theorem one_lt_encard_iff_nontrivial
 
 中文:
 定理 one_lt_encard_iff_nontrivial
-  结论: 1 < s.encard ↔ s.Nontrivial
+  结论: 1 < s.encard ↔ s.非平凡
   证明: by
   contrapose!; exact encard_le_one_iff_subsingleton
 
@@ -1828,7 +1828,7 @@ theorem exists_ne_of_one_lt_encard
   rw [h' b hb]; rw [h' b' hb']
 
 中文:
-定理 exists_ne_of_one_lt_encard
+定理 存在_ne_of_one_lt_encard
   条件: (h : 1 < s.encard) (a : α)
   结论: 存在 b in s, b != a
   证明: by
@@ -1887,7 +1887,7 @@ theorem encard_eq_three
 
 中文:
 定理 encard_eq_three
-  条件: {α : 类型u_1} {s : Set α}
+  条件: {α : 类型u_1} {s : 集合 α}
   证明: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, hxy, hyz, hxz, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
@@ -1920,7 +1920,7 @@ theorem encard_eq_four
 
 中文:
 定理 encard_eq_four
-  条件: {α : 类型u_1} {s : Set α}
+  条件: {α : 类型u_1} {s : 集合 α}
   证明: by
   refine ⟨fun h => ?_, fun ⟨x, y, z, w, hxy, hxz, hxw, hyz, hyw, hzw, hs⟩ => ?_⟩
   · obtain ⟨x, hx⟩ := nonempty_of_encard_ne_zero (s := s) (by rw [h]; simp)
@@ -1954,7 +1954,7 @@ theorem Nat.encard_range
   rw [Finset.card_range]
 
 中文:
-定理 Nat.encard_range
+定理 自然数.encard_range
   条件: (k : 自然数)
   结论: {i | i < k}.encard = k
   证明: by
@@ -1982,8 +1982,8 @@ theorem Finite.eq_insert_of_subset_of_encard_eq_succ
   obtain ⟨x, hx⟩ := hst; use x; rw [← sdiff_union_of_subset h, hx, singleton_union]
 
 中文:
-定理 Finite.eq_insert_of_subset_of_encard_eq_succ
-  结论: (hs : s.Finite) (h : s subseteq t)
+定理 有限.eq_insert_of_subset_of_encard_eq_succ
+  结论: (hs : s.有限) (h : s subseteq t)
   证明: by
   rw [← encard_sdiff_add_encard_of_subset h]; rw [add_comm _ 1]; rw [(ENat.addLECancellable_of_lt_top hs.encard_lt_top).inj_left]; rw [encard_eq_one] at hst
   obtain ⟨x, hx⟩ := hst; use x; rw [← sdiff_union_of_subset h, hx, singleton_union]
@@ -2012,7 +2012,7 @@ theorem exists_subset_encard_eq
       rintro rfl; rw [ht₀, ← Nat.cast_one, ← Nat.cast_add, Nat.cast_
 
 中文:
-定理 exists_subset_encard_eq
+定理 存在_subset_encard_eq
   条件: {k : 自然数∞} (hk : k <= s.encard)
   结论: 存在 t, t subseteq s ∧ t.encard = k
   证明: by
@@ -2053,7 +2053,7 @@ theorem exists_superset_subset_encard_eq
     rw [← encard_sdiff_add_encard_of_subset hst]; rw [add_
 
 中文:
-定理 exists_superset_subset_encard_eq
+定理 存在_superset_subset_encard_eq
   结论: {k : 自然数∞}
   证明: by
   obtain (hs | hs) := eq_or_ne s.encard ⊤
@@ -2094,8 +2094,8 @@ theorem InjOn.encard_image
   rw [encard]; rw [ENat.card_image_of_injOn h]; rw [encard]
 
 中文:
-定理 InjOn.encard_image
-  条件: (h : InjOn f s)
+定理 单射限制.encard_image
+  条件: (h : 单射限制 f s)
   结论: (f '' s).encard = s.encard
   证明: by
   rw [encard]; rw [ENat.card_image_of_injOn h]; rw [encard]
@@ -2133,8 +2133,8 @@ theorem _root_.Function.Injective.encard_image
   proof: hf.injOn.encard_image
 
 中文:
-定理 _root_.Function.Injective.encard_image
-  条件: (hf : f.Injective) (s : Set α)
+定理 _root_.函数.单射.encard_image
+  条件: (hf : f.单射) (s : 集合 α)
   证明: hf.injOn.encard_image
 
 Depends on / 依赖: encard_image, hf.injOn.encard_image
@@ -2153,8 +2153,8 @@ theorem _root_.Function.Injective.encard_range
   rw [← image_univ]; rw [hf.encard_image]; rw [encard_univ]
 
 中文:
-定理 _root_.Function.Injective.encard_range
-  条件: (hf : f.Injective)
+定理 _root_.函数.单射.encard_range
+  条件: (hf : f.单射)
   证明: by
   rw [← image_univ]; rw [hf.encard_image]; rw [encard_univ]
 
@@ -2174,7 +2174,7 @@ theorem _root_.Function.Embedding.encard_le
   proof: ENat.card_le_card_of_injective e.injective
 
 中文:
-定理 _root_.Function.Embedding.encard_le
+定理 _root_.函数.嵌入.encard_le
   条件: (e : s ↪ t)
   结论: s.encard <= t.encard
   证明: ENat.card_le_card_of_injective e.injective
@@ -2198,7 +2198,7 @@ theorem encard_image_le
 
 中文:
 定理 encard_image_le
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: (f '' s).encard <= s.encard
   证明: by
   obtain (h | h) := isEmpty_or_nonempty α
@@ -2226,8 +2226,8 @@ theorem Finite.injOn_of_encard_image_eq
   exact hs.eq_of_subset_of_encard_le' (f.invFunOn_image_image_subset s) h.symm.le
 
 中文:
-定理 Finite.injOn_of_encard_image_eq
-  条件: (hs : s.Finite) (h : (f '' s).encard = s.encard)
+定理 有限.injOn_of_encard_image_eq
+  条件: (hs : s.有限) (h : (f '' s).encard = s.encard)
   证明: by
   obtain (h' | hne) := isEmpty_or_nonempty α
   · simp
@@ -2256,7 +2256,7 @@ theorem encard_preimage_of_injective_subset_range
 
 中文:
 定理 encard_preimage_of_injective_subset_range
-  条件: (hf : f.Injective) (ht : t subseteq range f)
+  条件: (hf : f.单射) (ht : t subseteq range f)
   证明: by
   rw [← hf.encard_image]; rw [image_preimage_eq_inter_range]; rw [inter_eq_self_of_subset_left ht]
 
@@ -2277,7 +2277,7 @@ lemma encard_preimage_of_bijective
 
 中文:
 引理 encard_preimage_of_bijective
-  条件: (hf : f.Bijective) (t : Set β)
+  条件: (hf : f.双射) (t : 集合 β)
   结论: (f ⁻¹' t).encard = t.encard
   证明: encard_preimage_of_injective_subset_range hf.injective (by simp [hf.surjective.range_eq])
 
@@ -2297,7 +2297,7 @@ theorem encard_le_encard_of_injOn
 
 中文:
 定理 encard_le_encard_of_injOn
-  条件: (hf : MapsTo f s t) (f_inj : InjOn f s)
+  条件: (hf : 映射到 f s t) (f_inj : 单射限制 f s)
   证明: by
   grw [← f_inj.encard_image, hf.image_subset]
 
@@ -2319,7 +2319,7 @@ lemma encard_preimage_val_le_encard_left
 
 中文:
 引理 encard_preimage_val_le_encard_left
-  条件: (P Q : Set α)
+  条件: (P Q : 集合 α)
   结论: (P ↓inter Q).encard <= P.encard
   证明: (Function.Embedding.subtype _).encard_le
 
@@ -2342,7 +2342,7 @@ lemma encard_preimage_val_le_encard_right
 
 中文:
 引理 encard_preimage_val_le_encard_right
-  条件: (P Q : Set α)
+  条件: (P Q : 集合 α)
   结论: (P ↓inter Q).encard <= Q.encard
   证明: Function.Embedding.encard_le ⟨fun ⟨⟨x, _⟩, hx⟩ => ⟨x, hx⟩, fun _ _ h => by
     simpa [Subtype.coe_inj] using h⟩
@@ -2369,8 +2369,8 @@ theorem Finite.exists_injOn_of_encard_le
     rwa [
 
 中文:
-定理 Finite.exists_injOn_of_encard_le
-  结论: [Nonempty β] {s : Set α} {t : Set β} (hs : s.Finite)
+定理 有限.存在_injOn_of_encard_le
+  结论: [非空 β] {s : 集合 α} {t : 集合 β} (hs : s.有限)
   证明: by
   classical
   obtain (rfl | h | ⟨a, has, -⟩) := s.eq_empty_or_encard_eq_top_or_encard_sdiff_singleton_lt
@@ -2420,8 +2420,8 @@ theorem Finite.exists_bijOn_of_encard_eq
     (h.symm.trans hinj.encard_image.symm).le]
 
 中文:
-定理 Finite.exists_bijOn_of_encard_eq
-  条件: [Nonempty β] (hs : s.Finite) (h : s.encard = t.encard)
+定理 有限.存在_bijOn_of_encard_eq
+  条件: [非空 β] (hs : s.有限) (h : s.encard = t.encard)
   证明: by
   obtain ⟨f, hf, hinj⟩ := hs.exists_injOn_of_encard_le h.le; use f
   convert! hinj.bijOn_image
@@ -2451,8 +2451,8 @@ lemma exists_ne_map_eq_of_encard_lt_of_maps_to
   simpa only [hf.restrict_inj, not_imp_not] using! hc
 
 中文:
-引理 exists_ne_map_eq_of_encard_lt_of_maps_to
-  条件: (hc : t.encard < s.encard) (hf : MapsTo f s t)
+引理 存在_ne_map_eq_of_encard_lt_of_maps_to
+  条件: (hc : t.encard < s.encard) (hf : 映射到 f s t)
   证明: by
   contrapose! hc
   suffices Function.Injective (hf.restrict f) by
@@ -2499,7 +2499,7 @@ definition ncard
 
 中文:
 定义 ncard
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: ENat.toNat s.encard
 
 Depends on / 依赖: ENat.toNat, encard, s.encard
@@ -2517,7 +2517,7 @@ theorem ncard_def
 
 中文:
 定理 ncard_def
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s.ncard = E自然数.to自然数 s.encard
   证明: rfl
 -/
@@ -2534,8 +2534,8 @@ theorem Finite.cast_ncard_eq
   rwa [ncard, ENat.natCast_toNat_eq_self, ne_eq, encard_eq_top_iff, Set.Infinite, not_not]
 
 中文:
-定理 Finite.cast_ncard_eq
-  条件: (hs : s.Finite)
+定理 有限.cast_ncard_eq
+  条件: (hs : s.有限)
   结论: s.ncard = s.encard
   证明: by
   rwa [ncard, ENat.natCast_toNat_eq_self, ne_eq, encard_eq_top_iff, Set.Infinite, not_not]
@@ -2558,7 +2558,7 @@ theorem coe_ncard_eq_encard
 
 中文:
 定理 coe_ncard_eq_encard
-  条件: [Finite s]
+  条件: [有限 s]
   结论: s.ncard = s.encard
   证明: s.toFinite.cast_ncard_eq
 
@@ -2578,7 +2578,7 @@ lemma ncard_le_encard
 
 中文:
 引理 ncard_le_encard
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s.ncard <= s.encard
   证明: ENat.natCast_toNat_le_self _
 
@@ -2596,8 +2596,8 @@ theorem _root_.Nat.card_coe_set_eq
   proof: rfl
 
 中文:
-定理 _root_.Nat.card_coe_set_eq
-  条件: (s : Set α)
+定理 _root_.自然数.card_coe_set_eq
+  条件: (s : 集合 α)
   结论: 自然数.card s = s.ncard
   证明: rfl
 -/
@@ -2614,7 +2614,7 @@ theorem ncard_eq_toFinset_card
 
 中文:
 定理 ncard_eq_toFinset_card
-  条件: (s : Set α) (hs : s.Finite := by toFinite_tac)
+  条件: (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← _root_.Nat.card_coe_set_eq]; rw [@Nat.card_eq_fintype_card _ hs.fintype]; rw [@Finite.card_toFinset _ _ hs.fintype hs]
 
@@ -2635,7 +2635,7 @@ theorem ncard_eq_toFinset_card'
 
 中文:
 定理 ncard_eq_toFinset_card'
-  条件: (s : Set α) [Fintype s]
+  条件: (s : 集合 α) [有限类型 s]
   证明: by
   simp [← _root_.Nat.card_coe_set_eq, Nat.card_eq_fintype_card]
 
@@ -2659,8 +2659,8 @@ theorem fintypeCard_eq_ncard
 
 中文:
 定理 fintypeCard_eq_ncard
-  条件: [Fintype s]
-  结论: Fintype.card s = s.ncard
+  条件: [有限类型 s]
+  结论: 有限类型.card s = s.ncard
   证明: by
   rw [ncard_eq_toFinset_card']; rw [toFinset_card]
 
@@ -2679,7 +2679,7 @@ lemma cast_ncard
 
 中文:
 引理 cast_ncard
-  条件: {s : Set α} (hs : s.Finite)
+  条件: {s : 集合 α} (hs : s.有限)
   证明: @Nat.cast_card _ hs
 
 Depends on / 依赖: Nat.cast_card, cast_card
@@ -2702,7 +2702,7 @@ theorem encard_le_coe_iff_finite_ncard_le
 中文:
 定理 encard_le_coe_iff_finite_ncard_le
   条件: {k : 自然数}
-  结论: s.encard <= k ↔ s.Finite ∧ s.ncard <= k
+  结论: s.encard <= k ↔ s.有限 ∧ s.ncard <= k
   证明: by
   rw [encard_le_coe_iff]; rw [and_congr_right_iff]
   exact fun hfin => ⟨fun ⟨n₀, hn₀, hle⟩ => by rwa [ncard_def, hn₀, ENat.toNat_natCast],
@@ -2728,8 +2728,8 @@ theorem Infinite.ncard
 @[gcongr]
 
 中文:
-定理 Infinite.ncard
-  条件: (hs : s.Infinite)
+定理 无限.ncard
+  条件: (hs : s.无限)
   结论: s.ncard = 0
   证明: by
   rw [← _root_.Nat.card_coe_set_eq]; rw [@Nat.card_eq_zero_of_infinite _ hs.to_subtype]
@@ -2754,7 +2754,7 @@ theorem ncard_le_ncard
 
 中文:
 定理 ncard_le_ncard
-  条件: (hst : s subseteq t) (ht : t.Finite := by toFinite_tac)
+  条件: (hst : s subseteq t) (ht : t.有限 := by toFinite_tac)
   证明: by
   rw [← Nat.cast_le (α := Nat∞)]; rw [ht.cast_ncard_eq]; rw [(ht.subset hst).cast_ncard_eq]
   exact encard_mono hst
@@ -2777,8 +2777,8 @@ theorem ncard_mono
 
 中文:
 定理 ncard_mono
-  条件: [Finite α]
-  结论: @Monotone (Set α) _ _ _ ncard
+  条件: [有限 α]
+  结论: @递增 (集合 α) _ _ _ ncard
   证明: fun _ _ => ncard_le_ncard
 
 Depends on / 依赖: ncard_le_ncard
@@ -2796,7 +2796,7 @@ theorem ncard_eq_zero
 
 中文:
 定理 ncard_eq_zero
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← Nat.cast_inj (R := Nat∞)]; rw [hs.cast_ncard_eq]; rw [Nat.cast_zero]; rw [encard_eq_zero]
 -/
@@ -2816,8 +2816,8 @@ theorem ncard_coe_finset
 
 中文:
 定理 ncard_coe_finset
-  条件: (s : Finset α)
-  结论: (s : Set α).ncard = s.card
+  条件: (s : 有限集 α)
+  结论: (s : 集合 α).ncard = s.card
   证明: by
   rw [ncard_eq_toFinset_card _]; rw [Finset.finite_toSet_toFinset]
 -/
@@ -2836,7 +2836,7 @@ theorem ncard_univ
 中文:
 定理 ncard_univ
   条件: (α : 类型)
-  结论: (univ : Set α).ncard = 自然数.card α
+  结论: (univ : 集合 α).ncard = 自然数.card α
   证明: Nat.card_univ
 -/
 @[simp] theorem ncard_univ (α : Type*) : (univ : Set α).ncard = Nat.card α := Nat.card_univ
@@ -2852,7 +2852,7 @@ theorem ncard_le_card
 
 中文:
 定理 ncard_le_card
-  条件: [Finite α] (s : Set α)
+  条件: [有限 α] (s : 集合 α)
   结论: s.ncard <= 自然数.card α
   证明: ncard_univ α ▸ ncard_le_ncard s.subset_univ
 
@@ -2874,7 +2874,7 @@ theorem ncard_empty
 中文:
 定理 ncard_empty
   条件: (α : 类型)
-  结论: (∅ : Set α).ncard = 0
+  结论: (∅ : 集合 α).ncard = 0
   证明: by
   rw [ncard_eq_zero]
 -/
@@ -2895,8 +2895,8 @@ protected alias ⟨_, Nonempty.ncard_pos⟩ := ncard_pos
 
 中文:
 定理 ncard_pos
-  条件: (hs : s.Finite := by toFinite_tac)
-  结论: 0 < s.ncard ↔ s.Nonempty
+  条件: (hs : s.有限 := by toFinite_tac)
+  结论: 0 < s.ncard ↔ s.非空
   证明: by
   rw [pos_iff_ne_zero]; rw [Ne]; rw [ncard_eq_zero hs]; rw [nonempty_iff_ne_empty]
 
@@ -2920,7 +2920,7 @@ theorem ncard_ne_zero_of_mem
 
 中文:
 定理 ncard_ne_zero_of_mem
-  条件: {a : α} (h : a in s) (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} (h : a in s) (hs : s.有限 := by toFinite_tac)
   结论: s.ncard != 0
   证明: ((ncard_pos hs).mpr ⟨a, h⟩).ne.symm
 
@@ -2941,7 +2941,7 @@ theorem finite_of_ncard_ne_zero
 中文:
 定理 finite_of_ncard_ne_zero
   条件: (hs : s.ncard != 0)
-  结论: s.Finite
+  结论: s.有限
   证明: s.finite_or_infinite.elim id fun h => (hs h.ncard).elim
 
 Depends on / 依赖: finite_or_infinite, h.ncard, s.finite_or_infinite.elim
@@ -2961,7 +2961,7 @@ theorem finite_of_ncard_pos
 中文:
 定理 finite_of_ncard_pos
   条件: (hs : 0 < s.ncard)
-  结论: s.Finite
+  结论: s.有限
   证明: finite_of_ncard_ne_zero hs.ne.symm
 
 Depends on / 依赖: finite_of_ncard_ne_zero, hs.ne.symm
@@ -2982,7 +2982,7 @@ theorem nonempty_of_ncard_ne_zero
 中文:
 定理 nonempty_of_ncard_ne_zero
   条件: (hs : s.ncard != 0)
-  结论: s.Nonempty
+  结论: s.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rintro rfl; simp at hs
 
@@ -3004,7 +3004,7 @@ theorem ncard_singleton
 中文:
 定理 ncard_singleton
   条件: (a : α)
-  结论: ({a} : Set α).ncard = 1
+  结论: ({a} : 集合 α).ncard = 1
   证明: by
   simp [ncard]
 -/
@@ -3026,7 +3026,7 @@ theorem ncard_singleton_inter
 
 中文:
 定理 ncard_singleton_inter
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: ({a} inter s).ncard <= 1
   证明: by
   rw [← Nat.cast_le (α := Nat∞)]; rw [(toFinite _).cast_ncard_eq]; rw [Nat.cast_one]
@@ -3055,7 +3055,7 @@ theorem ncard_prod
 
 中文:
 定理 ncard_prod
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   结论: (s ×ˢ t).ncard = s.ncard * t.ncard
   证明: by
   simp [ncard, ENat.toNat_mul]
@@ -3081,7 +3081,7 @@ theorem ncard_powerset
 
 中文:
 定理 ncard_powerset
-  条件: (s : Set α) (hs : s.Finite := by toFinite_tac)
+  条件: (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   have h := Cardinal.mk_powerset s
   rw [← cast_ncard hs.powerset]; rw [← cast_ncard hs] at h
@@ -3108,7 +3108,7 @@ theorem ncard_insert_of_notMem
 
 中文:
 定理 ncard_insert_of_notMem
-  条件: {a : α} (h : a ∉ s) (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} (h : a ∉ s) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← Nat.cast_inj (R := Nat∞)]; rw [(hs.insert a).cast_ncard_eq]; rw [Nat.cast_add]; rw [Nat.cast_one]; rw [hs.cast_ncard_eq]; rw [encard_insert_of_notMem h]
 -/
@@ -3153,7 +3153,7 @@ theorem ncard_insert_le
 
 中文:
 定理 ncard_insert_le
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: (insert a s).ncard <= s.ncard + 1
   证明: by
   obtain hs | hs := s.finite_or_infinite
@@ -3179,7 +3179,7 @@ theorem one_le_ncard_insert
 
 中文:
 定理 one_le_ncard_insert
-  条件: (a : α) (s : Set α) (hs : s.Finite := by toFinite_tac)
+  条件: (a : α) (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: Nat.one_le_iff_ne_zero.mpr ncard_ne_zero_of_mem (mem_insert a s) (by simp [hs])
 
 Depends on / 依赖: Nat.one_le_iff_ne_zero.mpr, insert, mem_insert, ncard_ne_zero_of_mem, one_le_iff_ne_zero, toFinite_tac
@@ -3201,7 +3201,7 @@ theorem ncard_insert_eq_ite
 
 中文:
 定理 ncard_insert_eq_ite
-  条件: {a : α} [Decidable (a in s)] (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} [可判定 (a in s)] (hs : s.有限 := by toFinite_tac)
   证明: by
   by_cases h : a in s
   · rw [ncard_insert_of_mem h, if_pos h]
@@ -3230,7 +3230,7 @@ theorem ncard_le_ncard_insert
 
 中文:
 定理 ncard_le_ncard_insert
-  条件: (a : α) (s : Set α)
+  条件: (a : α) (s : 集合 α)
   结论: s.ncard <= (insert a s).ncard
   证明: by
   classical
@@ -3259,7 +3259,7 @@ theorem ncard_pair
 中文:
 定理 ncard_pair
   条件: {a b : α} (h : a != b)
-  结论: ({a, b} : Set α).ncard = 2
+  结论: ({a, b} : 集合 α).ncard = 2
   证明: by
   simp [h]
 -/
@@ -3348,7 +3348,7 @@ alias ncard_diff_singleton_lt_of_mem := ncard_sdiff_singleton_lt_of_mem
 
 中文:
 定理 ncard_sdiff_singleton_lt_of_mem
-  条件: {a : α} (h : a in s) (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} (h : a in s) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_sdiff_singleton_add_one h hs]; apply lt_add_one
 
@@ -3381,7 +3381,7 @@ theorem ncard_sdiff_singleton_le
 
 中文:
 定理 ncard_sdiff_singleton_le
-  条件: (s : Set α) (a : α)
+  条件: (s : 集合 α) (a : α)
   结论: (s \ {a}).ncard <= s.ncard
   证明: by
   obtain hs | hs := s.finite_or_infinite
@@ -3418,7 +3418,7 @@ alias pred_ncard_le_ncard_diff_singleton := pred_ncard_le_ncard_sdiff_singleton
 
 中文:
 定理 pred_ncard_le_ncard_sdiff_singleton
-  条件: (s : Set α) (a : α)
+  条件: (s : 集合 α) (a : α)
   证明: by
   by_cases h : a in s
   · rw [ncard_sdiff_singleton_of_mem h]
@@ -3493,7 +3493,7 @@ lemma odd_card_insert_iff
 
 中文:
 引理 odd_card_insert_iff
-  条件: {a : α} (ha : a ∉ s) (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} (ha : a ∉ s) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [ncard_insert_of_notMem ha hs]; rw [Nat.odd_add]
   simp only [← Nat.not_even_iff_odd, Nat.not_even_one, iff_false, Decidable.not_not]
@@ -3516,7 +3516,7 @@ lemma even_card_insert_iff
 
 中文:
 引理 even_card_insert_iff
-  条件: {a : α} (ha : a ∉ s) (hs : s.Finite := by toFinite_tac)
+  条件: {a : α} (ha : a ∉ s) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [ncard_insert_of_notMem ha hs]; rw [Nat.even_add_one]; rw [Nat.not_even_iff_odd]
 
@@ -3542,7 +3542,7 @@ theorem ncard_image_le
 
 中文:
 定理 ncard_image_le
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   结论: (f '' s).ncard <= s.ncard
   证明: by
   to_encard_tac; rw [hs.cast_ncard_eq, (hs.image _).cast_ncard_eq]; apply encard_image_le
@@ -3564,8 +3564,8 @@ theorem InjOn.ncard_image
 @[deprecated (since := "2026-01-30")] alias ncard_image_of_injOn := InjOn.ncard_image
 
 中文:
-定理 InjOn.ncard_image
-  条件: (H : Set.InjOn f s)
+定理 单射限制.ncard_image
+  条件: (H : 集合.单射限制 f s)
   结论: (f '' s).ncard = s.ncard
   证明: congr_arg ENat.toNat H.encard_image
 
@@ -3590,7 +3590,7 @@ theorem injOn_of_ncard_image_eq
 
 中文:
 定理 injOn_of_ncard_image_eq
-  条件: (h : (f '' s).ncard = s.ncard) (hs : s.Finite := by toFinite_tac)
+  条件: (h : (f '' s).ncard = s.ncard) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← Nat.cast_inj (R := Nat∞)]; rw [hs.cast_ncard_eq]; rw [(hs.image _).cast_ncard_eq] at h
   exact hs.injOn_of_encard_image_eq h
@@ -3612,7 +3612,7 @@ theorem ncard_image_iff
 
 中文:
 定理 ncard_image_iff
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: ⟨fun h => injOn_of_ncard_image_eq h hs, InjOn.ncard_image⟩
 
 Depends on / 依赖: InjOn.ncard_image, Set.InjOn, injOn_of_ncard_image_eq, ncard_image, s.ncard, toFinite_tac
@@ -3632,7 +3632,7 @@ theorem ncard_image_of_injective
 
 中文:
 定理 ncard_image_of_injective
-  条件: (s : Set α) (H : f.Injective)
+  条件: (s : 集合 α) (H : f.单射)
   结论: (f '' s).ncard = s.ncard
   证明: H.injOn.ncard_image
 
@@ -3652,7 +3652,7 @@ theorem ncard_preimage_of_injective_subset_range
 
 中文:
 定理 ncard_preimage_of_injective_subset_range
-  结论: {s : Set β} (H : f.Injective)
+  结论: {s : 集合 β} (H : f.单射)
   证明: by
   rw [← ncard_image_of_injective _ H]; rw [image_preimage_eq_iff.mpr hs]
 
@@ -3677,7 +3677,7 @@ theorem fiber_ncard_ne_zero_iff_mem_image
 
 中文:
 定理 fiber_ncard_ne_zero_iff_mem_image
-  条件: {y : β} (hs : s.Finite := by toFinite_tac)
+  条件: {y : β} (hs : s.有限 := by toFinite_tac)
   证明: by
   refine ⟨nonempty_of_ncard_ne_zero, ?_⟩
   rintro ⟨z, hz, rfl⟩
@@ -3724,7 +3724,7 @@ theorem ncard_subtype
 
 中文:
 定理 ncard_subtype
-  条件: (P : α -> 命题) (s : Set α)
+  条件: (P : α -> 命题) (s : 集合 α)
   证明: by
   convert! (ncard_image_of_injective _ (@Subtype.coe_injective _ P)).symm
   ext x
@@ -3746,7 +3746,7 @@ theorem ncard_inter_le_ncard_left
 
 中文:
 定理 ncard_inter_le_ncard_left
-  条件: (s t : Set α) (hs : s.Finite := by toFinite_tac)
+  条件: (s t : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: ncard_le_ncard inter_subset_left hs
 
 Depends on / 依赖: inter_subset_left, ncard_le_ncard, s.ncard, toFinite_tac
@@ -3765,7 +3765,7 @@ theorem ncard_inter_le_ncard_right
 
 中文:
 定理 ncard_inter_le_ncard_right
-  条件: (s t : Set α) (ht : t.Finite := by toFinite_tac)
+  条件: (s t : 集合 α) (ht : t.有限 := by toFinite_tac)
   证明: ncard_le_ncard inter_subset_right ht
 
 Depends on / 依赖: inter_subset_right, ncard_le_ncard, t.ncard, toFinite_tac
@@ -3806,7 +3806,7 @@ theorem subset_iff_eq_of_ncard_le
 
 中文:
 定理 subset_iff_eq_of_ncard_le
-  条件: (h : t.ncard <= s.ncard) (ht : t.Finite := by toFinite_tac)
+  条件: (h : t.ncard <= s.ncard) (ht : t.有限 := by toFinite_tac)
   证明: ⟨fun hst => eq_of_subset_of_ncard_le hst h ht, Eq.subset⟩
 
 Depends on / 依赖: Eq.subset, eq_of_subset_of_ncard_le, subset, subseteq, toFinite_tac
@@ -3825,7 +3825,7 @@ theorem map_eq_of_subset
 
 中文:
 定理 map_eq_of_subset
-  条件: {f : α ↪ α} (h : f '' s subseteq s) (hs : s.Finite := by toFinite_tac)
+  条件: {f : α ↪ α} (h : f '' s subseteq s) (hs : s.有限 := by toFinite_tac)
   证明: eq_of_subset_of_ncard_le h (ncard_map _).ge hs
 
 Depends on / 依赖: eq_of_subset_of_ncard_le, ncard_map, toFinite_tac
@@ -3865,7 +3865,7 @@ theorem ncard_lt_ncard
 
 中文:
 定理 ncard_lt_ncard
-  条件: (h : s ⊂ t) (ht : t.Finite := by toFinite_tac)
+  条件: (h : s ⊂ t) (ht : t.有限 := by toFinite_tac)
   证明: by
   rw [← Nat.cast_lt (α := Nat∞)]; rw [ht.cast_ncard_eq]; rw [(ht.subset h.subset).cast_ncard_eq]
   exact (ht.subset h.subset).encard_lt_encard h
@@ -3888,7 +3888,7 @@ theorem ncard_lt_card
 
 中文:
 定理 ncard_lt_card
-  条件: [Finite α] (h : s != univ)
+  条件: [有限 α] (h : s != univ)
   结论: s.ncard < 自然数.card α
   证明: ncard_univ α ▸ ncard_lt_ncard (ssubset_univ_iff.mpr h)
 
@@ -3908,8 +3908,8 @@ theorem ncard_strictMono
 
 中文:
 定理 ncard_strictMono
-  条件: [Finite α]
-  结论: @StrictMono (Set α) _ _ _ ncard
+  条件: [有限 α]
+  结论: @严格递增 (集合 α) _ _ _ ncard
   证明: fun _ _ h => ncard_lt_ncard h
 
 Depends on / 依赖: ncard_lt_ncard
@@ -3926,8 +3926,8 @@ theorem Finite.ncard_strictMonoOn
   proof: fun _ _ _ ht hlt => ncard_lt_ncard hlt ht
 
 中文:
-定理 Finite.ncard_strictMonoOn
-  结论: StrictMonoOn (α := Set α) ncard (Set.ofPred Set.Finite)
+定理 有限.ncard_strictMonoOn
+  结论: StrictMonoOn (α := 集合 α) ncard (集合.ofPred 集合.有限)
   证明: fun _ _ _ ht hlt => ncard_lt_ncard hlt ht
 
 Depends on / 依赖: Finite, Set.Finite, Set.ofPred, ofPred
@@ -3995,7 +3995,7 @@ theorem ncard_congr
 
 中文:
 定理 ncard_congr
-  结论: {t : Set β} (f : 对任意 a in s, β) (h₁ : 对任意 a ha, f a ha in t)
+  结论: {t : 集合 β} (f : 对任意 a in s, β) (h₁ : 对任意 a ha, f a ha in t)
   证明: by
   set f' : s -> t := fun x => ⟨f x.1 x.2, h₁ _ _⟩
   have hbij : f'.Bijective := by
@@ -4037,8 +4037,8 @@ theorem ncard_congr'
 
 中文:
 定理 ncard_congr'
-  条件: {S : Set α} {T : Set β} (f : S ≃ T)
-  结论: Set.ncard S = Set.ncard T
+  条件: {S : 集合 α} {T : 集合 β} (f : S ≃ T)
+  结论: 集合.ncard S = 集合.ncard T
   证明: Cardinal.toNat_congr f
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_congr, toNat_congr
@@ -4058,7 +4058,7 @@ theorem ncard_le_ncard_of_injOn
 
 中文:
 定理 ncard_le_ncard_of_injOn
-  结论: {t : Set β} (f : α -> β) (hf : 对任意 a in s, f a in t) (f_inj : InjOn f s)
+  结论: {t : 集合 β} (f : α -> β) (hf : 对任意 a in s, f a in t) (f_inj : 单射限制 f s)
   证明: by
   have hle := encard_le_encard_of_injOn hf f_inj
   to_encard_tac; rwa [ht.cast_ncard_eq, (ht.finite_of_encard_le hle).cast_ncard_eq]
@@ -4082,7 +4082,7 @@ theorem ncard_range_of_injective
 
 中文:
 定理 ncard_range_of_injective
-  条件: (hf : Function.Injective f)
+  条件: (hf : 函数.单射 f)
   证明: by
   rw [← image_univ]; rw [ncard_image_of_injective univ hf]; rw [ncard_univ]
 
@@ -4102,8 +4102,8 @@ theorem BijOn.ncard_eq
   proof: ncard_congr' h.equiv
 
 中文:
-定理 BijOn.ncard_eq
-  条件: {t : Set β} (h : Set.BijOn f s t)
+定理 双射限制.ncard_eq
+  条件: {t : 集合 β} (h : 集合.双射限制 f s t)
   结论: s.ncard = t.ncard
   证明: ncard_congr' h.equiv
 
@@ -4123,8 +4123,8 @@ theorem exists_ne_map_eq_of_ncard_lt_of_maps_to
   exact (ncard_le_ncard_of_injOn f hf h' ht).not_gt hc
 
 中文:
-定理 exists_ne_map_eq_of_ncard_lt_of_maps_to
-  结论: {t : Set β} (hc : t.ncard < s.ncard) {f : α -> β}
+定理 存在_ne_map_eq_of_ncard_lt_of_maps_to
+  结论: {t : 集合 β} (hc : t.ncard < s.ncard) {f : α -> β}
   证明: by
   by_contra h'
   simp only [Ne, not_exists, not_and, not_imp_not] at h'
@@ -4183,7 +4183,7 @@ theorem surj_on_of_inj_on_of_ncard_le
 
 中文:
 定理 surj_on_of_inj_on_of_ncard_le
-  结论: {t : Set β} (f : 对任意 a in s, β) (hf : 对任意 a ha, f a ha in t)
+  结论: {t : 集合 β} (f : 对任意 a in s, β) (hf : 对任意 a ha, f a ha in t)
   证明: by
   intro b hb
   set f' : s -> t := fun x => ⟨f x.1 x.2, hf _ _⟩
@@ -4238,7 +4238,7 @@ theorem inj_on_of_surj_on_of_ncard_le
 
 中文:
 定理 inj_on_of_surj_on_of_ncard_le
-  结论: {t : Set β} (f : 对任意 a in s, β) (hf : 对任意 a ha, f a ha in t)
+  结论: {t : 集合 β} (f : 对任意 a in s, β) (hf : 对任意 a ha, f a ha in t)
   证明: by
   classical
   set f' : s -> t := fun x => ⟨f x.1 x.2, hf _ _⟩
@@ -4283,7 +4283,7 @@ theorem ncard_coe
 
 中文:
 定理 ncard_coe
-  条件: {α : 类型} (s : Set α)
+  条件: {α : 类型} (s : 集合 α)
   证明: by simp
 -/
 theorem ncard_coe {α : Type*} (s : Set α) :
@@ -4301,7 +4301,7 @@ lemma ncard_graphOn
 
 中文:
 引理 ncard_graphOn
-  条件: (s : Set α) (f : α -> β)
+  条件: (s : 集合 α) (f : α -> β)
   结论: (s.graphOn f).ncard = s.ncard
   证明: by
   rw [← fst_injOn_graph.ncard_image]; rw [image_fst_graphOn]
@@ -4325,7 +4325,7 @@ lemma ncard_powerset_ncard
 
 中文:
 引理 ncard_powerset_ncard
-  条件: (hs : s.Finite) (n : 自然数)
+  条件: (hs : s.有限) (n : 自然数)
   证明: by
   lift s to Finset α using hs
   have h₁ : {t subseteq (s : Set α) | t.ncard = n} subseteq range ((↑) : Finset α -> Set α) := by
@@ -4362,7 +4362,7 @@ theorem ncard_union_add_ncard_inter
 
 中文:
 定理 ncard_union_add_ncard_inter
-  结论: (s t : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s t : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   to_encard_tac; rw [hs.cast_ncard_eq, ht.cast_ncard_eq, (hs.union ht).cast_ncard_eq,
     (hs.subset inter_subset_left).cast_ncard_eq, encard_union_add_encard_inter]
@@ -4385,7 +4385,7 @@ theorem ncard_inter_add_ncard_union
 
 中文:
 定理 ncard_inter_add_ncard_union
-  结论: (s t : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s t : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [add_comm]; rw [ncard_union_add_ncard_inter _ _ hs ht]
 
@@ -4412,7 +4412,7 @@ theorem ncard_union_le
 
 中文:
 定理 ncard_union_le
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: (s union t).ncard <= s.ncard + t.ncard
   证明: by
   obtain (h | h) := (s union t).finite_or_infinite
@@ -4444,7 +4444,7 @@ theorem ncard_union_eq
 
 中文:
 定理 ncard_union_eq
-  结论: (h : Disjoint s t) (hs : s.Finite := by toFinite_tac)
+  结论: (h : Disjoint s t) (hs : s.有限 := by toFinite_tac)
   证明: by
   to_encard_tac
   rw [hs.cast_ncard_eq]; rw [ht.cast_ncard_eq]; rw [(hs.union ht).cast_ncard_eq]; rw [encard_union_eq h]
@@ -4467,7 +4467,7 @@ theorem ncard_union_eq_iff
 
 中文:
 定理 ncard_union_eq_iff
-  结论: (hs : s.Finite := by toFinite_tac)
+  结论: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_union_add_ncard_inter s t hs ht]; rw [left_eq_add]; rw [ncard_eq_zero (hs.inter_of_left t)]; rw [disjoint_iff_inter_eq_empty]
 
@@ -4487,7 +4487,7 @@ theorem ncard_union_lt
 
 中文:
 定理 ncard_union_lt
-  结论: (hs : s.Finite := by toFinite_tac)
+  结论: (hs : s.有限 := by toFinite_tac)
   证明: (ncard_union_le s t).lt_of_ne (mt (ncard_union_eq_iff hs ht).mp h)
 
 Depends on / 依赖: Disjoint, Finite, lt_of_ne, ncard_union_eq_iff, ncard_union_le, s.ncard, t.Finite, t.ncard, toFinite_tac
@@ -4512,7 +4512,7 @@ alias ncard_diff_add_ncard_of_subset := ncard_sdiff_add_ncard_of_subset
 
 中文:
 定理 ncard_sdiff_add_ncard_of_subset
-  条件: (h : s subseteq t) (ht : t.Finite := by toFinite_tac)
+  条件: (h : s subseteq t) (ht : t.有限 := by toFinite_tac)
   证明: by
   to_encard_tac
   rw [ht.cast_ncard_eq]; rw [(ht.subset h).cast_ncard_eq]; rw [ht.sdiff.cast_ncard_eq]; rw [encard_sdiff_add_encard_of_subset h]
@@ -4543,7 +4543,7 @@ theorem ncard_sdiff'
 
 中文:
 定理 ncard_sdiff'
-  条件: (hst : s subseteq t) (ht : t.Finite := by toFinite_tac)
+  条件: (hst : s subseteq t) (ht : t.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_sdiff_add_ncard_of_subset hst ht]; rw [add_tsub_cancel_right]
 
@@ -4572,7 +4572,7 @@ theorem ncard_sdiff
 
 中文:
 定理 ncard_sdiff
-  条件: (hst : s subseteq t) (hs : s.Finite := by toFinite_tac)
+  条件: (hst : s subseteq t) (hs : s.有限 := by toFinite_tac)
   证明: by
   obtain ht | ht := t.finite_or_infinite
   · exact ncard_sdiff' hst ht
@@ -4601,7 +4601,7 @@ lemma cast_ncard_sdiff
 
 中文:
 引理 cast_ncard_sdiff
-  条件: {R : 类型} [AddGroupWithOne R] (hst : s subseteq t) (ht : t.Finite)
+  条件: {R : 类型} [加法带幺群 R] (hst : s subseteq t) (ht : t.有限)
   证明: by
   rw [ncard_sdiff hst (ht.subset hst)]; rw [Nat.cast_sub (ncard_le_ncard hst ht)]
 
@@ -4630,7 +4630,7 @@ alias ncard_le_ncard_diff_add_ncar
 
 中文:
 定理 ncard_le_ncard_sdiff_add_ncard
-  条件: (s t : Set α) (ht : t.Finite := by toFinite_tac)
+  条件: (s t : 集合 α) (ht : t.有限 := by toFinite_tac)
   证明: by
   rcases s.finite_or_infinite with hs | hs
   · to_encard_tac
@@ -4668,7 +4668,7 @@ theorem le_ncard_sdiff
 
 中文:
 定理 le_ncard_sdiff
-  条件: (s t : Set α) (hs : s.Finite := by toFinite_tac)
+  条件: (s t : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: tsub_le_iff_left.mpr (by rw [add_comm]; apply ncard_le_ncard_sdiff_add_ncard _ _ hs)
 
 @[deprecated (since := "2026-06-03")] alias le_ncard_diff := le_ncard_sdiff
@@ -4694,7 +4694,7 @@ theorem ncard_sdiff_add_ncard
 
 中文:
 定理 ncard_sdiff_add_ncard
-  结论: (s t : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s t : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_union_eq disjoint_sdiff_left hs.sdiff ht]; rw [sdiff_union_self]
 
@@ -4751,7 +4751,7 @@ theorem exists_mem_notMem_of_ncard_lt_ncard
   proof: sdiff_nonempty_of_ncard_lt_ncard h hs
 
 中文:
-定理 exists_mem_notMem_of_ncard_lt_ncard
+定理 存在_mem_notMem_of_ncard_lt_ncard
   结论: (h : s.ncard < t.ncard)
   证明: sdiff_nonempty_of_ncard_lt_ncard h hs
 
@@ -4776,7 +4776,7 @@ alias ncard_inter_add_ncard_diff_eq_ncard := ncard_inter_add_ncard_sdiff_eq_ncar
 
 中文:
 定理 ncard_inter_add_ncard_sdiff_eq_ncard
-  结论: (s t : Set α)
+  结论: (s t : 集合 α)
   证明: by
   rw [← ncard_union_eq (disjoint_of_subset_left inter_subset_right disjoint_sdiff_right)
     (hs.inter_of_left _) hs.sdiff]; rw [union_comm]; rw [sdiff_union_inter]
@@ -4806,7 +4806,7 @@ alias ncard_eq_ncard_iff_ncard_diff_eq_ncard_diff := ncard_eq_ncard_iff_ncard_sd
 
 中文:
 定理 ncard_eq_ncard_iff_ncard_sdiff_eq_ncard_sdiff
-  结论: (hs : s.Finite := by toFinite_tac)
+  结论: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_inter_add_ncard_sdiff_eq_ncard s t hs]; rw [← ncard_inter_add_ncard_sdiff_eq_ncard t s ht]; rw [inter_comm]; rw [add_right_inj]
 
@@ -4836,7 +4836,7 @@ alias ncard_le_ncard_iff_ncard_diff_le_ncard_diff := ncard_le_ncard_iff_ncard_sd
 
 中文:
 定理 ncard_le_ncard_iff_ncard_sdiff_le_ncard_sdiff
-  结论: (hs : s.Finite := by toFinite_tac)
+  结论: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_inter_add_ncard_sdiff_eq_ncard s t hs]; rw [← ncard_inter_add_ncard_sdiff_eq_ncard t s ht]; rw [inter_comm]; rw [add_le_add_iff_left]
 
@@ -4866,7 +4866,7 @@ alias ncard_lt_ncard_iff_ncard_diff_lt_ncard_diff := ncard_lt_ncard_iff_ncard_sd
 
 中文:
 定理 ncard_lt_ncard_iff_ncard_sdiff_lt_ncard_sdiff
-  结论: (hs : s.Finite := by toFinite_tac)
+  结论: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_inter_add_ncard_sdiff_eq_ncard s t hs]; rw [← ncard_inter_add_ncard_sdiff_eq_ncard t s ht]; rw [inter_comm]; rw [add_lt_add_iff_left]
 
@@ -4893,7 +4893,7 @@ theorem ncard_add_ncard_compl
 
 中文:
 定理 ncard_add_ncard_compl
-  结论: (s : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_univ]; rw [← ncard_union_eq (@disjoint_compl_right _ _ s) hs hsc]; rw [union_compl_self]
 
@@ -4914,7 +4914,7 @@ theorem ncard_compl_add_ncard
 
 中文:
 定理 ncard_compl_add_ncard
-  结论: (s : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [add_comm]; rw [ncard_add_ncard_compl s hs hsc]
 
@@ -4935,7 +4935,7 @@ theorem ncard_compl
 
 中文:
 定理 ncard_compl
-  结论: (s : Set α) (hs : s.Finite := by toFinite_tac)
+  结论: (s : 集合 α) (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [← ncard_add_ncard_compl s hs hsc]; rw [Nat.add_sub_cancel_left]
 
@@ -4956,7 +4956,7 @@ theorem ncard_compl_of_ncard_eq_add
 
 中文:
 定理 ncard_compl_of_ncard_eq_add
-  结论: [Finite α] (s : Set α) {n : 自然数}
+  结论: [有限 α] (s : 集合 α) {n : 自然数}
   证明: by
   rwa [← ncard_compl_add_ncard s, Nat.add_right_cancel_iff] at h
 
@@ -4978,7 +4978,7 @@ theorem eq_univ_iff_ncard
 
 中文:
 定理 eq_univ_iff_ncard
-  条件: [Finite α] (s : Set α)
+  条件: [有限 α] (s : 集合 α)
   证明: by
   rw [← compl_empty_iff]; rw [← ncard_eq_zero]; rw [← ncard_add_ncard_compl s]; rw [left_eq_add]
 
@@ -4999,7 +4999,7 @@ lemma even_ncard_compl_iff
 
 中文:
 引理 even_ncard_compl_iff
-  条件: [Finite α] (heven : Even (自然数.card α)) (s : Set α)
+  条件: [有限 α] (heven : Even (自然数.card α)) (s : 集合 α)
   证明: by
   rwa [iff_comm, ← Nat.even_add, ncard_add_ncard_compl]
 
@@ -5020,7 +5020,7 @@ lemma odd_ncard_compl_iff
 
 中文:
 引理 odd_ncard_compl_iff
-  条件: [Finite α] (heven : Even (自然数.card α)) (s : Set α)
+  条件: [有限 α] (heven : Even (自然数.card α)) (s : 集合 α)
   证明: by
   rw [← Nat.not_even_iff_odd]; rw [even_ncard_compl_iff heven]; rw [Nat.not_even_iff_odd]
 
@@ -5043,7 +5043,7 @@ theorem nonempty_inter_of_lt_ncard_add_ncard
 
 中文:
 定理 nonempty_inter_of_lt_ncard_add_ncard
-  结论: [Finite α]
+  结论: [有限 α]
   证明: by
   rw [← ncard_union_add_ncard_inter s t] at h
   replace h := (s union t).ncard_le_card.trans_lt h
@@ -5070,7 +5070,7 @@ theorem nonempty_inter_of_le_ncard_add_ncard
 
 中文:
 定理 nonempty_inter_of_le_ncard_add_ncard
-  结论: [Finite α]
+  结论: [有限 α]
   证明: by
   rw [← ncard_union_add_ncard_inter s t] at h'
   replace h := (ncard_lt_card h).trans_le h'
@@ -5149,7 +5149,7 @@ lemma exists_subsuperset_card_eq
   obtain ⟨u, hsu, hut, hu⟩ := Finset.exists_subsuperset_card_eq (mod_cast hst) (by simpa using
 
 中文:
-引理 exists_subsuperset_card_eq
+引理 存在_subsuperset_card_eq
   条件: {n : 自然数} (hst : s subseteq t) (hsn : s.ncard <= n) (hnt : n <= t.ncard)
   证明: by
   obtain ht | ht := t.infinite_or_finite
@@ -5183,7 +5183,7 @@ lemma exists_subset_card_eq
   simpa using exists_subsuperset_card_eq s.empty_subset (by simp) hns
 
 中文:
-引理 exists_subset_card_eq
+引理 存在_subset_card_eq
   条件: {n : 自然数} (hns : n <= s.ncard)
   结论: 存在 t subseteq s, t.ncard = n
   证明: by
@@ -5208,8 +5208,8 @@ theorem Infinite.exists_subset_ncard_eq
   simp
 
 中文:
-定理 Infinite.exists_subset_ncard_eq
-  条件: {s : Set α} (hs : s.Infinite) (k : 自然数)
+定理 无限.存在_subset_ncard_eq
+  条件: {s : 集合 α} (hs : s.无限) (k : 自然数)
   证明: by
   have := hs.to_subtype
   obtain ⟨t', -, rfl⟩ := @Infinite.exists_subset_card_eq s univ infinite_univ k
@@ -5240,8 +5240,8 @@ theorem Infinite.exists_superset_ncard_eq
     add_tsub_cancel_of_le
 
 中文:
-定理 Infinite.exists_superset_ncard_eq
-  结论: {s t : Set α} (ht : t.Infinite) (hst : s subseteq t)
+定理 无限.存在_superset_ncard_eq
+  结论: {s t : 集合 α} (ht : t.无限) (hst : s subseteq t)
   证明: by
   obtain ⟨s₁, hs₁, hs₁fin, hs₁card⟩ := (ht.sdiff hs).exists_subset_ncard_eq (k - s.ncard)
   refine ⟨s union s₁, subset_union_left, union_subset hst (hs₁.trans sdiff_subset), ?_⟩
@@ -5271,7 +5271,7 @@ theorem exists_subset_or_subset_of_two_mul_lt_ncard
   obtain ⟨r', hnr', hr'⟩ := Finset.exists_subset_or_subset_of_two_mul_lt
 
 中文:
-定理 exists_subset_or_subset_of_two_mul_lt_ncard
+定理 存在_subset_or_subset_of_two_mul_lt_ncard
   条件: {n : 自然数} (hst : 2 * n < (s union t).ncard)
   证明: by
   classical
@@ -5302,8 +5302,8 @@ lemma _root_.Finset.exists_not_mem_of_card_lt_enatCard
   simp [← Set.encard_coe_eq_coe_finsetCard, Set.eq_univ_of_forall (α := α) (s := s) hs]
 
 中文:
-引理 _root_.Finset.exists_not_mem_of_card_lt_enatCard
-  条件: {s : Finset α} (hs : s.card < E自然数.card α)
+引理 _root_.有限集.存在_not_mem_of_card_lt_enatCard
+  条件: {s : 有限集 α} (hs : s.card < E自然数.card α)
   证明: by
   contrapose! hs
   simp [← Set.encard_coe_eq_coe_finsetCard, Set.eq_univ_of_forall (α := α) (s := s) hs]
@@ -5366,8 +5366,8 @@ theorem exists_eq_insert_iff_ncard
     simp [Finset.ex
 
 中文:
-定理 exists_eq_insert_iff_ncard
-  条件: (hs : s.Finite := by toFinite_tac)
+定理 存在_eq_insert_iff_ncard
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   classical
   rcases t.finite_or_infinite with ht | ht
@@ -5404,7 +5404,7 @@ theorem ncard_le_one
 
 中文:
 定理 ncard_le_one
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp_rw [ncard_eq_toFinset_card _ hs, Finset.card_le_one, Finite.mem_toFinset]
 
@@ -5424,7 +5424,7 @@ theorem ncard_le_one_iff_subsingleton
 
 中文:
 定理 ncard_le_one_iff_subsingleton
-  条件: [Finite s]
+  条件: [有限 s]
   证明: ncard_le_one inferInstanceAs (Finite s)
 -/
 @[simp] theorem ncard_le_one_iff_subsingleton [Finite s] :
@@ -5443,7 +5443,7 @@ theorem ncard_le_one_iff
 
 中文:
 定理 ncard_le_one_iff
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [ncard_le_one hs]
   tauto
@@ -5470,7 +5470,7 @@ theorem ncard_le_one_iff_eq
 
 中文:
 定理 ncard_le_one_iff_eq
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   obtain rfl | ⟨x, hx⟩ := s.eq_empty_or_nonempty
   · exact iff_of_true (by simp) (Or.inl rfl)
@@ -5500,7 +5500,7 @@ theorem ncard_le_one_iff_subset_singleton
 
 中文:
 定理 ncard_le_one_iff_subset_singleton
-  结论: [Nonempty α]
+  结论: [非空 α]
   证明: by
   simp_rw [ncard_eq_toFinset_card _ hs, Finset.card_le_one_iff_subset_singleton,
     Finite.toFinset_subset, Finset.coe_singleton]
@@ -5526,7 +5526,7 @@ theorem ncard_le_one_of_subsingleton
 
 中文:
 定理 ncard_le_one_of_subsingleton
-  条件: [Subsingleton α] (s : Set α)
+  条件: [子单例 α] (s : 集合 α)
   结论: s.ncard <= 1
   证明: by
   rw [ncard_eq_toFinset_card]
@@ -5549,7 +5549,7 @@ theorem one_lt_ncard_iff_nontrivial
 
 中文:
 定理 one_lt_ncard_iff_nontrivial
-  条件: [Finite s]
+  条件: [有限 s]
   证明: by
   rw [← not_subsingleton_iff]; rw [← ncard_le_one_iff_subsingleton]; rw [not_le]
 
@@ -5604,7 +5604,7 @@ theorem one_lt_ncard
 
 中文:
 定理 one_lt_ncard
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp_rw [ncard_eq_toFinset_card _ hs, Finset.one_lt_card, Finite.mem_toFinset]
 
@@ -5626,7 +5626,7 @@ theorem one_lt_ncard_iff
 
 中文:
 定理 one_lt_ncard_iff
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   rw [one_lt_ncard hs]
   simp only [exists_and_left]
@@ -5651,7 +5651,7 @@ lemma one_lt_ncard_of_nonempty_of_even
 
 中文:
 引理 one_lt_ncard_of_nonempty_of_even
-  结论: (hs : Set.Finite s) (hn : Set.Nonempty s := by toFinite_tac)
+  结论: (hs : 集合.有限 s) (hn : 集合.非空 s := by toFinite_tac)
   证明: by
   rw [← Set.ncard_pos hs] at hn
   have : s.ncard != 1 := fun h => by simp [h] at he
@@ -5676,7 +5676,7 @@ theorem two_lt_ncard_iff
 
 中文:
 定理 two_lt_ncard_iff
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp_rw [ncard_eq_toFinset_card _ hs, Finset.two_lt_card_iff, Finite.mem_toFinset]
 
@@ -5697,7 +5697,7 @@ theorem two_lt_ncard
 
 中文:
 定理 two_lt_ncard
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp only [two_lt_ncard_iff hs, exists_and_left]
 
@@ -5718,7 +5718,7 @@ theorem three_lt_ncard_iff
 
 中文:
 定理 three_lt_ncard_iff
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp_rw [ncard_eq_toFinset_card _ hs, Finset.three_lt_card_iff, Finite.mem_toFinset]
 
@@ -5740,7 +5740,7 @@ theorem three_lt_ncard
 
 中文:
 定理 three_lt_ncard
-  条件: (hs : s.Finite := by toFinite_tac)
+  条件: (hs : s.有限 := by toFinite_tac)
   证明: by
   simp only [three_lt_ncard_iff hs, exists_and_left]
 
@@ -5764,7 +5764,7 @@ theorem exists_ne_of_one_lt_ncard
   simpa only [Finite.mem_toFinset] using Finset.exists_mem_ne hs a
 
 中文:
-定理 exists_ne_of_one_lt_ncard
+定理 存在_ne_of_one_lt_ncard
   条件: (hs : 1 < s.ncard) (a : α)
   结论: 存在 b, b in s ∧ b != a
   证明: by
@@ -5832,7 +5832,7 @@ theorem ncard_eq_succ
 
 中文:
 定理 ncard_eq_succ
-  条件: {n : 自然数} (hs : s.Finite := by toFinite_tac)
+  条件: {n : 自然数} (hs : s.有限 := by toFinite_tac)
   证明: by
   refine ⟨eq_insert_of_ncard_eq_succ, ?_⟩
   rintro ⟨a, t, hat, h, rfl⟩
@@ -5930,7 +5930,7 @@ theorem ncard_sumEquiv_symm_apply
 
 中文:
 定理 ncard_sumEquiv_symm_apply
-  条件: {α : 类型} (s : Set α)
+  条件: {α : 类型} (s : 集合 α)
   证明: by
   by_cases hs : s.Finite
   · simp [(ncard_union_eq_iff (.image _ hs) (.image _ hs)).2 disjoint_image_inl_image_inr,
@@ -5963,7 +5963,7 @@ theorem Function.Surjective.card_le_card_add_one_iff
   rw [← Set.ncard_range_of_injective (Function.injective_surjInv hf)]; rw [← Set.ncard_add_ncar
 
 中文:
-定理 Function.Surjective.card_le_card_add_one_iff
+定理 函数.满射.card_le_card_add_one_iff
   证明: by
   rcases isEmpty_or_nonempty α
   · simp
@@ -6014,8 +6014,8 @@ theorem Set.ncard_le_ncard_image_add_one_iff
       (Set.surjective_mapsTo_image_restrict f s).card_le_card_add_one_iff
 
 中文:
-定理 Set.ncard_le_ncard_image_add_one_iff
-  条件: {α β : 类型} (s : Set α) [Finite s] (f : α -> β)
+定理 集合.ncard_le_ncard_image_add_one_iff
+  条件: {α β : 类型} (s : 集合 α) [有限 s] (f : α -> β)
   证明: by
   simpa [Subtype.ext_iff, ← (Set.image_injective.mpr Subtype.val_injective).eq_iff,
      Set.image_insert_eq, Set.image_singleton] using

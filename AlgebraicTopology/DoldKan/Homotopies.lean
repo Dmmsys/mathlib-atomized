@@ -100,7 +100,7 @@ theorem c_mk
 中文:
 定理 c_mk
   条件: (i j : 自然数) (h : j + 1 = i)
-  结论: c.Rel i j
+  结论: c.关系 i j
   证明: ComplexShape.down_mk i j h
 
 Depends on / 依赖: ComplexShape, ComplexShape.down_mk, down_mk
@@ -125,7 +125,7 @@ theorem cs_down_0_not_rel_left
 中文:
 定理 cs_down_0_not_rel_left
   条件: (j : 自然数)
-  结论: ¬c.Rel 0 j
+  结论: ¬c.关系 0 j
   证明: by
   intro hj
   dsimp at hj
@@ -189,7 +189,7 @@ theorem hσ'_eq_zero
 
 中文:
 定理 hσ'_eq_zero
-  条件: {q n m : 自然数} (hnq : n < q) (hnm : c.Rel m n)
+  条件: {q n m : 自然数} (hnq : n < q) (hnm : c.关系 m n)
   证明: by
   simp only [hσ', hσ]
   split_ifs
@@ -215,7 +215,7 @@ theorem hσ'_eq
 
 中文:
 定理 hσ'_eq
-  条件: {q n a m : 自然数} (ha : n = a + q) (hnm : c.Rel m n)
+  条件: {q n a m : 自然数} (ha : n = a + q) (hnm : c.关系 m n)
   证明: by
   #adaptation_note /-- Before https://github.com/leanprover/lean4/pull/13166
   (replacing grind's canonicalizer with a type-directed normalizer), `grind` closed this goal.
@@ -345,7 +345,7 @@ theorem hσ'_naturality
 
 中文:
 定理 hσ'_naturality
-  条件: (q : 自然数) (n m : 自然数) (hnm : c.Rel m n) {X Y : SimplicialObject C} (f : X ⟶ Y)
+  条件: (q : 自然数) (n m : 自然数) (hnm : c.关系 m n) {X Y : SimplicialObject C} (f : X ⟶ Y)
   证明: by
   obtain rfl : n + 1 = m := hnm
   -- `simp? [hσ', hσ]` says:
@@ -414,7 +414,7 @@ theorem map_hσ'
 
 中文:
 定理 map_hσ'
-  结论: {D : 类型} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
+  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
   证明: by
   unfold hσ' hσ
   split_ifs
@@ -450,7 +450,7 @@ theorem map_Hσ
 
 中文:
 定理 map_Hσ
-  结论: {D : 类型} [Category* D] [Preadditive D] (G : C ⥤ D) [G.Additive]
+  结论: {D : 类型} [范畴* D] [预加性 D] (G : C ⥤ D) [G.加性]
   证明: by
   unfold Hσ
   have eq := HomologicalComplex.congr_hom (map_nullHomotopicMap' G (@hσ' _ _ _ X q)) n

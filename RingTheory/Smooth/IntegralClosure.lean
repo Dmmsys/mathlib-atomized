@@ -48,7 +48,7 @@ definition TensorProduct.toIntegralClosure
       ((y.2.map (Algebra.TensorProduct.includeRight (R := R) (A := S))).tower_top (A := S)
 
 中文:
-定义 TensorProduct.toIntegralClosure
+定义 张量积.to整数egralClosure
   定义体: (Algebra.TensorProduct.map (.id _ _) (integralClosure R B).val).codRestrict _ fun x => by
   induction x with
   | zero => simp
@@ -84,8 +84,8 @@ lemma TensorProduct.toIntegralClosure_injective_of_flat
     (integralClosure R B).val.toLinearMap Subtype.val_injective
 
 中文:
-引理 TensorProduct.toIntegralClosure_injective_of_flat
-  条件: [Module.Flat R S]
+引理 张量积.to整数egralClosure_injective_of_flat
+  条件: [模.平坦 R S]
   证明: by
   refine Function.Injective.of_comp (f := (integralClosure _ _).val) ?_
   rw [← AlgHom.coe_comp]; rw [toIntegralClosure]; rw [AlgHom.val_comp_codRestrict]
@@ -115,7 +115,7 @@ let e := (Algebra.TensorProduct.cancelBaseChange ..).symm.trans
   rw [← e.coe_
 
 中文:
-引理 TensorProduct.toIntegralClosure_bijective_of_tower
+引理 张量积.to整数egralClosure_bijective_of_tower
   证明: by
 let e := (Algebra.TensorProduct.cancelBaseChange ..).symm.trans
 (Algebra.TensorProduct.congr (.refl (R := T) (A₁ := T)) (.ofBijective _ H)).trans
@@ -154,7 +154,7 @@ lemma TensorProduct.toIntegralClosure_bijective_of_isLocalizationAway
     refine isLocal
 
 中文:
-引理 TensorProduct.toIntegralClosure_bijective_of_isLocalizationAway
+引理 张量积.to整数egralClosure_bijective_of_isLocalizationAway
   证明: by
   have (r : s) : IsLocalizedModule.Away r.1
       (Algebra.TensorProduct.map (Algebra.ofId S (Sᵣ r))
@@ -234,7 +234,7 @@ lemma TensorProduct.toIntegralClosure_mvPolynomial_bijective
   let e₁ := (Algebra.TensorProduct.comm
 
 中文:
-引理 TensorProduct.toIntegralClosure_mvPolynomial_bijective
+引理 张量积.to整数egralClosure_mvPolynomial_bijective
   条件: {σ : 类型}
   证明: by
   classical
@@ -292,7 +292,7 @@ lemma TensorProduct.toIntegralClosure_bijective_of_isLocalization
     con
 
 中文:
-引理 TensorProduct.toIntegralClosure_bijective_of_isLocalization
+引理 张量积.to整数egralClosure_bijective_of_isLocalization
   证明: by
   let φ : integralClosure R B ->ₐ[R] integralClosure S (S otimes[R] B) :=
     AlgHom.codRestrict (Algebra.TensorProduct.includeRight.comp (integralClosure R B).val)
@@ -354,7 +354,7 @@ lemma exists_derivative_mul_eq_and_isIntegral_coeff
   algebraize [φ.toRingHo
 
 中文:
-引理 exists_derivative_mul_eq_and_isIntegral_coeff
+引理 存在_derivative_mul_eq_and_is整数egral_coeff
   证明: by
   cases subsingleton_or_nontrivial B
   · exact ⟨0, Subsingleton.elim _ _, by simp [isIntegral_zero]⟩
@@ -464,7 +464,7 @@ theorem mem_adjoin_map_integralClosure_of_isStandardEtale
 
 中文:
 定理 mem_adjoin_map_integralClosure_of_isStandardEtale
-  结论: [Algebra.IsStandardEtale R S]
+  结论: [代数.是StandardEtale R S]
   证明: by
   -- By assumption, `S = (R[X]/f)[1/g]` for some `f g : R[X]`. Let `x : S` denote the image of `X`.
   have 𝓟 := Classical.ofNonempty (α := StandardEtalePresentation R S)
@@ -572,7 +572,7 @@ theorem TensorProduct.toIntegralClosure_bijective_of_isStandardEtale
   refine 
 
 中文:
-定理 TensorProduct.toIntegralClosure_bijective_of_isStandardEtale
+定理 张量积.to整数egralClosure_bijective_of_isStandardEtale
   证明: by
   refine ⟨toIntegralClosure_injective_of_flat, ?_⟩
   intro ⟨x, hx⟩
@@ -606,8 +606,8 @@ theorem TensorProduct.toIntegralClosure_bijective_of_smooth
     exact ⟨f, hfm, toIntegralClosure_bijectiv
 
 中文:
-定理 TensorProduct.toIntegralClosure_bijective_of_smooth
-  条件: [Algebra.Smooth R S]
+定理 张量积.to整数egralClosure_bijective_of_smooth
+  条件: [代数.光滑 R S]
   证明: by
   have (m : PrimeSpectrum S) : exists f ∉ m.asIdeal,
       Function.Bijective (toIntegralClosure R (Localization.Away f) B) := by

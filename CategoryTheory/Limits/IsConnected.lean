@@ -59,7 +59,7 @@ definition constPUnitFunctor
 
 中文:
 定义 constPUnitFunctor
-  签名: : C ⥤ Type w
+  签名: : C ⥤ 类型 w
   定义体: (Functor.const C).obj PUnit.{w + 1}
 
 Depends on / 依赖: Functor, Functor.const
@@ -79,7 +79,7 @@ definition pUnitCocone
 
 中文:
 定义 pUnitCocone
-  签名: : Cocone (constPUnitFunctor.{w} C) where
+  签名: : 余锥 (constPUnitFunctor.{w} C) where
   定义体: PUnit
   ι := 𝟙 _
 -/
@@ -107,7 +107,7 @@ definition isColimitPUnitCocone
 
 中文:
 定义 isColimitPUnitCocone
-  签名: [IsConnected C]
+  签名: [是连通 C]
   定义体: s.ι.app Classical.ofNonempty
   fac s j := by
     ext ⟨⟩
@@ -143,7 +143,7 @@ instance instHasColimitConstPUnitFunctor
 
 中文:
 实例 instHasColimitConstPUnitFunctor
-  签名: [IsConnected C]
+  签名: [是连通 C]
   定义体: ⟨_, isColimitPUnitCocone _⟩
 
 Depends on / 依赖: isColimitPUnitCocone
@@ -191,7 +191,7 @@ definition colimitConstPUnitIsoPUnit
 
 中文:
 定义 colimitConstPUnitIsoPUnit
-  签名: [IsConnected C]
+  签名: [是连通 C]
   定义体: IsColimit.coconePointUniqueUpToIso (colimit.isColimit _) (isColimitPUnitCocone.{w} C)
 
 Depends on / 依赖: Functor, Functor.additive_of_iso, IsColimit, IsColimit.coconePointUniqueUpToIso, Localization, Localization.functor_additive_iff, W.Q.commShiftIso, additive_of_iso, coconePointUniqueUpToIso, colimit, colimit.isColimit, commShiftIso, functor_additive_iff, isColimit, isColimitPUnitCocone
@@ -215,7 +215,7 @@ theorem zigzag_of_eqvGen_colimitTypeRel
 
 中文:
 定理 zigzag_of_eqvGen_colimitTypeRel
-  结论: (F : C ⥤ Type w) (c d : Σ j, F.obj j)
+  结论: (F : C ⥤ 类型 w) (c d : Σ j, F.obj j)
   证明: by
   induction h with
 | rel _ _ h => exact Zigzag.of_hom Exists.choose h
@@ -320,8 +320,8 @@ CategoryTheory.Functor.Final.colimitIso F constPUnitFunctor.{max u v u₂ v₂} 
 
 中文:
 定理 isConnected_iff_of_final
-  条件: (F : C ⥤ D) [F.Final]
-  结论: IsConnected C ↔ IsConnected D
+  条件: (F : C ⥤ D) [F.终]
+  结论: 是连通 C ↔ 是连通 D
   证明: by
   rw [isConnected_iff_colimit_constPUnitFunctor_iso_pUnit.{max v u v₂ u₂} C]; rw [isConnected_iff_colimit_constPUnitFunctor_iso_pUnit.{max v u v₂ u₂} D]
 exact Equiv.nonempty_congr Iso.isoCongrLeft
@@ -347,8 +347,8 @@ theorem isConnected_iff_of_initial
 
 中文:
 定理 isConnected_iff_of_initial
-  条件: (F : C ⥤ D) [F.Initial]
-  结论: IsConnected C ↔ IsConnected D
+  条件: (F : C ⥤ D) [F.初始]
+  结论: 是连通 C ↔ 是连通 D
   证明: by
   rw [← isConnected_op_iff_isConnected C]; rw [← isConnected_op_iff_isConnected D]
   exact isConnected_iff_of_final F.op
@@ -384,7 +384,7 @@ exact ⟨Zag.symm Zag.of_hom h.to _, Z
 中文:
 引理 isConnected_of_isInitial
   条件: {x : C} (h : Limits.IsInitial x)
-  结论: IsConnected C
+  结论: 是连通 C
   证明: by
   let : Nonempty C := ⟨x⟩
   apply isConnected_of_zigzag
@@ -423,8 +423,8 @@ exact ⟨Zag.of_hom h.from _, Zag.symm
 
 中文:
 引理 isConnected_of_isTerminal
-  条件: {x : C} (h : Limits.IsTerminal x)
-  结论: IsConnected C
+  条件: {x : C} (h : Limits.是终止 x)
+  结论: 是连通 C
   证明: by
   let : Nonempty C := ⟨x⟩
   apply isConnected_of_zigzag
@@ -458,7 +458,7 @@ lemma isConnected_of_hasInitial
 中文:
 引理 isConnected_of_hasInitial
   条件: [Limits.HasInitial C]
-  结论: IsConnected C
+  结论: 是连通 C
   证明: isConnected_of_isInitial C Limits.initialIsInitial
 
 Depends on / 依赖: Limits, Limits.initialIsInitial, initialIsInitial, isConnected_of_isInitial
@@ -477,8 +477,8 @@ lemma isConnected_of_hasTerminal
 
 中文:
 引理 isConnected_of_hasTerminal
-  条件: [Limits.HasTerminal C]
-  结论: IsConnected C
+  条件: [Limits.有终止 C]
+  结论: 是连通 C
   证明: isConnected_of_isTerminal C Limits.terminalIsTerminal
 
 Depends on / 依赖: Limits, Limits.terminalIsTerminal, isConnected_of_isTerminal, terminalIsTerminal

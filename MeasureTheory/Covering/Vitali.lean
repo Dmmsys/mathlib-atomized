@@ -56,8 +56,8 @@ theorem exists_disjoint_subfamily_covering_enlargement
   the already chosen one, pick another element with large `δ`. Go on forever (transfinitely) unti
 
 中文:
-定理 exists_disjoint_subfamily_covering_enlargement
-  结论: (B : ι -> Set α) (t : Set ι) (δ : ι -> 实数)
+定理 存在_disjoint_subfamily_covering_enlargement
+  结论: (B : ι -> 集合 α) (t : 集合 ι) (δ : ι -> 实数)
   证明: by
   /- The proof could be formulated as a transfinite induction. First pick an element of `t` with `δ`
   as large as possible (up to a factor of `τ`). Then among the remaining elements not intersecting
@@ -173,7 +173,7 @@ theorem exists_disjoint_subfamily_covering_enlargement_closedBall
       fun a ha => 
 
 中文:
-定理 exists_disjoint_subfamily_covering_enlargement_closedBall
+定理 存在_disjoint_subfamily_covering_enlargement_closedBall
   证明: by
   rcases eq_empty_or_nonempty t with (rfl | _)
   · exact ⟨∅, Subset.refl _, pairwiseDisjoint_empty, by simp⟩
@@ -232,7 +232,7 @@ theorem exists_disjoint_subfamily_covering_enlargement_ball
       fun a ha => ⟨a, h
 
 中文:
-定理 exists_disjoint_subfamily_covering_enlargement_ball
+定理 存在_disjoint_subfamily_covering_enlargement_ball
   证明: by
   rcases eq_empty_or_nonempty t with (rfl | _)
   · exact ⟨∅, Subset.refl _, pairwiseDisjoint_empty, by simp⟩
@@ -285,7 +285,7 @@ theorem exists_disjoint_covering_ae
   such that any element of `t` intersects an element of `u` with comparable radius. Fix `ε > 0`.
 
 中文:
-定理 exists_disjoint_covering_ae
+定理 存在_disjoint_covering_ae
   证明: by
   /- The idea of the proof is the following. Assume for simplicity that `μ` is finite. Applying the
   abstract Vitali covering theorem with `δ = r` given by `hf`, one obtains a disjoint subfamily `u`,
@@ -494,7 +494,7 @@ theorem exists_disjoint_covering_ae'
   obtain ⟨_, _, ⟨a, ha₁, ha₂, ha₃⟩, _⟩ :=
 
 中文:
-定理 exists_disjoint_covering_ae'
+定理 存在_disjoint_covering_ae'
   证明: by
   suffices forall x in s, forall ε > (0 : Real), exists a in t, r a <= ε ∧ c a = x from
     exists_disjoint_covering_ae μ s t C r c B hB μB ht h't this
@@ -537,7 +537,7 @@ definition vitaliFamily
 
 中文:
 定义 vitaliFamily
-  签名: [PseudoMetricSpace α] [MeasurableSpace α] [OpensMeasurableSpace α]
+  签名: [伪度量空间 α] [可测空间 α] [OpensMeasurable空间 α]
   定义体: { a | IsClosed a ∧ (interior a).Nonempty ∧
     exists r, a subseteq closedBall x r ∧ μ (closedBall x (3 * r)) <= C * μ a }
   measurableSet _ _ ha := ha.1.measurableSet

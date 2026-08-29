@@ -34,7 +34,7 @@ lemma Types.isSeparator_punit
 
 中文:
 引理 Types.isSeparator_punit
-  结论: IsSeparator (PUnit.{u + 1})
+  结论: IsSeparator (命题单元.{u + 1})
   证明: by
   intro X Y f g h
   ext x

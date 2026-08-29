@@ -41,7 +41,7 @@ definition curryLeft
 
 中文:
 定义 curryLeft
-  签名: (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  签名: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   定义体: AlternatingMap.mkContinuousLinear f.toAlternatingMap.curryLeft ‖f‖
     f.toContinuousMultilinearMap.norm_map_cons_le
 
@@ -66,7 +66,7 @@ lemma toContinuousMultilinearMap_curryLeft
 
 中文:
 引理 toContinuousMultilinearMap_curryLeft
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E)
   证明: rfl
 
 @[simp]
@@ -88,7 +88,7 @@ lemma toAlternatingMap_curryLeft
 
 中文:
 引理 toAlternatingMap_curryLeft
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E)
   证明: rfl
 
 @[simp]
@@ -111,7 +111,7 @@ lemma norm_curryLeft
 
 中文:
 引理 norm_curryLeft
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   结论: ‖f.curryLeft‖ = ‖f‖
   证明: f.toContinuousMultilinearMap.curryLeft_norm
 
@@ -135,7 +135,7 @@ theorem curryLeft_apply_apply
 
 中文:
 定理 curryLeft_apply_apply
-  条件: (f : E [⋀^Fin (n + 1)]->L[𝕜] F) (x : E) (v : Fin n -> E)
+  条件: (f : E [⋀^有限集 (n + 1)]->L[𝕜] F) (x : E) (v : 有限集 n -> E)
   证明: rfl
 
 @[simp]
@@ -157,7 +157,7 @@ theorem curryLeft_zero
 
 中文:
 定理 curryLeft_zero
-  结论: curryLeft (0 : E [⋀^Fin (n + 1)]->L[𝕜] F) = 0
+  结论: curryLeft (0 : E [⋀^有限集 (n + 1)]->L[𝕜] F) = 0
   证明: rfl
 
 @[simp]
@@ -178,7 +178,7 @@ theorem curryLeft_add
 
 中文:
 定理 curryLeft_add
-  条件: (f g : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  条件: (f g : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   证明: rfl
 
 @[simp]
@@ -198,7 +198,7 @@ theorem curryLeft_smul
 
 中文:
 定理 curryLeft_smul
-  条件: (r : 𝕜) (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  条件: (r : 𝕜) (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   证明: rfl
 -/
 theorem curryLeft_smul (r : 𝕜) (f : E [⋀^Fin (n + 1)]->L[𝕜] F) :
@@ -249,7 +249,7 @@ theorem curryLeft_same
 
 中文:
 定理 curryLeft_same
-  条件: (f : E [⋀^Fin (n + 2)]->L[𝕜] F) (x : E)
+  条件: (f : E [⋀^有限集 (n + 2)]->L[𝕜] F) (x : E)
   证明: ext fun _ => f.map_eq_zero_of_eq _ (by simp) Fin.zero_ne_one
 
 @[simp]
@@ -273,7 +273,7 @@ theorem curryLeft_compContinuousAlternatingMap
 
 中文:
 定理 curryLeft_compContinuousAlternatingMap
-  结论: (g : F ->L[𝕜] G) (f : E [⋀^Fin (n + 1)]->L[𝕜] F)
+  结论: (g : F ->L[𝕜] G) (f : E [⋀^有限集 (n + 1)]->L[𝕜] F)
   证明: rfl
 
 @[simp]
@@ -295,7 +295,7 @@ theorem curryLeft_compContinuousLinearMap
 
 中文:
 定理 curryLeft_compContinuousLinearMap
-  条件: (g : F [⋀^Fin (n + 1)]->L[𝕜] G) (f : E ->L[𝕜] F) (x : E)
+  条件: (g : F [⋀^有限集 (n + 1)]->L[𝕜] G) (f : E ->L[𝕜] F) (x : E)
   证明: ext fun v => congr_arg g funext fun i => by cases i using Fin.cases <;> simp
 
 Depends on / 依赖: Fin.cases, congr_arg

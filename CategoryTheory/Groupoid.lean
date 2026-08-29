@@ -49,9 +49,9 @@ class Groupoid
     - comp_inv : forall {X Y : obj} (f : X ⟶ Y), comp f (inv f) = id X  [default: by cat_disch]
 
 中文:
-类 Groupoid
+类 群胚
   参数: (obj : 类型u)
-  继承: Category.{v} obj
+  继承: 范畴.{v} obj
   公理与运算 (3 个):
     - inv : 对任意 {X Y : obj}, (X ⟶ Y) -> (Y ⟶ X)
     - inv_comp : 对任意 {X Y : obj} (f : X ⟶ Y), comp (inv f) f = id Y  [默认: by cat_disch]
@@ -79,7 +79,7 @@ abbreviation LargeGroupoid
 
 中文:
 缩写 LargeGroupoid
-  签名: (C : Type (u + 1))
+  签名: (C : 类型 (u + 1))
   定义体: Groupoid.{u} C
 
 Depends on / 依赖: Groupoid
@@ -124,9 +124,9 @@ theorem Groupoid.inv_eq_inv
   proof: IsIso.eq_inv_of_hom_inv_id Groupoid.comp_inv f
 
 中文:
-定理 Groupoid.inv_eq_inv
+定理 群胚.inv_eq_inv
   条件: (f : X ⟶ Y)
-  结论: Groupoid.inv f = CategoryTheory.inv f
+  结论: 群胚.inv f = 范畴论.inv f
   证明: IsIso.eq_inv_of_hom_inv_id Groupoid.comp_inv f
 
 Depends on / 依赖: Groupoid, Groupoid.comp_inv, IsIso.eq_inv_of_hom_inv_id, comp_inv, eq_inv_of_hom_inv_id
@@ -145,7 +145,7 @@ definition Groupoid.invEquiv
   body: ⟨Groupoid.inv, Groupoid.inv, fun f => by simp, fun f => by simp⟩
 
 中文:
-定义 Groupoid.invEquiv
+定义 群胚.invEquiv
   签名: : (X ⟶ Y) ≃ (Y ⟶ X)
   定义体: ⟨Groupoid.inv, Groupoid.inv, fun f => by simp, fun f => by simp⟩
 
@@ -171,9 +171,9 @@ theorem Groupoid.reverse_eq_inv
   proof: rfl
 
 中文:
-定理 Groupoid.reverse_eq_inv
+定理 群胚.reverse_eq_inv
   条件: (f : X ⟶ Y)
-  结论: Quiver.reverse f = Groupoid.inv f
+  结论: 箭图.reverse f = 群胚.inv f
   证明: rfl
 -/
 theorem Groupoid.reverse_eq_inv (f : X ⟶ Y) : Quiver.reverse f = Groupoid.inv f :=
@@ -190,7 +190,7 @@ instance functorMapReverse
 
 中文:
 实例 functorMapReverse
-  签名: {D : 类型} [Groupoid D] (F : C ⥤ D)
+  签名: {D : 类型} [群胚 D] (F : C ⥤ D)
   定义体: by simp
 
 Depends on / 依赖: Fan.proj, opCoproductIsoProduct
@@ -212,7 +212,7 @@ definition Groupoid.isoEquivHom
   invFun f := { hom := f, inv := Groupoid.inv f }
 
 中文:
-定义 Groupoid.isoEquivHom
+定义 群胚.isoEquivHom
   签名: : (X ≅ Y) ≃ (X ⟶ Y) where
   定义体: Iso.hom
   invFun f := { hom := f, inv := Groupoid.inv f }
@@ -242,7 +242,7 @@ definition Groupoid.invEquivalence
   counitIso := NatIso.ofComponents (fun _ => .refl _)
 
 中文:
-定义 Groupoid.invEquivalence
+定义 群胚.invEquivalence
   签名: : C ≌ Cᵒᵖ where
   定义体: Opposite.op
   functor.map {_ _} f := (inv f).op
@@ -275,10 +275,10 @@ class IsGroupoid
     - all_isIso({X Y : C} (f : X ⟶ Y)) : IsIso f  [default: by infer_instance]
 
 中文:
-类 IsGroupoid
-  参数: (C : 类型u) [Category.{v} C]
+类 是群胚
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - all_isIso({X Y : C} (f : X ⟶ Y)) : IsIso f  [默认: by infer_instance]
+    - all_isIso({X Y : C} (f : X ⟶ Y)) : 是同构 f  [默认: by infer_instance]
 
 Depends on / 依赖: Category, Category.assoc, Discrete, Discrete.functor_obj, IsColimit, IsColimit.comp_coconePointUniqueUpToIso_inv, Iso.hom_inv_id_assoc, Iso.op_inv, Quiver, Quiver.Hom.op_inj, Quiver.Hom.op_unop, Quiver.Hom.unop_inj, Quiver.Hom.unop_op, _inv_comp_inj, comp_coconePointUniqueUpToIso_inv, functor_obj, hom_ext, hom_inv_id_assoc, infer_instance, opCoproductIsoProduct
 -/
@@ -302,8 +302,8 @@ definition Groupoid.ofIsGroupoid
   body: fun f => CategoryTheory.inv f
 
 中文:
-定义 Groupoid.ofIsGroupoid
-  签名: [IsGroupoid C]
+定义 群胚.ofIsGroupoid
+  签名: [是群胚 C]
   定义体: fun f => CategoryTheory.inv f
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.inv
@@ -323,8 +323,8 @@ definition Groupoid.ofIsIso
   body: fun f => CategoryTheory.inv f
 
 中文:
-定义 Groupoid.ofIsIso
-  签名: (all_is_iso : 对任意 {X Y : C} (f : X ⟶ Y), IsIso f)
+定义 群胚.ofIsIso
+  签名: (all_is_iso : 对任意 {X Y : C} (f : X ⟶ Y), 是同构 f)
   定义体: fun f => CategoryTheory.inv f
 
 Depends on / 依赖: CategoryTheory, CategoryTheory.inv
@@ -344,8 +344,8 @@ definition Groupoid.ofHomUnique
   body: all_unique.default
 
 中文:
-定义 Groupoid.ofHomUnique
-  签名: (all_unique : 对任意 {X Y : C}, Unique (X ⟶ Y))
+定义 群胚.ofHomUnique
+  签名: (all_unique : 对任意 {X Y : C}, 唯一 (X ⟶ Y))
   定义体: all_unique.default
 
 Depends on / 依赖: all_unique, all_unique.default
@@ -365,7 +365,7 @@ lemma isGroupoid_of_reflects_iso
 
 中文:
 引理 isGroupoid_of_reflects_iso
-  结论: {C D : 类型} [Category* C] [Category* D]
+  结论: {C D : 类型} [范畴* C] [范畴* D]
   证明: isIso_of_reflects_iso _ F
 
 Depends on / 依赖: isIso_of_reflects_iso
@@ -393,8 +393,8 @@ inv f := h.preimage Groupoid.inv (F.map f)
       simp }
 
 中文:
-定义 Groupoid.ofFullyFaithfulToGroupoid
-  签名: {C : 类型} [𝒞 : Category C] {D : 类型u} [Groupoid.{v} D]
+定义 群胚.ofFullyFaithfulToGroupoid
+  签名: {C : 类型} [𝒞 : 范畴 C] {D : 类型u} [群胚.{v} D]
   定义体: { 𝒞 with
 inv f := h.preimage Groupoid.inv (F.map f)
     inv_comp f := by
@@ -427,7 +427,7 @@ instance InducedCategory.groupoid
 
 中文:
 实例 InducedCategory.groupoid
-  签名: {C : 类型u} (D : 类型u₂) [Groupoid.{v} D] (F : C -> D)
+  签名: {C : 类型u} (D : 类型u₂) [群胚.{v} D] (F : C -> D)
   定义体: Groupoid.ofFullyFaithfulToGroupoid (inducedFunctor F) (fullyFaithfulInducedFunctor F)
 
 Depends on / 依赖: Groupoid, Groupoid.ofFullyFaithfulToGroupoid, fullyFaithfulInducedFunctor, inducedFunctor, ofFullyFaithfulToGroupoid
@@ -470,7 +470,7 @@ instance groupoidPi
 
 中文:
 实例 groupoidPi
-  签名: {I : 类型u} {J : I -> 类型u₂} [对任意 i, Groupoid.{v} (J i)]
+  签名: {I : 类型u} {J : I -> 类型u₂} [对任意 i, 群胚.{v} (J i)]
   定义体: fun i : I => Groupoid.inv (f i)
   comp_inv := fun f => by funext i; apply Groupoid.comp_inv
   inv_comp := fun f => by funext i; apply Groupoid.inv_comp
@@ -493,7 +493,7 @@ instance groupoidProd
 
 中文:
 实例 groupoidProd
-  签名: {α : 类型u} {β : 类型v} [Groupoid.{u₂} α] [Groupoid.{v₂} β]
+  签名: {α : 类型u} {β : 类型v} [群胚.{u₂} α] [群胚.{v₂} β]
   定义体: (Groupoid.inv f.1, Groupoid.inv f.2)
 
 Depends on / 依赖: Groupoid, Groupoid.inv
@@ -532,7 +532,7 @@ instance isGroupoidProd
 
 中文:
 实例 isGroupoidProd
-  签名: {α : 类型u} {β : 类型u₂} [Category.{v} α] [Category.{v₂} β]
+  签名: {α : 类型u} {β : 类型u₂} [范畴.{v} α] [范畴.{v₂} β]
   定义体: (isIso_prod_iff (f := f)).mpr ⟨inferInstance, inferInstance⟩
 
 Depends on / 依赖: isIso_prod_iff
@@ -562,7 +562,7 @@ lemma isGroupoid_iff_isomorphisms_eq_top
 
 中文:
 引理 isGroupoid_iff_isomorphisms_eq_top
-  条件: (C : 类型) [Category* C]
+  条件: (C : 类型) [范畴* C]
   证明: by
   constructor
   · rw [eq_top_iff]

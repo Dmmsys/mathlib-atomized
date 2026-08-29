@@ -99,7 +99,7 @@ mul_smul r s m := Quot.induction_on₃ r s m by
 
 中文:
 缩写 filteredColimitsModule
-  签名: : Module (RingCat.FilteredColimits.colimit R)
+  签名: : 模 (环范畴.FilteredColimits.colimit R)
   定义体: colimit.smul R M H
 mul_smul r s m := Quot.induction_on₃ r s m by
     rintro ⟨U₁, a₁⟩ ⟨U₂, a₂⟩ ⟨V, b⟩
@@ -180,8 +180,8 @@ abbreviation IsColimit.module
           (AddCommGrpCat.FilteredColimits.colimitCoconeIsColimit M)).addCommGroupIs
 
 中文:
-缩写 IsColimit.module
-  签名: {cR : Cocone R} (hcR : IsColimit cR) {cM : Cocone M}
+缩写 是余极限.module
+  签名: {cR : 余锥 R} (hcR : 是余极限 cR) {cM : 余锥 M}
   定义体: letI := filteredColimitsModule R M H
   letI : Module (RingCat.FilteredColimits.colimit R) cM.pt :=
     AddEquiv.module (β := AddCommGrpCat.FilteredColimits.colimit M) _
@@ -218,8 +218,8 @@ lemma IsColimit.ι_smul
   let β := IsC
 
 中文:
-引理 IsColimit.ι_smul
-  结论: {cR : Cocone R} (hcR : IsColimit cR) {cM : Cocone M}
+引理 是余极限.ι_smul
+  结论: {cR : 余锥 R} (hcR : 是余极限 cR) {cM : 余锥 M}
   证明: IsColimit.module R M H hcR hcM
     cM.ι.app i (r • m) =
       HSMul.hSMul (α := cR.pt) (β := cM.pt) (cR.ι.app i r) (cM.ι.app i m) := by
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module (R.stalk x) ↑(TopCat.Presheaf.stalk M.presheaf x)
+  签名: 模 (R.stalk x) ↑(顶元素范畴.预层.stalk M.presheaf x)
   定义体: letI (i : (OpenNhds x)ᵒᵖ) : Module (((OpenNhds.inclusion x).op ⋙ R).obj i)
       (((OpenNhds.inclusion x).op ⋙ M.presheaf).obj i) := by
     dsimp; infer_instance

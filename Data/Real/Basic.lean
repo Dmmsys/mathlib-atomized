@@ -42,7 +42,7 @@ structure Real
   (no additional axioms)
 
 中文:
-结构 Real
+结构 实数
   参数: where ofCauchy
   (无附加公理)
 -/
@@ -67,7 +67,7 @@ theorem ofRat_rat
 
 中文:
 定理 ofRat_rat
-  条件: {abv : Rat -> Rat} [IsAbsoluteValue abv] (q : Rat)
+  条件: {abv : 有理数 -> 有理数} [是绝对值 abv] (q : 有理数)
   证明: rfl
 -/
 theorem ofRat_rat {abv : Rat -> Rat} [IsAbsoluteValue abv] (q : Rat) :
@@ -126,7 +126,7 @@ definition equivCauchy
 
 中文:
 定义 equivCauchy
-  签名: : 实数 ≃ CauSeq.Completion.Cauchy (abs : Rat -> Rat)
+  签名: : 实数 ≃ CauSeq.完备化.Cauchy (abs : 有理数 -> 有理数)
   定义体: ⟨Real.cauchy, Real.ofCauchy, fun ⟨_⟩ => rfl, fun _ => rfl⟩
 
 Depends on / 依赖: Real.cauchy, Real.ofCauchy, cauchy, ofCauchy
@@ -171,7 +171,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 实数
+  签名: 零 实数
   定义体: ⟨zero⟩
 -/
 instance : Zero Real :=
@@ -189,7 +189,7 @@ instance :
 
 中文:
 实例 :
-  签名: One 实数
+  签名: 幺 实数
   定义体: ⟨one⟩
 -/
 instance : One Real :=
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add 实数
+  签名: 加法 实数
   定义体: ⟨add⟩
 -/
 instance : Add Real :=
@@ -225,7 +225,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg 实数
+  签名: 取负 实数
   定义体: ⟨neg⟩
 -/
 instance : Neg Real :=
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul 实数
+  签名: 乘法 实数
   定义体: ⟨mul⟩
 -/
 instance : Mul Real :=
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub 实数
+  签名: 减法 实数
   定义体: ⟨fun a b => a + -b⟩
 -/
 instance : Sub Real :=
@@ -277,7 +277,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv 实数
+  签名: 取逆 实数
   定义体: ⟨inv'⟩
 -/
 noncomputable instance : Inv Real :=
@@ -539,8 +539,8 @@ instance instNatCast
   body: ⟨n⟩
 
 中文:
-实例 instNatCast
-  签名: : 自然数Cast 实数 where natCast n
+实例 inst自然数Cast
+  签名: : 自然数嵌入 实数 where natCast n
   定义体: ⟨n⟩
 -/
 instance instNatCast : NatCast Real where natCast n := ⟨n⟩
@@ -553,8 +553,8 @@ instance instIntCast
   body: ⟨z⟩
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast 实数 where intCast z
+实例 inst整数Cast
+  签名: : 整数嵌入 实数 where intCast z
   定义体: ⟨z⟩
 -/
 instance instIntCast : IntCast Real where intCast z := ⟨z⟩
@@ -568,7 +568,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast 实数 where nnratCast q
+  签名: : 非负有理数嵌入 实数 where nnratCast q
   定义体: ⟨q⟩
 -/
 instance instNNRatCast : NNRatCast Real where nnratCast q := ⟨q⟩
@@ -582,7 +582,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: : RatCast 实数 where ratCast q
+  签名: : 有理数嵌入 实数 where ratCast q
   定义体: ⟨q⟩
 -/
 instance instRatCast : RatCast Real where ratCast q := ⟨q⟩
@@ -630,7 +630,7 @@ lemma ofCauchy_nnratCast
 
 中文:
 引理 ofCauchy_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (⟨q⟩ : 实数) = q
   证明: rfl
 -/
@@ -646,7 +646,7 @@ lemma ofCauchy_ratCast
 
 中文:
 引理 ofCauchy_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (⟨q⟩ : 实数) = q
   证明: rfl
 -/
@@ -695,7 +695,7 @@ lemma cauchy_nnratCast
 
 中文:
 引理 cauchy_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: (q : 实数).cauchy = q
   证明: rfl
 -/
@@ -711,7 +711,7 @@ lemma cauchy_ratCast
 
 中文:
 引理 cauchy_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: (q : 实数).cauchy = q
   证明: rfl
 -/
@@ -733,7 +733,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: : CommRing 实数 where
+  签名: : 交换环 实数 where
   定义体: ⟨n⟩
   intCast z := ⟨z⟩
   npow := @npowRec Real ⟨1⟩ ⟨(· * ·)⟩
@@ -781,7 +781,7 @@ definition ringEquivCauchy
 
 中文:
 定义 ringEquivCauchy
-  签名: : 实数 ≃+* CauSeq.Completion.Cauchy (abs : Rat -> Rat)
+  签名: : 实数 ≃+* CauSeq.完备化.Cauchy (abs : 有理数 -> 有理数)
   定义体: { equivCauchy with
     toFun := cauchy
     invFun := ofCauchy
@@ -808,7 +808,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: : Ring 实数
+  签名: : 环 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring 实数
+  签名: 交换半环 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -842,7 +842,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: : Semiring 实数
+  签名: : 半环 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -859,7 +859,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoidWithZero 实数
+  签名: 带零交换幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -876,7 +876,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero 实数
+  签名: 带零幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -893,7 +893,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup 实数
+  签名: 加法交换群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -910,7 +910,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroup 实数
+  签名: 加法群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -927,7 +927,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid 实数
+  签名: 加法交换幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -944,7 +944,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid 实数
+  签名: 加法幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -961,7 +961,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddLeftCancelSemigroup 实数
+  签名: 加法左消去半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -978,7 +978,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddRightCancelSemigroup 实数
+  签名: 加法右消去半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -995,7 +995,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommSemigroup 实数
+  签名: 加法交换半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1012,7 +1012,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddSemigroup 实数
+  签名: 加法半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1029,7 +1029,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid 实数
+  签名: 交换幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1046,7 +1046,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid 实数
+  签名: 幺半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1063,7 +1063,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemigroup 实数
+  签名: 交换半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1080,7 +1080,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semigroup 实数
+  签名: 半群 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1097,7 +1097,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 实数
+  签名: 可居 实数
   定义体: ⟨0⟩
 -/
 instance : Inhabited Real :=
@@ -1113,7 +1113,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (x : CauSeq Rat abs)
+  签名: (x : CauSeq 有理数 abs)
   定义体: ⟨CauSeq.Completion.mk x⟩
 
 Depends on / 依赖: CauSeq, CauSeq.Completion.mk, Completion
@@ -1132,7 +1132,7 @@ theorem mk_eq
 
 中文:
 定理 mk_eq
-  条件: {f g : CauSeq Rat abs}
+  条件: {f g : CauSeq 有理数 abs}
   结论: mk f = mk g ↔ f ≈ g
   证明: ext_cauchy_iff.trans CauSeq.Completion.mk_eq
 
@@ -1203,7 +1203,7 @@ theorem mk_lt
 
 中文:
 定理 mk_lt
-  条件: {f g : CauSeq Rat abs}
+  条件: {f g : CauSeq 有理数 abs}
   结论: mk f < mk g ↔ f < g
   证明: lt_cauchy
 
@@ -1257,7 +1257,7 @@ theorem mk_add
 
 中文:
 定理 mk_add
-  条件: {f g : CauSeq Rat abs}
+  条件: {f g : CauSeq 有理数 abs}
   结论: mk (f + g) = mk f + mk g
   证明: by simp [mk, ← ofCauchy_add]
 
@@ -1276,7 +1276,7 @@ theorem mk_mul
 
 中文:
 定理 mk_mul
-  条件: {f g : CauSeq Rat abs}
+  条件: {f g : CauSeq 有理数 abs}
   结论: mk (f * g) = mk f * mk g
   证明: by simp [mk, ← ofCauchy_mul]
 
@@ -1297,7 +1297,7 @@ theorem mk_neg
 
 中文:
 定理 mk_neg
-  条件: {f : CauSeq Rat abs}
+  条件: {f : CauSeq 有理数 abs}
   结论: mk (-f) = -mk f
   证明: by simp [mk, ← ofCauchy_neg]
 
@@ -1321,7 +1321,7 @@ theorem mk_pos
 
 中文:
 定理 mk_pos
-  条件: {f : CauSeq Rat abs}
+  条件: {f : CauSeq 有理数 abs}
   结论: 0 < mk f ↔ Pos f
   证明: by
   rw [← mk_zero]; rw [mk_lt]
@@ -1344,7 +1344,7 @@ lemma mk_const
 
 中文:
 引理 mk_const
-  条件: {x : Rat}
+  条件: {x : 有理数}
   结论: mk (const abs x) = x
   证明: rfl
 -/
@@ -1409,7 +1409,7 @@ theorem mk_le
 
 中文:
 定理 mk_le
-  条件: {f g : CauSeq Rat abs}
+  条件: {f g : CauSeq 有理数 abs}
   结论: mk f <= mk g ↔ f <= g
   证明: by
   simp only [le_def', mk_lt, mk_eq]; rfl
@@ -1469,7 +1469,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder 实数 where
+  签名: : 偏序 实数 where
   定义体: by
     induction a using Real.ind_mk
     induction b using Real.ind_mk
@@ -1513,7 +1513,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder 实数
+  签名: 预序 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -1533,7 +1533,7 @@ theorem ratCast_lt
 
 中文:
 定理 ratCast_lt
-  条件: {x y : Rat}
+  条件: {x y : 有理数}
   结论: (x : 实数) < (y : 实数) ↔ x < y
   证明: by
   rw [← mk_const]; rw [← mk_const]; rw [mk_lt]
@@ -1573,7 +1573,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial 实数 where
+  签名: : 非平凡 实数 where
   定义体: ⟨0, 1, Real.zero_lt_one.ne⟩
 
 Depends on / 依赖: Real.zero_lt_one.ne, zero_lt_one
@@ -1591,7 +1591,7 @@ instance instZeroLEOneClass
 
 中文:
 实例 instZeroLEOneClass
-  签名: : ZeroLEOneClass 实数 where
+  签名: : ZeroLEOne类 实数 where
   定义体: le_of_lt Real.zero_lt_one
 
 Depends on / 依赖: Real.zero_lt_one, le_of_lt, zero_lt_one
@@ -1616,7 +1616,7 @@ instance instIsOrderedAddMonoid
 
 中文:
 实例 instIsOrderedAddMonoid
-  签名: : IsOrderedAddMonoid 实数 where
+  签名: : 是OrderedAdd幺半群 实数 where
   定义体: by
     simp only [le_iff_eq_or_lt]
     rintro a b ⟨rfl, h⟩
@@ -1654,7 +1654,7 @@ instance instIsStrictOrderedRing
 
 中文:
 实例 instIsStrictOrderedRing
-  签名: : IsStrictOrderedRing 实数
+  签名: : 是StrictOrdered环 实数
   定义体: .of_mul_pos fun a b => by
     induction a using Real.ind_mk
     induction b using Real.ind_mk
@@ -1678,7 +1678,7 @@ instance instIsOrderedRing
 
 中文:
 实例 instIsOrderedRing
-  签名: : IsOrderedRing 实数
+  签名: : 是Ordered环 实数
   定义体: inferInstance
 -/
 instance instIsOrderedRing : IsOrderedRing Real :=
@@ -1694,7 +1694,7 @@ instance instIsOrderedCancelAddMonoid
 
 中文:
 实例 instIsOrderedCancelAddMonoid
-  签名: : IsOrderedCancelAddMonoid 实数
+  签名: : 是OrderedCancelAdd幺半群 实数
   定义体: inferInstance
 -/
 instance instIsOrderedCancelAddMonoid : IsOrderedCancelAddMonoid Real :=
@@ -1716,7 +1716,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max 实数
+  签名: 最大值 实数
   定义体: ⟨sup⟩
 -/
 instance : Max Real :=
@@ -1789,7 +1789,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min 实数
+  签名: 最小值 实数
   定义体: ⟨inf⟩
 -/
 instance : Min Real :=
@@ -1867,7 +1867,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice 实数
+  签名: Distrib格 实数
   定义体: (· ⊔ ·)
   le_sup_left := by
     intro a b
@@ -1942,7 +1942,7 @@ instance lattice
 
 中文:
 实例 lattice
-  签名: : Lattice 实数
+  签名: : 格 实数
   定义体: inferInstance
 -/
 instance lattice : Lattice Real :=
@@ -1994,7 +1994,7 @@ instance leTotal_R
 
 中文:
 实例 leTotal_R
-  签名: : @Std.Total 实数 (· <= ·)
+  签名: : @Std.全 实数 (· <= ·)
   定义体: ⟨by
     intro a b
     induction a using Real.ind_mk
@@ -2021,7 +2021,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder 实数
+  签名: : 线性序 实数
   定义体: Lattice.toLinearOrder Real
 
 Depends on / 依赖: Lattice, Lattice.toLinearOrder, toLinearOrder
@@ -2039,7 +2039,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDomain 实数
+  签名: 是整环 实数
   定义体: IsStrictOrderedRing.isDomain
 
 Depends on / 依赖: IsStrictOrderedRing, IsStrictOrderedRing.isDomain, isDomain
@@ -2055,7 +2055,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: : DivInvMonoid 实数 where
+  签名: : 除逆幺半群 实数 where
 -/
 noncomputable instance instDivInvMonoid : DivInvMonoid Real where
 
@@ -2100,7 +2100,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: : Field 实数 where
+  签名: : 域 实数 where
   定义体: by
     rintro ⟨a⟩ h
     rw [mul_comm]
@@ -2142,7 +2142,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivisionRing 实数
+  签名: 除环 实数
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -2227,8 +2227,8 @@ theorem le_mk_of_forall_le
   refine ⟨_, half_pos K0, i, fun j ij =
 
 中文:
-定理 le_mk_of_forall_le
-  条件: {f : CauSeq Rat abs}
+定理 le_mk_of_对任意_le
+  条件: {f : CauSeq 有理数 abs}
   结论: (存在 i, 对任意 j >= i, x <= f j) -> x <= mk f
   证明: by
   intro h
@@ -2268,8 +2268,8 @@ theorem mk_le_of_forall_le
   exact le_mk_of_forall_le ⟨i, fun j ij => by simp [H _ ij]⟩
 
 中文:
-定理 mk_le_of_forall_le
-  条件: {f : CauSeq Rat abs} {x : 实数} (h : 存在 i, 对任意 j >= i, (f j : 实数) <= x)
+定理 mk_le_of_对任意_le
+  条件: {f : CauSeq 有理数 abs} {x : 实数} (h : 存在 i, 对任意 j >= i, (f j : 实数) <= x)
   证明: by
   obtain ⟨i, H⟩ := h
   rw [← neg_le_neg_iff]; rw [← mk_neg]
@@ -2297,8 +2297,8 @@ sub_le_comm.1
 le_mk_of_forall_le H.imp fun _ h j ij => sub_le_comm.1 (abs_sub_le_iff.1 <| h j ij).2⟩
 
 中文:
-定理 mk_near_of_forall_near
-  结论: {f : CauSeq Rat abs} {x : 实数} {ε : 实数}
+定理 mk_near_of_对任意_near
+  结论: {f : CauSeq 有理数 abs} {x : 实数} {ε : 实数}
   证明: abs_sub_le_iff.2
 ⟨sub_le_iff_le_add'.2
 mk_le_of_forall_le
@@ -2384,7 +2384,7 @@ definition IsPowMul
 
 中文:
 定义 IsPowMul
-  签名: {R : 类型} [Pow R 自然数] (f : R -> 实数)
+  签名: {R : 类型} [幂 R 自然数] (f : R -> 实数)
   定义体: forall (a : R) {n : Nat}, 1 <= n -> f (a ^ n) = f a ^ n
 -/
 def IsPowMul {R : Type*} [Pow R Nat] (f : R -> Real) :=
@@ -2403,7 +2403,7 @@ lemma IsPowMul.map_one_le_one
 
 中文:
 引理 IsPowMul.map_one_le_one
-  条件: {R : 类型} [Monoid R] {f : R -> 实数} (hf : IsPowMul f)
+  条件: {R : 类型} [幺半群 R] {f : R -> 实数} (hf : IsPowMul f)
   证明: by
   have hf1 : (f 1) ^ 2 = f 1 := by conv_rhs => rw [← one_pow 2, hf _ one_le_two]
   rcases eq_zero_or_one_of_sq_eq_self hf1 with h | h <;> rw [h]
@@ -2426,8 +2426,8 @@ definition RingHom.IsBoundedWrt
   body: exists C : Real, 0 < C ∧ forall x : α, nβ (f x) <= C * nα x
 
 中文:
-定义 RingHom.IsBoundedWrt
-  签名: {α : 类型} [Ring α] {β : 类型} [Ring β] (nα : α -> 实数) (nβ : β -> 实数)
+定义 环态射.IsBoundedWrt
+  签名: {α : 类型} [环 α] {β : 类型} [环 β] (nα : α -> 实数) (nβ : β -> 实数)
   定义体: exists C : Real, 0 < C ∧ forall x : α, nβ (f x) <= C * nα x
 -/
 def RingHom.IsBoundedWrt {α : Type*} [Ring α] {β : Type*} [Ring β] (nα : α -> Real) (nβ : β -> Real)

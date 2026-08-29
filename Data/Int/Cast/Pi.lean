@@ -37,8 +37,8 @@ instance instIntCast
 @[simp]
 
 中文:
-实例 instIntCast
-  签名: : 整数Cast (对任意 i, π i) where intCast n _
+实例 inst整数Cast
+  签名: : 整数嵌入 (对任意 i, π i) where intCast n _
   定义体: n
 
 @[simp]
@@ -99,8 +99,8 @@ theorem Sum.elim_intCast_intCast
   proof: Sum.elim_lam_const_lam_const (γ := γ) n
 
 中文:
-定理 Sum.elim_intCast_intCast
-  条件: {α β γ : 类型} [整数Cast γ] (n : 整数)
+定理 和.elim_intCast_intCast
+  条件: {α β γ : 类型} [整数嵌入 γ] (n : 整数)
   证明: Sum.elim_lam_const_lam_const (γ := γ) n
 
 Depends on / 依赖: Sum.elim_lam_const_lam_const, elim_lam_const_lam_const

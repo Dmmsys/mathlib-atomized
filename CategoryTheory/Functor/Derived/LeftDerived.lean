@@ -55,10 +55,10 @@ class IsLeftDerivedFunctor
     - isRightKanExtension((LF α)) : LF.IsRightKanExtension α
 
 中文:
-类 IsLeftDerivedFunctor
+类 是左导出函子
   参数: (LF : D ⥤ H) {F : C ⥤ H} {L : C ⥤ D} (α : L ⋙ LF ⟶ F)
   公理与运算 (1 个):
-    - isRightKanExtension((LF α)) : LF.IsRightKanExtension α
+    - isRightKanExtension((LF α)) : LF.是RightKanExtension α
 -/
 class IsLeftDerivedFunctor (LF : D ⥤ H) {F : C ⥤ H} {L : C ⥤ D} (α : L ⋙ LF ⟶ F)
     (W : MorphismProperty C) [L.IsLocalization W] : Prop where
@@ -77,7 +77,7 @@ lemma isLeftDerivedFunctor_iff_isRightKanExtension
 
 中文:
 引理 isLeftDerivedFunctor_iff_isRightKanExtension
-  条件: [L.IsLocalization W]
+  条件: [L.是Localization W]
   证明: by
   constructor
   · exact fun _ => IsLeftDerivedFunctor.isRightKanExtension LF α W
@@ -104,7 +104,7 @@ lemma isLeftDerivedFunctor_iff_of_iso
 
 中文:
 引理 isLeftDerivedFunctor_iff_of_iso
-  结论: (α' : L ⋙ LF' ⟶ F) (W : Morphism命题erty C)
+  结论: (α' : L ⋙ LF' ⟶ F) (W : MorphismProperty C)
   证明: by
   simp only [isLeftDerivedFunctor_iff_isRightKanExtension]
   exact isRightKanExtension_iff_of_iso e _ _ comm
@@ -234,7 +234,7 @@ definition leftDerivedNatTrans
 @[reassoc (attr := simp)]
 
 中文:
-定义 leftDerivedNatTrans
+定义 leftDerived自然数Trans
   签名: (τ : F' ⟶ F)
   定义体: LF.leftDerivedLift α W LF' (α' ≫ τ)
 
@@ -259,7 +259,7 @@ lemma leftDerivedNatTrans_fac
 @[reassoc (attr := simp)]
 
 中文:
-引理 leftDerivedNatTrans_fac
+引理 leftDerived自然数Trans_fac
   条件: (τ : F' ⟶ F)
   证明: by
   dsimp only [leftDerivedNatTrans]
@@ -288,7 +288,7 @@ lemma leftDerivedNatTrans_app
 @[simp]
 
 中文:
-引理 leftDerivedNatTrans_app
+引理 leftDerived自然数Trans_app
   条件: (τ : F' ⟶ F) (X : C)
   证明: by
   dsimp only [leftDerivedNatTrans]
@@ -313,7 +313,7 @@ lemma leftDerivedNatTrans_id
   proof: leftDerived_ext LF α W _ _ _ (by simp)
 
 中文:
-引理 leftDerivedNatTrans_id
+引理 leftDerived自然数Trans_id
   证明: leftDerived_ext LF α W _ _ _ (by simp)
 
 Depends on / 依赖: leftDerived_ext
@@ -334,7 +334,7 @@ lemma leftDerivedNatTrans_comp
   proof: leftDerived_ext LF α W _ _ _ (by simp)
 
 中文:
-引理 leftDerivedNatTrans_comp
+引理 leftDerived自然数Trans_comp
   条件: (τ' : F'' ⟶ F') (τ : F' ⟶ F)
   证明: leftDerived_ext LF α W _ _ _ (by simp)
 
@@ -358,7 +358,7 @@ definition leftDerivedNatIso
   inv := leftDerivedNatTrans LF LF' α α' W τ.inv
 
 中文:
-定义 leftDerivedNatIso
+定义 leftDerived自然数Iso
   签名: (τ : F' ≅ F)
   定义体: leftDerivedNatTrans LF' LF α' α W τ.hom
   inv := leftDerivedNatTrans LF LF' α α' W τ.inv
@@ -380,7 +380,7 @@ abbreviation leftDerivedUnique
 
 中文:
 缩写 leftDerivedUnique
-  签名: [LF'.IsLeftDerivedFunctor α'₂ W]
+  签名: [LF'.是左导出函子 α'₂ W]
   定义体: leftDerivedNatIso LF LF' α α'₂ W (Iso.refl F)
 
 Depends on / 依赖: Iso.refl, leftDerivedNatIso
@@ -429,7 +429,7 @@ class HasLeftDerivedFunctor
     - hasRightKanExtension' : HasRightKanExtension W.Q F
 
 中文:
-类 HasLeftDerivedFunctor
+类 有左导出函子
   参数: : 命题 where
   公理与运算 (1 个):
     - hasRightKanExtension' : HasRightKanExtension W.Q F
@@ -501,8 +501,8 @@ lemma HasLeftDerivedFunctor.hasRightKanExtension
   simpa only [← hasLeftDerivedFunctor_iff F L W]
 
 中文:
-引理 HasLeftDerivedFunctor.hasRightKanExtension
-  条件: [HasLeftDerivedFunctor F W]
+引理 有左导出函子.hasRightKanExtension
+  条件: [有左导出函子 F W]
   证明: by
   simpa only [← hasLeftDerivedFunctor_iff F L W]
 
@@ -525,8 +525,8 @@ lemma HasLeftDerivedFunctor.mk'
   simpa only [hasLeftDerivedFunctor_iff F L W] using HasRightKanExtension.mk LF α
 
 中文:
-引理 HasLeftDerivedFunctor.mk'
-  条件: [LF.IsLeftDerivedFunctor α W]
+引理 有左导出函子.mk'
+  条件: [LF.是左导出函子 α W]
   证明: by
   have := IsLeftDerivedFunctor.isRightKanExtension LF α W
   simpa only [hasLeftDerivedFunctor_iff F L W] using HasRightKanExtension.mk LF α
@@ -596,7 +596,7 @@ instance :
 
 中文:
 实例 :
-  签名: (F.totalLeftDerived L W).IsLeftDerivedFunctor
+  签名: (F.totalLeftDerived L W).是左导出函子
   定义体: by
     dsimp [totalLeftDerived, totalLeftDerivedCounit]
     infer_instance

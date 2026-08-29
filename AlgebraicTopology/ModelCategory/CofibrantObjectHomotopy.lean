@@ -79,7 +79,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomRel.IsStableUnderPostcomp (homRel C)
+  签名: HomRel.是StableUnderPostcomp (homRel C)
   定义体: h.postcomp _
 
 Depends on / 依赖: h.postcomp, postcomp
@@ -97,7 +97,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomRel.IsStableUnderPrecomp (homRel C)
+  签名: HomRel.是StableUnderPrecomp (homRel C)
   定义体: h.precomp _
 
 Depends on / 依赖: h.precomp, precomp
@@ -168,7 +168,7 @@ lemma toHoCat_obj_surjective
 
 中文:
 引理 toHoCat_obj_surjective
-  结论: Function.Surjective (toHoCat (C := C)).obj
+  结论: 函数.满射 (toHoCat (C := C)).obj
   证明: fun ⟨_⟩ => ⟨_, rfl⟩
 -/
 lemma toHoCat_obj_surjective : Function.Surjective (toHoCat (C := C)).obj :=
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Full (toHoCat (C := C))
+  签名: 函子.满 (toHoCat (C := C))
   定义体: by dsimp [toHoCat]; infer_instance
 
 Depends on / 依赖: infer_instance, toHoCat
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: (weakEquivalences (CofibrantObject C)).HasQuotient (homRel C)
+  签名: (weakEquivalences (CofibrantObject C)).有商 (homRel C)
   定义体: by
     simp only [← weakEquivalence_iff, weakEquivalence_iff_of_objectProperty]
     obtain ⟨P, ⟨h⟩⟩ := h
@@ -272,7 +272,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithWeakEquivalences (CofibrantObject.HoCat C)
+  签名: 带弱等价范畴 (CofibrantObject.HoCat C)
   定义体: (weakEquivalences _).quotient _
 
 Depends on / 依赖: quotient, weakEquivalences
@@ -391,7 +391,7 @@ instance :
 
 中文:
 实例 :
-  签名: (toHoCatLocalizerMorphism C).IsLocalizedEquivalence
+  签名: (toHoCatLocalizerMorphism C).是LocalizedEquivalence
   定义体: by
   apply (factorsThroughLocalization C).isLocalizedEquivalence
   apply MorphismProperty.eq_inverseImage_quotientFunctor
@@ -421,7 +421,7 @@ lemma HoCat.exists_resolution
   infer_instance
 
 中文:
-引理 HoCat.exists_resolution
+引理 HoCat.存在_resolution
   条件: (X : C)
   证明: by
   have h := MorphismProperty.factorizationData (cofibrations C) (trivialFibrations C)
@@ -500,7 +500,7 @@ lemma HoCat.exists_resolution_map
   exact ⟨sq.lift, sq.fac_right⟩
 
 中文:
-引理 HoCat.exists_resolution_map
+引理 HoCat.存在_resolution_map
   条件: {X Y : C} (f : X ⟶ Y)
   证明: by
   have sq : CommSq (initial.to _) (initial.to _) (pResolutionObj Y)
@@ -712,7 +712,7 @@ definition HoCat.ιCompResolutionNatTrans
     exact HoCat.resolutionMap_fac f.hom)
 
 中文:
-定义 HoCat.ιCompResolutionNatTrans
+定义 HoCat.ιCompResolution自然数Trans
   签名: :
   定义体: toHoCat.map { hom := (HoCat.pResolutionObj (ι.obj X)) }
   naturality _ _ f := toHoCat.congr_map (by
@@ -810,7 +810,7 @@ definition HoCat.resolutionCompToLocalizationNatTrans
     simpa only [Functor.map_comp] using! L.congr_map (HoCat.resolutionMap_fac f)
 
 中文:
-定义 HoCat.resolutionCompToLocalizationNatTrans
+定义 HoCat.resolutionCompToLocalization自然数Trans
   签名: :
   定义体: L.map (pResolutionObj X)
   naturality _ _ f := by
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (HoCat.resolutionCompToLocalization自然数Trans L)
+  签名: 是同构 (HoCat.resolutionCompToLocalization自然数Trans L)
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X
@@ -873,7 +873,7 @@ definition localizerMorphism
 
 中文:
 定义 localizerMorphism
-  签名: : LocalizerMorphism (weakEquivalences (CofibrantObject C))
+  签名: : Localizer态射 (weakEquivalences (CofibrantObject C))
   定义体: ι
   map := by rfl
 -/
@@ -899,7 +899,7 @@ instance :
 
 中文:
 实例 :
-  签名: (localizerMorphism C).IsLocalizedEquivalence
+  签名: (localizerMorphism C).是LocalizedEquivalence
   定义体: by
   let Hcof := (weakEquivalences (HoCat C)).Localization
   let Lcofπ : HoCat C ⥤ Hcof := (weakEquivalences (CofibrantObject.HoCat C)).Q

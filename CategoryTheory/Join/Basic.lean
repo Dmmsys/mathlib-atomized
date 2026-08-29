@@ -56,11 +56,11 @@ inductive Join
     - right: D -> Join C D
 
 中文:
-归纳类型 Join
-  参数: (C : 类型u₁) [Category.{v₁} C] (D : 类型u₂) [Category.{v₂} D]
+归纳类型 并
+  参数: (C : 类型u₁) [范畴.{v₁} C] (D : 类型u₂) [范畴.{v₂} D]
   构造子 (2 个):
-    - left: C -> Join C D
-    - right: D -> Join C D
+    - left: C -> 并 C D
+    - right: D -> 并 C D
 
 Depends on / 依赖: CategoryTheory
 -/
@@ -88,8 +88,8 @@ definition Hom
   signature: : C ⋆ D -> C ⋆ D -> Type (max v₁ v₂)
 
 中文:
-定义 Hom
-  签名: : C ⋆ D -> C ⋆ D -> Type (max v₁ v₂)
+定义 态射
+  签名: : C ⋆ D -> C ⋆ D -> 类型 (最大值 v₁ v₂)
 -/
 def Hom : C ⋆ D -> C ⋆ D -> Type (max v₁ v₂)
   | .left x, .left y => ULift (x ⟶ y)
@@ -106,7 +106,7 @@ definition id
 
 中文:
 定义 id
-  签名: : 对任意 X : C ⋆ D, Hom X X
+  签名: : 对任意 X : C ⋆ D, 态射 X X
 -/
 def id : forall X : C ⋆ D, Hom X X
   | .left x => ULift.up (𝟙 x)
@@ -121,7 +121,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: : 对任意 {x y z : C ⋆ D}, Hom x y -> Hom y z -> Hom x z
+  签名: : 对任意 {x y z : C ⋆ D}, 态射 x y -> 态射 y z -> 态射 x z
 -/
 def comp : forall {x y z : C ⋆ D}, Hom x y -> Hom y z -> Hom x z
   | .left _x, .left _y, .left _z, f, g => ULift.up (ULift.down f ≫ ULift.down g)
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{max v₁ v₂} (C ⋆ D)
+  签名: 范畴.{最大值 v₁ v₂} (C ⋆ D)
   定义体: Hom X Y
   id _ := id _
   comp := comp
@@ -195,7 +195,7 @@ lemma false_of_right_to_left
 中文:
 引理 false_of_right_to_left
   条件: {X : D} {Y : C} (f : right X ⟶ left Y)
-  结论: False
+  结论: 假
   证明: (f : PEmpty).elim
 
 Depends on / 依赖: PEmpty
@@ -291,7 +291,7 @@ definition homInduction
 
 中文:
 定义 homInduction
-  签名: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
+  签名: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
   定义体: match x, y, f with
   | .left x, .left y, .up f => left x y f
   | .right x, .right y, .up f => right x y f
@@ -322,7 +322,7 @@ lemma homInduction_left
 
 中文:
 引理 homInduction_left
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
+  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -347,7 +347,7 @@ lemma homInduction_right
 
 中文:
 引理 homInduction_right
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
+  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
   证明: rfl
 
 @[simp]
@@ -370,7 +370,7 @@ lemma homInduction_edge
 
 中文:
 引理 homInduction_edge
-  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
+  结论: {P : {x y : C ⋆ D} -> (x ⟶ y) -> 类型层*}
   证明: rfl
 -/
 lemma homInduction_edge {P : {x y : C ⋆ D} -> (x ⟶ y) -> Sort*}
@@ -392,7 +392,7 @@ definition inclLeftFullyFaithful
 
 中文:
 定义 inclLeftFullyFaithful
-  签名: : (inclLeft C D).FullyFaithful where
+  签名: : (inclLeft C D).满忠实 where
   定义体: f.down
 
 Depends on / 依赖: f.down
@@ -418,7 +418,7 @@ definition inclRightFullyFaithful
 
 中文:
 定义 inclRightFullyFaithful
-  签名: : (inclRight C D).FullyFaithful where
+  签名: : (inclRight C D).满忠实 where
   定义体: f.down
 
 .full instance inclLeftFull : (inclLeft C D).Full := inclLeftFullyFaithful C D
@@ -529,7 +529,7 @@ definition mkFunctor
 
 中文:
 定义 mkFunctor
-  签名: (F : C ⥤ E) (G : D ⥤ E) (α : Prod.fst C D ⋙ F ⟶ Prod.snd C D ⋙ G)
+  签名: (F : C ⥤ E) (G : D ⥤ E) (α : 积类型.fst C D ⋙ F ⟶ 积类型.snd C D ⋙ G)
   定义体: match X with
     | .left x => F.obj x
     | .right x => G.obj x
@@ -764,7 +764,7 @@ definition mkNatTrans
     | @edge c d => exact funext_iff.mp (NatTrans.ext_iff.mp h) (c, d)
 
 中文:
-定义 mkNatTrans
+定义 mk自然数Trans
   签名: {F : C ⋆ D ⥤ E} {F' : C ⋆ D ⥤ E}
   定义体: match x with
     | left x => αₗ.app x
@@ -810,7 +810,7 @@ lemma mkNatTrans_app_left
   proof: rfl
 
 中文:
-引理 mkNatTrans_app_left
+引理 mk自然数Trans_app_left
   条件: (c : C)
   结论: (mk自然数Trans αₗ αᵣ h).app (left c) = αₗ.app c
   证明: rfl
@@ -829,7 +829,7 @@ lemma mkNatTrans_app_right
   proof: rfl
 
 中文:
-引理 mkNatTrans_app_right
+引理 mk自然数Trans_app_right
   条件: (d : D)
   结论: (mk自然数Trans αₗ αᵣ h).app (right d) = αᵣ.app d
   证明: rfl
@@ -847,7 +847,7 @@ lemma whiskerLeft_inclLeft_mkNatTrans
   proof: rfl
 
 中文:
-引理 whiskerLeft_inclLeft_mkNatTrans
+引理 whiskerLeft_inclLeft_mk自然数Trans
   结论: whiskerLeft (inclLeft C D) (mk自然数Trans αₗ αᵣ h) = αₗ
   证明: rfl
 -/
@@ -863,7 +863,7 @@ lemma whiskerLeft_inclRight_mkNatTrans
   proof: rfl
 
 中文:
-引理 whiskerLeft_inclRight_mkNatTrans
+引理 whiskerLeft_inclRight_mk自然数Trans
   证明: rfl
 -/
 lemma whiskerLeft_inclRight_mkNatTrans :
@@ -914,7 +914,7 @@ lemma eq_mkNatTrans
   apply natTrans_ext <;> simp
 
 中文:
-引理 eq_mkNatTrans
+引理 eq_mk自然数Trans
   条件: {F F' : C ⋆ D ⥤ E} (α : F ⟶ F')
   证明: by
   apply natTrans_ext <;> simp
@@ -936,7 +936,7 @@ lemma mkNatTransComp
   apply natTrans_ext <;> cat_disch
 
 中文:
-引理 mkNatTransComp
+引理 mk自然数TransComp
   证明: by
   apply natTrans_ext <;> cat_disch
 
@@ -974,7 +974,7 @@ definition mkNatIso
     Iso.inv_comp_eq, ← Category.assoc, Eq.comm, Iso.comp_inv_eq, h])
 
 中文:
-定义 mkNatIso
+定义 mk自然数Iso
   签名: {F : C ⋆ D ⥤ E} {G : C ⋆ D ⥤ E}
   定义体: mkNatTrans eₗ.hom eᵣ.hom (by simpa using h)
   inv := mkNatTrans eₗ.inv eᵣ.inv (by rw [Eq.comm, ← isoWhiskerLeft_inv, ← isoWhiskerLeft_inv,
@@ -1804,7 +1804,7 @@ instance isEquivalenceMapPair
 
 中文:
 实例 isEquivalenceMapPair
-  签名: {F : C ⥤ C'} {F' : D ⥤ D'} [F.IsEquivalence] [F'.IsEquivalence]
+  签名: {F : C ⥤ C'} {F' : D ⥤ D'} [F.是等价] [F'.是等价]
   定义体: inferInstanceAs (mapPairEquiv F.asEquivalence F'.asEquivalence).functor.IsEquivalence
 
 Depends on / 依赖: F.asEquivalence, IsEquivalence, asEquivalence, functor, functor.IsEquivalence, mapPairEquiv

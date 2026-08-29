@@ -29,8 +29,8 @@ theorem Function.Injective.isDomain
   __ := hf.isCancelMulZero f (map_zero _) (map_mul _)
 
 中文:
-定理 Function.Injective.isDomain
-  结论: [Semiring α] [IsDomain α] [Semiring β] {F}
+定理 函数.单射.isDomain
+  结论: [半环 α] [是整环 α] [半环 β] {F}
   证明: domain_nontrivial f (map_zero _) (map_one _)
   __ := hf.isCancelMulZero f (map_zero _) (map_mul _)
 -/

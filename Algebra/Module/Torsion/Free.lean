@@ -47,10 +47,10 @@ class Module.IsTorsionFree
     - isSMulRegular(⦃r) : R⦄ : IsRegular r -> IsSMulRegular M r
 
 中文:
-类 Module.IsTorsionFree
+类 模.是无挠
   参数: where
   公理与运算 (1 个):
-    - isSMulRegular(⦃r) : R⦄ : IsRegular r -> IsSMulRegular M r
+    - isSMulRegular(⦃r) : R⦄ : 是正则 r -> IsSMulRegular M r
 
 Depends on / 依赖: IsTorsionFree, IsTorsionFree.isSMulRegular, isSMulRegular
 -/
@@ -69,7 +69,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree R R
+  签名: 是无挠 R R
   定义体: hr.1
 -/
 instance : IsTorsionFree R R where isSMulRegular _r hr := hr.1
@@ -83,7 +83,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsTorsionFree Rᵐᵒᵖ R
+  签名: 是无挠 Rᵐᵒᵖ R
   定义体: hr.unop.2
 
 Depends on / 依赖: hr.unop
@@ -99,8 +99,8 @@ lemma Function.Injective.moduleIsTorsionFree
   proof: hf hr.isSMulRegular by simpa [smul] using congr(f $hm)
 
 中文:
-引理 Function.Injective.moduleIsTorsionFree
-  结论: [IsTorsionFree R N] (f : M -> N) (hf : f.Injective)
+引理 函数.单射.moduleIsTorsionFree
+  结论: [是无挠 R N] (f : M -> N) (hf : f.单射)
   证明: hf hr.isSMulRegular by simpa [smul] using congr(f $hm)
 
 Depends on / 依赖: hr.isSMulRegular, isSMulRegular
@@ -118,8 +118,8 @@ lemma Module.IsTorsionFree.comap
   proof: (isRegular _ hr).isSMulRegular.of_map f (smul r)
 
 中文:
-引理 Module.IsTorsionFree.comap
-  结论: [IsTorsionFree S M] (f : R -> S)
+引理 模.是无挠.comap
+  结论: [是无挠 S M] (f : R -> S)
   证明: (isRegular _ hr).isSMulRegular.of_map f (smul r)
 
 Depends on / 依赖: isRegular, isSMulRegular, isSMulRegular.of_map, of_map
@@ -138,8 +138,8 @@ instance IsAddTorsionFree.to_isTorsionFree_nat
   body: nsmul_right_injective (by simpa [isRegular_iff_ne_zero] using hn)
 
 中文:
-实例 IsAddTorsionFree.to_isTorsionFree_nat
-  签名: [IsAddTorsionFree M]
+实例 是加法无挠.to_isTorsionFree_nat
+  签名: [是加法无挠 M]
   定义体: nsmul_right_injective (by simpa [isRegular_iff_ne_zero] using hn)
 
 Depends on / 依赖: isRegular_iff_ne_zero, nsmul_right_injective
@@ -156,8 +156,8 @@ instance Subsingleton.to_moduleIsTorsionFree
   body: Function.injective_of_subsingleton _
 
 中文:
-实例 Subsingleton.to_moduleIsTorsionFree
-  签名: [Subsingleton M]
+实例 子单例.to_moduleIsTorsionFree
+  签名: [子单例 M]
   定义体: Function.injective_of_subsingleton _
 
 Depends on / 依赖: Function, Function.injective_of_subsingleton, injective_of_subsingleton
@@ -178,9 +178,9 @@ lemma IsRegular.smul_right_injective
   proof: hr.isSMulRegular
 
 中文:
-引理 IsRegular.smul_right_injective
-  条件: (hr : IsRegular r)
-  结论: ((r • ·) : M -> M).Injective
+引理 是正则.smul_right_injective
+  条件: (hr : 是正则 r)
+  结论: ((r • ·) : M -> M).单射
   证明: hr.isSMulRegular
 -/
 protected lemma IsRegular.smul_right_injective (hr : IsRegular r) : ((r • ·) : M -> M).Injective :=
@@ -196,8 +196,8 @@ lemma IsRegular.smul_right_inj
   proof: (hr.smul_right_injective _).eq_iff
 
 中文:
-引理 IsRegular.smul_right_inj
-  条件: (hr : IsRegular r)
+引理 是正则.smul_right_inj
+  条件: (hr : 是正则 r)
   结论: r • m₁ = r • m₂ ↔ m₁ = m₂
   证明: (hr.smul_right_injective _).eq_iff
 -/
@@ -213,8 +213,8 @@ lemma IsRegular.smul_eq_zero_iff_right
   proof: by rw [← hr.smul_right_inj (m₁ := m), smul_zero]
 
 中文:
-引理 IsRegular.smul_eq_zero_iff_right
-  条件: (hr : IsRegular r)
+引理 是正则.smul_eq_zero_iff_right
+  条件: (hr : 是正则 r)
   证明: by rw [← hr.smul_right_inj (m₁ := m), smul_zero]
 -/
 @[simp] protected lemma IsRegular.smul_eq_zero_iff_right (hr : IsRegular r) :
@@ -230,8 +230,8 @@ lemma IsRegular.smul_ne_zero_iff_right
   proof: hr.smul_eq_zero_iff_right.ne
 
 中文:
-引理 IsRegular.smul_ne_zero_iff_right
-  条件: (hr : IsRegular r)
+引理 是正则.smul_ne_zero_iff_right
+  条件: (hr : 是正则 r)
   结论: r • m != 0 ↔ m != 0
   证明: hr.smul_eq_zero_iff_right.ne
 -/
@@ -251,8 +251,8 @@ exact ⟨fun x y hxy => hs.isSMulRegular by simpa using hxy,
 fun x y hxy => hs.isSMulRegular by simpa using hxy⟩
 
 中文:
-引理 Module.IsTorsionFree.trans
-  结论: [Module S R] [IsTorsionFree S R] [IsScalarTower S R R]
+引理 模.是无挠.trans
+  结论: [模 S R] [是无挠 S R] [标量塔 S R R]
   证明: by
     refine (?_ : IsRegular (s • 1 : R)).isSMulRegular (by simpa using hxy)
 exact ⟨fun x y hxy => hs.isSMulRegular by simpa using hxy,
@@ -302,7 +302,7 @@ lemma smul_right_injective
 中文:
 引理 smul_right_injective
   条件: (hr : r != 0)
-  结论: ((r • ·) : M -> M).Injective
+  结论: ((r • ·) : M -> M).单射
   证明: (IsRegular.of_ne_zero hr).smul_right_injective _
 
 Depends on / 依赖: GroupWithZero, GroupWithZero.toNoZeroSMulDivisors, IsRegular, IsRegular.of_ne_zero, NoZeroSMulDivisors, of_ne_zero, smul_right_injective, toNoZeroSMulDivisors
@@ -464,8 +464,8 @@ lemma IsAddTorsionFree.of_isTorsionFree
     simp_rw [← Nat.cast_smul_eq_nsmul R]; apply smul_right_injective; simpa
 
 中文:
-引理 IsAddTorsionFree.of_isTorsionFree
-  结论: IsAddTorsionFree M where
+引理 是加法无挠.of_isTorsionFree
+  结论: 是加法无挠 M where
   证明: by
     simp_rw [← Nat.cast_smul_eq_nsmul R]; apply smul_right_injective; simpa
 
@@ -490,8 +490,8 @@ lemma Module.isTorsionFree_nat_iff_isAddTorsionFree
   mpr _ := inferInstance
 
 中文:
-引理 Module.isTorsionFree_nat_iff_isAddTorsionFree
-  结论: IsTorsionFree 自然数 M ↔ IsAddTorsionFree M where
+引理 模.isTorsionFree_nat_iff_isAddTorsionFree
+  结论: 是无挠 自然数 M ↔ 是加法无挠 M where
   证明: .of_isTorsionFree Nat _
   mpr _ := inferInstance
 
@@ -517,8 +517,8 @@ instance [IsAddTorsionFree
 @[simp]
 
 中文:
-实例 [IsAddTorsionFree
-  签名: M] : IsTorsionFree 整数 M where
+实例 [是加法无挠
+  签名: M] : 是无挠 整数 M where
   定义体: zsmul_right_injective (by simpa [isRegular_iff_ne_zero] using hn)
 
 @[simp]
@@ -539,8 +539,8 @@ lemma Module.isTorsionFree_int_iff_isAddTorsionFree
   mpr _ := inferInstance
 
 中文:
-引理 Module.isTorsionFree_int_iff_isAddTorsionFree
-  结论: IsTorsionFree 整数 M ↔ IsAddTorsionFree M where
+引理 模.isTorsionFree_int_iff_isAddTorsionFree
+  结论: 是无挠 整数 M ↔ 是加法无挠 M where
   证明: .of_isTorsionFree Int _
   mpr _ := inferInstance
 
@@ -566,8 +566,8 @@ lemma Module.IsTorsionFree.of_smul_eq_zero
     simpa [sub_eq_zero, hr.ne_zero] using h r (m₁ - m₂) (by simpa [smul_sub, sub_eq_zero] using hm)
 
 中文:
-引理 Module.IsTorsionFree.of_smul_eq_zero
-  结论: [Nontrivial R]
+引理 模.是无挠.of_smul_eq_zero
+  结论: [非平凡 R]
   证明: by
     simpa [sub_eq_zero, hr.ne_zero] using h r (m₁ - m₂) (by simpa [smul_sub, sub_eq_zero] using hm)
 
@@ -589,8 +589,8 @@ lemma Module.isTorsionFree_iff_smul_eq_zero
   mpr := .of_smul_eq_zero
 
 中文:
-引理 Module.isTorsionFree_iff_smul_eq_zero
-  条件: [IsDomain R]
+引理 模.isTorsionFree_iff_smul_eq_zero
+  条件: [是整环 R]
   证明: smul_eq_zero.1
   mpr := .of_smul_eq_zero
 
@@ -619,7 +619,7 @@ lemma smul_left_injective
 中文:
 引理 smul_left_injective
   条件: (hm : m != 0)
-  结论: ((· • m) : R -> M).Injective
+  结论: ((· • m) : R -> M).单射
   证明: by
   rintro r₁ r₂ hr
   dsimp at hr
@@ -670,9 +670,9 @@ lemma CharZero.of_isAddTorsionFree
   simpa using smul_left_injective Int hx h
 
 中文:
-引理 CharZero.of_isAddTorsionFree
-  条件: [Nontrivial M] [IsAddTorsionFree M]
-  结论: CharZero R
+引理 特征零.of_isAddTorsionFree
+  条件: [非平凡 M] [是加法无挠 M]
+  结论: 特征零 R
   证明: by
   refine ⟨fun {n m h} => ?_⟩
   obtain ⟨x, hx⟩ := exists_ne (0 : M)

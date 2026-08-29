@@ -138,7 +138,7 @@ definition ContinuousLinearEquiv.toNonlinearRightInverse
   right_inv' := f.apply_symm_apply
 
 中文:
-定义 ContinuousLinearEquiv.toNonlinearRightInverse
+定义 连续线性等价.toNonlinearRightInverse
   定义体: f.invFun
   nnnorm := ‖(f.symm : F ->SL[σ'] E)‖₊
   bound' _ := ContinuousLinearMap.le_opNorm (f.symm : F ->SL[σ'] E) _
@@ -197,8 +197,8 @@ theorem exists_approx_preimage_norm_le
     rwa [mem
 
 中文:
-定理 exists_approx_preimage_norm_le
-  条件: (surj : Surjective f)
+定理 存在_approx_preimage_norm_le
+  条件: (surj : 满射 f)
   证明: by
   have A : ⋃ n : Nat, closure (f '' ball 0 n) = Set.univ := by
     refine Subset.antisymm (subset_univ _) fun y _ => ?_
@@ -291,8 +291,8 @@ theorem exists_preimage_norm_le
     has no preimage yet. We will iterate
 
 中文:
-定理 exists_preimage_norm_le
-  条件: (surj : Surjective f)
+定理 存在_preimage_norm_le
+  条件: (surj : 满射 f)
   证明: by
   obtain ⟨C, C0, hC⟩ := exists_approx_preimage_norm_le f surj
   /- Second step of the proof: starting from `y`, we want an exact preimage of `y`. Let `g y` be
@@ -385,8 +385,8 @@ theorem isOpenMap
 
 中文:
 定理 isOpenMap
-  条件: (surj : Surjective f)
-  结论: IsOpenMap f
+  条件: (surj : 满射 f)
+  结论: 是开映射 f
   证明: by
   intro s hs
   rcases exists_preimage_norm_le f surj with ⟨C, Cpos, hC⟩
@@ -429,8 +429,8 @@ theorem isQuotientMap
 
 中文:
 定理 isQuotientMap
-  条件: (surj : Surjective f)
-  结论: IsQuotientMap f
+  条件: (surj : 满射 f)
+  结论: 是商映射 f
   证明: (f.isOpenMap surj).isQuotientMap f.continuous surj
 
 Depends on / 依赖: continuous, f.continuous, f.isOpenMap, isOpenMap, isQuotientMap
@@ -451,8 +451,8 @@ theorem _root_.AffineMap.isOpenMap
       (f.linear_surjective_iff.mpr surj)
 
 中文:
-定理 _root_.AffineMap.isOpenMap
-  结论: {F : 类型} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+定理 _root_.仿射映射.isOpenMap
+  结论: {F : 类型} [赋范交换加群 F] [赋范空间 𝕜 F]
   证明: AffineMap.isOpenMap_linear_iff.mp
     ContinuousLinearMap.isOpenMap { f.linear with cont := AffineMap.continuous_linear_iff.mpr hf }
       (f.linear_surjective_iff.mpr surj)
@@ -482,7 +482,7 @@ theorem interior_preimage
 
 中文:
 定理 interior_preimage
-  条件: (hsurj : Surjective f) (s : Set F)
+  条件: (hsurj : 满射 f) (s : 集合 F)
   证明: ((f.isOpenMap hsurj).preimage_interior_eq_interior_preimage f.continuous s).symm
 
 Depends on / 依赖: continuous, f.continuous, f.isOpenMap, isOpenMap, preimage_interior_eq_interior_preimage
@@ -502,7 +502,7 @@ theorem closure_preimage
 
 中文:
 定理 closure_preimage
-  条件: (hsurj : Surjective f) (s : Set F)
+  条件: (hsurj : 满射 f) (s : 集合 F)
   结论: closure (f ⁻¹' s) = f ⁻¹' closure s
   证明: ((f.isOpenMap hsurj).preimage_closure_eq_closure_preimage f.continuous s).symm
 
@@ -521,7 +521,7 @@ theorem frontier_preimage
 
 中文:
 定理 frontier_preimage
-  条件: (hsurj : Surjective f) (s : Set F)
+  条件: (hsurj : 满射 f) (s : 集合 F)
   证明: ((f.isOpenMap hsurj).preimage_frontier_eq_frontier_preimage f.continuous s).symm
 
 Depends on / 依赖: continuous, f.continuous, f.isOpenMap, isOpenMap, preimage_frontier_eq_frontier_preimage
@@ -547,7 +547,7 @@ theorem exists_nonlinearRightInverse_of_surjective
   exact hC
 
 中文:
-定理 exists_nonlinearRightInverse_of_surjective
+定理 存在_nonlinearRightInverse_of_surjective
   条件: (f : E ->SL[σ] F) (hsurj : f.range = ⊤)
   证明: by
   choose C hC fsymm h using
@@ -630,8 +630,8 @@ theorem continuous_symm
 
 中文:
 定理 continuous_symm
-  条件: (e : E ≃ₛₗ[σ] F) (h : Continuous e)
-  结论: Continuous e.symm
+  条件: (e : E ≃ₛₗ[σ] F) (h : 连续 e)
+  结论: 连续 e.symm
   证明: by
   rw [continuous_def]
   intro s hs
@@ -662,7 +662,7 @@ definition toContinuousLinearEquivOfContinuous
 
 中文:
 定义 toContinuousLinearEquivOfContinuous
-  签名: (e : E ≃ₛₗ[σ] F) (h : Continuous e)
+  签名: (e : E ≃ₛₗ[σ] F) (h : 连续 e)
   定义体: { e with
     continuous_toFun := h
     continuous_invFun := e.continuous_symm h }
@@ -689,7 +689,7 @@ theorem coeFn_toContinuousLinearEquivOfContinuous
 
 中文:
 定理 coeFn_toContinuousLinearEquivOfContinuous
-  条件: (e : E ≃ₛₗ[σ] F) (h : Continuous e)
+  条件: (e : E ≃ₛₗ[σ] F) (h : 连续 e)
   证明: rfl
 
 @[simp]
@@ -709,7 +709,7 @@ theorem coeFn_toContinuousLinearEquivOfContinuous_symm
 
 中文:
 定理 coeFn_toContinuousLinearEquivOfContinuous_symm
-  条件: (e : E ≃ₛₗ[σ] F) (h : Continuous e)
+  条件: (e : E ≃ₛₗ[σ] F) (h : 连续 e)
   证明: rfl
 -/
 theorem coeFn_toContinuousLinearEquivOfContinuous_symm (e : E ≃ₛₗ[σ] F) (h : Continuous e) :
@@ -736,7 +736,7 @@ LinearEquiv.toContinuousLinearEquivOfContinuous (LinearEquiv.ofInjective f.toLin
 
 中文:
 定义 equivRange
-  签名: (hinj : Injective f) (hclo : IsClosed (range f))
+  签名: (hinj : 单射 f) (hclo : 是闭集 (range f))
   定义体: have : CompleteSpace f.range := hclo.completeSpace_coe
 LinearEquiv.toContinuousLinearEquivOfContinuous (LinearEquiv.ofInjective f.toLinearMap hinj)
     (f.continuous.codRestrict fun x => f.mem_range_self x).congr fun _ => rfl
@@ -764,7 +764,7 @@ theorem coe_linearMap_equivRange
 
 中文:
 定理 coe_linearMap_equivRange
-  条件: (hinj : Injective f) (hclo : IsClosed (range f))
+  条件: (hinj : 单射 f) (hclo : 是闭集 (range f))
   证明: rfl
 
 @[simp]
@@ -786,7 +786,7 @@ theorem coe_equivRange
 
 中文:
 定理 coe_equivRange
-  条件: (hinj : Injective f) (hclo : IsClosed (range f))
+  条件: (hinj : 单射 f) (hclo : 是闭集 (range f))
   证明: rfl
 
 @[simp]
@@ -806,7 +806,7 @@ lemma equivRange_symm_toLinearEquiv
 
 中文:
 引理 equivRange_symm_toLinearEquiv
-  条件: (hinj : Injective f) (hclo : IsClosed (range f))
+  条件: (hinj : 单射 f) (hclo : 是闭集 (range f))
   证明: rfl
 -/
 lemma equivRange_symm_toLinearEquiv (hinj : Injective f) (hclo : IsClosed (range f)) :
@@ -826,7 +826,7 @@ lemma equivRange_symm_apply
 
 中文:
 引理 equivRange_symm_apply
-  结论: (hinj : Injective f) (hclo : IsClosed (range f))
+  结论: (hinj : 单射 f) (hclo : 是闭集 (range f))
   证明: by
   simp [ContinuousLinearEquiv.symm_apply_eq, Subtype.ext_iff]
 
@@ -1109,7 +1109,7 @@ lemma _root_.ContinuousLinearMap.isUnit_iff_bijective
     simp only [LinearMap.range_eq_top, LinearMap.ker_eq_bot, f.coe_coe, h.1, h.2]
 
 中文:
-引理 _root_.ContinuousLinearMap.isUnit_iff_bijective
+引理 _root_.连续线性映射.isUnit_iff_bijective
   条件: {f : E ->L[𝕜] E}
   证明: by
   constructor
@@ -1195,7 +1195,7 @@ definition coprodSubtypeLEquivOfIsCompl
 
 中文:
 定义 coprodSubtypeLEquivOfIsCompl
-  签名: {F : 类型} [NormedAddCommGroup F] [NormedSpace 𝕜 F]
+  签名: {F : 类型} [赋范交换加群 F] [赋范空间 𝕜 F]
   定义体: ContinuousLinearEquiv.ofBijective (f.coprod G.subtypeL)
     (by
       rw [ker_coprod_of_disjoint_range]
@@ -1226,7 +1226,7 @@ theorem range_eq_map_coprodSubtypeLEquivOfIsCompl
 
 中文:
 定理 range_eq_map_coprodSubtypeLEquivOfIsCompl
-  结论: {F : 类型} [NormedAddCommGroup F]
+  结论: {F : 类型} [赋范交换加群 F]
   证明: by
   rw [coprodSubtypeLEquivOfIsCompl]; rw [← ContinuousLinearEquiv.toLinearMap_toContinuousLinearMap]; rw [ContinuousLinearEquiv.coe_ofBijective]; rw [coe_coprod]; rw [LinearMap.coprod_map_prod]; rw [Submodule.map_bot]; rw [sup_bot_eq]; rw [Submodule.map_top]
 
@@ -1255,7 +1255,7 @@ theorem closed_complemented_range_of_isCompl_of_ker_eq_bot
 
 中文:
 定理 closed_complemented_range_of_isCompl_of_ker_eq_bot
-  结论: {F : 类型} [NormedAddCommGroup F]
+  结论: {F : 类型} [赋范交换加群 F]
   证明: by
   have : CompleteSpace G := hG.completeSpace_coe
   let g := coprodSubtypeLEquivOfIsCompl f h hker
@@ -1296,8 +1296,8 @@ theorem LinearMap.continuous_of_isClosed_graph
     (LinearEquiv.ofLeftInverse this).trans (LinearEquiv.ofEq _ _ g.graph_eq_r
 
 中文:
-定理 LinearMap.continuous_of_isClosed_graph
-  条件: (hg : IsClosed (g.graph : Set <| E × F))
+定理 线性映射.continuous_of_isClosed_graph
+  条件: (hg : 是闭集 (g.graph : 集合 <| E × F))
   证明: by
   let : CompleteSpace g.graph := completeSpace_coe_iff_isComplete.mpr hg.isComplete
   let φ₀ : E ->ₗ[𝕜] E × F := LinearMap.id.prod g
@@ -1334,7 +1334,7 @@ theorem LinearMap.continuous_of_seq_closed_graph
   exact (continuous_snd.tendsto _).comp hφ
 
 中文:
-定理 LinearMap.continuous_of_seq_closed_graph
+定理 线性映射.continuous_of_seq_closed_graph
   证明: by
   refine g.continuous_of_isClosed_graph (IsSeqClosed.isClosed ?_)
   rintro φ ⟨x, y⟩ hφg hφ
@@ -1376,7 +1376,7 @@ definition ofIsClosedGraph
 
 中文:
 定义 ofIsClosedGraph
-  签名: (hg : IsClosed (g.graph : Set <| E × F))
+  签名: (hg : 是闭集 (g.graph : 集合 <| E × F))
   定义体: g
   cont := g.continuous_of_isClosed_graph hg
 
@@ -1397,7 +1397,7 @@ theorem coeFn_ofIsClosedGraph
 
 中文:
 定理 coeFn_ofIsClosedGraph
-  条件: (hg : IsClosed (g.graph : Set <| E × F))
+  条件: (hg : 是闭集 (g.graph : 集合 <| E × F))
   证明: rfl
 -/
 theorem coeFn_ofIsClosedGraph (hg : IsClosed (g.graph : Set <| E × F)) :
@@ -1416,7 +1416,7 @@ theorem coe_ofIsClosedGraph
 
 中文:
 定理 coe_ofIsClosedGraph
-  条件: (hg : IsClosed (g.graph : Set <| E × F))
+  条件: (hg : 是闭集 (g.graph : 集合 <| E × F))
   证明: by
   ext
   rfl

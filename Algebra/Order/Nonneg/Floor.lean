@@ -45,7 +45,7 @@ instance floorSemiring
 
 中文:
 实例 floorSemiring
-  签名: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
+  签名: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
   定义体: ⌊(a : α)⌋₊
   ceil a := ⌈(a : α)⌉₊
   floor_of_neg ha := FloorSemiring.floor_of_neg ha
@@ -75,7 +75,7 @@ theorem nat_floor_coe
 
 中文:
 定理 nat_floor_coe
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
   证明: rfl
 
 @[norm_cast]
@@ -96,7 +96,7 @@ theorem nat_ceil_coe
 
 中文:
 定理 nat_ceil_coe
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]
+  结论: [半环 α] [偏序 α] [是Ordered环 α] [FloorSemiring α]
   证明: rfl
 -/
 theorem nat_ceil_coe [Semiring α] [PartialOrder α] [IsOrderedRing α] [FloorSemiring α]

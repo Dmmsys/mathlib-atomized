@@ -89,7 +89,7 @@ theorem eq_top_of_isUnit_mem
 
 中文:
 定理 eq_top_of_isUnit_mem
-  条件: {x} (hx : x in I) (h : IsUnit x)
+  条件: {x} (hx : x in I) (h : 是单位 x)
   结论: I = ⊤
   证明: let ⟨y, hy⟩ := h.exists_left_inv
   eq_top_of_unit_mem I x y hx hy
@@ -151,7 +151,7 @@ theorem mem_sup_left
 
 中文:
 定理 mem_sup_left
-  条件: {S T : Ideal R}
+  条件: {S T : 理想 R}
   结论: 对任意 {x : R}, x in S -> x in S ⊔ T
   证明: @le_sup_left _ _ S T
 
@@ -171,7 +171,7 @@ theorem mem_sup_right
 
 中文:
 定理 mem_sup_right
-  条件: {S T : Ideal R}
+  条件: {S T : 理想 R}
   结论: 对任意 {x : R}, x in T -> x in S ⊔ T
   证明: @le_sup_right _ _ S T
 
@@ -191,7 +191,7 @@ theorem mem_iSup_of_mem
 
 中文:
 定理 mem_iSup_of_mem
-  条件: {ι : Sort*} {S : ι -> Ideal R} (i : ι)
+  条件: {ι : 类型层*} {S : ι -> 理想 R} (i : ι)
   结论: 对任意 {x : R}, x in S i -> x in iSup S
   证明: @le_iSup _ _ _ S _
 
@@ -210,7 +210,7 @@ theorem mem_sSup_of_mem
 
 中文:
 定理 mem_sSup_of_mem
-  条件: {S : Set (Ideal R)} {s : Ideal R} (hs : s in S)
+  条件: {S : 集合 (理想 R)} {s : 理想 R} (hs : s in S)
   证明: @le_sSup _ _ _ _ hs
 
 Depends on / 依赖: le_sSup
@@ -230,7 +230,7 @@ theorem mem_sInf
 
 中文:
 定理 mem_sInf
-  条件: {s : Set (Ideal R)} {x : R}
+  条件: {s : 集合 (理想 R)} {x : R}
   结论: x in sInf s ↔ 对任意 ⦃I⦄, I in s -> x in I
   证明: ⟨fun hx I his => hx I ⟨I, iInf_pos his⟩, fun H _I ⟨_J, hij⟩ => hij ▸ fun _S ⟨hj, hS⟩ => hS ▸ H hj⟩
 
@@ -250,7 +250,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {I J : Ideal R} {x : R}
+  条件: {I J : 理想 R} {x : R}
   结论: x in I ⊓ J ↔ x in I ∧ x in J
   证明: Iff.rfl
 
@@ -270,7 +270,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {I : ι -> Ideal R} {x : R}
+  条件: {ι : 类型层*} {I : ι -> 理想 R} {x : R}
   结论: x in iInf I ↔ 对任意 i, x in I i
   证明: Submodule.mem_iInf _
 
@@ -291,7 +291,7 @@ theorem mem_bot
 中文:
 定理 mem_bot
   条件: {x : R}
-  结论: x in (⊥ : Ideal R) ↔ x = 0
+  结论: x in (⊥ : 理想 R) ↔ x = 0
   证明: Submodule.mem_bot _
 
 Depends on / 依赖: Submodule, Submodule.mem_bot, mem_bot

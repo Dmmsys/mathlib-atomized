@@ -94,7 +94,7 @@ lemma succ_ofNat
   proof: succ_natCast n
 
 中文:
-引理 succ_ofNat
+引理 succ_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: succ_natCast n
 
@@ -114,7 +114,7 @@ lemma one_le_iff_pos
 
 中文:
 引理 one_le_iff_pos
-  结论: {α : 类型} [PartialOrder α] [AddMonoidWithOne α]
+  结论: {α : 类型} [偏序 α] [加法带幺幺半群 α]
   证明: by
   cases a <;> simp [Order.one_le_iff_pos]
 

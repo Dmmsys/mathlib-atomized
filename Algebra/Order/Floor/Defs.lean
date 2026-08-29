@@ -71,7 +71,7 @@ class FloorSemiring
 
 中文:
 类 FloorSemiring
-  参数: (α) [Semiring α] [PartialOrder α]
+  参数: (α) [半环 α] [偏序 α]
   公理与运算 (5 个):
     - floor : α -> 自然数
     - ceil : α -> 自然数
@@ -140,7 +140,7 @@ theorem natCast_mono
 
 中文:
 定理 natCast_mono
-  结论: Monotone (自然数.cast : 自然数 -> α)
+  结论: 递增 (自然数.cast : 自然数 -> α)
   证明: fun _ _ h => (gc_ceil _ _).mp h.trans' (gc_ceil _ _).mpr (le_refl _)
 
 Depends on / 依赖: gc_ceil, h.trans, le_refl
@@ -184,7 +184,7 @@ theorem natCast_strictMono
 
 中文:
 定理 natCast_strictMono
-  结论: StrictMono (自然数.cast : 自然数 -> α)
+  结论: 严格递增 (自然数.cast : 自然数 -> α)
   证明: by
   refine strictMono_nat_of_lt_succ fun n => (natCast_mono (Nat.le_succ n)).lt_of_ne fun hn => ?_
   replace hn (k : Nat) : ((n + k : Nat) : α) = n := by
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: ZeroLEOneClass α
+  签名: ZeroLEOne类 α
   定义体: ⟨by simpa only [Nat.cast_one] using natCast_nonneg 1⟩
 
 Depends on / 依赖: Nat.cast_one, cast_one, natCast_nonneg
@@ -227,7 +227,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero α
+  签名: 特征零 α
   定义体: ⟨natCast_strictMono.injective⟩
 
 Depends on / 依赖: injective, natCast_strictMono, natCast_strictMono.injective
@@ -484,8 +484,8 @@ class FloorRing
     - gc_ceil_coe : GaloisConnection ceil (↑)
 
 中文:
-类 FloorRing
-  参数: (α) [Ring α] [LinearOrder α]
+类 Floor环
+  参数: (α) [环 α] [线性序 α]
   公理与运算 (4 个):
     - floor : α -> 整数
     - ceil : α -> 整数
@@ -519,7 +519,7 @@ instance :
 
 中文:
 实例 :
-  签名: FloorRing 整数
+  签名: Floor环 整数
   定义体: id
   ceil := id
   gc_coe_floor a b := by
@@ -551,8 +551,8 @@ definition FloorRing.ofFloor
     gc_ceil_coe := fun a z => by rw [neg_le, ← gc_coe_floor, Int.cast_neg, neg_le_neg_iff] }
 
 中文:
-定义 FloorRing.ofFloor
-  签名: (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (floor : α -> 整数)
+定义 Floor环.ofFloor
+  签名: (α) [环 α] [线性序 α] [是Ordered环 α] (floor : α -> 整数)
   定义体: { floor
     ceil := fun a => -floor (-a)
     gc_coe_floor
@@ -581,8 +581,8 @@ definition FloorRing.ofCeil
     gc_ceil_coe }
 
 中文:
-定义 FloorRing.ofCeil
-  签名: (α) [Ring α] [LinearOrder α] [IsOrderedRing α] (ceil : α -> 整数)
+定义 Floor环.ofCeil
+  签名: (α) [环 α] [线性序 α] [是Ordered环 α] (ceil : α -> 整数)
   定义体: { floor := fun a => -ceil (-a)
     ceil
     gc_coe_floor := fun a z => by rw [le_neg, gc_ceil_coe, Int.cast_neg, neg_le_neg_iff]
@@ -641,7 +641,7 @@ theorem exists_floor'
   exact le_trans' (floorAux below above).2.1
 
 中文:
-定理 exists_floor'
+定理 存在_floor'
   证明: by
   refine ⟨_, fun n => ⟨?_, (floorAux below above).2.2 _⟩⟩
   rw [← Int.cast_le (R := α)]
@@ -676,7 +676,7 @@ definition FloorRing.ofBounded
   .ofFloor _ _ fun n x => (Classical.choose_spec (exists_floor' x (be
 
 中文:
-定义 FloorRing.ofBounded
+定义 Floor环.ofBounded
   定义体: have below (x : α) : exists n : Int, n <= x := by
     obtain ⟨n, hn⟩ := bounded (-x)
     use -n
@@ -854,7 +854,7 @@ theorem floorRing_floor_eq
 
 中文:
 定理 floorRing_floor_eq
-  结论: @FloorRing.floor = @整数.floor
+  结论: @Floor环.floor = @整数.floor
   证明: rfl
 
 @[simp]
@@ -873,7 +873,7 @@ theorem floorRing_ceil_eq
 
 中文:
 定理 floorRing_ceil_eq
-  结论: @FloorRing.ceil = @整数.ceil
+  结论: @Floor环.ceil = @整数.ceil
   证明: rfl
 -/
 theorem floorRing_ceil_eq : @FloorRing.ceil = @Int.ceil :=
@@ -1206,7 +1206,7 @@ theorem Int.floor_toNat
   proof: rfl
 
 中文:
-定理 Int.floor_toNat
+定理 整数.floor_to自然数
   条件: (a : α)
   结论: ⌊a⌋.to自然数 = ⌊a⌋₊
   证明: rfl
@@ -1226,7 +1226,7 @@ theorem Int.ceil_toNat
 @[simp]
 
 中文:
-定理 Int.ceil_toNat
+定理 整数.ceil_to自然数
   条件: (a : α)
   结论: ⌈a⌉.to自然数 = ⌈a⌉₊
   证明: rfl
@@ -1248,7 +1248,7 @@ theorem Nat.floor_int
 @[simp]
 
 中文:
-定理 Nat.floor_int
+定理 自然数.floor_int
   结论: (自然数.floor : 整数 -> 自然数) = 整数.to自然数
   证明: rfl
 
@@ -1267,7 +1267,7 @@ theorem Nat.ceil_int
   proof: rfl
 
 中文:
-定理 Nat.ceil_int
+定理 自然数.ceil_int
   结论: (自然数.ceil : 整数 -> 自然数) = 整数.to自然数
   证明: rfl
 -/
@@ -1292,7 +1292,7 @@ theorem intCast_mono
 
 中文:
 定理 intCast_mono
-  结论: Monotone (整数.cast : 整数 -> α)
+  结论: 递增 (整数.cast : 整数 -> α)
   证明: fun _ _ h => (gc_ceil_coe _ _).mp h.trans' (gc_ceil_coe _ _).mpr (le_refl _)
 
 Depends on / 依赖: gc_ceil_coe, h.trans, le_refl
@@ -1313,7 +1313,7 @@ theorem intCast_strictMono
 
 中文:
 定理 intCast_strictMono
-  结论: StrictMono (整数.cast : 整数 -> α)
+  结论: 严格递增 (整数.cast : 整数 -> α)
   证明: by
   obtain ⟨h⟩ : NeZero (1 : α) := inferInstance
   refine strictMono_int_of_lt_succ fun n => (intCast_mono (Int.le_add_one (le_refl _))).lt_of_ne ?_

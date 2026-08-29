@@ -58,10 +58,10 @@ class IsConvexDist
     - dist_iConvexComb_fst_snd_le([inst₁] [inst₂] (f : StdSimplex Real (X × X))) : dist (f.iConvexComb Prod.fst) (f.iConvexComb Prod.snd) <= f.iConvexComb fun x => dist x.1 x.2
 
 中文:
-类 IsConvexDist
-  参数: [inst₁ : ConvexSpace 实数 X] [inst₂ : MetricSpace X]
+类 是余nvexDist
+  参数: [inst₁ : 凸空间 实数 X] [inst₂ : 度量空间 X]
   公理与运算 (1 个):
-    - dist_iConvexComb_fst_snd_le([inst₁] [inst₂] (f : StdSimplex 实数 (X × X))) : dist (f.iConvexComb Prod.fst) (f.iConvexComb Prod.snd) <= f.iConvexComb fun x => dist x.1 x.2
+    - dist_iConvexComb_fst_snd_le([inst₁] [inst₂] (f : 标准单纯形 实数 (X × X))) : dist (f.iConvexComb 积类型.fst) (f.iConvexComb 积类型.snd) <= f.iConvexComb fun x => dist x.1 x.2
 -/
 class IsConvexDist [inst₁ : ConvexSpace Real X] [inst₂ : MetricSpace X] : Prop where
   /-- Use `dist_iConvexComb_le` instead. -/
@@ -86,7 +86,7 @@ lemma dist_iConvexComb_le
 
 中文:
 引理 dist_iConvexComb_le
-  条件: {ι : 类型} (f : StdSimplex 实数 ι) (x y : ι -> X)
+  条件: {ι : 类型} (f : 标准单纯形 实数 ι) (x y : ι -> X)
   证明: by
   simpa [iConvexComb_map, Finsupp.sum_mapDomain_index, add_mul]
     using IsConvexDist.dist_iConvexComb_fst_snd_le (f.map fun i => (x i, y i))
@@ -113,7 +113,7 @@ lemma dist_iConvexComb_left_le
 
 中文:
 引理 dist_iConvexComb_left_le
-  条件: (f : StdSimplex 实数 I) (g : I -> X) (x : X)
+  条件: (f : 标准单纯形 实数 I) (g : I -> X) (x : X)
   证明: by
   simpa using dist_iConvexComb_le f g (fun _ => x)
 
@@ -134,7 +134,7 @@ lemma dist_iConvexComb_right_le
 
 中文:
 引理 dist_iConvexComb_right_le
-  条件: (x : X) (f : StdSimplex 实数 I) (g : I -> X)
+  条件: (x : X) (f : 标准单纯形 实数 I) (g : I -> X)
   证明: by
   simpa using dist_iConvexComb_le f (fun _ => x) g
 
@@ -155,7 +155,7 @@ lemma dist_sConvexComb_left_le
 
 中文:
 引理 dist_sConvexComb_left_le
-  条件: (f : StdSimplex 实数 X) (x : X)
+  条件: (f : 标准单纯形 实数 X) (x : X)
   证明: by
   simpa using dist_iConvexComb_left_le f id x
 
@@ -178,7 +178,7 @@ lemma dist_sConvexComb_right_le
 
 中文:
 引理 dist_sConvexComb_right_le
-  条件: (x : X) (f : StdSimplex 实数 X)
+  条件: (x : X) (f : 标准单纯形 实数 X)
   证明: by
   simpa using dist_iConvexComb_right_le x f id
 
@@ -519,7 +519,7 @@ alias continuous_convexComboPair' := continuous_convexCombPair'
 
 中文:
 引理 continuous_convexCombPair'
-  结论: [BoundedSpace X]
+  结论: [有界空间 X]
   证明: continuous_convexCombPair_of_isBounded f hf hf0 hf1 x y hx hy (.all _) (.all _)
 
 @[deprecated (since := "2026-05-15")]
@@ -566,8 +566,8 @@ instance IsConvexDist.subtype
     simp [Subtype.dist_eq, Finsupp.sum_mapDomain_index, add_mul]
 
 中文:
-实例 IsConvexDist.subtype
-  签名: (s : Set X) (hs : IsConvexSet 实数 s)
+实例 是余nvexDist.subtype
+  签名: (s : 集合 X) (hs : IsConvexSet 实数 s)
   定义体: .subtype s hs
     IsConvexDist s := by
   let : ConvexSpace Real s := .subtype s hs
@@ -594,8 +594,8 @@ instance IsConvexDist.submodule
   body: .subtype _ _
 
 中文:
-实例 IsConvexDist.submodule
-  签名: {F M : 类型} [AddCommGroup M] [MetricSpace M]
+实例 是余nvexDist.submodule
+  签名: {F M : 类型} [加法交换群 M] [度量空间 M]
   定义体: .subtype _ _
 
 Depends on / 依赖: subtype

@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: FormallyUnramified S (ResidueField S)
+  签名: 形式非分歧 S (ResidueField S)
   定义体: .quotient _
 
 Depends on / 依赖: quotient
@@ -70,7 +70,7 @@ instance [FormallyUnramified
   .of_restrictScalars R _ _
 
 中文:
-实例 [FormallyUnramified
+实例 [形式非分歧
   签名: R S] :
   定义体: have : FormallyUnramified R (ResidueField S) := .comp _ S _
   .of_restrictScalars R _ _
@@ -98,7 +98,7 @@ instance [FormallyUnramified
 @[stacks 00UW "(2)"]
 
 中文:
-实例 [FormallyUnramified
+实例 [形式非分歧
   签名: R S] :
   定义体: have : EssFiniteType R (ResidueField S) := .comp _ S _
   have : EssFiniteType (ResidueField R) (ResidueField S) := .of_comp R _ _
@@ -124,7 +124,7 @@ instance [FormallyUnramified
   body: FormallyUnramified.isSeparable _ _
 
 中文:
-实例 [FormallyUnramified
+实例 [形式非分歧
   签名: R S] :
   定义体: FormallyUnramified.isSeparable _ _
 
@@ -148,8 +148,8 @@ lemma FormallyUnramified.isField_quotient_map_maximalIdeal
   have : IsScalarTower R (ResidueField R) (S ⧸ mR) := (inferInstanc
 
 中文:
-引理 FormallyUnramified.isField_quotient_map_maximalIdeal
-  条件: [FormallyUnramified R S]
+引理 形式非分歧.isField_quotient_map_maximalIdeal
+  条件: [形式非分歧 R S]
   证明: by
   let mR := (maximalIdeal R).map (algebraMap R S)
   have hmR : mR <= maximalIdeal S := ((local_hom_TFAE (algebraMap R S)).out 0 2 rfl rfl).mp ‹_›
@@ -191,8 +191,8 @@ lemma FormallyUnramified.map_maximalIdeal
 @[stacks 02FM]
 
 中文:
-引理 FormallyUnramified.map_maximalIdeal
-  条件: [FormallyUnramified R S]
+引理 形式非分歧.map_maximalIdeal
+  条件: [形式非分歧 R S]
   证明: by
   apply eq_maximalIdeal
   rw [Ideal.Quotient.maximal_ideal_iff_isField_quotient]
@@ -223,7 +223,7 @@ lemma FormallyUnramified.of_map_maximalIdeal
   obtain ⟨x, rfl⟩ := (Kaehl
 
 中文:
-引理 FormallyUnramified.of_map_maximalIdeal
+引理 形式非分歧.of_map_maximalIdeal
   证明: by
   constructor
   have : FormallyUnramified (ResidueField R) (ResidueField S) := .of_isSeparable _ _
@@ -264,7 +264,7 @@ lemma FormallyUnramified.iff_map_maximalIdeal_eq
   proof: ⟨fun _ => ⟨inferInstance, map_maximalIdeal⟩, fun ⟨_, e⟩ => of_map_maximalIdeal e⟩
 
 中文:
-引理 FormallyUnramified.iff_map_maximalIdeal_eq
+引理 形式非分歧.iff_map_maximalIdeal_eq
   证明: ⟨fun _ => ⟨inferInstance, map_maximalIdeal⟩, fun ⟨_, e⟩ => of_map_maximalIdeal e⟩
 
 Depends on / 依赖: map_maximalIdeal, of_map_maximalIdeal
@@ -326,8 +326,8 @@ instance [Algebra.IsUnramifiedAt
   body: ((Algebra.isUnramifiedAt_iff_map_eq _ _ _).mp inferInstance).1
 
 中文:
-实例 [Algebra.IsUnramifiedAt
-  签名: R q] : Algebra.IsSeparable p.ResidueField q.ResidueField
+实例 [代数.IsUnramifiedAt
+  签名: R q] : 代数.是可分 p.ResidueField q.ResidueField
   定义体: ((Algebra.isUnramifiedAt_iff_map_eq _ _ _).mp inferInstance).1
 
 Depends on / 依赖: Algebra, Algebra.isUnramifiedAt_iff_map_eq, isUnramifiedAt_iff_map_eq
@@ -344,8 +344,8 @@ instance [Algebra.IsUnramifiedAt
   body: Algebra.FormallyUnramified.finite_of_free _ _
 
 中文:
-实例 [Algebra.IsUnramifiedAt
-  签名: R q] : Module.Finite p.ResidueField q.ResidueField
+实例 [代数.IsUnramifiedAt
+  签名: R q] : 模.有限 p.ResidueField q.ResidueField
   定义体: Algebra.FormallyUnramified.finite_of_free _ _
 
 Depends on / 依赖: Algebra, Algebra.FormallyUnramified.finite_of_free, FormallyUnramified, finite_of_free
@@ -418,7 +418,7 @@ lemma finite_of_primesOver_eq_singleton
 
 中文:
 引理 finite_of_primesOver_eq_singleton
-  结论: [Module.Finite R S] [q.LiesOver p]
+  结论: [模.有限 R S] [q.LiesOver p]
   证明: by
   classical
   obtain ⟨s, hs⟩ := Module.Finite.fg_top (R := R) (M := S)
@@ -499,7 +499,7 @@ lemma exists_awayMap_injective_of_localRingHom_injective
   choose m hm using fun x => (IsLocalizatio
 
 中文:
-引理 exists_awayMap_injective_of_localRingHom_injective
+引理 存在_awayMap_injective_of_localRingHom_injective
   证明: by
   classical
   obtain ⟨s, hs⟩ := hRS
@@ -557,7 +557,7 @@ lemma exists_awayMap_bijective_of_localRingHom_bijective
     simp only [localRingHom_mk', Prod.exists,
 
 中文:
-引理 exists_awayMap_bijective_of_localRingHom_bijective
+引理 存在_awayMap_bijective_of_localRingHom_bijective
   证明: by
   classical
   obtain ⟨s, hs⟩ := Algebra.FiniteType.out (R := R) (A := S)
@@ -616,7 +616,7 @@ lemma exists_awayMap_bijective_of_residueField_surjective
       localRingHom_surjective_of_primesOver_eq_singleton hq H⟩
 
 中文:
-引理 exists_awayMap_bijective_of_residueField_surjective
+引理 存在_awayMap_bijective_of_residueField_surjective
   证明: exists_awayMap_bijective_of_localRingHom_bijective hq (by simpa using! Submodule.fg_bot)
     ⟨localRingHom_injective_of_primesOver_eq_singleton hq,
       localRingHom_surjective_of_primesOver_eq_singleton hq H⟩

@@ -61,7 +61,7 @@ definition tautologicalRelations
 
 中文:
 定义 tautologicalRelations
-  签名: : Relations A where
+  签名: : 关系 A where
   定义体: M
   R := tautological.R A M
   relation
@@ -96,7 +96,7 @@ definition tautologicalRelationsSolutionEquiv
 
 中文:
 定义 tautologicalRelationsSolutionEquiv
-  签名: {N : Type w} [AddCommGroup N] [Module A N]
+  签名: {N : 类型 w} [加法交换群 N] [模 A N]
   定义体: { toFun := s.var
       map_add' := fun m₁ m₂ => by
         symm
@@ -138,7 +138,7 @@ definition tautologicalSolution
 
 中文:
 定义 tautologicalSolution
-  签名: : (tautologicalRelations A M).Solution M
+  签名: : (tautologicalRelations A M).解 M
   定义体: tautologicalRelationsSolutionEquiv.symm .id
 
 Depends on / 依赖: tautologicalRelationsSolutionEquiv, tautologicalRelationsSolutionEquiv.symm
@@ -209,7 +209,7 @@ definition tautological
 
 中文:
 定义 tautological
-  签名: : Presentation A M
+  签名: : 呈现 A M
   定义体: ofIsPresentation (tautologicalSolution_isPresentation A M)
 
 Depends on / 依赖: ofIsPresentation, tautologicalSolution_isPresentation

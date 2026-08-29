@@ -54,7 +54,7 @@ definition nonMemberSubfamily
 
 中文:
 定义 nonMemberSubfamily
-  签名: (a : α) (𝒜 : Finset (Finset α))
+  签名: (a : α) (𝒜 : 有限集 (有限集 α))
   定义体: {s in 𝒜 | a ∉ s}
 -/
 def nonMemberSubfamily (a : α) (𝒜 : Finset (Finset α)) : Finset (Finset α) := {s in 𝒜 | a ∉ s}
@@ -71,7 +71,7 @@ definition memberSubfamily
 
 中文:
 定义 memberSubfamily
-  签名: (a : α) (𝒜 : Finset (Finset α))
+  签名: (a : α) (𝒜 : 有限集 (有限集 α))
   定义体: {s in 𝒜 | a in s}.image fun s => erase s a
 
 @[simp]
@@ -147,7 +147,7 @@ theorem nonMemberSubfamily_inter
 
 中文:
 定理 nonMemberSubfamily_inter
-  条件: (a : α) (𝒜 ℬ : Finset (Finset α))
+  条件: (a : α) (𝒜 ℬ : 有限集 (有限集 α))
   证明: filter_inter_distrib _ _ _
 
 Depends on / 依赖: filter_inter_distrib
@@ -169,7 +169,7 @@ theorem memberSubfamily_inter
 
 中文:
 定理 memberSubfamily_inter
-  条件: (a : α) (𝒜 ℬ : Finset (Finset α))
+  条件: (a : α) (𝒜 ℬ : 有限集 (有限集 α))
   证明: by
   unfold memberSubfamily
   rw [filter_inter_distrib]; rw [image_inter_of_injOn _ _ ((erase_injOn' _).mono _)]
@@ -193,7 +193,7 @@ theorem nonMemberSubfamily_union
 
 中文:
 定理 nonMemberSubfamily_union
-  条件: (a : α) (𝒜 ℬ : Finset (Finset α))
+  条件: (a : α) (𝒜 ℬ : 有限集 (有限集 α))
   证明: filter_union _ _ _
 
 Depends on / 依赖: filter_union
@@ -213,7 +213,7 @@ theorem memberSubfamily_union
 
 中文:
 定理 memberSubfamily_union
-  条件: (a : α) (𝒜 ℬ : Finset (Finset α))
+  条件: (a : α) (𝒜 ℬ : 有限集 (有限集 α))
   证明: by
   simp_rw [memberSubfamily, filter_union, image_union]
 
@@ -237,7 +237,7 @@ theorem card_memberSubfamily_add_card_nonMemberSubfamily
 
 中文:
 定理 card_memberSubfamily_add_card_nonMemberSubfamily
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   证明: by
   rw [memberSubfamily]; rw [nonMemberSubfamily]; rw [card_image_of_injOn]
   · conv_rhs => rw [← card_filter_add_card_filter_not (fun s => (a in s))]
@@ -272,7 +272,7 @@ theorem memberSubfamily_union_nonMemberSubfamily
 
 中文:
 定理 memberSubfamily_union_nonMemberSubfamily
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   证明: by
   ext s
   simp only [mem_union, mem_memberSubfamily, mem_nonMemberSubfamily, mem_image]
@@ -441,7 +441,7 @@ lemma nonMemberSubfamily_image_insert
 
 中文:
 引理 nonMemberSubfamily_image_insert
-  结论: (𝒜.image <| insert a).nonMemberSubfamily a = ∅
+  结论: (𝒜.像 <| insert a).nonMemberSubfamily a = ∅
   证明: by
   simp [eq_empty_iff_forall_notMem]
 -/
@@ -460,7 +460,7 @@ lemma memberSubfamily_image_erase
 
 中文:
 引理 memberSubfamily_image_erase
-  结论: (𝒜.image (erase · a)).memberSubfamily a = ∅
+  结论: (𝒜.像 (erase · a)).memberSubfamily a = ∅
   证明: by
   simp [eq_empty_iff_forall_notMem,
     (ne_of_mem_of_not_mem' (mem_insert_self _ _) (notMem_erase _ _)).symm]
@@ -485,7 +485,7 @@ lemma image_insert_memberSubfamily
 
 中文:
 引理 image_insert_memberSubfamily
-  条件: (𝒜 : Finset (Finset α)) (a : α)
+  条件: (𝒜 : 有限集 (有限集 α)) (a : α)
   证明: by
   ext s
   simp only [mem_memberSubfamily, mem_image, mem_filter]
@@ -536,7 +536,7 @@ lemma memberFamily_induction_on
 
 中文:
 引理 memberFamily_induction_on
-  结论: {p : Finset (Finset α) -> 命题}
+  结论: {p : 有限集 (有限集 α) -> 命题}
   证明: by
   set u := 𝒜.sup id
   have hu : forall s in 𝒜, s subseteq u := fun s => le_sup (f := id)
@@ -595,7 +595,7 @@ lemma family_induction_on
 
 中文:
 引理 family_induction_on
-  结论: {p : Finset (Finset α) -> 命题}
+  结论: {p : 有限集 (有限集 α) -> 命题}
   证明: by
   refine memberFamily_induction_on 𝒜 empty singleton_empty fun a 𝒜 h𝒜₀ h𝒜₁ => subfamily a h𝒜₀ ?_
   rw [← image_insert_memberSubfamily]
@@ -632,7 +632,7 @@ scoped[FinsetFamily] notation "𝓓 " => Down.compression
 
 中文:
 定义 compression
-  签名: (a : α) (𝒜 : Finset (Finset α))
+  签名: (a : α) (𝒜 : 有限集 (有限集 α))
   定义体: {s in 𝒜 | erase s a in 𝒜}.disjUnion {s in 𝒜.image fun s => erase s a | s ∉ 𝒜}
     disjoint_left.2 fun _s h₁ h₂ => (mem_filter.1 h₂).2 (mem_filter.1 h₁).1
 
@@ -792,7 +792,7 @@ theorem compression_idem
 
 中文:
 定理 compression_idem
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   结论: 𝓓 a (𝓓 a 𝒜) = 𝓓 a 𝒜
   证明: by
   ext s
@@ -826,7 +826,7 @@ theorem card_compression
 
 中文:
 定理 card_compression
-  条件: (a : α) (𝒜 : Finset (Finset α))
+  条件: (a : α) (𝒜 : 有限集 (有限集 α))
   结论: #(𝓓 a 𝒜) = #𝒜
   证明: by
   rw [compression]; rw [card_disjUnion]; rw [filter_image]; rw [card_image_of_injOn ((erase_injOn' _).mono fun s hs => _)]; rw [← card_union_of_disjoint]

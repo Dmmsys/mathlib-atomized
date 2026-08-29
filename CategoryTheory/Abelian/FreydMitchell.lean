@@ -98,7 +98,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (AsSmall.{max u v} C)
+  签名: 非空 (AsSmall.{最大值 u v} C)
   定义体: ⟨0⟩
 -/
 instance : Nonempty (AsSmall.{max u v} C) := ⟨0⟩
@@ -115,7 +115,7 @@ definition EmbeddingRing
 
 中文:
 定义 EmbeddingRing
-  签名: : Type (max u v)
+  签名: : 类型 (最大值 u v)
   定义体: IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
     (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
 
@@ -137,7 +137,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (EmbeddingRing C)
+  签名: 环 (EmbeddingRing C)
   定义体: inferInstanceAs Ring
     IsGrothendieckAbelian.OppositeModuleEmbedding.EmbeddingRing
       (Ind.yoneda (C := (AsSmall.{max u v} C)ᵒᵖ)).rightOp
@@ -161,7 +161,7 @@ definition F
 
 中文:
 定义 F
-  签名: : C ⥤ AsSmall.{max u v} C
+  签名: : C ⥤ AsSmall.{最大值 u v} C
   定义体: AsSmall.equiv.functor
 -/
 private def F : C ⥤ AsSmall.{max u v} C :=
@@ -217,7 +217,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : C ⥤ ModuleCat.{max u v} (EmbeddingRing C)
+  签名: : C ⥤ 模范畴.{最大值 u v} (EmbeddingRing C)
   定义体: F C ⋙ G C ⋙ H C
 -/
 noncomputable def functor : C ⥤ ModuleCat.{max u v} (EmbeddingRing C) :=
@@ -238,7 +238,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor C).Faithful
+  签名: (functor C).忠实
   定义体: by
   rw [functor]
   have : (F C).Faithful := by rw [F]; infer_instance
@@ -270,7 +270,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor C).Full
+  签名: (functor C).满
   定义体: by
   rw [functor]
   have : (F C).Full := by rw [F]; infer_instance
@@ -303,7 +303,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (functor C)
+  签名: 保持FiniteLimits (functor C)
   定义体: by
   rw [functor]
   have : PreservesFiniteLimits (F C) := by rw [F]; infer_instance
@@ -337,7 +337,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteColimits (functor C)
+  签名: 保持FiniteColimits (functor C)
   定义体: by
   rw [functor]
   have : PreservesFiniteColimits (F C) := by rw [F]; infer_instance
@@ -370,7 +370,7 @@ theorem freyd_mitchell
 
 中文:
 定理 freyd_mitchell
-  条件: (C : 类型u) [Category.{v} C] [Abelian C]
+  条件: (C : 类型u) [范畴.{v} C] [交换 C]
   证明: ⟨_, _, FreydMitchell.functor C, inferInstance, inferInstance, inferInstance, inferInstance⟩
 
 Depends on / 依赖: FreydMitchell, FreydMitchell.functor, functor

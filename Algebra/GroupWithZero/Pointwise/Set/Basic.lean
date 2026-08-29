@@ -45,7 +45,7 @@ lemma mul_zero_subset
 
 中文:
 引理 mul_zero_subset
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s * 0 subseteq 0
   证明: by simp [subset_def, mem_mul]
 
@@ -63,7 +63,7 @@ lemma zero_mul_subset
 
 中文:
 引理 zero_mul_subset
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 0 * s subseteq 0
   证明: by simp [subset_def, mem_mul]
 
@@ -81,8 +81,8 @@ lemma Nonempty.mul_zero
   proof: s.mul_zero_subset.antisymm by simpa [mem_mul] using! hs
 
 中文:
-引理 Nonempty.mul_zero
-  条件: (hs : s.Nonempty)
+引理 非空.mul_zero
+  条件: (hs : s.非空)
   结论: s * 0 = 0
   证明: s.mul_zero_subset.antisymm by simpa [mem_mul] using! hs
 -/
@@ -99,8 +99,8 @@ lemma Nonempty.zero_mul
   proof: s.zero_mul_subset.antisymm by simpa [mem_mul] using! hs
 
 中文:
-引理 Nonempty.zero_mul
-  条件: (hs : s.Nonempty)
+引理 非空.zero_mul
+  条件: (hs : s.非空)
   结论: 0 * s = 0
   证明: s.zero_mul_subset.antisymm by simpa [mem_mul] using! hs
 -/
@@ -123,7 +123,7 @@ lemma div_zero_subset
 
 中文:
 引理 div_zero_subset
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: s / 0 subseteq 0
   证明: by simp [subset_def, mem_div]
 
@@ -141,7 +141,7 @@ lemma zero_div_subset
 
 中文:
 引理 zero_div_subset
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 0 / s subseteq 0
   证明: by simp [subset_def, mem_div]
 
@@ -159,8 +159,8 @@ lemma Nonempty.div_zero
   proof: s.div_zero_subset.antisymm by simpa [mem_div] using! hs
 
 中文:
-引理 Nonempty.div_zero
-  条件: (hs : s.Nonempty)
+引理 非空.div_zero
+  条件: (hs : s.非空)
   结论: s / 0 = 0
   证明: s.div_zero_subset.antisymm by simpa [mem_div] using! hs
 -/
@@ -177,8 +177,8 @@ lemma Nonempty.zero_div
   proof: s.zero_div_subset.antisymm by simpa [mem_div] using! hs
 
 中文:
-引理 Nonempty.zero_div
-  条件: (hs : s.Nonempty)
+引理 非空.zero_div
+  条件: (hs : s.非空)
   结论: 0 / s = 0
   证明: s.zero_div_subset.antisymm by simpa [mem_div] using! hs
 -/
@@ -195,7 +195,7 @@ lemma inv_zero
 
 中文:
 引理 inv_zero
-  结论: (0 : Set α)⁻¹ = 0
+  结论: (0 : 集合 α)⁻¹ = 0
   证明: by ext; simp
 -/
 @[simp] protected lemma inv_zero : (0 : Set α)⁻¹ = 0 := by ext; simp

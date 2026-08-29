@@ -36,7 +36,7 @@ theorem zero_right
 
 中文:
 定理 zero_right
-  条件: [MulZeroClass G₀] (a : G₀)
+  条件: [乘零类 G₀] (a : G₀)
   结论: SemiconjBy a 0 0
   证明: by
   simp only [SemiconjBy, mul_zero, zero_mul]
@@ -61,7 +61,7 @@ theorem zero_left
 
 中文:
 定理 zero_left
-  条件: [MulZeroClass G₀] (x y : G₀)
+  条件: [乘零类 G₀] (x y : G₀)
   结论: SemiconjBy 0 x y
   证明: by
   simp only [SemiconjBy, mul_zero, zero_mul]

@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: Condensed.ulift.Full
+  签名: Condensed.ulift.满
   定义体: show (sheafCompose _ _).Full from inferInstance
 
 Depends on / 依赖: sheafCompose
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: Condensed.ulift.Faithful
+  签名: Condensed.ulift.忠实
   定义体: show (sheafCompose _ _).Faithful from inferInstance
 
 Depends on / 依赖: Faithful, sheafCompose
@@ -218,7 +218,7 @@ instance :
 
 中文:
 实例 :
-  签名: compHausToCondensed'.Full
+  签名: compHausToCondensed'.满
   定义体: inferInstanceAs ((coherentTopology CompHaus).yoneda).Full
 
 Depends on / 依赖: CompHaus, coherentTopology, yoneda
@@ -236,7 +236,7 @@ instance :
 
 中文:
 实例 :
-  签名: compHausToCondensed'.Faithful
+  签名: compHausToCondensed'.忠实
   定义体: inferInstanceAs ((coherentTopology CompHaus).yoneda).Faithful
 
 Depends on / 依赖: CompHaus, Faithful, coherentTopology, yoneda
@@ -254,7 +254,7 @@ instance :
 
 中文:
 实例 :
-  签名: compHausToCondensed.Full
+  签名: compHausToCondensed.满
   定义体: inferInstanceAs (_ ⋙ _).Full
 -/
 instance : compHausToCondensed.Full := inferInstanceAs (_ ⋙ _).Full
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: compHausToCondensed.Faithful
+  签名: compHausToCondensed.忠实
   定义体: inferInstanceAs (_ ⋙ _).Faithful
 
 Depends on / 依赖: Faithful
@@ -286,7 +286,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteCoproducts compHausToCondensed.{u}
+  签名: 保持FiniteCoproducts compHausToCondensed.{u}
   定义体: inferInstanceAs PreservesFiniteCoproducts (coherentTopology _).uliftYoneda
 
 Depends on / 依赖: PreservesFiniteCoproducts, coherentTopology, uliftYoneda

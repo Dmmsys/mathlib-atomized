@@ -45,7 +45,7 @@ instance hasPullbacks_opposite
 
 中文:
 实例 hasPullbacks_opposite
-  签名: [HasPushouts C]
+  签名: [有Pushouts C]
   定义体: by
   have : HasColimitsOfShape WalkingCospanᵒᵖ C :=
     hasColimitsOfShape_of_equivalence walkingCospanOpEquiv.symm
@@ -71,7 +71,7 @@ instance hasPushouts_opposite
 
 中文:
 实例 hasPushouts_opposite
-  签名: [HasPullbacks C]
+  签名: [有Pullbacks C]
   定义体: by
   have : HasLimitsOfShape WalkingSpanᵒᵖ C :=
     hasLimitsOfShape_of_equivalence walkingSpanOpEquiv.symm
@@ -1408,7 +1408,7 @@ definition coneOp
 
 中文:
 定义 coneOp
-  签名: (p : CommSq f g h i)
+  签名: (p : 交换Sq f g h i)
   定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext
@@ -1427,7 +1427,7 @@ definition coconeOp
 
 中文:
 定义 coconeOp
-  签名: (p : CommSq f g h i)
+  签名: (p : 交换Sq f g h i)
   定义体: PullbackCone.ext (Iso.refl _) (by simp) (by simp)
 
 Depends on / 依赖: Iso.refl, PullbackCone, PullbackCone.ext
@@ -1446,7 +1446,7 @@ definition coneUnop
 
 中文:
 定义 coneUnop
-  签名: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : CommSq f g h i)
+  签名: {W X Y Z : Cᵒᵖ} {f : W ⟶ X} {g : W ⟶ Y} {h : X ⟶ Z} {i : Y ⟶ Z} (p : 交换Sq f g h i)
   定义体: PushoutCocone.ext (Iso.refl _) (by simp) (by simp)
 
 Depends on / 依赖: Iso.refl, PushoutCocone, PushoutCocone.ext

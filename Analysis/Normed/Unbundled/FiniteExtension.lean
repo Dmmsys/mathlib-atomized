@@ -200,7 +200,7 @@ theorem norm_isNonarchimedean
 
 中文:
 定理 norm_isNonarchimedean
-  条件: (hna : IsNonarchimedean (Norm.norm : K -> 实数))
+  条件: (hna : IsNonarchimedean (范数.norm : K -> 实数))
   证明: fun x y => by
   obtain ⟨ixy, _, hixy⟩ := exists_mem_eq_sup' univ_nonempty (fun i => ‖(B.repr (x + y)) i‖)
   have hxy : ‖B.repr (x + y) ixy‖ <= max ‖B.repr x ixy‖ ‖B.repr y ixy‖ := by
@@ -306,7 +306,7 @@ theorem norm_smul
 
 中文:
 定理 norm_smul
-  结论: {ι : 类型} [Fintype ι] [Nonempty ι] {B : Basis ι K L} {i : ι}
+  结论: {ι : 类型} [有限类型 ι] [非空 ι] {B : 基 ι K L} {i : ι}
   证明: by
   rw [norm_extends hBi]; rw [Basis.norm]; rw [Basis.norm]; rw [Finset.mul₀_sup' (norm_nonneg _) (fun j : ι => ‖B.repr y j‖) univ univ_nonempty]
   congr with j
@@ -343,8 +343,8 @@ theorem exists_nonarchimedean_pow_mul_seminorm_of_finiteDimensional
   let hfin : Fintype ι := FiniteDimensio
 
 中文:
-定理 exists_nonarchimedean_pow_mul_seminorm_of_finiteDimensional
-  结论: (hfd : FiniteDimensional K L)
+定理 存在_nonarchimedean_pow_mul_seminorm_of_finiteDimensional
+  结论: (hfd : 有限维 K L)
   证明: by
   -- Choose a basis B = {1, e2,..., en} of the K-vector space L
   have h1 : LinearIndepOn K id ({1} : Set L) := .singleton one_ne_zero

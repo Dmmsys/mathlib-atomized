@@ -102,7 +102,7 @@ theorem trace_apply
 中文:
 定理 trace_apply
   条件: (x)
-  结论: trace R S x = LinearMap.trace R S (lmul R S x)
+  结论: trace R S x = 线性映射.trace R S (lmul R S x)
   证明: rfl
 -/
 theorem trace_apply (x) : trace R S x = LinearMap.trace R S (lmul R S x) :=
@@ -117,8 +117,8 @@ theorem trace_eq_zero_of_not_exists_basis
   proof: by ext s; simp [trace_apply, LinearMap.trace, h]
 
 中文:
-定理 trace_eq_zero_of_not_exists_basis
-  条件: (h : ¬存在 s : Finset S, Nonempty (Basis s R S))
+定理 trace_eq_zero_of_not_存在_basis
+  条件: (h : ¬存在 s : 有限集 S, 非空 (基 s R S))
   证明: by ext s; simp [trace_apply, LinearMap.trace, h]
 
 Depends on / 依赖: LinearMap, LinearMap.trace, trace_apply
@@ -140,7 +140,7 @@ theorem trace_eq_matrix_trace
 
 中文:
 定理 trace_eq_matrix_trace
-  条件: [DecidableEq ι] (b : Basis ι R S) (s : S)
+  条件: [DecidableEq ι] (b : 基 ι R S) (s : S)
   证明: by
   rw [trace_apply]; rw [LinearMap.trace_eq_matrix_trace _ b]; rw [← toMatrix_lmul_eq]; rfl
 
@@ -164,7 +164,7 @@ theorem trace_algebraMap_of_basis
 
 中文:
 定理 trace_algebraMap_of_basis
-  条件: (b : Basis ι R S) (x : R)
+  条件: (b : 基 ι R S) (x : R)
   证明: by
   have := Classical.decEq ι
   rw [trace_apply]; rw [LinearMap.trace_eq_matrix_trace R b]; rw [Matrix.trace]
@@ -192,7 +192,7 @@ theorem trace_self
 
 中文:
 定理 trace_self
-  结论: trace R R = LinearMap.id
+  结论: trace R R = 线性映射.id
   证明: by
   ext; simpa using trace_algebraMap_of_basis (.singleton (Fin 1) R) 1
 -/
@@ -234,7 +234,7 @@ theorem trace_algebraMap
 
 中文:
 定理 trace_algebraMap
-  条件: [StrongRankCondition R] [Module.Free R S] (x : R)
+  条件: [StrongRankCondition R] [模.自由 R S] (x : R)
   证明: by
   by_cases H : exists s : Finset S, Nonempty (Basis s R S)
   · rw [trace_algebraMap_of_basis H.choose_spec.some, finrank_eq_card_basis H.choose_spec.some]
@@ -264,7 +264,7 @@ theorem trace_trace_of_basis
 
 中文:
 定理 trace_trace_of_basis
-  结论: [Algebra S T] [IsScalarTower R S T] {ι κ : 类型} [Finite ι]
+  结论: [代数 S T] [标量塔 R S T] {ι κ : 类型} [有限 ι]
   证明: by
   have := Classical.decEq ι
   have := Classical.decEq κ
@@ -300,7 +300,7 @@ theorem trace_comp_trace_of_basis
 
 中文:
 定理 trace_comp_trace_of_basis
-  结论: [Algebra S T] [IsScalarTower R S T] {ι κ : 类型} [Finite ι]
+  结论: [代数 S T] [标量塔 R S T] {ι κ : 类型} [有限 ι]
   证明: by
   ext
   rw [LinearMap.comp_apply]; rw [LinearMap.restrictScalars_apply]; rw [trace_trace_of_basis b c]
@@ -326,7 +326,7 @@ theorem trace_trace
 
 中文:
 定理 trace_trace
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: trace_trace_of_basis (Module.Free.chooseBasis R S) (Module.Free.chooseBasis S T) x
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, trace_trace_of_basis
@@ -351,7 +351,7 @@ theorem trace_comp_trace
 
 中文:
 定理 trace_comp_trace
-  结论: [Algebra S T] [IsScalarTower R S T]
+  结论: [代数 S T] [标量塔 R S T]
   证明: LinearMap.ext trace_trace
 
 @[simp]
@@ -379,7 +379,7 @@ theorem trace_prod_apply
 
 中文:
 定理 trace_prod_apply
-  结论: [Module.Free R S] [Module.Free R T] [Module.Finite R S] [Module.Finite R T]
+  结论: [模.自由 R S] [模.自由 R T] [模.有限 R S] [模.有限 R T]
   证明: by
   let f := (lmul R S).toLinearMap.prodMap (lmul R T).toLinearMap
   have : (lmul R (S × T)).toLinearMap = (prodMapLinear R S T S T R).comp f :=
@@ -407,7 +407,7 @@ theorem trace_prod
 
 中文:
 定理 trace_prod
-  条件: [Module.Free R S] [Module.Free R T] [Module.Finite R S] [Module.Finite R T]
+  条件: [模.自由 R S] [模.自由 R T] [模.有限 R S] [模.有限 R T]
   证明: LinearMap.ext fun p => by rw [coprod_apply, trace_prod_apply]
 
 Depends on / 依赖: LinearMap, LinearMap.ext, coprod_apply, trace_prod_apply
@@ -473,7 +473,7 @@ theorem traceForm_isSymm
 
 中文:
 定理 traceForm_isSymm
-  结论: (traceForm R S).IsSymm
+  结论: (traceForm R S).是Symm
   证明: ⟨fun _ _ => congr_arg (trace R S) (mul_comm _ _)⟩
 
 Depends on / 依赖: congr_arg, mul_comm
@@ -492,7 +492,7 @@ theorem traceForm_toMatrix
 
 中文:
 定理 traceForm_toMatrix
-  条件: [DecidableEq ι] (b : Basis ι R S) (i j)
+  条件: [DecidableEq ι] (b : 基 ι R S) (i j)
   证明: by
   rw [LinearMap.BilinForm.toMatrix_apply]; rw [traceForm_apply]
 

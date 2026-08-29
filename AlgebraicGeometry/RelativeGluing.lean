@@ -38,8 +38,8 @@ lemma Scheme.isLocallyDirected_of_equifibered_of_injective
       simp only [Functor.comp_obj, forget_obj, Functor.comp_map, forget_
 
 中文:
-引理 Scheme.isLocallyDirected_of_equifibered_of_injective
-  结论: {J : 类型} [Category J]
+引理 概形.isLocallyDirected_of_equifibered_of_injective
+  结论: {J : 类型} [范畴 J]
   证明: by
     simp only [Functor.comp_obj, Scheme.forget_obj, Functor.comp_map, Scheme.forget_map] at heq
     obtain ⟨l, fli, flj, x, hi, hj⟩ := (G ⋙ Scheme.forget).exists_map_eq_of_isLocallyDirected fi fj
@@ -108,7 +108,7 @@ structure RelativeGluingData
 结构 RelativeGluingData
   参数: where
   公理与运算 (3 个):
-    - functor : 𝒰.I₀ ⥤ Scheme.{u}
+    - functor : 𝒰.I₀ ⥤ 概形.{u}
     - natTrans : functor ⟶ 𝒰.functorOfLocallyDirected
     - equifibered : natTrans.Equifibered
 -/
@@ -139,8 +139,8 @@ instance [Quiver.IsThin
   exact (d.functor.map hij).injective
 
 中文:
-实例 [Quiver.IsThin
-  签名: 𝒰.I₀] : (d.functor ⋙ Scheme.forget).IsLocallyDirected
+实例 [箭图.IsThin
+  签名: 𝒰.I₀] : (d.functor ⋙ 概形.forget).是LocallyDirected
   定义体: by
   apply isLocallyDirected_of_equifibered_of_injective d.natTrans d.equifibered
   intro i j hij
@@ -171,7 +171,7 @@ abbreviation glued
 
 中文:
 缩写 glued
-  签名: : Scheme.{u}
+  签名: : 概形.{u}
   定义体: colimit d.functor
 
 Depends on / 依赖: colimit, d.functor, functor
@@ -209,7 +209,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category d.cover.I₀
+  签名: 范畴 d.cover.I₀
   定义体: inferInstanceAs Category 𝒰.I₀
 
 Depends on / 依赖: Category

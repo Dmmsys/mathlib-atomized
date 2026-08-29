@@ -612,7 +612,7 @@ theorem eq_one_of_sq_sub_mul_sq_eq_zero
 
 中文:
 定理 eq_one_of_sq_sub_mul_sq_eq_zero
-  结论: {p : 自然数} [Fact p.Prime] {a : 整数} (ha : (a : ZMod p) != 0)
+  结论: {p : 自然数} [Fact p.素] {a : 整数} (ha : (a : ZMod p) != 0)
   证明: by
   apply_fun (· * y⁻¹ ^ 2) at hxy
   simp only [zero_mul] at hxy
@@ -643,7 +643,7 @@ theorem eq_one_of_sq_sub_mul_sq_eq_zero'
 
 中文:
 定理 eq_one_of_sq_sub_mul_sq_eq_zero'
-  结论: {p : 自然数} [Fact p.Prime] {a : 整数} (ha : (a : ZMod p) != 0)
+  结论: {p : 自然数} [Fact p.素] {a : 整数} (ha : (a : ZMod p) != 0)
   证明: by
   have hy : y != 0 := by
     rintro rfl
@@ -680,7 +680,7 @@ theorem eq_zero_mod_of_eq_neg_one
 
 中文:
 定理 eq_zero_mod_of_eq_neg_one
-  结论: {p : 自然数} [Fact p.Prime] {a : 整数} (h : legendreSym p a = -1)
+  结论: {p : 自然数} [Fact p.素] {a : 整数} (h : legendreSym p a = -1)
   证明: by
   have ha : (a : ZMod p) != 0 := by
     intro hf
@@ -720,7 +720,7 @@ theorem prime_dvd_of_eq_neg_one
 
 中文:
 定理 prime_dvd_of_eq_neg_one
-  结论: {p : 自然数} [Fact p.Prime] {a : 整数} (h : legendreSym p a = -1) {x y : 整数}
+  结论: {p : 自然数} [Fact p.素] {a : 整数} (h : legendreSym p a = -1) {x y : 整数}
   证明: by
   simp_rw [← ZMod.intCast_zmod_eq_zero_iff_dvd] at hxy ⊢
   push_cast at hxy
@@ -810,7 +810,7 @@ theorem exists_sq_eq_neg_one_iff
   rw [FiniteField.isSquare_neg_one_iff]; rw [card p]
 
 中文:
-定理 exists_sq_eq_neg_one_iff
+定理 存在_sq_eq_neg_one_iff
   结论: IsSquare (-1 : ZMod p) ↔ p % 4 != 3
   证明: by
   rw [FiniteField.isSquare_neg_one_iff]; rw [card p]

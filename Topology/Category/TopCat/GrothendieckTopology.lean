@@ -54,7 +54,7 @@ definition isOpenEmbedding
 
 中文:
 定义 isOpenEmbedding
-  签名: : Morphism命题erty TopCat
+  签名: : MorphismProperty 顶元素范畴
   定义体: fun _ _ f => Topology.IsOpenEmbedding f
 
 @[simp]
@@ -75,7 +75,7 @@ lemma isOpenEmbedding_iff
 
 中文:
 引理 isOpenEmbedding_iff
-  条件: {X Y : TopCat.{u}} (f : X ⟶ Y)
+  条件: {X Y : 顶元素范畴.{u}} (f : X ⟶ Y)
   证明: .rfl
 -/
 lemma isOpenEmbedding_iff {X Y : TopCat.{u}} (f : X ⟶ Y) :
@@ -92,7 +92,7 @@ instance :
 
 中文:
 实例 :
-  签名: isOpenEmbedding.IsMultiplicative
+  签名: isOpenEmbedding.是Multiplicative
   定义体: .id
   comp_mem _ _ hf hg := hg.comp hf
 -/
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: isOpenEmbedding.IsStableUnderBaseChange
+  签名: isOpenEmbedding.是StableUnderBaseChange
   定义体: .mk' fun _ _ _ _ _ _ hg => fst_isOpenEmbedding_of_right _ hg
 
 Depends on / 依赖: fst_isOpenEmbedding_of_right
@@ -152,7 +152,7 @@ deriving instance Precoverage.IsStableUnderBaseChange for precoverage
 
 中文:
 定义 precoverage
-  签名: : Precoverage TopCat.{u}
+  签名: : Precoverage 顶元素范畴.{u}
   定义体: Types.jointlySurjectivePrecoverage.comap (forget TopCat) ⊓ isOpenEmbedding.precoverage
   deriving Precoverage.HasIsos, Precoverage.IsStableUnderComposition
 
@@ -176,7 +176,7 @@ abbreviation grothendieckTopology
 
 中文:
 缩写 grothendieckTopology
-  签名: : GrothendieckTopology TopCat.{u}
+  签名: : Grothendieck拓扑 顶元素范畴.{u}
   定义体: precoverage.toGrothendieck
 
 Depends on / 依赖: precoverage, precoverage.toGrothendieck, toGrothendieck
@@ -194,8 +194,8 @@ lemma exists_mem_zeroHypercover_range
   simpa using E.mem₀.left
 
 中文:
-引理 exists_mem_zeroHypercover_range
-  条件: {X : TopCat.{u}} (E : precoverage.ZeroHypercover X)
+引理 存在_mem_zeroHypercover_range
+  条件: {X : 顶元素范畴.{u}} (E : precoverage.ZeroHypercover X)
   证明: by
   simpa using E.mem₀.left
 
@@ -216,7 +216,7 @@ lemma isOpenEmbedding_f_zeroHypercover
 
 中文:
 引理 isOpenEmbedding_f_zeroHypercover
-  条件: {X : TopCat.{u}} (E : precoverage.ZeroHypercover X)
+  条件: {X : 顶元素范畴.{u}} (E : precoverage.ZeroHypercover X)
   证明: by
   simpa using E.mem₀.right
 
@@ -259,7 +259,7 @@ instance subcanonical_grothendieckTopology
 
 中文:
 实例 subcanonical_grothendieckTopology
-  签名: : grothendieckTopology.Subcanonical
+  签名: : grothendieckTopology.子典范
   定义体: by
   refine .of_isSheaf_yoneda_obj _ fun X => ?_
   rw [Precoverage.isSheaf_toGrothendieck_iff_of_isStableUnderBaseChange_of_small]
@@ -361,7 +361,7 @@ instance :
 
 中文:
 实例 :
-  签名: uliftFunctor.IsContinuous grothendieckTopology grothendieckTopology
+  签名: uliftFunctor.是连续 grothendieckTopology grothendieckTopology
   定义体: by
   apply Functor.isContinuous_toGrothendieck_of_pullbacksPreservedBy
   apply precoverage_le_comap_uliftFunctor

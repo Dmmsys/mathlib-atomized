@@ -78,7 +78,7 @@ add_aesop_rules safe tactic
 
 中文:
 定义 AEStronglyMeasurable
-  签名: [m : MeasurableSpace α] {m₀ : MeasurableSpace α} (f : α -> β)
+  签名: [m : 可测空间 α] {m₀ : 可测空间 α} (f : α -> β)
   定义体: exists g : α -> β, StronglyMeasurable[m] g ∧ f =ᵐ[μ] g
 
 add_aesop_rules safe tactic
@@ -134,7 +134,7 @@ theorem aefinStronglyMeasurable
 
 中文:
 定理 aefinStronglyMeasurable
-  条件: [Zero β] [TopologicalSpace β] (hf : FinStronglyMeasurable f μ)
+  条件: [零 β] [拓扑空间 β] (hf : FinStronglyMeasurable f μ)
   证明: ⟨f, hf, ae_eq_refl f⟩
 
 Depends on / 依赖: ae_eq_refl
@@ -155,7 +155,7 @@ theorem aefinStronglyMeasurable_zero
 
 中文:
 定理 aefinStronglyMeasurable_zero
-  结论: {α β} {_ : MeasurableSpace α} (μ : Measure α) [Zero β]
+  结论: {α β} {_ : 可测空间 α} (μ : 测度 α) [零 β]
   证明: ⟨0, finStronglyMeasurable_zero, EventuallyEq.rfl⟩
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.rfl, finStronglyMeasurable_zero
@@ -230,7 +230,7 @@ theorem aestronglyMeasurable_one
 
 中文:
 定理 aestronglyMeasurable_one
-  条件: [One β]
+  条件: [幺 β]
   结论: AEStronglyMeasurable[m] (1 : α -> β) μ
   证明: stronglyMeasurable_one.aestronglyMeasurable
 
@@ -255,7 +255,7 @@ lemma AEStronglyMeasurable.of_subsingleton_dom
 
 中文:
 引理 AEStronglyMeasurable.of_subsingleton_dom
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: AEStronglyMeasurable[m] f μ
   证明: StronglyMeasurable.of_subsingleton_dom.aestronglyMeasurable
 
@@ -280,7 +280,7 @@ lemma AEStronglyMeasurable.of_subsingleton_cod
 
 中文:
 引理 AEStronglyMeasurable.of_subsingleton_cod
-  条件: [Subsingleton β]
+  条件: [子单例 β]
   结论: AEStronglyMeasurable[m] f μ
   证明: StronglyMeasurable.of_subsingleton_cod.aestronglyMeasurable
 
@@ -361,7 +361,7 @@ lemma aestronglyMeasurable_id_of_isSeparable
 
 中文:
 引理 aestronglyMeasurable_id_of_isSeparable
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   nontriviality α
   obtain ⟨a, -⟩ := exists_pair_ne α
@@ -409,7 +409,7 @@ lemma of_discrete
 
 中文:
 引理 of_discrete
-  条件: [Countable α] [MeasurableSingletonClass α]
+  条件: [可数 α] [MeasurableSingleton类 α]
   结论: AEStronglyMeasurable f μ
   证明: StronglyMeasurable.of_discrete.aestronglyMeasurable
 
@@ -476,7 +476,7 @@ theorem measurable_mk
 
 中文:
 定理 measurable_mk
-  结论: [PseudoMetrizableSpace β] [MeasurableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [可测空间 β] [Borel空间 β]
   证明: hf.stronglyMeasurable_mk.measurable
 
 Depends on / 依赖: hf.stronglyMeasurable_mk.measurable, measurable, stronglyMeasurable_mk
@@ -520,7 +520,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  结论: {β} [MeasurableSpace β] [TopologicalSpace β]
+  结论: {β} [可测空间 β] [拓扑空间 β]
   证明: ⟨hf.mk f, hf.stronglyMeasurable_mk.measurable, hf.ae_eq_mk⟩
 -/
 protected theorem aemeasurable {β} [MeasurableSpace β] [TopologicalSpace β]
@@ -579,7 +579,7 @@ theorem mono_measure
 
 中文:
 定理 mono_measure
-  条件: {ν : Measure α} (hf : AEStronglyMeasurable[m] f μ) (h : ν <= μ)
+  条件: {ν : 测度 α} (hf : AEStronglyMeasurable[m] f μ) (h : ν <= μ)
   证明: ⟨hf.mk f, hf.stronglyMeasurable_mk, Eventually.filter_mono (ae_mono h) hf.ae_eq_mk⟩
 
 Depends on / 依赖: Eventually, Eventually.filter_mono, ae_eq_mk, ae_mono, filter_mono, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk, stronglyMeasurable_mk
@@ -656,7 +656,7 @@ lemma of_trim
 
 中文:
 引理 of_trim
-  结论: {m₀' : MeasurableSpace α} (hm₀ : m₀' <= m₀)
+  结论: {m₀' : 可测空间 α} (hm₀ : m₀' <= m₀)
   证明: by
   obtain ⟨g, hg_meas, hfg⟩ := hf; exact ⟨g, hg_meas, ae_eq_of_ae_eq_trim hfg⟩
 
@@ -717,8 +717,8 @@ theorem _root_.Continuous.comp_aestronglyMeasurable
   proof: ⟨_, hg.comp_stronglyMeasurable hf.stronglyMeasurable_mk, EventuallyEq.fun_comp hf.ae_eq_mk g⟩
 
 中文:
-定理 _root_.Continuous.comp_aestronglyMeasurable
-  结论: {g : β -> γ} {f : α -> β} (hg : Continuous g)
+定理 _root_.连续.comp_aestronglyMeasurable
+  结论: {g : β -> γ} {f : α -> β} (hg : 连续 g)
   证明: ⟨_, hg.comp_stronglyMeasurable hf.stronglyMeasurable_mk, EventuallyEq.fun_comp hf.ae_eq_mk g⟩
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.fun_comp, ae_eq_mk, comp_stronglyMeasurable, fun_comp, hf.ae_eq_mk, hf.stronglyMeasurable_mk, hg.comp_stronglyMeasurable, stronglyMeasurable_mk
@@ -741,8 +741,8 @@ theorem _root_.Continuous.aestronglyMeasurable
 @[fun_prop]
 
 中文:
-定理 _root_.Continuous.aestronglyMeasurable
-  结论: [TopologicalSpace α] [OpensMeasurableSpace α]
+定理 _root_.连续.aestronglyMeasurable
+  结论: [拓扑空间 α] [OpensMeasurable空间 α]
   证明: hf.stronglyMeasurable.aestronglyMeasurable
 
 @[fun_prop]
@@ -827,7 +827,7 @@ theorem _root_.Continuous.comp_aestronglyMeasurable₂
   proof: hg.comp_aestronglyMeasurable (hf.prodMk h'f)
 
 中文:
-定理 _root_.Continuous.comp_aestronglyMeasurable₂
+定理 _root_.连续.comp_aestronglyMeasurable₂
   证明: hg.comp_aestronglyMeasurable (hf.prodMk h'f)
 
 Depends on / 依赖: comp_aestronglyMeasurable, hf.prodMk, hg.comp_aestronglyMeasurable, prodMk
@@ -849,7 +849,7 @@ theorem _root_.Measurable.aestronglyMeasurable
   proof: hf.stronglyMeasurable.aestronglyMeasurable
 
 中文:
-定理 _root_.Measurable.aestronglyMeasurable
+定理 _root_.可测.aestronglyMeasurable
   证明: hf.stronglyMeasurable.aestronglyMeasurable
 
 Depends on / 依赖: aestronglyMeasurable, hf.stronglyMeasurable.aestronglyMeasurable, stronglyMeasurable
@@ -877,7 +877,7 @@ refine Filter.EventuallyEq.trans ?_
 
 中文:
 引理 of_measurableSpace_le_on
-  结论: {m' m₀ : MeasurableSpace α} {μ : Measure[m₀] α} [Zero β]
+  结论: {m' m₀ : 可测空间 α} {μ : 测度[m₀] α} [零 β]
   证明: by
   have h_ind_eq : s.indicator (hf.mk f) =ᵐ[μ] f := by
 refine Filter.EventuallyEq.trans ?_
@@ -922,7 +922,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [Mul β] [ContinuousMul β] (hf : AEStronglyMeasurable[m] f μ)
+  结论: [乘法 β] [连续乘法 β] (hf : AEStronglyMeasurable[m] f μ)
   证明: ⟨hf.mk f * hg.mk g, by fun_prop, hf.ae_eq_mk.mul hg.ae_eq_mk⟩
 
 @[to_additive (attr := fun_prop)]
@@ -944,7 +944,7 @@ theorem mul_const
 
 中文:
 定理 mul_const
-  条件: [Mul β] [ContinuousMul β] (hf : AEStronglyMeasurable[m] f μ) (c : β)
+  条件: [乘法 β] [连续乘法 β] (hf : AEStronglyMeasurable[m] f μ) (c : β)
   证明: hf.mul aestronglyMeasurable_const
 
 @[to_additive (attr := fun_prop)]
@@ -966,7 +966,7 @@ theorem const_mul
 
 中文:
 定理 const_mul
-  条件: [Mul β] [ContinuousMul β] (hf : AEStronglyMeasurable[m] f μ) (c : β)
+  条件: [乘法 β] [连续乘法 β] (hf : AEStronglyMeasurable[m] f μ) (c : β)
   证明: aestronglyMeasurable_const.mul hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -988,7 +988,7 @@ theorem inv
 
 中文:
 定理 inv
-  条件: [Inv β] [ContinuousInv β] (hf : AEStronglyMeasurable[m] f μ)
+  条件: [取逆 β] [连续取逆 β] (hf : AEStronglyMeasurable[m] f μ)
   证明: ⟨(hf.mk f)⁻¹, hf.stronglyMeasurable_mk.inv, hf.ae_eq_mk.inv⟩
 
 @[to_fun (attr := fun_prop)]
@@ -1010,7 +1010,7 @@ theorem inv₀
 
 中文:
 定理 inv₀
-  结论: [GroupWithZero β] [ContinuousInv₀ β] [MetrizableSpace β]
+  结论: [带零群 β] [余ntinuousInv₀ β] [Metrizable空间 β]
   证明: ⟨(hf.mk f)⁻¹, hf.stronglyMeasurable_mk.inv₀, hf.ae_eq_mk.inv⟩
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1035,7 +1035,7 @@ theorem div
 
 中文:
 定理 div
-  结论: [Group β] [IsTopologicalGroup β] (hf : AEStronglyMeasurable[m] f μ)
+  结论: [群 β] [是拓扑群 β] (hf : AEStronglyMeasurable[m] f μ)
   证明: ⟨hf.mk f / hg.mk g, hf.stronglyMeasurable_mk.div' hg.stronglyMeasurable_mk,
     hf.ae_eq_mk.div hg.ae_eq_mk⟩
 
@@ -1060,7 +1060,7 @@ theorem div₀
 
 中文:
 定理 div₀
-  结论: [GroupWithZero β] [ContinuousMul β] [ContinuousInv₀ β] [MetrizableSpace β]
+  结论: [带零群 β] [连续乘法 β] [余ntinuousInv₀ β] [Metrizable空间 β]
   证明: ⟨hf.mk f / hg.mk g, hf.stronglyMeasurable_mk.div hg.stronglyMeasurable_mk,
     hf.ae_eq_mk.div hg.ae_eq_mk⟩
 
@@ -1088,7 +1088,7 @@ theorem mul_iff_right
 
 中文:
 定理 mul_iff_right
-  条件: [CommGroup β] [IsTopologicalGroup β] (hf : AEStronglyMeasurable[m] f μ)
+  条件: [交换群 β] [是拓扑群 β] (hf : AEStronglyMeasurable[m] f μ)
   证明: ⟨fun h => show g = f * g * f⁻¹ by simp only [mul_inv_cancel_comm] ▸ h.mul hf.inv,
     fun h => hf.mul h⟩
 
@@ -1114,7 +1114,7 @@ theorem mul_iff_left
 
 中文:
 定理 mul_iff_left
-  条件: [CommGroup β] [IsTopologicalGroup β] (hf : AEStronglyMeasurable[m] f μ)
+  条件: [交换群 β] [是拓扑群 β] (hf : AEStronglyMeasurable[m] f μ)
   证明: mul_comm g f ▸ AEStronglyMeasurable.mul_iff_right hf
 
 @[to_fun (attr := to_additive (attr := fun_prop))]
@@ -1138,7 +1138,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
+  结论: {𝕜} [拓扑空间 𝕜] [标量乘法 𝕜 β] [连续标量乘法 𝕜 β] {f : α -> 𝕜}
   证明: continuous_smul.comp_aestronglyMeasurable (hf.prodMk hg)
 
 @[to_additive (attr := to_fun (attr := fun_prop)) const_nsmul]
@@ -1161,7 +1161,7 @@ theorem pow
 
 中文:
 定理 pow
-  条件: [Monoid β] [ContinuousMul β] (hf : AEStronglyMeasurable[m] f μ) (n : 自然数)
+  条件: [幺半群 β] [连续乘法 β] (hf : AEStronglyMeasurable[m] f μ) (n : 自然数)
   证明: ⟨hf.mk f ^ n, hf.stronglyMeasurable_mk.pow _, hf.ae_eq_mk.pow_const _⟩
 
 @[to_additive (attr := to_fun (attr := fun_prop))]
@@ -1189,7 +1189,7 @@ alias const_vadd' := AEStronglyMeasurable.fun_const_vadd
 
 中文:
 定理 const_smul
-  结论: {𝕜} [SMul 𝕜 β] [ContinuousConstSMul 𝕜 β]
+  结论: {𝕜} [标量乘法 𝕜 β] [连续常数标量乘法 𝕜 β]
   证明: ⟨c • hf.mk f, hf.stronglyMeasurable_mk.const_smul c, hf.ae_eq_mk.const_smul c⟩
 
 @[deprecated (since := "2026-06-26")]
@@ -1221,7 +1221,7 @@ theorem smul_const
 
 中文:
 定理 smul_const
-  结论: {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
+  结论: {𝕜} [拓扑空间 𝕜] [标量乘法 𝕜 β] [连续标量乘法 𝕜 β] {f : α -> 𝕜}
   证明: continuous_smul.comp_aestronglyMeasurable (hf.prodMk aestronglyMeasurable_const)
 -/
 protected theorem smul_const {𝕜} [TopologicalSpace 𝕜] [SMul 𝕜 β] [ContinuousSMul 𝕜 β] {f : α -> 𝕜}
@@ -1243,7 +1243,7 @@ theorem star
 
 中文:
 定理 star
-  结论: {R : 类型} [TopologicalSpace R] [Star R] [ContinuousStar R] {f : α -> R}
+  结论: {R : 类型} [拓扑空间 R] [对合 R] [余ntinuousStar R] {f : α -> R}
   证明: ⟨star (hf.mk f), hf.stronglyMeasurable_mk.star, hf.ae_eq_mk.star⟩
 -/
 protected theorem star {R : Type*} [TopologicalSpace R] [Star R] [ContinuousStar R] {f : α -> R}
@@ -1267,8 +1267,8 @@ theorem sup
 @[to_fun (attr := fun_prop)]
 
 中文:
-定理 sup
-  结论: [SemilatticeSup β] [ContinuousSup β] (hf : AEStronglyMeasurable f μ)
+定理 上确界
+  结论: [SemilatticeSup β] [余ntinuousSup β] (hf : AEStronglyMeasurable f μ)
   证明: ⟨hf.mk f ⊔ hg.mk g, hf.stronglyMeasurable_mk.sup hg.stronglyMeasurable_mk,
     hf.ae_eq_mk.sup hg.ae_eq_mk⟩
 
@@ -1292,8 +1292,8 @@ theorem inf
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 inf
-  结论: [SemilatticeInf β] [ContinuousInf β] (hf : AEStronglyMeasurable f μ)
+定理 下确界
+  结论: [SemilatticeInf β] [余ntinuousInf β] (hf : AEStronglyMeasurable f μ)
   证明: ⟨hf.mk f ⊓ hg.mk g, hf.stronglyMeasurable_mk.inf hg.stronglyMeasurable_mk,
     hf.ae_eq_mk.inf hg.ae_eq_mk⟩
 
@@ -1317,7 +1317,7 @@ theorem oneLePart
 
 中文:
 定理 oneLePart
-  结论: [Group β] [Lattice β] [ContinuousSup β]
+  结论: [群 β] [格 β] [余ntinuousSup β]
   证明: hf.sup aestronglyMeasurable_const
 
 @[to_additive (attr := fun_prop)]
@@ -1338,7 +1338,7 @@ theorem leOnePart
 
 中文:
 定理 leOnePart
-  结论: [Group β] [Lattice β] [ContinuousSup β] [ContinuousInv β]
+  结论: [群 β] [格 β] [余ntinuousSup β] [连续取逆 β]
   证明: hf.inv.sup aestronglyMeasurable_const
 -/
 protected theorem leOnePart [Group β] [Lattice β] [ContinuousSup β] [ContinuousInv β]
@@ -1376,8 +1376,8 @@ theorem _root_.List.aestronglyMeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 _root_.List.aestronglyMeasurable_prod
-  结论: (l : List (α -> M))
+定理 _root_.列表.aestronglyMeasurable_prod
+  结论: (l : 列表 (α -> M))
   证明: by
   induction l with
   | nil => exact aestronglyMeasurable_one
@@ -1409,7 +1409,7 @@ theorem _root_.List.aestronglyMeasurable_fun_prod
   simpa only [← Pi.list_prod_apply] using l.aestronglyMeasurable_prod hl
 
 中文:
-定理 _root_.List.aestronglyMeasurable_fun_prod
+定理 _root_.列表.aestronglyMeasurable_fun_prod
   证明: by
   simpa only [← Pi.list_prod_apply] using l.aestronglyMeasurable_prod hl
 
@@ -1496,8 +1496,8 @@ theorem _root_.Finset.aestronglyMeasurable_prod
 @[to_additive (attr := fun_prop)]
 
 中文:
-定理 _root_.Finset.aestronglyMeasurable_prod
-  结论: {ι : 类型} {f : ι -> α -> M} (s : Finset ι)
+定理 _root_.有限集.aestronglyMeasurable_prod
+  结论: {ι : 类型} {f : ι -> α -> M} (s : 有限集 ι)
   证明: Multiset.aestronglyMeasurable_prod _ fun _g hg =>
     let ⟨_i, hi, hg⟩ := Multiset.mem_map.1 hg
     hg ▸ hf _ hi
@@ -1523,8 +1523,8 @@ theorem _root_.Finset.aestronglyMeasurable_fun_prod
   simpa only [← Finset.prod_apply] using s.aestronglyMeasurable_prod hf
 
 中文:
-定理 _root_.Finset.aestronglyMeasurable_fun_prod
-  结论: {ι : 类型} {f : ι -> α -> M} (s : Finset ι)
+定理 _root_.有限集.aestronglyMeasurable_fun_prod
+  结论: {ι : 类型} {f : ι -> α -> M} (s : 有限集 ι)
   证明: by
   simpa only [← Finset.prod_apply] using s.aestronglyMeasurable_prod hf
 
@@ -1554,8 +1554,8 @@ theorem _root_.AEMeasurable.aestronglyMeasurable
 @[fun_prop]
 
 中文:
-定理 _root_.AEMeasurable.aestronglyMeasurable
-  结论: [PseudoMetrizableSpace β] [OpensMeasurableSpace β]
+定理 _root_.几乎处处可测.aestronglyMeasurable
+  结论: [PseudoMetrizable空间 β] [OpensMeasurable空间 β]
   证明: ⟨hf.mk f, hf.measurable_mk.stronglyMeasurable, hf.ae_eq_mk⟩
 
 @[fun_prop]
@@ -1577,7 +1577,7 @@ theorem _root_.aestronglyMeasurable_id
 
 中文:
 定理 _root_.aestronglyMeasurable_id
-  结论: {α : 类型} [TopologicalSpace α] [PseudoMetrizableSpace α]
+  结论: {α : 类型} [拓扑空间 α] [PseudoMetrizable空间 α]
   证明: aemeasurable_id.aestronglyMeasurable
 
 Depends on / 依赖: aemeasurable_id, aemeasurable_id.aestronglyMeasurable, aestronglyMeasurable
@@ -1597,7 +1597,7 @@ theorem _root_.aestronglyMeasurable_iff_aemeasurable
 
 中文:
 定理 _root_.aestronglyMeasurable_iff_aemeasurable
-  结论: [PseudoMetrizableSpace β] [BorelSpace β]
+  结论: [PseudoMetrizable空间 β] [Borel空间 β]
   证明: ⟨fun h => h.aemeasurable, fun h => h.aestronglyMeasurable⟩
 
 Depends on / 依赖: aemeasurable, aestronglyMeasurable, h.aemeasurable, h.aestronglyMeasurable
@@ -1621,7 +1621,7 @@ theorem dist
 
 中文:
 定理 dist
-  结论: {β : 类型} [PseudoMetricSpace β] {f g : α -> β}
+  结论: {β : 类型} [伪度量空间 β] {f g : α -> β}
   证明: continuous_dist.comp_aestronglyMeasurable (hf.prodMk hg)
 
 @[fun_prop]
@@ -1644,7 +1644,7 @@ theorem norm
 
 中文:
 定理 norm
-  结论: {β : 类型} [SeminormedAddCommGroup β] {f : α -> β}
+  结论: {β : 类型} [SeminormedAddComm群 β] {f : α -> β}
   证明: continuous_norm.comp_aestronglyMeasurable hf
 
 @[fun_prop]
@@ -1664,7 +1664,7 @@ theorem nnnorm
 
 中文:
 定理 nnnorm
-  结论: {β : 类型} [SeminormedAddCommGroup β] {f : α -> β}
+  结论: {β : 类型} [SeminormedAddComm群 β] {f : α -> β}
   证明: continuous_nnnorm.comp_aestronglyMeasurable hf
 -/
 protected theorem nnnorm {β : Type*} [SeminormedAddCommGroup β] {f : α -> β}
@@ -1688,7 +1688,7 @@ theorem enorm
 
 中文:
 定理 enorm
-  结论: {β : 类型} [TopologicalSpace β] [ContinuousENorm β] {f : α -> β}
+  结论: {β : 类型} [拓扑空间 β] [余ntinuousE范数 β] {f : α -> β}
   证明: (continuous_enorm.comp_aestronglyMeasurable hf).aemeasurable
 -/
 protected theorem enorm {β : Type*} [TopologicalSpace β] [ContinuousENorm β] {f : α -> β}
@@ -1713,7 +1713,7 @@ theorem edist
 
 中文:
 定理 edist
-  结论: {β : 类型} [PseudoMetricSpace β] {f g : α -> β}
+  结论: {β : 类型} [伪度量空间 β] {f g : α -> β}
   证明: (continuous_edist.comp_aestronglyMeasurable (hf.prodMk hg)).aemeasurable
 
 @[fun_prop]
@@ -1733,7 +1733,7 @@ theorem real_toNNReal
   proof: continuous_real_toNNReal.comp_aestronglyMeasurable hf
 
 中文:
-定理 real_toNNReal
+定理 real_toNN实数
   条件: {f : α -> 实数} (hf : AEStronglyMeasurable f μ)
   证明: continuous_real_toNNReal.comp_aestronglyMeasurable hf
 -/
@@ -1758,7 +1758,7 @@ theorem _root_.aestronglyMeasurable_indicator_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_indicator_iff
-  条件: [Zero β] {s : Set α} (hs : MeasurableSet s)
+  条件: [零 β] {s : 集合 α} (hs : 可测集 s)
   证明: by
   constructor
   · intro h
@@ -1820,7 +1820,7 @@ theorem indicator
 
 中文:
 定理 indicator
-  结论: [Zero β] (hfm : AEStronglyMeasurable f μ) {s : Set α}
+  结论: [零 β] (hfm : AEStronglyMeasurable f μ) {s : 集合 α}
   证明: (aestronglyMeasurable_indicator_iff hs).mpr hfm.restrict
 
 @[fun_prop]
@@ -1840,7 +1840,7 @@ theorem indicator₀
 
 中文:
 定理 indicator₀
-  结论: [Zero β] (hfm : AEStronglyMeasurable f μ) {s : Set α}
+  结论: [零 β] (hfm : AEStronglyMeasurable f μ) {s : 集合 α}
   证明: (aestronglyMeasurable_indicator_iff₀ hs).2 hfm.restrict
 -/
 protected theorem indicator₀ [Zero β] (hfm : AEStronglyMeasurable f μ) {s : Set α}
@@ -1865,7 +1865,7 @@ theorem nullMeasurableSet_eq_fun
 
 中文:
 定理 nullMeasurableSet_eq_fun
-  结论: {E} [TopologicalSpace E] [MetrizableSpace E] {f g : α -> E}
+  结论: {E} [拓扑空间 E] [Metrizable空间 E] {f g : α -> E}
   证明: by
   apply
     (hf.stronglyMeasurable_mk.measurableSet_eq_fun
@@ -1899,7 +1899,7 @@ lemma nullMeasurableSet_mulSupport
 
 中文:
 引理 nullMeasurableSet_mulSupport
-  结论: {E} [TopologicalSpace E] [MetrizableSpace E] [One E] {f : α -> E}
+  结论: {E} [拓扑空间 E] [Metrizable空间 E] [幺 E] {f : α -> E}
   证明: (hf.nullMeasurableSet_eq_fun stronglyMeasurable_const.aestronglyMeasurable).compl
 
 Depends on / 依赖: aestronglyMeasurable, hf.nullMeasurableSet_eq_fun, nullMeasurableSet_eq_fun, stronglyMeasurable_const, stronglyMeasurable_const.aestronglyMeasurable
@@ -1923,7 +1923,7 @@ theorem nullMeasurableSet_lt
 
 中文:
 定理 nullMeasurableSet_lt
-  结论: [Preorder β] [OrderClosedTopology β] [PseudoMetrizableSpace β]
+  结论: [预序 β] [OrderClosed拓扑 β] [PseudoMetrizable空间 β]
   证明: by
   apply
     (hf.stronglyMeasurable_mk.measurableSet_lt hg.stronglyMeasurable_mk).nullMeasurableSet.congr
@@ -1957,7 +1957,7 @@ theorem nullMeasurableSet_le
 
 中文:
 定理 nullMeasurableSet_le
-  结论: [Preorder β] [OrderClosedTopology β] [PseudoMetrizableSpace β]
+  结论: [预序 β] [OrderClosed拓扑 β] [PseudoMetrizable空间 β]
   证明: by
   apply
     (hf.stronglyMeasurable_mk.measurableSet_le hg.stronglyMeasurable_mk).nullMeasurableSet.congr
@@ -1986,7 +1986,7 @@ theorem _root_.aestronglyMeasurable_of_aestronglyMeasurable_trim
 
 中文:
 定理 _root_.aestronglyMeasurable_of_aestronglyMeasurable_trim
-  结论: {α} {m m0 : MeasurableSpace α}
+  结论: {α} {m m0 : 可测空间 α}
   证明: ⟨hf.mk f, StronglyMeasurable.mono hf.stronglyMeasurable_mk hm, ae_eq_of_ae_eq_trim hf.ae_eq_mk⟩
 
 Depends on / 依赖: StronglyMeasurable, StronglyMeasurable.mono, ae_eq_mk, ae_eq_of_ae_eq_trim, hf.ae_eq_mk, hf.mk, hf.stronglyMeasurable_mk, stronglyMeasurable_mk
@@ -2007,7 +2007,7 @@ theorem comp_aemeasurable
 
 中文:
 定理 comp_aemeasurable
-  结论: {γ : 类型} {_ : MeasurableSpace γ} {_ : MeasurableSpace α} {f : γ -> α}
+  结论: {γ : 类型} {_ : 可测空间 γ} {_ : 可测空间 α} {f : γ -> α}
   证明: ⟨hg.mk g ∘ hf.mk f, hg.stronglyMeasurable_mk.comp_measurable hf.measurable_mk,
     (ae_eq_comp hf hg.ae_eq_mk).trans (hf.ae_eq_mk.fun_comp (hg.mk g))⟩
 
@@ -2029,7 +2029,7 @@ theorem comp_measurable
 
 中文:
 定理 comp_measurable
-  结论: {γ : 类型} {_ : MeasurableSpace γ} {_ : MeasurableSpace α} {f : γ -> α}
+  结论: {γ : 类型} {_ : 可测空间 γ} {_ : 可测空间 α} {f : γ -> α}
   证明: hg.comp_aemeasurable hf.aemeasurable
 
 Depends on / 依赖: aemeasurable, comp_aemeasurable, hf.aemeasurable, hg.comp_aemeasurable
@@ -2049,7 +2049,7 @@ theorem comp_quasiMeasurePreserving
 
 中文:
 定理 comp_quasiMeasurePreserving
-  结论: {γ : 类型} {_ : MeasurableSpace γ} {_ : MeasurableSpace α}
+  结论: {γ : 类型} {_ : 可测空间 γ} {_ : 可测空间 α}
   证明: (hg.mono_ac hf.absolutelyContinuous).comp_measurable hf.measurable
 
 Depends on / 依赖: absolutelyContinuous, comp_measurable, hf.absolutelyContinuous, hf.measurable, hg.mono_ac, measurable, mono_ac
@@ -2100,7 +2100,7 @@ lemma aestronglyMeasurable_id_map
 
 中文:
 引理 aestronglyMeasurable_id_map
-  结论: {mβ : MeasurableSpace β}
+  结论: {mβ : 可测空间 β}
   证明: by
   obtain ⟨t, ht1, ht2⟩ := hf.isSeparable_ae_range
   refine aestronglyMeasurable_id_of_isSeparable ht1.closure ?_
@@ -2135,7 +2135,7 @@ theorem _root_.aestronglyMeasurable_iff_aemeasurable_separable
 
 中文:
 定理 _root_.aestronglyMeasurable_iff_aemeasurable_separable
-  结论: [PseudoMetrizableSpace β]
+  结论: [PseudoMetrizable空间 β]
   证明: by
   refine ⟨fun H => ⟨H.aemeasurable, H.isSeparable_ae_range⟩, ?_⟩
   rintro ⟨H, ⟨t, t_sep, ht⟩⟩
@@ -2174,7 +2174,7 @@ theorem _root_.aestronglyMeasurable_iff_nullMeasurable_separable
 
 中文:
 定理 _root_.aestronglyMeasurable_iff_nullMeasurable_separable
-  结论: [PseudoMetrizableSpace β]
+  结论: [PseudoMetrizable空间 β]
   证明: aestronglyMeasurable_iff_aemeasurable_separable.trans and_congr_left fun ⟨_, hsep, h⟩ =>
     have := hsep.secondCountableTopology
     ⟨AEMeasurable.nullMeasurable, fun hf => hf.aemeasurable_of_aerange h⟩
@@ -2202,7 +2202,7 @@ theorem _root_.MeasurableEmbedding.aestronglyMeasurable_map_iff
   exact ⟨g₂, hgm₂, hf.ae_map_iff.2 heq⟩
 
 中文:
-定理 _root_.MeasurableEmbedding.aestronglyMeasurable_map_iff
+定理 _root_.可测嵌入.aestronglyMeasurable_map_iff
   结论: {γ : 类型}
   证明: by
   refine ⟨fun H => H.comp_measurable hf.measurable, ?_⟩
@@ -2238,8 +2238,8 @@ theorem _root_.Topology.IsEmbedding.aestronglyMeasurable_comp_iff
       { hg
 
 中文:
-定理 _root_.Topology.IsEmbedding.aestronglyMeasurable_comp_iff
-  结论: [PseudoMetrizableSpace β]
+定理 _root_.拓扑.是嵌入.aestronglyMeasurable_comp_iff
+  结论: [PseudoMetrizable空间 β]
   证明: by
   let := pseudoMetrizableSpacePseudoMetric γ
   borelize β γ
@@ -2284,7 +2284,7 @@ theorem _root_.aestronglyMeasurable_of_tendsto_ae
 
 中文:
 定理 _root_.aestronglyMeasurable_of_tendsto_ae
-  结论: {ι : 类型} [PseudoMetrizableSpace β]
+  结论: {ι : 类型} [PseudoMetrizable空间 β]
   证明: by
   borelize β
   refine aestronglyMeasurable_iff_aemeasurable_separable.2 ⟨?_, ?_⟩
@@ -2324,8 +2324,8 @@ theorem _root_.exists_stronglyMeasurable_limit_of_tendsto_ae
   have Hg : AEStronglyMeasurable g μ := aestronglyMeasurable_of_tendsto_ae _
 
 中文:
-定理 _root_.exists_stronglyMeasurable_limit_of_tendsto_ae
-  结论: [PseudoMetrizableSpace β]
+定理 _root_.存在_stronglyMeasurable_limit_of_tendsto_ae
+  结论: [PseudoMetrizable空间 β]
   证明: by
   borelize β
   obtain ⟨g, _, hg⟩ :
@@ -2365,7 +2365,7 @@ lemma exists_stronglyMeasurable_range_subset
     simpa [Set.range_piecewise] using! 
 
 中文:
-引理 exists_stronglyMeasurable_range_subset
+引理 存在_stronglyMeasurable_range_subset
   结论: {α β : 类型}
   证明: by
   obtain ⟨f', hf', hff'⟩ := hf
@@ -2411,7 +2411,7 @@ theorem piecewise
 
 中文:
 定理 piecewise
-  结论: {s : Set α} [DecidablePred (· in s)]
+  结论: {s : 集合 α} [DecidablePred (· in s)]
   证明: by
   refine ⟨s.piecewise (hf.mk f) (hg.mk g),
     StronglyMeasurable.piecewise hs hf.stronglyMeasurable_mk hg.stronglyMeasurable_mk, ?_⟩
@@ -2461,7 +2461,7 @@ theorem sum_measure
 
 中文:
 定理 sum_measure
-  结论: [PseudoMetrizableSpace β] {m : MeasurableSpace α} {μ : ι -> Measure α}
+  结论: [PseudoMetrizable空间 β] {m : 可测空间 α} {μ : ι -> 测度 α}
   证明: by
   borelize β
   refine
@@ -2501,7 +2501,7 @@ theorem _root_.aestronglyMeasurable_sum_measure_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_sum_measure_iff
-  结论: [PseudoMetrizableSpace β]
+  结论: [PseudoMetrizable空间 β]
   证明: ⟨fun h _ => h.mono_measure (Measure.le_sum _ _), sum_measure⟩
 
 @[simp]
@@ -2528,7 +2528,7 @@ theorem _root_.aestronglyMeasurable_add_measure_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_add_measure_iff
-  条件: [PseudoMetrizableSpace β] {ν : Measure α}
+  条件: [PseudoMetrizable空间 β] {ν : 测度 α}
   证明: by
   rw [← sum_cond]; rw [aestronglyMeasurable_sum_measure_iff]; rw [Bool.forall_bool]; rw [and_comm]
   rfl
@@ -2555,7 +2555,7 @@ theorem add_measure
 
 中文:
 定理 add_measure
-  结论: [PseudoMetrizableSpace β] {ν : Measure α} {f : α -> β}
+  结论: [PseudoMetrizable空间 β] {ν : 测度 α} {f : α -> β}
   证明: aestronglyMeasurable_add_measure_iff.2 ⟨hμ, hν⟩
 
 @[fun_prop]
@@ -2580,7 +2580,7 @@ theorem iUnion
 
 中文:
 定理 iUnion
-  结论: [PseudoMetrizableSpace β] {s : ι -> Set α}
+  结论: [PseudoMetrizable空间 β] {s : ι -> 集合 α}
   证明: (sum_measure h).mono_measure restrict_iUnion_le
 
 @[simp]
@@ -2604,7 +2604,7 @@ theorem _root_.aestronglyMeasurable_iUnion_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_iUnion_iff
-  条件: [PseudoMetrizableSpace β] {s : ι -> Set α}
+  条件: [PseudoMetrizable空间 β] {s : ι -> 集合 α}
   证明: ⟨fun h _ => h.mono_measure restrict_mono (subset_iUnion _ _) le_rfl,
     AEStronglyMeasurable.iUnion⟩
 
@@ -2630,7 +2630,7 @@ theorem _root_.aestronglyMeasurable_union_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_union_iff
-  条件: [PseudoMetrizableSpace β] {s t : Set α}
+  条件: [PseudoMetrizable空间 β] {s t : 集合 α}
   证明: by
   simp only [union_eq_iUnion, aestronglyMeasurable_iUnion_iff, Bool.forall_bool, cond, and_comm]
 
@@ -2654,7 +2654,7 @@ theorem aestronglyMeasurable_uIoc_iff
 
 中文:
 定理 aestronglyMeasurable_uIoc_iff
-  结论: [LinearOrder α] [PseudoMetrizableSpace β] {f : α -> β}
+  结论: [线性序 α] [PseudoMetrizable空间 β] {f : α -> β}
   证明: by
   rw [uIoc_eq_union]; rw [aestronglyMeasurable_union_iff]
 
@@ -2680,7 +2680,7 @@ theorem smul_measure
 
 中文:
 定理 smul_measure
-  结论: {R : 类型} [SMul R 实数>=0∞] [IsScalarTower R 实数>=0∞ 实数>=0∞]
+  结论: {R : 类型} [标量乘法 R 实数>=0∞] [标量塔 R 实数>=0∞ 实数>=0∞]
   证明: ⟨h.mk f, h.stronglyMeasurable_mk, ae_smul_measure h.ae_eq_mk c⟩
 
 Depends on / 依赖: ae_eq_mk, ae_smul_measure, h.ae_eq_mk, h.mk, h.stronglyMeasurable_mk, stronglyMeasurable_mk
@@ -2706,7 +2706,7 @@ theorem _root_.aestronglyMeasurable_const_smul_iff
 
 中文:
 定理 _root_.aestronglyMeasurable_const_smul_iff
-  条件: [ContinuousConstSMul G β] (c : G)
+  条件: [连续常数标量乘法 G β] (c : G)
   证明: ⟨fun h => by simpa only [inv_smul_smul] using h.fun_const_smul c⁻¹, fun h => h.const_smul c⟩
 
 Depends on / 依赖: const_smul, fun_const_smul, h.const_smul, h.fun_const_smul, inv_smul_smul
@@ -2731,7 +2731,7 @@ nonrec theorem _root_.IsUnit.aestronglyMeasurable_const_smul_iff [ContinuousCons
 
 中文:
 定理 _root_.aestronglyMeasurable_smul_iff
-  结论: [TopologicalSpace G] [ContinuousInv G]
+  结论: [拓扑空间 G] [连续取逆 G]
   证明: ⟨fun h => (hc.fun_inv.fun_smul h).congr (by simp), fun h => hc.fun_smul h⟩
 
 nonrec theorem _root_.IsUnit.aestronglyMeasurable_const_smul_iff [ContinuousConstSMul M β] {c : M}
@@ -2763,7 +2763,7 @@ theorem _root_.aestronglyMeasurable_const_smul_iff₀
 
 中文:
 定理 _root_.aestronglyMeasurable_const_smul_iff₀
-  结论: [ContinuousConstSMul G₀ β] {c : G₀}
+  结论: [连续常数标量乘法 G₀ β] {c : G₀}
   证明: (IsUnit.mk0 _ hc).aestronglyMeasurable_const_smul_iff
 
 Depends on / 依赖: IsUnit, IsUnit.mk0, aestronglyMeasurable_const_smul_iff
@@ -2786,7 +2786,7 @@ theorem _root_.aestronglyMeasurable_smul_iff₀
 
 中文:
 定理 _root_.aestronglyMeasurable_smul_iff₀
-  结论: [TopologicalSpace G₀] [ContinuousInv₀ G₀]
+  结论: [拓扑空间 G₀] [余ntinuousInv₀ G₀]
   证明: by
   refine ⟨fun h => (hc.fun_inv₀.fun_smul h).congr ?_, fun h => hc.fun_smul h⟩
   filter_upwards [hc0] with x hx
@@ -2888,7 +2888,7 @@ theorem aemeasurable
 
 中文:
 定理 aemeasurable
-  结论: {β} [Zero β] [MeasurableSpace β] [TopologicalSpace β]
+  结论: {β} [零 β] [可测空间 β] [拓扑空间 β]
   证明: ⟨hf.mk f, hf.finStronglyMeasurable_mk.measurable, hf.ae_eq_mk⟩
 -/
 protected theorem aemeasurable {β} [Zero β] [MeasurableSpace β] [TopologicalSpace β]
@@ -2914,7 +2914,7 @@ theorem mul
 
 中文:
 定理 mul
-  结论: [MulZeroClass β] [ContinuousMul β] (hf : AEFinStronglyMeasurable f μ)
+  结论: [乘零类 β] [连续乘法 β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨hf.mk f * hg.mk g, hf.finStronglyMeasurable_mk.mul hg.finStronglyMeasurable_mk,
     hf.ae_eq_mk.mul hg.ae_eq_mk⟩
 
@@ -2939,7 +2939,7 @@ theorem add
 
 中文:
 定理 add
-  结论: [AddZeroClass β] [ContinuousAdd β] (hf : AEFinStronglyMeasurable f μ)
+  结论: [加法零类 β] [连续加法 β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨hf.mk f + hg.mk g, hf.finStronglyMeasurable_mk.add hg.finStronglyMeasurable_mk,
     hf.ae_eq_mk.add hg.ae_eq_mk⟩
 
@@ -2963,7 +2963,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: [SubtractionMonoid β] [ContinuousNeg β] (hf : AEFinStronglyMeasurable f μ)
+  条件: [Subtraction幺半群 β] [连续取负 β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨-hf.mk f, hf.finStronglyMeasurable_mk.neg, hf.ae_eq_mk.neg⟩
 
 @[measurability]
@@ -2986,7 +2986,7 @@ theorem sub
 
 中文:
 定理 sub
-  结论: [SubtractionMonoid β] [ContinuousSub β] (hf : AEFinStronglyMeasurable f μ)
+  结论: [Subtraction幺半群 β] [余ntinuousSub β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨hf.mk f - hg.mk g, hf.finStronglyMeasurable_mk.sub hg.finStronglyMeasurable_mk,
     hf.ae_eq_mk.sub hg.ae_eq_mk⟩
 
@@ -3008,7 +3008,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  结论: {𝕜} [TopologicalSpace 𝕜] [Zero β]
+  结论: {𝕜} [拓扑空间 𝕜] [零 β]
   证明: ⟨c • hf.mk f, hf.finStronglyMeasurable_mk.const_smul c, hf.ae_eq_mk.const_smul c⟩
 -/
 protected theorem const_smul {𝕜} [TopologicalSpace 𝕜] [Zero β]
@@ -3035,8 +3035,8 @@ theorem sup
 @[aesop safe 20 (rule_sets := [Measurable])]
 
 中文:
-定理 sup
-  结论: [SemilatticeSup β] [ContinuousSup β] (hf : AEFinStronglyMeasurable f μ)
+定理 上确界
+  结论: [SemilatticeSup β] [余ntinuousSup β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨hf.mk f ⊔ hg.mk g, hf.finStronglyMeasurable_mk.sup hg.finStronglyMeasurable_mk,
     hf.ae_eq_mk.sup hg.ae_eq_mk⟩
 
@@ -3058,8 +3058,8 @@ theorem inf
     hf.ae_eq_mk.inf hg.ae_eq_mk⟩
 
 中文:
-定理 inf
-  结论: [SemilatticeInf β] [ContinuousInf β] (hf : AEFinStronglyMeasurable f μ)
+定理 下确界
+  结论: [SemilatticeInf β] [余ntinuousInf β] (hf : AEFinStronglyMeasurable f μ)
   证明: ⟨hf.mk f ⊓ hg.mk g, hf.finStronglyMeasurable_mk.inf hg.finStronglyMeasurable_mk,
     hf.ae_eq_mk.inf hg.ae_eq_mk⟩
 -/
@@ -3087,7 +3087,7 @@ theorem exists_set_sigmaFinite
   exact Eventually.of_forall hgt_zero
 
 中文:
-定理 exists_set_sigmaFinite
+定理 存在_set_sigmaFinite
   条件: (hf : AEFinStronglyMeasurable f μ)
   证明: by
   rcases hf with ⟨g, hg, hfg⟩
@@ -3201,7 +3201,7 @@ theorem aefinStronglyMeasurable_iff_aemeasurable
 
 中文:
 定理 aefinStronglyMeasurable_iff_aemeasurable
-  结论: {_m0 : MeasurableSpace α} (μ : Measure α)
+  结论: {_m0 : 可测空间 α} (μ : 测度 α)
   证明: by
   simp_rw [AEFinStronglyMeasurable, AEMeasurable, finStronglyMeasurable_iff_measurable]
 
@@ -3224,7 +3224,7 @@ theorem aefinStronglyMeasurable_of_aemeasurable
 
 中文:
 定理 aefinStronglyMeasurable_of_aemeasurable
-  结论: {_m0 : MeasurableSpace α} (μ : Measure α)
+  结论: {_m0 : 可测空间 α} (μ : 测度 α)
   证明: (aefinStronglyMeasurable_iff_aemeasurable μ).mpr hf
 
 Depends on / 依赖: aefinStronglyMeasurable_iff_aemeasurable

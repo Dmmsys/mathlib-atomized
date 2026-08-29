@@ -49,7 +49,7 @@ lemma valuation_eq_valuation_X_zpow_intDegree_of_one_lt_valuation_X
 
 中文:
 引理 valuation_eq_valuation_X_zpow_intDegree_of_one_lt_valuation_X
-  结论: {f : RatFunc K}
+  结论: {f : 有理函数 K}
   证明: by
   induction f using RatFunc.induction_on with
   | f p q hq =>
@@ -85,7 +85,7 @@ lemma valuation_isEquiv_inftyValuation_of_one_lt_valuation_X
 
 中文:
 引理 valuation_isEquiv_inftyValuation_of_one_lt_valuation_X
-  条件: [v.IsTrivialOn K] (hlt : 1 < v X)
+  条件: [v.是TrivialOn K] (hlt : 1 < v X)
   证明: by
   refine isEquiv_iff_val_lt_one.mpr fun {f} => ?_
   rcases eq_or_ne f 0 with rfl | hf
@@ -124,7 +124,7 @@ lemma setOfPred_polynomial_valuation_lt_one_and_ne_zero_nonempty
 
 中文:
 引理 setOfPred_polynomial_valuation_lt_one_and_ne_zero_nonempty
-  结论: [v.IsNontrivial] [v.IsTrivialOn K]
+  结论: [v.是非平凡] [v.是TrivialOn K]
   证明: by
   obtain ⟨w, h0, h1⟩ := IsNontrivial.exists_lt_one (v := v)
   induction w using RatFunc.induction_on with
@@ -169,7 +169,7 @@ lemma one_le_valuation_factor
 
 中文:
 引理 one_le_valuation_factor
-  结论: (hne : {p : K[X] | v p < 1 ∧ p != 0}.Nonempty) {a b : K[X]}
+  结论: (hne : {p : K[X] | v p < 1 ∧ p != 0}.非空) {a b : K[X]}
   证明: by
   set πᵥ := degree_lt_wf.min _ hne
   have hda : a.degree < πᵥ.degree := by
@@ -207,7 +207,7 @@ lemma irreducible_min_polynomial_valuation_lt_one_and_ne_zero
 
 中文:
 引理 irreducible_min_polynomial_valuation_lt_one_and_ne_zero
-  结论: [v.IsTrivialOn K]
+  结论: [v.是TrivialOn K]
   证明: by
   set πᵥ := degree_lt_wf.min _ hne
   have hπᵥ : v πᵥ < 1 ∧ πᵥ != 0 := degree_lt_wf.min_mem _ hne
@@ -330,7 +330,7 @@ definition valuationIdeal
 
 中文:
 定义 valuationIdeal
-  签名: : HeightOneSpectrum K[X] where
+  签名: : 高一谱 K[X] where
   定义体: Submodule.span K[X] {πᵥ}
   isPrime := IsMaximal.isPrime (PrincipalIdealRing.isMaximal_of_irreducible
     (irreducible_min_polynomial_valuation_lt_one_and_ne_zero
@@ -425,8 +425,8 @@ lemma exists_zpow_uniformizingPolynomial
       (Associates.mk (Pᵥ).asIdeal).count (Associates.mk (Ideal.span {q})).
 
 中文:
-引理 exists_zpow_uniformizingPolynomial
-  条件: {f : RatFunc K} (hf : f != 0)
+引理 存在_zpow_uniformizingPolynomial
+  条件: {f : 有理函数 K} (hf : f != 0)
   证明: by
   have h0 : v πᵥ != 0 := by simpa using uniformizingPolynomial_ne_zero hle
   induction f using RatFunc.induction_on with
@@ -462,7 +462,7 @@ lemma uniformizingPolynomial_isUniformizer
 
 中文:
 引理 uniformizingPolynomial_isUniformizer
-  条件: [hv : IsRankOneDiscrete v]
+  条件: [hv : 是RankOneDiscrete v]
   证明: by
   have h0 : v πᵥ != 0 := by simpa using uniformizingPolynomial_ne_zero hle
   rw [IsUniformizer]; rw [← hv.valueGroup_genLTOne_eq_generator]; rw [← h0.isUnit.unit_spec]; rw [Units.val_inj]
@@ -511,7 +511,7 @@ lemma valuation_isEquiv_valuationIdeal_adic_of_valuation_X_le_one
 
 中文:
 引理 valuation_isEquiv_valuationIdeal_adic_of_valuation_X_le_one
-  条件: [IsRankOneDiscrete v]
+  条件: [是RankOneDiscrete v]
   证明: by
   rw [isEquiv_iff_val_le_one]
   intro f
@@ -561,7 +561,7 @@ lemma adicValuation_not_isEquiv_infty_valuation
 
 中文:
 引理 adicValuation_not_isEquiv_infty_valuation
-  结论: [DecidableEq (RatFunc K)]
+  结论: [DecidableEq (有理函数 K)]
   证明: by
   simp only [isEquiv_iff_val_le_one]
   push Not
@@ -592,7 +592,7 @@ lemma adicValuation_ne_inftyValuation
 
 中文:
 引理 adicValuation_ne_inftyValuation
-  结论: [DecidableEq (RatFunc K)]
+  结论: [DecidableEq (有理函数 K)]
   证明: by
   by_contra h
   exact absurd Valuation.IsEquiv.refl (h ▸ adicValuation_not_isEquiv_infty_valuation p)
@@ -649,7 +649,7 @@ theorem valuation_isEquiv_infty_or_adic
 
 中文:
 定理 valuation_isEquiv_infty_or_adic
-  条件: [DecidableEq (RatFunc K)]
+  条件: [DecidableEq (有理函数 K)]
   证明: by
   rcases lt_or_ge 1 (v X) with hlt | hge
   /- Infinity case -/
@@ -686,7 +686,7 @@ lemma valuation_isEquiv_adic_of_not_isEquiv_infty
 
 中文:
 引理 valuation_isEquiv_adic_of_not_isEquiv_infty
-  结论: [DecidableEq (RatFunc K)]
+  结论: [DecidableEq (有理函数 K)]
   证明: valuation_isEquiv_infty_or_adic.or.resolve_left hni
 
 Depends on / 依赖: resolve_left, valuation_isEquiv_infty_or_adic, valuation_isEquiv_infty_or_adic.or.resolve_left

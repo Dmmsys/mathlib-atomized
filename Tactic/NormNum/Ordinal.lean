@@ -38,8 +38,8 @@ lemma isNat_ordinalMul.{u}
   statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalMul.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn rn : 自然数},
+引理 is自然数_ordinalMul.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
 -/
 lemma isNat_ordinalMul.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
     IsNat a an -> IsNat b bn -> an * bn = rn -> IsNat (a * b) rn
@@ -104,8 +104,8 @@ lemma isNat_ordinalLE_true.{u}
   statement: forall {a b : Ordinal.{u}} {an bn : Nat},
 
 中文:
-引理 isNat_ordinalLE_true.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn : 自然数},
+引理 is自然数_ordinalLE_true.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
 -/
 lemma isNat_ordinalLE_true.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
     IsNat a an -> IsNat b bn -> decide (an <= bn) = true -> a <= b
@@ -119,8 +119,8 @@ lemma isNat_ordinalLE_false.{u}
   statement: forall {a b : Ordinal.{u}} {an bn : Nat},
 
 中文:
-引理 isNat_ordinalLE_false.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn : 自然数},
+引理 is自然数_ordinalLE_false.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
 -/
 lemma isNat_ordinalLE_false.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
     IsNat a an -> IsNat b bn -> decide (an <= bn) = false -> ¬a <= b
@@ -134,8 +134,8 @@ lemma isNat_ordinalLT_true.{u}
   statement: forall {a b : Ordinal.{u}} {an bn : Nat},
 
 中文:
-引理 isNat_ordinalLT_true.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn : 自然数},
+引理 is自然数_ordinalLT_true.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
 -/
 lemma isNat_ordinalLT_true.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
     IsNat a an -> IsNat b bn -> decide (an < bn) = true -> a < b
@@ -149,8 +149,8 @@ lemma isNat_ordinalLT_false.{u}
   statement: forall {a b : Ordinal.{u}} {an bn : Nat},
 
 中文:
-引理 isNat_ordinalLT_false.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn : 自然数},
+引理 is自然数_ordinalLT_false.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn : 自然数},
 -/
 lemma isNat_ordinalLT_false.{u} : forall {a b : Ordinal.{u}} {an bn : Nat},
     IsNat a an -> IsNat b bn -> decide (an < bn) = false -> ¬a < b
@@ -262,8 +262,8 @@ lemma isNat_ordinalSub.{u}
   statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalSub.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn rn : 自然数},
+引理 is自然数_ordinalSub.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
 
 Depends on / 依赖: And.right, _closure_eq_self, closed_nhdsSet_basis
 -/
@@ -326,8 +326,8 @@ lemma isNat_ordinalDiv.{u}
   statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalDiv.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn rn : 自然数},
+引理 is自然数_ordinalDiv.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
 -/
 lemma isNat_ordinalDiv.{u} : forall {a b : Ordinal.{u}} {an bn rn : Nat},
     IsNat a an -> IsNat b bn -> an / bn = rn -> IsNat (a / b) rn
@@ -390,8 +390,8 @@ lemma isNat_ordinalMod.{u}
   statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalMod.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn rn : 自然数},
+引理 is自然数_ordinalMod.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
 
 Depends on / 依赖: NormalSpace, NormalSpace.of_regularSpace_lindelofSpace, of_regularSpace_lindelofSpace
 -/
@@ -452,8 +452,8 @@ lemma isNat_ordinalOPow.{u}
   statement: forall {a b : Ordinal.{u}} {an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalOPow.{u}
-  结论: 对任意 {a b : Ordinal.{u}} {an bn rn : 自然数},
+引理 is自然数_ordinalOPow.{u}
+  结论: 对任意 {a b : 序数.{u}} {an bn rn : 自然数},
 
 Depends on / 依赖: NormalSpace, T1Space, T4Space
 -/
@@ -518,8 +518,8 @@ lemma isNat_ordinalNPow.{u}
   statement: forall {a : Ordinal.{u}} {b an bn rn : Nat},
 
 中文:
-引理 isNat_ordinalNPow.{u}
-  结论: 对任意 {a : Ordinal.{u}} {b an bn rn : 自然数},
+引理 is自然数_ordinalNPow.{u}
+  结论: 对任意 {a : 序数.{u}} {b an bn rn : 自然数},
 -/
 lemma isNat_ordinalNPow.{u} : forall {a : Ordinal.{u}} {b an bn rn : Nat},
     IsNat a an -> IsNat b bn -> an ^ bn = rn -> IsNat (a ^ b) rn

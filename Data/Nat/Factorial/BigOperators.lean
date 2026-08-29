@@ -35,7 +35,7 @@ lemma monotone_factorial
 
 中文:
 引理 monotone_factorial
-  结论: Monotone factorial
+  结论: 递增 factorial
   证明: fun _ _ => factorial_le
 
 Depends on / 依赖: factorial_le
@@ -119,7 +119,7 @@ theorem _root_.Finset.prod_range_add_one_eq_factorial
   proof: .symm factorial_eq_prod_range_add_one _
 
 中文:
-定理 _root_.Finset.prod_range_add_one_eq_factorial
+定理 _root_.有限集.prod_range_add_one_eq_factorial
   条件: (n : 自然数)
   结论: ∏ i in range n, (i + 1) = (n)!
   证明: .symm factorial_eq_prod_range_add_one _

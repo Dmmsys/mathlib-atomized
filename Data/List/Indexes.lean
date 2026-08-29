@@ -45,7 +45,7 @@ theorem mapIdx_append_one
 
 中文:
 定理 mapIdx_append_one
-  结论: 对任意 {f : 自然数 -> α -> β} {l : List α} {e : α},
+  结论: 对任意 {f : 自然数 -> α -> β} {l : 列表 α} {e : α},
   证明: mapIdx_concat
 
 Depends on / 依赖: mapIdx_concat
@@ -67,7 +67,7 @@ theorem mapIdx_eq_ofFn
 
 中文:
 定理 mapIdx_eq_ofFn
-  条件: (l : List α) (f : 自然数 -> α -> β)
+  条件: (l : 列表 α) (f : 自然数 -> α -> β)
   证明: by
   induction l generalizing f with
   | nil => simp
@@ -103,7 +103,7 @@ theorem mapIdxMAux'_eq_mapIdxMGo
 
 中文:
 定理 mapIdxMAux'_eq_mapIdxMGo
-  条件: {α} (f : 自然数 -> α -> m PUnit) (as : List α) (arr : Array PUnit)
+  条件: {α} (f : 自然数 -> α -> m 命题单元) (as : 列表 α) (arr : 数组 命题单元)
   证明: by
   induction as generalizing arr with
   | nil => simp only [mapIdxMAux', mapIdxM.go, seqRight_eq, map_pure, seq_pure]
@@ -136,7 +136,7 @@ theorem mapIdxM'_eq_mapIdxM
 
 中文:
 定理 mapIdxM'_eq_mapIdxM
-  条件: {α} (f : 自然数 -> α -> m PUnit) (as : List α)
+  条件: {α} (f : 自然数 -> α -> m 命题单元) (as : 列表 α)
   证明: mapIdxMAux'_eq_mapIdxMGo f as #[]
 -/
 theorem mapIdxM'_eq_mapIdxM {α} (f : Nat -> α -> m PUnit) (as : List α) :

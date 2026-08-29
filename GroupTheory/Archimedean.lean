@@ -63,8 +63,8 @@ theorem Subgroup.cyclic_of_min
       refine a_min 
 
 中文:
-定理 Subgroup.cyclic_of_min
-  结论: {H : Subgroup G} {a : G}
+定理 子群.cyclic_of_min
+  结论: {H : 子群 G} {a : G}
   证明: by
   obtain ⟨⟨a_in, a_pos⟩, a_min⟩ := ha
   refine le_antisymm ?_ (H.closure_le.mpr <| by simp [a_in])
@@ -113,8 +113,8 @@ theorem Subgroup.exists_isLeast_one_lt
     lift m to N
 
 中文:
-定理 Subgroup.exists_isLeast_one_lt
-  结论: {H : Subgroup G} (hbot : H != ⊥) {a : G} (h₀ : 1 < a)
+定理 子群.存在_isLeast_one_lt
+  结论: {H : 子群 G} (hbot : H != ⊥) {a : G} (h₀ : 1 < a)
   证明: by
   -- todo: move to a lemma?
   have hex : forall g > 1, exists n : Nat, g in Ioc (a ^ n) (a ^ (n + 1)) := fun g hg => by
@@ -168,8 +168,8 @@ theorem Subgroup.cyclic_of_isolated_one
   · exact (exists_isLeast_one_lt hbot h₀ hd).imp fun _ => cyclic_of_min
 
 中文:
-定理 Subgroup.cyclic_of_isolated_one
-  结论: {H : Subgroup G} {a : G} (h₀ : 1 < a)
+定理 子群.cyclic_of_isolated_one
+  结论: {H : 子群 G} {a : G} (h₀ : 1 < a)
   证明: by
   rcases eq_or_ne H ⊥ with rfl | hbot
   · exact ⟨1, closure_singleton_one.symm⟩
@@ -195,9 +195,9 @@ theorem Int.subgroup_cyclic
 AddSubgroup.cyclic_of_isolated_zero one_pos by simp [this]
 
 中文:
-定理 Int.subgroup_cyclic
-  条件: (H : AddSubgroup 整数)
-  结论: 存在 a, H = AddSubgroup.closure {a}
+定理 整数.subgroup_cyclic
+  条件: (H : 加法子群 整数)
+  结论: 存在 a, H = 加法子群.closure {a}
   证明: have : Ioo (0 : Int) 1 = ∅ := eq_empty_of_forall_notMem fun _ hm =>
     hm.1.not_ge (lt_add_one_iff.1 hm.2)
 AddSubgroup.cyclic_of_isolated_zero one_pos by simp [this]

@@ -49,7 +49,7 @@ definition runTacForHeartbeats
 
 中文:
 定义 runTacForHeartbeats
-  签名: (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : 布尔 := true)
+  签名: (tac : TSyntax `Lean.Parser.Tactic.tacticSeq) (revert : 布尔值 := true)
   定义体: do
   let start ← IO.getNumHeartbeats
   let s ← saveState
@@ -84,7 +84,7 @@ let stddev : Float := Float.sqrt
 
 中文:
 定义 variation
-  签名: (counts : List 自然数)
+  签名: (counts : 列表 自然数)
   定义体: let min := counts.min?.getD 0
   let max := counts.max?.getD 0
   let toFloat (n : Nat) := n.toUInt64.toFloat
@@ -120,7 +120,7 @@ definition logVariation
 
 中文:
 定义 logVariation
-  签名: {m} [Monad m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
+  签名: {m} [单子 m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
   定义体: do
   if let [min, max, stddev] := variation counts then
   -- convert `[min, max, stddev]` to user-facing heartbeats
@@ -177,7 +177,7 @@ definition roundDownIf
 
 中文:
 定义 roundDownIf
-  签名: (n : 自然数) (approx : 布尔)
+  签名: (n : 自然数) (approx : 布尔值)
   定义体: if approx then s!"approximately {(n / 1000) * 1000}" else s!"{n}"
 
 Depends on / 依赖: approx, approximately
@@ -279,7 +279,7 @@ definition elabForHeartbeats
 
 中文:
 定义 elabForHeartbeats
-  签名: (cmd : TSyntax `command) (revert : 布尔 := true)
+  签名: (cmd : TSyntax `command) (revert : 布尔值 := true)
   定义体: do
   let start ← IO.getNumHeartbeats
   let s ← get

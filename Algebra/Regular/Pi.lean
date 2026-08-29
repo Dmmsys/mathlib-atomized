@@ -84,7 +84,7 @@ theorem isRegular_iff
 中文:
 定理 isRegular_iff
   条件: {a : 对任意 i, R i}
-  结论: IsRegular a ↔ 对任意 i, IsRegular (a i)
+  结论: 是正则 a ↔ 对任意 i, 是正则 (a i)
   证明: by
   simp [_root_.isRegular_iff, forall_and]
 
@@ -106,7 +106,7 @@ theorem isSMulRegular_iff
 
 中文:
 定理 isSMulRegular_iff
-  条件: [对任意 i, SMul α (R i)] {r : α} [对任意 i, Nonempty (R i)]
+  条件: [对任意 i, 标量乘法 α (R i)] {r : α} [对任意 i, 非空 (R i)]
   证明: Pi.map_injective
 
 Depends on / 依赖: Pi.map_injective, map_injective

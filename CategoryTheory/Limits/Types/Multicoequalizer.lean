@@ -161,7 +161,7 @@ definition isColimitOfMulticoequalizerDiagram'
 
 中文:
 定义 isColimitOfMulticoequalizerDiagram'
-  签名: [LinearOrder ι]
+  签名: [线性序 ι]
   定义体: Multicofork.isColimitToLinearOrder _ (isColimitOfMulticoequalizerDiagram c)
     { iso i j := Set.functorToTypes.mapIso (eqToIso (by
         dsimp
@@ -194,7 +194,7 @@ lemma isPushout_of_bicartSq
 
 中文:
 引理 isPushout_of_bicartSq
-  条件: {S₁ S₂ S₃ S₄ : Set X} (h : Lattice.BicartSq S₁ S₂ S₃ S₄)
+  条件: {S₁ S₂ S₃ S₄ : 集合 X} (h : 格.BicartSq S₁ S₂ S₃ S₄)
   证明: Multicofork.IsColimit.isPushout _ (by ext (_ | _) <;> tauto) (by tauto)
     (isColimitOfMulticoequalizerDiagram' h.multicoequalizerDiagram)
 

@@ -96,7 +96,7 @@ theorem GoodProducts.Plimit
 
 中文:
 定理 GoodProducts.Plimit
-  条件: (o : Ordinal) (ho : Order.IsSuccLimit o)
+  条件: (o : 序数) (ho : Order.是SuccLimit o)
   证明: by
   intro h hho C hC hsC
   rw [linearIndependent_iff_union_smaller C ho hsC]; rw [linearIndependent_subtype_iff]
@@ -132,7 +132,7 @@ theorem GoodProducts.linearIndependentAux
 
 中文:
 定理 GoodProducts.linearIndependentAux
-  条件: (μ : Ordinal)
+  条件: (μ : 序数)
   结论: P I μ
   证明: by
   refine Ordinal.limitRecOn μ P0 (fun o h ho C hC hsC => ?_)
@@ -168,7 +168,7 @@ theorem GoodProducts.linearIndependent
 
 中文:
 定理 GoodProducts.linearIndependent
-  条件: (hC : IsClosed C)
+  条件: (hC : 是闭集 C)
   证明: GoodProducts.linearIndependentAux (Ordinal.type (· < · : I -> I -> Prop)) (le_refl _)
     C hC (fun _ _ _ _ => Ordinal.typein_lt_type _ _)
 
@@ -190,8 +190,8 @@ definition GoodProducts.Basis
   body: Basis.mk (GoodProducts.linearIndependent C hC) (GoodProducts.span C hC)
 
 中文:
-定义 GoodProducts.Basis
-  签名: (hC : IsClosed C)
+定义 GoodProducts.基
+  签名: (hC : 是闭集 C)
   定义体: Basis.mk (GoodProducts.linearIndependent C hC) (GoodProducts.span C hC)
 
 Depends on / 依赖: Basis.mk, GoodProducts, GoodProducts.linearIndependent, GoodProducts.span, linearIndependent
@@ -217,7 +217,7 @@ theorem Nobeling_aux
 
 中文:
 定理 Nobeling_aux
-  结论: Module.Free 整数 (LocallyConstant S 整数)
+  结论: 模.自由 整数 (局部常数 S 整数)
   证明: Module.Free.of_equiv'
   (Module.Free.of_basis <| GoodProducts.Basis _ hι.isClosed_range) (LocallyConstant.congrLeftₗ Int
     hι.isEmbedding.toHomeomorph).symm
@@ -245,7 +245,7 @@ definition Nobeling.ι
 
 中文:
 定义 Nobeling.ι
-  签名: : S -> ({C : Set S // IsClopen C} -> 布尔)
+  签名: : S -> ({C : 集合 S // IsClopen C} -> 布尔值)
   定义体: fun s C => decide (s in C.1)
 -/
 def Nobeling.ι : S -> ({C : Set S // IsClopen C} -> Bool) := fun s C => decide (s in C.1)
@@ -270,7 +270,7 @@ theorem Nobeling.isClosedEmbedding
 
 中文:
 定理 Nobeling.isClosedEmbedding
-  结论: IsClosedEmbedding (Nobeling.ι S)
+  结论: 是闭嵌入 (Nobeling.ι S)
   证明: by
   classical
   apply Continuous.isClosedEmbedding
@@ -325,7 +325,7 @@ instance LocallyConstant.freeOfProfinite
   exact @Nobeling_aux {C : Set S // IsClopen C} _ _ S (Nobeling.ι S) (Nobeling.isClosedEmbedding S)
 
 中文:
-实例 LocallyConstant.freeOfProfinite
+实例 局部常数.freeOfProfinite
   签名: (S : Profinite.{u})
   定义体: by
   obtain ⟨_, _⟩ := exists_wellFoundedLT {C : Set S // IsClopen C}

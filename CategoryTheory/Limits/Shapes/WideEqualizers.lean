@@ -68,7 +68,7 @@ inductive WalkingParallelFamily
 
 中文:
 归纳类型 WalkingParallelFamily
-  参数: (J : Type w)
+  参数: (J : 类型 w)
   构造子 (2 个):
     - zero: WalkingParallelFamily J
     - one: WalkingParallelFamily J
@@ -112,11 +112,11 @@ inductive WalkingParallelFamily.Hom
     - line: J -> WalkingParallelFamily.Hom J zero one
 
 中文:
-归纳类型 WalkingParallelFamily.Hom
-  参数: (J : Type w)
+归纳类型 WalkingParallelFamily.态射
+  参数: (J : 类型 w)
   构造子 (2 个):
-    - id: 对任意 X : WalkingParallelFamily.{w} J, WalkingParallelFamily.Hom J X X
-    - line: J -> WalkingParallelFamily.Hom J zero one
+    - id: 对任意 X : WalkingParallelFamily.{w} J, WalkingParallelFamily.态射 J X X
+    - line: J -> WalkingParallelFamily.态射 J zero one
 -/
 inductive WalkingParallelFamily.Hom (J : Type w) :
   WalkingParallelFamily J -> WalkingParallelFamily J -> Type w
@@ -137,7 +137,7 @@ definition WalkingParallelFamily.Hom.comp
   signature: :
 
 中文:
-定义 WalkingParallelFamily.Hom.comp
+定义 WalkingParallelFamily.态射.comp
   签名: :
 
 Depends on / 依赖: Functor, Functor.additive_of_comp_faithful, Functor.additive_of_iso, additive_of_comp_faithful, additive_of_iso, commShiftIso
@@ -164,7 +164,7 @@ instance WalkingParallelFamily.category
 
 中文:
 实例 WalkingParallelFamily.category
-  签名: : SmallCategory (WalkingParallelFamily J) where
+  签名: : 小范畴 (WalkingParallelFamily J) where
   定义体: WalkingParallelFamily.Hom J
   id := WalkingParallelFamily.Hom.id
   comp := WalkingParallelFamily.Hom.comp
@@ -601,7 +601,7 @@ definition Trident.ofι
 
 中文:
 定义 Trident.ofι
-  签名: [Nonempty J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
+  签名: [非空 J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
   定义体: P
   π :=
     { app := fun X => WalkingParallelFamily.casesOn X ι (ι ≫ f (Classical.arbitrary J))
@@ -641,7 +641,7 @@ definition Cotrident.ofπ
 
 中文:
 定义 Cotrident.ofπ
-  签名: [Nonempty J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
+  签名: [非空 J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
   定义体: P
   ι :=
     { app := fun X => WalkingParallelFamily.casesOn X (f (Classical.arbitrary J) ≫ π) π
@@ -670,7 +670,7 @@ theorem Trident.ι_ofι
 
 中文:
 定理 Trident.ι_ofι
-  条件: [Nonempty J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
+  条件: [非空 J] {P : C} (ι : P ⟶ X) (w : 对任意 j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂)
   证明: rfl
 -/
 theorem Trident.ι_ofι [Nonempty J] {P : C} (ι : P ⟶ X) (w : forall j₁ j₂, ι ≫ f j₁ = ι ≫ f j₂) :
@@ -689,7 +689,7 @@ theorem Cotrident.π_ofπ
 
 中文:
 定理 Cotrident.π_ofπ
-  条件: [Nonempty J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
+  条件: [非空 J] {P : C} (π : Y ⟶ P) (w : 对任意 j₁ j₂, f j₁ ≫ π = f j₂ ≫ π)
   证明: rfl
 
 #adaptation_note
@@ -764,7 +764,7 @@ theorem Trident.equalizer_ext
 
 中文:
 定理 Trident.equalizer_ext
-  结论: [Nonempty J] (s : Trident f) {W : C} {k l : W ⟶ s.pt}
+  结论: [非空 J] (s : Trident f) {W : C} {k l : W ⟶ s.pt}
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, exists_small_le, isoClosure_le_iff
 -/
@@ -783,7 +783,7 @@ theorem Cotrident.coequalizer_ext
 
 中文:
 定理 Cotrident.coequalizer_ext
-  结论: [Nonempty J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
+  结论: [非空 J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
 -/
 theorem Cotrident.coequalizer_ext [Nonempty J] (s : Cotrident f) {W : C} {k l : s.pt ⟶ W}
     (h : s.π ≫ k = s.π ≫ l) : forall j : WalkingParallelFamily J, s.ι.app j ≫ k = s.ι.app j ≫ l
@@ -799,8 +799,8 @@ theorem Trident.IsLimit.hom_ext
   proof: hs.hom_ext Trident.equalizer_ext _ h
 
 中文:
-定理 Trident.IsLimit.hom_ext
-  结论: [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C}
+定理 Trident.是极限.hom_ext
+  结论: [非空 J] {s : Trident f} (hs : 是极限 s) {W : C}
   证明: hs.hom_ext Trident.equalizer_ext _ h
 
 Depends on / 依赖: Trident, Trident.equalizer_ext, equalizer_ext, hom_ext, hs.hom_ext
@@ -818,8 +818,8 @@ theorem Cotrident.IsColimit.hom_ext
   proof: hs.hom_ext Cotrident.coequalizer_ext _ h
 
 中文:
-定理 Cotrident.IsColimit.hom_ext
-  结论: [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C}
+定理 Cotrident.是余极限.hom_ext
+  结论: [非空 J] {s : Cotrident f} (hs : 是余极限 s) {W : C}
   证明: hs.hom_ext Cotrident.coequalizer_ext _ h
 
 Depends on / 依赖: Cotrident, Cotrident.coequalizer_ext, EssentiallySmall, EssentiallySmall.exists_small_le, coequalizer_ext, exists_small_le, hom_ext, hs.hom_ext, le_sup_left, le_sup_right, monotone_isoClosure, sup_le_iff
@@ -837,8 +837,8 @@ definition Trident.IsLimit.lift'
   body: ⟨hs.lift Trident.ofι _ h, hs.fac _ _⟩
 
 中文:
-定义 Trident.IsLimit.lift'
-  签名: [Nonempty J] {s : Trident f} (hs : IsLimit s) {W : C} (k : W ⟶ X)
+定义 Trident.是极限.lift'
+  签名: [非空 J] {s : Trident f} (hs : 是极限 s) {W : C} (k : W ⟶ X)
   定义体: ⟨hs.lift Trident.ofι _ h, hs.fac _ _⟩
 
 Depends on / 依赖: EssentiallySmall, EssentiallySmall.exists_small_le, Trident, Trident.of, exists_small_le, hs.fac, hs.lift, iSup_le_iff, le_iSup, monotone_isoClosure
@@ -856,8 +856,8 @@ definition Cotrident.IsColimit.desc'
   body: ⟨hs.desc Cotrident.ofπ _ h, hs.fac _ _⟩
 
 中文:
-定义 Cotrident.IsColimit.desc'
-  签名: [Nonempty J] {s : Cotrident f} (hs : IsColimit s) {W : C} (k : Y ⟶ W)
+定义 Cotrident.是余极限.desc'
+  签名: [非空 J] {s : Cotrident f} (hs : 是余极限 s) {W : C} (k : Y ⟶ W)
   定义体: ⟨hs.desc Cotrident.ofπ _ h, hs.fac _ _⟩
 
 Depends on / 依赖: Cotrident, Cotrident.of, hs.desc, hs.fac
@@ -879,8 +879,8 @@ definition Trident.IsLimit.mk
     uniq := uniq }
 
 中文:
-定义 Trident.IsLimit.mk
-  签名: [Nonempty J] (t : Trident f) (lift : 对任意 s : Trident f, s.pt ⟶ t.pt)
+定义 Trident.是极限.mk
+  签名: [非空 J] (t : Trident f) (lift : 对任意 s : Trident f, s.pt ⟶ t.pt)
   定义体: { lift
     fac := fun s j =>
       WalkingParallelFamily.casesOn j (fac s)
@@ -911,8 +911,8 @@ definition Trident.IsLimit.mk'
     (create s).2.2 (w zero)
 
 中文:
-定义 Trident.IsLimit.mk'
-  签名: [Nonempty J] (t : Trident f)
+定义 Trident.是极限.mk'
+  签名: [非空 J] (t : Trident f)
   定义体: Trident.IsLimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
     (create s).2.2 (w zero)
 
@@ -938,8 +938,8 @@ definition Cotrident.IsColimit.mk
     uniq := uniq }
 
 中文:
-定义 Cotrident.IsColimit.mk
-  签名: [Nonempty J] (t : Cotrident f) (desc : 对任意 s : Cotrident f, t.pt ⟶ s.pt)
+定义 Cotrident.是余极限.mk
+  签名: [非空 J] (t : Cotrident f) (desc : 对任意 s : Cotrident f, t.pt ⟶ s.pt)
   定义体: { desc
     fac := fun s j =>
       WalkingParallelFamily.casesOn j (by rw [← t.w_assoc (line (Classical.arbitrary J)), fac, s.w])
@@ -970,8 +970,8 @@ definition Cotrident.IsColimit.mk'
     (create s).2.2 (w one)
 
 中文:
-定义 Cotrident.IsColimit.mk'
-  签名: [Nonempty J] (t : Cotrident f)
+定义 Cotrident.是余极限.mk'
+  签名: [非空 J] (t : Cotrident f)
   定义体: Cotrident.IsColimit.mk t (fun s => (create s).1) (fun s => (create s).2.1) fun s _ w =>
     (create s).2.2 (w one)
 
@@ -1003,8 +1003,8 @@ definition Trident.IsLimit.homIso
   right_inv _ := Subtype.ext (Trident.IsLimit.lift' ht _ _).prop
 
 中文:
-定义 Trident.IsLimit.homIso
-  签名: [Nonempty J] {t : Trident f} (ht : IsLimit t) (Z : C)
+定义 Trident.是极限.homIso
+  签名: [非空 J] {t : Trident f} (ht : 是极限 t) (Z : C)
   定义体: ⟨k ≫ t.ι, by simp⟩
   invFun h := (Trident.IsLimit.lift' ht _ h.prop).1
   left_inv _ := Trident.IsLimit.hom_ext ht (Trident.IsLimit.lift' _ _ _).prop
@@ -1026,8 +1026,8 @@ theorem Trident.IsLimit.homIso_natural
   proof: Category.assoc _ _ _
 
 中文:
-定理 Trident.IsLimit.homIso_natural
-  结论: [Nonempty J] {t : Trident f} (ht : IsLimit t) {Z Z' : C}
+定理 Trident.是极限.homIso_natural
+  结论: [非空 J] {t : Trident f} (ht : 是极限 t) {Z Z' : C}
   证明: Category.assoc _ _ _
 
 Depends on / 依赖: Category, Category.assoc, F.obj, Subtype, small_of_surjective
@@ -1056,8 +1056,8 @@ definition Cotrident.IsColimit.homIso
   right_inv _ := Subtype.ext (Cotrident.IsColimit.desc' ht _ _).prop
 
 中文:
-定义 Cotrident.IsColimit.homIso
-  签名: [Nonempty J] {t : Cotrident f} (ht : IsColimit t) (Z : C)
+定义 Cotrident.是余极限.homIso
+  签名: [非空 J] {t : Cotrident f} (ht : 是余极限 t) (Z : C)
   定义体: ⟨t.π ≫ k, by simp⟩
   invFun h := (Cotrident.IsColimit.desc' ht _ h.prop).1
   left_inv _ := Cotrident.IsColimit.hom_ext ht (Cotrident.IsColimit.desc' _ _ _).prop
@@ -1081,8 +1081,8 @@ theorem Cotrident.IsColimit.homIso_natural
   proof: (Category.assoc _ _ _).symm
 
 中文:
-定理 Cotrident.IsColimit.homIso_natural
-  结论: [Nonempty J] {t : Cotrident f} {Z Z' : C} (q : Z ⟶ Z')
+定理 Cotrident.是余极限.homIso_natural
+  结论: [非空 J] {t : Cotrident f} {Z Z' : C} (q : Z ⟶ Z')
   证明: (Category.assoc _ _ _).symm
 
 Depends on / 依赖: Category, Category.assoc
@@ -1107,7 +1107,7 @@ definition Cone.ofTrident
       naturality := fun j j' g => by cases g <;> cat_disch }
 
 中文:
-定义 Cone.ofTrident
+定义 锥.ofTrident
   签名: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
   定义体: t.pt
   π :=
@@ -1139,7 +1139,7 @@ definition Cocone.ofCotrident
 @[simp]
 
 中文:
-定义 Cocone.ofCotrident
+定义 余锥.ofCotrident
   签名: {F : WalkingParallelFamily J ⥤ C} (t : Cotrident fun j => F.map (line j))
   定义体: t.pt
   ι :=
@@ -1169,7 +1169,7 @@ theorem Cone.ofTrident_π
 @[simp]
 
 中文:
-定理 Cone.ofTrident_π
+定理 锥.ofTrident_π
   结论: {F : WalkingParallelFamily J ⥤ C} (t : Trident fun j => F.map (line j))
   证明: rfl
 
@@ -1189,7 +1189,7 @@ theorem Cocone.ofCotrident_ι
   proof: rfl
 
 中文:
-定理 Cocone.ofCotrident_ι
+定理 余锥.ofCotrident_ι
   结论: {F : WalkingParallelFamily J ⥤ C}
   证明: rfl
 -/
@@ -1212,7 +1212,7 @@ definition Trident.ofCone
 
 中文:
 定义 Trident.ofCone
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : Cone F)
+  签名: {F : WalkingParallelFamily J ⥤ C} (t : 锥 F)
   定义体: t.pt
   π :=
     { app := fun X => t.π.app X ≫ eqToHom (by cases X <;> cat_disch)
@@ -1244,7 +1244,7 @@ definition Cotrident.ofCocone
 
 中文:
 定义 Cotrident.ofCocone
-  签名: {F : WalkingParallelFamily J ⥤ C} (t : Cocone F)
+  签名: {F : WalkingParallelFamily J ⥤ C} (t : 余锥 F)
   定义体: t.pt
   ι :=
     { app := fun X => eqToHom (by cases X <;> cat_disch) ≫ t.ι.app X
@@ -1274,7 +1274,7 @@ theorem Trident.ofCone_π
 
 中文:
 定理 Trident.ofCone_π
-  条件: {F : WalkingParallelFamily J ⥤ C} (t : Cone F) (j)
+  条件: {F : WalkingParallelFamily J ⥤ C} (t : 锥 F) (j)
   证明: rfl
 
 @[simp]
@@ -1296,7 +1296,7 @@ theorem Cotrident.ofCocone_ι
 
 中文:
 定理 Cotrident.ofCocone_ι
-  条件: {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) (j)
+  条件: {F : WalkingParallelFamily J ⥤ C} (t : 余锥 F) (j)
   证明: rfl
 -/
 theorem Cotrident.ofCocone_ι {F : WalkingParallelFamily J ⥤ C} (t : Cocone F) (j) :
@@ -1321,7 +1321,7 @@ definition Trident.mkHom
 
 中文:
 定义 Trident.mkHom
-  签名: [Nonempty J] {s t : Trident f} (k : s.pt ⟶ t.pt)
+  签名: [非空 J] {s t : Trident f} (k : s.pt ⟶ t.pt)
   定义体: k
   w := by
     rintro ⟨_ | _⟩
@@ -1354,7 +1354,7 @@ definition Trident.ext
 
 中文:
 定义 Trident.ext
-  签名: [Nonempty J] {s t : Trident f} (i : s.pt ≅ t.pt)
+  签名: [非空 J] {s t : Trident f} (i : s.pt ≅ t.pt)
   定义体: Trident.mkHom i.hom w
   inv := Trident.mkHom i.inv (by rw [← w, Iso.inv_hom_id_assoc])
 
@@ -1383,7 +1383,7 @@ definition Cotrident.mkHom
 
 中文:
 定义 Cotrident.mkHom
-  签名: [Nonempty J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
+  签名: [非空 J] {s t : Cotrident f} (k : s.pt ⟶ t.pt)
   定义体: k
   w := by
     rintro ⟨_ | _⟩
@@ -1412,7 +1412,7 @@ definition Cotrident.ext
 
 中文:
 定义 Cotrident.ext
-  签名: [Nonempty J] {s t : Cotrident f} (i : s.pt ≅ t.pt)
+  签名: [非空 J] {s t : Cotrident f} (i : s.pt ≅ t.pt)
   定义体: Cotrident.mkHom i.hom w
   inv := Cotrident.mkHom i.inv (by rw [Iso.comp_inv_eq, w])
 
@@ -1566,7 +1566,7 @@ definition wideEqualizerIsWideEqualizer
 
 中文:
 定义 wideEqualizerIsWideEqualizer
-  签名: [Nonempty J]
+  签名: [非空 J]
   定义体: IsLimit.ofIsoLimit (limit.isLimit _) (Trident.ext (Iso.refl _))
 
 Depends on / 依赖: IsLimit, IsLimit.ofIsoLimit, Iso.refl, Trident, Trident.ext, isLimit, limit.isLimit, ofIsoLimit
@@ -1587,7 +1587,7 @@ abbreviation wideEqualizer.lift
 
 中文:
 缩写 wideEqualizer.lift
-  签名: [Nonempty J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
+  签名: [非空 J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
   定义体: limit.lift (parallelFamily f) (Trident.ofι k h)
 
 Depends on / 依赖: Trident, Trident.of, limit.lift, parallelFamily
@@ -1609,7 +1609,7 @@ theorem wideEqualizer.lift_ι
 
 中文:
 定理 wideEqualizer.lift_ι
-  结论: [Nonempty J] {W : C} (k : W ⟶ X)
+  结论: [非空 J] {W : C} (k : W ⟶ X)
   证明: by
   simp
 -/
@@ -1628,7 +1628,7 @@ definition wideEqualizer.lift'
 
 中文:
 定义 wideEqualizer.lift'
-  签名: [Nonempty J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
+  签名: [非空 J] {W : C} (k : W ⟶ X) (h : 对任意 j₁ j₂, k ≫ f j₁ = k ≫ f j₂)
   定义体: ⟨wideEqualizer.lift k h, wideEqualizer.lift_ι _ _⟩
 
 Depends on / 依赖: wideEqualizer, wideEqualizer.lift, wideEqualizer.lift_
@@ -1650,7 +1650,7 @@ theorem wideEqualizer.hom_ext
 
 中文:
 定理 wideEqualizer.hom_ext
-  结论: [Nonempty J] {W : C} {k l : W ⟶ wideEqualizer f}
+  结论: [非空 J] {W : C} {k l : W ⟶ wideEqualizer f}
   证明: Trident.IsLimit.hom_ext (limit.isLimit _) h
 
 Depends on / 依赖: IsLimit, Trident, Trident.IsLimit.hom_ext, hom_ext, isLimit, limit.isLimit
@@ -1669,7 +1669,7 @@ instance wideEqualizer.ι_mono
 
 中文:
 实例 wideEqualizer.ι_mono
-  签名: [Nonempty J]
+  签名: [非空 J]
   定义体: wideEqualizer.hom_ext w
 
 Depends on / 依赖: hom_ext, wideEqualizer, wideEqualizer.hom_ext
@@ -1693,7 +1693,7 @@ theorem mono_of_isLimit_parallelFamily
 
 中文:
 定理 mono_of_isLimit_parallelFamily
-  条件: [Nonempty J] {c : Cone (parallelFamily f)} (i : IsLimit c)
+  条件: [非空 J] {c : 锥 (parallelFamily f)} (i : 是极限 c)
   证明: Trident.IsLimit.hom_ext i w
 
 Depends on / 依赖: IsLimit, Trident, Trident.IsLimit.hom_ext, hom_ext
@@ -1845,7 +1845,7 @@ definition wideCoequalizerIsWideCoequalizer
 
 中文:
 定义 wideCoequalizerIsWideCoequalizer
-  签名: [Nonempty J]
+  签名: [非空 J]
   定义体: IsColimit.ofIsoColimit (colimit.isColimit _) (Cotrident.ext (Iso.refl _))
 
 Depends on / 依赖: Cotrident, Cotrident.ext, IsColimit, IsColimit.ofIsoColimit, Iso.refl, colimit, colimit.isColimit, isColimit, ofIsoColimit
@@ -1866,7 +1866,7 @@ abbreviation wideCoequalizer.desc
 
 中文:
 缩写 wideCoequalizer.desc
-  签名: [Nonempty J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
+  签名: [非空 J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
   定义体: colimit.desc (parallelFamily f) (Cotrident.ofπ k h)
 
 Depends on / 依赖: Cotrident, Cotrident.of, colimit, colimit.desc, parallelFamily
@@ -1888,7 +1888,7 @@ theorem wideCoequalizer.π_desc
 
 中文:
 定理 wideCoequalizer.π_desc
-  结论: [Nonempty J] {W : C} (k : Y ⟶ W)
+  结论: [非空 J] {W : C} (k : Y ⟶ W)
   证明: by
   simp
 
@@ -1909,7 +1909,7 @@ definition wideCoequalizer.desc'
 
 中文:
 定义 wideCoequalizer.desc'
-  签名: [Nonempty J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
+  签名: [非空 J] {W : C} (k : Y ⟶ W) (h : 对任意 j₁ j₂, f j₁ ≫ k = f j₂ ≫ k)
   定义体: ⟨wideCoequalizer.desc k h, wideCoequalizer.π_desc _ _⟩
 
 Depends on / 依赖: wideCoequalizer, wideCoequalizer.desc
@@ -1931,7 +1931,7 @@ theorem wideCoequalizer.hom_ext
 
 中文:
 定理 wideCoequalizer.hom_ext
-  结论: [Nonempty J] {W : C} {k l : wideCoequalizer f ⟶ W}
+  结论: [非空 J] {W : C} {k l : wideCoequalizer f ⟶ W}
   证明: Cotrident.IsColimit.hom_ext (colimit.isColimit _) h
 
 Depends on / 依赖: Cotrident, Cotrident.IsColimit.hom_ext, IsColimit, colimit, colimit.isColimit, hom_ext, isColimit
@@ -1950,7 +1950,7 @@ instance wideCoequalizer.π_epi
 
 中文:
 实例 wideCoequalizer.π_epi
-  签名: [Nonempty J]
+  签名: [非空 J]
   定义体: wideCoequalizer.hom_ext w
 
 Depends on / 依赖: hom_ext, wideCoequalizer, wideCoequalizer.hom_ext
@@ -1974,7 +1974,7 @@ theorem epi_of_isColimit_parallelFamily
 
 中文:
 定理 epi_of_isColimit_parallelFamily
-  结论: [Nonempty J] {c : Cocone (parallelFamily f)}
+  结论: [非空 J] {c : 余锥 (parallelFamily f)}
   证明: Cotrident.IsColimit.hom_ext i w
 
 Depends on / 依赖: Cotrident, Cotrident.IsColimit.hom_ext, IsColimit, hom_ext

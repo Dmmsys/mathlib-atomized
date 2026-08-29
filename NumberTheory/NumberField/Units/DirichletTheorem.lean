@@ -118,7 +118,7 @@ definition _root_.NumberField.Units.logEmbedding
 @[simp]
 
 中文:
-定义 _root_.NumberField.Units.logEmbedding
+定义 _root_.数域.单位群.logEmbedding
   签名: :
   定义体: { toFun := fun x w => mult w.val * Real.log (w.val ↑x.toMul)
   map_zero' := by simp; rfl
@@ -294,7 +294,7 @@ theorem map_logEmbedding_sup_torsion
 
 中文:
 定理 map_logEmbedding_sup_torsion
-  条件: (s : AddSubgroup (Additive (𝓞 K)ˣ))
+  条件: (s : 加法子群 (加性 (𝓞 K)ˣ))
   证明: by
   rw [← logEmbedding_ker]; rw [AddSubgroup.map_eq_map_iff]; rw [sup_right_idem]
 
@@ -400,7 +400,7 @@ definition _root_.NumberField.Units.unitLattice
   body: Submodule.map (logEmbedding K).toIntLinearMap ⊤
 
 中文:
-定义 _root_.NumberField.Units.unitLattice
+定义 _root_.数域.单位群.unitLattice
   签名: :
   定义体: Submodule.map (logEmbedding K).toIntLinearMap ⊤
 
@@ -680,7 +680,7 @@ theorem exists_unit
   rsuffices ⟨n, m, hnm, h⟩ : exi
 
 中文:
-定理 exists_unit
+定理 存在_unit
   条件: (w₁ : InfinitePlace K)
   证明: by
   obtain ⟨B, hB⟩ : exists B : Nat, minkowskiBound K 1 < (convexBodyLTFactor K) * B := by
@@ -814,7 +814,7 @@ instance instDiscrete_unitLattice
 
 中文:
 实例 instDiscrete_unitLattice
-  签名: : DiscreteTopology (unitLattice K)
+  签名: : 离散拓扑 (unitLattice K)
   定义体: by
   classical
   refine discreteTopology_of_isOpen_singleton_zero ?_
@@ -848,7 +848,7 @@ instance instZLattice_unitLattice
 
 中文:
 实例 instZLattice_unitLattice
-  签名: : IsZLattice 实数 (unitLattice K) where
+  签名: : 是Z格 实数 (unitLattice K) where
   定义体: unitLattice_span_eq_top K
 
 Depends on / 依赖: unitLattice_span_eq_top
@@ -1049,7 +1049,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free 整数 (Additive ((𝓞 K)ˣ ⧸ (torsion K)))
+  签名: 模.自由 整数 (加性 ((𝓞 K)ˣ ⧸ (torsion K)))
   定义体: by
   classical exact Module.Free.of_equiv (logEmbeddingEquiv K).symm
 
@@ -1069,7 +1069,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite 整数 (Additive ((𝓞 K)ˣ ⧸ (torsion K)))
+  签名: 模.有限 整数 (加性 ((𝓞 K)ˣ ⧸ (torsion K)))
   定义体: by
   classical exact Module.Finite.equiv (logEmbeddingEquiv K).symm
 
@@ -1097,7 +1097,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Finite 整数 (Additive (𝓞 K)ˣ)
+  签名: 模.有限 整数 (加性 (𝓞 K)ˣ)
   定义体: by
   rw [Module.finite_def]
   refine Submodule.fg_of_fg_map_of_fg_inf_ker
@@ -1133,7 +1133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid.FG (𝓞 K)ˣ
+  签名: 幺半群.FG (𝓞 K)ˣ
   定义体: by
   rw [Monoid.fg_iff_add_fg]; rw [← AddGroup.fg_iff_addMonoid_fg]; rw [← Module.Finite.iff_addGroup_fg]
   infer_instance
@@ -1157,7 +1157,7 @@ theorem finrank_modTorsion
 
 中文:
 定理 finrank_modTorsion
-  结论: finrank 整数 (Additive ((𝓞 K)ˣ ⧸ (torsion K))) = rank K
+  结论: finrank 整数 (加性 ((𝓞 K)ˣ ⧸ (torsion K))) = rank K
   证明: by
   rw [← LinearEquiv.finrank_eq (logEmbeddingEquiv K).symm]; rw [unitLattice_rank]
 
@@ -1181,7 +1181,7 @@ theorem finrank_eq
 
 中文:
 定理 finrank_eq
-  结论: finrank 整数 (Additive (𝓞 K)ˣ) = rank K
+  结论: finrank 整数 (加性 (𝓞 K)ˣ) = rank K
   证明: by
   simpa [← finrank_modTorsion] using! finrank_quotient_torsion_eq.symm
 
@@ -1201,7 +1201,7 @@ definition basisModTorsion
 
 中文:
 定义 basisModTorsion
-  签名: : Basis (Fin (rank K)) 整数 (Additive ((𝓞 K)ˣ ⧸ (torsion K)))
+  签名: : 基 (有限集 (rank K)) 整数 (加性 ((𝓞 K)ˣ ⧸ (torsion K)))
   定义体: Basis.reindex (Module.Free.chooseBasis Int _) (Fintype.equivOfCardEq <| by
     rw [← Module.finrank_eq_card_chooseBasisIndex]; rw [finrank_modTorsion]; rw [Fintype.card_fin])
 
@@ -1221,7 +1221,7 @@ definition basisUnitLattice
 
 中文:
 定义 basisUnitLattice
-  签名: : Basis (Fin (rank K)) 整数 (unitLattice K)
+  签名: : 基 (有限集 (rank K)) 整数 (unitLattice K)
   定义体: (basisModTorsion K).map (logEmbeddingEquiv K)
 
 Depends on / 依赖: basisModTorsion, logEmbeddingEquiv
@@ -1240,7 +1240,7 @@ definition fundSystem
 
 中文:
 定义 fundSystem
-  签名: : Fin (rank K) -> (𝓞 K)ˣ
+  签名: : 有限集 (rank K) -> (𝓞 K)ˣ
   定义体: -- `:)` prevents the `⧸` decaying to a quotient by `leftRel` when we unfold this later
   fun i => Quotient.out ((basisModTorsion K i).toMul :)
 -/
@@ -1259,7 +1259,7 @@ theorem fundSystem_mk
 
 中文:
 定理 fundSystem_mk
-  条件: (i : Fin (rank K))
+  条件: (i : 有限集 (rank K))
   证明: by
   simp_rw [fundSystem, ← Equiv.eq_symm_apply, Additive.ofMul_symm_eq, Quotient.out_eq']
 
@@ -1280,7 +1280,7 @@ theorem logEmbedding_fundSystem
 
 中文:
 定理 logEmbedding_fundSystem
-  条件: (i : Fin (rank K))
+  条件: (i : 有限集 (rank K))
   证明: by
   rw [basisUnitLattice]; rw [Basis.map_apply]; rw [← fundSystem_mk]; rw [logEmbeddingEquiv_apply]
 
@@ -1306,7 +1306,7 @@ theorem fun_eq_repr
 
 中文:
 定理 fun_eq_repr
-  结论: {x ζ : (𝓞 K)ˣ} {f : Fin (rank K) -> 整数} (hζ : ζ in torsion K)
+  结论: {x ζ : (𝓞 K)ˣ} {f : 有限集 (rank K) -> 整数} (hζ : ζ in torsion K)
   证明: by
   suffices Additive.ofMul ↑x = ∑ i, (f i) • (basisModTorsion K i) by
     rw [← (basisModTorsion K).repr_sum_self f]; rw [← this]
@@ -1344,7 +1344,7 @@ theorem exist_unique_eq_mul_prod
 中文:
 定理 exist_unique_eq_mul_prod
   条件: (x : (𝓞 K)ˣ)
-  结论: 存在! ζe : torsion K × (Fin (rank K) -> 整数),
+  结论: 存在! ζe : torsion K × (有限集 (rank K) -> 整数),
   证明: by
   let ζ := x * (∏ i, (fundSystem K i) ^ ((basisModTorsion K).repr (Additive.ofMul ↑x) i))⁻¹
   have h_tors : ζ in torsion K := by

@@ -201,7 +201,7 @@ theorem aux_dvd_of_coeff_ne_zero
 
 中文:
 定理 aux_dvd_of_coeff_ne_zero
-  结论: {f : 自然数 -> 自然数 -> R} {d : 自然数} {s : Finset 自然数} (hs0 : 0 ∉ s)
+  结论: {f : 自然数 -> 自然数 -> R} {d : 自然数} {s : 有限集 自然数} (hs0 : 0 ∉ s)
   证明: by
   by_cases hx : x in s
   · specialize hprod x hx
@@ -251,7 +251,7 @@ theorem aux_prod_coeff_eq_zero_of_notMem_range
 
 中文:
 定理 aux_prod_coeff_eq_zero_of_notMem_range
-  结论: (f : 自然数 -> 自然数 -> R) {d : 自然数} {s : Finset 自然数}
+  结论: (f : 自然数 -> 自然数 -> R) {d : 自然数} {s : 有限集 自然数}
   证明: by
   suffices exists i in s, (coeff (g i)) ((1 : R⟦X⟧) + ∑' j, f i (j + 1) • X ^ (i * (j + 1))) = 0 by
     obtain ⟨i, hi, hi'⟩ := this
@@ -305,7 +305,7 @@ theorem aux_prod_f_eq_prod_coeff
 
 中文:
 定理 aux_prod_f_eq_prod_coeff
-  结论: (f : 自然数 -> 自然数 -> R) {n : 自然数} (p : Partition n) {s : Finset 自然数}
+  结论: (f : 自然数 -> 自然数 -> R) {n : 自然数} (p : 分拆 n) {s : 有限集 自然数}
   证明: by
   simp_rw [Finsupp.prod, Multiset.toFinsupp_support, Multiset.toFinsupp_apply]
   apply prod_subset_one_on_sdiff

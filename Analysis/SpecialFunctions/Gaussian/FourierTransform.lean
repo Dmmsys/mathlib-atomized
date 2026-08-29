@@ -53,8 +53,8 @@ definition verticalIntegral
   body: ∫ y : Real in (0 : Real)..c, I * (cexp (-b * (T + y * I) ^ 2) - cexp (-b * (T - y * I) ^ 2))
 
 中文:
-定义 verticalIntegral
-  签名: (b : Complex) (c T : 实数)
+定义 vertical整数egral
+  签名: (b : 复形) (c T : 实数)
   定义体: ∫ y : Real in (0 : Real)..c, I * (cexp (-b * (T + y * I) ^ 2) - cexp (-b * (T - y * I) ^ 2))
 -/
 def verticalIntegral (b : Complex) (c T : Real) : Complex :=
@@ -73,7 +73,7 @@ theorem norm_cexp_neg_mul_sq_add_mul_I
 
 中文:
 定理 norm_cexp_neg_mul_sq_add_mul_I
-  条件: (b : Complex) (c T : 实数)
+  条件: (b : 复形) (c T : 实数)
   证明: by
   rw [Complex.norm_exp]; rw [neg_mul]; rw [neg_re]; rw [← re_add_im b]
   simp only [sq, re_add_im, mul_re, mul_im, add_re, add_im, ofReal_re, ofReal_im, I_re, I_im]
@@ -139,7 +139,7 @@ theorem verticalIntegral_norm_le
    
 
 中文:
-定理 verticalIntegral_norm_le
+定理 vertical整数egral_norm_le
   条件: (hb : 0 < b.re) (c : 实数) {T : 实数} (hT : 0 <= T)
   证明: by
   -- first get uniform bound for integrand
@@ -205,7 +205,7 @@ theorem tendsto_verticalIntegral
         (Eventually.of_forall fun T hT 
 
 中文:
-定理 tendsto_verticalIntegral
+定理 tendsto_vertical整数egral
   条件: (hb : 0 < b.re) (c : 实数)
   证明: by
   -- complete proof using squeeze theorem:
@@ -357,7 +357,7 @@ theorem _root_.integral_cexp_quadratic
 
 中文:
 定理 _root_.integral_cexp_quadratic
-  条件: (hb : b.re < 0) (c d : Complex)
+  条件: (hb : b.re < 0) (c d : 复形)
   证明: by
   have hb' : b != 0 := by contrapose! hb; rw [hb, zero_re]
   have h (x : Real) : cexp (b * x ^ 2 + c * x + d) =
@@ -398,7 +398,7 @@ lemma _root_.integrable_cexp_quadratic'
 
 中文:
 引理 _root_.integrable_cexp_quadratic'
-  条件: (hb : b.re < 0) (c d : Complex)
+  条件: (hb : b.re < 0) (c d : 复形)
   证明: by
   have hb' : b != 0 := by contrapose! hb; rw [hb, zero_re]
   by_contra H
@@ -426,7 +426,7 @@ lemma _root_.integrable_cexp_quadratic
 
 中文:
 引理 _root_.integrable_cexp_quadratic
-  条件: (hb : 0 < b.re) (c d : Complex)
+  条件: (hb : 0 < b.re) (c d : 复形)
   证明: by
   have : (-b).re < 0 := by simpa using hb
   exact integrable_cexp_quadratic' this c d
@@ -450,8 +450,8 @@ theorem _root_.fourierIntegral_gaussian
     mul_neg, div_neg, neg_neg, mul_pow, I_sq, neg_one_mul, mul_comm]
 
 中文:
-定理 _root_.fourierIntegral_gaussian
-  条件: (hb : 0 < b.re) (t : Complex)
+定理 _root_.fourier整数egral_gaussian
+  条件: (hb : 0 < b.re) (t : 复形)
   证明: by
   conv => enter [1, 2, x]; rw [← Complex.exp_add, add_comm, ← add_zero (-b * x ^ 2 + I * t * x)]
   rw [integral_cexp_quadratic (show (-b).re < 0 by rwa [neg_re]; rw [neg_lt_zero]), neg_neg, zero_sub,
@@ -482,7 +482,7 @@ theorem _root_.fourier_gaussian_pi'
 
 中文:
 定理 _root_.fourier_gaussian_pi'
-  条件: (hb : 0 < b.re) (c : Complex)
+  条件: (hb : 0 < b.re) (c : 复形)
   证明: by
   have : b != 0 := by contrapose! hb; rw [hb, zero_re]
   have h : (-↑π * b).re < 0 := by
@@ -554,7 +554,7 @@ theorem integrable_cexp_neg_sum_mul_add
 
 中文:
 定理 integrable_cexp_neg_sum_mul_add
-  结论: {ι : 类型} [Fintype ι] {b : ι -> Complex}
+  结论: {ι : 类型} [有限类型 ι] {b : ι -> 复形}
   证明: by
   simp_rw [← Finset.sum_neg_distrib, ← Finset.sum_add_distrib, Complex.exp_sum, ← neg_mul]
   apply Integrable.fintype_prod (f := fun i (v : Real) => cexp (-b i * v ^ 2 + c i * v)) (fun i => ?_)
@@ -583,7 +583,7 @@ theorem integrable_cexp_neg_mul_sum_add
 
 中文:
 定理 integrable_cexp_neg_mul_sum_add
-  条件: {ι : 类型} [Fintype ι] (hb : 0 < b.re) (c : ι -> Complex)
+  条件: {ι : 类型} [有限类型 ι] (hb : 0 < b.re) (c : ι -> 复形)
   证明: by
   simp_rw [neg_mul, Finset.mul_sum]
   exact integrable_cexp_neg_sum_mul_add (fun _ => hb) c
@@ -648,7 +648,7 @@ theorem integrable_cexp_neg_mul_sq_norm_add
 
 中文:
 定理 integrable_cexp_neg_mul_sq_norm_add
-  条件: (hb : 0 < b.re) (c : Complex) (w : V)
+  条件: (hb : 0 < b.re) (c : 复形) (w : V)
   证明: by
   let e := (stdOrthonormalBasis Real V).repr.symm
   rw [← e.measurePreserving.integrable_comp_emb e.toHomeomorph.measurableEmbedding]
@@ -682,7 +682,7 @@ theorem integral_cexp_neg_sum_mul_add
 
 中文:
 定理 integral_cexp_neg_sum_mul_add
-  结论: {ι : 类型} [Fintype ι] {b : ι -> Complex}
+  结论: {ι : 类型} [有限类型 ι] {b : ι -> 复形}
   证明: by
   simp_rw [← Finset.sum_neg_distrib, ← Finset.sum_add_distrib, Complex.exp_sum, ← neg_mul]
   rw [integral_fintype_prod_volume_eq_prod (f := fun i (v : Real) => cexp (-b i * v ^ 2 + c i * v))]
@@ -715,7 +715,7 @@ theorem integral_cexp_neg_mul_sum_add
 
 中文:
 定理 integral_cexp_neg_mul_sum_add
-  条件: {ι : 类型} [Fintype ι] (hb : 0 < b.re) (c : ι -> Complex)
+  条件: {ι : 类型} [有限类型 ι] (hb : 0 < b.re) (c : ι -> 复形)
   证明: by
   simp_rw [neg_mul, Finset.mul_sum, integral_cexp_neg_sum_mul_add (fun _ => hb) c, one_div,
     Finset.prod_mul_distrib, Finset.prod_const, ← cpow_nat_mul, ← Complex.exp_sum, Fintype.card,

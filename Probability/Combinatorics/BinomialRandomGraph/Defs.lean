@@ -55,7 +55,7 @@ definition binomialRandom
 
 中文:
 定义 binomialRandom
-  签名: : Measure (SimpleGraph V)
+  签名: : 测度 (简单图 V)
   定义体: setBer(Sym2.diagSetᶜ, p).comap edgeSet
 
 @[inherit_doc] scoped notation "G(" V ", " p ")" => binomialRandom V p
@@ -112,7 +112,7 @@ lemma binomialRandom_apply'
 
 中文:
 引理 binomialRandom_apply'
-  条件: (S : Set (SimpleGraph V))
+  条件: (S : 集合 (简单图 V))
   证明: by
   rw [binomialRandom]; rw [measurableEmbedding_edgeSet.comap_apply]
 
@@ -134,7 +134,7 @@ lemma binomialRandom_apply
 
 中文:
 引理 binomialRandom_apply
-  条件: (S : Set (SimpleGraph V))
+  条件: (S : 集合 (简单图 V))
   证明: by
   simp [binomialRandom_apply', setBernoulli_apply, ← Set.image_comp]
 
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsProbabilityMeasure G(V, p)
+  签名: 是概率测度 G(V, p)
   定义体: by
   refine measurableEmbedding_edgeSet.isProbabilityMeasure_comap ?_
   filter_upwards [setBernoulli_ae_subset] with s hs
@@ -227,7 +227,7 @@ lemma binomialRandom_singleton
 
 中文:
 引理 binomialRandom_singleton
-  条件: [Finite V] (G : SimpleGraph V)
+  条件: [有限 V] (G : 简单图 V)
   证明: by
   classical
   cases nonempty_fintype V

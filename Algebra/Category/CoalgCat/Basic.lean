@@ -37,11 +37,11 @@ structure CoalgCat
     - instCoalgebra : Coalgebra R carrier
 
 中文:
-结构 CoalgCat
-  参数: extends ModuleCat.{v} R
-  继承: ModuleCat.{v} R
+结构 余alg范畴
+  参数: extends 模范畴.{v} R
+  继承: 模范畴.{v} R
   公理与运算 (1 个):
-    - instCoalgebra : Coalgebra R carrier
+    - instCoalgebra : 余algebra R carrier
 -/
 structure CoalgCat extends ModuleCat.{v} R where
   instCoalgebra : Coalgebra R carrier
@@ -64,7 +64,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CoalgCat.{v} R) (类型v)
+  签名: CoeSort (余alg范畴.{v} R) (类型v)
   定义体: ⟨(·.carrier)⟩
 
 Depends on / 依赖: carrier
@@ -82,7 +82,7 @@ theorem moduleCat_of_toModuleCat
 
 中文:
 定理 moduleCat_of_toModuleCat
-  条件: (X : CoalgCat.{v} R)
+  条件: (X : 余alg范畴.{v} R)
   证明: rfl
 -/
 @[simp] theorem moduleCat_of_toModuleCat (X : CoalgCat.{v} R) :
@@ -103,7 +103,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型v) [AddCommGroup X] [Module R X] [Coalgebra R X]
+  签名: (X : 类型v) [加法交换群 X] [模 R X] [余algebra R X]
   定义体: { ModuleCat.of R X with
     instCoalgebra := (inferInstance : Coalgebra R X) }
 
@@ -129,7 +129,7 @@ lemma of_comul
 
 中文:
 引理 of_comul
-  条件: {X : 类型v} [AddCommGroup X] [Module R X] [Coalgebra R X]
+  条件: {X : 类型v} [加法交换群 X] [模 R X] [余algebra R X]
   证明: rfl
 
 @[simp]
@@ -150,7 +150,7 @@ lemma of_counit
 
 中文:
 引理 of_counit
-  条件: {X : 类型v} [AddCommGroup X] [Module R X] [Coalgebra R X]
+  条件: {X : 类型v} [加法交换群 X] [模 R X] [余algebra R X]
   证明: rfl
 
 Depends on / 依赖: Coalgebra, Coalgebra.counit, counit
@@ -171,8 +171,8 @@ structure Hom
     - toCoalgHom' : V ->ₗc[R] W
 
 中文:
-结构 Hom
-  参数: (V W : CoalgCat.{v} R)
+结构 态射
+  参数: (V W : 余alg范畴.{v} R)
   公理与运算 (1 个):
     - toCoalgHom' : V ->ₗc[R] W
 -/
@@ -192,7 +192,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (CoalgCat.{v} R) where
+  签名: : 范畴 (余alg范畴.{v} R) where
   定义体: Hom M N
   id M := ⟨CoalgHom.id R M⟩
   comp f g := ⟨CoalgHom.comp g.toCoalgHom' f.toCoalgHom'⟩
@@ -213,7 +213,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory (CoalgCat.{v} R) (· ->ₗc[R] ·) where
+  签名: : 余ncrete范畴 (余alg范畴.{v} R) (· ->ₗc[R] ·) where
   定义体: f.toCoalgHom'
   ofHom f := ⟨f⟩
 
@@ -232,8 +232,8 @@ abbreviation Hom.toCoalgHom
   body: ConcreteCategory.hom (C := CoalgCat.{v} R) f
 
 中文:
-缩写 Hom.toCoalgHom
-  签名: {X Y : CoalgCat.{v} R} (f : Hom X Y)
+缩写 态射.toCoalgHom
+  签名: {X Y : 余alg范畴.{v} R} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := CoalgCat.{v} R) f
 
 Depends on / 依赖: CoalgCat, ConcreteCategory, ConcreteCategory.hom
@@ -251,7 +251,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型v} [AddCommGroup X] [Module R X] [AddCommGroup Y] [Module R Y]
+  签名: {X Y : 类型v} [加法交换群 X] [模 R X] [加法交换群 Y] [模 R Y]
   定义体: ConcreteCategory.ofHom f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom
@@ -272,8 +272,8 @@ lemma Hom.toCoalgHom_injective
 @[ext]
 
 中文:
-引理 Hom.toCoalgHom_injective
-  条件: (V W : CoalgCat.{v} R)
+引理 态射.toCoalgHom_injective
+  条件: (V W : 余alg范畴.{v} R)
   证明: fun ⟨f⟩ ⟨g⟩ _ => by congr
 
 @[ext]
@@ -293,7 +293,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {M N : CoalgCat.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalgHom)
+  条件: {M N : 余alg范畴.{v} R} (f g : M ⟶ N) (h : f.toCoalgHom = g.toCoalgHom)
   证明: Hom.ext h
 
 Depends on / 依赖: Hom.ext
@@ -312,7 +312,7 @@ theorem toCoalgHom_comp
 
 中文:
 定理 toCoalgHom_comp
-  条件: {M N U : CoalgCat.{v} R} (f : M ⟶ N) (g : N ⟶ U)
+  条件: {M N U : 余alg范畴.{v} R} (f : M ⟶ N) (g : N ⟶ U)
   证明: rfl
 -/
 @[simp] theorem toCoalgHom_comp {M N U : CoalgCat.{v} R} (f : M ⟶ N) (g : N ⟶ U) :
@@ -329,7 +329,7 @@ theorem toCoalgHom_id
 
 中文:
 定理 toCoalgHom_id
-  条件: {M : CoalgCat.{v} R}
+  条件: {M : 余alg范畴.{v} R}
   证明: rfl
 -/
 @[simp] theorem toCoalgHom_id {M : CoalgCat.{v} R} :
@@ -349,7 +349,7 @@ instance hasForgetToModule
 
 中文:
 实例 hasForgetToModule
-  签名: : HasForget₂ (CoalgCat R) (ModuleCat R) where
+  签名: : 有Forget₂ (余alg范畴 R) (模范畴 R) where
   定义体: { obj := fun M => ModuleCat.of R M
       map := fun f => ModuleCat.ofHom f.toCoalgHom.toLinearMap }
 
@@ -375,7 +375,7 @@ theorem forget₂_obj
 
 中文:
 定理 forget₂_obj
-  条件: (X : CoalgCat R)
+  条件: (X : 余alg范畴 R)
   证明: rfl
 
 @[simp]
@@ -395,7 +395,7 @@ theorem forget₂_map
 
 中文:
 定理 forget₂_map
-  条件: (X Y : CoalgCat R) (f : X ⟶ Y)
+  条件: (X Y : 余alg范畴 R) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem forget₂_map (X Y : CoalgCat R) (f : X ⟶ Y) :
@@ -606,7 +606,7 @@ instance CoalgCat.forget_reflects_isos
     exact ⟨e.toCoalgIso.isIso_hom.1⟩
 
 中文:
-实例 CoalgCat.forget_reflects_isos
+实例 余alg范畴.forget_reflects_isos
   签名: :
   定义体: by
     let i := asIso ((forget (CoalgCat.{v} R)).map f)

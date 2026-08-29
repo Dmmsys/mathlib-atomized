@@ -75,7 +75,7 @@ theorem coe_fold_r
 
 中文:
 定理 coe_fold_r
-  条件: (b : α) (l : List α)
+  条件: (b : α) (l : 列表 α)
   结论: fold op b l = l.foldr op b
   证明: rfl
 -/
@@ -93,7 +93,7 @@ theorem coe_fold_l
 
 中文:
 定理 coe_fold_l
-  条件: (b : α) (l : List α)
+  条件: (b : α) (l : 列表 α)
   结论: fold op b l = l.foldl op b
   证明: (coe_foldr_swap op b l).trans by simp [hc.comm]
 
@@ -311,7 +311,7 @@ theorem fold_hom
 
 中文:
 定理 fold_hom
-  结论: {op' : β -> β -> β} [Std.Commutative op'] [Std.Associative op'] {m : α -> β}
+  结论: {op' : β -> β -> β} [Std.交换 op'] [Std.结合 op'] {m : α -> β}
   证明: Multiset.induction_on s (by simp) (by simp +contextual [hm])
 
 Depends on / 依赖: Multiset, Multiset.induction_on, contextual, induction_on

@@ -84,7 +84,7 @@ theorem lift_genericMonicPoly
 
 中文:
 定理 lift_genericMonicPoly
-  条件: [CommRing K] [Nontrivial K] {n : 自然数} (v : Fin (n + 1) -> K)
+  条件: [交换环 K] [非平凡 K] {n : 自然数} (v : 有限集 (n + 1) -> K)
   证明: by
   simp [genericMonicPoly, monicEquivDegreeLT, degreeLTEquiv, eval_finsetSum]
 
@@ -126,7 +126,7 @@ theorem realize_genericMonicPolyHasRoot
 
 中文:
 定理 realize_genericMonicPolyHasRoot
-  条件: [Field K] [CompatibleRing K] (n : 自然数)
+  条件: [域 K] [余mpatible环 K] (n : 自然数)
   证明: by
   rw [Equiv.forall_congr_left ((monicEquivDegreeLT n).trans (degreeLTEquiv K n).toEquiv)]
   simp [Sentence.Realize, genericMonicPolyHasRoot, lift_genericMonicPoly]
@@ -168,7 +168,7 @@ instance [Language.ring.Structure
   body: Theory.Model.mono h Set.subset_union_left
 
 中文:
-实例 [Language.ring.Structure
+实例 [Language.ring.结构
   签名: K] (p
   定义体: Theory.Model.mono h Set.subset_union_left
 
@@ -195,8 +195,8 @@ instance [Field
     (natDegree_pos_iff_degree_p
 
 中文:
-实例 [Field
-  签名: K] [CompatibleRing K] {p
+实例 [域
+  签名: K] [余mpatible环 K] {p
   定义体: by
   refine Theory.model_union_iff.2 ⟨inferInstance, ?_⟩
   simp only [Theory.model_iff, Set.mem_image,
@@ -230,7 +230,7 @@ theorem modelField_of_modelACF
 
 中文:
 定理 modelField_of_modelACF
-  结论: (p : 自然数) (K : 类型) [Language.ring.Structure K]
+  结论: (p : 自然数) (K : 类型) [Language.ring.结构 K]
   证明: Theory.Model.mono h (Set.subset_union_of_subset_left Set.subset_union_left _)
 
 Depends on / 依赖: Set.subset_union_left, Set.subset_union_of_subset_left, Theory, Theory.Model.mono, subset_union_left, subset_union_of_subset_left
@@ -330,7 +330,7 @@ theorem ACF_isSatisfiable
 
 中文:
 定理 ACF_isSatisfiable
-  条件: {p : 自然数} (hp : p.Prime ∨ p = 0)
+  条件: {p : 自然数} (hp : p.素 ∨ p = 0)
   证明: by
   cases hp with
   | inl hp =>
@@ -377,7 +377,7 @@ theorem ACF_categorical
 
 中文:
 定理 ACF_categorical
-  条件: {p : 自然数} (κ : Cardinal) (hκ : ℵ₀ < κ)
+  条件: {p : 自然数} (κ : 基数) (hκ : ℵ₀ < κ)
   证明: by
   rintro ⟨M⟩ ⟨N⟩ hM hN
   let _ := fieldOfModelACF p M
@@ -429,7 +429,7 @@ theorem ACF_isComplete
 
 中文:
 定理 ACF_isComplete
-  条件: {p : 自然数} (hp : p.Prime ∨ p = 0)
+  条件: {p : 自然数} (hp : p.素 ∨ p = 0)
   证明: by
   apply Categorical.isComplete.{0, 0, 0} (Order.succ ℵ₀) _
     (ACF_categorical _ (Order.lt_succ _))

@@ -162,7 +162,7 @@ theorem birkhoffAverage_congr_ring
 
 中文:
 定理 birkhoffAverage_congr_ring
-  结论: (S : 类型) [DivisionSemiring S] [Module S M]
+  结论: (S : 类型) [除半环 S] [模 S M]
   证明: map_birkhoffAverage R S (AddMonoidHom.id M) f g n x
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.id, map_birkhoffAverage
@@ -183,7 +183,7 @@ theorem birkhoffAverage_congr_ring'
 
 中文:
 定理 birkhoffAverage_congr_ring'
-  条件: (S : 类型) [DivisionSemiring S] [Module S M]
+  条件: (S : 类型) [除半环 S] [模 S M]
   证明: by
   ext; apply birkhoffAverage_congr_ring
 
@@ -203,7 +203,7 @@ theorem Function.IsFixedPt.birkhoffAverage_eq
   rw [birkhoffAverage]; rw [h.birkhoffSum_eq]; rw [← Nat.cast_smul_eq_nsmul R]; rw [inv_smul_smul₀ hn]
 
 中文:
-定理 Function.IsFixedPt.birkhoffAverage_eq
+定理 函数.IsFixedPt.birkhoffAverage_eq
   结论: {f : α -> α} {x : α} (h : IsFixedPt f x)
   证明: by
   rw [birkhoffAverage]; rw [h.birkhoffSum_eq]; rw [← Nat.cast_smul_eq_nsmul R]; rw [inv_smul_smul₀ hn]

@@ -41,8 +41,8 @@ lemma NumberField.exists_not_isUnramifiedIn
   simpa [← not_dvd_discr_iff_isUnramifiedIn K 𝒪 hp1]
 
 中文:
-引理 NumberField.exists_not_isUnramifiedIn
-  条件: (H : Module.finrank Rat K != 1)
+引理 数域.存在_not_isUnramifiedIn
+  条件: (H : 模.finrank 有理数 K != 1)
   证明: by
   have : 0 < Module.finrank Rat K := Module.finrank_pos
   have : 2 < |discr K| := abs_discr_gt_two (by lia)
@@ -74,8 +74,8 @@ lemma NumberField.exists_not_isUnramifiedAt_int
   have := IsIntegralClosure.isIntegral_a
 
 中文:
-引理 NumberField.exists_not_isUnramifiedAt_int
-  条件: (H : Module.finrank Rat K != 1)
+引理 数域.存在_not_isUnramifiedAt_int
+  条件: (H : 模.finrank 有理数 K != 1)
   证明: by
   obtain ⟨p, hp1, hp2⟩ := NumberField.exists_not_isUnramifiedIn (𝒪 := 𝒪) H
   have := (IsIntegralClosure.algebraMap_injective 𝒪 Int K).isDomain
@@ -106,8 +106,8 @@ lemma NumberField.finrank_eq_one_of_unramified
   exact H inferInstance
 
 中文:
-引理 NumberField.finrank_eq_one_of_unramified
-  条件: [Algebra.Unramified 整数 𝒪]
+引理 数域.finrank_eq_one_of_unramified
+  条件: [代数.非分歧 整数 𝒪]
   证明: by
   by_contra H
   obtain ⟨P, _, H⟩ := NumberField.exists_not_isUnramifiedAt_int (𝒪 := 𝒪) H
@@ -174,8 +174,8 @@ lemma NumberField.exists_not_isUnramifiedAt_int_of_isGalois
   let : Mu
 
 中文:
-引理 NumberField.exists_not_isUnramifiedAt_int_of_isGalois
-  结论: [IsGalois Rat K]
+引理 数域.存在_not_isUnramifiedAt_int_of_isGalois
+  结论: [是Galois 有理数 K]
   证明: by
   have := (IsIntegralClosure.algebraMap_injective 𝒪 Int K).isDomain
   have := IsIntegralClosure.isDedekindDomain Int Rat K 𝒪

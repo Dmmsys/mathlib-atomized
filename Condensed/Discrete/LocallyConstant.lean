@@ -95,7 +95,7 @@ definition functorToPresheaves
 
 中文:
 定义 functorToPresheaves
-  签名: : Type (max u w) ⥤ ((CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w)) where
+  签名: : 类型 (最大值 u w) ⥤ ((余mpHausLike.{u} P)ᵒᵖ ⥤ 类型 (最大值 u w)) where
   定义体: {
     obj := fun ⟨S⟩ => (LocallyConstant S X)
     map f := ↾fun g => g.comap f.unop.hom.hom }
@@ -125,7 +125,7 @@ definition locallyConstantIsoContinuousMap
 
 中文:
 定义 locallyConstantIsoContinuousMap
-  签名: (Y X : 类型) [TopologicalSpace Y]
+  签名: (Y X : 类型) [拓扑空间 Y]
   定义体: letI : TopologicalSpace X := ⊥
   haveI : DiscreteTopology X := ⟨rfl⟩
   { hom := ↾fun f => (f : C(Y, X))
@@ -158,7 +158,7 @@ abbreviation fiber
 
 中文:
 缩写 fiber
-  签名: : CompHausLike.{u} P
+  签名: : 余mpHausLike.{u} P
   定义体: CompHausLike.of P a.val
 
 Depends on / 依赖: CompHausLike, CompHausLike.of, a.val
@@ -192,7 +192,7 @@ definition sigmaIso
 
 中文:
 定义 sigmaIso
-  签名: [HasExplicitFiniteCoproducts.{u} P]
+  签名: [有ExplicitFiniteCoproducts.{u} P]
   定义体: isoOfBijective (ofHom _ (sigmaIsoHom r)) ⟨sigmaIsoHom_inj r, sigmaIsoHom_surj r⟩
 
 Depends on / 依赖: isoOfBijective, sigmaIsoHom, sigmaIsoHom_inj, sigmaIsoHom_surj
@@ -215,7 +215,7 @@ lemma sigmaComparison_comp_sigmaIso
 
 中文:
 引理 sigmaComparison_comp_sigmaIso
-  结论: [HasExplicitFiniteCoproducts.{u} P]
+  结论: [有ExplicitFiniteCoproducts.{u} P]
   证明: by
   ext
   simp only [Functor.mapIso_hom, Iso.op_hom, sigmaComparison, TypeCat.Fun.toFun_apply,
@@ -269,7 +269,7 @@ definition counitAppApp
 
 中文:
 定义 counitAppApp
-  签名: (S : CompHausLike.{u} P)
+  签名: (S : 余mpHausLike.{u} P)
   定义体: ↾fun r => (inv (sigmaComparison Y (fun a => (fiber r a).1)) ≫
     (Y.mapIso (sigmaIso r).op).inv) (counitAppAppImage r)
 
@@ -299,7 +299,7 @@ lemma presheaf_ext
 
 中文:
 引理 presheaf_ext
-  结论: (X : (CompHausLike.{u} P)ᵒᵖ ⥤ Type (max u w))
+  结论: (X : (余mpHausLike.{u} P)ᵒᵖ ⥤ 类型 (最大值 u w))
   证明: by
   apply injective_of_mono (X.mapIso (sigmaIso f).op).hom
   apply injective_of_mono (sigmaComparison X (fun a => (fiber f a).1))
@@ -335,7 +335,7 @@ lemma incl_of_counitAppApp
 
 中文:
 引理 incl_of_counitAppApp
-  结论: [PreservesFiniteProducts Y] [HasExplicitFiniteCoproducts.{u} P]
+  结论: [保持FiniteProducts Y] [有ExplicitFiniteCoproducts.{u} P]
   证明: by
   rw [← sigmaComparison_comp_sigmaIso]; rw [Functor.mapIso_hom]; rw [Iso.op_hom]; rw [types_comp_apply]
   simp only [counitAppApp, Functor.mapIso_inv, ← Iso.op_hom, CategoryTheory.comp_apply,
@@ -399,7 +399,7 @@ lemma incl_comap
 
 中文:
 引理 incl_comap
-  结论: {S T : (CompHausLike P)ᵒᵖ}
+  结论: {S T : (余mpHausLike P)ᵒᵖ}
   证明: rfl
 -/
 lemma incl_comap {S T : (CompHausLike P)ᵒᵖ}
@@ -430,7 +430,7 @@ definition counitApp
 
 中文:
 定义 counitApp
-  签名: [HasExplicitFiniteCoproducts.{u} P]
+  签名: [有ExplicitFiniteCoproducts.{u} P]
   定义体: fun ⟨S⟩ => counitAppApp S Y
   naturality := by
     intro S T g
@@ -473,7 +473,7 @@ definition functorToPresheavesIso
 
 中文:
 定义 functorToPresheavesIso
-  签名: (X : Type (max u w))
+  签名: (X : 类型 (最大值 u w))
   定义体: NatIso.ofComponents (fun S => locallyConstantIsoContinuousMap _ _)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, locallyConstantIsoContinuousMap, ofComponents
@@ -559,7 +559,7 @@ definition counit
 
 中文:
 定义 counit
-  签名: [HasExplicitFiniteCoproducts.{u} P]
+  签名: [有ExplicitFiniteCoproducts.{u} P]
   定义体: CompHausLike.preregular hs
     (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ ⋙ functor.{u, w} P hs ⟶
         𝟭 (Sheaf (coherentTopology (CompHausLike.{u} P)) (Type (max u w))) where
@@ -624,7 +624,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨CompHausLike.of P PUnit.{u + 1}⟩ where
+  签名: : 𝟭 _ ⟶ functor P hs ⋙ (sheafSections _ _).obj ⟨余mpHausLike.of P 命题单元.{u + 1}⟩ where
   定义体: ↾fun x => LocallyConstant.const _ x
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.const
@@ -643,7 +643,7 @@ definition unitIso
 
 中文:
 定义 unitIso
-  签名: : 𝟭 (Type (max u w)) ≅ functor.{u, w} P hs ⋙
+  签名: : 𝟭 (类型 (最大值 u w)) ≅ functor.{u, w} P hs ⋙
   定义体: unit P hs
   inv := { app _ := ↾fun f => f.toFun PUnit.unit }
 
@@ -671,7 +671,7 @@ lemma adjunction_left_triangle
 
 中文:
 引理 adjunction_left_triangle
-  结论: [HasExplicitFiniteCoproducts.{u} P]
+  结论: [有ExplicitFiniteCoproducts.{u} P]
   证明: by
   ext ⟨S⟩ (f : LocallyConstant _ X)
   simp only [Functor.id_obj, functor_obj_obj_obj, functorToPresheaves_obj_obj, Functor.comp_obj,
@@ -728,7 +728,7 @@ definition adjunction
 
 中文:
 定义 adjunction
-  签名: [HasExplicitFiniteCoproducts.{u} P]
+  签名: [有ExplicitFiniteCoproducts.{u} P]
   定义体: unit P hs
   counit := counit P hs
   left_triangle_components := by
@@ -773,8 +773,8 @@ instance [HasExplicitFiniteCoproducts.{u}
   body: inferInstanceAs (IsIso (unitIso P hs).hom)
 
 中文:
-实例 [HasExplicitFiniteCoproducts.{u}
-  签名: P] : IsIso (adjunction P hs).unit
+实例 [有ExplicitFiniteCoproducts.{u}
+  签名: P] : 是同构 (adjunction P hs).unit
   定义体: inferInstanceAs (IsIso (unitIso P hs).hom)
 
 Depends on / 依赖: unitIso
@@ -803,7 +803,7 @@ abbreviation functor
 
 中文:
 缩写 functor
-  签名: : Type (u + 1) ⥤ CondensedSet.{u}
+  签名: : 类型 (u + 1) ⥤ CondensedSet.{u}
   定义体: CompHausLike.LocallyConstant.functor.{u, u + 1} (P := fun _ => True)
     (hs := fun _ _ _ => ((CompHaus.effectiveEpi_tfae _).out 0 2).mp)
 
@@ -823,7 +823,7 @@ definition iso
 
 中文:
 定义 iso
-  签名: : functor ≅ discrete (Type (u + 1))
+  签名: : functor ≅ discrete (类型 (u + 1))
   定义体: (LocallyConstant.adjunction _ _).leftAdjointUniq (discreteUnderlyingAdj _)
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, discreteUnderlyingAdj, leftAdjointUniq
@@ -841,7 +841,7 @@ definition functorFullyFaithful
 
 中文:
 定义 functorFullyFaithful
-  签名: : functor.FullyFaithful
+  签名: : functor.满忠实
   定义体: (LocallyConstant.adjunction.{u, u + 1} _ _).fullyFaithfulLOfIsIsoUnit
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, fullyFaithfulLOfIsIsoUnit
@@ -859,7 +859,7 @@ instance :
 
 中文:
 实例 :
-  签名: functor.Faithful
+  签名: functor.忠实
   定义体: functorFullyFaithful.faithful
 
 Depends on / 依赖: faithful, functorFullyFaithful, functorFullyFaithful.faithful
@@ -876,7 +876,7 @@ instance :
 
 中文:
 实例 :
-  签名: functor.Full
+  签名: functor.满
   定义体: functorFullyFaithful.full
 
 Depends on / 依赖: functorFullyFaithful, functorFullyFaithful.full
@@ -893,7 +893,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete <| Type _).Faithful
+  签名: (discrete <| 类型 _).忠实
   定义体: Functor.Faithful.of_iso iso
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, of_iso
@@ -910,7 +910,7 @@ instance :
 
 中文:
 实例 :
-  签名: (discrete <| Type _).Full
+  签名: (discrete <| 类型 _).满
   定义体: Functor.Full.of_iso iso
 
 Depends on / 依赖: Functor, Functor.Full.of_iso, of_iso
@@ -978,7 +978,7 @@ definition functorFullyFaithful
 
 中文:
 定义 functorFullyFaithful
-  签名: : functor.{u}.FullyFaithful
+  签名: : functor.{u}.满忠实
   定义体: (LocallyConstant.adjunction _ _).fullyFaithfulLOfIsIsoUnit
 
 Depends on / 依赖: LocallyConstant, LocallyConstant.adjunction, adjunction, fullyFaithfulLOfIsIsoUnit
@@ -996,7 +996,7 @@ instance :
 
 中文:
 实例 :
-  签名: functor.{u}.Faithful
+  签名: functor.{u}.忠实
   定义体: functorFullyFaithful.faithful
 
 Depends on / 依赖: faithful, functorFullyFaithful, functorFullyFaithful.faithful
@@ -1013,7 +1013,7 @@ instance :
 
 中文:
 实例 :
-  签名: LightCondSet.LocallyConstant.functor.Full
+  签名: LightCondSet.局部常数.functor.满
   定义体: functorFullyFaithful.full
 
 Depends on / 依赖: functorFullyFaithful, functorFullyFaithful.full
@@ -1030,7 +1030,7 @@ instance :
 
 中文:
 实例 :
-  签名: (LightCondensed.discrete <| 类型u).Faithful
+  签名: (LightCondensed.discrete <| 类型u).忠实
   定义体: Functor.Faithful.of_iso iso.{u}
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful.of_iso, of_iso
@@ -1047,7 +1047,7 @@ instance :
 
 中文:
 实例 :
-  签名: (LightCondensed.discrete <| 类型u).Full
+  签名: (LightCondensed.discrete <| 类型u).满
   定义体: Functor.Full.of_iso iso.{u}
 
 Depends on / 依赖: Functor, Functor.Full.of_iso, of_iso

@@ -55,7 +55,7 @@ theorem condExp_ae_eq_restrict_zero
 
 中文:
 定理 condExp_ae_eq_restrict_zero
-  条件: (hs : MeasurableSet[m] s) (hf : f =ᵐ[μ.restrict s] 0)
+  条件: (hs : 可测集[m] s) (hf : f =ᵐ[μ.restrict s] 0)
   证明: by
   by_cases hm : m <= m0
   swap; · simp_rw [condExp_of_not_le hm]; rfl
@@ -106,7 +106,7 @@ theorem condExp_indicator_aux
 
 中文:
 定理 condExp_indicator_aux
-  条件: (hs : MeasurableSet[m] s) (hf : f =ᵐ[μ.restrict sᶜ] 0)
+  条件: (hs : 可测集[m] s) (hf : f =ᵐ[μ.restrict sᶜ] 0)
   证明: by
   by_cases hm : m <= m0
   swap; · simp_rw [condExp_of_not_le hm, Set.indicator_zero']; rfl
@@ -141,7 +141,7 @@ theorem condExp_indicator
 
 中文:
 定理 condExp_indicator
-  条件: (hf_int : 整数egrable f μ) (hs : MeasurableSet[m] s)
+  条件: (hf_int : 可积 f μ) (hs : 可测集[m] s)
   证明: by
   by_cases hm : m <= m0
   swap; · simp_rw [condExp_of_not_le hm, Set.indicator_zero']; rfl
@@ -204,7 +204,7 @@ theorem condExp_restrict_ae_eq_restrict
 
 中文:
 定理 condExp_restrict_ae_eq_restrict
-  结论: (hm : m <= m0) [SigmaFinite (μ.trim hm)]
+  结论: (hm : m <= m0) [σ有限 (μ.trim hm)]
   证明: by
   have : SigmaFinite ((μ.restrict s).trim hm) := by rw [← restrict_trim hm _ hs_m]; infer_instance
   rw [ae_eq_restrict_iff_indicator_ae_eq (hm _ hs_m)]
@@ -252,7 +252,7 @@ theorem condExp_ae_eq_restrict_of_measurableSpace_eq_on
 
 中文:
 定理 condExp_ae_eq_restrict_of_measurableSpace_eq_on
-  结论: {m m₂ m0 : MeasurableSpace α}
+  结论: {m m₂ m0 : 可测空间 α}
   证明: by
   rw [ae_eq_restrict_iff_indicator_ae_eq (hm _ hs_m)]
   have hs_m₂ : MeasurableSet[m₂] s := by rwa [← Set.inter_univ s, ← hs Set.univ, Set.inter_univ]

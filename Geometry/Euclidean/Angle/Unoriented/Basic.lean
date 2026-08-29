@@ -122,8 +122,8 @@ theorem _root_.LinearIsometry.angle_map
 @[simp, norm_cast]
 
 中文:
-定理 _root_.LinearIsometry.angle_map
-  结论: {E F : 类型} [NormedAddCommGroup E] [NormedAddCommGroup F]
+定理 _root_.线性等距.angle_map
+  结论: {E F : 类型} [赋范交换加群 E] [赋范交换加群 F]
   证明: by
   rw [angle]; rw [angle]; rw [f.inner_map_map]; rw [f.norm_map]; rw [f.norm_map]
 
@@ -146,8 +146,8 @@ theorem _root_.Submodule.angle_coe
   proof: s.subtypeₗᵢ.angle_map x y
 
 中文:
-定理 _root_.Submodule.angle_coe
-  条件: {s : Submodule 实数 V} (x y : s)
+定理 _root_.子模.angle_coe
+  条件: {s : 子模 实数 V} (x y : s)
   证明: s.subtypeₗᵢ.angle_map x y
 
 Depends on / 依赖: angle_map, s.subtype

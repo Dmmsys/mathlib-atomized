@@ -30,7 +30,7 @@ structure ForwardExt
 结构 ForwardExt
   参数: where
   公理与运算 (1 个):
-    - eval((h : Expr) (goal : MVarId)) : MetaM Unit
+    - eval((h : Expr) (goal : MVarId)) : MetaM 单元
 -/
 structure ForwardExt where
   eval (h : Expr) (goal : MVarId) : MetaM Unit

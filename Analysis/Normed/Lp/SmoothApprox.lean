@@ -50,7 +50,7 @@ theorem exist_eLpNorm_sub_le_of_continuous
 
 中文:
 定理 exist_eLpNorm_sub_le_of_continuous
-  结论: (μ : Measure E := by volume_tac)
+  结论: (μ : 测度 E := by volume_tac)
   证明: by
   rcases eq_or_ne p ∞ with rfl | hp
   · obtain ⟨g, hg₁, hg₂, hg₃⟩ := h₂.exists_contDiff_approx ⊤ (ε := fun _ => ε) (by fun_prop)
@@ -153,7 +153,7 @@ theorem _root_.MeasureTheory.Lp.dense_hasCompactSupport_contDiff
   use ⟨g, hg₄.coeFn_toLp, hg₁, hg₂⟩
 
 中文:
-定理 _root_.MeasureTheory.Lp.dense_hasCompactSupport_contDiff
+定理 _root_.测度论.Lp.dense_hasCompactSupport_contDiff
   结论: {p : 实数>=0∞} (hp : p != ⊤)
   证明: by
   intro f

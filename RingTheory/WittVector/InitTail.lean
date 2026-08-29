@@ -540,7 +540,7 @@ theorem init_isPoly
 中文:
 定理 init_isPoly
   条件: (n : 自然数)
-  结论: IsPoly p fun _ _ => init n
+  结论: 是Poly p fun _ _ => init n
   证明: select_isPoly (P := fun i => i < n)
 
 Depends on / 依赖: select_isPoly

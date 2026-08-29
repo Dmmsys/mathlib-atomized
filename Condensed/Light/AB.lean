@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: CountableAB4Star (LightCondMod.{u} R)
+  签名: 余untableAB4Star (LightCondMod.{u} R)
   定义体: have := hasExactLimitsOfShape_of_preservesEpi (LightCondMod R) (Discrete Nat)
   CountableAB4Star.of_hasExactLimitsOfShape_nat _
 
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsGrothendieckAbelian.{u} (LightCondMod.{u} R)
+  签名: 是GrothendieckAbelian.{u} (LightCondMod.{u} R)
   定义体: Sheaf.isGrothendieckAbelian_of_essentiallySmall _ _
 
 Depends on / 依赖: Sheaf.isGrothendieckAbelian_of_essentiallySmall, isGrothendieckAbelian_of_essentiallySmall

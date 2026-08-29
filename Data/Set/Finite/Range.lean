@@ -50,7 +50,7 @@ instance fintypeRange
 
 中文:
 实例 fintypeRange
-  签名: [DecidableEq α] (f : ι -> α) [Fintype (PLift ι)]
+  签名: [DecidableEq α] (f : ι -> α) [有限类型 (命题层提升 ι)]
   定义体: Fintype.ofFinset (Finset.univ.image <| f ∘ PLift.down) by simp
 
 Depends on / 依赖: Finset, Finset.univ.image, Fintype, Fintype.ofFinset, PLift.down, ofFinset
@@ -89,7 +89,7 @@ instance finite_range
 
 中文:
 实例 finite_range
-  签名: (f : ι -> α) [Finite ι]
+  签名: (f : ι -> α) [有限 ι]
   定义体: by
   classical
   have := Fintype.ofFinite (PLift ι)
@@ -112,7 +112,7 @@ instance finite_replacement
 
 中文:
 实例 finite_replacement
-  签名: [Finite α] (f : α -> β)
+  签名: [有限 α] (f : α -> β)
   定义体: Finite.Set.finite_range f
 
 Depends on / 依赖: Finite, Finite.Set.finite_range, finite_range
@@ -148,8 +148,8 @@ theorem finite_range
 
 中文:
 定理 finite_range
-  条件: (f : ι -> α) [Finite ι]
-  结论: (range f).Finite
+  条件: (f : ι -> α) [有限 ι]
+  结论: (range f).有限
   证明: toFinite _
 
 Depends on / 依赖: toFinite
@@ -168,8 +168,8 @@ theorem Finite.dependent_image
   simpa [range] using finite_range fun x : s => F x x.2
 
 中文:
-定理 Finite.dependent_image
-  条件: {s : Set α} (hs : s.Finite) (F : 对任意 i in s, β)
+定理 有限.dependent_image
+  条件: {s : 集合 α} (hs : s.有限) (F : 对任意 i in s, β)
   证明: by
   have := hs.to_subtype
   simpa [range] using finite_range fun x : s => F x x.2
@@ -196,8 +196,8 @@ lemma Finite.exists_subset_finite_image_eq
   exact ⟨range g', fun a ha => by aesop, finite_range _, by aesop⟩
 
 中文:
-引理 Finite.exists_subset_finite_image_eq
-  结论: {f : α -> β} {s : Set α} {u : Set β}
+引理 有限.存在_subset_finite_image_eq
+  结论: {f : α -> β} {s : 集合 α} {u : 集合 β}
   证明: by
   have : Finite u := Finite.to_subtype hu
   choose g hg hg' using hsu

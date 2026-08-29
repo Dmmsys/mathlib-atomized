@@ -32,7 +32,7 @@ lemma CanonicallyOrderedAdd.multiset_prod_pos
   exact CanonicallyOrderedAdd.list_prod_pos
 
 中文:
-引理 CanonicallyOrderedAdd.multiset_prod_pos
+引理 典范有序加法.multiset_prod_pos
   结论: {R : 类型}
   证明: by
   rcases m with ⟨l⟩
@@ -143,7 +143,7 @@ lemma Multiset.mem_le_prod_of_one_le
 
 中文:
 引理 Multiset.mem_le_prod_of_one_le
-  结论: [ZeroLEOneClass β] {f : α -> β} (h1 : 对任意 a : α, 1 <= f a)
+  结论: [ZeroLEOne类 β] {f : α -> β} (h1 : 对任意 a : α, 1 <= f a)
   证明: by
   obtain ⟨s', rfl⟩ := exists_cons_of_mem ha
   rw [map_cons]; rw [prod_cons]

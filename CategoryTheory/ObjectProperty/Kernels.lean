@@ -45,9 +45,9 @@ inductive kernels
 
 中文:
 归纳类型 kernels
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (1 个):
-    - of_isLimit: {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : KernelFork f) (hk : IsLimit k) (hf : W f) : kernels k.pt
+    - of_isLimit: {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : 核叉 f) (hk : 是极限 k) (hf : W f) : kernels k.pt
 -/
 inductive kernels : ObjectProperty C
   | of_isLimit {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : KernelFork f) (hk : IsLimit k)
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.kernels.IsClosedUnderIsomorphisms
+  签名: W.kernels.在同构下封闭
   定义体: by
     rintro _ _ i ⟨f, k, hk, hf⟩
     exact .of_isLimit f (KernelFork.ofι (i.inv ≫ k.ι) (by simp))
@@ -111,9 +111,9 @@ inductive cokernels
 
 中文:
 归纳类型 cokernels
-  参数: : Object命题erty C
+  参数: : ObjectProperty C
   构造子 (1 个):
-    - of_isColimit: {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : CokernelCofork f) (hk : IsColimit k) (hf : W f) : cokernels k.pt
+    - of_isColimit: {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : 余核余叉 f) (hk : 是余极限 k) (hf : W f) : cokernels k.pt
 -/
 inductive cokernels : ObjectProperty C
   | of_isColimit {X₁ X₂ : C} (f : X₁ ⟶ X₂) (k : CokernelCofork f) (hk : IsColimit k)
@@ -151,7 +151,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.cokernels.IsClosedUnderIsomorphisms
+  签名: W.cokernels.在同构下封闭
   定义体: by
     rintro _ _ i ⟨f, k, hk, hf⟩
     exact .of_isColimit f (CokernelCofork.ofπ (k.π ≫ i.hom) (by simp))
@@ -184,10 +184,10 @@ class IsClosedUnderKernels
     - kernels_le : (MorphismProperty.ofObjectProperty P P).kernels <= P
 
 中文:
-类 IsClosedUnderKernels
+类 是ClosedUnderKernels
   参数: : 命题 where
   公理与运算 (1 个):
-    - kernels_le : (Morphism命题erty.ofObject命题erty P P).kernels <= P
+    - kernels_le : (MorphismProperty.ofObjectProperty P P).kernels <= P
 -/
 class IsClosedUnderKernels : Prop where
   kernels_le : (MorphismProperty.ofObjectProperty P P).kernels <= P
@@ -202,7 +202,7 @@ lemma prop_of_isLimit_kernelFork
 
 中文:
 引理 prop_of_isLimit_kernelFork
-  结论: [P.IsClosedUnderKernels] {X Y : C} {f : X ⟶ Y} {k : KernelFork f}
+  结论: [P.是ClosedUnderKernels] {X Y : C} {f : X ⟶ Y} {k : 核叉 f}
   证明: IsClosedUnderKernels.kernels_le _ (.of_isLimit _ k hk ⟨hX, hY⟩)
 
 Depends on / 依赖: IsClosedUnderKernels, IsClosedUnderKernels.kernels_le, kernels_le, of_isLimit
@@ -221,7 +221,7 @@ lemma prop_kernel
 
 中文:
 引理 prop_kernel
-  结论: [P.IsClosedUnderKernels] {X Y : C} (f : X ⟶ Y) [HasKernel f] (hX : P X)
+  结论: [P.是ClosedUnderKernels] {X Y : C} (f : X ⟶ Y) [HasKernel f] (hX : P X)
   证明: (P.prop_of_isLimit_kernelFork (kernelIsKernel f) hX hY :)
 
 Depends on / 依赖: P.prop_of_isLimit_kernelFork, kernelIsKernel, prop_of_isLimit_kernelFork
@@ -242,8 +242,8 @@ instance [P.IsClosedUnderSubobjects]
     exact P.prop_of_mono k.ι hf.1
 
 中文:
-实例 [P.IsClosedUnderSubobjects]
-  签名: : P.IsClosedUnderKernels where
+实例 [P.是ClosedUnderSubobjects]
+  签名: : P.是ClosedUnderKernels where
   定义体: by
     intro _ ⟨_, k, hk, hf⟩
     let := Fork.IsLimit.mono hk
@@ -267,7 +267,7 @@ lemma hasLimit_parallelPair_comp_ι
 
 中文:
 引理 hasLimit_parallelPair_comp_ι
-  条件: {X Y : P.FullSubcategory} (f : X ⟶ Y) [HasKernel f.hom]
+  条件: {X Y : P.满子范畴} (f : X ⟶ Y) [HasKernel f.hom]
   证明: hasLimit_of_iso (F := parallelPair f.hom 0) (Iso.symm (diagramIsoParallelPair _))
 
 Depends on / 依赖: Iso.symm, diagramIsoParallelPair, f.hom, hasLimit_of_iso, parallelPair
@@ -295,7 +295,7 @@ definition createsKernels
 
 中文:
 定义 createsKernels
-  签名: [P.IsClosedUnderKernels] {X Y : P.FullSubcategory}
+  签名: [P.是ClosedUnderKernels] {X Y : P.满子范畴}
   定义体: by
   fapply createsLimitFullSubcategoryInclusion'
   · exact (Cone.postcompose (Iso.symm (diagramIsoParallelPair _)).hom).obj
@@ -327,8 +327,8 @@ lemma preservesKernels_ι
 
 中文:
 引理 preservesKernels_ι
-  条件: [HasKernels C] [P.IsClosedUnderKernels] ⦃X Y
-  结论: P.FullSubcategory⦄
+  条件: [有Kernels C] [P.是ClosedUnderKernels] ⦃X Y
+  结论: P.满子范畴⦄
   证明: by
   have := P.createsKernels f
   have := P.hasLimit_parallelPair_comp_ι f
@@ -353,8 +353,8 @@ instance [P.IsClosedUnderKernels]
     hasLimit_of_created _ P.ι
 
 中文:
-实例 [P.IsClosedUnderKernels]
-  签名: [HasKernels C]
+实例 [P.是ClosedUnderKernels]
+  签名: [有Kernels C]
   定义体: letI := P.createsKernels f
     letI := P.hasLimit_parallelPair_comp_ι f
     hasLimit_of_created _ P.ι
@@ -380,10 +380,10 @@ class IsClosedUnderCokernels
     - cokernels_le : (MorphismProperty.ofObjectProperty P P).cokernels <= P
 
 中文:
-类 IsClosedUnderCokernels
+类 是ClosedUnderCokernels
   参数: : 命题 where
   公理与运算 (1 个):
-    - cokernels_le : (Morphism命题erty.ofObject命题erty P P).cokernels <= P
+    - cokernels_le : (MorphismProperty.ofObjectProperty P P).cokernels <= P
 -/
 class IsClosedUnderCokernels : Prop where
   cokernels_le : (MorphismProperty.ofObjectProperty P P).cokernels <= P
@@ -398,7 +398,7 @@ lemma prop_of_isColimit_cokernelCofork
 
 中文:
 引理 prop_of_isColimit_cokernelCofork
-  结论: [P.IsClosedUnderCokernels] {X Y : C} {f : X ⟶ Y}
+  结论: [P.是ClosedUnderCokernels] {X Y : C} {f : X ⟶ Y}
   证明: IsClosedUnderCokernels.cokernels_le _ (.of_isColimit _ k hk ⟨hX, hY⟩)
 
 Depends on / 依赖: IsClosedUnderCokernels, IsClosedUnderCokernels.cokernels_le, cokernels_le, of_isColimit
@@ -417,7 +417,7 @@ lemma prop_cokernel
 
 中文:
 引理 prop_cokernel
-  结论: [P.IsClosedUnderCokernels] {X Y : C} (f : X ⟶ Y) [HasCokernel f] (hX : P X)
+  结论: [P.是ClosedUnderCokernels] {X Y : C} (f : X ⟶ Y) [HasCokernel f] (hX : P X)
   证明: (P.prop_of_isColimit_cokernelCofork (cokernelIsCokernel f) hX hY :)
 
 Depends on / 依赖: P.prop_of_isColimit_cokernelCofork, cokernelIsCokernel, prop_of_isColimit_cokernelCofork
@@ -438,8 +438,8 @@ instance [P.IsClosedUnderQuotients]
     exact P.prop_of_epi k.π hf.2
 
 中文:
-实例 [P.IsClosedUnderQuotients]
-  签名: : P.IsClosedUnderCokernels where
+实例 [P.是ClosedUnderQuotients]
+  签名: : P.是ClosedUnderCokernels where
   定义体: by
     intro _ ⟨_, k, hk, hf⟩
     let := Cofork.IsColimit.epi hk
@@ -463,7 +463,7 @@ lemma hasColimit_parallelPair_comp_ι
 
 中文:
 引理 hasColimit_parallelPair_comp_ι
-  条件: {X Y : P.FullSubcategory} (f : X ⟶ Y) [HasCokernel f.hom]
+  条件: {X Y : P.满子范畴} (f : X ⟶ Y) [HasCokernel f.hom]
   证明: hasColimit_of_iso (F := parallelPair f.hom 0) (diagramIsoParallelPair _)
 
 Depends on / 依赖: diagramIsoParallelPair, f.hom, hasColimit_of_iso, parallelPair
@@ -491,7 +491,7 @@ definition createsCokernels
 
 中文:
 定义 createsCokernels
-  签名: [P.IsClosedUnderCokernels] {X Y : P.FullSubcategory}
+  签名: [P.是ClosedUnderCokernels] {X Y : P.满子范畴}
   定义体: by
   fapply createsColimitFullSubcategoryInclusion'
   · exact (Cocone.precompose (diagramIsoParallelPair _).hom).obj
@@ -523,8 +523,8 @@ lemma preservesCokernels_ι
 
 中文:
 引理 preservesCokernels_ι
-  条件: [HasCokernels C] [P.IsClosedUnderCokernels] ⦃X Y
-  结论: P.FullSubcategory⦄
+  条件: [有余kernels C] [P.是ClosedUnderCokernels] ⦃X Y
+  结论: P.满子范畴⦄
   证明: by
   have := P.createsCokernels f
   have := P.hasColimit_parallelPair_comp_ι f
@@ -549,8 +549,8 @@ instance [P.IsClosedUnderCokernels]
     hasColimit_of_created _ P.ι
 
 中文:
-实例 [P.IsClosedUnderCokernels]
-  签名: [HasCokernels C]
+实例 [P.是ClosedUnderCokernels]
+  签名: [有余kernels C]
   定义体: letI := P.createsCokernels f
     letI := P.hasColimit_parallelPair_comp_ι f
     hasColimit_of_created _ P.ι

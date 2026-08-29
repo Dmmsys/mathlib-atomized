@@ -76,7 +76,7 @@ theorem dense_irrational
 
 中文:
 定理 dense_irrational
-  结论: Dense { x : 实数 | Irrational x }
+  结论: 稠密 { x : 实数 | Irrational x }
   证明: by
   refine Real.isTopologicalBasis_Ioo_rat.dense_iff.2 ?_
   simp only [mem_iUnion, mem_singleton_iff, exists_prop, forall_exists_index, and_imp]
@@ -127,7 +127,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology { x // Irrational x }
+  签名: Order拓扑 { x // Irrational x }
   定义体: induced_orderTopology _ Iff.rfl @fun _ _ hlt =>
     let ⟨z, hz, hxz, hzy⟩ := exists_irrational_btwn hlt
     ⟨⟨z, hz⟩, hxz, hzy⟩
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMaxOrder { x // Irrational x }
+  签名: NoMax序 { x // Irrational x }
   定义体: ⟨fun ⟨x, hx⟩ => ⟨⟨x + (1 : Nat), hx.add_natCast 1⟩, by simp⟩⟩
 
 Depends on / 依赖: add_natCast, hx.add_natCast
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMinOrder { x // Irrational x }
+  签名: NoMin序 { x // Irrational x }
   定义体: ⟨fun ⟨x, hx⟩ => ⟨⟨x - (1 : Nat), hx.sub_natCast 1⟩, by simp⟩⟩
 
 Depends on / 依赖: hx.sub_natCast, sub_natCast
@@ -187,7 +187,7 @@ instance :
 
 中文:
 实例 :
-  签名: DenselyOrdered { x // Irrational x }
+  签名: 稠密序 { x // Irrational x }
   定义体: ⟨fun _ _ hlt =>
     let ⟨z, hz, hxz, hzy⟩ := exists_irrational_btwn hlt
     ⟨⟨z, hz⟩, hxz, hzy⟩⟩
@@ -214,7 +214,7 @@ theorem eventually_forall_le_dist_cast_div
   rcases Metric.me
 
 中文:
-定理 eventually_forall_le_dist_cast_div
+定理 eventually_对任意_le_dist_cast_div
   条件: (hx : Irrational x) (n : 自然数)
   证明: by
   have A : IsClosed (range (fun m => (n : Real)⁻¹ * m : Int -> Real)) :=
@@ -248,7 +248,7 @@ theorem eventually_forall_le_dist_cast_div_of_denom_le
   proof: (finite_le_nat n).eventually_all.2 fun k _ => hx.eventually_forall_le_dist_cast_div k
 
 中文:
-定理 eventually_forall_le_dist_cast_div_of_denom_le
+定理 eventually_对任意_le_dist_cast_div_of_denom_le
   条件: (hx : Irrational x) (n : 自然数)
   证明: (finite_le_nat n).eventually_all.2 fun k _ => hx.eventually_forall_le_dist_cast_div k
 
@@ -268,7 +268,7 @@ theorem eventually_forall_le_dist_cast_rat_of_den_le
     simpa only [Rat.cast_def] using H r.den hr r.num
 
 中文:
-定理 eventually_forall_le_dist_cast_rat_of_den_le
+定理 eventually_对任意_le_dist_cast_rat_of_den_le
   条件: (hx : Irrational x) (n : 自然数)
   证明: (hx.eventually_forall_le_dist_cast_div_of_denom_le n).mono fun ε H r hr => by
     simpa only [Rat.cast_def] using H r.den hr r.num

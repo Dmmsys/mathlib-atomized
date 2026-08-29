@@ -123,7 +123,7 @@ lemma face_singleton_compl_le_boundary
 
 中文:
 引理 face_singleton_compl_le_boundary
-  条件: {n : 自然数} (i : Fin (n + 1))
+  条件: {n : 自然数} (i : 有限集 (n + 1))
   证明: by
   rw [boundary_eq_iSup]
   exact le_iSup (fun (i : Fin (n +1)) => stdSimplex.face {i}ᶜ) i
@@ -441,7 +441,7 @@ definition faceι
 
 中文:
 定义 faceι
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: Subcomplex.homOfLE (face_singleton_compl_le_boundary i)
 
 Depends on / 依赖: Subcomplex, Subcomplex.homOfLE, face_singleton_compl_le_boundary, homOfLE
@@ -465,7 +465,7 @@ lemma faceι_ι
 
 中文:
 引理 faceι_ι
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: by
   simp [faceι]
 -/
@@ -488,7 +488,7 @@ definition ι
 
 中文:
 定义 ι
-  签名: {n : 自然数} (i : Fin (n + 2))
+  签名: {n : 自然数} (i : 有限集 (n + 2))
   定义体: Subcomplex.lift ((stdSimplex.{u}.map (SimplexCategory.δ i))) (by
     simp only [Subcomplex.range_eq_ofSimplex]
     refine le_trans ?_ (face_singleton_compl_le_boundary i)
@@ -518,7 +518,7 @@ lemma ι_ι
 
 中文:
 引理 ι_ι
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: rfl
 
 @[reassoc (attr := simp)]
@@ -539,7 +539,7 @@ lemma faceSingletonComplIso_inv_ι
 
 中文:
 引理 faceSingletonComplIso_inv_ι
-  条件: {n : 自然数} (i : Fin (n + 2))
+  条件: {n : 自然数} (i : 有限集 (n + 2))
   证明: by
   rw [← cancel_epi (stdSimplex.faceSingletonComplIso i).hom]; rw [Iso.hom_inv_id_assoc]
   rfl

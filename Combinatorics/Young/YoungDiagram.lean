@@ -74,11 +74,11 @@ structure YoungDiagram
     - isLowerSet : IsLowerSet (cells : Set (Nat × Nat))
 
 中文:
-结构 YoungDiagram
+结构 Young图
   参数: where
   公理与运算 (2 个):
-    - cells : Finset (自然数 × 自然数)
-    - isLowerSet : IsLowerSet (cells : Set (自然数 × 自然数))
+    - cells : 有限集 (自然数 × 自然数)
+    - isLowerSet : 是下集 (cells : 集合 (自然数 × 自然数))
 -/
 structure YoungDiagram where
   /-- A finite set which represents a finite collection of cells on the `ℕ × ℕ` grid. -/
@@ -99,7 +99,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike YoungDiagram (自然数 × 自然数)
+  签名: 集合状 Young图 (自然数 × 自然数)
   定义体: y.cells
   coe_injective μ ν h := by rwa [YoungDiagram.ext_iff, ← Finset.coe_inj]
 
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder YoungDiagram
+  签名: 偏序 Young图
   定义体: .ofSetLike YoungDiagram (Nat × Nat)
 
 @[simp]
@@ -144,7 +144,7 @@ theorem mem_cells
 
 中文:
 定理 mem_cells
-  条件: {μ : YoungDiagram} (c : 自然数 × 自然数)
+  条件: {μ : Young图} (c : 自然数 × 自然数)
   结论: c in μ.cells ↔ c in μ
   证明: Iff.rfl
 
@@ -185,7 +185,7 @@ instance decidableMem
 
 中文:
 实例 decidableMem
-  签名: (μ : YoungDiagram)
+  签名: (μ : Young图)
   定义体: inferInstanceAs (DecidablePred (· in μ.cells))
 
 Depends on / 依赖: DecidablePred
@@ -203,7 +203,7 @@ theorem up_left_mem
 
 中文:
 定理 up_left_mem
-  结论: (μ : YoungDiagram) {i1 i2 j1 j2 : 自然数} (hi : i1 <= i2) (hj : j1 <= j2)
+  结论: (μ : Young图) {i1 i2 j1 j2 : 自然数} (hi : i1 <= i2) (hj : j1 <= j2)
   证明: μ.isLowerSet (Prod.mk_le_mk.mpr ⟨hi, hj⟩) hcell
 
 Depends on / 依赖: Prod.mk_le_mk.mpr, isLowerSet, mk_le_mk
@@ -228,7 +228,7 @@ theorem cells_subset_iff
 
 中文:
 定理 cells_subset_iff
-  条件: {μ ν : YoungDiagram}
+  条件: {μ ν : Young图}
   结论: μ.cells subseteq ν.cells ↔ μ <= ν
   证明: Iff.rfl
 
@@ -251,7 +251,7 @@ theorem cells_ssubset_iff
 
 中文:
 定理 cells_ssubset_iff
-  条件: {μ ν : YoungDiagram}
+  条件: {μ ν : Young图}
   结论: μ.cells ⊂ ν.cells ↔ μ < ν
   证明: Iff.rfl
 
@@ -275,7 +275,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max YoungDiagram
+  签名: 最大值 Young图
   定义体: { cells := μ.cells union ν.cells
       isLowerSet := by
         rw [Finset.coe_union]
@@ -306,7 +306,7 @@ theorem cells_sup
 
 中文:
 定理 cells_sup
-  条件: (μ ν : YoungDiagram)
+  条件: (μ ν : Young图)
   结论: (μ ⊔ ν).cells = μ.cells union ν.cells
   证明: rfl
 
@@ -329,8 +329,8 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (μ ν : YoungDiagram)
-  结论: ↑(μ ⊔ ν) = (μ union ν : Set (自然数 × 自然数))
+  条件: (μ ν : Young图)
+  结论: ↑(μ ⊔ ν) = (μ union ν : 集合 (自然数 × 自然数))
   证明: Finset.coe_union _ _
 
 @[simp]
@@ -352,7 +352,7 @@ theorem mem_sup
 
 中文:
 定理 mem_sup
-  条件: {μ ν : YoungDiagram} {x : 自然数 × 自然数}
+  条件: {μ ν : Young图} {x : 自然数 × 自然数}
   结论: x in μ ⊔ ν ↔ x in μ ∨ x in ν
   证明: Finset.mem_union
 
@@ -376,7 +376,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min YoungDiagram
+  签名: 最小值 Young图
   定义体: { cells := μ.cells inter ν.cells
       isLowerSet := by
         rw [Finset.coe_inter]
@@ -407,7 +407,7 @@ theorem cells_inf
 
 中文:
 定理 cells_inf
-  条件: (μ ν : YoungDiagram)
+  条件: (μ ν : Young图)
   结论: (μ ⊓ ν).cells = μ.cells inter ν.cells
   证明: rfl
 
@@ -430,8 +430,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (μ ν : YoungDiagram)
-  结论: ↑(μ ⊓ ν) = (μ inter ν : Set (自然数 × 自然数))
+  条件: (μ ν : Young图)
+  结论: ↑(μ ⊓ ν) = (μ inter ν : 集合 (自然数 × 自然数))
   证明: Finset.coe_inter _ _
 
 @[simp]
@@ -453,7 +453,7 @@ theorem mem_inf
 
 中文:
 定理 mem_inf
-  条件: {μ ν : YoungDiagram} {x : 自然数 × 自然数}
+  条件: {μ ν : Young图} {x : 自然数 × 自然数}
   结论: x in μ ⊓ ν ↔ x in μ ∧ x in ν
   证明: Finset.mem_inter
 
@@ -481,7 +481,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot YoungDiagram
+  签名: 有底序 Young图
   定义体: { cells := ∅
       isLowerSet := by
         intro a b _ h
@@ -519,7 +519,7 @@ theorem cells_bot
 
 中文:
 定理 cells_bot
-  结论: (⊥ : YoungDiagram).cells = ∅
+  结论: (⊥ : Young图).cells = ∅
   证明: rfl
 
 @[simp]
@@ -542,7 +542,7 @@ theorem notMem_bot
 中文:
 定理 notMem_bot
   条件: (x : 自然数 × 自然数)
-  结论: x ∉ (⊥ : YoungDiagram)
+  结论: x ∉ (⊥ : Young图)
   证明: Finset.notMem_empty x
 
 @[norm_cast]
@@ -564,7 +564,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: (⊥ : YoungDiagram) = (∅ : Set (自然数 × 自然数))
+  结论: (⊥ : Young图) = (∅ : 集合 (自然数 × 自然数))
   证明: by
   ext; simp
 -/
@@ -581,7 +581,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited YoungDiagram
+  签名: 可居 Young图
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited YoungDiagram :=
@@ -598,7 +598,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice YoungDiagram
+  签名: Distrib格 Young图
   定义体: Function.Injective.distribLattice YoungDiagram.cells (fun μ ν h => by rwa [YoungDiagram.ext_iff])
     .rfl .rfl (fun _ _ => rfl) fun _ _ => rfl
 
@@ -620,7 +620,7 @@ abbreviation card
 
 中文:
 缩写 card
-  签名: (μ : YoungDiagram)
+  签名: (μ : Young图)
   定义体: μ.cells.card
 -/
 protected abbrev card (μ : YoungDiagram) : Nat :=
@@ -645,7 +645,7 @@ definition transpose
 
 中文:
 定义 transpose
-  签名: (μ : YoungDiagram)
+  签名: (μ : Young图)
   定义体: (Equiv.prodComm _ _).finsetCongr μ.cells
   isLowerSet _ _ h := by
     simp only [Finset.mem_coe, Equiv.finsetCongr_apply, Finset.mem_map_equiv]
@@ -680,7 +680,7 @@ theorem mem_transpose
 
 中文:
 定理 mem_transpose
-  条件: {μ : YoungDiagram} {c : 自然数 × 自然数}
+  条件: {μ : Young图} {c : 自然数 × 自然数}
   结论: c in μ.transpose ↔ c.swap in μ
   证明: by
   simp [transpose]
@@ -706,7 +706,7 @@ theorem transpose_transpose
 
 中文:
 定理 transpose_transpose
-  条件: (μ : YoungDiagram)
+  条件: (μ : Young图)
   结论: μ.transpose.transpose = μ
   证明: by
   ext x
@@ -732,7 +732,7 @@ theorem transpose_eq_iff_eq_transpose
 
 中文:
 定理 transpose_eq_iff_eq_transpose
-  条件: {μ ν : YoungDiagram}
+  条件: {μ ν : Young图}
   结论: μ.transpose = ν ↔ μ = ν.transpose
   证明: by
   constructor <;>
@@ -760,7 +760,7 @@ theorem transpose_eq_iff
 
 中文:
 定理 transpose_eq_iff
-  条件: {μ ν : YoungDiagram}
+  条件: {μ ν : Young图}
   结论: μ.transpose = ν.transpose ↔ μ = ν
   证明: by
   rw [transpose_eq_iff_eq_transpose]
@@ -788,7 +788,7 @@ theorem le_of_transpose_le
 
 中文:
 定理 le_of_transpose_le
-  条件: {μ ν : YoungDiagram} (h_le : μ.transpose <= ν)
+  条件: {μ ν : Young图} (h_le : μ.transpose <= ν)
   证明: fun c hc => by
   simp only [mem_transpose]
   apply h_le
@@ -820,7 +820,7 @@ theorem transpose_le_iff
 
 中文:
 定理 transpose_le_iff
-  条件: {μ ν : YoungDiagram}
+  条件: {μ ν : Young图}
   结论: μ.transpose <= ν.transpose ↔ μ <= ν
   证明: ⟨fun h => by
     convert! YoungDiagram.le_of_transpose_le h
@@ -851,7 +851,7 @@ theorem transpose_mono
 
 中文:
 定理 transpose_mono
-  条件: {μ ν : YoungDiagram} (h_le : μ <= ν)
+  条件: {μ ν : Young图} (h_le : μ <= ν)
   结论: μ.transpose <= ν.transpose
   证明: transpose_le_iff.mpr h_le
 -/
@@ -871,7 +871,7 @@ definition transposeOrderIso
 
 中文:
 定义 transposeOrderIso
-  签名: : YoungDiagram ≃o YoungDiagram
+  签名: : Young图 ≃o Young图
   定义体: ⟨⟨transpose, transpose, fun _ => by simp, fun _ => by simp⟩, by simp⟩
 
 Depends on / 依赖: transpose
@@ -905,7 +905,7 @@ definition row
 
 中文:
 定义 row
-  签名: (μ : YoungDiagram) (i : 自然数)
+  签名: (μ : Young图) (i : 自然数)
   定义体: μ.cells.filter fun c => c.fst = i
 
 Depends on / 依赖: c.fst, cells.filter, filter
@@ -925,7 +925,7 @@ theorem mem_row_iff
 
 中文:
 定理 mem_row_iff
-  条件: {μ : YoungDiagram} {i : 自然数} {c : 自然数 × 自然数}
+  条件: {μ : Young图} {i : 自然数} {c : 自然数 × 自然数}
   结论: c in μ.row i ↔ c in μ ∧ c.fst = i
   证明: by
   simp [row]
@@ -944,7 +944,7 @@ theorem mk_mem_row_iff
 
 中文:
 定理 mk_mem_row_iff
-  条件: {μ : YoungDiagram} {i j : 自然数}
+  条件: {μ : Young图} {i j : 自然数}
   结论: (i, j) in μ.row i ↔ (i, j) in μ
   证明: by simp [row]
 -/
@@ -968,8 +968,8 @@ theorem exists_notMem_row
   exact ⟨j, hj⟩
 
 中文:
-定理 exists_notMem_row
-  条件: (μ : YoungDiagram) (i : 自然数)
+定理 存在_notMem_row
+  条件: (μ : Young图) (i : 自然数)
   结论: 存在 j, (i, j) ∉ μ
   证明: by
   obtain ⟨j, hj⟩ :=
@@ -999,7 +999,7 @@ definition rowLen
 
 中文:
 定义 rowLen
-  签名: (μ : YoungDiagram) (i : 自然数)
+  签名: (μ : Young图) (i : 自然数)
   定义体: Nat.find μ.exists_notMem_row i
 
 Depends on / 依赖: Nat.find, exists_notMem_row
@@ -1021,7 +1021,7 @@ theorem mem_iff_lt_rowLen
 
 中文:
 定理 mem_iff_lt_rowLen
-  条件: {μ : YoungDiagram} {i j : 自然数}
+  条件: {μ : Young图} {i j : 自然数}
   结论: (i, j) in μ ↔ j < μ.rowLen i
   证明: by
   rw [rowLen]; rw [Nat.lt_find_iff]
@@ -1051,8 +1051,8 @@ theorem row_eq_prod
 
 中文:
 定理 row_eq_prod
-  条件: {μ : YoungDiagram} {i : 自然数}
-  结论: μ.row i = {i} ×ˢ Finset.range (μ.rowLen i)
+  条件: {μ : Young图} {i : 自然数}
+  结论: μ.row i = {i} ×ˢ 有限集.range (μ.rowLen i)
   证明: by
   ext ⟨a, b⟩
   simp only [Finset.mem_product, Finset.mem_singleton, Finset.mem_range, mem_row_iff,
@@ -1083,7 +1083,7 @@ theorem rowLen_eq_card
 
 中文:
 定理 rowLen_eq_card
-  条件: (μ : YoungDiagram) {i : 自然数}
+  条件: (μ : Young图) {i : 自然数}
   结论: μ.rowLen i = (μ.row i).card
   证明: by
   simp [row_eq_prod]
@@ -1111,7 +1111,7 @@ theorem rowLen_anti
 
 中文:
 定理 rowLen_anti
-  条件: (μ : YoungDiagram) (i1 i2 : 自然数) (hi : i1 <= i2)
+  条件: (μ : Young图) (i1 i2 : 自然数) (hi : i1 <= i2)
   结论: μ.rowLen i2 <= μ.rowLen i1
   证明: by
   by_contra! h_lt
@@ -1146,7 +1146,7 @@ definition col
 
 中文:
 定义 col
-  签名: (μ : YoungDiagram) (j : 自然数)
+  签名: (μ : Young图) (j : 自然数)
   定义体: μ.cells.filter fun c => c.snd = j
 
 Depends on / 依赖: c.snd, cells.filter, filter
@@ -1166,7 +1166,7 @@ theorem mem_col_iff
 
 中文:
 定理 mem_col_iff
-  条件: {μ : YoungDiagram} {j : 自然数} {c : 自然数 × 自然数}
+  条件: {μ : Young图} {j : 自然数} {c : 自然数 × 自然数}
   结论: c in μ.col j ↔ c in μ ∧ c.snd = j
   证明: by
   simp [col]
@@ -1185,7 +1185,7 @@ theorem mk_mem_col_iff
 
 中文:
 定理 mk_mem_col_iff
-  条件: {μ : YoungDiagram} {i j : 自然数}
+  条件: {μ : Young图} {i j : 自然数}
   结论: (i, j) in μ.col j ↔ (i, j) in μ
   证明: by simp [col]
 -/
@@ -1203,8 +1203,8 @@ theorem exists_notMem_col
   simp
 
 中文:
-定理 exists_notMem_col
-  条件: (μ : YoungDiagram) (j : 自然数)
+定理 存在_notMem_col
+  条件: (μ : Young图) (j : 自然数)
   结论: 存在 i, (i, j) ∉ μ.cells
   证明: by
   convert! μ.transpose.exists_notMem_row j using 1
@@ -1226,7 +1226,7 @@ definition colLen
 
 中文:
 定义 colLen
-  签名: (μ : YoungDiagram) (j : 自然数)
+  签名: (μ : Young图) (j : 自然数)
   定义体: Nat.find μ.exists_notMem_col j
 
 @[simp]
@@ -1251,7 +1251,7 @@ theorem colLen_transpose
 
 中文:
 定理 colLen_transpose
-  条件: (μ : YoungDiagram) (j : 自然数)
+  条件: (μ : Young图) (j : 自然数)
   结论: μ.transpose.colLen j = μ.rowLen j
   证明: by
   simp [rowLen, colLen]
@@ -1276,7 +1276,7 @@ theorem rowLen_transpose
 
 中文:
 定理 rowLen_transpose
-  条件: (μ : YoungDiagram) (i : 自然数)
+  条件: (μ : Young图) (i : 自然数)
   结论: μ.transpose.rowLen i = μ.colLen i
   证明: by
   simp [rowLen, colLen]
@@ -1299,7 +1299,7 @@ theorem mem_iff_lt_colLen
 
 中文:
 定理 mem_iff_lt_colLen
-  条件: {μ : YoungDiagram} {i j : 自然数}
+  条件: {μ : Young图} {i j : 自然数}
   结论: (i, j) in μ ↔ i < μ.colLen j
   证明: by
   rw [← rowLen_transpose]; rw [← mem_iff_lt_rowLen]
@@ -1327,8 +1327,8 @@ theorem col_eq_prod
 
 中文:
 定理 col_eq_prod
-  条件: {μ : YoungDiagram} {j : 自然数}
-  结论: μ.col j = Finset.range (μ.colLen j) ×ˢ {j}
+  条件: {μ : Young图} {j : 自然数}
+  结论: μ.col j = 有限集.range (μ.colLen j) ×ˢ {j}
   证明: by
   ext ⟨a, b⟩
   simp only [Finset.mem_product, Finset.mem_singleton, Finset.mem_range, mem_col_iff,
@@ -1359,7 +1359,7 @@ theorem colLen_eq_card
 
 中文:
 定理 colLen_eq_card
-  条件: (μ : YoungDiagram) {j : 自然数}
+  条件: (μ : Young图) {j : 自然数}
   结论: μ.colLen j = (μ.col j).card
   证明: by
   simp [col_eq_prod]
@@ -1384,7 +1384,7 @@ theorem colLen_anti
 
 中文:
 定理 colLen_anti
-  条件: (μ : YoungDiagram) (j1 j2 : 自然数) (hj : j1 <= j2)
+  条件: (μ : Young图) (j1 j2 : 自然数) (hj : j1 <= j2)
   结论: μ.colLen j2 <= μ.colLen j1
   证明: by
   convert! μ.transpose.rowLen_anti j1 j2 hj using 1 <;> simp
@@ -1419,7 +1419,7 @@ definition rowLens
 
 中文:
 定义 rowLens
-  签名: (μ : YoungDiagram)
+  签名: (μ : Young图)
   定义体: (List.range <| μ.colLen 0).map μ.rowLen
 
 @[simp]
@@ -1442,7 +1442,7 @@ theorem get_rowLens
 
 中文:
 定理 get_rowLens
-  条件: {μ : YoungDiagram} {i : 自然数} {h : i < μ.rowLens.length}
+  条件: {μ : Young图} {i : 自然数} {h : i < μ.rowLens.length}
   证明: by simp only [rowLens, List.getElem_range, List.getElem_map]
 
 @[simp]
@@ -1465,7 +1465,7 @@ theorem length_rowLens
 
 中文:
 定理 length_rowLens
-  条件: {μ : YoungDiagram}
+  条件: {μ : Young图}
   结论: μ.rowLens.length = μ.colLen 0
   证明: by
   simp only [rowLens, List.length_map, List.length_range]
@@ -1486,7 +1486,7 @@ theorem rowLens_sorted
 
 中文:
 定理 rowLens_sorted
-  条件: (μ : YoungDiagram)
+  条件: (μ : Young图)
   结论: μ.rowLens.SortedGE
   证明: (List.pairwise_le_range.map _ μ.rowLen_anti).sortedGE
 
@@ -1509,7 +1509,7 @@ theorem pos_of_mem_rowLens
 
 中文:
 定理 pos_of_mem_rowLens
-  条件: (μ : YoungDiagram) (x : 自然数) (hx : x in μ.rowLens)
+  条件: (μ : Young图) (x : 自然数) (hx : x in μ.rowLens)
   结论: 0 < x
   证明: by
   rw [rowLens]; rw [List.mem_map] at hx
@@ -1548,7 +1548,7 @@ definition cellsOfRowLens
 
 中文:
 定义 cellsOfRowLens
-  签名: : List 自然数 -> Finset (自然数 × 自然数)
+  签名: : 列表 自然数 -> 有限集 (自然数 × 自然数)
 -/
 protected def cellsOfRowLens : List Nat -> Finset (Nat × Nat)
   | [] => ∅
@@ -1570,7 +1570,7 @@ theorem mem_cellsOfRowLens
 
 中文:
 定理 mem_cellsOfRowLens
-  条件: {w : List 自然数} {c : 自然数 × 自然数}
+  条件: {w : 列表 自然数} {c : 自然数 × 自然数}
   证明: by
   induction w generalizing c <;> rw [YoungDiagram.cellsOfRowLens]
   · simp
@@ -1600,7 +1600,7 @@ definition ofRowLens
 
 中文:
 定义 ofRowLens
-  签名: (w : List 自然数) (hw : w.SortedGE)
+  签名: (w : 列表 自然数) (hw : w.SortedGE)
   定义体: YoungDiagram.cellsOfRowLens w
   isLowerSet := by
     rintro ⟨i2, j2⟩ ⟨i1, j1⟩ ⟨hi : i1 <= i2, hj : j1 <= j2⟩ hcell
@@ -1638,7 +1638,7 @@ theorem mem_ofRowLens
 
 中文:
 定理 mem_ofRowLens
-  条件: {w : List 自然数} {hw : w.SortedGE} {c : 自然数 × 自然数}
+  条件: {w : 列表 自然数} {hw : w.SortedGE} {c : 自然数 × 自然数}
   证明: YoungDiagram.mem_cellsOfRowLens
 
 Depends on / 依赖: YoungDiagram, YoungDiagram.mem_cellsOfRowLens, mem_cellsOfRowLens
@@ -1660,7 +1660,7 @@ theorem rowLens_length_ofRowLens
 
 中文:
 定理 rowLens_length_ofRowLens
-  条件: {w : List 自然数} {hw : w.SortedGE} (hpos : 对任意 x in w, 0 < x)
+  条件: {w : 列表 自然数} {hw : w.SortedGE} (hpos : 对任意 x in w, 0 < x)
   证明: by
   simp only [length_rowLens, colLen, Nat.find_eq_iff, mem_cells, mem_ofRowLens,
     lt_self_iff_false, IsEmpty.exists_iff, Classical.not_not]
@@ -1685,7 +1685,7 @@ theorem rowLen_ofRowLens
 
 中文:
 定理 rowLen_ofRowLens
-  条件: {w : List 自然数} {hw : w.SortedGE} (i : Fin w.length)
+  条件: {w : 列表 自然数} {hw : w.SortedGE} (i : 有限集 w.length)
   证明: by
   simp [rowLen, Nat.find_eq_iff, mem_ofRowLens]
 
@@ -1709,7 +1709,7 @@ theorem ofRowLens_to_rowLens_eq_self
 
 中文:
 定理 ofRowLens_to_rowLens_eq_self
-  条件: {μ : YoungDiagram}
+  条件: {μ : Young图}
   结论: ofRowLens _ (rowLens_sorted μ) = μ
   证明: by
   ext ⟨i, j⟩
@@ -1734,7 +1734,7 @@ theorem rowLens_ofRowLens_eq_self
 
 中文:
 定理 rowLens_ofRowLens_eq_self
-  条件: {w : List 自然数} {hw : w.SortedGE} (hpos : 对任意 x in w, 0 < x)
+  条件: {w : 列表 自然数} {hw : w.SortedGE} (hpos : 对任意 x in w, 0 < x)
   证明: List.ext_get (rowLens_length_ofRowLens hpos) fun i h₁ h₂ =>
 (get_rowLens (h := h₁)).trans rowLen_ofRowLens ⟨i, h₂⟩
 
@@ -1761,7 +1761,7 @@ definition equivListRowLens
 
 中文:
 定义 equivListRowLens
-  签名: : YoungDiagram ≃ { w : List 自然数 // w.SortedGE ∧ 对任意 x in w, 0 < x } where
+  签名: : Young图 ≃ { w : 列表 自然数 // w.SortedGE ∧ 对任意 x in w, 0 < x } where
   定义体: ⟨μ.rowLens, μ.rowLens_sorted, μ.pos_of_mem_rowLens⟩
   invFun ww := ofRowLens ww.1 ww.2.1
   left_inv _ := ofRowLens_to_rowLens_eq_self

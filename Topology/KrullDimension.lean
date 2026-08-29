@@ -42,7 +42,7 @@ definition topologicalKrullDim
 
 中文:
 定义 topologicalKrullDim
-  签名: (T : 类型) [TopologicalSpace T]
+  签名: (T : 类型) [拓扑空间 T]
   定义体: krullDim (IrreducibleCloseds T)
 
 Depends on / 依赖: IrreducibleCloseds, krullDim
@@ -64,8 +64,8 @@ theorem Topology.IsInducing.topologicalKrullDim_le
   proof: krullDim_le_of_strictMono _ (map_strictMono_of_isInducing hf)
 
 中文:
-定理 Topology.IsInducing.topologicalKrullDim_le
-  条件: {f : Y -> X} (hf : IsInducing f)
+定理 拓扑.是Inducing.topologicalKrullDim_le
+  条件: {f : Y -> X} (hf : 是Inducing f)
   证明: krullDim_le_of_strictMono _ (map_strictMono_of_isInducing hf)
 
 Depends on / 依赖: krullDim_le_of_strictMono, map_strictMono_of_isInducing
@@ -87,8 +87,8 @@ theorem IsHomeomorph.topologicalKrullDim_eq
   le_antisymm fwd bwd
 
 中文:
-定理 IsHomeomorph.topologicalKrullDim_eq
-  条件: (f : X -> Y) (h : IsHomeomorph f)
+定理 是同胚.topologicalKrullDim_eq
+  条件: (f : X -> Y) (h : 是同胚 f)
   证明: have fwd : topologicalKrullDim X <= topologicalKrullDim Y :=
     h.isInducing.topologicalKrullDim_le
   have bwd : topologicalKrullDim Y <= topologicalKrullDim X :=
@@ -115,7 +115,7 @@ theorem topologicalKrullDim_subspace_le
 
 中文:
 定理 topologicalKrullDim_subspace_le
-  条件: (X : 类型) [TopologicalSpace X] (Y : Set X)
+  条件: (X : 类型) [拓扑空间 X] (Y : 集合 X)
   证明: IsInducing.subtypeVal.topologicalKrullDim_le
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal.topologicalKrullDim_le, subtypeVal, topologicalKrullDim_le
@@ -163,8 +163,8 @@ lemma Topology.IsOpenEmbedding.coheight_map
   exact ⟨⟨b, a.2.mono (Set.preimage_mono hlt.le)⟩, hlt, rfl⟩
 
 中文:
-引理 Topology.IsOpenEmbedding.coheight_map
-  结论: {f : X -> Y} (hf : IsOpenEmbedding f)
+引理 拓扑.是开嵌入.coheight_map
+  结论: {f : X -> Y} (hf : 是开嵌入 f)
   证明: by
   rw [← coheight_orderIso (orderIsoOfIsOpenEmbedding f hf) Z]
   refine .symm (coheight_eq_of_strictMono Subtype.val (Subtype.strictMono_coe _) ?_ _)
@@ -195,8 +195,8 @@ lemma Topology.IsOpenEmbedding.coheight_eq
   simp [closure_image_closure hf.continuous]
 
 中文:
-引理 Topology.IsOpenEmbedding.coheight_eq
-  结论: [QuasiSober Y] [T0Space Y] [QuasiSober X] [T0Space X]
+引理 拓扑.是开嵌入.coheight_eq
+  结论: [拟醇 Y] [T0空间 Y] [拟醇 X] [T0空间 X]
   证明: by
   rw [← coheight_orderIso (irreducibleSetEquivPoints (α := Y)).symm (f x)]; rw [← coheight_orderIso (irreducibleSetEquivPoints (α := X)).symm x]; rw [← Topology.IsOpenEmbedding.coheight_map hf]
   congr

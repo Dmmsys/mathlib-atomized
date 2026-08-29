@@ -46,7 +46,7 @@ definition convexCombination
 
 中文:
 定义 convexCombination
-  签名: (s : StdSimplex R P)
+  签名: (s : 标准单纯形 R P)
   定义体: s.weights.support.affineCombination R id s.weights
 
 Depends on / 依赖: affineCombination, s.weights, s.weights.support.affineCombination, support, weights
@@ -99,7 +99,7 @@ theorem convexCombination_assoc
 
 中文:
 定理 convexCombination_assoc
-  条件: (f : StdSimplex R (StdSimplex R P))
+  条件: (f : 标准单纯形 R (标准单纯形 R P))
   证明: by
   -- Choose a base point
   obtain ⟨b⟩ : Nonempty P := inferInstance
@@ -175,7 +175,7 @@ definition toConvexSpace
 
 中文:
 定义 toConvexSpace
-  签名: : ConvexSpace R P where
+  签名: : 凸空间 R P where
   定义体: convexCombination
   sConvexComb_single := convexCombination_single
   assoc := convexCombination_assoc
@@ -203,7 +203,7 @@ alias convexCombination_eq_affineCombination := sConvexComb_eq_affineCombination
 
 中文:
 定理 sConvexComb_eq_affineCombination
-  条件: (s : StdSimplex R P)
+  条件: (s : 标准单纯形 R P)
   证明: by
   rfl
 
@@ -232,7 +232,7 @@ theorem iConvexComb_eq_affineCombination
 
 中文:
 定理 iConvexComb_eq_affineCombination
-  条件: (s : StdSimplex R I) (f : I -> P)
+  条件: (s : 标准单纯形 R I) (f : I -> P)
   证明: by
   let p : P := Nonempty.some inferInstance
   simp only [iConvexComb, sConvexComb_eq_affineCombination]

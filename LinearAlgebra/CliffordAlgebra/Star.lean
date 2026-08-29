@@ -47,7 +47,7 @@ instance instStarRing
 
 中文:
 实例 instStarRing
-  签名: : StarRing (CliffordAlgebra Q) where
+  签名: : 对合环 (CliffordAlgebra Q) where
   定义体: reverse (involute x)
   star_involutive x := by
     simp only [reverse_involute_commute.eq, reverse_reverse, involute_involute]

@@ -48,8 +48,8 @@ definition AffineSpace
   body: pullback (terminal.from S) (terminal.from (Spec Int[n]))
 
 中文:
-定义 AffineSpace
-  签名: (n : 类型u) (S : Scheme.{u})
+定义 仿射空间
+  签名: (n : 类型u) (S : 概形.{u})
   定义体: pullback (terminal.from S) (terminal.from (Spec Int[n]))
 
 Depends on / 依赖: Scheme, Scheme.Hom.resLE, infer_instance, pullback, terminal, terminal.from
@@ -162,8 +162,8 @@ definition toSpecMvPolyIntEquiv
     rw [Ad
 
 中文:
-定义 toSpecMvPolyIntEquiv
-  签名: {X : Scheme.{u}}
+定义 toSpecMvPoly整数Equiv
+  签名: {X : 概形.{u}}
   定义体: f.appTop ((Scheme.ΓSpecIso Int[n]).inv (.X i))
   invFun v := X.toSpecΓ ≫ Spec.map
     (CommRingCat.ofHom (MvPolynomial.eval₂Hom ((algebraMap Int _).comp ULift.ringEquiv.toRingHom) v))
@@ -199,8 +199,8 @@ lemma toSpecMvPolyIntEquiv_comp
   proof: rfl
 
 中文:
-引理 toSpecMvPolyIntEquiv_comp
-  条件: {X Y : Scheme} (f : X ⟶ Y) (g : Y ⟶ Spec 整数[n]) (i)
+引理 toSpecMvPoly整数Equiv_comp
+  条件: {X Y : 概形} (f : X ⟶ Y) (g : Y ⟶ Spec 整数[n]) (i)
   证明: rfl
 -/
 lemma toSpecMvPolyIntEquiv_comp {X Y : Scheme} (f : X ⟶ Y) (g : Y ⟶ Spec Int[n]) (i) :
@@ -238,7 +238,7 @@ definition homOfVector
 
 中文:
 定义 homOfVector
-  签名: {X : Scheme.{u}} (f : X ⟶ S) (v : n -> Γ(X, ⊤))
+  签名: {X : 概形.{u}} (f : X ⟶ S) (v : n -> Γ(X, ⊤))
   定义体: pullback.lift f ((toSpecMvPolyIntEquiv n).symm v) (by simp)
 
 Depends on / 依赖: pullback, pullback.lift, toSpecMvPolyIntEquiv
@@ -370,7 +370,7 @@ lemma comp_homOfVector
 
 中文:
 引理 comp_homOfVector
-  条件: {X Y : Scheme} (v : n -> Γ(Y, ⊤)) (f : X ⟶ Y) (g : Y ⟶ S)
+  条件: {X Y : 概形} (v : n -> Γ(Y, ⊤)) (f : X ⟶ Y) (g : Y ⟶ S)
   证明: by
   ext1 <;> simp
 -/
@@ -403,7 +403,7 @@ definition homOverEquiv
 
 中文:
 定义 homOverEquiv
-  签名: {X : Scheme.{u}} [X.Over S]
+  签名: {X : 概形.{u}} [X.Over S]
   定义体: f.1.appTop (coord S i)
   invFun v := ⟨homOfVector (X ↘ S) v, inferInstance⟩
   left_inv f := by
@@ -447,7 +447,7 @@ definition isoOfIsAffine
 
 中文:
 定义 isoOfIsAffine
-  签名: [IsAffine S]
+  签名: [是仿射 S]
   定义体: 𝔸(n; S).toSpecΓ ≫ Spec.map (CommRingCat.ofHom
         (eval₂Hom ((𝔸(n; S) ↘ S).appTop).hom (coord S)))
       inv := homOfVector (Spec.map (CommRingCat.ofHom C) ≫ S.isoSpec.inv)
@@ -502,7 +502,7 @@ lemma isoOfIsAffine_hom_appTop
 
 中文:
 引理 isoOfIsAffine_hom_appTop
-  条件: [IsAffine S]
+  条件: [是仿射 S]
   证明: by
   simp [isoOfIsAffine_hom]
 
@@ -526,7 +526,7 @@ lemma isoOfIsAffine_inv_appTop_coord
 
 中文:
 引理 isoOfIsAffine_inv_appTop_coord
-  条件: [IsAffine S] (i)
+  条件: [是仿射 S] (i)
   证明: homOfVector_appTop_coord _ _ _
 
 Depends on / 依赖: homOfVector_appTop_coord
@@ -547,7 +547,7 @@ lemma isoOfIsAffine_inv_over
 
 中文:
 引理 isoOfIsAffine_inv_over
-  条件: [IsAffine S]
+  条件: [是仿射 S]
   证明: pullback.lift_fst _ _ _
 
 Depends on / 依赖: IsOpenImmersion, SurjectiveOnStalks, lift_fst, pullback, pullback.lift_fst
@@ -565,8 +565,8 @@ instance [IsAffine
   body: .of_isIso (isoOfIsAffine n S).hom
 
 中文:
-实例 [IsAffine
-  签名: S] : IsAffine 𝔸(n; S)
+实例 [是仿射
+  签名: S] : 是仿射 𝔸(n; S)
   定义体: .of_isIso (isoOfIsAffine n S).hom
 
 Depends on / 依赖: isoOfIsAffine, of_isIso
@@ -585,7 +585,7 @@ definition SpecIso
 
 中文:
 定义 SpecIso
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: isoOfIsAffine _ _ ≪≫ Scheme.Spec.mapIso (MvPolynomial.mapEquiv _
     (Scheme.ΓSpecIso R).symm.commRingCatIsoToRingEquiv).toCommRingCatIso.op
 
@@ -610,7 +610,7 @@ lemma SpecIso_hom_appTop
 
 中文:
 引理 SpecIso_hom_appTop
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: by
   ext i
   simp [SpecIso]
@@ -639,7 +639,7 @@ lemma SpecIso_inv_appTop_coord
 
 中文:
 引理 SpecIso_inv_appTop_coord
-  条件: (R : CommRingCat.{u}) (i)
+  条件: (R : 交换环范畴.{u}) (i)
   证明: by
   simp only [SpecIso, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, Scheme.Spec_map,
     Quiver.Hom.unop_op, TopologicalSpace.Opens.map_top, Scheme.Hom.comp_app, CommRingCat.comp_apply]
@@ -674,7 +674,7 @@ lemma SpecIso_inv_over
 
 中文:
 引理 SpecIso_inv_over
-  条件: (R : CommRingCat.{u})
+  条件: (R : 交换环范畴.{u})
   证明: by
   simp only [SpecIso, Iso.trans_inv, Functor.mapIso_inv, Iso.op_inv, Scheme.Spec_map,
     Quiver.Hom.unop_op, Category.assoc, isoOfIsAffine_inv_over, Scheme.isoSpec_Spec_inv,
@@ -711,7 +711,7 @@ definition map
 
 中文:
 定义 map
-  签名: {S T : Scheme.{u}} (f : S ⟶ T)
+  签名: {S T : 概形.{u}} (f : S ⟶ T)
   定义体: homOfVector (𝔸(n; S) ↘ S ≫ f) (coord S)
 
 @[reassoc (attr := simp)]
@@ -735,7 +735,7 @@ lemma map_over
 
 中文:
 引理 map_over
-  条件: {S T : Scheme.{u}} (f : S ⟶ T)
+  条件: {S T : 概形.{u}} (f : S ⟶ T)
   结论: map n f ≫ 𝔸(n; T) ↘ T = 𝔸(n; S) ↘ S ≫ f
   证明: pullback.lift_fst _ _ _
 
@@ -759,7 +759,7 @@ lemma map_appTop_coord
 
 中文:
 引理 map_appTop_coord
-  条件: {S T : Scheme.{u}} (f : S ⟶ T) (i)
+  条件: {S T : 概形.{u}} (f : S ⟶ T) (i)
   证明: homOfVector_appTop_coord _ _ _
 
 @[reassoc (attr := simp)]
@@ -786,7 +786,7 @@ lemma map_toSpecMvPoly
 
 中文:
 引理 map_toSpecMvPoly
-  条件: {S T : Scheme.{u}} (f : S ⟶ T)
+  条件: {S T : 概形.{u}} (f : S ⟶ T)
   证明: by
   apply (toSpecMvPolyIntEquiv _).injective
   ext i
@@ -836,7 +836,7 @@ lemma map_comp
 
 中文:
 引理 map_comp
-  条件: {S S' S'' : Scheme} (f : S ⟶ S') (g : S' ⟶ S'')
+  条件: {S S' S'' : 概形} (f : S ⟶ S') (g : S' ⟶ S'')
   证明: by
   ext1
   · simp
@@ -865,7 +865,7 @@ lemma map_SpecMap
 
 中文:
 引理 map_SpecMap
-  条件: {R S : CommRingCat.{u}} (φ : R ⟶ S)
+  条件: {R S : 交换环范畴.{u}} (φ : R ⟶ S)
   证明: by
   rw [← Iso.inv_comp_eq]
   ext1
@@ -901,7 +901,7 @@ definition mapSpecMap
 
 中文:
 定义 mapSpecMap
-  签名: {R S : CommRingCat.{u}} (φ : R ⟶ S)
+  签名: {R S : 交换环范畴.{u}} (φ : R ⟶ S)
   定义体: Arrow.isoMk (SpecIso n S) (SpecIso n R) (by have := (SpecIso n R).inv_hom_id; simp [map_SpecMap])
 -/
 def mapSpecMap {R S : CommRingCat.{u}} (φ : R ⟶ S) :
@@ -924,7 +924,7 @@ lemma isPullback_map
 
 中文:
 引理 isPullback_map
-  条件: {S T : Scheme.{u}} (f : S ⟶ T)
+  条件: {S T : 概形.{u}} (f : S ⟶ T)
   证明: by
   refine (IsPullback.paste_horiz_iff (.flip <| .of_hasPullback _ _) (map_over f)).mp ?_
   simp only [terminal.comp_from, ]
@@ -952,7 +952,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: {n m : 类型u} (i : m -> n) (S : Scheme.{u})
+  签名: {n m : 类型u} (i : m -> n) (S : 概形.{u})
   定义体: homOfVector (𝔸(n; S) ↘ S) (coord S ∘ i)
 
 @[simp, reassoc]
@@ -975,7 +975,7 @@ lemma reindex_over
 
 中文:
 引理 reindex_over
-  条件: {n m : 类型u} (i : m -> n) (S : Scheme.{u})
+  条件: {n m : 类型u} (i : m -> n) (S : 概形.{u})
   证明: pullback.lift_fst _ _ _
 
 @[simp]
@@ -999,7 +999,7 @@ lemma reindex_appTop_coord
 
 中文:
 引理 reindex_appTop_coord
-  条件: {n m : 类型u} (i : m -> n) (S : Scheme.{u}) (j : m)
+  条件: {n m : 类型u} (i : m -> n) (S : 概形.{u}) (j : m)
   证明: homOfVector_appTop_coord _ _ _
 
 @[simp]
@@ -1042,7 +1042,7 @@ lemma reindex_comp
 
 中文:
 引理 reindex_comp
-  条件: {n₁ n₂ n₃ : 类型u} (i : n₁ ⟶ n₂) (j : n₂ ⟶ n₃) (S : Scheme.{u})
+  条件: {n₁ n₂ n₃ : 类型u} (i : n₁ ⟶ n₂) (j : n₂ ⟶ n₃) (S : 概形.{u})
   证明: by
   ext k <;> simp
 -/
@@ -1063,7 +1063,7 @@ lemma map_reindex
 
 中文:
 引理 map_reindex
-  条件: {n₁ n₂ : 类型u} (i : n₁ -> n₂) {S T : Scheme.{u}} (f : S ⟶ T)
+  条件: {n₁ n₂ : 类型u} (i : n₁ -> n₂) {S T : 概形.{u}} (f : S ⟶ T)
   证明: by
   apply hom_ext <;> simp
 
@@ -1088,7 +1088,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : (类型u)ᵒᵖ ⥤ Scheme.{u} ⥤ Scheme.{u} where
+  签名: : (类型u)ᵒᵖ ⥤ 概形.{u} ⥤ 概形.{u} where
   定义体: { obj := AffineSpace n.unop, map := map n.unop, map_id := map_id, map_comp := map_comp }
   map {n m} i := { app := reindex i.unop, naturality := fun _ _ => map_reindex i.unop }
   map_id n := by ext : 2; exact reindex_id _
@@ -1116,7 +1116,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsAffineHom (𝔸(n; S) ↘ S)
+  签名: 是仿射态射 (𝔸(n; S) ↘ S)
   定义体: MorphismProperty.pullback_fst _ _ inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -1137,7 +1137,7 @@ instance :
 
 中文:
 实例 :
-  签名: Surjective (𝔸(n; S) ↘ S)
+  签名: 满射 (𝔸(n; S) ↘ S)
   定义体: MorphismProperty.pullback_fst _ _ by
   have := isIso_of_isTerminal specULiftZIsTerminal terminalIsTerminal (terminal.from _)
   rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @Surjective)]
@@ -1162,8 +1162,8 @@ instance [Finite
   rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty
 
 中文:
-实例 [Finite
-  签名: n] : LocallyOfFinitePresentation (𝔸(n; S) ↘ S)
+实例 [有限
+  签名: n] : 局部有限呈现 (𝔸(n; S) ↘ S)
   定义体: MorphismProperty.pullback_fst _ _ by
   have := isIso_of_isTerminal specULiftZIsTerminal.{u} terminalIsTerminal (terminal.from _)
   rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]; rw [MorphismProperty.cancel_right_of_respectsIso (P := @LocallyOfFinitePresentation)]; rw [HasRingHomProperty
@@ -1194,7 +1194,7 @@ lemma isOpenMap_over
 
 中文:
 引理 isOpenMap_over
-  结论: IsOpenMap (𝔸(n; S) ↘ S)
+  结论: 是开映射 (𝔸(n; S) ↘ S)
   证明: by
   change topologically @IsOpenMap _
   wlog hS : exists R, S = Spec R
@@ -1235,7 +1235,7 @@ instance :
 
 中文:
 实例 :
-  签名: GeometricallyIrreducible (𝔸(n; S) ↘ S)
+  签名: 几何不可约 (𝔸(n; S) ↘ S)
   定义体: by
   rw [geometricallyIrreducible_iff]
   introv K h
@@ -1261,8 +1261,8 @@ instance [IrreducibleSpace
   body: GeometricallyIrreducible.irreducibleSpace (𝔸(n; S) ↘ S) (isOpenMap_over S)
 
 中文:
-实例 [IrreducibleSpace
-  签名: S] : IrreducibleSpace 𝔸(n; S)
+实例 [不可约空间
+  签名: S] : 不可约空间 𝔸(n; S)
   定义体: GeometricallyIrreducible.irreducibleSpace (𝔸(n; S) ↘ S) (isOpenMap_over S)
 
 Depends on / 依赖: GeometricallyIrreducible, GeometricallyIrreducible.irreducibleSpace, irreducibleSpace, isOpenMap_over
@@ -1285,7 +1285,7 @@ instance :
 
 中文:
 实例 :
-  签名: GeometricallyReduced (𝔸(n; S) ↘ S)
+  签名: 几何既约 (𝔸(n; S) ↘ S)
   定义体: by
   rw [geometricallyReduced_iff]
   introv K h
@@ -1320,7 +1320,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : IsReduced S] : IsReduced 𝔸(n; S)
+  签名: : 是既约 S] : 是既约 𝔸(n; S)
   定义体: by
   wlog hS : exists R, S = Spec R
   · rw [IsReduced.iff_of_openCover _ (S.affineCover.pullback₁ (𝔸(n; S) ↘ S))]
@@ -1352,7 +1352,7 @@ instance :
 
 中文:
 实例 :
-  签名: Geometrically整数egral (𝔸(n; S) ↘ S)
+  签名: 几何整 (𝔸(n; S) ↘ S)
   定义体: .of_geometricallyReduced_of_geometricallyIrreducible _
 
 Depends on / 依赖: Surjective, Surjective.sigmaDesc_of_union_range_eq_univ, iUnion_range, of_geometricallyReduced_of_geometricallyIrreducible, sigmaDesc_of_union_range_eq_univ
@@ -1369,8 +1369,8 @@ instance [IsIntegral
   body: isIntegral_of_irreducibleSpace_of_isReduced _
 
 中文:
-实例 [IsIntegral
-  签名: S] : Is整数egral 𝔸(n; S)
+实例 [是整
+  签名: S] : 是整 𝔸(n; S)
   定义体: isIntegral_of_irreducibleSpace_of_isReduced _
 
 Depends on / 依赖: isIntegral_of_irreducibleSpace_of_isReduced
@@ -1394,8 +1394,8 @@ instance [IsEmpty
    
 
 中文:
-实例 [IsEmpty
-  签名: n] : IsIso (𝔸(n; S) ↘ S)
+实例 [是空
+  签名: n] : 是同构 (𝔸(n; S) ↘ S)
   定义体: pullback_fst
 (P := isomorphisms _) _ _ by
   rw [← terminal.comp_from (Spec.map (CommRingCat.ofHom C))]
@@ -1435,8 +1435,8 @@ lemma isIntegralHom_over_iff_isEmpty
       exact this (S.affineCover.X _) (MorphismProperty.IsStableUnderBaseChange.of_is
 
 中文:
-引理 isIntegralHom_over_iff_isEmpty
-  结论: Is整数egralHom (𝔸(n; S) ↘ S) ↔ IsEmpty S ∨ IsEmpty n
+引理 is整数egralHom_over_iff_isEmpty
+  结论: 是整态射 (𝔸(n; S) ↘ S) ↔ 是空 S ∨ 是空 n
   证明: by
   constructor
   · intro h
@@ -1489,9 +1489,9 @@ lemma not_isIntegralHom
   simp [isIntegralHom_over_iff_isEmpty]
 
 中文:
-引理 not_isIntegralHom
-  条件: [Nonempty S] [Nonempty n]
-  结论: ¬ Is整数egralHom (𝔸(n; S) ↘ S)
+引理 not_is整数egralHom
+  条件: [非空 S] [非空 n]
+  结论: ¬ 是整态射 (𝔸(n; S) ↘ S)
   证明: by
   simp [isIntegralHom_over_iff_isEmpty]
 
@@ -1513,7 +1513,7 @@ lemma spec_le_iff
 
 中文:
 引理 spec_le_iff
-  条件: (R : CommRingCat) (p q : Spec R)
+  条件: (R : 交换环范畴) (p q : Spec R)
   结论: p <= q ↔ q.asIdeal <= p.asIdeal
   证明: by
   aesop (add simp PrimeSpectrum.le_iff_specializes)

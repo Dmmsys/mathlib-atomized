@@ -85,11 +85,11 @@ structure PolynomialLaw
     - isCompat'({S : Type u} [CommSemiring S] [Algebra R S] {S' : Type u} [CommSemiring S'] [Algebra R S'] (φ : S ->ₐ[R] S')) : φ.toLinearMap.rTensor N ∘ toFun' S = toFun' S' ∘ φ.toLinearMap.rTensor M  [default: by aesop]
 
 中文:
-结构 PolynomialLaw
-  参数: (R : 类型u) [CommSemiring R]
+结构 多项式律
+  参数: (R : 类型u) [交换半环 R]
   公理与运算 (2 个):
-    - toFun'((S : 类型u) [CommSemiring S] [Algebra R S]) : S otimes[R] M -> S otimes[R] N
-    - isCompat'({S : 类型u} [CommSemiring S] [Algebra R S] {S' : 类型u} [CommSemiring S'] [Algebra R S'] (φ : S ->ₐ[R] S')) : φ.toLinearMap.rTensor N ∘ toFun' S = toFun' S' ∘ φ.toLinearMap.rTensor M  [默认: by aesop]
+    - toFun'((S : 类型u) [交换半环 S] [代数 R S]) : S otimes[R] M -> S otimes[R] N
+    - isCompat'({S : 类型u} [交换半环 S] [代数 R S] {S' : 类型u} [交换半环 S'] [代数 R S'] (φ : S ->ₐ[R] S')) : φ.toLinearMap.rTensor N ∘ toFun' S = toFun' S' ∘ φ.toLinearMap.rTensor M  [默认: by aesop]
 -/
 structure PolynomialLaw (R : Type u) [CommSemiring R]
     (M : Type*) [AddCommMonoid M] [Module R M] (N : Type*) [AddCommMonoid N] [Module R N] where
@@ -113,7 +113,7 @@ theorem PolynomialLaw.isCompat_apply'
   simpa only using! congr_fun (f.isCompat' φ) x
 
 中文:
-定理 PolynomialLaw.isCompat_apply'
+定理 多项式律.isCompat_apply'
   证明: by
   simpa only using! congr_fun (f.isCompat' φ) x
 
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (M ->ₚₗ[R] N)
+  签名: 零 (M ->ₚₗ[R] N)
   定义体: ⟨{ toFun' _ := 0 }⟩
 
 @[simp]
@@ -168,7 +168,7 @@ theorem zero_def
 
 中文:
 定理 zero_def
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem zero_def (S : Type u) [CommSemiring S] [Algebra R S] :
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (PolynomialLaw R M N)
+  签名: 可居 (多项式律 R M N)
   定义体: ⟨Zero.zero⟩
 
 Depends on / 依赖: Zero.zero
@@ -219,7 +219,7 @@ theorem id_apply'
 
 中文:
 定理 id_apply'
-  条件: {S : 类型u} [CommSemiring S] [Algebra R S]
+  条件: {S : 类型u} [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem id_apply' {S : Type u} [CommSemiring S] [Algebra R S] :
@@ -255,7 +255,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (PolynomialLaw R M N)
+  签名: 加法 (多项式律 R M N)
   定义体: ⟨add⟩
 
 @[simp]
@@ -273,7 +273,7 @@ theorem add_def
 
 中文:
 定理 add_def
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem add_def (S : Type u) [CommSemiring S] [Algebra R S] :
@@ -289,7 +289,7 @@ theorem add_def_apply
 
 中文:
 定理 add_def_apply
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S] (m : S otimes[R] M)
+  条件: (S : 类型u) [交换半环 S] [代数 R S] (m : S otimes[R] M)
   证明: rfl
 -/
 theorem add_def_apply (S : Type u) [CommSemiring S] [Algebra R S] (m : S otimes[R] M) :
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (M ->ₚₗ[R] N)
+  签名: 标量乘法 R (M ->ₚₗ[R] N)
   定义体: ⟨smul⟩
 
 @[simp]
@@ -343,7 +343,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem smul_def (S : Type u) [CommSemiring S] [Algebra R S] :
@@ -359,7 +359,7 @@ theorem smul_def_apply
 
 中文:
 定理 smul_def_apply
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S] (m : S otimes[R] M)
+  条件: (S : 类型u) [交换半环 S] [代数 R S] (m : S otimes[R] M)
   证明: rfl
 -/
 theorem smul_def_apply (S : Type u) [CommSemiring S] [Algebra R S] (m : S otimes[R] M) :
@@ -436,7 +436,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction R (M ->ₚₗ[R] N)
+  签名: 乘法作用 R (M ->ₚₗ[R] N)
   定义体: one_smul
   mul_smul a b f := by ext; simp only [smul_def, mul_smul]
 
@@ -461,7 +461,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (M ->ₚₗ[R] N)
+  签名: 加法交换幺半群 (M ->ₚₗ[R] N)
   定义体: by ext; simp only [add_def, add_assoc]
   zero_add f := by ext; simp only [add_def, zero_add, zero_def]
   add_zero f := by ext; simp only [add_def, add_zero, zero_def]
@@ -495,7 +495,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (M ->ₚₗ[R] N)
+  签名: 模 R (M ->ₚₗ[R] N)
   定义体: rfl
   smul_add a f g := by ext; simp only [smul_def, add_def, smul_add]
   add_smul := add_smul
@@ -545,7 +545,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (M ->ₚₗ[R] N)
+  签名: 取负 (M ->ₚₗ[R] N)
   定义体: ⟨neg⟩
 
 @[simp]
@@ -563,7 +563,7 @@ theorem neg_def
 
 中文:
 定理 neg_def
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem neg_def (S : Type u) [CommSemiring S] [Algebra R S] :
@@ -585,7 +585,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (M ->ₚₗ[R] N)
+  签名: 加法交换群 (M ->ₚₗ[R] N)
   定义体: (n : R) • f
   zsmul_zero' f := by simp_rw [HSMul.hSMul, SMul.smul]; simp only [Int.cast_zero, zero_smul]
   zsmul_succ' n f := by
@@ -656,7 +656,7 @@ theorem ground_apply
 中文:
 定理 ground_apply
   条件: (m : M)
-  结论: f.ground m = TensorProduct.lid R N (f.toFun' R (1 otimesₜ[R] m))
+  结论: f.ground m = 张量积.lid R N (f.toFun' R (1 otimesₜ[R] m))
   证明: rfl
 -/
 theorem ground_apply (m : M) : f.ground m = TensorProduct.lid R N (f.toFun' R (1 otimesₜ[R] m)) := rfl
@@ -693,7 +693,7 @@ theorem one_tmul_ground_apply'
 
 中文:
 定理 one_tmul_ground_apply'
-  条件: {S : 类型u} [CommSemiring S] [Algebra R S] (x : M)
+  条件: {S : 类型u} [交换半环 S] [代数 R S] (x : M)
   证明: by
   rw [ground_apply]
   convert! f.isCompat_apply' (Algebra.algHom R R S) (1 otimesₜ[R] x)
@@ -817,7 +817,7 @@ theorem comp_toFun'
 
 中文:
 定理 comp_toFun'
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: rfl
 -/
 theorem comp_toFun' (S : Type u) [CommSemiring S] [Algebra R S] :
@@ -897,7 +897,7 @@ definition lifts
 
 中文:
 定义 lifts
-  签名: : Type _
+  签名: : 类型 _
   定义体: Σ (s : Finset S), (MvPolynomial (Fin s.card) R) otimes[R] M
 
 Depends on / 依赖: Finset, MvPolynomial, otimes, s.card
@@ -917,7 +917,7 @@ definition φ
 
 中文:
 定义 φ
-  签名: (s : Finset S)
+  签名: (s : 有限集 S)
   定义体: aeval (R := R) (fun n => (s.equivFin.symm n : S))
 
 Depends on / 依赖: equivFin, s.equivFin.symm
@@ -941,8 +941,8 @@ theorem range_φ
 
 中文:
 定理 range_φ
-  条件: (s : Finset S)
-  结论: (φ R s).range = Algebra.adjoin R s
+  条件: (s : 有限集 S)
+  结论: (φ R s).range = 代数.adjoin R s
   证明: by
   simp only [φ]
   rw [← Algebra.adjoin_range_eq_range_aeval]
@@ -1026,8 +1026,8 @@ theorem exists_range_φ_eq_of_fg
   proof: ⟨hB.choose, by simp only [range_φ, hB.choose_spec]⟩
 
 中文:
-定理 exists_range_φ_eq_of_fg
-  条件: {B : Subalgebra R S} (hB : Subalgebra.FG B)
+定理 存在_range_φ_eq_of_fg
+  条件: {B : 子代数 R S} (hB : 子代数.FG B)
   证明: ⟨hB.choose, by simp only [range_φ, hB.choose_spec]⟩
 
 Depends on / 依赖: choose_spec, hB.choose, hB.choose_spec
@@ -1184,7 +1184,7 @@ theorem toFun_eq_rTensor_φ_toFun'
 
 中文:
 定理 toFun_eq_rTensor_φ_toFun'
-  结论: {t : S otimes[R] M} {s : Finset S}
+  结论: {t : S otimes[R] M} {s : 有限集 S}
   证明: by
   rw [PolynomialLaw.toFun]; rw [← ha]; rw [(factorsThrough_toFunLifted_π f).extend_apply]; rw [toFunLifted]
 
@@ -1208,7 +1208,7 @@ theorem exists_lift_of_mem_range_rTensor
     rw [← hu]; rw [← Subalgebra.val_comp_inclusion hφ]; rw [comp_toLinearMap]; rw [rTensor_comp]; 
 
 中文:
-定理 exists_lift_of_mem_range_rTensor
+定理 存在_lift_of_mem_range_rTensor
   证明: by
   obtain ⟨u, hu⟩ := ht
   suffices h_surj : Function.Surjective ((φ.rangeRestrict.toLinearMap).rTensor M) by
@@ -1246,7 +1246,7 @@ theorem π_surjective
 
 中文:
 定理 π_surjective
-  结论: Function.Surjective (π R M S)
+  结论: 函数.满射 (π R M S)
   证明: by
   intro t
   obtain ⟨B : Subalgebra R S, hB : B.FG, ht : t in range _⟩ := TensorProduct.Algebra.exists_of_fg t
@@ -1275,9 +1275,9 @@ theorem exists_lift
   use s.card, φ R s, p, ha
 
 中文:
-定理 exists_lift
+定理 存在_lift
   条件: (t : S otimes[R] M)
-  结论: 存在 (n : 自然数) (ψ : MvPolynomial (Fin n) R ->ₐ[R] S)
+  结论: 存在 (n : 自然数) (ψ : 多元多项式 (有限集 n) R ->ₐ[R] S)
   证明: by
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
   use s.card, φ R s, p, ha
@@ -1304,9 +1304,9 @@ theorem exists_lift'
   have hAB : A <= A ⊔ Algebra.adjoin R ({s} : Finset S) := 
 
 中文:
-定理 exists_lift'
+定理 存在_lift'
   条件: (t : S otimes[R] M) (s : S)
-  结论: 存在 (n : 自然数) (ψ : MvPolynomial (Fin n) R ->ₐ[R] S)
+  结论: 存在 (n : 自然数) (ψ : 多元多项式 (有限集 n) R ->ₐ[R] S)
   证明: by
   obtain ⟨A, hA, ht⟩ := TensorProduct.Algebra.exists_of_fg t
   have hB : Subalgebra.FG (A ⊔ Algebra.adjoin R ({s} : Finset S)) :=
@@ -1350,7 +1350,7 @@ theorem toFun'_eq_toFun
 
 中文:
 定理 toFun'_eq_toFun
-  条件: (S : 类型u) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型u) [交换半环 S] [代数 R S]
   证明: by
   ext t
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
@@ -1384,7 +1384,7 @@ theorem isCompat_apply
 
 中文:
 定理 isCompat_apply
-  条件: {T : Type w} [CommSemiring T] [Algebra R T] (h : S ->ₐ[R] T) (t : S otimes[R] M)
+  条件: {T : 类型 w} [交换半环 T] [代数 R T] (h : S ->ₐ[R] T) (t : S otimes[R] M)
   证明: by
   classical
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
@@ -1442,7 +1442,7 @@ theorem isCompat
 
 中文:
 定理 isCompat
-  条件: {T : Type w} [CommSemiring T] [Algebra R T] (h : S ->ₐ[R] T)
+  条件: {T : 类型 w} [交换半环 T] [代数 R T] (h : S ->ₐ[R] T)
   证明: by
   ext t
   simp only [Function.comp_apply, PolynomialLaw.isCompat_apply]
@@ -1561,7 +1561,7 @@ theorem toFun_neg
 
 中文:
 定理 toFun_neg
-  结论: {R : 类型u} [CommRing R]
+  结论: {R : 类型u} [交换环 R]
   证明: by
   ext t
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
@@ -1679,7 +1679,7 @@ theorem toFun_comp
 
 中文:
 定理 toFun_comp
-  条件: (S : 类型) [CommSemiring S] [Algebra R S]
+  条件: (S : 类型) [交换半环 S] [代数 R S]
   证明: by
   ext t
   obtain ⟨⟨s, p⟩, ha⟩ := π_surjective t
@@ -1708,7 +1708,7 @@ theorem toFun_comp_apply
 
 中文:
 定理 toFun_comp_apply
-  条件: (S : 类型) [CommSemiring S] [Algebra R S] (m : S otimes[R] M)
+  条件: (S : 类型) [交换半环 S] [代数 R S] (m : S otimes[R] M)
   证明: by
   simp only [toFun_comp, Function.comp_apply]
 

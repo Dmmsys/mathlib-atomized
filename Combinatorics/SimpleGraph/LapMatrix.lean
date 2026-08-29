@@ -79,7 +79,7 @@ theorem isHermitian_adjMatrix
 
 中文:
 定理 isHermitian_adjMatrix
-  条件: [NonAssocSemiring R] [StarRing R]
+  条件: [非结合半环 R] [对合环 R]
   结论: (G.adjMatrix R).IsHermitian
   证明: .isHermitian G.isAdjMatrix_adjMatrix R
 
@@ -100,7 +100,7 @@ theorem degree_eq_sum_if_adj
 
 中文:
 定理 degree_eq_sum_if_adj
-  条件: {R : 类型} [AddCommMonoidWithOne R] (i : V)
+  条件: {R : 类型} [加法交换带幺幺半群 R] (i : V)
   证明: by
   unfold degree neighborFinset neighborSet
   rw [sum_boole]; rw [Set.toFinset_ofPred]
@@ -124,7 +124,7 @@ definition degMatrix
 
 中文:
 定义 degMatrix
-  签名: [AddMonoidWithOne R]
+  签名: [加法带幺幺半群 R]
   定义体: Matrix.diagonal (G.degree ·)
 
 Depends on / 依赖: G.degree, Matrix, Matrix.diagonal, degree, diagonal
@@ -141,7 +141,7 @@ definition lapMatrix
 
 中文:
 定义 lapMatrix
-  签名: [AddGroupWithOne R]
+  签名: [加法带幺群 R]
   定义体: G.degMatrix R - G.adjMatrix R
 
 Depends on / 依赖: G.adjMatrix, G.degMatrix, adjMatrix, degMatrix
@@ -159,8 +159,8 @@ theorem isSymm_degMatrix
 
 中文:
 定理 isSymm_degMatrix
-  条件: [AddMonoidWithOne R]
-  结论: (G.degMatrix R).IsSymm
+  条件: [加法带幺幺半群 R]
+  结论: (G.degMatrix R).是Symm
   证明: isSymm_diagonal _
 
 Depends on / 依赖: isSymm_diagonal
@@ -179,7 +179,7 @@ theorem isHermitian_degMatrix
 
 中文:
 定理 isHermitian_degMatrix
-  条件: [NonAssocSemiring R] [StarRing R]
+  条件: [非结合半环 R] [对合环 R]
   结论: (G.degMatrix R).IsHermitian
   证明: Matrix.isHermitian_diagonal_iff.mpr by simp
 
@@ -199,8 +199,8 @@ theorem isSymm_lapMatrix
 
 中文:
 定理 isSymm_lapMatrix
-  条件: [AddGroupWithOne R]
-  结论: (G.lapMatrix R).IsSymm
+  条件: [加法带幺群 R]
+  结论: (G.lapMatrix R).是Symm
   证明: .sub G.isSymm_adjMatrix G.isSymm_degMatrix R
 
 Depends on / 依赖: G.isSymm_adjMatrix, G.isSymm_degMatrix, isSymm_adjMatrix, isSymm_degMatrix
@@ -219,7 +219,7 @@ theorem isHermitian_lapMatrix
 
 中文:
 定理 isHermitian_lapMatrix
-  条件: [NonAssocRing R] [StarRing R]
+  条件: [非结合环 R] [对合环 R]
   结论: (G.lapMatrix R).IsHermitian
   证明: .sub G.isHermitian_adjMatrix R G.isHermitian_degMatrix R
 
@@ -241,7 +241,7 @@ theorem degMatrix_mulVec_apply
 
 中文:
 定理 degMatrix_mulVec_apply
-  条件: [NonAssocSemiring R] (v : V) (vec : V -> R)
+  条件: [非结合半环 R] (v : V) (vec : V -> R)
   证明: by
   rw [degMatrix]; rw [mulVec_diagonal]
 
@@ -262,7 +262,7 @@ theorem lapMatrix_mulVec_apply
 
 中文:
 定理 lapMatrix_mulVec_apply
-  条件: [NonAssocRing R] (v : V) (vec : V -> R)
+  条件: [非结合环 R] (v : V) (vec : V -> R)
   证明: by
   simp_rw [lapMatrix, sub_mulVec, Pi.sub_apply, degMatrix_mulVec_apply, adjMatrix_mulVec_apply]
 
@@ -285,7 +285,7 @@ theorem lapMatrix_mulVec_const_eq_zero
 
 中文:
 定理 lapMatrix_mulVec_const_eq_zero
-  条件: [NonAssocRing R]
+  条件: [非结合环 R]
   证明: by
   ext1 i
   rw [lapMatrix_mulVec_apply]
@@ -310,7 +310,7 @@ theorem dotProduct_mulVec_degMatrix
 
 中文:
 定理 dotProduct_mulVec_degMatrix
-  条件: [CommSemiring R] (x : V -> R)
+  条件: [交换半环 R] (x : V -> R)
   证明: by
   simp only [dotProduct, degMatrix, mulVec_diagonal, ← mul_assoc, mul_comm]
 
@@ -336,7 +336,7 @@ theorem lapMatrix_toLinearMap₂'
 
 中文:
 定理 lapMatrix_toLinearMap₂'
-  条件: [Field R] [CharZero R] (x : V -> R)
+  条件: [域 R] [特征零 R] (x : V -> R)
   证明: by
   simp_rw [toLinearMap₂'_apply', lapMatrix, sub_mulVec, dotProduct_sub, dotProduct_mulVec_degMatrix,
     dotProduct_mulVec_adjMatrix, ← sum_sub_distrib, degree_eq_sum_if_adj, sum_mul, ite_mul, one_mul,
@@ -373,7 +373,7 @@ theorem posSemidef_lapMatrix
 
 中文:
 定理 posSemidef_lapMatrix
-  结论: [Field R] [LinearOrder R] [IsStrictOrderedRing R] [StarRing R]
+  结论: [域 R] [线性序 R] [是StrictOrdered环 R] [对合环 R]
   证明: by
   refine .of_dotProduct_mulVec_nonneg ?_ (fun x => ?_)
   · rw [IsHermitian, conjTranspose_eq_transpose_of_trivial, isSymm_lapMatrix]
@@ -399,7 +399,7 @@ theorem lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_adj
     [lapMatrix_toLinearMap₂', sum_eq_zero_iff_of_nonneg, sub_eq_zero]
 
 中文:
-定理 lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_adj
+定理 lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_对任意_adj
   证明: by
   simp (disch := intros; positivity)
     [lapMatrix_toLinearMap₂', sum_eq_zero_iff_of_nonneg, sub_eq_zero]
@@ -420,7 +420,7 @@ theorem lapMatrix_mulVec_eq_zero_iff_forall_adj
   rw [← (posSemidef_lapMatrix Real G).toLinearMap₂'_zero_iff]; rw [star_trivial]; rw [lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_adj]
 
 中文:
-定理 lapMatrix_mulVec_eq_zero_iff_forall_adj
+定理 lapMatrix_mulVec_eq_zero_iff_对任意_adj
   条件: {x : V -> 实数}
   证明: by
   rw [← (posSemidef_lapMatrix Real G).toLinearMap₂'_zero_iff]; rw [star_trivial]; rw [lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_adj]
@@ -446,7 +446,7 @@ theorem lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_reachable
   | cons hA _ h' => exact (h _ _ hA).trans h'
 
 中文:
-定理 lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_reachable
+定理 lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_对任意_reachable
   条件: (x : V -> 实数)
   证明: by
   rw [lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_adj]
@@ -478,7 +478,7 @@ theorem lapMatrix_mulVec_eq_zero_iff_forall_reachable
 @[simp]
 
 中文:
-定理 lapMatrix_mulVec_eq_zero_iff_forall_reachable
+定理 lapMatrix_mulVec_eq_zero_iff_对任意_reachable
   条件: {x : V -> 实数}
   证明: by
   rw [← (posSemidef_lapMatrix Real G).toLinearMap₂'_zero_iff]; rw [star_trivial]; rw [lapMatrix_toLinearMap₂'_apply'_eq_zero_iff_forall_reachable]
@@ -509,7 +509,7 @@ theorem det_lapMatrix_eq_zero
 
 中文:
 定理 det_lapMatrix_eq_zero
-  条件: [h : Nonempty V]
+  条件: [h : 非空 V]
   结论: (G.lapMatrix 实数).det = 0
   证明: by
   rw [← Matrix.exists_mulVec_eq_zero_iff]
@@ -545,7 +545,7 @@ lemma mem_ker_toLin'_lapMatrix_of_connectedComponent
 
 中文:
 引理 mem_ker_toLin'_lapMatrix_of_connectedComponent
-  结论: {G : SimpleGraph V} [DecidableRel G.Adj]
+  结论: {G : 简单图 V} [DecidableRel G.伴随]
   证明: by
   rw [LinearMap.mem_ker]; rw [toLin'_apply]; rw [lapMatrix_mulVec_eq_zero_iff_forall_reachable]
   grind [ConnectedComponent.eq]

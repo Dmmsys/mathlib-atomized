@@ -44,7 +44,7 @@ definition IsCompactSystem
 
 中文:
 定义 IsCompactSystem
-  签名: (S : Set (Set α))
+  签名: (S : 集合 (集合 α))
   定义体: forall C : Nat -> Set α, (forall i, C i in S) -> ⋂ i, C i = ∅ -> exists (n : Nat), dissipate C n = ∅
 
 Depends on / 依赖: dissipate
@@ -67,7 +67,7 @@ lemma of_nonempty_iInter
   exact h C hC
 
 中文:
-引理 of_nonempty_iInter
+引理 of_nonempty_i整数er
   证明: by
   intro C hC
   contrapose!
@@ -94,8 +94,8 @@ lemma nonempty_iInter
   exact hp C hC
 
 中文:
-引理 nonempty_iInter
-  结论: (hp : IsCompactSystem S) {C : 自然数 -> Set α} (hC : 对任意 i, C i in S)
+引理 nonempty_i整数er
+  结论: (hp : IsCompactSystem S) {C : 自然数 -> 集合 α} (hC : 对任意 i, C i in S)
   证明: by
   revert h_nonempty
   contrapose!
@@ -121,8 +121,8 @@ theorem iff_nonempty_iInter
 @[simp]
 
 中文:
-定理 iff_nonempty_iInter
-  条件: (S : Set (Set α))
+定理 iff_nonempty_i整数er
+  条件: (S : 集合 (集合 α))
   证明: ⟨nonempty_iInter, of_nonempty_iInter⟩
 
 @[simp]
@@ -146,7 +146,7 @@ lemma of_IsEmpty
 
 中文:
 引理 of_IsEmpty
-  条件: [IsEmpty α] (S : Set (Set α))
+  条件: [是空 α] (S : 集合 (集合 α))
   结论: IsCompactSystem S
   证明: fun s _ _ => ⟨0, Set.eq_empty_of_isEmpty (dissipate s 0)⟩
 
@@ -165,7 +165,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {T : Set (Set α)} (hT : IsCompactSystem T) (hST : S subseteq T)
+  条件: {T : 集合 (集合 α)} (hT : IsCompactSystem T) (hST : S subseteq T)
   证明: fun C hC1 hC2 => hT C (fun i => hST (hC1 i)) hC2
 -/
 theorem mono {T : Set (Set α)} (hT : IsCompactSystem T) (hST : S subseteq T) :
@@ -287,8 +287,8 @@ lemma isCompactSystem_iff_nonempty_iInter_of_lt
   exact le
 
 中文:
-引理 isCompactSystem_iff_nonempty_iInter_of_lt
-  条件: (S : Set (Set α))
+引理 isCompactSystem_iff_nonempty_i整数er_of_lt
+  条件: (S : 集合 (集合 α))
   证明: by
   simp_rw [IsCompactSystem.iff_nonempty_iInter]
   refine ⟨fun h C hi h'=> h C hi (fun n => dissipate_eq_biInter_lt ▸ (h' (n + 1))),
@@ -404,7 +404,7 @@ theorem isCompactSystem_iff_nonempty_iInter_of_directed
   · exact h1 C h3 s
 
 中文:
-定理 isCompactSystem_iff_nonempty_iInter_of_directed
+定理 isCompactSystem_iff_nonempty_i整数er_of_directed
   条件: (hpi : IsPiSystem S)
   证明: by
   rw [isCompactSystem_iff_of_directed hpi]
@@ -440,7 +440,7 @@ theorem isCompactSystem_isCompact_isClosed
 
 中文:
 定理 isCompactSystem_isCompact_isClosed
-  条件: (α : 类型) [TopologicalSpace α]
+  条件: (α : 类型) [拓扑空间 α]
   证明: by
   refine IsCompactSystem.of_nonempty_iInter fun C hC_cc h_nonempty => ?_
   rw [← iInter_dissipate]
@@ -471,7 +471,7 @@ theorem isCompactSystem_isCompact
 
 中文:
 定理 isCompactSystem_isCompact
-  条件: (α : 类型) [TopologicalSpace α] [T2Space α]
+  条件: (α : 类型) [拓扑空间 α] [T2空间 α]
   证明: by
   convert! isCompactSystem_isCompact_isClosed α with s
   simpa using IsCompact.isClosed
@@ -493,7 +493,7 @@ theorem isCompactSystem_insert_univ_isCompact_isClosed
 
 中文:
 定理 isCompactSystem_insert_univ_isCompact_isClosed
-  条件: (α : 类型) [TopologicalSpace α]
+  条件: (α : 类型) [拓扑空间 α]
   证明: (isCompactSystem_isCompact_isClosed α).insert_univ
 
 Depends on / 依赖: insert_univ, isCompactSystem_isCompact_isClosed

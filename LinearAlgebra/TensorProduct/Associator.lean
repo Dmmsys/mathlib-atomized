@@ -81,7 +81,7 @@ theorem lid_tmul
 中文:
 定理 lid_tmul
   条件: (m : M) (r : R)
-  结论: (TensorProduct.lid R M : R otimes M -> M) (r otimesₜ m) = r • m
+  结论: (张量积.lid R M : R otimes M -> M) (r otimesₜ m) = r • m
   证明: rfl
 
 @[simp]
@@ -102,7 +102,7 @@ theorem lid_symm_apply
 中文:
 定理 lid_symm_apply
   条件: (m : M)
-  结论: (TensorProduct.lid R M).symm m = 1 otimesₜ m
+  结论: (张量积.lid R M).symm m = 1 otimesₜ m
   证明: rfl
 -/
 theorem lid_symm_apply (m : M) : (TensorProduct.lid R M).symm m = 1 otimesₜ m :=
@@ -118,7 +118,7 @@ theorem toLinearMap_symm_lid
 
 中文:
 定理 toLinearMap_symm_lid
-  结论: (TensorProduct.lid R M).symm.toLinearMap = mk R R M 1
+  结论: (张量积.lid R M).symm.toLinearMap = mk R R M 1
   证明: rfl
 -/
 theorem toLinearMap_symm_lid : (TensorProduct.lid R M).symm.toLinearMap = mk R R M 1 := rfl
@@ -137,7 +137,7 @@ lemma includeRight_lid
 
 中文:
 引理 includeRight_lid
-  条件: {S : 类型} [Semiring S] [Algebra R S] (m : R otimes[R] M)
+  条件: {S : 类型} [半环 S] [代数 R S] (m : R otimes[R] M)
   证明: by
   suffices forall m, (LinearMap.rTensor M (Algebra.algHom R R S).toLinearMap).comp
     (TensorProduct.lid R M).symm.toLinearMap m = 1 otimesₜ[R] m by
@@ -203,7 +203,7 @@ theorem rid_tmul
 中文:
 定理 rid_tmul
   条件: (m : M) (r : R)
-  结论: (TensorProduct.rid R M) (m otimesₜ r) = r • m
+  结论: (张量积.rid R M) (m otimesₜ r) = r • m
   证明: rfl
 
 @[simp]
@@ -224,7 +224,7 @@ theorem rid_symm_apply
 中文:
 定理 rid_symm_apply
   条件: (m : M)
-  结论: (TensorProduct.rid R M).symm m = m otimesₜ 1
+  结论: (张量积.rid R M).symm m = m otimesₜ 1
   证明: rfl
 -/
 theorem rid_symm_apply (m : M) : (TensorProduct.rid R M).symm m = m otimesₜ 1 :=
@@ -242,7 +242,7 @@ theorem toLinearMap_symm_rid
 
 中文:
 定理 toLinearMap_symm_rid
-  结论: (TensorProduct.rid R M).symm.toLinearMap = (mk R M R).flip 1
+  结论: (张量积.rid R M).symm.toLinearMap = (mk R M R).flip 1
   证明: rfl
 
 @[simp]
@@ -334,7 +334,7 @@ theorem lid_eq_rid
 
 中文:
 定理 lid_eq_rid
-  结论: TensorProduct.lid R R = TensorProduct.rid R R
+  结论: 张量积.lid R R = 张量积.rid R R
   证明: LinearEquiv.toLinearMap_injective ext' mul_comm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toLinearMap_injective, mul_comm, toLinearMap_injective
@@ -395,8 +395,8 @@ lemma CompatibleSMul.of_algebraMap_surjective
     simp [smul_tmul]
 
 中文:
-引理 CompatibleSMul.of_algebraMap_surjective
-  结论: {A : 类型} [CommSemiring A] [Algebra R A]
+引理 余mpatibleSMul.of_algebraMap_surjective
+  结论: {A : 类型} [交换半环 A] [代数 R A]
   证明: by
     obtain ⟨r, rfl⟩ := h a
     simp [smul_tmul]

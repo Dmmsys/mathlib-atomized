@@ -56,7 +56,7 @@ structure PreOneHypercover
   参数: (S : C)
   继承: PreZeroHypercover.{w} S
   公理与运算 (5 个):
-    - I₁((i₁ i₂ : I₀)) : Type w
+    - I₁((i₁ i₂ : I₀)) : 类型 w
     - Y(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : C
     - p₁(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₁
     - p₂(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₂
@@ -223,7 +223,7 @@ definition sieve₁'
 
 中文:
 定义 sieve₁'
-  签名: : Sieve (pullback (E.f i₁) (E.f i₂))
+  签名: : 筛 (pullback (E.f i₁) (E.f i₂))
   定义体: Sieve.ofArrows _ (fun (j : E.I₁ i₁ i₂) => E.toPullback j)
 -/
 noncomputable def sieve₁' : Sieve (pullback (E.f i₁) (E.f i₂)) :=
@@ -307,7 +307,7 @@ abbreviation I₁'
 
 中文:
 缩写 I₁'
-  签名: : Type w
+  签名: : 类型 w
   定义体: Sigma (fun (i : E.I₀ × E.I₀) => E.I₁ i.1 i.2)
 -/
 abbrev I₁' : Type w := Sigma (fun (i : E.I₀ × E.I₀) => E.I₁ i.1 i.2)
@@ -475,7 +475,7 @@ definition forkOfIsColimit
 
 中文:
 定义 forkOfIsColimit
-  签名: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
+  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
   定义体: .ofι (F.map (Cofan.IsColimit.desc hc E.f).op) by
     simp_rw [← Functor.map_comp, ← op_comp]
     congr 2
@@ -506,7 +506,7 @@ lemma forkOfIsColimit_ι_map_inj
 
 中文:
 引理 forkOfIsColimit_ι_map_inj
-  结论: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
+  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'}
   证明: by
   simp [forkOfIsColimit, ← Functor.map_comp, ← op_comp]
 
@@ -586,7 +586,7 @@ definition sigmaOfIsColimit
 
 中文:
 定义 sigmaOfIsColimit
-  签名: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
+  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
   定义体: E.toPreZeroHypercover.sigmaOfIsColimit hc
   I₁ _ _ := PUnit
   Y _ _ _ := d.pt
@@ -618,7 +618,7 @@ lemma p₁_sigmaOfIsColimit
 
 中文:
 引理 p₁_sigmaOfIsColimit
-  结论: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
+  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
   证明: by
   simp [sigmaOfIsColimit]
 
@@ -642,7 +642,7 @@ lemma p₂_sigmaOfIsColimit
 
 中文:
 引理 p₂_sigmaOfIsColimit
-  结论: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'} (hd : IsColimit d)
+  结论: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'} (hd : 是余极限 d)
   证明: by
   simp [sigmaOfIsColimit]
 
@@ -684,7 +684,7 @@ definition isLimitSigmaOfIsColimitEquiv
 
 中文:
 定义 isLimitSigmaOfIsColimitEquiv
-  签名: {c : Cofan E.X} (hc : IsColimit c) {d : Cofan E.Y'}
+  签名: {c : Cofan E.X} (hc : 是余极限 c) {d : Cofan E.Y'}
   定义体: by
   refine (Multifork.isLimitEquivOfIsos _ _ ?_ ?_ ?_ ?_ ?_ ?_).trans
     (IsLimit.ofConeEquiv <| (MulticospanIndex.multiforkOfParallelHomsEquivFork
@@ -802,7 +802,7 @@ instance :
 
 中文:
 实例 :
-  签名: Nonempty (PreOneHypercover.{w} S)
+  签名: 非空 (PreOneHypercover.{w} S)
   定义体: ⟨trivial S⟩
 -/
 instance : Nonempty (PreOneHypercover.{w} S) := ⟨trivial S⟩
@@ -868,7 +868,7 @@ lemma sieve₁_inter
 
 中文:
 引理 sieve₁_inter
-  结论: [HasPullbacks C] {i j : E.I₀ × F.I₀} {W : C}
+  结论: [有Pullbacks C] {i j : E.I₀ × F.I₀} {W : C}
   证明: by
   ext Y f
   let p : W ⟶ pullback ((inter E F).f i) ((inter E F).f j) :=
@@ -935,7 +935,7 @@ structure Hom
     - w₁₂({i j : E.I₀} (k : E.I₁ i j)) : h₁ k ≫ F.p₂ (s₁ k) = E.p₂ k ≫ h₀ j  [default: by cat_disch]
 
 中文:
-结构 Hom
+结构 态射
   参数: (E F : PreOneHypercover S)
   公理与运算 (4 个):
     - s₁({i j : E.I₀} (k : E.I₁ i j)) : F.I₁ (s₀ i) (s₀ j)
@@ -970,7 +970,7 @@ definition Hom.id
   h₁ _ := 𝟙 _
 
 中文:
-定义 Hom.id
+定义 态射.id
   签名: (E : PreOneHypercover S)
   定义体: PreZeroHypercover.Hom.id _
   s₁ := _root_.id
@@ -1000,8 +1000,8 @@ definition Hom.comp
   w₁₂ := by simp [w₁₂, w₁₂_assoc]
 
 中文:
-定义 Hom.comp
-  签名: (f : E.Hom F) (g : F.Hom G)
+定义 态射.comp
+  签名: (f : E.态射 F) (g : F.态射 G)
   定义体: PreZeroHypercover.Hom.comp _ _
   s₁ := g.s₁ ∘ f.s₁
   h₁ i := f.h₁ i ≫ g.h₁ _
@@ -1026,8 +1026,8 @@ definition Hom.s₁'
   body: ⟨⟨f.s₀ k.1.1, f.s₀ k.1.2⟩, f.s₁ k.2⟩
 
 中文:
-定义 Hom.s₁'
-  签名: (f : E.Hom F) (k : E.I₁')
+定义 态射.s₁'
+  签名: (f : E.态射 F) (k : E.I₁')
   定义体: ⟨⟨f.s₀ k.1.1, f.s₀ k.1.2⟩, f.s₁ k.2⟩
 -/
 def Hom.s₁' (f : E.Hom F) (k : E.I₁') : F.I₁' :=
@@ -1048,7 +1048,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (PreOneHypercover S)
+  签名: 范畴 (PreOneHypercover S)
   定义体: Hom
   id E := Hom.id E
   comp f g := f.comp g
@@ -1096,8 +1096,8 @@ definition Hom.mapMultiforkOfIsLimit
     
 
 中文:
-定义 Hom.mapMultiforkOfIsLimit
-  签名: (f : E.Hom F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)}
+定义 态射.mapMultiforkOfIsLimit
+  签名: (f : E.态射 F) (P : Cᵒᵖ ⥤ A) {c : Multifork (E.multicospanIndex P)}
   定义体: Multifork.IsLimit.lift hc (fun a => d.ι (f.s₀ a) ≫ P.map (f.h₀ a).op) by
     intro (k : E.I₁')
     simp only [multicospanIndex_right, multicospanShape_fst, multicospanIndex_left,
@@ -1131,7 +1131,7 @@ lemma Hom.mapMultiforkOfIsLimit_ι
   simp [mapMultiforkOfIsLimit]
 
 中文:
-引理 Hom.mapMultiforkOfIsLimit_ι
+引理 态射.mapMultiforkOfIsLimit_ι
   证明: by
   simp [mapMultiforkOfIsLimit]
 
@@ -1162,7 +1162,7 @@ lemma Hom.mapMultiforkOfIsLimit_id
   simp
 
 中文:
-引理 Hom.mapMultiforkOfIsLimit_id
+引理 态射.mapMultiforkOfIsLimit_id
   条件: (d : Multifork (E.multicospanIndex P))
   证明: by
   apply Multifork.IsLimit.hom_ext hc
@@ -1189,8 +1189,8 @@ lemma Hom.mapMultiforkOfIsLimit_comp
   simp
 
 中文:
-引理 Hom.mapMultiforkOfIsLimit_comp
-  结论: (g : F.Hom G) (t : Multifork (G.multicospanIndex P))
+引理 态射.mapMultiforkOfIsLimit_comp
+  结论: (g : F.态射 G) (t : Multifork (G.multicospanIndex P))
   证明: by
   apply Multifork.IsLimit.hom_ext hc
   simp
@@ -1574,8 +1574,8 @@ lemma Hom.ext'
   simp_all only [eqToHom_refl, Category.comp_id, implies_true, congrIndexOneOfEqIso_refl,
 
 中文:
-引理 Hom.ext'
-  结论: {E F : PreOneHypercover S} {f g : E.Hom F}
+引理 态射.ext'
+  结论: {E F : PreOneHypercover S} {f g : E.态射 F}
   证明: by
   obtain ⟨toHomf, fs₁, fh₁⟩ := f
   obtain ⟨toHomg, gs₁, gh₁⟩ := g
@@ -1618,8 +1618,8 @@ lemma Hom.ext'_iff
   simp [congrIndexOneOfEq]
 
 中文:
-引理 Hom.ext'_iff
-  条件: {E F : PreOneHypercover S} {f g : E.Hom F}
+引理 态射.ext'_iff
+  条件: {E F : PreOneHypercover S} {f g : E.态射 F}
   证明: by
   refine ⟨fun h => ?_, fun ⟨hs₀, hh₀, hs₁, hh₁⟩ => Hom.ext' hs₀ hh₀ hs₁ hh₁⟩
   subst h
@@ -2041,8 +2041,8 @@ definition Hom.mapMulticospan
   signature: {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.Hom F)
 
 中文:
-定义 Hom.mapMulticospan
-  签名: {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.Hom F)
+定义 态射.mapMulticospan
+  签名: {E : PreOneHypercover.{w} S} {F : PreOneHypercover.{w'} S} (f : E.态射 F)
 
 Depends on / 依赖: F.multicospanShape, multicospanShape
 -/
@@ -2191,7 +2191,7 @@ definition interFst
 
 中文:
 定义 interFst
-  签名: : (E.inter F).Hom E where
+  签名: : (E.inter F).态射 E where
   定义体: E.toPreZeroHypercover.interFst F.toPreZeroHypercover
   s₁ {i j} k := k.1
   h₁ _ := pullback.fst _ _
@@ -2219,7 +2219,7 @@ definition interSnd
 
 中文:
 定义 interSnd
-  签名: : (E.inter F).Hom F where
+  签名: : (E.inter F).态射 F where
   定义体: E.toPreZeroHypercover.interSnd F.toPreZeroHypercover
   s₁ {i j} k := k.2
   h₁ _ := pullback.snd _ _
@@ -2257,7 +2257,7 @@ h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
 
 中文:
 定义 interLift
-  签名: {G : PreOneHypercover.{w''} S} (f : G.Hom E) (g : G.Hom F)
+  签名: {G : PreOneHypercover.{w''} S} (f : G.态射 E) (g : G.态射 F)
   定义体: PreZeroHypercover.interLift f.toHom g.toHom
   s₁ {i j} k := ⟨f.s₁ k, g.s₁ k⟩
 h₁ k := pullback.lift (f.h₁ k) (g.h₁ k) by
@@ -2368,7 +2368,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: {S : C} (E : PreOneHypercover S) [E.HasPullbacks]
+  签名: {S : C} (E : PreOneHypercover S) [E.有Pullbacks]
   定义体: E
   mem₀ := mem₀
   mem₁ i₁ i₂ W p₁ p₂ w := by
@@ -2410,7 +2410,7 @@ definition multiforkLift
 
 中文:
 定义 multiforkLift
-  签名: : c.pt ⟶ F.obj.obj (Opposite.op S)
+  签名: : c.pt ⟶ F.obj.obj (对偶.op S)
   定义体: F.property.amalgamateOfArrows _ E.mem₀ c.ι (fun W i₁ i₂ p₁ p₂ w => by
     apply F.property.hom_ext ⟨_, E.mem₁ _ _ _ _ w⟩
     rintro ⟨T, g, j, h, fac₁, fac₂⟩
@@ -2472,7 +2472,7 @@ definition isLimitMultifork
 
 中文:
 定义 isLimitMultifork
-  签名: : IsLimit (E.multifork F.1)
+  签名: : 是极限 (E.multifork F.1)
   定义体: Multifork.IsLimit.mk _ (fun c => multiforkLift c) (fun c => multiforkLift_map c) (by
     intro c m hm
     apply F.property.hom_ext_ofArrows _ E.mem₀
@@ -2582,7 +2582,7 @@ definition inter
 
 中文:
 定义 inter
-  签名: [HasPullbacks C] (E F : J.OneHypercover S)
+  签名: [有Pullbacks C] (E F : J.OneHypercover S)
   定义体: E.toPreOneHypercover.inter F.toPreOneHypercover
   mem₀ := (E.toZeroHypercover.inter F.toZeroHypercover).mem₀
   mem₁ i₁ i₂ W p₁ p₂ h := by
@@ -2620,7 +2620,7 @@ abbreviation Hom
   body: E.toPreOneHypercover.Hom F.toPreOneHypercover
 
 中文:
-缩写 Hom
+缩写 态射
   签名: (E : OneHypercover.{w} J S) (F : OneHypercover.{w'} J S)
   定义体: E.toPreOneHypercover.Hom F.toPreOneHypercover
 
@@ -2644,7 +2644,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (J.OneHypercover S)
+  签名: 范畴 (J.OneHypercover S)
   定义体: Hom
   id E := PreOneHypercover.Hom.id E.toPreOneHypercover
   comp f g := f.comp g
@@ -2705,7 +2705,7 @@ definition preOneHypercover
 
 中文:
 定义 preOneHypercover
-  签名: : PreOneHypercover.{max u v} X where
+  签名: : PreOneHypercover.{最大值 u v} X where
   定义体: S.Arrow
   X f := f.Y
   f f := f.f
@@ -2778,7 +2778,7 @@ lemma preOneHypercover_sieve₁
 
 中文:
 引理 preOneHypercover_sieve₁
-  结论: (f₁ f₂ : S.Arrow) {W : C} (p₁ : W ⟶ f₁.Y) (p₂ : W ⟶ f₂.Y)
+  结论: (f₁ f₂ : S.箭头) {W : C} (p₁ : W ⟶ f₁.Y) (p₂ : W ⟶ f₂.Y)
   证明: by
   ext Y f
   simp only [Sieve.top_apply, iff_true]
@@ -2907,7 +2907,7 @@ lemma sieve₁'_toPreOneHypercover_eq_top
 
 中文:
 引理 sieve₁'_toPreOneHypercover_eq_top
-  结论: {S : C} (E : PreZeroHypercover S) [E.HasPullbacks]
+  结论: {S : C} (E : PreZeroHypercover S) [E.有Pullbacks]
   证明: by
   rw [eq_top_iff]
   intro Y f _
@@ -2970,7 +2970,7 @@ definition PreZeroHypercover.refineOneHypercover
 
 中文:
 定义 PreZeroHypercover.refineOneHypercover
-  签名: {X : C} (E : PreZeroHypercover.{w} X) [E.HasPullbacks]
+  签名: {X : C} (E : PreZeroHypercover.{w} X) [E.有Pullbacks]
   定义体: E
   I₁ i j := (F i j).I₀
   Y i j k := (F i j).X k
@@ -3001,7 +3001,7 @@ instance :
 
 中文:
 实例 :
-  签名: (E.refineOneHypercover F).HasPullbacks
+  签名: (E.refineOneHypercover F).有Pullbacks
   定义体: ‹_›
 
 Depends on / 依赖: Finset, Finset.univ.map, SimpleGraph, SimpleGraph.mk

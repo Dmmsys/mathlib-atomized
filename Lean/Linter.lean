@@ -45,7 +45,7 @@ definition whenLinterOption
 
 中文:
 定义 whenLinterOption
-  签名: (opt : Lean.Option 布尔) (x : m Unit)
+  签名: (opt : Lean.选项类型 布尔值) (x : m 单元)
   定义体: do
   if getLinterValue opt (← getLinterOptions) then x
 -/
@@ -70,7 +70,7 @@ definition whenNotLinterOption
 
 中文:
 定义 whenNotLinterOption
-  签名: (opt : Lean.Option 布尔) (x : m Unit)
+  签名: (opt : Lean.选项类型 布尔值) (x : m 单元)
   定义体: do
   unless getLinterValue opt (← getLinterOptions) do x
 -/
@@ -106,7 +106,7 @@ definition whenLinterActivated
 
 中文:
 定义 whenLinterActivated
-  签名: (opt : Lean.Option 布尔) (x : CommandElab) (breakOnError := true)
+  签名: (opt : Lean.选项类型 布尔值) (x : CommandElab) (breakOnError := true)
   定义体: withSetOptionIn fun stx => whenLinterOption opt do
     unless ← pure breakOnError <&&> MonadLog.hasErrors do
       x stx

@@ -310,7 +310,7 @@ lemma groupCohomologyπOdd_eq_iff
 
 中文:
 引理 groupCohomologyπOdd_eq_iff
-  条件: (i : 自然数) (hi : Odd i) (x y : LinearMap.ker A.norm.hom.toLinearMap)
+  条件: (i : 自然数) (hi : Odd i) (x y : 线性映射.ker A.norm.hom.toLinearMap)
   证明: by
   rw [← sub_eq_zero]; rw [← map_sub]; rw [groupCohomologyπOdd_eq_zero_iff]; rw [AddSubgroupClass.coe_sub]
 

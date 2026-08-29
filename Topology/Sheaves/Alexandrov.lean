@@ -170,7 +170,7 @@ lemma exists_le_of_le_sup
   grind [principalOpen_le_iff, Opens.mem_iSup]
 
 中文:
-引理 exists_le_of_le_sup
+引理 存在_le_of_le_sup
   结论: {ι : 类型v} {x : X}
   证明: by
   grind [principalOpen_le_iff, Opens.mem_iSup]
@@ -324,7 +324,7 @@ definition isLimit
 
 中文:
 定义 isLimit
-  签名: {X : TopCat.{v}} [Preorder X] [Topology.IsUpperSet X]
+  签名: {X : 顶元素范畴.{v}} [预序 X] [拓扑.是上集 X]
   定义体: limit.lift _ (lowerCone Us S)
   fac := by
     rintro S ⟨V, i, hV⟩
@@ -417,7 +417,7 @@ theorem Topology.IsUpperSet.isSheaf_of_isRightKanExtension
     @rightKanExtensionUnique _ _ _ _ _ _ _ _ _ _ (by assumption) _ _ 
 
 中文:
-定理 Topology.IsUpperSet.isSheaf_of_isRightKanExtension
+定理 拓扑.是上集.isSheaf_of_isRightKanExtension
   证明: by
   let γ : principals X ⋙ principalsKanExtension F ⟶ F :=
     (principals X).pointwiseRightKanExtensionCounit F

@@ -49,8 +49,8 @@ theorem ae_const_le_iff_forall_lt_measure_zero
   simp_rw [eventually_const_le_iff_forall_lt_eventually_const_lt, ae_iff, not_lt]
 
 中文:
-定理 ae_const_le_iff_forall_lt_measure_zero
-  结论: {β} [LinearOrder β] [TopologicalSpace β]
+定理 ae_const_le_iff_对任意_lt_measure_zero
+  结论: {β} [线性序 β] [拓扑空间 β]
   证明: by
   simp_rw [eventually_const_le_iff_forall_lt_eventually_const_lt, ae_iff, not_lt]
 
@@ -70,8 +70,8 @@ lemma ae_le_const_iff_forall_gt_measure_zero
   proof: ae_const_le_iff_forall_lt_measure_zero (β := βᵒᵈ) _ _
 
 中文:
-引理 ae_le_const_iff_forall_gt_measure_zero
-  结论: {β} [LinearOrder β] [TopologicalSpace β]
+引理 ae_le_const_iff_对任意_gt_measure_zero
+  结论: {β} [线性序 β] [拓扑空间 β]
   证明: ae_const_le_iff_forall_lt_measure_zero (β := βᵒᵈ) _ _
 
 Depends on / 依赖: ae_const_le_iff_forall_lt_measure_zero
@@ -96,8 +96,8 @@ theorem ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀
       (measure_mono (Set.inter_subset_right)).tr
 
 中文:
-定理 ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀
-  结论: [SigmaFinite μ]
+定理 ae_le_of_对任意_setL整数egral_le_of_sigmaFinite₀
+  结论: [σ有限 μ]
   证明: by
   have A : forall (ε N : Real>=0) (p : Nat), 0 < ε ->
       μ ({x | g x + ε <= f x ∧ g x <= N} inter spanningSets μ p) = 0 := by
@@ -168,8 +168,8 @@ theorem ae_le_of_forall_setLIntegral_le_of_sigmaFinite
   proof: ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀ hf.aemeasurable h
 
 中文:
-定理 ae_le_of_forall_setLIntegral_le_of_sigmaFinite
-  结论: [SigmaFinite μ] {f g : α -> 实数>=0∞}
+定理 ae_le_of_对任意_setL整数egral_le_of_sigmaFinite
+  结论: [σ有限 μ] {f g : α -> 实数>=0∞}
   证明: ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀ hf.aemeasurable h
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable
@@ -193,8 +193,8 @@ theorem ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀
   filter_upwards [A, B] with x using le_antisymm
 
 中文:
-定理 ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀
-  结论: [SigmaFinite μ]
+定理 ae_eq_of_对任意_setL整数egral_eq_of_sigmaFinite₀
+  结论: [σ有限 μ]
   证明: by
   have A : f <=ᵐ[μ] g :=
     ae_le_of_forall_setLIntegral_le_of_sigmaFinite₀ hf fun s hs h's => le_of_eq (h s hs h's)
@@ -222,8 +222,8 @@ theorem ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite
   proof: ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hf.aemeasurable hg.aemeasurable h
 
 中文:
-定理 ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite
-  结论: [SigmaFinite μ] {f g : α -> 实数>=0∞}
+定理 ae_eq_of_对任意_setL整数egral_eq_of_sigmaFinite
+  结论: [σ有限 μ] {f g : α -> 实数>=0∞}
   证明: ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hf.aemeasurable hg.aemeasurable h
 
 Depends on / 依赖: aemeasurable, hf.aemeasurable, hg.aemeasurable
@@ -249,8 +249,8 @@ theorem AEMeasurable.ae_eq_of_forall_setLIntegral_eq
   suffices f =ᵐ[μ.restrict (s u
 
 中文:
-定理 AEMeasurable.ae_eq_of_forall_setLIntegral_eq
-  结论: {f g : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+定理 几乎处处可测.ae_eq_of_对任意_setL整数egral_eq
+  结论: {f g : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: by
   have hf' : AEFinStronglyMeasurable f μ :=
     ENNReal.aefinStronglyMeasurable_of_aemeasurable hfi hf
@@ -383,8 +383,8 @@ lemma ae_eq_of_setLIntegral_prod_eq
   refine lintegral_eq_lintegral_of_isPiSystem_of_uni
 
 中文:
-引理 ae_eq_of_setLIntegral_prod_eq
-  结论: {β : 类型} {mβ : MeasurableSpace β}
+引理 ae_eq_of_setL整数egral_prod_eq
+  结论: {β : 类型} {mβ : 可测空间 β}
   证明: by
   have hg_int : ∫⁻ x, g x ∂μ != ∞ := by
     rwa [← setLIntegral_univ, ← Set.univ_prod_univ, ← h .univ .univ, Set.univ_prod_univ,
@@ -428,7 +428,7 @@ theorem withDensity_eq_iff_of_sigmaFinite
 
 中文:
 定理 withDensity_eq_iff_of_sigmaFinite
-  结论: [SigmaFinite μ] {f g : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: [σ有限 μ] {f g : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: ⟨fun hfg => by
     refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite₀ hf hg fun s hs _ => ?_
     rw [← withDensity_apply f hs]; rw [← withDensity_apply g hs]; rw [← hfg], withDensity_congr_ae⟩
@@ -455,7 +455,7 @@ theorem withDensity_eq_iff
 
 中文:
 定理 withDensity_eq_iff
-  结论: {f g : α -> 实数>=0∞} (hf : AEMeasurable f μ)
+  结论: {f g : α -> 实数>=0∞} (hf : 几乎处处可测 f μ)
   证明: ⟨fun hfg => by
     refine AEMeasurable.ae_eq_of_forall_setLIntegral_eq hf hg hfi ?_ fun s hs _ => ?_
     · rwa [← setLIntegral_univ, ← withDensity_apply g MeasurableSet.univ, ← hfg,

@@ -112,7 +112,7 @@ definition isColimit'
 
 中文:
 定义 isColimit'
-  签名: [LinearOrder ι]
+  签名: [线性序 ι]
   定义体: Multicofork.isColimitToLinearOrder _ h.isColimit
     { iso i j := toSSetFunctor.mapIso (eqToIso (by
         dsimp
@@ -147,7 +147,7 @@ abbreviation BicartSq
 
 中文:
 缩写 BicartSq
-  签名: (A₁ A₂ A₃ A₄ : X.Subcomplex)
+  签名: (A₁ A₂ A₃ A₄ : X.子复形)
   定义体: Lattice.BicartSq A₁ A₂ A₃ A₄
 
 Depends on / 依赖: BicartSq, Lattice, Lattice.BicartSq
@@ -172,7 +172,7 @@ lemma BicartSq.isPushout
 
 中文:
 引理 BicartSq.isPushout
-  条件: {A₁ A₂ A₃ A₄ : X.Subcomplex} (sq : BicartSq A₁ A₂ A₃ A₄)
+  条件: {A₁ A₂ A₃ A₄ : X.子复形} (sq : BicartSq A₁ A₂ A₃ A₄)
   证明: rfl
   isColimit' :=
     ⟨evaluationJointlyReflectsColimits _

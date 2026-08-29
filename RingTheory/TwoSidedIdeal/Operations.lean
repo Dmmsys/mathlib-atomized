@@ -61,7 +61,7 @@ abbreviation span
 
 中文:
 缩写 span
-  签名: (s : Set R)
+  签名: (s : 集合 R)
   定义体: { ringCon := ringConGen (fun a b => a - b in s) }
 
 Depends on / 依赖: ringCon, ringConGen
@@ -83,8 +83,8 @@ lemma subset_span
 
 中文:
 引理 subset_span
-  条件: {s : Set R}
-  结论: s subseteq (span s : Set R)
+  条件: {s : 集合 R}
+  结论: s subseteq (span s : 集合 R)
   证明: by
   intro x hx
   rw [SetLike.mem_coe]; rw [mem_iff]
@@ -115,7 +115,7 @@ lemma mem_span_iff
 
 中文:
 引理 mem_span_iff
-  条件: {s : Set R} {x}
+  条件: {s : 集合 R} {x}
   证明: by
   refine ⟨?_, fun h => h _ subset_span⟩
   delta span
@@ -153,7 +153,7 @@ exact fun I hI => hx I h.trans hI
 
 中文:
 引理 span_mono
-  条件: {s t : Set R} (h : s subseteq t)
+  条件: {s t : 集合 R} (h : s subseteq t)
   结论: span s <= span t
   证明: by
   intro x hx
@@ -180,7 +180,7 @@ lemma span_le
 
 中文:
 引理 span_le
-  条件: {s : Set R} {I : TwoSidedIdeal R}
+  条件: {s : 集合 R} {I : TwoSided理想 R}
   结论: span s <= I ↔ s subseteq I
   证明: by
   rw [TwoSidedIdeal.ringCon_le_iff]; rw [RingCon.gi _ |>.gc]
@@ -214,7 +214,7 @@ theorem span_induction
 
 中文:
 定理 span_induction
-  结论: {s : Set R}
+  结论: {s : 集合 R}
   证明: let J : TwoSidedIdeal R := .mk'
     {x | exists hx, p x hx}
     ⟨zero_mem _, zero⟩
@@ -255,7 +255,7 @@ definition map
 
 中文:
 定义 map
-  签名: (I : TwoSidedIdeal R)
+  签名: (I : TwoSided理想 R)
   定义体: span (f '' I)
 -/
 def map (I : TwoSidedIdeal R) : TwoSidedIdeal S :=
@@ -271,7 +271,7 @@ lemma map_mono
 
 中文:
 引理 map_mono
-  条件: {I J : TwoSidedIdeal R} (h : I <= J)
+  条件: {I J : TwoSided理想 R} (h : I <= J)
   证明: span_mono Set.image_mono h
 
 Depends on / 依赖: Set.image_mono, image_mono, span_mono
@@ -299,7 +299,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: : TwoSidedIdeal S ->o TwoSidedIdeal R where
+  签名: : TwoSided理想 S ->o TwoSided理想 R where
   定义体: ⟨I.ringCon.comap f⟩
   monotone' := by
     intro I J h
@@ -329,7 +329,7 @@ lemma comap_le_comap
 
 中文:
 引理 comap_le_comap
-  条件: {I J : TwoSidedIdeal S} (h : I <= J)
+  条件: {I J : TwoSided理想 S} (h : I <= J)
   证明: (comap f).monotone h
 
 Depends on / 依赖: monotone
@@ -350,7 +350,7 @@ lemma mem_comap
 
 中文:
 引理 mem_comap
-  条件: {I : TwoSidedIdeal S} {x : R}
+  条件: {I : TwoSided理想 S} {x : R}
   证明: by
   simp [comap, RingCon.comap, mem_iff]
 
@@ -370,7 +370,7 @@ definition _root_.RingEquiv.mapTwoSidedIdeal
     (by ext; simp [mem_comap])
 
 中文:
-定义 _root_.RingEquiv.mapTwoSidedIdeal
+定义 _root_.环等价.mapTwoSidedIdeal
   签名: (e : R ≃+* S)
   定义体: OrderIso.ofHomInv (comap e.symm) (comap e) (by ext; simp [mem_comap])
     (by ext; simp [mem_comap])
@@ -390,8 +390,8 @@ lemma _root_.RingEquiv.mapTwoSidedIdeal_apply
   proof: rfl
 
 中文:
-引理 _root_.RingEquiv.mapTwoSidedIdeal_apply
-  条件: (e : R ≃+* S) (I : TwoSidedIdeal R)
+引理 _root_.环等价.mapTwoSidedIdeal_apply
+  条件: (e : R ≃+* S) (I : TwoSided理想 R)
   证明: rfl
 -/
 lemma _root_.RingEquiv.mapTwoSidedIdeal_apply (e : R ≃+* S) (I : TwoSidedIdeal R) :
@@ -406,7 +406,7 @@ lemma _root_.RingEquiv.mapTwoSidedIdeal_symm
   proof: rfl
 
 中文:
-引理 _root_.RingEquiv.mapTwoSidedIdeal_symm
+引理 _root_.环等价.mapTwoSidedIdeal_symm
   条件: (e : R ≃+* S)
   证明: rfl
 -/
@@ -431,7 +431,7 @@ lemma comap_comap
 
 中文:
 引理 comap_comap
-  条件: (I : TwoSidedIdeal T) (f : R ->+* S) (g : S ->+* T)
+  条件: (I : TwoSided理想 T) (f : R ->+* S) (g : S ->+* T)
   证明: by
   ext; simp [mem_comap]
 
@@ -465,7 +465,7 @@ lemma mem_span_iff_mem_addSubgroup_closure_absorbing
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure_absorbing
-  结论: {s : Set R}
+  结论: {s : 集合 R}
   证明: by
   have h_left' {x y} (hy : y in closure s) : x * y in closure s := by
     have := (AddMonoidHom.mulLeft x).map_closure s ▸ mem_map_of_mem _ hy
@@ -522,7 +522,7 @@ lemma set_mul_subset
 
 中文:
 引理 set_mul_subset
-  条件: {s : Set R} {I : TwoSidedIdeal R} (h : s subseteq I) (t : Set R)
+  条件: {s : 集合 R} {I : TwoSided理想 R} (h : s subseteq I) (t : 集合 R)
   证明: by
   rintro - ⟨r, -, x, hx, rfl⟩
   exact mul_mem_left _ _ _ (h hx)
@@ -546,7 +546,7 @@ lemma subset_mul_set
 
 中文:
 引理 subset_mul_set
-  条件: {s : Set R} {I : TwoSidedIdeal R} (h : s subseteq I) (t : Set R)
+  条件: {s : 集合 R} {I : TwoSided理想 R} (h : s subseteq I) (t : 集合 R)
   证明: by
   rintro - ⟨x, hx, r, -, rfl⟩
   exact mul_mem_right _ _ _ (h hx)
@@ -573,7 +573,7 @@ lemma mem_span_iff_mem_addSubgroup_closure_nonunital
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure_nonunital
-  条件: {s : Set R} {z : R}
+  条件: {s : 集合 R} {z : R}
   证明: by
   trans z in span (s union s * univ union univ * s union univ * s * univ)
   · refine ⟨(span_mono (by simp only [Set.union_assoc, Set.subset_union_left]) ·), fun h => ?_⟩
@@ -630,7 +630,7 @@ lemma mem_span_iff_mem_addSubgroup_closure
 
 中文:
 引理 mem_span_iff_mem_addSubgroup_closure
-  条件: {s : Set R} {z : R}
+  条件: {s : 集合 R} {z : R}
   证明: by
   trans z in span (univ * s * univ)
   · refine ⟨(span_mono (fun x hx => ?_) ·), fun hz => ?_⟩
@@ -666,7 +666,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R I
+  签名: 标量乘法 R I
   定义体: ⟨r • x.1, I.mul_mem_left _ _ x.2⟩
 
 Depends on / 依赖: I.mul_mem_left, mul_mem_left
@@ -683,7 +683,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Rᵐᵒᵖ I
+  签名: 标量乘法 Rᵐᵒᵖ I
   定义体: ⟨r • x.1, I.mul_mem_right _ _ x.2⟩
 
 Depends on / 依赖: I.mul_mem_right, mul_mem_right
@@ -702,7 +702,7 @@ instance leftModule
 
 中文:
 实例 leftModule
-  签名: : Module R I
+  签名: : 模 R I
   定义体: Function.Injective.module _ (coeAddMonoidHom I) Subtype.coe_injective fun _ _ => rfl
 
 @[simp]
@@ -742,7 +742,7 @@ instance rightModule
 
 中文:
 实例 rightModule
-  签名: : Module Rᵐᵒᵖ I
+  签名: : 模 Rᵐᵒᵖ I
   定义体: Function.Injective.module _ (coeAddMonoidHom I) Subtype.coe_injective fun _ _ => rfl
 
 @[simp]
@@ -780,7 +780,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass R Rᵐᵒᵖ I
+  签名: 标量交换类 R Rᵐᵒᵖ I
   定义体: Subtype.ext smul_comm r s x.1
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_comm
@@ -827,7 +827,7 @@ theorem subtype_injective
 
 中文:
 定理 subtype_injective
-  结论: Function.Injective (subtype I)
+  结论: 函数.单射 (subtype I)
   证明: Subtype.coe_injective
 
 @[simp]
@@ -848,7 +848,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: ⇑(subtype I) = Subtype.val
+  结论: ⇑(subtype I) = 子类型.val
   证明: rfl
 -/
 theorem coe_subtype : ⇑(subtype I) = Subtype.val :=
@@ -893,7 +893,7 @@ theorem subtypeMop_injective
 
 中文:
 定理 subtypeMop_injective
-  结论: Function.Injective (subtypeMop I)
+  结论: 函数.单射 (subtypeMop I)
   证明: MulOpposite.op_injective.comp Subtype.coe_injective
 
 Depends on / 依赖: MulOpposite, MulOpposite.op_injective.comp, Subtype, Subtype.coe_injective, coe_injective, op_injective
@@ -912,7 +912,7 @@ definition fromIdeal
 
 中文:
 定义 fromIdeal
-  签名: : Ideal R ->o TwoSidedIdeal R where
+  签名: : 理想 R ->o TwoSided理想 R where
   定义体: span I
   monotone' _ _ := span_mono
 -/
@@ -931,7 +931,7 @@ lemma mem_fromIdeal
 
 中文:
 引理 mem_fromIdeal
-  条件: {I : Ideal R} {x : R}
+  条件: {I : 理想 R} {x : R}
   证明: by simp [fromIdeal]
 
 Depends on / 依赖: fromIdeal
@@ -953,7 +953,7 @@ definition asIdeal
 
 中文:
 定义 asIdeal
-  签名: : TwoSidedIdeal R ->o Ideal R where
+  签名: : TwoSided理想 R ->o 理想 R where
   定义体: { carrier := I
     add_mem' := I.add_mem
     zero_mem' := I.zero_mem
@@ -982,7 +982,7 @@ lemma mem_asIdeal
 
 中文:
 引理 mem_asIdeal
-  条件: {I : TwoSidedIdeal R} {x : R}
+  条件: {I : TwoSided理想 R} {x : R}
   证明: by simp [asIdeal]
 
 Depends on / 依赖: asIdeal
@@ -1029,8 +1029,8 @@ lemma coe_asIdeal
 
 中文:
 引理 coe_asIdeal
-  条件: {I : TwoSidedIdeal R}
-  结论: (asIdeal I : Set R) = I
+  条件: {I : TwoSided理想 R}
+  结论: (asIdeal I : 集合 R) = I
   证明: rfl
 -/
 lemma coe_asIdeal {I : TwoSidedIdeal R} : (asIdeal I : Set R) = I := rfl
@@ -1045,7 +1045,7 @@ lemma bot_asIdeal
 
 中文:
 引理 bot_asIdeal
-  结论: (⊥ : TwoSidedIdeal R).asIdeal = ⊥
+  结论: (⊥ : TwoSided理想 R).asIdeal = ⊥
   证明: rfl
 -/
 @[simp] lemma bot_asIdeal : (⊥ : TwoSidedIdeal R).asIdeal = ⊥ := rfl
@@ -1060,7 +1060,7 @@ lemma top_asIdeal
 
 中文:
 引理 top_asIdeal
-  结论: (⊤ : TwoSidedIdeal R).asIdeal = ⊤
+  结论: (⊤ : TwoSided理想 R).asIdeal = ⊤
   证明: rfl
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.ext, StarAlgHom, StarAlgHom.ext
@@ -1083,7 +1083,7 @@ definition asIdealOpposite
 
 中文:
 定义 asIdealOpposite
-  签名: : TwoSidedIdeal R ->o Ideal Rᵐᵒᵖ where
+  签名: : TwoSided理想 R ->o 理想 Rᵐᵒᵖ where
   定义体: asIdeal ⟨I.ringCon.op⟩
   monotone' I J h x h' := by
     simp only [mem_asIdeal, mem_iff, RingCon.op_iff, MulOpposite.unop_zero] at h' ⊢
@@ -1109,7 +1109,7 @@ lemma mem_asIdealOpposite
 
 中文:
 引理 mem_asIdealOpposite
-  条件: {I : TwoSidedIdeal R} {x : Rᵐᵒᵖ}
+  条件: {I : TwoSided理想 R} {x : Rᵐᵒᵖ}
   证明: by
   simpa [asIdealOpposite, asIdeal, TwoSidedIdeal.mem_iff, RingCon.op_iff] using
     ⟨I.ringCon.symm, I.ringCon.symm⟩
@@ -1143,7 +1143,7 @@ left_inv _ := SetLike.ext fun _ => mem_span_iff.trans by aesop
 
 中文:
 定义 orderIsoIdeal
-  签名: : TwoSidedIdeal R ≃o Ideal R where
+  签名: : TwoSided理想 R ≃o 理想 R where
   定义体: asIdeal
   invFun := fromIdeal
   map_rel_iff' := ⟨fun h _ hx => h hx, fun h => asIdeal.monotone' h⟩
@@ -1183,7 +1183,7 @@ definition toTwoSided
 
 中文:
 定义 toTwoSided
-  签名: (I : Ideal R) [I.IsTwoSided]
+  签名: (I : 理想 R) [I.是TwoSided]
   定义体: TwoSidedIdeal.mk' I I.zero_mem I.add_mem I.neg_mem (I.smul_mem _) (I.mul_mem_right _)
 
 @[simp]
@@ -1207,7 +1207,7 @@ lemma mem_toTwoSided
 
 中文:
 引理 mem_toTwoSided
-  条件: {I : Ideal R} [I.IsTwoSided] {x : R}
+  条件: {I : 理想 R} [I.是TwoSided] {x : R}
   证明: by
   simp [toTwoSided]
 
@@ -1234,8 +1234,8 @@ lemma coe_toTwoSided
 
 中文:
 引理 coe_toTwoSided
-  条件: (I : Ideal R) [I.IsTwoSided]
-  结论: (I.toTwoSided : Set R) = I
+  条件: (I : 理想 R) [I.是TwoSided]
+  结论: (I.toTwoSided : 集合 R) = I
   证明: by
   simp [toTwoSided]
 
@@ -1260,7 +1260,7 @@ lemma toTwoSided_asIdeal
 
 中文:
 引理 toTwoSided_asIdeal
-  条件: (I : TwoSidedIdeal R)
+  条件: (I : TwoSided理想 R)
   结论: I.asIdeal.toTwoSided = I
   证明: by ext; simp
 
@@ -1284,7 +1284,7 @@ lemma asIdeal_toTwoSided
 
 中文:
 引理 asIdeal_toTwoSided
-  条件: (I : Ideal R) [I.IsTwoSided]
+  条件: (I : 理想 R) [I.是TwoSided]
   结论: I.toTwoSided.asIdeal = I
   证明: by
   ext
@@ -1304,7 +1304,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Ideal R) (TwoSidedIdeal R) TwoSidedIdeal.asIdeal (·.IsTwoSided)
+  签名: CanLift (理想 R) (TwoSided理想 R) TwoSided理想.asIdeal (·.是TwoSided)
   定义体: ⟨I.toTwoSided, asIdeal_toTwoSided ..⟩
 
 Depends on / 依赖: I.toTwoSided, asIdeal_toTwoSided, toTwoSided
@@ -1328,8 +1328,8 @@ definition TwoSidedIdeal.orderIsoIsTwoSided
   map_rel_iff' {I I'} := by simp [SetLike.le_def]
 
 中文:
-定义 TwoSidedIdeal.orderIsoIsTwoSided
-  签名: {R : 类型} [Ring R]
+定义 TwoSided理想.orderIsoIsTwoSided
+  签名: {R : 类型} [环 R]
   定义体: ⟨I.asIdeal, inferInstance⟩
   invFun I := have := I.2; I.1.toTwoSided
   left_inv _ := by simp

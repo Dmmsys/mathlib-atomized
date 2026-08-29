@@ -106,7 +106,7 @@ theorem FinrankQuotientMap.span_eq_top
 
 中文:
 定理 FinrankQuotientMap.span_eq_top
-  结论: [IsDomain R] [IsDomain S] [Algebra K L] [Module.Finite R S]
+  结论: [是整环 R] [是整环 S] [代数 K L] [模.有限 R S]
   证明: by
   have hRL : Function.Injective (algebraMap R L) := by
     rw [IsScalarTower.algebraMap_eq R K L]
@@ -231,7 +231,7 @@ theorem FinrankQuotientMap.linearIndependent_of_nontrivial
 
 中文:
 定理 FinrankQuotientMap.linearIndependent_of_nontrivial
-  结论: [IsDedekindDomain R]
+  结论: [是Dedekind整环 R]
   证明: by
   contrapose hb' with hb
   -- Informally, if we have a nontrivial linear dependence with coefficients `g` in `K`,
@@ -291,7 +291,7 @@ theorem finrank_quotient_map
 
 中文:
 定理 finrank_quotient_map
-  结论: [IsDomain S] [IsDedekindDomain R] [Algebra K L]
+  结论: [是整环 S] [是Dedekind整环 R] [代数 K L]
   证明: by
   -- Choose an arbitrary basis `b` for `[S/pS : R/p]`.
   -- We'll use the previous results to turn it into a basis on `[Frac(S) : Frac(R)]`.
@@ -363,8 +363,8 @@ instance Quotient.algebraQuotientPowRamificationIdx
 @[simp, deprecated "Use results of RingTheory.RamificationInertia.Basic" (since := "2026-07-01")]
 
 中文:
-实例 Quotient.algebraQuotientPowRamificationIdx
-  签名: : Algebra (R ⧸ p) (S ⧸ P ^ e)
+实例 商.algebraQuotientPowRamificationIdx
+  签名: : 代数 (R ⧸ p) (S ⧸ P ^ e)
   定义体: Quotient.algebraQuotientOfLEComap (Ideal.map_le_iff_le_comap.mp le_pow_ramificationIdx')
 
 @[simp, deprecated "Use results of RingTheory.RamificationInertia.Basic" (since := "2026-07-01")]
@@ -384,7 +384,7 @@ theorem Quotient.algebraMap_quotient_pow_ramificationIdx
   proof: rfl
 
 中文:
-定理 Quotient.algebraMap_quotient_pow_ramificationIdx
+定理 商.algebraMap_quotient_pow_ramificationIdx
   条件: (x : R)
   证明: rfl
 
@@ -408,7 +408,7 @@ definition Quotient.algebraQuotientOfRamificationIdxNeZero
   body: Quotient.algebraQuotientOfLEComap (le_comap_of_ramificationIdx'_ne_zero hfp.out)
 
 中文:
-定义 Quotient.algebraQuotientOfRamificationIdxNeZero
+定义 商.algebraQuotientOfRamificationIdxNeZero
   签名: [hfp : NeZero e]
   定义体: Quotient.algebraQuotientOfLEComap (le_comap_of_ramificationIdx'_ne_zero hfp.out)
 
@@ -429,7 +429,7 @@ theorem Quotient.algebraMap_quotient_of_ramificationIdx_neZero
   proof: rfl
 
 中文:
-定理 Quotient.algebraMap_quotient_of_ramificationIdx_neZero
+定理 商.algebraMap_quotient_of_ramificationIdx_neZero
   证明: rfl
 -/
 theorem Quotient.algebraMap_quotient_of_ramificationIdx_neZero
@@ -642,7 +642,7 @@ theorem quotientToQuotientRangePowQuotSucc_injective
 
 中文:
 定理 quotientToQuotientRangePowQuotSucc_injective
-  结论: [IsDedekindDomain S] [P.IsPrime]
+  结论: [是Dedekind整环 S] [P.是素]
   证明: fun x =>
   Quotient.inductionOn' x fun x y =>
     Quotient.inductionOn' y fun y h => by
@@ -685,7 +685,7 @@ theorem quotientToQuotientRangePowQuotSucc_surjective
 
 中文:
 定理 quotientToQuotientRangePowQuotSucc_surjective
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   rintro ⟨⟨⟨x⟩, hx⟩⟩
   have Pe_le_Pi : P ^ e <= P ^ i := Ideal.pow_le_pow_right hi.le
@@ -735,7 +735,7 @@ definition quotientRangePowQuotSuccInclusionEquiv
 
 中文:
 定义 quotientRangePowQuotSuccInclusionEquiv
-  签名: [IsDedekindDomain S]
+  签名: [是Dedekind整环 S]
   定义体: by
   choose a a_mem a_notMem using
     SetLike.exists_of_lt
@@ -775,7 +775,7 @@ theorem rank_pow_quot_aux
 
 中文:
 定理 rank_pow_quot_aux
-  结论: [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime] (hP0 : P != ⊥)
+  结论: [是Dedekind整环 S] [p.是极大] [P.是素] (hP0 : P != ⊥)
   证明: by
   rw [← rank_range_of_injective _ (powQuotSuccInclusion_injective p P i)]; rw [(quotientRangePowQuotSuccInclusionEquiv p P hP0 hi).symm.rank_eq]
   exact (Submodule.rank_quotient_add_rank (LinearMap.range (powQuotSuccInclusion p P i))).symm
@@ -809,7 +809,7 @@ theorem rank_pow_quot
 
 中文:
 定理 rank_pow_quot
-  结论: [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime] (hP0 : P != ⊥)
+  结论: [是Dedekind整环 S] [p.是极大] [P.是素] (hP0 : P != ⊥)
   证明: by
   let Q : Nat -> Prop :=
     fun i => Module.rank (R ⧸ p) { x // x in map (Quotient.mk (P ^ e)) (P ^ i) }
@@ -854,7 +854,7 @@ theorem rank_prime_pow_ramificationIdx
 
 中文:
 定理 rank_prime_pow_ramificationIdx
-  结论: [IsDedekindDomain S] [p.IsMaximal] [P.IsPrime]
+  结论: [是Dedekind整环 S] [p.是极大] [P.是素]
   证明: by
   let : NeZero e := ⟨he⟩
   have := rank_pow_quot p P hP0 0 (Nat.zero_le e)
@@ -894,7 +894,7 @@ theorem finrank_prime_pow_ramificationIdx
 
 中文:
 定理 finrank_prime_pow_ramificationIdx
-  结论: [IsDedekindDomain S] (hP0 : P != ⊥)
+  结论: [是Dedekind整环 S] (hP0 : P != ⊥)
   证明: by
   let : NeZero e := ⟨he⟩
   let : Algebra (R ⧸ p) (S ⧸ P) := Quotient.algebraQuotientOfRamificationIdxNeZero p P
@@ -947,7 +947,7 @@ theorem Factors.ne_bot
 中文:
 定理 Factors.ne_bot
   条件: (P : (factors (map (algebraMap R S) p)).toFinset)
-  结论: (P : Ideal S) != ⊥
+  结论: (P : 理想 S) != ⊥
   证明: (prime_of_factor _ (Multiset.mem_toFinset.mp P.2)).ne_zero
 
 @[deprecated "Use results of RingTheory.RamificationInertia.Basic" (since := "2026-07-01")]
@@ -1067,7 +1067,7 @@ instance Factors.liesOver
 
 中文:
 实例 Factors.liesOver
-  签名: [p.IsMaximal] (P : (factors (map (algebraMap R S) p)).toFinset)
+  签名: [p.是极大] (P : (factors (map (algebraMap R S) p)).toFinset)
   定义体: ⟨(comap_eq_of_scalar_tower_quotient (algebraMap (R ⧸ p) (S ⧸ P.1)).injective).symm⟩
 
 @[deprecated "Use results of RingTheory.RamificationInertia.Basic" (since := "2026-07-01")]
@@ -1093,7 +1093,7 @@ theorem Factors.finrank_pow_ramificationIdx
 
 中文:
 定理 Factors.finrank_pow_ramificationIdx
-  结论: [p.IsMaximal]
+  结论: [p.是极大]
   证明: by
   rw [finrank_prime_pow_ramificationIdx]; rw [inertiaDeg'_algebraMap]
   exacts [Factors.ne_bot p P, NeZero.ne _]
@@ -1125,7 +1125,7 @@ universe w
 
 中文:
 实例 Factors.finiteDimensional_quotient_pow
-  签名: [Module.Finite R S] [p.IsMaximal]
+  签名: [模.有限 R S] [p.是极大]
   定义体: by
   refine .of_finrank_pos ?_
   rw [pos_iff_ne_zero]; rw [Factors.finrank_pow_ramificationIdx]
@@ -1161,7 +1161,7 @@ definition Factors.piQuotientEquiv
 
 中文:
 定义 Factors.piQuotientEquiv
-  签名: (p : Ideal R) (hp : map (algebraMap R S) p != ⊥)
+  签名: (p : 理想 R) (hp : map (algebraMap R S) p != ⊥)
   定义体: (IsDedekindDomain.quotientEquivPiFactors hp).trans
     @RingEquiv.piCongrRight (factors (map (algebraMap R S) p)).toFinset
       (fun P => S ⧸ (P : Ideal S) ^ (factors (map (algebraMap R S) p)).count (P : Ideal S))
@@ -1196,7 +1196,7 @@ theorem Factors.piQuotientEquiv_mk
 
 中文:
 定理 Factors.piQuotientEquiv_mk
-  条件: (p : Ideal R) (hp : map (algebraMap R S) p != ⊥) (x : S)
+  条件: (p : 理想 R) (hp : map (algebraMap R S) p != ⊥) (x : S)
   证明: rfl
 
 @[simp, deprecated "Use results of RingTheory.RamificationInertia.Basic" (since := "2026-07-01")]
@@ -1215,7 +1215,7 @@ theorem Factors.piQuotientEquiv_map
 
 中文:
 定理 Factors.piQuotientEquiv_map
-  条件: (p : Ideal R) (hp : map (algebraMap R S) p != ⊥) (x : R)
+  条件: (p : 理想 R) (hp : map (algebraMap R S) p != ⊥) (x : R)
   证明: rfl
 -/
 theorem Factors.piQuotientEquiv_map (p : Ideal R) (hp : map (algebraMap R S) p != ⊥) (x : R) :
@@ -1243,7 +1243,7 @@ definition Factors.piQuotientLinearEquiv
 
 中文:
 定义 Factors.piQuotientLinearEquiv
-  签名: (p : Ideal R) (hp : map (algebraMap R S) p != ⊥)
+  签名: (p : 理想 R) (hp : map (algebraMap R S) p != ⊥)
   定义体: { Factors.piQuotientEquiv p hp with
     map_smul' := by
       rintro ⟨c⟩ ⟨x⟩; ext P
@@ -1291,7 +1291,7 @@ theorem sum_ramification_inertia
 
 中文:
 定理 sum_ramification_inertia
-  条件: {p : Ideal R} [p.IsMaximal] (hp0 : p != ⊥)
+  条件: {p : 理想 R} [p.是极大] (hp0 : p != ⊥)
   证明: by
   set e := ramificationIdx' p (S := S)
   calc
@@ -1340,7 +1340,7 @@ exact Nat.pos_iff_n
 
 中文:
 定理 inertiaDeg_le_finrank
-  结论: [NoZeroSMulDivisors R S] {p : Ideal R} [p.IsMaximal]
+  结论: [无零标量乘因子 R S] {p : 理想 R} [p.是极大]
   证明: by
   have hP : P in IsDedekindDomain.primesOverFinset p S :=
     (IsDedekindDomain.mem_primesOverFinset_iff hp0 _).mpr ⟨hP₁, hP₂⟩
@@ -1376,7 +1376,7 @@ theorem ramificationIdx_le_finrank
 
 中文:
 定理 ramificationIdx_le_finrank
-  结论: [NoZeroSMulDivisors R S] {p : Ideal R} [p.IsMaximal]
+  结论: [无零标量乘因子 R S] {p : 理想 R} [p.是极大]
   证明: by
   by_cases hp0 : p = ⊥
   · simp [hp0]
@@ -1414,7 +1414,7 @@ theorem card_primesOverFinset_le_finrank
 
 中文:
 定理 card_primesOverFinset_le_finrank
-  结论: [NoZeroSMulDivisors R S] {p : Ideal R} [p.IsMaximal]
+  结论: [无零标量乘因子 R S] {p : 理想 R} [p.是极大]
   证明: by
   rw [← sum_ramification_inertia S K L hp0]; rw [Finset.card_eq_sum_ones]
   refine Finset.sum_le_sum fun P hP => ?_
@@ -1449,7 +1449,7 @@ lemma ramificationIdx_mul_inertiaDeg_of_isLocalRing
 
 中文:
 引理 ramificationIdx_mul_inertiaDeg_of_isLocalRing
-  结论: [IsLocalRing S] {p : Ideal R} [p.IsMaximal]
+  结论: [是局部环 S] {p : 理想 R} [p.是极大]
   证明: by
   have := FaithfulSMul.of_field_isFractionRing R S K L
   simp_rw [← sum_ramification_inertia S K L hp0, IsLocalRing.primesOverFinset_eq S hp0,

@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitPullbacks (fun Y => TotallyDisconnectedSpace Y)
+  签名: 有ExplicitPullbacks (fun Y => 全不连通空间 Y)
   定义体: { hasProp :=
     show TotallyDisconnectedSpace {_xy : _ | _} from inferInstance }
 
@@ -55,7 +55,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasExplicitFiniteCoproducts.{w, u} (fun Y => TotallyDisconnectedSpace Y)
+  签名: 有ExplicitFiniteCoproducts.{w, u} (fun Y => 全不连通空间 Y)
   定义体: { hasProp :=
     show TotallyDisconnectedSpace (Σ (_a : _), _) from inferInstance }
 
@@ -79,7 +79,7 @@ noncomputable example : PreservesFiniteCoproducts profiniteToCompHaus := inferIn
 
 中文:
 缩写 isTerminalPUnit
-  签名: : IsTerminal (Profinite.of PUnit.{u + 1})
+  签名: : 是终止 (Profinite.of 命题单元.{u + 1})
   定义体: CompHausLike.isTerminalPUnit
 
 example : FinitaryExtensive Profinite.{u} := inferInstance

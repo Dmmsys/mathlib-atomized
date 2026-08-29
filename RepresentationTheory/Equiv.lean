@@ -45,7 +45,7 @@ definition ofMulActionSubsingletonEquivTrivial
 
 中文:
 定义 ofMulActionSubsingletonEquivTrivial
-  签名: : (ofMulAction k G H).Equiv (trivial k G k)
+  签名: : (ofMulAction k G H).等价 (trivial k G k)
   定义体: .mk (MonoidAlgebra.uniqueLinearEquiv k H) fun g => by ext a; simp [Subsingleton.elim (g • a) a]
 
 @[simp]
@@ -107,7 +107,7 @@ definition diagonalOneEquivLeftRegular
 
 中文:
 定义 diagonalOneEquivLeftRegular
-  签名: : (diagonal k G 1).Equiv (leftRegular k G)
+  签名: : (diagonal k G 1).等价 (leftRegular k G)
   定义体: .mk (MonoidAlgebra.mapDomainLinearEquiv _ _ <| .funUnique _ _) fun g => by ext; simp
 
 @[simp]
@@ -131,7 +131,7 @@ lemma diagonalOneEquivLeftRegular_apply_single
 
 中文:
 引理 diagonalOneEquivLeftRegular_apply_single
-  条件: (f : Fin 1 -> G) (r : k)
+  条件: (f : 有限集 1 -> G) (r : k)
   证明: by
   simp [diagonalOneEquivLeftRegular]
 
@@ -191,7 +191,7 @@ definition freeLift
 
 中文:
 定义 freeLift
-  签名: {α : Type w'} (f : α -> V)
+  签名: {α : 类型 w'} (f : α -> V)
   定义体: linearCombination k (fun x => σ x.2 (f x.1)) ∘ₗ
     (curryLinearEquiv k).symm.toLinearMap ∘ₗ
     Finsupp.mapRange.linearMap (MonoidAlgebra.coeffLinearEquiv _).toLinearMap
@@ -219,7 +219,7 @@ lemma freeLift_single_single
 
 中文:
 引理 freeLift_single_single
-  条件: {α : Type w'} (i : α) (g : G) (r : k) (f : α -> V)
+  条件: {α : 类型 w'} (i : α) (g : G) (r : k) (f : α -> V)
   证明: by
   simp [freeLift]
 
@@ -248,7 +248,7 @@ definition freeLiftLEquiv
 
 中文:
 定义 freeLiftLEquiv
-  签名: (α : Type w')
+  签名: (α : 类型 w')
   定义体: f (single i (.single 1 1))
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -277,7 +277,7 @@ definition finsuppTensorLeft
 
 中文:
 定义 finsuppTensorLeft
-  签名: (α : Type w') [DecidableEq α]
+  签名: (α : 类型 w') [DecidableEq α]
   定义体: .mk (TensorProduct.finsuppLeft _ _ _ _ _) fun g => by
     ext; simp [TensorProduct.finsuppLeft_apply_tmul]
 
@@ -301,7 +301,7 @@ lemma finsuppTensorLeft_apply_tmul
 
 中文:
 引理 finsuppTensorLeft_apply_tmul
-  条件: {α : Type w'} [DecidableEq α] (f : α ->₀ V) (w : W)
+  条件: {α : 类型 w'} [DecidableEq α] (f : α ->₀ V) (w : W)
   证明: by
   simp [finsuppTensorLeft, TensorProduct.finsuppLeft_apply_tmul]
 
@@ -327,7 +327,7 @@ lemma finsuppTensorLeft_apply_tmul_apply
 
 中文:
 引理 finsuppTensorLeft_apply_tmul_apply
-  结论: {α : Type w'} [DecidableEq α] (f : α ->₀ V) (w : W)
+  结论: {α : 类型 w'} [DecidableEq α] (f : α ->₀ V) (w : W)
   证明: by
   simp +contextual [finsuppTensorLeft_apply_tmul, Finsupp.sum_apply, Finsupp.single_apply]
 
@@ -351,7 +351,7 @@ lemma finsuppTensorLeft_symm_apply_single
 
 中文:
 引理 finsuppTensorLeft_symm_apply_single
-  条件: {α : Type w'} [DecidableEq α] (i : α) (v : V) (w : W)
+  条件: {α : 类型 w'} [DecidableEq α] (i : α) (v : V) (w : W)
   证明: by
   simp [finsuppTensorLeft]
 
@@ -372,7 +372,7 @@ definition finsuppTensorRight
 
 中文:
 定义 finsuppTensorRight
-  签名: (α : Type w') [DecidableEq α]
+  签名: (α : 类型 w') [DecidableEq α]
   定义体: .mk (TensorProduct.finsuppRight _ _ _ _ _) fun g => by
     ext; simp [TensorProduct.finsuppRight_apply_tmul]
 
@@ -396,7 +396,7 @@ lemma finsuppTensorRight_apply_tmul
 
 中文:
 引理 finsuppTensorRight_apply_tmul
-  条件: {α : Type w'} [DecidableEq α] (v : V) (f : α ->₀ W)
+  条件: {α : 类型 w'} [DecidableEq α] (v : V) (f : α ->₀ W)
   证明: by
   simp [finsuppTensorRight, TensorProduct.finsuppRight_apply_tmul]
 
@@ -422,7 +422,7 @@ lemma finsuppTensorRight_apply_tmul_apply
 
 中文:
 引理 finsuppTensorRight_apply_tmul_apply
-  结论: {α : Type w'} [DecidableEq α] (v : V) (f : α ->₀ W)
+  结论: {α : 类型 w'} [DecidableEq α] (v : V) (f : α ->₀ W)
   证明: by
   simp +contextual [finsuppTensorRight_apply_tmul, Finsupp.sum_apply, Finsupp.single_apply]
 
@@ -446,7 +446,7 @@ lemma finsuppTensorRight_symm_apply_single
 
 中文:
 引理 finsuppTensorRight_symm_apply_single
-  条件: {α : Type w'} [DecidableEq α] (i : α) (v : V) (w : W)
+  条件: {α : 类型 w'} [DecidableEq α] (i : α) (v : V) (w : W)
   证明: by
   simp [finsuppTensorRight]
 
@@ -470,7 +470,7 @@ definition leftRegularTensorTrivialIsoFree
 
 中文:
 定义 leftRegularTensorTrivialIsoFree
-  签名: (α : Type w')
+  签名: (α : 类型 w')
   定义体: .mk (TensorProduct.congr (MonoidAlgebra.coeffLinearEquiv _) (MonoidAlgebra.coeffLinearEquiv _) ≪≫ₗ
     finsuppTensorFinsupp' k G α ≪≫ₗ Finsupp.domLCongr (Equiv.prodComm G α) ≪≫ₗ curryLinearEquiv k
       ≪≫ₗ Finsupp.mapRange.linearEquiv (MonoidAlgebra.coeffLinearEquiv _).symm) fun g => by ext; simp
@@ -499,7 +499,7 @@ lemma leftRegularTensorTrivialIsoFree_apply_single_tmul_single
 
 中文:
 引理 leftRegularTensorTrivialIsoFree_apply_single_tmul_single
-  结论: {α : Type w'} (g : G) (i : α)
+  结论: {α : 类型 w'} (g : G) (i : α)
   证明: by
   simp [leftRegularTensorTrivialIsoFree]
 
@@ -524,7 +524,7 @@ lemma leftRegularTensorTrivialIsoFree_symm_apply_single_single
 
 中文:
 引理 leftRegularTensorTrivialIsoFree_symm_apply_single_single
-  结论: {α : Type w'} (i : α) (g : G)
+  结论: {α : 类型 w'} (i : α) (g : G)
   证明: by
   simp [leftRegularTensorTrivialIsoFree, finsuppTensorFinsupp'_symm_single_eq_single_one_tmul]
 
@@ -556,7 +556,7 @@ definition leftRegularMapEquiv
 
 中文:
 定义 leftRegularMapEquiv
-  签名: : (leftRegular k G).整数ertwiningMap σ ≃ₗ[k] V where
+  签名: : (leftRegular k G).整数ertwining映射 σ ≃ₗ[k] V where
   定义体: (Finsupp.llift V k k G).symm
     (f.toLinearMap ∘ₗ (MonoidAlgebra.coeffLinearEquiv _).symm.toLinearMap) (1 : G)
   map_add' _ _ := rfl

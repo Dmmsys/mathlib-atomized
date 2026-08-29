@@ -45,7 +45,7 @@ This is `Nat.divisorsAntidiagonal` without a special case for `n = 0`. -/
 
 中文:
 实例 instHasAntidiagonal
-  签名: : Finset.HasAntidiagonal (Additive 自然数+)
+  签名: : 有限集.有Antidiagonal (加性 自然数+)
   定义体: /- The set of divisors of a positive natural number.
 This is `Nat.divisorsAntidiagonal` without a special case for `n = 0`. -/
   let divisorsAntidiagonal (n : Nat+) : Finset (Nat+ × Nat+) :=
@@ -122,7 +122,7 @@ theorem mem_finMulAntidiag
 
 中文:
 定理 mem_finMulAntidiag
-  条件: {d n : 自然数} {f : Fin d -> 自然数}
+  条件: {d n : 自然数} {f : 有限集 d -> 自然数}
   证明: by
   unfold finMulAntidiag
   split_ifs with h
@@ -238,7 +238,7 @@ theorem dvd_of_mem_finMulAntidiag
 
 中文:
 定理 dvd_of_mem_finMulAntidiag
-  结论: {n d : 自然数} {f : Fin d -> 自然数} (hf : f in finMulAntidiag d n)
+  结论: {n d : 自然数} {f : 有限集 d -> 自然数} (hf : f in finMulAntidiag d n)
   证明: by
   rw [mem_finMulAntidiag] at hf
   rw [← hf.1]
@@ -262,7 +262,7 @@ theorem ne_zero_of_mem_finMulAntidiag
 
 中文:
 定理 ne_zero_of_mem_finMulAntidiag
-  结论: {d n : 自然数} {f : Fin d -> 自然数}
+  结论: {d n : 自然数} {f : 有限集 d -> 自然数}
   证明: ne_zero_of_dvd_ne_zero (mem_finMulAntidiag.mp hf).2 (dvd_of_mem_finMulAntidiag hf i)
 
 Depends on / 依赖: dvd_of_mem_finMulAntidiag, mem_finMulAntidiag, mem_finMulAntidiag.mp, ne_zero_of_dvd_ne_zero
@@ -281,7 +281,7 @@ theorem prod_eq_of_mem_finMulAntidiag
 
 中文:
 定理 prod_eq_of_mem_finMulAntidiag
-  结论: {d n : 自然数} {f : Fin d -> 自然数}
+  结论: {d n : 自然数} {f : 有限集 d -> 自然数}
   证明: (mem_finMulAntidiag.mp hf).1
 
 Depends on / 依赖: mem_finMulAntidiag, mem_finMulAntidiag.mp
@@ -355,7 +355,7 @@ lemma image_apply_finMulAntidiag
 
 中文:
 引理 image_apply_finMulAntidiag
-  条件: {d n : 自然数} {i : Fin d} (hd : d != 1)
+  条件: {d n : 自然数} {i : 有限集 d} (hd : d != 1)
   证明: by
   ext k
   simp only [mem_image, ne_eq, mem_divisors]
@@ -431,7 +431,7 @@ lemma finMulAntidiag_existsUnique_prime_dvd
   apply Nat.coprime_of_squarefree_mul
 
 中文:
-引理 finMulAntidiag_existsUnique_prime_dvd
+引理 finMulAntidiag_存在Unique_prime_dvd
   结论: {d n p : 自然数} (hn : Squarefree n)
   证明: by
   rw [mem_finMulAntidiag] at hf
@@ -719,7 +719,7 @@ theorem f_img
 
 中文:
 定理 f_img
-  结论: {n : 自然数} (hn : Squarefree n) (a : Fin 3 -> 自然数)
+  结论: {n : 自然数} (hn : Squarefree n) (a : 有限集 3 -> 自然数)
   证明: by
   rw [mem_filter]; rw [Finset.mem_product]; rw [mem_divisors]; rw [mem_divisors]
   refine ⟨⟨⟨?_, hn.ne_zero⟩, ⟨?_, hn.ne_zero⟩⟩, ?_⟩ <;> rw [f, ← finMulAntidiag_three a ha]
@@ -759,7 +759,7 @@ theorem f_inj
 
 中文:
 定理 f_inj
-  结论: {n : 自然数} (a : Fin 3 -> 自然数) (ha : a in finMulAntidiag 3 n)
+  结论: {n : 自然数} (a : 有限集 3 -> 自然数) (ha : a in finMulAntidiag 3 n)
   证明: by
   obtain ⟨hfab1, hfab2⟩ := Prod.mk.inj hfab
   have hprods : a 0 * a 1 * a 2 = a 0 * a 1 * b 2 := by

@@ -62,7 +62,7 @@ definition qcCoverFamily
 
 中文:
 定义 qcCoverFamily
-  签名: : PreZeroHypercoverFamily Scheme.{u} where
+  签名: : PreZeroHypercoverFamily 概形.{u} where
   定义体: X.quasiCompactCover
   iff_shrink {_} E := (quasiCompactCover_shrink_iff E).symm
 
@@ -84,7 +84,7 @@ definition qcPrecoverage
 
 中文:
 定义 qcPrecoverage
-  签名: : Precoverage Scheme.{u}
+  签名: : Precoverage 概形.{u}
   定义体: qcCoverFamily.precoverage
 
 @[simp]
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: qcPrecoverage.HasIsos
+  签名: qcPrecoverage.有是os
   定义体: .of_preZeroHypercoverFamily fun X Y f hf => by
   rw [qcCoverFamily_property]; rw [Scheme.quasiCompactCover_iff]
   infer_instance
@@ -158,7 +158,7 @@ instance :
 
 中文:
 实例 :
-  签名: qcPrecoverage.IsStableUnderBaseChange
+  签名: qcPrecoverage.是StableUnderBaseChange
   定义体: by
   refine .of_preZeroHypercoverFamily_of_isClosedUnderIsomorphisms ?_ ?_
   · intro X
@@ -190,7 +190,7 @@ instance :
 
 中文:
 实例 :
-  签名: qcPrecoverage.IsStableUnderComposition
+  签名: qcPrecoverage.是StableUnderComposition
   定义体: by
   refine .of_preZeroHypercoverFamily fun {X} E F hE hF => ?_
   simp only [qcCoverFamily_property, Scheme.quasiCompactCover_iff] at hE hF ⊢
@@ -216,7 +216,7 @@ instance :
 
 中文:
 实例 :
-  签名: qcPrecoverage.IsStableUnderSup
+  签名: qcPrecoverage.是StableUnderSup
   定义体: by
   refine .of_preZeroHypercoverFamily fun {X} E F hE hF => ?_
   simp only [qcCoverFamily_property, Scheme.quasiCompactCover_iff] at hE hF ⊢
@@ -242,7 +242,7 @@ lemma bot_mem_qcPrecoverage
 
 中文:
 引理 bot_mem_qcPrecoverage
-  条件: (X : Scheme.{u}) [IsEmpty X]
+  条件: (X : 概形.{u}) [是空 X]
   结论: ⊥ in qcPrecoverage X
   证明: by
   rw [← PreZeroHypercover.presieve₀_empty.{0}]; rw [presieve₀_mem_qcPrecoverage_iff]
@@ -267,7 +267,7 @@ lemma precoverage_le_qcPrecoverage_of_isOpenMap
 
 中文:
 引理 precoverage_le_qcPrecoverage_of_isOpenMap
-  结论: {P : Morphism命题erty Scheme.{u}}
+  结论: {P : MorphismProperty 概形.{u}}
   证明: by
   refine Precoverage.le_of_zeroHypercover fun X E => ?_
   rw [presieve₀_mem_qcPrecoverage_iff]
@@ -313,8 +313,8 @@ lemma Hom.singleton_mem_qcPrecoverage
   infer_instance
 
 中文:
-引理 Hom.singleton_mem_qcPrecoverage
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) [Surjective f]
+引理 态射.singleton_mem_qcPrecoverage
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) [满射 f]
   证明: by
   let E : Cover.{u} _ _ := f.cover (P := ⊤) trivial
   rw [qcPrecoverage]; rw [PreZeroHypercoverFamily.mem_precoverage_iff]
@@ -348,7 +348,7 @@ abbreviation propQCPrecoverage
 
 中文:
 缩写 propQCPrecoverage
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: qcPrecoverage ⊓ Scheme.precoverage P
 
 @[grind .]
@@ -391,7 +391,7 @@ lemma propQCPrecoverage_monotone
 
 中文:
 引理 propQCPrecoverage_monotone
-  结论: Monotone propQCPrecoverage
+  结论: 递增 propQCPrecoverage
   证明: by
   intro P Q h
   rw [propQCPrecoverage]; rw [propQCPrecoverage]
@@ -419,7 +419,7 @@ lemma zariskiPrecoverage_le_propQCPrecoverage
 
 中文:
 引理 zariskiPrecoverage_le_propQCPrecoverage
-  条件: [P.ContainsIdentities] [IsZariskiLocalAtSource P]
+  条件: [P.余ntainsIdentities] [IsZariskiLocalAtSource P]
   证明: by
   rw [propQCPrecoverage]; rw [le_inf_iff]
   refine ⟨zariskiPrecoverage_le_qcPrecoverage, precoverage_mono fun X Y f hf => ?_⟩
@@ -449,7 +449,7 @@ lemma bot_mem_propQCPrecoverage
 
 中文:
 引理 bot_mem_propQCPrecoverage
-  条件: (X : Scheme.{u}) [IsEmpty X]
+  条件: (X : 概形.{u}) [是空 X]
   结论: ⊥ in propQCPrecoverage P X
   证明: ⟨bot_mem_qcPrecoverage _, bot_mem_precoverage _ _⟩
 
@@ -471,7 +471,7 @@ abbreviation Cover.forgetQc
 
 中文:
 缩写 Cover.forgetQc
-  签名: {S : Scheme.{u}} (𝒰 : Scheme.Cover (propQCPrecoverage P) S)
+  签名: {S : 概形.{u}} (𝒰 : 概形.Cover (propQCPrecoverage P) S)
   定义体: 𝒰.toPreZeroHypercover
   mem₀ := 𝒰.mem₀.2
 
@@ -499,7 +499,7 @@ definition Cover.ofQuasiCompactCover
 
 中文:
 定义 Cover.ofQuasiCompactCover
-  签名: {S : Scheme.{u}} (𝒰 : Scheme.Cover (precoverage P) S)
+  签名: {S : 概形.{u}} (𝒰 : 概形.Cover (precoverage P) S)
   定义体: 𝒰.toPreZeroHypercover
   mem₀ := ⟨Scheme.presieve₀_mem_qcPrecoverage_iff.mpr ‹_›, 𝒰.mem₀⟩
 
@@ -525,7 +525,7 @@ definition Cover.qculift
 
 中文:
 定义 Cover.qculift
-  签名: {S : Scheme.{u}} (𝒰 : Cover.{w} (precoverage P) S)
+  签名: {S : 概形.{u}} (𝒰 : Cover.{w} (precoverage P) S)
   定义体: 𝒰.ulift.toPreZeroHypercover.sum (QuasiCompactCover.ulift 𝒰.1)
   mem₀ := by
     rw [presieve₀_mem_precoverage_iff]
@@ -596,8 +596,8 @@ lemma mem_propQCPrecoverage_iff_exists_quasiCompactCover
 @[grind .]
 
 中文:
-引理 mem_propQCPrecoverage_iff_exists_quasiCompactCover
-  条件: {S : Scheme.{u}} {R : Presieve S}
+引理 mem_propQCPrecoverage_iff_存在_quasiCompactCover
+  条件: {S : 概形.{u}} {R : Presieve S}
   证明: by
   rw [Precoverage.mem_iff_exists_zeroHypercover]
   refine ⟨fun ⟨𝒰, h⟩ => ⟨𝒰.weaken propQCPrecoverage_le_precoverage, ?_, h⟩,
@@ -630,8 +630,8 @@ lemma Hom.singleton_mem_propQCPrecoverage
   grind [singleton_mem_precoverage_iff]
 
 中文:
-引理 Hom.singleton_mem_propQCPrecoverage
-  结论: {X Y : Scheme.{u}} {f : X ⟶ Y} (hf : P f) [Surjective f]
+引理 态射.singleton_mem_propQCPrecoverage
+  结论: {X Y : 概形.{u}} {f : X ⟶ Y} (hf : P f) [满射 f]
   证明: by
   refine ⟨f.singleton_mem_qcPrecoverage, ?_⟩
   grind [singleton_mem_precoverage_iff]
@@ -653,7 +653,7 @@ abbreviation propQCTopology
 
 中文:
 缩写 propQCTopology
-  签名: (P : Morphism命题erty Scheme.{u})
+  签名: (P : MorphismProperty 概形.{u})
   定义体: (propQCPrecoverage P).toGrothendieck
 
 Depends on / 依赖: propQCPrecoverage, toGrothendieck
@@ -676,7 +676,7 @@ lemma bot_mem_propQCTopology
 
 中文:
 引理 bot_mem_propQCTopology
-  条件: (X : Scheme.{u}) [IsEmpty X]
+  条件: (X : 概形.{u}) [是空 X]
   结论: ⊥ in propQCTopology P X
   证明: by
   rw [← Sieve.generate_bot]
@@ -704,8 +704,8 @@ lemma Hom.generate_singleton_mem_propQCTopology
 @[simp, grind .]
 
 中文:
-引理 Hom.generate_singleton_mem_propQCTopology
-  结论: {X Y : Scheme.{u}} (f : X ⟶ Y) (hf : P f)
+引理 态射.generate_singleton_mem_propQCTopology
+  结论: {X Y : 概形.{u}} (f : X ⟶ Y) (hf : P f)
   证明: by
   apply Precoverage.generate_mem_toGrothendieck
   exact f.singleton_mem_propQCPrecoverage hf
@@ -733,7 +733,7 @@ lemma Cover.mem_propQCTopology
 
 中文:
 引理 Cover.mem_propQCTopology
-  结论: {S : Scheme.{u}} (𝒰 : Cover.{u} (precoverage P) S)
+  结论: {S : 概形.{u}} (𝒰 : Cover.{u} (precoverage P) S)
   证明: by
   refine Precoverage.generate_mem_toGrothendieck ⟨?_, 𝒰.mem₀⟩
   rwa [presieve₀_mem_qcPrecoverage_iff]
@@ -756,7 +756,7 @@ lemma zariskiTopology_le_propQCTopology
 
 中文:
 引理 zariskiTopology_le_propQCTopology
-  条件: [P.IsMultiplicative] [IsZariskiLocalAtSource P]
+  条件: [P.是Multiplicative] [IsZariskiLocalAtSource P]
   证明: Precoverage.toGrothendieck_mono zariskiPrecoverage_le_propQCPrecoverage
 
 Depends on / 依赖: Precoverage, Precoverage.toGrothendieck_mono, toGrothendieck_mono, zariskiPrecoverage_le_propQCPrecoverage

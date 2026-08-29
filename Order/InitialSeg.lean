@@ -64,11 +64,11 @@ structure InitialSeg
     - mem_range_of_rel' : forall a b, s b (toRelEmbedding a) -> b in Set.range toRelEmbedding
 
 中文:
-结构 InitialSeg
+结构 初始段
   参数: {α β : 类型} (r : α -> α -> 命题) (s : β -> β -> 命题)
   继承: r ↪r s
   公理与运算 (1 个):
-    - mem_range_of_rel' : 对任意 a b, s b (toRelEmbedding a) -> b in Set.range toRelEmbedding
+    - mem_range_of_rel' : 对任意 a b, s b (toRelEmbedding a) -> b in 集合.range toRelEmbedding
 -/
 structure InitialSeg {α β : Type*} (r : α -> α -> Prop) (s : β -> β -> Prop) extends r ↪r s where
   /-- The order embedding is an initial segment -/
@@ -114,7 +114,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (r ≼i s) α β
+  签名: 函数状 (r ≼i s) α β
   定义体: f.toFun
   coe_injective := by
     rintro ⟨f, hf⟩ ⟨g, hg⟩ h
@@ -158,7 +158,7 @@ instance :
 
 中文:
 实例 :
-  签名: RelHomClass (r ≼i s) r s
+  签名: 关系态射类 (r ≼i s) r s
   定义体: f.map_rel_iff.2
 
 Depends on / 依赖: f.map_rel_iff, map_rel_iff
@@ -178,7 +178,7 @@ definition toOrderEmbedding
 
 中文:
 定义 toOrderEmbedding
-  签名: [PartialOrder α] [PartialOrder β] (f : α <=i β)
+  签名: [偏序 α] [偏序 β] (f : α <=i β)
   定义体: f.orderEmbeddingOfLTEmbedding
 
 @[simp]
@@ -201,7 +201,7 @@ theorem toOrderEmbedding_apply
 
 中文:
 定理 toOrderEmbedding_apply
-  条件: [PartialOrder α] [PartialOrder β] (f : α <=i β) (x : α)
+  条件: [偏序 α] [偏序 β] (f : α <=i β) (x : α)
   证明: rfl
 
 @[simp]
@@ -221,7 +221,7 @@ theorem coe_toOrderEmbedding
 
 中文:
 定理 coe_toOrderEmbedding
-  条件: [PartialOrder α] [PartialOrder β] (f : α <=i β)
+  条件: [偏序 α] [偏序 β] (f : α <=i β)
   证明: rfl
 -/
 theorem coe_toOrderEmbedding [PartialOrder α] [PartialOrder β] (f : α <=i β) :
@@ -237,8 +237,8 @@ instance [PartialOrder
   body: f.toOrderEmbedding.map_rel_iff.2
 
 中文:
-实例 [PartialOrder
-  签名: α] [PartialOrder β] : OrderHomClass (α <=i β) α β where
+实例 [偏序
+  签名: α] [偏序 β] : 序态射类 (α <=i β) α β where
   定义体: f.toOrderEmbedding.map_rel_iff.2
 
 Depends on / 依赖: f.toOrderEmbedding.map_rel_iff, map_rel_iff, toOrderEmbedding
@@ -299,7 +299,7 @@ theorem mem_range_of_rel
 中文:
 定理 mem_range_of_rel
   条件: (f : r ≼i s) {a : α} {b : β}
-  结论: s b (f a) -> b in Set.range f
+  结论: s b (f a) -> b in 集合.range f
   证明: f.mem_range_of_rel' _ _
 
 Depends on / 依赖: f.mem_range_of_rel, mem_range_of_rel
@@ -360,7 +360,7 @@ theorem exists_eq_iff_rel
     fun ⟨_, e, h⟩ => e ▸ f.map_rel_iff.2 h⟩
 
 中文:
-定理 exists_eq_iff_rel
+定理 存在_eq_iff_rel
   条件: (f : r ≼i s) {a : α} {b : β}
   结论: s b (f a) ↔ 存在 a', f a' = b ∧ r a' a
   证明: ⟨fun h => by
@@ -461,7 +461,7 @@ theorem refl_apply
 中文:
 定理 refl_apply
   条件: (x : α)
-  结论: InitialSeg.refl r x = x
+  结论: 初始段.refl r x = x
   证明: rfl
 
 @[simp]
@@ -503,7 +503,7 @@ instance subsingleton_of_trichotomous_of_irrefl
 
 中文:
 实例 subsingleton_of_trichotomous_of_irrefl
-  签名: [Std.Trichotomous s] [Std.Irrefl s]
+  签名: [Std.三歧 s] [Std.Irrefl s]
   定义体: by
     ext a
     refine IsWellFounded.induction r a fun b IH =>
@@ -531,8 +531,8 @@ instance [IsWellOrder
   body: ⟨fun a => have := a.isWellFounded; Subsingleton.elim a⟩
 
 中文:
-实例 [IsWellOrder
-  签名: β s] : Subsingleton (r ≼i s)
+实例 [是良序
+  签名: β s] : 子单例 (r ≼i s)
   定义体: ⟨fun a => have := a.isWellFounded; Subsingleton.elim a⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, a.isWellFounded, isWellFounded
@@ -552,7 +552,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: [IsWellOrder β s] (f g : r ≼i s) (a)
+  条件: [是良序 β s] (f g : r ≼i s) (a)
   结论: f a = g a
   证明: by
   rw [Subsingleton.elim f g]
@@ -571,7 +571,7 @@ theorem eq_relIso
 
 中文:
 定理 eq_relIso
-  条件: [IsWellOrder β s] (f : r ≼i s) (g : r ≃r s) (a : α)
+  条件: [是良序 β s] (f : r ≼i s) (g : r ≃r s) (a : α)
   结论: g a = f a
   证明: InitialSeg.eq g.toInitialSeg f a
 
@@ -593,7 +593,7 @@ definition antisymm
 
 中文:
 定义 antisymm
-  签名: [IsWellOrder β s] (f : r ≼i s) (g : s ≼i r)
+  签名: [是良序 β s] (f : r ≼i s) (g : s ≼i r)
   定义体: have := f.toRelEmbedding.isWellOrder
   ⟨⟨f, g, (f.trans g).eq (InitialSeg.refl _), (g.trans f).eq (InitialSeg.refl _)⟩, f.map_rel_iff'⟩
 
@@ -619,7 +619,7 @@ theorem antisymm_toFun
 
 中文:
 定理 antisymm_toFun
-  条件: [IsWellOrder β s] (f : r ≼i s) (g : s ≼i r)
+  条件: [是良序 β s] (f : r ≼i s) (g : s ≼i r)
   结论: (antisymm f g : α -> β) = f
   证明: rfl
 
@@ -639,7 +639,7 @@ theorem antisymm_symm
 
 中文:
 定理 antisymm_symm
-  条件: [IsWellOrder α r] [IsWellOrder β s] (f : r ≼i s) (g : s ≼i r)
+  条件: [是良序 α r] [是良序 β s] (f : r ≼i s) (g : s ≼i r)
   证明: RelIso.coe_fn_injective rfl
 
 Depends on / 依赖: RelIso, RelIso.coe_fn_injective, coe_fn_injective
@@ -669,7 +669,7 @@ theorem eq_or_principal
 
 中文:
 定理 eq_or_principal
-  条件: [IsWellOrder β s] (f : r ≼i s)
+  条件: [是良序 β s] (f : r ≼i s)
   证明: by
   apply or_iff_not_imp_right.2
   intro h b
@@ -714,7 +714,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (p : Set β) (f : r ≼i s) (H : 对任意 a, f a in p)
+  签名: (p : 集合 β) (f : r ≼i s) (H : 对任意 a, f a in p)
   定义体: ⟨RelEmbedding.codRestrict p f H, fun a ⟨b, m⟩ h =>
     let ⟨a', e⟩ := f.mem_range_of_rel h
     ⟨a', by subst e; rfl⟩⟩
@@ -757,7 +757,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [IsEmpty α]
+  签名: (r : α -> α -> 命题) (s : β -> β -> 命题) [是空 α]
   定义体: ⟨RelEmbedding.ofIsEmpty r s, isEmptyElim⟩
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.ofIsEmpty, isEmptyElim, ofIsEmpty
@@ -803,7 +803,7 @@ theorem leAdd_apply
 中文:
 定理 leAdd_apply
   条件: (r : α -> α -> 命题) (s : β -> β -> 命题) (a)
-  结论: leAdd r s a = Sum.inl a
+  结论: leAdd r s a = 和.inl a
   证明: rfl
 -/
 theorem leAdd_apply (r : α -> α -> Prop) (s : β -> β -> Prop) (a) : leAdd r s a = Sum.inl a :=
@@ -852,12 +852,12 @@ structure PrincipalSeg
     - mem_range_iff_rel' : forall b, b in Set.range toRelEmbedding ↔ s b top
 
 中文:
-结构 PrincipalSeg
+结构 主段
   参数: {α β : 类型} (r : α -> α -> 命题) (s : β -> β -> 命题)
   继承: r ↪r s
   公理与运算 (2 个):
     - top : β
-    - mem_range_iff_rel' : 对任意 b, b in Set.range toRelEmbedding ↔ s b top
+    - mem_range_iff_rel' : 对任意 b, b in 集合.range toRelEmbedding ↔ s b top
 -/
 structure PrincipalSeg {α β : Type*} (r : α -> α -> Prop) (s : β -> β -> Prop) extends r ↪r s where
   /-- The supremum of the principal segment -/
@@ -925,7 +925,7 @@ theorem toRelEmbedding_injective
 
 中文:
 定理 toRelEmbedding_injective
-  条件: [Std.Irrefl s] [Std.Trichotomous s]
+  条件: [Std.Irrefl s] [Std.三歧 s]
   证明: by
   rintro ⟨f, a, hf⟩ ⟨g, b, hg⟩ rfl
   congr
@@ -956,7 +956,7 @@ theorem toRelEmbedding_inj
 
 中文:
 定理 toRelEmbedding_inj
-  条件: [Std.Irrefl s] [Std.Trichotomous s] {f g : r ≺i s}
+  条件: [Std.Irrefl s] [Std.三歧 s] {f g : r ≺i s}
   证明: toRelEmbedding_injective.eq_iff
 
 @[ext]
@@ -984,7 +984,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: [Std.Irrefl s] [Std.Trichotomous s] {f g : r ≺i s} (h : 对任意 x, f x = g x)
+  条件: [Std.Irrefl s] [Std.三歧 s] {f g : r ≺i s} (h : 对任意 x, f x = g x)
   结论: f = g
   证明: by
   rw [← toRelEmbedding_inj]
@@ -1013,7 +1013,7 @@ theorem coe_fn_mk
 中文:
 定理 coe_fn_mk
   条件: (f : r ↪r s) (t o)
-  结论: (@PrincipalSeg.mk _ _ r s f t o : α -> β) = f
+  结论: (@主段.mk _ _ r s f t o : α -> β) = f
   证明: rfl
 -/
 theorem coe_fn_mk (f : r ↪r s) (t o) : (@PrincipalSeg.mk _ _ r s f t o : α -> β) = f :=
@@ -1031,7 +1031,7 @@ theorem mem_range_iff_rel
 中文:
 定理 mem_range_iff_rel
   条件: (f : r ≺i s)
-  结论: 对任意 {b : β}, b in Set.range f ↔ s b f.top
+  结论: 对任意 {b : β}, b in 集合.range f ↔ s b f.top
   证明: f.mem_range_iff_rel' _
 
 Depends on / 依赖: f.mem_range_iff_rel, mem_range_iff_rel
@@ -1051,7 +1051,7 @@ theorem range_eq
 中文:
 定理 range_eq
   条件: (f : r ≺i s)
-  结论: Set.range f = {b | s b f.top}
+  结论: 集合.range f = {b | s b f.top}
   证明: Set.ext_iff.2 fun _ => mem_range_iff_rel f
 
 Depends on / 依赖: Set.ext_iff, ext_iff, mem_range_iff_rel
@@ -1091,7 +1091,7 @@ theorem mem_range_of_rel_top
 中文:
 定理 mem_range_of_rel_top
   条件: (f : r ≺i s) {b : β} (h : s b f.top)
-  结论: b in Set.range f
+  结论: b in 集合.range f
   证明: f.mem_range_iff_rel.2 h
 
 Depends on / 依赖: f.mem_range_iff_rel, mem_range_iff_rel
@@ -1109,7 +1109,7 @@ theorem mem_range_of_rel
 
 中文:
 定理 mem_range_of_rel
-  条件: [IsTrans β s] (f : r ≺i s) {a : α} {b : β} (h : s b (f a))
+  条件: [是Trans β s] (f : r ≺i s) {a : α} {b : β} (h : s b (f a))
   证明: f.mem_range_of_rel_top _root_.trans h f.lt_top _
 
 Depends on / 依赖: _root_, _root_.trans, f.lt_top, f.mem_range_of_rel_top, lt_top, mem_range_of_rel_top
@@ -1132,7 +1132,7 @@ theorem surjOn
 中文:
 定理 surjOn
   条件: (f : r ≺i s)
-  结论: Set.SurjOn f Set.univ { b | s b f.top }
+  结论: 集合.满射限制 f 集合.univ { b | s b f.top }
   证明: by
   intro b h
   simpa using mem_range_of_rel_top _ h
@@ -1153,7 +1153,7 @@ instance hasCoeInitialSeg
 
 中文:
 实例 hasCoeInitialSeg
-  签名: [IsTrans β s]
+  签名: [是Trans β s]
   定义体: ⟨fun f => ⟨f.toRelEmbedding, fun _ _ => f.mem_range_of_rel⟩⟩
 
 Depends on / 依赖: f.mem_range_of_rel, f.toRelEmbedding, mem_range_of_rel, toRelEmbedding
@@ -1172,7 +1172,7 @@ theorem coe_coe_fn'
 
 中文:
 定理 coe_coe_fn'
-  条件: [IsTrans β s] (f : r ≺i s)
+  条件: [是Trans β s] (f : r ≺i s)
   结论: ((f : r ≼i s) : α -> β) = f
   证明: rfl
 -/
@@ -1188,8 +1188,8 @@ theorem _root_.InitialSeg.eq_principalSeg
   proof: InitialSeg.eq g f a
 
 中文:
-定理 _root_.InitialSeg.eq_principalSeg
-  条件: [IsWellOrder β s] (f : r ≼i s) (g : r ≺i s) (a : α)
+定理 _root_.初始段.eq_principalSeg
+  条件: [是良序 β s] (f : r ≼i s) (g : r ≺i s) (a : α)
   证明: InitialSeg.eq g f a
 
 Depends on / 依赖: InitialSeg, InitialSeg.eq
@@ -1207,8 +1207,8 @@ theorem exists_eq_iff_rel
   proof: @InitialSeg.exists_eq_iff_rel α β r s f a b
 
 中文:
-定理 exists_eq_iff_rel
-  条件: [IsTrans β s] (f : r ≺i s) {a : α} {b : β}
+定理 存在_eq_iff_rel
+  条件: [是Trans β s] (f : r ≺i s) {a : α} {b : β}
   证明: @InitialSeg.exists_eq_iff_rel α β r s f a b
 
 Depends on / 依赖: InitialSeg, InitialSeg.exists_eq_iff_rel, exists_eq_iff_rel
@@ -1228,8 +1228,8 @@ definition _root_.InitialSeg.toPrincipalSeg
 @[simp]
 
 中文:
-定义 _root_.InitialSeg.toPrincipalSeg
-  签名: [IsWellOrder β s] (f : r ≼i s)
+定义 _root_.初始段.toPrincipalSeg
+  签名: [是良序 β s] (f : r ≼i s)
   定义体: ⟨f, _, Classical.choose_spec (f.eq_or_principal.resolve_left hf)⟩
 
 @[simp]
@@ -1250,8 +1250,8 @@ theorem _root_.InitialSeg.toPrincipalSeg_apply
   proof: rfl
 
 中文:
-定理 _root_.InitialSeg.toPrincipalSeg_apply
-  结论: [IsWellOrder β s] (f : r ≼i s)
+定理 _root_.初始段.toPrincipalSeg_apply
+  结论: [是良序 β s] (f : r ≼i s)
   证明: rfl
 -/
 theorem _root_.InitialSeg.toPrincipalSeg_apply [IsWellOrder β s] (f : r ≼i s)
@@ -1272,8 +1272,8 @@ theorem irrefl
 
 中文:
 定理 irrefl
-  条件: {r : α -> α -> 命题} [IsWellOrder α r] (f : r ≺i r)
-  结论: False
+  条件: {r : α -> α -> 命题} [是良序 α r] (f : r ≺i r)
+  结论: 假
   证明: by
   have h := f.lt_top f.top
   rw [show f f.top = f.top from InitialSeg.eq f (InitialSeg.refl r) f.top] at h
@@ -1370,7 +1370,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: [IsTrans γ t] (f : r ≺i s) (g : s ≺i t)
+  签名: [是Trans γ t] (f : r ≺i s) (g : s ≺i t)
   定义体: transInitial f g
 
 @[simp]
@@ -1392,7 +1392,7 @@ theorem trans_apply
 
 中文:
 定理 trans_apply
-  条件: [IsTrans γ t] (f : r ≺i s) (g : s ≺i t) (a : α)
+  条件: [是Trans γ t] (f : r ≺i s) (g : s ≺i t) (a : α)
   结论: f.trans g a = g (f a)
   证明: rfl
 
@@ -1413,7 +1413,7 @@ theorem trans_top
 
 中文:
 定理 trans_top
-  条件: [IsTrans γ t] (f : r ≺i s) (g : s ≺i t)
+  条件: [是Trans γ t] (f : r ≺i s) (g : s ≺i t)
   结论: (f.trans g).top = g f.top
   证明: rfl
 -/
@@ -1557,8 +1557,8 @@ instance [IsWellOrder
   body: ext ((f : r ≼i s).eq g)
 
 中文:
-实例 [IsWellOrder
-  签名: β s] : Subsingleton (r ≺i s) where
+实例 [是良序
+  签名: β s] : 子单例 (r ≺i s) where
   定义体: ext ((f : r ≼i s).eq g)
 -/
 instance [IsWellOrder β s] : Subsingleton (r ≺i s) where
@@ -1576,7 +1576,7 @@ theorem eq
 
 中文:
 定理 eq
-  条件: [IsWellOrder β s] (f g : r ≺i s) (a)
+  条件: [是良序 β s] (f g : r ≺i s) (a)
   结论: f a = g a
   证明: by
   rw [Subsingleton.elim f g]
@@ -1596,7 +1596,7 @@ theorem top_eq
 
 中文:
 定理 top_eq
-  条件: [IsWellOrder γ t] (e : r ≃r s) (f : r ≺i t) (g : s ≺i t)
+  条件: [是良序 γ t] (e : r ≃r s) (f : r ≺i t) (g : s ≺i t)
   结论: f.top = g.top
   证明: by
   rw [Subsingleton.elim f (PrincipalSeg.relIsoTrans e g)]; rfl
@@ -1618,7 +1618,7 @@ theorem top_rel_top
 
 中文:
 定理 top_rel_top
-  结论: {r : α -> α -> 命题} {s : β -> β -> 命题} {t : γ -> γ -> 命题} [IsWellOrder γ t]
+  结论: {r : α -> α -> 命题} {s : β -> β -> 命题} {t : γ -> γ -> 命题} [是良序 γ t]
   证明: by
   rw [Subsingleton.elim h (f.trans g)]
   apply PrincipalSeg.lt_top
@@ -1758,7 +1758,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (p : Set β) (f : r ≺i s) (H : 对任意 a, f a in p) (H₂ : f.top in p)
+  签名: (p : 集合 β) (f : r ≺i s) (H : 对任意 a, f a in p) (H₂ : f.top in p)
   定义体: ⟨RelEmbedding.codRestrict p f H, ⟨f.top, H₂⟩, fun ⟨_, _⟩ => by simp [← f.mem_range_iff_rel]⟩
 
 @[simp]
@@ -1825,7 +1825,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: (r : α -> α -> 命题) [IsEmpty α] {b : β} (H : 对任意 b', ¬s b' b)
+  签名: (r : α -> α -> 命题) [是空 α] {b : β} (H : 对任意 b', ¬s b' b)
   定义体: { RelEmbedding.ofIsEmpty r s with
     top := b
     mem_range_iff_rel' := by simp [H] }
@@ -1850,7 +1850,7 @@ theorem ofIsEmpty_top
 
 中文:
 定理 ofIsEmpty_top
-  条件: (r : α -> α -> 命题) [IsEmpty α] {b : β} (H : 对任意 b', ¬s b' b)
+  条件: (r : α -> α -> 命题) [是空 α] {b : β} (H : 对任意 b', ¬s b' b)
   证明: rfl
 -/
 theorem ofIsEmpty_top (r : α -> α -> Prop) [IsEmpty α] {b : β} (H : forall b', ¬s b' b) :
@@ -1869,7 +1869,7 @@ abbreviation pemptyToPUnit
 
 中文:
 缩写 pemptyToPUnit
-  签名: : @emptyRelation PEmpty ≺i @emptyRelation PUnit
+  签名: : @emptyRelation 命题空 ≺i @emptyRelation 命题单元
   定义体: (@ofIsEmpty _ _ emptyRelation _ _ PUnit.unit) fun _ => not_false
 
 @[deprecated (since := "2026-02-08")] alias pemptyToPunit := pemptyToPUnit
@@ -1892,7 +1892,7 @@ theorem acc
 
 中文:
 定理 acc
-  条件: [IsTrans β s] (f : r ≺i s) (a : α)
+  条件: [是Trans β s] (f : r ≺i s) (a : α)
   结论: Acc r a ↔ Acc s (f a)
   证明: (f : r ≼i s).acc a
 -/
@@ -1912,7 +1912,7 @@ theorem wellFounded_iff_principalSeg
 
 中文:
 定理 wellFounded_iff_principalSeg
-  条件: {β : 类型u} {s : β -> β -> 命题} [IsTrans β s]
+  条件: {β : 类型u} {s : β -> β -> 命题} [是Trans β s]
   证明: ⟨fun wf _ _ f => RelHomClass.wellFounded f.toRelEmbedding wf, fun h =>
     wellFounded_iff_wellFounded_subrel.mpr fun b => h _ _ (PrincipalSeg.ofElement s b)⟩
 
@@ -1940,7 +1940,7 @@ definition principalSumRelIso
 
 中文:
 定义 principalSumRelIso
-  签名: [IsWellOrder β s] (f : r ≼i s)
+  签名: [是良序 β s] (f : r ≼i s)
   定义体: if h : Surjective f
     then Sum.inr (RelIso.ofSurjective f h)
     else Sum.inl (f.toPrincipalSeg h)
@@ -1966,7 +1966,7 @@ definition transPrincipal
 
 中文:
 定义 transPrincipal
-  签名: [IsWellOrder β s] [IsTrans γ t] (f : r ≼i s) (g : s ≺i t)
+  签名: [是良序 β s] [是Trans γ t] (f : r ≼i s) (g : s ≺i t)
   定义体: match f.principalSumRelIso with
   | Sum.inl f' => f'.trans g
   | Sum.inr f' => PrincipalSeg.relIsoTrans f' g
@@ -1996,7 +1996,7 @@ theorem transPrincipal_apply
 
 中文:
 定理 transPrincipal_apply
-  条件: [IsWellOrder β s] [IsTrans γ t] (f : r ≼i s) (g : s ≺i t) (a : α)
+  条件: [是良序 β s] [是Trans γ t] (f : r ≼i s) (g : s ≺i t) (a : α)
   证明: by
   rw [InitialSeg.transPrincipal]
   obtain f' | f' := f.principalSumRelIso
@@ -2026,8 +2026,8 @@ theorem exists_sum_relIso
   · exact ⟨PEmpty, nofun, inferInstance, ⟨(RelIso.sumLexEmpty r _).trans f⟩⟩
 
 中文:
-定理 exists_sum_relIso
-  条件: {β : 类型u} {s : β -> β -> 命题} [IsWellOrder β s] (f : r ≼i s)
+定理 存在_sum_relIso
+  条件: {β : 类型u} {s : β -> β -> 命题} [是良序 β s] (f : r ≼i s)
   证明: by
   classical
   obtain f | f := f.principalSumRelIso
@@ -2060,7 +2060,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def collapseF [IsWellOrder β s] (f : r ↪r s)
+  签名: def collapseF [是良序 β s] (f : r ↪r s)
   定义体: (RelEmbedding.isWellFounded f).fix _ fun a IH =>
     have H : f a in { b | forall a h, s (IH a h).1 b } :=
       fun b h => trans_trichotomous_left (IH b h).2 (f.map_rel_iff.2 h)
@@ -2086,7 +2086,7 @@ theorem collapseF_lt
 
 中文:
 定理 collapseF_lt
-  条件: [IsWellOrder β s] (f : r ↪r s) {a : α}
+  条件: [是良序 β s] (f : r ↪r s) {a : α}
   证明: by
   change _ in { b | forall a', r a' a -> s (collapseF f a') b }
   rw [collapseF]; rw [IsWellFounded.fix_eq]
@@ -2113,7 +2113,7 @@ theorem collapseF_not_lt
 
 中文:
 定理 collapseF_not_lt
-  结论: [IsWellOrder β s] (f : r ↪r s) (a : α) {b}
+  结论: [是良序 β s] (f : r ↪r s) (a : α) {b}
   证明: by
   rw [collapseF]; rw [IsWellFounded.fix_eq]
   dsimp only
@@ -2144,8 +2144,8 @@ definition RelEmbedding.collapse
     · refine (collapseF_not_lt f m (fun c h => ?_
 
 中文:
-定义 RelEmbedding.collapse
-  签名: [IsWellOrder β s] (f : r ↪r s)
+定义 关系嵌入.collapse
+  签名: [是良序 β s] (f : r ↪r s)
   定义体: have H := RelEmbedding.isWellOrder f
   ⟨RelEmbedding.ofMonotone _ fun a b => collapseF_lt f, fun a b h => by
     obtain ⟨m, hm, hm'⟩ := H.wf.has_min { a | ¬s _ b } ⟨_, asymm h⟩
@@ -2181,8 +2181,8 @@ definition InitialSeg.total
 | Sum.inl f, Sum.inl g
 
 中文:
-定义 InitialSeg.total
-  签名: (r s) [IsWellOrder α r] [IsWellOrder β s]
+定义 初始段.total
+  签名: (r s) [是良序 α r] [是良序 β s]
   定义体: match (leAdd r s).principalSumRelIso,
     (RelEmbedding.sumLexInr r s).collapse.principalSumRelIso with
 | Sum.inl f, Sum.inr g => Sum.inl f.transRelIso g.symm
@@ -2225,7 +2225,7 @@ definition _root_.OrderIso.toInitialSeg
 
 中文:
 定义 _root_.OrderIso.toInitialSeg
-  签名: [Preorder α] [Preorder β] (f : α ≃o β)
+  签名: [预序 α] [预序 β] (f : α ≃o β)
   定义体: f.toRelIsoLT.toInitialSeg
 
 Depends on / 依赖: f.toRelIsoLT.toInitialSeg, toInitialSeg, toRelIsoLT
@@ -2249,7 +2249,7 @@ theorem mem_range_of_le
 中文:
 定理 mem_range_of_le
   条件: [LT α] (f : α <=i β) (h : b <= f a)
-  结论: b in Set.range f
+  结论: b in 集合.range f
   证明: by
   obtain rfl | hb := h.eq_or_lt
   exacts [⟨a, rfl⟩, f.mem_range_of_rel hb]
@@ -2274,7 +2274,7 @@ theorem isLowerSet_range
 中文:
 定理 isLowerSet_range
   条件: [LT α] (f : α <=i β)
-  结论: IsLowerSet (Set.range f)
+  结论: 是下集 (集合.range f)
   证明: by
   rintro _ b h ⟨a, rfl⟩
   exact mem_range_of_le f h
@@ -2298,7 +2298,7 @@ theorem le_iff_le
 
 中文:
 定理 le_iff_le
-  条件: [PartialOrder α] (f : α <=i β)
+  条件: [偏序 α] (f : α <=i β)
   结论: f a <= f a' ↔ a <= a'
   证明: f.toOrderEmbedding.le_iff_le
 
@@ -2320,7 +2320,7 @@ theorem lt_iff_lt
 
 中文:
 定理 lt_iff_lt
-  条件: [PartialOrder α] (f : α <=i β)
+  条件: [偏序 α] (f : α <=i β)
   结论: f a < f a' ↔ a < a'
   证明: f.toOrderEmbedding.lt_iff_lt
 
@@ -2340,8 +2340,8 @@ theorem monotone
 
 中文:
 定理 monotone
-  条件: [PartialOrder α] (f : α <=i β)
-  结论: Monotone f
+  条件: [偏序 α] (f : α <=i β)
+  结论: 递增 f
   证明: f.toOrderEmbedding.monotone
 
 Depends on / 依赖: f.toOrderEmbedding.monotone, monotone, toOrderEmbedding
@@ -2362,8 +2362,8 @@ theorem strictMono
 
 中文:
 定理 strictMono
-  条件: [PartialOrder α] (f : α <=i β)
-  结论: StrictMono f
+  条件: [偏序 α] (f : α <=i β)
+  结论: 严格递增 f
   证明: f.toOrderEmbedding.strictMono
 
 @[simp]
@@ -2393,7 +2393,7 @@ alias ⟨_, map_isMin⟩ := isMin_apply_iff
 
 中文:
 定理 isMin_apply_iff
-  条件: [PartialOrder α] (f : α <=i β)
+  条件: [偏序 α] (f : α <=i β)
   结论: IsMin (f a) ↔ IsMin a
   证明: by
   refine ⟨StrictMono.isMin_of_apply f.strictMono, fun h b hb => ?_⟩
@@ -2427,7 +2427,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  条件: [PartialOrder α] [OrderBot α] [OrderBot β] (f : α <=i β)
+  条件: [偏序 α] [有底序 α] [有底序 β] (f : α <=i β)
   结论: f ⊥ = ⊥
   证明: (map_isMin f isMin_bot).eq_bot
 
@@ -2447,8 +2447,8 @@ theorem image_Iio
 
 中文:
 定理 image_Iio
-  条件: [PartialOrder α] (f : α <=i β) (a : α)
-  结论: f '' Set.Iio a = Set.Iio (f a)
+  条件: [偏序 α] (f : α <=i β) (a : α)
+  结论: f '' 集合.左无界右开区间 a = 集合.左无界右开区间 (f a)
   证明: f.toOrderEmbedding.image_Iio f.isLowerSet_range a
 
 Depends on / 依赖: f.isLowerSet_range, f.toOrderEmbedding.image_Iio, image_Iio, isLowerSet_range, toOrderEmbedding
@@ -2474,7 +2474,7 @@ theorem le_apply_iff
 
 中文:
 定理 le_apply_iff
-  条件: [PartialOrder α] (f : α <=i β)
+  条件: [偏序 α] (f : α <=i β)
   结论: b <= f a ↔ 存在 c <= a, f c = b
   证明: by
   constructor
@@ -2514,7 +2514,7 @@ theorem lt_apply_iff
 
 中文:
 定理 lt_apply_iff
-  条件: [PartialOrder α] (f : α <=i β)
+  条件: [偏序 α] (f : α <=i β)
   结论: b < f a ↔ 存在 a' < a, f a' = b
   证明: by
   constructor
@@ -2554,7 +2554,7 @@ theorem mem_range_of_le
 中文:
 定理 mem_range_of_le
   条件: [LT α] (f : α <i β) (h : b <= f a)
-  结论: b in Set.range f
+  结论: b in 集合.range f
   证明: (f : α <=i β).mem_range_of_le h
 
 Depends on / 依赖: mem_range_of_le
@@ -2574,7 +2574,7 @@ theorem range_eq_Iio
 中文:
 定理 range_eq_Iio
   条件: [LT α] (f : α <i β)
-  结论: Set.range f = Set.Iio f.top
+  结论: 集合.range f = 集合.左无界右开区间 f.top
   证明: f.range_eq
 
 Depends on / 依赖: f.range_eq, range_eq
@@ -2594,7 +2594,7 @@ theorem isLowerSet_range
 中文:
 定理 isLowerSet_range
   条件: [LT α] (f : α <i β)
-  结论: IsLowerSet (Set.range f)
+  结论: 是下集 (集合.range f)
   证明: (f : α <=i β).isLowerSet_range
 
 Depends on / 依赖: isLowerSet_range
@@ -2615,7 +2615,7 @@ theorem le_iff_le
 
 中文:
 定理 le_iff_le
-  条件: [PartialOrder α] (f : α <i β)
+  条件: [偏序 α] (f : α <i β)
   结论: f a <= f a' ↔ a <= a'
   证明: (f : α <=i β).le_iff_le
 
@@ -2637,7 +2637,7 @@ theorem lt_iff_lt
 
 中文:
 定理 lt_iff_lt
-  条件: [PartialOrder α] (f : α <i β)
+  条件: [偏序 α] (f : α <i β)
   结论: f a < f a' ↔ a < a'
   证明: (f : α <=i β).lt_iff_lt
 
@@ -2657,8 +2657,8 @@ theorem monotone
 
 中文:
 定理 monotone
-  条件: [PartialOrder α] (f : α <i β)
-  结论: Monotone f
+  条件: [偏序 α] (f : α <i β)
+  结论: 递增 f
   证明: (f : α <=i β).monotone
 
 Depends on / 依赖: monotone
@@ -2679,8 +2679,8 @@ theorem strictMono
 
 中文:
 定理 strictMono
-  条件: [PartialOrder α] (f : α <i β)
-  结论: StrictMono f
+  条件: [偏序 α] (f : α <i β)
+  结论: 严格递增 f
   证明: (f : α <=i β).strictMono
 
 @[simp]
@@ -2706,7 +2706,7 @@ alias ⟨_, map_isMin⟩ := isMin_apply_iff
 
 中文:
 定理 isMin_apply_iff
-  条件: [PartialOrder α] (f : α <i β)
+  条件: [偏序 α] (f : α <i β)
   结论: IsMin (f a) ↔ IsMin a
   证明: (f : α <=i β).isMin_apply_iff
 
@@ -2733,7 +2733,7 @@ theorem map_bot
 
 中文:
 定理 map_bot
-  条件: [PartialOrder α] [OrderBot α] [OrderBot β] (f : α <i β)
+  条件: [偏序 α] [有底序 α] [有底序 β] (f : α <i β)
   结论: f ⊥ = ⊥
   证明: (f : α <=i β).map_bot
 
@@ -2753,8 +2753,8 @@ theorem image_Iio
 
 中文:
 定理 image_Iio
-  条件: [PartialOrder α] (f : α <i β) (a : α)
-  结论: f '' Set.Iio a = Set.Iio (f a)
+  条件: [偏序 α] (f : α <i β) (a : α)
+  结论: f '' 集合.左无界右开区间 a = 集合.左无界右开区间 (f a)
   证明: (f : α <=i β).image_Iio a
 
 Depends on / 依赖: image_Iio
@@ -2773,7 +2773,7 @@ theorem le_apply_iff
 
 中文:
 定理 le_apply_iff
-  条件: [PartialOrder α] (f : α <i β)
+  条件: [偏序 α] (f : α <i β)
   结论: b <= f a ↔ 存在 c <= a, f c = b
   证明: (f : α <=i β).le_apply_iff
 
@@ -2793,7 +2793,7 @@ theorem lt_apply_iff
 
 中文:
 定理 lt_apply_iff
-  条件: [PartialOrder α] (f : α <i β)
+  条件: [偏序 α] (f : α <i β)
   结论: b < f a ↔ 存在 a' < a, f a' = b
   证明: (f : α <=i β).lt_apply_iff
 

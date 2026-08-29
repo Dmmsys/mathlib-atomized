@@ -74,7 +74,7 @@ definition analyticOrderNatAt
 @[simp]
 
 中文:
-定义 analyticOrderNatAt
+定义 analyticOrder自然数At
   签名: (f : 𝕜 -> E) (z₀ : 𝕜)
   定义体: (analyticOrderAt f z₀).toNat
 
@@ -119,7 +119,7 @@ lemma analyticOrderNatAt_of_not_analyticAt
   proof: by simp [analyticOrderNatAt, hf]
 
 中文:
-引理 analyticOrderNatAt_of_not_analyticAt
+引理 analyticOrder自然数At_of_not_analyticAt
   条件: (hf : ¬ AnalyticAt 𝕜 f z₀)
   证明: by simp [analyticOrderNatAt, hf]
 
@@ -137,7 +137,7 @@ lemma Nat.cast_analyticOrderNatAt
   proof: ENat.natCast_toNat hf
 
 中文:
-引理 Nat.cast_analyticOrderNatAt
+引理 自然数.cast_analyticOrder自然数At
   条件: (hf : analyticOrderAt f z₀ != ⊤)
   证明: ENat.natCast_toNat hf
 -/
@@ -241,7 +241,7 @@ lemma AnalyticAt.analyticOrderNatAt_eq_iff
   simp [← Nat.cast_inj (R := Nat∞), Nat.cast_analyticOrderNatAt hf', hf.analyticOrderAt_eq_natCast]
 
 中文:
-引理 AnalyticAt.analyticOrderNatAt_eq_iff
+引理 AnalyticAt.analyticOrder自然数At_eq_iff
   结论: (hf : AnalyticAt 𝕜 f z₀) (hf' : analyticOrderAt f z₀ != ⊤)
   证明: by
   simp [← Nat.cast_inj (R := Nat∞), Nat.cast_analyticOrderNatAt hf', hf.analyticOrderAt_eq_natCast]
@@ -401,7 +401,7 @@ lemma apply_eq_zero_of_analyticOrderNatAt_ne_zero
   by_cases hf' : AnalyticAt 𝕜 f z₀ <;> simp_all [analyticOrderNatAt, analyticOrderAt_eq_zero]
 
 中文:
-引理 apply_eq_zero_of_analyticOrderNatAt_ne_zero
+引理 apply_eq_zero_of_analyticOrder自然数At_ne_zero
   条件: (hf : analyticOrder自然数At f z₀ != 0)
   证明: by
   by_cases hf' : AnalyticAt 𝕜 f z₀ <;> simp_all [analyticOrderNatAt, analyticOrderAt_eq_zero]
@@ -933,7 +933,7 @@ lemma natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
 
 中文:
 引理 natCast_le_analyticOrderAt_iff_iteratedDeriv_eq_zero
-  结论: [CharZero 𝕜] [CompleteSpace E]
+  结论: [特征零 𝕜] [完备空间 E]
   证明: by
   induction n generalizing f with
   | zero => simp
@@ -972,7 +972,7 @@ lemma analyticOrderAt_deriv_of_pos
 
 中文:
 引理 analyticOrderAt_deriv_of_pos
-  结论: {𝕜 : 类型} {E : 类型} [NontriviallyNormedField 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} {E : 类型} [NontriviallyNormedField 𝕜] [特征零 𝕜]
   证明: by
   have ⟨g, hg, hg₀, hfg⟩ := (AnalyticAt.analyticOrderAt_eq_natCast hf).1 horder
   have hz₀ : f z₀ = 0 := by
@@ -1056,8 +1056,8 @@ lemma AnalyticAt.exists_eventuallyEq_sum_add_pow_mul
   · rw [na
 
 中文:
-引理 AnalyticAt.exists_eventuallyEq_sum_add_pow_mul
-  结论: [CharZero 𝕜] [CompleteSpace E]
+引理 AnalyticAt.存在_eventuallyEq_sum_add_pow_mul
+  结论: [特征零 𝕜] [完备空间 E]
   证明: by
   simp only [← sub_eq_iff_eq_add']
   have : AnalyticAt 𝕜
@@ -1104,8 +1104,8 @@ lemma AnalyticAt.exists_eq_sum_add_pow_mul
   
 
 中文:
-引理 AnalyticAt.exists_eq_sum_add_pow_mul
-  结论: [CharZero 𝕜] [CompleteSpace E]
+引理 AnalyticAt.存在_eq_sum_add_pow_mul
+  结论: [特征零 𝕜] [完备空间 E]
   证明: by
   classical
   obtain ⟨F, hFa, hF⟩ := hf.exists_eventuallyEq_sum_add_pow_mul n
@@ -1421,7 +1421,7 @@ theorem analyticOrderNatAt_mul
   simp [analyticOrderNatAt, analyticOrderAt_mul, ENat.toNat_add, *]
 
 中文:
-定理 analyticOrderNatAt_mul
+定理 analyticOrder自然数At_mul
   结论: (hf : AnalyticAt 𝕜 f z₀) (hg : AnalyticAt 𝕜 g z₀)
   证明: by
   simp [analyticOrderNatAt, analyticOrderAt_mul, ENat.toNat_add, *]
@@ -1459,7 +1459,7 @@ theorem analyticOrderNatAt_pow
   simp [analyticOrderNatAt, analyticOrderAt_pow, hf]
 
 中文:
-定理 analyticOrderNatAt_pow
+定理 analyticOrder自然数At_pow
   条件: (hf : AnalyticAt 𝕜 f z₀) (n : 自然数)
   证明: by
   simp [analyticOrderNatAt, analyticOrderAt_pow, hf]
@@ -1660,8 +1660,8 @@ theorem exists_analyticOrderAt_ne_top_iff_forall
       isClopen_iff.1 hf
 
 中文:
-定理 exists_analyticOrderAt_ne_top_iff_forall
-  条件: (hf : AnalyticOnNhd 𝕜 f U) (hU : IsConnected U)
+定理 存在_analyticOrderAt_ne_top_iff_对任意
+  条件: (hf : AnalyticOnNhd 𝕜 f U) (hU : 是连通 U)
   证明: by
   have : ConnectedSpace U := Subtype.connectedSpace hU
   obtain ⟨v⟩ : Nonempty U := inferInstance
@@ -1823,7 +1823,7 @@ theorem preimage_zero_mem_codiscrete
 
 中文:
 定理 preimage_zero_mem_codiscrete
-  结论: [ConnectedSpace 𝕜] {x : 𝕜} (hf : AnalyticOnNhd 𝕜 f Set.univ)
+  结论: [连通空间 𝕜] {x : 𝕜} (hf : AnalyticOnNhd 𝕜 f 集合.univ)
   证明: hf.preimage_zero_mem_codiscreteWithin hx trivial isConnected_univ
 
 Depends on / 依赖: hf.preimage_zero_mem_codiscreteWithin, isConnected_univ, preimage_zero_mem_codiscreteWithin
@@ -1846,7 +1846,7 @@ lemma analyticOrderAt_eq_top_iff_eq_zero
 
 中文:
 引理 analyticOrderAt_eq_top_iff_eq_zero
-  结论: [PreconnectedSpace 𝕜] {f : 𝕜 -> E} (z : 𝕜)
+  结论: [预连通空间 𝕜] {f : 𝕜 -> E} (z : 𝕜)
   证明: by
 .mp ?_, by simp +contextual⟩ refine analyticOrderAt_eq_top.trans ⟨fun h => eqOn_univ ..
   apply eqOn_zero_of_preconnected_of_frequently_eq_zero (fun z _ => hf z) isPreconnected_univ trivial
@@ -1873,8 +1873,8 @@ lemma _root_.IsOpen.forall_analyticOrderAt_eq_top_iff_eqOn_zero
   exact fun _ => hzero.eq_of_mem
 
 中文:
-引理 _root_.IsOpen.forall_analyticOrderAt_eq_top_iff_eqOn_zero
-  结论: {s : Set 𝕜} (hs : IsOpen s)
+引理 _root_.是开集.对任意_analyticOrderAt_eq_top_iff_eqOn_zero
+  结论: {s : 集合 𝕜} (hs : 是开集 s)
   证明: by
   refine ⟨(EventuallyEq.eq_of_nhds <| analyticOrderAt_eq_top.mp <| · · ·), fun hzero z hz => ?_⟩
   apply analyticOrderAt_eq_top.mpr

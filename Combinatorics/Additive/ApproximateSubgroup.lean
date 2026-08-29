@@ -54,8 +54,8 @@ structure IsApproximateAddSubgroup
     - two_nsmul_covByVAdd : CovByVAdd G K (2 • A) A
 
 中文:
-结构 IsApproximateAddSubgroup
-  参数: {G : 类型} [AddGroup G] (K : 实数) (A : Set G)
+结构 是ApproximateAdd子群
+  参数: {G : 类型} [加法群 G] (K : 实数) (A : 集合 G)
   公理与运算 (3 个):
     - zero_mem : 0 in A
     - neg_eq_self : -A = A
@@ -85,8 +85,8 @@ structure IsApproximateSubgroup
     - sq_covBySMul : CovBySMul G K (A ^ 2) A
 
 中文:
-结构 IsApproximateSubgroup
-  参数: (K : 实数) (A : Set G)
+结构 是Approximate子群
+  参数: (K : 实数) (A : 集合 G)
   公理与运算 (3 个):
     - one_mem : 1 in A
     - inv_eq_self : A⁻¹ = A
@@ -112,8 +112,8 @@ lemma nonempty
 
 中文:
 引理 nonempty
-  条件: (hA : IsApproximateSubgroup K A)
-  结论: A.Nonempty
+  条件: (hA : 是Approximate子群 K A)
+  结论: A.非空
   证明: ⟨1, hA.one_mem⟩
 
 @[to_additive one_le]
@@ -140,7 +140,7 @@ lemma one_le
 
 中文:
 引理 one_le
-  条件: (hA : IsApproximateSubgroup K A)
+  条件: (hA : 是Approximate子群 K A)
   结论: 1 <= K
   证明: by
   obtain ⟨F, hF, hSF⟩ := hA.sq_covBySMul
@@ -174,8 +174,8 @@ lemma mono
 
 中文:
 引理 mono
-  条件: (hKL : K <= L) (hA : IsApproximateSubgroup K A)
-  结论: IsApproximateSubgroup L A where
+  条件: (hKL : K <= L) (hA : 是Approximate子群 K A)
+  结论: 是Approximate子群 L A where
   证明: hA.one_mem
   inv_eq_self := hA.inv_eq_self
   sq_covBySMul := hA.sq_covBySMul.mono hKL
@@ -205,7 +205,7 @@ lemma card_pow_le
 
 中文:
 引理 card_pow_le
-  条件: [DecidableEq G] {A : Finset G} (hA : IsApproximateSubgroup K (A : Set G))
+  条件: [DecidableEq G] {A : 有限集 G} (hA : 是Approximate子群 K (A : 集合 G))
   证明: hA.sq_covBySMul
     calc
       (#(A ^ (n + 2)) : Real) <= #(F ^ (n + 1) * A) := by
@@ -241,7 +241,7 @@ lemma card_mul_self_le
 
 中文:
 引理 card_mul_self_le
-  条件: [DecidableEq G] {A : Finset G} (hA : IsApproximateSubgroup K (A : Set G))
+  条件: [DecidableEq G] {A : 有限集 G} (hA : 是Approximate子群 K (A : 集合 G))
   证明: by simpa [sq] using hA.card_pow_le (n := 2)
 
 @[to_additive]
@@ -270,8 +270,8 @@ lemma image
     · sim
 
 中文:
-引理 image
-  结论: {F H : 类型} [Group H] [FunLike F G H] [MonoidHomClass F G H] (f : F)
+引理 像
+  结论: {F H : 类型} [群 H] [函数状 F G H] [幺半群态射类 F G H] (f : F)
   证明: ⟨1, hA.one_mem, map_one _⟩
   inv_eq_self := by simp [← Set.image_inv, hA.inv_eq_self]
   sq_covBySMul := by
@@ -312,7 +312,7 @@ lemma subgroup
 
 中文:
 引理 subgroup
-  条件: {S : 类型} [SetLike S G] [SubgroupClass S G] {H : S}
+  条件: {S : 类型} [集合状 S G] [子群类 S G] {H : S}
   证明: OneMemClass.one_mem H
   inv_eq_self := inv_coe_set
   sq_covBySMul := ⟨{1}, by simp⟩
@@ -343,7 +343,7 @@ lemma of_small_tripling
 
 中文:
 引理 of_small_tripling
-  结论: [DecidableEq G] {A : Finset G} (hA₁ : 1 in A) (hAsymm : A⁻¹ = A)
+  结论: [DecidableEq G] {A : 有限集 G} (hA₁ : 1 in A) (hAsymm : A⁻¹ = A)
   证明: by rw [sq, ← one_mul 1]; exact Set.mul_mem_mul hA₁ hA₁
   inv_eq_self := by simp [← inv_pow, hAsymm, ← coe_inv]
   sq_covBySMul := by
@@ -440,7 +440,7 @@ lemma pow_inter_pow
 
 中文:
 引理 pow_inter_pow
-  结论: (hA : IsApproximateSubgroup K A) (hB : IsApproximateSubgroup L B) (hm : 2 <= m)
+  结论: (hA : 是Approximate子群 K A) (hB : 是Approximate子群 L B) (hm : 2 <= m)
   证明: ⟨Set.one_mem_pow hA.one_mem, Set.one_mem_pow hB.one_mem⟩
   inv_eq_self := by simp_rw [inter_inv, ← inv_pow, hA.inv_eq_self, hB.inv_eq_self]
   sq_covBySMul := by
@@ -486,7 +486,7 @@ lemma isApproximateSubgroup_one
 
 中文:
 引理 isApproximateSubgroup_one
-  条件: {A : Set G}
+  条件: {A : 集合 G}
   证明: by
     suffices A * A subseteq A from
       let H : Subgroup G :=

@@ -39,7 +39,7 @@ abbreviation SemigroupIdeal
 
 中文:
 缩写 SemigroupIdeal
-  签名: (M : 类型) [Mul M]
+  签名: (M : 类型) [乘法 M]
   定义体: SubMulAction M M
 
 Depends on / 依赖: SubMulAction
@@ -88,7 +88,7 @@ abbreviation closure
 
 中文:
 缩写 closure
-  签名: (s : Set M)
+  签名: (s : 集合 M)
   定义体: SubMulAction.closure M s
 
 @[to_additive]
@@ -237,7 +237,7 @@ theorem coe_closure
 
 中文:
 定理 coe_closure
-  条件: [Semigroup M] {s : Set M}
+  条件: [半群 M] {s : 集合 M}
   证明: by
   let I : SemigroupIdeal M :=
     { carrier := s union univ * s
@@ -276,7 +276,7 @@ theorem mem_closure'
 
 中文:
 定理 mem_closure'
-  条件: [Semigroup M] {s : Set M} {x : M}
+  条件: [半群 M] {s : 集合 M} {x : M}
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_closure]
   simp [mem_mul]
@@ -306,7 +306,7 @@ theorem coe_closure'
 
 中文:
 定理 coe_closure'
-  条件: [Monoid M] {s : Set M}
+  条件: [幺半群 M] {s : 集合 M}
   证明: by
   rw [coe_closure]; rw [union_eq_right]
   exact fun x hx => ⟨1, mem_univ 1, x, hx, by simp⟩
@@ -333,7 +333,7 @@ theorem mem_closure''
 
 中文:
 定理 mem_closure''
-  条件: [Monoid M] {s : Set M} {x : M}
+  条件: [幺半群 M] {s : 集合 M} {x : M}
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_closure']
   simp [mem_mul]
@@ -366,7 +366,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: [Mul M] (I : SemigroupIdeal M)
+  签名: [乘法 M] (I : SemigroupIdeal M)
   定义体: exists (s : Set M), s.Finite ∧ I = closure s
 
 @[to_additive]
@@ -388,8 +388,8 @@ theorem fg_iff
 
 中文:
 定理 fg_iff
-  条件: [Mul M] {I : SemigroupIdeal M}
-  结论: I.FG ↔ 存在 (s : Finset M), I = closure s
+  条件: [乘法 M] {I : SemigroupIdeal M}
+  结论: I.FG ↔ 存在 (s : 有限集 M), I = closure s
   证明: SubMulAction.fg_iff
 
 Depends on / 依赖: SubMulAction, SubMulAction.fg_iff, fg_iff

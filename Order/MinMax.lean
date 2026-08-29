@@ -43,7 +43,7 @@ theorem le_min_iff
 
 中文:
 定理 le_min_iff
-  结论: c <= min a b ↔ c <= a ∧ c <= b
+  结论: c <= 最小值 a b ↔ c <= a ∧ c <= b
   证明: le_inf_iff
 
 @[to_dual min_le_iff]
@@ -66,7 +66,7 @@ theorem le_max_iff
 
 中文:
 定理 le_max_iff
-  结论: a <= max b c ↔ a <= b ∨ a <= c
+  结论: a <= 最大值 b c ↔ a <= b ∨ a <= c
   证明: le_sup_iff
 
 @[to_dual]
@@ -112,7 +112,7 @@ theorem lt_min_iff
 
 中文:
 定理 lt_min_iff
-  结论: a < min b c ↔ a < b ∧ a < c
+  结论: a < 最小值 b c ↔ a < b ∧ a < c
   证明: lt_inf_iff
 
 @[to_dual min_lt_iff]
@@ -135,7 +135,7 @@ theorem lt_max_iff
 
 中文:
 定理 lt_max_iff
-  结论: a < max b c ↔ a < b ∨ a < c
+  结论: a < 最大值 b c ↔ a < b ∨ a < c
   证明: lt_sup_iff
 
 @[to_dual]
@@ -158,7 +158,7 @@ theorem max_le_max
 
 中文:
 定理 max_le_max
-  结论: a <= c -> b <= d -> max a b <= max c d
+  结论: a <= c -> b <= d -> 最大值 a b <= 最大值 c d
   证明: sup_le_sup
 
 @[to_dual]
@@ -183,7 +183,7 @@ theorem max_le_max_left
 中文:
 定理 max_le_max_left
   条件: (c) (h : a <= b)
-  结论: max c a <= max c b
+  结论: 最大值 c a <= 最大值 c b
   证明: sup_le_sup_left h c
 
 @[to_dual]
@@ -207,7 +207,7 @@ theorem max_le_max_right
 中文:
 定理 max_le_max_right
   条件: (c) (h : a <= b)
-  结论: max a c <= max b c
+  结论: 最大值 a c <= 最大值 b c
   证明: sup_le_sup_right h c
 
 @[to_dual min_le_of_left_le]
@@ -229,7 +229,7 @@ theorem le_max_of_le_left
 
 中文:
 定理 le_max_of_le_left
-  结论: a <= b -> a <= max b c
+  结论: a <= b -> a <= 最大值 b c
   证明: le_sup_of_le_left
 
 @[to_dual min_le_of_right_le]
@@ -252,7 +252,7 @@ theorem le_max_of_le_right
 
 中文:
 定理 le_max_of_le_right
-  结论: a <= c -> a <= max b c
+  结论: a <= c -> a <= 最大值 b c
   证明: le_sup_of_le_right
 
 @[to_dual min_lt_of_left_lt]
@@ -277,7 +277,7 @@ theorem lt_max_of_lt_left
 中文:
 定理 lt_max_of_lt_left
   条件: (h : a < b)
-  结论: a < max b c
+  结论: a < 最大值 b c
   证明: h.trans_le (le_max_left b c)
 
 @[to_dual min_lt_of_right_lt]
@@ -302,7 +302,7 @@ theorem lt_max_of_lt_right
 中文:
 定理 lt_max_of_lt_right
   条件: (h : a < c)
-  结论: a < max b c
+  结论: a < 最大值 b c
   证明: h.trans_le (le_max_right b c)
 
 @[to_dual]
@@ -327,7 +327,7 @@ lemma max_min_distrib_left
 中文:
 引理 max_min_distrib_left
   条件: (a b c : α)
-  结论: max a (min b c) = min (max a b) (max a c)
+  结论: 最大值 a (最小值 b c) = 最小值 (最大值 a b) (最大值 a c)
   证明: sup_inf_left _ _ _
 
 @[to_dual]
@@ -350,7 +350,7 @@ lemma max_min_distrib_right
 中文:
 引理 max_min_distrib_right
   条件: (a b c : α)
-  结论: max (min a b) c = min (max a c) (max b c)
+  结论: 最大值 (最小值 a b) c = 最小值 (最大值 a c) (最大值 b c)
   证明: sup_inf_right _ _ _
 
 Depends on / 依赖: sup_inf_right
@@ -370,7 +370,7 @@ theorem min_le_max
 
 中文:
 定理 min_le_max
-  结论: min a b <= max a b
+  结论: 最小值 a b <= 最大值 a b
   证明: le_trans (min_le_left a b) (le_max_left a b)
 
 @[to_dual]
@@ -393,7 +393,7 @@ theorem min_eq_left_iff
 
 中文:
 定理 min_eq_left_iff
-  结论: min a b = a ↔ a <= b
+  结论: 最小值 a b = a ↔ a <= b
   证明: inf_eq_left
 
 @[to_dual]
@@ -414,7 +414,7 @@ theorem min_eq_right_iff
 
 中文:
 定理 min_eq_right_iff
-  结论: min a b = b ↔ b <= a
+  结论: 最小值 a b = b ↔ b <= a
   证明: inf_eq_right
 
 Depends on / 依赖: inf_eq_right
@@ -444,7 +444,7 @@ theorem min_cases
 中文:
 定理 min_cases
   条件: (a b : α)
-  结论: min a b = a ∧ a <= b ∨ min a b = b ∧ b < a
+  结论: 最小值 a b = a ∧ a <= b ∨ 最小值 a b = b ∧ b < a
   证明: by
   grind
 
@@ -467,7 +467,7 @@ theorem min_eq_iff
 
 中文:
 定理 min_eq_iff
-  结论: min a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a
+  结论: 最小值 a b = c ↔ a = c ∧ a <= b ∨ b = c ∧ b <= a
   证明: by
   grind
 
@@ -490,7 +490,7 @@ theorem min_lt_min_left_iff
 
 中文:
 定理 min_lt_min_left_iff
-  结论: min a c < min b c ↔ a < b ∧ a < c
+  结论: 最小值 a c < 最小值 b c ↔ a < b ∧ a < c
   证明: by
   grind
 
@@ -511,7 +511,7 @@ theorem min_lt_min_right_iff
 
 中文:
 定理 min_lt_min_right_iff
-  结论: min a b < min a c ↔ b < c ∧ b < a
+  结论: 最小值 a b < 最小值 a c ↔ b < c ∧ b < a
   证明: by
   grind
 -/
@@ -530,7 +530,7 @@ instance max_idem
 
 中文:
 实例 max_idem
-  签名: : Std.IdempotentOp (α := α) max where
+  签名: : Std.IdempotentOp (α := α) 最大值 where
   定义体: by simp
 -/
 instance max_idem : Std.IdempotentOp (α := α) max where
@@ -548,7 +548,7 @@ theorem min_lt_max
 
 中文:
 定理 min_lt_max
-  结论: min a b < max a b ↔ a != b
+  结论: 最小值 a b < 最大值 a b ↔ a != b
   证明: inf_lt_sup
 
 @[to_dual]
@@ -573,7 +573,7 @@ theorem max_lt_max
 中文:
 定理 max_lt_max
   条件: (h₁ : a < c) (h₂ : b < d)
-  结论: max a b < max c d
+  结论: 最大值 a b < 最大值 c d
   证明: max_lt (lt_max_of_lt_left h₁) (lt_max_of_lt_right h₂)
 
 @[to_dual]
@@ -602,7 +602,7 @@ lemma min_right_comm
 中文:
 引理 min_right_comm
   条件: (a b c : α)
-  结论: min (min a b) c = min (min a c) b
+  结论: 最小值 (最小值 a b) c = 最小值 (最小值 a c) b
   证明: by
   rw [min_assoc]; rw [min_comm b]; rw [← min_assoc]
 
@@ -636,7 +636,7 @@ theorem MonotoneOn.map_max
 中文:
 定理 MonotoneOn.map_max
   条件: (hf : MonotoneOn f s) (ha : a in s) (hb : b in s)
-  结论: f (max a b) =
+  结论: f (最大值 a b) =
   证明: by
   rcases le_total a b with h | h <;>
     simp only [max_eq_right, max_eq_left, hf ha hb, hf hb ha, h]
@@ -665,7 +665,7 @@ theorem AntitoneOn.map_max
 中文:
 定理 AntitoneOn.map_max
   条件: (hf : AntitoneOn f s) (ha : a in s) (hb : b in s)
-  结论: f (max a b) =
+  结论: f (最大值 a b) =
   证明: hf.dual_right.map_max ha hb
 
 @[to_dual]
@@ -689,9 +689,9 @@ theorem Monotone.map_max
 @[to_dual]
 
 中文:
-定理 Monotone.map_max
-  条件: (hf : Monotone f)
-  结论: f (max a b) = max (f a) (f b)
+定理 递增.map_max
+  条件: (hf : 递增 f)
+  结论: f (最大值 a b) = 最大值 (f a) (f b)
   证明: by
   rcases le_total a b with h | h <;> simp [h, hf h]
 
@@ -716,9 +716,9 @@ theorem Antitone.map_max
 @[to_dual]
 
 中文:
-定理 Antitone.map_max
-  条件: (hf : Antitone f)
-  结论: f (max a b) = min (f a) (f b)
+定理 递减.map_max
+  条件: (hf : 递减 f)
+  结论: f (最大值 a b) = 最小值 (f a) (f b)
   证明: by
   rcases le_total a b with h | h <;> simp [h, hf h]
 
@@ -744,7 +744,7 @@ theorem min_choice
 中文:
 定理 min_choice
   条件: (a b : α)
-  结论: min a b = a ∨ min a b = b
+  结论: 最小值 a b = a ∨ 最小值 a b = b
   证明: by cases le_total a b <;> simp [*]
 
 @[to_dual le_of_le_min_left]
@@ -767,7 +767,7 @@ theorem le_of_max_le_left
 
 中文:
 定理 le_of_max_le_left
-  条件: {a b c : α} (h : max a b <= c)
+  条件: {a b c : α} (h : 最大值 a b <= c)
   结论: a <= c
   证明: le_trans (le_max_left _ _) h
 
@@ -790,7 +790,7 @@ theorem le_of_max_le_right
 
 中文:
 定理 le_of_max_le_right
-  条件: {a b c : α} (h : max a b <= c)
+  条件: {a b c : α} (h : 最大值 a b <= c)
   结论: b <= c
   证明: le_trans (le_max_right _ _) h
 
@@ -809,7 +809,7 @@ instance instCommutativeMax
 
 中文:
 实例 instCommutativeMax
-  签名: : Std.Commutative (α := α) max where comm
+  签名: : Std.交换 (α := α) 最大值 where comm
   定义体: max_comm
 -/
 @[to_dual] instance instCommutativeMax : Std.Commutative (α := α) max where comm := max_comm
@@ -825,7 +825,7 @@ instance instAssociativeMax
 
 中文:
 实例 instAssociativeMax
-  签名: : Std.Associative (α := α) max where assoc
+  签名: : Std.结合 (α := α) 最大值 where assoc
   定义体: max_assoc
 
 @[to_dual]
@@ -843,7 +843,7 @@ theorem max_left_commutative
 
 中文:
 定理 max_left_commutative
-  结论: LeftCommutative (max : α -> α -> α)
+  结论: 左交换 (最大值 : α -> α -> α)
   证明: ⟨max_left_comm⟩
 
 Depends on / 依赖: max_left_comm

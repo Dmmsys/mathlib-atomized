@@ -144,7 +144,7 @@ definition elabGRewrite
 
 中文:
 定义 elabGRewrite
-  签名: (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 布尔)
+  签名: (mvarId : MVarId) (e : Expr) (stx : Syntax) (forwardImp symm : 布尔值)
   定义体: do
   let treesSaved ← getResetInfoTrees
   let r ← Term.withSynthesize do
@@ -206,7 +206,7 @@ definition grewriteTarget
 
 中文:
 定义 grewriteTarget
-  签名: (stx : Syntax) (symm : 布尔) (config : GRewrite.Config)
+  签名: (stx : Syntax) (symm : 布尔值) (config : GRewrite.余nfig)
   定义体: do
   let goal ← getMainGoal
   let r ← goal.withContext do
@@ -238,7 +238,7 @@ definition grewriteLocalDecl
 
 中文:
 定义 grewriteLocalDecl
-  签名: (stx : Syntax) (symm : 布尔) (fvarId : FVarId) (config : GRewrite.Config)
+  签名: (stx : Syntax) (symm : 布尔值) (fvarId : FVarId) (config : GRewrite.余nfig)
   定义体: withMainContext do
   -- Note: we cannot execute `replace` inside `Term.withSynthesize`.
   -- See issues https://github.com/leanprover-community/mathlib4/issues/2711 and https://github.com/leanprover-community/mathlib4/issues/2727.

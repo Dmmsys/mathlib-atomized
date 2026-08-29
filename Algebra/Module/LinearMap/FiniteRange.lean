@@ -246,7 +246,7 @@ lemma HasNoetherianRange.of_isNoetherian_dom
 
 中文:
 引理 HasNoetherianRange.of_isNoetherian_dom
-  条件: [IsNoetherian K V] {f : V ->ₗ[K] V₂}
+  条件: [是Noether K V] {f : V ->ₗ[K] V₂}
   证明: hasNoetherianRange_iff_range.mpr inferInstance
 -/
 @[simp] lemma HasNoetherianRange.of_isNoetherian_dom [IsNoetherian K V] {f : V ->ₗ[K] V₂} :
@@ -264,7 +264,7 @@ lemma HasFiniteRange.of_finite_dom
 
 中文:
 引理 HasFiniteRange.of_finite_dom
-  条件: [Module.Finite K V] {f : V ->ₗ[K] V₂}
+  条件: [模.有限 K V] {f : V ->ₗ[K] V₂}
   证明: by
   simp [HasFiniteRange]
 -/
@@ -282,7 +282,7 @@ lemma HasNoetherianRange.of_isNoetherian_rng
 
 中文:
 引理 HasNoetherianRange.of_isNoetherian_rng
-  条件: [IsNoetherian K V₂] {f : V ->ₗ[K] V₂}
+  条件: [是Noether K V₂] {f : V ->ₗ[K] V₂}
   证明: hasNoetherianRange_iff_range.mpr inferInstance
 -/
 @[simp] lemma HasNoetherianRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V ->ₗ[K] V₂} :
@@ -299,7 +299,7 @@ lemma HasFiniteRange.of_isNoetherian_rng
 
 中文:
 引理 HasFiniteRange.of_isNoetherian_rng
-  条件: [IsNoetherian K V₂] {f : V ->ₗ[K] V₂}
+  条件: [是Noether K V₂] {f : V ->ₗ[K] V₂}
   证明: HasNoetherianRange.of_isNoetherian_rng.hasFiniteRange
 -/
 @[simp] lemma HasFiniteRange.of_isNoetherian_rng [IsNoetherian K V₂] {f : V ->ₗ[K] V₂} :
@@ -328,7 +328,7 @@ lemma HasFiniteRange.hasNoetherianRange
 
 中文:
 引理 HasFiniteRange.hasNoetherianRange
-  结论: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
+  结论: [是Noether环 K] {u : V ->ₗ[K] V₂}
   证明: by
   rw [HasNoetherianRange]
   have := Finite.of_fg h.fg_range
@@ -352,7 +352,7 @@ lemma hasNoetherianRange_iff_hasFiniteRange
 
 中文:
 引理 hasNoetherianRange_iff_hasFiniteRange
-  条件: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
+  条件: [是Noether环 K] {u : V ->ₗ[K] V₂}
   证明: ⟨HasNoetherianRange.hasFiniteRange, HasFiniteRange.hasNoetherianRange⟩
 
 Depends on / 依赖: HasFiniteRange, HasFiniteRange.hasNoetherianRange, HasNoetherianRange, HasNoetherianRange.hasFiniteRange, hasFiniteRange, hasNoetherianRange
@@ -395,7 +395,7 @@ lemma HasFiniteRange.comp_right
 
 中文:
 引理 HasFiniteRange.comp_right
-  结论: [IsNoetherianRing K] {v : V₂ ->ₗ[K] V₃} (h : v.HasFiniteRange)
+  结论: [是Noether环 K] {v : V₂ ->ₗ[K] V₃} (h : v.HasFiniteRange)
   证明: .hasFiniteRange h.hasNoetherianRange.comp_right _
 
 Depends on / 依赖: comp_right, h.hasNoetherianRange.comp_right, hasFiniteRange, hasNoetherianRange
@@ -474,7 +474,7 @@ lemma HasFiniteRange.add
 
 中文:
 引理 HasFiniteRange.add
-  结论: [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
+  结论: [是Noether环 K] {f g : V ->ₗ[K] V₂}
   证明: .hasFiniteRange hf.hasNoetherianRange.add hg.hasNoetherianRange
 -/
 @[simp] lemma HasFiniteRange.add [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
@@ -508,7 +508,7 @@ lemma HasFiniteRange.sub
 
 中文:
 引理 HasFiniteRange.sub
-  结论: [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
+  结论: [是Noether环 K] {f g : V ->ₗ[K] V₂}
   证明: sub_eq_add_neg f g ▸ hf.add hg.neg
 -/
 @[simp] lemma HasFiniteRange.sub [IsNoetherianRing K] {f g : V ->ₗ[K] V₂}
@@ -624,7 +624,7 @@ definition finiteRange
 
 中文:
 定义 finiteRange
-  签名: : Submodule K (V ->ₗ[K] V₂) where
+  签名: : 子模 K (V ->ₗ[K] V₂) where
   定义体: {u | u.HasNoetherianRange}
   add_mem' hu hv := by simp_all
   zero_mem' := by simp
@@ -668,7 +668,7 @@ lemma mem_finiteRange_iff_hasFiniteRange
 
 中文:
 引理 mem_finiteRange_iff_hasFiniteRange
-  条件: [IsNoetherianRing K] {f : V ->ₗ[K] V₂}
+  条件: [是Noether环 K] {f : V ->ₗ[K] V₂}
   证明: by
   rw [mem_finiteRange_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
 
@@ -729,7 +729,7 @@ lemma equiv_iff_hasFiniteRange
 
 中文:
 引理 equiv_iff_hasFiniteRange
-  条件: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂}
+  条件: [是Noether环 K] {u v : V ->ₗ[K] V₂}
   证明: by
   rw [equiv_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_hasFiniteRange]
 
@@ -772,7 +772,7 @@ lemma equiv_zero_iff_hasFiniteRange
 
 中文:
 引理 equiv_zero_iff_hasFiniteRange
-  条件: [IsNoetherianRing K] {u : V ->ₗ[K] V₂}
+  条件: [是Noether环 K] {u : V ->ₗ[K] V₂}
   证明: by
   simp [equiv_iff_hasFiniteRange]
 
@@ -814,7 +814,7 @@ lemma equiv_iff_eqLocus_coFG
 
 中文:
 引理 equiv_iff_eqLocus_coFG
-  条件: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂}
+  条件: [是Noether环 K] {u v : V ->ₗ[K] V₂}
   证明: by
   rw [eqLocus_eq_ker_sub]; rw [ker_coFG_iff_hasFiniteRange]; rw [equiv_iff_hasFiniteRange]
 
@@ -837,7 +837,7 @@ lemma equiv_of_eqOn_of_isNoetherian
 
 中文:
 引理 equiv_of_eqOn_of_isNoetherian
-  结论: {u v : V ->ₗ[K] V₂} (A : Submodule K V)
+  结论: {u v : V ->ₗ[K] V₂} (A : 子模 K V)
   证明: by
   have A_le : A <= eqLocus u v := le_eqLocus.mpr eqOn_A
   rw [equiv_iff_isNoetherian_quotient_eqLocus]
@@ -863,7 +863,7 @@ lemma equiv_of_eqOn_coFG
 
 中文:
 引理 equiv_of_eqOn_coFG
-  结论: [IsNoetherianRing K] {u v : V ->ₗ[K] V₂} {A : Submodule K V}
+  结论: [是Noether环 K] {u v : V ->ₗ[K] V₂} {A : 子模 K V}
   证明: equiv_iff_eqLocus_coFG.mpr A_coFG.of_le le_eqLocus.mpr eqOn_A
 
 @[gcongr]
@@ -960,7 +960,7 @@ lemma projection_equiv_zero_iff_isNoetherian
 
 中文:
 引理 projection_equiv_zero_iff_isNoetherian
-  条件: {S T : Submodule K V} (hST : IsCompl S T)
+  条件: {S T : 子模 K V} (hST : 是补集 S T)
   证明: by
   rw [equiv_zero_iff_hasNoetherianRange]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
 
@@ -980,7 +980,7 @@ lemma projection_equiv_zero
 
 中文:
 引理 projection_equiv_zero
-  条件: {S T : Submodule K V} [IsNoetherian K S] (hST : IsCompl S T)
+  条件: {S T : 子模 K V} [是Noether K S] (hST : 是补集 S T)
   证明: .mpr inferInstance projection_equiv_zero_iff_isNoetherian hST
 
 Depends on / 依赖: projection_equiv_zero_iff_isNoetherian
@@ -1000,7 +1000,7 @@ lemma projection_equiv_id_iff_isNoetherian
 
 中文:
 引理 projection_equiv_id_iff_isNoetherian
-  条件: {S T : Submodule K V} (hST : IsCompl S T)
+  条件: {S T : 子模 K V} (hST : 是补集 S T)
   证明: by
   rw [Setoid.comm]; rw [equiv_iff_hasNoetherianRange]; rw [← projection_eq_id_sub_projection]; rw [hasNoetherianRange_iff_range]; rw [range_projection]
 
@@ -1020,7 +1020,7 @@ lemma projection_equiv_id
 
 中文:
 引理 projection_equiv_id
-  条件: {S T : Submodule K V} [IsNoetherian K T] (hST : IsCompl S T)
+  条件: {S T : 子模 K V} [是Noether K T] (hST : 是补集 S T)
   证明: .mpr inferInstance projection_equiv_id_iff_isNoetherian hST
 
 Depends on / 依赖: projection_equiv_id_iff_isNoetherian
@@ -1163,7 +1163,7 @@ lemma _root_.LinearEquiv.isQuasiInverse
 @[symm]
 
 中文:
-引理 _root_.LinearEquiv.isQuasiInverse
+引理 _root_.线性等价.isQuasiInverse
   条件: (e : V ≃ₗ[K] V₂)
   证明: by
   simp [IsQuasiInverse, IsLeftQuasiInverse, IsRightQuasiInverse]
@@ -1602,7 +1602,7 @@ lemma isQuasiInverse_subtype_projectionOnto_iff
 
 中文:
 引理 isQuasiInverse_subtype_projectionOnto_iff
-  条件: {S T : Submodule K V} (hST : IsCompl S T)
+  条件: {S T : 子模 K V} (hST : 是补集 S T)
   证明: by
   rw [IsQuasiInverse]; rw [and_iff_left (by simp [IsRightQuasiInverse]; rw [projectionOnto_comp_subtype]),
     IsLeftQuasiInverse, ← projection,
@@ -1626,7 +1626,7 @@ lemma isQuasiInverse_subtype_projectionOnto
 
 中文:
 引理 isQuasiInverse_subtype_projectionOnto
-  结论: {S T : Submodule K V} [IsNoetherian K T]
+  结论: {S T : 子模 K V} [是Noether K T]
   证明: .mpr inferInstance isQuasiInverse_subtype_projectionOnto_iff hST
 
 Depends on / 依赖: isQuasiInverse_subtype_projectionOnto_iff

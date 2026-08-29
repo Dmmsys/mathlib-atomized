@@ -125,7 +125,7 @@ theorem not_monotoneOn_not_antitoneOn_iff_exists_le_le
     not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ in s)]
 
 中文:
-定理 not_monotoneOn_not_antitoneOn_iff_exists_le_le
+定理 not_monotoneOn_not_antitoneOn_iff_存在_le_le
   证明: by
   simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
     not_monotone_not_antitone_iff_exists_le_le, @and_left_comm (_ in s)]
@@ -149,7 +149,7 @@ theorem not_monotoneOn_not_antitoneOn_iff_exists_lt_lt
     not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ in s)]
 
 中文:
-定理 not_monotoneOn_not_antitoneOn_iff_exists_lt_lt
+定理 not_monotoneOn_not_antitoneOn_iff_存在_lt_lt
   证明: by
   simp [monotoneOn_iff_monotone, antitoneOn_iff_antitone, and_assoc, exists_and_left,
     not_monotone_not_antitone_iff_exists_lt_lt, @and_left_comm (_ in s)]
@@ -181,8 +181,8 @@ theorem Monotone.inter
   proof: hf.inf hg
 
 中文:
-定理 Monotone.inter
-  条件: [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g)
+定理 递增.inter
+  条件: [预序 β] {f g : β -> 集合 α} (hf : 递增 f) (hg : 递增 g)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -201,7 +201,7 @@ theorem MonotoneOn.inter
 
 中文:
 定理 MonotoneOn.inter
-  结论: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
+  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : MonotoneOn f s)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -219,8 +219,8 @@ theorem Antitone.inter
   proof: hf.inf hg
 
 中文:
-定理 Antitone.inter
-  条件: [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g)
+定理 递减.inter
+  条件: [预序 β] {f g : β -> 集合 α} (hf : 递减 f) (hg : 递减 g)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -239,7 +239,7 @@ theorem AntitoneOn.inter
 
 中文:
 定理 AntitoneOn.inter
-  结论: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
+  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : AntitoneOn f s)
   证明: hf.inf hg
 
 Depends on / 依赖: hf.inf
@@ -257,8 +257,8 @@ theorem Monotone.union
   proof: hf.sup hg
 
 中文:
-定理 Monotone.union
-  条件: [Preorder β] {f g : β -> Set α} (hf : Monotone f) (hg : Monotone g)
+定理 递增.union
+  条件: [预序 β] {f g : β -> 集合 α} (hf : 递增 f) (hg : 递增 g)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -277,7 +277,7 @@ theorem MonotoneOn.union
 
 中文:
 定理 MonotoneOn.union
-  结论: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : MonotoneOn f s)
+  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : MonotoneOn f s)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -295,8 +295,8 @@ theorem Antitone.union
   proof: hf.sup hg
 
 中文:
-定理 Antitone.union
-  条件: [Preorder β] {f g : β -> Set α} (hf : Antitone f) (hg : Antitone g)
+定理 递减.union
+  条件: [预序 β] {f g : β -> 集合 α} (hf : 递减 f) (hg : 递减 g)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -315,7 +315,7 @@ theorem AntitoneOn.union
 
 中文:
 定理 AntitoneOn.union
-  结论: [Preorder β] {f g : β -> Set α} {s : Set β} (hf : AntitoneOn f s)
+  结论: [预序 β] {f g : β -> 集合 α} {s : 集合 β} (hf : AntitoneOn f s)
   证明: hf.sup hg
 
 Depends on / 依赖: hf.sup
@@ -338,7 +338,7 @@ theorem monotone_ofPred
 
 中文:
 定理 monotone_ofPred
-  条件: [Preorder α] {p : α -> β -> 命题} (hp : 对任意 b, Monotone fun a => p a b)
+  条件: [预序 α] {p : α -> β -> 命题} (hp : 对任意 b, 递增 fun a => p a b)
   证明: fun _ _ h b => hp b h
 
 @[deprecated (since := "2026-07-09")] alias monotone_setOf := monotone_ofPred
@@ -360,7 +360,7 @@ theorem antitone_ofPred
 
 中文:
 定理 antitone_ofPred
-  条件: [Preorder α] {p : α -> β -> 命题} (hp : 对任意 b, Antitone fun a => p a b)
+  条件: [预序 α] {p : α -> β -> 命题} (hp : 对任意 b, 递减 fun a => p a b)
   证明: fun _ _ h b => hp b h
 
 @[deprecated (since := "2026-07-09")] alias antitone_setOf := antitone_ofPred
@@ -380,9 +380,9 @@ theorem antitone_bforall
   proof: fun _ _ hst h x hx => h x hst hx
 
 中文:
-定理 antitone_bforall
+定理 antitone_b对任意
   条件: {P : α -> 命题}
-  结论: Antitone fun s : Set α => 对任意 x in s, P x
+  结论: 递减 fun s : 集合 α => 对任意 x in s, P x
   证明: fun _ _ hst h x hx => h x hst hx
 -/
 theorem antitone_bforall {P : α -> Prop} : Antitone fun s : Set α => forall x in s, P x :=

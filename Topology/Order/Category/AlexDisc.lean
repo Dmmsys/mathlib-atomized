@@ -30,8 +30,8 @@ structure AlexDisc
 
 中文:
 结构 AlexDisc
-  参数: extends TopCat
-  继承: TopCat
+  参数: extends 顶元素范畴
+  继承: 顶元素范畴
   公理与运算 (1 个):
     - [is_alexandrovDiscrete : AlexandrovDiscrete carrier]
 -/
@@ -52,7 +52,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort AlexDisc (Type _)
+  签名: CoeSort AlexDisc (类型 _)
   定义体: ⟨fun X => X.toTopCat⟩
 
 Depends on / 依赖: X.toTopCat, toTopCat
@@ -70,7 +70,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category AlexDisc
+  签名: : 范畴 AlexDisc
   定义体: inferInstanceAs Category (InducedCategory _ toTopCat)
 
 Depends on / 依赖: Category, InducedCategory, toTopCat
@@ -88,7 +88,7 @@ instance concreteCategory
 
 中文:
 实例 concreteCategory
-  签名: : ConcreteCategory AlexDisc (C(·, ·))
+  签名: : 余ncrete范畴 AlexDisc (C(·, ·))
   定义体: inferInstanceAs ConcreteCategory (InducedCategory _ toTopCat) _
 
 Depends on / 依赖: ConcreteCategory, InducedCategory, toTopCat
@@ -106,7 +106,7 @@ instance instHasForgetToTop
 
 中文:
 实例 instHasForgetToTop
-  签名: : HasForget₂ AlexDisc TopCat
+  签名: : 有Forget₂ AlexDisc 顶元素范畴
   定义体: inferInstanceAs HasForget₂ (InducedCategory _ toTopCat) _
 
 Depends on / 依赖: InducedCategory, toTopCat
@@ -125,7 +125,7 @@ instance forgetToTop_full
 
 中文:
 实例 forgetToTop_full
-  签名: : (forget₂ AlexDisc TopCat).Full where
+  签名: : (forget₂ AlexDisc 顶元素范畴).满 where
   定义体: ⟨InducedCategory.homMk f, rfl⟩
 
 Depends on / 依赖: InducedCategory, InducedCategory.homMk
@@ -145,7 +145,7 @@ instance forgetToTop_faithful
 
 中文:
 实例 forgetToTop_faithful
-  签名: : (forget₂ AlexDisc TopCat).Faithful where
+  签名: : (forget₂ AlexDisc 顶元素范畴).忠实 where
   定义体: by
     ext x
     exact ConcreteCategory.congr_hom h x
@@ -168,7 +168,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (X : 类型) [TopologicalSpace X] [AlexandrovDiscrete X]
+  签名: (X : 类型) [拓扑空间 X] [AlexandrovDiscrete X]
   定义体: TopCat.of X
 
 Depends on / 依赖: TopCat, TopCat.of
@@ -187,7 +187,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (α : 类型) [TopologicalSpace α] [AlexandrovDiscrete α]
+  条件: (α : 类型) [拓扑空间 α] [AlexandrovDiscrete α]
   结论: ↥(of α) = α
   证明: rfl
 -/
@@ -203,7 +203,7 @@ lemma forgetToTop_of
 
 中文:
 引理 forgetToTop_of
-  条件: (α : 类型) [TopologicalSpace α] [AlexandrovDiscrete α]
+  条件: (α : 类型) [拓扑空间 α] [AlexandrovDiscrete α]
   证明: rfl
 -/
 @[simp] lemma forgetToTop_of (α : Type*) [TopologicalSpace α] [AlexandrovDiscrete α] :
@@ -221,7 +221,7 @@ lemma coe_forgetToTop
 中文:
 引理 coe_forgetToTop
   条件: (X : AlexDisc)
-  结论: ↥((forget₂ _ TopCat).obj X) = X
+  结论: ↥((forget₂ _ 顶元素范畴).obj X) = X
   证明: rfl
 -/
 @[simp] lemma coe_forgetToTop (X : AlexDisc) : ↥((forget₂ _ TopCat).obj X) = X := rfl
@@ -240,7 +240,7 @@ definition Iso.mk
   inv_hom_id := by ext; apply e.apply_symm_apply
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : AlexDisc} (e : α ≃ₜ β)
   定义体: ConcreteCategory.ofHom (e : ContinuousMap α β)
   inv := ConcreteCategory.ofHom (e.symm : ContinuousMap β α)
@@ -272,7 +272,7 @@ counitIso := NatIso.ofComponents fun X => Preor
 
 中文:
 定义 alexDiscEquivPreord
-  签名: : AlexDisc ≌ Preord where
+  签名: : AlexDisc ≌ 预序 where
   定义体: forget₂ _ _ ⋙ topToPreord
   inverse.obj X := AlexDisc.of (WithUpperSet X)
   inverse.map f := ConcreteCategory.ofHom (WithUpperSet.map f.hom)

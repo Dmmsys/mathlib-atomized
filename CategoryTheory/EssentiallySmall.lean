@@ -52,9 +52,9 @@ class EssentiallySmall
 
 中文:
 类 EssentiallySmall
-  参数: (C : 类型u) [Category.{v} C]
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
-    - equiv_smallCategory : 存在 (S : Type w) (_ : SmallCategory S), Nonempty (C ≌ S)
+    - equiv_smallCategory : 存在 (S : 类型 w) (_ : 小范畴 S), 非空 (C ≌ S)
 -/
 class EssentiallySmall (C : Type u) [Category.{v} C] : Prop where
   /-- An essentially small category is equivalent to some small category. -/
@@ -70,7 +70,7 @@ theorem EssentiallySmall.mk'
 
 中文:
 定理 EssentiallySmall.mk'
-  结论: {C : 类型u} [Category.{v} C] {S : Type w} [SmallCategory S]
+  结论: {C : 类型u} [范畴.{v} C] {S : 类型 w} [小范畴 S]
   证明: ⟨⟨S, _, ⟨e⟩⟩⟩
 -/
 theorem EssentiallySmall.mk' {C : Type u} [Category.{v} C] {S : Type w} [SmallCategory S]
@@ -90,7 +90,7 @@ definition SmallModel
 
 中文:
 定义 SmallModel
-  签名: (C : 类型u) [Category.{v} C] [EssentiallySmall.{w} C]
+  签名: (C : 类型u) [范畴.{v} C] [EssentiallySmall.{w} C]
   定义体: Classical.choose (@EssentiallySmall.equiv_smallCategory C _ _)
 
 Depends on / 依赖: Classical, Classical.choose, EssentiallySmall, EssentiallySmall.equiv_smallCategory, equiv_smallCategory
@@ -108,7 +108,7 @@ instance smallCategorySmallModel
 
 中文:
 实例 smallCategorySmallModel
-  签名: (C : 类型u) [Category.{v} C]
+  签名: (C : 类型u) [范畴.{v} C]
   定义体: Classical.choose (Classical.choose_spec (@EssentiallySmall.equiv_smallCategory C _ _))
 
 Depends on / 依赖: Classical, Classical.choose, Classical.choose_spec, EssentiallySmall, EssentiallySmall.equiv_smallCategory, choose_spec, equiv_smallCategory
@@ -128,7 +128,7 @@ definition equivSmallModel
 
 中文:
 定义 equivSmallModel
-  签名: (C : 类型u) [Category.{v} C] [EssentiallySmall.{w} C]
+  签名: (C : 类型u) [范畴.{v} C] [EssentiallySmall.{w} C]
   定义体: Nonempty.some
     (Classical.choose_spec (Classical.choose_spec (@EssentiallySmall.equiv_smallCategory C _ _)))
 
@@ -157,7 +157,7 @@ theorem essentiallySmall_congr
 
 中文:
 定理 essentiallySmall_congr
-  结论: {C : 类型u} [Category.{v} C] {D : 类型u'} [Category.{v'} D]
+  结论: {C : 类型u} [范畴.{v} C] {D : 类型u'} [范畴.{v'} D]
   证明: by
   fconstructor
   · rintro ⟨S, 𝒮, ⟨f⟩⟩
@@ -184,7 +184,7 @@ theorem Discrete.essentiallySmallOfSmall
   proof: ⟨⟨Discrete (Shrink α), ⟨inferInstance, ⟨Discrete.equivalence (equivShrink _)⟩⟩⟩⟩
 
 中文:
-定理 Discrete.essentiallySmallOfSmall
+定理 离散.essentiallySmallOfSmall
   条件: {α : 类型u} [Small.{w} α]
   证明: ⟨⟨Discrete (Shrink α), ⟨inferInstance, ⟨Discrete.equivalence (equivShrink _)⟩⟩⟩⟩
 
@@ -204,7 +204,7 @@ theorem essentiallySmallSelf
 
 中文:
 定理 essentiallySmallSelf
-  结论: EssentiallySmall.{max w v u} C
+  结论: EssentiallySmall.{最大值 w v u} C
   证明: EssentiallySmall.mk' (AsSmall.equiv : C ≌ AsSmall.{w} C)
 
 Depends on / 依赖: AsSmall, AsSmall.equiv, EssentiallySmall, EssentiallySmall.mk
@@ -229,7 +229,7 @@ class LocallySmall
 
 中文:
 类 LocallySmall
-  参数: (C : 类型u) [Category.{v} C]
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (1 个):
     - hom_small : 对任意 X Y : C, Small.{w} (X ⟶ Y)  [默认: by infer_instance]
 
@@ -255,7 +255,7 @@ theorem locallySmall_of_faithful
 
 中文:
 定理 locallySmall_of_faithful
-  结论: {C : 类型u} [Category.{v} C] {D : 类型u'} [Category.{v'} D]
+  结论: {C : 类型u} [范畴.{v} C] {D : 类型u'} [范畴.{v'} D]
   证明: small_of_injective F.map_injective
 
 Depends on / 依赖: F.map_injective, map_injective, small_of_injective
@@ -274,7 +274,7 @@ theorem locallySmall_congr
 
 中文:
 定理 locallySmall_congr
-  结论: {C : 类型u} [Category.{v} C] {D : 类型u'} [Category.{v'} D]
+  结论: {C : 类型u} [范畴.{v} C] {D : 类型u'} [范畴.{v'} D]
   证明: ⟨fun _ => locallySmall_of_faithful e.inverse, fun _ => locallySmall_of_faithful e.functor⟩
 
 Depends on / 依赖: e.functor, e.inverse, functor, inverse, locallySmall_of_faithful
@@ -304,8 +304,8 @@ theorem locallySmall_max
 
 中文:
 定理 locallySmall_max
-  条件: {C : 类型u} [Category.{v} C]
-  结论: LocallySmall.{max v w} C where
+  条件: {C : 类型u} [范畴.{v} C]
+  结论: LocallySmall.{最大值 v w} C where
   证明: small_max.{w} _
 
 Depends on / 依赖: small_max
@@ -439,7 +439,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category.{w} (ShrinkHoms C)
+  签名: 范畴.{w} (ShrinkHoms C)
   定义体: Shrink (fromShrinkHoms X ⟶ fromShrinkHoms Y)
   id X := equivShrink _ (𝟙 (fromShrinkHoms X))
   comp f g := equivShrink _ ((equivShrink _).symm f ≫ (equivShrink _).symm g)
@@ -540,7 +540,7 @@ instance :
 
 中文:
 实例 :
-  签名: (functor C).IsEquivalence
+  签名: (functor C).是等价
   定义体: (equivalence C).isEquivalence_functor
 
 Depends on / 依赖: equivalence, isEquivalence_functor
@@ -556,7 +556,7 @@ instance :
 
 中文:
 实例 :
-  签名: (inverse C).IsEquivalence
+  签名: (inverse C).是等价
   定义体: (equivalence C).isEquivalence_inverse
 
 Depends on / 依赖: equivalence, isEquivalence_inverse
@@ -585,7 +585,7 @@ instance [Small.{w}
 
 中文:
 实例 [Small.{w}
-  签名: C] : Category.{v} (Shrink.{w} C)
+  签名: C] : 范畴.{v} (Shrink.{w} C)
   定义体: inferInstanceAs (Category (InducedCategory _ (equivShrink C).symm))
 
 Depends on / 依赖: Category, InducedCategory, equivShrink
@@ -652,7 +652,7 @@ theorem essentiallySmall_iff
 
 中文:
 定理 essentiallySmall_iff
-  条件: (C : 类型u) [Category.{v} C]
+  条件: (C : 类型u) [范畴.{v} C]
   证明: by
   -- This theorem is the only bit of real work in this file.
   fconstructor
@@ -737,7 +737,7 @@ theorem essentiallySmall_of_fully_faithful
 
 中文:
 定理 essentiallySmall_of_fully_faithful
-  结论: {D : 类型u'} [Category.{v'} D] (F : C ⥤ D)
+  结论: {D : 类型u'} [范畴.{v'} D] (F : C ⥤ D)
   证明: (essentiallySmall_iff C).2 ⟨small_of_injective F.mapSkeleton_injective,
     locallySmall_of_faithful F⟩
 
@@ -760,7 +760,7 @@ instance locallySmall_fullSubcategory
 
 中文:
 实例 locallySmall_fullSubcategory
-  签名: [LocallySmall.{w} C] (P : Object命题erty C)
+  签名: [LocallySmall.{w} C] (P : ObjectProperty C)
   定义体: locallySmall_of_faithful P.ι
 
 Depends on / 依赖: locallySmall_of_faithful
@@ -781,7 +781,7 @@ instance essentiallySmall_fullSubcategory_mem
 
 中文:
 实例 essentiallySmall_fullSubcategory_mem
-  签名: (s : Set C) [Small.{w} s] [LocallySmall.{w} C]
+  签名: (s : 集合 C) [Small.{w} s] [LocallySmall.{w} C]
   定义体: suffices Small.{w} (ObjectProperty.FullSubcategory (· in s)) from
     essentiallySmall_of_small_of_locallySmall _
   small_of_injective (f := fun x => (⟨x.1, x.2⟩ : s)) (by cat_disch)
@@ -812,7 +812,7 @@ theorem essentiallySmall_iff_of_thin
 
 中文:
 定理 essentiallySmall_iff_of_thin
-  条件: {C : 类型u} [Category.{v} C] [Quiver.IsThin C]
+  条件: {C : 类型u} [范畴.{v} C] [箭图.IsThin C]
   证明: by
   simp [essentiallySmall_iff, CategoryTheory.locallySmall_of_thin]
 
@@ -832,7 +832,7 @@ instance [Small.{w}
 
 中文:
 实例 [Small.{w}
-  签名: C] : Small.{w} (Discrete C)
+  签名: C] : Small.{w} (离散 C)
   定义体: small_map discreteEquiv
 
 Depends on / 依赖: discreteEquiv, small_map

@@ -52,7 +52,7 @@ definition chosenTerminalIsTerminal
 
 中文:
 定义 chosenTerminalIsTerminal
-  签名: : IsTerminal chosenTerminal.{v, u}
+  签名: : 是终止 chosenTerminal.{v, u}
   定义体: IsTerminal.ofUniqueHom (fun C => ((Functor.const C).obj ⟨⟨⟨⟩⟩⟩).toCatHom) fun _ _ => rfl
 
 Depends on / 依赖: Functor, Functor.const, IsTerminal, IsTerminal.ofUniqueHom, ofUniqueHom, toCatHom
@@ -79,7 +79,7 @@ definition fromChosenTerminalEquiv
 
 中文:
 定义 fromChosenTerminalEquiv
-  签名: {C : 类型u} [Category.{v} C]
+  签名: {C : 类型u} [范畴.{v} C]
   定义体: F.obj ⟨⟨()⟩⟩
   invFun := (Functor.const _).obj
   left_inv _ := by
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory Cat
+  签名: CartesianMonoidal范畴 Cat
   定义体: .ofChosenFiniteProducts ⟨_, chosenTerminalIsTerminal⟩ fun X Y =>
     { cone := X.prodCone Y, isLimit := isLimitProdCone X Y }
 
@@ -182,7 +182,7 @@ instance :
 
 中文:
 实例 :
-  签名: BraidedCategory Cat
+  签名: 辫范畴 Cat
   定义体: .ofCartesianMonoidalCategory
 
 Depends on / 依赖: ofCartesianMonoidalCategory
@@ -393,7 +393,7 @@ lemma leftUnitor_hom
 中文:
 引理 leftUnitor_hom
   条件: (C : Cat.{v, u})
-  结论: (fun_ C).hom = (Prod.snd _ _).toCatHom
+  结论: (fun_ C).hom = (积类型.snd _ _).toCatHom
   证明: rfl
 -/
 lemma leftUnitor_hom (C : Cat.{v, u}) : (fun_ C).hom = (Prod.snd _ _).toCatHom := rfl
@@ -410,7 +410,7 @@ lemma leftUnitor_inv
 中文:
 引理 leftUnitor_inv
   条件: (C : Cat.{v, u})
-  结论: (fun_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom
+  结论: (fun_ C).inv = (积类型.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom
   证明: rfl
 -/
 lemma leftUnitor_inv (C : Cat.{v, u}) : (fun_ C).inv = (Prod.sectR ⟨⟨⟨⟩⟩⟩ _).toCatHom := rfl
@@ -427,7 +427,7 @@ lemma rightUnitor_hom
 中文:
 引理 rightUnitor_hom
   条件: (C : Cat.{v, u})
-  结论: (ρ_ C).hom = (Prod.fst _ _).toCatHom
+  结论: (ρ_ C).hom = (积类型.fst _ _).toCatHom
   证明: rfl
 
 Depends on / 依赖: infer_instance, isIso_iff_of_reflects_iso, sheafToPresheaf, sheafToPresheaf_map_sheafComposeNatTrans_eq_sheafifyCompIso_inv
@@ -446,7 +446,7 @@ lemma rightUnitor_inv
 中文:
 引理 rightUnitor_inv
   条件: (C : Cat.{v, u})
-  结论: (ρ_ C).inv = (Prod.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom
+  结论: (ρ_ C).inv = (积类型.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom
   证明: rfl
 -/
 lemma rightUnitor_inv (C : Cat.{v, u}) : (ρ_ C).inv = (Prod.sectL _ ⟨⟨⟨⟩⟩⟩).toCatHom := rfl

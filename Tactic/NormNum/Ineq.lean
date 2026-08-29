@@ -169,8 +169,8 @@ theorem isNat_le_true
   statement: {a b : α} -> {a' b' : Nat} ->
 
 中文:
-定理 isNat_le_true
-  条件: [Semiring α] [PartialOrder α] [IsOrderedRing α]
+定理 is自然数_le_true
+  条件: [半环 α] [偏序 α] [是Ordered环 α]
   结论: {a b : α} -> {a' b' : 自然数} ->
 
 Depends on / 依赖: R1Space, T2Space, T2Space.r1Space, r1Space
@@ -188,8 +188,8 @@ theorem isNat_lt_false
   proof: not_lt_of_ge (isNat_le_true hb ha h)
 
 中文:
-定理 isNat_lt_false
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : 自然数}
+定理 is自然数_lt_false
+  结论: [半环 α] [偏序 α] [是Ordered环 α] {a b : α} {a' b' : 自然数}
   证明: not_lt_of_ge (isNat_le_true hb ha h)
 
 Depends on / 依赖: isNat_le_true, not_lt_of_ge
@@ -213,7 +213,7 @@ have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
 
 中文:
 定理 isNNRat_le_true
-  条件: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  条件: [半环 α] [线性序 α] [是StrictOrdered环 α]
   证明: (Nat.cast_le (α := α)).mpr of_decide_eq_true h
 have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
@@ -251,7 +251,7 @@ have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
 
 中文:
 定理 isNNRat_lt_true
-  条件: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  条件: [半环 α] [线性序 α] [是StrictOrdered环 α]
   证明: (Nat.cast_lt (α := α)).mpr of_decide_eq_true h
     have ha : 0 < ⅟(da : α) := pos_invOf_of_invertible_cast da
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
@@ -283,7 +283,7 @@ theorem isNNRat_le_false
 
 中文:
 定理 isNNRat_le_false
-  结论: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [半环 α] [线性序 α] [是StrictOrdered环 α]
   证明: not_le_of_gt (isNNRat_lt_true hb ha h)
 
 Depends on / 依赖: isNNRat_lt_true, not_le_of_gt
@@ -303,7 +303,7 @@ theorem isNNRat_lt_false
 
 中文:
 定理 isNNRat_lt_false
-  结论: [Semiring α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [半环 α] [线性序 α] [是StrictOrdered环 α]
   证明: not_lt_of_ge (isNNRat_le_true hb ha h)
 
 Depends on / 依赖: isNNRat_le_true, not_lt_of_ge
@@ -328,7 +328,7 @@ have h := (mul_le_mul_of_nonneg_left · hb) mul_le_mul_of_nonneg_right h ha
 
 中文:
 定理 isRat_le_true
-  条件: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  条件: [环 α] [线性序 α] [是StrictOrdered环 α]
   证明: Int.cast_mono (R := α) of_decide_eq_true h
 have ha : 0 <= ⅟(da : α) := invOf_nonneg.mpr Nat.cast_nonneg da
 have hb : 0 <= ⅟(db : α) := invOf_nonneg.mpr Nat.cast_nonneg db
@@ -367,7 +367,7 @@ have h := (mul_lt_mul_of_pos_left · hb) mul_lt_mul_of_pos_right h ha
 
 中文:
 定理 isRat_lt_true
-  条件: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  条件: [环 α] [线性序 α] [是StrictOrdered环 α]
   证明: Int.cast_strictMono (R := α) of_decide_eq_true h
     have ha : 0 < ⅟(da : α) := pos_invOf_of_invertible_cast da
     have hb : 0 < ⅟(db : α) := pos_invOf_of_invertible_cast db
@@ -399,7 +399,7 @@ theorem isRat_le_false
 
 中文:
 定理 isRat_le_false
-  结论: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [环 α] [线性序 α] [是StrictOrdered环 α]
   证明: not_le_of_gt (isRat_lt_true hb ha h)
 
 Depends on / 依赖: isRat_lt_true, not_le_of_gt
@@ -419,7 +419,7 @@ theorem isRat_lt_false
 
 中文:
 定理 isRat_lt_false
-  结论: [Ring α] [LinearOrder α] [IsStrictOrderedRing α]
+  结论: [环 α] [线性序 α] [是StrictOrdered环 α]
   证明: not_lt_of_ge (isRat_le_true hb ha h)
 
 Depends on / 依赖: isRat_le_true, not_lt_of_ge
@@ -438,8 +438,8 @@ theorem isNat_lt_true
   given: [Semiring α] [PartialOrder α] [IsOrderedRing α] [CharZero α]
 
 中文:
-定理 isNat_lt_true
-  条件: [Semiring α] [PartialOrder α] [IsOrderedRing α] [CharZero α]
+定理 is自然数_lt_true
+  条件: [半环 α] [偏序 α] [是Ordered环 α] [特征零 α]
 -/
 theorem isNat_lt_true [Semiring α] [PartialOrder α] [IsOrderedRing α] [CharZero α] :
     {a b : α} -> {a' b' : Nat} ->
@@ -456,8 +456,8 @@ theorem isNat_le_false
   proof: not_le_of_gt (isNat_lt_true hb ha h)
 
 中文:
-定理 isNat_le_false
-  结论: [Semiring α] [PartialOrder α] [IsOrderedRing α] [CharZero α]
+定理 is自然数_le_false
+  结论: [半环 α] [偏序 α] [是Ordered环 α] [特征零 α]
   证明: not_le_of_gt (isNat_lt_true hb ha h)
 
 Depends on / 依赖: isNat_lt_true, not_le_of_gt
@@ -476,8 +476,8 @@ theorem isInt_le_true
   statement: {a b : α} -> {a' b' : Int} ->
 
 中文:
-定理 isInt_le_true
-  条件: [Ring α] [PartialOrder α] [IsOrderedRing α]
+定理 is整数_le_true
+  条件: [环 α] [偏序 α] [是Ordered环 α]
   结论: {a b : α} -> {a' b' : 整数} ->
 -/
 theorem isInt_le_true [Ring α] [PartialOrder α] [IsOrderedRing α] : {a b : α} -> {a' b' : Int} ->
@@ -492,8 +492,8 @@ theorem isInt_lt_true
   given: [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
 
 中文:
-定理 isInt_lt_true
-  条件: [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
+定理 is整数_lt_true
+  条件: [环 α] [偏序 α] [是Ordered环 α] [非平凡 α]
 -/
 theorem isInt_lt_true [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α] :
     {a b : α} -> {a' b' : Int} ->
@@ -509,8 +509,8 @@ theorem isInt_le_false
   proof: not_le_of_gt (isInt_lt_true hb ha h)
 
 中文:
-定理 isInt_le_false
-  结论: [Ring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
+定理 is整数_le_false
+  结论: [环 α] [偏序 α] [是Ordered环 α] [非平凡 α]
   证明: not_le_of_gt (isInt_lt_true hb ha h)
 
 Depends on / 依赖: isInt_lt_true, not_le_of_gt
@@ -529,8 +529,8 @@ theorem isInt_lt_false
   proof: not_lt_of_ge (isInt_le_true hb ha h)
 
 中文:
-定理 isInt_lt_false
-  结论: [Ring α] [PartialOrder α] [IsOrderedRing α] {a b : α} {a' b' : 整数}
+定理 is整数_lt_false
+  结论: [环 α] [偏序 α] [是Ordered环 α] {a b : α} {a' b' : 整数}
   证明: not_lt_of_ge (isInt_le_true hb ha h)
 
 Depends on / 依赖: isInt_le_true, not_lt_of_ge

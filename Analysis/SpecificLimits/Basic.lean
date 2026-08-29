@@ -42,7 +42,7 @@ theorem NNRat.tendsto_inv_atTop_nhds_zero_nat
 
 中文:
 定理 NNRat.tendsto_inv_atTop_nhds_zero_nat
-  结论: Tendsto (fun n : 自然数 => (n : Rat>=0)⁻¹) atTop (𝓝 0)
+  结论: 收敛 (fun n : 自然数 => (n : 有理数>=0)⁻¹) atTop (𝓝 0)
   证明: tendsto_inv_atTop_zero.comp tendsto_natCast_atTop_atTop
 
 Depends on / 依赖: tendsto_inv_atTop_zero, tendsto_inv_atTop_zero.comp, tendsto_natCast_atTop_atTop
@@ -62,7 +62,7 @@ theorem NNRat.tendsto_algebraMap_inv_atTop_nhds_zero_nat
 
 中文:
 定理 NNRat.tendsto_algebraMap_inv_atTop_nhds_zero_nat
-  结论: (𝕜 : 类型) [Semiring 𝕜]
+  结论: (𝕜 : 类型) [半环 𝕜]
   证明: by
   convert! (continuous_algebraMap Rat>=0 𝕜).continuousAt.tendsto.comp tendsto_inv_atTop_nhds_zero_nat
   rw [map_zero]
@@ -87,7 +87,7 @@ theorem tendsto_inv_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_inv_atTop_nhds_zero_nat
-  结论: {𝕜 : 类型} [DivisionSemiring 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} [除半环 𝕜] [特征零 𝕜]
   证明: by
   convert! NNRat.tendsto_algebraMap_inv_atTop_nhds_zero_nat 𝕜
   simp
@@ -112,7 +112,7 @@ theorem tendsto_const_div_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_const_div_atTop_nhds_zero_nat
-  结论: {𝕜 : 类型} [DivisionSemiring 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} [除半环 𝕜] [特征零 𝕜]
   证明: by
   simpa only [mul_zero, div_eq_mul_inv] using
     (tendsto_const_nhds (x := C)).mul tendsto_inv_atTop_nhds_zero_nat
@@ -136,7 +136,7 @@ theorem tendsto_one_div_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_one_div_atTop_nhds_zero_nat
-  结论: {𝕜 : 类型} [DivisionSemiring 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} [除半环 𝕜] [特征零 𝕜]
   证明: by
   simp [tendsto_inv_atTop_nhds_zero_nat]
 
@@ -161,7 +161,7 @@ theorem EReal.tendsto_const_div_atTop_nhds_zero_nat
   exact _root_.tendsto_const_div_atTop_nhds_zero_nat C.toReal
 
 中文:
-定理 EReal.tendsto_const_div_atTop_nhds_zero_nat
+定理 E实数.tendsto_const_div_atTop_nhds_zero_nat
   条件: {C : E实数} (h : C != ⊥) (h' : C != ⊤)
   证明: by
   have : (fun n : Nat => C / n) = fun n : Nat => ((C.toReal / n : Real) : EReal) := by
@@ -191,7 +191,7 @@ theorem tendsto_one_div_add_atTop_nhds_zero_nat
 
 中文:
 定理 tendsto_one_div_add_atTop_nhds_zero_nat
-  结论: {𝕜 : 类型} [DivisionSemiring 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} [除半环 𝕜] [特征零 𝕜]
   证明: suffices Tendsto (fun n : Nat => 1 / (↑(n + 1) : 𝕜)) atTop (𝓝 0) by simpa
   (tendsto_add_atTop_iff_nat 1).2 tendsto_one_div_atTop_nhds_zero_nat
 
@@ -245,7 +245,7 @@ theorem tendsto_natCast_div_add_atTop
 
 中文:
 定理 tendsto_natCast_div_add_atTop
-  结论: {𝕜 : 类型} [DivisionSemiring 𝕜] [TopologicalSpace 𝕜]
+  结论: {𝕜 : 类型} [除半环 𝕜] [拓扑空间 𝕜]
   证明: by
   convert! Tendsto.congr' ((eventually_ne_atTop 0).mp (Eventually.of_forall fun n hn => _)) _
   · exact fun n : Nat => 1 / (1 + x / n)
@@ -288,7 +288,7 @@ theorem tendsto_add_mul_div_add_mul_atTop_nhds
 
 中文:
 定理 tendsto_add_mul_div_add_mul_atTop_nhds
-  结论: {𝕜 : 类型} [Semifield 𝕜] [CharZero 𝕜]
+  结论: {𝕜 : 类型} [半域 𝕜] [特征零 𝕜]
   证明: by
   apply Filter.Tendsto.congr'
   case f₁ => exact fun k => (a * (↑k)⁻¹ + c) / (b * (↑k)⁻¹ + d)
@@ -389,8 +389,8 @@ theorem Filter.EventuallyEq.div_mul_cancel
   simp_all
 
 中文:
-定理 Filter.EventuallyEq.div_mul_cancel
-  结论: {α G : 类型} [GroupWithZero G] {f g : α -> G}
+定理 滤子.EventuallyEq.div_mul_cancel
+  结论: {α G : 类型} [带零群 G] {f g : α -> G}
   证明: by
   filter_upwards [hg.le_comap <| preimage_mem_comap (m := g) (mem_principal_self {0}ᶜ)] with x hx
   simp_all
@@ -412,7 +412,7 @@ theorem Filter.EventuallyEq.div_mul_cancel_atTop
 mem_of_superset (Ioi_mem_atTop 0) by simp
 
 中文:
-定理 Filter.EventuallyEq.div_mul_cancel_atTop
+定理 滤子.EventuallyEq.div_mul_cancel_atTop
   结论: {α K : 类型}
   证明: div_mul_cancel hg.mono_right le_principal_iff.mpr
 mem_of_superset (Ioi_mem_atTop 0) by simp
@@ -435,8 +435,8 @@ theorem Filter.Tendsto.num
   proof: (hlim.pos_mul_atTop ha hg).congr' (EventuallyEq.div_mul_cancel_atTop hg)
 
 中文:
-定理 Filter.Tendsto.num
-  结论: {α K : 类型} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+定理 滤子.收敛.num
+  结论: {α K : 类型} [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: (hlim.pos_mul_atTop ha hg).congr' (EventuallyEq.div_mul_cancel_atTop hg)
 
 Depends on / 依赖: EventuallyEq, EventuallyEq.div_mul_cancel_atTop, div_mul_cancel_atTop, hlim.pos_mul_atTop, pos_mul_atTop
@@ -460,8 +460,8 @@ theorem Filter.Tendsto.den
   (hlim'.pos_mul_atTop (inv_pos_of_pos ha) hf).congr' (.div_mul_cancel_atTop hf)
 
 中文:
-定理 Filter.Tendsto.den
-  结论: {α K : 类型} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+定理 滤子.收敛.den
+  结论: {α K : 类型} [域 K] [线性序 K] [是StrictOrdered环 K]
   证明: have hlim' : Tendsto (fun x => g x / f x) l (𝓝 a⁻¹) := by
     simp_rw [← inv_div (f _)]
     exact Filter.Tendsto.inv (f := fun x => f x / g x) hlim
@@ -488,7 +488,7 @@ theorem Filter.Tendsto.num_atTop_iff_den_atTop
   proof: ⟨fun hf => hf.den ha hlim, fun hg => hg.num ha hlim⟩
 
 中文:
-定理 Filter.Tendsto.num_atTop_iff_den_atTop
+定理 滤子.收敛.num_atTop_iff_den_atTop
   结论: {α K : 类型}
   证明: ⟨fun hf => hf.den ha hlim, fun hg => hg.num ha hlim⟩
 
@@ -667,7 +667,7 @@ theorem uniformity_basis_dist_pow_of_lt_one
 
 中文:
 定理 uniformity_basis_dist_pow_of_lt_one
-  结论: {α : 类型} [PseudoMetricSpace α] {r : 实数} (h₀ : 0 < r)
+  结论: {α : 类型} [伪度量空间 α] {r : 实数} (h₀ : 0 < r)
   证明: Metric.mk_uniformity_basis (fun _ _ => pow_pos h₀ _) fun _ ε0 =>
     (exists_pow_lt_of_lt_one ε0 h₁).imp fun _ hk => ⟨trivial, hk.le⟩
 
@@ -816,7 +816,7 @@ theorem NNReal.tendsto_pow_atTop_nhds_zero_of_lt_one
 @[simp]
 
 中文:
-定理 NNReal.tendsto_pow_atTop_nhds_zero_of_lt_one
+定理 非负实数.tendsto_pow_atTop_nhds_zero_of_lt_one
   条件: {r : 实数>=0} (hr : r < 1)
   证明: NNReal.tendsto_coe.1 by
     simp only [NNReal.coe_pow, NNReal.coe_zero,
@@ -843,7 +843,7 @@ theorem NNReal.tendsto_pow_atTop_nhds_zero_iff
 tendsto_pow_atTop_nhds_zero_iff.mp tendsto_coe.mpr h, tendsto_pow_atTop_nhds_zero_of_lt_one⟩
 
 中文:
-定理 NNReal.tendsto_pow_atTop_nhds_zero_iff
+定理 非负实数.tendsto_pow_atTop_nhds_zero_iff
   条件: {r : 实数>=0}
   证明: ⟨fun h => by simpa [coe_pow, coe_zero, abs_eq, coe_lt_one, val_eq_coe] using
 tendsto_pow_atTop_nhds_zero_iff.mp tendsto_coe.mpr h, tendsto_pow_atTop_nhds_zero_of_lt_one⟩
@@ -868,7 +868,7 @@ theorem ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one
 @[simp]
 
 中文:
-定理 ENNReal.tendsto_pow_atTop_nhds_zero_of_lt_one
+定理 广义非负实数.tendsto_pow_atTop_nhds_zero_of_lt_one
   条件: {r : 实数>=0∞} (hr : r < 1)
   证明: by
   rcases ENNReal.lt_iff_exists_coe.1 hr with ⟨r, rfl, hr'⟩
@@ -903,7 +903,7 @@ theorem ENNReal.tendsto_pow_atTop_nhds_zero_iff
   n
 
 中文:
-定理 ENNReal.tendsto_pow_atTop_nhds_zero_iff
+定理 广义非负实数.tendsto_pow_atTop_nhds_zero_iff
   条件: {r : 实数>=0∞}
   证明: by
   refine ⟨fun h => ?_, tendsto_pow_atTop_nhds_zero_of_lt_one⟩
@@ -940,7 +940,7 @@ theorem ENNReal.tendsto_pow_atTop_nhds_top_iff
 exact lt_irrefl _ lt_of_lt_of_le (hn n le_rfl) pow_le_one₀ zero_le r
 
 中文:
-定理 ENNReal.tendsto_pow_atTop_nhds_top_iff
+定理 广义非负实数.tendsto_pow_atTop_nhds_top_iff
   条件: {r : 实数>=0∞}
   证明: by
   refine ⟨?_, ?_⟩
@@ -978,7 +978,7 @@ lemma ENNReal.eq_zero_of_le_mul_pow
   exact Tendsto.const_mul (tendsto_pow_atTop_nhds_zero_of_lt_one hr) (Or.inr coe_ne_top)
 
 中文:
-引理 ENNReal.eq_zero_of_le_mul_pow
+引理 广义非负实数.eq_zero_of_le_mul_pow
   结论: {x r : 实数>=0∞} {ε : 实数>=0} (hr : r < 1)
   证明: by
   rw [← nonpos_iff_eq_zero]
@@ -1118,7 +1118,7 @@ theorem summable_geometric_two_encode
 
 中文:
 定理 summable_geometric_two_encode
-  条件: {ι : 类型} [Encodable ι]
+  条件: {ι : 类型} [可编码 ι]
   证明: summable_geometric_two.comp_injective Encodable.encode_injective
 
 Depends on / 依赖: Encodable, Encodable.encode_injective, comp_injective, encode_injective, summable_geometric_two, summable_geometric_two.comp_injective
@@ -1330,7 +1330,7 @@ theorem NNReal.hasSum_geometric
   exact hasSum_geometric_of_lt_one r.coe_nonneg hr
 
 中文:
-定理 NNReal.hasSum_geometric
+定理 非负实数.hasSum_geometric
   条件: {r : 实数>=0} (hr : r < 1)
   结论: HasSum (fun n : 自然数 => r ^ n) (1 - r)⁻¹
   证明: by
@@ -1357,7 +1357,7 @@ theorem NNReal.summable_geometric
   proof: ⟨_, NNReal.hasSum_geometric hr⟩
 
 中文:
-定理 NNReal.summable_geometric
+定理 非负实数.summable_geometric
   条件: {r : 实数>=0} (hr : r < 1)
   结论: Summable fun n : 自然数 => r ^ n
   证明: ⟨_, NNReal.hasSum_geometric hr⟩
@@ -1379,7 +1379,7 @@ theorem NNReal.tsum_geometric
 @[deprecated (since := "2026-03-18")] alias tsum_geometric_nnreal := NNReal.tsum_geometric
 
 中文:
-定理 NNReal.tsum_geometric
+定理 非负实数.tsum_geometric
   条件: {r : 实数>=0} (hr : r < 1)
   结论: ∑' n : 自然数, r ^ n = (1 - r)⁻¹
   证明: (NNReal.hasSum_geometric hr).tsum_eq
@@ -1412,7 +1412,7 @@ theorem ENNReal.tsum_geometric
   · rw [tsub_eq_zero_iff_le.mpr
 
 中文:
-定理 ENNReal.tsum_geometric
+定理 广义非负实数.tsum_geometric
   条件: (r : 实数>=0∞)
   结论: ∑' n : 自然数, r ^ n = (1 - r)⁻¹
   证明: by
@@ -1449,7 +1449,7 @@ theorem ENNReal.tsum_geometric_add_one
   simp only [_root_.pow_succ', ENNReal.tsum_mul_left, ENNReal.tsum_geometric]
 
 中文:
-定理 ENNReal.tsum_geometric_add_one
+定理 广义非负实数.tsum_geometric_add_one
   条件: (r : 实数>=0∞)
   结论: ∑' n : 自然数, r ^ (n + 1) = r * (1 - r)⁻¹
   证明: by
@@ -1471,7 +1471,7 @@ lemma ENNReal.tsum_two_zpow_neg_add_one
   exact ENNReal.inv_mul_cancel (Ne.symm (NeZero.ne' 2)) (Ne.symm top_ne_ofNat)
 
 中文:
-引理 ENNReal.tsum_two_zpow_neg_add_one
+引理 广义非负实数.tsum_two_zpow_neg_add_one
   证明: by
   simp_rw [neg_sub_left, ENNReal.zpow_neg, ← Nat.cast_one (R := Int), ← Nat.cast_add, zpow_natCast,
     ENNReal.inv_pow, ENNReal.tsum_geometric_add_one, one_sub_inv_two, inv_inv]
@@ -1496,7 +1496,7 @@ lemma ENNReal.tsum_geometric_two
   proof: by simp
 
 中文:
-引理 ENNReal.tsum_geometric_two
+引理 广义非负实数.tsum_geometric_two
   结论: ∑' n, (2⁻¹ : 实数>=0∞) ^ n = 2
   证明: by simp
 -/
@@ -1511,8 +1511,8 @@ lemma ENNReal.tsum_geometric_two_encode_le_two
   proof: (ENNReal.tsum_comp_le_tsum_of_injective encode_injective _).trans_eq ENNReal.tsum_geometric_two
 
 中文:
-引理 ENNReal.tsum_geometric_two_encode_le_two
-  条件: {ι : 类型} [Encodable ι]
+引理 广义非负实数.tsum_geometric_two_encode_le_two
+  条件: {ι : 类型} [可编码 ι]
   证明: (ENNReal.tsum_comp_le_tsum_of_injective encode_injective _).trans_eq ENNReal.tsum_geometric_two
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_comp_le_tsum_of_injective, ENNReal.tsum_geometric_two, encode_injective, trans_eq, tsum_comp_le_tsum_of_injective, tsum_geometric_two
@@ -1548,7 +1548,7 @@ lemma tsum_geometric_encode_lt_top
 
 中文:
 引理 tsum_geometric_encode_lt_top
-  条件: {r : 实数>=0∞} (hr : r < 1) {ι : 类型} [Encodable ι]
+  条件: {r : 实数>=0∞} (hr : r < 1) {ι : 类型} [可编码 ι]
   证明: (ENNReal.tsum_comp_le_tsum_of_injective encode_injective _).trans_lt by simpa
 
 Depends on / 依赖: ENNReal, ENNReal.tsum_comp_le_tsum_of_injective, encode_injective, trans_lt, tsum_comp_le_tsum_of_injective
@@ -1620,7 +1620,7 @@ include hu in
 
 中文:
 定理 edist_le_of_edist_le_geometric_of_tendsto
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a)) (n : 自然数)
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a)) (n : 自然数)
   证明: by
   convert! edist_le_tsum_of_edist_le_of_tendsto _ hu ha _
   simp only [pow_add, ENNReal.tsum_mul_left, ENNReal.tsum_geometric, div_eq_mul_inv, mul_assoc]
@@ -1646,7 +1646,7 @@ theorem edist_le_of_edist_le_geometric_of_tendsto₀
 
 中文:
 定理 edist_le_of_edist_le_geometric_of_tendsto₀
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a))
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a))
   证明: by
   simpa only [_root_.pow_zero, mul_one] using edist_le_of_edist_le_geometric_of_tendsto r C hu ha 0
 
@@ -1824,7 +1824,7 @@ theorem dist_le_of_le_geometric_of_tendsto₀
 
 中文:
 定理 dist_le_of_le_geometric_of_tendsto₀
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a))
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a))
   证明: (aux_hasSum_of_le_geometric hr hu).tsum_eq ▸
     dist_le_tsum_of_dist_le_of_tendsto₀ _ hu ⟨_, aux_hasSum_of_le_geometric hr hu⟩ ha
 
@@ -1850,7 +1850,7 @@ theorem dist_le_of_le_geometric_of_tendsto
 
 中文:
 定理 dist_le_of_le_geometric_of_tendsto
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a)) (n : 自然数)
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a)) (n : 自然数)
   证明: by
   have := aux_hasSum_of_le_geometric hr hu
   convert! dist_le_tsum_of_dist_le_of_tendsto _ hu ⟨_, this⟩ ha n
@@ -1901,7 +1901,7 @@ theorem dist_le_of_le_geometric_two_of_tendsto₀
 
 中文:
 定理 dist_le_of_le_geometric_two_of_tendsto₀
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a))
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a))
   证明: tsum_geometric_two' C ▸ dist_le_tsum_of_dist_le_of_tendsto₀ _ hu₂ (summable_geometric_two' C) ha
 
 Depends on / 依赖: summable_geometric_two, tsum_geometric_two
@@ -1924,7 +1924,7 @@ theorem dist_le_of_le_geometric_two_of_tendsto
 
 中文:
 定理 dist_le_of_le_geometric_two_of_tendsto
-  条件: {a : α} (ha : Tendsto f atTop (𝓝 a)) (n : 自然数)
+  条件: {a : α} (ha : 收敛 f atTop (𝓝 a)) (n : 自然数)
   证明: by
   convert! dist_le_tsum_of_dist_le_of_tendsto _ hu₂ (summable_geometric_two' C) ha n
   simp only [add_comm n, pow_add, ← div_div]
@@ -1997,7 +1997,7 @@ definition posSumOfEncodable
 
 中文:
 定义 posSumOfEncodable
-  签名: {ε : 实数} (hε : 0 < ε) (ι) [Encodable ι]
+  签名: {ε : 实数} (hε : 0 < ε) (ι) [可编码 ι]
   定义体: by
   let f n := ε / 2 / 2 ^ n
   have hf : HasSum f ε := hasSum_geometric_two' _
@@ -2037,8 +2037,8 @@ theorem Set.Countable.exists_pos_hasSum_le
   · simpa only [Subtype.coe_prop, dif_pos, Subtype
 
 中文:
-定理 Set.Countable.exists_pos_hasSum_le
-  结论: {ι : 类型} {s : Set ι} (hs : s.Countable) {ε : 实数}
+定理 集合.可数.存在_pos_hasSum_le
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.可数) {ε : 实数}
   证明: by
   classical
   have := hs.toEncodable
@@ -2077,8 +2077,8 @@ theorem Set.Countable.exists_pos_forall_sum_le
   exact fun _ _ => (hpos _).le
 
 中文:
-定理 Set.Countable.exists_pos_forall_sum_le
-  结论: {ι : 类型} {s : Set ι} (hs : s.Countable) {ε : 实数}
+定理 集合.可数.存在_pos_对任意_sum_le
+  结论: {ι : 类型} {s : 集合 ι} (hs : s.可数) {ε : 实数}
   证明: by
   classical
   rcases hs.exists_pos_hasSum_le hε with ⟨ε', hpos, c, hε'c, hcε⟩
@@ -2116,8 +2116,8 @@ theorem exists_pos_sum_of_countable
       ⟨c, hasSum_le (fun i => (hε' i).le) hasSum_zero hc⟩, NNReal.hasSum_co
 
 中文:
-定理 exists_pos_sum_of_countable
-  条件: {ε : 实数>=0} (hε : ε != 0) (ι) [Countable ι]
+定理 存在_pos_sum_of_countable
+  条件: {ε : 实数>=0} (hε : ε != 0) (ι) [可数 ι]
   证明: by
   cases nonempty_encodable ι
   obtain ⟨a, a0, aε⟩ := exists_between (pos_iff_ne_zero.2 hε)
@@ -2155,8 +2155,8 @@ theorem exists_pos_sum_of_countable
   exact ⟨ε', hp, (ENNReal.tsum_coe_eq hc).symm ▸ lt_trans (coe_lt_coe.2 hcr) hrε⟩
 
 中文:
-定理 exists_pos_sum_of_countable
-  条件: {ε : 实数>=0∞} (hε : ε != 0) (ι) [Countable ι]
+定理 存在_pos_sum_of_countable
+  条件: {ε : 实数>=0∞} (hε : ε != 0) (ι) [可数 ι]
   证明: by
   rcases exists_between (pos_iff_ne_zero.2 hε) with ⟨r, h0r, hrε⟩
   rcases lt_iff_exists_coe.1 hrε with ⟨x, rfl, _⟩
@@ -2182,8 +2182,8 @@ theorem exists_pos_sum_of_countable'
   ⟨fun i => δ i, fun i => ENNReal.coe_pos.2 (δpos i), hδ⟩
 
 中文:
-定理 exists_pos_sum_of_countable'
-  条件: {ε : 实数>=0∞} (hε : ε != 0) (ι) [Countable ι]
+定理 存在_pos_sum_of_countable'
+  条件: {ε : 实数>=0∞} (hε : ε != 0) (ι) [可数 ι]
   证明: let ⟨δ, δpos, hδ⟩ := exists_pos_sum_of_countable hε ι
   ⟨fun i => δ i, fun i => ENNReal.coe_pos.2 (δpos i), hδ⟩
 
@@ -2208,8 +2208,8 @@ theorem exists_pos_tsum_mul_lt_of_countable
   refine lt_of_le_of_lt (ENNReal.t
 
 中文:
-定理 exists_pos_tsum_mul_lt_of_countable
-  结论: {ε : 实数>=0∞} (hε : ε != 0) {ι} [Countable ι] (w : ι -> 实数>=0∞)
+定理 存在_pos_tsum_mul_lt_of_countable
+  结论: {ε : 实数>=0∞} (hε : ε != 0) {ι} [可数 ι] (w : ι -> 实数>=0∞)
   证明: by
   lift w to ι -> Real>=0 using hw
   rcases exists_pos_sum_of_countable hε ι with ⟨δ', Hpos, Hsum⟩
@@ -2244,7 +2244,7 @@ theorem factorial_tendsto_atTop
 
 中文:
 定理 factorial_tendsto_atTop
-  结论: Tendsto 自然数.factorial atTop atTop
+  结论: 收敛 自然数.factorial atTop atTop
   证明: tendsto_atTop_atTop_of_monotone (fun _ _ => Nat.factorial_le) fun n => ⟨n, n.self_le_factorial⟩
 
 Depends on / 依赖: Nat.factorial_le, factorial_le, n.self_le_factorial, self_le_factorial, tendsto_atTop_atTop_of_monotone
@@ -2363,7 +2363,7 @@ lemma tendsto_nat_floor_mul_atTop
 
 中文:
 引理 tendsto_nat_floor_mul_atTop
-  结论: {α : Type _}
+  结论: {α : 类型 _}
   证明: Tendsto.comp tendsto_nat_floor_atTop
  Tendsto.const_mul_atTop ha tendsto_natCast_atTop_atTop
 
@@ -2431,7 +2431,7 @@ theorem tendsto_nat_floor_div_atTop
 
 中文:
 定理 tendsto_nat_floor_div_atTop
-  结论: Tendsto (fun x => (⌊x⌋₊ : R) / x) atTop (𝓝 1)
+  结论: 收敛 (fun x => (⌊x⌋₊ : R) / x) atTop (𝓝 1)
   证明: by
   simpa using tendsto_nat_floor_mul_div_atTop (zero_le_one' R)
 
@@ -2491,7 +2491,7 @@ theorem tendsto_nat_ceil_div_atTop
 
 中文:
 定理 tendsto_nat_ceil_div_atTop
-  结论: Tendsto (fun x => (⌈x⌉₊ : R) / x) atTop (𝓝 1)
+  结论: 收敛 (fun x => (⌈x⌉₊ : R) / x) atTop (𝓝 1)
   证明: by
   simpa using tendsto_nat_ceil_mul_div_atTop (zero_le_one' R)
 
@@ -2511,9 +2511,9 @@ lemma Nat.tendsto_div_const_atTop
   rw [Tendsto]; rw [map_div_atTop_eq_nat n hn.bot_lt]
 
 中文:
-引理 Nat.tendsto_div_const_atTop
+引理 自然数.tendsto_div_const_atTop
   条件: {n : 自然数} (hn : n != 0)
-  结论: Tendsto (· / n) atTop atTop
+  结论: 收敛 (· / n) atTop atTop
   证明: by
   rw [Tendsto]; rw [map_div_atTop_eq_nat n hn.bot_lt]
 

@@ -44,7 +44,7 @@ definition catalanSeries
 
 中文:
 定义 catalanSeries
-  签名: : PowerSeries 自然数
+  签名: : 幂级数 自然数
   定义体: PowerSeries.mk catalan
 
 @[simp]

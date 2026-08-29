@@ -56,7 +56,7 @@ lemma isUltrametricDist_of_forall_norm_add_one_le_max_norm_one
  
 
 中文:
-引理 isUltrametricDist_of_forall_norm_add_one_le_max_norm_one
+引理 isUltrametricDist_of_对任意_norm_add_one_le_max_norm_one
   证明: by
   refine isUltrametricDist_of_forall_norm_add_le_max_norm (fun x y => ?_)
   rcases eq_or_ne y 0 with rfl | hy
@@ -89,7 +89,7 @@ lemma isUltrametricDist_of_forall_norm_add_one_of_norm_le_one
     rw [← div_le_one (by positivity)]; rw [← norm_div]; rw [add_div]; rw [div_s
 
 中文:
-引理 isUltrametricDist_of_forall_norm_add_one_of_norm_le_one
+引理 isUltrametricDist_of_对任意_norm_add_one_of_norm_le_one
   证明: by
   refine isUltrametricDist_of_forall_norm_add_one_le_max_norm_one fun x => ?_
   rcases le_or_gt ‖x‖ 1 with H | H
@@ -120,7 +120,7 @@ lemma isUltrametricDist_of_forall_norm_sub_one_of_norm_le_one
   exact isUltrametricDist_of_forall_norm_add_one_of_norm_le_one this
 
 中文:
-引理 isUltrametricDist_of_forall_norm_sub_one_of_norm_le_one
+引理 isUltrametricDist_of_对任意_norm_sub_one_of_norm_le_one
   证明: by
   have (x : R) (hx : ‖x‖ <= 1) : ‖x + 1‖ <= 1 := by
     simpa only [← neg_add', norm_neg] using h (-x) (norm_neg x ▸ hx)
@@ -146,7 +146,7 @@ lemma isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm
   -- that `(m + 1) ^ (1 / m)` gets arbitrarily close to 1, altho
 
 中文:
-引理 isUltrametricDist_of_forall_pow_norm_le_nsmul_pow_max_one_norm
+引理 isUltrametricDist_of_对任意_pow_norm_le_nsmul_pow_max_one_norm
   证明: by
   -- it will suffice to prove that `‖x + 1‖ ≤ max 1 ‖x‖`
   refine isUltrametricDist_of_forall_norm_add_one_le_max_norm_one fun x => ?_
@@ -194,7 +194,7 @@ lemma isUltrametricDist_of_forall_norm_natCast_le_one
  
 
 中文:
-引理 isUltrametricDist_of_forall_norm_natCast_le_one
+引理 isUltrametricDist_of_对任意_norm_natCast_le_one
   证明: by
   -- from a previous lemma, suffices to prove that for all `m`, we have
   -- `‖x + 1‖ ^ m ≤ (m + 1) • max 1 ‖x‖ ^ m`
@@ -249,7 +249,7 @@ theorem isUltrametricDist_iff_forall_norm_natCast_le_one
       IsUltrametricDist.isUltrametricDist_of_forall_norm_natCast_le_one⟩
 
 中文:
-定理 isUltrametricDist_iff_forall_norm_natCast_le_one
+定理 isUltrametricDist_iff_对任意_norm_natCast_le_one
   结论: {R : 类型}
   证明: ⟨fun _ => IsUltrametricDist.norm_natCast_le_one R,
       IsUltrametricDist.isUltrametricDist_of_forall_norm_natCast_le_one⟩

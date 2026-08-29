@@ -45,8 +45,8 @@ class IsVerdierRightLocalizing
     - fac({X Y : C} (f : X ⟶ Y) (hX : B X) (hY : A Y)) : exists (Z : C) (a : X ⟶ Z) (b : Z ⟶ Y), A Z ∧ B Z ∧ a ≫ b = f
 
 中文:
-类 IsVerdierRightLocalizing
-  参数: (A B : Object命题erty C)
+类 是VerdierRightLocalizing
+  参数: (A B : ObjectProperty C)
   公理与运算 (1 个):
     - fac({X Y : C} (f : X ⟶ Y) (hX : B X) (hY : A Y)) : 存在 (Z : C) (a : X ⟶ Z) (b : Z ⟶ Y), A Z ∧ B Z ∧ a ≫ b = f
 -/
@@ -64,8 +64,8 @@ class IsVerdierLeftLocalizing
     - fac({X Y : C} (f : X ⟶ Y) (hX : A X) (hY : B Y)) : exists (Z : C) (a : X ⟶ Z) (b : Z ⟶ Y), A Z ∧ B Z ∧ a ≫ b = f
 
 中文:
-类 IsVerdierLeftLocalizing
-  参数: (A B : Object命题erty C)
+类 是VerdierLeftLocalizing
+  参数: (A B : ObjectProperty C)
   公理与运算 (1 个):
     - fac({X Y : C} (f : X ⟶ Y) (hX : A X) (hY : B Y)) : 存在 (Z : C) (a : X ⟶ Z) (b : Z ⟶ Y), A Z ∧ B Z ∧ a ≫ b = f
 -/
@@ -160,7 +160,7 @@ lemma isVerdierRightLocalizing_iff
 
 中文:
 引理 isVerdierRightLocalizing_iff
-  结论: [A.IsTriangulated] [B.IsTriangulated]
+  结论: [A.是三角] [B.是三角]
   证明: by
   refine ⟨fun _ X Y s hX hs => ?_, fun hA => ⟨fun {X Y} f hX hY => ?_⟩⟩
   · rw [ObjectProperty.trW_iff'] at hs
@@ -206,7 +206,7 @@ lemma IsVerdierRightLocalizing.fac'
   proof: (isVerdierRightLocalizing_iff A B).1 inferInstance s hX hs
 
 中文:
-引理 IsVerdierRightLocalizing.fac'
+引理 是VerdierRightLocalizing.fac'
   证明: (isVerdierRightLocalizing_iff A B).1 inferInstance s hX hs
 
 Depends on / 依赖: isVerdierRightLocalizing_iff
@@ -233,7 +233,7 @@ lemma isVerdierLeftLocalizing_iff
 
 中文:
 引理 isVerdierLeftLocalizing_iff
-  结论: [A.IsTriangulated] [B.IsTriangulated]
+  结论: [A.是三角] [B.是三角]
   证明: by
   rw [← isVerdierRightLocalizing_op_iff]; rw [isVerdierRightLocalizing_iff]
   refine ⟨fun hA X Y s hY hs => ?_, fun hA X Y s hX hs => ?_⟩
@@ -264,7 +264,7 @@ lemma IsVerdierLeftLocalizing.fac'
   proof: (isVerdierLeftLocalizing_iff A B).1 inferInstance s hY hs
 
 中文:
-引理 IsVerdierLeftLocalizing.fac'
+引理 是VerdierLeftLocalizing.fac'
   证明: (isVerdierLeftLocalizing_iff A B).1 inferInstance s hY hs
 
 Depends on / 依赖: isVerdierLeftLocalizing_iff
@@ -296,7 +296,7 @@ definition triangulatedLocalizerMorphism
 
 中文:
 定义 triangulatedLocalizerMorphism
-  签名: [A.IsTriangulated]
+  签名: [A.是三角]
   定义体: A.ι
   map X Y f hf := by
     simp only [MorphismProperty.inverseImage_iff, trW_iff] at hf ⊢
@@ -320,7 +320,7 @@ instance [A.IsTriangulated]
   body: inferInstanceAs (A.ι.CommShift Int)
 
 中文:
-实例 [A.IsTriangulated]
+实例 [A.是三角]
   签名: :
   定义体: inferInstanceAs (A.ι.CommShift Int)
 
@@ -339,7 +339,7 @@ instance [A.IsTriangulated]
   body: inferInstanceAs A.ι.IsTriangulated
 
 中文:
-实例 [A.IsTriangulated]
+实例 [A.是三角]
   签名: :
   定义体: inferInstanceAs A.ι.IsTriangulated
 
@@ -369,7 +369,7 @@ lemma trW_inverseImage_ι_iff
 
 中文:
 引理 trW_inverseImage_ι_iff
-  条件: [A.IsTriangulated] {X Y : A.FullSubcategory} (f : X ⟶ Y)
+  条件: [A.是三角] {X Y : A.满子范畴} (f : X ⟶ Y)
   证明: by
   simp only [trW_iff]
   constructor
@@ -411,7 +411,7 @@ lemma inverseImage_opEquivalence_inverse_trW_inverseImage_ι_op
 
 中文:
 引理 inverseImage_opEquivalence_inverse_trW_inverseImage_ι_op
-  结论: [A.IsTriangulated]
+  结论: [A.是三角]
   证明: by
   ext ⟨X₁⟩ ⟨X₂⟩ a
   simp [trW_op, trW_inverseImage_ι_iff, ← op_inf]
@@ -450,7 +450,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂).Full
+  签名: ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂).满
   定义体: by
   let F := (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
   have : L₁.EssSurj := Localization.essSurj L₁ (B.inverseImage A.ι).trW
@@ -497,8 +497,8 @@ instance [Preadditive
   exact Functor.additive_of_iso e
 
 中文:
-实例 [Preadditive
-  签名: D₁] [Preadditive D₂] [L₁.Additive] [L₂.Additive] :
+实例 [预加性
+  签名: D₁] [预加性 D₂] [L₁.加性] [L₂.加性] :
   定义体: by
   let F := (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
   rw [Localization.functor_additive_iff L₁ (B.inverseImage A.ι).trW]
@@ -534,7 +534,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂).Faithful
+  签名: ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂).忠实
   定义体: by
   let := Localization.preadditive L₁ (B.inverseImage A.ι).trW
   let := Localization.preadditive L₂ B.trW
@@ -580,7 +580,7 @@ instance [A.IsVerdierRightLocalizing
   body: ⟨.ofFullyFaithful _⟩
 
 中文:
-实例 [A.IsVerdierRightLocalizing
+实例 [A.是VerdierRightLocalizing
   签名: B] :
   定义体: ⟨.ofFullyFaithful _⟩
 
@@ -605,7 +605,7 @@ instance [A.IsVerdierLeftLocalizing
     (A.opEquivalence.functor ⋙ L₁.o
 
 中文:
-实例 [A.IsVerdierLeftLocalizing
+实例 [A.是VerdierLeftLocalizing
   签名: B] :
   定义体: by
   let L₁ := (B.inverseImage A.ι).trW.Q
@@ -669,8 +669,8 @@ instance [Preadditive
   exact Functor.additive_of_iso e
 
 中文:
-实例 [Preadditive
-  签名: D₁] [Preadditive D₂] [L₁.Additive] [L₂.Additive] :
+实例 [预加性
+  签名: D₁] [预加性 D₂] [L₁.加性] [L₂.加性] :
   定义体: by
   let F := (A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂
   rw [Localization.functor_additive_iff L₁ (B.inverseImage A.ι).trW]
@@ -703,7 +703,7 @@ definition IsVerdierLeftLocalizing.fullyFaithful
       ((A.triangulatedLocalizerMorphism B).functor ⋙ L₂) (L₁ ⋙ F) _ _ e.symm)
 
 中文:
-定义 IsVerdierLeftLocalizing.fullyFaithful
+定义 是VerdierLeftLocalizing.fullyFaithful
   定义体: Functor.FullyFaithful.ofIso (.ofFullyFaithful
     ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂))
     (Localization.liftNatIso L₁ (B.inverseImage A.ι).trW
@@ -737,8 +737,8 @@ definition IsVerdierRightLocalizing.fullyFaithful
       ((A.triangulatedLocalizerMorphism B).functor ⋙ L₂) (L₁ ⋙ F) _ _ e.symm)
 
 中文:
-定义 IsVerdierRightLocalizing.fullyFaithful
-  签名: [A.IsVerdierRightLocalizing B]
+定义 是VerdierRightLocalizing.fullyFaithful
+  签名: [A.是VerdierRightLocalizing B]
   定义体: Functor.FullyFaithful.ofIso (.ofFullyFaithful
     ((A.triangulatedLocalizerMorphism B).localizedFunctor L₁ L₂))
     (Localization.liftNatIso L₁ (B.inverseImage A.ι).trW

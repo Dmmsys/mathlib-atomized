@@ -136,7 +136,7 @@ theorem refl_conj
 中文:
 定理 refl_conj
   条件: (f : End X)
-  结论: (Iso.refl X).conj f = f
+  结论: (同构.refl X).conj f = f
   证明: by
   rw [conj_apply]; rw [Iso.refl_inv]; rw [Iso.refl_hom]; rw [Category.id_comp]; rw [Category.comp_id]
 

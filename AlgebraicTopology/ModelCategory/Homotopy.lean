@@ -59,7 +59,7 @@ definition rightHomotopy
 
 中文:
 定义 rightHomotopy
-  签名: (h : LeftHomotopyRel f g) (Q : PathObject Y) [Q.IsGood]
+  签名: (h : LeftHomotopyRel f g) (Q : PathObject Y) [Q.是Good]
   定义体: let P := h.exists_good_cylinder.choose
   have h := h.exists_good_cylinder.choose_spec.2.some
   have h' := h.exists_good_cylinder.choose_spec.1
@@ -136,7 +136,7 @@ definition leftHomotopy
 
 中文:
 定义 leftHomotopy
-  签名: (h : RightHomotopyRel f g) (Q : Cylinder X) [Q.IsGood]
+  签名: (h : RightHomotopyRel f g) (Q : 柱 X) [Q.是Good]
   定义体: let P := h.exists_good_pathObject.choose
   have h := h.exists_good_pathObject.choose_spec.2.some
   have h' := h.exists_good_pathObject.choose_spec.1

@@ -54,7 +54,7 @@ deriving Category
 
 中文:
 定义 PullbackShift
-  签名: [HasShift C B] (_ : A ->+ B)
+  签名: [有Shift C B] (_ : A ->+ B)
   定义体: C
 deriving Category
 -/
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasShift (PullbackShift C φ) A
+  签名: 有Shift (PullbackShift C φ) A
   定义体: Discrete.addMonoidalFunctor φ ⋙ shiftMonoidalFunctor C B
 
 Depends on / 依赖: Discrete, Discrete.addMonoidalFunctor, addMonoidalFunctor, shiftMonoidalFunctor
@@ -93,8 +93,8 @@ instance [HasZeroObject
   body: inferInstanceAs HasZeroObject C
 
 中文:
-实例 [HasZeroObject
-  签名: C] : HasZeroObject (PullbackShift C φ)
+实例 [有ZeroObject
+  签名: C] : 有ZeroObject (PullbackShift C φ)
   定义体: inferInstanceAs HasZeroObject C
 
 Depends on / 依赖: HasZeroObject
@@ -111,8 +111,8 @@ instance [Preadditive
   body: inferInstanceAs Preadditive C
 
 中文:
-实例 [Preadditive
-  签名: C] : Preadditive (PullbackShift C φ)
+实例 [预加性
+  签名: C] : 预加性 (PullbackShift C φ)
   定义体: inferInstanceAs Preadditive C
 
 Depends on / 依赖: Preadditive
@@ -129,7 +129,7 @@ instance [Preadditive
   body: inferInstanceAs (shiftFunctor C (φ a)).Additive
 
 中文:
-实例 [Preadditive
+实例 [预加性
   签名: C] (a
   定义体: inferInstanceAs (shiftFunctor C (φ a)).Additive
 
@@ -392,7 +392,7 @@ instance commShiftPullback
 
 中文:
 实例 commShiftPullback
-  签名: : (PullbackShift.functor φ F).CommShift A where
+  签名: : (PullbackShift.functor φ F).交换Shift A where
   定义体: isoWhiskerRight (pullbackShiftIso C φ a (φ a) rfl) F ≪≫
     F.commShiftIso (φ a) ≪≫ isoWhiskerLeft _ (pullbackShiftIso D φ a (φ a) rfl).symm
   commShiftIso_zero := by
@@ -482,7 +482,7 @@ instance commShiftPullback
 
 中文:
 实例 commShiftPullback
-  签名: (τ : F ⟶ G) [自然数Trans.CommShift τ B]
+  签名: (τ : F ⟶ G) [自然变换.交换Shift τ B]
   定义体: by
     ext
     dsimp [PullbackShift.natTrans]
@@ -537,7 +537,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift (PullbackShift.natIsoId C φ).hom A
+  签名: 自然变换.交换Shift (PullbackShift.natIsoId C φ).hom A
   定义体: by
     ext
     simp [PullbackShift.natIsoId, Functor.commShiftPullback_iso_eq]
@@ -595,7 +595,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Trans.CommShift (PullbackShift.natIsoComp φ F G).hom A
+  签名: 自然变换.交换Shift (PullbackShift.natIsoComp φ F G).hom A
   定义体: by
     ext
     dsimp [PullbackShift.natIsoComp]
@@ -679,7 +679,7 @@ instance commShiftPullback
 
 中文:
 实例 commShiftPullback
-  签名: [adj.CommShift B]
+  签名: [adj.交换Shift B]
   定义体: by
     dsimp [PullbackShift.adjunction]
     infer_instance

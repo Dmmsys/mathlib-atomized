@@ -31,7 +31,7 @@ definition IsPGroup
   body: forall g : G, exists k : Nat, g ^ p ^ k = 1
 
 中文:
-定义 IsPGroup
+定义 是p群
   签名: : 命题
   定义体: forall g : G, exists k : Nat, g ^ p ^ k = 1
 -/
@@ -54,7 +54,7 @@ alias ⟨exists_pow_pow_eq_one, _⟩ := isPGroup_iff_pow_pow_eq_one
 
 中文:
 定理 _root_.isPGroup_iff_pow_pow_eq_one
-  结论: IsPGroup p G ↔ 对任意 g : G, 存在 k, g ^ p ^ k = 1
+  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, g ^ p ^ k = 1
   证明: .rfl
 
 alias ⟨exists_pow_pow_eq_one, _⟩ := isPGroup_iff_pow_pow_eq_one
@@ -77,7 +77,7 @@ alias ⟨exists_orderOf_dvd_pow, _⟩ := isPGroup_iff_orderOf_dvd_pow
 
 中文:
 定理 _root_.isPGroup_iff_orderOf_dvd_pow
-  结论: IsPGroup p G ↔ 对任意 g : G, 存在 k, orderOf g ∣ p ^ k
+  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, orderOf g ∣ p ^ k
   证明: by
   simp_rw [isPGroup_iff_pow_pow_eq_one, orderOf_dvd_iff_pow_eq_one]
 
@@ -105,8 +105,8 @@ alias ⟨exists_orderOf_eq_pow, _⟩ := iff_orderOf
 
 中文:
 定理 iff_orderOf
-  条件: [Fact p.Prime]
-  结论: IsPGroup p G ↔ 对任意 g : G, 存在 k, orderOf g = p ^ k
+  条件: [Fact p.素]
+  结论: 是p群 p G ↔ 对任意 g : G, 存在 k, orderOf g = p ^ k
   证明: by
   simp_rw [isPGroup_iff_orderOf_dvd_pow, Nat.dvd_prime_pow Fact.out]
 exact forall_congr' fun g => ⟨by grind, .imp by grind⟩
@@ -135,7 +135,7 @@ theorem of_card_dvd_pow
 中文:
 定理 of_card_dvd_pow
   条件: {n : 自然数} (hG : 自然数.card G ∣ p ^ n)
-  结论: IsPGroup p G
+  结论: 是p群 p G
   证明: by
   refine fun g => ⟨n, ?_⟩
   grw [← orderOf_dvd_iff_pow_eq_one, ← hG, orderOf_dvd_natCard]
@@ -163,8 +163,8 @@ theorem _root_.isPGroup_iff_card_dvd_pow
 
 中文:
 定理 _root_.isPGroup_iff_card_dvd_pow
-  条件: [Finite G]
-  结论: IsPGroup p G ↔ 存在 n, 自然数.card G ∣ p ^ n
+  条件: [有限 G]
+  结论: 是p群 p G ↔ 存在 n, 自然数.card G ∣ p ^ n
   证明: by
   refine ⟨fun h => ?_, fun ⟨n, hn⟩ => of_card_dvd_pow hn⟩
   rcases eq_or_ne p 0 with rfl | hp
@@ -202,7 +202,7 @@ theorem dvd_orderOf
 
 中文:
 定理 dvd_orderOf
-  条件: [Fact p.Prime] (hG : IsPGroup p G) {g : G} (hg : g != 1)
+  条件: [Fact p.素] (hG : 是p群 p G) {g : G} (hg : g != 1)
   结论: p ∣ orderOf g
   证明: by
   have ⟨k, hk⟩ := hG.exists_orderOf_eq_pow g
@@ -230,7 +230,7 @@ theorem of_card
 中文:
 定理 of_card
   条件: {n : 自然数} (hG : 自然数.card G = p ^ n)
-  结论: IsPGroup p G
+  结论: 是p群 p G
   证明: of_card_dvd_pow hG.dvd
 
 Depends on / 依赖: hG.dvd, of_card_dvd_pow
@@ -250,8 +250,8 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton G]
-  结论: IsPGroup p G
+  条件: [子单例 G]
+  结论: 是p群 p G
   证明: of_card (n := 0) (by simp)
 
 Depends on / 依赖: of_card
@@ -269,7 +269,7 @@ theorem of_bot
 
 中文:
 定理 of_bot
-  结论: IsPGroup p (⊥ : Subgroup G)
+  结论: 是p群 p (⊥ : 子群 G)
   证明: .of_subsingleton p _
 
 Depends on / 依赖: of_subsingleton
@@ -291,7 +291,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: IsPGroup 0 G
+  结论: 是p群 0 G
   证明: fun g => ⟨1, by simp⟩
 
 @[simp]
@@ -312,7 +312,7 @@ theorem _root_.isPGroup_one_iff_subsingleton
 
 中文:
 定理 _root_.isPGroup_one_iff_subsingleton
-  结论: IsPGroup 1 G ↔ Subsingleton G
+  结论: 是p群 1 G ↔ 子单例 G
   证明: by
   refine ⟨?_, fun h => .of_subsingleton 1 G⟩
   simpa [isPGroup_iff_pow_pow_eq_one] using subsingleton_of_forall_eq 1
@@ -335,7 +335,7 @@ theorem card
 
 中文:
 定理 card
-  结论: IsPGroup (自然数.card G) G
+  结论: 是p群 (自然数.card G) G
   证明: fun g => ⟨1, by simp⟩
 
 @[gcongr]
@@ -357,8 +357,8 @@ exact fun g => (hp g).imp fun k hk => hk.trans pow_dvd_pow_of_dvd hpq k
 
 中文:
 定理 mono
-  条件: {q : 自然数} (hpq : p ∣ q) (hp : IsPGroup p G)
-  结论: IsPGroup q G
+  条件: {q : 自然数} (hpq : p ∣ q) (hp : 是p群 p G)
+  结论: 是p群 q G
   证明: by
   rw [isPGroup_iff_orderOf_dvd_pow] at hp ⊢
 exact fun g => (hp g).imp fun k hk => hk.trans pow_dvd_pow_of_dvd hpq k
@@ -378,8 +378,8 @@ theorem of_pow
 
 中文:
 定理 of_pow
-  条件: {n : 自然数} (h : IsPGroup (p ^ n) G)
-  结论: IsPGroup p G
+  条件: {n : 自然数} (h : 是p群 (p ^ n) G)
+  结论: 是p群 p G
   证明: fun g => (h g).imp' (n * ·) by simp [pow_mul]
 
 Depends on / 依赖: pow_mul
@@ -402,8 +402,8 @@ alias ⟨exists_card_eq, _⟩ := iff_card
 
 中文:
 定理 iff_card
-  条件: [Fact p.Prime] [Finite G]
-  结论: IsPGroup p G ↔ 存在 n : 自然数, 自然数.card G = p ^ n
+  条件: [Fact p.素] [有限 G]
+  结论: 是p群 p G ↔ 存在 n : 自然数, 自然数.card G = p ^ n
   证明: by
   simp_rw [isPGroup_iff_card_dvd_pow, Nat.dvd_prime_pow Fact.out]
   exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
@@ -433,8 +433,8 @@ theorem _root_.isPGroup_iff_exists_orderOf_dvd_pow
   grw [← Nat.pow_dvd_pow p <| hg g' <| Finset.mem_
 
 中文:
-定理 _root_.isPGroup_iff_exists_orderOf_dvd_pow
-  条件: [Finite G]
+定理 _root_.isPGroup_iff_存在_orderOf_dvd_pow
+  条件: [有限 G]
   证明: by
   refine isPGroup_iff_orderOf_dvd_pow.trans ⟨fun h => ?_, fun ⟨k, hk⟩ => fun g => ⟨k, hk g⟩⟩
   choose k hk using h
@@ -465,8 +465,8 @@ theorem _root_.isPGroup_iff_exists_pow_pow_eq_one
   simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one]
 
 中文:
-定理 _root_.isPGroup_iff_exists_pow_pow_eq_one
-  条件: [Finite G]
+定理 _root_.isPGroup_iff_存在_pow_pow_eq_one
+  条件: [有限 G]
   证明: by
   simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, orderOf_dvd_iff_pow_eq_one]
 
@@ -487,8 +487,8 @@ theorem of_exponent_dvd_pow
 
 中文:
 定理 of_exponent_dvd_pow
-  条件: {n : 自然数} (h : Monoid.exponent G ∣ p ^ n)
-  结论: IsPGroup p G
+  条件: {n : 自然数} (h : 幺半群.exponent G ∣ p ^ n)
+  结论: 是p群 p G
   证明: fun g => ⟨n, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp h g⟩
 
 Depends on / 依赖: Monoid, Monoid.exponent_dvd_iff_forall_pow_eq_one.mp, exponent_dvd_iff_forall_pow_eq_one
@@ -509,7 +509,7 @@ alias ⟨exists_exponent_dvd_pow, _⟩ := isPGroup_iff_exponent_dvd_pow
 
 中文:
 定理 _root_.isPGroup_iff_exponent_dvd_pow
-  条件: [Finite G]
+  条件: [有限 G]
   证明: by
   simp_rw [isPGroup_iff_exists_orderOf_dvd_pow, Monoid.exponent_dvd]
 
@@ -537,7 +537,7 @@ alias ⟨exists_exponent_eq_pow, _⟩ := isPGroup_iff_exponent_eq_pow
 
 中文:
 定理 _root_.isPGroup_iff_exponent_eq_pow
-  条件: [Finite G] [Fact p.Prime]
+  条件: [有限 G] [Fact p.素]
   证明: by
   simp_rw [isPGroup_iff_exponent_dvd_pow, Nat.dvd_prime_pow Fact.out]
   exact ⟨fun ⟨n, k, _, hk⟩ => ⟨k, hk⟩, fun ⟨n, hn⟩ => ⟨n, n, le_rfl, hn⟩⟩
@@ -588,7 +588,7 @@ theorem _root_.isPGroup_iff_primeFactors_card_subset
 
 中文:
 定理 _root_.isPGroup_iff_primeFactors_card_subset
-  条件: [Finite G] (h : p != 0)
+  条件: [有限 G] (h : p != 0)
   证明: by
   refine isPGroup_iff_card_dvd_pow.trans ⟨fun ⟨n, hn⟩ => ?_, fun hG => ?_⟩
   · rcases eq_or_ne n 0 with (rfl | hn0)
@@ -625,7 +625,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: {H : 类型} [Group H] (ϕ : H ->* G) (hϕ : Function.Injective ϕ)
+  条件: {H : 类型} [群 H] (ϕ : H ->* G) (hϕ : 函数.单射 ϕ)
   证明: by
   simp_rw [IsPGroup, ← hϕ.eq_iff, ϕ.map_pow, ϕ.map_one]
   exact fun h => hG (ϕ h)
@@ -648,8 +648,8 @@ theorem to_subgroup
 
 中文:
 定理 to_subgroup
-  条件: (H : Subgroup G)
-  结论: IsPGroup p H
+  条件: (H : 子群 G)
+  结论: 是p群 p H
   证明: hG.of_injective H.subtype Subtype.coe_injective
 
 Depends on / 依赖: H.subtype, Subtype, Subtype.coe_injective, coe_injective, hG.of_injective, of_injective, subtype
@@ -669,7 +669,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: {H : 类型} [Group H] (ϕ : G ->* H) (hϕ : Function.Surjective ϕ)
+  条件: {H : 类型} [群 H] (ϕ : G ->* H) (hϕ : 函数.满射 ϕ)
   证明: by
   refine fun h => Exists.elim (hϕ h) fun g hg => Exists.imp (fun k hk => ?_) (hG g)
   rw [← hg]; rw [← ϕ.map_pow]; rw [hk]; rw [ϕ.map_one]
@@ -692,8 +692,8 @@ theorem to_quotient
 
 中文:
 定理 to_quotient
-  条件: (H : Subgroup G) [H.Normal]
-  结论: IsPGroup p (G ⧸ H)
+  条件: (H : 子群 G) [H.正规]
+  结论: 是p群 p (G ⧸ H)
   证明: hG.of_surjective (QuotientGroup.mk' H) Quotient.mk''_surjective
 
 Depends on / 依赖: Quotient, Quotient.mk, QuotientGroup, QuotientGroup.mk, _surjective, hG.of_surjective, of_surjective
@@ -712,8 +712,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: {H : 类型} [Group H] (ϕ : G ≃* H)
-  结论: IsPGroup p H
+  条件: {H : 类型} [群 H] (ϕ : G ≃* H)
+  结论: 是p群 p H
   证明: hG.of_surjective ϕ.toMonoidHom ϕ.surjective
 
 Depends on / 依赖: hG.of_surjective, of_surjective, surjective, toMonoidHom
@@ -882,7 +882,7 @@ theorem index
 
 中文:
 定理 index
-  条件: (H : Subgroup G) [H.FiniteIndex]
+  条件: (H : 子群 G) [H.FiniteIndex]
   结论: 存在 n : 自然数, H.index = p ^ n
   证明: by
   obtain ⟨n, hn⟩ := iff_card.mp (hG.to_quotient H.normalCore)
@@ -962,8 +962,8 @@ Finite.one_lt_card_iff_nontrivial.1
 
 中文:
 定理 nontrivial_iff_card
-  条件: [Finite G]
-  结论: Nontrivial G ↔ 存在 n > 0, 自然数.card G = p ^ n
+  条件: [有限 G]
+  结论: 非平凡 G ↔ 存在 n > 0, 自然数.card G = p ^ n
   证明: ⟨fun hGnt =>
     let ⟨k, hk⟩ := iff_card.1 hG
     ⟨k,
@@ -1005,7 +1005,7 @@ theorem card_orbit
 
 中文:
 定理 card_orbit
-  条件: (a : α) [Finite (orbit G a)]
+  条件: (a : α) [有限 (orbit G a)]
   结论: 存在 n : 自然数, 自然数.card (orbit G a) = p ^ n
   证明: by
   let ϕ := orbitEquivQuotientStabilizer G a
@@ -1103,7 +1103,7 @@ theorem nonempty_fixed_point_of_prime_not_dvd_card
 
 中文:
 定理 nonempty_fixed_point_of_prime_not_dvd_card
-  条件: (α) [MulAction G α] (hpα : ¬p ∣ 自然数.card α)
+  条件: (α) [乘法作用 G α] (hpα : ¬p ∣ 自然数.card α)
   证明: have : Finite α := Nat.finite_of_card_ne_zero (fun h => (h ▸ hpα) (dvd_zero p))
   @Set.Nonempty.of_subtype _ _
     (by
@@ -1138,7 +1138,7 @@ theorem exists_fixed_point_of_prime_dvd_card_of_fixed_point
   rw [F
 
 中文:
-定理 exists_fixed_point_of_prime_dvd_card_of_fixed_point
+定理 存在_fixed_point_of_prime_dvd_card_of_fixed_point
   结论: (hpα : p ∣ 自然数.card α) {a : α}
   证明: by
   have hpf : p ∣ Nat.card (fixedPoints G α) :=
@@ -1177,8 +1177,8 @@ theorem center_nontrivial
 
 中文:
 定理 center_nontrivial
-  条件: [Nontrivial G] [Finite G]
-  结论: Nontrivial (Subgroup.center G)
+  条件: [非平凡 G] [有限 G]
+  结论: 非平凡 (子群.center G)
   证明: by
   have := (hG.of_equiv ConjAct.toConjAct).exists_fixed_point_of_prime_dvd_card_of_fixed_point G
   rw [ConjAct.fixedPoints_eq_center] at this
@@ -1212,8 +1212,8 @@ theorem bot_lt_center
 
 中文:
 定理 bot_lt_center
-  条件: [Nontrivial G] [Finite G]
-  结论: ⊥ < Subgroup.center G
+  条件: [非平凡 G] [有限 G]
+  结论: ⊥ < 子群.center G
   证明: by
   have := center_nontrivial hG
   exact
@@ -1242,8 +1242,8 @@ theorem to_le
 
 中文:
 定理 to_le
-  条件: {H K : Subgroup G} (hK : IsPGroup p K) (hHK : H <= K)
-  结论: IsPGroup p H
+  条件: {H K : 子群 G} (hK : 是p群 p K) (hHK : H <= K)
+  结论: 是p群 p H
   证明: hK.of_injective (Subgroup.inclusion hHK) fun a b h =>
     Subtype.ext (by
       change ((Subgroup.inclusion hHK) a : G) = (Subgroup.inclusion hHK) b
@@ -1268,8 +1268,8 @@ theorem to_inf_left
 
 中文:
 定理 to_inf_left
-  条件: {H K : Subgroup G} (hH : IsPGroup p H)
-  结论: IsPGroup p (H ⊓ K : Subgroup G)
+  条件: {H K : 子群 G} (hH : 是p群 p H)
+  结论: 是p群 p (H ⊓ K : 子群 G)
   证明: hH.to_le inf_le_left
 
 Depends on / 依赖: hH.to_le, inf_le_left, to_le
@@ -1288,8 +1288,8 @@ theorem to_inf_right
 
 中文:
 定理 to_inf_right
-  条件: {H K : Subgroup G} (hK : IsPGroup p K)
-  结论: IsPGroup p (H ⊓ K : Subgroup G)
+  条件: {H K : 子群 G} (hK : 是p群 p K)
+  结论: 是p群 p (H ⊓ K : 子群 G)
   证明: hK.to_le inf_le_right
 
 Depends on / 依赖: hK.to_le, inf_le_right, to_le
@@ -1309,7 +1309,7 @@ theorem map
 
 中文:
 定理 map
-  条件: {H : Subgroup G} (hH : IsPGroup p H) {K : 类型} [Group K] (ϕ : G ->* K)
+  条件: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K] (ϕ : G ->* K)
   证明: by
   rw [← H.range_subtype]; rw [MonoidHom.map_range]
   exact hH.of_surjective (ϕ.domRestrict H).rangeRestrict (ϕ.domRestrict H).rangeRestrict_surjective
@@ -1338,7 +1338,7 @@ theorem comap_of_ker_isPGroup
 
 中文:
 定理 comap_of_ker_isPGroup
-  结论: {H : Subgroup G} (hH : IsPGroup p H) {K : 类型} [Group K]
+  结论: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K]
   证明: by
   intro g
   obtain ⟨j, hj⟩ := hH ⟨ϕ g.1, g.2⟩
@@ -1368,7 +1368,7 @@ theorem ker_isPGroup_of_injective
 
 中文:
 定理 ker_isPGroup_of_injective
-  条件: {K : 类型} [Group K] {ϕ : K ->* G} (hϕ : Function.Injective ϕ)
+  条件: {K : 类型} [群 K] {ϕ : K ->* G} (hϕ : 函数.单射 ϕ)
   证明: (congr_arg (fun Q : Subgroup K => IsPGroup p Q) (ϕ.ker_eq_bot hϕ)).mpr IsPGroup.of_bot
 
 Depends on / 依赖: IsPGroup, IsPGroup.of_bot, Subgroup, congr_arg, ker_eq_bot, of_bot
@@ -1387,7 +1387,7 @@ theorem comap_of_injective
 
 中文:
 定理 comap_of_injective
-  结论: {H : Subgroup G} (hH : IsPGroup p H) {K : 类型} [Group K] (ϕ : K ->* G)
+  结论: {H : 子群 G} (hH : 是p群 p H) {K : 类型} [群 K] (ϕ : K ->* G)
   证明: hH.comap_of_ker_isPGroup ϕ (ker_isPGroup_of_injective hϕ)
 
 Depends on / 依赖: comap_of_ker_isPGroup, hH.comap_of_ker_isPGroup, ker_isPGroup_of_injective
@@ -1406,7 +1406,7 @@ theorem comap_subtype
 
 中文:
 定理 comap_subtype
-  条件: {H : Subgroup G} (hH : IsPGroup p H) {K : Subgroup G}
+  条件: {H : 子群 G} (hH : 是p群 p H) {K : 子群 G}
   证明: hH.comap_of_injective K.subtype Subtype.coe_injective
 
 Depends on / 依赖: K.subtype, Subtype, Subtype.coe_injective, coe_injective, comap_of_injective, hH.comap_of_injective, subtype
@@ -1428,7 +1428,7 @@ theorem to_sup_of_normal_right
 
 中文:
 定理 to_sup_of_normal_right
-  结论: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
+  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
   证明: by
   rw [← QuotientGroup.ker_mk' K]; rw [← Subgroup.comap_map_eq]
   apply (hH.map (QuotientGroup.mk' K)).comap_of_ker_isPGroup
@@ -1452,7 +1452,7 @@ theorem to_sup_of_normal_left
 
 中文:
 定理 to_sup_of_normal_left
-  结论: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
+  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
   证明: sup_comm H K ▸ to_sup_of_normal_right hK hH
 
 Depends on / 依赖: sup_comm, to_sup_of_normal_right
@@ -1474,7 +1474,7 @@ theorem to_sup_of_normal_right'
 
 中文:
 定理 to_sup_of_normal_right'
-  结论: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
+  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
   证明: let hHK' :=
     to_sup_of_normal_right (hH.of_equiv (Subgroup.subgroupOfEquivOfLe hHK).symm)
       (hK.of_equiv (Subgroup.subgroupOfEquivOfLe Subgroup.le_normalizer).symm)
@@ -1503,7 +1503,7 @@ theorem to_sup_of_normal_left'
 
 中文:
 定理 to_sup_of_normal_left'
-  结论: {H K : Subgroup G} (hH : IsPGroup p H) (hK : IsPGroup p K)
+  结论: {H K : 子群 G} (hH : 是p群 p H) (hK : 是p群 p K)
   证明: sup_comm H K ▸ to_sup_of_normal_right' hK hH hHK
 
 Depends on / 依赖: sup_comm, to_sup_of_normal_right
@@ -1525,7 +1525,7 @@ theorem coprime_card_of_ne
 
 中文:
 定理 coprime_card_of_ne
-  结论: {G₂ : 类型} [Group G₂] (p₁ p₂ : 自然数) [hp₁ : Fact p₁.Prime]
+  结论: {G₂ : 类型} [群 G₂] (p₁ p₂ : 自然数) [hp₁ : Fact p₁.素]
   证明: by
   obtain ⟨n₁, heq₁⟩ := iff_card.mp hH₁; rw [heq₁]; clear heq₁
   obtain ⟨n₂, heq₂⟩ := iff_card.mp hH₂; rw [heq₂]; clear heq₂
@@ -1557,7 +1557,7 @@ exact orderOf_eq_one_iff.mp Nat.eq
 
 中文:
 定理 disjoint_of_coprime
-  结论: {p₁ p₂ : 自然数} {H₁ H₂ : Subgroup G} (hH₁ : IsPGroup p₁ H₁)
+  结论: {p₁ p₂ : 自然数} {H₁ H₂ : 子群 G} (hH₁ : 是p群 p₁ H₁)
   证明: by
   refine Subgroup.disjoint_def.mpr fun {g} hg₁ hg₂ => ?_
   have ⟨k₁, hk₁⟩ := hH₁ ⟨g, hg₁⟩
@@ -1587,7 +1587,7 @@ theorem disjoint_of_ne
 
 中文:
 定理 disjoint_of_ne
-  结论: (p₁ p₂ : 自然数) [hp₁ : Fact p₁.Prime] [hp₂ : Fact p₂.Prime] (hne : p₁ != p₂)
+  结论: (p₁ p₂ : 自然数) [hp₁ : Fact p₁.素] [hp₂ : Fact p₂.素] (hne : p₁ != p₂)
   证明: disjoint_of_coprime hH₁ hH₂ .mpr hne Nat.coprime_primes hp₁.elim hp₂.elim
 
 Depends on / 依赖: Nat.coprime_primes, coprime_primes, disjoint_of_coprime
@@ -1615,7 +1615,7 @@ theorem le_or_disjoint_of_coprime
 
 中文:
 定理 le_or_disjoint_of_coprime
-  结论: [hp : Fact p.Prime] {P : Subgroup G} (hP : IsPGroup p P)
+  结论: [hp : Fact p.素] {P : 子群 G} (hP : 是p群 p P)
   证明: by
   by_cases h1 : Nat.card H = 0
   · rw [h1, Nat.coprime_zero_left, Subgroup.index_eq_one] at h_cop
@@ -1743,7 +1743,7 @@ theorem isMulCommutative_of_card_eq_prime_sq
 中文:
 定理 isMulCommutative_of_card_eq_prime_sq
   条件: (hG : 自然数.card G = p ^ 2)
-  结论: IsMulCommutative G
+  结论: 是MulCommutative G
   证明: let := cyclic_center_quotient_of_card_eq_prime_sq hG
   isMulCommutative_of_isCyclic_quotient_center_self G
 
@@ -1821,7 +1821,7 @@ lemma isPGroup_multiplicative
 
 中文:
 引理 isPGroup_multiplicative
-  结论: IsPGroup n (Multiplicative G)
+  结论: 是p群 n (Multiplicative G)
   证明: by
   simpa [IsPGroup, Multiplicative.forall] using
     fun _ => ⟨1, by simp [← ofAdd_nsmul, ZModModule.char_nsmul_eq_zero]⟩

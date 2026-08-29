@@ -31,7 +31,7 @@ lemma harmonic_eq_sum_Icc
 中文:
 引理 harmonic_eq_sum_Icc
   条件: {n : 自然数}
-  结论: harmonic n = ∑ i in Finset.Icc 1 n, (↑i)⁻¹
+  结论: harmonic n = ∑ i in 有限集.闭区间 1 n, (↑i)⁻¹
   证明: by
   rw [harmonic]; rw [Finset.range_eq_Ico]; rw [Finset.sum_Ico_add' (fun (i : Nat) => (i : Rat)⁻¹) 0 n (c := 1)]
   simp only [Finset.Ico_add_one_right_eq_Icc]

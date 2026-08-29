@@ -35,8 +35,8 @@ instance TotallySeparatedSpace.t2Space
     exact ⟨u, v, h₁, h₂, h₃, h₄, h₅⟩
 
 中文:
-实例 TotallySeparatedSpace.t2Space
-  签名: [TotallySeparatedSpace X]
+实例 TotallySeparated空间.t2Space
+  签名: [TotallySeparated空间 X]
   定义体: by
     obtain ⟨u, v, h₁, h₂, h₃, h₄, _, h₅⟩ := isTotallySeparated_univ trivial trivial h
     exact ⟨u, v, h₁, h₂, h₃, h₄, h₅⟩

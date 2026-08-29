@@ -46,7 +46,7 @@ comm := fun g => symm g.hom.naturality f
 
 中文:
 定义 functorToAction
-  签名: : C ⥤ Action FintypeCat.{u} (Aut F) where
+  签名: : C ⥤ 作用 FintypeCat.{u} (Aut F) where
   定义体: Action.FintypeCat.ofMulAction (Aut F) (F.obj X)
   map f := {
     hom := F.map f
@@ -120,7 +120,7 @@ inferInstanceAs Functor.Faithful F
 
 中文:
 实例 :
-  签名: Functor.Faithful (functorToAction F)
+  签名: 函子.忠实 (functorToAction F)
   定义体: have : Functor.Faithful (functorToAction F ⋙ forget₂ _ FintypeCat) :=
 inferInstanceAs Functor.Faithful F
   Functor.Faithful.of_comp (functorToAction F) (forget₂ _ FintypeCat)
@@ -144,7 +144,7 @@ inferInstanceAs PreservesMonomorphisms F
 
 中文:
 实例 :
-  签名: PreservesMonomorphisms (functorToAction F)
+  签名: 保持Monomorphisms (functorToAction F)
   定义体: have : PreservesMonomorphisms (functorToAction F ⋙ forget₂ _ FintypeCat) :=
 inferInstanceAs PreservesMonomorphisms F
   preservesMonomorphisms_of_preserves_of_reflects (functorToAction F) (forget₂ _ FintypeCat)
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: ReflectsMonomorphisms (functorToAction F)
+  签名: 反映单态射 (functorToAction F)
   定义体: reflectsMonomorphisms_of_faithful _
 
 Depends on / 依赖: reflectsMonomorphisms_of_faithful
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.ReflectsIsomorphisms (functorToAction F)
+  签名: 函子.反映同构 (functorToAction F)
   定义体: have : IsIso (F.map f) := (forget₂ _ FintypeCat).map_isIso ((functorToAction F).map f)
     isIso_of_reflects_iso f F
 
@@ -206,7 +206,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteCoproducts (functorToAction F)
+  签名: 保持FiniteCoproducts (functorToAction F)
   定义体: ⟨fun _ => Action.preservesColimitsOfShape_of_preserves (functorToAction F)
     (inferInstanceAs <| PreservesColimitsOfShape (Discrete _) F)⟩
 
@@ -227,7 +227,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteProducts (functorToAction F)
+  签名: 保持FiniteProducts (functorToAction F)
   定义体: ⟨fun _ => Action.preservesLimitsOfShape_of_preserves (functorToAction F)
     (inferInstanceAs <| PreservesLimitsOfShape (Discrete _) F)⟩
 
@@ -252,7 +252,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesIsConnected (functorToAction F)
+  签名: 保持是连通 (functorToAction F)
   定义体: ⟨fun {X} _ => FintypeCat.Action.isConnected_of_transitive (Aut F) (F.obj X)⟩
 
 Depends on / 依赖: Action, F.obj, FintypeCat, FintypeCat.Action.isConnected_of_transitive, isConnected_of_transitive

@@ -124,8 +124,8 @@ lemma exists_radius_le
     le_trans 
 
 中文:
-引理 exists_radius_le
-  条件: (t : T) (V : Finset T) (ha : 1 < a) (c : 实数>=0∞)
+引理 存在_radius_le
+  条件: (t : T) (V : 有限集 T) (ha : 1 < a) (c : 实数>=0∞)
   证明: by
   have := ENNReal.tendsto_nhds_top_iff_nat.1
     ((ENNReal.tendsto_rpow_atTop_of_one_lt_base ha).comp tendsto_natCast_atTop_atTop) #V
@@ -158,7 +158,7 @@ definition logSizeRadius
 
 中文:
 定义 logSizeRadius
-  签名: (t : T) (V : Finset T) (a c : 实数>=0∞)
+  签名: (t : T) (V : 有限集 T) (a c : 实数>=0∞)
   定义体: if h : 1 < a then Nat.find (exists_radius_le t V h c) else 0
 
 Depends on / 依赖: Nat.find, exists_radius_le
@@ -270,7 +270,7 @@ structure logSizeBallStruct
 结构 logSizeBallStruct
   参数: (T : 类型)
   公理与运算 (3 个):
-    - finset : Finset T
+    - finset : 有限集 T
     - point : T
     - radius : 自然数
 -/
@@ -349,7 +349,7 @@ definition logSizeBallSeq
 
 中文:
 定义 logSizeBallSeq
-  签名: (J : Finset T) (hJ : J.Nonempty) (a c : 实数>=0∞)
+  签名: (J : 有限集 T) (hJ : J.非空) (a c : 实数>=0∞)
   定义体: (logSizeBallSeq J hJ a c n).finset \ ((logSizeBallSeq J hJ a c n).smallBall c)
     let t' := if hV' : V'.Nonempty then hV'.choose else (logSizeBallSeq J hJ a c n).point
     { finset := V',
@@ -377,7 +377,7 @@ lemma finset_logSizeBallSeq_zero
 
 中文:
 引理 finset_logSizeBallSeq_zero
-  条件: (hJ : J.Nonempty)
+  条件: (hJ : J.非空)
   证明: rfl
 -/
 lemma finset_logSizeBallSeq_zero (hJ : J.Nonempty) :
@@ -393,7 +393,7 @@ lemma point_logSizeBallSeq_zero
 
 中文:
 引理 point_logSizeBallSeq_zero
-  条件: (hJ : J.Nonempty)
+  条件: (hJ : J.非空)
   证明: rfl
 -/
 lemma point_logSizeBallSeq_zero (hJ : J.Nonempty) :
@@ -409,7 +409,7 @@ lemma radius_logSizeBallSeq_zero
 
 中文:
 引理 radius_logSizeBallSeq_zero
-  条件: (hJ : J.Nonempty)
+  条件: (hJ : J.非空)
   证明: rfl
 -/
 lemma radius_logSizeBallSeq_zero (hJ : J.Nonempty) :
@@ -425,7 +425,7 @@ lemma finset_logSizeBallSeq_add_one
 
 中文:
 引理 finset_logSizeBallSeq_add_one
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: rfl
 -/
 lemma finset_logSizeBallSeq_add_one (hJ : J.Nonempty) (i : Nat) :
@@ -442,7 +442,7 @@ lemma point_logSizeBallSeq_add_one
 
 中文:
 引理 point_logSizeBallSeq_add_one
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: rfl
 -/
 lemma point_logSizeBallSeq_add_one (hJ : J.Nonempty) (i : Nat) :
@@ -460,7 +460,7 @@ lemma radius_logSizeBallSeq_add_one
 
 中文:
 引理 radius_logSizeBallSeq_add_one
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: rfl
 -/
 lemma radius_logSizeBallSeq_add_one (hJ : J.Nonempty) (i : Nat) :
@@ -479,7 +479,7 @@ lemma finset_logSizeBallSeq_add_one_subset
 
 中文:
 引理 finset_logSizeBallSeq_add_one_subset
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: by
   simp [finset_logSizeBallSeq_add_one]
 
@@ -499,7 +499,7 @@ lemma antitone_logSizeBallSeq_add_one_subset
 
 中文:
 引理 antitone_logSizeBallSeq_add_one_subset
-  条件: (hJ : J.Nonempty)
+  条件: (hJ : J.非空)
   证明: antitone_nat_of_succ_le (finset_logSizeBallSeq_add_one_subset hJ)
 
 Depends on / 依赖: antitone_nat_of_succ_le, finset_logSizeBallSeq_add_one_subset
@@ -520,7 +520,7 @@ apply subset_trans antitone_logSizeBallSeq_add_one_subset hJ zero_le
 
 中文:
 引理 finset_logSizeBallSeq_subset_logSizeBallSeq_init
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: by
 apply subset_trans antitone_logSizeBallSeq_add_one_subset hJ zero_le
   simp [finset_logSizeBallSeq_zero]
@@ -549,7 +549,7 @@ lemma radius_logSizeBallSeq_le
 
 中文:
 引理 radius_logSizeBallSeq_le
-  结论: (hJ : J.Nonempty) (ha : 1 < a) (hn : 1 <= n) (hJ_card : #J <= a ^ n)
+  结论: (hJ : J.非空) (ha : 1 < a) (hn : 1 <= n) (hJ_card : #J <= a ^ n)
   证明: by
   match i with
   | 0 =>
@@ -586,7 +586,7 @@ lemma one_le_radius_logSizeBallSeq
 
 中文:
 引理 one_le_radius_logSizeBallSeq
-  条件: (hJ : J.Nonempty) (ha : 1 < a) (i : 自然数)
+  条件: (hJ : J.非空) (ha : 1 < a) (i : 自然数)
   证明: by
   match i with
   | 0 => exact one_le_logSizeRadius ha
@@ -614,7 +614,7 @@ lemma point_mem_finset_logSizeBallSeq
 
 中文:
 引理 point_mem_finset_logSizeBallSeq
-  结论: (hJ : J.Nonempty) (i : 自然数)
+  结论: (hJ : J.非空) (i : 自然数)
   证明: by
   match i with
   | 0 => simp [point_logSizeBallSeq_zero, finset_logSizeBallSeq_zero, Exists.choose_spec]
@@ -645,7 +645,7 @@ lemma point_mem_logSizeBallSeq_init
 
 中文:
 引理 point_mem_logSizeBallSeq_init
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: by
   induction i with
   | zero => exact point_mem_finset_logSizeBallSeq hJ 0 hJ
@@ -677,7 +677,7 @@ lemma point_notMem_finset_logSizeBallSeq_add_one
 
 中文:
 引理 point_notMem_finset_logSizeBallSeq_add_one
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: by
   simp [finset_logSizeBallSeq_add_one, logSizeBallStruct.smallBall]
 
@@ -702,7 +702,7 @@ lemma finset_logSizeBallSeq_add_one_ssubset
 
 中文:
 引理 finset_logSizeBallSeq_add_one_ssubset
-  结论: (hJ : J.Nonempty) (i : 自然数)
+  结论: (hJ : J.非空) (i : 自然数)
   证明: by
     apply ssubset_of_subset_not_subset
     · simp [finset_logSizeBallSeq_add_one]
@@ -732,7 +732,7 @@ lemma card_finset_logSizeBallSeq_add_one_lt
 
 中文:
 引理 card_finset_logSizeBallSeq_add_one_lt
-  结论: (hJ : J.Nonempty) (i : 自然数)
+  结论: (hJ : J.非空) (i : 自然数)
   证明: by
   simp [Finset.card_lt_card, finset_logSizeBallSeq_add_one_ssubset hJ i h]
 
@@ -761,7 +761,7 @@ apply le_trans Finset.card_le_card (finset_logSizeBallSeq_add_one_subset hJ i)
 
 中文:
 引理 card_finset_logSizeBallSeq_le
-  条件: (hJ : J.Nonempty) (i : 自然数)
+  条件: (hJ : J.非空) (i : 自然数)
   证明: by
   induction i with
   | zero => simp [finset_logSizeBallSeq_zero]
@@ -798,7 +798,7 @@ lemma card_finset_logSizeBallSeq_card_eq_zero
 
 中文:
 引理 card_finset_logSizeBallSeq_card_eq_zero
-  条件: (hJ : J.Nonempty)
+  条件: (hJ : J.非空)
   证明: by
   rw [← Nat.le_zero]; rw [← tsub_self #J]
   exact card_finset_logSizeBallSeq_le hJ #J
@@ -825,7 +825,7 @@ lemma disjoint_smallBall_logSizeBallSeq
 
 中文:
 引理 disjoint_smallBall_logSizeBallSeq
-  条件: (hJ : J.Nonempty) {i j : 自然数} (hij : i != j)
+  条件: (hJ : J.非空) {i j : 自然数} (hij : i != j)
   证明: by
   wlog! h : i < j generalizing i j
 · exact Disjoint.symm this hij.symm (ne_iff_lt_iff_le.mpr h).mp hij.symm
@@ -859,7 +859,7 @@ definition pairSetSeq
 
 中文:
 定义 pairSetSeq
-  签名: (J : Finset T) (a c : 实数>=0∞) (n : 自然数)
+  签名: (J : 有限集 T) (a c : 实数>=0∞) (n : 自然数)
   定义体: if hJ : J.Nonempty then
     Finset.product {(logSizeBallSeq J hJ a c n).point} ((logSizeBallSeq J hJ a c n).ball c)
   else ∅
@@ -883,7 +883,7 @@ definition pairSet
 
 中文:
 定义 pairSet
-  签名: (J : Finset T) (a c : 实数>=0∞)
+  签名: (J : 有限集 T) (a c : 实数>=0∞)
   定义体: Finset.biUnion (Finset.range #J) (pairSetSeq J a c)
 
 Depends on / 依赖: Finset, Finset.biUnion, Finset.range, biUnion, pairSetSeq
@@ -903,7 +903,7 @@ lemma pairSet_empty_eq_empty
 中文:
 引理 pairSet_empty_eq_empty
   条件: (a c : 实数>=0∞)
-  结论: pairSet (∅ : Finset T) a c = ∅
+  结论: pairSet (∅ : 有限集 T) a c = ∅
   证明: rfl
 -/
 lemma pairSet_empty_eq_empty (a c : Real>=0∞) : pairSet (∅ : Finset T) a c = ∅ := rfl
@@ -967,7 +967,7 @@ lemma card_pairSetSeq_le_logSizeRadius_mul
 
 中文:
 引理 card_pairSetSeq_le_logSizeRadius_mul
-  条件: (hJ : J.Nonempty) (i : 自然数) (ha : 1 < a)
+  条件: (hJ : J.非空) (i : 自然数) (ha : 1 < a)
   证明: by
   induction i with
   | zero =>
@@ -1009,7 +1009,7 @@ lemma logSizeRadius_le_card_smallBall
 
 中文:
 引理 logSizeRadius_le_card_smallBall
-  条件: (hJ : J.Nonempty) (i : 自然数) (ha : 1 < a)
+  条件: (hJ : J.非空) (i : 自然数) (ha : 1 < a)
   证明: by
   match i with
   | 0 =>
@@ -1142,7 +1142,7 @@ lemma iSup_edist_pairSet
 
 中文:
 引理 iSup_edist_pairSet
-  条件: {E : 类型} [PseudoEMetricSpace E] (ha : 1 < a) (f : T -> E)
+  条件: {E : 类型} [PseudoEMetric空间 E] (ha : 1 < a) (f : T -> E)
   证明: by
   rw [iSup_le_iff]; rintro ⟨s, hs⟩
   rw [iSup_le_iff]; rintro ⟨⟨t, ht⟩, hst⟩

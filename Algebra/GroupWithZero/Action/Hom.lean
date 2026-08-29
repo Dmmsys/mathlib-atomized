@@ -30,8 +30,8 @@ instance [SMulZeroClass
   smul_zero _ := ext fun _ => smul_zero _
 
 中文:
-实例 [SMulZeroClass
-  签名: M B] : SMulZeroClass M (ZeroHom A B) where
+实例 [SMulZero类
+  签名: M B] : SMulZero类 M (保零态射 A B) where
   定义体: { toFun a := r • f a
       map_zero' := by simp only [map_zero, smul_zero] }
   smul_zero _ := ext fun _ => smul_zero _
@@ -55,7 +55,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMulZeroClass M B] (m : M) (f : ZeroHom A B)
+  条件: [SMulZero类 M B] (m : M) (f : 保零态射 A B)
   结论: ⇑(m • f) = m • f
   证明: rfl
 -/
@@ -72,7 +72,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMulZeroClass M B] (m : M) (f : ZeroHom A B) (a : A)
+  条件: [SMulZero类 M B] (m : M) (f : 保零态射 A B) (a : A)
   证明: rfl
 -/
 @[simp] theorem smul_apply [SMulZeroClass M B] (m : M) (f : ZeroHom A B) (a : A) :
@@ -88,7 +88,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  条件: [SMulZeroClass M C] (m : M) (g : ZeroHom B C) (f : ZeroHom A B)
+  条件: [SMulZero类 M C] (m : M) (g : 保零态射 B C) (f : 保零态射 A B)
   证明: rfl
 -/
 theorem smul_comp [SMulZeroClass M C] (m : M) (g : ZeroHom B C) (f : ZeroHom A B) :
@@ -103,8 +103,8 @@ instance [SMulZeroClass
   body: ext fun _ => smul_comm _ _ _
 
 中文:
-实例 [SMulZeroClass
-  签名: M B] [SMulZeroClass N B] [SMulCommClass M N B] :
+实例 [SMulZero类
+  签名: M B] [SMulZero类 N B] [标量交换类 M N B] :
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -122,8 +122,8 @@ instance [SMul
   body: ext fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: M N] [SMulZeroClass M B] [SMulZeroClass N B] [IsScalarTower M N B] :
+实例 [标量乘法
+  签名: M N] [SMulZero类 M B] [SMulZero类 N B] [标量塔 M N B] :
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -141,8 +141,8 @@ instance [SMulZeroClass
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [SMulZeroClass
-  签名: M B] [SMulZeroClass Mᵐᵒᵖ B] [IsCentralScalar M B] :
+实例 [SMulZero类
+  签名: M B] [SMulZero类 Mᵐᵒᵖ B] [中心标量 M B] :
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -160,8 +160,8 @@ instance [Zero
   body: ext fun _ => zero_smul _ _
 
 中文:
-实例 [Zero
-  签名: M] [SMulWithZero M B] : SMulWithZero M (ZeroHom A B) where
+实例 [零
+  签名: M] [带零标量乘法 M B] : 带零标量乘法 M (保零态射 A B) where
   定义体: ext fun _ => zero_smul _ _
 
 Depends on / 依赖: zero_smul
@@ -180,8 +180,8 @@ instance [MonoidWithZero
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
 中文:
-实例 [MonoidWithZero
-  签名: M] [MulActionWithZero M B] : MulActionWithZero M (ZeroHom A B) where
+实例 [带零幺半群
+  签名: M] [带零乘法作用 M B] : 带零乘法作用 M (保零态射 A B) where
   定义体: inferInstance
   one_smul _ := ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
@@ -212,8 +212,8 @@ instance [DistribSMul
   smul_zero _ := ext fun _ => smul_zero _
 
 中文:
-实例 [DistribSMul
-  签名: M B] : SMulZeroClass M (A ->+ B) where
+实例 [分配标量乘法
+  签名: M B] : SMulZero类 M (A ->+ B) where
   定义体: { toFun a := r • f a
       map_zero' := by simp only [map_zero, smul_zero]
       map_add' _ _ := by simp only [map_add, smul_add] }
@@ -239,7 +239,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [DistribSMul M B] (m : M) (f : A ->+ B)
+  条件: [分配标量乘法 M B] (m : M) (f : A ->+ B)
   结论: ⇑(m • f) = m • f
   证明: rfl
 -/
@@ -256,7 +256,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [DistribSMul M B] (m : M) (f : A ->+ B) (a : A)
+  条件: [分配标量乘法 M B] (m : M) (f : A ->+ B) (a : A)
   结论: (m • f) a = m • f a
   证明: rfl
 -/
@@ -273,7 +273,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  条件: [DistribSMul M C] (m : M) (g : B ->+ C) (f : A ->+ B)
+  条件: [分配标量乘法 M C] (m : M) (g : B ->+ C) (f : A ->+ B)
   证明: rfl
 -/
 theorem smul_comp [DistribSMul M C] (m : M) (g : B ->+ C) (f : A ->+ B) :
@@ -288,8 +288,8 @@ instance [DistribSMul
   body: ext fun _ => smul_comm _ _ _
 
 中文:
-实例 [DistribSMul
-  签名: M B] [DistribSMul N B] [SMulCommClass M N B] :
+实例 [分配标量乘法
+  签名: M B] [分配标量乘法 N B] [标量交换类 M N B] :
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -307,8 +307,8 @@ instance [SMul
   body: ext fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: M N] [DistribSMul M B] [DistribSMul N B] [IsScalarTower M N B] :
+实例 [标量乘法
+  签名: M N] [分配标量乘法 M B] [分配标量乘法 N B] [标量塔 M N B] :
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -326,8 +326,8 @@ instance [DistribSMul
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [DistribSMul
-  签名: M B] [DistribSMul Mᵐᵒᵖ B] [IsCentralScalar M B] :
+实例 [分配标量乘法
+  签名: M B] [分配标量乘法 Mᵐᵒᵖ B] [中心标量 M B] :
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -349,8 +349,8 @@ instance [DistribSMul
   body: ext fun _ => smul_add _ _ _
 
 中文:
-实例 [DistribSMul
-  签名: M B] : DistribSMul M (A ->+ B) where
+实例 [分配标量乘法
+  签名: M B] : 分配标量乘法 M (A ->+ B) where
   定义体: ext fun _ => smul_add _ _ _
 
 Depends on / 依赖: smul_add
@@ -369,8 +369,8 @@ instance [Monoid
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _
 
 中文:
-实例 [Monoid
-  签名: M] [DistribMulAction M B] : DistribMulAction M (A ->+ B) where
+实例 [幺半群
+  签名: M] [分配乘法作用 M B] : 分配乘法作用 M (A ->+ B) where
   定义体: inferInstance
   one_smul _ := ext fun _ => one_smul _ _
   mul_smul _ _ _ := ext fun _ => mul_smul _ _ _

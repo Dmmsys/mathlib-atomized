@@ -29,7 +29,7 @@ theorem ringKrullDim_eq_zero_of_field
 
 中文:
 定理 ringKrullDim_eq_zero_of_field
-  条件: (F : 类型) [Field F]
+  条件: (F : 类型) [域 F]
   结论: ringKrullDim F = 0
   证明: krullDim_eq_zero_of_unique
 
@@ -48,7 +48,7 @@ theorem ringKrullDim_eq_zero_of_isField
 
 中文:
 定理 ringKrullDim_eq_zero_of_isField
-  条件: {F : 类型} [CommRing F] (hF : IsField F)
+  条件: {F : 类型} [交换环 F] (hF : 是域 F)
   证明: @krullDim_eq_zero_of_unique _ _ @PrimeSpectrum.instUnique _ hF.toField
 
 Depends on / 依赖: PrimeSpectrum, PrimeSpectrum.instUnique, hF.toField, instUnique, krullDim_eq_zero_of_unique, toField

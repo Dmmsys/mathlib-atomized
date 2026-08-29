@@ -53,10 +53,10 @@ structure Subspace
     - mem_add'((v w : V) (hv : v != 0) (hw : w != 0) (hvw : v + w != 0)) : mk K v hv in carrier -> mk K w hw in carrier -> mk K (v + w) hvw in carrier
 
 中文:
-结构 Subspace
+结构 子空间
   参数: where
   公理与运算 (2 个):
-    - carrier : Set (ℙ K V)
+    - carrier : 集合 (ℙ K V)
     - mem_add'((v w : V) (hv : v != 0) (hw : w != 0) (hvw : v + w != 0)) : mk K v hv in carrier -> mk K w hw in carrier -> mk K (v + w) hvw in carrier
 -/
 structure Subspace where
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subspace K V) (ℙ K V)
+  签名: 集合状 (子空间 K V) (ℙ K V)
   定义体: carrier
   coe_injective A B := by
     cases A
@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Subspace K V)
+  签名: 偏序 (子空间 K V)
   定义体: .ofSetLike (Subspace K V) (ℙ K V)
 
 @[simp]
@@ -133,7 +133,7 @@ theorem mem_carrier_iff
 
 中文:
 定理 mem_carrier_iff
-  条件: (A : Subspace K V) (x : ℙ K V)
+  条件: (A : 子空间 K V) (x : ℙ K V)
   结论: x in A.carrier ↔ x in A
   证明: Iff.refl _
 
@@ -152,7 +152,7 @@ theorem mem_add
 
 中文:
 定理 mem_add
-  条件: (T : Subspace K V) (v w : V) (hv : v != 0) (hw : w != 0) (hvw : v + w != 0)
+  条件: (T : 子空间 K V) (v w : V) (hv : v != 0) (hw : w != 0) (hvw : v + w != 0)
   证明: T.mem_add' v w hv hw hvw
 
 Depends on / 依赖: T.mem_add, mem_add
@@ -174,7 +174,7 @@ inductive spanCarrier
 
 中文:
 归纳类型 spanCarrier
-  参数: (S : Set (ℙ K V))
+  参数: (S : 集合 (ℙ K V))
   构造子 (2 个):
     - of: (x : ℙ K V) (hx : x in S) : spanCarrier S x
     - mem_add: (v w : V) (hv : v != 0) (hw : w != 0) (hvw : v + w != 0) : spanCarrier S (Projectivization.mk K v hv) -> spanCarrier S (Projectivization.mk K w hw) -> spanCarrier S (Projectivization.mk K (v + w) hvw)
@@ -196,7 +196,7 @@ definition span
 
 中文:
 定义 span
-  签名: (S : Set (ℙ K V))
+  签名: (S : 集合 (ℙ K V))
   定义体: spanCarrier S
   mem_add' v w hv hw hvw := spanCarrier.mem_add v w hv hw hvw
 
@@ -217,7 +217,7 @@ theorem subset_span
 
 中文:
 定理 subset_span
-  条件: (S : Set (ℙ K V))
+  条件: (S : 集合 (ℙ K V))
   结论: S subseteq span S
   证明: fun _x hx => spanCarrier.of _ hx
 
@@ -243,7 +243,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion (span : Set (ℙ K V) -> Subspace K V) SetLike.coe where
+  签名: : Galois嵌入 (span : 集合 (ℙ K V) -> 子空间 K V) 集合状.coe where
   定义体: span S
   gc A B :=
     ⟨fun h => le_trans (subset_span _) h, by
@@ -278,7 +278,7 @@ theorem span_coe
 
 中文:
 定理 span_coe
-  条件: (W : Subspace K V)
+  条件: (W : 子空间 K V)
   结论: span ↑W = W
   证明: GaloisInsertion.l_u_eq gi W
 
@@ -299,7 +299,7 @@ instance instInf
 
 中文:
 实例 instInf
-  签名: : Min (Subspace K V)
+  签名: : 最小值 (子空间 K V)
   定义体: ⟨fun A B =>
     ⟨A ⊓ B, fun _v _w hv hw _hvw h1 h2 =>
       ⟨A.mem_add _ _ hv hw _ h1.1 h2.1, B.mem_add _ _ hv hw _ h1.2 h2.2⟩⟩⟩
@@ -324,7 +324,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: : InfSet (Subspace K V)
+  签名: : 下确界集 (子空间 K V)
   定义体: ⟨fun A =>
     ⟨sInf (SetLike.coe '' A), fun v w hv hw hvw h1 h2 t => by
       rintro ⟨s, hs, rfl⟩
@@ -354,7 +354,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (Subspace K V)
+  签名: 完备格 (子空间 K V)
   定义体: { __ := completeLatticeOfInf (Subspace K V)
       (by
         refine fun s => ⟨fun a ha x hx => hx _ ⟨a, ha, rfl⟩, fun a ha x hx E => ?_⟩
@@ -385,7 +385,7 @@ instance subspaceInhabited
 
 中文:
 实例 subspaceInhabited
-  签名: : Inhabited (Subspace K V) where default
+  签名: : 可居 (子空间 K V) where default
   定义体: ⊤
 -/
 instance subspaceInhabited : Inhabited (Subspace K V) where default := ⊤
@@ -402,7 +402,7 @@ theorem span_empty
 
 中文:
 定理 span_empty
-  结论: span (∅ : Set (ℙ K V)) = ⊥
+  结论: span (∅ : 集合 (ℙ K V)) = ⊥
   证明: gi.gc.l_bot
 
 Depends on / 依赖: gi.gc.l_bot, l_bot
@@ -424,7 +424,7 @@ theorem span_univ
 
 中文:
 定理 span_univ
-  结论: span (Set.univ : Set (ℙ K V)) = ⊤
+  结论: span (集合.univ : 集合 (ℙ K V)) = ⊤
   证明: by
   rw [eq_top_iff]; rw [SetLike.le_def]
   intro x _hx
@@ -448,7 +448,7 @@ theorem span_le_subspace_iff
 
 中文:
 定理 span_le_subspace_iff
-  条件: {S : Set (ℙ K V)} {W : Subspace K V}
+  条件: {S : 集合 (ℙ K V)} {W : 子空间 K V}
   结论: span S <= W ↔ S subseteq W
   证明: gi.gc S W
 
@@ -472,7 +472,7 @@ theorem monotone_span
 
 中文:
 定理 monotone_span
-  结论: Monotone (span : Set (ℙ K V) -> Subspace K V)
+  结论: 递增 (span : 集合 (ℙ K V) -> 子空间 K V)
   证明: gi.gc.monotone_l
 
 @[gcongr]
@@ -494,7 +494,7 @@ lemma span_le_span
 
 中文:
 引理 span_le_span
-  条件: {s t : Set (ℙ K V)} (hst : s subseteq t)
+  条件: {s t : 集合 (ℙ K V)} (hst : s subseteq t)
   结论: span s <= span t
   证明: monotone_span hst
 
@@ -512,7 +512,7 @@ theorem subset_span_trans
 
 中文:
 定理 subset_span_trans
-  条件: {S T U : Set (ℙ K V)} (hST : S subseteq span T) (hTU : T subseteq span U)
+  条件: {S T U : 集合 (ℙ K V)} (hST : S subseteq span T) (hTU : T subseteq span U)
   证明: gi.gc.le_u_l_trans hST hTU
 
 Depends on / 依赖: gi.gc.le_u_l_trans, le_u_l_trans
@@ -532,7 +532,7 @@ theorem span_union
 
 中文:
 定理 span_union
-  条件: (S T : Set (ℙ K V))
+  条件: (S T : 集合 (ℙ K V))
   结论: span (S union T) = span S ⊔ span T
   证明: (@gi K V _ _ _).gc.l_sup
 
@@ -552,7 +552,7 @@ theorem span_iUnion
 
 中文:
 定理 span_iUnion
-  条件: {ι} (s : ι -> Set (ℙ K V))
+  条件: {ι} (s : ι -> 集合 (ℙ K V))
   结论: span (⋃ i, s i) = ⨆ i, span (s i)
   证明: (@gi K V _ _ _).gc.l_iSup
 
@@ -573,7 +573,7 @@ theorem sup_span
 
 中文:
 定理 sup_span
-  条件: {S : Set (ℙ K V)} {W : Subspace K V}
+  条件: {S : 集合 (ℙ K V)} {W : 子空间 K V}
   结论: W ⊔ span S = span (W union S)
   证明: by
   rw [span_union]; rw [span_coe]
@@ -595,7 +595,7 @@ theorem span_sup
 
 中文:
 定理 span_sup
-  条件: {S : Set (ℙ K V)} {W : Subspace K V}
+  条件: {S : 集合 (ℙ K V)} {W : 子空间 K V}
   结论: span S ⊔ W = span (S union W)
   证明: by
   rw [span_union]; rw [span_coe]
@@ -617,7 +617,7 @@ theorem mem_span
 
 中文:
 定理 mem_span
-  条件: {S : Set (ℙ K V)} (u : ℙ K V)
+  条件: {S : 集合 (ℙ K V)} (u : ℙ K V)
   证明: by
   simp_rw [← span_le_subspace_iff]
   exact ⟨fun hu W hW => hW hu, fun W => W (span S) (le_refl _)⟩
@@ -646,8 +646,8 @@ theorem span_eq_sInf
 
 中文:
 定理 span_eq_sInf
-  条件: {S : Set (ℙ K V)}
-  结论: span S = sInf { W : Subspace K V| S subseteq W }
+  条件: {S : 集合 (ℙ K V)}
+  结论: span S = sInf { W : 子空间 K V| S subseteq W }
   证明: by
   ext x
   simp_rw [mem_carrier_iff, mem_span x]
@@ -676,7 +676,7 @@ theorem span_eq_of_le
 
 中文:
 定理 span_eq_of_le
-  条件: {S : Set (ℙ K V)} {W : Subspace K V} (hS : S subseteq W) (hW : W <= span S)
+  条件: {S : 集合 (ℙ K V)} {W : 子空间 K V} (hS : S subseteq W) (hW : W <= span S)
   证明: le_antisymm (span_le_subspace_iff.mpr hS) hW
 
 Depends on / 依赖: le_antisymm, span_le_subspace_iff, span_le_subspace_iff.mpr
@@ -697,7 +697,7 @@ theorem span_eq_span_iff
 
 中文:
 定理 span_eq_span_iff
-  条件: {S T : Set (ℙ K V)}
+  条件: {S T : 集合 (ℙ K V)}
   结论: span S = span T ↔ S subseteq span T ∧ T subseteq span S
   证明: ⟨fun h => ⟨h ▸ subset_span S, h.symm ▸ subset_span T⟩, fun h =>
     le_antisymm (span_le_subspace_iff.2 h.1) (span_le_subspace_iff.2 h.2)⟩
@@ -725,7 +725,7 @@ definition submodule
 
 中文:
 定义 submodule
-  签名: : Projectivization.Subspace K V ≃o Submodule K V where
+  签名: : Projectivization.子空间 K V ≃o 子模 K V where
   定义体: { carrier := {x | (h : x != 0) -> Projectivization.mk K x h in s.carrier}
     add_mem' {x y} hx₁ hy₁ := by
       rcases eq_or_ne x 0 with rfl | hx₂
@@ -782,7 +782,7 @@ theorem mem_submodule_iff
 
 中文:
 定理 mem_submodule_iff
-  条件: (s : Projectivization.Subspace K V) {v : V} (hv : v != 0)
+  条件: (s : Projectivization.子空间 K V) {v : V} (hv : v != 0)
   证明: ⟨fun h => h hv, fun h _ => h⟩
 
 @[simp]
@@ -806,7 +806,7 @@ lemma bot_coe
 
 中文:
 引理 bot_coe
-  结论: ((⊥ : Subspace K V) : Set (Projectivization K V)) = ∅
+  结论: ((⊥ : 子空间 K V) : 集合 (Projectivization K V)) = ∅
   证明: by
   ext x
   simp only [SetLike.mem_coe, Set.mem_empty_iff_false, iff_false]
@@ -843,7 +843,7 @@ abbreviation projectivization
 
 中文:
 缩写 projectivization
-  签名: : Submodule K V ≃o Projectivization.Subspace K V
+  签名: : 子模 K V ≃o Projectivization.子空间 K V
   定义体: Projectivization.Subspace.submodule.symm
 
 @[simp]
@@ -864,7 +864,7 @@ theorem mk_mem_projectivization_iff
 
 中文:
 定理 mk_mem_projectivization_iff
-  条件: (s : Submodule K V) {v : V} (hv : v != 0)
+  条件: (s : 子模 K V) {v : V} (hv : v != 0)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -884,7 +884,7 @@ theorem mem_projectivization_iff_submodule_le
 
 中文:
 定理 mem_projectivization_iff_submodule_le
-  条件: (s : Submodule K V) (x : ℙ K V)
+  条件: (s : 子模 K V) (x : ℙ K V)
   证明: by
   cases x
   rw [mk_mem_projectivization_iff]; rw [Projectivization.submodule_mk]; rw [Submodule.span_singleton_le_iff_mem]

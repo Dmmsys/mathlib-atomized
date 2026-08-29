@@ -44,7 +44,7 @@ instance intrinsicStar
 
 中文:
 实例 intrinsicStar
-  签名: : Star (WithConv (E ->L[R] F)) where star f
+  签名: : 对合 (WithConv (E ->L[R] F)) where star f
   定义体: toConv
   { (star (toConv f.ofConv.toLinearMap)).ofConv with }
 
@@ -96,7 +96,7 @@ theorem IntrinsicStar.isSelfAdjoint_iff_map_star
     eq_comm (a := f _)]
 
 中文:
-定理 IntrinsicStar.isSelfAdjoint_iff_map_star
+定理 整数rinsicStar.isSelfAdjoint_iff_map_star
   条件: (f : WithConv (E ->L[R] F))
   证明: by
   simp [IsSelfAdjoint, WithConv.ext_iff, ContinuousLinearMap.ext_iff, star_eq_iff_star_eq,
@@ -117,7 +117,7 @@ theorem IntrinsicStar.isSelfAdjoint_toLinearMap_iff
   simp [isSelfAdjoint_iff_map_star, LinearMap.IntrinsicStar.isSelfAdjoint_iff_map_star]
 
 中文:
-定理 IntrinsicStar.isSelfAdjoint_toLinearMap_iff
+定理 整数rinsicStar.isSelfAdjoint_toLinearMap_iff
   条件: (f : WithConv (E ->L[R] F))
   证明: by
   simp [isSelfAdjoint_iff_map_star, LinearMap.IntrinsicStar.isSelfAdjoint_iff_map_star]
@@ -154,7 +154,7 @@ instance intrinsicStarAddMonoid
 
 中文:
 实例 intrinsicStarAddMonoid
-  签名: [ContinuousAdd F]
+  签名: [连续加法 F]
   定义体: by ext; simp
 -/
 instance intrinsicStarAddMonoid [ContinuousAdd F] : StarAddMonoid (WithConv (E ->L[R] F)) where
@@ -171,7 +171,7 @@ theorem intrinsicStar_comp
 
 中文:
 定理 intrinsicStar_comp
-  结论: {G : 类型} [AddCommMonoid G] [Module R G] [StarAddMonoid G]
+  结论: {G : 类型} [加法交换幺半群 G] [模 R G] [StarAdd幺半群 G]
   证明: by
   ext; simp
 -/
@@ -192,7 +192,7 @@ theorem intrinsicStar_comp'
 
 中文:
 定理 intrinsicStar_comp'
-  结论: {G : 类型} [AddCommMonoid G] [Module R G] [StarAddMonoid G]
+  结论: {G : 类型} [加法交换幺半群 G] [模 R G] [StarAdd幺半群 G]
   证明: by
   ext; simp
 -/
@@ -243,7 +243,7 @@ theorem intrinsicStar_toSpanSingleton
 
 中文:
 定理 intrinsicStar_toSpanSingleton
-  条件: [ContinuousSMul S E] (a : E)
+  条件: [连续标量乘法 S E] (a : E)
   证明: by ext; simp
 -/
 @[simp] theorem intrinsicStar_toSpanSingleton [ContinuousSMul S E] (a : E) :
@@ -260,7 +260,7 @@ theorem intrinsicStar_smulRight
 
 中文:
 定理 intrinsicStar_smulRight
-  结论: [Module S F] [StarModule S F] [ContinuousSMul S F]
+  结论: [模 S F] [对合模 S F] [连续标量乘法 S F]
   证明: by
   ext; simp
 -/
@@ -281,7 +281,7 @@ instance intrinsicStarModule
 
 中文:
 实例 intrinsicStarModule
-  签名: [SMulCommClass R R F] [ContinuousConstSMul R F]
+  签名: [标量交换类 R R F] [连续常数标量乘法 R F]
   定义体: by ext; simp
 -/
 instance intrinsicStarModule [SMulCommClass R R F] [ContinuousConstSMul R F] :
@@ -297,7 +297,7 @@ lemma intrinsicStar_eq_comp
 
 中文:
 引理 intrinsicStar_eq_comp
-  结论: {R : 类型} [CommSemiring R] [StarRing R] [Module R E] [StarModule R E]
+  结论: {R : 类型} [交换半环 R] [对合环 R] [模 R E] [对合模 R E]
   证明: rfl
 -/
 lemma intrinsicStar_eq_comp {R : Type*} [CommSemiring R] [StarRing R] [Module R E] [StarModule R E]

@@ -39,8 +39,8 @@ abbreviation Module.ofMinimalAxioms
     smul_zero := fun r => (AddMonoidHom.mk' (r • ·) (smul_add r)).map_zero }
 
 中文:
-缩写 Module.ofMinimalAxioms
-  签名: {R : 类型u} {M : 类型v} [Semiring R] [AddCommGroup M] [SMul R M]
+缩写 模.ofMinimalAxioms
+  签名: {R : 类型u} {M : 类型v} [半环 R] [加法交换群 M] [标量乘法 R M]
   定义体: { smul_add := smul_add,
     add_smul := add_smul,
     mul_smul := mul_smul,

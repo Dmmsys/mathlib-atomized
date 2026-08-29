@@ -139,7 +139,7 @@ lemma map_add
 
 中文:
 引理 map_add
-  条件: (F : C ⥤ D) (hF : W.IsInvertedBy F) [Preadditive D] [F.Additive]
+  条件: (F : C ⥤ D) (hF : W.IsInvertedBy F) [预加性 D] [F.加性]
   证明: by
   have := hF φ.s φ.hs
   rw [← cancel_mono (F.map φ.s)]; rw [add_comp]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [LeftFraction.map_comp_map_s]; rw [F.map_add]
@@ -561,7 +561,7 @@ definition addCommGroup'
 
 中文:
 定义 addCommGroup'
-  签名: : AddCommGroup (L.obj X ⟶ L.obj Y)
+  签名: : 加法交换群 (L.obj X ⟶ L.obj Y)
   定义体: by
   letI : Zero (L.obj X ⟶ L.obj Y) := ⟨L.map 0⟩
   letI : Add (L.obj X ⟶ L.obj Y) := ⟨add' W⟩
@@ -750,7 +750,7 @@ definition addCommGroup
 
 中文:
 定义 addCommGroup
-  签名: : AddCommGroup (X' ⟶ Y')
+  签名: : 加法交换群 (X' ⟶ Y')
   定义体: by
   have := Localization.essSurj L W
   letI := addCommGroup' L W (L.objPreimage X') (L.objPreimage Y')
@@ -837,7 +837,7 @@ definition preadditive
 
 中文:
 定义 preadditive
-  签名: : Preadditive D where
+  签名: : 预加性 D where
   定义体: Preadditive.addCommGroup L W
   add_comp _ _ _ _ _ _ := by apply Preadditive.add_comp
   comp_add _ _ _ _ _ _ := by apply Preadditive.comp_add
@@ -896,7 +896,7 @@ lemma functor_additive_iff
 
 中文:
 引理 functor_additive_iff
-  结论: {E : 类型} [Category* E] [Preadditive E] [Preadditive D] [L.Additive]
+  结论: {E : 类型} [范畴* E] [预加性 E] [预加性 D] [L.加性]
   证明: by
   constructor
   · intro
@@ -937,7 +937,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive W.Localization
+  签名: 预加性 W.Localization
   定义体: preadditive W.Q W
 
 Depends on / 依赖: preadditive
@@ -953,7 +953,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.Q.Additive
+  签名: W.Q.加性
   定义体: functor_additive W.Q W
 
 Depends on / 依赖: functor_additive
@@ -968,8 +968,8 @@ instance [HasZeroObject
   body: W.Q.hasZeroObject_of_additive
 
 中文:
-实例 [HasZeroObject
-  签名: C] : HasZeroObject W.Localization
+实例 [有ZeroObject
+  签名: C] : 有ZeroObject W.Localization
   定义体: W.Q.hasZeroObject_of_additive
 
 Depends on / 依赖: W.Q.hasZeroObject_of_additive, hasZeroObject_of_additive
@@ -988,7 +988,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive W.Localization'
+  签名: 预加性 W.Localization'
   定义体: preadditive W.Q' W
 
 Depends on / 依赖: preadditive
@@ -1004,7 +1004,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.Q'.Additive
+  签名: W.Q'.加性
   定义体: functor_additive W.Q' W
 
 Depends on / 依赖: functor_additive
@@ -1019,8 +1019,8 @@ instance [HasZeroObject
   body: W.Q'.hasZeroObject_of_additive
 
 中文:
-实例 [HasZeroObject
-  签名: C] : HasZeroObject W.Localization'
+实例 [有ZeroObject
+  签名: C] : 有ZeroObject W.Localization'
   定义体: W.Q'.hasZeroObject_of_additive
 
 Depends on / 依赖: hasZeroObject_of_additive
@@ -1040,7 +1040,7 @@ lemma Functor.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions
       exact h _ (by rw [L.map_sub, F.map_sub, hfg, sub_self]))
 
 中文:
-引理 Functor.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions
+引理 函子.faithful_of_comp_cancel_zero_of_hasLeftCalculusOfFractions
   证明: faithful_of_comp_of_hasLeftCalculusOfFractions L W F
     (fun X₁ X₂ f g hfg => by
       rw [← sub_eq_zero]; rw [← L.map_sub]

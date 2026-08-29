@@ -70,12 +70,12 @@ inductive GenerateOpen
 
 中文:
 归纳类型 GenerateOpen
-  参数: (g : Set (Set α))
+  参数: (g : 集合 (集合 α))
   构造子 (4 个):
     - basic: 对任意 s in g, GenerateOpen g s
     - univ: GenerateOpen g univ
     - inter: 对任意 s t, GenerateOpen g s -> GenerateOpen g t -> GenerateOpen g (s inter t)
-    - sUnion: 对任意 S : Set (Set α), (对任意 s in S, GenerateOpen g s) -> GenerateOpen g (⋃₀ S)
+    - sUnion: 对任意 S : 集合 (集合 α), (对任意 s in S, GenerateOpen g s) -> GenerateOpen g (⋃₀ S)
 -/
 inductive GenerateOpen (g : Set (Set α)) : Set α -> Prop
   | basic : forall s in g, GenerateOpen g s
@@ -98,7 +98,7 @@ definition generateFrom
 
 中文:
 定义 generateFrom
-  签名: (g : Set (Set α))
+  签名: (g : 集合 (集合 α))
   定义体: GenerateOpen g
   isOpen_univ := GenerateOpen.univ
   isOpen_inter := GenerateOpen.inter
@@ -122,7 +122,7 @@ theorem isOpen_generateFrom_of_mem
 
 中文:
 定理 isOpen_generateFrom_of_mem
-  条件: {g : Set (Set α)} {s : Set α} (hs : s in g)
+  条件: {g : 集合 (集合 α)} {s : 集合 α} (hs : s in g)
   证明: GenerateOpen.basic s hs
 
 Depends on / 依赖: GenerateOpen, GenerateOpen.basic
@@ -149,7 +149,7 @@ refine le_antisymm (biInf_mono fun s ⟨as, sg⟩ => ⟨as, .basic _ sg⟩) le_i
 
 中文:
 定理 nhds_generateFrom
-  条件: {g : Set (Set α)} {a : α}
+  条件: {g : 集合 (集合 α)} {a : α}
   证明: by
   let := generateFrom g
   rw [nhds_def]
@@ -188,7 +188,7 @@ lemma tendsto_nhds_generateFrom_iff
 
 中文:
 引理 tendsto_nhds_generateFrom_iff
-  结论: {β : 类型} {m : α -> β} {f : Filter α} {g : Set (Set β)}
+  结论: {β : 类型} {m : α -> β} {f : 滤子 α} {g : 集合 (集合 β)}
   证明: by
   simp only [nhds_generateFrom, @forall_comm (b in _), tendsto_iInf, mem_ofPred_eq, and_imp,
     tendsto_principal]; rfl
@@ -216,7 +216,7 @@ definition mkOfNhds
 
 中文:
 定义 mkOfNhds
-  签名: (n : α -> Filter α)
+  签名: (n : α -> 滤子 α)
   定义体: forall a in s, s in n a
   isOpen_univ _ _ := univ_mem
   isOpen_inter := fun _s _t hs ht x ⟨hxs, hxt⟩ => inter_mem (hs x hxs) (ht x hxt)
@@ -247,7 +247,7 @@ theorem nhds_mkOfNhds_of_hasBasis
 
 中文:
 定理 nhds_mkOfNhds_of_hasBasis
-  结论: {n : α -> Filter α} {ι : α -> Sort*} {p : 对任意 a, ι a -> 命题}
+  结论: {n : α -> 滤子 α} {ι : α -> 类型层*} {p : 对任意 a, ι a -> 命题}
   证明: by
   let t : TopologicalSpace α := .mkOfNhds n
   apply le_antisymm
@@ -282,7 +282,7 @@ theorem nhds_mkOfNhds
 
 中文:
 定理 nhds_mkOfNhds
-  结论: (n : α -> Filter α) (a : α) (h₀ : pure <= n)
+  结论: (n : α -> 滤子 α) (a : α) (h₀ : pure <= n)
   证明: nhds_mkOfNhds_of_hasBasis (fun a => (n a).basis_sets) h₀ h₁ _
 
 Depends on / 依赖: basis_sets, nhds_mkOfNhds_of_hasBasis
@@ -309,7 +309,7 @@ theorem nhds_mkOfNhds_single
 
 中文:
 定理 nhds_mkOfNhds_single
-  条件: [DecidableEq α] {a₀ : α} {l : Filter α} (h : pure a₀ <= l) (b : α)
+  条件: [DecidableEq α] {a₀ : α} {l : 滤子 α} (h : pure a₀ <= l) (b : α)
   证明: by
   refine nhds_mkOfNhds _ _ (le_update_iff.mpr ⟨h, fun _ _ => le_rfl⟩) fun a s hs => ?_
   rcases eq_or_ne a a₀ with (rfl | ha)
@@ -342,7 +342,7 @@ theorem nhds_mkOfNhds_filterBasis
 
 中文:
 定理 nhds_mkOfNhds_filterBasis
-  结论: (B : α -> FilterBasis α) (a : α) (h₀ : 对任意 x, 对任意 n in B x, x in n)
+  结论: (B : α -> 滤子基 α) (a : α) (h₀ : 对任意 x, 对任意 n in B x, x in n)
   证明: nhds_mkOfNhds_of_hasBasis (fun a => (B a).hasBasis) h₀ h₁ a
 
 Depends on / 依赖: hasBasis, nhds_mkOfNhds_of_hasBasis
@@ -367,7 +367,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (TopologicalSpace α)
+  签名: 偏序 (拓扑空间 α)
   定义体: { PartialOrder.lift (fun t => OrderDual.toDual IsOpen[t]) (fun _ _ => TopologicalSpace.ext) with
     le := fun s t => forall U, IsOpen[t] U -> IsOpen[s] U }
 
@@ -388,8 +388,8 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: {α} {t s : TopologicalSpace α}
-  结论: t <= s ↔ IsOpen[s] <= IsOpen[t]
+  条件: {α} {t s : 拓扑空间 α}
+  结论: t <= s ↔ 是开集[s] <= 是开集[t]
   证明: Iff.rfl
 -/
 protected theorem le_def {α} {t s : TopologicalSpace α} : t <= s ↔ IsOpen[s] <= IsOpen[t] :=
@@ -406,7 +406,7 @@ theorem le_generateFrom_iff_subset_isOpen
 
 中文:
 定理 le_generateFrom_iff_subset_isOpen
-  条件: {g : Set (Set α)} {t : TopologicalSpace α}
+  条件: {g : 集合 (集合 α)} {t : 拓扑空间 α}
   证明: ⟨fun ht s hs => ht _ .basic s hs, fun hg _s hs =>
     hs.recOn (fun _ h => hg h) isOpen_univ (fun _ _ _ _ => IsOpen.inter) fun _ _ => isOpen_sUnion⟩
 
@@ -433,7 +433,7 @@ definition mkOfClosure
 
 中文:
 定义 mkOfClosure
-  签名: (s : Set (Set α)) (hs : { u | GenerateOpen s u } = s)
+  签名: (s : 集合 (集合 α)) (hs : { u | GenerateOpen s u } = s)
   定义体: u in s
   isOpen_univ := hs ▸ TopologicalSpace.GenerateOpen.univ
   isOpen_inter := hs ▸ TopologicalSpace.GenerateOpen.inter
@@ -456,7 +456,7 @@ theorem mkOfClosure_sets
 
 中文:
 定理 mkOfClosure_sets
-  条件: {s : Set (Set α)} {hs : {u | GenerateOpen s u} = s}
+  条件: {s : 集合 (集合 α)} {hs : {u | GenerateOpen s u} = s}
   证明: TopologicalSpace.ext (by ext U; exact Set.ext_iff.mp hs.symm U)
 
 Depends on / 依赖: Set.ext_iff.mp, TopologicalSpace, TopologicalSpace.ext, ext_iff, hs.symm
@@ -529,7 +529,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (TopologicalSpace α)
+  签名: 完备格 (拓扑空间 α)
   定义体: (gciGenerateFrom α).liftCompleteLattice
 
 @[mono, gcongr]
@@ -549,7 +549,7 @@ theorem generateFrom_anti
 
 中文:
 定理 generateFrom_anti
-  条件: {α} {g₁ g₂ : Set (Set α)} (h : g₁ subseteq g₂)
+  条件: {α} {g₁ g₂ : 集合 (集合 α)} (h : g₁ subseteq g₂)
   证明: (gc_generateFrom _).monotone_u h
 
 Depends on / 依赖: gc_generateFrom, monotone_u
@@ -571,7 +571,7 @@ alias generateFrom_setOf_isOpen := generateFrom_setOfPred_isOpen
 
 中文:
 定理 generateFrom_setOfPred_isOpen
-  条件: (t : TopologicalSpace α)
+  条件: (t : 拓扑空间 α)
   证明: (gciGenerateFrom α).u_l_eq t
 
 @[deprecated (since := "2026-07-09")]
@@ -613,7 +613,7 @@ theorem generateFrom_surjective
 
 中文:
 定理 generateFrom_surjective
-  结论: Surjective (generateFrom : Set (Set α) -> TopologicalSpace α)
+  结论: 满射 (generateFrom : 集合 (集合 α) -> 拓扑空间 α)
   证明: (gciGenerateFrom α).u_surjective
 
 Depends on / 依赖: gciGenerateFrom, u_surjective
@@ -633,7 +633,7 @@ theorem setOfPred_isOpen_injective
 
 中文:
 定理 setOfPred_isOpen_injective
-  结论: Injective fun t : TopologicalSpace α => { s | IsOpen[t] s }
+  结论: 单射 fun t : 拓扑空间 α => { s | 是开集[t] s }
   证明: (gciGenerateFrom α).l_injective
 
 @[deprecated (since := "2026-07-09")] alias setOf_isOpen_injective := setOfPred_isOpen_injective
@@ -663,9 +663,9 @@ theorem IsOpen.mono
   proof: h s hs
 
 中文:
-定理 IsOpen.mono
-  条件: (hs : IsOpen[t₂] s) (h : t₁ <= t₂)
-  结论: IsOpen[t₁] s
+定理 是开集.mono
+  条件: (hs : 是开集[t₂] s) (h : t₁ <= t₂)
+  结论: 是开集[t₁] s
   证明: h s hs
 -/
 theorem IsOpen.mono (hs : IsOpen[t₂] s) (h : t₁ <= t₂) : IsOpen[t₁] s := h s hs
@@ -680,9 +680,9 @@ theorem IsClosed.mono
   proof: (@isOpen_compl_iff α s t₁).mp hs.isOpen_compl.mono h
 
 中文:
-定理 IsClosed.mono
-  条件: (hs : IsClosed[t₂] s) (h : t₁ <= t₂)
-  结论: IsClosed[t₁] s
+定理 是闭集.mono
+  条件: (hs : 是闭集[t₂] s) (h : t₁ <= t₂)
+  结论: 是闭集[t₁] s
   证明: (@isOpen_compl_iff α s t₁).mp hs.isOpen_compl.mono h
 
 Depends on / 依赖: hs.isOpen_compl.mono, isOpen_compl, isOpen_compl_iff
@@ -720,7 +720,7 @@ theorem isOpen_implies_isOpen_iff
 
 中文:
 定理 isOpen_implies_isOpen_iff
-  结论: (对任意 s, IsOpen[t₁] s -> IsOpen[t₂] s) ↔ t₂ <= t₁
+  结论: (对任意 s, 是开集[t₁] s -> 是开集[t₂] s) ↔ t₂ <= t₁
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -745,10 +745,10 @@ class IndiscreteTopology
     - eq_top((α)) : ‹TopologicalSpace α› = ⊤
 
 中文:
-类 IndiscreteTopology
-  参数: (α) [TopologicalSpace α]
+类 Indiscrete拓扑
+  参数: (α) [拓扑空间 α]
   公理与运算 (1 个):
-    - eq_top((α)) : ‹TopologicalSpace α› = ⊤
+    - eq_top((α)) : ‹拓扑空间 α› = ⊤
 -/
 class IndiscreteTopology (α) [TopologicalSpace α] where
   eq_top (α) : ‹TopologicalSpace α› = ⊤
@@ -763,7 +763,7 @@ instance :
 
 中文:
 实例 :
-  签名: @IndiscreteTopology α ⊤
+  签名: @Indiscrete拓扑 α ⊤
   定义体: @IndiscreteTopology.mk _ ⊤ rfl
 
 Depends on / 依赖: IndiscreteTopology, IndiscreteTopology.mk
@@ -783,10 +783,10 @@ class NontrivialTopology
     - ne_top((α)) : ‹TopologicalSpace α› != ⊤
 
 中文:
-类 NontrivialTopology
-  参数: (α) [TopologicalSpace α]
+类 非平凡拓扑
+  参数: (α) [拓扑空间 α]
   公理与运算 (1 个):
-    - ne_top((α)) : ‹TopologicalSpace α› != ⊤
+    - ne_top((α)) : ‹拓扑空间 α› != ⊤
 -/
 class NontrivialTopology (α) [TopologicalSpace α] where
   ne_top (α) : ‹TopologicalSpace α› != ⊤
@@ -802,8 +802,8 @@ theorem TopologicalSpace.indiscrete_or_nontrivial
 @[simp, push]
 
 中文:
-定理 TopologicalSpace.indiscrete_or_nontrivial
-  条件: (α) [TopologicalSpace α]
+定理 拓扑空间.indiscrete_or_nontrivial
+  条件: (α) [拓扑空间 α]
   证明: (eq_or_ne ‹TopologicalSpace α› ⊤).imp .mk .mk
 
 @[simp, push]
@@ -826,8 +826,8 @@ theorem TopologicalSpace.not_indiscrete_iff
 @[simp, push]
 
 中文:
-定理 TopologicalSpace.not_indiscrete_iff
-  条件: [TopologicalSpace α]
+定理 拓扑空间.not_indiscrete_iff
+  条件: [拓扑空间 α]
   证明: ⟨fun h => ⟨fun x => h ⟨x⟩⟩, fun h x => h.ne_top x.eq_top⟩
 
 @[simp, push]
@@ -848,8 +848,8 @@ theorem TopologicalSpace.not_nontrivial_iff
   proof: TopologicalSpace.not_indiscrete_iff.not_right.symm
 
 中文:
-定理 TopologicalSpace.not_nontrivial_iff
-  条件: [TopologicalSpace α]
+定理 拓扑空间.not_nontrivial_iff
+  条件: [拓扑空间 α]
   证明: TopologicalSpace.not_indiscrete_iff.not_right.symm
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.not_indiscrete_iff.not_right.symm, not_indiscrete_iff, not_right
@@ -877,8 +877,8 @@ theorem IndiscreteTopology.isOpen_iff
     | sUnion _ _ ih => exact sUnion_mem_empt
 
 中文:
-定理 IndiscreteTopology.isOpen_iff
-  条件: [IndiscreteTopology α] (U : Set α)
+定理 Indiscrete拓扑.isOpen_iff
+  条件: [Indiscrete拓扑 α] (U : 集合 α)
   证明: by
   cases IndiscreteTopology.eq_top α
   refine ⟨fun h => ?_, ?_⟩
@@ -914,9 +914,9 @@ theorem TopologicalSpace.isOpen_top_iff
   proof: letI : TopologicalSpace α := ⊤; IndiscreteTopology.isOpen_iff _
 
 中文:
-定理 TopologicalSpace.isOpen_top_iff
-  条件: {α} (U : Set α)
-  结论: IsOpen[⊤] U ↔ U = ∅ ∨ U = univ
+定理 拓扑空间.isOpen_top_iff
+  条件: {α} (U : 集合 α)
+  结论: 是开集[⊤] U ↔ U = ∅ ∨ U = univ
   证明: letI : TopologicalSpace α := ⊤; IndiscreteTopology.isOpen_iff _
 
 Depends on / 依赖: IndiscreteTopology, IndiscreteTopology.isOpen_iff, TopologicalSpace, isOpen_iff
@@ -934,8 +934,8 @@ theorem IndiscreteTopology.isClosed_iff
   simp [← isOpen_compl_iff, IndiscreteTopology.isOpen_iff, Or.comm]
 
 中文:
-定理 IndiscreteTopology.isClosed_iff
-  条件: [IndiscreteTopology α] (C : Set α)
+定理 Indiscrete拓扑.isClosed_iff
+  条件: [Indiscrete拓扑 α] (C : 集合 α)
   证明: by
   simp [← isOpen_compl_iff, IndiscreteTopology.isOpen_iff, Or.comm]
 
@@ -957,8 +957,8 @@ theorem dense_indiscrete
 
 中文:
 定理 dense_indiscrete
-  条件: [IndiscreteTopology α] {s : Set α} (h : s.Nonempty)
-  结论: Dense s
+  条件: [Indiscrete拓扑 α] {s : 集合 α} (h : s.非空)
+  结论: 稠密 s
   证明: by
   simp [dense_iff_inter_open, IndiscreteTopology.isOpen_iff, h]
 
@@ -977,7 +977,7 @@ theorem closure_indiscrete
 
 中文:
 定理 closure_indiscrete
-  条件: [IndiscreteTopology α] {s : Set α} (h : s.Nonempty)
+  条件: [Indiscrete拓扑 α] {s : 集合 α} (h : s.非空)
   证明: Dense.closure_eq (dense_indiscrete h)
 
 Depends on / 依赖: Dense.closure_eq, closure_eq, dense_indiscrete
@@ -997,7 +997,7 @@ theorem continuous_of_indiscreteTopology
 
 中文:
 定理 continuous_of_indiscreteTopology
-  结论: {β} [TopologicalSpace β] [IndiscreteTopology β]
+  结论: {β} [拓扑空间 β] [Indiscrete拓扑 β]
   证明: by simp [IndiscreteTopology.isOpen_iff]
 
 Depends on / 依赖: IndiscreteTopology, IndiscreteTopology.isOpen_iff, isOpen_iff
@@ -1016,8 +1016,8 @@ class DiscreteTopology
     - eq_bot : t = ⊥
 
 中文:
-类 DiscreteTopology
-  参数: (α : 类型) [t : TopologicalSpace α]
+类 离散拓扑
+  参数: (α : 类型) [t : 拓扑空间 α]
   公理与运算 (1 个):
     - eq_bot : t = ⊥
 -/
@@ -1037,7 +1037,7 @@ theorem discreteTopology_bot
 中文:
 定理 discreteTopology_bot
   条件: (α : 类型)
-  结论: @DiscreteTopology α ⊥
+  结论: @离散拓扑 α ⊥
   证明: @DiscreteTopology.mk α ⊥ rfl
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.mk
@@ -1061,8 +1061,8 @@ theorem isOpen_discrete
 
 中文:
 定理 isOpen_discrete
-  条件: (s : Set α)
-  结论: IsOpen s
+  条件: (s : 集合 α)
+  结论: 是开集 s
   证明: (@DiscreteTopology.eq_bot α _).symm ▸ trivial
 
 Depends on / 依赖: DiscreteTopology, DiscreteTopology.eq_bot, eq_bot
@@ -1080,8 +1080,8 @@ theorem isClosed_discrete
 
 中文:
 定理 isClosed_discrete
-  条件: (s : Set α)
-  结论: IsClosed s
+  条件: (s : 集合 α)
+  结论: 是闭集 s
   证明: ⟨isOpen_discrete _⟩
 -/
 @[simp] theorem isClosed_discrete (s : Set α) : IsClosed s := ⟨isOpen_discrete _⟩
@@ -1097,7 +1097,7 @@ theorem closure_discrete
 
 中文:
 定理 closure_discrete
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: closure s = s
   证明: (isClosed_discrete _).closure_eq
 
@@ -1118,8 +1118,8 @@ theorem dense_discrete
 
 中文:
 定理 dense_discrete
-  条件: {s : Set α}
-  结论: Dense s ↔ s = univ
+  条件: {s : 集合 α}
+  结论: 稠密 s ↔ s = univ
   证明: by simp [dense_iff_closure_eq]
 
 @[simp]
@@ -1142,7 +1142,7 @@ theorem denseRange_discrete
 中文:
 定理 denseRange_discrete
   条件: {ι : 类型} {f : ι -> α}
-  结论: DenseRange f ↔ Surjective f
+  结论: DenseRange f ↔ 满射 f
   证明: by
   rw [DenseRange]; rw [dense_discrete]; rw [range_eq_univ]
 
@@ -1165,8 +1165,8 @@ theorem continuous_of_discreteTopology
 
 中文:
 定理 continuous_of_discreteTopology
-  条件: [TopologicalSpace β] {f : α -> β}
-  结论: Continuous f
+  条件: [拓扑空间 β] {f : α -> β}
+  结论: 连续 f
   证明: continuous_def.2 fun _ _ => isOpen_discrete _
 
 Depends on / 依赖: continuous_def, isOpen_discrete
@@ -1188,7 +1188,7 @@ theorem continuous_discrete_rng
 
 中文:
 定理 continuous_discrete_rng
-  结论: {α} [TopologicalSpace α] [TopologicalSpace β] [DiscreteTopology β]
+  结论: {α} [拓扑空间 α] [拓扑空间 β] [离散拓扑 β]
   证明: ⟨fun h _ => (isOpen_discrete _).preimage h, fun h => ⟨fun s _ => by
     rw [← biUnion_of_singleton s]; rw [preimage_iUnion₂]
     exact isOpen_biUnion fun _ _ => h _⟩⟩
@@ -1215,8 +1215,8 @@ theorem nhds_discrete
 
 中文:
 定理 nhds_discrete
-  条件: (α : 类型) [TopologicalSpace α] [DiscreteTopology α]
-  结论: @nhds α _ = pure
+  条件: (α : 类型) [拓扑空间 α] [离散拓扑 α]
+  结论: @邻域滤子 α _ = pure
   证明: le_antisymm (fun _ s hs => (isOpen_discrete s).mem_nhds hs) pure_le_nhds
 
 Depends on / 依赖: isOpen_discrete, le_antisymm, mem_nhds, pure_le_nhds
@@ -1234,7 +1234,7 @@ theorem mem_nhds_discrete
 
 中文:
 定理 mem_nhds_discrete
-  条件: {x : α} {s : Set α}
+  条件: {x : α} {s : 集合 α}
   证明: by rw [nhds_discrete, mem_pure]
 
 Depends on / 依赖: mem_pure, nhds_discrete
@@ -1257,7 +1257,7 @@ theorem le_of_nhds_le_nhds
 
 中文:
 定理 le_of_nhds_le_nhds
-  条件: (h : 对任意 x, @nhds α t₁ x <= @nhds α t₂ x)
+  条件: (h : 对任意 x, @邻域滤子 α t₁ x <= @邻域滤子 α t₂ x)
   结论: t₁ <= t₂
   证明: fun s => by
   rw [@isOpen_iff_mem_nhds _ t₁]; rw [@isOpen_iff_mem_nhds _ t₂]
@@ -1280,7 +1280,7 @@ theorem eq_bot_of_singletons_open
 
 中文:
 定理 eq_bot_of_singletons_open
-  条件: {t : TopologicalSpace α} (h : 对任意 x, IsOpen[t] {x})
+  条件: {t : 拓扑空间 α} (h : 对任意 x, 是开集[t] {x})
   结论: t = ⊥
   证明: bot_unique fun s _ => biUnion_of_singleton s ▸ isOpen_biUnion fun x _ => h x
 
@@ -1298,8 +1298,8 @@ theorem discreteTopology_iff_forall_isOpen
   proof: ⟨@isOpen_discrete _ _, fun h => ⟨eq_bot_of_singletons_open fun _ => h _⟩⟩
 
 中文:
-定理 discreteTopology_iff_forall_isOpen
-  条件: [TopologicalSpace α]
+定理 discreteTopology_iff_对任意_isOpen
+  条件: [拓扑空间 α]
   证明: ⟨@isOpen_discrete _ _, fun h => ⟨eq_bot_of_singletons_open fun _ => h _⟩⟩
 
 Depends on / 依赖: eq_bot_of_singletons_open, isOpen_discrete
@@ -1318,8 +1318,8 @@ theorem discreteTopology_iff_forall_isClosed
     isOpen_compl_iff
 
 中文:
-定理 discreteTopology_iff_forall_isClosed
-  条件: [TopologicalSpace α]
+定理 discreteTopology_iff_对任意_isClosed
+  条件: [拓扑空间 α]
   证明: discreteTopology_iff_forall_isOpen.trans compl_surjective.forall.trans forall_congr' fun _ =>
     isOpen_compl_iff
 
@@ -1340,7 +1340,7 @@ theorem discreteTopology_iff_isOpen_singleton
 
 中文:
 定理 discreteTopology_iff_isOpen_singleton
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: ⟨fun _ _ => isOpen_discrete _, fun h => ⟨eq_bot_of_singletons_open h⟩⟩
 
 Depends on / 依赖: eq_bot_of_singletons_open, isOpen_discrete
@@ -1359,8 +1359,8 @@ theorem DiscreteTopology.of_finite_of_isClosed_singleton
     s.iUnion_of_singleton_coe ▸ isClosed_iUnion_of_finite fun _ => h _
 
 中文:
-定理 DiscreteTopology.of_finite_of_isClosed_singleton
-  结论: [TopologicalSpace α] [Finite α]
+定理 离散拓扑.of_finite_of_isClosed_singleton
+  结论: [拓扑空间 α] [有限 α]
   证明: discreteTopology_iff_forall_isClosed.mpr fun s =>
     s.iUnion_of_singleton_coe ▸ isClosed_iUnion_of_finite fun _ => h _
 
@@ -1383,7 +1383,7 @@ theorem discreteTopology_iff_singleton_mem_nhds
 
 中文:
 定理 discreteTopology_iff_singleton_mem_nhds
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   simp only [discreteTopology_iff_isOpen_singleton,
     isOpen_iff_mem_nhds, mem_singleton_iff, forall_eq]
@@ -1408,7 +1408,7 @@ theorem discreteTopology_iff_nhds
 
 中文:
 定理 discreteTopology_iff_nhds
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   simp only [discreteTopology_iff_singleton_mem_nhds]
   apply forall_congr' (fun x => ?_)
@@ -1433,7 +1433,7 @@ theorem discreteTopology_iff_nhds_ne
 
 中文:
 定理 discreteTopology_iff_nhds_ne
-  条件: [TopologicalSpace α]
+  条件: [拓扑空间 α]
   证明: by
   simp only [discreteTopology_iff_singleton_mem_nhds, nhdsWithin, inf_principal_eq_bot, compl_compl]
 
@@ -1452,7 +1452,7 @@ theorem DiscreteTopology.of_continuous_injective
     hinj.preimage_image s ▸ (isOpen_discrete _).preimage hc
 
 中文:
-定理 DiscreteTopology.of_continuous_injective
+定理 离散拓扑.of_continuous_injective
   证明: discreteTopology_iff_forall_isOpen.2 fun s =>
     hinj.preimage_image s ▸ (isOpen_discrete _).preimage hc
 
@@ -1480,7 +1480,7 @@ theorem isOpen_induced_iff
 
 中文:
 定理 isOpen_induced_iff
-  条件: [t : TopologicalSpace β] {s : Set α} {f : α -> β}
+  条件: [t : 拓扑空间 β] {s : 集合 α} {f : α -> β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1502,7 +1502,7 @@ theorem isClosed_induced_iff
 
 中文:
 定理 isClosed_induced_iff
-  条件: [t : TopologicalSpace β] {s : Set α} {f : α -> β}
+  条件: [t : 拓扑空间 β] {s : 集合 α} {f : α -> β}
   证明: by
   let := t.induced f
   simp only [← isOpen_compl_iff, isOpen_induced_iff]
@@ -1526,7 +1526,7 @@ theorem isOpen_coinduced
 
 中文:
 定理 isOpen_coinduced
-  条件: {t : TopologicalSpace α} {s : Set β} {f : α -> β}
+  条件: {t : 拓扑空间 α} {s : 集合 β} {f : α -> β}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1546,7 +1546,7 @@ theorem isClosed_coinduced
 
 中文:
 定理 isClosed_coinduced
-  条件: {t : TopologicalSpace α} {s : Set β} {f : α -> β}
+  条件: {t : 拓扑空间 α} {s : 集合 β} {f : α -> β}
   证明: by
   simp only [← isOpen_compl_iff, isOpen_coinduced (f := f), preimage_compl]
 
@@ -1569,7 +1569,7 @@ theorem preimage_nhds_coinduced
 
 中文:
 定理 preimage_nhds_coinduced
-  结论: [TopologicalSpace α] {π : α -> β} {s : Set β} {a : α}
+  结论: [拓扑空间 α] {π : α -> β} {s : 集合 β} {a : α}
   证明: by
   let := TopologicalSpace.coinduced π ‹_›
   rcases mem_nhds_iff.mp hs with ⟨V, hVs, V_op, mem_V⟩
@@ -1595,8 +1595,8 @@ theorem Continuous.coinduced_le
   proof: (@continuous_def α β t t').1 h
 
 中文:
-定理 Continuous.coinduced_le
-  条件: (h : Continuous[t, t'] f)
+定理 连续.coinduced_le
+  条件: (h : 连续[t, t'] f)
   结论: t.coinduced f <= t'
   证明: (@continuous_def α β t t').1 h
 
@@ -1615,7 +1615,7 @@ theorem coinduced_le_iff_le_induced
 
 中文:
 定理 coinduced_le_iff_le_induced
-  结论: {f : α -> β} {tα : TopologicalSpace α}
+  结论: {f : α -> β} {tα : 拓扑空间 α}
   证明: ⟨fun h _s ⟨_t, ht, hst⟩ => hst ▸ h _ ht, fun h s hs => h _ ⟨s, hs, rfl⟩⟩
 -/
 theorem coinduced_le_iff_le_induced {f : α -> β} {tα : TopologicalSpace α}
@@ -1632,8 +1632,8 @@ theorem Continuous.le_induced
   proof: coinduced_le_iff_le_induced.1 h.coinduced_le
 
 中文:
-定理 Continuous.le_induced
-  条件: (h : Continuous[t, t'] f)
+定理 连续.le_induced
+  条件: (h : 连续[t, t'] f)
   结论: t <= t'.induced f
   证明: coinduced_le_iff_le_induced.1 h.coinduced_le
 
@@ -1728,7 +1728,7 @@ theorem induced_top
 
 中文:
 定理 induced_top
-  结论: (⊤ : TopologicalSpace α).induced g = ⊤
+  结论: (⊤ : 拓扑空间 α).induced g = ⊤
   证明: (gc_coinduced_induced g).u_top
 
 @[simp]
@@ -1774,7 +1774,7 @@ theorem induced_iInf
 
 中文:
 定理 induced_iInf
-  条件: {ι : Sort w} {t : ι -> TopologicalSpace α}
+  条件: {ι : 类型层 w} {t : ι -> 拓扑空间 α}
   证明: (gc_coinduced_induced g).u_iInf
 
 @[simp]
@@ -1799,7 +1799,7 @@ theorem induced_sInf
 
 中文:
 定理 induced_sInf
-  条件: {s : Set (TopologicalSpace α)}
+  条件: {s : 集合 (拓扑空间 α)}
   证明: by
   rw [sInf_eq_iInf']; rw [sInf_image']; rw [induced_iInf]
 
@@ -1824,7 +1824,7 @@ theorem coinduced_bot
 
 中文:
 定理 coinduced_bot
-  结论: (⊥ : TopologicalSpace α).coinduced f = ⊥
+  结论: (⊥ : 拓扑空间 α).coinduced f = ⊥
   证明: (gc_coinduced_induced f).l_bot
 
 @[simp]
@@ -1870,7 +1870,7 @@ theorem coinduced_iSup
 
 中文:
 定理 coinduced_iSup
-  条件: {ι : Sort w} {t : ι -> TopologicalSpace α}
+  条件: {ι : 类型层 w} {t : ι -> 拓扑空间 α}
   证明: (gc_coinduced_induced f).l_iSup
 
 @[simp]
@@ -1893,7 +1893,7 @@ theorem coinduced_sSup
 
 中文:
 定理 coinduced_sSup
-  条件: {s : Set (TopologicalSpace α)}
+  条件: {s : 集合 (拓扑空间 α)}
   证明: by
   rw [sSup_eq_iSup']; rw [sSup_image']; rw [coinduced_iSup]
 
@@ -1915,7 +1915,7 @@ funext fun s => propext ⟨fun ⟨_, hs, h⟩ => h ▸ hs, fun hs => ⟨s, hs, r
 
 中文:
 定理 induced_id
-  条件: [t : TopologicalSpace α]
+  条件: [t : 拓扑空间 α]
   结论: t.induced id = t
   证明: TopologicalSpace.ext
 funext fun s => propext ⟨fun ⟨_, hs, h⟩ => h ▸ hs, fun hs => ⟨s, hs, rfl⟩⟩
@@ -1937,7 +1937,7 @@ theorem induced_fun_id
 
 中文:
 定理 induced_fun_id
-  条件: {t : TopologicalSpace α}
+  条件: {t : 拓扑空间 α}
   结论: t.induced (·) = t
   证明: induced_id
 
@@ -1958,7 +1958,7 @@ theorem induced_compose
 
 中文:
 定理 induced_compose
-  条件: {tγ : TopologicalSpace γ} {f : α -> β} {g : β -> γ}
+  条件: {tγ : 拓扑空间 γ} {f : α -> β} {g : β -> γ}
   证明: TopologicalSpace.ext
     funext fun _ => propext
       ⟨fun ⟨_, ⟨s, hs, h₂⟩, h₁⟩ => h₁ ▸ h₂ ▸ ⟨s, hs, rfl⟩,
@@ -1984,7 +1984,7 @@ theorem induced_const
 
 中文:
 定理 induced_const
-  条件: [t : TopologicalSpace α] {x : α}
+  条件: [t : 拓扑空间 α] {x : α}
   结论: (t.induced fun _ : β => x) = ⊤
   证明: le_antisymm le_top (@continuous_const β α ⊤ t x).le_induced
 
@@ -2004,7 +2004,7 @@ theorem coinduced_id
 
 中文:
 定理 coinduced_id
-  条件: [t : TopologicalSpace α]
+  条件: [t : 拓扑空间 α]
   结论: t.coinduced id = t
   证明: TopologicalSpace.ext rfl
 
@@ -2023,7 +2023,7 @@ theorem coinduced_compose
 
 中文:
 定理 coinduced_compose
-  条件: [tα : TopologicalSpace α] {f : α -> β} {g : β -> γ}
+  条件: [tα : 拓扑空间 α] {f : α -> β} {g : β -> γ}
   证明: TopologicalSpace.ext rfl
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.ext
@@ -2044,7 +2044,7 @@ theorem Equiv.induced_symm
   simp only [e.symm.preimage_eq_iff_eq_image, exists_eq_right, Equiv.image_symm_eq_preimage]
 
 中文:
-定理 Equiv.induced_symm
+定理 等价.induced_symm
   条件: {α β : 类型} (e : α ≃ β)
   证明: by
   ext t U
@@ -2068,7 +2068,7 @@ theorem Equiv.coinduced_symm
   proof: e.symm.induced_symm.symm
 
 中文:
-定理 Equiv.coinduced_symm
+定理 等价.coinduced_symm
   条件: {α β : 类型} (e : α ≃ β)
   证明: e.symm.induced_symm.symm
 
@@ -2087,8 +2087,8 @@ lemma WithTopology.topology_eq_induced
   proof: congrFun (WithTopology.equiv X t).coinduced_symm t
 
 中文:
-引理 WithTopology.topology_eq_induced
-  条件: {X : 类型} (t : TopologicalSpace X)
+引理 With拓扑.topology_eq_induced
+  条件: {X : 类型} (t : 拓扑空间 X)
   证明: congrFun (WithTopology.equiv X t).coinduced_symm t
 
 Depends on / 依赖: WithTopology, WithTopology.equiv, coinduced_symm
@@ -2142,8 +2142,8 @@ instance [TopologicalSpace
   body: Subsingleton.elim _ _
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Subsingleton α] : IndiscreteTopology α where
+实例 [拓扑空间
+  签名: α] [子单例 α] : Indiscrete拓扑 α where
   定义体: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -2161,8 +2161,8 @@ lemma Nontrivial.of_nontrivialTopology
   proof: by contrapose! h; infer_instance
 
 中文:
-引理 Nontrivial.of_nontrivialTopology
-  条件: [TopologicalSpace α] [h : NontrivialTopology α]
+引理 非平凡.of_nontrivialTopology
+  条件: [拓扑空间 α] [h : 非平凡拓扑 α]
   证明: by contrapose! h; infer_instance
 
 Depends on / 依赖: contrapose, infer_instance
@@ -2180,7 +2180,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace Empty
+  签名: 拓扑空间 空
   定义体: ⊥
 -/
 instance : TopologicalSpace Empty := ⊥
@@ -2194,7 +2194,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology Empty
+  签名: 离散拓扑 空
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology Empty := ⟨rfl⟩
@@ -2208,7 +2208,7 @@ instance :
 
 中文:
 实例 :
-  签名: IndiscreteTopology Empty
+  签名: Indiscrete拓扑 空
   定义体: inferInstance
 -/
 instance : IndiscreteTopology Empty := inferInstance
@@ -2223,7 +2223,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace PEmpty
+  签名: 拓扑空间 命题空
   定义体: ⊥
 -/
 instance : TopologicalSpace PEmpty := ⊥
@@ -2237,7 +2237,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology PEmpty
+  签名: 离散拓扑 命题空
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology PEmpty := ⟨rfl⟩
@@ -2251,7 +2251,7 @@ instance :
 
 中文:
 实例 :
-  签名: IndiscreteTopology PEmpty
+  签名: Indiscrete拓扑 命题空
   定义体: inferInstance
 -/
 instance : IndiscreteTopology PEmpty := inferInstance
@@ -2266,7 +2266,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace PUnit
+  签名: 拓扑空间 命题单元
   定义体: ⊥
 -/
 instance : TopologicalSpace PUnit := ⊥
@@ -2280,7 +2280,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology PUnit
+  签名: 离散拓扑 命题单元
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology PUnit := ⟨rfl⟩
@@ -2294,7 +2294,7 @@ instance :
 
 中文:
 实例 :
-  签名: IndiscreteTopology PUnit
+  签名: Indiscrete拓扑 命题单元
   定义体: inferInstance
 -/
 instance : IndiscreteTopology PUnit := inferInstance
@@ -2309,7 +2309,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 布尔
+  签名: 拓扑空间 布尔值
   定义体: ⊥
 -/
 instance : TopologicalSpace Bool := ⊥
@@ -2323,7 +2323,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology 布尔
+  签名: 离散拓扑 布尔值
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology Bool := ⟨rfl⟩
@@ -2338,7 +2338,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 自然数
+  签名: 拓扑空间 自然数
   定义体: ⊥
 -/
 instance : TopologicalSpace Nat := ⊥
@@ -2352,7 +2352,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology 自然数
+  签名: 离散拓扑 自然数
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology Nat := ⟨rfl⟩
@@ -2367,7 +2367,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace 整数
+  签名: 拓扑空间 整数
   定义体: ⊥
 -/
 instance : TopologicalSpace Int := ⊥
@@ -2381,7 +2381,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology 整数
+  签名: 离散拓扑 整数
   定义体: ⟨rfl⟩
 -/
 instance : DiscreteTopology Int := ⟨rfl⟩
@@ -2416,7 +2416,7 @@ instance :
 
 中文:
 实例 :
-  签名: DiscreteTopology (WithDiscreteTopology α)
+  签名: 离散拓扑 (WithDiscreteTopology α)
   定义体: coinduced_bot
 
 Depends on / 依赖: coinduced_bot
@@ -2434,7 +2434,7 @@ instance :
 
 中文:
 实例 :
-  签名: IndiscreteTopology (WithTopology α ⊤)
+  签名: Indiscrete拓扑 (With拓扑 α ⊤)
   定义体: by rw [WithTopology.topology_eq_induced, induced_top]
 
 Depends on / 依赖: WithTopology, WithTopology.topology_eq_induced, induced_top, topology_eq_induced
@@ -2456,8 +2456,8 @@ theorem WithTopology.nontrivialTopology_iff
   · simp +contextual
 
 中文:
-定理 WithTopology.nontrivialTopology_iff
-  条件: {t : TopologicalSpace α}
+定理 With拓扑.nontrivialTopology_iff
+  条件: {t : 拓扑空间 α}
   证明: by
   simp_rw [nontrivialTopology_iff, topology_eq_induced, ne_eq, not_iff_not]
   constructor
@@ -2482,8 +2482,8 @@ lemma Nat.cast_continuous
   proof: continuous_of_discreteTopology
 
 中文:
-引理 Nat.cast_continuous
-  条件: {R : 类型} [自然数Cast R] [TopologicalSpace R]
+引理 自然数.cast_continuous
+  条件: {R : 类型} [自然数嵌入 R] [拓扑空间 R]
   证明: continuous_of_discreteTopology
 -/
 lemma Nat.cast_continuous {R : Type*} [NatCast R] [TopologicalSpace R] :
@@ -2499,8 +2499,8 @@ lemma Int.cast_continuous
   proof: continuous_of_discreteTopology
 
 中文:
-引理 Int.cast_continuous
-  条件: {R : 类型} [整数Cast R] [TopologicalSpace R]
+引理 整数.cast_continuous
+  条件: {R : 类型} [整数嵌入 R] [拓扑空间 R]
   证明: continuous_of_discreteTopology
 -/
 lemma Int.cast_continuous {R : Type*} [IntCast R] [TopologicalSpace R] :
@@ -2517,7 +2517,7 @@ instance sierpinskiSpace
 
 中文:
 实例 sierpinskiSpace
-  签名: : TopologicalSpace 命题
+  签名: : 拓扑空间 命题
   定义体: generateFrom {{True}}
 
 Depends on / 依赖: generateFrom
@@ -2536,7 +2536,7 @@ theorem continuous_empty_function
 
 中文:
 定理 continuous_empty_function
-  结论: [TopologicalSpace α] [TopologicalSpace β] [IsEmpty β]
+  结论: [拓扑空间 α] [拓扑空间 β] [是空 β]
   证明: letI := Function.isEmpty f
   continuous_of_discreteTopology
 
@@ -2557,7 +2557,7 @@ theorem le_generateFrom
 
 中文:
 定理 le_generateFrom
-  条件: {t : TopologicalSpace α} {g : Set (Set α)} (h : 对任意 s in g, IsOpen s)
+  条件: {t : 拓扑空间 α} {g : 集合 (集合 α)} (h : 对任意 s in g, 是开集 s)
   证明: le_generateFrom_iff_subset_isOpen.2 h
 
 Depends on / 依赖: le_generateFrom_iff_subset_isOpen
@@ -2577,7 +2577,7 @@ theorem induced_generateFrom_eq
 
 中文:
 定理 induced_generateFrom_eq
-  条件: {α β} {b : Set (Set β)} {f : α -> β}
+  条件: {α β} {b : 集合 (集合 β)} {f : α -> β}
   证明: le_antisymm (le_generateFrom <| forall_mem_image.2 fun s hs => ⟨s, GenerateOpen.basic _ hs, rfl⟩)
     (coinduced_le_iff_le_induced.1 <| le_generateFrom fun _s hs => .basic _ (mem_image_of_mem _ hs))
 
@@ -2602,7 +2602,7 @@ theorem le_induced_generateFrom
 
 中文:
 定理 le_induced_generateFrom
-  结论: {α β} [t : TopologicalSpace α] {b : Set (Set β)} {f : α -> β}
+  结论: {α β} [t : 拓扑空间 α] {b : 集合 (集合 β)} {f : α -> β}
   证明: by
   rw [induced_generateFrom_eq]
   apply le_generateFrom
@@ -2634,7 +2634,7 @@ lemma generateFrom_insert_of_generateOpen
 
 中文:
 引理 generateFrom_insert_of_generateOpen
-  结论: {α : 类型} {s : Set (Set α)} {t : Set α}
+  结论: {α : 类型} {s : 集合 (集合 α)} {t : 集合 α}
   证明: by
   refine le_antisymm (generateFrom_anti <| subset_insert t s) (le_generateFrom ?_)
   rintro t (rfl | h)
@@ -2665,7 +2665,7 @@ lemma generateFrom_insert_univ
 
 中文:
 引理 generateFrom_insert_univ
-  条件: {α : 类型} {s : Set (Set α)}
+  条件: {α : 类型} {s : 集合 (集合 α)}
   证明: generateFrom_insert_of_generateOpen .univ
 
 @[simp]
@@ -2689,7 +2689,7 @@ lemma generateFrom_insert_empty
 
 中文:
 引理 generateFrom_insert_empty
-  条件: {α : 类型} {s : Set (Set α)}
+  条件: {α : 类型} {s : 集合 (集合 α)}
   证明: by
   rw [← sUnion_empty]
   exact generateFrom_insert_of_generateOpen (.sUnion ∅ (fun s_1 a => False.elim a))
@@ -2717,7 +2717,7 @@ definition nhdsAdjoint
 
 中文:
 定义 nhdsAdjoint
-  签名: (a : α) (f : Filter α)
+  签名: (a : α) (f : 滤子 α)
   定义体: a in s -> s in f
   isOpen_univ _ := univ_mem
   isOpen_inter := fun _s _t hs ht ⟨has, hat⟩ => inter_mem (hs has) (ht hat)
@@ -2743,7 +2743,7 @@ theorem gc_nhds
 中文:
 定理 gc_nhds
   条件: (a : α)
-  结论: GaloisConnection (nhdsAdjoint a) fun t => @nhds α t a
+  结论: GaloisConnection (nhdsAdjoint a) fun t => @邻域滤子 α t a
   证明: fun f t => by
   rw [le_nhds_iff]
   exact ⟨fun H s hs has => H _ has hs, fun H s has hs => H _ hs has⟩
@@ -2764,7 +2764,7 @@ theorem nhds_mono
 
 中文:
 定理 nhds_mono
-  条件: {t₁ t₂ : TopologicalSpace α} {a : α} (h : t₁ <= t₂)
+  条件: {t₁ t₂ : 拓扑空间 α} {a : α} (h : t₁ <= t₂)
   证明: (gc_nhds a).monotone_u h
 
 Depends on / 依赖: gc_nhds, monotone_u
@@ -2783,7 +2783,7 @@ theorem le_iff_nhds
 
 中文:
 定理 le_iff_nhds
-  条件: {α : 类型} (t t' : TopologicalSpace α)
+  条件: {α : 类型} (t t' : 拓扑空间 α)
   证明: ⟨fun h _ => nhds_mono h, le_of_nhds_le_nhds⟩
 
 Depends on / 依赖: le_of_nhds_le_nhds, nhds_mono
@@ -2803,7 +2803,7 @@ theorem isOpen_singleton_nhdsAdjoint
 
 中文:
 定理 isOpen_singleton_nhdsAdjoint
-  条件: {α : 类型} {a b : α} (f : Filter α) (hb : b != a)
+  条件: {α : 类型} {a b : α} (f : 滤子 α) (hb : b != a)
   证明: fun h =>
   absurd h hb.symm
 -/
@@ -2826,7 +2826,7 @@ theorem nhds_nhdsAdjoint_same
 
 中文:
 定理 nhds_nhdsAdjoint_same
-  条件: (a : α) (f : Filter α)
+  条件: (a : α) (f : 滤子 α)
   证明: by
   let _ := nhdsAdjoint a f
   apply le_antisymm
@@ -2855,7 +2855,7 @@ theorem nhds_nhdsAdjoint_of_ne
 
 中文:
 定理 nhds_nhdsAdjoint_of_ne
-  条件: {a b : α} (f : Filter α) (h : b != a)
+  条件: {a b : α} (f : 滤子 α) (h : b != a)
   证明: let _ := nhdsAdjoint a f
 (isOpen_singleton_iff_nhds_eq_pure _).1 isOpen_singleton_nhdsAdjoint f h
 
@@ -2876,7 +2876,7 @@ theorem nhds_nhdsAdjoint
 
 中文:
 定理 nhds_nhdsAdjoint
-  条件: [DecidableEq α] (a : α) (f : Filter α)
+  条件: [DecidableEq α] (a : α) (f : 滤子 α)
   证明: eq_update_iff.2 ⟨nhds_nhdsAdjoint_same .., fun _ => nhds_nhdsAdjoint_of_ne _⟩
 
 Depends on / 依赖: eq_update_iff, nhds_nhdsAdjoint_of_ne, nhds_nhdsAdjoint_same
@@ -2897,7 +2897,7 @@ theorem le_nhdsAdjoint_iff'
 
 中文:
 定理 le_nhdsAdjoint_iff'
-  条件: {a : α} {f : Filter α} {t : TopologicalSpace α}
+  条件: {a : α} {f : 滤子 α} {t : 拓扑空间 α}
   证明: by
   classical
   simp_rw [le_iff_nhds, nhds_nhdsAdjoint, forall_update_iff, (pure_le_nhds _).ge_iff_eq']
@@ -2920,7 +2920,7 @@ theorem le_nhdsAdjoint_iff
 
 中文:
 定理 le_nhdsAdjoint_iff
-  条件: {α : 类型} (a : α) (f : Filter α) (t : TopologicalSpace α)
+  条件: {α : 类型} (a : α) (f : 滤子 α) (t : 拓扑空间 α)
   证明: by
   simp only [le_nhdsAdjoint_iff', @isOpen_singleton_iff_nhds_eq_pure α t]
 
@@ -2940,7 +2940,7 @@ theorem nhds_iInf
 
 中文:
 定理 nhds_iInf
-  条件: {ι : Sort*} {t : ι -> TopologicalSpace α} {a : α}
+  条件: {ι : 类型层*} {t : ι -> 拓扑空间 α} {a : α}
   证明: (gc_nhds a).u_iInf
 
 Depends on / 依赖: gc_nhds, u_iInf
@@ -2959,7 +2959,7 @@ theorem nhds_sInf
 
 中文:
 定理 nhds_sInf
-  条件: {s : Set (TopologicalSpace α)} {a : α}
+  条件: {s : 集合 (拓扑空间 α)} {a : α}
   证明: (gc_nhds a).u_sInf
 
 Depends on / 依赖: gc_nhds, u_sInf
@@ -2979,7 +2979,7 @@ theorem nhds_inf
 
 中文:
 定理 nhds_inf
-  条件: {t₁ t₂ : TopologicalSpace α} {a : α}
+  条件: {t₁ t₂ : 拓扑空间 α} {a : α}
   证明: (gc_nhds a).u_inf (b₁ := t₁)
 
 Depends on / 依赖: gc_nhds, u_inf
@@ -3000,7 +3000,7 @@ theorem nhds_top
 中文:
 定理 nhds_top
   条件: {a : α}
-  结论: @nhds α ⊤ a = ⊤
+  结论: @邻域滤子 α ⊤ a = ⊤
   证明: (gc_nhds a).u_top
 
 Depends on / 依赖: gc_nhds, u_top
@@ -3018,7 +3018,7 @@ theorem isOpen_sup
 
 中文:
 定理 isOpen_sup
-  条件: {t₁ t₂ : TopologicalSpace α} {s : Set α}
+  条件: {t₁ t₂ : 拓扑空间 α} {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -3039,8 +3039,8 @@ theorem IndiscreteTopology.nhds_eq
   exact nhds_top
 
 中文:
-定理 IndiscreteTopology.nhds_eq
-  条件: [TopologicalSpace α] [IndiscreteTopology α] (a : α)
+定理 Indiscrete拓扑.nhds_eq
+  条件: [拓扑空间 α] [Indiscrete拓扑 α] (a : α)
   证明: by
   cases IndiscreteTopology.eq_top α
   exact nhds_top
@@ -3063,7 +3063,7 @@ theorem clusterPt_of_indiscreteTopology
 
 中文:
 定理 clusterPt_of_indiscreteTopology
-  结论: [TopologicalSpace α] [IndiscreteTopology α]
+  结论: [拓扑空间 α] [Indiscrete拓扑 α]
   证明: by
   simpa [ClusterPt, IndiscreteTopology.nhds_eq]
 
@@ -3086,8 +3086,8 @@ theorem Inseparable.all
   proof: (IndiscreteTopology.nhds_eq _).trans (IndiscreteTopology.nhds_eq _).symm
 
 中文:
-定理 Inseparable.all
-  条件: [TopologicalSpace α] [IndiscreteTopology α] (x y : α)
+定理 不可分.all
+  条件: [拓扑空间 α] [Indiscrete拓扑 α] (x y : α)
   证明: (IndiscreteTopology.nhds_eq _).trans (IndiscreteTopology.nhds_eq _).symm
 
 Depends on / 依赖: IndiscreteTopology, IndiscreteTopology.nhds_eq, nhds_eq
@@ -3105,8 +3105,8 @@ theorem IndiscreteTopology.of_forall_inseparable
   proof: ext_nhds fun x => nhds_top ▸ top_unique fun _ hs a => mem_of_mem_nhds h x a ▸ hs
 
 中文:
-定理 IndiscreteTopology.of_forall_inseparable
-  结论: [TopologicalSpace α]
+定理 Indiscrete拓扑.of_对任意_inseparable
+  结论: [拓扑空间 α]
   证明: ext_nhds fun x => nhds_top ▸ top_unique fun _ hs a => mem_of_mem_nhds h x a ▸ hs
 
 Depends on / 依赖: ext_nhds, mem_of_mem_nhds, nhds_top, top_unique
@@ -3125,8 +3125,8 @@ theorem TopologicalSpace.indiscrete_iff_forall_inseparable
   mpr := .of_forall_inseparable
 
 中文:
-定理 TopologicalSpace.indiscrete_iff_forall_inseparable
-  条件: {t : TopologicalSpace α}
+定理 拓扑空间.indiscrete_iff_对任意_inseparable
+  条件: {t : 拓扑空间 α}
   证明: Inseparable.all
   mpr := .of_forall_inseparable
 
@@ -3152,8 +3152,8 @@ alias ⟨NontrivialTopology.exists_not_inseparable, NontrivialTopology.of_exists
 @[deprecated Inseparable.all (since := "2026-01-21")]
 
 中文:
-定理 TopologicalSpace.nontrivial_iff_exists_not_inseparable
-  条件: {t : TopologicalSpace α}
+定理 拓扑空间.nontrivial_iff_存在_not_inseparable
+  条件: {t : 拓扑空间 α}
   证明: by
   simpa using indiscrete_iff_forall_inseparable.not
 
@@ -3186,7 +3186,7 @@ theorem inseparable_top
 中文:
 定理 inseparable_top
   条件: (x y : α)
-  结论: @Inseparable α ⊤ x y
+  结论: @不可分 α ⊤ x y
   证明: @Inseparable.all _ ⊤ _ x y
 
 @[deprecated TopologicalSpace.indiscrete_iff_forall_inseparable (since := "2026-01-21")]
@@ -3209,8 +3209,8 @@ theorem TopologicalSpace.eq_top_iff_forall_inseparable
 @[deprecated TopologicalSpace.nontrivial_iff_exists_not_inseparable (since := "2026-01-21")]
 
 中文:
-定理 TopologicalSpace.eq_top_iff_forall_inseparable
-  条件: {t : TopologicalSpace α}
+定理 拓扑空间.eq_top_iff_对任意_inseparable
+  条件: {t : 拓扑空间 α}
   证明: by
   rw [← TopologicalSpace.indiscrete_iff_forall_inseparable]; rw [indiscreteTopology_iff]
 
@@ -3233,8 +3233,8 @@ theorem TopologicalSpace.ne_top_iff_exists_not_inseparable
   rw [← TopologicalSpace.nontrivial_iff_exists_not_inseparable]; rw [nontrivialTopology_iff]
 
 中文:
-定理 TopologicalSpace.ne_top_iff_exists_not_inseparable
-  条件: {t : TopologicalSpace α}
+定理 拓扑空间.ne_top_iff_存在_not_inseparable
+  条件: {t : 拓扑空间 α}
   证明: by
   rw [← TopologicalSpace.nontrivial_iff_exists_not_inseparable]; rw [nontrivialTopology_iff]
 
@@ -3258,7 +3258,7 @@ theorem continuous_iff_coinduced_le
 
 中文:
 定理 continuous_iff_coinduced_le
-  条件: {t₁ : TopologicalSpace α} {t₂ : TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₂ : 拓扑空间 β}
   证明: continuous_def
 
 Depends on / 依赖: continuous_def
@@ -3277,7 +3277,7 @@ theorem continuous_iff_le_induced
 
 中文:
 定理 continuous_iff_le_induced
-  条件: {t₁ : TopologicalSpace α} {t₂ : TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₂ : 拓扑空间 β}
   证明: Iff.trans continuous_iff_coinduced_le (gc_coinduced_induced f _ _)
 
 Depends on / 依赖: Iff.trans, continuous_iff_coinduced_le, gc_coinduced_induced
@@ -3300,7 +3300,7 @@ lemma continuous_generateFrom_iff
 
 中文:
 引理 continuous_generateFrom_iff
-  条件: {t : TopologicalSpace α} {b : Set (Set β)}
+  条件: {t : 拓扑空间 α} {b : 集合 (集合 β)}
   证明: by
   rw [continuous_iff_coinduced_le]; rw [le_generateFrom_iff_subset_isOpen]
   simp only [isOpen_coinduced, subset_def, mem_ofPred_eq]
@@ -3326,8 +3326,8 @@ theorem continuous_induced_dom
 
 中文:
 定理 continuous_induced_dom
-  条件: {t : TopologicalSpace β}
-  结论: Continuous[induced f t, t] f
+  条件: {t : 拓扑空间 β}
+  结论: 连续[induced f t, t] f
   证明: continuous_iff_le_induced.2 le_rfl
 
 Depends on / 依赖: continuous_iff_le_induced, le_rfl
@@ -3346,7 +3346,7 @@ theorem continuous_induced_rng
 
 中文:
 定理 continuous_induced_rng
-  条件: {g : γ -> α} {t₂ : TopologicalSpace β} {t₁ : TopologicalSpace γ}
+  条件: {g : γ -> α} {t₂ : 拓扑空间 β} {t₁ : 拓扑空间 γ}
   证明: by
   simp only [continuous_iff_le_induced, induced_compose]
 
@@ -3366,7 +3366,7 @@ theorem continuous_coinduced_rng
 
 中文:
 定理 continuous_coinduced_rng
-  条件: {t : TopologicalSpace α}
+  条件: {t : 拓扑空间 α}
   证明: continuous_iff_coinduced_le.2 le_rfl
 
 Depends on / 依赖: continuous_iff_coinduced_le, le_rfl
@@ -3386,7 +3386,7 @@ theorem continuous_coinduced_dom
 
 中文:
 定理 continuous_coinduced_dom
-  条件: {g : β -> γ} {t₁ : TopologicalSpace α} {t₂ : TopologicalSpace γ}
+  条件: {g : β -> γ} {t₁ : 拓扑空间 α} {t₂ : 拓扑空间 γ}
   证明: by
   simp only [continuous_iff_coinduced_le, coinduced_compose]
 
@@ -3408,7 +3408,7 @@ theorem continuous_le_dom
 
 中文:
 定理 continuous_le_dom
-  结论: {t₁ t₂ : TopologicalSpace α} {t₃ : TopologicalSpace β} (h₁ : t₂ <= t₁)
+  结论: {t₁ t₂ : 拓扑空间 α} {t₃ : 拓扑空间 β} (h₁ : t₂ <= t₁)
   证明: by
   rw [continuous_iff_le_induced] at h₂ ⊢
   exact le_trans h₁ h₂
@@ -3432,7 +3432,7 @@ theorem continuous_le_rng
 
 中文:
 定理 continuous_le_rng
-  结论: {t₁ : TopologicalSpace α} {t₂ t₃ : TopologicalSpace β} (h₁ : t₂ <= t₃)
+  结论: {t₁ : 拓扑空间 α} {t₂ t₃ : 拓扑空间 β} (h₁ : t₂ <= t₃)
   证明: by
   rw [continuous_iff_coinduced_le] at h₂ ⊢
   exact le_trans h₂ h₁
@@ -3455,7 +3455,7 @@ theorem continuous_sup_dom
 
 中文:
 定理 continuous_sup_dom
-  条件: {t₁ t₂ : TopologicalSpace α} {t₃ : TopologicalSpace β}
+  条件: {t₁ t₂ : 拓扑空间 α} {t₃ : 拓扑空间 β}
   证明: by
   simp only [continuous_iff_le_induced, sup_le_iff]
 
@@ -3475,7 +3475,7 @@ theorem continuous_sup_rng_left
 
 中文:
 定理 continuous_sup_rng_left
-  条件: {t₁ : TopologicalSpace α} {t₃ t₂ : TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₃ t₂ : 拓扑空间 β}
   证明: continuous_le_rng le_sup_left
 
 Depends on / 依赖: continuous_le_rng, le_sup_left
@@ -3494,7 +3494,7 @@ theorem continuous_sup_rng_right
 
 中文:
 定理 continuous_sup_rng_right
-  条件: {t₁ : TopologicalSpace α} {t₃ t₂ : TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₃ t₂ : 拓扑空间 β}
   证明: continuous_le_rng le_sup_right
 
 Depends on / 依赖: continuous_le_rng, le_sup_right
@@ -3514,7 +3514,7 @@ theorem continuous_sSup_dom
 
 中文:
 定理 continuous_sSup_dom
-  条件: {T : Set (TopologicalSpace α)} {t₂ : TopologicalSpace β}
+  条件: {T : 集合 (拓扑空间 α)} {t₂ : 拓扑空间 β}
   证明: by
   simp only [continuous_iff_le_induced, sSup_le_iff]
 
@@ -3534,7 +3534,7 @@ theorem continuous_sSup_rng
 
 中文:
 定理 continuous_sSup_rng
-  结论: {t₁ : TopologicalSpace α} {t₂ : Set (TopologicalSpace β)}
+  结论: {t₁ : 拓扑空间 α} {t₂ : 集合 (拓扑空间 β)}
   证明: continuous_iff_coinduced_le.2 le_sSup_of_le h₁ continuous_iff_coinduced_le.1 hf
 
 Depends on / 依赖: continuous_iff_coinduced_le, le_sSup_of_le
@@ -3555,7 +3555,7 @@ theorem continuous_iSup_dom
 
 中文:
 定理 continuous_iSup_dom
-  条件: {t₁ : ι -> TopologicalSpace α} {t₂ : TopologicalSpace β}
+  条件: {t₁ : ι -> 拓扑空间 α} {t₂ : 拓扑空间 β}
   证明: by
   simp only [continuous_iff_le_induced, iSup_le_iff]
 
@@ -3575,7 +3575,7 @@ theorem continuous_iSup_rng
 
 中文:
 定理 continuous_iSup_rng
-  结论: {t₁ : TopologicalSpace α} {t₂ : ι -> TopologicalSpace β} {i : ι}
+  结论: {t₁ : 拓扑空间 α} {t₂ : ι -> 拓扑空间 β} {i : ι}
   证明: continuous_sSup_rng ⟨i, rfl⟩ h
 
 Depends on / 依赖: continuous_sSup_rng
@@ -3595,7 +3595,7 @@ theorem continuous_inf_rng
 
 中文:
 定理 continuous_inf_rng
-  条件: {t₁ : TopologicalSpace α} {t₂ t₃ : TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₂ t₃ : 拓扑空间 β}
   证明: by
   simp only [continuous_iff_coinduced_le, le_inf_iff]
 
@@ -3615,7 +3615,7 @@ theorem continuous_inf_dom_left
 
 中文:
 定理 continuous_inf_dom_left
-  条件: {t₁ t₂ : TopologicalSpace α} {t₃ : TopologicalSpace β}
+  条件: {t₁ t₂ : 拓扑空间 α} {t₃ : 拓扑空间 β}
   证明: continuous_le_dom inf_le_left
 
 Depends on / 依赖: continuous_le_dom, inf_le_left
@@ -3634,7 +3634,7 @@ theorem continuous_inf_dom_right
 
 中文:
 定理 continuous_inf_dom_right
-  条件: {t₁ t₂ : TopologicalSpace α} {t₃ : TopologicalSpace β}
+  条件: {t₁ t₂ : 拓扑空间 α} {t₃ : 拓扑空间 β}
   证明: continuous_le_dom inf_le_right
 
 Depends on / 依赖: continuous_le_dom, inf_le_right
@@ -3653,7 +3653,7 @@ theorem continuous_sInf_dom
 
 中文:
 定理 continuous_sInf_dom
-  结论: {t₁ : Set (TopologicalSpace α)} {t₂ : TopologicalSpace β}
+  结论: {t₁ : 集合 (拓扑空间 α)} {t₂ : 拓扑空间 β}
   证明: continuous_le_dom sInf_le h₁
 
 Depends on / 依赖: continuous_le_dom, sInf_le
@@ -3674,7 +3674,7 @@ theorem continuous_sInf_rng
 
 中文:
 定理 continuous_sInf_rng
-  条件: {t₁ : TopologicalSpace α} {T : Set (TopologicalSpace β)}
+  条件: {t₁ : 拓扑空间 α} {T : 集合 (拓扑空间 β)}
   证明: by
   simp only [continuous_iff_coinduced_le, le_sInf_iff]
 
@@ -3694,7 +3694,7 @@ theorem continuous_iInf_dom
 
 中文:
 定理 continuous_iInf_dom
-  条件: {t₁ : ι -> TopologicalSpace α} {t₂ : TopologicalSpace β} {i : ι}
+  条件: {t₁ : ι -> 拓扑空间 α} {t₂ : 拓扑空间 β} {i : ι}
   证明: continuous_le_dom iInf_le _ _
 
 Depends on / 依赖: continuous_le_dom, iInf_le
@@ -3716,7 +3716,7 @@ theorem continuous_iInf_rng
 
 中文:
 定理 continuous_iInf_rng
-  条件: {t₁ : TopologicalSpace α} {t₂ : ι -> TopologicalSpace β}
+  条件: {t₁ : 拓扑空间 α} {t₂ : ι -> 拓扑空间 β}
   证明: by
   simp only [continuous_iff_coinduced_le, le_iInf_iff]
 
@@ -3742,8 +3742,8 @@ theorem continuous_bot
 
 中文:
 定理 continuous_bot
-  条件: {t : TopologicalSpace β}
-  结论: Continuous[⊥, t] f
+  条件: {t : 拓扑空间 β}
+  结论: 连续[⊥, t] f
   证明: continuous_iff_le_induced.2 bot_le
 
 @[continuity, fun_prop]
@@ -3765,8 +3765,8 @@ theorem continuous_top
 
 中文:
 定理 continuous_top
-  条件: {t : TopologicalSpace α}
-  结论: Continuous[t, ⊤] f
+  条件: {t : 拓扑空间 α}
+  结论: 连续[t, ⊤] f
   证明: continuous_iff_coinduced_le.2 le_top
 
 Depends on / 依赖: continuous_iff_coinduced_le, le_top
@@ -3785,8 +3785,8 @@ theorem continuous_id_iff_le
 
 中文:
 定理 continuous_id_iff_le
-  条件: {t t' : TopologicalSpace α}
-  结论: Continuous[t, t'] id ↔ t <= t'
+  条件: {t t' : 拓扑空间 α}
+  结论: 连续[t, t'] id ↔ t <= t'
   证明: @continuous_def _ _ t t' id
 
 Depends on / 依赖: continuous_def
@@ -3805,8 +3805,8 @@ theorem continuous_id_of_le
 
 中文:
 定理 continuous_id_of_le
-  条件: {t t' : TopologicalSpace α} (h : t <= t')
-  结论: Continuous[t, t'] id
+  条件: {t t' : 拓扑空间 α} (h : t <= t')
+  结论: 连续[t, t'] id
   证明: continuous_id_iff_le.2 h
 
 Depends on / 依赖: continuous_id_iff_le
@@ -3832,7 +3832,7 @@ theorem mem_nhds_induced
 
 中文:
 定理 mem_nhds_induced
-  条件: [T : TopologicalSpace α] (f : β -> α) (a : β) (s : Set β)
+  条件: [T : 拓扑空间 α] (f : β -> α) (a : β) (s : 集合 β)
   证明: by
   let := T.induced f
   simp_rw [mem_nhds_iff, isOpen_induced_iff]
@@ -3866,7 +3866,7 @@ theorem nhds_induced
 
 中文:
 定理 nhds_induced
-  条件: [T : TopologicalSpace α] (f : β -> α) (a : β)
+  条件: [T : 拓扑空间 α] (f : β -> α) (a : β)
   证明: by
   ext s
   rw [mem_nhds_induced]; rw [mem_comap]
@@ -3889,7 +3889,7 @@ theorem induced_iff_nhds_eq
 
 中文:
 定理 induced_iff_nhds_eq
-  条件: [tα : TopologicalSpace α] [tβ : TopologicalSpace β] (f : β -> α)
+  条件: [tα : 拓扑空间 α] [tβ : 拓扑空间 β] (f : β -> α)
   证明: by
   simp only [ext_iff_nhds, nhds_induced]
 
@@ -3910,7 +3910,7 @@ theorem map_nhds_induced_of_surjective
 
 中文:
 定理 map_nhds_induced_of_surjective
-  结论: [T : TopologicalSpace α] {f : β -> α} (hf : Surjective f)
+  结论: [T : 拓扑空间 α] {f : β -> α} (hf : 满射 f)
   证明: by
   rw [nhds_induced]; rw [map_comap_of_surjective hf]
 
@@ -3931,7 +3931,7 @@ theorem continuous_nhdsAdjoint_dom
 
 中文:
 定理 continuous_nhdsAdjoint_dom
-  条件: [TopologicalSpace β] {f : α -> β} {a : α} {l : Filter α}
+  条件: [拓扑空间 β] {f : α -> β} {a : α} {l : 滤子 α}
   证明: by
   simp_rw [continuous_iff_le_induced, gc_nhds _ _, nhds_induced, tendsto_iff_comap]
 
@@ -3952,7 +3952,7 @@ theorem coinduced_nhdsAdjoint
 
 中文:
 定理 coinduced_nhdsAdjoint
-  条件: (f : α -> β) (a : α) (l : Filter α)
+  条件: (f : α -> β) (a : α) (l : 滤子 α)
   证明: eq_of_forall_ge_iff fun _ => by
     rw [gc_nhds]; rw [← continuous_iff_coinduced_le]; rw [continuous_nhdsAdjoint_dom]; rw [Tendsto]
 
@@ -3982,7 +3982,7 @@ theorem isOpen_induced_eq
 
 中文:
 定理 isOpen_induced_eq
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -4002,8 +4002,8 @@ theorem isOpen_induced
 
 中文:
 定理 isOpen_induced
-  条件: {s : Set β} (h : IsOpen s)
-  结论: IsOpen[induced f t] (f ⁻¹' s)
+  条件: {s : 集合 β} (h : 是开集 s)
+  结论: 是开集[induced f t] (f ⁻¹' s)
   证明: ⟨s, h, rfl⟩
 -/
 theorem isOpen_induced {s : Set β} (h : IsOpen s) : IsOpen[induced f t] (f ⁻¹' s) :=
@@ -4022,8 +4022,8 @@ theorem isClosed_induced
 
 中文:
 定理 isClosed_induced
-  条件: {s : Set β} (h : IsClosed s)
-  结论: IsClosed[induced f t] (f ⁻¹' s)
+  条件: {s : 集合 β} (h : 是闭集 s)
+  结论: 是闭集[induced f t] (f ⁻¹' s)
   证明: by
   simp_rw [← isOpen_compl_iff]
   exact isOpen_induced h.isOpen_compl
@@ -4047,7 +4047,7 @@ theorem map_nhds_induced_eq
 中文:
 定理 map_nhds_induced_eq
   条件: (a : α)
-  结论: map f (@nhds α (induced f t) a) = 𝓝[range f] f a
+  结论: map f (@邻域滤子 α (induced f t) a) = 𝓝[range f] f a
   证明: by
   rw [nhds_induced]; rw [Filter.map_comap]; rw [nhdsWithin]
 
@@ -4085,7 +4085,7 @@ theorem closure_induced
 
 中文:
 定理 closure_induced
-  条件: {f : α -> β} {a : α} {s : Set α}
+  条件: {f : α -> β} {a : α} {s : 集合 α}
   证明: by
   simp only [mem_closure_iff_frequently, nhds_induced, frequently_comap, mem_image, and_comm]
 
@@ -4106,7 +4106,7 @@ theorem isClosed_induced_iff'
 
 中文:
 定理 isClosed_induced_iff'
-  条件: {f : α -> β} {s : Set α}
+  条件: {f : α -> β} {s : 集合 α}
   证明: by
   simp only [← closure_subset_iff_isClosed, subset_def, closure_induced]
 
@@ -4135,7 +4135,7 @@ theorem isOpen_singleton_true
 
 中文:
 定理 isOpen_singleton_true
-  结论: IsOpen ({True} : Set 命题)
+  结论: 是开集 ({真} : 集合 命题)
   证明: TopologicalSpace.GenerateOpen.basic _ (mem_singleton _)
 
 @[simp]
@@ -4158,7 +4158,7 @@ theorem nhds_true
 
 中文:
 定理 nhds_true
-  结论: 𝓝 True = pure True
+  结论: 𝓝 真 = pure 真
   证明: le_antisymm (le_pure_iff.2 <| isOpen_singleton_true.mem_nhds <| mem_singleton _) (pure_le_nhds _)
 
 @[simp]
@@ -4179,7 +4179,7 @@ theorem nhds_false
 
 中文:
 定理 nhds_false
-  结论: 𝓝 False = ⊤
+  结论: 𝓝 假 = ⊤
   证明: TopologicalSpace.nhds_generateFrom.trans by simp [@and_comm (_ in _)]
 
 Depends on / 依赖: TopologicalSpace, TopologicalSpace.nhds_generateFrom.trans, and_comm, nhds_generateFrom
@@ -4197,7 +4197,7 @@ theorem tendsto_nhds_true
 
 中文:
 定理 tendsto_nhds_true
-  条件: {l : Filter α} {p : α -> 命题}
+  条件: {l : 滤子 α} {p : α -> 命题}
   证明: by simp
 -/
 theorem tendsto_nhds_true {l : Filter α} {p : α -> Prop} :
@@ -4214,7 +4214,7 @@ theorem tendsto_nhds_Prop
 
 中文:
 定理 tendsto_nhds_Prop
-  条件: {l : Filter α} {p : α -> 命题} {q : 命题}
+  条件: {l : 滤子 α} {p : α -> 命题} {q : 命题}
   证明: by
   by_cases q <;> simp [*]
 -/
@@ -4237,7 +4237,7 @@ theorem continuous_Prop
 中文:
 定理 continuous_Prop
   条件: {p : α -> 命题}
-  结论: Continuous p ↔ IsOpen { x | p x }
+  结论: 连续 p ↔ 是开集 { x | p x }
   证明: by
   simp only [continuous_iff_continuousAt, ContinuousAt, tendsto_nhds_Prop, isOpen_iff_mem_nhds]; rfl
 
@@ -4257,8 +4257,8 @@ theorem isOpen_iff_continuous_mem
 
 中文:
 定理 isOpen_iff_continuous_mem
-  条件: {s : Set α}
-  结论: IsOpen s ↔ Continuous (· in s)
+  条件: {s : 集合 α}
+  结论: 是开集 s ↔ 连续 (· in s)
   证明: continuous_Prop.symm
 
 Depends on / 依赖: continuous_Prop, continuous_Prop.symm
@@ -4284,7 +4284,7 @@ theorem generateFrom_union
 
 中文:
 定理 generateFrom_union
-  条件: (a₁ a₂ : Set (Set α))
+  条件: (a₁ a₂ : 集合 (集合 α))
   证明: (gc_generateFrom α).u_inf
 
 Depends on / 依赖: gc_generateFrom, u_inf
@@ -4305,7 +4305,7 @@ theorem setOfPred_isOpen_sup
 
 中文:
 定理 setOfPred_isOpen_sup
-  条件: (t₁ t₂ : TopologicalSpace α)
+  条件: (t₁ t₂ : 拓扑空间 α)
   证明: rfl
 
 @[deprecated (since := "2026-07-09")] alias setOf_isOpen_sup := setOfPred_isOpen_sup
@@ -4326,7 +4326,7 @@ theorem generateFrom_iUnion
 
 中文:
 定理 generateFrom_iUnion
-  条件: {f : ι -> Set (Set α)}
+  条件: {f : ι -> 集合 (集合 α)}
   证明: (gc_generateFrom α).u_iInf
 
 Depends on / 依赖: gc_generateFrom, u_iInf
@@ -4347,7 +4347,7 @@ theorem setOfPred_isOpen_iSup
 
 中文:
 定理 setOfPred_isOpen_iSup
-  条件: {t : ι -> TopologicalSpace α}
+  条件: {t : ι -> 拓扑空间 α}
   证明: (gc_generateFrom α).l_iSup
 
 @[deprecated (since := "2026-07-09")] alias setOf_isOpen_iSup := setOfPred_isOpen_iSup
@@ -4370,7 +4370,7 @@ theorem generateFrom_sUnion
 
 中文:
 定理 generateFrom_sUnion
-  条件: {S : Set (Set (Set α))}
+  条件: {S : 集合 (集合 (集合 α))}
   证明: (gc_generateFrom α).u_sInf
 
 Depends on / 依赖: gc_generateFrom, u_sInf
@@ -4391,7 +4391,7 @@ theorem setOfPred_isOpen_sSup
 
 中文:
 定理 setOfPred_isOpen_sSup
-  条件: {T : Set (TopologicalSpace α)}
+  条件: {T : 集合 (拓扑空间 α)}
   证明: (gc_generateFrom α).l_sSup
 
 @[deprecated (since := "2026-07-09")] alias setOf_isOpen_sSup := setOfPred_isOpen_sSup
@@ -4414,7 +4414,7 @@ theorem generateFrom_union_isOpen
 
 中文:
 定理 generateFrom_union_isOpen
-  条件: (a b : TopologicalSpace α)
+  条件: (a b : 拓扑空间 α)
   证明: (gciGenerateFrom α).u_inf_l _ _
 
 Depends on / 依赖: gciGenerateFrom, u_inf_l
@@ -4433,7 +4433,7 @@ theorem generateFrom_iUnion_isOpen
 
 中文:
 定理 generateFrom_iUnion_isOpen
-  条件: (f : ι -> TopologicalSpace α)
+  条件: (f : ι -> 拓扑空间 α)
   证明: (gciGenerateFrom α).u_iInf_l _
 
 Depends on / 依赖: gciGenerateFrom, u_iInf_l
@@ -4452,7 +4452,7 @@ theorem generateFrom_inter
 
 中文:
 定理 generateFrom_inter
-  条件: (a b : TopologicalSpace α)
+  条件: (a b : 拓扑空间 α)
   证明: (gciGenerateFrom α).u_sup_l _ _
 
 Depends on / 依赖: gciGenerateFrom, u_sup_l
@@ -4470,8 +4470,8 @@ theorem generateFrom_iInter
   proof: (gciGenerateFrom α).u_iSup_l _
 
 中文:
-定理 generateFrom_iInter
-  条件: (f : ι -> TopologicalSpace α)
+定理 generateFrom_i整数er
+  条件: (f : ι -> 拓扑空间 α)
   证明: (gciGenerateFrom α).u_iSup_l _
 
 Depends on / 依赖: gciGenerateFrom, u_iSup_l
@@ -4489,8 +4489,8 @@ theorem generateFrom_iInter_of_generateFrom_eq_self
   proof: (gciGenerateFrom α).u_iSup_of_l_u_eq_self f hf
 
 中文:
-定理 generateFrom_iInter_of_generateFrom_eq_self
-  结论: (f : ι -> Set (Set α))
+定理 generateFrom_i整数er_of_generateFrom_eq_self
+  结论: (f : ι -> 集合 (集合 α))
   证明: (gciGenerateFrom α).u_iSup_of_l_u_eq_self f hf
 
 Depends on / 依赖: gciGenerateFrom, u_iSup_of_l_u_eq_self
@@ -4514,8 +4514,8 @@ theorem isOpen_iSup_iff
 
 中文:
 定理 isOpen_iSup_iff
-  条件: {s : Set α}
-  结论: IsOpen[⨆ i, t i] s ↔ 对任意 i, IsOpen[t i] s
+  条件: {s : 集合 α}
+  结论: 是开集[⨆ i, t i] s ↔ 对任意 i, 是开集[t i] s
   证明: show s in {s | IsOpen[iSup t] s} ↔ s in { x : Set α | forall i : ι, IsOpen[t i] x } by
     simp [setOfPred_isOpen_iSup]
 
@@ -4536,7 +4536,7 @@ theorem isOpen_sSup_iff
 
 中文:
 定理 isOpen_sSup_iff
-  条件: {s : Set α} {T : Set (TopologicalSpace α)}
+  条件: {s : 集合 α} {T : 集合 (拓扑空间 α)}
   证明: by
   simp +instances only [sSup_eq_iSup, isOpen_iSup_iff]
 
@@ -4558,8 +4558,8 @@ theorem isClosed_iSup_iff
 
 中文:
 定理 isClosed_iSup_iff
-  条件: {s : Set α}
-  结论: IsClosed[⨆ i, t i] s ↔ 对任意 i, IsClosed[t i] s
+  条件: {s : 集合 α}
+  结论: 是闭集[⨆ i, t i] s ↔ 对任意 i, 是闭集[t i] s
   证明: by
   simp only [← @isOpen_compl_iff _ _ (⨆ i, t i), ← @isOpen_compl_iff _ _ (t _), isOpen_iSup_iff]
 
@@ -4579,7 +4579,7 @@ theorem isClosed_sSup_iff
 
 中文:
 定理 isClosed_sSup_iff
-  条件: {s : Set α} {T : Set (TopologicalSpace α)}
+  条件: {s : 集合 α} {T : 集合 (拓扑空间 α)}
   证明: by
   simp +instances only [sSup_eq_iSup, isClosed_iSup_iff]
 

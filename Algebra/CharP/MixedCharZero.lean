@@ -79,11 +79,11 @@ class MixedCharZero
     - charP_quotient : exists I : Ideal R, I != ⊤ ∧ CharP (R ⧸ I) p
 
 中文:
-类 MixedCharZero
+类 混合特征零
   参数: (p : 自然数)
   公理与运算 (2 个):
-    - [toCharZero : CharZero R]
-    - charP_quotient : 存在 I : Ideal R, I != ⊤ ∧ CharP (R ⧸ I) p
+    - [toCharZero : 特征零 R]
+    - charP_quotient : 存在 I : 理想 R, I != ⊤ ∧ 特征p (R ⧸ I) p
 -/
 class MixedCharZero (p : Nat) : Prop where
   [toCharZero : CharZero R]
@@ -162,7 +162,7 @@ lemma reduce_to_maximal_ideal
 
 中文:
 引理 reduce_to_maximal_ideal
-  条件: {p : 自然数} (hp : 自然数.Prime p)
+  条件: {p : 自然数} (hp : 自然数.素 p)
   证明: by
   constructor
   · intro g
@@ -239,8 +239,8 @@ lemma of_algebraRat
 
 中文:
 引理 of_algebraRat
-  条件: [Algebra Rat R]
-  结论: 对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I)
+  条件: [代数 有理数 R]
+  结论: 对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I)
   证明: by
   intro I hI
   constructor
@@ -283,8 +283,8 @@ lemma PNat.isUnit_natCast
   -- In particular, the image of `n`
 
 中文:
-引理 PNat.isUnit_natCast
-  结论: [h : Fact (对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))]
+引理 正自然数.isUnit_natCast
+  结论: [h : Fact (对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))]
   证明: by
   -- `n : R` is a unit iff `(n)` is not a proper ideal in `R`.
   rw [← Ideal.span_singleton_eq_top]
@@ -317,7 +317,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def pnatCast [Fact (对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))]
+  签名: def pnatCast [Fact (对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))]
   定义体: fun n => (PNat.isUnit_natCast n).unit
 -/
 private noncomputable def pnatCast [Fact (forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))] : Nat+ -> Rˣ :=
@@ -362,7 +362,7 @@ lemma pnatCast_one
 
 中文:
 引理 pnatCast_one
-  条件: [Fact (对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))]
+  条件: [Fact (对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))]
   证明: by
   apply Units.ext
   rw [Units.val_one]
@@ -393,7 +393,7 @@ lemma pnatCast_eq_natCast
 
 中文:
 引理 pnatCast_eq_natCast
-  条件: [Fact (对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))] (n : 自然数+)
+  条件: [Fact (对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))] (n : 自然数+)
   证明: by
   change ((PNat.isUnit_natCast (R := R) n).unit : R) = ↑n
   simp only [IsUnit.unit_spec]
@@ -422,7 +422,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def algebraRat (h : 对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))
+  签名: def algebraRat (h : 对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))
   定义体: haveI : Fact (forall I : Ideal R, I != ⊤ -> CharZero (R ⧸ I)) := ⟨h⟩
   RingHom.toAlgebra
   { toFun := fun x => x.num /ₚ ↑x.pnatDen
@@ -479,7 +479,7 @@ lemma of_not_mixedCharZero
 
 中文:
 引理 of_not_mixedCharZero
-  条件: [CharZero R] (h : 对任意 p > 0, ¬MixedCharZero R p)
+  条件: [特征零 R] (h : 对任意 p > 0, ¬混合特征零 R p)
   证明: by
   intro I hI_ne_top
   suffices CharP (R ⧸ I) 0 from CharP.charP_to_charZero _
@@ -518,7 +518,7 @@ lemma to_not_mixedCharZero
 
 中文:
 引理 to_not_mixedCharZero
-  条件: (h : 对任意 I : Ideal R, I != ⊤ -> CharZero (R ⧸ I))
+  条件: (h : 对任意 I : 理想 R, I != ⊤ -> 特征零 (R ⧸ I))
   证明: by
   intro p p_pos
   by_contra hp_mixedChar
@@ -544,7 +544,7 @@ theorem iff_not_mixedCharZero
 
 中文:
 定理 iff_not_mixedCharZero
-  条件: [CharZero R]
+  条件: [特征零 R]
   证明: ⟨to_not_mixedCharZero R, of_not_mixedCharZero R⟩
 
 Depends on / 依赖: of_not_mixedCharZero, to_not_mixedCharZero
@@ -605,7 +605,7 @@ lemma isEmpty_algebraRat_iff_mixedCharZero
 
 中文:
 引理 isEmpty_algebraRat_iff_mixedCharZero
-  条件: [CharZero R]
+  条件: [特征零 R]
   证明: by
   contrapose!
   rw [← EqualCharZero.iff_not_mixedCharZero]
@@ -650,7 +650,7 @@ theorem split_equalCharZero_mixedCharZero
 
 中文:
 定理 split_equalCharZero_mixedCharZero
-  结论: [CharZero R] (h_equal : Algebra Rat R -> P)
+  结论: [特征零 R] (h_equal : 代数 有理数 R -> P)
   证明: by
   by_cases h : exists p > 0, MixedCharZero R p
   · rcases h with ⟨p, ⟨H, hp⟩⟩
@@ -689,7 +689,7 @@ theorem split_by_characteristic
 
 中文:
 定理 split_by_characteristic
-  结论: (h_pos : 对任意 p : 自然数, p != 0 -> CharP R p -> P)
+  结论: (h_pos : 对任意 p : 自然数, p != 0 -> 特征p R p -> P)
   证明: by
   cases CharP.exists R with
   | intro p p_charP =>
@@ -726,7 +726,7 @@ theorem split_by_characteristic_domain
 
 中文:
 定理 split_by_characteristic_domain
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   refine split_by_characteristic R ?_ h_equal h_mixed
   intro p p_pos p_char
@@ -757,7 +757,7 @@ theorem split_by_characteristic_localRing
 
 中文:
 定理 split_by_characteristic_localRing
-  结论: [IsLocalRing R]
+  结论: [是局部环 R]
   证明: by
   refine split_by_characteristic R ?_ h_equal h_mixed
   intro p p_pos p_char

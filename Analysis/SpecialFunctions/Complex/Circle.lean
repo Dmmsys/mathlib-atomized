@@ -40,7 +40,7 @@ Subtype.ext ext_norm_arg (z.norm_coe.trans w.norm_coe.symm) h
 
 中文:
 定理 injective_arg
-  结论: Injective fun z : Circle => arg z
+  结论: 单射 fun z : Circle => arg z
   证明: fun z w h =>
 Subtype.ext ext_norm_arg (z.norm_coe.trans w.norm_coe.symm) h
 
@@ -164,7 +164,7 @@ definition argPartialEquiv
 
 中文:
 定义 argPartialEquiv
-  签名: : PartialEquiv Circle 实数 where
+  签名: : 部分等价 Circle 实数 where
   定义体: arg ∘ (↑)
   invFun := exp
   source := univ
@@ -199,7 +199,7 @@ right_inv x := Subtype.ext argPartialEquiv.right_inv x.2
 
 中文:
 定义 argEquiv
-  签名: : Circle ≃ Ioc (-π) π where
+  签名: : Circle ≃ 左开右闭区间 (-π) π where
   定义体: ⟨arg z, neg_pi_lt_arg _, arg_le_pi _⟩
   invFun := exp ∘ (↑)
   left_inv _ := argPartialEquiv.left_inv trivial
@@ -223,7 +223,7 @@ lemma leftInverse_exp_arg
 
 中文:
 引理 leftInverse_exp_arg
-  结论: LeftInverse exp (arg ∘ (↑))
+  结论: 左逆 exp (arg ∘ (↑))
   证明: exp_arg
 
 Depends on / 依赖: exp_arg
@@ -239,7 +239,7 @@ lemma invOn_arg_exp
 
 中文:
 引理 invOn_arg_exp
-  结论: InvOn (arg ∘ (↑)) exp (Ioc (-π) π) univ
+  结论: InvOn (arg ∘ (↑)) exp (左开右闭区间 (-π) π) univ
   证明: argPartialEquiv.symm.invOn
 
 Depends on / 依赖: argPartialEquiv, argPartialEquiv.symm.invOn
@@ -255,7 +255,7 @@ lemma surjOn_exp_neg_pi_pi
 
 中文:
 引理 surjOn_exp_neg_pi_pi
-  结论: SurjOn exp (Ioc (-π) π) univ
+  结论: 满射限制 exp (左开右闭区间 (-π) π) univ
   证明: argPartialEquiv.symm.surjOn
 
 Depends on / 依赖: argPartialEquiv, argPartialEquiv.symm.surjOn, surjOn
@@ -304,7 +304,7 @@ lemma periodic_exp
 
 中文:
 引理 periodic_exp
-  结论: Periodic exp (2 * π)
+  结论: 周期 exp (2 * π)
   证明: fun z => exp_eq_exp.2 ⟨1, by rw [Int.cast_one, one_mul]⟩
 
 Depends on / 依赖: Int.cast_one, cast_one, exp_eq_exp, one_mul
@@ -465,8 +465,8 @@ lemma exp_injOn_of_forall_sub_mem_Ioo
   rw [exp_eq_exp_iff_exp_sub_eq_one]; rw [← sub_mul]; rw [← of
 
 中文:
-引理 exp_injOn_of_forall_sub_mem_Ioo
-  结论: {s : Set 实数}
+引理 exp_injOn_of_对任意_sub_mem_Ioo
+  结论: {s : 集合 实数}
   证明: by
   intro t₁ ht₁ t₂ ht₂ heq
   obtain ⟨h1, h2⟩ := hs t₁ ht₁ t₂ ht₂
@@ -499,7 +499,7 @@ lemma exp_injOn_Icc
 中文:
 引理 exp_injOn_Icc
   条件: {a b : 实数} (h : b - a < 2 * π)
-  结论: InjOn exp (Icc a b)
+  结论: 单射限制 exp (闭区间 a b)
   证明: exp_injOn_of_forall_sub_mem_Ioo fun x ⟨hx1, hx2⟩ y ⟨hy1, hy2⟩ => by constructor <;> linarith
 
 Depends on / 依赖: exp_injOn_of_forall_sub_mem_Ioo
@@ -519,7 +519,7 @@ lemma exp_injOn_Ico
 中文:
 引理 exp_injOn_Ico
   条件: {a b : 实数} (h : b - a <= 2 * π)
-  结论: InjOn exp (Ico a b)
+  结论: 单射限制 exp (左闭右开区间 a b)
   证明: exp_injOn_of_forall_sub_mem_Ioo fun x ⟨hx1, hx2⟩ y ⟨hy1, hy2⟩ => by constructor <;> linarith
 
 Depends on / 依赖: exp_injOn_of_forall_sub_mem_Ioo
@@ -539,7 +539,7 @@ lemma exp_injOn_Ioc
 中文:
 引理 exp_injOn_Ioc
   条件: {a b : 实数} (h : b - a <= 2 * π)
-  结论: InjOn exp (Ioc a b)
+  结论: 单射限制 exp (左开右闭区间 a b)
   证明: exp_injOn_of_forall_sub_mem_Ioo fun x ⟨hx1, hx2⟩ y ⟨hy1, hy2⟩ => by constructor <;> linarith
 
 Depends on / 依赖: exp_injOn_of_forall_sub_mem_Ioo
@@ -756,7 +756,7 @@ lemma exp_surjective
 
 中文:
 引理 exp_surjective
-  结论: Surjective exp
+  结论: 满射 exp
   证明: fun z => ⟨z.val.arg, exp_arg z⟩
 
 Depends on / 依赖: exp_arg, z.val.arg
@@ -773,7 +773,7 @@ instance :
 
 中文:
 实例 :
-  签名: PathConnectedSpace Circle
+  签名: 道路连通空间 Circle
   定义体: exp_surjective.pathConnectedSpace exp.continuous
 
 Depends on / 依赖: continuous, exp.continuous, exp_surjective, exp_surjective.pathConnectedSpace, pathConnectedSpace
@@ -1086,7 +1086,7 @@ lemma path_self
 中文:
 引理 path_self
   条件: (x : Circle)
-  结论: path x x = Path.refl x
+  结论: path x x = 道路.refl x
   证明: by
   ext a
   simp [path, angleDiff]
@@ -1114,7 +1114,7 @@ lemma path_injective_of_ne
 中文:
 引理 path_injective_of_ne
   条件: (hne : x != y)
-  结论: Injective (path x y)
+  结论: 单射 (path x y)
   证明: by
   rw [coe_path]
   refine (exp_injOn_Icc (a := x.val.arg) (b := angleDiff x y + x.val.arg)
@@ -1233,7 +1233,7 @@ lemma path_image_Ioc_union
 中文:
 引理 path_image_Ioc_union
   条件: (h : x != y)
-  结论: path x y '' Ioc 0 1 union path y x '' Ioc 0 1 = univ
+  结论: path x y '' 左开右闭区间 0 1 union path y x '' 左开右闭区间 0 1 = univ
   证明: by
   rw [path_image_Ioc_of_ne h]; rw [path_image_Ioc_of_ne h.symm]; rw [← image_union]; rw [Ioc_union_Ioc_angleDiff_add_arg h]; rw [periodic_exp.image_Ioc two_pi_pos]
   exact exp_surjective.range_eq
@@ -1294,7 +1294,7 @@ lemma compl_path_image_Ioc
 中文:
 引理 compl_path_image_Ioc
   条件: (h : x != y)
-  结论: (path x y '' Ioc 0 1)ᶜ = path y x '' Ioc 0 1
+  结论: (path x y '' 左开右闭区间 0 1)ᶜ = path y x '' 左开右闭区间 0 1
   证明: (compl_subset_iff_union.mpr <| path_image_Ioc_union h).antisymm
  (disjoint_path_image_Ioc h.symm).subset_compl_right
 
@@ -1317,7 +1317,7 @@ lemma compl_range_path
 中文:
 引理 compl_range_path
   条件: (h : x != y)
-  结论: (range (path x y))ᶜ = path y x '' Ioo 0 1
+  结论: (range (path x y))ᶜ = path y x '' 开区间 0 1
   证明: by
   rw [range_path]; rw [← Ioc_insert_left (by simp)]; rw [image_insert_eq]; rw [← path_image_Ioc_of_ne h]; rw [← union_singleton]; rw [compl_union]; rw [compl_path_image_Ioc h]; rw [← Ioo_insert_right (by simp)]; rw [image_insert_eq]; rw [(y.path x).target]; rw [exp_arg]; rw [insert_inter_of_notMe
 
@@ -1418,7 +1418,7 @@ lemma isPathConnected_compl_singleton
 中文:
 引理 isPathConnected_compl_singleton
   条件: (x : Circle)
-  结论: IsPathConnected {x}ᶜ
+  结论: 是道路连通 {x}ᶜ
   证明: by
   refine ⟨-x, neg_ne_self x, fun y (hyx : y != x) => ?_⟩
   obtain hxP | hxP := (em (x in range (path (-x) y))).symm
@@ -1462,7 +1462,7 @@ lemma not_isPreconnected_compl_pair
 中文:
 引理 not_isPreconnected_compl_pair
   条件: (hxy : x != y)
-  结论: ¬ IsPreconnected {x, y}ᶜ
+  结论: ¬ 是预连通 {x, y}ᶜ
   证明: by
   simp only [isPreconnected_iff_subset_of_disjoint_closed, not_forall, not_or, exists_and_left]
   refine ⟨range (path x y), ?_, range (path y x), (isCompact_range (path x y).continuous).isClosed,
@@ -1537,7 +1537,7 @@ lemma coe_toCircle
 中文:
 引理 coe_toCircle
   条件: (θ : Angle)
-  结论: (θ.toCircle : Complex) = θ.cos + θ.sin * I
+  结论: (θ.toCircle : 复形) = θ.cos + θ.sin * I
   证明: by
   induction θ using Angle.induction_on
   simp [exp_mul_I]
@@ -1659,7 +1659,7 @@ theorem scaled_exp_map_periodic
 
 中文:
 定理 scaled_exp_map_periodic
-  结论: Function.Periodic (fun x => Circle.exp (2 * π / T * x)) T
+  结论: 函数.周期 (fun x => Circle.exp (2 * π / T * x)) T
   证明: by
   -- The case T = 0 is not interesting, but it is true, so we prove it to save hypotheses
   rcases eq_or_ne T 0 with (rfl | hT)
@@ -1839,7 +1839,7 @@ theorem continuous_toCircle
 
 中文:
 定理 continuous_toCircle
-  结论: Continuous (@toCircle T)
+  结论: 连续 (@toCircle T)
   证明: continuous_coinduced_dom.mpr (Circle.exp.continuous.comp <| by fun_prop)
 
 Depends on / 依赖: Circle, Circle.exp.continuous.comp, continuous, continuous_coinduced_dom, continuous_coinduced_dom.mpr, fun_prop
@@ -1867,7 +1867,7 @@ theorem injective_toCircle
 中文:
 定理 injective_toCircle
   条件: (hT : T != 0)
-  结论: Function.Injective (@toCircle T)
+  结论: 函数.单射 (@toCircle T)
   证明: by
   intro a b h
   induction a using QuotientAddGroup.induction_on
@@ -2109,7 +2109,7 @@ theorem Circle.isOpen_centeredArc
 中文:
 定理 Circle.isOpen_centeredArc
   条件: (r : 实数)
-  结论: IsOpen (centeredArc r)
+  结论: 是开集 (centeredArc r)
   证明: by
   have hset : {x : Real | |x| < r} = Ioo (-r) r := by
     ext x
@@ -2142,7 +2142,7 @@ theorem Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two
           (div_le_self pi_nonneg one_le_t
 
 中文:
-定理 Circle.eq_one_of_forall_pow_mem_centeredArc_pi_div_two
+定理 Circle.eq_one_of_对任意_pow_mem_centeredArc_pi_div_two
   结论: {z : Circle}
   证明: by
   have hz1 : z in centeredArc (π / 2) := by simpa using hz 1

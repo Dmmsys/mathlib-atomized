@@ -41,7 +41,7 @@ shape := fun i j w => C.shape _ _ by simpa }
 
 中文:
 定义 truncate
-  签名: [HasZeroMorphisms V]
+  签名: [有ZeroMorphisms V]
   定义体: { X := fun i => C.X (i + 1)
       d := fun i j => C.d (i + 1) (j + 1)
 shape := fun i j w => C.shape _ _ by simpa }
@@ -67,7 +67,7 @@ definition truncateTo
 
 中文:
 定义 truncateTo
-  签名: [HasZeroObject V] [HasZeroMorphisms V] (C : ChainComplex V 自然数)
+  签名: [有ZeroObject V] [有ZeroMorphisms V] (C : 链复形 V 自然数)
   定义体: (toSingle₀Equiv (truncate.obj C) (C.X 0)).symm ⟨C.d 1 0, by simp⟩
 
 Depends on / 依赖: truncate, truncate.obj
@@ -89,7 +89,7 @@ definition augment
 
 中文:
 定义 augment
-  签名: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  签名: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
 -/
 def augment (C : ChainComplex V Nat) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0) :
     ChainComplex V Nat where
@@ -121,7 +121,7 @@ theorem augment_X_zero
 
 中文:
 定理 augment_X_zero
-  条件: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  条件: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: rfl
 
 @[simp]
@@ -143,7 +143,7 @@ theorem augment_X_succ
 
 中文:
 定理 augment_X_succ
-  结论: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  结论: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: rfl
 
 @[simp]
@@ -165,7 +165,7 @@ theorem augment_d_one_zero
 
 中文:
 定理 augment_d_one_zero
-  条件: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  条件: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: rfl
 
 @[simp]
@@ -186,7 +186,7 @@ theorem augment_d_succ_succ
 
 中文:
 定理 augment_d_succ_succ
-  结论: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  结论: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: by
   cases i <;> rfl
 -/
@@ -215,7 +215,7 @@ definition truncateAugment
 
 中文:
 定义 truncateAugment
-  签名: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  签名: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   定义体: { f := fun _ => 𝟙 _ }
   inv :=
     { f := fun _ => 𝟙 _
@@ -253,7 +253,7 @@ theorem truncateAugment_hom_f
 
 中文:
 定理 truncateAugment_hom_f
-  结论: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  结论: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: rfl
 
 @[simp]
@@ -275,7 +275,7 @@ theorem truncateAugment_inv_f
 
 中文:
 定理 truncateAugment_inv_f
-  结论: (C : ChainComplex V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
+  结论: (C : 链复形 V 自然数) {X : V} (f : C.X 0 ⟶ X) (w : C.d 1 0 ≫ f = 0)
   证明: rfl
 
 @[simp]
@@ -298,7 +298,7 @@ theorem chainComplex_d_succ_succ_zero
 
 中文:
 定理 chainComplex_d_succ_succ_zero
-  条件: (C : ChainComplex V 自然数) (i : 自然数)
+  条件: (C : 链复形 V 自然数) (i : 自然数)
   结论: C.d (i + 2) 0 = 0
   证明: by
   rw [C.shape]
@@ -332,7 +332,7 @@ definition augmentTruncate
 
 中文:
 定义 augmentTruncate
-  签名: (C : ChainComplex V 自然数)
+  签名: (C : 链复形 V 自然数)
   定义体: { f := fun | 0 => 𝟙 _ | _ + 1 => 𝟙 _
       comm' := fun i j => by
         match i with
@@ -383,7 +383,7 @@ theorem augmentTruncate_hom_f_zero
 
 中文:
 定理 augmentTruncate_hom_f_zero
-  条件: (C : ChainComplex V 自然数)
+  条件: (C : 链复形 V 自然数)
   证明: rfl
 
 @[simp]
@@ -405,7 +405,7 @@ theorem augmentTruncate_hom_f_succ
 
 中文:
 定理 augmentTruncate_hom_f_succ
-  条件: (C : ChainComplex V 自然数) (i : 自然数)
+  条件: (C : 链复形 V 自然数) (i : 自然数)
   证明: rfl
 
 @[simp]
@@ -427,7 +427,7 @@ theorem augmentTruncate_inv_f_zero
 
 中文:
 定理 augmentTruncate_inv_f_zero
-  条件: (C : ChainComplex V 自然数)
+  条件: (C : 链复形 V 自然数)
   证明: rfl
 
 @[simp]
@@ -447,7 +447,7 @@ theorem augmentTruncate_inv_f_succ
 
 中文:
 定理 augmentTruncate_inv_f_succ
-  条件: (C : ChainComplex V 自然数) (i : 自然数)
+  条件: (C : 链复形 V 自然数) (i : 自然数)
   证明: rfl
 -/
 theorem augmentTruncate_inv_f_succ (C : ChainComplex V Nat) (i : Nat) :
@@ -465,7 +465,7 @@ definition toSingle₀AsComplex
 
 中文:
 定义 toSingle₀AsComplex
-  签名: [HasZeroObject V] (C : ChainComplex V 自然数) (X : V)
+  签名: [有ZeroObject V] (C : 链复形 V 自然数) (X : V)
   定义体: let ⟨f, w⟩ := toSingle₀Equiv C X f
   augment C f w
 
@@ -499,7 +499,7 @@ definition truncate
 
 中文:
 定义 truncate
-  签名: [HasZeroMorphisms V]
+  签名: [有ZeroMorphisms V]
   定义体: { X := fun i => C.X (i + 1)
       d := fun i j => C.d (i + 1) (j + 1)
       shape := fun i j w => by
@@ -529,7 +529,7 @@ definition toTruncate
 
 中文:
 定义 toTruncate
-  签名: [HasZeroObject V] [HasZeroMorphisms V] (C : CochainComplex V 自然数)
+  签名: [有ZeroObject V] [有ZeroMorphisms V] (C : 上链复形 V 自然数)
   定义体: (fromSingle₀Equiv (truncate.obj C) (C.X 0)).symm ⟨C.d 0 1, by simp⟩
 
 Depends on / 依赖: truncate, truncate.obj
@@ -559,7 +559,7 @@ definition augment
 
 中文:
 定义 augment
-  签名: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  签名: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   定义体: by
     rcases j with (_ | _ | j) <;> cases i <;> simp_all
   d_comp_d' i j k hij hjk := by
@@ -604,7 +604,7 @@ theorem augment_X_zero
 
 中文:
 定理 augment_X_zero
-  条件: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  条件: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   证明: rfl
 
 @[simp]
@@ -626,7 +626,7 @@ theorem augment_X_succ
 
 中文:
 定理 augment_X_succ
-  结论: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  结论: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   证明: rfl
 
 @[simp]
@@ -648,7 +648,7 @@ theorem augment_d_zero_one
 
 中文:
 定理 augment_d_zero_one
-  条件: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  条件: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   证明: rfl
 
 @[simp]
@@ -668,7 +668,7 @@ theorem augment_d_succ_succ
 
 中文:
 定理 augment_d_succ_succ
-  结论: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  结论: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   证明: rfl
 -/
 theorem augment_d_succ_succ (C : CochainComplex V Nat) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
@@ -698,7 +698,7 @@ definition truncateAugment
 
 中文:
 定义 truncateAugment
-  签名: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
+  签名: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0) (w : f ≫ C.d 0 1 = 0)
   定义体: { f := fun _ => 𝟙 _ }
   inv :=
     { f := fun _ => 𝟙 _
@@ -740,7 +740,7 @@ theorem truncateAugment_hom_f
 
 中文:
 定理 truncateAugment_hom_f
-  结论: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0)
+  结论: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0)
   证明: rfl
 
 @[simp]
@@ -762,7 +762,7 @@ theorem truncateAugment_inv_f
 
 中文:
 定理 truncateAugment_inv_f
-  结论: (C : CochainComplex V 自然数) {X : V} (f : X ⟶ C.X 0)
+  结论: (C : 上链复形 V 自然数) {X : V} (f : X ⟶ C.X 0)
   证明: rfl
 
 @[simp]
@@ -787,7 +787,7 @@ theorem cochainComplex_d_succ_succ_zero
 
 中文:
 定理 cochainComplex_d_succ_succ_zero
-  条件: (C : CochainComplex V 自然数) (i : 自然数)
+  条件: (C : 上链复形 V 自然数) (i : 自然数)
   结论: C.d 0 (i + 2) = 0
   证明: by
   rw [C.shape]
@@ -821,7 +821,7 @@ definition augmentTruncate
 
 中文:
 定义 augmentTruncate
-  签名: (C : CochainComplex V 自然数)
+  签名: (C : 上链复形 V 自然数)
   定义体: { f := fun | 0 => 𝟙 _ | _ + 1 => 𝟙 _
       comm' := fun i j => by
         rcases j with (_ | _ | j) <;> cases i <;> aesop }
@@ -856,7 +856,7 @@ theorem augmentTruncate_hom_f_zero
 
 中文:
 定理 augmentTruncate_hom_f_zero
-  条件: (C : CochainComplex V 自然数)
+  条件: (C : 上链复形 V 自然数)
   证明: rfl
 
 @[simp]
@@ -878,7 +878,7 @@ theorem augmentTruncate_hom_f_succ
 
 中文:
 定理 augmentTruncate_hom_f_succ
-  条件: (C : CochainComplex V 自然数) (i : 自然数)
+  条件: (C : 上链复形 V 自然数) (i : 自然数)
   证明: rfl
 
 @[simp]
@@ -900,7 +900,7 @@ theorem augmentTruncate_inv_f_zero
 
 中文:
 定理 augmentTruncate_inv_f_zero
-  条件: (C : CochainComplex V 自然数)
+  条件: (C : 上链复形 V 自然数)
   证明: rfl
 
 @[simp]
@@ -920,7 +920,7 @@ theorem augmentTruncate_inv_f_succ
 
 中文:
 定理 augmentTruncate_inv_f_succ
-  条件: (C : CochainComplex V 自然数) (i : 自然数)
+  条件: (C : 上链复形 V 自然数) (i : 自然数)
   证明: rfl
 -/
 theorem augmentTruncate_inv_f_succ (C : CochainComplex V Nat) (i : Nat) :
@@ -938,7 +938,7 @@ definition fromSingle₀AsComplex
 
 中文:
 定义 fromSingle₀AsComplex
-  签名: [HasZeroObject V] (C : CochainComplex V 自然数) (X : V)
+  签名: [有ZeroObject V] (C : 上链复形 V 自然数) (X : V)
   定义体: let ⟨f, w⟩ := fromSingle₀Equiv C X f
   augment C f w
 

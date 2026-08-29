@@ -36,7 +36,7 @@ theorem xor_assoc
 
 中文:
 定理 xor_assoc
-  条件: (h : k = 2 ^ n) (a b c : Fin k)
+  条件: (h : k = 2 ^ n) (a b c : 有限集 k)
   结论: (a ^^^ b) ^^^ c = a ^^^ (b ^^^ c)
   证明: by
   grind [Fin.xor_val, Nat.xor_mod_two_pow, Nat.mod_mod]
@@ -56,7 +56,7 @@ theorem xor_comm
 
 中文:
 定理 xor_comm
-  条件: (a b : Fin k)
+  条件: (a b : 有限集 k)
   结论: a ^^^ b = b ^^^ a
   证明: by grind [Fin.xor_val]
 
@@ -75,7 +75,7 @@ theorem xor_self
 
 中文:
 定理 xor_self
-  条件: [NeZero k] (a : Fin k)
+  条件: [NeZero k] (a : 有限集 k)
   结论: a ^^^ a = 0
   证明: by
   grind [Fin.xor_val, Nat.zero_mod]
@@ -94,7 +94,7 @@ theorem xor_zero
 
 中文:
 定理 xor_zero
-  条件: [NeZero k] (a : Fin k)
+  条件: [NeZero k] (a : 有限集 k)
   结论: a ^^^ 0 = a
   证明: by
   grind [Fin.xor_val, Fin.val_zero, Nat.mod_eq_of_lt]

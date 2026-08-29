@@ -51,9 +51,9 @@ structure SupBotHom
   (no additional axioms)
 
 中文:
-结构 SupBotHom
-  参数: (α β : 类型) [Max α] [Max β] [Bot α] [Bot β]
-  继承: SupHom α β, BotHom α β
+结构 SupBot态射
+  参数: (α β : 类型) [最大值 α] [最大值 β] [底元素 α] [底元素 β]
+  继承: 并态射 α β, 底元素态射 α β
   (无附加公理)
 -/
 structure SupBotHom (α β : Type*) [Max α] [Max β] [Bot α] [Bot β]
@@ -71,9 +71,9 @@ structure InfTopHom
   (no additional axioms)
 
 中文:
-结构 InfTopHom
-  参数: (α β : 类型) [Min α] [Min β] [Top α] [Top β]
-  继承: InfHom α β, TopHom α β
+结构 InfTop态射
+  参数: (α β : 类型) [最小值 α] [最小值 β] [顶元素 α] [顶元素 β]
+  继承: 交态射 α β, 顶元素态射 α β
   (无附加公理)
 -/
 structure InfTopHom (α β : Type*) [Min α] [Min β] [Top α] [Top β]
@@ -91,9 +91,9 @@ structure BoundedLatticeHom
   (no additional axioms)
 
 中文:
-结构 BoundedLatticeHom
-  参数: (α β : 类型) [Lattice α] [Lattice β] [BoundedOrder α]
-  继承: LatticeHom α β, InfTopHom α β, SupBotHom α β
+结构 有界格态射
+  参数: (α β : 类型) [格 α] [格 β] [有界序 α]
+  继承: 格态射 α β, InfTop态射 α β, SupBot态射 α β
   (无附加公理)
 
 Depends on / 依赖: BoundedLatticeHom, BoundedLatticeHom.mk, map_bot, map_top
@@ -119,9 +119,9 @@ class SupBotHomClass
     - map_bot((f : F)) : f ⊥ = ⊥
 
 中文:
-类 SupBotHomClass
-  参数: (F α β : 类型) [Max α] [Max β] [Bot α] [Bot β] [FunLike F α β]
-  继承: SupHomClass F α β
+类 SupBot态射类
+  参数: (F α β : 类型) [最大值 α] [最大值 β] [底元素 α] [底元素 β] [函数状 F α β]
+  继承: 并态射类 F α β
   公理与运算 (1 个):
     - map_bot((f : F)) : f ⊥ = ⊥
 -/
@@ -145,9 +145,9 @@ class InfTopHomClass
     - map_top((f : F)) : f ⊤ = ⊤
 
 中文:
-类 InfTopHomClass
-  参数: (F α β : 类型) [Min α] [Min β] [Top α] [Top β] [FunLike F α β]
-  继承: InfHomClass F α β
+类 InfTop态射类
+  参数: (F α β : 类型) [最小值 α] [最小值 β] [顶元素 α] [顶元素 β] [函数状 F α β]
+  继承: 交态射类 F α β
   公理与运算 (1 个):
     - map_top((f : F)) : f ⊤ = ⊤
 -/
@@ -168,9 +168,9 @@ class BoundedLatticeHomClass
     - map_bot((f : F)) : f ⊥ = ⊥
 
 中文:
-类 BoundedLatticeHomClass
-  参数: (F α β : 类型) [Lattice α] [Lattice β] [BoundedOrder α]
-  继承: LatticeHomClass F α β
+类 有界格态射类
+  参数: (F α β : 类型) [格 α] [格 β] [有界序 α]
+  继承: 格态射类 F α β
   公理与运算 (2 个):
     - map_top((f : F)) : f ⊤ = ⊤
     - map_bot((f : F)) : f ⊥ = ⊥
@@ -249,7 +249,7 @@ theorem Disjoint.map
 
 中文:
 定理 Disjoint.map
-  结论: [OrderBot α] [OrderBot β] [BotHomClass F α β] [InfHomClass F α β] {a b : α}
+  结论: [有底序 α] [有底序 β] [底元素态射类 F α β] [交态射类 F α β] {a b : α}
   证明: by
   rw [disjoint_iff]; rw [← map_inf]; rw [h.eq_bot]; rw [map_bot]
 
@@ -268,8 +268,8 @@ theorem IsCompl.map
   proof: ⟨h.1.map _, h.2.map _⟩
 
 中文:
-定理 IsCompl.map
-  结论: [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] {a b : α}
+定理 是补集.map
+  结论: [有界序 α] [有界序 β] [有界格态射类 F α β] {a b : α}
   证明: ⟨h.1.map _, h.2.map _⟩
 -/
 theorem IsCompl.map [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] {a b : α}
@@ -362,8 +362,8 @@ instance [Max
   body: ⟨fun f => ⟨f, map_bot f⟩⟩
 
 中文:
-实例 [Max
-  签名: α] [Max β] [Bot α] [Bot β] [SupBotHomClass F α β] : CoeTC F (SupBotHom α β)
+实例 [最大值
+  签名: α] [最大值 β] [底元素 α] [底元素 β] [SupBot态射类 F α β] : CoeTC F (SupBot态射 α β)
   定义体: ⟨fun f => ⟨f, map_bot f⟩⟩
 
 Depends on / 依赖: map_bot
@@ -384,8 +384,8 @@ instance [Lattice
       map_bot' := map_bot f }⟩
 
 中文:
-实例 [Lattice
-  签名: α] [Lattice β] [BoundedOrder α] [BoundedOrder β] [BoundedLatticeHomClass F α β] :
+实例 [格
+  签名: α] [格 β] [有界序 α] [有界序 β] [有界格态射类 F α β] :
   定义体: ⟨fun f =>
     { (f : LatticeHom α β) with
       toFun := f
@@ -429,7 +429,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (SupBotHom α β) α β
+  签名: 函数状 (SupBot态射 α β) α β
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -461,7 +461,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupBotHomClass (SupBotHom α β) α β
+  签名: SupBot态射类 (SupBot态射 α β) α β
   定义体: f.map_sup'
   map_bot f := f.map_bot'
 
@@ -485,7 +485,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (f : SupBotHom α β)
+  条件: (f : SupBot态射 α β)
   结论: f.toFun = f
   证明: rfl
 -/
@@ -502,7 +502,7 @@ lemma coe_toSupHom
 
 中文:
 引理 coe_toSupHom
-  条件: (f : SupBotHom α β)
+  条件: (f : SupBot态射 α β)
   结论: ⇑f.toSupHom = f
   证明: rfl
 -/
@@ -518,7 +518,7 @@ lemma coe_toBotHom
 
 中文:
 引理 coe_toBotHom
-  条件: (f : SupBotHom α β)
+  条件: (f : SupBot态射 α β)
   结论: ⇑f.toBotHom = f
   证明: rfl
 -/
@@ -536,7 +536,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (f : SupHom α β) (hf)
+  条件: (f : 并态射 α β) (hf)
   结论: ⇑(mk f hf) = f
   证明: rfl
 
@@ -556,7 +556,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : SupBotHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : SupBot态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -582,7 +582,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
   定义体: { f.toBotHom.copy f' h with toSupHom := f.toSupHom.copy f' h }
 
 @[to_dual (attr := simp)]
@@ -604,7 +604,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 
@@ -625,7 +625,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : SupBotHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : SupBot态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -650,7 +650,7 @@ definition id
 
 中文:
 定义 id
-  签名: : SupBotHom α α
+  签名: : SupBot态射 α α
   定义体: ⟨SupHom.id α, rfl⟩
 
 @[to_dual]
@@ -671,7 +671,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SupBotHom α α)
+  签名: 可居 (SupBot态射 α α)
   定义体: ⟨SupBotHom.id α⟩
 
 @[to_dual (attr := simp, norm_cast)]
@@ -692,7 +692,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(SupBotHom.id α) = id
+  结论: ⇑(SupBot态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(SupBotHom.id α) = id :=
@@ -713,7 +713,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: SupBotHom.id α a = a
+  结论: SupBot态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : SupBotHom.id α a = a :=
@@ -733,7 +733,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : SupBotHom β γ) (g : SupBotHom α β)
+  签名: (f : SupBot态射 β γ) (g : SupBot态射 α β)
   定义体: { f.toSupHom.comp g.toSupHom, f.toBotHom.comp g.toBotHom with }
 
 @[to_dual (attr := simp)]
@@ -757,7 +757,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : SupBotHom β γ) (g : SupBotHom α β)
+  条件: (f : SupBot态射 β γ) (g : SupBot态射 α β)
   结论: (f.comp g : α -> γ) = f ∘ g
   证明: rfl
 
@@ -780,7 +780,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : SupBotHom β γ) (g : SupBotHom α β) (a : α)
+  条件: (f : SupBot态射 β γ) (g : SupBot态射 α β) (a : α)
   结论: (f.comp g) a = f (g a)
   证明: rfl
 
@@ -800,7 +800,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (f : SupBotHom γ δ) (g : SupBotHom β γ) (h : SupBotHom α β)
+  条件: (f : SupBot态射 γ δ) (g : SupBot态射 β γ) (h : SupBot态射 α β)
   证明: rfl
 -/
 theorem comp_assoc (f : SupBotHom γ δ) (g : SupBotHom β γ) (h : SupBotHom α β) :
@@ -818,8 +818,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : SupBotHom α β)
-  结论: f.comp (SupBotHom.id α) = f
+  条件: (f : SupBot态射 α β)
+  结论: f.comp (SupBot态射.id α) = f
   证明: rfl
 -/
 @[to_dual (attr := simp)] theorem comp_id (f : SupBotHom α β) : f.comp (SupBotHom.id α) = f := rfl
@@ -837,8 +837,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : SupBotHom α β)
-  结论: (SupBotHom.id β).comp f = f
+  条件: (f : SupBot态射 α β)
+  结论: (SupBot态射.id β).comp f = f
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -858,7 +858,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : SupBotHom β γ} {f : SupBotHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : SupBot态射 β γ} {f : SupBot态射 α β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, fun h => congr_arg₂ _ h rfl⟩
 
 @[to_dual (attr := simp)]
@@ -880,7 +880,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : SupBotHom β γ} {f₁ f₂ : SupBotHom α β} (hg : Injective g)
+  条件: {g : SupBot态射 β γ} {f₁ f₂ : SupBot态射 α β} (hg : 单射 g)
   证明: ⟨fun h => SupBotHom.ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: SupBotHom, SupBotHom.ext, comp_apply, congr_arg
@@ -906,7 +906,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (SupBotHom α β)
+  签名: 最大值 (SupBot态射 α β)
   定义体: ⟨fun f g => { f.toBotHom ⊔ g.toBotHom with toSupHom := f.toSupHom ⊔ g.toSupHom }⟩
 
 @[to_dual]
@@ -929,7 +929,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SupBotHom α β)
+  签名: 偏序 (SupBot态射 α β)
   定义体: PartialOrder.lift _ DFunLike.coe_injective
 
 @[to_dual]
@@ -952,7 +952,7 @@ instance :
 
 中文:
 实例 :
-  签名: SemilatticeSup (SupBotHom α β)
+  签名: SemilatticeSup (SupBot态射 α β)
   定义体: DFunLike.coe_injective.semilatticeSup _ .rfl .rfl fun _ _ => rfl
 
 @[to_dual]
@@ -976,7 +976,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (SupBotHom α β)
+  签名: 有底序 (SupBot态射 α β)
   定义体: ⟨⊥, rfl⟩
   bot_le _ _ := bot_le
 
@@ -1000,7 +1000,7 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (f g : SupBotHom α β)
+  条件: (f g : SupBot态射 α β)
   结论: ⇑(f ⊔ g) = ⇑f ⊔ ⇑g
   证明: rfl
 
@@ -1022,7 +1022,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ⇑(⊥ : SupBotHom α β) = ⊥
+  结论: ⇑(⊥ : SupBot态射 α β) = ⊥
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1044,7 +1044,7 @@ theorem sup_apply
 
 中文:
 定理 sup_apply
-  条件: (f g : SupBotHom α β) (a : α)
+  条件: (f g : SupBot态射 α β) (a : α)
   结论: (f ⊔ g) a = f a ⊔ g a
   证明: rfl
 
@@ -1066,7 +1066,7 @@ theorem bot_apply
 中文:
 定理 bot_apply
   条件: (a : α)
-  结论: (⊥ : SupBotHom α β) a = ⊥
+  结论: (⊥ : SupBot态射 α β) a = ⊥
   证明: rfl
 -/
 theorem bot_apply (a : α) : (⊥ : SupBotHom α β) a = ⊥ :=
@@ -1171,7 +1171,7 @@ definition toBoundedOrderHom
 
 中文:
 定义 toBoundedOrderHom
-  签名: (f : BoundedLatticeHom α β)
+  签名: (f : 有界格态射 α β)
   定义体: { f, (f.toLatticeHom : α ->o β) with }
 
 Depends on / 依赖: f.toLatticeHom, toLatticeHom
@@ -1190,7 +1190,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (BoundedLatticeHom α β) α β where
+  签名: : 函数状 (有界格态射 α β) α β where
   定义体: f.toFun
   coe_injective f g h := by obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f; obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := g; congr
 
@@ -1213,7 +1213,7 @@ instance instBoundedLatticeHomClass
 
 中文:
 实例 instBoundedLatticeHomClass
-  签名: : BoundedLatticeHomClass (BoundedLatticeHom α β) α β where
+  签名: : 有界格态射类 (有界格态射 α β) α β where
   定义体: f.map_sup'
   map_inf f := f.map_inf'
   map_top f := f.map_top'
@@ -1238,7 +1238,7 @@ lemma toFun_eq_coe
 
 中文:
 引理 toFun_eq_coe
-  条件: (f : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 α β)
   结论: f.toFun = f
   证明: rfl
 -/
@@ -1256,7 +1256,7 @@ lemma coe_toLatticeHom
 
 中文:
 引理 coe_toLatticeHom
-  条件: (f : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 α β)
   结论: ⇑f.toLatticeHom = f
   证明: rfl
 @[to_dual (attr := simp)]
@@ -1274,7 +1274,7 @@ lemma coe_toSupBotHom
 
 中文:
 引理 coe_toSupBotHom
-  条件: (f : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 α β)
   结论: ⇑f.toSupBotHom = f
   证明: rfl
 -/
@@ -1290,7 +1290,7 @@ lemma coe_toBoundedOrderHom
 
 中文:
 引理 coe_toBoundedOrderHom
-  条件: (f : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 α β)
   结论: ⇑f.toBoundedOrderHom = f
   证明: rfl
 -/
@@ -1308,7 +1308,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (f : LatticeHom α β) (hf hf')
+  条件: (f : 格态射 α β) (hf hf')
   结论: ⇑(mk f hf hf') = f
   证明: rfl
 
@@ -1328,7 +1328,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : BoundedLatticeHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : 有界格态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -1349,7 +1349,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
   定义体: { f.toLatticeHom.copy f' h, f.toBoundedOrderHom.copy f' h with }
 
 @[simp]
@@ -1369,7 +1369,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -1387,7 +1387,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : BoundedLatticeHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : 有界格态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -1408,7 +1408,7 @@ definition id
 
 中文:
 定义 id
-  签名: : BoundedLatticeHom α α
+  签名: : 有界格态射 α α
   定义体: { LatticeHom.id α, BoundedOrderHom.id α with }
 -/
 protected def id : BoundedLatticeHom α α :=
@@ -1426,7 +1426,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (BoundedLatticeHom α α)
+  签名: 可居 (有界格态射 α α)
   定义体: ⟨BoundedLatticeHom.id α⟩
 
 @[simp, norm_cast]
@@ -1447,7 +1447,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(BoundedLatticeHom.id α) = id
+  结论: ⇑(有界格态射.id α) = id
   证明: rfl
 -/
 theorem coe_id : ⇑(BoundedLatticeHom.id α) = id :=
@@ -1468,7 +1468,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: BoundedLatticeHom.id α a = a
+  结论: 有界格态射.id α a = a
   证明: rfl
 -/
 theorem id_apply (a : α) : BoundedLatticeHom.id α a = a :=
@@ -1486,7 +1486,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  签名: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   定义体: { f.toLatticeHom.comp g.toLatticeHom, f.toBoundedOrderHom.comp g.toBoundedOrderHom with }
 
 @[simp]
@@ -1509,7 +1509,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   证明: rfl
 
 @[simp]
@@ -1531,7 +1531,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) (a : α)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β) (a : α)
   证明: rfl
 
 @[simp]
@@ -1552,7 +1552,7 @@ theorem coe_comp_lattice_hom'
 
 中文:
 定理 coe_comp_lattice_hom'
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   证明: rfl
 -/
 theorem coe_comp_lattice_hom' (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β) :
@@ -1572,7 +1572,7 @@ theorem coe_comp_lattice_hom
 
 中文:
 定理 coe_comp_lattice_hom
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1595,7 +1595,7 @@ theorem coe_comp_sup_hom'
 
 中文:
 定理 coe_comp_sup_hom'
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   证明: rfl
 
 @[to_dual]
@@ -1617,7 +1617,7 @@ theorem coe_comp_sup_hom
 
 中文:
 定理 coe_comp_sup_hom
-  条件: (f : BoundedLatticeHom β γ) (g : BoundedLatticeHom α β)
+  条件: (f : 有界格态射 β γ) (g : 有界格态射 α β)
   证明: rfl
 
 @[simp]
@@ -1637,7 +1637,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: (f : BoundedLatticeHom γ δ) (g : BoundedLatticeHom β γ)
+  结论: (f : 有界格态射 γ δ) (g : 有界格态射 β γ)
   证明: rfl
 -/
 theorem comp_assoc (f : BoundedLatticeHom γ δ) (g : BoundedLatticeHom β γ)
@@ -1655,8 +1655,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : BoundedLatticeHom α β)
-  结论: f.comp (BoundedLatticeHom.id α) = f
+  条件: (f : 有界格态射 α β)
+  结论: f.comp (有界格态射.id α) = f
   证明: rfl
 -/
 @[simp] theorem comp_id (f : BoundedLatticeHom α β) : f.comp (BoundedLatticeHom.id α) = f := rfl
@@ -1674,8 +1674,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : BoundedLatticeHom α β)
-  结论: (BoundedLatticeHom.id β).comp f = f
+  条件: (f : 有界格态射 α β)
+  结论: (有界格态射.id β).comp f = f
   证明: rfl
 
 @[simp]
@@ -1696,7 +1696,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  结论: {g₁ g₂ : BoundedLatticeHom β γ} {f : BoundedLatticeHom α β}
+  结论: {g₁ g₂ : 有界格态射 β γ} {f : 有界格态射 α β}
   证明: ⟨fun h => BoundedLatticeHom.ext hf.forall.2 DFunLike.ext_iff.1 h,
     fun h => congr_arg₂ _ h rfl⟩
 
@@ -1720,7 +1720,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : BoundedLatticeHom β γ} {f₁ f₂ : BoundedLatticeHom α β} (hg : Injective g)
+  条件: {g : 有界格态射 β γ} {f₁ f₂ : 有界格态射 α β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -1834,7 +1834,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : SupBotHom α β ≃ InfTopHom αᵒᵈ βᵒᵈ where
+  签名: : SupBot态射 α β ≃ InfTop态射 αᵒᵈ βᵒᵈ where
   定义体: ⟨SupHom.dual f.toSupHom, f.map_bot'⟩
   invFun f := ⟨SupHom.dual.symm f.toInfHom, f.map_top'⟩
 
@@ -1856,7 +1856,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: SupBotHom.dual (SupBotHom.id α) = InfTopHom.id _
+  结论: SupBot态射.dual (SupBot态射.id α) = InfTop态射.id _
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1876,7 +1876,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : SupBotHom β γ) (f : SupBotHom α β)
+  条件: (g : SupBot态射 β γ) (f : SupBot态射 α β)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1898,7 +1898,7 @@ theorem symm_dual_id
 
 中文:
 定理 symm_dual_id
-  结论: SupBotHom.dual.symm (InfTopHom.id _) = SupBotHom.id α
+  结论: SupBot态射.dual.symm (InfTop态射.id _) = SupBot态射.id α
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1917,7 +1917,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : InfTopHom βᵒᵈ γᵒᵈ) (f : InfTopHom αᵒᵈ βᵒᵈ)
+  条件: (g : InfTop态射 βᵒᵈ γᵒᵈ) (f : InfTop态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 -/
 theorem symm_dual_comp (g : InfTopHom βᵒᵈ γᵒᵈ) (f : InfTopHom αᵒᵈ βᵒᵈ) :
@@ -1947,7 +1947,7 @@ definition dual
 
 中文:
 定义 dual
-  签名: : BoundedLatticeHom α β ≃ BoundedLatticeHom αᵒᵈ βᵒᵈ where
+  签名: : 有界格态射 α β ≃ 有界格态射 αᵒᵈ βᵒᵈ where
   定义体: ⟨LatticeHom.dual f.toLatticeHom, f.map_bot', f.map_top'⟩
   invFun f := ⟨LatticeHom.dual.symm f.toLatticeHom, f.map_bot', f.map_top'⟩
 
@@ -1970,7 +1970,7 @@ theorem dual_id
 
 中文:
 定理 dual_id
-  结论: BoundedLatticeHom.dual (BoundedLatticeHom.id α) = BoundedLatticeHom.id _
+  结论: 有界格态射.dual (有界格态射.id α) = 有界格态射.id _
   证明: rfl
 
 @[simp]
@@ -1991,7 +1991,7 @@ theorem dual_comp
 
 中文:
 定理 dual_comp
-  条件: (g : BoundedLatticeHom β γ) (f : BoundedLatticeHom α β)
+  条件: (g : 有界格态射 β γ) (f : 有界格态射 α β)
   证明: rfl
 
 @[simp]
@@ -2032,7 +2032,7 @@ theorem symm_dual_comp
 
 中文:
 定理 symm_dual_comp
-  条件: (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLatticeHom αᵒᵈ βᵒᵈ)
+  条件: (g : 有界格态射 βᵒᵈ γᵒᵈ) (f : 有界格态射 αᵒᵈ βᵒᵈ)
   证明: rfl
 -/
 theorem symm_dual_comp (g : BoundedLatticeHom βᵒᵈ γᵒᵈ) (f : BoundedLatticeHom αᵒᵈ βᵒᵈ) :

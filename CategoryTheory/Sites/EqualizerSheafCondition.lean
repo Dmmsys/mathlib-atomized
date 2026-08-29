@@ -63,7 +63,7 @@ abbreviation FirstObj
 
 中文:
 缩写 FirstObj
-  签名: : Type (max v u)
+  签名: : 类型 (最大值 v u)
   定义体: ∏ᶜ fun f : Σ Y, { f : Y ⟶ X // R f } => P.obj (op f.1)
 
 Depends on / 依赖: P.obj
@@ -139,7 +139,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FirstObj P (⊥ : Presieve X))
+  签名: 可居 (FirstObj P (⊥ : Presieve X))
   定义体: (firstObjEqFamily P _).toEquiv.inhabited
 
 Depends on / 依赖: firstObjEqFamily, inhabited, toEquiv, toEquiv.inhabited
@@ -157,7 +157,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FirstObj P ((⊥ : Sieve X) : Presieve X))
+  签名: 可居 (FirstObj P ((⊥ : 筛 X) : Presieve X))
   定义体: inferInstanceAs Inhabited (FirstObj P (⊥ : Presieve X))
 
 Depends on / 依赖: FirstObj, Inhabited, Presieve
@@ -206,7 +206,7 @@ abbreviation SecondObj
 
 中文:
 缩写 SecondObj
-  签名: : Type (max v u)
+  签名: : 类型 (最大值 v u)
   定义体: ∏ᶜ fun f : Σ (Y Z : _) (_ : Z ⟶ Y), { f' : Y ⟶ X // S f' } => P.obj (op f.2.1)
 
 Depends on / 依赖: P.obj
@@ -278,7 +278,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SecondObj P (⊥ : Sieve X))
+  签名: 可居 (SecondObj P (⊥ : 筛 X))
   定义体: ⟨firstMap _ _ default⟩
 
 Depends on / 依赖: firstMap
@@ -447,7 +447,7 @@ definition SecondObj
 
 中文:
 定义 SecondObj
-  签名: : Type (max v u)
+  签名: : 类型 (最大值 v u)
   定义体: ∏ᶜ fun fg : (Σ Y, { f : Y ⟶ X // R f }) × Σ Z, { g : Z ⟶ X // R g } =>
     haveI := Presieve.HasPairwisePullbacks.has_pullbacks fg.1.2.2 fg.2.2.2
     P.obj (op (pullback fg.1.2.1 fg.2.2.1))
@@ -494,8 +494,8 @@ instance [HasPullbacks
   body: ⟨firstMap _ _ default⟩
 
 中文:
-实例 [HasPullbacks
-  签名: C] : Inhabited (SecondObj P (⊥ : Presieve X))
+实例 [有Pullbacks
+  签名: C] : 可居 (SecondObj P (⊥ : Presieve X))
   定义体: ⟨firstMap _ _ default⟩
 
 Depends on / 依赖: firstMap
@@ -635,7 +635,7 @@ theorem sheaf_condition
 
 中文:
 定理 sheaf_condition
-  结论: R.IsSheafFor P ↔ Nonempty (IsLimit (Fork.ofι _ (w P R)))
+  结论: R.IsSheafFor P ↔ 非空 (是极限 (叉.ofι _ (w P R)))
   证明: by
   rw [Types.type_equalizer_iff_unique]; rw [← Equiv.forall_congr_right (firstObjEqFamily P R).toEquiv.symm]
   simp_rw [← compatible_iff]
@@ -693,7 +693,7 @@ abbreviation FirstObj
 
 中文:
 缩写 FirstObj
-  签名: : Type w
+  签名: : 类型 w
   定义体: ∏ᶜ (fun i => P.obj (op (X i)))
 
 @[ext]
@@ -716,7 +716,7 @@ lemma FirstObj.ext
 
 中文:
 引理 FirstObj.ext
-  结论: (z₁ z₂ : FirstObj P X) (h : 对任意 i, (Pi.π _ i : FirstObj P X ⟶ _) z₁ =
+  结论: (z₁ z₂ : FirstObj P X) (h : 对任意 i, (依赖函数类型.π _ i : FirstObj P X ⟶ _) z₁ =
   证明: by
   apply Limits.Types.limit_ext
   rintro ⟨i⟩
@@ -746,7 +746,7 @@ abbreviation SecondObj
 
 中文:
 缩写 SecondObj
-  签名: : Type w
+  签名: : 类型 w
   定义体: ∏ᶜ (fun (ij : I × I) => P.obj (op (pullback (π ij.1) (π ij.2))))
 
 @[ext]
@@ -770,7 +770,7 @@ lemma SecondObj.ext
 
 中文:
 引理 SecondObj.ext
-  结论: (z₁ z₂ : SecondObj P X π) (h : 对任意 ij, (Pi.π _ ij : SecondObj P X π ⟶ _) z₁ =
+  结论: (z₁ z₂ : SecondObj P X π) (h : 对任意 ij, (依赖函数类型.π _ ij : SecondObj P X π ⟶ _) z₁ =
   证明: by
   apply Limits.Types.limit_ext
   rintro ⟨i⟩
@@ -880,7 +880,7 @@ theorem compatible_iff
 
 中文:
 定理 compatible_iff
-  结论: {I : Type w} (X : I -> C) (π : (i : I) -> X i ⟶ B)
+  结论: {I : 类型 w} (X : I -> C) (π : (i : I) -> X i ⟶ B)
   证明: by
   rw [Arrows.pullbackCompatible_iff]
   constructor

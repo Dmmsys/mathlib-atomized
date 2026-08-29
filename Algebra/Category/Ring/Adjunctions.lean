@@ -44,7 +44,7 @@ definition free
 
 中文:
 定义 free
-  签名: : 类型u ⥤ CommRingCat.{u} where
+  签名: : 类型u ⥤ 交换环范畴.{u} where
   定义体: of (MvPolynomial α Int)
   map {X Y} f := ofHom (↑(rename f : _ ->ₐ[Int] _) : MvPolynomial X Int ->+* MvPolynomial Y Int)
 
@@ -69,7 +69,7 @@ theorem free_obj_coe
 中文:
 定理 free_obj_coe
   条件: {α : 类型u}
-  结论: (free.obj α : 类型u) = MvPolynomial α 整数
+  结论: (free.obj α : 类型u) = 多元多项式 α 整数
   证明: rfl
 -/
 theorem free_obj_coe {α : Type u} : (free.obj α : Type u) = MvPolynomial α Int :=
@@ -111,7 +111,7 @@ invFun := fun f => ofHom homEquiv.symm f
 
 中文:
 定义 adj
-  签名: : free ⊣ forget CommRingCat.{u}
+  签名: : free ⊣ forget 交换环范畴.{u}
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun _ _ =>
         { toFun := fun f => ↾(homEquiv f.hom)
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget CommRingCat.{u}).IsRightAdjoint
+  签名: (forget 交换环范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : (forget CommRingCat.{u}).IsRightAdjoint :=
@@ -163,7 +163,7 @@ definition coyoneda
 
 中文:
 定义 coyoneda
-  签名: : 类型vᵒᵖ ⥤ CommRingCat.{u} ⥤ CommRingCat.{max u v} where
+  签名: : 类型vᵒᵖ ⥤ 交换环范畴.{u} ⥤ 交换环范畴.{最大值 u v} where
   定义体: { obj R := CommRingCat.of (unop n -> R)
     map {R S} φ := CommRingCat.ofHom (RingHom.pi (φ.hom.comp <| Pi.evalRingHom _ ·)) }
   map {m n} f :=
@@ -189,7 +189,7 @@ definition coyonedaAdj
 
 中文:
 定义 coyonedaAdj
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: { app n := ↾fun i => CommRingCat.ofHom (Pi.evalRingHom _ i) }
   counit := { app S := (CommRingCat.ofHom (RingHom.pi fun f => f.hom)).op }
 
@@ -216,7 +216,7 @@ definition coyonedaUnique
 
 中文:
 定义 coyonedaUnique
-  签名: {n : 类型v} [Unique n]
+  签名: {n : 类型v} [唯一 n]
   定义体: NatIso.ofComponents (fun X => (RingEquiv.piUnique _).toCommRingCatIso) (fun f => by ext; simp)
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, RingEquiv, RingEquiv.piUnique, ofComponents, piUnique, toCommRingCatIso
@@ -240,7 +240,7 @@ definition monoidAlgebra
 
 中文:
 定义 monoidAlgebra
-  签名: (R : CommRingCat.{max u v})
+  签名: (R : 交换环范畴.{最大值 u v})
   定义体: Under.mk (CommRingCat.ofHom MonoidAlgebra.singleOneRingHom)
   map f := Under.homMk (CommRingCat.ofHom <| MonoidAlgebra.mapDomainRingHom R f.hom)
   map_comp f g := by ext : 2; apply MonoidAlgebra.ringHom_ext <;> intro <;> simp
@@ -270,7 +270,7 @@ definition monoidAlgebraAdj
 
 中文:
 定义 monoidAlgebraAdj
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: { app G := CommMonCat.ofHom (MonoidAlgebra.of R G) }
   counit :=
   { app S := Under.homMk (CommRingCat.ofHom (MonoidAlgebra.liftNCRingHom S.hom.hom
@@ -306,7 +306,7 @@ definition forget₂Adj
 
 中文:
 定义 forget₂Adj
-  签名: {R : CommRingCat.{u}} (hR : Limits.IsInitial R)
+  签名: {R : 交换环范畴.{u}} (hR : Limits.IsInitial R)
   定义体: (monoidAlgebraAdj R).comp (Under.equivalenceOfIsInitial hR).toAdjunction
 
 Depends on / 依赖: Under.equivalenceOfIsInitial, equivalenceOfIsInitial, monoidAlgebraAdj, toAdjunction
@@ -328,7 +328,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ CommRingCat CommMonCat).IsRightAdjoint
+  签名: (forget₂ 交换环范畴 交换幺半群范畴).是右伴随
   定义体: ⟨_, ⟨CommRingCat.forget₂Adj Limits.initialIsInitial⟩⟩
 
 Depends on / 依赖: CommRingCat, CommRingCat.forget, Limits, Limits.initialIsInitial, initialIsInitial

@@ -47,7 +47,7 @@ abbreviation combPairHoms
 
 中文:
 缩写 combPairHoms
-  签名: : (i : ι₁ oplus ι₂) -> bc.pt ⟶ Sum.elim f₁ f₂ i
+  签名: : (i : ι₁ oplus ι₂) -> bc.pt ⟶ 和.elim f₁ f₂ i
 -/
 abbrev combPairHoms : (i : ι₁ oplus ι₂) -> bc.pt ⟶ Sum.elim f₁ f₂ i
   | .inl a => bc.fst ≫ c₁.proj a
@@ -74,7 +74,7 @@ definition combPairIsLimit
 
 中文:
 定义 combPairIsLimit
-  签名: : IsLimit (Fan.mk bc.pt (combPairHoms c₁ c₂ bc))
+  签名: : 是极限 (Fan.mk bc.pt (combPairHoms c₁ c₂ bc))
   定义体: Fan.IsLimit.mk _
     (fun s => Fan.IsLimit.lift h <| fun i => by
       cases i
@@ -123,7 +123,7 @@ abbreviation combPairHoms
 
 中文:
 缩写 combPairHoms
-  签名: : (i : ι₁ oplus ι₂) -> Sum.elim f₁ f₂ i ⟶ bc.pt
+  签名: : (i : ι₁ oplus ι₂) -> 和.elim f₁ f₂ i ⟶ bc.pt
 -/
 abbrev combPairHoms : (i : ι₁ oplus ι₂) -> Sum.elim f₁ f₂ i ⟶ bc.pt
   | .inl a => c₁.inj a ≫ bc.inl
@@ -149,7 +149,7 @@ definition combPairIsColimit
 
 中文:
 定义 combPairIsColimit
-  签名: : IsColimit (Cofan.mk bc.pt (combPairHoms c₁ c₂ bc))
+  签名: : 是余极限 (Cofan.mk bc.pt (combPairHoms c₁ c₂ bc))
   定义体: Cofan.IsColimit.mk _
     (fun s => Cofan.IsColimit.desc h <| fun i => by
       cases i

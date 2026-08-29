@@ -146,7 +146,7 @@ theorem expand_one
 
 中文:
 定理 expand_one
-  结论: expand 1 one_ne_zero = AlgHom.id R (MvPowerSeries σ R)
+  结论: expand 1 one_ne_zero = 代数态射.id R (MvPowerSeries σ R)
   证明: by
   ext1 i
   simp [expand, subst_self]
@@ -211,8 +211,8 @@ theorem HasSubst.expand
   proof: comp hf (HasSubst.X_pow hp)
 
 中文:
-定理 HasSubst.expand
-  条件: {f : σ -> MvPowerSeries τ S} (hf : HasSubst f)
+定理 有Subst.expand
+  条件: {f : σ -> MvPowerSeries τ S} (hf : 有Subst f)
   证明: comp hf (HasSubst.X_pow hp)
 
 Depends on / 依赖: HasSubst, HasSubst.X_pow, X_pow
@@ -232,7 +232,7 @@ theorem expand_comp_substAlgHom
 
 中文:
 定理 expand_comp_substAlgHom
-  条件: {f : σ -> MvPowerSeries τ S} (hf : HasSubst f)
+  条件: {f : σ -> MvPowerSeries τ S} (hf : 有Subst f)
   证明: by
   ext1 i
   simp [expand, subst_comp_subst_apply hf (HasSubst.X_pow hp)]
@@ -255,7 +255,7 @@ theorem expand_substAlgHom
 
 中文:
 定理 expand_substAlgHom
-  条件: {f : σ -> MvPowerSeries τ S} (hf : HasSubst f) {φ : MvPowerSeries σ S}
+  条件: {f : σ -> MvPowerSeries τ S} (hf : 有Subst f) {φ : MvPowerSeries σ S}
   证明: by
   rw [← AlgHom.comp_apply]; rw [expand_comp_substAlgHom]
 
@@ -276,7 +276,7 @@ theorem expand_subst
 
 中文:
 定理 expand_subst
-  条件: {f : σ -> MvPowerSeries τ R} (hf : HasSubst f) {φ : MvPowerSeries σ R}
+  条件: {f : σ -> MvPowerSeries τ R} (hf : 有Subst f) {φ : MvPowerSeries σ R}
   证明: by
   rw [← substAlgHom_apply hf]; rw [expand_substAlgHom]; rw [substAlgHom_apply]
 
@@ -603,7 +603,7 @@ theorem expand_eq_expand
 
 中文:
 定理 expand_eq_expand
-  条件: {φ : MvPolynomial σ R}
+  条件: {φ : 多元多项式 σ R}
   证明: by
   ext n
   simp only [MvPolynomial.coeff_coe]

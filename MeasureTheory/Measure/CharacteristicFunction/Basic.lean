@@ -208,7 +208,7 @@ theorem ext_of_integral_char_eq
 
 中文:
 定理 ext_of_integral_char_eq
-  结论: (he : Continuous e) (he' : e != 1)
+  结论: (he : 连续 e) (he' : e != 1)
   证明: by
   apply ext_of_forall_mem_subalgebra_integral_eq_of_pseudoEMetric_complete_countable
       (separatesPoints_charPoly he he' hL hL')
@@ -257,7 +257,7 @@ definition charFun
 
 中文:
 定义 charFun
-  签名: [Inner 实数 E] (μ : Measure E) (t : E)
+  签名: [内积 实数 E] (μ : 测度 E) (t : E)
   定义体: ∫ x, exp (⟪x, t⟫ * I) ∂μ
 -/
 noncomputable def charFun [Inner Real E] (μ : Measure E) (t : E) : Complex := ∫ x, exp (⟪x, t⟫ * I) ∂μ
@@ -273,7 +273,7 @@ lemma charFun_apply
 
 中文:
 引理 charFun_apply
-  条件: [Inner 实数 E] (t : E)
+  条件: [内积 实数 E] (t : E)
   结论: charFun μ t = ∫ x, exp (⟪x, t⟫ * I) ∂μ
   证明: rfl
 -/
@@ -289,7 +289,7 @@ lemma charFun_apply_real
 
 中文:
 引理 charFun_apply_real
-  条件: {μ : Measure 实数} (t : 实数)
+  条件: {μ : 测度 实数} (t : 实数)
   证明: by simp [charFun_apply]
 
 Depends on / 依赖: charFun_apply
@@ -314,8 +314,8 @@ lemma charFun_zero
 
 中文:
 引理 charFun_zero
-  条件: (μ : Measure E)
-  结论: charFun μ 0 = μ.real Set.univ
+  条件: (μ : 测度 E)
+  结论: charFun μ 0 = μ.real 集合.univ
   证明: by
   simp [charFun_apply]
 
@@ -339,7 +339,7 @@ lemma charFun_zero_measure
 
 中文:
 引理 charFun_zero_measure
-  结论: charFun (0 : Measure E) t = 0
+  结论: charFun (0 : 测度 E) t = 0
   证明: by simp [charFun_apply]
 
 @[simp]
@@ -404,7 +404,7 @@ lemma charFun_eq_integral_probChar
 中文:
 引理 charFun_eq_integral_probChar
   条件: (t : E)
-  结论: charFun μ t = ∫ x, (probChar ⟪x, t⟫ : Complex) ∂μ
+  结论: charFun μ t = ∫ x, (probChar ⟪x, t⟫ : 复形) ∂μ
   证明: by
   simp [charFun_apply, probChar_apply]
 
@@ -423,7 +423,7 @@ lemma charFun_eq_fourierIntegral
   simp [charFun_apply, VectorFourier.fourierIntegral_probChar]
 
 中文:
-引理 charFun_eq_fourierIntegral
+引理 charFun_eq_fourier整数egral
   条件: (t : E)
   证明: by
   simp [charFun_apply, VectorFourier.fourierIntegral_probChar]
@@ -449,7 +449,7 @@ lemma charFun_eq_fourierIntegral'
   rw [← 
 
 中文:
-引理 charFun_eq_fourierIntegral'
+引理 charFun_eq_fourier整数egral'
   条件: (t : E)
   证明: by
   simp only [charFun_apply, VectorFourier.fourierIntegral, neg_smul,
@@ -485,7 +485,7 @@ lemma norm_charFun_le
 中文:
 引理 norm_charFun_le
   条件: (t : E)
-  结论: ‖charFun μ t‖ <= μ.real Set.univ
+  结论: ‖charFun μ t‖ <= μ.real 集合.univ
   证明: by
   rw [charFun_eq_fourierIntegral]
   exact (VectorFourier.norm_fourierIntegral_le_integral_norm _ _ _ _ _).trans_eq (by simp)
@@ -507,7 +507,7 @@ lemma norm_charFun_le_one
 
 中文:
 引理 norm_charFun_le_one
-  条件: [IsProbabilityMeasure μ] (t : E)
+  条件: [是概率测度 μ] (t : E)
   结论: ‖charFun μ t‖ <= 1
   证明: (norm_charFun_le _).trans_eq (by simp)
 
@@ -532,7 +532,7 @@ lemma norm_one_sub_charFun_le_two
 
 中文:
 引理 norm_one_sub_charFun_le_two
-  条件: [IsProbabilityMeasure μ]
+  条件: [是概率测度 μ]
   结论: ‖1 - charFun μ t‖ <= 2
   证明: calc ‖1 - charFun μ t‖
   _ <= ‖(1 : Complex)‖ + ‖charFun μ t‖ := norm_sub_le _ _
@@ -562,7 +562,7 @@ lemma stronglyMeasurable_charFun
 
 中文:
 引理 stronglyMeasurable_charFun
-  条件: [OpensMeasurableSpace E] [SecondCountableTopology E] [SFinite μ]
+  条件: [OpensMeasurable空间 E] [第二可数拓扑 E] [SFinite μ]
   证明: (Measurable.stronglyMeasurable (by fun_prop)).integral_prod_left
 
 @[fun_prop]
@@ -584,7 +584,7 @@ lemma measurable_charFun
 
 中文:
 引理 measurable_charFun
-  条件: [OpensMeasurableSpace E] [SecondCountableTopology E] [SFinite μ]
+  条件: [OpensMeasurable空间 E] [第二可数拓扑 E] [SFinite μ]
   证明: stronglyMeasurable_charFun.measurable
 
 Depends on / 依赖: measurable, stronglyMeasurable_charFun, stronglyMeasurable_charFun.measurable
@@ -603,8 +603,8 @@ lemma intervalIntegrable_charFun
     stronglyMeasurable_charFun.aestronglyMeasurable (ae_of_all _ norm_charFun_le)
 
 中文:
-引理 intervalIntegrable_charFun
-  条件: {μ : Measure 实数} [IsFiniteMeasure μ] {a b : 实数}
+引理 interval整数egrable_charFun
+  条件: {μ : 测度 实数} [是有限测度 μ] {a b : 实数}
   证明: IntervalIntegrable.mono_fun' (g := fun _ => μ.real Set.univ) (by simp)
     stronglyMeasurable_charFun.aestronglyMeasurable (ae_of_all _ norm_charFun_le)
 
@@ -627,7 +627,7 @@ lemma charFun_map_smul
 
 中文:
 引理 charFun_map_smul
-  条件: [BorelSpace E] (r : 实数) (t : E)
+  条件: [Borel空间 E] (r : 实数) (t : E)
   证明: by
   rw [charFun_apply]; rw [charFun_apply]; rw [integral_map (by fun_prop) (by fun_prop)]
   simp_rw [inner_smul_right, ← real_inner_smul_left]
@@ -651,7 +651,7 @@ lemma charFun_map_smul_comp
 
 中文:
 引理 charFun_map_smul_comp
-  结论: {X : 类型} {mX : MeasurableSpace X} {μ : Measure X} [BorelSpace E]
+  结论: {X : 类型} {mX : 可测空间 X} {μ : 测度 X} [Borel空间 E]
   证明: by
   rw [show (fun x => r • (f x)) = (r • ·) ∘ f from rfl]; rw [← AEMeasurable.map_map_of_aemeasurable]; rw [charFun_map_smul]
   all_goals fun_prop
@@ -674,7 +674,7 @@ lemma charFun_map_mul
 
 中文:
 引理 charFun_map_mul
-  条件: {μ : Measure 实数} (r t : 实数)
+  条件: {μ : 测度 实数} (r t : 实数)
   证明: charFun_map_smul r t
 
 Depends on / 依赖: charFun_map_smul
@@ -692,7 +692,7 @@ lemma charFun_map_mul_comp
 
 中文:
 引理 charFun_map_mul_comp
-  结论: {X : 类型} {mX : MeasurableSpace X} {μ : Measure X}
+  结论: {X : 类型} {mX : 可测空间 X} {μ : 测度 X}
   证明: charFun_map_smul_comp hf r t
 
 Depends on / 依赖: charFun_map_smul_comp
@@ -717,7 +717,7 @@ lemma charFun_dirac
 
 中文:
 引理 charFun_dirac
-  条件: [OpensMeasurableSpace E] {x : E} (t : E)
+  条件: [OpensMeasurable空间 E] {x : E} (t : E)
   证明: by
   rw [charFun_apply]; rw [integral_dirac]
 
@@ -744,7 +744,7 @@ lemma charFun_map_add_const
 
 中文:
 引理 charFun_map_add_const
-  条件: [BorelSpace E] (r t : E)
+  条件: [Borel空间 E] (r t : E)
   证明: by
   rw [charFun_apply]; rw [charFun_apply]; rw [integral_map (by fun_prop) (by fun_prop)]; rw [← integral_mul_const]
   congr with a
@@ -778,7 +778,7 @@ lemma charFun_map_const_add
 
 中文:
 引理 charFun_map_const_add
-  条件: [BorelSpace E] (r t : E)
+  条件: [Borel空间 E] (r t : E)
   证明: by
   simp_rw [add_comm r]
   exact charFun_map_add_const _ _
@@ -806,8 +806,8 @@ theorem Measure.ext_of_charFun
   · exact continuous_inner
 
 中文:
-定理 Measure.ext_of_charFun
-  结论: [CompleteSpace E]
+定理 测度.ext_of_charFun
+  结论: [完备空间 E]
   证明: by
   simp_rw [funext_iff, charFun_eq_integral_innerProbChar] at h
   refine ext_of_integral_char_eq continuous_probChar probChar_ne_one (L := innerₗ E)
@@ -840,7 +840,7 @@ lemma charFun_conv
 
 中文:
 引理 charFun_conv
-  条件: [IsFiniteMeasure μ] [IsFiniteMeasure ν] (t : E)
+  条件: [是有限测度 μ] [是有限测度 ν] (t : E)
   证明: by
   simp_rw [charFun_apply]
   rw [integral_conv]
@@ -873,7 +873,7 @@ lemma charFun_prod
 
 中文:
 引理 charFun_prod
-  结论: {μ : Measure E} {ν : Measure F} [SFinite μ] [SFinite ν]
+  结论: {μ : 测度 E} {ν : 测度 F} [SFinite μ] [SFinite ν]
   证明: by
   simp_rw [charFun, prod_inner_apply, ← MeasurableEquiv.coe_toLp, ← integral_prod_mul,
     integral_map_equiv]
@@ -906,7 +906,7 @@ lemma charFun_eq_prod_iff
 
 中文:
 引理 charFun_eq_prod_iff
-  结论: {μ : Measure E} {ν : Measure F} {ξ : Measure (E × F)}
+  结论: {μ : 测度 E} {ν : 测度 F} {ξ : 测度 (E × F)}
   证明: by
     refine (MeasurableEquiv.toLp 2 (E × F)).map_measurableEquiv_injective
  Measure.ext_of_charFun funext fun t => ?_
@@ -941,7 +941,7 @@ lemma charFun_pi
 
 中文:
 引理 charFun_pi
-  条件: {μ : (i : ι) -> Measure (E i)} [对任意 i, SigmaFinite (μ i)] (t : PiLp 2 E)
+  条件: {μ : (i : ι) -> 测度 (E i)} [对任意 i, σ有限 (μ i)] (t : PiLp 2 E)
   证明: by
   simp_rw [charFun, PiLp.inner_apply, ← MeasurableEquiv.coe_toLp, ← integral_fintype_prod_eq_prod,
     integral_map_equiv]
@@ -971,7 +971,7 @@ lemma charFun_eq_pi_iff
 
 中文:
 引理 charFun_eq_pi_iff
-  结论: {μ : (i : ι) -> Measure (E i)} {ν : Measure (Π i, E i)}
+  结论: {μ : (i : ι) -> 测度 (E i)} {ν : 测度 (Π i, E i)}
   证明: by
     refine (MeasurableEquiv.toLp 2 (Π i, E i)).map_measurableEquiv_injective
  Measure.ext_of_charFun funext fun t => ?_
@@ -1010,7 +1010,7 @@ definition charFunDual
 
 中文:
 定义 charFunDual
-  签名: (μ : Measure E) (L : StrongDual 实数 E)
+  签名: (μ : 测度 E) (L : StrongDual 实数 E)
   定义体: ∫ v, probCharDual L v ∂μ
 
 Depends on / 依赖: probCharDual
@@ -1051,7 +1051,7 @@ lemma charFunDual_eq_charFun_map_one
 
 中文:
 引理 charFunDual_eq_charFun_map_one
-  条件: [OpensMeasurableSpace E] (L : StrongDual 实数 E)
+  条件: [OpensMeasurable空间 E] (L : StrongDual 实数 E)
   证明: by
   rw [charFunDual_apply]
   have : ∫ x, cexp (L x * I) ∂μ = ∫ x, cexp (x * I) ∂(μ.map L) := by
@@ -1091,7 +1091,7 @@ lemma charFun_map_eq_charFunDual_smul
 
 中文:
 引理 charFun_map_eq_charFunDual_smul
-  条件: [OpensMeasurableSpace E] (L : StrongDual 实数 E) (u : 实数)
+  条件: [OpensMeasurable空间 E] (L : StrongDual 实数 E) (u : 实数)
   证明: by
   rw [charFunDual_apply]
   have : ∫ x, cexp ((u • L) x * I) ∂μ = ∫ x, cexp (u * x * I) ∂(μ.map L) := by
@@ -1128,7 +1128,7 @@ lemma charFun_eq_charFunDual_toDualMap
 
 中文:
 引理 charFun_eq_charFunDual_toDualMap
-  结论: {E : 类型} [NormedAddCommGroup E] [InnerProductSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [内积空间 实数 E]
   证明: by
   simp [charFunDual_apply, charFun_apply, real_inner_comm]
 
@@ -1154,7 +1154,7 @@ lemma charFun_toDual_symm_eq_charFunDual
 
 中文:
 引理 charFun_toDual_symm_eq_charFunDual
-  结论: {E : 类型} [NormedAddCommGroup E] [CompleteSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [完备空间 E]
   证明: by
   rw [charFun_eq_charFunDual_toDualMap]; rw [← InnerProductSpace.toDual_apply_eq_toDualMap_apply]
   simp
@@ -1180,7 +1180,7 @@ lemma charFunDual_map
 
 中文:
 引理 charFunDual_map
-  结论: [OpensMeasurableSpace E] [BorelSpace F] (L : E ->L[实数] F)
+  结论: [OpensMeasurable空间 E] [Borel空间 F] (L : E ->L[实数] F)
   证明: by
   rw [charFunDual_eq_charFun_map_one]; rw [charFunDual_eq_charFun_map_one]; rw [Measure.map_map (by fun_prop) (by fun_prop)]; rw [ContinuousLinearMap.coe_comp]
 
@@ -1204,7 +1204,7 @@ lemma charFunDual_dirac
 
 中文:
 引理 charFunDual_dirac
-  条件: [OpensMeasurableSpace E] {x : E} (L : StrongDual 实数 E)
+  条件: [OpensMeasurable空间 E] {x : E} (L : StrongDual 实数 E)
   证明: by
   rw [charFunDual_apply]; rw [integral_dirac]
 
@@ -1230,7 +1230,7 @@ lemma charFunDual_map_add_const
 
 中文:
 引理 charFunDual_map_add_const
-  条件: [BorelSpace E] (r : E) (L : StrongDual 实数 E)
+  条件: [Borel空间 E] (r : E) (L : StrongDual 实数 E)
   证明: by
   rw [charFunDual_apply]; rw [charFunDual_apply]; rw [integral_map (by fun_prop) (by fun_prop)]; rw [← integral_mul_const]
   congr with a
@@ -1262,7 +1262,7 @@ lemma charFunDual_map_const_add
 
 中文:
 引理 charFunDual_map_const_add
-  条件: [BorelSpace E] (r : E) (L : StrongDual 实数 E)
+  条件: [Borel空间 E] (r : E) (L : StrongDual 实数 E)
   证明: by
   simp_rw [add_comm r]
   exact charFunDual_map_add_const _ _
@@ -1348,7 +1348,7 @@ lemma charFunDual_pi
 
 中文:
 引理 charFunDual_pi
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {E : ι -> 类型}
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {E : ι -> 类型}
   证明: by
   simp_rw [charFunDual_apply, ← L.sum_comp_single, ofReal_sum, Finset.sum_mul, Complex.exp_sum,
     ← integral_fintype_prod_eq_prod]
@@ -1377,7 +1377,7 @@ lemma charFunDual_pi'
 
 中文:
 引理 charFunDual_pi'
-  结论: (p : 实数>=0∞) [Fact (1 <= p)] {ι : 类型} [Fintype ι] [DecidableEq ι]
+  结论: (p : 实数>=0∞) [Fact (1 <= p)] {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
   simp_rw [charFunDual_apply, ← integral_fintype_prod_eq_prod, ← Complex.exp_sum, ← Finset.sum_mul,
     ← ofReal_sum, L.comp_apply, ← map_sum, ContinuousLinearMap.sum_comp_single]
@@ -1413,8 +1413,8 @@ theorem Measure.ext_of_charFunDual
   · exact isBoundedBilinearMap_apply.symm.continuous
 
 中文:
-定理 Measure.ext_of_charFunDual
-  结论: [CompleteSpace E]
+定理 测度.ext_of_charFunDual
+  结论: [完备空间 E]
   证明: by
   refine ext_of_integral_char_eq continuous_probChar probChar_ne_one
     ?_ ?_ (fun L => funext_iff.mp h L)
@@ -1445,7 +1445,7 @@ refine Measure.ext_of_charFunDual funext fun t => ?_
 
 中文:
 引理 charFunDual_eq_prod_iff
-  结论: [BorelSpace F] [SecondCountableTopology F] [CompleteSpace E]
+  结论: [Borel空间 F] [第二可数拓扑 F] [完备空间 E]
   证明: by
 refine Measure.ext_of_charFunDual funext fun t => ?_
     rw [h]; rw [charFunDual_prod]
@@ -1478,7 +1478,7 @@ lemma charFunDual_eq_prod_iff'
 
 中文:
 引理 charFunDual_eq_prod_iff'
-  结论: (p : 实数>=0∞) [Fact (1 <= p)] [BorelSpace F]
+  结论: (p : 实数>=0∞) [Fact (1 <= p)] [Borel空间 F]
   证明: by
     refine (MeasurableEquiv.toLp p (E × F)).map_measurableEquiv_injective
  Measure.ext_of_charFunDual funext fun L => ?_
@@ -1517,7 +1517,7 @@ refine Measure.ext_of_charFunDual funext fun t => ?_
 
 中文:
 引理 charFunDual_eq_pi_iff
-  结论: {ι : 类型} [Fintype ι] [DecidableEq ι] {E : ι -> 类型}
+  结论: {ι : 类型} [有限类型 ι] [DecidableEq ι] {E : ι -> 类型}
   证明: by
 refine Measure.ext_of_charFunDual funext fun t => ?_
     rw [h]; rw [charFunDual_pi]
@@ -1551,7 +1551,7 @@ lemma charFunDual_eq_pi_iff'
 
 中文:
 引理 charFunDual_eq_pi_iff'
-  结论: (p : 实数>=0∞) [Fact (1 <= p)] {ι : 类型} [Fintype ι] [DecidableEq ι]
+  结论: (p : 实数>=0∞) [Fact (1 <= p)] {ι : 类型} [有限类型 ι] [DecidableEq ι]
   证明: by
     refine (MeasurableEquiv.toLp p (Π i, E i)).map_measurableEquiv_injective
  Measure.ext_of_charFunDual funext fun L => ?_
@@ -1589,7 +1589,7 @@ lemma charFunDual_conv
 
 中文:
 引理 charFunDual_conv
-  结论: {μ ν : Measure E} [IsFiniteMeasure μ] [IsFiniteMeasure ν]
+  结论: {μ ν : 测度 E} [是有限测度 μ] [是有限测度 ν]
   证明: by
   simp_rw [charFunDual_apply]
   rw [integral_conv]

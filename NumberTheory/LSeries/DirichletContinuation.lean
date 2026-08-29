@@ -67,8 +67,8 @@ definition LFunction
   body: ZMod.LFunction χ s
 
 中文:
-定义 LFunction
-  签名: (χ : DirichletCharacter Complex N) (s : Complex)
+定义 L函数
+  签名: (χ : DirichletCharacter 复形 N) (s : 复形)
   定义体: ZMod.LFunction χ s
 
 Depends on / 依赖: LFunction, ZMod.LFunction
@@ -86,7 +86,7 @@ lemma LFunction_modOne_eq
 
 中文:
 引理 LFunction_modOne_eq
-  条件: {χ : DirichletCharacter Complex 1}
+  条件: {χ : DirichletCharacter 复形 1}
   证明: by
   ext; rw [LFunction, ZMod.LFunction_modOne_eq, (by rfl : (0 : ZMod 1) = 1), map_one, one_mul]
 -/
@@ -104,7 +104,7 @@ lemma LFunction_eq_LSeries
 
 中文:
 引理 LFunction_eq_LSeries
-  条件: (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < re s)
+  条件: (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < re s)
   证明: ZMod.LFunction_eq_LSeries χ hs
 
 Depends on / 依赖: LFunction_eq_LSeries, ZMod.LFunction_eq_LSeries
@@ -128,7 +128,7 @@ lemma deriv_LFunction_eq_deriv_LSeries
 
 中文:
 引理 deriv_LFunction_eq_deriv_LSeries
-  条件: (χ : DirichletCharacter Complex N) {s : Complex} (hs : 1 < s.re)
+  条件: (χ : DirichletCharacter 复形 N) {s : 复形} (hs : 1 < s.re)
   证明: by
   refine Filter.EventuallyEq.deriv_eq ?_
   have h : {z | 1 < z.re} in nhds s :=
@@ -161,7 +161,7 @@ lemma differentiableAt_LFunction
 
 中文:
 引理 differentiableAt_LFunction
-  条件: (χ : DirichletCharacter Complex N) (s : Complex) (hs : s != 1 ∨ χ != 1)
+  条件: (χ : DirichletCharacter 复形 N) (s : 复形) (hs : s != 1 ∨ χ != 1)
   证明: ZMod.differentiableAt_LFunction χ s (hs.imp_right χ.sum_eq_zero_of_ne_one)
 
 Depends on / 依赖: ZMod.differentiableAt_LFunction, differentiableAt_LFunction, hs.imp_right, imp_right, sum_eq_zero_of_ne_one
@@ -182,7 +182,7 @@ lemma differentiable_LFunction
 
 中文:
 引理 differentiable_LFunction
-  条件: {χ : DirichletCharacter Complex N} (hχ : χ != 1)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : χ != 1)
   证明: (differentiableAt_LFunction _ · <| Or.inr hχ)
 
 Depends on / 依赖: Or.inr, differentiableAt_LFunction
@@ -203,7 +203,7 @@ lemma Even.LFunction_neg_two_mul_nat_add_one
 
 中文:
 引理 Even.LFunction_neg_two_mul_nat_add_one
-  条件: {χ : DirichletCharacter Complex N} (hχ : Even χ) (n : 自然数)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : Even χ) (n : 自然数)
   证明: ZMod.LFunction_neg_two_mul_nat_add_one hχ.to_fun n
 
 Depends on / 依赖: LFunction_neg_two_mul_nat_add_one, ZMod.LFunction_neg_two_mul_nat_add_one, to_fun
@@ -226,7 +226,7 @@ lemma Even.LFunction_neg_two_mul_nat
 
 中文:
 引理 Even.LFunction_neg_two_mul_nat
-  条件: {χ : DirichletCharacter Complex N} (hχ : Even χ) (n : 自然数) [NeZero n]
+  条件: {χ : DirichletCharacter 复形 N} (hχ : Even χ) (n : 自然数) [NeZero n]
   证明: by
   obtain ⟨m, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (NeZero.ne n)
   exact_mod_cast hχ.LFunction_neg_two_mul_nat_add_one m
@@ -375,7 +375,7 @@ lemma LFunctionTrivChar_eq_mul_riemannZeta
 
 中文:
 引理 LFunctionTrivChar_eq_mul_riemannZeta
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by
   rw [← LFunction_modOne_eq (χ := 1)]; rw [LFunctionTrivChar]; rw [← changeLevel_one N.one_dvd]; rw [mul_comm]
   convert! LFunction_changeLevel N.one_dvd 1 (.inr hs) using 4 with p
@@ -446,7 +446,7 @@ definition gammaFactor
 
 中文:
 定义 gammaFactor
-  签名: (χ : DirichletCharacter Complex N) (s : Complex)
+  签名: (χ : DirichletCharacter 复形 N) (s : 复形)
   定义体: if χ.Even then GammaReal s else GammaReal (s + 1)
 
 Depends on / 依赖: GammaReal
@@ -465,7 +465,7 @@ lemma Even.gammaFactor_def
 
 中文:
 引理 Even.gammaFactor_def
-  条件: {χ : DirichletCharacter Complex N} (hχ : χ.Even) (s : Complex)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : χ.Even) (s : 复形)
   证明: by
   simp [gammaFactor, hχ]
 
@@ -486,7 +486,7 @@ lemma Odd.gammaFactor_def
 
 中文:
 引理 Odd.gammaFactor_def
-  条件: {χ : DirichletCharacter Complex N} (hχ : χ.Odd) (s : Complex)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : χ.Odd) (s : 复形)
   证明: by
   simp [gammaFactor, hχ.not_even]
 
@@ -508,7 +508,7 @@ definition completedLFunction
 
 中文:
 定义 completedLFunction
-  签名: (χ : DirichletCharacter Complex N) (s : Complex)
+  签名: (χ : DirichletCharacter 复形 N) (s : 复形)
   定义体: ZMod.completedLFunction χ s
 -/
 @[pp_nodot] noncomputable def completedLFunction (χ : DirichletCharacter Complex N) (s : Complex) : Complex :=
@@ -525,7 +525,7 @@ lemma completedLFunction_modOne_eq
 
 中文:
 引理 completedLFunction_modOne_eq
-  条件: {χ : DirichletCharacter Complex 1}
+  条件: {χ : DirichletCharacter 复形 1}
   证明: by
   ext; rw [completedLFunction, ZMod.completedLFunction_modOne_eq, map_one, one_mul]
 
@@ -546,7 +546,7 @@ lemma differentiableAt_completedLFunction
 
 中文:
 引理 differentiableAt_completedLFunction
-  结论: (χ : DirichletCharacter Complex N) (s : Complex)
+  结论: (χ : DirichletCharacter 复形 N) (s : 复形)
   证明: ZMod.differentiableAt_completedLFunction _ _ (by have := χ.map_zero'; tauto)
     (by have := χ.sum_eq_zero_of_ne_one; tauto)
 
@@ -570,7 +570,7 @@ lemma differentiable_completedLFunction
 
 中文:
 引理 differentiable_completedLFunction
-  条件: {χ : DirichletCharacter Complex N} (hχ : χ != 1)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : χ != 1)
   证明: by
   refine fun s => differentiableAt_completedLFunction _ _ (Or.inr ?_) (Or.inr hχ)
   exact hχ ∘ level_one' _
@@ -596,7 +596,7 @@ lemma LFunction_eq_completed_div_gammaFactor
 
 中文:
 引理 LFunction_eq_completed_div_gammaFactor
-  结论: (χ : DirichletCharacter Complex N) (s : Complex)
+  结论: (χ : DirichletCharacter 复形 N) (s : 复形)
   证明: by
   rcases χ.even_or_odd with hχ | hχ <;>
   rw [hχ.gammaFactor_def]
@@ -623,7 +623,7 @@ definition rootNumber
 
 中文:
 定义 rootNumber
-  签名: (χ : DirichletCharacter Complex N)
+  签名: (χ : DirichletCharacter 复形 N)
   定义体: gaussSum χ stdAddChar / I ^ (if χ.Even then 0 else 1) / N ^ (1 / 2 : Complex)
 
 Depends on / 依赖: gaussSum, stdAddChar
@@ -645,7 +645,7 @@ lemma rootNumber_modOne
 
 中文:
 引理 rootNumber_modOne
-  条件: (χ : DirichletCharacter Complex 1)
+  条件: (χ : DirichletCharacter 复形 1)
   结论: rootNumber χ = 1
   证明: by
   simp [rootNumber, gaussSum, -univ_unique, ← singleton_eq_univ (1 : ZMod 1),
@@ -678,7 +678,7 @@ theorem completedLFunction_one_sub
 
 中文:
 定理 completedLFunction_one_sub
-  条件: {χ : DirichletCharacter Complex N} (hχ : IsPrimitive χ) (s : Complex)
+  条件: {χ : DirichletCharacter 复形 N} (hχ : 是Primitive χ) (s : 复形)
   证明: by
   classical
   -- First handle special case of Riemann zeta
@@ -751,7 +751,7 @@ abbreviation LFunctionTrivChar₁
 
 中文:
 缩写 LFunctionTrivChar₁
-  签名: : Complex -> Complex
+  签名: : 复形 -> 复形
   定义体: Function.update (fun s => (s - 1) * LFunctionTrivChar n s) 1
     (∏ p in n.primeFactors, (1 - (p : Complex)⁻¹))
 
@@ -801,7 +801,7 @@ lemma differentiable_LFunctionTrivChar₁
 
 中文:
 引理 differentiable_LFunctionTrivChar₁
-  结论: Differentiable Complex (LFunctionTrivChar₁ n)
+  结论: 可微 复形 (LFunctionTrivChar₁ n)
   证明: by
   rw [← differentiableOn_univ]; rw [← differentiableOn_compl_singleton_and_continuousAt_iff (c := 1) Filter.univ_mem]
   refine ⟨DifferentiableOn.congr (f := fun s => (s - 1) * LFunctionTrivChar n s)
@@ -833,7 +833,7 @@ lemma deriv_LFunctionTrivChar₁_apply_of_ne_one
 
 中文:
 引理 deriv_LFunctionTrivChar₁_apply_of_ne_one
-  条件: {s : Complex} (hs : s != 1)
+  条件: {s : 复形} (hs : s != 1)
   证明: by
   have H : deriv (LFunctionTrivChar₁ n) s =
       deriv (fun w => (w - 1) * LFunctionTrivChar n w) s := by

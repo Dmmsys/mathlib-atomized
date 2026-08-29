@@ -90,11 +90,11 @@ structure FilterBasis
     - inter_sets({x y}) : x in sets -> y in sets -> exists z in sets, z subseteq x inter y
 
 中文:
-结构 FilterBasis
+结构 滤子基
   参数: (α : 类型)
   公理与运算 (3 个):
-    - sets : Set (Set α)
-    - nonempty : sets.Nonempty
+    - sets : 集合 (集合 α)
+    - nonempty : sets.非空
     - inter_sets({x y}) : x in sets -> y in sets -> 存在 z in sets, z subseteq x inter y
 -/
 structure FilterBasis (α : Type*) where
@@ -114,8 +114,8 @@ instance FilterBasis.nonempty_sets
   body: B.nonempty.to_subtype
 
 中文:
-实例 FilterBasis.nonempty_sets
-  签名: (B : FilterBasis α)
+实例 滤子基.nonempty_sets
+  签名: (B : 滤子基 α)
   定义体: B.nonempty.to_subtype
 
 Depends on / 依赖: B.nonempty.to_subtype, nonempty, to_subtype
@@ -138,8 +138,8 @@ theorem FilterBasis.mem_sets
   proof: Iff.rfl
 
 中文:
-定理 FilterBasis.mem_sets
-  条件: {s : Set α} {B : FilterBasis α}
+定理 滤子基.mem_sets
+  条件: {s : 集合 α} {B : 滤子基 α}
   结论: s in B.sets ↔ s in B
   证明: Iff.rfl
 -/
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FilterBasis 自然数)
+  签名: 可居 (滤子基 自然数)
   定义体: ⟨{ sets := range Ici
       nonempty := ⟨Ici 0, mem_range_self 0⟩
       inter_sets := by
@@ -185,8 +185,8 @@ definition Filter.asBasis
   body: ⟨f.sets, ⟨univ, univ_mem⟩, fun {x y} hx hy => ⟨x inter y, inter_mem hx hy, subset_rfl⟩⟩
 
 中文:
-定义 Filter.asBasis
-  签名: (f : Filter α)
+定义 滤子.asBasis
+  签名: (f : 滤子 α)
   定义体: ⟨f.sets, ⟨univ, univ_mem⟩, fun {x y} hx hy => ⟨x inter y, inter_mem hx hy, subset_rfl⟩⟩
 
 Depends on / 依赖: f.sets, inter_mem, subset_rfl, univ_mem
@@ -206,8 +206,8 @@ structure Filter.IsBasis
     - inter : forall {i j}, p i -> p j -> exists k, p k ∧ s k subseteq s i inter s j
 
 中文:
-结构 Filter.IsBasis
-  参数: (p : ι -> 命题) (s : ι -> Set α)
+结构 滤子.是基
+  参数: (p : ι -> 命题) (s : ι -> 集合 α)
   公理与运算 (2 个):
     - nonempty : 存在 i, p i
     - inter : 对任意 {i j}, p i -> p j -> 存在 k, p k ∧ s k subseteq s i inter s j
@@ -239,7 +239,7 @@ definition filterBasis
 
 中文:
 定义 filterBasis
-  签名: {p : ι -> 命题} {s : ι -> Set α} (h : IsBasis p s)
+  签名: {p : ι -> 命题} {s : ι -> 集合 α} (h : 是基 p s)
   定义体: { t | exists i, p i ∧ s i = t }
   nonempty :=
     let ⟨i, hi⟩ := h.nonempty
@@ -272,7 +272,7 @@ theorem mem_filterBasis_iff
 
 中文:
 定理 mem_filterBasis_iff
-  条件: {U : Set α}
+  条件: {U : 集合 α}
   结论: U in h.filterBasis ↔ 存在 i, p i ∧ s i = U
   证明: Iff.rfl
 
@@ -302,7 +302,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (B : FilterBasis α)
+  签名: (B : 滤子基 α)
   定义体: { s | exists t in B, t subseteq s }
   univ_sets := B.nonempty.imp fun s s_in => ⟨s_in, s.subset_univ⟩
   sets_of_superset := fun ⟨s, s_in, h⟩ hxy => ⟨s, s_in, Set.Subset.trans h hxy⟩
@@ -329,7 +329,7 @@ theorem mem_filter_iff
 
 中文:
 定理 mem_filter_iff
-  条件: (B : FilterBasis α) {U : Set α}
+  条件: (B : 滤子基 α) {U : 集合 α}
   结论: U in B.filter ↔ 存在 s in B, s subseteq U
   证明: Iff.rfl
 
@@ -350,7 +350,7 @@ theorem mem_filter_of_mem
 
 中文:
 定理 mem_filter_of_mem
-  条件: (B : FilterBasis α) {U : Set α}
+  条件: (B : 滤子基 α) {U : 集合 α}
   结论: U in B -> U in B.filter
   证明: fun U_in =>
   ⟨U, U_in, Subset.refl _⟩
@@ -379,7 +379,7 @@ theorem eq_iInf_principal
 
 中文:
 定理 eq_iInf_principal
-  条件: (B : FilterBasis α)
+  条件: (B : 滤子基 α)
   结论: B.filter = ⨅ s : B.sets, 𝓟 s
   证明: by
   have : Directed (· >= ·) fun s : B.sets => 𝓟 (s : Set α) := by
@@ -420,7 +420,7 @@ theorem generate
 
 中文:
 定理 generate
-  条件: (B : FilterBasis α)
+  条件: (B : 滤子基 α)
   结论: generate B.sets = B.filter
   证明: by
   apply le_antisymm
@@ -450,7 +450,7 @@ lemma ker_filter
 
 中文:
 引理 ker_filter
-  条件: (F : FilterBasis α)
+  条件: (F : 滤子基 α)
   结论: F.filter.ker = ⋂₀ F.sets
   证明: by
   aesop (add simp [ker, FilterBasis.filter])
@@ -478,7 +478,7 @@ definition filter
 
 中文:
 定义 filter
-  签名: (h : IsBasis p s)
+  签名: (h : 是基 p s)
   定义体: h.filterBasis.filter
 -/
 protected def filter (h : IsBasis p s) : Filter α :=
@@ -496,7 +496,7 @@ theorem mem_filter_iff
 
 中文:
 定理 mem_filter_iff
-  条件: (h : IsBasis p s) {U : Set α}
+  条件: (h : 是基 p s) {U : 集合 α}
   证明: by
   simp only [IsBasis.filter, FilterBasis.mem_filter_iff, mem_filterBasis_iff,
     exists_exists_and_eq_and]
@@ -518,7 +518,7 @@ theorem filter_eq_generate
 
 中文:
 定理 filter_eq_generate
-  条件: (h : IsBasis p s)
+  条件: (h : 是基 p s)
   结论: h.filter = generate { U | 存在 i, p i ∧ s i = U }
   证明: by
   rw [IsBasis.filter]; rw [← h.filterBasis.generate]; rw [IsBasis.filterBasis]
@@ -541,10 +541,10 @@ structure HasBasis
     - mem_iff' : forall t : Set α, t in l ↔ exists i, p i ∧ s i subseteq t
 
 中文:
-结构 HasBasis
-  参数: (l : Filter α) (p : ι -> 命题) (s : ι -> Set α)
+结构 有基
+  参数: (l : 滤子 α) (p : ι -> 命题) (s : ι -> 集合 α)
   公理与运算 (1 个):
-    - mem_iff' : 对任意 t : Set α, t in l ↔ 存在 i, p i ∧ s i subseteq t
+    - mem_iff' : 对任意 t : 集合 α, t in l ↔ 存在 i, p i ∧ s i subseteq t
 -/
 structure HasBasis (l : Filter α) (p : ι -> Prop) (s : ι -> Set α) : Prop where
   /-- A set `t` belongs to a filter `l` iff it includes an element of the basis. -/
@@ -565,8 +565,8 @@ theorem HasBasis.mem_iff
   proof: hl.mem_iff' t
 
 中文:
-定理 HasBasis.mem_iff
-  条件: (hl : l.HasBasis p s)
+定理 有基.mem_iff
+  条件: (hl : l.有基 p s)
   结论: t in l ↔ 存在 i, p i ∧ s i subseteq t
   证明: hl.mem_iff' t
 
@@ -587,8 +587,8 @@ theorem HasBasis.eq_of_same_basis
   rw [hl.mem_iff]; rw [hl'.mem_iff]
 
 中文:
-定理 HasBasis.eq_of_same_basis
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p s)
+定理 有基.eq_of_same_basis
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p s)
   结论: l = l'
   证明: by
   ext t
@@ -610,7 +610,7 @@ theorem hasBasis_iff
 
 中文:
 定理 hasBasis_iff
-  结论: l.HasBasis p s ↔ 对任意 t, t in l ↔ 存在 i, p i ∧ s i subseteq t
+  结论: l.有基 p s ↔ 对任意 t, t in l ↔ 存在 i, p i ∧ s i subseteq t
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 theorem hasBasis_iff : l.HasBasis p s ↔ forall t, t in l ↔ exists i, p i ∧ s i subseteq t :=
@@ -626,8 +626,8 @@ theorem HasBasis.ex_mem
   proof: (h.mem_iff.mp univ_mem).imp fun _ => And.left
 
 中文:
-定理 HasBasis.ex_mem
-  条件: (h : l.HasBasis p s)
+定理 有基.ex_mem
+  条件: (h : l.有基 p s)
   结论: 存在 i, p i
   证明: (h.mem_iff.mp univ_mem).imp fun _ => And.left
 
@@ -646,9 +646,9 @@ theorem HasBasis.nonempty
   proof: h.ex_mem.nonempty
 
 中文:
-定理 HasBasis.nonempty
-  条件: (h : l.HasBasis p s)
-  结论: Nonempty ι
+定理 有基.nonempty
+  条件: (h : l.有基 p s)
+  结论: 非空 ι
   证明: h.ex_mem.nonempty
 -/
 protected theorem HasBasis.nonempty (h : l.HasBasis p s) : Nonempty ι :=
@@ -664,9 +664,9 @@ theorem IsBasis.hasBasis
   proof: ⟨fun t => by simp only [h.mem_filter_iff]⟩
 
 中文:
-定理 IsBasis.hasBasis
-  条件: (h : IsBasis p s)
-  结论: HasBasis h.filter p s
+定理 是基.hasBasis
+  条件: (h : 是基 p s)
+  结论: 有基 h.filter p s
   证明: ⟨fun t => by simp only [h.mem_filter_iff]⟩
 -/
 protected theorem IsBasis.hasBasis (h : IsBasis p s) : HasBasis h.filter p s :=
@@ -681,8 +681,8 @@ theorem HasBasis.mem_of_superset
   proof: hl.mem_iff.2 ⟨i, hi, ht⟩
 
 中文:
-定理 HasBasis.mem_of_superset
-  条件: (hl : l.HasBasis p s) (hi : p i) (ht : s i subseteq t)
+定理 有基.mem_of_superset
+  条件: (hl : l.有基 p s) (hi : p i) (ht : s i subseteq t)
   证明: hl.mem_iff.2 ⟨i, hi, ht⟩
 -/
 protected theorem HasBasis.mem_of_superset (hl : l.HasBasis p s) (hi : p i) (ht : s i subseteq t) :
@@ -699,8 +699,8 @@ theorem HasBasis.mem_of_mem
   proof: hl.mem_of_superset hi Subset.rfl
 
 中文:
-定理 HasBasis.mem_of_mem
-  条件: (hl : l.HasBasis p s) (hi : p i)
+定理 有基.mem_of_mem
+  条件: (hl : l.有基 p s) (hi : p i)
   结论: s i in l
   证明: hl.mem_of_superset hi Subset.rfl
 
@@ -718,8 +718,8 @@ definition HasBasis.index
   body: ⟨(h.mem_iff.1 ht).choose, (h.mem_iff.1 ht).choose_spec.1⟩
 
 中文:
-定义 HasBasis.index
-  签名: (h : l.HasBasis p s) (t : Set α) (ht : t in l)
+定义 有基.index
+  签名: (h : l.有基 p s) (t : 集合 α) (ht : t in l)
   定义体: ⟨(h.mem_iff.1 ht).choose, (h.mem_iff.1 ht).choose_spec.1⟩
 
 Depends on / 依赖: choose_spec, h.mem_iff, mem_iff
@@ -737,8 +737,8 @@ theorem HasBasis.property_index
   proof: (h.index t ht).2
 
 中文:
-定理 HasBasis.property_index
-  条件: (h : l.HasBasis p s) (ht : t in l)
+定理 有基.property_index
+  条件: (h : l.有基 p s) (ht : t in l)
   结论: p (h.index t ht)
   证明: (h.index t ht).2
 
@@ -757,8 +757,8 @@ theorem HasBasis.set_index_mem
   proof: h.mem_of_mem h.property_index _
 
 中文:
-定理 HasBasis.set_index_mem
-  条件: (h : l.HasBasis p s) (ht : t in l)
+定理 有基.set_index_mem
+  条件: (h : l.有基 p s) (ht : t in l)
   结论: s (h.index t ht) in l
   证明: h.mem_of_mem h.property_index _
 
@@ -777,8 +777,8 @@ theorem HasBasis.set_index_subset
   proof: (h.mem_iff.1 ht).choose_spec.2
 
 中文:
-定理 HasBasis.set_index_subset
-  条件: (h : l.HasBasis p s) (ht : t in l)
+定理 有基.set_index_subset
+  条件: (h : l.有基 p s) (ht : t in l)
   结论: s (h.index t ht) subseteq t
   证明: (h.mem_iff.1 ht).choose_spec.2
 
@@ -799,9 +799,9 @@ theorem HasBasis.isBasis
     simpa only [h.mem_iff] using inter_mem (h.mem_of_mem hi) (h.mem_of_mem hj)
 
 中文:
-定理 HasBasis.isBasis
-  条件: (h : l.HasBasis p s)
-  结论: IsBasis p s where
+定理 有基.isBasis
+  条件: (h : l.有基 p s)
+  结论: 是基 p s where
   证明: h.ex_mem
   inter hi hj := by
     simpa only [h.mem_iff] using inter_mem (h.mem_of_mem hi) (h.mem_of_mem hj)
@@ -825,8 +825,8 @@ theorem HasBasis.filter_eq
   simp [h.mem_iff, IsBasis.mem_filter_iff]
 
 中文:
-定理 HasBasis.filter_eq
-  条件: (h : l.HasBasis p s)
+定理 有基.filter_eq
+  条件: (h : l.有基 p s)
   结论: h.isBasis.filter = l
   证明: by
   ext U
@@ -849,8 +849,8 @@ theorem HasBasis.eq_generate
   rw [← h.isBasis.filter_eq_generate]; rw [h.filter_eq]
 
 中文:
-定理 HasBasis.eq_generate
-  条件: (h : l.HasBasis p s)
+定理 有基.eq_generate
+  条件: (h : l.有基 p s)
   结论: l = generate { U | 存在 i, p i ∧ s i = U }
   证明: by
   rw [← h.isBasis.filter_eq_generate]; rw [h.filter_eq]
@@ -869,8 +869,8 @@ theorem _root_.FilterBasis.hasBasis
   proof: ⟨fun _ => B.mem_filter_iff⟩
 
 中文:
-定理 _root_.FilterBasis.hasBasis
-  条件: (B : FilterBasis α)
+定理 _root_.滤子基.hasBasis
+  条件: (B : 滤子基 α)
   证明: ⟨fun _ => B.mem_filter_iff⟩
 -/
 protected theorem _root_.FilterBasis.hasBasis (B : FilterBasis α) :
@@ -890,8 +890,8 @@ theorem HasBasis.to_hasBasis'
   exact ⟨i', hi', hs's.trans ht⟩
 
 中文:
-定理 HasBasis.to_hasBasis'
-  结论: (hl : l.HasBasis p s) (h : 对任意 i, p i -> 存在 i', p' i' ∧ s' i' subseteq s i)
+定理 有基.to_hasBasis'
+  结论: (hl : l.有基 p s) (h : 对任意 i, p i -> 存在 i', p' i' ∧ s' i' subseteq s i)
   证明: by
   refine ⟨fun t => ⟨fun ht => ?_, fun ⟨i', hi', ht⟩ => mem_of_superset (h' i' hi') ht⟩⟩
   rcases hl.mem_iff.1 ht with ⟨i, hi, ht⟩
@@ -918,8 +918,8 @@ theorem HasBasis.to_hasBasis
     hl.mem_iff.2 ⟨i, hi, hss'⟩
 
 中文:
-定理 HasBasis.to_hasBasis
-  结论: (hl : l.HasBasis p s) (h : 对任意 i, p i -> 存在 i', p' i' ∧ s' i' subseteq s i)
+定理 有基.to_hasBasis
+  结论: (hl : l.有基 p s) (h : 对任意 i, p i -> 存在 i', p' i' ∧ s' i' subseteq s i)
   证明: hl.to_hasBasis' h fun i' hi' =>
     let ⟨i, hi, hss'⟩ := h' i' hi'
     hl.mem_iff.2 ⟨i, hi, hss'⟩
@@ -942,8 +942,8 @@ lemma HasBasis.congr
     and_congr_right fun hi => hs i hi ▸ Iff.rfl⟩
 
 中文:
-引理 HasBasis.congr
-  结论: (hl : l.HasBasis p s) {p' s'} (hp : 对任意 i, p i ↔ p' i)
+引理 有基.congr
+  结论: (hl : l.有基 p s) {p' s'} (hp : 对任意 i, p i ↔ p' i)
   证明: ⟨fun t => by simp only [hl.mem_iff, ← hp]; exact exists_congr fun i =>
     and_congr_right fun hi => hs i hi ▸ Iff.rfl⟩
 -/
@@ -961,8 +961,8 @@ theorem HasBasis.to_subset
   proof: hl.to_hasBasis' (fun i hi => ⟨i, hi, h i hi⟩) ht
 
 中文:
-定理 HasBasis.to_subset
-  结论: (hl : l.HasBasis p s) {t : ι -> Set α} (h : 对任意 i, p i -> t i subseteq s i)
+定理 有基.to_subset
+  结论: (hl : l.有基 p s) {t : ι -> 集合 α} (h : 对任意 i, p i -> t i subseteq s i)
   证明: hl.to_hasBasis' (fun i hi => ⟨i, hi, h i hi⟩) ht
 
 Depends on / 依赖: hl.to_hasBasis, to_hasBasis
@@ -980,8 +980,8 @@ theorem HasBasis.eventually_iff
   proof: by simpa using! hl.mem_iff
 
 中文:
-定理 HasBasis.eventually_iff
-  条件: (hl : l.HasBasis p s) {q : α -> 命题}
+定理 有基.eventually_iff
+  条件: (hl : l.有基 p s) {q : α -> 命题}
   证明: by simpa using! hl.mem_iff
 
 Depends on / 依赖: hl.mem_iff, mem_iff
@@ -999,8 +999,8 @@ theorem HasBasis.frequently_iff
   simp only [Filter.Frequently, hl.eventually_iff]; push Not; rfl
 
 中文:
-定理 HasBasis.frequently_iff
-  条件: (hl : l.HasBasis p s) {q : α -> 命题}
+定理 有基.frequently_iff
+  条件: (hl : l.有基 p s) {q : α -> 命题}
   证明: by
   simp only [Filter.Frequently, hl.eventually_iff]; push Not; rfl
 
@@ -1022,8 +1022,8 @@ theorem HasBasis.exists_iff
     fun ⟨i, hi, hP⟩ => ⟨s i, hl.mem_of_mem hi, hP⟩⟩
 
 中文:
-定理 HasBasis.exists_iff
-  结论: (hl : l.HasBasis p s) {P : Set α -> 命题}
+定理 有基.存在_iff
+  结论: (hl : l.有基 p s) {P : 集合 α -> 命题}
   证明: ⟨fun ⟨_s, hs, hP⟩ =>
     let ⟨i, hi, his⟩ := hl.mem_iff.1 hs
     ⟨i, hi, mono his hP⟩,
@@ -1049,8 +1049,8 @@ theorem HasBasis.forall_iff
     mono his (H i hi)⟩
 
 中文:
-定理 HasBasis.forall_iff
-  结论: (hl : l.HasBasis p s) {P : Set α -> 命题}
+定理 有基.对任意_iff
+  结论: (hl : l.有基 p s) {P : 集合 α -> 命题}
   证明: ⟨fun H i hi => H (s i) hl.mem_of_mem hi, fun H _s hs =>
     let ⟨i, hi, his⟩ := hl.mem_iff.1 hs
     mono his (H i hi)⟩
@@ -1072,8 +1072,8 @@ theorem HasBasis.neBot_iff
   proof: forall_mem_nonempty_iff_neBot.symm.trans hl.forall_iff fun _ _ => Nonempty.mono
 
 中文:
-定理 HasBasis.neBot_iff
-  条件: (hl : l.HasBasis p s)
+定理 有基.neBot_iff
+  条件: (hl : l.有基 p s)
   证明: forall_mem_nonempty_iff_neBot.symm.trans hl.forall_iff fun _ _ => Nonempty.mono
 -/
 protected theorem HasBasis.neBot_iff (hl : l.HasBasis p s) :
@@ -1091,8 +1091,8 @@ theorem HasBasis.eq_bot_iff
 hl.neBot_iff.trans by simp only [not_exists, not_and, nonempty_iff_ne_empty]
 
 中文:
-定理 HasBasis.eq_bot_iff
-  条件: (hl : l.HasBasis p s)
+定理 有基.eq_bot_iff
+  条件: (hl : l.有基 p s)
   结论: l = ⊥ ↔ 存在 i, p i ∧ s i = ∅
   证明: not_iff_not.1 neBot_iff.symm.trans
 hl.neBot_iff.trans by simp only [not_exists, not_and, nonempty_iff_ne_empty]
@@ -1114,8 +1114,8 @@ theorem basis_sets
 
 中文:
 定理 basis_sets
-  条件: (l : Filter α)
-  结论: l.HasBasis (fun s : Set α => s in l) id
+  条件: (l : 滤子 α)
+  结论: l.有基 (fun s : 集合 α => s in l) id
   证明: ⟨fun _ => exists_mem_subset_iff.symm⟩
 
 Depends on / 依赖: RingHom, RingHom.ker_isMaximal_of_surjective, convert, exists_mem_subset_iff, exists_mem_subset_iff.symm, ker_isMaximal_of_surjective
@@ -1134,7 +1134,7 @@ theorem asBasis_filter
 
 中文:
 定理 asBasis_filter
-  条件: (f : Filter α)
+  条件: (f : 滤子 α)
   结论: f.asBasis.filter = f
   证明: Filter.ext fun _ => exists_mem_subset_iff
 
@@ -1156,7 +1156,7 @@ theorem hasBasis_self
 
 中文:
 定理 hasBasis_self
-  条件: {l : Filter α} {P : Set α -> 命题}
+  条件: {l : 滤子 α} {P : 集合 α -> 命题}
   证明: by
   simp only [hasBasis_iff, id, and_assoc]
   exact forall_congr' fun s =>
@@ -1179,8 +1179,8 @@ theorem HasBasis.comp_surjective
   proof: ⟨fun _ => h.mem_iff.trans hg.exists⟩
 
 中文:
-定理 HasBasis.comp_surjective
-  条件: (h : l.HasBasis p s) {g : ι' -> ι} (hg : Function.Surjective g)
+定理 有基.comp_surjective
+  条件: (h : l.有基 p s) {g : ι' -> ι} (hg : 函数.满射 g)
   证明: ⟨fun _ => h.mem_iff.trans hg.exists⟩
 
 Depends on / 依赖: h.mem_iff.trans, hg.exists, mem_iff
@@ -1199,9 +1199,9 @@ theorem HasBasis.comp_equiv
   proof: h.comp_surjective e.surjective
 
 中文:
-定理 HasBasis.comp_equiv
-  条件: (h : l.HasBasis p s) (e : ι' ≃ ι)
-  结论: l.HasBasis (p ∘ e) (s ∘ e)
+定理 有基.comp_equiv
+  条件: (h : l.有基 p s) (e : ι' ≃ ι)
+  结论: l.有基 (p ∘ e) (s ∘ e)
   证明: h.comp_surjective e.surjective
 
 Depends on / 依赖: comp_surjective, e.surjective, h.comp_surjective, surjective
@@ -1219,9 +1219,9 @@ theorem HasBasis.to_image_id'
   proof: ⟨fun _ => by simp [h.mem_iff]⟩
 
 中文:
-定理 HasBasis.to_image_id'
-  条件: (h : l.HasBasis p s)
-  结论: l.HasBasis (fun t => 存在 i, p i ∧ s i = t) id
+定理 有基.to_image_id'
+  条件: (h : l.有基 p s)
+  结论: l.有基 (fun t => 存在 i, p i ∧ s i = t) id
   证明: ⟨fun _ => by simp [h.mem_iff]⟩
 
 Depends on / 依赖: h.mem_iff, mem_iff
@@ -1238,8 +1238,8 @@ theorem HasBasis.to_image_id
   proof: h.to_image_id'
 
 中文:
-定理 HasBasis.to_image_id
-  条件: {ι : 类型} {p : ι -> 命题} {s : ι -> Set α} (h : l.HasBasis p s)
+定理 有基.to_image_id
+  条件: {ι : 类型} {p : ι -> 命题} {s : ι -> 集合 α} (h : l.有基 p s)
   证明: h.to_image_id'
 
 Depends on / 依赖: h.to_image_id, to_image_id
@@ -1261,8 +1261,8 @@ theorem HasBasis.restrict
   exact ⟨j, ⟨hpj, hqj⟩, hji.trans hti⟩
 
 中文:
-定理 HasBasis.restrict
-  结论: (h : l.HasBasis p s) {q : ι -> 命题}
+定理 有基.restrict
+  结论: (h : l.有基 p s) {q : ι -> 命题}
   证明: by
   refine ⟨fun t => ⟨fun ht => ?_, fun ⟨i, hpi, hti⟩ => h.mem_iff.2 ⟨i, hpi.1, hti⟩⟩⟩
   rcases h.mem_iff.1 ht with ⟨i, hpi, hti⟩
@@ -1288,8 +1288,8 @@ theorem HasBasis.restrict_subset
     ⟨hj.1, subset_inter_iff.1 hj.2⟩
 
 中文:
-定理 HasBasis.restrict_subset
-  条件: (h : l.HasBasis p s) {V : Set α} (hV : V in l)
+定理 有基.restrict_subset
+  条件: (h : l.有基 p s) {V : 集合 α} (hV : V in l)
   证明: h.restrict fun _i hi => (h.mem_iff.1 (inter_mem hV (h.mem_of_mem hi))).imp fun _j hj =>
     ⟨hj.1, subset_inter_iff.1 hj.2⟩
 
@@ -1310,8 +1310,8 @@ theorem HasBasis.hasBasis_self_subset
   simpa only [and_assoc] using! h.restrict_subset hV
 
 中文:
-定理 HasBasis.hasBasis_self_subset
-  结论: {p : Set α -> 命题} (h : l.HasBasis (fun s => s in l ∧ p s) id)
+定理 有基.hasBasis_self_subset
+  结论: {p : 集合 α -> 命题} (h : l.有基 (fun s => s in l ∧ p s) id)
   证明: by
   simpa only [and_assoc] using! h.restrict_subset hV
 
@@ -1333,8 +1333,8 @@ theorem HasBasis.ge_iff
     mem_of_superset (h _ hi') hs⟩
 
 中文:
-定理 HasBasis.ge_iff
-  条件: (hl' : l'.HasBasis p' s')
+定理 有基.ge_iff
+  条件: (hl' : l'.有基 p' s')
   结论: l <= l' ↔ 对任意 i', p' i' -> s' i' in l
   证明: ⟨fun h _i' hi' => h hl'.mem_of_mem hi', fun h _s hs =>
     let ⟨_i', hi', hs⟩ := hl'.mem_iff.1 hs
@@ -1358,8 +1358,8 @@ theorem HasBasis.le_iff
   simp only [le_def, hl.mem_iff]
 
 中文:
-定理 HasBasis.le_iff
-  条件: (hl : l.HasBasis p s)
+定理 有基.le_iff
+  条件: (hl : l.有基 p s)
   结论: l <= l' ↔ 对任意 t in l', 存在 i, p i ∧ s i subseteq t
   证明: by
   simp only [le_def, hl.mem_iff]
@@ -1379,8 +1379,8 @@ theorem HasBasis.le_basis_iff
   simp only [hl'.ge_iff, hl.mem_iff]
 
 中文:
-定理 HasBasis.le_basis_iff
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.le_basis_iff
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: by
   simp only [hl'.ge_iff, hl.mem_iff]
 
@@ -1401,8 +1401,8 @@ theorem HasBasis.eq_top_iff
   simp [← top_le_iff, h.ge_iff]
 
 中文:
-定理 HasBasis.eq_top_iff
-  条件: (h : l.HasBasis p s)
+定理 有基.eq_top_iff
+  条件: (h : l.有基 p s)
   结论: l = ⊤ ↔ 对任意 i, p i -> s i = univ
   证明: by
   simp [← top_le_iff, h.ge_iff]
@@ -1426,8 +1426,8 @@ theorem HasBasis.ext
     simpa using h
 
 中文:
-定理 HasBasis.ext
-  结论: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.ext
+  结论: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: by
   apply le_antisymm
   · rw [hl.le_basis_iff hl']
@@ -1462,8 +1462,8 @@ theorem HasBasis.inf'
       exact mem_inf_of_inter (hl.mem_of_mem hi) (hl'.mem_of_m
 
 中文:
-定理 HasBasis.inf'
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.下确界'
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: ⟨by
     intro t
     constructor
@@ -1495,8 +1495,8 @@ theorem HasBasis.inf
   proof: (hl.inf' hl').comp_equiv Equiv.pprodEquivProd.symm
 
 中文:
-定理 HasBasis.inf
-  结论: {ι ι' : 类型} {p : ι -> 命题} {s : ι -> Set α} {p' : ι' -> 命题}
+定理 有基.下确界
+  结论: {ι ι' : 类型} {p : ι -> 命题} {s : ι -> 集合 α} {p' : ι' -> 命题}
   证明: (hl.inf' hl').comp_equiv Equiv.pprodEquivProd.symm
 
 Depends on / 依赖: Equiv.pprodEquivProd.symm, comp_equiv, hl.inf, pprodEquivProd
@@ -1519,7 +1519,7 @@ theorem hasBasis_iInf_of_directed'
 
 中文:
 定理 hasBasis_iInf_of_directed'
-  结论: {ι : 类型} {ι' : ι -> Sort _} [Nonempty ι] {l : ι -> Filter α}
+  结论: {ι : 类型} {ι' : ι -> 类型层 _} [非空 ι] {l : ι -> 滤子 α}
   证明: by
   refine ⟨fun t => ?_⟩
   rw [mem_iInf_of_directed h]; rw [Sigma.exists]
@@ -1548,7 +1548,7 @@ theorem hasBasis_iInf_of_directed
 
 中文:
 定理 hasBasis_iInf_of_directed
-  结论: {ι : 类型} {ι' : Sort _} [Nonempty ι] {l : ι -> Filter α}
+  结论: {ι : 类型} {ι' : 类型层 _} [非空 ι] {l : ι -> 滤子 α}
   证明: by
   refine ⟨fun t => ?_⟩
   rw [mem_iInf_of_directed h]; rw [Prod.exists]
@@ -1577,7 +1577,7 @@ theorem hasBasis_biInf_of_directed'
 
 中文:
 定理 hasBasis_biInf_of_directed'
-  结论: {ι : 类型} {ι' : ι -> Sort _} {dom : Set ι}
+  结论: {ι : 类型} {ι' : ι -> 类型层 _} {dom : 集合 ι}
   证明: by
   refine ⟨fun t => ?_⟩
   rw [mem_biInf_of_directed h hdom]; rw [Sigma.exists]
@@ -1607,7 +1607,7 @@ theorem hasBasis_biInf_of_directed
 
 中文:
 定理 hasBasis_biInf_of_directed
-  结论: {ι : 类型} {ι' : Sort _} {dom : Set ι} (hdom : dom.Nonempty)
+  结论: {ι : 类型} {ι' : 类型层 _} {dom : 集合 ι} (hdom : dom.非空)
   证明: by
   refine ⟨fun t => ?_⟩
   rw [mem_biInf_of_directed h hdom]; rw [Prod.exists]
@@ -1650,8 +1650,8 @@ theorem hasBasis_principal
 
 中文:
 定理 hasBasis_principal
-  条件: (t : Set α)
-  结论: (𝓟 t).HasBasis (fun _ : Unit => True) fun _ => t
+  条件: (t : 集合 α)
+  结论: (𝓟 t).有基 (fun _ : 单元 => 真) fun _ => t
   证明: ⟨fun U => by simp⟩
 -/
 theorem hasBasis_principal (t : Set α) : (𝓟 t).HasBasis (fun _ : Unit => True) fun _ => t :=
@@ -1691,8 +1691,8 @@ theorem HasBasis.sup'
     simp only [and_assoc, and_left_comm]⟩
 
 中文:
-定理 HasBasis.sup'
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.上确界'
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: ⟨by
     intro t
     simp_rw [mem_sup, hl.mem_iff, hl'.mem_iff, PProd.exists, union_subset_iff,
@@ -1718,8 +1718,8 @@ theorem HasBasis.sup
   proof: (hl.sup' hl').comp_equiv Equiv.pprodEquivProd.symm
 
 中文:
-定理 HasBasis.sup
-  结论: {ι ι' : 类型} {p : ι -> 命题} {s : ι -> Set α} {p' : ι' -> 命题}
+定理 有基.上确界
+  结论: {ι ι' : 类型} {p : ι -> 命题} {s : ι -> 集合 α} {p' : ι' -> 命题}
   证明: (hl.sup' hl').comp_equiv Equiv.pprodEquivProd.symm
 
 Depends on / 依赖: Equiv.pprodEquivProd.symm, comp_equiv, hl.sup, pprodEquivProd
@@ -1741,7 +1741,7 @@ theorem hasBasis_iSup
 
 中文:
 定理 hasBasis_iSup
-  结论: {ι : Sort*} {ι' : ι -> 类型} {l : ι -> Filter α} {p : 对任意 i, ι' i -> 命题}
+  结论: {ι : 类型层*} {ι' : ι -> 类型} {l : ι -> 滤子 α} {p : 对任意 i, ι' i -> 命题}
   证明: hasBasis_iff.mpr fun t => by
     simp only [(hl _).mem_iff, Classical.skolem, forall_and, iUnion_subset_iff,
       mem_iSup]
@@ -1766,8 +1766,8 @@ theorem HasBasis.sup_principal
       Unique.exists_iff]⟩
 
 中文:
-定理 HasBasis.sup_principal
-  条件: (hl : l.HasBasis p s) (t : Set α)
+定理 有基.sup_principal
+  条件: (hl : l.有基 p s) (t : 集合 α)
   证明: ⟨fun u => by
     simp only [(hl.sup' (hasBasis_principal t)).mem_iff, PProd.exists, and_true,
       Unique.exists_iff]⟩
@@ -1790,8 +1790,8 @@ theorem HasBasis.sup_pure
   simp only [← principal_singleton, hl.sup_principal]
 
 中文:
-定理 HasBasis.sup_pure
-  条件: (hl : l.HasBasis p s) (x : α)
+定理 有基.sup_pure
+  条件: (hl : l.有基 p s) (x : α)
   证明: by
   simp only [← principal_singleton, hl.sup_principal]
 
@@ -1811,8 +1811,8 @@ theorem HasBasis.inf_principal
     simp only [mem_inf_principal, hl.mem_iff, subset_def, mem_ofPred_eq, mem_inter_iff, and_imp]⟩
 
 中文:
-定理 HasBasis.inf_principal
-  条件: (hl : l.HasBasis p s) (s' : Set α)
+定理 有基.inf_principal
+  条件: (hl : l.有基 p s) (s' : 集合 α)
   证明: ⟨fun t => by
     simp only [mem_inf_principal, hl.mem_iff, subset_def, mem_ofPred_eq, mem_inter_iff, and_imp]⟩
 
@@ -1833,8 +1833,8 @@ theorem HasBasis.principal_inf
   simpa only [inf_comm, inter_comm] using hl.inf_principal s'
 
 中文:
-定理 HasBasis.principal_inf
-  条件: (hl : l.HasBasis p s) (s' : Set α)
+定理 有基.principal_inf
+  条件: (hl : l.有基 p s) (s' : 集合 α)
   证明: by
   simpa only [inf_comm, inter_comm] using hl.inf_principal s'
 
@@ -1853,8 +1853,8 @@ theorem HasBasis.inf_basis_neBot_iff
   proof: (hl.inf' hl').neBot_iff.trans by simp [@forall_comm _ ι']
 
 中文:
-定理 HasBasis.inf_basis_neBot_iff
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.inf_basis_neBot_iff
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: (hl.inf' hl').neBot_iff.trans by simp [@forall_comm _ ι']
 
 Depends on / 依赖: forall_comm, hl.inf, neBot_iff, neBot_iff.trans
@@ -1872,8 +1872,8 @@ theorem HasBasis.inf_neBot_iff
   proof: hl.inf_basis_neBot_iff l'.basis_sets
 
 中文:
-定理 HasBasis.inf_neBot_iff
-  条件: (hl : l.HasBasis p s)
+定理 有基.inf_neBot_iff
+  条件: (hl : l.有基 p s)
   证明: hl.inf_basis_neBot_iff l'.basis_sets
 
 Depends on / 依赖: basis_sets, hl.inf_basis_neBot_iff, inf_basis_neBot_iff
@@ -1891,8 +1891,8 @@ theorem HasBasis.inf_principal_neBot_iff
   proof: (hl.inf_principal t).neBot_iff
 
 中文:
-定理 HasBasis.inf_principal_neBot_iff
-  条件: (hl : l.HasBasis p s) {t : Set α}
+定理 有基.inf_principal_neBot_iff
+  条件: (hl : l.有基 p s) {t : 集合 α}
   证明: (hl.inf_principal t).neBot_iff
 
 Depends on / 依赖: hl.inf_principal, inf_principal, neBot_iff
@@ -1911,8 +1911,8 @@ theorem HasBasis.disjoint_iff
     hl.inf_basis_neBot_iff hl', not_exists, not_and, bot_eq_empty, ← nonempty_iff_ne_empty]
 
 中文:
-定理 HasBasis.disjoint_iff
-  条件: (hl : l.HasBasis p s) (hl' : l'.HasBasis p' s')
+定理 有基.disjoint_iff
+  条件: (hl : l.有基 p s) (hl' : l'.有基 p' s')
   证明: not_iff_not.mp by simp only [_root_.disjoint_iff, ← Ne.eq_def, ← neBot_iff, inf_eq_inter,
     hl.inf_basis_neBot_iff hl', not_exists, not_and, bot_eq_empty, ← nonempty_iff_ne_empty]
 
@@ -1932,8 +1932,8 @@ theorem _root_.Disjoint.exists_mem_filter_basis
   proof: (hl.disjoint_iff hl').1 h
 
 中文:
-定理 _root_.Disjoint.exists_mem_filter_basis
-  结论: (h : Disjoint l l') (hl : l.HasBasis p s)
+定理 _root_.Disjoint.存在_mem_filter_basis
+  结论: (h : Disjoint l l') (hl : l.有基 p s)
   证明: (hl.disjoint_iff hl').1 h
 
 Depends on / 依赖: disjoint_iff, hl.disjoint_iff
@@ -1970,8 +1970,8 @@ theorem inf_principal_neBot_iff
 
 中文:
 定理 inf_principal_neBot_iff
-  条件: {s : Set α}
-  结论: NeBot (l ⊓ 𝓟 s) ↔ 对任意 U in l, (U inter s).Nonempty
+  条件: {s : 集合 α}
+  结论: NeBot (l ⊓ 𝓟 s) ↔ 对任意 U in l, (U inter s).非空
   证明: l.basis_sets.inf_principal_neBot_iff
 
 Depends on / 依赖: basis_sets, inf_principal_neBot_iff, l.basis_sets.inf_principal_neBot_iff
@@ -1994,7 +1994,7 @@ inter_compl_nonempty_iff.2 fun hts => hs mem_of_superset ht hts⟩
 
 中文:
 定理 mem_iff_inf_principal_compl
-  条件: {f : Filter α} {s : Set α}
+  条件: {f : 滤子 α} {s : 集合 α}
   结论: s in f ↔ f ⊓ 𝓟 sᶜ = ⊥
   证明: by
   refine not_iff_not.1 ((inf_principal_neBot_iff.trans ?_).symm.trans neBot_iff)
@@ -2023,7 +2023,7 @@ theorem notMem_iff_inf_principal_compl
 
 中文:
 定理 notMem_iff_inf_principal_compl
-  条件: {f : Filter α} {s : Set α}
+  条件: {f : 滤子 α} {s : 集合 α}
   结论: s ∉ f ↔ NeBot (f ⊓ 𝓟 sᶜ)
   证明: (not_congr mem_iff_inf_principal_compl).trans neBot_iff.symm
 
@@ -2049,7 +2049,7 @@ theorem disjoint_principal_right
 
 中文:
 定理 disjoint_principal_right
-  条件: {f : Filter α} {s : Set α}
+  条件: {f : 滤子 α} {s : 集合 α}
   结论: Disjoint f (𝓟 s) ↔ sᶜ in f
   证明: by
   rw [mem_iff_inf_principal_compl]; rw [compl_compl]; rw [disjoint_iff]
@@ -2076,7 +2076,7 @@ theorem disjoint_principal_left
 
 中文:
 定理 disjoint_principal_left
-  条件: {f : Filter α} {s : Set α}
+  条件: {f : 滤子 α} {s : 集合 α}
   结论: Disjoint (𝓟 s) f ↔ sᶜ in f
   证明: by
   rw [disjoint_comm]; rw [disjoint_principal_right]
@@ -2105,7 +2105,7 @@ alias ⟨_, _root_.Disjoint.filter_principal⟩ := disjoint_principal_principal
 
 中文:
 定理 disjoint_principal_principal
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: Disjoint (𝓟 s) (𝓟 t) ↔ Disjoint s t
   证明: by
   rw [← subset_compl_iff_disjoint_left]; rw [disjoint_principal_left]; rw [mem_principal]
@@ -2135,7 +2135,7 @@ theorem disjoint_pure_pure
 中文:
 定理 disjoint_pure_pure
   条件: {x y : α}
-  结论: Disjoint (pure x : Filter α) (pure y) ↔ x != y
+  结论: Disjoint (pure x : 滤子 α) (pure y) ↔ x != y
   证明: by
   simp only [← principal_singleton, disjoint_principal_principal, disjoint_singleton]
 
@@ -2155,8 +2155,8 @@ theorem HasBasis.disjoint_iff_left
     (hasBasis_principal _).disjoint_iff l'.basis_sets, true_and, Unique.exists_iff]
 
 中文:
-定理 HasBasis.disjoint_iff_left
-  条件: (h : l.HasBasis p s)
+定理 有基.disjoint_iff_left
+  条件: (h : l.有基 p s)
   证明: by
   simp only [h.disjoint_iff l'.basis_sets, id, ← disjoint_principal_left,
     (hasBasis_principal _).disjoint_iff l'.basis_sets, true_and, Unique.exists_iff]
@@ -2177,8 +2177,8 @@ theorem HasBasis.disjoint_iff_right
   proof: disjoint_comm.trans h.disjoint_iff_left
 
 中文:
-定理 HasBasis.disjoint_iff_right
-  条件: (h : l.HasBasis p s)
+定理 有基.disjoint_iff_right
+  条件: (h : l.有基 p s)
   证明: disjoint_comm.trans h.disjoint_iff_left
 
 Depends on / 依赖: disjoint_comm, disjoint_comm.trans, disjoint_iff_left, h.disjoint_iff_left
@@ -2197,8 +2197,8 @@ theorem le_iff_forall_inf_principal_compl
   proof: forall₂_congr fun _ _ => mem_iff_inf_principal_compl
 
 中文:
-定理 le_iff_forall_inf_principal_compl
-  条件: {f g : Filter α}
+定理 le_iff_对任意_inf_principal_compl
+  条件: {f g : 滤子 α}
   结论: f <= g ↔ 对任意 V in g, f ⊓ 𝓟 Vᶜ = ⊥
   证明: forall₂_congr fun _ _ => mem_iff_inf_principal_compl
 
@@ -2218,7 +2218,7 @@ theorem inf_neBot_iff_frequently_left
 
 中文:
 定理 inf_neBot_iff_frequently_left
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   证明: by
   simp only [inf_neBot_iff, frequently_iff, and_comm]; rfl
 
@@ -2240,7 +2240,7 @@ theorem inf_neBot_iff_frequently_right
 
 中文:
 定理 inf_neBot_iff_frequently_right
-  条件: {f g : Filter α}
+  条件: {f g : 滤子 α}
   证明: by
   rw [inf_comm]
   exact inf_neBot_iff_frequently_left
@@ -2262,8 +2262,8 @@ theorem HasBasis.eq_biInf
   proof: eq_biInf_of_mem_iff_exists_mem fun {_} => by simp only [h.mem_iff, mem_principal]
 
 中文:
-定理 HasBasis.eq_biInf
-  条件: (h : l.HasBasis p s)
+定理 有基.eq_biInf
+  条件: (h : l.有基 p s)
   结论: l = ⨅ (i) (_ : p i), 𝓟 (s i)
   证明: eq_biInf_of_mem_iff_exists_mem fun {_} => by simp only [h.mem_iff, mem_principal]
 
@@ -2283,8 +2283,8 @@ theorem HasBasis.eq_iInf
   simpa only [iInf_true] using h.eq_biInf
 
 中文:
-定理 HasBasis.eq_iInf
-  条件: (h : l.HasBasis (fun _ => True) s)
+定理 有基.eq_iInf
+  条件: (h : l.有基 (fun _ => 真) s)
   结论: l = ⨅ i, 𝓟 (s i)
   证明: by
   simpa only [iInf_true] using h.eq_biInf
@@ -2305,7 +2305,7 @@ theorem hasBasis_iInf_principal
 
 中文:
 定理 hasBasis_iInf_principal
-  条件: {s : ι -> Set α} (h : Directed (· >= ·) s) [Nonempty ι]
+  条件: {s : ι -> 集合 α} (h : Directed (· >= ·) s) [非空 ι]
   证明: ⟨fun t => by
     simpa only [true_and] using! mem_iInf_of_directed (h.mono_comp _ monotone_principal.dual) t⟩
 
@@ -2330,7 +2330,7 @@ theorem hasBasis_biInf_principal
 
 中文:
 定理 hasBasis_biInf_principal
-  结论: {s : β -> Set α} {S : Set β} (h : DirectedOn (s ⁻¹'o (· >= ·)) S)
+  结论: {s : β -> 集合 α} {S : 集合 β} (h : DirectedOn (s ⁻¹'o (· >= ·)) S)
   证明: ⟨fun t => by
     refine mem_biInf_of_directed ?_ ne
     rw [directedOn_iff_directed]; rw [← directed_comp] at h ⊢
@@ -2357,7 +2357,7 @@ theorem hasBasis_biInf_principal'
 
 中文:
 定理 hasBasis_biInf_principal'
-  结论: {ι : 类型} {p : ι -> 命题} {s : ι -> Set α}
+  结论: {ι : 类型} {p : ι -> 命题} {s : ι -> 集合 α}
   证明: Filter.hasBasis_biInf_principal h ne
 
 Depends on / 依赖: Filter, Filter.hasBasis_biInf_principal, hasBasis_biInf_principal
@@ -2377,9 +2377,9 @@ theorem HasBasis.map
   proof: ⟨fun t => by simp only [mem_map, image_subset_iff, hl.mem_iff, preimage]⟩
 
 中文:
-定理 HasBasis.map
-  条件: (f : α -> β) (hl : l.HasBasis p s)
-  结论: (l.map f).HasBasis p fun i => f '' s i
+定理 有基.map
+  条件: (f : α -> β) (hl : l.有基 p s)
+  结论: (l.map f).有基 p fun i => f '' s i
   证明: ⟨fun t => by simp only [mem_map, image_subset_iff, hl.mem_iff, preimage]⟩
 
 Depends on / 依赖: hl.mem_iff, image_subset_iff, mem_iff, mem_map, preimage
@@ -2399,8 +2399,8 @@ theorem HasBasis.comap
 exact ⟨fun h x hx => h hx rfl, fun h y hy x hx => h by rwa [mem_preimage, hx]⟩⟩
 
 中文:
-定理 HasBasis.comap
-  条件: (f : β -> α) (hl : l.HasBasis p s)
+定理 有基.comap
+  条件: (f : β -> α) (hl : l.有基 p s)
   证明: ⟨fun t => by
     simp only [mem_comap', hl.mem_iff]
     refine exists_congr (fun i => Iff.rfl.and ?_)
@@ -2425,7 +2425,7 @@ theorem comap_hasBasis
 
 中文:
 定理 comap_hasBasis
-  条件: (f : α -> β) (l : Filter β)
+  条件: (f : α -> β) (l : 滤子 β)
   证明: ⟨fun _ => mem_comap⟩
 
 Depends on / 依赖: mem_comap
@@ -2445,8 +2445,8 @@ theorem HasBasis.forall_mem_mem
   exact ⟨fun h i hi => h (s i) i hi Subset.rfl, fun h t i hi ht => ht (h i hi)⟩
 
 中文:
-定理 HasBasis.forall_mem_mem
-  条件: (h : HasBasis l p s) {x : α}
+定理 有基.对任意_mem_mem
+  条件: (h : 有基 l p s) {x : α}
   证明: by
   simp only [h.mem_iff, exists_imp, and_imp]
   exact ⟨fun h i hi => h (s i) i hi Subset.rfl, fun h t i hi ht => ht (h i hi)⟩
@@ -2470,8 +2470,8 @@ theorem HasBasis.biInf_mem
       iInf₂_le_of_le i hpi (hf hi)
 
 中文:
-定理 HasBasis.biInf_mem
-  结论: [CompleteLattice β] {f : Set α -> β} (h : HasBasis l p s)
+定理 有基.biInf_mem
+  结论: [完备格 β] {f : 集合 α -> β} (h : 有基 l p s)
   证明: le_antisymm (le_iInf₂ fun i hi => iInf₂_le (s i) (h.mem_of_mem hi))
     le_iInf₂ fun _t ht =>
       let ⟨i, hpi, hi⟩ := h.mem_iff.1 ht
@@ -2493,8 +2493,8 @@ theorem HasBasis.biInter_mem
   proof: h.biInf_mem hf
 
 中文:
-定理 HasBasis.biInter_mem
-  条件: {f : Set α -> Set β} (h : HasBasis l p s) (hf : Monotone f)
+定理 有基.bi整数er_mem
+  条件: {f : 集合 α -> 集合 β} (h : 有基 l p s) (hf : 递增 f)
   证明: h.biInf_mem hf
 -/
 protected theorem HasBasis.biInter_mem {f : Set α -> Set β} (h : HasBasis l p s) (hf : Monotone f) :
@@ -2511,8 +2511,8 @@ theorem HasBasis.ker
   proof: sInter_eq_biInter.trans h.biInter_mem monotone_id
 
 中文:
-定理 HasBasis.ker
-  条件: (h : HasBasis l p s)
+定理 有基.ker
+  条件: (h : 有基 l p s)
   结论: l.ker = ⋂ (i) (_ : p i), s i
   证明: sInter_eq_biInter.trans h.biInter_mem monotone_id
 -/
@@ -2532,11 +2532,11 @@ structure IsAntitoneBasis
     - antitone : Antitone s''
 
 中文:
-结构 IsAntitoneBasis
-  参数: : 命题 extends IsBasis (fun _ => True) s'' where
-  继承: IsBasis (fun _ => True) s''
+结构 是AntitoneBasis
+  参数: : 命题 extends 是基 (fun _ => 真) s'' where
+  继承: 是基 (fun _ => 真) s''
   公理与运算 (1 个):
-    - antitone : Antitone s''
+    - antitone : 递减 s''
 -/
 structure IsAntitoneBasis : Prop extends IsBasis (fun _ => True) s'' where
   /-- The sequence of sets is antitone. -/
@@ -2553,11 +2553,11 @@ structure HasAntitoneBasis
     - antitone : Antitone s
 
 中文:
-结构 HasAntitoneBasis
-  参数: (l : Filter α) (s : ι'' -> Set α)
-  继承: HasBasis l (fun _ => True) s
+结构 有AntitoneBasis
+  参数: (l : 滤子 α) (s : ι'' -> 集合 α)
+  继承: 有基 l (fun _ => 真) s
   公理与运算 (1 个):
-    - antitone : Antitone s
+    - antitone : 递减 s
 
 Depends on / 依赖: HasBasis, HasBasis.map, hf.toHasBasis, image_mono, toHasBasis
 -/
@@ -2575,8 +2575,8 @@ theorem HasAntitoneBasis.map
   proof: ⟨HasBasis.map _ hf.toHasBasis, fun _ _ h => image_mono hf.2 h⟩
 
 中文:
-定理 HasAntitoneBasis.map
-  结论: {l : Filter α} {s : ι'' -> Set α}
+定理 有AntitoneBasis.map
+  结论: {l : 滤子 α} {s : ι'' -> 集合 α}
   证明: ⟨HasBasis.map _ hf.toHasBasis, fun _ _ h => image_mono hf.2 h⟩
 -/
 protected theorem HasAntitoneBasis.map {l : Filter α} {s : ι'' -> Set α}
@@ -2592,8 +2592,8 @@ theorem HasAntitoneBasis.comap
   proof: ⟨hf.1.comap _, fun _ _ h => preimage_mono (hf.2 h)⟩
 
 中文:
-定理 HasAntitoneBasis.comap
-  结论: {l : Filter α} {s : ι'' -> Set α}
+定理 有AntitoneBasis.comap
+  结论: {l : 滤子 α} {s : ι'' -> 集合 α}
   证明: ⟨hf.1.comap _, fun _ _ h => preimage_mono (hf.2 h)⟩
 -/
 protected theorem HasAntitoneBasis.comap {l : Filter α} {s : ι'' -> Set α}
@@ -2609,8 +2609,8 @@ lemma HasAntitoneBasis.iInf_principal
   proof: ⟨hasBasis_iInf_principal hs.directed_ge, hs⟩
 
 中文:
-引理 HasAntitoneBasis.iInf_principal
-  结论: {ι : 类型} [Preorder ι] [Nonempty ι] [IsDirectedOrder ι]
+引理 有AntitoneBasis.iInf_principal
+  结论: {ι : 类型} [预序 ι] [非空 ι] [IsDirectedOrder ι]
   证明: ⟨hasBasis_iInf_principal hs.directed_ge, hs⟩
 
 Depends on / 依赖: directed_ge, hasBasis_iInf_principal, hs.directed_ge
@@ -2637,8 +2637,8 @@ theorem HasBasis.tendsto_left_iff
   rfl
 
 中文:
-定理 HasBasis.tendsto_left_iff
-  条件: (hla : la.HasBasis pa sa)
+定理 有基.tendsto_left_iff
+  条件: (hla : la.有基 pa sa)
   证明: by
   simp only [Tendsto, (hla.map f).le_iff, image_subset_iff]
   rfl
@@ -2660,8 +2660,8 @@ theorem HasBasis.tendsto_right_iff
   simp only [Tendsto, hlb.ge_iff, mem_map', Filter.Eventually]
 
 中文:
-定理 HasBasis.tendsto_right_iff
-  条件: (hlb : lb.HasBasis pb sb)
+定理 有基.tendsto_right_iff
+  条件: (hlb : lb.有基 pb sb)
   证明: by
   simp only [Tendsto, hlb.ge_iff, mem_map', Filter.Eventually]
 
@@ -2681,8 +2681,8 @@ theorem HasBasis.tendsto_iff
   simp [hlb.tendsto_right_iff, hla.eventually_iff]
 
 中文:
-定理 HasBasis.tendsto_iff
-  条件: (hla : la.HasBasis pa sa) (hlb : lb.HasBasis pb sb)
+定理 有基.tendsto_iff
+  条件: (hla : la.有基 pa sa) (hlb : lb.有基 pb sb)
   证明: by
   simp [hlb.tendsto_right_iff, hla.eventually_iff]
 
@@ -2701,8 +2701,8 @@ theorem Tendsto.basis_left
   proof: hla.tendsto_left_iff.1 H
 
 中文:
-定理 Tendsto.basis_left
-  条件: (H : Tendsto f la lb) (hla : la.HasBasis pa sa)
+定理 收敛.basis_left
+  条件: (H : 收敛 f la lb) (hla : la.有基 pa sa)
   证明: hla.tendsto_left_iff.1 H
 
 Depends on / 依赖: hla.tendsto_left_iff, tendsto_left_iff
@@ -2720,8 +2720,8 @@ theorem Tendsto.basis_right
   proof: hlb.tendsto_right_iff.1 H
 
 中文:
-定理 Tendsto.basis_right
-  条件: (H : Tendsto f la lb) (hlb : lb.HasBasis pb sb)
+定理 收敛.basis_right
+  条件: (H : 收敛 f la lb) (hlb : lb.有基 pb sb)
   证明: hlb.tendsto_right_iff.1 H
 
 Depends on / 依赖: hlb.tendsto_right_iff, tendsto_right_iff
@@ -2739,8 +2739,8 @@ theorem Tendsto.basis_both
   proof: (hla.tendsto_iff hlb).1 H
 
 中文:
-定理 Tendsto.basis_both
-  结论: (H : Tendsto f la lb) (hla : la.HasBasis pa sa)
+定理 收敛.basis_both
+  结论: (H : 收敛 f la lb) (hla : la.有基 pa sa)
   证明: (hla.tendsto_iff hlb).1 H
 
 Depends on / 依赖: hla.tendsto_iff, tendsto_iff
@@ -2759,8 +2759,8 @@ theorem HasBasis.prod_pprod
   proof: (hla.comap Prod.fst).inf' (hlb.comap Prod.snd)
 
 中文:
-定理 HasBasis.prod_pprod
-  条件: (hla : la.HasBasis pa sa) (hlb : lb.HasBasis pb sb)
+定理 有基.prod_pprod
+  条件: (hla : la.有基 pa sa) (hlb : lb.有基 pb sb)
   证明: (hla.comap Prod.fst).inf' (hlb.comap Prod.snd)
 
 Depends on / 依赖: Prod.fst, Prod.snd, hla.comap, hlb.comap
@@ -2778,8 +2778,8 @@ theorem HasBasis.prod
   proof: (hla.comap Prod.fst).inf (hlb.comap Prod.snd)
 
 中文:
-定理 HasBasis.prod
-  结论: {ι ι' : 类型} {pa : ι -> 命题} {sa : ι -> Set α} {pb : ι' -> 命题}
+定理 有基.乘积
+  结论: {ι ι' : 类型} {pa : ι -> 命题} {sa : ι -> 集合 α} {pb : ι' -> 命题}
   证明: (hla.comap Prod.fst).inf (hlb.comap Prod.snd)
 
 Depends on / 依赖: Prod.fst, Prod.snd, hla.comap, hlb.comap
@@ -2799,8 +2799,8 @@ theorem HasBasis.principal_prod
   simpa only [prod_eq_inf, comap_principal, prod_eq] using (h.comap Prod.snd).principal_inf _
 
 中文:
-定理 HasBasis.principal_prod
-  条件: (sa : Set α) (h : lb.HasBasis pb sb)
+定理 有基.principal_prod
+  条件: (sa : 集合 α) (h : lb.有基 pb sb)
   证明: by
   simpa only [prod_eq_inf, comap_principal, prod_eq] using (h.comap Prod.snd).principal_inf _
 -/
@@ -2818,8 +2818,8 @@ theorem HasBasis.prod_principal
   simpa only [prod_eq_inf, comap_principal, prod_eq] using (h.comap Prod.fst).inf_principal _
 
 中文:
-定理 HasBasis.prod_principal
-  条件: (h : la.HasBasis pa sa) (sb : Set β)
+定理 有基.prod_principal
+  条件: (h : la.有基 pa sa) (sb : 集合 β)
   证明: by
   simpa only [prod_eq_inf, comap_principal, prod_eq] using (h.comap Prod.fst).inf_principal _
 -/
@@ -2837,8 +2837,8 @@ theorem HasBasis.top_prod
   simpa only [principal_univ] using h.principal_prod univ
 
 中文:
-定理 HasBasis.top_prod
-  条件: (h : lb.HasBasis pb sb)
+定理 有基.top_prod
+  条件: (h : lb.有基 pb sb)
   证明: by
   simpa only [principal_univ] using h.principal_prod univ
 -/
@@ -2856,8 +2856,8 @@ theorem HasBasis.prod_top
   simpa only [principal_univ] using h.prod_principal univ
 
 中文:
-定理 HasBasis.prod_top
-  条件: (h : la.HasBasis pa sa)
+定理 有基.prod_top
+  条件: (h : la.有基 pa sa)
   证明: by
   simpa only [principal_univ] using h.prod_principal univ
 -/
@@ -2881,8 +2881,8 @@ theorem HasBasis.prod_same_index
     exact ⟨⟨i, i⟩, ⟨hi, hi⟩, h⟩
 
 中文:
-定理 HasBasis.prod_same_index
-  结论: {p : ι -> 命题} {sb : ι -> Set β} (hla : la.HasBasis p sa)
+定理 有基.prod_same_index
+  结论: {p : ι -> 命题} {sb : ι -> 集合 β} (hla : la.有基 p sa)
   证明: by
   simp only [hasBasis_iff, (hla.prod_pprod hlb).mem_iff]
   refine fun t => ⟨?_, ?_⟩
@@ -2916,8 +2916,8 @@ theorem HasBasis.prod_same_index_mono
 ⟨min i j, this, hsa this hi min_le_left _ _, hsb this hj min_le_right _ _⟩
 
 中文:
-定理 HasBasis.prod_same_index_mono
-  结论: {ι : 类型} [LinearOrder ι] {p : ι -> 命题} {sa : ι -> Set α}
+定理 有基.prod_same_index_mono
+  结论: {ι : 类型} [线性序 ι] {p : ι -> 命题} {sa : ι -> 集合 α}
   证明: hla.prod_same_index hlb fun {i j} hi hj =>
     have : p (min i j) := min_rec' _ hi hj
 ⟨min i j, this, hsa this hi min_le_left _ _, hsb this hj min_le_right _ _⟩
@@ -2941,8 +2941,8 @@ theorem HasBasis.prod_same_index_anti
   proof: @HasBasis.prod_same_index_mono _ _ _ _ ιᵒᵈ _ _ _ _ hla hlb hsa.dual_left hsb.dual_left
 
 中文:
-定理 HasBasis.prod_same_index_anti
-  结论: {ι : 类型} [LinearOrder ι] {p : ι -> 命题} {sa : ι -> Set α}
+定理 有基.prod_same_index_anti
+  结论: {ι : 类型} [线性序 ι] {p : ι -> 命题} {sa : ι -> 集合 α}
   证明: @HasBasis.prod_same_index_mono _ _ _ _ ιᵒᵈ _ _ _ _ hla hlb hsa.dual_left hsb.dual_left
 
 Depends on / 依赖: HasBasis, HasBasis.prod_same_index_mono, dual_left, hsa.dual_left, hsb.dual_left, prod_same_index_mono
@@ -2964,8 +2964,8 @@ theorem HasBasis.prod_self
       hl.mem_iff.1 (inter_mem (hl.mem_of_mem hi) (hl.mem_of_mem hj))
 
 中文:
-定理 HasBasis.prod_self
-  条件: (hl : la.HasBasis pa sa)
+定理 有基.prod_self
+  条件: (hl : la.有基 pa sa)
   证明: hl.prod_same_index hl fun {i j} hi hj => by
     simpa only [exists_prop, subset_inter_iff] using
       hl.mem_iff.1 (inter_mem (hl.mem_of_mem hi) (hl.mem_of_mem hj))
@@ -3045,8 +3045,8 @@ theorem HasAntitoneBasis.prod
   proof: ⟨hf.1.prod_same_index_anti hg.1 (hf.2.antitoneOn _) (hg.2.antitoneOn _), hf.2.set_prod hg.2⟩
 
 中文:
-定理 HasAntitoneBasis.prod
-  结论: {ι : 类型} [LinearOrder ι] {f : Filter α} {g : Filter β}
+定理 有AntitoneBasis.乘积
+  结论: {ι : 类型} [线性序 ι] {f : 滤子 α} {g : 滤子 β}
   证明: ⟨hf.1.prod_same_index_anti hg.1 (hf.2.antitoneOn _) (hg.2.antitoneOn _), hf.2.set_prod hg.2⟩
 
 Depends on / 依赖: antitoneOn, prod_same_index_anti, set_prod
@@ -3065,8 +3065,8 @@ theorem HasBasis.coprod
   proof: (hla.comap Prod.fst).sup (hlb.comap Prod.snd)
 
 中文:
-定理 HasBasis.coprod
-  结论: {ι ι' : 类型} {pa : ι -> 命题} {sa : ι -> Set α} {pb : ι' -> 命题}
+定理 有基.coprod
+  结论: {ι ι' : 类型} {pa : ι -> 命题} {sa : ι -> 集合 α} {pb : ι' -> 命题}
   证明: (hla.comap Prod.fst).sup (hlb.comap Prod.snd)
 
 Depends on / 依赖: Prod.fst, Prod.snd, hla.comap, hlb.comap

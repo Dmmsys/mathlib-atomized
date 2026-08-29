@@ -33,8 +33,8 @@ theorem Subalgebra.isSimpleOrder_of_finrank_prime
       refine (hp.eq_one
 
 中文:
-定理 Subalgebra.isSimpleOrder_of_finrank_prime
-  结论: (F A) [Field F] [Ring A] [IsDomain A]
+定理 子代数.isSimpleOrder_of_finrank_prime
+  结论: (F A) [域 F] [环 A] [是整环 A]
   证明: { toNontrivial :=
       ⟨⟨⊥, ⊤, fun he =>
           Nat.not_prime_one ((Subalgebra.bot_eq_top_iff_finrank_eq_one.1 he).subst hp)⟩⟩

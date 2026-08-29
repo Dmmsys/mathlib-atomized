@@ -64,7 +64,7 @@ definition cdf
 
 中文:
 定义 cdf
-  签名: (μ : Measure 实数)
+  签名: (μ : 测度 实数)
   定义体: condCDF ((dirac Unit.unit).prod μ) Unit.unit
 
 Depends on / 依赖: Unit.unit, condCDF
@@ -123,7 +123,7 @@ lemma monotone_cdf
 
 中文:
 引理 monotone_cdf
-  结论: Monotone (cdf μ)
+  结论: 递增 (cdf μ)
   证明: (condCDF _ _).mono
 
 Depends on / 依赖: condCDF
@@ -140,7 +140,7 @@ lemma tendsto_cdf_atBot
 
 中文:
 引理 tendsto_cdf_atBot
-  结论: Tendsto (cdf μ) atBot (𝓝 0)
+  结论: 收敛 (cdf μ) atBot (𝓝 0)
   证明: tendsto_condCDF_atBot _ _
 
 Depends on / 依赖: tendsto_condCDF_atBot
@@ -157,7 +157,7 @@ lemma tendsto_cdf_atTop
 
 中文:
 引理 tendsto_cdf_atTop
-  结论: Tendsto (cdf μ) atTop (𝓝 1)
+  结论: 收敛 (cdf μ) atTop (𝓝 1)
   证明: tendsto_condCDF_atTop _ _
 
 Depends on / 依赖: tendsto_condCDF_atTop
@@ -176,9 +176,9 @@ lemma ofReal_cdf
   simpa only [fst_prod, prod_prod, measure_univ, one_mul, lintegral_dirac] using! h
 
 中文:
-引理 ofReal_cdf
-  条件: [IsProbabilityMeasure μ] (x : 实数)
-  结论: ENN实数.of实数 (cdf μ x) = μ (Iic x)
+引理 of实数_cdf
+  条件: [是概率测度 μ] (x : 实数)
+  结论: 广义非负实数.of实数 (cdf μ x) = μ (左无界右闭区间 x)
   证明: by
   have h := lintegral_condCDF ((dirac Unit.unit).prod μ) x
   simpa only [fst_prod, prod_prod, measure_univ, one_mul, lintegral_dirac] using! h
@@ -201,8 +201,8 @@ lemma cdf_eq_real
 
 中文:
 引理 cdf_eq_real
-  条件: [IsProbabilityMeasure μ] (x : 实数)
-  结论: cdf μ x = μ.real (Iic x)
+  条件: [是概率测度 μ] (x : 实数)
+  结论: cdf μ x = μ.real (左无界右闭区间 x)
   证明: by
   rw [measureReal_def]; rw [← ofReal_cdf μ x]; rw [ENNReal.toReal_ofReal (cdf_nonneg μ x)]
 
@@ -224,7 +224,7 @@ instance instIsProbabilityMeasurecdf
 
 中文:
 实例 instIsProbabilityMeasurecdf
-  签名: : IsProbabilityMeasure (cdf μ).measure
+  签名: : 是概率测度 (cdf μ).measure
   定义体: by
   constructor
   simp only [StieltjesFunction.measure_univ _ (tendsto_cdf_atBot μ) (tendsto_cdf_atTop μ), sub_zero,
@@ -250,7 +250,7 @@ lemma measure_cdf
 
 中文:
 引理 measure_cdf
-  条件: [IsProbabilityMeasure μ]
+  条件: [是概率测度 μ]
   结论: (cdf μ).measure = μ
   证明: by
   refine ext_of_Iic (cdf μ).measure μ (fun a => ?_)
@@ -278,7 +278,7 @@ lemma cdf_measure_stieltjesFunction
 
 中文:
 引理 cdf_measure_stieltjesFunction
-  结论: (f : StieltjesFunction 实数) (hf0 : Tendsto f atBot (𝓝 0))
+  结论: (f : Stieltjes函数 实数) (hf0 : 收敛 f atBot (𝓝 0))
   证明: by
   refine (cdf f.measure).eq_of_measure_of_tendsto_atBot f ?_ (tendsto_cdf_atBot _) hf0
   have h_prob : IsProbabilityMeasure f.measure :=
@@ -307,8 +307,8 @@ lemma unitInterval.cdf_eq_real
   rw [ProbabilityTheory.cdf_eq_real]; rw [map_measureReal_apply measurable_subtype_coe measurableSet_Iic]; rw [subtype_Iic_eq_Icc]
 
 中文:
-引理 unitInterval.cdf_eq_real
-  条件: (μ : Measure I) [IsProbabilityMeasure μ] (x : I)
+引理 unit整数erval.cdf_eq_real
+  条件: (μ : 测度 I) [是概率测度 μ] (x : I)
   证明: by
   have : IsProbabilityMeasure (μ.map Subtype.val) := isProbabilityMeasure_map (by fun_prop)
   rw [ProbabilityTheory.cdf_eq_real]; rw [map_measureReal_apply measurable_subtype_coe measurableSet_Iic]; rw [subtype_Iic_eq_Icc]
@@ -334,8 +334,8 @@ lemma MeasureTheory.Measure.eq_of_cdf
   rw [← measure_cdf μ]; rw [← measure_cdf ν]; rw [h]
 
 中文:
-引理 MeasureTheory.Measure.eq_of_cdf
-  结论: (μ ν : Measure 实数) [IsProbabilityMeasure μ]
+引理 测度论.测度.eq_of_cdf
+  结论: (μ ν : 测度 实数) [是概率测度 μ]
   证明: by
   rw [← measure_cdf μ]; rw [← measure_cdf ν]; rw [h]
 
@@ -354,8 +354,8 @@ lemma MeasureTheory.Measure.cdf_eq_iff
   proof: ⟨eq_of_cdf μ ν, fun h => by rw [h]⟩
 
 中文:
-引理 MeasureTheory.Measure.cdf_eq_iff
-  结论: (μ ν : Measure 实数) [IsProbabilityMeasure μ]
+引理 测度论.测度.cdf_eq_iff
+  结论: (μ ν : 测度 实数) [是概率测度 μ]
   证明: ⟨eq_of_cdf μ ν, fun h => by rw [h]⟩
 -/
 @[simp] lemma MeasureTheory.Measure.cdf_eq_iff (μ ν : Measure Real) [IsProbabilityMeasure μ]

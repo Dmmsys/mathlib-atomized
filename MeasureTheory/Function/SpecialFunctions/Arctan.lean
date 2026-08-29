@@ -28,7 +28,7 @@ theorem measurable_arctan
 
 中文:
 定理 measurable_arctan
-  结论: Measurable arctan
+  结论: 可测 arctan
   证明: continuous_arctan.measurable
 
 Depends on / 依赖: continuous_arctan, continuous_arctan.measurable, measurable
@@ -55,9 +55,9 @@ theorem Measurable.arctan
   proof: measurable_arctan.comp hf
 
 中文:
-定理 Measurable.arctan
-  条件: (hf : Measurable f)
-  结论: Measurable fun x => arctan (f x)
+定理 可测.arctan
+  条件: (hf : 可测 f)
+  结论: 可测 fun x => arctan (f x)
   证明: measurable_arctan.comp hf
 
 Depends on / 依赖: measurable_arctan, measurable_arctan.comp

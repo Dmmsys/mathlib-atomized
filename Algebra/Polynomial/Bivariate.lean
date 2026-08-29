@@ -311,7 +311,7 @@ lemma evalEval_finsetSum
 
 中文:
 引理 evalEval_finsetSum
-  条件: {ι : 类型} (s : Finset ι) (x y : R) (f : ι -> R[X][Y])
+  条件: {ι : 类型} (s : 有限集 ι) (x y : R) (f : ι -> R[X][Y])
   证明: by
   simp only [evalEval, eval_finsetSum]
 
@@ -339,7 +339,7 @@ lemma evalEval_smul
 
 中文:
 引理 evalEval_smul
-  结论: [DistribSMul S R] [IsScalarTower S R R] (x y : R) (s : S)
+  结论: [分配标量乘法 S R] [标量塔 S R R] (x y : R) (s : S)
   证明: by
   simp only [evalEval, eval_smul]
 
@@ -361,7 +361,7 @@ lemma evalEval_surjective
 中文:
 引理 evalEval_surjective
   条件: (x y : R)
-  结论: Function.Surjective evalEval x y
+  结论: 函数.满射 evalEval x y
   证明: fun y => ⟨CC y, evalEval_CC ..⟩
 
 Depends on / 依赖: evalEval_CC
@@ -490,7 +490,7 @@ lemma evalEval_prod
 
 中文:
 引理 evalEval_prod
-  条件: {ι : 类型} (s : Finset ι) (x y : R) (p : ι -> R[X][Y])
+  条件: {ι : 类型} (s : 有限集 ι) (x y : R) (p : ι -> R[X][Y])
   证明: by
   simp only [evalEval, eval_prod]
 
@@ -512,7 +512,7 @@ lemma evalEval_list_prod
 
 中文:
 引理 evalEval_list_prod
-  条件: (x y : R) (l : List R[X][Y])
+  条件: (x y : R) (l : 列表 R[X][Y])
   证明: by
   simp only [evalEval, eval_list_prod, List.map_map]
   rfl -- todo: add the missing lemma
@@ -1323,7 +1323,7 @@ definition equivMvPolynomial
 
 中文:
 定义 equivMvPolynomial
-  签名: : R[X][Y] ≃ₐ[R] MvPolynomial (Fin 2) R
+  签名: : R[X][Y] ≃ₐ[R] 多元多项式 (有限集 2) R
   定义体: .ofAlgHom (aevalAeval (.X 0) (.X 1)) (MvPolynomial.aeval ![.C X, X])
     (by ext i; fin_cases i <;> simp) (by ext <;> simp)
 
@@ -1503,7 +1503,7 @@ lemma pderiv_zero_equivMvPolynomial
 
 中文:
 引理 pderiv_zero_equivMvPolynomial
-  条件: {R : 类型} [CommRing R] (p : R[X][Y])
+  条件: {R : 类型} [交换环 R] (p : R[X][Y])
   证明: by
   induction p using Polynomial.induction_on' with
   | add p q _ _ => aesop

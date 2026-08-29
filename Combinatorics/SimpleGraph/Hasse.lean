@@ -47,7 +47,7 @@ definition hasse
 
 中文:
 定义 hasse
-  签名: : SimpleGraph α where
+  签名: : 简单图 α where
   定义体: a ⋖ b ∨ b ⋖ a
 -/
 def hasse : SimpleGraph α where
@@ -66,7 +66,7 @@ theorem hasse_adj
 
 中文:
 定理 hasse_adj
-  结论: (hasse α).Adj a b ↔ a ⋖ b ∨ b ⋖ a
+  结论: (hasse α).伴随 a b ↔ a ⋖ b ∨ b ⋖ a
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -230,8 +230,8 @@ fun c hc => Or.inr covBy_succ_of_not_isMax hc.2.not_isMax
 
 中文:
 定理 hasse_preconnected_of_succ
-  条件: [SuccOrder α] [IsSuccArchimedean α]
-  结论: (hasse α).Preconnected
+  条件: [Succ序 α] [是SuccArchimedean α]
+  结论: (hasse α).预连通
   证明: fun a b => by
   rw [reachable_iff_reflTransGen]
   exact
@@ -262,8 +262,8 @@ fun c hc => Or.inr pred_covBy_of_not_isMin hc.1.not_isMin
 
 中文:
 定理 hasse_preconnected_of_pred
-  条件: [PredOrder α] [IsPredArchimedean α]
-  结论: (hasse α).Preconnected
+  条件: [Pred序 α] [是PredArchimedean α]
+  结论: (hasse α).预连通
   证明: fun a b => by
   rw [reachable_iff_reflTransGen]; rw [← reflTransGen_swap]
   exact
@@ -307,7 +307,7 @@ theorem pathGraph_adj
 
 中文:
 定理 pathGraph_adj
-  条件: {n : 自然数} {u v : Fin n}
+  条件: {n : 自然数} {u v : 有限集 n}
   证明: by simp [pathGraph, hasse]
 
 Depends on / 依赖: pathGraph
@@ -327,7 +327,7 @@ theorem pathGraph_preconnected
 中文:
 定理 pathGraph_preconnected
   条件: (n : 自然数)
-  结论: (pathGraph n).Preconnected
+  结论: (pathGraph n).预连通
   证明: hasse_preconnected_of_succ _
 
 Depends on / 依赖: hasse_preconnected_of_succ
@@ -347,7 +347,7 @@ theorem pathGraph_connected
 中文:
 定理 pathGraph_connected
   条件: (n : 自然数)
-  结论: (pathGraph (n + 1)).Connected
+  结论: (pathGraph (n + 1)).连通
   证明: ⟨pathGraph_preconnected _⟩
 
 Depends on / 依赖: pathGraph_preconnected
@@ -442,8 +442,8 @@ definition IsPath.pathGraphIsoToSubgraph
     refine ⟨fun hadj => ?_, w.pa
 
 中文:
-定义 IsPath.pathGraphIsoToSubgraph
-  签名: (hw : w.IsPath)
+定义 是道路.pathGraphIsoToSubgraph
+  签名: (hw : w.是道路)
   定义体: w.pathGraphHomToSubgraph
   invFun v := ⟨w.support.idxOf v.val, by grind [w.mem_verts_toSubgraph]⟩
   left_inv := by grind [pathGraphHomToSubgraph, RelHom.coeFn_mk, hw.support_nodup]
@@ -474,8 +474,8 @@ definition IsPath.pathGraphCopy
   body: w.toSubgraph.coeCopy.comp hw.pathGraphIsoToSubgraph.toCopy
 
 中文:
-定义 IsPath.pathGraphCopy
-  签名: (hw : w.IsPath)
+定义 是道路.pathGraphCopy
+  签名: (hw : w.是道路)
   定义体: w.toSubgraph.coeCopy.comp hw.pathGraphIsoToSubgraph.toCopy
 
 Depends on / 依赖: coeCopy, hw.pathGraphIsoToSubgraph.toCopy, pathGraphIsoToSubgraph, toCopy, toSubgraph, w.toSubgraph.coeCopy.comp
@@ -497,8 +497,8 @@ theorem IsPath.isContained_pathGraph
   exact ⟨hw.pathGraphCopy⟩
 
 中文:
-定理 IsPath.isContained_pathGraph
-  条件: (hw : w.IsPath)
+定理 是道路.isContained_pathGraph
+  条件: (hw : w.是道路)
   结论: pathGraph (w.length + 1) ⊑ G
   证明: by
   classical

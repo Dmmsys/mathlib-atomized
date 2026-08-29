@@ -248,7 +248,7 @@ theorem fermatPsp_base_one
 
 中文:
 定理 fermatPsp_base_one
-  条件: {n : 自然数} (h₁ : 1 < n) (h₂ : ¬n.Prime)
+  条件: {n : 自然数} (h₁ : 1 < n) (h₂ : ¬n.素)
   结论: FermatPsp n 1
   证明: by
   refine ⟨show n ∣ 1 ^ (n - 1) - 1 from ?_, h₂, h₁⟩
@@ -438,7 +438,7 @@ theorem psp_from_prime_psp
 
 中文:
 定理 psp_from_prime_psp
-  结论: {b : 自然数} (b_ge_two : 2 <= b) {p : 自然数} (p_prime : p.Prime)
+  结论: {b : 自然数} (b_ge_two : 2 <= b) {p : 自然数} (p_prime : p.素)
   证明: by
   unfold psp_from_prime
   set A := (b ^ p - 1) / (b - 1)
@@ -595,7 +595,7 @@ theorem exists_infinite_pseudoprimes
   -- automatically know that `p` is greater than m and that it does not di
 
 中文:
-定理 exists_infinite_pseudoprimes
+定理 存在_infinite_pseudoprimes
   条件: {b : 自然数} (h : 1 <= b) (m : 自然数)
   证明: by
   by_cases b_ge_two : 2 <= b
@@ -655,7 +655,7 @@ theorem frequently_atTop_fermatPsp
 中文:
 定理 frequently_atTop_fermatPsp
   条件: {b : 自然数} (h : 1 <= b)
-  结论: 存在ᶠ n in Filter.atTop, FermatPsp n b
+  结论: 存在ᶠ n in 滤子.atTop, FermatPsp n b
   证明: by
   -- Based on the proof of `Nat.frequently_atTop_modEq_one`
   refine Filter.frequently_atTop.2 fun n => ?_

@@ -62,7 +62,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  结论: GaloisConnection (image f) (preimage f)
+  结论: GaloisConnection (像 f) (原像 f)
   证明: fun _ _ =>
   image_subset_iff
 -/
@@ -80,7 +80,7 @@ theorem preimage_kernImage
 
 中文:
 定理 preimage_kernImage
-  结论: GaloisConnection (preimage f) (kernImage f)
+  结论: GaloisConnection (原像 f) (kernImage f)
   证明: fun _ _ =>
   subset_kernImage_iff.symm
 -/
@@ -103,7 +103,7 @@ lemma kernImage_mono
 
 中文:
 引理 kernImage_mono
-  结论: Monotone (kernImage f)
+  结论: 递增 (kernImage f)
   证明: Set.preimage_kernImage.monotone_u
 
 Depends on / 依赖: Set.preimage_kernImage.monotone_u, monotone_u, preimage_kernImage
@@ -123,7 +123,7 @@ lemma kernImage_eq_compl
 
 中文:
 引理 kernImage_eq_compl
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: kernImage f s = (f '' sᶜ)ᶜ
   证明: Set.preimage_kernImage.u_unique (Set.image_preimage.compl)
     (fun t => compl_compl (f ⁻¹' t) ▸ Set.preimage_compl)
@@ -146,7 +146,7 @@ lemma kernImage_compl
 
 中文:
 引理 kernImage_compl
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: kernImage f (sᶜ) = (f '' s)ᶜ
   证明: by
   rw [kernImage_eq_compl]; rw [compl_compl]
@@ -188,7 +188,7 @@ lemma kernImage_preimage_eq_iff
 
 中文:
 引理 kernImage_preimage_eq_iff
-  条件: {s : Set β}
+  条件: {s : 集合 β}
   结论: kernImage f (f ⁻¹' s) = s ↔ (range f)ᶜ subseteq s
   证明: by
   rw [kernImage_eq_compl]; rw [← preimage_compl]; rw [compl_eq_comm]; rw [eq_comm]; rw [image_preimage_eq_iff]; rw [compl_subset_comm]
@@ -211,7 +211,7 @@ lemma compl_range_subset_kernImage
 
 中文:
 引理 compl_range_subset_kernImage
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: (range f)ᶜ subseteq kernImage f s
   证明: by
   rw [← kernImage_empty]
@@ -234,7 +234,7 @@ lemma kernImage_union_preimage
 
 中文:
 引理 kernImage_union_preimage
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   证明: by
   rw [kernImage_eq_compl]; rw [kernImage_eq_compl]; rw [compl_union]; rw [← preimage_compl]; rw [image_inter_preimage]; rw [compl_inter]; rw [compl_compl]
 
@@ -255,7 +255,7 @@ lemma kernImage_preimage_union
 
 中文:
 引理 kernImage_preimage_union
-  条件: {s : Set α} {t : Set β}
+  条件: {s : 集合 α} {t : 集合 β}
   证明: by
   rw [union_comm]; rw [kernImage_union_preimage]; rw [union_comm]
 
@@ -286,7 +286,7 @@ theorem image_projection_prod
 
 中文:
 定理 image_projection_prod
-  结论: {ι : 类型} {α : ι -> 类型} {v : 对任意 i : ι, Set (α i)}
+  结论: {ι : 类型} {α : ι -> 类型} {v : 对任意 i : ι, 集合 (α i)}
   证明: by
   classical
     apply Subset.antisymm
@@ -332,7 +332,7 @@ theorem mapsTo_sUnion
 
 中文:
 定理 mapsTo_sUnion
-  条件: {S : Set (Set α)} {t : Set β} {f : α -> β}
+  条件: {S : 集合 (集合 α)} {t : 集合 β} {f : α -> β}
   证明: mapsTo_iff_subset_preimage.trans sUnion_subset_iff
 
 @[simp]
@@ -354,7 +354,7 @@ theorem mapsTo_iUnion
 
 中文:
 定理 mapsTo_iUnion
-  条件: {s : ι -> Set α} {t : Set β} {f : α -> β}
+  条件: {s : ι -> 集合 α} {t : 集合 β} {f : α -> β}
   证明: mapsTo_iff_subset_preimage.trans iUnion_subset_iff
 
 Depends on / 依赖: iUnion_subset_iff, mapsTo_iff_subset_preimage, mapsTo_iff_subset_preimage.trans
@@ -373,7 +373,7 @@ theorem mapsTo_iUnion₂
 
 中文:
 定理 mapsTo_iUnion₂
-  条件: {s : 对任意 i, κ i -> Set α} {t : Set β} {f : α -> β}
+  条件: {s : 对任意 i, κ i -> 集合 α} {t : 集合 β} {f : α -> β}
   证明: mapsTo_iff_subset_preimage.trans iUnion₂_subset_iff
 
 Depends on / 依赖: mapsTo_iff_subset_preimage, mapsTo_iff_subset_preimage.trans
@@ -392,7 +392,7 @@ theorem mapsTo_iUnion_iUnion
 
 中文:
 定理 mapsTo_iUnion_iUnion
-  结论: {s : ι -> Set α} {t : ι -> Set β} {f : α -> β}
+  结论: {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: mapsTo_iUnion.2 fun i => (H i).mono_right (subset_iUnion t i)
 
 Depends on / 依赖: mapsTo_iUnion, mono_right, subset_iUnion
@@ -413,7 +413,7 @@ theorem mapsTo_iUnion₂_iUnion₂
 
 中文:
 定理 mapsTo_iUnion₂_iUnion₂
-  结论: {s : 对任意 i, κ i -> Set α} {t : 对任意 i, κ i -> Set β} {f : α -> β}
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 对任意 i, κ i -> 集合 β} {f : α -> β}
   证明: mapsTo_iUnion_iUnion fun i => mapsTo_iUnion_iUnion (H i)
 
 @[simp]
@@ -436,8 +436,8 @@ theorem mapsTo_sInter
 @[simp]
 
 中文:
-定理 mapsTo_sInter
-  条件: {s : Set α} {T : Set (Set β)} {f : α -> β}
+定理 mapsTo_s整数er
+  条件: {s : 集合 α} {T : 集合 (集合 β)} {f : α -> β}
   证明: forall₂_comm
 
 @[simp]
@@ -456,8 +456,8 @@ theorem mapsTo_iInter
   proof: mapsTo_sInter.trans forall_mem_range
 
 中文:
-定理 mapsTo_iInter
-  条件: {s : Set α} {t : ι -> Set β} {f : α -> β}
+定理 mapsTo_i整数er
+  条件: {s : 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: mapsTo_sInter.trans forall_mem_range
 
 Depends on / 依赖: forall_mem_range, mapsTo_sInter, mapsTo_sInter.trans
@@ -476,8 +476,8 @@ theorem mapsTo_iInter₂
   simp only [mapsTo_iInter]
 
 中文:
-定理 mapsTo_iInter₂
-  条件: {s : Set α} {t : 对任意 i, κ i -> Set β} {f : α -> β}
+定理 mapsTo_i整数er₂
+  条件: {s : 集合 α} {t : 对任意 i, κ i -> 集合 β} {f : α -> β}
   证明: by
   simp only [mapsTo_iInter]
 
@@ -496,8 +496,8 @@ theorem mapsTo_iInter_iInter
   proof: mapsTo_iInter.2 fun i => (H i).mono_left (iInter_subset s i)
 
 中文:
-定理 mapsTo_iInter_iInter
-  结论: {s : ι -> Set α} {t : ι -> Set β} {f : α -> β}
+定理 mapsTo_i整数er_i整数er
+  结论: {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: mapsTo_iInter.2 fun i => (H i).mono_left (iInter_subset s i)
 
 Depends on / 依赖: iInter_subset, mapsTo_iInter, mono_left
@@ -515,8 +515,8 @@ theorem mapsTo_iInter₂_iInter₂
   proof: mapsTo_iInter_iInter fun i => mapsTo_iInter_iInter (H i)
 
 中文:
-定理 mapsTo_iInter₂_iInter₂
-  结论: {s : 对任意 i, κ i -> Set α} {t : 对任意 i, κ i -> Set β} {f : α -> β}
+定理 mapsTo_i整数er₂_i整数er₂
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 对任意 i, κ i -> 集合 β} {f : α -> β}
   证明: mapsTo_iInter_iInter fun i => mapsTo_iInter_iInter (H i)
 
 Depends on / 依赖: mapsTo_iInter_iInter
@@ -535,8 +535,8 @@ theorem image_iInter_subset
   proof: (mapsTo_iInter_iInter fun i => mapsTo_image f (s i)).image_subset
 
 中文:
-定理 image_iInter_subset
-  条件: (s : ι -> Set α) (f : α -> β)
+定理 image_i整数er_subset
+  条件: (s : ι -> 集合 α) (f : α -> β)
   结论: (f '' ⋂ i, s i) subseteq ⋂ i, f '' s i
   证明: (mapsTo_iInter_iInter fun i => mapsTo_image f (s i)).image_subset
 
@@ -554,8 +554,8 @@ theorem image_iInter₂_subset
   proof: (mapsTo_iInter₂_iInter₂ fun i hi => mapsTo_image f (s i hi)).image_subset
 
 中文:
-定理 image_iInter₂_subset
-  条件: (s : 对任意 i, κ i -> Set α) (f : α -> β)
+定理 image_i整数er₂_subset
+  条件: (s : 对任意 i, κ i -> 集合 α) (f : α -> β)
   证明: (mapsTo_iInter₂_iInter₂ fun i hi => mapsTo_image f (s i hi)).image_subset
 
 Depends on / 依赖: image_subset, mapsTo_image
@@ -576,8 +576,8 @@ theorem image_sInter_subset
   apply image_iInter₂_subset
 
 中文:
-定理 image_sInter_subset
-  条件: (S : Set (Set α)) (f : α -> β)
+定理 image_s整数er_subset
+  条件: (S : 集合 (集合 α)) (f : α -> β)
   结论: f '' ⋂₀ S subseteq ⋂ s in S, f '' s
   证明: by
   rw [sInter_eq_biInter]
@@ -599,8 +599,8 @@ theorem image2_sInter_right_subset
   aesop
 
 中文:
-定理 image2_sInter_right_subset
-  条件: (t : Set α) (S : Set (Set β)) (f : α -> β -> γ)
+定理 image2_s整数er_right_subset
+  条件: (t : 集合 α) (S : 集合 (集合 β)) (f : α -> β -> γ)
   证明: by
   aesop
 -/
@@ -618,8 +618,8 @@ theorem image2_sInter_left_subset
   aesop
 
 中文:
-定理 image2_sInter_left_subset
-  条件: (S : Set (Set α)) (t : Set β) (f : α -> β -> γ)
+定理 image2_s整数er_left_subset
+  条件: (S : 集合 (集合 α)) (t : 集合 β) (f : α -> β -> γ)
   证明: by
   aesop
 -/
@@ -740,8 +740,8 @@ theorem InjOn.image_iInter_eq
   replace hx : forall i, x i in ⋃ j, s j 
 
 中文:
-定理 InjOn.image_iInter_eq
-  条件: [Nonempty ι] {s : ι -> Set α} {f : α -> β} (h : InjOn f (⋃ i, s i))
+定理 单射限制.image_i整数er_eq
+  条件: [非空 ι] {s : ι -> 集合 α} {f : α -> β} (h : 单射限制 f (⋃ i, s i))
   证明: by
   inhabit ι
   refine Subset.antisymm (image_iInter_subset s f) fun y hy => ?_
@@ -782,8 +782,8 @@ theorem InjOn.image_biInter_eq
   simpa only [iUnion, iSup_subtype'] using h
 
 中文:
-定理 InjOn.image_biInter_eq
-  结论: {p : ι -> 命题} {s : 对任意 i, p i -> Set α} (hp : 存在 i, p i)
+定理 单射限制.image_bi整数er_eq
+  结论: {p : ι -> 命题} {s : 对任意 i, p i -> 集合 α} (hp : 存在 i, p i)
   证明: by
   simp only [iInter, iInf_subtype']
   have : Nonempty { i // p i } := nonempty_subtype.2 hp
@@ -812,8 +812,8 @@ theorem image_iInter
   · exact hf.injective.injOn.image_iInter_eq
 
 中文:
-定理 image_iInter
-  条件: {f : α -> β} (hf : Bijective f) (s : ι -> Set α)
+定理 image_i整数er
+  条件: {f : α -> β} (hf : 双射 f) (s : ι -> 集合 α)
   证明: by
   cases isEmpty_or_nonempty ι
   · simp_rw [iInter_of_empty, image_univ_of_surjective hf.surjective]
@@ -836,8 +836,8 @@ theorem image_iInter₂
   proof: by simp_rw [image_iInter hf]
 
 中文:
-定理 image_iInter₂
-  条件: {f : α -> β} (hf : Bijective f) (s : 对任意 i, κ i -> Set α)
+定理 image_i整数er₂
+  条件: {f : α -> β} (hf : 双射 f) (s : 对任意 i, κ i -> 集合 α)
   证明: by simp_rw [image_iInter hf]
 
 Depends on / 依赖: image_iInter, simp_rw
@@ -860,7 +860,7 @@ theorem inj_on_iUnion_of_directed
 
 中文:
 定理 inj_on_iUnion_of_directed
-  结论: {s : ι -> Set α} (hs : Directed (· subseteq ·) s) {f : α -> β}
+  结论: {s : ι -> 集合 α} (hs : Directed (· subseteq ·) s) {f : α -> β}
   证明: by
   intro x hx y hy hxy
   rcases mem_iUnion.1 hx with ⟨i, hx⟩
@@ -890,7 +890,7 @@ theorem surjOn_sUnion
 
 中文:
 定理 surjOn_sUnion
-  条件: {s : Set α} {T : Set (Set β)} {f : α -> β} (H : 对任意 t in T, SurjOn f s t)
+  条件: {s : 集合 α} {T : 集合 (集合 β)} {f : α -> β} (H : 对任意 t in T, 满射限制 f s t)
   证明: fun _ ⟨t, ht, hx⟩ => H t ht hx
 -/
 theorem surjOn_sUnion {s : Set α} {T : Set (Set β)} {f : α -> β} (H : forall t in T, SurjOn f s t) :
@@ -906,7 +906,7 @@ theorem surjOn_iUnion
 
 中文:
 定理 surjOn_iUnion
-  条件: {s : Set α} {t : ι -> Set β} {f : α -> β} (H : 对任意 i, SurjOn f s (t i))
+  条件: {s : 集合 α} {t : ι -> 集合 β} {f : α -> β} (H : 对任意 i, 满射限制 f s (t i))
   证明: surjOn_sUnion forall_mem_range.2 H
 
 Depends on / 依赖: forall_mem_range, surjOn_sUnion
@@ -925,7 +925,7 @@ theorem surjOn_iUnion_iUnion
 
 中文:
 定理 surjOn_iUnion_iUnion
-  结论: {s : ι -> Set α} {t : ι -> Set β} {f : α -> β}
+  结论: {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: surjOn_iUnion fun i => (H i).mono (subset_iUnion _ _) (Subset.refl _)
 
 Depends on / 依赖: Subset, Subset.refl, subset_iUnion, surjOn_iUnion
@@ -944,7 +944,7 @@ theorem surjOn_iUnion₂
 
 中文:
 定理 surjOn_iUnion₂
-  结论: {s : Set α} {t : 对任意 i, κ i -> Set β} {f : α -> β}
+  结论: {s : 集合 α} {t : 对任意 i, κ i -> 集合 β} {f : α -> β}
   证明: surjOn_iUnion fun i => surjOn_iUnion (H i)
 
 Depends on / 依赖: surjOn_iUnion
@@ -963,7 +963,7 @@ theorem surjOn_iUnion₂_iUnion₂
 
 中文:
 定理 surjOn_iUnion₂_iUnion₂
-  结论: {s : 对任意 i, κ i -> Set α} {t : 对任意 i, κ i -> Set β} {f : α -> β}
+  结论: {s : 对任意 i, κ i -> 集合 α} {t : 对任意 i, κ i -> 集合 β} {f : α -> β}
   证明: surjOn_iUnion_iUnion fun i => surjOn_iUnion_iUnion (H i)
 
 Depends on / 依赖: surjOn_iUnion_iUnion
@@ -984,8 +984,8 @@ theorem surjOn_iInter
   exact fun i => H i hy
 
 中文:
-定理 surjOn_iInter
-  结论: [Nonempty ι] {s : ι -> Set α} {t : Set β} {f : α -> β}
+定理 surjOn_i整数er
+  结论: [非空 ι] {s : ι -> 集合 α} {t : 集合 β} {f : α -> β}
   证明: by
   intro y hy
   rw [Hinj.image_iInter_eq]; rw [mem_iInter]
@@ -1008,8 +1008,8 @@ theorem surjOn_iInter_iInter
   proof: surjOn_iInter (fun i => (H i).mono (Subset.refl _) (iInter_subset _ _)) Hinj
 
 中文:
-定理 surjOn_iInter_iInter
-  结论: [Nonempty ι] {s : ι -> Set α} {t : ι -> Set β} {f : α -> β}
+定理 surjOn_i整数er_i整数er
+  结论: [非空 ι] {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: surjOn_iInter (fun i => (H i).mono (Subset.refl _) (iInter_subset _ _)) Hinj
 
 Depends on / 依赖: Subset, Subset.refl, iInter_subset, surjOn_iInter
@@ -1030,7 +1030,7 @@ theorem bijOn_iUnion
 
 中文:
 定理 bijOn_iUnion
-  结论: {s : ι -> Set α} {t : ι -> Set β} {f : α -> β} (H : 对任意 i, BijOn f (s i) (t i))
+  结论: {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β} (H : 对任意 i, 双射限制 f (s i) (t i))
   证明: ⟨mapsTo_iUnion_iUnion fun i => (H i).mapsTo, Hinj, surjOn_iUnion_iUnion fun i => (H i).surjOn⟩
 
 Depends on / 依赖: mapsTo, mapsTo_iUnion_iUnion, surjOn, surjOn_iUnion_iUnion
@@ -1050,8 +1050,8 @@ theorem bijOn_iInter
     surjOn_iInter_iInter (fun i => (H i).surjOn) Hinj⟩
 
 中文:
-定理 bijOn_iInter
-  结论: [hi : Nonempty ι] {s : ι -> Set α} {t : ι -> Set β} {f : α -> β}
+定理 bijOn_i整数er
+  结论: [hi : 非空 ι] {s : ι -> 集合 α} {t : ι -> 集合 β} {f : α -> β}
   证明: ⟨mapsTo_iInter_iInter fun i => (H i).mapsTo,
     hi.elim fun i => (H i).injOn.mono (iInter_subset _ _),
     surjOn_iInter_iInter (fun i => (H i).surjOn) Hinj⟩
@@ -1074,7 +1074,7 @@ theorem bijOn_iUnion_of_directed
 
 中文:
 定理 bijOn_iUnion_of_directed
-  结论: {s : ι -> Set α} (hs : Directed (· subseteq ·) s) {t : ι -> Set β}
+  结论: {s : ι -> 集合 α} (hs : Directed (· subseteq ·) s) {t : ι -> 集合 β}
   证明: bijOn_iUnion H inj_on_iUnion_of_directed hs fun i => (H i).injOn
 
 Depends on / 依赖: bijOn_iUnion, inj_on_iUnion_of_directed
@@ -1092,8 +1092,8 @@ theorem bijOn_iInter_of_directed
   proof: bijOn_iInter H inj_on_iUnion_of_directed hs fun i => (H i).injOn
 
 中文:
-定理 bijOn_iInter_of_directed
-  结论: [Nonempty ι] {s : ι -> Set α} (hs : Directed (· subseteq ·) s)
+定理 bijOn_i整数er_of_directed
+  结论: [非空 ι] {s : ι -> 集合 α} (hs : Directed (· subseteq ·) s)
   证明: bijOn_iInter H inj_on_iUnion_of_directed hs fun i => (H i).injOn
 
 Depends on / 依赖: bijOn_iInter, inj_on_iUnion_of_directed
@@ -1122,7 +1122,7 @@ theorem image_iUnion
 
 中文:
 定理 image_iUnion
-  条件: {f : α -> β} {s : ι -> Set α}
+  条件: {f : α -> β} {s : ι -> 集合 α}
   结论: (f '' ⋃ i, s i) = ⋃ i, f '' s i
   证明: by
   ext1 x
@@ -1144,7 +1144,7 @@ theorem image_iUnion₂
 
 中文:
 定理 image_iUnion₂
-  条件: (f : α -> β) (s : 对任意 i, κ i -> Set α)
+  条件: (f : α -> β) (s : 对任意 i, κ i -> 集合 α)
   证明: by simp_rw [image_iUnion]
 
 Depends on / 依赖: image_iUnion, simp_rw
@@ -1164,7 +1164,7 @@ theorem univ_subtype
 中文:
 定理 univ_subtype
   条件: {p : α -> 命题}
-  结论: (univ : Set (Subtype p)) = ⋃ (x) (h : p x), {⟨x, h⟩}
+  结论: (univ : 集合 (子类型 p)) = ⋃ (x) (h : p x), {⟨x, h⟩}
   证明: Set.ext fun ⟨x, h⟩ => by simp [h]
 
 Depends on / 依赖: Set.ext
@@ -1203,7 +1203,7 @@ theorem image_eq_iUnion
 
 中文:
 定理 image_eq_iUnion
-  条件: (f : α -> β) (s : Set α)
+  条件: (f : α -> β) (s : 集合 α)
   结论: f '' s = ⋃ i in s, {f i}
   证明: Set.ext fun b => by simp [@eq_comm β b]
 
@@ -1225,7 +1225,7 @@ theorem biUnion_range
 
 中文:
 定理 biUnion_range
-  条件: {f : ι -> α} {g : α -> Set β}
+  条件: {f : ι -> α} {g : α -> 集合 β}
   结论: ⋃ x in range f, g x = ⋃ y, g (f y)
   证明: iSup_range
 
@@ -1247,7 +1247,7 @@ theorem iUnion_iUnion_eq'
 
 中文:
 定理 iUnion_iUnion_eq'
-  条件: {f : ι -> α} {g : α -> Set β}
+  条件: {f : ι -> α} {g : α -> 集合 β}
   证明: by simpa using biUnion_range
 
 Depends on / 依赖: biUnion_range
@@ -1267,8 +1267,8 @@ theorem biInter_range
 @[simp]
 
 中文:
-定理 biInter_range
-  条件: {f : ι -> α} {g : α -> Set β}
+定理 bi整数er_range
+  条件: {f : ι -> α} {g : α -> 集合 β}
   结论: ⋂ x in range f, g x = ⋂ y, g (f y)
   证明: iInf_range
 
@@ -1289,8 +1289,8 @@ theorem iInter_iInter_eq'
   proof: by simpa using biInter_range
 
 中文:
-定理 iInter_iInter_eq'
-  条件: {f : ι -> α} {g : α -> Set β}
+定理 i整数er_i整数er_eq'
+  条件: {f : ι -> α} {g : α -> 集合 β}
   证明: by simpa using biInter_range
 
 Depends on / 依赖: biInter_range
@@ -1327,7 +1327,7 @@ theorem biInter_image
   proof: iInf_image
 
 中文:
-定理 biInter_image
+定理 bi整数er_image
   结论: ⋂ x in f '' s, g x = ⋂ y in s, g (f y)
   证明: iInf_image
 
@@ -1346,7 +1346,7 @@ lemma biUnion_image2
 
 中文:
 引理 biUnion_image2
-  条件: (s : Set α) (t : Set β) (f : α -> β -> γ) (g : γ -> Set δ)
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> β -> γ) (g : γ -> 集合 δ)
   证明: iSup_image2 ..
 
 Depends on / 依赖: iSup_image2
@@ -1363,8 +1363,8 @@ lemma biInter_image2
   proof: iInf_image2 ..
 
 中文:
-引理 biInter_image2
-  条件: (s : Set α) (t : Set β) (f : α -> β -> γ) (g : γ -> Set δ)
+引理 bi整数er_image2
+  条件: (s : 集合 α) (t : 集合 β) (f : α -> β -> γ) (g : γ -> 集合 δ)
   证明: iInf_image2 ..
 
 Depends on / 依赖: iInf_image2
@@ -1382,7 +1382,7 @@ lemma iUnion_inter_iUnion
 
 中文:
 引理 iUnion_inter_iUnion
-  条件: {ι κ : Sort*} (f : ι -> Set α) (g : κ -> Set α)
+  条件: {ι κ : 类型层*} (f : ι -> 集合 α) (g : κ -> 集合 α)
   证明: by simp_rw [iUnion_inter, inter_iUnion]
 
 Depends on / 依赖: iUnion_inter, inter_iUnion, simp_rw
@@ -1399,8 +1399,8 @@ lemma iInter_union_iInter
   proof: by simp_rw [iInter_union, union_iInter]
 
 中文:
-引理 iInter_union_iInter
-  条件: {ι κ : Sort*} (f : ι -> Set α) (g : κ -> Set α)
+引理 i整数er_union_i整数er
+  条件: {ι κ : 类型层*} (f : ι -> 集合 α) (g : κ -> 集合 α)
   证明: by simp_rw [iInter_union, union_iInter]
 
 Depends on / 依赖: iInter_union, simp_rw, union_iInter
@@ -1419,7 +1419,7 @@ lemma iUnion₂_inter_iUnion₂
 
 中文:
 引理 iUnion₂_inter_iUnion₂
-  结论: {ι₁ κ₁ : Sort*} {ι₂ : ι₁ -> Sort*} {k₂ : κ₁ -> Sort*}
+  结论: {ι₁ κ₁ : 类型层*} {ι₂ : ι₁ -> 类型层*} {k₂ : κ₁ -> 类型层*}
   证明: by
   simp_rw [iUnion_inter, inter_iUnion]
 
@@ -1440,8 +1440,8 @@ lemma iInter₂_union_iInter₂
   simp_rw [iInter_union, union_iInter]
 
 中文:
-引理 iInter₂_union_iInter₂
-  结论: {ι₁ κ₁ : Sort*} {ι₂ : ι₁ -> Sort*} {k₂ : κ₁ -> Sort*}
+引理 i整数er₂_union_i整数er₂
+  结论: {ι₁ κ₁ : 类型层*} {ι₂ : ι₁ -> 类型层*} {k₂ : κ₁ -> 类型层*}
   证明: by
   simp_rw [iInter_union, union_iInter]
 
@@ -1462,7 +1462,7 @@ theorem biUnion_inter_of_pairwise_disjoint
 
 中文:
 定理 biUnion_inter_of_pairwise_disjoint
-  结论: {ι : 类型} {f : ι -> Set α}
+  结论: {ι : 类型} {f : ι -> 集合 α}
   证明: biSup_inter_of_pairwise_disjoint h s t
 
 Depends on / 依赖: biSup_inter_of_pairwise_disjoint
@@ -1481,7 +1481,7 @@ theorem biUnion_iInter_of_pairwise_disjoint
   proof: biSup_iInter_of_pairwise_disjoint h s
 
 中文:
-定理 biUnion_iInter_of_pairwise_disjoint
+定理 biUnion_i整数er_of_pairwise_disjoint
   结论: {ι κ : 类型}
   证明: biSup_iInter_of_pairwise_disjoint h s
 
@@ -1510,7 +1510,7 @@ theorem monotone_preimage
 中文:
 定理 monotone_preimage
   条件: {f : α -> β}
-  结论: Monotone (preimage f)
+  结论: 递增 (原像 f)
   证明: fun _ _ h => preimage_mono h
 
 @[simp]
@@ -1531,7 +1531,7 @@ theorem preimage_iUnion
 
 中文:
 定理 preimage_iUnion
-  条件: {f : α -> β} {s : ι -> Set β}
+  条件: {f : α -> β} {s : ι -> 集合 β}
   结论: (f ⁻¹' ⋃ i, s i) = ⋃ i, f ⁻¹' s i
   证明: Set.ext by simp [preimage]
 
@@ -1550,7 +1550,7 @@ theorem preimage_iUnion₂
 
 中文:
 定理 preimage_iUnion₂
-  条件: {f : α -> β} {s : 对任意 i, κ i -> Set β}
+  条件: {f : α -> β} {s : 对任意 i, κ i -> 集合 β}
   证明: by simp_rw [preimage_iUnion]
 
 Depends on / 依赖: preimage_iUnion, simp_rw
@@ -1574,8 +1574,8 @@ theorem image_sUnion
 
 中文:
 定理 image_sUnion
-  条件: {f : α -> β} {s : Set (Set α)}
-  结论: (f '' ⋃₀ s) = ⋃₀ (image f '' s)
+  条件: {f : α -> β} {s : 集合 (集合 α)}
+  结论: (f '' ⋃₀ s) = ⋃₀ (像 f '' s)
   证明: by
   ext
   simp only [Set.mem_iUnion, Set.sUnion_image]
@@ -1603,7 +1603,7 @@ theorem preimage_sUnion
 
 中文:
 定理 preimage_sUnion
-  条件: {f : α -> β} {s : Set (Set β)}
+  条件: {f : α -> β} {s : 集合 (集合 β)}
   结论: f ⁻¹' ⋃₀ s = ⋃ t in s, f ⁻¹' t
   证明: by
   rw [sUnion_eq_biUnion]; rw [preimage_iUnion₂]
@@ -1624,8 +1624,8 @@ theorem preimage_iInter
   ext; simp
 
 中文:
-定理 preimage_iInter
-  条件: {f : α -> β} {s : ι -> Set β}
+定理 preimage_i整数er
+  条件: {f : α -> β} {s : ι -> 集合 β}
   结论: (f ⁻¹' ⋂ i, s i) = ⋂ i, f ⁻¹' s i
   证明: by
   ext; simp
@@ -1644,8 +1644,8 @@ theorem preimage_iInter₂
 @[simp]
 
 中文:
-定理 preimage_iInter₂
-  条件: {f : α -> β} {s : 对任意 i, κ i -> Set β}
+定理 preimage_i整数er₂
+  条件: {f : α -> β} {s : 对任意 i, κ i -> 集合 β}
   证明: by simp_rw [preimage_iInter]
 
 @[simp]
@@ -1669,8 +1669,8 @@ theorem preimage_sInter
 @[simp]
 
 中文:
-定理 preimage_sInter
-  条件: {f : α -> β} {s : Set (Set β)}
+定理 preimage_s整数er
+  条件: {f : α -> β} {s : 集合 (集合 β)}
   结论: f ⁻¹' ⋂₀ s = ⋂ t in s, f ⁻¹' t
   证明: by
   rw [sInter_eq_biInter]; rw [preimage_iInter₂]
@@ -1695,7 +1695,7 @@ theorem biUnion_preimage_singleton
 
 中文:
 定理 biUnion_preimage_singleton
-  条件: (f : α -> β) (s : Set β)
+  条件: (f : α -> β) (s : 集合 β)
   结论: ⋃ y in s, f ⁻¹' {y} = f ⁻¹' s
   证明: by
   rw [← preimage_iUnion₂]; rw [biUnion_of_singleton]
@@ -1744,7 +1744,7 @@ theorem prod_iUnion
 
 中文:
 定理 prod_iUnion
-  条件: {s : Set α} {t : ι -> Set β}
+  条件: {s : 集合 α} {t : ι -> 集合 β}
   结论: (s ×ˢ ⋃ i, t i) = ⋃ i, s ×ˢ t i
   证明: by
   ext
@@ -1764,7 +1764,7 @@ theorem prod_iUnion₂
 
 中文:
 定理 prod_iUnion₂
-  条件: {s : Set α} {t : 对任意 i, κ i -> Set β}
+  条件: {s : 集合 α} {t : 对任意 i, κ i -> 集合 β}
   证明: by simp_rw [prod_iUnion]
 
 Depends on / 依赖: prod_iUnion, simp_rw
@@ -1784,7 +1784,7 @@ theorem prod_sUnion
 
 中文:
 定理 prod_sUnion
-  条件: {s : Set α} {C : Set (Set β)}
+  条件: {s : 集合 α} {C : 集合 (集合 β)}
   结论: s ×ˢ ⋃₀ C = ⋃₀ ((fun t => s ×ˢ t) '' C)
   证明: by
   simp_rw [sUnion_eq_biUnion, biUnion_image, prod_iUnion₂]
@@ -1807,7 +1807,7 @@ theorem iUnion_prod_const
 
 中文:
 定理 iUnion_prod_const
-  条件: {s : ι -> Set α} {t : Set β}
+  条件: {s : ι -> 集合 α} {t : 集合 β}
   结论: (⋃ i, s i) ×ˢ t = ⋃ i, s i ×ˢ t
   证明: by
   ext
@@ -1827,7 +1827,7 @@ theorem iUnion₂_prod_const
 
 中文:
 定理 iUnion₂_prod_const
-  条件: {s : 对任意 i, κ i -> Set α} {t : Set β}
+  条件: {s : 对任意 i, κ i -> 集合 α} {t : 集合 β}
   证明: by simp_rw [iUnion_prod_const]
 
 Depends on / 依赖: iUnion_prod_const, simp_rw
@@ -1846,7 +1846,7 @@ theorem sUnion_prod_const
 
 中文:
 定理 sUnion_prod_const
-  条件: {C : Set (Set α)} {t : Set β}
+  条件: {C : 集合 (集合 α)} {t : 集合 β}
   证明: by
   simp only [sUnion_eq_biUnion, iUnion₂_prod_const, biUnion_image]
 
@@ -1868,7 +1868,7 @@ theorem iUnion_prod
 
 中文:
 定理 iUnion_prod
-  条件: {ι ι' α β} (s : ι -> Set α) (t : ι' -> Set β)
+  条件: {ι ι' α β} (s : ι -> 集合 α) (t : ι' -> 集合 β)
   证明: by
   ext
   simp
@@ -1889,7 +1889,7 @@ lemma iUnion_prod'
 
 中文:
 引理 iUnion_prod'
-  条件: (f : β × γ -> Set α)
+  条件: (f : β × γ -> 集合 α)
   结论: ⋃ x : β × γ, f x = ⋃ (i : β) (j : γ), f (i, j)
   证明: iSup_prod
 
@@ -1913,7 +1913,7 @@ theorem iUnion_prod_of_monotone
 
 中文:
 定理 iUnion_prod_of_monotone
-  结论: [SemilatticeSup α] {s : α -> Set β} {t : α -> Set γ} (hs : Monotone s)
+  结论: [SemilatticeSup α] {s : α -> 集合 β} {t : α -> 集合 γ} (hs : 递增 s)
   证明: by
   ext ⟨z, w⟩; simp only [mem_prod, mem_iUnion, exists_imp, and_imp, iff_def]; constructor
   · intro x hz hw
@@ -1943,7 +1943,7 @@ lemma biUnion_prod
 
 中文:
 引理 biUnion_prod
-  条件: {α β γ} (s : Set α) (t : Set β) (f : α -> Set γ) (g : β -> Set δ)
+  条件: {α β γ} (s : 集合 α) (t : 集合 β) (f : α -> 集合 γ) (g : β -> 集合 δ)
   证明: by
   ext ⟨_, _⟩
   simp only [mem_iUnion, mem_prod, exists_prop, Prod.exists]; tauto
@@ -1965,7 +1965,7 @@ lemma biUnion_prod'
 
 中文:
 引理 biUnion_prod'
-  条件: (s : Set β) (t : Set γ) (f : β × γ -> Set α)
+  条件: (s : 集合 β) (t : 集合 γ) (f : β × γ -> 集合 α)
   证明: biSup_prod
 
 Depends on / 依赖: biSup_prod
@@ -1983,8 +1983,8 @@ theorem sInter_prod_sInter_subset
   proof: subset_iInter₂ fun x hx _ hy => ⟨hy.1 x.1 hx.1, hy.2 x.2 hx.2⟩
 
 中文:
-定理 sInter_prod_sInter_subset
-  条件: (S : Set (Set α)) (T : Set (Set β))
+定理 s整数er_prod_s整数er_subset
+  条件: (S : 集合 (集合 α)) (T : 集合 (集合 β))
   证明: subset_iInter₂ fun x hx _ hy => ⟨hy.1 x.1 hx.1, hy.2 x.2 hx.2⟩
 -/
 theorem sInter_prod_sInter_subset (S : Set (Set α)) (T : Set (Set β)) :
@@ -2005,8 +2005,8 @@ theorem sInter_prod_sInter
   exact ⟨fun s₀ h₀ => (hx (s₀, s₂) ⟨h₀, h₂⟩).1, fun s₀ h₀ => (hx (s₁, s₀) ⟨h₁, h₀⟩).2⟩
 
 中文:
-定理 sInter_prod_sInter
-  条件: {S : Set (Set α)} {T : Set (Set β)} (hS : S.Nonempty) (hT : T.Nonempty)
+定理 s整数er_prod_s整数er
+  条件: {S : 集合 (集合 α)} {T : 集合 (集合 β)} (hS : S.非空) (hT : T.非空)
   证明: by
   obtain ⟨s₁, h₁⟩ := hS
   obtain ⟨s₂, h₂⟩ := hT
@@ -2035,8 +2035,8 @@ theorem sInter_prod
   simp_rw [prod_singleton, mem_image, iInter_exists, biInter_and', iInter_iInter_eq_right]
 
 中文:
-定理 sInter_prod
-  条件: {S : Set (Set α)} (hS : S.Nonempty) (t : Set β)
+定理 s整数er_prod
+  条件: {S : 集合 (集合 α)} (hS : S.非空) (t : 集合 β)
   证明: by
   rw [← sInter_singleton t]; rw [sInter_prod_sInter hS (singleton_nonempty t)]; rw [sInter_singleton]
   simp_rw [prod_singleton, mem_image, iInter_exists, biInter_and', iInter_iInter_eq_right]
@@ -2059,8 +2059,8 @@ theorem prod_sInter
   simp_rw [singleton_prod, mem_image, iInter_exists, biInter_and', iInter_iInter_eq_right]
 
 中文:
-定理 prod_sInter
-  条件: {T : Set (Set β)} (hT : T.Nonempty) (s : Set α)
+定理 prod_s整数er
+  条件: {T : 集合 (集合 β)} (hT : T.非空) (s : 集合 α)
   证明: by
   rw [← sInter_singleton s]; rw [sInter_prod_sInter (singleton_nonempty s) hT]; rw [sInter_singleton]
   simp_rw [singleton_prod, mem_image, iInter_exists, biInter_and', iInter_iInter_eq_right]
@@ -2084,8 +2084,8 @@ theorem prod_iInter
   exact ⟨fun h i => ⟨h.1, h.2 i⟩, fun h => ⟨(h hι.some).1, fun i => (h i).2⟩⟩
 
 中文:
-定理 prod_iInter
-  条件: {s : Set α} {t : ι -> Set β} [hι : Nonempty ι]
+定理 prod_i整数er
+  条件: {s : 集合 α} {t : ι -> 集合 β} [hι : 非空 ι]
   证明: by
   ext x
   simp only [mem_prod, mem_iInter]
@@ -2117,7 +2117,7 @@ theorem image2_eq_iUnion
 
 中文:
 定理 image2_eq_iUnion
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   结论: image2 f s t = ⋃ (i in s) (j in t), {f i j}
   证明: by
   ext; simp [eq_comm]
@@ -2178,7 +2178,7 @@ theorem image2_iUnion_left
 
 中文:
 定理 image2_iUnion_left
-  条件: (s : ι -> Set α) (t : Set β)
+  条件: (s : ι -> 集合 α) (t : 集合 β)
   证明: by
   simp only [← image_prod, iUnion_prod_const, image_iUnion]
 
@@ -2199,7 +2199,7 @@ theorem image2_iUnion_right
 
 中文:
 定理 image2_iUnion_right
-  条件: (s : Set α) (t : ι -> Set β)
+  条件: (s : 集合 α) (t : ι -> 集合 β)
   证明: by
   simp only [← image_prod, prod_iUnion, image_iUnion]
 
@@ -2220,7 +2220,7 @@ theorem image2_sUnion_left
 
 中文:
 定理 image2_sUnion_left
-  条件: (S : Set (Set α)) (t : Set β)
+  条件: (S : 集合 (集合 α)) (t : 集合 β)
   证明: by
   aesop
 -/
@@ -2239,7 +2239,7 @@ theorem image2_sUnion_right
 
 中文:
 定理 image2_sUnion_right
-  条件: (s : Set α) (T : Set (Set β))
+  条件: (s : 集合 α) (T : 集合 (集合 β))
   证明: by
   aesop
 -/
@@ -2257,7 +2257,7 @@ theorem image2_iUnion₂_left
 
 中文:
 定理 image2_iUnion₂_left
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set β)
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 β)
   证明: by simp_rw [image2_iUnion_left]
 
 Depends on / 依赖: image2_iUnion_left, simp_rw
@@ -2276,7 +2276,7 @@ theorem image2_iUnion₂_right
 
 中文:
 定理 image2_iUnion₂_right
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set β)
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 β)
   证明: by
   simp_rw [image2_iUnion_right]
 
@@ -2297,8 +2297,8 @@ theorem image2_iInter_subset_left
   exact fun x hx y hy i => mem_image2_of_mem (hx _) hy
 
 中文:
-定理 image2_iInter_subset_left
-  条件: (s : ι -> Set α) (t : Set β)
+定理 image2_i整数er_subset_left
+  条件: (s : ι -> 集合 α) (t : 集合 β)
   证明: by
   simp_rw [image2_subset_iff, mem_iInter]
   exact fun x hx y hy i => mem_image2_of_mem (hx _) hy
@@ -2321,8 +2321,8 @@ theorem image2_iInter_subset_right
   exact fun x hx y hy i => mem_image2_of_mem hx (hy _)
 
 中文:
-定理 image2_iInter_subset_right
-  条件: (s : Set α) (t : ι -> Set β)
+定理 image2_i整数er_subset_right
+  条件: (s : 集合 α) (t : ι -> 集合 β)
   证明: by
   simp_rw [image2_subset_iff, mem_iInter]
   exact fun x hx y hy i => mem_image2_of_mem hx (hy _)
@@ -2345,8 +2345,8 @@ theorem image2_iInter₂_subset_left
   exact fun x hx y hy i j => mem_image2_of_mem (hx _ _) hy
 
 中文:
-定理 image2_iInter₂_subset_left
-  条件: (s : 对任意 i, κ i -> Set α) (t : Set β)
+定理 image2_i整数er₂_subset_left
+  条件: (s : 对任意 i, κ i -> 集合 α) (t : 集合 β)
   证明: by
   simp_rw [image2_subset_iff, mem_iInter]
   exact fun x hx y hy i j => mem_image2_of_mem (hx _ _) hy
@@ -2369,8 +2369,8 @@ theorem image2_iInter₂_subset_right
   exact fun x hx y hy i j => mem_image2_of_mem hx (hy _ _)
 
 中文:
-定理 image2_iInter₂_subset_right
-  条件: (s : Set α) (t : 对任意 i, κ i -> Set β)
+定理 image2_i整数er₂_subset_right
+  条件: (s : 集合 α) (t : 对任意 i, κ i -> 集合 β)
   证明: by
   simp_rw [image2_subset_iff, mem_iInter]
   exact fun x hx y hy i j => mem_image2_of_mem hx (hy _ _)
@@ -2393,8 +2393,8 @@ theorem image2_sInter_subset_left
   exact image2_iInter₂_subset_left ..
 
 中文:
-定理 image2_sInter_subset_left
-  条件: (S : Set (Set α)) (t : Set β)
+定理 image2_s整数er_subset_left
+  条件: (S : 集合 (集合 α)) (t : 集合 β)
   证明: by
   rw [sInter_eq_biInter]
   exact image2_iInter₂_subset_left ..
@@ -2417,8 +2417,8 @@ theorem image2_sInter_subset_right
   exact image2_iInter₂_subset_right ..
 
 中文:
-定理 image2_sInter_subset_right
-  条件: (s : Set α) (T : Set (Set β))
+定理 image2_s整数er_subset_right
+  条件: (s : 集合 α) (T : 集合 (集合 β))
   证明: by
   rw [sInter_eq_biInter]
   exact image2_iInter₂_subset_right ..
@@ -2486,7 +2486,7 @@ theorem seq_def
 
 中文:
 定理 seq_def
-  条件: {s : Set (α -> β)} {t : Set α}
+  条件: {s : 集合 (α -> β)} {t : 集合 α}
   结论: seq s t = ⋃ f in s, f '' t
   证明: by
   rw [seq_eq_image2]; rw [iUnion_image_left]
@@ -2508,7 +2508,7 @@ theorem seq_subset
 
 中文:
 定理 seq_subset
-  条件: {s : Set (α -> β)} {t : Set α} {u : Set β}
+  条件: {s : 集合 (α -> β)} {t : 集合 α} {u : 集合 β}
   证明: image2_subset_iff
 
 @[gcongr, mono]
@@ -2530,7 +2530,7 @@ theorem seq_mono
 
 中文:
 定理 seq_mono
-  条件: {s₀ s₁ : Set (α -> β)} {t₀ t₁ : Set α} (hs : s₀ subseteq s₁) (ht : t₀ subseteq t₁)
+  条件: {s₀ s₁ : 集合 (α -> β)} {t₀ t₁ : 集合 α} (hs : s₀ subseteq s₁) (ht : t₀ subseteq t₁)
   证明: image2_subset hs ht
 
 Depends on / 依赖: image2_subset
@@ -2549,8 +2549,8 @@ theorem singleton_seq
 
 中文:
 定理 singleton_seq
-  条件: {f : α -> β} {t : Set α}
-  结论: Set.seq ({f} : Set (α -> β)) t = f '' t
+  条件: {f : α -> β} {t : 集合 α}
+  结论: 集合.seq ({f} : 集合 (α -> β)) t = f '' t
   证明: image2_singleton_left
 
 Depends on / 依赖: image2_singleton_left
@@ -2569,8 +2569,8 @@ theorem seq_singleton
 
 中文:
 定理 seq_singleton
-  条件: {s : Set (α -> β)} {a : α}
-  结论: Set.seq s {a} = (fun f : α -> β => f a) '' s
+  条件: {s : 集合 (α -> β)} {a : α}
+  结论: 集合.seq s {a} = (fun f : α -> β => f a) '' s
   证明: image2_singleton_right
 
 Depends on / 依赖: image2_singleton_right
@@ -2590,7 +2590,7 @@ exact .symm image2_assoc fun _ _ _ => rfl
 
 中文:
 定理 seq_seq
-  条件: {s : Set (β -> γ)} {t : Set (α -> β)} {u : Set α}
+  条件: {s : 集合 (β -> γ)} {t : 集合 (α -> β)} {u : 集合 α}
   证明: by
   simp only [seq_eq_image2, image2_image_left]
 exact .symm image2_assoc fun _ _ _ => rfl
@@ -2613,7 +2613,7 @@ theorem image_seq
 
 中文:
 定理 image_seq
-  条件: {f : β -> γ} {s : Set (α -> β)} {t : Set α}
+  条件: {f : β -> γ} {s : 集合 (α -> β)} {t : 集合 α}
   证明: by
   simp only [seq, image_image2, image2_image_left, comp_apply]
 
@@ -2635,8 +2635,8 @@ theorem prod_eq_seq
 
 中文:
 定理 prod_eq_seq
-  条件: {s : Set α} {t : Set β}
-  结论: s ×ˢ t = (Prod.mk '' s).seq t
+  条件: {s : 集合 α} {t : 集合 β}
+  结论: s ×ˢ t = (积类型.mk '' s).seq t
   证明: by
   rw [seq_eq_image2]; rw [image2_image_left]; rw [image2_mk_eq_prod]
 
@@ -2656,7 +2656,7 @@ theorem prod_image_seq_comm
 
 中文:
 定理 prod_image_seq_comm
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   证明: by
   rw [← prod_eq_seq]; rw [← image_swap_prod]; rw [prod_eq_seq]; rw [image_seq]; rw [← image_comp]; rfl
 
@@ -2678,7 +2678,7 @@ theorem image2_eq_seq
 
 中文:
 定理 image2_eq_seq
-  条件: (f : α -> β -> γ) (s : Set α) (t : Set β)
+  条件: (f : α -> β -> γ) (s : 集合 α) (t : 集合 β)
   结论: image2 f s t = seq (f '' s) t
   证明: by
   rw [seq_eq_image2]; rw [image2_image_left]

@@ -48,7 +48,7 @@ definition pullback
 
 中文:
 定义 pullback
-  签名: : PresheafOfModules.{v} S ⥤ PresheafOfModules.{v} R
+  签名: : 预模层.{v} S ⥤ 预模层.{v} R
   定义体: (pushforward.{v} φ).leftAdjoint
 
 Depends on / 依赖: leftAdjoint, pushforward
@@ -84,7 +84,7 @@ abbreviation pullbackObjIsDefined
 
 中文:
 缩写 pullbackObjIsDefined
-  签名: : Object命题erty (PresheafOfModules.{v} S)
+  签名: : ObjectProperty (预模层.{v} S)
   定义体: (pushforward φ).leftAdjointObjIsDefined
 
 Depends on / 依赖: leftAdjointObjIsDefined, pushforward
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward.{u} φ).IsRightAdjoint
+  签名: (pushforward.{u} φ).是右伴随
   定义体: isRightAdjoint_of_leftAdjointObjIsDefined_eq_top
     (pullbackObjIsDefined_eq_top φ)
 
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).IsRightAdjoint
+  签名: (pushforward.{v} (F := 𝟭 C) (𝟙 S)).是右伴随
   定义体: isRightAdjoint_of_iso (pushforwardId.{v} S).symm
 
 Depends on / 依赖: IsRightAdjoint
@@ -281,7 +281,7 @@ instance :
 
 中文:
 实例 :
-  签名: (pushforward.{v} (F := F ⋙ G) (φ ≫ whiskerLeft F.op ψ)).IsRightAdjoint
+  签名: (pushforward.{v} (F := F ⋙ G) (φ ≫ whiskerLeft F.op ψ)).是右伴随
   定义体: isRightAdjoint_of_iso (pushforwardComp.{v} φ ψ)
 
 Depends on / 依赖: F.op, IsRightAdjoint, whiskerLeft

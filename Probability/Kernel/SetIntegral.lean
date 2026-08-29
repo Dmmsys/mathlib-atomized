@@ -34,7 +34,7 @@ lemma integral_integral_indicator
 
 中文:
 引理 integral_integral_indicator
-  结论: (μ : Measure X) (f : X -> Y -> E) {s : Set X}
+  结论: (μ : 测度 X) (f : X -> Y -> E) {s : 集合 X}
   证明: by
   simp_rw [← integral_indicator hs, Kernel.integral_indicator₂]
 

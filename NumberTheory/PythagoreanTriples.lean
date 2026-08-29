@@ -68,7 +68,7 @@ theorem Int.sq_ne_two_mod_four
 noncomputable section
 
 中文:
-定理 Int.sq_ne_two_mod_four
+定理 整数.sq_ne_two_mod_four
   条件: (z : 整数)
   结论: z * z % 4 != 2
   证明: by
@@ -366,7 +366,7 @@ theorem even_odd_of_coprime
 
 中文:
 定理 even_odd_of_coprime
-  条件: (hc : 整数.gcd x y = 1)
+  条件: (hc : 整数.最大公约数 x y = 1)
   证明: by
   rcases Int.emod_two_eq_zero_or_one x with hx | hx <;>
     rcases Int.emod_two_eq_zero_or_one y with hy | hy
@@ -428,7 +428,7 @@ theorem gcd_dvd
 
 中文:
 定理 gcd_dvd
-  结论: (整数.gcd x y : 整数) ∣ z
+  结论: (整数.最大公约数 x y : 整数) ∣ z
   证明: by
   by_cases h0 : Int.gcd x y = 0
   · obtain ⟨hx, hy⟩ := Int.gcd_eq_zero_iff.mp h0
@@ -474,7 +474,7 @@ theorem normalize
 
 中文:
 定理 normalize
-  结论: PythagoreanTriple (x / 整数.gcd x y) (y / 整数.gcd x y) (z / 整数.gcd x y)
+  结论: PythagoreanTriple (x / 整数.最大公约数 x y) (y / 整数.最大公约数 x y) (z / 整数.最大公约数 x y)
   证明: by
   by_cases h0 : Int.gcd x y = 0
   · obtain ⟨hx, hy⟩ := Int.gcd_eq_zero_iff.mp h0
@@ -593,7 +593,7 @@ theorem ne_zero_of_coprime
 
 中文:
 定理 ne_zero_of_coprime
-  条件: (hc : 整数.gcd x y = 1)
+  条件: (hc : 整数.最大公约数 x y = 1)
   结论: z != 0
   证明: by
   suffices 0 < z * z by
@@ -641,7 +641,7 @@ theorem isPrimitiveClassified_of_coprime_of_zero_left
 
 中文:
 定理 isPrimitiveClassified_of_coprime_of_zero_left
-  条件: (hc : 整数.gcd x y = 1) (hx : x = 0)
+  条件: (hc : 整数.最大公约数 x y = 1) (hx : x = 0)
   证明: by
   subst x
   change Nat.gcd 0 (Int.natAbs y) = 1 at hc
@@ -688,8 +688,8 @@ theorem coprime_of_coprime
 
 中文:
 定理 coprime_of_coprime
-  条件: (hc : 整数.gcd x y = 1)
-  结论: 整数.gcd y z = 1
+  条件: (hc : 整数.最大公约数 x y = 1)
+  结论: 整数.最大公约数 y z = 1
   证明: by
   by_contra H
   obtain ⟨p, hp, hpy, hpz⟩ := Nat.Prime.not_coprime_iff_dvd.mp H
@@ -845,7 +845,7 @@ theorem coprime_sq_sub_sq_add_of_even_odd
 
 中文:
 定理 coprime_sq_sub_sq_add_of_even_odd
-  结论: {m n : 整数} (h : 整数.gcd m n = 1) (hm : m % 2 = 0)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1) (hm : m % 2 = 0)
   证明: by
   by_contra H
   obtain ⟨p, hp, hp1, hp2⟩ := Nat.Prime.not_coprime_iff_dvd.mp H
@@ -899,7 +899,7 @@ theorem coprime_sq_sub_sq_add_of_odd_even
 
 中文:
 定理 coprime_sq_sub_sq_add_of_odd_even
-  结论: {m n : 整数} (h : 整数.gcd m n = 1) (hm : m % 2 = 1)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1) (hm : m % 2 = 1)
   证明: by
   rw [Int.gcd]; rw [← Int.natAbs_neg (m ^ 2 - n ^ 2)]
   rw [(by ring : -(m ^ 2 - n ^ 2) = n ^ 2 - m ^ 2)]; rw [add_comm]
@@ -930,7 +930,7 @@ theorem coprime_sq_sub_mul_of_even_odd
 
 中文:
 定理 coprime_sq_sub_mul_of_even_odd
-  结论: {m n : 整数} (h : 整数.gcd m n = 1) (hm : m % 2 = 0)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1) (hm : m % 2 = 0)
   证明: by
   by_contra H
   obtain ⟨p, hp, hp1, hp2⟩ := Nat.Prime.not_coprime_iff_dvd.mp H
@@ -987,7 +987,7 @@ theorem coprime_sq_sub_mul_of_odd_even
 
 中文:
 定理 coprime_sq_sub_mul_of_odd_even
-  结论: {m n : 整数} (h : 整数.gcd m n = 1) (hm : m % 2 = 1)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1) (hm : m % 2 = 1)
   证明: by
   rw [Int.gcd]; rw [← Int.natAbs_neg (m ^ 2 - n ^ 2)]
   rw [(by ring : 2 * m * n = 2 * n * m)]; rw [(by ring : -(m ^ 2 - n ^ 2) = n ^ 2 - m ^ 2)]
@@ -1014,7 +1014,7 @@ theorem coprime_sq_sub_mul
 
 中文:
 定理 coprime_sq_sub_mul
-  结论: {m n : 整数} (h : 整数.gcd m n = 1)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1)
   证明: by
   rcases hmn with h1 | h2
   · exact coprime_sq_sub_mul_of_even_odd h h1.left h1.right
@@ -1045,7 +1045,7 @@ theorem coprime_sq_sub_sq_sum_of_odd_odd
 
 中文:
 定理 coprime_sq_sub_sq_sum_of_odd_odd
-  结论: {m n : 整数} (h : 整数.gcd m n = 1) (hm : m % 2 = 1)
+  结论: {m n : 整数} (h : 整数.最大公约数 m n = 1) (hm : m % 2 = 1)
   证明: by
   obtain ⟨m0, hm2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hm)
   obtain ⟨n0, hn2⟩ := exists_eq_mul_left_of_dvd (Int.dvd_self_sub_of_emod_eq hn)
@@ -1112,7 +1112,7 @@ theorem isPrimitiveClassified_aux
 
 中文:
 定理 isPrimitiveClassified_aux
-  结论: (hc : x.gcd y = 1) (hzpos : 0 < z) {m n : 整数}
+  结论: (hc : x.最大公约数 y = 1) (hzpos : 0 < z) {m n : 整数}
   证明: by
   have hz : z != 0 := ne_of_gt hzpos
   have h2 : y = m ^ 2 - n ^ 2 ∧ z = m ^ 2 + n ^ 2 := by
@@ -1163,7 +1163,7 @@ theorem isPrimitiveClassified_of_coprime_of_odd_of_pos
 
 中文:
 定理 isPrimitiveClassified_of_coprime_of_odd_of_pos
-  结论: (hc : 整数.gcd x y = 1) (hyo : y % 2 = 1)
+  结论: (hc : 整数.最大公约数 x y = 1) (hyo : y % 2 = 1)
   证明: by
   by_cases h0 : x = 0
   · exact h.isPrimitiveClassified_of_coprime_of_zero_left hc h0
@@ -1276,7 +1276,7 @@ theorem isPrimitiveClassified_of_coprime_of_pos
 
 中文:
 定理 isPrimitiveClassified_of_coprime_of_pos
-  条件: (hc : 整数.gcd x y = 1) (hzpos : 0 < z)
+  条件: (hc : 整数.最大公约数 x y = 1) (hzpos : 0 < z)
   证明: by
   rcases h.even_odd_of_coprime hc with h1 | h2
   · exact h.isPrimitiveClassified_of_coprime_of_odd_of_pos hc h1.right hzpos
@@ -1311,7 +1311,7 @@ theorem isPrimitiveClassified_of_coprime
 
 中文:
 定理 isPrimitiveClassified_of_coprime
-  条件: (hc : 整数.gcd x y = 1)
+  条件: (hc : 整数.最大公约数 x y = 1)
   结论: h.IsPrimitiveClassified
   证明: by
   by_cases! hz : 0 < z

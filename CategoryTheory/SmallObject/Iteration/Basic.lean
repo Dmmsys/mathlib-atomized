@@ -95,7 +95,7 @@ definition restrictionLT
 
 中文:
 定义 restrictionLT
-  签名: : Set.Iio i ⥤ C
+  签名: : 集合.左无界右开区间 i ⥤ C
   定义体: (Set.principalSegIioIicOfLE hi).monotone.functor ⋙ F
 
 
@@ -136,7 +136,7 @@ lemma restrictionLT_map
 
 中文:
 引理 restrictionLT_map
-  条件: {k₁ k₂ : Set.Iio i} (φ : k₁ ⟶ k₂)
+  条件: {k₁ k₂ : 集合.左无界右开区间 i} (φ : k₁ ⟶ k₂)
   证明: rfl
 -/
 lemma restrictionLT_map {k₁ k₂ : Set.Iio i} (φ : k₁ ⟶ k₂) :
@@ -155,7 +155,7 @@ definition coconeOfLE
 
 中文:
 定义 coconeOfLE
-  签名: : Cocone (restrictionLT F hi)
+  签名: : 余锥 (restrictionLT F hi)
   定义体: (Set.principalSegIioIicOfLE hi).cocone F
 
 Depends on / 依赖: Set.principalSegIioIicOfLE, cocone, principalSegIioIicOfLE
@@ -175,7 +175,7 @@ definition restrictionLE
 
 中文:
 定义 restrictionLE
-  签名: : Set.Iic i ⥤ C
+  签名: : 集合.左无界右闭区间 i ⥤ C
   定义体: (Set.initialSegIicIicOfLE hi).monotone.functor ⋙ F
 
 @[simp]
@@ -217,7 +217,7 @@ lemma restrictionLE_map
 
 中文:
 引理 restrictionLE_map
-  条件: {k₁ k₂ : Set.Iic i} (φ : k₁ ⟶ k₂)
+  条件: {k₁ k₂ : 集合.左无界右闭区间 i} (φ : k₁ ⟶ k₂)
   证明: rfl
 -/
 lemma restrictionLE_map {k₁ k₂ : Set.Iic i} (φ : k₁ ⟶ k₂) :
@@ -269,7 +269,7 @@ definition ofNatTrans
   X₀ := 𝟭 C
 
 中文:
-定义 ofNatTrans
+定义 of自然数Trans
   签名: {F : C ⥤ C} (ε : 𝟭 C ⟶ F)
   定义体: G ⋙ F
   toSucc G := Functor.whiskerLeft G ε
@@ -292,7 +292,7 @@ definition prop
 
 中文:
 定义 prop
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: .ofHoms (fun (X : C) => Φ.toSucc X)
 
 Depends on / 依赖: ofHoms, toSucc
@@ -461,7 +461,7 @@ definition arrowMap
 
 中文:
 定义 arrowMap
-  签名: {j : J} (F : Set.Iic j ⥤ C) (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ <= j)
+  签名: {j : J} (F : 集合.左无界右闭区间 j ⥤ C) (i₁ i₂ : J) (h₁₂ : i₁ <= i₂) (h₂ : i₂ <= j)
   定义体: Arrow.mk (F.map (homOfLE h₁₂ : ⟨i₁, h₁₂.trans h₂⟩ ⟶ ⟨i₂, h₂⟩))
 
 @[simp]
@@ -484,7 +484,7 @@ lemma arrowMap_refl
 
 中文:
 引理 arrowMap_refl
-  条件: {j : J} (F : Set.Iic j ⥤ C) (i : J) (hi : i <= j)
+  条件: {j : J} (F : 集合.左无界右闭区间 j ⥤ C) (i : J) (hi : i <= j)
   证明: by
   simp [arrowMap]
 
@@ -504,7 +504,7 @@ lemma arrowMap_restrictionLE
 
 中文:
 引理 arrowMap_restrictionLE
-  结论: {j : J} (F : Set.Iic j ⥤ C) {j' : J} (hj' : j' <= j)
+  结论: {j : J} (F : 集合.左无界右闭区间 j ⥤ C) {j' : J} (hj' : j' <= j)
   证明: rfl
 -/
 lemma arrowMap_restrictionLE {j : J} (F : Set.Iic j ⥤ C) {j' : J} (hj' : j' <= j)
@@ -526,7 +526,7 @@ definition arrowSucc
 
 中文:
 定义 arrowSucc
-  签名: : Arrow C
+  签名: : 箭头 C
   定义体: arrowMap F i (Order.succ i) (Order.le_succ i) (Order.succ_le_of_lt hi)
 
 Depends on / 依赖: Order.le_succ, Order.succ, Order.succ_le_of_lt, arrowMap, le_succ, succ_le_of_lt
@@ -567,7 +567,7 @@ definition arrowι
 
 中文:
 定义 arrowι
-  签名: : Arrow C
+  签名: : 箭头 C
   定义体: letI := hasColimitsOfShape_of_isSuccLimit C i hi
   Arrow.mk (colimit.ι F ⟨k, hk⟩)
 
@@ -622,10 +622,10 @@ structure Iteration
 结构 Iteration
   参数: [WellFoundedLT J] (j : J)
   公理与运算 (4 个):
-    - F : Set.Iic j ⥤ C
+    - F : 集合.左无界右闭区间 j ⥤ C
     - obj_bot : F.obj ⟨⊥, bot_le⟩ = Φ.X₀
     - arrowSucc_eq((i : J) (hi : i < j)) : arrowSucc F i hi = Φ.toSuccArrow (F.obj ⟨i, hi.le⟩)
-    - arrowMap_limit((i : J) (hi : Order.IsSuccLimit i) (hij : i <= j) (k : J) (hk : k < i)) : arrowMap F k i hk.le hij = arrowι (restrictionLT F hij) hi k hk
+    - arrowMap_limit((i : J) (hi : Order.是SuccLimit i) (hij : i <= j) (k : J) (hk : k < i)) : arrowMap F k i hk.le hij = arrowι (restrictionLT F hij) hi k hk
 -/
 structure Iteration [WellFoundedLT J] (j : J) where
   /-- The data of all `i`th iterations for `i : J` such that `i ≤ j`. -/
@@ -703,7 +703,7 @@ lemma obj_limit
 
 中文:
 引理 obj_limit
-  条件: (i : J) (hi : Order.IsSuccLimit i) (hij : i <= j)
+  条件: (i : J) (hi : Order.是SuccLimit i) (hij : i <= j)
   证明: hasColimitsOfShape_of_isSuccLimit C i hi
     iter.F.obj ⟨i, hij⟩ = colimit (restrictionLT iter.F hij) :=
   congr_arg Comma.right (iter.arrowMap_limit i hi hij ⊥ (Order.IsSuccLimit.bot_lt hi))
@@ -735,7 +735,7 @@ definition isColimit
 
 中文:
 定义 isColimit
-  签名: (i : J) (hi : Order.IsSuccLimit i) (hij : i <= j)
+  签名: (i : J) (hi : Order.是SuccLimit i) (hij : i <= j)
   定义体: by
   letI := hasColimitsOfShape_of_isSuccLimit C i hi
   refine IsColimit.ofIsoColimit (colimit.isColimit (restrictionLT iter.F hij))
@@ -992,7 +992,7 @@ instance subsingleton
 
 中文:
 实例 subsingleton
-  签名: : Subsingleton (Φ.Iteration j) where
+  签名: : 子单例 (Φ.Iteration j) where
   定义体: by
     suffices iter₁.F = iter₂.F by aesop
     revert iter₁ iter₂

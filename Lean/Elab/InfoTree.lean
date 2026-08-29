@@ -67,7 +67,7 @@ definition findSomeM?
 
 中文:
 定义 findSomeM?
-  签名: {m : Type -> Type} [Monad m] {α}
+  签名: {m : 类型 -> 类型} [单子 m] {α}
   定义体: go ctx? t
 -/
 partial def findSomeM? {m : Type -> Type} [Monad m] {α}
@@ -97,7 +97,7 @@ definition findSome?
 
 中文:
 定义 findSome?
-  签名: {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> Option α)
+  签名: {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> 选项类型 α)
   定义体: Id.run t.findSomeM? f ctx?
 -/
 def findSome? {α} (f : ContextInfo -> Info -> PersistentArray InfoTree -> Option α)
@@ -114,7 +114,7 @@ definition onHighestNode?
 
 中文:
 定义 onHighestNode?
-  签名: {α} (t : InfoTree) (ctx? : Option ContextInfo)
+  签名: {α} (t : InfoTree) (ctx? : 选项类型 ContextInfo)
   定义体: t.findSome? (ctx? := ctx?) fun ctx i ch => some (f ctx i ch)
 
 Depends on / 依赖: findSome, t.findSome
@@ -133,7 +133,7 @@ definition getHighestInfo?
 
 中文:
 定义 getHighestInfo?
-  签名: (t : InfoTree) (ctx? : Option ContextInfo)
+  签名: (t : InfoTree) (ctx? : 选项类型 ContextInfo)
   定义体: t.onHighestNode? ctx? fun ctx i _ => (ctx, i)
 
 Depends on / 依赖: onHighestNode, t.onHighestNode
@@ -254,7 +254,7 @@ definition getLCtx?
 
 中文:
 定义 getLCtx?
-  签名: : Info -> Option (LocalContext × Option Expr)
+  签名: : Info -> 选项类型 (LocalContext × 选项类型 Expr)
 -/
 def getLCtx? : Info -> Option (LocalContext × Option Expr)
   | .ofTacticInfo i => do

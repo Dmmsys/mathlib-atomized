@@ -504,7 +504,7 @@ lemma fst_surjective
 
 中文:
 引理 fst_surjective
-  结论: Function.Surjective (fst G₀ H₀)
+  结论: 函数.满射 (fst G₀ H₀)
   证明: by
   classical
   exact Function.HasRightInverse.surjective ⟨inl .., fun _ => by simp⟩
@@ -527,7 +527,7 @@ lemma snd_surjective
 
 中文:
 引理 snd_surjective
-  结论: Function.Surjective (snd G₀ H₀)
+  结论: 函数.满射 (snd G₀ H₀)
   证明: by
   classical
   exact Function.HasRightInverse.surjective ⟨inr .., fun _ => by simp⟩

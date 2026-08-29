@@ -267,7 +267,7 @@ theorem two_mul_C_half_eq_one
 
 中文:
 定理 two_mul_C_half_eq_one
-  条件: [Invertible (2 : R)]
+  条件: [可逆 (2 : R)]
   结论: 2 * C (⅟2 : R) = 1
   证明: by
   rw [two_mul]; rw [← C_add]; rw [invOf_two_add_invOf_two]; rw [C_1]
@@ -287,7 +287,7 @@ theorem C_half_mul_two_eq_one
 
 中文:
 定理 C_half_mul_two_eq_one
-  条件: [Invertible (2 : R)]
+  条件: [可逆 (2 : R)]
   结论: C (⅟2 : R) * 2 = 1
   证明: by
   rw [mul_comm]; rw [two_mul_C_half_eq_one]
@@ -327,7 +327,7 @@ theorem dickson_one_one_eq_chebyshev_T
 
 中文:
 定理 dickson_one_one_eq_chebyshev_T
-  条件: [Invertible (2 : R)] (n : 自然数)
+  条件: [可逆 (2 : R)] (n : 自然数)
   证明: (dickson_one_one_eq_chebyshev_C R n).trans (Chebyshev.C_eq_two_mul_T_comp_half_mul_X R n)
 
 Depends on / 依赖: C_eq_two_mul_T_comp_half_mul_X, Chebyshev, Chebyshev.C_eq_two_mul_T_comp_half_mul_X, dickson_one_one_eq_chebyshev_C
@@ -346,7 +346,7 @@ theorem chebyshev_T_eq_dickson_one_one
 
 中文:
 定理 chebyshev_T_eq_dickson_one_one
-  条件: [Invertible (2 : R)] (n : 自然数)
+  条件: [可逆 (2 : R)] (n : 自然数)
   证明: dickson_one_one_eq_chebyshev_C R n ▸ Chebyshev.T_eq_half_mul_C_comp_two_mul_X R n
 
 Depends on / 依赖: Chebyshev, Chebyshev.T_eq_half_mul_C_comp_two_mul_X, T_eq_half_mul_C_comp_two_mul_X, dickson_one_one_eq_chebyshev_C
@@ -387,7 +387,7 @@ theorem dickson_two_one_eq_chebyshev_U
 
 中文:
 定理 dickson_two_one_eq_chebyshev_U
-  条件: [Invertible (2 : R)] (n : 自然数)
+  条件: [可逆 (2 : R)] (n : 自然数)
   证明: (dickson_two_one_eq_chebyshev_S R n).trans (Chebyshev.S_eq_U_comp_half_mul_X R n)
 
 Depends on / 依赖: Chebyshev, Chebyshev.S_eq_U_comp_half_mul_X, S_eq_U_comp_half_mul_X, dickson_two_one_eq_chebyshev_S
@@ -493,7 +493,7 @@ theorem dickson_one_one_zmod_p
 
 中文:
 定理 dickson_one_one_zmod_p
-  条件: (p : 自然数) [Fact p.Prime]
+  条件: (p : 自然数) [Fact p.素]
   结论: dickson 1 (1 : ZMod p) p = X ^ p
   证明: by
   -- Recall that `dickson_one_one_eval_add_inv` characterises `dickson 1 1 p`
@@ -582,7 +582,7 @@ theorem dickson_one_one_charP
 
 中文:
 定理 dickson_one_one_charP
-  条件: (p : 自然数) [Fact p.Prime] [CharP R p]
+  条件: (p : 自然数) [Fact p.素] [特征p R p]
   结论: dickson 1 (1 : R) p = X ^ p
   证明: by
   have h : (1 : R) = ZMod.castHom (dvd_refl p) R 1 := by

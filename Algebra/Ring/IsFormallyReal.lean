@@ -46,11 +46,11 @@ inductive IsSumNonzeroSq
     - sq_add: {a s : R} (ha : a != 0) (hs : IsSumNonzeroSq s) : IsSumNonzeroSq (a * a + s)
 
 中文:
-归纳类型 IsSumNonzeroSq
-  参数: [Mul R] [Add R] [Zero R]
+归纳类型 是SumNonzeroSq
+  参数: [乘法 R] [加法 R] [零 R]
   构造子 (2 个):
-    - sq: {a : R} (ha : a != 0) : IsSumNonzeroSq (a * a)
-    - sq_add: {a s : R} (ha : a != 0) (hs : IsSumNonzeroSq s) : IsSumNonzeroSq (a * a + s)
+    - sq: {a : R} (ha : a != 0) : 是SumNonzeroSq (a * a)
+    - sq_add: {a s : R} (ha : a != 0) (hs : 是SumNonzeroSq s) : 是SumNonzeroSq (a * a + s)
 -/
 inductive IsSumNonzeroSq [Mul R] [Add R] [Zero R] : R -> Prop
   | sq {a : R} (ha : a != 0) : IsSumNonzeroSq (a * a)
@@ -69,8 +69,8 @@ theorem IsSumNonzeroSq.add
   induction h₁ <;> simp_all [sq_add, add_assoc]
 
 中文:
-定理 IsSumNonzeroSq.add
-  结论: [AddMonoid R] [Mul R] {s₁ s₂ : R}
+定理 是SumNonzeroSq.add
+  结论: [加法幺半群 R] [乘法 R] {s₁ s₂ : R}
   证明: by
   induction h₁ <;> simp_all [sq_add, add_assoc]
 
@@ -90,8 +90,8 @@ theorem IsSumNonzeroSq.isSumSq
   induction h <;> aesop
 
 中文:
-定理 IsSumNonzeroSq.isSumSq
-  结论: [AddMonoid R] [Mul R] {s : R}
+定理 是SumNonzeroSq.isSumSq
+  结论: [加法幺半群 R] [乘法 R] {s : R}
   证明: by
   induction h <;> aesop
 -/
@@ -119,7 +119,7 @@ theorem isSumNonzeroSq_iff_isSumSq
 
 中文:
 定理 isSumNonzeroSq_iff_isSumSq
-  条件: [NonUnitalNonAssocSemiring R] {s : R} (hs : s != 0)
+  条件: [非幺非结合半环 R] {s : R} (hs : s != 0)
   证明: IsSumNonzeroSq.isSumSq
   mpr h := by
     induction h with
@@ -167,7 +167,7 @@ definition sumNonzeroSq
 
 中文:
 定义 sumNonzeroSq
-  签名: : AddSubsemigroup R where
+  签名: : 加法子半群 R where
   定义体: {s : R | IsSumNonzeroSq s}
   add_mem' := .add
 
@@ -191,7 +191,7 @@ theorem mem_sumNonzeroSq
 
 中文:
 定理 mem_sumNonzeroSq
-  结论: s in sumNonzeroSq R ↔ IsSumNonzeroSq s
+  结论: s in sumNonzeroSq R ↔ 是SumNonzeroSq s
   证明: .rfl
 
 @[simp]
@@ -259,10 +259,10 @@ class IsFormallyReal
     - not_isSumNonzeroSq_zero : ¬ IsSumNonzeroSq (0 : R)
 
 中文:
-类 IsFormallyReal
-  参数: [AddCommMonoid R] [Mul R]
+类 是Formally实数
+  参数: [加法交换幺半群 R] [乘法 R]
   公理与运算 (1 个):
-    - not_isSumNonzeroSq_zero : ¬ IsSumNonzeroSq (0 : R)
+    - not_isSumNonzeroSq_zero : ¬ 是SumNonzeroSq (0 : R)
 
 Depends on / 依赖: Scheme, Scheme.Hom.opensFunctor, infer_instance, opensFunctor
 -/
@@ -286,7 +286,7 @@ theorem of_eq_zero_of_mul_self_of_eq_zero_of_add
 
 中文:
 定理 of_eq_zero_of_mul_self_of_eq_zero_of_add
-  结论: [AddCommMonoid R] [Mul R]
+  结论: [加法交换幺半群 R] [乘法 R]
   证明: by
     suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
     intro x hx
@@ -321,7 +321,7 @@ theorem of_eq_zero_of_eq_zero_of_mul_self_add
 
 中文:
 定理 of_eq_zero_of_eq_zero_of_mul_self_add
-  结论: [NonUnitalNonAssocSemiring R]
+  结论: [非幺非结合半环 R]
   证明: by
     suffices forall (x : R), IsSumNonzeroSq x -> x != 0 by grind
     intro x hx
@@ -350,8 +350,8 @@ instance [Ring
     fun hs₁ hs₂ h => ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
 
 中文:
-实例 [Ring
-  签名: R] [LinearOrder R] [IsStrictOrderedRing R] : IsFormally实数 R
+实例 [环
+  签名: R] [线性序 R] [是StrictOrdered环 R] : 是Formally实数 R
   定义体: of_eq_zero_of_mul_self_of_eq_zero_of_add mul_self_eq_zero.mp
     fun hs₁ hs₂ h => ((add_eq_zero_iff_of_nonneg (IsSumSq.nonneg hs₁) (IsSumSq.nonneg hs₂)).mp h).1
 
@@ -374,8 +374,8 @@ instance [Ring
 exact not_isSumNonzeroSq_zero by simpa [← pow_two, hx] using IsSumNonzeroSq.sq hc
 
 中文:
-实例 [Ring
-  签名: R] [IsFormally实数 R] : IsReduced R
+实例 [环
+  签名: R] [是Formally实数 R] : 是既约 R
   定义体: by
   rw [isReduced_iff_pow_one_lt 2 (by lia)]
   intro x hx
@@ -405,7 +405,7 @@ theorem eq_zero_of_add_right
 
 中文:
 定理 eq_zero_of_add_right
-  结论: [NonUnitalNonAssocSemiring R] [IsFormally实数 R]
+  结论: [非幺非结合半环 R] [是Formally实数 R]
   证明: by
   by_contra! h₁
   have h₂ : s₂ != 0 := fun hc => by simp_all
@@ -434,7 +434,7 @@ theorem eq_zero_of_add_left
 
 中文:
 定理 eq_zero_of_add_left
-  结论: [NonUnitalNonAssocSemiring R] [IsFormally实数 R]
+  结论: [非幺非结合半环 R] [是Formally实数 R]
   证明: by
   simp_all [eq_zero_of_add_right hs₁ hs₂ h]
 
@@ -454,7 +454,7 @@ theorem eq_zero_of_isSumSq_of_neg_isSumSq
 
 中文:
 定理 eq_zero_of_isSumSq_of_neg_isSumSq
-  结论: [NonUnitalNonAssocRing R] [IsFormally实数 R]
+  结论: [非幺非结合环 R] [是Formally实数 R]
   证明: eq_zero_of_add_right h₁ h₂ (by simp)
 
 Depends on / 依赖: eq_zero_of_add_right

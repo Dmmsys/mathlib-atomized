@@ -39,7 +39,7 @@ structure Kleisli
 
 中文:
 结构 Kleisli
-  参数: (T : Monad C)
+  参数: (T : 单子 C)
   (无附加公理)
 -/
 structure Kleisli (T : Monad C) where mk (T) ::
@@ -93,7 +93,7 @@ structure Hom
     - of : c.of ⟶ T.obj c'.of
 
 中文:
-结构 Hom
+结构 态射
   参数: (c c' : Kleisli T)
   公理与运算 (1 个):
     - of : c.of ⟶ T.obj c'.of
@@ -111,7 +111,7 @@ instance [Inhabited
   body: ⟨.mk T default⟩
 
 中文:
-实例 [Inhabited
+实例 [可居
   签名: C] (T
   定义体: ⟨.mk T default⟩
 -/
@@ -142,7 +142,7 @@ comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
 
 中文:
 实例 category
-  签名: : Category (Kleisli T) where
+  签名: : 范畴 (Kleisli T) where
   定义体: Hom X Y
 id X := .mk T.η.app X.of
 comp {_} {_} {Z} f g := .mk f.of ≫ T.map g.of ≫ T.μ.app Z.of
@@ -317,8 +317,8 @@ structure Cokleisli
   (no additional axioms)
 
 中文:
-结构 Cokleisli
-  参数: (U : Comonad C)
+结构 余kleisli
+  参数: (U : 余单子 C)
   (无附加公理)
 -/
 structure Cokleisli (U : Comonad C) where mk (U) ::
@@ -340,8 +340,8 @@ lemma mk_of
 
 中文:
 引理 mk_of
-  条件: (c : Cokleisli U)
-  结论: Cokleisli.mk U c.of = c
+  条件: (c : 余kleisli U)
+  结论: 余kleisli.mk U c.of = c
   证明: rfl
 -/
 @[simp] lemma mk_of (c : Cokleisli U) : Cokleisli.mk U c.of = c := rfl
@@ -357,7 +357,7 @@ lemma of_mk
 中文:
 引理 of_mk
   条件: (c : C)
-  结论: (Cokleisli.mk U c).of = c
+  结论: (余kleisli.mk U c).of = c
   证明: rfl
 -/
 lemma of_mk (c : C) : (Cokleisli.mk U c).of = c := rfl
@@ -373,8 +373,8 @@ structure Hom
     - of : U.obj c.of ⟶ c'.of
 
 中文:
-结构 Hom
-  参数: (c c' : Cokleisli U)
+结构 态射
+  参数: (c c' : 余kleisli U)
   公理与运算 (1 个):
     - of : U.obj c.of ⟶ c'.of
 -/
@@ -391,7 +391,7 @@ instance [Inhabited
   body: ⟨.mk U default⟩
 
 中文:
-实例 [Inhabited
+实例 [可居
   签名: C] (U
   定义体: ⟨.mk U default⟩
 -/
@@ -411,7 +411,7 @@ comp f g := .mk U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
 
 中文:
 实例 category
-  签名: : Category (Cokleisli U) where
+  签名: : 范畴 (余kleisli U) where
   定义体: Hom X Y
 id X := .mk U.ε.app X.of
 comp f g := .mk U.δ.app _ ≫ (U : C ⥤ C).map f.of ≫ g.of
@@ -435,7 +435,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {x y : Cokleisli U} {f g : x ⟶ y} (h : f.of = g.of)
+  条件: {x y : 余kleisli U} {f g : x ⟶ y} (h : f.of = g.of)
   结论: f = g
   证明: Hom.ext h
 
@@ -459,7 +459,7 @@ definition toCokleisli
 
 中文:
 定义 toCokleisli
-  签名: : C ⥤ Cokleisli U where
+  签名: : C ⥤ 余kleisli U where
   定义体: .mk U X
   map {X} {_} f := .mk (U.ε.app X ≫ f)
 -/
@@ -481,7 +481,7 @@ definition fromCokleisli
 
 中文:
 定义 fromCokleisli
-  签名: : Cokleisli U ⥤ C where
+  签名: : 余kleisli U ⥤ C where
   定义体: U.obj X.of
   map {X} {_} f := U.δ.app X.of ≫ U.map f.of
   map_id _ := U.right_counit _

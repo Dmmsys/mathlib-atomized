@@ -41,8 +41,8 @@ theorem exists_norm_eq_iInf_of_complete_convex
   have δ_le' : forall w in K, δ <= ‖u - w‖ := fun w hw => δ
 
 中文:
-定理 exists_norm_eq_iInf_of_complete_convex
-  结论: {K : Set F} (ne : K.Nonempty) (h₁ : IsComplete K)
+定理 存在_norm_eq_iInf_of_complete_convex
+  结论: {K : 集合 F} (ne : K.非空) (h₁ : 是完备 K)
   证明: fun u => by
   let δ := ⨅ w : K, ‖u - w‖
   let : Nonempty K := ne.to_subtype
@@ -173,7 +173,7 @@ theorem norm_eq_iInf_iff_real_inner_le_zero
 
 中文:
 定理 norm_eq_iInf_iff_real_inner_le_zero
-  结论: {K : Set F} (h : Convex 实数 K) {u : F} {v : F}
+  结论: {K : 集合 F} (h : 凸 实数 K) {u : F} {v : F}
   证明: by
   let : Nonempty K := ⟨⟨v, hv⟩⟩
   constructor
@@ -285,8 +285,8 @@ theorem exists_norm_eq_iInf_of_complete_subspace
   exact exists_norm_eq_iInf_of_complete_convex ⟨0, K'.zero_mem⟩ h K'.convex
 
 中文:
-定理 exists_norm_eq_iInf_of_complete_subspace
-  条件: (h : IsComplete (↑K : Set E))
+定理 存在_norm_eq_iInf_of_complete_subspace
+  条件: (h : 是完备 (↑K : 集合 E))
   证明: by
   let : InnerProductSpace Real E := InnerProductSpace.rclikeToReal 𝕜 E
   let K' : Submodule Real E := Submodule.restrictScalars Real K
@@ -319,7 +319,7 @@ theorem norm_eq_iInf_iff_real_inner_eq_zero
 
 中文:
 定理 norm_eq_iInf_iff_real_inner_eq_zero
-  条件: (K : Submodule 实数 F) {u : F} {v : F} (hv : v in K)
+  条件: (K : 子模 实数 F) {u : F} {v : F} (hv : v in K)
   证明: Iff.intro
     (by
       intro h

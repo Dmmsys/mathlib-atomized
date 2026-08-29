@@ -40,7 +40,7 @@ definition enumerate
 
 中文:
 定义 enumerate
-  签名: : Set α -> 自然数 -> Option α
+  签名: : 集合 α -> 自然数 -> 选项类型 α
 -/
 def enumerate : Set α -> Nat -> Option α
   | s, 0 => sel s
@@ -58,7 +58,7 @@ theorem enumerate_eq_none_of_sel
 
 中文:
 定理 enumerate_eq_none_of_sel
-  条件: {s : Set α} (h : sel s = none)
+  条件: {s : 集合 α} (h : sel s = none)
   结论: 对任意 {n}, enumerate sel s n = none
 -/
 theorem enumerate_eq_none_of_sel {s : Set α} (h : sel s = none) : forall {n}, enumerate sel s n = none
@@ -143,7 +143,7 @@ theorem enumerate_inj
 
 中文:
 定理 enumerate_inj
-  结论: {n₁ n₂ : 自然数} {a : α} {s : Set α} (h_sel : 对任意 s a, sel s = some a -> a in s)
+  结论: {n₁ n₂ : 自然数} {a : α} {s : 集合 α} (h_sel : 对任意 s a, sel s = some a -> a in s)
   证明: by
   wlog! hn : n₁ <= n₂ generalizing n₁ n₂
   · exact (this h₂ h₁ hn.le).symm

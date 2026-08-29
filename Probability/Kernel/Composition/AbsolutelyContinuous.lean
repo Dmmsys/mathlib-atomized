@@ -57,8 +57,8 @@ lemma MutuallySingular.compProd_of_right
   
 
 中文:
-引理 MutuallySingular.compProd_of_right
-  条件: (μ ν : Measure α) (hκη : 对任意ᵐ a ∂μ, κ a ⟂ₘ η a)
+引理 互奇异.compProd_of_right
+  条件: (μ ν : 测度 α) (hκη : 对任意ᵐ a ∂μ, κ a ⟂ₘ η a)
   证明: by
   by_cases hμ : SFinite μ
   swap; · rw [compProd_of_not_sfinite _ _ hμ]; simp
@@ -102,8 +102,8 @@ lemma MutuallySingular.compProd_of_right'
   simp_rw [MutuallySingular.comm, hκη]
 
 中文:
-引理 MutuallySingular.compProd_of_right'
-  条件: (μ ν : Measure α) (hκη : 对任意ᵐ a ∂ν, κ a ⟂ₘ η a)
+引理 互奇异.compProd_of_right'
+  条件: (μ ν : 测度 α) (hκη : 对任意ᵐ a ∂ν, κ a ⟂ₘ η a)
   证明: by
   refine (MutuallySingular.compProd_of_right _ _ ?_).symm
   simp_rw [MutuallySingular.comm, hκη]

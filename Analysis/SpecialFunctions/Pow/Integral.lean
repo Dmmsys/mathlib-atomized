@@ -158,7 +158,7 @@ lemma integrableOn_ball_of_norm_le_rpow
 
 中文:
 引理 integrableOn_ball_of_norm_le_rpow
-  结论: (hd : 1 <= Module.finrank 实数 E) {f : E -> F} {C α r : 实数}
+  结论: (hd : 1 <= 模.finrank 实数 E) {f : E -> F} {C α r : 实数}
   证明: by
   have : Nontrivial E := by
     apply Module.nontrivial_of_finrank_pos (R := Real)
@@ -207,8 +207,8 @@ theorem locallyIntegrable_of_norm_le_rpow
     (mem_ball_zero_iff.mpr <| hR · ·)
 
 中文:
-定理 locallyIntegrable_of_norm_le_rpow
-  结论: (hdim : 1 <= Module.finrank 实数 E) {f : E -> F} {C α : 实数}
+定理 locally整数egrable_of_norm_le_rpow
+  结论: (hdim : 1 <= 模.finrank 实数 E) {f : E -> F} {C α : 实数}
   证明: by
   rw [locallyIntegrable_iff]
   intro K hK

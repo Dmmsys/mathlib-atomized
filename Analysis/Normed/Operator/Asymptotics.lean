@@ -161,7 +161,7 @@ theorem isBigO_comp
 
 中文:
 定理 isBigO_comp
-  条件: {α : 类型} (f : α -> E) (l : Filter α)
+  条件: {α : 类型} (f : α -> E) (l : 滤子 α)
   结论: (fun x' => e (f x')) =O[l] f
   证明: (e : E ->SL[σ₁₂] F).isBigO_comp f l
 
@@ -181,7 +181,7 @@ theorem isBigO_sub
 
 中文:
 定理 isBigO_sub
-  条件: (l : Filter E) (x : E)
+  条件: (l : 滤子 E) (x : E)
   结论: (fun x' => e (x' - x)) =O[l] fun x' => x' - x
   证明: (e : E ->SL[σ₁₂] F).isBigO_sub l x
 
@@ -207,7 +207,7 @@ theorem isBigO_comp_rev
 
 中文:
 定理 isBigO_comp_rev
-  条件: {α : 类型} (f : α -> E) (l : Filter α)
+  条件: {α : 类型} (f : α -> E) (l : 滤子 α)
   结论: f =O[l] fun x' => e (f x')
   证明: (e.symm.isBigO_comp _ l).congr_left fun _ => e.symm_apply_apply _
 
@@ -227,7 +227,7 @@ theorem isBigO_sub_rev
 
 中文:
 定理 isBigO_sub_rev
-  条件: (l : Filter E) (x : E)
+  条件: (l : 滤子 E) (x : E)
   结论: (fun x' => x' - x) =O[l] fun x' => e (x' - x)
   证明: e.isBigO_comp_rev _ _
 

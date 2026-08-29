@@ -60,7 +60,7 @@ definition FinMeasAdditive
 
 中文:
 定义 FinMeasAdditive
-  签名: {β} [AddMonoid β] {_ : MeasurableSpace α} (μ : Measure α) (T : Set α -> β)
+  签名: {β} [加法幺半群 β] {_ : 可测空间 α} (μ : 测度 α) (T : 集合 α -> β)
   定义体: forall s t, MeasurableSet s -> MeasurableSet t -> μ s != ∞ -> μ t != ∞ -> Disjoint s t ->
     T (s union t) = T s + T t
 
@@ -89,7 +89,7 @@ theorem zero
 
 中文:
 定理 zero
-  结论: FinMeasAdditive μ (0 : Set α -> β)
+  结论: FinMeasAdditive μ (0 : 集合 α -> β)
   证明: fun _ _ _ _ _ _ _ => by simp
 -/
 theorem zero : FinMeasAdditive μ (0 : Set α -> β) := fun _ _ _ _ _ _ _ => by simp
@@ -105,7 +105,7 @@ theorem smul
 
 中文:
 定理 smul
-  条件: [DistribSMul 𝕜 β] (hT : FinMeasAdditive μ T) (c : 𝕜)
+  条件: [分配标量乘法 𝕜 β] (hT : FinMeasAdditive μ T) (c : 𝕜)
   证明: fun s t hs ht hμs hμt hst => by
   simp [hT s t hs ht hμs hμt hst]
 -/
@@ -124,7 +124,7 @@ theorem of_eq_top_imp_eq_top
 
 中文:
 定理 of_eq_top_imp_eq_top
-  结论: {μ' : Measure α} (h : 对任意 s, MeasurableSet s -> μ s = ∞ -> μ' s = ∞)
+  结论: {μ' : 测度 α} (h : 对任意 s, 可测集 s -> μ s = ∞ -> μ' s = ∞)
   证明: fun s t hs ht hμ's hμ't hst =>
   hT s t hs ht (mt (h s hs) hμ's) (mt (h t ht) hμ't) hst
 -/
@@ -143,7 +143,7 @@ top_unique hμs.symm.trans_le (Measure.le_add_right le_rfl s)
 
 中文:
 定理 add_right_measure
-  条件: {ν : Measure α} (hT : FinMeasAdditive μ T)
+  条件: {ν : 测度 α} (hT : FinMeasAdditive μ T)
   证明: hT.of_eq_top_imp_eq_top fun s _ hμs =>
 top_unique hμs.symm.trans_le (Measure.le_add_right le_rfl s)
 
@@ -165,7 +165,7 @@ top_unique hμs.symm.trans_le (Measure.le_add_left le_rfl s)
 
 中文:
 定理 add_left_measure
-  条件: {ν : Measure α} (hT : FinMeasAdditive μ T)
+  条件: {ν : 测度 α} (hT : FinMeasAdditive μ T)
   证明: hT.of_eq_top_imp_eq_top fun s _ hμs =>
 top_unique hμs.symm.trans_le (Measure.le_add_left le_rfl s)
 
@@ -270,7 +270,7 @@ theorem map_empty_eq_zero
 
 中文:
 定理 map_empty_eq_zero
-  条件: {β} [AddCancelMonoid β] {T : Set α -> β} (hT : FinMeasAdditive μ T)
+  条件: {β} [加法消去幺半群 β] {T : 集合 α -> β} (hT : FinMeasAdditive μ T)
   证明: by
   have h_empty : μ ∅ != ∞ := (measure_empty.le.trans_lt ENNReal.coe_lt_top).ne
   specialize hT ∅ ∅ MeasurableSet.empty MeasurableSet.empty h_empty h_empty (disjoint_empty _)
@@ -331,7 +331,7 @@ theorem add_measure
 
 中文:
 定理 add_measure
-  条件: {ν : Measure α} (hT : FinMeasAdditive μ T) (hT' : FinMeasAdditive ν T')
+  条件: {ν : 测度 α} (hT : FinMeasAdditive μ T) (hT' : FinMeasAdditive ν T')
   证明: hT.add_right_measure.add (hT'.add_left_measure)
 
 Depends on / 依赖: add_left_measure, add_right_measure, hT.add_right_measure.add
@@ -358,7 +358,7 @@ theorem map_iUnion_fin_meas_set_eq_sum
 
 中文:
 定理 map_iUnion_fin_meas_set_eq_sum
-  结论: (T : Set α -> β) (T_empty : T ∅ = 0)
+  结论: (T : 集合 α -> β) (T_empty : T ∅ = 0)
   证明: by
   classical
   revert hSp h_disj
@@ -415,7 +415,7 @@ theorem neg
 
 中文:
 定理 neg
-  条件: [AddGroup β] (hT : FinMeasAdditive μ T)
+  条件: [加法群 β] (hT : FinMeasAdditive μ T)
   证明: by
   intro s t hs ht hμs hμt hst
   have h_comm : T s + T t = T t + T s := by
@@ -441,7 +441,7 @@ theorem sub
 
 中文:
 定理 sub
-  条件: [AddCommGroup β] (hT : FinMeasAdditive μ T) (hT' : FinMeasAdditive μ T')
+  条件: [加法交换群 β] (hT : FinMeasAdditive μ T) (hT' : FinMeasAdditive μ T')
   证明: sub_eq_add_neg T T' ▸ hT.add hT'.neg
 
 Depends on / 依赖: hT.add, sub_eq_add_neg
@@ -462,7 +462,7 @@ definition DominatedFinMeasAdditive
 
 中文:
 定义 DominatedFinMeasAdditive
-  签名: {β} [SeminormedAddCommGroup β] {_ : MeasurableSpace α} (μ : Measure α)
+  签名: {β} [SeminormedAddComm群 β] {_ : 可测空间 α} (μ : 测度 α)
   定义体: FinMeasAdditive μ T ∧ forall s, MeasurableSet s -> μ s < ∞ -> ‖T s‖ <= C * μ.real s
 
 Depends on / 依赖: FinMeasAdditive, MeasurableSet
@@ -488,7 +488,7 @@ theorem zero
 
 中文:
 定理 zero
-  条件: {m : MeasurableSpace α} (μ : Measure α) (hC : 0 <= C)
+  条件: {m : 可测空间 α} (μ : 测度 α) (hC : 0 <= C)
   证明: by
   refine ⟨FinMeasAdditive.zero, fun s _ _ => ?_⟩
   rw [Pi.zero_apply]; rw [norm_zero]
@@ -515,7 +515,7 @@ theorem eq_zero_of_measure_zero
 
 中文:
 定理 eq_zero_of_measure_zero
-  结论: {β : 类型} [NormedAddCommGroup β] {T : Set α -> β} {C : 实数}
+  结论: {β : 类型} [赋范交换加群 β] {T : 集合 α -> β} {C : 实数}
   证明: by
   refine norm_eq_zero.mp ?_
   refine ((hT.2 s hs (by simp [hs_zero])).trans (le_of_eq ?_)).antisymm (norm_nonneg _)
@@ -540,7 +540,7 @@ theorem eq_zero
 
 中文:
 定理 eq_zero
-  结论: {β : 类型} [NormedAddCommGroup β] {T : Set α -> β} {C : 实数} {_ : MeasurableSpace α}
+  结论: {β : 类型} [赋范交换加群 β] {T : 集合 α -> β} {C : 实数} {_ : 可测空间 α}
   证明: eq_zero_of_measure_zero hT hs (by simp only [Measure.coe_zero, Pi.zero_apply])
 
 Depends on / 依赖: Measure, Measure.coe_zero, Pi.zero_apply, coe_zero, eq_zero_of_measure_zero, zero_apply
@@ -626,7 +626,7 @@ theorem smul
 
 中文:
 定理 smul
-  结论: [SeminormedAddGroup 𝕜] [DistribSMul 𝕜 β] [IsBoundedSMul 𝕜 β]
+  结论: [半赋范加群 𝕜] [分配标量乘法 𝕜 β] [是BoundedSMul 𝕜 β]
   证明: by
   refine ⟨hT.1.smul c, fun s hs hμs => (norm_smul_le _ _).trans ?_⟩
   rw [mul_assoc]
@@ -658,7 +658,7 @@ have h' : forall s, μ s = ∞ -> μ' s = ∞ := fun s hs => top_unique hs.symm.
 
 中文:
 定理 of_measure_le
-  结论: {μ' : Measure α} (h : μ <= μ') (hT : DominatedFinMeasAdditive μ T C)
+  结论: {μ' : 测度 α} (h : μ <= μ') (hT : DominatedFinMeasAdditive μ T C)
   证明: by
 have h' : forall s, μ s = ∞ -> μ' s = ∞ := fun s hs => top_unique hs.symm.trans_le (h _)
   refine ⟨hT.1.of_eq_top_imp_eq_top fun s _ => h' s, fun s hs hμ's => ?_⟩
@@ -698,7 +698,7 @@ theorem add_measure
 
 中文:
 定理 add_measure
-  结论: {C' : 实数} (μ ν : Measure α)
+  结论: {C' : 实数} (μ ν : 测度 α)
   证明: by
   refine ⟨hT.1.add_measure hT'.1, fun s hs hsf => ?_⟩
   have hμs : μ s < ∞ := (Measure.le_add_right le_rfl s).trans_lt hsf
@@ -734,7 +734,7 @@ theorem sub_measure
 
 中文:
 定理 sub_measure
-  结论: {C' : 实数} (μ ν : Measure α)
+  结论: {C' : 实数} (μ ν : 测度 α)
   证明: sub_eq_add_neg T T' ▸ hT.add_measure μ ν hT'.neg
 
 Depends on / 依赖: add_measure, hT.add_measure, sub_eq_add_neg
@@ -754,7 +754,7 @@ theorem add_measure_right
 
 中文:
 定理 add_measure_right
-  结论: {_ : MeasurableSpace α} (μ ν : Measure α)
+  结论: {_ : 可测空间 α} (μ ν : 测度 α)
   证明: of_measure_le (Measure.le_add_right le_rfl) hT hC
 
 Depends on / 依赖: Measure, Measure.le_add_right, le_add_right, le_rfl, of_measure_le
@@ -773,7 +773,7 @@ theorem add_measure_left
 
 中文:
 定理 add_measure_left
-  结论: {_ : MeasurableSpace α} (μ ν : Measure α)
+  结论: {_ : 可测空间 α} (μ ν : 测度 α)
   证明: of_measure_le (Measure.le_add_left le_rfl) hT hC
 
 Depends on / 依赖: Measure, Measure.le_add_left, le_add_left, le_rfl, of_measure_le
@@ -796,7 +796,7 @@ theorem finsetSum_measure
 
 中文:
 定理 finsetSum_measure
-  结论: {ι} {s : Finset ι} (hs : s.Nonempty) (μ : ι -> Measure α)
+  结论: {ι} {s : 有限集 ι} (hs : s.非空) (μ : ι -> 测度 α)
   证明: by
   induction hs using Finset.Nonempty.cons_induction with
   | singleton i => simp_all
@@ -866,7 +866,7 @@ theorem of_measure_le_smul
 
 中文:
 定理 of_measure_le_smul
-  结论: {μ' : Measure α} {c : 实数>=0∞} (hc : c != ∞) (h : μ <= c • μ')
+  结论: {μ' : 测度 α} {c : 实数>=0∞} (hc : c != ∞) (h : μ <= c • μ')
   证明: (hT.of_measure_le h hC).of_smul_measure hc
 
 Depends on / 依赖: hT.of_measure_le, of_measure_le, of_smul_measure
@@ -894,7 +894,7 @@ definition setToSimpleFunc
 
 中文:
 定义 setToSimpleFunc
-  签名: {_ : MeasurableSpace α} (T : Set α -> F ->L[实数] F') (f : α ->ₛ F)
+  签名: {_ : 可测空间 α} (T : 集合 α -> F ->L[实数] F') (f : α ->ₛ F)
   定义体: ∑ x in f.range, T (f ⁻¹' {x}) x
 
 @[simp]
@@ -915,7 +915,7 @@ theorem setToSimpleFunc_zero
 
 中文:
 定理 setToSimpleFunc_zero
-  条件: {m : MeasurableSpace α} (f : α ->ₛ F)
+  条件: {m : 可测空间 α} (f : α ->ₛ F)
   证明: by simp [setToSimpleFunc]
 
 Depends on / 依赖: setToSimpleFunc
@@ -941,7 +941,7 @@ theorem setToSimpleFunc_zero'
 
 中文:
 定理 setToSimpleFunc_zero'
-  结论: {T : Set α -> E ->L[实数] F'}
+  结论: {T : 集合 α -> E ->L[实数] F'}
   证明: by
   simp_rw [setToSimpleFunc]
   refine sum_eq_zero fun x _ => ?_
@@ -976,7 +976,7 @@ theorem setToSimpleFunc_zero_apply
 
 中文:
 定理 setToSimpleFunc_zero_apply
-  条件: {m : MeasurableSpace α} (T : Set α -> F ->L[实数] F')
+  条件: {m : 可测空间 α} (T : 集合 α -> F ->L[实数] F')
   证明: by
   cases isEmpty_or_nonempty α <;> simp [setToSimpleFunc]
 
@@ -1072,7 +1072,7 @@ theorem map_setToSimpleFunc
 
 中文:
 定理 map_setToSimpleFunc
-  结论: (T : Set α -> F ->L[实数] F') (h_add : FinMeasAdditive μ T) {f : α ->ₛ G}
+  结论: (T : 集合 α -> F ->L[实数] F') (h_add : FinMeasAdditive μ T) {f : α ->ₛ G}
   证明: by
   classical
   have T_empty : T ∅ = 0 := h_add.map_empty_eq_zero
@@ -1132,7 +1132,7 @@ theorem setToSimpleFunc_congr'
 
 中文:
 定理 setToSimpleFunc_congr'
-  结论: (T : Set α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
+  结论: (T : 集合 α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
   证明: show ((pair f g).map Prod.fst).setToSimpleFunc T = ((pair f g).map Prod.snd).setToSimpleFunc T by
     have h_pair : Integrable (f.pair g) μ := integrable_pair hf hg
     rw [map_setToSimpleFunc T h_add h_pair Prod.fst_zero]
@@ -1175,7 +1175,7 @@ theorem setToSimpleFunc_congr
 
 中文:
 定理 setToSimpleFunc_congr
-  结论: (T : Set α -> E ->L[实数] F)
+  结论: (T : 集合 α -> E ->L[实数] F)
   证明: by
   refine setToSimpleFunc_congr' T h_add hf ((integrable_congr h).mp hf) ?_
   refine fun x y hxy => h_zero _ ((measurableSet_fiber f x).inter (measurableSet_fiber g y)) ?_
@@ -1212,7 +1212,7 @@ theorem setToSimpleFunc_congr_left
 
 中文:
 定理 setToSimpleFunc_congr_left
-  结论: (T T' : Set α -> E ->L[实数] F)
+  结论: (T T' : 集合 α -> E ->L[实数] F)
   证明: by
   simp_rw [setToSimpleFunc]
   refine sum_congr rfl fun x _ => ?_
@@ -1246,7 +1246,7 @@ theorem setToSimpleFunc_add_left
 
 中文:
 定理 setToSimpleFunc_add_left
-  条件: {m : MeasurableSpace α} (T T' : Set α -> F ->L[实数] F') {f : α ->ₛ F}
+  条件: {m : 可测空间 α} (T T' : 集合 α -> F ->L[实数] F') {f : α ->ₛ F}
   证明: by
   simp_rw [setToSimpleFunc, Pi.add_apply]
   push_cast
@@ -1280,7 +1280,7 @@ theorem setToSimpleFunc_add_left'
 
 中文:
 定理 setToSimpleFunc_add_left'
-  结论: (T T' T'' : Set α -> E ->L[实数] F)
+  结论: (T T' T'' : 集合 α -> E ->L[实数] F)
   证明: by
   classical
   simp_rw [setToSimpleFunc_eq_sum_filter]
@@ -1323,7 +1323,7 @@ theorem setToSimpleFunc_smul_left
 
 中文:
 定理 setToSimpleFunc_smul_left
-  结论: {m : MeasurableSpace α} (T : Set α -> F ->L[实数] F') (c : 实数)
+  结论: {m : 可测空间 α} (T : 集合 α -> F ->L[实数] F') (c : 实数)
   证明: by
   simp_rw [setToSimpleFunc, _root_.smul_apply, smul_sum]
 
@@ -1352,7 +1352,7 @@ theorem setToSimpleFunc_smul_left'
 
 中文:
 定理 setToSimpleFunc_smul_left'
-  结论: (T T' : Set α -> E ->L[实数] F') (c : 实数)
+  结论: (T T' : 集合 α -> E ->L[实数] F') (c : 实数)
   证明: by
   classical
   simp_rw [setToSimpleFunc_eq_sum_filter]
@@ -1395,7 +1395,7 @@ theorem setToSimpleFunc_add
 
 中文:
 定理 setToSimpleFunc_add
-  结论: (T : Set α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
+  结论: (T : 集合 α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
   证明: have hp_pair : Integrable (f.pair g) μ := integrable_pair hf hg
   calc
     setToSimpleFunc T (f + g) = ∑ x in (pair f g).range, T (pair f g ⁻¹' {x}) (x.fst + x.snd) := by
@@ -1434,7 +1434,7 @@ theorem setToSimpleFunc_neg
 
 中文:
 定理 setToSimpleFunc_neg
-  结论: (T : Set α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f : α ->ₛ E}
+  结论: (T : 集合 α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f : α ->ₛ E}
   证明: calc
     setToSimpleFunc T (-f) = setToSimpleFunc T (f.map Neg.neg) := rfl
     _ = -setToSimpleFunc T f := by
@@ -1466,7 +1466,7 @@ theorem setToSimpleFunc_sub
 
 中文:
 定理 setToSimpleFunc_sub
-  结论: (T : Set α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
+  结论: (T : 集合 α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) {f g : α ->ₛ E}
   证明: by
   rw [sub_eq_add_neg]; rw [setToSimpleFunc_add T h_add hf]; rw [setToSimpleFunc_neg T h_add hg]; rw [sub_eq_add_neg]
   rw [integrable_iff] at hg ⊢
@@ -1501,7 +1501,7 @@ theorem setToSimpleFunc_smul_real
 
 中文:
 定理 setToSimpleFunc_smul_real
-  结论: (T : Set α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) (c : 实数)
+  结论: (T : 集合 α -> E ->L[实数] F) (h_add : FinMeasAdditive μ T) (c : 实数)
   证明: calc
     setToSimpleFunc T (c • f) = ∑ x in f.range, T (f ⁻¹' {x}) (c • x) := by
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
@@ -1534,7 +1534,7 @@ theorem setToSimpleFunc_smul
 
 中文:
 定理 setToSimpleFunc_smul
-  结论: {E} [NormedAddCommGroup E] [SMulZeroClass 𝕜 E]
+  结论: {E} [赋范交换加群 E] [SMulZero类 𝕜 E]
   证明: calc
     setToSimpleFunc T (c • f) = ∑ x in f.range, T (f ⁻¹' {x}) (c • x) := by
       rw [smul_eq_map c f]; rw [map_setToSimpleFunc T h_add hf]; rw [smul_zero]
@@ -1570,7 +1570,7 @@ theorem setToSimpleFunc_mono_left
 
 中文:
 定理 setToSimpleFunc_mono_left
-  结论: {m : MeasurableSpace α} (T T' : Set α -> F ->L[实数] G'')
+  结论: {m : 可测空间 α} (T T' : 集合 α -> F ->L[实数] G'')
   证明: by
   simp_rw [setToSimpleFunc]; gcongr; apply hTT'
 
@@ -1595,7 +1595,7 @@ theorem setToSimpleFunc_mono_left'
 
 中文:
 定理 setToSimpleFunc_mono_left'
-  结论: (T T' : Set α -> E ->L[实数] G'')
+  结论: (T T' : 集合 α -> E ->L[实数] G'')
   证明: by
   unfold setToSimpleFunc
   gcongr with i _
@@ -1630,7 +1630,7 @@ theorem setToSimpleFunc_nonneg
 
 中文:
 定理 setToSimpleFunc_nonneg
-  结论: {m : MeasurableSpace α} (T : Set α -> G' ->L[实数] G'')
+  结论: {m : 可测空间 α} (T : 集合 α -> G' ->L[实数] G'')
   证明: by
   refine sum_nonneg fun i hi => hT_nonneg _ i ?_
   rw [mem_range] at hi
@@ -1670,7 +1670,7 @@ theorem setToSimpleFunc_nonneg'
 
 中文:
 定理 setToSimpleFunc_nonneg'
-  结论: (T : Set α -> G' ->L[实数] G'')
+  结论: (T : 集合 α -> G' ->L[实数] G'')
   证明: by
   refine sum_nonneg fun i hi => ?_
   by_cases h0 : i = 0
@@ -1712,7 +1712,7 @@ theorem setToSimpleFunc_mono
 
 中文:
 定理 setToSimpleFunc_mono
-  结论: [IsOrderedAddMonoid G']
+  结论: [是OrderedAdd幺半群 G']
   证明: by
   rw [← sub_nonneg]; rw [← setToSimpleFunc_sub T h_add hgi hfi]
   refine setToSimpleFunc_nonneg' T hT_nonneg _ ?_ (hgi.sub hfi)
@@ -1748,7 +1748,7 @@ theorem norm_setToSimpleFunc_le_sum_opNorm
 
 中文:
 定理 norm_setToSimpleFunc_le_sum_opNorm
-  结论: {m : MeasurableSpace α} (T : Set α -> F' ->L[实数] F)
+  结论: {m : 可测空间 α} (T : 集合 α -> F' ->L[实数] F)
   证明: calc
     ‖∑ x in f.range, T (f ⁻¹' {x}) x‖ <= ∑ x in f.range, ‖T (f ⁻¹' {x}) x‖ := norm_sum_le _ _
     _ <= ∑ x in f.range, ‖T (f ⁻¹' {x})‖ * ‖x‖ := by
@@ -1779,7 +1779,7 @@ exact hT_norm _ SimpleFunc.measurableSet_fiber _ _
 
 中文:
 定理 norm_setToSimpleFunc_le_sum_mul_norm
-  结论: (T : Set α -> F ->L[实数] F') {C : 实数}
+  结论: (T : 集合 α -> F ->L[实数] F') {C : 实数}
   证明: calc
     ‖f.setToSimpleFunc T‖ <= ∑ x in f.range, ‖T (f ⁻¹' {x})‖ * ‖x‖ :=
       norm_setToSimpleFunc_le_sum_opNorm T f
@@ -1819,7 +1819,7 @@ exact hT_n
 
 中文:
 定理 norm_setToSimpleFunc_le_sum_mul_norm_of_integrable
-  结论: (T : Set α -> E ->L[实数] F') {C : 实数}
+  结论: (T : 集合 α -> E ->L[实数] F') {C : 实数}
   证明: calc
     ‖f.setToSimpleFunc T‖ <= ∑ x in f.range, ‖T (f ⁻¹' {x})‖ * ‖x‖ :=
       norm_setToSimpleFunc_le_sum_opNorm T f
@@ -1867,7 +1867,7 @@ theorem setToSimpleFunc_indicator
 
 中文:
 定理 setToSimpleFunc_indicator
-  结论: (T : Set α -> F ->L[实数] F') (hT_empty : T ∅ = 0)
+  结论: (T : 集合 α -> F ->L[实数] F') (hT_empty : T ∅ = 0)
   证明: by
   classical
   obtain rfl | hs_empty := s.eq_empty_or_nonempty
@@ -1921,7 +1921,7 @@ theorem setToSimpleFunc_const'
 
 中文:
 定理 setToSimpleFunc_const'
-  结论: [Nonempty α] (T : Set α -> F ->L[实数] F') (x : F)
+  结论: [非空 α] (T : 集合 α -> F ->L[实数] F') (x : F)
   证明: by
   simp only [setToSimpleFunc, range_const, Set.mem_singleton, preimage_const_of_mem,
     sum_singleton, ← Function.const_def, coe_const]
@@ -1949,7 +1949,7 @@ theorem setToSimpleFunc_const
 
 中文:
 定理 setToSimpleFunc_const
-  结论: (T : Set α -> F ->L[实数] F') (hT_empty : T ∅ = 0) (x : F)
+  结论: (T : 集合 α -> F ->L[实数] F') (hT_empty : T ∅ = 0) (x : F)
   证明: by
   cases isEmpty_or_nonempty α
   · have h_univ_empty : (univ : Set α) = ∅ := Subsingleton.elim _ _

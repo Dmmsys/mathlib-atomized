@@ -112,7 +112,7 @@ instance :
 
 中文:
 实例 :
-  签名: U.overEquivalence.functor.IsDenseSubsite
+  签名: U.overEquivalence.functor.是DenseSubsite
   定义体: by
     simp only [Opens.mem_grothendieckTopology, Sieve.mem_functorPushforward_functor]
     constructor
@@ -147,7 +147,7 @@ instance :
 
 中文:
 实例 :
-  签名: U.overEquivalence.symm.inverse.IsDenseSubsite
+  签名: U.overEquivalence.symm.inverse.是DenseSubsite
   定义体: inferInstanceAs (U.overEquivalence.functor.IsDenseSubsite ..)
 
 Depends on / 依赖: IsDenseSubsite, U.overEquivalence.functor.IsDenseSubsite, functor, overEquivalence
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: U.overEquivalence.inverse.IsDenseSubsite
+  签名: U.overEquivalence.inverse.是DenseSubsite
   定义体: inferInstanceAs (U.overEquivalence.symm.functor.IsDenseSubsite ..)
 
 Depends on / 依赖: IsDenseSubsite, U.overEquivalence.symm.functor.IsDenseSubsite, functor, overEquivalence
@@ -205,7 +205,7 @@ definition overPullbackSheafEquivOver
 
 中文:
 定义 overPullbackSheafEquivOver
-  签名: {X : TopCat} (U : Opens X)
+  签名: {X : 顶元素范畴} (U : Opens X)
   定义体: .refl _
 -/
 def overPullbackSheafEquivOver {X : TopCat} (U : Opens X) :
@@ -227,7 +227,7 @@ definition sheafRestrictSheafEquivOver
 
 中文:
 定义 sheafRestrictSheafEquivOver
-  签名: {X : TopCat} (U : Opens X)
+  签名: {X : 顶元素范畴} (U : Opens X)
   定义体: U.overPullbackSheafEquivOver.isoCompInverse.symm
 
 Depends on / 依赖: U.overPullbackSheafEquivOver.isoCompInverse.symm, isoCompInverse, overPullbackSheafEquivOver

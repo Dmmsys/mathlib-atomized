@@ -44,7 +44,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial M₀] (u : M₀ˣ)
+  条件: [非平凡 M₀] (u : M₀ˣ)
   结论: (u : M₀) != 0
   证明: left_ne_zero_of_mul_eq_one u.mul_inv
 
@@ -117,7 +117,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial M₀] {a : M₀} (ha : IsUnit a)
+  条件: [非平凡 M₀] {a : M₀} (ha : 是单位 a)
   结论: a != 0
   证明: let ⟨u, hu⟩ := ha
   hu ▸ u.ne_zero
@@ -140,7 +140,7 @@ theorem mul_right_eq_zero
 
 中文:
 定理 mul_right_eq_zero
-  条件: {a b : M₀} (ha : IsUnit a)
+  条件: {a b : M₀} (ha : 是单位 a)
   结论: a * b = 0 ↔ b = 0
   证明: let ⟨u, hu⟩ := ha
   hu ▸ u.mul_right_eq_zero
@@ -163,7 +163,7 @@ theorem mul_left_eq_zero
 
 中文:
 定理 mul_left_eq_zero
-  条件: {a b : M₀} (hb : IsUnit b)
+  条件: {a b : M₀} (hb : 是单位 b)
   结论: a * b = 0 ↔ a = 0
   证明: let ⟨u, hu⟩ := hb
   hu ▸ u.mul_left_eq_zero
@@ -188,7 +188,7 @@ theorem isUnit_zero_iff
 
 中文:
 定理 isUnit_zero_iff
-  结论: IsUnit (0 : M₀) ↔ (0 : M₀) = 1
+  结论: 是单位 (0 : M₀) ↔ (0 : M₀) = 1
   证明: ⟨fun ⟨⟨_, a, (a0 : 0 * a = 1), _⟩, rfl⟩ => by rwa [zero_mul] at a0, fun h =>
     @isUnit_of_subsingleton _ _ (subsingleton_of_zero_eq_one h) 0⟩
 
@@ -209,8 +209,8 @@ theorem not_isUnit_zero
 
 中文:
 定理 not_isUnit_zero
-  条件: [Nontrivial M₀]
-  结论: ¬IsUnit (0 : M₀)
+  条件: [非平凡 M₀]
+  结论: ¬是单位 (0 : M₀)
   证明: mt isUnit_zero_iff.1 zero_ne_one
 
 Depends on / 依赖: isUnit_zero_iff, zero_ne_one
@@ -280,7 +280,7 @@ theorem inverse_of_isUnit
 
 中文:
 定理 inverse_of_isUnit
-  条件: {x : M₀} (h : IsUnit x)
+  条件: {x : M₀} (h : 是单位 x)
   结论: x⁻¹ʳ = ((h.unit⁻¹ : M₀ˣ) : M₀)
   证明: dif_pos h
 
@@ -301,7 +301,7 @@ theorem inverse_non_unit
 
 中文:
 定理 inverse_non_unit
-  条件: (x : M₀) (h : ¬IsUnit x)
+  条件: (x : M₀) (h : ¬是单位 x)
   结论: x⁻¹ʳ = 0
   证明: dif_neg h
 
@@ -323,7 +323,7 @@ theorem mul_inverse_cancel
 
 中文:
 定理 mul_inverse_cancel
-  条件: (x : M₀) (h : IsUnit x)
+  条件: (x : M₀) (h : 是单位 x)
   结论: x * x⁻¹ʳ = 1
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -348,7 +348,7 @@ theorem inverse_mul_cancel
 
 中文:
 定理 inverse_mul_cancel
-  条件: (x : M₀) (h : IsUnit x)
+  条件: (x : M₀) (h : 是单位 x)
   结论: x⁻¹ʳ * x = 1
   证明: by
   rcases h with ⟨u, rfl⟩
@@ -372,7 +372,7 @@ theorem mul_inverse_cancel_right
 
 中文:
 定理 mul_inverse_cancel_right
-  条件: (x y : M₀) (h : IsUnit x)
+  条件: (x y : M₀) (h : 是单位 x)
   结论: y * x * x⁻¹ʳ = y
   证明: by
   rw [mul_assoc]; rw [mul_inverse_cancel x h]; rw [mul_one]
@@ -394,7 +394,7 @@ theorem inverse_mul_cancel_right
 
 中文:
 定理 inverse_mul_cancel_right
-  条件: (x y : M₀) (h : IsUnit x)
+  条件: (x y : M₀) (h : 是单位 x)
   结论: y * x⁻¹ʳ * x = y
   证明: by
   rw [mul_assoc]; rw [inverse_mul_cancel x h]; rw [mul_one]
@@ -416,7 +416,7 @@ theorem mul_inverse_cancel_left
 
 中文:
 定理 mul_inverse_cancel_left
-  条件: (x y : M₀) (h : IsUnit x)
+  条件: (x y : M₀) (h : 是单位 x)
   结论: x * (x⁻¹ʳ * y) = y
   证明: by
   rw [← mul_assoc]; rw [mul_inverse_cancel x h]; rw [one_mul]
@@ -438,7 +438,7 @@ theorem inverse_mul_cancel_left
 
 中文:
 定理 inverse_mul_cancel_left
-  条件: (x y : M₀) (h : IsUnit x)
+  条件: (x y : M₀) (h : 是单位 x)
   结论: x⁻¹ʳ * (x * y) = y
   证明: by
   rw [← mul_assoc]; rw [inverse_mul_cancel x h]; rw [one_mul]
@@ -460,7 +460,7 @@ theorem inverse_mul_eq_iff_eq_mul
 
 中文:
 定理 inverse_mul_eq_iff_eq_mul
-  条件: (x y z : M₀) (h : IsUnit x)
+  条件: (x y z : M₀) (h : 是单位 x)
   结论: x⁻¹ʳ * y = z ↔ y = x * z
   证明: ⟨fun h1 => by rw [← h1, mul_inverse_cancel_left _ _ h],
   fun h1 => by rw [h1, inverse_mul_cancel_left _ _ h]⟩
@@ -483,7 +483,7 @@ theorem eq_mul_inverse_iff_mul_eq
 
 中文:
 定理 eq_mul_inverse_iff_mul_eq
-  条件: (x y z : M₀) (h : IsUnit z)
+  条件: (x y z : M₀) (h : 是单位 z)
   结论: x = y * z⁻¹ʳ ↔ x * z = y
   证明: ⟨fun h1 => by rw [h1, inverse_mul_cancel_right _ _ h],
   fun h1 => by rw [← h1, mul_inverse_cancel_right _ _ h]⟩
@@ -557,7 +557,7 @@ theorem inverse_inverse
 
 中文:
 定理 inverse_inverse
-  条件: {a : M₀} (h : IsUnit a)
+  条件: {a : M₀} (h : 是单位 a)
   结论: a⁻¹ʳ⁻¹ʳ = a
   证明: by
   obtain ⟨u, rfl⟩ := h
@@ -582,9 +582,9 @@ theorem IsUnit.ringInverse
   statement: IsUnit a -> IsUnit a⁻¹ʳ
 
 中文:
-定理 IsUnit.ringInverse
+定理 是单位.ringInverse
   条件: {a : M₀}
-  结论: IsUnit a -> IsUnit a⁻¹ʳ
+  结论: 是单位 a -> 是单位 a⁻¹ʳ
 -/
 theorem IsUnit.ringInverse {a : M₀} : IsUnit a -> IsUnit a⁻¹ʳ
   | ⟨u, hu⟩ => hu ▸ ⟨u⁻¹, (Ring.inverse_unit u).symm⟩
@@ -610,7 +610,7 @@ theorem isUnit_ringInverse
 中文:
 定理 isUnit_ringInverse
   条件: {a : M₀}
-  结论: IsUnit a⁻¹ʳ ↔ IsUnit a
+  结论: 是单位 a⁻¹ʳ ↔ 是单位 a
   证明: ⟨fun h => by
     cases subsingleton_or_nontrivial M₀
     · convert! h
@@ -649,8 +649,8 @@ theorem Ring.inverse_mul
  
 
 中文:
-定理 Ring.inverse_mul
-  条件: {a b : M₀} (h : IsUnit a ∨ IsUnit b)
+定理 环.inverse_mul
+  条件: {a b : M₀} (h : 是单位 a ∨ 是单位 b)
   结论: (a * b)⁻¹ʳ = b⁻¹ʳ * a⁻¹ʳ
   证明: by
   obtain (⟨ha, hb⟩ | ⟨ha, hb⟩ | ⟨ha, hb⟩) :
@@ -684,9 +684,9 @@ theorem Ring.isUnit_iff_inverse_ne_zero
 grind_pattern Ring.isUnit_iff_inverse_ne_zero => IsUnit x, x⁻¹ʳ
 
 中文:
-定理 Ring.isUnit_iff_inverse_ne_zero
-  条件: [Nontrivial M₀] {x : M₀}
-  结论: IsUnit x ↔ x⁻¹ʳ != 0
+定理 环.isUnit_iff_inverse_ne_zero
+  条件: [非平凡 M₀] {x : M₀}
+  结论: 是单位 x ↔ x⁻¹ʳ != 0
   证明: ⟨(IsUnit.ringInverse · |>.ne_zero), by simpa using mt Ring.inverse_non_unit (x := x)⟩
 
 grind_pattern Ring.isUnit_iff_inverse_ne_zero => IsUnit x, x⁻¹ʳ
@@ -709,9 +709,9 @@ theorem Ring.not_isUnit_iff_inverse_eq_zero
   grind
 
 中文:
-定理 Ring.not_isUnit_iff_inverse_eq_zero
-  条件: [Nontrivial M₀] {x : M₀}
-  结论: ¬ IsUnit x ↔ x⁻¹ʳ = 0
+定理 环.not_isUnit_iff_inverse_eq_zero
+  条件: [非平凡 M₀] {x : M₀}
+  结论: ¬ 是单位 x ↔ x⁻¹ʳ = 0
   证明: by
   grind
 -/
@@ -734,9 +734,9 @@ theorem Ring.isUnit_iff_mul_inverse_cancel
 grind_pattern Ring.isUnit_iff_mul_inverse_cancel => IsUnit x, x⁻¹ʳ
 
 中文:
-定理 Ring.isUnit_iff_mul_inverse_cancel
+定理 环.isUnit_iff_mul_inverse_cancel
   条件: {x : M₀}
-  结论: IsUnit x ↔ x * x⁻¹ʳ = 1
+  结论: 是单位 x ↔ x * x⁻¹ʳ = 1
   证明: by
   nontriviality M₀
   refine ⟨mul_inverse_cancel _, ?_⟩
@@ -773,9 +773,9 @@ grind_pattern Ring.isUnit_iff_inverse_mul_cancel => IsUnit x, x⁻¹ʳ
 @[simp, grind =]
 
 中文:
-定理 Ring.isUnit_iff_inverse_mul_cancel
+定理 环.isUnit_iff_inverse_mul_cancel
   条件: (x : M₀)
-  结论: IsUnit x ↔ x⁻¹ʳ * x = 1
+  结论: 是单位 x ↔ x⁻¹ʳ * x = 1
   证明: by
   nontriviality M₀
   refine ⟨Ring.inverse_mul_cancel x, ?_⟩
@@ -811,7 +811,7 @@ theorem Ring.inverse_inverse_inverse
   · simp [Ring.not_isUnit_iff_inverse_eq_zero.mp h]
 
 中文:
-定理 Ring.inverse_inverse_inverse
+定理 环.inverse_inverse_inverse
   条件: {a : M₀}
   结论: a⁻¹ʳ⁻¹ʳ⁻¹ʳ = a⁻¹ʳ
   证明: by
@@ -983,7 +983,7 @@ theorem mk0_inj
 中文:
 定理 mk0_inj
   条件: {a b : G₀} (ha : a != 0) (hb : b != 0)
-  结论: Units.mk0 a ha = Units.mk0 b hb ↔ a = b
+  结论: 单位群.mk0 a ha = 单位群.mk0 b hb ↔ a = b
   证明: ⟨fun h => by injection h, fun h => Units.ext h⟩
 
 Depends on / 依赖: Units.ext, injection
@@ -1002,9 +1002,9 @@ theorem exists0
   fun ⟨g, hg, pg⟩ => ⟨Units.mk0 g hg, pg⟩⟩
 
 中文:
-定理 exists0
+定理 存在0
   条件: {p : G₀ˣ -> 命题}
-  结论: (存在 g : G₀ˣ, p g) ↔ 存在 (g : G₀) (hg : g != 0), p (Units.mk0 g hg)
+  结论: (存在 g : G₀ˣ, p g) ↔ 存在 (g : G₀) (hg : g != 0), p (单位群.mk0 g hg)
   证明: ⟨fun ⟨g, pg⟩ => ⟨g, g.ne_zero, (g.mk0_val g.ne_zero).symm ▸ pg⟩,
   fun ⟨g, hg, pg⟩ => ⟨Units.mk0 g hg, pg⟩⟩
 
@@ -1025,7 +1025,7 @@ theorem exists0'
 @[simp]
 
 中文:
-定理 exists0'
+定理 存在0'
   条件: {p : 对任意 g : G₀, g != 0 -> 命题}
   证明: Iff.trans (by simp_rw [val_mk0]) exists0.symm
 
@@ -1049,7 +1049,7 @@ theorem exists_iff_ne_zero
   simp [exists0]
 
 中文:
-定理 exists_iff_ne_zero
+定理 存在_iff_ne_zero
   条件: {p : G₀ -> 命题}
   结论: (存在 u : G₀ˣ, p u) ↔ 存在 x != 0, p x
   证明: by
@@ -1071,7 +1071,7 @@ theorem _root_.GroupWithZero.eq_zero_or_unit
   simpa using em _
 
 中文:
-定理 _root_.GroupWithZero.eq_zero_or_unit
+定理 _root_.带零群.eq_zero_or_unit
   条件: (a : G₀)
   结论: a = 0 ∨ 存在 u : G₀ˣ, a = u
   证明: by
@@ -1097,9 +1097,9 @@ theorem IsUnit.mk0
 @[simp]
 
 中文:
-定理 IsUnit.mk0
+定理 是单位.mk0
   条件: (x : G₀) (hx : x != 0)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: (Units.mk0 x hx).isUnit
 
 @[simp]
@@ -1122,7 +1122,7 @@ protected alias ⟨_, Ne.isUnit⟩ := isUnit_iff_ne_zero
 
 中文:
 定理 isUnit_iff_ne_zero
-  结论: IsUnit a ↔ a != 0
+  结论: 是单位 a ↔ a != 0
   证明: (Units.exists_iff_ne_zero (p := (· = a))).trans (by simp)
 
 protected alias ⟨_, Ne.isUnit⟩ := isUnit_iff_ne_zero
@@ -1154,7 +1154,7 @@ theorem Units.mk0_mul
   ext; rfl
 
 中文:
-定理 Units.mk0_mul
+定理 单位群.mk0_mul
   条件: (x y : G₀) (hxy)
   证明: by
   ext; rfl
@@ -1883,7 +1883,7 @@ lemma divp_mk0
 中文:
 引理 divp_mk0
   条件: (a : G₀) (hb : b != 0)
-  结论: a /ₚ Units.mk0 b hb = a / b
+  结论: a /ₚ 单位群.mk0 b hb = a / b
   证明: divp_eq_div _ _
 -/
 @[simp] lemma divp_mk0 (a : G₀) (hb : b != 0) : a /ₚ Units.mk0 b hb = a / b := divp_eq_div _ _
@@ -2187,7 +2187,7 @@ theorem Ring.inverse_eq_inv
 @[simp]
 
 中文:
-定理 Ring.inverse_eq_inv
+定理 环.inverse_eq_inv
   条件: (a : G₀)
   结论: a⁻¹ʳ = a⁻¹
   证明: by
@@ -2214,8 +2214,8 @@ theorem Ring.inverse_eq_inv'
   proof: funext Ring.inverse_eq_inv
 
 中文:
-定理 Ring.inverse_eq_inv'
-  结论: (Ring.inverse : G₀ -> G₀) = Inv.inv
+定理 环.inverse_eq_inv'
+  结论: (环.inverse : G₀ -> G₀) = 取逆.inv
   证明: funext Ring.inverse_eq_inv
 
 Depends on / 依赖: Ring.inverse_eq_inv, inverse_eq_inv
@@ -2606,7 +2606,7 @@ definition groupWithZeroOfIsUnitOrEqZero
 
 中文:
 定义 groupWithZeroOfIsUnitOrEqZero
-  签名: [hM : MonoidWithZero M]
+  签名: [hM : 带零幺半群 M]
   定义体: { hM with
     inv := fun a => if h0 : a = 0 then 0 else ↑((h a).resolve_right h0).unit⁻¹,
     inv_zero := dif_pos rfl,
@@ -2638,7 +2638,7 @@ definition commGroupWithZeroOfIsUnitOrEqZero
 
 中文:
 定义 commGroupWithZeroOfIsUnitOrEqZero
-  签名: [hM : CommMonoidWithZero M]
+  签名: [hM : 带零交换幺半群 M]
   定义体: { groupWithZeroOfIsUnitOrEqZero h, hM with }
 
 Depends on / 依赖: groupWithZeroOfIsUnitOrEqZero

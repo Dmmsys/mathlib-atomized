@@ -62,11 +62,11 @@ structure IsPreLocalizingSequence
     - tendsto_top : forallᵐ ω ∂P, Tendsto (τ · ω) atTop (𝓝 ⊤)
 
 中文:
-结构 IsPreLocalizingSequence
-  参数: [Preorder ι] [TopologicalSpace ι] [OrderTopology ι]
+结构 是PreLocalizingSequence
+  参数: [预序 ι] [拓扑空间 ι] [Order拓扑 ι]
   公理与运算 (2 个):
     - isStoppingTime : 对任意 n, IsStoppingTime 𝓕 (τ n)
-    - tendsto_top : 对任意ᵐ ω ∂P, Tendsto (τ · ω) atTop (𝓝 ⊤)
+    - tendsto_top : 对任意ᵐ ω ∂P, 收敛 (τ · ω) atTop (𝓝 ⊤)
 
 Depends on / 依赖: IsStoppingTime, Tendsto, isStoppingTime, tendsto_top, volume_tac
 -/
@@ -87,11 +87,11 @@ structure IsLocalizingSequence
     - mono : forallᵐ ω ∂P, Monotone (τ · ω)
 
 中文:
-结构 IsLocalizingSequence
-  参数: [Preorder ι] [TopologicalSpace ι] [OrderTopology ι]
-  继承: IsPreLocalizingSequence 𝓕 τ P
+结构 是LocalizingSequence
+  参数: [预序 ι] [拓扑空间 ι] [Order拓扑 ι]
+  继承: 是PreLocalizingSequence 𝓕 τ P
   公理与运算 (1 个):
-    - mono : 对任意ᵐ ω ∂P, Monotone (τ · ω)
+    - mono : 对任意ᵐ ω ∂P, 递增 (τ · ω)
 
 Depends on / 依赖: IsPreLocalizingSequence, Monotone, extends, volume_tac
 -/
@@ -112,7 +112,7 @@ lemma isLocalizingSequence_const_top
 
 中文:
 引理 isLocalizingSequence_const_top
-  结论: [Preorder ι] [TopologicalSpace ι] [OrderTopology ι]
+  结论: [预序 ι] [拓扑空间 ι] [Order拓扑 ι]
   证明: by simp [IsStoppingTime]
   mono := ae_of_all _ fun _ _ _ _ => by simp
   tendsto_top := ae_of_all _ fun _ => tendsto_const_nhds
@@ -141,8 +141,8 @@ lemma IsLocalizingSequence.min
     filter_upwards [hτ.tendsto_top, hσ.tendsto_top] with ω hτω hσω using hτω.min hσω
 
 中文:
-引理 IsLocalizingSequence.min
-  结论: [TopologicalSpace ι] [OrderTopology ι]
+引理 是LocalizingSequence.最小值
+  结论: [拓扑空间 ι] [Order拓扑 ι]
   证明: (hτ.isStoppingTime n).min (hσ.isStoppingTime n)
   mono := by filter_upwards [hτ.mono, hσ.mono] with ω hτω hσω using hτω.min hσω
   tendsto_top := by
@@ -170,7 +170,7 @@ definition Locally
 
 中文:
 定义 Locally
-  签名: [TopologicalSpace ι] [OrderTopology ι] [Zero E]
+  签名: [拓扑空间 ι] [Order拓扑 ι] [零 E]
   定义体: exists τ : Nat -> Ω -> WithTop ι, IsLocalizingSequence 𝓕 τ P ∧
     forall n, p (stoppedProcess (fun i => {ω | ⊥ < τ n ω}.indicator (X i)) (τ n))
 
@@ -198,7 +198,7 @@ definition localSeq
 
 中文:
 定义 localSeq
-  签名: [Zero E] (hX : Locally p 𝓕 X P)
+  签名: [零 E] (hX : Locally p 𝓕 X P)
   定义体: hX.choose
 
 Depends on / 依赖: hX.choose
@@ -217,7 +217,7 @@ lemma isLocalizingSequence_localSeq
 
 中文:
 引理 isLocalizingSequence_localSeq
-  条件: [Zero E] (hX : Locally p 𝓕 X P)
+  条件: [零 E] (hX : Locally p 𝓕 X P)
   证明: hX.choose_spec.1
 
 Depends on / 依赖: choose_spec, hX.choose_spec
@@ -236,7 +236,7 @@ lemma stoppedProcess_localSeq
 
 中文:
 引理 stoppedProcess_localSeq
-  条件: [Zero E] (hX : Locally p 𝓕 X P) (n : 自然数)
+  条件: [零 E] (hX : Locally p 𝓕 X P) (n : 自然数)
   证明: hX.choose_spec.2 n
 
 Depends on / 依赖: choose_spec, hX.choose_spec
@@ -256,7 +256,7 @@ lemma of_prop
 
 中文:
 引理 of_prop
-  条件: [Zero E] (hp : p X)
+  条件: [零 E] (hp : p X)
   结论: Locally p 𝓕 X P
   证明: ⟨fun n _ => ⊤, isLocalizingSequence_const_top _ _, by simpa⟩
 
@@ -275,7 +275,7 @@ lemma mono
 
 中文:
 引理 mono
-  条件: [Zero E] (hpq : 对任意 X, p X -> q X) (hpX : Locally p 𝓕 X P)
+  条件: [零 E] (hpq : 对任意 X, p X -> q X) (hpX : Locally p 𝓕 X P)
   证明: ⟨hpX.localSeq, hpX.isLocalizingSequence_localSeq, fun n => hpq _ hpX.stoppedProcess_localSeq n⟩
 
 Depends on / 依赖: hpX.isLocalizingSequence_localSeq, hpX.localSeq, hpX.stoppedProcess_localSeq, isLocalizingSequence_localSeq, localSeq, stoppedProcess_localSeq
@@ -294,7 +294,7 @@ lemma of_and
 
 中文:
 引理 of_and
-  条件: [Zero E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
+  条件: [零 E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
   证明: ⟨hX.mono fun _ => And.left, hX.mono fun _ => And.right⟩
 
 Depends on / 依赖: And.left, And.right, hX.mono
@@ -313,7 +313,7 @@ lemma left
 
 中文:
 引理 left
-  条件: [Zero E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
+  条件: [零 E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
   证明: hX.of_and.left
 
 Depends on / 依赖: hX.of_and.left, of_and
@@ -332,7 +332,7 @@ lemma right
 
 中文:
 引理 right
-  条件: [Zero E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
+  条件: [零 E] (hX : Locally (fun Y => p Y ∧ q Y) 𝓕 X P)
   证明: hX.of_and.right
 
 Depends on / 依赖: hX.of_and.right, of_and
@@ -482,7 +482,7 @@ mono := ae_of_all _ fun ω n m hnm => iInf_le_iInf_of_subset fun k hk => hnm.tra
     rw [liminf_eq_iSup_iInf_
 
 中文:
-引理 IsPreLocalizingSequence.isLocalizingSequence_biInf
+引理 是PreLocalizingSequence.isLocalizingSequence_biInf
   证明: IsStoppingTime.biInf (Set.to_countable {j | j >= n})
     (fun j _ => hτ.isStoppingTime j)
 mono := ae_of_all _ fun ω n m hnm => iInf_le_iInf_of_subset fun k hk => hnm.trans hk
@@ -633,7 +633,7 @@ lemma mkStrictMonoAux_strictMono
 中文:
 引理 mkStrictMonoAux_strictMono
   条件: (x : 自然数 -> 自然数)
-  结论: StrictMono (mkStrictMonoAux x)
+  结论: 严格递增 (mkStrictMonoAux x)
   证明: strictMono_nat_of_lt_succ fun n => by grind [mkStrictMonoAux]
 -/
 private lemma mkStrictMonoAux_strictMono (x : Nat -> Nat) : StrictMono (mkStrictMonoAux x) :=
@@ -705,7 +705,7 @@ lemma IsLocalizingSequence.isPrelocalizingSequence_inf_extraction
     lt_of_le_of_lt (ENNReal.summable.tsum_mono ENNReal.sum
 
 中文:
-引理 IsLocalizingSequence.isPrelocalizingSequence_inf_extraction
+引理 是LocalizingSequence.isPrelocalizingSequence_inf_extraction
   证明: by
   obtain ⟨nk, T, hnk, hT, hP⟩ := isPreLocalizingSequence_of_isLocalizingSequence_aux hτ hσ
   refine ⟨nk, hnk, fun n => (hτ.isStoppingTime n).min ((hσ _).isStoppingTime _), ?_⟩
@@ -748,7 +748,7 @@ refine
 
 中文:
 引理 IsStable.locally_locally_iff
-  条件: [IsRightContinuous 𝓕] (hp : IsStable 𝓕 p)
+  条件: [是RightContinuous 𝓕] (hp : IsStable 𝓕 p)
   证明: by
   refine ⟨fun hL => ?_, fun hL => ⟨hL.localSeq, hL.isLocalizingSequence_localSeq,
 fun n => .of_prop hL.stoppedProcess_localSeq n⟩⟩
@@ -786,7 +786,7 @@ lemma IsStable.locally_induction
 
 中文:
 引理 IsStable.locally_induction
-  结论: [IsRightContinuous 𝓕]
+  结论: [是RightContinuous 𝓕]
   证明: hq.locally_locally_iff.1 hpX.mono hpq
 
 Depends on / 依赖: hpX.mono, hq.locally_locally_iff, locally_locally_iff
@@ -807,7 +807,7 @@ lemma IsStable.locally_induction₂
 
 中文:
 引理 IsStable.locally_induction₂
-  结论: {r : (ι -> Ω -> E) -> 命题} [IsRightContinuous 𝓕]
+  结论: {r : (ι -> Ω -> E) -> 命题} [是RightContinuous 𝓕]
   证明: hq.locally_induction (p := fun Y => r Y ∧ p Y) (and_imp.2 <| hrpq ·)
     (hr.locally_and_iff hp).2 ⟨hrX, hpX⟩
 

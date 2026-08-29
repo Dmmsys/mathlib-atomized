@@ -24,7 +24,7 @@ instance :
 
 中文:
 实例 :
-  签名: StarRing 实数
+  签名: 对合环 实数
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm

@@ -76,7 +76,7 @@ instance instCountable
 
 中文:
 实例 instCountable
-  签名: : Countable (IterateMulAct f)
+  签名: : 可数 (IterateMulAct f)
   定义体: Function.Injective.countable fun _ _ => IterateMulAct.ext
 
 @[to_additive]
@@ -106,7 +106,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid (IterateMulAct f) where
+  签名: : 交换幺半群 (IterateMulAct f) where
   定义体: ⟨0⟩
   mul m n := ⟨m.1 + n.1⟩
   mul_assoc a b c := by ext; apply Nat.add_assoc
@@ -144,7 +144,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: : MulAction (IterateMulAct f) α where
+  签名: : 乘法作用 (IterateMulAct f) α where
   定义体: f^[n.val] x
   one_smul _ := rfl
   mul_smul _ _ := Function.iterate_add_apply f _ _

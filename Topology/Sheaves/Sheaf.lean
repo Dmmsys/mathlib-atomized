@@ -96,8 +96,8 @@ theorem isSheaf_unit
 
 中文:
 定理 isSheaf_unit
-  条件: (F : Presheaf (CategoryTheory.Discrete Unit) X)
-  结论: F.IsSheaf
+  条件: (F : 预层 (范畴论.离散 单元) X)
+  结论: F.是层
   证明: fun x U S _ x _ => ⟨eqToHom (Subsingleton.elim _ _), by cat_disch, fun _ => by cat_disch⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, cat_disch, eqToHom
@@ -116,8 +116,8 @@ theorem isSheaf_iso_iff
 
 中文:
 定理 isSheaf_iso_iff
-  条件: {F G : Presheaf C X} (α : F ≅ G)
-  结论: F.IsSheaf ↔ G.IsSheaf
+  条件: {F G : 预层 C X} (α : F ≅ G)
+  结论: F.是层 ↔ G.是层
   证明: Presheaf.isSheaf_of_iso_iff α
 
 Depends on / 依赖: Presheaf, Presheaf.isSheaf_of_iso_iff, isSheaf_of_iso_iff
@@ -136,8 +136,8 @@ theorem isSheaf_of_iso
 
 中文:
 定理 isSheaf_of_iso
-  条件: {F G : Presheaf C X} (α : F ≅ G) (h : F.IsSheaf)
-  结论: G.IsSheaf
+  条件: {F G : 预层 C X} (α : F ≅ G) (h : F.是层)
+  结论: G.是层
   证明: (isSheaf_iso_iff α).1 h
 
 Depends on / 依赖: isSheaf_iso_iff
@@ -167,8 +167,8 @@ abbreviation Sheaf.presheaf
   body: F.1
 
 中文:
-缩写 Sheaf.presheaf
-  签名: (F : X.Sheaf C)
+缩写 层.presheaf
+  签名: (F : X.层 C)
   定义体: F.1
 -/
 abbrev Sheaf.presheaf (F : X.Sheaf C) : TopCat.Presheaf C X :=
@@ -187,7 +187,7 @@ instance sheafInhabited
 
 中文:
 实例 sheafInhabited
-  签名: : Inhabited (Sheaf (CategoryTheory.Discrete PUnit) X)
+  签名: : 可居 (层 (范畴论.离散 命题单元) X)
   定义体: ⟨⟨Functor.star _, Presheaf.isSheaf_unit _⟩⟩
 
 Depends on / 依赖: Functor, Functor.star, Presheaf, Presheaf.isSheaf_unit, isSheaf_unit
@@ -207,7 +207,7 @@ definition forget
 
 中文:
 定义 forget
-  签名: : TopCat.Sheaf C X ⥤ TopCat.Presheaf C X
+  签名: : 顶元素范畴.层 C X ⥤ 顶元素范畴.预层 C X
   定义体: sheafToPresheaf _ _
 
 Depends on / 依赖: sheafToPresheaf
@@ -228,7 +228,7 @@ instance forget_full
 
 中文:
 实例 forget_full
-  签名: : (forget C X).Full where
+  签名: : (forget C X).满 where
   定义体: ⟨ObjectProperty.homMk f, rfl⟩
 
 Depends on / 依赖: ObjectProperty, ObjectProperty.homMk
@@ -246,7 +246,7 @@ instance forgetFaithful
 
 中文:
 实例 forgetFaithful
-  签名: : (forget C X).Faithful where
+  签名: : (forget C X).忠实 where
   定义体: Sheaf.hom_ext
 
 Depends on / 依赖: Sheaf.hom_ext, hom_ext
@@ -266,7 +266,7 @@ theorem id_app
 
 中文:
 定理 id_app
-  条件: (F : Sheaf C X) (t)
+  条件: (F : 层 C X) (t)
   结论: (𝟙 F : F ⟶ F).1.app t = 𝟙 _
   证明: rfl
 -/
@@ -283,7 +283,7 @@ theorem comp_app
 
 中文:
 定理 comp_app
-  条件: {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t)
+  条件: {F G H : 层 C X} (f : F ⟶ G) (g : G ⟶ H) (t)
   证明: rfl
 -/
 theorem comp_app {F G H : Sheaf C X} (f : F ⟶ G) (g : G ⟶ H) (t) :
@@ -306,8 +306,8 @@ lemma Presheaf.IsSheaf.section_ext
   · exact fun 
 
 中文:
-引理 Presheaf.IsSheaf.section_ext
-  结论: {X : TopCat.{u}}
+引理 预层.是层.section_ext
+  结论: {X : 顶元素范畴.{u}}
   证明: by
   have := (isSheaf_iff_isSheaf_of_type _ _).mp
     ((Presheaf.isSheaf_iff_isSheaf_forget (C := Opens X) (A' := A) _ F (forget _)).mp hF)

@@ -71,7 +71,7 @@ definition homologicalKernel
 
 中文:
 定义 homologicalKernel
-  签名: : Object命题erty C
+  签名: : ObjectProperty C
   定义体: fun X => forall (n : Int), IsZero (F.obj (X⟦n⟧))
 
 Depends on / 依赖: F.obj, IsZero
@@ -119,11 +119,11 @@ class IsHomological
     - exact((T : Triangle C) (hT : T in distTriang C)) : ((shortComplexOfDistTriangle T hT).map F).Exact
 
 中文:
-类 IsHomological
-  参数: : 命题 extends F.PreservesZeroMorphisms where
-  继承: F.PreservesZeroMorphisms
+类 是Homological
+  参数: : 命题 extends F.保持ZeroMorphisms where
+  继承: F.保持ZeroMorphisms
   公理与运算 (1 个):
-    - exact((T : Triangle C) (hT : T in distTriang C)) : ((shortComplexOfDistTriangle T hT).map F).Exact
+    - exact((T : Triangle C) (hT : T in distTriang C)) : ((shortComplexOfDistTriangle T hT).map F).正合
 -/
 class IsHomological : Prop extends F.PreservesZeroMorphisms where
   exact (T : Triangle C) (hT : T in distTriang C) :
@@ -139,7 +139,7 @@ lemma map_distinguished_exact
 
 中文:
 引理 map_distinguished_exact
-  条件: [F.IsHomological] (T : Triangle C) (hT : T in distTriang C)
+  条件: [F.是Homological] (T : Triangle C) (hT : T in distTriang C)
   证明: IsHomological.exact _ hT
 
 Depends on / 依赖: IsHomological, IsHomological.exact
@@ -164,8 +164,8 @@ lemma IsHomological.mk'
       (F.mapShortComplex.mapIso ((shortComplexOfDistTriangleIsoOfIso e hT)))).2 h'
 
 中文:
-引理 IsHomological.mk'
-  结论: [F.PreservesZeroMorphisms]
+引理 是Homological.mk'
+  结论: [F.保持ZeroMorphisms]
   证明: by
     obtain ⟨T', e, h'⟩ := hF T hT
     exact (ShortComplex.exact_iff_of_iso
@@ -194,8 +194,8 @@ lemma IsHomological.of_iso
     (F₁.map_distinguished_exact T hT)⟩
 
 中文:
-引理 IsHomological.of_iso
-  条件: {F₁ F₂ : C ⥤ A} [F₁.IsHomological] (e : F₁ ≅ F₂)
+引理 是Homological.of_iso
+  条件: {F₁ F₂ : C ⥤ A} [F₁.是Homological] (e : F₁ ≅ F₂)
   证明: have := preservesZeroMorphisms_of_iso e
   ⟨fun T hT => ShortComplex.exact_of_iso (ShortComplex.mapNatIso _ e)
     (F₁.map_distinguished_exact T hT)⟩
@@ -222,7 +222,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.homologicalKernel.IsClosedUnderIsomorphisms
+  签名: F.homologicalKernel.在同构下封闭
   定义体: (hX n).of_iso ((shiftFunctor C n ⋙ F).mapIso e.symm)
 
 Depends on / 依赖: e.symm, mapIso, of_iso, shiftFunctor
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: F.homologicalKernel.IsTriangulated
+  签名: F.homologicalKernel.是三角
   定义体: ⟨0, isZero_zero C,
     fun n => (shiftFunctor C n ⋙ F).map_isZero (isZero_zero C)⟩
   toIsStableUnderShift := ⟨fun a => ⟨fun X hX b =>

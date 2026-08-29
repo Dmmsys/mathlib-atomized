@@ -70,7 +70,7 @@ definition spanRank
 
 中文:
 定义 spanRank
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: ⨅ (s : {s : Set M // span R s = p}), #s
 -/
 noncomputable def spanRank (p : Submodule R M) : Cardinal := ⨅ (s : {s : Set M // span R s = p}), #s
@@ -85,7 +85,7 @@ definition spanFinrank
 
 中文:
 定义 spanFinrank
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: (spanRank p).toNat
 
 Depends on / 依赖: spanRank
@@ -111,8 +111,8 @@ lemma spanRank_toENat_eq_iInf_encard
     rw [id_eq
 
 中文:
-引理 spanRank_toENat_eq_iInf_encard
-  条件: (p : Submodule R M)
+引理 spanRank_toE自然数_eq_iInf_encard
+  条件: (p : 子模 R M)
   结论: p.spanRank.toE自然数 =
   证明: by
   rw [spanRank]
@@ -155,8 +155,8 @@ lemma spanRank_toENat_eq_iInf_finset_card
   · simp_rw [← Set.encard_coe_eq_coe_fi
 
 中文:
-引理 spanRank_toENat_eq_iInf_finset_card
-  条件: (p : Submodule R M)
+引理 spanRank_toE自然数_eq_iInf_finset_card
+  条件: (p : 子模 R M)
   证明: by
   rw [spanRank_toENat_eq_iInf_encard]
   rcases eq_or_ne (⨅ (s : Set M) (_ : span R s = p), s.encard) ⊤ with (h1 | h2)
@@ -192,7 +192,7 @@ lemma spanFinrank_eq_iInf
 
 中文:
 引理 spanFinrank_eq_iInf
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   证明: by
   simp [spanFinrank, Cardinal.toNat, spanRank_toENat_eq_iInf_finset_card, ENat.iInf_toNat]
 
@@ -223,7 +223,7 @@ lemma spanRank_finite_iff_fg
 
 中文:
 引理 spanRank_finite_iff_fg
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   结论: p.spanRank < aleph0 ↔ p.FG
   证明: by
   rw [spanRank]; rw [Submodule.fg_def]
@@ -263,7 +263,7 @@ lemma spanFinrank_of_not_fg
 
 中文:
 引理 spanFinrank_of_not_fg
-  条件: {p : Submodule R M} (hp : ¬p.FG)
+  条件: {p : 子模 R M} (hp : ¬p.FG)
   结论: p.spanFinrank = 0
   证明: by
   refine toNat_eq_zero.2 ?_
@@ -292,7 +292,7 @@ lemma fg_iff_spanRank_eq_spanFinrank
 
 中文:
 引理 fg_iff_spanRank_eq_spanFinrank
-  条件: {p : Submodule R M}
+  条件: {p : 子模 R M}
   结论: p.spanRank = p.spanFinrank ↔ p.FG
   证明: by
   rw [spanFinrank]; rw [← spanRank_finite_iff_fg]; rw [eq_comm]
@@ -315,7 +315,7 @@ lemma FG.spanRank_eq_spanFinrank
 
 中文:
 引理 FG.spanRank_eq_spanFinrank
-  条件: {p : Submodule R M} (fg : p.FG)
+  条件: {p : 子模 R M} (fg : p.FG)
   结论: p.spanRank = p.spanFinrank
   证明: fg_iff_spanRank_eq_spanFinrank.mpr fg
 
@@ -334,7 +334,7 @@ lemma FG.spanRank_le_iff
 
 中文:
 引理 FG.spanRank_le_iff
-  条件: {p : Submodule R M} (hp : p.FG) (n : 自然数)
+  条件: {p : 子模 R M} (hp : p.FG) (n : 自然数)
   证明: (Cardinal.toNat_le_iff_of_lt_aleph0 n (by simpa)).symm
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_le_iff_of_lt_aleph0, toNat_le_iff_of_lt_aleph0
@@ -353,7 +353,7 @@ lemma FG.spanRank_eq_iff
 
 中文:
 引理 FG.spanRank_eq_iff
-  条件: {p : Submodule R M} (hp : p.FG) (n : 自然数)
+  条件: {p : 子模 R M} (hp : p.FG) (n : 自然数)
   证明: (Cardinal.toNat_eq_iff_of_lt_aleph0 n (by simpa)).symm
 
 Depends on / 依赖: Cardinal, Cardinal.toNat_eq_iff_of_lt_aleph0, toNat_eq_iff_of_lt_aleph0
@@ -376,8 +376,8 @@ lemma spanRank_span_le_card
 
 中文:
 引理 spanRank_span_le_card
-  条件: (s : Set M)
-  结论: (Submodule.span R s).spanRank <= #s
+  条件: (s : 集合 M)
+  结论: (子模.span R s).spanRank <= #s
   证明: by
   rw [spanRank]
   let s' : {s1 : Set M // span R s1 = span R s} := ⟨s, rfl⟩
@@ -439,7 +439,7 @@ lemma spanRank_span_of_linearIndepOn
 
 中文:
 引理 spanRank_span_of_linearIndepOn
-  条件: [RankCondition R] (s : Set M) (hs : LinearIndepOn R id s)
+  条件: [RankCondition R] (s : 集合 M) (hs : LinearIndepOn R id s)
   证明: by
   simp [← spanRank_span_range_of_linearIndependent Subtype.val_injective hs]
 
@@ -462,7 +462,7 @@ lemma spanFinrank_span_le_encard
 
 中文:
 引理 spanFinrank_span_le_encard
-  条件: (s : Set M)
+  条件: (s : 集合 M)
   结论: (span R s).spanFinrank <= s.encard
   证明: by
   rw [spanFinrank]; rw [Set.encard]; rw [ENat.card]
@@ -486,7 +486,7 @@ lemma spanFinrank_span_le_ncard_of_finite
 
 中文:
 引理 spanFinrank_span_le_ncard_of_finite
-  条件: {s : Set M} (hs : s.Finite)
+  条件: {s : 集合 M} (hs : s.有限)
   证明: by
   rw [← Nat.cast_le (α := Nat∞)]
   exact le_trans (spanFinrank_span_le_encard _) hs.cast_ncard_eq.ge
@@ -511,8 +511,8 @@ theorem exists_span_set_card_eq_spanRank
   exact ⟨s.1, ⟨hs, s.2⟩⟩
 
 中文:
-定理 exists_span_set_card_eq_spanRank
-  条件: (p : Submodule R M)
+定理 存在_span_set_card_eq_spanRank
+  条件: (p : 子模 R M)
   证明: by
   rw [spanRank]
   obtain ⟨s, hs⟩ : ⨅ (s : {s : Set M // span R s = p}), #s in
@@ -542,8 +542,8 @@ theorem FG.exists_span_set_encard_eq_spanFinrank
   simp
 
 中文:
-定理 FG.exists_span_set_encard_eq_spanFinrank
-  条件: {p : Submodule R M} (h : p.FG)
+定理 FG.存在_span_set_encard_eq_spanFinrank
+  条件: {p : 子模 R M} (h : p.FG)
   证明: by
   obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_card_eq_spanRank p
   refine ⟨s, ⟨?_, hs₂⟩⟩
@@ -574,8 +574,8 @@ theorem FG.exists_span_finset_card_eq_spanFinrank
   simpa [s_f.encard_eq_coe_toFinset_card, ENat.natCast_inj] using hs₁
 
 中文:
-定理 FG.exists_span_finset_card_eq_spanFinrank
-  条件: {p : Submodule R M} (h : p.FG)
+定理 FG.存在_span_finset_card_eq_spanFinrank
+  条件: {p : 子模 R M} (h : p.FG)
   证明: by
   obtain ⟨s, ⟨hs₁, hs₂⟩⟩ := exists_span_set_encard_eq_spanFinrank h
   have s_f := Set.finite_of_encard_eq_coe hs₁
@@ -605,8 +605,8 @@ lemma lift_spanRank_le_iff_exists_span_set_card_le
   · exact fun ⟨s, ⟨h₁, h₂⟩⟩ => h₂.symm ▸ (Cardinal.lift_le.mpr (spanRank_span_le_card s)).trans h₁
 
 中文:
-引理 lift_spanRank_le_iff_exists_span_set_card_le
-  条件: (p : Submodule R M) {a : Cardinal.{max u v}}
+引理 lift_spanRank_le_iff_存在_span_set_card_le
+  条件: (p : 子模 R M) {a : 基数.{最大值 u v}}
   证明: by
   constructor
   · intro h
@@ -636,8 +636,8 @@ lemma FG.spanRank_le_iff_exists_span_set_card_le
 @[simp]
 
 中文:
-引理 FG.spanRank_le_iff_exists_span_set_card_le
-  条件: (p : Submodule R M) {a : Cardinal}
+引理 FG.spanRank_le_iff_存在_span_set_card_le
+  条件: (p : 子模 R M) {a : 基数}
   证明: by
   convert! lift_spanRank_le_iff_exists_span_set_card_le p (a := a) <;> simp
 
@@ -669,7 +669,7 @@ lemma spanRank_eq_zero_iff_eq_bot
 
 中文:
 引理 spanRank_eq_zero_iff_eq_bot
-  条件: {I : Submodule R M}
+  条件: {I : 子模 R M}
   结论: I.spanRank = 0 ↔ I = ⊥
   证明: by
   constructor
@@ -706,7 +706,7 @@ lemma spanRank_bot
 
 中文:
 引理 spanRank_bot
-  结论: (⊥ : Ideal R).spanRank = 0
+  结论: (⊥ : 理想 R).spanRank = 0
   证明: Submodule.spanRank_eq_zero_iff_eq_bot.mpr rfl
 
 @[simp]
@@ -728,7 +728,7 @@ lemma spanFinrank_bot
 
 中文:
 引理 spanFinrank_bot
-  结论: (⊥ : Submodule R M).spanFinrank = 0
+  结论: (⊥ : 子模 R M).spanFinrank = 0
   证明: by simp [spanFinrank]
 
 @[nontriviality]
@@ -752,7 +752,7 @@ lemma spanRank_subsingleton
 
 中文:
 引理 spanRank_subsingleton
-  条件: [Subsingleton R] (p : Submodule R M)
+  条件: [子单例 R] (p : 子模 R M)
   结论: p.spanRank = 0
   证明: by
   simp [nontriviality]
@@ -778,7 +778,7 @@ lemma spanFinrank_subsingleton
 
 中文:
 引理 spanFinrank_subsingleton
-  条件: [Subsingleton R] (p : Submodule R M)
+  条件: [子单例 R] (p : 子模 R M)
   结论: p.spanFinrank = 0
   证明: by
   have := Module.subsingleton R M
@@ -800,7 +800,7 @@ definition generators
 
 中文:
 定义 generators
-  签名: (p : Submodule R M)
+  签名: (p : 子模 R M)
   定义体: Classical.choose (exists_span_set_card_eq_spanRank p)
 
 Depends on / 依赖: Classical, Classical.choose, exists_span_set_card_eq_spanRank
@@ -819,7 +819,7 @@ lemma generators_card
 
 中文:
 引理 generators_card
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: #(generators p) = spanRank p
   证明: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).1
 
@@ -840,7 +840,7 @@ lemma FG.generators_ncard
 
 中文:
 引理 FG.generators_ncard
-  条件: {p : Submodule R M} (h : p.FG)
+  条件: {p : 子模 R M} (h : p.FG)
   证明: by
   rw [← Nat.cast_inj (R := Cardinal)]; rw [← fg_iff_spanRank_eq_spanFinrank.mpr h]; rw [Set.ncard]; rw [Set.encard]; rw [ENat.card]; rw [generators_card]; rw [toNat_toENat]; rw [← spanFinrank]
   exact (fg_iff_spanRank_eq_spanFinrank.mpr h).symm
@@ -864,7 +864,7 @@ lemma FG.finite_generators
 
 中文:
 引理 FG.finite_generators
-  条件: {p : Submodule R M} (hp : p.FG)
+  条件: {p : 子模 R M} (hp : p.FG)
   证明: by
   rw [← Cardinal.lt_aleph0_iff_set_finite]; rw [Submodule.generators_card]
   exact spanRank_finite_iff_fg.mpr hp
@@ -887,7 +887,7 @@ lemma span_generators
 
 中文:
 引理 span_generators
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: span R (generators p) = p
   证明: (Classical.choose_spec (exists_span_set_card_eq_spanRank p)).2
 
@@ -909,7 +909,7 @@ lemma FG.generators_mem
 
 中文:
 引理 FG.generators_mem
-  条件: (p : Submodule R M)
+  条件: (p : 子模 R M)
   结论: generators p subseteq p
   证明: by
   nth_rw 2 [← span_generators p]
@@ -935,7 +935,7 @@ lemma spanRank_sup_le_sum_spanRank
 
 中文:
 引理 spanRank_sup_le_sum_spanRank
-  条件: {p q : Submodule R M}
+  条件: {p q : 子模 R M}
   证明: by
   apply (FG.spanRank_le_iff_exists_span_set_card_le (p ⊔ q)).mpr
   obtain ⟨sp, ⟨hp₁, rfl⟩⟩ := exists_span_set_card_eq_spanRank p
@@ -964,7 +964,7 @@ lemma spanFinrank_eq_zero_iff_eq_bot
 
 中文:
 引理 spanFinrank_eq_zero_iff_eq_bot
-  条件: {p : Submodule R M} (h : p.FG)
+  条件: {p : 子模 R M} (h : p.FG)
   证明: by
   refine ⟨fun heq => ?_, fun h => by simp [h]⟩
   rw [← Submodule.FG.generators_ncard h]; rw [Set.ncard_eq_zero h.finite_generators] at heq
@@ -1025,8 +1025,8 @@ lemma spanFinrank_eq_one_iff
 
 中文:
 引理 spanFinrank_eq_one_iff
-  条件: (p : Submodule R M)
-  结论: p.spanFinrank = 1 ↔ p.IsPrincipal ∧ p != ⊥
+  条件: (p : 子模 R M)
+  结论: p.spanFinrank = 1 ↔ p.是Principal ∧ p != ⊥
   证明: by
   refine ⟨fun h => ⟨?_, (by grind [spanFinrank_bot])⟩,
     fun ⟨⟨a, ha⟩, _⟩ => ha ▸ spanFinrank_singleton (by simp_all)⟩
@@ -1071,7 +1071,7 @@ lemma lift_spanRank_map_le
 
 中文:
 引理 lift_spanRank_map_le
-  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : Submodule R M)
+  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) (p : 子模 R M)
   证明: by
   rw [← generators_card p]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
   exact ⟨f '' p.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun n ⟨m, hm, h⟩ =>
@@ -1096,7 +1096,7 @@ lemma spanRank_map_le
 
 中文:
 引理 spanRank_map_le
-  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : Submodule R M)
+  条件: [RingHomSurjective σ] (f : M ->ₛₗ[σ] N) (p : 子模 R M)
   证明: by
   simpa using lift_spanRank_map_le f p
 
@@ -1118,7 +1118,7 @@ lemma spanFinrank_map_le_of_fg
 
 中文:
 引理 spanFinrank_map_le_of_fg
-  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : Submodule R M}
+  结论: [RingHomSurjective σ] (f : M ->ₛₗ[σ] L) {p : 子模 R M}
   证明: by
   rw [← (hp.map f).spanRank_le_iff]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← hp.spanRank_eq_spanFinrank]
   exact p.lift_spanRank_map_le f
@@ -1246,8 +1246,8 @@ lemma spanRank_top
 
 中文:
 引理 spanRank_top
-  条件: (p : Submodule R M)
-  结论: (⊤ : Submodule R p).spanRank = p.spanRank
+  条件: (p : 子模 R M)
+  结论: (⊤ : 子模 R p).spanRank = p.spanRank
   证明: by
   simpa using (spanRank_map_eq_of_injective _ p.subtype_injective ⊤).symm
 
@@ -1268,8 +1268,8 @@ lemma spanFinrank_top
 
 中文:
 引理 spanFinrank_top
-  条件: (p : Submodule R M)
-  结论: (⊤ : Submodule R p).spanFinrank = p.spanFinrank
+  条件: (p : 子模 R M)
+  结论: (⊤ : 子模 R p).spanFinrank = p.spanFinrank
   证明: by
   simp [Submodule.spanFinrank]
 
@@ -1319,7 +1319,7 @@ lemma le_spanRank_restrictScalars
 
 中文:
 引理 le_spanRank_restrictScalars
-  条件: (N : Submodule S M)
+  条件: (N : 子模 S M)
   证明: by
   obtain ⟨s, hs, e⟩ := (N.restrictScalars R).exists_span_set_card_eq_spanRank
   obtain rfl : span S s = N :=
@@ -1348,7 +1348,7 @@ lemma spanRank_restrictScalars_eq
 
 中文:
 引理 spanRank_restrictScalars_eq
-  结论: (H : Function.Surjective (algebraMap R S))
+  结论: (H : 函数.满射 (algebraMap R S))
   证明: by
   refine N.le_spanRank_restrictScalars.antisymm' ?_
   obtain ⟨s, hs, rfl⟩ := N.exists_span_set_card_eq_spanRank
@@ -1385,8 +1385,8 @@ hfr ▸ mem_map_of_mem _ span_generators I ▸ subset_span hr)) ?_⟩
   simp o
 
 中文:
-引理 Ideal.lift_spanRank_map_le
-  条件: (f : R ->+* T) (I : Ideal R)
+引理 理想.lift_spanRank_map_le
+  条件: (f : R ->+* T) (I : 理想 R)
   证明: by
   rw [← generators_card I]; rw [lift_spanRank_le_iff_exists_span_set_card_le]
   refine ⟨f '' I.generators, Cardinal.mk_image_le_lift, le_antisymm (span_le.2 (fun s ⟨r, hr, hfr⟩ =>
@@ -1418,8 +1418,8 @@ lemma Ideal.lift_spanRank_map_eq_of_ringEquiv
   exact Ideal.lift_spanRank_map_le (f.symm : T ->+* R) _
 
 中文:
-引理 Ideal.lift_spanRank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* T) (I : Ideal R)
+引理 理想.lift_spanRank_map_eq_of_ringEquiv
+  条件: (f : R ≃+* T) (I : 理想 R)
   证明: by
   apply (I.lift_spanRank_map_le (f : R ->+* T)).antisymm
   nth_rw 1 [← Ideal.map_of_equiv f (I := I)]
@@ -1446,8 +1446,8 @@ lemma Ideal.spanRank_map_le
 @[simp]
 
 中文:
-引理 Ideal.spanRank_map_le
-  条件: (f : R ->+* S) (I : Ideal R)
+引理 理想.spanRank_map_le
+  条件: (f : R ->+* S) (I : 理想 R)
   结论: (I.map f).spanRank <= I.spanRank
   证明: by
   simpa using I.lift_spanRank_map_le f
@@ -1470,8 +1470,8 @@ lemma Ideal.spanRank_map_eq_of_ringEquiv
   simpa using I.lift_spanRank_map_eq_of_ringEquiv f
 
 中文:
-引理 Ideal.spanRank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* S) (I : Ideal R)
+引理 理想.spanRank_map_eq_of_ringEquiv
+  条件: (f : R ≃+* S) (I : 理想 R)
   证明: by
   simpa using I.lift_spanRank_map_eq_of_ringEquiv f
 
@@ -1494,8 +1494,8 @@ lemma Ideal.spanFinrank_map_le_of_fg
 @[simp]
 
 中文:
-引理 Ideal.spanFinrank_map_le_of_fg
-  条件: (f : R ->+* T) {I : Ideal R} (hI : I.FG)
+引理 理想.spanFinrank_map_le_of_fg
+  条件: (f : R ->+* T) {I : 理想 R} (hI : I.FG)
   证明: by
   rw [← Submodule.FG.spanRank_le_iff (hI.map f)]; rw [← Cardinal.lift_le.{u}]; rw [Cardinal.lift_natCast]; rw [← Cardinal.lift_natCast.{v}]; rw [← Submodule.FG.spanRank_eq_spanFinrank hI]
   exact I.lift_spanRank_map_le f
@@ -1520,8 +1520,8 @@ lemma Ideal.spanFinrank_map_eq_of_ringEquiv
   rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [I.lift_spanRank_map_eq_of_ringEquiv f]
 
 中文:
-引理 Ideal.spanFinrank_map_eq_of_ringEquiv
-  条件: (f : R ≃+* T) (I : Ideal R)
+引理 理想.spanFinrank_map_eq_of_ringEquiv
+  条件: (f : R ≃+* T) (I : 理想 R)
   证明: by
   rw [Submodule.spanFinrank]; rw [Submodule.spanFinrank]; rw [← Cardinal.toNat_lift.{u]; rw [v}]; rw [← Cardinal.toNat_lift.{v]; rw [u}]; rw [I.lift_spanRank_map_eq_of_ringEquiv f]
 
@@ -1552,8 +1552,8 @@ lemma Module.Basis.mk_eq_spanRank
   exact v.linearIndependent.linearIndepOn_id
 
 中文:
-引理 Module.Basis.mk_eq_spanRank
-  条件: [RankCondition R] {ι : 类型} (v : Basis ι R M)
+引理 模.基.mk_eq_spanRank
+  条件: [RankCondition R] {ι : 类型} (v : 基 ι R M)
   证明: by
   rw [← v.span_eq]; rw [spanRank_span_of_linearIndepOn]
   exact v.linearIndependent.linearIndepOn_id
@@ -1577,8 +1577,8 @@ theorem Submodule.rank_eq_spanRank_of_free
   rw [← Basis.mk_eq_rank'' B]; rw [← Basis.mk_eq_spanRank B]; rw [← Cardinal.lift_id #(Set.range B)]; rw [Cardinal.mk_range_eq_of_injective B.injective]; rw [Cardinal.lift_id _]
 
 中文:
-定理 Submodule.rank_eq_spanRank_of_free
-  条件: [Module.Free R M] [StrongRankCondition R]
+定理 子模.rank_eq_spanRank_of_free
+  条件: [模.自由 R M] [StrongRankCondition R]
   证明: by
   have := nontrivial_of_invariantBasisNumber R
   obtain ⟨I, B⟩ := ‹Module.Free R M›
@@ -1602,8 +1602,8 @@ lemma Module.finrank_eq_spanFinrank_of_free
   simp [Module.finrank, Submodule.spanFinrank, Submodule.rank_eq_spanRank_of_free]
 
 中文:
-引理 Module.finrank_eq_spanFinrank_of_free
-  条件: [StrongRankCondition R] [Module.Free R M]
+引理 模.finrank_eq_spanFinrank_of_free
+  条件: [StrongRankCondition R] [模.自由 R M]
   证明: by
   simp [Module.finrank, Submodule.spanFinrank, Submodule.rank_eq_spanRank_of_free]
 
@@ -1626,7 +1626,7 @@ theorem Submodule.rank_le_spanRank
   simpa
 
 中文:
-定理 Submodule.rank_le_spanRank
+定理 子模.rank_le_spanRank
   条件: [StrongRankCondition R]
   证明: by
   rw [Module.rank]; rw [Submodule.spanRank]

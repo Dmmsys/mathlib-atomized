@@ -49,7 +49,7 @@ definition uniformSpace
 
 中文:
 定义 uniformSpace
-  签名: : UniformSpace R
+  签名: : 一致空间 R
   定义体: .ofFun (fun x y => abv (y - x)) (by simp) (fun x y => abv.map_sub y x)
     (fun _ _ _ => (abv.sub_le _ _ _).trans_eq (add_comm _ _))
     fun ε ε0 => ⟨ε / 2, half_pos ε0, fun _ h₁ _ h₂ => (add_lt_add h₁ h₂).trans_eq (add_halves ε)⟩

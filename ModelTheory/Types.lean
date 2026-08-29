@@ -66,12 +66,12 @@ structure CompleteType
     - isMaximal' : toTheory.IsMaximal
 
 中文:
-结构 CompleteType
+结构 余mpleteType
   参数: where
   公理与运算 (3 个):
     - toTheory : L[[α]].Theory
     - subset' : (L.lhomWithConstants α).onTheory T subseteq toTheory
-    - isMaximal' : toTheory.IsMaximal
+    - isMaximal' : toTheory.是极大
 -/
 structure CompleteType where
   /-- The underlying theory -/
@@ -118,7 +118,7 @@ instance Sentence.instSetLike
 
 中文:
 实例 Sentence.instSetLike
-  签名: : SetLike (T.CompleteType α) L[[α]].Sentence
+  签名: : 集合状 (T.余mpleteType α) L[[α]].Sentence
   定义体: ⟨fun p => p.toTheory, fun p q h => by
     cases p
     cases q
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (T.CompleteType α)
+  签名: 偏序 (T.余mpleteType α)
   定义体: .ofSetLike (T.CompleteType α) (L[[α]].Sentence)
 
 Depends on / 依赖: CompleteType, Sentence, T.CompleteType, ofSetLike
@@ -160,8 +160,8 @@ theorem isMaximal
 
 中文:
 定理 isMaximal
-  条件: (p : T.CompleteType α)
-  结论: IsMaximal (p : L[[α]].Theory)
+  条件: (p : T.余mpleteType α)
+  结论: 是极大 (p : L[[α]].Theory)
   证明: p.isMaximal'
 
 Depends on / 依赖: isMaximal, p.isMaximal
@@ -180,7 +180,7 @@ theorem subset
 
 中文:
 定理 subset
-  条件: (p : T.CompleteType α)
+  条件: (p : T.余mpleteType α)
   结论: (L.lhomWithConstants α).onTheory T subseteq (p : L[[α]].Theory)
   证明: p.subset'
 
@@ -200,7 +200,7 @@ theorem mem_or_not_mem
 
 中文:
 定理 mem_or_not_mem
-  条件: (p : T.CompleteType α) (φ : L[[α]].Sentence)
+  条件: (p : T.余mpleteType α) (φ : L[[α]].Sentence)
   结论: φ in p ∨ φ.not in p
   证明: p.isMaximal.mem_or_not_mem φ
 
@@ -243,7 +243,7 @@ theorem mem_of_models
 
 中文:
 定理 mem_of_models
-  结论: (p : T.CompleteType α) {φ : L[[α]].Sentence}
+  结论: (p : T.余mpleteType α) {φ : L[[α]].Sentence}
   证明: (p.mem_or_not_mem φ).resolve_right fun con =>
     ((models_iff_not_satisfiable _).1 h)
       (p.isMaximal.1.mono (union_subset p.subset (singleton_subset_iff.2 con)))
@@ -273,7 +273,7 @@ theorem not_mem_iff
 
 中文:
 定理 not_mem_iff
-  条件: (p : T.CompleteType α) (φ : L[[α]].Sentence)
+  条件: (p : T.余mpleteType α) (φ : L[[α]].Sentence)
   结论: φ.not in p ↔ φ ∉ p
   证明: ⟨fun hf ht => by
     have h : ¬IsSatisfiable ({φ, φ.not} : L[[α]].Theory) := by
@@ -453,7 +453,7 @@ theorem nonempty_iff
 
 中文:
 定理 nonempty_iff
-  结论: Nonempty (T.CompleteType α) ↔ T.IsSatisfiable
+  结论: 非空 (T.余mpleteType α) ↔ T.IsSatisfiable
   证明: by
   rw [← isSatisfiable_onTheory_iff (lhomWithConstants_injective L α)]
   rw [nonempty_iff_univ_nonempty]; rw [nonempty_iff_ne_empty]; rw [Ne]; rw [not_iff_comm]; rw [← union_empty ((L.lhomWithConstants α).onTheory T)]; rw [← setOfPred_subset_eq_empty_iff]
@@ -476,7 +476,7 @@ instance instNonempty
 
 中文:
 实例 instNonempty
-  签名: : Nonempty (CompleteType (∅ : L.Theory) α)
+  签名: : 非空 (余mpleteType (∅ : L.Theory) α)
   定义体: nonempty_iff.2 (isSatisfiable_empty L)
 
 Depends on / 依赖: isSatisfiable_empty, nonempty_iff
@@ -497,7 +497,7 @@ theorem iInter_setOfPred_subset
 @[deprecated (since := "2026-07-09")] alias iInter_setOf_subset := iInter_setOfPred_subset
 
 中文:
-定理 iInter_setOfPred_subset
+定理 i整数er_setOfPred_subset
   条件: {ι : 类型} (S : ι -> L[[α]].Theory)
   证明: by
   ext
@@ -528,7 +528,7 @@ theorem toList_foldr_inf_mem
 
 中文:
 定理 toList_foldr_inf_mem
-  条件: {p : T.CompleteType α} {t : Finset L[[α]].Sentence}
+  条件: {p : T.余mpleteType α} {t : 有限集 L[[α]].Sentence}
   证明: by
   simp_rw [subset_def, ← SetLike.mem_coe, p.isMaximal.mem_iff_models, models_sentence_iff,
     Sentence.Realize, Formula.Realize, BoundedFormula.realize_foldr_inf, Finset.mem_toList]
@@ -612,7 +612,7 @@ theorem formula_mem_typeOf
 
 中文:
 定理 formula_mem_typeOf
-  条件: {φ : L.Formula α}
+  条件: {φ : L.公式 α}
   证明: by simp
 
 @[simp]
@@ -632,7 +632,7 @@ lemma mem_typesWith_iff
 
 中文:
 引理 mem_typesWith_iff
-  条件: (φ : L[[α]].Sentence) (p : CompleteType T α)
+  条件: (φ : L[[α]].Sentence) (p : 余mpleteType T α)
   证明: by
   rfl
 -/
@@ -699,7 +699,7 @@ lemma typesWith_top
 
 中文:
 引理 typesWith_top
-  结论: T.typesWith (α := α) ⊤ = Set.univ
+  结论: T.typesWith (α := α) ⊤ = 集合.univ
   证明: univ_subset_iff.mp fun p _ => p.isMaximal.mem_of_models (φ := ⊤) (fun _ _ _ a => a)
 
 Depends on / 依赖: Set.univ
@@ -746,7 +746,7 @@ definition realizedTypes
 
 中文:
 定义 realizedTypes
-  签名: (α : Type w)
+  签名: (α : 类型 w)
   定义体: Set.range (T.typeOf : (α -> M) -> T.CompleteType α)
 
 Depends on / 依赖: CompleteType, Set.range, T.CompleteType, T.typeOf, typeOf
@@ -773,8 +773,8 @@ theorem exists_modelType_is_realized_in
       ((M.subtheoryModel p.subset).reduct 
 
 中文:
-定理 exists_modelType_is_realized_in
-  条件: (p : T.CompleteType α)
+定理 存在_modelType_is_realized_in
+  条件: (p : T.余mpleteType α)
   证明: by
   obtain ⟨M⟩ := p.isMaximal.1
   refine ⟨(M.subtheoryModel p.subset).reduct (L.lhomWithConstants α), fun a => (L.con a : M), ?_⟩

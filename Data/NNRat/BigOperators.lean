@@ -36,8 +36,8 @@ theorem cast_listSum
 
 中文:
 定理 cast_listSum
-  条件: (l : List Rat>=0)
-  结论: (l.sum : K) = (l.map (↑)).sum
+  条件: (l : 列表 有理数>=0)
+  结论: (l.求和 : K) = (l.map (↑)).求和
   证明: map_list_sum (castHom _) _
 
 @[norm_cast]
@@ -61,8 +61,8 @@ theorem cast_listProd
 
 中文:
 定理 cast_listProd
-  条件: (l : List Rat>=0)
-  结论: (l.prod : K) = (l.map (↑)).prod
+  条件: (l : 列表 有理数>=0)
+  结论: (l.乘积 : K) = (l.map (↑)).乘积
   证明: map_list_prod (castHom _) _
 
 @[norm_cast]
@@ -86,8 +86,8 @@ theorem cast_multisetSum
 
 中文:
 定理 cast_multisetSum
-  条件: (s : Multiset Rat>=0)
-  结论: (s.sum : K) = (s.map (↑)).sum
+  条件: (s : Multiset 有理数>=0)
+  结论: (s.求和 : K) = (s.map (↑)).求和
   证明: map_multiset_sum (castHom _) _
 
 @[norm_cast]
@@ -109,7 +109,7 @@ theorem cast_sum
 
 中文:
 定理 cast_sum
-  条件: (s : Finset α) (f : α -> Rat>=0)
+  条件: (s : 有限集 α) (f : α -> 有理数>=0)
   结论: ↑(∑ a in s, f a) = ∑ a in s, (f a : K)
   证明: map_sum (castHom _) _ _
 
@@ -138,8 +138,8 @@ theorem cast_multisetProd
 
 中文:
 定理 cast_multisetProd
-  条件: (s : Multiset Rat>=0)
-  结论: (s.prod : K) = (s.map (↑)).prod
+  条件: (s : Multiset 有理数>=0)
+  结论: (s.乘积 : K) = (s.map (↑)).乘积
   证明: map_multiset_prod (castHom _) _
 
 @[norm_cast]
@@ -161,7 +161,7 @@ theorem cast_prod
 
 中文:
 定理 cast_prod
-  条件: (s : Finset α) (f : α -> Rat>=0)
+  条件: (s : 有限集 α) (f : α -> 有理数>=0)
   结论: ↑(∏ a in s, f a) = ∏ a in s, (f a : K)
   证明: map_prod (castHom _) _ _
 
@@ -186,7 +186,7 @@ theorem toNNRat_sum_of_nonneg
 
 中文:
 定理 toNNRat_sum_of_nonneg
-  条件: {s : Finset α} {f : α -> Rat} (hf : 对任意 a, a in s -> 0 <= f a)
+  条件: {s : 有限集 α} {f : α -> 有理数} (hf : 对任意 a, a in s -> 0 <= f a)
   证明: by
   rw [← coe_inj]; rw [cast_sum]; rw [Rat.coe_toNNRat _ (Finset.sum_nonneg hf)]
   exact Finset.sum_congr rfl fun x hxs => by rw [Rat.coe_toNNRat _ (hf x hxs)]
@@ -210,7 +210,7 @@ theorem toNNRat_prod_of_nonneg
 
 中文:
 定理 toNNRat_prod_of_nonneg
-  条件: {s : Finset α} {f : α -> Rat} (hf : 对任意 a in s, 0 <= f a)
+  条件: {s : 有限集 α} {f : α -> 有理数} (hf : 对任意 a in s, 0 <= f a)
   证明: by
   rw [← coe_inj]; rw [cast_prod]; rw [Rat.coe_toNNRat _ (Finset.prod_nonneg hf)]
   exact Finset.prod_congr rfl fun x hxs => by rw [Rat.coe_toNNRat _ (hf x hxs)]

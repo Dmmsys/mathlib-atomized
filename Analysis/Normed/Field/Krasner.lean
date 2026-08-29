@@ -56,10 +56,10 @@ class IsKrasner
     - krasner'({x y : L}) : IsSeparable K x -> ((minpoly K x).map (algebraMap K L)).Splits -> IsIntegral K y -> (forall x' : L, IsConjRoot K x x' -> x != x' -> ‖x - y‖ < ‖x - x'‖) -> x in K⟮y⟯
 
 中文:
-类 IsKrasner
-  参数: [Field K] [Algebra K L]
+类 是Krasner
+  参数: [域 K] [代数 K L]
   公理与运算 (1 个):
-    - krasner'({x y : L}) : IsSeparable K x -> ((minpoly K x).map (algebraMap K L)).Splits -> Is整数egral K y -> (对任意 x' : L, IsConjRoot K x x' -> x != x' -> ‖x - y‖ < ‖x - x'‖) -> x in K⟮y⟯
+    - krasner'({x y : L}) : 是可分 K x -> ((minpoly K x).map (algebraMap K L)).Splits -> 是整 K y -> (对任意 x' : L, IsConjRoot K x x' -> x != x' -> ‖x - y‖ < ‖x - x'‖) -> x in K⟮y⟯
 -/
 class IsKrasner [Field K] [Algebra K L] : Prop where
   krasner' {x y : L} : IsSeparable K x -> ((minpoly K x).map (algebraMap K L)).Splits ->
@@ -78,7 +78,7 @@ theorem krasner
 
 中文:
 定理 krasner
-  结论: [Field K] [Algebra K L]
+  结论: [域 K] [代数 K L]
   证明: IsKrasner.krasner' hx sp hy h
 
 Depends on / 依赖: IsKrasner, IsKrasner.krasner, krasner
@@ -109,8 +109,8 @@ theorem of_completeSpace_of_normal
 
 中文:
 定理 of_completeSpace_of_normal
-  条件: [Normal K L]
-  结论: IsKrasner K L where
+  条件: [正规 K L]
+  结论: 是Krasner K L where
   证明: by
     let z := x - y
     have := IntermediateField.adjoin.finiteDimensional yint
@@ -174,7 +174,7 @@ instance of_completeSpace
 
 中文:
 实例 of_completeSpace
-  签名: [Algebra.IsAlgebraic K L]
+  签名: [代数.是代数 K L]
   定义体: by
     -- Reduce to the case `L = algebraic closure of K` to apply the previous lemma.
     let C := AlgebraicClosure K

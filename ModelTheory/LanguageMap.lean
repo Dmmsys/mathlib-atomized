@@ -56,11 +56,11 @@ structure LHom
     - onRelation : forall ⦃n⦄, L.Relations n -> L'.Relations n  [default: by exact fun {n} => isEmptyElim]
 
 中文:
-结构 LHom
+结构 L态射
   参数: where
   公理与运算 (2 个):
-    - onFunction : 对任意 ⦃n⦄, L.Functions n -> L'.Functions n  [默认: by exact fun {n} => isEmptyElim]
-    - onRelation : 对任意 ⦃n⦄, L.Relations n -> L'.Relations n  [默认: by exact fun {n} => isEmptyElim]
+    - onFunction : 对任意 ⦃n⦄, L.函数 n -> L'.函数 n  [默认: by exact fun {n} => isEmptyElim]
+    - onRelation : 对任意 ⦃n⦄, L.关系 n -> L'.关系 n  [默认: by exact fun {n} => isEmptyElim]
 
 Depends on / 依赖: isEmptyElim
 -/
@@ -95,7 +95,7 @@ definition reduct
 
 中文:
 定义 reduct
-  签名: (M : 类型) [L'.Structure M]
+  签名: (M : 类型) [L'.结构 M]
   定义体: funMap (ϕ.onFunction f) xs
   RelMap r xs := RelMap (ϕ.onRelation r) xs
 
@@ -133,7 +133,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (L ->ᴸ L)
+  签名: 可居 (L ->ᴸ L)
   定义体: ⟨LHom.id L⟩
 
 Depends on / 依赖: LHom.id
@@ -153,7 +153,7 @@ definition sumInl
 
 中文:
 定义 sumInl
-  签名: : L ->ᴸ L.sum L'
+  签名: : L ->ᴸ L.求和 L'
   定义体: ⟨fun _n => Sum.inl, fun _n => Sum.inl⟩
 -/
 protected def sumInl : L ->ᴸ L.sum L' :=
@@ -171,7 +171,7 @@ definition sumInr
 
 中文:
 定义 sumInr
-  签名: : L' ->ᴸ L.sum L'
+  签名: : L' ->ᴸ L.求和 L'
   定义体: ⟨fun _n => Sum.inr, fun _n => Sum.inr⟩
 -/
 protected def sumInr : L' ->ᴸ L.sum L' :=
@@ -190,7 +190,7 @@ definition ofIsEmpty
 
 中文:
 定义 ofIsEmpty
-  签名: [L.IsAlgebraic] [L.IsRelational]
+  签名: [L.是代数] [L.IsRelational]
 -/
 protected def ofIsEmpty [L.IsAlgebraic] [L.IsRelational] : L ->ᴸ L' where
 
@@ -234,7 +234,7 @@ instance [L.IsAlgebraic]
   body: ⟨⟨LHom.ofIsEmpty L L'⟩, fun _ => LHom.funext (Subsingleton.elim _ _) (Subsingleton.elim _ _)⟩
 
 中文:
-实例 [L.IsAlgebraic]
+实例 [L.是代数]
   签名: [L.IsRelational]
   定义体: ⟨⟨LHom.ofIsEmpty L L'⟩, fun _ => LHom.funext (Subsingleton.elim _ _) (Subsingleton.elim _ _)⟩
 
@@ -282,7 +282,7 @@ theorem id_comp
 中文:
 定理 id_comp
   条件: (F : L ->ᴸ L')
-  结论: LHom.id L' ∘ᴸ F = F
+  结论: L态射.id L' ∘ᴸ F = F
   证明: by
   cases F
   rfl
@@ -308,7 +308,7 @@ theorem comp_id
 中文:
 定理 comp_id
   条件: (F : L ->ᴸ L')
-  结论: F ∘ᴸ LHom.id L = F
+  结论: F ∘ᴸ L态射.id L = F
   证明: by
   cases F
   rfl
@@ -351,7 +351,7 @@ definition sumElim
 
 中文:
 定义 sumElim
-  签名: : L.sum L'' ->ᴸ L' where
+  签名: : L.求和 L'' ->ᴸ L' where
   定义体: Sum.elim (fun f => ϕ.onFunction f) fun f => ψ.onFunction f
   onRelation _n := Sum.elim (fun f => ϕ.onRelation f) fun f => ψ.onRelation f
 -/
@@ -371,7 +371,7 @@ theorem sumElim_comp_inl
 中文:
 定理 sumElim_comp_inl
   条件: (ψ : L'' ->ᴸ L')
-  结论: ϕ.sumElim ψ ∘ᴸ LHom.sumInl = ϕ
+  结论: ϕ.sumElim ψ ∘ᴸ L态射.sumInl = ϕ
   证明: LHom.funext (funext fun _ => rfl) (funext fun _ => rfl)
 
 Depends on / 依赖: LHom.funext
@@ -391,7 +391,7 @@ theorem sumElim_comp_inr
 中文:
 定理 sumElim_comp_inr
   条件: (ψ : L'' ->ᴸ L')
-  结论: ϕ.sumElim ψ ∘ᴸ LHom.sumInr = ψ
+  结论: ϕ.sumElim ψ ∘ᴸ L态射.sumInr = ψ
   证明: LHom.funext (funext fun _ => rfl) (funext fun _ => rfl)
 
 Depends on / 依赖: LHom.funext
@@ -409,7 +409,7 @@ theorem sumElim_inl_inr
 
 中文:
 定理 sumElim_inl_inr
-  结论: LHom.sumInl.sumElim LHom.sumInr = LHom.id (L.sum L')
+  结论: L态射.sumInl.sumElim L态射.sumInr = L态射.id (L.求和 L')
   证明: LHom.funext (funext fun _ => Sum.elim_inl_inr) (funext fun _ => Sum.elim_inl_inr)
 
 Depends on / 依赖: LHom.funext, Sum.elim_inl_inr, elim_inl_inr
@@ -457,7 +457,7 @@ definition sumMap
 
 中文:
 定义 sumMap
-  签名: : L.sum L₁ ->ᴸ L'.sum L₂ where
+  签名: : L.求和 L₁ ->ᴸ L'.求和 L₂ where
   定义体: Sum.map (fun f => ϕ.onFunction f) fun f => ψ.onFunction f
   onRelation _n := Sum.map (fun f => ϕ.onRelation f) fun f => ψ.onRelation f
 
@@ -482,7 +482,7 @@ theorem sumMap_comp_inl
 
 中文:
 定理 sumMap_comp_inl
-  结论: ϕ.sumMap ψ ∘ᴸ LHom.sumInl = LHom.sumInl ∘ᴸ ϕ
+  结论: ϕ.sumMap ψ ∘ᴸ L态射.sumInl = L态射.sumInl ∘ᴸ ϕ
   证明: LHom.funext (funext fun _ => rfl) (funext fun _ => rfl)
 
 @[simp]
@@ -503,7 +503,7 @@ theorem sumMap_comp_inr
 
 中文:
 定理 sumMap_comp_inr
-  结论: ϕ.sumMap ψ ∘ᴸ LHom.sumInr = LHom.sumInr ∘ᴸ ψ
+  结论: ϕ.sumMap ψ ∘ᴸ L态射.sumInr = L态射.sumInr ∘ᴸ ψ
   证明: LHom.funext (funext fun _ => rfl) (funext fun _ => rfl)
 
 Depends on / 依赖: LHom.funext
@@ -524,11 +524,11 @@ structure Injective
     - onRelation({n}) : Function.Injective fun R : L.Relations n => onRelation ϕ R
 
 中文:
-结构 Injective
+结构 单射
   参数: : 命题 where
   公理与运算 (2 个):
-    - onFunction({n}) : Function.Injective fun f : L.Functions n => onFunction ϕ f
-    - onRelation({n}) : Function.Injective fun R : L.Relations n => onRelation ϕ R
+    - onFunction({n}) : 函数.单射 fun f : L.函数 n => onFunction ϕ f
+    - onRelation({n}) : 函数.单射 fun R : L.关系 n => onRelation ϕ R
 -/
 protected structure Injective : Prop where
   onFunction {n} : Function.Injective fun f : L.Functions n => onFunction ϕ f
@@ -582,11 +582,11 @@ class IsExpansionOn
     - map_onRelation : forall {n} (R : L.Relations n) (x : Fin n -> M), RelMap (ϕ.onRelation R) x = RelMap R x  [default: by exact fun {n} => isEmptyElim]
 
 中文:
-类 IsExpansionOn
-  参数: (M : 类型) [L.Structure M] [L'.Structure M]
+类 是ExpansionOn
+  参数: (M : 类型) [L.结构 M] [L'.结构 M]
   公理与运算 (2 个):
-    - map_onFunction : 对任意 {n} (f : L.Functions n) (x : Fin n -> M), funMap (ϕ.onFunction f) x = funMap f x  [默认: by exact fun {n} => isEmptyElim]
-    - map_onRelation : 对任意 {n} (R : L.Relations n) (x : Fin n -> M), RelMap (ϕ.onRelation R) x = RelMap R x  [默认: by exact fun {n} => isEmptyElim]
+    - map_onFunction : 对任意 {n} (f : L.函数 n) (x : 有限集 n -> M), funMap (ϕ.onFunction f) x = funMap f x  [默认: by exact fun {n} => isEmptyElim]
+    - map_onRelation : 对任意 {n} (R : L.关系 n) (x : 有限集 n -> M), RelMap (ϕ.onRelation R) x = RelMap R x  [默认: by exact fun {n} => isEmptyElim]
 
 Depends on / 依赖: L.Relations, RelMap, Relations, isEmptyElim, map_onRelation, onRelation
 -/
@@ -611,7 +611,7 @@ theorem map_onFunction
 
 中文:
 定理 map_onFunction
-  结论: {M : 类型} [L.Structure M] [L'.Structure M] [ϕ.IsExpansionOn M] {n}
+  结论: {M : 类型} [L.结构 M] [L'.结构 M] [ϕ.是ExpansionOn M] {n}
   证明: IsExpansionOn.map_onFunction f x
 
 @[simp]
@@ -633,7 +633,7 @@ theorem map_onRelation
 
 中文:
 定理 map_onRelation
-  结论: {M : 类型} [L.Structure M] [L'.Structure M] [ϕ.IsExpansionOn M] {n}
+  结论: {M : 类型} [L.结构 M] [L'.结构 M] [ϕ.是ExpansionOn M] {n}
   证明: IsExpansionOn.map_onRelation R x
 
 Depends on / 依赖: IsExpansionOn, IsExpansionOn.map_onRelation, map_onRelation
@@ -652,7 +652,7 @@ instance id_isExpansionOn
 
 中文:
 实例 id_isExpansionOn
-  签名: (M : 类型) [L.Structure M]
+  签名: (M : 类型) [L.结构 M]
   定义体: ⟨fun _ _ => rfl, fun _ _ => rfl⟩
 -/
 instance id_isExpansionOn (M : Type*) [L.Structure M] : IsExpansionOn (LHom.id L) M :=
@@ -667,7 +667,7 @@ instance ofIsEmpty_isExpansionOn
 
 中文:
 实例 ofIsEmpty_isExpansionOn
-  签名: (M : 类型) [L.Structure M] [L'.Structure M] [L.IsAlgebraic]
+  签名: (M : 类型) [L.结构 M] [L'.结构 M] [L.是代数]
 -/
 instance ofIsEmpty_isExpansionOn (M : Type*) [L.Structure M] [L'.Structure M] [L.IsAlgebraic]
     [L.IsRelational] : IsExpansionOn (LHom.ofIsEmpty L L') M where
@@ -682,7 +682,7 @@ instance sumElim_isExpansionOn
 
 中文:
 实例 sumElim_isExpansionOn
-  签名: {L'' : Language} (ψ : L'' ->ᴸ L') (M : 类型) [L.Structure M]
+  签名: {L'' : Language} (ψ : L'' ->ᴸ L') (M : 类型) [L.结构 M]
   定义体: ⟨fun f _ => Sum.casesOn f (by simp) (by simp), fun R _ => Sum.casesOn R (by simp) (by simp)⟩
 
 Depends on / 依赖: Sum.casesOn, casesOn
@@ -702,7 +702,7 @@ instance sumMap_isExpansionOn
 
 中文:
 实例 sumMap_isExpansionOn
-  签名: {L₁ L₂ : Language} (ψ : L₁ ->ᴸ L₂) (M : 类型) [L.Structure M]
+  签名: {L₁ L₂ : Language} (ψ : L₁ ->ᴸ L₂) (M : 类型) [L.结构 M]
   定义体: ⟨fun f _ => Sum.casesOn f (by simp) (by simp), fun R _ => Sum.casesOn R (by simp) (by simp)⟩
 
 Depends on / 依赖: Sum.casesOn, casesOn
@@ -722,7 +722,7 @@ instance sumInl_isExpansionOn
 
 中文:
 实例 sumInl_isExpansionOn
-  签名: (M : 类型) [L.Structure M] [L'.Structure M]
+  签名: (M : 类型) [L.结构 M] [L'.结构 M]
   定义体: ⟨fun _f _ => rfl, fun _R _ => rfl⟩
 -/
 instance sumInl_isExpansionOn (M : Type*) [L.Structure M] [L'.Structure M] :
@@ -741,7 +741,7 @@ instance sumInr_isExpansionOn
 
 中文:
 实例 sumInr_isExpansionOn
-  签名: (M : 类型) [L.Structure M] [L'.Structure M]
+  签名: (M : 类型) [L.结构 M] [L'.结构 M]
   定义体: ⟨fun _f _ => rfl, fun _R _ => rfl⟩
 
 @[simp]
@@ -763,7 +763,7 @@ theorem funMap_sumInl
 
 中文:
 定理 funMap_sumInl
-  结论: [(L.sum L').Structure M] [(LHom.sumInl : L ->ᴸ L.sum L').IsExpansionOn M] {n}
+  结论: [(L.求和 L').结构 M] [(L态射.sumInl : L ->ᴸ L.求和 L').是ExpansionOn M] {n}
   证明: (LHom.sumInl : L ->ᴸ L.sum L').map_onFunction f x
 
 @[simp]
@@ -785,7 +785,7 @@ theorem funMap_sumInr
 
 中文:
 定理 funMap_sumInr
-  结论: [(L'.sum L).Structure M] [(LHom.sumInr : L ->ᴸ L'.sum L).IsExpansionOn M] {n}
+  结论: [(L'.求和 L).结构 M] [(L态射.sumInr : L ->ᴸ L'.求和 L).是ExpansionOn M] {n}
   证明: (LHom.sumInr : L ->ᴸ L'.sum L).map_onFunction f x
 
 Depends on / 依赖: LHom.sumInr, map_onFunction, sumInr
@@ -804,7 +804,7 @@ theorem sumInl_injective
 
 中文:
 定理 sumInl_injective
-  结论: (LHom.sumInl : L ->ᴸ L.sum L').Injective
+  结论: (L态射.sumInl : L ->ᴸ L.求和 L').单射
   证明: ⟨fun h => Sum.inl_injective h, fun h => Sum.inl_injective h⟩
 
 Depends on / 依赖: Sum.inl_injective, inl_injective
@@ -822,7 +822,7 @@ theorem sumInr_injective
 
 中文:
 定理 sumInr_injective
-  结论: (LHom.sumInr : L' ->ᴸ L.sum L').Injective
+  结论: (L态射.sumInr : L' ->ᴸ L.求和 L').单射
   证明: ⟨fun h => Sum.inr_injective h, fun h => Sum.inr_injective h⟩
 
 Depends on / 依赖: Sum.inr_injective, inr_injective
@@ -850,7 +850,7 @@ theorem Injective.isExpansionOn_default
   · have hr : ϕ.onRelation r in Set.range fun r : L.R
 
 中文:
-定理 Injective.isExpansionOn_default
+定理 单射.isExpansionOn_default
   结论: {ϕ : L ->ᴸ L'}
   证明: by
   let := ϕ.defaultExpansion M
@@ -891,13 +891,13 @@ structure LEquiv
     - right_inv : toLHom.comp invLHom = LHom.id L'
 
 中文:
-结构 LEquiv
+结构 L等价
   参数: (L L' : Language)
   公理与运算 (4 个):
     - toLHom : L ->ᴸ L'
     - invLHom : L' ->ᴸ L
-    - left_inv : invLHom.comp toLHom = LHom.id L
-    - right_inv : toLHom.comp invLHom = LHom.id L'
+    - left_inv : invLHom.comp toLHom = L态射.id L
+    - right_inv : toLHom.comp invLHom = L态射.id L'
 -/
 structure LEquiv (L L' : Language) where
   /-- The forward language homomorphism -/
@@ -941,7 +941,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (L ≃ᴸ L)
+  签名: 可居 (L ≃ᴸ L)
   定义体: ⟨LEquiv.refl L⟩
 
 Depends on / 依赖: LEquiv, LEquiv.refl
@@ -1084,7 +1084,7 @@ instance isRelational_constantsOn
 
 中文:
 实例 isRelational_constantsOn
-  签名: [_ie : IsEmpty α]
+  签名: [_ie : 是空 α]
   定义体: fun n => Nat.casesOn n _ie inferInstance
 
 Depends on / 依赖: Nat.casesOn, casesOn
@@ -1149,7 +1149,7 @@ definition LHom.constantsOnMap
     | 0, c => f c
 
 中文:
-定义 LHom.constantsOnMap
+定义 L态射.constantsOnMap
   签名: (f : α -> β)
   定义体: fun {n} c =>
     match n, c with
@@ -1219,7 +1219,7 @@ scoped[FirstOrder] notation:max L "[[" α "]]" => Language.withConstants L α
 
 中文:
 定义 withConstants
-  签名: : Language.{max u w', v}
+  签名: : Language.{最大值 u w', v}
   定义体: L.sum (constantsOn α)
 
 @[inherit_doc FirstOrder.Language.withConstants]
@@ -1285,7 +1285,7 @@ theorem lhomWithConstants_injective
 
 中文:
 定理 lhomWithConstants_injective
-  结论: (L.lhomWithConstants α).Injective
+  结论: (L.lhomWithConstants α).单射
   证明: LHom.sumInl_injective
 
 Depends on / 依赖: LHom.sumInl_injective, sumInl_injective
@@ -1322,7 +1322,7 @@ definition LHom.addConstants
   body: φ.sumMap (LHom.id _)
 
 中文:
-定义 LHom.addConstants
+定义 L态射.addConstants
   签名: {L' : Language} (φ : L ->ᴸ L')
   定义体: φ.sumMap (LHom.id _)
 
@@ -1341,7 +1341,7 @@ instance paramsStructure
 
 中文:
 实例 paramsStructure
-  签名: (A : Set α)
+  签名: (A : 集合 α)
   定义体: constantsOn.structure (↑)
 
 Depends on / 依赖: constantsOn, constantsOn.structure, structure
@@ -1368,8 +1368,8 @@ definition LEquiv.addEmptyConstants
     exact _root_.trans (congr rfl (Subsingleton.elim _ _)
 
 中文:
-定义 LEquiv.addEmptyConstants
-  签名: [ie : IsEmpty α]
+定义 L等价.addEmptyConstants
+  签名: [ie : 是空 α]
   定义体: lhomWithConstants L α
   invLHom := LHom.sumElim (LHom.id L) (LHom.ofIsEmpty (constantsOn α) L)
   left_inv := by rw [lhomWithConstants, LHom.sumElim_comp_inl]
@@ -1402,7 +1402,7 @@ theorem withConstants_funMap_sumInl
 
 中文:
 定理 withConstants_funMap_sumInl
-  结论: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
   证明: (lhomWithConstants L α).map_onFunction f x
 
 @[simp]
@@ -1424,7 +1424,7 @@ theorem withConstants_relMap_sumInl
 
 中文:
 定理 withConstants_relMap_sumInl
-  结论: [L[[α]].Structure M] [(lhomWithConstants L α).IsExpansionOn M]
+  结论: [L[[α]].结构 M] [(lhomWithConstants L α).是ExpansionOn M]
   证明: (lhomWithConstants L α).map_onRelation R x
 
 Depends on / 依赖: lhomWithConstants, map_onRelation
@@ -1465,7 +1465,7 @@ theorem LHom.map_constants_comp_sumInl
   proof: by ext <;> rfl
 
 中文:
-定理 LHom.map_constants_comp_sumInl
+定理 L态射.map_constants_comp_sumInl
   条件: {f : α -> β}
   证明: by ext <;> rfl
 -/
@@ -1488,7 +1488,7 @@ instance withConstantsStructure
 
 中文:
 实例 withConstantsStructure
-  签名: : L[[α]].Structure M
+  签名: : L[[α]].结构 M
   定义体: inferInstanceAs (L.sum _).Structure M
 
 Depends on / 依赖: L.sum, Structure
@@ -1506,7 +1506,7 @@ instance constantsOnSelfStructure
 
 中文:
 实例 constantsOnSelfStructure
-  签名: : (constantsOn M).Structure M
+  签名: : (constantsOn M).结构 M
   定义体: fast_instance% constantsOn.structure id
 
 Depends on / 依赖: constantsOn, constantsOn.structure, fast_instance, structure
@@ -1524,7 +1524,7 @@ instance withConstantsSelfStructure
 
 中文:
 实例 withConstantsSelfStructure
-  签名: : L[[M]].Structure M
+  签名: : L[[M]].结构 M
   定义体: inferInstance
 -/
 instance withConstantsSelfStructure : L[[M]].Structure M := inferInstance
@@ -1539,7 +1539,7 @@ instance withConstants_self_expansion
 
 中文:
 实例 withConstants_self_expansion
-  签名: : (lhomWithConstants L M).IsExpansionOn M
+  签名: : (lhomWithConstants L M).是ExpansionOn M
   定义体: ⟨fun _ _ => rfl, fun _ _ => rfl⟩
 -/
 instance withConstants_self_expansion : (lhomWithConstants L M).IsExpansionOn M :=
@@ -1555,7 +1555,7 @@ instance withConstants_expansion
 
 中文:
 实例 withConstants_expansion
-  签名: : (L.lhomWithConstants α).IsExpansionOn M
+  签名: : (L.lhomWithConstants α).是ExpansionOn M
   定义体: ⟨fun _ _ => rfl, fun _ _ => rfl⟩
 -/
 instance withConstants_expansion : (L.lhomWithConstants α).IsExpansionOn M :=
@@ -1609,7 +1609,7 @@ instance addConstants_expansion
 
 中文:
 实例 addConstants_expansion
-  签名: {L' : Language} [L'.Structure M] (φ : L ->ᴸ L') [φ.IsExpansionOn M]
+  签名: {L' : Language} [L'.结构 M] (φ : L ->ᴸ L') [φ.是ExpansionOn M]
   定义体: LHom.sumMap_isExpansionOn _ _ M
 
 Depends on / 依赖: LHom.sumMap_isExpansionOn, sumMap_isExpansionOn
@@ -1632,7 +1632,7 @@ theorem withConstants_funMap_sumInr
 
 中文:
 定理 withConstants_funMap_sumInr
-  条件: {a : α} {x : Fin 0 -> M}
+  条件: {a : α} {x : 有限集 0 -> M}
   证明: by
   rw [Unique.eq_default x]
   exact (LHom.sumInr : constantsOn α ->ᴸ L.sum _).map_onFunction _ _
@@ -1720,8 +1720,8 @@ definition Embedding.withConstants
 deriving L.Structure
 
 中文:
-定义 Embedding.withConstants
-  签名: (_f : M ↪[L] N) (_A : Set M)
+定义 嵌入.withConstants
+  签名: (_f : M ↪[L] N) (_A : 集合 M)
   定义体: N
 deriving L.Structure
 -/
@@ -1741,7 +1741,7 @@ instance :
 
 中文:
 实例 :
-  签名: L[[A]].Structure (f.withConstants A)
+  签名: L[[A]].结构 (f.withConstants A)
   定义体: inferInstance
 -/
 instance : L[[A]].Structure (f.withConstants A) := inferInstance
@@ -1767,7 +1767,7 @@ definition Embedding.liftWithConstants
     | inr r => exact isEmptyElim r
 
 中文:
-定义 Embedding.liftWithConstants
+定义 嵌入.liftWithConstants
   签名: :
   定义体: by
   refine ⟨f.toEmbedding, ?_, ?_⟩

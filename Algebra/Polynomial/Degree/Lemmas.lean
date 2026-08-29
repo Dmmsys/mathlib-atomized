@@ -603,7 +603,7 @@ theorem degree_sum_eq_of_disjoint
 
 中文:
 定理 degree_sum_eq_of_disjoint
-  结论: (f : S -> R[X]) (s : Finset S)
+  结论: (f : S -> R[X]) (s : 有限集 S)
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -659,7 +659,7 @@ theorem natDegree_sum_eq_of_disjoint
 
 中文:
 定理 natDegree_sum_eq_of_disjoint
-  结论: (f : S -> R[X]) (s : Finset S)
+  结论: (f : S -> R[X]) (s : 有限集 S)
   证明: by
   by_cases! H : exists x in s, f x != 0
   · obtain ⟨x, hx, hx'⟩ := H
@@ -811,7 +811,7 @@ theorem degree_map_eq_iff
 
 中文:
 定理 degree_map_eq_iff
-  条件: {f : R ->+* S} {p : Polynomial R}
+  条件: {f : R ->+* S} {p : 多项式 R}
   证明: by
   rcases eq_or_ne p 0 with h | h
   · simp [h]
@@ -849,7 +849,7 @@ theorem natDegree_map_eq_iff
 
 中文:
 定理 natDegree_map_eq_iff
-  条件: {f : R ->+* S} {p : Polynomial R}
+  条件: {f : R ->+* S} {p : 多项式 R}
   证明: by
   rcases eq_or_ne (natDegree p) 0 with h | h
   · simp_rw [h, ne_eq, or_true, iff_true, ← Nat.le_zero, ← h, natDegree_map_le]
@@ -873,7 +873,7 @@ theorem degree_map_eq_of_isUnit_leadingCoeff
 
 中文:
 定理 degree_map_eq_of_isUnit_leadingCoeff
-  结论: [Nontrivial S] (f : R ->+* S)
+  结论: [非平凡 S] (f : R ->+* S)
   证明: degree_map_eq_of_leadingCoeff_ne_zero _ .ne_zero f.isUnit_map hp
 
 Depends on / 依赖: degree_map_eq_of_leadingCoeff_ne_zero, f.isUnit_map, isUnit_map, ne_zero
@@ -892,7 +892,7 @@ theorem natDegree_map_eq_of_isUnit_leadingCoeff
 
 中文:
 定理 natDegree_map_eq_of_isUnit_leadingCoeff
-  结论: [Nontrivial S] (f : R ->+* S)
+  结论: [非平凡 S] (f : R ->+* S)
   证明: natDegree_eq_natDegree degree_map_eq_of_isUnit_leadingCoeff _ hp
 
 Depends on / 依赖: degree_map_eq_of_isUnit_leadingCoeff, natDegree_eq_natDegree
@@ -911,7 +911,7 @@ theorem leadingCoeff_map_eq_of_isUnit_leadingCoeff
 
 中文:
 定理 leadingCoeff_map_eq_of_isUnit_leadingCoeff
-  结论: [Nontrivial S] (f : R ->+* S)
+  结论: [非平凡 S] (f : R ->+* S)
   证明: leadingCoeff_map_of_leadingCoeff_ne_zero _ .ne_zero f.isUnit_map hp
 
 Depends on / 依赖: f.isUnit_map, isUnit_map, leadingCoeff_map_of_leadingCoeff_ne_zero, ne_zero
@@ -930,7 +930,7 @@ theorem nextCoeff_map_eq_of_isUnit_leadingCoeff
 
 中文:
 定理 nextCoeff_map_eq_of_isUnit_leadingCoeff
-  结论: [Nontrivial S] (f : R ->+* S)
+  结论: [非平凡 S] (f : R ->+* S)
   证明: nextCoeff_map_of_leadingCoeff_ne_zero _ .ne_zero f.isUnit_map hp
 
 Depends on / 依赖: f.isUnit_map, isUnit_map, ne_zero, nextCoeff_map_of_leadingCoeff_ne_zero
@@ -950,7 +950,7 @@ theorem degree_map_eq_of_injective
 
 中文:
 定理 degree_map_eq_of_injective
-  条件: {f : R ->+* S} (hf : Function.Injective f) (p : Polynomial R)
+  条件: {f : R ->+* S} (hf : 函数.单射 f) (p : 多项式 R)
   证明: by
   simp [hf, map_ne_zero_iff, ne_or_eq]
 
@@ -970,7 +970,7 @@ theorem natDegree_map_eq_of_injective
 
 中文:
 定理 natDegree_map_eq_of_injective
-  条件: {f : R ->+* S} (hf : Function.Injective f) (p : Polynomial R)
+  条件: {f : R ->+* S} (hf : 函数.单射 f) (p : 多项式 R)
   证明: natDegree_eq_of_degree_eq degree_map_eq_of_injective hf _
 
 Depends on / 依赖: degree_map_eq_of_injective, natDegree_eq_of_degree_eq
@@ -990,7 +990,7 @@ theorem leadingCoeff_map_of_injective
 
 中文:
 定理 leadingCoeff_map_of_injective
-  结论: {f : R ->+* S} (hf : Function.Injective f)
+  结论: {f : R ->+* S} (hf : 函数.单射 f)
   证明: by
   simp only [leadingCoeff, natDegree_map_eq_of_injective hf, coeff_map]
 
@@ -1012,7 +1012,7 @@ theorem nextCoeff_map
 
 中文:
 定理 nextCoeff_map
-  条件: {f : R ->+* S} (hf : Function.Injective f) (p : Polynomial R)
+  条件: {f : R ->+* S} (hf : 函数.单射 f) (p : 多项式 R)
   证明: by
   simp only [hf, nextCoeff, natDegree_map_eq_of_injective]
   split_ifs <;> simp
@@ -1250,7 +1250,7 @@ theorem subsingleton_isRoot_of_natDegree_eq_one
 
 中文:
 定理 subsingleton_isRoot_of_natDegree_eq_one
-  结论: [IsLeftCancelMulZero R]
+  结论: [是左消去MulZero R]
   证明: by
   intro r₁
   obtain ⟨r₂, hr₂, r₃, rfl⟩ : exists a, a != 0 ∧ exists b, C a * X + C b = p := by rwa [natDegree_eq_one] at h
@@ -1510,7 +1510,7 @@ lemma comp_neg_X_leadingCoeff_eq
 
 中文:
 引理 comp_neg_X_leadingCoeff_eq
-  条件: [Ring R] (p : R[X])
+  条件: [环 R] (p : R[X])
   证明: by
   nontriviality R
   by_cases h : p = 0
@@ -1541,7 +1541,7 @@ theorem comp_neg_X_eq_zero_iff
 
 中文:
 定理 comp_neg_X_eq_zero_iff
-  条件: [Ring R] {p : R[X]}
+  条件: [环 R] {p : R[X]}
   结论: p.comp (-X) = 0 ↔ p = 0
   证明: by
   simp [← leadingCoeff_eq_zero]
@@ -1565,7 +1565,7 @@ lemma comp_eq_zero_iff
 
 中文:
 引理 comp_eq_zero_iff
-  条件: [Semiring R] [NoZeroDivisors R] {p q : R[X]}
+  条件: [半环 R] [无零因子 R] {p q : R[X]}
   证明: by
   refine ⟨fun h => ?_, Or.rec (fun h => by simp [h]) fun h => by rw [h.2, comp_C, h.1, C_0]⟩
   have key : p.natDegree = 0 ∨ q.natDegree = 0 := by
@@ -1601,7 +1601,7 @@ lemma degree_comp
 
 中文:
 引理 degree_comp
-  条件: [Semiring R] [NoZeroDivisors R] {p q : R[X]} (hq : 0 < q.degree)
+  条件: [半环 R] [无零因子 R] {p q : R[X]} (hq : 0 < q.degree)
   证明: by
   rcases eq_or_ne p 0 with rfl | hp
   · rw [zero_comp, degree_zero, WithBot.bot_mul']
@@ -1638,7 +1638,7 @@ lemma degree_comp_neg_X
 
 中文:
 引理 degree_comp_neg_X
-  条件: [Ring R] {p : R[X]}
+  条件: [环 R] {p : R[X]}
   结论: (p.comp (-X)).degree = p.degree
   证明: by
   nontriviality R

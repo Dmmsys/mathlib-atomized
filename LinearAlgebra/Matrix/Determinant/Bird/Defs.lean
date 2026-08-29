@@ -53,7 +53,7 @@ definition get
 
 中文:
 定义 get
-  签名: (n : 自然数) (A : Array R) (i j : 自然数)
+  签名: (n : 自然数) (A : 数组 R) (i j : 自然数)
   定义体: A.getD (n * i + j) 0
 -/
 protected def get (n : Nat) (A : Array R) (i j : Nat) : R :=
@@ -86,7 +86,7 @@ definition stepEntry
 
 中文:
 定义 stepEntry
-  签名: (n : 自然数) (A : Array R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
+  签名: (n : 自然数) (A : 数组 R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
   定义体: -(BirdDet.sumFrom n (i + 1) fun k => F k k) * BirdDet.get n A i j +
     BirdDet.sumFrom n (i + 1) fun k => F i k * BirdDet.get n A k j
 
@@ -108,7 +108,7 @@ definition birdDet
 
 中文:
 定义 birdDet
-  签名: (n : 自然数) (A : Array R)
+  签名: (n : 自然数) (A : 数组 R)
   定义体: match n with
   | 0 => 1
   | k + 1 => (-1 : R) ^ k * (stepEntry n A)^[k] (BirdDet.get n A) 0 0
@@ -133,7 +133,7 @@ theorem get_eq
 
 中文:
 定理 get_eq
-  条件: (n : 自然数) (A : Array R) (i j : 自然数)
+  条件: (n : 自然数) (A : 数组 R) (i j : 自然数)
   证明: by
   rfl
 -/
@@ -222,7 +222,7 @@ theorem stepEntry_eq
 
 中文:
 定理 stepEntry_eq
-  条件: (n : 自然数) (A : Array R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
+  条件: (n : 自然数) (A : 数组 R) (F : 自然数 -> 自然数 -> R) (i j : 自然数)
   证明: by
   rfl
 -/
@@ -244,7 +244,7 @@ theorem birdDet_zero
 
 中文:
 定理 birdDet_zero
-  条件: (A : Array R)
+  条件: (A : 数组 R)
   结论: birdDet 0 A = 1
   证明: by
   rfl
@@ -262,7 +262,7 @@ theorem birdDet_succ
 
 中文:
 定理 birdDet_succ
-  条件: (k : 自然数) (A : Array R)
+  条件: (k : 自然数) (A : 数组 R)
   证明: by rw [birdDet]
 
 Depends on / 依赖: birdDet
@@ -284,7 +284,7 @@ theorem birdDet_eq
 
 中文:
 定理 birdDet_eq
-  条件: (n k : 自然数) (A : Array R) (hn : n = k + 1)
+  条件: (n k : 自然数) (A : 数组 R) (hn : n = k + 1)
   证明: by
   subst hn
   exact birdDet_succ k A
@@ -311,7 +311,7 @@ definition stepEntry
 
 中文:
 定义 stepEntry
-  签名: {n : 自然数} (A F : Matrix (Fin n) (Fin n) R)
+  签名: {n : 自然数} (A F : 矩阵 (有限集 n) (有限集 n) R)
   定义体: .of fun i j => (-∑ k in Finset.Ioi i, F k k) * A i j +
     ∑ k in Finset.Ioi i, F i k * A k j
 
@@ -333,7 +333,7 @@ definition birdDet
 
 中文:
 定义 birdDet
-  签名: {n : 自然数} (A : Matrix (Fin n) (Fin n) R)
+  签名: {n : 自然数} (A : 矩阵 (有限集 n) (有限集 n) R)
   定义体: match n with
   | 0 => 1
   | k + 1 => (-1 : R) ^ k * (stepEntry A)^[k] A 0 0
@@ -356,7 +356,7 @@ theorem stepEntry_eq
 
 中文:
 定理 stepEntry_eq
-  条件: {n : 自然数} (A F : Matrix (Fin n) (Fin n) R)
+  条件: {n : 自然数} (A F : 矩阵 (有限集 n) (有限集 n) R)
   证明: by
   rfl
 -/
@@ -377,7 +377,7 @@ theorem birdDetSpec_zero
 
 中文:
 定理 birdDetSpec_zero
-  条件: (A : Matrix (Fin 0) (Fin 0) R)
+  条件: (A : 矩阵 (有限集 0) (有限集 0) R)
   证明: by
   rfl
 -/
@@ -396,7 +396,7 @@ theorem birdDetSpec_succ
 
 中文:
 定理 birdDetSpec_succ
-  条件: {k : 自然数} (A : Matrix (Fin (k + 1)) (Fin (k + 1)) R)
+  条件: {k : 自然数} (A : 矩阵 (有限集 (k + 1)) (有限集 (k + 1)) R)
   证明: by
   rw [birdDet]
 

@@ -38,8 +38,8 @@ lemma CommRingCat.epi_iff_epi
       (by ext r; change algebraMap R S 
 
 中文:
-引理 CommRingCat.epi_iff_epi
-  条件: {R S : 类型u} [CommRing R] [CommRing S] [Algebra R S]
+引理 交换环范畴.epi_iff_epi
+  条件: {R S : 类型u} [交换环 R] [交换环 S] [代数 R S]
   证明: by
   simp_rw [Algebra.isEpi_iff_forall_one_tmul_eq, eq_comm]
   constructor
@@ -82,8 +82,8 @@ have : Algebra.IsEpi R S := CommRingCat.epi_iff_epi.mp inferInstanceAs (Epi f)
   rwa [Algebra.isEpi_iff_surjective_algebraMap_of_finite] at this
 
 中文:
-引理 RingHom.surjective_of_epi_of_finite
-  结论: {R S : CommRingCat} (f : R ⟶ S) [Epi f]
+引理 环态射.surjective_of_epi_of_finite
+  结论: {R S : 交换环范畴} (f : R ⟶ S) [满态射 f]
   证明: by
   algebraize [f.hom]
 have : Algebra.IsEpi R S := CommRingCat.epi_iff_epi.mp inferInstanceAs (Epi f)
@@ -107,8 +107,8 @@ lemma RingHom.surjective_iff_epi_and_finite
   mpr := fun ⟨_, h⟩ => surjective_of_epi_of_finite f h
 
 中文:
-引理 RingHom.surjective_iff_epi_and_finite
-  条件: {R S : CommRingCat} {f : R ⟶ S}
+引理 环态射.surjective_iff_epi_and_finite
+  条件: {R S : 交换环范畴} {f : R ⟶ S}
   证明: ⟨ConcreteCategory.epi_of_surjective f h, .of_surjective f.hom h⟩
   mpr := fun ⟨_, h⟩ => surjective_of_epi_of_finite f h
 

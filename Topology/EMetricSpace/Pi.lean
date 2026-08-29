@@ -41,7 +41,7 @@ instance [forall
   body: Finset.sup univ fun b => edist (f b) (g b)
 
 中文:
-实例 [forall
+实例 [对任意
   签名: b, EDist (X b)] : EDist (对任意 b, X b) where
   定义体: Finset.sup univ fun b => edist (f b) (g b)
 
@@ -141,7 +141,7 @@ theorem edist_pi_const
 
 中文:
 定理 edist_pi_const
-  条件: [Nonempty β] (a b : α)
+  条件: [非空 β] (a b : α)
   结论: (edist (fun _ : β => a) fun _ => b) = edist a b
   证明: Finset.sup_const univ_nonempty (edist a b)
 
@@ -165,7 +165,7 @@ instance pseudoEMetricSpacePi
 
 中文:
 实例 pseudoEMetricSpacePi
-  签名: [对任意 b, PseudoEMetricSpace (X b)]
+  签名: [对任意 b, PseudoEMetric空间 (X b)]
   定义体: bot_unique Finset.sup_le by simp
   edist_comm f g := by simp [edist_pi_def, edist_comm]
   edist_triangle _ g _ := edist_pi_le_iff.2 fun b => le_trans (edist_triangle _ (g b) _)
@@ -208,7 +208,7 @@ instance emetricSpacePi
 
 中文:
 实例 emetricSpacePi
-  签名: [对任意 b, EMetricSpace (X b)]
+  签名: [对任意 b, 广义度量空间 (X b)]
   定义体: .ofT0PseudoEMetricSpace _
 
 Depends on / 依赖: ofT0PseudoEMetricSpace

@@ -43,8 +43,8 @@ theorem _root_.Measurable.factorsThrough
   rw [← mem_preimage]; rw [← hs]; rw [mem_preimage]; rw [h]; rw [← mem_preimage]; rw [hs]; rw [mem_preimage]; rw [mem_singleton_iff]
 
 中文:
-定理 _root_.Measurable.factorsThrough
-  结论: [MeasurableSpace Z] [MeasurableSingletonClass Z]
+定理 _root_.可测.factorsThrough
+  结论: [可测空间 Z] [MeasurableSingleton类 Z]
   证明: by
   refine fun x₁ x₂ h => eq_of_mem_singleton ?_
   obtain ⟨s, -, hs⟩ := hg (measurableSet_singleton (g x₂))
@@ -70,7 +70,7 @@ theorem StronglyMeasurable.factorsThrough
 
 中文:
 定理 StronglyMeasurable.factorsThrough
-  结论: [TopologicalSpace Z]
+  结论: [拓扑空间 Z]
   证明: by
   borelize Z
   exact hg.measurable.factorsThrough
@@ -100,8 +100,8 @@ theorem StronglyMeasurable.exists_eq_measurable_comp
     obtain ⟨h₂, mh₂, rfl⟩ := h₂
 
 中文:
-定理 StronglyMeasurable.exists_eq_measurable_comp
-  结论: [Nonempty Z] [TopologicalSpace Z]
+定理 StronglyMeasurable.存在_eq_measurable_comp
+  结论: [非空 Z] [拓扑空间 Z]
   证明: by
   let mX : MeasurableSpace X := mY.comap f
   induction g, hg using StronglyMeasurable.induction' with
@@ -144,8 +144,8 @@ theorem _root_.Measurable.exists_eq_measurable_comp
   exact ⟨h, mh.measurable, hh⟩
 
 中文:
-定理 _root_.Measurable.exists_eq_measurable_comp
-  结论: [Nonempty Z] [MeasurableSpace Z]
+定理 _root_.可测.存在_eq_measurable_comp
+  结论: [非空 Z] [可测空间 Z]
   证明: by
   let := upgradeStandardBorel Z
   obtain ⟨h, mh, hh⟩ := hg.stronglyMeasurable.exists_eq_measurable_comp
@@ -177,8 +177,8 @@ theorem _root_.Measurable.dependsOn_of_piLE
   proof: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 中文:
-定理 _root_.Measurable.dependsOn_of_piLE
-  结论: [MeasurableSpace Z] [MeasurableSingletonClass Z]
+定理 _root_.可测.dependsOn_of_piLE
+  结论: [可测空间 Z] [MeasurableSingleton类 Z]
   证明: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 Depends on / 依赖: dependsOn_iff_factorsThrough, factorsThrough, hf.factorsThrough
@@ -197,7 +197,7 @@ theorem StronglyMeasurable.dependsOn_of_piLE
 
 中文:
 定理 StronglyMeasurable.dependsOn_of_piLE
-  结论: [TopologicalSpace Z] [PseudoMetrizableSpace Z]
+  结论: [拓扑空间 Z] [PseudoMetrizable空间 Z]
   证明: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 Depends on / 依赖: dependsOn_iff_factorsThrough, factorsThrough, hf.factorsThrough
@@ -221,8 +221,8 @@ theorem _root_.Measurable.dependsOn_of_piFinset
   proof: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 中文:
-定理 _root_.Measurable.dependsOn_of_piFinset
-  结论: [MeasurableSpace Z] [MeasurableSingletonClass Z]
+定理 _root_.可测.dependsOn_of_piFinset
+  结论: [可测空间 Z] [MeasurableSingleton类 Z]
   证明: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 Depends on / 依赖: dependsOn_iff_factorsThrough, factorsThrough, hf.factorsThrough
@@ -241,7 +241,7 @@ theorem StronglyMeasurable.dependsOn_of_piFinset
 
 中文:
 定理 StronglyMeasurable.dependsOn_of_piFinset
-  结论: [TopologicalSpace Z] [PseudoMetrizableSpace Z]
+  结论: [拓扑空间 Z] [PseudoMetrizable空间 Z]
   证明: dependsOn_iff_factorsThrough.2 hf.factorsThrough
 
 Depends on / 依赖: dependsOn_iff_factorsThrough, factorsThrough, hf.factorsThrough

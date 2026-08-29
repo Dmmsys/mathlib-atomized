@@ -109,8 +109,8 @@ theorem isNat_log
   statement: {b nb n nn k : Nat} -> IsNat b nb -> IsNat n nn ->
 
 中文:
-定理 isNat_log
-  结论: {b nb n nn k : 自然数} -> Is自然数 b nb -> Is自然数 n nn ->
+定理 is自然数_log
+  结论: {b nb n nn k : 自然数} -> 是自然数 b nb -> 是自然数 n nn ->
 -/
 theorem isNat_log : {b nb n nn k : Nat} -> IsNat b nb -> IsNat n nn ->
     Nat.log nb nn = k -> IsNat (Nat.log b n) k
@@ -131,7 +131,7 @@ definition proveNatLog
       ⟨q(nat_li
 
 中文:
-定义 proveNatLog
+定义 prove自然数Log
   签名: (eb en : Q(自然数))
   定义体: match eb.natLit!, en.natLit! with
 | 0, _ => have : eb =Q nat_lit 0 := ⟨⟩; ⟨q(nat_lit 0), q(nat_log_zero $en)⟩
@@ -177,7 +177,7 @@ definition evalNatLog
   let pf' : Q(IsNat (Nat.log $b $n) $ek) := q(isNat_log $pb
 
 中文:
-定义 evalNatLog
+定义 eval自然数Log
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let mkApp2 _ (b : Q(Nat)) (n : Q(Nat)) ← Meta.whnfR e | failure
@@ -270,8 +270,8 @@ theorem isNat_clog
   statement: {b nb n nn k : Nat} -> IsNat b nb -> IsNat n nn ->
 
 中文:
-定理 isNat_clog
-  结论: {b nb n nn k : 自然数} -> Is自然数 b nb -> Is自然数 n nn ->
+定理 is自然数_clog
+  结论: {b nb n nn k : 自然数} -> 是自然数 b nb -> 是自然数 n nn ->
 -/
 theorem isNat_clog : {b nb n nn k : Nat} -> IsNat b nb -> IsNat n nn ->
     Nat.clog nb nn = k -> IsNat (Nat.clog b n) k
@@ -293,7 +293,7 @@ definition proveNatClog
     ⟨q(nat_lit 0), q(nat_clog_zero_right $eb $en $h)
 
 中文:
-定义 proveNatClog
+定义 prove自然数Clog
   签名: (eb en : Q(自然数))
   定义体: let b := eb.natLit!
   let n := en.natLit!
@@ -347,7 +347,7 @@ definition evalNatClog
   let pf' : Q(IsNat (Nat.clog $b $n) $ek) := q(isNat_clog 
 
 中文:
-定义 evalNatClog
+定义 eval自然数Clog
   签名: : NormNumExt where eval {u α} e
   定义体: do
   let mkApp2 _ (b : Q(Nat)) (n : Q(Nat)) ← Meta.whnfR e | failure

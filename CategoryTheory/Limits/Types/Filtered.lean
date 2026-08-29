@@ -42,7 +42,7 @@ definition Rel
   body: exists (k : _) (f : x.1 ⟶ k) (g : y.1 ⟶ k), F.map f x.2 = F.map g y.2
 
 中文:
-定义 Rel
+定义 关系
   签名: (x y : Σ j, F.obj j)
   定义体: exists (k : _) (f : x.1 ⟶ k) (g : y.1 ⟶ k), F.map f x.2 = F.map g y.2
 -/
@@ -114,7 +114,7 @@ definition isColimitOf
 
 中文:
 定义 isColimitOf
-  签名: (t : Cocone F) (hsurj : 对任意 x : t.pt, 存在 i xi, x = t.ι.app i xi)
+  签名: (t : 余锥 F) (hsurj : 对任意 x : t.pt, 存在 i xi, x = t.ι.app i xi)
   定义体: by
   let α : t.pt -> J := fun x => (hsurj x).choose
   let f : forall (x : t.pt), F.obj (α x) := fun x => (hsurj x).choose_spec.choose
@@ -175,7 +175,7 @@ definition isColimitOf'
 
 中文:
 定义 isColimitOf'
-  签名: (t : Cocone F) (hsurj : 对任意 x : t.pt, 存在 i xi, x = t.ι.app i xi)
+  签名: (t : 余锥 F) (hsurj : 对任意 x : t.pt, 存在 i xi, x = t.ι.app i xi)
   定义体: isColimitOf _ _ hsurj (fun i j xi xj h => by
     obtain ⟨k, g, hg⟩ := hinj (IsFiltered.max i j) (F.map (IsFiltered.leftToMax i j) xi)
       (F.map (IsFiltered.rightToMax i j) xj)
@@ -209,7 +209,7 @@ theorem rel_equiv
 
 中文:
 定理 rel_equiv
-  结论: _root_.Equivalence (FilteredColimit.Rel.{v, u} F) where
+  结论: _root_.等价 (FilteredColimit.关系.{v, u} F) where
   证明: ⟨x.1, 𝟙 x.1, 𝟙 x.1, rfl⟩
   symm := fun ⟨k, f, g, h⟩ => ⟨k, g, f, h.symm⟩
   trans {x y z} := fun ⟨k, f, g, h⟩ ⟨k', f', g', h'⟩ =>
@@ -277,7 +277,7 @@ theorem colimit_eq_iff_aux
 
 中文:
 定理 colimit_eq_iff_aux
-  条件: [HasColimit F] {i j : J} {xi : F.obj i} {xj : F.obj j}
+  条件: [有余极限 F] {i j : J} {xi : F.obj i} {xj : F.obj j}
   证明: by
   dsimp
   rw [← (equivShrink _).symm.injective.eq_iff]; rw [Equiv.symm_apply_apply]; rw [Equiv.symm_apply_apply]; rw [Functor.ιColimitType_eq_iff]; rw [FilteredColimit.rel_eq_eqvGen_colimitTypeRel]
@@ -307,7 +307,7 @@ theorem isColimit_eq_iff
 
 中文:
 定理 isColimit_eq_iff
-  条件: {t : Cocone F} (ht : IsColimit t) {i j : J} {xi : F.obj i} {xj : F.obj j}
+  条件: {t : 余锥 F} (ht : 是余极限 t) {i j : J} {xi : F.obj i} {xj : F.obj j}
   证明: by
   have : HasColimit F := ⟨_, ht⟩
   refine Iff.trans ?_ (colimit_eq_iff_aux F)
@@ -348,7 +348,7 @@ theorem isColimit_eq_iff'
 
 中文:
 定理 isColimit_eq_iff'
-  条件: {t : Cocone F} (ht : IsColimit t) {i : J} (x y : F.obj i)
+  条件: {t : 余锥 F} (ht : 是余极限 t) {i : J} (x y : F.obj i)
   证明: by
   rw [isColimit_eq_iff _ ht]
   constructor
@@ -382,7 +382,7 @@ theorem colimit_eq_iff
 
 中文:
 定理 colimit_eq_iff
-  条件: [HasColimit F] {i j : J} {xi : F.obj i} {xj : F.obj j}
+  条件: [有余极限 F] {i j : J} {xi : F.obj i} {xj : F.obj j}
   证明: isColimit_eq_iff _ (colimit.isColimit F)
 
 Depends on / 依赖: colimit, colimit.isColimit, isColimit, isColimit_eq_iff

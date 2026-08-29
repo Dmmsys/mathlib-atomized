@@ -43,7 +43,7 @@ abbreviation GrothendieckGroup
 
 中文:
 缩写 GrothendieckGroup
-  签名: : Type _
+  签名: : 类型 _
   定义体: Localization (⊤ : Submonoid M)
 
 Depends on / 依赖: Localization, Submonoid
@@ -94,8 +94,8 @@ lemma of_injective
 
 中文:
 引理 of_injective
-  条件: [IsCancelMul M]
-  结论: Injective (of (M := M))
+  条件: [是消去乘法 M]
+  结论: 单射 (of (M := M))
   证明: fun m₁ m₂ => by simp [of, ← mk_one_eq_monoidOf_mk, mk_eq_mk_iff']
 
 @[to_additive]
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (GrothendieckGroup M)
+  签名: 取逆 (GrothendieckGroup M)
   定义体: rec (fun m s => (.mk s ⟨m, Submonoid.mem_top m⟩ : GrothendieckGroup M))
     fun {m₁ m₂ s₁ s₂} h => by simpa [r_iff_exists, mk_eq_mk_iff, eq_comm, mul_comm] using h
 
@@ -141,8 +141,8 @@ lemma inv_mk
 
 中文:
 引理 inv_mk
-  条件: (m : M) (s : (⊤ : Submonoid M))
-  结论: (mk m s)⁻¹ = .mk s ⟨m, Submonoid.mem_top _⟩
+  条件: (m : M) (s : (⊤ : 子幺半群 M))
+  结论: (mk m s)⁻¹ = .mk s ⟨m, 子幺半群.mem_top _⟩
   证明: rfl
 -/
 lemma inv_mk (m : M) (s : (⊤ : Submonoid M)) : (mk m s)⁻¹ = .mk s ⟨m, Submonoid.mem_top _⟩ := rfl
@@ -166,7 +166,7 @@ instance instCommGroup
 
 中文:
 实例 instCommGroup
-  签名: : CommGroup (GrothendieckGroup M) where
+  签名: : 交换群 (GrothendieckGroup M) where
   定义体: inferInstance
   inv_mul_cancel a := by
     cases a using ind
@@ -196,7 +196,7 @@ lemma mk_div_mk
 
 中文:
 引理 mk_div_mk
-  条件: (m₁ m₂ : M) (s₁ s₂ : (⊤ : Submonoid M))
+  条件: (m₁ m₂ : M) (s₁ s₂ : (⊤ : 子幺半群 M))
   证明: by
   simp [div_eq_mul_inv, mk_mul]; rfl
 

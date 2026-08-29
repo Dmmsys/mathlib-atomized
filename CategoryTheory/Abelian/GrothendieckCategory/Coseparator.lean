@@ -35,7 +35,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasCoseparator C
+  签名: 有余separator C
   定义体: by
   suffices HasCoseparator (ShrinkHoms C) from
     HasCoseparator.of_equivalence (ShrinkHoms.equivalence.{w} C).symm

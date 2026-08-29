@@ -49,8 +49,8 @@ theorem StrictMonoOn.continuousWithinAt_right_of_exists_between
 
 
 中文:
-定理 StrictMonoOn.continuousWithinAt_right_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 StrictMonoOn.continuousWithinAt_right_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: by
   have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
   refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
@@ -89,8 +89,8 @@ theorem continuousWithinAt_right_of_monotoneOn_of_exists_between
 have : a < c :
 
 中文:
-定理 continuousWithinAt_right_of_monotoneOn_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 continuousWithinAt_right_of_monotoneOn_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: by
   have has : a in s := mem_of_mem_nhdsWithin self_mem_Ici hs
   refine tendsto_order.2 ⟨fun b hb => ?_, fun b hb => ?_⟩
@@ -128,7 +128,7 @@ theorem continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
 
 中文:
 定理 continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  结论: [DenselyOrdered β]
+  结论: [稠密序 β]
   证明: by
   refine continuousWithinAt_right_of_monotoneOn_of_exists_between h_mono hs fun b hb => ?_
   rcases (mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset hb).1 hfs with ⟨b', ⟨hab', hbb'⟩, hb'⟩
@@ -158,7 +158,7 @@ theorem continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin
 
 中文:
 定理 continuousWithinAt_right_of_monotoneOn_of_image_mem_nhdsWithin
-  结论: [DenselyOrdered β]
+  结论: [稠密序 β]
   证明: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
     mem_of_superset hfs subset_closure
 
@@ -181,7 +181,7 @@ theorem StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
-  结论: [DenselyOrdered β]
+  结论: [稠密序 β]
   证明: continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin
     (fun _ hx _ hy => (h_mono.le_iff_le hx hy).2) hs hfs
 
@@ -204,7 +204,7 @@ theorem StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_right_of_image_mem_nhdsWithin
-  结论: [DenselyOrdered β] {f : α -> β}
+  结论: [稠密序 β] {f : α -> β}
   证明: h_mono.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs
     (mem_of_superset hfs subset_closure)
 
@@ -228,7 +228,7 @@ theorem StrictMonoOn.continuousWithinAt_right_of_surjOn
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_right_of_surjOn
-  结论: {f : α -> β} {s : Set α} {a : α}
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: h_mono.continuousWithinAt_right_of_exists_between hs fun _ hb =>
     let ⟨c, hcs, hcb⟩ := hfs hb
     ⟨c, hcs, hcb.symm ▸ hb, hcb.le⟩
@@ -253,8 +253,8 @@ theorem StrictMonoOn.continuousWithinAt_left_of_exists_between
     ⟨c, hcs, hca, hcb⟩
 
 中文:
-定理 StrictMonoOn.continuousWithinAt_left_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 StrictMonoOn.continuousWithinAt_left_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: h_mono.dual.continuousWithinAt_right_of_exists_between hs fun b hb =>
     let ⟨c, hcs, hcb, hca⟩ := hfs b hb
     ⟨c, hcs, hca, hcb⟩
@@ -280,8 +280,8 @@ theorem continuousWithinAt_left_of_monotoneOn_of_exists_between
     ⟨c, hcs, hca, hcb⟩
 
 中文:
-定理 continuousWithinAt_left_of_monotoneOn_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 continuousWithinAt_left_of_monotoneOn_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: @continuousWithinAt_right_of_monotoneOn_of_exists_between αᵒᵈ βᵒᵈ _ _ _ _ _ _ f s a hf.dual hs
     fun b hb =>
     let ⟨c, hcs, hcb, hca⟩ := hfs b hb
@@ -308,7 +308,7 @@ theorem continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin
 
 中文:
 定理 continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin
-  结论: [DenselyOrdered β]
+  结论: [稠密序 β]
   证明: @continuousWithinAt_right_of_monotoneOn_of_closure_image_mem_nhdsWithin αᵒᵈ βᵒᵈ _ _ _ _ _ _ _ f s
     a hf.dual hs hfs
 
@@ -331,7 +331,7 @@ theorem continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin
 
 中文:
 定理 continuousWithinAt_left_of_monotoneOn_of_image_mem_nhdsWithin
-  结论: [DenselyOrdered β] {f : α -> β}
+  结论: [稠密序 β] {f : α -> β}
   证明: continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono hs
     (mem_of_superset hfs subset_closure)
 
@@ -353,7 +353,7 @@ theorem StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_left_of_closure_image_mem_nhdsWithin
-  结论: [DenselyOrdered β]
+  结论: [稠密序 β]
   证明: h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin hs hfs
 
 Depends on / 依赖: continuousWithinAt_right_of_closure_image_mem_nhdsWithin, h_mono, h_mono.dual.continuousWithinAt_right_of_closure_image_mem_nhdsWithin
@@ -373,7 +373,7 @@ theorem StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_left_of_image_mem_nhdsWithin
-  结论: [DenselyOrdered β] {f : α -> β}
+  结论: [稠密序 β] {f : α -> β}
   证明: h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin hs hfs
 
 Depends on / 依赖: continuousWithinAt_right_of_image_mem_nhdsWithin, h_mono, h_mono.dual.continuousWithinAt_right_of_image_mem_nhdsWithin
@@ -393,7 +393,7 @@ theorem StrictMonoOn.continuousWithinAt_left_of_surjOn
 
 中文:
 定理 StrictMonoOn.continuousWithinAt_left_of_surjOn
-  结论: {f : α -> β} {s : Set α} {a : α}
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: h_mono.dual.continuousWithinAt_right_of_surjOn hs hfs
 
 Depends on / 依赖: continuousWithinAt_right_of_surjOn, h_mono, h_mono.dual.continuousWithinAt_right_of_surjOn
@@ -414,8 +414,8 @@ theorem StrictMonoOn.continuousAt_of_exists_between
       h_mono.continuousWithinAt_right_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
 
 中文:
-定理 StrictMonoOn.continuousAt_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 StrictMonoOn.continuousAt_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: continuousAt_iff_continuous_left_right.2
     ⟨h_mono.continuousWithinAt_left_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_l,
       h_mono.continuousWithinAt_right_of_exists_between (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
@@ -443,7 +443,7 @@ theorem StrictMonoOn.continuousAt_of_closure_image_mem_nhds
 
 中文:
 定理 StrictMonoOn.continuousAt_of_closure_image_mem_nhds
-  结论: [DenselyOrdered β] {f : α -> β}
+  结论: [稠密序 β] {f : α -> β}
   证明: continuousAt_iff_continuous_left_right.2
     ⟨h_mono.continuousWithinAt_left_of_closure_image_mem_nhdsWithin (mem_nhdsWithin_of_mem_nhds hs)
         (mem_nhdsWithin_of_mem_nhds hfs),
@@ -471,7 +471,7 @@ theorem StrictMonoOn.continuousAt_of_image_mem_nhds
 
 中文:
 定理 StrictMonoOn.continuousAt_of_image_mem_nhds
-  结论: [DenselyOrdered β] {f : α -> β} {s : Set α}
+  结论: [稠密序 β] {f : α -> β} {s : 集合 α}
   证明: h_mono.continuousAt_of_closure_image_mem_nhds hs (mem_of_superset hfs subset_closure)
 
 Depends on / 依赖: continuousAt_of_closure_image_mem_nhds, h_mono, h_mono.continuousAt_of_closure_image_mem_nhds, mem_of_superset, subset_closure
@@ -494,8 +494,8 @@ theorem continuousAt_of_monotoneOn_of_exists_between
         (mem_nhdsWithin_of_mem_nhds hs) hfs_r⟩
 
 中文:
-定理 continuousAt_of_monotoneOn_of_exists_between
-  结论: {f : α -> β} {s : Set α} {a : α}
+定理 continuousAt_of_monotoneOn_of_存在_between
+  结论: {f : α -> β} {s : 集合 α} {a : α}
   证明: continuousAt_iff_continuous_left_right.2
     ⟨continuousWithinAt_left_of_monotoneOn_of_exists_between h_mono (mem_nhdsWithin_of_mem_nhds hs)
         hfs_l,
@@ -527,7 +527,7 @@ theorem continuousAt_of_monotoneOn_of_closure_image_mem_nhds
 
 中文:
 定理 continuousAt_of_monotoneOn_of_closure_image_mem_nhds
-  结论: [DenselyOrdered β] {f : α -> β}
+  结论: [稠密序 β] {f : α -> β}
   证明: continuousAt_iff_continuous_left_right.2
     ⟨continuousWithinAt_left_of_monotoneOn_of_closure_image_mem_nhdsWithin h_mono
         (mem_nhdsWithin_of_mem_nhds hs) (mem_nhdsWithin_of_mem_nhds hfs),
@@ -556,7 +556,7 @@ theorem continuousAt_of_monotoneOn_of_image_mem_nhds
 
 中文:
 定理 continuousAt_of_monotoneOn_of_image_mem_nhds
-  结论: [DenselyOrdered β] {f : α -> β} {s : Set α}
+  结论: [稠密序 β] {f : α -> β} {s : 集合 α}
   证明: continuousAt_of_monotoneOn_of_closure_image_mem_nhds h_mono hs
     (mem_of_superset hfs subset_closure)
 
@@ -579,8 +579,8 @@ univ_mem
       by simp only [image_univ, h_dense.closure_eq, univ_mem]
 
 中文:
-定理 Monotone.continuous_of_denseRange
-  结论: [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
+定理 递增.continuous_of_denseRange
+  结论: [稠密序 β] {f : α -> β} (h_mono : 递增 f)
   证明: continuous_iff_continuousAt.mpr fun a =>
     continuousAt_of_monotoneOn_of_closure_image_mem_nhds (fun _ _ _ _ hxy => h_mono hxy)
 univ_mem
@@ -604,8 +604,8 @@ theorem Monotone.continuous_of_surjective
   proof: h_mono.continuous_of_denseRange h_surj.denseRange
 
 中文:
-定理 Monotone.continuous_of_surjective
-  结论: [DenselyOrdered β] {f : α -> β} (h_mono : Monotone f)
+定理 递增.continuous_of_surjective
+  结论: [稠密序 β] {f : α -> β} (h_mono : 递增 f)
   证明: h_mono.continuous_of_denseRange h_surj.denseRange
 
 Depends on / 依赖: continuous_of_denseRange, denseRange, h_mono, h_mono.continuous_of_denseRange, h_surj, h_surj.denseRange
@@ -647,7 +647,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (e : α ≃o β)
-  结论: Continuous e
+  结论: 连续 e
   证明: by
   rw [‹OrderTopology β›.topology_eq_generate_intervals]; rw [continuous_generateFrom_iff]
   rintro s ⟨a, rfl | rfl⟩
@@ -675,7 +675,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomeomorphClass (α ≃o β) α β
+  签名: 同胚类 (α ≃o β) α β
   定义体: OrderIso.continuous
   inv_continuous e := e.symm.continuous
 

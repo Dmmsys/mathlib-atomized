@@ -35,10 +35,10 @@ structure FinBddDistLat
 
 中文:
 结构 FinBddDistLat
-  参数: extends BddDistLat
-  继承: BddDistLat
+  参数: extends 有界分配格
+  继承: 有界分配格
   公理与运算 (1 个):
-    - [isFintype : Fintype carrier]
+    - [isFintype : 有限类型 carrier]
 -/
 structure FinBddDistLat extends BddDistLat where
   [isFintype : Fintype carrier]
@@ -81,7 +81,7 @@ abbreviation of
 
 中文:
 缩写 of
-  签名: (α : 类型) [DistribLattice α] [BoundedOrder α] [Fintype α]
+  签名: (α : 类型) [Distrib格 α] [有界序 α] [有限类型 α]
   定义体: α
 -/
 abbrev of (α : Type*) [DistribLattice α] [BoundedOrder α] [Fintype α] : FinBddDistLat where
@@ -98,7 +98,7 @@ abbreviation of'
 
 中文:
 缩写 of'
-  签名: (α : 类型) [DistribLattice α] [Fintype α] [Nonempty α]
+  签名: (α : 类型) [Distrib格 α] [有限类型 α] [非空 α]
   定义体: α
   isBoundedOrder := Fintype.toBoundedOrder α
 -/
@@ -119,11 +119,11 @@ structure Hom
     - hom' : BoundedLatticeHom X Y
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : FinBddDistLat.{u})
   公理与运算 (2 个):
     - private(mk) : :
-    - hom' : BoundedLatticeHom X Y
+    - hom' : 有界格态射 X Y
 -/
 structure Hom (X Y : FinBddDistLat.{u}) where
   private mk ::
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category FinBddDistLat.{u}
+  签名: 范畴 FinBddDistLat.{u}
   定义体: Hom X Y
   id X := ⟨BoundedLatticeHom.id X⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory FinBddDistLat (BoundedLatticeHom · ·)
+  签名: 余ncrete范畴 FinBddDistLat (有界格态射 · ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -186,8 +186,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := FinBddDistLat) f
 
 中文:
-缩写 Hom.hom
-  签名: {X Y : FinBddDistLat.{u}} (f : Hom X Y)
+缩写 态射.hom
+  签名: {X Y : FinBddDistLat.{u}} (f : 态射 X Y)
   定义体: ConcreteCategory.hom (C := FinBddDistLat) f
 -/
 abbrev Hom.hom {X Y : FinBddDistLat.{u}} (f : Hom X Y) :=
@@ -203,7 +203,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
+  签名: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
   定义体: ConcreteCategory.ofHom (C := FinBddDistLat) f
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.ofHom, FinBddDistLat
@@ -226,8 +226,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (X Y : FinBddDistLat.{u}) (f : Hom X Y)
+定义 态射.Simps.hom
+  签名: (X Y : FinBddDistLat.{u}) (f : 态射 X Y)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -344,7 +344,7 @@ lemma hom_id
 中文:
 引理 hom_id
   条件: {X : FinBddDistLat}
-  结论: (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _
+  结论: (𝟙 X : X ⟶ X).hom = 有界格态射.id _
   证明: rfl
 -/
 lemma hom_id {X : FinBddDistLat} : (𝟙 X : X ⟶ X).hom = BoundedLatticeHom.id _ := rfl
@@ -444,7 +444,7 @@ lemma hom_ofHom
 
 中文:
 引理 hom_ofHom
-  结论: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
+  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
   证明: rfl
 
 @[simp]
@@ -486,7 +486,7 @@ lemma ofHom_id
 
 中文:
 引理 ofHom_id
-  条件: {X : 类型u} [DistribLattice X] [BoundedOrder X] [Fintype X]
+  条件: {X : 类型u} [Distrib格 X] [有界序 X] [有限类型 X]
   证明: rfl
 
 @[simp]
@@ -505,7 +505,7 @@ lemma ofHom_comp
 
 中文:
 引理 ofHom_comp
-  结论: {X Y Z : 类型u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
+  结论: {X Y Z : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
   证明: rfl
 -/
 lemma ofHom_comp {X Y Z : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
@@ -524,7 +524,7 @@ lemma ofHom_apply
 
 中文:
 引理 ofHom_apply
-  结论: {X Y : 类型u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
+  结论: {X Y : 类型u} [Distrib格 X] [有界序 X] [有限类型 X] [Distrib格 Y]
   证明: rfl
 -/
 lemma ofHom_apply {X Y : Type u} [DistribLattice X] [BoundedOrder X] [Fintype X] [DistribLattice Y]
@@ -582,7 +582,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited FinBddDistLat
+  签名: 可居 FinBddDistLat
   定义体: ⟨of PUnit⟩
 -/
 instance : Inhabited FinBddDistLat :=
@@ -599,7 +599,7 @@ instance hasForgetToBddDistLat
 
 中文:
 实例 hasForgetToBddDistLat
-  签名: : HasForget₂ FinBddDistLat BddDistLat where
+  签名: : 有Forget₂ FinBddDistLat 有界分配格 where
   定义体: .of X
   forget₂.map f := BddDistLat.ofHom f.hom
 -/
@@ -618,7 +618,7 @@ instance hasForgetToFinPartOrd
 
 中文:
 实例 hasForgetToFinPartOrd
-  签名: : HasForget₂ FinBddDistLat FinPartOrd where
+  签名: : 有Forget₂ FinBddDistLat 有限偏序 where
   定义体: .of X
   forget₂.map f := ConcreteCategory.ofHom (OrderHomClass.toOrderHom f.hom)
 -/
@@ -641,7 +641,7 @@ definition Iso.mk
   inv_hom_id := by ext; exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
+定义 同构.mk
   签名: {α β : FinBddDistLat.{u}} (e : α.carrier ≃o β.carrier)
   定义体: ofHom e
   inv := ofHom e.symm

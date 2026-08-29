@@ -38,8 +38,8 @@ zero_ne_one
       _ = 1 := invOf_mul_self
 
 中文:
-定理 Invertible.ne_zero
-  条件: [MulZeroOneClass α] (a : α) [Nontrivial α] [Invertible a]
+定理 可逆.ne_zero
+  条件: [乘零幺类 α] (a : α) [非平凡 α] [可逆 a]
   结论: a != 0
   证明: fun ha =>
 zero_ne_one
@@ -75,8 +75,8 @@ theorem Ring.inverse_invertible
   proof: Ring.inverse_unit (unitOfInvertible _)
 
 中文:
-定理 Ring.inverse_invertible
-  条件: (x : α) [Invertible x]
+定理 环.inverse_invertible
+  条件: (x : α) [可逆 x]
   结论: x⁻¹ʳ = ⅟x
   证明: Ring.inverse_unit (unitOfInvertible _)
 
@@ -126,7 +126,7 @@ theorem invOf_eq_inv
 
 中文:
 定理 invOf_eq_inv
-  条件: (a : α) [Invertible a]
+  条件: (a : α) [可逆 a]
   结论: ⅟a = a⁻¹
   证明: invOf_eq_right_inv (mul_inv_cancel₀ (Invertible.ne_zero a))
 
@@ -151,7 +151,7 @@ theorem inv_mul_cancel_of_invertible
 
 中文:
 定理 inv_mul_cancel_of_invertible
-  条件: (a : α) [Invertible a]
+  条件: (a : α) [可逆 a]
   结论: a⁻¹ * a = 1
   证明: inv_mul_cancel₀ (Invertible.ne_zero a)
 
@@ -174,7 +174,7 @@ theorem mul_inv_cancel_of_invertible
 
 中文:
 定理 mul_inv_cancel_of_invertible
-  条件: (a : α) [Invertible a]
+  条件: (a : α) [可逆 a]
   结论: a * a⁻¹ = 1
   证明: mul_inv_cancel₀ (Invertible.ne_zero a)
 
@@ -195,7 +195,7 @@ instance invertibleInv
 
 中文:
 实例 invertibleInv
-  签名: {a : α} [Invertible a]
+  签名: {a : α} [可逆 a]
   定义体: ⟨a, by simp, by simp⟩
 
 @[simp]
@@ -217,7 +217,7 @@ theorem div_mul_cancel_of_invertible
 
 中文:
 定理 div_mul_cancel_of_invertible
-  条件: (a b : α) [Invertible b]
+  条件: (a b : α) [可逆 b]
   结论: a / b * b = a
   证明: div_mul_cancel₀ a (Invertible.ne_zero b)
 
@@ -242,7 +242,7 @@ theorem mul_div_cancel_of_invertible
 
 中文:
 定理 mul_div_cancel_of_invertible
-  条件: (a b : α) [Invertible b]
+  条件: (a b : α) [可逆 b]
   结论: a * b / b = a
   证明: mul_div_cancel_right₀ a (Invertible.ne_zero b)
 
@@ -265,7 +265,7 @@ theorem div_self_of_invertible
 
 中文:
 定理 div_self_of_invertible
-  条件: (a : α) [Invertible a]
+  条件: (a : α) [可逆 a]
   结论: a / a = 1
   证明: div_self (Invertible.ne_zero a)
 
@@ -286,7 +286,7 @@ definition invertibleDiv
 
 中文:
 定义 invertibleDiv
-  签名: (a b : α) [Invertible a] [Invertible b]
+  签名: (a b : α) [可逆 a] [可逆 b]
   定义体: ⟨b / a, by simp [← mul_div_assoc], by simp [← mul_div_assoc]⟩
 
 Depends on / 依赖: mul_div_assoc
@@ -304,7 +304,7 @@ theorem invOf_div
 
 中文:
 定理 invOf_div
-  条件: (a b : α) [Invertible a] [Invertible b] [Invertible (a / b)]
+  条件: (a b : α) [可逆 a] [可逆 b] [可逆 (a / b)]
   证明: invOf_eq_right_inv (by simp [← mul_div_assoc])
 
 Depends on / 依赖: invOf_eq_right_inv, mul_div_assoc

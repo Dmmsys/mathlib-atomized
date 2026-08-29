@@ -46,7 +46,7 @@ class HasInjectiveDimensionLT
   (no additional axioms)
 
 中文:
-类 HasInjectiveDimensionLT
+类 有InjectiveDimensionLT
   参数: (X : C) (n : 自然数)
   (无附加公理)
 
@@ -92,7 +92,7 @@ lemma subsingleton
 
 中文:
 引理 subsingleton
-  条件: [hX : HasInjectiveDimensionLT X n] (i : 自然数) (hi : n <= i) (Y : C)
+  条件: [hX : 有InjectiveDimensionLT X n] (i : 自然数) (hi : n <= i) (Y : C)
   证明: by
   let := HasExt.standard C
   have := hX.subsingleton' i hi
@@ -146,7 +146,7 @@ lemma Abelian.Ext.eq_zero_of_hasInjectiveDimensionLT
   proof: (HasInjectiveDimensionLT.subsingleton X n i hi Y).elim _ _
 
 中文:
-引理 Abelian.Ext.eq_zero_of_hasInjectiveDimensionLT
+引理 交换.Ext.eq_zero_of_hasInjectiveDimensionLT
   结论: [HasExt.{w} C]
   证明: (HasInjectiveDimensionLT.subsingleton X n i hi Y).elim _ _
 
@@ -198,8 +198,8 @@ lemma Limits.IsZero.hasInjectiveDimensionLT_zero
   rw [← e.comp_mk₀_id]; rw [hX.eq_zero_of_tgt (𝟙 X)]; rw [Ext.mk₀_zero]; rw [Ext.comp_zero]
 
 中文:
-引理 Limits.IsZero.hasInjectiveDimensionLT_zero
-  条件: (hX : IsZero X)
+引理 Limits.是零.hasInjectiveDimensionLT_zero
+  条件: (hX : 是零 X)
   证明: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -225,7 +225,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasInjectiveDimensionLT (0 : C) 0
+  签名: 有InjectiveDimensionLT (0 : C) 0
   定义体: (isZero_zero C).hasInjectiveDimensionLT_zero
 
 Depends on / 依赖: hasInjectiveDimensionLT_zero, isZero_zero
@@ -249,8 +249,8 @@ lemma isZero_of_hasInjectiveDimensionLT_zero
 
 中文:
 引理 isZero_of_hasInjectiveDimensionLT_zero
-  条件: [HasInjectiveDimensionLT X 0]
-  结论: IsZero X
+  条件: [有InjectiveDimensionLT X 0]
+  结论: 是零 X
   证明: by
   let := HasExt.standard C
   rw [IsZero.iff_id_eq_zero]
@@ -277,7 +277,7 @@ lemma hasInjectiveDimensionLT_zero_iff_isZero
 
 中文:
 引理 hasInjectiveDimensionLT_zero_iff_isZero
-  结论: HasInjectiveDimensionLT X 0 ↔ IsZero X
+  结论: 有InjectiveDimensionLT X 0 ↔ 是零 X
   证明: ⟨fun _ => isZero_of_hasInjectiveDimensionLT_zero X, fun h => h.hasInjectiveDimensionLT_zero⟩
 
 Depends on / 依赖: h.hasInjectiveDimensionLT_zero, hasInjectiveDimensionLT_zero, isZero_of_hasInjectiveDimensionLT_zero
@@ -325,7 +325,7 @@ instance [HasInjectiveDimensionLT
   body: hasInjectiveDimensionLT_of_ge X n (n + k) (by lia)
 
 中文:
-实例 [HasInjectiveDimensionLT
+实例 [有InjectiveDimensionLT
   签名: X n] (k
   定义体: hasInjectiveDimensionLT_of_ge X n (n + k) (by lia)
 
@@ -344,7 +344,7 @@ instance [HasInjectiveDimensionLT
   body: hasInjectiveDimensionLT_of_ge X n (k + n) (by lia)
 
 中文:
-实例 [HasInjectiveDimensionLT
+实例 [有InjectiveDimensionLT
   签名: X n] (k
   定义体: hasInjectiveDimensionLT_of_ge X n (k + n) (by lia)
 
@@ -363,7 +363,7 @@ instance [HasInjectiveDimensionLT
   body: inferInstanceAs (HasInjectiveDimensionLT X (n + 1))
 
 中文:
-实例 [HasInjectiveDimensionLT
+实例 [有InjectiveDimensionLT
   签名: X n] :
   定义体: inferInstanceAs (HasInjectiveDimensionLT X (n + 1))
 
@@ -388,8 +388,8 @@ instance [Injective
   · exact e.eq_zero_of_injective
 
 中文:
-实例 [Injective
-  签名: X] : HasInjectiveDimensionLT X 1
+实例 [单射
+  签名: X] : 有InjectiveDimensionLT X 1
   定义体: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -487,8 +487,8 @@ lemma Retract.hasInjectiveDimensionLT
   rw [← x.comp_mk₀_id]; rw [← h.retract]; rw [← Ext.mk₀_comp_mk₀]; rw [← Ext.comp_assoc_of_second_deg_zero]; rw [(x.comp (Ext.mk₀ h.i) (add_zero i)).eq_zero_of_hasInjectiveDimensionLT n hi]; rw [Ext.zero_comp]
 
 中文:
-引理 Retract.hasInjectiveDimensionLT
-  结论: {X Y : C} (h : Retract X Y) (n : 自然数)
+引理 收缩.hasInjectiveDimensionLT
+  结论: {X Y : C} (h : 收缩 X Y) (n : 自然数)
   证明: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -552,7 +552,7 @@ lemma hasInjectiveDimensionLT_X₂
 
 中文:
 引理 hasInjectiveDimensionLT_X₂
-  结论: (h₁ : HasInjectiveDimensionLT S.X₁ n)
+  结论: (h₁ : 有InjectiveDimensionLT S.X₁ n)
   证明: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -590,7 +590,7 @@ lemma hasInjectiveDimensionLT_X₁
 
 中文:
 引理 hasInjectiveDimensionLT_X₁
-  结论: (h₁ : HasInjectiveDimensionLT S.X₃ n)
+  结论: (h₁ : 有InjectiveDimensionLT S.X₃ n)
   证明: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -629,7 +629,7 @@ lemma hasInjectiveDimensionLT_X₃
 
 中文:
 引理 hasInjectiveDimensionLT_X₃
-  结论: (h₂ : HasInjectiveDimensionLT S.X₂ n)
+  结论: (h₂ : 有InjectiveDimensionLT S.X₂ n)
   证明: by
   let := HasExt.standard C
   rw [hasInjectiveDimensionLT_iff]
@@ -661,7 +661,7 @@ lemma hasInjectiveDimensionLT_X₃_iff
 
 中文:
 引理 hasInjectiveDimensionLT_X₃_iff
-  条件: (n : 自然数) (h₂ : Injective S.X₂)
+  条件: (n : 自然数) (h₂ : 单射 S.X₂)
   证明: ⟨fun _ => hS.hasInjectiveDimensionLT_X₁ (n + 1) inferInstance inferInstance,
     fun _ => hS.hasInjectiveDimensionLT_X₃ (n + 1) inferInstance inferInstance⟩
 
@@ -699,7 +699,7 @@ lemma hasInjectiveDimensionLT_of_enoughProjectives
 
 中文:
 引理 hasInjectiveDimensionLT_of_enoughProjectives
-  结论: [HasExt.{w} C] [EnoughProjectives C] (X : C)
+  结论: [HasExt.{w} C] [有足够投射 C] (X : C)
   证明: by
   suffices forall ⦃d : Nat⦄ ⦃Y : C⦄ (e : Ext Y X d) (k : Nat), d = n + k -> e = 0 from
     HasInjectiveDimensionLT.mk (fun i hi Y e => by
@@ -803,8 +803,8 @@ lemma Retract.injectiveDimension_le
     exact h.hasInjectiveDimensionLT i)
 
 中文:
-引理 Retract.injectiveDimension_le
-  条件: {X Y : C} (h : Retract X Y)
+引理 收缩.injectiveDimension_le
+  条件: {X Y : C} (h : 收缩 X Y)
   证明: sInf_le_sInf_of_subset_insert_top (fun n hn => by
     simp only [Set.mem_ofPred_eq, not_top_lt, IsEmpty.forall_iff, implies_true,
       Set.insert_eq_of_mem] at hn ⊢

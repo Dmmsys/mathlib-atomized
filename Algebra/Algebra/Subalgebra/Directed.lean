@@ -47,7 +47,7 @@ theorem coe_iSup_of_directed
 中文:
 定理 coe_iSup_of_directed
   条件: (dir : Directed (· <= ·) K)
-  结论: ↑(iSup K) = ⋃ i, (K i : Set A)
+  结论: ↑(iSup K) = ⋃ i, (K i : 集合 A)
   证明: by
   let s : Subalgebra R A :=
     { __ := Subsemiring.copy _ _ (Subsemiring.coe_iSup_of_directed dir).symm
@@ -79,7 +79,7 @@ theorem isMulCommutative_iSup
 
 中文:
 定理 isMulCommutative_iSup
-  结论: {S : ι -> Subalgebra R A}
+  结论: {S : ι -> 子代数 R A}
   证明: by
   simpa [isMulCommutative_iff, ← SetLike.mem_coe, coe_iSup_of_directed dir,
     Subsemiring.coe_iSup_of_directed dir] using Subsemiring.isMulCommutative_iSup dir
@@ -102,7 +102,7 @@ instance instIsMulCommutative_iSup
 
 中文:
 实例 instIsMulCommutative_iSup
-  签名: [Preorder ι] [IsDirectedOrder ι]
+  签名: [预序 ι] [IsDirectedOrder ι]
   定义体: isMulCommutative_iSup S.monotone.directed_le
 
 Depends on / 依赖: S.monotone.directed_le, directed_le, isMulCommutative_iSup, monotone

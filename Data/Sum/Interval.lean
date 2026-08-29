@@ -42,7 +42,7 @@ definition sumLift₂
 
 中文:
 定义 sumLift₂
-  签名: : 对任意 (_ : α₁ oplus α₂) (_ : β₁ oplus β₂), Finset (γ₁ oplus γ₂)
+  签名: : 对任意 (_ : α₁ oplus α₂) (_ : β₁ oplus β₂), 有限集 (γ₁ oplus γ₂)
 -/
 def sumLift₂ : forall (_ : α₁ oplus α₂) (_ : β₁ oplus β₂), Finset (γ₁ oplus γ₂)
   | inl a, inl b => (f a b).map Embedding.inl
@@ -258,7 +258,7 @@ definition sumLexLift
 
 中文:
 定义 sumLexLift
-  签名: : α₁ oplus α₂ -> β₁ oplus β₂ -> Finset (γ₁ oplus γ₂)
+  签名: : α₁ oplus α₂ -> β₁ oplus β₂ -> 有限集 (γ₁ oplus γ₂)
 -/
 def sumLexLift : α₁ oplus α₂ -> β₁ oplus β₂ -> Finset (γ₁ oplus γ₂)
   | inl a, inl b => (f₁ a b).map Embedding.inl
@@ -578,7 +578,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder (α oplus β) where
+  签名: : 局部有限序 (α oplus β) where
   定义体: sumLift₂ Icc Icc
   finsetIco := sumLift₂ Ico Ico
   finsetIoc := sumLift₂ Ioc Ioc
@@ -610,7 +610,7 @@ theorem Icc_inl_inl
 
 中文:
 定理 Icc_inl_inl
-  结论: Icc (inl a₁ : α oplus β) (inl a₂) = (Icc a₁ a₂).map Embedding.inl
+  结论: 闭区间 (inl a₁ : α oplus β) (inl a₂) = (闭区间 a₁ a₂).map 嵌入.inl
   证明: rfl
 -/
 theorem Icc_inl_inl : Icc (inl a₁ : α oplus β) (inl a₂) = (Icc a₁ a₂).map Embedding.inl :=
@@ -626,7 +626,7 @@ theorem Ico_inl_inl
 
 中文:
 定理 Ico_inl_inl
-  结论: Ico (inl a₁ : α oplus β) (inl a₂) = (Ico a₁ a₂).map Embedding.inl
+  结论: 左闭右开区间 (inl a₁ : α oplus β) (inl a₂) = (左闭右开区间 a₁ a₂).map 嵌入.inl
   证明: rfl
 -/
 theorem Ico_inl_inl : Ico (inl a₁ : α oplus β) (inl a₂) = (Ico a₁ a₂).map Embedding.inl :=
@@ -642,7 +642,7 @@ theorem Ioc_inl_inl
 
 中文:
 定理 Ioc_inl_inl
-  结论: Ioc (inl a₁ : α oplus β) (inl a₂) = (Ioc a₁ a₂).map Embedding.inl
+  结论: 左开右闭区间 (inl a₁ : α oplus β) (inl a₂) = (左开右闭区间 a₁ a₂).map 嵌入.inl
   证明: rfl
 -/
 theorem Ioc_inl_inl : Ioc (inl a₁ : α oplus β) (inl a₂) = (Ioc a₁ a₂).map Embedding.inl :=
@@ -660,7 +660,7 @@ theorem Ioo_inl_inl
 
 中文:
 定理 Ioo_inl_inl
-  结论: Ioo (inl a₁ : α oplus β) (inl a₂) = (Ioo a₁ a₂).map Embedding.inl
+  结论: 开区间 (inl a₁ : α oplus β) (inl a₂) = (开区间 a₁ a₂).map 嵌入.inl
   证明: rfl
 
 @[simp]
@@ -681,7 +681,7 @@ theorem Icc_inl_inr
 
 中文:
 定理 Icc_inl_inr
-  结论: Icc (inl a₁) (inr b₂) = ∅
+  结论: 闭区间 (inl a₁) (inr b₂) = ∅
   证明: rfl
 
 @[simp]
@@ -702,7 +702,7 @@ theorem Ico_inl_inr
 
 中文:
 定理 Ico_inl_inr
-  结论: Ico (inl a₁) (inr b₂) = ∅
+  结论: 左闭右开区间 (inl a₁) (inr b₂) = ∅
   证明: rfl
 
 @[simp]
@@ -723,7 +723,7 @@ theorem Ioc_inl_inr
 
 中文:
 定理 Ioc_inl_inr
-  结论: Ioc (inl a₁) (inr b₂) = ∅
+  结论: 左开右闭区间 (inl a₁) (inr b₂) = ∅
   证明: rfl
 
 @[simp]
@@ -744,7 +744,7 @@ theorem Ioo_inl_inr
 
 中文:
 定理 Ioo_inl_inr
-  结论: Ioo (inl a₁) (inr b₂) = ∅
+  结论: 开区间 (inl a₁) (inr b₂) = ∅
   证明: rfl
 
 @[simp]
@@ -765,7 +765,7 @@ theorem Icc_inr_inl
 
 中文:
 定理 Icc_inr_inl
-  结论: Icc (inr b₁) (inl a₂) = ∅
+  结论: 闭区间 (inr b₁) (inl a₂) = ∅
   证明: rfl
 
 @[simp]
@@ -786,7 +786,7 @@ theorem Ico_inr_inl
 
 中文:
 定理 Ico_inr_inl
-  结论: Ico (inr b₁) (inl a₂) = ∅
+  结论: 左闭右开区间 (inr b₁) (inl a₂) = ∅
   证明: rfl
 
 @[simp]
@@ -807,7 +807,7 @@ theorem Ioc_inr_inl
 
 中文:
 定理 Ioc_inr_inl
-  结论: Ioc (inr b₁) (inl a₂) = ∅
+  结论: 左开右闭区间 (inr b₁) (inl a₂) = ∅
   证明: rfl
 
 @[simp]
@@ -826,7 +826,7 @@ theorem Ioo_inr_inl
 
 中文:
 定理 Ioo_inr_inl
-  结论: Ioo (inr b₁) (inl a₂) = ∅
+  结论: 开区间 (inr b₁) (inl a₂) = ∅
   证明: rfl
 -/
 theorem Ioo_inr_inl : Ioo (inr b₁) (inl a₂) = ∅ :=
@@ -842,7 +842,7 @@ theorem Icc_inr_inr
 
 中文:
 定理 Icc_inr_inr
-  结论: Icc (inr b₁ : α oplus β) (inr b₂) = (Icc b₁ b₂).map Embedding.inr
+  结论: 闭区间 (inr b₁ : α oplus β) (inr b₂) = (闭区间 b₁ b₂).map 嵌入.inr
   证明: rfl
 -/
 theorem Icc_inr_inr : Icc (inr b₁ : α oplus β) (inr b₂) = (Icc b₁ b₂).map Embedding.inr :=
@@ -858,7 +858,7 @@ theorem Ico_inr_inr
 
 中文:
 定理 Ico_inr_inr
-  结论: Ico (inr b₁ : α oplus β) (inr b₂) = (Ico b₁ b₂).map Embedding.inr
+  结论: 左闭右开区间 (inr b₁ : α oplus β) (inr b₂) = (左闭右开区间 b₁ b₂).map 嵌入.inr
   证明: rfl
 -/
 theorem Ico_inr_inr : Ico (inr b₁ : α oplus β) (inr b₂) = (Ico b₁ b₂).map Embedding.inr :=
@@ -874,7 +874,7 @@ theorem Ioc_inr_inr
 
 中文:
 定理 Ioc_inr_inr
-  结论: Ioc (inr b₁ : α oplus β) (inr b₂) = (Ioc b₁ b₂).map Embedding.inr
+  结论: 左开右闭区间 (inr b₁ : α oplus β) (inr b₂) = (左开右闭区间 b₁ b₂).map 嵌入.inr
   证明: rfl
 -/
 theorem Ioc_inr_inr : Ioc (inr b₁ : α oplus β) (inr b₂) = (Ioc b₁ b₂).map Embedding.inr :=
@@ -890,7 +890,7 @@ theorem Ioo_inr_inr
 
 中文:
 定理 Ioo_inr_inr
-  结论: Ioo (inr b₁ : α oplus β) (inr b₂) = (Ioo b₁ b₂).map Embedding.inr
+  结论: 开区间 (inr b₁ : α oplus β) (inr b₂) = (开区间 b₁ b₂).map 嵌入.inr
   证明: rfl
 -/
 theorem Ioo_inr_inr : Ioo (inr b₁ : α oplus β) (inr b₂) = (Ioo b₁ b₂).map Embedding.inr :=
@@ -940,7 +940,7 @@ theorem Iic_inl
 
 中文:
 定理 Iic_inl
-  结论: Iic (inl a : α oplus β) = (Iic a).map Embedding.inl
+  结论: 左无界右闭区间 (inl a : α oplus β) = (左无界右闭区间 a).map 嵌入.inl
   证明: rfl
 -/
 theorem Iic_inl : Iic (inl a : α oplus β) = (Iic a).map Embedding.inl := rfl
@@ -954,7 +954,7 @@ theorem Iic_inr
 
 中文:
 定理 Iic_inr
-  结论: Iic (inr b : α oplus β) = (Iic b).map Embedding.inr
+  结论: 左无界右闭区间 (inr b : α oplus β) = (左无界右闭区间 b).map 嵌入.inr
   证明: rfl
 -/
 theorem Iic_inr : Iic (inr b : α oplus β) = (Iic b).map Embedding.inr := rfl
@@ -968,7 +968,7 @@ theorem Iio_inl
 
 中文:
 定理 Iio_inl
-  结论: Iio (inl a : α oplus β) = (Iio a).map Embedding.inl
+  结论: 左无界右开区间 (inl a : α oplus β) = (左无界右开区间 a).map 嵌入.inl
   证明: rfl
 -/
 theorem Iio_inl : Iio (inl a : α oplus β) = (Iio a).map Embedding.inl := rfl
@@ -982,7 +982,7 @@ theorem Iio_inr
 
 中文:
 定理 Iio_inr
-  结论: Iio (inr b : α oplus β) = (Iio b).map Embedding.inr
+  结论: 左无界右开区间 (inr b : α oplus β) = (左无界右开区间 b).map 嵌入.inr
   证明: rfl
 -/
 theorem Iio_inr : Iio (inr b : α oplus β) = (Iio b).map Embedding.inr := rfl
@@ -1031,7 +1031,7 @@ theorem Ici_inl
 
 中文:
 定理 Ici_inl
-  结论: Ici (inl a : α oplus β) = (Ici a).map Embedding.inl
+  结论: 左闭右无界区间 (inl a : α oplus β) = (左闭右无界区间 a).map 嵌入.inl
   证明: rfl
 -/
 theorem Ici_inl : Ici (inl a : α oplus β) = (Ici a).map Embedding.inl := rfl
@@ -1045,7 +1045,7 @@ theorem Ici_inr
 
 中文:
 定理 Ici_inr
-  结论: Ici (inr b : α oplus β) = (Ici b).map Embedding.inr
+  结论: 左闭右无界区间 (inr b : α oplus β) = (左闭右无界区间 b).map 嵌入.inr
   证明: rfl
 -/
 theorem Ici_inr : Ici (inr b : α oplus β) = (Ici b).map Embedding.inr := rfl
@@ -1059,7 +1059,7 @@ theorem Ioi_inl
 
 中文:
 定理 Ioi_inl
-  结论: Ioi (inl a : α oplus β) = (Ioi a).map Embedding.inl
+  结论: 左开右无界区间 (inl a : α oplus β) = (左开右无界区间 a).map 嵌入.inl
   证明: rfl
 -/
 theorem Ioi_inl : Ioi (inl a : α oplus β) = (Ioi a).map Embedding.inl := rfl
@@ -1073,7 +1073,7 @@ theorem Ioi_inr
 
 中文:
 定理 Ioi_inr
-  结论: Ioi (inr b : α oplus β) = (Ioi b).map Embedding.inr
+  结论: 左开右无界区间 (inr b : α oplus β) = (左开右无界区间 b).map 嵌入.inr
   证明: rfl
 -/
 theorem Ioi_inr : Ioi (inr b : α oplus β) = (Ioi b).map Embedding.inr := rfl
@@ -1104,7 +1104,7 @@ instance locallyFiniteOrder
 
 中文:
 实例 locallyFiniteOrder
-  签名: : LocallyFiniteOrder (α oplusₗ β) where
+  签名: : 局部有限序 (α oplusₗ β) where
   定义体: (sumLexLift Icc Icc (fun a _ => Ici a) (fun _ => Iic) (ofLex a) (ofLex b)).map toLex.toEmbedding
   finsetIco a b :=
     (sumLexLift Ico Ico (fun a _ => Ici a) (fun _ => Iio) (ofLex a) (ofLex b)).map toLex.toEmbedding
@@ -1222,7 +1222,7 @@ lemma Icc_inl_inr
 
 中文:
 引理 Icc_inl_inr
-  结论: Icc (inlₗ a) (inrₗ b) = ((Ici a).disjSum (Iic b)).map toLex.toEmbedding
+  结论: 闭区间 (inlₗ a) (inrₗ b) = ((左闭右无界区间 a).disjSum (左无界右闭区间 b)).map toLex.toEmbedding
   证明: rfl
 
 @[simp]
@@ -1242,7 +1242,7 @@ lemma Ico_inl_inr
 
 中文:
 引理 Ico_inl_inr
-  结论: Ico (inlₗ a) (inrₗ b) = ((Ici a).disjSum (Iio b)).map toLex.toEmbedding
+  结论: 左闭右开区间 (inlₗ a) (inrₗ b) = ((左闭右无界区间 a).disjSum (左无界右开区间 b)).map toLex.toEmbedding
   证明: rfl
 
 @[simp]
@@ -1262,7 +1262,7 @@ lemma Ioc_inl_inr
 
 中文:
 引理 Ioc_inl_inr
-  结论: Ioc (inlₗ a) (inrₗ b) = ((Ioi a).disjSum (Iic b)).map toLex.toEmbedding
+  结论: 左开右闭区间 (inlₗ a) (inrₗ b) = ((左开右无界区间 a).disjSum (左无界右闭区间 b)).map toLex.toEmbedding
   证明: rfl
 
 @[simp]
@@ -1282,7 +1282,7 @@ lemma Ioo_inl_inr
 
 中文:
 引理 Ioo_inl_inr
-  结论: Ioo (inlₗ a) (inrₗ b) = ((Ioi a).disjSum (Iio b)).map toLex.toEmbedding
+  结论: 开区间 (inlₗ a) (inrₗ b) = ((左开右无界区间 a).disjSum (左无界右开区间 b)).map toLex.toEmbedding
   证明: rfl
 
 @[simp]
@@ -1302,7 +1302,7 @@ lemma Icc_inr_inl
 
 中文:
 引理 Icc_inr_inl
-  结论: Icc (inrₗ b) (inlₗ a) = ∅
+  结论: 闭区间 (inrₗ b) (inlₗ a) = ∅
   证明: rfl
 
 @[simp]
@@ -1322,7 +1322,7 @@ lemma Ico_inr_inl
 
 中文:
 引理 Ico_inr_inl
-  结论: Ico (inrₗ b) (inlₗ a) = ∅
+  结论: 左闭右开区间 (inrₗ b) (inlₗ a) = ∅
   证明: rfl
 
 @[simp]
@@ -1342,7 +1342,7 @@ lemma Ioc_inr_inl
 
 中文:
 引理 Ioc_inr_inl
-  结论: Ioc (inrₗ b) (inlₗ a) = ∅
+  结论: 左开右闭区间 (inrₗ b) (inlₗ a) = ∅
   证明: rfl
 
 @[simp]
@@ -1360,7 +1360,7 @@ lemma Ioo_inr_inl
 
 中文:
 引理 Ioo_inr_inl
-  结论: Ioo (inrₗ b) (inlₗ a) = ∅
+  结论: 开区间 (inrₗ b) (inlₗ a) = ∅
   证明: rfl
 -/
 lemma Ioo_inr_inl : Ioo (inrₗ b) (inlₗ a) = ∅ := rfl
@@ -1495,7 +1495,7 @@ lemma Iic_inl
 
 中文:
 引理 Iic_inl
-  结论: Iic (inlₗ a : α oplusₗ β) = (Iic a).map (Embedding.inl.trans toLex.toEmbedding)
+  结论: 左无界右闭区间 (inlₗ a : α oplusₗ β) = (左无界右闭区间 a).map (嵌入.inl.trans toLex.toEmbedding)
   证明: rfl
 -/
 lemma Iic_inl : Iic (inlₗ a : α oplusₗ β) = (Iic a).map (Embedding.inl.trans toLex.toEmbedding) := rfl
@@ -1509,7 +1509,7 @@ lemma Iic_inr
 
 中文:
 引理 Iic_inr
-  结论: Iic (inrₗ b : α oplusₗ β) = (Finset.univ.disjSum (Iic b)).map toLex.toEmbedding
+  结论: 左无界右闭区间 (inrₗ b : α oplusₗ β) = (有限集.univ.disjSum (左无界右闭区间 b)).map toLex.toEmbedding
   证明: rfl
 -/
 lemma Iic_inr : Iic (inrₗ b : α oplusₗ β) = (Finset.univ.disjSum (Iic b)).map toLex.toEmbedding := rfl
@@ -1524,7 +1524,7 @@ lemma Iio_inl
 
 中文:
 引理 Iio_inl
-  结论: Iio (inlₗ a : α oplusₗ β) = (Iio a).map (Embedding.inl.trans toLex.toEmbedding)
+  结论: 左无界右开区间 (inlₗ a : α oplusₗ β) = (左无界右开区间 a).map (嵌入.inl.trans toLex.toEmbedding)
   证明: rfl
 -/
 lemma Iio_inl : Iio (inlₗ a : α oplusₗ β) = (Iio a).map (Embedding.inl.trans toLex.toEmbedding) := rfl
@@ -1538,7 +1538,7 @@ lemma Iio_inr
 
 中文:
 引理 Iio_inr
-  结论: Iio (inrₗ b : α oplusₗ β) = (Finset.univ.disjSum (Iio b)).map toLex.toEmbedding
+  结论: 左无界右开区间 (inrₗ b : α oplusₗ β) = (有限集.univ.disjSum (左无界右开区间 b)).map toLex.toEmbedding
   证明: rfl
 
 Depends on / 依赖: NormalWord, fstIdx_ne
@@ -1608,7 +1608,7 @@ lemma Ici_inl
 
 中文:
 引理 Ici_inl
-  结论: Ici (inlₗ a : α oplusₗ β) = ((Ici a).disjSum Finset.univ).map toLex.toEmbedding
+  结论: 左闭右无界区间 (inlₗ a : α oplusₗ β) = ((左闭右无界区间 a).disjSum 有限集.univ).map toLex.toEmbedding
   证明: rfl
 -/
 lemma Ici_inl : Ici (inlₗ a : α oplusₗ β) = ((Ici a).disjSum Finset.univ).map toLex.toEmbedding := rfl
@@ -1622,7 +1622,7 @@ lemma Ici_inr
 
 中文:
 引理 Ici_inr
-  结论: Ici (inrₗ b : α oplusₗ β) = (Ici b).map (Embedding.inr.trans toLex.toEmbedding)
+  结论: 左闭右无界区间 (inrₗ b : α oplusₗ β) = (左闭右无界区间 b).map (嵌入.inr.trans toLex.toEmbedding)
   证明: rfl
 -/
 lemma Ici_inr : Ici (inrₗ b : α oplusₗ β) = (Ici b).map (Embedding.inr.trans toLex.toEmbedding) := rfl
@@ -1637,7 +1637,7 @@ lemma Ioi_inl
 
 中文:
 引理 Ioi_inl
-  结论: Ioi (inlₗ a : α oplusₗ β) = ((Ioi a).disjSum Finset.univ).map toLex.toEmbedding
+  结论: 左开右无界区间 (inlₗ a : α oplusₗ β) = ((左开右无界区间 a).disjSum 有限集.univ).map toLex.toEmbedding
   证明: rfl
 -/
 lemma Ioi_inl : Ioi (inlₗ a : α oplusₗ β) = ((Ioi a).disjSum Finset.univ).map toLex.toEmbedding := rfl
@@ -1651,7 +1651,7 @@ lemma Ioi_inr
 
 中文:
 引理 Ioi_inr
-  结论: Ioi (inrₗ b : α oplusₗ β) = (Ioi b).map (Embedding.inr.trans toLex.toEmbedding)
+  结论: 左开右无界区间 (inrₗ b : α oplusₗ β) = (左开右无界区间 b).map (嵌入.inr.trans toLex.toEmbedding)
   证明: rfl
 -/
 lemma Ioi_inr : Ioi (inrₗ b : α oplusₗ β) = (Ioi b).map (Embedding.inr.trans toLex.toEmbedding) := rfl

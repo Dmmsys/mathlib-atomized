@@ -246,9 +246,9 @@ lemma Prop.forall
   proof: ⟨fun h => ⟨h _, h _⟩, by rintro ⟨h₁, h₀⟩ p; by_cases hp : p <;> simp only [hp] <;> assumption⟩
 
 中文:
-引理 Prop.forall
+引理 命题.对任意
   条件: {f : 命题 -> 命题}
-  结论: (对任意 p, f p) ↔ f True ∧ f False
+  结论: (对任意 p, f p) ↔ f 真 ∧ f 假
   证明: ⟨fun h => ⟨h _, h _⟩, by rintro ⟨h₁, h₀⟩ p; by_cases hp : p <;> simp only [hp] <;> assumption⟩
 -/
 lemma Prop.forall {f : Prop -> Prop} : (forall p, f p) ↔ f True ∧ f False :=
@@ -265,9 +265,9 @@ lemma Prop.exists
     by rintro (h | h) <;> exact ⟨_, h⟩⟩
 
 中文:
-引理 Prop.exists
+引理 命题.存在
   条件: {f : 命题 -> 命题}
-  结论: (存在 p, f p) ↔ f True ∨ f False
+  结论: (存在 p, f p) ↔ f 真 ∨ f 假
   证明: ⟨fun ⟨p, h⟩ => by refine (em p).imp ?_ ?_ <;> intro H <;> convert! h <;> simp [H],
     by rintro (h | h) <;> exact ⟨_, h⟩⟩
 

@@ -55,7 +55,7 @@ refine .of_isLittleO this.congr' ?_ (Eventually.of_forall fun _ => mul_one _)
 中文:
 定理 hasStrictDerivAt_inv
   条件: (hx : x != 0)
-  结论: HasStrictDerivAt Inv.inv (-(x ^ 2)⁻¹) x
+  结论: HasStrictDerivAt 取逆.inv (-(x ^ 2)⁻¹) x
   证明: by
   suffices
     (fun p : 𝕜 × 𝕜 => (p.1 - p.2) * ((x * x)⁻¹ - (p.1 * p.2)⁻¹)) =o[𝓝 (x, x)] fun p =>
@@ -92,7 +92,7 @@ theorem hasDerivAt_inv
 中文:
 定理 hasDerivAt_inv
   条件: (x_ne_zero : x != 0)
-  结论: HasDerivAt (fun y => y⁻¹) (-(x ^ 2)⁻¹) x
+  结论: 在点处可导 (fun y => y⁻¹) (-(x ^ 2)⁻¹) x
   证明: (hasStrictDerivAt_inv x_ne_zero).hasDerivAt
 
 Depends on / 依赖: hasDerivAt, hasStrictDerivAt_inv, x_ne_zero
@@ -110,7 +110,7 @@ theorem hasDerivWithinAt_inv
 
 中文:
 定理 hasDerivWithinAt_inv
-  条件: (x_ne_zero : x != 0) (s : Set 𝕜)
+  条件: (x_ne_zero : x != 0) (s : 集合 𝕜)
   证明: (hasDerivAt_inv x_ne_zero).hasDerivWithinAt
 
 Depends on / 依赖: hasDerivAt_inv, hasDerivWithinAt, x_ne_zero
@@ -361,8 +361,8 @@ theorem HasDerivAt.inv
   exact hc.inv hx
 
 中文:
-定理 HasDerivAt.inv
-  条件: (hc : HasDerivAt c c' x) (hx : c x != 0)
+定理 在点处可导.inv
+  条件: (hc : 在点处可导 c c' x) (hx : c x != 0)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.inv hx
@@ -587,8 +587,8 @@ theorem HasDerivAt.fun_div
   exact hc.div hd hx
 
 中文:
-定理 HasDerivAt.fun_div
-  条件: (hc : HasDerivAt c c' x) (hd : HasDerivAt d d' x) (hx : d x != 0)
+定理 在点处可导.fun_div
+  条件: (hc : 在点处可导 c c' x) (hd : 在点处可导 d d' x) (hx : d x != 0)
   证明: by
   rw [← hasDerivWithinAt_univ] at *
   exact hc.div hd hx
@@ -609,8 +609,8 @@ theorem HasDerivAt.div
   proof: hc.fun_div hd hx
 
 中文:
-定理 HasDerivAt.div
-  条件: (hc : HasDerivAt c c' x) (hd : HasDerivAt d d' x) (hx : d x != 0)
+定理 在点处可导.div
+  条件: (hc : 在点处可导 c c' x) (hd : 在点处可导 d d' x) (hx : d x != 0)
   证明: hc.fun_div hd hx
 
 Depends on / 依赖: fun_div, hc.fun_div
@@ -721,8 +721,8 @@ theorem Differentiable.div
   proof: fun x => (hc x).div (hd x) (hx x)
 
 中文:
-定理 Differentiable.div
-  条件: (hc : Differentiable 𝕜 c) (hd : Differentiable 𝕜 d) (hx : 对任意 x, d x != 0)
+定理 可微.div
+  条件: (hc : 可微 𝕜 c) (hd : 可微 𝕜 d) (hx : 对任意 x, d x != 0)
   证明: fun x => (hc x).div (hd x) (hx x)
 -/
 theorem Differentiable.div (hc : Differentiable 𝕜 c) (hd : Differentiable 𝕜 d) (hx : forall x, d x != 0) :

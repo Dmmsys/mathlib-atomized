@@ -31,7 +31,7 @@ definition nonempty_to_inhabited
 
 中文:
 定义 nonempty_to_inhabited
-  签名: (α : Sort*) (_ : Nonempty α)
+  签名: (α : 类型层*) (_ : 非空 α)
   定义体: Inhabited.mk (Classical.ofNonempty)
 
 Depends on / 依赖: Classical, Classical.ofNonempty, Inhabited, Inhabited.mk, ofNonempty
@@ -52,7 +52,7 @@ definition nonempty_prop_to_inhabited
 
 中文:
 定义 nonempty_prop_to_inhabited
-  签名: (α : 命题) (α_nonempty : Nonempty α)
+  签名: (α : 命题) (α_nonempty : 非空 α)
   定义体: Inhabited.mk Nonempty.elim α_nonempty id
 
 Depends on / 依赖: Inhabited, Inhabited.mk, Nonempty, Nonempty.elim
@@ -85,7 +85,7 @@ definition evalInhabit
 
 中文:
 定义 evalInhabit
-  签名: (goal : MVarId) (h_name : Option Ident) (term : Syntax)
+  签名: (goal : MVarId) (h_name : 选项类型 Ident) (term : Syntax)
   定义体: do
   goal.withContext do
     let e ← Tactic.elabTerm term none

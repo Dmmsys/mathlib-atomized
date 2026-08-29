@@ -33,12 +33,12 @@ structure IsAddQuotientCoveringMap
     - disjoint((e : E)) : exists U in 𝓝 e, forall g : G, ((g +ᵥ ·) '' U inter U).Nonempty -> g = 0
 
 中文:
-结构 IsAddQuotientCoveringMap
-  参数: (G) [AddGroup G] [AddAction G E]
-  继承: IsQuotientMap f, ContinuousConstVAdd G E
+结构 是加法QuotientCovering映射
+  参数: (G) [加法群 G] [加法作用 G E]
+  继承: 是商映射 f, 连续常数向量加法 G E
   公理与运算 (2 个):
-    - apply_eq_iff_mem_orbit({e₁ e₂}) : f e₁ = f e₂ ↔ e₁ in AddAction.orbit G e₂
-    - disjoint((e : E)) : 存在 U in 𝓝 e, 对任意 g : G, ((g +ᵥ ·) '' U inter U).Nonempty -> g = 0
+    - apply_eq_iff_mem_orbit({e₁ e₂}) : f e₁ = f e₂ ↔ e₁ in 加法作用.orbit G e₂
+    - disjoint((e : E)) : 存在 U in 𝓝 e, 对任意 g : G, ((g +ᵥ ·) '' U inter U).非空 -> g = 0
 -/
 structure IsAddQuotientCoveringMap (G) [AddGroup G] [AddAction G E] : Prop
     extends IsQuotientMap f, ContinuousConstVAdd G E where
@@ -62,12 +62,12 @@ structure IsQuotientCoveringMap
     - disjoint((e : E)) : exists U in 𝓝 e, forall g : G, ((g • ·) '' U inter U).Nonempty -> g = 1
 
 中文:
-结构 IsQuotientCoveringMap
-  参数: : 命题 extends IsQuotientMap f, ContinuousConstSMul G E where
-  继承: IsQuotientMap f, ContinuousConstSMul G E
+结构 是QuotientCovering映射
+  参数: : 命题 extends 是商映射 f, 连续常数标量乘法 G E where
+  继承: 是商映射 f, 连续常数标量乘法 G E
   公理与运算 (2 个):
-    - apply_eq_iff_mem_orbit({e₁ e₂}) : f e₁ = f e₂ ↔ e₁ in MulAction.orbit G e₂
-    - disjoint((e : E)) : 存在 U in 𝓝 e, 对任意 g : G, ((g • ·) '' U inter U).Nonempty -> g = 1
+    - apply_eq_iff_mem_orbit({e₁ e₂}) : f e₁ = f e₂ ↔ e₁ in 乘法作用.orbit G e₂
+    - disjoint((e : E)) : 存在 U in 𝓝 e, 对任意 g : G, ((g • ·) '' U inter U).非空 -> g = 1
 -/
 structure IsQuotientCoveringMap : Prop extends IsQuotientMap f, ContinuousConstSMul G E where
   apply_eq_iff_mem_orbit {e₁ e₂} : f e₁ = f e₂ ↔ e₁ in MulAction.orbit G e₂
@@ -89,8 +89,8 @@ lemma IsAddQuotientCoveringMap.toMultiplicative
     exact ⟨U, hU, fun g => by simpa using hU' (Mul
 
 中文:
-引理 IsAddQuotientCoveringMap.toMultiplicative
-  结论: (G) [AddGroup G] [AddAction G E]
+引理 是加法QuotientCovering映射.toMultiplicative
+  结论: (G) [加法群 G] [加法作用 G E]
   证明: hf.toIsQuotientMap
   continuous_const_smul g := by simpa using hf.continuous_const_vadd (Multiplicative.ofAdd.symm g)
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
@@ -124,8 +124,8 @@ lemma IsQuotientCoveringMap.toAdditive
     exact ⟨U, hU, fun g => by simpa using hU' (Additive.
 
 中文:
-引理 IsQuotientCoveringMap.toAdditive
-  结论: (G) [Group G] [MulAction G E]
+引理 是QuotientCovering映射.toAdditive
+  结论: (G) [群 G] [乘法作用 G E]
   证明: hf.toIsQuotientMap
   continuous_const_vadd g := by simpa using hf.continuous_const_smul (Additive.ofMul.symm g)
   apply_eq_iff_mem_orbit {e₁ e₂} := by simp [hf.apply_eq_iff_mem_orbit]
@@ -157,7 +157,7 @@ theorem subgroup_congr
 
 中文:
 定理 subgroup_congr
-  条件: (S S' : Subgroup G) (eq : S = S')
+  条件: (S S' : 子群 G) (eq : S = S')
   证明: by rw [eq]
 -/
 @[to_additive] theorem subgroup_congr (S S' : Subgroup G) (eq : S = S') :
@@ -197,7 +197,7 @@ theorem isCancelSMul
 
 中文:
 定理 isCancelSMul
-  结论: IsCancelSMul G E where
+  结论: 是消去标量乘法 G E where
   证明: by
     have ⟨U, heU, hU⟩ := hf.disjoint e
     simpa [inv_mul_eq_one, eq_comm] using hU (g'⁻¹ * g)
@@ -224,7 +224,7 @@ omit hf in
 
 中文:
 定理 homeomorph_comp
-  结论: {Y} [TopologicalSpace Y]
+  结论: {Y} [拓扑空间 Y]
   证明: φ.isQuotientMap.comp hf.toIsQuotientMap
   continuous_const_smul := hf.continuous_const_smul
   apply_eq_iff_mem_orbit := by simpa using @hf.apply_eq_iff_mem_orbit
@@ -251,7 +251,7 @@ theorem homeomorph_comp_iff
 
 中文:
 定理 homeomorph_comp_iff
-  结论: {Y} [TopologicalSpace Y]
+  结论: {Y} [拓扑空间 Y]
   证明: by convert! h.homeomorph_comp φ.symm; ext; simp
   mpr h := h.homeomorph_comp φ
 -/
@@ -469,7 +469,7 @@ theorem toPermFiber_injective
 中文:
 定理 toPermFiber_injective
   条件: (x : X)
-  结论: Function.Injective (hf.toPermFiber x)
+  结论: 函数.单射 (hf.toPermFiber x)
   证明: have ⟨e, he⟩ := hf.surjective x
   fun _ _ eq => hf.toPermFiber_ext x ⟨e, he⟩ congr($eq _)
 
@@ -495,7 +495,7 @@ theorem exists_toPermFiber_eq
   simp
 
 中文:
-定理 exists_toPermFiber_eq
+定理 存在_toPermFiber_eq
   条件: {x : X} (e e' : f ⁻¹' {x})
   结论: 存在 g, hf.toPermFiber x g e = e'
   证明: by
@@ -554,7 +554,7 @@ definition trivializationOfSMulDisjoint
 
 中文:
 定义 trivializationOfSMulDisjoint
-  签名: [TopologicalSpace G] [DiscreteTopology G]
+  签名: [拓扑空间 G] [离散拓扑 G]
   定义体: by
   have pGE (g : G) e : f (g • e) = f e := hfG.mpr ⟨g, rfl⟩
   have preim_im : f ⁻¹' f '' U = ⋃ g : G, (g • ·) ⁻¹' U := by
@@ -668,7 +668,7 @@ omit hf hfG
 
 中文:
 引理 isQuotientCoveringMap_of_properlyDiscontinuousSMul
-  条件: [IsCancelSMul G E]
+  条件: [是消去标量乘法 G E]
   证明: hf
   apply_eq_iff_mem_orbit := hfG
   disjoint e :=
@@ -736,7 +736,7 @@ lemma isQuotientCoveringMap_of_subgroup
 
 中文:
 引理 isQuotientCoveringMap_of_subgroup
-  结论: [Group E] [IsTopologicalGroup E]
+  结论: [群 E] [是拓扑群 E]
   证明: hf
   apply_eq_iff_mem_orbit := hfG.trans QuotientGroup.rightRel_apply.symm
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulLeft_inter_nonempty
@@ -768,7 +768,7 @@ MulOpposite.unop_injective disj _ hS by
 
 中文:
 引理 isQuotientCoveringMap_of_subgroupOp
-  结论: [Group E] [IsTopologicalGroup E]
+  结论: [群 E] [是拓扑群 E]
   证明: hf
   apply_eq_iff_mem_orbit := hfG.trans QuotientGroup.leftRel_apply.symm
   disjoint e := have ⟨U, hU, _, disj⟩ := hG.exists_nhds_eq_one_of_image_mulRight_inter_nonempty
@@ -799,7 +799,7 @@ lemma isQuotientCoveringMap_of_isDiscrete_ker_monoidHom
 
 中文:
 引理 isQuotientCoveringMap_of_isDiscrete_ker_monoidHom
-  结论: [Group E]
+  结论: [群 E]
   证明: hf.isQuotientCoveringMap_of_subgroup f.ker disc fun {_ _} => by
     rw [eq_comm]; rw [← mul_inv_eq_one]; rw [← map_inv]; rw [← map_mul]; rfl
 -/
@@ -822,8 +822,8 @@ lemma Subgroup.isQuotientCoveringMap
     Quotient.eq''.trans QuotientGroup.leftRel_apply
 
 中文:
-引理 Subgroup.isQuotientCoveringMap
-  结论: {G} [Group G] [TopologicalSpace G]
+引理 子群.isQuotientCoveringMap
+  结论: {G} [群 G] [拓扑空间 G]
   证明: isQuotientMap_quotient_mk'.isQuotientCoveringMap_of_subgroupOp S hS
     Quotient.eq''.trans QuotientGroup.leftRel_apply
 -/
@@ -843,8 +843,8 @@ lemma Subgroup.isQuotientCoveringMap_of_comm
 QuotientGroup.leftRel_apply.trans by rw [mul_comm]
 
 中文:
-引理 Subgroup.isQuotientCoveringMap_of_comm
-  结论: {G} [CommGroup G] [TopologicalSpace G]
+引理 子群.isQuotientCoveringMap_of_comm
+  结论: {G} [交换群 G] [拓扑空间 G]
   证明: isQuotientMap_quotient_mk'.isQuotientCoveringMap_of_subgroup S hS Quotient.eq''.trans
 QuotientGroup.leftRel_apply.trans by rw [mul_comm]
 -/
@@ -872,7 +872,7 @@ lemma isCoveringMap
 
 中文:
 引理 isCoveringMap
-  条件: (h : IsQuotientCoveringMap f G)
+  条件: (h : 是QuotientCovering映射 f G)
   证明: isCoveringMap_iff_isCoveringMapOn_univ.mpr by
     have := h.toContinuousConstSMul
     convert! ← h.isCoveringMapOn_of_smul_disjoint h.apply_eq_iff_mem_orbit fun e => ?_
@@ -906,7 +906,7 @@ theorem isOpenQuotientMap
 
 中文:
 定理 isOpenQuotientMap
-  条件: (h : IsQuotientCoveringMap f G)
+  条件: (h : 是QuotientCovering映射 f G)
   证明: h.surjective
   continuous := h.isCoveringMap.continuous
   isOpenMap := h.isCoveringMap.isOpenMap

@@ -197,7 +197,7 @@ theorem quotient_map_C_eq_zero
 
 中文:
 定理 quotient_map_C_eq_zero
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: by
   intro a ha
   rw [RingHom.comp_apply]; rw [Quotient.eq_zero_iff_mem]
@@ -232,7 +232,7 @@ theorem eval₂_C_mk_eq_zero
 
 中文:
 定理 eval₂_C_mk_eq_zero
-  条件: {I : Ideal R}
+  条件: {I : 理想 R}
   证明: by
   intro a ha
   rw [← sum_monomial_eq a]
@@ -279,7 +279,7 @@ definition polynomialQuotientEquivQuotientPolynomial
 
 中文:
 定义 polynomialQuotientEquivQuotientPolynomial
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: eval₂RingHom
       (Quotient.lift I ((Quotient.mk (map C I : Ideal R[X])).comp C) quotient_map_C_eq_zero)
       (Quotient.mk (map C I : Ideal R[X]) X)
@@ -341,7 +341,7 @@ theorem polynomialQuotientEquivQuotientPolynomial_symm_mk
 
 中文:
 定理 polynomialQuotientEquivQuotientPolynomial_symm_mk
-  条件: (I : Ideal R) (f : R[X])
+  条件: (I : 理想 R) (f : R[X])
   证明: by
   simp only [polynomialQuotientEquivQuotientPolynomial, coe_eval₂RingHom, RingEquiv.symm_mk,
     RingEquiv.coe_mk, Equiv.coe_fn_symm_mk, Quotient.lift_mk]
@@ -370,7 +370,7 @@ theorem polynomialQuotientEquivQuotientPolynomial_map_mk
 
 中文:
 定理 polynomialQuotientEquivQuotientPolynomial_map_mk
-  条件: (I : Ideal R) (f : R[X])
+  条件: (I : 理想 R) (f : R[X])
   证明: by
   apply (polynomialQuotientEquivQuotientPolynomial I).symm.injective
   rw [RingEquiv.symm_apply_apply]; rw [polynomialQuotientEquivQuotientPolynomial_symm_mk]
@@ -393,7 +393,7 @@ theorem isDomain_map_C_quotient
 
 中文:
 定理 isDomain_map_C_quotient
-  条件: {P : Ideal R} (_ : IsPrime P)
+  条件: {P : 理想 R} (_ : 是素 P)
   证明: MulEquiv.isDomain (Polynomial (R ⧸ P)) (polynomialQuotientEquivQuotientPolynomial P).symm
 
 Depends on / 依赖: MulEquiv, MulEquiv.isDomain, Polynomial, isDomain, polynomialQuotientEquivQuotientPolynomial
@@ -417,7 +417,7 @@ theorem eq_zero_of_polynomial_mem_map_range
 
 中文:
 定理 eq_zero_of_polynomial_mem_map_range
-  结论: (I : Ideal R[X]) (x : ((Quotient.mk I).comp C).range)
+  结论: (I : 理想 R[X]) (x : ((商.mk I).comp C).range)
   证明: by
   let i := ((Quotient.mk I).comp C).rangeRestrict
   have hi' : RingHom.ker (Polynomial.mapRingHom i) <= I := by
@@ -460,8 +460,8 @@ lemma IsField.of_isPrincipalIdealRing_polynomial
   exact PrincipalIdealRing.isMaximal_of_irreducible (irreducible_X_sub_C 0)
 
 中文:
-引理 IsField.of_isPrincipalIdealRing_polynomial
-  条件: [IsDomain R] [IsPrincipalIdealRing R[X]]
+引理 是域.of_isPrincipalIdealRing_polynomial
+  条件: [是整环 R] [是主理想环 R[X]]
   证明: by
   apply (quotientSpanXSubCAlgEquiv 0).symm.toMulEquiv.isField
   rw [← Quotient.maximal_ideal_iff_isField_quotient]
@@ -495,7 +495,7 @@ theorem quotient_map_C_eq_zero
 
 中文:
 定理 quotient_map_C_eq_zero
-  条件: {I : Ideal R} {i : R} (hi : i in I)
+  条件: {I : 理想 R} {i : R} (hi : i in I)
   证明: by
   simp only [Function.comp_apply, RingHom.coe_comp, Ideal.Quotient.eq_zero_iff_mem]
   exact Ideal.mem_map_of_mem _ hi
@@ -526,7 +526,7 @@ theorem eval₂_C_mk_eq_zero
 
 中文:
 定理 eval₂_C_mk_eq_zero
-  结论: {I : Ideal R} {a : MvPolynomial σ R}
+  结论: {I : 理想 R} {a : 多元多项式 σ R}
   证明: by
   rw [as_sum a]
   rw [coe_eval₂Hom]; rw [eval₂_sum]
@@ -573,7 +573,7 @@ lemma quotientEquivQuotientMvPolynomial_rightInverse
 
 中文:
 引理 quotientEquivQuotientMvPolynomial_rightInverse
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   intro f
   apply induction_on f
@@ -626,7 +626,7 @@ lemma quotientEquivQuotientMvPolynomial_leftInverse
 
 中文:
 引理 quotientEquivQuotientMvPolynomial_leftInverse
-  条件: (I : Ideal R)
+  条件: (I : 理想 R)
   证明: by
   intro f
   obtain ⟨f, rfl⟩ := Ideal.Quotient.mk_surjective f
@@ -675,7 +675,7 @@ definition quotientEquivQuotientMvPolynomial
 
 中文:
 定义 quotientEquivQuotientMvPolynomial
-  签名: (I : Ideal R)
+  签名: (I : 理想 R)
   定义体: let e : MvPolynomial σ (R ⧸ I) ->ₐ[R]
       MvPolynomial σ R ⧸ (Ideal.map C I : Ideal (MvPolynomial σ R)) :=
     { eval₂Hom

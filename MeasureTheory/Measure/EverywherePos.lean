@@ -57,7 +57,7 @@ definition IsEverywherePos
 
 中文:
 定义 IsEverywherePos
-  签名: (μ : Measure α) (s : Set α)
+  签名: (μ : 测度 α) (s : 集合 α)
   定义体: forall x in s, forall n in 𝓝[s] x, 0 < μ n
 -/
 def IsEverywherePos (μ : Measure α) (s : Set α) : Prop :=
@@ -73,7 +73,7 @@ definition everywherePosSubset
 
 中文:
 定义 everywherePosSubset
-  签名: (μ : Measure α) (s : Set α)
+  签名: (μ : 测度 α) (s : 集合 α)
   定义体: {x | x in s ∧ forall n in 𝓝[s] x, 0 < μ n}
 -/
 def everywherePosSubset (μ : Measure α) (s : Set α) : Set α :=
@@ -90,7 +90,7 @@ lemma everywherePosSubset_subset
 
 中文:
 引理 everywherePosSubset_subset
-  条件: (μ : Measure α) (s : Set α)
+  条件: (μ : 测度 α) (s : 集合 α)
   结论: μ.everywherePosSubset s subseteq s
   证明: fun _x hx => hx.1
 -/
@@ -112,8 +112,8 @@ lemma exists_isOpen_everywherePosSubset_eq_sdiff
   have A : w subsete
 
 中文:
-引理 exists_isOpen_everywherePosSubset_eq_sdiff
-  条件: (μ : Measure α) (s : Set α)
+引理 存在_isOpen_everywherePosSubset_eq_sdiff
+  条件: (μ : 测度 α) (s : 集合 α)
   证明: by
   refine ⟨{x | exists n in 𝓝[s] x, μ n = 0}, ?_, by ext x; simp [everywherePosSubset, pos_iff_ne_zero]⟩
   rw [isOpen_iff_mem_nhds]
@@ -156,8 +156,8 @@ lemma _root_.MeasurableSet.everywherePosSubset
   exact hs.diff u_open.measurableSet
 
 中文:
-引理 _root_.MeasurableSet.everywherePosSubset
-  结论: [OpensMeasurableSpace α]
+引理 _root_.可测集.everywherePosSubset
+  结论: [OpensMeasurable空间 α]
   证明: by
   rcases exists_isOpen_everywherePosSubset_eq_sdiff μ s with ⟨u, u_open, hu⟩
   rw [hu]
@@ -182,8 +182,8 @@ lemma _root_.IsClosed.everywherePosSubset
   exact hs.sdiff u_open
 
 中文:
-引理 _root_.IsClosed.everywherePosSubset
-  条件: (hs : IsClosed s)
+引理 _root_.是闭集.everywherePosSubset
+  条件: (hs : 是闭集 s)
   证明: by
   rcases exists_isOpen_everywherePosSubset_eq_sdiff μ s with ⟨u, u_open, hu⟩
   rw [hu]
@@ -207,8 +207,8 @@ lemma _root_.IsCompact.everywherePosSubset
   exact hs.diff u_open
 
 中文:
-引理 _root_.IsCompact.everywherePosSubset
-  条件: (hs : IsCompact s)
+引理 _root_.是紧集.everywherePosSubset
+  条件: (hs : 是紧集 s)
   证明: by
   rcases exists_isOpen_everywherePosSubset_eq_sdiff μ s with ⟨u, u_open, hu⟩
   rw [hu]
@@ -272,7 +272,7 @@ lemma everywherePosSubset_ae_eq
 
 中文:
 引理 everywherePosSubset_ae_eq
-  条件: [OpensMeasurableSpace α] [InnerRegular μ] (hs : MeasurableSet s)
+  条件: [OpensMeasurable空间 α] [内正则 μ] (hs : 可测集 s)
   证明: by
   simp only [ae_eq_set, sdiff_eq_empty.mpr (everywherePosSubset_subset μ s), measure_empty,
     true_and, (hs.diff hs.everywherePosSubset).measure_eq_iSup_isCompact, ENNReal.iSup_eq_zero]
@@ -450,7 +450,7 @@ lemma IsEverywherePos.of_forall_exists_nhds_eq
   exact hs x hx _ (inter_mem hn (mem_nhdsWithin_of_mem_nhds t_mem))
 
 中文:
-引理 IsEverywherePos.of_forall_exists_nhds_eq
+引理 IsEverywherePos.of_对任意_存在_nhds_eq
   结论: (hs : IsEverywherePos μ s)
   证明: by
   intro x hx n hn
@@ -482,7 +482,7 @@ lemma isEverywherePos_iff_of_forall_exists_nhds_eq
   exact ⟨t, ht, fun u hu => (h't u hu).symm⟩
 
 中文:
-引理 isEverywherePos_iff_of_forall_exists_nhds_eq
+引理 isEverywherePos_iff_of_对任意_存在_nhds_eq
   条件: (h : 对任意 x in s, 存在 t in 𝓝 x, 对任意 u subseteq t, ν u = μ u)
   证明: by
   refine ⟨fun H => H.of_forall_exists_nhds_eq ?_, fun H => H.of_forall_exists_nhds_eq h⟩
@@ -513,8 +513,8 @@ lemma _root_.IsOpen.isEverywherePos
   exact (u_open.inter hs).measure_pos μ ⟨x, ⟨xu, xs⟩⟩
 
 中文:
-引理 _root_.IsOpen.isEverywherePos
-  条件: [IsOpenPosMeasure μ] (hs : IsOpen s)
+引理 _root_.是开集.isEverywherePos
+  条件: [是OpenPosMeasure μ] (hs : 是开集 s)
   结论: IsEverywherePos μ s
   证明: by
   intro x xs n hn

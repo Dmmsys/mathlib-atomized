@@ -42,7 +42,7 @@ Eq.symm prod_image by simpa [mem_preimage, Set.InjOn] using hf
 
 中文:
 引理 prod_preimage'
-  条件: (f : ι -> κ) [DecidablePred (· in Set.range f)] (s : Finset κ) (hf) (g : κ -> β)
+  条件: (f : ι -> κ) [DecidablePred (· in 集合.range f)] (s : 有限集 κ) (hf) (g : κ -> β)
   证明: by
   classical
   calc
@@ -76,7 +76,7 @@ lemma prod_preimage
 
 中文:
 引理 prod_preimage
-  结论: (f : ι -> κ) (s : Finset κ) (hf) (g : κ -> β)
+  结论: (f : ι -> κ) (s : 有限集 κ) (hf) (g : κ -> β)
   证明: by
   classical rw [prod_preimage', prod_filter_of_ne]; exact fun x hx => Not.imp_symm (hg x hx)
 
@@ -100,7 +100,7 @@ lemma prod_preimage_of_bij
 
 中文:
 引理 prod_preimage_of_bij
-  条件: (f : ι -> κ) (s : Finset κ) (hf : Set.BijOn f (f ⁻¹' ↑s) ↑s) (g : κ -> β)
+  条件: (f : ι -> κ) (s : 有限集 κ) (hf : 集合.双射限制 f (f ⁻¹' ↑s) ↑s) (g : κ -> β)
   证明: prod_preimage _ _ hf.injOn g fun _ hs h_f => (h_f <| hf.subset_range hs).elim
 
 Depends on / 依赖: hf.injOn, hf.subset_range, prod_preimage, subset_range

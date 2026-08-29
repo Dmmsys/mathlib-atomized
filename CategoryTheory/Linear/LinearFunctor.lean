@@ -42,7 +42,7 @@ class Functor.Linear
     - map_smul : forall {X Y : C} (f : X ⟶ Y) (r : R), F.map (r • f) = r • F.map f  [default: by cat_disch]
 
 中文:
-类 Functor.Linear
+类 函子.线性
   参数: : 命题 where
   公理与运算 (1 个):
     - map_smul : 对任意 {X Y : C} (f : X ⟶ Y) (r : R), F.map (r • f) = r • F.map f  [默认: by cat_disch]
@@ -68,7 +68,7 @@ lemma Functor.linear_iff
     rw [this]; rw [F.map_comp]; rw [h]; rw [Linear.smul_comp]; rw [Category.id_comp]
 
 中文:
-引理 Functor.linear_iff
+引理 函子.linear_iff
   条件: (F : C ⥤ D)
   证明: by
   constructor
@@ -154,7 +154,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (𝟭 C)
+  签名: 线性 R (𝟭 C)
 -/
 instance : Linear R (𝟭 C) where
 
@@ -170,8 +170,8 @@ instance [Linear
   signature: R G] : Linear R (F ⋙ G) where
 
 中文:
-实例 [Linear
-  签名: R G] : Linear R (F ⋙ G) where
+实例 [线性
+  签名: R G] : 线性 R (F ⋙ G) where
 -/
 instance [Linear R G] : Linear R (F ⋙ G) where
 
@@ -192,7 +192,7 @@ lemma linear_of_full_essSurj_comp
 
 中文:
 引理 linear_of_full_essSurj_comp
-  条件: [F.Full] [F.EssSurj] [Functor.Linear R (F ⋙ G)]
+  条件: [F.满] [F.本质满射] [函子.线性 R (F ⋙ G)]
   证明: by
   refine ⟨fun {X Y} f r => ?_⟩
   obtain ⟨X', Y', eX, eY, f', rfl⟩ :
@@ -225,7 +225,7 @@ lemma linear_comp_iff_of_full_of_essSurj
 
 中文:
 引理 linear_comp_iff_of_full_of_essSurj
-  条件: [F.Full] [F.EssSurj]
+  条件: [F.满] [F.本质满射]
   证明: ⟨fun _ => linear_of_full_essSurj_comp F G, fun _ => inferInstance⟩
 
 Depends on / 依赖: linear_of_full_essSurj_comp
@@ -293,8 +293,8 @@ lemma linear_of_iso
 
 中文:
 引理 linear_of_iso
-  条件: {G : C ⥤ D} (e : F ≅ G) [F.Linear R]
-  结论: G.Linear R
+  条件: {G : C ⥤ D} (e : F ≅ G) [F.线性 R]
+  结论: G.线性 R
   证明: by
   exact
     { map_smul := fun f r => by
@@ -335,7 +335,7 @@ instance fullSubcategoryInclusionLinear
 
 中文:
 实例 fullSubcategoryInclusionLinear
-  签名: {C : 类型} [Category* C] [Preadditive C]
+  签名: {C : 类型} [范畴* C] [预加性 C]
 -/
 instance fullSubcategoryInclusionLinear {C : Type*} [Category* C] [Preadditive C]
     [CategoryTheory.Linear R C] (Z : ObjectProperty C) : Z.ι.Linear R where
@@ -354,7 +354,7 @@ instance natLinear
 
 中文:
 实例 natLinear
-  签名: : F.Linear 自然数 where
+  签名: : F.线性 自然数 where
   定义体: F.mapAddHom.map_nsmul r f
 
 Depends on / 依赖: F.mapAddHom.map_nsmul, mapAddHom, map_nsmul
@@ -372,7 +372,7 @@ instance intLinear
 
 中文:
 实例 intLinear
-  签名: : F.Linear 整数 where
+  签名: : F.线性 整数 where
   定义体: F.mapAddHom.map_zsmul r f
 
 Depends on / 依赖: F.mapAddHom.map_zsmul, mapAddHom, map_zsmul
@@ -392,7 +392,7 @@ instance ratLinear
 
 中文:
 实例 ratLinear
-  签名: : F.Linear Rat where
+  签名: : F.线性 有理数 where
   定义体: F.mapAddHom.toRatLinearMap.map_smul r f
 
 Depends on / 依赖: F.mapAddHom.toRatLinearMap.map_smul, mapAddHom, map_smul, toRatLinearMap
@@ -419,7 +419,7 @@ instance inverseLinear
 
 中文:
 实例 inverseLinear
-  签名: (e : C ≌ D) [e.functor.Linear R]
+  签名: (e : C ≌ D) [e.functor.线性 R]
   定义体: by
     apply e.functor.map_injective
     simp

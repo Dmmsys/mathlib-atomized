@@ -39,7 +39,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow 自然数∞ 自然数∞
+  签名: 幂 自然数∞ 自然数∞
 -/
 instance : Pow Nat∞ Nat∞ where
   pow
@@ -318,7 +318,7 @@ lemma epow_right_mono
 中文:
 引理 epow_right_mono
   条件: (h : x != 0)
-  结论: Monotone (fun y : 自然数∞ => x ^ y)
+  结论: 递增 (fun y : 自然数∞ => x ^ y)
   证明: by
   intro y z y_z
   induction y
@@ -405,7 +405,7 @@ lemma epow_left_mono
 
 中文:
 引理 epow_left_mono
-  结论: Monotone (fun x : 自然数∞ => x ^ y)
+  结论: 递增 (fun x : 自然数∞ => x ^ y)
   证明: by
   intro x z x_z
   simp only

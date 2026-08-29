@@ -46,7 +46,7 @@ definition Additive
   body: α
 
 中文:
-定义 Additive
+定义 加性
   签名: (α : 类型)
   定义体: α
 -/
@@ -81,7 +81,7 @@ definition ofMul
 
 中文:
 定义 ofMul
-  签名: : α ≃ Additive α
+  签名: : α ≃ 加性 α
   定义体: ⟨fun x => x, fun x => x, fun _ => rfl, fun _ => rfl⟩
 -/
 def ofMul : α ≃ Additive α :=
@@ -101,7 +101,7 @@ definition toMul
 
 中文:
 定义 toMul
-  签名: : Additive α ≃ α
+  签名: : 加性 α ≃ α
   定义体: ofMul.symm
 
 @[simp]
@@ -161,7 +161,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {a b : Additive α} (hab : a.toMul = b.toMul)
+  条件: {a b : 加性 α} (hab : a.toMul = b.toMul)
   结论: a = b
   证明: hab
 
@@ -182,8 +182,8 @@ lemma «forall»
 @[simp]
 
 中文:
-引理 «forall»
-  条件: {p : Additive α -> 命题}
+引理 «对任意»
+  条件: {p : 加性 α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (ofMul a)
   证明: Iff.rfl
 
@@ -202,8 +202,8 @@ lemma «exists»
   proof: Iff.rfl
 
 中文:
-引理 «exists»
-  条件: {p : Additive α -> 命题}
+引理 «存在»
+  条件: {p : 加性 α -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (ofMul a)
   证明: Iff.rfl
 -/
@@ -221,7 +221,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : Additive α -> Sort*} (ofMul : 对任意 a, motive (ofMul a))
+  签名: {motive : 加性 α -> 类型层*} (ofMul : 对任意 a, motive (ofMul a))
   定义体: fun a => ofMul (a.toMul)
 
 Depends on / 依赖: a.toMul
@@ -346,7 +346,7 @@ lemma «forall»
 @[simp]
 
 中文:
-引理 «forall»
+引理 «对任意»
   条件: {p : Multiplicative α -> 命题}
   结论: (对任意 a, p a) ↔ 对任意 a, p (ofAdd a)
   证明: Iff.rfl
@@ -366,7 +366,7 @@ lemma «exists»
   proof: Iff.rfl
 
 中文:
-引理 «exists»
+引理 «存在»
   条件: {p : Multiplicative α -> 命题}
   结论: (存在 a, p a) ↔ 存在 a, p (ofAdd a)
   证明: Iff.rfl
@@ -385,7 +385,7 @@ definition rec
 
 中文:
 定义 rec
-  签名: {motive : Multiplicative α -> Sort*} (ofAdd : 对任意 a, motive (ofAdd a))
+  签名: {motive : Multiplicative α -> 类型层*} (ofAdd : 对任意 a, motive (ofAdd a))
   定义体: fun a => ofAdd (a.toAdd)
 
 Depends on / 依赖: a.toAdd
@@ -479,7 +479,7 @@ theorem ofMul_toMul
 
 中文:
 定理 ofMul_toMul
-  条件: (x : Additive α)
+  条件: (x : 加性 α)
   结论: ofMul x.toMul = x
   证明: rfl
 -/
@@ -495,8 +495,8 @@ instance [Subsingleton
   body: toMul.injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Additive α)
+实例 [子单例
+  签名: α] : 子单例 (加性 α)
   定义体: toMul.injective.subsingleton
 
 Depends on / 依赖: injective, subsingleton, toMul.injective.subsingleton
@@ -511,8 +511,8 @@ instance [Subsingleton
   body: toAdd.injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: α] : Subsingleton (Multiplicative α)
+实例 [子单例
+  签名: α] : 子单例 (Multiplicative α)
   定义体: toAdd.injective.subsingleton
 
 Depends on / 依赖: injective, subsingleton, toAdd.injective.subsingleton
@@ -528,8 +528,8 @@ instance [Inhabited
   body: ⟨ofMul default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Additive α)
+实例 [可居
+  签名: α] : 可居 (加性 α)
   定义体: ⟨ofMul default⟩
 -/
 instance [Inhabited α] : Inhabited (Additive α) :=
@@ -544,8 +544,8 @@ instance [Inhabited
   body: ⟨ofAdd default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Multiplicative α)
+实例 [可居
+  签名: α] : 可居 (Multiplicative α)
   定义体: ⟨ofAdd default⟩
 -/
 instance [Inhabited α] : Inhabited (Multiplicative α) :=
@@ -560,8 +560,8 @@ instance [Unique
   body: toMul.unique
 
 中文:
-实例 [Unique
-  签名: α] : Unique (Additive α)
+实例 [唯一
+  签名: α] : 唯一 (加性 α)
   定义体: toMul.unique
 
 Depends on / 依赖: toMul.unique, unique
@@ -576,8 +576,8 @@ instance [Unique
   body: toAdd.unique
 
 中文:
-实例 [Unique
-  签名: α] : Unique (Multiplicative α)
+实例 [唯一
+  签名: α] : 唯一 (Multiplicative α)
   定义体: toAdd.unique
 
 Depends on / 依赖: toAdd.unique, unique
@@ -609,7 +609,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : DecidableEq α] : DecidableEq (Additive α)
+  签名: : DecidableEq α] : DecidableEq (加性 α)
   定义体: h
 -/
 instance [h : DecidableEq α] : DecidableEq (Additive α) := h
@@ -623,8 +623,8 @@ instance Additive.instNontrivial
   body: ofMul.injective.nontrivial
 
 中文:
-实例 Additive.instNontrivial
-  签名: [Nontrivial α]
+实例 加性.instNontrivial
+  签名: [非平凡 α]
   定义体: ofMul.injective.nontrivial
 
 Depends on / 依赖: injective, nontrivial, ofMul.injective.nontrivial
@@ -642,7 +642,7 @@ instance Multiplicative.instNontrivial
 
 中文:
 实例 Multiplicative.instNontrivial
-  签名: [Nontrivial α]
+  签名: [非平凡 α]
   定义体: ofAdd.injective.nontrivial
 
 Depends on / 依赖: injective, nontrivial, ofAdd.injective.nontrivial
@@ -659,8 +659,8 @@ instance Additive.add
   body: ofMul (x.toMul * y.toMul)
 
 中文:
-实例 Additive.add
-  签名: [Mul α]
+实例 加性.add
+  签名: [乘法 α]
   定义体: ofMul (x.toMul * y.toMul)
 
 Depends on / 依赖: x.toMul, y.toMul
@@ -680,7 +680,7 @@ instance Multiplicative.mul
 
 中文:
 实例 Multiplicative.mul
-  签名: [Add α]
+  签名: [加法 α]
   定义体: ofAdd (x.toAdd + y.toAdd)
 
 @[simp]
@@ -704,7 +704,7 @@ theorem ofAdd_add
 
 中文:
 定理 ofAdd_add
-  条件: [Add α] (x y : α)
+  条件: [加法 α] (x y : α)
   结论: ofAdd (x + y) = ofAdd x * ofAdd y
   证明: rfl
 
@@ -726,7 +726,7 @@ theorem toAdd_mul
 
 中文:
 定理 toAdd_mul
-  条件: [Add α] (x y : Multiplicative α)
+  条件: [加法 α] (x y : Multiplicative α)
   结论: (x * y).toAdd = x.toAdd + y.toAdd
   证明: rfl
 
@@ -748,7 +748,7 @@ theorem ofMul_mul
 
 中文:
 定理 ofMul_mul
-  条件: [Mul α] (x y : α)
+  条件: [乘法 α] (x y : α)
   结论: ofMul (x * y) = ofMul x + ofMul y
   证明: rfl
 
@@ -768,7 +768,7 @@ theorem toMul_add
 
 中文:
 定理 toMul_add
-  条件: [Mul α] (x y : Additive α)
+  条件: [乘法 α] (x y : 加性 α)
   结论: (x + y).toMul = x.toMul * y.toMul
   证明: rfl
 -/
@@ -783,8 +783,8 @@ instance Additive.addSemigroup
   body: { Additive.add with add_assoc := @mul_assoc α _ }
 
 中文:
-实例 Additive.addSemigroup
-  签名: [Semigroup α]
+实例 加性.addSemigroup
+  签名: [半群 α]
   定义体: { Additive.add with add_assoc := @mul_assoc α _ }
 
 Depends on / 依赖: Additive, Additive.add, add_assoc, mul_assoc
@@ -802,7 +802,7 @@ instance Multiplicative.semigroup
 
 中文:
 实例 Multiplicative.semigroup
-  签名: [AddSemigroup α]
+  签名: [加法半群 α]
   定义体: { Multiplicative.mul with mul_assoc := @add_assoc α _ }
 
 Depends on / 依赖: Multiplicative, Multiplicative.mul, add_assoc, mul_assoc
@@ -819,8 +819,8 @@ instance Additive.addCommSemigroup
   body: { Additive.addSemigroup with add_comm := @mul_comm α _ }
 
 中文:
-实例 Additive.addCommSemigroup
-  签名: [CommSemigroup α]
+实例 加性.addCommSemigroup
+  签名: [交换半群 α]
   定义体: { Additive.addSemigroup with add_comm := @mul_comm α _ }
 
 Depends on / 依赖: Additive, Additive.addSemigroup, addSemigroup, add_comm, mul_comm
@@ -838,7 +838,7 @@ instance Multiplicative.commSemigroup
 
 中文:
 实例 Multiplicative.commSemigroup
-  签名: [AddCommSemigroup α]
+  签名: [加法交换半群 α]
   定义体: { Multiplicative.semigroup with mul_comm := @add_comm α _ }
 
 Depends on / 依赖: Multiplicative, Multiplicative.semigroup, add_comm, mul_comm, semigroup
@@ -855,8 +855,8 @@ instance Additive.isLeftCancelAdd
   body: ⟨@mul_left_cancel α _ _⟩
 
 中文:
-实例 Additive.isLeftCancelAdd
-  签名: [Mul α] [IsLeftCancelMul α]
+实例 加性.isLeftCancelAdd
+  签名: [乘法 α] [左乘消去 α]
   定义体: ⟨@mul_left_cancel α _ _⟩
 
 Depends on / 依赖: mul_left_cancel
@@ -874,7 +874,7 @@ instance Multiplicative.isLeftCancelMul
 
 中文:
 实例 Multiplicative.isLeftCancelMul
-  签名: [Add α] [IsLeftCancelAdd α]
+  签名: [加法 α] [是左消去加法 α]
   定义体: ⟨@add_left_cancel α _ _⟩
 
 Depends on / 依赖: add_left_cancel
@@ -892,8 +892,8 @@ instance Additive.isRightCancelAdd
   body: ⟨fun _ _ _ => mul_right_cancel (G := α)⟩
 
 中文:
-实例 Additive.isRightCancelAdd
-  签名: [Mul α] [IsRightCancelMul α]
+实例 加性.isRightCancelAdd
+  签名: [乘法 α] [右乘消去 α]
   定义体: ⟨fun _ _ _ => mul_right_cancel (G := α)⟩
 
 Depends on / 依赖: mul_right_cancel
@@ -911,7 +911,7 @@ instance Multiplicative.isRightCancelMul
 
 中文:
 实例 Multiplicative.isRightCancelMul
-  签名: [Add α] [IsRightCancelAdd α]
+  签名: [加法 α] [是右消去加法 α]
   定义体: ⟨fun _ _ _ => add_right_cancel (G := α)⟩
 
 Depends on / 依赖: add_right_cancel
@@ -929,8 +929,8 @@ instance Additive.isCancelAdd
   body: ⟨⟩
 
 中文:
-实例 Additive.isCancelAdd
-  签名: [Mul α] [IsCancelMul α]
+实例 加性.isCancelAdd
+  签名: [乘法 α] [是消去乘法 α]
   定义体: ⟨⟩
 -/
 instance Additive.isCancelAdd [Mul α] [IsCancelMul α] : IsCancelAdd (Additive α) :=
@@ -946,7 +946,7 @@ instance Multiplicative.isCancelMul
 
 中文:
 实例 Multiplicative.isCancelMul
-  签名: [Add α] [IsCancelAdd α]
+  签名: [加法 α] [是消去加法 α]
   定义体: ⟨⟩
 -/
 instance Multiplicative.isCancelMul [Add α] [IsCancelAdd α] : IsCancelMul (Multiplicative α) :=
@@ -961,8 +961,8 @@ instance Additive.addLeftCancelSemigroup
   body: { Additive.addSemigroup, Additive.isLeftCancelAdd with }
 
 中文:
-实例 Additive.addLeftCancelSemigroup
-  签名: [LeftCancelSemigroup α]
+实例 加性.addLeftCancelSemigroup
+  签名: [左消去半群 α]
   定义体: { Additive.addSemigroup, Additive.isLeftCancelAdd with }
 
 Depends on / 依赖: Additive, Additive.addSemigroup, Additive.isLeftCancelAdd, addSemigroup, isLeftCancelAdd
@@ -981,7 +981,7 @@ instance Multiplicative.leftCancelSemigroup
 
 中文:
 实例 Multiplicative.leftCancelSemigroup
-  签名: [AddLeftCancelSemigroup α]
+  签名: [加法左消去半群 α]
   定义体: { Multiplicative.semigroup, Multiplicative.isLeftCancelMul with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.isLeftCancelMul, Multiplicative.semigroup, isLeftCancelMul, semigroup
@@ -999,8 +999,8 @@ instance Additive.addRightCancelSemigroup
   body: { Additive.addSemigroup, Additive.isRightCancelAdd with }
 
 中文:
-实例 Additive.addRightCancelSemigroup
-  签名: [RightCancelSemigroup α]
+实例 加性.addRightCancelSemigroup
+  签名: [右消去半群 α]
   定义体: { Additive.addSemigroup, Additive.isRightCancelAdd with }
 
 Depends on / 依赖: Additive, Additive.addSemigroup, Additive.isRightCancelAdd, addSemigroup, isRightCancelAdd
@@ -1019,7 +1019,7 @@ instance Multiplicative.rightCancelSemigroup
 
 中文:
 实例 Multiplicative.rightCancelSemigroup
-  签名: [AddRightCancelSemigroup α]
+  签名: [加法右消去半群 α]
   定义体: { Multiplicative.semigroup, Multiplicative.isRightCancelMul with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.isRightCancelMul, Multiplicative.semigroup, isRightCancelMul, semigroup
@@ -1039,8 +1039,8 @@ instance [One
 @[simp]
 
 中文:
-实例 [One
-  签名: α] : Zero (Additive α)
+实例 [幺
+  签名: α] : 零 (加性 α)
   定义体: ⟨Additive.ofMul 1⟩
 
 @[simp]
@@ -1064,8 +1064,8 @@ theorem ofMul_one
 
 中文:
 定理 ofMul_one
-  条件: [One α]
-  结论: @Additive.ofMul α 1 = 0
+  条件: [幺 α]
+  结论: @加性.ofMul α 1 = 0
   证明: rfl
 
 @[simp]
@@ -1086,8 +1086,8 @@ theorem ofMul_eq_zero
 
 中文:
 定理 ofMul_eq_zero
-  条件: {A : 类型} [One A] {x : A}
-  结论: Additive.ofMul x = 0 ↔ x = 1
+  条件: {A : 类型} [幺 A] {x : A}
+  结论: 加性.ofMul x = 0 ↔ x = 1
   证明: Iff.rfl
 
 @[simp]
@@ -1110,8 +1110,8 @@ theorem toMul_zero
 
 中文:
 定理 toMul_zero
-  条件: [One α]
-  结论: (0 : Additive α).toMul = 1
+  条件: [幺 α]
+  结论: (0 : 加性 α).toMul = 1
   证明: rfl
 
 @[simp]
@@ -1129,7 +1129,7 @@ lemma toMul_eq_one
 
 中文:
 引理 toMul_eq_one
-  条件: {α : 类型} [One α] {x : Additive α}
+  条件: {α : 类型} [幺 α] {x : 加性 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1149,8 +1149,8 @@ instance [Zero
 @[simp]
 
 中文:
-实例 [Zero
-  签名: α] : One (Multiplicative α)
+实例 [零
+  签名: α] : 幺 (Multiplicative α)
   定义体: ⟨Multiplicative.ofAdd 0⟩
 
 @[simp]
@@ -1174,7 +1174,7 @@ theorem ofAdd_zero
 
 中文:
 定理 ofAdd_zero
-  条件: [Zero α]
+  条件: [零 α]
   结论: @Multiplicative.ofAdd α 0 = 1
   证明: rfl
 
@@ -1197,7 +1197,7 @@ theorem ofAdd_eq_one
 
 中文:
 定理 ofAdd_eq_one
-  条件: {A : 类型} [Zero A] {x : A}
+  条件: {A : 类型} [零 A] {x : A}
   结论: Multiplicative.ofAdd x = 1 ↔ x = 0
   证明: Iff.rfl
 
@@ -1222,7 +1222,7 @@ theorem toAdd_one
 
 中文:
 定理 toAdd_one
-  条件: [Zero α]
+  条件: [零 α]
   结论: (1 : Multiplicative α).toAdd = 0
   证明: rfl
 
@@ -1242,7 +1242,7 @@ lemma toAdd_eq_zero
 
 中文:
 引理 toAdd_eq_zero
-  条件: {α : 类型} [Zero α] {x : Multiplicative α}
+  条件: {α : 类型} [零 α] {x : Multiplicative α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1261,8 +1261,8 @@ instance Additive.addZeroClass
   add_zero := @mul_one α _
 
 中文:
-实例 Additive.addZeroClass
-  签名: [MulOneClass α]
+实例 加性.addZeroClass
+  签名: [MulOne类 α]
   定义体: @one_mul α _
   add_zero := @mul_one α _
 
@@ -1283,7 +1283,7 @@ instance Multiplicative.mulOneClass
 
 中文:
 实例 Multiplicative.mulOneClass
-  签名: [AddZeroClass α]
+  签名: [加法零类 α]
   定义体: @zero_add α _
   mul_one := @add_zero α _
 
@@ -1304,8 +1304,8 @@ instance Additive.addMonoid
   nsmul_succ := h.npow_succ
 
 中文:
-实例 Additive.addMonoid
-  签名: [h : Monoid α]
+实例 加性.addMonoid
+  签名: [h : 幺半群 α]
   定义体: ofMul (a.toMul ^ n)
   nsmul_zero := h.npow_zero
   nsmul_succ := h.npow_succ
@@ -1331,7 +1331,7 @@ instance Multiplicative.monoid
 
 中文:
 实例 Multiplicative.monoid
-  签名: [h : AddMonoid α]
+  签名: [h : 加法幺半群 α]
   定义体: ofAdd (n • a.toAdd)
   npow_zero := h.nsmul_zero
   npow_succ := h.nsmul_succ
@@ -1359,7 +1359,7 @@ theorem ofMul_pow
 
 中文:
 定理 ofMul_pow
-  条件: [Monoid α] (n : 自然数) (a : α)
+  条件: [幺半群 α] (n : 自然数) (a : α)
   结论: ofMul (a ^ n) = n • ofMul a
   证明: rfl
 
@@ -1382,7 +1382,7 @@ theorem toMul_nsmul
 
 中文:
 定理 toMul_nsmul
-  条件: [Monoid α] (n : 自然数) (a : Additive α)
+  条件: [幺半群 α] (n : 自然数) (a : 加性 α)
   结论: (n • a).toMul = a.toMul ^ n
   证明: rfl
 
@@ -1405,7 +1405,7 @@ theorem ofAdd_nsmul
 
 中文:
 定理 ofAdd_nsmul
-  条件: [AddMonoid α] (n : 自然数) (a : α)
+  条件: [加法幺半群 α] (n : 自然数) (a : α)
   结论: ofAdd (n • a) = ofAdd a ^ n
   证明: rfl
 
@@ -1426,7 +1426,7 @@ theorem toAdd_pow
 
 中文:
 定理 toAdd_pow
-  条件: [AddMonoid α] (a : Multiplicative α) (n : 自然数)
+  条件: [加法幺半群 α] (a : Multiplicative α) (n : 自然数)
   结论: (a ^ n).toAdd = n • a.toAdd
   证明: rfl
 -/
@@ -1451,7 +1451,7 @@ lemma isAddLeftRegular_ofMul
 中文:
 引理 isAddLeftRegular_ofMul
   条件: {a : α}
-  结论: IsAddLeftRegular (Additive.ofMul a) ↔ IsLeftRegular a
+  结论: IsAddLeftRegular (加性.ofMul a) ↔ IsLeftRegular a
   证明: .rfl
 
 @[simp]
@@ -1472,7 +1472,7 @@ lemma isLeftRegular_toMul
 
 中文:
 引理 isLeftRegular_toMul
-  条件: {a : Additive α}
+  条件: {a : 加性 α}
   结论: IsLeftRegular a.toMul ↔ IsAddLeftRegular a
   证明: .rfl
 
@@ -1495,7 +1495,7 @@ lemma isAddRightRegular_ofMul
 中文:
 引理 isAddRightRegular_ofMul
   条件: {a : α}
-  结论: IsAddRightRegular (Additive.ofMul a) ↔ IsRightRegular a
+  结论: IsAddRightRegular (加性.ofMul a) ↔ IsRightRegular a
   证明: .rfl
 
 @[simp]
@@ -1515,7 +1515,7 @@ lemma isRightRegular_toMul
 
 中文:
 引理 isRightRegular_toMul
-  条件: {a : Additive α}
+  条件: {a : 加性 α}
   结论: IsRightRegular a.toMul ↔ IsAddRightRegular a
   证明: .rfl
 -/
@@ -1534,7 +1534,7 @@ lemma isAddRegular_ofMul
 中文:
 引理 isAddRegular_ofMul
   条件: {a : α}
-  结论: IsAddRegular (Additive.ofMul a) ↔ IsRegular a
+  结论: 是加法正则 (加性.ofMul a) ↔ 是正则 a
   证明: by
   simp [isAddRegular_iff, isRegular_iff]
 -/
@@ -1553,8 +1553,8 @@ lemma isRegular_toMul
 
 中文:
 引理 isRegular_toMul
-  条件: {a : Additive α}
-  结论: IsRegular a.toMul ↔ IsAddRegular a
+  条件: {a : 加性 α}
+  结论: 是正则 a.toMul ↔ 是加法正则 a
   证明: by
   simp [isAddRegular_iff, isRegular_iff]
 -/
@@ -1658,7 +1658,7 @@ lemma isRegular_ofAdd
 中文:
 引理 isRegular_ofAdd
   条件: {a : α}
-  结论: IsRegular (Multiplicative.ofAdd a) ↔ IsAddRegular a
+  结论: 是正则 (Multiplicative.ofAdd a) ↔ 是加法正则 a
   证明: by
   simp [isAddRegular_iff, isRegular_iff]
 -/
@@ -1678,7 +1678,7 @@ lemma isAddRegular_toAdd
 中文:
 引理 isAddRegular_toAdd
   条件: {a : Multiplicative α}
-  结论: IsAddRegular a.toAdd ↔ IsRegular a
+  结论: 是加法正则 a.toAdd ↔ 是正则 a
   证明: by
   simp [isAddRegular_iff, isRegular_iff]
 -/
@@ -1696,8 +1696,8 @@ instance Additive.addLeftCancelMonoid
   body: { Additive.addMonoid, Additive.addLeftCancelSemigroup with }
 
 中文:
-实例 Additive.addLeftCancelMonoid
-  签名: [LeftCancelMonoid α]
+实例 加性.addLeftCancelMonoid
+  签名: [左消去幺半群 α]
   定义体: { Additive.addMonoid, Additive.addLeftCancelSemigroup with }
 
 Depends on / 依赖: Additive, Additive.addLeftCancelSemigroup, Additive.addMonoid, addLeftCancelSemigroup, addMonoid
@@ -1715,7 +1715,7 @@ instance Multiplicative.leftCancelMonoid
 
 中文:
 实例 Multiplicative.leftCancelMonoid
-  签名: [AddLeftCancelMonoid α]
+  签名: [加法左消去幺半群 α]
   定义体: { Multiplicative.monoid, Multiplicative.leftCancelSemigroup with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.leftCancelSemigroup, Multiplicative.monoid, leftCancelSemigroup, monoid
@@ -1733,8 +1733,8 @@ instance Additive.addRightCancelMonoid
   body: { Additive.addMonoid, Additive.addRightCancelSemigroup with }
 
 中文:
-实例 Additive.addRightCancelMonoid
-  签名: [RightCancelMonoid α]
+实例 加性.addRightCancelMonoid
+  签名: [右消去幺半群 α]
   定义体: { Additive.addMonoid, Additive.addRightCancelSemigroup with }
 
 Depends on / 依赖: Additive, Additive.addMonoid, Additive.addRightCancelSemigroup, addMonoid, addRightCancelSemigroup
@@ -1752,7 +1752,7 @@ instance Multiplicative.rightCancelMonoid
 
 中文:
 实例 Multiplicative.rightCancelMonoid
-  签名: [AddRightCancelMonoid α]
+  签名: [加法右消去幺半群 α]
   定义体: { Multiplicative.monoid, Multiplicative.rightCancelSemigroup with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.monoid, Multiplicative.rightCancelSemigroup, monoid, rightCancelSemigroup
@@ -1770,8 +1770,8 @@ instance Additive.addCommMonoid
   body: { Additive.addMonoid, Additive.addCommSemigroup with }
 
 中文:
-实例 Additive.addCommMonoid
-  签名: [CommMonoid α]
+实例 加性.addCommMonoid
+  签名: [交换幺半群 α]
   定义体: { Additive.addMonoid, Additive.addCommSemigroup with }
 
 Depends on / 依赖: Additive, Additive.addCommSemigroup, Additive.addMonoid, addCommSemigroup, addMonoid
@@ -1789,7 +1789,7 @@ instance Multiplicative.commMonoid
 
 中文:
 实例 Multiplicative.commMonoid
-  签名: [AddCommMonoid α]
+  签名: [加法交换幺半群 α]
   定义体: { Multiplicative.monoid, Multiplicative.commSemigroup with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.commSemigroup, Multiplicative.monoid, commSemigroup, monoid
@@ -1805,8 +1805,8 @@ instance Additive.instAddCancelCommMonoid
   signature: [CancelCommMonoid α]
 
 中文:
-实例 Additive.instAddCancelCommMonoid
-  签名: [CancelCommMonoid α]
+实例 加性.instAddCancelCommMonoid
+  签名: [消去交换幺半群 α]
 -/
 instance Additive.instAddCancelCommMonoid [CancelCommMonoid α] :
     AddCancelCommMonoid (Additive α) where
@@ -1820,7 +1820,7 @@ instance Multiplicative.instCancelCommMonoid
 
 中文:
 实例 Multiplicative.instCancelCommMonoid
-  签名: [AddCancelCommMonoid α]
+  签名: [加法消去交换幺半群 α]
 -/
 instance Multiplicative.instCancelCommMonoid [AddCancelCommMonoid α] :
     CancelCommMonoid (Multiplicative α) where
@@ -1836,8 +1836,8 @@ instance Additive.neg
 @[simp]
 
 中文:
-实例 Additive.neg
-  签名: [Inv α]
+实例 加性.neg
+  签名: [取逆 α]
   定义体: ⟨fun x => ofAdd x.toMul⁻¹⟩
 
 @[simp]
@@ -1861,7 +1861,7 @@ theorem ofMul_inv
 
 中文:
 定理 ofMul_inv
-  条件: [Inv α] (x : α)
+  条件: [取逆 α] (x : α)
   结论: ofMul x⁻¹ = -ofMul x
   证明: rfl
 
@@ -1882,7 +1882,7 @@ theorem toMul_neg
 
 中文:
 定理 toMul_neg
-  条件: [Inv α] (x : Additive α)
+  条件: [取逆 α] (x : 加性 α)
   结论: (-x).toMul = x.toMul⁻¹
   证明: rfl
 -/
@@ -1901,7 +1901,7 @@ instance Multiplicative.inv
 
 中文:
 实例 Multiplicative.inv
-  签名: [Neg α]
+  签名: [取负 α]
   定义体: ⟨fun x => ofMul (-x.toAdd)⟩
 
 @[simp]
@@ -1925,7 +1925,7 @@ theorem ofAdd_neg
 
 中文:
 定理 ofAdd_neg
-  条件: [Neg α] (x : α)
+  条件: [取负 α] (x : α)
   结论: ofAdd (-x) = (ofAdd x)⁻¹
   证明: rfl
 
@@ -1946,7 +1946,7 @@ theorem toAdd_inv
 
 中文:
 定理 toAdd_inv
-  条件: [Neg α] (x : Multiplicative α)
+  条件: [取负 α] (x : Multiplicative α)
   结论: x⁻¹.toAdd = -x.toAdd
   证明: rfl
 -/
@@ -1962,8 +1962,8 @@ instance Additive.sub
   body: ofMul (x.toMul / y.toMul)
 
 中文:
-实例 Additive.sub
-  签名: [Div α]
+实例 加性.sub
+  签名: [除法 α]
   定义体: ofMul (x.toMul / y.toMul)
 
 Depends on / 依赖: x.toMul, y.toMul
@@ -1983,7 +1983,7 @@ instance Multiplicative.div
 
 中文:
 实例 Multiplicative.div
-  签名: [Sub α]
+  签名: [减法 α]
   定义体: ofAdd (x.toAdd - y.toAdd)
 
 @[simp]
@@ -2007,7 +2007,7 @@ theorem ofAdd_sub
 
 中文:
 定理 ofAdd_sub
-  条件: [Sub α] (x y : α)
+  条件: [减法 α] (x y : α)
   结论: ofAdd (x - y) = ofAdd x / ofAdd y
   证明: rfl
 
@@ -2030,7 +2030,7 @@ theorem toAdd_div
 
 中文:
 定理 toAdd_div
-  条件: [Sub α] (x y : Multiplicative α)
+  条件: [减法 α] (x y : Multiplicative α)
   结论: (x / y).toAdd = x.toAdd - y.toAdd
   证明: rfl
 
@@ -2053,7 +2053,7 @@ theorem ofMul_div
 
 中文:
 定理 ofMul_div
-  条件: [Div α] (x y : α)
+  条件: [除法 α] (x y : α)
   结论: ofMul (x / y) = ofMul x - ofMul y
   证明: rfl
 
@@ -2074,7 +2074,7 @@ theorem toMul_sub
 
 中文:
 定理 toMul_sub
-  条件: [Div α] (x y : Additive α)
+  条件: [除法 α] (x y : 加性 α)
   结论: (x - y).toMul = x.toMul / y.toMul
   证明: rfl
 -/
@@ -2090,7 +2090,7 @@ instance Additive.involutiveNeg
   body: { Additive.neg with neg_neg := @inv_inv α _ }
 
 中文:
-实例 Additive.involutiveNeg
+实例 加性.involutiveNeg
   签名: [InvolutiveInv α]
   定义体: { Additive.neg with neg_neg := @inv_inv α _ }
 
@@ -2130,8 +2130,8 @@ instance Additive.subNegMonoid
   zsmul_neg' := h.zpow_neg'
 
 中文:
-实例 Additive.subNegMonoid
-  签名: [h : DivInvMonoid α]
+实例 加性.subNegMonoid
+  签名: [h : 除逆幺半群 α]
   定义体: h.div_eq_mul_inv
   zsmul n a := ofMul (a.toMul ^ n)
   zsmul_zero' := h.zpow_zero'
@@ -2163,7 +2163,7 @@ instance Multiplicative.divInvMonoid
 
 中文:
 实例 Multiplicative.divInvMonoid
-  签名: [h : SubNegMonoid α]
+  签名: [h : SubNeg幺半群 α]
   定义体: h.sub_eq_add_neg
   zpow n a := ofAdd (n • a.toAdd)
   zpow_zero' := h.zsmul_zero'
@@ -2195,7 +2195,7 @@ theorem ofMul_zpow
 
 中文:
 定理 ofMul_zpow
-  条件: [DivInvMonoid α] (z : 整数) (a : α)
+  条件: [除逆幺半群 α] (z : 整数) (a : α)
   结论: ofMul (a ^ z) = z • ofMul a
   证明: rfl
 
@@ -2218,7 +2218,7 @@ theorem toMul_zsmul
 
 中文:
 定理 toMul_zsmul
-  条件: [DivInvMonoid α] (z : 整数) (a : Additive α)
+  条件: [除逆幺半群 α] (z : 整数) (a : 加性 α)
   结论: (z • a).toMul = a.toMul ^ z
   证明: rfl
 
@@ -2241,7 +2241,7 @@ theorem ofAdd_zsmul
 
 中文:
 定理 ofAdd_zsmul
-  条件: [SubNegMonoid α] (z : 整数) (a : α)
+  条件: [SubNeg幺半群 α] (z : 整数) (a : α)
   结论: ofAdd (z • a) = ofAdd a ^ z
   证明: rfl
 
@@ -2262,7 +2262,7 @@ theorem toAdd_zpow
 
 中文:
 定理 toAdd_zpow
-  条件: [SubNegMonoid α] (a : Multiplicative α) (z : 整数)
+  条件: [SubNeg幺半群 α] (a : Multiplicative α) (z : 整数)
   结论: (a ^ z).toAdd = z • a.toAdd
   证明: rfl
 -/
@@ -2280,8 +2280,8 @@ instance Additive.subtractionMonoid
     neg_eq_of_add := @inv_eq_of_mul_eq_one_right α _ }
 
 中文:
-实例 Additive.subtractionMonoid
-  签名: [DivisionMonoid α]
+实例 加性.subtractionMonoid
+  签名: [Division幺半群 α]
   定义体: { Additive.subNegMonoid, Additive.involutiveNeg with
     neg_add_rev := @mul_inv_rev α _
     neg_eq_of_add := @inv_eq_of_mul_eq_one_right α _ }
@@ -2305,7 +2305,7 @@ instance Multiplicative.divisionMonoid
 
 中文:
 实例 Multiplicative.divisionMonoid
-  签名: [SubtractionMonoid α]
+  签名: [Subtraction幺半群 α]
   定义体: { Multiplicative.divInvMonoid, Multiplicative.involutiveInv with
     mul_inv_rev := @neg_add_rev α _
     inv_eq_of_mul := @neg_eq_of_add_eq_zero_right α _ }
@@ -2326,8 +2326,8 @@ instance Additive.subtractionCommMonoid
   body: { Additive.subtractionMonoid, Additive.addCommSemigroup with }
 
 中文:
-实例 Additive.subtractionCommMonoid
-  签名: [DivisionCommMonoid α]
+实例 加性.subtractionCommMonoid
+  签名: [DivisionComm幺半群 α]
   定义体: { Additive.subtractionMonoid, Additive.addCommSemigroup with }
 
 Depends on / 依赖: Additive, Additive.addCommSemigroup, Additive.subtractionMonoid, addCommSemigroup, subtractionMonoid
@@ -2346,7 +2346,7 @@ instance Multiplicative.divisionCommMonoid
 
 中文:
 实例 Multiplicative.divisionCommMonoid
-  签名: [SubtractionCommMonoid α]
+  签名: [SubtractionComm幺半群 α]
   定义体: { Multiplicative.divisionMonoid, Multiplicative.commSemigroup with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.commSemigroup, Multiplicative.divisionMonoid, commSemigroup, divisionMonoid
@@ -2364,8 +2364,8 @@ instance Additive.addGroup
   body: { Additive.subNegMonoid with neg_add_cancel := @inv_mul_cancel α _ }
 
 中文:
-实例 Additive.addGroup
-  签名: [Group α]
+实例 加性.addGroup
+  签名: [群 α]
   定义体: { Additive.subNegMonoid with neg_add_cancel := @inv_mul_cancel α _ }
 
 Depends on / 依赖: Additive, Additive.subNegMonoid, inv_mul_cancel, neg_add_cancel, subNegMonoid
@@ -2383,7 +2383,7 @@ instance Multiplicative.group
 
 中文:
 实例 Multiplicative.group
-  签名: [AddGroup α]
+  签名: [加法群 α]
   定义体: { Multiplicative.divInvMonoid with inv_mul_cancel := @neg_add_cancel α _ }
 
 Depends on / 依赖: Multiplicative, Multiplicative.divInvMonoid, divInvMonoid, inv_mul_cancel, neg_add_cancel
@@ -2400,8 +2400,8 @@ instance Additive.addCommGroup
   body: { Additive.addGroup, Additive.addCommMonoid with }
 
 中文:
-实例 Additive.addCommGroup
-  签名: [CommGroup α]
+实例 加性.addCommGroup
+  签名: [交换群 α]
   定义体: { Additive.addGroup, Additive.addCommMonoid with }
 
 Depends on / 依赖: Additive, Additive.addCommMonoid, Additive.addGroup, addCommMonoid, addGroup
@@ -2419,7 +2419,7 @@ instance Multiplicative.commGroup
 
 中文:
 实例 Multiplicative.commGroup
-  签名: [AddCommGroup α]
+  签名: [加法交换群 α]
   定义体: { Multiplicative.group, Multiplicative.commMonoid with }
 
 Depends on / 依赖: Multiplicative, Multiplicative.commMonoid, Multiplicative.group, commMonoid
@@ -2436,8 +2436,8 @@ instance [Monoid
   body: pow_left_injective (M := α)
 
 中文:
-实例 [Monoid
-  签名: α] [IsMulTorsionFree α] : IsAddTorsionFree (Additive α) where
+实例 [幺半群
+  签名: α] [是MulTorsionFree α] : 是加法无挠 (加性 α) where
   定义体: pow_left_injective (M := α)
 
 Depends on / 依赖: pow_left_injective
@@ -2454,8 +2454,8 @@ instance [AddMonoid
   body: nsmul_right_injective (M := α)
 
 中文:
-实例 [AddMonoid
-  签名: α] [IsAddTorsionFree α] : IsMulTorsionFree (Multiplicative α) where
+实例 [加法幺半群
+  签名: α] [是加法无挠 α] : 是MulTorsionFree (Multiplicative α) where
   定义体: nsmul_right_injective (M := α)
 
 Depends on / 依赖: nsmul_right_injective
@@ -2472,8 +2472,8 @@ instance Additive.coeToFun
   body: ⟨fun a => CoeFun.coe a.toMul⟩
 
 中文:
-实例 Additive.coeToFun
-  签名: {α : 类型} {β : α -> Sort*} [CoeFun α β]
+实例 加性.coeToFun
+  签名: {α : 类型} {β : α -> 类型层*} [CoeFun α β]
   定义体: ⟨fun a => CoeFun.coe a.toMul⟩
 
 Depends on / 依赖: CoeFun, CoeFun.coe, a.toMul
@@ -2492,7 +2492,7 @@ instance Multiplicative.coeToFun
 
 中文:
 实例 Multiplicative.coeToFun
-  签名: {α : 类型} {β : α -> Sort*} [CoeFun α β]
+  签名: {α : 类型} {β : α -> 类型层*} [CoeFun α β]
   定义体: ⟨fun a => CoeFun.coe a.toAdd⟩
 
 Depends on / 依赖: CoeFun, CoeFun.coe, a.toAdd
@@ -2514,7 +2514,7 @@ lemma Pi.mulSingle_multiplicativeOfAdd_eq
       zero_apply, ofAdd_zero]
 
 中文:
-引理 Pi.mulSingle_multiplicativeOfAdd_eq
+引理 依赖函数类型.mulSingle_multiplicativeOfAdd_eq
   结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型}
   证明: by
   rcases eq_or_ne j i with rfl | h
@@ -2545,7 +2545,7 @@ lemma Pi.single_additiveOfMul_eq
       one_apply, ofMul_one]
 
 中文:
-引理 Pi.single_additiveOfMul_eq
+引理 依赖函数类型.single_additiveOfMul_eq
   结论: {ι : 类型} [DecidableEq ι] {M : ι -> 类型}
   证明: by
   rcases eq_or_ne j i with rfl | h

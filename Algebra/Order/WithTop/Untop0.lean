@@ -172,7 +172,7 @@ lemma untopD_add
 
 中文:
 引理 untopD_add
-  条件: [Add α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤)
+  条件: [加法 α] {a b : WithTop α} {c : α} (ha : a != ⊤) (hb : b != ⊤)
   证明: by
   lift a to α using ha
   lift b to α using hb
@@ -201,7 +201,7 @@ lemma untop₀_add
 
 中文:
 引理 untop₀_add
-  条件: [AddZeroClass α] {a b : WithTop α} (ha : a != ⊤) (hb : b != ⊤)
+  条件: [加法零类 α] {a b : WithTop α} (ha : a != ⊤) (hb : b != ⊤)
   证明: untopD_add ha hb
 
 @[simp]
@@ -225,7 +225,7 @@ lemma untop₀_natCast
 
 中文:
 引理 untop₀_natCast
-  条件: [AddMonoidWithOne α] (n : 自然数)
+  条件: [加法带幺幺半群 α] (n : 自然数)
   结论: untop₀ (n : WithTop α) = n
   证明: rfl
 
@@ -248,7 +248,7 @@ theorem untop₀_one
 
 中文:
 定理 untop₀_one
-  条件: {α : 类型} [AddMonoidWithOne α]
+  条件: {α : 类型} [加法带幺幺半群 α]
   证明: by
   convert WithTop.untop₀_natCast 1
   all_goals exact Nat.cast_one.symm
@@ -274,8 +274,8 @@ lemma untop₀_ofNat
 @[simp]
 
 中文:
-引理 untop₀_ofNat
-  条件: [AddMonoidWithOne α] (n : 自然数) [n.AtLeastTwo]
+引理 untop₀_of自然数
+  条件: [加法带幺幺半群 α] (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 
 @[simp]
@@ -294,7 +294,7 @@ lemma untop₀_neg
 
 中文:
 引理 untop₀_neg
-  条件: [AddCommGroup α]
+  条件: [加法交换群 α]
   结论: 对任意 a : WithTop α, (-a).untop₀ = -a.untop₀
 -/
 lemma untop₀_neg [AddCommGroup α] : forall a : WithTop α, (-a).untop₀ = -a.untop₀
@@ -312,7 +312,7 @@ lemma untop₀_mul
 
 中文:
 引理 untop₀_mul
-  条件: [DecidableEq α] [MulZeroClass α] (a b : WithTop α)
+  条件: [DecidableEq α] [乘零类 α] (a b : WithTop α)
   证明: untopD_zero_mul a b
 
 Depends on / 依赖: untopD_zero_mul

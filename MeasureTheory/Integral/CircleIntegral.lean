@@ -98,7 +98,7 @@ theorem range_circleMap
 
 中文:
 定理 range_circleMap
-  条件: (c : Complex) (R : 实数)
+  条件: (c : 复形) (R : 实数)
   结论: range (circleMap c R) = sphere c |R|
   证明: calc
     range (circleMap c R) = c +ᵥ R • range fun θ : Real => exp (θ * I) := by
@@ -133,8 +133,8 @@ theorem image_circleMap_Ioc
 
 中文:
 定理 image_circleMap_Ioc
-  条件: (c : Complex) (R : 实数)
-  结论: circleMap c R '' Ioc 0 (2 * π) = sphere c |R|
+  条件: (c : 复形) (R : 实数)
+  结论: circleMap c R '' 左开右闭区间 0 (2 * π) = sphere c |R|
   证明: by
   rw [← range_circleMap]; rw [← (periodic_circleMap c R).image_Ioc Real.two_pi_pos 0]; rw [zero_add]
 
@@ -155,7 +155,7 @@ theorem hasDerivAt_circleMap
 
 中文:
 定理 hasDerivAt_circleMap
-  条件: (c : Complex) (R : 实数) (θ : 实数)
+  条件: (c : 复形) (R : 实数) (θ : 实数)
   证明: by
   simpa only [mul_assoc, one_mul, ofRealCLM_apply, circleMap, ofReal_one, zero_add]
     using! (((ofRealCLM.hasDerivAt (x := θ)).mul_const I).cexp.const_mul (R : Complex)).const_add c
@@ -179,8 +179,8 @@ theorem differentiable_circleMap
 
 中文:
 定理 differentiable_circleMap
-  条件: (c : Complex) (R : 实数)
-  结论: Differentiable 实数 (circleMap c R)
+  条件: (c : 复形) (R : 实数)
+  结论: 可微 实数 (circleMap c R)
   证明: fun θ =>
   (hasDerivAt_circleMap c R θ).differentiableAt
 -/
@@ -202,7 +202,7 @@ theorem analyticOnNhd_circleMap
 
 中文:
 定理 analyticOnNhd_circleMap
-  条件: (c : Complex) (R : 实数)
+  条件: (c : 复形) (R : 实数)
   证明: by
   intro z hz
   apply analyticAt_const.add
@@ -232,7 +232,7 @@ theorem contDiff_circleMap
 
 中文:
 定理 contDiff_circleMap
-  条件: (c : Complex) (R : 实数) {n : WithTop 自然数∞}
+  条件: (c : 复形) (R : 实数) {n : WithTop 自然数∞}
   证明: (analyticOnNhd_circleMap c R).contDiff
 
 @[continuity, fun_prop]
@@ -257,8 +257,8 @@ theorem continuous_circleMap
 
 中文:
 定理 continuous_circleMap
-  条件: (c : Complex) (R : 实数)
-  结论: Continuous (circleMap c R)
+  条件: (c : 复形) (R : 实数)
+  结论: 连续 (circleMap c R)
   证明: (differentiable_circleMap c R).continuous
 
 @[fun_prop]
@@ -282,8 +282,8 @@ theorem measurable_circleMap
 
 中文:
 定理 measurable_circleMap
-  条件: (c : Complex) (R : 实数)
-  结论: Measurable (circleMap c R)
+  条件: (c : 复形) (R : 实数)
+  结论: 可测 (circleMap c R)
   证明: (continuous_circleMap c R).measurable
 
 @[simp]
@@ -305,7 +305,7 @@ theorem deriv_circleMap
 
 中文:
 定理 deriv_circleMap
-  条件: (c : Complex) (R : 实数) (θ : 实数)
+  条件: (c : 复形) (R : 实数) (θ : 实数)
   结论: deriv (circleMap c R) θ = circleMap 0 R θ * I
   证明: (hasDerivAt_circleMap _ _ _).deriv
 
@@ -324,7 +324,7 @@ theorem deriv_circleMap_eq_zero_iff
 
 中文:
 定理 deriv_circleMap_eq_zero_iff
-  条件: {c : Complex} {R : 实数} {θ : 实数}
+  条件: {c : 复形} {R : 实数} {θ : 实数}
   证明: by simp [I_ne_zero]
 
 Depends on / 依赖: I_ne_zero, IsAtomic
@@ -342,7 +342,7 @@ theorem deriv_circleMap_ne_zero
 
 中文:
 定理 deriv_circleMap_ne_zero
-  条件: {c : Complex} {R : 实数} {θ : 实数} (hR : R != 0)
+  条件: {c : 复形} {R : 实数} {θ : 实数} (hR : R != 0)
   证明: mt deriv_circleMap_eq_zero_iff.1 hR
 
 Depends on / 依赖: IsCoatomic, deriv_circleMap_eq_zero_iff
@@ -363,7 +363,7 @@ NNReal.coe_le_coe.1 by simp
 
 中文:
 定理 lipschitzWith_circleMap
-  条件: (c : Complex) (R : 实数)
+  条件: (c : 复形) (R : 实数)
   结论: LipschitzWith (实数.nnabs R) (circleMap c R)
   证明: lipschitzWith_of_nnnorm_deriv_le (differentiable_circleMap _ _) fun θ =>
 NNReal.coe_le_coe.1 by simp
@@ -389,7 +389,7 @@ theorem continuous_circleMap_inv
 
 中文:
 定理 continuous_circleMap_inv
-  条件: {R : 实数} {z w : Complex} (hw : w in ball z R)
+  条件: {R : 实数} {z w : 复形} (hw : w in ball z R)
   证明: by
   have : forall θ, circleMap z R θ - w != 0 := by
     simp_rw [sub_ne_zero]
@@ -425,7 +425,7 @@ theorem circleMap_preimage_codiscrete
 
 中文:
 定理 circleMap_preimage_codiscrete
-  条件: {c : Complex} {R : 实数} (hR : R != 0)
+  条件: {c : 复形} {R : 实数} (hR : R != 0)
   证明: by
   intro s hs
   apply (analyticOnNhd_circleMap c R).preimage_mem_codiscreteWithin
@@ -460,7 +460,7 @@ theorem circleMap_neg_radius
 
 中文:
 定理 circleMap_neg_radius
-  条件: {r x : 实数} {c : Complex}
+  条件: {r x : 实数} {c : 复形}
   证明: by
   simp [circleMap, add_mul, Complex.exp_add]
 
@@ -490,8 +490,8 @@ definition CircleIntegrable
   body: IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π)
 
 中文:
-定义 CircleIntegrable
-  签名: (f : Complex -> E) (c : Complex) (R : 实数)
+定义 Circle整数egrable
+  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
   定义体: IntervalIntegrable (fun θ : Real => f (circleMap c R θ)) volume 0 (2 * π)
 
 Depends on / 依赖: IntervalIntegrable, IsCoatomistic, circleMap, volume
@@ -511,8 +511,8 @@ theorem circleIntegrable_def
 @[simp, fun_prop]
 
 中文:
-定理 circleIntegrable_def
-  条件: (f : Complex -> E) (c : Complex) (R : 实数)
+定理 circle整数egrable_def
+  条件: (f : 复形 -> E) (c : 复形) (R : 实数)
   结论: Circle整数egrable f c R ↔
   证明: Iff.rfl
 
@@ -536,8 +536,8 @@ theorem circleIntegrable_const
 @[fun_prop]
 
 中文:
-定理 circleIntegrable_const
-  条件: (a : E) (c : Complex) (R : 实数)
+定理 circle整数egrable_const
+  条件: (a : E) (c : 复形) (R : 实数)
   结论: Circle整数egrable (fun _ => a) c R
   证明: intervalIntegrable_const
 
@@ -559,8 +559,8 @@ theorem circleIntegrable_id
   proof: (continuous_circleMap c R).intervalIntegrable 0 (2 * π)
 
 中文:
-定理 circleIntegrable_id
-  条件: (c : Complex) (R : 实数)
+定理 circle整数egrable_id
+  条件: (c : 复形) (R : 实数)
   结论: Circle整数egrable (fun z => z) c R
   证明: (continuous_circleMap c R).intervalIntegrable 0 (2 * π)
 
@@ -590,7 +590,7 @@ theorem abs
 
 中文:
 定理 abs
-  条件: {f : Complex -> 实数} (hf : Circle整数egrable f c R)
+  条件: {f : 复形 -> 实数} (hf : Circle整数egrable f c R)
   证明: IntervalIntegrable.abs hf
 
 @[to_fun (attr := fun_prop)]
@@ -658,8 +658,8 @@ theorem sum
   exact IntervalIntegrable.sum s h
 
 中文:
-定理 sum
-  结论: {ι : 类型} (s : Finset ι) {f : ι -> Complex -> E}
+定理 求和
+  结论: {ι : 类型} (s : 有限集 ι) {f : ι -> 复形 -> E}
   证明: by
   rw [CircleIntegrable]; rw [(by aesop : (fun θ => (∑ i in s]; rw [f i) (circleMap c R θ))
     = ∑ i in s]; rw [fun θ => f i (circleMap c R θ))] at *
@@ -692,7 +692,7 @@ nonrec theorem neg (hf : CircleIntegrable f c R) : CircleIntegr
 
 中文:
 定理 finsum
-  条件: {ι : 类型} {f : ι -> Complex -> E} (h : 对任意 i, Circle整数egrable (f i) c R)
+  条件: {ι : 类型} {f : ι -> 复形 -> E} (h : 对任意 i, Circle整数egrable (f i) c R)
   证明: by
   by_cases h₁ : (Function.support f).Finite
   · rw [finsum_eq_sum f h₁]
@@ -728,7 +728,7 @@ theorem const_smul
 
 中文:
 定理 const_smul
-  条件: {f : Complex -> A} (h : Circle整数egrable f c R)
+  条件: {f : 复形 -> A} (h : Circle整数egrable f c R)
   结论: Circle整数egrable (a • f) c R
   证明: IntervalIntegrable.const_mul h _
 
@@ -756,7 +756,7 @@ theorem continuousOn_smul
 
 中文:
 定理 continuousOn_smul
-  结论: {f : Complex -> F} {g : Complex -> 𝕜} (hf : Circle整数egrable f c R)
+  结论: {f : 复形 -> F} {g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
   证明: IntervalIntegrable.continuousOn_smul hf
     (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
 
@@ -784,7 +784,7 @@ theorem smul_continuousOn
 
 中文:
 定理 smul_continuousOn
-  结论: {f : Complex -> 𝕜} {g : Complex -> F} (hf : Circle整数egrable f c R)
+  结论: {f : 复形 -> 𝕜} {g : 复形 -> F} (hf : Circle整数egrable f c R)
   证明: IntervalIntegrable.smul_continuousOn hf
     (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
 
@@ -812,7 +812,7 @@ theorem continuousOn_mul
 
 中文:
 定理 continuousOn_mul
-  结论: {f g : Complex -> 𝕜} (hf : Circle整数egrable f c R)
+  结论: {f g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
   证明: IntervalIntegrable.continuousOn_mul hf
     (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
 
@@ -844,7 +844,7 @@ theorem mul_continuousOn
 
 中文:
 定理 mul_continuousOn
-  结论: {f g : Complex -> 𝕜} (hf : Circle整数egrable f c R)
+  结论: {f g : 复形 -> 𝕜} (hf : Circle整数egrable f c R)
   证明: IntervalIntegrable.mul_continuousOn hf
     (hg.comp (by fun_prop) (fun x hx => circleMap_mem_sphere' c R x))
 
@@ -879,7 +879,7 @@ theorem out
 
 中文:
 定理 out
-  条件: [NormedSpace Complex E] (hf : Circle整数egrable f c R)
+  条件: [赋范空间 复形 E] (hf : Circle整数egrable f c R)
   证明: by
   simp only [CircleIntegrable, deriv_circleMap, intervalIntegrable_iff] at *
   refine (hf.norm.const_mul |R|).mono' ?_ ?_
@@ -910,8 +910,8 @@ theorem circleIntegrable_zero_radius
   simp [CircleIntegrable]
 
 中文:
-定理 circleIntegrable_zero_radius
-  条件: {f : Complex -> E} {c : Complex}
+定理 circle整数egrable_zero_radius
+  条件: {f : 复形 -> E} {c : 复形}
   结论: Circle整数egrable f c 0
   证明: by
   simp [CircleIntegrable]
@@ -932,8 +932,8 @@ theorem circleIntegrable_congr
 @[deprecated (since := "2026-04-26")] alias crcleIntegrable_congr := circleIntegrable_congr
 
 中文:
-定理 circleIntegrable_congr
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> E}
+定理 circle整数egrable_congr
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
   证明: intervalIntegrable_congr fun x _ => hf (circleMap_mem_sphere' c R x)
 
 @[deprecated (since := "2026-04-26")] alias crcleIntegrable_congr := circleIntegrable_congr
@@ -961,8 +961,8 @@ theorem circleIntegrable_neg_radius
   simpa using! ((periodic_circleMa
 
 中文:
-定理 circleIntegrable_neg_radius
-  条件: {c : Complex} {R : 实数} {f : Complex -> E}
+定理 circle整数egrable_neg_radius
+  条件: {c : 复形} {R : 实数} {f : 复形 -> E}
   证明: by
   unfold CircleIntegrable
   rw [intervalIntegrable_congr (f := fun θ => f (circleMap c (-R) θ))
@@ -994,8 +994,8 @@ theorem CircleIntegrable.congr_codiscreteWithin
     by tauto⟩
 
 中文:
-定理 CircleIntegrable.congr_codiscreteWithin
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> E}
+定理 Circle整数egrable.congr_codiscreteWithin
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
   证明: by
   by_cases hR : R = 0
   · simp [hR]
@@ -1028,8 +1028,8 @@ theorem circleIntegrable_congr_codiscreteWithin
     (CircleIntegrable.congr_codiscreteWithin hf.symm ·)⟩
 
 中文:
-定理 circleIntegrable_congr_codiscreteWithin
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> E}
+定理 circle整数egrable_congr_codiscreteWithin
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> E}
   证明: ⟨(CircleIntegrable.congr_codiscreteWithin hf ·),
     (CircleIntegrable.congr_codiscreteWithin hf.symm ·)⟩
 
@@ -1056,8 +1056,8 @@ theorem circleIntegrable_iff
   · have H : forall {θ}, circleMap 0 R θ * I != 0 := fun {θ} => by simp 
 
 中文:
-定理 circleIntegrable_iff
-  条件: [NormedSpace Complex E] {f : Complex -> E} {c : Complex} (R : 实数)
+定理 circle整数egrable_iff
+  条件: [赋范空间 复形 E] {f : 复形 -> E} {c : 复形} (R : 实数)
   证明: by
   by_cases h₀ : R = 0
   · simp +unfoldPartialApp [h₀, const]
@@ -1092,8 +1092,8 @@ theorem ContinuousOn.circleIntegrable'
   proof: (hf.comp_continuous (continuous_circleMap _ _) (circleMap_mem_sphere' _ _)).intervalIntegrable _ _
 
 中文:
-定理 ContinuousOn.circleIntegrable'
-  结论: {f : Complex -> E} {c : Complex} {R : 实数}
+定理 ContinuousOn.circle整数egrable'
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数}
   证明: (hf.comp_continuous (continuous_circleMap _ _) (circleMap_mem_sphere' _ _)).intervalIntegrable _ _
 
 Depends on / 依赖: circleMap_mem_sphere, comp_continuous, continuous_circleMap, hf.comp_continuous, intervalIntegrable
@@ -1111,8 +1111,8 @@ theorem ContinuousOn.circleIntegrable
   proof: ContinuousOn.circleIntegrable' (abs_of_nonneg hR).symm ▸ hf
 
 中文:
-定理 ContinuousOn.circleIntegrable
-  结论: {f : Complex -> E} {c : Complex} {R : 实数} (hR : 0 <= R)
+定理 ContinuousOn.circle整数egrable
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数} (hR : 0 <= R)
   证明: ContinuousOn.circleIntegrable' (abs_of_nonneg hR).symm ▸ hf
 
 Depends on / 依赖: ContinuousOn, ContinuousOn.circleIntegrable, abs_of_nonneg, circleIntegrable
@@ -1139,8 +1139,8 @@ theorem circleIntegrable_sub_zpow_iff
     refine not_intervalInte
 
 中文:
-定理 circleIntegrable_sub_zpow_iff
-  条件: {c w : Complex} {R : 实数} {n : 整数}
+定理 circle整数egrable_sub_zpow_iff
+  条件: {c w : 复形} {R : 实数} {n : 整数}
   证明: by
   constructor
   · intro h; contrapose! h; rcases h with ⟨hR, hn, hw⟩
@@ -1195,8 +1195,8 @@ theorem circleIntegrable_sub_inv_iff
   simp only [← zpow_neg_one, circleIntegrable_sub_zpow_iff]; simp
 
 中文:
-定理 circleIntegrable_sub_inv_iff
-  条件: {c w : Complex} {R : 实数}
+定理 circle整数egrable_sub_inv_iff
+  条件: {c w : 复形} {R : 实数}
   证明: by
   simp only [← zpow_neg_one, circleIntegrable_sub_zpow_iff]; simp
 
@@ -1217,8 +1217,8 @@ definition circleIntegral
   body: ∫ θ : Real in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
 
 中文:
-定义 circleIntegral
-  签名: (f : Complex -> E) (c : Complex) (R : 实数)
+定义 circle整数egral
+  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
   定义体: ∫ θ : Real in 0..2 * π, deriv (circleMap c R) θ • f (circleMap c R θ)
 
 Depends on / 依赖: circleMap
@@ -1239,8 +1239,8 @@ theorem circleIntegral_def_Icc
   rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]
 
 中文:
-定理 circleIntegral_def_Icc
-  条件: (f : Complex -> E) (c : Complex) (R : 实数)
+定理 circle整数egral_def_Icc
+  条件: (f : 复形 -> E) (c : 复形) (R : 实数)
   证明: by
   rw [circleIntegral]; rw [intervalIntegral.integral_of_le Real.two_pi_pos.le]; rw [Measure.restrict_congr_set Ioc_ae_eq_Icc]
 
@@ -1267,7 +1267,7 @@ theorem _root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn
     simp only [dist_smul₀, deriv_
 
 中文:
-定理 _root_.TendstoUniformlyOn.tendsto_circleIntegral_of_continuousOn
+定理 _root_.TendstoUniformlyOn.tendsto_circle整数egral_of_continuousOn
   证明: by
   apply TendstoUniformlyOn.tendsto_intervalIntegral_of_continuousOn
   · refine hf.mono fun i hi => .smul ?_ (hi.comp ?_ ?_)
@@ -1314,7 +1314,7 @@ theorem integral_radius_zero
 
 中文:
 定理 integral_radius_zero
-  条件: (f : Complex -> E) (c : Complex)
+  条件: (f : 复形 -> E) (c : 复形)
   结论: (∮ z in C(c, 0), f z) = 0
   证明: by
   simp +unfoldPartialApp [circleIntegral, const]
@@ -1334,7 +1334,7 @@ theorem integral_congr
 
 中文:
 定理 integral_congr
-  条件: {f g : Complex -> E} {c : Complex} {R : 实数} (hR : 0 <= R) (h : EqOn f g (sphere c R))
+  条件: {f g : 复形 -> E} {c : 复形} {R : 实数} (hR : 0 <= R) (h : EqOn f g (sphere c R))
   证明: intervalIntegral.integral_congr fun θ _ => by simp only [h (circleMap_mem_sphere _ hR _)]
 
 Depends on / 依赖: circleMap_mem_sphere, integral_congr, intervalIntegral, intervalIntegral.integral_congr
@@ -1357,8 +1357,8 @@ theorem circleIntegral_congr_codiscreteWithin
   exact codiscreteWithin_mono (by taut
 
 中文:
-定理 circleIntegral_congr_codiscreteWithin
-  结论: {c : Complex} {R : 实数} {f₁ f₂ : Complex -> Complex}
+定理 circle整数egral_congr_codiscreteWithin
+  结论: {c : 复形} {R : 实数} {f₁ f₂ : 复形 -> 复形}
   证明: by
   apply intervalIntegral.integral_congr_ae_restrict
   apply ae_restrict_le_codiscreteWithin measurableSet_uIoc
@@ -1392,7 +1392,7 @@ theorem integral_sub_inv_smul_sub_smul
 
 中文:
 定理 integral_sub_inv_smul_sub_smul
-  条件: (f : Complex -> E) (c w : Complex) (R : 实数)
+  条件: (f : 复形 -> E) (c w : 复形) (R : 实数)
   证明: by
   rcases eq_or_ne R 0 with (rfl | hR); · simp only [integral_radius_zero]
   have : (circleMap c R ⁻¹' {w}).Countable := (countable_singleton _).preimage_circleMap c hR
@@ -1420,7 +1420,7 @@ theorem integral_undef
 
 中文:
 定理 integral_undef
-  条件: {f : Complex -> E} {c : Complex} {R : 实数} (hf : ¬Circle整数egrable f c R)
+  条件: {f : 复形 -> E} {c : 复形} {R : 实数} (hf : ¬Circle整数egrable f c R)
   证明: intervalIntegral.integral_undef (mt (circleIntegrable_iff R).mpr hf)
 
 Depends on / 依赖: circleIntegrable_iff, integral_undef, intervalIntegral, intervalIntegral.integral_undef
@@ -1440,7 +1440,7 @@ theorem integral_add
 
 中文:
 定理 integral_add
-  结论: {f g : Complex -> E} {c : Complex} {R : 实数} (hf : Circle整数egrable f c R)
+  结论: {f g : 复形 -> E} {c : 复形} {R : 实数} (hf : Circle整数egrable f c R)
   证明: by
   simp only [circleIntegral, smul_add, intervalIntegral.integral_add hf.out hg.out]
 
@@ -1462,7 +1462,7 @@ theorem integral_sub
 
 中文:
 定理 integral_sub
-  结论: {f g : Complex -> E} {c : Complex} {R : 实数} (hf : Circle整数egrable f c R)
+  结论: {f g : 复形 -> E} {c : 复形} {R : 实数} (hf : Circle整数egrable f c R)
   证明: by
   simp only [circleIntegral, smul_sub, intervalIntegral.integral_sub hf.out hg.out]
 
@@ -1485,7 +1485,7 @@ theorem integral_fun_sum
 
 中文:
 定理 integral_fun_sum
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> Complex -> E} {c : Complex} {R : 实数}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 复形 -> E} {c : 复形} {R : 实数}
   证明: by
   simp only [circleIntegral, Finset.smul_sum,
     intervalIntegral.integral_finsetSum fun i hi => (h i hi).out]
@@ -1515,7 +1515,7 @@ gcongr;
 
 中文:
 定理 norm_integral_le_of_norm_le_const'
-  结论: {f : Complex -> E} {c : Complex} {R C : 实数}
+  结论: {f : 复形 -> E} {c : 复形} {R C : 实数}
   证明: calc
     ‖∮ z in C(c, R), f z‖ <= |R| * C * |2 * π - 0| :=
       intervalIntegral.norm_integral_le_of_norm_le_const fun θ _ =>
@@ -1552,7 +1552,7 @@ theorem norm_integral_le_of_norm_le_const
 
 中文:
 定理 norm_integral_le_of_norm_le_const
-  结论: {f : Complex -> E} {c : Complex} {R C : 实数} (hR : 0 <= R)
+  结论: {f : 复形 -> E} {c : 复形} {R C : 实数} (hR : 0 <= R)
   证明: have : |R| = R := abs_of_nonneg hR
   calc
 ‖∮ z in C(c, R), f z‖ <= 2 * π * |R| * C := norm_integral_le_of_norm_le_const' by rwa [this]
@@ -1580,7 +1580,7 @@ theorem norm_two_pi_i_inv_smul_integral_le_of_norm_le_const
 
 中文:
 定理 norm_two_pi_i_inv_smul_integral_le_of_norm_le_const
-  结论: {f : Complex -> E} {c : Complex} {R C : 实数}
+  结论: {f : 复形 -> E} {c : 复形} {R C : 实数}
   证明: by
   have : ‖(2 * π * I : Complex)⁻¹‖ = (2 * π)⁻¹ := by simp [Real.pi_pos.le]
   rw [norm_smul]; rw [this]; rw [← div_eq_inv_mul]; rw [div_le_iff₀ Real.two_pi_pos]; rw [mul_comm (R * C)]; rw [← mul_assoc]
@@ -1611,7 +1611,7 @@ theorem norm_integral_lt_of_norm_le_const_of_lt
 
 中文:
 定理 norm_integral_lt_of_norm_le_const_of_lt
-  结论: {f : Complex -> E} {c : Complex} {R C : 实数} (hR : 0 < R)
+  结论: {f : 复形 -> E} {c : 复形} {R C : 实数} (hR : 0 < R)
   证明: by
   rw [← _root_.abs_of_pos hR]; rw [← image_circleMap_Ioc] at hlt
   rcases hlt with ⟨_, ⟨θ₀, hmem, rfl⟩, hlt⟩
@@ -1656,7 +1656,7 @@ theorem integral_smul
 
 中文:
 定理 integral_smul
-  结论: {𝕜 : 类型} [RCLike 𝕜] [NormedSpace 𝕜 E] [SMulCommClass 𝕜 Complex E] (a : 𝕜)
+  结论: {𝕜 : 类型} [RCLike 𝕜] [赋范空间 𝕜 E] [标量交换类 𝕜 复形 E] (a : 𝕜)
   证明: by
   simp only [circleIntegral, ← smul_comm a (_ : Complex) (_ : E), intervalIntegral.integral_smul]
 
@@ -1682,7 +1682,7 @@ theorem integral_smul_const
 
 中文:
 定理 integral_smul_const
-  条件: [CompleteSpace E] (f : Complex -> Complex) (a : E) (c : Complex) (R : 实数)
+  条件: [完备空间 E] (f : 复形 -> 复形) (a : E) (c : 复形) (R : 实数)
   证明: by
   simp only [circleIntegral, intervalIntegral.integral_smul_const, ← smul_assoc]
 
@@ -1707,7 +1707,7 @@ theorem integral_const_mul
 
 中文:
 定理 integral_const_mul
-  条件: (a : Complex) (f : Complex -> Complex) (c : Complex) (R : 实数)
+  条件: (a : 复形) (f : 复形 -> 复形) (c : 复形) (R : 实数)
   证明: integral_smul a f c R
 
 @[simp]
@@ -1730,7 +1730,7 @@ theorem integral_sub_center_inv
 
 中文:
 定理 integral_sub_center_inv
-  条件: (c : Complex) {R : 实数} (hR : R != 0)
+  条件: (c : 复形) {R : 实数} (hR : R != 0)
   证明: by
   simp [circleIntegral, ← div_eq_mul_inv, mul_div_cancel_left₀ _ (circleMap_ne_center hR)]
 
@@ -1755,7 +1755,7 @@ theorem integral_eq_zero_of_hasDerivWithinAt'
 
 中文:
 定理 integral_eq_zero_of_hasDerivWithinAt'
-  结论: [CompleteSpace E] {f f' : Complex -> E} {c : Complex} {R : 实数}
+  结论: [完备空间 E] {f f' : 复形 -> E} {c : 复形} {R : 实数}
   证明: by
   by_cases hi : CircleIntegrable f' c R
   · rw [← sub_eq_zero.2 ((periodic_circleMap c R).comp f).eq]
@@ -1785,7 +1785,7 @@ theorem integral_eq_zero_of_hasDerivWithinAt
 
 中文:
 定理 integral_eq_zero_of_hasDerivWithinAt
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: integral_eq_zero_of_hasDerivWithinAt' (abs_of_nonneg hR).symm ▸ h
 
 Depends on / 依赖: abs_of_nonneg, integral_eq_zero_of_hasDerivWithinAt
@@ -1809,7 +1809,7 @@ theorem integral_sub_zpow_of_undef
 
 中文:
 定理 integral_sub_zpow_of_undef
-  结论: {n : 整数} {c w : Complex} {R : 实数} (hn : n < 0)
+  结论: {n : 整数} {c w : 复形} {R : 实数} (hn : n < 0)
   证明: by
   rcases eq_or_ne R 0 with (rfl | h0)
   · apply integral_radius_zero
@@ -1843,7 +1843,7 @@ theorem integral_sub_zpow_of_ne
 
 中文:
 定理 integral_sub_zpow_of_ne
-  条件: {n : 整数} (hn : n != -1) (c w : Complex) (R : 实数)
+  条件: {n : 整数} (hn : n != -1) (c w : 复形) (R : 实数)
   证明: by
   by_cases! H : w in sphere c |R| ∧ n < -1
   · rcases H with ⟨hw, hn⟩
@@ -1888,7 +1888,7 @@ ContinuousMultilinearMap.mkPiRing Complex _
 
 中文:
 定义 cauchyPowerSeries
-  签名: (f : Complex -> E) (c : Complex) (R : 实数)
+  签名: (f : 复形 -> E) (c : 复形) (R : 实数)
   定义体: fun n =>
 ContinuousMultilinearMap.mkPiRing Complex _
     (2 * π * I : Complex)⁻¹ • ∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z
@@ -1910,7 +1910,7 @@ theorem cauchyPowerSeries_apply
 
 中文:
 定理 cauchyPowerSeries_apply
-  条件: (f : Complex -> E) (c : Complex) (R : 实数) (n : 自然数) (w : Complex)
+  条件: (f : 复形 -> E) (c : 复形) (R : 实数) (n : 自然数) (w : 复形)
   证明: by
   simp only [cauchyPowerSeries, ContinuousMultilinearMap.mkPiRing_apply, Fin.prod_const,
     div_eq_mul_inv, mul_pow, mul_smul, circleIntegral.integral_smul]
@@ -1939,7 +1939,7 @@ theorem norm_cauchyPowerSeries_le
 
 中文:
 定理 norm_cauchyPowerSeries_le
-  条件: (f : Complex -> E) (c : Complex) (R : 实数) (n : 自然数)
+  条件: (f : 复形 -> E) (c : 复形) (R : 实数) (n : 自然数)
   证明: calc ‖cauchyPowerSeries f c R n‖
     _ = (2 * π)⁻¹ * ‖∮ z in C(c, R), (z - c)⁻¹ ^ n • (z - c)⁻¹ • f z‖ := by
       simp [cauchyPowerSeries, norm_smul, Real.pi_pos.le]
@@ -1984,7 +1984,7 @@ theorem le_radius_cauchyPowerSeries
 
 中文:
 定理 le_radius_cauchyPowerSeries
-  条件: (f : Complex -> E) (c : Complex) (R : 实数>=0)
+  条件: (f : 复形 -> E) (c : 复形) (R : 实数>=0)
   证明: by
   refine
     (cauchyPowerSeries f c R).le_radius_of_bound
@@ -2027,7 +2027,7 @@ theorem hasSum_two_pi_I_cauchyPowerSeries_integral
 
 中文:
 定理 hasSum_two_pi_I_cauchyPowerSeries_integral
-  结论: {f : Complex -> E} {c : Complex} {R : 实数} {w : Complex}
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
   证明: by
   have hR : 0 < R := (norm_nonneg w).trans_lt hw
   have hwR : ‖w‖ / R in Ico (0 : Real) 1 :=
@@ -2074,7 +2074,7 @@ theorem hasSum_cauchyPowerSeries_integral
 
 中文:
 定理 hasSum_cauchyPowerSeries_integral
-  结论: {f : Complex -> E} {c : Complex} {R : 实数} {w : Complex}
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
   证明: by
   simp only [cauchyPowerSeries_apply]
   exact (hasSum_two_pi_I_cauchyPowerSeries_integral hf hw).const_smul _
@@ -2098,7 +2098,7 @@ theorem sum_cauchyPowerSeries_eq_integral
 
 中文:
 定理 sum_cauchyPowerSeries_eq_integral
-  结论: {f : Complex -> E} {c : Complex} {R : 实数} {w : Complex}
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数} {w : 复形}
   证明: (hasSum_cauchyPowerSeries_integral hf hw).tsum_eq
 
 Depends on / 依赖: hasSum_cauchyPowerSeries_integral, tsum_eq
@@ -2120,7 +2120,7 @@ hasSum := fun hy => hasSum_cauchyPowerSeries_integral hf by simpa using hy }
 
 中文:
 定理 hasFPowerSeriesOn_cauchy_integral
-  结论: {f : Complex -> E} {c : Complex} {R : 实数>=0}
+  结论: {f : 复形 -> E} {c : 复形} {R : 实数>=0}
   证明: { r_le := le_radius_cauchyPowerSeries _ _ _
     r_pos := ENNReal.coe_pos.2 hR
 hasSum := fun hy => hasSum_cauchyPowerSeries_integral hf by simpa using hy }
@@ -2153,7 +2153,7 @@ theorem integral_sub_inv_of_mem_ball
 
 中文:
 定理 integral_sub_inv_of_mem_ball
-  条件: {c w : Complex} {R : 实数} (hw : w in ball c R)
+  条件: {c w : 复形} {R : 实数} (hw : w in ball c R)
   证明: by
   have hR : 0 < R := dist_nonneg.trans_lt hw
   suffices H : HasSum (fun n : Nat => ∮ z in C(c, R), ((w - c) / (z - c)) ^ n * (z - c)⁻¹)

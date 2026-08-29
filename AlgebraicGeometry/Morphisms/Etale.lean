@@ -48,10 +48,10 @@ class Etale
     - etale_appLE((f)) : forall {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Etale
 
 中文:
-类 Etale
-  参数: {X Y : Scheme.{u}} (f : X ⟶ Y)
+类 平展
+  参数: {X Y : 概形.{u}} (f : X ⟶ Y)
   公理与运算 (1 个):
-    - etale_appLE((f)) : 对任意 {U : Y.Opens} (_ : IsAffineOpen U) {V : X.Opens} (_ : IsAffineOpen V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.Etale
+    - etale_appLE((f)) : 对任意 {U : Y.Opens} (_ : 是仿射开集 U) {V : X.Opens} (_ : 是仿射开集 V) (e : V <= f ⁻¹ᵁ U), (f.appLE U V e).hom.平展
 
 Depends on / 依赖: Etale.etale_appLE, etale_appLE
 -/
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasRingHom命题erty @Etale RingHom.Etale
+  签名: 有RingHomProperty @平展 环态射.平展
   定义体: RingHom.Etale.propertyIsLocal
   eq_affineLocally' := by
     ext X Y f
@@ -106,7 +106,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsMultiplicative @Etale
+  签名: MorphismProperty.是Multiplicative @平展
   定义体: HasRingHomProperty.isMultiplicative RingHom.Etale.stableUnderComposition
     RingHom.Etale.containsIdentities
 
@@ -127,7 +127,7 @@ instance etale_comp
 
 中文:
 实例 etale_comp
-  签名: {Z : Scheme.{u}} (g : Y ⟶ Z) [Etale f] [Etale g]
+  签名: {Z : 概形.{u}} (g : Y ⟶ Z) [平展 f] [平展 g]
   定义体: MorphismProperty.comp_mem _ f g ‹Etale f› ‹Etale g›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.comp_mem, comp_mem
@@ -146,7 +146,7 @@ instance etale_isStableUnderBaseChange
 
 中文:
 实例 etale_isStableUnderBaseChange
-  签名: : Morphism命题erty.IsStableUnderBaseChange @Etale
+  签名: : MorphismProperty.是StableUnderBaseChange @平展
   定义体: HasRingHomProperty.isStableUnderBaseChange RingHom.Etale.isStableUnderBaseChange
 
 Depends on / 依赖: HasRingHomProperty, HasRingHomProperty.isStableUnderBaseChange, RingHom, RingHom.Etale.isStableUnderBaseChange, isStableUnderBaseChange
@@ -193,7 +193,7 @@ lemma eq_smoothOfRelativeDimension_zero
 
 中文:
 引理 eq_smoothOfRelativeDimension_zero
-  结论: @Etale = @SmoothOfRelativeDimension 0
+  结论: @平展 = @SmoothOfRelativeDimension 0
   证明: by
   apply HasRingHomProperty.ext
   introv
@@ -225,7 +225,7 @@ lemma iff_smoothOfRelativeDimension_zero
 
 中文:
 引理 iff_smoothOfRelativeDimension_zero
-  结论: Etale f ↔ SmoothOfRelativeDimension 0 f
+  结论: 平展 f ↔ SmoothOfRelativeDimension 0 f
   证明: by
   rw [eq_smoothOfRelativeDimension_zero]
 
@@ -244,7 +244,7 @@ instance [Etale
   rwa [← iff_smoothOfRelativeDimension_zero]
 
 中文:
-实例 [Etale
+实例 [平展
   签名: f] : SmoothOfRelativeDimension 0 f
   定义体: by
   rwa [← iff_smoothOfRelativeDimension_zero]
@@ -276,7 +276,7 @@ exact inferInstanceAs Etale (pullback.diagonal f)
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty
+  签名: MorphismProperty.有OfPostcompProperty
   定义体: by
   rw [MorphismProperty.hasOfPostcompProperty_iff_le_diagonal]
   intro X Y f ⟨hft, hfu⟩
@@ -300,7 +300,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  结论: {Z : Scheme.{u}} (g : Y ⟶ Z) [Etale (f ≫ g)] [LocallyOfFiniteType g]
+  结论: {Z : 概形.{u}} (g : Y ⟶ Z) [平展 (f ≫ g)] [局部有限型 g]
   证明: of_postcomp _ (W' := @LocallyOfFiniteType ⊓ @FormallyUnramified) f g ⟨‹_›, ‹_›⟩ ‹_›
 
 Depends on / 依赖: FormallyUnramified, LocallyOfFiniteType, of_postcomp
@@ -323,7 +323,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @Etale @Etale
+  签名: MorphismProperty.有OfPostcompProperty @平展 @平展
   定义体: by
   apply MorphismProperty.HasOfPostcompProperty.of_le (W := @Etale)
     (Q := (@LocallyOfFiniteType ⊓ @FormallyUnramified))
@@ -374,7 +374,7 @@ lemma of_formallyUnramified_of_flat
 
 中文:
 引理 of_formallyUnramified_of_flat
-  结论: [Flat f] [FormallyUnramified f]
+  结论: [平坦 f] [形式非分歧 f]
   证明: by
   rw [Etale.iff_flat_and_formallyUnramified]
   exact ⟨inferInstance, inferInstance, inferInstance⟩
@@ -402,8 +402,8 @@ definition Etale
 deriving Category, HasPullbacks, HasFiniteLimits
 
 中文:
-定义 Etale
-  签名: (X : Scheme.{u})
+定义 平展
+  签名: (X : 概形.{u})
   定义体: MorphismProperty.Over @Etale ⊤ X
 deriving Category, HasPullbacks, HasFiniteLimits
 -/
@@ -430,8 +430,8 @@ definition Etale.forget
   body: MorphismProperty.Over.forget @Etale ⊤ X
 
 中文:
-定义 Etale.forget
-  签名: : X.Etale ⥤ Over X
+定义 平展.forget
+  签名: : X.平展 ⥤ Over X
   定义体: MorphismProperty.Over.forget @Etale ⊤ X
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.forget, forget
@@ -449,8 +449,8 @@ definition Etale.forgetFullyFaithful
   body: MorphismProperty.Comma.forgetFullyFaithful _ _ _
 
 中文:
-定义 Etale.forgetFullyFaithful
-  签名: : (Etale.forget X).FullyFaithful
+定义 平展.forgetFullyFaithful
+  签名: : (平展.forget X).满忠实
   定义体: MorphismProperty.Comma.forgetFullyFaithful _ _ _
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Comma.forgetFullyFaithful, forgetFullyFaithful
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Etale.forget X).Full
+  签名: (平展.forget X).满
   定义体: (Etale.forgetFullyFaithful X).full
 
 Depends on / 依赖: Etale.forgetFullyFaithful, forgetFullyFaithful
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: (Etale.forget X).Faithful
+  签名: (平展.forget X).忠实
   定义体: (Etale.forgetFullyFaithful X).faithful
 
 Depends on / 依赖: Etale.forgetFullyFaithful, faithful, forgetFullyFaithful
@@ -506,8 +506,8 @@ abbreviation Etale.mk
   body: MorphismProperty.Over.mk _ f inferInstance
 
 中文:
-缩写 Etale.mk
-  签名: {Y : Scheme.{u}} (f : Y ⟶ X) [Etale f]
+缩写 平展.mk
+  签名: {Y : 概形.{u}} (f : Y ⟶ X) [平展 f]
   定义体: MorphismProperty.Over.mk _ f inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.Over.mk
@@ -528,8 +528,8 @@ lemma Etale.forget_mk
 @[simp]
 
 中文:
-引理 Etale.forget_mk
-  条件: {Y : Scheme.{u}} (f : Y ⟶ X) [Etale f]
+引理 平展.forget_mk
+  条件: {Y : 概形.{u}} (f : Y ⟶ X) [平展 f]
   证明: rfl
 
 @[simp]
@@ -549,8 +549,8 @@ lemma Etale.forget_obj_left
 @[simp]
 
 中文:
-引理 Etale.forget_obj_left
-  条件: (Y : X.Etale)
+引理 平展.forget_obj_left
+  条件: (Y : X.平展)
   证明: rfl
 
 @[simp]
@@ -568,8 +568,8 @@ lemma Etale.forget_obj_hom
   proof: rfl
 
 中文:
-引理 Etale.forget_obj_hom
-  条件: (Y : X.Etale)
+引理 平展.forget_obj_hom
+  条件: (Y : X.平展)
   证明: rfl
 -/
 lemma Etale.forget_obj_hom (Y : X.Etale) :
@@ -588,8 +588,8 @@ definition Etale.rec
   body: mk _ _ T.prop
 
 中文:
-定义 Etale.rec
-  签名: {motive : X.Etale -> Sort*}
+定义 平展.rec
+  签名: {motive : X.平展 -> 类型层*}
   定义体: mk _ _ T.prop
 
 Depends on / 依赖: T.prop
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (Etale.forget X)
+  签名: 保持FiniteLimits (平展.forget X)
   定义体: inferInstanceAs (PreservesFiniteLimits (MorphismProperty.Over.forget _ ⊤ X))
 
 Depends on / 依赖: DeltaZero.default, MorphismProperty, MorphismProperty.Over.forget, PreservesFiniteLimits, Subsingleton, Unique, Unique.uniq, forget, this.allEq, truncation

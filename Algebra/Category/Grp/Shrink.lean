@@ -41,8 +41,8 @@ map {X Y} f := GrpCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
 
 中文:
-定义 GrpCat.shrinkFunctor
-  签名: (F : C ⥤ GrpCat.{w'}) [对任意 X, Small.{w} (F.obj X)]
+定义 群范畴.shrinkFunctor
+  签名: (F : C ⥤ 群范畴.{w'}) [对任意 X, Small.{w} (F.obj X)]
   定义体: GrpCat.of (Shrink.{w} (F.obj X))
 map {X Y} f := GrpCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (F.map f).hom).comp Shrink.mulEquiv.toMonoidHom
@@ -72,8 +72,8 @@ definition GrpCat.shrinkFunctorMap
       congr($((FunctorToTypes.shrinkMap.{w} (Functor.whiskerRight τ (forget _))).naturality f) x)
 
 中文:
-定义 GrpCat.shrinkFunctorMap
-  签名: {F G : C ⥤ GrpCat.{w'}} (τ : F ⟶ G)
+定义 群范畴.shrinkFunctorMap
+  签名: {F G : C ⥤ 群范畴.{w'}} (τ : F ⟶ G)
   定义体: GrpCat.ofHom
     (Shrink.mulEquiv.symm.toMonoidHom.comp (τ.app X).hom).comp Shrink.mulEquiv.toMonoidHom
   naturality X Y f := by

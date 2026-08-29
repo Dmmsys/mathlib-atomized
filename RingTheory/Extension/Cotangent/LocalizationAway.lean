@@ -55,7 +55,7 @@ lemma comp_localizationAway_ker
 
 中文:
 引理 comp_localizationAway_ker
-  结论: (P : Generators R S ι) (f : P.Ring)
+  结论: (P : 生成元 R S ι) (f : P.环)
   证明: by
   have : (localizationAway T g).ker = Ideal.map ((localizationAway T g).ofComp P).toAlgHom
       (Ideal.span {MvPolynomial.rename Sum.inr f * MvPolynomial.X (Sum.inl ()) - 1}) := by
@@ -92,7 +92,7 @@ definition compLocalizationAwayAlgHom
 
 中文:
 定义 compLocalizationAwayAlgHom
-  签名: : ((Generators.localizationAway T g).comp P).Ring ->ₐ[R]
+  签名: : ((生成元.localizationAway T g).comp P).环 ->ₐ[R]
   定义体: aeval (R := R) (S₁ := Localization.Away _)
     (Sum.elim
       (fun _ => IsLocalization.Away.invSelf <| (Ideal.Quotient.mk (P.ker ^ 2) (P.σ g)))
@@ -125,7 +125,7 @@ lemma compLocalizationAwayAlgHom_toAlgHom_toComp
 
 中文:
 引理 compLocalizationAwayAlgHom_toAlgHom_toComp
-  条件: (x : P.Ring)
+  条件: (x : P.环)
   证明: by
   simp only [toComp_toAlgHom, compLocalizationAwayAlgHom, comp,
     localizationAway, AlgHom.toRingHom_eq_coe, aeval_rename,
@@ -156,7 +156,7 @@ lemma compLocalizationAwayAlgHom_X_inl
 
 中文:
 引理 compLocalizationAwayAlgHom_X_inl
-  结论: compLocalizationAwayAlgHom T g P (X (Sum.inl ())) =
+  结论: compLocalizationAwayAlgHom T g P (X (和.inl ())) =
   证明: by
   simp [compLocalizationAwayAlgHom]
 
@@ -312,7 +312,7 @@ definition cotangentCompAwaySec
 
 中文:
 定义 cotangentCompAwaySec
-  签名: (x : ((localizationAway T g).comp P).toExtension.Cotangent)
+  签名: (x : ((localizationAway T g).comp P).toExtension.余切)
   定义体: (basisCotangentAway T g).constr T fun _ => x
 
 Depends on / 依赖: basisCotangentAway, constr
@@ -480,7 +480,7 @@ lemma cotangentCompLocalizationAwayEquiv_symm_inl
 
 中文:
 引理 cotangentCompLocalizationAwayEquiv_symm_inl
-  条件: (a : T otimes[S] P.toExtension.Cotangent)
+  条件: (a : T otimes[S] P.toExtension.余切)
   证明: by
   simp [← cotangentCompLocalizationAwayEquiv_symm_comp_inl g P hx]
 

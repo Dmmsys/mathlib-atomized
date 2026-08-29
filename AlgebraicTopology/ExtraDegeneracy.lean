@@ -93,8 +93,8 @@ structure ExtraDegeneracy
     - s'_comp_ε : dsimp% s' ≫ X.hom.app (op ⦋0⦌) = 𝟙 X.right  [默认: by cat_disch]
     - s₀_comp_δ₁ : dsimp% s 0 ≫ X.left.δ 1 = X.hom.app (op ⦋0⦌) ≫ s'  [默认: by cat_disch]
     - s_comp_δ₀ : 对任意 n : 自然数, s n ≫ X.left.δ 0 = 𝟙 _  [默认: by cat_disch]
-    - s_comp_δ : 对任意 (n : 自然数) (i : Fin (n + 2)), s (n + 1) ≫ X.left.δ i.succ = X.left.δ i ≫ s n  [默认: by cat_disch]
-    - s_comp_σ : 对任意 (n : 自然数) (i : Fin (n + 1)), s n ≫ X.left.σ i.succ = X.left.σ i ≫ s (n + 1)  [默认: by cat_disch]
+    - s_comp_δ : 对任意 (n : 自然数) (i : 有限集 (n + 2)), s (n + 1) ≫ X.left.δ i.succ = X.left.δ i ≫ s n  [默认: by cat_disch]
+    - s_comp_σ : 对任意 (n : 自然数) (i : 有限集 (n + 1)), s n ≫ X.left.σ i.succ = X.left.σ i ≫ s (n + 1)  [默认: by cat_disch]
 
 Depends on / 依赖: X.hom.app, X.left, cat_disch, i.succ
 -/
@@ -130,7 +130,7 @@ definition map
 
 中文:
 定义 map
-  签名: {D : 类型} [Category* D] {X : SimplicialObject.Augmented C} (ed : ExtraDegeneracy X)
+  签名: {D : 类型} [范畴* D] {X : SimplicialObject.Augmented C} (ed : ExtraDegeneracy X)
   定义体: F.map ed.s'
   s n := F.map (ed.s n)
 
@@ -296,7 +296,7 @@ definition splitEpi
 
 中文:
 定义 splitEpi
-  签名: : SplitEpi X.hom where
+  签名: : 分裂满态射 X.hom where
   定义体: ed.section_
 
 @[reassoc (attr := simp)]
@@ -346,7 +346,7 @@ definition h
 
 中文:
 定义 h
-  签名: {n : 自然数} (i : Fin (n + 1))
+  签名: {n : 自然数} (i : 有限集 (n + 1))
   定义体: X.left.δ₀Iter i.val (by grind) ≫ ed.s i.rev.val ≫ X.left.σ₀Iter i.val (by grind)
 
 @[reassoc]
@@ -369,7 +369,7 @@ lemma h_eq
 
 中文:
 引理 h_eq
-  条件: {n : 自然数} (i : Fin (n + 1)) (j : 自然数) (hj : j = i.rev.val := by grind)
+  条件: {n : 自然数} (i : 有限集 (n + 1)) (j : 自然数) (hj : j = i.rev.val := by grind)
   证明: by
   subst hj
   rfl
@@ -403,7 +403,7 @@ definition homotopy
 
 中文:
 定义 homotopy
-  签名: : SimplicialObject.Homotopy (X.hom ≫ ed.section_) (𝟙 X.left) where
+  签名: : SimplicialObject.同伦 (X.hom ≫ ed.section_) (𝟙 X.left) where
   定义体: h ed
   h_zero_comp_δ_zero n := by simp [h_eq_assoc ed (0 : Fin (n + 1)) n (by simp)]
   h_last_comp_δ_last n := by
@@ -482,7 +482,7 @@ definition shiftFun
 
 中文:
 定义 shiftFun
-  签名: {n : 自然数} {X : 类型} [Zero X] (f : Fin n -> X) (i : Fin (n + 1))
+  签名: {n : 自然数} {X : 类型} [零 X] (f : 有限集 n -> X) (i : 有限集 (n + 1))
   定义体: Matrix.vecCons 0 f i
 
 @[simp]
@@ -506,7 +506,7 @@ theorem shiftFun_zero
 
 中文:
 定理 shiftFun_zero
-  条件: {n : 自然数} {X : 类型} [Zero X] (f : Fin n -> X)
+  条件: {n : 自然数} {X : 类型} [零 X] (f : 有限集 n -> X)
   结论: shiftFun f 0 = 0
   证明: rfl
 
@@ -526,7 +526,7 @@ theorem shiftFun_succ
 
 中文:
 定理 shiftFun_succ
-  条件: {n : 自然数} {X : 类型} [Zero X] (f : Fin n -> X) (i : Fin n)
+  条件: {n : 自然数} {X : 类型} [零 X] (f : 有限集 n -> X) (i : 有限集 n)
   证明: rfl
 -/
 theorem shiftFun_succ {n : Nat} {X : Type*} [Zero X] (f : Fin n -> X) (i : Fin n) :
@@ -554,7 +554,7 @@ definition shift
 
 中文:
 定义 shift
-  签名: {n : 自然数} {Δ : SimplexCategory} (f : ⦋n⦌ ⟶ Δ)
+  签名: {n : 自然数} {Δ : 单纯形范畴} (f : ⦋n⦌ ⟶ Δ)
   定义体: SimplexCategory.Hom.mk
     { toFun := shiftFun f.toOrderHom
       monotone' := fun i₁ i₂ hi => by
@@ -609,7 +609,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def extraDegeneracy (Δ : SimplexCategory)
+  签名: def extraDegeneracy (Δ : 单纯形范畴)
   定义体: ↾fun _ => objMk (OrderHom.const _ 0)
   s _ := ↾fun f => objEquiv.symm (shift (objEquiv f))
   s'_comp_ε := by
@@ -675,7 +675,7 @@ instance nonempty_extraDegeneracy_stdSimplex
 
 中文:
 实例 nonempty_extraDegeneracy_stdSimplex
-  签名: (Δ : SimplexCategory)
+  签名: (Δ : 单纯形范畴)
   定义体: ⟨StandardSimplex.extraDegeneracy Δ⟩
 
 Depends on / 依赖: StandardSimplex, StandardSimplex.extraDegeneracy, extraDegeneracy
@@ -770,7 +770,7 @@ theorem ExtraDegeneracy.s_comp_π_succ
 
 中文:
 定理 ExtraDegeneracy.s_comp_π_succ
-  条件: (n : 自然数) (i : Fin (n + 1))
+  条件: (n : 自然数) (i : 有限集 (n + 1))
   证明: by
   simp [ExtraDegeneracy.s]
 
@@ -918,7 +918,7 @@ definition homotopyEquiv
 
 中文:
 定义 homotopyEquiv
-  签名: [Preadditive C] [HasZeroObject C]
+  签名: [预加性 C] [有ZeroObject C]
   定义体: AlternatingFaceMapComplex.ε.app X
   inv := (ChainComplex.fromSingle₀Equiv _ _).symm (by exact ed.s')
   homotopyInvHomId := Homotopy.ofEq (by

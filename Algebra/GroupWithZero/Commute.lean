@@ -69,7 +69,7 @@ theorem mul_inverse_rev
 
 中文:
 定理 mul_inverse_rev
-  条件: {M₀} [CommMonoidWithZero M₀] (a b : M₀)
+  条件: {M₀} [带零交换幺半群 M₀] (a b : M₀)
   证明: mul_inverse_rev' (Commute.all _ _)
 
 Depends on / 依赖: Commute, Commute.all, mul_inverse_rev
@@ -107,7 +107,7 @@ lemma inverse_pow_mul_eq_iff_eq_mul
 
 中文:
 引理 inverse_pow_mul_eq_iff_eq_mul
-  条件: {a : M₀} (b c : M₀) (ha : IsUnit a) {k : 自然数}
+  条件: {a : M₀} (b c : M₀) (ha : 是单位 a) {k : 自然数}
   证明: by
   rw [Ring.inverse_pow]; rw [Ring.inverse_mul_eq_iff_eq_mul _ _ _ (IsUnit.pow _ ha)]
 
@@ -158,7 +158,7 @@ theorem zero_right
 
 中文:
 定理 zero_right
-  条件: [MulZeroClass G₀] (a : G₀)
+  条件: [乘零类 G₀] (a : G₀)
   结论: Commute a 0
   证明: SemiconjBy.zero_right a
 
@@ -181,7 +181,7 @@ theorem zero_left
 
 中文:
 定理 zero_left
-  条件: [MulZeroClass G₀] (a : G₀)
+  条件: [乘零类 G₀] (a : G₀)
   结论: Commute 0 a
   证明: SemiconjBy.zero_left a a
 

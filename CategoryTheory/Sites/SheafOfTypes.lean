@@ -73,8 +73,8 @@ definition IsSeparated
   body: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSeparatedFor P (S : Presieve X)
 
 中文:
-定义 IsSeparated
-  签名: (P : Cᵒᵖ ⥤ Type w)
+定义 是分离
+  签名: (P : Cᵒᵖ ⥤ 类型 w)
   定义体: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSeparatedFor P (S : Presieve X)
 
 Depends on / 依赖: IsSeparatedFor, Presieve
@@ -91,8 +91,8 @@ definition IsSheaf
   body: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSheafFor P (S : Presieve X)
 
 中文:
-定义 IsSheaf
-  签名: (P : Cᵒᵖ ⥤ Type w)
+定义 是层
+  签名: (P : Cᵒᵖ ⥤ 类型 w)
   定义体: forall ⦃X⦄ (S : Sieve X), S in J X -> IsSheafFor P (S : Presieve X)
 
 Depends on / 依赖: IsSheafFor, Presieve
@@ -110,8 +110,8 @@ theorem IsSheaf.isSheafFor
   proof: (isSheafFor_iff_generate R).2 hp _ hr
 
 中文:
-定理 IsSheaf.isSheafFor
-  结论: {P : Cᵒᵖ ⥤ Type w} (hp : IsSheaf J P) (R : Presieve X)
+定理 是层.isSheafFor
+  结论: {P : Cᵒᵖ ⥤ 类型 w} (hp : 是层 J P) (R : Presieve X)
   证明: (isSheafFor_iff_generate R).2 hp _ hr
 
 Depends on / 依赖: isSheafFor_iff_generate
@@ -130,7 +130,7 @@ theorem isSheaf_of_le
 
 中文:
 定理 isSheaf_of_le
-  条件: (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C}
+  条件: (P : Cᵒᵖ ⥤ 类型 w) {J₁ J₂ : Grothendieck拓扑 C}
   证明: fun h t _ S hS => t S (h _ hS)
 -/
 theorem isSheaf_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} :
@@ -146,7 +146,7 @@ theorem isSeparated_of_le
 
 中文:
 定理 isSeparated_of_le
-  条件: (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C}
+  条件: (P : Cᵒᵖ ⥤ 类型 w) {J₁ J₂ : Grothendieck拓扑 C}
   证明: fun h hP _ S hS => hP S h _ hS
 -/
 theorem isSeparated_of_le (P : Cᵒᵖ ⥤ Type w) {J₁ J₂ : GrothendieckTopology C} :
@@ -164,9 +164,9 @@ theorem IsSheaf.isSeparated
   proof: fun _ S hS => (h S hS).isSeparatedFor
 
 中文:
-定理 IsSheaf.isSeparated
-  条件: {P : Cᵒᵖ ⥤ Type w} (h : IsSheaf J P)
-  结论: IsSeparated J P
+定理 是层.isSeparated
+  条件: {P : Cᵒᵖ ⥤ 类型 w} (h : 是层 J P)
+  结论: 是分离 J P
   证明: fun _ S hS => (h S hS).isSeparatedFor
 
 Depends on / 依赖: isSeparatedFor
@@ -184,8 +184,8 @@ theorem IsSeparated.isSheaf
   proof: fun _ S hS => (h S hS).isSheafFor h' _ S hS
 
 中文:
-定理 IsSeparated.isSheaf
-  结论: {P : Cᵒᵖ ⥤ Type w} (h : IsSeparated J P) (h' : 对任意 X, 对任意 S in J X,
+定理 是分离.isSheaf
+  结论: {P : Cᵒᵖ ⥤ 类型 w} (h : 是分离 J P) (h' : 对任意 X, 对任意 S in J X,
   证明: fun _ S hS => (h S hS).isSheafFor h' _ S hS
 
 Depends on / 依赖: isSheafFor
@@ -216,7 +216,7 @@ include he in
 
 中文:
 引理 isSheaf_of_nat_equiv
-  条件: (hP₁ : Presieve.IsSheaf J P₁)
+  条件: (hP₁ : Presieve.是层 J P₁)
   证明: fun _ R hR =>
   isSheafFor_of_nat_equiv e he (hP₁ R hR)
 
@@ -259,8 +259,8 @@ theorem isSheaf_iso
 
 中文:
 定理 isSheaf_iso
-  条件: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (h : IsSheaf J P)
-  结论: IsSheaf J P'
+  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (h : 是层 J P)
+  结论: 是层 J P'
   证明: fun _ S hS => isSheafFor_iso i (h S hS)
 
 Depends on / 依赖: isSheafFor_iso
@@ -278,7 +278,7 @@ theorem isSeparated_iso
 
 中文:
 定理 isSeparated_iso
-  条件: {P' : Cᵒᵖ ⥤ Type w} (i : P ≅ P') (hP : IsSeparated J P)
+  条件: {P' : Cᵒᵖ ⥤ 类型 w} (i : P ≅ P') (hP : 是分离 J P)
   证明: fun _ S hS => isSeparatedFor_iso i (hP S hS)
 
 Depends on / 依赖: isSeparatedFor_iso
@@ -326,7 +326,7 @@ theorem isSheaf_pretopology
 
 中文:
 定理 isSheaf_pretopology
-  条件: [HasPullbacks C] (K : Pretopology C)
+  条件: [有Pullbacks C] (K : Pretopology C)
   证明: by
   constructor
   · intro PJ X R hR
@@ -367,7 +367,7 @@ theorem isSheaf_bot
 
 中文:
 定理 isSheaf_bot
-  结论: IsSheaf (⊥ : GrothendieckTopology C) P
+  结论: 是层 (⊥ : Grothendieck拓扑 C) P
   证明: fun X => by
   simp [isSheafFor_top]
 
@@ -409,7 +409,7 @@ theorem isSheaf_comp_uliftFunctor_iff
 
 中文:
 定理 isSheaf_comp_uliftFunctor_iff
-  结论: IsSheaf J (P ⋙ uliftFunctor.{w'}) ↔ IsSheaf J P
+  结论: 是层 J (P ⋙ uliftFunctor.{w'}) ↔ 是层 J P
   证明: (isSheaf_iff_of_nat_equiv (fun _ => Equiv.ulift.symm) (fun _ _ _ _ => rfl)).symm
 
 Depends on / 依赖: Equiv.ulift.symm, isSheaf_iff_of_nat_equiv
@@ -429,8 +429,8 @@ theorem isSheaf_comp_uliftFunctor
 
 中文:
 定理 isSheaf_comp_uliftFunctor
-  条件: (h : IsSheaf J P)
-  结论: IsSheaf J (P ⋙ uliftFunctor.{w'})
+  条件: (h : 是层 J P)
+  结论: 是层 J (P ⋙ uliftFunctor.{w'})
   证明: by
   rwa [isSheaf_comp_uliftFunctor_iff]
 
@@ -489,7 +489,7 @@ definition yonedaFamilyOfElements_fromCocone
 
 中文:
 定义 yonedaFamilyOfElements_fromCocone
-  签名: (R : Presieve X) (s : Cocone (diagram R))
+  签名: (R : Presieve X) (s : 余锥 (diagram R))
   定义体: fun _ f hf => s.ι.app ⟨Over.mk f, hf⟩
 
 Depends on / 依赖: Over.mk
@@ -524,7 +524,7 @@ theorem yonedaFamily_fromCocone_compatible
 
 中文:
 定理 yonedaFamily_fromCocone_compatible
-  条件: (S : Sieve X) (s : Cocone (diagram S.arrows))
+  条件: (S : 筛 X) (s : 余锥 (diagram S.arrows))
   证明: by
   intro Y₁ Y₂ Z g₁ g₂ f₁ f₂ hf₁ hf₂ hgf
   have Hs := s.ι.naturality
@@ -569,8 +569,8 @@ theorem forallYonedaIsSheaf_iff_colimit
         replace H := H s.pt (yonedaFamilyOfElements_fromCocone S.arrows 
 
 中文:
-定理 forallYonedaIsSheaf_iff_colimit
-  条件: (S : Sieve X)
+定理 对任意YonedaIsSheaf_iff_colimit
+  条件: (S : 筛 X)
   证明: by
   constructor
   · intro H

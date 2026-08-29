@@ -80,7 +80,7 @@ theorem span_top
 
 中文:
 定理 span_top
-  结论: span K (span 整数 (Set.range b) : Set E) = ⊤
+  结论: span K (span 整数 (集合.range b) : 集合 E) = ⊤
   证明: by simp [span_span_of_tower]
 
 Depends on / 依赖: span_span_of_tower
@@ -99,7 +99,7 @@ theorem map
 
 中文:
 定理 map
-  条件: {F : 类型} [AddCommGroup F] [Module K F] (f : E ≃ₗ[K] F)
+  条件: {F : 类型} [加法交换群 F] [模 K F] (f : E ≃ₗ[K] F)
   证明: by
   simp_rw [Submodule.map_span, LinearEquiv.coe_coe, LinearEquiv.restrictScalars_apply,
     Basis.coe_map, Set.range_comp]
@@ -154,7 +154,7 @@ definition fundamentalDomain
 
 中文:
 定义 fundamentalDomain
-  签名: : Set E
+  签名: : 集合 E
   定义体: {m | forall i, b.repr m i in Set.Ico (0 : K) 1}
 
 @[simp]
@@ -197,7 +197,7 @@ theorem map_fundamentalDomain
 
 中文:
 定理 map_fundamentalDomain
-  条件: {F : 类型} [NormedAddCommGroup F] [NormedSpace K F] (f : E ≃ₗ[K] F)
+  条件: {F : 类型} [赋范交换加群 F] [赋范空间 K F] (f : E ≃ₗ[K] F)
   证明: by
   ext x
   rw [mem_fundamentalDomain]; rw [Basis.map_repr]; rw [LinearEquiv.trans_apply]; rw [← mem_fundamentalDomain]; rw [show f.symm x = f.toEquiv.symm x by rfl]; rw [← Set.mem_image_equiv]
@@ -251,7 +251,7 @@ lemma fundamentalDomain_pi_basisFun
 
 中文:
 引理 fundamentalDomain_pi_basisFun
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: by
   ext; simp
 -/
@@ -389,7 +389,7 @@ theorem floor_eq_self_of_mem
 
 中文:
 定理 floor_eq_self_of_mem
-  条件: (m : E) (h : m in span 整数 (Set.range b))
+  条件: (m : E) (h : m in span 整数 (集合.range b))
   结论: (floor b m : E) = m
   证明: by
   apply b.ext_elem
@@ -429,7 +429,7 @@ theorem ceil_eq_self_of_mem
 
 中文:
 定理 ceil_eq_self_of_mem
-  条件: (m : E) (h : m in span 整数 (Set.range b))
+  条件: (m : E) (h : m in span 整数 (集合.range b))
   结论: (ceil b m : E) = m
   证明: by
   apply b.ext_elem
@@ -552,7 +552,7 @@ theorem fract_zSpan_add
 
 中文:
 定理 fract_zSpan_add
-  条件: (m : E) {v : E} (h : v in span 整数 (Set.range b))
+  条件: (m : E) {v : E} (h : v in span 整数 (集合.range b))
   证明: by
   refine (Basis.ext_elem_iff b).mpr fun i => ?_
   simp_rw [repr_fract_apply, Int.fract_eq_fract]
@@ -579,7 +579,7 @@ theorem fract_add_ZSpan
 
 中文:
 定理 fract_add_ZSpan
-  条件: (m : E) {v : E} (h : v in span 整数 (Set.range b))
+  条件: (m : E) {v : E} (h : v in span 整数 (集合.range b))
   证明: by rw [add_comm, fract_zSpan_add b m h]
 
 Depends on / 依赖: add_comm, fract_zSpan_add
@@ -662,7 +662,7 @@ theorem fractRestrict_surjective
 
 中文:
 定理 fractRestrict_surjective
-  结论: Function.Surjective (fractRestrict b)
+  结论: 函数.满射 (fractRestrict b)
   证明: fun x => ⟨↑x, Subtype.ext (fract_eq_self.mpr (Subtype.mem x))⟩
 
 @[simp]
@@ -706,7 +706,7 @@ theorem fract_eq_fract
 中文:
 定理 fract_eq_fract
   条件: (m n : E)
-  结论: fract b m = fract b n ↔ -m + n in span 整数 (Set.range b)
+  结论: fract b m = fract b n ↔ -m + n in span 整数 (集合.range b)
   证明: by
   rw [eq_comm]; rw [Basis.ext_elem_iff b]
   simp_rw [repr_fract_apply, Int.fract_eq_fract, eq_comm, Basis.mem_span_iff_repr_mem,
@@ -738,7 +738,7 @@ theorem norm_fract_le
 
 中文:
 定理 norm_fract_le
-  条件: [HasSolidNorm K] (m : E)
+  条件: [有Solid范数 K] (m : E)
   结论: ‖fract b m‖ <= ∑ i, ‖b i‖
   证明: by
   calc
@@ -785,7 +785,7 @@ theorem coe_floor_self
 中文:
 定理 coe_floor_self
   条件: (k : K)
-  结论: (floor (Basis.singleton ι K) k : K) = ⌊k⌋
+  结论: (floor (基.singleton ι K) k : K) = ⌊k⌋
   证明: Basis.ext_elem (Basis.singleton ι K) fun _ => by
     rw [repr_floor_apply]; rw [Basis.singleton_repr]; rw [Basis.singleton_repr]
 
@@ -811,7 +811,7 @@ theorem coe_fract_self
 中文:
 定理 coe_fract_self
   条件: (k : K)
-  结论: (fract (Basis.singleton ι K) k : K) = 整数.fract k
+  结论: (fract (基.singleton ι K) k : K) = 整数.fract k
   证明: Basis.ext_elem (Basis.singleton ι K) fun _ => by
     rw [repr_fract_apply]; rw [Basis.singleton_repr]; rw [Basis.singleton_repr]
 
@@ -839,7 +839,7 @@ theorem fundamentalDomain_isBounded
 
 中文:
 定理 fundamentalDomain_isBounded
-  条件: [Finite ι] [HasSolidNorm K]
+  条件: [有限 ι] [有Solid范数 K]
   证明: by
   cases nonempty_fintype ι
   refine isBounded_iff_forall_norm_le.2 ⟨∑ j, ‖b j‖, fun x hx => ?_⟩
@@ -867,7 +867,7 @@ theorem vadd_mem_fundamentalDomain
 
 中文:
 定理 vadd_mem_fundamentalDomain
-  条件: [Fintype ι] (y : span 整数 (Set.range b)) (x : E)
+  条件: [有限类型 ι] (y : span 整数 (集合.range b)) (x : E)
   证明: by
   rw [Subtype.ext_iff]; rw [← add_right_inj x]; rw [NegMemClass.coe_neg]; rw [← sub_eq_add_neg]; rw [← fract_apply]; rw [← fract_zSpan_add b _ (Subtype.mem y)]; rw [add_comm]; rw [← vadd_eq_add]; rw [← vadd_def]; rw [eq_comm]; rw [←
     fract_eq_self]
@@ -893,7 +893,7 @@ theorem exist_unique_vadd_mem_fundamentalDomain
 
 中文:
 定理 exist_unique_vadd_mem_fundamentalDomain
-  条件: [Finite ι] (x : E)
+  条件: [有限 ι] (x : E)
   证明: by
   cases nonempty_fintype ι
   refine ⟨-floor b x, ?_, fun y h => ?_⟩
@@ -925,7 +925,7 @@ definition quotientEquiv
 
 中文:
 定义 quotientEquiv
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: by
   refine Equiv.ofBijective ?_ ⟨fun x y => ?_, fun x => ?_⟩
   · refine fun q => Quotient.liftOn q (fractRestrict b) (fun _ _ h => ?_)
@@ -962,7 +962,7 @@ theorem quotientEquiv_apply_mk
 
 中文:
 定理 quotientEquiv_apply_mk
-  条件: [Fintype ι] (x : E)
+  条件: [有限类型 ι] (x : E)
   证明: rfl
 
 @[simp]
@@ -983,7 +983,7 @@ theorem quotientEquiv.symm_apply
 
 中文:
 定理 quotientEquiv.symm_apply
-  条件: [Fintype ι] (x : fundamentalDomain b)
+  条件: [有限类型 ι] (x : fundamentalDomain b)
   证明: by
   rw [Equiv.symm_apply_eq]; rw [quotientEquiv_apply_mk b ↑x]; rw [Subtype.ext_iff]; rw [fractRestrict_apply]
   exact (fract_eq_self.mpr x.prop).symm
@@ -1014,7 +1014,7 @@ theorem discreteTopology_pi_basisFun
 
 中文:
 定理 discreteTopology_pi_basisFun
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: by
   cases nonempty_fintype ι
   refine discreteTopology_iff_isOpen_singleton_zero.mpr ⟨Metric.ball 0 1, Metric.isOpen_ball, ?_⟩
@@ -1050,7 +1050,7 @@ theorem fundamentalDomain_subset_parallelepiped
 
 中文:
 定理 fundamentalDomain_subset_parallelepiped
-  条件: [Fintype ι]
+  条件: [有限类型 ι]
   证明: by
   rw [fundamentalDomain]; rw [parallelepiped_basis_eq]; rw [Set.ofPred_subset_ofPred]
   exact fun _ h i => Set.Ico_subset_Icc_self (h i)
@@ -1076,8 +1076,8 @@ instance [Finite
   · exact dis
 
 中文:
-实例 [Finite
-  签名: ι] : DiscreteTopology (span 整数 (Set.range b))
+实例 [有限
+  签名: ι] : 离散拓扑 (span 整数 (集合.range b))
   定义体: by
   have h : Set.MapsTo b.equivFun (span Int (Set.range b)) (span Int (Set.range (Pi.basisFun Real ι))) := by
     intro _ hx
@@ -1104,8 +1104,8 @@ instance [Finite
   body: inferInstanceAs DiscreteTopology (span Int (Set.range b))
 
 中文:
-实例 [Finite
-  签名: ι] : DiscreteTopology (span 整数 (Set.range b)).toAddSubgroup
+实例 [有限
+  签名: ι] : 离散拓扑 (span 整数 (集合.range b)).toAddSubgroup
   定义体: inferInstanceAs DiscreteTopology (span Int (Set.range b))
 
 Depends on / 依赖: DiscreteTopology, Set.range
@@ -1129,7 +1129,7 @@ theorem setFinite_inter
 
 中文:
 定理 setFinite_inter
-  条件: [命题erSpace E] [Finite ι] {s : Set E} (hs : Bornology.IsBounded s)
+  条件: [真空间 E] [有限 ι] {s : 集合 E} (hs : 有界结构.IsBounded s)
   证明: by
   have : DiscreteTopology (span Int (Set.range b)) := inferInstance
   refine Metric.finite_isBounded_inter_isClosed DiscreteTopology.isDiscrete hs ?_
@@ -1163,7 +1163,7 @@ theorem fundamentalDomain_measurableSet
 
 中文:
 定理 fundamentalDomain_measurableSet
-  条件: [MeasurableSpace E] [OpensMeasurableSpace E] [Finite ι]
+  条件: [可测空间 E] [OpensMeasurable空间 E] [有限 ι]
   证明: by
   cases nonempty_fintype ι
   have : FiniteDimensional Real E := b.finiteDimensional_of_finite
@@ -1198,7 +1198,7 @@ theorem isAddFundamentalDomain
 
 中文:
 定理 isAddFundamentalDomain
-  结论: [Finite ι] [MeasurableSpace E] [OpensMeasurableSpace E]
+  结论: [有限 ι] [可测空间 E] [OpensMeasurable空间 E]
   证明: by
   cases nonempty_fintype ι
   exact IsAddFundamentalDomain.mk' (nullMeasurableSet (fundamentalDomain_measurableSet b))
@@ -1221,7 +1221,7 @@ theorem isAddFundamentalDomain'
 
 中文:
 定理 isAddFundamentalDomain'
-  结论: [Finite ι] [MeasurableSpace E] [OpensMeasurableSpace E]
+  结论: [有限 ι] [可测空间 E] [OpensMeasurable空间 E]
   证明: ZSpan.isAddFundamentalDomain b μ
 -/
 protected theorem isAddFundamentalDomain' [Finite ι] [MeasurableSpace E] [OpensMeasurableSpace E]
@@ -1241,7 +1241,7 @@ exact inferInstanceAs VAddInvariantMeasure (span Int (Set.range b)).toAddSubgrou
 
 中文:
 定理 measure_fundamentalDomain_ne_zero
-  结论: [Finite ι] [MeasurableSpace E] [BorelSpace E]
+  结论: [有限 ι] [可测空间 E] [Borel空间 E]
   证明: by
   convert! (ZSpan.isAddFundamentalDomain b μ).measure_ne_zero (NeZero.ne μ)
 exact inferInstanceAs VAddInvariantMeasure (span Int (Set.range b)).toAddSubgroup E μ
@@ -1268,7 +1268,7 @@ theorem measure_fundamentalDomain
 
 中文:
 定理 measure_fundamentalDomain
-  结论: [Fintype ι] [DecidableEq ι] [MeasurableSpace E] (μ : Measure E)
+  结论: [有限类型 ι] [DecidableEq ι] [可测空间 E] (μ : 测度 E)
   证明: by
   have : FiniteDimensional Real E := b.finiteDimensional_of_finite
   convert! μ.addHaar_preimage_linearEquiv (b.equiv b₀ (Equiv.refl ι)) (fundamentalDomain b₀)
@@ -1297,7 +1297,7 @@ theorem measureReal_fundamentalDomain
 @[simp]
 
 中文:
-定理 measureReal_fundamentalDomain
+定理 measure实数_fundamentalDomain
   证明: by
   simp [measureReal_def, measure_fundamentalDomain b μ b₀]
 
@@ -1326,7 +1326,7 @@ theorem volume_fundamentalDomain
 
 中文:
 定理 volume_fundamentalDomain
-  条件: [Fintype ι] [DecidableEq ι] (b : Basis ι 实数 (ι -> 实数))
+  条件: [有限类型 ι] [DecidableEq ι] (b : 基 ι 实数 (ι -> 实数))
   证明: by
   rw [measure_fundamentalDomain b volume (b₀ := Pi.basisFun Real ι)]; rw [fundamentalDomain_pi_basisFun]; rw [volume_pi]; rw [Measure.pi_pi]; rw [Real.volume_Ico]; rw [sub_zero]; rw [ENNReal.ofReal_one]; rw [Finset.prod_const_one]; rw [mul_one]; rw [← Matrix.det_transpose]
   rfl
@@ -1352,7 +1352,7 @@ theorem volume_real_fundamentalDomain
 
 中文:
 定理 volume_real_fundamentalDomain
-  条件: [Fintype ι] [DecidableEq ι] (b : Basis ι 实数 (ι -> 实数))
+  条件: [有限类型 ι] [DecidableEq ι] (b : 基 ι 实数 (ι -> 实数))
   证明: by
   simp [measureReal_def]
 
@@ -1377,7 +1377,7 @@ theorem fundamentalDomain_ae_parallelepiped
 
 中文:
 定理 fundamentalDomain_ae_parallelepiped
-  结论: [Fintype ι] [MeasurableSpace E] (μ : Measure E)
+  结论: [有限类型 ι] [可测空间 E] (μ : 测度 E)
   证明: by
   classical
   have : FiniteDimensional Real E := b.finiteDimensional_of_finite
@@ -1430,10 +1430,10 @@ class IsZLattice
     - span_top : span K (L : Set E) = ⊤
 
 中文:
-类 IsZLattice
-  参数: (K : 类型) [NormedField K] {E : 类型} [NormedAddCommGroup E] [NormedSpace K E]
+类 是Z格
+  参数: (K : 类型) [赋范域 K] {E : 类型} [赋范交换加群 E] [赋范空间 K E]
   公理与运算 (1 个):
-    - span_top : span K (L : Set E) = ⊤
+    - span_top : span K (L : 集合 E) = ⊤
 -/
 class IsZLattice (K : Type*) [NormedField K] {E : Type*} [NormedAddCommGroup E] [NormedSpace K E]
     (L : Submodule Int E) [DiscreteTopology L] : Prop where
@@ -1449,8 +1449,8 @@ instance instIsZLatticeRealSpan
   body: ZSpan.span_top b
 
 中文:
-实例 instIsZLatticeRealSpan
-  签名: {E ι : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+实例 instIsZLattice实数Span
+  签名: {E ι : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   定义体: ZSpan.span_top b
 
 Depends on / 依赖: ZSpan.span_top, span_top
@@ -1482,7 +1482,7 @@ theorem ZLattice.FG
 
 中文:
 定理 ZLattice.FG
-  条件: [hs : IsZLattice K L]
+  条件: [hs : 是Z格 K L]
   结论: L.FG
   证明: by
   obtain ⟨s, ⟨h_incl, ⟨h_span, h_lind⟩⟩⟩ := exists_linearIndependent K (L : Set E)
@@ -1539,8 +1539,8 @@ theorem ZLattice.module_finite
 
 中文:
 定理 ZLattice.module_finite
-  条件: [IsZLattice K L]
-  结论: Module.Finite 整数 L
+  条件: [是Z格 K L]
+  结论: 模.有限 整数 L
   证明: .of_fg (ZLattice.FG K L)
 
 Depends on / 依赖: ZLattice, ZLattice.FG, of_fg
@@ -1563,7 +1563,7 @@ instance instModuleFinite_of_discrete_submodule
 
 中文:
 实例 instModuleFinite_of_discrete_submodule
-  签名: {E : 类型} [NormedAddCommGroup E]
+  签名: {E : 类型} [赋范交换加群 E]
   定义体: by
   let f := (span Real (L : Set E)).subtype
   let L₀ := L.comap (f.restrictScalars Int)
@@ -1607,8 +1607,8 @@ theorem ZLattice.module_free
 
 中文:
 定理 ZLattice.module_free
-  条件: [IsZLattice K L]
-  结论: Module.Free 整数 L
+  条件: [是Z格 K L]
+  结论: 模.自由 整数 L
   证明: by
   have : Module.Finite Int L := module_finite K L
   have : Module Rat E := Module.compHom E (algebraMap Rat K)
@@ -1636,7 +1636,7 @@ instance instModuleFree_of_discrete_submodule
 
 中文:
 实例 instModuleFree_of_discrete_submodule
-  签名: {E : 类型} [NormedAddCommGroup E]
+  签名: {E : 类型} [赋范交换加群 E]
   定义体: by
   have : Module Rat E := Module.compHom E (algebraMap Rat Real)
   have : IsAddTorsionFree E := .of_module_rat _
@@ -1669,7 +1669,7 @@ theorem ZLattice.rank
 
 中文:
 定理 ZLattice.rank
-  条件: [hs : IsZLattice K L]
+  条件: [hs : 是Z格 K L]
   结论: finrank 整数 L = finrank K E
   证明: by
   classical
@@ -1783,7 +1783,7 @@ definition ofZLatticeBasis
 
 中文:
 定义 ofZLatticeBasis
-  签名: : Basis ι K E
+  签名: : 基 ι K E
   定义体: by
   have : Module.Finite Int L := ZLattice.module_finite K L
   have : Free Int L := ZLattice.module_free K L
@@ -1881,7 +1881,7 @@ theorem ofZLatticeBasis_span
 
 中文:
 定理 ofZLatticeBasis_span
-  结论: span 整数 (Set.range (b.ofZLatticeBasis K)) = L
+  结论: span 整数 (集合.range (b.ofZLatticeBasis K)) = L
   证明: by
   calc span Int (Set.range (b.ofZLatticeBasis K))
     _ = span Int (L.subtype '' Set.range b) := by congr; ext; simp
@@ -1911,7 +1911,7 @@ theorem ZLattice.isAddFundamentalDomain
 
 中文:
 定理 ZLattice.isAddFundamentalDomain
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   convert! ZSpan.isAddFundamentalDomain (b.ofZLatticeBasis Real) μ
   all_goals exact (b.ofZLatticeBasis_span Real).symm
@@ -1937,7 +1937,7 @@ instance instCountable_of_discrete_submodule
 
 中文:
 实例 instCountable_of_discrete_submodule
-  签名: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+  签名: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   定义体: by
   simp_rw [← (Module.Free.chooseBasis Int L).ofZLatticeBasis_span Real]
   infer_instance
@@ -1965,8 +1965,8 @@ theorem Real.finrank_eq_int_finrank_of_discrete
       ⟨f.symm, continuous_of_dis
 
 中文:
-定理 Real.finrank_eq_int_finrank_of_discrete
-  结论: {E : 类型} [NormedAddCommGroup E] [NormedSpace 实数 E]
+定理 实数.finrank_eq_int_finrank_of_discrete
+  结论: {E : 类型} [赋范交换加群 E] [赋范空间 实数 E]
   证明: by
   let F := span Real s
   let L : Submodule Int (span Real s) := comap (F.restrictScalars Int).subtype (span Int s)
@@ -2008,8 +2008,8 @@ definition IsZLattice.basis
     (by rw [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real, finrank_fintype_fun_eq_card]))
 
 中文:
-定义 IsZLattice.basis
-  签名: : Basis ι 整数 L
+定义 是Z格.basis
+  签名: : 基 ι 整数 L
   定义体: (Free.chooseBasis Int L).reindex (Fintype.equivOfCardEq
     (by rw [← finrank_eq_card_chooseBasisIndex, ZLattice.rank Real, finrank_fintype_fun_eq_card]))
 
@@ -2089,7 +2089,7 @@ theorem ZLattice.comap_discreteTopology
 
 中文:
 定理 ZLattice.comap_discreteTopology
-  结论: [hL : DiscreteTopology L] {e : F ->ₗ[K] E}
+  结论: [hL : 离散拓扑 L] {e : F ->ₗ[K] E}
   证明: by
   exact DiscreteTopology.preimage_of_continuous_injective L he₁ he₂
 
@@ -2109,7 +2109,7 @@ instance [DiscreteTopology
   body: ZLattice.comap_discreteTopology K L e.continuous e.injective
 
 中文:
-实例 [DiscreteTopology
+实例 [离散拓扑
   签名: L] (e
   定义体: ZLattice.comap_discreteTopology K L e.continuous e.injective
 
@@ -2130,7 +2130,7 @@ theorem ZLattice.comap_span_top
 
 中文:
 定理 ZLattice.comap_span_top
-  结论: (hL : span K (L : Set E) = ⊤) {e : F ->ₗ[K] E}
+  结论: (hL : span K (L : 集合 E) = ⊤) {e : F ->ₗ[K] E}
   证明: by
   rw [ZLattice.coe_comap]; rw [Submodule.span_preimage_eq (Submodule.nonempty L) he]; rw [hL]; rw [comap_top]
 
@@ -2154,7 +2154,7 @@ instance instIsZLatticeComap
 
 中文:
 实例 instIsZLatticeComap
-  签名: [DiscreteTopology L] [IsZLattice K L] (e : F ≃L[K] E)
+  签名: [离散拓扑 L] [是Z格 K L] (e : F ≃L[K] E)
   定义体: by
     rw [ZLattice.coe_comap]; rw [LinearEquiv.coe_coe]; rw [e.coe_toLinearEquiv]; rw [← e.image_symm_eq_preimage]; rw [← ContinuousLinearEquiv.coe_toLinearEquiv]; rw [← LinearEquiv.coe_coe]; rw [← Submodule.map_span]; rw [IsZLattice.span_top]; rw [Submodule.map_top]; rw [e.symm.range]
 
@@ -2194,7 +2194,7 @@ theorem ZLattice.comap_comp
 
 中文:
 定理 ZLattice.comap_comp
-  结论: {G : 类型} [NormedAddCommGroup G] [NormedSpace K G]
+  结论: {G : 类型} [赋范交换加群 G] [赋范空间 K G]
   证明: (Submodule.comap_comp _ _ L).symm
 
 Depends on / 依赖: Submodule, Submodule.comap_comp, comap_comp
@@ -2267,7 +2267,7 @@ definition ofZLatticeComap
 
 中文:
 定义 ofZLatticeComap
-  签名: (e : F ≃ₗ[K] E) {ι : 类型} (b : Basis ι 整数 L)
+  签名: (e : F ≃ₗ[K] E) {ι : 类型} (b : 基 ι 整数 L)
   定义体: b.map (ZLattice.comap_equiv K L e)
 
 @[simp]
@@ -2290,7 +2290,7 @@ theorem ofZLatticeComap_apply
 
 中文:
 定理 ofZLatticeComap_apply
-  条件: (e : F ≃ₗ[K] E) {ι : 类型} (b : Basis ι 整数 L) (i : ι)
+  条件: (e : F ≃ₗ[K] E) {ι : 类型} (b : 基 ι 整数 L) (i : ι)
   证明: by simp [Basis.ofZLatticeComap]
 
 @[simp]
@@ -2312,7 +2312,7 @@ theorem ofZLatticeComap_repr_apply
 
 中文:
 定理 ofZLatticeComap_repr_apply
-  条件: (e : F ≃ₗ[K] E) {ι : 类型} (b : Basis ι 整数 L) (x : L) (i : ι)
+  条件: (e : F ≃ₗ[K] E) {ι : 类型} (b : 基 ι 整数 L) (x : L) (i : ι)
   证明: by
   simp [Basis.ofZLatticeComap]
 
@@ -2346,8 +2346,8 @@ theorem Module.Basis.ofZLatticeBasis_comap
   simp
 
 中文:
-定理 Module.Basis.ofZLatticeBasis_comap
-  条件: (e : F ≃L[K] E) {ι : 类型} (b : Basis ι 整数 L)
+定理 模.基.ofZLatticeBasis_comap
+  条件: (e : F ≃L[K] E) {ι : 类型} (b : 基 ι 整数 L)
   证明: by
   ext
   simp
@@ -2375,7 +2375,7 @@ lemma IsZLattice.isCompact_range_of_periodic
     fun i => ⌊(b
 
 中文:
-引理 IsZLattice.isCompact_range_of_periodic
+引理 是Z格.isCompact_range_of_periodic
   证明: by
   have := ZLattice.module_free Real L
   let b := Module.Free.chooseBasis Int L

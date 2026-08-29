@@ -117,8 +117,8 @@ definition prod
         OrthonormalBasis.coe_toBasis, LinearMap.coe_inr, WithLp.coe_symm_line
 
 中文:
-定义 prod
-  签名: (v : OrthonormalBasis ι₁ 𝕜 E) (w : OrthonormalBasis ι₂ 𝕜 F)
+定义 乘积
+  签名: (v : 正交标准基 ι₁ 𝕜 E) (w : 正交标准基 ι₂ 𝕜 F)
   定义体: ((v.toBasis.prod w.toBasis).map (WithLp.linearEquiv 2 𝕜 (E × F)).symm).toOrthonormalBasis
   (by
     constructor
@@ -156,7 +156,7 @@ theorem prod_apply
 
 中文:
 定理 prod_apply
-  条件: (v : OrthonormalBasis ι₁ 𝕜 E) (w : OrthonormalBasis ι₂ 𝕜 F)
+  条件: (v : 正交标准基 ι₁ 𝕜 E) (w : 正交标准基 ι₂ 𝕜 F)
   证明: by
   rw [Sum.forall]
   unfold OrthonormalBasis.prod
@@ -557,7 +557,7 @@ theorem Quotient.inner_mk_mk
   simp [K.quotientEquivOrthogonal_mk x hx, K.quotientEquivOrthogonal_mk y hy]
 
 中文:
-定理 Quotient.inner_mk_mk
+定理 商.inner_mk_mk
   条件: (x y : E) (hx : x in Kᗮ) (hy : y in Kᗮ)
   证明: by
   simp [K.quotientEquivOrthogonal_mk x hx, K.quotientEquivOrthogonal_mk y hy]

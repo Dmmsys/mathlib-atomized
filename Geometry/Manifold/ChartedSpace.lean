@@ -149,10 +149,10 @@ class ChartedSpace
     - chart_mem_atlas : forall x, chartAt x in atlas
 
 中文:
-类 ChartedSpace
-  参数: (H : 类型) [TopologicalSpace H] (M : 类型) [TopologicalSpace M]
+类 Charted空间
+  参数: (H : 类型) [拓扑空间 H] (M : 类型) [拓扑空间 M]
   公理与运算 (4 个):
-    - atlas : Set (OpenPartialHomeomorph M H)
+    - atlas : 集合 (OpenPartialHomeomorph M H)
     - chartAt : M -> OpenPartialHomeomorph M H
     - mem_chart_source : 对任意 x, x in (chartAt x).source
     - chart_mem_atlas : 对任意 x, chartAt x in atlas
@@ -175,7 +175,7 @@ abbreviation atlas
 
 中文:
 缩写 atlas
-  签名: (H : 类型) [TopologicalSpace H] (M : 类型) [TopologicalSpace M]
+  签名: (H : 类型) [拓扑空间 H] (M : 类型) [拓扑空间 M]
   定义体: ChartedSpace.atlas
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.atlas
@@ -196,7 +196,7 @@ abbreviation chartAt
 
 中文:
 缩写 chartAt
-  签名: (H : 类型) [TopologicalSpace H] {M : 类型} [TopologicalSpace M]
+  签名: (H : 类型) [拓扑空间 H] {M : 类型} [拓扑空间 M]
   定义体: ChartedSpace.chartAt x
 
 @[simp, mfld_simps]
@@ -220,7 +220,7 @@ lemma mem_chart_source
 
 中文:
 引理 mem_chart_source
-  结论: (H : 类型) {M : 类型} [TopologicalSpace H] [TopologicalSpace M]
+  结论: (H : 类型) {M : 类型} [拓扑空间 H] [拓扑空间 M]
   证明: ChartedSpace.mem_chart_source x
 
 @[simp, mfld_simps]
@@ -242,7 +242,7 @@ lemma chart_mem_atlas
 
 中文:
 引理 chart_mem_atlas
-  结论: (H : 类型) {M : 类型} [TopologicalSpace H] [TopologicalSpace M]
+  结论: (H : 类型) {M : 类型} [拓扑空间 H] [拓扑空间 M]
   证明: ChartedSpace.chart_mem_atlas x
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.chart_mem_atlas, chart_mem_atlas
@@ -261,7 +261,7 @@ lemma nonempty_of_chartedSpace
 
 中文:
 引理 nonempty_of_chartedSpace
-  结论: {H : 类型} {M : 类型} [TopologicalSpace H] [TopologicalSpace M]
+  结论: {H : 类型} {M : 类型} [拓扑空间 H] [拓扑空间 M]
   证明: ⟨chartAt H x x⟩
 
 Depends on / 依赖: chartAt
@@ -283,7 +283,7 @@ lemma isEmpty_of_chartedSpace
 
 中文:
 引理 isEmpty_of_chartedSpace
-  结论: (H : 类型) {M : 类型} [TopologicalSpace H] [TopologicalSpace M]
+  结论: (H : 类型) {M : 类型} [拓扑空间 H] [拓扑空间 M]
   证明: by
   rcases isEmpty_or_nonempty M with hM | ⟨⟨x⟩⟩
   · exact hM
@@ -375,7 +375,7 @@ theorem iUnion_source_chartAt
 
 中文:
 定理 iUnion_source_chartAt
-  结论: (⋃ x : M, (chartAt H x).source) = (univ : Set M)
+  结论: (⋃ x : M, (chartAt H x).source) = (univ : 集合 M)
   证明: eq_univ_iff_forall.mpr fun x => mem_iUnion.mpr ⟨x, mem_chart_source H x⟩
 
 Depends on / 依赖: eq_univ_iff_forall, eq_univ_iff_forall.mpr, mem_chart_source, mem_iUnion, mem_iUnion.mpr
@@ -394,8 +394,8 @@ theorem ChartedSpace.isOpen_iff
   simp only [(chartAt H _).isOpen_image_iff_of_subset_source inter_subset_left]
 
 中文:
-定理 ChartedSpace.isOpen_iff
-  条件: (s : Set M)
+定理 Charted空间.isOpen_iff
+  条件: (s : 集合 M)
   证明: by
   rw [isOpen_iff_of_cover (fun i => (chartAt H i).open_source) (iUnion_source_chartAt H M)]
   simp only [(chartAt H _).isOpen_image_iff_of_subset_source inter_subset_left]
@@ -525,8 +525,8 @@ theorem ChartedSpace.secondCountable_of_countable_cover
   exact secondCountableTopology_of_countable_cover (fun x : s => (chartAt H (x : M)).open_source) hs
 
 中文:
-定理 ChartedSpace.secondCountable_of_countable_cover
-  结论: [SecondCountableTopology H] {s : Set M}
+定理 Charted空间.secondCountable_of_countable_cover
+  结论: [第二可数拓扑 H] {s : 集合 M}
   证明: by
   have : forall x : M, SecondCountableTopology (chartAt H x).source :=
     fun x => (chartAt (H := H) x).secondCountableTopology_source
@@ -559,8 +559,8 @@ theorem ChartedSpace.secondCountable_of_sigmaCompact
   exact ChartedSpace.secondCountable_of_countable_cover H hsU hsc
 
 中文:
-定理 ChartedSpace.secondCountable_of_sigmaCompact
-  结论: [SecondCountableTopology H]
+定理 Charted空间.secondCountable_of_sigmaCompact
+  结论: [第二可数拓扑 H]
   证明: by
   obtain ⟨s, hsc, hsU⟩ : exists s, Set.Countable s ∧ ⋃ (x) (_ : x in s), (chartAt H x).source = univ :=
     countable_cover_nhds_of_sigmaCompact fun x : M => chart_source_mem_nhds H x
@@ -589,9 +589,9 @@ theorem ChartedSpace.locallyCompactSpace
     exact ((compact_basis_nhds (chartAt H x x)).hasB
 
 中文:
-定理 ChartedSpace.locallyCompactSpace
-  条件: [LocallyCompactSpace H]
-  结论: LocallyCompactSpace M
+定理 Charted空间.locallyCompactSpace
+  条件: [局部紧空间 H]
+  结论: 局部紧空间 M
   证明: by
   have : forall x : M, (𝓝 x).HasBasis
       (fun s => s in 𝓝 (chartAt H x x) ∧ IsCompact s ∧ s subseteq (chartAt H x).target)
@@ -627,9 +627,9 @@ theorem ChartedSpace.locallyConnectedSpace
     simpa only [e, OpenPartialHomeomorph.symm_map_nhds_eq, me
 
 中文:
-定理 ChartedSpace.locallyConnectedSpace
-  条件: [LocallyConnectedSpace H]
-  结论: LocallyConnectedSpace M
+定理 Charted空间.locallyConnectedSpace
+  条件: [局部连通空间 H]
+  结论: 局部连通空间 M
   证明: by
   let e : M -> OpenPartialHomeomorph M H := chartAt H
   refine locallyConnectedSpace_of_connected_bases (fun x s => (e x).symm '' s)
@@ -664,8 +664,8 @@ theorem ChartedSpace.locallyPathConnectedSpace
   refine ⟨e.symm '' pathComponentIn (e '' t) (e x), ⟨?_, ?_⟩, (?_ : _ subsete
 
 中文:
-定理 ChartedSpace.locallyPathConnectedSpace
-  条件: [LocallyPathConnectedSpace H]
+定理 Charted空间.locallyPathConnectedSpace
+  条件: [LocallyPathConnected空间 H]
   证明: by
   refine ⟨fun x => ⟨fun s => ⟨fun hs => ?_, fun ⟨u, hu⟩ => Filter.mem_of_superset hu.1.1 hu.2⟩⟩⟩
   let e := chartAt H x
@@ -710,8 +710,8 @@ definition ChartedSpace.comp
   chart_mem_atlas p := ⟨chartAt _ p, chart_mem_atlas _ p, chartAt _ _, chart_mem_atlas _ _, rfl⟩
 
 中文:
-定义 ChartedSpace.comp
-  签名: (H : 类型) [TopologicalSpace H] (H' : 类型) [TopologicalSpace H']
+定义 Charted空间.comp
+  签名: (H : 类型) [拓扑空间 H] (H' : 类型) [拓扑空间 H']
   定义体: image2 OpenPartialHomeomorph.trans (atlas H' M) (atlas H H')
   chartAt p := (chartAt H' p).trans (chartAt H (chartAt H' p p))
   mem_chart_source p := by simp only [mfld_simps]
@@ -737,7 +737,7 @@ theorem chartAt_comp
 
 中文:
 定理 chartAt_comp
-  结论: (H : 类型) [TopologicalSpace H] (H' : 类型) [TopologicalSpace H']
+  结论: (H : 类型) [拓扑空间 H] (H' : 类型) [拓扑空间 H']
   证明: rfl
 
 Depends on / 依赖: ChartedSpace, ChartedSpace.comp, chartAt
@@ -762,9 +762,9 @@ theorem ChartedSpace.t1Space
     · simp only [preimage_c
 
 中文:
-定理 ChartedSpace.t1Space
-  条件: [T1Space H]
-  结论: T1Space M
+定理 Charted空间.t1Space
+  条件: [T1空间 H]
+  结论: T1空间 M
   证明: by
   apply t1Space_iff_exists_open.2 (fun x y hxy => ?_)
   by_cases hy : y in (chartAt H x).source
@@ -800,9 +800,9 @@ theorem ChartedSpace.discreteTopology
   simp only [subset_singleton_iff, mem_inter_iff, m
 
 中文:
-定理 ChartedSpace.discreteTopology
-  条件: [DiscreteTopology H]
-  结论: DiscreteTopology M
+定理 Charted空间.discreteTopology
+  条件: [离散拓扑 H]
+  结论: 离散拓扑 M
   证明: by
   apply discreteTopology_iff_isOpen_singleton.2 (fun x => ?_)
   have : IsOpen ((chartAt H x).source inter (chartAt H x) ⁻¹' {chartAt H x x}) :=
@@ -841,8 +841,8 @@ definition ChartedSpace.empty
   chart_mem_atlas x := (IsEmpty.false x).elim
 
 中文:
-定义 ChartedSpace.empty
-  签名: (H : 类型) [TopologicalSpace H]
+定义 Charted空间.empty
+  签名: (H : 类型) [拓扑空间 H]
   定义体: ∅
   chartAt x := (IsEmpty.false x).elim
   mem_chart_source x := (IsEmpty.false x).elim
@@ -868,7 +868,7 @@ instance chartedSpaceSelf
 
 中文:
 实例 chartedSpaceSelf
-  签名: (H : 类型) [TopologicalSpace H]
+  签名: (H : 类型) [拓扑空间 H]
   定义体: {OpenPartialHomeomorph.refl H}
   chartAt _ := OpenPartialHomeomorph.refl H
   mem_chart_source x := mem_univ x
@@ -895,7 +895,7 @@ theorem chartedSpaceSelf_atlas
 
 中文:
 定理 chartedSpaceSelf_atlas
-  条件: {H : 类型} [TopologicalSpace H] {e : OpenPartialHomeomorph H H}
+  条件: {H : 类型} [拓扑空间 H] {e : OpenPartialHomeomorph H H}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -914,7 +914,7 @@ theorem chartAt_self_eq
 
 中文:
 定理 chartAt_self_eq
-  条件: {H : 类型} [TopologicalSpace H] {x : H}
+  条件: {H : 类型} [拓扑空间 H] {x : H}
   证明: rfl
 -/
 theorem chartAt_self_eq {H : Type*} [TopologicalSpace H] {x : H} :
@@ -941,8 +941,8 @@ definition ChartedSpace.ofDiscreteTopology
 @[deprecate
 
 中文:
-定义 ChartedSpace.ofDiscreteTopology
-  签名: [TopologicalSpace M] [TopologicalSpace H]
+定义 Charted空间.ofDiscreteTopology
+  签名: [拓扑空间 M] [拓扑空间 H]
   定义体: letI f := fun x : M => OpenPartialHomeomorph.const
       (isOpen_discrete {x}) (isOpen_discrete {h.default})
     Set.image f univ
@@ -981,7 +981,7 @@ lemma chartedSpace_of_discreteTopology_chartAt
 
 中文:
 引理 chartedSpace_of_discreteTopology_chartAt
-  结论: [TopologicalSpace M] [TopologicalSpace H]
+  结论: [拓扑空间 M] [拓扑空间 H]
   证明: ChartedSpace.ofDiscreteTopology (M := M) (H := H)
     chartAt H x = OpenPartialHomeomorph.const (isOpen_discrete {x}) (isOpen_discrete {h.default}) :=
   rfl
@@ -1064,7 +1064,7 @@ instance modelProdInhabited
 
 中文:
 实例 modelProdInhabited
-  签名: [Inhabited H] [Inhabited H']
+  签名: [可居 H] [可居 H']
   定义体: inferInstanceAs Inhabited (H × H')
 
 Depends on / 依赖: Inhabited
@@ -1118,7 +1118,7 @@ instance modelPiInhabited
 
 中文:
 实例 modelPiInhabited
-  签名: [对任意 i, Inhabited (Hi i)]
+  签名: [对任意 i, 可居 (Hi i)]
   定义体: inferInstanceAs Inhabited (forall i, Hi i)
 
 Depends on / 依赖: Inhabited
@@ -1135,8 +1135,8 @@ instance [forall
   body: inferInstanceAs TopologicalSpace (forall i, Hi i)
 
 中文:
-实例 [forall
-  签名: i, TopologicalSpace (Hi i)] : TopologicalSpace (ModelPi Hi)
+实例 [对任意
+  签名: i, 拓扑空间 (Hi i)] : 拓扑空间 (ModelPi Hi)
   定义体: inferInstanceAs TopologicalSpace (forall i, Hi i)
 
 Depends on / 依赖: TopologicalSpace
@@ -1159,7 +1159,7 @@ instance prodChartedSpace
 
 中文:
 实例 prodChartedSpace
-  签名: (H : 类型) [TopologicalSpace H] (M : 类型) [TopologicalSpace M]
+  签名: (H : 类型) [拓扑空间 H] (M : 类型) [拓扑空间 M]
   定义体: image2 OpenPartialHomeomorph.prod (atlas H M) (atlas H' M')
   chartAt x := (chartAt H x.1).prod (chartAt H' x.2)
   mem_chart_source x := ⟨mem_chart_source H x.1, mem_chart_source H' x.2⟩
@@ -1266,7 +1266,7 @@ instance piChartedSpace
 
 中文:
 实例 piChartedSpace
-  签名: {ι : 类型} [Finite ι] (H : ι -> 类型) [对任意 i, TopologicalSpace (H i)]
+  签名: {ι : 类型} [有限 ι] (H : ι -> 类型) [对任意 i, 拓扑空间 (H i)]
   定义体: OpenPartialHomeomorph.pi '' Set.pi univ fun _ => atlas (H _) (M _)
   chartAt f := OpenPartialHomeomorph.pi fun i => chartAt (H i) (f i)
   mem_chart_source f i _ := mem_chart_source (H i) (f i)
@@ -1295,7 +1295,7 @@ theorem piChartedSpace_chartAt
 
 中文:
 定理 piChartedSpace_chartAt
-  结论: {ι : 类型} [Finite ι] (H : ι -> 类型)
+  结论: {ι : 类型} [有限 ι] (H : ι -> 类型)
   证明: rfl
 
 Depends on / 依赖: ModelPi, OpenPartialHomeomorph, OpenPartialHomeomorph.pi, chartAt
@@ -1328,8 +1328,8 @@ definition ChartedSpace.sumOfNonempty
   chartAt := Sum.elim (fun x => (cm.chartAt x).lift_openEmbedding IsOp
 
 中文:
-定义 ChartedSpace.sumOfNonempty
-  签名: [Nonempty H]
+定义 Charted空间.sumOfNonempty
+  签名: [非空 H]
   定义体: ((fun e => e.lift_openEmbedding IsOpenEmbedding.inl) '' cm.atlas) union
     ((fun e => e.lift_openEmbedding IsOpenEmbedding.inr) '' cm'.atlas)
   -- At `x : M`, the chart is the chart in `M`; at `x' ∈ M'`, it is the chart in `M'`.
@@ -1379,8 +1379,8 @@ instance ChartedSpace.sum
   exact empty H (M oplus M')
 
 中文:
-实例 ChartedSpace.sum
-  签名: : ChartedSpace H (M oplus M')
+实例 Charted空间.求和
+  签名: : Charted空间 H (M oplus M')
   定义体: by
   by_cases! h : Nonempty H
   · exact ChartedSpace.sumOfNonempty
@@ -1410,7 +1410,7 @@ lemma ChartedSpace.sum_chartAt_inl
   rfl
 
 中文:
-引理 ChartedSpace.sum_chartAt_inl
+引理 Charted空间.sum_chartAt_inl
   条件: (x : M)
   证明: nonempty_of_chartedSpace x
     chartAt H (Sum.inl x)
@@ -1440,7 +1440,7 @@ lemma ChartedSpace.sum_chartAt_inr
   rfl
 
 中文:
-引理 ChartedSpace.sum_chartAt_inr
+引理 Charted空间.sum_chartAt_inr
   条件: (x' : M')
   证明: nonempty_of_chartedSpace x'
     chartAt H (Sum.inr x')
@@ -1520,8 +1520,8 @@ lemma ChartedSpace.mem_atlas_sum
   · rw [← hxe]; right; use x
 
 中文:
-引理 ChartedSpace.mem_atlas_sum
-  结论: [h : Nonempty H]
+引理 Charted空间.mem_atlas_sum
+  结论: [h : 非空 H]
   证明: by
   simp +instances only [atlas, sum, h, ↓reduceDIte] at he
   obtain (⟨x, hx, hxe⟩ | ⟨x, hx, hxe⟩) := he
@@ -1616,7 +1616,7 @@ definition Homeomorph.chartedSpace
   body: f.isLocalHomeomorph.chartedSpace f.surjective
 
 中文:
-定义 Homeomorph.chartedSpace
+定义 同胚.chartedSpace
   签名: (f : M ≃ₜ M')
   定义体: f.isLocalHomeomorph.chartedSpace f.surjective
 
@@ -1648,15 +1648,15 @@ structure ChartedSpaceCore
     - continuousOn_toFun : forall e e' : PartialEquiv M H, e in atlas -> e' in atlas -> ContinuousOn (e.symm.trans e') (e.symm.trans e').source
 
 中文:
-结构 ChartedSpaceCore
-  参数: (H : 类型) [TopologicalSpace H] (M : 类型)
+结构 图册空间核心
+  参数: (H : 类型) [拓扑空间 H] (M : 类型)
   公理与运算 (6 个):
-    - atlas : Set (PartialEquiv M H)
-    - chartAt : M -> PartialEquiv M H
+    - atlas : 集合 (部分等价 M H)
+    - chartAt : M -> 部分等价 M H
     - mem_chart_source : 对任意 x, x in (chartAt x).source
     - chart_mem_atlas : 对任意 x, chartAt x in atlas
-    - open_source : 对任意 e e' : PartialEquiv M H, e in atlas -> e' in atlas -> IsOpen (e.symm.trans e').source
-    - continuousOn_toFun : 对任意 e e' : PartialEquiv M H, e in atlas -> e' in atlas -> ContinuousOn (e.symm.trans e') (e.symm.trans e').source
+    - open_source : 对任意 e e' : 部分等价 M H, e in atlas -> e' in atlas -> 是开集 (e.symm.trans e').source
+    - continuousOn_toFun : 对任意 e e' : 部分等价 M H, e in atlas -> e' in atlas -> ContinuousOn (e.symm.trans e') (e.symm.trans e').source
 -/
 structure ChartedSpaceCore (H : Type*) [TopologicalSpace H] (M : Type*) where
   /-- An atlas of charts, which are only `PartialEquiv`s -/
@@ -1687,7 +1687,7 @@ definition toTopologicalSpace
 
 中文:
 定义 toTopologicalSpace
-  签名: : TopologicalSpace M
+  签名: : 拓扑空间 M
   定义体: TopologicalSpace.generateFrom
     ⋃ (e : PartialEquiv M H) (_ : e in c.atlas) (s : Set H) (_ : IsOpen s),
       {e ⁻¹' s inter e.source}
@@ -1713,7 +1713,7 @@ theorem open_source'
 中文:
 定理 open_source'
   条件: (he : e in c.atlas)
-  结论: IsOpen[c.toTopologicalSpace] e.source
+  结论: 是开集[c.toTopologicalSpace] e.source
   证明: by
   apply TopologicalSpace.GenerateOpen.basic
   simp only [exists_prop, mem_iUnion, mem_singleton_iff]
@@ -1744,7 +1744,7 @@ theorem open_target
 中文:
 定理 open_target
   条件: (he : e in c.atlas)
-  结论: IsOpen e.target
+  结论: 是开集 e.target
   证明: by
   have E : e.target inter e.symm ⁻¹' e.source = e.target :=
     Subset.antisymm inter_subset_left fun x hx =>
@@ -1777,7 +1777,7 @@ definition openPartialHomeomorph
 
 中文:
 定义 openPartialHomeomorph
-  签名: (e : PartialEquiv M H) (he : e in c.atlas)
+  签名: (e : 部分等价 M H) (he : e in c.atlas)
   定义体: { __ := c.toTopologicalSpace
     __ := e
     open_source := by convert! c.open_source' he
@@ -1838,7 +1838,7 @@ definition toChartedSpace
 
 中文:
 定义 toChartedSpace
-  签名: : @ChartedSpace H _ M c.toTopologicalSpace
+  签名: : @Charted空间 H _ M c.toTopologicalSpace
   定义体: { __ := c.toTopologicalSpace
     atlas := ⋃ (e : PartialEquiv M H) (he : e in c.atlas), {c.openPartialHomeomorph e he}
     chartAt := fun x => c.openPartialHomeomorph (c.chartAt x) (c.chart_mem_atlas x)

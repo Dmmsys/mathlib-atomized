@@ -44,9 +44,9 @@ structure IsDenseInducing
     - dense : DenseRange i
 
 中文:
-结构 IsDenseInducing
-  参数: [TopologicalSpace α] [TopologicalSpace β] (i : α -> β)
-  继承: IsInducing i
+结构 是DenseInducing
+  参数: [拓扑空间 α] [拓扑空间 β] (i : α -> β)
+  继承: 是Inducing i
   公理与运算 (1 个):
     - dense : DenseRange i
 -/
@@ -68,8 +68,8 @@ theorem _root_.Dense.isDenseInducing_val
   proof: ⟨IsInducing.subtypeVal, hs.denseRange_val⟩
 
 中文:
-定理 _root_.Dense.isDenseInducing_val
-  条件: {s : Set α} (hs : Dense s)
+定理 _root_.稠密.isDenseInducing_val
+  条件: {s : 集合 α} (hs : 稠密 s)
   证明: ⟨IsInducing.subtypeVal, hs.denseRange_val⟩
 
 Depends on / 依赖: IsInducing, IsInducing.subtypeVal, denseRange_val, hs.denseRange_val, subtypeVal
@@ -90,8 +90,8 @@ lemma isInducing
 
 中文:
 引理 isInducing
-  条件: (di : IsDenseInducing i)
-  结论: IsInducing i
+  条件: (di : 是DenseInducing i)
+  结论: 是Inducing i
   证明: di.toIsInducing
 
 Depends on / 依赖: di.toIsInducing, toIsInducing
@@ -109,7 +109,7 @@ theorem nhds_eq_comap
 
 中文:
 定理 nhds_eq_comap
-  条件: (di : IsDenseInducing i)
+  条件: (di : 是DenseInducing i)
   结论: 对任意 a : α, 𝓝 a = comap i (𝓝 <| i a)
   证明: di.isInducing.nhds_eq_comap
 
@@ -129,8 +129,8 @@ theorem continuous
 
 中文:
 定理 continuous
-  条件: (di : IsDenseInducing i)
-  结论: Continuous i
+  条件: (di : 是DenseInducing i)
+  结论: 连续 i
   证明: di.isInducing.continuous
 -/
 protected theorem continuous (di : IsDenseInducing i) : Continuous i :=
@@ -147,7 +147,7 @@ theorem closure_range
 
 中文:
 定理 closure_range
-  条件: (di : IsDenseInducing i)
+  条件: (di : 是DenseInducing i)
   结论: closure (range i) = univ
   证明: di.dense.closure_range
 
@@ -166,7 +166,7 @@ theorem preconnectedSpace
 
 中文:
 定理 preconnectedSpace
-  条件: [PreconnectedSpace α] (di : IsDenseInducing i)
+  条件: [预连通空间 α] (di : 是DenseInducing i)
   证明: di.dense.preconnectedSpace di.continuous
 -/
 protected theorem preconnectedSpace [PreconnectedSpace α] (di : IsDenseInducing i) :
@@ -189,7 +189,7 @@ theorem closure_image_mem_nhds
 
 中文:
 定理 closure_image_mem_nhds
-  条件: {s : Set α} {a : α} (di : IsDenseInducing i) (hs : s in 𝓝 a)
+  条件: {s : 集合 α} {a : α} (di : 是DenseInducing i) (hs : s in 𝓝 a)
   证明: by
   rw [di.nhds_eq_comap a]; rw [((nhds_basis_opens _).comap _).mem_iff] at hs
   rcases hs with ⟨U, ⟨haU, hUo⟩, sub : i ⁻¹' U subseteq s⟩
@@ -223,8 +223,8 @@ theorem dense_image
 
 中文:
 定理 dense_image
-  条件: (di : IsDenseInducing i) {s : Set α}
-  结论: Dense (i '' s) ↔ Dense s
+  条件: (di : 是DenseInducing i) {s : 集合 α}
+  结论: 稠密 (i '' s) ↔ 稠密 s
   证明: by
   refine ⟨fun H x => ?_, di.dense.dense_image di.continuous⟩
   rw [di.isInducing.closure_eq_preimage_closure_image]; rw [H.closure_eq]; rw [preimage_univ]
@@ -253,7 +253,7 @@ theorem interior_compact_eq_empty
 
 中文:
 定理 interior_compact_eq_empty
-  结论: [T2Space β] (di : IsDenseInducing i) (hd : Dense (range i)ᶜ)
+  结论: [T2空间 β] (di : 是DenseInducing i) (hd : 稠密 (range i)ᶜ)
   证明: by
   refine eq_empty_iff_forall_notMem.2 fun x hx => ?_
   rw [mem_interior_iff_mem_nhds] at hx
@@ -284,7 +284,7 @@ theorem prodMap
 
 中文:
 定理 prodMap
-  结论: [TopologicalSpace γ] [TopologicalSpace δ] {e₁ : α -> β} {e₂ : γ -> δ}
+  结论: [拓扑空间 γ] [拓扑空间 δ] {e₁ : α -> β} {e₂ : γ -> δ}
   证明: de₁.isInducing.prodMap de₂.isInducing
   dense := de₁.dense.prodMap de₂.dense
 -/
@@ -307,8 +307,8 @@ theorem separableSpace
 
 中文:
 定理 separableSpace
-  条件: [SeparableSpace α] (di : IsDenseInducing i)
-  结论: SeparableSpace β
+  条件: [可分空间 α] (di : 是DenseInducing i)
+  结论: 可分空间 β
   证明: di.dense.separableSpace di.continuous
 -/
 protected theorem separableSpace [SeparableSpace α] (di : IsDenseInducing i) : SeparableSpace β :=
@@ -330,7 +330,7 @@ theorem tendsto_comap_nhds_nhds
 
 中文:
 定理 tendsto_comap_nhds_nhds
-  结论: {d : δ} {a : α} (di : IsDenseInducing i)
+  结论: {d : δ} {a : α} (di : 是DenseInducing i)
   证明: by
   have lim1 : map g (comap g (𝓝 d)) <= 𝓝 d := map_comap_le
   replace lim1 : map h (map g (comap g (𝓝 d))) <= map h (𝓝 d) := map_mono lim1
@@ -359,7 +359,7 @@ theorem nhdsWithin_neBot
 
 中文:
 定理 nhdsWithin_neBot
-  条件: (di : IsDenseInducing i) (b : β)
+  条件: (di : 是DenseInducing i) (b : β)
   结论: NeBot (𝓝[range i] b)
   证明: di.dense.nhdsWithin_neBot b
 -/
@@ -379,7 +379,7 @@ theorem comap_nhds_neBot
 
 中文:
 定理 comap_nhds_neBot
-  条件: (di : IsDenseInducing i) (b : β)
+  条件: (di : 是DenseInducing i) (b : β)
   结论: NeBot (comap i (𝓝 b))
   证明: comap_neBot fun s hs => by
     rcases mem_closure_iff_nhds.1 (di.dense b) s hs with ⟨_, ⟨ha, a, rfl⟩⟩
@@ -401,8 +401,8 @@ theorem _root_.Dense.comap_val_nhds_neBot
   proof: hs.isDenseInducing_val.comap_nhds_neBot _
 
 中文:
-定理 _root_.Dense.comap_val_nhds_neBot
-  条件: {s : Set α} (hs : Dense s) (a : α)
+定理 _root_.稠密.comap_val_nhds_neBot
+  条件: {s : 集合 α} (hs : 稠密 s) (a : α)
   证明: hs.isDenseInducing_val.comap_nhds_neBot _
 
 Depends on / 依赖: comap_nhds_neBot, hs.isDenseInducing_val.comap_nhds_neBot, isDenseInducing_val
@@ -423,7 +423,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (di : IsDenseInducing i) (f : α -> γ) (b : β)
+  签名: (di : 是DenseInducing i) (f : α -> γ) (b : β)
   定义体: @limUnder _ _ _ ⟨f (di.dense.some b)⟩ (comap i (𝓝 b)) f
 
 Depends on / 依赖: di.dense.some, limUnder
@@ -443,7 +443,7 @@ theorem tendsto_extend
 
 中文:
 定理 tendsto_extend
-  条件: (di : IsDenseInducing i) {f : α -> γ} {a : α} (hf : ContinuousAt f a)
+  条件: (di : 是DenseInducing i) {f : α -> γ} {a : α} (hf : ContinuousAt f a)
   证明: by
   rw [IsDenseInducing.extend]; rw [← di.nhds_eq_comap]
   exact tendsto_nhds_limUnder ⟨_, hf⟩
@@ -465,7 +465,7 @@ theorem inseparable_extend
 
 中文:
 定理 inseparable_extend
-  结论: [R1Space γ] (di : IsDenseInducing i) {f : α -> γ} {a : α}
+  结论: [R1空间 γ] (di : 是DenseInducing i) {f : α -> γ} {a : α}
   证明: tendsto_nhds_unique_inseparable (di.tendsto_extend hf) hf
 
 Depends on / 依赖: di.tendsto_extend, tendsto_extend, tendsto_nhds_unique_inseparable
@@ -485,7 +485,7 @@ theorem extend_eq_of_tendsto
 
 中文:
 定理 extend_eq_of_tendsto
-  结论: [T2Space γ] (di : IsDenseInducing i) {b : β} {c : γ} {f : α -> γ}
+  结论: [T2空间 γ] (di : 是DenseInducing i) {b : β} {c : γ} {f : α -> γ}
   证明: haveI := di.comap_nhds_neBot
   hf.limUnder_eq
 
@@ -506,7 +506,7 @@ theorem extend_eq_at
 
 中文:
 定理 extend_eq_at
-  结论: [T2Space γ] (di : IsDenseInducing i) {f : α -> γ} {a : α}
+  结论: [T2空间 γ] (di : 是DenseInducing i) {f : α -> γ} {a : α}
   证明: extend_eq_of_tendsto _ di.nhds_eq_comap a ▸ hf
 
 Depends on / 依赖: di.nhds_eq_comap, extend_eq_of_tendsto, nhds_eq_comap
@@ -525,7 +525,7 @@ theorem extend_eq_at'
 
 中文:
 定理 extend_eq_at'
-  结论: [T2Space γ] (di : IsDenseInducing i) {f : α -> γ} {a : α} (c : γ)
+  结论: [T2空间 γ] (di : 是DenseInducing i) {f : α -> γ} {a : α} (c : γ)
   证明: di.extend_eq_at (continuousAt_of_tendsto_nhds hf)
 
 Depends on / 依赖: continuousAt_of_tendsto_nhds, di.extend_eq_at, extend_eq_at
@@ -544,7 +544,7 @@ theorem extend_eq
 
 中文:
 定理 extend_eq
-  条件: [T2Space γ] (di : IsDenseInducing i) {f : α -> γ} (hf : Continuous f) (a : α)
+  条件: [T2空间 γ] (di : 是DenseInducing i) {f : α -> γ} (hf : 连续 f) (a : α)
   证明: di.extend_eq_at hf.continuousAt
 
 Depends on / 依赖: continuousAt, di.extend_eq_at, extend_eq_at, hf.continuousAt
@@ -566,7 +566,7 @@ theorem extend_eq'
 
 中文:
 定理 extend_eq'
-  结论: [T2Space γ] {f : α -> γ} (di : IsDenseInducing i)
+  结论: [T2空间 γ] {f : α -> γ} (di : 是DenseInducing i)
   证明: by
   rcases hf (i a) with ⟨b, hb⟩
   refine di.extend_eq_at' b ?_
@@ -597,7 +597,7 @@ theorem extend_unique_at
 
 中文:
 定理 extend_unique_at
-  结论: [T2Space γ] {b : β} {f : α -> γ} {g : β -> γ} (di : IsDenseInducing i)
+  结论: [T2空间 γ] {b : β} {f : α -> γ} {g : β -> γ} (di : 是DenseInducing i)
   证明: by
   refine di.extend_eq_of_tendsto fun s hs => mem_map.2 ?_
   suffices forallᶠ x : α in comap i (𝓝 b), g (i x) in s from
@@ -629,7 +629,7 @@ theorem extend_unique
 
 中文:
 定理 extend_unique
-  结论: [T2Space γ] {f : α -> γ} {g : β -> γ} (di : IsDenseInducing i)
+  结论: [T2空间 γ] {f : α -> γ} {g : β -> γ} (di : 是DenseInducing i)
   证明: funext fun _ => extend_unique_at di (Eventually.of_forall hf) hg.continuousAt
 
 Depends on / 依赖: Eventually, Eventually.of_forall, continuousAt, extend_unique_at, hg.continuousAt, of_forall
@@ -655,7 +655,7 @@ theorem continuousAt_extend
 
 中文:
 定理 continuousAt_extend
-  结论: [T3Space γ] {b : β} {f : α -> γ} (di : IsDenseInducing i)
+  结论: [T3空间 γ] {b : β} {f : α -> γ} (di : 是DenseInducing i)
   证明: by
   set φ := di.extend f
   have := di.comap_nhds_neBot
@@ -699,7 +699,7 @@ theorem continuous_extend
 
 中文:
 定理 continuous_extend
-  结论: [T3Space γ] {f : α -> γ} (di : IsDenseInducing i)
+  结论: [T3空间 γ] {f : α -> γ} (di : 是DenseInducing i)
   证明: continuous_iff_continuousAt.mpr fun _ => di.continuousAt_extend univ_mem' hf
 
 Depends on / 依赖: continuousAt_extend, continuous_iff_continuousAt, continuous_iff_continuousAt.mpr, di.continuousAt_extend, univ_mem
@@ -720,7 +720,7 @@ theorem mk'
 
 中文:
 定理 mk'
-  结论: (i : α -> β) (c : Continuous i) (dense : 对任意 x, x in closure (range i))
+  结论: (i : α -> β) (c : 连续 i) (dense : 对任意 x, x in closure (range i))
   证明: isInducing_iff_nhds.2 fun a =>
       le_antisymm (c.tendsto _).le_comap (by simpa [Filter.le_def] using! H a)
   dense := dense
@@ -749,7 +749,7 @@ definition extend
 
 中文:
 定义 extend
-  签名: (hs : Dense s) (f : s -> β)
+  签名: (hs : 稠密 s) (f : s -> β)
   定义体: hs.isDenseInducing_val.extend f
 
 Depends on / 依赖: extend, hs.isDenseInducing_val.extend, isDenseInducing_val
@@ -769,7 +769,7 @@ theorem extend_eq_of_tendsto
 
 中文:
 定理 extend_eq_of_tendsto
-  结论: [T2Space β] (hs : Dense s) {a : α} {b : β}
+  结论: [T2空间 β] (hs : 稠密 s) {a : α} {b : β}
   证明: hs.isDenseInducing_val.extend_eq_of_tendsto hf
 
 Depends on / 依赖: extend_eq_of_tendsto, hs.isDenseInducing_val.extend_eq_of_tendsto, isDenseInducing_val
@@ -788,7 +788,7 @@ theorem extend_eq_at
 
 中文:
 定理 extend_eq_at
-  结论: [T2Space β] (hs : Dense s) {f : s -> β} {x : s}
+  结论: [T2空间 β] (hs : 稠密 s) {f : s -> β} {x : s}
   证明: hs.isDenseInducing_val.extend_eq_at hf
 
 Depends on / 依赖: extend_eq_at, hs.isDenseInducing_val.extend_eq_at, isDenseInducing_val
@@ -807,7 +807,7 @@ theorem extend_eq
 
 中文:
 定理 extend_eq
-  条件: [T2Space β] (hs : Dense s) (hf : Continuous f) (x : s)
+  条件: [T2空间 β] (hs : 稠密 s) (hf : 连续 f) (x : s)
   证明: hs.extend_eq_at hf.continuousAt
 
 Depends on / 依赖: continuousAt, extend_eq_at, hf.continuousAt, hs.extend_eq_at
@@ -826,7 +826,7 @@ theorem extend_unique_at
 
 中文:
 定理 extend_unique_at
-  结论: [T2Space β] {a : α} {g : α -> β} (hs : Dense s)
+  结论: [T2空间 β] {a : α} {g : α -> β} (hs : 稠密 s)
   证明: hs.isDenseInducing_val.extend_unique_at hf hg
 
 Depends on / 依赖: extend_unique_at, hs.isDenseInducing_val.extend_unique_at, isDenseInducing_val
@@ -846,7 +846,7 @@ theorem extend_unique
 
 中文:
 定理 extend_unique
-  结论: [T2Space β] {g : α -> β} (hs : Dense s)
+  结论: [T2空间 β] {g : α -> β} (hs : 稠密 s)
   证明: hs.isDenseInducing_val.extend_unique hf hg
 
 Depends on / 依赖: extend_unique, hs.isDenseInducing_val.extend_unique, isDenseInducing_val
@@ -865,7 +865,7 @@ theorem continuousAt_extend
 
 中文:
 定理 continuousAt_extend
-  结论: [T3Space β] {a : α} (hs : Dense s)
+  结论: [T3空间 β] {a : α} (hs : 稠密 s)
   证明: hs.isDenseInducing_val.continuousAt_extend hf
 
 Depends on / 依赖: continuousAt_extend, hs.isDenseInducing_val.continuousAt_extend, isDenseInducing_val
@@ -885,7 +885,7 @@ theorem continuous_extend
 
 中文:
 定理 continuous_extend
-  结论: [T3Space β] (hs : Dense s)
+  结论: [T3空间 β] (hs : 稠密 s)
   证明: hs.isDenseInducing_val.continuous_extend hf
 
 Depends on / 依赖: continuous_extend, hs.isDenseInducing_val.continuous_extend, isDenseInducing_val
@@ -907,11 +907,11 @@ structure IsDenseEmbedding
     - injective : Function.Injective e
 
 中文:
-结构 IsDenseEmbedding
-  参数: [TopologicalSpace α] [TopologicalSpace β] (e : α -> β)
-  继承: IsDenseInducing e
+结构 是稠密嵌入
+  参数: [拓扑空间 α] [拓扑空间 β] (e : α -> β)
+  继承: 是DenseInducing e
   公理与运算 (1 个):
-    - injective : Function.Injective e
+    - injective : 函数.单射 e
 -/
 structure IsDenseEmbedding [TopologicalSpace α] [TopologicalSpace β] (e : α -> β) : Prop
     extends IsDenseInducing e where
@@ -927,8 +927,8 @@ lemma IsDenseEmbedding.mk'
   proof: { IsDenseInducing.mk' e c dense H with injective }
 
 中文:
-引理 IsDenseEmbedding.mk'
-  结论: [TopologicalSpace α] [TopologicalSpace β] (e : α -> β) (c : Continuous e)
+引理 是稠密嵌入.mk'
+  结论: [拓扑空间 α] [拓扑空间 β] (e : α -> β) (c : 连续 e)
   证明: { IsDenseInducing.mk' e c dense H with injective }
 
 Depends on / 依赖: IsDenseInducing, IsDenseInducing.mk, injective
@@ -956,8 +956,8 @@ lemma isDenseInducing
 
 中文:
 引理 isDenseInducing
-  条件: (de : IsDenseEmbedding e)
-  结论: IsDenseInducing e
+  条件: (de : 是稠密嵌入 e)
+  结论: 是DenseInducing e
   证明: de.toIsDenseInducing
 
 Depends on / 依赖: de.toIsDenseInducing, toIsDenseInducing
@@ -975,7 +975,7 @@ theorem inj_iff
 
 中文:
 定理 inj_iff
-  条件: (de : IsDenseEmbedding e) {x y}
+  条件: (de : 是稠密嵌入 e) {x y}
   结论: e x = e y ↔ x = y
   证明: de.injective.eq_iff
 
@@ -995,8 +995,8 @@ theorem isEmbedding
 
 中文:
 定理 isEmbedding
-  条件: (de : IsDenseEmbedding e)
-  结论: IsEmbedding e where __
+  条件: (de : 是稠密嵌入 e)
+  结论: 是嵌入 e where __
   证明: de
 -/
 theorem isEmbedding (de : IsDenseEmbedding e) : IsEmbedding e where __ := de
@@ -1012,8 +1012,8 @@ theorem separableSpace
 
 中文:
 定理 separableSpace
-  条件: [SeparableSpace α] (de : IsDenseEmbedding e)
-  结论: SeparableSpace β
+  条件: [可分空间 α] (de : 是稠密嵌入 e)
+  结论: 可分空间 β
   证明: de.isDenseInducing.separableSpace
 -/
 protected theorem separableSpace [SeparableSpace α] (de : IsDenseEmbedding e) : SeparableSpace β :=
@@ -1030,7 +1030,7 @@ theorem prodMap
 
 中文:
 定理 prodMap
-  结论: {e₁ : α -> β} {e₂ : γ -> δ} (de₁ : IsDenseEmbedding e₁)
+  结论: {e₁ : α -> β} {e₂ : γ -> δ} (de₁ : 是稠密嵌入 e₁)
   证明: de₁.isDenseInducing.prodMap de₂.isDenseInducing
   injective := de₁.injective.prodMap de₂.injective
 -/
@@ -1077,7 +1077,7 @@ theorem subtype
 
 中文:
 定理 subtype
-  条件: (de : IsDenseEmbedding e) (p : α -> 命题)
+  条件: (de : 是稠密嵌入 e) (p : α -> 命题)
   证明: dense_iff_closure_eq.2 by
       ext ⟨x, hx⟩
       rw [image_eq_range] at hx
@@ -1111,8 +1111,8 @@ theorem dense_image
 
 中文:
 定理 dense_image
-  条件: (de : IsDenseEmbedding e) {s : Set α}
-  结论: Dense (e '' s) ↔ Dense s
+  条件: (de : 是稠密嵌入 e) {s : 集合 α}
+  结论: 稠密 (e '' s) ↔ 稠密 s
   证明: de.isDenseInducing.dense_image
 
 Depends on / 依赖: de.isDenseInducing.dense_image, dense_image, isDenseInducing
@@ -1131,8 +1131,8 @@ lemma id
 
 中文:
 引理 id
-  条件: {α : 类型} [TopologicalSpace α]
-  结论: IsDenseEmbedding (id : α -> α)
+  条件: {α : 类型} [拓扑空间 α]
+  结论: 是稠密嵌入 (id : α -> α)
   证明: { IsEmbedding.id with dense := denseRange_id }
 -/
 protected lemma id {α : Type*} [TopologicalSpace α] : IsDenseEmbedding (id : α -> α) :=
@@ -1149,8 +1149,8 @@ theorem Dense.isDenseEmbedding_val
   proof: { IsEmbedding.subtypeVal with dense := hs.denseRange_val }
 
 中文:
-定理 Dense.isDenseEmbedding_val
-  条件: [TopologicalSpace α] {s : Set α} (hs : Dense s)
+定理 稠密.isDenseEmbedding_val
+  条件: [拓扑空间 α] {s : 集合 α} (hs : 稠密 s)
   证明: { IsEmbedding.subtypeVal with dense := hs.denseRange_val }
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal, denseRange_val, hs.denseRange_val, subtypeVal
@@ -1175,7 +1175,7 @@ _ subseteq closure { b | p b } := closure_mono range_subset_iff.mpr h
 
 中文:
 定理 isClosed_property
-  结论: [TopologicalSpace β] {e : α -> β} {p : β -> 命题} (he : DenseRange e)
+  结论: [拓扑空间 β] {e : α -> β} {p : β -> 命题} (he : DenseRange e)
   证明: by
   have : univ subseteq { b | p b } :=
     calc
@@ -1206,7 +1206,7 @@ theorem isClosed_property2
 
 中文:
 定理 isClosed_property2
-  结论: [TopologicalSpace β] {e : α -> β} {p : β -> β -> 命题} (he : DenseRange e)
+  结论: [拓扑空间 β] {e : α -> β} {p : β -> β -> 命题} (he : DenseRange e)
   证明: have : forall q : β × β, p q.1 q.2 := isClosed_property (he.prodMap he) hp fun _ => h _ _
   fun b₁ b₂ => this ⟨b₁, b₂⟩
 
@@ -1231,7 +1231,7 @@ theorem isClosed_property3
 
 中文:
 定理 isClosed_property3
-  结论: [TopologicalSpace β] {e : α -> β} {p : β -> β -> β -> 命题}
+  结论: [拓扑空间 β] {e : α -> β} {p : β -> β -> β -> 命题}
   证明: have : forall q : β × β × β, p q.1 q.2.1 q.2.2 :=
     isClosed_property (he.prodMap <| he.prodMap he) hp fun _ => h _ _ _
   fun b₁ b₂ b₃ => this ⟨b₁, b₂, b₃⟩
@@ -1260,7 +1260,7 @@ theorem DenseRange.induction_on
 
 中文:
 定理 DenseRange.induction_on
-  结论: [TopologicalSpace β] {e : α -> β} (he : DenseRange e) {p : β -> 命题}
+  结论: [拓扑空间 β] {e : α -> β} (he : DenseRange e) {p : β -> 命题}
   证明: isClosed_property he hp ih b₀
 
 @[elab_as_elim]
@@ -1284,7 +1284,7 @@ theorem DenseRange.induction_on₂
 
 中文:
 定理 DenseRange.induction_on₂
-  结论: [TopologicalSpace β] {e : α -> β} {p : β -> β -> 命题}
+  结论: [拓扑空间 β] {e : α -> β} {p : β -> β -> 命题}
   证明: isClosed_property2 he hp h _ _
 
 @[elab_as_elim]
@@ -1307,7 +1307,7 @@ theorem DenseRange.induction_on₃
 
 中文:
 定理 DenseRange.induction_on₃
-  结论: [TopologicalSpace β] {e : α -> β} {p : β -> β -> β -> 命题}
+  结论: [拓扑空间 β] {e : α -> β} {p : β -> β -> β -> 命题}
   证明: isClosed_property3 he hp h _ _ _
 
 Depends on / 依赖: isClosed_property3
@@ -1332,7 +1332,7 @@ theorem DenseRange.equalizer
 
 中文:
 定理 DenseRange.equalizer
-  结论: (hfd : DenseRange f) {g h : β -> γ} (hg : Continuous g)
+  结论: (hfd : DenseRange f) {g h : β -> γ} (hg : 连续 g)
   证明: funext fun y => hfd.induction_on y (isClosed_eq hg hh) congr_fun H
 
 Depends on / 依赖: congr_fun, hfd.induction_on, induction_on, isClosed_eq
@@ -1361,8 +1361,8 @@ theorem Filter.HasBasis.hasBasis_of_isDenseInducing
     obtain ⟨i, hi, hi'⟩ := (h _).m
 
 中文:
-定理 Filter.HasBasis.hasBasis_of_isDenseInducing
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+定理 滤子.有基.hasBasis_of_isDenseInducing
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   rw [Filter.hasBasis_iff] at h ⊢
   intro T

@@ -65,8 +65,8 @@ structure PrelaxFunctorStruct
 
 中文:
 结构 PrelaxFunctorStruct
-  参数: extends Prefunctor B C
-  继承: Prefunctor B C
+  参数: extends 预函子 B C
+  继承: 预函子 B C
   公理与运算 (1 个):
     - map₂({a b : B} {f g : a ⟶ b}) : (f ⟶ g) -> (map f ⟶ map g)
 -/
@@ -98,7 +98,7 @@ definition mkOfHomPrefunctors
 
 中文:
 定义 mkOfHomPrefunctors
-  签名: (F : B -> C) (F' : (a : B) -> (b : B) -> Prefunctor (a ⟶ b) (F a ⟶ F b))
+  签名: (F : B -> C) (F' : (a : B) -> (b : B) -> 预函子 (a ⟶ b) (F a ⟶ F b))
   定义体: F
   map {a b} := (F' a b).obj
   map₂ {a b} := (F' a b).map
@@ -121,7 +121,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : 类型u₁) [Quiver.{v₁} B] [对任意 a b : B, Quiver.{w₁} (a ⟶ b)]
+  签名: (B : 类型u₁) [箭图.{v₁} B] [对任意 a b : B, 箭图.{w₁} (a ⟶ b)]
   定义体: { Prefunctor.id B with map₂ := fun η => η }
 
 Depends on / 依赖: Prefunctor, Prefunctor.id
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (PrelaxFunctorStruct B B)
+  签名: 可居 (PrelaxFunctorStruct B B)
   定义体: ⟨PrelaxFunctorStruct.id B⟩
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.hasTerminal, PrelaxFunctorStruct, PrelaxFunctorStruct.id, hasTerminal
@@ -187,8 +187,8 @@ structure PrelaxFunctor
     - map₂_comp : forall {a b : B} {f g h : a ⟶ b} (η : f ⟶ g) (θ : g ⟶ h), map₂ (η ≫ θ) = map₂ η ≫ map₂ θ  [default: by cat_disch]
 
 中文:
-结构 PrelaxFunctor
-  参数: (B : 类型u₁) [Bicategory.{w₁, v₁} B] (C : 类型u₂) [Bicategory.{w₂, v₂} C]
+结构 预松弛函子
+  参数: (B : 类型u₁) [双范畴.{w₁, v₁} B] (C : 类型u₂) [双范畴.{w₂, v₂} C]
   继承: PrelaxFunctorStruct B C
   公理与运算 (2 个):
     - map₂_id : 对任意 {a b : B} (f : a ⟶ b), map₂ (𝟙 f) = 𝟙 (map f)  [默认: by aesop -- TODO: why not cat_disch?]
@@ -258,7 +258,7 @@ definition id
 
 中文:
 定义 id
-  签名: (B : 类型u₁) [Bicategory.{w₁, v₁} B]
+  签名: (B : 类型u₁) [双范畴.{w₁, v₁} B]
   定义体: PrelaxFunctorStruct.id B
 
 Depends on / 依赖: PrelaxFunctorStruct, PrelaxFunctorStruct.id
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (PrelaxFunctor B B)
+  签名: 可居 (预松弛函子 B B)
   定义体: ⟨PrelaxFunctor.id B⟩
 
 Depends on / 依赖: PrelaxFunctor, PrelaxFunctor.id
@@ -298,7 +298,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (G : PrelaxFunctor C D)
+  签名: (G : 预松弛函子 C D)
   定义体: PrelaxFunctorStruct.comp F.toPrelaxFunctorStruct G.toPrelaxFunctorStruct
 
 Depends on / 依赖: F.toPrelaxFunctorStruct, G.toPrelaxFunctorStruct, PrelaxFunctorStruct, PrelaxFunctorStruct.comp, toPrelaxFunctorStruct
@@ -388,7 +388,7 @@ instance map₂_isIso
 
 中文:
 实例 map₂_isIso
-  签名: {f g : a ⟶ b} (η : f ⟶ g) [IsIso η]
+  签名: {f g : a ⟶ b} (η : f ⟶ g) [是同构 η]
   定义体: (F.map₂Iso (asIso η)).isIso_hom
 
 @[simp]
@@ -412,7 +412,7 @@ lemma map₂_inv
 
 中文:
 引理 map₂_inv
-  条件: {f g : a ⟶ b} (η : f ⟶ g) [IsIso η]
+  条件: {f g : a ⟶ b} (η : f ⟶ g) [是同构 η]
   结论: F.map₂ (inv η) = inv (F.map₂ η)
   证明: by
   apply IsIso.eq_inv_of_hom_inv_id
@@ -489,7 +489,7 @@ lemma map₂_hom_inv_isIso
 
 中文:
 引理 map₂_hom_inv_isIso
-  条件: {f g : a ⟶ b} (η : f ⟶ g) [IsIso η]
+  条件: {f g : a ⟶ b} (η : f ⟶ g) [是同构 η]
   证明: by
   simp
 
@@ -537,7 +537,7 @@ lemma map₂_inv_hom_isIso
 
 中文:
 引理 map₂_inv_hom_isIso
-  条件: {f g : a ⟶ b} (η : f ⟶ g) [IsIso η]
+  条件: {f g : a ⟶ b} (η : f ⟶ g) [是同构 η]
   证明: by
   simp
 -/

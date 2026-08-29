@@ -56,7 +56,7 @@ lemma set_smul_eq_map
 
 中文:
 引理 set_smul_eq_map
-  条件: [SMulCommClass R R N]
+  条件: [标量交换类 R R N]
   证明: by
   apply set_smul_eq_of_le
   · intro r n hr hn
@@ -112,7 +112,7 @@ lemma mem_set_smul
 
 中文:
 引理 mem_set_smul
-  条件: (x : M) [SMulCommClass R R N]
+  条件: (x : M) [标量交换类 R R N]
   证明: by
   fconstructor
   · intro h
@@ -159,7 +159,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def pointwiseSetMulAction [SMulCommClass R R M]
+  签名: def pointwiseSetMulAction [标量交换类 R R M]
   定义体: show {(1 : R)} • x = x from SetLike.ext fun m =>
     (mem_singleton_set_smul _ _ _).trans ⟨by rintro ⟨_, h, rfl⟩; rwa [one_smul],
       fun h => ⟨m, h, (one_smul _ _).symm⟩⟩
@@ -204,7 +204,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def pointwiseSetDistribMulAction [SMulCommClass R R M]
+  签名: def pointwiseSetDistribMulAction [标量交换类 R R M]
   定义体: set_smul_bot s
   smul_add s x y := le_antisymm
     (set_smul_le _ _ _ <| by

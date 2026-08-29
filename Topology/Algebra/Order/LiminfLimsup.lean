@@ -382,7 +382,7 @@ lemma limsup_const_add
 
 中文:
 引理 limsup_const_add
-  结论: (F : Filter ι) [NeBot F] [Add R] [ContinuousAdd R]
+  结论: (F : 滤子 ι) [NeBot F] [加法 R] [连续加法 R]
   证明: (Monotone.map_limsSup_of_continuousAt (F := F.map f) (f := fun (x : R) => c + x)
     (fun _ _ h => by dsimp; gcongr) (continuous_const_add c).continuousAt bdd_above cobdd).symm
 
@@ -406,7 +406,7 @@ lemma limsup_add_const
 
 中文:
 引理 limsup_add_const
-  结论: (F : Filter ι) [NeBot F] [Add R] [ContinuousAdd R]
+  结论: (F : 滤子 ι) [NeBot F] [加法 R] [连续加法 R]
   证明: (Monotone.map_limsSup_of_continuousAt (F := F.map f) (f := fun (x : R) => x + c)
     (fun _ _ h => by dsimp; gcongr) (continuous_add_const c).continuousAt bdd_above cobdd).symm
 
@@ -430,7 +430,7 @@ lemma liminf_const_add
 
 中文:
 引理 liminf_const_add
-  结论: (F : Filter ι) [NeBot F] [Add R] [ContinuousAdd R]
+  结论: (F : 滤子 ι) [NeBot F] [加法 R] [连续加法 R]
   证明: (Monotone.map_limsInf_of_continuousAt (F := F.map f) (f := fun (x : R) => c + x)
     (fun _ _ h => by dsimp; gcongr) (continuous_const_add c).continuousAt cobdd bdd_below).symm
 
@@ -454,7 +454,7 @@ lemma liminf_add_const
 
 中文:
 引理 liminf_add_const
-  结论: (F : Filter ι) [NeBot F] [Add R] [ContinuousAdd R]
+  结论: (F : 滤子 ι) [NeBot F] [加法 R] [连续加法 R]
   证明: (Monotone.map_limsInf_of_continuousAt (F := F.map f) (f := fun (x : R) => x + c)
     (fun _ _ h => by dsimp; gcongr) (continuous_add_const c).continuousAt cobdd bdd_below).symm
 
@@ -482,7 +482,7 @@ lemma limsup_const_sub
 
 中文:
 引理 limsup_const_sub
-  结论: (F : Filter ι) [AddCommSemigroup R] [Sub R] [ContinuousSub R] [OrderedSub R]
+  结论: (F : 滤子 ι) [加法交换半群 R] [减法 R] [余ntinuousSub R] [OrderedSub R]
   证明: by
   rcases F.eq_or_neBot with rfl | _
   · simp only [liminf, limsInf, limsup, limsSup, map_bot, eventually_bot, Set.ofPred_true]
@@ -527,7 +527,7 @@ lemma limsup_sub_const
 
 中文:
 引理 limsup_sub_const
-  结论: (F : Filter ι) [AddCommSemigroup R] [Sub R] [ContinuousSub R] [OrderedSub R]
+  结论: (F : 滤子 ι) [加法交换半群 R] [减法 R] [余ntinuousSub R] [OrderedSub R]
   证明: by
   rcases F.eq_or_neBot with rfl | _
   · have {a : R} : sInf Set.univ <= a := by
@@ -567,7 +567,7 @@ lemma liminf_const_sub
 
 中文:
 引理 liminf_const_sub
-  结论: (F : Filter ι) [NeBot F] [AddCommSemigroup R] [Sub R] [ContinuousSub R]
+  结论: (F : 滤子 ι) [NeBot F] [加法交换半群 R] [减法 R] [余ntinuousSub R]
   证明: (Antitone.map_limsSup_of_continuousAt (F := F.map f) (f := fun (x : R) => c - x)
     (fun _ _ h => tsub_le_tsub_left h c) (continuous_sub_left c).continuousAt bdd_above cobdd).symm
 
@@ -591,7 +591,7 @@ lemma liminf_sub_const
 
 中文:
 引理 liminf_sub_const
-  结论: (F : Filter ι) [NeBot F] [AddCommSemigroup R] [Sub R] [ContinuousSub R]
+  结论: (F : 滤子 ι) [NeBot F] [加法交换半群 R] [减法 R] [余ntinuousSub R]
   证明: (Monotone.map_limsInf_of_continuousAt (F := F.map f) (f := fun (x : R) => x - c)
     (fun _ _ h => tsub_le_tsub_right h c) (continuous_sub_right c).continuousAt cobdd bdd_below).symm
 

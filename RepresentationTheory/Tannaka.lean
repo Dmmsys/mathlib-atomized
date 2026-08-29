@@ -49,7 +49,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (FDRep k G) (FGModuleCat k)).Monoidal
+  签名: (forget₂ (FDRep k G) (FGModuleCat k)).幺半群
   定义体: inferInstanceAs (Action.forget _ _).Monoidal
 
 Depends on / 依赖: Action, Action.forget, Monoidal, forget
@@ -320,7 +320,7 @@ definition rightFDRep
 
 中文:
 定义 rightFDRep
-  签名: [Finite G]
+  签名: [有限 G]
   定义体: FDRep.of rightRegular
 
 Depends on / 依赖: FDRep.of, rightRegular
@@ -347,8 +347,8 @@ lemma equivHom_injective
 
 中文:
 引理 equivHom_injective
-  条件: [Nontrivial k]
-  结论: Function.Injective (equivHom k G)
+  条件: [非平凡 k]
+  结论: 函数.单射 (equivHom k G)
   证明: by
   intro s t h
   classical
@@ -488,7 +488,7 @@ omit [Finite G] in
 
 中文:
 定义 sumSMulInv
-  签名: [Fintype G] {X : FDRep k G} (v : X)
+  签名: [有限类型 G] {X : FDRep k G} (v : X)
   定义体: ∑ s : G, (f s) • (X.ρ s⁻¹ v)
   map_add' _ _ := by simp [add_smul, sum_add_distrib]
   map_smul' _ _ := by simp [smul_sum, smul_smul]
@@ -512,7 +512,7 @@ lemma sumSMulInv_single_id
 
 中文:
 引理 sumSMulInv_single_id
-  条件: [Fintype G] [DecidableEq G] {X : FDRep k G} (v : X)
+  条件: [有限类型 G] [DecidableEq G] {X : FDRep k G} (v : X)
   证明: by
   simp
 -/
@@ -539,7 +539,7 @@ definition ofRightFDRep
 
 中文:
 定义 ofRightFDRep
-  签名: [Fintype G] (X : FDRep k G) (v : X)
+  签名: [有限类型 G] (X : FDRep k G) (v : X)
   定义体: InducedCategory.homMk (ofHom (sumSMulInv v))
   comm t := by
     ext f
@@ -649,7 +649,7 @@ lemma toRightFDRepComp_in_rightRegular
 
 中文:
 引理 toRightFDRepComp_in_rightRegular
-  条件: [IsDomain k] (η : Aut (forget k G))
+  条件: [是整环 k] (η : Aut (forget k G))
   证明: by
   classical
   obtain ⟨s, hs⟩ := ((evalAlgHom _ _ 1).comp (algHomOfRightFDRepComp η)).eq_piEvalAlgHom
@@ -693,8 +693,8 @@ lemma equivHom_surjective
 
 中文:
 引理 equivHom_surjective
-  条件: [IsDomain k]
-  结论: Function.Surjective (equivHom k G)
+  条件: [是整环 k]
+  结论: 函数.满射 (equivHom k G)
   证明: by
   intro η
   obtain ⟨s, h⟩ := toRightFDRepComp_in_rightRegular η
@@ -718,7 +718,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: [IsDomain k]
+  签名: [是整环 k]
   定义体: MulEquiv.ofBijective (equivHom k G) ⟨equivHom_injective, equivHom_surjective⟩
 
 Depends on / 依赖: MulEquiv, MulEquiv.ofBijective, equivHom, equivHom_injective, equivHom_surjective, ofBijective

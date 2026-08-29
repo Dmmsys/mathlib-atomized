@@ -73,7 +73,7 @@ theorem eq_smul_of_le_smul_of_le_jacobson
 
 中文:
 定理 eq_smul_of_le_smul_of_le_jacobson
-  结论: {I J : Ideal R} {N : Submodule R M} (hN : N.FG)
+  结论: {I J : 理想 R} {N : 子模 R M} (hN : N.FG)
   证明: by
   refine le_antisymm ?_ (Submodule.smul_le.2 fun _ _ _ => Submodule.smul_mem _ _)
   intro n hn
@@ -104,7 +104,7 @@ lemma eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator
 
 中文:
 引理 eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator
-  结论: {I : Ideal R}
+  结论: {I : 理想 R}
   证明: (eq_smul_of_le_smul_of_le_jacobson hN hIN.le hIjac).trans N.annihilator_smul
 
 Depends on / 依赖: N.annihilator_smul, annihilator_smul, eq_smul_of_le_smul_of_le_jacobson, hIN.le
@@ -153,7 +153,7 @@ lemma eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator
 
 中文:
 引理 eq_bot_of_set_smul_eq_of_subset_jacobson_annihilator
-  结论: {s : Set R}
+  结论: {s : 集合 R}
   证明: eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator hN
     (Eq.trans hsN (span_smul_eq s N).symm) (span_le.mpr hsJac)
 
@@ -177,7 +177,7 @@ eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator Module.Finite.fg_top H
 
 中文:
 引理 top_ne_ideal_smul_of_le_jacobson_annihilator
-  结论: [Nontrivial M]
+  结论: [非平凡 M]
   证明: fun H => top_ne_bot
 eq_bot_of_eq_ideal_smul_of_le_jacobson_annihilator Module.Finite.fg_top H
     (congrArg (I <= Ideal.jacobson ·) annihilator_top).mpr h
@@ -202,7 +202,7 @@ lemma top_ne_set_smul_of_subset_jacobson_annihilator
 
 中文:
 引理 top_ne_set_smul_of_subset_jacobson_annihilator
-  结论: [Nontrivial M]
+  结论: [非平凡 M]
   证明: ne_of_ne_of_eq (top_ne_ideal_smul_of_le_jacobson_annihilator (span_le.mpr h))
     (span_smul_eq _ _)
 
@@ -227,7 +227,7 @@ lemma top_ne_pointwise_smul_of_mem_jacobson_annihilator
 
 中文:
 引理 top_ne_pointwise_smul_of_mem_jacobson_annihilator
-  结论: [Nontrivial M]
+  结论: [非平凡 M]
   证明: ne_of_ne_of_eq (top_ne_set_smul_of_subset_jacobson_annihilator <|
                     Set.singleton_subset_iff.mpr h) (singleton_set_smul ⊤ r)
 
@@ -255,7 +255,7 @@ theorem eq_bot_of_le_smul_of_le_jacobson_bot
 
 中文:
 定理 eq_bot_of_le_smul_of_le_jacobson_bot
-  结论: (I : Ideal R) (N : Submodule R M) (hN : N.FG)
+  结论: (I : 理想 R) (N : 子模 R M) (hN : N.FG)
   证明: by
   rw [eq_smul_of_le_smul_of_le_jacobson hN hIN hIjac]; rw [Submodule.bot_smul]
 
@@ -281,7 +281,7 @@ theorem sup_eq_sup_smul_of_le_smul_of_le_jacobson
 
 中文:
 定理 sup_eq_sup_smul_of_le_smul_of_le_jacobson
-  结论: {I J : Ideal R} {N N' : Submodule R M}
+  结论: {I J : 理想 R} {N N' : 子模 R M}
   证明: by
   have hNN' : N ⊔ N' = N ⊔ I • N' :=
     le_antisymm (sup_le le_sup_left hNN)
@@ -322,7 +322,7 @@ theorem sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson
 
 中文:
 定理 sup_smul_eq_sup_smul_of_le_smul_of_le_jacobson
-  结论: {I J : Ideal R} {N N' : Submodule R M}
+  结论: {I J : 理想 R} {N N' : 子模 R M}
   证明: ((sup_le_sup_left smul_le_right _).antisymm (sup_le le_sup_left hNN)).trans
     (sup_eq_sup_smul_of_le_smul_of_le_jacobson hN' hIJ hNN)
 
@@ -344,7 +344,7 @@ theorem le_of_le_smul_of_le_jacobson_bot
 
 中文:
 定理 le_of_le_smul_of_le_jacobson_bot
-  结论: {R M} [CommRing R] [AddCommGroup M] [Module R M]
+  结论: {R M} [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   rw [← sup_eq_left]; rw [sup_eq_sup_smul_of_le_smul_of_le_jacobson hN' hIJ hNN]; rw [bot_smul]; rw [sup_bot_eq]
 
@@ -370,7 +370,7 @@ theorem smul_le_of_le_smul_of_le_jacobson_bot
 
 中文:
 定理 smul_le_of_le_smul_of_le_jacobson_bot
-  结论: {I : Ideal R} {N N' : Submodule R M} (hN' : N'.FG)
+  结论: {I : 理想 R} {N N' : 子模 R M} (hN' : N'.FG)
   证明: smul_le_right.trans (le_of_le_smul_of_le_jacobson_bot hN' hIJ hNN)
 
 Depends on / 依赖: le_of_le_smul_of_le_jacobson_bot, smul_le_right, smul_le_right.trans
@@ -396,8 +396,8 @@ lemma exists_sub_one_mem_and_smul_le_of_fg_of_le_sup
     apply le_anti
 
 中文:
-引理 exists_sub_one_mem_and_smul_le_of_fg_of_le_sup
-  结论: {I : Ideal R}
+引理 存在_sub_one_mem_and_smul_le_of_fg_of_le_sup
+  结论: {I : 理想 R}
   证明: by
   have hNN'' : P <= N ⊔ N' := le_trans hNN' (by simpa using le_trans smul_le_right le_sup_right)
   have h1 : P.map N.mkQ = N'.map N.mkQ := by
@@ -532,7 +532,7 @@ theorem exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot
     simp [← hsspan, map_span, Set.image_image]
 
 中文:
-定理 exists_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot
+定理 存在_injOn_mkQ_image_span_eq_of_span_eq_map_mkQ_of_le_jacobson_bot
   证明: by
   use Quotient.out '' s
   split_ands
@@ -569,8 +569,8 @@ lemma LinearMap.surjective_of_surjective_comp_mkQ
   exact LinearMap.range_eq_top_of_surjective _ surj
 
 中文:
-引理 LinearMap.surjective_of_surjective_comp_mkQ
-  结论: {N : 类型} [AddCommGroup N] [Module R N]
+引理 线性映射.surjective_of_surjective_comp_mkQ
+  结论: {N : 类型} [加法交换群 N] [模 R N]
   证明: by
   rw [← LinearMap.range_eq_top]; rw [← top_le_iff]
   apply Submodule.le_of_le_smul_of_le_jacobson_bot (Module.finite_def.mp ‹_›) Ile

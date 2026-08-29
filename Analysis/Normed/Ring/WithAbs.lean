@@ -41,7 +41,7 @@ structure WithAbs
 
 中文:
 结构 WithAbs
-  参数: [Semiring R] (v : AbsoluteValue R S)
+  参数: [半环 R] (v : 绝对值 R S)
   公理与运算 (2 个):
     - toAbs((v)) : :
     - ofAbs : R
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (WithAbs v)
+  签名: 半环 (WithAbs v)
   定义体: fast_instance% Equiv.semiring { toFun := ofAbs, invFun := toAbs v }
 
 Depends on / 依赖: Equiv.semiring, fast_instance, invFun, semiring
@@ -129,7 +129,7 @@ lemma ofAbs_surjective
 
 中文:
 引理 ofAbs_surjective
-  结论: Function.Surjective (ofAbs (v := v))
+  结论: 函数.满射 (ofAbs (v := v))
   证明: Function.RightInverse.surjective ofAbs_toAbs _
 -/
 lemma ofAbs_surjective : Function.Surjective (ofAbs (v := v)) :=
@@ -145,7 +145,7 @@ lemma toAbs_surjective
 
 中文:
 引理 toAbs_surjective
-  结论: Function.Surjective (toAbs v)
+  结论: 函数.满射 (toAbs v)
   证明: Function.RightInverse.surjective toAbs_ofAbs _
 
 Depends on / 依赖: Function, Function.RightInverse.surjective, RightInverse, surjective, toAbs_ofAbs
@@ -163,7 +163,7 @@ lemma ofAbs_injective
 
 中文:
 引理 ofAbs_injective
-  结论: Function.Injective (ofAbs (v := v))
+  结论: 函数.单射 (ofAbs (v := v))
   证明: Function.LeftInverse.injective toAbs_ofAbs _
 -/
 lemma ofAbs_injective : Function.Injective (ofAbs (v := v)) :=
@@ -179,7 +179,7 @@ lemma toAbs_injective
 
 中文:
 引理 toAbs_injective
-  结论: Function.Injective (toAbs v)
+  结论: 函数.单射 (toAbs v)
   证明: Function.LeftInverse.injective ofAbs_toAbs _
 
 Depends on / 依赖: Function, Function.LeftInverse.injective, LeftInverse, injective, ofAbs_toAbs
@@ -197,7 +197,7 @@ lemma ofAbs_bijective
 
 中文:
 引理 ofAbs_bijective
-  结论: Function.Bijective (ofAbs (v := v))
+  结论: 函数.双射 (ofAbs (v := v))
   证明: ⟨ofAbs_injective v, ofAbs_surjective v⟩
 -/
 lemma ofAbs_bijective : Function.Bijective (ofAbs (v := v)) :=
@@ -213,7 +213,7 @@ lemma toAbs_bijective
 
 中文:
 引理 toAbs_bijective
-  结论: Function.Bijective (toAbs v)
+  结论: 函数.双射 (toAbs v)
   证明: ⟨toAbs_injective v, toAbs_surjective v⟩
 
 Depends on / 依赖: toAbs_injective, toAbs_surjective
@@ -447,8 +447,8 @@ instance [Nontrivial
   body: (equiv v).nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: R] : Nontrivial (WithAbs v)
+实例 [非平凡
+  签名: R] : 非平凡 (WithAbs v)
   定义体: (equiv v).nontrivial
 
 Depends on / 依赖: nontrivial
@@ -463,8 +463,8 @@ instance [Unique
   body: (equiv v).unique
 
 中文:
-实例 [Unique
-  签名: R] : Unique (WithAbs v)
+实例 [唯一
+  签名: R] : 唯一 (WithAbs v)
   定义体: (equiv v).unique
 
 Depends on / 依赖: unique
@@ -480,7 +480,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (WithAbs v)
+  签名: 可居 (WithAbs v)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (WithAbs v) := ⟨0⟩
@@ -515,7 +515,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: WithAbs.map v v (RingHom.id R) = RingHom.id (WithAbs v)
+  结论: WithAbs.map v v (环态射.id R) = 环态射.id (WithAbs v)
   证明: rfl
 -/
 @[simp] theorem map_id : WithAbs.map v v (RingHom.id R) = RingHom.id (WithAbs v) := rfl
@@ -594,7 +594,7 @@ theorem congr_refl
 
 中文:
 定理 congr_refl
-  结论: congr v v (RingEquiv.refl R) = RingEquiv.refl (WithAbs v)
+  结论: congr v v (环等价.refl R) = 环等价.refl (WithAbs v)
   证明: rfl
 -/
 theorem congr_refl : congr v v (RingEquiv.refl R) = RingEquiv.refl (WithAbs v) := rfl
@@ -673,7 +673,7 @@ definition equivWithAbs
 
 中文:
 定义 equivWithAbs
-  签名: (v w : AbsoluteValue R S)
+  签名: (v w : 绝对值 R S)
   定义体: congr v w (.refl R)
 
 @[deprecated "Use `WithAbs.congr_symm` instead." (since := "2026-03-02")]
@@ -694,7 +694,7 @@ theorem equivWithAbs_symm
 
 中文:
 定理 equivWithAbs_symm
-  条件: (v w : AbsoluteValue R S)
+  条件: (v w : 绝对值 R S)
   证明: congr_symm _ _ _
 
 @[deprecated "Use `simp`." (since := "2026-03-02")]
@@ -718,7 +718,7 @@ theorem equiv_equivWithAbs_symm_apply
 
 中文:
 定理 equiv_equivWithAbs_symm_apply
-  条件: {v w : AbsoluteValue R S} {x : WithAbs w}
+  条件: {v w : 绝对值 R S} {x : WithAbs w}
   证明: by simp
 
 @[deprecated "Use `simp`." (since := "2026-03-02")]
@@ -739,7 +739,7 @@ theorem equivWithAbs_equiv_symm_apply
 
 中文:
 定理 equivWithAbs_equiv_symm_apply
-  条件: {v w : AbsoluteValue R S} {x : R}
+  条件: {v w : 绝对值 R S} {x : R}
   证明: by simp
 
 @[deprecated "Use `simp`." (since := "2026-03-02")]
@@ -758,7 +758,7 @@ theorem equivWithAbs_symm_equiv_symm_apply
 
 中文:
 定理 equivWithAbs_symm_equiv_symm_apply
-  条件: {v w : AbsoluteValue R S} {x : R}
+  条件: {v w : 绝对值 R S} {x : R}
   证明: by simp
 -/
 theorem equivWithAbs_symm_equiv_symm_apply {v w : AbsoluteValue R S} {x : R} :
@@ -780,7 +780,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (WithAbs v)
+  签名: 交换半环 (WithAbs v)
   定义体: fast_instance% (equiv v).commSemiring
 
 Depends on / 依赖: commSemiring, fast_instance
@@ -806,7 +806,7 @@ instance normedRing
 
 中文:
 实例 normedRing
-  签名: (v : AbsoluteValue R 实数)
+  签名: (v : 绝对值 R 实数)
   定义体: letI := v.toNormedRing
   fast_instance% (equiv v).normedRing
 
@@ -827,7 +827,7 @@ lemma norm_eq_apply_ofAbs
 
 中文:
 引理 norm_eq_apply_ofAbs
-  条件: (v : AbsoluteValue R 实数) (x : WithAbs v)
+  条件: (v : 绝对值 R 实数) (x : WithAbs v)
   结论: ‖x‖ = v x.ofAbs
   证明: rfl
 -/
@@ -846,7 +846,7 @@ lemma norm_toAbs_eq
 
 中文:
 引理 norm_toAbs_eq
-  条件: (v : AbsoluteValue R 实数) (x : R)
+  条件: (v : 绝对值 R 实数) (x : R)
   结论: ‖toAbs v x‖ = v x
   证明: rfl
 
@@ -942,7 +942,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (WithAbs v)
+  签名: 交换环 (WithAbs v)
   定义体: fast_instance% (equiv v).commRing
 
 Depends on / 依赖: commRing, fast_instance
@@ -964,8 +964,8 @@ instance [SMul
   body: ofAbs x • t
 
 中文:
-实例 [SMul
-  签名: R T] : SMul (WithAbs v) T where
+实例 [标量乘法
+  签名: R T] : 标量乘法 (WithAbs v) T where
   定义体: ofAbs x • t
 -/
 instance [SMul R T] : SMul (WithAbs v) T where
@@ -981,7 +981,7 @@ theorem smul_left_def
 
 中文:
 定理 smul_left_def
-  条件: [SMul R T] (x : WithAbs v) (t : T)
+  条件: [标量乘法 R T] (x : WithAbs v) (t : T)
   证明: rfl
 -/
 theorem smul_left_def [SMul R T] (x : WithAbs v) (t : T) :
@@ -996,8 +996,8 @@ instance [SMul
   body: ofAbs_injective v FaithfulSMul.eq_of_smul_eq_smul h
 
 中文:
-实例 [SMul
-  签名: R T] [FaithfulSMul R T] : FaithfulSMul (WithAbs v) T where
+实例 [标量乘法
+  签名: R T] [忠实标量乘法 R T] : 忠实标量乘法 (WithAbs v) T where
   定义体: ofAbs_injective v FaithfulSMul.eq_of_smul_eq_smul h
 
 Depends on / 依赖: FaithfulSMul, FaithfulSMul.eq_of_smul_eq_smul, eq_of_smul_eq_smul, ofAbs_injective
@@ -1014,8 +1014,8 @@ instance [SMul
   body: Equiv.smul T { toFun := ofAbs, invFun := toAbs v }
 
 中文:
-实例 [SMul
-  签名: T R] : SMul T (WithAbs v)
+实例 [标量乘法
+  签名: T R] : 标量乘法 T (WithAbs v)
   定义体: Equiv.smul T { toFun := ofAbs, invFun := toAbs v }
 
 Depends on / 依赖: Equiv.smul, invFun
@@ -1032,7 +1032,7 @@ theorem smul_right_def
 
 中文:
 定理 smul_right_def
-  条件: [SMul T R] (t : T) (x : WithAbs v)
+  条件: [标量乘法 T R] (t : T) (x : WithAbs v)
   证明: rfl
 -/
 theorem smul_right_def [SMul T R] (t : T) (x : WithAbs v) :
@@ -1049,8 +1049,8 @@ instance [SMul
     exact FaithfulSMul.eq_of_smul_eq_smul fun _ => h (toAbs v _)
 
 中文:
-实例 [SMul
-  签名: T R] [FaithfulSMul T R] : FaithfulSMul T (WithAbs v) where
+实例 [标量乘法
+  签名: T R] [忠实标量乘法 T R] : 忠实标量乘法 T (WithAbs v) where
   定义体: by
     simp only [smul_right_def, toAbs.injEq] at h
     exact FaithfulSMul.eq_of_smul_eq_smul fun _ => h (toAbs v _)
@@ -1085,7 +1085,7 @@ instance moduleLeft
 
 中文:
 实例 moduleLeft
-  签名: [AddCommMonoid T] [Module R T]
+  签名: [加法交换幺半群 T] [模 R T]
   定义体: fast_instance% .compHom T (equiv v).toRingHom
 
 @[deprecated (since := "2026-03-02")] alias instModule_left := moduleLeft
@@ -1108,8 +1108,8 @@ instance [Semiring
 @[deprecated (since := "2026-03-02")] alias instModule_right := instModule
 
 中文:
-实例 [Semiring
-  签名: T] [Module T R] : Module T (WithAbs v)
+实例 [半环
+  签名: T] [模 T R] : 模 T (WithAbs v)
   定义体: fast_instance% (equiv v).module T
 
 @[deprecated (since := "2026-03-02")] alias instModule_right := instModule
@@ -1193,7 +1193,7 @@ instance algebraLeft
 
 中文:
 实例 algebraLeft
-  签名: (v : AbsoluteValue R S)
+  签名: (v : 绝对值 R S)
   定义体: fast_instance% .compHom T (equiv v).toRingHom
 
 Depends on / 依赖: compHom, fast_instance, toRingHom
@@ -1211,7 +1211,7 @@ theorem algebraMap_left_apply
 
 中文:
 定理 algebraMap_left_apply
-  条件: {v : AbsoluteValue R S} (x : WithAbs v)
+  条件: {v : 绝对值 R S} (x : WithAbs v)
   证明: rfl
 -/
 theorem algebraMap_left_apply {v : AbsoluteValue R S} (x : WithAbs v) :
@@ -1227,7 +1227,7 @@ theorem algebraMap_left_injective
 
 中文:
 定理 algebraMap_left_injective
-  结论: (v : AbsoluteValue R S)
+  结论: (v : 绝对值 R S)
   证明: h.comp (ofAbs_injective v)
 
 Depends on / 依赖: h.comp, ofAbs_injective
@@ -1250,7 +1250,7 @@ theorem algebraMap_right_apply
 
 中文:
 定理 algebraMap_right_apply
-  条件: {v : AbsoluteValue T S} (x : R)
+  条件: {v : 绝对值 T S} (x : R)
   证明: rfl
 -/
 theorem algebraMap_right_apply {v : AbsoluteValue T S} (x : R) :
@@ -1266,7 +1266,7 @@ theorem algebraMap_right_injective
 
 中文:
 定理 algebraMap_right_injective
-  结论: (v : AbsoluteValue T S)
+  结论: (v : 绝对值 T S)
   证明: (toAbs_injective v).comp h
 
 Depends on / 依赖: toAbs_injective
@@ -1288,7 +1288,7 @@ theorem ofAbs_algebraMap
 
 中文:
 定理 ofAbs_algebraMap
-  条件: (v : AbsoluteValue R S) (w : AbsoluteValue T S) (x : WithAbs v)
+  条件: (v : 绝对值 R S) (w : 绝对值 T S) (x : WithAbs v)
   证明: rfl
 
 @[deprecated (since := "2026-03-02")] alias instAlgebra_left := algebraLeft
@@ -1311,7 +1311,7 @@ definition algEquiv
 
 中文:
 定义 algEquiv
-  签名: (v : AbsoluteValue T S)
+  签名: (v : 绝对值 T S)
   定义体: (equiv v).algEquiv R
 
 Depends on / 依赖: algEquiv
@@ -1328,7 +1328,7 @@ theorem algEquiv_apply
 
 中文:
 定理 algEquiv_apply
-  条件: (v : AbsoluteValue T S) (x : WithAbs v)
+  条件: (v : 绝对值 T S) (x : WithAbs v)
   证明: rfl
 -/
 @[simp] theorem algEquiv_apply (v : AbsoluteValue T S) (x : WithAbs v) :
@@ -1343,7 +1343,7 @@ theorem algEquiv_symm_apply
 
 中文:
 定理 algEquiv_symm_apply
-  条件: (v : AbsoluteValue T S) (x : T)
+  条件: (v : 绝对值 T S) (x : T)
   证明: rfl
 -/
 @[simp] theorem algEquiv_symm_apply (v : AbsoluteValue T S) (x : T) :
@@ -1369,7 +1369,7 @@ class LiesOver
 
 中文:
 类 LiesOver
-  参数: (w : AbsoluteValue L S) (v : AbsoluteValue K S)
+  参数: (w : 绝对值 L S) (v : 绝对值 K S)
   公理与运算 (1 个):
     - comp_eq((w) (v)) : w.comp (algebraMap K L).injective = v
 -/

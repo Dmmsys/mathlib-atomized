@@ -60,7 +60,7 @@ definition IsCaratheodory
 
 中文:
 定义 IsCaratheodory
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall t, m t = m (t inter s) + m (t \ s)
 -/
 def IsCaratheodory (s : Set α) : Prop :=
@@ -78,7 +78,7 @@ theorem isCaratheodory_iff_le'
 
 中文:
 定理 isCaratheodory_iff_le'
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: forall_congr' fun _ => le_antisymm_iff.trans and_iff_right measure_le_inter_add_sdiff _ _ _
 
 @[simp]
@@ -192,7 +192,7 @@ lemma IsCaratheodory.biUnion_of_finite
 
 中文:
 引理 IsCaratheodory.biUnion_of_finite
-  结论: {ι : 类型} {s : ι -> Set α} {t : Set ι} (ht : t.Finite)
+  结论: {ι : 类型} {s : ι -> 集合 α} {t : 集合 ι} (ht : t.有限)
   证明: by
   classical
   lift t to Finset ι using ht
@@ -226,7 +226,7 @@ theorem measure_inter_union
 
 中文:
 定理 measure_inter_union
-  条件: (h : s₁ inter s₂ subseteq ∅) (h₁ : IsCaratheodory m s₁) {t : Set α}
+  条件: (h : s₁ inter s₂ subseteq ∅) (h₁ : IsCaratheodory m s₁) {t : 集合 α}
   证明: by
   rw [h₁]; rw [Set.inter_assoc]; rw [Set.union_inter_cancel_left]; rw [inter_sdiff_assoc]; rw [union_sdiff_cancel_left h]
 
@@ -245,7 +245,7 @@ theorem isCaratheodory_iUnion_lt
 
 中文:
 定理 isCaratheodory_iUnion_lt
-  条件: {s : 自然数 -> Set α}
+  条件: {s : 自然数 -> 集合 α}
 -/
 theorem isCaratheodory_iUnion_lt {s : Nat -> Set α} :
     forall {n : Nat}, (forall i < n, IsCaratheodory m (s i)) -> IsCaratheodory m (⋃ i < n, s i)
@@ -316,7 +316,7 @@ lemma isCaratheodory_partialSups
 
 中文:
 引理 isCaratheodory_partialSups
-  结论: {ι : 类型} [Preorder ι] [LocallyFiniteOrderBot ι]
+  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
   证明: by
   simpa only [partialSups_apply, Finset.sup'_eq_sup, Finset.sup_set_eq_biUnion, ← Finset.mem_coe,
     Finset.coe_Iic] using .biUnion_of_finite (finite_Iic _) (fun j _ => h j)
@@ -339,7 +339,7 @@ lemma isCaratheodory_disjointed
 
 中文:
 引理 isCaratheodory_disjointed
-  结论: {ι : 类型} [Preorder ι] [LocallyFiniteOrderBot ι]
+  结论: {ι : 类型} [预序 ι] [LocallyFiniteOrderBot ι]
   证明: disjointedRec (fun _ j ht => m.isCaratheodory_sdiff ht <| h j) (h i)
 
 Depends on / 依赖: disjointedRec, isCaratheodory_sdiff, m.isCaratheodory_sdiff
@@ -358,7 +358,7 @@ theorem isCaratheodory_sum
 
 中文:
 定理 isCaratheodory_sum
-  结论: {s : 自然数 -> Set α} (h : 对任意 i, IsCaratheodory m (s i))
+  结论: {s : 自然数 -> 集合 α} (h : 对任意 i, IsCaratheodory m (s i))
 -/
 theorem isCaratheodory_sum {s : Nat -> Set α} (h : forall i, IsCaratheodory m (s i))
     (hd : Pairwise (Disjoint on s)) {t : Set α} :
@@ -386,7 +386,7 @@ theorem isCaratheodory_iUnion_of_disjoint
 
 中文:
 定理 isCaratheodory_iUnion_of_disjoint
-  结论: {s : 自然数 -> Set α} (h : 对任意 i, IsCaratheodory m (s i))
+  结论: {s : 自然数 -> 集合 α} (h : 对任意 i, IsCaratheodory m (s i))
   证明: by
   apply (isCaratheodory_iff_le' m).mpr
   intro t
@@ -425,7 +425,7 @@ lemma isCaratheodory_iUnion
 
 中文:
 引理 isCaratheodory_iUnion
-  条件: {s : 自然数 -> Set α} (h : 对任意 i, m.IsCaratheodory (s i))
+  条件: {s : 自然数 -> 集合 α} (h : 对任意 i, m.IsCaratheodory (s i))
   证明: by
   rw [← iUnion_disjointed]
   exact m.isCaratheodory_iUnion_of_disjoint (m.isCaratheodory_disjointed h)
@@ -455,7 +455,7 @@ theorem f_iUnion
 
 中文:
 定理 f_iUnion
-  条件: {s : 自然数 -> Set α} (h : 对任意 i, IsCaratheodory m (s i)) (hd : Pairwise (Disjoint on s))
+  条件: {s : 自然数 -> 集合 α} (h : 对任意 i, IsCaratheodory m (s i)) (hd : 两两 (Disjoint on s))
   证明: by
   refine le_antisymm (measure_iUnion_le s) ?_
   rw [ENNReal.tsum_eq_iSup_nat]
@@ -488,7 +488,7 @@ definition caratheodoryDynkin
 
 中文:
 定义 caratheodoryDynkin
-  签名: : MeasurableSpace.DynkinSystem α where
+  签名: : 可测空间.DynkinSystem α where
   定义体: IsCaratheodory m
   has_empty := isCaratheodory_empty m
   has_compl s := isCaratheodory_compl m s
@@ -518,7 +518,7 @@ definition caratheodory
 
 中文:
 定义 caratheodory
-  签名: : MeasurableSpace α
+  签名: : 可测空间 α
   定义体: by
   apply MeasurableSpace.DynkinSystem.toMeasurableSpace (caratheodoryDynkin m)
   intro s₁ s₂
@@ -539,7 +539,7 @@ theorem isCaratheodory_iff
 
 中文:
 定理 isCaratheodory_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -558,7 +558,7 @@ theorem isCaratheodory_iff_le
 
 中文:
 定理 isCaratheodory_iff_le
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: isCaratheodory_iff_le' m
 
 Depends on / 依赖: isCaratheodory_iff_le
@@ -577,7 +577,7 @@ theorem iUnion_eq_of_caratheodory
 
 中文:
 定理 iUnion_eq_of_caratheodory
-  结论: {s : 自然数 -> Set α}
+  结论: {s : 自然数 -> 集合 α}
   证明: f_iUnion m h hd
 -/
 protected theorem iUnion_eq_of_caratheodory {s : Nat -> Set α}
@@ -608,7 +608,7 @@ theorem ofFunction_caratheodory
 
 中文:
 定理 ofFunction_caratheodory
-  结论: {m : Set α -> 实数>=0∞} {s : Set α} {h₀ : m ∅ = 0}
+  结论: {m : 集合 α -> 实数>=0∞} {s : 集合 α} {h₀ : m ∅ = 0}
   证明: by
   apply (isCaratheodory_iff_le _).mpr
   refine fun t => le_iInf fun f => le_iInf fun hf => ?_
@@ -657,7 +657,7 @@ theorem boundedBy_caratheodory
 
 中文:
 定理 boundedBy_caratheodory
-  结论: {m : Set α -> 实数>=0∞} {s : Set α}
+  结论: {m : 集合 α -> 实数>=0∞} {s : 集合 α}
   证明: by
   apply ofFunction_caratheodory; intro t
   rcases t.eq_empty_or_nonempty with rfl | h
@@ -690,7 +690,7 @@ theorem zero_caratheodory
 
 中文:
 定理 zero_caratheodory
-  结论: (0 : OuterMeasure α).caratheodory = ⊤
+  结论: (0 : 外测度 α).caratheodory = ⊤
   证明: top_unique fun _ _ _ => (add_zero _).symm
 
 Depends on / 依赖: add_zero, top_unique
@@ -711,7 +711,7 @@ theorem top_caratheodory
 
 中文:
 定理 top_caratheodory
-  结论: (⊤ : OuterMeasure α).caratheodory = ⊤
+  结论: (⊤ : 外测度 α).caratheodory = ⊤
   证明: top_unique fun s _ =>
     (isCaratheodory_iff_le _).2 fun t =>
       t.eq_empty_or_nonempty.elim (fun ht => by simp [ht]) fun ht => by
@@ -735,7 +735,7 @@ theorem le_add_caratheodory
 
 中文:
 定理 le_add_caratheodory
-  条件: (m₁ m₂ : OuterMeasure α)
+  条件: (m₁ m₂ : 外测度 α)
   证明: fun s ⟨hs₁, hs₂⟩ t => by simp [hs₁ t, hs₂ t, add_left_comm, add_assoc]
 
 Depends on / 依赖: add_assoc, add_left_comm
@@ -755,7 +755,7 @@ theorem le_sum_caratheodory
 
 中文:
 定理 le_sum_caratheodory
-  条件: {ι} (m : ι -> OuterMeasure α)
+  条件: {ι} (m : ι -> 外测度 α)
   证明: fun s h t => by
   simp [fun i => MeasurableSpace.measurableSet_iInf.1 h i t, ENNReal.tsum_add]
 
@@ -780,7 +780,7 @@ theorem le_smul_caratheodory
 
 中文:
 定理 le_smul_caratheodory
-  条件: (a : 实数>=0∞) (m : OuterMeasure α)
+  条件: (a : 实数>=0∞) (m : 外测度 α)
   证明: fun s h t => by
       simp only [smul_apply, smul_eq_mul]
       rw [(isCaratheodory_iff m).mp h t]

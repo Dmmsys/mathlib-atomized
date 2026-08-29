@@ -41,10 +41,10 @@ class IsPrincipalIdealRing
     - principal : forall S : Ideal R, S.IsPrincipal
 
 中文:
-类 IsPrincipalIdealRing
-  参数: (R : 类型u) [Semiring R]
+类 是主理想环
+  参数: (R : 类型u) [半环 R]
   公理与运算 (1 个):
-    - principal : 对任意 S : Ideal R, S.IsPrincipal
+    - principal : 对任意 S : 理想 R, S.是Principal
 -/
 class IsPrincipalIdealRing (R : Type u) [Semiring R] : Prop where
   principal : forall S : Ideal R, S.IsPrincipal
@@ -67,7 +67,7 @@ abbreviation span
 
 中文:
 缩写 span
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: Submodule.span α s
 
 Depends on / 依赖: Submodule, Submodule.span
@@ -86,8 +86,8 @@ theorem submodule_span_eq
 
 中文:
 定理 submodule_span_eq
-  条件: {s : Set α}
-  结论: Submodule.span α s = Ideal.span s
+  条件: {s : 集合 α}
+  结论: 子模.span α s = 理想.span s
   证明: by simp
 -/
 theorem submodule_span_eq {s : Set α} : Submodule.span α s = Ideal.span s := by simp
@@ -102,7 +102,7 @@ theorem span_empty
 
 中文:
 定理 span_empty
-  结论: span (∅ : Set α) = ⊥
+  结论: span (∅ : 集合 α) = ⊥
   证明: by simp
 -/
 theorem span_empty : span (∅ : Set α) = ⊥ := by simp
@@ -117,7 +117,7 @@ theorem span_univ
 
 中文:
 定理 span_univ
-  结论: span (Set.univ : Set α) = ⊤
+  结论: span (集合.univ : 集合 α) = ⊤
   证明: by simp
 -/
 theorem span_univ : span (Set.univ : Set α) = ⊤ := by simp
@@ -133,7 +133,7 @@ theorem span_union
 
 中文:
 定理 span_union
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: span (s union t) = span s ⊔ span t
   证明: Submodule.span_union _ _
 
@@ -153,7 +153,7 @@ theorem span_iUnion
 
 中文:
 定理 span_iUnion
-  条件: {ι} (s : ι -> Set α)
+  条件: {ι} (s : ι -> 集合 α)
   结论: span (⋃ i, s i) = ⨆ i, span (s i)
   证明: Submodule.span_iUnion _
 
@@ -172,7 +172,7 @@ theorem iSup_eq_span
 
 中文:
 定理 iSup_eq_span
-  条件: {ι} (p : ι -> Ideal α)
+  条件: {ι} (p : ι -> 理想 α)
   证明: Submodule.iSup_eq_span p
 
 Depends on / 依赖: Submodule, Submodule.iSup_eq_span, iSup_eq_span
@@ -192,8 +192,8 @@ theorem mem_span
 
 中文:
 定理 mem_span
-  条件: {s : Set α} (x)
-  结论: x in span s ↔ 对任意 p : Ideal α, s subseteq p -> x in p
+  条件: {s : 集合 α} (x)
+  结论: x in span s ↔ 对任意 p : 理想 α, s subseteq p -> x in p
   证明: mem_iInter₂
 -/
 theorem mem_span {s : Set α} (x) : x in span s ↔ forall p : Ideal α, s subseteq p -> x in p :=
@@ -210,7 +210,7 @@ theorem subset_span
 
 中文:
 定理 subset_span
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: s subseteq span s
   证明: Submodule.subset_span
 
@@ -232,7 +232,7 @@ theorem span_le
 
 中文:
 定理 span_le
-  条件: {s : Set α} {I}
+  条件: {s : 集合 α} {I}
   结论: span s <= I ↔ s subseteq I
   证明: Submodule.span_le
 
@@ -255,7 +255,7 @@ theorem span_mono
 
 中文:
 定理 span_mono
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   结论: s subseteq t -> span s <= span t
   证明: Submodule.span_mono
 
@@ -276,7 +276,7 @@ theorem span_eq
 
 中文:
 定理 span_eq
-  结论: span (I : Set α) = I
+  结论: span (I : 集合 α) = I
   证明: by simp
 
 @[simp]
@@ -294,7 +294,7 @@ theorem span_singleton_one
 
 中文:
 定理 span_singleton_one
-  结论: span ({1} : Set α) = ⊤
+  结论: span ({1} : 集合 α) = ⊤
   证明: (eq_top_iff_one _).2 subset_span mem_singleton _
 
 Depends on / 依赖: eq_top_iff_one, mem_singleton, subset_span
@@ -313,7 +313,7 @@ theorem isCompactElement_top
 
 中文:
 定理 isCompactElement_top
-  结论: IsCompactElement (⊤ : Ideal α)
+  结论: IsCompactElement (⊤ : 理想 α)
   证明: by
   simpa only [← span_singleton_one] using Submodule.singleton_span_isCompactElement 1
 
@@ -332,7 +332,7 @@ theorem mem_span_insert
 
 中文:
 定理 mem_span_insert
-  条件: {s : Set α} {x y}
+  条件: {s : 集合 α} {x y}
   证明: Submodule.mem_span_insert
 
 Depends on / 依赖: Submodule, Submodule.mem_span_insert, mem_span_insert
@@ -373,7 +373,7 @@ theorem mem_span_singleton'
 中文:
 定理 mem_span_singleton'
   条件: {x y : α}
-  结论: x in span ({y} : Set α) ↔ 存在 a, a * y = x
+  结论: x in span ({y} : 集合 α) ↔ 存在 a, a * y = x
   证明: Submodule.mem_span_singleton
 
 Depends on / 依赖: Submodule, Submodule.mem_span_singleton, mem_span_singleton
@@ -393,7 +393,7 @@ theorem mem_span_singleton_self
 中文:
 定理 mem_span_singleton_self
   条件: (x : α)
-  结论: x in span ({x} : Set α)
+  结论: x in span ({x} : 集合 α)
   证明: by simp
 -/
 theorem mem_span_singleton_self (x : α) : x in span ({x} : Set α) := by simp
@@ -425,7 +425,7 @@ theorem span_singleton_mul_left_unit
 
 中文:
 定理 span_singleton_mul_left_unit
-  条件: {a : α} (h2 : IsUnit a) (x : α)
+  条件: {a : α} (h2 : 是单位 a) (x : α)
   证明: Submodule.span_singleton_smul_eq h2 x
 
 Depends on / 依赖: Submodule, Submodule.span_singleton_smul_eq, span_singleton_smul_eq
@@ -445,8 +445,8 @@ theorem span_insert
 
 中文:
 定理 span_insert
-  条件: (x) (s : Set α)
-  结论: span (insert x s) = span ({x} : Set α) ⊔ span s
+  条件: (x) (s : 集合 α)
+  结论: span (insert x s) = span ({x} : 集合 α) ⊔ span s
   证明: Submodule.span_insert x s
 
 Depends on / 依赖: Submodule, Submodule.span_insert, span_insert
@@ -465,7 +465,7 @@ theorem span_eq_bot
 
 中文:
 定理 span_eq_bot
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: span s = ⊥ ↔ 对任意 x in s, (x : α) = 0
   证明: by simp
 -/
@@ -483,7 +483,7 @@ theorem span_singleton_eq_bot
 中文:
 定理 span_singleton_eq_bot
   条件: {x}
-  结论: span ({x} : Set α) = ⊥ ↔ x = 0
+  结论: span ({x} : 集合 α) = ⊥ ↔ x = 0
   证明: by simp
 -/
 theorem span_singleton_eq_bot {x} : span ({x} : Set α) = ⊥ ↔ x = 0 := by simp
@@ -498,7 +498,7 @@ theorem span_singleton_zero
 
 中文:
 定理 span_singleton_zero
-  结论: span ({0} : Set α) = ⊥
+  结论: span ({0} : 集合 α) = ⊥
   证明: by simp
 -/
 theorem span_singleton_zero : span ({0} : Set α) = ⊥ := by simp
@@ -515,7 +515,7 @@ theorem span_singleton_ne_top
 
 中文:
 定理 span_singleton_ne_top
-  条件: {α : 类型} [CommSemiring α] {x : α} (hx : ¬IsUnit x)
+  条件: {α : 类型} [交换半环 α] {x : α} (hx : ¬是单位 x)
   证明: (Ideal.ne_top_iff_one _).mpr fun h1 =>
     let ⟨y, hy⟩ := Ideal.mem_span_singleton'.mp h1
     hx ⟨⟨x, y, mul_comm y x ▸ hy, hy⟩, rfl⟩
@@ -538,7 +538,7 @@ theorem span_zero
 
 中文:
 定理 span_zero
-  结论: span (0 : Set α) = ⊥
+  结论: span (0 : 集合 α) = ⊥
   证明: by simp
 -/
 theorem span_zero : span (0 : Set α) = ⊥ := by simp
@@ -554,7 +554,7 @@ theorem span_insert_zero
 
 中文:
 定理 span_insert_zero
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: span (insert (0 : α) s) = span s
   证明: by simp
 -/
@@ -573,7 +573,7 @@ lemma span_sdiff_singleton_zero
 
 中文:
 引理 span_sdiff_singleton_zero
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: span (s \ {0}) = span s
   证明: by simp
 
@@ -592,7 +592,7 @@ theorem span_one
 
 中文:
 定理 span_one
-  结论: span (1 : Set α) = ⊤
+  结论: span (1 : 集合 α) = ⊤
   证明: by rw [← Set.singleton_one, span_singleton_one]
 
 Depends on / 依赖: Set.singleton_one, singleton_one, span_singleton_one
@@ -611,7 +611,7 @@ theorem span_eq_top_iff_finite
 
 中文:
 定理 span_eq_top_iff_finite
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   simp_rw [eq_top_iff_one]
   exact ⟨Submodule.mem_span_finite_of_mem_span, fun ⟨s', h₁, h₂⟩ => span_mono h₁ h₂⟩
@@ -640,7 +640,7 @@ theorem mem_span_singleton_sup
 
 中文:
 定理 mem_span_singleton_sup
-  条件: {x y : α} {I : Ideal α}
+  条件: {x y : α} {I : 理想 α}
   证明: by
   rw [Submodule.mem_sup]
   constructor
@@ -692,7 +692,7 @@ I.ne_top_iff_one.1 h hz ▸ I.zero_mem
 
 中文:
 定理 zero_ne_one_of_proper
-  条件: {I : Ideal α} (h : I != ⊤)
+  条件: {I : 理想 α} (h : I != ⊤)
   结论: (0 : α) != 1
   证明: fun hz =>
 I.ne_top_iff_one.1 h hz ▸ I.zero_mem
@@ -713,7 +713,7 @@ theorem span_pair_comm
 中文:
 定理 span_pair_comm
   条件: {x y : α}
-  结论: (span {x, y} : Ideal α) = span {y, x}
+  结论: (span {x, y} : 理想 α) = span {y, x}
   证明: by
   simp only [span_insert, sup_comm]
 
@@ -736,7 +736,7 @@ theorem mem_span_pair
 中文:
 定理 mem_span_pair
   条件: {x y z : α}
-  结论: z in span ({x, y} : Set α) ↔ 存在 a b, a * x + b * y = z
+  结论: z in span ({x, y} : 集合 α) ↔ 存在 a b, a * x + b * y = z
   证明: Submodule.mem_span_pair
 
 @[simp]
@@ -847,7 +847,7 @@ theorem mem_span_singleton
 中文:
 定理 mem_span_singleton
   条件: {x y : α}
-  结论: x in span ({y} : Set α) ↔ y ∣ x
+  结论: x in span ({y} : 集合 α) ↔ y ∣ x
   证明: mem_span_singleton'.trans exists_congr fun _ => by rw [eq_comm, mul_comm]
 
 Depends on / 依赖: eq_comm, exists_congr, mem_span_singleton, mul_comm
@@ -888,7 +888,7 @@ theorem span_singleton_eq_span_singleton
 
 中文:
 定理 span_singleton_eq_span_singleton
-  条件: {α : 类型u} [CommSemiring α] [IsDomain α] {x y : α}
+  条件: {α : 类型u} [交换半环 α] [是整环 α] {x y : α}
   证明: by
   rw [← dvd_dvd_iff_associated]; rw [le_antisymm_iff]; rw [and_comm]
   apply and_congr <;> rw [span_singleton_le_span_singleton]
@@ -964,7 +964,7 @@ theorem span_singleton_mul_right_unit
 
 中文:
 定理 span_singleton_mul_right_unit
-  条件: {a : α} (h2 : IsUnit a) (x : α)
+  条件: {a : α} (h2 : 是单位 a) (x : α)
   证明: by rw [mul_comm, span_singleton_mul_left_unit h2]
 
 @[simp]
@@ -988,7 +988,7 @@ theorem span_singleton_eq_top
 中文:
 定理 span_singleton_eq_top
   条件: {x}
-  结论: span ({x} : Set α) = ⊤ ↔ IsUnit x
+  结论: span ({x} : 集合 α) = ⊤ ↔ 是单位 x
   证明: by
   rw [isUnit_iff_dvd_one]; rw [← span_singleton_le_span_singleton]; rw [span_singleton_one]; rw [eq_top_iff]
 
@@ -1010,7 +1010,7 @@ h₂ isUnit_of_dvd_one
 
 中文:
 定理 factors_decreasing
-  条件: [IsDomain α] (b₁ b₂ : α) (h₁ : b₁ != 0) (h₂ : ¬IsUnit b₂)
+  条件: [是整环 α] (b₁ b₂ : α) (h₁ : b₁ != 0) (h₂ : ¬是单位 b₂)
   证明: lt_of_le_not_ge
     (Ideal.span_le.2 <| singleton_subset_iff.2 <| Ideal.mem_span_singleton.2 ⟨b₂, rfl⟩) fun h =>
 h₂ isUnit_of_dvd_one
@@ -1385,7 +1385,7 @@ theorem span_singleton_abs
 
 中文:
 定理 span_singleton_abs
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: span {|x|} = span {x}
   证明: by
   obtain h | h := abs_choice x <;>
@@ -1414,7 +1414,7 @@ theorem span_insert_abs
 
 中文:
 定理 span_insert_abs
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: span (insert |x| s) = span (insert x s)
   证明: by
   rw [span_insert]; rw [span_singleton_abs]; rw [span_insert]
@@ -1439,7 +1439,7 @@ theorem span_pair_abs
 
 中文:
 定理 span_pair_abs
-  条件: [LinearOrder α]
+  条件: [线性序 α]
   结论: span {x, |y|} = span {x, y}
   证明: by
   rw [span_pair_comm]; rw [span_insert_abs]; rw [span_pair_comm]

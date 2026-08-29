@@ -43,7 +43,7 @@ definition uliftZMultiplesHom
 
 中文:
 定义 uliftZMultiplesHom
-  签名: (G : 类型u) [AddGroup G]
+  签名: (G : 类型u) [加法群 G]
   定义体: (zmultiplesHom _).trans AddEquiv.ulift.symm.addMonoidHomCongrLeftEquiv
 
 Depends on / 依赖: AddEquiv, AddEquiv.ulift.symm.addMonoidHomCongrLeftEquiv, addMonoidHomCongrLeftEquiv, zmultiplesHom
@@ -63,7 +63,7 @@ definition uliftZPowersHom
 
 中文:
 定义 uliftZPowersHom
-  签名: (G : 类型u) [Group G]
+  签名: (G : 类型u) [群 G]
   定义体: (zpowersHom _).trans MulEquiv.ulift.symm.monoidHomCongrLeftEquiv
 
 Depends on / 依赖: MulEquiv, MulEquiv.ulift.symm.monoidHomCongrLeftEquiv, monoidHomCongrLeftEquiv, zpowersHom
@@ -81,7 +81,7 @@ definition GrpCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftZPowersHom M.carrier).symm).toIso
 
 中文:
-定义 GrpCat.coyonedaObjIsoForget
+定义 群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftZPowersHom M.carrier).symm).toIso
@@ -103,7 +103,7 @@ definition CommGrpCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftZPowersHom M.carrier).symm).toIso
 
 中文:
-定义 CommGrpCat.coyonedaObjIsoForget
+定义 交换群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftZPowersHom M.carrier).symm).toIso
@@ -125,7 +125,7 @@ definition AddGrpCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftZMultiplesHom M.carrier).symm).toIso
 
 中文:
-定义 AddGrpCat.coyonedaObjIsoForget
+定义 加法群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftZMultiplesHom M.carrier).symm).toIso
@@ -147,7 +147,7 @@ definition AddCommGrpCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftZMultiplesHom M.carrier).symm).toIso
 
 中文:
-定义 AddCommGrpCat.coyonedaObjIsoForget
+定义 加法交换群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftZMultiplesHom M.carrier).symm).toIso
@@ -168,7 +168,7 @@ instance GrpCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' GrpCat.coyonedaObjIsoForget
 
 中文:
-实例 GrpCat.forget_isCorepresentable
+实例 群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' GrpCat.coyonedaObjIsoForget
 
@@ -187,7 +187,7 @@ instance CommGrpCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' CommGrpCat.coyonedaObjIsoForget
 
 中文:
-实例 CommGrpCat.forget_isCorepresentable
+实例 交换群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' CommGrpCat.coyonedaObjIsoForget
 
@@ -206,7 +206,7 @@ instance AddGrpCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' AddGrpCat.coyonedaObjIsoForget
 
 中文:
-实例 AddGrpCat.forget_isCorepresentable
+实例 加法群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' AddGrpCat.coyonedaObjIsoForget
 
@@ -225,7 +225,7 @@ instance AddCommGrpCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' AddCommGrpCat.coyonedaObjIsoForget
 
 中文:
-实例 AddCommGrpCat.forget_isCorepresentable
+实例 加法交换群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' AddCommGrpCat.coyonedaObjIsoForget
 
@@ -247,7 +247,7 @@ theorem uliftZMultiplesHom_apply_add
 
 中文:
 定理 uliftZMultiplesHom_apply_add
-  条件: (G : 类型u) [AddCommGroup G] (x y : G)
+  条件: (G : 类型u) [加法交换群 G] (x y : G)
   证明: by
   ext
   simp_all only [uliftZMultiplesHom_apply_apply, smul_add, AddMonoidHom.add_apply]
@@ -271,8 +271,8 @@ definition AddCommGrpCat.uliftZMultiplesAddEquiv
     (AddEquiv.mk' (uliftZMultiplesHom G) (uliftZMultiplesHom_apply_add G)).symm
 
 中文:
-定义 AddCommGrpCat.uliftZMultiplesAddEquiv
-  签名: (G : AddCommGrpCat)
+定义 加法交换群范畴.uliftZMultiplesAddEquiv
+  签名: (G : 加法交换群范畴)
   定义体: AddCommGrpCat.homAddEquiv.trans
     (AddEquiv.mk' (uliftZMultiplesHom G) (uliftZMultiplesHom_apply_add G)).symm
 

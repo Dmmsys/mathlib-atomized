@@ -39,7 +39,7 @@ definition toFinset
 
 中文:
 定义 toFinset
-  签名: (o : Part α) [Decidable o.Dom]
+  签名: (o : Part α) [可判定 o.Dom]
   定义体: o.toOption.toFinset
 
 @[simp]
@@ -64,7 +64,7 @@ theorem mem_toFinset
 
 中文:
 定理 mem_toFinset
-  条件: {o : Part α} [Decidable o.Dom] {x : α}
+  条件: {o : Part α} [可判定 o.Dom] {x : α}
   结论: x in o.toFinset ↔ x in o
   证明: by
   simp [toFinset]
@@ -91,8 +91,8 @@ theorem toFinset_none
 
 中文:
 定理 toFinset_none
-  条件: [Decidable (none : Part α).Dom]
-  结论: none.toFinset = (∅ : Finset α)
+  条件: [可判定 (none : Part α).Dom]
+  结论: none.toFinset = (∅ : 有限集 α)
   证明: by
   simp [toFinset]
 
@@ -118,7 +118,7 @@ theorem toFinset_some
 
 中文:
 定理 toFinset_some
-  条件: {a : α} [Decidable (some a).Dom]
+  条件: {a : α} [可判定 (some a).Dom]
   结论: (some a).toFinset = {a}
   证明: by
   simp [toFinset]
@@ -142,8 +142,8 @@ theorem coe_toFinset
 
 中文:
 定理 coe_toFinset
-  条件: (o : Part α) [Decidable o.Dom]
-  结论: (o.toFinset : Set α) = { x | x in o }
+  条件: (o : Part α) [可判定 o.Dom]
+  结论: (o.toFinset : 集合 α) = { x | x in o }
   证明: Set.ext fun _ => mem_toFinset
 
 Depends on / 依赖: Set.ext, mem_toFinset
@@ -170,7 +170,7 @@ definition pimage
 
 中文:
 定义 pimage
-  签名: (f : α ->. β) [对任意 x, Decidable (f x).Dom] (s : Finset α)
+  签名: (f : α ->. β) [对任意 x, 可判定 (f x).Dom] (s : 有限集 α)
   定义体: s.biUnion fun x => (f x).toFinset
 
 @[simp]
@@ -216,7 +216,7 @@ theorem coe_pimage
 
 中文:
 定理 coe_pimage
-  结论: (s.pimage f : Set β) = f.image s
+  结论: (s.pimage f : 集合 β) = f.像 s
   证明: Set.ext fun _ => mem_pimage
 
 Depends on / 依赖: Set.ext, mem_pimage
@@ -238,7 +238,7 @@ theorem pimage_some
 
 中文:
 定理 pimage_some
-  条件: (s : Finset α) (f : α -> β) [对任意 x, Decidable (Part.some <| f x).Dom]
+  条件: (s : 有限集 α) (f : α -> β) [对任意 x, 可判定 (Part.some <| f x).Dom]
   证明: by
   ext
   simp [eq_comm]
@@ -356,7 +356,7 @@ theorem pimage_subset
 
 中文:
 定理 pimage_subset
-  条件: {t : Finset β}
+  条件: {t : 有限集 β}
   结论: s.pimage f subseteq t ↔ 对任意 x in s, 对任意 y in f x, y in t
   证明: by
   simp [subset_iff, @forall_comm _ β]

@@ -54,7 +54,7 @@ definition charmatrix
 
 中文:
 定义 charmatrix
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: Matrix.scalar n (X : R[X]) - (C : R ->+* R[X]).mapMatrix M
 
 Depends on / 依赖: Matrix, Matrix.scalar, mapMatrix, scalar
@@ -153,7 +153,7 @@ theorem charmatrix_zero
 
 中文:
 定理 charmatrix_zero
-  结论: charmatrix (0 : Matrix n n R) = Matrix.scalar n (X : R[X])
+  结论: charmatrix (0 : 矩阵 n n R) = 矩阵.scalar n (X : R[X])
   证明: by
   simp [charmatrix]
 
@@ -203,7 +203,7 @@ theorem charmatrix_one
 
 中文:
 定理 charmatrix_one
-  结论: charmatrix (1 : Matrix n n R) = diagonal fun _ => X - 1
+  结论: charmatrix (1 : 矩阵 n n R) = diagonal fun _ => X - 1
   证明: charmatrix_diagonal _
 
 @[simp]
@@ -249,7 +249,7 @@ theorem charmatrix_ofNat
 @[simp]
 
 中文:
-定理 charmatrix_ofNat
+定理 charmatrix_of自然数
   条件: (k : 自然数) [k.AtLeastTwo]
   证明: charmatrix_natCast _
 
@@ -274,7 +274,7 @@ theorem charmatrix_transpose
 
 中文:
 定理 charmatrix_transpose
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: (Mᵀ).charmatrix = M.charmatrixᵀ
   证明: by
   simp [charmatrix, transpose_map]
@@ -367,7 +367,7 @@ lemma charmatrix_map
 
 中文:
 引理 charmatrix_map
-  条件: (M : Matrix n n R) (f : R ->+* S)
+  条件: (M : 矩阵 n n R) (f : R ->+* S)
   证明: by
   ext i j
   by_cases h : i = j <;> simp [h, charmatrix, diagonal]
@@ -419,7 +419,7 @@ alias ⟨BlockTriangular.of_charmatrix, BlockTriangular.charmatrix⟩ := charmat
 
 中文:
 引理 charmatrix_blockTriangular_iff
-  条件: {α : 类型} [Preorder α] {M : Matrix n n R} {b : n -> α}
+  条件: {α : 类型} [预序 α] {M : 矩阵 n n R} {b : n -> α}
   证明: by
   rw [charmatrix]; rw [scalar_apply]; rw [RingHom.mapMatrix_apply]; rw [(blockTriangular_diagonal _).sub_iff_right]
   simp [BlockTriangular]
@@ -447,7 +447,7 @@ definition charpoly
 
 中文:
 定义 charpoly
-  签名: (M : Matrix n n R)
+  签名: (M : 矩阵 n n R)
   定义体: (charmatrix M).det
 
 Depends on / 依赖: charmatrix
@@ -471,7 +471,7 @@ theorem eval_charpoly
 
 中文:
 定理 eval_charpoly
-  条件: (M : Matrix m m R) (t : R)
+  条件: (M : 矩阵 m m R) (t : R)
   证明: by
   rw [Matrix.charpoly]; rw [← Polynomial.coe_evalRingHom]; rw [RingHom.map_det]; rw [Matrix.charmatrix]
   congr
@@ -504,7 +504,7 @@ theorem charpoly_isEmpty
 
 中文:
 定理 charpoly_isEmpty
-  条件: [IsEmpty n] {A : Matrix n n R}
+  条件: [是空 n] {A : 矩阵 n n R}
   结论: charpoly A = 1
   证明: by
   simp [charpoly]
@@ -528,7 +528,7 @@ theorem charpoly_zero
 
 中文:
 定理 charpoly_zero
-  结论: charpoly (0 : Matrix n n R) = X ^ Fintype.card n
+  结论: charpoly (0 : 矩阵 n n R) = X ^ 有限类型.card n
   证明: by
   simp [charpoly]
 
@@ -570,7 +570,7 @@ theorem charpoly_one
 
 中文:
 定理 charpoly_one
-  结论: charpoly (1 : Matrix n n R) = (X - 1) ^ Fintype.card n
+  结论: charpoly (1 : 矩阵 n n R) = (X - 1) ^ 有限类型.card n
   证明: by
   simp [charpoly]
 
@@ -611,7 +611,7 @@ theorem charpoly_ofNat
 @[simp]
 
 中文:
-定理 charpoly_ofNat
+定理 charpoly_of自然数
   条件: (k : 自然数) [k.AtLeastTwo]
   证明: charpoly_natCast _
 
@@ -636,7 +636,7 @@ theorem charpoly_transpose
 
 中文:
 定理 charpoly_transpose
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: (Mᵀ).charpoly = M.charpoly
   证明: by
   simp [charpoly]
@@ -683,7 +683,7 @@ lemma charpoly_map
 
 中文:
 引理 charpoly_map
-  条件: (M : Matrix n n R) (f : R ->+* S)
+  条件: (M : 矩阵 n n R) (f : R ->+* S)
   证明: by
   rw [charpoly]; rw [charmatrix_map]; rw [← Polynomial.coe_mapRingHom]; rw [charpoly]; rw [RingHom.map_det]; rw [RingHom.mapMatrix_apply]
 
@@ -780,7 +780,7 @@ lemma BlockTriangular.charpoly
 
 中文:
 引理 BlockTriangular.charpoly
-  条件: {α : 类型} {b : n -> α} [LinearOrder α] (h : M.BlockTriangular b)
+  条件: {α : 类型} {b : n -> α} [线性序 α] (h : M.BlockTriangular b)
   证明: by
   simp only [Matrix.charpoly, h.charmatrix.det, charmatrix_toSquareBlock]
 
@@ -804,7 +804,7 @@ alias charpoly_of_upperTriangular := charpoly_of_isUpperTriangular
 
 中文:
 引理 charpoly_of_isUpperTriangular
-  条件: [LinearOrder n] (M : Matrix n n R) (h : M.IsUpperTriangular)
+  条件: [线性序 n] (M : 矩阵 n n R) (h : M.IsUpperTriangular)
   证明: by
   simp [charpoly, det_of_isUpperTriangular h.charmatrix]
 
@@ -837,7 +837,7 @@ theorem aeval_self_charpoly
 
 中文:
 定理 aeval_self_charpoly
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: aeval M M.charpoly = 0
   证明: by
   -- We begin with the fact $χ_M(t) I = adjugate (t I - M) * (t I - M)$,
@@ -884,7 +884,7 @@ theorem charpoly_mul_comm'
 
 中文:
 定理 charpoly_mul_comm'
-  条件: (A : Matrix m n R) (B : Matrix n m R)
+  条件: (A : 矩阵 m n R) (B : 矩阵 n m R)
   证明: by
   -- This proof follows https://math.stackexchange.com/a/311362/315369
   let M := fromBlocks (scalar m X) (A.map C) (B.map C) (1 : Matrix n n R[X])
@@ -946,7 +946,7 @@ theorem charpoly_mul_comm
 
 中文:
 定理 charpoly_mul_comm
-  条件: (A B : Matrix n n R)
+  条件: (A B : 矩阵 n n R)
   结论: (A * B).charpoly = (B * A).charpoly
   证明: (isRegular_X_pow _).left.eq_iff.mp charpoly_mul_comm' A B
 
@@ -1007,7 +1007,7 @@ theorem charpoly_units_conj
 
 中文:
 定理 charpoly_units_conj
-  条件: (M : (Matrix n n R)ˣ) (N : Matrix n n R)
+  条件: (M : (矩阵 n n R)ˣ) (N : 矩阵 n n R)
   证明: by
   rw [Matrix.charpoly_mul_comm]; rw [← mul_assoc]
   simp
@@ -1033,7 +1033,7 @@ theorem charpoly_units_conj'
 
 中文:
 定理 charpoly_units_conj'
-  条件: (M : (Matrix n n R)ˣ) (N : Matrix n n R)
+  条件: (M : (矩阵 n n R)ˣ) (N : 矩阵 n n R)
   证明: by
   simpa using charpoly_units_conj M⁻¹ N
 
@@ -1058,7 +1058,7 @@ theorem charpoly_sub_scalar
 
 中文:
 定理 charpoly_sub_scalar
-  条件: (M : Matrix n n R) (μ : R)
+  条件: (M : 矩阵 n n R) (μ : R)
   证明: by
   simp_rw [charpoly, det_apply, Polynomial.sum_comp, Polynomial.smul_comp, Polynomial.prod_comp]
   congr! with σ _ i _

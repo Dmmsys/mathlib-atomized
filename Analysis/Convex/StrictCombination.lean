@@ -46,8 +46,8 @@ have hs₀ : forall j in t, 0 <= w j := fun j hj => h₀ j mem_insert_of_mem hj
     by_cases hsum_t : 
 
 中文:
-引理 StrictConvex.centerMass_mem_interior
-  结论: {s : Set V} {t : Finset ι} {w : ι -> R} {z : ι -> V}
+引理 严格凸.centerMass_mem_interior
+  结论: {s : 集合 V} {t : 有限集 ι} {w : ι -> R} {z : ι -> V}
   证明: by
   classical
   induction t using Finset.induction with
@@ -115,8 +115,8 @@ lemma StrictConvex.sum_mem_interior
   exact hs.centerMass_mem_interior h0 i j hi hj hij hi0 hj0 hz
 
 中文:
-引理 StrictConvex.sum_mem_interior
-  结论: {s : Set V} {t : Finset ι} {w : ι -> R} {z : ι -> V}
+引理 严格凸.sum_mem_interior
+  结论: {s : 集合 V} {t : 有限集 ι} {w : ι -> R} {z : ι -> V}
   证明: by
   rw [← t.centerMass_eq_of_sum_1 _ h1]
   exact hs.centerMass_mem_interior h0 i j hi hj hij hi0 hj0 hz
@@ -150,7 +150,7 @@ lemma centerMass_mem_ball_of_strictConvexSpace
 
 中文:
 引理 centerMass_mem_ball_of_strictConvexSpace
-  结论: {t : Finset ι} {w : ι -> 实数} {p : V} {r : 实数}
+  结论: {t : 有限集 ι} {w : ι -> 实数} {p : V} {r : 实数}
   证明: by
   rcases eq_or_ne r 0 with (rfl | hr)
   · simp_all
@@ -180,7 +180,7 @@ lemma sum_mem_ball_of_strictConvexSpace
 
 中文:
 引理 sum_mem_ball_of_strictConvexSpace
-  结论: {t : Finset ι} {w : ι -> 实数} {p : V} {r : 实数} {z : ι -> V}
+  结论: {t : 有限集 ι} {w : ι -> 实数} {p : V} {r : 实数} {z : ι -> V}
   证明: by
   rw [← t.centerMass_eq_of_sum_1 _ h1]
   exact centerMass_mem_ball_of_strictConvexSpace h0 hi hj hij hi0 hj0 hz
@@ -207,7 +207,7 @@ lemma norm_sum_lt_of_strictConvexSpace
 
 中文:
 引理 norm_sum_lt_of_strictConvexSpace
-  结论: {t : Finset ι} {w : ι -> 实数} {r : 实数} {z : ι -> V}
+  结论: {t : 有限集 ι} {w : ι -> 实数} {r : 实数} {z : ι -> V}
   证明: by
   simp_rw [← mem_closedBall_zero_iff] at hz
   rw [← mem_ball_zero_iff]
@@ -238,7 +238,7 @@ lemma dist_affineCombination_lt_of_strictConvexSpace
 
 中文:
 引理 dist_affineCombination_lt_of_strictConvexSpace
-  结论: {t : Finset ι} {w : ι -> 实数} {p₀ : P} {r : 实数}
+  结论: {t : 有限集 ι} {w : ι -> 实数} {p₀ : P} {r : 实数}
   证明: by
   rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ h1 p₀]; rw [weightedVSubOfPoint_apply]; rw [dist_vadd_left]
   simp_rw [dist_eq_norm_vsub] at hp
@@ -277,8 +277,8 @@ lemma dist_lt_of_mem_closedInterior_of_strictConvexSpace
     cong
 
 中文:
-引理 dist_lt_of_mem_closedInterior_of_strictConvexSpace
-  结论: {n : 自然数} (s : Simplex 实数 P n) {r : 实数}
+引理 dist_lt_of_mem_closed整数erior_of_strictConvexSpace
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {r : 实数}
   证明: by
   rcases hp with ⟨w, hw, hw01, rfl⟩
   obtain ⟨i, hi⟩ : exists i, w i != 0 := by
@@ -326,7 +326,7 @@ lemma dist_lt_of_mem_interior_of_strictConvexSpace
 
 中文:
 引理 dist_lt_of_mem_interior_of_strictConvexSpace
-  结论: {n : 自然数} (s : Simplex 实数 P n) {r : 实数}
+  结论: {n : 自然数} (s : 单纯形 实数 P n) {r : 实数}
   证明: s.dist_lt_of_mem_closedInterior_of_strictConvexSpace
     (Set.mem_of_mem_of_subset hp s.interior_subset_closedInterior)
     (fun i h => s.point_notMem_interior i (h ▸ hp)) hr

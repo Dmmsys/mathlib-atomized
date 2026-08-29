@@ -29,7 +29,7 @@ definition Int.shift2
   signature: (a b : Nat)
 
 中文:
-定义 Int.shift2
+定义 整数.shift2
   签名: (a b : 自然数)
 -/
 def Int.shift2 (a b : Nat) : Int -> Nat × Nat
@@ -189,9 +189,9 @@ inductive Float
 中文:
 归纳类型 Float
   构造子 (3 个):
-    - inf: 布尔 -> Float
+    - inf: 布尔值 -> Float
     - nan: Float
-    - finite: 布尔 -> 对任意 e m, ValidFinite e m -> Float
+    - finite: 布尔值 -> 对任意 e m, ValidFinite e m -> Float
 -/
 inductive Float
   | inf : Bool -> Float
@@ -208,7 +208,7 @@ definition Float.isFinite
 
 中文:
 定义 Float.isFinite
-  签名: : Float -> 布尔
+  签名: : Float -> 布尔值
 -/
 def Float.isFinite : Float -> Bool
   | Float.finite _ _ _ _ => true
@@ -227,7 +227,7 @@ definition toRat
 
 中文:
 定义 toRat
-  签名: : 对任意 f : Float, f.isFinite -> Rat
+  签名: : 对任意 f : Float, f.isFinite -> 有理数
   定义体: Int.shift2 m 1 e
     let r := mkRat n d
     if s then -r else r
@@ -260,7 +260,7 @@ theorem Float.Zero.valid
     le_trans C.pr
 
 中文:
-定理 Float.Zero.valid
+定理 Float.零.valid
   结论: ValidFinite emin 0
   证明: ⟨by
     rw [add_sub_assoc]
@@ -303,7 +303,7 @@ definition Float.zero
 
 中文:
 定义 Float.zero
-  签名: (s : 布尔)
+  签名: (s : 布尔值)
   定义体: Float.finite s emin 0 Float.Zero.valid
 
 Depends on / 依赖: Float.Zero.valid, Float.finite, finite
@@ -323,7 +323,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited Float
+  签名: 可居 Float
   定义体: ⟨Float.zero true⟩
 
 @[nolint docBlame]
@@ -343,7 +343,7 @@ definition Float.sign'
 
 中文:
 定义 Float.sign'
-  签名: : Float -> Semiquot 布尔
+  签名: : Float -> 半商 布尔值
 -/
 protected def Float.sign' : Float -> Semiquot Bool
   | Float.inf s => pure s
@@ -360,7 +360,7 @@ definition Float.sign
 
 中文:
 定义 Float.sign
-  签名: : Float -> 布尔
+  签名: : Float -> 布尔值
 -/
 protected def Float.sign : Float -> Bool
   | Float.inf s => s
@@ -377,7 +377,7 @@ definition Float.isZero
 
 中文:
 定义 Float.isZero
-  签名: : Float -> 布尔
+  签名: : Float -> 布尔值
 -/
 protected def Float.isZero : Float -> Bool
   | Float.finite _ _ 0 _ => true
@@ -409,7 +409,7 @@ definition divNatLtTwoPow
   signature: (n d : Nat)
 
 中文:
-定义 divNatLtTwoPow
+定义 div自然数LtTwoPow
   签名: (n d : 自然数)
 -/
 def divNatLtTwoPow (n d : Nat) : Int -> Bool
@@ -513,7 +513,7 @@ unsafe def add (mode : RMode) : Float -> Float -> Float
 
 中文:
 实例 :
-  签名: Neg Float
+  签名: 取负 Float
   定义体: ⟨Float.neg⟩
 
 @[nolint docBlame]

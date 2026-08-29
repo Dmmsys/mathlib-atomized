@@ -139,8 +139,8 @@ instance prod
   eq_of_hom f := Prod.ext (IsDiscrete.eq_of_hom f.1) (IsDiscrete.eq_of_hom f.2)
 
 中文:
-实例 prod
-  签名: : IsDiscrete (C × D) where
+实例 乘积
+  签名: : 是离散 (C × D) where
   定义体: inferInstanceAs (Subsingleton ((x.1 ⟶ y.1) × (x.2 ⟶ y.2)))
   eq_of_hom f := Prod.ext (IsDiscrete.eq_of_hom f.1) (IsDiscrete.eq_of_hom f.2)
 
@@ -165,8 +165,8 @@ instance sum
     | inl x y f =>
 
 中文:
-实例 sum
-  签名: : IsDiscrete (C oplus C') where
+实例 求和
+  签名: : 是离散 (C oplus C') where
   定义体: { allEq f g := by
         cases f <;> cases g
         · case inl x y f g => rw [((by assumption : IsDiscrete C).subsingleton x y).allEq f g]

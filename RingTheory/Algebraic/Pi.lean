@@ -36,8 +36,8 @@ definition Polynomial.hasSMulPi
   body: ⟨fun p f x => eval x p • f x⟩
 
 中文:
-定义 Polynomial.hasSMulPi
-  签名: [Semiring R] [SMul R S]
+定义 多项式.hasSMulPi
+  签名: [半环 R] [标量乘法 R S]
   定义体: ⟨fun p f x => eval x p • f x⟩
 -/
 def Polynomial.hasSMulPi [Semiring R] [SMul R S] : SMul R[X] (R -> S) :=
@@ -56,8 +56,8 @@ definition Polynomial.hasSMulPi'
   body: ⟨fun p f x => aeval x p • f x⟩
 
 中文:
-定义 Polynomial.hasSMulPi'
-  签名: [CommSemiring R] [Semiring S] [Algebra R S]
+定义 多项式.hasSMulPi'
+  签名: [交换半环 R] [半环 S] [代数 R S]
   定义体: ⟨fun p f x => aeval x p • f x⟩
 -/
 noncomputable def Polynomial.hasSMulPi' [CommSemiring R] [Semiring S] [Algebra R S]
@@ -79,7 +79,7 @@ theorem polynomial_smul_apply
 
 中文:
 定理 polynomial_smul_apply
-  条件: [Semiring R] [SMul R S] (p : R[X]) (f : R -> S) (x : R)
+  条件: [半环 R] [标量乘法 R S] (p : R[X]) (f : R -> S) (x : R)
   证明: rfl
 
 @[simp]
@@ -99,7 +99,7 @@ theorem polynomial_smul_apply'
 
 中文:
 定理 polynomial_smul_apply'
-  结论: [CommSemiring R] [Semiring S] [Algebra R S] [SMul S T]
+  结论: [交换半环 R] [半环 S] [代数 R S] [标量乘法 S T]
   证明: rfl
 -/
 theorem polynomial_smul_apply' [CommSemiring R] [Semiring S] [Algebra R S] [SMul S T]
@@ -124,8 +124,8 @@ definition Polynomial.algebraPi
     map_zero' := funext fun z => by simp only [Pi.zero_apply, map_zero
 
 中文:
-定义 Polynomial.algebraPi
-  签名: : Algebra R[X] (S -> T) where
+定义 多项式.algebraPi
+  签名: : 代数 R[X] (S -> T) where
   定义体: Polynomial.hasSMulPi' R S T
   algebraMap :=
   { toFun p z := algebraMap S T (aeval z p)
@@ -161,7 +161,7 @@ theorem Polynomial.algebraMap_pi_eq_aeval
 @[simp]
 
 中文:
-定理 Polynomial.algebraMap_pi_eq_aeval
+定理 多项式.algebraMap_pi_eq_aeval
   证明: rfl
 
 @[simp]
@@ -179,7 +179,7 @@ theorem Polynomial.algebraMap_pi_self_eq_eval
   proof: rfl
 
 中文:
-定理 Polynomial.algebraMap_pi_self_eq_eval
+定理 多项式.algebraMap_pi_self_eq_eval
   证明: rfl
 -/
 theorem Polynomial.algebraMap_pi_self_eq_eval :

@@ -42,8 +42,8 @@ lemma Module.FaithfullyFlat.injective_of_tensorProduct
   simpa [this] using! H
 
 中文:
-引理 Module.FaithfullyFlat.injective_of_tensorProduct
-  结论: [Module.FaithfullyFlat R S]
+引理 模.忠实平坦.injective_of_tensorProduct
+  结论: [模.忠实平坦 R S]
   证明: by
   have : LinearMap.lTensor S (Algebra.linearMap R T) =
       Algebra.linearMap S (S otimes[R] T) ∘ₗ (AlgebraTensorModule.rid R S S).toLinearMap := by
@@ -76,8 +76,8 @@ lemma Module.FaithfullyFlat.surjective_of_tensorProduct
   simpa [this] using! H
 
 中文:
-引理 Module.FaithfullyFlat.surjective_of_tensorProduct
-  结论: [Module.FaithfullyFlat R S]
+引理 模.忠实平坦.surjective_of_tensorProduct
+  结论: [模.忠实平坦 R S]
   证明: by
   have : LinearMap.lTensor S (Algebra.linearMap R T) =
       Algebra.linearMap S (S otimes[R] T) ∘ₗ (AlgebraTensorModule.rid R S S).toLinearMap := by
@@ -105,8 +105,8 @@ lemma Module.FaithfullyFlat.bijective_of_tensorProduct
   proof: ⟨injective_of_tensorProduct H.1, surjective_of_tensorProduct H.2⟩
 
 中文:
-引理 Module.FaithfullyFlat.bijective_of_tensorProduct
-  结论: [Module.FaithfullyFlat R S]
+引理 模.忠实平坦.bijective_of_tensorProduct
+  结论: [模.忠实平坦 R S]
   证明: ⟨injective_of_tensorProduct H.1, surjective_of_tensorProduct H.2⟩
 
 Depends on / 依赖: injective_of_tensorProduct, surjective_of_tensorProduct
@@ -130,7 +130,7 @@ lemma RingHom.FaithfullyFlat.codescendsAlong_injective
   exact h.injective_of_tensorProduct H
 
 中文:
-引理 RingHom.FaithfullyFlat.codescendsAlong_injective
+引理 环态射.忠实平坦.codescendsAlong_injective
   证明: by
   apply CodescendsAlong.mk _ injective_respectsIso
   introv h H
@@ -160,7 +160,7 @@ lemma RingHom.FaithfullyFlat.codescendsAlong_surjective
 universe u
 
 中文:
-引理 RingHom.FaithfullyFlat.codescendsAlong_surjective
+引理 环态射.忠实平坦.codescendsAlong_surjective
   证明: by
   apply CodescendsAlong.mk _ surjective_respectsIso
   introv h H
@@ -188,7 +188,7 @@ lemma RingHom.FaithfullyFlat.codescendsAlong_bijective
   proof: CodescendsAlong.and codescendsAlong_injective codescendsAlong_surjective
 
 中文:
-引理 RingHom.FaithfullyFlat.codescendsAlong_bijective
+引理 环态射.忠实平坦.codescendsAlong_bijective
   证明: CodescendsAlong.and codescendsAlong_injective codescendsAlong_surjective
 
 Depends on / 依赖: CodescendsAlong, CodescendsAlong.and, codescendsAlong_injective, codescendsAlong_surjective

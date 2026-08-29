@@ -51,7 +51,7 @@ structure PseudoEpimorphism
 
 中文:
 结构 PseudoEpimorphism
-  参数: (α β : 类型) [Preorder α] [Preorder β]
+  参数: (α β : 类型) [预序 α] [预序 β]
   继承: α ->o β
   公理与运算 (1 个):
     - exists_map_eq_of_map_le'(⦃a) : α⦄ ⦃b : β⦄ : toFun a <= b -> 存在 c, a <= c ∧ toFun c = b
@@ -70,8 +70,8 @@ structure EsakiaHom
     - exists_map_eq_of_map_le'(⦃a) : α⦄ ⦃b : β⦄ : toFun a <= b -> exists c, a <= c ∧ toFun c = b
 
 中文:
-结构 EsakiaHom
-  参数: (α β : 类型) [TopologicalSpace α] [Preorder α] [TopologicalSpace β]
+结构 Esakia态射
+  参数: (α β : 类型) [拓扑空间 α] [预序 α] [拓扑空间 β]
   继承: α ->Co β
   公理与运算 (1 个):
     - exists_map_eq_of_map_le'(⦃a) : α⦄ ⦃b : β⦄ : toFun a <= b -> 存在 c, a <= c ∧ toFun c = b
@@ -93,9 +93,9 @@ class PseudoEpimorphismClass
     - exists_map_eq_of_map_le((f : F) ⦃a) : α⦄ ⦃b : β⦄ : f a <= b -> exists c, a <= c ∧ f c = b
 
 中文:
-类 PseudoEpimorphismClass
+类 PseudoEpimorphism类
   参数: (F : 类型) (α β : outParam 类型)
-  继承: OrderHomClass F α β
+  继承: 序态射类 F α β
   公理与运算 (1 个):
     - exists_map_eq_of_map_le((f : F) ⦃a) : α⦄ ⦃b : β⦄ : f a <= b -> 存在 c, a <= c ∧ f c = b
 -/
@@ -115,9 +115,9 @@ class EsakiaHomClass
     - exists_map_eq_of_map_le((f : F) ⦃a) : α⦄ ⦃b : β⦄ : f a <= b -> exists c, a <= c ∧ f c = b
 
 中文:
-类 EsakiaHomClass
-  参数: (F : 类型) (α β : outParam 类型) [TopologicalSpace α] [Preorder α]
-  继承: ContinuousOrderHomClass F α β
+类 Esakia态射类
+  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α] [预序 α]
+  继承: 余ntinuous序态射类 F α β
   公理与运算 (1 个):
     - exists_map_eq_of_map_le((f : F) ⦃a) : α⦄ ⦃b : β⦄ : f a <= b -> 存在 c, a <= c ∧ f c = b
 -/
@@ -156,8 +156,8 @@ instance [Preorder
   body: ⟨fun f => ⟨f, exists_map_eq_of_map_le f⟩⟩
 
 中文:
-实例 [Preorder
-  签名: α] [Preorder β] [PseudoEpimorphismClass F α β] :
+实例 [预序
+  签名: α] [预序 β] [PseudoEpimorphism类 F α β] :
   定义体: ⟨fun f => ⟨f, exists_map_eq_of_map_le f⟩⟩
 
 Depends on / 依赖: exists_map_eq_of_map_le
@@ -175,8 +175,8 @@ instance [TopologicalSpace
   body: ⟨fun f => ⟨f, exists_map_eq_of_map_le f⟩⟩
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [Preorder α] [TopologicalSpace β] [Preorder β]
+实例 [拓扑空间
+  签名: α] [预序 α] [拓扑空间 β] [预序 β]
   定义体: ⟨fun f => ⟨f, exists_map_eq_of_map_le f⟩⟩
 
 Depends on / 依赖: exists_map_eq_of_map_le
@@ -214,7 +214,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (PseudoEpimorphism α β) α β where
+  签名: : 函数状 (PseudoEpimorphism α β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoEpimorphismClass (PseudoEpimorphism α β) α β
+  签名: PseudoEpimorphism类 (PseudoEpimorphism α β) α β
   定义体: f.monotone' h
   exists_map_eq_of_map_le := PseudoEpimorphism.exists_map_eq_of_map_le'
 
@@ -403,7 +403,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (PseudoEpimorphism α α)
+  签名: 可居 (PseudoEpimorphism α α)
   定义体: ⟨PseudoEpimorphism.id α⟩
 
 @[simp, norm_cast]
@@ -444,7 +444,7 @@ theorem coe_id_orderHom
 
 中文:
 定理 coe_id_orderHom
-  结论: (PseudoEpimorphism.id α : α ->o α) = OrderHom.id
+  结论: (PseudoEpimorphism.id α : α ->o α) = 序态射.id
   证明: rfl
 -/
 theorem coe_id_orderHom : (PseudoEpimorphism.id α : α ->o α) = OrderHom.id := rfl
@@ -665,7 +665,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : PseudoEpimorphism β γ} {f₁ f₂ : PseudoEpimorphism α β} (hg : Injective g)
+  条件: {g : PseudoEpimorphism β γ} {f₁ f₂ : PseudoEpimorphism α β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg
@@ -694,7 +694,7 @@ definition toPseudoEpimorphism
 
 中文:
 定义 toPseudoEpimorphism
-  签名: (f : EsakiaHom α β)
+  签名: (f : Esakia态射 α β)
   定义体: { f with }
 -/
 def toPseudoEpimorphism (f : EsakiaHom α β) : PseudoEpimorphism α β :=
@@ -714,7 +714,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (EsakiaHom α β) α β where
+  签名: : 函数状 (Esakia态射 α β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨⟨_, _⟩, _⟩, _⟩ := f
@@ -744,7 +744,7 @@ instance :
 
 中文:
 实例 :
-  签名: EsakiaHomClass (EsakiaHom α β) α β
+  签名: Esakia态射类 (Esakia态射 α β) α β
   定义体: f.monotone'
   map_continuous f := f.continuous_toFun
   exists_map_eq_of_map_le f := f.exists_map_eq_of_map_le'
@@ -769,7 +769,7 @@ theorem toContinuousOrderHom_coe
 
 中文:
 定理 toContinuousOrderHom_coe
-  条件: {f : EsakiaHom α β}
+  条件: {f : Esakia态射 α β}
   证明: rfl
 -/
 theorem toContinuousOrderHom_coe {f : EsakiaHom α β} :
@@ -788,7 +788,7 @@ theorem toFun_eq_coe
 
 中文:
 定理 toFun_eq_coe
-  条件: {f : EsakiaHom α β}
+  条件: {f : Esakia态射 α β}
   结论: f.toFun = (f : α -> β)
   证明: rfl
 
@@ -808,7 +808,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {f g : EsakiaHom α β} (h : 对任意 a, f a = g a)
+  条件: {f g : Esakia态射 α β} (h : 对任意 a, f a = g a)
   结论: f = g
   证明: DFunLike.ext f g h
 
@@ -830,7 +830,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : EsakiaHom α β) (f' : α -> β) (h : f' = f)
+  签名: (f : Esakia态射 α β) (f' : α -> β) (h : f' = f)
   定义体: ⟨f.toContinuousOrderHom.copy f' h, by
     simpa only [h.symm, toFun_eq_coe] using! f.exists_map_eq_of_map_le'⟩
 
@@ -852,7 +852,7 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (f : EsakiaHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Esakia态射 α β) (f' : α -> β) (h : f' = f)
   结论: ⇑(f.copy f' h) = f'
   证明: rfl
 -/
@@ -869,7 +869,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (f : EsakiaHom α β) (f' : α -> β) (h : f' = f)
+  条件: (f : Esakia态射 α β) (f' : α -> β) (h : f' = f)
   结论: f.copy f' h = f
   证明: DFunLike.ext' h
 
@@ -890,7 +890,7 @@ definition id
 
 中文:
 定义 id
-  签名: : EsakiaHom α α
+  签名: : Esakia态射 α α
   定义体: ⟨ContinuousOrderHom.id α, fun _ b h => ⟨b, h, rfl⟩⟩
 -/
 protected def id : EsakiaHom α α :=
@@ -908,7 +908,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (EsakiaHom α α)
+  签名: 可居 (Esakia态射 α α)
   定义体: ⟨EsakiaHom.id α⟩
 
 @[simp, norm_cast]
@@ -931,7 +931,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: ⇑(EsakiaHom.id α) = id
+  结论: ⇑(Esakia态射.id α) = id
   证明: rfl
 
 @[simp, norm_cast]
@@ -970,7 +970,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (a : α)
-  结论: EsakiaHom.id α a = a
+  结论: Esakia态射.id α a = a
   证明: rfl
 
 @[simp, norm_cast]
@@ -988,7 +988,7 @@ theorem coe_id_continuousOrderHom
 
 中文:
 定理 coe_id_continuousOrderHom
-  结论: (EsakiaHom.id α : α ->Co α) = ContinuousOrderHom.id α
+  结论: (Esakia态射.id α : α ->Co α) = 余ntinuous序态射.id α
   证明: rfl
 -/
 theorem coe_id_continuousOrderHom : (EsakiaHom.id α : α ->Co α) = ContinuousOrderHom.id α := rfl
@@ -1008,7 +1008,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : EsakiaHom β γ) (f : EsakiaHom α β)
+  签名: (g : Esakia态射 β γ) (f : Esakia态射 α β)
   定义体: ⟨g.toContinuousOrderHom.comp f.toContinuousOrderHom, fun a b h₀ => by
     obtain ⟨b, h₁, rfl⟩ := g.exists_map_eq_of_map_le' h₀
     obtain ⟨b, h₂, rfl⟩ := f.exists_map_eq_of_map_le' h₁
@@ -1037,7 +1037,7 @@ theorem coe_comp_continuousOrderHom
 
 中文:
 定理 coe_comp_continuousOrderHom
-  条件: (g : EsakiaHom β γ) (f : EsakiaHom α β)
+  条件: (g : Esakia态射 β γ) (f : Esakia态射 α β)
   证明: rfl
 
 @[simp]
@@ -1058,7 +1058,7 @@ theorem coe_comp_pseudoEpimorphism
 
 中文:
 定理 coe_comp_pseudoEpimorphism
-  条件: (g : EsakiaHom β γ) (f : EsakiaHom α β)
+  条件: (g : Esakia态射 β γ) (f : Esakia态射 α β)
   证明: rfl
 
 @[simp]
@@ -1080,7 +1080,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (g : EsakiaHom β γ) (f : EsakiaHom α β)
+  条件: (g : Esakia态射 β γ) (f : Esakia态射 α β)
   结论: (g.comp f : α -> γ) = g ∘ f
   证明: rfl
 
@@ -1102,7 +1102,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (g : EsakiaHom β γ) (f : EsakiaHom α β) (a : α)
+  条件: (g : Esakia态射 β γ) (f : Esakia态射 α β) (a : α)
   结论: (g.comp f) a = g (f a)
   证明: rfl
 
@@ -1123,7 +1123,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  条件: (h : EsakiaHom γ δ) (g : EsakiaHom β γ) (f : EsakiaHom α β)
+  条件: (h : Esakia态射 γ δ) (g : Esakia态射 β γ) (f : Esakia态射 α β)
   证明: rfl
 
 @[simp]
@@ -1145,8 +1145,8 @@ theorem comp_id
 
 中文:
 定理 comp_id
-  条件: (f : EsakiaHom α β)
-  结论: f.comp (EsakiaHom.id α) = f
+  条件: (f : Esakia态射 α β)
+  结论: f.comp (Esakia态射.id α) = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1168,8 +1168,8 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (f : EsakiaHom α β)
-  结论: (EsakiaHom.id β).comp f = f
+  条件: (f : Esakia态射 α β)
+  结论: (Esakia态射.id β).comp f = f
   证明: ext fun _ => rfl
 
 @[simp]
@@ -1190,7 +1190,7 @@ theorem cancel_right
 
 中文:
 定理 cancel_right
-  条件: {g₁ g₂ : EsakiaHom β γ} {f : EsakiaHom α β} (hf : Surjective f)
+  条件: {g₁ g₂ : Esakia态射 β γ} {f : Esakia态射 α β} (hf : 满射 f)
   证明: ⟨fun h => ext hf.forall.2 DFunLike.ext_iff.1 h, congr_arg (comp · f)⟩
 
 @[simp]
@@ -1212,7 +1212,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  条件: {g : EsakiaHom β γ} {f₁ f₂ : EsakiaHom α β} (hg : Injective g)
+  条件: {g : Esakia态射 β γ} {f₁ f₂ : Esakia态射 α β} (hg : 单射 g)
   证明: ⟨fun h => ext fun a => hg by rw [← comp_apply, h, comp_apply], congr_arg _⟩
 
 Depends on / 依赖: comp_apply, congr_arg

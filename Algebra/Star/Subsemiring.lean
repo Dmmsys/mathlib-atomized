@@ -29,9 +29,9 @@ structure StarSubsemiring
     - star_mem'({a}) : a in carrier -> star a in carrier
 
 中文:
-结构 StarSubsemiring
-  参数: (R : 类型v) [NonAssocSemiring R] [Star R]
-  继承: Subsemiring R
+结构 对合子半环
+  参数: (R : 类型v) [非结合半环 R] [对合 R]
+  继承: 子半环 R
   公理与运算 (1 个):
     - star_mem'({a}) : a in carrier -> star a in carrier
 -/
@@ -58,7 +58,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: {R : 类型v} [NonAssocSemiring R] [Star R]
+  签名: {R : 类型v} [非结合半环 R] [对合 R]
   定义体: s.carrier
   coe_injective p q h := by obtain ⟨⟨⟨⟨_, _⟩, _⟩, _⟩, _⟩ := p; cases q; congr
 
@@ -93,7 +93,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R : 类型} [NonAssocSemiring R] [SetLike S R] [StarRing R] [SubsemiringClass S R]
+  签名: {S R : 类型} [非结合半环 R] [集合状 S R] [对合环 R] [子半环类 S R]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -132,7 +132,7 @@ instance starMemClass
 
 中文:
 实例 starMemClass
-  签名: : StarMemClass (StarSubsemiring R) R where
+  签名: : StarMem类 (对合子半环 R) R where
   定义体: s.star_mem'
 
 Depends on / 依赖: s.star_mem, star_mem
@@ -153,7 +153,7 @@ instance subsemiringClass
 
 中文:
 实例 subsemiringClass
-  签名: : SubsemiringClass (StarSubsemiring R) R where
+  签名: : 子半环类 (对合子半环 R) R where
   定义体: s.add_mem'
   mul_mem {s} := s.mul_mem'
   zero_mem {s} := s.zero_mem'
@@ -181,7 +181,7 @@ instance starRing
 
 中文:
 实例 starRing
-  签名: (s : StarSubsemiring R)
+  签名: (s : 对合子半环 R)
   定义体: { StarMemClass.instStar s with
     star_involutive := fun r => Subtype.ext (star_star (r : R))
     star_mul := fun r₁ r₂ => Subtype.ext (star_mul (r₁ : R) (r₂ : R))
@@ -205,7 +205,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: (s : StarSubsemiring R)
+  签名: (s : 对合子半环 R)
   定义体: s.toSubsemiring.toNonAssocSemiring
 
 Depends on / 依赖: s.toSubsemiring.toNonAssocSemiring, toNonAssocSemiring, toSubsemiring
@@ -226,7 +226,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : StarSubsemiring R} {x : R}
+  条件: {s : 对合子半环 R} {x : R}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -251,7 +251,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {S T : StarSubsemiring R} (h : 对任意 x : R, x in S ↔ x in T)
+  条件: {S T : 对合子半环 R} (h : 对任意 x : R, x in S ↔ x in T)
   结论: S = T
   证明: SetLike.ext h
 
@@ -276,8 +276,8 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (S : Subsemiring R) (h)
-  结论: ((⟨S, h⟩ : StarSubsemiring R) : Set R) = S
+  条件: (S : 子半环 R) (h)
+  结论: ((⟨S, h⟩ : 对合子半环 R) : 集合 R) = S
   证明: rfl
 
 @[simp]
@@ -298,7 +298,7 @@ theorem mem_toSubsemiring
 
 中文:
 定理 mem_toSubsemiring
-  条件: {S : StarSubsemiring R} {x}
+  条件: {S : 对合子半环 R} {x}
   结论: x in S.toSubsemiring ↔ x in S
   证明: Iff.rfl
 
@@ -321,8 +321,8 @@ theorem coe_toSubsemiring
 
 中文:
 定理 coe_toSubsemiring
-  条件: (S : StarSubsemiring R)
-  结论: (S.toSubsemiring : Set R) = S
+  条件: (S : 对合子半环 R)
+  结论: (S.toSubsemiring : 集合 R) = S
   证明: rfl
 -/
 theorem coe_toSubsemiring (S : StarSubsemiring R) : (S.toSubsemiring : Set R) = S :=
@@ -356,7 +356,7 @@ theorem toSubsemiring_inj
 
 中文:
 定理 toSubsemiring_inj
-  条件: {S U : StarSubsemiring R}
+  条件: {S U : 对合子半环 R}
   结论: S.toSubsemiring = U.toSubsemiring ↔ S = U
   证明: toSubsemiring_injective.eq_iff
 
@@ -375,7 +375,7 @@ theorem toSubsemiring_le_iff
 
 中文:
 定理 toSubsemiring_le_iff
-  条件: {S₁ S₂ : StarSubsemiring R}
+  条件: {S₁ S₂ : 对合子半环 R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -397,7 +397,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (S : StarSubsemiring R) (s : Set R) (hs : s = ↑S)
+  签名: (S : 对合子半环 R) (s : 集合 R) (hs : s = ↑S)
   定义体: Subsemiring.copy S.toSubsemiring s hs
   star_mem' := @fun a ha => hs ▸ (S.star_mem' (by simpa [hs] using ha) : star a in (S : Set R))
 
@@ -419,8 +419,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (S : StarSubsemiring R) (s : Set R) (hs : s = ↑S)
-  结论: (S.copy s hs : Set R) = s
+  条件: (S : 对合子半环 R) (s : 集合 R) (hs : s = ↑S)
+  结论: (S.copy s hs : 集合 R) = s
   证明: rfl
 -/
 theorem coe_copy (S : StarSubsemiring R) (s : Set R) (hs : s = ↑S) : (S.copy s hs : Set R) = s :=
@@ -437,7 +437,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : StarSubsemiring R) (s : Set R) (hs : s = ↑S)
+  条件: (S : 对合子半环 R) (s : 集合 R) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -461,7 +461,7 @@ definition center
 
 中文:
 定义 center
-  签名: (R) [NonAssocSemiring R] [StarRing R]
+  签名: (R) [非结合半环 R] [对合环 R]
   定义体: Subsemiring.center R
   star_mem' := Set.star_mem_center
 
@@ -493,7 +493,7 @@ definition center
 
 中文:
 定义 center
-  签名: : SubStarSemigroup A
+  签名: : SubStar半群 A
   定义体: { Subsemigroup.center A with
     star_mem' := Set.star_mem_center }
 

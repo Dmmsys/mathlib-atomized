@@ -150,7 +150,7 @@ alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
 
 中文:
 定理 not_disjoint_iff_nonempty_inter
-  结论: ¬Disjoint s t ↔ (s inter t).Nonempty
+  结论: ¬Disjoint s t ↔ (s inter t).非空
   证明: not_disjoint_iff.trans by simp [Finset.Nonempty]
 
 alias ⟨_, Nonempty.not_disjoint⟩ := not_disjoint_iff_nonempty_inter
@@ -177,8 +177,8 @@ omit [DecidableEq α] in
 
 中文:
 定理 disjoint_or_nonempty_inter
-  条件: (s t : Finset α)
-  结论: Disjoint s t ∨ (s inter t).Nonempty
+  条件: (s t : 有限集 α)
+  结论: Disjoint s t ∨ (s inter t).非空
   证明: by
   rw [← not_disjoint_iff_nonempty_inter]
   exact em _
@@ -223,7 +223,7 @@ lemma pairwiseDisjoint_iff
 
 中文:
 引理 pairwiseDisjoint_iff
-  条件: {ι : 类型} {s : Set ι} {f : ι -> Finset α}
+  条件: {ι : 类型} {s : 集合 ι} {f : ι -> 有限集 α}
   证明: by
   simp [Set.PairwiseDisjoint, Set.Pairwise, not_imp_comm (a := _ = _),
     not_disjoint_iff_nonempty_inter]
@@ -247,7 +247,7 @@ instance isDirected_le
 
 中文:
 实例 isDirected_le
-  签名: : IsDirectedOrder (Finset α)
+  签名: : IsDirectedOrder (有限集 α)
   定义体: by classical infer_instance
 
 Depends on / 依赖: classical, infer_instance
@@ -263,7 +263,7 @@ instance isDirected_subset
 
 中文:
 实例 isDirected_subset
-  签名: : IsDirected (Finset α) (· subseteq ·)
+  签名: : 是Directed (有限集 α) (· subseteq ·)
   定义体: isDirected_le
 
 Depends on / 依赖: NeZero, NeZero.ne, isDirected_le, n.natAbs_ne_zero.mpr, natAbs_ne_zero
@@ -307,9 +307,9 @@ lemma Nontrivial.erase_nonempty
   proof: (hs.exists_ne a).imp by simp_all
 
 中文:
-引理 Nontrivial.erase_nonempty
-  条件: (hs : s.Nontrivial)
-  结论: (s.erase a).Nonempty
+引理 非平凡.erase_nonempty
+  条件: (hs : s.非平凡)
+  结论: (s.erase a).非空
   证明: (hs.exists_ne a).imp by simp_all
 -/
 protected lemma Nontrivial.erase_nonempty (hs : s.Nontrivial) : (s.erase a).Nonempty :=
@@ -333,7 +333,7 @@ lemma erase_nonempty
 中文:
 引理 erase_nonempty
   条件: (ha : a in s)
-  结论: (s.erase a).Nonempty ↔ s.Nontrivial
+  结论: (s.erase a).非空 ↔ s.非平凡
   证明: by
   simp only [Finset.Nonempty, mem_erase, and_comm (b := _ in _)]
   refine ⟨?_, fun hs => hs.exists_ne a⟩
@@ -363,7 +363,7 @@ theorem erase_singleton
 中文:
 定理 erase_singleton
   条件: (a : α)
-  结论: ({a} : Finset α).erase a = ∅
+  结论: ({a} : 有限集 α).erase a = ∅
   证明: by grind
 
 @[simp]
@@ -384,7 +384,7 @@ theorem erase_insert_eq_erase
 
 中文:
 定理 erase_insert_eq_erase
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: (insert a s).erase a = s.erase a
   证明: by grind
 -/
@@ -401,7 +401,7 @@ theorem erase_insert
 
 中文:
 定理 erase_insert
-  条件: {a : α} {s : Finset α} (h : a ∉ s)
+  条件: {a : α} {s : 有限集 α} (h : a ∉ s)
   结论: (insert a s).erase a = s
   证明: by grind
 
@@ -419,7 +419,7 @@ theorem erase_insert_of_ne
 
 中文:
 定理 erase_insert_of_ne
-  条件: {a b : α} {s : Finset α} (h : a != b)
+  条件: {a b : α} {s : 有限集 α} (h : a != b)
   证明: by grind
 -/
 theorem erase_insert_of_ne {a b : α} {s : Finset α} (h : a != b) :
@@ -435,7 +435,7 @@ theorem erase_cons_of_ne
 
 中文:
 定理 erase_cons_of_ne
-  条件: {a b : α} {s : Finset α} (ha : a ∉ s) (hb : a != b)
+  条件: {a b : α} {s : 有限集 α} (ha : a ∉ s) (hb : a != b)
   证明: by grind
 -/
 theorem erase_cons_of_ne {a b : α} {s : Finset α} (ha : a ∉ s) (hb : a != b) :
@@ -506,7 +506,7 @@ theorem erase_ssubset
 
 中文:
 定理 erase_ssubset
-  条件: {a : α} {s : Finset α} (h : a in s)
+  条件: {a : α} {s : 有限集 α} (h : a in s)
   结论: s.erase a ⊂ s
   证明: by grind
 -/
@@ -523,7 +523,7 @@ theorem erase_union_eq
 
 中文:
 定理 erase_union_eq
-  条件: (a : α) (s : Finset α) (h : a in s)
+  条件: (a : α) (s : 有限集 α) (h : a in s)
   结论: (erase s a) union {a} = s
   证明: by grind
 -/
@@ -540,8 +540,8 @@ theorem ssubset_iff_exists_subset_erase
   grind
 
 中文:
-定理 ssubset_iff_exists_subset_erase
-  条件: {s t : Finset α}
+定理 ssubset_iff_存在_subset_erase
+  条件: {s t : 有限集 α}
   结论: s ⊂ t ↔ 存在 a in t, s subseteq t.erase a
   证明: by
   grind
@@ -560,7 +560,7 @@ theorem erase_ssubset_insert
 
 中文:
 定理 erase_ssubset_insert
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: s.erase a ⊂ insert a s
   证明: ssubset_iff_exists_subset_erase.2 ⟨a, mem_insert_self _ _, by grw [← subset_insert]⟩
 
@@ -580,7 +580,7 @@ theorem erase_cons
 
 中文:
 定理 erase_cons
-  条件: {s : Finset α} {a : α} (h : a ∉ s)
+  条件: {s : 有限集 α} {a : α} (h : a ∉ s)
   结论: (s.cons a h).erase a = s
   证明: by grind
 -/
@@ -597,7 +597,7 @@ theorem subset_insert_iff
 
 中文:
 定理 subset_insert_iff
-  条件: {a : α} {s t : Finset α}
+  条件: {a : α} {s t : 有限集 α}
   结论: s subseteq insert a t ↔ s.erase a subseteq t
   证明: by grind
 -/
@@ -614,7 +614,7 @@ theorem erase_insert_subset
 
 中文:
 定理 erase_insert_subset
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (insert a s).erase a subseteq s
   证明: subset_insert_iff.1 Subset.rfl
 
@@ -634,7 +634,7 @@ theorem insert_erase_subset
 
 中文:
 定理 insert_erase_subset
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: s subseteq insert a (s.erase a)
   证明: subset_insert_iff.2 Subset.rfl
 
@@ -699,7 +699,7 @@ theorem erase_injOn'
 中文:
 定理 erase_injOn'
   条件: (a : α)
-  结论: { s : Finset α | a in s }.InjOn fun s => s.erase a
+  结论: { s : 有限集 α | a in s }.单射限制 fun s => s.erase a
   证明: fun s hs t ht (h : s.erase a = _) => by rw [← insert_erase hs, ← insert_erase ht, h]
 
 Depends on / 依赖: insert_erase, s.erase
@@ -722,8 +722,8 @@ lemma Nontrivial.exists_cons_eq
   refine ⟨(s.erase a).erase b, a, ?_, b, ?_, ?_, ?_⟩ <;> simp [insert_erase ha, *]
 
 中文:
-引理 Nontrivial.exists_cons_eq
-  条件: {s : Finset α} (hs : s.Nontrivial)
+引理 非平凡.存在_cons_eq
+  条件: {s : 有限集 α} (hs : s.非平凡)
   证明: by
   classical
   obtain ⟨a, ha, b, hb, hab⟩ := hs
@@ -779,7 +779,7 @@ theorem sdiff_singleton_eq_erase
 
 中文:
 定理 sdiff_singleton_eq_erase
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: s \ {a} = s.erase a
   证明: by grind
 -/
@@ -797,7 +797,7 @@ theorem erase_eq
 
 中文:
 定理 erase_eq
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: s.erase a = s \ {a}
   证明: (sdiff_singleton_eq_erase _ _).symm
 
@@ -933,7 +933,7 @@ theorem inter_erase
 
 中文:
 定理 inter_erase
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   结论: s inter t.erase a = (s inter t).erase a
   证明: by grind
 
@@ -953,7 +953,7 @@ theorem erase_inter
 
 中文:
 定理 erase_inter
-  条件: (a : α) (s t : Finset α)
+  条件: (a : α) (s t : 有限集 α)
   结论: s.erase a inter t = (s inter t).erase a
   证明: by grind
 -/
@@ -970,7 +970,7 @@ theorem erase_sdiff_comm
 
 中文:
 定理 erase_sdiff_comm
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: s.erase a \ t = (s \ t).erase a
   证明: by grind
 -/
@@ -987,7 +987,7 @@ theorem erase_inter_comm
 
 中文:
 定理 erase_inter_comm
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: s.erase a inter t = s inter t.erase a
   证明: by grind
 -/
@@ -1005,7 +1005,7 @@ theorem erase_union_distrib
 
 中文:
 定理 erase_union_distrib
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: (s union t).erase a = s.erase a union t.erase a
   证明: by
   grind
@@ -1023,7 +1023,7 @@ theorem insert_inter_distrib
 
 中文:
 定理 insert_inter_distrib
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   证明: by grind
 -/
 theorem insert_inter_distrib (s t : Finset α) (a : α) :
@@ -1041,7 +1041,7 @@ theorem erase_sdiff_distrib
 
 中文:
 定理 erase_sdiff_distrib
-  条件: (s t : Finset α) (a : α)
+  条件: (s t : 有限集 α) (a : α)
   结论: (s \ t).erase a = s.erase a \ t.erase a
   证明: by
   grind
@@ -1061,7 +1061,7 @@ theorem erase_union_of_mem
 
 中文:
 定理 erase_union_of_mem
-  条件: (ha : a in t) (s : Finset α)
+  条件: (ha : a in t) (s : 有限集 α)
   结论: s.erase a union t = s union t
   证明: by
   grind
@@ -1081,7 +1081,7 @@ theorem union_erase_of_mem
 
 中文:
 定理 union_erase_of_mem
-  条件: (ha : a in s) (t : Finset α)
+  条件: (ha : a in s) (t : 有限集 α)
   结论: s union t.erase a = s union t
   证明: by
   grind
@@ -1121,7 +1121,7 @@ theorem sdiff_insert
 
 中文:
 定理 sdiff_insert
-  条件: (s t : Finset α) (x : α)
+  条件: (s t : 有限集 α) (x : α)
   结论: s \ insert x t = (s \ t).erase x
   证明: by
   grind
@@ -1140,7 +1140,7 @@ theorem sdiff_insert_insert_of_mem_of_notMem
 
 中文:
 定理 sdiff_insert_insert_of_mem_of_notMem
-  条件: {s t : Finset α} {x : α} (hxs : x in s) (hxt : x ∉ t)
+  条件: {s t : 有限集 α} {x : α} (hxs : x in s) (hxt : x ∉ t)
   证明: by
   grind
 -/
@@ -1200,7 +1200,7 @@ theorem erase_eq_empty_iff
 
 中文:
 定理 erase_eq_empty_iff
-  条件: (s : Finset α) (a : α)
+  条件: (s : 有限集 α) (a : α)
   结论: s.erase a = ∅ ↔ s = ∅ ∨ s = {a}
   证明: by
   rw [← sdiff_singleton_eq_erase]; rw [sdiff_eq_empty_iff_subset]; rw [subset_singleton_iff]
@@ -1258,7 +1258,7 @@ theorem disjoint_sdiff_inter
 
 中文:
 定理 disjoint_sdiff_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: Disjoint (s \ t) (s inter t)
   证明: disjoint_of_subset_right inter_subset_right sdiff_disjoint
 
@@ -1284,7 +1284,7 @@ theorem attach_empty
 
 中文:
 定理 attach_empty
-  结论: (∅ : Finset α).attach = ∅
+  结论: (∅ : 有限集 α).attach = ∅
   证明: rfl
 
 @[simp]
@@ -1310,8 +1310,8 @@ protected alias ⟨_, Nonempty.attach⟩ := attach_nonempty_iff
 
 中文:
 定理 attach_nonempty_iff
-  条件: {s : Finset α}
-  结论: s.attach.Nonempty ↔ s.Nonempty
+  条件: {s : 有限集 α}
+  结论: s.attach.非空 ↔ s.非空
   证明: by
   simp [Finset.Nonempty]
 
@@ -1341,7 +1341,7 @@ theorem attach_eq_empty_iff
 
 中文:
 定理 attach_eq_empty_iff
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s.attach = ∅ ↔ s = ∅
   证明: by
   simp [eq_empty_iff_forall_notMem]
@@ -1383,7 +1383,7 @@ theorem filter_cons_of_pos
 
 中文:
 定理 filter_cons_of_pos
-  条件: (a : α) (s : Finset α) (ha : a ∉ s) (hp : p a)
+  条件: (a : α) (s : 有限集 α) (ha : a ∉ s) (hp : p a)
   证明: eq_of_veq s.val.filter_cons_of_pos hp
 
 Depends on / 依赖: eq_of_veq, filter_cons_of_pos, s.val.filter_cons_of_pos
@@ -1402,7 +1402,7 @@ theorem filter_cons_of_neg
 
 中文:
 定理 filter_cons_of_neg
-  条件: (a : α) (s : Finset α) (ha : a ∉ s) (hp : ¬p a)
+  条件: (a : α) (s : 有限集 α) (ha : a ∉ s) (hp : ¬p a)
   证明: eq_of_veq s.val.filter_cons_of_neg hp
 
 Depends on / 依赖: eq_of_veq, filter_cons_of_neg, s.val.filter_cons_of_neg
@@ -1422,7 +1422,7 @@ theorem disjoint_filter
 
 中文:
 定理 disjoint_filter
-  条件: {s : Finset α} {p q : α -> 命题} [DecidablePred p] [DecidablePred q]
+  条件: {s : 有限集 α} {p q : α -> 命题} [DecidablePred p] [DecidablePred q]
   证明: by
   constructor <;> simp +contextual [disjoint_left]
 
@@ -1446,7 +1446,7 @@ theorem disjoint_filter_filter'
 
 中文:
 定理 disjoint_filter_filter'
-  结论: (s t : Finset α)
+  结论: (s t : 有限集 α)
   证明: by
   simp_rw [disjoint_left, mem_filter]
   rintro a ⟨_, hp⟩ ⟨_, hq⟩
@@ -1473,7 +1473,7 @@ theorem disjoint_filter_filter_not
 
 中文:
 定理 disjoint_filter_filter_not
-  结论: (s t : Finset α) (p : α -> 命题)
+  结论: (s t : 有限集 α) (p : α -> 命题)
   证明: s.disjoint_filter_filter' t disjoint_compl_right
 
 Depends on / 依赖: disjoint_compl_right, disjoint_filter_filter, s.disjoint_filter_filter
@@ -1493,7 +1493,7 @@ theorem filter_disjUnion
 
 中文:
 定理 filter_disjUnion
-  条件: (s : Finset α) (t : Finset α) (h : Disjoint s t)
+  条件: (s : 有限集 α) (t : 有限集 α) (h : Disjoint s t)
   证明: eq_of_veq Multiset.filter_add _ _ _
 
 Depends on / 依赖: Multiset, Multiset.filter_add, eq_of_veq, filter_add
@@ -1514,7 +1514,7 @@ theorem filter_cons
 
 中文:
 定理 filter_cons
-  条件: {a : α} (s : Finset α) (ha : a ∉ s)
+  条件: {a : α} (s : 有限集 α) (ha : a ∉ s)
   证明: by grind
 
 @[simp]
@@ -1537,7 +1537,7 @@ theorem disjoint_disjUnion_left
 
 中文:
 定理 disjoint_disjUnion_left
-  条件: {s t u : Finset α} (h : Disjoint s t)
+  条件: {s t u : 有限集 α} (h : Disjoint s t)
   证明: by
   simp only [disjoint_left, mem_disjUnion, or_imp, forall_and]
 
@@ -1561,7 +1561,7 @@ theorem disjoint_disjUnion_right
 
 中文:
 定理 disjoint_disjUnion_right
-  条件: {s t u : Finset α} (h : Disjoint t u)
+  条件: {s t u : 有限集 α} (h : Disjoint t u)
   证明: by
   simp only [disjoint_right, mem_disjUnion, or_imp, forall_and]
 
@@ -1586,7 +1586,7 @@ theorem filter_union
 
 中文:
 定理 filter_union
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: (s₁ union s₂).filter p = s₁.filter p union s₂.filter p
   证明: by
   grind
@@ -1604,7 +1604,7 @@ theorem filter_union_right
 
 中文:
 定理 filter_union_right
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: by grind
 -/
 theorem filter_union_right (s : Finset α) :
@@ -1620,7 +1620,7 @@ theorem filter_mem_eq_inter
 
 中文:
 定理 filter_mem_eq_inter
-  条件: {s t : Finset α} [对任意 i, Decidable (i in t)]
+  条件: {s t : 有限集 α} [对任意 i, 可判定 (i in t)]
   证明: by grind
 -/
 theorem filter_mem_eq_inter {s t : Finset α} [forall i, Decidable (i in t)] :
@@ -1636,7 +1636,7 @@ theorem filter_notMem_eq_sdiff
 
 中文:
 定理 filter_notMem_eq_sdiff
-  条件: {s t : Finset α} [对任意 i, Decidable (i ∉ t)]
+  条件: {s t : 有限集 α} [对任意 i, 可判定 (i ∉ t)]
   证明: by grind
 -/
 theorem filter_notMem_eq_sdiff {s t : Finset α} [forall i, Decidable (i ∉ t)] :
@@ -1654,7 +1654,7 @@ theorem filter_inter_distrib
 
 中文:
 定理 filter_inter_distrib
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: (s inter t).filter p = s.filter p inter t.filter p
   证明: by
   grind
@@ -1673,7 +1673,7 @@ theorem filter_inter
 
 中文:
 定理 filter_inter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s.filter p inter t = (s inter t).filter p
   证明: by grind
 -/
@@ -1690,7 +1690,7 @@ theorem inter_filter
 
 中文:
 定理 inter_filter
-  条件: (s t : Finset α)
+  条件: (s t : 有限集 α)
   结论: s inter t.filter p = (s inter t).filter p
   证明: by grind
 -/
@@ -1706,7 +1706,7 @@ theorem filter_insert
 
 中文:
 定理 filter_insert
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   证明: by grind
 -/
 theorem filter_insert (a : α) (s : Finset α) :
@@ -1724,7 +1724,7 @@ theorem filter_erase
 
 中文:
 定理 filter_erase
-  条件: (a : α) (s : Finset α)
+  条件: (a : α) (s : 有限集 α)
   结论: (s.erase a).filter p = (s.filter p).erase a
   证明: by
   grind
@@ -1744,7 +1744,7 @@ theorem filter_or
 
 中文:
 定理 filter_or
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.filter fun a => p a ∨ q a) = s.filter p union s.filter q
   证明: by
   grind
@@ -1764,7 +1764,7 @@ theorem filter_and
 
 中文:
 定理 filter_and
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.filter fun a => p a ∧ q a) = s.filter p inter s.filter q
   证明: by
   grind
@@ -1784,7 +1784,7 @@ theorem filter_not
 
 中文:
 定理 filter_not
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: (s.filter fun a => ¬p a) = s \ s.filter p
   证明: by
   grind
@@ -1802,7 +1802,7 @@ lemma filter_and_not
 
 中文:
 引理 filter_and_not
-  条件: (s : Finset α) (p q : α -> 命题) [DecidablePred p] [DecidablePred q]
+  条件: (s : 有限集 α) (p q : α -> 命题) [DecidablePred p] [DecidablePred q]
   证明: by grind
 -/
 lemma filter_and_not (s : Finset α) (p q : α -> Prop) [DecidablePred p] [DecidablePred q] :
@@ -1819,7 +1819,7 @@ theorem sdiff_eq_filter
 
 中文:
 定理 sdiff_eq_filter
-  条件: (s₁ s₂ : Finset α)
+  条件: (s₁ s₂ : 有限集 α)
   结论: s₁ \ s₂ = s₁.filter (· ∉ s₂)
   证明: by grind
 -/
@@ -1843,7 +1843,7 @@ theorem subset_union_elim
 
 中文:
 定理 subset_union_elim
-  条件: {s : Finset α} {t₁ t₂ : Set α} (h : ↑s subseteq t₁ union t₂)
+  条件: {s : 有限集 α} {t₁ t₂ : 集合 α} (h : ↑s subseteq t₁ union t₂)
   证明: by
   classical
     refine ⟨s.filter (· in t₁), s.filter (· ∉ t₁), ?_, ?_, ?_⟩
@@ -1879,7 +1879,7 @@ theorem filter_eq
 
 中文:
 定理 filter_eq
-  条件: [DecidableEq β] (s : Finset β) (b : β)
+  条件: [DecidableEq β] (s : 有限集 β) (b : β)
   证明: by grind
 -/
 theorem filter_eq [DecidableEq β] (s : Finset β) (b : β) :
@@ -1895,7 +1895,7 @@ theorem filter_eq'
 
 中文:
 定理 filter_eq'
-  条件: [DecidableEq β] (s : Finset β) (b : β)
+  条件: [DecidableEq β] (s : 有限集 β) (b : β)
   证明: by grind
 -/
 theorem filter_eq' [DecidableEq β] (s : Finset β) (b : β) :
@@ -1911,7 +1911,7 @@ theorem filter_ne
 
 中文:
 定理 filter_ne
-  条件: [DecidableEq β] (s : Finset β) (b : β)
+  条件: [DecidableEq β] (s : 有限集 β) (b : β)
   证明: by grind
 -/
 theorem filter_ne [DecidableEq β] (s : Finset β) (b : β) :
@@ -1928,7 +1928,7 @@ theorem filter_ne'
 
 中文:
 定理 filter_ne'
-  条件: [DecidableEq β] (s : Finset β) (b : β)
+  条件: [DecidableEq β] (s : 有限集 β) (b : β)
   结论: (s.filter fun a => a != b) = s.erase b
   证明: (filter_congr fun _ _ => by simp_rw [@ne_comm _ b]).trans (s.filter_ne b)
 
@@ -1947,7 +1947,7 @@ theorem filter_union_filter_of_codisjoint
 
 中文:
 定理 filter_union_filter_of_codisjoint
-  条件: (s : Finset α) (h : Codisjoint p q)
+  条件: (s : 有限集 α) (h : Codisjoint p q)
   证明: (filter_or _ _ _).symm.trans filter_true_of_mem fun x _ => h.top_le x trivial
 
 Depends on / 依赖: filter_or, filter_true_of_mem, h.top_le, symm.trans, top_le
@@ -1966,7 +1966,7 @@ theorem filter_union_filter_not_eq
 
 中文:
 定理 filter_union_filter_not_eq
-  条件: [对任意 x, Decidable (¬p x)] (s : Finset α)
+  条件: [对任意 x, 可判定 (¬p x)] (s : 有限集 α)
   证明: filter_union_filter_of_codisjoint _ _ _ @codisjoint_hnot_right _ _ p
 
 Depends on / 依赖: codisjoint_hnot_right, filter_union_filter_of_codisjoint
@@ -2025,7 +2025,7 @@ theorem range_inter_range
 中文:
 定理 range_inter_range
   条件: (m n : 自然数)
-  结论: range m inter range n = range (min m n)
+  结论: range m inter range n = range (最小值 m n)
   证明: by ext; simp
 
 @[simp]
@@ -2045,7 +2045,7 @@ theorem range_union_range
 中文:
 定理 range_union_range
   条件: (m n : 自然数)
-  结论: range m union range n = range (max m n)
+  结论: range m union range n = range (最大值 m n)
   证明: by ext; simp
 -/
 theorem range_union_range (m n : Nat) : range m union range n = range (max m n) := by ext; simp
@@ -2177,7 +2177,7 @@ protected alias ⟨_, Aesop.toFinset_nonempty_of_ne⟩ := toFinset_nonempty
 
 中文:
 定理 toFinset_nonempty
-  结论: s.toFinset.Nonempty ↔ s != 0
+  结论: s.toFinset.非空 ↔ s != 0
   证明: by
   simp only [toFinset_eq_empty, Ne, Finset.nonempty_iff_ne_empty]
 
@@ -2237,7 +2237,7 @@ theorem toFinset_union
 
 中文:
 定理 toFinset_union
-  条件: (l l' : List α)
+  条件: (l l' : 列表 α)
   结论: (l union l').toFinset = l.toFinset union l'.toFinset
   证明: by
   ext
@@ -2268,7 +2268,7 @@ alias ⟨_, Aesop.toFinset_nonempty_of_ne⟩ := toFinset_nonempty_iff
 
 中文:
 定理 toFinset_inter
-  条件: (l l' : List α)
+  条件: (l l' : 列表 α)
   结论: (l inter l').toFinset = l.toFinset inter l'.toFinset
   证明: by
   ext
@@ -2298,7 +2298,7 @@ theorem toFinset_filter
 
 中文:
 定理 toFinset_filter
-  条件: (s : List α) (p : α -> 布尔)
+  条件: (s : 列表 α) (p : α -> 布尔值)
   证明: by
   ext; simp [List.mem_filter]
 
@@ -2318,7 +2318,7 @@ theorem filter_toFinset
 
 中文:
 定理 filter_toFinset
-  条件: (s : List α) (p : α -> 命题) [DecidablePred p]
+  条件: (s : 列表 α) (p : α -> 命题) [DecidablePred p]
   证明: by simp
 -/
 theorem filter_toFinset (s : List α) (p : α -> Prop) [DecidablePred p] :
@@ -2342,7 +2342,7 @@ theorem toList_eq_nil
 
 中文:
 定理 toList_eq_nil
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s.toList = [] ↔ s = ∅
   证明: Multiset.toList_eq_nil.trans val_eq_zero
 
@@ -2364,7 +2364,7 @@ theorem empty_toList
 
 中文:
 定理 empty_toList
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s.toList.isEmpty ↔ s = ∅
   证明: by simp
 
@@ -2383,7 +2383,7 @@ theorem toList_empty
 
 中文:
 定理 toList_empty
-  结论: (∅ : Finset α).toList = []
+  结论: (∅ : 有限集 α).toList = []
   证明: toList_eq_nil.mpr rfl
 
 Depends on / 依赖: toList_eq_nil, toList_eq_nil.mpr
@@ -2401,8 +2401,8 @@ theorem Nonempty.toList_ne_nil
   proof: mt toList_eq_nil.mp hs.ne_empty
 
 中文:
-定理 Nonempty.toList_ne_nil
-  条件: {s : Finset α} (hs : s.Nonempty)
+定理 非空.toList_ne_nil
+  条件: {s : 有限集 α} (hs : s.非空)
   结论: s.toList != []
   证明: mt toList_eq_nil.mp hs.ne_empty
 
@@ -2421,8 +2421,8 @@ theorem Nonempty.not_empty_toList
   proof: mt empty_toList.mp hs.ne_empty
 
 中文:
-定理 Nonempty.not_empty_toList
-  条件: {s : Finset α} (hs : s.Nonempty)
+定理 非空.not_empty_toList
+  条件: {s : 有限集 α} (hs : s.非空)
   结论: ¬s.toList.isEmpty
   证明: mt empty_toList.mp hs.ne_empty
 
@@ -2588,8 +2588,8 @@ definition Finset.union
 @[simp]
 
 中文:
-定义 Finset.union
-  签名: (s t : Finset α) (h : Disjoint s t)
+定义 有限集.union
+  签名: (s t : 有限集 α) (h : Disjoint s t)
   定义体: .symm .trans (Equiv.Set.union (disjoint_coe.mpr h)) Equiv.setCongr (coe_union _ _)
 
 @[simp]
@@ -2612,7 +2612,7 @@ theorem Finset.union_inl
 @[simp]
 
 中文:
-定理 Finset.union_inl
+定理 有限集.union_inl
   条件: (h : Disjoint s t) (x : s)
   证明: rfl
 
@@ -2634,7 +2634,7 @@ theorem Finset.union_inr
 @[simp]
 
 中文:
-定理 Finset.union_inr
+定理 有限集.union_inr
   条件: (h : Disjoint s t) (y : t)
   证明: rfl
 
@@ -2657,7 +2657,7 @@ theorem Finset.union_symm_left
 @[simp]
 
 中文:
-定理 Finset.union_symm_left
+定理 有限集.union_symm_left
   结论: (h : Disjoint s t) {i : α} (hi : i in s)
   证明: by
   simp [Equiv.symm_apply_eq]
@@ -2681,7 +2681,7 @@ theorem Finset.union_symm_right
   simp [Equiv.symm_apply_eq]
 
 中文:
-定理 Finset.union_symm_right
+定理 有限集.union_symm_right
   结论: (h : Disjoint s t) {i : α} (hi : i in t)
   证明: by
   simp [Equiv.symm_apply_eq]
@@ -2703,8 +2703,8 @@ definition Finset.disjUnionEquiv
 @[simp]
 
 中文:
-定义 Finset.disjUnionEquiv
-  签名: (s t : Finset α) (h : Disjoint s t)
+定义 有限集.disjUnionEquiv
+  签名: (s t : 有限集 α) (h : Disjoint s t)
   定义体: .symm .trans (Equiv.Set.union (disjoint_coe.mpr h)) Equiv.setCongr (coe_disjUnion h)
 
 @[simp]
@@ -2727,7 +2727,7 @@ theorem Finset.disjUnionEquiv_inl
 @[simp]
 
 中文:
-定理 Finset.disjUnionEquiv_inl
+定理 有限集.disjUnionEquiv_inl
   条件: (h : Disjoint s t) (x : s)
   证明: rfl
 
@@ -2749,7 +2749,7 @@ theorem Finset.disjUnionEquiv_inr
 @[simp]
 
 中文:
-定理 Finset.disjUnionEquiv_inr
+定理 有限集.disjUnionEquiv_inr
   条件: (h : Disjoint s t) (y : t)
   证明: rfl
 
@@ -2772,7 +2772,7 @@ theorem Finset.disjUnionEquiv_symm_left
 @[simp]
 
 中文:
-定理 Finset.disjUnionEquiv_symm_left
+定理 有限集.disjUnionEquiv_symm_left
   结论: (h : Disjoint s t) {i : α} (hi : i in s)
   证明: by
   simp [Equiv.symm_apply_eq]
@@ -2797,7 +2797,7 @@ theorem Finset.disjUnionEquiv_symm_right
   simp [Equiv.symm_apply_eq]
 
 中文:
-定理 Finset.disjUnionEquiv_symm_right
+定理 有限集.disjUnionEquiv_symm_right
   结论: (h : Disjoint s t) {i : α} (hi : i in t)
   证明: by
   simp [Equiv.symm_apply_eq]
@@ -2820,7 +2820,7 @@ definition piFinsetUnion
 
 中文:
 定义 piFinsetUnion
-  签名: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : Finset ι} (h : Disjoint s t)
+  签名: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : 有限集 ι} (h : Disjoint s t)
   定义体: let e := Equiv.Finset.union s t h
 .symm.trans (.piCongrLeft (fun i : ↥(s union t) => α i) e) sumPiEquivProdPi (fun b => α (e b))
 
@@ -2845,7 +2845,7 @@ lemma piFinsetUnion_left
 
 中文:
 引理 piFinsetUnion_left
-  结论: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : Finset ι}
+  结论: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : 有限集 ι}
   证明: by
   simp_rw [piFinsetUnion, sumPiEquivProdPi, piCongrLeft, piCongrLeft', trans_apply, coe_fn_symm_mk]
   rw! [Finset.union_symm_left h hi hi']
@@ -2874,7 +2874,7 @@ lemma piFinsetUnion_right
 
 中文:
 引理 piFinsetUnion_right
-  结论: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : Finset ι}
+  结论: {ι} [DecidableEq ι] (α : ι -> 类型) {s t : 有限集 ι}
   证明: by
   simp_rw [piFinsetUnion, sumPiEquivProdPi, piCongrLeft, piCongrLeft', trans_apply, coe_fn_symm_mk]
   rw! [Finset.union_symm_right h hi hi']
@@ -2899,8 +2899,8 @@ definition _root_.Finset.equivToSet
   invFun a := ⟨a.1, mem_coe.1 a.2⟩
 
 中文:
-定义 _root_.Finset.equivToSet
-  签名: (s : Finset α)
+定义 _root_.有限集.equivToSet
+  签名: (s : 有限集 α)
   定义体: ⟨a.1, mem_coe.2 a.2⟩
   invFun a := ⟨a.1, mem_coe.1 a.2⟩
 
@@ -2994,8 +2994,8 @@ theorem univ_finset_of_isEmpty
 
 中文:
 定理 univ_finset_of_isEmpty
-  条件: [h : IsEmpty α]
-  结论: (Set.univ : Set (Finset α)) = {∅}
+  条件: [h : 是空 α]
+  结论: (集合.univ : 集合 (有限集 α)) = {∅}
   证明: subset_antisymm (fun S hS => by simp [Finset.eq_empty_of_isEmpty S]) (by simp)
 
 Depends on / 依赖: Finset, Finset.eq_empty_of_isEmpty, eq_empty_of_isEmpty, subset_antisymm
@@ -3015,9 +3015,9 @@ theorem isEmpty_of_forall_eq_empty
 @[simp]
 
 中文:
-定理 isEmpty_of_forall_eq_empty
-  条件: (H : 对任意 s : Finset α, s = ∅)
-  结论: IsEmpty α
+定理 isEmpty_of_对任意_eq_empty
+  条件: (H : 对任意 s : 有限集 α, s = ∅)
+  结论: 是空 α
   证明: isEmpty_iff.mpr fun a => by specialize H {a}; aesop
 
 @[simp]
@@ -3039,7 +3039,7 @@ theorem univ_finset_eq_singleton_empty_iff
 
 中文:
 定理 univ_finset_eq_singleton_empty_iff
-  结论: @Set.univ (Finset α) = {∅} ↔ IsEmpty α
+  结论: @集合.univ (有限集 α) = {∅} ↔ 是空 α
   证明: ⟨fun h => isEmpty_of_forall_eq_empty fun s => Set.mem_singleton_iff.mp
     (Set.ext_iff.mp h s |>.mp (Set.mem_univ s)), fun _ => by simp⟩
 

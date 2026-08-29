@@ -38,7 +38,7 @@ theorem isThin_iff
 
 中文:
 定理 isThin_iff
-  结论: Quiver.IsThin C ↔ 对任意 c : C, Subsingleton (c ⟶ c)
+  结论: 箭图.IsThin C ↔ 对任意 c : C, 子单例 (c ⟶ c)
   证明: by
   refine ⟨fun h c => h c c, fun h c d => Subsingleton.intro fun f g => ?_⟩
   have := h d

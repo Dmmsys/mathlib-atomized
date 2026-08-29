@@ -40,7 +40,7 @@ definition tensorAlgebra
 
 中文:
 定义 tensorAlgebra
-  签名: (R : 类型u) [CommRing R]
+  签名: (R : 类型u) [交换环 R]
   定义体: AlgCat.of R (TensorAlgebra R M)
   map f := AlgCat.ofHom (TensorAlgebra.lift _ (TensorAlgebra.ι _ ∘ₗ f.hom))
 
@@ -78,7 +78,7 @@ definition tensorAlgebraAdj
 
 中文:
 定义 tensorAlgebraAdj
-  签名: : tensorAlgebra.{u} R ⊣ forget₂ (AlgCat.{u} R) (ModuleCat.{u} R) where
+  签名: : tensorAlgebra.{u} R ⊣ forget₂ (Alg范畴.{u} R) (模范畴.{u} R) where
   定义体: ModuleCat.ofHom (TensorAlgebra.ι _)
   counit.app A := AlgCat.ofHom (TensorAlgebra.lift R .id)
   counit.naturality _ _ _ := by
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ RingCat.{u} AddCommGrpCat.{u}).IsRightAdjoint
+  签名: (forget₂ 环范畴.{u} 加法交换群范畴.{u}).是右伴随
   定义体: by
   rw [← Functor.isRightAdjoint_comp_iff_right (forget₂ (AlgCat.{u} Int) RingCat.{u})]
   have heq : forget₂ (AlgCat.{u} Int) _ ⋙ forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u} =

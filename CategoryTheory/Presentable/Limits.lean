@@ -206,7 +206,7 @@ definition isColimitMapCocone
 
 中文:
 定义 isColimitMapCocone
-  签名: : IsColimit (c.pt.mapCocone cX)
+  签名: : 是余极限 (c.pt.mapCocone cX)
   定义体: by
   have := isFiltered_of_isCardinalFiltered J κ
   apply Types.FilteredColimit.isColimitOf'
@@ -241,7 +241,7 @@ lemma isCardinalAccessible_of_isLimit
 
 中文:
 引理 isCardinalAccessible_of_isLimit
-  结论: {K : 类型u'} [Category.{v'} K] {F : K ⥤ C ⥤ Type w'}
+  结论: {K : 类型u'} [范畴.{v'} K] {F : K ⥤ C ⥤ 类型 w'}
   证明: ⟨fun {X} => ⟨fun {cX} hcX => by
     have := fun k => preservesColimitsOfShape_of_isCardinalAccessible (F.obj k) κ J
     exact ⟨Accessible.Limits.isColimitMapCocone c

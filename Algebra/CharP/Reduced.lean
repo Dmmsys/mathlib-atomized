@@ -33,7 +33,7 @@ theorem iterateFrobenius_inj
 
 中文:
 定理 iterateFrobenius_inj
-  结论: Function.Injective (iterateFrobenius R p n)
+  结论: 函数.单射 (iterateFrobenius R p n)
   证明: fun x y H => by
   rw [← sub_eq_zero] at H ⊢
   simp_rw [iterateFrobenius_def, ← sub_pow_expChar_pow] at H
@@ -56,7 +56,7 @@ theorem frobenius_inj
 
 中文:
 定理 frobenius_inj
-  结论: Function.Injective (frobenius R p)
+  结论: 函数.单射 (frobenius R p)
   证明: iterateFrobenius_one (R := R) p ▸ iterateFrobenius_inj R p 1
 
 Depends on / 依赖: iterateFrobenius_inj, iterateFrobenius_one
@@ -80,7 +80,7 @@ theorem isSquare_of_charTwo'
 
 中文:
 定理 isSquare_of_charTwo'
-  结论: {R : 类型} [Finite R] [CommRing R] [IsReduced R] [CharP R 2]
+  结论: {R : 类型} [有限 R] [交换环 R] [是既约 R] [特征p R 2]
   证明: by
   cases nonempty_fintype R
   exact

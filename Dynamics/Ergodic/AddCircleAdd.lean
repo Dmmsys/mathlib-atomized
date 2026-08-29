@@ -38,7 +38,7 @@ theorem ergodic_add_left
 中文:
 定理 ergodic_add_left
   条件: {a : AddCircle p}
-  结论: Ergodic (a + ·) ↔ addOrderOf a = 0
+  结论: 遍历 (a + ·) ↔ addOrderOf a = 0
   证明: by
   rw [← denseRange_zsmul_iff]; rw [ergodic_add_left_iff_denseRange_zsmul]
 
@@ -60,7 +60,7 @@ theorem ergodic_add_right
 中文:
 定理 ergodic_add_right
   条件: {a : AddCircle p}
-  结论: Ergodic (· + a) ↔ addOrderOf a = 0
+  结论: 遍历 (· + a) ↔ addOrderOf a = 0
   证明: by
   simp only [add_comm, ← ergodic_add_left]
 

@@ -64,7 +64,7 @@ definition continuousLinearMapCoordChange
 
 中文:
 定义 continuousLinearMapCoordChange
-  签名: [e₁.IsLinear 𝕜₁] [e₁'.IsLinear 𝕜₁] [e₂.IsLinear 𝕜₂]
+  签名: [e₁.是线性 𝕜₁] [e₁'.是线性 𝕜₁] [e₂.是线性 𝕜₂]
   定义体: ((e₁'.coordChangeL 𝕜₁ e₁ b).symm.arrowCongrSL (e₂.coordChangeL 𝕜₂ e₂' b) :
     (F₁ ->SL[σ] F₂) ≃L[𝕜₂] F₁ ->SL[σ] F₂)
 
@@ -188,7 +188,7 @@ instance continuousLinearMap.isLinear
 
 中文:
 实例 continuousLinearMap.isLinear
-  签名: [对任意 x, ContinuousAdd (E₂ x)] [对任意 x, ContinuousSMul 𝕜₂ (E₂ x)]
+  签名: [对任意 x, 连续加法 (E₂ x)] [对任意 x, 连续标量乘法 𝕜₂ (E₂ x)]
   定义体: { map_add L L' := by simp [continuousLinearMap, Pretrivialization.toFun']
       map_smul c L := by simp [continuousLinearMap, Pretrivialization.toFun'] }
 
@@ -210,7 +210,7 @@ theorem continuousLinearMap_apply
 
 中文:
 定理 continuousLinearMap_apply
-  条件: (p : TotalSpace (F₁ ->SL[σ] F₂) fun x => E₁ x ->SL[σ] E₂ x)
+  条件: (p : 全空间 (F₁ ->SL[σ] F₂) fun x => E₁ x ->SL[σ] E₂ x)
   证明: rfl
 -/
 theorem continuousLinearMap_apply (p : TotalSpace (F₁ ->SL[σ] F₂) fun x => E₁ x ->SL[σ] E₂ x) :
@@ -327,7 +327,7 @@ definition Bundle.ContinuousLinearMap.vectorPrebundle
     infer_instanc
 
 中文:
-定义 Bundle.ContinuousLinearMap.vectorPrebundle
+定义 Bundle.连续线性映射.vectorPrebundle
   签名: :
   定义体: {e | exists (e₁ : Trivialization F₁ (π F₁ E₁)) (e₂ : Trivialization F₂ (π F₂ E₂))
       (_ : MemTrivializationAtlas e₁) (_ : MemTrivializationAtlas e₂),
@@ -384,7 +384,7 @@ instance Bundle.ContinuousLinearMap.topologicalSpaceTotalSpace
   body: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).totalSpaceTopology
 
 中文:
-实例 Bundle.ContinuousLinearMap.topologicalSpaceTotalSpace
+实例 Bundle.连续线性映射.topologicalSpaceTotalSpace
   签名: :
   定义体: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).totalSpaceTopology
 
@@ -403,7 +403,7 @@ instance Bundle.ContinuousLinearMap.fiberBundle
   body: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).toFiberBundle
 
 中文:
-实例 Bundle.ContinuousLinearMap.fiberBundle
+实例 Bundle.连续线性映射.fiberBundle
   签名: :
   定义体: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).toFiberBundle
 
@@ -422,7 +422,7 @@ instance Bundle.ContinuousLinearMap.vectorBundle
   body: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).toVectorBundle
 
 中文:
-实例 Bundle.ContinuousLinearMap.vectorBundle
+实例 Bundle.连续线性映射.vectorBundle
   签名: :
   定义体: (Bundle.ContinuousLinearMap.vectorPrebundle σ F₁ E₁ F₂ E₂).toVectorBundle
 
@@ -462,7 +462,7 @@ instance Bundle.ContinuousLinearMap.memTrivializationAtlas
   body: ⟨_, ⟨e₁, e₂, by infer_instance, by infer_instance, rfl⟩, rfl⟩
 
 中文:
-实例 Bundle.ContinuousLinearMap.memTrivializationAtlas
+实例 Bundle.连续线性映射.memTrivializationAtlas
   签名: :
   定义体: ⟨_, ⟨e₁, e₂, by infer_instance, by infer_instance, rfl⟩, rfl⟩
 
@@ -626,7 +626,7 @@ theorem continuousWithinAt_hom_bundle
 
 中文:
 定理 continuousWithinAt_hom_bundle
-  结论: {M : 类型} [TopologicalSpace M]
+  结论: {M : 类型} [拓扑空间 M]
   证明: FiberBundle.continuousWithinAt_totalSpace ..
 
 Depends on / 依赖: FiberBundle, FiberBundle.continuousWithinAt_totalSpace, continuousWithinAt_totalSpace
@@ -649,7 +649,7 @@ theorem continuousAt_hom_bundle
 
 中文:
 定理 continuousAt_hom_bundle
-  结论: {M : 类型} [TopologicalSpace M]
+  结论: {M : 类型} [拓扑空间 M]
   证明: FiberBundle.continuousAt_totalSpace ..
 
 Depends on / 依赖: FiberBundle, FiberBundle.continuousAt_totalSpace, continuousAt_totalSpace
@@ -856,7 +856,7 @@ lemma Continuous.clm_bundle_apply
   exact hϕ.clm_bundle_apply hv
 
 中文:
-引理 Continuous.clm_bundle_apply
+引理 连续.clm_bundle_apply
   证明: by
   simp only [← continuousOn_univ] at hϕ hv ⊢
   exact hϕ.clm_bundle_apply hv
@@ -944,7 +944,7 @@ lemma Continuous.clm_bundle_apply₂
   exact hψ.clm_bundle_apply₂ hv hw
 
 中文:
-引理 Continuous.clm_bundle_apply₂
+引理 连续.clm_bundle_apply₂
   证明: by
   simp only [← continuousOn_univ] at hψ hv hw ⊢
   exact hψ.clm_bundle_apply₂ hv hw

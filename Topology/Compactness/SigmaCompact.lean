@@ -38,7 +38,7 @@ definition IsSigmaCompact
 
 中文:
 定义 IsSigmaCompact
-  签名: (s : Set X)
+  签名: (s : 集合 X)
   定义体: exists K : Nat -> Set X, (forall n, IsCompact (K n)) ∧ ⋃ n, K n = s
 
 Depends on / 依赖: IsCompact
@@ -56,8 +56,8 @@ lemma IsCompact.isSigmaCompact
   proof: ⟨fun _ => s, fun _ => hs, iUnion_const _⟩
 
 中文:
-引理 IsCompact.isSigmaCompact
-  条件: {s : Set X} (hs : IsCompact s)
+引理 是紧集.isSigmaCompact
+  条件: {s : 集合 X} (hs : 是紧集 s)
   结论: IsSigmaCompact s
   证明: ⟨fun _ => s, fun _ => hs, iUnion_const _⟩
 
@@ -78,7 +78,7 @@ lemma isSigmaCompact_empty
 
 中文:
 引理 isSigmaCompact_empty
-  结论: IsSigmaCompact (∅ : Set X)
+  结论: IsSigmaCompact (∅ : 集合 X)
   证明: IsCompact.isSigmaCompact isCompact_empty
 
 Depends on / 依赖: IsCompact, IsCompact.isSigmaCompact, isCompact_empty, isSigmaCompact
@@ -101,7 +101,7 @@ lemma isSigmaCompact_iUnion_of_isCompact
 
 中文:
 引理 isSigmaCompact_iUnion_of_isCompact
-  结论: [hι : Countable ι] (s : ι -> Set X)
+  结论: [hι : 可数 ι] (s : ι -> 集合 X)
   证明: by
   rcases isEmpty_or_nonempty ι
   · simp only [iUnion_of_empty, isSigmaCompact_empty]
@@ -132,7 +132,7 @@ lemma isSigmaCompact_sUnion_of_isCompact
 
 中文:
 引理 isSigmaCompact_sUnion_of_isCompact
-  结论: {S : Set (Set X)} (hc : Set.Countable S)
+  结论: {S : 集合 (集合 X)} (hc : 集合.可数 S)
   证明: by
   have : Countable S := countable_coe_iff.mpr hc
   rw [sUnion_eq_iUnion]
@@ -163,7 +163,7 @@ lemma isSigmaCompact_iUnion
 
 中文:
 引理 isSigmaCompact_iUnion
-  结论: [Countable ι] (s : ι -> Set X)
+  结论: [可数 ι] (s : ι -> 集合 X)
   证明: by
   -- Choose a decomposition s_i = ⋃ K_i,j for each i.
   choose K hcomp hcov using fun i => hcomp i
@@ -198,7 +198,7 @@ lemma isSigmaCompact_sUnion
 
 中文:
 引理 isSigmaCompact_sUnion
-  结论: (S : Set (Set X)) (hc : Set.Countable S)
+  结论: (S : 集合 (集合 X)) (hc : 集合.可数 S)
   证明: by
   have : Countable S := countable_coe_iff.mpr hc
   apply sUnion_eq_iUnion.symm ▸ isSigmaCompact_iUnion _ hcomp
@@ -223,7 +223,7 @@ lemma isSigmaCompact_biUnion
 
 中文:
 引理 isSigmaCompact_biUnion
-  结论: {s : Set ι} {S : ι -> Set X} (hc : Set.Countable s)
+  结论: {s : 集合 ι} {S : ι -> 集合 X} (hc : 集合.可数 s)
   证明: by
   have : Countable ↑s := countable_coe_iff.mpr hc
   rw [biUnion_eq_iUnion]
@@ -252,7 +252,7 @@ lemma IsSigmaCompact.of_isClosed_subset
 
 中文:
 引理 IsSigmaCompact.of_isClosed_subset
-  结论: {s t : Set X} (ht : IsSigmaCompact t)
+  结论: {s t : 集合 X} (ht : IsSigmaCompact t)
   证明: by
   rcases ht with ⟨K, hcompact, hcov⟩
   refine ⟨(fun n => s inter (K n)), fun n => (hcompact n).inter_left hs, ?_⟩
@@ -281,7 +281,7 @@ lemma IsSigmaCompact.image_of_continuousOn
 
 中文:
 引理 IsSigmaCompact.image_of_continuousOn
-  结论: {f : X -> Y} {s : Set X} (hs : IsSigmaCompact s)
+  结论: {f : X -> Y} {s : 集合 X} (hs : IsSigmaCompact s)
   证明: by
   rcases hs with ⟨K, hcompact, hcov⟩
   refine ⟨fun n => f '' K n, ?_, hcov.symm ▸ image_iUnion.symm⟩
@@ -304,8 +304,8 @@ lemma IsSigmaCompact.image
   proof: hs.image_of_continuousOn hf.continuousOn
 
 中文:
-引理 IsSigmaCompact.image
-  条件: {f : X -> Y} (hf : Continuous f) {s : Set X} (hs : IsSigmaCompact s)
+引理 IsSigmaCompact.像
+  条件: {f : X -> Y} (hf : 连续 f) {s : 集合 X} (hs : IsSigmaCompact s)
   证明: hs.image_of_continuousOn hf.continuousOn
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hs.image_of_continuousOn, image_of_continuousOn
@@ -328,8 +328,8 @@ lemma Topology.IsInducing.isSigmaCompact_iff
     -- Since f is inducing, each K n is compact iff L n is.
 
 中文:
-引理 Topology.IsInducing.isSigmaCompact_iff
-  结论: {f : X -> Y} {s : Set X}
+引理 拓扑.是Inducing.isSigmaCompact_iff
+  结论: {f : X -> Y} {s : 集合 X}
   证明: by
   constructor
   · exact fun h => h.image hf.continuous
@@ -368,8 +368,8 @@ lemma Topology.IsEmbedding.isSigmaCompact_iff
   proof: hf.isInducing.isSigmaCompact_iff
 
 中文:
-引理 Topology.IsEmbedding.isSigmaCompact_iff
-  结论: {f : X -> Y} {s : Set X}
+引理 拓扑.是嵌入.isSigmaCompact_iff
+  结论: {f : X -> Y} {s : 集合 X}
   证明: hf.isInducing.isSigmaCompact_iff
 
 Depends on / 依赖: hf.isInducing.isSigmaCompact_iff, isInducing, isSigmaCompact_iff
@@ -387,8 +387,8 @@ lemma Subtype.isSigmaCompact_iff
   proof: IsEmbedding.subtypeVal.isSigmaCompact_iff
 
 中文:
-引理 Subtype.isSigmaCompact_iff
-  条件: {p : X -> 命题} {s : Set { a // p a }}
+引理 子类型.isSigmaCompact_iff
+  条件: {p : X -> 命题} {s : 集合 { a // p a }}
   证明: IsEmbedding.subtypeVal.isSigmaCompact_iff
 
 Depends on / 依赖: IsEmbedding, IsEmbedding.subtypeVal.isSigmaCompact_iff, isSigmaCompact_iff, subtypeVal
@@ -407,10 +407,10 @@ class SigmaCompactSpace
     - isSigmaCompact_univ : IsSigmaCompact (univ : Set X)
 
 中文:
-类 SigmaCompactSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 SigmaCompact空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - isSigmaCompact_univ : IsSigmaCompact (univ : Set X)
+    - isSigmaCompact_univ : IsSigmaCompact (univ : 集合 X)
 -/
 class SigmaCompactSpace (X : Type*) [TopologicalSpace X] : Prop where
   /-- In a σ-compact space, `Set.univ` is a σ-compact set. -/
@@ -426,7 +426,7 @@ lemma isSigmaCompact_univ_iff
 
 中文:
 引理 isSigmaCompact_univ_iff
-  结论: IsSigmaCompact (univ : Set X) ↔ SigmaCompactSpace X
+  结论: IsSigmaCompact (univ : 集合 X) ↔ SigmaCompact空间 X
   证明: ⟨fun h => ⟨h⟩, fun h => h.1⟩
 -/
 lemma isSigmaCompact_univ_iff : IsSigmaCompact (univ : Set X) ↔ SigmaCompactSpace X :=
@@ -443,8 +443,8 @@ lemma isSigmaCompact_univ
 
 中文:
 引理 isSigmaCompact_univ
-  条件: [h : SigmaCompactSpace X]
-  结论: IsSigmaCompact (univ : Set X)
+  条件: [h : SigmaCompact空间 X]
+  结论: IsSigmaCompact (univ : 集合 X)
   证明: isSigmaCompact_univ_iff.mpr h
 
 Depends on / 依赖: isSigmaCompact_univ_iff, isSigmaCompact_univ_iff.mpr
@@ -461,7 +461,7 @@ lemma SigmaCompactSpace_iff_exists_compact_covering
   rw [← isSigmaCompact_univ_iff]; rw [IsSigmaCompact]
 
 中文:
-引理 SigmaCompactSpace_iff_exists_compact_covering
+引理 SigmaCompactSpace_iff_存在_compact_covering
   证明: by
   rw [← isSigmaCompact_univ_iff]; rw [IsSigmaCompact]
 
@@ -480,8 +480,8 @@ lemma SigmaCompactSpace.exists_compact_covering
   proof: SigmaCompactSpace_iff_exists_compact_covering.mp h
 
 中文:
-引理 SigmaCompactSpace.exists_compact_covering
-  条件: [h : SigmaCompactSpace X]
+引理 SigmaCompact空间.存在_compact_covering
+  条件: [h : SigmaCompact空间 X]
   证明: SigmaCompactSpace_iff_exists_compact_covering.mp h
 
 Depends on / 依赖: SigmaCompactSpace_iff_exists_compact_covering, SigmaCompactSpace_iff_exists_compact_covering.mp
@@ -500,7 +500,7 @@ lemma isSigmaCompact_range
 
 中文:
 引理 isSigmaCompact_range
-  条件: {f : X -> Y} (hf : Continuous f) [SigmaCompactSpace X]
+  条件: {f : X -> Y} (hf : 连续 f) [SigmaCompact空间 X]
   证明: image_univ ▸ isSigmaCompact_univ.image hf
 
 Depends on / 依赖: image_univ, isSigmaCompact_univ, isSigmaCompact_univ.image
@@ -520,7 +520,7 @@ lemma isSigmaCompact_iff_isSigmaCompact_univ
 
 中文:
 引理 isSigmaCompact_iff_isSigmaCompact_univ
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: by
   rw [Subtype.isSigmaCompact_iff]; rw [image_univ]; rw [Subtype.range_coe]
 
@@ -540,7 +540,7 @@ lemma isSigmaCompact_iff_sigmaCompactSpace
 
 中文:
 引理 isSigmaCompact_iff_sigmaCompactSpace
-  条件: {s : Set X}
+  条件: {s : 集合 X}
   证明: isSigmaCompact_iff_isSigmaCompact_univ.trans isSigmaCompact_univ_iff
 
 Depends on / 依赖: isSigmaCompact_iff_isSigmaCompact_univ, isSigmaCompact_iff_isSigmaCompact_univ.trans, isSigmaCompact_univ_iff
@@ -562,8 +562,8 @@ theorem SigmaCompactSpace.of_countable
   proof: ⟨(exists_seq_cover_iff_countable ⟨_, isCompact_empty⟩).2 ⟨S, Hc, Hcomp, HU⟩⟩
 
 中文:
-定理 SigmaCompactSpace.of_countable
-  结论: (S : Set (Set X)) (Hc : S.Countable)
+定理 SigmaCompact空间.of_countable
+  结论: (S : 集合 (集合 X)) (Hc : S.可数)
   证明: ⟨(exists_seq_cover_iff_countable ⟨_, isCompact_empty⟩).2 ⟨S, Hc, Hcomp, HU⟩⟩
 
 Depends on / 依赖: exists_seq_cover_iff_countable, isCompact_empty
@@ -599,7 +599,7 @@ definition compactCovering
 
 中文:
 定义 compactCovering
-  签名: : 自然数 -> Set X
+  签名: : 自然数 -> 集合 X
   定义体: accumulate exists_compact_covering.choose
 
 Depends on / 依赖: accumulate, exists_compact_covering, exists_compact_covering.choose
@@ -619,7 +619,7 @@ theorem isCompact_compactCovering
 中文:
 定理 isCompact_compactCovering
   条件: (n : 自然数)
-  结论: IsCompact (compactCovering X n)
+  结论: 是紧集 (compactCovering X n)
   证明: isCompact_accumulate (Classical.choose_spec SigmaCompactSpace.exists_compact_covering).1 n
 
 Depends on / 依赖: Classical, Classical.choose_spec, SigmaCompactSpace, SigmaCompactSpace.exists_compact_covering, choose_spec, exists_compact_covering, isCompact_accumulate
@@ -705,7 +705,7 @@ theorem exists_mem_compactCovering
   proof: iUnion_eq_univ_iff.mp (iUnion_compactCovering X) x
 
 中文:
-定理 exists_mem_compactCovering
+定理 存在_mem_compactCovering
   条件: (x : X)
   结论: 存在 n, x in compactCovering X n
   证明: iUnion_eq_univ_iff.mp (iUnion_compactCovering X) x
@@ -727,8 +727,8 @@ instance [SigmaCompactSpace
         iUnion_compactCovering, univ_prod_univ]⟩⟩
 
 中文:
-实例 [SigmaCompactSpace
-  签名: Y] : SigmaCompactSpace (X × Y)
+实例 [SigmaCompact空间
+  签名: Y] : SigmaCompact空间 (X × Y)
   定义体: ⟨⟨fun n => compactCovering X n ×ˢ compactCovering Y n, fun _ =>
       (isCompact_compactCovering _ _).prod (isCompact_compactCovering _ _), by
       simp only [iUnion_prod_of_monotone (compactCovering_subset X) (compactCovering_subset Y),
@@ -756,7 +756,7 @@ instance [Finite
   · exact fun i => compactCovering_subset (X i)
 
 中文:
-实例 [Finite
+实例 [有限
   签名: ι] {X
   定义体: by
   refine ⟨⟨fun n => Set.pi univ fun i => compactCovering (X i) n,
@@ -787,8 +787,8 @@ instance [SigmaCompactSpace
       by simp only [iUnion_union_distrib, ← image_iUnion, iUnion_compactCovering
 
 中文:
-实例 [SigmaCompactSpace
-  签名: Y] : SigmaCompactSpace (X oplus Y)
+实例 [SigmaCompact空间
+  签名: Y] : SigmaCompact空间 (X oplus Y)
   定义体: ⟨⟨fun n => Sum.inl '' compactCovering X n union Sum.inr '' compactCovering Y n, fun n =>
       ((isCompact_compactCovering X n).image continuous_inl).union
         ((isCompact_compactCovering Y n).image continuous_inr),
@@ -818,7 +818,7 @@ instance [Countable
       exact (isCompact_compactCovering _
 
 中文:
-实例 [Countable
+实例 [可数
   签名: ι] {X
   定义体: by
   cases isEmpty_or_nonempty ι
@@ -855,7 +855,7 @@ lemma Topology.IsClosedEmbedding.sigmaCompactSpace
       rw [← preimage_iUnion]; rw [iUnion_compactCovering]; rw [preimage_univ]⟩⟩
 
 中文:
-引理 Topology.IsClosedEmbedding.sigmaCompactSpace
+引理 拓扑.是闭嵌入.sigmaCompactSpace
   结论: {e : Y -> X}
   证明: ⟨⟨fun n => e ⁻¹' compactCovering X n, fun _ =>
       he.isCompact_preimage (isCompact_compactCovering _ _), by
@@ -877,9 +877,9 @@ theorem IsClosed.sigmaCompactSpace
   proof: hs.isClosedEmbedding_subtypeVal.sigmaCompactSpace
 
 中文:
-定理 IsClosed.sigmaCompactSpace
-  条件: {s : Set X} (hs : IsClosed s)
-  结论: SigmaCompactSpace s
+定理 是闭集.sigmaCompactSpace
+  条件: {s : 集合 X} (hs : 是闭集 s)
+  结论: SigmaCompact空间 s
   证明: hs.isClosedEmbedding_subtypeVal.sigmaCompactSpace
 
 Depends on / 依赖: hs.isClosedEmbedding_subtypeVal.sigmaCompactSpace, isClosedEmbedding_subtypeVal, sigmaCompactSpace
@@ -896,8 +896,8 @@ instance [SigmaCompactSpace
   body: IsClosedEmbedding.uliftDown.sigmaCompactSpace
 
 中文:
-实例 [SigmaCompactSpace
-  签名: Y] : SigmaCompactSpace (ULift.{u} Y)
+实例 [SigmaCompact空间
+  签名: Y] : SigmaCompact空间 (类型层提升.{u} Y)
   定义体: IsClosedEmbedding.uliftDown.sigmaCompactSpace
 
 Depends on / 依赖: IsClosedEmbedding, IsClosedEmbedding.uliftDown.sigmaCompactSpace, sigmaCompactSpace, uliftDown
@@ -919,8 +919,8 @@ theorem LocallyFinite.countable_univ
   exact mem_iUnion.2 ⟨n, x, hx, hn⟩
 
 中文:
-定理 LocallyFinite.countable_univ
-  结论: {f : ι -> Set X} (hf : LocallyFinite f)
+定理 局部有限.countable_univ
+  结论: {f : ι -> 集合 X} (hf : 局部有限 f)
   证明: by
   have := fun n => hf.finite_nonempty_inter_compact (isCompact_compactCovering X n)
   refine (countable_iUnion fun n => (this n).countable).mono fun i _ => ?_
@@ -949,7 +949,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def LocallyFinite.encodable {ι : 类型} {f : ι -> Set X}
+  签名: def 局部有限.encodable {ι : 类型} {f : ι -> 集合 X}
   定义体: @Encodable.ofEquiv _ _ (hf.countable_univ hne).toEncodable (Equiv.Set.univ _).symm
 -/
 protected noncomputable def LocallyFinite.encodable {ι : Type*} {f : ι -> Set X}
@@ -972,7 +972,7 @@ theorem countable_cover_nhdsWithin_of_sigmaCompact
 
 中文:
 定理 countable_cover_nhdsWithin_of_sigmaCompact
-  结论: {f : X -> Set X} {s : Set X} (hs : IsClosed s)
+  结论: {f : X -> 集合 X} {s : 集合 X} (hs : 是闭集 s)
   证明: by
   simp only [nhdsWithin, mem_inf_principal] at hf
   choose t ht hsub using fun n =>
@@ -1009,7 +1009,7 @@ theorem countable_cover_nhds_of_sigmaCompact
 
 中文:
 定理 countable_cover_nhds_of_sigmaCompact
-  条件: {f : X -> Set X} (hf : 对任意 x, f x in 𝓝 x)
+  条件: {f : X -> 集合 X} (hf : 对任意 x, f x in 𝓝 x)
   证明: by
   simp only [← nhdsWithin_univ] at hf
   rcases countable_cover_nhdsWithin_of_sigmaCompact isClosed_univ fun x _ => hf x with
@@ -1039,11 +1039,11 @@ structure CompactExhaustion
     - iUnion_eq' : ⋃ n, toFun n = univ
 
 中文:
-结构 CompactExhaustion
-  参数: (X : 类型) [TopologicalSpace X]
+结构 余mpactExhaustion
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (4 个):
-    - toFun : 自然数 -> Set X
-    - isCompact' : 对任意 n, IsCompact (toFun n)
+    - toFun : 自然数 -> 集合 X
+    - isCompact' : 对任意 n, 是紧集 (toFun n)
     - subset_interior_succ' : 对任意 n, toFun n subseteq interior (toFun (n + 1))
     - iUnion_eq' : ⋃ n, toFun n = univ
 -/
@@ -1071,7 +1071,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (CompactExhaustion X) 自然数 (Set X)
+  签名: 函数状 (余mpactExhaustion X) 自然数 (集合 X)
   定义体: toFun
   coe_injective | ⟨_, _, _, _⟩, ⟨_, _, _, _⟩, rfl => rfl
 -/
@@ -1090,7 +1090,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderHomClass (CompactExhaustion X) 自然数 (Set X)
+  签名: 序态射类 (余mpactExhaustion X) 自然数 (集合 X)
   定义体: monotone_nat_of_le_succ
     (fun n => (f.subset_interior_succ' n).trans interior_subset) h
 
@@ -1130,7 +1130,7 @@ theorem isCompact
 中文:
 定理 isCompact
   条件: (n : 自然数)
-  结论: IsCompact (K n)
+  结论: 是紧集 (K n)
   证明: K.isCompact' n
 -/
 protected theorem isCompact (n : Nat) : IsCompact (K n) :=
@@ -1246,7 +1246,7 @@ theorem exists_mem
   proof: iUnion_eq_univ_iff.1 K.iUnion_eq x
 
 中文:
-定理 exists_mem
+定理 存在_mem
   条件: (x : X)
   结论: 存在 n, x in K n
   证明: iUnion_eq_univ_iff.1 K.iUnion_eq x
@@ -1268,7 +1268,7 @@ theorem exists_mem_nhds
 exact ⟨n + 1, mem_interior_iff_mem_nhds.mp K.subset_interior_succ n hn⟩
 
 中文:
-定理 exists_mem_nhds
+定理 存在_mem_nhds
   条件: (x : X)
   结论: 存在 n, K n in 𝓝 x
   证明: by
@@ -1297,8 +1297,8 @@ theorem exists_superset_of_isCompact
 ·
 
 中文:
-定理 exists_superset_of_isCompact
-  条件: {s : Set X} (hs : IsCompact s)
+定理 存在_superset_of_isCompact
+  条件: {s : 集合 X} (hs : 是紧集 s)
   结论: 存在 n, s subseteq K n
   证明: by
   suffices exists n, s subseteq interior (K n) from this.imp fun _ => (Subset.trans · interior_subset)
@@ -1400,7 +1400,7 @@ definition shiftr
 
 中文:
 定义 shiftr
-  签名: : CompactExhaustion X where
+  签名: : 余mpactExhaustion X where
   定义体: Nat.casesOn n ∅ K
   isCompact' n := Nat.casesOn n isCompact_empty K.isCompact
   subset_interior_succ' n := Nat.casesOn n (empty_subset _) K.subset_interior_succ
@@ -1487,7 +1487,7 @@ definition choice
 
 中文:
 定义 choice
-  签名: (X : 类型) [TopologicalSpace X] [WeaklyLocallyCompactSpace X]
+  签名: (X : 类型) [拓扑空间 X] [WeaklyLocallyCompact空间 X]
   定义体: by
   apply Classical.choice
   let K : Nat -> { s : Set X // IsCompact s } := fun n =>
@@ -1520,8 +1520,8 @@ instance [SigmaCompactSpace
   body: ⟨CompactExhaustion.choice X⟩
 
 中文:
-实例 [SigmaCompactSpace
-  签名: X] [WeaklyLocallyCompactSpace X] :
+实例 [SigmaCompact空间
+  签名: X] [WeaklyLocallyCompact空间 X] :
   定义体: ⟨CompactExhaustion.choice X⟩
 
 Depends on / 依赖: CompactExhaustion, CompactExhaustion.choice, choice

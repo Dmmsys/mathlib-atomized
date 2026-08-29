@@ -54,7 +54,7 @@ theorem nonUnitalAlgHom_ext
 
 中文:
 定理 nonUnitalAlgHom_ext
-  结论: [DistribMulAction R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
+  结论: [分配乘法作用 R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
   证明: NonUnitalAlgHom.to_distribMulActionHom_injective
     MonoidAlgebra.distribMulActionHom_ext' fun a => DistribMulActionHom.ext_ring (h a)
 
@@ -77,7 +77,7 @@ theorem nonUnitalAlgHom_ext'
 
 中文:
 定理 nonUnitalAlgHom_ext'
-  结论: [DistribMulAction R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
+  结论: [分配乘法作用 R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
   证明: nonUnitalAlgHom_ext R DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, nonUnitalAlgHom_ext
@@ -106,7 +106,7 @@ definition liftMagma
 
 中文:
 定义 liftMagma
-  签名: [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+  签名: [模 R A] [标量塔 R A A] [标量交换类 R A A]
   定义体: {
     toAddMonoidHom :=
       (liftAddHom fun x => (smulAddHom R A).flip (f x)).comp coeffAddEquiv.toAddMonoidHom
@@ -156,7 +156,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra R A[M] where
+  签名: : 代数 R A[M] where
   定义体: singleOneRingHom.comp (algebraMap R A)
   smul_def' r a := by ext; simp [coeff_single_one_mul, Algebra.smul_def]
   commutes' r f := by ext; simp [coeff_single_one_mul, coeff_mul_single_one, Algebra.commutes]
@@ -261,7 +261,7 @@ instance isLocalHom_singleOneAlgHom
 
 中文:
 实例 isLocalHom_singleOneAlgHom
-  签名: : IsLocalHom (singleOneAlgHom : A ->ₐ[R] A[M]) where
+  签名: : 是Local态射 (singleOneAlgHom : A ->ₐ[R] A[M]) where
   定义体: isLocalHom_singleOneRingHom.map_nonunit
 
 @[to_additive (dont_translate := R)]
@@ -282,7 +282,7 @@ instance isLocalHom_algebraMap
 
 中文:
 实例 isLocalHom_algebraMap
-  签名: [IsLocalHom (algebraMap R A)]
+  签名: [是Local态射 (algebraMap R A)]
   定义体: .of_map _ _ isLocalHom_singleOneAlgHom (R := R).map_nonunit _ hx
 
 Depends on / 依赖: isLocalHom_singleOneAlgHom, map_nonunit, of_map
@@ -306,7 +306,7 @@ definition uniqueAlgEquiv
 
 中文:
 定义 uniqueAlgEquiv
-  签名: [Subsingleton M]
+  签名: [子单例 M]
   定义体: uniqueRingEquiv _
   commutes' r := by simp
 
@@ -329,7 +329,7 @@ lemma uniqueAlgEquiv_symm_apply
 
 中文:
 引理 uniqueAlgEquiv_symm_apply
-  条件: [Subsingleton M] (a : A)
+  条件: [子单例 M] (a : A)
   证明: by ext; simp [uniqueAlgEquiv]
 
 Depends on / 依赖: uniqueAlgEquiv
@@ -349,7 +349,7 @@ lemma coeff_uniqueAlgEquiv_symm
 
 中文:
 引理 coeff_uniqueAlgEquiv_symm
-  条件: [Subsingleton M] (a : A) (m : M)
+  条件: [子单例 M] (a : A) (m : M)
   证明: by simp [Subsingleton.elim m 1]
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -369,7 +369,7 @@ lemma toRingEquiv_uniqueAlgEquiv
 
 中文:
 引理 toRingEquiv_uniqueAlgEquiv
-  条件: [Unique M]
+  条件: [唯一 M]
   证明: rfl
 -/
 lemma toRingEquiv_uniqueAlgEquiv [Unique M] :
@@ -388,7 +388,7 @@ lemma toRingEquiv_symm_uniqueAlgEquiv
 
 中文:
 引理 toRingEquiv_symm_uniqueAlgEquiv
-  条件: [Unique M]
+  条件: [唯一 M]
   证明: rfl
 -/
 lemma toRingEquiv_symm_uniqueAlgEquiv [Unique M] :
@@ -497,7 +497,7 @@ definition mapDomainNonUnitalAlgHom
 
 中文:
 定义 mapDomainNonUnitalAlgHom
-  签名: [CommSemiring R] [Semiring A] [Algebra R A]
+  签名: [交换半环 R] [半环 A] [代数 R A]
   定义体: mapDomainNonUnitalRingHom A f
   map_mul' := mapDomain_mul f
   map_smul' _ _ := mapDomain_smul ..
@@ -523,7 +523,7 @@ theorem mapDomain_algebraMap
 
 中文:
 定理 mapDomain_algebraMap
-  结论: {F : 类型} [CommSemiring R] [Semiring A] [Algebra R A]
+  结论: {F : 类型} [交换半环 R] [半环 A] [代数 R A]
   证明: by
   simp only [coe_algebraMap, mapDomain_single, map_one, (· ∘ ·)]
 
@@ -856,7 +856,7 @@ alias lift_mapRangeRingHom_algebraMap := lift_mapRingHom_algebraMap
 
 中文:
 定理 lift_mapRingHom_algebraMap
-  结论: [CommSemiring S] [Algebra S A]
+  结论: [交换半环 S] [代数 S A]
   证明: by
   induction x using induction with
   | zero => simp
@@ -1644,7 +1644,7 @@ definition GroupSMul.linearMap
 
 中文:
 定义 GroupSMul.linearMap
-  签名: [Monoid M] [CommSemiring R] (V : 类型) [AddCommMonoid V] [Module R V]
+  签名: [幺半群 M] [交换半环 R] (V : 类型) [加法交换幺半群 V] [模 R V]
   定义体: single g (1 : R) • v
   map_add' x y := smul_add (single g (1 : R)) x y
   map_smul' _c _x := smul_algebra_smul_comm _ _ _
@@ -1669,7 +1669,7 @@ theorem GroupSMul.linearMap_apply
 
 中文:
 定理 GroupSMul.linearMap_apply
-  结论: [Monoid M] [CommSemiring R] (V : 类型) [AddCommMonoid V]
+  结论: [幺半群 M] [交换半环 R] (V : 类型) [加法交换幺半群 V]
   证明: rfl
 -/
 theorem GroupSMul.linearMap_apply [Monoid M] [CommSemiring R] (V : Type*) [AddCommMonoid V]
@@ -1769,7 +1769,7 @@ scoped[AlgebraMonoidAlgebra] attribute [instance] MonoidAlgebra.algebraMonoidAlg
 
 中文:
 缩写 algebraMonoidAlgebra
-  签名: : Algebra R[M] S[M]
+  签名: : 代数 R[M] S[M]
   定义体: (mapRingHom M (algebraMap R S)).toAlgebra
 
 scoped[AlgebraMonoidAlgebra] attribute [instance] MonoidAlgebra.algebraMonoidAlgebra
@@ -1819,7 +1819,7 @@ scoped[AlgebraMonoidAlgebra] attribute [instance] MonoidAlgebra.isScalarTower_mo
 
 中文:
 引理 isScalarTower_monoidAlgebra
-  结论: [CommSemiring T] [Algebra R T] [Algebra S T]
+  结论: [交换半环 T] [代数 R T] [代数 S T]
   证明: .of_algebraMap_eq' (mapAlgHom _ (IsScalarTower.toAlgHom R S T)).comp_algebraMap.symm
 
 scoped[AlgebraMonoidAlgebra] attribute [instance] MonoidAlgebra.isScalarTower_monoidAlgebra
@@ -1856,7 +1856,7 @@ theorem nonUnitalAlgHom_ext'
 
 中文:
 定理 nonUnitalAlgHom_ext'
-  结论: [DistribMulAction R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
+  结论: [分配乘法作用 R A] {φ₁ φ₂ : R[M] ->ₙₐ[R] A}
   证明: nonUnitalAlgHom_ext R DFunLike.congr_fun h
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, nonUnitalAlgHom_ext
@@ -1885,7 +1885,7 @@ definition liftMagma
 
 中文:
 定义 liftMagma
-  签名: [Module R A] [IsScalarTower R A A] [SMulCommClass R A A]
+  签名: [模 R A] [标量塔 R A A] [标量交换类 R A A]
   定义体: {
     toAddMonoidHom :=
       (liftAddHom fun x => (smulAddHom R A).flip (f <| .ofAdd x)).comp coeffAddEquiv.toAddMonoidHom
@@ -2203,7 +2203,7 @@ alias lift_mapRangeRingHom_algebraMap := lift_mapRingHom_algebraMap
 
 中文:
 引理 lift_mapRingHom_algebraMap
-  结论: [CommSemiring S] [Algebra S A] [Algebra R S] [IsScalarTower R S A]
+  结论: [交换半环 S] [代数 S A] [代数 R S] [标量塔 R S A]
   证明: by
   induction x using induction with
   | zero => simp
@@ -2239,7 +2239,7 @@ definition domCongrAut
 
 中文:
 定义 domCongrAut
-  签名: : AddAut M ->+ Additive (A[M] ≃ₐ[R] A[M]) where
+  签名: : AddAut M ->+ 加性 (A[M] ≃ₐ[R] A[M]) where
   定义体: .ofMul (AddMonoidAlgebra.domCongr R A f)
   map_zero' := by ext; simp [AddAut.zero_def]
   map_add' _ _ := by ext; simp [AddAut.add_def]
@@ -2306,7 +2306,7 @@ definition toMultiplicativeAlgEquiv
 
 中文:
 定义 toMultiplicativeAlgEquiv
-  签名: : AddMonoidAlgebra A M ≃ₐ[R] MonoidAlgebra A (Multiplicative M) where
+  签名: : 加法幺半群代数 A M ≃ₐ[R] 幺半群代数 A (Multiplicative M) where
   定义体: toMultiplicative A M
   commutes' r := by ext; simp
 
@@ -2357,7 +2357,7 @@ definition toAdditiveAlgEquiv
 
 中文:
 定义 toAdditiveAlgEquiv
-  签名: : MonoidAlgebra A M ≃ₐ[R] AddMonoidAlgebra A (Additive M) where
+  签名: : 幺半群代数 A M ≃ₐ[R] 加法幺半群代数 A (加性 M) where
   定义体: toAdditive A M
   commutes' r := by simp [toAdditive]
 

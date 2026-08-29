@@ -66,11 +66,11 @@ structure ContinuousLinearMap
     - cont : Continuous toFun  [default: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 中文:
-结构 ContinuousLinearMap
-  参数: {R : 类型} {S : 类型} [Semiring R] [Semiring S] (σ : R ->+* S)
+结构 连续线性映射
+  参数: {R : 类型} {S : 类型} [半环 R] [半环 S] (σ : R ->+* S)
   继承: M ->ₛₗ[σ] M₂
   公理与运算 (1 个):
-    - cont : Continuous toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
+    - cont : 连续 toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 Depends on / 依赖: eta_expand, fun_prop
 -/
@@ -98,9 +98,9 @@ class ContinuousSemilinearMapClass
   (no additional axioms)
 
 中文:
-类 ContinuousSemilinearMapClass
-  参数: (F : 类型) {R S : outParam 类型} [Semiring R] [Semiring S]
-  继承: SemilinearMapClass F σ M M₂, ContinuousMapClass F M M₂
+类 连续半线性映射类
+  参数: (F : 类型) {R S : outParam 类型} [半环 R] [半环 S]
+  继承: 半线性映射类 F σ M M₂, 连续映射类 F M M₂
   (无附加公理)
 -/
 class ContinuousSemilinearMapClass (F : Type*) {R S : outParam Type*} [Semiring R] [Semiring S]
@@ -119,7 +119,7 @@ abbreviation ContinuousLinearMapClass
 
 中文:
 缩写 ContinuousLinearMapClass
-  签名: (F : 类型) (R : outParam 类型) [Semiring R]
+  签名: (F : 类型) (R : outParam 类型) [半环 R]
   定义体: ContinuousSemilinearMapClass F (RingHom.id R) M M₂
 
 Depends on / 依赖: ContinuousSemilinearMapClass, RingHom, RingHom.id
@@ -139,7 +139,7 @@ abbreviation StrongDual
 
 中文:
 缩写 StrongDual
-  签名: (R : 类型) [Semiring R] [TopologicalSpace R]
+  签名: (R : 类型) [半环 R] [拓扑空间 R]
   定义体: M ->L[R] R
 -/
 abbrev StrongDual (R : Type*) [Semiring R] [TopologicalSpace R]
@@ -170,7 +170,7 @@ instance LinearMap.coe
   body: ⟨toLinearMap⟩
 
 中文:
-实例 LinearMap.coe
+实例 线性映射.coe
   签名: : Coe (M₁ ->SL[σ₁₂] M₂) (M₁ ->ₛₗ[σ₁₂] M₂)
   定义体: ⟨toLinearMap⟩
 
@@ -192,7 +192,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
+  结论: 函数.单射 ((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂)
   证明: by
   intro f g H
   cases f
@@ -216,7 +216,7 @@ instance funLike
 
 中文:
 实例 funLike
-  签名: : FunLike (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+  签名: : 函数状 (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
   定义体: f.toLinearMap
   coe_injective _ _ h := coe_injective (DFunLike.coe_injective h)
 
@@ -311,7 +311,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: Continuous f
+  结论: 连续 f
   证明: f.2
 
 @[continuity, fun_prop]
@@ -334,7 +334,7 @@ theorem continuous_toLinearMap
 中文:
 定理 continuous_toLinearMap
   条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: Continuous f.toLinearMap
+  结论: 连续 f.toLinearMap
   证明: f.2
 
 @[simp]
@@ -355,7 +355,7 @@ theorem uniformContinuous
 
 中文:
 定理 uniformContinuous
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁] [UniformSpace E₂]
+  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
   证明: uniformContinuous_addMonoidHom_of_continuous f.continuous
 
 @[simp, norm_cast]
@@ -396,7 +396,7 @@ theorem coeFn_injective
 
 中文:
 定理 coeFn_injective
-  结论: @Function.Injective (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑)
+  结论: @函数.单射 (M₁ ->SL[σ₁₂] M₂) (M₁ -> M₂) (↑)
   证明: DFunLike.coe_injective
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective
@@ -640,7 +640,7 @@ lemma range_toLinearMap
 中文:
 引理 range_toLinearMap
   条件: (f : M₁ ->SL[σ₁₂] M₂)
-  结论: Set.range f.toLinearMap = Set.range f
+  结论: 集合.range f.toLinearMap = 集合.range f
   证明: by simp
 -/
 lemma range_toLinearMap (f : M₁ ->SL[σ₁₂] M₂) : Set.range f.toLinearMap = Set.range f := by simp
@@ -717,7 +717,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [Module R₁ M₂] (f : M₁ ->L[R₁] M₂) (c : R₁) (x : M₁)
+  条件: [模 R₁ M₂] (f : M₁ ->L[R₁] M₂) (c : R₁) (x : M₁)
   证明: by simp only [RingHom.id_apply, map_smulₛₗ]
 
 @[simp]
@@ -738,7 +738,7 @@ theorem map_smul_of_tower
 
 中文:
 定理 map_smul_of_tower
-  结论: {R S : 类型} [Semiring S] [SMul R M₁] [Module S M₁] [SMul R M₂]
+  结论: {R S : 类型} [半环 S] [标量乘法 R M₁] [模 S M₁] [标量乘法 R M₂]
   证明: LinearMap.CompatibleSMul.map_smul (f : M₁ ->ₗ[S] M₂) c x
 
 @[ext]
@@ -764,7 +764,7 @@ theorem ext_ring
 
 中文:
 定理 ext_ring
-  条件: [TopologicalSpace R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1)
+  条件: [拓扑空间 R₁] {f g : R₁ ->L[R₁] M₁} (h : f 1 = g 1)
   结论: f = g
   证明: coe_inj.1 LinearMap.ext_ring h
 
@@ -803,7 +803,7 @@ theorem eqOn_closure_span
 
 中文:
 定理 eqOn_closure_span
-  条件: [T2Space M₂] {s : Set M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : Set.EqOn f g s)
+  条件: [T2空间 M₂] {s : 集合 M₁} {f g : M₁ ->SL[σ₁₂] M₂} (h : 集合.EqOn f g s)
   证明: (LinearMap.eqOn_span' h).closure f.continuous g.continuous
 
 Depends on / 依赖: LinearMap, LinearMap.eqOn_span, closure, continuous, eqOn_span, f.continuous, g.continuous
@@ -822,7 +822,7 @@ theorem ext_on
 
 中文:
 定理 ext_on
-  结论: [T2Space M₂] {s : Set M₁} (hs : Dense (Submodule.span R₁ s : Set M₁))
+  结论: [T2空间 M₂] {s : 集合 M₁} (hs : 稠密 (子模.span R₁ s : 集合 M₁))
   证明: ext fun x => eqOn_closure_span h (hs x)
 
 Depends on / 依赖: eqOn_closure_span
@@ -840,8 +840,8 @@ theorem _root_.Submodule.topologicalClosure_map
   proof: image_closure_subset_closure_image f.continuous
 
 中文:
-定理 _root_.Submodule.topologicalClosure_map
-  结论: [RingHomSurjective σ₁₂] [TopologicalSpace R₁]
+定理 _root_.子模.topologicalClosure_map
+  结论: [RingHomSurjective σ₁₂] [拓扑空间 R₁]
   证明: image_closure_subset_closure_image f.continuous
 
 Depends on / 依赖: continuous, f.continuous, image_closure_subset_closure_image
@@ -864,8 +864,8 @@ theorem _root_.Submodule.topologicalClosure_mem_invtSubmodule
   exact (s.topologicalClosure_map f).trans (Submodule.topologicalClosure_mono hs)
 
 中文:
-定理 _root_.Submodule.topologicalClosure_mem_invtSubmodule
-  结论: [TopologicalSpace R₁]
+定理 _root_.子模.topologicalClosure_mem_invtSubmodule
+  结论: [拓扑空间 R₁]
   证明: by
   rw [Module.End.mem_invtSubmodule_iff_map_le] at hs ⊢
   exact (s.topologicalClosure_map f).trans (Submodule.topologicalClosure_mono hs)
@@ -925,7 +925,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul S₂ (M₁ ->SL[σ₁₂] M₂) where
+  签名: : 标量乘法 S₂ (M₁ ->SL[σ₁₂] M₂) where
   定义体: ⟨c • (f : M₁ ->ₛₗ[σ₁₂] M₂), (f.2.const_smul _ : Continuous fun x => c • f x)⟩
 
 Depends on / 依赖: Continuous, const_smul
@@ -945,7 +945,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSMulApply S₂ (M₁ ->SL[σ₁₂] M₂) M₁ M₂
+  签名: 是SMulApply S₂ (M₁ ->SL[σ₁₂] M₂) M₁ M₂
   定义体: rfl
 
 @[simp, norm_cast]
@@ -999,7 +999,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul S₂ T₂] [IsScalarTower S₂ T₂ M₂]
+  签名: [标量乘法 S₂ T₂] [标量塔 S₂ T₂ M₂]
   定义体: FunLike.isScalarTower
 
 Depends on / 依赖: FunLike, FunLike.isScalarTower, isScalarTower
@@ -1017,7 +1017,7 @@ instance smulCommClass
 
 中文:
 实例 smulCommClass
-  签名: [SMulCommClass S₂ T₂ M₂]
+  签名: [标量交换类 S₂ T₂ M₂]
   定义体: FunLike.smulCommClass
 
 Depends on / 依赖: FunLike, FunLike.smulCommClass, smulCommClass
@@ -1042,7 +1042,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: : MulAction S₂ (M₁ ->SL[σ₁₂] M₂)
+  签名: : 乘法作用 S₂ (M₁ ->SL[σ₁₂] M₂)
   定义体: fast_instance% FunLike.mulAction
 
 Depends on / 依赖: FunLike, FunLike.mulAction, fast_instance, mulAction
@@ -1061,7 +1061,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : Zero (M₁ ->SL[σ₁₂] M₂)
+  签名: : 零 (M₁ ->SL[σ₁₂] M₂)
   定义体: ⟨⟨0, continuous_zero⟩⟩
 
 Depends on / 依赖: continuous_zero
@@ -1079,7 +1079,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂
+  签名: 是ZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂
   定义体: rfl
 -/
 instance : IsZeroApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
@@ -1097,7 +1097,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited (M₁ ->SL[σ₁₂] M₂)
+  签名: : 可居 (M₁ ->SL[σ₁₂] M₂)
   定义体: ⟨0⟩
 
 @[simp]
@@ -1190,7 +1190,7 @@ instance uniqueOfLeft
 
 中文:
 实例 uniqueOfLeft
-  签名: [Subsingleton M₁]
+  签名: [子单例 M₁]
   定义体: coe_injective.unique
 
 Depends on / 依赖: coe_injective, coe_injective.unique, unique
@@ -1208,7 +1208,7 @@ instance uniqueOfRight
 
 中文:
 实例 uniqueOfRight
-  签名: [Subsingleton M₂]
+  签名: [子单例 M₂]
   定义体: coe_injective.unique
 
 Depends on / 依赖: coe_injective, coe_injective.unique, unique
@@ -1228,7 +1228,7 @@ theorem exists_ne_zero
   exact hf (ContinuousLinearMap.ext h)
 
 中文:
-定理 exists_ne_zero
+定理 存在_ne_zero
   条件: {f : M₁ ->SL[σ₁₂] M₂} (hf : f != 0)
   结论: 存在 x, f x != 0
   证明: by
@@ -1273,7 +1273,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (M₁ ->L[R₁] M₁)
+  签名: : 幺 (M₁ ->L[R₁] M₁)
   定义体: ⟨.id R₁ M₁⟩
 -/
 instance one : One (M₁ ->L[R₁] M₁) :=
@@ -1306,7 +1306,7 @@ instance instIsOneApply
 
 中文:
 实例 instIsOneApply
-  签名: : IsOneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where
+  签名: : 是OneApplyEqSelf (M₁ ->L[R₁] M₁) M₁ where
   定义体: rfl
 
 @[simp]
@@ -1329,7 +1329,7 @@ theorem id_apply
 中文:
 定理 id_apply
   条件: (x : M₁)
-  结论: ContinuousLinearMap.id R₁ M₁ x = x
+  结论: 连续线性映射.id R₁ M₁ x = x
   证明: rfl
 
 @[simp, norm_cast]
@@ -1349,7 +1349,7 @@ theorem coe_id
 
 中文:
 定理 coe_id
-  结论: (ContinuousLinearMap.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = LinearMap.id
+  结论: (连续线性映射.id R₁ M₁ : M₁ ->ₗ[R₁] M₁) = 线性映射.id
   证明: rfl
 
 @[simp, norm_cast]
@@ -1370,7 +1370,7 @@ theorem coe_id'
 
 中文:
 定理 coe_id'
-  结论: ⇑(ContinuousLinearMap.id R₁ M₁) = id
+  结论: ⇑(连续线性映射.id R₁ M₁) = id
   证明: rfl
 
 @[simp, norm_cast]
@@ -1469,7 +1469,7 @@ theorem coe_eq_id
 中文:
 定理 coe_eq_id
   条件: {f : M₁ ->L[R₁] M₁}
-  结论: (f : M₁ ->ₗ[R₁] M₁) = LinearMap.id ↔ f = .id _ _
+  结论: (f : M₁ ->ₗ[R₁] M₁) = 线性映射.id ↔ f = .id _ _
   证明: by
   rw [← coe_id]; rw [coe_inj]
 
@@ -1492,8 +1492,8 @@ instance [Nontrivial
     have ⟨x, hx⟩ := exists_ne (0 : M₁); hx (by simpa using DFunLike.congr_fun e.symm x)⟩
 
 中文:
-实例 [Nontrivial
-  签名: M₁] : Nontrivial (M₁ ->L[R₁] M₁)
+实例 [非平凡
+  签名: M₁] : 非平凡 (M₁ ->L[R₁] M₁)
   定义体: ⟨0, 1, fun e =>
     have ⟨x, hx⟩ := exists_ne (0 : M₁); hx (by simpa using DFunLike.congr_fun e.symm x)⟩
 
@@ -1517,7 +1517,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add (M₁ ->SL[σ₁₂] M₂)
+  签名: : 加法 (M₁ ->SL[σ₁₂] M₂)
   定义体: ⟨fun f g => ⟨f + g, f.2.add g.2⟩⟩
 -/
 instance add : Add (M₁ ->SL[σ₁₂] M₂) :=
@@ -1535,7 +1535,7 @@ instance instIsAddApply
 
 中文:
 实例 instIsAddApply
-  签名: : IsAddApply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
+  签名: : 是加法Apply (M₁ ->SL[σ₁₂] M₂) M₁ M₂ where
   定义体: rfl
 
 @[simp, norm_cast]
@@ -1612,7 +1612,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid (M₁ ->SL[σ₁₂] M₂)
+  签名: 加法幺半群 (M₁ ->SL[σ₁₂] M₂)
   定义体: fast_instance% FunLike.addMonoid
 
 Depends on / 依赖: FunLike, FunLike.addMonoid, addMonoid, fast_instance
@@ -1631,7 +1631,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid (M₁ ->SL[σ₁₂] M₂)
+  签名: : 加法交换幺半群 (M₁ ->SL[σ₁₂] M₂)
   定义体: fast_instance% FunLike.addCommMonoid
 
 @[simp, norm_cast]
@@ -1657,7 +1657,7 @@ theorem toLinearMap_sum
 
 中文:
 定理 toLinearMap_sum
-  条件: {ι : 类型} (t : Finset ι) (f : ι -> M₁ ->SL[σ₁₂] M₂)
+  条件: {ι : 类型} (t : 有限集 ι) (f : ι -> M₁ ->SL[σ₁₂] M₂)
   证明: map_sum (AddMonoidHom.mk ⟨((↑) : (M₁ ->SL[σ₁₂] M₂) -> M₁ ->ₛₗ[σ₁₂] M₂), rfl⟩ fun _ _ => rfl) _ _
 
 @[deprecated (since := "2026-05-20")] protected alias sum_apply := _root_.sum_apply
@@ -1981,7 +1981,7 @@ theorem comp_add
 
 中文:
 定理 comp_add
-  结论: [ContinuousAdd M₂] [ContinuousAdd M₃] (g : M₂ ->SL[σ₂₃] M₃)
+  结论: [连续加法 M₂] [连续加法 M₃] (g : M₂ ->SL[σ₂₃] M₃)
   证明: by
   ext
   simp
@@ -2006,7 +2006,7 @@ theorem add_comp
 
 中文:
 定理 add_comp
-  条件: [ContinuousAdd M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
+  条件: [连续加法 M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃) (f : M₁ ->SL[σ₁₂] M₂)
   证明: by
   ext
   simp
@@ -2030,7 +2030,7 @@ theorem comp_finsetSum
 
 中文:
 定理 comp_finsetSum
-  结论: {ι : 类型} {s : Finset ι}
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
   ext
   simp
@@ -2059,7 +2059,7 @@ theorem finsetSum_comp
 
 中文:
 定理 finsetSum_comp
-  结论: {ι : 类型} {s : Finset ι}
+  结论: {ι : 类型} {s : 有限集 ι}
   证明: by
   ext
   simp only [comp_apply, sum_apply]
@@ -2086,7 +2086,7 @@ theorem comp_assoc
 
 中文:
 定理 comp_assoc
-  结论: {R₄ : 类型} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
+  结论: {R₄ : 类型} [半环 R₄] [模 R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
   证明: rfl
 -/
 theorem comp_assoc {R₄ : Type*} [Semiring R₄] [Module R₄ M₄] {σ₁₄ : R₁ ->+* R₄} {σ₂₄ : R₂ ->+* R₄}
@@ -2107,7 +2107,7 @@ theorem cancel_left
 
 中文:
 定理 cancel_left
-  结论: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g)
+  结论: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : 函数.单射 g)
   证明: by
   ext x
   exact hg congr($h x)
@@ -2127,7 +2127,7 @@ lemma cancel_left'
 
 中文:
 引理 cancel_left'
-  条件: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : Function.Injective g)
+  条件: {g : M₂ ->SL[σ₂₃] M₃} {f₁ f₂ : M₁ ->SL[σ₁₂] M₂} (hg : 函数.单射 g)
   证明: ⟨cancel_left hg, congr_arg (fun f => g ∘SL f)⟩
 
 Depends on / 依赖: cancel_left, congr_arg
@@ -2146,7 +2146,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (M₁ ->L[R₁] M₁)
+  签名: : 乘法 (M₁ ->L[R₁] M₁)
   定义体: ⟨comp⟩
 -/
 instance instMul : Mul (M₁ ->L[R₁] M₁) :=
@@ -2162,7 +2162,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulApplyEqComp (M₁ ->L[R₁] M₁) M₁
+  签名: 是MulApplyEqComp (M₁ ->L[R₁] M₁) M₁
   定义体: rfl
 -/
 instance : IsMulApplyEqComp (M₁ ->L[R₁] M₁) M₁ where
@@ -2241,7 +2241,7 @@ instance monoidWithZero
 
 中文:
 实例 monoidWithZero
-  签名: : MonoidWithZero (M₁ ->L[R₁] M₁)
+  签名: : 带零幺半群 (M₁ ->L[R₁] M₁)
   定义体: fast_instance% FunLike.monoidWithZero
 
 @[deprecated (since := "2026-07-23")] alias coe_pow' := FunLike.coe_pow_eq_iterate
@@ -2294,8 +2294,8 @@ instance instNatCast
   body: n • (1 : M₁ ->L[R₁] M₁)
 
 中文:
-实例 instNatCast
-  签名: [ContinuousAdd M₁]
+实例 inst自然数Cast
+  签名: [连续加法 M₁]
   定义体: n • (1 : M₁ ->L[R₁] M₁)
 -/
 instance instNatCast [ContinuousAdd M₁] : NatCast (M₁ ->L[R₁] M₁) where
@@ -2310,8 +2310,8 @@ instance instIsNatCastApply
   body: rfl
 
 中文:
-实例 instIsNatCastApply
-  签名: [ContinuousAdd M₁]
+实例 instIs自然数CastApply
+  签名: [连续加法 M₁]
   定义体: rfl
 -/
 instance instIsNatCastApply [ContinuousAdd M₁] : IsNatCastApply (M₁ ->L[R₁] M₁) M₁ where
@@ -2327,7 +2327,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: [ContinuousAdd M₁]
+  签名: [连续加法 M₁]
   定义体: fast_instance% FunLike.semiring
 
 Depends on / 依赖: FunLike, FunLike.semiring, fast_instance, semiring
@@ -2353,7 +2353,7 @@ definition toLinearMapRingHom
 
 中文:
 定义 toLinearMapRingHom
-  签名: [ContinuousAdd M₁]
+  签名: [连续加法 M₁]
   定义体: toLinearMap
   map_zero' := rfl
   map_one' := rfl
@@ -2385,7 +2385,7 @@ theorem natCast_apply
 
 中文:
 定理 natCast_apply
-  条件: [ContinuousAdd M₁] (n : 自然数) (m : M₁)
+  条件: [连续加法 M₁] (n : 自然数) (m : M₁)
   结论: (↑n : M₁ ->L[R₁] M₁) m = n • m
   证明: rfl
 
@@ -2404,8 +2404,8 @@ theorem ofNat_apply
   proof: rfl
 
 中文:
-定理 ofNat_apply
-  条件: [ContinuousAdd M₁] (n : 自然数) [n.AtLeastTwo] (m : M₁)
+定理 of自然数_apply
+  条件: [连续加法 M₁] (n : 自然数) [n.AtLeastTwo] (m : M₁)
   证明: rfl
 -/
 theorem ofNat_apply [ContinuousAdd M₁] (n : Nat) [n.AtLeastTwo] (m : M₁) :
@@ -2452,8 +2452,8 @@ theorem isHomeomorph_of_isUnit
 
 中文:
 定理 isHomeomorph_of_isUnit
-  条件: {T : M₁ ->L[R₁] M₁} (hT : IsUnit T)
-  结论: IsHomeomorph T
+  条件: {T : M₁ ->L[R₁] M₁} (hT : 是单位 T)
+  结论: 是同胚 T
   证明: by
   obtain ⟨T, rfl⟩ := hT
   exact (homeomorphOfUnit T).isHomeomorph
@@ -2480,7 +2480,7 @@ instance applyModule
 
 中文:
 实例 applyModule
-  签名: : Module (M₁ ->L[R₁] M₁) M₁
+  签名: : 模 (M₁ ->L[R₁] M₁) M₁
   定义体: Module.compHom _ toLinearMapRingHom
 
 @[simp]
@@ -2519,7 +2519,7 @@ instance applyFaithfulSMul
 
 中文:
 实例 applyFaithfulSMul
-  签名: : FaithfulSMul (M₁ ->L[R₁] M₁) M₁
+  签名: : 忠实标量乘法 (M₁ ->L[R₁] M₁) M₁
   定义体: ⟨fun {_ _} => ContinuousLinearMap.ext⟩
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.ext
@@ -2537,7 +2537,7 @@ instance applySMulCommClass
 
 中文:
 实例 applySMulCommClass
-  签名: : SMulCommClass R₁ (M₁ ->L[R₁] M₁) M₁ where
+  签名: : 标量交换类 R₁ (M₁ ->L[R₁] M₁) M₁ where
   定义体: (e.map_smul r m).symm
 
 Depends on / 依赖: e.map_smul, map_smul
@@ -2555,7 +2555,7 @@ instance applySMulCommClass'
 
 中文:
 实例 applySMulCommClass'
-  签名: : SMulCommClass (M₁ ->L[R₁] M₁) R₁ M₁ where
+  签名: : 标量交换类 (M₁ ->L[R₁] M₁) R₁ M₁ where
   定义体: map_smul
 
 Depends on / 依赖: map_smul
@@ -2573,7 +2573,7 @@ instance continuousConstSMul_apply
 
 中文:
 实例 continuousConstSMul_apply
-  签名: : ContinuousConstSMul (M₁ ->L[R₁] M₁) M₁
+  签名: : 连续常数标量乘法 (M₁ ->L[R₁] M₁) M₁
   定义体: ⟨ContinuousLinearMap.continuous⟩
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.continuous, continuous
@@ -2593,7 +2593,7 @@ theorem isClosed_ker
 
 中文:
 定理 isClosed_ker
-  条件: [T1Space M₂] (f : M₁ ->SL[σ₁₂] M₂)
+  条件: [T1空间 M₂] (f : M₁ ->SL[σ₁₂] M₂)
   证明: isClosed_singleton.preimage f.continuous
 
 Depends on / 依赖: continuous, f.continuous, isClosed_singleton, isClosed_singleton.preimage, preimage
@@ -2612,7 +2612,7 @@ theorem isClosed_eqLocus
 
 中文:
 定理 isClosed_eqLocus
-  条件: [T2Space M₂] (f g : M₁ ->SL[σ₁₂] M₂)
+  条件: [T2空间 M₂] (f g : M₁ ->SL[σ₁₂] M₂)
   证明: isClosed_eq f.continuous g.continuous
 
 Depends on / 依赖: continuous, f.continuous, g.continuous, isClosed_eq
@@ -2631,7 +2631,7 @@ theorem isComplete_ker
 
 中文:
 定理 isComplete_ker
-  结论: {M' : 类型} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
+  结论: {M' : 类型} [一致空间 M'] [完备空间 M'] [加法交换幺半群 M']
   证明: (isClosed_ker f).isComplete
 
 Depends on / 依赖: isClosed_ker, isComplete
@@ -2651,7 +2651,7 @@ theorem isComplete_eqLocus
 
 中文:
 定理 isComplete_eqLocus
-  结论: {M' : 类型} [UniformSpace M'] [CompleteSpace M'] [AddCommMonoid M']
+  结论: {M' : 类型} [一致空间 M'] [完备空间 M'] [加法交换幺半群 M']
   证明: (isClosed_eqLocus f g).isComplete
 
 Depends on / 依赖: isClosed_eqLocus, isComplete
@@ -2671,7 +2671,7 @@ instance completeSpace_ker
 
 中文:
 实例 completeSpace_ker
-  签名: {M' : 类型} [UniformSpace M'] [CompleteSpace M']
+  签名: {M' : 类型} [一致空间 M'] [完备空间 M']
   定义体: (isComplete_ker f).completeSpace_coe
 
 Depends on / 依赖: completeSpace_coe, isComplete_ker
@@ -2691,7 +2691,7 @@ instance completeSpace_eqLocus
 
 中文:
 实例 completeSpace_eqLocus
-  签名: {M' : 类型} [UniformSpace M'] [CompleteSpace M']
+  签名: {M' : 类型} [一致空间 M'] [完备空间 M']
   定义体: (isComplete_eqLocus f g).completeSpace_coe
 
 Depends on / 依赖: completeSpace_coe, isComplete_eqLocus
@@ -2810,7 +2810,7 @@ theorem smulRight_comp_smulRight
 
 中文:
 定理 smulRight_comp_smulRight
-  结论: {M₃ : 类型} [AddCommMonoid M₃] [Module R₁ M₃]
+  结论: {M₃ : 类型} [加法交换幺半群 M₃] [模 R₁ M₃]
   证明: by
   ext
   simp
@@ -2831,7 +2831,7 @@ theorem range_smulRight_apply
 
 中文:
 定理 range_smulRight_apply
-  结论: {R : 类型} [DivisionSemiring R] [Module R M₁] [Module R M₂]
+  结论: {R : 类型} [除半环 R] [模 R M₁] [模 R M₂]
   证明: LinearMap.range_smulRight_apply (by simpa [coe_inj, ← toLinearMap_zero] using hf) x
 
 Depends on / 依赖: LinearMap, LinearMap.range_smulRight_apply, coe_inj, range_smulRight_apply, toLinearMap_zero
@@ -2960,7 +2960,7 @@ theorem toSpanSingleton_add
 
 中文:
 定理 toSpanSingleton_add
-  条件: [ContinuousAdd M₁] (x y : M₁)
+  条件: [连续加法 M₁] (x y : M₁)
   证明: coe_inj.mp LinearMap.toSpanSingleton_add _ _
 
 Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton_add, coe_inj, coe_inj.mp, toSpanSingleton_add
@@ -2979,7 +2979,7 @@ theorem toSpanSingleton_smul
 
 中文:
 定理 toSpanSingleton_smul
-  结论: {α} [Monoid α] [DistribMulAction α M₁] [ContinuousConstSMul α M₁]
+  结论: {α} [幺半群 α] [分配乘法作用 α M₁] [连续常数标量乘法 α M₁]
   证明: coe_inj.mp LinearMap.toSpanSingleton_smul _ _
 
 Depends on / 依赖: LinearMap, LinearMap.toSpanSingleton_smul, coe_inj, coe_inj.mp, toSpanSingleton_smul
@@ -3113,7 +3113,7 @@ theorem toSpanSingleton_comp_toSpanSingleton
 
 中文:
 定理 toSpanSingleton_comp_toSpanSingleton
-  条件: [ContinuousMul R₁] {x : M₂} {c : R₁}
+  条件: [连续乘法 R₁] {x : M₂} {c : R₁}
   证明: smulRight_comp_smulRight 1 1
 
 Depends on / 依赖: smulRight_comp_smulRight
@@ -3215,7 +3215,7 @@ instance neg
 
 中文:
 实例 neg
-  签名: : Neg (M ->SL[σ₁₂] M₂)
+  签名: : 取负 (M ->SL[σ₁₂] M₂)
   定义体: ⟨fun f => ⟨-f, f.2.neg⟩⟩
 -/
 instance neg : Neg (M ->SL[σ₁₂] M₂) :=
@@ -3233,7 +3233,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsNegApply (M ->SL[σ₁₂] M₂) M M₂
+  签名: 是NegApply (M ->SL[σ₁₂] M₂) M M₂
   定义体: rfl
 
 @[simp, norm_cast]
@@ -3309,7 +3309,7 @@ instance sub
 
 中文:
 实例 sub
-  签名: : Sub (M ->SL[σ₁₂] M₂)
+  签名: : 减法 (M ->SL[σ₁₂] M₂)
   定义体: ⟨fun f g => ⟨f - g, f.2.sub g.2⟩⟩
 -/
 instance sub : Sub (M ->SL[σ₁₂] M₂) :=
@@ -3325,7 +3325,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSubApply (M ->SL[σ₁₂] M₂) M M₂
+  签名: 是SubApply (M ->SL[σ₁₂] M₂) M M₂
   定义体: rfl
 -/
 instance : IsSubApply (M ->SL[σ₁₂] M₂) M M₂ where
@@ -3343,7 +3343,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (M ->SL[σ₁₂] M₂)
+  签名: : 加法交换群 (M ->SL[σ₁₂] M₂)
   定义体: fast_instance% FunLike.addCommGroup
 
 @[simp, norm_cast]
@@ -3427,7 +3427,7 @@ theorem comp_neg
 
 中文:
 定理 comp_neg
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
+  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₂]
   证明: by
   ext x
   simp
@@ -3455,7 +3455,7 @@ theorem neg_comp
 
 中文:
 定理 neg_comp
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g : M₂ ->SL[σ₂₃] M₃)
+  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₃] (g : M₂ ->SL[σ₂₃] M₃)
   证明: by
   ext
   simp
@@ -3482,7 +3482,7 @@ theorem comp_sub
 
 中文:
 定理 comp_sub
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₂]
+  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₂]
   证明: by
   ext
   simp
@@ -3508,7 +3508,7 @@ theorem sub_comp
 
 中文:
 定理 sub_comp
-  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [IsTopologicalAddGroup M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃)
+  结论: [RingHomCompTriple σ₁₂ σ₂₃ σ₁₃] [是拓扑加群 M₃] (g₁ g₂ : M₂ ->SL[σ₂₃] M₃)
   证明: by
   ext
   simp
@@ -3527,8 +3527,8 @@ instance [IsTopologicalAddGroup
   body: z • (1 : M ->L[R] M)
 
 中文:
-实例 [IsTopologicalAddGroup
-  签名: M] : 整数Cast (M ->L[R] M) where
+实例 [是拓扑加群
+  签名: M] : 整数嵌入 (M ->L[R] M) where
   定义体: z • (1 : M ->L[R] M)
 -/
 instance [IsTopologicalAddGroup M] : IntCast (M ->L[R] M) where
@@ -3545,8 +3545,8 @@ instance instIsIntCastApply
 @[deprecated (since := "2026-05-20")] alias intCast_apply := _root_.intCast_apply
 
 中文:
-实例 instIsIntCastApply
-  签名: [IsTopologicalAddGroup M]
+实例 instIs整数CastApply
+  签名: [是拓扑加群 M]
   定义体: rfl
 
 @[deprecated (since := "2026-05-20")] alias intCast_apply := _root_.intCast_apply
@@ -3566,7 +3566,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: [IsTopologicalAddGroup M]
+  签名: [是拓扑加群 M]
   定义体: fast_instance% FunLike.ring
 
 Depends on / 依赖: FunLike, FunLike.ring, fast_instance
@@ -3587,7 +3587,7 @@ theorem toSpanSingleton_pow
 
 中文:
 定理 toSpanSingleton_pow
-  条件: [TopologicalSpace R] [IsTopologicalRing R] (c : R) (n : 自然数)
+  条件: [拓扑空间 R] [是拓扑环 R] (c : R) (n : 自然数)
   证明: by
   induction n with
   | zero => ext; simp
@@ -3622,7 +3622,7 @@ theorem isOpenMap_of_ne_zero
 
 中文:
 定理 isOpenMap_of_ne_zero
-  结论: [TopologicalSpace R] [DivisionRing R] [ContinuousSub R]
+  结论: [拓扑空间 R] [除环 R] [余ntinuousSub R]
   证明: let ⟨x, hx⟩ := exists_ne_zero hf
   IsOpenMap.of_sections fun y =>
 ⟨fun a => y + (a - f y) • (f x)⁻¹ • x, Continuous.continuousAt by fun_prop, by simp,
@@ -3686,7 +3686,7 @@ theorem comp_smul
 
 中文:
 定理 comp_smul
-  结论: [LinearMap.CompatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
+  结论: [线性映射.余mpatibleSMul N₂ N₃ S R] (hₗ : N₂ ->L[R] N₃) (c : S)
   证明: by
   ext x
   exact hₗ.map_smul_of_tower c (fₗ x)
@@ -3713,7 +3713,7 @@ theorem comp_smulₛₗ
 
 中文:
 定理 comp_smulₛₗ
-  结论: [SMulCommClass R₂ R₂ M₂] [SMulCommClass R₃ R₃ M₃] [ContinuousConstSMul R₂ M₂]
+  结论: [标量交换类 R₂ R₂ M₂] [标量交换类 R₃ R₃ M₃] [连续常数标量乘法 R₂ M₂]
   证明: by
   ext x
   simp
@@ -3734,7 +3734,7 @@ instance distribMulAction
 
 中文:
 实例 distribMulAction
-  签名: [ContinuousAdd M₂]
+  签名: [连续加法 M₂]
   定义体: fast_instance% FunLike.distribMulAction
 
 Depends on / 依赖: FunLike, FunLike.distribMulAction, distribMulAction, fast_instance
@@ -3769,7 +3769,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module S₃ (M ->SL[σ₁₃] M₃)
+  签名: : 模 S₃ (M ->SL[σ₁₃] M₃)
   定义体: fast_instance% FunLike.module
 
 Depends on / 依赖: FunLike, FunLike.module, fast_instance, module
@@ -3786,7 +3786,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [Module S₃ᵐᵒᵖ M₃] [IsCentralScalar S₃ M₃]
+  签名: [模 S₃ᵐᵒᵖ M₃] [中心标量 S₃ M₃]
   定义体: FunLike.isCentralScalar
 
 Depends on / 依赖: FunLike, FunLike.isCentralScalar, isCentralScalar
@@ -4051,7 +4051,7 @@ instance algebra
 
 中文:
 实例 algebra
-  签名: : Algebra S (M ->L[R] M)
+  签名: : 代数 S (M ->L[R] M)
   定义体: Algebra.ofModule smul_comp fun _ _ _ => comp_smul _ _ _
 
 Depends on / 依赖: Algebra, Algebra.ofModule, comp_smul, ofModule, smul_comp

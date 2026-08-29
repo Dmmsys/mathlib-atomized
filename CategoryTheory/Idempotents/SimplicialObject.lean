@@ -37,7 +37,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIdempotentComplete (SimplicialObject C)
+  签名: 是IdempotentComplete (SimplicialObject C)
   定义体: Idempotents.functor_category_isIdempotentComplete _ _
 
 Depends on / 依赖: Idempotents, Idempotents.functor_category_isIdempotentComplete, functor_category_isIdempotentComplete
@@ -55,7 +55,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIdempotentComplete (CosimplicialObject C)
+  签名: 是IdempotentComplete (CosimplicialObject C)
   定义体: Idempotents.functor_category_isIdempotentComplete _ _
 
 Depends on / 依赖: Idempotents, Idempotents.functor_category_isIdempotentComplete, functor_category_isIdempotentComplete

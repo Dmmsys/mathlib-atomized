@@ -73,8 +73,8 @@ class InvMemClass
     - inv_mem : forall {s : S} {x}, x in s -> x⁻¹ in s
 
 中文:
-类 InvMemClass
-  参数: (S : 类型) (G : outParam 类型) [Inv G] [SetLike S G]
+类 InvMem类
+  参数: (S : 类型) (G : outParam 类型) [取逆 G] [集合状 S G]
   公理与运算 (1 个):
     - inv_mem : 对任意 {s : S} {x}, x in s -> x⁻¹ in s
 -/
@@ -94,8 +94,8 @@ class NegMemClass
     - neg_mem : forall {s : S} {x}, x in s -> -x in s
 
 中文:
-类 NegMemClass
-  参数: (S : 类型) (G : outParam 类型) [Neg G] [SetLike S G]
+类 NegMem类
+  参数: (S : 类型) (G : outParam 类型) [取负 G] [集合状 S G]
   公理与运算 (1 个):
     - neg_mem : 对任意 {s : S} {x}, x in s -> -x in s
 -/
@@ -115,8 +115,8 @@ class HasMemOrNegMem
     - mem_or_neg_mem((s) (a : G)) : a in s ∨ -a in s
 
 中文:
-类 HasMemOrNegMem
-  参数: {S G : 类型} [Neg G] [SetLike S G] (s : S)
+类 有MemOrNegMem
+  参数: {S G : 类型} [取负 G] [集合状 S G] (s : S)
   公理与运算 (1 个):
     - mem_or_neg_mem((s) (a : G)) : a in s ∨ -a in s
 -/
@@ -135,8 +135,8 @@ class HasMemOrInvMem
     - mem_or_inv_mem((s) (a : G)) : a in s ∨ a⁻¹ in s
 
 中文:
-类 HasMemOrInvMem
-  参数: {S G : 类型} [Inv G] [SetLike S G] (s : S)
+类 有MemOrInvMem
+  参数: {S G : 类型} [取逆 G] [集合状 S G] (s : S)
   公理与运算 (1 个):
     - mem_or_inv_mem((s) (a : G)) : a in s ∨ a⁻¹ in s
 -/
@@ -218,9 +218,9 @@ class SubgroupClass
   (no additional axioms)
 
 中文:
-类 SubgroupClass
-  参数: (S : 类型) (G : outParam 类型) [DivInvMonoid G] [SetLike S G]
-  继承: SubmonoidClass S G, InvMemClass S G
+类 子群类
+  参数: (S : 类型) (G : outParam 类型) [除逆幺半群 G] [集合状 S G]
+  继承: 子幺半群类 S G, InvMem类 S G
   (无附加公理)
 -/
 class SubgroupClass (S : Type*) (G : outParam Type*) [DivInvMonoid G] [SetLike S G] : Prop
@@ -236,9 +236,9 @@ class AddSubgroupClass
   (no additional axioms)
 
 中文:
-类 AddSubgroupClass
-  参数: (S : 类型) (G : outParam 类型) [SubNegMonoid G] [SetLike S G]
-  继承: AddSubmonoidClass S G, NegMemClass S G
+类 加法子群类
+  参数: (S : 类型) (G : outParam 类型) [SubNeg幺半群 G] [集合状 S G]
+  继承: 加法子幺半群类 S G, NegMem类 S G
   (无附加公理)
 
 Depends on / 依赖: SetLike, inv_mem, neg_mem
@@ -261,7 +261,7 @@ theorem inv_mem_iff
 
 中文:
 定理 inv_mem_iff
-  结论: {S G} [InvolutiveInv G] {_ : SetLike S G} [InvMemClass S G] {H : S}
+  结论: {S G} [InvolutiveInv G] {_ : 集合状 S G} [InvMem类 S G] {H : S}
   证明: ⟨fun h => inv_inv x ▸ inv_mem h, inv_mem⟩
 
 Depends on / 依赖: inv_inv, inv_mem
@@ -340,7 +340,7 @@ theorem exists_inv_mem_iff_exists_mem
 @[to_additive]
 
 中文:
-定理 exists_inv_mem_iff_exists_mem
+定理 存在_inv_mem_iff_存在_mem
   条件: {P : G -> 命题}
   证明: by
   constructor <;>
@@ -419,7 +419,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: {G S : 类型} [Inv G] [SetLike S G] [InvMemClass S G] {H : S}
+  签名: {G S : 类型} [取逆 G] [集合状 S G] [InvMem类 S G] {H : S}
   定义体: ⟨fun a => ⟨a⁻¹, inv_mem a.2⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -471,7 +471,7 @@ theorem subset_union
 
 中文:
 定理 subset_union
-  条件: [LE S] [IsConcreteLE S G] {H K L : S}
+  条件: [LE S] [是余ncreteLE S G] {H K L : S}
   证明: by
   refine ⟨fun h => ?_, fun h x xH => h.imp (mem_of_le_of_mem · xH) (mem_of_le_of_mem · xH)⟩
   rw [or_iff_not_imp_left]; rw [SetLike.not_le_iff_exists]; rw [← SetLike.coe_subset_coe]
@@ -500,7 +500,7 @@ instance div
 
 中文:
 实例 div
-  签名: {G S : 类型} [DivInvMonoid G] [SetLike S G] [SubgroupClass S G] {H : S}
+  签名: {G S : 类型} [除逆幺半群 G] [集合状 S G] [子群类 S G] {H : S}
   定义体: ⟨fun a b => ⟨a / b, div_mem a.2 b.2⟩⟩
 
 Depends on / 依赖: div_mem
@@ -522,7 +522,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: {M S} [DivInvMonoid M] [SetLike S M] [SubgroupClass S M] {H : S}
+  签名: {M S} [除逆幺半群 M] [集合状 S M] [子群类 S M] {H : S}
   定义体: ⟨fun a n => ⟨a.1 ^ n, zpow_mem a.2 n⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -643,7 +643,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (SubgroupClass.subtype H : H -> G) = ((↑) : H -> G)
+  结论: (子群类.subtype H : H -> G) = ((↑) : H -> G)
   证明: by
   rfl
 -/
@@ -709,7 +709,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: [LE S] [IsConcreteLE S G] {H K : S} (h : H <= K)
+  签名: [LE S] [是余ncreteLE S G] {H K : S} (h : H <= K)
   定义体: MonoidHom.mk' (fun x => ⟨x, mem_of_le_of_mem h x.prop⟩) fun _ _ => rfl
 
 @[to_additive (attr := simp)]
@@ -735,7 +735,7 @@ theorem inclusion_self
 
 中文:
 定理 inclusion_self
-  条件: [Preorder S] [IsConcreteLE S G] (x : H)
+  条件: [预序 S] [是余ncreteLE S G] (x : H)
   结论: inclusion le_rfl x = x
   证明: by
   cases x
@@ -760,7 +760,7 @@ theorem inclusion_mk
 
 中文:
 定理 inclusion_mk
-  条件: [LE S] [IsConcreteLE S G] {h : H <= K} (x : G) (hx : x in H)
+  条件: [LE S] [是余ncreteLE S G] {h : H <= K} (x : G) (hx : x in H)
   证明: rfl
 
 @[to_additive]
@@ -784,7 +784,7 @@ theorem inclusion_right
 
 中文:
 定理 inclusion_right
-  条件: [LE S] [IsConcreteLE S G] (h : H <= K) (x : K) (hx : (x : G) in H)
+  条件: [LE S] [是余ncreteLE S G] (h : H <= K) (x : K) (hx : (x : G) in H)
   证明: by
   cases x
   rfl
@@ -811,7 +811,7 @@ theorem inclusion_inclusion
 
 中文:
 定理 inclusion_inclusion
-  结论: [Preorder S] [IsConcreteLE S G]
+  结论: [预序 S] [是余ncreteLE S G]
   证明: by
   cases x
   rfl
@@ -837,7 +837,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  结论: [LE S] [IsConcreteLE S G]
+  结论: [LE S] [是余ncreteLE S G]
   证明: Set.coe_inclusion (SetLike.coe_subset_coe.mpr h) a
 
 @[to_additive (attr := simp)]
@@ -859,7 +859,7 @@ theorem subtype_comp_inclusion
 
 中文:
 定理 subtype_comp_inclusion
-  结论: [LE S] [IsConcreteLE S G]
+  结论: [LE S] [是余ncreteLE S G]
   证明: rfl
 -/
 theorem subtype_comp_inclusion [LE S] [IsConcreteLE S G]
@@ -882,9 +882,9 @@ structure Subgroup
     - inv_mem'({x}) : x in carrier -> x⁻¹ in carrier
 
 中文:
-结构 Subgroup
-  参数: (G : 类型) [Group G]
-  继承: Submonoid G
+结构 子群
+  参数: (G : 类型) [群 G]
+  继承: 子幺半群 G
   公理与运算 (1 个):
     - inv_mem'({x}) : x in carrier -> x⁻¹ in carrier
 -/
@@ -903,9 +903,9 @@ structure AddSubgroup
     - neg_mem'({x}) : x in carrier -> -x in carrier
 
 中文:
-结构 AddSubgroup
-  参数: (G : 类型) [AddGroup G]
-  继承: AddSubmonoid G
+结构 加法子群
+  参数: (G : 类型) [加法群 G]
+  继承: 加法子幺半群 G
   公理与运算 (1 个):
     - neg_mem'({x}) : x in carrier -> -x in carrier
 
@@ -940,7 +940,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subgroup G) G
+  签名: 集合状 (子群 G) G
   定义体: s.carrier
   coe_injective p q h := by
     obtain ⟨⟨⟨hp, _⟩, _⟩, _⟩ := p
@@ -969,7 +969,7 @@ initialize_simps_projections AddSubgroup (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subgroup G)
+  签名: 偏序 (子群 G)
   定义体: .ofSetLike (Subgroup G) G
 
 initialize_simps_projections Subgroup (carrier -> coe, as_prefix coe)
@@ -995,7 +995,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S G : 类型} [Group G] [SetLike S G] [SubgroupClass S G]
+  签名: {S G : 类型} [群 G] [集合状 S G] [子群类 S G]
   定义体: ⟨⟨⟨s, MulMemClass.mul_mem⟩, OneMemClass.one_mem s⟩, InvMemClass.inv_mem⟩
 
 @[to_additive]
@@ -1025,7 +1025,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubgroupClass (Subgroup G) G
+  签名: 子群类 (子群 G) G
   定义体: Subgroup.inv_mem' _
   one_mem _ := (Subgroup.toSubmonoid _).one_mem'
   mul_mem := (Subgroup.toSubmonoid _).mul_mem'
@@ -1053,7 +1053,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {s : Subgroup G} {x : G}
+  条件: {s : 子群 G} {x : G}
   结论: x in s.carrier ↔ x in s
   证明: Iff.rfl
 
@@ -1077,7 +1077,7 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {s : Submonoid G} {x : G} (h_inv)
+  条件: {s : 子幺半群 G} {x : G} (h_inv)
   证明: Iff.rfl
 
 @[to_additive (attr := simp)]
@@ -1101,7 +1101,7 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: {s : Submonoid G} (h_inv)
+  条件: {s : 子幺半群 G} (h_inv)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1123,7 +1123,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {s t : Submonoid G} (h_inv) (h_inv')
+  条件: {s t : 子幺半群 G} (h_inv) (h_inv')
   证明: Iff.rfl
 
 @[to_additive (attr := simp)]
@@ -1148,8 +1148,8 @@ theorem coe_toSubmonoid
 
 中文:
 定理 coe_toSubmonoid
-  条件: (K : Subgroup G)
-  结论: (K.toSubmonoid : Set G) = K
+  条件: (K : 子群 G)
+  结论: (K.toSubmonoid : 集合 G) = K
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1171,7 +1171,7 @@ theorem mem_toSubmonoid
 
 中文:
 定理 mem_toSubmonoid
-  条件: (K : Subgroup G) (x : G)
+  条件: (K : 子群 G) (x : G)
   结论: x in K.toSubmonoid ↔ x in K
   证明: Iff.rfl
 
@@ -1198,7 +1198,7 @@ theorem toSubmonoid_injective
 
 中文:
 定理 toSubmonoid_injective
-  结论: Function.Injective (toSubmonoid : Subgroup G -> Submonoid G)
+  结论: 函数.单射 (toSubmonoid : 子群 G -> 子幺半群 G)
   证明: fun p q h => by
     have := SetLike.ext'_iff.1 h
     rw [coe_toSubmonoid]; rw [coe_toSubmonoid] at this
@@ -1228,7 +1228,7 @@ theorem toSubmonoid_inj
 
 中文:
 定理 toSubmonoid_inj
-  条件: {p q : Subgroup G}
+  条件: {p q : 子群 G}
   结论: p.toSubmonoid = q.toSubmonoid ↔ p = q
   证明: toSubmonoid_injective.eq_iff
 
@@ -1253,7 +1253,7 @@ theorem toSubmonoid_strictMono
 
 中文:
 定理 toSubmonoid_strictMono
-  结论: StrictMono (toSubmonoid : Subgroup G -> Submonoid G)
+  结论: 严格递增 (toSubmonoid : 子群 G -> 子幺半群 G)
   证明: fun _ _ =>
   id
 
@@ -1275,7 +1275,7 @@ theorem toSubmonoid_mono
 
 中文:
 定理 toSubmonoid_mono
-  结论: Monotone (toSubmonoid : Subgroup G -> Submonoid G)
+  结论: 递增 (toSubmonoid : 子群 G -> 子幺半群 G)
   证明: toSubmonoid_strictMono.monotone
 
 @[to_additive (attr := simp)]
@@ -1299,7 +1299,7 @@ theorem toSubmonoid_le
 
 中文:
 定理 toSubmonoid_le
-  条件: {p q : Subgroup G}
+  条件: {p q : 子群 G}
   结论: p.toSubmonoid <= q.toSubmonoid ↔ p <= q
   证明: Iff.rfl
 
@@ -1322,8 +1322,8 @@ lemma coe_nonempty
 
 中文:
 引理 coe_nonempty
-  条件: (s : Subgroup G)
-  结论: (s : Set G).Nonempty
+  条件: (s : 子群 G)
+  结论: (s : 集合 G).非空
   证明: ⟨1, one_mem _⟩
 
 Depends on / 依赖: one_mem
@@ -1359,7 +1359,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (K : Subgroup G) (s : Set G) (hs : s = K)
+  签名: (K : 子群 G) (s : 集合 G) (hs : s = K)
   定义体: s
   one_mem' := hs.symm ▸ K.one_mem'
   mul_mem' := hs.symm ▸ K.mul_mem'
@@ -1385,7 +1385,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (K : Subgroup G) (s : Set G) (hs : s = ↑K)
+  条件: (K : 子群 G) (s : 集合 G) (hs : s = ↑K)
   结论: K.copy s hs = K
   证明: SetLike.coe_injective hs
 
@@ -1407,7 +1407,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {H K : Subgroup G} (h : 对任意 x, x in H ↔ x in K)
+  条件: {H K : 子群 G} (h : 对任意 x, x in H ↔ x in K)
   结论: H = K
   证明: SetLike.ext h
 
@@ -1533,8 +1533,8 @@ theorem exists_inv_mem_iff_exists_mem
 @[to_additive]
 
 中文:
-定理 exists_inv_mem_iff_exists_mem
-  条件: (K : Subgroup G) {P : G -> 命题}
+定理 存在_inv_mem_iff_存在_mem
+  条件: (K : 子群 G) {P : G -> 命题}
   证明: exists_inv_mem_iff_exists_mem
 
 @[to_additive]
@@ -1652,7 +1652,7 @@ definition ofDiv
 
 中文:
 定义 ofDiv
-  签名: (s : Set G) (hsn : s.Nonempty) (hs : 对任意ᵉ (x in s) (y in s), x * y⁻¹ in s)
+  签名: (s : 集合 G) (hsn : s.非空) (hs : 对任意ᵉ (x in s) (y in s), x * y⁻¹ in s)
   定义体: have one_mem : (1 : G) in s := by
     let ⟨x, hx⟩ := hsn
     simpa using hs x hx x hx
@@ -1687,7 +1687,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul H
+  签名: : 乘法 H
   定义体: H.toSubmonoid.mul
 
 Depends on / 依赖: H.toSubmonoid.mul, SMulCommClass, toSubmonoid
@@ -1707,7 +1707,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One H
+  签名: : 幺 H
   定义体: H.toSubmonoid.one
 
 Depends on / 依赖: H.toSubmonoid.one, SMulCommClass, toSubmonoid
@@ -1727,7 +1727,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: : Inv H
+  签名: : 取逆 H
   定义体: ⟨fun a => ⟨a⁻¹, H.inv_mem a.2⟩⟩
 
 Depends on / 依赖: H.inv_mem, IsScalarTower, inv_mem
@@ -1747,7 +1747,7 @@ instance div
 
 中文:
 实例 div
-  签名: : Div H
+  签名: : 除法 H
   定义体: ⟨fun a b => ⟨a / b, H.div_mem a.2 b.2⟩⟩
 
 Depends on / 依赖: H.div_mem, MulAction, div_mem
@@ -1767,7 +1767,7 @@ instance npow
 
 中文:
 实例 npow
-  签名: : Pow H 自然数
+  签名: : 幂 H 自然数
   定义体: ⟨fun a n => ⟨a ^ n, H.pow_mem a.2 n⟩⟩
 -/
 protected instance npow : Pow H Nat :=
@@ -1787,7 +1787,7 @@ instance zpow
 
 中文:
 实例 zpow
-  签名: : Pow H 整数
+  签名: : 幂 H 整数
   定义体: ⟨fun a n => ⟨a ^ n, H.zpow_mem a.2 n⟩⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1990,7 +1990,7 @@ instance toGroup
 
 中文:
 实例 toGroup
-  签名: {G : 类型} [Group G] (H : Subgroup G)
+  签名: {G : 类型} [群 G] (H : 子群 G)
   定义体: SubgroupClass.toGroup H
 
 Depends on / 依赖: SubgroupClass, SubgroupClass.toGroup, toGroup
@@ -2010,7 +2010,7 @@ instance toCommGroup
 
 中文:
 实例 toCommGroup
-  签名: {G : 类型} [CommGroup G] (H : Subgroup G)
+  签名: {G : 类型} [交换群 G] (H : 子群 G)
   定义体: SubgroupClass.toCommGroup H
 
 Depends on / 依赖: SubgroupClass, SubgroupClass.toCommGroup, toCommGroup
@@ -2053,7 +2053,7 @@ lemma subtype_apply
 
 中文:
 引理 subtype_apply
-  条件: {s : Subgroup G} (x : s)
+  条件: {s : 子群 G} (x : s)
   证明: rfl
 
 @[to_additive]
@@ -2074,7 +2074,7 @@ lemma subtype_injective
 
 中文:
 引理 subtype_injective
-  条件: (s : Subgroup G)
+  条件: (s : 子群 G)
   证明: Subtype.coe_injective
 
 @[to_additive (attr := simp)]
@@ -2117,7 +2117,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: {H K : Subgroup G} (h : H <= K)
+  签名: {H K : 子群 G} (h : H <= K)
   定义体: MonoidHom.mk' (fun x => ⟨x, h x.2⟩) fun _ _ => rfl
 
 @[to_additive (attr := simp)]
@@ -2141,7 +2141,7 @@ theorem coe_inclusion
 
 中文:
 定理 coe_inclusion
-  条件: {H K : Subgroup G} (h : H <= K) (a : H)
+  条件: {H K : 子群 G} (h : H <= K) (a : H)
   结论: (inclusion h a : G) = a
   证明: Set.coe_inclusion h a
 
@@ -2166,8 +2166,8 @@ theorem inclusion_injective
 
 中文:
 定理 inclusion_injective
-  条件: {H K : Subgroup G} (h : H <= K)
-  结论: Function.Injective inclusion h
+  条件: {H K : 子群 G} (h : H <= K)
+  结论: 函数.单射 inclusion h
   证明: Set.inclusion_injective h
 
 @[to_additive (attr := simp)]
@@ -2190,7 +2190,7 @@ lemma inclusion_inj
 
 中文:
 引理 inclusion_inj
-  条件: {H K : Subgroup G} (h : H <= K) {x y : H}
+  条件: {H K : 子群 G} (h : H <= K) {x y : H}
   证明: (inclusion_injective h).eq_iff
 
 @[to_additive (attr := simp)]
@@ -2212,7 +2212,7 @@ theorem subtype_comp_inclusion
 
 中文:
 定理 subtype_comp_inclusion
-  条件: {H K : Subgroup G} (hH : H <= K)
+  条件: {H K : 子群 G} (hH : H <= K)
   证明: rfl
 -/
 theorem subtype_comp_inclusion {H K : Subgroup G} (hH : H <= K) :
@@ -2231,7 +2231,7 @@ structure Normal
     - conj_mem : forall n, n in H -> forall g : G, g * n * g⁻¹ in H
 
 中文:
-结构 Normal
+结构 正规
   参数: : 命题 where
   公理与运算 (1 个):
     - conj_mem : 对任意 n, n in H -> 对任意 g : G, g * n * g⁻¹ in H
@@ -2256,8 +2256,8 @@ structure Normal
     - conj_mem : forall n, n in H -> forall g : A, g + n + -g in H
 
 中文:
-结构 Normal
-  参数: (H : AddSubgroup A)
+结构 正规
+  参数: (H : 加法子群 A)
   公理与运算 (1 个):
     - conj_mem : 对任意 n, n in H -> 对任意 g : A, g + n + -g in H
 
@@ -2300,7 +2300,7 @@ theorem conj_mem'
 
 中文:
 定理 conj_mem'
-  条件: (nH : H.Normal) (n : G) (hn : n in H) (g : G)
+  条件: (nH : H.正规) (n : G) (hn : n in H) (g : G)
   证明: by
   convert! nH.conj_mem n hn g⁻¹
   rw [inv_inv]
@@ -2330,7 +2330,7 @@ theorem mem_comm
 
 中文:
 定理 mem_comm
-  条件: (nH : H.Normal) {a b : G} (h : a * b in H)
+  条件: (nH : H.正规) {a b : G} (h : a * b in H)
   结论: b * a in H
   证明: by
   have : a⁻¹ * (a * b) * a⁻¹⁻¹ in H := nH.conj_mem (a * b) h a⁻¹
@@ -2356,7 +2356,7 @@ theorem mem_comm_iff
 
 中文:
 定理 mem_comm_iff
-  条件: (nH : H.Normal) {a b : G}
+  条件: (nH : H.正规) {a b : G}
   结论: a * b in H ↔ b * a in H
   证明: ⟨nH.mem_comm, nH.mem_comm⟩
 
@@ -2395,7 +2395,7 @@ definition normalizer
 
 中文:
 定义 normalizer
-  签名: (S : Set G)
+  签名: (S : 集合 G)
   定义体: { g : G | forall n, n in S ↔ g * n * g⁻¹ in S }
   one_mem' := by simp
   mul_mem' {a b} (ha : forall n, n in S ↔ a * n * a⁻¹ in S) (hb : forall n, n in S ↔ b * n * b⁻¹ in S) n := by
@@ -2597,7 +2597,7 @@ theorem commGroup_isMulCommutative
 
 中文:
 定理 commGroup_isMulCommutative
-  条件: {G : 类型} [CommGroup G] (H : Subgroup G)
+  条件: {G : 类型} [交换群 G] (H : 子群 G)
   证明: inferInstance
 
 @[to_additive (attr := deprecated setLike_mul_comm (since := "2026-03-09"))]
@@ -2616,7 +2616,7 @@ lemma mul_comm_of_mem_isMulCommutative
 
 中文:
 引理 mul_comm_of_mem_isMulCommutative
-  条件: [IsMulCommutative H] {a b : G} (ha : a in H) (hb : b in H)
+  条件: [是MulCommutative H] {a b : G} (ha : a in H) (hb : b in H)
   证明: setLike_mul_comm ha hb
 
 Depends on / 依赖: setLike_mul_comm
@@ -2641,8 +2641,8 @@ theorem Set.injOn_iff_map_eq_one
 refine mul_inv_eq_one.1 h _ (mul_mem ?_ (inv_mem ?_)) ?_ <;> simp_all
 
 中文:
-定理 Set.injOn_iff_map_eq_one
-  结论: {F G H S : 类型} [Group G] [Group H]
+定理 集合.injOn_iff_map_eq_one
+  结论: {F G H S : 类型} [群 G] [群 H]
   证明: by
     refine h ha (one_mem s) ?_
     rwa [map_one]

@@ -40,7 +40,7 @@ abbreviation piπ
 
 中文:
 缩写 piπ
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι)
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι)
   定义体: ofHom ⟨fun f => f i, continuous_apply i⟩
 
 Depends on / 依赖: continuous_apply
@@ -60,7 +60,7 @@ definition piFan
 
 中文:
 定义 piFan
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u})
   定义体: Fan.mk (TopCat.of (forall i, α i)) (piπ.{v, u} α)
 
 Depends on / 依赖: Fan.mk, TopCat, TopCat.of
@@ -88,7 +88,7 @@ definition piFanIsLimit
 
 中文:
 定义 piFanIsLimit
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u})
   定义体: ofHom
     { toFun := fun s i => S.π.app ⟨i⟩ s
       continuous_toFun := continuous_pi (fun i => (S.π.app ⟨i⟩).hom.2) }
@@ -120,7 +120,7 @@ definition piIsoPi
 
 中文:
 定义 piIsoPi
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u})
   定义体: (limit.isLimit _).conePointUniqueUpToIso (piFanIsLimit.{v, u} α)
 
 Depends on / 依赖: conePointUniqueUpToIso, isLimit, limit.isLimit, piFanIsLimit
@@ -140,7 +140,7 @@ theorem piIsoPi_inv_π
 
 中文:
 定理 piIsoPi_inv_π
-  条件: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι)
+  条件: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι)
   证明: by simp [piIsoPi]
 
 Depends on / 依赖: piIsoPi
@@ -158,7 +158,7 @@ theorem piIsoPi_inv_π_apply
 
 中文:
 定理 piIsoPi_inv_π_apply
-  条件: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι) (x : 对任意 i, α i)
+  条件: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι) (x : 对任意 i, α i)
   证明: ConcreteCategory.congr_hom (piIsoPi_inv_π α i) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
@@ -177,7 +177,7 @@ theorem piIsoPi_hom_apply
 
 中文:
 定理 piIsoPi_hom_apply
-  结论: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι)
+  结论: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι)
   证明: rfl
 -/
 theorem piIsoPi_hom_apply {ι : Type v} (α : ι -> TopCat.{max v u}) (i : ι)
@@ -196,7 +196,7 @@ abbreviation sigmaι
 
 中文:
 缩写 sigmaι
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι)
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι)
   定义体: by
   refine ofHom (ContinuousMap.mk ?_ ?_)
   · apply Sigma.mk i
@@ -221,7 +221,7 @@ definition sigmaCofan
 
 中文:
 定义 sigmaCofan
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u})
   定义体: Cofan.mk (TopCat.of (Σ i, α i)) (sigmaι α)
 
 Depends on / 依赖: Cofan.mk, TopCat, TopCat.of
@@ -249,7 +249,7 @@ definition sigmaCofanIsColimit
 
 中文:
 定义 sigmaCofanIsColimit
-  签名: {ι : 类型v} (β : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (β : ι -> 顶元素范畴.{最大值 v u})
   定义体: ofHom
     { toFun := fun (s : of (Σ i, β i)) => S.ι.app ⟨s.1⟩ s.2
       continuous_toFun := by continuity }
@@ -285,7 +285,7 @@ definition sigmaIsoSigma
 
 中文:
 定义 sigmaIsoSigma
-  签名: {ι : 类型v} (α : ι -> TopCat.{max v u})
+  签名: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u})
   定义体: (colimit.isColimit _).coconePointUniqueUpToIso (sigmaCofanIsColimit.{v, u} α)
 
 Depends on / 依赖: coconePointUniqueUpToIso, colimit, colimit.isColimit, isColimit, sigmaCofanIsColimit
@@ -305,7 +305,7 @@ theorem sigmaIsoSigma_hom_ι
 
 中文:
 定理 sigmaIsoSigma_hom_ι
-  条件: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι)
+  条件: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι)
   证明: by simp [sigmaIsoSigma]
 
 Depends on / 依赖: sigmaIsoSigma
@@ -323,7 +323,7 @@ theorem sigmaIsoSigma_hom_ι_apply
 
 中文:
 定理 sigmaIsoSigma_hom_ι_apply
-  条件: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι) (x : α i)
+  条件: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι) (x : α i)
   证明: ConcreteCategory.congr_hom (sigmaIsoSigma_hom_ι α i) x
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom
@@ -343,7 +343,7 @@ theorem sigmaIsoSigma_inv_apply
 
 中文:
 定理 sigmaIsoSigma_inv_apply
-  条件: {ι : 类型v} (α : ι -> TopCat.{max v u}) (i : ι) (x : α i)
+  条件: {ι : 类型v} (α : ι -> 顶元素范畴.{最大值 v u}) (i : ι) (x : α i)
   证明: by
   rw [← sigmaIsoSigma_hom_ι_apply]; rw [← comp_app]; rw [← comp_app]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
 
@@ -365,7 +365,7 @@ abbreviation prodFst
 
 中文:
 缩写 prodFst
-  签名: {X Y : TopCat.{u}}
+  签名: {X Y : 顶元素范畴.{u}}
   定义体: ofHom { toFun := Prod.fst }
 
 Depends on / 依赖: Prod.fst
@@ -383,7 +383,7 @@ abbreviation prodSnd
 
 中文:
 缩写 prodSnd
-  签名: {X Y : TopCat.{u}}
+  签名: {X Y : 顶元素范畴.{u}}
   定义体: ofHom { toFun := Prod.snd }
 
 Depends on / 依赖: Prod.snd
@@ -401,7 +401,7 @@ definition prodBinaryFan
 
 中文:
 定义 prodBinaryFan
-  签名: (X Y : TopCat.{u})
+  签名: (X Y : 顶元素范畴.{u})
   定义体: BinaryFan.mk prodFst prodSnd
 
 Depends on / 依赖: BinaryFan, BinaryFan.mk, prodFst, prodSnd
@@ -427,7 +427,7 @@ definition prodBinaryFanIsLimit
 
 中文:
 定义 prodBinaryFanIsLimit
-  签名: (X Y : TopCat.{u})
+  签名: (X Y : 顶元素范畴.{u})
   定义体: fun S : BinaryFan X Y => ofHom { toFun s := (S.fst s, S.snd s) }
   fac := by
     rintro S (_ | _) <;> {dsimp; ext; rfl}
@@ -466,7 +466,7 @@ definition prodIsoProd
 
 中文:
 定义 prodIsoProd
-  签名: (X Y : TopCat.{u})
+  签名: (X Y : 顶元素范畴.{u})
   定义体: (limit.isLimit _).conePointUniqueUpToIso (prodBinaryFanIsLimit X Y)
 
 Depends on / 依赖: conePointUniqueUpToIso, isLimit, limit.isLimit, prodBinaryFanIsLimit
@@ -488,7 +488,7 @@ theorem prodIsoProd_hom_fst
 
 中文:
 定理 prodIsoProd_hom_fst
-  条件: (X Y : TopCat.{u})
+  条件: (X Y : 顶元素范畴.{u})
   证明: by
   simp [← Iso.eq_inv_comp, prodIsoProd]
   rfl
@@ -514,7 +514,7 @@ theorem prodIsoProd_hom_snd
 
 中文:
 定理 prodIsoProd_hom_snd
-  条件: (X Y : TopCat.{u})
+  条件: (X Y : 顶元素范畴.{u})
   证明: by
   simp [← Iso.eq_inv_comp, prodIsoProd]
   rfl
@@ -539,7 +539,7 @@ theorem prodIsoProd_hom_apply
 
 中文:
 定理 prodIsoProd_hom_apply
-  条件: {X Y : TopCat.{u}} (x : ↑(X ⨯ Y))
+  条件: {X Y : 顶元素范畴.{u}} (x : ↑(X ⨯ Y))
   证明: rfl
 
 @[reassoc (attr := simp), elementwise]
@@ -561,7 +561,7 @@ theorem prodIsoProd_inv_fst
 
 中文:
 定理 prodIsoProd_inv_fst
-  条件: (X Y : TopCat.{u})
+  条件: (X Y : 顶元素范畴.{u})
   证明: by simp [Iso.inv_comp_eq]
 
 @[reassoc (attr := simp), elementwise]
@@ -582,7 +582,7 @@ theorem prodIsoProd_inv_snd
 
 中文:
 定理 prodIsoProd_inv_snd
-  条件: (X Y : TopCat.{u})
+  条件: (X Y : 顶元素范畴.{u})
   证明: by simp [Iso.inv_comp_eq]
 
 Depends on / 依赖: Iso.inv_comp_eq, inv_comp_eq
@@ -605,7 +605,7 @@ theorem prod_topology
 
 中文:
 定理 prod_topology
-  条件: {X Y : TopCat.{u}}
+  条件: {X Y : 顶元素范畴.{u}}
   证明: by
   let homeo := homeoOfIso (prodIsoProd X Y)
   refine homeo.isInducing.eq_induced.trans ?_
@@ -644,7 +644,7 @@ theorem range_prod_map
 
 中文:
 定理 range_prod_map
-  条件: {W X Y Z : TopCat.{u}} (f : W ⟶ Y) (g : X ⟶ Z)
+  条件: {W X Y Z : 顶元素范畴.{u}} (f : W ⟶ Y) (g : X ⟶ Z)
   证明: by
   ext x
   constructor
@@ -694,7 +694,7 @@ theorem isInducing_prodMap
 
 中文:
 定理 isInducing_prodMap
-  结论: {W X Y Z : TopCat.{u}} {f : W ⟶ X} {g : Y ⟶ Z} (hf : IsInducing f)
+  结论: {W X Y Z : 顶元素范畴.{u}} {f : W ⟶ X} {g : Y ⟶ Z} (hf : 是Inducing f)
   证明: by
   constructor
   simp_rw [prod_topology, induced_inf, induced_compose, ← coe_comp,
@@ -723,7 +723,7 @@ theorem isEmbedding_prodMap
 
 中文:
 定理 isEmbedding_prodMap
-  结论: {W X Y Z : TopCat.{u}} {f : W ⟶ X} {g : Y ⟶ Z} (hf : IsEmbedding f)
+  结论: {W X Y Z : 顶元素范畴.{u}} {f : W ⟶ X} {g : Y ⟶ Z} (hf : 是嵌入 f)
   证明: ⟨isInducing_prodMap hf.isInducing hg.isInducing, by
     have := (TopCat.mono_iff_injective _).mpr hf.injective
     have := (TopCat.mono_iff_injective _).mpr hg.injective
@@ -750,7 +750,7 @@ definition binaryCofan
 
 中文:
 定义 binaryCofan
-  签名: (X Y : TopCat.{u})
+  签名: (X Y : 顶元素范畴.{u})
   定义体: BinaryCofan.mk (ofHom ⟨Sum.inl, by fun_prop⟩) (ofHom ⟨Sum.inr, by fun_prop⟩)
 -/
 protected def binaryCofan (X Y : TopCat.{u}) : BinaryCofan X Y :=
@@ -779,7 +779,7 @@ definition binaryCofanIsColimit
 
 中文:
 定义 binaryCofanIsColimit
-  签名: (X Y : TopCat.{u})
+  签名: (X Y : 顶元素范畴.{u})
   定义体: by
   refine Limits.BinaryCofan.isColimitMk (fun s => ofHom
     { toFun := Sum.elim s.inl s.inr, continuous_toFun := ?_ }) ?_ ?_ ?_
@@ -828,7 +828,7 @@ theorem binaryCofan_isColimit_iff
 
 中文:
 定理 binaryCofan_isColimit_iff
-  条件: {X Y : TopCat.{u}} (c : BinaryCofan X Y)
+  条件: {X Y : 顶元素范畴.{u}} (c : BinaryCofan X Y)
   证明: by
   classical
     constructor

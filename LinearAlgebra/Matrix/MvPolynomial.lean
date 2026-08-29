@@ -40,7 +40,7 @@ definition mvPolynomialX
 
 中文:
 定义 mvPolynomialX
-  签名: [CommSemiring R]
+  签名: [交换半环 R]
   定义体: of fun i j => MvPolynomial.X (i, j)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.X
@@ -60,7 +60,7 @@ theorem mvPolynomialX_apply
 
 中文:
 定理 mvPolynomialX_apply
-  条件: [CommSemiring R] (i j)
+  条件: [交换半环 R] (i j)
   证明: rfl
 -/
 theorem mvPolynomialX_apply [CommSemiring R] (i j) :
@@ -79,7 +79,7 @@ theorem mvPolynomialX_map_eval₂
 
 中文:
 定理 mvPolynomialX_map_eval₂
-  条件: [CommSemiring R] [CommSemiring S] (f : R ->+* S) (A : Matrix m n S)
+  条件: [交换半环 R] [交换半环 S] (f : R ->+* S) (A : 矩阵 m n S)
   证明: ext fun i j => MvPolynomial.eval₂_X _ (fun p : m × n => A p.1 p.2) (i, j)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.eval
@@ -98,7 +98,7 @@ theorem mvPolynomialX_mapMatrix_eval
 
 中文:
 定理 mvPolynomialX_mapMatrix_eval
-  结论: [Fintype m] [DecidableEq m] [CommSemiring R]
+  结论: [有限类型 m] [DecidableEq m] [交换半环 R]
   证明: mvPolynomialX_map_eval₂ _ A
 -/
 theorem mvPolynomialX_mapMatrix_eval [Fintype m] [DecidableEq m] [CommSemiring R]
@@ -118,7 +118,7 @@ theorem mvPolynomialX_mapMatrix_aeval
 
 中文:
 定理 mvPolynomialX_mapMatrix_aeval
-  结论: [Fintype m] [DecidableEq m] [CommSemiring R] [CommSemiring S]
+  结论: [有限类型 m] [DecidableEq m] [交换半环 R] [交换半环 S]
   证明: mvPolynomialX_map_eval₂ _ A
 -/
 theorem mvPolynomialX_mapMatrix_aeval [Fintype m] [DecidableEq m] [CommSemiring R] [CommSemiring S]
@@ -142,7 +142,7 @@ theorem det_mvPolynomialX_ne_zero
 
 中文:
 定理 det_mvPolynomialX_ne_zero
-  条件: [DecidableEq m] [Fintype m] [CommRing R] [Nontrivial R]
+  条件: [DecidableEq m] [有限类型 m] [交换环 R] [非平凡 R]
   证明: by
   intro h_det
   have := congr_arg Matrix.det (mvPolynomialX_mapMatrix_eval (1 : Matrix m m R))
@@ -172,7 +172,7 @@ theorem eval_det_mvPolynomialX
 
 中文:
 定理 eval_det_mvPolynomialX
-  条件: [DecidableEq m] [Fintype m] [CommRing R] (s : m × m -> R)
+  条件: [DecidableEq m] [有限类型 m] [交换环 R] (s : m × m -> R)
   证明: by
   rw [(MvPolynomial.eval s).map_det]
   congr 1

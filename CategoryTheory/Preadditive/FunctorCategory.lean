@@ -50,7 +50,7 @@ instance functorCategoryPreadditive
 
 中文:
 实例 functorCategoryPreadditive
-  签名: : Preadditive (C ⥤ D) where
+  签名: : 预加性 (C ⥤ D) where
   定义体: { nsmul n α :=
         { app := n • α.app
           naturality X Y f := by
@@ -293,7 +293,7 @@ theorem app_sum
 
 中文:
 定理 app_sum
-  条件: {ι : 类型} (s : Finset ι) (X : C) (α : ι -> (F ⟶ G))
+  条件: {ι : 类型} (s : 有限集 ι) (X : C) (α : ι -> (F ⟶ G))
   证明: by
   simp only [← appHom_apply, map_sum]
 

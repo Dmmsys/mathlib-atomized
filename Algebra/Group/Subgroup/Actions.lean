@@ -40,7 +40,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: : MulAction S α
+  签名: : 乘法作用 S α
   定义体: inferInstanceAs (MulAction S.toSubmonoid α)
 
 Depends on / 依赖: MulAction, S.toSubmonoid, toSubmonoid
@@ -101,7 +101,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: [MulAction G β] [SMul α β] [SMulCommClass G α β] (S : Subgroup G)
+  签名: [乘法作用 G β] [标量乘法 α β] [标量交换类 G α β] (S : 子群 G)
   定义体: S.toSubmonoid.smulCommClass_left
 
 @[to_additive]
@@ -123,7 +123,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: [SMul α β] [MulAction G β] [SMulCommClass α G β] (S : Subgroup G)
+  签名: [标量乘法 α β] [乘法作用 G β] [标量交换类 α G β] (S : 子群 G)
   定义体: S.toSubmonoid.smulCommClass_right
 
 Depends on / 依赖: S.toSubmonoid.smulCommClass_right, smulCommClass_right, toSubmonoid
@@ -145,8 +145,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: α β] [MulAction G α] [MulAction G β] [IsScalarTower G α β] (S
+实例 [标量乘法
+  签名: α β] [乘法作用 G α] [乘法作用 G β] [标量塔 G α β] (S
   定义体: inferInstanceAs (IsScalarTower S.toSubmonoid α β)
 
 @[to_additive]
@@ -167,8 +167,8 @@ instance [MulAction
   body: inferInstanceAs (FaithfulSMul S.toSubmonoid α)
 
 中文:
-实例 [MulAction
-  签名: G α] [FaithfulSMul G α] (S
+实例 [乘法作用
+  签名: G α] [忠实标量乘法 G α] (S
   定义体: inferInstanceAs (FaithfulSMul S.toSubmonoid α)
 
 Depends on / 依赖: FaithfulSMul, S.toSubmonoid, toSubmonoid
@@ -185,8 +185,8 @@ instance [AddMonoid
   body: inferInstanceAs (DistribMulAction S.toSubmonoid α)
 
 中文:
-实例 [AddMonoid
-  签名: α] [DistribMulAction G α] (S
+实例 [加法幺半群
+  签名: α] [分配乘法作用 G α] (S
   定义体: inferInstanceAs (DistribMulAction S.toSubmonoid α)
 
 Depends on / 依赖: DistribMulAction, S.toSubmonoid, toSubmonoid
@@ -203,8 +203,8 @@ instance [Monoid
   body: inferInstanceAs (MulDistribMulAction S.toSubmonoid α)
 
 中文:
-实例 [Monoid
-  签名: α] [MulDistribMulAction G α] (S
+实例 [幺半群
+  签名: α] [MulDistribMul作用 G α] (S
   定义体: inferInstanceAs (MulDistribMulAction S.toSubmonoid α)
 
 Depends on / 依赖: MulDistribMulAction, S.toSubmonoid, toSubmonoid
@@ -222,7 +222,7 @@ instance center.smulCommClass_left
 
 中文:
 实例 center.smulCommClass_left
-  签名: : SMulCommClass (center G) G G
+  签名: : 标量交换类 (center G) G G
   定义体: Submonoid.center.smulCommClass_left
 
 Depends on / 依赖: Submonoid, Submonoid.center.smulCommClass_left, center, smulCommClass_left
@@ -240,7 +240,7 @@ instance center.smulCommClass_right
 
 中文:
 实例 center.smulCommClass_right
-  签名: : SMulCommClass G (center G) G
+  签名: : 标量交换类 G (center G) G
   定义体: Submonoid.center.smulCommClass_right
 
 Depends on / 依赖: Submonoid, Submonoid.center.smulCommClass_right, center, smulCommClass_right
@@ -260,8 +260,8 @@ lemma MonoidWithZeroHom.comap_mker
   proof: rfl
 
 中文:
-引理 MonoidWithZeroHom.comap_mker
-  结论: {M N P : 类型} [MulZeroOneClass M] [MulZeroOneClass N]
+引理 带零幺半群态射.comap_mker
+  结论: {M N P : 类型} [乘零幺类 M] [乘零幺类 N]
   证明: rfl
 -/
 lemma MonoidWithZeroHom.comap_mker {M N P : Type*} [MulZeroOneClass M] [MulZeroOneClass N]

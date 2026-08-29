@@ -83,7 +83,7 @@ TensorProduct.ext TensorProduct.ext (by ext; rfl)
 leftUnitor_eq _ := BialgCat.Hom.ex
 
 中文:
-定义 MonoidalCategory.inducingFunctorData
+定义 幺半群范畴.inducingFunctorData
   签名: :
   定义体: Iso.refl _
   whiskerLeft_eq _ _ _ _ := by ext; rfl
@@ -118,7 +118,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (HopfAlgCat R)
+  签名: : 幺半群范畴 (HopfAlg范畴 R)
   定义体: Monoidal.induced (forget₂ _ (BialgCat R)) (MonoidalCategory.inducingFunctorData R)
 
 Depends on / 依赖: BialgCat, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.inducingFunctorData, induced, inducingFunctorData
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (HopfAlgCat R) (BialgCat R)).Monoidal
+  签名: (forget₂ (HopfAlg范畴 R) (Bialg范畴 R)).幺半群
 -/
 noncomputable instance : (forget₂ (HopfAlgCat R) (BialgCat R)).Monoidal where
 

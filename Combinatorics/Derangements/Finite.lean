@@ -61,7 +61,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (derangements α)
+  签名: 有限类型 (derangements α)
   定义体: inferInstanceAs Fintype { f : Perm α | forall x : α, f x != x }
 
 Depends on / 依赖: Fintype
@@ -80,7 +80,7 @@ theorem card_derangements_invariant
 
 中文:
 定理 card_derangements_invariant
-  结论: {α β : 类型} [Fintype α] [DecidableEq α] [Fintype β]
+  结论: {α β : 类型} [有限类型 α] [DecidableEq α] [有限类型 β]
   证明: Fintype.card_congr (Equiv.derangementsCongr <| equivOfCardEq h)
 
 Depends on / 依赖: Equiv.derangementsCongr, Fintype, Fintype.card_congr, card_congr, derangementsCongr, equivOfCardEq
@@ -290,7 +290,7 @@ theorem card_derangements_eq_numDerangements
 
 中文:
 定理 card_derangements_eq_numDerangements
-  条件: (α : 类型) [Fintype α] [DecidableEq α]
+  条件: (α : 类型) [有限类型 α] [DecidableEq α]
   证明: by
   rw [← card_derangements_invariant (card_fin _)]
   exact card_derangements_fin_eq_numDerangements

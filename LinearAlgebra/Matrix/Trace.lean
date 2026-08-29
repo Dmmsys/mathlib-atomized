@@ -48,7 +48,7 @@ definition trace
 
 中文:
 定义 trace
-  签名: (A : Matrix n n R)
+  签名: (A : 矩阵 n n R)
   定义体: ∑ i, diag A i
 -/
 def trace (A : Matrix n n R) : R :=
@@ -65,7 +65,7 @@ lemma trace_diagonal
 
 中文:
 引理 trace_diagonal
-  条件: {o} [Fintype o] [DecidableEq o] (d : o -> R)
+  条件: {o} [有限类型 o] [DecidableEq o] (d : o -> R)
   证明: by
   simp only [trace, diag_apply, diagonal_apply_eq]
 -/
@@ -86,7 +86,7 @@ theorem trace_zero
 
 中文:
 定理 trace_zero
-  结论: trace (0 : Matrix n n R) = 0
+  结论: trace (0 : 矩阵 n n R) = 0
   证明: (Finset.sum_const (0 : R)).trans smul_zero _
 
 Depends on / 依赖: Finset, Finset.sum_const, mkMetric, smul_zero, sum_const
@@ -110,7 +110,7 @@ lemma trace_eq_zero_of_isEmpty
 
 中文:
 引理 trace_eq_zero_of_isEmpty
-  条件: [IsEmpty n] (A : Matrix n n R)
+  条件: [是空 n] (A : 矩阵 n n R)
   结论: trace A = 0
   证明: by simp [trace]
 
@@ -132,7 +132,7 @@ theorem trace_add
 
 中文:
 定理 trace_add
-  条件: (A B : Matrix n n R)
+  条件: (A B : 矩阵 n n R)
   结论: trace (A + B) = trace A + trace B
   证明: Finset.sum_add_distrib
 
@@ -156,7 +156,7 @@ theorem trace_smul
 
 中文:
 定理 trace_smul
-  条件: [DistribSMul α R] (r : α) (A : Matrix n n R)
+  条件: [分配标量乘法 α R] (r : α) (A : 矩阵 n n R)
   证明: Finset.smul_sum.symm
 
 @[simp]
@@ -181,7 +181,7 @@ theorem trace_transpose
 
 中文:
 定理 trace_transpose
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   结论: trace Aᵀ = trace A
   证明: rfl
 
@@ -202,7 +202,7 @@ theorem trace_conjTranspose
 
 中文:
 定理 trace_conjTranspose
-  条件: [StarAddMonoid R] (A : Matrix n n R)
+  条件: [StarAdd幺半群 R] (A : 矩阵 n n R)
   结论: trace Aᴴ = star (trace A)
   证明: (star_sum _ _).symm
 
@@ -227,7 +227,7 @@ definition traceAddMonoidHom
 
 中文:
 定义 traceAddMonoidHom
-  签名: : Matrix n n R ->+ R where
+  签名: : 矩阵 n n R ->+ R where
   定义体: trace
   map_zero' := trace_zero n R
   map_add' := trace_add
@@ -251,7 +251,7 @@ definition traceLinearMap
 
 中文:
 定义 traceLinearMap
-  签名: [Semiring α] [Module α R]
+  签名: [半环 α] [模 α R]
   定义体: trace
   map_add' := trace_add
   map_smul' := trace_smul
@@ -277,8 +277,8 @@ theorem trace_list_sum
 
 中文:
 定理 trace_list_sum
-  条件: (l : List (Matrix n n R))
-  结论: trace l.sum = (l.map trace).sum
+  条件: (l : 列表 (矩阵 n n R))
+  结论: trace l.求和 = (l.map trace).求和
   证明: map_list_sum (traceAddMonoidHom n R) l
 
 @[simp]
@@ -302,8 +302,8 @@ theorem trace_multiset_sum
 
 中文:
 定理 trace_multiset_sum
-  条件: (s : Multiset (Matrix n n R))
-  结论: trace s.sum = (s.map trace).sum
+  条件: (s : Multiset (矩阵 n n R))
+  结论: trace s.求和 = (s.map trace).求和
   证明: map_multiset_sum (traceAddMonoidHom n R) s
 
 @[simp]
@@ -324,7 +324,7 @@ theorem trace_sum
 
 中文:
 定理 trace_sum
-  条件: (s : Finset ι) (f : ι -> Matrix n n R)
+  条件: (s : 有限集 ι) (f : ι -> 矩阵 n n R)
   证明: map_sum (traceAddMonoidHom n R) f s
 
 Depends on / 依赖: Ioo_mem_nhdsGT, boundedBy_union_of_top_of_nonempty_inter, edist_le_ediam_of_mem, filter_upwards, iInf_eq_top, map_sum, mkMetric, not_ge, pos_iff_ne_zero, r.trans_le, tendsto_nhds_unique_of_eventuallyEq, tendsto_pre, this.not_ge, traceAddMonoidHom, trans_le
@@ -342,8 +342,8 @@ theorem _root_.AddMonoidHom.map_trace
   proof: map_sum f (fun i => diag A i) Finset.univ
 
 中文:
-定理 _root_.AddMonoidHom.map_trace
-  结论: [AddCommMonoid S] {F : 类型} [FunLike F R S]
+定理 _root_.加法幺半群态射.map_trace
+  结论: [加法交换幺半群 S] {F : 类型} [函数状 F R S]
   证明: map_sum f (fun i => diag A i) Finset.univ
 
 Depends on / 依赖: Finset, Finset.univ, map_sum
@@ -364,7 +364,7 @@ lemma trace_blockDiagonal
 
 中文:
 引理 trace_blockDiagonal
-  条件: [DecidableEq p] (M : p -> Matrix n n R)
+  条件: [DecidableEq p] (M : p -> 矩阵 n n R)
   证明: by
   simp [blockDiagonal, trace, Finset.sum_comm (γ := n), Fintype.sum_prod_type]
 
@@ -385,7 +385,7 @@ lemma trace_blockDiagonal'
 
 中文:
 引理 trace_blockDiagonal'
-  结论: [DecidableEq p] {m : p -> 类型} [对任意 i, Fintype (m i)]
+  结论: [DecidableEq p] {m : p -> 类型} [对任意 i, 有限类型 (m i)]
   证明: by
   simp [blockDiagonal', trace, Finset.sum_sigma']
 
@@ -416,7 +416,7 @@ theorem trace_sub
 
 中文:
 定理 trace_sub
-  条件: (A B : Matrix n n R)
+  条件: (A B : 矩阵 n n R)
   结论: trace (A - B) = trace A - trace B
   证明: Finset.sum_sub_distrib ..
 
@@ -439,7 +439,7 @@ theorem trace_neg
 
 中文:
 定理 trace_neg
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   结论: trace (-A) = -trace A
   证明: Finset.sum_neg_distrib ..
 
@@ -466,7 +466,7 @@ theorem trace_one
 
 中文:
 定理 trace_one
-  结论: trace (1 : Matrix n n R) = Fintype.card n
+  结论: trace (1 : 矩阵 n n R) = 有限类型.card n
   证明: by
   simp_rw [trace, diag_one, Pi.one_def, Finset.sum_const, nsmul_one, Finset.card_univ]
 
@@ -490,7 +490,7 @@ theorem trace_transpose_mul
 
 中文:
 定理 trace_transpose_mul
-  条件: [AddCommMonoid R] [Mul R] (A : Matrix m n R) (B : Matrix n m R)
+  条件: [加法交换幺半群 R] [乘法 R] (A : 矩阵 m n R) (B : 矩阵 n m R)
   证明: Finset.sum_comm
 
 Depends on / 依赖: Finset, Finset.sum_comm, sum_comm
@@ -509,7 +509,7 @@ theorem trace_mul_comm
 
 中文:
 定理 trace_mul_comm
-  条件: [AddCommMonoid R] [CommMagma R] (A : Matrix m n R) (B : Matrix n m R)
+  条件: [加法交换幺半群 R] [交换原群 R] (A : 矩阵 m n R) (B : 矩阵 n m R)
   证明: by rw [← trace_transpose, ← trace_transpose_mul, transpose_mul]
 
 Depends on / 依赖: trace_transpose, trace_transpose_mul, transpose_mul
@@ -528,7 +528,7 @@ theorem trace_mul_cycle
 
 中文:
 定理 trace_mul_cycle
-  结论: [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
+  结论: [非幺交换半环 R] (A : 矩阵 m n R) (B : 矩阵 n p R)
   证明: by
   rw [trace_mul_comm]; rw [Matrix.mul_assoc]
 
@@ -551,7 +551,7 @@ theorem trace_mul_cycle'
 
 中文:
 定理 trace_mul_cycle'
-  结论: [NonUnitalCommSemiring R] (A : Matrix m n R) (B : Matrix n p R)
+  结论: [非幺交换半环 R] (A : 矩阵 m n R) (B : 矩阵 n p R)
   证明: by
   rw [← Matrix.mul_assoc]; rw [trace_mul_comm]
 
@@ -578,7 +578,7 @@ theorem trace_replicateCol_mul_replicateRow
 
 中文:
 定理 trace_replicateCol_mul_replicateRow
-  结论: {ι : 类型} [Unique ι] [NonUnitalNonAssocSemiring R]
+  结论: {ι : 类型} [唯一 ι] [非幺非结合半环 R]
   证明: by
   apply Finset.sum_congr rfl
   simp [mul_apply]
@@ -604,7 +604,7 @@ theorem trace_vecMulVec
 
 中文:
 定理 trace_vecMulVec
-  条件: [NonUnitalNonAssocSemiring R] (a b : n -> R)
+  条件: [非幺非结合半环 R] (a b : n -> R)
   证明: by
   rw [vecMulVec_eq Unit]; rw [trace_replicateCol_mul_replicateRow]
 
@@ -629,7 +629,7 @@ lemma trace_submatrix_succ
 
 中文:
 引理 trace_submatrix_succ
-  结论: {n : 自然数} [AddCommMonoid R]
+  结论: {n : 自然数} [加法交换幺半群 R]
   证明: by
   delta trace
   rw [← (finSuccEquiv n).symm.sum_comp]
@@ -660,7 +660,7 @@ theorem trace_units_conj
 
 中文:
 定理 trace_units_conj
-  条件: (M : (Matrix m m R)ˣ) (N : Matrix m m R)
+  条件: (M : (矩阵 m m R)ˣ) (N : 矩阵 m m R)
   证明: by
   rw [trace_mul_cycle]; rw [Units.inv_mul]; rw [one_mul]
 
@@ -682,7 +682,7 @@ theorem trace_units_conj'
 
 中文:
 定理 trace_units_conj'
-  条件: (M : (Matrix m m R)ˣ) (N : Matrix m m R)
+  条件: (M : (矩阵 m m R)ˣ) (N : 矩阵 m m R)
   证明: trace_units_conj M⁻¹ N
 
 Depends on / 依赖: trace_units_conj
@@ -712,7 +712,7 @@ theorem trace_fin_zero
 
 中文:
 定理 trace_fin_zero
-  条件: (A : Matrix (Fin 0) (Fin 0) R)
+  条件: (A : 矩阵 (有限集 0) (有限集 0) R)
   结论: trace A = 0
   证明: rfl
 -/
@@ -730,7 +730,7 @@ theorem trace_fin_one
 
 中文:
 定理 trace_fin_one
-  条件: (A : Matrix (Fin 1) (Fin 1) R)
+  条件: (A : 矩阵 (有限集 1) (有限集 1) R)
   结论: trace A = A 0 0
   证明: add_zero _
 
@@ -750,7 +750,7 @@ theorem trace_fin_two
 
 中文:
 定理 trace_fin_two
-  条件: (A : Matrix (Fin 2) (Fin 2) R)
+  条件: (A : 矩阵 (有限集 2) (有限集 2) R)
   结论: trace A = A 0 0 + A 1 1
   证明: congr_arg (_ + ·) (add_zero (A 1 1))
 
@@ -774,7 +774,7 @@ theorem trace_fin_three
 
 中文:
 定理 trace_fin_three
-  条件: (A : Matrix (Fin 3) (Fin 3) R)
+  条件: (A : 矩阵 (有限集 3) (有限集 3) R)
   结论: trace A = A 0 0 + A 1 1 + A 2 2
   证明: by
   rw [← add_zero (A 2 2)]; rw [add_assoc]
@@ -920,7 +920,7 @@ theorem trace_single_mul
 
 中文:
 定理 trace_single_mul
-  结论: [NonUnitalNonAssocSemiring R] [Fintype m]
+  结论: [非幺非结合半环 R] [有限类型 m]
   证明: by
   simp [trace, mul_apply, single, ite_and]
 
@@ -942,7 +942,7 @@ theorem trace_mul_single
 
 中文:
 定理 trace_mul_single
-  结论: [NonUnitalNonAssocSemiring R] [Fintype m]
+  结论: [非幺非结合半环 R] [有限类型 m]
   证明: by
   simp [trace, mul_apply, single, ite_and]
 
@@ -968,7 +968,7 @@ theorem trace_surjective
 
 中文:
 定理 trace_surjective
-  条件: [AddCommMonoid R] [Nonempty n]
+  条件: [加法交换幺半群 R] [非空 n]
   证明: fun r => by
   classical
   inhabit n
@@ -996,7 +996,7 @@ theorem ext_iff_trace_mul_left
 
 中文:
 定理 ext_iff_trace_mul_left
-  条件: [NonAssocSemiring R] {A B : Matrix m n R}
+  条件: [非结合半环 R] {A B : 矩阵 m n R}
   证明: by
   refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
   ext i j
@@ -1026,7 +1026,7 @@ theorem ext_iff_trace_mul_right
 
 中文:
 定理 ext_iff_trace_mul_right
-  条件: [NonAssocSemiring R] {A B : Matrix m n R}
+  条件: [非结合半环 R] {A B : 矩阵 m n R}
   证明: by
   refine ⟨fun h x => h ▸ rfl, fun h => ?_⟩
   ext i j

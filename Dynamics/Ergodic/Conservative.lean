@@ -61,11 +61,11 @@ structure Conservative
     - exists_mem_iterate_mem' : forall ⦃s⦄, MeasurableSet s -> μ s != 0 -> exists x in s, exists m != 0, f^[m] x in s
 
 中文:
-结构 Conservative
-  参数: (f : α -> α) (μ : Measure α)
-  继承: QuasiMeasurePreserving f μ μ
+结构 余nservative
+  参数: (f : α -> α) (μ : 测度 α)
+  继承: 拟保测 f μ μ
   公理与运算 (1 个):
-    - exists_mem_iterate_mem' : 对任意 ⦃s⦄, MeasurableSet s -> μ s != 0 -> 存在 x in s, 存在 m != 0, f^[m] x in s
+    - exists_mem_iterate_mem' : 对任意 ⦃s⦄, 可测集 s -> μ s != 0 -> 存在 x in s, 存在 m != 0, f^[m] x in s
 
 Depends on / 依赖: exists_mem_iterate_mem, h.exists_mem_iterate_mem, h.quasiMeasurePreserving, hsm.nullMeasurableSet, nullMeasurableSet, quasiMeasurePreserving
 -/
@@ -83,8 +83,8 @@ theorem MeasurePreserving.conservative
   proof: ⟨h.quasiMeasurePreserving, fun _ hsm h0 => h.exists_mem_iterate_mem hsm.nullMeasurableSet h0⟩
 
 中文:
-定理 MeasurePreserving.conservative
-  条件: [IsFiniteMeasure μ] (h : MeasurePreserving f μ μ)
+定理 保测.conservative
+  条件: [是有限测度 μ] (h : 保测 f μ μ)
   证明: ⟨h.quasiMeasurePreserving, fun _ hsm h0 => h.exists_mem_iterate_mem hsm.nullMeasurableSet h0⟩
 -/
 protected theorem MeasurePreserving.conservative [IsFiniteMeasure μ] (h : MeasurePreserving f μ μ) :
@@ -106,8 +106,8 @@ theorem id
 
 中文:
 定理 id
-  条件: (μ : Measure α)
-  结论: Conservative id μ
+  条件: (μ : 测度 α)
+  结论: 余nservative id μ
   证明: { toQuasiMeasurePreserving := QuasiMeasurePreserving.id μ
     exists_mem_iterate_mem' := fun _ _ h0 => by
       simpa [exists_ne] using! nonempty_of_measure_ne_zero h0 }
@@ -127,7 +127,7 @@ theorem of_absolutelyContinuous
 
 中文:
 定理 of_absolutelyContinuous
-  结论: {ν : Measure α} (h : Conservative f μ) (hν : ν ≪ μ)
+  结论: {ν : 测度 α} (h : 余nservative f μ) (hν : ν ≪ μ)
   证明: ⟨h', fun _ hsm h0 => h.exists_mem_iterate_mem' hsm (mt (@hν _) h0)⟩
 
 Depends on / 依赖: exists_mem_iterate_mem, h.exists_mem_iterate_mem
@@ -147,7 +147,7 @@ theorem measureRestrict
 
 中文:
 定理 measureRestrict
-  条件: (h : Conservative f μ) (hs : MapsTo f s s)
+  条件: (h : 余nservative f μ) (hs : 映射到 f s s)
   证明: .of_absolutelyContinuous h (absolutelyContinuous_of_le restrict_le_self)
     h.toQuasiMeasurePreserving.restrict hs
 
@@ -169,7 +169,7 @@ theorem congr_ae
 
 中文:
 定理 congr_ae
-  条件: {ν : Measure α} (hf : Conservative f μ) (h : ae μ = ae ν)
+  条件: {ν : 测度 α} (hf : 余nservative f μ) (h : ae μ = ae ν)
   证明: .of_absolutelyContinuous hf h.ge.absolutelyContinuous_of_ae
     hf.toQuasiMeasurePreserving.mono h.ge.absolutelyContinuous_of_ae h.le.absolutelyContinuous_of_ae
 
@@ -189,8 +189,8 @@ theorem _root_.MeasureTheory.conservative_congr
   proof: ⟨(congr_ae · h), (congr_ae · h.symm)⟩
 
 中文:
-定理 _root_.MeasureTheory.conservative_congr
-  条件: {ν : Measure α} (h : ae μ = ae ν)
+定理 _root_.测度论.conservative_congr
+  条件: {ν : 测度 α} (h : ae μ = ae ν)
   证明: ⟨(congr_ae · h), (congr_ae · h.symm)⟩
 
 Depends on / 依赖: congr_ae, h.symm
@@ -211,8 +211,8 @@ theorem exists_mem_iterate_mem
   exact ⟨x, hsub hxt, m, hm₀, hsub hmt⟩
 
 中文:
-定理 exists_mem_iterate_mem
-  结论: (hf : Conservative f μ)
+定理 存在_mem_iterate_mem
+  结论: (hf : 余nservative f μ)
   证明: by
   rcases hsm.exists_measurable_subset_ae_eq with ⟨t, hsub, htm, hts⟩
   rcases hf.exists_mem_iterate_mem' htm (by rwa [measure_congr hts]) with ⟨x, hxt, m, hm₀, hmt⟩
@@ -242,7 +242,7 @@ theorem frequently_measure_inter_ne_zero
 
 中文:
 定理 frequently_measure_inter_ne_zero
-  结论: (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
+  结论: (hf : 余nservative f μ) (hs : NullMeasurableSet s μ)
   证明: by
   set t : Nat -> Set α := fun n => s inter f^[n] ⁻¹' s
   -- Assume that `μ (t n) ≠ 0`, where `t n = s ∩ f^[n] ⁻¹' s`, only for finitely many `n`.
@@ -287,8 +287,8 @@ theorem exists_gt_measure_inter_ne_zero
   ⟨m, hmN, hm⟩
 
 中文:
-定理 exists_gt_measure_inter_ne_zero
-  结论: (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
+定理 存在_gt_measure_inter_ne_zero
+  结论: (hf : 余nservative f μ) (hs : NullMeasurableSet s μ)
   证明: let ⟨m, hm, hmN⟩ :=
     ((hf.frequently_measure_inter_ne_zero hs h0).and_eventually (eventually_gt_atTop N)).exists
   ⟨m, hmN, hm⟩
@@ -316,8 +316,8 @@ exact hs.inter .biInter (to_countable _) fun m _ =>
   rcases (hf.exists_gt_measure_inter_n
 
 中文:
-定理 measure_mem_forall_ge_image_notMem_eq_zero
-  结论: (hf : Conservative f μ)
+定理 measure_mem_对任意_ge_image_notMem_eq_zero
+  结论: (hf : 余nservative f μ)
   证明: by
   by_contra H
   have : NullMeasurableSet (s inter { x | forall m >= n, f^[m] x ∉ s }) μ := by
@@ -355,7 +355,7 @@ theorem ae_mem_imp_frequently_image_mem
 
 中文:
 定理 ae_mem_imp_frequently_image_mem
-  条件: (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
+  条件: (hf : 余nservative f μ) (hs : NullMeasurableSet s μ)
   证明: by
   simp only [frequently_atTop, @forall_comm (_ in s), ae_all_iff]
   intro n
@@ -383,7 +383,7 @@ theorem inter_frequently_image_mem_ae_eq
 
 中文:
 定理 inter_frequently_image_mem_ae_eq
-  条件: (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
+  条件: (hf : 余nservative f μ) (hs : NullMeasurableSet s μ)
   证明: inter_eventuallyEq_left.2 hf.ae_mem_imp_frequently_image_mem hs
 
 Depends on / 依赖: ae_mem_imp_frequently_image_mem, hf.ae_mem_imp_frequently_image_mem, inter_eventuallyEq_left
@@ -402,7 +402,7 @@ theorem measure_inter_frequently_image_mem_eq
 
 中文:
 定理 measure_inter_frequently_image_mem_eq
-  条件: (hf : Conservative f μ) (hs : NullMeasurableSet s μ)
+  条件: (hf : 余nservative f μ) (hs : NullMeasurableSet s μ)
   证明: measure_congr (hf.inter_frequently_image_mem_ae_eq hs)
 
 Depends on / 依赖: hf.inter_frequently_image_mem_ae_eq, inter_frequently_image_mem_ae_eq, measure_congr
@@ -426,8 +426,8 @@ theorem ae_forall_image_mem_imp_frequently_image_mem
   rwa [add_comm, iterate_add_apply]
 
 中文:
-定理 ae_forall_image_mem_imp_frequently_image_mem
-  结论: (hf : Conservative f μ)
+定理 ae_对任意_image_mem_imp_frequently_image_mem
+  结论: (hf : 余nservative f μ)
   证明: by
   refine ae_all_iff.2 fun k => ?_
   refine (hf.ae_mem_imp_frequently_image_mem
@@ -458,7 +458,7 @@ theorem frequently_ae_mem_and_frequently_image_mem
 
 中文:
 定理 frequently_ae_mem_and_frequently_image_mem
-  结论: (hf : Conservative f μ)
+  结论: (hf : 余nservative f μ)
   证明: ((frequently_ae_mem_iff.2 h0).and_eventually (hf.ae_mem_imp_frequently_image_mem hs)).mono
     fun _ hx => ⟨hx.1, hx.2 hx.1⟩
 
@@ -483,7 +483,7 @@ theorem ae_frequently_mem_of_mem_nhds
 
 中文:
 定理 ae_frequently_mem_of_mem_nhds
-  结论: [TopologicalSpace α] [SecondCountableTopology α]
+  结论: [拓扑空间 α] [第二可数拓扑 α]
   证明: by
   have : forall s in countableBasis α, forallᵐ x ∂μ, x in s -> existsᶠ n in atTop, f^[n] x in s := fun s hs =>
     h.ae_mem_imp_frequently_image_mem (isOpen_of_mem_countableBasis hs).nullMeasurableSet
@@ -519,8 +519,8 @@ theorem iterate
 
 中文:
 定理 iterate
-  条件: (hf : Conservative f μ) (n : 自然数)
-  结论: Conservative f^[n] μ
+  条件: (hf : 余nservative f μ) (n : 自然数)
+  结论: 余nservative f^[n] μ
   证明: by
   -- Discharge the trivial case `n = 0`
   rcases n with - | n

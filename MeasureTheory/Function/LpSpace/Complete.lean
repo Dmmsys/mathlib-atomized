@@ -40,7 +40,7 @@ theorem eLpNorm'_lim_eq_lintegral_liminf
 
 中文:
 定理 eLpNorm'_lim_eq_lintegral_liminf
-  结论: {ι} [Nonempty ι] [LinearOrder ι] {f : ι -> α -> E} {p : 实数}
+  结论: {ι} [非空 ι] [线性序 ι] {f : ι -> α -> E} {p : 实数}
   证明: by
   suffices h_no_pow : (∫⁻ a, ‖f_lim a‖ₑ ^ p ∂μ) = ∫⁻ a, atTop.liminf fun m => ‖f m a‖ₑ ^ p ∂μ by
     rw [eLpNorm'_eq_lintegral_enorm]; rw [h_no_pow]
@@ -120,7 +120,7 @@ theorem eLpNorm_exponent_top_lim_eq_essSup_liminf
 
 中文:
 定理 eLpNorm_exponent_top_lim_eq_essSup_liminf
-  结论: {ι} [Nonempty ι] [LinearOrder ι] {f : ι -> α -> E}
+  结论: {ι} [非空 ι] [线性序 ι] {f : ι -> α -> E}
   证明: by
   rw [eLpNorm_exponent_top]; rw [eLpNormEssSup_eq_essSup_enorm]
   refine essSup_congr_ae (h_lim.mono fun x hx => ?_)
@@ -152,7 +152,7 @@ theorem eLpNorm_exponent_top_lim_le_liminf_eLpNorm_exponent_top
 
 中文:
 定理 eLpNorm_exponent_top_lim_le_liminf_eLpNorm_exponent_top
-  结论: {ι} [Nonempty ι] [Countable ι]
+  结论: {ι} [非空 ι] [可数 ι]
   证明: by
   rw [eLpNorm_exponent_top_lim_eq_essSup_liminf h_lim]
   simp_rw [eLpNorm_exponent_top, eLpNormEssSup]
@@ -229,7 +229,7 @@ theorem eLpNorm_le_of_ae_tendsto
 
 中文:
 定理 eLpNorm_le_of_ae_tendsto
-  结论: {ι : 类型} {u : Filter ι} [NeBot u] [IsCountablyGenerated u]
+  结论: {ι : 类型} {u : 滤子 ι} [NeBot u] [是余untablyGenerated u]
   证明: by
   obtain ⟨v, hv⟩ := exists_seq_tendsto u
   have : forallᵐ (x : α) ∂μ, Tendsto (fun n => f (v n) x) atTop (𝓝 (g x)) := by
@@ -277,7 +277,7 @@ theorem tendsto_Lp_iff_tendsto_eLpNorm'
 
 中文:
 定理 tendsto_Lp_iff_tendsto_eLpNorm'
-  结论: {ι} {fi : Filter ι} [Fact (1 <= p)] (f : ι -> Lp E p μ)
+  结论: {ι} {fi : 滤子 ι} [Fact (1 <= p)] (f : ι -> Lp E p μ)
   证明: by
   rw [tendsto_iff_dist_tendsto_zero]
   simp_rw [dist_def]
@@ -312,7 +312,7 @@ theorem tendsto_Lp_iff_tendsto_eLpNorm
 
 中文:
 定理 tendsto_Lp_iff_tendsto_eLpNorm
-  结论: {ι} {fi : Filter ι} [Fact (1 <= p)] (f : ι -> Lp E p μ)
+  结论: {ι} {fi : 滤子 ι} [Fact (1 <= p)] (f : ι -> Lp E p μ)
   证明: by
   rw [tendsto_Lp_iff_tendsto_eLpNorm']
   suffices h_eq :
@@ -350,7 +350,7 @@ theorem tendsto_Lp_iff_tendsto_eLpNorm''
 
 中文:
 定理 tendsto_Lp_iff_tendsto_eLpNorm''
-  结论: {ι} {fi : Filter ι} [Fact (1 <= p)] (f : ι -> α -> E)
+  结论: {ι} {fi : 滤子 ι} [Fact (1 <= p)] (f : ι -> α -> E)
   证明: by
   rw [Lp.tendsto_Lp_iff_tendsto_eLpNorm' (fun n => (f_ℒp n).toLp (f n)) (f_lim_ℒp.toLp f_lim)]
   refine Filter.tendsto_congr fun n => ?_
@@ -383,7 +383,7 @@ theorem tendsto_Lp_of_tendsto_eLpNorm
 
 中文:
 定理 tendsto_Lp_of_tendsto_eLpNorm
-  结论: {ι} {fi : Filter ι} [Fact (1 <= p)] {f : ι -> Lp E p μ}
+  结论: {ι} {fi : 滤子 ι} [Fact (1 <= p)] {f : ι -> Lp E p μ}
   证明: (tendsto_Lp_iff_tendsto_eLpNorm f f_lim f_lim_ℒp).mpr h_tendsto
 
 Depends on / 依赖: f_lim, h_tendsto, tendsto_Lp_iff_tendsto_eLpNorm
@@ -408,7 +408,7 @@ theorem cauchySeq_Lp_iff_cauchySeq_eLpNorm
 
 中文:
 定理 cauchySeq_Lp_iff_cauchySeq_eLpNorm
-  结论: {ι} [Nonempty ι] [SemilatticeSup ι] [hp : Fact (1 <= p)]
+  结论: {ι} [非空 ι] [SemilatticeSup ι] [hp : Fact (1 <= p)]
   证明: by
   simp_rw [cauchySeq_iff_tendsto_dist_atTop_0, dist_def]
   rw [← ENNReal.toReal_zero]; rw [ENNReal.tendsto_toReal_iff (fun n => ?_) ENNReal.zero_ne_top]
@@ -674,7 +674,7 @@ theorem ae_tendsto_of_cauchy_eLpNorm'
 
 中文:
 定理 ae_tendsto_of_cauchy_eLpNorm'
-  结论: [CompleteSpace E] {f : 自然数 -> α -> E} {p : 实数}
+  结论: [完备空间 E] {f : 自然数 -> α -> E} {p : 实数}
   证明: by
   have h_summable : forallᵐ x ∂μ, Summable fun i : Nat => f (i + 1) x - f i x := by
     have h1 :
@@ -722,7 +722,7 @@ theorem ae_tendsto_of_cauchy_eLpNorm
 
 中文:
 定理 ae_tendsto_of_cauchy_eLpNorm
-  结论: [CompleteSpace E] {f : 自然数 -> α -> E}
+  结论: [完备空间 E] {f : 自然数 -> α -> E}
   证明: by
   by_cases hp_top : p = ∞
   · simp_rw [hp_top] at *
@@ -873,7 +873,7 @@ theorem cauchy_complete_eLpNorm
 
 中文:
 定理 cauchy_complete_eLpNorm
-  结论: [CompleteSpace E] (hp : 1 <= p) {f : 自然数 -> α -> E}
+  结论: [完备空间 E] (hp : 1 <= p) {f : 自然数 -> α -> E}
   证明: by
   obtain ⟨f_lim, h_f_lim_meas, h_lim⟩ :
       exists f_lim : α -> E, StronglyMeasurable f_lim ∧
@@ -910,7 +910,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace E] [hp : Fact (1 <= p)]
+  签名: [完备空间 E] [hp : Fact (1 <= p)]
   定义体: completeSpace_lp_of_cauchy_complete_eLpNorm fun _f hf _B hB h_cau =>
     cauchy_complete_eLpNorm hp.elim hf hB.ne h_cau
 

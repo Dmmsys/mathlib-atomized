@@ -41,7 +41,7 @@ definition IsTotallyDisconnected
 
 中文:
 定义 IsTotallyDisconnected
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: forall t, t subseteq s -> IsPreconnected t -> t.Subsingleton
 
 Depends on / 依赖: IsPreconnected, Subsingleton, subseteq, t.Subsingleton
@@ -60,7 +60,7 @@ theorem isTotallyDisconnected_empty
 
 中文:
 定理 isTotallyDisconnected_empty
-  结论: IsTotallyDisconnected (∅ : Set α)
+  结论: IsTotallyDisconnected (∅ : 集合 α)
   证明: fun _ ht _ _ x_in _ _ =>
   (ht x_in).elim
 
@@ -82,7 +82,7 @@ theorem isTotallyDisconnected_singleton
 中文:
 定理 isTotallyDisconnected_singleton
   条件: {x}
-  结论: IsTotallyDisconnected ({x} : Set α)
+  结论: IsTotallyDisconnected ({x} : 集合 α)
   证明: fun _ ht _ =>
   subsingleton_singleton.anti ht
 -/
@@ -101,10 +101,10 @@ class TotallyDisconnectedSpace
     - isTotallyDisconnected_univ : IsTotallyDisconnected (univ : Set α)
 
 中文:
-类 TotallyDisconnectedSpace
-  参数: (α : 类型u) [TopologicalSpace α]
+类 全不连通空间
+  参数: (α : 类型u) [拓扑空间 α]
   公理与运算 (1 个):
-    - isTotallyDisconnected_univ : IsTotallyDisconnected (univ : Set α)
+    - isTotallyDisconnected_univ : IsTotallyDisconnected (univ : 集合 α)
 -/
 class TotallyDisconnectedSpace (α : Type u) [TopologicalSpace α] : Prop where
   /-- The universal set `Set.univ` in a totally disconnected space is totally disconnected. -/
@@ -119,8 +119,8 @@ theorem IsPreconnected.subsingleton
   proof: TotallyDisconnectedSpace.isTotallyDisconnected_univ s (subset_univ s) h
 
 中文:
-定理 IsPreconnected.subsingleton
-  结论: [TotallyDisconnectedSpace α] {s : Set α}
+定理 是预连通.subsingleton
+  结论: [全不连通空间 α] {s : 集合 α}
   证明: TotallyDisconnectedSpace.isTotallyDisconnected_univ s (subset_univ s) h
 
 Depends on / 依赖: TotallyDisconnectedSpace, TotallyDisconnectedSpace.isTotallyDisconnected_univ, isTotallyDisconnected_univ, subset_univ
@@ -159,7 +159,7 @@ instance Pi.totallyDisconnectedSpace
     fun x x_in y y_in => funext fun a => (this a).subsingleton ⟨x, x_in, rfl⟩ ⟨y, y_in, rfl⟩⟩
 
 中文:
-实例 Pi.totallyDisconnectedSpace
+实例 依赖函数类型.totallyDisconnectedSpace
   签名: {α : 类型} {β : α -> 类型}
   定义体: ⟨fun t _ h2 =>
     have : forall a, IsPreconnected ((fun x : forall a, β a => x a) '' t) := fun a =>
@@ -190,8 +190,8 @@ instance Prod.totallyDisconnectedSpace
       (H2.subsingle
 
 中文:
-实例 Prod.totallyDisconnectedSpace
-  签名: [TopologicalSpace β] [TotallyDisconnectedSpace α]
+实例 积类型.totallyDisconnectedSpace
+  签名: [拓扑空间 β] [全不连通空间 α]
   定义体: ⟨fun t _ h2 =>
     have H1 : IsPreconnected (Prod.fst '' t) := h2.image Prod.fst continuous_fst.continuousOn
     have H2 : IsPreconnected (Prod.snd '' t) := h2.image Prod.snd continuous_snd.continuousOn
@@ -223,8 +223,8 @@ instance [TopologicalSpace
   · exact ht.subsingleton.image _
 
 中文:
-实例 [TopologicalSpace
-  签名: β] [TotallyDisconnectedSpace α] [TotallyDisconnectedSpace β] :
+实例 [拓扑空间
+  签名: β] [全不连通空间 α] [全不连通空间 β] :
   定义体: by
   refine ⟨fun s _ hs => ?_⟩
   obtain ⟨t, ht, rfl⟩ | ⟨t, ht, rfl⟩ := Sum.isPreconnected_iff.1 hs
@@ -254,8 +254,8 @@ instance [forall
     exact ht.isPreconnected.subsingleton.image _
 
 中文:
-实例 [forall
-  签名: i, TopologicalSpace (X i)] [对任意 i, TotallyDisconnectedSpace (X i)] :
+实例 [对任意
+  签名: i, 拓扑空间 (X i)] [对任意 i, 全不连通空间 (X i)] :
   定义体: by
   refine ⟨fun s _ hs => ?_⟩
   obtain rfl | h := s.eq_empty_or_nonempty
@@ -357,7 +357,7 @@ theorem connectedComponent_eq_singleton
 
 中文:
 定理 connectedComponent_eq_singleton
-  条件: [TotallyDisconnectedSpace α] (x : α)
+  条件: [全不连通空间 α] (x : α)
   证明: totallyDisconnectedSpace_iff_connectedComponent_singleton.1 ‹_› x
 -/
 @[simp] theorem connectedComponent_eq_singleton [TotallyDisconnectedSpace α] (x : α) :
@@ -376,8 +376,8 @@ theorem Continuous.image_connectedComponent_eq_singleton
     (isPreconnected_connectedComponent.image f h.continuousOn).subsingleton
 
 中文:
-定理 Continuous.image_connectedComponent_eq_singleton
-  结论: {β : 类型} [TopologicalSpace β]
+定理 连续.image_connectedComponent_eq_singleton
+  结论: {β : 类型} [拓扑空间 β]
   证明: (Set.subsingleton_iff_singleton <| mem_image_of_mem f mem_connectedComponent).mp
     (isPreconnected_connectedComponent.image f h.continuousOn).subsingleton
 
@@ -400,7 +400,7 @@ theorem isTotallyDisconnected_of_totallyDisconnectedSpace
 
 中文:
 定理 isTotallyDisconnected_of_totallyDisconnectedSpace
-  条件: [TotallyDisconnectedSpace α] (s : Set α)
+  条件: [全不连通空间 α] (s : 集合 α)
   证明: fun t _ ht =>
   TotallyDisconnectedSpace.isTotallyDisconnected_univ _ t.subset_univ ht
 -/
@@ -417,8 +417,8 @@ lemma TotallyDisconnectedSpace.eq_of_continuous
   proof: (isPreconnected_univ.image f hf.continuousOn).subsingleton ⟨i, trivial, rfl⟩ ⟨j, trivial, rfl⟩
 
 中文:
-引理 TotallyDisconnectedSpace.eq_of_continuous
-  结论: [TopologicalSpace β]
+引理 全不连通空间.eq_of_continuous
+  结论: [拓扑空间 β]
   证明: (isPreconnected_univ.image f hf.continuousOn).subsingleton ⟨i, trivial, rfl⟩ ⟨j, trivial, rfl⟩
 
 Depends on / 依赖: continuousOn, hf.continuousOn, isPreconnected_univ, isPreconnected_univ.image, subsingleton
@@ -441,7 +441,7 @@ definition TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace
   right_inv _ := rfl
 
 中文:
-定义 TotallyDisconnectedSpace.continuousMapEquivOfConnectedSpace
+定义 全不连通空间.continuousMapEquivOfConnectedSpace
   定义体: f (Classical.arbitrary _)
   invFun y := ⟨fun _ => y, by fun_prop⟩
   left_inv f := ContinuousMap.ext (TotallyDisconnectedSpace.eq_of_continuous _ f.2 _)
@@ -471,7 +471,7 @@ hf'
 
 中文:
 定理 isTotallyDisconnected_of_image
-  结论: [TopologicalSpace β] {f : α -> β} (hf : ContinuousOn f s)
+  结论: [拓扑空间 β] {f : α -> β} (hf : ContinuousOn f s)
   证明: fun _t hts ht _x x_in _y y_in =>
 hf'
     h _ (image_mono hts) (ht.image f <| hf.mono hts) (mem_image_of_mem f x_in)
@@ -495,8 +495,8 @@ lemma Topology.IsEmbedding.isTotallyDisconnected
   proof: isTotallyDisconnected_of_image hf.continuous.continuousOn hf.injective h
 
 中文:
-引理 Topology.IsEmbedding.isTotallyDisconnected
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+引理 拓扑.是嵌入.isTotallyDisconnected
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: isTotallyDisconnected_of_image hf.continuous.continuousOn hf.injective h
 
 Depends on / 依赖: continuous, continuousOn, hf.continuous.continuousOn, hf.injective, injective, isTotallyDisconnected_of_image
@@ -519,8 +519,8 @@ lemma Topology.IsEmbedding.isTotallyDisconnected_image
   exact (hs v hvs hu).image _
 
 中文:
-引理 Topology.IsEmbedding.isTotallyDisconnected_image
-  结论: [TopologicalSpace β] {f : α -> β} {s : Set α}
+引理 拓扑.是嵌入.isTotallyDisconnected_image
+  结论: [拓扑空间 β] {f : α -> β} {s : 集合 α}
   证明: by
   refine ⟨hf.isTotallyDisconnected, fun hs u hus hu => ?_⟩
   obtain ⟨v, hvs, rfl⟩ : exists v, v subseteq s ∧ f '' v = u :=
@@ -548,8 +548,8 @@ lemma Topology.IsEmbedding.isTotallyDisconnected_range
   rw [totallyDisconnectedSpace_iff]; rw [← image_univ]; rw [hf.isTotallyDisconnected_image]
 
 中文:
-引理 Topology.IsEmbedding.isTotallyDisconnected_range
-  结论: [TopologicalSpace β] {f : α -> β}
+引理 拓扑.是嵌入.isTotallyDisconnected_range
+  结论: [拓扑空间 β] {f : α -> β}
   证明: by
   rw [totallyDisconnectedSpace_iff]; rw [← image_univ]; rw [hf.isTotallyDisconnected_image]
 
@@ -570,7 +570,7 @@ lemma totallyDisconnectedSpace_subtype_iff
 
 中文:
 引理 totallyDisconnectedSpace_subtype_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   证明: by
   rw [← IsEmbedding.subtypeVal.isTotallyDisconnected_range]; rw [Subtype.range_val]
 
@@ -589,8 +589,8 @@ instance Subtype.totallyDisconnectedSpace
   body: totallyDisconnectedSpace_subtype_iff.2 (isTotallyDisconnected_of_totallyDisconnectedSpace _)
 
 中文:
-实例 Subtype.totallyDisconnectedSpace
-  签名: {α : 类型} {p : α -> 命题} [TopologicalSpace α]
+实例 子类型.totallyDisconnectedSpace
+  签名: {α : 类型} {p : α -> 命题} [拓扑空间 α]
   定义体: totallyDisconnectedSpace_subtype_iff.2 (isTotallyDisconnected_of_totallyDisconnectedSpace _)
 
 Depends on / 依赖: isTotallyDisconnected_of_totallyDisconnectedSpace, totallyDisconnectedSpace_subtype_iff
@@ -608,8 +608,8 @@ instance [TotallyDisconnectedSpace
   body: ‹TotallyDisconnectedSpace α›
 
 中文:
-实例 [TotallyDisconnectedSpace
-  签名: α] : TotallyDisconnectedSpace (Additive α)
+实例 [全不连通空间
+  签名: α] : 全不连通空间 (加性 α)
   定义体: ‹TotallyDisconnectedSpace α›
 
 Depends on / 依赖: TotallyDisconnectedSpace
@@ -626,8 +626,8 @@ instance [TotallyDisconnectedSpace
   body: ‹TotallyDisconnectedSpace α›
 
 中文:
-实例 [TotallyDisconnectedSpace
-  签名: α] : TotallyDisconnectedSpace (Multiplicative α)
+实例 [全不连通空间
+  签名: α] : 全不连通空间 (Multiplicative α)
   定义体: ‹TotallyDisconnectedSpace α›
 
 Depends on / 依赖: TotallyDisconnectedSpace
@@ -650,7 +650,7 @@ definition IsTotallySeparated
 
 中文:
 定义 IsTotallySeparated
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: Set.Pairwise s fun x y =>
   exists u v : Set α, IsOpen u ∧ IsOpen v ∧ x in u ∧ y in v ∧ s subseteq u union v ∧ Disjoint u v
 
@@ -670,7 +670,7 @@ theorem isTotallySeparated_empty
 
 中文:
 定理 isTotallySeparated_empty
-  结论: IsTotallySeparated (∅ : Set α)
+  结论: IsTotallySeparated (∅ : 集合 α)
   证明: fun _ => False.elim
 
 Depends on / 依赖: False.elim
@@ -690,7 +690,7 @@ theorem isTotallySeparated_singleton
 中文:
 定理 isTotallySeparated_singleton
   条件: {x}
-  结论: IsTotallySeparated ({x} : Set α)
+  结论: IsTotallySeparated ({x} : 集合 α)
   证明: fun _ hp _ hq hpq =>
   (hpq <| (eq_of_mem_singleton hp).symm ▸ (eq_of_mem_singleton hq).symm).elim
 -/
@@ -715,7 +715,7 @@ theorem isTotallyDisconnected_of_isTotallySeparated
 
 中文:
 定理 isTotallyDisconnected_of_isTotallySeparated
-  条件: {s : Set α} (H : IsTotallySeparated s)
+  条件: {s : 集合 α} (H : IsTotallySeparated s)
   证明: by
   intro t hts ht x x_in y y_in
   by_contra h
@@ -751,10 +751,10 @@ class TotallySeparatedSpace
     - isTotallySeparated_univ : IsTotallySeparated (univ : Set α)
 
 中文:
-类 TotallySeparatedSpace
-  参数: (α : 类型u) [TopologicalSpace α]
+类 TotallySeparated空间
+  参数: (α : 类型u) [拓扑空间 α]
   公理与运算 (1 个):
-    - isTotallySeparated_univ : IsTotallySeparated (univ : Set α)
+    - isTotallySeparated_univ : IsTotallySeparated (univ : 集合 α)
 -/
 @[mk_iff] class TotallySeparatedSpace (α : Type u) [TopologicalSpace α] : Prop where
   /-- The universal set `Set.univ` in a totally separated space is totally separated. -/
@@ -785,8 +785,8 @@ theorem totallySeparatedSpace_iff_exists_isClopen
       Ux, fun Uy => Set.dis
 
 中文:
-定理 totallySeparatedSpace_iff_exists_isClopen
-  条件: {α : 类型} [TopologicalSpace α]
+定理 totallySeparatedSpace_iff_存在_isClopen
+  条件: {α : 类型} [拓扑空间 α]
   证明: by
   simp only [totallySeparatedSpace_iff, IsTotallySeparated, Set.Pairwise, mem_univ, true_implies]
   refine forall₃_congr fun x y _ =>
@@ -814,8 +814,8 @@ theorem exists_isClopen_of_totally_separated
   proof: totallySeparatedSpace_iff_exists_isClopen.mp ‹_›
 
 中文:
-定理 exists_isClopen_of_totally_separated
-  结论: {α : 类型} [TopologicalSpace α]
+定理 存在_isClopen_of_totally_separated
+  结论: {α : 类型} [拓扑空间 α]
   证明: totallySeparatedSpace_iff_exists_isClopen.mp ‹_›
 
 Depends on / 依赖: totallySeparatedSpace_iff_exists_isClopen, totallySeparatedSpace_iff_exists_isClopen.mp
@@ -840,8 +840,8 @@ theorem Continuous.image_eq_of_connectedComponent_eq
       h.image_connectedComponent_eq_singleton b ▸ hab ▸ rfl
 
 中文:
-定理 Continuous.image_eq_of_connectedComponent_eq
-  结论: (h : Continuous f) (a b : α)
+定理 连续.image_eq_of_connectedComponent_eq
+  结论: (h : 连续 f) (a b : α)
   证明: singleton_eq_singleton_iff.1
     h.image_connectedComponent_eq_singleton a ▸
       h.image_connectedComponent_eq_singleton b ▸ hab ▸ rfl
@@ -866,8 +866,8 @@ definition Continuous.connectedComponentsLift
 @[continuity]
 
 中文:
-定义 Continuous.connectedComponentsLift
-  签名: (h : Continuous f)
+定义 连续.connectedComponentsLift
+  签名: (h : 连续 f)
   定义体: fun x =>
   Quotient.liftOn' x f h.image_eq_of_connectedComponent_eq
 
@@ -888,8 +888,8 @@ theorem Continuous.connectedComponentsLift_continuous
 @[simp]
 
 中文:
-定理 Continuous.connectedComponentsLift_continuous
-  条件: (h : Continuous f)
+定理 连续.connectedComponentsLift_continuous
+  条件: (h : 连续 f)
   证明: h.quotient_liftOn' by convert! h.image_eq_of_connectedComponent_eq
 
 @[simp]
@@ -912,8 +912,8 @@ theorem Continuous.connectedComponentsLift_apply_coe
 @[simp]
 
 中文:
-定理 Continuous.connectedComponentsLift_apply_coe
-  条件: (h : Continuous f) (x : α)
+定理 连续.connectedComponentsLift_apply_coe
+  条件: (h : 连续 f) (x : α)
   证明: rfl
 
 @[simp]
@@ -932,8 +932,8 @@ theorem Continuous.connectedComponentsLift_comp_coe
   proof: rfl
 
 中文:
-定理 Continuous.connectedComponentsLift_comp_coe
-  条件: (h : Continuous f)
+定理 连续.connectedComponentsLift_comp_coe
+  条件: (h : 连续 f)
   证明: rfl
 -/
 theorem Continuous.connectedComponentsLift_comp_coe (h : Continuous f) :
@@ -950,7 +950,7 @@ theorem connectedComponents_lift_unique'
 
 中文:
 定理 connectedComponents_lift_unique'
-  结论: {β : Sort*} {g₁ g₂ : ConnectedComponents α -> β}
+  结论: {β : 类型层*} {g₁ g₂ : ConnectedComponents α -> β}
   证明: ConnectedComponents.surjective_coe.injective_comp_right hg
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.surjective_coe.injective_comp_right, injective_comp_right, surjective_coe
@@ -968,8 +968,8 @@ theorem Continuous.connectedComponentsLift_unique
   proof: connectedComponents_lift_unique' hg.trans h.connectedComponentsLift_comp_coe.symm
 
 中文:
-定理 Continuous.connectedComponentsLift_unique
-  结论: (h : Continuous f) (g : ConnectedComponents α -> β)
+定理 连续.connectedComponentsLift_unique
+  结论: (h : 连续 f) (g : ConnectedComponents α -> β)
   证明: connectedComponents_lift_unique' hg.trans h.connectedComponentsLift_comp_coe.symm
 
 Depends on / 依赖: connectedComponentsLift_comp_coe, connectedComponents_lift_unique, h.connectedComponentsLift_comp_coe.symm, hg.trans
@@ -1022,8 +1022,8 @@ definition Continuous.connectedComponentsMap
 @[simp]
 
 中文:
-定义 Continuous.connectedComponentsMap
-  签名: {β : 类型} [TopologicalSpace β] {f : α -> β}
+定义 连续.connectedComponentsMap
+  签名: {β : 类型} [拓扑空间 β] {f : α -> β}
   定义体: Continuous.connectedComponentsLift (ConnectedComponents.continuous_coe.comp h)
 
 @[simp]
@@ -1044,8 +1044,8 @@ lemma Continuous.connectedComponentsMap_mk
   proof: rfl
 
 中文:
-引理 Continuous.connectedComponentsMap_mk
-  结论: {β : 类型} [TopologicalSpace β] {f : α -> β}
+引理 连续.connectedComponentsMap_mk
+  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
   证明: rfl
 -/
 lemma Continuous.connectedComponentsMap_mk {β : Type*} [TopologicalSpace β] {f : α -> β}
@@ -1062,8 +1062,8 @@ theorem Continuous.connectedComponentsMap_continuous
   proof: Continuous.connectedComponentsLift_continuous (ConnectedComponents.continuous_coe.comp h)
 
 中文:
-定理 Continuous.connectedComponentsMap_continuous
-  结论: {β : 类型} [TopologicalSpace β] {f : α -> β}
+定理 连续.connectedComponentsMap_continuous
+  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
   证明: Continuous.connectedComponentsLift_continuous (ConnectedComponents.continuous_coe.comp h)
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.continuous_coe.comp, Continuous, Continuous.connectedComponentsLift_continuous, connectedComponentsLift_continuous, continuous_coe
@@ -1085,8 +1085,8 @@ lemma Topology.IsCoinducing.connectedComponentsMap
 @[simp]
 
 中文:
-引理 Topology.IsCoinducing.connectedComponentsMap
-  结论: {β : 类型} [TopologicalSpace β] {f : α -> β}
+引理 拓扑.是余inducing.connectedComponentsMap
+  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
   证明: by
   rw [← ConnectedComponents.isQuotientMap_coe.isCoinducing.of_comp_iff]
   exact ConnectedComponents.isQuotientMap_coe.isCoinducing.comp hf
@@ -1111,8 +1111,8 @@ lemma Continuous.connectedComponentsMap_surjective
   proof: Quotient.lift_surjective _ _ ConnectedComponents.surjective_coe.comp h
 
 中文:
-引理 Continuous.connectedComponentsMap_surjective
-  结论: {β : 类型} [TopologicalSpace β] {f : α -> β}
+引理 连续.connectedComponentsMap_surjective
+  结论: {β : 类型} [拓扑空间 β] {f : α -> β}
   证明: Quotient.lift_surjective _ _ ConnectedComponents.surjective_coe.comp h
 
 Depends on / 依赖: ConnectedComponents, ConnectedComponents.surjective_coe.comp, Quotient, Quotient.lift_surjective, lift_surjective, surjective_coe
@@ -1135,8 +1135,8 @@ lemma Topology.IsCoinducing.connectedComponentsMap_bijective
   simp_all [← hf.preimage_connectedComponent hf']
 
 中文:
-引理 Topology.IsCoinducing.connectedComponentsMap_bijective
-  结论: {β : 类型} [TopologicalSpace β]
+引理 拓扑.是余inducing.connectedComponentsMap_bijective
+  结论: {β : 类型} [拓扑空间 β]
   证明: by
   refine ⟨fun x y h => ?_, Continuous.connectedComponentsMap_surjective _ fun y => (hf' y).nonempty⟩
   obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe x
@@ -1162,8 +1162,8 @@ theorem IsPreconnected.constant
   proof: (hs.image f hf).subsingleton (mem_image_of_mem f hx) (mem_image_of_mem f hy)
 
 中文:
-定理 IsPreconnected.constant
-  结论: {Y : 类型} [TopologicalSpace Y] [DiscreteTopology Y] {s : Set α}
+定理 是预连通.constant
+  结论: {Y : 类型} [拓扑空间 Y] [离散拓扑 Y] {s : 集合 α}
   证明: (hs.image f hf).subsingleton (mem_image_of_mem f hx) (mem_image_of_mem f hy)
 
 Depends on / 依赖: hs.image, mem_image_of_mem, subsingleton
@@ -1182,8 +1182,8 @@ theorem PreconnectedSpace.constant
   proof: IsPreconnected.constant hp.isPreconnected_univ (Continuous.continuousOn hf) trivial trivial
 
 中文:
-定理 PreconnectedSpace.constant
-  结论: {Y : 类型} [TopologicalSpace Y] [DiscreteTopology Y]
+定理 预连通空间.constant
+  结论: {Y : 类型} [拓扑空间 Y] [离散拓扑 Y]
   证明: IsPreconnected.constant hp.isPreconnected_univ (Continuous.continuousOn hf) trivial trivial
 
 Depends on / 依赖: Continuous, Continuous.continuousOn, IsPreconnected, IsPreconnected.constant, constant, continuousOn, hp.isPreconnected_univ, isPreconnected_univ
@@ -1205,8 +1205,8 @@ theorem IsPreconnected.constant_of_mapsTo
   exact (isPreconnected_iff_preconnectedSpace.mp hS).constant (hc.mapsToRestrict _)
 
 中文:
-定理 IsPreconnected.constant_of_mapsTo
-  结论: {S : Set α} (hS : IsPreconnected S)
+定理 是预连通.constant_of_mapsTo
+  结论: {S : 集合 α} (hS : 是预连通 S)
   证明: by
   let F : S -> T := hTm.restrict f S T
   suffices F ⟨x, hx⟩ = F ⟨y, hy⟩ by rwa [← Subtype.coe_inj] at this
@@ -1235,8 +1235,8 @@ theorem IsPreconnected.eqOn_const_of_mapsTo
   · exact ⟨f x, hTm hx, fun x' hx' => hS.constant_of_mapsTo hT hc hTm hx' hx⟩
 
 中文:
-定理 IsPreconnected.eqOn_const_of_mapsTo
-  结论: {S : Set α} (hS : IsPreconnected S)
+定理 是预连通.eqOn_const_of_mapsTo
+  结论: {S : 集合 α} (hS : 是预连通 S)
   证明: by
   rcases S.eq_empty_or_nonempty with (rfl | ⟨x, hx⟩)
   · exact hne.imp fun _ hy => ⟨hy, eqOn_empty _ _⟩
@@ -1265,8 +1265,8 @@ theorem IsPreconnected.isDiscrete_iff_subsingleton
   mpr h := h.isDiscrete
 
 中文:
-定理 IsPreconnected.isDiscrete_iff_subsingleton
-  条件: {S : Set α} (hS : IsPreconnected S)
+定理 是预连通.isDiscrete_iff_subsingleton
+  条件: {S : 集合 α} (hS : 是预连通 S)
   证明: by
     have : DiscreteTopology S := isDiscrete_iff_discreteTopology.mp h
     have : PreconnectedSpace S := isPreconnected_iff_preconnectedSpace.mp hS

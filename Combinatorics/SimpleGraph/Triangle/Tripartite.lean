@@ -62,15 +62,15 @@ inductive Rel
     - in₂₁: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₂ c) (in₁ b)
 
 中文:
-归纳类型 Rel
-  参数: (t : Finset (α × β × γ))
+归纳类型 关系
+  参数: (t : 有限集 (α × β × γ))
   构造子 (6 个):
-    - in₀₁: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₀ a) (in₁ b)
-    - in₁₀: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₁ b) (in₀ a)
-    - in₀₂: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₀ a) (in₂ c)
-    - in₂₀: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₂ c) (in₀ a)
-    - in₁₂: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₁ b) (in₂ c)
-    - in₂₁: ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₂ c) (in₁ b)
+    - in₀₁: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₀ a) (in₁ b)
+    - in₁₀: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₁ b) (in₀ a)
+    - in₀₂: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₀ a) (in₂ c)
+    - in₂₀: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₂ c) (in₀ a)
+    - in₁₂: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₁ b) (in₂ c)
+    - in₂₁: ⦃a b c⦄ : (a, b, c) in t -> 关系 t (in₂ c) (in₁ b)
 -/
 @[mk_iff] inductive Rel (t : Finset (α × β × γ)) : α oplus β oplus γ -> α oplus β oplus γ -> Prop
 | in₀₁ ⦃a b c⦄ : (a, b, c) in t -> Rel t (in₀ a) (in₁ b)
@@ -92,7 +92,7 @@ instance rel_irrefl
 
 中文:
 实例 rel_irrefl
-  签名: : Std.Irrefl (Rel t) where
+  签名: : Std.Irrefl (关系 t) where
   定义体: nomatch hx
 
 Depends on / 依赖: nomatch
@@ -110,7 +110,7 @@ instance rel_symm
 
 中文:
 实例 rel_symm
-  签名: : Std.Symm (Rel t) where
+  签名: : Std.Symm (关系 t) where
   定义体: by cases h <;> constructor <;> assumption
 -/
 instance rel_symm : Std.Symm (Rel t) where
@@ -128,7 +128,7 @@ definition graph
 
 中文:
 定义 graph
-  签名: (t : Finset (α × β × γ))
+  签名: (t : 有限集 (α × β × γ))
   定义体: Rel t
   symm := inferInstance
   loopless := inferInstance
@@ -152,7 +152,7 @@ lemma not_in₀₀
 
 中文:
 引理 not_in₀₀
-  结论: ¬ (graph t).Adj (in₀ a) (in₀ a')
+  结论: ¬ (graph t).伴随 (in₀ a) (in₀ a')
   证明: fun h => nomatch h
 -/
 @[simp] lemma not_in₀₀ : ¬ (graph t).Adj (in₀ a) (in₀ a') := fun h => nomatch h
@@ -166,7 +166,7 @@ lemma not_in₁₁
 
 中文:
 引理 not_in₁₁
-  结论: ¬ (graph t).Adj (in₁ b) (in₁ b')
+  结论: ¬ (graph t).伴随 (in₁ b) (in₁ b')
   证明: fun h => nomatch h
 -/
 @[simp] lemma not_in₁₁ : ¬ (graph t).Adj (in₁ b) (in₁ b') := fun h => nomatch h
@@ -180,7 +180,7 @@ lemma not_in₂₂
 
 中文:
 引理 not_in₂₂
-  结论: ¬ (graph t).Adj (in₂ c) (in₂ c')
+  结论: ¬ (graph t).伴随 (in₂ c) (in₂ c')
   证明: fun h => nomatch h
 -/
 @[simp] lemma not_in₂₂ : ¬ (graph t).Adj (in₂ c) (in₂ c') := fun h => nomatch h
@@ -195,7 +195,7 @@ lemma in₀₁_iff
 
 中文:
 引理 in₀₁_iff
-  结论: (graph t).Adj (in₀ a) (in₁ b) ↔ 存在 c, (a, b, c) in t
+  结论: (graph t).伴随 (in₀ a) (in₁ b) ↔ 存在 c, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₀₁ h⟩
 -/
 @[simp] lemma in₀₁_iff : (graph t).Adj (in₀ a) (in₁ b) ↔ exists c, (a, b, c) in t :=
@@ -210,7 +210,7 @@ lemma in₁₀_iff
 
 中文:
 引理 in₁₀_iff
-  结论: (graph t).Adj (in₁ b) (in₀ a) ↔ 存在 c, (a, b, c) in t
+  结论: (graph t).伴随 (in₁ b) (in₀ a) ↔ 存在 c, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₁₀ h⟩
 -/
 @[simp] lemma in₁₀_iff : (graph t).Adj (in₁ b) (in₀ a) ↔ exists c, (a, b, c) in t :=
@@ -225,7 +225,7 @@ lemma in₀₂_iff
 
 中文:
 引理 in₀₂_iff
-  结论: (graph t).Adj (in₀ a) (in₂ c) ↔ 存在 b, (a, b, c) in t
+  结论: (graph t).伴随 (in₀ a) (in₂ c) ↔ 存在 b, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₀₂ h⟩
 -/
 @[simp] lemma in₀₂_iff : (graph t).Adj (in₀ a) (in₂ c) ↔ exists b, (a, b, c) in t :=
@@ -240,7 +240,7 @@ lemma in₂₀_iff
 
 中文:
 引理 in₂₀_iff
-  结论: (graph t).Adj (in₂ c) (in₀ a) ↔ 存在 b, (a, b, c) in t
+  结论: (graph t).伴随 (in₂ c) (in₀ a) ↔ 存在 b, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₂₀ h⟩
 -/
 @[simp] lemma in₂₀_iff : (graph t).Adj (in₂ c) (in₀ a) ↔ exists b, (a, b, c) in t :=
@@ -255,7 +255,7 @@ lemma in₁₂_iff
 
 中文:
 引理 in₁₂_iff
-  结论: (graph t).Adj (in₁ b) (in₂ c) ↔ 存在 a, (a, b, c) in t
+  结论: (graph t).伴随 (in₁ b) (in₂ c) ↔ 存在 a, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₁₂ h⟩
 -/
 @[simp] lemma in₁₂_iff : (graph t).Adj (in₁ b) (in₂ c) ↔ exists a, (a, b, c) in t :=
@@ -270,7 +270,7 @@ lemma in₂₁_iff
 
 中文:
 引理 in₂₁_iff
-  结论: (graph t).Adj (in₂ c) (in₁ b) ↔ 存在 a, (a, b, c) in t
+  结论: (graph t).伴随 (in₂ c) (in₁ b) ↔ 存在 a, (a, b, c) in t
   证明: ⟨by rintro ⟨⟩; exact ⟨_, ‹_›⟩, fun ⟨_, h⟩ => in₂₁ h⟩
 -/
 @[simp] lemma in₂₁_iff : (graph t).Adj (in₂ c) (in₁ b) ↔ exists a, (a, b, c) in t :=
@@ -396,7 +396,7 @@ class ExplicitDisjoint
 
 中文:
 类 ExplicitDisjoint
-  参数: (t : Finset (α × β × γ))
+  参数: (t : 有限集 (α × β × γ))
   公理与运算 (3 个):
     - inj₀ : 对任意 ⦃a b c a'⦄, (a, b, c) in t -> (a', b, c) in t -> a = a'
     - inj₁ : 对任意 ⦃a b c b'⦄, (a, b, c) in t -> (a, b', c) in t -> b = b'
@@ -418,7 +418,7 @@ class NoAccidental
 
 中文:
 类 NoAccidental
-  参数: (t : Finset (α × β × γ))
+  参数: (t : 有限集 (α × β × γ))
   公理与运算 (1 个):
     - eq_or_eq_or_eq : 对任意 ⦃a a' b b' c c'⦄, (a', b, c) in t -> (a, b', c) in t -> (a, b, c') in t -> a = a' ∨ b = b' ∨ c = c'
 -/
@@ -438,7 +438,7 @@ instance graph.instDecidableRelAdj
 
 中文:
 实例 graph.instDecidableRelAdj
-  签名: : DecidableRel (graph t).Adj
+  签名: : DecidableRel (graph t).伴随
 -/
 instance graph.instDecidableRelAdj : DecidableRel (graph t).Adj
   | in₀ _a, in₀ _a' => Decidable.isFalse not_in₀₀
@@ -493,7 +493,7 @@ definition toTriangle
 
 中文:
 定义 toTriangle
-  签名: : α × β × γ ↪ Finset (α oplus β oplus γ) where
+  签名: : α × β × γ ↪ 有限集 (α oplus β oplus γ) where
   定义体: {in₀ x.1, in₁ x.2.1, in₂ x.2.2}
   inj' := fun ⟨a, b, c⟩ ⟨a', b', c'⟩ => by simpa only [Finset.Subset.antisymm_iff, Finset.subset_iff,
     mem_insert, mem_singleton, forall_eq_or_imp, forall_eq, Prod.mk_inj, or_false, false_or,
@@ -519,7 +519,7 @@ lemma toTriangle_is3Clique
 中文:
 引理 toTriangle_is3Clique
   条件: (hx : x in t)
-  结论: (graph t).IsNClique 3 (toTriangle x)
+  结论: (graph t).是NClique 3 (toTriangle x)
   证明: by
   simp only [toTriangle_apply, is3Clique_triple_iff, in₀₁_iff, in₀₂_iff, in₁₂_iff]
   exact ⟨⟨_, hx⟩, ⟨_, hx⟩, _, hx⟩
@@ -546,8 +546,8 @@ nonrec lemma is3Clique_iff [NoAccidental t] {s : Finset (α oplus β oplus γ)} 
     ob
 
 中文:
-引理 exists_mem_toTriangle
-  条件: {x y : α oplus β oplus γ} (hxy : (graph t).Adj x y)
+引理 存在_mem_toTriangle
+  条件: {x y : α oplus β oplus γ} (hxy : (graph t).伴随 x y)
   证明: by cases hxy <;> exact ⟨_, ‹_›, by simp⟩
 
 nonrec lemma is3Clique_iff [NoAccidental t] {s : Finset (α oplus β oplus γ)} :
@@ -681,7 +681,7 @@ lemma cliqueFinset_eq_image
 中文:
 引理 cliqueFinset_eq_image
   条件: [NoAccidental t]
-  结论: (graph t).cliqueFinset 3 = t.image toTriangle
+  结论: (graph t).cliqueFinset 3 = t.像 toTriangle
   证明: coe_injective by push_cast; exact cliqueSet_eq_image _
 
 Depends on / 依赖: cliqueSet_eq_image, coe_injective

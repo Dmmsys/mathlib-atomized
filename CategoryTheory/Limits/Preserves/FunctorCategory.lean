@@ -63,7 +63,7 @@ lemma FunctorCategory.prod_preservesColimits
 
 中文:
 引理 FunctorCategory.prod_preservesColimits
-  结论: [HasBinaryProducts D] [HasColimits D]
+  结论: [HasBinaryProducts D] [有余极限 D]
   证明: {
       preservesColimit := fun {K : J ⥤ C ⥤ D} => ({
           preserves := fun {c : Cocone K} (t : IsColimit c) => ⟨by
@@ -115,7 +115,7 @@ instance whiskeringLeft_preservesLimitsOfShape
 
 中文:
 实例 whiskeringLeft_preservesLimitsOfShape
-  签名: (J : 类型u) [Category.{v} J]
+  签名: (J : 类型u) [范畴.{v} J]
   定义体: ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsLimits
@@ -150,7 +150,7 @@ instance whiskeringLeft_preservesColimitsOfShape
 
 中文:
 实例 whiskeringLeft_preservesColimitsOfShape
-  签名: (J : 类型u) [Category.{v} J]
+  签名: (J : 类型u) [范畴.{v} J]
   定义体: ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsColimits
@@ -180,7 +180,7 @@ instance whiskeringLeft_preservesLimits
 
 中文:
 实例 whiskeringLeft_preservesLimits
-  签名: [HasLimitsOfSize.{w, w'} D] (F : C ⥤ E)
+  签名: [有LimitsOfSize.{w, w'} D] (F : C ⥤ E)
   定义体: ⟨fun {J} _ => whiskeringLeft_preservesLimitsOfShape J F⟩
 
 Depends on / 依赖: whiskeringLeft_preservesLimitsOfShape
@@ -199,7 +199,7 @@ instance whiskeringLeft_preservesColimit
 
 中文:
 实例 whiskeringLeft_preservesColimit
-  签名: [HasColimitsOfSize.{w, w'} D] (F : C ⥤ E)
+  签名: [有余limitsOfSize.{w, w'} D] (F : C ⥤ E)
   定义体: ⟨fun {J} _ => whiskeringLeft_preservesColimitsOfShape J F⟩
 
 Depends on / 依赖: whiskeringLeft_preservesColimitsOfShape
@@ -230,7 +230,7 @@ instance whiskeringRight_preservesLimitsOfShape
 
 中文:
 实例 whiskeringRight_preservesLimitsOfShape
-  签名: {C : 类型} [Category* C] {D : 类型}
+  签名: {C : 类型} [范畴* C] {D : 类型}
   定义体: ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsLimits _ (fun k => ?_)
@@ -274,7 +274,7 @@ definition limitCompWhiskeringRightIsoLimitComp
 
 中文:
 定义 limitCompWhiskeringRightIsoLimitComp
-  签名: {C : 类型} [Category* C] {D : 类型}
+  签名: {C : 类型} [范畴* C] {D : 类型}
   定义体: (preservesLimitIso _ _).symm
 
 Depends on / 依赖: preservesLimitIso
@@ -298,7 +298,7 @@ theorem limitCompWhiskeringRightIsoLimitComp_inv_π
 
 中文:
 定理 limitCompWhiskeringRightIsoLimitComp_inv_π
-  结论: {C : 类型} [Category* C] {D : 类型}
+  结论: {C : 类型} [范畴* C] {D : 类型}
   证明: by
   simp [limitCompWhiskeringRightIsoLimitComp]
 
@@ -350,7 +350,7 @@ instance whiskeringRight_preservesColimitsOfShape
 
 中文:
 实例 whiskeringRight_preservesColimitsOfShape
-  签名: {C : 类型} [Category* C] {D : 类型}
+  签名: {C : 类型} [范畴* C] {D : 类型}
   定义体: ⟨fun {K} =>
     ⟨fun c {hc} => ⟨by
       apply evaluationJointlyReflectsColimits _ (fun k => ?_)
@@ -379,7 +379,7 @@ definition colimitCompWhiskeringRightIsoColimitComp
 
 中文:
 定义 colimitCompWhiskeringRightIsoColimitComp
-  签名: {C : 类型} [Category* C] {D : 类型}
+  签名: {C : 类型} [范畴* C] {D : 类型}
   定义体: (preservesColimitIso _ _).symm
 
 Depends on / 依赖: preservesColimitIso
@@ -403,7 +403,7 @@ theorem ι_colimitCompWhiskeringRightIsoColimitComp_hom
 
 中文:
 定理 ι_colimitCompWhiskeringRightIsoColimitComp_hom
-  结论: {C : 类型} [Category* C] {D : 类型}
+  结论: {C : 类型} [范畴* C] {D : 类型}
   证明: by
   simp [colimitCompWhiskeringRightIsoColimitComp]
 
@@ -429,7 +429,7 @@ theorem whiskerRight_ι_colimitCompWhiskeringRightIsoColimitComp_inv
 
 中文:
 定理 whiskerRight_ι_colimitCompWhiskeringRightIsoColimitComp_inv
-  结论: {C : 类型} [Category* C]
+  结论: {C : 类型} [范畴* C]
   证明: by
   simp [Iso.comp_inv_eq]
 
@@ -452,7 +452,7 @@ instance whiskeringRightPreservesLimits
 
 中文:
 实例 whiskeringRightPreservesLimits
-  签名: {C : 类型} [Category* C] {D : 类型} [Category* D]
+  签名: {C : 类型} [范畴* C] {D : 类型} [范畴* D]
   定义体: ⟨inferInstance⟩
 -/
 instance whiskeringRightPreservesLimits {C : Type*} [Category* C] {D : Type*} [Category* D]
@@ -471,7 +471,7 @@ instance whiskeringRightPreservesColimits
 
 中文:
 实例 whiskeringRightPreservesColimits
-  签名: {C : 类型} [Category* C] {D : 类型} [Category* D]
+  签名: {C : 类型} [范畴* C] {D : 类型} [范畴* D]
   定义体: ⟨inferInstance⟩
 -/
 instance whiskeringRightPreservesColimits {C : Type*} [Category* C] {D : Type*} [Category* D]
@@ -492,7 +492,7 @@ lemma preservesLimit_of_lan_preservesLimit
 
 中文:
 引理 preservesLimit_of_lan_preservesLimit
-  结论: {C D : 类型u} [SmallCategory C]
+  结论: {C D : 类型u} [小范畴 C]
   证明: letI := preservesLimitsOfShape_of_natIso (J := J)
     (Presheaf.compULiftYonedaIsoULiftYonedaCompLan.{u} F).symm
   preservesLimitsOfShape_of_reflects_of_preserves F uliftYoneda.{u}
@@ -516,7 +516,7 @@ lemma preservesFiniteLimits_of_evaluation
 
 中文:
 引理 preservesFiniteLimits_of_evaluation
-  结论: {D : 类型} [Category* D] {E : 类型} [Category* E]
+  结论: {D : 类型} [范畴* D] {E : 类型} [范畴* E]
   证明: ⟨fun J _ _ => preservesLimitsOfShape_of_evaluation F J fun k => (h k).preservesFiniteLimits _⟩
 
 Depends on / 依赖: preservesFiniteLimits, preservesLimitsOfShape_of_evaluation
@@ -536,7 +536,7 @@ lemma preservesFiniteColimits_of_evaluation
 
 中文:
 引理 preservesFiniteColimits_of_evaluation
-  结论: {D : 类型} [Category* D] {E : 类型} [Category* E]
+  结论: {D : 类型} [范畴* D] {E : 类型} [范畴* E]
   证明: ⟨fun J _ _ => preservesColimitsOfShape_of_evaluation F J fun k => (h k).preservesFiniteColimits _⟩
 
 Depends on / 依赖: preservesColimitsOfShape_of_evaluation, preservesFiniteColimits
@@ -575,7 +575,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesLimitsOfShape J (colim : (K ⥤ D ⥤ C) ⥤ _)
+  签名: 保持形状极限 J (colim : (K ⥤ D ⥤ C) ⥤ _)
   定义体: preservesLimitsOfShape_of_evaluation _ _ (fun d =>
     let i : (colim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         colimit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=
@@ -616,7 +616,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesColimitsOfShape J (lim : (K ⥤ D ⥤ C) ⥤ _)
+  签名: 保持形状余极限 J (lim : (K ⥤ D ⥤ C) ⥤ _)
   定义体: preservesColimitsOfShape_of_evaluation _ _ (fun d =>
     let i : (lim : (K ⥤ D ⥤ C) ⥤ _) ⋙ (evaluation D C).obj d ≅
         limit ((whiskeringRight K (D ⥤ C) C).obj ((evaluation D C).obj d)).flip :=

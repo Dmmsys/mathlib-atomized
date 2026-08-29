@@ -145,7 +145,7 @@ abbreviation extendedIdeal
 
 中文:
 缩写 extendedIdeal
-  签名: (I : (Ideal A)⁰)
+  签名: (I : (理想 A)⁰)
   定义体: ⟨I.1.map (algebraMap A B), mem_nonZeroDivisors_iff_ne_zero.mpr
     (Ideal.map_eq_bot_iff_of_injective (FaithfulSMul.algebraMap_injective A B)).not.mpr
       (mem_nonZeroDivisors_iff_ne_zero.mp I.2)⟩
@@ -171,7 +171,7 @@ theorem extendedIdeal_extendedIdeal
 
 中文:
 定理 extendedIdeal_extendedIdeal
-  结论: (C : 类型) [CommRing C] [IsDomain C] [Algebra B C]
+  结论: (C : 类型) [交换环 C] [是整环 C] [代数 B C]
   证明: by
   simp [Ideal.map_map, IsScalarTower.algebraMap_eq A B C]
 
@@ -202,7 +202,7 @@ theorem extendedHom_mk0'
 
 中文:
 定理 extendedHom_mk0'
-  条件: [IsDomain B] (I : (Ideal A)⁰)
+  条件: [是整环 B] (I : (理想 A)⁰)
   证明: by
   rw [← ClassGroup.mk_mk0 (FractionRing A)]; rw [extendedHom_mk]
 
@@ -232,7 +232,7 @@ lemma extendedHom_mk0
 
 中文:
 引理 extendedHom_mk0
-  条件: (I : (Ideal A)⁰)
+  条件: (I : (理想 A)⁰)
   证明: by
   rw [mk0_eq_quotientMk]; rw [mk0_eq_quotientMk]; rw [extendedHom_quotientMk]
   congr; ext : 1
@@ -310,7 +310,7 @@ theorem extendedHom_eq_one_of_forall_isPrincipal
   exact (ClassGroup.mk0_eq_one_iff (extendedIdeal A B I).2).mpr (by simpa using h I)
 
 中文:
-定理 extendedHom_eq_one_of_forall_isPrincipal
+定理 extendedHom_eq_one_of_对任意_isPrincipal
   证明: by
   ext x
   obtain ⟨I, rfl⟩ := ClassGroup.mk0_surjective x

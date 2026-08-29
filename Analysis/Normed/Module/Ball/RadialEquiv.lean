@@ -49,7 +49,7 @@ definition homeomorphSphereProd
 
 中文:
 定义 homeomorphSphereProd
-  签名: (E : 类型) [NormedAddCommGroup E] [NormedSpace 实数 E]
+  签名: (E : 类型) [赋范交换加群 E] [赋范空间 实数 E]
   定义体: have : 0 < ‖(x : E)‖ := by simpa [-Subtype.coe_prop] using x.2
     (⟨r • ‖x.1‖⁻¹ • x.1, by simp [norm_smul, abs_of_pos hr, this.ne']⟩,
       ⟨‖x.1‖ / r, by rw [mem_Ioi]; positivity⟩)
@@ -126,8 +126,8 @@ exact hx₀.resolve_left ne_of_mem_of_not_mem hxU hU₀
     specialize this hU.neg (by simpa) (-x) (b
 
 中文:
-定理 IsOpen.smul_sphere
-  结论: {r : 实数} (hr : r != 0) {U : Set 实数} {V : Set (Metric.sphere (0 : E) r)}
+定理 是开集.smul_sphere
+  结论: {r : 实数} (hr : r != 0) {U : 集合 实数} {V : 集合 (Metric.sphere (0 : E) r)}
   证明: by
   rw [isOpen_iff_mem_nhds]
   rintro _ ⟨x, hxU, _, ⟨y, hyV, rfl⟩, rfl⟩

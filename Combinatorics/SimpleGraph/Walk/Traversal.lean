@@ -65,7 +65,7 @@ theorem getVert_zero
 
 中文:
 定理 getVert_zero
-  条件: {u v} (w : G.Walk u v)
+  条件: {u v} (w : G.途径 u v)
   结论: w.getVert 0 = u
   证明: by cases w <;> rfl
 
@@ -109,7 +109,7 @@ theorem getVert_of_length_le
 
 中文:
 定理 getVert_of_length_le
-  条件: {u v} (w : G.Walk u v) {i : 自然数} (hi : w.length <= i)
+  条件: {u v} (w : G.途径 u v) {i : 自然数} (hi : w.length <= i)
   证明: by
   induction w generalizing i with
   | nil => rfl
@@ -143,7 +143,7 @@ theorem getVert_length
 
 中文:
 定理 getVert_length
-  条件: {u v} (w : G.Walk u v)
+  条件: {u v} (w : G.途径 u v)
   结论: w.getVert w.length = v
   证明: w.getVert_of_length_le rfl.le
 
@@ -170,7 +170,7 @@ theorem adj_getVert_succ
 
 中文:
 定理 adj_getVert_succ
-  条件: {u v} (w : G.Walk u v) {i : 自然数} (hi : i < w.length)
+  条件: {u v} (w : G.途径 u v) {i : 自然数} (hi : i < w.length)
   证明: by
   induction w generalizing i with
   | nil => cases hi
@@ -203,7 +203,7 @@ lemma getVert_cons_succ
 
 中文:
 引理 getVert_cons_succ
-  条件: {u v w n} (p : G.Walk v w) (h : G.Adj u v)
+  条件: {u v w n} (p : G.途径 v w) (h : G.伴随 u v)
   证明: rfl
 -/
 lemma getVert_cons_succ {u v w n} (p : G.Walk v w) (h : G.Adj u v) :
@@ -223,7 +223,7 @@ lemma getVert_cons
 
 中文:
 引理 getVert_cons
-  条件: {u v w n} (p : G.Walk v w) (h : G.Adj u v) (hn : n != 0)
+  条件: {u v w n} (p : G.途径 v w) (h : G.伴随 u v) (hn : n != 0)
   证明: by
   obtain ⟨n, rfl⟩ := Nat.exists_eq_add_one_of_ne_zero hn
   rw [getVert_cons_succ]; rw [Nat.add_sub_cancel]
@@ -250,7 +250,7 @@ theorem getVert_mem_support
 
 中文:
 定理 getVert_mem_support
-  条件: {u v : V} (p : G.Walk u v) (i : 自然数)
+  条件: {u v : V} (p : G.途径 u v) (i : 自然数)
   结论: p.getVert i in p.support
   证明: by
   induction p generalizing i <;> cases i <;> simp [*]
@@ -277,7 +277,7 @@ lemma getVert_eq_support_getElem
 
 中文:
 引理 getVert_eq_support_getElem
-  条件: {u v : V} {n : 自然数} (p : G.Walk u v) (h : n <= p.length)
+  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h : n <= p.length)
   证明: by
   cases p with
   | nil => simp
@@ -309,7 +309,7 @@ lemma support_getElem_eq_getVert
 
 中文:
 引理 support_getElem_eq_getVert
-  条件: {u v : V} {n : 自然数} (p : G.Walk u v) (h)
+  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h)
   证明: (p.getVert_eq_support_getElem <| by grind).symm
 
 Depends on / 依赖: getVert_eq_support_getElem, p.getVert_eq_support_getElem
@@ -329,7 +329,7 @@ lemma getVert_eq_support_getElem?
 
 中文:
 引理 getVert_eq_support_getElem?
-  条件: {u v : V} {n : 自然数} (p : G.Walk u v) (h : n <= p.length)
+  条件: {u v : V} {n : 自然数} (p : G.途径 u v) (h : n <= p.length)
   证明: by
   rw [getVert_eq_support_getElem p h]; rw [← List.getElem?_eq_getElem]
 -/
@@ -352,7 +352,7 @@ lemma getVert_eq_getD_support
 
 中文:
 引理 getVert_eq_getD_support
-  条件: {u v : V} (p : G.Walk u v) (n : 自然数)
+  条件: {u v : V} (p : G.途径 u v) (n : 自然数)
   证明: by
   by_cases h : n <= p.length
   · simp [← getVert_eq_support_getElem? p h]
@@ -380,7 +380,7 @@ lemma getVert_support_idxOf
 
 中文:
 引理 getVert_support_idxOf
-  条件: [DecidableEq V] (p : G.Walk u v) (h : w in p.support)
+  条件: [DecidableEq V] (p : G.途径 u v) (h : w in p.support)
   证明: by
   grind [getVert_eq_support_getElem]
 
@@ -401,7 +401,7 @@ theorem getVert_comp_val_eq_get_support
 
 中文:
 定理 getVert_comp_val_eq_get_support
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: by
   grind [getVert_eq_support_getElem, length_support]
 
@@ -422,7 +422,7 @@ theorem range_getVert_eq_range_support_getElem
 
 中文:
 定理 range_getVert_eq_range_support_getElem
-  条件: {u v : V} (p : G.Walk u v)
+  条件: {u v : V} (p : G.途径 u v)
   证明: Set.ext fun _ => ⟨by grind [Set.range_list_get, getVert_mem_support],
     fun ⟨n, _⟩ => ⟨n, by grind [getVert_eq_support_getElem, length_support]⟩⟩
 
@@ -445,7 +445,7 @@ theorem darts_getElem_eq_getVert
 
 中文:
 定理 darts_getElem_eq_getVert
-  条件: {u v : V} {p : G.Walk u v} (n : 自然数) (h : n < p.darts.length)
+  条件: {u v : V} {p : G.途径 u v} (n : 自然数) (h : n < p.darts.length)
   证明: by
   rw [p.length_darts] at h
   ext <;> simp [p.getVert_eq_support_getElem (le_of_lt h), p.getVert_eq_support_getElem h]
@@ -468,7 +468,7 @@ theorem getElem_edges
 
 中文:
 定理 getElem_edges
-  条件: {p : G.Walk u v} {i : 自然数} (h : i < p.edges.length)
+  条件: {p : G.途径 u v} {i : 自然数} (h : i < p.edges.length)
   证明: by
   simp [getElem_edges_eq_edge_getElem_darts, darts_getElem_eq_getVert]
 
@@ -488,8 +488,8 @@ theorem mk_mem_edges_iff_exists
   constructor <;> grind [getElem_edges, List.mem_iff_getElem]
 
 中文:
-定理 mk_mem_edges_iff_exists
-  条件: {u' v' : V} (p : G.Walk u v)
+定理 mk_mem_edges_iff_存在
+  条件: {u' v' : V} (p : G.途径 u v)
   证明: by
   constructor <;> grind [getElem_edges, List.mem_iff_getElem]
 
@@ -514,7 +514,7 @@ exact h₀ ▸ h₁ ▸ p.adj_getVert_succ (i := k) by grind
 
 中文:
 定理 adj_of_infix_support
-  条件: {u v u' v'} {p : G.Walk u v} (h : [u', v'] <:+: p.support)
+  条件: {u v u' v'} {p : G.途径 u v} (h : [u', v'] <:+: p.support)
   证明: by
   have ⟨k, hk, h⟩ := List.infix_iff_getElem?.mp h
   have h₀ := Nat.zero_add _ ▸ h 0 Nat.zero_lt_two
@@ -542,7 +542,7 @@ abbreviation snd
 
 中文:
 缩写 snd
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: p.getVert 1
 
 Depends on / 依赖: getVert, p.getVert
@@ -560,7 +560,7 @@ lemma adj_snd
 
 中文:
 引理 adj_snd
-  条件: {p : G.Walk v w} (hp : ¬ p.Nil)
+  条件: {p : G.途径 v w} (hp : ¬ p.Nil)
   证明: by
   simpa using adj_getVert_succ p (by simpa [not_nil_iff_lt_length] using hp : 0 < p.length)
 -/
@@ -578,7 +578,7 @@ lemma snd_cons
 
 中文:
 引理 snd_cons
-  条件: {u v w} (q : G.Walk v w) (hadj : G.Adj u v)
+  条件: {u v w} (q : G.途径 v w) (hadj : G.伴随 u v)
   证明: by simp
 -/
 lemma snd_cons {u v w} (q : G.Walk v w) (hadj : G.Adj u v) :
@@ -595,7 +595,7 @@ lemma snd_mem_tail_support
 
 中文:
 引理 snd_mem_tail_support
-  条件: {u v : V} {p : G.Walk u v} (h : ¬p.Nil)
+  条件: {u v : V} {p : G.途径 u v} (h : ¬p.Nil)
   结论: p.snd in p.support.tail
   证明: p.notNilRec (by simp) h
 
@@ -618,7 +618,7 @@ lemma support_getElem_one
 
 中文:
 引理 support_getElem_one
-  条件: {p : G.Walk u v} (hp)
+  条件: {p : G.途径 u v} (hp)
   结论: p.support[1]'hp = p.snd
   证明: by
   grind [getVert_eq_support_getElem]
@@ -638,7 +638,7 @@ lemma snd_eq_support_getElem_one
 
 中文:
 引理 snd_eq_support_getElem_one
-  条件: {p : G.Walk u v} (hnil : ¬p.Nil)
+  条件: {p : G.途径 u v} (hnil : ¬p.Nil)
   证明: .symm support_getElem_one _
 
 Depends on / 依赖: support_getElem_one
@@ -659,7 +659,7 @@ abbreviation penultimate
 
 中文:
 缩写 penultimate
-  签名: (p : G.Walk u v)
+  签名: (p : G.途径 u v)
   定义体: p.getVert (p.length - 1)
 
 @[simp]
@@ -702,7 +702,7 @@ lemma penultimate_cons_nil
 
 中文:
 引理 penultimate_cons_nil
-  条件: (h : G.Adj u v)
+  条件: (h : G.伴随 u v)
   结论: (cons h nil).penultimate = u
   证明: rfl
 
@@ -721,7 +721,7 @@ lemma penultimate_cons_cons
 
 中文:
 引理 penultimate_cons_cons
-  条件: {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w')
+  条件: {w'} (h : G.伴随 u v) (h₂ : G.伴随 v w) (p : G.途径 w w')
   证明: rfl
 -/
 lemma penultimate_cons_cons {w'} (h : G.Adj u v) (h₂ : G.Adj v w) (p : G.Walk w w') :
@@ -739,7 +739,7 @@ lemma penultimate_cons_of_not_nil
 
 中文:
 引理 penultimate_cons_of_not_nil
-  条件: (h : G.Adj u v) (p : G.Walk v w) (hp : ¬ p.Nil)
+  条件: (h : G.伴随 u v) (p : G.途径 v w) (hp : ¬ p.Nil)
   证明: p.notNilRec (by simp) hp h
 
 @[simp]
@@ -763,8 +763,8 @@ lemma adj_penultimate
 
 中文:
 引理 adj_penultimate
-  条件: {p : G.Walk v w} (hp : ¬ p.Nil)
-  结论: G.Adj p.penultimate w
+  条件: {p : G.途径 v w} (hp : ¬ p.Nil)
+  结论: G.伴随 p.penultimate w
   证明: by
   grind [getVert_length, adj_getVert_succ]
 
@@ -787,7 +787,7 @@ lemma penultimate_mem_dropLast_support
 
 中文:
 引理 penultimate_mem_dropLast_support
-  条件: {p : G.Walk u v} (h : ¬p.Nil)
+  条件: {p : G.途径 u v} (h : ¬p.Nil)
   证明: by
 .ne have := adj_penultimate h
   grind [getVert_mem_support, List.dropLast_concat_getLast, getLast_support]
@@ -813,7 +813,7 @@ lemma support_getElem_length_sub_one_eq_penultimate
 
 中文:
 引理 support_getElem_length_sub_one_eq_penultimate
-  条件: {p : G.Walk u v}
+  条件: {p : G.途径 u v}
   证明: by
   grind [getVert_eq_support_getElem]
 
@@ -837,7 +837,7 @@ definition firstDart
 
 中文:
 定义 firstDart
-  签名: (p : G.Walk v w) (hp : ¬ p.Nil)
+  签名: (p : G.途径 v w) (hp : ¬ p.Nil)
   定义体: v
   snd := p.snd
   adj := p.adj_snd hp
@@ -861,7 +861,7 @@ definition lastDart
 
 中文:
 定义 lastDart
-  签名: (p : G.Walk v w) (hp : ¬ p.Nil)
+  签名: (p : G.途径 v w) (hp : ¬ p.Nil)
   定义体: p.penultimate
   snd := w
   adj := p.adj_penultimate hp
@@ -883,7 +883,7 @@ lemma edge_firstDart
 
 中文:
 引理 edge_firstDart
-  条件: (p : G.Walk v w) (hp : ¬ p.Nil)
+  条件: (p : G.途径 v w) (hp : ¬ p.Nil)
   证明: rfl
 -/
 lemma edge_firstDart (p : G.Walk v w) (hp : ¬ p.Nil) :
@@ -899,7 +899,7 @@ lemma edge_lastDart
 
 中文:
 引理 edge_lastDart
-  条件: (p : G.Walk v w) (hp : ¬ p.Nil)
+  条件: (p : G.途径 v w) (hp : ¬ p.Nil)
   证明: rfl
 -/
 lemma edge_lastDart (p : G.Walk v w) (hp : ¬ p.Nil) :
@@ -916,7 +916,7 @@ theorem firstDart_eq
 
 中文:
 定理 firstDart_eq
-  条件: {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
+  条件: {p : G.途径 v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
   证明: by
   simp [Dart.ext_iff, firstDart_toProd, darts_getElem_eq_getVert]
 
@@ -938,7 +938,7 @@ theorem lastDart_eq
 
 中文:
 定理 lastDart_eq
-  条件: {p : G.Walk v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
+  条件: {p : G.途径 v w} (h₁ : ¬ p.Nil) (h₂ : 0 < p.darts.length)
   证明: by
   simp (disch := grind) [Dart.ext_iff, lastDart_toProd, darts_getElem_eq_getVert,
     p.getVert_of_length_le]
@@ -963,7 +963,7 @@ theorem head_darts_eq_firstDart
 
 中文:
 定理 head_darts_eq_firstDart
-  条件: {p : G.Walk v w} (hnil : p.darts != [])
+  条件: {p : G.途径 v w} (hnil : p.darts != [])
   证明: by
   grind [firstDart_eq]
 
@@ -985,7 +985,7 @@ theorem firstDart_eq_head_darts
 
 中文:
 定理 firstDart_eq_head_darts
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   证明: .symm head_darts_eq_firstDart _
 
 @[simp]
@@ -1010,7 +1010,7 @@ theorem firstDart_mem_darts
 
 中文:
 定理 firstDart_mem_darts
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   结论: p.firstDart hnil in p.darts
   证明: p.firstDart_eq_head_darts _ ▸ List.head_mem _
 
@@ -1033,7 +1033,7 @@ theorem getLast_darts_eq_lastDart
 
 中文:
 定理 getLast_darts_eq_lastDart
-  条件: {p : G.Walk v w} (hnil : p.darts != [])
+  条件: {p : G.途径 v w} (hnil : p.darts != [])
   证明: by
   grind [lastDart_eq, not_nil_iff_lt_length]
 
@@ -1056,7 +1056,7 @@ theorem lastDart_eq_getLast_darts
 
 中文:
 定理 lastDart_eq_getLast_darts
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   证明: by
   grind [lastDart_eq, not_nil_iff_lt_length]
 
@@ -1080,7 +1080,7 @@ theorem lastDart_mem_darts
 
 中文:
 定理 lastDart_mem_darts
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   结论: p.lastDart hnil in p.darts
   证明: p.lastDart_eq_getLast_darts _ ▸ List.getLast_mem _
 
@@ -1103,7 +1103,7 @@ theorem head_edges_eq_mk_start_snd
 
 中文:
 定理 head_edges_eq_mk_start_snd
-  条件: {p : G.Walk v w} (hp)
+  条件: {p : G.途径 v w} (hp)
   结论: p.edges.head hp = s(v, p.snd)
   证明: by
   simp [p.edge_firstDart, Walk.edges]
@@ -1123,7 +1123,7 @@ theorem mk_start_snd_eq_head_edges
 
 中文:
 定理 mk_start_snd_eq_head_edges
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   证明: .symm head_edges_eq_mk_start_snd _
 
 Depends on / 依赖: head_edges_eq_mk_start_snd
@@ -1143,7 +1143,7 @@ theorem mk_start_snd_mem_edges
 
 中文:
 定理 mk_start_snd_mem_edges
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   结论: s(v, p.snd) in p.edges
   证明: p.mk_start_snd_eq_head_edges hnil ▸ List.head_mem _
 
@@ -1165,7 +1165,7 @@ theorem getLast_edges_eq_mk_penultimate_end
 
 中文:
 定理 getLast_edges_eq_mk_penultimate_end
-  条件: {p : G.Walk v w} (hp)
+  条件: {p : G.途径 v w} (hp)
   证明: by
   simp [p.edge_lastDart, Walk.edges]
 
@@ -1185,7 +1185,7 @@ theorem mk_penultimate_end_eq_getLast_edges
 
 中文:
 定理 mk_penultimate_end_eq_getLast_edges
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   证明: .symm getLast_edges_eq_mk_penultimate_end _
 
 Depends on / 依赖: getLast_edges_eq_mk_penultimate_end
@@ -1204,7 +1204,7 @@ theorem mk_penultimate_end_mem_edges
 
 中文:
 定理 mk_penultimate_end_mem_edges
-  条件: {p : G.Walk v w} (hnil : ¬p.Nil)
+  条件: {p : G.途径 v w} (hnil : ¬p.Nil)
   证明: p.mk_penultimate_end_eq_getLast_edges hnil ▸ List.getLast_mem _
 
 Depends on / 依赖: List.getLast_mem, getLast_mem, mk_penultimate_end_eq_getLast_edges, p.mk_penultimate_end_eq_getLast_edges

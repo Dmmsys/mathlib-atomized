@@ -94,7 +94,7 @@ instance _root_.Multiset.encodable
 
 中文:
 实例 _root_.Multiset.encodable
-  签名: : Encodable (Multiset α)
+  签名: : 可编码 (Multiset α)
   定义体: ⟨encodeMultiset, decodeMultiset, fun s => by simp [encodeMultiset, decodeMultiset, encodek]⟩
 
 Depends on / 依赖: decodeMultiset, encodeMultiset, encodek
@@ -118,7 +118,7 @@ definition lower
 
 中文:
 定义 lower
-  签名: : List 自然数 -> 自然数 -> List 自然数
+  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
 -/
 def lower : List Nat -> Nat -> List Nat
   | [], _ => []
@@ -133,7 +133,7 @@ definition raise
 
 中文:
 定义 raise
-  签名: : List 自然数 -> 自然数 -> List 自然数
+  签名: : 列表 自然数 -> 自然数 -> 列表 自然数
 -/
 def raise : List Nat -> Nat -> List Nat
   | [], _ => []
@@ -165,7 +165,7 @@ theorem raise_lower
 
 中文:
 定理 raise_lower
-  结论: 对任意 {l n}, List.SortedLE (n :: l) -> raise (lower l n) n = l
+  结论: 对任意 {l n}, 列表.SortedLE (n :: l) -> raise (lower l n) n = l
   证明: List.rel_of_pairwise_cons h.pairwise List.mem_cons_self
     simp [raise, lower, Nat.sub_add_cancel this, raise_lower h.pairwise.of_cons.sortedLE]
 
@@ -186,7 +186,7 @@ theorem isChain_raise
 
 中文:
 定理 isChain_raise
-  结论: 对任意 l n, List.IsChain (· <= ·) (raise l n)
+  结论: 对任意 l n, 列表.IsChain (· <= ·) (raise l n)
 -/
 theorem isChain_raise : forall l n, List.IsChain (· <= ·) (raise l n)
   | [], _ => .nil
@@ -205,7 +205,7 @@ theorem isChain_cons_raise
 中文:
 定理 isChain_cons_raise
   条件: (l n)
-  结论: List.IsChain (· <= ·) (n :: raise l n)
+  结论: 列表.IsChain (· <= ·) (n :: raise l n)
   证明: isChain_raise (n :: l) 0
 
 Depends on / 依赖: isChain_raise
@@ -225,7 +225,7 @@ theorem raise_sorted
 中文:
 定理 raise_sorted
   条件: (l n)
-  结论: List.SortedLE (raise l n)
+  结论: 列表.SortedLE (raise l n)
   证明: (isChain_raise _ _).sortedLE
 
 Depends on / 依赖: isChain_raise, sortedLE
@@ -250,7 +250,7 @@ instance multiset
 
 中文:
 实例 multiset
-  签名: : Denumerable (Multiset α)
+  签名: : 可枚举 (Multiset α)
   定义体: mk'
 ⟨fun s : Multiset α => encode lower (s.map encode).sort 0,
      fun n =>

@@ -176,7 +176,7 @@ theorem nonempty_sublevelLeft
 
 中文:
 定理 nonempty_sublevelLeft
-  结论: [TopologicalSpace E]
+  结论: [拓扑空间 E]
   证明: by
   rcases y with ⟨y, hy⟩
   obtain ⟨x, hx, hx_le⟩ := LowerSemicontinuousOn.exists_isMinOn ne_X kX (hfy y hy)
@@ -208,7 +208,7 @@ theorem isClosed_sublevelLeft
 
 中文:
 定理 isClosed_sublevelLeft
-  结论: [TopologicalSpace E]
+  结论: [拓扑空间 E]
   证明: by
   specialize hfy y.val y.prop
   rw [← lowerSemicontinuous_restrict_iff]; rw [lowerSemicontinuous_iff_isClosed_preimage] at hfy
@@ -234,7 +234,7 @@ theorem isPreconnected_sublevelLeft
 
 中文:
 定理 isPreconnected_sublevelLeft
-  结论: [TopologicalSpace E]
+  结论: [拓扑空间 E]
   证明: (hfy' y.val y.prop).isPreconnected_preimage_subtype
 
 Depends on / 依赖: isPreconnected_preimage_subtype, y.prop, y.val
@@ -262,7 +262,7 @@ theorem sublevelLeft_subset_union
 
 中文:
 定理 sublevelLeft_subset_union
-  结论: [AddCommGroup F] [Module 实数 F]
+  结论: [加法交换群 F] [模 实数 F]
   证明: fun x hx => by
     simp only [Set.mem_union, mem_sublevelLeft_iff, ← inf_le_iff]
     specialize hfx' x x.2 (f x y ⊓ f x y')
@@ -297,7 +297,7 @@ theorem sublevelLeft_subset_or
 
 中文:
 定理 sublevelLeft_subset_or
-  结论: [TopologicalSpace E] [AddCommGroup E]
+  结论: [拓扑空间 E] [加法交换群 E]
   证明: by
   apply isPreconnected_iff_subset_of_disjoint_closed.mp
     (isPreconnected_sublevelLeft hfy' b ⟨z, cY.segment_subset y.prop y'.prop z.prop⟩)

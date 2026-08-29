@@ -335,7 +335,7 @@ theorem lift_mk
 
 中文:
 定理 lift_mk
-  结论: lift (mk R M N) = LinearMap.id
+  结论: lift (mk R M N) = 线性映射.id
   证明: Eq.symm lift.unique fun _ _ => rfl
 
 Depends on / 依赖: Eq.symm, lift.unique, unique
@@ -810,7 +810,7 @@ theorem comm_tmul
 中文:
 定理 comm_tmul
   条件: (m : M) (n : N)
-  结论: (TensorProduct.comm R M N) (m otimesₜ n) = n otimesₜ m
+  结论: (张量积.comm R M N) (m otimesₜ n) = n otimesₜ m
   证明: rfl
 
 @[simp]
@@ -829,7 +829,7 @@ lemma comm_symm
 
 中文:
 引理 comm_symm
-  结论: (TensorProduct.comm R M N).symm = TensorProduct.comm R N M
+  结论: (张量积.comm R M N).symm = 张量积.comm R N M
   证明: rfl
 -/
 lemma comm_symm : (TensorProduct.comm R M N).symm = TensorProduct.comm R N M := rfl
@@ -846,7 +846,7 @@ theorem comm_symm_tmul
 中文:
 定理 comm_symm_tmul
   条件: (m : M) (n : N)
-  结论: (TensorProduct.comm R M N).symm (n otimesₜ m) = m otimesₜ n
+  结论: (张量积.comm R M N).symm (n otimesₜ m) = m otimesₜ n
   证明: rfl
 -/
 theorem comm_symm_tmul (m : M) (n : N) : (TensorProduct.comm R M N).symm (n otimesₜ m) = m otimesₜ n :=
@@ -1034,7 +1034,7 @@ theorem mapOfCompatibleSMul_surjective
 
 中文:
 定理 mapOfCompatibleSMul_surjective
-  结论: Function.Surjective (mapOfCompatibleSMul R A S M N)
+  结论: 函数.满射 (mapOfCompatibleSMul R A S M N)
   证明: fun x => x.induction_on (⟨0, map_zero _⟩) (fun m n => ⟨_, mapOfCompatibleSMul_tmul ..⟩)
     fun _ _ ⟨x, hx⟩ ⟨y, hy⟩ => ⟨x + y, by simpa using congr($hx + $hy)⟩
 
@@ -1064,7 +1064,7 @@ definition equivOfCompatibleSMul
 
 中文:
 定义 equivOfCompatibleSMul
-  签名: [CompatibleSMul A R M N]
+  签名: [余mpatibleSMul A R M N]
   定义体: mapOfCompatibleSMul R A S M N
   invFun := mapOfCompatibleSMul A R S M N
   left_inv x := x.induction_on (map_zero _) (fun _ _ => rfl)
@@ -1111,7 +1111,7 @@ definition Neg.aux
   body: lift (mk R M N).comp (-LinearMap.id)
 
 中文:
-定义 Neg.aux
+定义 取负.aux
   签名: : M otimes[R] N ->ₗ[R] M otimes[R] N
   定义体: lift (mk R M N).comp (-LinearMap.id)
 
@@ -1130,7 +1130,7 @@ instance neg
 
 中文:
 实例 neg
-  签名: : Neg (M otimes[R] N) where
+  签名: : 取负 (M otimes[R] N) where
   定义体: Neg.aux R
 
 Depends on / 依赖: Neg.aux
@@ -1197,7 +1197,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup (M otimes[R] N) where
+  签名: : 加法交换群 (M otimes[R] N) where
   定义体: fun x => TensorProduct.neg_add_cancel x
   zsmul_zero' := by simp
   zsmul_succ' := by simp [add_comm, TensorProduct.add_smul]
@@ -1303,8 +1303,8 @@ instance CompatibleSMul.int
       fun r ih => by simpa [sub_smul, tmul_sub, sub_tmul] using ih⟩
 
 中文:
-实例 CompatibleSMul.int
-  签名: : CompatibleSMul R 整数 M P
+实例 余mpatibleSMul.int
+  签名: : 余mpatibleSMul R 整数 M P
   定义体: ⟨fun r m p =>
     Int.induction_on r (by simp) (fun r ih => by simpa [add_smul, tmul_add, add_tmul] using ih)
       fun r ih => by simpa [sub_smul, tmul_sub, sub_tmul] using ih⟩
@@ -1325,8 +1325,8 @@ instance CompatibleSMul.unit
   body: ⟨fun s m n => CompatibleSMul.smul_tmul (s : S) m n⟩
 
 中文:
-实例 CompatibleSMul.unit
-  签名: {S} [Monoid S] [DistribMulAction S M] [DistribMulAction S N]
+实例 余mpatibleSMul.unit
+  签名: {S} [幺半群 S] [分配乘法作用 S M] [分配乘法作用 S N]
   定义体: ⟨fun s m n => CompatibleSMul.smul_tmul (s : S) m n⟩
 
 Depends on / 依赖: CompatibleSMul, CompatibleSMul.smul_tmul, smul_tmul

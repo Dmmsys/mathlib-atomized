@@ -113,7 +113,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: {W' : Morphism命题erty C} (hW : W <= W')
+  签名: {W' : MorphismProperty C} (hW : W <= W')
   定义体: h.toTransfiniteCompositionOfShape
   map_mem j hj := hW _ (h.map_mem j hj)
 
@@ -140,7 +140,7 @@ definition ofOrderIso
 
 中文:
 定义 ofOrderIso
-  签名: {J' : Type w'} [LinearOrder J'] [OrderBot J']
+  签名: {J' : 类型 w'} [线性序 J'] [有底序 J']
   定义体: h.toTransfiniteCompositionOfShape.ofOrderIso e
   map_mem j hj := by
     have := h.map_mem (e j) (by simpa only [e.isMax_apply])
@@ -179,7 +179,7 @@ definition map
 
 中文:
 定义 map
-  签名: {W : Morphism命题erty D} {F : C ⥤ D}
+  签名: {W : MorphismProperty D} {F : C ⥤ D}
   定义体: h.toTransfiniteCompositionOfShape.map F
   map_mem j hj := h.map_mem j hj
 
@@ -397,7 +397,7 @@ definition transfiniteCompositionsOfShape
 
 中文:
 定义 transfiniteCompositionsOfShape
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: fun _ _ f => Nonempty (W.TransfiniteCompositionOfShape J f)
 
 Depends on / 依赖: Nonempty, TransfiniteCompositionOfShape, W.TransfiniteCompositionOfShape
@@ -527,7 +527,7 @@ class IsStableUnderTransfiniteCompositionOfShape
     - le : W.transfiniteCompositionsOfShape J <= W
 
 中文:
-类 IsStableUnderTransfiniteCompositionOfShape
+类 是StableUnderTransfiniteCompositionOfShape
   参数: : 命题 where
   公理与运算 (1 个):
     - le : W.transfiniteCompositionsOfShape J <= W
@@ -685,7 +685,7 @@ English:
 lemma IsStableUnderTransfiniteCompositionOfShape.of_isStableUnderColimitsOfShape
 
 中文:
-引理 IsStableUnderTransfiniteCompositionOfShape.of_isStableUnderColimitsOfShape
+引理 是StableUnderTransfiniteCompositionOfShape.of_isStableUnderColimitsOfShape
 -/
 lemma IsStableUnderTransfiniteCompositionOfShape.of_isStableUnderColimitsOfShape
     [W.IsMultiplicative] [W.RespectsIso]
@@ -703,7 +703,7 @@ instance [W.IsMultiplicative]
   body: .of_isStableUnderColimitsOfShape (fun _ _ _ _ _ => by infer_instance)
 
 中文:
-实例 [W.IsMultiplicative]
+实例 [W.是Multiplicative]
   签名: [W.RespectsIso]
   定义体: .of_isStableUnderColimitsOfShape (fun _ _ _ _ _ => by infer_instance)
 
@@ -744,10 +744,10 @@ class IsStableUnderTransfiniteComposition
     - isStableUnderTransfiniteCompositionOfShape((J : Type w) [LinearOrder J] [SuccOrder J] [OrderBot J] [WellFoundedLT J]) : W.IsStableUnderTransfiniteCompositionOfShape J  [default: by infer_instance]
 
 中文:
-类 IsStableUnderTransfiniteComposition
+类 是StableUnderTransfiniteComposition
   参数: : 命题 where
   公理与运算 (1 个):
-    - isStableUnderTransfiniteCompositionOfShape((J : Type w) [LinearOrder J] [SuccOrder J] [OrderBot J] [WellFoundedLT J]) : W.IsStableUnderTransfiniteCompositionOfShape J  [默认: by infer_instance]
+    - isStableUnderTransfiniteCompositionOfShape((J : 类型 w) [线性序 J] [Succ序 J] [有底序 J] [WellFoundedLT J]) : W.是StableUnderTransfiniteCompositionOfShape J  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -769,7 +769,7 @@ instance [W.IsMultiplicative]
   body: inferInstance
 
 中文:
-实例 [W.IsMultiplicative]
+实例 [W.是Multiplicative]
   签名: [W.RespectsIso]
   定义体: inferInstance
 -/
@@ -819,7 +819,7 @@ lemma shrink₀
 
 中文:
 引理 shrink₀
-  结论: IsStableUnderTransfiniteComposition.{0} W
+  结论: 是StableUnderTransfiniteComposition.{0} W
   证明: shrink.{0, w'} W
 
 Depends on / 依赖: shrink
@@ -842,7 +842,7 @@ instance :
 
 中文:
 实例 :
-  签名: W.IsMultiplicative
+  签名: W.是Multiplicative
   定义体: transfiniteCompositionsOfShape_le _ _ _
       (TransfiniteCompositionOfShape.id W X).mem
   comp_mem f g hf hg :=
@@ -875,7 +875,7 @@ definition transfiniteCompositions
 
 中文:
 定义 transfiniteCompositions
-  签名: : Morphism命题erty C
+  签名: : MorphismProperty C
   定义体: ⨆ (J : Type w) (_ : LinearOrder J) (_ : SuccOrder J) (_ : OrderBot J)
     (_ : WellFoundedLT J), W.transfiniteCompositionsOfShape J
 
@@ -1007,7 +1007,7 @@ lemma transfiniteCompositions_le
 
 中文:
 引理 transfiniteCompositions_le
-  条件: [IsStableUnderTransfiniteComposition.{w} W]
+  条件: [是StableUnderTransfiniteComposition.{w} W]
   证明: by
   intro _ _ f hf
   rw [transfiniteCompositions_iff] at hf
@@ -1040,7 +1040,7 @@ lemma transfiniteCompositions_le_iff
 
 中文:
 引理 transfiniteCompositions_le_iff
-  结论: {P Q : Morphism命题erty C}
+  结论: {P Q : MorphismProperty C}
   证明: by
   constructor
   · exact (le_transfiniteCompositions P).trans
@@ -1123,7 +1123,7 @@ lemma isIso
 
 中文:
 引理 isIso
-  结论: IsIso f
+  结论: 是同构 f
   证明: (isomorphisms C).transfiniteCompositionsOfShape_le _ _ h.mem
 
 Depends on / 依赖: WithBotTop, WithBotTop.rec, h.mem, infer_instance, isLE_of_isZero, isomorphisms, transfiniteCompositionsOfShape_le

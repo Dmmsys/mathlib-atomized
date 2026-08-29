@@ -93,7 +93,7 @@ theorem exp_diagonal
 
 中文:
 定理 exp_diagonal
-  条件: [Algebra Rat 𝔸] (v : m -> 𝔸)
+  条件: [代数 有理数 𝔸] (v : m -> 𝔸)
   结论: exp (diagonal v) = diagonal (exp v)
   证明: by
   simp_rw [exp_eq_tsum_rat, diagonal_pow, ← diagonal_smul, ← diagonal_tsum]
@@ -114,7 +114,7 @@ theorem exp_blockDiagonal
 
 中文:
 定理 exp_blockDiagonal
-  条件: [Algebra Rat 𝔸] (v : m -> Matrix n n 𝔸)
+  条件: [代数 有理数 𝔸] (v : m -> 矩阵 n n 𝔸)
   证明: by
   simp_rw [exp_eq_tsum_rat, ← blockDiagonal_pow, ← blockDiagonal_smul, ← blockDiagonal_tsum]
 
@@ -135,7 +135,7 @@ theorem exp_blockDiagonal'
 
 中文:
 定理 exp_blockDiagonal'
-  条件: [Algebra Rat 𝔸] (v : 对任意 i, Matrix (n' i) (n' i) 𝔸)
+  条件: [代数 有理数 𝔸] (v : 对任意 i, 矩阵 (n' i) (n' i) 𝔸)
   证明: by
   simp_rw [exp_eq_tsum_rat, ← blockDiagonal'_pow, ← blockDiagonal'_smul, ← blockDiagonal'_tsum]
 
@@ -155,7 +155,7 @@ theorem exp_conjTranspose
 
 中文:
 定理 exp_conjTranspose
-  条件: [StarRing 𝔸] [ContinuousStar 𝔸] (A : Matrix m m 𝔸)
+  条件: [对合环 𝔸] [余ntinuousStar 𝔸] (A : 矩阵 m m 𝔸)
   证明: (star_exp A).symm
 
 Depends on / 依赖: star_exp
@@ -174,7 +174,7 @@ theorem IsHermitian.exp
 
 中文:
 定理 IsHermitian.exp
-  条件: [StarRing 𝔸] [ContinuousStar 𝔸] {A : Matrix m m 𝔸} (h : A.IsHermitian)
+  条件: [对合环 𝔸] [余ntinuousStar 𝔸] {A : 矩阵 m m 𝔸} (h : A.IsHermitian)
   证明: (exp_conjTranspose _).symm.trans congr_arg _ h
 
 Depends on / 依赖: congr_arg, exp_conjTranspose, symm.trans
@@ -193,7 +193,7 @@ theorem BlockTriangular.exp
 
 中文:
 定理 BlockTriangular.exp
-  结论: [LinearOrder α] [Algebra Rat 𝔸] {M : Matrix m m 𝔸} {b : m -> α}
+  结论: [线性序 α] [代数 有理数 𝔸] {M : 矩阵 m m 𝔸} {b : m -> α}
   证明: exp_mem (s := blockTriangularSubalgebra Rat _ b) isClosed_setOfPred_blockTriangular hM
 
 Depends on / 依赖: blockTriangularSubalgebra, exp_mem, isClosed_setOfPred_blockTriangular
@@ -222,7 +222,7 @@ theorem exp_transpose
 
 中文:
 定理 exp_transpose
-  条件: (A : Matrix m m 𝔸)
+  条件: (A : 矩阵 m m 𝔸)
   结论: exp Aᵀ = (exp A)ᵀ
   证明: by
   simp_rw [exp_eq_tsum_rat, transpose_tsum, transpose_smul, transpose_pow]
@@ -242,9 +242,9 @@ theorem IsSymm.exp
   proof: (exp_transpose _).symm.trans congr_arg _ h
 
 中文:
-定理 IsSymm.exp
-  条件: {A : Matrix m m 𝔸} (h : A.IsSymm)
-  结论: (exp A).IsSymm
+定理 是Symm.exp
+  条件: {A : 矩阵 m m 𝔸} (h : A.是Symm)
+  结论: (exp A).是Symm
   证明: (exp_transpose _).symm.trans congr_arg _ h
 
 Depends on / 依赖: congr_arg, exp_transpose, symm.trans
@@ -306,7 +306,7 @@ theorem exp_units_conj'
 
 中文:
 定理 exp_units_conj'
-  条件: (U : (Matrix m m 𝔸)ˣ) (A : Matrix m m 𝔸)
+  条件: (U : (矩阵 m m 𝔸)ˣ) (A : 矩阵 m m 𝔸)
   证明: exp_units_conj U⁻¹ A
 
 Depends on / 依赖: exp_units_conj
@@ -336,7 +336,7 @@ theorem exp_neg
 
 中文:
 定理 exp_neg
-  条件: (A : Matrix m m 𝔸)
+  条件: (A : 矩阵 m m 𝔸)
   结论: exp (-A) = (exp A)⁻¹
   证明: by
   rw [nonsing_inv_eq_ringInverse]
@@ -363,7 +363,7 @@ theorem exp_zsmul
 
 中文:
 定理 exp_zsmul
-  条件: (z : 整数) (A : Matrix m m 𝔸)
+  条件: (z : 整数) (A : 矩阵 m m 𝔸)
   结论: exp (z • A) = exp A ^ z
   证明: by
   obtain ⟨n, rfl | rfl⟩ := z.eq_nat_or_neg
@@ -390,7 +390,7 @@ theorem exp_conj
 
 中文:
 定理 exp_conj
-  条件: (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U)
+  条件: (U : 矩阵 m m 𝔸) (A : 矩阵 m m 𝔸) (hy : 是单位 U)
   证明: let ⟨u, hu⟩ := hy
   hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj u A
 
@@ -412,7 +412,7 @@ theorem exp_conj'
 
 中文:
 定理 exp_conj'
-  条件: (U : Matrix m m 𝔸) (A : Matrix m m 𝔸) (hy : IsUnit U)
+  条件: (U : 矩阵 m m 𝔸) (A : 矩阵 m m 𝔸) (hy : 是单位 U)
   证明: let ⟨u, hu⟩ := hy
   hu ▸ by simpa only [Matrix.coe_units_inv] using exp_units_conj' u A
 

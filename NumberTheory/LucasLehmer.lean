@@ -63,7 +63,7 @@ theorem strictMono_mersenne
 
 中文:
 定理 strictMono_mersenne
-  结论: StrictMono mersenne
+  结论: 严格递增 mersenne
   证明: fun m n h =>
 (Nat.sub_lt_sub_iff_right <| Nat.one_le_pow _ _ two_pos).2 by gcongr; norm_num1
 
@@ -208,9 +208,9 @@ lemma Nat.Prime.of_mersenne
   apply Nat.not_prime_one h
 
 中文:
-引理 Nat.Prime.of_mersenne
-  条件: {p : 自然数} (h : (mersenne p).Prime)
-  结论: 自然数.Prime p
+引理 自然数.素.of_mersenne
+  条件: {p : 自然数} (h : (mersenne p).素)
+  结论: 自然数.素 p
   证明: by
 .2 apply Nat.prime_of_pow_sub_one_prime _ h
   rintro rfl
@@ -404,7 +404,7 @@ lemma legendreSym_mersenne_two
 
 中文:
 引理 legendreSym_mersenne_two
-  条件: {p : 自然数} [Fact (mersenne p).Prime] (hp : 3 <= p)
+  条件: {p : 自然数} [Fact (mersenne p).素] (hp : 3 <= p)
   证明: by
   have := mersenne_mod_eight hp
   rw [legendreSym.at_two (by lia)]; rw [ZMod.χ₈_nat_eq_if_mod_eight]
@@ -432,7 +432,7 @@ lemma legendreSym_mersenne_three
 
 中文:
 引理 legendreSym_mersenne_three
-  条件: {p : 自然数} [Fact (mersenne p).Prime] (hp : 3 <= p) (odd : Odd p)
+  条件: {p : 自然数} [Fact (mersenne p).素] (hp : 3 <= p) (odd : Odd p)
   证明: by
   rw [(by rfl : (3 : Int) = (3 : Nat))]; rw [legendreSym.quadratic_reciprocity_three_mod_four (by norm_num)
     (mersenne_mod_four (by lia))]; rw [legendreSym.mod]
@@ -806,7 +806,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (X q)
+  签名: 可居 (X q)
   定义体: inferInstanceAs (Inhabited (ZMod q × ZMod q))
 
 Depends on / 依赖: Inhabited
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (X q)
+  签名: 加法交换群 (X q)
   定义体: inferInstanceAs (AddCommGroup (ZMod q × ZMod q))
 
 @[ext]
@@ -1003,7 +1003,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (X q)
+  签名: 乘法 (X q)
   定义体: (x.1 * y.1 + 3 * x.2 * y.2, x.1 * y.2 + x.2 * y.1)
 
 @[simp]
@@ -1064,7 +1064,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (X q)
+  签名: 幺 (X q)
   定义体: ⟨1, 0⟩
 
 @[simp]
@@ -1122,7 +1122,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (X q)
+  签名: 幺半群 (X q)
   定义体: { (inferInstance : Mul (X q)), (inferInstance : One (X q)) with
     mul_assoc := fun x y z => by ext <;> dsimp <;> ring
     one_mul := fun x => by ext <;> simp
@@ -1146,7 +1146,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (X q)
+  签名: 自然数嵌入 (X q)
   定义体: fun n => ⟨n, 0⟩
 -/
 instance : NatCast (X q) where
@@ -1195,7 +1195,7 @@ theorem ofNat_fst
   proof: rfl
 
 中文:
-定理 ofNat_fst
+定理 of自然数_fst
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1212,7 +1212,7 @@ theorem ofNat_snd
   proof: rfl
 
 中文:
-定理 ofNat_snd
+定理 of自然数_snd
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: rfl
 -/
@@ -1236,7 +1236,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddGroupWithOne (X q)
+  签名: 加法带幺群 (X q)
   定义体: { (inferInstance : Monoid (X q)), (inferInstance : AddCommGroup (X q)),
       (inferInstance : NatCast (X q)) with
     natCast_zero := by ext <;> simp
@@ -1311,7 +1311,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (X q)
+  签名: 环 (X q)
   定义体: { (inferInstance : AddGroupWithOne (X q)), (inferInstance : AddCommGroup (X q)),
       (inferInstance : Monoid (X q)) with
     left_distrib := left_distrib
@@ -1340,7 +1340,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (X q)
+  签名: 交换环 (X q)
   定义体: { (inferInstance : Ring (X q)) with
     mul_comm := fun _ _ => by ext <;> dsimp <;> ring }
 
@@ -1362,7 +1362,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: (1 < (q : 自然数))] : Nontrivial (X q)
+  签名: (1 < (q : 自然数))] : 非平凡 (X q)
   定义体: ⟨⟨0, 1, ne_of_apply_ne Prod.fst zero_ne_one⟩⟩
 
 @[simp]
@@ -1671,7 +1671,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharP (X q) q
+  签名: 特征p (X q) q
   定义体: by
     convert! ZMod.natCast_eq_zero_iff _ _
     exact ⟨congr_arg Prod.fst, fun hx => ext hx (by simp)⟩
@@ -1718,7 +1718,7 @@ lemma one_add_α_pow_q
 
 中文:
 引理 one_add_α_pow_q
-  条件: [Fact q.Prime] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
+  条件: [Fact q.素] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
   证明: by
   obtain ⟨k, rfl⟩ := odd
   let q := 2 * k + 1
@@ -1752,7 +1752,7 @@ lemma one_add_α_pow_q_succ
 
 中文:
 引理 one_add_α_pow_q_succ
-  条件: [Fact q.Prime] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
+  条件: [Fact q.素] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
   证明: by
   rw [pow_succ]; rw [one_add_α_pow_q odd leg3]; rw [mul_comm]; rw [← _root_.sq_sub_sq]; rw [α_sq]
   norm_num
@@ -1780,7 +1780,7 @@ lemma two_mul_ω_pow
 
 中文:
 引理 two_mul_ω_pow
-  条件: [Fact q.Prime] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
+  条件: [Fact q.素] (odd : Odd q) (leg3 : legendreSym q 3 = -1)
   证明: by
   rw [← one_add_α_sq]; rw [← pow_mul]
   have : 2 * ((q + 1) / 2) = q + 1 := by
@@ -1818,7 +1818,7 @@ lemma pow_ω
 
 中文:
 引理 pow_ω
-  结论: [Fact q.Prime] (odd : Odd q)
+  结论: [Fact q.素] (odd : Odd q)
   证明: by
   have pow2 : (2 : ZMod q) ^ ((q + 1) / 2) = 2 := by
     obtain ⟨_, _⟩ := odd
@@ -1865,7 +1865,7 @@ lemma ω_pow_trace
 
 中文:
 引理 ω_pow_trace
-  结论: [Fact q.Prime] (odd : Odd q)
+  结论: [Fact q.素] (odd : Odd q)
   证明: by
   have : (ω : X q) ^ ((q + 1) / 2) * ωb ^ ((q + 1) / 4) = -ωb ^ ((q + 1) / 4) := by
     rw [pow_ω odd leg3 leg2]
@@ -1900,7 +1900,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (X q)
+  签名: 有限类型 (X q)
   定义体: inferInstanceAs Fintype (ZMod q × ZMod q)
 
 Depends on / 依赖: Fintype
@@ -1919,7 +1919,7 @@ theorem card_eq
 
 中文:
 定理 card_eq
-  结论: Fintype.card (X q) = q ^ 2
+  结论: 有限类型.card (X q) = q ^ 2
   证明: by
   change Fintype.card (ZMod q × ZMod q) = q ^ 2
   rw [Fintype.card_prod]; rw [ZMod.card q]; rw [sq]
@@ -2262,7 +2262,7 @@ theorem lucas_lehmer_sufficiency
 中文:
 定理 lucas_lehmer_sufficiency
   条件: (p : 自然数) (w : 1 < p)
-  结论: LucasLehmerTest p -> (mersenne p).Prime
+  结论: LucasLehmerTest p -> (mersenne p).素
   证明: by
   set p' := p - 2 with hp'
   clear_value p'
@@ -2307,7 +2307,7 @@ theorem lucas_lehmer_necessity
 
 中文:
 定理 lucas_lehmer_necessity
-  条件: (p : 自然数) (w : 3 <= p) (hp : (mersenne p).Prime)
+  条件: (p : 自然数) (w : 3 <= p) (hp : (mersenne p).素)
   证明: by
   have : Fact (mersenne p).Prime := ⟨‹_›⟩
   set p' := p - 2 with hp'
@@ -2360,7 +2360,7 @@ definition sModNat
   signature: (q : Nat)
 
 中文:
-定义 sModNat
+定义 sMod自然数
   签名: (q : 自然数)
 -/
 def sModNat (q : Nat) : Nat -> Nat
@@ -2382,7 +2382,7 @@ theorem sModNat_eq_sMod
     grind [sModNat, sMod, Int.emod_eq_add_self_emod]
 
 中文:
-定理 sModNat_eq_sMod
+定理 sMod自然数_eq_sMod
   条件: (p k : 自然数) (hp : 2 <= p)
   结论: (sMod自然数 (2 ^ p - 1) k : 整数) = sMod p k
   证明: by
@@ -2419,7 +2419,7 @@ definition sModNatAux
   signature: (b q : Nat)
 
 中文:
-定义 sModNatAux
+定义 sMod自然数Aux
   签名: (b q : 自然数)
 -/
 def sModNatAux (b q : Nat) : Nat -> Nat
@@ -2442,7 +2442,7 @@ theorem sModNatAux_eq
 @[deprecated (since := "2026-06-06")] alias sModNat_aux_eq := sModNatAux_eq
 
 中文:
-定理 sModNatAux_eq
+定理 sMod自然数Aux_eq
   条件: (q k : 自然数)
   结论: sMod自然数Aux (4 % q) q k = sMod自然数 q k
   证明: by
@@ -2474,7 +2474,7 @@ theorem sModNatTR_eq_sModNat
   rw [sModNatTR]; rw [helper]; rw [sModNatAux_eq]
 
 中文:
-定理 sModNatTR_eq_sModNat
+定理 sMod自然数TR_eq_sMod自然数
   条件: (q i : 自然数)
   结论: sMod自然数TR q i = sMod自然数 q i
   证明: by
@@ -2561,7 +2561,7 @@ theorem isNat_lucasLehmerTest
   statement: {p np : Nat} ->
 
 中文:
-定理 isNat_lucasLehmerTest
+定理 is自然数_lucasLehmerTest
   结论: {p np : 自然数} ->
 -/
 theorem isNat_lucasLehmerTest : {p np : Nat} ->
@@ -2576,7 +2576,7 @@ theorem isNat_not_lucasLehmerTest
   statement: {p np : Nat} ->
 
 中文:
-定理 isNat_not_lucasLehmerTest
+定理 is自然数_not_lucasLehmerTest
   结论: {p np : 自然数} ->
 -/
 theorem isNat_not_lucasLehmerTest : {p np : Nat} ->

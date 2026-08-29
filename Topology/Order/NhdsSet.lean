@@ -40,7 +40,7 @@ theorem nhdsSet_Ioi
 
 中文:
 定理 nhdsSet_Ioi
-  结论: 𝓝ˢ (Ioi a) = 𝓟 (Ioi a)
+  结论: 𝓝ˢ (左开右无界区间 a) = 𝓟 (左开右无界区间 a)
   证明: isOpen_Ioi.nhdsSet_eq
 -/
 @[simp] theorem nhdsSet_Ioi : 𝓝ˢ (Ioi a) = 𝓟 (Ioi a) := isOpen_Ioi.nhdsSet_eq
@@ -54,7 +54,7 @@ theorem nhdsSet_Iio
 
 中文:
 定理 nhdsSet_Iio
-  结论: 𝓝ˢ (Iio a) = 𝓟 (Iio a)
+  结论: 𝓝ˢ (左无界右开区间 a) = 𝓟 (左无界右开区间 a)
   证明: isOpen_Iio.nhdsSet_eq
 -/
 @[simp] theorem nhdsSet_Iio : 𝓝ˢ (Iio a) = 𝓟 (Iio a) := isOpen_Iio.nhdsSet_eq
@@ -68,7 +68,7 @@ theorem nhdsSet_Ioo
 
 中文:
 定理 nhdsSet_Ioo
-  结论: 𝓝ˢ (Ioo a b) = 𝓟 (Ioo a b)
+  结论: 𝓝ˢ (开区间 a b) = 𝓟 (开区间 a b)
   证明: isOpen_Ioo.nhdsSet_eq
 -/
 @[simp] theorem nhdsSet_Ioo : 𝓝ˢ (Ioo a b) = 𝓟 (Ioo a b) := isOpen_Ioo.nhdsSet_eq
@@ -84,7 +84,7 @@ theorem nhdsSet_Ici
 
 中文:
 定理 nhdsSet_Ici
-  结论: 𝓝ˢ (Ici a) = 𝓝 a ⊔ 𝓟 (Ioi a)
+  结论: 𝓝ˢ (左闭右无界区间 a) = 𝓝 a ⊔ 𝓟 (左开右无界区间 a)
   证明: by
   rw [← Ioi_insert]; rw [nhdsSet_insert]; rw [nhdsSet_Ioi]
 
@@ -103,7 +103,7 @@ theorem nhdsSet_Iic
 
 中文:
 定理 nhdsSet_Iic
-  结论: 𝓝ˢ (Iic a) = 𝓝 a ⊔ 𝓟 (Iio a)
+  结论: 𝓝ˢ (左无界右闭区间 a) = 𝓝 a ⊔ 𝓟 (左无界右开区间 a)
   证明: nhdsSet_Ici (α := αᵒᵈ)
 
 Depends on / 依赖: nhdsSet_Ici
@@ -123,7 +123,7 @@ theorem nhdsSet_Ico
 中文:
 定理 nhdsSet_Ico
   条件: (h : a < b)
-  结论: 𝓝ˢ (Ico a b) = 𝓝 a ⊔ 𝓟 (Ioo a b)
+  结论: 𝓝ˢ (左闭右开区间 a b) = 𝓝 a ⊔ 𝓟 (开区间 a b)
   证明: by
   rw [← Ioo_insert_left h]; rw [nhdsSet_insert]; rw [nhdsSet_Ioo]
 
@@ -145,7 +145,7 @@ theorem nhdsSet_Ioc
 中文:
 定理 nhdsSet_Ioc
   条件: (h : a < b)
-  结论: 𝓝ˢ (Ioc a b) = 𝓝 b ⊔ 𝓟 (Ioo a b)
+  结论: 𝓝ˢ (左开右闭区间 a b) = 𝓝 b ⊔ 𝓟 (开区间 a b)
   证明: by
   rw [← Ioo_insert_right h]; rw [nhdsSet_insert]; rw [nhdsSet_Ioo]
 
@@ -169,7 +169,7 @@ theorem nhdsSet_Icc
 中文:
 定理 nhdsSet_Icc
   条件: (h : a <= b)
-  结论: 𝓝ˢ (Icc a b) = 𝓝 a ⊔ 𝓝 b ⊔ 𝓟 (Ioo a b)
+  结论: 𝓝ˢ (闭区间 a b) = 𝓝 a ⊔ 𝓝 b ⊔ 𝓟 (开区间 a b)
   证明: by
   rcases h.eq_or_lt with rfl | hlt
   · simp
@@ -200,7 +200,7 @@ alias ⟨_, Ioi_mem_nhdsSet_Ici⟩ := Ioi_mem_nhdsSet_Ici_iff
 
 中文:
 定理 Ioi_mem_nhdsSet_Ici_iff
-  结论: Ioi a in 𝓝ˢ (Ici b) ↔ a < b
+  结论: 左开右无界区间 a in 𝓝ˢ (左闭右无界区间 b) ↔ a < b
   证明: by
   rw [isOpen_Ioi.mem_nhdsSet]; rw [Ici_subset_Ioi]
 
@@ -225,7 +225,7 @@ theorem Ici_mem_nhdsSet_Ici
 中文:
 定理 Ici_mem_nhdsSet_Ici
   条件: (h : a < b)
-  结论: Ici a in 𝓝ˢ (Ici b)
+  结论: 左闭右无界区间 a in 𝓝ˢ (左闭右无界区间 b)
   证明: mem_of_superset (Ioi_mem_nhdsSet_Ici h) Ioi_subset_Ici_self
 
 Depends on / 依赖: Ioi_mem_nhdsSet_Ici, Ioi_subset_Ici_self, mem_of_superset
@@ -246,7 +246,7 @@ alias ⟨_, Iio_mem_nhdsSet_Iic⟩ := Iio_mem_nhdsSet_Iic_iff
 
 中文:
 定理 Iio_mem_nhdsSet_Iic_iff
-  结论: Iio b in 𝓝ˢ (Iic a) ↔ a < b
+  结论: 左无界右开区间 b in 𝓝ˢ (左无界右闭区间 a) ↔ a < b
   证明: Ioi_mem_nhdsSet_Ici_iff (α := αᵒᵈ)
 
 alias ⟨_, Iio_mem_nhdsSet_Iic⟩ := Iio_mem_nhdsSet_Iic_iff
@@ -270,7 +270,7 @@ theorem Iic_mem_nhdsSet_Iic
 中文:
 定理 Iic_mem_nhdsSet_Iic
   条件: (h : a < b)
-  结论: Iic b in 𝓝ˢ (Iic a)
+  结论: 左无界右闭区间 b in 𝓝ˢ (左无界右闭区间 a)
   证明: Ici_mem_nhdsSet_Ici (α := αᵒᵈ) h
 
 Depends on / 依赖: Ici_mem_nhdsSet_Ici
@@ -291,7 +291,7 @@ theorem Ioi_mem_nhdsSet_Icc
 中文:
 定理 Ioi_mem_nhdsSet_Icc
   条件: (h : a < b)
-  结论: Ioi a in 𝓝ˢ (Icc b c)
+  结论: 左开右无界区间 a in 𝓝ˢ (闭区间 b c)
   证明: nhdsSet_mono Icc_subset_Ici_self Ioi_mem_nhdsSet_Ici h
 
 Depends on / 依赖: Icc_subset_Ici_self, Ioi_mem_nhdsSet_Ici, nhdsSet_mono
@@ -311,7 +311,7 @@ theorem Ici_mem_nhdsSet_Icc
 中文:
 定理 Ici_mem_nhdsSet_Icc
   条件: (h : a < b)
-  结论: Ici a in 𝓝ˢ (Icc b c)
+  结论: 左闭右无界区间 a in 𝓝ˢ (闭区间 b c)
   证明: mem_of_superset (Ioi_mem_nhdsSet_Icc h) Ioi_subset_Ici_self
 
 Depends on / 依赖: Ioi_mem_nhdsSet_Icc, Ioi_subset_Ici_self, mem_of_superset
@@ -331,7 +331,7 @@ theorem Iio_mem_nhdsSet_Icc
 中文:
 定理 Iio_mem_nhdsSet_Icc
   条件: (h : b < c)
-  结论: Iio c in 𝓝ˢ (Icc a b)
+  结论: 左无界右开区间 c in 𝓝ˢ (闭区间 a b)
   证明: nhdsSet_mono Icc_subset_Iic_self Iio_mem_nhdsSet_Iic h
 
 Depends on / 依赖: Icc_subset_Iic_self, Iio_mem_nhdsSet_Iic, nhdsSet_mono
@@ -351,7 +351,7 @@ theorem Iic_mem_nhdsSet_Icc
 中文:
 定理 Iic_mem_nhdsSet_Icc
   条件: (h : b < c)
-  结论: Iic c in 𝓝ˢ (Icc a b)
+  结论: 左无界右闭区间 c in 𝓝ˢ (闭区间 a b)
   证明: mem_of_superset (Iio_mem_nhdsSet_Icc h) Iio_subset_Iic_self
 
 Depends on / 依赖: Iio_mem_nhdsSet_Icc, Iio_subset_Iic_self, mem_of_superset
@@ -371,7 +371,7 @@ theorem Ioo_mem_nhdsSet_Icc
 中文:
 定理 Ioo_mem_nhdsSet_Icc
   条件: (h : a < b) (h' : c < d)
-  结论: Ioo a d in 𝓝ˢ (Icc b c)
+  结论: 开区间 a d in 𝓝ˢ (闭区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Icc h) (Iio_mem_nhdsSet_Icc h')
 
 Depends on / 依赖: Iio_mem_nhdsSet_Icc, Ioi_mem_nhdsSet_Icc, inter_mem
@@ -391,7 +391,7 @@ theorem Ico_mem_nhdsSet_Icc
 中文:
 定理 Ico_mem_nhdsSet_Icc
   条件: (h : a < b) (h' : c < d)
-  结论: Ico a d in 𝓝ˢ (Icc b c)
+  结论: 左闭右开区间 a d in 𝓝ˢ (闭区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Icc h) (Iio_mem_nhdsSet_Icc h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Icc, Iio_mem_nhdsSet_Icc, inter_mem
@@ -411,7 +411,7 @@ theorem Ioc_mem_nhdsSet_Icc
 中文:
 定理 Ioc_mem_nhdsSet_Icc
   条件: (h : a < b) (h' : c < d)
-  结论: Ioc a d in 𝓝ˢ (Icc b c)
+  结论: 左开右闭区间 a d in 𝓝ˢ (闭区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Icc h) (Iic_mem_nhdsSet_Icc h')
 
 Depends on / 依赖: Iic_mem_nhdsSet_Icc, Ioi_mem_nhdsSet_Icc, inter_mem
@@ -431,7 +431,7 @@ theorem Icc_mem_nhdsSet_Icc
 中文:
 定理 Icc_mem_nhdsSet_Icc
   条件: (h : a < b) (h' : c < d)
-  结论: Icc a d in 𝓝ˢ (Icc b c)
+  结论: 闭区间 a d in 𝓝ˢ (闭区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Icc h) (Iic_mem_nhdsSet_Icc h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Icc, Iic_mem_nhdsSet_Icc, inter_mem
@@ -452,7 +452,7 @@ theorem Ici_mem_nhdsSet_Ico
 中文:
 定理 Ici_mem_nhdsSet_Ico
   条件: (h : a < b)
-  结论: Ici a in 𝓝ˢ (Ico b c)
+  结论: 左闭右无界区间 a in 𝓝ˢ (左闭右开区间 b c)
   证明: nhdsSet_mono Ico_subset_Icc_self Ici_mem_nhdsSet_Icc h
 
 Depends on / 依赖: Ici_mem_nhdsSet_Icc, Ico_subset_Icc_self, nhdsSet_mono
@@ -472,7 +472,7 @@ theorem Ioi_mem_nhdsSet_Ico
 中文:
 定理 Ioi_mem_nhdsSet_Ico
   条件: (h : a < b)
-  结论: Ioi a in 𝓝ˢ (Ico b c)
+  结论: 左开右无界区间 a in 𝓝ˢ (左闭右开区间 b c)
   证明: nhdsSet_mono Ico_subset_Icc_self Ioi_mem_nhdsSet_Icc h
 
 Depends on / 依赖: Ico_subset_Icc_self, Ioi_mem_nhdsSet_Icc, nhdsSet_mono
@@ -492,7 +492,7 @@ theorem Iio_mem_nhdsSet_Ico
 中文:
 定理 Iio_mem_nhdsSet_Ico
   条件: (h : b <= c)
-  结论: Iio c in 𝓝ˢ (Ico a b)
+  结论: 左无界右开区间 c in 𝓝ˢ (左闭右开区间 a b)
   证明: nhdsSet_mono Ico_subset_Iio_self by simpa
 
 Depends on / 依赖: Ico_subset_Iio_self, nhdsSet_mono
@@ -512,7 +512,7 @@ theorem Iic_mem_nhdsSet_Ico
 中文:
 定理 Iic_mem_nhdsSet_Ico
   条件: (h : b <= c)
-  结论: Iic c in 𝓝ˢ (Ico a b)
+  结论: 左无界右闭区间 c in 𝓝ˢ (左闭右开区间 a b)
   证明: mem_of_superset (Iio_mem_nhdsSet_Ico h) Iio_subset_Iic_self
 
 Depends on / 依赖: Iio_mem_nhdsSet_Ico, Iio_subset_Iic_self, mem_of_superset
@@ -532,7 +532,7 @@ theorem Ioo_mem_nhdsSet_Ico
 中文:
 定理 Ioo_mem_nhdsSet_Ico
   条件: (h : a < b) (h' : c <= d)
-  结论: Ioo a d in 𝓝ˢ (Ico b c)
+  结论: 开区间 a d in 𝓝ˢ (左闭右开区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Ico h) (Iio_mem_nhdsSet_Ico h')
 
 Depends on / 依赖: Iio_mem_nhdsSet_Ico, Ioi_mem_nhdsSet_Ico, inter_mem
@@ -552,7 +552,7 @@ theorem Icc_mem_nhdsSet_Ico
 中文:
 定理 Icc_mem_nhdsSet_Ico
   条件: (h : a < b) (h' : c <= d)
-  结论: Icc a d in 𝓝ˢ (Ico b c)
+  结论: 闭区间 a d in 𝓝ˢ (左闭右开区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Ico h) (Iic_mem_nhdsSet_Ico h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Ico, Iic_mem_nhdsSet_Ico, inter_mem
@@ -572,7 +572,7 @@ theorem Ioc_mem_nhdsSet_Ico
 中文:
 定理 Ioc_mem_nhdsSet_Ico
   条件: (h : a < b) (h' : c <= d)
-  结论: Ioc a d in 𝓝ˢ (Ico b c)
+  结论: 左开右闭区间 a d in 𝓝ˢ (左闭右开区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Ico h) (Iic_mem_nhdsSet_Ico h')
 
 Depends on / 依赖: Iic_mem_nhdsSet_Ico, Ioi_mem_nhdsSet_Ico, inter_mem
@@ -592,7 +592,7 @@ theorem Ico_mem_nhdsSet_Ico
 中文:
 定理 Ico_mem_nhdsSet_Ico
   条件: (h : a < b) (h' : c <= d)
-  结论: Ico a d in 𝓝ˢ (Ico b c)
+  结论: 左闭右开区间 a d in 𝓝ˢ (左闭右开区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Ico h) (Iio_mem_nhdsSet_Ico h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Ico, Iio_mem_nhdsSet_Ico, inter_mem
@@ -613,7 +613,7 @@ theorem Ioi_mem_nhdsSet_Ioc
 中文:
 定理 Ioi_mem_nhdsSet_Ioc
   条件: (h : a <= b)
-  结论: Ioi a in 𝓝ˢ (Ioc b c)
+  结论: 左开右无界区间 a in 𝓝ˢ (左开右闭区间 b c)
   证明: nhdsSet_mono Ioc_subset_Ioi_self by simpa
 
 Depends on / 依赖: Ioc_subset_Ioi_self, nhdsSet_mono
@@ -633,7 +633,7 @@ theorem Iio_mem_nhdsSet_Ioc
 中文:
 定理 Iio_mem_nhdsSet_Ioc
   条件: (h : b < c)
-  结论: Iio c in 𝓝ˢ (Ioc a b)
+  结论: 左无界右开区间 c in 𝓝ˢ (左开右闭区间 a b)
   证明: nhdsSet_mono Ioc_subset_Icc_self Iio_mem_nhdsSet_Icc h
 
 Depends on / 依赖: Iio_mem_nhdsSet_Icc, Ioc_subset_Icc_self, nhdsSet_mono
@@ -653,7 +653,7 @@ theorem Ici_mem_nhdsSet_Ioc
 中文:
 定理 Ici_mem_nhdsSet_Ioc
   条件: (h : a <= b)
-  结论: Ici a in 𝓝ˢ (Ioc b c)
+  结论: 左闭右无界区间 a in 𝓝ˢ (左开右闭区间 b c)
   证明: mem_of_superset (Ioi_mem_nhdsSet_Ioc h) Ioi_subset_Ici_self
 
 Depends on / 依赖: Ioi_mem_nhdsSet_Ioc, Ioi_subset_Ici_self, mem_of_superset
@@ -673,7 +673,7 @@ theorem Iic_mem_nhdsSet_Ioc
 中文:
 定理 Iic_mem_nhdsSet_Ioc
   条件: (h : b < c)
-  结论: Iic c in 𝓝ˢ (Ioc a b)
+  结论: 左无界右闭区间 c in 𝓝ˢ (左开右闭区间 a b)
   证明: nhdsSet_mono Ioc_subset_Icc_self Iic_mem_nhdsSet_Icc h
 
 Depends on / 依赖: Iic_mem_nhdsSet_Icc, Ioc_subset_Icc_self, nhdsSet_mono
@@ -693,7 +693,7 @@ theorem Ioo_mem_nhdsSet_Ioc
 中文:
 定理 Ioo_mem_nhdsSet_Ioc
   条件: (h : a <= b) (h' : c < d)
-  结论: Ioo a d in 𝓝ˢ (Ioc b c)
+  结论: 开区间 a d in 𝓝ˢ (左开右闭区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Ioc h) (Iio_mem_nhdsSet_Ioc h')
 
 Depends on / 依赖: Iio_mem_nhdsSet_Ioc, Ioi_mem_nhdsSet_Ioc, inter_mem
@@ -713,7 +713,7 @@ theorem Icc_mem_nhdsSet_Ioc
 中文:
 定理 Icc_mem_nhdsSet_Ioc
   条件: (h : a <= b) (h' : c < d)
-  结论: Icc a d in 𝓝ˢ (Ioc b c)
+  结论: 闭区间 a d in 𝓝ˢ (左开右闭区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Ioc h) (Iic_mem_nhdsSet_Ioc h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Ioc, Iic_mem_nhdsSet_Ioc, inter_mem
@@ -733,7 +733,7 @@ theorem Ioc_mem_nhdsSet_Ioc
 中文:
 定理 Ioc_mem_nhdsSet_Ioc
   条件: (h : a <= b) (h' : c < d)
-  结论: Ioc a d in 𝓝ˢ (Ioc b c)
+  结论: 左开右闭区间 a d in 𝓝ˢ (左开右闭区间 b c)
   证明: inter_mem (Ioi_mem_nhdsSet_Ioc h) (Iic_mem_nhdsSet_Ioc h')
 
 Depends on / 依赖: Iic_mem_nhdsSet_Ioc, Ioi_mem_nhdsSet_Ioc, inter_mem
@@ -753,7 +753,7 @@ theorem Ico_mem_nhdsSet_Ioc
 中文:
 定理 Ico_mem_nhdsSet_Ioc
   条件: (h : a <= b) (h' : c < d)
-  结论: Ico a d in 𝓝ˢ (Ioc b c)
+  结论: 左闭右开区间 a d in 𝓝ˢ (左开右闭区间 b c)
   证明: inter_mem (Ici_mem_nhdsSet_Ioc h) (Iio_mem_nhdsSet_Ioc h')
 
 Depends on / 依赖: Ici_mem_nhdsSet_Ioc, Iio_mem_nhdsSet_Ioc, inter_mem
@@ -783,7 +783,7 @@ theorem hasBasis_nhdsSet_Iic_Iio
 
 中文:
 定理 hasBasis_nhdsSet_Iic_Iio
-  条件: (a : α) [h : Nonempty (Ioi a)]
+  条件: (a : α) [h : 非空 (左开右无界区间 a)]
   证明: by
   refine ⟨fun s => ⟨fun hs => ?_, fun ⟨b, hab, hb⟩ => mem_of_superset (Iio_mem_nhdsSet_Iic hab) hb⟩⟩
   rw [nhdsSet_Iic]; rw [mem_sup]; rw [mem_principal] at hs
@@ -846,7 +846,7 @@ theorem Iic_mem_nhdsSet_Iic_iff
 中文:
 定理 Iic_mem_nhdsSet_Iic_iff
   条件: {a b : α} [NeBot (𝓝[>] b)]
-  结论: Iic a in 𝓝ˢ (Iic b) ↔ b < a
+  结论: 左无界右闭区间 a in 𝓝ˢ (左无界右闭区间 b) ↔ b < a
   证明: (hasBasis_nhdsSet_Iic_Iic b).mem_iff.trans
     ⟨fun ⟨_c, hbc, hca⟩ => hbc.trans_le (Iic_subset_Iic.1 hca), fun h => ⟨_, h, Subset.rfl⟩⟩
 
@@ -866,7 +866,7 @@ theorem hasBasis_nhdsSet_Ici_Ioi
 
 中文:
 定理 hasBasis_nhdsSet_Ici_Ioi
-  条件: (a : α) [Nonempty (Iio a)]
+  条件: (a : α) [非空 (左无界右开区间 a)]
   证明: have : Nonempty (Ioi (toDual a)) := ‹_›; hasBasis_nhdsSet_Iic_Iio (toDual a)
 
 Depends on / 依赖: Nonempty, hasBasis_nhdsSet_Iic_Iio, toDual
@@ -911,7 +911,7 @@ theorem Ici_mem_nhdsSet_Ici_iff
 中文:
 定理 Ici_mem_nhdsSet_Ici_iff
   条件: {a b : α} [NeBot (𝓝[<] b)]
-  结论: Ici a in 𝓝ˢ (Ici b) ↔ a < b
+  结论: 左闭右无界区间 a in 𝓝ˢ (左闭右无界区间 b) ↔ a < b
   证明: have : NeBot (𝓝[>] (toDual b)) := ‹_›; Iic_mem_nhdsSet_Iic_iff (a := toDual a) (b := toDual b)
 
 Depends on / 依赖: Iic_mem_nhdsSet_Iic_iff, toDual

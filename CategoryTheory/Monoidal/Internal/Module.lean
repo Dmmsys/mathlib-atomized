@@ -60,7 +60,7 @@ definition MonObj.toRing
 
 中文:
 定义 MonObj.toRing
-  签名: (A : ModuleCat.{u} R) [MonObj A]
+  签名: (A : 模范畴.{u} R) [MonObj A]
   定义体: { (inferInstance : AddCommGroup A) with
     one := η[A] (1 : R)
     mul := fun x y => μ[A] (x otimesₜ y)
@@ -129,7 +129,7 @@ theorem algebraMap
 
 中文:
 定理 algebraMap
-  条件: (A : ModuleCat.{u} R) [MonObj A] (r : R)
+  条件: (A : 模范畴.{u} R) [MonObj A] (r : R)
   结论: algebraMap R A r = η[A] r
   证明: rfl
 -/
@@ -155,7 +155,7 @@ definition functor
 
 中文:
 定义 functor
-  签名: : Mon (ModuleCat.{u} R) ⥤ AlgCat R where
+  签名: : 幺半群 (模范畴.{u} R) ⥤ Alg范畴 R where
   定义体: AlgCat.of R A.X
   map {_ _} f := AlgCat.ofHom
     { f.hom.hom.toAddMonoidHom with
@@ -196,7 +196,7 @@ refine TensorProduct.ext LinearMap.ext_ring LinearMap.ext fun x => ?_
 
 中文:
 定义 inverseObj
-  签名: (A : AlgCat.{u} R)
+  签名: (A : Alg范畴.{u} R)
   定义体: ofHom Algebra.linearMap R A
 mul := ofHom LinearMap.mul' R A
   one_mul := by
@@ -269,7 +269,7 @@ isMonHom_hom.mul_hom := hom_ext TensorProduct.ext LinearMap.ext₂ map_mul f.hom
 
 中文:
 定义 inverse
-  签名: : AlgCat.{u} R ⥤ Mon (ModuleCat.{u} R) where
+  签名: : Alg范畴.{u} R ⥤ 幺半群 (模范畴.{u} R) where
   定义体: { X := ModuleCat.of R A, mon := inverseObj A }
   map f :=
     { hom := ofHom <| f.hom.toLinearMap
@@ -310,7 +310,7 @@ definition monModuleEquivalenceAlgebra
 
 中文:
 定义 monModuleEquivalenceAlgebra
-  签名: : Mon (ModuleCat.{u} R) ≌ AlgCat R where
+  签名: : 幺半群 (模范畴.{u} R) ≌ Alg范畴 R where
   定义体: functor
   inverse := inverse
   unitIso :=

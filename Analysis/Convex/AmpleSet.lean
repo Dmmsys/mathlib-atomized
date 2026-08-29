@@ -58,7 +58,7 @@ definition AmpleSet
 
 中文:
 定义 AmpleSet
-  签名: (s : Set F)
+  签名: (s : 集合 F)
   定义体: forall x in s, convexHull Real (connectedComponentIn s x) = univ
 
 Depends on / 依赖: connectedComponentIn, convexHull
@@ -80,7 +80,7 @@ theorem ampleSet_univ
 
 中文:
 定理 ampleSet_univ
-  条件: {F : 类型} [NormedAddCommGroup F] [NormedSpace 实数 F]
+  条件: {F : 类型} [赋范交换加群 F] [赋范空间 实数 F]
   证明: by
   intro x _
   rw [connectedComponentIn_univ]; rw [PreconnectedSpace.connectedComponent_eq_univ]; rw [convexHull_univ]
@@ -104,7 +104,7 @@ theorem ampleSet_empty
 
 中文:
 定理 ampleSet_empty
-  结论: AmpleSet (∅ : Set F)
+  结论: AmpleSet (∅ : 集合 F)
   证明: fun _ => False.elim
 
 Depends on / 依赖: False.elim
@@ -131,7 +131,7 @@ theorem union
 
 中文:
 定理 union
-  条件: {s t : Set F} (hs : AmpleSet s) (ht : AmpleSet t)
+  条件: {s t : 集合 F} (hs : AmpleSet s) (ht : AmpleSet t)
   结论: AmpleSet (s union t)
   证明: by
   intro x hx
@@ -169,8 +169,8 @@ theorem image
 .symm L.toAffineMa
 
 中文:
-定理 image
-  条件: {s : Set E} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
+定理 像
+  条件: {s : 集合 E} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
   证明: forall_mem_image.mpr fun x hx =>
   calc (convexHull Real) (connectedComponentIn (L '' s) (L x))
     _ = (convexHull Real) (L '' (connectedComponentIn s x)) :=
@@ -199,7 +199,7 @@ theorem image_iff
 
 中文:
 定理 image_iff
-  条件: {s : Set E} (L : E ≃ᴬ[实数] F)
+  条件: {s : 集合 E} (L : E ≃ᴬ[实数] F)
   证明: ⟨fun h => (L.symm_image_image s) ▸ h.image L.symm, fun h => h.image L⟩
 
 Depends on / 依赖: L.symm, L.symm_image_image, h.image, symm_image_image
@@ -220,8 +220,8 @@ theorem preimage
   exact h.image L.symm
 
 中文:
-定理 preimage
-  条件: {s : Set F} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
+定理 原像
+  条件: {s : 集合 F} (h : AmpleSet s) (L : E ≃ᴬ[实数] F)
   结论: AmpleSet (L ⁻¹' s)
   证明: by
   rw [← L.image_symm_eq_preimage]
@@ -243,7 +243,7 @@ theorem preimage_iff
 
 中文:
 定理 preimage_iff
-  条件: {s : Set F} (L : E ≃ᴬ[实数] F)
+  条件: {s : 集合 F} (L : E ≃ᴬ[实数] F)
   证明: ⟨fun h => L.image_preimage s ▸ h.image L, fun h => h.preimage L⟩
 
 Depends on / 依赖: L.image_preimage, h.image, h.preimage, image_preimage, preimage
@@ -264,7 +264,7 @@ theorem vadd
 
 中文:
 定理 vadd
-  条件: [ContinuousAdd E] {s : Set E} (h : AmpleSet s) {y : E}
+  条件: [连续加法 E] {s : 集合 E} (h : AmpleSet s) {y : E}
   证明: h.image (ContinuousAffineEquiv.constVAdd Real E y)
 
 Depends on / 依赖: ContinuousAffineEquiv, ContinuousAffineEquiv.constVAdd, constVAdd, h.image
@@ -283,7 +283,7 @@ theorem vadd_iff
 
 中文:
 定理 vadd_iff
-  条件: [ContinuousAdd E] {s : Set E} {y : E}
+  条件: [连续加法 E] {s : 集合 E} {y : E}
   证明: AmpleSet.image_iff (ContinuousAffineEquiv.constVAdd Real E y)
 
 Depends on / 依赖: AmpleSet, AmpleSet.image_iff, ContinuousAffineEquiv, ContinuousAffineEquiv.constVAdd, constVAdd, image_iff
@@ -313,7 +313,7 @@ theorem of_one_lt_codim
 
 中文:
 定理 of_one_lt_codim
-  结论: [IsTopologicalAddGroup F] [ContinuousSMul 实数 F] {E : Submodule 实数 F}
+  结论: [是拓扑加群 F] [连续标量乘法 实数 F] {E : 子模 实数 F}
   证明: fun x hx => by
   rw [E.connectedComponentIn_eq_self_of_one_lt_codim hcodim hx]; rw [eq_univ_iff_forall]
   intro y

@@ -159,8 +159,8 @@ theorem Convex.quasiconvexOn_of_convex_le
   proof: fun r => hs.inter (h r)
 
 中文:
-定理 Convex.quasiconvexOn_of_convex_le
-  条件: (hs : Convex 𝕜 s) (h : 对任意 r, Convex 𝕜 { x | f x <= r })
+定理 凸.quasiconvexOn_of_convex_le
+  条件: (hs : 凸 𝕜 s) (h : 对任意 r, 凸 𝕜 { x | f x <= r })
   证明: fun r => hs.inter (h r)
 
 Depends on / 依赖: hs.inter
@@ -177,8 +177,8 @@ theorem Convex.quasiconcaveOn_of_convex_ge
   proof: Convex.quasiconvexOn_of_convex_le (β := βᵒᵈ) hs h
 
 中文:
-定理 Convex.quasiconcaveOn_of_convex_ge
-  条件: (hs : Convex 𝕜 s) (h : 对任意 r, Convex 𝕜 { x | r <= f x })
+定理 凸.quasiconcaveOn_of_convex_ge
+  条件: (hs : 凸 𝕜 s) (h : 对任意 r, 凸 𝕜 { x | r <= f x })
   证明: Convex.quasiconvexOn_of_convex_le (β := βᵒᵈ) hs h
 
 Depends on / 依赖: Convex, Convex.quasiconvexOn_of_convex_le, quasiconvexOn_of_convex_le
@@ -201,7 +201,7 @@ theorem QuasiconvexOn.convex
 中文:
 定理 QuasiconvexOn.convex
   条件: [IsDirectedOrder β] (hf : QuasiconvexOn 𝕜 s f)
-  结论: Convex 𝕜 s
+  结论: 凸 𝕜 s
   证明: fun x hx y hy _ _ ha hb hab =>
   let ⟨_, hxz, hyz⟩ := exists_ge_ge (f x) (f y)
   (hf _ ⟨hx, hxz⟩ ⟨hy, hyz⟩ ha hb hab).1
@@ -225,7 +225,7 @@ theorem QuasiconcaveOn.convex
 中文:
 定理 QuasiconcaveOn.convex
   条件: [IsCodirectedOrder β] (hf : QuasiconcaveOn 𝕜 s f)
-  结论: Convex 𝕜 s
+  结论: 凸 𝕜 s
   证明: hf.dual.convex
 
 Depends on / 依赖: convex, hf.dual.convex
@@ -292,7 +292,7 @@ theorem QuasiconvexOn.antitone_comp
 
 中文:
 定理 QuasiconvexOn.antitone_comp
-  条件: (hg : Antitone g) (hf : QuasiconvexOn 𝕜 s f)
+  条件: (hg : 递减 g) (hf : QuasiconvexOn 𝕜 s f)
   证明: hf.monotone_comp (γ := γᵒᵈ) hg
 
 Depends on / 依赖: hf.monotone_comp, monotone_comp
@@ -311,7 +311,7 @@ theorem QuasiconcaveOn.monotone_comp
 
 中文:
 定理 QuasiconcaveOn.monotone_comp
-  条件: (hg : Monotone g) (hf : QuasiconcaveOn 𝕜 s f)
+  条件: (hg : 递增 g) (hf : QuasiconcaveOn 𝕜 s f)
   证明: QuasiconvexOn.monotone_comp hg.dual hf
 
 Depends on / 依赖: QuasiconvexOn, QuasiconvexOn.monotone_comp, hg.dual, monotone_comp
@@ -330,7 +330,7 @@ theorem QuasiconcaveOn.antitone_comp
 
 中文:
 定理 QuasiconcaveOn.antitone_comp
-  条件: (hg : Antitone g) (hf : QuasiconcaveOn 𝕜 s f)
+  条件: (hg : 递减 g) (hf : QuasiconcaveOn 𝕜 s f)
   证明: QuasiconvexOn.monotone_comp (β := βᵒᵈ) hg.dual hf
 
 Depends on / 依赖: QuasiconvexOn, QuasiconvexOn.monotone_comp, hg.dual, monotone_comp
@@ -349,7 +349,7 @@ theorem QuasilinearOn.monotone_comp
 
 中文:
 定理 QuasilinearOn.monotone_comp
-  条件: (hg : Monotone g) (hf : QuasilinearOn 𝕜 s f)
+  条件: (hg : 递增 g) (hf : QuasilinearOn 𝕜 s f)
   证明: ⟨hf.1.monotone_comp hg, hf.2.monotone_comp hg⟩
 
 Depends on / 依赖: monotone_comp
@@ -368,7 +368,7 @@ theorem QuasilinearOn.antitone_comp
 
 中文:
 定理 QuasilinearOn.antitone_comp
-  条件: (hg : Antitone g) (hf : QuasilinearOn 𝕜 s f)
+  条件: (hg : 递减 g) (hf : QuasilinearOn 𝕜 s f)
   证明: ⟨hf.2.antitone_comp hg, hf.1.antitone_comp hg⟩
 
 Depends on / 依赖: antitone_comp
@@ -398,8 +398,8 @@ theorem Convex.quasiconvexOn_restrict
   exact Convex.inter ht (hf b)
 
 中文:
-定理 Convex.quasiconvexOn_restrict
-  结论: {t : Set E} (hf : QuasiconvexOn 𝕜 s f) (hst : t subseteq s)
+定理 凸.quasiconvexOn_restrict
+  结论: {t : 集合 E} (hf : QuasiconvexOn 𝕜 s f) (hst : t subseteq s)
   证明: by
   intro b
   rw [Set.sep_eq_inter_sep hst]
@@ -425,8 +425,8 @@ theorem Convex.quasiconcaveOn_restrict
   exact Convex.inter ht (hf b)
 
 中文:
-定理 Convex.quasiconcaveOn_restrict
-  结论: {t : Set E} (hf : QuasiconcaveOn 𝕜 s f) (hst : t subseteq s)
+定理 凸.quasiconcaveOn_restrict
+  结论: {t : 集合 E} (hf : QuasiconcaveOn 𝕜 s f) (hst : t subseteq s)
   证明: by
   intro b
   rw [Set.sep_eq_inter_sep hst]
@@ -463,7 +463,7 @@ theorem QuasiconcaveOn.isPreconnected_preimage_subtype
 
 中文:
 定理 QuasiconcaveOn.isPreconnected_preimage_subtype
-  结论: {s : Set E} {t : β}
+  结论: {s : 集合 E} {t : β}
   证明: by
   rw [← Topology.IsInducing.subtypeVal.isPreconnected_image]; rw [image_preimage_eq_inter_range]; rw [Subtype.range_coe]; rw [inter_comm]
   exact (hfc t).isPreconnected
@@ -486,7 +486,7 @@ theorem QuasiconvexOn.isPreconnected_preimage_subtype
 
 中文:
 定理 QuasiconvexOn.isPreconnected_preimage_subtype
-  结论: {s : Set E} {t : β}
+  结论: {s : 集合 E} {t : β}
   证明: QuasiconcaveOn.isPreconnected_preimage_subtype (β := βᵒᵈ) hfc
 
 Depends on / 依赖: QuasiconcaveOn, QuasiconcaveOn.isPreconnected_preimage_subtype, isPreconnected_preimage_subtype
@@ -506,7 +506,7 @@ theorem QuasilinearOn.isPreconnected_preimage_subtype
 
 中文:
 定理 QuasilinearOn.isPreconnected_preimage_subtype
-  结论: {s : Set E} {t : β}
+  结论: {s : 集合 E} {t : β}
   证明: hfc.left.isPreconnected_preimage_subtype
 
 Depends on / 依赖: hfc.left.isPreconnected_preimage_subtype, isPreconnected_preimage_subtype
@@ -534,7 +534,7 @@ theorem QuasiconvexOn.sup
   exact (hf r).inter (hg r)
 
 中文:
-定理 QuasiconvexOn.sup
+定理 QuasiconvexOn.上确界
   结论: [SemilatticeSup β] (hf : QuasiconvexOn 𝕜 s f)
   证明: by
   intro r
@@ -558,7 +558,7 @@ theorem QuasiconcaveOn.inf
   proof: hf.dual.sup hg
 
 中文:
-定理 QuasiconcaveOn.inf
+定理 QuasiconcaveOn.下确界
   结论: [SemilatticeInf β] (hf : QuasiconcaveOn 𝕜 s f)
   证明: hf.dual.sup hg
 
@@ -588,7 +588,7 @@ theorem quasiconvexOn_iff_le_max
 
 中文:
 定理 quasiconvexOn_iff_le_max
-  结论: QuasiconvexOn 𝕜 s f ↔ Convex 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
+  结论: QuasiconvexOn 𝕜 s f ↔ 凸 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
   证明: ⟨fun hf =>
     ⟨hf.convex, fun _ hx _ hy _ _ ha hb hab =>
       (hf _ ⟨hx, le_max_left _ _⟩ ⟨hy, le_max_right _ _⟩ ha hb hab).2⟩,
@@ -615,7 +615,7 @@ theorem quasiconcaveOn_iff_min_le
 
 中文:
 定理 quasiconcaveOn_iff_min_le
-  结论: QuasiconcaveOn 𝕜 s f ↔ Convex 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
+  结论: QuasiconcaveOn 𝕜 s f ↔ 凸 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
   证明: quasiconvexOn_iff_le_max (β := βᵒᵈ)
 
 Depends on / 依赖: quasiconvexOn_iff_le_max
@@ -637,7 +637,7 @@ theorem quasilinearOn_iff_mem_uIcc
 
 中文:
 定理 quasilinearOn_iff_mem_uIcc
-  结论: QuasilinearOn 𝕜 s f ↔ Convex 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
+  结论: QuasilinearOn 𝕜 s f ↔ 凸 𝕜 s ∧ 对任意 ⦃x⦄, x in s -> 对任意 ⦃y⦄,
   证明: by
   rw [QuasilinearOn]; rw [quasiconvexOn_iff_le_max]; rw [quasiconcaveOn_iff_min_le]; rw [and_and_and_comm]; rw [and_self_iff]
   apply and_congr_right'
@@ -763,7 +763,7 @@ theorem MonotoneOn.quasiconvexOn
 
 中文:
 定理 MonotoneOn.quasiconvexOn
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasiconvexOn 𝕜 s f
   证明: hf.convex_le hs
 
@@ -783,7 +783,7 @@ theorem MonotoneOn.quasiconcaveOn
 
 中文:
 定理 MonotoneOn.quasiconcaveOn
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasiconcaveOn 𝕜 s f
   证明: hf.convex_ge hs
 
@@ -803,7 +803,7 @@ theorem MonotoneOn.quasilinearOn
 
 中文:
 定理 MonotoneOn.quasilinearOn
-  条件: (hf : MonotoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : MonotoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasilinearOn 𝕜 s f
   证明: ⟨hf.quasiconvexOn hs, hf.quasiconcaveOn hs⟩
 
@@ -823,7 +823,7 @@ theorem AntitoneOn.quasiconvexOn
 
 中文:
 定理 AntitoneOn.quasiconvexOn
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasiconvexOn 𝕜 s f
   证明: hf.convex_le hs
 
@@ -843,7 +843,7 @@ theorem AntitoneOn.quasiconcaveOn
 
 中文:
 定理 AntitoneOn.quasiconcaveOn
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasiconcaveOn 𝕜 s f
   证明: hf.convex_ge hs
 
@@ -863,7 +863,7 @@ theorem AntitoneOn.quasilinearOn
 
 中文:
 定理 AntitoneOn.quasilinearOn
-  条件: (hf : AntitoneOn f s) (hs : Convex 𝕜 s)
+  条件: (hf : AntitoneOn f s) (hs : 凸 𝕜 s)
   结论: QuasilinearOn 𝕜 s f
   证明: ⟨hf.quasiconvexOn hs, hf.quasiconcaveOn hs⟩
 
@@ -882,8 +882,8 @@ theorem Monotone.quasiconvexOn
   proof: (hf.monotoneOn _).quasiconvexOn convex_univ
 
 中文:
-定理 Monotone.quasiconvexOn
-  条件: (hf : Monotone f)
+定理 递增.quasiconvexOn
+  条件: (hf : 递增 f)
   结论: QuasiconvexOn 𝕜 univ f
   证明: (hf.monotoneOn _).quasiconvexOn convex_univ
 
@@ -902,8 +902,8 @@ theorem Monotone.quasiconcaveOn
   proof: (hf.monotoneOn _).quasiconcaveOn convex_univ
 
 中文:
-定理 Monotone.quasiconcaveOn
-  条件: (hf : Monotone f)
+定理 递增.quasiconcaveOn
+  条件: (hf : 递增 f)
   结论: QuasiconcaveOn 𝕜 univ f
   证明: (hf.monotoneOn _).quasiconcaveOn convex_univ
 
@@ -922,8 +922,8 @@ theorem Monotone.quasilinearOn
   proof: ⟨hf.quasiconvexOn, hf.quasiconcaveOn⟩
 
 中文:
-定理 Monotone.quasilinearOn
-  条件: (hf : Monotone f)
+定理 递增.quasilinearOn
+  条件: (hf : 递增 f)
   结论: QuasilinearOn 𝕜 univ f
   证明: ⟨hf.quasiconvexOn, hf.quasiconcaveOn⟩
 
@@ -942,8 +942,8 @@ theorem Antitone.quasiconvexOn
   proof: (hf.antitoneOn _).quasiconvexOn convex_univ
 
 中文:
-定理 Antitone.quasiconvexOn
-  条件: (hf : Antitone f)
+定理 递减.quasiconvexOn
+  条件: (hf : 递减 f)
   结论: QuasiconvexOn 𝕜 univ f
   证明: (hf.antitoneOn _).quasiconvexOn convex_univ
 
@@ -962,8 +962,8 @@ theorem Antitone.quasiconcaveOn
   proof: (hf.antitoneOn _).quasiconcaveOn convex_univ
 
 中文:
-定理 Antitone.quasiconcaveOn
-  条件: (hf : Antitone f)
+定理 递减.quasiconcaveOn
+  条件: (hf : 递减 f)
   结论: QuasiconcaveOn 𝕜 univ f
   证明: (hf.antitoneOn _).quasiconcaveOn convex_univ
 
@@ -982,8 +982,8 @@ theorem Antitone.quasilinearOn
   proof: ⟨hf.quasiconvexOn, hf.quasiconcaveOn⟩
 
 中文:
-定理 Antitone.quasilinearOn
-  条件: (hf : Antitone f)
+定理 递减.quasilinearOn
+  条件: (hf : 递减 f)
   结论: QuasilinearOn 𝕜 univ f
   证明: ⟨hf.quasiconvexOn, hf.quasiconcaveOn⟩
 
@@ -1012,7 +1012,7 @@ theorem QuasilinearOn.monotoneOn_or_antitoneOn
 
 中文:
 定理 QuasilinearOn.monotoneOn_or_antitoneOn
-  条件: [LinearOrder β] (hf : QuasilinearOn 𝕜 s f)
+  条件: [线性序 β] (hf : QuasilinearOn 𝕜 s f)
   证明: by
   simp_rw [monotoneOn_or_antitoneOn_iff_uIcc, ← segment_eq_uIcc]
   rintro a ha b hb c _ h
@@ -1037,7 +1037,7 @@ theorem quasilinearOn_iff_monotoneOn_or_antitoneOn
 
 中文:
 定理 quasilinearOn_iff_monotoneOn_or_antitoneOn
-  结论: [LinearOrder β]
+  结论: [线性序 β]
   证明: ⟨fun h => h.monotoneOn_or_antitoneOn, fun h =>
     h.elim (fun h => h.quasilinearOn hs) fun h => h.quasilinearOn hs⟩
 

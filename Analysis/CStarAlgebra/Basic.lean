@@ -52,8 +52,8 @@ class NormedStarGroup
     - norm_star_le : forall x : E, ‖x⋆‖ <= ‖x‖
 
 中文:
-类 NormedStarGroup
-  参数: (E : 类型) [SeminormedAddCommGroup E] [StarAddMonoid E]
+类 NormedStar群
+  参数: (E : 类型) [SeminormedAddComm群 E] [StarAdd幺半群 E]
   公理与运算 (1 个):
     - norm_star_le : 对任意 x : E, ‖x⋆‖ <= ‖x‖
 -/
@@ -122,7 +122,7 @@ definition starNormedAddGroupHom
 
 中文:
 定义 starNormedAddGroupHom
-  签名: : NormedAddGroupHom E E
+  签名: : 赋范加群态射 E E
   定义体: { starAddEquiv with bound' := ⟨1, fun _ => le_trans (norm_star _).le (one_mul _).symm.le⟩ }
 
 Depends on / 依赖: le_trans, norm_star, one_mul, starAddEquiv, symm.le
@@ -141,7 +141,7 @@ theorem star_isometry
 
 中文:
 定理 star_isometry
-  结论: Isometry (star : E -> E)
+  结论: 等距 (star : E -> E)
   证明: show Isometry starAddEquiv from
     AddMonoidHomClass.isometry_of_norm starAddEquiv (show forall x, ‖x⋆‖ = ‖x‖ from norm_star)
 
@@ -164,8 +164,8 @@ instance [NormedField
   body: norm_smul_le _ (_ : E)
 
 中文:
-实例 [NormedField
-  签名: 𝕜] [NormedSpace 𝕜 E] [Star 𝕜] [TrivialStar 𝕜] [StarModule 𝕜 E] :
+实例 [赋范域
+  签名: 𝕜] [赋范空间 𝕜 E] [对合 𝕜] [TrivialStar 𝕜] [对合模 𝕜 E] :
   定义体: norm_smul_le _ (_ : E)
 
 Depends on / 依赖: norm_smul_le
@@ -296,7 +296,7 @@ instance RingHomIsometric.starRingEnd
 
 中文:
 实例 RingHomIsometric.starRingEnd
-  签名: [NormedCommRing E] [StarRing E] [NormedStarGroup E]
+  签名: [NormedComm环 E] [对合环 E] [NormedStar群 E]
   定义体: ⟨@norm_star _ _ _ _⟩
 
 Depends on / 依赖: norm_star
@@ -315,8 +315,8 @@ class CStarRing
     - norm_mul_self_le : forall x : E, ‖x‖ * ‖x‖ <= ‖x⋆ * x‖
 
 中文:
-类 CStarRing
-  参数: (E : 类型) [NonUnitalNormedRing E] [StarRing E]
+类 CStar环
+  参数: (E : 类型) [非幺赋范环 E] [对合环 E]
   公理与运算 (1 个):
     - norm_mul_self_le : 对任意 x : E, ‖x‖ * ‖x‖ <= ‖x⋆ * x‖
 -/
@@ -333,7 +333,7 @@ instance :
 
 中文:
 实例 :
-  签名: CStarRing 实数
+  签名: CStar环 实数
   定义体: by simp
 -/
 instance : CStarRing Real where
@@ -653,8 +653,8 @@ instance _root_.Pi.starRing'
   body: inferInstance
 
 中文:
-实例 _root_.Pi.starRing'
-  签名: : StarRing (对任意 i, R i)
+实例 _root_.依赖函数类型.starRing'
+  签名: : 对合环 (对任意 i, R i)
   定义体: inferInstance
 -/
 instance _root_.Pi.starRing' : StarRing (forall i, R i) :=
@@ -675,8 +675,8 @@ instance _root_.Prod.cstarRing
     rcases le_total ‖x.fst‖ ‖x.snd‖ with (h | h) <;> simp [h]
 
 中文:
-实例 _root_.Prod.cstarRing
-  签名: : CStarRing (R₁ × R₂) where
+实例 _root_.积类型.cstarRing
+  签名: : CStar环 (R₁ × R₂) where
   定义体: by
     dsimp only [norm]
     simp only [Prod.fst_mul, Prod.fst_star, Prod.snd_mul, Prod.snd_star, norm_star_mul_self, ← sq]
@@ -707,8 +707,8 @@ instance _root_.Pi.cstarRing
           (fun x y h => by simpa only [sq] using mul_le_mul' h h) (by simp)).symm
 
 中文:
-实例 _root_.Pi.cstarRing
-  签名: : CStarRing (对任意 i, R i) where
+实例 _root_.依赖函数类型.cstarRing
+  签名: : CStar环 (对任意 i, R i) where
   定义体: by
     refine le_of_eq (Eq.symm ?_)
     simp only [norm, Pi.mul_apply, Pi.star_apply, nnnorm_star_mul_self, ← sq]
@@ -737,8 +737,8 @@ instance _root_.Pi.cstarRing'
   body: Pi.cstarRing
 
 中文:
-实例 _root_.Pi.cstarRing'
-  签名: : CStarRing (ι -> R₁)
+实例 _root_.依赖函数类型.cstarRing'
+  签名: : CStar环 (ι -> R₁)
   定义体: Pi.cstarRing
 
 Depends on / 依赖: Pi.cstarRing, cstarRing
@@ -773,7 +773,7 @@ theorem norm_one
 
 中文:
 定理 norm_one
-  条件: [Nontrivial E]
+  条件: [非平凡 E]
   结论: ‖(1 : E)‖ = 1
   证明: by
   have : 0 < ‖(1 : E)‖ := norm_pos_iff.mpr one_ne_zero
@@ -802,7 +802,7 @@ theorem norm_coe_unitary
 
 中文:
 定理 norm_coe_unitary
-  条件: [Nontrivial E] (U : unitary E)
+  条件: [非平凡 E] (U : unitary E)
   结论: ‖(U : E)‖ = 1
   证明: by
   rw [← sq_eq_sq₀ (norm_nonneg _) zero_le_one]; rw [one_pow 2]; rw [sq]; rw [← CStarRing.norm_star_mul_self]; rw [Unitary.coe_star_mul_self]; rw [CStarRing.norm_one]
@@ -825,7 +825,7 @@ theorem norm_of_mem_unitary
 
 中文:
 定理 norm_of_mem_unitary
-  条件: [Nontrivial E] {U : E} (hU : U in unitary E)
+  条件: [非平凡 E] {U : E} (hU : U in unitary E)
   结论: ‖U‖ = 1
   证明: norm_coe_unitary ⟨U, hU⟩
 
@@ -1024,8 +1024,8 @@ theorem IsStarProjection.norm_le
   simp [mul_sub, ← CStarRing.norm_star_mul_self, he.isSelfAdjoint.star_eq, he.isIdempotentElem.eq]
 
 中文:
-定理 IsStarProjection.norm_le
-  结论: [NonUnitalNormedRing E] [StarRing E] [CStarRing E]
+定理 是StarProjection.norm_le
+  结论: [非幺赋范环 E] [对合环 E] [CStar环 E]
   证明: by
   suffices ‖e‖ * (‖e‖ - 1) = 0 by grind [sub_eq_zero]
   simp [mul_sub, ← CStarRing.norm_star_mul_self, he.isSelfAdjoint.star_eq, he.isIdempotentElem.eq]
@@ -1189,7 +1189,7 @@ instance to_cstarRing
 
 中文:
 实例 to_cstarRing
-  签名: {R A} [CommRing R] [StarRing R] [NormedRing A] [StarRing A] [CStarRing A]
+  签名: {R A} [交换环 R] [对合环 R] [赋范环 A] [对合环 A] [CStar环 A]
   定义体: @CStarRing.norm_mul_self_le A _ _ _ x
 
 Depends on / 依赖: CStarRing, CStarRing.norm_mul_self_le, norm_mul_self_le

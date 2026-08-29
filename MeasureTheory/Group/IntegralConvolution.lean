@@ -76,7 +76,7 @@ lemma integral_mconv
 
 中文:
 引理 integral_mconv
-  条件: [NormedSpace 实数 F] [SFinite μ] [SFinite ν] (hf : 整数egrable f (μ ∗ₘ ν))
+  条件: [赋范空间 实数 F] [SFinite μ] [SFinite ν] (hf : 可积 f (μ ∗ₘ ν))
   证明: by
   unfold Measure.mconv
   rw [integral_map (by fun_prop) hf.1]; rw [integral_prod]

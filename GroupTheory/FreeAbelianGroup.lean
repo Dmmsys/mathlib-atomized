@@ -84,7 +84,7 @@ definition FreeAbelianGroup
 deriving Inhabited, AddCommGroup
 
 中文:
-定义 FreeAbelianGroup
+定义 自由交换群
   签名: : 类型u
   定义体: Additive Abelianization FreeGroup α
 deriving Inhabited, AddCommGroup
@@ -104,8 +104,8 @@ instance [IsEmpty
   body: inferInstanceAs Unique (delta% FreeAbelianGroup α)
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (FreeAbelianGroup α)
+实例 [是空
+  签名: α] : 唯一 (自由交换群 α)
   定义体: inferInstanceAs Unique (delta% FreeAbelianGroup α)
 
 Depends on / 依赖: FreeAbelianGroup, Unique
@@ -146,7 +146,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: {β : 类型v} [AddCommGroup β]
+  签名: {β : 类型v} [加法交换群 β]
   定义体: (@FreeGroup.lift _ (Multiplicative β) _).trans
     (@Abelianization.lift _ _ (Multiplicative β) _).trans MonoidHom.toAdditive
 
@@ -199,7 +199,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (g : FreeAbelianGroup α ->+ β) (hg : 对任意 x, g (of x) = f x) {x}
+  条件: (g : 自由交换群 α ->+ β) (hg : 对任意 x, g (of x) = f x) {x}
   证明: DFunLike.congr_fun (lift.symm_apply_eq.mp (funext hg : g ∘ of = f)) _
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, congr_fun, lift.symm_apply_eq.mp, symm_apply_eq
@@ -221,7 +221,7 @@ theorem lift_ext
 
 中文:
 定理 lift_ext
-  条件: (g h : FreeAbelianGroup α ->+ β) (H : 对任意 x, g (of x) = h (of x))
+  条件: (g h : 自由交换群 α ->+ β) (H : 对任意 x, g (of x) = h (of x))
   结论: g = h
   证明: lift.symm.injective funext H
 
@@ -245,7 +245,7 @@ theorem lift_comp_apply
 
 中文:
 定理 lift_comp_apply
-  结论: {α β γ} [AddCommGroup β] [AddCommGroup γ]
+  结论: {α β γ} [加法交换群 β] [加法交换群 γ]
   证明: by
   rw [← AddMonoidHom.comp_apply g (lift f)]
   refine (lift_unique _ _ ?_).symm
@@ -283,7 +283,7 @@ have hfy0 : f (of
 
 中文:
 定理 of_injective
-  结论: Function.Injective (of : α -> FreeAbelianGroup α)
+  结论: 函数.单射 (of : α -> 自由交换群 α)
   证明: by
   classical
   exact fun x y hoxy => Classical.by_contradiction fun hxy : x != y =>
@@ -356,8 +356,8 @@ instance [Nonempty
   body: let ⟨x⟩ := ‹Nonempty α›; ⟨0, of x, zero_ne_of _⟩
 
 中文:
-实例 [Nonempty
-  签名: α] : Nontrivial (FreeAbelianGroup α) where
+实例 [非空
+  签名: α] : 非平凡 (自由交换群 α) where
   定义体: let ⟨x⟩ := ‹Nonempty α›; ⟨0, of x, zero_ne_of _⟩
 
 Depends on / 依赖: Nonempty, zero_ne_of
@@ -403,7 +403,7 @@ theorem lift_add_apply
 
 中文:
 定理 lift_add_apply
-  条件: [AddCommGroup G] (f g : α -> G) (a : FreeAbelianGroup α)
+  条件: [加法交换群 G] (f g : α -> G) (a : 自由交换群 α)
   证明: by
   induction a using FreeAbelianGroup.induction_on with
   | zero => simp only [(lift _).map_zero, zero_add]
@@ -434,7 +434,7 @@ lemma lift_add
 
 中文:
 引理 lift_add
-  条件: [AddCommGroup G] (f g : α -> G)
+  条件: [加法交换群 G] (f g : α -> G)
   结论: lift (f + g) = lift f + lift g
   证明: AddMonoidHom.ext lift_add_apply _ _
 
@@ -458,7 +458,7 @@ definition liftAddEquiv
 
 中文:
 定义 liftAddEquiv
-  签名: [AddCommGroup G]
+  签名: [加法交换群 G]
   定义体: ⟨lift, lift_add⟩
 
 Depends on / 依赖: lift_add
@@ -479,7 +479,7 @@ definition liftAddGroupHom
 
 中文:
 定义 liftAddGroupHom
-  签名: {α} (β) [AddCommGroup β] (a : FreeAbelianGroup α)
+  签名: {α} (β) [加法交换群 β] (a : 自由交换群 α)
   定义体: AddMonoidHom.mk' (fun f => lift f a) (lift_add_apply · · _)
 
 Depends on / 依赖: AddMonoidHom, AddMonoidHom.mk, lift_add_apply
@@ -498,7 +498,7 @@ lemma lift_neg
 
 中文:
 引理 lift_neg
-  条件: [AddCommGroup G] (f : α -> G)
+  条件: [加法交换群 G] (f : α -> G)
   结论: lift (-f) = -lift f
   证明: liftAddEquiv.map_neg f
 -/
@@ -514,7 +514,7 @@ lemma lift_neg_apply
 
 中文:
 引理 lift_neg_apply
-  条件: [AddCommGroup G] (f : α -> G) (a : FreeAbelianGroup α)
+  条件: [加法交换群 G] (f : α -> G) (a : 自由交换群 α)
   证明: congr($(lift_neg f) a)
 
 Depends on / 依赖: lift_neg
@@ -539,7 +539,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad FreeAbelianGroup.{u}
+  签名: 单子 自由交换群.{u}
   定义体: of α
   bind x f := lift f x
 
@@ -586,7 +586,7 @@ theorem map_pure
 中文:
 定理 map_pure
   条件: (f : α -> β) (x : α)
-  结论: f < > (pure x : FreeAbelianGroup α) = pure (f x)
+  结论: f < > (pure x : 自由交换群 α) = pure (f x)
   证明: rfl
 
 @[simp]
@@ -609,7 +609,7 @@ theorem map_zero
 中文:
 定理 map_zero
   条件: (f : α -> β)
-  结论: f < > (0 : FreeAbelianGroup α) = 0
+  结论: f < > (0 : 自由交换群 α) = 0
   证明: (lift (of ∘ f)).map_zero
 
 @[simp]
@@ -630,7 +630,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  条件: (f : α -> β) (x y : FreeAbelianGroup α)
+  条件: (f : α -> β) (x y : 自由交换群 α)
   证明: (lift _).map_add _ _
 
 @[simp]
@@ -653,7 +653,7 @@ theorem map_neg
 
 中文:
 定理 map_neg
-  条件: (f : α -> β) (x : FreeAbelianGroup α)
+  条件: (f : α -> β) (x : 自由交换群 α)
   结论: f < > (-x) = -f < > x
   证明: map_neg (lift <| of ∘ f) _
 
@@ -675,7 +675,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  条件: (f : α -> β) (x y : FreeAbelianGroup α)
+  条件: (f : α -> β) (x y : 自由交换群 α)
   证明: map_sub (lift <| of ∘ f) _ _
 
 @[simp]
@@ -716,7 +716,7 @@ theorem pure_bind
 
 中文:
 定理 pure_bind
-  条件: (f : α -> FreeAbelianGroup β) (x)
+  条件: (f : α -> 自由交换群 β) (x)
   结论: pure x >>= f = f x
   证明: lift_apply_of _ _
 
@@ -741,7 +741,7 @@ theorem zero_bind
 
 中文:
 定理 zero_bind
-  条件: (f : α -> FreeAbelianGroup β)
+  条件: (f : α -> 自由交换群 β)
   结论: 0 >>= f = 0
   证明: (lift f).map_zero
 
@@ -765,7 +765,7 @@ theorem add_bind
 
 中文:
 定理 add_bind
-  条件: (f : α -> FreeAbelianGroup β) (x y : FreeAbelianGroup α)
+  条件: (f : α -> 自由交换群 β) (x y : 自由交换群 α)
   证明: (lift _).map_add _ _
 
 @[simp]
@@ -790,7 +790,7 @@ theorem neg_bind
 
 中文:
 定理 neg_bind
-  条件: (f : α -> FreeAbelianGroup β) (x : FreeAbelianGroup α)
+  条件: (f : α -> 自由交换群 β) (x : 自由交换群 α)
   结论: -x >>= f = -(x >>= f)
   证明: map_neg (lift f) _
 
@@ -814,7 +814,7 @@ theorem sub_bind
 
 中文:
 定理 sub_bind
-  条件: (f : α -> FreeAbelianGroup β) (x y : FreeAbelianGroup α)
+  条件: (f : α -> 自由交换群 β) (x y : 自由交换群 α)
   证明: map_sub (lift f) _ _
 
 @[simp]
@@ -839,7 +839,7 @@ theorem pure_seq
 
 中文:
 定理 pure_seq
-  条件: (f : α -> β) (x : FreeAbelianGroup α)
+  条件: (f : α -> β) (x : 自由交换群 α)
   结论: pure f <*> x = f < > x
   证明: pure_bind _ _
 
@@ -864,8 +864,8 @@ theorem zero_seq
 
 中文:
 定理 zero_seq
-  条件: (x : FreeAbelianGroup α)
-  结论: (0 : FreeAbelianGroup (α -> β)) <*> x = 0
+  条件: (x : 自由交换群 α)
+  结论: (0 : 自由交换群 (α -> β)) <*> x = 0
   证明: zero_bind _
 
 @[simp]
@@ -888,7 +888,7 @@ theorem add_seq
 
 中文:
 定理 add_seq
-  条件: (f g : FreeAbelianGroup (α -> β)) (x : FreeAbelianGroup α)
+  条件: (f g : 自由交换群 (α -> β)) (x : 自由交换群 α)
   证明: add_bind _ _ _
 
 @[simp]
@@ -913,7 +913,7 @@ theorem neg_seq
 
 中文:
 定理 neg_seq
-  条件: (f : FreeAbelianGroup (α -> β)) (x : FreeAbelianGroup α)
+  条件: (f : 自由交换群 (α -> β)) (x : 自由交换群 α)
   结论: -f <*> x = -(f <*> x)
   证明: neg_bind _ _
 
@@ -935,7 +935,7 @@ theorem sub_seq
 
 中文:
 定理 sub_seq
-  条件: (f g : FreeAbelianGroup (α -> β)) (x : FreeAbelianGroup α)
+  条件: (f g : 自由交换群 (α -> β)) (x : 自由交换群 α)
   证明: sub_bind _ _ _
 
 Depends on / 依赖: sub_bind
@@ -959,7 +959,7 @@ definition seqAddGroupHom
 
 中文:
 定义 seqAddGroupHom
-  签名: (f : FreeAbelianGroup (α -> β))
+  签名: (f : 自由交换群 (α -> β))
   定义体: by
   refine .mk' (f <*> ·) fun x y => ?_
   change lift (· <$> (x + y)) _ = lift (· <$> x) _ + lift (· <$> y) _
@@ -988,7 +988,7 @@ theorem seq_zero
 
 中文:
 定理 seq_zero
-  条件: (f : FreeAbelianGroup (α -> β))
+  条件: (f : 自由交换群 (α -> β))
   结论: f <*> 0 = 0
   证明: (seqAddGroupHom f).map_zero
 
@@ -1012,7 +1012,7 @@ theorem seq_add
 
 中文:
 定理 seq_add
-  条件: (f : FreeAbelianGroup (α -> β)) (x y : FreeAbelianGroup α)
+  条件: (f : 自由交换群 (α -> β)) (x y : 自由交换群 α)
   证明: (seqAddGroupHom f).map_add x y
 
 @[simp]
@@ -1037,7 +1037,7 @@ theorem seq_neg
 
 中文:
 定理 seq_neg
-  条件: (f : FreeAbelianGroup (α -> β)) (x : FreeAbelianGroup α)
+  条件: (f : 自由交换群 (α -> β)) (x : 自由交换群 α)
   结论: f <*> -x = -(f <*> x)
   证明: (seqAddGroupHom f).map_neg x
 
@@ -1059,7 +1059,7 @@ theorem seq_sub
 
 中文:
 定理 seq_sub
-  条件: (f : FreeAbelianGroup (α -> β)) (x y : FreeAbelianGroup α)
+  条件: (f : 自由交换群 (α -> β)) (x y : 自由交换群 α)
   证明: (seqAddGroupHom f).map_sub x y
 
 Depends on / 依赖: map_sub, seqAddGroupHom
@@ -1083,7 +1083,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad FreeAbelianGroup.{u}
+  签名: 合法单子 自由交换群.{u}
   定义体: LawfulMonad.mk'
   (id_map := fun x => FreeAbelianGroup.induction_on' x (FreeAbelianGroup.map_zero id) (map_pure id)
     (fun x ih => by rw [FreeAbelianGroup.map_neg, ih])
@@ -1118,7 +1118,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommApplicative FreeAbelianGroup.{u}
+  签名: 交换适用 自由交换群.{u}
   定义体: by
     induction x using FreeAbelianGroup.induction_on' with
     | zero => rw [FreeAbelianGroup.map_zero, zero_seq, seq_zero]
@@ -1181,7 +1181,7 @@ theorem lift_comp
 
 中文:
 定理 lift_comp
-  条件: {α} {β} {γ} [AddCommGroup γ] (f : α -> β) (g : β -> γ) (x : FreeAbelianGroup α)
+  条件: {α} {β} {γ} [加法交换群 γ] (f : α -> β) (g : β -> γ) (x : 自由交换群 α)
   证明: by
   induction x using FreeAbelianGroup.induction_on with
   | zero => simp only [map_zero]
@@ -1210,7 +1210,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map id = AddMonoidHom.id (FreeAbelianGroup α)
+  结论: map id = 加法幺半群态射.id (自由交换群 α)
   证明: Eq.symm
     lift_ext _ _ fun _ => lift_unique of (AddMonoidHom.id _) fun _ => AddMonoidHom.id_apply _ _
 
@@ -1233,7 +1233,7 @@ theorem map_id_apply
 
 中文:
 定理 map_id_apply
-  条件: (x : FreeAbelianGroup α)
+  条件: (x : 自由交换群 α)
   结论: map id x = x
   证明: by
   rw [map_id]
@@ -1277,7 +1277,7 @@ theorem map_comp_apply
 
 中文:
 定理 map_comp_apply
-  条件: {f : α -> β} {g : β -> γ} (x : FreeAbelianGroup α)
+  条件: {f : α -> β} {g : β -> γ} (x : 自由交换群 α)
   证明: by
   rw [map_comp]
   rfl
@@ -1325,7 +1325,7 @@ instance mul
 
 中文:
 实例 mul
-  签名: : Mul (FreeAbelianGroup α)
+  签名: : 乘法 (自由交换群 α)
   定义体: ⟨fun x => lift fun x₂ => lift (fun x₁ => of (x₁ * x₂)) x⟩
 -/
 instance mul : Mul (FreeAbelianGroup α) :=
@@ -1345,7 +1345,7 @@ theorem mul_def
 
 中文:
 定理 mul_def
-  条件: (x y : FreeAbelianGroup α)
+  条件: (x y : 自由交换群 α)
   证明: rfl
 
 @[simp]
@@ -1408,7 +1408,7 @@ instance distrib
 
 中文:
 实例 distrib
-  签名: : Distrib (FreeAbelianGroup α) where
+  签名: : Distrib (自由交换群 α) where
   定义体: fun _ _ _ => (lift _).map_add _ _
   right_distrib x y z := by simp [mul_def, ← Pi.add_def]
 
@@ -1431,7 +1431,7 @@ instance nonUnitalNonAssocRing
 
 中文:
 实例 nonUnitalNonAssocRing
-  签名: : NonUnitalNonAssocRing (FreeAbelianGroup α) where
+  签名: : 非幺非结合环 (自由交换群 α) where
   定义体: by
     have h : 0 * a + 0 * a = 0 * a := by simp [← add_mul]
     simpa using h
@@ -1460,7 +1460,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (FreeAbelianGroup α)
+  签名: : 幺 (自由交换群 α)
   定义体: ⟨of 1⟩
 -/
 instance one : One (FreeAbelianGroup α) :=
@@ -1476,7 +1476,7 @@ theorem one_def
 
 中文:
 定理 one_def
-  结论: (1 : FreeAbelianGroup α) = of 1
+  结论: (1 : 自由交换群 α) = of 1
   证明: rfl
 -/
 theorem one_def : (1 : FreeAbelianGroup α) = of 1 :=
@@ -1492,7 +1492,7 @@ theorem of_one
 
 中文:
 定理 of_one
-  结论: (of 1 : FreeAbelianGroup α) = 1
+  结论: (of 1 : 自由交换群 α) = 1
   证明: rfl
 -/
 theorem of_one : (of 1 : FreeAbelianGroup α) = 1 :=
@@ -1518,7 +1518,7 @@ instance nonUnitalRing
 
 中文:
 实例 nonUnitalRing
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: by
     induction z using FreeAbelianGroup.induction_on with
     | zero => simp only [mul_zero]
@@ -1571,7 +1571,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: : Ring (FreeAbelianGroup α) where
+  签名: : 环 (自由交换群 α) where
   定义体: by
     rw [mul_def]; rw [one_def]; rw [lift_apply_of]
     induction x using FreeAbelianGroup.induction_on with
@@ -1616,7 +1616,7 @@ definition ofMulHom
 
 中文:
 定义 ofMulHom
-  签名: : α ->* FreeAbelianGroup α where
+  签名: : α ->* 自由交换群 α where
   定义体: of
   map_one' := of_one _
   map_mul' := of_mul
@@ -1639,7 +1639,7 @@ theorem ofMulHom_coe
 
 中文:
 定理 ofMulHom_coe
-  结论: (ofMulHom : α -> FreeAbelianGroup α) = of
+  结论: (ofMulHom : α -> 自由交换群 α) = of
   证明: rfl
 -/
 theorem ofMulHom_coe : (ofMulHom : α -> FreeAbelianGroup α) = of :=
@@ -1663,7 +1663,7 @@ definition liftMonoid
 
 中文:
 定义 liftMonoid
-  签名: : (α ->* R) ≃ (FreeAbelianGroup α ->+* R) where
+  签名: : (α ->* R) ≃ (自由交换群 α ->+* R) where
   定义体: { lift f with
     toFun := lift f
     map_one' := (lift_apply_of f _).trans f.map_one
@@ -1759,7 +1759,7 @@ theorem liftMonoid_symm_coe
 
 中文:
 定理 liftMonoid_symm_coe
-  条件: (f : FreeAbelianGroup α ->+* R)
+  条件: (f : 自由交换群 α ->+* R)
   证明: rfl
 -/
 theorem liftMonoid_symm_coe (f : FreeAbelianGroup α ->+* R) :
@@ -1786,8 +1786,8 @@ instance [CommMonoid
      
 
 中文:
-实例 [CommMonoid
-  签名: α] : CommRing (FreeAbelianGroup α) where
+实例 [交换幺半群
+  签名: α] : 交换环 (自由交换群 α) where
   定义体: by
     induction x using FreeAbelianGroup.induction_on with
     | zero => exact zero_mul y
@@ -1834,7 +1834,7 @@ definition uniqueEquiv
 
 中文:
 定义 uniqueEquiv
-  签名: (T : 类型) [Unique T]
+  签名: (T : 类型) [唯一 T]
   定义体: FreeAbelianGroup.lift fun _ => (1 : Int)
   invFun n := n • of Inhabited.default
   left_inv z := FreeAbelianGroup.induction_on z

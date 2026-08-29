@@ -39,7 +39,7 @@ definition star
 
 中文:
 定义 star
-  签名: : C ⥤ Discrete PUnit.{w + 1}
+  签名: : C ⥤ 离散 命题单元.{w + 1}
   定义体: (Functor.const _).obj ⟨⟨⟩⟩
 
 Depends on / 依赖: Functor, Functor.const, variable
@@ -60,7 +60,7 @@ definition punitExt
 
 中文:
 定义 punitExt
-  签名: (F G : C ⥤ Discrete PUnit.{w + 1})
+  签名: (F G : C ⥤ 离散 命题单元.{w + 1})
   定义体: NatIso.ofComponents fun X => eqToIso (by simp only [eq_iff_true_of_subsingleton])
 
 Depends on / 依赖: NatIso, NatIso.ofComponents, eqToIso, eq_iff_true_of_subsingleton, ofComponents
@@ -79,7 +79,7 @@ theorem punit_ext'
 
 中文:
 定理 punit_ext'
-  条件: (F G : C ⥤ Discrete PUnit.{w + 1})
+  条件: (F G : C ⥤ 离散 命题单元.{w + 1})
   结论: F = G
   证明: Functor.ext fun X => by simp only [eq_iff_true_of_subsingleton]
 
@@ -124,7 +124,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : Discrete PUnit.{w + 1} ⥤ C ≌ C where
+  签名: : 离散 命题单元.{w + 1} ⥤ C ≌ C where
   定义体: { obj := fun F => F.obj ⟨⟨⟩⟩
       map := fun θ => θ.app ⟨⟨⟩⟩ }
   inverse := Functor.const _

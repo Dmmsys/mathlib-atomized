@@ -44,7 +44,7 @@ theorem isOpenMap_barycentric_coord
 
 中文:
 定理 isOpenMap_barycentric_coord
-  条件: [Nontrivial ι] (b : AffineBasis ι 𝕜 P) (i : ι)
+  条件: [非平凡 ι] (b : 仿射基 ι 𝕜 P) (i : ι)
   证明: AffineMap.isOpenMap_linear_iff.mp
 (b.coord i).linear.isOpenMap_of_finiteDimensional
       (b.coord i).linear_surjective_iff.mpr (b.surjective_coord i)
@@ -72,7 +72,7 @@ theorem continuous_barycentric_coord
 中文:
 定理 continuous_barycentric_coord
   条件: (i : ι)
-  结论: Continuous (b.coord i)
+  结论: 连续 (b.coord i)
   证明: (b.coord i).continuous_of_finiteDimensional
 
 Depends on / 依赖: b.coord, continuous_of_finiteDimensional
@@ -100,8 +100,8 @@ theorem AffineBasis.interior_convexHull
     have : FiniteDimensional Real E := b.finiteDimensiona
 
 中文:
-定理 AffineBasis.interior_convexHull
-  结论: {ι E : 类型} [Finite ι] [NormedAddCommGroup E]
+定理 仿射基.interior_convexHull
+  结论: {ι E : 类型} [有限 ι] [赋范交换加群 E]
   证明: by
   cases subsingleton_or_nontrivial ι
   · -- The zero-dimensional case.
@@ -152,8 +152,8 @@ theorem IsOpen.exists_between_affineIndependent_span_eq_top
     refin
 
 中文:
-定理 IsOpen.exists_between_affineIndependent_span_eq_top
-  结论: {s u : Set P} (hu : IsOpen u)
+定理 是开集.存在_between_affineIndependent_span_eq_top
+  结论: {s u : 集合 P} (hu : 是开集 u)
   证明: by
   obtain ⟨q, hq⟩ := hne
   obtain ⟨ε, ε0, hεu⟩ := Metric.nhds_basis_closedBall.mem_iff.1 (hu.mem_nhds <| hsu hq)
@@ -203,8 +203,8 @@ theorem IsOpen.exists_subset_affineIndependent_span_eq_top
   exact ⟨s, hsu, hs⟩
 
 中文:
-定理 IsOpen.exists_subset_affineIndependent_span_eq_top
-  结论: {u : Set P} (hu : IsOpen u)
+定理 是开集.存在_subset_affineIndependent_span_eq_top
+  结论: {u : 集合 P} (hu : 是开集 u)
   证明: by
   rcases hne with ⟨x, hx⟩
   rcases hu.exists_between_affineIndependent_span_eq_top (singleton_subset_iff.mpr hx)
@@ -230,8 +230,8 @@ theorem IsOpen.affineSpan_eq_top
 top_unique hs' ▸ affineSpan_mono _ hsu
 
 中文:
-定理 IsOpen.affineSpan_eq_top
-  条件: {u : Set P} (hu : IsOpen u) (hne : u.Nonempty)
+定理 是开集.affineSpan_eq_top
+  条件: {u : 集合 P} (hu : 是开集 u) (hne : u.非空)
   证明: let ⟨_, hsu, _, hs'⟩ := hu.exists_subset_affineIndependent_span_eq_top hne
 top_unique hs' ▸ affineSpan_mono _ hsu
 
@@ -253,7 +253,7 @@ theorem affineSpan_eq_top_of_nonempty_interior
 
 中文:
 定理 affineSpan_eq_top_of_nonempty_interior
-  结论: {s : Set V}
+  结论: {s : 集合 V}
   证明: top_unique isOpen_interior.affineSpan_eq_top hs ▸
     (affineSpan_mono _ interior_subset).trans_eq (affineSpan_convexHull _)
 
@@ -276,8 +276,8 @@ theorem AffineBasis.centroid_mem_interior_convexHull
     inv_pos, Nat.cast_pos, Finset.card_pos, Finset.univ_nonempty, forall_true_iff]
 
 中文:
-定理 AffineBasis.centroid_mem_interior_convexHull
-  条件: {ι} [Fintype ι] (b : AffineBasis ι 实数 V)
+定理 仿射基.centroid_mem_interior_convexHull
+  条件: {ι} [有限类型 ι] (b : 仿射基 ι 实数 V)
   证明: by
   have := b.nonempty
   simp only [b.interior_convexHull, mem_ofPred_eq, b.coord_apply_centroid (Finset.mem_univ _),
@@ -307,7 +307,7 @@ theorem interior_convexHull_nonempty_iff_affineSpan_eq_top
 
 中文:
 定理 interior_convexHull_nonempty_iff_affineSpan_eq_top
-  条件: [FiniteDimensional 实数 V] {s : Set V}
+  条件: [有限维 实数 V] {s : 集合 V}
   证明: by
   refine ⟨affineSpan_eq_top_of_nonempty_interior, fun h => ?_⟩
   obtain ⟨t, hts, b, hb⟩ := AffineBasis.exists_affine_subbasis h
@@ -338,8 +338,8 @@ theorem Convex.interior_nonempty_iff_affineSpan_eq_top
   rw [← interior_convexHull_nonempty_iff_affineSpan_eq_top]; rw [hs.convexHull_eq]
 
 中文:
-定理 Convex.interior_nonempty_iff_affineSpan_eq_top
-  结论: [FiniteDimensional 实数 V] {s : Set V}
+定理 凸.interior_nonempty_iff_affineSpan_eq_top
+  结论: [有限维 实数 V] {s : 集合 V}
   证明: by
   rw [← interior_convexHull_nonempty_iff_affineSpan_eq_top]; rw [hs.convexHull_eq]
 

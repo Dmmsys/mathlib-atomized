@@ -91,7 +91,7 @@ definition fintypeOfKerOfCodom
 
 中文:
 定义 fintypeOfKerOfCodom
-  签名: [Fintype g.ker]
+  签名: [有限类型 g.ker]
   定义体: fintypeOfKerLeRange ((topEquiv : _ ≃* G).toMonoidHom.comp <| inclusion le_top) g fun x hx =>
     ⟨⟨x, hx⟩, rfl⟩
 
@@ -114,7 +114,7 @@ definition fintypeOfDomOfCoker
 
 中文:
 定义 fintypeOfDomOfCoker
-  签名: [Normal f.range] [Fintype <| G ⧸ f.range]
+  签名: [正规 f.range] [有限类型 <| G ⧸ f.range]
   定义体: fintypeOfKerLeRange _ (mk' f.range) fun x => (eq_one_iff x).mp
 
 Depends on / 依赖: eq_one_iff, f.range, fintypeOfKerLeRange
@@ -139,8 +139,8 @@ lemma finite_iff_subgroup_quotient
 
 中文:
 引理 finite_iff_subgroup_quotient
-  条件: (H : Subgroup G)
-  结论: Finite G ↔ Finite H ∧ Finite (G ⧸ H)
+  条件: (H : 子群 G)
+  结论: 有限 G ↔ 有限 H ∧ 有限 (G ⧸ H)
   证明: by
   rw [(groupEquivQuotientProdSubgroup (s := H)).finite_iff]; rw [Prod.finite_iff]; rw [and_comm]
 
@@ -163,9 +163,9 @@ lemma Finite.of_subgroup_quotient
   rw [finite_iff_subgroup_quotient]; constructor <;> assumption
 
 中文:
-引理 Finite.of_subgroup_quotient
-  条件: (H : Subgroup G) [Finite H] [Finite (G ⧸ H)]
-  结论: Finite G
+引理 有限.of_subgroup_quotient
+  条件: (H : 子群 G) [有限 H] [有限 (G ⧸ H)]
+  结论: 有限 G
   证明: by
   rw [finite_iff_subgroup_quotient]; constructor <;> assumption
 

@@ -70,7 +70,7 @@ example : DecidableEq m := inferInstanceAs DecidableEq ((x : α) × Fin (m.count
 
 中文:
 实例 :
-  签名: CoeSort (Multiset α) (Type _)
+  签名: CoeSort (Multiset α) (类型 _)
   定义体: ⟨Multiset.ToType⟩
 
 example : DecidableEq m := inferInstanceAs DecidableEq ((x : α) × Fin (m.count x))
@@ -94,7 +94,7 @@ definition mkToType
 
 中文:
 定义 mkToType
-  签名: (m : Multiset α) (x : α) (i : Fin (m.count x))
+  签名: (m : Multiset α) (x : α) (i : 有限集 (m.count x))
   定义体: ⟨x, i⟩
 -/
 def mkToType (m : Multiset α) (x : α) (i : Fin (m.count x)) : m :=
@@ -127,7 +127,7 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: {x : α} {i : Fin (m.count x)}
+  条件: {x : α} {i : 有限集 (m.count x)}
   结论: ↑(m.mkToType x i) = x
   证明: rfl
 -/
@@ -167,7 +167,7 @@ theorem forall_coe
 @[simp]
 
 中文:
-定理 forall_coe
+定理 对任意_coe
   条件: (p : m -> 命题)
   证明: Sigma.forall
 
@@ -187,7 +187,7 @@ theorem exists_coe
   proof: Sigma.exists
 
 中文:
-定理 exists_coe
+定理 存在_coe
   条件: (p : m -> 命题)
   证明: Sigma.exists
 -/
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype { p : α × 自然数 | p.2 < m.count p.1 }
+  签名: 有限类型 { p : α × 自然数 | p.2 < m.count p.1 }
   定义体: Fintype.ofFinset
     (m.toFinset.disjiUnion
       (fun x => (Finset.range (m.count x)).map ⟨_, Prod.mk_right_injective x⟩)
@@ -326,7 +326,7 @@ lemma map_toEnumFinset_fst
 中文:
 引理 map_toEnumFinset_fst
   条件: (m : Multiset α)
-  结论: m.toEnumFinset.val.map Prod.fst = m
+  结论: m.toEnumFinset.val.map 积类型.fst = m
   证明: by
   ext a; simp [count_map, ← Finset.filter_val, eq_comm (a := a)]
 -/
@@ -370,7 +370,7 @@ lemma map_fst_le_of_subset_toEnumFinset
 
 中文:
 引理 map_fst_le_of_subset_toEnumFinset
-  条件: {s : Finset (α × 自然数)} (hsm : s subseteq m.toEnumFinset)
+  条件: {s : 有限集 (α × 自然数)} (hsm : s subseteq m.toEnumFinset)
   证明: by
   simp_rw [le_iff_count, count_map]
   rintro a
@@ -552,7 +552,7 @@ instance fintypeCoe
 
 中文:
 实例 fintypeCoe
-  签名: : Fintype m
+  签名: : 有限类型 m
   定义体: Fintype.ofEquiv m.toEnumFinset m.coeEquiv.symm
 
 Depends on / 依赖: Fintype, Fintype.ofEquiv, coeEquiv, m.coeEquiv.symm, m.toEnumFinset, ofEquiv, toEnumFinset
@@ -728,7 +728,7 @@ theorem card_coe
 中文:
 定理 card_coe
   条件: (m : Multiset α)
-  结论: Fintype.card m = Multiset.card m
+  结论: 有限类型.card m = Multiset.card m
   证明: by
   rw [Fintype.card_congr m.coeEquiv]
   simp only [Fintype.card_coe, card_toEnumFinset]
@@ -757,8 +757,8 @@ theorem prod_eq_prod_coe
 
 中文:
 定理 prod_eq_prod_coe
-  条件: [CommMonoid α] (m : Multiset α)
-  结论: m.prod = ∏ x : m, (x : α)
+  条件: [交换幺半群 α] (m : Multiset α)
+  结论: m.乘积 = ∏ x : m, (x : α)
   证明: by
   congr
   simp
@@ -784,7 +784,7 @@ theorem prod_eq_prod_toEnumFinset
 
 中文:
 定理 prod_eq_prod_toEnumFinset
-  条件: [CommMonoid α] (m : Multiset α)
+  条件: [交换幺半群 α] (m : Multiset α)
   证明: by
   congr
   simp
@@ -811,7 +811,7 @@ theorem prod_toEnumFinset
 
 中文:
 定理 prod_toEnumFinset
-  条件: {β : 类型} [CommMonoid β] (m : Multiset α) (f : α -> 自然数 -> β)
+  条件: {β : 类型} [交换幺半群 β] (m : Multiset α) (f : α -> 自然数 -> β)
   证明: by
   rw [Fintype.prod_equiv m.coeEquiv (fun x => f x x.2) fun x => f x.1.1 x.1.2]
   · rw [← m.toEnumFinset.prod_coe_sort fun x => f x.1 x.2]
@@ -860,7 +860,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (0 : Multiset α)
+  签名: 是空 (0 : Multiset α)
   定义体: Fintype.card_eq_zero_iff.mp (by simp)
 
 Depends on / 依赖: Fintype, Fintype.card_eq_zero_iff.mp, card_eq_zero_iff
@@ -877,7 +877,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty (∅ : Multiset α)
+  签名: 是空 (∅ : Multiset α)
   定义体: Fintype.card_eq_zero_iff.mp (by simp)
 
 Depends on / 依赖: Fintype, Fintype.card_eq_zero_iff.mp, card_eq_zero_iff

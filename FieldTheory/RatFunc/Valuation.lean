@@ -55,7 +55,7 @@ definition inftyValuationDef
 
 中文:
 定义 inftyValuationDef
-  签名: (r : RatFunc F)
+  签名: (r : 有理函数 F)
   定义体: if r = 0 then 0 else exp r.intDegree
 
 Depends on / 依赖: intDegree, r.intDegree
@@ -115,7 +115,7 @@ theorem InftyValuation.map_mul'
 
 中文:
 定理 InftyValuation.map_mul'
-  条件: (x y : RatFunc F)
+  条件: (x y : 有理函数 F)
   证明: by
   rw [inftyValuationDef]; rw [inftyValuationDef]; rw [inftyValuationDef]
   by_cases hx : x = 0
@@ -150,7 +150,7 @@ theorem InftyValuation.map_add_le_max'
 
 中文:
 定理 InftyValuation.map_add_le_max'
-  条件: (x y : RatFunc F)
+  条件: (x y : 有理函数 F)
   证明: by
   unfold inftyValuationDef
   have := @RatFunc.intDegree_add_le F
@@ -178,7 +178,7 @@ theorem inftyValuation_of_nonzero
 
 中文:
 定理 inftyValuation_of_nonzero
-  条件: {x : RatFunc F} (hx : x != 0)
+  条件: {x : 有理函数 F} (hx : x != 0)
   证明: by
   rw [inftyValuationDef]; rw [if_neg hx]
 
@@ -202,7 +202,7 @@ definition inftyValuation
 
 中文:
 定义 inftyValuation
-  签名: : Valuation (RatFunc F) 整数ᵐ⁰ where
+  签名: : 赋值 (有理函数 F) 整数ᵐ⁰ where
   定义体: inftyValuationDef F
   map_zero' := InftyValuation.map_zero' F
   map_one' := InftyValuation.map_one' F
@@ -231,7 +231,7 @@ theorem inftyValuation_apply
 
 中文:
 定理 inftyValuation_apply
-  条件: {x : RatFunc F}
+  条件: {x : 有理函数 F}
   结论: inftyValuation F x = inftyValuationDef F x
   证明: rfl
 
@@ -278,7 +278,7 @@ theorem inftyValuation.X
 
 中文:
 定理 inftyValuation.X
-  结论: inftyValuation F RatFunc.X = exp 1
+  结论: inftyValuation F 有理函数.X = exp 1
   证明: by
   simp [inftyValuation_apply, inftyValuationDef, if_neg RatFunc.X_ne_zero, RatFunc.intDegree_X]
 
@@ -299,7 +299,7 @@ lemma inftyValuation.X_zpow
 中文:
 引理 inftyValuation.X_zpow
   条件: (m : 整数)
-  结论: inftyValuation F (RatFunc.X ^ m) = exp m
+  结论: inftyValuation F (有理函数.X ^ m) = exp m
   证明: by simp
 -/
 lemma inftyValuation.X_zpow (m : Int) : inftyValuation F (RatFunc.X ^ m) = exp m := by simp
@@ -315,7 +315,7 @@ theorem inftyValuation.X_inv
 
 中文:
 定理 inftyValuation.X_inv
-  结论: inftyValuation F (1 / RatFunc.X) = exp (-1)
+  结论: inftyValuation F (1 / 有理函数.X) = exp (-1)
   证明: by
   rw [one_div]; rw [← zpow_neg_one]; rw [inftyValuation.X_zpow]
 
@@ -357,7 +357,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valuation.IsNontrivial (inftyValuation F)
+  签名: 赋值.是非平凡 (inftyValuation F)
   定义体: ⟨RatFunc.X, by simp⟩
 
 Depends on / 依赖: RatFunc, RatFunc.X
@@ -374,7 +374,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valuation.IsTrivialOn F (inftyValuation F)
+  签名: 赋值.是TrivialOn F (inftyValuation F)
   定义体: ⟨fun _ hx => by simp [inftyValuation.C _ hx]⟩
 
 Depends on / 依赖: inftyValuation, inftyValuation.C
@@ -394,7 +394,7 @@ definition inftyValued
 
 中文:
 定义 inftyValued
-  签名: : Valued (RatFunc F) 整数ᵐ⁰
+  签名: : 赋值 (有理函数 F) 整数ᵐ⁰
   定义体: Valued.mk' inftyValuation F
 
 Depends on / 依赖: Valued, Valued.mk, inftyValuation
@@ -412,7 +412,7 @@ theorem inftyValued.def
 
 中文:
 定理 inftyValued.def
-  条件: {x : RatFunc F}
+  条件: {x : 有理函数 F}
   证明: rfl
 -/
 theorem inftyValued.def {x : RatFunc F} :
@@ -439,7 +439,7 @@ definition _root_.RatFunc.CompletionAtInfty
 deriving Field, Algebra (RatFunc F), Coe (RatFunc F), Inhabited
 
 中文:
-定义 _root_.RatFunc.CompletionAtInfty
+定义 _root_.有理函数.CompletionAtInfty
   定义体: UniformSpace.Completion (RatFunc F)
 deriving Field, Algebra (RatFunc F), Coe (RatFunc F), Inhabited
 
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: Valued (CompletionAtInfty F) 整数ᵐ⁰
+  签名: 赋值 (CompletionAtInfty F) 整数ᵐ⁰
   定义体: inferInstanceAs Valued (UniformSpace.Completion (RatFunc F)) Intᵐ⁰
 
 Depends on / 依赖: Completion, RatFunc, UniformSpace, UniformSpace.Completion, Valued

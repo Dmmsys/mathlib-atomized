@@ -210,7 +210,7 @@ theorem dpow_add_of_lt
 
 中文:
 定理 dpow_add_of_lt
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1)! : A)) {m : 自然数} (hmn : m < n)
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1)! : A)) {m : 自然数} (hmn : m < n)
   证明: by
   rw [dpow_eq_of_mem (Ideal.add_mem I hx hy)]
   simp only [dpow]
@@ -253,7 +253,7 @@ theorem dpow_add
 
 中文:
 定理 dpow_add
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1)! : A)) (hnI : I ^ n = 0) {m : 自然数} {x : A}
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1)! : A)) (hnI : I ^ n = 0) {m : 自然数} {x : A}
   证明: by
   by_cases! hmn : m < n
   · exact dpow_add_of_lt hn_fac hmn hx hy
@@ -321,7 +321,7 @@ theorem dpow_mul_of_add_lt
 
 中文:
 定理 dpow_mul_of_add_lt
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1)! : A)) {m k : 自然数}
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1)! : A)) {m k : 自然数}
   证明: by
   have hm : m < n := lt_of_le_of_lt le_self_add hkm
   have hk : k < n := lt_of_le_of_lt le_add_self hkm
@@ -354,7 +354,7 @@ theorem mul_dpow
 
 中文:
 定理 mul_dpow
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1).factorial : A)) (hnI : I ^ n = 0)
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1).factorial : A)) (hnI : I ^ n = 0)
   证明: by
   by_cases! hkm : m + k < n
   · exact dpow_mul_of_add_lt hn_fac hkm hx
@@ -386,7 +386,7 @@ theorem dpow_comp_of_mul_lt
 
 中文:
 定理 dpow_comp_of_mul_lt
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1)! : A)) {m k : 自然数} (hk : k != 0)
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1)! : A)) {m k : 自然数} (hk : k != 0)
   证明: by
   have hmn : m < n := lt_of_le_of_lt (Nat.le_mul_of_pos_right _ (Nat.pos_of_ne_zero hk)) hkm
   rw [dpow_eq_of_mem (m := m * k) hx]; rw [dpow_eq_of_mem (dpow_mem hk hx)]
@@ -424,7 +424,7 @@ theorem dpow_comp
 
 中文:
 定理 dpow_comp
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1).factorial : A)) (hnI : I ^ n = 0)
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1).factorial : A)) (hnI : I ^ n = 0)
   证明: by
   by_cases! hmk : m * k < n
   · exact dpow_comp_of_mul_lt hn_fac hk hmk hx
@@ -460,7 +460,7 @@ definition dividedPowers
 
 中文:
 定义 dividedPowers
-  签名: {n : 自然数} (hn_fac : IsUnit ((n - 1).factorial : A))
+  签名: {n : 自然数} (hn_fac : 是单位 ((n - 1).factorial : A))
   定义体: dpow I
   dpow_null hx := dpow_null hx
   dpow_zero hx := dpow_zero hx
@@ -493,7 +493,7 @@ lemma dpow_apply
 
 中文:
 引理 dpow_apply
-  结论: {n : 自然数} (hn_fac : IsUnit ((n - 1).factorial : A)) (hnI : I ^ n = 0)
+  结论: {n : 自然数} (hn_fac : 是单位 ((n - 1).factorial : A)) (hnI : I ^ n = 0)
   证明: rfl
 -/
 lemma dpow_apply {n : Nat} (hn_fac : IsUnit ((n - 1).factorial : A)) (hnI : I ^ n = 0)

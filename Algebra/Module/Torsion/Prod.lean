@@ -32,7 +32,7 @@ instance moduleIsTorsionFree
 
 中文:
 实例 moduleIsTorsionFree
-  签名: [Semiring R] [AddCommMonoid M] [AddCommMonoid N]
+  签名: [半环 R] [加法交换幺半群 M] [加法交换幺半群 N]
   定义体: hr.isSMulRegular.prodMap hr.isSMulRegular
 
 Depends on / 依赖: hr.isSMulRegular, hr.isSMulRegular.prodMap, isSMulRegular, prodMap

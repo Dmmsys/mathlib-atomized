@@ -73,7 +73,7 @@ class MonadWriter
 类 MonadWriter
   参数: (ω : outParam (类型u)) (M : 类型u -> 类型v)
   公理与运算 (3 个):
-    - tell((w : ω)) : M PUnit
+    - tell((w : ω)) : M 命题单元
     - listen({α} (f : M α)) : M (α × ω)
     - pass({α} (f : M (α × (ω -> ω)))) : M α
 -/
@@ -124,7 +124,7 @@ listen x s := (fun ((a, w), s) => ((a, s), w)) < > listen (x s)
 pass x s := pass (fun ((a, f), s) => ((a, s), f)) < > (x s)
 
 中文:
-实例 [Monad
+实例 [单子
   签名: M] [MonadWriter ω M] : MonadWriter ω (StateT σ M) where
   定义体: (tell w : M _)
 listen x s := (fun ((a, w), s) => ((a, s), w)) < > listen (x s)
@@ -417,7 +417,7 @@ instance [EmptyCollection
 
 中文:
 实例 [EmptyCollection
-  签名: ω] [Append ω] : Monad (WriterT ω M)
+  签名: ω] [Append ω] : 单子 (WriterT ω M)
   定义体: monad ∅ (· ++ ·)
 -/
 instance [EmptyCollection ω] [Append ω] : Monad (WriterT ω M) := monad ∅ (· ++ ·)
@@ -446,8 +446,8 @@ instance [Monoid
   body: monad 1 (· * ·)
 
 中文:
-实例 [Monoid
-  签名: ω] : Monad (WriterT ω M)
+实例 [幺半群
+  签名: ω] : 单子 (WriterT ω M)
   定义体: monad 1 (· * ·)
 -/
 instance [Monoid ω] : Monad (WriterT ω M) := monad 1 (· * ·)
@@ -460,7 +460,7 @@ instance [Monoid
   body: WriterT.liftTell 1
 
 中文:
-实例 [Monoid
+实例 [幺半群
   签名: ω] : MonadLift M (WriterT ω M)
   定义体: WriterT.liftTell 1
 
@@ -481,8 +481,8 @@ instance [Monoid
   (bind_assoc := fun _ _ _ => by ext; simp [mul_assoc])
 
 中文:
-实例 [Monoid
-  签名: ω] [LawfulMonad M] : LawfulMonad (WriterT ω M)
+实例 [幺半群
+  签名: ω] [合法单子 M] : 合法单子 (WriterT ω M)
   定义体: LawfulMonad.mk'
   (bind_pure_comp := fun _ _ => by ext; simp)
   (id_map := fun _ => by ext; simp)
@@ -729,7 +729,7 @@ instance [Monad
 universe u₀ u₁ v₀ v₁ in
 
 中文:
-实例 [Monad
+实例 [单子
   签名: m] : MonadWriterAdapter ω (WriterT ω m) where
   定义体: WriterT.adapt
 

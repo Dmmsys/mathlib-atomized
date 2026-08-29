@@ -68,7 +68,7 @@ theorem elim'_none
 中文:
 定理 elim'_none
   条件: (b : β) (f : α -> β)
-  结论: Option.elim' b f none = b
+  结论: 选项类型.elim' b f none = b
   证明: rfl
 
 @[simp]
@@ -90,7 +90,7 @@ theorem elim'_some
 中文:
 定理 elim'_some
   条件: {a : α} (b : β) (f : α -> β)
-  结论: Option.elim' b f (some a) = f a
+  结论: 选项类型.elim' b f (some a) = f a
   证明: rfl
 
 @[simp]
@@ -109,8 +109,8 @@ theorem elim'_none_some
 
 中文:
 定理 elim'_none_some
-  条件: (f : Option α -> β)
-  结论: (Option.elim' (f none) (f ∘ some)) = f
+  条件: (f : 选项类型 α -> β)
+  结论: (选项类型.elim' (f none) (f ∘ some)) = f
   证明: funext fun o => by cases o <;> rfl
 -/
 theorem elim'_none_some (f : Option α -> β) : (Option.elim' (f none) (f ∘ some)) = f :=
@@ -127,7 +127,7 @@ lemma elim'_eq_elim
 
 中文:
 引理 elim'_eq_elim
-  条件: {α β : 类型} (b : β) (f : α -> β) (a : Option α)
+  条件: {α β : 类型} (b : β) (f : α -> β) (a : 选项类型 α)
   证明: by
   cases a <;> rfl
 -/
@@ -147,7 +147,7 @@ abbreviation iget
 
 中文:
 缩写 iget
-  签名: [Inhabited α]
+  签名: [可居 α]
 -/
 abbrev iget [Inhabited α] : Option α -> α
   | some x => x
@@ -165,7 +165,7 @@ theorem iget_some
 
 中文:
 定理 iget_some
-  条件: [Inhabited α] {a : α}
+  条件: [可居 α] {a : α}
   结论: (some a).iget = a
   证明: rfl
 -/

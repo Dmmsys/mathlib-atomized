@@ -66,9 +66,9 @@ structure LeftHomologyData
     - i : K ⟶ S.X₂
     - π : K ⟶ H
     - wi : i ≫ S.g = 0
-    - hi : IsLimit (KernelFork.ofι i wi)
-    - wπ : hi.lift (KernelFork.ofι _ S.zero) ≫ π = 0
-    - hπ : IsColimit (CokernelCofork.ofπ π wπ)
+    - hi : 是极限 (核叉.ofι i wi)
+    - wπ : hi.lift (核叉.ofι _ S.zero) ≫ π = 0
+    - hπ : 是余极限 (余核余叉.ofπ π wπ)
 -/
 structure LeftHomologyData where
   /-- a choice of kernel of `S.g : S.X₂ ⟶ S.X₃` -/
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono h.i
+  签名: 单态射 h.i
   定义体: ⟨fun _ _ => Fork.IsLimit.hom_ext h.hi⟩
 
 Depends on / 依赖: Fork.IsLimit.hom_ext, IsLimit, h.hi, hom_ext
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi h.π
+  签名: 满态射 h.π
   定义体: ⟨fun _ _ => Cofork.IsColimit.hom_ext h.hπ⟩
 
 Depends on / 依赖: Cofork, Cofork.IsColimit.hom_ext, IsColimit, hom_ext
@@ -323,7 +323,7 @@ definition hπ'
 
 中文:
 定义 hπ'
-  签名: : IsColimit (CokernelCofork.ofπ h.π h.f'_π)
+  签名: : 是余极限 (余核余叉.ofπ h.π h.f'_π)
   定义体: h.hπ
 -/
 def hπ' : IsColimit (CokernelCofork.ofπ h.π h.f'_π) := h.hπ
@@ -384,7 +384,7 @@ lemma isIso_i
 中文:
 引理 isIso_i
   条件: (hg : S.g = 0)
-  结论: IsIso h.i
+  结论: 是同构 h.i
   证明: ⟨h.liftK (𝟙 S.X₂) (by rw [hg, id_comp]),
     by simp only [← cancel_mono h.i, id_comp, assoc, liftK_i, comp_id], liftK_i _ _ _⟩
 
@@ -412,7 +412,7 @@ lemma isIso_π
 中文:
 引理 isIso_π
   条件: (hf : S.f = 0)
-  结论: IsIso h.π
+  结论: 是同构 h.π
   证明: by
   have ⟨φ, hφ⟩ := CokernelCofork.IsColimit.desc' h.hπ' (𝟙 _)
     (by rw [← cancel_mono h.i, comp_id, f'_i, zero_comp, hf])
@@ -451,7 +451,7 @@ definition ofIsColimitCokernelCofork
 
 中文:
 定义 ofIsColimitCokernelCofork
-  签名: (hg : S.g = 0) (c : CokernelCofork S.f) (hc : IsColimit c)
+  签名: (hg : S.g = 0) (c : 余核余叉 S.f) (hc : 是余极限 c)
   定义体: S.X₂
   H := c.pt
   i := 𝟙 _
@@ -483,7 +483,7 @@ lemma ofIsColimitCokernelCofork_f'
 
 中文:
 引理 ofIsColimitCokernelCofork_f'
-  结论: (hg : S.g = 0) (c : CokernelCofork S.f)
+  结论: (hg : S.g = 0) (c : 余核余叉 S.f)
   证明: by
   rfl
 -/
@@ -506,7 +506,7 @@ lemma ofIsColimitCokernelCofork_liftK
 
 中文:
 引理 ofIsColimitCokernelCofork_liftK
-  结论: (hg : S.g = 0) (c : CokernelCofork S.f) (hc : IsColimit c)
+  结论: (hg : S.g = 0) (c : 余核余叉 S.f) (hc : 是余极限 c)
   证明: by
   rw [← cancel_mono (ofIsColimitCokernelCofork S hg c hc).i]; rw [liftK_i]
   simp
@@ -564,7 +564,7 @@ definition ofIsLimitKernelFork
 
 中文:
 定义 ofIsLimitKernelFork
-  签名: (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c)
+  签名: (hf : S.f = 0) (c : 核叉 S.g) (hc : 是极限 c)
   定义体: c.pt
   H := c.pt
   i := c.ι
@@ -604,7 +604,7 @@ lemma ofIsLimitKernelFork_f'
 
 中文:
 引理 ofIsLimitKernelFork_f'
-  条件: (hf : S.f = 0) (c : KernelFork S.g) (hc : IsLimit c)
+  条件: (hf : S.f = 0) (c : 核叉 S.g) (hc : 是极限 c)
   证明: by
   rw [← cancel_mono (ofIsLimitKernelFork S hf c hc).i]; rw [f'_i]; rw [hf]; rw [zero_comp]
 -/
@@ -753,10 +753,10 @@ class HasLeftHomology
     - condition : Nonempty S.LeftHomologyData
 
 中文:
-类 HasLeftHomology
+类 有LeftHomology
   参数: : 命题 where
   公理与运算 (1 个):
-    - condition : Nonempty S.LeftHomologyData
+    - condition : 非空 S.LeftHomologyData
 -/
 class HasLeftHomology : Prop where
   condition : Nonempty S.LeftHomologyData
@@ -771,7 +771,7 @@ definition leftHomologyData
 
 中文:
 定义 leftHomologyData
-  签名: [S.HasLeftHomology]
+  签名: [S.有LeftHomology]
   定义体: HasLeftHomology.condition.some
 
 Depends on / 依赖: HasLeftHomology, HasLeftHomology.condition.some, condition
@@ -795,7 +795,7 @@ lemma mk'
 中文:
 引理 mk'
   条件: (h : S.LeftHomologyData)
-  结论: HasLeftHomology S
+  结论: 有LeftHomology S
   证明: ⟨Nonempty.intro h⟩
 
 Depends on / 依赖: Nonempty, Nonempty.intro
@@ -1006,7 +1006,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (LeftHomologyMapData φ h₁ h₂)
+  签名: 子单例 (LeftHomologyMapData φ h₁ h₂)
   定义体: ⟨fun ψ₁ ψ₂ => by
     have hK : ψ₁.φK = ψ₂.φK := by rw [← cancel_mono h₂.i, commi, commi]
     have hH : ψ₁.φH = ψ₂.φH := by rw [← cancel_epi h₁.π, commπ, commπ, hK]
@@ -1038,7 +1038,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (LeftHomologyMapData φ h₁ h₂)
+  签名: 可居 (LeftHomologyMapData φ h₁ h₂)
   定义体: ⟨by
   let φK : h₁.K ⟶ h₂.K := h₂.liftK (h₁.i ≫ φ.τ₂)
     (by rw [assoc, φ.comm₂₃, h₁.wi_assoc, zero_comp])
@@ -1066,7 +1066,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (LeftHomologyMapData φ h₁ h₂)
+  签名: 唯一 (LeftHomologyMapData φ h₁ h₂)
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -1429,7 +1429,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono S.iCycles
+  签名: 单态射 S.iCycles
   定义体: by
   dsimp only [iCycles]
   infer_instance
@@ -1453,7 +1453,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi S.leftHomologyπ
+  签名: 满态射 S.leftHomologyπ
   定义体: by
   dsimp only [leftHomologyπ]
   infer_instance
@@ -1570,7 +1570,7 @@ lemma isIso_iCycles
 中文:
 引理 isIso_iCycles
   条件: (hg : S.g = 0)
-  结论: IsIso S.iCycles
+  结论: 是同构 S.iCycles
   证明: LeftHomologyData.isIso_i _ hg
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.isIso_i, isIso_i
@@ -1661,7 +1661,7 @@ lemma isIso_leftHomologyπ
 中文:
 引理 isIso_leftHomologyπ
   条件: (hf : S.f = 0)
-  结论: IsIso S.leftHomologyπ
+  结论: 是同构 S.leftHomologyπ
   证明: LeftHomologyData.isIso_π _ hf
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.isIso_
@@ -2076,7 +2076,7 @@ lemma leftHomologyMap_id
 
 中文:
 引理 leftHomologyMap_id
-  条件: [HasLeftHomology S]
+  条件: [有LeftHomology S]
   证明: leftHomologyMap'_id _
 
 @[simp]
@@ -2100,7 +2100,7 @@ lemma cyclesMap_id
 
 中文:
 引理 cyclesMap_id
-  条件: [HasLeftHomology S]
+  条件: [有LeftHomology S]
   证明: cyclesMap'_id _
 
 @[simp]
@@ -2166,7 +2166,7 @@ lemma leftHomologyMap_zero
 
 中文:
 引理 leftHomologyMap_zero
-  条件: [HasLeftHomology S₁] [HasLeftHomology S₂]
+  条件: [有LeftHomology S₁] [有LeftHomology S₂]
   证明: leftHomologyMap'_zero _ _
 
 @[simp]
@@ -2188,7 +2188,7 @@ lemma cyclesMap_zero
 
 中文:
 引理 cyclesMap_zero
-  条件: [HasLeftHomology S₁] [HasLeftHomology S₂]
+  条件: [有LeftHomology S₁] [有LeftHomology S₂]
   证明: cyclesMap'_zero _ _
 
 Depends on / 依赖: _zero, cyclesMap
@@ -2275,7 +2275,7 @@ lemma leftHomologyMap_comp
 
 中文:
 引理 leftHomologyMap_comp
-  结论: [HasLeftHomology S₁] [HasLeftHomology S₂] [HasLeftHomology S₃]
+  结论: [有LeftHomology S₁] [有LeftHomology S₂] [有LeftHomology S₃]
   证明: leftHomologyMap'_comp _ _ _ _ _
 
 @[reassoc]
@@ -2298,7 +2298,7 @@ lemma cyclesMap_comp
 
 中文:
 引理 cyclesMap_comp
-  结论: [HasLeftHomology S₁] [HasLeftHomology S₂] [HasLeftHomology S₃]
+  结论: [有LeftHomology S₁] [有LeftHomology S₂] [有LeftHomology S₃]
   证明: cyclesMap'_comp _ _ _ _ _
 
 Depends on / 依赖: _comp, cyclesMap
@@ -2351,7 +2351,7 @@ instance isIso_leftHomologyMap'_of_isIso
 
 中文:
 实例 isIso_leftHomologyMap'_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ]
   定义体: inferInstanceAs IsIso (leftHomologyMapIso' (asIso φ) h₁ h₂).hom
 
 Depends on / 依赖: leftHomologyMapIso
@@ -2402,7 +2402,7 @@ instance isIso_cyclesMap'_of_isIso
 
 中文:
 实例 isIso_cyclesMap'_of_isIso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ]
   定义体: inferInstanceAs IsIso (cyclesMapIso' (asIso φ) h₁ h₂).hom
 
 Depends on / 依赖: cyclesMapIso
@@ -2428,7 +2428,7 @@ definition leftHomologyMapIso
 
 中文:
 定义 leftHomologyMapIso
-  签名: (e : S₁ ≅ S₂) [S₁.HasLeftHomology]
+  签名: (e : S₁ ≅ S₂) [S₁.有LeftHomology]
   定义体: leftHomologyMap e.hom
   inv := leftHomologyMap e.inv
   hom_inv_id := by rw [← leftHomologyMap_comp, e.hom_inv_id, leftHomologyMap_id]
@@ -2479,7 +2479,7 @@ definition cyclesMapIso
 
 中文:
 定义 cyclesMapIso
-  签名: (e : S₁ ≅ S₂) [S₁.HasLeftHomology]
+  签名: (e : S₁ ≅ S₂) [S₁.有LeftHomology]
   定义体: cyclesMap e.hom
   inv := cyclesMap e.inv
   hom_inv_id := by rw [← cyclesMap_comp, e.hom_inv_id, cyclesMap_id]
@@ -2504,7 +2504,7 @@ instance isIso_cyclesMap_of_iso
 
 中文:
 实例 isIso_cyclesMap_of_iso
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ] [S₁.HasLeftHomology]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ] [S₁.有LeftHomology]
   定义体: inferInstanceAs IsIso (cyclesMapIso (asIso φ)).hom
 
 Depends on / 依赖: cyclesMapIso
@@ -2685,7 +2685,7 @@ lemma leftHomologyMap_eq
 
 中文:
 引理 leftHomologyMap_eq
-  条件: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  条件: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   dsimp [LeftHomologyData.leftHomologyIso, leftHomologyMapIso']
   rw [← γ.leftHomologyMap'_eq]; rw [← leftHomologyMap'_comp]; rw [← leftHomologyMap'_comp]; rw [id_comp]; rw [comp_id]
@@ -2714,7 +2714,7 @@ lemma cyclesMap_eq
 
 中文:
 引理 cyclesMap_eq
-  条件: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  条件: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   dsimp [LeftHomologyData.cyclesIso, cyclesMapIso']
   rw [← γ.cyclesMap'_eq]; rw [← cyclesMap'_comp]; rw [← cyclesMap'_comp]; rw [id_comp]; rw [comp_id]
@@ -2739,7 +2739,7 @@ lemma leftHomologyMap_comm
 
 中文:
 引理 leftHomologyMap_comm
-  条件: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  条件: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   simp only [γ.leftHomologyMap_eq, assoc, Iso.inv_hom_id, comp_id]
 
@@ -2760,7 +2760,7 @@ lemma cyclesMap_comm
 
 中文:
 引理 cyclesMap_comm
-  条件: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  条件: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   simp only [γ.cyclesMap_eq, assoc, Iso.inv_hom_id, comp_id]
 
@@ -2792,7 +2792,7 @@ definition leftHomologyFunctor
 
 中文:
 定义 leftHomologyFunctor
-  签名: : ShortComplex C ⥤ C where
+  签名: : 短复形 C ⥤ C where
   定义体: S.leftHomology
   map := leftHomologyMap
 
@@ -2816,7 +2816,7 @@ definition cyclesFunctor
 
 中文:
 定义 cyclesFunctor
-  签名: : ShortComplex C ⥤ C where
+  签名: : 短复形 C ⥤ C where
   定义体: S.cycles
   map := cyclesMap
 
@@ -2838,7 +2838,7 @@ definition leftHomologyπNatTrans
   naturality := fun _ _ φ => (leftHomologyπ_naturality φ).symm
 
 中文:
-定义 leftHomologyπNatTrans
+定义 leftHomologyπ自然数Trans
   签名: : cyclesFunctor C ⟶ leftHomologyFunctor C where
   定义体: leftHomologyπ S
   naturality := fun _ _ φ => (leftHomologyπ_naturality φ).symm
@@ -2859,8 +2859,8 @@ definition iCyclesNatTrans
   body: S.iCycles
 
 中文:
-定义 iCyclesNatTrans
-  签名: : cyclesFunctor C ⟶ ShortComplex.π₂ where
+定义 iCycles自然数Trans
+  签名: : cyclesFunctor C ⟶ 短复形.π₂ where
   定义体: S.iCycles
 
 Depends on / 依赖: S.iCycles, iCycles
@@ -2880,7 +2880,7 @@ definition toCyclesNatTrans
   naturality := fun _ _ φ => (toCycles_naturality φ).symm
 
 中文:
-定义 toCyclesNatTrans
+定义 toCycles自然数Trans
   签名: :
   定义体: S.toCycles
   naturality := fun _ _ φ => (toCycles_naturality φ).symm
@@ -3073,7 +3073,7 @@ lemma hasLeftHomology_of_epi_of_isIso_of_mono
 
 中文:
 引理 hasLeftHomology_of_epi_of_isIso_of_mono
-  结论: (φ : S₁ ⟶ S₂) [HasLeftHomology S₁]
+  结论: (φ : S₁ ⟶ S₂) [有LeftHomology S₁]
   证明: HasLeftHomology.mk' (LeftHomologyData.ofEpiOfIsIsoOfMono φ S₁.leftHomologyData)
 
 Depends on / 依赖: HasLeftHomology, HasLeftHomology.mk, LeftHomologyData, LeftHomologyData.ofEpiOfIsIsoOfMono, leftHomologyData, ofEpiOfIsIsoOfMono
@@ -3092,7 +3092,7 @@ lemma hasLeftHomology_of_epi_of_isIso_of_mono'
 
 中文:
 引理 hasLeftHomology_of_epi_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) [HasLeftHomology S₂]
+  结论: (φ : S₁ ⟶ S₂) [有LeftHomology S₂]
   证明: HasLeftHomology.mk' (LeftHomologyData.ofEpiOfIsIsoOfMono' φ S₂.leftHomologyData)
 
 Depends on / 依赖: HasLeftHomology, HasLeftHomology.mk, LeftHomologyData, LeftHomologyData.ofEpiOfIsIsoOfMono, leftHomologyData, ofEpiOfIsIsoOfMono
@@ -3111,7 +3111,7 @@ lemma hasLeftHomology_of_iso
 
 中文:
 引理 hasLeftHomology_of_iso
-  条件: {S₁ S₂ : ShortComplex C} (e : S₁ ≅ S₂) [HasLeftHomology S₁]
+  条件: {S₁ S₂ : 短复形 C} (e : S₁ ≅ S₂) [有LeftHomology S₁]
   证明: hasLeftHomology_of_epi_of_isIso_of_mono e.hom
 
 Depends on / 依赖: e.hom, hasLeftHomology_of_epi_of_isIso_of_mono
@@ -3277,7 +3277,7 @@ definition cyclesIsKernel
 
 中文:
 定义 cyclesIsKernel
-  签名: : IsLimit (KernelFork.ofι S.iCycles S.iCycles_g)
+  签名: : 是极限 (核叉.ofι S.iCycles S.iCycles_g)
   定义体: S.leftHomologyData.hi
 
 Depends on / 依赖: S.leftHomologyData.hi, leftHomologyData
@@ -3482,7 +3482,7 @@ lemma liftCycles_comp_cyclesMap
 
 中文:
 引理 liftCycles_comp_cyclesMap
-  条件: (φ : S ⟶ S₁) [S₁.HasLeftHomology]
+  条件: (φ : S ⟶ S₁) [S₁.有LeftHomology]
   证明: by
   cat_disch
 
@@ -3559,7 +3559,7 @@ lemma hasKernel
 
 中文:
 引理 hasKernel
-  条件: [S.HasLeftHomology]
+  条件: [S.有LeftHomology]
   结论: HasKernel S.g
   证明: ⟨⟨⟨_, S.leftHomologyData.hi⟩⟩⟩
 
@@ -3585,7 +3585,7 @@ lemma hasCokernel
 
 中文:
 引理 hasCokernel
-  条件: [S.HasLeftHomology] [HasKernel S.g]
+  条件: [S.有LeftHomology] [HasKernel S.g]
   证明: by
   let h := S.leftHomologyData
   have : HasColimit (parallelPair h.f' 0) := ⟨⟨⟨_, h.hπ'⟩⟩⟩
@@ -3617,7 +3617,7 @@ definition leftHomologyIsoCokernelLift
 
 中文:
 定义 leftHomologyIsoCokernelLift
-  签名: [S.HasLeftHomology] [HasKernel S.g]
+  签名: [S.有LeftHomology] [HasKernel S.g]
   定义体: (LeftHomologyData.ofHasKernelOfHasCokernel S).leftHomologyIso
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.ofHasKernelOfHasCokernel, leftHomologyIso, ofHasKernelOfHasCokernel
@@ -3643,7 +3643,7 @@ lemma isIso_cyclesMap'_of_isIso_of_mono
 
 中文:
 引理 isIso_cyclesMap'_of_isIso_of_mono
-  结论: (φ : S₁ ⟶ S₂) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃)
+  结论: (φ : S₁ ⟶ S₂) (h₂ : 是同构 φ.τ₂) (h₃ : 单态射 φ.τ₃)
   证明: by
   refine ⟨h₁.liftK (h₂.i ≫ inv φ.τ₂) ?_, ?_, ?_⟩
   · simp only [assoc, ← cancel_mono φ.τ₃, zero_comp, ← φ.comm₂₃, IsIso.inv_hom_id_assoc, h₂.wi]
@@ -3671,7 +3671,7 @@ lemma isIso_cyclesMap_of_isIso_of_mono'
 
 中文:
 引理 isIso_cyclesMap_of_isIso_of_mono'
-  结论: (φ : S₁ ⟶ S₂) (h₂ : IsIso φ.τ₂) (h₃ : Mono φ.τ₃)
+  结论: (φ : S₁ ⟶ S₂) (h₂ : 是同构 φ.τ₂) (h₃ : 单态射 φ.τ₃)
   证明: isIso_cyclesMap'_of_isIso_of_mono φ h₂ h₃ _ _
 
 Depends on / 依赖: _of_isIso_of_mono, isIso_cyclesMap
@@ -3691,7 +3691,7 @@ instance isIso_cyclesMap_of_isIso_of_mono
 
 中文:
 实例 isIso_cyclesMap_of_isIso_of_mono
-  签名: (φ : S₁ ⟶ S₂) [IsIso φ.τ₂] [Mono φ.τ₃]
+  签名: (φ : S₁ ⟶ S₂) [是同构 φ.τ₂] [单态射 φ.τ₃]
   定义体: isIso_cyclesMap_of_isIso_of_mono' φ inferInstance inferInstance
 
 Depends on / 依赖: isIso_cyclesMap_of_isIso_of_mono

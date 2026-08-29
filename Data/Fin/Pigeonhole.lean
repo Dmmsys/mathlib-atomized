@@ -32,7 +32,7 @@ theorem le_of_injective
 
 中文:
 定理 le_of_injective
-  条件: (f : Fin m -> Fin n) (hf : f.Injective)
+  条件: (f : 有限集 m -> 有限集 n) (hf : f.单射)
   结论: m <= n
   证明: by
   simpa using Fintype.card_le_of_injective f hf
@@ -54,7 +54,7 @@ theorem le_of_embedding
 
 中文:
 定理 le_of_embedding
-  条件: (f : Fin m ↪ Fin n)
+  条件: (f : 有限集 m ↪ 有限集 n)
   结论: m <= n
   证明: by
   simpa using Fintype.card_le_of_embedding f
@@ -75,7 +75,7 @@ theorem lt_of_injective_of_notMem
 
 中文:
 定理 lt_of_injective_of_notMem
-  结论: (f : Fin m -> Fin n) (hf : f.Injective) {b : Fin n}
+  结论: (f : 有限集 m -> 有限集 n) (hf : f.单射) {b : 有限集 n}
   证明: by
   simpa using Fintype.card_lt_of_injective_of_notMem f hf hb
 
@@ -97,7 +97,7 @@ theorem le_of_surjective
 
 中文:
 定理 le_of_surjective
-  条件: (f : Fin m -> Fin n) (hf : Function.Surjective f)
+  条件: (f : 有限集 m -> 有限集 n) (hf : 函数.满射 f)
   结论: n <= m
   证明: by
   simpa using Fintype.card_le_of_surjective f hf
@@ -118,7 +118,7 @@ theorem card_range_le
 
 中文:
 定理 card_range_le
-  条件: {α : 类型} [Fintype α] [DecidableEq α] (f : Fin m -> α)
+  条件: {α : 类型} [有限类型 α] [DecidableEq α] (f : 有限集 m -> α)
   证明: by
   simpa using Fintype.card_range_le f
 

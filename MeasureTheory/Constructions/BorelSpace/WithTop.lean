@@ -42,7 +42,7 @@ instance :
 
 中文:
 实例 :
-  签名: MeasurableSpace (WithTop ι)
+  签名: 可测空间 (WithTop ι)
   定义体: borel _
 -/
 instance : MeasurableSpace (WithTop ι) := borel _
@@ -57,7 +57,7 @@ instance :
 
 中文:
 实例 :
-  签名: BorelSpace (WithTop ι)
+  签名: Borel空间 (WithTop ι)
   定义体: ⟨rfl⟩
 -/
 instance : BorelSpace (WithTop ι) := ⟨rfl⟩
@@ -75,7 +75,7 @@ definition MeasurableEquiv.neTopEquiv
   body: (WithTop.neTopHomeomorph ι).toMeasurableEquiv
 
 中文:
-定义 MeasurableEquiv.neTopEquiv
+定义 可测等价.neTopEquiv
   签名: : { r : WithTop ι | r != ⊤ } ≃ᵐ ι
   定义体: (WithTop.neTopHomeomorph ι).toMeasurableEquiv
 
@@ -95,7 +95,7 @@ lemma measurable_of_measurable_comp_coe
 
 中文:
 引理 measurable_of_measurable_comp_coe
-  结论: {α : 类型} {mα : MeasurableSpace α}
+  结论: {α : 类型} {mα : 可测空间 α}
   证明: measurable_of_measurable_on_compl_singleton ⊤
     (MeasurableEquiv.neTopEquiv.symm.measurable_comp_iff.1 h)
 
@@ -119,7 +119,7 @@ lemma measurable_untopD
 中文:
 引理 measurable_untopD
   条件: (d : ι)
-  结论: Measurable (untopD d)
+  结论: 可测 (untopD d)
   证明: measurable_of_measurable_comp_coe measurable_id
 
 Depends on / 依赖: measurable_id, measurable_of_measurable_comp_coe
@@ -138,8 +138,8 @@ lemma measurable_untopA
 
 中文:
 引理 measurable_untopA
-  条件: [Nonempty ι]
-  结论: Measurable (WithTop.untopA (α := ι))
+  条件: [非空 ι]
+  结论: 可测 (WithTop.untopA (α := ι))
   证明: measurable_untopD _
 -/
 lemma measurable_untopA [Nonempty ι] : Measurable (WithTop.untopA (α := ι)) :=
@@ -157,7 +157,7 @@ lemma measurable_coe
 
 中文:
 引理 measurable_coe
-  结论: Measurable (fun x : ι => (x : WithTop ι))
+  结论: 可测 (fun x : ι => (x : WithTop ι))
   证明: continuous_coe.measurable
 
 @[fun_prop]
@@ -178,8 +178,8 @@ lemma _root_.Measurable.withTop_coe
 @[fun_prop]
 
 中文:
-引理 _root_.Measurable.withTop_coe
-  条件: {α} {mα : MeasurableSpace α} {f : α -> ι} (hf : Measurable f)
+引理 _root_.可测.withTop_coe
+  条件: {α} {mα : 可测空间 α} {f : α -> ι} (hf : 可测 f)
   证明: measurable_coe.comp hf
 
 @[fun_prop]
@@ -202,8 +202,8 @@ lemma _root_.Measurable.untopD
 @[fun_prop]
 
 中文:
-引理 _root_.Measurable.untopD
-  结论: {α} {mα : MeasurableSpace α} (d : ι)
+引理 _root_.可测.untopD
+  结论: {α} {mα : 可测空间 α} (d : ι)
   证明: (measurable_untopD d).comp hf
 
 @[fun_prop]
@@ -224,8 +224,8 @@ lemma _root_.Measurable.untopA
   proof: hf.untopD _
 
 中文:
-引理 _root_.Measurable.untopA
-  结论: {α} {mα : MeasurableSpace α} [Nonempty ι]
+引理 _root_.可测.untopA
+  结论: {α} {mα : 可测空间 α} [非空 ι]
   证明: hf.untopD _
 
 Depends on / 依赖: hf.untopD, untopD
@@ -246,7 +246,7 @@ definition measurableEquivSum
 
 中文:
 定义 measurableEquivSum
-  签名: : WithTop ι ≃ᵐ ι oplus Unit
+  签名: : WithTop ι ≃ᵐ ι oplus 单元
   定义体: { Equiv.optionEquivSumPUnit ι with
     measurable_toFun := measurable_of_measurable_comp_coe measurable_inl
     measurable_invFun := measurable_fun_sum measurable_coe (@measurable_const _ Unit _ _ ⊤) }

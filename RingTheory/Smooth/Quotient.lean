@@ -39,8 +39,8 @@ lemma LinearMap.ker_inf_smul_top_eq_smul_of_flat
  
 
 中文:
-引理 LinearMap.ker_inf_smul_top_eq_smul_of_flat
-  结论: {M N : 类型} [AddCommGroup M] [AddCommGroup N]
+引理 线性映射.ker_inf_smul_top_eq_smul_of_flat
+  结论: {M N : 类型} [加法交换群 M] [加法交换群 N]
   证明: by
   refine le_antisymm (fun x hx => ?_) (fun x hx => ?_)
   · rcases (Submodule.ext_iff.mp (I.subtype_rTensor_range M) x).mpr hx.2 with ⟨y, hy⟩
@@ -99,7 +99,7 @@ lemma comap_ker_eq_sup_of_ker_eq_map
 
 中文:
 引理 comap_ker_eq_sup_of_ker_eq_map
-  结论: (surjRS : Function.Surjective (algebraMap R S))
+  结论: (surjRS : 函数.满射 (algebraMap R S))
   证明: by
   rw [RingHom.comap_ker]; rw [← IsScalarTower.algebraMap_eq]; rw [IsScalarTower.algebraMap_eq _ S]; rw [← RingHom.comap_ker]
   simp [eqmap, Ideal.comap_map_of_surjective' _ surjRS]
@@ -127,7 +127,7 @@ lemma mul_le_ker_of_range_le_mul_of_sq_zero
 
 中文:
 引理 mul_le_ker_of_range_le_mul_of_sq_zero
-  结论: {J I : Ideal R} (sq : I ^ 2 = ⊥)
+  结论: {J I : 理想 R} (sq : I ^ 2 = ⊥)
   证明: by
   rw [pow_two] at sq
   have {x : R} (h : x in I * J) : f (J.toCotangent ⟨x, Ideal.mul_le_right h⟩) = 0 := by
@@ -177,8 +177,8 @@ lemma Algebra.FormallySmooth.of_surjective_of_ker_eq_map_of_flat
     σ' := fun s' => MvPolyn
 
 中文:
-引理 Algebra.FormallySmooth.of_surjective_of_ker_eq_map_of_flat
-  结论: [Module.Flat R S]
+引理 代数.形式光滑.of_surjective_of_ker_eq_map_of_flat
+  结论: [模.平坦 R S]
   证明: by
   let P := (Algebra.Generators.self R S).toExtension
   let : Algebra.FormallySmooth R P.Ring := instFormallySmoothMvPolynomial S
@@ -319,8 +319,8 @@ lemma RingHom.FormallySmooth.of_flat_of_ker_eq_map_of_square_zero
   exact Algebra.FormallySmooth.of_surjective_of_ker_eq_map_of_flat surjR surjS eqmap sq0 ‹_›
 
 中文:
-引理 RingHom.FormallySmooth.of_flat_of_ker_eq_map_of_square_zero
-  结论: (f : R ->+* S) (flat : f.Flat)
+引理 环态射.形式光滑.of_flat_of_ker_eq_map_of_square_zero
+  结论: (f : R ->+* S) (flat : f.平坦)
   证明: by
   algebraize [f, qR, qS, g, qS.comp f]
   let _ : IsScalarTower R R' S' := IsScalarTower.of_algebraMap_eq' comm

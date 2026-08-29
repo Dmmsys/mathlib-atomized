@@ -148,7 +148,7 @@ definition normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
 
 中文:
 定义 normalizedFactorsMapEquivNormalizedFactorsMinPolyMk
-  签名: (hI : IsMaximal I)
+  签名: (hI : 是极大 I)
   定义体: by
   refine (IsDedekindDomain.normalizedFactorsEquivOfQuotEquiv (quotMapEquivQuotQuotMap hx hx')
     ?_ ?_).trans ?_
@@ -221,7 +221,7 @@ theorem normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map
 
 中文:
 定理 normalizedFactors_ideal_map_eq_normalizedFactors_min_poly_mk_map
-  结论: (hI : IsMaximal I)
+  结论: (hI : 是极大 I)
   证明: by
   ext J
   -- WLOG, assume J is a normalized factor
@@ -288,8 +288,8 @@ theorem Ideal.irreducible_map_of_irreducible_minpoly
   suffices exists y, normalizedFactors (I.map (algebraMap R S)) = 
 
 中文:
-定理 Ideal.irreducible_map_of_irreducible_minpoly
-  结论: (hI : IsMaximal I) (hI' : I != ⊥)
+定理 理想.irreducible_map_of_irreducible_minpoly
+  结论: (hI : 是极大 I) (hI' : I != ⊥)
   证明: by
   classical
   have mem_norm_factors : normalize (Polynomial.map (Ideal.Quotient.mk I) (minpoly R x)) in

@@ -33,8 +33,8 @@ instance [Inhabited
   body: ⟨Stream'.const default⟩
 
 中文:
-实例 [Inhabited
-  签名: α] : Inhabited (Stream' α)
+实例 [可居
+  签名: α] : 可居 (Stream' α)
   定义体: ⟨Stream'.const default⟩
 
 Depends on / 依赖: Stream
@@ -350,7 +350,7 @@ lemma get_cons_append_zero
 
 中文:
 引理 get_cons_append_zero
-  条件: {a : α} {x : List α} {s : Stream' α}
+  条件: {a : α} {x : 列表 α} {s : Stream' α}
   证明: rfl
 -/
 @[simp] lemma get_cons_append_zero {a : α} {x : List α} {s : Stream' α} :
@@ -437,7 +437,7 @@ theorem cons_injective2
 
 中文:
 定理 cons_injective2
-  结论: Function.Injective2 (cons : α -> Stream' α -> Stream' α)
+  结论: 函数.Injective2 (cons : α -> Stream' α -> Stream' α)
   证明: fun x y s t h =>
   ⟨by rw [← get_zero_cons x s, h, get_zero_cons],
     Stream'.ext fun n => by rw [← get_succ_cons n _ x, h, get_succ_cons]⟩
@@ -458,7 +458,7 @@ theorem cons_injective_left
 中文:
 定理 cons_injective_left
   条件: (s : Stream' α)
-  结论: Function.Injective fun x => cons x s
+  结论: 函数.单射 fun x => cons x s
   证明: cons_injective2.left _
 
 Depends on / 依赖: cons_injective2, cons_injective2.left
@@ -478,7 +478,7 @@ theorem cons_injective_right
 中文:
 定理 cons_injective_right
   条件: (x : α)
-  结论: Function.Injective (cons x)
+  结论: 函数.单射 (cons x)
   证明: cons_injective2.right _
 
 Depends on / 依赖: cons_injective2, cons_injective2.right
@@ -636,7 +636,7 @@ theorem mem_iff_exists_get_eq
   mpr h := mem_of_get_eq h.choose_spec
 
 中文:
-定理 mem_iff_exists_get_eq
+定理 mem_iff_存在_get_eq
   条件: {s : Stream' α} {a : α}
   结论: a in s ↔ 存在 n, a = s.get n where
   证明: by simp [Membership.mem, any_def]
@@ -878,7 +878,7 @@ theorem exists_of_mem_map
   proof: fun ⟨n, h⟩ => ⟨get s n, ⟨n, rfl⟩, h.symm⟩
 
 中文:
-定理 exists_of_mem_map
+定理 存在_of_mem_map
   条件: {f} {b : β} {s : Stream' α}
   结论: b in map f s -> 存在 a, a in s ∧ f a = b
   证明: fun ⟨n, h⟩ => ⟨get s n, ⟨n, rfl⟩, h.symm⟩
@@ -1026,7 +1026,7 @@ theorem enum_eq_zip
 中文:
 定理 enum_eq_zip
   条件: (s : Stream' α)
-  结论: enum s = zip Prod.mk nats s
+  结论: enum s = zip 积类型.mk nats s
   证明: rfl
 -/
 theorem enum_eq_zip (s : Stream' α) : enum s = zip Prod.mk nats s :=
@@ -1334,7 +1334,7 @@ definition IsBisimulation
       head s₁ = head s₂ ∧ tail s₁ ~ tail s₂
 
 中文:
-定义 IsBisimulation
+定义 是Bisimulation
   定义体: forall ⦃s₁ s₂⦄, s₁ ~ s₂ ->
       head s₁ = head s₂ ∧ tail s₁ ~ tail s₂
 -/
@@ -1351,7 +1351,7 @@ theorem get_of_bisim
 
 中文:
 定理 get_of_bisim
-  条件: (bisim : IsBisimulation R) {s₁ s₂}
+  条件: (bisim : 是Bisimulation R) {s₁ s₂}
 -/
 theorem get_of_bisim (bisim : IsBisimulation R) {s₁ s₂} :
     forall n, s₁ ~ s₂ -> get s₁ n = get s₂ n ∧ drop (n + 1) s₁ ~ drop (n + 1) s₂
@@ -1373,7 +1373,7 @@ theorem eq_of_bisim
 
 中文:
 定理 eq_of_bisim
-  条件: (bisim : IsBisimulation R) {s₁ s₂}
+  条件: (bisim : 是Bisimulation R) {s₁ s₂}
   结论: s₁ ~ s₂ -> s₁ = s₂
   证明: fun r =>
   Stream'.ext fun n => And.left (get_of_bisim R bisim n r)
@@ -2135,7 +2135,7 @@ theorem cons_append_stream
 
 中文:
 定理 cons_append_stream
-  条件: (a : α) (l : List α) (s : Stream' α)
+  条件: (a : α) (l : 列表 α) (s : Stream' α)
   证明: rfl
 -/
 theorem cons_append_stream (a : α) (l : List α) (s : Stream' α) :
@@ -2151,7 +2151,7 @@ theorem append_append_stream
 
 中文:
 定理 append_append_stream
-  结论: 对任意 (l₁ l₂ : List α) (s : Stream' α),
+  结论: 对任意 (l₁ l₂ : 列表 α) (s : Stream' α),
 -/
 @[simp] theorem append_append_stream : forall (l₁ l₂ : List α) (s : Stream' α),
     l₁ ++ l₂ ++ₛ s = l₁ ++ₛ (l₂ ++ₛ s)
@@ -2321,7 +2321,7 @@ theorem drop_append_stream
 
 中文:
 定理 drop_append_stream
-  结论: 对任意 (l : List α) (s : Stream' α), drop l.length (l ++ₛ s) = s
+  结论: 对任意 (l : 列表 α) (s : Stream' α), drop l.length (l ++ₛ s) = s
 -/
 theorem drop_append_stream : forall (l : List α) (s : Stream' α), drop l.length (l ++ₛ s) = s
   | [], s => rfl
@@ -2359,7 +2359,7 @@ theorem mem_append_stream_right
 
 中文:
 定理 mem_append_stream_right
-  结论: 对任意 {a : α} (l : List α) {s : Stream' α}, a in s -> a in l ++ₛ s
+  结论: 对任意 {a : α} (l : 列表 α) {s : Stream' α}, a in s -> a in l ++ₛ s
   证明: mem_append_stream_right l h
     mem_cons_of_mem _ ih
 
@@ -2380,7 +2380,7 @@ theorem mem_append_stream_left
 
 中文:
 定理 mem_append_stream_left
-  结论: 对任意 {a : α} {l : List α} (s : Stream' α), a in l -> a in l ++ₛ s
+  结论: 对任意 {a : α} {l : 列表 α} (s : Stream' α), a in l -> a in l ++ₛ s
 -/
 theorem mem_append_stream_left : forall {a : α} {l : List α} (s : Stream' α), a in l -> a in l ++ₛ s
   | _, [], _, h => absurd h List.not_mem_nil
@@ -2500,7 +2500,7 @@ theorem take_take
 中文:
 定理 take_take
   条件: {s : Stream' α}
-  结论: 对任意 {m n}, (s.take n).take m = s.take (min n m)
+  结论: 对任意 {m n}, (s.take n).take m = s.take (最小值 n m)
 -/
 theorem take_take {s : Stream' α} : forall {m n}, (s.take n).take m = s.take (min n m)
   | 0, n => by rw [Nat.min_zero, List.take_zero, take_zero]
@@ -2876,7 +2876,7 @@ theorem cycle_g_cons
 
 中文:
 定理 cycle_g_cons
-  条件: (a : α) (a₁ : α) (l₁ : List α) (a₀ : α) (l₀ : List α)
+  条件: (a : α) (a₁ : α) (l₁ : 列表 α) (a₀ : α) (l₀ : 列表 α)
   证明: rfl
 -/
 protected theorem cycle_g_cons (a : α) (a₁ : α) (l₁ : List α) (a₀ : α) (l₀ : List α) :
@@ -2897,7 +2897,7 @@ theorem cycle_eq
 
 中文:
 定理 cycle_eq
-  结论: 对任意 (l : List α) (h : l != []), cycle l h = l ++ₛ cycle l h
+  结论: 对任意 (l : 列表 α) (h : l != []), cycle l h = l ++ₛ cycle l h
   证明: by
       induction l' generalizing a' with
       | nil => rw [corec_eq]; rfl
@@ -2930,7 +2930,7 @@ theorem mem_cycle
 
 中文:
 定理 mem_cycle
-  条件: {a : α} {l : List α}
+  条件: {a : α} {l : 列表 α}
   结论: 对任意 h : l != [], a in l -> a in cycle l h
   证明: fun h ainl => by
   rw [cycle_eq]; exact mem_append_stream_left _ ainl
@@ -3048,7 +3048,7 @@ theorem inits_core_eq
 
 中文:
 定理 inits_core_eq
-  条件: (l : List α) (s : Stream' α)
+  条件: (l : 列表 α) (s : Stream' α)
   证明: by
     unfold initsCore corecOn
     rw [corec_eq]
@@ -3119,7 +3119,7 @@ theorem cons_get_inits_core
 
 中文:
 定理 cons_get_inits_core
-  条件: (a : α) (n : 自然数) (l : List α) (s : Stream' α)
+  条件: (a : α) (n : 自然数) (l : 列表 α) (s : Stream' α)
   证明: by
   induction n generalizing l s with
   | zero => rfl

@@ -216,7 +216,7 @@ theorem support_coeff_mul_single
 
 中文:
 定理 support_coeff_mul_single
-  结论: [IsRightCancelMul G] (f : k[G]) (r : k)
+  结论: [右乘消去 G] (f : k[G]) (r : k)
   证明: by
   classical ext; simp [support_coeff_mul_single_eq_image f hr (.all x)]
 
@@ -247,7 +247,7 @@ theorem support_coeff_single_mul
 
 中文:
 定理 support_coeff_single_mul
-  结论: [IsLeftCancelMul G] (f : k[G]) (r : k)
+  结论: [左乘消去 G] (f : k[G]) (r : k)
   证明: by
   classical ext; simp [support_coeff_single_mul_eq_image f hr (.all x)]
 
@@ -281,7 +281,7 @@ lemma support_coeff_one_subset
 
 中文:
 引理 support_coeff_one_subset
-  条件: [One G]
+  条件: [幺 G]
   结论: (1 : k[G]).coeff.support subseteq 1
   证明: Finsupp.support_single_subset
 
@@ -310,7 +310,7 @@ lemma support_coeff_one
 
 中文:
 引理 support_coeff_one
-  条件: [One G] [NeZero (1 : k)]
+  条件: [幺 G] [NeZero (1 : k)]
   结论: (1 : k[G]).coeff.support = 1
   证明: Finsupp.support_single _ one_ne_zero
 
@@ -338,7 +338,7 @@ theorem mem_span_support_coeff
 
 中文:
 定理 mem_span_support_coeff
-  条件: [MulOneClass G] (f : k[G])
+  条件: [MulOne类 G] (f : k[G])
   证明: by
   simp [of, ← supported_eq_span_single, mem_supported]
 
@@ -380,7 +380,7 @@ theorem mem_span_support_coeff
 中文:
 定理 mem_span_support_coeff
   条件: (f : k[G])
-  结论: f in Submodule.span k (of' k G '' f.coeff.support)
+  结论: f in 子模.span k (of' k G '' f.coeff.support)
   证明: by
   simp [of', ← supported_eq_span_single, mem_supported]
 

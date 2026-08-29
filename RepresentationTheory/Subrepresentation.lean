@@ -39,10 +39,10 @@ structure Subrepresentation
     - apply_mem_toSubmodule((g : G) ⦃v) : W⦄ : v in toSubmodule -> ρ g v in toSubmodule
 
 中文:
-结构 Subrepresentation
+结构 子表示
   参数: where
   公理与运算 (2 个):
-    - toSubmodule : Submodule A W
+    - toSubmodule : 子模 A W
     - apply_mem_toSubmodule((g : G) ⦃v) : W⦄ : v in toSubmodule -> ρ g v in toSubmodule
 -/
 structure Subrepresentation where
@@ -88,7 +88,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subrepresentation ρ) W
+  签名: 集合状 (子表示 ρ) W
   定义体: ρ'.toSubmodule
   coe_injective := SetLike.coe_injective.comp toSubmodule_injective
 
@@ -108,7 +108,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Subrepresentation ρ)
+  签名: 偏序 (子表示 ρ)
   定义体: .ofSetLike (Subrepresentation ρ) W
 
 Depends on / 依赖: Subrepresentation, ofSetLike
@@ -127,7 +127,7 @@ definition toRepresentation
 
 中文:
 定义 toRepresentation
-  签名: (ρ' : Subrepresentation ρ)
+  签名: (ρ' : 子表示 ρ)
   定义体: (ρ g).restrict (ρ'.apply_mem_toSubmodule g)
   map_one' := by ext; simp
   map_mul' x y := by ext; simp
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Subrepresentation ρ)
+  签名: 最大值 (子表示 ρ)
   定义体: .mk (ρ₁.toSubmodule ⊔ ρ₂.toSubmodule) by
       simp only [Submodule.forall_mem_sup, map_add]
       intro g x₁ hx₁ x₂ hx₂
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Subrepresentation ρ)
+  签名: 最小值 (子表示 ρ)
   定义体: .mk (ρ₁.toSubmodule ⊓ ρ₂.toSubmodule) by
       simp only [Submodule.mem_inf, and_imp]
       rintro g x hx₁ hx₂
@@ -217,8 +217,8 @@ lemma coe_sup
 
 中文:
 引理 coe_sup
-  条件: (ρ₁ ρ₂ : Subrepresentation ρ)
-  结论: ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : Set W) + (ρ₂ : Set W)
+  条件: (ρ₁ ρ₂ : 子表示 ρ)
+  结论: ↑(ρ₁ ⊔ ρ₂) = (ρ₁ : 集合 W) + (ρ₂ : 集合 W)
   证明: Submodule.coe_sup ρ₁.toSubmodule ρ₂.toSubmodule
 
 @[simp, norm_cast]
@@ -242,8 +242,8 @@ lemma coe_inf
 
 中文:
 引理 coe_inf
-  条件: (ρ₁ ρ₂ : Subrepresentation ρ)
-  结论: ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : Set W)
+  条件: (ρ₁ ρ₂ : 子表示 ρ)
+  结论: ↑(ρ₁ ⊓ ρ₂) = (ρ₁ inter ρ₂ : 集合 W)
   证明: rfl
 
 @[simp]
@@ -263,7 +263,7 @@ lemma toSubmodule_sup
 
 中文:
 引理 toSubmodule_sup
-  条件: (ρ₁ ρ₂ : Subrepresentation ρ)
+  条件: (ρ₁ ρ₂ : 子表示 ρ)
   证明: rfl
 
 @[simp]
@@ -282,7 +282,7 @@ lemma toSubmodule_inf
 
 中文:
 引理 toSubmodule_inf
-  条件: (ρ₁ ρ₂ : Subrepresentation ρ)
+  条件: (ρ₁ ρ₂ : 子表示 ρ)
   证明: rfl
 -/
 lemma toSubmodule_inf (ρ₁ ρ₂ : Subrepresentation ρ) :
@@ -298,7 +298,7 @@ instance :
 
 中文:
 实例 :
-  签名: Lattice (Subrepresentation ρ)
+  签名: 格 (子表示 ρ)
   定义体: toSubmodule_injective.lattice _ .rfl .rfl toSubmodule_sup toSubmodule_inf
 
 Depends on / 依赖: lattice, toSubmodule_inf, toSubmodule_injective, toSubmodule_injective.lattice, toSubmodule_sup
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (Subrepresentation ρ)
+  签名: 有界序 (子表示 ρ)
   定义体: ⟨⊤, by simp⟩
   le_top _ := le_top (α := Submodule A W)
   bot := ⟨⊥, by simp⟩
@@ -354,7 +354,7 @@ definition asSubmodule
 
 中文:
 定义 asSubmodule
-  签名: (σ : Subrepresentation ρ)
+  签名: (σ : 子表示 ρ)
   定义体: σ.toSubmodule
   smul_mem' c v hv := by
     induction c using MonoidAlgebra.induction_linear with
@@ -388,7 +388,7 @@ lemma mem_asSubmodule_iff
 
 中文:
 引理 mem_asSubmodule_iff
-  条件: {σ : Subrepresentation ρ} {v : W}
+  条件: {σ : 子表示 ρ} {v : W}
   结论: v in asSubmodule σ ↔ v in σ
   证明: by rfl
 -/
@@ -410,7 +410,7 @@ definition asSubmodule'
 
 中文:
 定义 asSubmodule'
-  签名: (σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M))
+  签名: (σ : 子表示 (Representation.ofModule (k := A) (G := G) M))
   定义体: σ.toSubmodule
   smul_mem' c m hm := by
     induction c using MonoidAlgebra.induction_linear with
@@ -442,7 +442,7 @@ lemma mem_asSubmodule'_iff
 
 中文:
 引理 mem_asSubmodule'_iff
-  结论: {σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)}
+  结论: {σ : 子表示 (Representation.ofModule (k := A) (G := G) M)}
   证明: by rfl
 -/
 lemma mem_asSubmodule'_iff {σ : Subrepresentation (Representation.ofModule (k := A) (G := G) M)}
@@ -464,7 +464,7 @@ definition ofSubmodule
 
 中文:
 定义 ofSubmodule
-  签名: (N : Submodule A[G] M)
+  签名: (N : 子模 A[G] M)
   定义体: { N with
     smul_mem' a m hm := N.smul_mem' (algebraMap A A[G] a) hm }
   apply_mem_toSubmodule g v hv := by
@@ -493,7 +493,7 @@ lemma mem_ofSubmodule_iff
 
 中文:
 引理 mem_ofSubmodule_iff
-  条件: {N : Submodule A[G] M} {m : M}
+  条件: {N : 子模 A[G] M} {m : M}
   结论: m in ofSubmodule N ↔ m in N
   证明: by rfl
 -/
@@ -516,7 +516,7 @@ definition ofSubmodule'
 
 中文:
 定义 ofSubmodule'
-  签名: (N : Submodule A[G] ρ.asModule)
+  签名: (N : 子模 A[G] ρ.asModule)
   定义体: { N with
     smul_mem' a w hw := by simpa using! (N.smul_mem (algebraMap A A[G] a) hw) }
   apply_mem_toSubmodule g w hw := by
@@ -547,7 +547,7 @@ lemma mem_ofSubmodule'_iff
 
 中文:
 引理 mem_ofSubmodule'_iff
-  条件: {N : Submodule A[G] ρ.asModule} {w : W}
+  条件: {N : 子模 A[G] ρ.asModule} {w : W}
   结论: w in ofSubmodule' N ↔ w in N
   证明: .rfl
 -/
@@ -571,7 +571,7 @@ definition subrepresentationSubmoduleOrderIso
 
 中文:
 定义 subrepresentationSubmoduleOrderIso
-  签名: : Subrepresentation ρ ≃o Submodule A[G] ρ.asModule where
+  签名: : 子表示 ρ ≃o 子模 A[G] ρ.asModule where
   定义体: asSubmodule
   invFun := ofSubmodule'
   left_inv σ := rfl
@@ -604,7 +604,7 @@ definition submoduleSubrepresentationOrderIso
 
 中文:
 定义 submoduleSubrepresentationOrderIso
-  签名: : Submodule A[G] M ≃o
+  签名: : 子模 A[G] M ≃o
   定义体: ofSubmodule
   invFun := asSubmodule'
   left_inv N := rfl

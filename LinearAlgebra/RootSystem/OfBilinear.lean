@@ -45,10 +45,10 @@ structure IsReflective
     - dvd_two_mul : forall y, B x x ∣ 2 * B x y
 
 中文:
-结构 IsReflective
+结构 是反射
   参数: (B : M ->ₗ[R] M ->ₗ[R] R) (x : M)
   公理与运算 (2 个):
-    - regular : IsRegular (B x x)
+    - regular : 是正则 (B x x)
     - dvd_two_mul : 对任意 y, B x x ∣ 2 * B x y
 -/
 structure IsReflective (B : M ->ₗ[R] M ->ₗ[R] R) (x : M) : Prop where
@@ -70,7 +70,7 @@ lemma of_dvd_two
 
 中文:
 引理 of_dvd_two
-  条件: [IsCancelMulZero R] [NeZero (2 : R)] (hx : B x x ∣ 2)
+  条件: [是乘零消去 R] [NeZero (2 : R)] (hx : B x x ∣ 2)
   证明: .of_ne_zero fun contra => by simp [contra, two_ne_zero (α := R)] at hx
   dvd_two_mul y := hx.mul_right (B x y)
 
@@ -212,7 +212,7 @@ lemma isOrthogonal_reflection
 
 中文:
 引理 isOrthogonal_reflection
-  条件: (hSB : LinearMap.IsSymm B)
+  条件: (hSB : 线性映射.是Symm B)
   证明: by
   intro y z
   simp only [reflection_apply, map_sub, map_smul, sub_apply,
@@ -251,7 +251,7 @@ lemma reflective_reflection
 
 中文:
 引理 reflective_reflection
-  结论: (hSB : LinearMap.IsSymm B) {y : M}
+  结论: (hSB : 线性映射.是Symm B) {y : M}
   证明: by
   constructor
   · rw [isOrthogonal_reflection B hx hSB]
@@ -303,7 +303,7 @@ definition ofBilinear
 
 中文:
 定义 ofBilinear
-  签名: [IsReflexive R M] (B : M ->ₗ[R] M ->ₗ[R] R) (hNB : LinearMap.Nondegenerate B)
+  签名: [是自反 R M] (B : M ->ₗ[R] M ->ₗ[R] R) (hNB : 线性映射.非退化 B)
   定义体: Dual.eval R M
   root := Embedding.subtype fun x => IsReflective B x
   coroot :=

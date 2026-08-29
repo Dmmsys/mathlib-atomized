@@ -55,9 +55,9 @@ class TotalComplexShape
     - π : I₁ × I₂ -> I₁₂
     - ε₁ : I₁ × I₂ -> 整数ˣ
     - ε₂ : I₁ × I₂ -> 整数ˣ
-    - rel₁({i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂)) : c₁₂.Rel (π ⟨i₁, i₂⟩) (π ⟨i₁', i₂⟩)
-    - rel₂((i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂')) : c₁₂.Rel (π ⟨i₁, i₂⟩) (π ⟨i₁, i₂'⟩)
-    - ε₂_ε₁({i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.Rel i₁ i₁') (h₂ : c₂.Rel i₂ i₂')) : ε₂ ⟨i₁, i₂⟩ * ε₁ ⟨i₁, i₂'⟩ = - ε₁ ⟨i₁, i₂⟩ * ε₂ ⟨i₁', i₂⟩
+    - rel₁({i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂)) : c₁₂.关系 (π ⟨i₁, i₂⟩) (π ⟨i₁', i₂⟩)
+    - rel₂((i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂')) : c₁₂.关系 (π ⟨i₁, i₂⟩) (π ⟨i₁, i₂'⟩)
+    - ε₂_ε₁({i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.关系 i₁ i₁') (h₂ : c₂.关系 i₂ i₂')) : ε₂ ⟨i₁, i₂⟩ * ε₁ ⟨i₁, i₂'⟩ = - ε₁ ⟨i₁, i₂⟩ * ε₂ ⟨i₁', i₂⟩
 -/
 class TotalComplexShape where
   /-- a map on indices -/
@@ -138,7 +138,7 @@ lemma rel_π₁
 
 中文:
 引理 rel_π₁
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂)
   证明: TotalComplexShape.rel₁ h i₂
 
 Depends on / 依赖: TotalComplexShape, TotalComplexShape.rel
@@ -157,7 +157,7 @@ lemma next_π₁
 
 中文:
 引理 next_π₁
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂)
   证明: c₁₂.next_eq' (rel_π₁ c₂ c₁₂ h i₂)
 
 Depends on / 依赖: next_eq
@@ -176,7 +176,7 @@ lemma prev_π₁
 
 中文:
 引理 prev_π₁
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂)
   证明: c₁₂.prev_eq' (rel_π₁ c₂ c₁₂ h i₂)
 
 Depends on / 依赖: prev_eq
@@ -197,7 +197,7 @@ lemma rel_π₂
 
 中文:
 引理 rel_π₂
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂')
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂')
   证明: TotalComplexShape.rel₂ i₁ h
 
 Depends on / 依赖: TotalComplexShape, TotalComplexShape.rel
@@ -216,7 +216,7 @@ lemma next_π₂
 
 中文:
 引理 next_π₂
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂')
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂')
   证明: c₁₂.next_eq' (rel_π₂ c₁ c₁₂ i₁ h)
 
 Depends on / 依赖: next_eq
@@ -235,7 +235,7 @@ lemma prev_π₂
 
 中文:
 引理 prev_π₂
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂')
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂')
   证明: c₁₂.prev_eq' (rel_π₂ c₁ c₁₂ i₁ h)
 
 Depends on / 依赖: prev_eq
@@ -256,7 +256,7 @@ lemma ε₂_ε₁
 
 中文:
 引理 ε₂_ε₁
-  条件: {i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.Rel i₁ i₁') (h₂ : c₂.Rel i₂ i₂')
+  条件: {i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.关系 i₁ i₁') (h₂ : c₂.关系 i₂ i₂')
   证明: TotalComplexShape.ε₂_ε₁ h₁ h₂
 
 Depends on / 依赖: TotalComplexShape
@@ -281,7 +281,7 @@ lemma ε₁_ε₂
 
 中文:
 引理 ε₁_ε₂
-  条件: {i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.Rel i₁ i₁') (h₂ : c₂.Rel i₂ i₂')
+  条件: {i₁ i₁' : I₁} {i₂ i₂' : I₂} (h₁ : c₁.关系 i₁ i₁') (h₂ : c₂.关系 i₂ i₂')
   证明: Eq.trans (mul_one _).symm (by
     rw [← Int.units_mul_self (ComplexShape.ε₁ c₁ c₂ c₁₂ (i₁]; rw [i₂'))]; rw [mul_assoc]
     conv_lhs =>
@@ -318,13 +318,13 @@ class TensorSigns
     - ε'_succ((p q : I) (hpq : c.Rel p q)) : ε' q = - ε' p
 
 中文:
-类 TensorSigns
+类 张量符号
   参数: where
   公理与运算 (4 个):
     - ε' : Multiplicative I ->* 整数ˣ
-    - rel_add((p q r : I) (hpq : c.Rel p q)) : c.Rel (p + r) (q + r)
-    - add_rel((p q r : I) (hpq : c.Rel p q)) : c.Rel (r + p) (r + q)
-    - ε'_succ((p q : I) (hpq : c.Rel p q)) : ε' q = - ε' p
+    - rel_add((p q r : I) (hpq : c.关系 p q)) : c.关系 (p + r) (q + r)
+    - add_rel((p q r : I) (hpq : c.关系 p q)) : c.关系 (r + p) (r + q)
+    - ε'_succ((p q : I) (hpq : c.关系 p q)) : ε' q = - ε' p
 -/
 class TensorSigns where
   /-- the signs which appear in the vertical differential of the total complex -/
@@ -363,8 +363,8 @@ lemma rel_add
 
 中文:
 引理 rel_add
-  条件: {p q : I} (hpq : c.Rel p q) (r : I)
-  结论: c.Rel (p + r) (q + r)
+  条件: {p q : I} (hpq : c.关系 p q) (r : I)
+  结论: c.关系 (p + r) (q + r)
   证明: TensorSigns.rel_add _ _ _ hpq
 
 Depends on / 依赖: TensorSigns, TensorSigns.rel_add, rel_add
@@ -385,8 +385,8 @@ lemma add_rel
 
 中文:
 引理 add_rel
-  条件: (r : I) {p q : I} (hpq : c.Rel p q)
-  结论: c.Rel (r + p) (r + q)
+  条件: (r : I) {p q : I} (hpq : c.关系 p q)
+  结论: c.关系 (r + p) (r + q)
   证明: TensorSigns.add_rel _ _ _ hpq
 
 @[simp]
@@ -428,7 +428,7 @@ lemma ε_succ
 
 中文:
 引理 ε_succ
-  条件: {p q : I} (hpq : c.Rel p q)
+  条件: {p q : I} (hpq : c.关系 p q)
   结论: c.ε q = - c.ε p
   证明: TensorSigns.ε'_succ p q hpq
 
@@ -469,7 +469,7 @@ lemma next_add
 
 中文:
 引理 next_add
-  条件: (p q : I) (hp : c.Rel p (c.next p))
+  条件: (p q : I) (hp : c.关系 p (c.next p))
   证明: c.next_eq' (c.rel_add hp q)
 
 Depends on / 依赖: c.next_eq, c.rel_add, next_eq, rel_add
@@ -490,7 +490,7 @@ lemma next_add'
 
 中文:
 引理 next_add'
-  条件: (p q : I) (hq : c.Rel q (c.next q))
+  条件: (p q : I) (hq : c.关系 q (c.next q))
   证明: c.next_eq' (c.add_rel p hq)
 
 @[simps]
@@ -559,7 +559,7 @@ instance :
 
 中文:
 实例 :
-  签名: TensorSigns (ComplexShape.down 自然数)
+  签名: 张量符号 (余mplexShape.down 自然数)
   定义体: MonoidHom.mk' (fun (i : Nat) => (-1 : Intˣ) ^ i) (pow_add (-1 : Intˣ))
   rel_add p q r (hpq : q + 1 = p) := by dsimp; lia
   add_rel p q r (hpq : q + 1 = p) := by dsimp; lia
@@ -592,9 +592,9 @@ lemma ε_down_Nat
   proof: rfl
 
 中文:
-引理 ε_down_Nat
+引理 ε_down_自然数
   条件: (n : 自然数)
-  结论: (ComplexShape.down 自然数).ε n = (-1 : 整数ˣ) ^ n
+  结论: (余mplexShape.down 自然数).ε n = (-1 : 整数ˣ) ^ n
   证明: rfl
 
 Depends on / 依赖: infer_instance, isLE_Q_obj_iff
@@ -621,7 +621,7 @@ instance :
 
 中文:
 实例 :
-  签名: TensorSigns (ComplexShape.up 整数)
+  签名: 张量符号 (余mplexShape.up 整数)
   定义体: MonoidHom.mk' Int.negOnePow Int.negOnePow_add
   rel_add p q r (hpq : p + 1 = q) := by dsimp; lia
   add_rel p q r (hpq : p + 1 = q) := by dsimp; lia
@@ -654,9 +654,9 @@ lemma ε_up_Int
   proof: rfl
 
 中文:
-引理 ε_up_Int
+引理 ε_up_整数
   条件: (n : 整数)
-  结论: (ComplexShape.up 整数).ε n = n.negOnePow
+  结论: (余mplexShape.up 整数).ε n = n.negOnePow
   证明: rfl
 
 Depends on / 依赖: Functor, Functor.comp_obj, TStructure, TStructure.t.isLE_of_iso, comp_obj, e.symm, isLE_of_iso, singleFunctorIsoCompQ
@@ -683,7 +683,7 @@ class Associative
     - ε₂_eq_mul((i₁ : I₁) (i₂ : I₂) (i₃ : I₃)) : ε₂ c₁₂ c₃ c (π c₁ c₂ c₁₂ (i₁, i₂), i₃) = (ε₂ c₁ c₂₃ c (i₁, π c₂ c₃ c₂₃ (i₂, i₃)) * ε₂ c₂ c₃ c₂₃ (i₂, i₃))
 
 中文:
-类 Associative
+类 结合
   参数: : 命题 where
   公理与运算 (4 个):
     - assoc((i₁ : I₁) (i₂ : I₂) (i₃ : I₃)) : π c₁₂ c₃ c ⟨π c₁ c₂ c₁₂ ⟨i₁, i₂⟩, i₃⟩ = π c₁ c₂₃ c ⟨i₁, π c₂ c₃ c₂₃ ⟨i₂, i₃⟩⟩
@@ -931,10 +931,10 @@ class TotalComplexShapeSymmetry
 类 TotalComplexShapeSymmetry
   参数: [TotalComplexShape c₁ c₂ c₁₂] [TotalComplexShape c₂ c₁ c₁₂]
   公理与运算 (4 个):
-    - symm((i₁ : I₁) (i₂ : I₂)) : ComplexShape.π c₂ c₁ c₁₂ ⟨i₂, i₁⟩ = ComplexShape.π c₁ c₂ c₁₂ ⟨i₁, i₂⟩
+    - symm((i₁ : I₁) (i₂ : I₂)) : 余mplexShape.π c₂ c₁ c₁₂ ⟨i₂, i₁⟩ = 余mplexShape.π c₁ c₂ c₁₂ ⟨i₁, i₂⟩
     - σ((i₁ : I₁) (i₂ : I₂)) : 整数ˣ
-    - σ_ε₁({i₁ i₁' : I₁} (h₁ : c₁.Rel i₁ i₁') (i₂ : I₂)) : σ i₁ i₂ * ComplexShape.ε₁ c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = ComplexShape.ε₂ c₂ c₁ c₁₂ ⟨i₂, i₁⟩ * σ i₁' i₂
-    - σ_ε₂((i₁ : I₁) {i₂ i₂' : I₂} (h₂ : c₂.Rel i₂ i₂')) : σ i₁ i₂ * ComplexShape.ε₂ c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = ComplexShape.ε₁ c₂ c₁ c₁₂ ⟨i₂, i₁⟩ * σ i₁ i₂'
+    - σ_ε₁({i₁ i₁' : I₁} (h₁ : c₁.关系 i₁ i₁') (i₂ : I₂)) : σ i₁ i₂ * 余mplexShape.ε₁ c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = 余mplexShape.ε₂ c₂ c₁ c₁₂ ⟨i₂, i₁⟩ * σ i₁' i₂
+    - σ_ε₂((i₁ : I₁) {i₂ i₂' : I₂} (h₂ : c₂.关系 i₂ i₂')) : σ i₁ i₂ * 余mplexShape.ε₂ c₁ c₂ c₁₂ ⟨i₁, i₂⟩ = 余mplexShape.ε₁ c₂ c₁ c₁₂ ⟨i₂, i₁⟩ * σ i₁ i₂'
 -/
 class TotalComplexShapeSymmetry [TotalComplexShape c₁ c₂ c₁₂] [TotalComplexShape c₂ c₁ c₁₂] where
   symm (i₁ : I₁) (i₂ : I₂) : ComplexShape.π c₂ c₁ c₁₂ ⟨i₂, i₁⟩ = ComplexShape.π c₁ c₂ c₁₂ ⟨i₁, i₂⟩
@@ -1061,7 +1061,7 @@ lemma σ_ε₁
 
 中文:
 引理 σ_ε₁
-  条件: {i₁ i₁' : I₁} (h₁ : c₁.Rel i₁ i₁') (i₂ : I₂)
+  条件: {i₁ i₁' : I₁} (h₁ : c₁.关系 i₁ i₁') (i₂ : I₂)
   证明: TotalComplexShapeSymmetry.σ_ε₁ h₁ i₂
 
 Depends on / 依赖: TotalComplexShapeSymmetry
@@ -1082,7 +1082,7 @@ lemma σ_ε₂
 
 中文:
 引理 σ_ε₂
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h₂ : c₂.Rel i₂ i₂')
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h₂ : c₂.关系 i₂ i₂')
   证明: TotalComplexShapeSymmetry.σ_ε₂ i₁ h₂
 
 Depends on / 依赖: TotalComplexShapeSymmetry
@@ -1195,7 +1195,7 @@ class TotalComplexShapeSymmetrySymmetry
 类 TotalComplexShapeSymmetrySymmetry
   参数: [TotalComplexShape c₁ c₂ c₁₂]
   公理与运算 (1 个):
-    - σ_symm(i₁ i₂) : ComplexShape.σ c₂ c₁ c₁₂ i₂ i₁ = ComplexShape.σ c₁ c₂ c₁₂ i₁ i₂
+    - σ_symm(i₁ i₂) : 余mplexShape.σ c₂ c₁ c₁₂ i₂ i₁ = 余mplexShape.σ c₁ c₂ c₁₂ i₁ i₂
 -/
 class TotalComplexShapeSymmetrySymmetry [TotalComplexShape c₁ c₂ c₁₂]
     [TotalComplexShape c₂ c₁ c₁₂] [TotalComplexShapeSymmetry c₁ c₂ c₁₂]

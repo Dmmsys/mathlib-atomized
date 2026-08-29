@@ -39,7 +39,7 @@ definition Pairwise
   body: forall ⦃i j⦄, i != j -> r i j
 
 中文:
-定义 Pairwise
+定义 两两
   签名: (r : α -> α -> 命题)
   定义体: forall ⦃i j⦄, i != j -> r i j
 -/
@@ -56,9 +56,9 @@ theorem Pairwise.mono
   proof: fun _i _j hij => h hr hij
 
 中文:
-定理 Pairwise.mono
-  条件: (hr : Pairwise r) (h : 对任意 ⦃i j⦄, r i j -> p i j)
-  结论: Pairwise p
+定理 两两.mono
+  条件: (hr : 两两 r) (h : 对任意 ⦃i j⦄, r i j -> p i j)
+  结论: 两两 p
   证明: fun _i _j hij => h hr hij
 -/
 theorem Pairwise.mono (hr : Pairwise r) (h : forall ⦃i j⦄, r i j -> p i j) : Pairwise p :=
@@ -76,8 +76,8 @@ theorem Pairwise.eq
 @[simp]
 
 中文:
-定理 Pairwise.eq
-  条件: (h : Pairwise r)
+定理 两两.eq
+  条件: (h : 两两 r)
   结论: ¬r a b -> a = b
   证明: not_imp_comm.1 @h _ _
 
@@ -97,9 +97,9 @@ lemma Subsingleton.pairwise
   proof: fun _ _ h => False.elim h.elim Subsingleton.elim _ _
 
 中文:
-引理 Subsingleton.pairwise
-  条件: [Subsingleton α]
-  结论: Pairwise r
+引理 子单例.pairwise
+  条件: [子单例 α]
+  结论: 两两 r
   证明: fun _ _ h => False.elim h.elim Subsingleton.elim _ _
 -/
 protected lemma Subsingleton.pairwise [Subsingleton α] : Pairwise r :=
@@ -116,8 +116,8 @@ theorem Function.injective_iff_pairwise_ne
 alias ⟨Function.Injective.pairwise_ne, _⟩ := Function.injective_iff_pairwise_ne
 
 中文:
-定理 Function.injective_iff_pairwise_ne
-  结论: Injective f ↔ Pairwise ((· != ·) on f)
+定理 函数.injective_iff_pairwise_ne
+  结论: 单射 f ↔ 两两 ((· != ·) on f)
   证明: forall₂_congr fun _i _j => not_imp_not.symm
 
 alias ⟨Function.Injective.pairwise_ne, _⟩ := Function.injective_iff_pairwise_ne
@@ -138,8 +138,8 @@ lemma Pairwise.comp_of_injective
   proof: fun _ _ h => hr hf.ne h
 
 中文:
-引理 Pairwise.comp_of_injective
-  条件: (hr : Pairwise r) {f : β -> α} (hf : Injective f)
+引理 两两.comp_of_injective
+  条件: (hr : 两两 r) {f : β -> α} (hf : 单射 f)
   证明: fun _ _ h => hr hf.ne h
 
 Depends on / 依赖: hf.ne
@@ -157,8 +157,8 @@ lemma Pairwise.of_comp_of_surjective
   proof: hf.forall₂.2 fun _ _ h => hr ne_of_apply_ne f h
 
 中文:
-引理 Pairwise.of_comp_of_surjective
-  条件: {f : β -> α} (hr : Pairwise (r on f)) (hf : Surjective f)
+引理 两两.of_comp_of_surjective
+  条件: {f : β -> α} (hr : 两两 (r on f)) (hf : 满射 f)
   证明: hf.forall₂.2 fun _ _ h => hr ne_of_apply_ne f h
 
 Depends on / 依赖: hf.forall, ne_of_apply_ne
@@ -175,8 +175,8 @@ lemma Function.Bijective.pairwise_comp_iff
   proof: ⟨fun hr => hr.of_comp_of_surjective hf.surjective, fun hr => hr.comp_of_injective hf.injective⟩
 
 中文:
-引理 Function.Bijective.pairwise_comp_iff
-  条件: {f : β -> α} (hf : Bijective f)
+引理 函数.双射.pairwise_comp_iff
+  条件: {f : β -> α} (hf : 双射 f)
   证明: ⟨fun hr => hr.of_comp_of_surjective hf.surjective, fun hr => hr.comp_of_injective hf.injective⟩
 
 Depends on / 依赖: comp_of_injective, hf.injective, hf.surjective, hr.comp_of_injective, hr.of_comp_of_surjective, injective, of_comp_of_surjective, surjective
@@ -202,7 +202,7 @@ fun _i _j hij => h Fin.succ_inj.not.2 hij⟩
 
 中文:
 定理 pairwise_fin_succ_iff
-  条件: {n : 自然数} {R : Fin n.succ -> Fin n.succ -> 命题}
+  条件: {n : 自然数} {R : 有限集 n.succ -> 有限集 n.succ -> 命题}
   证明: ⟨
     fun _ => h (Fin.succ_ne_zero _), fun _ => h (Fin.succ_ne_zero _).symm,
 fun _i _j hij => h Fin.succ_inj.not.2 hij⟩
@@ -236,7 +236,7 @@ theorem pairwise_fin_succ_iff_of_isSymm
 
 中文:
 定理 pairwise_fin_succ_iff_of_isSymm
-  条件: {n : 自然数} {R : Fin n.succ -> Fin n.succ -> 命题} [Std.Symm R]
+  条件: {n : 自然数} {R : 有限集 n.succ -> 有限集 n.succ -> 命题} [Std.Symm R]
   证明: by
   simp only [pairwise_fin_succ_iff, comm (b := 0) (r := R), and_self_left]
 
@@ -257,8 +257,8 @@ definition Pairwise
   body: forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> x != y -> r x y
 
 中文:
-定义 Pairwise
-  签名: (s : Set α) (r : α -> α -> 命题)
+定义 两两
+  签名: (s : 集合 α) (r : α -> α -> 命题)
   定义体: forall ⦃x⦄, x in s -> forall ⦃y⦄, y in s -> x != y -> r x y
 -/
 protected def Pairwise (s : Set α) (r : α -> α -> Prop) :=
@@ -274,9 +274,9 @@ theorem pairwise_of_forall
   proof: fun a _ b _ _ => h a b
 
 中文:
-定理 pairwise_of_forall
-  条件: (s : Set α) (r : α -> α -> 命题) (h : 对任意 a b, r a b)
-  结论: s.Pairwise r
+定理 pairwise_of_对任意
+  条件: (s : 集合 α) (r : α -> α -> 命题) (h : 对任意 a b, r a b)
+  结论: s.两两 r
   证明: fun a _ b _ _ => h a b
 -/
 theorem pairwise_of_forall (s : Set α) (r : α -> α -> Prop) (h : forall a b, r a b) : s.Pairwise r :=
@@ -291,8 +291,8 @@ theorem Pairwise.imp_on
   proof: fun _a ha _b hb hab => hrp ha hb hab h ha hb hab
 
 中文:
-定理 Pairwise.imp_on
-  条件: (h : s.Pairwise r) (hrp : s.Pairwise fun ⦃a b : α⦄ => r a b -> p a b)
+定理 两两.imp_on
+  条件: (h : s.两两 r) (hrp : s.两两 fun ⦃a b : α⦄ => r a b -> p a b)
   证明: fun _a ha _b hb hab => hrp ha hb hab h ha hb hab
 -/
 theorem Pairwise.imp_on (h : s.Pairwise r) (hrp : s.Pairwise fun ⦃a b : α⦄ => r a b -> p a b) :
@@ -309,9 +309,9 @@ theorem Pairwise.imp
   proof: h.imp_on pairwise_of_forall s _ hpq
 
 中文:
-定理 Pairwise.imp
-  条件: (h : s.Pairwise r) (hpq : 对任意 ⦃a b : α⦄, r a b -> p a b)
-  结论: s.Pairwise p
+定理 两两.imp
+  条件: (h : s.两两 r) (hpq : 对任意 ⦃a b : α⦄, r a b -> p a b)
+  结论: s.两两 p
   证明: h.imp_on pairwise_of_forall s _ hpq
 
 Depends on / 依赖: h.imp_on, imp_on, pairwise_of_forall
@@ -329,8 +329,8 @@ theorem Pairwise.eq
   proof: of_not_not fun hab => h hs ha hb hab
 
 中文:
-定理 Pairwise.eq
-  条件: (hs : s.Pairwise r) (ha : a in s) (hb : b in s) (h : ¬r a b)
+定理 两两.eq
+  条件: (hs : s.两两 r) (ha : a in s) (hb : b in s) (h : ¬r a b)
   结论: a = b
   证明: of_not_not fun hab => h hs ha hb hab
 -/
@@ -377,8 +377,8 @@ theorem Pairwise.on_injective
   proof: fun i j hij => hs (hfs i) (hfs j) (hf.ne hij)
 
 中文:
-定理 Pairwise.on_injective
-  条件: (hs : s.Pairwise r) (hf : Function.Injective f) (hfs : 对任意 x, f x in s)
+定理 两两.on_injective
+  条件: (hs : s.两两 r) (hf : 函数.单射 f) (hfs : 对任意 x, f x in s)
   证明: fun i j hij => hs (hfs i) (hfs j) (hf.ne hij)
 
 Depends on / 依赖: hf.ne
@@ -398,9 +398,9 @@ theorem Pairwise.set_pairwise
   proof: fun _ _ _ _ w => h w
 
 中文:
-定理 Pairwise.set_pairwise
-  条件: (h : Pairwise r) (s : Set α)
-  结论: s.Pairwise r
+定理 两两.set_pairwise
+  条件: (h : 两两 r) (s : 集合 α)
+  结论: s.两两 r
   证明: fun _ _ _ _ w => h w
 -/
 theorem Pairwise.set_pairwise (h : Pairwise r) (s : Set α) : s.Pairwise r := fun _ _ _ _ w => h w

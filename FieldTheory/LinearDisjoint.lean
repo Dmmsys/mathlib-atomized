@@ -263,7 +263,7 @@ theorem LinearDisjoint.symm'
 
 中文:
 定理 LinearDisjoint.symm'
-  条件: (H : (IsScalarTower.toAlgHom F L E).fieldRange.LinearDisjoint L')
+  条件: (H : (标量塔.toAlgHom F L E).fieldRange.LinearDisjoint L')
   证明: Subalgebra.LinearDisjoint.symm H
 
 Depends on / 依赖: LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.symm
@@ -304,7 +304,7 @@ theorem map
 
 中文:
 定理 map
-  结论: (H : A.LinearDisjoint B) {K : 类型} [Field K] [Algebra F K]
+  结论: (H : A.LinearDisjoint B) {K : 类型} [域 K] [代数 F K]
   证明: linearDisjoint_iff'.2 ((linearDisjoint_iff'.1 H).map f f.injective)
 
 Depends on / 依赖: f.injective, injective, linearDisjoint_iff
@@ -328,7 +328,7 @@ theorem map'
 
 中文:
 定理 map'
-  结论: (H : A.LinearDisjoint L) (K : 类型) [Field K] [Algebra F K] [Algebra L K]
+  结论: (H : A.LinearDisjoint L) (K : 类型) [域 K] [代数 F K] [代数 L K]
   证明: by
   rw [linearDisjoint_iff] at H ⊢
   have := H.map (IsScalarTower.toAlgHom F E K) (RingHom.injective _)
@@ -362,7 +362,7 @@ theorem map''
 
 中文:
 定理 map''
-  结论: {L' : 类型} [Field L'] [Algebra F L'] [Algebra L' E] [IsScalarTower F L' E]
+  结论: {L' : 类型} [域 L'] [代数 F L'] [代数 L' E] [标量塔 F L' E]
   证明: by
   rw [linearDisjoint_iff] at H ⊢
   have := H.map (IsScalarTower.toAlgHom F E K) (RingHom.injective _)
@@ -413,7 +413,7 @@ theorem bot_right
 
 中文:
 定理 bot_right
-  结论: A.LinearDisjoint (⊥ : 整数ermediateField F E)
+  结论: A.LinearDisjoint (⊥ : 中间域 F E)
   证明: linearDisjoint_iff'.2 (Subalgebra.LinearDisjoint.bot_right _)
 
 Depends on / 依赖: LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.bot_right, bot_right, linearDisjoint_iff
@@ -432,7 +432,7 @@ theorem bot_left
 
 中文:
 定理 bot_left
-  结论: (⊥ : 整数ermediateField F E).LinearDisjoint L
+  结论: (⊥ : 中间域 F E).LinearDisjoint L
   证明: Subalgebra.LinearDisjoint.bot_left _
 
 Depends on / 依赖: LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.bot_left, bot_left
@@ -477,7 +477,7 @@ theorem of_basis_left
 
 中文:
 定理 of_basis_left
-  结论: {ι : 类型} (a : Basis ι F A)
+  结论: {ι : 类型} (a : 基 ι F A)
   证明: Subalgebra.LinearDisjoint.of_basis_left _ _ a H.map_of_surjective_injective
     (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)) (AddMonoidHom.id E)
     (AlgEquiv.surjective _) (by simp) (fun _ _ => by simp_rw [Algebra.smul_def]; rfl)
@@ -649,7 +649,7 @@ theorem of_basis_right
 
 中文:
 定理 of_basis_right
-  结论: {ι : 类型} (b : Basis ι F B)
+  结论: {ι : 类型} (b : 基 ι F B)
   证明: linearDisjoint_iff'.2 (.of_basis_right _ _ b H)
 
 Depends on / 依赖: linearDisjoint_iff, of_basis_right
@@ -693,7 +693,7 @@ theorem of_basis_right'
 
 中文:
 定理 of_basis_right'
-  结论: {ι : 类型} (b : Basis ι F L)
+  结论: {ι : 类型} (b : 基 ι F L)
   证明: Subalgebra.LinearDisjoint.of_basis_right _ _
     (b.map (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv) H
 
@@ -759,7 +759,7 @@ theorem of_basis_mul
 
 中文:
 定理 of_basis_mul
-  结论: {κ ι : 类型} (a : Basis κ F A) (b : Basis ι F B)
+  结论: {κ ι : 类型} (a : 基 κ F A) (b : 基 ι F B)
   证明: linearDisjoint_iff'.2 (.of_basis_mul _ _ a b H)
 
 Depends on / 依赖: linearDisjoint_iff, of_basis_mul
@@ -779,7 +779,7 @@ theorem of_basis_mul'
 
 中文:
 定理 of_basis_mul'
-  结论: {κ ι : 类型} (a : Basis κ F A) (b : Basis ι F L)
+  结论: {κ ι : 类型} (a : 基 κ F A) (b : 基 ι F L)
   证明: Subalgebra.LinearDisjoint.of_basis_mul _ _ a
     (b.map (AlgEquiv.ofInjectiveField (IsScalarTower.toAlgHom F L E)).toLinearEquiv) H
 
@@ -801,7 +801,7 @@ theorem of_le_left
 
 中文:
 定理 of_le_left
-  结论: {A' : 整数ermediateField F E} (H : A.LinearDisjoint L)
+  结论: {A' : 中间域 F E} (H : A.LinearDisjoint L)
   证明: Subalgebra.LinearDisjoint.of_le_left_of_flat H h
 
 Depends on / 依赖: LinearDisjoint, Subalgebra, Subalgebra.LinearDisjoint.of_le_left_of_flat, of_le_left_of_flat
@@ -820,7 +820,7 @@ theorem of_le_right
 
 中文:
 定理 of_le_right
-  结论: {B' : 整数ermediateField F E} (H : A.LinearDisjoint B)
+  结论: {B' : 中间域 F E} (H : A.LinearDisjoint B)
   证明: linearDisjoint_iff'.2 ((linearDisjoint_iff'.1 H).of_le_right_of_flat h)
 
 Depends on / 依赖: linearDisjoint_iff, of_le_right_of_flat
@@ -842,7 +842,7 @@ theorem of_le_right'
 
 中文:
 定理 of_le_right'
-  结论: (H : A.LinearDisjoint L) (L' : 类型) [Field L']
+  结论: (H : A.LinearDisjoint L) (L' : 类型) [域 L']
   证明: by
   refine Subalgebra.LinearDisjoint.of_le_right_of_flat H ?_
   convert! AlgHom.range_comp_le_range (IsScalarTower.toAlgHom F L' L) (IsScalarTower.toAlgHom F L E)
@@ -867,7 +867,7 @@ theorem of_le
 
 中文:
 定理 of_le
-  结论: {A' B' : 整数ermediateField F E} (H : A.LinearDisjoint B)
+  结论: {A' B' : 中间域 F E} (H : A.LinearDisjoint B)
   证明: .of_le_right hB H.of_le_left hA
 
 Depends on / 依赖: H.of_le_left, of_le_left, of_le_right
@@ -886,7 +886,7 @@ theorem of_le'
 
 中文:
 定理 of_le'
-  结论: {A' : 整数ermediateField F E} (H : A.LinearDisjoint L)
+  结论: {A' : 中间域 F E} (H : A.LinearDisjoint L)
   证明: .of_le_right' L' H.of_le_left hA
 
 Depends on / 依赖: H.of_le_left, of_le_left, of_le_right
@@ -995,7 +995,7 @@ theorem of_finrank_sup
 
 中文:
 定理 of_finrank_sup
-  结论: [FiniteDimensional F A] [FiniteDimensional F B]
+  结论: [有限维 F A] [有限维 F B]
   证明: linearDisjoint_iff'.2 .of_finrank_sup_of_free (by rwa [← sup_toSubalgebra_of_left])
 
 Depends on / 依赖: linearDisjoint_iff, of_finrank_sup_of_free, sup_toSubalgebra_of_left
@@ -1016,7 +1016,7 @@ theorem finrank_left_eq_finrank
 
 中文:
 定理 finrank_left_eq_finrank
-  条件: [Module.Finite F A] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
+  条件: [模.有限 F A] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
   证明: by
   have := h₁.finrank_sup
   rwa [h₂, finrank_top', ← finrank_mul_finrank F A E, mul_right_inj' finrank_pos.ne'] at this
@@ -1038,7 +1038,7 @@ theorem finrank_right_eq_finrank
 
 中文:
 定理 finrank_right_eq_finrank
-  条件: [Module.Finite F B] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
+  条件: [模.有限 F B] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
   证明: h₁.symm.finrank_left_eq_finrank (by rwa [sup_comm])
 
 Depends on / 依赖: finrank_left_eq_finrank, sup_comm, symm.finrank_left_eq_finrank
@@ -1063,7 +1063,7 @@ e
 
 中文:
 定理 of_inf_eq_bot_aux
-  结论: [IsGalois F A] [FiniteDimensional F E] (h₁ : A ⊔ B = ⊤)
+  结论: [是Galois F A] [有限维 F E] (h₁ : A ⊔ B = ⊤)
   证明: by
   apply LinearDisjoint.of_finrank_sup
   rw [h₁]; rw [finrank_top']; rw [← Module.finrank_mul_finrank F B E]; rw [mul_comm]; rw [mul_left_inj'
@@ -1098,7 +1098,7 @@ theorem of_inf_eq_bot
 
 中文:
 定理 of_inf_eq_bot
-  结论: [IsGalois F A] [FiniteDimensional F A] [FiniteDimensional F B]
+  结论: [是Galois F A] [有限维 F A] [有限维 F B]
   证明: by
   let C : IntermediateField F E := A ⊔ B
   let A' : IntermediateField F C := A.restrict le_sup_left
@@ -1134,7 +1134,7 @@ theorem iff_inf_eq_bot
 
 中文:
 定理 iff_inf_eq_bot
-  条件: [IsGalois F A] [FiniteDimensional F A] [FiniteDimensional F B]
+  条件: [是Galois F A] [有限维 F A] [有限维 F B]
   证明: ⟨fun h => inf_eq_bot h, fun h => of_inf_eq_bot h⟩
 
 Depends on / 依赖: inf_eq_bot, of_inf_eq_bot
@@ -1561,7 +1561,7 @@ theorem isDomain
 中文:
 定理 isDomain
   条件: (H : A.LinearDisjoint L)
-  结论: IsDomain (A otimes[F] L)
+  结论: 是整环 (A otimes[F] L)
   证明: have : IsDomain (A otimes[F] _) := Subalgebra.LinearDisjoint.isDomain H
   (Algebra.TensorProduct.congr (AlgEquiv.refl : A ≃ₐ[F] A)
     (AlgEquiv.ofInjective (IsScalarTower.toAlgHom F L E) (RingHom.injective _))).toMulEquiv.isDomain
@@ -1585,7 +1585,7 @@ theorem isDomain'
 
 中文:
 定理 isDomain'
-  结论: {A B : 类型} [Field A] [Algebra F A] [Field B] [Algebra F B]
+  结论: {A B : 类型} [域 A] [代数 F A] [域 B] [代数 F B]
   证明: by
   simp_rw [linearDisjoint_iff', AlgHom.fieldRange_toSubalgebra] at H
   exact H.isDomain_of_injective fa.injective fb.injective
@@ -1614,7 +1614,7 @@ theorem of_isField
 
 中文:
 定理 of_isField
-  条件: (H : IsField (A otimes[F] L))
+  条件: (H : 是域 (A otimes[F] L))
   结论: A.LinearDisjoint L
   证明: by
   apply Subalgebra.LinearDisjoint.of_isField
@@ -1651,7 +1651,7 @@ theorem of_isField'
 
 中文:
 定理 of_isField'
-  结论: {A : 类型v} [Field A] {B : Type w} [Field B]
+  结论: {A : 类型v} [域 A] {B : 类型 w} [域 B]
   证明: by
   rw [linearDisjoint_iff']
   apply Subalgebra.LinearDisjoint.of_isField
@@ -1682,8 +1682,8 @@ theorem exists_field_of_isDomain
   ⟨K, inst1, inst2, fa, fb, linearDisjoint_iff'.2 H⟩
 
 中文:
-定理 exists_field_of_isDomain
-  结论: (A : 类型v) [Field A] (B : Type w) [Field B]
+定理 存在_field_of_isDomain
+  结论: (A : 类型v) [域 A] (B : 类型 w) [域 B]
   证明: have ⟨K, inst1, inst2, fa, fb, _, _, H⟩ :=
     Subalgebra.LinearDisjoint.exists_field_of_isDomain_of_injective F A B
       (RingHom.injective _) (RingHom.injective _)
@@ -1716,8 +1716,8 @@ theorem isField_of_forall
   let fa := i.comp (Algebra.Ten
 
 中文:
-定理 isField_of_forall
-  结论: (A : 类型v) [Field A] (B : Type w) [Field B]
+定理 isField_of_对任意
+  结论: (A : 类型v) [域 A] (B : 类型 w) [域 B]
   证明: by
   obtain ⟨M, hM⟩ := Ideal.exists_maximal (A otimes[F] B)
   apply not_imp_not.1 (Ring.ne_bot_of_isMaximal_of_not_isField hM)
@@ -1764,7 +1764,7 @@ theorem _root_.Algebra.TensorProduct.isField_of_isAlgebraic
     Algebra.TensorProduct.congr (AlgEquiv.ofInjective fa hfa) (AlgEquiv
 
 中文:
-定理 _root_.Algebra.TensorProduct.isField_of_isAlgebraic
+定理 _root_.代数.张量积.isField_of_isAlgebraic
   证明: have ⟨L, _, _, fa, fb, hfa, hfb, H⟩ :=
     Subalgebra.LinearDisjoint.exists_field_of_isDomain_of_injective F E K
       (RingHom.injective _) (RingHom.injective _)
@@ -1821,7 +1821,7 @@ theorem isField_of_isAlgebraic'
 
 中文:
 定理 isField_of_isAlgebraic'
-  结论: {A B : 类型} [Field A] [Algebra F A] [Field B] [Algebra F B]
+  结论: {A B : 类型} [域 A] [代数 F A] [域 B] [代数 F B]
   证明: have := H.isDomain'
   Algebra.TensorProduct.isField_of_isAlgebraic F A B halg
 
@@ -1873,7 +1873,7 @@ theorem trace_algebraMap
 
 中文:
 定理 trace_algebraMap
-  结论: [FiniteDimensional F E] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
+  结论: [有限维 F E] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
   证明: by
   rw [linearDisjoint_iff'] at h₁
   refine h₁.trace_algebraMap ?_ x
@@ -1901,7 +1901,7 @@ theorem norm_algebraMap
 
 中文:
 定理 norm_algebraMap
-  结论: [FiniteDimensional F E] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
+  结论: [有限维 F E] (h₁ : A.LinearDisjoint B) (h₂ : A ⊔ B = ⊤)
   证明: by
   rw [linearDisjoint_iff'] at h₁
   refine h₁.norm_algebraMap ?_ x

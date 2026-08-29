@@ -76,7 +76,7 @@ theorem nonempty_sections_of_finite_cofiltered_system.init
 
 中文:
 定理 nonempty_sections_of_finite_cofiltered_system.init
-  结论: {J : 类型u} [SmallCategory J]
+  结论: {J : 类型u} [小范畴 J]
   证明: by
   let F' : J ⥤ TopCat := F ⋙ TopCat.discrete
   have : forall j, DiscreteTopology (F'.obj j) := fun _ => ⟨rfl⟩
@@ -112,7 +112,7 @@ theorem nonempty_sections_of_finite_cofiltered_system
 
 中文:
 定理 nonempty_sections_of_finite_cofiltered_system
-  结论: {J : 类型u} [Category.{w} J]
+  结论: {J : 类型u} [范畴.{w} J]
   证明: by
   -- Step 1: lift everything to the `max u v w` universe.
   let J' : Type max w v u := AsSmall.{max w v} J
@@ -152,7 +152,7 @@ theorem nonempty_sections_of_finite_inverse_system
 
 中文:
 定理 nonempty_sections_of_finite_inverse_system
-  结论: {J : 类型u} [Preorder J] [IsDirectedOrder J]
+  结论: {J : 类型u} [预序 J] [IsDirectedOrder J]
   证明: nonempty_sections_of_finite_cofiltered_system F
 
 Depends on / 依赖: nonempty_sections_of_finite_cofiltered_system
@@ -315,7 +315,7 @@ theorem isMittagLeffler_of_surjective
 
 中文:
 定理 isMittagLeffler_of_surjective
-  条件: (h : 对任意 ⦃i j : J⦄ (f : i ⟶ j), Function.Surjective (F.map f))
+  条件: (h : 对任意 ⦃i j : J⦄ (f : i ⟶ j), 函数.满射 (F.map f))
   证明: fun j => ⟨j, 𝟙 j, fun k g => by rw [map_id, types_id, range_id, (h g).range_eq]⟩
 
 Depends on / 依赖: map_id, range_eq, range_id, types_id
@@ -369,7 +369,7 @@ instance toPreimages_finite
 
 中文:
 实例 toPreimages_finite
-  签名: [对任意 j, Finite (F.obj j)]
+  签名: [对任意 j, 有限 (F.obj j)]
   定义体: fun _ => Subtype.finite
 
 Depends on / 依赖: Subtype, Subtype.finite, finite
@@ -559,7 +559,7 @@ theorem isMittagLeffler_of_exists_finite_range
     (F.ranges_directed j).directedOn_range.is_bot_of_i
 
 中文:
-定理 isMittagLeffler_of_exists_finite_range
+定理 isMittagLeffler_of_存在_finite_range
   证明: by
   intro j
   obtain ⟨i, hi, hf⟩ := h j
@@ -618,7 +618,7 @@ instance toEventualRanges_finite
 
 中文:
 实例 toEventualRanges_finite
-  签名: [对任意 j, Finite (F.obj j)]
+  签名: [对任意 j, 有限 (F.obj j)]
   定义体: fun _ => Subtype.finite
 
 Depends on / 依赖: HasInitial, OrderBot, Subtype, Subtype.finite, finite, hasInitial_of_unique
@@ -687,7 +687,7 @@ theorem toEventualRanges_nonempty
 
 中文:
 定理 toEventualRanges_nonempty
-  条件: (h : F.IsMittagLeffler) [对任意 j : J, Nonempty (F.obj j)] (j : J)
+  条件: (h : F.IsMittagLeffler) [对任意 j : J, 非空 (F.obj j)] (j : J)
   证明: by
   let ⟨i, f, h⟩ := F.isMittagLeffler_iff_eventualRange.1 h j
   rw [toEventualRanges_obj]; rw [h]
@@ -749,7 +749,7 @@ theorem toPreimages_nonempty_of_surjective
 
 中文:
 定理 toPreimages_nonempty_of_surjective
-  结论: [hFn : 对任意 j : J, Nonempty (F.obj j)]
+  结论: [hFn : 对任意 j : J, 非空 (F.obj j)]
   证明: by
   simp only [toPreimages_obj, nonempty_coe_sort, nonempty_iInter, mem_preimage]
   obtain h | ⟨⟨ji⟩⟩ := isEmpty_or_nonempty (j ⟶ i)
@@ -865,7 +865,7 @@ theorem eventually_injective
 
 中文:
 定理 eventually_injective
-  条件: [Nonempty J] [Finite F.sections]
+  条件: [非空 J] [有限 F.sections]
   证明: by
   have : forall j, Fintype (F.obj j) := fun j => Fintype.ofFinite (F.obj j)
   have : Fintype F.sections := Fintype.ofFinite F.sections

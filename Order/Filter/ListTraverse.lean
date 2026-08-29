@@ -33,7 +33,7 @@ theorem sequence_mono
 
 中文:
 定理 sequence_mono
-  结论: 对任意 as bs : List (Filter α), Forall₂ (· <= ·) as bs -> sequence as <= sequence bs
+  结论: 对任意 as bs : 列表 (滤子 α), Forall₂ (· <= ·) as bs -> sequence as <= sequence bs
 -/
 theorem sequence_mono : forall as bs : List (Filter α), Forall₂ (· <= ·) as bs -> sequence as <= sequence bs
   | [], [], Forall₂.nil => le_rfl
@@ -73,7 +73,7 @@ theorem mem_traverse_iff
 
 中文:
 定理 mem_traverse_iff
-  条件: (fs : List β) (t : Set (List α))
+  条件: (fs : 列表 β) (t : 集合 (列表 α))
   证明: by
   constructor
   · induction fs generalizing t with

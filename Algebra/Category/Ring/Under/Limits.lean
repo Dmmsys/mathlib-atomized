@@ -73,7 +73,7 @@ definition piFanIsLimit
 
 中文:
 定义 piFanIsLimit
-  签名: : IsLimit (piFan P)
+  签名: : 是极限 (piFan P)
   定义体: isLimitOfReflects (Under.forget R)
 (isLimitMapConeFanMkEquiv (Under.forget R) P _).symm
       CommRingCat.piFanIsLimit (fun i => (P i).right)
@@ -150,7 +150,7 @@ definition tensorProductFanIso
 
 中文:
 定义 tensorProductFanIso
-  签名: [Fintype ι] [DecidableEq ι]
+  签名: [有限类型 ι] [DecidableEq ι]
   定义体: Fan.ext (Algebra.TensorProduct.piRight R S _ _).toUnder fun i => by
     dsimp only [tensorProductFan, Fan.mk_pt, fan_mk_proj, tensorProductFan']
     apply CommRingCat.mkUnder_ext
@@ -186,7 +186,7 @@ definition tensorProductFanIsLimit
 
 中文:
 定义 tensorProductFanIsLimit
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: letI : Fintype ι := Fintype.ofFinite ι
   (IsLimit.equivIsoLimit (tensorProductFanIso P)).symm (Under.piFanIsLimit _)
 
@@ -208,7 +208,7 @@ definition piFanTensorProductIsLimit
 
 中文:
 定义 piFanTensorProductIsLimit
-  签名: [Finite ι]
+  签名: [有限 ι]
   定义体: (isLimitMapConeFanMkEquiv (tensorProd R S) P _).symm tensorProductFanIsLimit P
 
 Depends on / 依赖: isLimitMapConeFanMkEquiv, tensorProd, tensorProductFanIsLimit
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteProducts (tensorProd R S)
+  签名: 保持FiniteProducts (tensorProd R S)
   定义体: let J : Type u := ULift.{u} (Fin n)
     have : PreservesLimitsOfShape (Discrete J) (tensorProd R S) :=
       preservesLimitsOfShape_of_discrete (tensorProd R S)
@@ -335,7 +335,7 @@ definition equalizerFork'
 
 中文:
 定义 equalizerFork'
-  签名: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
+  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
   定义体: Fork.ofι ((AlgHom.equalizer f g).val.toUnder) by ext a; exact a.property
 
 @[simp]
@@ -358,7 +358,7 @@ lemma equalizerFork'_ι
 
 中文:
 引理 equalizerFork'_ι
-  结论: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
+  结论: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A] [代数 R B]
   证明: rfl
 -/
 lemma equalizerFork'_ι {A B : Type u} [CommRing A] [CommRing B] [Algebra R A] [Algebra R B]
@@ -400,8 +400,8 @@ definition equalizerFork'IsLimit
   body: Under.equalizerForkIsLimit f.toUnder g.toUnder
 
 中文:
-定义 equalizerFork'IsLimit
-  签名: {A B : 类型u} [CommRing A] [CommRing B] [Algebra R A]
+定义 equalizerFork'是极限
+  签名: {A B : 类型u} [交换环 A] [交换环 B] [代数 R A]
   定义体: Under.equalizerForkIsLimit f.toUnder g.toUnder
 
 Depends on / 依赖: MonCat, forget
@@ -473,7 +473,7 @@ definition equalizerForkTensorProdIso
 
 中文:
 定义 equalizerForkTensorProdIso
-  签名: [Module.Flat R S] {A B : Under R} (f g : A ⟶ B)
+  签名: [模.平坦 R S] {A B : Under R} (f g : A ⟶ B)
   定义体: Fork.ext (AlgHom.tensorEqualizerEquiv S S (toAlgHom f) (toAlgHom g)).toUnder by
     ext
     apply AlgHom.coe_tensorEqualizer
@@ -502,7 +502,7 @@ definition tensorProdMapEqualizerForkIsLimit
 
 中文:
 定义 tensorProdMapEqualizerForkIsLimit
-  签名: [Module.Flat R S] {A B : Under R} (f g : A ⟶ B)
+  签名: [模.平坦 R S] {A B : Under R} (f g : A ⟶ B)
   定义体: (isLimitMapConeForkEquiv (tensorProd R S) _).symm
 (IsLimit.equivIsoLimit (equalizerForkTensorProdIso f g).symm)
     Under.equalizerFork'IsLimit _ _
@@ -528,7 +528,7 @@ instance [Module.Flat
   preservesLimit_of_preserves_limit_cone hc hc'
 
 中文:
-实例 [Module.Flat
+实例 [模.平坦
   签名: R S] {A B
   定义体: let c : Fork f g := Under.equalizerFork f g
   let hc : IsLimit c := Under.equalizerForkIsLimit f g
@@ -555,8 +555,8 @@ instance [Module.Flat
   body: preservesLimit_of_iso_diagram _ (diagramIsoParallelPair K).symm
 
 中文:
-实例 [Module.Flat
-  签名: R S] : PreservesLimitsOfShape WalkingParallelPair (tensorProd R S) where
+实例 [模.平坦
+  签名: R S] : 保持形状极限 WalkingParallelPair (tensorProd R S) where
   定义体: preservesLimit_of_iso_diagram _ (diagramIsoParallelPair K).symm
 
 Depends on / 依赖: diagramIsoParallelPair, preservesLimit_of_iso_diagram
@@ -574,8 +574,8 @@ instance [Module.Flat
   body: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts (tensorProd R S)
 
 中文:
-实例 [Module.Flat
-  签名: R S] : PreservesFiniteLimits (tensorProd R S)
+实例 [模.平坦
+  签名: R S] : 保持FiniteLimits (tensorProd R S)
   定义体: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts (tensorProd R S)
 
 Depends on / 依赖: preservesFiniteLimits_of_preservesEqualizers_and_finiteProducts, tensorProd
@@ -600,7 +600,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteProducts (Under.pushout f)
+  签名: 保持FiniteProducts (Under.pushout f)
   定义体: letI : Algebra R S := f.hom.toAlgebra
     preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)
 
@@ -623,7 +623,7 @@ lemma preservesFiniteLimits_of_flat
 
 中文:
 引理 preservesFiniteLimits_of_flat
-  条件: (hf : RingHom.Flat f.hom)
+  条件: (hf : 环态射.平坦 f.hom)
   证明: letI : Algebra R S := f.hom.toAlgebra
     haveI : Module.Flat R S := hf
     preservesLimitsOfShape_of_natIso (tensorProdIsoPushout R S)

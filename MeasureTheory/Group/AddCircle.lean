@@ -94,7 +94,7 @@ theorem isAddFundamentalDomain_of_ae_ball
 
 中文:
 定理 isAddFundamentalDomain_of_ae_ball
-  结论: (I : Set <| AddCircle T) (u x : AddCircle T)
+  结论: (I : 集合 <| AddCircle T) (u x : AddCircle T)
   证明: by
   set G := AddSubgroup.zmultiples u
   set n := addOrderOf u
@@ -157,7 +157,7 @@ theorem volume_of_add_preimage_eq
 
 中文:
 定理 volume_of_add_preimage_eq
-  结论: (s I : Set <| AddCircle T) (u x : AddCircle T)
+  结论: (s I : 集合 <| AddCircle T) (u x : AddCircle T)
   证明: by
   let G := AddSubgroup.zmultiples u
   have : Fintype G := @Fintype.ofFinite _ hu.finite_zmultiples.to_subtype

@@ -33,8 +33,8 @@ lemma IsGroupLikeElem.antipode_mul_cancel
   simpa [ha, -mul_antipode_lTensor_comul_apply] using mul_antipode_rTensor_comul_apply (R := R) a
 
 中文:
-引理 IsGroupLikeElem.antipode_mul_cancel
-  条件: (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.antipode_mul_cancel
+  条件: (ha : 是GroupLikeElem R a)
   证明: by
   simpa [ha, -mul_antipode_lTensor_comul_apply] using mul_antipode_rTensor_comul_apply (R := R) a
 -/
@@ -52,8 +52,8 @@ lemma IsGroupLikeElem.mul_antipode_cancel
   simpa [ha, -mul_antipode_lTensor_comul_apply] using mul_antipode_lTensor_comul_apply (R := R) a
 
 中文:
-引理 IsGroupLikeElem.mul_antipode_cancel
-  条件: (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.mul_antipode_cancel
+  条件: (ha : 是GroupLikeElem R a)
   证明: by
   simpa [ha, -mul_antipode_lTensor_comul_apply] using mul_antipode_lTensor_comul_apply (R := R) a
 -/
@@ -80,8 +80,8 @@ definition GroupLike.toUnits
   map_mul' a b := by ext; rfl
 
 中文:
-定义 GroupLike.toUnits
-  签名: : GroupLike R A ->* Aˣ where
+定义 群状.toUnits
+  签名: : 群状 R A ->* Aˣ where
   定义体: {
     val := a
     inv := antipode R a
@@ -111,9 +111,9 @@ lemma IsGroupLikeElem.isUnit
   proof: (GroupLike.toUnits R ⟨a, ha⟩).isUnit
 
 中文:
-引理 IsGroupLikeElem.isUnit
-  条件: (ha : IsGroupLikeElem R a)
-  结论: IsUnit a
+引理 是GroupLikeElem.isUnit
+  条件: (ha : 是GroupLikeElem R a)
+  结论: 是单位 a
   证明: (GroupLike.toUnits R ⟨a, ha⟩).isUnit
 
 Depends on / 依赖: GroupLike, GroupLike.toUnits, isUnit, toUnits
@@ -130,8 +130,8 @@ lemma IsGroupLikeElem.antipode
   proof: ha.of_mul_eq_one ha.mul_antipode_cancel ha.antipode_mul_cancel
 
 中文:
-引理 IsGroupLikeElem.antipode
-  条件: (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.antipode
+  条件: (ha : 是GroupLikeElem R a)
   证明: ha.of_mul_eq_one ha.mul_antipode_cancel ha.antipode_mul_cancel
 -/
 @[simp] protected lemma IsGroupLikeElem.antipode (ha : IsGroupLikeElem R a) :
@@ -147,8 +147,8 @@ lemma IsGroupLikeElem.antipode_antipode
   proof: left_inv_eq_right_inv ha.antipode.antipode_mul_cancel ha.antipode_mul_cancel
 
 中文:
-引理 IsGroupLikeElem.antipode_antipode
-  条件: (ha : IsGroupLikeElem R a)
+引理 是GroupLikeElem.antipode_antipode
+  条件: (ha : 是GroupLikeElem R a)
   证明: left_inv_eq_right_inv ha.antipode.antipode_mul_cancel ha.antipode_mul_cancel
 -/
 @[simp] lemma IsGroupLikeElem.antipode_antipode (ha : IsGroupLikeElem R a) :
@@ -167,7 +167,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (GroupLike R A)
+  签名: 取逆 (群状 R A)
   定义体: ⟨antipode R a, a.2.antipode⟩
 
 Depends on / 依赖: antipode
@@ -185,7 +185,7 @@ lemma val_inv
 
 中文:
 引理 val_inv
-  条件: (a : GroupLike R A)
+  条件: (a : 群状 R A)
   结论: ↑(a⁻¹) = (antipode R a : A)
   证明: rfl
 -/
@@ -201,7 +201,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (GroupLike R A)
+  签名: 群 (群状 R A)
   定义体: by ext; simp
 -/
 instance : Group (GroupLike R A) where
@@ -222,8 +222,8 @@ instance GroupLike.instCommGroup
   __ := instGroup
 
 中文:
-实例 GroupLike.instCommGroup
-  签名: : CommGroup (GroupLike R A) where
+实例 群状.instCommGroup
+  签名: : 交换群 (群状 R A) where
   定义体: instCommMonoid
   __ := instGroup
 

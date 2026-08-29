@@ -85,11 +85,11 @@ inductive Term
     - func: forall {l : Nat} (_f : L.Functions l) (_ts : Fin l -> Term α), Term α
 
 中文:
-归纳类型 Term
+归纳类型 项
   参数: (α : 类型u')
   构造子 (2 个):
-    - var: α -> Term α
-    - func: 对任意 {l : 自然数} (_f : L.Functions l) (_ts : Fin l -> Term α), Term α
+    - var: α -> 项 α
+    - func: 对任意 {l : 自然数} (_f : L.函数 l) (_ts : 有限集 l -> 项 α), 项 α
 -/
 inductive Term (α : Type u') : Type max u u'
   | var : α -> Term α
@@ -116,7 +116,7 @@ decidable_of_iff (f = h ▸ g ∧ forall i : Fin m, xs i = ys (Fin.cast h i)) by
 
 中文:
 实例 instDecidableEq
-  签名: [DecidableEq α] [对任意 n, DecidableEq (L.Functions n)]
+  签名: [DecidableEq α] [对任意 n, DecidableEq (L.函数 n)]
   定义体: instDecidableEq
 decidable_of_iff (f = h ▸ g ∧ forall i : Fin m, xs i = ys (Fin.cast h i)) by
           subst h
@@ -209,7 +209,7 @@ theorem relabel_id
 
 中文:
 定理 relabel_id
-  条件: (t : L.Term α)
+  条件: (t : L.项 α)
   结论: t.relabel id = t
   证明: by
   induction t with
@@ -236,7 +236,7 @@ theorem relabel_id_eq_id
 
 中文:
 定理 relabel_id_eq_id
-  结论: (Term.relabel id : L.Term α -> L.Term α) = id
+  结论: (项.relabel id : L.项 α -> L.项 α) = id
   证明: funext relabel_id
 
 @[simp]
@@ -262,7 +262,7 @@ theorem relabel_relabel
 
 中文:
 定理 relabel_relabel
-  条件: (f : α -> β) (g : β -> γ) (t : L.Term α)
+  条件: (f : α -> β) (g : β -> γ) (t : L.项 α)
   证明: by
   induction t with
   | var => rfl
@@ -380,8 +380,8 @@ definition Functions.apply₁
   body: func f ![t]
 
 中文:
-定义 Functions.apply₁
-  签名: (f : L.Functions 1) (t : L.Term α)
+定义 函数.apply₁
+  签名: (f : L.函数 1) (t : L.项 α)
   定义体: func f ![t]
 -/
 def Functions.apply₁ (f : L.Functions 1) (t : L.Term α) : L.Term α :=
@@ -396,8 +396,8 @@ definition Functions.apply₂
   body: func f ![t₁, t₂]
 
 中文:
-定义 Functions.apply₂
-  签名: (f : L.Functions 2) (t₁ t₂ : L.Term α)
+定义 函数.apply₂
+  签名: (f : L.函数 2) (t₁ t₂ : L.项 α)
   定义体: func f ![t₁, t₂]
 -/
 def Functions.apply₂ (f : L.Functions 2) (t₁ t₂ : L.Term α) : L.Term α :=
@@ -412,8 +412,8 @@ definition Functions.term
   body: func f Term.var
 
 中文:
-定义 Functions.term
-  签名: {n : 自然数} (f : L.Functions n)
+定义 函数.term
+  签名: {n : 自然数} (f : L.函数 n)
   定义体: func f Term.var
 
 Depends on / 依赖: Term.var
@@ -434,7 +434,7 @@ definition constantsToVars
 
 中文:
 定义 constantsToVars
-  签名: : L[[γ]].Term α -> L.Term (γ oplus α)
+  签名: : L[[γ]].项 α -> L.项 (γ oplus α)
 -/
 def constantsToVars : L[[γ]].Term α -> L.Term (γ oplus α)
   | var a => var (Sum.inr a)
@@ -454,7 +454,7 @@ definition varsToConstants
 
 中文:
 定义 varsToConstants
-  签名: : L.Term (γ oplus α) -> L[[γ]].Term α
+  签名: : L.项 (γ oplus α) -> L[[γ]].项 α
 -/
 def varsToConstants : L.Term (γ oplus α) -> L[[γ]].Term α
   | var (Sum.inr a) => var a
@@ -483,7 +483,7 @@ definition constantsVarsEquiv
 
 中文:
 定义 constantsVarsEquiv
-  签名: : L[[γ]].Term α ≃ L.Term (γ oplus α)
+  签名: : L[[γ]].项 α ≃ L.项 (γ oplus α)
   定义体: ⟨constantsToVars, varsToConstants, by
     intro t
     induction t with
@@ -527,7 +527,7 @@ definition constantsVarsEquivLeft
 
 中文:
 定义 constantsVarsEquivLeft
-  签名: : L[[γ]].Term (α oplus β) ≃ L.Term ((γ oplus α) oplus β)
+  签名: : L[[γ]].项 (α oplus β) ≃ L.项 ((γ oplus α) oplus β)
   定义体: constantsVarsEquiv.trans (relabelEquiv (Equiv.sumAssoc _ _ _)).symm
 
 @[simp]
@@ -550,7 +550,7 @@ theorem constantsVarsEquivLeft_apply
 
 中文:
 定理 constantsVarsEquivLeft_apply
-  条件: (t : L[[γ]].Term (α oplus β))
+  条件: (t : L[[γ]].项 (α oplus β))
   证明: rfl
 
 @[simp]
@@ -570,7 +570,7 @@ theorem constantsVarsEquivLeft_symm_apply
 
 中文:
 定理 constantsVarsEquivLeft_symm_apply
-  条件: (t : L.Term ((γ oplus α) oplus β))
+  条件: (t : L.项 ((γ oplus α) oplus β))
   证明: rfl
 -/
 theorem constantsVarsEquivLeft_symm_apply (t : L.Term ((γ oplus α) oplus β)) :
@@ -587,7 +587,7 @@ instance inhabitedOfVar
 
 中文:
 实例 inhabitedOfVar
-  签名: [Inhabited α]
+  签名: [可居 α]
   定义体: ⟨var default⟩
 -/
 instance inhabitedOfVar [Inhabited α] : Inhabited (L.Term α) :=
@@ -603,7 +603,7 @@ instance inhabitedOfConstant
 
 中文:
 实例 inhabitedOfConstant
-  签名: [Inhabited L.Constants]
+  签名: [可居 L.Constants]
   定义体: ⟨(default : L.Constants).term⟩
 
 Depends on / 依赖: Constants, L.Constants
@@ -640,7 +640,7 @@ definition subst
 
 中文:
 定义 subst
-  签名: : L.Term α -> (α -> L.Term β) -> L.Term β
+  签名: : L.项 α -> (α -> L.项 β) -> L.项 β
 -/
 def subst : L.Term α -> (α -> L.Term β) -> L.Term β
   | var a, tf => tf a
@@ -657,7 +657,7 @@ definition substFunc
 
 中文:
 定义 substFunc
-  签名: : L.Term α -> (对任意 {n : 自然数}, L.Functions n -> L'.Term (Fin n)) -> L'.Term α
+  签名: : L.项 α -> (对任意 {n : 自然数}, L.函数 n -> L'.项 (有限集 n)) -> L'.项 α
 -/
 def substFunc : L.Term α -> (forall {n : Nat}, L.Functions n -> L'.Term (Fin n)) -> L'.Term α
   | var a, _ => var a
@@ -678,8 +678,8 @@ theorem substFunc_term
 
 中文:
 定理 substFunc_term
-  条件: (t : L.Term α)
-  结论: t.substFunc Functions.term = t
+  条件: (t : L.项 α)
+  结论: t.substFunc 函数.term = t
   证明: by
   induction t
   · rfl
@@ -735,7 +735,7 @@ theorem id_onTerm
 
 中文:
 定理 id_onTerm
-  结论: ((LHom.id L).onTerm : L.Term α -> L.Term α) = id
+  结论: ((L态射.id L).onTerm : L.项 α -> L.项 α) = id
   证明: by
   ext t
   induction t with
@@ -801,7 +801,7 @@ definition LEquiv.onTerm
     rw [Function.rightInverse_iff_comp]; rw [← LHom.comp_onTerm]; rw [φ.right_inv]; rw [LHom.id_onTerm]
 
 中文:
-定义 LEquiv.onTerm
+定义 L等价.onTerm
   签名: (φ : L ≃ᴸ L')
   定义体: φ.toLHom.onTerm
   invFun := φ.invLHom.onTerm
@@ -837,11 +837,11 @@ inductive BoundedFormula
 
 中文:
 归纳类型 BoundedFormula
-  参数: : 自然数 -> Type max u v u'
+  参数: : 自然数 -> 类型 最大值 u v u'
   构造子 (5 个):
     - falsum: {n} : BoundedFormula n
-    - equal: {n} (t₁ t₂ : L.Term (α oplus (Fin n))) : BoundedFormula n
-    - rel: {n l : 自然数} (R : L.Relations l) (ts : Fin l -> L.Term (α oplus (Fin n))) : BoundedFormula n
+    - equal: {n} (t₁ t₂ : L.项 (α oplus (有限集 n))) : BoundedFormula n
+    - rel: {n l : 自然数} (R : L.关系 l) (ts : 有限集 l -> L.项 (α oplus (有限集 n))) : BoundedFormula n
     - imp: {n} (f₁ f₂ : BoundedFormula n) : BoundedFormula n
     - all: {n} (f : BoundedFormula (n + 1)) : BoundedFormula n
 -/
@@ -862,7 +862,7 @@ abbreviation Formula
   body: L.BoundedFormula α 0
 
 中文:
-缩写 Formula
+缩写 公式
   定义体: L.BoundedFormula α 0
 
 Depends on / 依赖: BoundedFormula, L.BoundedFormula
@@ -913,8 +913,8 @@ definition Relations.boundedFormula
   body: BoundedFormula.rel R ts
 
 中文:
-定义 Relations.boundedFormula
-  签名: {l : 自然数} (R : L.Relations n) (ts : Fin n -> L.Term (α oplus (Fin l)))
+定义 关系.boundedFormula
+  签名: {l : 自然数} (R : L.关系 n) (ts : 有限集 n -> L.项 (α oplus (有限集 l)))
   定义体: BoundedFormula.rel R ts
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.rel
@@ -932,8 +932,8 @@ definition Relations.boundedFormula₁
   body: r.boundedFormula ![t]
 
 中文:
-定义 Relations.boundedFormula₁
-  签名: (r : L.Relations 1) (t : L.Term (α oplus (Fin n)))
+定义 关系.boundedFormula₁
+  签名: (r : L.关系 1) (t : L.项 (α oplus (有限集 n)))
   定义体: r.boundedFormula ![t]
 
 Depends on / 依赖: boundedFormula, r.boundedFormula
@@ -951,8 +951,8 @@ definition Relations.boundedFormula₂
   body: r.boundedFormula ![t₁, t₂]
 
 中文:
-定义 Relations.boundedFormula₂
-  签名: (r : L.Relations 2) (t₁ t₂ : L.Term (α oplus (Fin n)))
+定义 关系.boundedFormula₂
+  签名: (r : L.关系 2) (t₁ t₂ : L.项 (α oplus (有限集 n)))
   定义体: r.boundedFormula ![t₁, t₂]
 
 Depends on / 依赖: boundedFormula, r.boundedFormula
@@ -970,8 +970,8 @@ definition Term.bdEqual
   body: BoundedFormula.equal t₁ t₂
 
 中文:
-定义 Term.bdEqual
-  签名: (t₁ t₂ : L.Term (α oplus (Fin n)))
+定义 项.bdEqual
+  签名: (t₁ t₂ : L.项 (α oplus (有限集 n)))
   定义体: BoundedFormula.equal t₁ t₂
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.equal
@@ -988,8 +988,8 @@ definition Relations.formula
   body: R.boundedFormula fun i => (ts i).relabel Sum.inl
 
 中文:
-定义 Relations.formula
-  签名: (R : L.Relations n) (ts : Fin n -> L.Term α)
+定义 关系.formula
+  签名: (R : L.关系 n) (ts : 有限集 n -> L.项 α)
   定义体: R.boundedFormula fun i => (ts i).relabel Sum.inl
 
 Depends on / 依赖: R.boundedFormula, Sum.inl, boundedFormula, relabel
@@ -1006,8 +1006,8 @@ definition Relations.formula₁
   body: r.formula ![t]
 
 中文:
-定义 Relations.formula₁
-  签名: (r : L.Relations 1) (t : L.Term α)
+定义 关系.formula₁
+  签名: (r : L.关系 1) (t : L.项 α)
   定义体: r.formula ![t]
 
 Depends on / 依赖: formula, r.formula
@@ -1024,8 +1024,8 @@ definition Relations.formula₂
   body: r.formula ![t₁, t₂]
 
 中文:
-定义 Relations.formula₂
-  签名: (r : L.Relations 2) (t₁ t₂ : L.Term α)
+定义 关系.formula₂
+  签名: (r : L.关系 2) (t₁ t₂ : L.项 α)
   定义体: r.formula ![t₁, t₂]
 
 Depends on / 依赖: formula, r.formula
@@ -1042,8 +1042,8 @@ definition Term.equal
   body: (t₁.relabel Sum.inl).bdEqual (t₂.relabel Sum.inl)
 
 中文:
-定义 Term.equal
-  签名: (t₁ t₂ : L.Term α)
+定义 项.equal
+  签名: (t₁ t₂ : L.项 α)
   定义体: (t₁.relabel Sum.inl).bdEqual (t₂.relabel Sum.inl)
 
 Depends on / 依赖: Sum.inl, bdEqual, relabel
@@ -1063,7 +1063,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (L.BoundedFormula α n)
+  签名: 可居 (L.BoundedFormula α n)
   定义体: ⟨falsum⟩
 
 Depends on / 依赖: falsum
@@ -1081,7 +1081,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (L.BoundedFormula α n)
+  签名: 底元素 (L.BoundedFormula α n)
   定义体: ⟨falsum⟩
 
 Depends on / 依赖: falsum
@@ -1135,7 +1135,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (L.BoundedFormula α n)
+  签名: 顶元素 (L.BoundedFormula α n)
   定义体: ⟨BoundedFormula.not ⊥⟩
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.not
@@ -1153,7 +1153,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (L.BoundedFormula α n)
+  签名: 最小值 (L.BoundedFormula α n)
   定义体: ⟨fun f g => (f.imp g.not).not⟩
 
 Depends on / 依赖: f.imp, g.not
@@ -1171,7 +1171,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (L.BoundedFormula α n)
+  签名: 最大值 (L.BoundedFormula α n)
   定义体: ⟨fun f g => f.not.imp g⟩
 
 Depends on / 依赖: f.not.imp
@@ -1392,7 +1392,7 @@ definition alls
 
 中文:
 定义 alls
-  签名: : 对任意 {n}, L.BoundedFormula α n -> L.Formula α
+  签名: : 对任意 {n}, L.BoundedFormula α n -> L.公式 α
 -/
 def alls : forall {n}, L.BoundedFormula α n -> L.Formula α
   | 0, φ => φ
@@ -1407,7 +1407,7 @@ definition exs
 
 中文:
 定义 exs
-  签名: : 对任意 {n}, L.BoundedFormula α n -> L.Formula α
+  签名: : 对任意 {n}, L.BoundedFormula α n -> L.公式 α
 -/
 def exs : forall {n}, L.BoundedFormula α n -> L.Formula α
   | 0, φ => φ
@@ -1422,7 +1422,7 @@ definition mapTermRel
 
 中文:
 定义 mapTermRel
-  签名: {g : 自然数 -> 自然数} (ft : 对任意 n, L.Term (α oplus (Fin n)) -> L'.Term (β oplus (Fin (g n))))
+  签名: {g : 自然数 -> 自然数} (ft : 对任意 n, L.项 (α oplus (有限集 n)) -> L'.项 (β oplus (有限集 (g n))))
 -/
 def mapTermRel {g : Nat -> Nat} (ft : forall n, L.Term (α oplus (Fin n)) -> L'.Term (β oplus (Fin (g n))))
     (fr : forall n, L.Relations n -> L'.Relations n)
@@ -1560,7 +1560,7 @@ definition mapTermRelEquiv
 
 中文:
 定义 mapTermRelEquiv
-  签名: (ft : 对任意 n, L.Term (α oplus (Fin n)) ≃ L'.Term (β oplus (Fin n)))
+  签名: (ft : 对任意 n, L.项 (α oplus (有限集 n)) ≃ L'.项 (β oplus (有限集 n)))
   定义体: ⟨mapTermRel (fun n => ft n) (fun n => fr n) fun _ => id,
     mapTermRel (fun n => (ft n).symm) (fun n => (fr n).symm) fun _ => id, fun φ => by simp, fun φ =>
     by simp⟩
@@ -1585,7 +1585,7 @@ definition relabelAux
 
 中文:
 定义 relabelAux
-  签名: (g : α -> β oplus (Fin n)) (k : 自然数)
+  签名: (g : α -> β oplus (有限集 n)) (k : 自然数)
   定义体: Sum.map id finSumFinEquiv ∘ Equiv.sumAssoc _ _ _ ∘ Sum.map g id
 
 @[simp]
@@ -1613,7 +1613,7 @@ theorem sumElim_comp_relabelAux
 
 中文:
 定理 sumElim_comp_relabelAux
-  结论: {m : 自然数} {g : α -> β oplus (Fin n)} {v : β -> M}
+  结论: {m : 自然数} {g : α -> β oplus (有限集 n)} {v : β -> M}
   证明: by
   ext x
   rcases x with x | x
@@ -1670,7 +1670,7 @@ definition relabel
 
 中文:
 定义 relabel
-  签名: (g : α -> β oplus (Fin n)) {k} (φ : L.BoundedFormula α k)
+  签名: (g : α -> β oplus (有限集 n)) {k} (φ : L.BoundedFormula α k)
   定义体: φ.mapTermRel (fun _ t => t.relabel (relabelAux g _)) (fun _ => id) fun _ =>
     castLE (ge_of_eq (add_assoc _ _ _))
 
@@ -1718,7 +1718,7 @@ theorem relabel_falsum
 
 中文:
 定理 relabel_falsum
-  条件: (g : α -> β oplus (Fin n)) {k}
+  条件: (g : α -> β oplus (有限集 n)) {k}
   证明: rfl
 
 @[simp]
@@ -1741,7 +1741,7 @@ theorem relabel_bot
 
 中文:
 定理 relabel_bot
-  条件: (g : α -> β oplus (Fin n)) {k}
+  条件: (g : α -> β oplus (有限集 n)) {k}
   结论: (⊥ : L.BoundedFormula α k).relabel g = ⊥
   证明: rfl
 
@@ -1763,7 +1763,7 @@ theorem relabel_imp
 
 中文:
 定理 relabel_imp
-  条件: (g : α -> β oplus (Fin n)) {k} (φ ψ : L.BoundedFormula α k)
+  条件: (g : α -> β oplus (有限集 n)) {k} (φ ψ : L.BoundedFormula α k)
   证明: rfl
 
 @[simp]
@@ -1785,7 +1785,7 @@ theorem relabel_not
 
 中文:
 定理 relabel_not
-  条件: (g : α -> β oplus (Fin n)) {k} (φ : L.BoundedFormula α k)
+  条件: (g : α -> β oplus (有限集 n)) {k} (φ : L.BoundedFormula α k)
   证明: by simp [BoundedFormula.not]
 
 @[simp]
@@ -1810,7 +1810,7 @@ theorem relabel_all
 
 中文:
 定理 relabel_all
-  条件: (g : α -> β oplus (Fin n)) {k} (φ : L.BoundedFormula α (k + 1))
+  条件: (g : α -> β oplus (有限集 n)) {k} (φ : L.BoundedFormula α (k + 1))
   证明: by
   rw [relabel]; rw [mapTermRel]; rw [relabel]
   simp
@@ -1837,7 +1837,7 @@ theorem relabel_ex
 
 中文:
 定理 relabel_ex
-  条件: (g : α -> β oplus (Fin n)) {k} (φ : L.BoundedFormula α (k + 1))
+  条件: (g : α -> β oplus (有限集 n)) {k} (φ : L.BoundedFormula α (k + 1))
   证明: by simp [BoundedFormula.ex]
 
 @[simp]
@@ -1898,7 +1898,7 @@ definition subst
 
 中文:
 定义 subst
-  签名: {n : 自然数} (φ : L.BoundedFormula α n) (f : α -> L.Term β)
+  签名: {n : 自然数} (φ : L.BoundedFormula α n) (f : α -> L.项 β)
   定义体: φ.mapTermRel (fun _ t => t.subst (Sum.elim (Term.relabel Sum.inl ∘ f) (var ∘ Sum.inr)))
     (fun _ => id) fun _ => id
 
@@ -1937,7 +1937,7 @@ definition toFormula
 
 中文:
 定义 toFormula
-  签名: : 对任意 {n : 自然数}, L.BoundedFormula α n -> L.Formula (α oplus (Fin n))
+  签名: : 对任意 {n : 自然数}, L.BoundedFormula α n -> L.公式 (α oplus (有限集 n))
 -/
 def toFormula : forall {n : Nat}, L.BoundedFormula α n -> L.Formula (α oplus (Fin n))
   | _n, falsum => falsum
@@ -1959,7 +1959,7 @@ definition iSup
 
 中文:
 定义 iSup
-  签名: [Finite β] (f : β -> L.BoundedFormula α n)
+  签名: [有限 β] (f : β -> L.BoundedFormula α n)
   定义体: let _ := Fintype.ofFinite β
   ((Finset.univ : Finset β).toList.map f).foldr (· ⊔ ·) ⊥
 
@@ -1980,7 +1980,7 @@ definition iInf
 
 中文:
 定义 iInf
-  签名: [Finite β] (f : β -> L.BoundedFormula α n)
+  签名: [有限 β] (f : β -> L.BoundedFormula α n)
   定义体: let _ := Fintype.ofFinite β
   ((Finset.univ : Finset β).toList.map f).foldr (· ⊓ ·) ⊤
 
@@ -2368,7 +2368,7 @@ definition graph
 
 中文:
 定义 graph
-  签名: (f : L.Functions n)
+  签名: (f : L.函数 n)
   定义体: Term.equal (var 0) (func f fun i => var i.succ)
 
 Depends on / 依赖: Term.equal, i.succ
@@ -2390,7 +2390,7 @@ abbreviation imp
 
 中文:
 缩写 imp
-  签名: : L.Formula α -> L.Formula α -> L.Formula α
+  签名: : L.公式 α -> L.公式 α -> L.公式 α
   定义体: BoundedFormula.imp
 -/
 protected abbrev imp : L.Formula α -> L.Formula α -> L.Formula α :=
@@ -2408,7 +2408,7 @@ definition iAlls
 
 中文:
 定义 iAlls
-  签名: [Finite β] (φ : L.Formula (α oplus β))
+  签名: [有限 β] (φ : L.公式 (α oplus β))
   定义体: let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
   (BoundedFormula.relabel (fun a => Sum.map id e a) φ).alls
 
@@ -2430,7 +2430,7 @@ definition iExs
 
 中文:
 定义 iExs
-  签名: [Finite β] (φ : L.Formula (α oplus β))
+  签名: [有限 β] (φ : L.公式 (α oplus β))
   定义体: let e := Classical.choice (Classical.choose_spec (Finite.exists_equiv_fin β))
   (BoundedFormula.relabel (fun a => Sum.map id e a) φ).exs
 
@@ -2453,7 +2453,7 @@ definition iExsUnique
 
 中文:
 定义 iExsUnique
-  签名: [Finite β] (φ : L.Formula (α oplus β))
+  签名: [有限 β] (φ : L.公式 (α oplus β))
   定义体: iExs β φ ⊓ iAlls β
     ((φ.relabel (fun a => Sum.elim (.inl ∘ .inl) .inr a)).imp <|
       .iInf fun g => Term.equal (var (.inr g)) (var (.inl (.inr g))))
@@ -2476,7 +2476,7 @@ definition exClosure
 
 中文:
 定义 exClosure
-  签名: (φ : L.Formula α)
+  签名: (φ : L.公式 α)
   定义体: iExs φ.freeVarFinset (Formula.relabel Sum.inr (φ.restrictFreeVar id))
 
 Depends on / 依赖: Formula, Formula.relabel, Sum.inr, freeVarFinset, relabel, restrictFreeVar
@@ -2498,7 +2498,7 @@ definition iSup
 
 中文:
 定义 iSup
-  签名: [Finite α] (f : α -> L.Formula β)
+  签名: [有限 α] (f : α -> L.公式 β)
   定义体: BoundedFormula.iSup f
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.iSup
@@ -2516,7 +2516,7 @@ definition iInf
 
 中文:
 定义 iInf
-  签名: [Finite α] (f : α -> L.Formula β)
+  签名: [有限 α] (f : α -> L.公式 β)
   定义体: BoundedFormula.iInf f
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.iInf
@@ -2534,7 +2534,7 @@ definition equivSentence
 
 中文:
 定义 equivSentence
-  签名: : L.Formula α ≃ L[[α]].Sentence
+  签名: : L.公式 α ≃ L[[α]].Sentence
   定义体: (BoundedFormula.constantsVarsEquiv.trans (BoundedFormula.relabelEquiv (Equiv.sumEmpty _ _))).symm
 
 Depends on / 依赖: BoundedFormula, BoundedFormula.constantsVarsEquiv.trans, BoundedFormula.relabelEquiv, Equiv.sumEmpty, constantsVarsEquiv, relabelEquiv, sumEmpty
@@ -2553,7 +2553,7 @@ theorem equivSentence_not
 
 中文:
 定理 equivSentence_not
-  条件: (φ : L.Formula α)
+  条件: (φ : L.公式 α)
   结论: equivSentence φ.not = (equivSentence φ).not
   证明: rfl
 -/
@@ -2570,7 +2570,7 @@ theorem equivSentence_inf
 
 中文:
 定理 equivSentence_inf
-  条件: (φ ψ : L.Formula α)
+  条件: (φ ψ : L.公式 α)
   证明: rfl
 -/
 theorem equivSentence_inf (φ ψ : L.Formula α) :
@@ -2754,7 +2754,7 @@ definition distinctConstantsTheory
 
 中文:
 定义 distinctConstantsTheory
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: (fun ab : α × α => ((L.con ab.1).term.equal (L.con ab.2).term).not) ''
   (s ×ˢ s inter (Set.diagonal α)ᶜ)
 
@@ -2779,7 +2779,7 @@ theorem distinctConstantsTheory_mono
 
 中文:
 定理 distinctConstantsTheory_mono
-  条件: {s t : Set α} (h : s subseteq t)
+  条件: {s t : 集合 α} (h : s subseteq t)
   证明: by
   unfold distinctConstantsTheory; gcongr
 
@@ -2840,7 +2840,7 @@ theorem distinctConstantsTheory_eq_iUnion
 
 中文:
 定理 distinctConstantsTheory_eq_iUnion
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by
   classical
     simp only [distinctConstantsTheory]

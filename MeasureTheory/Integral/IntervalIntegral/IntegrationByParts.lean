@@ -558,7 +558,7 @@ alias integral_comp_smul_deriv' := integral_deriv_smul_comp'
 
 中文:
 定理 integral_deriv_smul_comp'
-  结论: (h : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: (h : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: integral_deriv_smul_comp'' (fun x hx => (h x hx).continuousAt.continuousWithinAt)
     (fun x hx => (h x <| Ioo_subset_Icc_self hx).hasDerivWithinAt) h' hg
 
@@ -589,7 +589,7 @@ alias integral_comp_smul_deriv := integral_deriv_smul_comp
 
 中文:
 定理 integral_deriv_smul_comp
-  结论: (h : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: (h : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: integral_deriv_smul_comp' h h' hg.continuousOn
 
 @[deprecated (since := "2026-03-19")]
@@ -895,7 +895,7 @@ alias integral_deriv_comp_smul_deriv := integral_deriv_smul_deriv_comp
 
 中文:
 定理 integral_deriv_smul_deriv_comp
-  结论: (hf : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: (hf : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: integral_eq_sub_of_hasDerivAt (fun x hx => (hg x hx).scomp x <| hf x hx)
     (hf'.smul (hg'.comp_continuousOn <| HasDerivAt.continuousOn hf)).intervalIntegrable
 
@@ -981,7 +981,7 @@ theorem integral_comp_mul_deriv'
 
 中文:
 定理 integral_comp_mul_deriv'
-  结论: {f f' g : 实数 -> 实数} (h : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: {f f' g : 实数 -> 实数} (h : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: by
   simpa [mul_comm] using integral_deriv_smul_comp' h h' hg
 
@@ -1007,7 +1007,7 @@ theorem integral_comp_mul_deriv
 
 中文:
 定理 integral_comp_mul_deriv
-  结论: {f f' g : 实数 -> 实数} (h : 对任意 x in uIcc a b, HasDerivAt f (f' x) x)
+  结论: {f f' g : 实数 -> 实数} (h : 对任意 x in uIcc a b, 在点处可导 f (f' x) x)
   证明: integral_comp_mul_deriv' h h' hg.continuousOn
 
 Depends on / 依赖: continuousOn, hg.continuousOn, integral_comp_mul_deriv

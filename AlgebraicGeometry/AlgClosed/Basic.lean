@@ -244,7 +244,7 @@ lemma ext_of_apply_eq
 
 中文:
 引理 ext_of_apply_eq
-  结论: {f g : X ⟶ Y} (i : Y ⟶ Spec (.of K)) [IsSeparated i] [LocallyOfFiniteType i]
+  结论: {f g : X ⟶ Y} (i : Y ⟶ Spec (.of K)) [是分离 i] [局部有限型 i]
   证明: by
   have : JacobsonSpace ↥X := LocallyOfFiniteType.jacobsonSpace (f ≫ i)
   refine ext_of_fromSpecResidueField_eq f g i (S inter closedPoints X) ?_ ?_ H'

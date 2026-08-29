@@ -26,7 +26,7 @@ theorem CharP.ker_intAlgebraMap_eq_span
   simp [CharP.intCast_eq_zero_iff R p, Ideal.mem_span_singleton]
 
 中文:
-定理 CharP.ker_intAlgebraMap_eq_span
+定理 特征p.ker_intAlgebraMap_eq_span
   证明: by
   ext a
   simp [CharP.intCast_eq_zero_iff R p, Ideal.mem_span_singleton]
@@ -58,7 +58,7 @@ ringChar.of_eq
 
 中文:
 定理 quotient
-  条件: (p : 自然数) [hp1 : Fact p.Prime] (hp2 : ↑p in nonunits R)
+  条件: (p : 自然数) [hp1 : Fact p.素] (hp2 : ↑p in nonunits R)
   证明: have hp0 : (p : R ⧸ (Ideal.span {(p : R)} : Ideal R)) = 0 :=
     map_natCast (Ideal.Quotient.mk (Ideal.span {(p : R)} : Ideal R)) p ▸
       Ideal.Quotient.eq_zero_iff_mem.2 (Ideal.subset_span <| Set.mem_singleton _)
@@ -94,7 +94,7 @@ theorem quotient'
 
 中文:
 定理 quotient'
-  条件: (p : 自然数) [CharP R p] (I : Ideal R) (h : 对任意 x : 自然数, (x : R) in I -> (x : R) = 0)
+  条件: (p : 自然数) [特征p R p] (I : 理想 R) (h : 对任意 x : 自然数, (x : R) in I -> (x : R) = 0)
   证明: by
     rw [← cast_eq_zero_iff R p x]; rw [← map_natCast (Ideal.Quotient.mk I)]
     refine Ideal.Quotient.eq.trans (?_ : ↑x - 0 in I ↔ _)
@@ -124,7 +124,7 @@ theorem quotient_iff
 
 中文:
 定理 quotient_iff
-  条件: (n : 自然数) [CharP R n] (I : Ideal R)
+  条件: (n : 自然数) [特征p R n] (I : 理想 R)
   证明: by
   refine ⟨fun _ x hx => ?_, CharP.quotient' n I⟩
   rw [CharP.cast_eq_zero_iff R n]; rw [← CharP.cast_eq_zero_iff (R ⧸ I) n _]
@@ -149,7 +149,7 @@ theorem quotient_iff_le_ker_natCast
 
 中文:
 定理 quotient_iff_le_ker_natCast
-  条件: (n : 自然数) [CharP R n] (I : Ideal R)
+  条件: (n : 自然数) [特征p R n] (I : 理想 R)
   证明: by
   rw [CharP.quotient_iff]; rw [RingHom.ker_eq_comap_bot]; rfl
 
@@ -170,8 +170,8 @@ lemma Ideal.natCast_mem_of_charP_quotient
   proof: Ideal.Quotient.eq_zero_iff_mem.mp by simp
 
 中文:
-引理 Ideal.natCast_mem_of_charP_quotient
-  条件: (p : 自然数) (I : Ideal R) [CharP (R ⧸ I) p]
+引理 理想.natCast_mem_of_charP_quotient
+  条件: (p : 自然数) (I : 理想 R) [特征p (R ⧸ I) p]
   证明: Ideal.Quotient.eq_zero_iff_mem.mp by simp
 
 Depends on / 依赖: Ideal.Quotient.eq_zero_iff_mem.mp, Quotient, eq_zero_iff_mem
@@ -195,8 +195,8 @@ theorem Ideal.Quotient.index_eq_zero
   exact Nat.cast_card_eq_zero (R ⧸ I)
 
 中文:
-定理 Ideal.Quotient.index_eq_zero
-  条件: (I : Ideal R)
+定理 理想.商.index_eq_zero
+  条件: (I : 理想 R)
   结论: (↑I.toAddSubgroup.index : R ⧸ I) = 0
   证明: by
   rw [AddSubgroup.index]; rw [Nat.card_eq]

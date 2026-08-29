@@ -88,7 +88,7 @@ lemma starGraph_adj
 中文:
 引理 starGraph_adj
   条件: {r x y : V}
-  结论: (starGraph r).Adj x y ↔ x != y ∧ (x = r ∨ y = r)
+  结论: (starGraph r).伴随 x y ↔ x != y ∧ (x = r ∨ y = r)
   证明: by
   simp [starGraph, fromRel]
 
@@ -114,7 +114,7 @@ lemma isUniversal_starGraph_self
 中文:
 引理 isUniversal_starGraph_self
   条件: {r : V}
-  结论: (starGraph r).IsUniversal r
+  结论: (starGraph r).是泛 r
   证明: by
   intro _ _
   simpa
@@ -135,7 +135,7 @@ lemma starGraph_adj_center_iff
 中文:
 引理 starGraph_adj_center_iff
   条件: {r v : V}
-  结论: (starGraph r).Adj r v ↔ r != v
+  结论: (starGraph r).伴随 r v ↔ r != v
   证明: by simp
 -/
 lemma starGraph_adj_center_iff {r v : V} : (starGraph r).Adj r v ↔ r != v := by simp
@@ -152,7 +152,7 @@ lemma starGraph_center_adj
 中文:
 引理 starGraph_center_adj
   条件: {r v : V} (h : r != v)
-  结论: (starGraph r).Adj r v
+  结论: (starGraph r).伴随 r v
   证明: starGraph_adj_center_iff.mpr h
 
 Depends on / 依赖: starGraph_adj_center_iff, starGraph_adj_center_iff.mpr
@@ -172,7 +172,7 @@ lemma starGraph_center_adj'
 中文:
 引理 starGraph_center_adj'
   条件: {r v : V} (h : r != v)
-  结论: (starGraph r).Adj v r
+  结论: (starGraph r).伴随 v r
   证明: (starGraph_center_adj h).symm
 
 Depends on / 依赖: Finset, Finset.coe_nonempty.mpr, coe_nonempty, insert_nonempty, s.insert_nonempty, starGraph_center_adj, to_subtype
@@ -192,7 +192,7 @@ lemma connected_starGraph
 中文:
 引理 connected_starGraph
   条件: (r : V)
-  结论: (starGraph r).Connected
+  结论: (starGraph r).连通
   证明: .of_isUniversal isUniversal_starGraph_self
 
 Depends on / 依赖: isUniversal_starGraph_self, of_isUniversal
@@ -258,7 +258,7 @@ lemma isTree_starGraph
 中文:
 引理 isTree_starGraph
   条件: (r : V)
-  结论: (starGraph r).IsTree
+  结论: (starGraph r).是树
   证明: ⟨connected_starGraph r, isAcyclic_starGraph r⟩
 
 Depends on / 依赖: connected_starGraph, isAcyclic_starGraph
@@ -276,7 +276,7 @@ lemma degree_starGraph_of_ne_center
 
 中文:
 引理 degree_starGraph_of_ne_center
-  条件: [Fintype V] [DecidableEq V] {r v : V} (h : v != r)
+  条件: [有限类型 V] [DecidableEq V] {r v : V} (h : v != r)
   证明: degree_eq_one_iff_existsUnique_adj.mpr ⟨r, by simp [h], by grind [starGraph_adj]⟩
 
 Depends on / 依赖: degree_eq_one_iff_existsUnique_adj, degree_eq_one_iff_existsUnique_adj.mpr, starGraph_adj
@@ -296,7 +296,7 @@ lemma degree_starGraph_center
 
 中文:
 引理 degree_starGraph_center
-  条件: [Fintype V] [DecidableEq V] {r : V}
+  条件: [有限类型 V] [DecidableEq V] {r : V}
   证明: by
   simp
 -/

@@ -79,7 +79,7 @@ definition krullDim
 
 中文:
 定义 krullDim
-  签名: (α : 类型) [Preorder α]
+  签名: (α : 类型) [预序 α]
   定义体: ⨆ (p : LTSeries α), p.length
 
 Depends on / 依赖: LTSeries, length, p.length
@@ -97,7 +97,7 @@ definition height
 
 中文:
 定义 height
-  签名: {α : 类型} [Preorder α] (a : α)
+  签名: {α : 类型} [预序 α] (a : α)
   定义体: ⨆ (p : LTSeries α) (_ : p.last <= a), p.length
 
 Depends on / 依赖: LTSeries, length, p.last, p.length
@@ -115,7 +115,7 @@ definition coheight
 
 中文:
 定义 coheight
-  签名: {α : 类型} [Preorder α] (a : α)
+  签名: {α : 类型} [预序 α] (a : α)
   定义体: height (α := αᵒᵈ) a
 
 Depends on / 依赖: height
@@ -567,7 +567,7 @@ lemma index_le_height
 
 中文:
 引理 index_le_height
-  条件: (p : LTSeries α) (i : Fin (p.length + 1))
+  条件: (p : LTSeries α) (i : 有限集 (p.length + 1))
   结论: i <= height (p i)
   证明: length_le_height_last (p := p.take i)
 
@@ -588,7 +588,7 @@ lemma rev_index_le_coheight
 
 中文:
 引理 rev_index_le_coheight
-  条件: (p : LTSeries α) (i : Fin (p.length + 1))
+  条件: (p : LTSeries α) (i : 有限集 (p.length + 1))
   结论: i.rev <= coheight (p i)
   证明: by
   simpa using! index_le_height (α := αᵒᵈ) p.reverse i.rev
@@ -673,7 +673,7 @@ lemma height_mono
 
 中文:
 引理 height_mono
-  结论: Monotone (α := α) height
+  结论: 递增 (α := α) height
   证明: fun _ _ hab => biSup_mono (fun _ hla => hla.trans hab)
 
 @[gcongr]
@@ -694,7 +694,7 @@ lemma coheight_anti
 
 中文:
 引理 coheight_anti
-  结论: Antitone (α := α) coheight
+  结论: 递减 (α := α) coheight
   证明: (height_mono (α := αᵒᵈ)).dual_left
 
 Depends on / 依赖: coheight
@@ -887,7 +887,7 @@ lemma height_le_height_apply_of_strictMono
 
 中文:
 引理 height_le_height_apply_of_strictMono
-  条件: (f : α -> β) (hf : StrictMono f) (x : α)
+  条件: (f : α -> β) (hf : 严格递增 f) (x : α)
   证明: by
   simp only [height_eq_iSup_last_eq]
   apply iSup₂_le
@@ -915,7 +915,7 @@ lemma coheight_le_coheight_apply_of_strictMono
 
 中文:
 引理 coheight_le_coheight_apply_of_strictMono
-  条件: (f : α -> β) (hf : StrictMono f) (x : α)
+  条件: (f : α -> β) (hf : 严格递增 f) (x : α)
   证明: by
   apply height_le_height_apply_of_strictMono (α := αᵒᵈ)
   exact fun _ _ h => hf h
@@ -944,7 +944,7 @@ lemma coheight_eq_of_strictMono
 
 中文:
 引理 coheight_eq_of_strictMono
-  结论: (f : α -> β) (hf : StrictMono f)
+  结论: (f : α -> β) (hf : 严格递增 f)
   证明: by
   refine le_antisymm (Order.coheight_le_coheight_apply_of_strictMono _ hf _) ?_
   refine coheight_le_iff'.mpr fun p hp => ?_
@@ -985,7 +985,7 @@ lemma height_eq_of_strictMono
 
 中文:
 引理 height_eq_of_strictMono
-  结论: (f : α -> β) (hf : StrictMono f)
+  结论: (f : α -> β) (hf : 严格递增 f)
   证明: by
   have : coheight (OrderDual.toDual a) = coheight (OrderDual.toDual (f a)) :=
     coheight_eq_of_strictMono (α := αᵒᵈ) (β := βᵒᵈ) (f := OrderDual.toDual ∘ f ∘ OrderDual.toDual)
@@ -1065,8 +1065,8 @@ lemma exists_eq_iSup_of_iSup_eq_coe
   simpa [hx] using! h
 
 中文:
-引理 exists_eq_iSup_of_iSup_eq_coe
-  结论: {α : 类型} [Nonempty α] {f : α -> 自然数∞} {n : 自然数}
+引理 存在_eq_iSup_of_iSup_eq_coe
+  结论: {α : 类型} [非空 α] {f : α -> 自然数∞} {n : 自然数}
   证明: by
   obtain ⟨x, hx⟩ := ENat.sSup_mem_of_nonempty_of_lt_top (h ▸ ENat.natCast_lt_top _)
   use x
@@ -1095,7 +1095,7 @@ lemma exists_series_of_le_height
     rintro m ⟨⟨p, rfl
 
 中文:
-引理 exists_series_of_le_height
+引理 存在_series_of_le_height
   条件: (a : α) {n : 自然数} (h : n <= height a)
   证明: by
   have hne : Nonempty { p : LTSeries α // p.last = a } := ⟨RelSeries.singleton _ a, rfl⟩
@@ -1143,7 +1143,7 @@ lemma exists_series_of_le_coheight
   exact ⟨p.reverse, by simpa, by simpa⟩
 
 中文:
-引理 exists_series_of_le_coheight
+引理 存在_series_of_le_coheight
   条件: (a : α) {n : 自然数} (h : n <= coheight a)
   证明: by
   obtain ⟨p, hp, hl⟩ := exists_series_of_le_height (α := αᵒᵈ) a h
@@ -1165,7 +1165,7 @@ lemma exists_series_of_height_eq_coe
   proof: exists_series_of_le_height a (le_of_eq h.symm)
 
 中文:
-引理 exists_series_of_height_eq_coe
+引理 存在_series_of_height_eq_coe
   条件: (a : α) {n : 自然数} (h : height a = n)
   证明: exists_series_of_le_height a (le_of_eq h.symm)
 
@@ -1184,7 +1184,7 @@ lemma exists_series_of_coheight_eq_coe
   proof: exists_series_of_le_coheight a (le_of_eq h.symm)
 
 中文:
-引理 exists_series_of_coheight_eq_coe
+引理 存在_series_of_coheight_eq_coe
   条件: (a : α) {n : 自然数} (h : coheight a = n)
   证明: exists_series_of_le_coheight a (le_of_eq h.symm)
 
@@ -1528,7 +1528,7 @@ lemma height_bot
 
 中文:
 引理 height_bot
-  条件: (α : 类型) [Preorder α] [OrderBot α]
+  条件: (α : 类型) [预序 α] [有底序 α]
   结论: height (⊥ : α) = 0
   证明: by simp
 -/
@@ -1545,7 +1545,7 @@ lemma coheight_top
 
 中文:
 引理 coheight_top
-  条件: (α : 类型) [Preorder α] [OrderTop α]
+  条件: (α : 类型) [预序 α] [有顶序 α]
   结论: coheight (⊤ : α) = 0
   证明: by simp
 -/
@@ -1564,7 +1564,7 @@ lemma height_pos_of_bot_lt
 
 中文:
 引理 height_pos_of_bot_lt
-  条件: {x : α} [OrderBot α] (h : ⊥ < x)
+  条件: {x : α} [有底序 α] (h : ⊥ < x)
   结论: 0 < height x
   证明: by
   rw [height_pos]
@@ -1589,7 +1589,7 @@ lemma coheight_pos_of_lt_top
 
 中文:
 引理 coheight_pos_of_lt_top
-  条件: {x : α} [OrderTop α] (h : x < ⊤)
+  条件: {x : α} [有顶序 α] (h : x < ⊤)
   结论: 0 < coheight x
   证明: by
   rw [coheight_pos]
@@ -1955,7 +1955,7 @@ lemma krullDim_eq_bot_iff
 
 中文:
 引理 krullDim_eq_bot_iff
-  结论: krullDim α = ⊥ ↔ IsEmpty α
+  结论: krullDim α = ⊥ ↔ 是空 α
   证明: by
   rw [eq_bot_iff]; rw [krullDim]; rw [iSup_le_iff]
   simp only [le_bot_iff, WithBot.natCast_ne_bot, isEmpty_iff]
@@ -1980,7 +1980,7 @@ lemma krullDim_nonneg_iff
 
 中文:
 引理 krullDim_nonneg_iff
-  结论: 0 <= krullDim α ↔ Nonempty α
+  结论: 0 <= krullDim α ↔ 非空 α
   证明: by
   contrapose!
   rw [← krullDim_eq_bot_iff]; rw [← WithBot.lt_coe_bot]; rw [bot_eq_zero]; rw [WithBot.coe_zero]
@@ -2002,7 +2002,7 @@ lemma krullDim_eq_bot
 
 中文:
 引理 krullDim_eq_bot
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: krullDim α = ⊥
   证明: krullDim_eq_bot_iff.mpr ‹_›
 
@@ -2021,7 +2021,7 @@ lemma krullDim_nonneg
 
 中文:
 引理 krullDim_nonneg
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: 0 <= krullDim α
   证明: krullDim_nonneg_iff.mpr ‹_›
 
@@ -2040,7 +2040,7 @@ theorem krullDim_ne_bot_iff
 
 中文:
 定理 krullDim_ne_bot_iff
-  结论: krullDim α != ⊥ ↔ Nonempty α
+  结论: krullDim α != ⊥ ↔ 非空 α
   证明: by
   rw [ne_eq]; rw [krullDim_eq_bot_iff]; rw [not_isEmpty_iff]
 
@@ -2060,7 +2060,7 @@ theorem bot_lt_krullDim_iff
 
 中文:
 定理 bot_lt_krullDim_iff
-  结论: ⊥ < krullDim α ↔ Nonempty α
+  结论: ⊥ < krullDim α ↔ 非空 α
   证明: by
   rw [bot_lt_iff_ne_bot]; rw [krullDim_ne_bot_iff]
 
@@ -2080,7 +2080,7 @@ theorem bot_lt_krullDim
 
 中文:
 定理 bot_lt_krullDim
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: ⊥ < krullDim α
   证明: bot_lt_krullDim_iff.mpr ‹_›
 
@@ -2104,7 +2104,7 @@ lemma krullDim_nonpos_iff_forall_isMax
     · cases H (l 0) (l 1) (h 0)
 
 中文:
-引理 krullDim_nonpos_iff_forall_isMax
+引理 krullDim_nonpos_iff_对任意_isMax
   结论: krullDim α <= 0 ↔ 对任意 x : α, IsMax x
   证明: by
   simp only [krullDim, iSup_le_iff, isMax_iff_forall_not_lt]
@@ -2135,7 +2135,7 @@ lemma krullDim_nonpos_iff_forall_isMin
   exact forall_comm
 
 中文:
-引理 krullDim_nonpos_iff_forall_isMin
+引理 krullDim_nonpos_iff_对任意_isMin
   结论: krullDim α <= 0 ↔ 对任意 x : α, IsMin x
   证明: by
   simp only [krullDim_nonpos_iff_forall_isMax, IsMax, IsMin]
@@ -2244,7 +2244,7 @@ lemma krullDim_nonpos_of_subsingleton
 
 中文:
 引理 krullDim_nonpos_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: krullDim α <= 0
   证明: by
   rw [krullDim_nonpos_iff_forall_isMax]
@@ -2266,7 +2266,7 @@ lemma krullDim_eq_zero
 
 中文:
 引理 krullDim_eq_zero
-  条件: [Nonempty α] [Subsingleton α]
+  条件: [非空 α] [子单例 α]
   证明: le_antisymm krullDim_nonpos_of_subsingleton krullDim_nonneg
 
 Depends on / 依赖: krullDim_nonneg, krullDim_nonpos_of_subsingleton, le_antisymm
@@ -2286,7 +2286,7 @@ lemma krullDim_eq_zero_of_unique
 
 中文:
 引理 krullDim_eq_zero_of_unique
-  条件: [Unique α]
+  条件: [唯一 α]
   结论: krullDim α = 0
   证明: le_antisymm krullDim_nonpos_of_subsingleton krullDim_nonneg
 
@@ -2309,8 +2309,8 @@ lemma krullDim_le_one_iff_forall_isMax
   simp [krullDim_le_one_iff, ← or_iff_not_imp_left]
 
 中文:
-引理 krullDim_le_one_iff_forall_isMax
-  条件: [OrderBot α]
+引理 krullDim_le_one_iff_对任意_isMax
+  条件: [有底序 α]
   证明: by
   simp [krullDim_le_one_iff, ← or_iff_not_imp_left]
 
@@ -2331,7 +2331,7 @@ lemma krullDim_eq_zero_iff_of_orderBot
 
 中文:
 引理 krullDim_eq_zero_iff_of_orderBot
-  条件: [OrderBot α]
+  条件: [有底序 α]
   证明: ⟨fun H => subsingleton_of_forall_eq ⊥ fun _ => le_bot_iff.mp
     (krullDim_nonpos_iff_forall_isMax.mp H.le ⊥ bot_le), fun _ => Order.krullDim_eq_zero⟩
 
@@ -2354,7 +2354,7 @@ lemma krullDim_pos_iff_of_orderBot
 
 中文:
 引理 krullDim_pos_iff_of_orderBot
-  条件: [OrderBot α]
+  条件: [有底序 α]
   证明: by
   rw [← not_subsingleton_iff_nontrivial]; rw [← Order.krullDim_eq_zero_iff_of_orderBot]; rw [← ne_eq]; rw [← lt_or_lt_iff_ne]; rw [or_iff_right]
   simp [Order.krullDim_nonneg]
@@ -2376,8 +2376,8 @@ lemma krullDim_le_one_iff_forall_isMin
   simp [krullDim_le_one_iff, ← or_iff_not_imp_right]
 
 中文:
-引理 krullDim_le_one_iff_forall_isMin
-  条件: [OrderTop α]
+引理 krullDim_le_one_iff_对任意_isMin
+  条件: [有顶序 α]
   证明: by
   simp [krullDim_le_one_iff, ← or_iff_not_imp_right]
 
@@ -2398,7 +2398,7 @@ lemma krullDim_eq_zero_iff_of_orderTop
 
 中文:
 引理 krullDim_eq_zero_iff_of_orderTop
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   证明: ⟨fun H => subsingleton_of_forall_eq ⊤ fun _ => top_le_iff.mp
     (krullDim_nonpos_iff_forall_isMin.mp H.le ⊤ le_top), fun _ => Order.krullDim_eq_zero⟩
 
@@ -2421,7 +2421,7 @@ lemma krullDim_pos_iff_of_orderTop
 
 中文:
 引理 krullDim_pos_iff_of_orderTop
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   证明: by
   rw [← not_subsingleton_iff_nontrivial]; rw [← Order.krullDim_eq_zero_iff_of_orderTop]; rw [← ne_eq]; rw [← lt_or_lt_iff_ne]; rw [or_iff_right]
   simp [Order.krullDim_nonneg]
@@ -2444,7 +2444,7 @@ lemma krullDim_le_one_iff_of_boundedOrder
 
 中文:
 引理 krullDim_le_one_iff_of_boundedOrder
-  条件: [BoundedOrder α]
+  条件: [有界序 α]
   证明: by
   simp [Order.krullDim_le_one_iff]
 
@@ -2613,7 +2613,7 @@ lemma krullDim_eq_iSup_length
 
 中文:
 引理 krullDim_eq_iSup_length
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   simp [krullDim, WithBot.coe_iSup (OrderTop.bddAbove _), WithBot.coe_natCast]
 
@@ -2668,7 +2668,7 @@ lemma krullDim_le_of_strictMono
 
 中文:
 引理 krullDim_le_of_strictMono
-  条件: (f : α -> β) (hf : StrictMono f)
+  条件: (f : α -> β) (hf : 严格递增 f)
   结论: krullDim α <= krullDim β
   证明: iSup_le fun p => le_sSup ⟨p.map f hf, rfl⟩
 
@@ -2844,7 +2844,7 @@ lemma krullDim_eq_iSup_height_of_nonempty
 
 中文:
 引理 krullDim_eq_iSup_height_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: krullDim α = ↑(⨆ (a : α), height a)
   证明: by
   apply le_antisymm
@@ -2879,7 +2879,7 @@ lemma krullDim_eq_iSup_coheight_of_nonempty
 
 中文:
 引理 krullDim_eq_iSup_coheight_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   simpa using! krullDim_eq_iSup_height_of_nonempty (α := αᵒᵈ)
 
@@ -2908,7 +2908,7 @@ lemma krullDim_eq_iSup_height_add_coheight_of_nonempty
 
 中文:
 引理 krullDim_eq_iSup_height_add_coheight_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   证明: by
   apply le_antisymm
   · rw [krullDim_eq_iSup_height_of_nonempty, WithBot.coe_le_coe]
@@ -3019,7 +3019,7 @@ lemma height_top_eq_krullDim
 
 中文:
 引理 height_top_eq_krullDim
-  条件: [OrderTop α]
+  条件: [有顶序 α]
   结论: height (⊤ : α) = krullDim α
   证明: by
   rw [krullDim_eq_iSup_length]
@@ -3053,7 +3053,7 @@ lemma coheight_bot_eq_krullDim
 
 中文:
 引理 coheight_bot_eq_krullDim
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: coheight (⊥ : α) = krullDim α
   证明: by
   rw [← krullDim_orderDual]
@@ -3082,7 +3082,7 @@ lemma height_eq_krullDim_Iic
 中文:
 引理 height_eq_krullDim_Iic
   条件: (x : α)
-  结论: (height x : 自然数∞) = krullDim (Set.Iic x)
+  结论: (height x : 自然数∞) = krullDim (集合.左无界右闭区间 x)
   证明: by
   rw [← height_top_eq_krullDim]; rw [height]; rw [height]; rw [WithBot.coe_inj]
   apply le_antisymm
@@ -3118,7 +3118,7 @@ lemma coheight_eq_krullDim_Ici
 
 中文:
 引理 coheight_eq_krullDim_Ici
-  条件: {α : 类型} [Preorder α] (x : α)
+  条件: {α : 类型} [预序 α] (x : α)
   证明: by
   rw [coheight]; rw [← krullDim_orderDual]; rw [Order.krullDim_eq_of_orderIso (OrderIso.refl _)]
   exact height_eq_krullDim_Iic _
@@ -3251,8 +3251,8 @@ class KrullDimLE
     - krullDim_le : krullDim α <= n
 
 中文:
-类 KrullDimLE
-  参数: (n : 自然数) (α : 类型) [Preorder α]
+类 Krull维数不超过
+  参数: (n : 自然数) (α : 类型) [预序 α]
   公理与运算 (1 个):
     - krullDim_le : krullDim α <= n
 -/
@@ -3268,8 +3268,8 @@ lemma KrullDimLE.mono
   proof: ⟨KrullDimLE.krullDim_le (n := n).trans (Nat.cast_le.mpr e)⟩
 
 中文:
-引理 KrullDimLE.mono
-  条件: {n m : 自然数} (e : n <= m) (α : 类型) [Preorder α] [KrullDimLE n α]
+引理 Krull维数不超过.mono
+  条件: {n m : 自然数} (e : n <= m) (α : 类型) [预序 α] [Krull维数不超过 n α]
   证明: ⟨KrullDimLE.krullDim_le (n := n).trans (Nat.cast_le.mpr e)⟩
 
 Depends on / 依赖: KrullDimLE, KrullDimLE.krullDim_le, Nat.cast_le.mpr, cast_le, krullDim_le
@@ -3299,7 +3299,7 @@ lemma krullDim_eq_one_iff_of_boundedOrder
 
 中文:
 引理 krullDim_eq_one_iff_of_boundedOrder
-  条件: {α : 类型} [PartialOrder α] [BoundedOrder α]
+  条件: {α : 类型} [偏序 α] [有界序 α]
   证明: by
   rw [le_antisymm_iff]; rw [krullDim_le_one_iff_of_boundedOrder]; rw [WithBot.one_le_iff_pos]; rw [Order.krullDim_pos_iff_of_orderBot]; rw [isSimpleOrder_iff]; rw [and_comm]
 
@@ -3319,7 +3319,7 @@ lemma krullDim_of_isSimpleOrder
 
 中文:
 引理 krullDim_of_isSimpleOrder
-  结论: {α : 类型} [PartialOrder α] [BoundedOrder α]
+  结论: {α : 类型} [偏序 α] [有界序 α]
   证明: krullDim_eq_one_iff_of_boundedOrder.mpr ‹_›
 -/
 @[simp] lemma krullDim_of_isSimpleOrder {α : Type*} [PartialOrder α] [BoundedOrder α]
@@ -3382,7 +3382,7 @@ lemma coheight_of_noMaxOrder
 
 中文:
 引理 coheight_of_noMaxOrder
-  条件: [NoMaxOrder α] (a : α)
+  条件: [NoMax序 α] (a : α)
   结论: coheight a = ⊤
   证明: by
   obtain ⟨f, hstrictmono⟩ := Nat.exists_strictMono ↑(Set.Ioi a)
@@ -3423,7 +3423,7 @@ lemma height_of_noMinOrder
 
 中文:
 引理 height_of_noMinOrder
-  条件: [NoMinOrder α] (a : α)
+  条件: [NoMin序 α] (a : α)
   结论: height a = ⊤
   证明: -- Implementation note: Here it's a bit easier to define the coheight variant first
   coheight_of_noMaxOrder (α := αᵒᵈ) a
@@ -3444,7 +3444,7 @@ lemma krullDim_of_noMaxOrder
 
 中文:
 引理 krullDim_of_noMaxOrder
-  条件: [Nonempty α] [NoMaxOrder α]
+  条件: [非空 α] [NoMax序 α]
   结论: krullDim α = ⊤
   证明: by
   simp [krullDim_eq_iSup_coheight, coheight_of_noMaxOrder]
@@ -3464,7 +3464,7 @@ lemma krullDim_of_noMinOrder
 
 中文:
 引理 krullDim_of_noMinOrder
-  条件: [Nonempty α] [NoMinOrder α]
+  条件: [非空 α] [NoMin序 α]
   结论: krullDim α = ⊤
   证明: by
   simp [krullDim_eq_iSup_height, height_of_noMinOrder]
@@ -3740,7 +3740,7 @@ lemma krullDim_WithTop
 
 中文:
 引理 krullDim_WithTop
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: krullDim (WithTop α) = krullDim α + 1
   证明: by
   rw [← height_top_eq_krullDim]; rw [krullDim_eq_iSup_height_of_nonempty]; rw [height_eq_iSup_lt_height]
@@ -3776,7 +3776,7 @@ lemma krullDim_withBot
 
 中文:
 引理 krullDim_withBot
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: krullDim (WithBot α) = krullDim α + 1
   证明: by
   conv_lhs => rw [← krullDim_orderDual]
@@ -4012,7 +4012,7 @@ lemma krullDim_le_of_krullDim_preimage_le'
 
 中文:
 引理 krullDim_le_of_krullDim_preimage_le'
-  结论: (f : α -> β) (h_mono : Monotone f)
+  结论: (f : α -> β) (h_mono : 递增 f)
   证明: Order.krullDim_le_of_krullDim_preimage_le ⟨f, h_mono⟩ h
 
 Depends on / 依赖: Order.krullDim_le_of_krullDim_preimage_le, h_mono, krullDim_le_of_krullDim_preimage_le

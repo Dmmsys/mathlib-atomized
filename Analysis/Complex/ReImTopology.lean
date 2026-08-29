@@ -87,7 +87,7 @@ theorem isOpenMap_re
 
 中文:
 定理 isOpenMap_re
-  结论: IsOpenMap re
+  结论: 是开映射 re
   证明: isHomeomorphicTrivialFiberBundle_re.isOpenMap_proj
 
 Depends on / 依赖: isHomeomorphicTrivialFiberBundle_re, isHomeomorphicTrivialFiberBundle_re.isOpenMap_proj, isOpenMap_proj
@@ -105,7 +105,7 @@ theorem isOpenMap_im
 
 中文:
 定理 isOpenMap_im
-  结论: IsOpenMap im
+  结论: 是开映射 im
   证明: isHomeomorphicTrivialFiberBundle_im.isOpenMap_proj
 
 Depends on / 依赖: isHomeomorphicTrivialFiberBundle_im, isHomeomorphicTrivialFiberBundle_im.isOpenMap_proj, isOpenMap_proj
@@ -123,7 +123,7 @@ theorem isQuotientMap_re
 
 中文:
 定理 isQuotientMap_re
-  结论: IsQuotientMap re
+  结论: 是商映射 re
   证明: isHomeomorphicTrivialFiberBundle_re.isQuotientMap_proj
 
 Depends on / 依赖: isHomeomorphicTrivialFiberBundle_re, isHomeomorphicTrivialFiberBundle_re.isQuotientMap_proj, isQuotientMap_proj
@@ -141,7 +141,7 @@ theorem isQuotientMap_im
 
 中文:
 定理 isQuotientMap_im
-  结论: IsQuotientMap im
+  结论: 是商映射 im
   证明: isHomeomorphicTrivialFiberBundle_im.isQuotientMap_proj
 
 Depends on / 依赖: isHomeomorphicTrivialFiberBundle_im, isHomeomorphicTrivialFiberBundle_im.isQuotientMap_proj, isQuotientMap_proj
@@ -160,7 +160,7 @@ theorem interior_preimage_re
 
 中文:
 定理 interior_preimage_re
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: interior (re ⁻¹' s) = re ⁻¹' interior s
   证明: (isOpenMap_re.preimage_interior_eq_interior_preimage continuous_re _).symm
 
@@ -180,7 +180,7 @@ theorem interior_preimage_im
 
 中文:
 定理 interior_preimage_im
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: interior (im ⁻¹' s) = im ⁻¹' interior s
   证明: (isOpenMap_im.preimage_interior_eq_interior_preimage continuous_im _).symm
 
@@ -200,7 +200,7 @@ theorem closure_preimage_re
 
 中文:
 定理 closure_preimage_re
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: closure (re ⁻¹' s) = re ⁻¹' closure s
   证明: (isOpenMap_re.preimage_closure_eq_closure_preimage continuous_re _).symm
 
@@ -220,7 +220,7 @@ theorem closure_preimage_im
 
 中文:
 定理 closure_preimage_im
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: closure (im ⁻¹' s) = im ⁻¹' closure s
   证明: (isOpenMap_im.preimage_closure_eq_closure_preimage continuous_im _).symm
 
@@ -240,7 +240,7 @@ theorem frontier_preimage_re
 
 中文:
 定理 frontier_preimage_re
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: frontier (re ⁻¹' s) = re ⁻¹' frontier s
   证明: (isOpenMap_re.preimage_frontier_eq_frontier_preimage continuous_re _).symm
 
@@ -262,7 +262,7 @@ theorem frontier_preimage_im
 
 中文:
 定理 frontier_preimage_im
-  条件: (s : Set 实数)
+  条件: (s : 集合 实数)
   结论: frontier (im ⁻¹' s) = im ⁻¹' frontier s
   证明: (isOpenMap_im.preimage_frontier_eq_frontier_preimage continuous_im _).symm
 
@@ -292,7 +292,7 @@ alias interior_setOf_re_le := interior_setOfPred_re_le
 中文:
 定理 interior_setOfPred_re_le
   条件: (a : 实数)
-  结论: interior { z : Complex | z.re <= a } = { z | z.re < a }
+  结论: interior { z : 复形 | z.re <= a } = { z | z.re < a }
   证明: by
   simpa only [interior_Iic] using! interior_preimage_re (Iic a)
 
@@ -328,7 +328,7 @@ alias interior_setOf_im_le := interior_setOfPred_im_le
 中文:
 定理 interior_setOfPred_im_le
   条件: (a : 实数)
-  结论: interior { z : Complex | z.im <= a } = { z | z.im < a }
+  结论: interior { z : 复形 | z.im <= a } = { z | z.im < a }
   证明: by
   simpa only [interior_Iic] using! interior_preimage_im (Iic a)
 
@@ -364,7 +364,7 @@ alias interior_setOf_le_re := interior_setOfPred_le_re
 中文:
 定理 interior_setOfPred_le_re
   条件: (a : 实数)
-  结论: interior { z : Complex | a <= z.re } = { z | a < z.re }
+  结论: interior { z : 复形 | a <= z.re } = { z | a < z.re }
   证明: by
   simpa only [interior_Ici] using! interior_preimage_re (Ici a)
 
@@ -400,7 +400,7 @@ alias interior_setOf_le_im := interior_setOfPred_le_im
 中文:
 定理 interior_setOfPred_le_im
   条件: (a : 实数)
-  结论: interior { z : Complex | a <= z.im } = { z | a < z.im }
+  结论: interior { z : 复形 | a <= z.im } = { z | a < z.im }
   证明: by
   simpa only [interior_Ici] using! interior_preimage_im (Ici a)
 
@@ -436,7 +436,7 @@ alias closure_setOf_re_lt := closure_setOfPred_re_lt
 中文:
 定理 closure_setOfPred_re_lt
   条件: (a : 实数)
-  结论: closure { z : Complex | z.re < a } = { z | z.re <= a }
+  结论: closure { z : 复形 | z.re < a } = { z | z.re <= a }
   证明: by
   simpa only [closure_Iio] using! closure_preimage_re (Iio a)
 
@@ -471,7 +471,7 @@ theorem closure_setOfPred_im_lt
 中文:
 定理 closure_setOfPred_im_lt
   条件: (a : 实数)
-  结论: closure { z : Complex | z.im < a } = { z | z.im <= a }
+  结论: closure { z : 复形 | z.im < a } = { z | z.im <= a }
   证明: by
   simpa only [closure_Iio] using! closure_preimage_im (Iio a)
 
@@ -505,7 +505,7 @@ alias closure_setOf_lt_re := closure_setOfPred_lt_re
 中文:
 定理 closure_setOfPred_lt_re
   条件: (a : 实数)
-  结论: closure { z : Complex | a < z.re } = { z | a <= z.re }
+  结论: closure { z : 复形 | a < z.re } = { z | a <= z.re }
   证明: by
   simpa only [closure_Ioi] using! closure_preimage_re (Ioi a)
 
@@ -540,7 +540,7 @@ theorem closure_setOfPred_lt_im
 中文:
 定理 closure_setOfPred_lt_im
   条件: (a : 实数)
-  结论: closure { z : Complex | a < z.im } = { z | a <= z.im }
+  结论: closure { z : 复形 | a < z.im } = { z | a <= z.im }
   证明: by
   simpa only [closure_Ioi] using! closure_preimage_im (Ioi a)
 
@@ -574,7 +574,7 @@ alias frontier_setOf_re_le := frontier_setOfPred_re_le
 中文:
 定理 frontier_setOfPred_re_le
   条件: (a : 实数)
-  结论: frontier { z : Complex | z.re <= a } = { z | z.re = a }
+  结论: frontier { z : 复形 | z.re <= a } = { z | z.re = a }
   证明: by
   simpa only [frontier_Iic] using! frontier_preimage_re (Iic a)
 
@@ -610,7 +610,7 @@ alias frontier_setOf_im_le := frontier_setOfPred_im_le
 中文:
 定理 frontier_setOfPred_im_le
   条件: (a : 实数)
-  结论: frontier { z : Complex | z.im <= a } = { z | z.im = a }
+  结论: frontier { z : 复形 | z.im <= a } = { z | z.im = a }
   证明: by
   simpa only [frontier_Iic] using! frontier_preimage_im (Iic a)
 
@@ -646,7 +646,7 @@ alias frontier_setOf_le_re := frontier_setOfPred_le_re
 中文:
 定理 frontier_setOfPred_le_re
   条件: (a : 实数)
-  结论: frontier { z : Complex | a <= z.re } = { z | z.re = a }
+  结论: frontier { z : 复形 | a <= z.re } = { z | z.re = a }
   证明: by
   simpa only [frontier_Ici] using! frontier_preimage_re (Ici a)
 
@@ -682,7 +682,7 @@ alias frontier_setOf_le_im := frontier_setOfPred_le_im
 中文:
 定理 frontier_setOfPred_le_im
   条件: (a : 实数)
-  结论: frontier { z : Complex | a <= z.im } = { z | z.im = a }
+  结论: frontier { z : 复形 | a <= z.im } = { z | z.im = a }
   证明: by
   simpa only [frontier_Ici] using! frontier_preimage_im (Ici a)
 
@@ -718,7 +718,7 @@ alias frontier_setOf_re_lt := frontier_setOfPred_re_lt
 中文:
 定理 frontier_setOfPred_re_lt
   条件: (a : 实数)
-  结论: frontier { z : Complex | z.re < a } = { z | z.re = a }
+  结论: frontier { z : 复形 | z.re < a } = { z | z.re = a }
   证明: by
   simpa only [frontier_Iio] using! frontier_preimage_re (Iio a)
 
@@ -754,7 +754,7 @@ alias frontier_setOf_im_lt := frontier_setOfPred_im_lt
 中文:
 定理 frontier_setOfPred_im_lt
   条件: (a : 实数)
-  结论: frontier { z : Complex | z.im < a } = { z | z.im = a }
+  结论: frontier { z : 复形 | z.im < a } = { z | z.im = a }
   证明: by
   simpa only [frontier_Iio] using! frontier_preimage_im (Iio a)
 
@@ -790,7 +790,7 @@ alias frontier_setOf_lt_re := frontier_setOfPred_lt_re
 中文:
 定理 frontier_setOfPred_lt_re
   条件: (a : 实数)
-  结论: frontier { z : Complex | a < z.re } = { z | z.re = a }
+  结论: frontier { z : 复形 | a < z.re } = { z | z.re = a }
   证明: by
   simpa only [frontier_Ioi] using! frontier_preimage_re (Ioi a)
 
@@ -824,7 +824,7 @@ alias frontier_setOf_lt_im := frontier_setOfPred_lt_im
 中文:
 定理 frontier_setOfPred_lt_im
   条件: (a : 实数)
-  结论: frontier { z : Complex | a < z.im } = { z | z.im = a }
+  结论: frontier { z : 复形 | a < z.im } = { z | z.im = a }
   证明: by
   simpa only [frontier_Ioi] using! frontier_preimage_im (Ioi a)
 
@@ -852,8 +852,8 @@ theorem closure_reProdIm
 
 中文:
 定理 closure_reProdIm
-  条件: (s t : Set 实数)
-  结论: closure (s ×Complex t) = closure s ×Complex closure t
+  条件: (s t : 集合 实数)
+  结论: closure (s ×复形 t) = closure s ×复形 closure t
   证明: by
   simpa only [← preimage_eq_preimage equivRealProdCLM.symm.toHomeomorph.surjective,
     equivRealProdCLM.symm.toHomeomorph.preimage_closure] using! @closure_prod_eq _ _ _ _ s t
@@ -876,8 +876,8 @@ theorem interior_reProdIm
 
 中文:
 定理 interior_reProdIm
-  条件: (s t : Set 实数)
-  结论: interior (s ×Complex t) = interior s ×Complex interior t
+  条件: (s t : 集合 实数)
+  结论: interior (s ×复形 t) = interior s ×复形 interior t
   证明: by
   rw [reProdIm]; rw [reProdIm]; rw [interior_inter]; rw [interior_preimage_re]; rw [interior_preimage_im]
 
@@ -898,7 +898,7 @@ theorem frontier_reProdIm
 
 中文:
 定理 frontier_reProdIm
-  条件: (s t : Set 实数)
+  条件: (s t : 集合 实数)
   证明: by
   simpa only [← preimage_eq_preimage equivRealProdCLM.symm.toHomeomorph.surjective,
     equivRealProdCLM.symm.toHomeomorph.preimage_frontier] using! frontier_prod_eq s t
@@ -989,9 +989,9 @@ theorem IsOpen.reProdIm
   proof: (hs.preimage continuous_re).inter (ht.preimage continuous_im)
 
 中文:
-定理 IsOpen.reProdIm
-  条件: (hs : IsOpen s) (ht : IsOpen t)
-  结论: IsOpen (s ×Complex t)
+定理 是开集.reProdIm
+  条件: (hs : 是开集 s) (ht : 是开集 t)
+  结论: 是开集 (s ×复形 t)
   证明: (hs.preimage continuous_re).inter (ht.preimage continuous_im)
 
 Depends on / 依赖: continuous_im, continuous_re, hs.preimage, ht.preimage, preimage
@@ -1009,9 +1009,9 @@ theorem IsClosed.reProdIm
   proof: (hs.preimage continuous_re).inter (ht.preimage continuous_im)
 
 中文:
-定理 IsClosed.reProdIm
-  条件: (hs : IsClosed s) (ht : IsClosed t)
-  结论: IsClosed (s ×Complex t)
+定理 是闭集.reProdIm
+  条件: (hs : 是闭集 s) (ht : 是闭集 t)
+  结论: 是闭集 (s ×复形 t)
   证明: (hs.preimage continuous_re).inter (ht.preimage continuous_im)
 
 Depends on / 依赖: continuous_im, continuous_re, hs.preimage, ht.preimage, preimage
@@ -1029,9 +1029,9 @@ theorem Bornology.IsBounded.reProdIm
   proof: antilipschitz_equivRealProd.isBounded_preimage (hs.prod ht)
 
 中文:
-定理 Bornology.IsBounded.reProdIm
+定理 有界结构.IsBounded.reProdIm
   条件: (hs : IsBounded s) (ht : IsBounded t)
-  结论: IsBounded (s ×Complex t)
+  结论: IsBounded (s ×复形 t)
   证明: antilipschitz_equivRealProd.isBounded_preimage (hs.prod ht)
 
 Depends on / 依赖: antilipschitz_equivRealProd, antilipschitz_equivRealProd.isBounded_preimage, hs.prod, isBounded_preimage
@@ -1054,7 +1054,7 @@ lemma TendstoUniformlyOn.re
 
 中文:
 引理 TendstoUniformlyOn.re
-  结论: {f : ι -> α -> Complex} {p : Filter ι} {g : α -> Complex} {K : Set α}
+  结论: {f : ι -> α -> 复形} {p : 滤子 ι} {g : α -> 复形} {K : 集合 α}
   证明: by
   apply UniformContinuous.comp_tendstoUniformlyOn uniformContinuous_re hf
 -/
@@ -1074,7 +1074,7 @@ lemma TendstoUniformly.re
 
 中文:
 引理 TendstoUniformly.re
-  结论: {f : ι -> α -> Complex} {p : Filter ι} {g : α -> Complex}
+  结论: {f : ι -> α -> 复形} {p : 滤子 ι} {g : α -> 复形}
   证明: by
   apply UniformContinuous.comp_tendstoUniformly uniformContinuous_re hf
 -/
@@ -1094,7 +1094,7 @@ lemma TendstoUniformlyOn.im
 
 中文:
 引理 TendstoUniformlyOn.im
-  结论: {f : ι -> α -> Complex} {p : Filter ι} {g : α -> Complex} {K : Set α}
+  结论: {f : ι -> α -> 复形} {p : 滤子 ι} {g : α -> 复形} {K : 集合 α}
   证明: by
   apply UniformContinuous.comp_tendstoUniformlyOn uniformContinuous_im hf
 
@@ -1116,7 +1116,7 @@ lemma TendstoUniformly.im
 
 中文:
 引理 TendstoUniformly.im
-  结论: {f : ι -> α -> Complex} {p : Filter ι} {g : α -> Complex}
+  结论: {f : ι -> α -> 复形} {p : 滤子 ι} {g : α -> 复形}
   证明: by
   apply UniformContinuous.comp_tendstoUniformly uniformContinuous_im hf
 -/

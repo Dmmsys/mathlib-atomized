@@ -44,7 +44,7 @@ lemma dvd_exponent
 
 中文:
 引理 dvd_exponent
-  结论: {ι G : 类型} [Monoid G] {n : ι -> 自然数}
+  结论: {ι G : 类型} [幺半群 G] {n : ι -> 自然数}
   证明: by
   classical -- to get `DecidableEq ι`
   have : n i = orderOf (e.symm <| Pi.mulSingle i <| .ofAdd 1) := by
@@ -79,7 +79,7 @@ exact (MulEquiv.map_eq_one_iff e).mp funext ha
   use (φi.comp
 
 中文:
-引理 exists_apply_ne_one_aux
+引理 存在_apply_ne_one_aux
   证明: by
   obtain ⟨ι, _, n, _, h⟩ := CommGroup.equiv_prod_multiplicative_zmod_of_finite G
   let e := h.some
@@ -120,7 +120,7 @@ have : NeZero n := ⟨fun H => NeZero.ne _ Nat.eq_zero_of_zero_dvd (H ▸ hn)⟩
   exact ZMod.exists_monoidHom_apply_ne_one (HasEnoughRootsOfUnity.exists_primitiveRoot M n) ha₀
 
 中文:
-定理 exists_apply_ne_one_of_hasEnoughRootsOfUnity
+定理 存在_apply_ne_one_of_hasEnoughRootsOfUnity
   条件: {a : G} (ha : a != 1)
   证明: by
   refine exists_apply_ne_one_aux G Mˣ (fun n hn a ha₀ => ?_) ha
@@ -151,7 +151,7 @@ theorem forall_apply_eq_apply_iff
     exists_apply_ne_one_of_hasEnoughRootsOfUnity G M (a := g * g'⁻¹)
 
 中文:
-定理 forall_apply_eq_apply_iff
+定理 对任意_apply_eq_apply_iff
   条件: {g g' : G}
   证明: by
   refine ⟨fun h => ?_, fun h => by simp [h]⟩
@@ -182,7 +182,7 @@ have inst i : HasEnoughRoo
 
 中文:
 定理 monoidHom_mulEquiv_of_hasEnoughRootsOfUnity
-  结论: Nonempty ((G ->* Mˣ) ≃* G)
+  结论: 非空 ((G ->* Mˣ) ≃* G)
   证明: by
   classical -- to get `DecidableEq ι`
   obtain ⟨ι, _, n, ⟨h₁, h₂⟩⟩ := equiv_prod_multiplicative_zmod_of_finite G
@@ -241,8 +241,8 @@ hM.of_dvd M Group.exponent_quotient_dvd H
   refine MonoidHom.surjective_of_card_ke
 
 中文:
-定理 _root_.MonoidHom.domRestrict_surjective
-  条件: (H : Subgroup G)
+定理 _root_.幺半群态射.domRestrict_surjective
+  条件: (H : 子群 G)
   证明: by
   have : Fintype H := Fintype.ofFinite H
   have : HasEnoughRootsOfUnity M (Monoid.exponent H) :=
@@ -281,8 +281,8 @@ hM.of_dvd M Group.exponent_quotient_dvd H
   exact fun φ => h (φ.comp (QuotientGroup.mk' H))
 
 中文:
-定理 forall_monoidHom_apply_eq_one_iff
-  条件: (H : Subgroup G) (x : G)
+定理 对任意_monoidHom_apply_eq_one_iff
+  条件: (H : 子群 G) (x : G)
   证明: by
   have : HasEnoughRootsOfUnity M (Monoid.exponent (G ⧸ H)) :=
 hM.of_dvd M Group.exponent_quotient_dvd H
@@ -315,7 +315,7 @@ hM.of_dvd M Group.exponent_quotient_dvd H
 
 中文:
 定理 card_domRestrictHom_ker
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: by
   have : HasEnoughRootsOfUnity M (Monoid.exponent (G ⧸ H)) :=
 hM.of_dvd M Group.exponent_quotient_dvd H
@@ -418,7 +418,7 @@ definition subgroupOrderIsoSubgroupMonoidHom
 
 中文:
 定义 subgroupOrderIsoSubgroupMonoidHom
-  签名: : Subgroup G ≃o (Subgroup (G ->* Mˣ))ᵒᵈ where
+  签名: : 子群 G ≃o (子群 (G ->* Mˣ))ᵒᵈ where
   定义体: OrderDual.toDual (domRestrictHom H Mˣ).ker
   invFun Φ := (monoidHomMonoidHomEquiv G M).mapSubgroup (domRestrictHom Φ.ofDual Mˣ).ker
   map_rel_iff' {H₁} {H₂} := by
@@ -458,7 +458,7 @@ theorem mem_subgroupOrderIsoSubgroupMonoidHom_iff
 
 中文:
 定理 mem_subgroupOrderIsoSubgroupMonoidHom_iff
-  条件: (H : Subgroup G) (φ : G ->* Mˣ)
+  条件: (H : 子群 G) (φ : G ->* Mˣ)
   证明: by
   simp [subgroupOrderIsoSubgroupMonoidHom]
 
@@ -484,7 +484,7 @@ theorem mem_subgroupOrderIsoSubgroupMonoidHom_symm_iff
 
 中文:
 定理 mem_subgroupOrderIsoSubgroupMonoidHom_symm_iff
-  条件: (Φ : Subgroup (G ->* Mˣ)) (g : G)
+  条件: (Φ : 子群 (G ->* Mˣ)) (g : G)
   证明: by
   simp_rw [subgroupOrderIsoSubgroupMonoidHom, OrderIso.symm_mk, RelIso.coe_fn_mk,
     Equiv.coe_fn_symm_mk, OrderDual.ofDual_toDual, MulEquiv.coe_mapSubgroup,
@@ -510,7 +510,7 @@ theorem card_subgroupOrderIsoSubgroupMonoidHom
 
 中文:
 定理 card_subgroupOrderIsoSubgroupMonoidHom
-  条件: (H : Subgroup G)
+  条件: (H : 子群 G)
   证明: card_domRestrictHom_ker _ _
 
 Depends on / 依赖: card_domRestrictHom_ker

@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited ReflQuiv
+  签名: 可居 ReflQuiv
   定义体: ⟨ReflQuiv.of (Discrete default)⟩
 
 Depends on / 依赖: Discrete, ReflQuiv, ReflQuiv.of
@@ -139,7 +139,7 @@ instance category
 
 中文:
 实例 category
-  签名: : LargeCategory.{max v u} ReflQuiv.{v, u} where
+  签名: : 大范畴.{最大值 v u} ReflQuiv.{v, u} where
   定义体: ReflPrefunctor C D
   id C := ReflPrefunctor.id C
   comp F G := ReflPrefunctor.comp F G
@@ -320,8 +320,8 @@ instance forget.Faithful
   body: fun hyp => Cat.Hom.ext forget_faithful _ _ hyp
 
 中文:
-实例 forget.Faithful
-  签名: : Functor.Faithful (forget) where
+实例 forget.忠实
+  签名: : 函子.忠实 (forget) where
   定义体: fun hyp => Cat.Hom.ext forget_faithful _ _ hyp
 
 Depends on / 依赖: Cat.Hom.ext, forget_faithful
@@ -380,8 +380,8 @@ instance forgetToQuiv.Faithful
   body: fun hyp => forgetToQuiv_faithful _ _ hyp
 
 中文:
-实例 forgetToQuiv.Faithful
-  签名: : Functor.Faithful forgetToQuiv where
+实例 forgetToQuiv.忠实
+  签名: : 函子.忠实 forgetToQuiv where
   定义体: fun hyp => forgetToQuiv_faithful _ _ hyp
 
 Depends on / 依赖: forgetToQuiv_faithful
@@ -521,7 +521,7 @@ inductive FreeReflRel
 归纳类型 FreeReflRel
   参数: : (X Y : Paths V) -> (f g : X ⟶ Y) -> 命题
   构造子 (1 个):
-    - mk: {X : V} : FreeReflRel X X (Quiver.Hom.toPath (𝟙rq X)) .nil
+    - mk: {X : V} : FreeReflRel X X (箭图.态射.toPath (𝟙rq X)) .nil
 -/
 inductive FreeReflRel : (X Y : Paths V) -> (f g : X ⟶ Y) -> Prop
   | mk {X : V} : FreeReflRel X X (Quiver.Hom.toPath (𝟙rq X)) .nil
@@ -556,7 +556,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (FreeRefl V)
+  签名: 范畴 (FreeRefl V)
   定义体: inferInstanceAs (Category (Quotient _))
 
 Depends on / 依赖: Category, Quotient
@@ -593,7 +593,7 @@ definition induction
 
 中文:
 定义 induction
-  签名: {motive : FreeRefl V -> Sort*} (mk : 对任意 v, motive (mk v)) (x : FreeRefl V)
+  签名: {motive : FreeRefl V -> 类型层*} (mk : 对任意 v, motive (mk v)) (x : FreeRefl V)
   定义体: mk _
 -/
 def induction {motive : FreeRefl V -> Sort*} (mk : forall v, motive (mk v)) (x : FreeRefl V) :
@@ -629,7 +629,7 @@ instance :
 
 中文:
 实例 :
-  签名: (FreeRefl.quotientFunctor V).Full
+  签名: (FreeRefl.quotientFunctor V).满
   定义体: Quotient.full_functor _
 
 Depends on / 依赖: Quotient, Quotient.full_functor, full_functor
@@ -738,7 +738,7 @@ definition morphismPropertyHomMk
 
 中文:
 定义 morphismPropertyHomMk
-  签名: : Morphism命题erty (FreeRefl V)
+  签名: : MorphismProperty (FreeRefl V)
   定义体: .ofHoms (fun (e : Σ (x y : V), x ⟶ y) => homMk e.2.2)
 
 Depends on / 依赖: ofHoms
@@ -866,7 +866,7 @@ lemma morphismProperty_eq_top
 
 中文:
 引理 morphismProperty_eq_top
-  结论: {W : Morphism命题erty (FreeRefl V)}
+  结论: {W : MorphismProperty (FreeRefl V)}
   证明: le_antisymm (by simp) (by
     rw [← multiplicativeClosure_morphismPropertyHomMk]; rw [MorphismProperty.multiplicativeClosure_le_iff]
     rintro _ _ _ ⟨h⟩
@@ -1030,7 +1030,7 @@ theorem lift_unique'
 
 中文:
 定理 lift_unique'
-  结论: {V} [ReflQuiver V] {D} [Category* D] (F₁ F₂ : FreeRefl V ⥤ D)
+  结论: {V} [ReflQuiver V] {D} [范畴* D] (F₁ F₂ : FreeRefl V ⥤ D)
   证明: Quotient.lift_unique' (C := Cat.free.obj (Quiv.of V)) (FreeReflRel (V := V)) _ _ h
 
 Depends on / 依赖: Cat.free.obj, FreeReflRel, Quiv.of, Quotient, Quotient.lift_unique, lift_unique
@@ -1052,7 +1052,7 @@ lemma functor_ext
 
 中文:
 引理 functor_ext
-  结论: {D : 类型} [Category* D]
+  结论: {D : 类型} [范畴* D]
   证明: lift_unique' _ _ (Paths.ext_functor (by ext; apply h₁) (fun _ _ _ => h₂ _))
 
 @[simp]
@@ -1148,7 +1148,7 @@ lemma FreeRefl.lift_spec
 
 中文:
 引理 FreeRefl.lift_spec
-  条件: {D : 类型} [Category* D] (F : V ⥤rq D)
+  条件: {D : 类型} [范畴* D] (F : V ⥤rq D)
   证明: ReflPrefunctor.ext (fun v => by simp) (by simp)
 
 Depends on / 依赖: ReflPrefunctor, ReflPrefunctor.ext
@@ -1257,7 +1257,7 @@ definition freeRefl
 
 中文:
 定义 freeRefl
-  签名: : ReflQuiv.{v, u} ⥤ Cat.{max u v, u} where
+  签名: : ReflQuiv.{v, u} ⥤ Cat.{最大值 u v, u} where
   定义体: Cat.of (FreeRefl V)
   map F := (freeReflMap F).toCatHom
   map_id X := by ext1; exact FreeRefl.functor_ext (by simp) (by simp)
@@ -1283,7 +1283,7 @@ definition freeReflNatTrans
     ext1; exact Paths.ext_functor (V := Quiv.of v) (by cat_disch) (by cat_disch)
 
 中文:
-定义 freeReflNatTrans
+定义 freeRefl自然数Trans
   签名: : ReflQuiv.forgetToQuiv ⋙ Cat.free ⟶ freeRefl where
   定义体: (FreeRefl.quotientFunctor V).toCatHom
   naturality v w f := by
@@ -1390,7 +1390,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : Cat.freeRefl.{max u v, u} ⊣ ReflQuiv.forget
+  签名: : Cat.freeRefl.{最大值 u v, u} ⊣ ReflQuiv.forget
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv _ _ := (Cat.Hom.equivFunctor ..).trans adj.homEquiv
       homEquiv_naturality_left_symm _ _ := by ext1; exact adj.homEquiv_naturality_left_symm _ _
@@ -1433,7 +1433,7 @@ lemma adj_counit_app
 
 中文:
 引理 adj_counit_app
-  条件: (D : 类型u) [Category.{max u v} D]
+  条件: (D : 类型u) [范畴.{最大值 u v} D]
   证明: rfl
 -/
 lemma adj_counit_app (D : Type u) [Category.{max u v} D] :
@@ -1454,7 +1454,7 @@ lemma adj_homEquiv
 
 中文:
 引理 adj_homEquiv
-  条件: (V : 类型u) [ReflQuiver.{max u v} V] (C : 类型u) [Category.{max u v} C]
+  条件: (V : 类型u) [ReflQuiver.{最大值 u v} V] (C : 类型u) [范畴.{最大值 u v} C]
   证明: by
   ext F
   apply Adjunction.homEquiv_unit
@@ -1476,7 +1476,7 @@ lemma adj.unit.map_app_eq
 
 中文:
 引理 adj.unit.map_app_eq
-  条件: (V : 类型u) [ReflQuiver.{max u v} V]
+  条件: (V : 类型u) [ReflQuiver.{最大值 u v} V]
   证明: rfl
 -/
 lemma adj.unit.map_app_eq (V : Type u) [ReflQuiver.{max u v} V] :
@@ -1498,7 +1498,7 @@ lemma adj.counit.comp_app_eq
 
 中文:
 引理 adj.counit.comp_app_eq
-  条件: (C : 类型u) [Category.{max u v} C]
+  条件: (C : 类型u) [范畴.{最大值 u v} C]
   证明: Paths.ext_functor rfl (fun _ _ f => by
     dsimp
     simp only [adj_counit_app, composePath_toPath, comp_id, id_comp]

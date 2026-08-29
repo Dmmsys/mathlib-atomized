@@ -33,8 +33,8 @@ instance Subtype.inv
 @[simp]
 
 中文:
-实例 Subtype.inv
-  签名: : Inv { x : K // 0 < x }
+实例 子类型.inv
+  签名: : 取逆 { x : K // 0 < x }
   定义体: ⟨fun x => ⟨x⁻¹, inv_pos.2 x.2⟩⟩
 
 @[simp]
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow { x : K // 0 < x } 整数
+  签名: 幂 { x : K // 0 < x } 整数
   定义体: ⟨fun x n => ⟨(x : K) ^ n, zpow_pos x.2 _⟩⟩
 
 @[simp]
@@ -116,7 +116,7 @@ zpow_neg' n x := Subtype.ext DivInvMonoid.zpow_neg' _ _
 
 中文:
 实例 :
-  签名: CommGroup { x : K // 0 < x }
+  签名: 交换群 { x : K // 0 < x }
   定义体: Subtype.ext inv_mul_cancel₀ a.2.ne'
 zpow_zero' x := Subtype.ext zpow_zero _
 zpow_succ' n x := Subtype.ext DivInvMonoid.zpow_succ' _ _

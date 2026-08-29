@@ -47,7 +47,7 @@ ker_eq_bot.mp Submodule.ker_liftQ_eq_bot _ _ _ (le_refl (Lin
 
 中文:
 定义 quotKerEquivRange
-  签名: : (M ⧸ LinearMap.ker f) ≃ₗ[R] LinearMap.range f
+  签名: : (M ⧸ 线性映射.ker f) ≃ₗ[R] 线性映射.range f
   定义体: -- TODO: We should fix this definition so that `fₗ.quotKerEquivRange.toAddEquiv` is definitionally
   -- equal to `QuotientAddGroup.quotientKerEquivRange f.toAddMonoidHom`.
   (LinearEquiv.ofInjective ((LinearMap.ker f).liftQ f <| le_rfl) <|
@@ -72,7 +72,7 @@ definition quotKerEquivOfSurjective
 
 中文:
 定义 quotKerEquivOfSurjective
-  签名: (f : M ->ₗ[R] M₂) (hf : Function.Surjective f)
+  签名: (f : M ->ₗ[R] M₂) (hf : 函数.满射 f)
   定义体: f.quotKerEquivRange.trans .ofTop (LinearMap.range f) range_eq_top.2 hf
 
 @[simp]
@@ -118,7 +118,7 @@ theorem quotKerEquivOfSurjective_apply_mk
 
 中文:
 定理 quotKerEquivOfSurjective_apply_mk
-  条件: (hf : Function.Surjective f) (x : M)
+  条件: (hf : 函数.满射 f) (x : M)
   证明: rfl
 
 @[simp]
@@ -140,7 +140,7 @@ theorem quotKerEquivRange_symm_apply_image
 
 中文:
 定理 quotKerEquivRange_symm_apply_image
-  条件: (x : M) (h : f x in LinearMap.range f)
+  条件: (x : M) (h : f x in 线性映射.range f)
   证明: f.quotKerEquivRange.symm_apply_apply ((LinearMap.ker f).mkQ x)
 
 @[simp]
@@ -163,7 +163,7 @@ theorem quotKerEquivOfSurjective_symm_apply
 
 中文:
 定理 quotKerEquivOfSurjective_symm_apply
-  条件: (hf : Function.Surjective f) (x : M)
+  条件: (hf : 函数.满射 f) (x : M)
   证明: by
   simp [LinearEquiv.symm_apply_eq]
 
@@ -183,7 +183,7 @@ abbreviation subToSupQuotient
 
 中文:
 缩写 subToSupQuotient
-  签名: (p p' : Submodule R M)
+  签名: (p p' : 子模 R M)
   定义体: (comap (p ⊔ p').subtype p').mkQ.comp (Submodule.inclusion le_sup_left)
 
 Depends on / 依赖: Submodule, Submodule.inclusion, inclusion, le_sup_left, mkQ.comp, subtype
@@ -204,7 +204,7 @@ theorem comap_leq_ker_subToSupQuotient
 
 中文:
 定理 comap_leq_ker_subToSupQuotient
-  条件: (p p' : Submodule R M)
+  条件: (p p' : 子模 R M)
   证明: by
   rw [LinearMap.ker_comp]; rw [Submodule.inclusion]; rw [comap_codRestrict]; rw [ker_mkQ]; rw [map_comap_subtype]
   exact comap_mono (inf_le_inf_right _ le_sup_left)
@@ -226,7 +226,7 @@ definition quotientInfToSupQuotient
 
 中文:
 定义 quotientInfToSupQuotient
-  签名: (p p' : Submodule R M)
+  签名: (p p' : 子模 R M)
   定义体: (comap p.subtype (p ⊓ p')).liftQ (subToSupQuotient p p') (comap_leq_ker_subToSupQuotient p p')
 
 Depends on / 依赖: comap_leq_ker_subToSupQuotient, p.subtype, subToSupQuotient, subtype
@@ -250,7 +250,7 @@ theorem quotientInfEquivSupQuotient_injective
 
 中文:
 定理 quotientInfEquivSupQuotient_injective
-  条件: (p p' : Submodule R M)
+  条件: (p p' : 子模 R M)
   证明: by
   rw [← ker_eq_bot]; rw [quotientInfToSupQuotient]; rw [ker_liftQ_eq_bot]
   rw [ker_comp]; rw [ker_mkQ]
@@ -279,7 +279,7 @@ theorem quotientInfEquivSupQuotient_surjective
 
 中文:
 定理 quotientInfEquivSupQuotient_surjective
-  条件: (p p' : Submodule R M)
+  条件: (p p' : 子模 R M)
   证明: by
   rw [← range_eq_top]; rw [quotientInfToSupQuotient]; rw [range_liftQ]; rw [eq_top_iff']
   rintro ⟨x, hx⟩; rcases mem_sup.1 hx with ⟨y, hy, z, hz, rfl⟩
@@ -308,7 +308,7 @@ definition quotientInfEquivSupQuotient
 
 中文:
 定义 quotientInfEquivSupQuotient
-  签名: (p p' : Submodule R M)
+  签名: (p p' : 子模 R M)
   定义体: LinearEquiv.ofBijective (quotientInfToSupQuotient p p')
     ⟨quotientInfEquivSupQuotient_injective p p', quotientInfEquivSupQuotient_surjective p p'⟩
 
@@ -332,7 +332,7 @@ theorem coe_quotientInfToSupQuotient
 
 中文:
 定理 coe_quotientInfToSupQuotient
-  条件: (p p' : Submodule R M)
+  条件: (p p' : 子模 R M)
   证明: rfl
 -/
 theorem coe_quotientInfToSupQuotient (p p' : Submodule R M) :
@@ -352,7 +352,7 @@ theorem quotientInfEquivSupQuotient_apply_mk
 
 中文:
 定理 quotientInfEquivSupQuotient_apply_mk
-  条件: (p p' : Submodule R M) (x : p)
+  条件: (p p' : 子模 R M) (x : p)
   证明: inclusion (le_sup_left : p <= p ⊔ p')
     quotientInfEquivSupQuotient p p' (Submodule.Quotient.mk x) =
       @Submodule.Quotient.mk R (p ⊔ p' : Submodule R M) _ _ _ (comap (p ⊔ p').subtype p') (map x) :=
@@ -377,7 +377,7 @@ theorem quotientInfEquivSupQuotient_symm_apply_left
 
 中文:
 定理 quotientInfEquivSupQuotient_symm_apply_left
-  结论: (p p' : Submodule R M) (x : ↥(p ⊔ p'))
+  结论: (p p' : 子模 R M) (x : ↥(p ⊔ p'))
   证明: (LinearEquiv.symm_apply_eq _).2 by
     rw [quotientInfEquivSupQuotient_apply_mk]; rw [inclusion_apply]
 
@@ -401,7 +401,7 @@ theorem quotientInfEquivSupQuotient_symm_apply_eq_zero_iff
 
 中文:
 定理 quotientInfEquivSupQuotient_symm_apply_eq_zero_iff
-  条件: {p p' : Submodule R M} {x : ↥(p ⊔ p')}
+  条件: {p p' : 子模 R M} {x : ↥(p ⊔ p')}
   证明: (LinearEquiv.symm_apply_eq _).trans by simp
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.symm_apply_eq, symm_apply_eq
@@ -420,7 +420,7 @@ theorem quotientInfEquivSupQuotient_symm_apply_right
 
 中文:
 定理 quotientInfEquivSupQuotient_symm_apply_right
-  结论: (p p' : Submodule R M) {x : ↥(p ⊔ p')}
+  结论: (p p' : 子模 R M) {x : ↥(p ⊔ p')}
   证明: quotientInfEquivSupQuotient_symm_apply_eq_zero_iff.2 hx
 
 Depends on / 依赖: quotientInfEquivSupQuotient_symm_apply_eq_zero_iff
@@ -528,7 +528,7 @@ theorem card_quotient_mul_card_quotient
 
 中文:
 定理 card_quotient_mul_card_quotient
-  条件: (S T : Submodule R M) (hST : T <= S)
+  条件: (S T : 子模 R M) (hST : T <= S)
   证明: by
   rw [Submodule.card_eq_card_quotient_mul_card (map T.mkQ S)]; rw [Nat.card_congr (quotientQuotientEquivQuotient T S hST).toEquiv]
 

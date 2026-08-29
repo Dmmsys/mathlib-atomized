@@ -54,7 +54,7 @@ lemma analyticWithinAt_of_singleton_mem
 
 中文:
 引理 analyticWithinAt_of_singleton_mem
-  条件: {f : E -> F} {s : Set E} {x : E} (h : {x} in 𝓝[s] x)
+  条件: {f : E -> F} {s : 集合 E} {x : E} (h : {x} in 𝓝[s] x)
   证明: by
   rcases mem_nhdsWithin.mp h with ⟨t, ot, xt, st⟩
   rcases Metric.mem_nhds_iff.mp (ot.mem_nhds xt) with ⟨r, r0, rt⟩
@@ -102,7 +102,7 @@ lemma analyticOn_of_locally_analyticOn
 
 中文:
 引理 analyticOn_of_locally_analyticOn
-  结论: {f : E -> F} {s : Set E}
+  结论: {f : E -> F} {s : 集合 E}
   证明: by
   intro x m
   rcases h x m with ⟨u, ou, xu, fu⟩
@@ -156,8 +156,8 @@ lemma IsOpen.analyticOn_iff_analyticOnNhd
       intro y
 
 中文:
-引理 IsOpen.analyticOn_iff_analyticOnNhd
-  条件: {f : E -> F} {s : Set E} (hs : IsOpen s)
+引理 是开集.analyticOn_iff_analyticOnNhd
+  条件: {f : E -> F} {s : 集合 E} (hs : 是开集 s)
   证明: by
   refine ⟨?_, AnalyticOnNhd.analyticOn⟩
   intro hf x m
@@ -215,8 +215,8 @@ lemma hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall
           exact e
 
 中文:
-引理 hasFPowerSeriesWithinOnBall_iff_exists_hasFPowerSeriesOnBall
-  结论: [CompleteSpace F] {f : E -> F}
+引理 hasFPowerSeriesWithinOnBall_iff_存在_hasFPowerSeriesOnBall
+  结论: [完备空间 F] {f : E -> F}
   证明: by
   constructor
   · intro h
@@ -278,8 +278,8 @@ lemma hasFPowerSeriesWithinAt_iff_exists_hasFPowerSeriesAt
   · intro ⟨g, hfg, ⟨r, hg⟩
 
 中文:
-引理 hasFPowerSeriesWithinAt_iff_exists_hasFPowerSeriesAt
-  结论: [CompleteSpace F] {f : E -> F}
+引理 hasFPowerSeriesWithinAt_iff_存在_hasFPowerSeriesAt
+  结论: [完备空间 F] {f : E -> F}
   证明: by
   constructor
   · intro ⟨r, h⟩
@@ -323,8 +323,8 @@ lemma analyticWithinAt_iff_exists_analyticAt
   tauto
 
 中文:
-引理 analyticWithinAt_iff_exists_analyticAt
-  条件: [CompleteSpace F] {f : E -> F} {s : Set E} {x : E}
+引理 analyticWithinAt_iff_存在_analyticAt
+  条件: [完备空间 F] {f : E -> F} {s : 集合 E} {x : E}
   证明: by
   simp only [AnalyticWithinAt, AnalyticAt, hasFPowerSeriesWithinAt_iff_exists_hasFPowerSeriesAt]
   tauto
@@ -355,8 +355,8 @@ lemma analyticWithinAt_iff_exists_analyticAt'
       simpa [g', xu
 
 中文:
-引理 analyticWithinAt_iff_exists_analyticAt'
-  条件: [CompleteSpace F] {f : E -> F} {s : Set E} {x : E}
+引理 analyticWithinAt_iff_存在_analyticAt'
+  条件: [完备空间 F] {f : E -> F} {s : 集合 E} {x : E}
   证明: by
   classical
   simp only [analyticWithinAt_iff_exists_analyticAt]
@@ -409,7 +409,7 @@ lemma AnalyticWithinAt.exists_mem_nhdsWithin_analyticOn
     have : AnalyticWit
 
 中文:
-引理 AnalyticWithinAt.exists_mem_nhdsWithin_analyticOn
+引理 AnalyticWithinAt.存在_mem_nhdsWithin_analyticOn
   证明: by
   obtain ⟨g, -, h'g, hg⟩ : exists g, f x = g x ∧ EqOn f g (insert x s) ∧ AnalyticAt 𝕜 g x :=
     h.exists_analyticAt

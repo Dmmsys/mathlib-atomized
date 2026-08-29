@@ -45,7 +45,7 @@ theorem padicValNat_eq_emultiplicity_of_ne_one
 @[simp]
 
 中文:
-定理 padicValNat_eq_emultiplicity_of_ne_one
+定理 padicVal自然数_eq_emultiplicity_of_ne_one
   条件: (hp : p != 1) {n : 自然数} (hn : n != 0)
   证明: by
   rw [eq_comm]; rw [emultiplicity_eq_coe]; rw [pow_dvd_iff_le_padicValNat hp hn]; rw [pow_dvd_iff_le_padicValNat hp hn]
@@ -76,7 +76,7 @@ theorem Nat.toNat_emultiplicity
     · simp [← padicValNat_eq_emultiplicity_of_ne_one, *]
 
 中文:
-定理 Nat.toNat_emultiplicity
+定理 自然数.to自然数_emultiplicity
   条件: (p n : 自然数)
   结论: (emultiplicity p n).to自然数 = padicVal自然数 p n
   证明: by
@@ -105,7 +105,7 @@ theorem padicValNat_def'
     padicValNat_eq_emultiplicity_of_ne_one hp hn
 
 中文:
-定理 padicValNat_def'
+定理 padicVal自然数_def'
   条件: {n : 自然数} (hp : p != 1) (hn : n != 0)
   证明: .symm multiplicity_eq_of_emultiplicity_eq_some .symm
     padicValNat_eq_emultiplicity_of_ne_one hp hn
@@ -126,8 +126,8 @@ theorem padicValNat_def
   proof: padicValNat_def' hp.out.ne_one hn
 
 中文:
-定理 padicValNat_def
-  条件: [hp : Fact p.Prime] {n : 自然数} (hn : n != 0)
+定理 padicVal自然数_def
+  条件: [hp : Fact p.素] {n : 自然数} (hn : n != 0)
   证明: padicValNat_def' hp.out.ne_one hn
 
 Depends on / 依赖: hp.out.ne_one, ne_one, padicValNat_def
@@ -145,8 +145,8 @@ theorem padicValNat_eq_emultiplicity
   proof: padicValNat_eq_emultiplicity_of_ne_one hp.out.ne_one hn
 
 中文:
-定理 padicValNat_eq_emultiplicity
-  条件: [hp : Fact p.Prime] {n : 自然数} (hn : n != 0)
+定理 padicVal自然数_eq_emultiplicity
+  条件: [hp : Fact p.素] {n : 自然数} (hn : n != 0)
   证明: padicValNat_eq_emultiplicity_of_ne_one hp.out.ne_one hn
 
 Depends on / 依赖: hp.out.ne_one, ne_one, padicValNat_eq_emultiplicity_of_ne_one
@@ -247,7 +247,7 @@ theorem le_emultiplicity_iff_replicate_subperm_primeFactorsList
 
 中文:
 定理 le_emultiplicity_iff_replicate_subperm_primeFactorsList
-  结论: {a b : 自然数} {n : 自然数} (ha : a.Prime)
+  结论: {a b : 自然数} {n : 自然数} (ha : a.素)
   证明: (replicate_subperm_primeFactorsList_iff ha hb).trans
 .symm pow_dvd_iff_le_emultiplicity
 
@@ -270,8 +270,8 @@ theorem le_padicValNat_iff_replicate_subperm_primeFactorsList
 .emultiplicity_eq_multiplicity]; rw [← padicValNat_def' ha.ne_one hb]; rw [Nat.cast_le]
 
 中文:
-定理 le_padicValNat_iff_replicate_subperm_primeFactorsList
-  结论: {a b : 自然数} {n : 自然数} (ha : a.Prime)
+定理 le_padicVal自然数_iff_replicate_subperm_primeFactorsList
+  结论: {a b : 自然数} {n : 自然数} (ha : a.素)
   证明: by
   rw [← le_emultiplicity_iff_replicate_subperm_primeFactorsList ha hb]; rw [Nat.finiteMultiplicity_iff.2 ⟨ha.ne_one]; rw [Nat.pos_of_ne_zero hb⟩
 .emultiplicity_eq_multiplicity]; rw [← padicValNat_def' ha.ne_one hb]; rw [Nat.cast_le]

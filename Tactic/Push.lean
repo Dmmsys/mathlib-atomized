@@ -57,8 +57,8 @@ theorem not_exists
   proof: _root_.not_exists
 
 中文:
-定理 not_exists
-  结论: (¬ Exists s) ↔ (对任意 x, binderNameHint x s <| ¬ s x)
+定理 not_存在
+  结论: (¬ 存在 s) ↔ (对任意 x, binderNameHint x s <| ¬ s x)
   证明: _root_.not_exists
 -/
 @[push] theorem not_exists : (¬ Exists s) ↔ (forall x, binderNameHint x s <| ¬ s x) :=
@@ -123,7 +123,7 @@ theorem not_forall_eq
   proof: propext not_forall
 
 中文:
-定理 not_forall_eq
+定理 not_对任意_eq
   结论: (¬ 对任意 x, s x) = (存在 x, ¬ s x)
   证明: propext not_forall
 
@@ -148,10 +148,10 @@ structure Config
     - distrib : Bool  [default: false]
 
 中文:
-结构 Config
+结构 余nfig
   参数: where
   公理与运算 (1 个):
-    - distrib : 布尔  [默认: false]
+    - distrib : 布尔值  [默认: false]
 -/
 structure Config where
   /-- If `true` (default `false`), rewrite `¬ (p ∧ q)` into `¬ p ∨ ¬ q` instead of `p → ¬ q`. -/
@@ -177,7 +177,7 @@ definition pushNegBuiltin
 
 中文:
 定义 pushNegBuiltin
-  签名: (cfg : Config)
+  签名: (cfg : 余nfig)
   定义体: fun e => do
   let e := (← instantiateMVars e).cleanupAnnotations
   match e with
@@ -216,7 +216,7 @@ definition pushSimpConfig
 
 中文:
 定义 pushSimpConfig
-  签名: : Simp.Config where
+  签名: : Simp.余nfig where
   定义体: false
   proj := false
 -/
@@ -241,7 +241,7 @@ definition pushStep
 
 中文:
 定义 pushStep
-  签名: (head : Head) (cfg : Config)
+  签名: (head : Head) (cfg : 余nfig)
   定义体: fun e => do
   let e_whnf ← whnf e
   let some e_head := Head.ofExpr? e_whnf | return Simp.Step.continue
@@ -284,7 +284,7 @@ definition pushCore
 
 中文:
 定义 pushCore
-  签名: (head : Head) (cfg : Config) (disch? : Option Simp.Discharge) (tgt : Expr)
+  签名: (head : Head) (cfg : 余nfig) (disch? : 选项类型 Simp.Discharge) (tgt : Expr)
   定义体: do
   let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
       (simpTheorems := #[])
@@ -364,7 +364,7 @@ definition pullCore
 
 中文:
 定义 pullCore
-  签名: (head : Head) (tgt : Expr) (disch? : Option Simp.Discharge)
+  签名: (head : Head) (tgt : Expr) (disch? : 选项类型 Simp.Discharge)
   定义体: do
   let ctx : Simp.Context ← Simp.mkContext pushSimpConfig
       (simpTheorems := #[])
@@ -394,7 +394,7 @@ definition isUnderscore
 
 中文:
 定义 isUnderscore
-  签名: : Term -> 布尔
+  签名: : 项 -> 布尔值
 -/
 partial def isUnderscore : Term -> Bool
   | `(_) | `(fun $_ => _) => true
@@ -415,7 +415,7 @@ match ← liftMacroM expandMacros stx with
 
 中文:
 定义 resolvePushId?
-  签名: (stx : Term)
+  签名: (stx : 项)
   定义体: do
 match ← liftMacroM expandMacros stx with
   | `($f $args*) =>
@@ -458,7 +458,7 @@ Term.withoutModifyingElabMetaStateWithInfo Term.withoutErrToSorry Term.elabTerm 
 
 中文:
 定义 elabHead
-  签名: (stx : Term)
+  签名: (stx : 项)
   定义体: withRef stx do
   -- we elaborate `stx` to get an appropriate error message if the term isn't well formed,
   -- and to add hover information
@@ -515,7 +515,7 @@ definition push
 
 中文:
 定义 push
-  签名: (cfg : Config) (disch? : Option Simp.Discharge) (head : Head) (loc : Location)
+  签名: (cfg : 余nfig) (disch? : 选项类型 Simp.Discharge) (head : Head) (loc : Location)
   定义体: do
   let cfg := { distrib := cfg.distrib || (← getBoolOption `push_neg.use_distrib) }
   transformAtLocation (pushCore head cfg disch? ·) s!"push {head}" loc ifUnchanged

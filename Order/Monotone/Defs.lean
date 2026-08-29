@@ -69,7 +69,7 @@ definition Monotone
 to_dual_insert_cast Monotone := forall_comm.eq
 
 中文:
-定义 Monotone
+定义 递增
   签名: (f : α -> β)
   定义体: forall ⦃a b⦄, a <= b -> f a <= f b
 
@@ -91,7 +91,7 @@ definition Antitone
 to_dual_insert_cast Antitone := forall_comm.eq
 
 中文:
-定义 Antitone
+定义 递减
   签名: (f : α -> β)
   定义体: forall ⦃a b⦄, a <= b -> f b <= f a
 
@@ -114,7 +114,7 @@ to_dual_insert_cast MonotoneOn := by grind only
 
 中文:
 定义 MonotoneOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f a <= f b
 
 to_dual_insert_cast MonotoneOn := by grind only
@@ -136,7 +136,7 @@ to_dual_insert_cast AntitoneOn := by grind only
 
 中文:
 定义 AntitoneOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a <= b -> f b <= f a
 
 to_dual_insert_cast AntitoneOn := by grind only
@@ -157,7 +157,7 @@ definition StrictMono
 to_dual_insert_cast StrictMono := forall_comm.eq
 
 中文:
-定义 StrictMono
+定义 严格递增
   签名: (f : α -> β)
   定义体: forall ⦃a b⦄, a < b -> f a < f b
 
@@ -179,7 +179,7 @@ definition StrictAnti
 to_dual_insert_cast StrictAnti := forall_comm.eq
 
 中文:
-定义 StrictAnti
+定义 严格递减
   签名: (f : α -> β)
   定义体: forall ⦃a b⦄, a < b -> f b < f a
 
@@ -202,7 +202,7 @@ to_dual_insert_cast StrictMonoOn := by grind only
 
 中文:
 定义 StrictMonoOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f a < f b
 
 to_dual_insert_cast StrictMonoOn := by grind only
@@ -224,7 +224,7 @@ to_dual_insert_cast StrictAntiOn := by grind only
 
 中文:
 定义 StrictAntiOn
-  签名: (f : α -> β) (s : Set α)
+  签名: (f : α -> β) (s : 集合 α)
   定义体: forall ⦃a⦄ (_ : a in s) ⦃b⦄ (_ : b in s), a < b -> f b < f a
 
 to_dual_insert_cast StrictAntiOn := by grind only
@@ -250,7 +250,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a b, a <= b -> f a <= f b)] : Decidable (Monotone f)
+  签名: : 可判定 (对任意 a b, a <= b -> f a <= f b)] : 可判定 (递增 f)
   定义体: i
 -/
 instance [i : Decidable (forall a b, a <= b -> f a <= f b)] : Decidable (Monotone f) := i
@@ -264,7 +264,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a b, a <= b -> f b <= f a)] : Decidable (Antitone f)
+  签名: : 可判定 (对任意 a b, a <= b -> f b <= f a)] : 可判定 (递减 f)
   定义体: i
 -/
 instance [i : Decidable (forall a b, a <= b -> f b <= f a)] : Decidable (Antitone f) := i
@@ -279,7 +279,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a in s, 对任意 b in s, a <= b -> f a <= f b)] :
+  签名: : 可判定 (对任意 a in s, 对任意 b in s, a <= b -> f a <= f b)] :
   定义体: i
 -/
 instance [i : Decidable (forall a in s, forall b in s, a <= b -> f a <= f b)] :
@@ -295,7 +295,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a in s, 对任意 b in s, a <= b -> f b <= f a)] :
+  签名: : 可判定 (对任意 a in s, 对任意 b in s, a <= b -> f b <= f a)] :
   定义体: i
 -/
 instance [i : Decidable (forall a in s, forall b in s, a <= b -> f b <= f a)] :
@@ -311,7 +311,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a b, a < b -> f a < f b)] : Decidable (StrictMono f)
+  签名: : 可判定 (对任意 a b, a < b -> f a < f b)] : 可判定 (严格递增 f)
   定义体: i
 -/
 instance [i : Decidable (forall a b, a < b -> f a < f b)] : Decidable (StrictMono f) := i
@@ -325,7 +325,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a b, a < b -> f b < f a)] : Decidable (StrictAnti f)
+  签名: : 可判定 (对任意 a b, a < b -> f b < f a)] : 可判定 (严格递减 f)
   定义体: i
 -/
 instance [i : Decidable (forall a b, a < b -> f b < f a)] : Decidable (StrictAnti f) := i
@@ -340,7 +340,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a in s, 对任意 b in s, a < b -> f a < f b)] :
+  签名: : 可判定 (对任意 a in s, 对任意 b in s, a < b -> f a < f b)] :
   定义体: i
 -/
 instance [i : Decidable (forall a in s, forall b in s, a < b -> f a < f b)] :
@@ -356,7 +356,7 @@ instance [i
 
 中文:
 实例 [i
-  签名: : Decidable (对任意 a in s, 对任意 b in s, a < b -> f b < f a)] :
+  签名: : 可判定 (对任意 a in s, 对任意 b in s, a < b -> f b < f a)] :
   定义体: i
 -/
 instance [i : Decidable (forall a in s, forall b in s, a < b -> f b < f a)] :
@@ -380,7 +380,7 @@ theorem Monotone.comp_le_comp_left
   proof: fun x => hf (le_gh x)
 
 中文:
-定理 Monotone.comp_le_comp_left
+定理 递增.comp_le_comp_left
   证明: fun x => hf (le_gh x)
 
 Depends on / 依赖: le_gh
@@ -403,8 +403,8 @@ theorem monotone_lam
 
 中文:
 定理 monotone_lam
-  条件: {f : α -> β -> γ} (hf : 对任意 b, Monotone fun a => f a b)
-  结论: Monotone f
+  条件: {f : α -> β -> γ} (hf : 对任意 b, 递增 fun a => f a b)
+  结论: 递增 f
   证明: fun _ _ h b => hf b h
 -/
 theorem monotone_lam {f : α -> β -> γ} (hf : forall b, Monotone fun a => f a b) : Monotone f :=
@@ -421,8 +421,8 @@ theorem monotone_app
 
 中文:
 定理 monotone_app
-  条件: (f : β -> α -> γ) (b : β) (hf : Monotone fun a b => f b a)
-  结论: Monotone (f b)
+  条件: (f : β -> α -> γ) (b : β) (hf : 递增 fun a b => f b a)
+  结论: 递增 (f b)
   证明: fun _ _ h => hf h b
 -/
 theorem monotone_app (f : β -> α -> γ) (b : β) (hf : Monotone fun a b => f b a) : Monotone (f b) :=
@@ -439,8 +439,8 @@ theorem antitone_lam
 
 中文:
 定理 antitone_lam
-  条件: {f : α -> β -> γ} (hf : 对任意 b, Antitone fun a => f a b)
-  结论: Antitone f
+  条件: {f : α -> β -> γ} (hf : 对任意 b, 递减 fun a => f a b)
+  结论: 递减 f
   证明: fun _ _ h b => hf b h
 -/
 theorem antitone_lam {f : α -> β -> γ} (hf : forall b, Antitone fun a => f a b) : Antitone f :=
@@ -457,8 +457,8 @@ theorem antitone_app
 
 中文:
 定理 antitone_app
-  条件: (f : β -> α -> γ) (b : β) (hf : Antitone fun a b => f b a)
-  结论: Antitone (f b)
+  条件: (f : β -> α -> γ) (b : β) (hf : 递减 fun a b => f b a)
+  结论: 递减 (f b)
   证明: fun _ _ h => hf h b
 -/
 theorem antitone_app (f : β -> α -> γ) (b : β) (hf : Antitone fun a b => f b a) : Antitone (f b) :=
@@ -475,8 +475,8 @@ theorem Function.monotone_eval
   proof: fun _ _ H => H i
 
 中文:
-定理 Function.monotone_eval
-  条件: {ι : 类型u} {α : ι -> 类型v} [对任意 i, Preorder (α i)] (i : ι)
+定理 函数.monotone_eval
+  条件: {ι : 类型u} {α : ι -> 类型v} [对任意 i, 预序 (α i)] (i : ι)
   证明: fun _ _ H => H i
 -/
 theorem Function.monotone_eval {ι : Type u} {α : ι -> Type v} [forall i, Preorder (α i)] (i : ι) :
@@ -512,8 +512,8 @@ theorem Monotone.imp
 @[to_dual self]
 
 中文:
-定理 Monotone.imp
-  条件: (hf : Monotone f) (h : a <= b)
+定理 递增.imp
+  条件: (hf : 递增 f) (h : a <= b)
   结论: f a <= f b
   证明: hf h
 
@@ -535,8 +535,8 @@ theorem Antitone.imp
 @[to_dual self]
 
 中文:
-定理 Antitone.imp
-  条件: (hf : Antitone f) (h : a <= b)
+定理 递减.imp
+  条件: (hf : 递减 f) (h : a <= b)
   结论: f b <= f a
   证明: hf h
 
@@ -558,8 +558,8 @@ theorem StrictMono.imp
 @[to_dual self]
 
 中文:
-定理 StrictMono.imp
-  条件: (hf : StrictMono f) (h : a < b)
+定理 严格递增.imp
+  条件: (hf : 严格递增 f) (h : a < b)
   结论: f a < f b
   证明: hf h
 
@@ -579,8 +579,8 @@ theorem StrictAnti.imp
   proof: hf h
 
 中文:
-定理 StrictAnti.imp
-  条件: (hf : StrictAnti f) (h : a < b)
+定理 严格递减.imp
+  条件: (hf : 严格递减 f) (h : a < b)
   结论: f b < f a
   证明: hf h
 -/
@@ -597,8 +597,8 @@ theorem Monotone.monotoneOn
   proof: fun _ _ _ _ => hf.imp
 
 中文:
-定理 Monotone.monotoneOn
-  条件: (hf : Monotone f) (s : Set α)
+定理 递增.monotoneOn
+  条件: (hf : 递增 f) (s : 集合 α)
   结论: MonotoneOn f s
   证明: fun _ _ _ _ => hf.imp
 -/
@@ -615,8 +615,8 @@ theorem Antitone.antitoneOn
   proof: fun _ _ _ _ => hf.imp
 
 中文:
-定理 Antitone.antitoneOn
-  条件: (hf : Antitone f) (s : Set α)
+定理 递减.antitoneOn
+  条件: (hf : 递减 f) (s : 集合 α)
   结论: AntitoneOn f s
   证明: fun _ _ _ _ => hf.imp
 -/
@@ -633,7 +633,7 @@ theorem monotoneOn_univ
 
 中文:
 定理 monotoneOn_univ
-  结论: MonotoneOn f Set.univ ↔ Monotone f
+  结论: MonotoneOn f 集合.univ ↔ 递增 f
   证明: ⟨fun h _ _ => h trivial trivial, fun h => h.monotoneOn _⟩
 -/
 @[simp] theorem monotoneOn_univ : MonotoneOn f Set.univ ↔ Monotone f :=
@@ -649,7 +649,7 @@ theorem antitoneOn_univ
 
 中文:
 定理 antitoneOn_univ
-  结论: AntitoneOn f Set.univ ↔ Antitone f
+  结论: AntitoneOn f 集合.univ ↔ 递减 f
   证明: ⟨fun h _ _ => h trivial trivial, fun h => h.antitoneOn _⟩
 -/
 @[simp] theorem antitoneOn_univ : AntitoneOn f Set.univ ↔ Antitone f :=
@@ -665,8 +665,8 @@ theorem StrictMono.strictMonoOn
   proof: fun _ _ _ _ => hf.imp
 
 中文:
-定理 StrictMono.strictMonoOn
-  条件: (hf : StrictMono f) (s : Set α)
+定理 严格递增.strictMonoOn
+  条件: (hf : 严格递增 f) (s : 集合 α)
   结论: StrictMonoOn f s
   证明: fun _ _ _ _ => hf.imp
 -/
@@ -683,8 +683,8 @@ theorem StrictAnti.strictAntiOn
   proof: fun _ _ _ _ => hf.imp
 
 中文:
-定理 StrictAnti.strictAntiOn
-  条件: (hf : StrictAnti f) (s : Set α)
+定理 严格递减.strictAntiOn
+  条件: (hf : 严格递减 f) (s : 集合 α)
   结论: StrictAntiOn f s
   证明: fun _ _ _ _ => hf.imp
 -/
@@ -701,7 +701,7 @@ theorem strictMonoOn_univ
 
 中文:
 定理 strictMonoOn_univ
-  结论: StrictMonoOn f Set.univ ↔ StrictMono f
+  结论: StrictMonoOn f 集合.univ ↔ 严格递增 f
   证明: ⟨fun h _ _ => h trivial trivial, fun h => h.strictMonoOn _⟩
 -/
 @[simp] theorem strictMonoOn_univ : StrictMonoOn f Set.univ ↔ StrictMono f :=
@@ -717,7 +717,7 @@ theorem strictAntiOn_univ
 
 中文:
 定理 strictAntiOn_univ
-  结论: StrictAntiOn f Set.univ ↔ StrictAnti f
+  结论: StrictAntiOn f 集合.univ ↔ 严格递减 f
   证明: ⟨fun h _ _ => h trivial trivial, fun h => h.strictAntiOn _⟩
 -/
 @[simp] theorem strictAntiOn_univ : StrictAntiOn f Set.univ ↔ StrictAnti f :=
@@ -739,9 +739,9 @@ theorem Monotone.strictMono_of_injective
   proof: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H
 
 中文:
-定理 Monotone.strictMono_of_injective
-  条件: (h₁ : Monotone f) (h₂ : Injective f)
-  结论: StrictMono f
+定理 递增.strictMono_of_injective
+  条件: (h₁ : 递增 f) (h₂ : 单射 f)
+  结论: 严格递增 f
   证明: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H
 
 Depends on / 依赖: h.le, h.ne, lt_of_ne
@@ -759,9 +759,9 @@ theorem Antitone.strictAnti_of_injective
   proof: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H.symm
 
 中文:
-定理 Antitone.strictAnti_of_injective
-  条件: (h₁ : Antitone f) (h₂ : Injective f)
-  结论: StrictAnti f
+定理 递减.strictAnti_of_injective
+  条件: (h₁ : 递减 f) (h₂ : 单射 f)
+  结论: 严格递减 f
   证明: fun _ _ h => (h₁ h.le).lt_of_ne fun H => h.ne h₂ H.symm
 
 Depends on / 依赖: H.symm, h.le, h.ne, lt_of_ne
@@ -790,8 +790,8 @@ theorem monotone_iff_forall_lt
 @[to_dual none]
 
 中文:
-定理 monotone_iff_forall_lt
-  结论: Monotone f ↔ 对任意 ⦃a b⦄, a < b -> f a <= f b
+定理 monotone_iff_对任意_lt
+  结论: 递增 f ↔ 对任意 ⦃a b⦄, a < b -> f a <= f b
   证明: forall₂_congr fun _ _ =>
     ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) hf⟩
 
@@ -816,8 +816,8 @@ theorem antitone_iff_forall_lt
 @[to_dual none]
 
 中文:
-定理 antitone_iff_forall_lt
-  结论: Antitone f ↔ 对任意 ⦃a b⦄, a < b -> f b <= f a
+定理 antitone_iff_对任意_lt
+  结论: 递减 f ↔ 对任意 ⦃a b⦄, a < b -> f b <= f a
   证明: forall₂_congr fun _ _ =>
     ⟨fun hf h => hf h.le, fun hf h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) hf⟩
 
@@ -841,7 +841,7 @@ theorem monotoneOn_iff_forall_lt
 @[to_dual none]
 
 中文:
-定理 monotoneOn_iff_forall_lt
+定理 monotoneOn_iff_对任意_lt
   证明: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
    fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).le) (hf ha hb)⟩
 
@@ -864,7 +864,7 @@ theorem antitoneOn_iff_forall_lt
    fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) (hf ha hb)⟩
 
 中文:
-定理 antitoneOn_iff_forall_lt
+定理 antitoneOn_iff_对任意_lt
   证明: ⟨fun hf _ ha _ hb h => hf ha hb h.le,
    fun hf _ ha _ hb h => h.eq_or_lt.elim (fun H => (congr_arg _ H).ge) (hf ha hb)⟩
 
@@ -923,9 +923,9 @@ theorem StrictMono.monotone
   proof: monotone_iff_forall_lt.2 fun _ _ h => (hf h).le
 
 中文:
-定理 StrictMono.monotone
-  条件: (hf : StrictMono f)
-  结论: Monotone f
+定理 严格递增.monotone
+  条件: (hf : 严格递增 f)
+  结论: 递增 f
   证明: monotone_iff_forall_lt.2 fun _ _ h => (hf h).le
 -/
 protected theorem StrictMono.monotone (hf : StrictMono f) : Monotone f :=
@@ -941,9 +941,9 @@ theorem StrictAnti.antitone
   proof: antitone_iff_forall_lt.2 fun _ _ h => (hf h).le
 
 中文:
-定理 StrictAnti.antitone
-  条件: (hf : StrictAnti f)
-  结论: Antitone f
+定理 严格递减.antitone
+  条件: (hf : 严格递减 f)
+  结论: 递减 f
   证明: antitone_iff_forall_lt.2 fun _ _ h => (hf h).le
 -/
 protected theorem StrictAnti.antitone (hf : StrictAnti f) : Antitone f :=
@@ -969,8 +969,8 @@ theorem monotone
 
 中文:
 定理 monotone
-  条件: [Subsingleton α] (f : α -> β)
-  结论: Monotone f
+  条件: [子单例 α] (f : α -> β)
+  结论: 递增 f
   证明: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
 -/
 protected theorem monotone [Subsingleton α] (f : α -> β) : Monotone f :=
@@ -987,8 +987,8 @@ theorem antitone
 
 中文:
 定理 antitone
-  条件: [Subsingleton α] (f : α -> β)
-  结论: Antitone f
+  条件: [子单例 α] (f : α -> β)
+  结论: 递减 f
   证明: fun _ _ _ => (congr_arg _ <| Subsingleton.elim _ _).le
 -/
 protected theorem antitone [Subsingleton α] (f : α -> β) : Antitone f :=
@@ -1005,8 +1005,8 @@ theorem monotone'
 
 中文:
 定理 monotone'
-  条件: [Subsingleton β] (f : α -> β)
-  结论: Monotone f
+  条件: [子单例 β] (f : α -> β)
+  结论: 递增 f
   证明: fun _ _ _ => (Subsingleton.elim _ _).le
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1025,8 +1025,8 @@ theorem antitone'
 
 中文:
 定理 antitone'
-  条件: [Subsingleton β] (f : α -> β)
-  结论: Antitone f
+  条件: [子单例 β] (f : α -> β)
+  结论: 递减 f
   证明: fun _ _ _ => (Subsingleton.elim _ _).le
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -1045,8 +1045,8 @@ theorem strictMono
 
 中文:
 定理 strictMono
-  条件: [Subsingleton α] (f : α -> β)
-  结论: StrictMono f
+  条件: [子单例 α] (f : α -> β)
+  结论: 严格递增 f
   证明: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
 -/
 protected theorem strictMono [Subsingleton α] (f : α -> β) : StrictMono f :=
@@ -1063,8 +1063,8 @@ theorem strictAnti
 
 中文:
 定理 strictAnti
-  条件: [Subsingleton α] (f : α -> β)
-  结论: StrictAnti f
+  条件: [子单例 α] (f : α -> β)
+  结论: 严格递减 f
   证明: fun _ _ h => (h.ne <| Subsingleton.elim _ _).elim
 -/
 protected theorem strictAnti [Subsingleton α] (f : α -> β) : StrictAnti f :=
@@ -1085,8 +1085,8 @@ theorem monotone_id
 
 中文:
 定理 monotone_id
-  条件: [Preorder α]
-  结论: Monotone (id : α -> α)
+  条件: [预序 α]
+  结论: 递增 (id : α -> α)
   证明: fun _ _ => id
 -/
 theorem monotone_id [Preorder α] : Monotone (id : α -> α) := fun _ _ => id
@@ -1102,7 +1102,7 @@ theorem monotoneOn_id
 
 中文:
 定理 monotoneOn_id
-  条件: [Preorder α] {s : Set α}
+  条件: [预序 α] {s : 集合 α}
   结论: MonotoneOn id s
   证明: fun _ _ _ _ => id
 -/
@@ -1119,8 +1119,8 @@ theorem strictMono_id
 
 中文:
 定理 strictMono_id
-  条件: [Preorder α]
-  结论: StrictMono (id : α -> α)
+  条件: [预序 α]
+  结论: 严格递增 (id : α -> α)
   证明: fun _ _ => id
 -/
 theorem strictMono_id [Preorder α] : StrictMono (id : α -> α) := fun _ _ => id
@@ -1136,7 +1136,7 @@ theorem strictMonoOn_id
 
 中文:
 定理 strictMonoOn_id
-  条件: [Preorder α] {s : Set α}
+  条件: [预序 α] {s : 集合 α}
   结论: StrictMonoOn id s
   证明: fun _ _ _ _ => id
 -/
@@ -1153,8 +1153,8 @@ theorem monotone_const
 
 中文:
 定理 monotone_const
-  条件: [Preorder α] [Preorder β] {c : β}
-  结论: Monotone fun _ : α => c
+  条件: [预序 α] [预序 β] {c : β}
+  结论: 递增 fun _ : α => c
   证明: fun _ _ _ => le_rfl
 
 Depends on / 依赖: le_rfl
@@ -1172,7 +1172,7 @@ theorem monotoneOn_const
 
 中文:
 定理 monotoneOn_const
-  条件: [Preorder α] [Preorder β] {c : β} {s : Set α}
+  条件: [预序 α] [预序 β] {c : β} {s : 集合 α}
   证明: fun _ _ _ _ _ => le_rfl
 
 Depends on / 依赖: le_rfl
@@ -1192,8 +1192,8 @@ theorem antitone_const
 
 中文:
 定理 antitone_const
-  条件: [Preorder α] [Preorder β] {c : β}
-  结论: Antitone fun _ : α => c
+  条件: [预序 α] [预序 β] {c : β}
+  结论: 递减 fun _ : α => c
   证明: fun _ _ _ => le_refl c
 
 Depends on / 依赖: le_refl
@@ -1213,7 +1213,7 @@ theorem antitoneOn_const
 
 中文:
 定理 antitoneOn_const
-  条件: [Preorder α] [Preorder β] {c : β} {s : Set α}
+  条件: [预序 α] [预序 β] {c : β} {s : 集合 α}
   证明: fun _ _ _ _ _ => le_rfl
 
 @[to_dual self]
@@ -1235,7 +1235,7 @@ theorem strictMono_of_le_iff_le
 
 中文:
 定理 strictMono_of_le_iff_le
-  结论: [Preorder α] [Preorder β] {f : α -> β}
+  结论: [预序 α] [预序 β] {f : α -> β}
   证明: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
 
 Depends on / 依赖: lt_iff_lt_of_le_iff_le
@@ -1256,7 +1256,7 @@ theorem strictAnti_of_le_iff_le
 
 中文:
 定理 strictAnti_of_le_iff_le
-  结论: [Preorder α] [Preorder β] {f : α -> β}
+  结论: [预序 α] [预序 β] {f : α -> β}
   证明: fun _ _ => (lt_iff_lt_of_le_iff_le' (h _ _) (h _ _)).1
 
 @[to_dual none]
@@ -1278,8 +1278,8 @@ theorem Function.Injective.of_lt_imp_ne
   grind [Injective]
 
 中文:
-定理 Function.Injective.of_lt_imp_ne
-  条件: [LinearOrder α] {f : α -> β} (h : 对任意 x y, x < y -> f x != f y)
+定理 函数.单射.of_lt_imp_ne
+  条件: [线性序 α] {f : α -> β} (h : 对任意 x y, x < y -> f x != f y)
   证明: by
   grind [Injective]
 
@@ -1298,8 +1298,8 @@ theorem Function.Injective.of_eq_imp_le
   proof: .antisymm h hxy.symm fun _ _ hxy => h hxy
 
 中文:
-定理 Function.Injective.of_eq_imp_le
-  结论: [PartialOrder α] {f : α -> β}
+定理 函数.单射.of_eq_imp_le
+  结论: [偏序 α] {f : α -> β}
   证明: .antisymm h hxy.symm fun _ _ hxy => h hxy
 
 Depends on / 依赖: antisymm, hxy.symm
@@ -1325,9 +1325,9 @@ theorem Monotone.comp
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 Monotone.comp
-  条件: (hg : Monotone g) (hf : Monotone f)
-  结论: Monotone (g ∘ f)
+定理 递增.comp
+  条件: (hg : 递增 g) (hf : 递增 f)
+  结论: 递增 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 protected theorem Monotone.comp (hg : Monotone g) (hf : Monotone f) : Monotone (g ∘ f) :=
@@ -1343,9 +1343,9 @@ theorem Monotone.comp_antitone
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 Monotone.comp_antitone
-  条件: (hg : Monotone g) (hf : Antitone f)
-  结论: Antitone (g ∘ f)
+定理 递增.comp_antitone
+  条件: (hg : 递增 g) (hf : 递减 f)
+  结论: 递减 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 theorem Monotone.comp_antitone (hg : Monotone g) (hf : Antitone f) : Antitone (g ∘ f) :=
@@ -1361,9 +1361,9 @@ theorem Antitone.comp
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 Antitone.comp
-  条件: (hg : Antitone g) (hf : Antitone f)
-  结论: Monotone (g ∘ f)
+定理 递减.comp
+  条件: (hg : 递减 g) (hf : 递减 f)
+  结论: 递增 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 protected theorem Antitone.comp (hg : Antitone g) (hf : Antitone f) : Monotone (g ∘ f) :=
@@ -1379,9 +1379,9 @@ theorem Antitone.comp_monotone
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 Antitone.comp_monotone
-  条件: (hg : Antitone g) (hf : Monotone f)
-  结论: Antitone (g ∘ f)
+定理 递减.comp_monotone
+  条件: (hg : 递减 g) (hf : 递增 f)
+  结论: 递减 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 theorem Antitone.comp_monotone (hg : Antitone g) (hf : Monotone f) : Antitone (g ∘ f) :=
@@ -1397,9 +1397,9 @@ theorem Monotone.iterate
   proof: Nat.recOn n monotone_id fun _ h => h.comp hf
 
 中文:
-定理 Monotone.iterate
-  条件: {f : α -> α} (hf : Monotone f) (n : 自然数)
-  结论: Monotone f^[n]
+定理 递增.iterate
+  条件: {f : α -> α} (hf : 递增 f) (n : 自然数)
+  结论: 递增 f^[n]
   证明: Nat.recOn n monotone_id fun _ h => h.comp hf
 -/
 protected theorem Monotone.iterate {f : α -> α} (hf : Monotone f) (n : Nat) : Monotone f^[n] :=
@@ -1414,8 +1414,8 @@ theorem Monotone.comp_monotoneOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 Monotone.comp_monotoneOn
-  条件: (hg : Monotone g) (hf : MonotoneOn f s)
+定理 递增.comp_monotoneOn
+  条件: (hg : 递增 g) (hf : MonotoneOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 protected theorem Monotone.comp_monotoneOn (hg : Monotone g) (hf : MonotoneOn f s) :
@@ -1432,8 +1432,8 @@ theorem Monotone.comp_antitoneOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 Monotone.comp_antitoneOn
-  条件: (hg : Monotone g) (hf : AntitoneOn f s)
+定理 递增.comp_antitoneOn
+  条件: (hg : 递增 g) (hf : AntitoneOn f s)
   结论: AntitoneOn (g ∘ f) s
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
@@ -1449,8 +1449,8 @@ theorem Antitone.comp_antitoneOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 Antitone.comp_antitoneOn
-  条件: (hg : Antitone g) (hf : AntitoneOn f s)
+定理 递减.comp_antitoneOn
+  条件: (hg : 递减 g) (hf : AntitoneOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 protected theorem Antitone.comp_antitoneOn (hg : Antitone g) (hf : AntitoneOn f s) :
@@ -1467,8 +1467,8 @@ theorem Antitone.comp_monotoneOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 Antitone.comp_monotoneOn
-  条件: (hg : Antitone g) (hf : MonotoneOn f s)
+定理 递减.comp_monotoneOn
+  条件: (hg : 递减 g) (hf : MonotoneOn f s)
   结论: AntitoneOn (g ∘ f) s
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
@@ -1485,9 +1485,9 @@ theorem StrictMono.comp
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 StrictMono.comp
-  条件: (hg : StrictMono g) (hf : StrictMono f)
-  结论: StrictMono (g ∘ f)
+定理 严格递增.comp
+  条件: (hg : 严格递增 g) (hf : 严格递增 f)
+  结论: 严格递增 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 protected theorem StrictMono.comp (hg : StrictMono g) (hf : StrictMono f) : StrictMono (g ∘ f) :=
@@ -1503,9 +1503,9 @@ theorem StrictMono.comp_strictAnti
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 StrictMono.comp_strictAnti
-  条件: (hg : StrictMono g) (hf : StrictAnti f)
-  结论: StrictAnti (g ∘ f)
+定理 严格递增.comp_strictAnti
+  条件: (hg : 严格递增 g) (hf : 严格递减 f)
+  结论: 严格递减 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 theorem StrictMono.comp_strictAnti (hg : StrictMono g) (hf : StrictAnti f) : StrictAnti (g ∘ f) :=
@@ -1521,9 +1521,9 @@ theorem StrictAnti.comp
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 StrictAnti.comp
-  条件: (hg : StrictAnti g) (hf : StrictAnti f)
-  结论: StrictMono (g ∘ f)
+定理 严格递减.comp
+  条件: (hg : 严格递减 g) (hf : 严格递减 f)
+  结论: 严格递增 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 -/
 protected theorem StrictAnti.comp (hg : StrictAnti g) (hf : StrictAnti f) : StrictMono (g ∘ f) :=
@@ -1539,9 +1539,9 @@ theorem StrictAnti.comp_strictMono
   proof: fun _ _ h => hg (hf h)
 
 中文:
-定理 StrictAnti.comp_strictMono
-  条件: (hg : StrictAnti g) (hf : StrictMono f)
-  结论: StrictAnti (g ∘ f)
+定理 严格递减.comp_strictMono
+  条件: (hg : 严格递减 g) (hf : 严格递增 f)
+  结论: 严格递减 (g ∘ f)
   证明: fun _ _ h => hg (hf h)
 
 Depends on / 依赖: DecidablePred, Irreducible
@@ -1559,9 +1559,9 @@ theorem StrictMono.iterate
   proof: Nat.recOn n strictMono_id fun _ h => h.comp hf
 
 中文:
-定理 StrictMono.iterate
-  条件: {f : α -> α} (hf : StrictMono f) (n : 自然数)
-  结论: StrictMono f^[n]
+定理 严格递增.iterate
+  条件: {f : α -> α} (hf : 严格递增 f) (n : 自然数)
+  结论: 严格递增 f^[n]
   证明: Nat.recOn n strictMono_id fun _ h => h.comp hf
 -/
 protected theorem StrictMono.iterate {f : α -> α} (hf : StrictMono f) (n : Nat) : StrictMono f^[n] :=
@@ -1576,8 +1576,8 @@ theorem StrictMono.comp_strictMonoOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 StrictMono.comp_strictMonoOn
-  条件: (hg : StrictMono g) (hf : StrictMonoOn f s)
+定理 严格递增.comp_strictMonoOn
+  条件: (hg : 严格递增 g) (hf : StrictMonoOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 protected theorem StrictMono.comp_strictMonoOn (hg : StrictMono g) (hf : StrictMonoOn f s) :
@@ -1593,8 +1593,8 @@ theorem StrictMono.comp_strictAntiOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 StrictMono.comp_strictAntiOn
-  条件: (hg : StrictMono g) (hf : StrictAntiOn f s)
+定理 严格递增.comp_strictAntiOn
+  条件: (hg : 严格递增 g) (hf : StrictAntiOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 theorem StrictMono.comp_strictAntiOn (hg : StrictMono g) (hf : StrictAntiOn f s) :
@@ -1610,8 +1610,8 @@ theorem StrictAnti.comp_strictAntiOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 StrictAnti.comp_strictAntiOn
-  条件: (hg : StrictAnti g) (hf : StrictAntiOn f s)
+定理 严格递减.comp_strictAntiOn
+  条件: (hg : 严格递减 g) (hf : StrictAntiOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 protected theorem StrictAnti.comp_strictAntiOn (hg : StrictAnti g) (hf : StrictAntiOn f s) :
@@ -1627,8 +1627,8 @@ theorem StrictAnti.comp_strictMonoOn
   proof: fun _ ha _ hb h => hg (hf ha hb h)
 
 中文:
-定理 StrictAnti.comp_strictMonoOn
-  条件: (hg : StrictAnti g) (hf : StrictMonoOn f s)
+定理 严格递减.comp_strictMonoOn
+  条件: (hg : 严格递减 g) (hf : StrictMonoOn f s)
   证明: fun _ ha _ hb h => hg (hf ha hb h)
 -/
 theorem StrictAnti.comp_strictMonoOn (hg : StrictAnti g) (hf : StrictMonoOn f s) :
@@ -1645,7 +1645,7 @@ lemma MonotoneOn.comp
 
 中文:
 引理 MonotoneOn.comp
-  条件: (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : Set.MapsTo f s t)
+  条件: (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : 集合.映射到 f s t)
   证明: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
 -/
 lemma MonotoneOn.comp (hg : MonotoneOn g t) (hf : MonotoneOn f s) (hs : Set.MapsTo f s t) :
@@ -1680,7 +1680,7 @@ lemma AntitoneOn.comp
 
 中文:
 引理 AntitoneOn.comp
-  条件: (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : Set.MapsTo f s t)
+  条件: (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : 集合.映射到 f s t)
   证明: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
 -/
 lemma AntitoneOn.comp (hg : AntitoneOn g t) (hf : AntitoneOn f s) (hs : Set.MapsTo f s t) :
@@ -1715,7 +1715,7 @@ lemma StrictMonoOn.comp
 
 中文:
 引理 StrictMonoOn.comp
-  条件: (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : Set.MapsTo f s t)
+  条件: (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : 集合.映射到 f s t)
   证明: fun _x hx _y hy hxy => hg (hs hx) (hs hy) hf hx hy hxy
 -/
 lemma StrictMonoOn.comp (hg : StrictMonoOn g t) (hf : StrictMonoOn f s) (hs : Set.MapsTo f s t) :
@@ -1752,7 +1752,7 @@ lemma StrictAntiOn.comp
 
 中文:
 引理 StrictAntiOn.comp
-  条件: (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : Set.MapsTo f s t)
+  条件: (hg : StrictAntiOn g t) (hf : StrictAntiOn f s) (hs : 集合.映射到 f s t)
   证明: fun _x hx _y hy hxy => hg (hs hy) (hs hx) hf hx hy hxy
 
 Depends on / 依赖: IsIntegralClosure, IsIntegralClosure.equiv, Subalgebra, Subalgebra.algebraMap_eq, algebraMap_eq, galRestrict, injective, integralClosure, symm.injective
@@ -1807,8 +1807,8 @@ theorem Monotone.reflect_lt
 @[to_dual self]
 
 中文:
-定理 Monotone.reflect_lt
-  条件: (hf : Monotone f) {a b : α} (h : f a < f b)
+定理 递增.reflect_lt
+  条件: (hf : 递增 f) {a b : α} (h : f a < f b)
   结论: a < b
   证明: lt_of_not_ge fun h' => h.not_ge (hf h')
 
@@ -1832,8 +1832,8 @@ theorem Antitone.reflect_lt
 @[to_dual self (reorder := a b, ha hb)]
 
 中文:
-定理 Antitone.reflect_lt
-  条件: (hf : Antitone f) {a b : α} (h : f a < f b)
+定理 递减.reflect_lt
+  条件: (hf : 递减 f) {a b : α} (h : f a < f b)
   结论: b < a
   证明: lt_of_not_ge fun h' => h.not_ge (hf h')
 
@@ -1902,9 +1902,9 @@ theorem Subtype.mono_coe
   proof: fun _ _ => id
 
 中文:
-定理 Subtype.mono_coe
-  条件: [Preorder α] (p : α -> 命题)
-  结论: Monotone ((↑) : Subtype p -> α)
+定理 子类型.mono_coe
+  条件: [预序 α] (p : α -> 命题)
+  结论: 递增 ((↑) : 子类型 p -> α)
   证明: fun _ _ => id
 
 Depends on / 依赖: AlgHom, AlgHom.ext, IsFractionRing, IsFractionRing.injective, IsIntegralClosure, IsIntegralClosure.algebraMap_injective, IsIntegralClosure.isLocalization, algebraMap_injective, injective, isDomain, isLocalization
@@ -1921,8 +1921,8 @@ theorem Subtype.strictMono_coe
   proof: fun _ _ => id
 
 中文:
-定理 Subtype.strictMono_coe
-  条件: [Preorder α] (p : α -> 命题)
+定理 子类型.strictMono_coe
+  条件: [预序 α] (p : α -> 命题)
   证明: fun _ _ => id
 -/
 theorem Subtype.strictMono_coe [Preorder α] (p : α -> Prop) :
@@ -1943,7 +1943,7 @@ theorem monotone_fst
 
 中文:
 定理 monotone_fst
-  结论: Monotone (@Prod.fst α β)
+  结论: 递增 (@积类型.fst α β)
   证明: fun _ _ => And.left
 
 Depends on / 依赖: And.left
@@ -1960,7 +1960,7 @@ theorem monotone_snd
 
 中文:
 定理 monotone_snd
-  结论: Monotone (@Prod.snd α β)
+  结论: 递增 (@积类型.snd α β)
   证明: fun _ _ => And.right
 
 Depends on / 依赖: And.right
@@ -1997,8 +1997,8 @@ theorem Monotone.prodMk
   proof: monotone_prodMk_iff.2 ⟨hf, hg⟩
 
 中文:
-定理 Monotone.prodMk
-  条件: {f : γ -> α} {g : γ -> β} (hf : Monotone f) (hg : Monotone g)
+定理 递增.prodMk
+  条件: {f : γ -> α} {g : γ -> β} (hf : 递增 f) (hg : 递增 g)
   证明: monotone_prodMk_iff.2 ⟨hf, hg⟩
 
 Depends on / 依赖: monotone_prodMk_iff
@@ -2017,9 +2017,9 @@ theorem Monotone.prodMap
   proof: fun _ _ h => ⟨hf h.1, hg h.2⟩
 
 中文:
-定理 Monotone.prodMap
-  条件: (hf : Monotone f) (hg : Monotone g)
-  结论: Monotone (Prod.map f g)
+定理 递增.prodMap
+  条件: (hf : 递增 f) (hg : 递增 g)
+  结论: 递增 (积类型.map f g)
   证明: fun _ _ h => ⟨hf h.1, hg h.2⟩
 -/
 theorem Monotone.prodMap (hf : Monotone f) (hg : Monotone g) : Monotone (Prod.map f g) :=
@@ -2035,9 +2035,9 @@ theorem Antitone.prodMap
   proof: fun _ _ h => ⟨hf h.1, hg h.2⟩
 
 中文:
-定理 Antitone.prodMap
-  条件: (hf : Antitone f) (hg : Antitone g)
-  结论: Antitone (Prod.map f g)
+定理 递减.prodMap
+  条件: (hf : 递减 f) (hg : 递减 g)
+  结论: 递减 (积类型.map f g)
   证明: fun _ _ h => ⟨hf h.1, hg h.2⟩
 -/
 theorem Antitone.prodMap (hf : Antitone f) (hg : Antitone g) : Antitone (Prod.map f g) :=
@@ -2111,9 +2111,9 @@ theorem StrictMono.prodMap
   exact Or.imp (And.imp hf.imp hg.monotone.imp) (And.imp hf.monotone.imp hg.imp)
 
 中文:
-定理 StrictMono.prodMap
-  条件: (hf : StrictMono f) (hg : StrictMono g)
-  结论: StrictMono (Prod.map f g)
+定理 严格递增.prodMap
+  条件: (hf : 严格递增 f) (hg : 严格递增 g)
+  结论: 严格递增 (积类型.map f g)
   证明: fun a b => by
   simp only [Prod.lt_iff]
   exact Or.imp (And.imp hf.imp hg.monotone.imp) (And.imp hf.monotone.imp hg.imp)
@@ -2137,9 +2137,9 @@ theorem StrictAnti.prodMap
   exact Or.imp (And.imp hf.imp hg.antitone.imp) (And.imp hf.antitone.imp hg.imp)
 
 中文:
-定理 StrictAnti.prodMap
-  条件: (hf : StrictAnti f) (hg : StrictAnti g)
-  结论: StrictAnti (Prod.map f g)
+定理 严格递减.prodMap
+  条件: (hf : 严格递减 f) (hg : 严格递减 g)
+  结论: 严格递减 (积类型.map f g)
   证明: fun a b => by
   simp only [Prod.lt_iff]
   exact Or.imp (And.imp hf.imp hg.antitone.imp) (And.imp hf.antitone.imp hg.imp)
@@ -2170,7 +2170,7 @@ theorem update_mono
 
 中文:
 定理 update_mono
-  结论: Monotone (update f i)
+  结论: 递增 (update f i)
   证明: fun _ _ => update_le_update_iff'.2
 
 Depends on / 依赖: IsDomain, IsIntegrallyClosed, update_le_update_iff
@@ -2187,7 +2187,7 @@ theorem update_strictMono
 
 中文:
 定理 update_strictMono
-  结论: StrictMono (update f i)
+  结论: 严格递增 (update f i)
   证明: fun _ _ => update_lt_update_iff.2
 
 Depends on / 依赖: update_lt_update_iff
@@ -2204,7 +2204,7 @@ theorem const_mono
 
 中文:
 定理 const_mono
-  结论: Monotone (const β : α -> β -> α)
+  结论: 递增 (const β : α -> β -> α)
   证明: fun _ _ h _ => h
 -/
 theorem const_mono : Monotone (const β : α -> β -> α) := fun _ _ h _ => h
@@ -2220,8 +2220,8 @@ theorem const_strictMono
 
 中文:
 定理 const_strictMono
-  条件: [Nonempty β]
-  结论: StrictMono (const β : α -> β -> α)
+  条件: [非空 β]
+  结论: 严格递增 (const β : α -> β -> α)
   证明: fun _ _ => const_lt_const.2
 
 Depends on / 依赖: const_lt_const
@@ -2245,7 +2245,7 @@ lemma monotone_iff_apply₂
 
 中文:
 引理 monotone_iff_apply₂
-  结论: Monotone f ↔ 对任意 i, Monotone (f · i)
+  结论: 递增 f ↔ 对任意 i, 递增 (f · i)
   证明: by
   simp [Monotone, Pi.le_def, @forall_comm ι]
 
@@ -2268,7 +2268,7 @@ alias ⟨Antitone.apply₂, Antitone.of_apply₂⟩ := antitone_iff_apply₂
 
 中文:
 引理 antitone_iff_apply₂
-  结论: Antitone f ↔ 对任意 i, Antitone (f · i)
+  结论: 递减 f ↔ 对任意 i, 递减 (f · i)
   证明: by
   simp [Antitone, Pi.le_def, @forall_comm ι]
 

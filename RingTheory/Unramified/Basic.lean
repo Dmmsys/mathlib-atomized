@@ -65,10 +65,10 @@ class FormallyUnramified
     - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
 
 中文:
-类 FormallyUnramified
+类 形式非分歧
   参数: : 命题 where
   公理与运算 (1 个):
-    - subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
+    - subsingleton_kaehlerDifferential : 子单例 Ω[A⁄R]
 -/
 class FormallyUnramified : Prop where
   subsingleton_kaehlerDifferential : Subsingleton Ω[A⁄R]
@@ -102,7 +102,7 @@ theorem comp_injective
 
 中文:
 定理 comp_injective
-  条件: [FormallyUnramified R A] (hI : I ^ 2 = ⊥)
+  条件: [形式非分歧 R A] (hI : I ^ 2 = ⊥)
   证明: by
   intro f₁ f₂ e
   let := f₁.toRingHom.toAlgebra
@@ -264,7 +264,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: [FormallyUnramified R A] (hI : IsNilpotent I) {g₁ g₂ : A ->ₐ[R] B}
+  结论: [形式非分歧 R A] (hI : 是幂零 I) {g₁ g₂ : A ->ₐ[R] B}
   证明: FormallyUnramified.lift_unique I hI g₁ g₂ (AlgHom.ext H)
 
 Depends on / 依赖: AlgHom, AlgHom.ext, FormallyUnramified, FormallyUnramified.lift_unique, lift_unique
@@ -288,7 +288,7 @@ theorem lift_unique_of_ringHom
 
 中文:
 定理 lift_unique_of_ringHom
-  结论: [FormallyUnramified R A] {C : 类型} [Ring C]
+  结论: [形式非分歧 R A] {C : 类型} [环 C]
   证明: FormallyUnramified.lift_unique _ hf _ _
     (by
       ext x
@@ -318,7 +318,7 @@ theorem ext'
 
 中文:
 定理 ext'
-  结论: [FormallyUnramified R A] {C : 类型} [Ring C] (f : B ->+* C)
+  结论: [形式非分歧 R A] {C : 类型} [环 C] (f : B ->+* C)
   证明: FormallyUnramified.lift_unique_of_ringHom f hf g₁ g₂ (RingHom.ext h)
 
 Depends on / 依赖: FormallyUnramified, FormallyUnramified.lift_unique_of_ringHom, RingHom, RingHom.ext, lift_unique_of_ringHom
@@ -338,7 +338,7 @@ theorem lift_unique'
 
 中文:
 定理 lift_unique'
-  结论: [FormallyUnramified R A] {C : 类型} [Ring C]
+  结论: [形式非分歧 R A] {C : 类型} [环 C]
   证明: FormallyUnramified.ext' _ hf g₁ g₂ (AlgHom.congr_fun h)
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, FormallyUnramified, FormallyUnramified.ext, congr_fun
@@ -366,7 +366,7 @@ theorem ext_of_iInf
 
 中文:
 定理 ext_of_iInf
-  结论: [FormallyUnramified R A] (hI : ⨅ i, I ^ i = ⊥) {g₁ g₂ : A ->ₐ[R] B}
+  结论: [形式非分歧 R A] (hI : ⨅ i, I ^ i = ⊥) {g₁ g₂ : A ->ₐ[R] B}
   证明: by
   have (i : Nat) :
       (Ideal.Quotient.mkₐ R (I ^ i)).comp g₁ = (Ideal.Quotient.mkₐ R (I ^ i)).comp g₂ := by
@@ -430,7 +430,7 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [FormallyUnramified R A] (e : A ≃ₐ[R] B)
+  条件: [形式非分歧 R A] (e : A ≃ₐ[R] B)
   证明: by
   rw [iff_comp_injective]
   intro C _ _ I hI f₁ f₂ e'
@@ -475,7 +475,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [FormallyUnramified R A] [FormallyUnramified A B]
+  条件: [形式非分歧 R A] [形式非分歧 A B]
   证明: by
   rw [iff_comp_injective]
   intro C _ _ I hI f₁ f₂ e
@@ -521,8 +521,8 @@ theorem of_restrictScalars
 
 中文:
 定理 of_restrictScalars
-  条件: [FormallyUnramified R B]
-  结论: FormallyUnramified A B
+  条件: [形式非分歧 R B]
+  结论: 形式非分歧 A B
   证明: by
   rw [iff_comp_injective]
   intro Q _ _ I e f₁ f₂ e'
@@ -570,7 +570,7 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: [FormallyUnramified R A] (f : A ->ₐ[R] B) (H : Function.Surjective f)
+  条件: [形式非分歧 R A] (f : A ->ₐ[R] B) (H : 函数.满射 f)
   证明: by
   rw [iff_comp_injective]
   intro Q _ _ I hI f₁ f₂ e
@@ -604,7 +604,7 @@ instance quotient
 
 中文:
 实例 quotient
-  签名: {A} [CommRing A] [Algebra R A] [FormallyUnramified R A] (I : Ideal A)
+  签名: {A} [交换环 A] [代数 R A] [形式非分歧 R A] (I : 理想 A)
   定义体: FormallyUnramified.of_surjective (IsScalarTower.toAlgHom R A (A ⧸ I)) Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_surjective, Ideal.Quotient.mk_surjective, IsScalarTower, IsScalarTower.toAlgHom, Quotient, mk_surjective, of_surjective, toAlgHom
@@ -625,7 +625,7 @@ theorem iff_of_equiv
 中文:
 定理 iff_of_equiv
   条件: (e : A ≃ₐ[R] B)
-  结论: FormallyUnramified R A ↔ FormallyUnramified R B
+  结论: 形式非分歧 R A ↔ 形式非分歧 R B
   证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_equiv
@@ -658,7 +658,7 @@ instance base_change
 
 中文:
 实例 base_change
-  签名: [FormallyUnramified R A]
+  签名: [形式非分歧 R A]
   定义体: by
   rw [iff_comp_injective]
   intro C _ _ I hI f₁ f₂ e
@@ -688,7 +688,7 @@ instance quotient_map
 
 中文:
 实例 quotient_map
-  签名: [FormallyUnramified R B] (p : Ideal R)
+  签名: [形式非分歧 R B] (p : 理想 R)
   定义体: .of_equiv (Algebra.TensorProduct.quotIdealMapEquivQuotTensor B p).symm
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.quotIdealMapEquivQuotTensor, TensorProduct, of_equiv, quotIdealMapEquivQuotTensor
@@ -725,8 +725,8 @@ theorem of_isLocalization
 
 中文:
 定理 of_isLocalization
-  条件: [IsLocalization M Rₘ]
-  结论: FormallyUnramified R Rₘ
+  条件: [是Localization M Rₘ]
+  结论: 形式非分歧 R Rₘ
   证明: by
   rw [iff_comp_injective]
   intro Q _ _ I _ f₁ f₂ _
@@ -755,7 +755,7 @@ instance [FormallyUnramified
   .comp _ S _
 
 中文:
-实例 [FormallyUnramified
+实例 [形式非分歧
   签名: R S] (M
   定义体: have := of_isLocalization (Rₘ := Localization M) M
   .comp _ S _
@@ -784,8 +784,8 @@ theorem localization_base
 
 中文:
 定理 localization_base
-  条件: [FormallyUnramified R Sₘ]
-  结论: FormallyUnramified Rₘ Sₘ
+  条件: [形式非分歧 R Sₘ]
+  结论: 形式非分歧 Rₘ Sₘ
   证明: FormallyUnramified.of_restrictScalars R Rₘ Sₘ
 
 Depends on / 依赖: FormallyUnramified, FormallyUnramified.of_restrictScalars, of_restrictScalars
@@ -807,7 +807,7 @@ theorem localization_map
 
 中文:
 定理 localization_map
-  条件: [FormallyUnramified R S]
+  条件: [形式非分歧 R S]
   证明: by
   have : FormallyUnramified S Sₘ :=
     FormallyUnramified.of_isLocalization (M.map (algebraMap R S))
@@ -838,8 +838,8 @@ lemma exists_algEquiv_prod
   let e₁ := AlgEquiv.prodQuotientOfIsI
 
 中文:
-引理 exists_algEquiv_prod
-  结论: (R S : 类型u) [CommRing R] [CommRing S]
+引理 存在_algEquiv_prod
+  结论: (R S : 类型u) [交换环 R] [交换环 S]
   证明: by
   obtain ⟨e, he, hsp⟩ : exists e, IsIdempotentElem e ∧ KaehlerDifferential.ideal R S = S otimes[R] S ∙ e :=
 (Ideal.isIdempotentElem_iff_of_fg _ (KaehlerDifferential.ideal_fg R S)).mp
@@ -883,11 +883,11 @@ class Unramified
     - finiteType : FiniteType R A  [default: by infer_instance]
 
 中文:
-类 Unramified
+类 非分歧
   参数: : 命题 where
   公理与运算 (2 个):
-    - formallyUnramified : FormallyUnramified R A  [默认: by infer_instance]
-    - finiteType : FiniteType R A  [默认: by infer_instance]
+    - formallyUnramified : 形式非分歧 R A  [默认: by infer_instance]
+    - finiteType : 有限型 R A  [默认: by infer_instance]
 
 Depends on / 依赖: FiniteType, finiteType, infer_instance
 -/
@@ -916,8 +916,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [Unramified R A] (e : A ≃ₐ[R] B)
-  结论: Unramified R B where
+  条件: [非分歧 R A] (e : A ≃ₐ[R] B)
+  结论: 非分歧 R B where
   证明: FormallyUnramified.of_equiv e
   finiteType := FiniteType.equiv Unramified.finiteType e
 
@@ -941,8 +941,8 @@ theorem of_isLocalization_Away
 
 中文:
 定理 of_isLocalization_Away
-  条件: (r : R) [IsLocalization.Away r A]
-  结论: Unramified R A where
+  条件: (r : R) [是Localization.Away r A]
+  结论: 非分歧 R A where
   证明: Algebra.FormallyUnramified.of_isLocalization (Submonoid.powers r)
   finiteType :=
     haveI : FinitePresentation R A := IsLocalization.Away.finitePresentation r
@@ -972,7 +972,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [Algebra A B] [IsScalarTower R A B] [Unramified R A] [Unramified A B]
+  条件: [代数 A B] [标量塔 R A B] [非分歧 R A] [非分歧 A B]
   证明: FormallyUnramified.comp R A B
   finiteType := FiniteType.trans (S := A) Unramified.finiteType
     Unramified.finiteType
@@ -994,7 +994,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [Unramified R A]
+  签名: [非分歧 R A]
 -/
 instance baseChange [Unramified R A] : Unramified B (B otimes[R] A) where
 

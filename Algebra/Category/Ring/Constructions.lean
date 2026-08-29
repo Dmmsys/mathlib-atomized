@@ -159,7 +159,7 @@ commutes' := DFunLike.congr_fun congrArg Hom.
 
 中文:
 定义 pushoutCoconeIsColimit
-  签名: : Limits.IsColimit (pushoutCocone R A B)
+  签名: : Limits.是余极限 (pushoutCocone R A B)
   定义体: Limits.PushoutCocone.isColimitAux' _ fun s => by
     letI := RingHom.toAlgebra (s.inl.hom.comp (algebraMap R A))
     let f' : A ->ₐ[R] s.pt :=
@@ -225,7 +225,7 @@ lemma isPushout_tensorProduct
 
 中文:
 引理 isPushout_tensorProduct
-  结论: (R A B : 类型u) [CommRing R] [CommRing A] [CommRing B]
+  结论: (R A B : 类型u) [交换环 R] [交换环 A] [交换环 B]
   证明: by
     ext
     simp
@@ -255,7 +255,7 @@ lemma isPushout_of_isPushout
 
 中文:
 引理 isPushout_of_isPushout
-  结论: (R S A B : 类型u) [CommRing R] [CommRing S]
+  结论: (R S A B : 类型u) [交换环 R] [交换环 S]
   证明: (isPushout_tensorProduct R S A).of_iso (Iso.refl _) (Iso.refl _) (Iso.refl _)
     (Algebra.IsPushout.equiv R S A B).toCommRingCatIso (by simp) (by simp)
     (by ext; simp [Algebra.IsPushout.equiv_tmul]) (by ext; simp [Algebra.IsPushout.equiv_tmul])
@@ -288,7 +288,7 @@ lemma isPushout_iff_isPushout
 
 中文:
 引理 isPushout_iff_isPushout
-  结论: {R S : 类型u} [CommRing R] [CommRing S] [Algebra R S]
+  结论: {R S : 类型u} [交换环 R] [交换环 S] [代数 R S]
   证明: by
   refine ⟨fun h => ?_, fun h => isPushout_of_isPushout ..⟩
   let e : R' otimes[R] S ≃+* S' := ((CommRingCat.isPushout_tensorProduct R R' S).isoPushout ≪≫
@@ -480,7 +480,7 @@ definition coproductCoconeIsColimit
 
 中文:
 定义 coproductCoconeIsColimit
-  签名: : IsColimit (coproductCocone A B) where
+  签名: : 是余极限 (coproductCocone A B) where
   定义体: ofHom (Algebra.TensorProduct.lift s.inl.hom.toIntAlgHom s.inr.hom.toIntAlgHom
       (fun _ _ => by apply Commute.all)).toRingHom
   fac (s : BinaryCofan A B) := fun ⟨j⟩ => by cases j <;> ext a <;> simp
@@ -518,7 +518,7 @@ definition coproductColimitCocone
 
 中文:
 定义 coproductColimitCocone
-  签名: : Limits.ColimitCocone (pair A B)
+  签名: : Limits.余极限余锥 (pair A B)
   定义体: ⟨_, coproductCoconeIsColimit A B⟩
 
 Depends on / 依赖: coproductCoconeIsColimit
@@ -544,7 +544,7 @@ definition punitIsTerminal
 
 中文:
 定义 punitIsTerminal
-  签名: : IsTerminal (CommRingCat.of.{u} PUnit)
+  签名: : 是终止 (交换环范畴.of.{u} 命题单元)
   定义体: IsTerminal.ofUnique _
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
@@ -571,7 +571,7 @@ instance commRingCat_hasStrictTerminalObjects
 
 中文:
 实例 commRingCat_hasStrictTerminalObjects
-  签名: : HasStrictTerminalObjects CommRingCat.{u}
+  签名: : 有StrictTerminalObjects 交换环范畴.{u}
   定义体: by
   apply hasStrictTerminalObjects_of_terminal_is_strict (CommRingCat.of PUnit)
   intro X f
@@ -609,8 +609,8 @@ theorem subsingleton_of_isTerminal
 
 中文:
 定理 subsingleton_of_isTerminal
-  条件: {X : CommRingCat} (hX : IsTerminal X)
-  结论: Subsingleton X
+  条件: {X : 交换环范畴} (hX : 是终止 X)
+  结论: 子单例 X
   证明: (hX.uniqueUpToIso punitIsTerminal).commRingCatIsoToRingEquiv.toEquiv.subsingleton_congr.mpr
     (show Subsingleton PUnit by infer_instance)
 
@@ -631,7 +631,7 @@ fun a => hom_ext a.hom.ext_int _⟩)
 
 中文:
 定义 zIsInitial
-  签名: : IsInitial (CommRingCat.of 整数)
+  签名: : IsInitial (交换环范畴.of 整数)
   定义体: IsInitial.ofUnique (h := fun R => ⟨⟨ofHom <| Int.castRingHom R⟩,
 fun a => hom_ext a.hom.ext_int _⟩)
 
@@ -656,7 +656,7 @@ definition isInitial
 
 中文:
 定义 isInitial
-  签名: : IsInitial (CommRingCat.of (ULift.{u} 整数))
+  签名: : IsInitial (交换环范畴.of (类型层提升.{u} 整数))
   定义体: IsInitial.ofUnique (h := fun R => ⟨⟨ofHom <| (Int.castRingHom R).comp ULift.ringEquiv.toRingHom⟩,
     fun _ => by
       ext : 1
@@ -719,7 +719,7 @@ definition prodFanIsLimit
 
 中文:
 定义 prodFanIsLimit
-  签名: : IsLimit (prodFan A B) where
+  签名: : 是极限 (prodFan A B) where
   定义体: ofHom RingHom.prod (c.π.app ⟨WalkingPair.left⟩).hom (c.π.app ⟨WalkingPair.right⟩).hom
   fac c j := by
     ext
@@ -788,7 +788,7 @@ uniq _ _ h := hom_ext DFunLike.ext _ _ fun x => funext fun i =>
 
 中文:
 定义 piFanIsLimit
-  签名: : IsLimit (piFan R) where
+  签名: : 是极限 (piFan R) where
   定义体: ofHom RingHom.pi fun i => (s.π.1 ⟨i⟩).hom
   fac s i := by rfl
 uniq _ _ h := hom_ext DFunLike.ext _ _ fun x => funext fun i =>
@@ -812,7 +812,7 @@ definition piIsoPi
 
 中文:
 定义 piIsoPi
-  签名: : ∏ᶜ R ≅ CommRingCat.of ((i : ι) -> R i)
+  签名: : ∏ᶜ R ≅ 交换环范畴.of ((i : ι) -> R i)
   定义体: limit.isoLimitCone ⟨_, piFanIsLimit R⟩
 
 Depends on / 依赖: isoLimitCone, limit.isoLimitCone, piFanIsLimit
@@ -829,8 +829,8 @@ definition _root_.RingEquiv.piEquivPi
   body: (piIsoPi (CommRingCat.of <| R ·)).commRingCatIsoToRingEquiv
 
 中文:
-定义 _root_.RingEquiv.piEquivPi
-  签名: (R : ι -> 类型u) [对任意 i, CommRing (R i)]
+定义 _root_.环等价.piEquivPi
+  签名: (R : ι -> 类型u) [对任意 i, 交换环 (R i)]
   定义体: (piIsoPi (CommRingCat.of <| R ·)).commRingCatIsoToRingEquiv
 
 Depends on / 依赖: CommRingCat, CommRingCat.of, commRingCatIsoToRingEquiv, piIsoPi
@@ -863,9 +863,9 @@ theorem isUnit_iff_forall_isUnit
       DFunLike.congr_fun 
 
 中文:
-定理 isUnit_iff_forall_isUnit
-  条件: (hc : IsLimit c) (r : c.pt)
-  结论: IsUnit r ↔
+定理 isUnit_iff_对任意_isUnit
+  条件: (hc : 是极限 c) (r : c.pt)
+  结论: 是单位 r ↔
   证明: by
   refine ⟨fun h _ => h.map _, fun h => ?_⟩
   simp only [isUnit_iff_exists_inv] at h ⊢
@@ -915,7 +915,7 @@ theorem π_isLocalHom
 
 中文:
 定理 π_isLocalHom
-  结论: (hc : IsLimit c) (j : J) (hj : 对任意 (x : c.pt), IsUnit (c.π.app j x) ->
+  结论: (hc : 是极限 c) (j : J) (hj : 对任意 (x : c.pt), 是单位 (c.π.app j x) ->
   证明: by
   refine ⟨fun (x : c.pt) hx => (?_ : IsUnit x)⟩
   rw [isUnit_iff_forall_isUnit F hc]; intro i
@@ -945,7 +945,7 @@ theorem isLocalRing
 
 中文:
 定理 isLocalRing
-  结论: (hc : IsLimit c) (j : J) [IsLocalRing (F.obj j)]
+  结论: (hc : 是极限 c) (j : J) [是局部环 (F.obj j)]
   证明: by
   have := π_isLocalHom F hc j hj
   apply RingHom.domain_isLocalRing (c.π.app j).hom
@@ -977,7 +977,7 @@ definition equalizerFork
 
 中文:
 定义 equalizerFork
-  签名: : Fork f g
+  签名: : 叉 f g
   定义体: Fork.ofι (CommRingCat.ofHom (RingHom.eqLocus f.hom g.hom).subtype) by
       ext ⟨x, e⟩
       simpa using e
@@ -1008,7 +1008,7 @@ exact Subtype.ext RingHom.congr_fun (congrArg Hom.hom hm) x
 
 中文:
 定义 equalizerForkIsLimit
-  签名: : IsLimit (equalizerFork f g)
+  签名: : 是极限 (equalizerFork f g)
   定义体: by
   fapply Fork.IsLimit.mk'
   intro s
@@ -1044,7 +1044,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsLocalHom (equalizerFork f g).ι.hom
+  签名: 是Local态射 (equalizerFork f g).ι.hom
   定义体: inferInstanceAs IsLocalHom (f.hom.eqLocus g.hom).subtype
 
 Depends on / 依赖: IsLocalHom, eqLocus, f.hom.eqLocus, g.hom, subtype
@@ -1071,7 +1071,7 @@ instance equalizer_ι_isLocalHom
 
 中文:
 实例 equalizer_ι_isLocalHom
-  签名: (F : WalkingParallelPair ⥤ CommRingCat.{u})
+  签名: (F : WalkingParallelPair ⥤ 交换环范畴.{u})
   定义体: by
   refine Limits.π_isLocalHom _ (limit.isLimit _) zero fun x hx i => ?_
   rcases i with _ | _
@@ -1101,7 +1101,7 @@ theorem equalizer_limit_isLocalRing
 
 中文:
 定理 equalizer_limit_isLocalRing
-  结论: (F : WalkingParallelPair ⥤ CommRingCat.{u})
+  结论: (F : WalkingParallelPair ⥤ 交换环范畴.{u})
   证明: RingHom.domain_isLocalRing (limit.π F WalkingParallelPair.zero).hom
 
 Depends on / 依赖: IsFinitePresentation, IsFinitePresentation.exists_quasicoherentData, RingHom, RingHom.domain_isLocalRing, WalkingParallelPair, WalkingParallelPair.zero, domain_isLocalRing, exists_quasicoherentData, localGeneratorsData
@@ -1126,7 +1126,7 @@ instance equalizer_ι_isLocalHom'
 
 中文:
 实例 equalizer_ι_isLocalHom'
-  签名: (F : WalkingParallelPairᵒᵖ ⥤ CommRingCat.{u})
+  签名: (F : WalkingParallelPairᵒᵖ ⥤ 交换环范畴.{u})
   定义体: by
   refine Limits.π_isLocalHom _ (limit.isLimit _) (op one) fun x hx i => ?_
   rcases i with _ | _
@@ -1272,7 +1272,7 @@ instance pullbackFst_isLocalHom
 
 中文:
 实例 pullbackFst_isLocalHom
-  签名: (f : A ⟶ C) (g : B ⟶ C) [IsLocalHom g.hom]
+  签名: (f : A ⟶ C) (g : B ⟶ C) [是Local态射 g.hom]
   定义体: by
   refine Limits.π_isLocalHom _ (limit.isLimit _) left fun x hx i => ?_
   rcases i with _ | _ | _
@@ -1302,7 +1302,7 @@ theorem pullback_isLocalRing
 
 中文:
 定理 pullback_isLocalRing
-  条件: (f : A ⟶ C) (g : B ⟶ C) [IsLocalHom g.hom] [IsLocalRing A]
+  条件: (f : A ⟶ C) (g : B ⟶ C) [是Local态射 g.hom] [是局部环 A]
   证明: RingHom.domain_isLocalRing (pullback.fst f g).hom
 
 Depends on / 依赖: RingHom, RingHom.domain_isLocalRing, domain_isLocalRing, pullback, pullback.fst

@@ -69,7 +69,7 @@ definition cof
 
 中文:
 定义 cof
-  签名: (o : Ordinal.{u})
+  签名: (o : 序数.{u})
   定义体: o.liftOnWellOrder (fun α _ _ => Order.cof α) fun _ _ _ _ _ _ h =>
     let ⟨f⟩ := type_eq.1 h
     (OrderIso.ofRelIsoLT f).cof_congr
@@ -98,7 +98,7 @@ theorem cof_type
 
 中文:
 定理 cof_type
-  条件: (α : 类型) [LinearOrder α] [WellFoundedLT α]
+  条件: (α : 类型) [线性序 α] [WellFoundedLT α]
   证明: liftOnWellOrder_type ..
 
 @[deprecated (since := "2026-02-18")] alias cof_type_lt := cof_type
@@ -131,7 +131,7 @@ theorem cof_toType
 
 中文:
 定理 cof_toType
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: Order.cof o.ToType = o.cof
   证明: by
   conv_rhs => rw [← type_toType o, cof_type]
@@ -166,8 +166,8 @@ theorem lift_cof
 
 中文:
 定理 lift_cof
-  条件: (o : Ordinal.{u})
-  结论: Cardinal.lift.{v} (cof o) = cof (Ordinal.lift.{v} o)
+  条件: (o : 序数.{u})
+  结论: 基数.lift.{v} (cof o) = cof (序数.lift.{v} o)
   证明: by
   cases o using inductionOnWellOrder with | type α
   rw [cof_type]; rw [← type_lt_ulift]; rw [cof_type]; rw [← Cardinal.lift_id'.{u]; rw [v} (Order.cof (ULift _))]; rw [← Cardinal.lift_umax]; rw [← ULift.orderIso.lift_cof_congr]
@@ -190,7 +190,7 @@ theorem _root_.Order.cof_Iio
 
 中文:
 定理 _root_.Order.cof_Iio
-  条件: [LinearOrder α] [WellFoundedLT α] (x : α)
+  条件: [线性序 α] [WellFoundedLT α] (x : α)
   证明: (cof_type _).symm
 
 @[simp]
@@ -212,8 +212,8 @@ theorem cof_Iio
 
 中文:
 定理 cof_Iio
-  条件: (o : Ordinal.{u})
-  结论: Order.cof (Iio o) = cof (lift.{u + 1} o)
+  条件: (o : 序数.{u})
+  结论: Order.cof (左无界右开区间 o) = cof (lift.{u + 1} o)
   证明: by
   rw [Order.cof_Iio]; rw [typein_ordinal]
 
@@ -234,7 +234,7 @@ theorem cof_le_card
 
 中文:
 定理 cof_le_card
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: cof o <= card o
   证明: by
   simpa using cof_le_cardinalMk o.ToType
@@ -256,7 +256,7 @@ theorem cof_ord_le
 
 中文:
 定理 cof_ord_le
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c.ord.cof <= c
   证明: by
   simpa using cof_le_card c.ord
@@ -279,7 +279,7 @@ theorem ord_cof_le
 
 中文:
 定理 ord_cof_le
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o.cof.ord <= o
   证明: (ord_le_ord.2 (cof_le_card o)).trans (ord_card_le o)
 
@@ -500,8 +500,8 @@ theorem one_lt_cof_iff
 
 中文:
 定理 one_lt_cof_iff
-  条件: {o : Ordinal}
-  结论: 1 < cof o ↔ IsSuccLimit o
+  条件: {o : 序数}
+  结论: 1 < cof o ↔ 是SuccLimit o
   证明: by
   rw [← not_iff_not]; rw [not_lt]; rw [Cardinal.le_one_iff]; rw [isSuccLimit_iff]; rw [not_and_or]; rw [not_ne_iff]; rw [not_isSuccPrelimit_iff_mem_range_succ]; rw [cof_eq_zero]; rw [cof_eq_one_iff]
 
@@ -527,7 +527,7 @@ theorem cof_lt_aleph0_iff
 
 中文:
 定理 cof_lt_aleph0_iff
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: cof o < ℵ₀ ↔ cof o <= 1
   证明: by
   simpa using Order.cof_lt_aleph0_iff (α := o.ToType)
@@ -554,7 +554,7 @@ theorem aleph0_le_cof_iff
 
 中文:
 定理 aleph0_le_cof_iff
-  条件: {o : Ordinal}
+  条件: {o : 序数}
   结论: ℵ₀ <= cof o ↔ 1 < cof o
   证明: by
   simp [← not_lt]
@@ -580,7 +580,7 @@ theorem aleph0_le_cof
 中文:
 定理 aleph0_le_cof
   条件: {o}
-  结论: ℵ₀ <= cof o ↔ IsSuccLimit o
+  结论: ℵ₀ <= cof o ↔ 是SuccLimit o
   证明: by
   rw [aleph0_le_cof_iff]; rw [one_lt_cof_iff]
 
@@ -604,7 +604,7 @@ theorem cof_eq_aleph0_of_isSuccLimit
 
 中文:
 定理 cof_eq_aleph0_of_isSuccLimit
-  条件: {o : Ordinal} (ho : IsSuccLimit o) (ho' : o < ω₁)
+  条件: {o : 序数} (ho : 是SuccLimit o) (ho' : o < ω₁)
   证明: by
   apply ((cof_le_card _).trans _).antisymm
   · rwa [aleph0_le_cof_iff, one_lt_cof_iff]
@@ -662,8 +662,8 @@ theorem exists_ord_cof_eq
   · 
 
 中文:
-定理 exists_ord_cof_eq
-  条件: [LinearOrder α] [WellFoundedLT α]
+定理 存在_ord_cof_eq
+  条件: [线性序 α] [WellFoundedLT α]
   证明: by
   obtain ⟨s, hs, hs'⟩ := exists_cof_eq α
   obtain ⟨r, hr, hr'⟩ := exists_ord_eq s
@@ -709,8 +709,8 @@ theorem exists_ord_cof_eq_of_isCofinal
 @[simp]
 
 中文:
-定理 exists_ord_cof_eq_of_isCofinal
-  结论: [LinearOrder α] [WellFoundedLT α]
+定理 存在_ord_cof_eq_of_isCofinal
+  结论: [线性序 α] [WellFoundedLT α]
   证明: by
   obtain ⟨t, ht, ht'⟩ := exists_ord_cof_eq s
   rw [cof_eq_of_isCofinal hs] at ht'
@@ -747,7 +747,7 @@ theorem _root_.Order.cof_ord_cof
 
 中文:
 定理 _root_.Order.cof_ord_cof
-  条件: (α : 类型) [LinearOrder α] [WellFoundedLT α]
+  条件: (α : 类型) [线性序 α] [WellFoundedLT α]
   证明: by
   obtain ⟨s, hs, hs'⟩ := exists_ord_cof_eq α
   rw [← hs']; rw [cof_type]; rw [cof_eq_of_isCofinal hs]
@@ -776,7 +776,7 @@ theorem cof_ord_cof
 
 中文:
 定理 cof_ord_cof
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   结论: o.cof.ord.cof = o.cof
   证明: by
   simpa using Order.cof_ord_cof o.ToType
@@ -810,7 +810,7 @@ theorem lift_cof_iSup_add_one
 
 中文:
 定理 lift_cof_iSup_add_one
-  条件: [Small.{u} β] {f : β -> Ordinal} (hf : StrictMono f)
+  条件: [Small.{u} β] {f : β -> 序数} (hf : 严格递增 f)
   证明: by
   have : StrictMono (β := Iio (⨆ i, f i + 1)) (fun i => ⟨f i, ?_⟩) := fun x y h => hf h
   · have := lift_cof_congr_of_strictMono this ?_
@@ -845,7 +845,7 @@ theorem cof_iSup_add_one
 
 中文:
 定理 cof_iSup_add_one
-  条件: {f : γ -> Ordinal} (hf : StrictMono f)
+  条件: {f : γ -> 序数} (hf : 严格递增 f)
   证明: by
   simpa using lift_cof_iSup_add_one hf
 
@@ -866,7 +866,7 @@ theorem lift_cof_iSup
 
 中文:
 定理 lift_cof_iSup
-  条件: [Small.{u} β] [NoMaxOrder β] {f : β -> Ordinal} (hf : StrictMono f)
+  条件: [Small.{u} β] [NoMax序 β] {f : β -> 序数} (hf : 严格递增 f)
   证明: by
   rw [← iSup_add_one hf]; rw [lift_cof_iSup_add_one hf]
 
@@ -887,7 +887,7 @@ theorem cof_iSup
 
 中文:
 定理 cof_iSup
-  条件: [NoMaxOrder γ] {f : γ -> Ordinal} (hf : StrictMono f)
+  条件: [NoMax序 γ] {f : γ -> 序数} (hf : 严格递增 f)
   证明: by
   simpa using lift_cof_iSup hf
 
@@ -910,7 +910,7 @@ theorem cof_iSup_Iio_add_one
 
 中文:
 定理 cof_iSup_Iio_add_one
-  条件: {a} {f : Iio a -> Ordinal} (hf : StrictMono f)
+  条件: {a} {f : 左无界右开区间 a -> 序数} (hf : 严格递增 f)
   证明: by
   simpa [← lift_cof] using lift_cof_iSup_add_one hf
 
@@ -931,7 +931,7 @@ theorem cof_iSup_Iio
 
 中文:
 定理 cof_iSup_Iio
-  条件: {a} {f : Iio a -> Ordinal} (hf : StrictMono f) (ha : IsSuccPrelimit a)
+  条件: {a} {f : 左无界右开区间 a -> 序数} (hf : 严格递增 f) (ha : IsSuccPrelimit a)
   证明: by
   rw [← iSup_Iio_add_one hf ha]; rw [cof_iSup_Iio_add_one hf]
 
@@ -957,7 +957,7 @@ alias cof_eq_of_isNormal := cof_map_of_isNormal
 
 中文:
 定理 cof_map_of_isNormal
-  条件: {f} (hf : IsNormal f) {a} (ha : IsSuccLimit a)
+  条件: {f} (hf : 是正规 f) {a} (ha : 是SuccLimit a)
   结论: cof (f a) = cof a
   证明: by
   rw [hf.apply_of_isSuccLimit ha]; rw [cof_iSup_Iio _ ha.isSuccPrelimit]
@@ -995,7 +995,7 @@ alias cof_le_of_isNor
 
 中文:
 定理 le_cof_map_of_isNormal
-  条件: {f} (hf : IsNormal f) (a)
+  条件: {f} (hf : 是正规 f) (a)
   结论: cof a <= cof (f a)
   证明: by
   cases a using limitRecOn with
@@ -1038,7 +1038,7 @@ theorem sSup_add_one_lt_of_lt_cof
 
 中文:
 定理 sSup_add_one_lt_of_lt_cof
-  结论: {s : Set Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {s : 集合 序数.{u}} {a : 序数.{u}}
   证明: by
   let f := OrderIso.ofRelIsoLT (enum (α := s) (· < ·))
   have : Small.{u} (Iio (typeLT s)) := by
@@ -1076,7 +1076,7 @@ theorem sSup_lt_of_lt_cof
 
 中文:
 定理 sSup_lt_of_lt_cof
-  结论: {s : Set Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {s : 集合 序数.{u}} {a : 序数.{u}}
   证明: (sSup_le_sSup_add_one s).trans_lt (sSup_add_one_lt_of_lt_cof ha hs)
 
 Depends on / 依赖: sSup_add_one_lt_of_lt_cof, sSup_le_sSup_add_one, trans_lt
@@ -1101,7 +1101,7 @@ theorem lift_iSup_add_one_lt_of_lt_cof
 
 中文:
 定理 lift_iSup_add_one_lt_of_lt_cof
-  结论: {f : β -> Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {f : β -> 序数.{u}} {a : 序数.{u}}
   证明: by
   rw [iSup]; rw [range_comp' (· + 1)]
   apply sSup_add_one_lt_of_lt_cof _ (by simpa)
@@ -1133,7 +1133,7 @@ theorem iSup_add_one_lt_of_lt_cof
 
 中文:
 定理 iSup_add_one_lt_of_lt_cof
-  结论: {f : α -> Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {f : α -> 序数.{u}} {a : 序数.{u}}
   证明: by
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [lift_cof] at ha
   simpa using lift_iSup_add_one_lt_of_lt_cof ha hf
@@ -1155,7 +1155,7 @@ theorem lift_iSup_lt_of_lt_cof
 
 中文:
 定理 lift_iSup_lt_of_lt_cof
-  结论: {f : β -> Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {f : β -> 序数.{u}} {a : 序数.{u}}
   证明: (iSup_le_iSup_add_one f).trans_lt (lift_iSup_add_one_lt_of_lt_cof ha hf)
 
 Depends on / 依赖: iSup_le_iSup_add_one, lift_iSup_add_one_lt_of_lt_cof, trans_lt
@@ -1176,7 +1176,7 @@ theorem iSup_lt_of_lt_cof
 
 中文:
 定理 iSup_lt_of_lt_cof
-  结论: {f : α -> Ordinal.{u}} {a : Ordinal.{u}}
+  结论: {f : α -> 序数.{u}} {a : 序数.{u}}
   证明: by
   rw [← Cardinal.lift_lt.{_]; rw [u}]; rw [lift_cof] at ha
   simpa using lift_iSup_lt_of_lt_cof ha hf
@@ -1200,7 +1200,7 @@ theorem cof_lift_iSup_add_one_le
 
 中文:
 定理 cof_lift_iSup_add_one_le
-  条件: [Small.{u} β] (f : β -> Ordinal.{u})
+  条件: [Small.{u} β] (f : β -> 序数.{u})
   证明: by
   by_contra! hf
   exact (lift_iSup_add_one_lt_of_lt_cof hf <| Ordinal.lt_iSup_add_one _).false
@@ -1224,7 +1224,7 @@ theorem cof_iSup_add_one_le
 
 中文:
 定理 cof_iSup_add_one_le
-  条件: (f : α -> Ordinal.{u})
+  条件: (f : α -> 序数.{u})
   结论: cof (⨆ i, f i + 1) <= #α
   证明: by
   simpa using cof_lift_iSup_add_one_le f
@@ -1247,8 +1247,8 @@ theorem _root_.Cardinal.sSup_lt_of_lt_cof_ord
   · simpa
 
 中文:
-定理 _root_.Cardinal.sSup_lt_of_lt_cof_ord
-  结论: {s : Set Cardinal.{u}} {a : Cardinal.{u}}
+定理 _root_.基数.sSup_lt_of_lt_cof_ord
+  结论: {s : 集合 基数.{u}} {a : 基数.{u}}
   证明: by
   rw [← ord_lt_ord]; rw [sSup_ord]
   apply Ordinal.sSup_lt_of_lt_cof
@@ -1275,8 +1275,8 @@ theorem _root_.Cardinal.lift_iSup_lt_of_lt_cof_ord
   apply Ordinal.lift_iSup_lt_of_lt_cof <;> simpa
 
 中文:
-定理 _root_.Cardinal.lift_iSup_lt_of_lt_cof_ord
-  结论: {f : β -> Cardinal.{u}} {a : Cardinal.{u}}
+定理 _root_.基数.lift_iSup_lt_of_lt_cof_ord
+  结论: {f : β -> 基数.{u}} {a : 基数.{u}}
   证明: by
   rw [← ord_lt_ord]; rw [iSup_ord]
   apply Ordinal.lift_iSup_lt_of_lt_cof <;> simpa
@@ -1299,8 +1299,8 @@ theorem _root_.Cardinal.iSup_lt_of_lt_cof_ord
   apply Ordinal.iSup_lt_of_lt_cof <;> simpa
 
 中文:
-定理 _root_.Cardinal.iSup_lt_of_lt_cof_ord
-  结论: {f : α -> Cardinal.{u}} {a : Cardinal.{u}}
+定理 _root_.基数.iSup_lt_of_lt_cof_ord
+  结论: {f : α -> 基数.{u}} {a : 基数.{u}}
   证明: by
   rw [← ord_lt_ord]; rw [iSup_ord]
   apply Ordinal.iSup_lt_of_lt_cof <;> simpa
@@ -1360,7 +1360,7 @@ theorem cof_eq_sInf_lsub
 
 中文:
 定理 cof_eq_sInf_lsub
-  条件: (o : Ordinal.{u})
+  条件: (o : 序数.{u})
   结论: cof o =
   证明: by
   refine le_antisymm (le_csInf (cof_lsub_def_nonempty o) ?_) (csInf_le' ?_)
@@ -1403,8 +1403,8 @@ theorem exists_lsub_cof
 @[deprecated cof_iSup_add_one_le (since := "2026-03-22")]
 
 中文:
-定理 exists_lsub_cof
-  条件: (o : Ordinal)
+定理 存在_lsub_cof
+  条件: (o : 序数)
   证明: by
   rw [cof_eq_sInf_lsub]
   exact csInf_mem (cof_lsub_def_nonempty o)
@@ -1432,7 +1432,7 @@ theorem cof_lsub_le
 
 中文:
 定理 cof_lsub_le
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   结论: cof (lsub.{u, u} f) <= #ι
   证明: cof_iSup_add_one_le f
 
@@ -1458,7 +1458,7 @@ theorem cof_lsub_le_lift
 
 中文:
 定理 cof_lsub_le_lift
-  条件: {ι} (f : ι -> Ordinal)
+  条件: {ι} (f : ι -> 序数)
   证明: by
   rw [← lift_id'.{u} (lsub f)]; rw [← Cardinal.lift_umax.{u]; rw [v}]
   exact cof_lift_iSup_add_one_le _
@@ -1491,7 +1491,7 @@ theorem le_cof_iff_lsub
 
 中文:
 定理 le_cof_iff_lsub
-  条件: {o : Ordinal} {a : Cardinal}
+  条件: {o : 序数} {a : 基数}
   证明: by
   rw [cof_eq_sInf_lsub]
   exact
@@ -1528,7 +1528,7 @@ theorem lsub_lt_ord_lift
 
 中文:
 定理 lsub_lt_ord_lift
-  结论: {ι} {f : ι -> Ordinal} {c : Ordinal}
+  结论: {ι} {f : ι -> 序数} {c : 序数}
   证明: by
   apply lift_iSup_add_one_lt_of_lt_cof _ hf
   rwa [Cardinal.lift_umax, c.lift_id']
@@ -1556,7 +1556,7 @@ theorem lsub_lt_ord
 
 中文:
 定理 lsub_lt_ord
-  条件: {ι} {f : ι -> Ordinal} {c : Ordinal} (hι : #ι < c.cof)
+  条件: {ι} {f : ι -> 序数} {c : 序数} (hι : #ι < c.cof)
   证明: iSup_add_one_lt_of_lt_cof hι
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
@@ -1583,7 +1583,7 @@ theorem cof_iSup_le_lift
 
 中文:
 定理 cof_iSup_le_lift
-  条件: {ι} {f : ι -> Ordinal} (H : 对任意 i, f i < iSup f)
+  条件: {ι} {f : ι -> 序数} (H : 对任意 i, f i < iSup f)
   证明: by
   by_contra! hf
   apply (lift_iSup_lt_of_lt_cof _ H).false
@@ -1614,7 +1614,7 @@ theorem cof_iSup_le
 
 中文:
 定理 cof_iSup_le
-  条件: {ι} {f : ι -> Ordinal} (H : 对任意 i, f i < iSup f)
+  条件: {ι} {f : ι -> 序数} (H : 对任意 i, f i < iSup f)
   证明: by
   by_contra! hf
   exact (iSup_lt_of_lt_cof hf H).false
@@ -1646,7 +1646,7 @@ alias iSup_lt_ord := iSup_lt_of_lt_cof
 
 中文:
 定理 iSup_lt_ord_lift
-  结论: {ι} {f : ι -> Ordinal} {c : Ordinal} (hι : Cardinal.lift.{v, u} #ι < c.cof)
+  结论: {ι} {f : ι -> 序数} {c : 序数} (hι : 基数.lift.{v, u} #ι < c.cof)
   证明: by
   apply lift_iSup_lt_of_lt_cof _ hf
   rwa [Cardinal.lift_umax, lift_id']
@@ -1682,7 +1682,7 @@ alias iSup_lt := Cardinal.iSup_lt_of_lt_cof_ord
 
 中文:
 定理 iSup_lt_lift
-  结论: {ι} {f : ι -> Cardinal} {c : Cardinal}
+  结论: {ι} {f : ι -> 基数} {c : 基数}
   证明: by
   apply lift_iSup_lt_of_lt_cof_ord _ hf
   rwa [Cardinal.lift_umax, c.lift_id']
@@ -1719,7 +1719,7 @@ theorem nfpFamily_lt_ord_lift
 
 中文:
 定理 nfpFamily_lt_ord_lift
-  结论: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : ℵ₀ < cof c)
+  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : ℵ₀ < cof c)
   证明: by
   refine lift_iSup_lt_of_lt_cof ?_ (fun l => ?_)
   · rw [Cardinal.lift_umax, c.lift_id']
@@ -1754,7 +1754,7 @@ theorem nfpFamily_lt_ord
 
 中文:
 定理 nfpFamily_lt_ord
-  结论: {ι} {f : ι -> Ordinal -> Ordinal} {c} (hc : ℵ₀ < cof c) (hc' : #ι < cof c)
+  结论: {ι} {f : ι -> 序数 -> 序数} {c} (hc : ℵ₀ < cof c) (hc' : #ι < cof c)
   证明: nfpFamily_lt_ord_lift hc (by rwa [(#ι).lift_id]) hf
 
 Depends on / 依赖: lift_id, nfpFamily_lt_ord_lift
@@ -1775,7 +1775,7 @@ theorem nfp_lt_ord
 
 中文:
 定理 nfp_lt_ord
-  条件: {f : Ordinal -> Ordinal} {c} (hc : ℵ₀ < cof c) (hf : 对任意 i < c, f i < c) {a}
+  条件: {f : 序数 -> 序数} {c} (hc : ℵ₀ < cof c) (hf : 对任意 i < c, f i < c) {a}
   证明: nfpFamily_lt_ord_lift hc (by simpa using Cardinal.one_lt_aleph0.trans hc) fun _ => hf
 
 @[deprecated exists_lsub_cof (since := "2026-03-21")]
@@ -1803,8 +1803,8 @@ theorem exists_blsub_cof
 @[deprecated le_cof_iff (since := "2026-03-21")]
 
 中文:
-定理 exists_blsub_cof
-  条件: (o : Ordinal)
+定理 存在_blsub_cof
+  条件: (o : 序数)
   证明: by
   rcases exists_lsub_cof o with ⟨ι, f, hf, hι⟩
   rcases Cardinal.exists_ord_eq ι with ⟨r, hr, hι'⟩
@@ -1841,7 +1841,7 @@ theorem le_cof_iff_blsub
 
 中文:
 定理 le_cof_iff_blsub
-  条件: {b : Ordinal} {a : Cardinal}
+  条件: {b : 序数} {a : 基数}
   证明: le_cof_iff_lsub.trans
     ⟨fun H o f hf => by simpa using H _ hf, fun H ι f hf => by
       rcases Cardinal.exists_ord_eq ι with ⟨r, hr, hι'⟩
@@ -1875,7 +1875,7 @@ theorem cof_blsub_le_lift
 
 中文:
 定理 cof_blsub_le_lift
-  条件: {o} (f : 对任意 a < o, Ordinal)
+  条件: {o} (f : 对任意 a < o, 序数)
   证明: by
   rw [← mk_toType o]
   exact cof_lsub_le_lift _
@@ -1905,7 +1905,7 @@ theorem cof_blsub_le
 
 中文:
 定理 cof_blsub_le
-  条件: {o} (f : 对任意 a < o, Ordinal)
+  条件: {o} (f : 对任意 a < o, 序数)
   结论: cof (blsub.{u, u} o f) <= o.card
   证明: by
   rw [← o.card.lift_id]
@@ -1933,7 +1933,7 @@ theorem blsub_lt_ord_lift
 
 中文:
 定理 blsub_lt_ord_lift
-  结论: {o : Ordinal.{u}} {f : 对任意 a < o, Ordinal} {c : Ordinal}
+  结论: {o : 序数.{u}} {f : 对任意 a < o, 序数} {c : 序数}
   证明: lt_of_le_of_ne (blsub_le hf) fun h =>
     ho.not_ge (by simpa [← iSup_ord, hf, h] using cof_blsub_le_lift.{u, v} f)
 
@@ -1959,7 +1959,7 @@ theorem blsub_lt_ord
 
 中文:
 定理 blsub_lt_ord
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c : Ordinal} (ho : o.card < c.cof)
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c : 序数} (ho : o.card < c.cof)
   证明: blsub_lt_ord_lift (by rwa [o.card.lift_id]) hf
 
 @[deprecated lift_iSup_lt_of_lt_cof (since := "2026-03-22")]
@@ -1986,7 +1986,7 @@ theorem cof_bsup_le_lift
 
 中文:
 定理 cof_bsup_le_lift
-  条件: {o : Ordinal} {f : 对任意 a < o, Ordinal} (H : 对任意 i h, f i h < bsup.{u, v} o f)
+  条件: {o : 序数} {f : 对任意 a < o, 序数} (H : 对任意 i h, f i h < bsup.{u, v} o f)
   证明: by
   rw [← bsup_eq_blsub_iff_lt_bsup.{u]; rw [v}] at H
   rw [H]
@@ -2017,7 +2017,7 @@ theorem cof_bsup_le
 
 中文:
 定理 cof_bsup_le
-  条件: {o : Ordinal} {f : 对任意 a < o, Ordinal}
+  条件: {o : 序数} {f : 对任意 a < o, 序数}
   证明: by
   rw [← o.card.lift_id]
   exact cof_bsup_le_lift
@@ -2044,7 +2044,7 @@ theorem bsup_lt_ord_lift
 
 中文:
 定理 bsup_lt_ord_lift
-  结论: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c : Ordinal}
+  结论: {o : 序数} {f : 对任意 a < o, 序数} {c : 序数}
   证明: (bsup_le_blsub f).trans_lt (blsub_lt_ord_lift ho hf)
 
 @[deprecated iSup_lt_of_lt_cof (since := "2026-03-22")]
@@ -2066,7 +2066,7 @@ theorem bsup_lt_ord
 
 中文:
 定理 bsup_lt_ord
-  条件: {o : Ordinal} {f : 对任意 a < o, Ordinal} {c : Ordinal} (ho : o.card < c.cof)
+  条件: {o : 序数} {f : 对任意 a < o, 序数} {c : 序数} (ho : o.card < c.cof)
   证明: bsup_lt_ord_lift (by rwa [o.card.lift_id])
 
 Depends on / 依赖: bsup_lt_ord_lift, lift_id, o.card.lift_id
@@ -2095,7 +2095,7 @@ theorem cof_add
 
 中文:
 定理 cof_add
-  条件: (a : Ordinal) {b : Ordinal} (hb : b != 0)
+  条件: (a : 序数) {b : 序数} (hb : b != 0)
   结论: cof (a + b) = cof b
   证明: by
   rcases zero_or_succ_or_isSuccLimit b with (rfl | ⟨c, rfl⟩ | hb)
@@ -2130,7 +2130,7 @@ theorem cof_mul
 
 中文:
 定理 cof_mul
-  条件: {a b : Ordinal} (ha : a != 0) (hb : IsSuccPrelimit b)
+  条件: {a b : 序数} (ha : a != 0) (hb : IsSuccPrelimit b)
   结论: cof (a * b) = cof b
   证明: by
   by_cases hb' : IsMin b
@@ -2163,7 +2163,7 @@ theorem cof_preOmega
 
 中文:
 定理 cof_preOmega
-  条件: {o : Ordinal} (ho : IsSuccPrelimit o)
+  条件: {o : 序数} (ho : IsSuccPrelimit o)
   结论: (preOmega o).cof = o.cof
   证明: by
   by_cases h : IsMin o
@@ -2193,7 +2193,7 @@ theorem cof_omega
 
 中文:
 定理 cof_omega
-  条件: {o : Ordinal} (ho : IsSuccLimit o)
+  条件: {o : 序数} (ho : 是SuccLimit o)
   结论: (ω_ o).cof = o.cof
   证明: cof_map_of_isNormal isNormal_omega ho
 
@@ -2224,7 +2224,7 @@ theorem cof_eq'
 
 中文:
 定理 cof_eq'
-  条件: (r : α -> α -> 命题) [H : IsWellOrder α r] (h : IsSuccLimit (type r))
+  条件: (r : α -> α -> 命题) [H : 是良序 α r] (h : 是SuccLimit (type r))
   证明: by
   classical
   let := linearOrderOfSTO r
@@ -2260,7 +2260,7 @@ theorem cof_univ
 
 中文:
 定理 cof_univ
-  结论: cof univ.{u, v} = Cardinal.univ.{u, v}
+  结论: cof univ.{u, v} = 基数.univ.{u, v}
   证明: by
   rw [univ]; rw [← lift_cof]; rw [cof_type]; rw [cof_ordinal]; rw [Cardinal.lift_univ]; rw [Cardinal.univ_umax.{u]; rw [v}]
 
@@ -2426,7 +2426,7 @@ theorem lt_power_cof_ord
 
 中文:
 定理 lt_power_cof_ord
-  条件: {c : Cardinal} (hc : ℵ₀ <= c)
+  条件: {c : 基数} (hc : ℵ₀ <= c)
   结论: c < c ^ c.ord.cof
   证明: by
   induction c using Cardinal.inductionOn with | mk α
@@ -2470,7 +2470,7 @@ alias lt_cof_power := lt_cof_ord_power
 
 中文:
 定理 lt_cof_ord_power
-  条件: {a b : Cardinal} (ha : ℵ₀ <= a) (hb : 1 < b)
+  条件: {a b : 基数} (ha : ℵ₀ <= a) (hb : 1 < b)
   结论: a < (b ^ a).ord.cof
   证明: by
   apply lt_imp_lt_of_le_imp_le (power_le_power_left <| power_ne_zero a hb.ne_bot)

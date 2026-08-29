@@ -90,11 +90,11 @@ structure IsBipartiteWith
     - mem_of_adj(⦃v w) : V⦄ : G.Adj v w -> v in s ∧ w in t ∨ v in t ∧ w in s
 
 中文:
-结构 IsBipartiteWith
-  参数: (G : SimpleGraph V) (s t : Set V)
+结构 是BipartiteWith
+  参数: (G : 简单图 V) (s t : 集合 V)
   公理与运算 (2 个):
     - disjoint : Disjoint s t
-    - mem_of_adj(⦃v w) : V⦄ : G.Adj v w -> v in s ∧ w in t ∨ v in t ∧ w in s
+    - mem_of_adj(⦃v w) : V⦄ : G.伴随 v w -> v in s ∧ w in t ∨ v in t ∧ w in s
 -/
 structure IsBipartiteWith (G : SimpleGraph V) (s t : Set V) : Prop where
   disjoint : Disjoint s t
@@ -113,9 +113,9 @@ theorem IsBipartiteWith.symm
     exact h.mem_of_adj hadj.symm
 
 中文:
-定理 IsBipartiteWith.symm
-  条件: (h : G.IsBipartiteWith s t)
-  结论: G.IsBipartiteWith t s where
+定理 是BipartiteWith.symm
+  条件: (h : G.是BipartiteWith s t)
+  结论: G.是BipartiteWith t s where
   证明: h.disjoint.symm
   mem_of_adj v w hadj := by
     rw [@and_comm (v in t) (w in s)]; rw [@and_comm (v in s) (w in t)]
@@ -139,7 +139,7 @@ theorem isBipartiteWith_comm
 
 中文:
 定理 isBipartiteWith_comm
-  结论: G.IsBipartiteWith s t ↔ G.IsBipartiteWith t s
+  结论: G.是BipartiteWith s t ↔ G.是BipartiteWith t s
   证明: ⟨IsBipartiteWith.symm, IsBipartiteWith.symm⟩
 
 Depends on / 依赖: IsBipartiteWith, IsBipartiteWith.symm
@@ -158,7 +158,7 @@ theorem IsBipartiteWith.mem_of_mem_adj
   simpa [hv, nhv] using hadj
 
 中文:
-定理 IsBipartiteWith.mem_of_mem_adj
+定理 是BipartiteWith.mem_of_mem_adj
   证明: by
   apply h.mem_of_adj at hadj
   have nhv : v ∉ t := Set.disjoint_left.mp h.disjoint hv
@@ -185,7 +185,7 @@ theorem isBipartiteWith_neighborSet
 
 中文:
 定理 isBipartiteWith_neighborSet
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   ext w
   rw [mem_neighborSet]; rw [Set.mem_ofPred_eq]; rw [iff_and_self]
@@ -211,7 +211,7 @@ theorem isBipartiteWith_neighborSet_subset
 
 中文:
 定理 isBipartiteWith_neighborSet_subset
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   rw [isBipartiteWith_neighborSet h hv]
   exact Set.sep_subset t (G.Adj v ·)
@@ -233,7 +233,7 @@ theorem isBipartiteWith_neighborSet_disjoint
 
 中文:
 定理 isBipartiteWith_neighborSet_disjoint
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: Set.disjoint_of_subset_left (isBipartiteWith_neighborSet_subset h hv) h.disjoint.symm
 
 Depends on / 依赖: Set.disjoint_of_subset_left, disjoint, disjoint_of_subset_left, h.disjoint.symm, isBipartiteWith_neighborSet_subset
@@ -253,7 +253,7 @@ theorem IsBipartiteWith.mem_of_mem_adj'
   simpa [hw, nhw] using hadj
 
 中文:
-定理 IsBipartiteWith.mem_of_mem_adj'
+定理 是BipartiteWith.mem_of_mem_adj'
   证明: by
   apply h.mem_of_adj at hadj
   have nhw : w ∉ s := Set.disjoint_right.mp h.disjoint hw
@@ -280,7 +280,7 @@ theorem isBipartiteWith_neighborSet'
 
 中文:
 定理 isBipartiteWith_neighborSet'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   ext v
   rw [mem_neighborSet]; rw [adj_comm]; rw [Set.mem_ofPred_eq]; rw [iff_and_self]
@@ -306,7 +306,7 @@ theorem isBipartiteWith_neighborSet_subset'
 
 中文:
 定理 isBipartiteWith_neighborSet_subset'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   rw [isBipartiteWith_neighborSet' h hw]
   exact Set.sep_subset s (G.Adj · w)
@@ -332,7 +332,7 @@ theorem isBipartiteWith_support_subset
 
 中文:
 定理 isBipartiteWith_support_subset
-  条件: (h : G.IsBipartiteWith s t)
+  条件: (h : G.是BipartiteWith s t)
   结论: G.support subseteq s union t
   证明: by
   intro v ⟨w, hadj⟩
@@ -356,7 +356,7 @@ theorem isBipartiteWith_neighborSet_disjoint'
 
 中文:
 定理 isBipartiteWith_neighborSet_disjoint'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: Set.disjoint_of_subset_left (isBipartiteWith_neighborSet_subset' h hw) h.disjoint
 
 Depends on / 依赖: Set.disjoint_of_subset_left, disjoint, disjoint_of_subset_left, h.disjoint, isBipartiteWith_neighborSet_subset
@@ -388,7 +388,7 @@ theorem isBipartiteWith_neighborFinset
 
 中文:
 定理 isBipartiteWith_neighborFinset
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   ext w
   rw [mem_neighborFinset]; rw [mem_filter]; rw [iff_and_self]
@@ -415,7 +415,7 @@ theorem isBipartiteWith_neighborFinset'
 
 中文:
 定理 isBipartiteWith_neighborFinset'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   ext v
   rw [mem_neighborFinset]; rw [adj_comm]; rw [mem_filter]; rw [iff_and_self]
@@ -440,7 +440,7 @@ theorem isBipartiteWith_bipartiteAbove
 
 中文:
 定理 isBipartiteWith_bipartiteAbove
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   rw [isBipartiteWith_neighborFinset h hv]; rw [bipartiteAbove]
 
@@ -461,7 +461,7 @@ theorem isBipartiteWith_bipartiteBelow
 
 中文:
 定理 isBipartiteWith_bipartiteBelow
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   rw [isBipartiteWith_neighborFinset' h hw]; rw [bipartiteBelow]
 
@@ -486,7 +486,7 @@ theorem isBipartiteWith_neighborFinset_subset
 
 中文:
 定理 isBipartiteWith_neighborFinset_subset
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   classical
   rw [isBipartiteWith_neighborFinset h hv]
@@ -512,7 +512,7 @@ theorem isBipartiteWith_neighborFinset_disjoint
 
 中文:
 定理 isBipartiteWith_neighborFinset_disjoint
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   证明: by
   rw [neighborFinset_def]; rw [← disjoint_coe]; rw [Set.coe_toFinset]
   exact isBipartiteWith_neighborSet_disjoint h hv
@@ -537,7 +537,7 @@ theorem isBipartiteWith_degree_le
 
 中文:
 定理 isBipartiteWith_degree_le
-  条件: (h : G.IsBipartiteWith s t) (hv : v in s)
+  条件: (h : G.是BipartiteWith s t) (hv : v in s)
   结论: G.degree v <= #t
   证明: by
   rw [← card_neighborFinset_eq_degree]
@@ -562,7 +562,7 @@ theorem isBipartiteWith_neighborFinset_subset'
 
 中文:
 定理 isBipartiteWith_neighborFinset_subset'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   classical
   rw [isBipartiteWith_neighborFinset' h hw]
@@ -588,7 +588,7 @@ theorem isBipartiteWith_neighborFinset_disjoint'
 
 中文:
 定理 isBipartiteWith_neighborFinset_disjoint'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   证明: by
   rw [neighborFinset_def]; rw [← disjoint_coe]; rw [Set.coe_toFinset]
   exact isBipartiteWith_neighborSet_disjoint' h hw
@@ -613,7 +613,7 @@ theorem isBipartiteWith_degree_le'
 
 中文:
 定理 isBipartiteWith_degree_le'
-  条件: (h : G.IsBipartiteWith s t) (hw : w in t)
+  条件: (h : G.是BipartiteWith s t) (hw : w in t)
   结论: G.degree w <= #s
   证明: by
   rw [← card_neighborFinset_eq_degree]
@@ -646,7 +646,7 @@ theorem isBipartiteWith_sum_degrees_eq
 
 中文:
 定理 isBipartiteWith_sum_degrees_eq
-  条件: [G.LocallyFinite] (h : G.IsBipartiteWith s t)
+  条件: [G.局部有限] (h : G.是BipartiteWith s t)
   证明: by
   classical
   simp_rw [← sum_attach t, ← sum_attach s, ← card_neighborFinset_eq_degree]
@@ -691,7 +691,7 @@ lemma isBipartiteWith_sum_degrees_eq_twice_card_edges
 
 中文:
 引理 isBipartiteWith_sum_degrees_eq_twice_card_edges
-  条件: [DecidableEq V] (h : G.IsBipartiteWith s t)
+  条件: [DecidableEq V] (h : G.是BipartiteWith s t)
   证明: by
   have hsub : G.support subseteq ↑s union ↑t := isBipartiteWith_support_subset h
   rw [← coe_union]; rw [← Set.toFinset_subset] at hsub
@@ -722,7 +722,7 @@ theorem isBipartiteWith_sum_degrees_eq_card_edges
 
 中文:
 定理 isBipartiteWith_sum_degrees_eq_card_edges
-  条件: (h : G.IsBipartiteWith s t)
+  条件: (h : G.是BipartiteWith s t)
   证明: by
   classical
   rw [← Nat.mul_left_cancel_iff zero_lt_two]; rw [← isBipartiteWith_sum_degrees_eq_twice_card_edges h]; rw [sum_union (disjoint_coe.mp h.disjoint)]; rw [two_mul]; rw [add_right_inj]
@@ -746,7 +746,7 @@ theorem isBipartiteWith_sum_degrees_eq_card_edges'
 
 中文:
 定理 isBipartiteWith_sum_degrees_eq_card_edges'
-  条件: (h : G.IsBipartiteWith s t)
+  条件: (h : G.是BipartiteWith s t)
   证明: isBipartiteWith_sum_degrees_eq_card_edges h.symm
 
 Depends on / 依赖: h.symm, isBipartiteWith_sum_degrees_eq_card_edges
@@ -768,7 +768,7 @@ abbreviation IsBipartite
 
 中文:
 缩写 IsBipartite
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: G.Colorable 2
 
 Depends on / 依赖: Colorable, G.Colorable
@@ -791,9 +791,9 @@ lemma IsBipartite.exists_isBipartiteWith
   lia
 
 中文:
-引理 IsBipartite.exists_isBipartiteWith
+引理 IsBipartite.存在_isBipartiteWith
   条件: (h : G.IsBipartite)
-  结论: 存在 s t, G.IsBipartiteWith s t
+  结论: 存在 s t, G.是BipartiteWith s t
   证明: by
   obtain ⟨c, hc⟩ := h
   refine ⟨{v | c v = 0}, {v | c v = 1}, by aesop (add simp [Set.disjoint_left]), ?_⟩
@@ -825,8 +825,8 @@ lemma IsBipartiteWith.isBipartite
     { replace ht : _ ∉ s := h.1.subset_compl_left ht; simp [hs, ht] }
 
 中文:
-引理 IsBipartiteWith.isBipartite
-  条件: {s t : Set V} (h : G.IsBipartiteWith s t)
+引理 是BipartiteWith.isBipartite
+  条件: {s t : 集合 V} (h : G.是BipartiteWith s t)
   结论: G.IsBipartite
   证明: by
   refine ⟨s.indicator 1, fun {v w} hw => ?_⟩
@@ -848,7 +848,7 @@ theorem isBipartite_iff_exists_isBipartiteWith
   proof: ⟨IsBipartite.exists_isBipartiteWith, fun ⟨_, _, h⟩ => h.isBipartite⟩
 
 中文:
-定理 isBipartite_iff_exists_isBipartiteWith
+定理 isBipartite_iff_存在_isBipartiteWith
   证明: ⟨IsBipartite.exists_isBipartiteWith, fun ⟨_, _, h⟩ => h.isBipartite⟩
 
 Depends on / 依赖: IsBipartite, IsBipartite.exists_isBipartiteWith, exists_isBipartiteWith, h.isBipartite, isBipartite
@@ -927,7 +927,7 @@ definition Copy.completeBipartiteGraph
     exact Function.Embedding.nonempty_
 
 中文:
-定义 Copy.completeBipartiteGraph
+定义 余py.completeBipartiteGraph
   定义体: by
   have : Nonempty (α ↪ left) := by
     rw [← card_coe] at card_left
@@ -1023,8 +1023,8 @@ lemma IsBipartiteWith.subgraph
   proof: ⟨by grind [h.disjoint], fun _ _ hadj' => h.mem_of_adj H.adj_sub hadj'⟩
 
 中文:
-引理 IsBipartiteWith.subgraph
-  条件: (h : G.IsBipartiteWith s t) (H : Subgraph G)
+引理 是BipartiteWith.subgraph
+  条件: (h : G.是BipartiteWith s t) (H : 子图 G)
   证明: ⟨by grind [h.disjoint], fun _ _ hadj' => h.mem_of_adj H.adj_sub hadj'⟩
 
 Depends on / 依赖: H.adj_sub, adj_sub, disjoint, h.disjoint, h.mem_of_adj, mem_of_adj
@@ -1045,7 +1045,7 @@ lemma IsBipartite.subgraph
 
 中文:
 引理 IsBipartite.subgraph
-  条件: (h : G.IsBipartite) (H : Subgraph G)
+  条件: (h : G.IsBipartite) (H : 子图 G)
   结论: H.coe.IsBipartite
   证明: let ⟨_, _, hst⟩ := isBipartite_iff_exists_isBipartiteWith.mp h
   isBipartite_iff_exists_isBipartiteWith.mpr ⟨_, _, IsBipartiteWith.subgraph hst H⟩
@@ -1069,7 +1069,7 @@ definition between
 
 中文:
 定义 between
-  签名: (s t : Set V) (G : SimpleGraph V)
+  签名: (s t : 集合 V) (G : 简单图 V)
   定义体: G.Adj v w ∧ (v in s ∧ w in t ∨ v in t ∧ w in s)
   symm.symm v w := by tauto
 
@@ -1089,7 +1089,7 @@ lemma between_adj
 
 中文:
 引理 between_adj
-  结论: (G.between s t).Adj v w ↔ G.Adj v w ∧ (v in s ∧ w in t ∨ v in t ∧ w in s)
+  结论: (G.between s t).伴随 v w ↔ G.伴随 v w ∧ (v in s ∧ w in t ∨ v in t ∧ w in s)
   证明: by rfl
 -/
 lemma between_adj : (G.between s t).Adj v w ↔ G.Adj v w ∧ (v in s ∧ w in t ∨ v in t ∧ w in s) := by rfl
@@ -1136,7 +1136,7 @@ instance [DecidableRel
 
 中文:
 实例 [DecidableRel
-  签名: G.Adj] [DecidablePred (· in s)] [DecidablePred (· in t)] :
+  签名: G.伴随] [DecidablePred (· in s)] [DecidablePred (· in t)] :
   定义体: inferInstanceAs (DecidableRel fun v w => G.Adj v w ∧ (v in s ∧ w in t ∨ v in t ∧ w in s))
 
 Depends on / 依赖: DecidableRel, G.Adj
@@ -1158,7 +1158,7 @@ theorem between_isBipartiteWith
 中文:
 定理 between_isBipartiteWith
   条件: (h : Disjoint s t)
-  结论: (G.between s t).IsBipartiteWith s t where
+  结论: (G.between s t).是BipartiteWith s t where
   证明: h
   mem_of_adj _ _ h := h.2
 -/
@@ -1430,8 +1430,8 @@ definition IsBipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
   inj' := 
 
 中文:
-定义 IsBipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
-  签名: [DecidableRel (· in · : V -> Set V -> _)]
+定义 是BipartiteWith.edgeSetEmbeddingCompleteBipartiteGraph
+  签名: [DecidableRel (· in · : V -> 集合 V -> _)]
   定义体: fun ⟨e, he⟩ =>
     e.fromRelNdrec he (sym := G.symm) (fun u v h => hG.mem_of_adj h |>.by_cases
       (fun h => ⟨s(.inl ⟨u, h.left⟩, .inr ⟨v, h.right⟩), .inl ⟨rfl, rfl⟩⟩)
@@ -1467,8 +1467,8 @@ theorem IsBipartiteWith.encard_edgeSet_le
   simp [encard_edgeSet_completeBipartiteGraph]
 
 中文:
-定理 IsBipartiteWith.encard_edgeSet_le
-  条件: (hG : G.IsBipartiteWith s t)
+定理 是BipartiteWith.encard_edgeSet_le
+  条件: (hG : G.是BipartiteWith s t)
   证明: by
   classical
   grw [hG.edgeSetEmbeddingCompleteBipartiteGraph.encard_le]
@@ -1531,7 +1531,7 @@ definition bipartiteDoubleCover
 
 中文:
 定义 bipartiteDoubleCover
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: by grind [adj_symm]
 -/
 @[simp] def bipartiteDoubleCover (G : SimpleGraph V) : SimpleGraph (V oplus V) where
@@ -1549,7 +1549,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : DecidableRel G.Adj] : DecidableRel G.bipartiteDoubleCover.Adj
+  签名: : DecidableRel G.伴随] : DecidableRel G.bipartiteDoubleCover.伴随
 -/
 instance [h : DecidableRel G.Adj] : DecidableRel G.bipartiteDoubleCover.Adj
   | .inl _, .inr _ | .inr _, .inl _ => h _ _
@@ -1596,7 +1596,7 @@ theorem card_edgeFinset_bipartiteDoubleCover
 
 中文:
 定理 card_edgeFinset_bipartiteDoubleCover
-  条件: [Fintype V] [DecidableRel G.Adj]
+  条件: [有限类型 V] [DecidableRel G.伴随]
   证明: by
   rw [two_mul_card_edgeFinset]; rw [eq_comm]
   apply card_bij (fun (v, w) _ => s(.inl v, .inr w))

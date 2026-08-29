@@ -41,8 +41,8 @@ theorem exists_linearIndependent_algEquiv_apply_of_finite
     `K[X]`-annihilato
 
 中文:
-定理 exists_linearIndependent_algEquiv_apply_of_finite
-  条件: [Finite L]
+定理 存在_linearIndependent_algEquiv_apply_of_finite
+  条件: [有限 L]
   证明: by
   have := Finite.of_injective _ (algebraMap K L).injective
   have := Fintype.ofFinite K
@@ -98,8 +98,8 @@ theorem exists_linearIndependent_algEquiv_apply_of_infinite
     .of fun i j => ∑ k, i.sy
 
 中文:
-定理 exists_linearIndependent_algEquiv_apply_of_infinite
-  条件: [Infinite K]
+定理 存在_linearIndependent_algEquiv_apply_of_infinite
+  条件: [无限 K]
   证明: by
   classical
   /- Choose a basis `e` of `L` over `K` and form the matrix `M` with entries

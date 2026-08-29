@@ -59,7 +59,7 @@ definition oneHypercover
 
 中文:
 定义 oneHypercover
-  签名: : Scheme.zariskiTopology.OneHypercover D.glued where
+  签名: : 概形.zariskiTopology.OneHypercover D.glued where
   定义体: D.J
   X := D.U
   f := D.ι

@@ -34,7 +34,7 @@ lemma isChain_ofFn
 
 中文:
 引理 isChain_ofFn
-  条件: {α : 类型} {n : 自然数} {f : Fin n -> α} {r : α -> α -> 命题}
+  条件: {α : 类型} {n : 自然数} {f : 有限集 n -> α} {r : α -> α -> 命题}
   证明: by
   simp_rw [isChain_iff_getElem, List.getElem_ofFn, length_ofFn]
 

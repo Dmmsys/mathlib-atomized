@@ -51,7 +51,7 @@ calc colimit (L ⋙ G) ≅ colimit grothendieckPro
 
 中文:
 引理 final_of_final_costructuredArrowToOver_small
-  结论: (L : A ⥤ T) (R : B ⥤ T) [Final R]
+  结论: (L : A ⥤ T) (R : B ⥤ T) [终 R]
   证明: by
   rw [final_iff_isIso_colimit_pre]
   intro G
@@ -110,7 +110,7 @@ theorem final_of_final_costructuredArrowToOver
 
 中文:
 定理 final_of_final_costructuredArrowToOver
-  结论: (L : A ⥤ T) (R : B ⥤ T) [Final R]
+  结论: (L : A ⥤ T) (R : B ⥤ T) [终 R]
   证明: by
   let sA : A ≌ AsSmall.{max u₁ u₂ u₃ v₁ v₂ v₃} A := AsSmall.equiv
   let sB : B ≌ AsSmall.{max u₁ u₂ u₃ v₁ v₂ v₃} B := AsSmall.equiv

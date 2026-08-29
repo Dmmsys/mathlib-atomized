@@ -121,7 +121,7 @@ definition weakFEPair
 
 中文:
 定义 weakFEPair
-  签名: : WeakFEPair Complex where
+  签名: : WeakFEPair 复形 where
   定义体: f (ofComplex (I * t))
   g t := translate f ModularGroup.S (ofComplex (I * t))
   k := k
@@ -169,7 +169,7 @@ definition Λ
 
 中文:
 定义 Λ
-  签名: : Complex -> Complex
+  签名: : 复形 -> 复形
   定义体: (weakFEPair hk f).Λ
 
 Depends on / 依赖: weakFEPair
@@ -275,7 +275,7 @@ definition L
 
 中文:
 定义 L
-  签名: (s : Complex)
+  签名: (s : 复形)
   定义体: Λ hk f s * (2 / GammaComplex s)
 
 Depends on / 依赖: GammaComplex
@@ -360,7 +360,7 @@ lemma isStrongFEPair
 
 中文:
 引理 isStrongFEPair
-  结论: IsStrongFEPair (weakFEPair hk f) where
+  结论: 是StrongFEPair (weakFEPair hk f) where
   证明: (CuspFormClass.zero_at_infty f).valueAtInfty_eq_zero
   hg₀ := (CuspFormClass.zero_at_infty <| translate f ModularGroup.S).valueAtInfty_eq_zero
 
@@ -383,7 +383,7 @@ lemma differentiable_Λ
 
 中文:
 引理 differentiable_Λ
-  结论: Differentiable Complex (Λ hk f)
+  结论: 可微 复形 (Λ hk f)
   证明: (isStrongFEPair hk f).differentiable_Λ
 
 Depends on / 依赖: isStrongFEPair
@@ -458,7 +458,7 @@ lemma differentiable_L
 
 中文:
 引理 differentiable_L
-  结论: Differentiable Complex (L hk f)
+  结论: 可微 复形 (L hk f)
   证明: by
   unfold L
   simp only [div_eq_mul_inv]

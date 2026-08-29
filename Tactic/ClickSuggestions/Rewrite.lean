@@ -33,7 +33,7 @@ structure RwLemma
   参数: where
   公理与运算 (2 个):
     - name : Premise
-    - symm : 布尔
+    - symm : 布尔值
 -/
 structure RwLemma where
   /-- The lemma -/
@@ -60,7 +60,7 @@ structure RwInfo
   公理与运算 (5 个):
     - rootExpr : Expr
     - subExpr : Expr
-    - rflTarget? : Option Expr
+    - rflTarget? : 选项类型 Expr
     - pos : SubExpr.Pos
     - rwKind : RwKind
 -/
@@ -96,7 +96,7 @@ structure RwKey
   参数: where
   公理与运算 (6 个):
     - numGoals : 自然数
-    - symm : 布尔
+    - symm : 布尔值
     - nameLength : 自然数
     - replacementSize : 自然数
     - name : String
@@ -136,7 +136,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord RwKey
+  签名: 序 RwKey
   定义体: (compare a.1 b.1).then
 (compare a.2 b.2).then
 (compare a.3 b.3).then
@@ -189,7 +189,7 @@ definition tacticSyntax
 
 中文:
 定义 tacticSyntax
-  签名: (lem : RwLemma) (rwKind : RwKind) (hyp? : Option Ident) (proof : Expr)
+  签名: (lem : RwLemma) (rwKind : RwKind) (hyp? : 选项类型 Ident) (proof : Expr)
   定义体: do
   let proof ← if justLemmaName then
       `(term| $(mkIdent <| ← lem.name.unresolveName))

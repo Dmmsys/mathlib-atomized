@@ -32,8 +32,8 @@ theorem Cardinal.mk_complex
   rw [mk_congr Complex.equivRealProd]; rw [mk_prod]; rw [lift_id]; rw [mk_real]; rw [continuum_mul_self]
 
 中文:
-定理 Cardinal.mk_complex
-  结论: #Complex = 𝔠
+定理 基数.mk_complex
+  结论: #复形 = 𝔠
   证明: by
   rw [mk_congr Complex.equivRealProd]; rw [mk_prod]; rw [lift_id]; rw [mk_real]; rw [continuum_mul_self]
 
@@ -51,8 +51,8 @@ theorem Cardinal.mk_univ_complex
   proof: by rw [mk_univ, mk_complex]
 
 中文:
-定理 Cardinal.mk_univ_complex
-  结论: #(Set.univ : Set Complex) = 𝔠
+定理 基数.mk_univ_complex
+  结论: #(集合.univ : 集合 复形) = 𝔠
   证明: by rw [mk_univ, mk_complex]
 
 Depends on / 依赖: mk_complex, mk_univ
@@ -71,7 +71,7 @@ theorem not_countable_complex
 
 中文:
 定理 not_countable_complex
-  结论: ¬(Set.univ : Set Complex).Countable
+  结论: ¬(集合.univ : 集合 复形).可数
   证明: by
   rw [← le_aleph0_iff_set_countable]; rw [not_le]; rw [Cardinal.mk_univ_complex]
   apply cantor

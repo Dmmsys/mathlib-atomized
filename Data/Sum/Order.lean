@@ -111,7 +111,7 @@ theorem LiftRel.trans
 
 中文:
 定理 LiftRel.trans
-  条件: [IsTrans α r] [IsTrans β s]
+  条件: [是Trans α r] [是Trans β s]
 -/
 theorem LiftRel.trans [IsTrans α r] [IsTrans β s] :
     forall {a b c}, LiftRel r s a b -> LiftRel r s b c -> LiftRel r s a c
@@ -127,8 +127,8 @@ instance [IsTrans
   body: ⟨fun _ _ _ => LiftRel.trans _ _⟩
 
 中文:
-实例 [IsTrans
-  签名: α r] [IsTrans β s] : IsTrans (α oplus β) (LiftRel r s)
+实例 [是Trans
+  签名: α r] [是Trans β s] : 是Trans (α oplus β) (LiftRel r s)
   定义体: ⟨fun _ _ _ => LiftRel.trans _ _⟩
 
 Depends on / 依赖: LiftRel, LiftRel.trans
@@ -145,8 +145,8 @@ instance [Std.Antisymm
   body: ⟨by rintro _ _ (⟨hab⟩ | ⟨hab⟩) (⟨hba⟩ | ⟨hba⟩) <;> rw [antisymm hab hba]⟩
 
 中文:
-实例 [Std.Antisymm
-  签名: r] [Std.Antisymm s] : Std.Antisymm (LiftRel r s)
+实例 [Std.反对称
+  签名: r] [Std.反对称 s] : Std.反对称 (LiftRel r s)
   定义体: ⟨by rintro _ _ (⟨hab⟩ | ⟨hab⟩) (⟨hba⟩ | ⟨hba⟩) <;> rw [antisymm hab hba]⟩
 
 Depends on / 依赖: antisymm
@@ -213,8 +213,8 @@ instance [IsTrans
     exacts [.inl (_root_.trans hab hbc), .sep _ _, .inr (_root_.trans hab hbc), .sep _ _]⟩
 
 中文:
-实例 [IsTrans
-  签名: α r] [IsTrans β s] : IsTrans (α oplus β) (Lex r s)
+实例 [是Trans
+  签名: α r] [是Trans β s] : 是Trans (α oplus β) (Lex r s)
   定义体: ⟨by
     rintro _ _ _ (⟨hab⟩ | ⟨hab⟩) (⟨hbc⟩ | ⟨hbc⟩)
     exacts [.inl (_root_.trans hab hbc), .sep _ _, .inr (_root_.trans hab hbc), .sep _ _]⟩
@@ -235,8 +235,8 @@ instance [Std.Antisymm
   body: ⟨by rintro _ _ (⟨hab⟩ | ⟨hab⟩) (⟨hba⟩ | ⟨hba⟩) <;> rw [antisymm hab hba]⟩
 
 中文:
-实例 [Std.Antisymm
-  签名: r] [Std.Antisymm s] : Std.Antisymm (Lex r s)
+实例 [Std.反对称
+  签名: r] [Std.反对称 s] : Std.反对称 (Lex r s)
   定义体: ⟨by rintro _ _ (⟨hab⟩ | ⟨hab⟩) (⟨hba⟩ | ⟨hba⟩) <;> rw [antisymm hab hba]⟩
 
 Depends on / 依赖: antisymm
@@ -258,8 +258,8 @@ instance [Std.Total
     | inr a, inr b => (total_of s a b).imp Lex.inr Lex.inr⟩
 
 中文:
-实例 [Std.Total
-  签名: r] [Std.Total s] : Std.Total (Lex r s)
+实例 [Std.全
+  签名: r] [Std.全 s] : Std.全 (Lex r s)
   定义体: ⟨fun a b =>
     match a, b with
     | inl a, inl b => (total_of r a b).imp Lex.inl Lex.inl
@@ -287,8 +287,8 @@ instance [Std.Trichotomous
   grind [Std.Trichotomous, Lex]
 
 中文:
-实例 [Std.Trichotomous
-  签名: r] [Std.Trichotomous s] : Std.Trichotomous (Lex r s)
+实例 [Std.三歧
+  签名: r] [Std.三歧 s] : Std.三歧 (Lex r s)
   定义体: by
   grind [Std.Trichotomous, Lex]
 
@@ -306,8 +306,8 @@ instance [IsWellOrder
   body: Sum.lex_wf IsWellFounded.wf IsWellFounded.wf
 
 中文:
-实例 [IsWellOrder
-  签名: α r] [IsWellOrder β s] :
+实例 [是良序
+  签名: α r] [是良序 β s] :
   定义体: Sum.lex_wf IsWellFounded.wf IsWellFounded.wf
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.wf, Sum.lex_wf, lex_wf
@@ -618,7 +618,7 @@ instance instPreorderSum
 
 中文:
 实例 instPreorderSum
-  签名: : Preorder (α oplus β)
+  签名: : 预序 (α oplus β)
   定义体: { instLESum, instLTSum with
     le_refl := fun _ => LiftRel.refl _ _ _,
     le_trans := fun _ _ _ => LiftRel.trans _ _,
@@ -652,7 +652,7 @@ theorem inl_mono
 
 中文:
 定理 inl_mono
-  结论: Monotone (inl : α -> α oplus β)
+  结论: 递增 (inl : α -> α oplus β)
   证明: fun _ _ => LiftRel.inl
 
 Depends on / 依赖: LiftRel, LiftRel.inl
@@ -669,7 +669,7 @@ theorem inr_mono
 
 中文:
 定理 inr_mono
-  结论: Monotone (inr : β -> α oplus β)
+  结论: 递增 (inr : β -> α oplus β)
   证明: fun _ _ => LiftRel.inr
 
 Depends on / 依赖: LiftRel, LiftRel.inr
@@ -686,7 +686,7 @@ theorem inl_strictMono
 
 中文:
 定理 inl_strictMono
-  结论: StrictMono (inl : α -> α oplus β)
+  结论: 严格递增 (inl : α -> α oplus β)
   证明: fun _ _ => LiftRel.inl
 
 Depends on / 依赖: LiftRel, LiftRel.inl
@@ -703,7 +703,7 @@ theorem inr_strictMono
 
 中文:
 定理 inr_strictMono
-  结论: StrictMono (inr : β -> α oplus β)
+  结论: 严格递增 (inr : β -> α oplus β)
   证明: fun _ _ => LiftRel.inr
 
 Depends on / 依赖: LiftRel, LiftRel.inr
@@ -722,8 +722,8 @@ instance [PartialOrder
     le_antisymm := fun _ _ => show LiftRel _ _ _ _ -> _ from antisymm }
 
 中文:
-实例 [PartialOrder
-  签名: α] [PartialOrder β] : PartialOrder (α oplus β)
+实例 [偏序
+  签名: α] [偏序 β] : 偏序 (α oplus β)
   定义体: { instPreorderSum with
     le_antisymm := fun _ _ => show LiftRel _ _ _ _ -> _ from antisymm }
 
@@ -750,7 +750,7 @@ instance noMinOrder
 
 中文:
 实例 noMinOrder
-  签名: [LT α] [LT β] [NoMinOrder α] [NoMinOrder β]
+  签名: [LT α] [LT β] [NoMin序 α] [NoMin序 β]
   定义体: ⟨fun a =>
     match a with
     | inl a =>
@@ -791,7 +791,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [LT α] [LT β] [NoMaxOrder α] [NoMaxOrder β]
+  签名: [LT α] [LT β] [NoMax序 α] [NoMax序 β]
   定义体: ⟨fun a =>
     match a with
     | inl a =>
@@ -836,7 +836,7 @@ theorem noMinOrder_iff
 中文:
 定理 noMinOrder_iff
   条件: [LT α] [LT β]
-  结论: NoMinOrder (α oplus β) ↔ NoMinOrder α ∧ NoMinOrder β
+  结论: NoMin序 (α oplus β) ↔ NoMin序 α ∧ NoMin序 β
   证明: ⟨fun _ =>
     ⟨⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_lt (inl a : α oplus β)
@@ -882,7 +882,7 @@ theorem noMaxOrder_iff
 中文:
 定理 noMaxOrder_iff
   条件: [LT α] [LT β]
-  结论: NoMaxOrder (α oplus β) ↔ NoMaxOrder α ∧ NoMaxOrder β
+  结论: NoMax序 (α oplus β) ↔ NoMax序 α ∧ NoMax序 β
   证明: ⟨fun _ =>
     ⟨⟨fun a => by
         obtain ⟨b | b, h⟩ := exists_gt (inl a : α oplus β)
@@ -924,7 +924,7 @@ instance denselyOrdered
 
 中文:
 实例 denselyOrdered
-  签名: [LT α] [LT β] [DenselyOrdered α] [DenselyOrdered β]
+  签名: [LT α] [LT β] [稠密序 α] [稠密序 β]
   定义体: ⟨fun a b h =>
     match a, b, h with
     | inl _, inl _, LiftRel.inl h =>
@@ -1057,7 +1057,7 @@ abbreviation _root_.Sum.inlₗ
   body: toLex (Sum.inl x)
 
 中文:
-缩写 _root_.Sum.inlₗ
+缩写 _root_.和.inlₗ
   签名: (x : α)
   定义体: toLex (Sum.inl x)
 
@@ -1077,7 +1077,7 @@ abbreviation _root_.Sum.inrₗ
   body: toLex (Sum.inr x)
 
 中文:
-缩写 _root_.Sum.inrₗ
+缩写 _root_.和.inrₗ
   签名: (x : β)
   定义体: toLex (Sum.inr x)
 
@@ -1524,7 +1524,7 @@ instance preorder
 
 中文:
 实例 preorder
-  签名: : Preorder (α oplusₗ β)
+  签名: : 预序 (α oplusₗ β)
   定义体: { Lex.LE, Lex.LT with
     le_refl := refl_of (Lex (· <= ·) (· <= ·)),
     le_trans := fun _ _ _ => trans_of (Lex (· <= ·) (· <= ·)),
@@ -1560,7 +1560,7 @@ theorem toLex_mono
 
 中文:
 定理 toLex_mono
-  结论: Monotone (@toLex (α oplus β))
+  结论: 递增 (@toLex (α oplus β))
   证明: fun _ _ h => h.lex
 
 Depends on / 依赖: h.lex
@@ -1577,7 +1577,7 @@ theorem toLex_strictMono
 
 中文:
 定理 toLex_strictMono
-  结论: StrictMono (@toLex (α oplus β))
+  结论: 严格递增 (@toLex (α oplus β))
   证明: fun _ _ h => h.lex
 
 Depends on / 依赖: h.lex
@@ -1594,7 +1594,7 @@ theorem inl_mono
 
 中文:
 定理 inl_mono
-  结论: Monotone (toLex ∘ inl : α -> α oplusₗ β)
+  结论: 递增 (toLex ∘ inl : α -> α oplusₗ β)
   证明: toLex_mono.comp Sum.inl_mono
 
 Depends on / 依赖: Sum.inl_mono, inl_mono, toLex_mono, toLex_mono.comp
@@ -1612,7 +1612,7 @@ theorem inr_mono
 
 中文:
 定理 inr_mono
-  结论: Monotone (toLex ∘ inr : β -> α oplusₗ β)
+  结论: 递增 (toLex ∘ inr : β -> α oplusₗ β)
   证明: toLex_mono.comp Sum.inr_mono
 
 Depends on / 依赖: Sum.inr_mono, inr_mono, toLex_mono, toLex_mono.comp
@@ -1630,7 +1630,7 @@ theorem inl_strictMono
 
 中文:
 定理 inl_strictMono
-  结论: StrictMono (toLex ∘ inl : α -> α oplusₗ β)
+  结论: 严格递增 (toLex ∘ inl : α -> α oplusₗ β)
   证明: toLex_strictMono.comp Sum.inl_strictMono
 
 Depends on / 依赖: Sum.inl_strictMono, inl_strictMono, toLex_strictMono, toLex_strictMono.comp
@@ -1648,7 +1648,7 @@ theorem inr_strictMono
 
 中文:
 定理 inr_strictMono
-  结论: StrictMono (toLex ∘ inr : β -> α oplusₗ β)
+  结论: 严格递增 (toLex ∘ inr : β -> α oplusₗ β)
   证明: toLex_strictMono.comp Sum.inr_strictMono
 
 Depends on / 依赖: Sum.inr_strictMono, inr_strictMono, toLex_strictMono, toLex_strictMono.comp
@@ -1668,7 +1668,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: [PartialOrder α] [PartialOrder β]
+  签名: [偏序 α] [偏序 β]
   定义体: { Lex.preorder with le_antisymm := fun _ _ => antisymm_of (Lex (· <= ·) (· <= ·)) }
 
 Depends on / 依赖: Lex.preorder, antisymm_of, le_antisymm, preorder
@@ -1690,7 +1690,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: [LinearOrder α] [LinearOrder β]
+  签名: [线性序 α] [线性序 β]
   定义体: { Lex.partialOrder with
     le_total := total_of (Lex (· <= ·) (· <= ·)),
     toDecidableLE := instDecidableRelSumLex,
@@ -1722,7 +1722,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [LE α] [OrderBot α] [LE β]
+  签名: [LE α] [有底序 α] [LE β]
   定义体: inl ⊥
   bot_le := by
     rintro (a | b)
@@ -1751,7 +1751,7 @@ theorem inl_bot
 
 中文:
 定理 inl_bot
-  条件: [LE α] [OrderBot α] [LE β]
+  条件: [LE α] [有底序 α] [LE β]
   结论: toLex (inl ⊥ : α oplus β) = ⊥
   证明: rfl
 -/
@@ -1774,7 +1774,7 @@ instance orderTop
 
 中文:
 实例 orderTop
-  签名: [LE α] [LE β] [OrderTop β]
+  签名: [LE α] [LE β] [有顶序 β]
   定义体: inr ⊤
   le_top := by
     rintro (a | b)
@@ -1803,7 +1803,7 @@ theorem inr_top
 
 中文:
 定理 inr_top
-  条件: [LE α] [LE β] [OrderTop β]
+  条件: [LE α] [LE β] [有顶序 β]
   结论: toLex (inr ⊤ : α oplus β) = ⊤
   证明: rfl
 -/
@@ -1820,7 +1820,7 @@ instance boundedOrder
 
 中文:
 实例 boundedOrder
-  签名: [LE α] [LE β] [OrderBot α] [OrderTop β]
+  签名: [LE α] [LE β] [有底序 α] [有顶序 β]
   定义体: { Lex.orderBot, Lex.orderTop with }
 
 Depends on / 依赖: Lex.orderBot, Lex.orderTop, orderBot, orderTop
@@ -1845,7 +1845,7 @@ instance noMinOrder
 
 中文:
 实例 noMinOrder
-  签名: [LT α] [LT β] [NoMinOrder α] [NoMinOrder β]
+  签名: [LT α] [LT β] [NoMin序 α] [NoMin序 β]
   定义体: ⟨fun a =>
     match a with
     | inl a =>
@@ -1884,7 +1884,7 @@ instance noMaxOrder
 
 中文:
 实例 noMaxOrder
-  签名: [LT α] [LT β] [NoMaxOrder α] [NoMaxOrder β]
+  签名: [LT α] [LT β] [NoMax序 α] [NoMax序 β]
   定义体: ⟨fun a =>
     match a with
     | inl a =>
@@ -1921,7 +1921,7 @@ instance noMinOrder_of_nonempty
 
 中文:
 实例 noMinOrder_of_nonempty
-  签名: [LT α] [LT β] [NoMinOrder α] [Nonempty α]
+  签名: [LT α] [LT β] [NoMin序 α] [非空 α]
   定义体: ⟨fun a =>
     match a with
     | inl a =>
@@ -1954,7 +1954,7 @@ instance noMaxOrder_of_nonempty
 
 中文:
 实例 noMaxOrder_of_nonempty
-  签名: [LT α] [LT β] [NoMaxOrder β] [Nonempty β]
+  签名: [LT α] [LT β] [NoMax序 β] [非空 β]
   定义体: ⟨fun a =>
     match a with
     | inl _ => ⟨toLex (inr <| Classical.arbitrary β), inl_lt_inr _ _⟩
@@ -1989,7 +1989,7 @@ instance denselyOrdered_of_noMaxOrder
 
 中文:
 实例 denselyOrdered_of_noMaxOrder
-  签名: [LT α] [LT β] [DenselyOrdered α] [DenselyOrdered β]
+  签名: [LT α] [LT β] [稠密序 α] [稠密序 β]
   定义体: ⟨fun a b h =>
     match a, b, h with
     | inl _, inl _, Lex.inl h =>
@@ -2032,7 +2032,7 @@ instance denselyOrdered_of_noMinOrder
 
 中文:
 实例 denselyOrdered_of_noMinOrder
-  签名: [LT α] [LT β] [DenselyOrdered α] [DenselyOrdered β]
+  签名: [LT α] [LT β] [稠密序 α] [稠密序 β]
   定义体: ⟨fun a b h =>
     match a, b, h with
     | inl _, inl _, Lex.inl h =>
@@ -2869,7 +2869,7 @@ definition sumLexEmpty
 
 中文:
 定义 sumLexEmpty
-  签名: [IsEmpty β]
+  签名: [是空 β]
   定义体: RelIso.sumLexEmpty ..
 
 Depends on / 依赖: RelIso, RelIso.sumLexEmpty, sumLexEmpty
@@ -2889,7 +2889,7 @@ definition emptySumLex
 
 中文:
 定义 emptySumLex
-  签名: [IsEmpty β]
+  签名: [是空 β]
   定义体: RelIso.emptySumLex ..
 
 @[simp]
@@ -2913,7 +2913,7 @@ lemma sumLexEmpty_apply_inl
 
 中文:
 引理 sumLexEmpty_apply_inl
-  条件: [IsEmpty β] (x : α)
+  条件: [是空 β] (x : α)
   结论: sumLexEmpty (β := β) (toLex <| .inl x) = x
   证明: rfl
 
@@ -2934,7 +2934,7 @@ lemma emptySumLex_apply_inr
 
 中文:
 引理 emptySumLex_apply_inr
-  条件: [IsEmpty β] (x : α)
+  条件: [是空 β] (x : α)
   结论: emptySumLex (β := β) (toLex <| .inr x) = x
   证明: rfl
 -/
@@ -2962,7 +2962,7 @@ definition orderIsoPUnitSumLex
 
 中文:
 定义 orderIsoPUnitSumLex
-  签名: : WithBot α ≃o PUnit oplusₗ α
+  签名: : WithBot α ≃o 命题单元 oplusₗ α
   定义体: ⟨(Equiv.optionEquivSumPUnit α).trans (Equiv.sumComm _ _).trans toLex, fun {a b} => by
     simp only [Equiv.optionEquivSumPUnit, Option.elim, Equiv.trans_apply, Equiv.coe_fn_mk,
       Equiv.sumComm_apply, swap, Lex.toLex_le_toLex, le_refl]
@@ -2996,7 +2996,7 @@ theorem orderIsoPUnitSumLex_bot
 
 中文:
 定理 orderIsoPUnitSumLex_bot
-  结论: @orderIsoPUnitSumLex α _ ⊥ = toLex (inl PUnit.unit)
+  结论: @orderIsoPUnitSumLex α _ ⊥ = toLex (inl 命题单元.unit)
   证明: rfl
 
 @[simp]
@@ -3040,7 +3040,7 @@ theorem orderIsoPUnitSumLex_symm_inl
 
 中文:
 定理 orderIsoPUnitSumLex_symm_inl
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   证明: rfl
 
 @[simp]
@@ -3089,7 +3089,7 @@ definition orderIsoSumLexPUnit
 
 中文:
 定义 orderIsoSumLexPUnit
-  签名: : WithTop α ≃o α oplusₗ PUnit
+  签名: : WithTop α ≃o α oplusₗ 命题单元
   定义体: ⟨(Equiv.optionEquivSumPUnit α).trans toLex, fun {a b} => by
     simp only [Equiv.optionEquivSumPUnit, Option.elim, Equiv.trans_apply, Equiv.coe_fn_mk,
       Lex.toLex_le_toLex, le_refl]
@@ -3124,7 +3124,7 @@ theorem orderIsoSumLexPUnit_top
 
 中文:
 定理 orderIsoSumLexPUnit_top
-  结论: @orderIsoSumLexPUnit α _ ⊤ = toLex (inr PUnit.unit)
+  结论: @orderIsoSumLexPUnit α _ ⊤ = toLex (inr 命题单元.unit)
   证明: rfl
 
 @[simp]
@@ -3168,7 +3168,7 @@ theorem orderIsoSumLexPUnit_symm_inr
 
 中文:
 定理 orderIsoSumLexPUnit_symm_inr
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   证明: rfl
 
 @[simp]

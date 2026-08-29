@@ -57,7 +57,7 @@ lemma sum_le_sum
 中文:
 引理 sum_le_sum
   条件: (h : 对任意 i in f.support, h₁ i (f i) <= h₂ i (f i))
-  结论: f.sum h₁ <= f.sum h₂
+  结论: f.求和 h₁ <= f.求和 h₂
   证明: Finset.sum_le_sum h
 
 Depends on / 依赖: Finset, Finset.sum_le_sum, sum_le_sum
@@ -77,7 +77,7 @@ theorem sum_nonneg
 中文:
 定理 sum_nonneg
   条件: (h : 对任意 i in f.support, 0 <= h₁ i (f i))
-  结论: 0 <= f.sum h₁
+  结论: 0 <= f.求和 h₁
   证明: Finset.sum_nonneg h
 
 Depends on / 依赖: Finset, Finset.sum_nonneg, sum_nonneg
@@ -96,7 +96,7 @@ theorem sum_nonneg'
 中文:
 定理 sum_nonneg'
   条件: (h : 对任意 i, 0 <= h₁ i (f i))
-  结论: 0 <= f.sum h₁
+  结论: 0 <= f.求和 h₁
   证明: sum_nonneg fun _ _ => h _
 
 Depends on / 依赖: sum_nonneg
@@ -115,7 +115,7 @@ theorem sum_nonpos
 中文:
 定理 sum_nonpos
   条件: (h : 对任意 i in f.support, h₁ i (f i) <= 0)
-  结论: f.sum h₁ <= 0
+  结论: f.求和 h₁ <= 0
   证明: Finset.sum_nonpos h
 
 Depends on / 依赖: Finset, Finset.sum_nonpos, sum_nonpos
@@ -141,7 +141,7 @@ theorem sum_pos
 中文:
 定理 sum_pos
   条件: (h : 对任意 i in f.support, 0 < g i (f i)) (hf : f != 0)
-  结论: 0 < f.sum g
+  结论: 0 < f.求和 g
   证明: Finset.sum_pos h (by simpa)
 
 Depends on / 依赖: Finset, Finset.sum_pos, sum_pos
@@ -200,7 +200,7 @@ lemma single_mono
 
 中文:
 引理 single_mono
-  结论: Monotone (single i : α -> ι ->₀ α)
+  结论: 递增 (single i : α -> ι ->₀ α)
   证明: fun _ _ => single_le_single.2
 
 Depends on / 依赖: single_le_single
@@ -320,8 +320,8 @@ lemma embDomain_mono
 
 中文:
 引理 embDomain_mono
-  条件: [Preorder α] (f : ι ↪ κ)
-  结论: Monotone (embDomain f : (ι ->₀ α) -> (κ ->₀ α))
+  条件: [预序 α] (f : ι ↪ κ)
+  结论: 递增 (embDomain f : (ι ->₀ α) -> (κ ->₀ α))
   证明: fun _ _ => (embDomain_le_embDomain_iff_le f _ _).mpr
 
 @[gcongr]
@@ -343,7 +343,7 @@ lemma embDomain_lt_embDomain_iff_lt
 
 中文:
 引理 embDomain_lt_embDomain_iff_lt
-  条件: [Preorder α] (f : ι ↪ κ) (g₁ g₂ : ι ->₀ α)
+  条件: [预序 α] (f : ι ↪ κ) (g₁ g₂ : ι ->₀ α)
   证明: by
   simp [lt_iff_le_not_ge, embDomain_le_embDomain_iff_le]
 
@@ -372,7 +372,7 @@ lemma mapDomain_le_mapDomain_iff_le
 
 中文:
 引理 mapDomain_le_mapDomain_iff_le
-  结论: [LE α] [@Std.Refl α (· <= ·)] {f : ι -> κ} (h : f.Injective)
+  结论: [LE α] [@Std.Refl α (· <= ·)] {f : ι -> κ} (h : f.单射)
   证明: by
   simpa [Finsupp.embDomain_eq_mapDomain] using Finsupp.embDomain_le_embDomain_iff_le ⟨f, h⟩ g₁ g₂
 
@@ -393,7 +393,7 @@ lemma mapDomain_lt_mapDomain_iff_lt
 
 中文:
 引理 mapDomain_lt_mapDomain_iff_lt
-  结论: [Preorder α] {f : ι -> κ} (h : f.Injective)
+  结论: [预序 α] {f : ι -> κ} (h : f.单射)
   证明: by
   simpa [Finsupp.embDomain_eq_mapDomain] using Finsupp.embDomain_lt_embDomain_iff_lt ⟨f, h⟩ g₁ g₂
 
@@ -423,7 +423,7 @@ instance isOrderedAddMonoid
 
 中文:
 实例 isOrderedAddMonoid
-  签名: : IsOrderedAddMonoid (ι ->₀ α)
+  签名: : 是OrderedAdd幺半群 (ι ->₀ α)
   定义体: { add_le_add_left := fun _a _b h c s => add_le_add_left (h s) (c s) }
 
 @[gcongr]
@@ -445,7 +445,7 @@ lemma mapDomain_mono
 
 中文:
 引理 mapDomain_mono
-  结论: Monotone (mapDomain f : (ι ->₀ α) -> (κ ->₀ α))
+  结论: 递增 (mapDomain f : (ι ->₀ α) -> (κ ->₀ α))
   证明: by
   classical exact fun g₁ g₂ h => sum_le_sum_index h (fun _ _ => single_mono) (by simp)
 
@@ -507,7 +507,7 @@ theorem single_le_sum
 
 中文:
 定理 single_le_sum
-  结论: {α M N : 类型} [Zero M] [AddCommMonoid N]
+  结论: {α M N : 类型} [零 M] [加法交换幺半群 N]
   证明: by
   rcases eq_or_ne (f a) 0 with H | H
   · rw [H, single_zero, sum_zero_index]
@@ -541,7 +541,7 @@ lemma single_eval_le_sum
 
 中文:
 引理 single_eval_le_sum
-  结论: {α M N : 类型} [Zero M] [AddCommMonoid N] [PartialOrder N]
+  结论: {α M N : 类型} [零 M] [加法交换幺半群 N] [偏序 N]
   证明: by
   simp only [← sum_single_index (h := fun (_ : α) m => g m) (a := a) (b := f a) hg]
   apply single_le_sum _ (fun _ m => h m)
@@ -566,7 +566,7 @@ instance isOrderedCancelAddMonoid
 
 中文:
 实例 isOrderedCancelAddMonoid
-  签名: [AddCommMonoid α] [Preorder α] [IsOrderedCancelAddMonoid α]
+  签名: [加法交换幺半群 α] [预序 α] [是OrderedCancelAdd幺半群 α]
   定义体: { le_of_add_le_add_left := fun _f _g _i h s => le_of_add_le_add_left (h s) }
 
 Depends on / 依赖: le_of_add_le_add_left
@@ -585,7 +585,7 @@ instance addLeftReflectLE
 
 中文:
 实例 addLeftReflectLE
-  签名: [AddCommMonoid α] [Preorder α] [AddLeftReflectLE α]
+  签名: [加法交换幺半群 α] [预序 α] [加法LeftReflectLE α]
   定义体: le_of_add_le_add_left H x
 
 Depends on / 依赖: le_of_add_le_add_left
@@ -607,7 +607,7 @@ instance instPosSMulMono
 
 中文:
 实例 instPosSMulMono
-  签名: [PosSMulMono α β]
+  签名: [正标量乘递增 α β]
   定义体: PosSMulMono.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulMono, PosSMulMono.lift, coe_le_coe, coe_smul
@@ -625,7 +625,7 @@ instance instSMulPosMono
 
 中文:
 实例 instSMulPosMono
-  签名: [SMulPosMono α β]
+  签名: [标量乘正递增 α β]
   定义体: SMulPosMono.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosMono, SMulPosMono.lift, coe_le_coe, coe_smul, coe_zero
@@ -643,7 +643,7 @@ instance instPosSMulReflectLE
 
 中文:
 实例 instPosSMulReflectLE
-  签名: [PosSMulReflectLE α β]
+  签名: [正标量乘反映偏序 α β]
   定义体: PosSMulReflectLE.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulReflectLE, PosSMulReflectLE.lift, coe_le_coe, coe_smul
@@ -661,7 +661,7 @@ instance instSMulPosReflectLE
 
 中文:
 实例 instSMulPosReflectLE
-  签名: [SMulPosReflectLE α β]
+  签名: [标量乘正反映偏序 α β]
   定义体: SMulPosReflectLE.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosReflectLE, SMulPosReflectLE.lift, coe_le_coe, coe_smul, coe_zero
@@ -684,7 +684,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: [PosSMulStrictMono α β]
+  签名: [正标量乘严格递增 α β]
   定义体: PosSMulStrictMono.lift _ coe_le_coe coe_smul
 
 Depends on / 依赖: PosSMulStrictMono, PosSMulStrictMono.lift, coe_le_coe, coe_smul
@@ -702,7 +702,7 @@ instance instSMulPosStrictMono
 
 中文:
 实例 instSMulPosStrictMono
-  签名: [SMulPosStrictMono α β]
+  签名: [标量乘正严格递增 α β]
   定义体: SMulPosStrictMono.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosStrictMono, SMulPosStrictMono.lift, coe_le_coe, coe_smul, coe_zero
@@ -722,7 +722,7 @@ instance instSMulPosReflectLT
 
 中文:
 实例 instSMulPosReflectLT
-  签名: [SMulPosReflectLT α β]
+  签名: [标量乘正反映严格偏序 α β]
   定义体: SMulPosReflectLT.lift _ coe_le_coe coe_smul coe_zero
 
 Depends on / 依赖: SMulPosReflectLT, SMulPosReflectLT.lift, coe_le_coe, coe_smul, coe_zero
@@ -747,7 +747,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: [IsBotZeroClass α]
+  签名: [是BotZero类 α]
   定义体: 0
   bot_le := by simp [le_def]
 -/
@@ -766,8 +766,8 @@ instance [IsBotZeroClass
 @[deprecated _root_.bot_eq_zero (since := "2026-05-07")]
 
 中文:
-实例 [IsBotZeroClass
-  签名: α] : IsBotZeroClass (ι ->₀ α) where
+实例 [是BotZero类
+  签名: α] : 是BotZero类 (ι ->₀ α) where
   定义体: isBot_bot
 
 @[deprecated _root_.bot_eq_zero (since := "2026-05-07")]
@@ -789,7 +789,7 @@ theorem bot_eq_zero
 
 中文:
 定理 bot_eq_zero
-  条件: [IsBotZeroClass α]
+  条件: [是BotZero类 α]
   结论: (⊥ : ι ->₀ α) = 0
   证明: rfl
 -/
@@ -835,7 +835,7 @@ theorem le_iff'
 
 中文:
 定理 le_iff'
-  条件: (f g : ι ->₀ α) {s : Finset ι} (hf : f.support subseteq s)
+  条件: (f g : ι ->₀ α) {s : 有限集 ι} (hf : f.support subseteq s)
   证明: by
   refine ⟨fun h s _ => h s, fun h s => ?_⟩
   by_cases H : s in f.support
@@ -881,7 +881,7 @@ lemma support_monotone
 
 中文:
 引理 support_monotone
-  结论: Monotone (support (α := ι) (M := α))
+  结论: 递增 (support (α := ι) (M := α))
   证明: fun f g h a ha => by rw [mem_support_iff, ← pos_iff_ne_zero] at ha ⊢; exact ha.trans_le (h _)
 -/
 lemma support_monotone : Monotone (support (α := ι) (M := α)) :=
@@ -979,7 +979,7 @@ instance tsub
 
 中文:
 实例 tsub
-  签名: : Sub (ι ->₀ α)
+  签名: : 减法 (ι ->₀ α)
   定义体: ⟨zipWith (fun m n => m - n) (tsub_self 0)⟩
 
 Depends on / 依赖: tsub_self, zipWith
@@ -1017,7 +1017,7 @@ instance [AddLeftMono
 
 中文:
 实例 [AddLeftMono
-  签名: α] : CanonicallyOrderedAdd (ι ->₀ α) where
+  签名: α] : 典范有序加法 (ι ->₀ α) where
   定义体: fun {f g} h => ⟨g - f, ext fun x => (add_tsub_cancel_of_le <| h x).symm⟩
   le_add_self _ _ _ := le_add_self
   le_self_add := fun _f _g _x => le_self_add
@@ -1163,7 +1163,7 @@ lemma mapDomain_tsub
 
 中文:
 引理 mapDomain_tsub
-  条件: {f : ι -> κ} (h : f.Injective) (f1 f2 : ι ->₀ α)
+  条件: {f : ι -> κ} (h : f.单射) (f1 f2 : ι ->₀ α)
   证明: by
   ext y
   by_cases! hy : y ∉ Set.range f

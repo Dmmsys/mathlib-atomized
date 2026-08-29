@@ -149,7 +149,7 @@ theorem _root_.Commute.ofNat_left
   proof: n.cast_commute x
 
 中文:
-定理 _root_.Commute.ofNat_left
+定理 _root_.Commute.of自然数_left
   条件: (n : 自然数) [n.AtLeastTwo] (x : α)
   结论: Commute (Of自然数.of自然数 n) x
   证明: n.cast_commute x
@@ -209,7 +209,7 @@ theorem _root_.Commute.ofNat_right
   proof: n.commute_cast x
 
 中文:
-定理 _root_.Commute.ofNat_right
+定理 _root_.Commute.of自然数_right
   条件: (x : α) (n : 自然数) [n.AtLeastTwo]
   结论: Commute x (Of自然数.of自然数 n)
   证明: n.commute_cast x

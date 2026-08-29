@@ -40,8 +40,8 @@ definition Subsemigroup.unitBall
     exact (norm_mul_le _ _).trans_lt (mul_lt_one_of_nonneg_of_lt_one_left (norm_nonneg _) hx hy.le)
 
 中文:
-定义 Subsemigroup.unitBall
-  签名: (𝕜 : 类型) [NonUnitalSeminormedRing 𝕜]
+定义 子半群.unitBall
+  签名: (𝕜 : 类型) [非幺Seminormed环 𝕜]
   定义体: ball (0 : 𝕜) 1
   mul_mem' hx hy := by
     rw [mem_ball_zero_iff] at *
@@ -63,8 +63,8 @@ lemma Subsemigroup.mem_unitBall
   simp [Subsemigroup.unitBall]
 
 中文:
-引理 Subsemigroup.mem_unitBall
-  条件: (𝕜 : 类型) [NonUnitalSeminormedRing 𝕜] {x : 𝕜}
+引理 子半群.mem_unitBall
+  条件: (𝕜 : 类型) [非幺Seminormed环 𝕜] {x : 𝕜}
   证明: by
   simp [Subsemigroup.unitBall]
 -/
@@ -82,7 +82,7 @@ instance Metric.unitBall.instSemigroup
 
 中文:
 实例 Metric.unitBall.instSemigroup
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: inferInstanceAs Semigroup (Subsemigroup.unitBall 𝕜)
 
 Depends on / 依赖: Semigroup, Subsemigroup, Subsemigroup.unitBall, unitBall
@@ -100,7 +100,7 @@ instance Metric.unitBall.instContinuousMul
 
 中文:
 实例 Metric.unitBall.instContinuousMul
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: (Subsemigroup.unitBall 𝕜).continuousMul
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.unitBall, continuousMul, unitBall
@@ -119,7 +119,7 @@ instance Metric.unitBall.instCommSemigroup
 
 中文:
 实例 Metric.unitBall.instCommSemigroup
-  签名: [SeminormedCommRing 𝕜]
+  签名: [SeminormedComm环 𝕜]
   定义体: inferInstanceAs CommSemigroup (Subsemigroup.unitBall 𝕜)
 
 Depends on / 依赖: CommSemigroup, Subsemigroup, Subsemigroup.unitBall, unitBall
@@ -140,7 +140,7 @@ instance Metric.unitBall.instHasDistribNeg
 
 中文:
 实例 Metric.unitBall.instHasDistribNeg
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.coe_injective.hasDistribNeg ((↑) : ball (0 : 𝕜) 1 -> 𝕜) (fun _ => rfl) fun _ _ => rfl
 
 @[simp, norm_cast]
@@ -162,7 +162,7 @@ theorem Metric.unitBall.coe_mul
 
 中文:
 定理 Metric.unitBall.coe_mul
-  条件: [NonUnitalSeminormedRing 𝕜] (x y : ball (0 : 𝕜) 1)
+  条件: [非幺Seminormed环 𝕜] (x y : ball (0 : 𝕜) 1)
   证明: rfl
 -/
 protected theorem Metric.unitBall.coe_mul [NonUnitalSeminormedRing 𝕜] (x y : ball (0 : 𝕜) 1) :
@@ -181,7 +181,7 @@ instance Metric.unitBall.instZero
 
 中文:
 实例 Metric.unitBall.instZero
-  签名: [Zero 𝕜] [PseudoMetricSpace 𝕜]
+  签名: [零 𝕜] [伪度量空间 𝕜]
   定义体: ⟨⟨0, by simp⟩⟩
 
 @[simp, norm_cast]
@@ -202,7 +202,7 @@ theorem Metric.unitBall.coe_zero
 
 中文:
 定理 Metric.unitBall.coe_zero
-  条件: [Zero 𝕜] [PseudoMetricSpace 𝕜]
+  条件: [零 𝕜] [伪度量空间 𝕜]
   证明: rfl
 
 @[simp, norm_cast]
@@ -222,7 +222,7 @@ theorem Metric.unitBall.coe_eq_zero
 
 中文:
 定理 Metric.unitBall.coe_eq_zero
-  条件: [Zero 𝕜] [PseudoMetricSpace 𝕜] {a : ball (0 : 𝕜) 1}
+  条件: [零 𝕜] [伪度量空间 𝕜] {a : ball (0 : 𝕜) 1}
   证明: Subtype.val_injective.eq_iff' unitBall.coe_zero
 -/
 protected theorem Metric.unitBall.coe_eq_zero [Zero 𝕜] [PseudoMetricSpace 𝕜] {a : ball (0 : 𝕜) 1} :
@@ -240,7 +240,7 @@ mul_zero _ := Subtype.ext mul_zero _
 
 中文:
 实例 Metric.unitBall.instSemigroupWithZero
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.ext zero_mul _
 mul_zero _ := Subtype.ext mul_zero _
 
@@ -261,7 +261,7 @@ instance Metric.unitBall.instIsLeftCancelMulZero
 
 中文:
 实例 Metric.unitBall.instIsLeftCancelMulZero
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.val_injective.isLeftCancelMulZero _ rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.isLeftCancelMulZero, isLeftCancelMulZero, val_injective
@@ -280,7 +280,7 @@ instance Metric.unitBall.instIsRightCancelMulZero
 
 中文:
 实例 Metric.unitBall.instIsRightCancelMulZero
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.val_injective.isRightCancelMulZero _ rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.isRightCancelMulZero, isRightCancelMulZero, val_injective
@@ -298,7 +298,7 @@ instance Metric.unitBall.instIsCancelMulZero
 
 中文:
 实例 Metric.unitBall.instIsCancelMulZero
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
 -/
 instance Metric.unitBall.instIsCancelMulZero [NonUnitalSeminormedRing 𝕜]
     [IsCancelMulZero 𝕜] : IsCancelMulZero (ball (0 : 𝕜) 1) where
@@ -319,8 +319,8 @@ definition Subsemigroup.unitClosedBall
     exact (norm_mul_le _ _).trans (mul_le_one₀ hx (norm_nonneg _) hy)
 
 中文:
-定义 Subsemigroup.unitClosedBall
-  签名: (𝕜 : 类型) [NonUnitalSeminormedRing 𝕜]
+定义 子半群.unitClosedBall
+  签名: (𝕜 : 类型) [非幺Seminormed环 𝕜]
   定义体: closedBall 0 1
   mul_mem' hx hy := by
     rw [mem_closedBall_zero_iff] at *
@@ -344,7 +344,7 @@ instance Metric.unitClosedBall.instSemigroup
 
 中文:
 实例 Metric.unitClosedBall.instSemigroup
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: inferInstanceAs Semigroup (Subsemigroup.unitClosedBall 𝕜)
 
 Depends on / 依赖: Semigroup, Subsemigroup, Subsemigroup.unitClosedBall, unitClosedBall
@@ -363,7 +363,7 @@ instance Metric.unitClosedBall.instHasDistribNeg
 
 中文:
 实例 Metric.unitClosedBall.instHasDistribNeg
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.coe_injective.hasDistribNeg ((↑) : closedBall (0 : 𝕜) 1 -> 𝕜) (fun _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.hasDistribNeg, closedBall, coe_injective, hasDistribNeg
@@ -384,7 +384,7 @@ instance Metric.unitClosedBall.instContinuousMul
 
 中文:
 实例 Metric.unitClosedBall.instContinuousMul
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: (Subsemigroup.unitClosedBall 𝕜).continuousMul
 
 @[simp, norm_cast]
@@ -406,7 +406,7 @@ theorem Metric.unitClosedBall.coe_mul
 
 中文:
 定理 Metric.unitClosedBall.coe_mul
-  结论: [NonUnitalSeminormedRing 𝕜]
+  结论: [非幺Seminormed环 𝕜]
   证明: rfl
 -/
 protected theorem Metric.unitClosedBall.coe_mul [NonUnitalSeminormedRing 𝕜]
@@ -425,7 +425,7 @@ instance Metric.unitClosedBall.instZero
 
 中文:
 实例 Metric.unitClosedBall.instZero
-  签名: [Zero 𝕜] [PseudoMetricSpace 𝕜]
+  签名: [零 𝕜] [伪度量空间 𝕜]
   定义体: ⟨0, by simp⟩
 
 @[simp, norm_cast]
@@ -447,7 +447,7 @@ lemma Metric.unitClosedBall.coe_zero
 
 中文:
 引理 Metric.unitClosedBall.coe_zero
-  条件: [Zero 𝕜] [PseudoMetricSpace 𝕜]
+  条件: [零 𝕜] [伪度量空间 𝕜]
   证明: rfl
 
 @[simp, norm_cast]
@@ -467,7 +467,7 @@ lemma Metric.unitClosedBall.coe_eq_zero
 
 中文:
 引理 Metric.unitClosedBall.coe_eq_zero
-  结论: [Zero 𝕜] [PseudoMetricSpace 𝕜]
+  结论: [零 𝕜] [伪度量空间 𝕜]
   证明: Subtype.val_injective.eq_iff' unitClosedBall.coe_zero
 -/
 protected lemma Metric.unitClosedBall.coe_eq_zero [Zero 𝕜] [PseudoMetricSpace 𝕜]
@@ -485,7 +485,7 @@ mul_zero _ := Subtype.ext mul_zero _
 
 中文:
 实例 Metric.unitClosedBall.instSemigroupWithZero
-  签名: [NonUnitalSeminormedRing 𝕜]
+  签名: [非幺Seminormed环 𝕜]
   定义体: Subtype.ext zero_mul _
 mul_zero _ := Subtype.ext mul_zero _
 
@@ -507,8 +507,8 @@ definition Submonoid.unitClosedBall
     one_mem' := mem_closedBall_zero_iff.2 norm_one.le }
 
 中文:
-定义 Submonoid.unitClosedBall
-  签名: (𝕜 : 类型) [SeminormedRing 𝕜] [NormOneClass 𝕜]
+定义 子幺半群.unitClosedBall
+  签名: (𝕜 : 类型) [Seminormed环 𝕜] [NormOne类 𝕜]
   定义体: { Subsemigroup.unitClosedBall 𝕜 with
     carrier := closedBall 0 1
     one_mem' := mem_closedBall_zero_iff.2 norm_one.le }
@@ -531,8 +531,8 @@ lemma Submonoid.mem_unitClosedBall
   simp [Submonoid.unitClosedBall]
 
 中文:
-引理 Submonoid.mem_unitClosedBall
-  条件: (𝕜 : 类型) [SeminormedRing 𝕜] [NormOneClass 𝕜] {x : 𝕜}
+引理 子幺半群.mem_unitClosedBall
+  条件: (𝕜 : 类型) [Seminormed环 𝕜] [NormOne类 𝕜] {x : 𝕜}
   证明: by
   simp [Submonoid.unitClosedBall]
 -/
@@ -550,7 +550,7 @@ instance Metric.unitClosedBall.instMonoid
 
 中文:
 实例 Metric.unitClosedBall.instMonoid
-  签名: [SeminormedRing 𝕜] [NormOneClass 𝕜]
+  签名: [Seminormed环 𝕜] [NormOne类 𝕜]
   定义体: inferInstanceAs Monoid (Submonoid.unitClosedBall 𝕜)
 
 Depends on / 依赖: Monoid, Submonoid, Submonoid.unitClosedBall, unitClosedBall
@@ -571,7 +571,7 @@ instance Metric.unitClosedBall.instCommMonoid
 
 中文:
 实例 Metric.unitClosedBall.instCommMonoid
-  签名: [SeminormedCommRing 𝕜] [NormOneClass 𝕜]
+  签名: [SeminormedComm环 𝕜] [NormOne类 𝕜]
   定义体: inferInstanceAs CommMonoid (Submonoid.unitClosedBall 𝕜)
 
 @[simp, norm_cast]
@@ -595,7 +595,7 @@ theorem Metric.unitClosedBall.coe_one
 
 中文:
 定理 Metric.unitClosedBall.coe_one
-  条件: [SeminormedRing 𝕜] [NormOneClass 𝕜]
+  条件: [Seminormed环 𝕜] [NormOne类 𝕜]
   证明: rfl
 
 @[simp, norm_cast]
@@ -617,7 +617,7 @@ theorem Metric.unitClosedBall.coe_eq_one
 
 中文:
 定理 Metric.unitClosedBall.coe_eq_one
-  结论: [SeminormedRing 𝕜] [NormOneClass 𝕜]
+  结论: [Seminormed环 𝕜] [NormOne类 𝕜]
   证明: Subtype.val_injective.eq_iff' unitClosedBall.coe_one
 
 @[simp, norm_cast]
@@ -637,7 +637,7 @@ theorem Metric.unitClosedBall.coe_pow
 
 中文:
 定理 Metric.unitClosedBall.coe_pow
-  结论: [SeminormedRing 𝕜] [NormOneClass 𝕜]
+  结论: [Seminormed环 𝕜] [NormOne类 𝕜]
   证明: rfl
 -/
 protected theorem Metric.unitClosedBall.coe_pow [SeminormedRing 𝕜] [NormOneClass 𝕜]
@@ -653,7 +653,7 @@ instance Metric.unitClosedBall.instMonoidWithZero
 
 中文:
 实例 Metric.unitClosedBall.instMonoidWithZero
-  签名: [SeminormedRing 𝕜] [NormOneClass 𝕜]
+  签名: [Seminormed环 𝕜] [NormOne类 𝕜]
 -/
 instance Metric.unitClosedBall.instMonoidWithZero [SeminormedRing 𝕜] [NormOneClass 𝕜] :
     MonoidWithZero (closedBall (0 : 𝕜) 1) where
@@ -668,7 +668,7 @@ instance Metric.unitClosedBall.instIsCancelMulZero
 
 中文:
 实例 Metric.unitClosedBall.instIsCancelMulZero
-  签名: [SeminormedRing 𝕜] [IsCancelMulZero 𝕜]
+  签名: [Seminormed环 𝕜] [是乘零消去 𝕜]
   定义体: Subtype.val_injective.isCancelMulZero _ rfl fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.val_injective.isCancelMulZero, isCancelMulZero, val_injective
@@ -697,8 +697,8 @@ definition Submonoid.unitSphere
   one_mem' := mem_sphere_zero_iff_norm.2 norm_one
 
 中文:
-定义 Submonoid.unitSphere
-  签名: (𝕜 : 类型) [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+定义 子幺半群.unitSphere
+  签名: (𝕜 : 类型) [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   定义体: sphere (0 : 𝕜) 1
   mul_mem' hx hy := by
     rw [mem_sphere_zero_iff_norm] at *
@@ -728,7 +728,7 @@ instance Metric.unitSphere.instInv
 
 中文:
 实例 Metric.unitSphere.instInv
-  签名: [NormedDivisionRing 𝕜]
+  签名: [NormedDivision环 𝕜]
   定义体: ⟨x⁻¹, mem_sphere_zero_iff_norm.2 by
     rw [norm_inv]; rw [mem_sphere_zero_iff_norm.1 x.coe_prop]; rw [inv_one]⟩
 
@@ -751,7 +751,7 @@ theorem Metric.unitSphere.coe_inv
 
 中文:
 定理 Metric.unitSphere.coe_inv
-  条件: [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1)
+  条件: [NormedDivision环 𝕜] (x : sphere (0 : 𝕜) 1)
   证明: rfl
 -/
 theorem Metric.unitSphere.coe_inv [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1) :
@@ -771,7 +771,7 @@ instance Metric.unitSphere.instDiv
 
 中文:
 实例 Metric.unitSphere.instDiv
-  签名: [NormedDivisionRing 𝕜]
+  签名: [NormedDivision环 𝕜]
   定义体: .mk (x / y) mem_sphere_zero_iff_norm.2 by
     rw [norm_div]; rw [mem_sphere_zero_iff_norm.1 x.2]; rw [mem_sphere_zero_iff_norm.1 y.coe_prop]; rw [div_one]
 
@@ -794,7 +794,7 @@ theorem Metric.unitSphere.coe_div
 
 中文:
 定理 Metric.unitSphere.coe_div
-  条件: [NormedDivisionRing 𝕜] (x y : sphere (0 : 𝕜) 1)
+  条件: [NormedDivision环 𝕜] (x y : sphere (0 : 𝕜) 1)
   证明: rfl
 -/
 protected theorem Metric.unitSphere.coe_div [NormedDivisionRing 𝕜] (x y : sphere (0 : 𝕜) 1) :
@@ -814,7 +814,7 @@ instance Metric.unitSphere.instZPow
 
 中文:
 实例 Metric.unitSphere.instZPow
-  签名: [NormedDivisionRing 𝕜]
+  签名: [NormedDivision环 𝕜]
   定义体: .mk ((x : 𝕜) ^ n) by
     rw [mem_sphere_zero_iff_norm]; rw [norm_zpow]; rw [mem_sphere_zero_iff_norm.1 x.coe_prop]; rw [one_zpow]
 
@@ -837,7 +837,7 @@ theorem Metric.unitSphere.coe_zpow
 
 中文:
 定理 Metric.unitSphere.coe_zpow
-  条件: [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1) (n : 整数)
+  条件: [NormedDivision环 𝕜] (x : sphere (0 : 𝕜) 1) (n : 整数)
   证明: rfl
 -/
 theorem Metric.unitSphere.coe_zpow [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1) (n : Int) :
@@ -854,7 +854,7 @@ instance Metric.unitSphere.instMonoid
 
 中文:
 实例 Metric.unitSphere.instMonoid
-  签名: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  签名: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   定义体: inferInstanceAs Monoid (Submonoid.unitSphere 𝕜)
 
 Depends on / 依赖: Monoid, Submonoid, Submonoid.unitSphere, unitSphere
@@ -875,7 +875,7 @@ instance Metric.unitSphere.instCommMonoid
 
 中文:
 实例 Metric.unitSphere.instCommMonoid
-  签名: [SeminormedCommRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  签名: [SeminormedComm环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   定义体: inferInstanceAs CommMonoid (Submonoid.unitSphere 𝕜)
 
 @[simp, norm_cast]
@@ -899,7 +899,7 @@ theorem Metric.unitSphere.coe_one
 
 中文:
 定理 Metric.unitSphere.coe_one
-  条件: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  条件: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   证明: rfl
 
 @[simp, norm_cast]
@@ -921,7 +921,7 @@ theorem Metric.unitSphere.coe_mul
 
 中文:
 定理 Metric.unitSphere.coe_mul
-  结论: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  结论: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   证明: rfl
 
 @[simp, norm_cast]
@@ -941,7 +941,7 @@ theorem Metric.unitSphere.coe_pow
 
 中文:
 定理 Metric.unitSphere.coe_pow
-  结论: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  结论: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   证明: rfl
 -/
 theorem Metric.unitSphere.coe_pow [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
@@ -961,7 +961,7 @@ definition unitSphereToUnits
 
 中文:
 定义 unitSphereToUnits
-  签名: (𝕜 : 类型) [NormedDivisionRing 𝕜]
+  签名: (𝕜 : 类型) [NormedDivision环 𝕜]
   定义体: Units.liftRight (Submonoid.unitSphere 𝕜).subtype
     (fun x => Units.mk0 x <| ne_zero_of_mem_unit_sphere _) fun _x => rfl
 
@@ -984,7 +984,7 @@ theorem unitSphereToUnits_apply_coe
 
 中文:
 定理 unitSphereToUnits_apply_coe
-  条件: [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1)
+  条件: [NormedDivision环 𝕜] (x : sphere (0 : 𝕜) 1)
   证明: rfl
 -/
 theorem unitSphereToUnits_apply_coe [NormedDivisionRing 𝕜] (x : sphere (0 : 𝕜) 1) :
@@ -1002,7 +1002,7 @@ Subtype.ext by convert! congr_arg Units.val h
 
 中文:
 定理 unitSphereToUnits_injective
-  条件: [NormedDivisionRing 𝕜]
+  条件: [NormedDivision环 𝕜]
   证明: fun x y h =>
 Subtype.ext by convert! congr_arg Units.val h
 -/
@@ -1024,7 +1024,7 @@ instance Metric.unitSphere.instGroup
 
 中文:
 实例 Metric.unitSphere.instGroup
-  签名: [NormedDivisionRing 𝕜]
+  签名: [NormedDivision环 𝕜]
   定义体: fast_instance% unitSphereToUnits_injective.group (unitSphereToUnits 𝕜) (Units.ext rfl)
     (fun _x _y => Units.ext rfl)
     (fun _x => Units.ext rfl) (fun _x _y => Units.ext <| div_eq_mul_inv _ _)
@@ -1050,7 +1050,7 @@ instance Metric.sphere.instHasDistribNeg
 
 中文:
 实例 Metric.sphere.instHasDistribNeg
-  签名: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  签名: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   定义体: Subtype.coe_injective.hasDistribNeg ((↑) : sphere (0 : 𝕜) 1 -> 𝕜) (fun _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: Subtype, Subtype.coe_injective.hasDistribNeg, coe_injective, hasDistribNeg, sphere
@@ -1069,7 +1069,7 @@ instance Metric.sphere.instContinuousMul
 
 中文:
 实例 Metric.sphere.instContinuousMul
-  签名: [SeminormedRing 𝕜] [NormMulClass 𝕜] [NormOneClass 𝕜]
+  签名: [Seminormed环 𝕜] [NormMul类 𝕜] [NormOne类 𝕜]
   定义体: (Submonoid.unitSphere 𝕜).continuousMul
 
 Depends on / 依赖: Submonoid, Submonoid.unitSphere, continuousMul, unitSphere
@@ -1088,7 +1088,7 @@ instance Metric.sphere.instIsTopologicalGroup
 
 中文:
 实例 Metric.sphere.instIsTopologicalGroup
-  签名: [NormedDivisionRing 𝕜]
+  签名: [NormedDivision环 𝕜]
   定义体: (continuous_subtype_val.inv₀ ne_zero_of_mem_unit_sphere).subtype_mk _
 
 Depends on / 依赖: continuous_subtype_val, continuous_subtype_val.inv, ne_zero_of_mem_unit_sphere, subtype_mk
@@ -1106,6 +1106,6 @@ instance Metric.sphere.instCommGroup
 
 中文:
 实例 Metric.sphere.instCommGroup
-  签名: [NormedField 𝕜]
+  签名: [赋范域 𝕜]
 -/
 instance Metric.sphere.instCommGroup [NormedField 𝕜] : CommGroup (sphere (0 : 𝕜) 1) where

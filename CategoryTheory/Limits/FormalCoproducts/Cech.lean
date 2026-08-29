@@ -42,7 +42,7 @@ definition power
 
 中文:
 定义 power
-  签名: (U : FormalCoproduct.{w} C) (α : Type t)
+  签名: (U : 形式余积.{w} C) (α : 类型 t)
   定义体: α -> U.I
   obj i := ∏ᶜ (U.obj ∘ i)
 -/
@@ -119,7 +119,7 @@ definition isLimitPowerFan
 
 中文:
 定义 isLimitPowerFan
-  签名: : IsLimit (U.powerFan α)
+  签名: : 是极限 (U.powerFan α)
   定义体: Fan.IsLimit.mk _
     (fun s =>
       { f i a := (s.proj a).f i
@@ -173,7 +173,7 @@ definition powerMap
 
 中文:
 定义 powerMap
-  签名: {U V : FormalCoproduct.{w} C} (f : U ⟶ V) (α : Type t)
+  签名: {U V : 形式余积.{w} C} (f : U ⟶ V) (α : 类型 t)
   定义体: f.f ∘ i
   φ i := Pi.map (fun a => f.φ (i a))
 -/
@@ -197,7 +197,7 @@ lemma powerMap_id
 
 中文:
 引理 powerMap_id
-  条件: (U : FormalCoproduct.{w} C) (α : Type t) [HasProductsOfShape α C]
+  条件: (U : 形式余积.{w} C) (α : 类型 t) [HasProductsOfShape α C]
   证明: by
   cat_disch
 
@@ -227,7 +227,7 @@ lemma powerMap_comp
 
 中文:
 引理 powerMap_comp
-  结论: {U V W : FormalCoproduct.{w} C} (f : U ⟶ V) (g : V ⟶ W) (α : Type t)
+  结论: {U V W : 形式余积.{w} C} (f : U ⟶ V) (g : V ⟶ W) (α : 类型 t)
   证明: by
   ext
   · cat_disch
@@ -266,7 +266,7 @@ definition powerFunctor
 
 中文:
 定义 powerFunctor
-  签名: (α : Type t) [HasProductsOfShape α C]
+  签名: (α : 类型 t) [HasProductsOfShape α C]
   定义体: U.power α
   map f := powerMap f α
 
@@ -290,7 +290,7 @@ definition mapPower
 
 中文:
 定义 mapPower
-  签名: (U : FormalCoproduct.{w} C) {α β : Type t}
+  签名: (U : 形式余积.{w} C) {α β : 类型 t}
   定义体: i ∘ f
   φ _ := Pi.lift (fun _ => Pi.π _ _)
 -/
@@ -314,7 +314,7 @@ lemma mapPower_id
 
 中文:
 引理 mapPower_id
-  结论: (U : FormalCoproduct.{w} C) (α : Type t)
+  结论: (U : 形式余积.{w} C) (α : 类型 t)
   证明: by
   cat_disch
 
@@ -343,7 +343,7 @@ lemma mapPower_comp
 
 中文:
 引理 mapPower_comp
-  结论: (U : FormalCoproduct.{w} C) {α β γ : Type t}
+  结论: (U : 形式余积.{w} C) {α β γ : 类型 t}
   证明: by
   ext
   · cat_disch
@@ -381,7 +381,7 @@ lemma mapPower_powerMap
 
 中文:
 引理 mapPower_powerMap
-  结论: {U V : FormalCoproduct.{w} C} (f : U ⟶ V)
+  结论: {U V : 形式余积.{w} C} (f : U ⟶ V)
   证明: by
   ext
   · cat_disch
@@ -414,7 +414,7 @@ lemma mapPower_π
 
 中文:
 引理 mapPower_π
-  结论: (U : FormalCoproduct.{w} C) {α β : Type}
+  结论: (U : 形式余积.{w} C) {α β : 类型}
   证明: by
   ext <;> simp
 -/
@@ -471,7 +471,7 @@ definition cech
 
 中文:
 定义 cech
-  签名: (U : FormalCoproduct.{w} C)
+  签名: (U : 形式余积.{w} C)
   定义体: U.power (ToType n.unop)
   map f := U.mapPower f.unop.toOrderHom.toFun
 

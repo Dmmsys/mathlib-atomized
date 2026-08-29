@@ -34,7 +34,7 @@ theorem isCompactOperator_id_iff_finiteDimensional
 
 中文:
 定理 isCompactOperator_id_iff_finiteDimensional
-  条件: [LocallyCompactSpace 𝕜]
+  条件: [局部紧空间 𝕜]
   证明: isCompactOperator_id_iff_locallyCompactSpace.trans
     ⟨fun _ => .of_locallyCompactSpace 𝕜, fun _ => .of_finiteDimensional_of_complete 𝕜 E⟩
 
@@ -59,7 +59,7 @@ lemma FiniteDimensional.of_isCompactOperator_id
   FiniteDimensional.of_isCompactOperator_id
 
 中文:
-引理 FiniteDimensional.of_isCompactOperator_id
+引理 有限维.of_isCompactOperator_id
   条件: (h : IsCompactOperator (id : E -> E))
   证明: by
   have := LocallyCompactSpace.of_isCompactOperator_id h

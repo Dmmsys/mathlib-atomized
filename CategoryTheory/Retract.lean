@@ -35,7 +35,7 @@ structure Retract
     - retract : i ≫ r = 𝟙 X  [default: by cat_disch]
 
 中文:
-结构 Retract
+结构 收缩
   参数: (X Y : C)
   公理与运算 (3 个):
     - i : X ⟶ Y
@@ -78,7 +78,7 @@ definition op
 
 中文:
 定义 op
-  签名: : Retract (op X) (op Y) where
+  签名: : 收缩 (op X) (op Y) where
   定义体: h.r.op
   r := h.i.op
   retract := by simp [← op_comp, h.retract]
@@ -134,7 +134,7 @@ definition splitEpi
 
 中文:
 定义 splitEpi
-  签名: : SplitEpi h.r where
+  签名: : 分裂满态射 h.r where
   定义体: h.i
 
 @[to_dual]
@@ -153,7 +153,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi h.r
+  签名: 是分裂满态射 h.r
   定义体: ⟨⟨h.splitEpi⟩⟩
 
 Depends on / 依赖: h.splitEpi, splitEpi
@@ -174,7 +174,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: : Retract X X where
+  签名: : 收缩 X X where
   定义体: 𝟙 X
   r := 𝟙 X
 -/
@@ -197,7 +197,7 @@ definition trans
 
 中文:
 定义 trans
-  签名: {Z : C} (h' : Retract Y Z)
+  签名: {Z : C} (h' : 收缩 Y Z)
   定义体: h.i ≫ h'.i
   r := h'.r ≫ h.r
 -/
@@ -329,7 +329,7 @@ definition left
 
 中文:
 定义 left
-  签名: : Retract X Z
+  签名: : 收缩 X Z
   定义体: h.map Arrow.leftFunc
 
 Depends on / 依赖: Arrow.leftFunc, h.map, leftFunc
@@ -373,7 +373,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi h.r.left
+  签名: 是分裂满态射 h.r.left
   定义体: ⟨⟨h.left.splitEpi⟩⟩
 
 @[to_dual]
@@ -393,7 +393,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSplitEpi h.r.right
+  签名: 是分裂满态射 h.r.right
   定义体: ⟨⟨h.right.splitEpi⟩⟩
 
 Depends on / 依赖: h.right.splitEpi, splitEpi
@@ -531,7 +531,7 @@ definition NatTrans.retractArrowApp
   retract := by ext <;> simp [← Functor.map_comp]
 
 中文:
-定义 NatTrans.retractArrowApp
+定义 自然变换.retractArrowApp
   签名: {F G : C ⥤ D}
   定义体: Arrow.homMk (F.map h.i) (G.map h.i) (by simp)
   r := Arrow.homMk (F.map h.r) (G.map h.r) (by simp)

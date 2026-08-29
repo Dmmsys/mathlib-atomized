@@ -149,7 +149,7 @@ theorem isMultiplicative_liouville
 
 中文:
 定理 isMultiplicative_liouville
-  结论: IsMultiplicative liouville
+  结论: 是Multiplicative liouville
   证明: ⟨liouville_apply_one, fun {m n} _ => liouville_apply_mul m n⟩
 
 Depends on / 依赖: liouville_apply_mul, liouville_apply_one

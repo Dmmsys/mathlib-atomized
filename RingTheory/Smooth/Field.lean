@@ -37,7 +37,7 @@ lemma Algebra.FormallySmooth.adjoin_of_algebraicIndependent
   exact .comp _ (adjoin K (Set.range v)) _
 
 中文:
-引理 Algebra.FormallySmooth.adjoin_of_algebraicIndependent
+引理 代数.形式光滑.adjoin_of_algebraicIndependent
   结论: {v : ι -> L}
   证明: by
   have : Algebra.FormallySmooth K (adjoin K (Set.range v)) :=
@@ -71,7 +71,7 @@ lemma Algebra.FormallySmooth.of_algebraicIndependent
   exact .of_equiv IntermediateField.topEquiv
 
 中文:
-引理 Algebra.FormallySmooth.of_algebraicIndependent
+引理 代数.形式光滑.of_algebraicIndependent
   结论: {v : ι -> L}
   证明: by
   have := Algebra.FormallySmooth.adjoin_of_algebraicIndependent hb
@@ -99,7 +99,7 @@ lemma Algebra.FormallySmooth.of_algebraicIndependent_of_isSeparable
   exact .comp _ (IntermediateField.adjoin K (Set.range v)) _
 
 中文:
-引理 Algebra.FormallySmooth.of_algebraicIndependent_of_isSeparable
+引理 代数.形式光滑.of_algebraicIndependent_of_isSeparable
   证明: by
   have := FormallySmooth.adjoin_of_algebraicIndependent hb
   have : FormallyEtale (IntermediateField.adjoin K (Set.range v)) L :=

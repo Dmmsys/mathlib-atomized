@@ -48,10 +48,10 @@ class HasInducedTStructure
     - exists_triangle_zero_one((A : C) (hA : P A)) : exists (X Y : C) (_ : t.IsLE X 0) (_ : t.IsGE Y 1) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : Int)⟧) (_ : Triangle.mk f g h in distTriang C), P.isoClosure X ∧ P.isoClosure Y
 
 中文:
-类 HasInducedTStructure
-  参数: [P.IsTriangulated]
+类 有InducedTStructure
+  参数: [P.是三角]
   公理与运算 (1 个):
-    - exists_triangle_zero_one((A : C) (hA : P A)) : 存在 (X Y : C) (_ : t.IsLE X 0) (_ : t.IsGE Y 1) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : 整数)⟧) (_ : Triangle.mk f g h in distTriang C), P.isoClosure X ∧ P.isoClosure Y
+    - exists_triangle_zero_one((A : C) (hA : P A)) : 存在 (X Y : C) (_ : t.是LE X 0) (_ : t.是GE Y 1) (f : X ⟶ A) (g : A ⟶ Y) (h : Y ⟶ X⟦(1 : 整数)⟧) (_ : Triangle.mk f g h in distTriang C), P.isoClosure X ∧ P.isoClosure Y
 -/
 class HasInducedTStructure [P.IsTriangulated] : Prop where
   exists_triangle_zero_one (A : C) (hA : P A) :
@@ -77,7 +77,7 @@ definition tStructure
 
 中文:
 定义 tStructure
-  签名: : TStructure P.FullSubcategory where
+  签名: : TStructure P.满子范畴 where
   定义体: t.le n X.obj
   ge n X := t.ge n X.obj
   le_isClosedUnderIsomorphisms n := ⟨fun {X Y} e hX => (t.le n).prop_of_iso (P.ι.mapIso e) hX⟩
@@ -121,7 +121,7 @@ lemma tStructure_isLE_iff
 
 中文:
 引理 tStructure_isLE_iff
-  条件: (X : P.FullSubcategory) (n : 整数)
+  条件: (X : P.满子范畴) (n : 整数)
   证明: ⟨fun h => ⟨h.1⟩, fun h => ⟨h.1⟩⟩
 -/
 lemma tStructure_isLE_iff (X : P.FullSubcategory) (n : Int) :
@@ -138,7 +138,7 @@ lemma tStructure_isGE_iff
 
 中文:
 引理 tStructure_isGE_iff
-  条件: (X : P.FullSubcategory) (n : 整数)
+  条件: (X : P.满子范畴) (n : 整数)
   证明: ⟨fun h => ⟨h.1⟩, fun h => ⟨h.1⟩⟩
 -/
 lemma tStructure_isGE_iff (X : P.FullSubcategory) (n : Int) :
@@ -156,8 +156,8 @@ lemma HasInducedTStructure.mk'
         P.le_isoClosure _ ((h X hX _).1), P.le_isoClosure _ ((h X hX _).2)⟩
 
 中文:
-引理 HasInducedTStructure.mk'
-  结论: {P : Object命题erty C} [P.IsTriangulated] {t : TStructure C}
+引理 有InducedTStructure.mk'
+  结论: {P : ObjectProperty C} [P.是三角] {t : TStructure C}
   证明: ⟨_, _, inferInstance, inferInstance, _, _, _,
       t.triangleLEGE_distinguished 0 1 (by lia) X,
         P.le_isoClosure _ ((h X hX _).1), P.le_isoClosure _ ((h X hX _).2)⟩
@@ -188,7 +188,7 @@ lemma mem_of_hasInductedTStructure
 
 中文:
 引理 mem_of_hasInductedTStructure
-  结论: (P : Object命题erty C) [P.IsTriangulated] (t : TStructure C)
+  结论: (P : ObjectProperty C) [P.是三角] (t : TStructure C)
   证明: by
   obtain ⟨e, _⟩ := t.triangle_iso_exists hT
     (P.ι.map_distinguished _ ((P.tStructure t).triangleLEGE_distinguished n₀ n₁ h ⟨_, h₂⟩))
@@ -245,7 +245,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.plus.HasInducedTStructure t
+  签名: t.plus.有InducedTStructure t
   定义体: .mk' (by rintro X ⟨a, _⟩ n; exact ⟨⟨a, inferInstance⟩, ⟨a, inferInstance⟩⟩)
 -/
 instance : t.plus.HasInducedTStructure t :=
@@ -261,7 +261,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.minus.HasInducedTStructure t
+  签名: t.minus.有InducedTStructure t
   定义体: .mk' (by rintro X ⟨a, _⟩ n; exact ⟨⟨a, inferInstance⟩, ⟨a, inferInstance⟩⟩)
 -/
 instance : t.minus.HasInducedTStructure t :=
@@ -279,7 +279,7 @@ instance :
 
 中文:
 实例 :
-  签名: t.bounded.HasInducedTStructure t
+  签名: t.bounded.有InducedTStructure t
   定义体: by
   dsimp [bounded]
   infer_instance
@@ -300,7 +300,7 @@ abbreviation onPlus
 
 中文:
 缩写 onPlus
-  签名: : TStructure t.plus.FullSubcategory
+  签名: : TStructure t.plus.满子范畴
   定义体: t.plus.tStructure t
 
 Depends on / 依赖: t.plus.tStructure, tStructure
@@ -317,7 +317,7 @@ abbreviation onMinus
 
 中文:
 缩写 onMinus
-  签名: : TStructure t.minus.FullSubcategory
+  签名: : TStructure t.minus.满子范畴
   定义体: t.minus.tStructure t
 
 Depends on / 依赖: t.minus.tStructure, tStructure
@@ -334,7 +334,7 @@ abbreviation onBounded
 
 中文:
 缩写 onBounded
-  签名: : TStructure t.bounded.FullSubcategory
+  签名: : TStructure t.bounded.满子范畴
   定义体: t.bounded.tStructure t
 
 Depends on / 依赖: bounded, t.bounded.tStructure, tStructure

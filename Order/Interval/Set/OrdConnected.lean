@@ -43,9 +43,9 @@ theorem OrdConnected.out
   proof: h.1
 
 中文:
-定理 OrdConnected.out
-  条件: (h : OrdConnected s)
-  结论: 对任意 ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), Icc x y subseteq s
+定理 序连通.out
+  条件: (h : 序连通 s)
+  结论: 对任意 ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), 闭区间 x y subseteq s
   证明: h.1
 -/
 theorem OrdConnected.out (h : OrdConnected s) : forall ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), Icc x y subseteq s :=
@@ -61,7 +61,7 @@ theorem ordConnected_def
 
 中文:
 定理 ordConnected_def
-  结论: OrdConnected s ↔ 对任意 ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), Icc x y subseteq s
+  结论: 序连通 s ↔ 对任意 ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), 闭区间 x y subseteq s
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem ordConnected_def : OrdConnected s ↔ forall ⦃x⦄ (_ : x in s) ⦃y⦄ (_ : y in s), Icc x y subseteq s :=
@@ -78,7 +78,7 @@ theorem ordConnected_iff
 
 中文:
 定理 ordConnected_iff
-  结论: OrdConnected s ↔ 对任意 x in s, 对任意 y in s, x <= y -> Icc x y subseteq s
+  结论: 序连通 s ↔ 对任意 x in s, 对任意 y in s, x <= y -> 闭区间 x y subseteq s
   证明: ordConnected_def.trans
     ⟨fun hs _ hx _ hy _ => hs hx hy, fun H x hx y hy _ hz => H x hx y hy (le_trans hz.1 hz.2) hz⟩
 
@@ -103,7 +103,7 @@ theorem ordConnected_of_Ioo
 
 中文:
 定理 ordConnected_of_Ioo
-  结论: {α : 类型} [PartialOrder α] {s : Set α}
+  结论: {α : 类型} [偏序 α] {s : 集合 α}
   证明: by
   rw [ordConnected_iff]
   intro x hx y hy hxy
@@ -130,8 +130,8 @@ theorem OrdConnected.preimage_mono
   proof: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨hf hz.1, hf hz.2⟩⟩
 
 中文:
-定理 OrdConnected.preimage_mono
-  条件: {f : β -> α} (hs : OrdConnected s) (hf : Monotone f)
+定理 序连通.preimage_mono
+  条件: {f : β -> α} (hs : 序连通 s) (hf : 递增 f)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨hf hz.1, hf hz.2⟩⟩
 
 Depends on / 依赖: hs.out
@@ -149,8 +149,8 @@ theorem OrdConnected.preimage_anti
   proof: ⟨fun _ hx _ hy _ hz => hs.out hy hx ⟨hf hz.2, hf hz.1⟩⟩
 
 中文:
-定理 OrdConnected.preimage_anti
-  条件: {f : β -> α} (hs : OrdConnected s) (hf : Antitone f)
+定理 序连通.preimage_anti
+  条件: {f : β -> α} (hs : 序连通 s) (hf : 递减 f)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hy hx ⟨hf hz.2, hf hz.1⟩⟩
 
 Depends on / 依赖: hs.out
@@ -169,7 +169,7 @@ theorem Icc_subset
 
 中文:
 定理 Icc_subset
-  条件: (s : Set α) [hs : OrdConnected s] {x y} (hx : x in s) (hy : y in s)
+  条件: (s : 集合 α) [hs : 序连通 s] {x y} (hx : x in s) (hy : y in s)
   证明: hs.out hx hy
 -/
 protected theorem Icc_subset (s : Set α) [hs : OrdConnected s] {x y} (hx : x in s) (hy : y in s) :
@@ -195,7 +195,7 @@ theorem image_Icc
 
 中文:
 定理 image_Icc
-  条件: (e : α ↪o β) (he : OrdConnected (range e)) (x y : α)
+  条件: (e : α ↪o β) (he : 序连通 (range e)) (x y : α)
   证明: by
   rw [← e.preimage_Icc]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 (he.out ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩)]
 
@@ -216,7 +216,7 @@ theorem image_Ico
 
 中文:
 定理 image_Ico
-  条件: (e : α ↪o β) (he : OrdConnected (range e)) (x y : α)
+  条件: (e : α ↪o β) (he : 序连通 (range e)) (x y : α)
   证明: by
   rw [← e.preimage_Ico]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 Ico_subset_Icc_self.trans he.out ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
 
@@ -237,7 +237,7 @@ theorem image_Ioc
 
 中文:
 定理 image_Ioc
-  条件: (e : α ↪o β) (he : OrdConnected (range e)) (x y : α)
+  条件: (e : α ↪o β) (he : 序连通 (range e)) (x y : α)
   证明: by
   rw [← e.preimage_Ioc]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 Ioc_subset_Icc_self.trans he.out ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
 
@@ -258,7 +258,7 @@ theorem image_Ioo
 
 中文:
 定理 image_Ioo
-  条件: (e : α ↪o β) (he : OrdConnected (range e)) (x y : α)
+  条件: (e : α ↪o β) (he : 序连通 (range e)) (x y : α)
   证明: by
   rw [← e.preimage_Ioo]; rw [image_preimage_eq_inter_range]; rw [inter_eq_left.2 Ioo_subset_Icc_self.trans he.out ⟨_]; rw [rfl⟩ ⟨_]; rw [rfl⟩]
 
@@ -289,7 +289,7 @@ lemma image_subtype_val_Icc
 
 中文:
 引理 image_subtype_val_Icc
-  条件: {s : Set α} [OrdConnected s] (x y : s)
+  条件: {s : 集合 α} [序连通 s] (x y : s)
   证明: (OrderEmbedding.subtype (· in s)).image_Icc (by simpa) x y
 
 @[simp]
@@ -313,7 +313,7 @@ lemma image_subtype_val_Ico
 
 中文:
 引理 image_subtype_val_Ico
-  条件: {s : Set α} [OrdConnected s] (x y : s)
+  条件: {s : 集合 α} [序连通 s] (x y : s)
   证明: (OrderEmbedding.subtype (· in s)).image_Ico (by simpa) x y
 
 @[simp]
@@ -337,7 +337,7 @@ lemma image_subtype_val_Ioc
 
 中文:
 引理 image_subtype_val_Ioc
-  条件: {s : Set α} [OrdConnected s] (x y : s)
+  条件: {s : 集合 α} [序连通 s] (x y : s)
   证明: (OrderEmbedding.subtype (· in s)).image_Ioc (by simpa) x y
 
 @[simp]
@@ -359,7 +359,7 @@ lemma image_subtype_val_Ioo
 
 中文:
 引理 image_subtype_val_Ioo
-  条件: {s : Set α} [OrdConnected s] (x y : s)
+  条件: {s : 集合 α} [序连通 s] (x y : s)
   证明: (OrderEmbedding.subtype (· in s)).image_Ioo (by simpa) x y
 
 Depends on / 依赖: OrderEmbedding, OrderEmbedding.subtype, image_Ioo, subtype
@@ -377,8 +377,8 @@ theorem OrdConnected.inter
   proof: ⟨fun _ hx _ hy => subset_inter (hs.out hx.1 hy.1) (ht.out hx.2 hy.2)⟩
 
 中文:
-定理 OrdConnected.inter
-  条件: {s t : Set α} (hs : OrdConnected s) (ht : OrdConnected t)
+定理 序连通.inter
+  条件: {s t : 集合 α} (hs : 序连通 s) (ht : 序连通 t)
   证明: ⟨fun _ hx _ hy => subset_inter (hs.out hx.1 hy.1) (ht.out hx.2 hy.2)⟩
 
 Depends on / 依赖: hs.out, ht.out, subset_inter
@@ -396,8 +396,8 @@ instance OrdConnected.inter'
   body: OrdConnected.inter ‹_› ‹_›
 
 中文:
-实例 OrdConnected.inter'
-  签名: {s t : Set α} [OrdConnected s] [OrdConnected t]
+实例 序连通.inter'
+  签名: {s t : 集合 α} [序连通 s] [序连通 t]
   定义体: OrdConnected.inter ‹_› ‹_›
 
 Depends on / 依赖: OrdConnected, OrdConnected.inter
@@ -417,8 +417,8 @@ theorem OrdConnected.dual
 @[instance]
 
 中文:
-定理 OrdConnected.dual
-  条件: {s : Set α} (hs : OrdConnected s)
+定理 序连通.dual
+  条件: {s : 集合 α} (hs : 序连通 s)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hy hx ⟨hz.2, hz.1⟩⟩
 
 @[instance]
@@ -443,8 +443,8 @@ theorem dual_ordConnected
 
 中文:
 定理 dual_ordConnected
-  条件: {s : Set α} [OrdConnected s]
-  结论: OrdConnected (ofDual ⁻¹' s)
+  条件: {s : 集合 α} [序连通 s]
+  结论: 序连通 (ofDual ⁻¹' s)
   证明: .dual ‹OrdConnected s›
 
 @[simp]
@@ -466,8 +466,8 @@ theorem ordConnected_dual
 
 中文:
 定理 ordConnected_dual
-  条件: {s : Set α}
-  结论: OrdConnected (OrderDual.ofDual ⁻¹' s) ↔ OrdConnected s
+  条件: {s : 集合 α}
+  结论: 序连通 (OrderDual.ofDual ⁻¹' s) ↔ 序连通 s
   证明: ⟨fun h => by simpa only [ordConnected_def] using! h.dual, fun h => h.dual⟩
 
 Depends on / 依赖: h.dual, ordConnected_def
@@ -484,8 +484,8 @@ theorem ordConnected_sInter
   proof: ⟨fun _x hx _y hy _z hz s hs => (hS s hs).out (hx s hs) (hy s hs) hz⟩
 
 中文:
-定理 ordConnected_sInter
-  条件: {S : Set (Set α)} (hS : 对任意 s in S, OrdConnected s)
+定理 ordConnected_s整数er
+  条件: {S : 集合 (集合 α)} (hS : 对任意 s in S, 序连通 s)
   证明: ⟨fun _x hx _y hy _z hz s hs => (hS s hs).out (hx s hs) (hy s hs) hz⟩
 -/
 theorem ordConnected_sInter {S : Set (Set α)} (hS : forall s in S, OrdConnected s) :
@@ -501,8 +501,8 @@ theorem ordConnected_iInter
   proof: ordConnected_sInter forall_mem_range.2 hs
 
 中文:
-定理 ordConnected_iInter
-  条件: {ι : Sort*} {s : ι -> Set α} (hs : 对任意 i, OrdConnected (s i))
+定理 ordConnected_i整数er
+  条件: {ι : 类型层*} {s : ι -> 集合 α} (hs : 对任意 i, 序连通 (s i))
   证明: ordConnected_sInter forall_mem_range.2 hs
 
 Depends on / 依赖: forall_mem_range, ordConnected_sInter
@@ -520,8 +520,8 @@ instance ordConnected_iInter'
   body: ordConnected_iInter ‹_›
 
 中文:
-实例 ordConnected_iInter'
-  签名: {ι : Sort*} {s : ι -> Set α} [对任意 i, OrdConnected (s i)]
+实例 ordConnected_i整数er'
+  签名: {ι : 类型层*} {s : ι -> 集合 α} [对任意 i, 序连通 (s i)]
   定义体: ordConnected_iInter ‹_›
 
 Depends on / 依赖: ordConnected_iInter
@@ -539,8 +539,8 @@ theorem ordConnected_biInter
   proof: ordConnected_iInter fun i => ordConnected_iInter hs i
 
 中文:
-定理 ordConnected_biInter
-  结论: {ι : Sort*} {p : ι -> 命题} {s : 对任意 i, p i -> Set α}
+定理 ordConnected_bi整数er
+  结论: {ι : 类型层*} {p : ι -> 命题} {s : 对任意 i, p i -> 集合 α}
   证明: ordConnected_iInter fun i => ordConnected_iInter hs i
 
 Depends on / 依赖: ordConnected_iInter
@@ -559,7 +559,7 @@ theorem ordConnected_pi
 
 中文:
 定理 ordConnected_pi
-  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, Preorder (α i)] {s : Set ι}
+  结论: {ι : 类型} {α : ι -> 类型} [对任意 i, 预序 (α i)] {s : 集合 ι}
   证明: ⟨fun _ hx _ hy _ hz i hi => (h i hi).out (hx i hi) (hy i hi) ⟨hz.1 i, hz.2 i⟩⟩
 -/
 theorem ordConnected_pi {ι : Type*} {α : ι -> Type*} [forall i, Preorder (α i)] {s : Set ι}
@@ -578,7 +578,7 @@ instance ordConnected_pi'
 
 中文:
 实例 ordConnected_pi'
-  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, Preorder (α i)] {s : Set ι}
+  签名: {ι : 类型} {α : ι -> 类型} [对任意 i, 预序 (α i)] {s : 集合 ι}
   定义体: ordConnected_pi fun i _ => h i
 
 @[to_dual]
@@ -719,7 +719,7 @@ theorem ordConnected_singleton
 
 中文:
 定理 ordConnected_singleton
-  条件: {α : 类型} [PartialOrder α] {a : α}
+  条件: {α : 类型} [偏序 α] {a : α}
   证明: by
   rw [← Icc_self]
   exact ordConnected_Icc
@@ -746,7 +746,7 @@ theorem ordConnected_empty
 
 中文:
 定理 ordConnected_empty
-  结论: OrdConnected (∅ : Set α)
+  结论: 序连通 (∅ : 集合 α)
   证明: ⟨fun _ => False.elim⟩
 
 @[instance]
@@ -767,7 +767,7 @@ theorem ordConnected_univ
 
 中文:
 定理 ordConnected_univ
-  结论: OrdConnected (univ : Set α)
+  结论: 序连通 (univ : 集合 α)
   证明: ⟨fun _ _ _ _ => subset_univ _⟩
 
 Depends on / 依赖: subset_univ
@@ -789,7 +789,7 @@ instance instDenselyOrdered
 
 中文:
 实例 instDenselyOrdered
-  签名: [DenselyOrdered α] {s : Set α} [hs : OrdConnected s]
+  签名: [稠密序 α] {s : 集合 α} [hs : 序连通 s]
   定义体: ⟨fun a b (h : (a : α) < b) =>
     let ⟨x, H⟩ := exists_between h
     ⟨⟨x, (hs.out a.2 b.2) (Ioo_subset_Icc_self H)⟩, H⟩⟩
@@ -817,7 +817,7 @@ theorem ordConnected_preimage
 
 中文:
 定理 ordConnected_preimage
-  结论: {F : 类型} [FunLike F α β] [OrderHomClass F α β] (f : F)
+  结论: {F : 类型} [函数状 F α β] [序态射类 F α β] (f : F)
   证明: ⟨fun _ hx _ hy _ hz => hs.out hx hy ⟨OrderHomClass.mono _ hz.1, OrderHomClass.mono _ hz.2⟩⟩
 
 @[instance]
@@ -843,7 +843,7 @@ theorem ordConnected_image
 
 中文:
 定理 ordConnected_image
-  结论: {E : 类型} [EquivLike E α β] [OrderIsoClass E α β] (e : E) {s : Set α}
+  结论: {E : 类型} [等价状 E α β] [OrderIso类 E α β] (e : E) {s : 集合 α}
   证明: by
   erw [(e : α ≃o β).image_eq_preimage_symm]
   apply ordConnected_preimage (e : α ≃o β).symm
@@ -870,7 +870,7 @@ theorem ordConnected_range
 
 中文:
 定理 ordConnected_range
-  条件: {E : 类型} [EquivLike E α β] [OrderIsoClass E α β] (e : E)
+  条件: {E : 类型} [等价状 E α β] [OrderIso类 E α β] (e : E)
   证明: by
   simp_rw [← image_univ]
   exact ordConnected_image (e : α ≃o β)
@@ -897,8 +897,8 @@ theorem OrdConnected.preimage_monotoneOn
     exact ⟨x
 
 中文:
-定理 OrdConnected.preimage_monotoneOn
-  结论: {f : β -> α} {t : Set β} {s : Set α}
+定理 序连通.preimage_monotoneOn
+  结论: {f : β -> α} {t : 集合 β} {s : 集合 α}
   证明: by
   let u := {x | (exists y in t, y <= x ∧ f y in s) ∧ (exists z in t, x <= z ∧ f z in s)}
   refine ⟨u, ⟨?_⟩, Subset.antisymm ?_ ?_⟩
@@ -932,8 +932,8 @@ theorem OrdConnected.preimage_antitoneOn
   proof: (OrdConnected.preimage_monotoneOn hs.dual hf.dual_right :)
 
 中文:
-定理 OrdConnected.preimage_antitoneOn
-  结论: {f : β -> α} {t : Set β} {s : Set α}
+定理 序连通.preimage_antitoneOn
+  结论: {f : β -> α} {t : 集合 β} {s : 集合 α}
   证明: (OrdConnected.preimage_monotoneOn hs.dual hf.dual_right :)
 
 Depends on / 依赖: OrdConnected, OrdConnected.preimage_monotoneOn, dual_right, hf.dual_right, hs.dual, preimage_monotoneOn
@@ -964,7 +964,7 @@ theorem _root_.IsAntichain.ordConnected
 中文:
 定理 _root_.IsAntichain.ordConnected
   条件: (hs : IsAntichain (· <= ·) s)
-  结论: s.OrdConnected
+  结论: s.序连通
   证明: ⟨fun x hx y hy z hz => by
     obtain rfl := hs.eq hx hy (hz.1.trans hz.2)
     rw [Icc_self]; rw [mem_singleton_iff] at hz
@@ -988,8 +988,8 @@ lemma ordConnected_inter_Icc_of_subset
 
 中文:
 引理 ordConnected_inter_Icc_of_subset
-  条件: (h : Ioo x y subseteq s)
-  结论: OrdConnected (s inter Icc x y)
+  条件: (h : 开区间 x y subseteq s)
+  结论: 序连通 (s inter 闭区间 x y)
   证明: ordConnected_of_Ioo fun _u ⟨_, hu, _⟩ _v ⟨_, _, hv⟩ _ =>
 .trans subset_inter h Ioo_subset_Icc_self Ioo_subset_Ioo hu hv
 
@@ -1070,7 +1070,7 @@ theorem ordConnected_uIcc
 中文:
 定理 ordConnected_uIcc
   条件: {a b : α}
-  结论: OrdConnected [[a, b]]
+  结论: 序连通 [[a, b]]
   证明: ordConnected_Icc
 
 @[instance]
@@ -1093,7 +1093,7 @@ theorem ordConnected_uIoc
 中文:
 定理 ordConnected_uIoc
   条件: {a b : α}
-  结论: OrdConnected (Ι a b)
+  结论: 序连通 (Ι a b)
   证明: ordConnected_Ioc
 
 Depends on / 依赖: ordConnected_Ioc
@@ -1110,8 +1110,8 @@ theorem OrdConnected.uIcc_subset
   proof: hs.out (min_rec' (· in s) hx hy) (max_rec' (· in s) hx hy)
 
 中文:
-定理 OrdConnected.uIcc_subset
-  条件: (hs : OrdConnected s) ⦃x⦄ (hx : x in s) ⦃y⦄ (hy : y in s)
+定理 序连通.uIcc_subset
+  条件: (hs : 序连通 s) ⦃x⦄ (hx : x in s) ⦃y⦄ (hy : y in s)
   证明: hs.out (min_rec' (· in s) hx hy) (max_rec' (· in s) hx hy)
 
 Depends on / 依赖: hs.out, max_rec, min_rec
@@ -1129,8 +1129,8 @@ theorem OrdConnected.uIoc_subset
   proof: Ioc_subset_Icc_self.trans hs.uIcc_subset hx hy
 
 中文:
-定理 OrdConnected.uIoc_subset
-  条件: (hs : OrdConnected s) ⦃x⦄ (hx : x in s) ⦃y⦄ (hy : y in s)
+定理 序连通.uIoc_subset
+  条件: (hs : 序连通 s) ⦃x⦄ (hx : x in s) ⦃y⦄ (hy : y in s)
   证明: Ioc_subset_Icc_self.trans hs.uIcc_subset hx hy
 
 Depends on / 依赖: Ioc_subset_Icc_self, Ioc_subset_Icc_self.trans, hs.uIcc_subset, uIcc_subset
@@ -1172,7 +1172,7 @@ theorem ordConnected_of_uIcc_subset_left
 中文:
 定理 ordConnected_of_uIcc_subset_left
   条件: (h : 对任意 y in s, [[x, y]] subseteq s)
-  结论: OrdConnected s
+  结论: 序连通 s
   证明: ordConnected_iff_uIcc_subset.2 fun y hy z hz =>
     calc
       [[y, z]] subseteq [[y, x]] union [[x, z]] := uIcc_subset_uIcc_union_uIcc
@@ -1246,7 +1246,7 @@ theorem image_subtype_val_uIcc
 
 中文:
 定理 image_subtype_val_uIcc
-  条件: [OrdConnected s] (a b : s)
+  条件: [序连通 s] (a b : s)
   证明: by
   simp [uIcc, (Subtype.mono_coe (· in s)).map_inf, (Subtype.mono_coe (· in s)).map_sup]
 
@@ -1272,7 +1272,7 @@ theorem image_subtype_val_uIoc
 
 中文:
 定理 image_subtype_val_uIoc
-  条件: [OrdConnected s] (a b : s)
+  条件: [序连通 s] (a b : s)
   证明: by
   simp [uIoc, (Subtype.mono_coe (· in s)).map_inf, (Subtype.mono_coe (· in s)).map_sup]
 
@@ -1296,7 +1296,7 @@ theorem image_subtype_val_uIoo
 
 中文:
 定理 image_subtype_val_uIoo
-  条件: [OrdConnected s] (a b : s)
+  条件: [序连通 s] (a b : s)
   证明: by
   simp [uIoo, (Subtype.mono_coe (· in s)).map_inf, (Subtype.mono_coe (· in s)).map_sup]
 

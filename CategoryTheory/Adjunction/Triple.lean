@@ -63,7 +63,7 @@ structure CategoryTheory.Adjunction.Triple
     - adj₂ : G ⊣ H
 
 中文:
-结构 CategoryTheory.Adjunction.Triple
+结构 范畴论.伴随.三元组
   参数: where
   公理与运算 (2 个):
     - adj₁ : F ⊣ G
@@ -97,7 +97,7 @@ lemma isIso_unit_iff_isIso_counit
 
 中文:
 引理 isIso_unit_iff_isIso_counit
-  结论: IsIso t.adj₁.unit ↔ IsIso t.adj₂.counit
+  结论: 是同构 t.adj₁.unit ↔ 是同构 t.adj₂.counit
   证明: by
   let adj : F ⋙ G ⊣ H ⋙ G := t.adj₁.comp t.adj₂
   constructor
@@ -140,7 +140,7 @@ definition fullyFaithfulEquiv
 
 中文:
 定义 fullyFaithfulEquiv
-  签名: : F.FullyFaithful ≃ H.FullyFaithful where
+  签名: : F.满忠实 ≃ H.满忠实 where
   定义体: haveI := h.full
     haveI := h.faithful
     haveI : IsIso t.adj₂.counit := by
@@ -186,7 +186,7 @@ definition op
 
 中文:
 定义 op
-  签名: : Triple H.op G.op F.op where
+  签名: : 三元组 H.op G.op F.op where
   定义体: t.adj₂.op
   adj₂ := t.adj₁.op
 -/
@@ -370,7 +370,7 @@ lemma op_rightToLeft
 
 中文:
 引理 op_rightToLeft
-  结论: t.op.rightToLeft = 自然数Trans.op t.rightToLeft
+  结论: t.op.rightToLeft = 自然变换.op t.rightToLeft
   证明: by
   ext
   rw [rightToLeft_eq_units]; rw [rightToLeft_eq_counits]
@@ -439,7 +439,7 @@ lemma epi_rightToLeft_app_iff
 
 中文:
 引理 epi_rightToLeft_app_iff
-  条件: [H.PreservesEpimorphisms] {X : C}
+  条件: [H.保持Epimorphisms] {X : C}
   证明: by
   have _ := t.adj₂.isLeftAdjoint
   refine ⟨fun h => by rw [← map_rightToLeft_app]; exact G.map_epi _, fun h => ?_⟩
@@ -663,7 +663,7 @@ omit [H.Full] [H.Faithful] in
 
 中文:
 引理 leftToRight_op
-  结论: t.op.leftToRight = 自然数Trans.op t.leftToRight
+  结论: t.op.leftToRight = 自然变换.op t.leftToRight
   证明: by
   ext
   rw [leftToRight]; rw [leftToRight_eq_counits]

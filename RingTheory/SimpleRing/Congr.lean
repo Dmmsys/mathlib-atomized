@@ -31,7 +31,7 @@ lemma of_surjective
 
 中文:
 引理 of_surjective
-  结论: {R S : 类型} [NonAssocRing R] [NonAssocRing S] [Nontrivial S]
+  结论: {R S : 类型} [非结合环 R] [非结合环 S] [非平凡 S]
   证明: OrderIso.isSimpleOrder (RingEquiv.ofBijective f
     ⟨RingHom.injective f, hf⟩).symm.mapTwoSidedIdeal
 
@@ -52,7 +52,7 @@ lemma of_ringEquiv
 
 中文:
 引理 of_ringEquiv
-  结论: {R S : 类型} [NonUnitalNonAssocRing R] [NonUnitalNonAssocRing S]
+  结论: {R S : 类型} [非幺非结合环 R] [非幺非结合环 S]
   证明: OrderIso.isSimpleOrder f.symm.mapTwoSidedIdeal
 
 Depends on / 依赖: OrderIso, OrderIso.isSimpleOrder, f.symm.mapTwoSidedIdeal, isSimpleOrder, mapTwoSidedIdeal
@@ -78,7 +78,7 @@ theorem isSimpleRing_iff_isTwoSided_imp
 
 中文:
 定理 isSimpleRing_iff_isTwoSided_imp
-  条件: {R : 类型} [Ring R]
+  条件: {R : 类型} [环 R]
   证明: by
   let e := orderIsoIsTwoSided (R := R)
   simp_rw [isSimpleRing_iff, isSimpleOrder_iff, orderIsoRingCon.toEquiv.nontrivial_congr,

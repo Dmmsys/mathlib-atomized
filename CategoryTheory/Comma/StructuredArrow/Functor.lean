@@ -136,7 +136,7 @@ definition grothendieckPrecompFunctorToComma
 
 中文:
 定义 grothendieckPrecompFunctorToComma
-  签名: : Grothendieck (R ⋙ functor L) ⥤ Comma L R where
+  签名: : Grothendieck (R ⋙ functor L) ⥤ 交换a L R where
   定义体: ⟨P.fiber.left, P.base, P.fiber.hom⟩
   map f := ⟨f.fiber.left, f.base, by simp⟩
 
@@ -189,7 +189,7 @@ definition commaToGrothendieckPrecompFunctor
 
 中文:
 定义 commaToGrothendieckPrecompFunctor
-  签名: : Comma L R ⥤ Grothendieck (R ⋙ functor L) where
+  签名: : 交换a L R ⥤ Grothendieck (R ⋙ functor L) where
   定义体: ⟨X.right, mk X.hom⟩
   map f := ⟨f.right, homMk f.left⟩
   map_id X := Grothendieck.ext _ _ rfl (by simp)
@@ -221,7 +221,7 @@ definition grothendieckPrecompFunctorEquivalence
 
 中文:
 定义 grothendieckPrecompFunctorEquivalence
-  签名: : Grothendieck (R ⋙ functor L) ≌ Comma L R where
+  签名: : Grothendieck (R ⋙ functor L) ≌ 交换a L R where
   定义体: grothendieckPrecompFunctorToComma _ _
   inverse := commaToGrothendieckPrecompFunctor _ _
   unitIso := NatIso.ofComponents (fun _ => Iso.refl _)
@@ -328,7 +328,7 @@ definition preFunctor
 
 中文:
 定义 preFunctor
-  签名: {D : 类型u₁} [Category.{v₁} D] (S : C ⥤ D) (T : D ⥤ E)
+  签名: {D : 类型u₁} [范畴.{v₁} D] (S : C ⥤ D) (T : D ⥤ E)
   定义体: (pre S T e).toCatHom
 
 Depends on / 依赖: PreservesColimitsOfShape, toCatHom

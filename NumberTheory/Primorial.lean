@@ -218,7 +218,7 @@ theorem primorial_monotone
 
 中文:
 定理 primorial_monotone
-  结论: Monotone primorial
+  结论: 递增 primorial
   证明: fun _ _ => primorial_mono
 
 Depends on / 依赖: primorial_mono
@@ -374,8 +374,8 @@ lemma Nat.Prime.dvd_primorial_iff
   exact (Nat.le_of_dvd hq.pos hpq).trans hqn
 
 中文:
-引理 Nat.Prime.dvd_primorial_iff
-  条件: {p n : 自然数} (hp : Prime p)
+引理 自然数.素.dvd_primorial_iff
+  条件: {p n : 自然数} (hp : 素 p)
   结论: p ∣ n# ↔ p <= n
   证明: by
   refine ⟨?_, fun h => dvd_prod_of_mem _ (by grind)⟩
@@ -403,8 +403,8 @@ lemma Nat.Prime.dvd_primorial
   proof: hp.dvd_primorial_iff.2 le_rfl
 
 中文:
-引理 Nat.Prime.dvd_primorial
-  条件: {p : 自然数} (hp : Prime p)
+引理 自然数.素.dvd_primorial
+  条件: {p : 自然数} (hp : 素 p)
   结论: p ∣ p#
   证明: hp.dvd_primorial_iff.2 le_rfl
 

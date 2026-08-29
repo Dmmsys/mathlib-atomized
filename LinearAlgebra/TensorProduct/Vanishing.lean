@@ -102,7 +102,7 @@ theorem VanishesTrivially.of_fintype
 
 中文:
 定理 VanishesTrivially.of_fintype
-  结论: {κ} [Fintype κ] (a : ι -> κ -> R) (y : κ -> N)
+  结论: {κ} [有限类型 κ] (a : ι -> κ -> R) (y : κ -> N)
   证明: have e := (Fintype.equivFin κ).symm
   ⟨Fintype.card κ, (a · ∘ e), y ∘ e, by simpa only [← e.sum_comp] using! hay, by
     rwa [← e.forall_congr_right] at ham⟩
@@ -127,8 +127,8 @@ theorem _root_.Equiv.vanishesTrivially_comp
     ← (e.arrowCongr (.refl _)).exists_congr_right, ← e.sum_comp]
 
 中文:
-定理 _root_.Equiv.vanishesTrivially_comp
-  条件: {κ} [Fintype κ] (e : κ ≃ ι)
+定理 _root_.等价.vanishesTrivially_comp
+  条件: {κ} [有限类型 κ] (e : κ ≃ ι)
   证明: by
   simp [VanishesTrivially, ← e.forall_congr_right,
     ← (e.arrowCongr (.refl _)).exists_congr_right, ← e.sum_comp]
@@ -187,7 +187,7 @@ theorem vanishesTrivially_of_sum_tmul_eq_zero
 
 中文:
 定理 vanishesTrivially_of_sum_tmul_eq_zero
-  结论: (hm : Submodule.span R (Set.range m) = ⊤)
+  结论: (hm : 子模.span R (集合.range m) = ⊤)
   证明: by
   -- Define a map $G \colon R^\iota \to M$ whose matrix entries are the $m_i$. It is surjective.
   set G : (ι ->₀ R) ->ₗ[R] M := Finsupp.linearCombination R m with hG
@@ -260,7 +260,7 @@ theorem vanishesTrivially_iff_sum_tmul_eq_zero
 
 中文:
 定理 vanishesTrivially_iff_sum_tmul_eq_zero
-  条件: (hm : Submodule.span R (Set.range m) = ⊤)
+  条件: (hm : 子模.span R (集合.range m) = ⊤)
   证明: ⟨sum_tmul_eq_zero_of_vanishesTrivially R, vanishesTrivially_of_sum_tmul_eq_zero R hm⟩
 
 Depends on / 依赖: sum_tmul_eq_zero_of_vanishesTrivially, vanishesTrivially_of_sum_tmul_eq_zero
@@ -346,7 +346,7 @@ theorem rTensor_injective_of_forall_vanishesTrivially
   rw [← Finset.sum_coe_sort]; rw [← e.
 
 中文:
-定理 rTensor_injective_of_forall_vanishesTrivially
+定理 rTensor_injective_of_对任意_vanishesTrivially
   证明: by
   apply (injective_iff_map_eq_zero _).mpr
   rintro x hx
@@ -392,7 +392,7 @@ theorem forall_vanishesTrivially_iff_forall_rTensor_injective
     exact vanishesTrivially_of_sum_tmul_eq_zero_of_rTensor_injective R (h _) hmn
 
 中文:
-定理 forall_vanishesTrivially_iff_forall_rTensor_injective
+定理 对任意_vanishesTrivially_iff_对任意_rTensor_injective
   证明: by
   constructor
   · intro h
@@ -426,7 +426,7 @@ theorem forall_vanishesTrivially_iff_forall_fg_rTensor_injective
       (h _ (fg_span (Set.finite_range _))) hmn
 
 中文:
-定理 forall_vanishesTrivially_iff_forall_fg_rTensor_injective
+定理 对任意_vanishesTrivially_iff_对任意_fg_rTensor_injective
   证明: by
   constructor
   · intro h M' _
@@ -457,7 +457,7 @@ theorem rTensor_injective_of_forall_fg_rTensor_injective
     ((forall_vanishesTrivially_iff_forall_fg_rTensor_injective R).mpr hMN) M'
 
 中文:
-定理 rTensor_injective_of_forall_fg_rTensor_injective
+定理 rTensor_injective_of_对任意_fg_rTensor_injective
   证明: (forall_vanishesTrivially_iff_forall_rTensor_injective R).mp
     ((forall_vanishesTrivially_iff_forall_fg_rTensor_injective R).mpr hMN) M'
 

@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Nonempty整数erval α)
+  签名: 幺 (Nonempty整数erval α)
   定义体: ⟨NonemptyInterval.pure 1⟩
 
 @[to_additive]
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (整数erval α)
+  签名: 幺 (区间 α)
   定义体: ⟨(1 : NonemptyInterval α)⟩
 
 Depends on / 依赖: NonemptyInterval
@@ -160,7 +160,7 @@ theorem coe_one_interval
 
 中文:
 定理 coe_one_interval
-  结论: ((1 : Nonempty整数erval α) : 整数erval α) = 1
+  结论: ((1 : Nonempty整数erval α) : 区间 α) = 1
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -216,7 +216,7 @@ lemma one_ne_bot
 
 中文:
 引理 one_ne_bot
-  结论: (1 : 整数erval α) != ⊥
+  结论: (1 : 区间 α) != ⊥
   证明: pure_ne_bot
 -/
 @[to_additive (attr := simp)] lemma one_ne_bot : (1 : Interval α) != ⊥ := pure_ne_bot
@@ -231,7 +231,7 @@ lemma bot_ne_one
 
 中文:
 引理 bot_ne_one
-  结论: (⊥ : 整数erval α) != 1
+  结论: (⊥ : 区间 α) != 1
   证明: bot_ne_pure
 -/
 @[to_additive (attr := simp)] lemma bot_ne_one : (⊥ : Interval α) != 1 := bot_ne_pure
@@ -259,7 +259,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : Nonempty整数erval α) : Set α) = 1
+  结论: ((1 : Nonempty整数erval α) : 集合 α) = 1
   证明: coe_pure _
 
 @[to_additive]
@@ -305,7 +305,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : 整数erval α) : Set α) = 1
+  结论: ((1 : 区间 α) : 集合 α) = 1
   证明: Icc_self _
 
 @[to_additive]
@@ -326,7 +326,7 @@ theorem one_mem_one
 
 中文:
 定理 one_mem_one
-  结论: (1 : α) in (1 : 整数erval α)
+  结论: (1 : α) in (1 : 区间 α)
   证明: ⟨le_rfl, le_rfl⟩
 
 Depends on / 依赖: le_rfl
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Nonempty整数erval α)
+  签名: 乘法 (Nonempty整数erval α)
   定义体: ⟨fun s t => ⟨s.toProd * t.toProd, mul_le_mul' s.fst_le_snd t.fst_le_snd⟩⟩
 
 @[to_additive]
@@ -385,7 +385,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (整数erval α)
+  签名: 乘法 (区间 α)
   定义体: ⟨WithBot.map₂ (· * ·)⟩
 
 Depends on / 依赖: WithBot, WithBot.map
@@ -473,7 +473,7 @@ theorem coe_mul_interval
 
 中文:
 定理 coe_mul_interval
-  结论: (↑(s * t) : 整数erval α) = s * t
+  结论: (↑(s * t) : 区间 α) = s * t
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -569,7 +569,7 @@ instance NonemptyInterval.instPow
   body: ⟨fun s n => ⟨s.toProd ^ n, pow_le_pow_left' s.fst_le_snd _⟩⟩
 
 中文:
-实例 NonemptyInterval.instPow
+实例 Nonempty整数erval.instPow
   签名: [MulLeftMono α] [MulRightMono α]
   定义体: ⟨fun s n => ⟨s.toProd ^ n, pow_le_pow_left' s.fst_le_snd _⟩⟩
 
@@ -681,7 +681,7 @@ instance commMonoid
 
 中文:
 实例 commMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: fast_instance% NonemptyInterval.toProd_injective.commMonoid _ toProd_one toProd_mul toProd_pow
 
 Depends on / 依赖: NonemptyInterval, NonemptyInterval.toProd_injective.commMonoid, commMonoid, fast_instance, toProd_injective, toProd_mul, toProd_one, toProd_pow
@@ -709,8 +709,8 @@ instance Interval.mulOneClass
 @[to_additive]
 
 中文:
-实例 Interval.mulOneClass
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+实例 区间.mulOneClass
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: (WithBot.map₂_coe_left _ _ _).trans by
       simp_rw [one_mul, ← Function.id_def, WithBot.map_id, id]
   mul_one s :=
@@ -741,8 +741,8 @@ instance Interval.commMonoid
   mul_assoc := fun _ _ _ => Option.map₂_assoc mul_assoc
 
 中文:
-实例 Interval.commMonoid
-  签名: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+实例 区间.commMonoid
+  签名: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   定义体: fun _ _ => Option.map₂_comm mul_comm
   mul_assoc := fun _ _ _ => Option.map₂_assoc mul_assoc
 
@@ -766,7 +766,7 @@ theorem coe_pow_interval
 
 中文:
 定理 coe_pow_interval
-  结论: [CommMonoid α] [Preorder α] [IsOrderedMonoid α]
+  结论: [交换幺半群 α] [预序 α] [是Ordered幺半群 α]
   证明: map_pow (⟨⟨(↑), coe_one_interval⟩, coe_mul_interval⟩ : NonemptyInterval α ->* Interval α) _ _
 
 Depends on / 依赖: Interval, NonemptyInterval, coe_mul_interval, coe_one_interval, map_pow
@@ -795,7 +795,7 @@ theorem bot_pow
 
 中文:
 定理 bot_pow
-  结论: 对任意 {n : 自然数}, n != 0 -> (⊥ : 整数erval α) ^ n = ⊥
+  结论: 对任意 {n : 自然数}, n != 0 -> (⊥ : 区间 α) ^ n = ⊥
 -/
 theorem bot_pow : forall {n : Nat}, n != 0 -> (⊥ : Interval α) ^ n = ⊥
   | 0, h => (h rfl).elim
@@ -825,7 +825,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (Nonempty整数erval α)
+  签名: 自然数嵌入 (Nonempty整数erval α)
   定义体: pure Nat.cast n
 
 Depends on / 依赖: Nat.cast
@@ -905,8 +905,8 @@ instance [CommSemiring
     toProd_zero toProd_one toProd_add toProd_mul (swap toProd_nsmul) toProd_pow (fun _ => rfl)
 
 中文:
-实例 [CommSemiring
-  签名: α] [PartialOrder α] [CanonicallyOrderedAdd α] :
+实例 [交换半环
+  签名: α] [偏序 α] [典范有序加法 α] :
   定义体: fast_instance% NonemptyInterval.toProd_injective.commSemiring _
     toProd_zero toProd_one toProd_add toProd_mul (swap toProd_nsmul) toProd_pow (fun _ => rfl)
 
@@ -943,7 +943,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Nonempty整数erval α)
+  签名: 减法 (Nonempty整数erval α)
   定义体: ⟨fun s t => ⟨(s.fst - t.snd, s.snd - t.fst), tsub_le_tsub s.fst_le_snd t.fst_le_snd⟩⟩
 
 Depends on / 依赖: fst_le_snd, s.fst, s.fst_le_snd, s.snd, t.fst, t.fst_le_snd, t.snd, tsub_le_tsub
@@ -961,7 +961,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (整数erval α)
+  签名: 减法 (区间 α)
   定义体: ⟨WithBot.map₂ Sub.sub⟩
 
 Depends on / 依赖: Sub.sub, WithBot, WithBot.map
@@ -1026,7 +1026,7 @@ theorem coe_sub_interval
 
 中文:
 定理 coe_sub_interval
-  结论: (↑(s - t) : 整数erval α) = s - t
+  结论: (↑(s - t) : 区间 α) = s - t
   证明: rfl
 -/
 theorem coe_sub_interval : (↑(s - t) : Interval α) = s - t :=
@@ -1148,7 +1148,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (Nonempty整数erval α)
+  签名: 除法 (Nonempty整数erval α)
   定义体: ⟨fun s t => ⟨(s.fst / t.snd, s.snd / t.fst), div_le_div'' s.fst_le_snd t.fst_le_snd⟩⟩
 
 Depends on / 依赖: div_le_div, fst_le_snd, s.fst, s.fst_le_snd, s.snd, t.fst, t.fst_le_snd, t.snd
@@ -1166,7 +1166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div (整数erval α)
+  签名: 除法 (区间 α)
   定义体: ⟨WithBot.map₂ (· / ·)⟩
 
 Depends on / 依赖: WithBot, WithBot.map
@@ -1231,7 +1231,7 @@ theorem coe_div_interval
 
 中文:
 定理 coe_div_interval
-  结论: (↑(s / t) : 整数erval α) = s / t
+  结论: (↑(s / t) : 区间 α) = s / t
   证明: rfl
 -/
 theorem coe_div_interval : (↑(s / t) : Interval α) = s / t :=
@@ -1350,7 +1350,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (Nonempty整数erval α)
+  签名: 取逆 (Nonempty整数erval α)
   定义体: ⟨fun s => ⟨(s.snd⁻¹, s.fst⁻¹), inv_le_inv' s.fst_le_snd⟩⟩
 
 @[to_additive]
@@ -1371,7 +1371,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (整数erval α)
+  签名: 取逆 (区间 α)
   定义体: ⟨WithBot.map Inv.inv⟩
 
 Depends on / 依赖: Inv.inv, WithBot, WithBot.map
@@ -1438,7 +1438,7 @@ theorem coe_inv_interval
 
 中文:
 定理 coe_inv_interval
-  结论: (↑(s⁻¹) : 整数erval α) = (↑s)⁻¹
+  结论: (↑(s⁻¹) : 区间 α) = (↑s)⁻¹
   证明: rfl
 
 @[to_additive]
@@ -1500,8 +1500,8 @@ theorem Interval.inv_bot
   proof: rfl
 
 中文:
-定理 Interval.inv_bot
-  结论: (⊥ : 整数erval α)⁻¹ = ⊥
+定理 区间.inv_bot
+  结论: (⊥ : 区间 α)⁻¹ = ⊥
   证明: rfl
 -/
 theorem Interval.inv_bot : (⊥ : Interval α)⁻¹ = ⊥ :=
@@ -1612,7 +1612,7 @@ instance divisionCommMonoid
 
 中文:
 实例 divisionCommMonoid
-  签名: : DivisionCommMonoid (Nonempty整数erval α) where
+  签名: : DivisionComm幺半群 (Nonempty整数erval α) where
   定义体: fun s t => by
     refine NonemptyInterval.ext (Prod.ext ?_ ?_) <;>
     exact div_eq_mul_inv _ _
@@ -1738,7 +1738,7 @@ instance divisionCommMonoid
 
 中文:
 实例 divisionCommMonoid
-  签名: : DivisionCommMonoid (整数erval α) where
+  签名: : DivisionComm幺半群 (区间 α) where
   定义体: by
     rintro (_ | s) (_ | t) <;> first | rfl | exact congr_arg WithBot.some (div_eq_mul_inv _ _)
   inv_inv := by rintro (_ | s) <;> first | rfl | exact congr_arg WithBot.some (inv_inv _)
@@ -1946,7 +1946,7 @@ theorem length_sum
 
 中文:
 定理 length_sum
-  条件: (f : ι -> Nonempty整数erval α) (s : Finset ι)
+  条件: (f : ι -> Nonempty整数erval α) (s : 有限集 ι)
   证明: map_sum (⟨⟨length, length_zero⟩, length_add⟩ : NonemptyInterval α ->+ α) _ _
 
 Depends on / 依赖: NonemptyInterval, length, length_add, length_zero, map_sum
@@ -1970,7 +1970,7 @@ definition length
 
 中文:
 定义 length
-  签名: : 整数erval α -> α
+  签名: : 区间 α -> α
 -/
 def length : Interval α -> α
   | ⊥ => 0
@@ -1986,7 +1986,7 @@ theorem length_nonneg
 
 中文:
 定理 length_nonneg
-  结论: 对任意 s : 整数erval α, 0 <= s.length
+  结论: 对任意 s : 区间 α, 0 <= s.length
 -/
 theorem length_nonneg : forall s : Interval α, 0 <= s.length
   | ⊥ => le_rfl
@@ -2032,7 +2032,7 @@ theorem length_zero
 
 中文:
 定理 length_zero
-  结论: (0 : 整数erval α).length = 0
+  结论: (0 : 区间 α).length = 0
   证明: length_pure _
 
 @[simp]
@@ -2052,7 +2052,7 @@ theorem length_neg
 
 中文:
 定理 length_neg
-  结论: 对任意 s : 整数erval α, (-s).length = s.length
+  结论: 对任意 s : 区间 α, (-s).length = s.length
 -/
 theorem length_neg : forall s : Interval α, (-s).length = s.length
   | ⊥ => rfl
@@ -2070,7 +2070,7 @@ theorem length_bot
 
 中文:
 定理 length_bot
-  结论: (⊥ : 整数erval α).length = 0
+  结论: (⊥ : 区间 α).length = 0
   证明: rfl
 -/
 theorem length_bot : (⊥ : Interval α).length = 0 := rfl
@@ -2084,7 +2084,7 @@ theorem length_add_le
 
 中文:
 定理 length_add_le
-  结论: 对任意 s t : 整数erval α, (s + t).length <= s.length + t.length
+  结论: 对任意 s t : 区间 α, (s + t).length <= s.length + t.length
 -/
 theorem length_add_le : forall s t : Interval α, (s + t).length <= s.length + t.length
   | ⊥, _ => by simp
@@ -2121,7 +2121,7 @@ theorem length_sum_le
 
 中文:
 定理 length_sum_le
-  条件: (f : ι -> 整数erval α) (s : Finset ι)
+  条件: (f : ι -> 区间 α) (s : 有限集 ι)
   证明: Finset.le_sum_of_subadditive _ length_zero.le length_add_le _ _
 
 Depends on / 依赖: Finset, Finset.le_sum_of_subadditive, le_sum_of_subadditive, length_add_le, length_zero, length_zero.le

@@ -77,7 +77,7 @@ instance KleisliCat.categoryStruct
 
 中文:
 实例 KleisliCat.categoryStruct
-  签名: {m} [Monad.{u, v} m]
+  签名: {m} [单子.{u, v} m]
   定义体: α -> m β
   id _ x := pure x
   comp f g := f >=> g
@@ -101,7 +101,7 @@ theorem KleisliCat.ext
 
 中文:
 定理 KleisliCat.ext
-  结论: {m} [Monad.{u, v} m] (α β : KleisliCat m)
+  结论: {m} [单子.{u, v} m] (α β : KleisliCat m)
   证明: funext h
 -/
 theorem KleisliCat.ext {m} [Monad.{u, v} m] (α β : KleisliCat m)
@@ -123,7 +123,7 @@ instance KleisliCat.category
 
 中文:
 实例 KleisliCat.category
-  签名: {m} [Monad.{u, v} m] [LawfulMonad m]
+  签名: {m} [单子.{u, v} m] [合法单子 m]
   定义体: by
   refine { id_comp := ?_, comp_id := ?_, assoc := ?_ } <;> intros <;>
   ext <;>
@@ -150,7 +150,7 @@ theorem KleisliCat.id_def
 
 中文:
 定理 KleisliCat.id_def
-  条件: {m} [Monad m] (α : KleisliCat m)
+  条件: {m} [单子 m] (α : KleisliCat m)
   结论: 𝟙 α = @pure m _ α
   证明: rfl
 -/
@@ -167,7 +167,7 @@ theorem KleisliCat.comp_def
 
 中文:
 定理 KleisliCat.comp_def
-  条件: {m} [Monad m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α)
+  条件: {m} [单子 m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α)
   证明: rfl
 -/
 theorem KleisliCat.comp_def {m} [Monad m] (α β γ : KleisliCat m) (xs : α ⟶ β) (ys : β ⟶ γ) (a : α) :
@@ -184,7 +184,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (KleisliCat id)
+  签名: 可居 (KleisliCat id)
   定义体: ⟨PUnit⟩
 -/
 instance : Inhabited (KleisliCat id) :=

@@ -66,7 +66,7 @@ theorem degree_lt_wf
 
 中文:
 定理 degree_lt_wf
-  结论: WellFounded fun p q : R[X] => degree p < degree q
+  结论: 良基 fun p q : R[X] => degree p < degree q
   证明: InvImage.wf degree wellFounded_lt
 
 Depends on / 依赖: InvImage, InvImage.wf, degree, wellFounded_lt
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation R[X]
+  签名: 良基关系 R[X]
   定义体: ⟨_, degree_lt_wf⟩
 
 @[nontriviality]
@@ -110,7 +110,7 @@ theorem monic_of_subsingleton
 
 中文:
 定理 monic_of_subsingleton
-  条件: [Subsingleton R] (p : R[X])
+  条件: [子单例 R] (p : R[X])
   结论: Monic p
   证明: Subsingleton.elim _ _
 
@@ -136,7 +136,7 @@ theorem degree_of_subsingleton
 
 中文:
 定理 degree_of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: degree p = ⊥
   证明: by
   rw [Subsingleton.elim p 0]; rw [degree_zero]
@@ -161,7 +161,7 @@ theorem natDegree_of_subsingleton
 
 中文:
 定理 natDegree_of_subsingleton
-  条件: [Subsingleton R]
+  条件: [子单例 R]
   结论: natDegree p = 0
   证明: by
   rw [Subsingleton.elim p 0]; rw [natDegree_zero]
@@ -433,7 +433,7 @@ theorem ite_le_natDegree_coeff
 
 中文:
 定理 ite_le_natDegree_coeff
-  条件: (p : R[X]) (n : 自然数) (I : Decidable (n < 1 + natDegree p))
+  条件: (p : R[X]) (n : 自然数) (I : 可判定 (n < 1 + natDegree p))
   证明: by
   split_ifs with h
   · rfl
@@ -1554,7 +1554,7 @@ lemma degree_C_mul_of_isUnit
 
 中文:
 引理 degree_C_mul_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   结论: (C a * p).degree = p.degree
   证明: by
   obtain rfl | hp := eq_or_ne p 0
@@ -1591,7 +1591,7 @@ lemma degree_mul_C_of_isUnit
 
 中文:
 引理 degree_mul_C_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   结论: (p * C a).degree = p.degree
   证明: by
   obtain rfl | hp := eq_or_ne p 0
@@ -1623,7 +1623,7 @@ lemma natDegree_C_mul_of_isUnit
 
 中文:
 引理 natDegree_C_mul_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   结论: (C a * p).natDegree = p.natDegree
   证明: by
   simp [natDegree, degree_C_mul_of_isUnit ha]
@@ -1645,7 +1645,7 @@ lemma natDegree_mul_C_of_isUnit
 
 中文:
 引理 natDegree_mul_C_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   结论: (p * C a).natDegree = p.natDegree
   证明: by
   simp [natDegree, degree_mul_C_of_isUnit ha]
@@ -1666,7 +1666,7 @@ lemma leadingCoeff_C_mul_of_isUnit
 
 中文:
 引理 leadingCoeff_C_mul_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   证明: by
   rwa [leadingCoeff, coeff_C_mul, natDegree_C_mul_of_isUnit, leadingCoeff]
 
@@ -1689,7 +1689,7 @@ lemma leadingCoeff_mul_C_of_isUnit
 
 中文:
 引理 leadingCoeff_mul_C_of_isUnit
-  条件: (ha : IsUnit a) (p : R[X])
+  条件: (ha : 是单位 a) (p : R[X])
   证明: by
   rwa [leadingCoeff, coeff_mul_C, natDegree_mul_C_of_isUnit, leadingCoeff]
 
@@ -1864,7 +1864,7 @@ theorem degree_smul_le
 
 中文:
 定理 degree_smul_le
-  条件: {S : 类型} [SMulZeroClass S R] (a : S) (p : R[X])
+  条件: {S : 类型} [SMulZero类 S R] (a : S) (p : R[X])
   证明: by
   refine (degree_le_iff_coeff_zero _ _).2 fun m hm => ?_
   rw [degree_lt_iff_coeff_zero] at hm
@@ -1888,7 +1888,7 @@ theorem natDegree_smul_le
 
 中文:
 定理 natDegree_smul_le
-  条件: {S : 类型} [SMulZeroClass S R] (a : S) (p : R[X])
+  条件: {S : 类型} [SMulZero类 S R] (a : S) (p : R[X])
   证明: natDegree_le_natDegree (degree_smul_le a p)
 
 Depends on / 依赖: degree_smul_le, natDegree_le_natDegree
@@ -2098,7 +2098,7 @@ theorem degree_sum_fin_lt
 
 中文:
 定理 degree_sum_fin_lt
-  条件: {n : 自然数} (f : Fin n -> R)
+  条件: {n : 自然数} (f : 有限集 n -> R)
   证明: (degree_sum_le _ _).trans_lt
     (Finset.sup_lt_iff <| WithBot.bot_lt_coe n).2 fun k _hk =>
 (degree_C_mul_X_pow_le _ _).trans_lt WithBot.coe_lt_coe.2 k.is_lt
@@ -2233,7 +2233,7 @@ theorem natDegree_X_pow_le
 
 中文:
 定理 natDegree_X_pow_le
-  条件: {R : 类型} [Semiring R] (n : 自然数)
+  条件: {R : 类型} [半环 R] (n : 自然数)
   结论: (X ^ n : R[X]).natDegree <= n
   证明: by
   nontriviality R
@@ -2260,7 +2260,7 @@ zero_ne_one' R by
 
 中文:
 定理 not_isUnit_X
-  结论: ¬IsUnit (X : R[X])
+  结论: ¬是单位 (X : R[X])
   证明: fun ⟨⟨_, g, _hfg, hgf⟩, rfl⟩ =>
 zero_ne_one' R by
     rw [← coeff_one_zero]; rw [← hgf]
@@ -2382,7 +2382,7 @@ theorem leadingCoeff_sub_of_degree_lt
 
 中文:
 定理 leadingCoeff_sub_of_degree_lt
-  条件: (h : Polynomial.degree q < Polynomial.degree p)
+  条件: (h : 多项式.degree q < 多项式.degree p)
   证明: by
   rw [← q.degree_neg] at h
   rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_lt' h]
@@ -2406,7 +2406,7 @@ theorem leadingCoeff_sub_of_degree_lt'
 
 中文:
 定理 leadingCoeff_sub_of_degree_lt'
-  条件: (h : Polynomial.degree p < Polynomial.degree q)
+  条件: (h : 多项式.degree p < 多项式.degree q)
   证明: by
   rw [← q.degree_neg] at h
   rw [sub_eq_add_neg]; rw [leadingCoeff_add_of_degree_lt h]; rw [leadingCoeff_neg]
@@ -2623,7 +2623,7 @@ theorem nextCoeff_X_add_C
 
 中文:
 定理 nextCoeff_X_add_C
-  条件: [Semiring S] (c : S)
+  条件: [半环 S] (c : S)
   结论: nextCoeff (X + C c) = c
   证明: by
   nontriviality S
@@ -2843,7 +2843,7 @@ theorem leadingCoeff_X_add_C
 
 中文:
 定理 leadingCoeff_X_add_C
-  条件: [Semiring S] (r : S)
+  条件: [半环 S] (r : S)
   结论: (X + C r).leadingCoeff = 1
   证明: by
   rw [← pow_one (X : S[X]), leadingCoeff_X_pow_add_C zero_lt_one]
@@ -2953,7 +2953,7 @@ definition degreeMonoidHom
 
 中文:
 定义 degreeMonoidHom
-  签名: [Nontrivial R]
+  签名: [非平凡 R]
   定义体: degree
   map_one' := degree_one
   map_mul' _ _ := degree_mul
@@ -2981,7 +2981,7 @@ lemma degree_pow
 
 中文:
 引理 degree_pow
-  条件: [Nontrivial R] (p : R[X]) (n : 自然数)
+  条件: [非平凡 R] (p : R[X]) (n : 自然数)
   结论: degree (p ^ n) = n • degree p
   证明: map_pow (@degreeMonoidHom R _ _ _) _ _
 
@@ -3311,7 +3311,7 @@ theorem nextCoeff_X_sub_C
 
 中文:
 定理 nextCoeff_X_sub_C
-  条件: [Ring S] (c : S)
+  条件: [环 S] (c : S)
   结论: nextCoeff (X - C c) = -c
   证明: by
   rw [sub_eq_add_neg]; rw [← map_neg C c]; rw [nextCoeff_X_add_C]
@@ -3449,7 +3449,7 @@ theorem leadingCoeff_X_sub_C
 
 中文:
 定理 leadingCoeff_X_sub_C
-  条件: [Ring S] (r : S)
+  条件: [环 S] (r : S)
   结论: (X - C r).leadingCoeff = 1
   证明: by
   rw [sub_eq_add_neg]; rw [← map_neg C r]; rw [leadingCoeff_X_add_C]

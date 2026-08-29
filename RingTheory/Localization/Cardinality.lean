@@ -50,7 +50,7 @@ theorem lift_cardinalMk_le
 
 中文:
 定理 lift_cardinalMk_le
-  条件: (S : Submonoid R) [IsLocalization S L]
+  条件: (S : 子幺半群 R) [是Localization S L]
   证明: by
   have := Localization.cardinalMk_le S
   rwa [← lift_le.{v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
@@ -73,7 +73,7 @@ theorem cardinalMk_le
 
 中文:
 定理 cardinalMk_le
-  结论: {L : 类型u} [CommSemiring L] [Algebra R L]
+  结论: {L : 类型u} [交换半环 L] [代数 R L]
   证明: by
   simpa using lift_cardinalMk_le (L := L) S
 
@@ -106,7 +106,7 @@ theorem cardinalMk
 
 中文:
 定理 cardinalMk
-  条件: {S : Submonoid R} (hS : S <= R⁰)
+  条件: {S : 子幺半群 R} (hS : S <= R⁰)
   结论: #(Localization S) = #R
   证明: by
   apply OreLocalization.cardinalMk
@@ -136,7 +136,7 @@ theorem lift_cardinalMk
 
 中文:
 定理 lift_cardinalMk
-  条件: (S : Submonoid R) [IsLocalization S L] (hS : S <= R⁰)
+  条件: (S : 子幺半群 R) [是Localization S L] (hS : S <= R⁰)
   证明: by
   have := Localization.cardinalMk hS
   rwa [← lift_inj.{u, v}, lift_mk_eq'.2 ⟨(Localization.algEquiv S L).toEquiv⟩] at this
@@ -159,7 +159,7 @@ theorem cardinalMk
 
 中文:
 定理 cardinalMk
-  结论: (L : 类型u) [CommRing L] [Algebra R L]
+  结论: (L : 类型u) [交换环 L] [代数 R L]
   证明: by
   simpa using lift_cardinalMk L S hS
 
@@ -184,8 +184,8 @@ theorem Cardinal.mk_fractionRing
 alias FractionRing.cardinalMk := Cardinal.mk_fractionRing
 
 中文:
-定理 Cardinal.mk_fractionRing
-  条件: (R : 类型u) [CommRing R]
+定理 基数.mk_fractionRing
+  条件: (R : 类型u) [交换环 R]
   结论: #(FractionRing R) = #R
   证明: IsLocalization.cardinalMk (FractionRing R) R⁰ le_rfl
 
@@ -214,7 +214,7 @@ theorem lift_cardinalMk
 中文:
 定理 lift_cardinalMk
   条件: [IsFractionRing R L]
-  结论: Cardinal.lift.{u} #L = Cardinal.lift.{v} #R
+  结论: 基数.lift.{u} #L = 基数.lift.{v} #R
   证明: IsLocalization.lift_cardinalMk L _ le_rfl
 
 Depends on / 依赖: IsLocalization, IsLocalization.lift_cardinalMk, le_rfl, lift_cardinalMk
@@ -233,7 +233,7 @@ theorem cardinalMk
 
 中文:
 定理 cardinalMk
-  条件: (L : 类型u) [CommRing L] [Algebra R L] [IsFractionRing R L]
+  条件: (L : 类型u) [交换环 L] [代数 R L] [IsFractionRing R L]
   结论: #L = #R
   证明: IsLocalization.cardinalMk L _ le_rfl
 

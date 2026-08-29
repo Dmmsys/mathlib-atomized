@@ -39,8 +39,8 @@ instance [IsCofilteredOrEmpty
     | x, star => ⟨x, 𝟙 _
 
 中文:
-实例 [IsCofilteredOrEmpty
-  签名: C] : IsCofiltered (WithTerminal C) where
+实例 [是余filteredOrEmpty
+  签名: C] : 是余filtered (WithTerminal C) where
   定义体: match x, y with
     | star, y => ⟨y, default, 𝟙 y, trivial⟩
     | x, star => ⟨x, 𝟙 x, default, trivial⟩
@@ -78,8 +78,8 @@ instance [IsFilteredOrEmpty
   isFiltered_of_isCofiltered_op _
 
 中文:
-实例 [IsFilteredOrEmpty
-  签名: C] : IsFiltered (WithInitial C)
+实例 [是FilteredOrEmpty
+  签名: C] : 是Filtered (WithInitial C)
   定义体: have := IsCofiltered.of_equivalence (opEquiv C).symm
   isFiltered_of_isCofiltered_op _
 

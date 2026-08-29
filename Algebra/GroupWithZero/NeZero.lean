@@ -76,7 +76,7 @@ theorem domain_nontrivial
 
 中文:
 定理 domain_nontrivial
-  条件: [Zero M₀'] [One M₀'] (f : M₀' -> M₀) (zero : f 0 = 0) (one : f 1 = 1)
+  条件: [零 M₀'] [幺 M₀'] (f : M₀' -> M₀) (zero : f 0 = 0) (one : f 1 = 1)
   证明: ⟨⟨0, 1, mt (congr_arg f) by
     rw [zero]; rw [one]
     exact zero_ne_one⟩⟩

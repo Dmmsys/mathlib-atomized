@@ -52,7 +52,7 @@ class inductive
 
 中文:
 类 inductive
-  参数: Functor.IsHomLift
+  参数: 函子.IsHomLift
   (无附加公理)
 
 Depends on / 依赖: Functor, Functor.IsHomLift, IsHomLift
@@ -211,7 +211,7 @@ lemma commSq
 
 中文:
 引理 commSq
-  结论: CommSq (p.map φ) (eqToHom (domain_eq p f φ)) (eqToHom (codomain_eq p f φ)) f where
+  结论: 交换Sq (p.map φ) (eqToHom (domain_eq p f φ)) (eqToHom (codomain_eq p f φ)) f where
   证明: by simp only [fac p f φ, eqToHom_trans_assoc, eqToHom_refl, id_comp]
 
 Depends on / 依赖: eqToHom_refl, eqToHom_trans_assoc, id_comp
@@ -892,8 +892,8 @@ lemma isIso_of_lift_isIso
 
 中文:
 引理 isIso_of_lift_isIso
-  条件: (f : R ⟶ S) (φ : a ⟶ b) [p.IsHomLift f φ] [IsIso φ]
-  结论: IsIso f
+  条件: (f : R ⟶ S) (φ : a ⟶ b) [p.IsHomLift f φ] [是同构 φ]
+  结论: 是同构 f
   证明: (fac p f φ) ▸ inferInstance
 -/
 lemma isIso_of_lift_isIso (f : R ⟶ S) (φ : a ⟶ b) [p.IsHomLift f φ] [IsIso φ] : IsIso f :=
@@ -958,7 +958,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: (f : R ⟶ S) (φ : a ⟶ b) [IsIso f] [IsIso φ] [p.IsHomLift f φ]
+  签名: (f : R ⟶ S) (φ : a ⟶ b) [是同构 f] [是同构 φ] [p.IsHomLift f φ]
   定义体: have : p.IsHomLift (asIso f).hom (asIso φ).hom := by simp_all
   IsHomLift.inv_lift_inv p (asIso f) (asIso φ)
 -/
@@ -1001,7 +1001,7 @@ instance lift_id_inv_isIso
 
 中文:
 实例 lift_id_inv_isIso
-  签名: (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [IsIso φ] [p.IsHomLift (𝟙 S) φ]
+  签名: (S : 𝒮) {a b : 𝒳} (φ : a ⟶ b) [是同构 φ] [p.IsHomLift (𝟙 S) φ]
   定义体: (IsIso.inv_id (X := S)) ▸ (IsHomLift.inv p _ φ)
 
 Depends on / 依赖: IsHomLift, IsHomLift.inv, IsIso.inv_id, inv_id

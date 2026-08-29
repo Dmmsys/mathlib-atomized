@@ -50,7 +50,7 @@ lemma isSheaf_of_isLimit
 
 中文:
 引理 isSheaf_of_isLimit
-  条件: (hc : IsLimit c) (hF : 对任意 j, Presheaf.IsSheaf J (F.obj j).presheaf)
+  条件: (hc : 是极限 c) (hF : 对任意 j, 预层.是层 J (F.obj j).presheaf)
   证明: by
   let G : D ⥤ Sheaf J AddCommGrpCat.{v} :=
     { obj := fun j => ⟨(F.obj j).presheaf, hF j⟩
@@ -95,7 +95,7 @@ instance createsLimit
 
 中文:
 实例 createsLimit
-  签名: : CreatesLimit F (forget _)
+  签名: : 创造极限 F (forget _)
   定义体: createsLimitOfFullyFaithfulOfIso' (limit.isLimit (F ⋙ forget _))
     (mk (limit (F ⋙ forget _))
       (PresheafOfModules.isSheaf_of_isLimit (limit.isLimit (F ⋙ forget _))
@@ -119,7 +119,7 @@ instance hasLimit
 
 中文:
 实例 hasLimit
-  签名: : HasLimit F
+  签名: : 有极限 F
   定义体: hasLimit_of_created F (forget _)
 
 Depends on / 依赖: forget, hasLimit_of_created
@@ -167,7 +167,7 @@ instance hasLimitsOfShape
 
 中文:
 实例 hasLimitsOfShape
-  签名: : HasLimitsOfShape D (SheafOfModules.{v} R) where
+  签名: : 有形状极限 D (模层.{v} R) where
 -/
 instance hasLimitsOfShape : HasLimitsOfShape D (SheafOfModules.{v} R) where
 
@@ -213,7 +213,7 @@ instance hasFiniteLimits
 
 中文:
 实例 hasFiniteLimits
-  签名: : HasFiniteLimits (SheafOfModules.{v} R)
+  签名: : 有有限极限 (模层.{v} R)
   定义体: ⟨fun _ => inferInstance⟩
 -/
 instance hasFiniteLimits : HasFiniteLimits (SheafOfModules.{v} R) :=
@@ -260,7 +260,7 @@ instance hasLimitsOfSize
 
 中文:
 实例 hasLimitsOfSize
-  签名: : HasLimitsOfSize.{v₂, v} (SheafOfModules.{v} R) where
+  签名: : 有LimitsOfSize.{v₂, v} (模层.{v} R) where
 -/
 instance hasLimitsOfSize : HasLimitsOfSize.{v₂, v} (SheafOfModules.{v} R) where
 
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: PreservesFiniteLimits (SheafOfModules.toSheaf.{v} R)
+  签名: 保持FiniteLimits (模层.toSheaf.{v} R)
   定义体: preservesFiniteLimits_of_reflects_of_preserves _ (sheafToPresheaf _ _)
 
 Depends on / 依赖: preservesFiniteLimits_of_reflects_of_preserves, sheafToPresheaf

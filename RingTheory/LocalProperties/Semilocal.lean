@@ -60,7 +60,7 @@ theorem Module.Finite.of_isLocalized_maximal
   use Finset.biUnion Finset.univ fun P => Finset.image (frac 
 
 中文:
-定理 Module.Finite.of_isLocalized_maximal
+定理 模.有限.of_isLocalized_maximal
   证明: by
   classical
   have : Fintype (MaximalSpectrum R) := Fintype.ofFinite _
@@ -97,8 +97,8 @@ theorem Submodule.fg_of_isLocalized_maximal
   exact .of_isLocalized_maximal _ _ _ (fun P => N.toLocalized' (Rₚ P) P.primeCompl (f P)) H
 
 中文:
-定理 Submodule.fg_of_isLocalized_maximal
-  结论: (N : Submodule R M)
+定理 子模.fg_of_isLocalized_maximal
+  结论: (N : 子模 R M)
   证明: by
   simp_rw [← Module.Finite.iff_fg] at ⊢ H
   exact .of_isLocalized_maximal _ _ _ (fun P => N.toLocalized' (Rₚ P) P.primeCompl (f P)) H
@@ -123,7 +123,7 @@ theorem Module.Finite.of_localized_maximal
   proof: .of_isLocalized_maximal M _ _ (fun _ _ => LocalizedModule.mkLinearMap _ _) H
 
 中文:
-定理 Module.Finite.of_localized_maximal
+定理 模.有限.of_localized_maximal
   证明: .of_isLocalized_maximal M _ _ (fun _ _ => LocalizedModule.mkLinearMap _ _) H
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, mkLinearMap, of_isLocalized_maximal
@@ -144,8 +144,8 @@ theorem Submodule.fg_of_localized_maximal
   proof: N.fg_of_isLocalized_maximal _ _ _ H
 
 中文:
-定理 Submodule.fg_of_localized_maximal
-  结论: (N : Submodule R M)
+定理 子模.fg_of_localized_maximal
+  结论: (N : 子模 R M)
   证明: N.fg_of_isLocalized_maximal _ _ _ H
 
 Depends on / 依赖: ContinuousConstSMul, ContinuousSMul, ContinuousSMul.continuousConstSMul, N.fg_of_isLocalized_maximal, continuousConstSMul, fg_of_isLocalized_maximal
@@ -167,7 +167,7 @@ theorem IsNoetherianRing.of_isLocalization_maximal
     Rₚ Rₚ (fun P _ => Algebra.linearMap R (Rₚ P)) N fun _ _ => IsNoetherian.noetherian _
 
 中文:
-定理 IsNoetherianRing.of_isLocalization_maximal
+定理 是Noether环.of_isLocalization_maximal
   证明: Submodule.fg_of_isLocalized_maximal
     Rₚ Rₚ (fun P _ => Algebra.linearMap R (Rₚ P)) N fun _ _ => IsNoetherian.noetherian _
 
@@ -210,7 +210,7 @@ theorem isPrincipalIdealRing_of_isPrincipalIdealRing_isLocalization_maximal
 
 中文:
 定理 isPrincipalIdealRing_of_isPrincipalIdealRing_isLocalization_maximal
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   have : IsNoetherianRing R :=
     IsNoetherianRing.of_isLocalization_maximal Rₚ fun P _ => inferInstance

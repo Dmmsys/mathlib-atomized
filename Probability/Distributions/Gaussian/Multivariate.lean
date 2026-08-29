@@ -74,7 +74,7 @@ definition stdGaussian
 
 中文:
 定义 stdGaussian
-  签名: : Measure E
+  签名: : 测度 E
   定义体: (Measure.pi (fun _ : Fin (Module.finrank Real E) => gaussianReal 0 1)).map
     (fun x => ∑ i, x i • stdOrthonormalBasis Real E i)
 
@@ -98,7 +98,7 @@ instance isProbabilityMeasure_stdGaussian
 
 中文:
 实例 isProbabilityMeasure_stdGaussian
-  签名: : IsProbabilityMeasure (stdGaussian E)
+  签名: : 是概率测度 (stdGaussian E)
   定义体: Measure.isProbabilityMeasure_map (Measurable.aemeasurable (by fun_prop))
 
 @[simp]
@@ -223,7 +223,7 @@ instance isGaussian_stdGaussian
 
 中文:
 实例 isGaussian_stdGaussian
-  签名: : IsGaussian (stdGaussian E)
+  签名: : 是Gaussian (stdGaussian E)
   定义体: by
   refine isGaussian_iff_gaussian_charFun.2 ⟨0, innerSL Real,
     LinearMap.BilinForm.isPosSemidef_iff.2 isPosSemidef_inner, ?_⟩
@@ -323,7 +323,7 @@ lemma stdGaussian_map
 
 中文:
 引理 stdGaussian_map
-  结论: {F : 类型} [NormedAddCommGroup F] [InnerProductSpace 实数 F] [MeasurableSpace F]
+  结论: {F : 类型} [赋范交换加群 F] [内积空间 实数 F] [可测空间 F]
   证明: f.finiteDimensional; (stdGaussian E).map f = stdGaussian F := by
   have := f.finiteDimensional
   apply Measure.ext_of_charFunDual
@@ -389,7 +389,7 @@ lemma stdGaussian_eq_map_pi_orthonormalBasis
 
 中文:
 引理 stdGaussian_eq_map_pi_orthonormalBasis
-  条件: (b : OrthonormalBasis ι 实数 E)
+  条件: (b : 正交标准基 ι 实数 E)
   证明: by
   have : (fun (x : ι -> Real) => ∑ i, x i • b i) =
       ⇑((EuclideanSpace.basisFun ι Real).equiv b (Equiv.refl ι)) ∘ (toLp 2) := by
@@ -432,7 +432,7 @@ definition multivariateGaussian
 
 中文:
 定义 multivariateGaussian
-  签名: (μ : EuclideanSpace 实数 ι) (S : Matrix ι ι 实数)
+  签名: (μ : EuclideanSpace 实数 ι) (S : 矩阵 ι ι 实数)
   定义体: (stdGaussian (EuclideanSpace Real ι)).map (fun x => μ + toEuclideanCLM (𝕜 := Real) (CFC.sqrt S) x)
 
 Depends on / 依赖: CFC.sqrt, EuclideanSpace, stdGaussian, toEuclideanCLM
@@ -457,7 +457,7 @@ lemma multivariateGaussian_of_not_posSemidef
 
 中文:
 引理 multivariateGaussian_of_not_posSemidef
-  结论: (μ : EuclideanSpace 实数 ι) {S : Matrix ι ι 实数}
+  结论: (μ : EuclideanSpace 实数 ι) {S : 矩阵 ι ι 实数}
   证明: by
   rw [multivariateGaussian]; rw [CFC.sqrt]; rw [cfcₙ_apply_of_not_predicate]
   · simp
@@ -514,7 +514,7 @@ instance isGaussian_multivariateGaussian
 
 中文:
 实例 isGaussian_multivariateGaussian
-  签名: : IsGaussian (multivariateGaussian μ S)
+  签名: : 是Gaussian (multivariateGaussian μ S)
   定义体: by
   have h : (fun x => μ + (toEuclideanCLM (𝕜 := Real) (CFC.sqrt S)) x) =
     (fun x => μ + x) ∘ ((toEuclideanCLM (𝕜 := Real) (CFC.sqrt S))) := rfl
@@ -736,7 +736,7 @@ lemma measurePreserving_restrict₂_multivariateGaussian
 
 中文:
 引理 measurePreserving_restrict₂_multivariateGaussian
-  结论: {ι : 类型} [DecidableEq ι] {I J : Finset ι}
+  结论: {ι : 类型} [DecidableEq ι] {I J : 有限集 ι}
   证明: by fun_prop
   map_eq := by
     apply IsGaussian.ext

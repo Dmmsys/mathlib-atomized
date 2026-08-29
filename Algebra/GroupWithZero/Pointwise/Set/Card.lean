@@ -34,8 +34,8 @@ lemma _root_.Cardinal.mk_smul_set₀
   proof: Cardinal.mk_image_eq_of_injOn _ _ (MulAction.injective₀ ha).injOn
 
 中文:
-引理 _root_.Cardinal.mk_smul_set₀
-  条件: (ha : a != 0) (s : Set M₀)
+引理 _root_.基数.mk_smul_set₀
+  条件: (ha : a != 0) (s : 集合 M₀)
   结论: #↥(a • s) = #s
   证明: Cardinal.mk_image_eq_of_injOn _ _ (MulAction.injective₀ ha).injOn
 
@@ -55,7 +55,7 @@ lemma natCard_smul_set₀
 
 中文:
 引理 natCard_smul_set₀
-  条件: (ha : a != 0) (s : Set M₀)
+  条件: (ha : a != 0) (s : 集合 M₀)
   结论: 自然数.card ↥(a • s) = 自然数.card s
   证明: Nat.card_image_of_injective (MulAction.injective₀ ha) _
 

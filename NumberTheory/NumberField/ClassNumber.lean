@@ -65,7 +65,7 @@ instance instFintypeClassGroup
 
 中文:
 实例 instFintypeClassGroup
-  签名: : Fintype (ClassGroup (𝓞 K))
+  签名: : 有限类型 (ClassGroup (𝓞 K))
   定义体: ClassGroup.fintypeOfAdmissibleOfFinite Rat K AbsoluteValue.absIsAdmissible
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.absIsAdmissible, ClassGroup, ClassGroup.fintypeOfAdmissibleOfFinite, absIsAdmissible, fintypeOfAdmissibleOfFinite
@@ -139,7 +139,7 @@ theorem classNumber_eq_one_iff
 
 中文:
 定理 classNumber_eq_one_iff
-  结论: classNumber K = 1 ↔ IsPrincipalIdealRing (𝓞 K)
+  结论: classNumber K = 1 ↔ 是主理想环 (𝓞 K)
   证明: card_classGroup_eq_one_iff
 
 Depends on / 依赖: card_classGroup_eq_one_iff
@@ -162,7 +162,7 @@ theorem exists_ideal_in_class_of_norm_le
     contrapos
 
 中文:
-定理 exists_ideal_in_class_of_norm_le
+定理 存在_ideal_in_class_of_norm_le
   条件: (C : ClassGroup (𝓞 K))
   证明: by
   obtain ⟨J, hJ⟩ := ClassGroup.mk0_surjective C⁻¹
@@ -409,7 +409,7 @@ theorem classNumber_eq
 
 中文:
 定理 classNumber_eq
-  结论: NumberField.classNumber Rat = 1
+  结论: 数域.classNumber 有理数 = 1
   证明: classNumber_eq_one_iff.mpr IsPrincipalIdealRing.of_surjective
     Rat.ringOfIntegersEquiv.symm Rat.ringOfIntegersEquiv.symm.surjective
 

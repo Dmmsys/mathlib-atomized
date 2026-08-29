@@ -132,7 +132,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: : Basis ι A (A otimes[R] M) where
+  签名: : 基 ι A (A otimes[R] M) where
   定义体: { basisAux A b with map_smul' := basisAux_map_smul b }
 
 @[simp]
@@ -252,8 +252,8 @@ lemma _root_.Module.Basis.baseChange_linearMap
   split <;> simp only [TensorProduct.tmul_zero]
 
 中文:
-引理 _root_.Module.Basis.baseChange_linearMap
-  条件: (b : Basis ι R M) (b' : Basis ι' R N) (ij : ι × ι')
+引理 _root_.模.基.baseChange_linearMap
+  条件: (b : 基 ι R M) (b' : 基 ι' R N) (ij : ι × ι')
   证明: by
   apply (basis A b').ext
   intro k
@@ -282,8 +282,8 @@ lemma _root_.Module.Basis.baseChange_end
   proof: b.baseChange_linearMap A b ij
 
 中文:
-引理 _root_.Module.Basis.baseChange_end
-  条件: (b : Basis ι R M) (ij : ι × ι)
+引理 _root_.模.基.baseChange_end
+  条件: (b : 基 ι R M) (ij : ι × ι)
   证明: b.baseChange_linearMap A b ij
 
 Depends on / 依赖: b.baseChange_linearMap, baseChange_linearMap
@@ -342,7 +342,7 @@ lemma toMatrix_baseChange
 
 中文:
 引理 toMatrix_baseChange
-  条件: (f : M₁ ->ₗ[R] M₂) (b₁ : Basis ι R M₁) (b₂ : Basis ι₂ R M₂)
+  条件: (f : M₁ ->ₗ[R] M₂) (b₁ : 基 ι R M₁) (b₂ : 基 ι₂ R M₂)
   证明: by
   ext; simp [toMatrix_apply]
 

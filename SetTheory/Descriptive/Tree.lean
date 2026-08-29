@@ -67,7 +67,7 @@ lemma mem_of_append
 
 中文:
 引理 mem_of_append
-  条件: {x y : List A} (h : x ++ y in T)
+  条件: {x y : 列表 A} (h : x ++ y in T)
   结论: x in T
   证明: by
   induction y generalizing x with
@@ -93,7 +93,7 @@ lemma mem_of_prefix
 
 中文:
 引理 mem_of_prefix
-  条件: {x y : List A} (h' : x <+: y) (h : y in T)
+  条件: {x y : 列表 A} (h' : x <+: y) (h : y in T)
   结论: x in T
   证明: by
   obtain ⟨_, rfl⟩ := h'; exact mem_of_append h
@@ -113,7 +113,7 @@ instance :
 
 中文:
 实例 :
-  签名: Trans List.IsPrefix (fun x (T : tree A) => x in T) (fun x T => x in T)
+  签名: Trans 列表.IsPrefix (fun x (T : tree A) => x in T) (fun x T => x in T)
   定义体: mem_of_prefix
 
 Depends on / 依赖: mem_of_prefix
@@ -132,7 +132,7 @@ lemma singleton_mem
 
 中文:
 引理 singleton_mem
-  条件: (T : tree A) {a : A} {x : List A} (h : a :: x in T)
+  条件: (T : tree A) {a : A} {x : 列表 A} (h : a :: x in T)
   结论: [a] in T
   证明: mem_of_prefix ⟨x, rfl⟩ h
 
@@ -529,7 +529,7 @@ lemma pullSub_adjunction
 
 中文:
 引理 pullSub_adjunction
-  条件: (S T : tree A) (x : List A)
+  条件: (S T : tree A) (x : 列表 A)
   结论: pullSub S x <= T ↔ S <= subAt T x where
   证明: by rw [← subAt_pullSub S x]; gcongr
   mpr _ := le_trans (by gcongr) (pullSub_subAt T x)

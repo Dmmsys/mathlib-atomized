@@ -37,7 +37,7 @@ definition getNamesFrom
 
 中文:
 定义 getNamesFrom
-  签名: {m} [Monad m] [MonadEnv m] [MonadFileMap m] (pos : String.Pos.Raw)
+  签名: {m} [单子 m] [MonadEnv m] [MonadFileMap m] (pos : String.Pos.Raw)
   定义体: do
   -- declarations from parallelism branches should not be interesting here, so use `local`
   let drs := declRangeExt.toPersistentEnvExtension.getState (asyncMode := .local) (← getEnv)
@@ -77,7 +77,7 @@ definition getAliasSyntax
 
 中文:
 定义 getAliasSyntax
-  签名: {m} [Monad m] [MonadResolveName m] (stx : Syntax)
+  签名: {m} [单子 m] [MonadResolveName m] (stx : Syntax)
   定义体: do
   let mut aliases := #[]
   if let `(export $_ ($ids*)) := stx then
@@ -109,7 +109,7 @@ definition logLint0Disable
 
 中文:
 定义 logLint0Disable
-  签名: {m} [Monad m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
+  签名: {m} [单子 m] [MonadLog m] [AddMessageContext m] [MonadOptions m]
   定义体: let disable := .note m!"This linter can be disabled with `set_option {linterOption.name} 0`"
   logWarningAt stx (.tagged linterOption.name m!"{msg}{disable}")
 

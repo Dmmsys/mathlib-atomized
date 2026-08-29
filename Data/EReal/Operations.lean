@@ -394,7 +394,7 @@ theorem toReal_add
   rfl
 
 中文:
-定理 toReal_add
+定理 to实数_add
   条件: {x y : E实数} (hx : x != ⊤) (h'x : x != ⊥) (hy : y != ⊤) (h'y : y != ⊥)
   证明: by
   lift x to Real using ⟨hx, h'x⟩
@@ -420,7 +420,7 @@ lemma toENNReal_add
   simp_all [ENNReal.ofReal_add]
 
 中文:
-引理 toENNReal_add
+引理 toENN实数_add
   条件: {x y : E实数} (hx : 0 <= x) (hy : 0 <= y)
   证明: by
   induction x <;> induction y <;> try {· simp_all}
@@ -449,7 +449,7 @@ lemma toENNReal_add_le
   exact ENNReal.ofReal_add_le
 
 中文:
-引理 toENNReal_add_le
+引理 toENN实数_add_le
   条件: {x y : E实数}
   结论: (x + y).toENN实数 <= x.toENN实数 + y.toENN实数
   证明: by
@@ -777,7 +777,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg E实数
+  签名: 取负 E实数
   定义体: ⟨EReal.neg⟩
 
 Depends on / 依赖: EReal.neg
@@ -797,7 +797,7 @@ instance :
 
 中文:
 实例 :
-  签名: SubNegZeroMonoid E实数
+  签名: SubNegZero幺半群 E实数
   定义体: congr_arg Real.toEReal neg_zero
   zsmul := zsmulRec
 
@@ -947,7 +947,7 @@ theorem toReal_neg_eq
   statement: forall {a : EReal}, toReal (-a) = -toReal a
 
 中文:
-定理 toReal_neg_eq
+定理 to实数_neg_eq
   结论: 对任意 {a : E实数}, to实数 (-a) = -to实数 a
 -/
 theorem toReal_neg_eq : forall {a : EReal}, toReal (-a) = -toReal a
@@ -1038,7 +1038,7 @@ theorem neg_strictAnti
 
 中文:
 定理 neg_strictAnti
-  结论: StrictAnti (- · : E实数 -> E实数)
+  结论: 严格递减 (- · : E实数 -> E实数)
   证明: WithBot.strictAnti_iff.2 ⟨WithTop.strictAnti_iff.2
     ⟨coe_strictMono.comp_strictAnti fun _ _ => neg_lt_neg, fun _ => bot_lt_coe _⟩,
       WithTop.forall.2 ⟨bot_lt_top, fun _ => coe_lt_top _⟩⟩
@@ -1388,8 +1388,8 @@ H₂ ▸ neg_coe _ by positivity
 @[simp]
 
 中文:
-定义 recENNReal
-  签名: {motive : E实数 -> Sort*} (coe : 对任意 x : 实数>=0∞, motive x)
+定义 recENN实数
+  签名: {motive : E实数 -> 类型层*} (coe : 对任意 x : 实数>=0∞, motive x)
   定义体: if hx : 0 <= x then coe_toENNReal hx ▸ coe _
   else
     haveI H₁ : 0 < -x := by simpa using hx
@@ -1426,8 +1426,8 @@ theorem recENNReal_coe_ennreal
 proof_wanted recENNReal_neg_coe_ennreal {m
 
 中文:
-定理 recENNReal_coe_ennreal
-  结论: {motive : E实数 -> Sort*} (coe : 对任意 x : 实数>=0∞, motive x)
+定理 recENN实数_coe_ennreal
+  结论: {motive : E实数 -> 类型层*} (coe : 对任意 x : 实数>=0∞, motive x)
   证明: by
   suffices forall y : EReal, x = y -> (recENNReal coe neg_coe y : motive y) ≍ coe x from
     heq_iff_eq.mp (this x rfl)
@@ -1810,7 +1810,7 @@ theorem coe_real_ereal_eq_coe_toNNReal_sub_coe_toNNReal
   · rw [Real.toNNReal_of_nonpos h, ENNReal.coe_zero, coe_ennreal_zero, coe_n
 
 中文:
-定理 coe_real_ereal_eq_coe_toNNReal_sub_coe_toNNReal
+定理 coe_real_ereal_eq_coe_toNN实数_sub_coe_toNN实数
   条件: (x : 实数)
   证明: by
   rcases le_total 0 x with (h | h)
@@ -1843,7 +1843,7 @@ theorem toReal_sub
   rfl
 
 中文:
-定理 toReal_sub
+定理 to实数_sub
   条件: {x y : E实数} (hx : x != ⊤) (h'x : x != ⊥) (hy : y != ⊤) (h'y : y != ⊥)
   证明: by
   lift x to Real using ⟨hx, h'x⟩
@@ -1871,7 +1871,7 @@ lemma toENNReal_sub
   · r
 
 中文:
-引理 toENNReal_sub
+引理 toENN实数_sub
   条件: {x y : E实数} (hy : 0 <= y)
   证明: by
   induction x <;> induction y <;> try {· simp_all [zero_tsub, ENNReal.sub_top]}
@@ -2350,7 +2350,7 @@ lemma le_of_forall_lt_iff_le
   aesop
 
 中文:
-引理 le_of_forall_lt_iff_le
+引理 le_of_对任意_lt_iff_le
   条件: {x y : E实数}
   结论: (对任意 z : 实数, x < z -> y <= z) ↔ y <= x
   证明: by
@@ -2379,7 +2379,7 @@ lemma ge_of_forall_gt_iff_ge
   aesop
 
 中文:
-引理 ge_of_forall_gt_iff_ge
+引理 ge_of_对任意_gt_iff_ge
   条件: {x y : E实数}
   结论: (对任意 z : 实数, z < y -> z <= x) ↔ y <= x
   证明: by
@@ -2408,7 +2408,7 @@ lemma exists_lt_add_left
   exact hc ▸ (add_bot a).symm ▸ bot_le
 
 中文:
-引理 exists_lt_add_left
+引理 存在_lt_add_left
   条件: {a b c : E实数} (hc : c < a + b)
   结论: 存在 a' < a, c < a' + b
   证明: by
@@ -2434,7 +2434,7 @@ lemma exists_lt_add_right
   simp_rw [add_comm a] at hc ⊢; exact exists_lt_add_left hc
 
 中文:
-引理 exists_lt_add_right
+引理 存在_lt_add_right
   条件: {a b c : E实数} (hc : c < a + b)
   结论: 存在 b' < b, c < a + b'
   证明: by
@@ -2457,7 +2457,7 @@ lemma add_le_of_forall_lt
   exact hd.le.trans (h _ ha' _ hb')
 
 中文:
-引理 add_le_of_forall_lt
+引理 add_le_of_对任意_lt
   条件: {a b c : E实数} (h : 对任意 a' < a, 对任意 b' < b, a' + b' <= c)
   结论: a + b <= c
   证明: by
@@ -2487,7 +2487,7 @@ lemma le_add_of_forall_gt
   exact h _ (EReal.lt_neg_of_lt_neg ha') _ (EReal.lt_neg_of_lt_neg hb')
 
 中文:
-引理 le_add_of_forall_gt
+引理 le_add_of_对任意_gt
   结论: {a b c : E实数} (h₁ : a != ⊥ ∨ b != ⊤) (h₂ : a != ⊤ ∨ b != ⊥)
   证明: by
   rw [← neg_le_neg_iff]; rw [neg_add h₁ h₂]
@@ -2518,7 +2518,7 @@ lemma _root_.ENNReal.toEReal_sub
     simp only [coe_nnreal_eq_coe_real, ← ENNReal.coe_sub, NNReal.coe_sub (mod_cast h_le), coe_sub]
 
 中文:
-引理 _root_.ENNReal.toEReal_sub
+引理 _root_.广义非负实数.toE实数_sub
   条件: {x y : 实数>=0∞} (hy_top : y != ∞) (h_le : y <= x)
   证明: by
   lift y to Real>=0 using hy_top
@@ -2981,7 +2981,7 @@ lemma toReal_mul
   | pos_bot _ h => simp [co
 
 中文:
-引理 toReal_mul
+引理 to实数_mul
   条件: {x y : E实数}
   结论: to实数 (x * y) = to实数 x * to实数 y
   证明: by
@@ -3022,7 +3022,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors E实数
+  签名: 无零因子 E实数
   定义体: by
     intro a b h
     contrapose! h
@@ -3287,7 +3287,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg E实数
+  签名: 有DistribNeg E实数
   定义体: EReal.neg_mul
   mul_neg := fun x y => by
     rw [x.mul_comm]; rw [x.mul_comm]
@@ -3500,7 +3500,7 @@ lemma toENNReal_mul
     · simp_all [le_of_lt, top_mul_of_neg 
 
 中文:
-引理 toENNReal_mul
+引理 toENN实数_mul
   条件: {x y : E实数} (hx : 0 <= x)
   证明: by
   induction x <;> induction y
@@ -3537,7 +3537,7 @@ lemma toENNReal_mul'
   rw [EReal.mul_comm]; rw [toENNReal_mul hy]; rw [mul_comm]
 
 中文:
-引理 toENNReal_mul'
+引理 toENN实数_mul'
   条件: {x y : E实数} (hy : 0 <= y)
   证明: by
   rw [EReal.mul_comm]; rw [toENNReal_mul hy]; rw [mul_comm]

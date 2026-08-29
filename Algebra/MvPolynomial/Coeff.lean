@@ -162,7 +162,7 @@ lemma coeff_linearCombination_X_pow_of_fintype
 
 中文:
 引理 coeff_linearCombination_X_pow_of_fintype
-  条件: [Fintype σ] (a : σ -> R) (s : σ ->₀ 自然数) (n : 自然数)
+  条件: [有限类型 σ] (a : σ -> R) (s : σ ->₀ 自然数) (n : 自然数)
   证明: by
   rw [← ofSupportFinite_coe (f := a) (hf := Set.toFinite _)]; rw [prod_congr (fun r _ => rfl)]; rw [← coeff_linearCombination_X_pow]
   simp [linearCombination_apply, sum_of_support_subset (s := Finset.univ)]
@@ -187,7 +187,7 @@ lemma coeff_sum_X_pow_of_fintype
 
 中文:
 引理 coeff_sum_X_pow_of_fintype
-  条件: [Fintype σ] (d : σ ->₀ 自然数) (n : 自然数)
+  条件: [有限类型 σ] (d : σ ->₀ 自然数) (n : 自然数)
   证明: by
   have : (∑ i, X i : MvPolynomial σ R) = ∑ i, (1 : σ -> R) i • X i := by simp
   simp [this, coeff_linearCombination_X_pow_of_fintype]
@@ -217,7 +217,7 @@ theorem coeff_add_pow
 
 中文:
 定理 coeff_add_pow
-  条件: (d : Fin 2 ->₀ 自然数) (n : 自然数)
+  条件: (d : 有限集 2 ->₀ 自然数) (n : 自然数)
   证明: by
   rw [← Fin.sum_univ_two]; rw [coeff_sum_X_pow_of_fintype]
   congr 1
@@ -253,7 +253,7 @@ theorem monomial_fin_two
 
 中文:
 定理 monomial_fin_two
-  条件: (d : Fin 2 ->₀ 自然数) (a : R)
+  条件: (d : 有限集 2 ->₀ 自然数) (a : R)
   证明: by
   rw [monomial_eq]; rw [mul_assoc]; rw [d.prod_fintype _ fun _ => pow_zero _]; rw [Fin.prod_univ_two]
 

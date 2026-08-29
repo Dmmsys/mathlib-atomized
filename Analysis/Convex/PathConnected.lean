@@ -79,7 +79,7 @@ theorem range_segment
 中文:
 定理 range_segment
   条件: (a b : E)
-  结论: Set.range (Path.segment a b) = [a -[实数] b]
+  结论: 集合.range (道路.segment a b) = [a -[实数] b]
   证明: by
   rw [segment_eq_image_lineMap]; rw [image_eq_range]
   simp only [← segment_apply]
@@ -107,7 +107,7 @@ theorem segment_same
 中文:
 定理 segment_same
   条件: (a : E)
-  结论: Path.segment a a = .refl a
+  结论: 道路.segment a a = .refl a
   证明: by ext; simp
 
 @[simp]
@@ -130,7 +130,7 @@ theorem segment_symm
 中文:
 定理 segment_symm
   条件: (a b : E)
-  结论: (Path.segment a b).symm = .segment b a
+  结论: (道路.segment a b).symm = .segment b a
   证明: by
   ext; simp
 
@@ -244,7 +244,7 @@ theorem JoinedIn.of_segment_subset
 
 中文:
 定理 JoinedIn.of_segment_subset
-  条件: {x y : E} {s : Set E} (h : [x -[实数] y] subseteq s)
+  条件: {x y : E} {s : 集合 E} (h : [x -[实数] y] subseteq s)
   结论: JoinedIn s x y
   证明: by
   use .segment x y
@@ -266,7 +266,7 @@ theorem StarConvex.isPathConnected
 
 中文:
 定理 StarConvex.isPathConnected
-  结论: {s : Set E} {a : E} (h : StarConvex 实数 a s)
+  结论: {s : 集合 E} {a : E} (h : StarConvex 实数 a s)
   证明: ⟨a, ha, fun _y hy => .of_segment_subset h.segment_subset hy⟩
 -/
 protected theorem StarConvex.isPathConnected {s : Set E} {a : E} (h : StarConvex Real a s)
@@ -282,8 +282,8 @@ theorem Convex.isPathConnected
   proof: let ⟨_a, ha⟩ := hne; (hconv ha).isPathConnected ha
 
 中文:
-定理 Convex.isPathConnected
-  条件: {s : Set E} (hconv : Convex 实数 s) (hne : s.Nonempty)
+定理 凸.isPathConnected
+  条件: {s : 集合 E} (hconv : 凸 实数 s) (hne : s.非空)
   证明: let ⟨_a, ha⟩ := hne; (hconv ha).isPathConnected ha
 -/
 protected theorem Convex.isPathConnected {s : Set E} (hconv : Convex Real s) (hne : s.Nonempty) :
@@ -299,8 +299,8 @@ theorem Convex.isConnected
   proof: (h.isPathConnected hne).isConnected
 
 中文:
-定理 Convex.isConnected
-  条件: {s : Set E} (h : Convex 实数 s) (hne : s.Nonempty)
+定理 凸.isConnected
+  条件: {s : 集合 E} (h : 凸 实数 s) (hne : s.非空)
   证明: (h.isPathConnected hne).isConnected
 -/
 protected theorem Convex.isConnected {s : Set E} (h : Convex Real s) (hne : s.Nonempty) :
@@ -318,9 +318,9 @@ theorem Convex.isPreconnected
     (h.isConnected hne).isPreconnected
 
 中文:
-定理 Convex.isPreconnected
-  条件: {s : Set E} (h : Convex 实数 s)
-  结论: IsPreconnected s
+定理 凸.isPreconnected
+  条件: {s : 集合 E} (h : 凸 实数 s)
+  结论: 是预连通 s
   证明: s.eq_empty_or_nonempty.elim (fun h => h.symm ▸ isPreconnected_empty) fun hne =>
     (h.isConnected hne).isPreconnected
 -/
@@ -338,9 +338,9 @@ theorem Submodule.isPathConnected
   proof: s.convex.isPathConnected s.nonempty
 
 中文:
-定理 Submodule.isPathConnected
-  条件: (s : Submodule 实数 E)
-  结论: IsPathConnected (s : Set E)
+定理 子模.isPathConnected
+  条件: (s : 子模 实数 E)
+  结论: 是道路连通 (s : 集合 E)
   证明: s.convex.isPathConnected s.nonempty
 
 Depends on / 依赖: convex, isPathConnected, nonempty, s.convex.isPathConnected, s.nonempty
@@ -357,8 +357,8 @@ theorem IsTopologicalAddGroup.pathConnectedSpace
   proof: pathConnectedSpace_iff_univ.mpr convex_univ.isPathConnected ⟨(0 : E), trivial⟩
 
 中文:
-定理 IsTopologicalAddGroup.pathConnectedSpace
-  结论: PathConnectedSpace E
+定理 是拓扑加群.pathConnectedSpace
+  结论: 道路连通空间 E
   证明: pathConnectedSpace_iff_univ.mpr convex_univ.isPathConnected ⟨(0 : E), trivial⟩
 
 Depends on / 依赖: LinearIsometryEquiv, LinearIsometryEquiv.refl, ofRepr
@@ -383,7 +383,7 @@ theorem isPathConnected_compl_of_isPathConnected_compl_zero
 
 中文:
 定理 isPathConnected_compl_of_isPathConnected_compl_zero
-  结论: {p q : Submodule 实数 E}
+  结论: {p q : 子模 实数 E}
   证明: by
   convert (hpc.image continuous_subtype_val).add q.isPathConnected
   trans Submodule.prodEquivOfIsCompl p q hpq '' ({0}ᶜ ×ˢ univ)
@@ -424,7 +424,7 @@ theorem segment_image_Ico
 中文:
 定理 segment_image_Ico
   条件: {x y : 实数} (h : x < y)
-  结论: (Path.segment x y) '' Ico 0 1 = Ico x y
+  结论: (道路.segment x y) '' 左闭右开区间 0 1 = 左闭右开区间 x y
   证明: by
   simp_rw [Path.segment_apply, ← image_image _ Subtype.val (Ico 0 1)]
   simp only [lineMap_apply, vsub_eq_sub, smul_eq_mul, vadd_eq_add, image_subtype_val_Ico,
@@ -456,7 +456,7 @@ theorem segment_image_Ioc
 中文:
 定理 segment_image_Ioc
   条件: {x y : 实数} (h : x < y)
-  结论: (Path.segment x y) '' Ioc 0 1 = Ioc x y
+  结论: (道路.segment x y) '' 左开右闭区间 0 1 = 左开右闭区间 x y
   证明: by
   simp_rw [Path.segment_apply, ← image_image _ Subtype.val (Ioc 0 1)]
   simp only [lineMap_apply, vsub_eq_sub, smul_eq_mul, vadd_eq_add, image_subtype_val_Ioc,

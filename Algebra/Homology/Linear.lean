@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (X ⟶ Y)
+  签名: 标量乘法 R (X ⟶ Y)
   定义体: { f := fun n => r • f.f n }
 
 @[simp]
@@ -110,7 +110,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R (HomologicalComplex C c)
+  签名: 线性 R (同调复形 C c)
 -/
 instance : Linear R (HomologicalComplex C c) where
 
@@ -123,7 +123,7 @@ English:
 instance CategoryTheory.Functor.mapHomologicalComplex_linear
 
 中文:
-实例 CategoryTheory.Functor.mapHomologicalComplex_linear
+实例 范畴论.函子.mapHomologicalComplex_linear
 -/
 instance CategoryTheory.Functor.mapHomologicalComplex_linear
     (F : C ⥤ D) [F.Additive] [Functor.Linear R F] (c : ComplexShape ι) :

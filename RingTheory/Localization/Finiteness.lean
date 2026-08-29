@@ -61,8 +61,8 @@ theorem IsLocalization.smul_mem_finsetIntegerMultiple_span
   let y := IsLocalizatio
 
 中文:
-定理 IsLocalization.smul_mem_finsetIntegerMultiple_span
-  结论: [Algebra R S] [Algebra R S']
+定理 是Localization.smul_mem_finset整数egerMultiple_span
+  结论: [代数 R S] [代数 R S']
   证明: by
   let g : S ->ₐ[R] S' :=
     AlgHom.mk' (algebraMap S S') fun c x => by simp [Algebra.algebraMap_eq_smul_one]
@@ -174,7 +174,7 @@ theorem multiple_mem_adjoin_of_mem_localization_adjoin
 
 中文:
 定理 multiple_mem_adjoin_of_mem_localization_adjoin
-  结论: [Algebra R' S] [Algebra R S]
+  结论: [代数 R' S] [代数 R S]
   证明: by
   change exists t : M, t • x in Subalgebra.toSubmodule (Algebra.adjoin R s)
   change x in Subalgebra.toSubmodule (Algebra.adjoin R' s) at hx
@@ -220,7 +220,7 @@ lemma of_isLocalization
 
 中文:
 引理 of_isLocalization
-  结论: (R S) {Rₚ Sₚ : 类型} [CommSemiring R] [CommSemiring S]
+  结论: (R S) {Rₚ Sₚ : 类型} [交换半环 R] [交换半环 S]
   证明: by
   classical
   have : algebraMap Rₚ Sₚ = IsLocalization.map (T := Algebra.algebraMapSubmonoid S M) Sₚ
@@ -275,8 +275,8 @@ lemma of_isLocalizedModule
 
 中文:
 引理 of_isLocalizedModule
-  条件: [Module.Finite R M]
-  结论: Module.Finite Rₚ Mₚ
+  条件: [模.有限 R M]
+  结论: 模.有限 Rₚ Mₚ
   证明: by
   classical
   obtain ⟨T, hT⟩ := ‹Module.Finite R M›
@@ -300,8 +300,8 @@ instance [Module.Finite
   body: of_isLocalizedModule S (LocalizedModule.mkLinearMap S M)
 
 中文:
-实例 [Module.Finite
-  签名: R M] : Module.Finite (Localization S) (LocalizedModule S M)
+实例 [模.有限
+  签名: R M] : 模.有限 (Localization S) (LocalizedModule S M)
   定义体: of_isLocalizedModule S (LocalizedModule.mkLinearMap S M)
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, mkLinearMap, of_isLocalizedModule
@@ -332,7 +332,7 @@ theorem of_localizationSpan_finite'
 
 中文:
 定理 of_localizationSpan_finite'
-  结论: (t : Finset R) (ht : Ideal.span (t : Set R) = ⊤)
+  结论: (t : 有限集 R) (ht : 理想.span (t : 集合 R) = ⊤)
   证明: by
   classical
   constructor
@@ -392,7 +392,7 @@ theorem of_localizationSpan'
 
 中文:
 定理 of_localizationSpan'
-  结论: (t : Set R) (ht : Ideal.span t = ⊤)
+  结论: (t : 集合 R) (ht : 理想.span t = ⊤)
   证明: by
   rw [Ideal.span_eq_top_iff_finite] at ht
   obtain ⟨t', hc, ht'⟩ := ht
@@ -433,7 +433,7 @@ theorem of_localizationSpan_finite
 
 中文:
 定理 of_localizationSpan_finite
-  结论: (t : Finset R) (ht : Ideal.span (t : Set R) = ⊤)
+  结论: (t : 有限集 R) (ht : 理想.span (t : 集合 R) = ⊤)
   证明: let f (g : t) : M ->ₗ[R] LocalizedModule.Away g.val M :=
     LocalizedModule.mkLinearMap (Submonoid.powers g.val) M
   of_localizationSpan_finite' t ht f H
@@ -460,7 +460,7 @@ theorem of_localizationSpan
 
 中文:
 定理 of_localizationSpan
-  结论: (t : Set R) (ht : Ideal.span t = ⊤)
+  结论: (t : 集合 R) (ht : 理想.span t = ⊤)
   证明: let f (g : t) : M ->ₗ[R] LocalizedModule.Away g.val M :=
     LocalizedModule.mkLinearMap (Submonoid.powers g.val) M
   of_localizationSpan' t ht f H
@@ -497,7 +497,7 @@ lemma of_localizationSpan'
 
 中文:
 引理 of_localizationSpan'
-  结论: (s : Set R) (hs : Ideal.span (s : Set R) = ⊤)
+  结论: (s : 集合 R) (hs : 理想.span (s : 集合 R) = ⊤)
   证明: by
   simp [← Module.Finite.iff_fg, Module.Finite.of_localizationSpan' s hs
     (fun g => N.toLocalized' (Rₚ g) (Submonoid.powers g.1) (ϕ g))
@@ -527,7 +527,7 @@ lemma of_localizationSpan
 
 中文:
 引理 of_localizationSpan
-  结论: (s : Set R) (hs : Ideal.span (s : Set R) = ⊤)
+  结论: (s : 集合 R) (hs : 理想.span (s : 集合 R) = ⊤)
   证明: N.of_localizationSpan' s hs (fun g => LocalizedModule.mkLinearMap (Submonoid.powers g.1) M) H
 
 Depends on / 依赖: LocalizedModule, LocalizedModule.mkLinearMap, N.of_localizationSpan, Submonoid, Submonoid.powers, mkLinearMap, of_localizationSpan, powers
@@ -607,7 +607,7 @@ lemma fg_of_localizationSpan
 
 中文:
 引理 fg_of_localizationSpan
-  结论: {I : Ideal R} (t : Set R) (ht : Ideal.span t = ⊤)
+  结论: {I : 理想 R} (t : 集合 R) (ht : 理想.span t = ⊤)
   证明: by
   apply Module.Finite.iff_fg.mp
   let k (g : t) : I ->ₗ[R] (I.map (algebraMap R (Localization.Away g.val))) :=
@@ -640,8 +640,8 @@ lemma RingHom.ker_fg_of_localizationSpan
   exact H g
 
 中文:
-引理 RingHom.ker_fg_of_localizationSpan
-  结论: (t : Set R) (ht : Ideal.span t = ⊤)
+引理 环态射.ker_fg_of_localizationSpan
+  结论: (t : 集合 R) (ht : 理想.span t = ⊤)
   证明: by
   apply Ideal.fg_of_localizationSpan t ht
   intro g

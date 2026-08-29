@@ -57,10 +57,10 @@ class HasHomotopyCofiber
     - hasBinaryBiproduct((i j : ι) (hij : c.Rel i j)) : HasBinaryBiproduct (F.X j) (G.X i)
 
 中文:
-类 HasHomotopyCofiber
+类 有HomotopyCofiber
   参数: (φ : F ⟶ G)
   公理与运算 (1 个):
-    - hasBinaryBiproduct((i j : ι) (hij : c.Rel i j)) : HasBinaryBiproduct (F.X j) (G.X i)
+    - hasBinaryBiproduct((i j : ι) (hij : c.关系 i j)) : 有BinaryBiproduct (F.X j) (G.X i)
 -/
 class HasHomotopyCofiber (φ : F ⟶ G) : Prop where
   hasBinaryBiproduct (i j : ι) (hij : c.Rel i j) : HasBinaryBiproduct (F.X j) (G.X i)
@@ -74,8 +74,8 @@ instance [HasBinaryBiproducts
   body: inferInstance
 
 中文:
-实例 [HasBinaryBiproducts
-  签名: C] : HasHomotopyCofiber φ where
+实例 [有BinaryBiproducts
+  签名: C] : 有HomotopyCofiber φ where
   定义体: inferInstance
 -/
 instance [HasBinaryBiproducts C] : HasHomotopyCofiber φ where
@@ -127,7 +127,7 @@ definition XIsoBiprod
 
 中文:
 定义 XIsoBiprod
-  签名: (i j : ι) (hij : c.Rel i j) [HasBinaryBiproduct (F.X j) (G.X i)]
+  签名: (i j : ι) (hij : c.关系 i j) [有BinaryBiproduct (F.X j) (G.X i)]
   定义体: eqToIso (by
     obtain rfl := c.next_eq' hij
     apply dif_pos hij)
@@ -150,7 +150,7 @@ definition XIso
 
 中文:
 定义 XIso
-  签名: (i : ι) (hi : ¬ c.Rel i (c.next i))
+  签名: (i : ι) (hi : ¬ c.关系 i (c.next i))
   定义体: eqToIso (dif_neg hi)
 
 Depends on / 依赖: dif_neg, eqToIso
@@ -175,7 +175,7 @@ lemma isZero_X
 
 中文:
 引理 isZero_X
-  结论: (i : ι) (hG : IsZero (G.X i))
+  结论: (i : ι) (hG : 是零 (G.X i))
   证明: by
   by_cases h : c.Rel i (c.next i)
   · have := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ h
@@ -309,7 +309,7 @@ lemma sndX_inrX
 
 中文:
 引理 sndX_inrX
-  条件: (i : ι) (hi : ¬ c.Rel i (c.next i))
+  条件: (i : ι) (hi : ¬ c.关系 i (c.next i))
   证明: by
   dsimp [sndX, inrX]
   simp only [dif_neg hi, Iso.hom_inv_id]
@@ -332,7 +332,7 @@ definition fstX
 
 中文:
 定义 fstX
-  签名: (i j : ι) (hij : c.Rel i j)
+  签名: (i j : ι) (hij : c.关系 i j)
   定义体: haveI := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
   (XIsoBiprod φ i j hij).hom ≫ biprod.fst
 
@@ -355,7 +355,7 @@ definition inlX
 
 中文:
 定义 inlX
-  签名: (i j : ι) (hij : c.Rel j i)
+  签名: (i j : ι) (hij : c.关系 j i)
   定义体: haveI := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
   biprod.inl ≫ (XIsoBiprod φ j i hij).inv
 
@@ -381,7 +381,7 @@ lemma inlX_fstX
 
 中文:
 引理 inlX_fstX
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: by
   simp [inlX, fstX]
 
@@ -406,7 +406,7 @@ lemma inlX_sndX
 
 中文:
 引理 inlX_sndX
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: by
   obtain rfl := c.next_eq' hij
   simp [inlX, sndX, dif_pos hij]
@@ -435,7 +435,7 @@ lemma inrX_fstX
 
 中文:
 引理 inrX_fstX
-  条件: (i j : ι) (hij : c.Rel i j)
+  条件: (i j : ι) (hij : c.关系 i j)
   证明: by
   obtain rfl := c.next_eq' hij
   simp [inrX, fstX, dif_pos hij]
@@ -465,7 +465,7 @@ lemma inlX_XIsoBiprod_hom
 
 中文:
 引理 inlX_XIsoBiprod_hom
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
     inlX φ i j hij ≫ (XIsoBiprod φ j i hij).hom = biprod.inl := by
   have := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
@@ -496,7 +496,7 @@ lemma inl_XIsoBiprod_inv
 
 中文:
 引理 inl_XIsoBiprod_inv
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
     biprod.inl ≫ (XIsoBiprod φ j i hij).inv = inlX φ i j hij := by
   simp [inlX]
@@ -527,7 +527,7 @@ lemma inrX_XIsoBiprod_hom
 
 中文:
 引理 inrX_XIsoBiprod_hom
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
     inrX φ j ≫ (XIsoBiprod φ j i hij).hom = biprod.inr := by
   obtain rfl := c.next_eq' hij
@@ -558,7 +558,7 @@ lemma inr_XIsoBiprod_inv
 
 中文:
 引理 inr_XIsoBiprod_inv
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
     biprod.inr ≫ (XIsoBiprod φ j i hij).inv = inrX φ j := by
   rw [← inrX_XIsoBiprod_hom φ i j hij]; rw [Category.assoc]; rw [Iso.hom_inv_id]; rw [Category.comp_id]
@@ -619,7 +619,7 @@ lemma ext_to_X
 
 中文:
 引理 ext_to_X
-  结论: (i j : ι) (hij : c.Rel i j) {A : C} {f g : A ⟶ X φ i}
+  结论: (i j : ι) (hij : c.关系 i j) {A : C} {f g : A ⟶ X φ i}
   证明: by
   have := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
   rw [← cancel_mono (XIsoBiprod φ i j hij).hom]
@@ -652,7 +652,7 @@ lemma ext_to_X'
 
 中文:
 引理 ext_to_X'
-  结论: (i : ι) (hi : ¬ c.Rel i (c.next i)) {A : C} {f g : A ⟶ X φ i}
+  结论: (i : ι) (hi : ¬ c.关系 i (c.next i)) {A : C} {f g : A ⟶ X φ i}
   证明: by
   rw [← cancel_mono (XIso φ i hi).hom]
   simpa only [sndX, dif_neg hi] using h
@@ -680,7 +680,7 @@ lemma ext_from_X
 
 中文:
 引理 ext_from_X
-  结论: (i j : ι) (hij : c.Rel j i) {A : C} {f g : X φ j ⟶ A}
+  结论: (i j : ι) (hij : c.关系 j i) {A : C} {f g : X φ j ⟶ A}
   证明: by
   have := HasHomotopyCofiber.hasBinaryBiproduct φ _ _ hij
   rw [← cancel_epi (XIsoBiprod φ j i hij).inv]
@@ -715,7 +715,7 @@ lemma ext_from_X'
 
 中文:
 引理 ext_from_X'
-  结论: (i : ι) (hi : ¬ c.Rel i (c.next i)) {A : C} {f g : X φ i ⟶ A}
+  结论: (i : ι) (hi : ¬ c.关系 i (c.next i)) {A : C} {f g : X φ i ⟶ A}
   证明: by
   rw [← cancel_epi (XIso φ i hi).inv]
   simpa only [inrX, dif_neg hi] using h
@@ -744,7 +744,7 @@ lemma d_fstX
 
 中文:
 引理 d_fstX
-  条件: (i j k : ι) (hij : c.Rel i j) (hjk : c.Rel j k)
+  条件: (i j k : ι) (hij : c.关系 i j) (hjk : c.关系 j k)
   证明: by
   obtain rfl := c.next_eq' hjk
   simp [d, dif_pos hij, dif_pos hjk]
@@ -773,7 +773,7 @@ lemma d_sndX
 
 中文:
 引理 d_sndX
-  条件: (i j : ι) (hij : c.Rel i j)
+  条件: (i j : ι) (hij : c.关系 i j)
   证明: by
   dsimp [d]
   split_ifs with hij <;> simp
@@ -803,7 +803,7 @@ lemma inlX_d
 
 中文:
 引理 inlX_d
-  条件: (i j k : ι) (hij : c.Rel i j) (hjk : c.Rel j k)
+  条件: (i j k : ι) (hij : c.关系 i j) (hjk : c.关系 j k)
   证明: by
   apply ext_to_X φ j k hjk
   · simp [d_fstX φ _ _ _ hij hjk]
@@ -832,7 +832,7 @@ lemma inlX_d'
 
 中文:
 引理 inlX_d'
-  条件: (i j : ι) (hij : c.Rel i j) (hj : ¬ c.Rel j (c.next j))
+  条件: (i j : ι) (hij : c.关系 i j) (hj : ¬ c.关系 j (c.next j))
   证明: by
   apply ext_to_X' _ _ hj
   simp [d_sndX φ i j hij]
@@ -856,7 +856,7 @@ lemma shape
 
 中文:
 引理 shape
-  条件: (i j : ι) (hij : ¬ c.Rel i j)
+  条件: (i j : ι) (hij : ¬ c.关系 i j)
   证明: dif_neg hij
 
 @[reassoc (attr := simp)]
@@ -931,7 +931,7 @@ definition homotopyCofiber
 
 中文:
 定义 homotopyCofiber
-  签名: : HomologicalComplex C c where
+  签名: : 同调复形 C c where
   定义体: homotopyCofiber.X φ i
   d i j := homotopyCofiber.d φ i j
   shape i j hij := homotopyCofiber.shape φ i j hij
@@ -996,7 +996,7 @@ definition inrCompHomotopy
 
 中文:
 定义 inrCompHomotopy
-  签名: (hc : 对任意 j, 存在 i, c.Rel i j)
+  签名: (hc : 对任意 j, 存在 i, c.关系 i j)
   定义体: if hij : c.Rel j i then inlX φ i j hij else 0
   zero _ _ hij := dif_neg hij
   comm j := by
@@ -1035,7 +1035,7 @@ lemma inrCompHomotopy_hom
 
 中文:
 引理 inrCompHomotopy_hom
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: dif_pos hij
 
 Depends on / 依赖: dif_pos
@@ -1053,7 +1053,7 @@ lemma inrCompHomotopy_hom_eq_zero
 
 中文:
 引理 inrCompHomotopy_hom_eq_zero
-  条件: (i j : ι) (hij : ¬ c.Rel j i)
+  条件: (i j : ι) (hij : ¬ c.关系 j i)
   证明: dif_neg hij
 
 Depends on / 依赖: dif_neg
@@ -1128,7 +1128,7 @@ lemma desc_f
 
 中文:
 引理 desc_f
-  条件: (j k : ι) (hjk : c.Rel j k)
+  条件: (j k : ι) (hjk : c.关系 j k)
   证明: by
   obtain rfl := c.next_eq' hjk
   apply dif_pos hjk
@@ -1151,7 +1151,7 @@ lemma desc_f'
 
 中文:
 引理 desc_f'
-  条件: (j : ι) (hj : ¬ c.Rel j (c.next j))
+  条件: (j : ι) (hj : ¬ c.关系 j (c.next j))
   证明: by
   apply dif_neg hj
 
@@ -1176,7 +1176,7 @@ lemma inlX_desc_f
 
 中文:
 引理 inlX_desc_f
-  条件: (i j : ι) (hjk : c.Rel j i)
+  条件: (i j : ι) (hjk : c.关系 j i)
   证明: by
   obtain rfl := c.next_eq' hjk
   dsimp [desc]
@@ -1251,7 +1251,7 @@ lemma inrCompHomotopy_hom_desc_hom
 
 中文:
 引理 inrCompHomotopy_hom_desc_hom
-  条件: (hc : 对任意 j, 存在 i, c.Rel i j) (i j : ι)
+  条件: (hc : 对任意 j, 存在 i, c.关系 i j) (i j : ι)
   证明: by
   by_cases hij : c.Rel j i
   · dsimp
@@ -1287,7 +1287,7 @@ lemma eq_desc
 
 中文:
 引理 eq_desc
-  条件: (f : homotopyCofiber φ ⟶ K) (hc : 对任意 j, 存在 i, c.Rel i j)
+  条件: (f : homotopyCofiber φ ⟶ K) (hc : 对任意 j, 存在 i, c.关系 i j)
   证明: by
   ext j
   by_cases hj : c.Rel j (c.next j)
@@ -1334,7 +1334,7 @@ lemma descSigma_ext_iff
 
 中文:
 引理 descSigma_ext_iff
-  结论: {φ : F ⟶ G} {K : HomologicalComplex C c}
+  结论: {φ : F ⟶ G} {K : 同调复形 C c}
   证明: by
   constructor
   · rintro rfl
@@ -1381,7 +1381,7 @@ definition descEquiv
 
 中文:
 定义 descEquiv
-  签名: (K : HomologicalComplex C c) (hc : 对任意 j, 存在 i, c.Rel i j)
+  签名: (K : 同调复形 C c) (hc : 对任意 j, 存在 i, c.关系 i j)
   定义体: fun ⟨α, hα⟩ => desc φ α hα
   invFun f := ⟨inr φ ≫ f, Homotopy.trans (Homotopy.ofEq (by simp))
     (((inrCompHomotopy φ hc).compRight f).trans (Homotopy.ofEq (by simp)))⟩
@@ -1420,7 +1420,7 @@ definition mapArrowHom
 
 中文:
 定义 mapArrowHom
-  签名: (α : Arrow.mk φ ⟶ Arrow.mk φ')
+  签名: (α : 箭头.mk φ ⟶ 箭头.mk φ')
   定义体: desc _ (α.right ≫ homotopyCofiber.inr φ')
     ((Homotopy.ofEq (by
         simp [reassoc_of% dsimp% α.w])).trans (((inrCompHomotopy φ' H).compLeft α.left).trans
@@ -1527,7 +1527,7 @@ definition mapArrowIso
 
 中文:
 定义 mapArrowIso
-  签名: (α : Arrow.mk φ ≅ Arrow.mk φ')
+  签名: (α : 箭头.mk φ ≅ 箭头.mk φ')
   定义体: mapArrowHom φ φ' H α.hom
   inv := mapArrowHom φ' φ H α.inv
   hom_inv_id := by rw [← mapArrowHom_comp, Iso.hom_inv_id, mapArrowHom_id]
@@ -1962,7 +1962,7 @@ abbreviation inlX
 
 中文:
 缩写 inlX
-  签名: (i j : ι) (hij : c.Rel j i)
+  签名: (i j : ι) (hij : c.关系 j i)
   定义体: homotopyCofiber.inlX (biprod.lift (𝟙 K) (-𝟙 K)) i j hij
 
 Depends on / 依赖: RightHomologyMapData, RightHomologyMapData.neg_, biprod, biprod.lift, homotopyCofiber, homotopyCofiber.inlX, neg.rightHomologyMap, rightHomologyMap
@@ -2003,7 +2003,7 @@ lemma inlX_π
 
 中文:
 引理 inlX_π
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: by
   simp [HomologicalComplex.cylinder.π, HomologicalComplex.cylinder.desc, Homotopy.equivSubZero]
 
@@ -2075,7 +2075,7 @@ definition nullHomotopy
 
 中文:
 定义 nullHomotopy
-  签名: : Homotopy (nullHomotopicMap K) 0
+  签名: : 同伦 (nullHomotopicMap K) 0
   定义体: Homotopy.nullHomotopy' _
 
 Depends on / 依赖: Homotopy, Homotopy.nullHomotopy, _add, _neg, nullHomotopy, opcyclesMap, sub_eq_add_neg
@@ -2100,7 +2100,7 @@ lemma inlX_nullHomotopy_f
 
 中文:
 引理 inlX_nullHomotopy_f
-  条件: (i j : ι) (hij : c.Rel j i)
+  条件: (i j : ι) (hij : c.关系 j i)
   证明: by
   dsimp [nullHomotopicMap]
   by_cases! hj : exists (k : ι), c.Rel k j
@@ -2234,7 +2234,7 @@ definition πCompι₀Homotopy
 
 中文:
 定义 πCompι₀Homotopy
-  签名: : Homotopy (π K ≫ ι₀ K) (𝟙 K.cylinder)
+  签名: : 同伦 (π K ≫ ι₀ K) (𝟙 K.cylinder)
   定义体: Homotopy.equivSubZero.symm
     ((Homotopy.ofEq (πCompι₀Homotopy.nullHomotopicMap_eq K hc).symm).trans
       (πCompι₀Homotopy.nullHomotopy K))
@@ -2261,7 +2261,7 @@ definition homotopyEquiv
 
 中文:
 定义 homotopyEquiv
-  签名: : HomotopyEquiv K.cylinder K where
+  签名: : 同伦等价 K.cylinder K where
   定义体: π K
   inv := ι₀ K
   homotopyHomInvId := πCompι₀Homotopy K hc
@@ -2286,7 +2286,7 @@ include hc in
 
 中文:
 定义 homotopy₀₁
-  签名: : Homotopy (ι₀ K) (ι₁ K)
+  签名: : 同伦 (ι₀ K) (ι₁ K)
   定义体: (Homotopy.ofEq (by simp)).trans (((πCompι₀Homotopy K hc).compLeft (ι₁ K)).trans
     (Homotopy.ofEq (by simp)))
 
@@ -2311,7 +2311,7 @@ lemma map_ι₀_eq_map_ι₁
 
 中文:
 引理 map_ι₀_eq_map_ι₁
-  结论: {D : 类型} [Category* D] (H : HomologicalComplex C c ⥤ D)
+  结论: {D : 类型} [范畴* D] (H : 同调复形 C c ⥤ D)
   证明: by
   have : IsIso (H.map (cylinder.π K)) := hH _ ⟨homotopyEquiv K hc, rfl⟩
   simp only [← cancel_mono (H.map (cylinder.π K)), ← H.map_comp, ι₀_π, H.map_id, ι₁_π]
@@ -2449,7 +2449,7 @@ lemma _root_.Homotopy.map_eq_of_inverts_homotopyEquivalences
     cylinder.map_ι₀_eq_map_ι₁ _ hc _ hH]
 
 中文:
-引理 _root_.Homotopy.map_eq_of_inverts_homotopyEquivalences
+引理 _root_.同伦.map_eq_of_inverts_homotopyEquivalences
   证明: by
   classical
   simp only [← cylinder.ι₀_desc _ _ h, ← cylinder.ι₁_desc _ _ h, H.map_comp,

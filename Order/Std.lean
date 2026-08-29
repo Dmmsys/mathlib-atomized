@@ -66,7 +66,7 @@ structure Preorder.OfStdArgs
     - isPreorder : let  [default: le Std.IsPreorder α := by extract_lets first | infer_instanc]
 
 中文:
-结构 Preorder.OfStdArgs
+结构 预序.OfStdArgs
   参数: (α : 类型)
   公理与运算 (4 个):
     - le : LE α  [默认: by first | infer_instance | exact LE.ofOrd _ | fail "failed ]
@@ -137,7 +137,7 @@ definition Preorder.ofStd
   lt_iff_le_not_ge := args.lawfulOrderLT.lt_iff
 
 中文:
-定义 Preorder.ofStd
+定义 预序.ofStd
   签名: (α : 类型) (args : OfStdArgs α := by exact {})
   定义体: args.le
   toLT := args.lt
@@ -165,9 +165,9 @@ structure PartialOrder.OfStdArgs
     - isPartialOrder : let  [default: le Std.IsPartialOrder α := by extract_lets first | infer_ins]
 
 中文:
-结构 PartialOrder.OfStdArgs
+结构 偏序.OfStdArgs
   参数: (α : 类型)
-  继承: toPreorderArgs : Preorder.OfStdArgs α
+  继承: toPreorderArgs : 预序.OfStdArgs α
   公理与运算 (1 个):
     - isPartialOrder : let  [默认: le Std.IsPartialOrder α := by extract_lets first | infer_ins]
 -/
@@ -205,7 +205,7 @@ definition PartialOrder.ofStd
   le_antisymm := args.isPartialOrder.le_antisymm
 
 中文:
-定义 PartialOrder.ofStd
+定义 偏序.ofStd
   签名: (α : 类型) (args : OfStdArgs α := by exact {})
   定义体: .ofStd α args.toPreorderArgs
   le_antisymm := args.isPartialOrder.le_antisymm
@@ -271,7 +271,7 @@ structure LinearOrder.OfStdArgs
     - lawfulOrderOrd : let  [default: le; let := lt; let := lawfulOrderLT; let := isLinearOrder le]
 
 中文:
-结构 LinearOrder.OfStdArgs
+结构 线性序.OfStdArgs
   参数: (α : 类型)
   公理与运算 (10 个):
     - isLinearOrder : let  [默认: le Std.IsLinearOrder α := by extract_lets first | infer_inst]
@@ -404,7 +404,7 @@ definition LinearOrder.ofStd
    
 
 中文:
-定义 LinearOrder.ofStd
+定义 线性序.ofStd
   签名: (α : 类型) (args : OfStdArgs α := by exact {})
   定义体: let := args.le
   let := args.lt

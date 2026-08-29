@@ -34,7 +34,7 @@ lemma dvd_smul_of_dvd
 
 中文:
 引理 dvd_smul_of_dvd
-  结论: {M : 类型} [SMul M R] [Semigroup R] [SMulCommClass M R R] {x y : R}
+  结论: {M : 类型} [标量乘法 M R] [半群 R] [标量交换类 M R R] {x y : R}
   证明: let ⟨k, hk⟩ := h; ⟨m • k, by rw [mul_smul_comm, ← hk]⟩
 
 Depends on / 依赖: mul_smul_comm
@@ -54,7 +54,7 @@ lemma dvd_nsmul_of_dvd
 
 中文:
 引理 dvd_nsmul_of_dvd
-  条件: [NonUnitalSemiring R] {x y : R} (n : 自然数) (h : x ∣ y)
+  条件: [非幺半环 R] {x y : R} (n : 自然数) (h : x ∣ y)
   结论: x ∣ n • y
   证明: dvd_smul_of_dvd n h
 
@@ -74,7 +74,7 @@ lemma dvd_zsmul_of_dvd
 
 中文:
 引理 dvd_zsmul_of_dvd
-  条件: [NonUnitalRing R] {x y : R} (z : 整数) (h : x ∣ y)
+  条件: [非幺环 R] {x y : R} (z : 整数) (h : x ∣ y)
   结论: x ∣ z • y
   证明: dvd_smul_of_dvd z h
 
@@ -366,7 +366,7 @@ lemma dvd_mul_sub_mul_mul_gcd_of_dvd
 
 中文:
 引理 dvd_mul_sub_mul_mul_gcd_of_dvd
-  结论: {p a b c d x y : R} [GCDMonoid R]
+  结论: {p a b c d x y : R} [最大公约数幺半群 R]
   证明: by
   rw [← (gcd_mul_left' (a * d - b * c) x y).dvd_iff_dvd_right]
   exact (dvd_gcd_iff _ _ _).2 ⟨dvd_mul_sub_mul_mul_left_of_dvd h1 h2,

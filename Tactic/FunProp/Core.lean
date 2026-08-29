@@ -91,7 +91,7 @@ definition synthesizeArgs
 
 中文:
 定义 synthesizeArgs
-  签名: (thmId : Origin) (xs : Array Expr)
+  签名: (thmId : Origin) (xs : 数组 Expr)
   定义体: do
   let mut postponed : Array Expr := #[]
   for x in xs do
@@ -191,7 +191,7 @@ definition tryTheoremCore
 
 中文:
 定义 tryTheoremCore
-  签名: (xs : Array Expr) (val : Expr) (type : Expr) (e : Expr)
+  签名: (xs : 数组 Expr) (val : Expr) (type : Expr) (e : Expr)
   定义体: do
   withTraceNode `Meta.Tactic.fun_prop
     (fun _ => return s!"applying: {← ppOrigin' thmId}") do
@@ -303,7 +303,7 @@ definition tryTheorem?
 
 中文:
 定义 tryTheorem?
-  签名: (e : Expr) (thmOrigin : Origin) (fun命题 : Expr -> Fun命题M (Option Result))
+  签名: (e : Expr) (thmOrigin : Origin) (funProp : Expr -> FunPropM (选项类型 Result))
   定义体: tryTheoremWithHint? e thmOrigin #[] funProp newMCtxDepth
 
 Depends on / 依赖: FunPropM, Result
@@ -332,7 +332,7 @@ definition applyIdRule
 
 中文:
 定义 applyIdRule
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr)
+  签名: (funPropDecl : FunPropDecl) (e : Expr)
   定义体: do
   let thms ← getLambdaTheorems funPropDecl.funPropName .id
   if thms.size = 0 then
@@ -378,7 +378,7 @@ definition applyConstRule
 
 中文:
 定义 applyConstRule
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr)
+  签名: (funPropDecl : FunPropDecl) (e : Expr)
   定义体: do
   let thms ← getLambdaTheorems funPropDecl.funPropName .const
   if thms.size = 0 then
@@ -421,7 +421,7 @@ definition applyApplyRule
 
 中文:
 定义 applyApplyRule
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr)
+  签名: (funPropDecl : FunPropDecl) (e : Expr)
   定义体: do
   let thms := (← getLambdaTheorems funPropDecl.funPropName .apply)
   for thm in thms do
@@ -459,7 +459,7 @@ definition applyCompRule
 
 中文:
 定义 applyCompRule
-  签名: (fun命题Decl : Fun命题Decl) (e f g : Expr)
+  签名: (funPropDecl : FunPropDecl) (e f g : Expr)
   定义体: do
 
   let thms ← getLambdaTheorems funPropDecl.funPropName .comp
@@ -509,7 +509,7 @@ definition applyPiRule
 
 中文:
 定义 applyPiRule
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr)
+  签名: (funPropDecl : FunPropDecl) (e : Expr)
   定义体: do
 
   let thms ← getLambdaTheorems funPropDecl.funPropName .pi
@@ -556,7 +556,7 @@ definition letCase
 
 中文:
 定义 letCase
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (f : Expr)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (f : Expr)
   定义体: do
   match f with
   | .lam xName xType (.letE yName yType yValue yBody _) xBi => do
@@ -626,7 +626,7 @@ definition applyMorRules
 
 中文:
 定义 applyMorRules
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
   trace[Debug.Meta.Tactic.fun_prop] "applying morphism theorems to {← ppExpr e}"
 
@@ -684,7 +684,7 @@ definition applyTransitionRules
 
 中文:
 定义 applyTransitionRules
-  签名: (e : Expr) (fun命题 : Expr -> Fun命题M (Option Result))
+  签名: (e : Expr) (funProp : Expr -> FunPropM (选项类型 Result))
   定义体: do
   withIncreasedTransitionDepth do
 
@@ -732,7 +732,7 @@ definition removeArgRule
 
 中文:
 定义 removeArgRule
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
 
   match h : fData.args.size with
@@ -779,7 +779,7 @@ definition bvarAppCase
 
 中文:
 定义 bvarAppCase
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
 
   if (← fData.isMorApplication) != .none then
@@ -819,7 +819,7 @@ definition getDeclTheorems
 
 中文:
 定义 getDeclTheorems
-  签名: (fun命题Decl : Fun命题Decl) (funName : Name)
+  签名: (funPropDecl : FunPropDecl) (funName : Name)
   定义体: do
 
   let thms ← getTheoremsForFunction funName funPropDecl.funPropName
@@ -867,7 +867,7 @@ definition getLocalTheorems
 
 中文:
 定义 getLocalTheorems
-  签名: (fun命题Decl : Fun命题Decl) (funOrigin : Origin)
+  签名: (funPropDecl : FunPropDecl) (funOrigin : Origin)
   定义体: do
 
   let mut thms : Array FunctionTheorem := #[]
@@ -950,7 +950,7 @@ definition tryTheorems
 
 中文:
 定义 tryTheorems
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
 
   -- none - decomposition not tried
@@ -1036,7 +1036,7 @@ definition fvarAppCase
 
 中文:
 定义 fvarAppCase
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
 
   -- fvar theorems are almost exclusively in uncurried form so we decompose if we can
@@ -1097,7 +1097,7 @@ definition constAppCase
 
 中文:
 定义 constAppCase
-  签名: (fun命题Decl : Fun命题Decl) (e : Expr) (fData : FunctionData)
+  签名: (funPropDecl : FunPropDecl) (e : Expr) (fData : FunctionData)
   定义体: do
 
   let some (funName, _) := fData.fn.const?

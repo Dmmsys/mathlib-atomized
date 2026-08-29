@@ -68,7 +68,7 @@ theorem find?_coe
 
 中文:
 定理 find?_coe
-  条件: (l : List α) (hp)
+  条件: (l : 列表 α) (hp)
   证明: rfl
 -/
 theorem find?_coe (l : List α) (hp) :

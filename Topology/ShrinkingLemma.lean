@@ -56,11 +56,11 @@ structure PartialRefinement
 
 中文:
 结构 PartialRefinement
-  参数: (u : ι -> Set X) (s : Set X) (p : Set X -> 命题)
+  参数: (u : ι -> 集合 X) (s : 集合 X) (p : 集合 X -> 命题)
   公理与运算 (7 个):
-    - toFun : ι -> Set X
-    - carrier : Set ι
-    - isOpen : 对任意 i, IsOpen (toFun i)
+    - toFun : ι -> 集合 X
+    - carrier : 集合 ι
+    - isOpen : 对任意 i, 是开集 (toFun i)
     - subset_iUnion : s subseteq ⋃ i, toFun i
     - closure_subset : 对任意 {i}, i in carrier -> closure (toFun i) subseteq u i
     - pred_of_mem({i} (hi : i in carrier)) : p (toFun i)
@@ -96,7 +96,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (PartialRefinement u s p) fun _ => ι -> Set X
+  签名: CoeFun (PartialRefinement u s p) fun _ => ι -> 集合 X
   定义体: ⟨toFun⟩
 -/
 instance : CoeFun (PartialRefinement u s p) fun _ => ι -> Set X := ⟨toFun⟩
@@ -140,7 +140,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (PartialRefinement u s p)
+  签名: 偏序 (PartialRefinement u s p)
   定义体: v₁.carrier subseteq v₂.carrier ∧ forall i in v₁.carrier, v₁ i = v₂ i
   le_refl _ := ⟨Subset.refl _, fun _ _ => rfl⟩
   le_trans _ _ _ h₁₂ h₂₃ :=
@@ -173,7 +173,7 @@ theorem apply_eq_of_chain
 
 中文:
 定理 apply_eq_of_chain
-  结论: {c : Set (PartialRefinement u s p)} (hc : IsChain (· <= ·) c) {v₁ v₂}
+  结论: {c : 集合 (PartialRefinement u s p)} (hc : IsChain (· <= ·) c) {v₁ v₂}
   证明: (hc.total h₁ h₂).elim (fun hle => hle.2 _ hi₁) (fun hle => (hle.2 _ hi₂).symm)
 
 Depends on / 依赖: hc.total
@@ -193,7 +193,7 @@ definition chainSupCarrier
 
 中文:
 定义 chainSupCarrier
-  签名: (c : Set (PartialRefinement u s p))
+  签名: (c : 集合 (PartialRefinement u s p))
   定义体: ⋃ v in c, carrier v
 
 Depends on / 依赖: carrier
@@ -212,7 +212,7 @@ definition find
 
 中文:
 定义 find
-  签名: (c : Set (PartialRefinement u s p)) (ne : c.Nonempty) (i : ι)
+  签名: (c : 集合 (PartialRefinement u s p)) (ne : c.非空) (i : ι)
   定义体: if hi : exists v in c, i in carrier v then hi.choose else ne.some
 
 Depends on / 依赖: carrier, hi.choose, ne.some
@@ -233,7 +233,7 @@ theorem find_mem
 
 中文:
 定理 find_mem
-  条件: {c : Set (PartialRefinement u s p)} (i : ι) (ne : c.Nonempty)
+  条件: {c : 集合 (PartialRefinement u s p)} (i : ι) (ne : c.非空)
   证明: by
   rw [find]
   split_ifs with h
@@ -264,7 +264,7 @@ theorem mem_find_carrier_iff
 
 中文:
 定理 mem_find_carrier_iff
-  条件: {c : Set (PartialRefinement u s p)} {i : ι} (ne : c.Nonempty)
+  条件: {c : 集合 (PartialRefinement u s p)} {i : ι} (ne : c.非空)
   证明: by
   rw [find]
   split_ifs with h
@@ -297,7 +297,7 @@ theorem find_apply_of_mem
 
 中文:
 定理 find_apply_of_mem
-  结论: {c : Set (PartialRefinement u s p)} (hc : IsChain (· <= ·) c)
+  结论: {c : 集合 (PartialRefinement u s p)} (hc : IsChain (· <= ·) c)
   证明: apply_eq_of_chain hc (find_mem _ _) hv ((mem_find_carrier_iff _).2 <| mem_iUnion₂.2 ⟨v, hv, hi⟩)
     hi
 
@@ -325,7 +325,7 @@ subset_iUnion x hxs := mem_iUnion.2 by
 
 中文:
 定义 chainSup
-  签名: (c : Set (PartialRefinement u s p)) (hc : IsChain (· <= ·) c) (ne : c.Nonempty)
+  签名: (c : 集合 (PartialRefinement u s p)) (hc : IsChain (· <= ·) c) (ne : c.非空)
   定义体: find c ne i i
   carrier := chainSupCarrier c
   isOpen i := (find _ _ _).isOpen i
@@ -372,7 +372,7 @@ theorem le_chainSup
 
 中文:
 定理 le_chainSup
-  结论: {c : Set (PartialRefinement u s p)} (hc : IsChain (· <= ·) c) (ne : c.Nonempty)
+  结论: {c : 集合 (PartialRefinement u s p)} (hc : IsChain (· <= ·) c) (ne : c.非空)
   证明: ⟨fun _ hi => mem_biUnion hv hi, fun _ hi => (find_apply_of_mem hc _ hv hi).symm⟩
 
 Depends on / 依赖: find_apply_of_mem, mem_biUnion
@@ -397,8 +397,8 @@ theorem exists_gt
   have C : IsClosed
 
 中文:
-定理 exists_gt
-  结论: [NormalSpace X] (v : PartialRefinement u s ⊤) (hs : IsClosed s)
+定理 存在_gt
+  结论: [正规空间 X] (v : PartialRefinement u s ⊤) (hs : 是闭集 s)
   证明: by
   have I : (s inter ⋂ (j) (_ : j != i), (v j)ᶜ) subseteq v i := by
     simp only [subset_def, mem_inter_iff, mem_iInter, and_imp]
@@ -468,8 +468,8 @@ theorem exists_subset_iUnion_closure_subset
     fun c hc ne => ⟨.chainSup c hc ne uf us, fun v hv => Part
 
 中文:
-定理 exists_subset_iUnion_closure_subset
-  结论: (hs : IsClosed s) (uo : 对任意 i, IsOpen (u i))
+定理 存在_subset_iUnion_closure_subset
+  结论: (hs : 是闭集 s) (uo : 对任意 i, 是开集 (u i))
   证明: by
   have : Nonempty (PartialRefinement u s ⊤) :=
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
@@ -505,8 +505,8 @@ theorem exists_subset_iUnion_closed_subset
     fun _ => isClosed_closure, hv⟩
 
 中文:
-定理 exists_subset_iUnion_closed_subset
-  结论: (hs : IsClosed s) (uo : 对任意 i, IsOpen (u i))
+定理 存在_subset_iUnion_closed_subset
+  结论: (hs : 是闭集 s) (uo : 对任意 i, 是开集 (u i))
   证明: let ⟨v, hsv, _, hv⟩ := exists_subset_iUnion_closure_subset hs uo uf us
   ⟨fun i => closure (v i), Subset.trans hsv (iUnion_mono fun _ => subset_closure),
     fun _ => isClosed_closure, hv⟩
@@ -530,8 +530,8 @@ theorem exists_iUnion_eq_closure_subset
   ⟨v, univ_subset_iff.1 vU, hv⟩
 
 中文:
-定理 exists_iUnion_eq_closure_subset
-  结论: (uo : 对任意 i, IsOpen (u i)) (uf : 对任意 x, { i | x in u i }.Finite)
+定理 存在_iUnion_eq_closure_subset
+  结论: (uo : 对任意 i, 是开集 (u i)) (uf : 对任意 x, { i | x in u i }.有限)
   证明: let ⟨v, vU, hv⟩ := exists_subset_iUnion_closure_subset isClosed_univ uo (fun x _ => uf x) uU.ge
   ⟨v, univ_subset_iff.1 vU, hv⟩
 
@@ -553,8 +553,8 @@ theorem exists_iUnion_eq_closed_subset
   ⟨v, univ_subset_iff.1 vU, hv⟩
 
 中文:
-定理 exists_iUnion_eq_closed_subset
-  结论: (uo : 对任意 i, IsOpen (u i)) (uf : 对任意 x, { i | x in u i }.Finite)
+定理 存在_iUnion_eq_closed_subset
+  结论: (uo : 对任意 i, 是开集 (u i)) (uf : 对任意 x, { i | x in u i }.有限)
   证明: let ⟨v, vU, hv⟩ := exists_subset_iUnion_closed_subset isClosed_univ uo (fun x _ => uf x) uU.ge
   ⟨v, univ_subset_iff.1 vU, hv⟩
 
@@ -590,8 +590,8 @@ theorem exists_gt_t2space
         apply is
 
 中文:
-定理 exists_gt_t2space
-  结论: (v : PartialRefinement u s (fun w => IsCompact (closure w)))
+定理 存在_gt_t2space
+  结论: (v : PartialRefinement u s (fun w => 是紧集 (closure w)))
   证明: by
   -- take `v i` such that `closure (v i)` is compact
   set si := s inter (⋃ j != i, v j)ᶜ with hsi
@@ -684,8 +684,8 @@ theorem exists_subset_iUnion_closure_subset_t2space
       IsChain (· <= ·) c -> c.Nonempty -> exists ub, forall v in c, v <= ub :=
 
 中文:
-定理 exists_subset_iUnion_closure_subset_t2space
-  结论: (hs : IsCompact s) (uo : 对任意 i, IsOpen (u i))
+定理 存在_subset_iUnion_closure_subset_t2space
+  结论: (hs : 是紧集 s) (uo : 对任意 i, 是开集 (u i))
   证明: by
   have : Nonempty (PartialRefinement u s (fun w => IsCompact (closure w))) :=
     ⟨⟨u, ∅, uo, us, False.elim, False.elim, fun _ => rfl⟩⟩
@@ -727,8 +727,8 @@ theorem exists_subset_iUnion_compact_subset_t2space
   · simp only [isClosed_closure, implies_true]
 
 中文:
-定理 exists_subset_iUnion_compact_subset_t2space
-  结论: (hs : IsCompact s) (uo : 对任意 i, IsOpen (u i))
+定理 存在_subset_iUnion_compact_subset_t2space
+  结论: (hs : 是紧集 s) (uo : 对任意 i, 是开集 (u i))
   证明: by
   let ⟨v, hsv, _, hv⟩ := exists_subset_iUnion_closure_subset_t2space hs uo uf us
   use fun i => closure (v i)

@@ -269,7 +269,7 @@ theorem equivariantProjection_condition
 
 中文:
 定理 equivariantProjection_condition
-  结论: (hcard : IsUnit (自然数.card G : k))
+  结论: (hcard : 是单位 (自然数.card G : k))
   证明: by
   rw [equivariantProjection_apply]
   simp only [conjugate_i π i h]
@@ -315,8 +315,8 @@ theorem exists_leftInverse_of_injective
     appl
 
 中文:
-定理 exists_leftInverse_of_injective
-  条件: (f : V ->ₗ[k[G]] W) (hf : LinearMap.ker f = ⊥)
+定理 存在_leftInverse_of_injective
+  条件: (f : V ->ₗ[k[G]] W) (hf : 线性映射.ker f = ⊥)
   证明: by
   let A := k[G]
   let : Module k W := .compHom W (algebraMap k A)
@@ -358,9 +358,9 @@ theorem exists_isCompl
 exact ⟨LinearMap.ker f, LinearMap.isCompl_of_proj DFunLike.congr_fun hf⟩
 
 中文:
-定理 exists_isCompl
-  条件: (p : Submodule k[G] V)
-  结论: 存在 q : Submodule k[G] V, IsCompl p q
+定理 存在_isCompl
+  条件: (p : 子模 k[G] V)
+  结论: 存在 q : 子模 k[G] V, 是补集 p q
   证明: by
   rcases MonoidAlgebra.exists_leftInverse_of_injective p.subtype p.ker_subtype with ⟨f, hf⟩
 exact ⟨LinearMap.ker f, LinearMap.isCompl_of_proj DFunLike.congr_fun hf⟩
@@ -381,7 +381,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSemisimpleModule k[G] V
+  签名: 是半单模 k[G] V
   定义体: exists_isCompl
 
 Depends on / 依赖: exists_isCompl
@@ -400,8 +400,8 @@ instance [AddGroup
   (AddMonoidAlgebra.toMultiplicativeAlgEquiv k G (R := Nat)).toRingEquiv.symm.isSemisimpleRing
 
 中文:
-实例 [AddGroup
-  签名: G] : IsSemisimpleRing (AddMonoidAlgebra k G)
+实例 [加法群
+  签名: G] : IsSemisimpleRing (加法幺半群代数 k G)
   定义体: haveI : NeZero (Nat.card (Multiplicative G) : k) := by
     rwa [Nat.card_congr Multiplicative.toAdd]
   (AddMonoidAlgebra.toMultiplicativeAlgEquiv k G (R := Nat)).toRingEquiv.symm.isSemisimpleRing

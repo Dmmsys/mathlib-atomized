@@ -41,7 +41,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [Group G] [MulAction G β]
+  签名: [群 G] [乘法作用 G β]
   定义体: ⟨fun g f => f.trans (MulAction.toPerm g).toEmbedding⟩
 
 @[to_additive]
@@ -64,7 +64,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: [Group G] [MulAction G β] (g : G) (f : α ↪ β)
+  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -87,7 +87,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [Group G] [MulAction G β] (g : G) (f : α ↪ β) (a : α)
+  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β) (a : α)
   结论: (g • f) a = g • f a
   证明: rfl
 
@@ -108,7 +108,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [Group G] [MulAction G β] (g : G) (f : α ↪ β)
+  条件: [群 G] [乘法作用 G β] (g : G) (f : α ↪ β)
   结论: ⇑(g • f) = g • ⇑f
   证明: rfl
 -/
@@ -126,8 +126,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: G] [Group G'] [SMul G G'] [MulAction G β] [MulAction G' β]
+实例 [群
+  签名: G] [群 G'] [标量乘法 G G'] [乘法作用 G β] [乘法作用 G' β]
   定义体: ⟨fun x y z => Function.Embedding.ext fun i => smul_assoc x y (z i)⟩
 
 @[to_additive]
@@ -148,8 +148,8 @@ instance [Group
   body: ⟨fun x y z => Function.Embedding.ext fun i => smul_comm x y (z i)⟩
 
 中文:
-实例 [Group
-  签名: G] [Group G'] [MulAction G β] [MulAction G' β] [SMulCommClass G G' β] :
+实例 [群
+  签名: G] [群 G'] [乘法作用 G β] [乘法作用 G' β] [标量交换类 G G' β] :
   定义体: ⟨fun x y z => Function.Embedding.ext fun i => smul_comm x y (z i)⟩
 
 Depends on / 依赖: Embedding, Function, Function.Embedding.ext, smul_comm
@@ -169,8 +169,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: G] [MulAction G β] [MulAction Gᵐᵒᵖ β] [IsCentralScalar G β] :
+实例 [群
+  签名: G] [乘法作用 G β] [乘法作用 Gᵐᵒᵖ β] [中心标量 G β] :
   定义体: ⟨fun _ _ => Function.Embedding.ext fun _ => op_smul_eq_smul _ _⟩
 
 @[to_additive]
@@ -191,8 +191,8 @@ instance [Group
   body: DFunLike.coe_injective.mulAction _ coe_smul
 
 中文:
-实例 [Group
-  签名: G] [MulAction G β] : MulAction G (α ↪ β)
+实例 [群
+  签名: G] [乘法作用 G β] : 乘法作用 G (α ↪ β)
   定义体: DFunLike.coe_injective.mulAction _ coe_smul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, coe_smul, mulAction

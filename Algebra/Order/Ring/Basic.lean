@@ -36,7 +36,7 @@ theorem IsSquare.nonneg
 
 中文:
 定理 IsSquare.nonneg
-  结论: [Semiring R] [LinearOrder R]
+  结论: [半环 R] [线性序 R]
   证明: by
   rcases h with ⟨y, rfl⟩
   exact mul_self_nonneg y
@@ -62,7 +62,7 @@ lemma not_isSquare_of_neg
 
 中文:
 引理 not_isSquare_of_neg
-  结论: [Semiring R] [LinearOrder R]
+  结论: [半环 R] [线性序 R]
   证明: (h.not_ge ·.nonneg)
 
 Depends on / 依赖: h.not_ge, nonneg, not_ge
@@ -243,7 +243,7 @@ definition IsNonarchimedean
 
 中文:
 定义 IsNonarchimedean
-  签名: {α : 类型} [Add α] (f : α -> R)
+  签名: {α : 类型} [加法 α] (f : α -> R)
   定义体: forall a b : α, f (a + b) <= f a ⊔ f b
 -/
 def IsNonarchimedean {α : Type*} [Add α] (f : α -> R) : Prop := forall a b : α, f (a + b) <= f a ⊔ f b
@@ -543,7 +543,7 @@ lemma Odd.strictMono_pow
 中文:
 引理 Odd.strictMono_pow
   条件: (hn : Odd n)
-  结论: StrictMono fun a : R => a ^ n
+  结论: 严格递增 fun a : R => a ^ n
   证明: by
   have hn₀ : n != 0 := by rintro rfl; simp [Odd] at hn
   intro a b hab
@@ -588,7 +588,7 @@ lemma Odd.pow_injective
 中文:
 引理 Odd.pow_injective
   条件: {n : 自然数} (hn : Odd n)
-  结论: Injective (· ^ n : R -> R)
+  结论: 单射 (· ^ n : R -> R)
   证明: hn.strictMono_pow.injective
 
 Depends on / 依赖: hn.strictMono_pow.injective, injective, strictMono_pow

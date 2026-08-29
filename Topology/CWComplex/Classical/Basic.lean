@@ -113,18 +113,18 @@ class RelCWComplex.{u}
 
 中文:
 类 RelCWComplex.{u}
-  参数: {X : 类型u} [TopologicalSpace X] (C : Set X) (D : outParam (Set X))
+  参数: {X : 类型u} [拓扑空间 X] (C : 集合 X) (D : outParam (集合 X))
   公理与运算 (11 个):
     - cell((n : 自然数)) : 类型u
-    - map((n : 自然数) (i : cell n)) : PartialEquiv (Fin n -> 实数) X
+    - map((n : 自然数) (i : cell n)) : 部分等价 (有限集 n -> 实数) X
     - source_eq((n : 自然数) (i : cell n)) : (map n i).source = ball 0 1
     - continuousOn((n : 自然数) (i : cell n)) : ContinuousOn (map n i) (closedBall 0 1)
     - continuousOn_symm((n : 自然数) (i : cell n)) : ContinuousOn (map n i).symm (map n i).target
-    - pairwiseDisjoint' : (univ : Set (Σ n, cell n)).PairwiseDisjoint (fun ni => map ni.1 ni.2 '' ball 0 1)
+    - pairwiseDisjoint' : (univ : 集合 (Σ n, cell n)).PairwiseDisjoint (fun ni => map ni.1 ni.2 '' ball 0 1)
     - disjointBase'((n : 自然数) (i : cell n)) : Disjoint (map n i '' ball 0 1) D
-    - mapsTo((n : 自然数) (i : cell n)) : 存在 I : Π m, Finset (cell m), MapsTo (map n i) (sphere 0 1) (D union ⋃ (m < n) (j in I m), map m j '' closedBall 0 1)
-    - closed'((A : Set X) (hAC : A subseteq C)) : ((对任意 n j, IsClosed (A inter map n j '' closedBall 0 1)) ∧ IsClosed (A inter D)) -> IsClosed A
-    - isClosedBase : IsClosed D
+    - mapsTo((n : 自然数) (i : cell n)) : 存在 I : Π m, 有限集 (cell m), 映射到 (map n i) (sphere 0 1) (D union ⋃ (m < n) (j in I m), map m j '' closedBall 0 1)
+    - closed'((A : 集合 X) (hAC : A subseteq C)) : ((对任意 n j, 是闭集 (A inter map n j '' closedBall 0 1)) ∧ 是闭集 (A inter D)) -> 是闭集 A
+    - isClosedBase : 是闭集 D
     - union' : D union ⋃ (n : 自然数) (j : cell n), map n j '' closedBall 0 1 = C
 -/
 class RelCWComplex.{u} {X : Type u} [TopologicalSpace X] (C : Set X) (D : outParam (Set X)) where
@@ -180,16 +180,16 @@ class CWComplex.{u}
 
 中文:
 类 CWComplex.{u}
-  参数: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  参数: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   公理与运算 (9 个):
     - cell((n : 自然数)) : 类型u
-    - map((n : 自然数) (i : cell n)) : PartialEquiv (Fin n -> 实数) X
+    - map((n : 自然数) (i : cell n)) : 部分等价 (有限集 n -> 实数) X
     - source_eq((n : 自然数) (i : cell n)) : (map n i).source = ball 0 1
     - continuousOn((n : 自然数) (i : cell n)) : ContinuousOn (map n i) (closedBall 0 1)
     - continuousOn_symm((n : 自然数) (i : cell n)) : ContinuousOn (map n i).symm (map n i).target
-    - pairwiseDisjoint' : (univ : Set (Σ n, cell n)).PairwiseDisjoint (fun ni => map ni.1 ni.2 '' ball 0 1)
-    - mapsTo'((n : 自然数) (i : cell n)) : 存在 I : Π m, Finset (cell m), MapsTo (map n i) (sphere 0 1) (⋃ (m < n) (j in I m), map m j '' closedBall 0 1)
-    - closed'((A : Set X) (hAC : A subseteq C)) : (对任意 n j, IsClosed (A inter map n j '' closedBall 0 1)) -> IsClosed A
+    - pairwiseDisjoint' : (univ : 集合 (Σ n, cell n)).PairwiseDisjoint (fun ni => map ni.1 ni.2 '' ball 0 1)
+    - mapsTo'((n : 自然数) (i : cell n)) : 存在 I : Π m, 有限集 (cell m), 映射到 (map n i) (sphere 0 1) (⋃ (m < n) (j in I m), map m j '' closedBall 0 1)
+    - closed'((A : 集合 X) (hAC : A subseteq C)) : (对任意 n j, 是闭集 (A inter map n j '' closedBall 0 1)) -> 是闭集 A
     - union' : ⋃ (n : 自然数) (j : cell n), map n j '' closedBall 0 1 = C
 -/
 class CWComplex.{u} {X : Type u} [TopologicalSpace X] (C : Set X) where
@@ -256,7 +256,7 @@ definition RelCWComplex.toCWComplex
 
 中文:
 定义 RelCWComplex.toCWComplex
-  签名: {X : 类型} [TopologicalSpace X] (C : Set X) [RelCWComplex C ∅]
+  签名: {X : 类型} [拓扑空间 X] (C : 集合 X) [RelCWComplex C ∅]
   定义体: cell C
   map := map
   source_eq := source_eq
@@ -289,7 +289,7 @@ lemma RelCWComplex.toCWComplex_eq
 
 中文:
 引理 RelCWComplex.toCWComplex_eq
-  结论: {X : 类型} [TopologicalSpace X] (C : Set X)
+  结论: {X : 类型} [拓扑空间 X] (C : 集合 X)
   证明: rfl
 -/
 lemma RelCWComplex.toCWComplex_eq {X : Type*} [TopologicalSpace X] (C : Set X)
@@ -373,7 +373,7 @@ lemma CWComplex.mapsTo
 中文:
 引理 CWComplex.mapsTo
   条件: [CWComplex C] (n : 自然数) (i : cell C n)
-  结论: 存在 I : Π m, Finset (cell C m),
+  结论: 存在 I : Π m, 有限集 (cell C m),
   证明: by
   have := RelCWComplex.mapsTo n i
   simp_rw [empty_union] at this
@@ -776,7 +776,7 @@ lemma RelCWComplex.subset_of_eq_union_iUnion
 
 中文:
 引理 RelCWComplex.subset_of_eq_union_iUnion
-  结论: [RelCWComplex C D] (I J : Π n, Set (cell C n))
+  结论: [RelCWComplex C D] (I J : Π n, 集合 (cell C n))
   证明: by
   intro i hi
   by_contra hJ
@@ -813,7 +813,7 @@ lemma RelCWComplex.eq_of_eq_union_iUnion
 
 中文:
 引理 RelCWComplex.eq_of_eq_union_iUnion
-  结论: [RelCWComplex C D] (I J : Π n, Set (cell C n))
+  结论: [RelCWComplex C D] (I J : Π n, 集合 (cell C n))
   证明: by
   ext n x
   exact ⟨fun h => subset_of_eq_union_iUnion I J hIJ n h,
@@ -841,7 +841,7 @@ lemma CWComplex.eq_of_eq_union_iUnion
 
 中文:
 引理 CWComplex.eq_of_eq_union_iUnion
-  结论: [CWComplex C] (I J : Π n, Set (cell C n))
+  结论: [CWComplex C] (I J : Π n, 集合 (cell C n))
   证明: by
   apply RelCWComplex.eq_of_eq_union_iUnion
   simp_rw [empty_union, hIJ]
@@ -892,7 +892,7 @@ lemma RelCWComplex.isClosed_closedCell
 
 中文:
 引理 RelCWComplex.isClosed_closedCell
-  条件: [RelCWComplex C D] [T2Space X] {n : 自然数} {i : cell C n}
+  条件: [RelCWComplex C D] [T2空间 X] {n : 自然数} {i : cell C n}
   证明: isCompact_closedCell.isClosed
 
 @[alias_in CWComplex]
@@ -939,7 +939,7 @@ lemma RelCWComplex.isClosed_cellFrontier
 
 中文:
 引理 RelCWComplex.isClosed_cellFrontier
-  条件: [RelCWComplex C D] [T2Space X] {n : 自然数} {i : cell C n}
+  条件: [RelCWComplex C D] [T2空间 X] {n : 自然数} {i : cell C n}
   证明: isCompact_cellFrontier.isClosed
 
 @[alias_in CWComplex]
@@ -966,7 +966,7 @@ lemma RelCWComplex.closure_openCell_eq_closedCell
 
 中文:
 引理 RelCWComplex.closure_openCell_eq_closedCell
-  结论: [RelCWComplex C D] [T2Space X] {n : 自然数}
+  结论: [RelCWComplex C D] [T2空间 X] {n : 自然数}
   证明: by
   apply subset_antisymm (isClosed_closedCell.closure_subset_iff.2 (openCell_subset_closedCell n j))
   rw [closedCell]; rw [← closure_ball 0 (by exact one_ne_zero)]
@@ -996,7 +996,7 @@ lemma RelCWComplex.closed
 
 中文:
 引理 RelCWComplex.closed
-  结论: (C : Set X) {D : Set X} [RelCWComplex C D] [T2Space X] (A : Set X)
+  结论: (C : 集合 X) {D : 集合 X} [RelCWComplex C D] [T2空间 X] (A : 集合 X)
   证明: by
   refine ⟨?_, closed' A asubc⟩
   exact fun closedA => ⟨fun _ _ => closedA.inter isClosed_closedCell, closedA.inter (isClosedBase C)⟩
@@ -1023,7 +1023,7 @@ lemma CWComplex.closed
 
 中文:
 引理 CWComplex.closed
-  条件: (C : Set X) [CWComplex C] [T2Space X] (A : Set X) (asubc : A subseteq C)
+  条件: (C : 集合 X) [CWComplex C] [T2空间 X] (A : 集合 X) (asubc : A subseteq C)
   证明: by
   have := RelCWComplex.closed C A asubc
   simp_all
@@ -1241,7 +1241,7 @@ lemma RelCWComplex.injective_map_zero
 
 中文:
 引理 RelCWComplex.injective_map_zero
-  条件: (C : Set X) [RelCWComplex C D]
+  条件: (C : 集合 X) [RelCWComplex C D]
   证明: by
   rintro x z h
   by_contra hne
@@ -1272,7 +1272,7 @@ lemma RelCWComplex.map_zero_eq_self_iff
 
 中文:
 引理 RelCWComplex.map_zero_eq_self_iff
-  条件: (C : Set X) [RelCWComplex C D] {x z : cell C 0}
+  条件: (C : 集合 X) [RelCWComplex C D] {x z : cell C 0}
   证明: ⟨fun h => injective_map_zero C h, fun h => h ▸ rfl⟩
 
 @[alias_in CWComplex]
@@ -1299,7 +1299,7 @@ lemma RelCWComplex.closedCell_zero_injective
 
 中文:
 引理 RelCWComplex.closedCell_zero_injective
-  条件: (C : Set X) [RelCWComplex C D]
+  条件: (C : 集合 X) [RelCWComplex C D]
   证明: by
   intro x y h
   rw [closedCell_zero_eq_singleton]; rw [closedCell_zero_eq_singleton]; rw [singleton_eq_singleton_iff] at h
@@ -1331,7 +1331,7 @@ lemma RelCWComplex.openCell_zero_injective
 
 中文:
 引理 RelCWComplex.openCell_zero_injective
-  条件: (C : Set X) [RelCWComplex C D]
+  条件: (C : 集合 X) [RelCWComplex C D]
   证明: by
   intro x y h
   rw [openCell_zero_eq_singleton]; rw [openCell_zero_eq_singleton]; rw [singleton_eq_singleton_iff] at h
@@ -1402,7 +1402,7 @@ lemma CWComplex.exists_cellFrontier_one_eq
   obtain ⟨⟨u, hu, h
 
 中文:
-引理 CWComplex.exists_cellFrontier_one_eq
+引理 CWComplex.存在_cellFrontier_one_eq
   条件: [CWComplex C] (e : cell C 1)
   证明: by
   obtain ⟨f, h⟩ := cellFrontier_subset_finite_closedCell 1 e
@@ -1473,8 +1473,8 @@ lemma RelCWComplex.isClosed
 
 中文:
 引理 RelCWComplex.isClosed
-  条件: [T2Space X] [RelCWComplex C D]
-  结论: IsClosed C
+  条件: [T2空间 X] [RelCWComplex C D]
+  结论: 是闭集 C
   证明: by
   rw [closed C C (by rfl)]
   constructor
@@ -1945,12 +1945,12 @@ structure Subcomplex
     - union' : D union ⋃ (n : Nat) (j : I n), openCell (C := C) n j = carrier
 
 中文:
-结构 Subcomplex
-  参数: (C : Set X) {D : Set X} [RelCWComplex C D]
+结构 子复形
+  参数: (C : 集合 X) {D : 集合 X} [RelCWComplex C D]
   公理与运算 (4 个):
-    - carrier : Set X
-    - I : Π n, Set (cell C n)
-    - closed' : IsClosed carrier
+    - carrier : 集合 X
+    - I : Π n, 集合 (cell C n)
+    - closed' : 是闭集 carrier
     - union' : D union ⋃ (n : 自然数) (j : I n), openCell (C := C) n j = carrier
 
 Depends on / 依赖: carrier
@@ -1986,7 +1986,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Subcomplex C) X
+  签名: 集合状 (子复形 C) X
   定义体: E.carrier
   coe_injective E F h := by
     obtain ⟨E, _, _, hE⟩ := E
@@ -2022,7 +2022,7 @@ initialize_simps_projections Subcomplex (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Subcomplex C)
+  签名: 偏序 (子复形 C)
   定义体: .ofSetLike (Subcomplex C) X
 
 initialize_simps_projections Subcomplex (carrier -> coe, as_prefix coe)
@@ -2049,8 +2049,8 @@ lemma mem_carrier
 
 中文:
 引理 mem_carrier
-  条件: {E : Subcomplex C} {x : X}
-  结论: x in E.carrier ↔ x in (E : Set X)
+  条件: {E : 子复形 C} {x : X}
+  结论: x in E.carrier ↔ x in (E : 集合 X)
   证明: Iff.rfl
 
 @[alias_in CWComplex.Subcomplex]
@@ -2073,8 +2073,8 @@ lemma coe_eq_carrier
 
 中文:
 引理 coe_eq_carrier
-  条件: {E : Subcomplex C}
-  结论: (E : Set X) = E.carrier
+  条件: {E : 子复形 C}
+  结论: (E : 集合 X) = E.carrier
   证明: rfl
 
 @[ext, alias_in CWComplex.Subcomplex]
@@ -2095,7 +2095,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {E F : Subcomplex C} (h : 对任意 x, x in E ↔ x in F)
+  条件: {E F : 子复形 C} (h : 对任意 x, x in E ↔ x in F)
   结论: E = F
   证明: SetLike.ext h
 
@@ -2118,8 +2118,8 @@ lemma eq_iff
 
 中文:
 引理 eq_iff
-  条件: (E F : Subcomplex C)
-  结论: E = F ↔ (E : Set X) = F
+  条件: (E F : 子复形 C)
+  结论: E = F ↔ (E : 集合 X) = F
   证明: SetLike.coe_injective.eq_iff.symm
 
 Depends on / 依赖: SetLike, SetLike.coe_injective.eq_iff.symm, coe_injective, eq_iff
@@ -2142,7 +2142,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (E : Subcomplex C) (F : Set X) (hF : F = E) (J : (n : 自然数) -> Set (cell C n))
+  签名: (E : 子复形 C) (F : 集合 X) (hF : F = E) (J : (n : 自然数) -> 集合 (cell C n))
   定义体: { carrier := F
     I := J
     closed' := hF.symm ▸ E.closed'
@@ -2170,7 +2170,7 @@ lemma coe_copy
 
 中文:
 引理 coe_copy
-  结论: (E : Subcomplex C) (F : Set X) (hF : F = E) (J : (n : 自然数) -> Set (cell C n))
+  结论: (E : 子复形 C) (F : 集合 X) (hF : F = E) (J : (n : 自然数) -> 集合 (cell C n))
   证明: rfl
 
 @[alias_in CWComplex.Subcomplex]
@@ -2190,7 +2190,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  结论: (E : Subcomplex C) (F : Set X) (hF : F = E) (J : (n : 自然数) -> Set (cell C n))
+  结论: (E : 子复形 C) (F : 集合 X) (hF : F = E) (J : (n : 自然数) -> 集合 (cell C n))
   证明: SetLike.coe_injective hF
 
 Depends on / 依赖: SetLike, SetLike.coe_injective, coe_injective
@@ -2213,7 +2213,7 @@ lemma union
 
 中文:
 引理 union
-  条件: (E : Subcomplex C)
+  条件: (E : 子复形 C)
   证明: by
   rw [E.union']
   rfl
@@ -2239,8 +2239,8 @@ lemma closed
 
 中文:
 引理 closed
-  条件: (E : Subcomplex C)
-  结论: IsClosed (E : Set X)
+  条件: (E : 子复形 C)
+  结论: 是闭集 (E : 集合 X)
   证明: E.closed'
 
 Depends on / 依赖: E.closed, closed
@@ -2269,8 +2269,8 @@ lemma CWComplex.Subcomplex.union
   exact this
 
 中文:
-引理 CWComplex.Subcomplex.union
-  条件: {C : Set X} [CWComplex C] {E : Subcomplex C}
+引理 CWComplex.子复形.union
+  条件: {C : 集合 X} [CWComplex C] {E : 子复形 C}
   证明: by
   have := RelCWComplex.Subcomplex.union E (C := C)
   rw [empty_union] at this
@@ -2303,8 +2303,8 @@ definition RelCWComplex.Subcomplex.mk'
     apply isClosed_of_disjoint_openC
 
 中文:
-定义 RelCWComplex.Subcomplex.mk'
-  签名: [T2Space X] (C : Set X) {D : Set X} [RelCWComplex C D]
+定义 RelCWComplex.子复形.mk'
+  签名: [T2空间 X] (C : 集合 X) {D : 集合 X} [RelCWComplex C D]
   定义体: E
   I := I
   closed' := by
@@ -2357,8 +2357,8 @@ definition CWComplex.Subcomplex.mk'
   body: RelCWComplex.Subcomplex.mk' C E I closedCell_subset (by rw [empty_union]; exact union)
 
 中文:
-定义 CWComplex.Subcomplex.mk'
-  签名: [T2Space X] (C : Set X) [CWComplex C] (E : Set X)
+定义 CWComplex.子复形.mk'
+  签名: [T2空间 X] (C : 集合 X) [CWComplex C] (E : 集合 X)
   定义体: RelCWComplex.Subcomplex.mk' C E I closedCell_subset (by rw [empty_union]; exact union)
 
 Depends on / 依赖: subseteq
@@ -2384,8 +2384,8 @@ definition RelCWComplex.Subcomplex.mk''
   union' := union
 
 中文:
-定义 RelCWComplex.Subcomplex.mk''
-  签名: [T2Space X] (C : Set X) {D : Set X} [RelCWComplex C D] (E : Set X)
+定义 RelCWComplex.子复形.mk''
+  签名: [T2空间 X] (C : 集合 X) {D : 集合 X} [RelCWComplex C D] (E : 集合 X)
   定义体: E
   I := I
   closed' := isClosed
@@ -2420,8 +2420,8 @@ definition CWComplex.Subcomplex.mk''
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-定义 CWComplex.Subcomplex.mk''
-  签名: [T2Space X] (C : Set X) [h : CWComplex C] (E : Set X)
+定义 CWComplex.子复形.mk''
+  签名: [T2空间 X] (C : 集合 X) [h : CWComplex C] (E : 集合 X)
   定义体: E
   I := I
   closed' := RelCWComplex.isClosed
@@ -2456,8 +2456,8 @@ lemma RelCWComplex.Subcomplex.subset_complex
 @[alias_in CWComplex.Subcomplex]
 
 中文:
-引理 RelCWComplex.Subcomplex.subset_complex
-  条件: {C D : Set X} [RelCWComplex C D] (E : Subcomplex C)
+引理 RelCWComplex.子复形.subset_complex
+  条件: {C D : 集合 X} [RelCWComplex C D] (E : 子复形 C)
   证明: by
   simp_rw [← union, ← RelCWComplex.union_iUnion_openCell_eq_complex]
   exact union_subset_union_right _ (iUnion_mono fun _ => iUnion_mono' fun j => ⟨j, subset_rfl⟩)
@@ -2483,8 +2483,8 @@ lemma RelCWComplex.Subcomplex.base_subset
   exact subset_union_left
 
 中文:
-引理 RelCWComplex.Subcomplex.base_subset
-  条件: {C D : Set X} [RelCWComplex C D] (E : Subcomplex C)
+引理 RelCWComplex.子复形.base_subset
+  条件: {C D : 集合 X} [RelCWComplex C D] (E : 子复形 C)
   证明: by
   simp_rw [← union]
   exact subset_union_left
@@ -2528,7 +2528,7 @@ definition skeletonLT
 
 中文:
 定义 skeletonLT
-  签名: (C : Set X) {D : Set X} [RelCWComplex C D] (n : 自然数∞)
+  签名: (C : 集合 X) {D : 集合 X} [RelCWComplex C D] (n : 自然数∞)
   定义体: Subcomplex.mk' _ (D union ⋃ (m : Nat) (_ : m < n) (j : cell C m), closedCell m j)
     (fun l => {x : cell C l | l < n})
     (by
@@ -2566,7 +2566,7 @@ abbreviation skeleton
 
 中文:
 缩写 skeleton
-  签名: (C : Set X) {D : Set X} [RelCWComplex C D] (n : 自然数∞)
+  签名: (C : 集合 X) {D : 集合 X} [RelCWComplex C D] (n : 自然数∞)
   定义体: skeletonLT C (n + 1)
 
 Depends on / 依赖: skeletonLT
@@ -2616,7 +2616,7 @@ lemma CWComplex.skeletonLT_zero_eq_empty
 中文:
 引理 CWComplex.skeletonLT_zero_eq_empty
   条件: [CWComplex C]
-  结论: (skeletonLT C 0 : Set X) = ∅
+  结论: (skeletonLT C 0 : 集合 X) = ∅
   证明: RelCWComplex.skeletonLT_zero_eq_base
 
 Depends on / 依赖: RelCWComplex, RelCWComplex.skeletonLT_zero_eq_base, skeletonLT_zero_eq_base
@@ -2721,7 +2721,7 @@ lemma RelCWComplex.skeletonLT_monotone
 中文:
 引理 RelCWComplex.skeletonLT_monotone
   条件: [RelCWComplex C D]
-  结论: Monotone (skeletonLT C)
+  结论: 递增 (skeletonLT C)
   证明: fun _ _ h => skeletonLT_mono h
 
 @[alias_in CWComplex]
@@ -2770,7 +2770,7 @@ lemma RelCWComplex.skeleton_monotone
 中文:
 引理 RelCWComplex.skeleton_monotone
   条件: [RelCWComplex C D]
-  结论: Monotone (skeleton C)
+  结论: 递增 (skeleton C)
   证明: fun _ _ h => skeleton_mono h
 
 @[alias_in CWComplex]
@@ -3455,7 +3455,7 @@ lemma RelCWComplex.disjoint_interior_base_closedCell
 
 中文:
 引理 RelCWComplex.disjoint_interior_base_closedCell
-  结论: [T2Space X] [RelCWComplex C D] {n : 自然数}
+  结论: [T2空间 X] [RelCWComplex C D] {n : 自然数}
   证明: by
   rw [disjoint_iff_inter_eq_empty]
   by_contra! h
@@ -3488,7 +3488,7 @@ lemma RelCWComplex.disjoint_interior_base_iUnion_closedCell
 
 中文:
 引理 RelCWComplex.disjoint_interior_base_iUnion_closedCell
-  条件: [T2Space X] [RelCWComplex C D]
+  条件: [T2空间 X] [RelCWComplex C D]
   证明: by
   simp_rw [disjoint_iff_inter_eq_empty, inter_iUnion, disjoint_interior_base_closedCell.inter_eq,
     iUnion_empty]
@@ -3523,7 +3523,7 @@ definition CWComplex.OfDiscreteClosed
 
 中文:
 定义 CWComplex.OfDiscreteClosed
-  签名: (hD : IsDiscrete D) (Dc : IsClosed D)
+  签名: (hD : 是离散 D) (Dc : 是闭集 D)
   定义体: match n with
     | 0 => D
     | (_ + 1) => PEmpty
@@ -3580,7 +3580,7 @@ instance CWComplex.ofDiscreteTopology
 
 中文:
 实例 CWComplex.ofDiscreteTopology
-  签名: {X : 类型} [TopologicalSpace X] [DiscreteTopology X]
+  签名: {X : 类型} [拓扑空间 X] [离散拓扑 X]
   定义体: CWComplex.OfDiscreteClosed IsDiscrete.univ isClosed_univ
 
 Depends on / 依赖: CWComplex, CWComplex.OfDiscreteClosed, IsDiscrete, IsDiscrete.univ, OfDiscreteClosed, isClosed_univ

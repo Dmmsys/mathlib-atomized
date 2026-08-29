@@ -47,7 +47,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasBinaryBiproduct K L
+  签名: 有BinaryBiproduct K L
   定义体: HasBinaryBiproduct.of_hasBinaryProduct _ _
 
 Depends on / 依赖: HasBinaryBiproduct, HasBinaryBiproduct.of_hasBinaryProduct, of_hasBinaryProduct

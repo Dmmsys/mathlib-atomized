@@ -98,11 +98,11 @@ inductive Monoid.CoprodI.Rel
     - of_mul: {i : ι} (x y : M i) : Monoid.CoprodI.Rel (FreeMonoid.of ⟨i, x⟩ * FreeMonoid.of ⟨i, y⟩) (FreeMonoid.of ⟨i, x * y⟩)
 
 中文:
-归纳类型 Monoid.CoprodI.Rel
-  参数: : FreeMonoid (Σ i, M i) -> FreeMonoid (Σ i, M i) -> 命题
+归纳类型 幺半群.余prodI.关系
+  参数: : 自由幺半群 (Σ i, M i) -> 自由幺半群 (Σ i, M i) -> 命题
   构造子 (2 个):
-    - of_one: (i : ι) : Monoid.CoprodI.Rel (FreeMonoid.of ⟨i, 1⟩) 1
-    - of_mul: {i : ι} (x y : M i) : Monoid.CoprodI.Rel (FreeMonoid.of ⟨i, x⟩ * FreeMonoid.of ⟨i, y⟩) (FreeMonoid.of ⟨i, x * y⟩)
+    - of_one: (i : ι) : 幺半群.余prodI.关系 (自由幺半群.of ⟨i, 1⟩) 1
+    - of_mul: {i : ι} (x y : M i) : 幺半群.余prodI.关系 (自由幺半群.of ⟨i, x⟩ * 自由幺半群.of ⟨i, y⟩) (自由幺半群.of ⟨i, x * y⟩)
 -/
 inductive Monoid.CoprodI.Rel : FreeMonoid (Σ i, M i) -> FreeMonoid (Σ i, M i) -> Prop
   | of_one (i : ι) : Monoid.CoprodI.Rel (FreeMonoid.of ⟨i, 1⟩) 1
@@ -119,8 +119,8 @@ definition Monoid.CoprodI
 deriving Monoid, Inhabited
 
 中文:
-定义 Monoid.CoprodI
-  签名: : Type _
+定义 幺半群.余prodI
+  签名: : 类型 _
   定义体: (conGen (Monoid.CoprodI.Rel M)).Quotient
 deriving Monoid, Inhabited
 
@@ -149,9 +149,9 @@ structure Word
 结构 Word
   参数: where
   公理与运算 (3 个):
-    - toList : List (Σ i, M i)
-    - ne_one : 对任意 l in toList, Sigma.snd l != 1
-    - chain_ne : toList.IsChain fun l l' => Sigma.fst l != Sigma.fst l'
+    - toList : 列表 (Σ i, M i)
+    - ne_one : 对任意 l in toList, 依赖和类型.snd l != 1
+    - chain_ne : toList.IsChain fun l l' => 依赖和类型.fst l != 依赖和类型.fst l'
 -/
 structure Word where
   /-- A `Word` is a `List (Σ i, M i)`, such that `1` is not in the list, and no
@@ -200,7 +200,7 @@ theorem of_apply
 中文:
 定理 of_apply
   条件: {i} (m : M i)
-  结论: of m = Con.mk' _ (FreeMonoid.of <| Sigma.mk i m)
+  结论: of m = Con.mk' _ (自由幺半群.of <| 依赖和类型.mk i m)
   证明: rfl
 -/
 theorem of_apply {i} (m : M i) : of m = Con.mk' _ (FreeMonoid.of <| Sigma.mk i m) :=
@@ -226,7 +226,7 @@ theorem ext_hom
 
 中文:
 定理 ext_hom
-  条件: (f g : CoprodI M ->* N) (h : 对任意 i, f.comp (of : M i ->* _) = g.comp of)
+  条件: (f g : 余prodI M ->* N) (h : 对任意 i, f.comp (of : M i ->* _) = g.comp of)
   结论: f = g
   证明: (MonoidHom.cancel_right Con.mk'_surjective).mp
     FreeMonoid.hom_eq fun ⟨i, x⟩ => by
@@ -270,7 +270,7 @@ Con.conGen_le.2 fun _ _ => by
 
 中文:
 定义 lift
-  签名: : (对任意 i, M i ->* N) ≃ (CoprodI M ->* N) where
+  签名: : (对任意 i, M i ->* N) ≃ (余prodI M ->* N) where
   定义体: Con.lift _ (FreeMonoid.lift fun p : Σ i, M i => fi p.fst p.snd)
 Con.conGen_le.2 fun _ _ => by
         simp_rw [Con.ker_rel]
@@ -319,7 +319,7 @@ theorem lift_comp_of
 
 中文:
 定理 lift_comp_of
-  条件: {N} [Monoid N] (fi : 对任意 i, M i ->* N) i
+  条件: {N} [幺半群 N] (fi : 对任意 i, M i ->* N) i
   结论: (lift fi).comp of = fi i
   证明: congr_fun (lift.symm_apply_apply fi) i
 
@@ -344,7 +344,7 @@ theorem lift_of
 
 中文:
 定理 lift_of
-  条件: {N} [Monoid N] (fi : 对任意 i, M i ->* N) {i} (m : M i)
+  条件: {N} [幺半群 N] (fi : 对任意 i, M i ->* N) {i} (m : M i)
   结论: lift fi (of m) = fi i m
   证明: DFunLike.congr_fun (lift_comp_of ..) m
 
@@ -368,7 +368,7 @@ theorem lift_comp_of'
 
 中文:
 定理 lift_comp_of'
-  条件: {N} [Monoid N] (f : CoprodI M ->* N)
+  条件: {N} [幺半群 N] (f : 余prodI M ->* N)
   证明: lift.apply_symm_apply f
 
 @[simp]
@@ -388,7 +388,7 @@ theorem lift_of'
 
 中文:
 定理 lift_of'
-  结论: lift (fun i => (of : M i ->* CoprodI M)) = .id (CoprodI M)
+  结论: lift (fun i => (of : M i ->* 余prodI M)) = .id (余prodI M)
   证明: lift_comp_of' (.id _)
 
 Depends on / 依赖: lift_comp_of
@@ -430,7 +430,7 @@ theorem of_injective
 中文:
 定理 of_injective
   条件: (i : ι)
-  结论: Function.Injective (of : M i ->* _)
+  结论: 函数.单射 (of : M i ->* _)
   证明: by
   classical exact (of_leftInverse i).injective
 
@@ -452,7 +452,7 @@ theorem mrange_eq_iSup
 
 中文:
 定理 mrange_eq_iSup
-  条件: {N} [Monoid N] (f : 对任意 i, M i ->* N)
+  条件: {N} [幺半群 N] (f : 对任意 i, M i ->* N)
   证明: by
   rw [lift]; rw [Equiv.coe_fn_mk]; rw [Con.lift_range]; rw [FreeMonoid.mrange_lift]; rw [range_sigma_eq_iUnion_range]; rw [Submonoid.closure_iUnion]
   simp +instances only [MonoidHom.mclosure_range]
@@ -477,7 +477,7 @@ theorem lift_mrange_le
 
 中文:
 定理 lift_mrange_le
-  条件: {N} [Monoid N] (f : 对任意 i, M i ->* N) {s : Submonoid N}
+  条件: {N} [幺半群 N] (f : 对任意 i, M i ->* N) {s : 子幺半群 N}
   证明: by
   simp [mrange_eq_iSup]
 
@@ -503,7 +503,7 @@ theorem iSup_mrange_of
 
 中文:
 定理 iSup_mrange_of
-  结论: ⨆ i, MonoidHom.mrange (of : M i ->* CoprodI M) = ⊤
+  结论: ⨆ i, 幺半群态射.mrange (of : M i ->* 余prodI M) = ⊤
   证明: by
   simp [← mrange_eq_iSup]
 
@@ -556,7 +556,7 @@ theorem induction_left
 
 中文:
 定理 induction_left
-  结论: {motive : CoprodI M -> 命题} (m : CoprodI M) (one : motive 1)
+  结论: {motive : 余prodI M -> 命题} (m : 余prodI M) (one : motive 1)
   证明: by
   induction m using Submonoid.induction_of_closure_eq_top_left mclosure_iUnion_range_of with
   | one => exact one
@@ -587,7 +587,7 @@ theorem induction_on
 
 中文:
 定理 induction_on
-  结论: {motive : CoprodI M -> 命题} (m : CoprodI M) (one : motive 1)
+  结论: {motive : 余prodI M -> 命题} (m : 余prodI M) (one : motive 1)
   证明: induction_left m one fun {_} _ _ => mul _ _ (of _ _)
 
 Depends on / 依赖: induction_left
@@ -611,7 +611,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (CoprodI G)
+  签名: 取逆 (余prodI G)
   定义体: MulOpposite.unop ∘ lift fun i => (of : G i ->* _).op.comp (MulEquiv.inv' (G i)).toMonoidHom
 
 Depends on / 依赖: MulEquiv, MulEquiv.inv, MulOpposite, MulOpposite.unop, op.comp, toMonoidHom
@@ -630,7 +630,7 @@ theorem inv_def
 
 中文:
 定理 inv_def
-  条件: (x : CoprodI G)
+  条件: (x : 余prodI G)
   证明: rfl
 -/
 theorem inv_def (x : CoprodI G) :
@@ -657,7 +657,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (CoprodI G)
+  签名: 群 (余prodI G)
   定义体: { inv_mul_cancel := by
       intro m
       rw [inv_def]
@@ -701,7 +701,7 @@ theorem lift_range_le
 
 中文:
 定理 lift_range_le
-  结论: {N} [Group N] (f : 对任意 i, G i ->* N) {s : Subgroup N}
+  结论: {N} [群 N] (f : 对任意 i, G i ->* N) {s : 子群 N}
   证明: by
   rintro _ ⟨x, rfl⟩
   induction x using CoprodI.induction_on with
@@ -742,7 +742,7 @@ theorem range_eq_iSup
 
 中文:
 定理 range_eq_iSup
-  条件: {N} [Group N] (f : 对任意 i, G i ->* N)
+  条件: {N} [群 N] (f : 对任意 i, G i ->* N)
   结论: (lift f).range = ⨆ i, (f i).range
   证明: by
   apply le_antisymm (lift_range_le _ f fun i => le_iSup (fun i => MonoidHom.range (f i)) i)
@@ -796,7 +796,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Word M)
+  签名: 可居 (Word M)
   定义体: ⟨empty⟩
 -/
 instance : Inhabited (Word M) :=
@@ -813,7 +813,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: (w : Word M)
   定义体: List.prod (w.toList.map fun l => of l.snd)
 
@@ -835,7 +835,7 @@ theorem prod_empty
 
 中文:
 定理 prod_empty
-  结论: prod (empty : Word M) = 1
+  结论: 乘积 (empty : Word M) = 1
   证明: rfl
 -/
 theorem prod_empty : prod (empty : Word M) = 1 :=
@@ -897,7 +897,7 @@ structure Pair
     - fstIdx_ne : fstIdx tail != some i
 
 中文:
-结构 Pair
+结构 对
   参数: (i : ι)
   公理与运算 (3 个):
     - head : M i
@@ -1021,7 +1021,7 @@ definition rcons
 
 中文:
 定义 rcons
-  签名: {i} (p : Pair M i)
+  签名: {i} (p : 对 M i)
   定义体: if h : p.head = 1 then p.tail
   else cons p.head p.tail p.fstIdx_ne h
 
@@ -1046,8 +1046,8 @@ theorem prod_rcons
 
 中文:
 定理 prod_rcons
-  条件: {i} (p : Pair M i)
-  结论: prod (rcons p) = of p.head * prod p.tail
+  条件: {i} (p : 对 M i)
+  结论: 乘积 (rcons p) = of p.head * 乘积 p.tail
   证明: if hm : p.head = 1 then by rw [rcons, dif_pos hm, hm, map_one, one_mul]
   else by rw [rcons, dif_neg hm, cons, prod, List.map_cons, List.prod_cons, prod]
 
@@ -1079,7 +1079,7 @@ theorem rcons_inj
 中文:
 定理 rcons_inj
   条件: {i}
-  结论: Function.Injective (rcons : Pair M i -> Word M)
+  结论: 函数.单射 (rcons : 对 M i -> Word M)
   证明: by
   rintro ⟨m, w, h⟩ ⟨m', w', h'⟩ he
   by_cases hm : m = 1 <;> by_cases hm' : m' = 1
@@ -1126,7 +1126,7 @@ theorem mem_rcons_iff
 
 中文:
 定理 mem_rcons_iff
-  条件: {i j : ι} (p : Pair M i) (m : M j)
+  条件: {i j : ι} (p : 对 M i) (m : M j)
   证明: by
   simp only [rcons, cons, ne_eq]
   grind
@@ -1162,7 +1162,7 @@ definition consRecOn
 
 中文:
 定义 consRecOn
-  签名: {motive : Word M -> Sort*} (w : Word M) (empty : motive empty)
+  签名: {motive : Word M -> 类型层*} (w : Word M) (empty : motive empty)
   定义体: by
   rcases w with ⟨w, h1, h2⟩
   induction w with
@@ -1203,7 +1203,7 @@ theorem consRecOn_empty
 
 中文:
 定理 consRecOn_empty
-  结论: {motive : Word M -> Sort*} (h_empty : motive empty)
+  结论: {motive : Word M -> 类型层*} (h_empty : motive empty)
   证明: rfl
 
 @[simp]
@@ -1223,7 +1223,7 @@ theorem consRecOn_cons
 
 中文:
 定理 consRecOn_cons
-  结论: {motive : Word M -> Sort*} (i) (m : M i) (w : Word M) h1 h2
+  结论: {motive : Word M -> 类型层*} (i) (m : M i) (w : Word M) h1 h2
   证明: rfl
 -/
 theorem consRecOn_cons {motive : Word M -> Sort*} (i) (m : M i) (w : Word M) h1 h2
@@ -1317,7 +1317,7 @@ theorem equivPair_symm
 
 中文:
 定理 equivPair_symm
-  条件: (i) (p : Pair M i)
+  条件: (i) (p : 对 M i)
   结论: (equivPair i).symm p = rcons p
   证明: rfl
 -/
@@ -1513,7 +1513,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction (CoprodI M) (Word M)
+  签名: 乘法作用 (余prodI M) (Word M)
   定义体: MulAction.ofEndHom (lift fun _ => MulAction.toEndHom)
 
 Depends on / 依赖: MulAction, MulAction.ofEndHom, MulAction.toEndHom, ofEndHom, toEndHom
@@ -1599,7 +1599,7 @@ theorem equivPair_tail
 
 中文:
 定理 equivPair_tail
-  条件: {i} (p : Pair M i)
+  条件: {i} (p : 对 M i)
   证明: equivPair_eq_of_fstIdx_ne _
 
 Depends on / 依赖: equivPair_eq_of_fstIdx_ne
@@ -1747,7 +1747,7 @@ theorem rcons_eq_smul
 
 中文:
 定理 rcons_eq_smul
-  条件: {i} (p : Pair M i)
+  条件: {i} (p : 对 M i)
   证明: by
   simp [of_smul_def]
 
@@ -1793,7 +1793,7 @@ theorem equivPair_tail_eq_inv_smul
 
 中文:
 定理 equivPair_tail_eq_inv_smul
-  结论: {G : ι -> 类型} [对任意 i, Group (G i)]
+  结论: {G : ι -> 类型} [对任意 i, 群 (G i)]
   证明: Eq.symm inv_smul_eq_iff.2 (equivPair_head_smul_equivPair_tail w).symm
 
 @[elab_as_elim]
@@ -1866,7 +1866,7 @@ theorem prod_smul
 中文:
 定理 prod_smul
   条件: (m)
-  结论: 对任意 w : Word M, prod (m • w) = m * prod w
+  结论: 对任意 w : Word M, 乘积 (m • w) = m * 乘积 w
   证明: by
   induction m using CoprodI.induction_on with
   | one =>
@@ -1912,7 +1912,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : CoprodI M ≃ Word M where
+  签名: : 余prodI M ≃ Word M where
   定义体: m • empty
   invFun w := prod w
   left_inv m := by dsimp only; rw [prod_smul, prod_empty, mul_one]
@@ -1964,7 +1964,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableEq (CoprodI M)
+  签名: DecidableEq (余prodI M)
   定义体: Equiv.decidableEq Word.equiv
 
 Depends on / 依赖: Equiv.decidableEq, Word.equiv, decidableEq
@@ -1987,7 +1987,7 @@ inductive NeWord
 
 中文:
 归纳类型 NeWord
-  参数: : ι -> ι -> Type _
+  参数: : ι -> ι -> 类型 _
   构造子 (2 个):
     - singleton: 对任意 {i : ι} (x : M i), x != 1 -> NeWord i i
     - append: 对任意 {i j k l} (_w₁ : NeWord i j) (_hne : j != k) (_w₂ : NeWord k l), NeWord i l
@@ -2011,7 +2011,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : 对任意 {i j} (_w : NeWord M i j), List (Σ i, M i)
+  签名: : 对任意 {i j} (_w : NeWord M i j), 列表 (Σ i, M i)
 -/
 def toList : forall {i j} (_w : NeWord M i j), List (Σ i, M i)
   | i, _, singleton x _ => [⟨i, x⟩]
@@ -2033,7 +2033,7 @@ theorem toList_ne_nil
 中文:
 定理 toList_ne_nil
   条件: {i j} (w : NeWord M i j)
-  结论: w.toList != List.nil
+  结论: w.toList != 列表.nil
   证明: by
   induction w
   · rintro ⟨rfl⟩
@@ -2098,7 +2098,7 @@ theorem toList_head?
 中文:
 定理 toList_head?
   条件: {i j} (w : NeWord M i j)
-  结论: w.toList.head? = Option.some ⟨i, w.head⟩
+  结论: w.toList.head? = 选项类型.some ⟨i, w.head⟩
   证明: by
   fun_induction toList with grind [head]
 
@@ -2127,7 +2127,7 @@ theorem toList_getLast?
 中文:
 定理 toList_getLast?
   条件: {i j} (w : NeWord M i j)
-  结论: w.toList.getLast? = Option.some ⟨j, w.last⟩
+  结论: w.toList.getLast? = 选项类型.some ⟨j, w.last⟩
   证明: by
   rw [← Option.mem_def]
   induction w
@@ -2269,7 +2269,7 @@ definition prod
 @[simp]
 
 中文:
-定义 prod
+定义 乘积
   签名: {i j} (w : NeWord M i j)
   定义体: w.toWord.prod
 
@@ -2342,7 +2342,7 @@ theorem prod_singleton
 中文:
 定理 prod_singleton
   条件: {i} (x : M i) (hne_one : x != 1)
-  结论: (singleton x hne_one).prod = of x
+  结论: (singleton x hne_one).乘积 = of x
   证明: by
   simp [toWord, prod, Word.prod]
 
@@ -2588,7 +2588,7 @@ theorem inv_prod
 中文:
 定理 inv_prod
   条件: {i j} (w : NeWord G i j)
-  结论: w.inv.prod = w.prod⁻¹
+  结论: w.inv.乘积 = w.乘积⁻¹
   证明: by
   induction w <;> simp [inv, *]
 
@@ -2880,7 +2880,7 @@ theorem empty_of_word_prod_eq_one
 
 中文:
 定理 empty_of_word_prod_eq_one
-  条件: {w : Word H} (h : lift f w.prod = 1)
+  条件: {w : Word H} (h : lift f w.乘积 = 1)
   证明: by
   by_contra hnotempty
   obtain ⟨i, j, w, rfl⟩ := NeWord.of_word w hnotempty
@@ -2912,7 +2912,7 @@ theorem lift_injective_of_ping_pong
 
 中文:
 定理 lift_injective_of_ping_pong
-  结论: Function.Injective (lift f)
+  结论: 函数.单射 (lift f)
   证明: by
   classical
     apply (injective_iff_map_eq_one (lift f)).mpr
@@ -2948,7 +2948,7 @@ definition FreeGroupBasis.coprodI
 
 中文:
 定义 FreeGroupBasis.coprodI
-  签名: {ι : 类型} {X : ι -> 类型} {G : ι -> 类型} [对任意 i, Group (G i)]
+  签名: {ι : 类型} {X : ι -> 类型} {G : ι -> 类型} [对任意 i, 群 (G i)]
   定义体: ⟨MulEquiv.symm MonoidHom.toMulEquiv
     (FreeGroup.lift fun x : Σ i, X i => CoprodI.of (B x.1 x.2))
     (CoprodI.lift fun i : ι => (B i).lift fun x : X i =>
@@ -3049,8 +3049,8 @@ theorem _root_.FreeGroup.injective_lift_of_ping_pong
   refine Functi
 
 中文:
-定理 _root_.FreeGroup.injective_lift_of_ping_pong
-  结论: Function.Injective (FreeGroup.lift a)
+定理 _root_.自由群.injective_lift_of_ping_pong
+  结论: 函数.单射 (自由群.lift a)
   证明: by
   -- Step one: express the free group lift via the free product lift
   have : FreeGroup.lift a =

@@ -56,7 +56,7 @@ deriving Inhabited
 
 中文:
 定义 FormalMultilinearSeries
-  签名: (𝕜 : 类型) (E : 类型) (F : 类型) [Semiring 𝕜] [AddCommMonoid E]
+  签名: (𝕜 : 类型) (E : 类型) (F : 类型) [半环 𝕜] [加法交换幺半群 E]
   定义体: forall n : Nat, E [×n]->L[𝕜] F
 deriving Inhabited
 -/
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid (FormalMultilinearSeries 𝕜 E F)
+  签名: 加法交换幺半群 (FormalMultilinearSeries 𝕜 E F)
   定义体: fast_instance% {
   __ := Pi.addCommMonoid
   zero _ := 0
@@ -169,7 +169,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  结论: [Semiring 𝕜'] [Module 𝕜' F] [ContinuousConstSMul 𝕜' F] [SMulCommClass 𝕜 𝕜' F]
+  结论: [半环 𝕜'] [模 𝕜' F] [连续常数标量乘法 𝕜' F] [标量交换类 𝕜 𝕜' F]
   证明: rfl
 
 @[ext]
@@ -222,7 +222,7 @@ definition prod
   signature: (p : FormalMultilinearSeries 𝕜 E F) (q : FormalMultilinearSeries 𝕜 E G)
 
 中文:
-定义 prod
+定义 乘积
   签名: (p : FormalMultilinearSeries 𝕜 E F) (q : FormalMultilinearSeries 𝕜 E G)
 -/
 def prod (p : FormalMultilinearSeries 𝕜 E F) (q : FormalMultilinearSeries 𝕜 E G) :
@@ -340,7 +340,7 @@ theorem congr
 
 中文:
 定理 congr
-  结论: (p : FormalMultilinearSeries 𝕜 E F) {m n : 自然数} {v : Fin m -> E} {w : Fin n -> E}
+  结论: (p : FormalMultilinearSeries 𝕜 E F) {m n : 自然数} {v : 有限集 m -> E} {w : 有限集 n -> E}
   证明: by
   subst n
   congr with ⟨i, hi⟩
@@ -496,7 +496,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (FormalMultilinearSeries 𝕜 E F)
+  签名: 加法交换群 (FormalMultilinearSeries 𝕜 E F)
   定义体: inferInstanceAs AddCommGroup forall n : Nat, E [×n]->L[𝕜] F
 
 @[simp]
@@ -1179,7 +1179,7 @@ theorem constFormalMultilinearSeries_apply_zero
 
 中文:
 定理 constFormalMultilinearSeries_apply_zero
-  结论: [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
+  结论: [NontriviallyNormedField 𝕜] [赋范交换加群 E]
   证明: rfl
 
 @[simp]
@@ -1200,7 +1200,7 @@ theorem constFormalMultilinearSeries_apply_succ
 
 中文:
 定理 constFormalMultilinearSeries_apply_succ
-  结论: [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
+  结论: [NontriviallyNormedField 𝕜] [赋范交换加群 E]
   证明: rfl
 -/
 theorem constFormalMultilinearSeries_apply_succ [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
@@ -1247,7 +1247,7 @@ lemma constFormalMultilinearSeries_zero
 
 中文:
 引理 constFormalMultilinearSeries_zero
-  结论: [NontriviallyNormedField 𝕜] [NormedAddCommGroup E]
+  结论: [NontriviallyNormedField 𝕜] [赋范交换加群 E]
   证明: by
   ext n
   induction n <;> simp

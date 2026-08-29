@@ -66,7 +66,7 @@ definition basis
 
 中文:
 定义 basis
-  签名: (σ : 类型) (R : 类型) [Ring R] (Jd : TwoSidedIdeal R × (σ ->₀ 自然数))
+  签名: (σ : 类型) (R : 类型) [环 R] (Jd : TwoSided理想 R × (σ ->₀ 自然数))
   定义体: TwoSidedIdeal.mk' {f | forall e <= Jd.2, coeff e f in Jd.1}
     (by simp [coeff_zero])
     (fun hf hg e he => by rw [map_add]; exact add_mem (hf e he) (hg e he))
@@ -113,7 +113,7 @@ theorem mem_basis_iff
 
 中文:
 定理 mem_basis_iff
-  条件: {f : MvPowerSeries σ R} {Jd : TwoSidedIdeal R × (σ ->₀ 自然数)}
+  条件: {f : MvPowerSeries σ R} {Jd : TwoSided理想 R × (σ ->₀ 自然数)}
   证明: by
   simp [basis]
 -/
@@ -131,7 +131,7 @@ theorem basis_le
 
 中文:
 定理 basis_le
-  条件: {Jd Ke : TwoSidedIdeal R × (σ ->₀ 自然数)} (hJK : Jd.1 <= Ke.1) (hed : Ke.2 <= Jd.2)
+  条件: {Jd Ke : TwoSided理想 R × (σ ->₀ 自然数)} (hJK : Jd.1 <= Ke.1) (hed : Ke.2 <= Jd.2)
   证明: fun _ => forall_imp (fun _ h hue => hJK (h (le_trans hue hed)))
 
 Depends on / 依赖: forall_imp, le_trans
@@ -160,7 +160,7 @@ theorem basis_le_iff
 
 中文:
 定理 basis_le_iff
-  条件: {J K : TwoSidedIdeal R} {d e : σ ->₀ 自然数} (hK : K != ⊤)
+  条件: {J K : TwoSided理想 R} {d e : σ ->₀ 自然数} (hK : K != ⊤)
   证明: by
   classical
   constructor
@@ -219,7 +219,7 @@ convert! hf _ Finset.le_sup (hD.mem_toFinset.mpr
 
 中文:
 引理 hasBasis_nhds_zero
-  条件: [IsLinearTopology R R] [IsLinearTopology Rᵐᵒᵖ R]
+  条件: [是线性拓扑 R R] [是线性拓扑 Rᵐᵒᵖ R]
   证明: by
   classical
   rw [nhds_pi]
@@ -255,8 +255,8 @@ instance [IsLinearTopology
   body: IsLinearTopology.mk_of_hasBasis' _ hasBasis_nhds_zero TwoSidedIdeal.mul_mem_left
 
 中文:
-实例 [IsLinearTopology
-  签名: R R] [IsLinearTopology Rᵐᵒᵖ R] :
+实例 [是线性拓扑
+  签名: R R] [是线性拓扑 Rᵐᵒᵖ R] :
   定义体: IsLinearTopology.mk_of_hasBasis' _ hasBasis_nhds_zero TwoSidedIdeal.mul_mem_left
 
 Depends on / 依赖: IsLinearTopology, IsLinearTopology.mk_of_hasBasis, TwoSidedIdeal, TwoSidedIdeal.mul_mem_left, hasBasis_nhds_zero, mk_of_hasBasis, mul_mem_left
@@ -274,8 +274,8 @@ instance [IsLinearTopology
   body: IsLinearTopology.mk_of_hasBasis' _ hasBasis_nhds_zero (fun J _ _ hg => J.mul_mem_right _ _ hg)
 
 中文:
-实例 [IsLinearTopology
-  签名: R R] [IsLinearTopology Rᵐᵒᵖ R] :
+实例 [是线性拓扑
+  签名: R R] [是线性拓扑 Rᵐᵒᵖ R] :
   定义体: IsLinearTopology.mk_of_hasBasis' _ hasBasis_nhds_zero (fun J _ _ hg => J.mul_mem_right _ _ hg)
 
 Depends on / 依赖: IsLinearTopology, IsLinearTopology.mk_of_hasBasis, J.mul_mem_right, hasBasis_nhds_zero, mk_of_hasBasis, mul_mem_right

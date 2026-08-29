@@ -57,18 +57,18 @@ structure IndParallelPairPresentation
   参数: {A B : Cᵒᵖ ⥤ 类型v₁} (f g : A ⟶ B)
   公理与运算 (13 个):
     - I : 类型v₁
-    - [ℐ : SmallCategory I]
-    - [hI : IsFiltered I]
+    - [ℐ : 小范畴 I]
+    - [hI : 是Filtered I]
     - F₁ : I ⥤ C
     - F₂ : I ⥤ C
-    - ι₁ : F₁ ⋙ yoneda ⟶ (Functor.const I).obj A
-    - isColimit₁ : IsColimit (Cocone.mk A ι₁)
-    - ι₂ : F₂ ⋙ yoneda ⟶ (Functor.const I).obj B
-    - isColimit₂ : IsColimit (Cocone.mk B ι₂)
+    - ι₁ : F₁ ⋙ yoneda ⟶ (函子.const I).obj A
+    - isColimit₁ : 是余极限 (余锥.mk A ι₁)
+    - ι₂ : F₂ ⋙ yoneda ⟶ (函子.const I).obj B
+    - isColimit₂ : 是余极限 (余锥.mk B ι₂)
     - φ : F₁ ⟶ F₂
     - ψ : F₁ ⟶ F₂
-    - hf : f = IsColimit.map isColimit₁ (Cocone.mk B ι₂) (whiskerRight φ yoneda)
-    - hg : g = IsColimit.map isColimit₁ (Cocone.mk B ι₂) (whiskerRight ψ yoneda)
+    - hf : f = 是余极限.map isColimit₁ (余锥.mk B ι₂) (whiskerRight φ yoneda)
+    - hg : g = 是余极限.map isColimit₁ (余锥.mk B ι₂) (whiskerRight ψ yoneda)
 -/
 structure IndParallelPairPresentation {A B : Cᵒᵖ ⥤ Type v₁} (f g : A ⟶ B) where
   /-- The indexing category. -/
@@ -174,7 +174,7 @@ abbreviation ι₁
 
 中文:
 缩写 ι₁
-  签名: : F₁ f g P₁ P₂ ⋙ yoneda ⟶ (Functor.const (K f g P₁ P₂)).obj A
+  签名: : F₁ f g P₁ P₂ ⋙ yoneda ⟶ (函子.const (K f g P₁ P₂)).obj A
   定义体: whiskerLeft (Comma.fst _ _) P₁.ι
 
 Depends on / 依赖: Comma.fst, Iso.refl, hasSmallLocalizedHom_iff_of_isos, shiftFunctorZero, whiskerLeft
@@ -192,7 +192,7 @@ abbreviation isColimit₁
 
 中文:
 缩写 isColimit₁
-  签名: : IsColimit (Cocone.mk A (ι₁ f g P₁ P₂))
+  签名: : 是余极限 (余锥.mk A (ι₁ f g P₁ P₂))
   定义体: (Functor.Final.isColimitWhiskerEquiv _ _).symm P₁.isColimit
 
 Depends on / 依赖: Functor, Functor.Final.isColimitWhiskerEquiv, Iso.refl, hasSmallLocalizedHom_iff_of_isos, isColimit, isColimitWhiskerEquiv, shiftFunctorZero
@@ -210,7 +210,7 @@ abbreviation ι₂
 
 中文:
 缩写 ι₂
-  签名: : F₂ f g P₁ P₂ ⋙ yoneda ⟶ (Functor.const (K f g P₁ P₂)).obj B
+  签名: : F₂ f g P₁ P₂ ⋙ yoneda ⟶ (函子.const (K f g P₁ P₂)).obj B
   定义体: whiskerLeft (Comma.snd _ _) P₂.ι
 
 Depends on / 依赖: Comma.snd, Iso.refl, hasSmallLocalizedHom_iff_of_isos, shiftFunctorAdd, whiskerLeft
@@ -228,7 +228,7 @@ abbreviation isColimit₂
 
 中文:
 缩写 isColimit₂
-  签名: : IsColimit (Cocone.mk B (ι₂ f g P₁ P₂))
+  签名: : 是余极限 (余锥.mk B (ι₂ f g P₁ P₂))
   定义体: (Functor.Final.isColimitWhiskerEquiv _ _).symm P₂.isColimit
 
 Depends on / 依赖: Functor, Functor.Final.isColimitWhiskerEquiv, Iso.refl, hasSmallLocalizedHom_iff_of_isos, isColimit, isColimitWhiskerEquiv, shiftFunctorAdd
@@ -283,7 +283,7 @@ theorem hf
 
 中文:
 定理 hf
-  结论: f = IsColimit.map (isColimit₁ f g P₁ P₂)
+  结论: f = 是余极限.map (isColimit₁ f g P₁ P₂)
   证明: by
   refine (isColimit₁ f g P₁ P₂).hom_ext (fun i => ?_)
   rw [IsColimit.ι_map]
@@ -344,7 +344,7 @@ theorem hg
 
 中文:
 定理 hg
-  结论: g = IsColimit.map (isColimit₁ f g P₁ P₂)
+  结论: g = 是余极限.map (isColimit₁ f g P₁ P₂)
   证明: by
   refine (isColimit₁ f g P₁ P₂).hom_ext (fun i => ?_)
   rw [IsColimit.ι_map]
@@ -417,7 +417,7 @@ theorem nonempty_indParallelPairPresentation
 
 中文:
 定理 nonempty_indParallelPairPresentation
-  结论: {A B : Cᵒᵖ ⥤ 类型v₁} (hA : IsIndObject A)
+  结论: {A B : Cᵒᵖ ⥤ 类型v₁} (hA : 是IndObject A)
   证明: ⟨NonemptyParallelPairPresentationAux.presentation f g hA.presentation hB.presentation⟩
 
 Depends on / 依赖: NonemptyParallelPairPresentationAux, NonemptyParallelPairPresentationAux.presentation, hA.presentation, hB.presentation, presentation

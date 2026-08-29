@@ -54,7 +54,7 @@ definition leftDual
 
 中文:
 定义 leftDual
-  签名: (J : Set α)
+  签名: (J : 集合 α)
   定义体: {b : β | forall ⦃a⦄, a in J -> a ~[R] b}
 -/
 def leftDual (J : Set α) : Set β := {b : β | forall ⦃a⦄, a in J -> a ~[R] b}
@@ -69,7 +69,7 @@ definition rightDual
 
 中文:
 定义 rightDual
-  签名: (I : Set β)
+  签名: (I : 集合 β)
   定义体: {a : α | forall ⦃b⦄, b in I -> a ~[R] b}
 -/
 def rightDual (I : Set β) : Set α := {a : α | forall ⦃b⦄, b in I -> a ~[R] b}
@@ -138,7 +138,7 @@ theorem leftDual_mem_rightFixedPoint
 
 中文:
 定理 leftDual_mem_rightFixedPoint
-  条件: (J : Set α)
+  条件: (J : 集合 α)
   结论: R.leftDual J in R.rightFixedPoints
   证明: by
   apply le_antisymm
@@ -166,7 +166,7 @@ theorem rightDual_mem_leftFixedPoint
 
 中文:
 定理 rightDual_mem_leftFixedPoint
-  条件: (I : Set β)
+  条件: (I : 集合 β)
   结论: R.rightDual I in R.leftFixedPoints
   证明: by
   apply le_antisymm
@@ -221,7 +221,7 @@ theorem rightDual_leftDual_le_of_le
 
 中文:
 定理 rightDual_leftDual_le_of_le
-  条件: {J J' : Set α} (h : J' in R.leftFixedPoints) (h₁ : J <= J')
+  条件: {J J' : 集合 α} (h : J' in R.leftFixedPoints) (h₁ : J <= J')
   证明: by
   rw [← h]
   apply R.gc_leftDual_rightDual.monotone_u
@@ -251,7 +251,7 @@ theorem leftDual_rightDual_le_of_le
 
 中文:
 定理 leftDual_rightDual_le_of_le
-  条件: {I I' : Set β} (h : I' in R.rightFixedPoints) (h₁ : I <= I')
+  条件: {I I' : 集合 β} (h : I' in R.rightFixedPoints) (h₁ : I <= I')
   证明: by
   rw [← h]
   apply R.gc_leftDual_rightDual.monotone_l

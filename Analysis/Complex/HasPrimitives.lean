@@ -82,7 +82,7 @@ lemma mem_ball_re_aux
 
 中文:
 引理 mem_ball_re_aux
-  条件: (hx : x in Ioo (z.re - (r - dist z c)) (z.re + (r - dist z c)))
+  条件: (hx : x in 开区间 (z.re - (r - dist z c)) (z.re + (r - dist z c)))
   证明: by
   set r₁ := r - dist z c
   set s := Ioo (z.re - r₁) (z.re + r₁)
@@ -187,7 +187,7 @@ lemma mem_ball_of_map_im_aux₂
 
 中文:
 引理 mem_ball_of_map_im_aux₂
-  条件: {w : Complex} (hw : w in ball z (r - dist z c))
+  条件: {w : 复形} (hw : w in ball z (r - dist z c))
   证明: by
   apply mem_ball_of_map_im_aux₁ <;>
   apply mem_of_subset_of_mem (ball_subset_ball' (by simp) : ball z (r - dist z c) subseteq ball c r)
@@ -214,8 +214,8 @@ definition wedgeIntegral
   body: (∫ x : Real in z.re..w.re, f (x + z.im * I)) + I • (∫ y : Real in z.im..w.im, f (w.re + y * I))
 
 中文:
-定义 wedgeIntegral
-  签名: (z w : Complex) (f : Complex -> E)
+定义 wedge整数egral
+  签名: (z w : 复形) (f : 复形 -> E)
   定义体: (∫ x : Real in z.re..w.re, f (x + z.im * I)) + I • (∫ y : Real in z.im..w.im, f (w.re + y * I))
 
 Depends on / 依赖: w.im, w.re, z.im, z.re
@@ -235,8 +235,8 @@ lemma wedgeIntegral_add_wedgeIntegral_eq
   abel
 
 中文:
-引理 wedgeIntegral_add_wedgeIntegral_eq
-  条件: (z w : Complex) (f : Complex -> E)
+引理 wedge整数egral_add_wedge整数egral_eq
+  条件: (z w : 复形) (f : 复形 -> E)
   证明: by
   simp only [wedgeIntegral, intervalIntegral.integral_symm z.re w.re,
     intervalIntegral.integral_symm z.im w.im, smul_neg]
@@ -264,7 +264,7 @@ definition IsConservativeOn
 
 中文:
 定义 IsConservativeOn
-  签名: (f : Complex -> E) (U : Set Complex)
+  签名: (f : 复形 -> E) (U : 集合 复形)
   定义体: forall z w, Rectangle z w subseteq U -> wedgeIntegral z w f = - wedgeIntegral w z f
 
 Depends on / 依赖: Rectangle, subseteq, wedgeIntegral
@@ -282,7 +282,7 @@ definition IsExactOn
 
 中文:
 定义 IsExactOn
-  签名: (f : Complex -> E) (U : Set Complex)
+  签名: (f : 复形 -> E) (U : 集合 复形)
   定义体: exists g, forall z in U, HasDerivAt g (f z) z
 
 Depends on / 依赖: HasDerivAt
@@ -302,7 +302,7 @@ lemma IsExactOn.with_val_at
 
 中文:
 引理 IsExactOn.with_val_at
-  条件: {f : Complex -> E} {s : Set Complex} (h : IsExactOn f s) (x₀ : Complex) (y : E)
+  条件: {f : 复形 -> E} {s : 集合 复形} (h : IsExactOn f s) (x₀ : 复形) (y : E)
   证明: by
   obtain ⟨η, hη⟩ := h
   use fun z => η z - η x₀ + y, by simp, by simpa using hη
@@ -324,7 +324,7 @@ lemma IsConservativeOn.mono
 
 中文:
 引理 IsConservativeOn.mono
-  条件: {U V : Set Complex} (h : U subseteq V) (hf : IsConservativeOn f V)
+  条件: {U V : 集合 复形} (h : U subseteq V) (hf : IsConservativeOn f V)
   证明: fun z w hzw => hf z w (hzw.trans h)
 
 Depends on / 依赖: hzw.trans
@@ -346,7 +346,7 @@ exact integral_boundary_rect_eq_zero_of_differentiableOn f z w hf.mono hzw
 
 中文:
 定理 _root_.DifferentiableOn.isConservativeOn
-  条件: {U : Set Complex} (hf : DifferentiableOn Complex f U)
+  条件: {U : 集合 复形} (hf : DifferentiableOn 复形 f U)
   证明: by
   rintro z w hzw
   rw [← add_eq_zero_iff_eq_neg]; rw [wedgeIntegral_add_wedgeIntegral_eq]
@@ -375,7 +375,7 @@ exact (differentiableOn_congr <| fun z hz => (hg z hz).deriv).mp hg'.deriv hU
 
 中文:
 引理 IsExactOn.differentiableOn
-  条件: {U : Set Complex} (hU : IsOpen U) (hf : IsExactOn f U)
+  条件: {U : 集合 复形} (hU : 是开集 U) (hf : IsExactOn f U)
   证明: by
   obtain ⟨g, hg⟩ := hf
   have hg' : DifferentiableOn Complex g U := fun z hz => (hg z hz).differentiableAt.differentiableWithinAt
@@ -410,7 +410,7 @@ lemma IsConservativeOn.eventually_nhds_wedgeIntegral_sub_wedgeIntegral
 
 
 中文:
-引理 IsConservativeOn.eventually_nhds_wedgeIntegral_sub_wedgeIntegral
+引理 IsConservativeOn.eventually_nhds_wedge整数egral_sub_wedge整数egral
   证明: by
   refine eventually_nhds_iff_ball.mpr ⟨r - dist z c, by simpa using hz, fun w w_in_z_ball => ?_⟩
   set I₁ := ∫ x in c.re..w.re, f (x + c.im * I)
@@ -480,7 +480,7 @@ lemma hasDerivAt_wedgeIntegral_re_aux
   let s 
 
 中文:
-引理 hasDerivAt_wedgeIntegral_re_aux
+引理 hasDerivAt_wedge整数egral_re_aux
   证明: by
   suffices (fun x => (∫ t in z.re..x, f (t + z.im * I)) - (x - z.re) • f z) =o[𝓝 z.re]
       fun x => x - z.re from
@@ -522,7 +522,7 @@ lemma hasDerivAt_wedgeIntegral_im_aux
       _ =o[𝓝 z] fun w => w - z
 
 中文:
-引理 hasDerivAt_wedgeIntegral_im_aux
+引理 hasDerivAt_wedge整数egral_im_aux
   证明: by
   suffices (fun w => ∫ y in z.im..w.im, f (w.re + y * I) - f z) =o[𝓝 z] fun w => w - z by
     calc
@@ -573,7 +573,7 @@ theorem IsConservativeOn.hasDerivAt_wedgeIntegral
     _ =o[𝓝 z] fun w => w - 
 
 中文:
-定理 IsConservativeOn.hasDerivAt_wedgeIntegral
+定理 IsConservativeOn.hasDerivAt_wedge整数egral
   条件: (h : IsConservativeOn f (ball c r))
   证明: by
   rw [hasDerivAt_iff_isLittleO]
@@ -668,7 +668,7 @@ theorem _root_.DifferentiableOn.isExactOn_ball
 
 中文:
 定理 _root_.DifferentiableOn.isExactOn_ball
-  条件: (hf : DifferentiableOn Complex f (ball c r))
+  条件: (hf : DifferentiableOn 复形 f (ball c r))
   证明: hf.isConservativeOn.isExactOn_ball hf.continuousOn
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hf.isConservativeOn.isExactOn_ball, isConservativeOn, isExactOn_ball
@@ -691,7 +691,7 @@ theorem IsConservativeOn.isExactOn_univ
 
 中文:
 定理 IsConservativeOn.isExactOn_univ
-  条件: (h₁ : Continuous f) (h₂ : IsConservativeOn f univ)
+  条件: (h₁ : 连续 f) (h₂ : IsConservativeOn f univ)
   证明: by
   use (wedgeIntegral 0 · f)
   intro z _
@@ -719,8 +719,8 @@ theorem _root_.Differentiable.isExactOn_univ
     ((isConservativeOn_and_continuousOn_iff_isDifferentiableOn isOpen_univ).2 hf.differentiableOn).1
 
 中文:
-定理 _root_.Differentiable.isExactOn_univ
-  条件: (hf : Differentiable Complex f)
+定理 _root_.可微.isExactOn_univ
+  条件: (hf : 可微 复形 f)
   结论: IsExactOn f univ
   证明: by
   apply IsConservativeOn.isExactOn_univ hf.continuous

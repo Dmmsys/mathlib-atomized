@@ -38,7 +38,7 @@ definition invertibleιOfInvertible
 
 中文:
 定义 invertibleιOfInvertible
-  签名: (m : M) [Invertible (Q m)]
+  签名: (m : M) [可逆 (Q m)]
   定义体: ι Q (⅟(Q m) • m)
   invOf_mul_self := by
     rw [map_smul]; rw [smul_mul_assoc]; rw [ι_sq_scalar]; rw [Algebra.smul_def]; rw [← map_mul]; rw [invOf_mul_self]; rw [map_one]
@@ -64,7 +64,7 @@ theorem invOf_ι
 
 中文:
 定理 invOf_ι
-  条件: (m : M) [Invertible (Q m)] [Invertible (ι Q m)]
+  条件: (m : M) [可逆 (Q m)] [可逆 (ι Q m)]
   证明: by
   let := invertibleιOfInvertible Q m
   convert! (rfl : ⅟(ι Q m) = _)
@@ -90,8 +90,8 @@ theorem isUnit_ι_of_isUnit
 
 中文:
 定理 isUnit_ι_of_isUnit
-  条件: {m : M} (h : IsUnit (Q m))
-  结论: IsUnit (ι Q m)
+  条件: {m : M} (h : 是单位 (Q m))
+  结论: 是单位 (ι Q m)
   证明: by
   cases h.nonempty_invertible
   let := invertibleιOfInvertible Q m
@@ -115,7 +115,7 @@ theorem ι_mul_ι_mul_invOf_ι
 
 中文:
 定理 ι_mul_ι_mul_invOf_ι
-  条件: (a b : M) [Invertible (ι Q a)] [Invertible (Q a)]
+  条件: (a b : M) [可逆 (ι Q a)] [可逆 (Q a)]
   证明: by
   rw [invOf_ι]; rw [map_smul]; rw [mul_smul_comm]; rw [ι_mul_ι_mul_ι]; rw [← map_smul]; rw [smul_sub]; rw [smul_smul]; rw [smul_smul]; rw [invOf_mul_self]; rw [one_smul]
 
@@ -136,7 +136,7 @@ theorem invOf_ι_mul_ι_mul_ι
 
 中文:
 定理 invOf_ι_mul_ι_mul_ι
-  条件: (a b : M) [Invertible (ι Q a)] [Invertible (Q a)]
+  条件: (a b : M) [可逆 (ι Q a)] [可逆 (Q a)]
   证明: by
   rw [invOf_ι]; rw [map_smul]; rw [smul_mul_assoc]; rw [smul_mul_assoc]; rw [ι_mul_ι_mul_ι]; rw [← map_smul]; rw [smul_sub]; rw [smul_smul]; rw [smul_smul]; rw [invOf_mul_self]; rw [one_smul]
 
@@ -163,7 +163,7 @@ definition invertibleOfInvertibleι
 
 中文:
 定义 invertibleOfInvertibleι
-  签名: (m : M) [Invertible (ι Q m)]
+  签名: (m : M) [可逆 (ι Q m)]
   定义体: ExteriorAlgebra.invertibleAlgebraMapEquiv M (Q m)
 .algebraMapOfInvertibleAlgebraMap (equivExterior Q).toLinearMap (by simp)
       .copy (.mul ‹Invertible (ι Q m)› ‹Invertible (ι Q m)›) _ (ι_sq_scalar _ _).symm
@@ -189,8 +189,8 @@ theorem isUnit_of_isUnit_ι
 
 中文:
 定理 isUnit_of_isUnit_ι
-  条件: {m : M} (h : IsUnit (ι Q m))
-  结论: IsUnit (Q m)
+  条件: {m : M} (h : 是单位 (ι Q m))
+  结论: 是单位 (Q m)
   证明: by
   cases h.nonempty_invertible
   let := invertibleOfInvertibleι Q m
@@ -215,7 +215,7 @@ theorem isUnit_ι_iff
 中文:
 定理 isUnit_ι_iff
   条件: {m : M}
-  结论: IsUnit (ι Q m) ↔ IsUnit (Q m)
+  结论: 是单位 (ι Q m) ↔ 是单位 (Q m)
   证明: ⟨isUnit_of_isUnit_ι Q, isUnit_ι_of_isUnit Q⟩
 -/
 @[simp] theorem isUnit_ι_iff {m : M} : IsUnit (ι Q m) ↔ IsUnit (Q m) :=

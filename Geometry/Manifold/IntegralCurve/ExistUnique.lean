@@ -74,8 +74,8 @@ theorem exists_isMIntegralCurveAt_of_contMDiffAt
 .snd.e
 
 中文:
-定理 exists_isMIntegralCurveAt_of_contMDiffAt
-  结论: [CompleteSpace E]
+定理 存在_isM整数egralCurveAt_of_contMDiffAt
+  结论: [完备空间 E]
   证明: by
   -- express the differentiability of the vector field `v` in the local chart
   rw [contMDiffAt_iff] at hv
@@ -144,7 +144,7 @@ lemma exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless
   proof: exists_isMIntegralCurveAt_of_contMDiffAt t₀ hv BoundarylessManifold.isInteriorPoint
 
 中文:
-引理 exists_isMIntegralCurveAt_of_contMDiffAt_boundaryless
+引理 存在_isM整数egralCurveAt_of_contMDiffAt_boundaryless
   证明: exists_isMIntegralCurveAt_of_contMDiffAt t₀ hv BoundarylessManifold.isInteriorPoint
 
 Depends on / 依赖: BoundarylessManifold, BoundarylessManifold.isInteriorPoint, exists_isMIntegralCurveAt_of_contMDiffAt, isInteriorPoint
@@ -171,7 +171,7 @@ theorem isMIntegralCurveAt_eventuallyEq_of_contMDiffAt
       (v ((ex
 
 中文:
-定理 isMIntegralCurveAt_eventuallyEq_of_contMDiffAt
+定理 isM整数egralCurveAt_eventuallyEq_of_contMDiffAt
   结论: (hγt₀ : I.Is整数eriorPoint (γ t₀))
   证明: by
   -- first define `v'` as the vector field expressed in the local chart around `γ t₀`
@@ -234,8 +234,8 @@ theorem isMIntegralCurveAt_eventuallyEq_of_contMDiffAt_boundaryless
   proof: isMIntegralCurveAt_eventuallyEq_of_contMDiffAt BoundarylessManifold.isInteriorPoint hv hγ hγ' h
 
 中文:
-定理 isMIntegralCurveAt_eventuallyEq_of_contMDiffAt_boundaryless
-  结论: [BoundarylessManifold I M]
+定理 isM整数egralCurveAt_eventuallyEq_of_contMDiffAt_boundaryless
+  结论: [无边界流形 I M]
   证明: isMIntegralCurveAt_eventuallyEq_of_contMDiffAt BoundarylessManifold.isInteriorPoint hv hγ hγ' h
 
 Depends on / 依赖: BoundarylessManifold, BoundarylessManifold.isInteriorPoint, isInteriorPoint, isMIntegralCurveAt_eventuallyEq_of_contMDiffAt
@@ -262,8 +262,8 @@ theorem isMIntegralCurveOn_Ioo_eqOn_of_contMDiff
   suffices hsub : Ioo a b 
 
 中文:
-定理 isMIntegralCurveOn_Ioo_eqOn_of_contMDiff
-  结论: (ht₀ : t₀ in Ioo a b)
+定理 isM整数egralCurveOn_Ioo_eqOn_of_contMDiff
+  结论: (ht₀ : t₀ in 开区间 a b)
   证明: by
   set s := {t | γ t = γ' t} inter Ioo a b with hs
   -- since `Ioo a b` is connected, we get `s = Ioo a b` by showing that `s` is clopen in `Ioo a b`
@@ -318,8 +318,8 @@ theorem isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless
     ht₀ (fun _ _ => BoundarylessManifold.isInteriorPoint) hv hγ hγ' h
 
 中文:
-定理 isMIntegralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless
-  结论: [BoundarylessManifold I M]
+定理 isM整数egralCurveOn_Ioo_eqOn_of_contMDiff_boundaryless
+  结论: [无边界流形 I M]
   证明: isMIntegralCurveOn_Ioo_eqOn_of_contMDiff
     ht₀ (fun _ _ => BoundarylessManifold.isInteriorPoint) hv hγ hγ' h
 
@@ -349,7 +349,7 @@ theorem isMIntegralCurve_eq_of_contMDiff
     exact ⟨T + S, by constructor <;> constructo
 
 中文:
-定理 isMIntegralCurve_eq_of_contMDiff
+定理 isM整数egralCurve_eq_of_contMDiff
   结论: (hγt : 对任意 t, I.Is整数eriorPoint (γ t))
   证明: by
   ext t
@@ -385,8 +385,8 @@ theorem isMIntegralCurve_Ioo_eq_of_contMDiff_boundaryless
   proof: isMIntegralCurve_eq_of_contMDiff (fun _ => BoundarylessManifold.isInteriorPoint) hv hγ hγ' h
 
 中文:
-定理 isMIntegralCurve_Ioo_eq_of_contMDiff_boundaryless
-  结论: [BoundarylessManifold I M]
+定理 isM整数egralCurve_Ioo_eq_of_contMDiff_boundaryless
+  结论: [无边界流形 I M]
   证明: isMIntegralCurve_eq_of_contMDiff (fun _ => BoundarylessManifold.isInteriorPoint) hv hγ hγ' h
 
 Depends on / 依赖: BoundarylessManifold, BoundarylessManifold.isInteriorPoint, isInteriorPoint, isMIntegralCurve_eq_of_contMDiff
@@ -408,8 +408,8 @@ apply congrFun
   rw [comp_apply]; rw [add_sub_cancel]; rw [heq]
 
 中文:
-引理 IsMIntegralCurve.periodic_of_eq
-  结论: [BoundarylessManifold I M]
+引理 IsM整数egralCurve.periodic_of_eq
+  结论: [无边界流形 I M]
   证明: by
 apply congrFun
     isMIntegralCurve_Ioo_eq_of_contMDiff_boundaryless (t₀ := b) hv (hγ.comp_add _) hγ _
@@ -445,8 +445,8 @@ lemma IsMIntegralCurve.periodic_xor_injective
     · rw [abs_of_n
 
 中文:
-引理 IsMIntegralCurve.periodic_xor_injective
-  结论: [BoundarylessManifold I M]
+引理 IsM整数egralCurve.periodic_xor_injective
+  结论: [无边界流形 I M]
   证明: by
   rw [xor_iff_iff_not]
   refine ⟨fun ⟨T, hT, hf⟩ => hf.not_injective (ne_of_gt hT), ?_⟩

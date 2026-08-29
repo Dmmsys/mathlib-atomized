@@ -66,7 +66,7 @@ abbreviation centroid
 
 中文:
 缩写 centroid
-  签名: (t : Affine.Simplex k P n)
+  签名: (t : 仿射.单纯形 k P n)
   定义体: Finset.univ.centroid k t.points
 
 Depends on / 依赖: Finset, Finset.univ.centroid, centroid, points, t.points
@@ -83,7 +83,7 @@ theorem univ_centroid_eq
 
 中文:
 定理 univ_centroid_eq
-  条件: (s : Simplex k P n)
+  条件: (s : 单纯形 k P n)
   证明: rfl
 -/
 theorem univ_centroid_eq (s : Simplex k P n) :
@@ -99,7 +99,7 @@ theorem centroid_mem_affineSpan
 
 中文:
 定理 centroid_mem_affineSpan
-  条件: [CharZero k] {n : 自然数} (s : Simplex k P n)
+  条件: [特征零 k] {n : 自然数} (s : 单纯形 k P n)
   证明: centroid_mem_affineSpan_of_card_eq_add_one k _ (card_fin (n + 1))
 
 Depends on / 依赖: card_fin, centroid_mem_affineSpan_of_card_eq_add_one
@@ -118,7 +118,7 @@ theorem centroid_eq_affineCombination
 
 中文:
 定理 centroid_eq_affineCombination
-  条件: (s : Simplex k P n)
+  条件: (s : 单纯形 k P n)
   证明: by rfl
 -/
 theorem centroid_eq_affineCombination (s : Simplex k P n) :
@@ -140,7 +140,7 @@ theorem centroid_notMem_affineSpan_of_ne_univ
 
 中文:
 定理 centroid_notMem_affineSpan_of_ne_univ
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   intro h
   have hssubset : t ⊂ Set.univ := by grind
@@ -181,7 +181,7 @@ theorem centroid_vsub_eq
 
 中文:
 定理 centroid_vsub_eq
-  条件: {n : 自然数} [CharZero k] (s : Simplex k P n) (p : P)
+  条件: {n : 自然数} [特征零 k] (s : 单纯形 k P n) (p : P)
   证明: by
   rw [centroid_vsub_const _ _ (by simp)]; rw [centroid_def]; rw [affineCombination_eq_linear_combination
     (hw := sum_centroidWeights_eq_one_of_nonempty _ _ (by simp))]
@@ -206,7 +206,7 @@ theorem centroid_eq_smul_sum_vsub_vadd
 
 中文:
 定理 centroid_eq_smul_sum_vsub_vadd
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   rw [← s.centroid_vsub_eq]; rw [vsub_vadd]
 
@@ -228,7 +228,7 @@ theorem smul_centroid_vsub_point_eq_sum_vsub
 
 中文:
 定理 smul_centroid_vsub_point_eq_sum_vsub
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   rw [centroid_eq_smul_sum_vsub_vadd s i]; rw [vadd_vsub]; rw [smul_smul]; rw [mul_inv_cancel₀]; rw [one_smul]
   norm_cast
@@ -256,7 +256,7 @@ theorem centroid_weighted_vsub_eq_zero
 
 中文:
 定理 centroid_weighted_vsub_eq_zero
-  条件: [CharZero k] (s : Simplex k P n)
+  条件: [特征零 k] (s : 单纯形 k P n)
   证明: by
   have h := centroid_vsub_eq s s.centroid
   simp only [vsub_self] at h
@@ -293,7 +293,7 @@ theorem eq_centroid_iff_sum_vsub_eq_zero
 
 中文:
 定理 eq_centroid_iff_sum_vsub_eq_zero
-  条件: [CharZero k] {s : Simplex k P n} {p : P}
+  条件: [特征零 k] {s : 单纯形 k P n} {p : P}
   证明: by
   constructor
   · intro h
@@ -337,7 +337,7 @@ theorem face_centroid_eq_centroid
 
 中文:
 定理 face_centroid_eq_centroid
-  结论: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数}
+  结论: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数}
   证明: by
   convert! (Finset.univ.centroid_map k (fs.orderEmbOfFin h).toEmbedding s.points).symm
   rw [← Finset.coe_inj]; rw [Finset.coe_map]; rw [Finset.coe_univ]; rw [Set.image_univ]
@@ -369,7 +369,7 @@ theorem centroid_eq_iff
 
 中文:
 定理 centroid_eq_iff
-  结论: [CharZero k] {n : 自然数} (s : Simplex k P n) {fs₁ fs₂ : Finset (Fin (n + 1))}
+  结论: [特征零 k] {n : 自然数} (s : 单纯形 k P n) {fs₁ fs₂ : 有限集 (有限集 (n + 1))}
   证明: by
   refine ⟨fun h => ?_, @congrArg _ _ fs₁ fs₂ (fun z => Finset.centroid k z s.points)⟩
   rw [Finset.centroid_eq_affineCombination_fintype]; rw [Finset.centroid_eq_affineCombination_fintype] at h
@@ -411,7 +411,7 @@ theorem face_centroid_eq_iff
 
 中文:
 定理 face_centroid_eq_iff
-  结论: [CharZero k] {n : 自然数} (s : Simplex k P n)
+  结论: [特征零 k] {n : 自然数} (s : 单纯形 k P n)
   证明: by
   rw [face_centroid_eq_centroid]; rw [face_centroid_eq_centroid]
   exact s.centroid_eq_iff h₁ h₂
@@ -440,7 +440,7 @@ theorem centroid_eq_of_range_eq
 
 中文:
 定理 centroid_eq_of_range_eq
-  结论: {n : 自然数} {s₁ s₂ : Simplex k P n}
+  结论: {n : 自然数} {s₁ s₂ : 单纯形 k P n}
   证明: by
   rw [← Set.image_univ]; rw [← Set.image_univ]; rw [← Finset.coe_univ] at h
   exact
@@ -472,7 +472,7 @@ theorem affineIndependent_points_update_centroid
 
 中文:
 定理 affineIndependent_points_update_centroid
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   have : s.centroid ∉ affineSpan k (s.points '' {i}ᶜ) :=
     s.centroid_notMem_affineSpan_of_ne_univ (by simp)
@@ -501,7 +501,7 @@ theorem centroid_map
 
 中文:
 定理 centroid_map
-  结论: [CharZero k] {V₂ P₂ : 类型} [AddCommGroup V₂] [Module k V₂]
+  结论: [特征零 k] {V₂ P₂ : 类型} [加法交换群 V₂] [模 k V₂]
   证明: by
   rw [centroid]; rw [map_points]; rw [centroid_eq_affineCombination]; rw [Finset.map_affineCombination]
   · rw [Finset.centroid]
@@ -535,7 +535,7 @@ theorem centroid_reindex
 
 中文:
 定理 centroid_reindex
-  结论: {m n : 自然数} (s : Simplex k P m)
+  结论: {m n : 自然数} (s : 单纯形 k P m)
   证明: by
   rw [centroid]; rw [centroid]
   simp only [centroid_eq_affineCombination]
@@ -572,7 +572,7 @@ theorem centroid_restrict
 
 中文:
 定理 centroid_restrict
-  结论: [CharZero k] {n : 自然数} (s : Simplex k P n) (S : AffineSubspace k P)
+  结论: [特征零 k] {n : 自然数} (s : 单纯形 k P n) (S : 仿射子空间 k P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).centroid = s.centroid := by
   rw [eq_comm]
@@ -605,7 +605,7 @@ definition faceOppositeCentroid
 
 中文:
 定义 faceOppositeCentroid
-  签名: (s : Affine.Simplex k P n) (i : Fin (n + 1))
+  签名: (s : 仿射.单纯形 k P n) (i : 有限集 (n + 1))
   定义体: (s.faceOpposite i).centroid
 
 Depends on / 依赖: centroid, faceOpposite, s.faceOpposite
@@ -623,7 +623,7 @@ theorem faceOppositeCentroid_mem_affineSpan_face
 
 中文:
 定理 faceOppositeCentroid_mem_affineSpan_face
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: centroid_mem_affineSpan (s.faceOpposite i)
 
 Depends on / 依赖: centroid_mem_affineSpan, faceOpposite, s.faceOpposite
@@ -649,7 +649,7 @@ theorem faceOppositeCentroid_eq_affineCombination
 
 中文:
 定理 faceOppositeCentroid_eq_affineCombination
-  条件: (s : Affine.Simplex k P n) (i : Fin (n + 1))
+  条件: (s : 仿射.单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   unfold faceOppositeCentroid
   have : s.faceOpposite i = s.face (fs := {i}ᶜ) (by simp [card_compl, NeZero.one_le]) := by rfl
@@ -684,7 +684,7 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_sum_vsub
 
 中文:
 定理 faceOppositeCentroid_vsub_point_eq_smul_sum_vsub
-  结论: [CharZero k] (s : Affine.Simplex k P n)
+  结论: [特征零 k] (s : 仿射.单纯形 k P n)
   证明: by
   rw [faceOppositeCentroid_eq_affineCombination]; rw [affineCombination_eq_weightedVSubOfPoint_vadd_of_sum_eq_one _ _ _ ?_ (s.points i)]
   · simp only [weightedVSubOfPoint_apply, vadd_vsub]
@@ -718,7 +718,7 @@ theorem faceOppositeCentroid_eq_sum_vsub_vadd
 
 中文:
 定理 faceOppositeCentroid_eq_sum_vsub_vadd
-  结论: [CharZero k] (s : Affine.Simplex k P n)
+  结论: [特征零 k] (s : 仿射.单纯形 k P n)
   证明: by
   rw [← faceOppositeCentroid_vsub_point_eq_smul_sum_vsub s i]; rw [vsub_vadd]
 
@@ -741,7 +741,7 @@ theorem point_vsub_faceOppositeCentroid_eq_smul_sum_vsub
 
 中文:
 定理 point_vsub_faceOppositeCentroid_eq_smul_sum_vsub
-  结论: [CharZero k] (s : Affine.Simplex k P n)
+  结论: [特征零 k] (s : 仿射.单纯形 k P n)
   证明: by
   rw [← neg_vsub_eq_vsub_rev]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [← neg_smul]; rw [Lean.Grind.Ring.neg_eq_mul_neg_one]; rw [← smul_smul]; rw [smul_sum]
   simp only [neg_smul, one_smul, neg_vsub_eq_vsub_rev]
@@ -766,7 +766,7 @@ theorem smul_faceOppositeCentroid_vsub_point_eq_sum_vsub
 
 中文:
 定理 smul_faceOppositeCentroid_vsub_point_eq_sum_vsub
-  结论: [CharZero k] (s : Affine.Simplex k P n)
+  结论: [特征零 k] (s : 仿射.单纯形 k P n)
   证明: by
   simp [faceOppositeCentroid_eq_sum_vsub_vadd, smul_smul, mul_inv_cancel₀ (NeZero.ne (n : k)),
     one_smul]
@@ -790,7 +790,7 @@ theorem smul_centroid_vsub_point_eq_smul_faceOppositeCentroid_vsub_point
 
 中文:
 定理 smul_centroid_vsub_point_eq_smul_faceOppositeCentroid_vsub_point
-  结论: [CharZero k]
+  结论: [特征零 k]
   证明: by
   rw [smul_faceOppositeCentroid_vsub_point_eq_sum_vsub s i]; rw [smul_centroid_vsub_point_eq_sum_vsub s i]
 
@@ -816,7 +816,7 @@ theorem faceOppositeCentroid_vsub_faceOppositeCentroid
 
 中文:
 定理 faceOppositeCentroid_vsub_faceOppositeCentroid
-  结论: [CharZero k] (s : Affine.Simplex k P n)
+  结论: [特征零 k] (s : 仿射.单纯形 k P n)
   证明: by
   rw [faceOppositeCentroid_eq_sum_vsub_vadd s i]; rw [faceOppositeCentroid_eq_sum_vsub_vadd s j]; rw [vadd_vsub_vadd_comm _ _ (s.points i) (s.points j)]
   have h1 (i : Fin (n + 1)) : ∑ x, (s.points x -ᵥ s.points i) =
@@ -857,7 +857,7 @@ theorem faceOppositeCentroid_vsub_point_eq_smul_vsub
 
 中文:
 定理 faceOppositeCentroid_vsub_point_eq_smul_vsub
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   rw [← vsub_sub_vsub_cancel_right _ (s.centroid) (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]
   congr
@@ -885,7 +885,7 @@ theorem point_vsub_faceOppositeCentroid_eq_smul_vsub
 
 中文:
 定理 point_vsub_faceOppositeCentroid_eq_smul_vsub
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   rw [← neg_vsub_eq_vsub_rev]; rw [faceOppositeCentroid_vsub_point_eq_smul_vsub]; rw [← neg_smul]; rw [← neg_smul_neg]; rw [neg_vsub_eq_vsub_rev]; rw [neg_neg]
 
@@ -911,7 +911,7 @@ theorem point_vsub_centroid_eq_smul_vsub
 
 中文:
 定理 point_vsub_centroid_eq_smul_vsub
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   symm
   rw [← vsub_sub_vsub_cancel_right _ _ (s.points i)]; rw [faceOppositeCentroid_vsub_point_eq_smul_sum_vsub]; rw [centroid_vsub_eq]; rw [← neg_vsub_eq_vsub_rev]; rw [centroid_vsub_eq]; rw [← sub_smul]; rw [smul_smul]; rw [← neg_smul]
@@ -943,7 +943,7 @@ theorem centroid_vsub_point_eq_smul_vsub
 
 中文:
 定理 centroid_vsub_point_eq_smul_vsub
-  结论: [CharZero k]
+  结论: [特征零 k]
   证明: by
   rw [← neg_vsub_eq_vsub_rev]; rw [point_vsub_centroid_eq_smul_vsub]; rw [← neg_smul_neg]; rw [neg_vsub_eq_vsub_rev]; rw [← neg_smul]; rw [neg_neg]
 
@@ -965,7 +965,7 @@ theorem faceOppositeCentroid_vsub_centroid_eq_smul_vsub
 
 中文:
 定理 faceOppositeCentroid_vsub_centroid_eq_smul_vsub
-  结论: [CharZero k]
+  结论: [特征零 k]
   证明: by
   rw [centroid_vsub_point_eq_smul_vsub]; rw [smul_smul]; rw [inv_mul_cancel₀ (NeZero.ne (n : k))]; rw [one_smul]
 
@@ -987,7 +987,7 @@ theorem centroid_vsub_faceOppositeCentroid_eq_smul_vsub
 
 中文:
 定理 centroid_vsub_faceOppositeCentroid_eq_smul_vsub
-  结论: [CharZero k]
+  结论: [特征零 k]
   证明: by
   rw [point_vsub_centroid_eq_smul_vsub]; rw [smul_smul]; rw [inv_mul_cancel₀ (NeZero.ne (n : k))]; rw [one_smul]
 
@@ -1009,7 +1009,7 @@ theorem centroid_eq_smul_vsub_vadd_point
 
 中文:
 定理 centroid_eq_smul_vsub_vadd_point
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   rw [← centroid_vsub_point_eq_smul_vsub]; rw [vsub_vadd]
 
@@ -1030,7 +1030,7 @@ theorem faceOppositeCentroid_eq_smul_vsub_vadd_point
 
 中文:
 定理 faceOppositeCentroid_eq_smul_vsub_vadd_point
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: by
   rw [centroid_vsub_point_eq_smul_vsub]; rw [eq_vadd_iff_vsub_eq]; rw [smul_smul]; rw [inv_mul_cancel₀ (NeZero.ne (n : k))]; rw [one_smul]
 
@@ -1055,7 +1055,7 @@ theorem faceOppositeCentroid_map
 
 中文:
 定理 faceOppositeCentroid_map
-  结论: [CharZero k] {V₂ P₂ : 类型} [AddCommGroup V₂]
+  结论: [特征零 k] {V₂ P₂ : 类型} [加法交换群 V₂]
   证明: by
   simp only [faceOppositeCentroid, faceOpposite_map, centroid_eq_affineCombination, map_points]
   rw [Finset.map_affineCombination]
@@ -1086,7 +1086,7 @@ theorem faceOppositeCentroid_restrict
 
 中文:
 定理 faceOppositeCentroid_restrict
-  结论: [CharZero k] (s : Simplex k P n)
+  结论: [特征零 k] (s : 单纯形 k P n)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).faceOppositeCentroid i = s.faceOppositeCentroid i := by
   rw [eq_comm]
@@ -1118,7 +1118,7 @@ exact centroid_eq_of_range_eq Affine.Simplex.range_faceOpposite_reindex s e i
 
 中文:
 定理 faceOppositeCentroid_reindex
-  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : Simplex k P m)
+  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : 单纯形 k P m)
   证明: by
   ext i
   rw [faceOppositeCentroid]
@@ -1145,7 +1145,7 @@ definition median
 
 中文:
 定义 median
-  签名: (s : Simplex k P n) (i : Fin (n + 1))
+  签名: (s : 单纯形 k P n) (i : 有限集 (n + 1))
   定义体: line[k, s.points i, s.faceOppositeCentroid i]
 
 Depends on / 依赖: faceOppositeCentroid, points, s.faceOppositeCentroid, s.points
@@ -1167,7 +1167,7 @@ theorem median_reindex
 
 中文:
 定理 median_reindex
-  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : Simplex k P n)
+  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : 单纯形 k P n)
   证明: by
   ext i
   simp [median]
@@ -1192,7 +1192,7 @@ theorem median_map
 
 中文:
 定理 median_map
-  结论: [CharZero k] {V₂ P₂ : 类型} [AddCommGroup V₂] [Module k V₂] [AffineSpace V₂ P₂]
+  结论: [特征零 k] {V₂ P₂ : 类型} [加法交换群 V₂] [模 k V₂] [仿射空间 V₂ P₂]
   证明: by
   simp [median, map_span, Set.image_pair]
 
@@ -1216,7 +1216,7 @@ theorem median_restrict
 
 中文:
 定理 median_restrict
-  结论: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1)) (S : AffineSubspace k P)
+  结论: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1)) (S : 仿射子空间 k P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     AffineSubspace.map (AffineSubspace.subtype S) ((s.restrict S hS).median i) = s.median i := by
   simp [median, map_span, Set.image_pair]
@@ -1240,7 +1240,7 @@ theorem faceOppositeCentroid_mem_median
 
 中文:
 定理 faceOppositeCentroid_mem_median
-  条件: (s : Simplex k P n) (i : Fin (n + 1))
+  条件: (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   simp [median, right_mem_affineSpan_pair]
 
@@ -1261,7 +1261,7 @@ theorem point_mem_median
 
 中文:
 定理 point_mem_median
-  条件: (s : Simplex k P n) (i : Fin (n + 1))
+  条件: (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   simp [median, left_mem_affineSpan_pair]
 
@@ -1285,7 +1285,7 @@ theorem centroid_mem_median
 
 中文:
 定理 centroid_mem_median
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   rw [median]
   have h : s.centroid = ((n : k) * (1 / (n + 1))) • (s.faceOppositeCentroid i -ᵥ s.points i)
@@ -1320,7 +1320,7 @@ theorem median_eq_line_point_centroid
 
 中文:
 定理 median_eq_line_point_centroid
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   have h1 : s.median i <= line[k, s.points i, s.centroid] := by
     unfold median
@@ -1368,8 +1368,8 @@ theorem eq_centroid_of_forall_mem_median
   have h_span : forall i : s', p -ᵥ s.centroid in (Submodule.span k ({u i} 
 
 中文:
-定理 eq_centroid_of_forall_mem_median
-  结论: [CharZero k] (s : Simplex k P n) {hn : 1 < n} {p : P}
+定理 eq_centroid_of_对任意_mem_median
+  结论: [特征零 k] (s : 单纯形 k P n) {hn : 1 < n} {p : P}
   证明: by
   rw [← vsub_eq_zero_iff_eq]
   set i₀ : Fin (n + 1) := 0
@@ -1440,7 +1440,7 @@ definition medial
 
 中文:
 定义 medial
-  签名: [CharZero k] (s : Simplex k P n)
+  签名: [特征零 k] (s : 单纯形 k P n)
   定义体: s.faceOppositeCentroid i
   independent := by
     obtain h := s.independent
@@ -1470,7 +1470,7 @@ theorem medial_points
 
 中文:
 定理 medial_points
-  条件: [CharZero k] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: [特征零 k] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: rfl
 -/
 theorem medial_points [CharZero k] (s : Simplex k P n) (i : Fin (n + 1)) :
@@ -1513,7 +1513,7 @@ theorem medial_map
 
 中文:
 定理 medial_map
-  结论: {V₂ P₂ : 类型} [AddCommGroup V₂] [Module k V₂] [AffineSpace V₂ P₂] [CharZero k]
+  结论: {V₂ P₂ : 类型} [加法交换群 V₂] [模 k V₂] [仿射空间 V₂ P₂] [特征零 k]
   证明: by
   ext i
   simp [medial_points]
@@ -1544,7 +1544,7 @@ theorem affineSpan_range_medial
 
 中文:
 定理 affineSpan_range_medial
-  条件: [CharZero k] (s : Simplex k P n)
+  条件: [特征零 k] (s : 单纯形 k P n)
   证明: by
   have hmem1 : s.medial.points 0 in affineSpan k (Set.range s.medial.points) :=
     mem_affineSpan _ (by simp)
@@ -1589,7 +1589,7 @@ theorem medial_restrict
 
 中文:
 定理 medial_restrict
-  结论: [CharZero k] (s : Simplex k P n) (S : AffineSubspace k P)
+  结论: [特征零 k] (s : 单纯形 k P n) (S : 仿射子空间 k P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).medial = s.medial.restrict S (s.affineSpan_range_medial ▸ hS) := by
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance

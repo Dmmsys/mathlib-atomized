@@ -54,7 +54,7 @@ definition mulSupport
 
 中文:
 定义 mulSupport
-  签名: : Subgroup G where
+  签名: : 子群 G where
   定义体: M ⊓ M⁻¹
   inv_mem' := by aesop
 -/
@@ -111,7 +111,7 @@ theorem _root_.Subgroup.gc_toSubmonoid_mulSupport
   proof: fun _ _ => ⟨fun _ _ => by aesop, fun h _ hx => (h hx).1⟩
 
 中文:
-定理 _root_.Subgroup.gc_toSubmonoid_mulSupport
+定理 _root_.子群.gc_toSubmonoid_mulSupport
   证明: fun _ _ => ⟨fun _ _ => by aesop, fun h _ hx => (h hx).1⟩
 
 Depends on / 依赖: Subgroup, Subgroup.toSubmonoid, mulSupport, toSubmonoid
@@ -316,7 +316,7 @@ theorem of_le
 
 中文:
 定理 of_le
-  条件: {N : Submonoid G} (hM : M.IsMulSpanning) (h : M <= N)
+  条件: {N : 子幺半群 G} (hM : M.IsMulSpanning) (h : M <= N)
   证明: by aesop
 
 @[to_additive]

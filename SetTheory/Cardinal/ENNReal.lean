@@ -27,9 +27,9 @@ lemma toReal_enatCard
   cases finite_or_infinite α <;> simp [ENat.card_eq_coe_natCard]
 
 中文:
-引理 toReal_enatCard
+引理 to实数_enatCard
   条件: (α : 类型)
-  结论: ENN实数.to实数 (E自然数.card α) = 自然数.card α
+  结论: 广义非负实数.to实数 (E自然数.card α) = 自然数.card α
   证明: by
   cases finite_or_infinite α <;> simp [ENat.card_eq_coe_natCard]
 -/

@@ -32,7 +32,7 @@ theorem Function.Periodic.im_invQParam_pos_of_norm_lt_one
     ((Real.log_neg_iff (norm_pos_iff.mpr hq_ne)).mpr hq)
 
 中文:
-定理 Function.Periodic.im_invQParam_pos_of_norm_lt_one
+定理 函数.周期.im_invQParam_pos_of_norm_lt_one
   证明: im_invQParam .. ▸ mul_pos_of_neg_of_neg
     (div_neg_of_neg_of_pos (neg_lt_zero.mpr hh) Real.two_pi_pos)
     ((Real.log_neg_iff (norm_pos_iff.mpr hq_ne)).mpr hq)
@@ -58,8 +58,8 @@ lemma Function.Periodic.norm_qParam_le_of_one_half_le_im
     mul_comm _ π, mul_assoc, le_mul_iff_one_le_right Real.pi_pos, ← div_le_iff₀' two_pos]
 
 中文:
-引理 Function.Periodic.norm_qParam_le_of_one_half_le_im
-  条件: {ξ : Complex} (hξ : 1 / 2 <= ξ.im)
+引理 函数.周期.norm_qParam_le_of_one_half_le_im
+  条件: {ξ : 复形} (hξ : 1 / 2 <= ξ.im)
   证明: by
   rwa [Periodic.qParam, ofReal_one, div_one, Complex.norm_exp, Real.exp_le_exp,
     mul_right_comm, mul_I_re, neg_le_neg_iff, ← ofReal_ofNat, ← ofReal_mul, im_ofReal_mul,

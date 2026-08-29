@@ -50,14 +50,14 @@ structure InjectiveResolution
     - quasiIso : QuasiIso ι  [default: by infer_instance]
 
 中文:
-结构 InjectiveResolution
+结构 单射消解
   参数: (Z : C)
   公理与运算 (5 个):
-    - cocomplex : CochainComplex C 自然数
-    - injective : 对任意 n, Injective (cocomplex.X n)  [默认: by infer_instance]
-    - [hasHomology : 对任意 i, cocomplex.HasHomology i]
+    - cocomplex : 上链复形 C 自然数
+    - injective : 对任意 n, 单射 (cocomplex.X n)  [默认: by infer_instance]
+    - [hasHomology : 对任意 i, cocomplex.有同调 i]
     - ι : (single₀ C).obj Z ⟶ cocomplex
-    - quasiIso : QuasiIso ι  [默认: by infer_instance]
+    - quasiIso : 拟同构 ι  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -86,10 +86,10 @@ class HasInjectiveResolution
     - out : Nonempty (InjectiveResolution Z)
 
 中文:
-类 HasInjectiveResolution
+类 有单射消解
   参数: (Z : C)
   公理与运算 (1 个):
-    - out : Nonempty (InjectiveResolution Z)
+    - out : 非空 (单射消解 Z)
 -/
 class HasInjectiveResolution (Z : C) : Prop where
   out : Nonempty (InjectiveResolution Z)
@@ -110,10 +110,10 @@ class HasInjectiveResolutions
     - out : forall Z : C, HasInjectiveResolution Z
 
 中文:
-类 HasInjectiveResolutions
+类 有InjectiveResolutions
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : 对任意 Z : C, HasInjectiveResolution Z
+    - out : 对任意 Z : C, 有单射消解 Z
 -/
 class HasInjectiveResolutions : Prop where
   out : forall Z : C, HasInjectiveResolution Z
@@ -248,7 +248,7 @@ definition kernelFork
 
 中文:
 定义 kernelFork
-  签名: : KernelFork (I.cocomplex.d 0 1)
+  签名: : 核叉 (I.cocomplex.d 0 1)
   定义体: KernelFork.ofι _ I.ι_f_zero_comp_complex_d
 
 Depends on / 依赖: KernelFork, KernelFork.of
@@ -272,7 +272,7 @@ definition isLimitKernelFork
 
 中文:
 定义 isLimitKernelFork
-  签名: : IsLimit (I.kernelFork)
+  签名: : 是极限 (I.kernelFork)
   定义体: by
   refine IsLimit.ofIsoLimit (I.cocomplex.cyclesIsKernel 0 1 (by simp)) (Iso.symm ?_)
   refine Fork.ext ((singleObjHomologySelfIso _ _ _).symm ≪≫
@@ -315,7 +315,7 @@ definition self
 
 中文:
 定义 self
-  签名: [Injective Z]
+  签名: [单射 Z]
   定义体: (CochainComplex.single₀ C).obj Z
   ι := 𝟙 ((CochainComplex.single₀ C).obj Z)
   injective n := by
@@ -350,7 +350,7 @@ structure Hom
     - ι_f_zero_comp_hom_f_zero : I.ι.f 0 ≫ hom.f 0 = ((single₀ C).map f).f 0 ≫ I'.ι.f 0
 
 中文:
-结构 Hom
+结构 态射
   参数: (f : Z ⟶ Z')
   公理与运算 (2 个):
     - hom : I.cocomplex ⟶ I'.cocomplex
@@ -378,7 +378,7 @@ lemma ι_comp_hom
 
 中文:
 引理 ι_comp_hom
-  条件: {f : Z ⟶ Z'} (φ : Hom I I' f)
+  条件: {f : Z ⟶ Z'} (φ : 态射 I I' f)
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch

@@ -211,7 +211,7 @@ definition limitConeLift
 
 中文:
 定义 limitConeLift
-  签名: (F : J ⥤ Cat.{v, v}) (s : Cone F)
+  签名: (F : J ⥤ Cat.{v, v}) (s : 锥 F)
   定义体: Functor.toCatHom {
     obj :=
       limit.lift (F ⋙ Cat.objects)
@@ -341,7 +341,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasLimits Cat.{v, v}
+  签名: 有极限 Cat.{v, v}
   定义体: { has_limit := fun F => ⟨⟨⟨HasLimits.limitCone F, HasLimits.limitConeIsLimit F⟩⟩⟩ }
 
 Depends on / 依赖: HasLimits, HasLimits.limitCone, HasLimits.limitConeIsLimit, has_limit, limitCone, limitConeIsLimit

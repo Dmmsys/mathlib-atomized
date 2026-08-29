@@ -82,7 +82,7 @@ theorem mk_eq_mk
 中文:
 定理 mk_eq_mk
   条件: (f : CauSeq _ abv)
-  结论: @Eq (Cauchy abv) ⟦f⟧ (mk f)
+  结论: @相等 (Cauchy abv) ⟦f⟧ (mk f)
   证明: rfl
 -/
 theorem mk_eq_mk (f : CauSeq _ abv) : @Eq (Cauchy abv) ⟦f⟧ (mk f) :=
@@ -134,7 +134,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (Cauchy abv)
+  签名: 零 (Cauchy abv)
   定义体: ⟨ofRat 0⟩
 -/
 instance : Zero (Cauchy abv) :=
@@ -150,7 +150,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (Cauchy abv)
+  签名: 幺 (Cauchy abv)
   定义体: ⟨ofRat 1⟩
 -/
 instance : One (Cauchy abv) :=
@@ -166,7 +166,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Cauchy abv)
+  签名: 可居 (Cauchy abv)
   定义体: ⟨0⟩
 -/
 instance : Inhabited (Cauchy abv) :=
@@ -246,7 +246,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (Cauchy abv)
+  签名: 加法 (Cauchy abv)
   定义体: ⟨(Quotient.map₂ (· + ·)) fun _ _ hf _ _ hg => add_equiv_add hf hg⟩
 
 @[simp]
@@ -287,7 +287,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (Cauchy abv)
+  签名: 取负 (Cauchy abv)
   定义体: ⟨(Quotient.map Neg.neg) fun _ _ hf => neg_equiv_neg hf⟩
 
 @[simp]
@@ -328,7 +328,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (Cauchy abv)
+  签名: 乘法 (Cauchy abv)
   定义体: ⟨(Quotient.map₂ (· * ·)) fun _ _ hf _ _ hg => mul_equiv_mul hf hg⟩
 
 @[simp]
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (Cauchy abv)
+  签名: 减法 (Cauchy abv)
   定义体: ⟨(Quotient.map₂ Sub.sub) fun _ _ hf _ _ hg => sub_equiv_sub hf hg⟩
 
 @[simp]
@@ -412,7 +412,7 @@ theorem mk_smul
 
 中文:
 定理 mk_smul
-  条件: {γ : 类型} [SMul γ β] [IsScalarTower γ β β] (c : γ) (f : CauSeq β abv)
+  条件: {γ : 类型} [标量乘法 γ β] [标量塔 γ β β] (c : γ) (f : CauSeq β abv)
   证明: rfl
 -/
 theorem mk_smul {γ : Type*} [SMul γ β] [IsScalarTower γ β β] (c : γ) (f : CauSeq β abv) :
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (Cauchy abv) 自然数
+  签名: 幂 (Cauchy abv) 自然数
   定义体: ⟨fun x n => Quotient.map (· ^ n) (fun _ _ hf => pow_equiv_pow hf _) x⟩
 
 @[simp]
@@ -470,7 +470,7 @@ instance :
 
 中文:
 实例 :
-  签名: 自然数Cast (Cauchy abv)
+  签名: 自然数嵌入 (Cauchy abv)
   定义体: ⟨fun n => mk n⟩
 -/
 instance : NatCast (Cauchy abv) :=
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: 整数Cast (Cauchy abv)
+  签名: 整数嵌入 (Cauchy abv)
   定义体: ⟨fun n => mk n⟩
 
 @[simp]
@@ -607,7 +607,7 @@ theorem ofRat_injective
 
 中文:
 定理 ofRat_injective
-  结论: Function.Injective (ofRat : β -> Cauchy abv)
+  结论: 函数.单射 (ofRat : β -> Cauchy abv)
   证明: fun x y h => by
   simpa [ofRat, mk_eq, ← const_sub, const_limZero, sub_eq_zero] using h
 
@@ -630,7 +630,7 @@ instance Cauchy.ring
 
 中文:
 实例 Cauchy.ring
-  签名: : Ring (Cauchy abv)
+  签名: : 环 (Cauchy abv)
   定义体: fast_instance%
   Function.Surjective.ring mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
@@ -705,7 +705,7 @@ instance Cauchy.instNonTrivial
 
 中文:
 实例 Cauchy.instNonTrivial
-  签名: [Nontrivial β]
+  签名: [非平凡 β]
   定义体: ofRat_injective.nontrivial
 
 Depends on / 依赖: nontrivial, ofRat_injective, ofRat_injective.nontrivial
@@ -734,7 +734,7 @@ instance Cauchy.commRing
 
 中文:
 实例 Cauchy.commRing
-  签名: : CommRing (Cauchy abv)
+  签名: : 交换环 (Cauchy abv)
   定义体: fast_instance%
   Function.Surjective.commRing mk Quotient.mk'_surjective rfl rfl
     (fun _ _ => (mk_add _ _).symm) (fun _ _ => (mk_mul _ _).symm) (fun _ => (mk_neg _).symm)
@@ -766,7 +766,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: : NNRatCast (Cauchy abv) where nnratCast q
+  签名: : 非负有理数嵌入 (Cauchy abv) where nnratCast q
   定义体: ofRat q
 -/
 instance instNNRatCast : NNRatCast (Cauchy abv) where nnratCast q := ofRat q
@@ -780,7 +780,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: : RatCast (Cauchy abv) where ratCast q
+  签名: : 有理数嵌入 (Cauchy abv) where ratCast q
   定义体: ofRat q
 -/
 instance instRatCast : RatCast (Cauchy abv) where ratCast q := ofRat q
@@ -796,7 +796,7 @@ lemma ofRat_nnratCast
 
 中文:
 引理 ofRat_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ofRat (q : β) = (q : Cauchy abv)
   证明: rfl
 -/
@@ -812,7 +812,7 @@ lemma ofRat_ratCast
 
 中文:
 引理 ofRat_ratCast
-  条件: (q : Rat)
+  条件: (q : 有理数)
   结论: ofRat (q : β) = (q : Cauchy abv)
   证明: rfl
 -/
@@ -836,7 +836,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (Cauchy abv)
+  签名: 取逆 (Cauchy abv)
   定义体: ⟨fun x =>
     (Quotient.liftOn x fun f => mk <| if h : LimZero f then 0 else inv f h) fun f g fg => by
       have := limZero_congr fg
@@ -1030,7 +1030,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: : DivInvMonoid (Cauchy abv) where
+  签名: : 除逆幺半群 (Cauchy abv) where
 -/
 noncomputable instance instDivInvMonoid : DivInvMonoid (Cauchy abv) where
 
@@ -1072,7 +1072,7 @@ nnqs
 
 中文:
 实例 Cauchy.divisionRing
-  签名: : DivisionRing (Cauchy abv) where
+  签名: : 除环 (Cauchy abv) where
   定义体: inv_zero
   mul_inv_cancel _ := CauSeq.Completion.mul_inv_cancel
   nnqsmul := (· • ·)
@@ -1121,7 +1121,7 @@ instance Cauchy.field
 
 中文:
 实例 Cauchy.field
-  签名: : Field (Cauchy abv)
+  签名: : 域 (Cauchy abv)
   定义体: { Cauchy.divisionRing, Cauchy.commRing with }
 
 Depends on / 依赖: Cauchy, Cauchy.commRing, Cauchy.divisionRing, commRing, divisionRing
@@ -1151,7 +1151,7 @@ class IsComplete
     - isComplete : forall s : CauSeq β abv, exists b : β, s ≈ const abv b
 
 中文:
-类 IsComplete
+类 是完备
   参数: : 命题 where
   公理与运算 (1 个):
     - isComplete : 对任意 s : CauSeq β abv, 存在 b : β, s ≈ const abv b

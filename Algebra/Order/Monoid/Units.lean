@@ -30,8 +30,8 @@ instance [Monoid
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-实例 [Monoid
-  签名: α] [Preorder α] : Preorder αˣ
+实例 [幺半群
+  签名: α] [预序 α] : 预序 αˣ
   定义体: Preorder.lift val
 
 @[to_additive (attr := simp, norm_cast)]
@@ -55,7 +55,7 @@ theorem val_le_val
 
 中文:
 定理 val_le_val
-  条件: [Monoid α] [Preorder α] {a b : αˣ}
+  条件: [幺半群 α] [预序 α] {a b : αˣ}
   结论: (a : α) <= b ↔ a <= b
   证明: Iff.rfl
 
@@ -80,7 +80,7 @@ theorem val_lt_val
 
 中文:
 定理 val_lt_val
-  条件: [Monoid α] [Preorder α] {a b : αˣ}
+  条件: [幺半群 α] [预序 α] {a b : αˣ}
   结论: (a : α) < b ↔ a < b
   证明: Iff.rfl
 
@@ -104,7 +104,7 @@ instance instPartialOrderUnits
 
 中文:
 实例 instPartialOrderUnits
-  签名: [Monoid α] [PartialOrder α]
+  签名: [幺半群 α] [偏序 α]
   定义体: PartialOrder.lift val val_injective
 
 @[to_additive]
@@ -126,8 +126,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] [LinearOrder α] : Max αˣ where
+实例 [幺半群
+  签名: α] [线性序 α] : 最大值 αˣ where
   定义体: if a <= b then b else a
 
 @[to_additive]
@@ -148,8 +148,8 @@ instance [Monoid
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-实例 [Monoid
-  签名: α] [LinearOrder α] : Min αˣ where
+实例 [幺半群
+  签名: α] [线性序 α] : 最小值 αˣ where
   定义体: if a <= b then a else b
 
 
@@ -175,8 +175,8 @@ theorem max_val
 
 中文:
 定理 max_val
-  条件: [Monoid α] [LinearOrder α] (a b : αˣ)
-  结论: (max a b).val = max a.val b.val
+  条件: [幺半群 α] [线性序 α] (a b : αˣ)
+  结论: (最大值 a b).val = 最大值 a.val b.val
   证明: by
   simp_rw [max_def, val_le_val, ← apply_ite]
   rfl
@@ -205,8 +205,8 @@ theorem min_val
 
 中文:
 定理 min_val
-  条件: [Monoid α] [LinearOrder α] (a b : αˣ)
-  结论: (min a b).val = min a.val b.val
+  条件: [幺半群 α] [线性序 α] (a b : αˣ)
+  结论: (最小值 a b).val = 最小值 a.val b.val
   证明: by
   simp_rw [min_def, val_le_val, ← apply_ite]
   rfl
@@ -231,8 +231,8 @@ instance [Monoid
 @[to_additive]
 
 中文:
-实例 [Monoid
-  签名: α] [Ord α] : Ord αˣ where
+实例 [幺半群
+  签名: α] [序 α] : 序 αˣ where
   定义体: compare a.val b.val
 
 @[to_additive]
@@ -256,7 +256,7 @@ theorem compare_val
 
 中文:
 定理 compare_val
-  条件: [Monoid α] [Ord α] (a b : αˣ)
+  条件: [幺半群 α] [序 α] (a b : αˣ)
   结论: compare a.val b.val = compare a b
   证明: rfl
 
@@ -274,8 +274,8 @@ instance [Monoid
   body: val_injective.linearOrder _ val_le_val val_lt_val min_val max_val compare_val
 
 中文:
-实例 [Monoid
-  签名: α] [LinearOrder α] : LinearOrder αˣ
+实例 [幺半群
+  签名: α] [线性序 α] : 线性序 αˣ
   定义体: val_injective.linearOrder _ val_le_val val_lt_val min_val max_val compare_val
 
 Depends on / 依赖: compare_val, linearOrder, max_val, min_val, val_injective, val_injective.linearOrder, val_le_val, val_lt_val
@@ -296,7 +296,7 @@ definition orderEmbeddingVal
 
 中文:
 定义 orderEmbeddingVal
-  签名: [Monoid α] [LinearOrder α]
+  签名: [幺半群 α] [线性序 α]
   定义体: ⟨⟨val, val_injective⟩, .rfl⟩
 
 Depends on / 依赖: val_injective

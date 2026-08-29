@@ -37,8 +37,8 @@ definition Nat.unaryCast
   signature: [One R] [Zero R] [Add R]
 
 中文:
-定义 Nat.unaryCast
-  签名: [One R] [Zero R] [Add R]
+定义 自然数.unaryCast
+  签名: [幺 R] [零 R] [加法 R]
 -/
 protected def Nat.unaryCast [One R] [Zero R] [Add R] : Nat -> R
   | 0 => 0
@@ -64,8 +64,8 @@ theorem Nat.cast_ofNat
   proof: rfl
 
 中文:
-定理 Nat.cast_ofNat
-  条件: {n : 自然数} [自然数Cast R] [自然数.AtLeastTwo n]
+定理 自然数.cast_of自然数
+  条件: {n : 自然数} [自然数嵌入 R] [自然数.AtLeastTwo n]
   证明: rfl
 -/
 @[simp, norm_cast] theorem Nat.cast_ofNat {n : Nat} [NatCast R] [Nat.AtLeastTwo n] :
@@ -86,9 +86,9 @@ class AddMonoidWithOne
     - natCast_succ : forall n, natCast (n + 1) = natCast n + 1  [default: by intros; rfl]
 
 中文:
-类 AddMonoidWithOne
+类 加法带幺幺半群
   参数: (R : 类型)
-  继承: NatCast R, AddMonoid R, One R
+  继承: 自然数嵌入 R, 加法幺半群 R, 幺 R
   公理与运算 (3 个):
     - natCast : = 自然数.unaryCast
     - natCast_zero : natCast 0 = 0  [默认: by intros; rfl]
@@ -113,9 +113,9 @@ class AddCommMonoidWithOne
   (no additional axioms)
 
 中文:
-类 AddCommMonoidWithOne
+类 加法交换带幺幺半群
   参数: (R : 类型)
-  继承: AddMonoidWithOne R, AddCommMonoid R
+  继承: 加法带幺幺半群 R, 加法交换幺半群 R
   (无附加公理)
 -/
 class AddCommMonoidWithOne (R : Type*) extends AddMonoidWithOne R, AddCommMonoid R
@@ -185,7 +185,7 @@ theorem cast_ite
 
 中文:
 定理 cast_ite
-  条件: (P : 命题) [Decidable P] (m n : 自然数)
+  条件: (P : 命题) [可判定 P] (m n : 自然数)
   证明: by
   split_ifs <;> rfl
 
@@ -306,7 +306,7 @@ definition binCast
 
 中文:
 定义 binCast
-  签名: [Zero R] [One R] [Add R]
+  签名: [零 R] [幺 R] [加法 R]
 -/
 protected def binCast [Zero R] [One R] [Add R] : Nat -> R
   | 0 => 0
@@ -333,7 +333,7 @@ theorem binCast_eq
 
 中文:
 定理 binCast_eq
-  条件: [AddMonoidWithOne R] (n : 自然数)
+  条件: [加法带幺幺半群 R] (n : 自然数)
   证明: by
   induction n using Nat.strongRecOn with | ind k hk => ?_
   cases k with
@@ -374,7 +374,7 @@ theorem cast_two
 
 中文:
 定理 cast_two
-  条件: [自然数Cast R]
+  条件: [自然数嵌入 R]
   结论: ((2 : 自然数) : R) = (2 : R)
   证明: rfl
 -/
@@ -391,7 +391,7 @@ theorem cast_three
 
 中文:
 定理 cast_three
-  条件: [自然数Cast R]
+  条件: [自然数嵌入 R]
   结论: ((3 : 自然数) : R) = (3 : R)
   证明: rfl
 -/
@@ -408,7 +408,7 @@ theorem cast_four
 
 中文:
 定理 cast_four
-  条件: [自然数Cast R]
+  条件: [自然数嵌入 R]
   结论: ((4 : 自然数) : R) = (4 : R)
   证明: rfl
 -/
@@ -427,8 +427,8 @@ abbreviation AddMonoidWithOne.unary
   body: { ‹One R›, ‹AddMonoid R› with }
 
 中文:
-缩写 AddMonoidWithOne.unary
-  签名: [AddMonoid R] [One R]
+缩写 加法带幺幺半群.unary
+  签名: [加法幺半群 R] [幺 R]
   定义体: { ‹One R›, ‹AddMonoid R› with }
 -/
 protected abbrev AddMonoidWithOne.unary [AddMonoid R] [One R] : AddMonoidWithOne R :=
@@ -448,8 +448,8 @@ abbreviation AddMonoidWithOne.binary
       rw [Nat.binCast_eq]; rw [Nat.binCast_eq]; rw [Nat.cast_succ] }
 
 中文:
-缩写 AddMonoidWithOne.binary
-  签名: [AddMonoid R] [One R]
+缩写 加法带幺幺半群.binary
+  签名: [加法幺半群 R] [幺 R]
   定义体: { ‹One R›, ‹AddMonoid R› with
     natCast := Nat.binCast,
     natCast_zero := by simp only [Nat.binCast],
@@ -479,7 +479,7 @@ theorem one_add_one_eq_two
 
 中文:
 定理 one_add_one_eq_two
-  条件: [AddMonoidWithOne R]
+  条件: [加法带幺幺半群 R]
   结论: 1 + 1 = (2 : R)
   证明: by
   rw [← Nat.cast_one]; rw [← Nat.cast_add]
@@ -507,7 +507,7 @@ theorem two_add_one_eq_three
 
 中文:
 定理 two_add_one_eq_three
-  条件: [AddMonoidWithOne R]
+  条件: [加法带幺幺半群 R]
   结论: 2 + 1 = (3 : R)
   证明: by
   rw [← one_add_one_eq_two]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← Nat.cast_add]
@@ -535,7 +535,7 @@ theorem three_add_one_eq_four
 
 中文:
 定理 three_add_one_eq_four
-  条件: [AddMonoidWithOne R]
+  条件: [加法带幺幺半群 R]
   结论: 3 + 1 = (4 : R)
   证明: by
   rw [← two_add_one_eq_three]; rw [← one_add_one_eq_two]; rw [← Nat.cast_one]; rw [← Nat.cast_add]; rw [← Nat.cast_add]; rw [← Nat.cast_add]
@@ -562,7 +562,7 @@ theorem two_add_two_eq_four
 
 中文:
 定理 two_add_two_eq_four
-  条件: [AddMonoidWithOne R]
+  条件: [加法带幺幺半群 R]
   结论: 2 + 2 = (4 : R)
   证明: by
   simp [← one_add_one_eq_two, ← Nat.cast_one, ← three_add_one_eq_four,
@@ -586,7 +586,7 @@ lemma nsmul_one
 
 中文:
 引理 nsmul_one
-  条件: {A} [AddMonoidWithOne A]
+  条件: {A} [加法带幺幺半群 A]
   结论: 对任意 n : 自然数, n • (1 : A) = n
 -/
 @[simp] lemma nsmul_one {A} [AddMonoidWithOne A] : forall n : Nat, n • (1 : A) = n

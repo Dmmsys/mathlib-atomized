@@ -73,7 +73,7 @@ definition isLimitForkMapOfIsLimit
 
 中文:
 定义 isLimitForkMapOfIsLimit
-  签名: [PreservesLimit (parallelPair f g) G] (l : IsLimit (Fork.ofι h w))
+  签名: [保持极限 (parallelPair f g) G] (l : 是极限 (叉.ofι h w))
   定义体: isLimitMapConeForkEquiv G w (isLimitOfPreserves G l)
 
 Depends on / 依赖: isLimitMapConeForkEquiv, isLimitOfPreserves
@@ -92,7 +92,7 @@ definition isLimitOfIsLimitForkMap
 
 中文:
 定义 isLimitOfIsLimitForkMap
-  签名: [ReflectsLimit (parallelPair f g) G]
+  签名: [反映极限 (parallelPair f g) G]
   定义体: isLimitOfReflects G ((isLimitMapConeForkEquiv G w).symm l)
 
 Depends on / 依赖: isLimitMapConeForkEquiv, isLimitOfReflects
@@ -115,7 +115,7 @@ definition isLimitOfHasEqualizerOfPreservesLimit
 
 中文:
 定义 isLimitOfHasEqualizerOfPreservesLimit
-  签名: [PreservesLimit (parallelPair f g) G]
+  签名: [保持极限 (parallelPair f g) G]
   定义体: isLimitForkMapOfIsLimit G _ (equalizerIsEqualizer f g)
 
 Depends on / 依赖: equalizerIsEqualizer, isLimitForkMapOfIsLimit
@@ -141,7 +141,7 @@ lemma PreservesEqualizer.of_iso_comparison
 
 中文:
 引理 PreservesEqualizer.of_iso_comparison
-  条件: [i : IsIso (equalizerComparison f g G)]
+  条件: [i : 是同构 (equalizerComparison f g G)]
   证明: by
   apply preservesLimit_of_preserves_limit_cone (equalizerIsEqualizer f g)
   apply (isLimitMapConeForkEquiv _ _).symm _
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (equalizerComparison f g G)
+  签名: 是同构 (equalizerComparison f g G)
   定义体: by
   rw [← PreservesEqualizer.iso_hom]
   infer_instance
@@ -297,7 +297,7 @@ definition isColimitCoforkMapOfIsColimit
 
 中文:
 定义 isColimitCoforkMapOfIsColimit
-  签名: [PreservesColimit (parallelPair f g) G]
+  签名: [保持余极限 (parallelPair f g) G]
   定义体: isColimitMapCoconeCoforkEquiv G w (isColimitOfPreserves G l)
 
 Depends on / 依赖: isColimitMapCoconeCoforkEquiv, isColimitOfPreserves
@@ -318,7 +318,7 @@ definition isColimitOfIsColimitCoforkMap
 
 中文:
 定义 isColimitOfIsColimitCoforkMap
-  签名: [ReflectsColimit (parallelPair f g) G]
+  签名: [反映余极限 (parallelPair f g) G]
   定义体: isColimitOfReflects G ((isColimitMapCoconeCoforkEquiv G w).symm l)
 
 Depends on / 依赖: isColimitMapCoconeCoforkEquiv, isColimitOfReflects
@@ -343,7 +343,7 @@ definition isColimitOfHasCoequalizerOfPreservesColimit
 
 中文:
 定义 isColimitOfHasCoequalizerOfPreservesColimit
-  签名: [PreservesColimit (parallelPair f g) G]
+  签名: [保持余极限 (parallelPair f g) G]
   定义体: isColimitCoforkMapOfIsColimit G _ (coequalizerIsCoequalizer f g)
 
 Depends on / 依赖: coequalizerIsCoequalizer, isColimitCoforkMapOfIsColimit
@@ -369,7 +369,7 @@ lemma of_iso_comparison
 
 中文:
 引理 of_iso_comparison
-  条件: [i : IsIso (coequalizerComparison f g G)]
+  条件: [i : 是同构 (coequalizerComparison f g G)]
   证明: by
   apply preservesColimit_of_preserves_colimit_cocone (coequalizerIsCoequalizer f g)
   apply (isColimitMapCoconeCoforkEquiv _ _).symm _
@@ -440,7 +440,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (coequalizerComparison f g G)
+  签名: 是同构 (coequalizerComparison f g G)
   定义体: by
   rw [← PreservesCoequalizer.iso_hom]
   infer_instance
@@ -467,7 +467,7 @@ instance map_π_epi
 
 中文:
 实例 map_π_epi
-  签名: : Epi (G.map (coequalizer.π f g))
+  签名: : 满态射 (G.map (coequalizer.π f g))
   定义体: ⟨fun {W} h k => by
     rw [← ι_comp_coequalizerComparison]
     have : Epi (coequalizer.π (G.map f) (G.map g) ≫ coequalizerComparison f g G) := by

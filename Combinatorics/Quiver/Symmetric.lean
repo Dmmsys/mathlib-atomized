@@ -53,7 +53,7 @@ instance symmetrifyQuiver
 
 中文:
 实例 symmetrifyQuiver
-  签名: (V : 类型u) [Quiver V]
+  签名: (V : 类型u) [箭图 V]
   定义体: ⟨fun a b : V => (a ⟶ b) oplus (b ⟶ a)⟩
 -/
 instance symmetrifyQuiver (V : Type u) [Quiver V] : Quiver (Symmetrify V) :=
@@ -71,7 +71,7 @@ class HasReverse
     - reverse' : forall {a b : V}, (a ⟶ b) -> (b ⟶ a)
 
 中文:
-类 HasReverse
+类 有Reverse
   参数: where
   公理与运算 (1 个):
     - reverse' : 对任意 {a b : V}, (a ⟶ b) -> (b ⟶ a)
@@ -90,7 +90,7 @@ definition reverse
 
 中文:
 定义 reverse
-  签名: {V} [Quiver.{v} V] [HasReverse V] {a b : V}
+  签名: {V} [箭图.{v} V] [有Reverse V] {a b : V}
   定义体: HasReverse.reverse'
 
 Depends on / 依赖: HasReverse, HasReverse.reverse, reverse
@@ -109,9 +109,9 @@ class HasInvolutiveReverse
     - inv' : forall {a b : V} (f : a ⟶ b), reverse (reverse f) = f
 
 中文:
-类 HasInvolutiveReverse
-  参数: extends HasReverse V
-  继承: HasReverse V
+类 有InvolutiveReverse
+  参数: extends 有Reverse V
+  继承: 有Reverse V
   公理与运算 (1 个):
     - inv' : 对任意 {a b : V} (f : a ⟶ b), reverse (reverse f) = f
 -/
@@ -134,7 +134,7 @@ theorem reverse_reverse
 
 中文:
 定理 reverse_reverse
-  条件: [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b)
+  条件: [h : 有InvolutiveReverse V] {a b : V} (f : a ⟶ b)
   证明: by apply h.inv'
 
 @[simp]
@@ -160,7 +160,7 @@ theorem reverse_inj
 
 中文:
 定理 reverse_inj
-  结论: [h : HasInvolutiveReverse V] {a b : V}
+  结论: [h : 有InvolutiveReverse V] {a b : V}
   证明: by
   constructor
   · rintro h
@@ -189,7 +189,7 @@ theorem eq_reverse_iff
 
 中文:
 定理 eq_reverse_iff
-  结论: [h : HasInvolutiveReverse V] {a b : V} (f : a ⟶ b)
+  结论: [h : 有InvolutiveReverse V] {a b : V} (f : a ⟶ b)
   证明: by
   rw [← reverse_inj]; rw [reverse_reverse]
 
@@ -213,7 +213,7 @@ class _root_.Prefunctor.MapReverse
     - map_reverse' : forall {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
 
 中文:
-类 _root_.Prefunctor.MapReverse
+类 _root_.预函子.MapReverse
   参数: (φ : U ⥤q V)
   公理与运算 (1 个):
     - map_reverse' : 对任意 {u v : U} (e : u ⟶ v), φ.map (reverse e) = reverse (φ.map e)
@@ -232,7 +232,7 @@ theorem _root_.Prefunctor.map_reverse
   proof: Prefunctor.MapReverse.map_reverse' e
 
 中文:
-定理 _root_.Prefunctor.map_reverse
+定理 _root_.预函子.map_reverse
   结论: (φ : U ⥤q V) [φ.MapReverse]
   证明: Prefunctor.MapReverse.map_reverse' e
 
@@ -252,7 +252,7 @@ instance _root_.Prefunctor.mapReverseComp
     simp only [Prefunctor.comp_map, Prefunctor.MapReverse.map_reverse']
 
 中文:
-实例 _root_.Prefunctor.mapReverseComp
+实例 _root_.预函子.mapReverseComp
   定义体: by
     simp only [Prefunctor.comp_map, Prefunctor.MapReverse.map_reverse']
 
@@ -273,7 +273,7 @@ instance _root_.Prefunctor.mapReverseId
   body: rfl
 
 中文:
-实例 _root_.Prefunctor.mapReverseId
+实例 _root_.预函子.mapReverseId
   签名: :
   定义体: rfl
 
@@ -295,7 +295,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasReverse (Symmetrify V)
+  签名: 有Reverse (Symmetrify V)
   定义体: ⟨fun e => e.swap⟩
 
 Depends on / 依赖: e.swap
@@ -358,7 +358,7 @@ abbreviation Hom.toPos
   body: Sum.inl f
 
 中文:
-缩写 Hom.toPos
+缩写 态射.toPos
   签名: {X Y : V} (f : X ⟶ Y)
   定义体: Sum.inl f
 
@@ -376,7 +376,7 @@ abbreviation Hom.toNeg
   body: Sum.inr f
 
 中文:
-缩写 Hom.toNeg
+缩写 态射.toNeg
   签名: {X Y : V} (f : X ⟶ Y)
   定义体: Sum.inr f
 
@@ -395,8 +395,8 @@ definition Path.reverse
   signature: [HasReverse V] {a : V}
 
 中文:
-定义 Path.reverse
-  签名: [HasReverse V] {a : V}
+定义 道路.reverse
+  签名: [有Reverse V] {a : V}
 -/
 def Path.reverse [HasReverse V] {a : V} : forall {b}, Path a b -> Path b a
   | _, Path.nil => Path.nil
@@ -414,8 +414,8 @@ theorem Path.reverse_toPath
 @[simp]
 
 中文:
-定理 Path.reverse_toPath
-  条件: [HasReverse V] {a b : V} (f : a ⟶ b)
+定理 道路.reverse_toPath
+  条件: [有Reverse V] {a b : V} (f : a ⟶ b)
   证明: rfl
 
 @[simp]
@@ -439,8 +439,8 @@ theorem Path.reverse_comp
 @[simp]
 
 中文:
-定理 Path.reverse_comp
-  条件: [HasReverse V] {a b c : V} (p : Path a b) (q : Path b c)
+定理 道路.reverse_comp
+  条件: [有Reverse V] {a b c : V} (p : 道路 a b) (q : 道路 b c)
   证明: by
   induction q with
   | nil => simp
@@ -469,8 +469,8 @@ theorem Path.reverse_reverse
     rfl
 
 中文:
-定理 Path.reverse_reverse
-  条件: [h : HasInvolutiveReverse V] {a b : V} (p : Path a b)
+定理 道路.reverse_reverse
+  条件: [h : 有InvolutiveReverse V] {a b : V} (p : 道路 a b)
   证明: by
   induction p with
   | nil => simp
@@ -505,7 +505,7 @@ definition of
 
 中文:
 定义 of
-  签名: : Prefunctor V (Symmetrify V) where
+  签名: : 预函子 V (Symmetrify V) where
   定义体: id
   map := Sum.inl
 -/
@@ -528,7 +528,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [HasReverse V'] (φ : Prefunctor V V')
+  签名: [有Reverse V'] (φ : 预函子 V V')
   定义体: φ.obj
   map
   | Sum.inl g => φ.map g
@@ -556,7 +556,7 @@ theorem lift_spec
 
 中文:
 定理 lift_spec
-  条件: [HasReverse V'] (φ : Prefunctor V V')
+  条件: [有Reverse V'] (φ : 预函子 V V')
   证明: by
   fapply Prefunctor.ext
   · rintro X
@@ -589,7 +589,7 @@ theorem lift_reverse
 
 中文:
 定理 lift_reverse
-  结论: [h : HasInvolutiveReverse V']
+  结论: [h : 有InvolutiveReverse V']
   证明: by
   dsimp [Symmetrify.lift]; cases f
   · simp only
@@ -626,7 +626,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  结论: [HasReverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (of ⋙q Φ) = φ)
+  结论: [有Reverse V'] (φ : V ⥤q V') (Φ : Symmetrify V ⥤q V') (hΦ : (of ⋙q Φ) = φ)
   证明: by
   subst_vars
   fapply Prefunctor.ext
@@ -664,7 +664,7 @@ definition _root_.Prefunctor.symmetrify
   map := Sum.map φ.map φ.map
 
 中文:
-定义 _root_.Prefunctor.symmetrify
+定义 _root_.预函子.symmetrify
   签名: (φ : U ⥤q V)
   定义体: φ.obj
   map := Sum.map φ.map φ.map
@@ -682,7 +682,7 @@ instance _root_.Prefunctor.symmetrify_mapReverse
   body: ⟨fun e => by cases e <;> rfl⟩
 
 中文:
-实例 _root_.Prefunctor.symmetrify_mapReverse
+实例 _root_.预函子.symmetrify_mapReverse
   签名: (φ : U ⥤q V)
   定义体: ⟨fun e => by cases e <;> rfl⟩
 -/
@@ -706,8 +706,8 @@ instance [HasReverse
               | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
 
 中文:
-实例 [HasReverse
-  签名: V] : HasReverse (Quiver.Push σ) where
+实例 [有Reverse
+  签名: V] : 有Reverse (箭图.Push σ) where
   定义体: fun
               | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
 -/
@@ -728,7 +728,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : HasInvolutiveReverse V] :
+  签名: : 有InvolutiveReverse V] :
   定义体: fun
   | PushQuiver.arrow f => PushQuiver.arrow (reverse f)
   inv' := fun
@@ -751,7 +751,7 @@ theorem of_reverse
 
 中文:
 定理 of_reverse
-  条件: [HasInvolutiveReverse V] (X Y : V) (f : X ⟶ Y)
+  条件: [有InvolutiveReverse V] (X Y : V) (f : X ⟶ Y)
   证明: rfl
 -/
 theorem of_reverse [HasInvolutiveReverse V] (X Y : V) (f : X ⟶ Y) :
@@ -769,7 +769,7 @@ instance ofMapReverse
 
 中文:
 实例 ofMapReverse
-  签名: [h : HasInvolutiveReverse V]
+  签名: [h : 有InvolutiveReverse V]
   定义体: ⟨by simp [of_reverse]⟩
 
 Depends on / 依赖: of_reverse

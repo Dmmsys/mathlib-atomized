@@ -86,7 +86,7 @@ theorem multilinearMapToDual_apply_tprod
 
 中文:
 定理 multilinearMapToDual_apply_tprod
-  条件: (f : (_ : Fin n) -> Module.Dual R M) (v : Fin n -> M)
+  条件: (f : (_ : 有限集 n) -> 模.对偶 R M) (v : 有限集 n -> M)
   证明: by
   simp [multilinearMapToDual]
 
@@ -128,7 +128,7 @@ lemma pairingDual_tprod_tprod
 
 中文:
 引理 pairingDual_tprod_tprod
-  条件: (f : (_ : Fin n) -> Module.Dual R M) (v : Fin n -> M)
+  条件: (f : (_ : 有限集 n) -> 模.对偶 R M) (v : 有限集 n -> M)
   证明: by
   simp [pairingDual]
 

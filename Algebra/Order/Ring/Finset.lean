@@ -37,7 +37,7 @@ lemma cast_finsetSup'
 中文:
 引理 cast_finsetSup'
   条件: (f : ι -> 自然数) (hs)
-  结论: ((s.sup' hs f : 自然数) : R) = s.sup' hs fun i => (f i : R)
+  结论: ((s.上确界' hs f : 自然数) : R) = s.上确界' hs fun i => (f i : R)
   证明: apply_sup'_eq_sup'_comp _ _ cast_max
 
 Depends on / 依赖: _comp, _eq_sup, apply_sup, cast_max
@@ -61,7 +61,7 @@ lemma cast_finsetInf'
 中文:
 引理 cast_finsetInf'
   条件: (f : ι -> 自然数) (hs)
-  结论: (↑(s.inf' hs f) : R) = s.inf' hs fun i => (f i : R)
+  结论: (↑(s.下确界' hs f) : R) = s.下确界' hs fun i => (f i : R)
   证明: apply_inf'_eq_inf'_comp _ _ cast_min
 
 @[simp, norm_cast]
@@ -82,7 +82,7 @@ lemma cast_finsetSup
 
 中文:
 引理 cast_finsetSup
-  条件: [OrderBot R] [CanonicallyOrderedAdd R] (s : Finset ι) (f : ι -> 自然数)
+  条件: [有底序 R] [典范有序加法 R] (s : 有限集 ι) (f : ι -> 自然数)
   证明: apply_sup_eq_sup_comp _ cast_max (by simp)
 
 Depends on / 依赖: apply_sup_eq_sup_comp, cast_max
@@ -113,8 +113,8 @@ lemma Finset.mul_sup₀
   | insert _ _ _ IH => simp only [sup_insert, mul_max, ← IH]
 
 中文:
-引理 Finset.mul_sup₀
-  条件: (s : Finset ι) (f : ι -> R) (a : R)
+引理 有限集.mul_sup₀
+  条件: (s : 有限集 ι) (f : ι -> R) (a : R)
   证明: by
   classical
   induction s using Finset.induction with
@@ -143,8 +143,8 @@ lemma Finset.sup_mul₀
   | insert _ _ _ IH => simp only [sup_insert, max_mul, ← IH]
 
 中文:
-引理 Finset.sup_mul₀
-  条件: (s : Finset ι) (f : ι -> R) (a : R)
+引理 有限集.sup_mul₀
+  条件: (s : 有限集 ι) (f : ι -> R) (a : R)
   证明: by
   classical
   induction s using Finset.induction with

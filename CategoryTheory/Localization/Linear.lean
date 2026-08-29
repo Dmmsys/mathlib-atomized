@@ -46,7 +46,7 @@ definition linear
 
 中文:
 定义 linear
-  签名: : Linear R D
+  签名: : 线性 R D
   定义体: Linear.ofRingMorphism
   ((CatCenter.localizationRingHom L W).comp (Linear.toCatCenter R C))
 
@@ -103,7 +103,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R W.Localization
+  签名: 线性 R W.Localization
   定义体: Localization.linear R W.Q W
 
 Depends on / 依赖: Localization, Localization.linear, linear
@@ -120,7 +120,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Linear R W.Q
+  签名: 函子.线性 R W.Q
   定义体: Localization.functor_linear R W.Q W
 
 Depends on / 依赖: Localization, Localization.functor_linear, functor_linear
@@ -143,7 +143,7 @@ instance :
 
 中文:
 实例 :
-  签名: Linear R W.Localization'
+  签名: 线性 R W.Localization'
   定义体: Localization.linear R W.Q' W
 
 Depends on / 依赖: Localization, Localization.linear, linear
@@ -160,7 +160,7 @@ instance :
 
 中文:
 实例 :
-  签名: Functor.Linear R W.Q'
+  签名: 函子.线性 R W.Q'
   定义体: Localization.functor_linear R W.Q' W
 
 Depends on / 依赖: Localization, Localization.functor_linear, functor_linear
@@ -197,7 +197,7 @@ lemma functor_linear_iff
 
 中文:
 引理 functor_linear_iff
-  条件: (F : C ⥤ E) (G : D ⥤ E) [Lifting L W F G]
+  条件: (F : C ⥤ E) (G : D ⥤ E) [提升 L W F G]
   证明: by
   constructor
   · intro

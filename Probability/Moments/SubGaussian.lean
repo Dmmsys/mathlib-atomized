@@ -146,10 +146,10 @@ structure Kernel.HasSubgaussianMGF
     - mgf_le : forallᵐ ω' ∂ν, forall t, mgf X (κ ω') t <= exp (c * t ^ 2 / 2)
 
 中文:
-结构 Kernel.HasSubgaussianMGF
+结构 核.有SubgaussianMGF
   参数: (X : Ω -> 实数) (c : 实数>=0)
   公理与运算 (2 个):
-    - integrable_exp_mul : 对任意 t, 整数egrable (fun ω => exp (t * X ω)) (κ ∘ₘ ν)
+    - integrable_exp_mul : 对任意 t, 可积 (fun ω => exp (t * X ω)) (κ ∘ₘ ν)
     - mgf_le : 对任意ᵐ ω' ∂ν, 对任意 t, mgf X (κ ω') t <= exp (c * t ^ 2 / 2)
 -/
 structure Kernel.HasSubgaussianMGF (X : Ω -> Real) (c : Real>=0)
@@ -173,7 +173,7 @@ lemma aestronglyMeasurable
 
 中文:
 引理 aestronglyMeasurable
-  条件: (h : HasSubgaussianMGF X c κ ν)
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   have h_int := h.integrable_exp_mul 1
   simpa using (aemeasurable_of_aemeasurable_exp h_int.1.aemeasurable).aestronglyMeasurable
@@ -195,7 +195,7 @@ lemma ae_integrable_exp_mul
 
 中文:
 引理 ae_integrable_exp_mul
-  条件: (h : HasSubgaussianMGF X c κ ν) (t : 实数)
+  条件: (h : 有SubgaussianMGF X c κ ν) (t : 实数)
   证明: Measure.ae_integrable_of_integrable_comp (h.integrable_exp_mul t)
 
 Depends on / 依赖: Measure, Measure.ae_integrable_of_integrable_comp, ae_integrable_of_integrable_comp, h.integrable_exp_mul, integrable_exp_mul
@@ -217,7 +217,7 @@ lemma ae_aestronglyMeasurable
 
 中文:
 引理 ae_aestronglyMeasurable
-  条件: (h : HasSubgaussianMGF X c κ ν)
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   have h_int := h.ae_integrable_exp_mul 1
   filter_upwards [h_int] with ω h_int
@@ -245,8 +245,8 @@ lemma ae_forall_integrable_exp_mul
   exact integrable_exp_mul_of_le_of_le (h_int _) (h_int _) (Int.floor_le t) (Int.le_ceil t)
 
 中文:
-引理 ae_forall_integrable_exp_mul
-  条件: (h : HasSubgaussianMGF X c κ ν)
+引理 ae_对任意_integrable_exp_mul
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   have h_int (n : Int) : forallᵐ ω' ∂ν, Integrable (fun ω => exp (n * X ω)) (κ ω') :=
     h.ae_integrable_exp_mul _
@@ -281,8 +281,8 @@ lemma ae_forall_memLp_exp_mul
     convert
 
 中文:
-引理 ae_forall_memLp_exp_mul
-  条件: (h : HasSubgaussianMGF X c κ ν) (p : 实数>=0)
+引理 ae_对任意_memLp_exp_mul
+  条件: (h : 有SubgaussianMGF X c κ ν) (p : 实数>=0)
   证明: by
   filter_upwards [h.ae_forall_integrable_exp_mul] with ω' hi t
   constructor
@@ -326,7 +326,7 @@ lemma memLp_exp_mul
 
 中文:
 引理 memLp_exp_mul
-  条件: (h : HasSubgaussianMGF X c κ ν) (t : 实数) (p : 实数>=0)
+  条件: (h : 有SubgaussianMGF X c κ ν) (t : 实数) (p : 实数>=0)
   证明: by
   by_cases hp0 : p = 0
   · simpa [hp0] using (h.integrable_exp_mul t).1
@@ -372,7 +372,7 @@ lemma cgf_le
 
 中文:
 引理 cgf_le
-  条件: (h : HasSubgaussianMGF X c κ ν)
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   filter_upwards [h.mgf_le, h.ae_forall_integrable_exp_mul] with ω' h h_int t
   calc cgf X (κ ω') t
@@ -411,7 +411,7 @@ lemma isFiniteMeasure
 
 中文:
 引理 isFiniteMeasure
-  条件: (h : HasSubgaussianMGF X c κ ν)
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   filter_upwards [h.ae_integrable_exp_mul 0, h.mgf_le] with ω' h h_mgf
   simpa [integrable_const_iff] using h
@@ -437,7 +437,7 @@ lemma measure_univ_le_one
 
 中文:
 引理 measure_univ_le_one
-  条件: (h : HasSubgaussianMGF X c κ ν)
+  条件: (h : 有SubgaussianMGF X c κ ν)
   证明: by
   filter_upwards [h.isFiniteMeasure, h.mgf_le] with ω' h h_mgf
   suffices (κ ω').real Set.univ <= 1 by
@@ -471,7 +471,7 @@ lemma of_rat
 
 中文:
 引理 of_rat
-  结论: (h_int : 对任意 t : 实数, 整数egrable (fun ω => exp (t * X ω)) (κ ∘ₘ ν))
+  结论: (h_int : 对任意 t : 实数, 可积 (fun ω => exp (t * X ω)) (κ ∘ₘ ν))
   证明: h_int
   mgf_le := by
     rw [← ae_all_iff] at h_mgf
@@ -509,7 +509,7 @@ lemma fun_zero
 
 中文:
 引理 fun_zero
-  条件: [IsFiniteMeasure ν] [IsZeroOrMarkovKernel κ]
+  条件: [是有限测度 ν] [是ZeroOrMarkovKernel κ]
   证明: by simp
   mgf_le := by simp
 
@@ -536,8 +536,8 @@ lemma zero
 
 中文:
 引理 zero
-  条件: [IsFiniteMeasure ν] [IsZeroOrMarkovKernel κ]
-  结论: HasSubgaussianMGF 0 0 κ ν
+  条件: [是有限测度 ν] [是ZeroOrMarkovKernel κ]
+  结论: 有SubgaussianMGF 0 0 κ ν
   证明: fun_zero
 
 @[simp]
@@ -562,7 +562,7 @@ lemma zero_kernel
 
 中文:
 引理 zero_kernel
-  结论: HasSubgaussianMGF X c (0 : Kernel Ω' Ω) ν
+  结论: 有SubgaussianMGF X c (0 : 核 Ω' Ω) ν
   证明: by
   constructor
   · simp [FunLike.coe_zero]
@@ -588,7 +588,7 @@ lemma zero_measure
 
 中文:
 引理 zero_measure
-  结论: HasSubgaussianMGF X c κ (0 : Measure Ω')
+  结论: 有SubgaussianMGF X c κ (0 : 测度 Ω')
   证明: ⟨by simp, by simp⟩
 -/
 lemma zero_measure : HasSubgaussianMGF X c κ (0 : Measure Ω') := ⟨by simp, by simp⟩
@@ -605,8 +605,8 @@ lemma neg
 
 中文:
 引理 neg
-  条件: {c : 实数>=0} (h : HasSubgaussianMGF X c κ ν)
-  结论: HasSubgaussianMGF (-X) c κ ν where
+  条件: {c : 实数>=0} (h : 有SubgaussianMGF X c κ ν)
+  结论: 有SubgaussianMGF (-X) c κ ν where
   证明: by simpa using h.integrable_exp_mul (-t)
   mgf_le := by filter_upwards [h.mgf_le] with ω' hm t using by simpa [mgf] using hm (-t)
 
@@ -633,7 +633,7 @@ lemma congr
 
 中文:
 引理 congr
-  条件: {Y : Ω -> 实数} (h : HasSubgaussianMGF X c κ ν) (h' : X =ᵐ[κ ∘ₘ ν] Y)
+  条件: {Y : Ω -> 实数} (h : 有SubgaussianMGF X c κ ν) (h' : X =ᵐ[κ ∘ₘ ν] Y)
   证明: by
     refine (integrable_congr ?_).mpr (h.integrable_exp_mul t)
     filter_upwards [h'] with ω hω using by rw [hω]
@@ -665,7 +665,7 @@ lemma _root_.ProbabilityTheory.Kernel.HasSubgaussianMGF_congr
   proof: ⟨fun hX => congr hX h, fun hY => congr hY (ae_eq_symm h)⟩
 
 中文:
-引理 _root_.ProbabilityTheory.Kernel.HasSubgaussianMGF_congr
+引理 _root_.ProbabilityTheory.核.HasSubgaussianMGF_congr
   条件: {Y : Ω -> 实数} (h : X =ᵐ[κ ∘ₘ ν] Y)
   证明: ⟨fun hX => congr hX h, fun hY => congr hY (ae_eq_symm h)⟩
 
@@ -693,7 +693,7 @@ lemma of_map
 
 中文:
 引理 of_map
-  结论: {Ω'' : 类型} {mΩ'' : MeasurableSpace Ω''} {κ : Kernel Ω' Ω''}
+  结论: {Ω'' : 类型} {mΩ'' : 可测空间 Ω''} {κ : 核 Ω' Ω''}
   证明: by
     have h1 := h.integrable_exp_mul t
     rwa [← Measure.map_comp _ _ hY, integrable_map_measure h1.aestronglyMeasurable (by fun_prop)]
@@ -737,7 +737,7 @@ lemma id_map_iff
 
 中文:
 引理 id_map_iff
-  条件: (hX : Measurable X)
+  条件: (hX : 可测 X)
   证明: by
   refine ⟨fun h => ?_, fun h => ⟨fun t => ?_, ?_⟩⟩
   · change HasSubgaussianMGF (id ∘ X) c κ ν
@@ -777,7 +777,7 @@ lemma const_mul
 
 中文:
 引理 const_mul
-  条件: (h : HasSubgaussianMGF X c κ ν) (r : 实数)
+  条件: (h : 有SubgaussianMGF X c κ ν) (r : 实数)
   证明: by
     simp_rw [← mul_assoc]
     exact h.integrable_exp_mul (t * r)
@@ -821,7 +821,7 @@ lemma measure_ge_le_exp_add
 
 中文:
 引理 measure_ge_le_exp_add
-  条件: (h : HasSubgaussianMGF X c κ ν) (ε : 实数)
+  条件: (h : 有SubgaussianMGF X c κ ν) (ε : 实数)
   证明: by
   filter_upwards [h.mgf_le, h.ae_forall_integrable_exp_mul, h.isFiniteMeasure] with ω' h1 h2 _ t ht
   calc (κ ω').real {ω | ε <= X ω}
@@ -860,7 +860,7 @@ lemma measure_ge_le
 
 中文:
 引理 measure_ge_le
-  条件: (h : HasSubgaussianMGF X c κ ν) {ε : 实数} (hε : 0 <= ε)
+  条件: (h : 有SubgaussianMGF X c κ ν) {ε : 实数} (hε : 0 <= ε)
   证明: by
   by_cases hc0 : c = 0
   · filter_upwards [h.measure_univ_le_one] with ω' h
@@ -908,7 +908,7 @@ lemma measure_pos_eq_zero_of_hasSubGaussianMGF_zero
 
 中文:
 引理 measure_pos_eq_zero_of_hasSubGaussianMGF_zero
-  条件: (h : HasSubgaussianMGF X 0 κ ν)
+  条件: (h : 有SubgaussianMGF X 0 κ ν)
   证明: by
   have hs : {ω | 0 < X ω} = ⋃ ε : {ε : Rat // 0 < ε}, {ω | ε <= X ω} := by
     ext ω
@@ -964,7 +964,7 @@ lemma ae_eq_zero_of_hasSubgaussianMGF_zero
 
 中文:
 引理 ae_eq_zero_of_hasSubgaussianMGF_zero
-  条件: (h : HasSubgaussianMGF X 0 κ ν)
+  条件: (h : 有SubgaussianMGF X 0 κ ν)
   证明: by
   filter_upwards [(h.neg).measure_pos_eq_zero_of_hasSubGaussianMGF_zero,
     h.measure_pos_eq_zero_of_hasSubGaussianMGF_zero]
@@ -1024,7 +1024,7 @@ lemma ae_eq_zero_of_hasSubgaussianMGF_zero'
 
 中文:
 引理 ae_eq_zero_of_hasSubgaussianMGF_zero'
-  条件: (h : HasSubgaussianMGF X 0 κ ν)
+  条件: (h : 有SubgaussianMGF X 0 κ ν)
   证明: by
   have hX := h.aestronglyMeasurable
   have h' : HasSubgaussianMGF (hX.mk X) 0 κ ν := h.congr hX.ae_eq_mk
@@ -1058,7 +1058,7 @@ lemma add
 
 中文:
 引理 add
-  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : HasSubgaussianMGF X cX κ ν)
+  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : 有SubgaussianMGF X cX κ ν)
   证明: by
   by_cases hX0 : cX = 0
   · simp only [hX0, NNReal.sqrt_zero, zero_add, NNReal.sq_sqrt] at hX ⊢
@@ -1135,7 +1135,7 @@ lemma prodMkLeft_compProd
 
 中文:
 引理 prodMkLeft_compProd
-  条件: {η : Kernel Ω Ω''} (h : HasSubgaussianMGF Y cY η (κ ∘ₘ ν))
+  条件: {η : 核 Ω Ω''} (h : 有SubgaussianMGF Y cY η (κ ∘ₘ ν))
   证明: by
   by_cases hν : SFinite ν
   swap; · simp [hν]
@@ -1181,7 +1181,7 @@ lemma integrable_exp_add_compProd
 
 中文:
 引理 integrable_exp_add_compProd
-  结论: {η : Kernel (Ω' × Ω) Ω''} [IsZeroOrMarkovKernel η]
+  结论: {η : 核 (Ω' × Ω) Ω''} [是ZeroOrMarkovKernel η]
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp [FunLike.coe_zero, hκ]
@@ -1228,7 +1228,7 @@ Measure.ae_integrable_of_integrable_comp integrable_exp_add_compProd hX hY q]
 
 中文:
 引理 add_compProd
-  结论: {η : Kernel (Ω' × Ω) Ω''} [IsZeroOrMarkovKernel η]
+  结论: {η : 核 (Ω' × Ω) Ω''} [是ZeroOrMarkovKernel η]
   证明: by
   by_cases hκ : IsSFiniteKernel κ
   swap; · simp [hκ]
@@ -1274,7 +1274,7 @@ lemma add_comp
 
 中文:
 引理 add_comp
-  结论: {η : Kernel Ω Ω''} [IsZeroOrMarkovKernel η]
+  结论: {η : 核 Ω Ω''} [是ZeroOrMarkovKernel η]
   证明: hX.add_compProd hY.prodMkLeft_compProd
 
 Depends on / 依赖: add_compProd, hX.add_compProd, hY.prodMkLeft_compProd, prodMkLeft_compProd
@@ -1510,10 +1510,10 @@ structure HasSubgaussianMGF
     - mgf_le : forall t : Real, mgf X μ t <= exp (c * t ^ 2 / 2)
 
 中文:
-结构 HasSubgaussianMGF
-  参数: (X : Ω -> 实数) (c : 实数>=0) (μ : Measure Ω := by volume_tac)
+结构 有SubgaussianMGF
+  参数: (X : Ω -> 实数) (c : 实数>=0) (μ : 测度 Ω := by volume_tac)
   公理与运算 (2 个):
-    - integrable_exp_mul : 对任意 t : 实数, 整数egrable (fun ω => exp (t * X ω)) μ
+    - integrable_exp_mul : 对任意 t : 实数, 可积 (fun ω => exp (t * X ω)) μ
     - mgf_le : 对任意 t : 实数, mgf X μ t <= exp (c * t ^ 2 / 2)
 
 Depends on / 依赖: Integrable, integrable_exp_mul, mgf_le, volume_tac
@@ -1553,7 +1553,7 @@ lemma aestronglyMeasurable
 
 中文:
 引理 aestronglyMeasurable
-  条件: (h : HasSubgaussianMGF X c μ)
+  条件: (h : 有SubgaussianMGF X c μ)
   结论: AEStronglyMeasurable X μ
   证明: by
   have h_int := h.integrable_exp_mul 1
@@ -1576,8 +1576,8 @@ lemma aemeasurable
 
 中文:
 引理 aemeasurable
-  条件: (h : HasSubgaussianMGF X c μ)
-  结论: AEMeasurable X μ
+  条件: (h : 有SubgaussianMGF X c μ)
+  结论: 几乎处处可测 X μ
   证明: h.aestronglyMeasurable.aemeasurable
 
 Depends on / 依赖: aemeasurable, aestronglyMeasurable, h.aestronglyMeasurable.aemeasurable
@@ -1598,7 +1598,7 @@ lemma congr
 
 中文:
 引理 congr
-  条件: (h : HasSubgaussianMGF X c μ) {Y : Ω -> 实数} (h' : X =ᵐ[μ] Y)
+  条件: (h : 有SubgaussianMGF X c μ) {Y : Ω -> 实数} (h' : X =ᵐ[μ] Y)
   证明: by
   rw [HasSubgaussianMGF_iff_kernel] at h ⊢
   apply h.congr
@@ -1624,7 +1624,7 @@ lemma memLp_exp_mul
 
 中文:
 引理 memLp_exp_mul
-  条件: (h : HasSubgaussianMGF X c μ) (t : 实数) (p : 实数>=0)
+  条件: (h : 有SubgaussianMGF X c μ) (t : 实数) (p : 实数>=0)
   证明: by
   rw [HasSubgaussianMGF_iff_kernel] at h
   simpa using h.memLp_exp_mul t p
@@ -1651,7 +1651,7 @@ lemma cgf_le
 
 中文:
 引理 cgf_le
-  条件: (h : HasSubgaussianMGF X c μ) (t : 实数)
+  条件: (h : 有SubgaussianMGF X c μ) (t : 实数)
   结论: cgf X μ t <= c * t ^ 2 / 2
   证明: by
   rw [HasSubgaussianMGF_iff_kernel] at h
@@ -1680,8 +1680,8 @@ lemma fun_zero
 
 中文:
 引理 fun_zero
-  条件: [IsZeroOrProbabilityMeasure μ]
-  结论: HasSubgaussianMGF (fun _ => 0) 0 μ
+  条件: [是ZeroOrProbabilityMeasure μ]
+  结论: 有SubgaussianMGF (fun _ => 0) 0 μ
   证明: by
   simp [HasSubgaussianMGF_iff_kernel]
 
@@ -1704,8 +1704,8 @@ lemma zero
 
 中文:
 引理 zero
-  条件: [IsZeroOrProbabilityMeasure μ]
-  结论: HasSubgaussianMGF 0 0 μ
+  条件: [是ZeroOrProbabilityMeasure μ]
+  结论: 有SubgaussianMGF 0 0 μ
   证明: fun_zero
 
 Depends on / 依赖: fun_zero
@@ -1724,8 +1724,8 @@ lemma neg
 
 中文:
 引理 neg
-  条件: {c : 实数>=0} (h : HasSubgaussianMGF X c μ)
-  结论: HasSubgaussianMGF (-X) c μ
+  条件: {c : 实数>=0} (h : 有SubgaussianMGF X c μ)
+  结论: 有SubgaussianMGF (-X) c μ
   证明: by
   simpa [HasSubgaussianMGF_iff_kernel] using (HasSubgaussianMGF_iff_kernel.1 h).neg
 
@@ -1749,7 +1749,7 @@ lemma of_map
 
 中文:
 引理 of_map
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ : 测度 Ω'}
   证明: by
     have h1 := h.integrable_exp_mul t
     rwa [integrable_map_measure h1.aestronglyMeasurable (by fun_prop)] at h1
@@ -1786,7 +1786,7 @@ lemma id_map_iff
 
 中文:
 引理 id_map_iff
-  条件: (hX : AEMeasurable X μ)
+  条件: (hX : 几乎处处可测 X μ)
   证明: by
   refine ⟨fun h => ?_, fun h => ⟨fun t => ?_, fun t => ?_⟩⟩
   · rw [← Function.id_comp X]
@@ -1820,7 +1820,7 @@ lemma congr_identDistrib
 
 中文:
 引理 congr_identDistrib
-  结论: {Ω' : 类型} {mΩ' : MeasurableSpace Ω'} {μ' : Measure Ω'}
+  结论: {Ω' : 类型} {mΩ' : 可测空间 Ω'} {μ' : 测度 Ω'}
   证明: by
   rw [← id_map_iff hXY.aemeasurable_fst] at hX
   rwa [← id_map_iff hXY.aemeasurable_snd, ← hXY.map_eq]
@@ -1849,7 +1849,7 @@ exact Measurable.stronglyMeasurable by fun_prop
 
 中文:
 引理 trim
-  条件: (hm : m <= mΩ) (hXm : Measurable[m] X) (hX : HasSubgaussianMGF X c μ)
+  条件: (hm : m <= mΩ) (hXm : 可测[m] X) (hX : 有SubgaussianMGF X c μ)
   证明: by
     refine (hX.integrable_exp_mul t).trim hm ?_
 exact Measurable.stronglyMeasurable by fun_prop
@@ -1882,7 +1882,7 @@ lemma const_mul
 
 中文:
 引理 const_mul
-  条件: (h : HasSubgaussianMGF X c μ) (r : 实数)
+  条件: (h : 有SubgaussianMGF X c μ) (r : 实数)
   证明: by
   rw [HasSubgaussianMGF_iff_kernel] at h ⊢
   exact Kernel.HasSubgaussianMGF.const_mul h r
@@ -1904,7 +1904,7 @@ lemma integrableExpSet_eq_univ
 
 中文:
 引理 integrableExpSet_eq_univ
-  条件: (hX : HasSubgaussianMGF X c μ)
+  条件: (hX : 有SubgaussianMGF X c μ)
   证明: by
   ext t
   simpa using! hX.integrable_exp_mul t
@@ -1927,7 +1927,7 @@ lemma memLp
 
 中文:
 引理 memLp
-  条件: (hX : HasSubgaussianMGF X c μ) (p : 实数>=0)
+  条件: (hX : 有SubgaussianMGF X c μ) (p : 实数>=0)
   结论: MemLp X p μ
   证明: memLp_of_mem_interior_integrableExpSet (by simp [integrableExpSet_eq_univ hX]) p
 
@@ -1947,8 +1947,8 @@ lemma integrable
 
 中文:
 引理 integrable
-  条件: (hX : HasSubgaussianMGF X c μ)
-  结论: 整数egrable X μ
+  条件: (hX : 有SubgaussianMGF X c μ)
+  结论: 可积 X μ
   证明: integrable_of_mem_interior_integrableExpSet (by simp [integrableExpSet_eq_univ hX])
 
 Depends on / 依赖: integrableExpSet_eq_univ, integrable_of_mem_interior_integrableExpSet
@@ -1970,7 +1970,7 @@ lemma measure_ge_le
 
 中文:
 引理 measure_ge_le
-  条件: (h : HasSubgaussianMGF X c μ) {ε : 实数} (hε : 0 <= ε)
+  条件: (h : 有SubgaussianMGF X c μ) {ε : 实数} (hε : 0 <= ε)
   证明: by
   rw [HasSubgaussianMGF_iff_kernel] at h
   simpa using h.measure_ge_le hε
@@ -1998,7 +1998,7 @@ lemma ae_eq_zero_of_hasSubgaussianMGF_zero
 
 中文:
 引理 ae_eq_zero_of_hasSubgaussianMGF_zero
-  条件: (h : HasSubgaussianMGF X 0 μ)
+  条件: (h : 有SubgaussianMGF X 0 μ)
   结论: X =ᵐ[μ] 0
   证明: by
   simpa using (HasSubgaussianMGF_iff_kernel.1 h).ae_eq_zero_of_hasSubgaussianMGF_zero
@@ -2024,7 +2024,7 @@ lemma add
 
 中文:
 引理 add
-  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : HasSubgaussianMGF X cX μ)
+  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : 有SubgaussianMGF X cX μ)
   证明: by
   have := (HasSubgaussianMGF_iff_kernel.1 hX).add (HasSubgaussianMGF_iff_kernel.1 hY)
   simpa [HasSubgaussianMGF_iff_kernel] using this
@@ -2056,7 +2056,7 @@ lemma add_of_indepFun
 
 中文:
 引理 add_of_indepFun
-  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : HasSubgaussianMGF X cX μ)
+  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : 有SubgaussianMGF X cX μ)
   证明: by
     simp_rw [mul_add, exp_add]
     convert! MemLp.integrable_mul (hX.memLp_exp_mul t 2) (hY.memLp_exp_mul t 2)
@@ -2101,7 +2101,7 @@ lemma sub_of_indepFun
 
 中文:
 引理 sub_of_indepFun
-  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : HasSubgaussianMGF X cX μ)
+  结论: {Y : Ω -> 实数} {cX cY : 实数>=0} (hX : 有SubgaussianMGF X cX μ)
   证明: by
   simp_rw [sub_eq_add_neg]
   exact hX.add_of_indepFun hY.neg hindep.neg_right
@@ -2129,7 +2129,7 @@ lemma sum_of_iIndepFun_of_forall_aemeasurable
     have h_indep' := (h_indep.indepFun_finsetS
 
 中文:
-引理 sum_of_iIndepFun_of_forall_aemeasurable
+引理 sum_of_iIndepFun_of_对任意_aemeasurable
   证明: by
   have : IsProbabilityMeasure μ := h_indep.isProbabilityMeasure
   classical
@@ -2259,7 +2259,7 @@ lemma measureReal_le_le_exp
       
 
 中文:
-引理 measureReal_le_le_exp
+引理 measure实数_le_le_exp
   结论: {Y : Ω -> 实数} {cX cY : 实数>=0}
   证明: by
   calc μ.real {ω | X ω <= Y ω}
@@ -2312,7 +2312,7 @@ lemma mgf_le_of_mem_Icc_of_integral_eq_zero
 
 中文:
 引理 mgf_le_of_mem_Icc_of_integral_eq_zero
-  结论: [IsProbabilityMeasure μ] {a b t : 实数}
+  结论: [是概率测度 μ] {a b t : 实数}
   证明: by
   have hi (u : Real) : Integrable (fun ω => exp (u * X ω)) μ := integrable_exp_mul_of_mem_Icc hm hb
   have hs : Set.Icc 0 t subseteq interior (integrableExpSet X μ) := by simp [hi, integrableExpSet]
@@ -2353,7 +2353,7 @@ lemma hasSubgaussianMGF_of_mem_Icc_of_integral_eq_zero
 
 中文:
 引理 hasSubgaussianMGF_of_mem_Icc_of_integral_eq_zero
-  结论: [IsProbabilityMeasure μ] {a b : 实数}
+  结论: [是概率测度 μ] {a b : 实数}
   证明: integrable_exp_mul_of_mem_Icc hm hb
   mgf_le t := by
     obtain ht | ht | ht := lt_trichotomy 0 t
@@ -2396,7 +2396,7 @@ lemma hasSubgaussianMGF_of_mem_Icc
 
 中文:
 引理 hasSubgaussianMGF_of_mem_Icc
-  结论: [IsProbabilityMeasure μ] {a b : 实数} (hm : AEMeasurable X μ)
+  结论: [是概率测度 μ] {a b : 实数} (hm : 几乎处处可测 X μ)
   证明: by
   rw [← sub_sub_sub_cancel_right b a μ[X]]
   apply hasSubgaussianMGF_of_mem_Icc_of_integral_eq_zero (hm.sub_const _)
@@ -2434,8 +2434,8 @@ lemma HasSubgaussianMGF.add_of_hasCondSubgaussianMGF
     exact @Measurable.aemeasurable _ _
 
 中文:
-引理 HasSubgaussianMGF.add_of_hasCondSubgaussianMGF
-  结论: [IsFiniteMeasure μ]
+引理 有SubgaussianMGF.add_of_hasCondSubgaussianMGF
+  结论: [是有限测度 μ]
   证明: by
   suffices HasSubgaussianMGF (fun p => X p.1 + Y p.2) (cX + cY)
       (@Measure.map Ω (Ω × Ω) mΩ (m.prod mΩ) Function.diag μ) by
@@ -2488,8 +2488,8 @@ lemma HasSubgaussianMGF.sum_of_hasCondSubgaussianMGF
       refine HasSubgaussianMGF.add_of_hasCondSubgaussianMGF (ℱ.le n) ?_ (h_subG n (by
 
 中文:
-引理 HasSubgaussianMGF.sum_of_hasCondSubgaussianMGF
-  结论: [IsZeroOrProbabilityMeasure μ]
+引理 有SubgaussianMGF.sum_of_hasCondSubgaussianMGF
+  结论: [是ZeroOrProbabilityMeasure μ]
   证明: by
   induction n with
   | zero => simp
@@ -2539,7 +2539,7 @@ alias measure_sum_ge_le_of_HasCondSubgaussianMGF := measure_sum_ge_le_of_hasCond
 
 中文:
 引理 measure_sum_ge_le_of_hasCondSubgaussianMGF
-  结论: [IsZeroOrProbabilityMeasure μ]
+  结论: [是ZeroOrProbabilityMeasure μ]
   证明: (HasSubgaussianMGF.sum_of_hasCondSubgaussianMGF h_adapted h0 n h_subG).measure_ge_le hε
 
 @[deprecated (since := "2026-01-27")]

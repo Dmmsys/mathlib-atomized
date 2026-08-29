@@ -181,7 +181,7 @@ theorem Nat.not_isPrimePow_iff_nontrivial_of_two_le
   grind [primeFactors_eq_empty]
 
 中文:
-定理 Nat.not_isPrimePow_iff_nontrivial_of_two_le
+定理 自然数.not_isPrimePow_iff_nontrivial_of_two_le
   条件: {n : 自然数} (hn : 2 <= n)
   证明: by
   rw [isPrimePow_iff_card_primeFactors_eq_one]; rw [← Finset.one_lt_card_iff_nontrivial]
@@ -210,7 +210,7 @@ theorem IsPrimePow.exists_ordCompl_eq_one
   refi
 
 中文:
-定理 IsPrimePow.exists_ordCompl_eq_one
+定理 IsPrimePow.存在_ordCompl_eq_one
   条件: {n : 自然数} (h : IsPrimePow n)
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn0); · cases not_isPrimePow_zero h
@@ -251,7 +251,7 @@ theorem exists_ordCompl_eq_one_iff_isPrimePow
   simp [Nat.le_zero.1 hn]
 
 中文:
-定理 exists_ordCompl_eq_one_iff_isPrimePow
+定理 存在_ordCompl_eq_one_iff_isPrimePow
   条件: {n : 自然数} (hn : n != 1)
   证明: by
   refine ⟨fun h => IsPrimePow.exists_ordCompl_eq_one h, fun h => ?_⟩
@@ -295,7 +295,7 @@ theorem isPrimePow_iff_unique_prime_dvd
 中文:
 定理 isPrimePow_iff_unique_prime_dvd
   条件: {n : 自然数}
-  结论: IsPrimePow n ↔ 存在! p : 自然数, p.Prime ∧ p ∣ n
+  结论: IsPrimePow n ↔ 存在! p : 自然数, p.素 ∧ p ∣ n
   证明: by
   rw [isPrimePow_nat_iff]
   constructor
@@ -376,7 +376,7 @@ theorem Nat.Coprime.isPrimePow_dvd_mul
   obtain ⟨p, k, h
 
 中文:
-定理 Nat.Coprime.isPrimePow_dvd_mul
+定理 自然数.Coprime.isPrimePow_dvd_mul
   条件: {n a b : 自然数} (hab : 自然数.Coprime a b) (hn : IsPrimePow n)
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
@@ -429,7 +429,7 @@ theorem Nat.mul_divisors_filter_prime_pow
   
 
 中文:
-定理 Nat.mul_divisors_filter_prime_pow
+定理 自然数.mul_divisors_filter_prime_pow
   条件: {a b : 自然数} (hab : a.Coprime b)
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
@@ -470,7 +470,7 @@ definition Nat.Primes.prodNatEquiv
     simp only [p.prop.pow_minFac k.add_one_ne_zero, Subtype.coe_eta, factorization_
 
 中文:
-定义 Nat.Primes.prodNatEquiv
+定义 自然数.Primes.prod自然数Equiv
   签名: : 自然数.Primes × 自然数 ≃ {n : 自然数 // IsPrimePow n} where
   定义体: ⟨pk.1 ^ (pk.2 + 1), ⟨pk.1, pk.2 + 1, prime_iff.mp pk.1.prop, pk.2.add_one_pos, rfl⟩⟩
   invFun n :=
@@ -507,7 +507,7 @@ lemma Nat.Primes.prodNatEquiv_apply
 @[simp]
 
 中文:
-引理 Nat.Primes.prodNatEquiv_apply
+引理 自然数.Primes.prod自然数Equiv_apply
   条件: (p : 自然数.Primes) (k : 自然数)
   证明: by
   rfl
@@ -530,7 +530,7 @@ lemma Nat.Primes.coe_prodNatEquiv_apply
 @[simp]
 
 中文:
-引理 Nat.Primes.coe_prodNatEquiv_apply
+引理 自然数.Primes.coe_prod自然数Equiv_apply
   条件: (p : 自然数.Primes) (k : 自然数)
   证明: rfl
 
@@ -550,7 +550,7 @@ lemma Nat.Primes.prodNatEquiv_symm_apply
   proof: rfl
 
 中文:
-引理 Nat.Primes.prodNatEquiv_symm_apply
+引理 自然数.Primes.prod自然数Equiv_symm_apply
   条件: {n : 自然数} (hn : IsPrimePow n)
   证明: rfl
 -/
@@ -629,7 +629,7 @@ theorem exists_base_eq_prime_pow_of_prime_pow_eq_base_pow
   exact Nat.pow_left_injective hn h.symm
 
 中文:
-定理 exists_base_eq_prime_pow_of_prime_pow_eq_base_pow
+定理 存在_base_eq_prime_pow_of_prime_pow_eq_base_pow
   结论: 存在 k, a = p ^ k
   证明: by
   rcases exponent_dvd_of_prime_pow_eq_pow hp h with ⟨k, m_eq⟩

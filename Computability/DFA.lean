@@ -70,7 +70,7 @@ structure DFA
   公理与运算 (3 个):
     - step : σ -> α -> σ
     - start : σ
-    - accept : Set σ
+    - accept : 集合 σ
 -/
 structure DFA (α : Type u) (σ : Type v) where
   /-- A transition function from state to state labelled by the alphabet. -/
@@ -93,8 +93,8 @@ instance [Inhabited
   body: ⟨DFA.mk (fun _ _ => default) default ∅⟩
 
 中文:
-实例 [Inhabited
-  签名: σ] : Inhabited (DFA α σ)
+实例 [可居
+  签名: σ] : 可居 (DFA α σ)
   定义体: ⟨DFA.mk (fun _ _ => default) default ∅⟩
 
 Depends on / 依赖: DFA.mk, Finset, Finset.sup_lt_iff, WithBot, WithBot.bot_lt_coe, WithBot.coe_lt_coe, bot_lt_coe, coe_lt_coe, coe_sup, sup_lt_iff
@@ -160,7 +160,7 @@ theorem evalFrom_cons
 
 中文:
 定理 evalFrom_cons
-  条件: (s : σ) (a : α) (x : List α)
+  条件: (s : σ) (a : α) (x : 列表 α)
   证明: rfl
 
 @[simp]
@@ -204,7 +204,7 @@ theorem evalFrom_append_singleton
 
 中文:
 定理 evalFrom_append_singleton
-  条件: (s : σ) (x : List α) (a : α)
+  条件: (s : σ) (x : 列表 α) (a : α)
   证明: by
   simp only [evalFrom, List.foldl_append, List.foldl_cons, List.foldl_nil]
 
@@ -226,7 +226,7 @@ definition eval
 
 中文:
 定义 eval
-  签名: : List α -> σ
+  签名: : 列表 α -> σ
   定义体: M.evalFrom M.start
 
 @[simp]
@@ -292,7 +292,7 @@ theorem eval_append_singleton
 
 中文:
 定理 eval_append_singleton
-  条件: (x : List α) (a : α)
+  条件: (x : 列表 α) (a : α)
   结论: M.eval (x ++ [a]) = M.step (M.eval x) a
   证明: evalFrom_append_singleton _ _ _ _
 
@@ -311,7 +311,7 @@ theorem evalFrom_of_append
 
 中文:
 定理 evalFrom_of_append
-  条件: (start : σ) (x y : List α)
+  条件: (start : σ) (x y : 列表 α)
   证明: List.foldl_append
 
 Depends on / 依赖: List.foldl_append, foldl_append
@@ -347,7 +347,7 @@ theorem mem_acceptsFrom
 
 中文:
 定理 mem_acceptsFrom
-  条件: {s : σ} {x : List α}
+  条件: {s : σ} {x : 列表 α}
   证明: by rfl
 -/
 theorem mem_acceptsFrom {s : σ} {x : List α} :
@@ -381,7 +381,7 @@ theorem mem_accepts
 
 中文:
 定理 mem_accepts
-  条件: {x : List α}
+  条件: {x : 列表 α}
   结论: x in M.accepts ↔ M.eval x in M.accept
   证明: by rfl
 -/
@@ -404,7 +404,7 @@ theorem evalFrom_split
 
 中文:
 定理 evalFrom_split
-  结论: [Fintype σ] {x : List α} {s t : σ} (hlen : Fintype.card σ <= x.length)
+  结论: [有限类型 σ] {x : 列表 α} {s t : σ} (hlen : 有限类型.card σ <= x.length)
   证明: by
   obtain ⟨n, m, hneq, heq⟩ :=
     Fintype.exists_ne_map_eq_of_card_lt
@@ -467,7 +467,7 @@ theorem evalFrom_of_pow
 
 中文:
 定理 evalFrom_of_pow
-  结论: {x y : List α} {s : σ} (hx : M.evalFrom s x = s)
+  结论: {x y : 列表 α} {s : σ} (hx : M.evalFrom s x = s)
   证明: by
   rw [Language.mem_kstar] at hy
   rcases hy with ⟨S, rfl, hS⟩
@@ -516,7 +516,7 @@ theorem pumping_lemma
 
 中文:
 定理 pumping_lemma
-  结论: [Fintype σ] {x : List α} (hx : x in M.accepts)
+  结论: [有限类型 σ] {x : 列表 α} (hx : x in M.accepts)
   证明: by
   obtain ⟨_, a, b, c, hx, hlen, hnil, rfl, hb, hc⟩ := M.evalFrom_split (s := M.start) hlen rfl
   use a, b, c, hx, hlen, hnil
@@ -619,7 +619,7 @@ theorem evalFrom_comap
 
 中文:
 定理 evalFrom_comap
-  条件: (f : α' -> α) (s : σ) (x : List α')
+  条件: (f : α' -> α) (s : σ) (x : 列表 α')
   证明: by
   induction x using List.reverseRecOn with
   | nil => simp
@@ -648,7 +648,7 @@ theorem eval_comap
 
 中文:
 定理 eval_comap
-  条件: (f : α' -> α) (x : List α')
+  条件: (f : α' -> α) (x : 列表 α')
   结论: (M.comap f).eval x = M.eval (x.map f)
   证明: by
   simp [eval]
@@ -675,7 +675,7 @@ theorem accepts_comap
 中文:
 定理 accepts_comap
   条件: (f : α' -> α)
-  结论: (M.comap f).accepts = List.map f ⁻¹' M.accepts
+  结论: (M.comap f).accepts = 列表.map f ⁻¹' M.accepts
   证明: by
   ext x
   conv =>
@@ -760,7 +760,7 @@ theorem reindex_refl
 
 中文:
 定理 reindex_refl
-  结论: reindex (Equiv.refl σ) M = M
+  结论: reindex (等价.refl σ) M = M
   证明: rfl
 
 @[simp]
@@ -807,7 +807,7 @@ theorem evalFrom_reindex
 
 中文:
 定理 evalFrom_reindex
-  条件: (g : σ ≃ σ') (s : σ') (x : List α)
+  条件: (g : σ ≃ σ') (s : σ') (x : 列表 α)
   证明: by
   induction x using List.reverseRecOn with
   | nil => simp
@@ -838,7 +838,7 @@ theorem eval_reindex
 
 中文:
 定理 eval_reindex
-  条件: (g : σ ≃ σ') (x : List α)
+  条件: (g : σ ≃ σ') (x : 列表 α)
   结论: (reindex g M).eval x = g (M.eval x)
   证明: by
   simp [eval]
@@ -910,7 +910,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (DFA α σ)
+  签名: 补集 (DFA α σ)
   定义体: ⟨M.step, M.start, M.acceptᶜ⟩
 
 Depends on / 依赖: M.accept, M.start, M.step
@@ -1187,7 +1187,7 @@ definition IsRegular
   body: exists σ : Type, exists _ : Fintype σ, exists M : DFA T σ, M.accepts = L
 
 中文:
-定义 IsRegular
+定义 是正则
   签名: {T : 类型u} (L : Language T)
   定义体: exists σ : Type, exists _ : Fintype σ, exists M : DFA T σ, M.accepts = L
 
@@ -1250,9 +1250,9 @@ theorem IsRegular.compl
   ⟨σ, inferInstance, Mᶜ, by simp [hM]⟩
 
 中文:
-定理 IsRegular.compl
-  条件: {T : 类型u} {L : Language T} (h : L.IsRegular)
-  结论: Lᶜ.IsRegular
+定理 是正则.compl
+  条件: {T : 类型u} {L : Language T} (h : L.是正则)
+  结论: Lᶜ.是正则
   证明: have ⟨σ, _, M, hM⟩ := h
   ⟨σ, inferInstance, Mᶜ, by simp [hM]⟩
 
@@ -1271,8 +1271,8 @@ theorem IsRegular.of_compl
   proof: L.compl_compl ▸ h.compl
 
 中文:
-定理 IsRegular.of_compl
-  条件: {T : 类型u} {L : Language T} (h : Lᶜ.IsRegular)
+定理 是正则.of_compl
+  条件: {T : 类型u} {L : Language T} (h : Lᶜ.是正则)
   证明: L.compl_compl ▸ h.compl
 -/
 protected theorem IsRegular.of_compl {T : Type u} {L : Language T} (h : Lᶜ.IsRegular) :
@@ -1293,7 +1293,7 @@ theorem IsRegular_compl
 中文:
 定理 IsRegular_compl
   条件: {T : 类型u} {L : Language T}
-  结论: Lᶜ.IsRegular ↔ L.IsRegular
+  结论: Lᶜ.是正则 ↔ L.是正则
   证明: ⟨.of_compl, .compl⟩
 
 Depends on / 依赖: _sup, of_compl, prodMk_sup
@@ -1312,8 +1312,8 @@ theorem IsRegular.add
   ⟨σ1 × σ2, inferInstance, M1.union M2, by simp [hM1, hM2]⟩
 
 中文:
-定理 IsRegular.add
-  条件: {T : 类型u} {L1 L2 : Language T} (h1 : L1.IsRegular) (h2 : L2.IsRegular)
+定理 是正则.add
+  条件: {T : 类型u} {L1 L2 : Language T} (h1 : L1.是正则) (h2 : L2.是正则)
   证明: have ⟨σ1, _, M1, hM1⟩ := h1
   have ⟨σ2, _, M2, hM2⟩ := h2
   ⟨σ1 × σ2, inferInstance, M1.union M2, by simp [hM1, hM2]⟩
@@ -1337,8 +1337,8 @@ theorem IsRegular.inf
   ⟨σ1 × σ2, inferInstance, M1.inter M2, by simp [hM1, hM2]⟩
 
 中文:
-定理 IsRegular.inf
-  条件: {T : 类型u} {L1 L2 : Language T} (h1 : L1.IsRegular) (h2 : L2.IsRegular)
+定理 是正则.下确界
+  条件: {T : 类型u} {L1 L2 : Language T} (h1 : L1.是正则) (h2 : L2.是正则)
   证明: have ⟨σ1, _, M1, hM1⟩ := h1
   have ⟨σ2, _, M2, hM2⟩ := h2
   ⟨σ1 × σ2, inferInstance, M1.inter M2, by simp [hM1, hM2]⟩

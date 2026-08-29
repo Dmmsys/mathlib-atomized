@@ -76,7 +76,7 @@ definition integer
 
 中文:
 定义 integer
-  签名: : Subalgebra R K
+  签名: : 子代数 R K
   定义体: {
     (⨅ (v) (_ : v ∉ S), (v.valuation K).valuationSubring.toSubring).copy
 {x : K | forall (v) (_ : v ∉ S), v.valuation K x <= 1}
@@ -120,7 +120,7 @@ theorem integer_valuation_le_one
 
 中文:
 定理 integer_valuation_le_one
-  条件: (x : S.integer K) {v : HeightOneSpectrum R} (hv : v ∉ S)
+  条件: (x : S.integer K) {v : 高一谱 R} (hv : v ∉ S)
   证明: x.property v hv
 
 Depends on / 依赖: property, x.property
@@ -147,7 +147,7 @@ lemma integer_univ
 
 中文:
 引理 integer_univ
-  结论: (Set.univ : Set (HeightOneSpectrum R)).integer K = ⊤
+  结论: (集合.univ : 集合 (高一谱 R)).integer K = ⊤
   证明: by
   ext
   tauto
@@ -171,7 +171,7 @@ lemma integer_empty
 
 中文:
 引理 integer_empty
-  结论: (∅ : Set (HeightOneSpectrum R)).integer K = ⊥
+  结论: (∅ : 集合 (高一谱 R)).integer K = ⊥
   证明: by
   ext x
   simp only [Set.integer, Set.mem_empty_iff_false, not_false_eq_true, true_implies]
@@ -206,7 +206,7 @@ definition unit
 
 中文:
 定义 unit
-  签名: : Subgroup Kˣ
+  签名: : 子群 Kˣ
   定义体: (⨅ (v) (_ : v ∉ S), (v.valuation K).valuationSubring.unitGroup).copy
 {x : Kˣ | forall (v) (_ : v ∉ S), (v : HeightOneSpectrum R).valuation K x = 1}
     Set.ext fun _ => by
@@ -247,7 +247,7 @@ theorem unit_valuation_eq_one
 
 中文:
 定理 unit_valuation_eq_one
-  条件: (x : S.unit K) {v : HeightOneSpectrum R} (hv : v ∉ S)
+  条件: (x : S.unit K) {v : 高一谱 R} (hv : v ∉ S)
   证明: x.property v hv
 
 Depends on / 依赖: property, x.property
@@ -273,7 +273,7 @@ definition unitEquivUnitsInteger
 eq_one_of_one_le_mul_lef
 
 中文:
-定义 unitEquivUnitsInteger
+定义 unitEquivUnits整数eger
   签名: : S.unit K ≃* (S.integer K)ˣ where
   定义体: ⟨⟨((x : Kˣ) : K), fun v hv => (x.property v hv).le⟩,
       ⟨((x⁻¹ : Kˣ) : K), fun v hv => (x⁻¹.property v hv).le⟩,

@@ -40,8 +40,8 @@ definition image
   body: ModuleCat.of R (LinearMap.range f.hom)
 
 中文:
-定义 image
-  签名: : ModuleCat R
+定义 像
+  签名: : 模范畴 R
   定义体: ModuleCat.of R (LinearMap.range f.hom)
 
 Depends on / 依赖: LinearMap, LinearMap.range, ModuleCat, ModuleCat.of, f.hom
@@ -58,8 +58,8 @@ definition image.ι
   body: ofHom (LinearMap.range f.hom).subtype
 
 中文:
-定义 image.ι
-  签名: : image f ⟶ H
+定义 像.ι
+  签名: : 像 f ⟶ H
   定义体: ofHom (LinearMap.range f.hom).subtype
 -/
 def image.ι : image f ⟶ H :=
@@ -75,7 +75,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (image.ι f)
+  签名: 单态射 (像.ι f)
   定义体: ConcreteCategory.mono_of_injective (image.ι f) Subtype.val_injective
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, Subtype, Subtype.val_injective, mono_of_injective, val_injective
@@ -93,7 +93,7 @@ definition factorThruImage
 
 中文:
 定义 factorThruImage
-  签名: : G ⟶ image f
+  签名: : G ⟶ 像 f
   定义体: ofHom f.hom.rangeRestrict
 
 Depends on / 依赖: f.hom.rangeRestrict, rangeRestrict
@@ -110,8 +110,8 @@ theorem image.fac
   proof: rfl
 
 中文:
-定理 image.fac
-  结论: factorThruImage f ≫ image.ι f = f
+定理 像.fac
+  结论: factorThruImage f ≫ 像.ι f = f
   证明: rfl
 -/
 theorem image.fac : factorThruImage f ≫ image.ι f = f :=
@@ -138,8 +138,8 @@ definition image.lift
       simp_rw [F'.fac, (Clas
 
 中文:
-定义 image.lift
-  签名: (F' : MonoFactorisation f)
+定义 像.lift
+  签名: (F' : 单态射分解 f)
   定义体: ofHom
   { toFun := (fun x => F'.e (Classical.indefiniteDescription _ x.2).1 : image f -> F'.I)
     map_add' := fun x y => by
@@ -182,9 +182,9 @@ theorem image.lift_fac
   rfl
 
 中文:
-定理 image.lift_fac
-  条件: (F' : MonoFactorisation f)
-  结论: image.lift F' ≫ F'.m = image.ι f
+定理 像.lift_fac
+  条件: (F' : 单态射分解 f)
+  结论: 像.lift F' ≫ F'.m = 像.ι f
   证明: by
   ext x
   change (F'.e ≫ F'.m) _ = _
@@ -211,7 +211,7 @@ definition monoFactorisation
 
 中文:
 定义 monoFactorisation
-  签名: : MonoFactorisation f where
+  签名: : 单态射分解 f where
   定义体: image f
   m := image.ι f
   e := factorThruImage f
@@ -232,7 +232,7 @@ definition isImage
 
 中文:
 定义 isImage
-  签名: : IsImage (monoFactorisation f) where
+  签名: : 是像 (monoFactorisation f) where
   定义体: image.lift
   lift_fac := image.lift_fac
 
@@ -254,7 +254,7 @@ definition imageIsoRange
 
 中文:
 定义 imageIsoRange
-  签名: {G H : ModuleCat.{v} R} (f : G ⟶ H)
+  签名: {G H : 模范畴.{v} R} (f : G ⟶ H)
   定义体: IsImage.isoExt (Image.isImage f) (isImage f)
 
 @[simp, reassoc, elementwise]
@@ -278,7 +278,7 @@ theorem imageIsoRange_inv_image_ι
 
 中文:
 定理 imageIsoRange_inv_image_ι
-  条件: {G H : ModuleCat.{v} R} (f : G ⟶ H)
+  条件: {G H : 模范畴.{v} R} (f : G ⟶ H)
   证明: IsImage.isoExt_inv_m _ _
 
 @[simp, reassoc, elementwise]
@@ -301,7 +301,7 @@ theorem imageIsoRange_hom_subtype
 
 中文:
 定理 imageIsoRange_hom_subtype
-  条件: {G H : ModuleCat.{v} R} (f : G ⟶ H)
+  条件: {G H : 模范畴.{v} R} (f : G ⟶ H)
   证明: by
   rw [← imageIsoRange_inv_image_ι f]; rw [Iso.hom_inv_id_assoc]
 

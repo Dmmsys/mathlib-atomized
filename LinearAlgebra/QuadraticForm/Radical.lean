@@ -42,7 +42,7 @@ definition radical
 
 中文:
 定义 radical
-  签名: : Submodule R M where
+  签名: : 子模 R M where
   定义体: {x : M | Q x = 0 ∧ QuadraticMap.polarBilin Q x = 0}
   zero_mem' := by simp
   smul_mem' a x hx := by simp [QuadraticMap.map_smul, hx.1, hx.2]
@@ -101,8 +101,8 @@ lemma IsometryEquiv.map_radical
   simp [mem_radical_iff', ← e.map_app, -map_app, e.toEquiv.forall_congr_left]
 
 中文:
-引理 IsometryEquiv.map_radical
-  结论: {Q' : QuadraticMap R M' P}
+引理 等距等价.map_radical
+  结论: {Q' : 二次映射 R M' P}
   证明: by
   ext
   simp [mem_radical_iff', ← e.map_app, -map_app, e.toEquiv.forall_congr_left]
@@ -124,7 +124,7 @@ lemma Equivalent.rank_radical_eq
 
 中文:
 引理 Equivalent.rank_radical_eq
-  条件: {Q' : QuadraticMap R M' P} (h : Equivalent Q Q')
+  条件: {Q' : 二次映射 R M' P} (h : Equivalent Q Q')
   证明: by
   obtain ⟨e⟩ := h
   rw [← e.map_radical]; rw [LinearEquiv.finrank_map_eq]
@@ -150,7 +150,7 @@ lemma lift_aux
 
 中文:
 引理 lift_aux
-  结论: {N : Submodule R M} (hN : N <= Q.radical)
+  结论: {N : 子模 R M} (hN : N <= Q.radical)
   证明: by
   rw [Submodule.quotientRel_def] at hmm'
   rw [(by simp : m = m' + (m - m'))]; rw [QuadraticMap.map_add Q m' (m - m')]; rw [(hN hmm').1]; rw [add_zero]; rw [polar_comm]; rw [← polarBilin_apply_apply]
@@ -179,7 +179,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (N : Submodule R M) (hN : N <= Q.radical)
+  签名: (N : 子模 R M) (hN : N <= Q.radical)
   定义体: by
   refine QuadraticMap.mk (Quotient.lift Q <| by exact lift_aux hN)
     (fun a m => m.inductionOn (Q.map_smul a)) ?_
@@ -208,7 +208,7 @@ lemma lift_mk
 
 中文:
 引理 lift_mk
-  条件: {N : Submodule R M} (hN : N <= Q.radical) (m : M)
+  条件: {N : 子模 R M} (hN : N <= Q.radical) (m : M)
   证明: rfl
 -/
 lemma lift_mk {N : Submodule R M} (hN : N <= Q.radical) (m : M) :
@@ -229,7 +229,7 @@ lemma le_radical_iff
 
 中文:
 引理 le_radical_iff
-  条件: {N : Submodule R M}
+  条件: {N : 子模 R M}
   证明: by
   constructor
   · exact fun hN => ⟨Q.lift N hN, rfl⟩
@@ -279,11 +279,11 @@ structure Nondegenerate
     - rank_rad_polar_le : Module.rank R Q.polarBilin.ker <= 1
 
 中文:
-结构 Nondegenerate
+结构 非退化
   参数: : 命题 where
   公理与运算 (2 个):
     - radical_eq_bot : Q.radical = ⊥
-    - rank_rad_polar_le : Module.rank R Q.polarBilin.ker <= 1
+    - rank_rad_polar_le : 模.rank R Q.polarBilin.ker <= 1
 -/
 structure Nondegenerate : Prop where
   radical_eq_bot : Q.radical = ⊥
@@ -345,7 +345,7 @@ lemma radical_eq_ker_associated
 
 中文:
 引理 radical_eq_ker_associated
-  结论: Q.radical = (QuadraticMap.associated Q).ker
+  结论: Q.radical = (二次映射.associated Q).ker
   证明: by
   rw [radical_eq_ker_polarBilin]
   ext m
@@ -487,7 +487,7 @@ lemma finrank_radical_of_equiv_weightedSumSquares
 
 中文:
 引理 finrank_radical_of_equiv_weightedSumSquares
-  结论: {M : 类型} [AddCommGroup M] [Module 𝕜 M]
+  结论: {M : 类型} [加法交换群 M] [模 𝕜 M]
   证明: by
   rw [hQ.rank_radical_eq]; rw [radical_weightedSumSquares]; rw [Pi.dim_spanSubset]
 

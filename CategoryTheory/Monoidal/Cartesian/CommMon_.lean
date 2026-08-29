@@ -36,8 +36,8 @@ lemma IsCommMonObj.ofRepresentableBy
   simp_rw [this, ← α.homEquiv'.apply_eq_iff_eq
 
 中文:
-引理 IsCommMonObj.ofRepresentableBy
-  条件: (F : Cᵒᵖ ⥤ CommMonCat) (α : (F ⋙ forget _).RepresentableBy X)
+引理 是交换MonObj.ofRepresentableBy
+  条件: (F : Cᵒᵖ ⥤ 交换幺半群范畴) (α : (F ⋙ forget _).可表示 X)
   证明: .ofRepresentableBy X (F ⋙ forget₂ CommMonCat MonCat) α
     IsCommMonObj X := by
   let : MonObj X := .ofRepresentableBy X (F ⋙ forget₂ CommMonCat MonCat) α

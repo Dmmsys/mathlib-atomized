@@ -46,8 +46,8 @@ theorem Convex.toWeakSpace_closure
   obtain ⟨
 
 中文:
-定理 Convex.toWeakSpace_closure
-  条件: {s : Set E} (hs : Convex 实数 s)
+定理 凸.toWeakSpace_closure
+  条件: {s : 集合 E} (hs : 凸 实数 s)
   证明: by
   refine le_antisymm (map_continuous <| toWeakSpaceCLM 𝕜 E).continuousOn.image_closure
     (Set.compl_subset_compl.mp fun x hx => ?_)
@@ -90,7 +90,7 @@ theorem toWeakSpace_closedConvexHull_eq
 
 中文:
 定理 toWeakSpace_closedConvexHull_eq
-  条件: {s : Set E}
+  条件: {s : 集合 E}
   证明: by
   rw [closedConvexHull_eq_closure_convexHull (𝕜 := 𝕜)]; rw [((convex_convexHull 𝕜 s).lift Real).toWeakSpace_closure _]; rw [closedConvexHull_eq_closure_convexHull]
   congr
@@ -117,8 +117,8 @@ theorem LinearMap.image_closure_of_convex
     simpa only [Set.image_image, ← hs.toW
 
 中文:
-定理 LinearMap.image_closure_of_convex
-  结论: {s : Set E} (hs : Convex 实数 s) (e : E ->ₗ[𝕜] F)
+定理 线性映射.image_closure_of_convex
+  结论: {s : 集合 E} (hs : 凸 实数 s) (e : E ->ₗ[𝕜] F)
   证明: by
   suffices he' : Continuous (toWeakSpace 𝕜 F <| e <| (toWeakSpace 𝕜 E).symm ·) by
     have h_convex : Convex Real (e '' s) := hs.linear_image (F := F) e
@@ -152,8 +152,8 @@ theorem LinearEquiv.image_closure_of_convex
     using (e.symm : F ->ₗ[𝕜] E).image_closure_of_convex (hs.linear_image (e : E ->ₗ[𝕜] F)) he₂
 
 中文:
-定理 LinearEquiv.image_closure_of_convex
-  结论: {s : Set E} (hs : Convex 实数 s) (e : E ≃ₗ[𝕜] F)
+定理 线性等价.image_closure_of_convex
+  结论: {s : 集合 E} (hs : 凸 实数 s) (e : E ≃ₗ[𝕜] F)
   证明: by
   refine le_antisymm ((e : E ->ₗ[𝕜] F).image_closure_of_convex hs he₁) ?_
   simp only [← Set.image_subset_image_iff e.symm.injective]
@@ -186,8 +186,8 @@ theorem LinearEquiv.image_closure_of_convex'
   
 
 中文:
-定理 LinearEquiv.image_closure_of_convex'
-  结论: {s : Set E} (hs : Convex 实数 s) (e : E ≃ₗ[𝕜] F)
+定理 线性等价.image_closure_of_convex'
+  结论: {s : 集合 E} (hs : 凸 实数 s) (e : E ≃ₗ[𝕜] F)
   证明: by
   have he' (f : StrongDual 𝕜 E) : (e_dual.symm f : F ->ₗ[𝕜] 𝕜) = e.symm.dualMap f := by
     simp only [DFunLike.ext'_iff, ContinuousLinearMap.coe_coe] at he ⊢

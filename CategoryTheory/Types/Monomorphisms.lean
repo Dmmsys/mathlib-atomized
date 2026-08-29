@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: (monomorphisms (类型u)).IsStableUnderCobaseChange
+  签名: (monomorphisms (类型u)).是StableUnderCobaseChange
   定义体: by
     simp only [monomorphisms.iff] at ht ⊢
     exact Limits.Types.pushoutCocone_inr_mono_of_isColimit sq.flip.isColimit
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderFilteredColimits.{v', u'}
+  签名: MorphismProperty.是StableUnderFilteredColimits.{v', u'}
   定义体: ⟨fun F₁ F₂ c₁ c₂ hc₁ hc₂ f hf φ hφ => by
     simp only [functorCategory, monomorphisms.iff, mono_iff_injective] at hf ⊢
     replace hφ (j : J) := congr_hom (hφ j)
@@ -131,7 +131,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.IsStableUnderCoproducts (monomorphisms (类型u))
+  签名: MorphismProperty.是StableUnderCoproducts (monomorphisms (类型u))
 -/
 instance : MorphismProperty.IsStableUnderCoproducts (monomorphisms (Type u)) where
 

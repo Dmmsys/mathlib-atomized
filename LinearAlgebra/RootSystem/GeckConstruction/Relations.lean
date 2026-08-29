@@ -481,7 +481,7 @@ lemma lie_e_f_ne
 
 中文:
 引理 lie_e_f_ne
-  条件: [P.IsReduced] [P.IsIrreducible]
+  条件: [P.是既约] [P.是不可约]
   证明: by
   have hij' : (i : ι) != (j : ι) := hij ∘ SetLike.coe_eq_coe.mp
   let := P.indexNeg

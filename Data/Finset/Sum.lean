@@ -42,7 +42,7 @@ definition disjSum
 
 中文:
 定义 disjSum
-  签名: : Finset (α oplus β)
+  签名: : 有限集 (α oplus β)
   定义体: ⟨s.1.disjSum t.1, s.2.disjSum t.2⟩
 
 @[simp]
@@ -86,7 +86,7 @@ theorem empty_disjSum
 
 中文:
 定理 empty_disjSum
-  结论: (∅ : Finset α).disjSum t = t.map Embedding.inr
+  结论: (∅ : 有限集 α).disjSum t = t.map 嵌入.inr
   证明: val_inj.1 Multiset.zero_disjSum _
 
 @[simp]
@@ -109,7 +109,7 @@ theorem disjSum_empty
 
 中文:
 定理 disjSum_empty
-  结论: s.disjSum (∅ : Finset β) = s.map Embedding.inl
+  结论: s.disjSum (∅ : 有限集 β) = s.map 嵌入.inl
   证明: val_inj.1 Multiset.disjSum_zero _
 
 @[simp]
@@ -152,7 +152,7 @@ theorem disjoint_map_inl_map_inr
 
 中文:
 定理 disjoint_map_inl_map_inr
-  结论: Disjoint (s.map Embedding.inl) (t.map Embedding.inr)
+  结论: Disjoint (s.map 嵌入.inl) (t.map 嵌入.inr)
   证明: by
   simp_rw [disjoint_left, mem_map]
   rintro x ⟨a, _, rfl⟩ ⟨b, _, ⟨⟩⟩
@@ -301,8 +301,8 @@ theorem disjSum_mono_left
 
 中文:
 定理 disjSum_mono_left
-  条件: (t : Finset β)
-  结论: Monotone fun s : Finset α => s.disjSum t
+  条件: (t : 有限集 β)
+  结论: 递增 fun s : 有限集 α => s.disjSum t
   证明: fun _ _ hs => disjSum_mono hs Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, disjSum_mono
@@ -321,8 +321,8 @@ theorem disjSum_mono_right
 
 中文:
 定理 disjSum_mono_right
-  条件: (s : Finset α)
-  结论: Monotone (s.disjSum : Finset β -> Finset (α oplus β))
+  条件: (s : 有限集 α)
+  结论: 递增 (s.disjSum : 有限集 β -> 有限集 (α oplus β))
   证明: fun _ _ => disjSum_mono Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, disjSum_mono
@@ -379,8 +379,8 @@ theorem disjSum_strictMono_left
 
 中文:
 定理 disjSum_strictMono_left
-  条件: (t : Finset β)
-  结论: StrictMono fun s : Finset α => s.disjSum t
+  条件: (t : 有限集 β)
+  结论: 严格递增 fun s : 有限集 α => s.disjSum t
   证明: fun _ _ hs => disjSum_ssubset_disjSum_of_ssubset_of_subset hs Subset.rfl
 
 Depends on / 依赖: Subset, Subset.rfl, disjSum_ssubset_disjSum_of_ssubset_of_subset
@@ -399,7 +399,7 @@ theorem disjSum_strictMono_right
 
 中文:
 定理 disjSum_strictMono_right
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   证明: fun _ _ =>
   disjSum_ssubset_disjSum_of_subset_of_ssubset Subset.rfl
 -/
@@ -418,7 +418,7 @@ lemma disjSum_inj
 
 中文:
 引理 disjSum_inj
-  条件: {α β : 类型} {s₁ s₂ : Finset α} {t₁ t₂ : Finset β}
+  条件: {α β : 类型} {s₁ s₂ : 有限集 α} {t₁ t₂ : 有限集 β}
   证明: by
   simp [Finset.ext_iff]
 -/
@@ -438,7 +438,7 @@ lemma Injective2_disjSum
 中文:
 引理 Injective2_disjSum
   条件: {α β : 类型}
-  结论: Function.Injective2 (@disjSum α β)
+  结论: 函数.Injective2 (@disjSum α β)
   证明: fun _ _ _ _ => by simp [Finset.ext_iff]
 
 Depends on / 依赖: Finset, Finset.ext_iff, ext_iff
@@ -456,7 +456,7 @@ definition toLeft
 
 中文:
 定义 toLeft
-  签名: (u : Finset (α oplus β))
+  签名: (u : 有限集 (α oplus β))
   定义体: u.filterMap (Sum.elim some fun _ => none) (by clear x; aesop)
 
 Depends on / 依赖: Sum.elim, filterMap, u.filterMap
@@ -474,7 +474,7 @@ definition toRight
 
 中文:
 定义 toRight
-  签名: (u : Finset (α oplus β))
+  签名: (u : 有限集 (α oplus β))
   定义体: u.filterMap (Sum.elim (fun _ => none) some) (by clear x; aesop)
 
 Depends on / 依赖: Sum.elim, filterMap, u.filterMap
@@ -569,7 +569,7 @@ lemma toLeft_monotone
 
 中文:
 引理 toLeft_monotone
-  结论: Monotone (@toLeft α β)
+  结论: 递增 (@toLeft α β)
   证明: fun _ _ => toLeft_subset_toLeft
 
 Depends on / 依赖: toLeft_subset_toLeft
@@ -585,7 +585,7 @@ lemma toRight_monotone
 
 中文:
 引理 toRight_monotone
-  结论: Monotone (@toRight α β)
+  结论: 递增 (@toRight α β)
   证明: fun _ _ => toRight_subset_toRight
 
 Depends on / 依赖: toRight_subset_toRight
@@ -892,7 +892,7 @@ lemma toLeft_map_sumComm
 
 中文:
 引理 toLeft_map_sumComm
-  结论: (u.map (Equiv.sumComm _ _).toEmbedding).toLeft = u.toRight
+  结论: (u.map (等价.sumComm _ _).toEmbedding).toLeft = u.toRight
   证明: by
   ext x; simp
 -/
@@ -910,7 +910,7 @@ lemma toRight_map_sumComm
 
 中文:
 引理 toRight_map_sumComm
-  结论: (u.map (Equiv.sumComm _ _).toEmbedding).toRight = u.toLeft
+  结论: (u.map (等价.sumComm _ _).toEmbedding).toRight = u.toLeft
   证明: by
   ext x; simp
 -/
@@ -992,7 +992,7 @@ lemma toLeft_image_swap
 
 中文:
 引理 toLeft_image_swap
-  结论: (u.image Sum.swap).toLeft = u.toRight
+  结论: (u.像 和.swap).toLeft = u.toRight
   证明: by
   ext x; simp
 -/
@@ -1010,7 +1010,7 @@ lemma toRight_image_swap
 
 中文:
 引理 toRight_image_swap
-  结论: (u.image Sum.swap).toRight = u.toLeft
+  结论: (u.像 和.swap).toRight = u.toLeft
   证明: by
   ext x; simp
 -/
@@ -1211,7 +1211,7 @@ lemma sumEquiv_symm_apply
 
 中文:
 引理 sumEquiv_symm_apply
-  条件: {α β : 类型} (s : Finset α × Finset β)
+  条件: {α β : 类型} (s : 有限集 α × 有限集 β)
   证明: rfl
 -/
 lemma sumEquiv_symm_apply {α β : Type*} (s : Finset α × Finset β) :
@@ -1251,7 +1251,7 @@ lemma fold_disjSum
 
 中文:
 引理 fold_disjSum
-  结论: (s : Finset α) (t : Finset β) (f : α oplus β -> γ) (b₁ b₂ : γ) (op : γ -> γ -> γ)
+  结论: (s : 有限集 α) (t : 有限集 β) (f : α oplus β -> γ) (b₁ b₂ : γ) (op : γ -> γ -> γ)
   证明: by
   simp_rw [fold, disjSum, Multiset.map_disjSum, fold_add]
 

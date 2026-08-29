@@ -54,8 +54,8 @@ class IsLocalAtTarget
     - of_forall_pullbackSnd({X Y : C} {f : Y ⟶ X} {R : Presieve X} (hR : R in K X) (h : forall {U : C} {g : U ⟶ X} [HasPullback f g], R g -> P (pullback.snd f g))) : P f
 
 中文:
-类 IsLocalAtTarget
-  参数: (P : Morphism命题erty C) (K : Precoverage C)
+类 是LocalAtTarget
+  参数: (P : MorphismProperty C) (K : Precoverage C)
   继承: RespectsIso P
   公理与运算 (2 个):
     - pullbackSnd({X Y : C} {f : Y ⟶ X} {R : Presieve X} {U : C} {g : U ⟶ X} (hR : R in K X) (hg : R g) (hf : P f) [HasPullback f g]) : P (pullback.snd f g)
@@ -111,8 +111,8 @@ lemma iff_of_forall_pullbackSnd
   grind [IsLocalAtTarget]
 
 中文:
-引理 iff_of_forall_pullbackSnd
-  结论: [P.IsLocalAtTarget K] {X Y : C} {R : Presieve Y} (hR : R in K Y)
+引理 iff_of_对任意_pullbackSnd
+  结论: [P.是LocalAtTarget K] {X Y : C} {R : Presieve Y} (hR : R in K Y)
   证明: by
   grind [IsLocalAtTarget]
 
@@ -140,7 +140,7 @@ lemma mk_of_iff_of_zeroHypercover
 
 中文:
 引理 mk_of_iff_of_zeroHypercover
-  结论: [K.HasPullbacks] [P.RespectsIso]
+  结论: [K.有Pullbacks] [P.RespectsIso]
   证明: by
   refine mk_of_iff fun X Y f R hR => ?_
   obtain ⟨𝒰, rfl⟩ := R.exists_eq_preZeroHypercover
@@ -175,7 +175,7 @@ lemma mk_of_small
 
 中文:
 引理 mk_of_small
-  结论: [K.HasPullbacks] [P.RespectsIso] [Precoverage.Small.{w} K]
+  结论: [K.有Pullbacks] [P.RespectsIso] [Precoverage.Small.{w} K]
   证明: .mk_of_iff_of_zeroHypercover fun _ 𝒰 => ⟨fun hf _ => h₁ 𝒰 hf _,
     fun h => h₂ 𝒰.restrictIndexOfSmall fun _ => h _⟩
 
@@ -200,7 +200,7 @@ lemma mk_of_isStableUnderBaseChange
 
 中文:
 引理 mk_of_isStableUnderBaseChange
-  结论: [K.HasPullbacks] [P.IsStableUnderBaseChange]
+  结论: [K.有Pullbacks] [P.是StableUnderBaseChange]
   证明: .mk_of_iff_of_zeroHypercover fun _ 𝒰 => ⟨fun hf _ => P.pullback_snd _ _ hf, fun h => H _ 𝒰 h⟩
 
 Depends on / 依赖: P.pullback_snd, mk_of_iff_of_zeroHypercover, pullback_snd
@@ -223,8 +223,8 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: [IsLocalAtTarget P L] (hle : K <= L)
-  结论: IsLocalAtTarget P K where
+  条件: [是LocalAtTarget P L] (hle : K <= L)
+  结论: 是LocalAtTarget P K where
   证明: pullbackSnd (hle _ h) i hf
   of_forall_pullbackSnd hR h := of_forall_pullbackSnd (hle _ hR) h
 
@@ -245,7 +245,7 @@ instance top
 
 中文:
 实例 top
-  签名: : IsLocalAtTarget (⊤ : Morphism命题erty C) K where
+  签名: : 是LocalAtTarget (⊤ : MorphismProperty C) K where
   定义体: by simp
   of_forall_pullbackSnd := by simp
 
@@ -295,7 +295,7 @@ lemma of_zeroHypercover
 
 中文:
 引理 of_zeroHypercover
-  条件: [K.HasPullbacks] (h : 对任意 (i : 𝒰.I₀), P (pullback.snd f (𝒰.f i)))
+  条件: [K.有Pullbacks] (h : 对任意 (i : 𝒰.I₀), P (pullback.snd f (𝒰.f i)))
   证明: of_forall_pullbackSnd 𝒰.mem₀ (by rintro _ _ _ ⟨i⟩; exact h _)
 
 Depends on / 依赖: of_forall_pullbackSnd
@@ -315,7 +315,7 @@ lemma iff_of_zeroHypercover
 
 中文:
 引理 iff_of_zeroHypercover
-  条件: [K.HasPullbacks]
+  条件: [K.有Pullbacks]
   结论: P f ↔ 对任意 i, P (pullback.snd f (𝒰.f i))
   证明: ⟨fun hf _ => pullbackSnd 𝒰.mem₀ ⟨_⟩ hf, fun h => of_zeroHypercover _ h⟩
 
@@ -335,8 +335,8 @@ instance inf
     ⟨of_forall_pullbackSnd hR fun i => (h i).1, of_forall_pullbackSnd hR fun i => (h i).2⟩
 
 中文:
-实例 inf
-  签名: (P Q : Morphism命题erty C) [IsLocalAtTarget P K] [IsLocalAtTarget Q K]
+实例 下确界
+  签名: (P Q : MorphismProperty C) [是LocalAtTarget P K] [是LocalAtTarget Q K]
   定义体: ⟨pullbackSnd hR i h.1, pullbackSnd hR i h.2⟩
   of_forall_pullbackSnd hR h :=
     ⟨of_forall_pullbackSnd hR fun i => (h i).1, of_forall_pullbackSnd hR fun i => (h i).2⟩
@@ -366,7 +366,7 @@ alias iff_of_zeroHypercover_target := IsLocalAtTarget.iff_of_zeroHypercover
 
 中文:
 引理 of_zeroHypercover_target
-  结论: {P : Morphism命题erty C} {K : Precoverage C} [K.HasPullbacks]
+  结论: {P : MorphismProperty C} {K : Precoverage C} [K.有Pullbacks]
   证明: by
   rw [IsLocalAtTarget.iff_of_zeroHypercover (P := P) 𝒰.restrictIndexOfSmall]
   simp [h]
@@ -396,8 +396,8 @@ class IsLocalAtSource
     - of_forall_comp({X Y : C} {f : X ⟶ Y} {R : Presieve X} (hR : R in K X)) : (forall ⦃U : C⦄ ⦃g : U ⟶ X⦄, R g -> P (g ≫ f)) -> P f
 
 中文:
-类 IsLocalAtSource
-  参数: (P : Morphism命题erty C) (K : Precoverage C)
+类 是LocalAtSource
+  参数: (P : MorphismProperty C) (K : Precoverage C)
   继承: RespectsIso P
   公理与运算 (2 个):
     - comp({X Y : C} {f : X ⟶ Y} {R : Presieve X} (hR : R in K X) {U : C} (g : U ⟶ X) (hg : R g) (hf : P f)) : P (g ≫ f)
@@ -519,8 +519,8 @@ lemma of_le
 
 中文:
 引理 of_le
-  条件: [IsLocalAtSource P L] (hle : K <= L)
-  结论: IsLocalAtSource P K where
+  条件: [是LocalAtSource P L] (hle : K <= L)
+  结论: 是LocalAtSource P K where
   证明: comp (hle _ hR) _
   of_forall_comp hR h := of_forall_comp (hle _ hR) h
 -/
@@ -539,7 +539,7 @@ instance top
 
 中文:
 实例 top
-  签名: : IsLocalAtSource (⊤ : Morphism命题erty C) K where
+  签名: : 是LocalAtSource (⊤ : MorphismProperty C) K where
   定义体: by simp
   of_forall_comp := by simp
 
@@ -603,8 +603,8 @@ instance inf
     ⟨of_forall_comp hR fun _ _ hg => (h hg).1, of_forall_comp hR fun _ _ hg => (h hg).2⟩
 
 中文:
-实例 inf
-  签名: (P Q : Morphism命题erty C) [IsLocalAtSource P K] [IsLocalAtSource Q K]
+实例 下确界
+  签名: (P Q : MorphismProperty C) [是LocalAtSource P K] [是LocalAtSource Q K]
   定义体: ⟨comp hR _ hg hf.left, comp hR _ hg hf.right⟩
   of_forall_comp hR h :=
     ⟨of_forall_comp hR fun _ _ hg => (h hg).1, of_forall_comp hR fun _ _ hg => (h hg).2⟩
@@ -634,7 +634,7 @@ alias iff_of_zeroHypercover_source := IsLocalAtSource.iff_of_zeroHypercover
 
 中文:
 引理 of_zeroHypercover_source
-  结论: {P : Morphism命题erty C} {K : Precoverage C}
+  结论: {P : MorphismProperty C} {K : Precoverage C}
   证明: by
   rw [IsLocalAtSource.iff_of_zeroHypercover (P := P) 𝒰.restrictIndexOfSmall]
   simp [h]
@@ -672,7 +672,7 @@ lemma eq_of_zeroHypercover_target
 
 中文:
 引理 eq_of_zeroHypercover_target
-  结论: [HasEqualizers C] [HasPullbacks C] {X Y S : C} {f g : X ⟶ Y}
+  结论: [HasEqualizers C] [有Pullbacks C] {X Y S : C} {f g : X ⟶ Y}
   证明: by
   suffices IsIso (equalizer.ι f g) from Limits.eq_of_epi_equalizer
   change MorphismProperty.isomorphisms C _

@@ -38,7 +38,7 @@ definition normed
 
 中文:
 定义 normed
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: fun x => f x / ∫ x, f x ∂μ
 -/
 protected def normed (μ : Measure E) : E -> Real := fun x => f x / ∫ x, f x ∂μ
@@ -54,7 +54,7 @@ theorem normed_def
 
 中文:
 定理 normed_def
-  条件: {μ : Measure E} (x : E)
+  条件: {μ : 测度 E} (x : E)
   结论: f.normed μ x = f x / ∫ x, f x ∂μ
   证明: rfl
 -/
@@ -93,7 +93,7 @@ theorem contDiff_normed
 中文:
 定理 contDiff_normed
   条件: {n : 自然数∞}
-  结论: ContDiff 实数 n (f.normed μ)
+  结论: 连续可微 实数 n (f.normed μ)
   证明: f.contDiff.div_const _
 
 Depends on / 依赖: contDiff, div_const, f.contDiff.div_const
@@ -111,7 +111,7 @@ theorem continuous_normed
 
 中文:
 定理 continuous_normed
-  结论: Continuous (f.normed μ)
+  结论: 连续 (f.normed μ)
   证明: f.continuous.div_const _
 
 Depends on / 依赖: continuous, div_const, f.continuous.div_const
@@ -153,7 +153,7 @@ theorem normed_neg
 
 中文:
 定理 normed_neg
-  条件: (f : ContDiffBump (0 : E)) (x : E)
+  条件: (f : 余ntDiffBump (0 : E)) (x : E)
   结论: f.normed μ (-x) = f.normed μ x
   证明: by
   simp_rw [f.normed_def, f.neg]
@@ -175,7 +175,7 @@ theorem integrable
 
 中文:
 定理 integrable
-  结论: 整数egrable f μ
+  结论: 可积 f μ
   证明: f.continuous.integrable_of_hasCompactSupport f.hasCompactSupport
 -/
 protected theorem integrable : Integrable f μ :=
@@ -191,7 +191,7 @@ theorem integrable_normed
 
 中文:
 定理 integrable_normed
-  结论: 整数egrable (f.normed μ) μ
+  结论: 可积 (f.normed μ) μ
   证明: f.integrable.div_const _
 -/
 protected theorem integrable_normed : Integrable (f.normed μ) μ :=
@@ -261,7 +261,7 @@ theorem support_normed_eq
 
 中文:
 定理 support_normed_eq
-  结论: Function.support (f.normed μ) = Metric.ball c f.rOut
+  结论: 函数.support (f.normed μ) = Metric.ball c f.rOut
   证明: by
   unfold ContDiffBump.normed
   rw [support_div]; rw [f.support_eq]; rw [support_const f.integral_pos.ne']; rw [inter_univ]
@@ -328,7 +328,7 @@ theorem tendsto_support_normed_smallSets
 
 中文:
 定理 tendsto_support_normed_smallSets
-  结论: {ι} {φ : ι -> ContDiffBump c} {l : Filter ι}
+  结论: {ι} {φ : ι -> 余ntDiffBump c} {l : 滤子 ι}
   证明: by
   simp_rw [NormedAddGroup.tendsto_nhds_zero, Real.norm_eq_abs,
     abs_eq_self.mpr (φ _).rOut_pos.le] at hφ
@@ -362,7 +362,7 @@ theorem integral_normed_smul
 
 中文:
 定理 integral_normed_smul
-  结论: {X} [NormedAddCommGroup X] [NormedSpace 实数 X]
+  结论: {X} [赋范交换加群 X] [赋范空间 实数 X]
   证明: by
   simp_rw [integral_smul_const, f.integral_normed (μ := μ), one_smul]
 
@@ -420,7 +420,7 @@ theorem normed_le_div_measure_closedBall_rIn
 
 中文:
 定理 normed_le_div_measure_closedBall_rIn
-  条件: [μ.IsOpenPosMeasure] (x : E)
+  条件: [μ.是OpenPosMeasure] (x : E)
   证明: by
   rw [normed_def]
   gcongr
@@ -489,7 +489,7 @@ theorem measure_closedBall_div_le_integral
 
 中文:
 定理 measure_closedBall_div_le_integral
-  条件: [IsAddHaarMeasure μ] (K : 实数) (h : f.rOut <= K * f.rIn)
+  条件: [是加法Haar测度 μ] (K : 实数) (h : f.rOut <= K * f.rIn)
   证明: by
   have K_pos : 0 < K := by
     simpa [f.rIn_pos, not_lt.2 f.rIn_pos.le] using mul_pos_iff.1 (f.rOut_pos.trans_le h)
@@ -525,7 +525,7 @@ theorem normed_le_div_measure_closedBall_rOut
 
 中文:
 定理 normed_le_div_measure_closedBall_rOut
-  结论: [IsAddHaarMeasure μ] (K : 实数) (h : f.rOut <= K * f.rIn)
+  结论: [是加法Haar测度 μ] (K : 实数) (h : f.rOut <= K * f.rIn)
   证明: by
   have K_pos : 0 < K := by
     simpa [f.rIn_pos, not_lt.2 f.rIn_pos.le] using mul_pos_iff.1 (f.rOut_pos.trans_le h)

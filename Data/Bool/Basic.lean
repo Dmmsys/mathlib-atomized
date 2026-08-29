@@ -67,7 +67,7 @@ theorem eq_false_eq_not_eq_true
 
 中文:
 定理 eq_false_eq_not_eq_true
-  条件: (b : 布尔)
+  条件: (b : 布尔值)
   结论: (¬(b = true)) = (b = false)
   证明: by simp
 -/
@@ -84,7 +84,7 @@ theorem eq_true_eq_not_eq_false
 
 中文:
 定理 eq_true_eq_not_eq_false
-  条件: (b : 布尔)
+  条件: (b : 布尔值)
   结论: (¬(b = false)) = (b = true)
   证明: by simp
 -/
@@ -101,7 +101,7 @@ theorem eq_false_of_not_eq_true
 
 中文:
 定理 eq_false_of_not_eq_true
-  条件: {b : 布尔}
+  条件: {b : 布尔值}
   结论: ¬b = true -> b = false
   证明: Eq.mp (eq_false_eq_not_eq_true b)
 
@@ -121,7 +121,7 @@ theorem eq_true_of_not_eq_false
 
 中文:
 定理 eq_true_of_not_eq_false
-  条件: {b : 布尔}
+  条件: {b : 布尔值}
   结论: ¬b = false -> b = true
   证明: Eq.mp (eq_true_eq_not_eq_false b)
 
@@ -140,7 +140,7 @@ theorem and_eq_true_eq_eq_true_and_eq_true
 
 中文:
 定理 and_eq_true_eq_eq_true_and_eq_true
-  条件: (a b : 布尔)
+  条件: (a b : 布尔值)
   证明: by simp
 -/
 theorem and_eq_true_eq_eq_true_and_eq_true (a b : Bool) :
@@ -156,7 +156,7 @@ theorem or_eq_true_eq_eq_true_or_eq_true
 
 中文:
 定理 or_eq_true_eq_eq_true_or_eq_true
-  条件: (a b : 布尔)
+  条件: (a b : 布尔值)
   证明: by simp
 -/
 theorem or_eq_true_eq_eq_true_or_eq_true (a b : Bool) :
@@ -173,7 +173,7 @@ theorem not_eq_true_eq_eq_false
 
 中文:
 定理 not_eq_true_eq_eq_false
-  条件: (a : 布尔)
+  条件: (a : 布尔值)
   结论: (not a = true) = (a = false)
   证明: by grind
 -/
@@ -189,7 +189,7 @@ theorem and_eq_false_eq_eq_false_or_eq_false
 
 中文:
 定理 and_eq_false_eq_eq_false_or_eq_false
-  条件: (a b : 布尔)
+  条件: (a b : 布尔值)
   证明: by grind
 -/
 theorem and_eq_false_eq_eq_false_or_eq_false (a b : Bool) :
@@ -205,7 +205,7 @@ theorem or_eq_false_eq_eq_false_and_eq_false
 
 中文:
 定理 or_eq_false_eq_eq_false_and_eq_false
-  条件: (a b : 布尔)
+  条件: (a b : 布尔值)
   证明: by grind
 -/
 theorem or_eq_false_eq_eq_false_and_eq_false (a b : Bool) :
@@ -222,7 +222,7 @@ theorem not_eq_false_eq_eq_true
 
 中文:
 定理 not_eq_false_eq_eq_true
-  条件: (a : 布尔)
+  条件: (a : 布尔值)
   结论: (not a = false) = (a = true)
   证明: by grind
 -/
@@ -238,7 +238,7 @@ theorem coe_false
 
 中文:
 定理 coe_false
-  结论: ↑false = False
+  结论: ↑false = 假
   证明: by simp
 -/
 theorem coe_false : ↑false = False := by simp
@@ -253,7 +253,7 @@ theorem coe_true
 
 中文:
 定理 coe_true
-  结论: ↑true = True
+  结论: ↑true = 真
   证明: by simp
 -/
 theorem coe_true : ↑true = True := by simp
@@ -268,7 +268,7 @@ theorem coe_sort_false
 
 中文:
 定理 coe_sort_false
-  结论: (false : 命题) = False
+  结论: (false : 命题) = 假
   证明: by simp
 -/
 theorem coe_sort_false : (false : Prop) = False := by simp
@@ -283,7 +283,7 @@ theorem coe_sort_true
 
 中文:
 定理 coe_sort_true
-  结论: (true : 命题) = True
+  结论: (true : 命题) = 真
   证明: by simp
 -/
 theorem coe_sort_true : (true : Prop) = True := by simp
@@ -299,7 +299,7 @@ theorem decide_iff
 
 中文:
 定理 decide_iff
-  条件: (p : 命题) [d : Decidable p]
+  条件: (p : 命题) [d : 可判定 p]
   结论: decide p = true ↔ p
   证明: by simp
 -/
@@ -316,7 +316,7 @@ theorem decide_true
 
 中文:
 定理 decide_true
-  条件: {p : 命题} [Decidable p]
+  条件: {p : 命题} [可判定 p]
   结论: p -> decide p
   证明: (decide_iff p).2
 
@@ -336,7 +336,7 @@ theorem of_decide_true
 
 中文:
 定理 of_decide_true
-  条件: {p : 命题} [Decidable p]
+  条件: {p : 命题} [可判定 p]
   结论: decide p -> p
   证明: (decide_iff p).1
 
@@ -356,7 +356,7 @@ theorem bool_iff_false
 
 中文:
 定理 bool_iff_false
-  条件: {b : 布尔}
+  条件: {b : 布尔值}
   结论: ¬b ↔ b = false
   证明: by grind
 -/
@@ -373,7 +373,7 @@ theorem bool_eq_false
 
 中文:
 定理 bool_eq_false
-  条件: {b : 布尔}
+  条件: {b : 布尔值}
   结论: ¬b -> b = false
   证明: bool_iff_false.1
 
@@ -393,7 +393,7 @@ theorem decide_false_iff
 
 中文:
 定理 decide_false_iff
-  条件: (p : 命题) {_ : Decidable p}
+  条件: (p : 命题) {_ : 可判定 p}
   结论: decide p = false ↔ ¬p
   证明: bool_iff_false.symm.trans (not_congr (decide_iff _))
 
@@ -413,7 +413,7 @@ theorem decide_false
 
 中文:
 定理 decide_false
-  条件: {p : 命题} [Decidable p]
+  条件: {p : 命题} [可判定 p]
   结论: ¬p -> decide p = false
   证明: (decide_false_iff p).2
 
@@ -433,7 +433,7 @@ theorem of_decide_false
 
 中文:
 定理 of_decide_false
-  条件: {p : 命题} [Decidable p]
+  条件: {p : 命题} [可判定 p]
   结论: decide p = false -> ¬p
   证明: (decide_false_iff p).1
 
@@ -453,7 +453,7 @@ theorem decide_congr
 
 中文:
 定理 decide_congr
-  条件: {p q : 命题} [Decidable p] [Decidable q] (h : p ↔ q)
+  条件: {p q : 命题} [可判定 p] [可判定 q] (h : p ↔ q)
   结论: decide p = decide q
   证明: decide_eq_decide.mpr h
 
@@ -473,7 +473,7 @@ theorem coe_xor_iff
 
 中文:
 定理 coe_xor_iff
-  条件: (a b : 布尔)
+  条件: (a b : 布尔值)
   结论: xor a b ↔ Xor (a = true) (b = true)
   证明: by grind
 -/
@@ -492,7 +492,7 @@ theorem dichotomy
 
 中文:
 定理 dichotomy
-  条件: (b : 布尔)
+  条件: (b : 布尔值)
   结论: b = false ∨ b = true
   证明: by grind
 -/
@@ -526,7 +526,7 @@ theorem or_inl
 
 中文:
 定理 or_inl
-  条件: {a b : 布尔} (H : a)
+  条件: {a b : 布尔值} (H : a)
   结论: a || b
   证明: by simp [H]
 -/
@@ -543,7 +543,7 @@ theorem or_inr
 
 中文:
 定理 or_inr
-  条件: {a b : 布尔} (H : b)
+  条件: {a b : 布尔值} (H : b)
   结论: a || b
   证明: by grind
 -/
@@ -559,7 +559,7 @@ theorem and_elim_left
 
 中文:
 定理 and_elim_left
-  结论: 对任意 {a b : 布尔}, a && b -> a
+  结论: 对任意 {a b : 布尔值}, a && b -> a
   证明: by decide
 -/
 theorem and_elim_left : forall {a b : Bool}, a && b -> a := by decide
@@ -574,7 +574,7 @@ theorem and_intro
 
 中文:
 定理 and_intro
-  结论: 对任意 {a b : 布尔}, a -> b -> a && b
+  结论: 对任意 {a b : 布尔值}, a -> b -> a && b
   证明: by decide
 -/
 theorem and_intro : forall {a b : Bool}, a -> b -> a && b := by decide
@@ -589,7 +589,7 @@ theorem and_elim_right
 
 中文:
 定理 and_elim_right
-  结论: 对任意 {a b : 布尔}, a && b -> b
+  结论: 对任意 {a b : 布尔值}, a && b -> b
   证明: by decide
 -/
 theorem and_elim_right : forall {a b : Bool}, a && b -> b := by decide
@@ -604,7 +604,7 @@ lemma eq_not_iff
 
 中文:
 引理 eq_not_iff
-  结论: 对任意 {a b : 布尔}, a = !b ↔ a != b
+  结论: 对任意 {a b : 布尔值}, a = !b ↔ a != b
   证明: by decide
 -/
 lemma eq_not_iff : forall {a b : Bool}, a = !b ↔ a != b := by decide
@@ -619,7 +619,7 @@ lemma not_eq_iff
 
 中文:
 引理 not_eq_iff
-  结论: 对任意 {a b : 布尔}, (!a) = b ↔ a != b
+  结论: 对任意 {a b : 布尔值}, (!a) = b ↔ a != b
   证明: by decide
 -/
 lemma not_eq_iff : forall {a b : Bool}, (!a) = b ↔ a != b := by decide
@@ -635,7 +635,7 @@ theorem ne_not
 
 中文:
 定理 ne_not
-  条件: {a b : 布尔}
+  条件: {a b : 布尔值}
   结论: a != !b ↔ a = b
   证明: not_eq_not
 
@@ -654,7 +654,7 @@ lemma not_ne_self
 
 中文:
 引理 not_ne_self
-  结论: 对任意 b : 布尔, (!b) != b
+  结论: 对任意 b : 布尔值, (!b) != b
   证明: by decide
 -/
 lemma not_ne_self : forall b : Bool, (!b) != b := by decide
@@ -669,7 +669,7 @@ lemma self_ne_not
 
 中文:
 引理 self_ne_not
-  结论: 对任意 b : 布尔, b != !b
+  结论: 对任意 b : 布尔值, b != !b
   证明: by decide
 -/
 lemma self_ne_not : forall b : Bool, b != !b := by decide
@@ -700,7 +700,7 @@ theorem not_iff_not
 
 中文:
 定理 not_iff_not
-  结论: 对任意 {b : 布尔}, !b ↔ ¬b
+  结论: 对任意 {b : 布尔值}, !b ↔ ¬b
   证明: by simp
 -/
 theorem not_iff_not : forall {b : Bool}, !b ↔ ¬b := by simp
@@ -716,7 +716,7 @@ theorem eq_true_of_not_eq_false'
 
 中文:
 定理 eq_true_of_not_eq_false'
-  条件: {a : 布尔}
+  条件: {a : 布尔值}
   结论: (!a) = false -> a = true
   证明: by decide +revert
 
@@ -735,7 +735,7 @@ theorem eq_false_of_not_eq_true'
 
 中文:
 定理 eq_false_of_not_eq_true'
-  条件: {a : 布尔}
+  条件: {a : 布尔值}
   结论: (!a) = true -> a = false
   证明: by decide +revert
 
@@ -770,7 +770,7 @@ theorem xor_iff_ne
 
 中文:
 定理 xor_iff_ne
-  结论: 对任意 {x y : 布尔}, xor x y = true ↔ x != y
+  结论: 对任意 {x y : 布尔值}, xor x y = true ↔ x != y
   证明: by decide
 -/
 theorem xor_iff_ne : forall {x y : Bool}, xor x y = true ↔ x != y := by decide
@@ -795,7 +795,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder 布尔 where
+  签名: : 线性序 布尔值 where
   定义体: by decide
   le_trans := by decide
   le_antisymm := by decide
@@ -833,7 +833,7 @@ theorem lt_iff
 
 中文:
 定理 lt_iff
-  结论: 对任意 {x y : 布尔}, x < y ↔ x = false ∧ y = true
+  结论: 对任意 {x y : 布尔值}, x < y ↔ x = false ∧ y = true
   证明: by decide
 
 @[simp]
@@ -869,7 +869,7 @@ theorem le_iff_imp
 
 中文:
 定理 le_iff_imp
-  结论: 对任意 {x y : 布尔}, x <= y ↔ x -> y
+  结论: 对任意 {x y : 布尔值}, x <= y ↔ x -> y
   证明: by decide
 -/
 theorem le_iff_imp : forall {x y : Bool}, x <= y ↔ x -> y := by decide
@@ -884,7 +884,7 @@ theorem and_le_left
 
 中文:
 定理 and_le_left
-  结论: 对任意 x y : 布尔, (x && y) <= x
+  结论: 对任意 x y : 布尔值, (x && y) <= x
   证明: by decide
 -/
 theorem and_le_left : forall x y : Bool, (x && y) <= x := by decide
@@ -899,7 +899,7 @@ theorem and_le_right
 
 中文:
 定理 and_le_right
-  结论: 对任意 x y : 布尔, (x && y) <= y
+  结论: 对任意 x y : 布尔值, (x && y) <= y
   证明: by decide
 -/
 theorem and_le_right : forall x y : Bool, (x && y) <= y := by decide
@@ -914,7 +914,7 @@ theorem le_and
 
 中文:
 定理 le_and
-  结论: 对任意 {x y z : 布尔}, x <= y -> x <= z -> x <= (y && z)
+  结论: 对任意 {x y z : 布尔值}, x <= y -> x <= z -> x <= (y && z)
   证明: by decide
 -/
 theorem le_and : forall {x y z : Bool}, x <= y -> x <= z -> x <= (y && z) := by decide
@@ -929,7 +929,7 @@ theorem left_le_or
 
 中文:
 定理 left_le_or
-  结论: 对任意 x y : 布尔, x <= (x || y)
+  结论: 对任意 x y : 布尔值, x <= (x || y)
   证明: by decide
 -/
 theorem left_le_or : forall x y : Bool, x <= (x || y) := by decide
@@ -944,7 +944,7 @@ theorem right_le_or
 
 中文:
 定理 right_le_or
-  结论: 对任意 x y : 布尔, y <= (x || y)
+  结论: 对任意 x y : 布尔值, y <= (x || y)
   证明: by decide
 -/
 theorem right_le_or : forall x y : Bool, y <= (x || y) := by decide
@@ -975,7 +975,7 @@ definition ofNat
 @[simp, grind =]
 
 中文:
-定义 ofNat
+定义 of自然数
   签名: (n : 自然数)
   定义体: decide (n != 0)
 
@@ -996,7 +996,7 @@ theorem ofNat_zero
 @[simp, grind =]
 
 中文:
-定理 ofNat_zero
+定理 of自然数_zero
   结论: of自然数 0 = false
   证明: rfl
 
@@ -1015,7 +1015,7 @@ theorem ofNat_add_one
   proof: rfl
 
 中文:
-定理 ofNat_add_one
+定理 of自然数_add_one
   条件: {n : 自然数}
   结论: of自然数 (n + 1) = true
   证明: rfl
@@ -1032,8 +1032,8 @@ lemma toNat_beq_zero
   proof: by grind
 
 中文:
-引理 toNat_beq_zero
-  条件: (b : 布尔)
+引理 to自然数_beq_zero
+  条件: (b : 布尔值)
   结论: (b.to自然数 == 0) = !b
   证明: by grind
 -/
@@ -1048,8 +1048,8 @@ lemma toNat_bne_zero
   proof: by simp [bne]
 
 中文:
-引理 toNat_bne_zero
-  条件: (b : 布尔)
+引理 to自然数_bne_zero
+  条件: (b : 布尔值)
   结论: (b.to自然数 != 0) = b
   证明: by simp [bne]
 -/
@@ -1064,8 +1064,8 @@ lemma toNat_beq_one
   proof: by cases b <;> rfl
 
 中文:
-引理 toNat_beq_one
-  条件: (b : 布尔)
+引理 to自然数_beq_one
+  条件: (b : 布尔值)
   结论: (b.to自然数 == 1) = b
   证明: by cases b <;> rfl
 -/
@@ -1080,8 +1080,8 @@ lemma toNat_bne_one
   proof: by simp [bne]
 
 中文:
-引理 toNat_bne_one
-  条件: (b : 布尔)
+引理 to自然数_bne_one
+  条件: (b : 布尔值)
   结论: (b.to自然数 != 1) = !b
   证明: by simp [bne]
 -/
@@ -1101,7 +1101,7 @@ theorem ofNat_le_ofNat
   | isFalse hn => cases Nat.decEq m 0 with grind [Bool.le_true]
 
 中文:
-定理 ofNat_le_ofNat
+定理 of自然数_le_of自然数
   条件: {n m : 自然数} (h : n <= m)
   结论: of自然数 n <= of自然数 m
   证明: by
@@ -1129,8 +1129,8 @@ theorem toNat_le_toNat
   cases b₀ <;> cases b₁ <;> simp_all +decide
 
 中文:
-定理 toNat_le_toNat
-  条件: {b₀ b₁ : 布尔} (h : b₀ <= b₁)
+定理 to自然数_le_to自然数
+  条件: {b₀ b₁ : 布尔值} (h : b₀ <= b₁)
   结论: to自然数 b₀ <= to自然数 b₁
   证明: by
   cases b₀ <;> cases b₁ <;> simp_all +decide
@@ -1150,8 +1150,8 @@ theorem ofNat_toNat
 @[simp]
 
 中文:
-定理 ofNat_toNat
-  条件: (b : 布尔)
+定理 of自然数_to自然数
+  条件: (b : 布尔值)
   结论: of自然数 (to自然数 b) = b
   证明: by grind [cases Bool]
 
@@ -1171,8 +1171,8 @@ theorem injective_iff
 
 中文:
 定理 injective_iff
-  条件: {α : Sort*} {f : 布尔 -> α}
-  结论: Function.Injective f ↔ f false != f true
+  条件: {α : 类型层*} {f : 布尔值 -> α}
+  结论: 函数.单射 f ↔ f false != f true
   证明: ⟨fun Hinj Heq => false_ne_true (Hinj Heq), fun H x y => by grind [cases Bool]⟩
 
 Depends on / 依赖: false_ne_true
@@ -1192,7 +1192,7 @@ theorem apply_apply_apply
 
 中文:
 定理 apply_apply_apply
-  条件: (f : 布尔 -> 布尔) (x : 布尔)
+  条件: (f : 布尔值 -> 布尔值) (x : 布尔值)
   结论: f (f (f x)) = f x
   证明: by
   cases h₁ : f true <;> cases h₂ : f false <;> grind [cases Bool]
@@ -1210,7 +1210,7 @@ definition xor3
 
 中文:
 定义 xor3
-  签名: (x y c : 布尔)
+  签名: (x y c : 布尔值)
   定义体: xor (xor x y) c
 -/
 protected def xor3 (x y c : Bool) :=
@@ -1226,7 +1226,7 @@ definition carry
 
 中文:
 定义 carry
-  签名: (x y c : 布尔)
+  签名: (x y c : 布尔值)
   定义体: x && y || x && c || y && c
 -/
 protected def carry (x y c : Bool) :=

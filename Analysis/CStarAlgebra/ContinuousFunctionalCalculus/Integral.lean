@@ -65,7 +65,7 @@ lemma cfcL_integral
 
 中文:
 引理 cfcL_integral
-  结论: [NormedSpace 实数 A] (a : A) (f : X -> C(spectrum 𝕜 a, 𝕜)) (hf₁ : 整数egrable f μ)
+  结论: [赋范空间 实数 A] (a : A) (f : X -> C(spectrum 𝕜 a, 𝕜)) (hf₁ : 可积 f μ)
   证明: by
   rw [ContinuousLinearMap.integral_comp_comm _ hf₁]
 
@@ -106,7 +106,7 @@ lemma cfcHom_integral
 
 中文:
 引理 cfcHom_integral
-  结论: [NormedSpace 实数 A] (a : A) (f : X -> C(spectrum 𝕜 a, 𝕜))
+  结论: [赋范空间 实数 A] (a : A) (f : X -> C(spectrum 𝕜 a, 𝕜))
   证明: cfcL_integral a f hf₁ ha
 
 Depends on / 依赖: cfcHom, cfcL_integral, cfc_tac
@@ -154,7 +154,7 @@ lemma integrableOn_cfc'
 
 中文:
 引理 integrableOn_cfc'
-  结论: {s : Set X} (f : X -> 𝕜 -> 𝕜) (a : A)
+  结论: {s : 集合 X} (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: by
   exact integrable_cfc' _ _ hf ha
 
@@ -183,7 +183,7 @@ lemma integrable_cfc
 
 中文:
 引理 integrable_cfc
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X] (f : X -> 𝕜 -> 𝕜)
+  结论: [拓扑空间 X] [OpensMeasurable空间 X] (f : X -> 𝕜 -> 𝕜)
   证明: by
   refine integrable_cfc' _ _ ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf
@@ -221,7 +221,7 @@ lemma integrableOn_cfc
 
 中文:
 引理 integrableOn_cfc
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X] {s : Set X}
+  结论: [拓扑空间 X] [OpensMeasurable空间 X] {s : 集合 X}
   证明: by
   refine integrableOn_cfc' _ _ ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf
@@ -263,7 +263,7 @@ lemma cfc_integral'
 
 中文:
 引理 cfc_integral'
-  结论: [NormedSpace 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
+  结论: [赋范空间 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: by
   have key₁ (z : spectrum 𝕜 a) :
       ∫ x, f x z ∂μ = (∫ x, mkD ((spectrum 𝕜 a).domRestrict (f x)) 0 ∂μ) z := by
@@ -309,8 +309,8 @@ lemma cfc_setIntegral'
   proof: cfc_integral' _ _ hf₁ hf₂ ha
 
 中文:
-引理 cfc_setIntegral'
-  结论: {s : Set X} [NormedSpace 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
+引理 cfc_set整数egral'
+  结论: {s : 集合 X} [赋范空间 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: cfc_integral' _ _ hf₁ hf₂ ha
 
 Depends on / 依赖: cfc_integral, cfc_tac
@@ -339,7 +339,7 @@ lemma cfc_integral
 
 中文:
 引理 cfc_integral
-  结论: [NormedSpace 实数 A] [TopologicalSpace X] [OpensMeasurableSpace X]
+  结论: [赋范空间 实数 A] [拓扑空间 X] [OpensMeasurable空间 X]
   证明: by
   have : forallᵐ (x : X) ∂μ, ContinuousOn (f x) (spectrum 𝕜 a) := .of_forall fun x =>
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
@@ -376,8 +376,8 @@ lemma cfc_setIntegral
   · exact aeStronglyMeasurable_restrict_mkD_restri
 
 中文:
-引理 cfc_setIntegral
-  结论: [NormedSpace 实数 A] [TopologicalSpace X] [OpensMeasurableSpace X] {s : Set X}
+引理 cfc_set整数egral
+  结论: [赋范空间 实数 A] [拓扑空间 X] [OpensMeasurable空间 X] {s : 集合 X}
   证明: by
   have : forallᵐ (x : X) ∂(μ.restrict s), ContinuousOn (f x) (spectrum 𝕜 a) :=
     ae_restrict_of_forall_mem hs fun x hx =>
@@ -424,7 +424,7 @@ lemma cfcₙL_integral
 
 中文:
 引理 cfcₙL_integral
-  结论: [NormedSpace 实数 A] (a : A) (f : X -> C(quasispectrum 𝕜 a, 𝕜)₀)
+  结论: [赋范空间 实数 A] (a : A) (f : X -> C(quasispectrum 𝕜 a, 𝕜)₀)
   证明: by
   rw [ContinuousLinearMap.integral_comp_comm _ hf₁]
 
@@ -445,7 +445,7 @@ lemma cfcₙHom_integral
 
 中文:
 引理 cfcₙHom_integral
-  结论: [NormedSpace 实数 A] (a : A) (f : X -> C(quasispectrum 𝕜 a, 𝕜)₀)
+  结论: [赋范空间 实数 A] (a : A) (f : X -> C(quasispectrum 𝕜 a, 𝕜)₀)
   证明: cfcₙL_integral a f hf₁ ha
 
 Depends on / 依赖: cfc_tac
@@ -513,7 +513,7 @@ lemma integrableOn_cfcₙ'
 
 中文:
 引理 integrableOn_cfcₙ'
-  结论: {s : Set X} (f : X -> 𝕜 -> 𝕜) (a : A)
+  结论: {s : 集合 X} (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: by
   exact integrable_cfcₙ' _ _ hf ha
 
@@ -542,7 +542,7 @@ lemma integrable_cfcₙ
 
 中文:
 引理 integrable_cfcₙ
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X] (f : X -> 𝕜 -> 𝕜)
+  结论: [拓扑空间 X] [OpensMeasurable空间 X] (f : X -> 𝕜 -> 𝕜)
   证明: by
   refine integrable_cfcₙ' _ _ ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_mkD_restrict_of_uncurry _ _ hf f_zero
@@ -582,7 +582,7 @@ lemma integrableOn_cfcₙ
 
 中文:
 引理 integrableOn_cfcₙ
-  结论: [TopologicalSpace X] [OpensMeasurableSpace X] {s : Set X}
+  结论: [拓扑空间 X] [OpensMeasurable空间 X] {s : 集合 X}
   证明: by
   refine integrableOn_cfcₙ' _ _ ⟨?_, ?_⟩ ha
   · exact aeStronglyMeasurable_restrict_mkD_restrict_of_uncurry hs _ _ hf f_zero
@@ -624,7 +624,7 @@ lemma cfcₙ_integral'
 
 中文:
 引理 cfcₙ_integral'
-  结论: [NormedSpace 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
+  结论: [赋范空间 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: by
   have key₁ (z : quasispectrum 𝕜 a) :
       ∫ x, f x z ∂μ = (∫ x, mkD ((quasispectrum 𝕜 a).domRestrict (f x)) 0 ∂μ) z := by
@@ -671,8 +671,8 @@ lemma cfcₙ_setIntegral'
   proof: cfcₙ_integral' _ _ hf₁ hf₂ hf₃ ha
 
 中文:
-引理 cfcₙ_setIntegral'
-  结论: {s : Set X} [NormedSpace 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
+引理 cfcₙ_set整数egral'
+  结论: {s : 集合 X} [赋范空间 实数 A] (f : X -> 𝕜 -> 𝕜) (a : A)
   证明: cfcₙ_integral' _ _ hf₁ hf₂ hf₃ ha
 
 Depends on / 依赖: cfc_tac
@@ -701,7 +701,7 @@ lemma cfcₙ_integral
 
 中文:
 引理 cfcₙ_integral
-  结论: [NormedSpace 实数 A] [TopologicalSpace X] [OpensMeasurableSpace X]
+  结论: [赋范空间 实数 A] [拓扑空间 X] [OpensMeasurable空间 X]
   证明: by
   have : forallᵐ (x : X) ∂μ, ContinuousOn (f x) (quasispectrum 𝕜 a) := .of_forall fun x =>
     hf.comp (Continuous.prodMk_right x).continuousOn fun _ hz => ⟨Set.mem_univ _, hz⟩
@@ -739,8 +739,8 @@ lemma cfcₙ_setIntegral
   · exact aeStronglyMeasurable_restri
 
 中文:
-引理 cfcₙ_setIntegral
-  结论: [NormedSpace 实数 A] [TopologicalSpace X] [OpensMeasurableSpace X] {s : Set X}
+引理 cfcₙ_set整数egral
+  结论: [赋范空间 实数 A] [拓扑空间 X] [OpensMeasurable空间 X] {s : 集合 X}
   证明: by
   have : forallᵐ (x : X) ∂(μ.restrict s), ContinuousOn (f x) (quasispectrum 𝕜 a) :=
     ae_restrict_of_forall_mem hs fun x hx =>

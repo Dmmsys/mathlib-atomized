@@ -79,7 +79,7 @@ let c := max' _ univ_nonempty.image (norm ∘ Φ)
 
 中文:
 引理 LSeriesSummable_of_one_lt_re
-  条件: (Φ : ZMod N -> Complex) {s : Complex} (hs : 1 < re s)
+  条件: (Φ : ZMod N -> 复形) {s : 复形} (hs : 1 < re s)
   证明: by
 let c := max' _ univ_nonempty.image (norm ∘ Φ)
   refine LSeriesSummable_of_bounded_of_one_lt_re (fun n _ => le_max' _ _ ?_) (m := c) hs
@@ -102,8 +102,8 @@ definition LFunction
   body: N ^ (-s) * ∑ j : ZMod N, Φ j * hurwitzZeta (toAddCircle j) s
 
 中文:
-定义 LFunction
-  签名: (Φ : ZMod N -> Complex) (s : Complex)
+定义 L函数
+  签名: (Φ : ZMod N -> 复形) (s : 复形)
   定义体: N ^ (-s) * ∑ j : ZMod N, Φ j * hurwitzZeta (toAddCircle j) s
 
 Depends on / 依赖: hurwitzZeta, toAddCircle
@@ -123,7 +123,7 @@ lemma LFunction_modOne_eq
 
 中文:
 引理 LFunction_modOne_eq
-  条件: (Φ : ZMod 1 -> Complex) (s : Complex)
+  条件: (Φ : ZMod 1 -> 复形) (s : 复形)
   证明: by
   simp only [LFunction, Nat.cast_one, one_cpow, ← singleton_eq_univ (0 : ZMod 1), sum_singleton,
     map_zero, hurwitzZeta_zero, one_mul]
@@ -150,7 +150,7 @@ lemma LFunction_eq_LSeries
 
 中文:
 引理 LFunction_eq_LSeries
-  条件: (Φ : ZMod N -> Complex) {s : Complex} (hs : 1 < re s)
+  条件: (Φ : ZMod N -> 复形) {s : 复形} (hs : 1 < re s)
   证明: by
   rw [LFunction]; rw [LSeries]; rw [mul_sum]; rw [Nat.sumByResidueClasses (LSeriesSummable_of_one_lt_re Φ hs) N]
   congr 1 with j
@@ -204,7 +204,7 @@ lemma differentiableAt_LFunction
 
 中文:
 引理 differentiableAt_LFunction
-  条件: (Φ : ZMod N -> Complex) (s : Complex) (hs : s != 1 ∨ ∑ j, Φ j = 0)
+  条件: (Φ : ZMod N -> 复形) (s : 复形) (hs : s != 1 ∨ ∑ j, Φ j = 0)
   证明: by
   refine .mul (by fun_prop) ?_
   rcases ne_or_eq s 1 with hs' | rfl
@@ -234,7 +234,7 @@ lemma differentiable_LFunction_of_sum_zero
 
 中文:
 引理 differentiable_LFunction_of_sum_zero
-  条件: {Φ : ZMod N -> Complex} (hΦ : ∑ j, Φ j = 0)
+  条件: {Φ : ZMod N -> 复形} (hΦ : ∑ j, Φ j = 0)
   证明: fun s => differentiableAt_LFunction Φ s (Or.inr hΦ)
 
 Depends on / 依赖: Or.inr, differentiableAt_LFunction
@@ -258,7 +258,7 @@ lemma LFunction_residue_one
 
 中文:
 引理 LFunction_residue_one
-  条件: (Φ : ZMod N -> Complex)
+  条件: (Φ : ZMod N -> 复形)
   证明: by
   simp only [LFunction, mul_sum]
   refine tendsto_finsetSum _ fun j _ => ?_
@@ -293,7 +293,7 @@ lemma LFunction_stdAddChar_eq_expZeta_of_one_lt_re
 
 中文:
 引理 LFunction_stdAddChar_eq_expZeta_of_one_lt_re
-  条件: (j : ZMod N) {s : Complex} (hs : 1 < s.re)
+  条件: (j : ZMod N) {s : 复形} (hs : 1 < s.re)
   证明: by
   rw [toAddCircle_apply]; rw [← (hasSum_expZeta_of_one_lt_re (j.val / N) hs).tsum_eq]; rw [LFunction_eq_LSeries _ hs]; rw [LSeries]
   congr 1 with n
@@ -324,7 +324,7 @@ lemma LFunction_stdAddChar_eq_expZeta
 
 中文:
 引理 LFunction_stdAddChar_eq_expZeta
-  条件: (j : ZMod N) (s : Complex) (hjs : j != 0 ∨ s != 1)
+  条件: (j : ZMod N) (s : 复形) (hjs : j != 0 ∨ s != 1)
   证明: by
   let U := if j = 0 then {z : Complex | z != 1} else univ -- region of analyticity of both functions
   let V := {z : Complex | 1 < re z} -- convergence region
@@ -385,7 +385,7 @@ lemma LFunction_dft
 
 中文:
 引理 LFunction_dft
-  条件: (Φ : ZMod N -> Complex) {s : Complex} (hs : Φ 0 = 0 ∨ s != 1)
+  条件: (Φ : ZMod N -> 复形) {s : 复形} (hs : Φ 0 = 0 ∨ s != 1)
   证明: by
   have (j : ZMod N) : Φ j * LFunction (fun k => 𝕖 (-j * k)) s =
       Φ j * expZeta (toAddCircle (-j)) s := by
@@ -427,7 +427,7 @@ theorem LFunction_one_sub
 
 中文:
 定理 LFunction_one_sub
-  结论: (Φ : ZMod N -> Complex) {s : Complex}
+  结论: (Φ : ZMod N -> 复形) {s : 复形}
   证明: by
   rw [LFunction]
   have (j : ZMod N) : Φ j * hurwitzZeta (toAddCircle j) (1 - s) = Φ j *
@@ -483,7 +483,7 @@ lemma LFunction_def_even
 
 中文:
 引理 LFunction_def_even
-  条件: (hΦ : Φ.Even) (s : Complex)
+  条件: (hΦ : Φ.Even) (s : 复形)
   证明: by
   simp only [LFunction, hurwitzZeta, mul_add (Φ _), sum_add_distrib]
   congr 1
@@ -516,7 +516,7 @@ lemma LFunction_def_odd
 
 中文:
 引理 LFunction_def_odd
-  条件: (hΦ : Φ.Odd) (s : Complex)
+  条件: (hΦ : Φ.Odd) (s : 复形)
   证明: by
   simp only [LFunction, hurwitzZeta, mul_add (Φ _), sum_add_distrib]
   congr 1
@@ -614,7 +614,7 @@ definition completedLFunction
 
 中文:
 定义 completedLFunction
-  签名: (Φ : ZMod N -> Complex) (s : Complex)
+  签名: (Φ : ZMod N -> 复形) (s : 复形)
   定义体: N ^ (-s) * ∑ j, Φ j * completedHurwitzZetaEven (toAddCircle j) s
   + N ^ (-s) * ∑ j, Φ j * completedHurwitzZetaOdd (toAddCircle j) s
 
@@ -636,8 +636,8 @@ lemma completedLFunction_zero
 
 中文:
 引理 completedLFunction_zero
-  条件: (s : Complex)
-  结论: completedLFunction (0 : ZMod N -> Complex) s = 0
+  条件: (s : 复形)
+  结论: completedLFunction (0 : ZMod N -> 复形) s = 0
   证明: by
   simp only [completedLFunction, Pi.zero_apply, zero_mul, sum_const_zero, mul_zero, zero_add]
 -/
@@ -656,7 +656,7 @@ lemma completedLFunction_const_mul
 
 中文:
 引理 completedLFunction_const_mul
-  条件: (a : Complex) (Φ : ZMod N -> Complex) (s : Complex)
+  条件: (a : 复形) (Φ : ZMod N -> 复形) (s : 复形)
   证明: by
   simp only [completedLFunction, mul_add, mul_sum]
   congr with i <;> ring
@@ -682,7 +682,7 @@ lemma completedLFunction_def_even
 
 中文:
 引理 completedLFunction_def_even
-  条件: (hΦ : Φ.Even) (s : Complex)
+  条件: (hΦ : Φ.Even) (s : 复形)
   证明: by
   suffices ∑ j, Φ j * completedHurwitzZetaOdd (toAddCircle j) s = 0 by
     rw [completedLFunction]; rw [this]; rw [mul_zero]; rw [add_zero]
@@ -712,7 +712,7 @@ lemma completedLFunction_def_odd
 
 中文:
 引理 completedLFunction_def_odd
-  条件: (hΦ : Φ.Odd) (s : Complex)
+  条件: (hΦ : Φ.Odd) (s : 复形)
   证明: by
   suffices ∑ j, Φ j * completedHurwitzZetaEven (toAddCircle j) s = 0 by
     rw [completedLFunction]; rw [this]; rw [mul_zero]; rw [zero_add]
@@ -739,7 +739,7 @@ lemma completedLFunction_modOne_eq
 
 中文:
 引理 completedLFunction_modOne_eq
-  条件: (Φ : ZMod 1 -> Complex) (s : Complex)
+  条件: (Φ : ZMod 1 -> 复形) (s : 复形)
   证明: by
   rw [completedLFunction_def_even (show Φ.Even from fun _ => congr_arg Φ (Subsingleton.elim ..))]; rw [Nat.cast_one]; rw [one_cpow]; rw [one_mul]; rw [← singleton_eq_univ 0]; rw [sum_singleton]; rw [map_zero]; rw [completedHurwitzZetaEven_zero]; rw [Subsingleton.elim 0 1]
 
@@ -760,7 +760,7 @@ definition completedLFunction₀
 
 中文:
 定义 completedLFunction₀
-  签名: (Φ : ZMod N -> Complex) (s : Complex)
+  签名: (Φ : ZMod N -> 复形) (s : 复形)
   定义体: N ^ (-s) * ∑ j : ZMod N, Φ j * completedHurwitzZetaEven₀ (toAddCircle j) s
   + N ^ (-s) * ∑ j : ZMod N, Φ j * completedHurwitzZetaOdd (toAddCircle j) s
 
@@ -783,7 +783,7 @@ lemma differentiable_completedLFunction₀
 
 中文:
 引理 differentiable_completedLFunction₀
-  条件: (Φ : ZMod N -> Complex)
+  条件: (Φ : ZMod N -> 复形)
   证明: by
   refine .add ?_ ?_ <;>
   refine .mul (by fun_prop) (.fun_sum fun i _ => .const_mul ?_ _)
@@ -811,7 +811,7 @@ lemma completedLFunction_eq
 
 中文:
 引理 completedLFunction_eq
-  条件: (Φ : ZMod N -> Complex) (s : Complex)
+  条件: (Φ : ZMod N -> 复形) (s : 复形)
   证明: by
   simp only [completedLFunction, completedHurwitzZetaEven_eq, toAddCircle_eq_zero, div_eq_mul_inv,
     ite_mul, one_mul, zero_mul, mul_sub, mul_ite, mul_zero, sum_sub_distrib, Fintype.sum_ite_eq',
@@ -842,7 +842,7 @@ lemma differentiableAt_completedLFunction
 
 中文:
 引理 differentiableAt_completedLFunction
-  结论: (Φ : ZMod N -> Complex) (s : Complex) (hs₀ : s != 0 ∨ Φ 0 = 0)
+  结论: (Φ : ZMod N -> 复形) (s : 复形) (hs₀ : s != 0 ∨ Φ 0 = 0)
   证明: by
   simp only [funext (completedLFunction_eq Φ), mul_div_assoc]
   -- We know `completedLFunction₀` is differentiable everywhere, so it suffices to show that the
@@ -901,7 +901,7 @@ lemma LFunction_eq_completed_div_gammaFactor_even
 
 中文:
 引理 LFunction_eq_completed_div_gammaFactor_even
-  条件: (hΦ : Φ.Even) (s : Complex) (hs : s != 0 ∨ Φ 0 = 0)
+  条件: (hΦ : Φ.Even) (s : 复形) (hs : s != 0 ∨ Φ 0 = 0)
   证明: by
   simp only [completedLFunction_def_even hΦ, LFunction_def_even hΦ, mul_div_assoc, sum_div]
   congr 2 with i
@@ -934,7 +934,7 @@ lemma LFunction_eq_completed_div_gammaFactor_odd
 
 中文:
 引理 LFunction_eq_completed_div_gammaFactor_odd
-  条件: (hΦ : Φ.Odd) (s : Complex)
+  条件: (hΦ : Φ.Odd) (s : 复形)
   证明: by
   simp only [LFunction_def_odd hΦ, completedLFunction_def_odd hΦ, hurwitzZetaOdd, mul_div_assoc,
     sum_div]
@@ -961,7 +961,7 @@ lemma completedLFunction_one_sub_of_one_lt_even
 
 中文:
 引理 completedLFunction_one_sub_of_one_lt_even
-  条件: (hΦ : Φ.Even) {s : Complex} (hs : 1 < re s)
+  条件: (hΦ : Φ.Even) {s : 复形} (hs : 1 < re s)
   证明: by
   have hs₀ : s != 0 := ne_zero_of_one_lt_re hs
   have hs₁ : s != 1 := (lt_irrefl _ <| one_re ▸ · ▸ hs)
@@ -1002,7 +1002,7 @@ lemma completedLFunction_one_sub_of_one_lt_odd
 
 中文:
 引理 completedLFunction_one_sub_of_one_lt_odd
-  条件: (hΦ : Φ.Odd) {s : Complex} (hs : 1 < re s)
+  条件: (hΦ : Φ.Odd) {s : 复形} (hs : 1 < re s)
   证明: by
   -- strip down to the key equality:
   suffices ∑ x, Φ x * completedSinZeta (toAddCircle x) s = I * completedLFunction (𝓕 Φ) s by
@@ -1051,7 +1051,7 @@ theorem completedLFunction_one_sub_even
 
 中文:
 定理 completedLFunction_one_sub_even
-  结论: (hΦ : Φ.Even) (s : Complex)
+  结论: (hΦ : Φ.Even) (s : 复形)
   证明: by
   -- We prove this using `AnalyticOnNhd.eqOn_of_preconnected_of_eventuallyEq`, so we need to
   -- gather up the ingredients for this big theorem.
@@ -1123,7 +1123,7 @@ theorem completedLFunction_one_sub_odd
 
 中文:
 定理 completedLFunction_one_sub_odd
-  条件: (hΦ : Φ.Odd) (s : Complex)
+  条件: (hΦ : Φ.Odd) (s : 复形)
   证明: by
   -- This is much easier than the even case since both functions are entire.
   -- First set up some notations:

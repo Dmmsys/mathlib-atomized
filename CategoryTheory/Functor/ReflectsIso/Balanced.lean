@@ -47,7 +47,7 @@ lemma Functor.balanced_of_preserves
     exact isIso_of_mono_of_epi _
 
 中文:
-引理 Functor.balanced_of_preserves
+引理 函子.balanced_of_preserves
   结论: (F : C ⥤ D)
   证明: by
     rw [← isIso_iff_of_reflects_iso (F := F)]

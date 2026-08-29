@@ -32,8 +32,8 @@ instance [Semiring
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
 
 中文:
-实例 [Semiring
-  签名: R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵐᵒᵖ where
+实例 [半环
+  签名: R] [偏序 R] [是Ordered环 R] : 是Ordered环 Rᵐᵒᵖ where
   定义体: zero_le_one (α := R)
   mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
@@ -60,8 +60,8 @@ instance [Semiring
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha
 
 中文:
-实例 [Semiring
-  签名: R] [PartialOrder R] [IsOrderedRing R] : IsOrderedRing Rᵃᵒᵖ where
+实例 [半环
+  签名: R] [偏序 R] [是Ordered环 R] : 是Ordered环 Rᵃᵒᵖ where
   定义体: zero_le_one (α := R)
   mul_le_mul_of_nonneg_left _a ha _b _c hbc := mul_le_mul_of_nonneg_left (α := R) hbc ha
   mul_le_mul_of_nonneg_right _a ha _b _c hbc := mul_le_mul_of_nonneg_right (α := R) hbc ha

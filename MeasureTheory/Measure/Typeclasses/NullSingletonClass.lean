@@ -36,8 +36,8 @@ class NullSingletonClass
     - measure_singleton : forall x, μ {x} = 0
 
 中文:
-类 NullSingletonClass
-  参数: {m0 : MeasurableSpace α} (μ : Measure α)
+类 NullSingleton类
+  参数: {m0 : 可测空间 α} (μ : 测度 α)
   公理与运算 (1 个):
     - measure_singleton : 对任意 x, μ {x} = 0
 -/
@@ -62,8 +62,8 @@ theorem _root_.Set.Subsingleton.measure_zero
   proof: hs.induction_on (p := fun s => μ s = 0) measure_empty measure_singleton
 
 中文:
-定理 _root_.Set.Subsingleton.measure_zero
-  结论: (hs : s.Subsingleton) (μ : Measure α)
+定理 _root_.集合.子单例.measure_zero
+  结论: (hs : s.子单例) (μ : 测度 α)
   证明: hs.induction_on (p := fun s => μ s = 0) measure_empty measure_singleton
 
 Depends on / 依赖: hs.induction_on, induction_on, measure_empty, measure_singleton
@@ -84,7 +84,7 @@ theorem Measure.restrict_singleton'
   simp only [measure_singleton, Measure.restrict_eq_zero]
 
 中文:
-定理 Measure.restrict_singleton'
+定理 测度.restrict_singleton'
   条件: {a : α}
   结论: μ.restrict {a} = 0
   证明: by
@@ -109,8 +109,8 @@ instance Measure.restrict.instNullSingletonClass
   apply measure_mono_null inter_subset_left ht2
 
 中文:
-实例 Measure.restrict.instNullSingletonClass
-  签名: (s : Set α)
+实例 测度.restrict.instNullSingletonClass
+  签名: (s : 集合 α)
   定义体: by
   refine ⟨fun x => ?_⟩
   obtain ⟨t, hxt, ht1, ht2⟩ := exists_measurable_superset_of_null (measure_singleton x : μ {x} = 0)
@@ -139,8 +139,8 @@ theorem _root_.Set.Countable.measure_zero
   simp
 
 中文:
-定理 _root_.Set.Countable.measure_zero
-  条件: (h : s.Countable) (μ : Measure α) [NullSingletonClass μ]
+定理 _root_.集合.可数.measure_zero
+  条件: (h : s.可数) (μ : 测度 α) [NullSingleton类 μ]
   证明: by
   rw [← biUnion_of_singleton s]; rw [measure_biUnion_null_iff h]
   simp
@@ -162,8 +162,8 @@ theorem _root_.Set.Countable.ae_notMem
   simpa only [ae_iff, Classical.not_not] using! h.measure_zero μ
 
 中文:
-定理 _root_.Set.Countable.ae_notMem
-  条件: (h : s.Countable) (μ : Measure α) [NullSingletonClass μ]
+定理 _root_.集合.可数.ae_notMem
+  条件: (h : s.可数) (μ : 测度 α) [NullSingleton类 μ]
   证明: by
   simpa only [ae_iff, Classical.not_not] using! h.measure_zero μ
 
@@ -183,8 +183,8 @@ lemma Measure.ae_ne
   proof: (countable_singleton a).ae_notMem μ
 
 中文:
-引理 Measure.ae_ne
-  条件: (μ : Measure α) [NullSingletonClass μ] (a : α)
+引理 测度.ae_ne
+  条件: (μ : 测度 α) [NullSingleton类 μ] (a : α)
   结论: 对任意ᵐ x ∂μ, x != a
   证明: (countable_singleton a).ae_notMem μ
 
@@ -204,8 +204,8 @@ lemma _root_.Set.Countable.measure_restrict_compl
 @[simp]
 
 中文:
-引理 _root_.Set.Countable.measure_restrict_compl
-  结论: (h : s.Countable) (μ : Measure α)
+引理 _root_.集合.可数.measure_restrict_compl
+  结论: (h : s.可数) (μ : 测度 α)
   证明: restrict_eq_self_of_ae_mem h.ae_notMem μ
 
 @[simp]
@@ -247,8 +247,8 @@ theorem _root_.Set.Finite.measure_zero
   proof: h.countable.measure_zero μ
 
 中文:
-定理 _root_.Set.Finite.measure_zero
-  条件: (h : s.Finite) (μ : Measure α) [NullSingletonClass μ]
+定理 _root_.集合.有限.measure_zero
+  条件: (h : s.有限) (μ : 测度 α) [NullSingleton类 μ]
   证明: h.countable.measure_zero μ
 
 Depends on / 依赖: countable, h.countable.measure_zero, measure_zero
@@ -266,8 +266,8 @@ theorem _root_.Finset.measure_zero
   proof: s.finite_toSet.measure_zero μ
 
 中文:
-定理 _root_.Finset.measure_zero
-  条件: (s : Finset α) (μ : Measure α) [NullSingletonClass μ]
+定理 _root_.有限集.measure_zero
+  条件: (s : 有限集 α) (μ : 测度 α) [NullSingleton类 μ]
   证明: s.finite_toSet.measure_zero μ
 
 Depends on / 依赖: finite_toSet, measure_zero, s.finite_toSet.measure_zero
@@ -287,8 +287,8 @@ theorem insert_ae_eq_self
 
 中文:
 定理 insert_ae_eq_self
-  条件: (a : α) (s : Set α)
-  结论: (insert a s : Set α) =ᵐ[μ] s
+  条件: (a : α) (s : 集合 α)
+  结论: (insert a s : 集合 α) =ᵐ[μ] s
   证明: union_ae_eq_right.2 measure_mono_null sdiff_subset (measure_singleton _)
 
 Depends on / 依赖: measure_mono_null, measure_singleton, sdiff_subset, union_ae_eq_right
@@ -311,8 +311,8 @@ exact hE.ne' (Set.countable_coe_iff.mp <| separableSpace_iff_countable.mp ‹_�
 alias exists_accPt_of_noAtoms := exists_accPt_of_nullSingletonClass
 
 中文:
-定理 exists_accPt_of_nullSingletonClass
-  结论: {X : 类型} [TopologicalSpace X] [MeasurableSpace X]
+定理 存在_accPt_of_nullSingletonClass
+  结论: {X : 类型} [拓扑空间 X] [可测空间 X]
   证明: by
   by_contra! h
   have : DiscreteTopology E := discreteTopology_of_noAccPts fun x _ => h x
@@ -347,7 +347,7 @@ theorem Iio_ae_eq_Iic
 
 中文:
 定理 Iio_ae_eq_Iic
-  结论: Iio a =ᵐ[μ] Iic a
+  结论: 左无界右开区间 a =ᵐ[μ] 左无界右闭区间 a
   证明: Iio_ae_eq_Iic' (measure_singleton a)
 
 Depends on / 依赖: Iio_ae_eq_Iic, measure_singleton
@@ -365,7 +365,7 @@ theorem Ioi_ae_eq_Ici
 
 中文:
 定理 Ioi_ae_eq_Ici
-  结论: Ioi a =ᵐ[μ] Ici a
+  结论: 左开右无界区间 a =ᵐ[μ] 左闭右无界区间 a
   证明: Ioi_ae_eq_Ici' (measure_singleton a)
 
 Depends on / 依赖: ComplementedLattice, Ioi_ae_eq_Ici, IsAtomic, isAtomic_of_complementedLattice, measure_singleton
@@ -383,7 +383,7 @@ theorem Ioo_ae_eq_Ioc
 
 中文:
 定理 Ioo_ae_eq_Ioc
-  结论: Ioo a b =ᵐ[μ] Ioc a b
+  结论: 开区间 a b =ᵐ[μ] 左开右闭区间 a b
   证明: Ioo_ae_eq_Ioc' (measure_singleton b)
 
 Depends on / 依赖: ComplementedLattice, Ioo_ae_eq_Ioc, isAtomistic_of_complementedLattice, measure_singleton
@@ -401,7 +401,7 @@ theorem Ioc_ae_eq_Icc
 
 中文:
 定理 Ioc_ae_eq_Icc
-  结论: Ioc a b =ᵐ[μ] Icc a b
+  结论: 左开右闭区间 a b =ᵐ[μ] 闭区间 a b
   证明: Ioc_ae_eq_Icc' (measure_singleton a)
 
 Depends on / 依赖: Ioc_ae_eq_Icc, measure_singleton
@@ -419,7 +419,7 @@ theorem Ioo_ae_eq_Ico
 
 中文:
 定理 Ioo_ae_eq_Ico
-  结论: Ioo a b =ᵐ[μ] Ico a b
+  结论: 开区间 a b =ᵐ[μ] 左闭右开区间 a b
   证明: Ioo_ae_eq_Ico' (measure_singleton a)
 
 Depends on / 依赖: Ioo_ae_eq_Ico, measure_singleton
@@ -437,7 +437,7 @@ theorem Ioo_ae_eq_Icc
 
 中文:
 定理 Ioo_ae_eq_Icc
-  结论: Ioo a b =ᵐ[μ] Icc a b
+  结论: 开区间 a b =ᵐ[μ] 闭区间 a b
   证明: Ioo_ae_eq_Icc' (measure_singleton a) (measure_singleton b)
 
 Depends on / 依赖: Ioo_ae_eq_Icc, measure_singleton
@@ -455,7 +455,7 @@ theorem Ico_ae_eq_Icc
 
 中文:
 定理 Ico_ae_eq_Icc
-  结论: Ico a b =ᵐ[μ] Icc a b
+  结论: 左闭右开区间 a b =ᵐ[μ] 闭区间 a b
   证明: Ico_ae_eq_Icc' (measure_singleton b)
 
 Depends on / 依赖: Ico_ae_eq_Icc, measure_singleton
@@ -473,7 +473,7 @@ theorem Ico_ae_eq_Ioc
 
 中文:
 定理 Ico_ae_eq_Ioc
-  结论: Ico a b =ᵐ[μ] Ioc a b
+  结论: 左闭右开区间 a b =ᵐ[μ] 左开右闭区间 a b
   证明: Ico_ae_eq_Ioc' (measure_singleton a) (measure_singleton b)
 
 Depends on / 依赖: Ico_ae_eq_Ioc, measure_singleton
@@ -491,7 +491,7 @@ theorem restrict_Iio_eq_restrict_Iic
 
 中文:
 定理 restrict_Iio_eq_restrict_Iic
-  结论: μ.restrict (Iio a) = μ.restrict (Iic a)
+  结论: μ.restrict (左无界右开区间 a) = μ.restrict (左无界右闭区间 a)
   证明: restrict_congr_set Iio_ae_eq_Iic
 
 Depends on / 依赖: Iio_ae_eq_Iic, restrict_congr_set
@@ -509,7 +509,7 @@ theorem restrict_Ioi_eq_restrict_Ici
 
 中文:
 定理 restrict_Ioi_eq_restrict_Ici
-  结论: μ.restrict (Ioi a) = μ.restrict (Ici a)
+  结论: μ.restrict (左开右无界区间 a) = μ.restrict (左闭右无界区间 a)
   证明: restrict_congr_set Ioi_ae_eq_Ici
 
 Depends on / 依赖: Ioi_ae_eq_Ici, restrict_congr_set
@@ -527,7 +527,7 @@ theorem restrict_Ioo_eq_restrict_Ioc
 
 中文:
 定理 restrict_Ioo_eq_restrict_Ioc
-  结论: μ.restrict (Ioo a b) = μ.restrict (Ioc a b)
+  结论: μ.restrict (开区间 a b) = μ.restrict (左开右闭区间 a b)
   证明: restrict_congr_set Ioo_ae_eq_Ioc
 
 Depends on / 依赖: Ioo_ae_eq_Ioc, restrict_congr_set
@@ -545,7 +545,7 @@ theorem restrict_Ioc_eq_restrict_Icc
 
 中文:
 定理 restrict_Ioc_eq_restrict_Icc
-  结论: μ.restrict (Ioc a b) = μ.restrict (Icc a b)
+  结论: μ.restrict (左开右闭区间 a b) = μ.restrict (闭区间 a b)
   证明: restrict_congr_set Ioc_ae_eq_Icc
 
 Depends on / 依赖: Ioc_ae_eq_Icc, restrict_congr_set
@@ -563,7 +563,7 @@ theorem restrict_Ioo_eq_restrict_Ico
 
 中文:
 定理 restrict_Ioo_eq_restrict_Ico
-  结论: μ.restrict (Ioo a b) = μ.restrict (Ico a b)
+  结论: μ.restrict (开区间 a b) = μ.restrict (左闭右开区间 a b)
   证明: restrict_congr_set Ioo_ae_eq_Ico
 
 Depends on / 依赖: Ioo_ae_eq_Ico, restrict_congr_set
@@ -581,7 +581,7 @@ theorem restrict_Ioo_eq_restrict_Icc
 
 中文:
 定理 restrict_Ioo_eq_restrict_Icc
-  结论: μ.restrict (Ioo a b) = μ.restrict (Icc a b)
+  结论: μ.restrict (开区间 a b) = μ.restrict (闭区间 a b)
   证明: restrict_congr_set Ioo_ae_eq_Icc
 
 Depends on / 依赖: Ioo_ae_eq_Icc, restrict_congr_set
@@ -599,7 +599,7 @@ theorem restrict_Ico_eq_restrict_Icc
 
 中文:
 定理 restrict_Ico_eq_restrict_Icc
-  结论: μ.restrict (Ico a b) = μ.restrict (Icc a b)
+  结论: μ.restrict (左闭右开区间 a b) = μ.restrict (闭区间 a b)
   证明: restrict_congr_set Ico_ae_eq_Icc
 
 Depends on / 依赖: Ico_ae_eq_Icc, restrict_congr_set
@@ -617,7 +617,7 @@ theorem restrict_Ico_eq_restrict_Ioc
 
 中文:
 定理 restrict_Ico_eq_restrict_Ioc
-  结论: μ.restrict (Ico a b) = μ.restrict (Ioc a b)
+  结论: μ.restrict (左闭右开区间 a b) = μ.restrict (左开右闭区间 a b)
   证明: restrict_congr_set Ico_ae_eq_Ioc
 
 Depends on / 依赖: Ico_ae_eq_Ioc, restrict_congr_set
@@ -641,7 +641,7 @@ theorem uIoc_ae_eq_interval
 
 中文:
 定理 uIoc_ae_eq_interval
-  条件: [LinearOrder α] {a b : α}
+  条件: [线性序 α] {a b : α}
   结论: Ι a b =ᵐ[μ] [[a, b]]
   证明: Ioc_ae_eq_Icc
 

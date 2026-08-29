@@ -48,7 +48,7 @@ definition invSubmonoid
 
 中文:
 定义 invSubmonoid
-  签名: : Submonoid S
+  签名: : 子幺半群 S
   定义体: (M.map (algebraMap R S)).leftInv
 
 Depends on / 依赖: M.map, algebraMap, leftInv
@@ -70,7 +70,7 @@ theorem submonoid_map_le_is_unit
 
 中文:
 定理 submonoid_map_le_is_unit
-  结论: M.map (algebraMap R S) <= IsUnit.submonoid S
+  结论: M.map (algebraMap R S) <= 是单位.submonoid S
   证明: by
   rintro _ ⟨a, ha, rfl⟩
   exact IsLocalization.map_units S ⟨_, ha⟩
@@ -130,7 +130,7 @@ theorem toInvSubmonoid_surjective
 
 中文:
 定理 toInvSubmonoid_surjective
-  结论: Function.Surjective (toInvSubmonoid M S)
+  结论: 函数.满射 (toInvSubmonoid M S)
   证明: Function.Surjective.comp (β := M.map (algebraMap R S))
     (Equiv.surjective (equivInvSubmonoid _ _).toEquiv) (MonoidHom.submonoidMap_surjective _ _)
 
@@ -296,7 +296,7 @@ theorem mem_invSubmonoid_iff_exists_mk'
     fun h => h.choose_spec ▸ (toInvSubmonoid M S h.choose).prop⟩
 
 中文:
-定理 mem_invSubmonoid_iff_exists_mk'
+定理 mem_invSubmonoid_iff_存在_mk'
   条件: (x : S)
   证明: by
   simp_rw [← toInvSubmonoid_eq_mk']
@@ -327,7 +327,7 @@ theorem span_invSubmonoid
 
 中文:
 定理 span_invSubmonoid
-  结论: Submodule.span R (invSubmonoid M S : Set S) = ⊤
+  结论: 子模.span R (invSubmonoid M S : 集合 S) = ⊤
   证明: by
   rw [eq_top_iff]
   rintro x -
@@ -361,8 +361,8 @@ theorem finiteType_of_monoid_fg
 
 中文:
 定理 finiteType_of_monoid_fg
-  条件: [Monoid.FG M]
-  结论: Algebra.FiniteType R S
+  条件: [幺半群.FG M]
+  结论: 代数.有限型 R S
   证明: by
   have := Monoid.fg_of_surjective _ (toInvSubmonoid_surjective M S)
   rw [Monoid.fg_iff_submonoid_fg] at this

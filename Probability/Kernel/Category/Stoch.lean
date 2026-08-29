@@ -55,7 +55,7 @@ abbreviation StochHom
 
 中文:
 缩写 StochHom
-  签名: : Morphism命题erty SFinKer
+  签名: : MorphismProperty SFinKer
   定义体: fun _ _ κ => IsMarkovKernel κ.1
 
 Depends on / 依赖: IsMarkovKernel
@@ -76,7 +76,7 @@ associator_hom_mem X Y Z := isMarkovKernel_deterministic MeasurableEquiv.measur
 
 中文:
 实例 :
-  签名: StochHom.IsStableUnderBraiding
+  签名: StochHom.是StableUnderBraiding
   定义体: by dsimp [StochHom]; infer_instance
   comp_mem κ η hκ hη := by dsimp [StochHom]; infer_instance
   whiskerLeft X Y Z κ hκ := by dsimp [StochHom]; infer_instance
@@ -128,8 +128,8 @@ instance [Deterministic
   signature: κ.hom] : Deterministic κ where
 
 中文:
-实例 [Deterministic
-  签名: κ.hom] : Deterministic κ where
+实例 [确定性
+  签名: κ.hom] : 确定性 κ where
 -/
 instance [Deterministic κ.hom] : Deterministic κ where
 
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (Δ[X])
+  签名: 确定性 (Δ[X])
 -/
 instance : Deterministic (Δ[X]) where
 
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: Deterministic (ε[X])
+  签名: 确定性 (ε[X])
   定义体: by
     ext : 1
     simp only [WideSubcategory.comp_def, MorphismProperty.counit_hom]
@@ -191,7 +191,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMarkovKernel κ.hom.hom
+  签名: 是MarkovKernel κ.hom.hom
   定义体: κ.2
 -/
 instance : IsMarkovKernel κ.hom.hom := κ.2
@@ -205,8 +205,8 @@ instance [Deterministic
   body: WideSubcategory.hom_ext_iff.mp Deterministic.copy_natural κ
 
 中文:
-实例 [Deterministic
-  签名: κ] : Deterministic κ.hom where
+实例 [确定性
+  签名: κ] : 确定性 κ.hom where
   定义体: WideSubcategory.hom_ext_iff.mp Deterministic.copy_natural κ
 
 Depends on / 依赖: Deterministic, Deterministic.copy_natural, WideSubcategory, WideSubcategory.hom_ext_iff.mp, copy_natural, hom_ext_iff
@@ -228,8 +228,8 @@ instance [Deterministic
     exact this.symm
 
 中文:
-实例 [Deterministic
-  签名: κ] : IsDeterministic κ.hom.hom where
+实例 [确定性
+  签名: κ] : 是确定性 κ.hom.hom where
   定义体: by
     have := Deterministic.copy_natural κ.hom
     rw [SFinKer.Hom.ext_iff] at this
@@ -263,7 +263,7 @@ instance :
 
 中文:
 实例 :
-  签名: PositiveCategory Stoch.{u}
+  签名: 正范畴 Stoch.{u}
   定义体: by ext : 2; simp
   copy_comp_natural κ η _ := by
     ext : 2

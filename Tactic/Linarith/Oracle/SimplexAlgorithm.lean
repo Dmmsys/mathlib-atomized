@@ -35,7 +35,7 @@ definition preprocess
 
 中文:
 定义 preprocess
-  签名: (matType : 自然数 -> 自然数 -> Type) [UsableInSimplexAlgorithm matType] (hyps : List Comp)
+  签名: (matType : 自然数 -> 自然数 -> 类型) [UsableInSimplexAlgorithm matType] (hyps : 列表 复合)
   定义体: let values : List (Nat × Nat × Rat) := hyps.foldlIdx (init := []) fun idx cur comp =>
     cur ++ comp.coeffs.map fun (var, c) => (var, idx, c)
 
@@ -65,7 +65,7 @@ definition postprocess
 
 中文:
 定义 postprocess
-  签名: (vec : Array Rat)
+  签名: (vec : 数组 有理数)
   定义体: let common_den : Nat := vec.foldl (fun acc item => acc.lcm item.den) 1
   let vecNat : Array Nat := vec.map (fun x : Rat => (x * common_den).floor.toNat)
 (∅ : Std.HashMap Nat Nat).insertMany vecNat.zipIdx.filterMap

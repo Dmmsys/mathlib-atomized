@@ -56,12 +56,12 @@ structure ContinuousLinearEquiv
     - continuous_invFun : Continuous invFun  [default: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 中文:
-结构 ContinuousLinearEquiv
-  参数: {R : 类型} {S : 类型} [Semiring R] [Semiring S] (σ : R ->+* S)
+结构 连续线性等价
+  参数: {R : 类型} {S : 类型} [半环 R] [半环 S] (σ : R ->+* S)
   继承: M ≃ₛₗ[σ] M₂
   公理与运算 (2 个):
-    - continuous_toFun : Continuous toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
-    - continuous_invFun : Continuous invFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
+    - continuous_toFun : 连续 toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
+    - continuous_invFun : 连续 invFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 Depends on / 依赖: Continuous, continuous_invFun, eta_expand, fun_prop, invFun
 -/
@@ -93,12 +93,12 @@ class ContinuousSemilinearEquivClass
     - inv_continuous : forall f : F, Continuous (EquivLike.inv f)  [default: by first | fun_prop | dsimp; fun_prop]
 
 中文:
-类 ContinuousSemilinearEquivClass
+类 余ntinuousSemilinear等价类
   参数: (F : 类型) {R : outParam 类型} {S : outParam 类型}
-  继承: SemilinearEquivClass F σ M M₂
+  继承: 半线性等价类 F σ M M₂
   公理与运算 (2 个):
-    - map_continuous : 对任意 f : F, Continuous f  [默认: by first | fun_prop | dsimp; fun_prop]
-    - inv_continuous : 对任意 f : F, Continuous (EquivLike.inv f)  [默认: by first | fun_prop | dsimp; fun_prop]
+    - map_continuous : 对任意 f : F, 连续 f  [默认: by first | fun_prop | dsimp; fun_prop]
+    - inv_continuous : 对任意 f : F, 连续 (等价状.inv f)  [默认: by first | fun_prop | dsimp; fun_prop]
 
 Depends on / 依赖: Continuous, EquivLike, EquivLike.inv, fun_prop, inv_continuous
 -/
@@ -124,7 +124,7 @@ abbreviation ContinuousLinearEquivClass
 
 中文:
 缩写 ContinuousLinearEquivClass
-  签名: (F : 类型) (R : outParam 类型) [Semiring R]
+  签名: (F : 类型) (R : outParam 类型) [半环 R]
   定义体: ContinuousSemilinearEquivClass F (RingHom.id R) M M₂
 
 Depends on / 依赖: ContinuousSemilinearEquivClass, RingHom, RingHom.id
@@ -181,7 +181,7 @@ Continuous.comp (continuous_apply (A := φ) i) continuous_subtype_val
 
 中文:
 定义 iInfKerProjEquiv
-  签名: {I J : Set ι} [DecidablePred fun i => i in I] (hd : Disjoint I J)
+  签名: {I J : 集合 ι} [DecidablePred fun i => i in I] (hd : Disjoint I J)
   定义体: LinearMap.iInfKerProjEquiv R φ hd hu
   continuous_toFun :=
     continuous_pi fun i =>
@@ -388,7 +388,7 @@ theorem coe_mk
 中文:
 定理 coe_mk
   条件: (e : M₁ ≃ₛₗ[σ₁₂] M₂) (a b)
-  结论: ⇑(ContinuousLinearEquiv.mk e a b) = e
+  结论: ⇑(连续线性等价.mk e a b) = e
   证明: rfl
 -/
 theorem coe_mk (e : M₁ ≃ₛₗ[σ₁₂] M₂) (a b) : ⇑(ContinuousLinearEquiv.mk e a b) = e := rfl
@@ -514,7 +514,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Function.Injective ((↑) : (M₁ ≃SL[σ₁₂] M₂) -> M₁ ->SL[σ₁₂] M₂)
+  结论: 函数.单射 ((↑) : (M₁ ≃SL[σ₁₂] M₂) -> M₁ ->SL[σ₁₂] M₂)
   证明: fun _e _e' h => ext funext ContinuousLinearMap.ext_iff.1 h
 
 @[simp, norm_cast]
@@ -598,7 +598,7 @@ theorem isOpenMap
 中文:
 定理 isOpenMap
   条件: (e : M₁ ≃SL[σ₁₂] M₂)
-  结论: IsOpenMap e
+  结论: 是开映射 e
   证明: (ContinuousLinearEquiv.toHomeomorph e).isOpenMap
 
 Depends on / 依赖: ContinuousLinearEquiv, ContinuousLinearEquiv.toHomeomorph, isOpenMap, toHomeomorph
@@ -617,7 +617,7 @@ theorem image_closure
 
 中文:
 定理 image_closure
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₁)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₁)
   结论: e '' closure s = closure (e '' s)
   证明: e.toHomeomorph.image_closure s
 
@@ -639,7 +639,7 @@ theorem preimage_closure
 
 中文:
 定理 preimage_closure
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₂)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₂)
   结论: e ⁻¹' closure s = closure (e ⁻¹' s)
   证明: e.toHomeomorph.preimage_closure s
 
@@ -662,8 +662,8 @@ theorem isClosed_image
 
 中文:
 定理 isClosed_image
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : Set M₁}
-  结论: IsClosed (e '' s) ↔ IsClosed s
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : 集合 M₁}
+  结论: 是闭集 (e '' s) ↔ 是闭集 s
   证明: e.toHomeomorph.isClosed_image
 
 Depends on / 依赖: e.toHomeomorph.isClosed_image, isClosed_image, toHomeomorph
@@ -765,7 +765,7 @@ theorem map_smul
 
 中文:
 定理 map_smul
-  条件: [Module R₁ M₂] (e : M₁ ≃L[R₁] M₂) (c : R₁) (x : M₁)
+  条件: [模 R₁ M₂] (e : M₁ ≃L[R₁] M₂) (c : R₁) (x : M₁)
   结论: e (c • x) = c • e x
   证明: (e : M₁ ->L[R₁] M₂).map_smul c x
 
@@ -810,7 +810,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (e : M₁ ≃SL[σ₁₂] M₂)
-  结论: Continuous (e : M₁ -> M₂)
+  结论: 连续 (e : M₁ -> M₂)
   证明: e.continuous_toFun
 -/
 protected theorem continuous (e : M₁ ≃SL[σ₁₂] M₂) : Continuous (e : M₁ -> M₂) :=
@@ -827,7 +827,7 @@ theorem continuousOn
 
 中文:
 定理 continuousOn
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : Set M₁}
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : 集合 M₁}
   结论: ContinuousOn (e : M₁ -> M₂) s
   证明: e.continuous.continuousOn
 -/
@@ -862,7 +862,7 @@ theorem continuousWithinAt
 
 中文:
 定理 continuousWithinAt
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : Set M₁} {x : M₁}
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) {s : 集合 M₁} {x : M₁}
   证明: e.continuous.continuousWithinAt
 -/
 protected theorem continuousWithinAt (e : M₁ ≃SL[σ₁₂] M₂) {s : Set M₁} {x : M₁} :
@@ -879,7 +879,7 @@ theorem comp_continuousOn_iff
 
 中文:
 定理 comp_continuousOn_iff
-  结论: {α : 类型} [TopologicalSpace α] (e : M₁ ≃SL[σ₁₂] M₂) {f : α -> M₁}
+  结论: {α : 类型} [拓扑空间 α] (e : M₁ ≃SL[σ₁₂] M₂) {f : α -> M₁}
   证明: e.toHomeomorph.comp_continuousOn_iff _ _
 
 Depends on / 依赖: comp_continuousOn_iff, e.toHomeomorph.comp_continuousOn_iff, toHomeomorph
@@ -898,7 +898,7 @@ theorem comp_continuous_iff
 
 中文:
 定理 comp_continuous_iff
-  条件: {α : 类型} [TopologicalSpace α] (e : M₁ ≃SL[σ₁₂] M₂) {f : α -> M₁}
+  条件: {α : 类型} [拓扑空间 α] (e : M₁ ≃SL[σ₁₂] M₂) {f : α -> M₁}
   证明: e.toHomeomorph.comp_continuous_iff
 
 Depends on / 依赖: comp_continuous_iff, e.toHomeomorph.comp_continuous_iff, toHomeomorph
@@ -918,7 +918,7 @@ theorem ext₁
 
 中文:
 定理 ext₁
-  条件: [TopologicalSpace R₁] {f g : R₁ ≃L[R₁] M₁} (h : f 1 = g 1)
+  条件: [拓扑空间 R₁] {f g : R₁ ≃L[R₁] M₁} (h : f 1 = g 1)
   结论: f = g
   证明: ext funext fun x => mul_one x ▸ by rw [← smul_eq_mul, map_smul, h, map_smul]
 
@@ -1027,7 +1027,7 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  结论: ↑(ContinuousLinearEquiv.refl R₁ M₁) = ContinuousLinearMap.id R₁ M₁
+  结论: ↑(连续线性等价.refl R₁ M₁) = 连续线性映射.id R₁ M₁
   证明: rfl
 
 @[simp, norm_cast]
@@ -1046,7 +1046,7 @@ theorem coe_refl'
 
 中文:
 定理 coe_refl'
-  结论: ⇑(ContinuousLinearEquiv.refl R₁ M₁) = id
+  结论: ⇑(连续线性等价.refl R₁ M₁) = id
   证明: rfl
 -/
 theorem coe_refl' : ⇑(ContinuousLinearEquiv.refl R₁ M₁) = id :=
@@ -1283,7 +1283,7 @@ definition prodCongr
 
 中文:
 定义 prodCongr
-  签名: [Module R₁ M₂] [Module R₁ M₃] [Module R₁ M₄] (e : M₁ ≃L[R₁] M₂) (e' : M₃ ≃L[R₁] M₄)
+  签名: [模 R₁ M₂] [模 R₁ M₃] [模 R₁ M₄] (e : M₁ ≃L[R₁] M₂) (e' : M₃ ≃L[R₁] M₄)
   定义体: e.toLinearEquiv.prodCongr e'.toLinearEquiv
 
 @[simp, norm_cast]
@@ -1307,7 +1307,7 @@ theorem prodCongr_apply
 
 中文:
 定理 prodCongr_apply
-  结论: [Module R₁ M₂] [Module R₁ M₃] [Module R₁ M₄] (e : M₁ ≃L[R₁] M₂)
+  结论: [模 R₁ M₂] [模 R₁ M₃] [模 R₁ M₄] (e : M₁ ≃L[R₁] M₂)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1329,7 +1329,7 @@ theorem coe_prodCongr
 
 中文:
 定理 coe_prodCongr
-  结论: [Module R₁ M₂] [Module R₁ M₃] [Module R₁ M₄] (e : M₁ ≃L[R₁] M₂)
+  结论: [模 R₁ M₂] [模 R₁ M₃] [模 R₁ M₄] (e : M₁ ≃L[R₁] M₂)
   证明: rfl
 
 @[simp]
@@ -1350,7 +1350,7 @@ theorem prodCongr_symm
 
 中文:
 定理 prodCongr_symm
-  结论: [Module R₁ M₂] [Module R₁ M₃] [Module R₁ M₄] (e : M₁ ≃L[R₁] M₂)
+  结论: [模 R₁ M₂] [模 R₁ M₃] [模 R₁ M₄] (e : M₁ ≃L[R₁] M₂)
   证明: rfl
 -/
 theorem prodCongr_symm [Module R₁ M₂] [Module R₁ M₃] [Module R₁ M₄] (e : M₁ ≃L[R₁] M₂)
@@ -1372,7 +1372,7 @@ definition prodComm
 
 中文:
 定义 prodComm
-  签名: [Module R₁ M₂]
+  签名: [模 R₁ M₂]
   定义体: LinearEquiv.prodComm R₁ M₁ M₂
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.prodComm, prodComm
@@ -1391,7 +1391,7 @@ lemma prodComm_symm
 
 中文:
 引理 prodComm_symm
-  条件: [Module R₁ M₂]
+  条件: [模 R₁ M₂]
   结论: (prodComm R₁ M₁ M₂).symm = prodComm R₁ M₂ M₁
   证明: rfl
 -/
@@ -1665,7 +1665,7 @@ lemma coe_prodUnique
 
 中文:
 引理 coe_prodUnique
-  结论: (prodUnique R M N).toEquiv = Equiv.prodUnique M N
+  结论: (prodUnique R M N).toEquiv = 等价.prodUnique M N
   证明: rfl
 
 @[simp]
@@ -1748,7 +1748,7 @@ lemma coe_uniqueProd
 
 中文:
 引理 coe_uniqueProd
-  结论: (uniqueProd R M N).toEquiv = Equiv.uniqueProd M N
+  结论: (uniqueProd R M N).toEquiv = 等价.uniqueProd M N
   证明: rfl
 
 @[simp]
@@ -1811,7 +1811,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : M₁ ≃SL[σ₁₂] M₂)
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: e.toLinearEquiv.toEquiv.bijective
 -/
 protected theorem bijective (e : M₁ ≃SL[σ₁₂] M₂) : Function.Bijective e :=
@@ -1829,7 +1829,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : M₁ ≃SL[σ₁₂] M₂)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: e.toLinearEquiv.toEquiv.injective
 -/
 protected theorem injective (e : M₁ ≃SL[σ₁₂] M₂) : Function.Injective e :=
@@ -1849,7 +1849,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : M₁ ≃SL[σ₁₂] M₂)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: e.toLinearEquiv.toEquiv.surjective
 
 @[simp]
@@ -2001,7 +2001,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₁)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₁)
   结论: e.symm '' e '' s = s
   证明: e.toLinearEquiv.toEquiv.symm_image_image s
 
@@ -2026,7 +2026,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₂)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₂)
   结论: e '' e.symm '' s = s
   证明: e.symm.symm_image_image s
 
@@ -2191,7 +2191,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (ContinuousLinearEquiv.symm : (M₁ ≃SL[σ₁₂] M₂) -> _)
+  结论: 函数.双射 (连续线性等价.symm : (M₁ ≃SL[σ₁₂] M₂) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -2212,7 +2212,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (ContinuousLinearEquiv.refl R₁ M₁).symm = ContinuousLinearEquiv.refl R₁ M₁
+  结论: (连续线性等价.refl R₁ M₁).symm = 连续线性等价.refl R₁ M₁
   证明: rfl
 -/
 theorem refl_symm : (ContinuousLinearEquiv.refl R₁ M₁).symm = ContinuousLinearEquiv.refl R₁ M₁ :=
@@ -2287,7 +2287,7 @@ lemma image_eq_preimage_symm
 
 中文:
 引理 image_eq_preimage_symm
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₁)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₁)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toLinearEquiv.toEquiv.image_eq_preimage_symm s
 -/
@@ -2306,7 +2306,7 @@ theorem image_symm_eq_preimage
 
 中文:
 定理 image_symm_eq_preimage
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₂)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₂)
   证明: by rw [e.symm.image_eq_preimage_symm, e.symm_symm]
 
 @[simp]
@@ -2327,7 +2327,7 @@ theorem symm_preimage_preimage
 
 中文:
 定理 symm_preimage_preimage
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₂)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₂)
   证明: e.toLinearEquiv.toEquiv.symm_preimage_preimage s
 
 @[simp]
@@ -2347,7 +2347,7 @@ theorem preimage_symm_preimage
 
 中文:
 定理 preimage_symm_preimage
-  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₁)
+  条件: (e : M₁ ≃SL[σ₁₂] M₂) (s : 集合 M₁)
   证明: e.symm.symm_preimage_preimage s
 -/
 protected theorem preimage_symm_preimage (e : M₁ ≃SL[σ₁₂] M₂) (s : Set M₁) :
@@ -2365,7 +2365,7 @@ lemma isUniformEmbedding
 
 中文:
 引理 isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁] [UniformSpace E₂]
+  结论: {E₁ E₂ : 类型} [一致空间 E₁] [一致空间 E₂]
   证明: e.toLinearEquiv.toEquiv.isUniformEmbedding e.toContinuousLinearMap.uniformContinuous
     e.symm.toContinuousLinearMap.uniformContinuous
 
@@ -2390,8 +2390,8 @@ theorem _root_.LinearEquiv.isUniformEmbedding
       E₁ ≃SL[σ₁₂] E₂)
 
 中文:
-定理 _root_.LinearEquiv.isUniformEmbedding
-  结论: {E₁ E₂ : 类型} [UniformSpace E₁]
+定理 _root_.线性等价.isUniformEmbedding
+  结论: {E₁ E₂ : 类型} [一致空间 E₁]
   证明: ContinuousLinearEquiv.isUniformEmbedding
     ({ e with
         continuous_toFun := h₁
@@ -2423,7 +2423,7 @@ definition equivOfInverse
 
 中文:
 定义 equivOfInverse
-  签名: (f₁ : M₁ ->SL[σ₁₂] M₂) (f₂ : M₂ ->SL[σ₂₁] M₁) (h₁ : Function.LeftInverse f₂ f₁)
+  签名: (f₁ : M₁ ->SL[σ₁₂] M₂) (f₂ : M₂ ->SL[σ₂₁] M₁) (h₁ : 函数.左逆 f₂ f₁)
   定义体: { f₁ with
     invFun := f₂
     left_inv := h₁
@@ -2601,7 +2601,7 @@ inv_mul_cancel f := ext funext fun _ => f.left_inv _
 
 中文:
 实例 automorphismGroup
-  签名: : Group (M₁ ≃L[R₁] M₁) where
+  签名: : 群 (M₁ ≃L[R₁] M₁) where
   定义体: g.trans f
   one := ContinuousLinearEquiv.refl R₁ M₁
   inv f := f.symm
@@ -2666,7 +2666,7 @@ definition ulift
 
 中文:
 定义 ulift
-  签名: : ULift M₁ ≃L[R₁] M₁ where
+  签名: : 类型层提升 M₁ ≃L[R₁] M₁ where
   定义体: ULift.moduleEquiv
 
 Depends on / 依赖: ULift.moduleEquiv, moduleEquiv
@@ -2730,7 +2730,7 @@ definition arrowCongrEquivₛₗ
 
 中文:
 定义 arrowCongrEquivₛₗ
-  签名: [SMulCommClass R₃ R₃ M₃] [SMulCommClass R₄ R₄ M₄]
+  签名: [标量交换类 R₃ R₃ M₃] [标量交换类 R₄ R₄ M₄]
   定义体: arrowCongrEquiv e₁₂ e₄₃
   map_add' := by simp
   map_smul' := by simp
@@ -2758,7 +2758,7 @@ definition piCongrLeft
 
 中文:
 定义 piCongrLeft
-  签名: (R : 类型) [Semiring R] {ι ι' : 类型}
+  签名: (R : 类型) [半环 R] {ι ι' : 类型}
   定义体: Homeomorph.piCongrLeft e
   __ := LinearEquiv.piCongrLeft R φ e
 
@@ -2782,7 +2782,7 @@ definition sumPiEquivProdPi
 
 中文:
 定义 sumPiEquivProdPi
-  签名: (R : 类型) [Semiring R] (S T : 类型)
+  签名: (R : 类型) [半环 R] (S T : 类型)
   定义体: LinearEquiv.sumPiEquivProdPi R S T A
   __ := Homeomorph.sumPiEquivProdPi S T A
 
@@ -2812,7 +2812,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: {α : 类型} [Unique α] (R : 类型) [Semiring R] (f : α -> 类型)
+  签名: {α : 类型} [唯一 α] (R : 类型) [半环 R] (f : α -> 类型)
   定义体: LinearEquiv.piUnique R f
   __ := Homeomorph.piUnique f
 
@@ -3235,7 +3235,7 @@ theorem coe_funUnique
 
 中文:
 定理 coe_funUnique
-  结论: ⇑(funUnique ι R M) = Function.eval default
+  结论: ⇑(funUnique ι R M) = 函数.eval default
   证明: rfl
 
 @[simp]
@@ -3254,7 +3254,7 @@ theorem coe_funUnique_symm
 
 中文:
 定理 coe_funUnique_symm
-  结论: ⇑(funUnique ι R M).symm = Function.const ι
+  结论: ⇑(funUnique ι R M).symm = 函数.const ι
   证明: rfl
 -/
 theorem coe_funUnique_symm : ⇑(funUnique ι R M).symm = Function.const ι :=
@@ -3275,7 +3275,7 @@ definition piFinTwo
 
 中文:
 定义 piFinTwo
-  签名: (M : Fin 2 -> 类型) [对任意 i, AddCommMonoid (M i)] [对任意 i, Module R (M i)]
+  签名: (M : 有限集 2 -> 类型) [对任意 i, 加法交换幺半群 (M i)] [对任意 i, 模 R (M i)]
   定义体: { Homeomorph.piFinTwo M with toLinearEquiv := LinearEquiv.piFinTwo R M }
 
 Depends on / 依赖: Homeomorph, Homeomorph.piFinTwo, LinearEquiv, LinearEquiv.piFinTwo, piFinTwo, toLinearEquiv
@@ -3296,7 +3296,7 @@ definition finTwoArrow
 
 中文:
 定义 finTwoArrow
-  签名: : (Fin 2 -> M) ≃L[R] M × M
+  签名: : (有限集 2 -> M) ≃L[R] M × M
   定义体: { piFinTwo R fun _ => M with toLinearEquiv := LinearEquiv.finTwoArrow R M }
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.finTwoArrow, finTwoArrow, piFinTwo, toLinearEquiv
@@ -3322,8 +3322,8 @@ definition _root_.Fin.consEquivL
   body: Fin.consLinearEquiv R M
 
 中文:
-定义 _root_.Fin.consEquivL
-  签名: : (M 0 × Π i, M (Fin.succ i)) ≃L[R] (Π i, M i) where
+定义 _root_.有限集.consEquivL
+  签名: : (M 0 × Π i, M (有限集.succ i)) ≃L[R] (Π i, M i) where
   定义体: Fin.consLinearEquiv R M
 
 Depends on / 依赖: Fin.consLinearEquiv, consLinearEquiv
@@ -3339,7 +3339,7 @@ abbreviation _root_.ContinuousLinearMap.finCons
   body: Fin.consEquivL R M ∘L f.prod fs
 
 中文:
-缩写 _root_.ContinuousLinearMap.finCons
+缩写 _root_.连续线性映射.finCons
   定义体: Fin.consEquivL R M ∘L f.prod fs
 
 Depends on / 依赖: Fin.consEquivL, consEquivL, f.prod
@@ -3438,7 +3438,7 @@ definition neg
 
 中文:
 定义 neg
-  签名: [ContinuousNeg M]
+  签名: [连续取负 M]
   定义体: LinearEquiv.neg R
 
 @[simp]
@@ -3462,7 +3462,7 @@ theorem coe_neg
 
 中文:
 定理 coe_neg
-  条件: [ContinuousNeg M]
+  条件: [连续取负 M]
   证明: rfl
 
 @[simp]
@@ -3483,7 +3483,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [ContinuousNeg M] (x : M)
+  条件: [连续取负 M] (x : M)
   证明: by simp
 
 @[simp]
@@ -3502,7 +3502,7 @@ theorem symm_neg
 
 中文:
 定理 symm_neg
-  条件: [ContinuousNeg M]
+  条件: [连续取负 M]
   证明: rfl
 -/
 theorem symm_neg [ContinuousNeg M] :
@@ -3572,7 +3572,7 @@ definition equivOfRightInverse
 
 中文:
 定义 equivOfRightInverse
-  签名: (f₁ : M ->L[R] M₂) (f₂ : M₂ ->L[R] M) (h : Function.RightInverse f₂ f₁)
+  签名: (f₁ : M ->L[R] M₂) (f₂ : M₂ ->L[R] M) (h : 函数.右逆 f₂ f₁)
   定义体: equivOfInverse (f₁.prod (f₁.projKerOfRightInverse f₂ h)) (f₂.coprod f₁.ker.subtypeL)
     (fun x => by simp) fun ⟨x, y⟩ => by simp [h x]
 
@@ -4294,7 +4294,7 @@ theorem ringInverse_eq_inverse
 
 中文:
 定理 ringInverse_eq_inverse
-  结论: Ring.inverse = inverse (R := R) (M := M)
+  结论: 环.inverse = inverse (R := R) (M := M)
   证明: by
   ext
   simp [inverse_eq_ringInverse (ContinuousLinearEquiv.refl R M)]
@@ -4317,7 +4317,7 @@ theorem inverse_id
 
 中文:
 定理 inverse_id
-  结论: (ContinuousLinearMap.id R M).inverse = .id R M
+  结论: (连续线性映射.id R M).inverse = .id R M
   证明: by
   rw [← ringInverse_eq_inverse]
   exact Ring.inverse_one _
@@ -4452,7 +4452,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (hf : f.IsInvertible)
-  结论: Function.Bijective f
+  结论: 函数.双射 f
   证明: by
   rcases hf with ⟨e, rfl⟩
   simp [ContinuousLinearEquiv.bijective]
@@ -4473,7 +4473,7 @@ theorem injective
 中文:
 定理 injective
   条件: (hf : f.IsInvertible)
-  结论: Function.Injective f
+  结论: 函数.单射 f
   证明: hf.bijective.injective
 -/
 protected theorem injective (hf : f.IsInvertible) : Function.Injective f :=
@@ -4491,7 +4491,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (hf : f.IsInvertible)
-  结论: Function.Surjective f
+  结论: 函数.满射 f
   证明: hf.bijective.surjective
 -/
 protected theorem surjective (hf : f.IsInvertible) : Function.Surjective f :=
@@ -4587,7 +4587,7 @@ theorem _root_.ContinuousLinearMap.isInvertible_inverse_iff
   proof: ⟨.of_isInvertible_inverse, .inverse⟩
 
 中文:
-定理 _root_.ContinuousLinearMap.isInvertible_inverse_iff
+定理 _root_.连续线性映射.isInvertible_inverse_iff
   证明: ⟨.of_isInvertible_inverse, .inverse⟩
 
 Depends on / 依赖: inverse, of_isInvertible_inverse
@@ -4609,7 +4609,7 @@ theorem coprod_comp_prodComm
 
 中文:
 定理 coprod_comp_prodComm
-  条件: [ContinuousAdd M] (f : M₂ ->L[R] M) (g : M₃ ->L[R] M)
+  条件: [连续加法 M] (f : M₂ ->L[R] M) (g : M₃ ->L[R] M)
   证明: by
   ext <;> simp
 -/
@@ -4645,7 +4645,7 @@ definition ofEq
 
 中文:
 定义 ofEq
-  签名: (p q : Submodule R M) (h : p = q)
+  签名: (p q : 子模 R M) (h : p = q)
   定义体: LinearEquiv.ofEq _ _ h
   continuous_toFun := by
     have h' : (fun x => x in p) = (fun x => x in q) := by simp [h]
@@ -4680,7 +4680,7 @@ definition submoduleMap
 
 中文:
 定义 submoduleMap
-  签名: (e : M ≃SL[σ₁₂] M₂) (p : Submodule R M)
+  签名: (e : M ≃SL[σ₁₂] M₂) (p : 子模 R M)
   定义体: LinearEquiv.submoduleMap e.toLinearEquiv p
   continuous_toFun := map_continuous ((e.toContinuousLinearMap.comp p.subtypeL).codRestrict _ _)
   continuous_invFun := (map_continuous e.symm).restrict fun x hx =>
@@ -4711,7 +4711,7 @@ lemma submoduleMap_apply
 
 中文:
 引理 submoduleMap_apply
-  条件: (e : M ≃SL[σ₁₂] M₂) (p : Submodule R M) (x : p)
+  条件: (e : M ≃SL[σ₁₂] M₂) (p : 子模 R M) (x : p)
   证明: by
   rfl
 
@@ -4733,7 +4733,7 @@ lemma submoduleMap_symm_apply
 
 中文:
 引理 submoduleMap_symm_apply
-  结论: (e : M ≃SL[σ₁₂] M₂) (p : Submodule R M)
+  结论: (e : M ≃SL[σ₁₂] M₂) (p : 子模 R M)
   证明: by
   rfl
 -/
@@ -4778,7 +4778,7 @@ theorem ofSubmodules_apply
 
 中文:
 定理 ofSubmodules_apply
-  结论: (e : M ≃SL[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: (e : M ≃SL[σ₁₂] M₂) {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 
 @[simp]
@@ -4799,7 +4799,7 @@ theorem ofSubmodules_symm_apply
 
 中文:
 定理 ofSubmodules_symm_apply
-  结论: (e : M ≃SL[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂}
+  结论: (e : M ≃SL[σ₁₂] M₂) {p : 子模 R M} {q : 子模 R₂ M₂}
   证明: rfl
 -/
 theorem ofSubmodules_symm_apply (e : M ≃SL[σ₁₂] M₂) {p : Submodule R M} {q : Submodule R₂ M₂}
@@ -4816,7 +4816,7 @@ definition ofSubmodule'
 
 中文:
 定义 ofSubmodule'
-  签名: (f : M ≃SL[σ₁₂] M₂) (U : Submodule R₂ M₂)
+  签名: (f : M ≃SL[σ₁₂] M₂) (U : 子模 R₂ M₂)
   定义体: .symm f.symm.ofSubmodules _ _ (U.map_equiv_eq_comap_symm f.toLinearEquiv.symm)
 
 Depends on / 依赖: U.map_equiv_eq_comap_symm, f.symm.ofSubmodules, f.toLinearEquiv.symm, map_equiv_eq_comap_symm, ofSubmodules, toLinearEquiv
@@ -4838,7 +4838,7 @@ theorem ofSubmodule'_toContinuousLinearMap
 
 中文:
 定理 ofSubmodule'_toContinuousLinearMap
-  条件: (f : M ≃SL[σ₁₂] M₂) (U : Submodule R₂ M₂)
+  条件: (f : M ≃SL[σ₁₂] M₂) (U : 子模 R₂ M₂)
   证明: by
   rfl
 
@@ -4863,7 +4863,7 @@ theorem ofSubmodule'_apply
 
 中文:
 定理 ofSubmodule'_apply
-  结论: (f : M ≃SL[σ₁₂] M₂) (U : Submodule R₂ M₂)
+  结论: (f : M ≃SL[σ₁₂] M₂) (U : 子模 R₂ M₂)
   证明: rfl
 
 @[simp]
@@ -4884,7 +4884,7 @@ theorem ofSubmodule'_symm_apply
 
 中文:
 定理 ofSubmodule'_symm_apply
-  条件: (f : M ≃SL[σ₁₂] M₂) (U : Submodule R₂ M₂) (x : U)
+  条件: (f : M ≃SL[σ₁₂] M₂) (U : 子模 R₂ M₂) (x : U)
   证明: rfl
 -/
 theorem ofSubmodule'_symm_apply (f : M ≃SL[σ₁₂] M₂) (U : Submodule R₂ M₂) (x : U) :
@@ -4901,8 +4901,8 @@ abbreviation _root_.Submodule.topContEquiv
   body: Submodule.topEquiv
 
 中文:
-缩写 _root_.Submodule.topContEquiv
-  签名: {R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+缩写 _root_.子模.topContEquiv
+  签名: {R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   定义体: Submodule.topEquiv
 
 Depends on / 依赖: Submodule, Submodule.topEquiv, topEquiv
@@ -4959,7 +4959,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Sˣ (V ≃L[R] W)
+  签名: 标量乘法 Sˣ (V ≃L[R] W)
   定义体: { __ := α • e.toLinearEquiv
     continuous_toFun := α.isUnit.continuous_const_smul_iff.mpr e.continuous
     continuous_invFun := α⁻¹.isUnit.continuous_const_smul_iff.mpr e.symm.continuous }
@@ -5014,7 +5014,7 @@ theorem symm_smul
 
 中文:
 定理 symm_smul
-  结论: [SMulCommClass R S V]
+  结论: [标量交换类 R S V]
   证明: rfl
 -/
 @[simp] theorem symm_smul [SMulCommClass R S V]
@@ -5047,7 +5047,7 @@ theorem smul_trans
 
 中文:
 定理 smul_trans
-  结论: [SMulCommClass R S V] [IsScalarTower S R G] (α : Sˣ) (e : G ≃L[R] V)
+  结论: [标量交换类 R S V] [标量塔 S R G] (α : Sˣ) (e : G ≃L[R] V)
   证明: by
   ext; simp [LinearMapClass.map_smul_of_tower f]
 
@@ -5067,7 +5067,7 @@ theorem trans_smul
 
 中文:
 定理 trans_smul
-  条件: [IsScalarTower S R G] (α : Sˣ) (e : G ≃L[R] V) (f : V ≃L[R] W)
+  条件: [标量塔 S R G] (α : Sˣ) (e : G ≃L[R] V) (f : V ≃L[R] W)
   证明: by ext; simp
 -/
 theorem trans_smul [IsScalarTower S R G] (α : Sˣ) (e : G ≃L[R] V) (f : V ≃L[R] W) :
@@ -5091,7 +5091,7 @@ definition ofIsHomeomorph
 
 中文:
 定义 ofIsHomeomorph
-  签名: (f : M ≃ₛₗ[σ] M₁) (hf : IsHomeomorph f)
+  签名: (f : M ≃ₛₗ[σ] M₁) (hf : 是同胚 f)
   定义体: f
   continuous_toFun := hf.continuous
   continuous_invFun := (f.isHomeomorph_iff.mp hf).2
@@ -5113,7 +5113,7 @@ theorem isHomeomorph
 中文:
 定理 isHomeomorph
   条件: (f : M ≃SL[σ] M₁)
-  结论: IsHomeomorph f
+  结论: 是同胚 f
   证明: ⟨f.continuous, isOpenMap f, f.bijective⟩
 
 Depends on / 依赖: bijective, continuous, f.bijective, f.continuous, isOpenMap
@@ -5174,7 +5174,7 @@ theorem _root_.LinearEquiv.isHomeomorph_iff
   proof: e.toEquiv.isHomeomorph_iff
 
 中文:
-定理 _root_.LinearEquiv.isHomeomorph_iff
+定理 _root_.线性等价.isHomeomorph_iff
   条件: (e : M ≃ₛₗ[σ] M₁)
   证明: e.toEquiv.isHomeomorph_iff
 

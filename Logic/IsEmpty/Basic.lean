@@ -30,7 +30,7 @@ theorem not_nonempty_iff
 
 中文:
 定理 not_nonempty_iff
-  结论: ¬Nonempty α ↔ IsEmpty α
+  结论: ¬非空 α ↔ 是空 α
   证明: ⟨fun h => ⟨fun x => h ⟨x⟩⟩, fun h1 h2 => h2.elim h1.elim⟩
 
 @[simp, push]
@@ -53,7 +53,7 @@ theorem not_isEmpty_iff
 
 中文:
 定理 not_isEmpty_iff
-  结论: ¬IsEmpty α ↔ Nonempty α
+  结论: ¬是空 α ↔ 非空 α
   证明: not_iff_comm.mp not_nonempty_iff
 
 @[simp]
@@ -79,7 +79,7 @@ theorem isEmpty_Prop
 中文:
 定理 isEmpty_Prop
   条件: {p : 命题}
-  结论: IsEmpty p ↔ ¬p
+  结论: 是空 p ↔ ¬p
   证明: by
   simp only [← not_nonempty_iff, nonempty_prop]
 
@@ -103,8 +103,8 @@ theorem isEmpty_pi
 
 中文:
 定理 isEmpty_pi
-  条件: {π : α -> Sort*}
-  结论: IsEmpty (对任意 a, π a) ↔ 存在 a, IsEmpty (π a)
+  条件: {π : α -> 类型层*}
+  结论: 是空 (对任意 a, π a) ↔ 存在 a, 是空 (π a)
   证明: by
   simp only [← not_nonempty_iff, Classical.nonempty_pi, not_forall]
 
@@ -126,7 +126,7 @@ theorem isEmpty_fun
 
 中文:
 定理 isEmpty_fun
-  结论: IsEmpty (α -> β) ↔ Nonempty α ∧ IsEmpty β
+  结论: 是空 (α -> β) ↔ 非空 α ∧ 是空 β
   证明: by
   rw [isEmpty_pi]; rw [← exists_true_iff_nonempty]; rw [← exists_and_right]; rw [true_and]
 
@@ -150,7 +150,7 @@ theorem nonempty_fun
 
 中文:
 定理 nonempty_fun
-  结论: Nonempty (α -> β) ↔ IsEmpty α ∨ Nonempty β
+  结论: 非空 (α -> β) ↔ 是空 α ∨ 非空 β
   证明: not_iff_not.mp by rw [not_or, not_nonempty_iff, not_nonempty_iff, isEmpty_fun, not_isEmpty_iff]
 
 @[simp]
@@ -176,7 +176,7 @@ theorem isEmpty_sigma
 中文:
 定理 isEmpty_sigma
   条件: {α} {E : α -> 类型}
-  结论: IsEmpty (Sigma E) ↔ 对任意 a, IsEmpty (E a)
+  结论: 是空 (依赖和类型 E) ↔ 对任意 a, 是空 (E a)
   证明: by
   simp only [← not_nonempty_iff, nonempty_sigma, not_exists]
 
@@ -200,8 +200,8 @@ theorem isEmpty_psigma
 
 中文:
 定理 isEmpty_psigma
-  条件: {α} {E : α -> Sort*}
-  结论: IsEmpty (PSigma E) ↔ 对任意 a, IsEmpty (E a)
+  条件: {α} {E : α -> 类型层*}
+  结论: 是空 (命题和类型 E) ↔ 对任意 a, 是空 (E a)
   证明: by
   simp only [← not_nonempty_iff, nonempty_psigma, not_exists]
 
@@ -225,7 +225,7 @@ theorem isEmpty_subtype
 中文:
 定理 isEmpty_subtype
   条件: (p : α -> 命题)
-  结论: IsEmpty (Subtype p) ↔ 对任意 x, ¬p x
+  结论: 是空 (子类型 p) ↔ 对任意 x, ¬p x
   证明: by
   simp only [← not_nonempty_iff, nonempty_subtype, not_exists]
 
@@ -252,7 +252,7 @@ theorem isEmpty_prod
 中文:
 定理 isEmpty_prod
   条件: {α β : 类型}
-  结论: IsEmpty (α × β) ↔ IsEmpty α ∨ IsEmpty β
+  结论: 是空 (α × β) ↔ 是空 α ∨ 是空 β
   证明: by
   simp only [← not_nonempty_iff, nonempty_prod, not_and_or]
 
@@ -277,7 +277,7 @@ theorem isEmpty_pprod
 
 中文:
 定理 isEmpty_pprod
-  结论: IsEmpty (PProd α β) ↔ IsEmpty α ∨ IsEmpty β
+  结论: 是空 (命题积类型 α β) ↔ 是空 α ∨ 是空 β
   证明: by
   simp only [← not_nonempty_iff, nonempty_pprod, not_and_or]
 
@@ -304,7 +304,7 @@ theorem isEmpty_sum
 中文:
 定理 isEmpty_sum
   条件: {α β}
-  结论: IsEmpty (α oplus β) ↔ IsEmpty α ∧ IsEmpty β
+  结论: 是空 (α oplus β) ↔ 是空 α ∧ 是空 β
   证明: by
   simp only [← not_nonempty_iff, nonempty_sum, not_or]
 
@@ -331,7 +331,7 @@ theorem isEmpty_psum
 中文:
 定理 isEmpty_psum
   条件: {α β}
-  结论: IsEmpty (α oplus' β) ↔ IsEmpty α ∧ IsEmpty β
+  结论: 是空 (α oplus' β) ↔ 是空 α ∧ 是空 β
   证明: by
   simp only [← not_nonempty_iff, nonempty_psum, not_or]
 
@@ -358,7 +358,7 @@ theorem isEmpty_ulift
 中文:
 定理 isEmpty_ulift
   条件: {α}
-  结论: IsEmpty (ULift α) ↔ IsEmpty α
+  结论: 是空 (类型层提升 α) ↔ 是空 α
   证明: by
   simp only [← not_nonempty_iff, nonempty_ulift]
 
@@ -383,7 +383,7 @@ theorem isEmpty_plift
 中文:
 定理 isEmpty_plift
   条件: {α}
-  结论: IsEmpty (PLift α) ↔ IsEmpty α
+  结论: 是空 (命题层提升 α) ↔ 是空 α
   证明: by
   simp only [← not_nonempty_iff, nonempty_plift]
 
@@ -403,8 +403,8 @@ theorem wellFounded_of_isEmpty
 
 中文:
 定理 wellFounded_of_isEmpty
-  条件: {α} [IsEmpty α] (r : α -> α -> 命题)
-  结论: WellFounded r
+  条件: {α} [是空 α] (r : α -> α -> 命题)
+  结论: 良基 r
   证明: ⟨isEmptyElim⟩
 
 Depends on / 依赖: isEmptyElim
@@ -426,7 +426,7 @@ theorem isEmpty_or_nonempty
 
 中文:
 定理 isEmpty_or_nonempty
-  结论: IsEmpty α ∨ Nonempty α
+  结论: 是空 α ∨ 非空 α
   证明: (em <| IsEmpty α).elim Or.inl Or.inr ∘ not_isEmpty_iff.mp
 
 @[simp]
@@ -448,8 +448,8 @@ theorem not_isEmpty_of_nonempty
 
 中文:
 定理 not_isEmpty_of_nonempty
-  条件: [h : Nonempty α]
-  结论: ¬IsEmpty α
+  条件: [h : 非空 α]
+  结论: ¬是空 α
   证明: not_isEmpty_iff.mpr h
 
 Depends on / 依赖: not_isEmpty_iff, not_isEmpty_iff.mpr
@@ -468,8 +468,8 @@ theorem Function.extend_of_isEmpty
   proof: funext fun _ => (Function.extend_apply' _ _ _) fun ⟨a, _⟩ => isEmptyElim a
 
 中文:
-定理 Function.extend_of_isEmpty
-  条件: [IsEmpty α] (f : α -> β) (g : α -> γ) (h : β -> γ)
+定理 函数.extend_of_isEmpty
+  条件: [是空 α] (f : α -> β) (g : α -> γ) (h : β -> γ)
   证明: funext fun _ => (Function.extend_apply' _ _ _) fun ⟨a, _⟩ => isEmptyElim a
 
 Depends on / 依赖: Function, Function.extend_apply, extend_apply, isEmptyElim
@@ -495,7 +495,7 @@ theorem leftTotal_empty
 
 中文:
 定理 leftTotal_empty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: LeftTotal R
   证明: by
   simp only [LeftTotal, IsEmpty.forall_iff]
@@ -519,8 +519,8 @@ theorem leftTotal_iff_isEmpty_left
 
 中文:
 定理 leftTotal_iff_isEmpty_left
-  条件: [IsEmpty β]
-  结论: LeftTotal R ↔ IsEmpty α
+  条件: [是空 β]
+  结论: LeftTotal R ↔ 是空 α
   证明: by
   simp only [LeftTotal, IsEmpty.exists_iff, isEmpty_iff]
 
@@ -544,7 +544,7 @@ theorem rightTotal_empty
 
 中文:
 定理 rightTotal_empty
-  条件: [IsEmpty β]
+  条件: [是空 β]
   结论: RightTotal R
   证明: by
   simp only [RightTotal, IsEmpty.forall_iff]
@@ -568,8 +568,8 @@ theorem rightTotal_iff_isEmpty_right
 
 中文:
 定理 rightTotal_iff_isEmpty_right
-  条件: [IsEmpty α]
-  结论: RightTotal R ↔ IsEmpty β
+  条件: [是空 α]
+  结论: RightTotal R ↔ 是空 β
   证明: by
   simp only [RightTotal, IsEmpty.exists_iff, isEmpty_iff]
 
@@ -592,7 +592,7 @@ theorem biTotal_empty
 
 中文:
 定理 biTotal_empty
-  条件: [IsEmpty α] [IsEmpty β]
+  条件: [是空 α] [是空 β]
   结论: BiTotal R
   证明: ⟨leftTotal_empty R, rightTotal_empty R⟩
 
@@ -613,8 +613,8 @@ theorem biTotal_iff_isEmpty_right
 
 中文:
 定理 biTotal_iff_isEmpty_right
-  条件: [IsEmpty α]
-  结论: BiTotal R ↔ IsEmpty β
+  条件: [是空 α]
+  结论: BiTotal R ↔ 是空 β
   证明: by
   simp only [BiTotal, leftTotal_empty, rightTotal_iff_isEmpty_right, true_and]
 
@@ -635,8 +635,8 @@ theorem biTotal_iff_isEmpty_left
 
 中文:
 定理 biTotal_iff_isEmpty_left
-  条件: [IsEmpty β]
-  结论: BiTotal R ↔ IsEmpty α
+  条件: [是空 β]
+  结论: BiTotal R ↔ 是空 α
   证明: by
   simp only [BiTotal, leftTotal_iff_isEmpty_left, rightTotal_empty, and_true]
 
@@ -655,9 +655,9 @@ theorem Function.Surjective.of_isEmpty
   proof: IsEmpty.elim ‹_›
 
 中文:
-定理 Function.Surjective.of_isEmpty
-  条件: [IsEmpty β] (f : α -> β)
-  结论: f.Surjective
+定理 函数.满射.of_isEmpty
+  条件: [是空 β] (f : α -> β)
+  结论: f.满射
   证明: IsEmpty.elim ‹_›
 
 Depends on / 依赖: IsEmpty, IsEmpty.elim
@@ -674,9 +674,9 @@ theorem Function.surjective_iff_isEmpty
   proof: ⟨Surjective.isEmpty, fun _ => .of_isEmpty f⟩
 
 中文:
-定理 Function.surjective_iff_isEmpty
-  条件: [IsEmpty α] (f : α -> β)
-  结论: f.Surjective ↔ IsEmpty β
+定理 函数.surjective_iff_isEmpty
+  条件: [是空 α] (f : α -> β)
+  结论: f.满射 ↔ 是空 β
   证明: ⟨Surjective.isEmpty, fun _ => .of_isEmpty f⟩
 
 Depends on / 依赖: Surjective, Surjective.isEmpty, isEmpty, of_isEmpty
@@ -695,9 +695,9 @@ theorem Function.Bijective.of_isEmpty
   ⟨injective_of_subsingleton f, .of_isEmpty f⟩
 
 中文:
-定理 Function.Bijective.of_isEmpty
-  条件: (f : α -> β) [IsEmpty β]
-  结论: f.Bijective
+定理 函数.双射.of_isEmpty
+  条件: (f : α -> β) [是空 β]
+  结论: f.双射
   证明: have := f.isEmpty
   ⟨injective_of_subsingleton f, .of_isEmpty f⟩
 
@@ -716,8 +716,8 @@ theorem Function.not_surjective_of_isEmpty_of_nonempty
   proof: (not_isEmpty_of_nonempty β ·.isEmpty)
 
 中文:
-定理 Function.not_surjective_of_isEmpty_of_nonempty
-  条件: [IsEmpty α] [Nonempty β] (f : α -> β)
+定理 函数.not_surjective_of_isEmpty_of_nonempty
+  条件: [是空 α] [非空 β] (f : α -> β)
   证明: (not_isEmpty_of_nonempty β ·.isEmpty)
 
 Depends on / 依赖: isEmpty, not_isEmpty_of_nonempty

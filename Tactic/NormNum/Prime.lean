@@ -235,7 +235,7 @@ exact nk minFac_prime h.one_lt.ne'
 
 中文:
 定理 minFacHelper_2
-  结论: {n k k' : 自然数} (e : k + 2 = k') (nk : ¬ 自然数.Prime k)
+  结论: {n k k' : 自然数} (e : k + 2 = k') (nk : ¬ 自然数.素 k)
   证明: by
   refine minFacHelper_1 e h fun h2 => ?_
   rw [← h2] at nk
@@ -287,8 +287,8 @@ theorem isNat_minFac_1
   statement: {a : Nat} -> IsNat a (nat_lit 1) -> IsNat a.minFac 1
 
 中文:
-定理 isNat_minFac_1
-  结论: {a : 自然数} -> Is自然数 a (nat_lit 1) -> Is自然数 a.minFac 1
+定理 is自然数_minFac_1
+  结论: {a : 自然数} -> 是自然数 a (nat_lit 1) -> 是自然数 a.minFac 1
 -/
 theorem isNat_minFac_1 : {a : Nat} -> IsNat a (nat_lit 1) -> IsNat a.minFac 1
   | _, ⟨rfl⟩ => ⟨minFac_one⟩
@@ -301,8 +301,8 @@ theorem isNat_minFac_2
   statement: {a a' : Nat} -> IsNat a a' -> a' % 2 = 0 -> IsNat a.minFac 2
 
 中文:
-定理 isNat_minFac_2
-  结论: {a a' : 自然数} -> Is自然数 a a' -> a' % 2 = 0 -> Is自然数 a.minFac 2
+定理 is自然数_minFac_2
+  结论: {a a' : 自然数} -> 是自然数 a a' -> a' % 2 = 0 -> 是自然数 a.minFac 2
 -/
 theorem isNat_minFac_2 : {a a' : Nat} -> IsNat a a' -> a' % 2 = 0 -> IsNat a.minFac 2
   | a, _, ⟨rfl⟩, h => ⟨by rw [cast_ofNat, minFac_eq_two_iff, Nat.dvd_iff_mod_eq_zero, h]⟩
@@ -315,7 +315,7 @@ theorem isNat_minFac_3
   statement: {n n' : Nat} -> (k : Nat) ->
 
 中文:
-定理 isNat_minFac_3
+定理 is自然数_minFac_3
   结论: {n n' : 自然数} -> (k : 自然数) ->
 -/
 theorem isNat_minFac_3 : {n n' : Nat} -> (k : Nat) ->
@@ -336,7 +336,7 @@ theorem isNat_minFac_4
       _ <= m := Nat.minFac_le_of_dvd hm h2mn
 
 中文:
-定理 isNat_minFac_4
+定理 is自然数_minFac_4
   结论: {n n' k : 自然数} ->
   证明: hmn
       _ < k := sqrt_lt.mpr (ble_eq_false.mp h2)
@@ -432,8 +432,8 @@ theorem isNat_prime_0
   statement: {n : Nat} -> IsNat n (nat_lit 0) -> ¬ n.Prime
 
 中文:
-定理 isNat_prime_0
-  结论: {n : 自然数} -> Is自然数 n (nat_lit 0) -> ¬ n.Prime
+定理 is自然数_prime_0
+  结论: {n : 自然数} -> 是自然数 n (nat_lit 0) -> ¬ n.素
 -/
 theorem isNat_prime_0 : {n : Nat} -> IsNat n (nat_lit 0) -> ¬ n.Prime
   | _, ⟨rfl⟩ => not_prime_zero
@@ -446,8 +446,8 @@ theorem isNat_prime_1
   statement: {n : Nat} -> IsNat n (nat_lit 1) -> ¬ n.Prime
 
 中文:
-定理 isNat_prime_1
-  结论: {n : 自然数} -> Is自然数 n (nat_lit 1) -> ¬ n.Prime
+定理 is自然数_prime_1
+  结论: {n : 自然数} -> 是自然数 n (nat_lit 1) -> ¬ n.素
 -/
 theorem isNat_prime_1 : {n : Nat} -> IsNat n (nat_lit 1) -> ¬ n.Prime
   | _, ⟨rfl⟩ => not_prime_one
@@ -460,7 +460,7 @@ theorem isNat_prime_2
   statement: {n n' : Nat} ->
 
 中文:
-定理 isNat_prime_2
+定理 is自然数_prime_2
   结论: {n n' : 自然数} ->
 -/
 theorem isNat_prime_2 : {n n' : Nat} ->
@@ -477,9 +477,9 @@ theorem isNat_not_prime
   proof: isNat.natElim h
 
 中文:
-定理 isNat_not_prime
-  条件: {n n' : 自然数} (h : Is自然数 n n')
-  结论: ¬n'.Prime -> ¬n.Prime
+定理 is自然数_not_prime
+  条件: {n n' : 自然数} (h : 是自然数 n n')
+  结论: ¬n'.素 -> ¬n.素
   证明: isNat.natElim h
 
 Depends on / 依赖: isNat.natElim, natElim
@@ -501,7 +501,7 @@ definition evalNatPrime
   let rec core : MetaM (Result q(N
 
 中文:
-定义 evalNatPrime
+定义 eval自然数Prime
   签名: : NormNumExt where eval {_ _} e
   定义体: do
   let .app (.const `Nat.Prime _) (n : Q(Nat)) ← whnfR e | failure

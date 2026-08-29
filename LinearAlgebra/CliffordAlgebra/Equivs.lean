@@ -84,7 +84,7 @@ theorem ι_eq_zero
 
 中文:
 定理 ι_eq_zero
-  结论: ι (0 : QuadraticForm R Unit) = 0
+  结论: ι (0 : QuadraticForm R 单元) = 0
   证明: Subsingleton.elim _ _
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim
@@ -107,7 +107,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (CliffordAlgebra (0 : QuadraticForm R Unit))
+  签名: 交换环 (CliffordAlgebra (0 : QuadraticForm R 单元))
   定义体: fun x y => by
     induction x using CliffordAlgebra.induction with
     | algebraMap r => apply Algebra.commutes
@@ -142,7 +142,7 @@ theorem reverse_apply
 
 中文:
 定理 reverse_apply
-  条件: (x : CliffordAlgebra (0 : QuadraticForm R Unit))
+  条件: (x : CliffordAlgebra (0 : QuadraticForm R 单元))
   证明: by
   induction x using CliffordAlgebra.induction with
   | algebraMap r => exact reverse.commutes _
@@ -213,7 +213,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : CliffordAlgebra (0 : QuadraticForm R Unit) ≃ₐ[R] R
+  签名: : CliffordAlgebra (0 : QuadraticForm R 单元) ≃ₐ[R] R
   定义体: AlgEquiv.ofAlgHom
     (CliffordAlgebra.lift (0 : QuadraticForm R Unit) <|
       ⟨0, fun _ : Unit => (zero_mul (0 : R)).trans (algebraMap R _).map_zero.symm⟩)
@@ -293,7 +293,7 @@ definition toComplex
 
 中文:
 定义 toComplex
-  签名: : CliffordAlgebra Q ->ₐ[实数] Complex
+  签名: : CliffordAlgebra Q ->ₐ[实数] 复形
   定义体: CliffordAlgebra.lift Q
     ⟨LinearMap.toSpanSingleton _ _ Complex.I, fun r => by
       dsimp [LinearMap.toSpanSingleton, LinearMap.id]
@@ -324,7 +324,7 @@ theorem toComplex_ι
 中文:
 定理 toComplex_ι
   条件: (r : 实数)
-  结论: toComplex (ι Q r) = r • Complex.I
+  结论: toComplex (ι Q r) = r • 复形.I
   证明: CliffordAlgebra.lift_ι_apply _ _ r
 
 Depends on / 依赖: CliffordAlgebra, CliffordAlgebra.lift_
@@ -384,7 +384,7 @@ definition ofComplex
 
 中文:
 定义 ofComplex
-  签名: : Complex ->ₐ[实数] CliffordAlgebra Q
+  签名: : 复形 ->ₐ[实数] CliffordAlgebra Q
   定义体: Complex.lift
     ⟨CliffordAlgebra.ι Q 1, by
       rw [CliffordAlgebra.ι_sq_scalar]; rw [Q_apply]; rw [one_mul]; rw [map_neg]; rw [map_one]⟩
@@ -411,7 +411,7 @@ theorem ofComplex_I
 
 中文:
 定理 ofComplex_I
-  结论: ofComplex Complex.I = ι Q 1
+  结论: ofComplex 复形.I = ι Q 1
   证明: Complex.liftAux_apply_I _ (by simp)
 
 @[simp]
@@ -437,7 +437,7 @@ theorem toComplex_comp_ofComplex
 
 中文:
 定理 toComplex_comp_ofComplex
-  结论: toComplex.comp ofComplex = AlgHom.id 实数 Complex
+  结论: toComplex.comp ofComplex = 代数态射.id 实数 复形
   证明: by
   ext1
   dsimp only [AlgHom.comp_apply, Subtype.coe_mk, AlgHom.id_apply]
@@ -466,7 +466,7 @@ theorem toComplex_ofComplex
 
 中文:
 定理 toComplex_ofComplex
-  条件: (c : Complex)
+  条件: (c : 复形)
   结论: toComplex (ofComplex c) = c
   证明: AlgHom.congr_fun toComplex_comp_ofComplex c
 
@@ -494,7 +494,7 @@ theorem ofComplex_comp_toComplex
 
 中文:
 定理 ofComplex_comp_toComplex
-  结论: ofComplex.comp toComplex = AlgHom.id 实数 (CliffordAlgebra Q)
+  结论: ofComplex.comp toComplex = 代数态射.id 实数 (CliffordAlgebra Q)
   证明: by
   ext
   dsimp only [LinearMap.comp_apply, Subtype.coe_mk, AlgHom.id_apply, AlgHom.toLinearMap_apply,
@@ -544,7 +544,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : CliffordAlgebra Q ≃ₐ[实数] Complex
+  签名: : CliffordAlgebra Q ≃ₐ[实数] 复形
   定义体: AlgEquiv.ofAlgHom toComplex ofComplex toComplex_comp_ofComplex ofComplex_comp_toComplex
 -/
 protected def equiv : CliffordAlgebra Q ≃ₐ[Real] Complex :=
@@ -562,7 +562,7 @@ CliffordAlgebraComplex.equiv.injective by
 
 中文:
 实例 :
-  签名: CommRing (CliffordAlgebra Q)
+  签名: 交换环 (CliffordAlgebra Q)
   定义体: fun x y =>
 CliffordAlgebraComplex.equiv.injective by
       rw [map_mul]; rw [mul_comm]; rw [map_mul]
@@ -621,7 +621,7 @@ theorem reverse_eq_id
 
 中文:
 定理 reverse_eq_id
-  结论: (reverse : CliffordAlgebra Q ->ₗ[实数] _) = LinearMap.id
+  结论: (reverse : CliffordAlgebra Q ->ₗ[实数] _) = 线性映射.id
   证明: LinearMap.ext reverse_apply
 
 Depends on / 依赖: LinearMap, LinearMap.ext, reverse_apply
@@ -643,7 +643,7 @@ theorem ofComplex_conj
 
 中文:
 定理 ofComplex_conj
-  条件: (c : Complex)
+  条件: (c : 复形)
   结论: ofComplex (conj c) = involute (ofComplex c)
   证明: CliffordAlgebraComplex.equiv.injective by
     rw [equiv_apply]; rw [equiv_apply]; rw [toComplex_involute]; rw [toComplex_ofComplex]; rw [toComplex_ofComplex]
@@ -729,7 +729,7 @@ definition quaternionBasis
 
 中文:
 定义 quaternionBasis
-  签名: : QuaternionAlgebra.Basis (CliffordAlgebra (Q c₁ c₂)) c₁ 0 c₂ where
+  签名: : Quaternion代数.基 (CliffordAlgebra (Q c₁ c₂)) c₁ 0 c₂ where
   定义体: ι (Q c₁ c₂) (1, 0)
   j := ι (Q c₁ c₂) (0, 1)
   k := ι (Q c₁ c₂) (1, 0) * ι (Q c₁ c₂) (0, 1)

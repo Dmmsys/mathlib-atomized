@@ -48,7 +48,7 @@ class HasPointwiseLeftDerivedFunctorAt
     - hasLimit' : HasPointwiseRightKanExtensionAt W.Q F (W.Q.obj X)
 
 中文:
-类 HasPointwiseLeftDerivedFunctorAt
+类 有PointwiseLeftDerivedFunctorAt
   参数: (X : C)
   公理与运算 (1 个):
     - hasLimit' : HasPointwiseRightKanExtensionAt W.Q F (W.Q.obj X)
@@ -87,7 +87,7 @@ lemma hasPointwiseLeftDerivedFunctorAt_iff
 
 中文:
 引理 hasPointwiseLeftDerivedFunctorAt_iff
-  条件: [L.IsLocalization W] (X : C)
+  条件: [L.是Localization W] (X : C)
   证明: by
   rw [← hasPointwiseRightKanExtensionAt_iff_of_equivalence W.Q L F
     (Localization.uniq W.Q L W) (Localization.compUniqFunctor W.Q L W) (W.Q.obj X) (L.obj X)
@@ -113,7 +113,7 @@ lemma HasPointwiseLeftDerivedFunctorAt.hasLimit
   rwa [← hasPointwiseLeftDerivedFunctorAt_iff F L W]
 
 中文:
-引理 HasPointwiseLeftDerivedFunctorAt.hasLimit
+引理 有PointwiseLeftDerivedFunctorAt.hasLimit
   证明: by
   rwa [← hasPointwiseLeftDerivedFunctorAt_iff F L W]
 
@@ -166,7 +166,7 @@ lemma hasPointwiseRightKanExtension_of_hasPointwiseLeftDerivedFunctor
 
 中文:
 引理 hasPointwiseRightKanExtension_of_hasPointwiseLeftDerivedFunctor
-  条件: [L.IsLocalization W]
+  条件: [L.是Localization W]
   证明: fun Y => by
   have := Localization.essSurj L W
   rw [← hasPointwiseRightKanExtensionAt_iff_of_iso _ F (L.objObjPreimageIso Y)]; rw [← F.hasPointwiseLeftDerivedFunctorAt_iff L W]
@@ -393,7 +393,7 @@ instance [L.IsLocalization
   body: isLeftDerivedFunctor_of_inverts W _ _
 
 中文:
-实例 [L.IsLocalization
+实例 [L.是Localization
   签名: W] (hF
   定义体: isLeftDerivedFunctor_of_inverts W _ _
 
@@ -418,7 +418,7 @@ lemma isIso_of_isLeftDerivedFunctor_of_inverts
 
 中文:
 引理 isIso_of_isLeftDerivedFunctor_of_inverts
-  结论: [L.IsLocalization W]
+  结论: [L.是Localization W]
   证明: by
   have : α = whiskerLeft _ (leftDerivedUnique _ _ (Localization.fac F hF L).hom α W).inv ≫
       (Localization.fac F hF L).hom := by simp
@@ -448,7 +448,7 @@ lemma isLeftDerivedFunctor_iff_of_inverts
 
 中文:
 引理 isLeftDerivedFunctor_iff_of_inverts
-  结论: [L.IsLocalization W]
+  结论: [L.是Localization W]
   证明: ⟨fun _ => isIso_of_isLeftDerivedFunctor_of_inverts LF α hF, fun _ =>
     isLeftDerivedFunctor_of_inverts W LF (asIso α)⟩
 

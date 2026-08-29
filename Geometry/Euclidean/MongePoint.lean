@@ -72,7 +72,7 @@ definition mongePoint
 
 中文:
 定义 mongePoint
-  签名: {n : 自然数} (s : Simplex 实数 P n)
+  签名: {n : 自然数} (s : 单纯形 实数 P n)
   定义体: (((n + 1 : Nat) : Real) / ((n - 1 : Nat) : Real)) •
       ((univ : Finset (Fin (n + 1))).centroid Real s.points -ᵥ s.circumcenter) +ᵥ
     s.circumcenter
@@ -94,7 +94,7 @@ theorem mongePoint_eq_smul_vsub_vadd_circumcenter
 
 中文:
 定理 mongePoint_eq_smul_vsub_vadd_circumcenter
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: rfl
 -/
 theorem mongePoint_eq_smul_vsub_vadd_circumcenter {n : Nat} (s : Simplex Real P n) :
@@ -118,7 +118,7 @@ lemma mongePoint_reindex
 
 中文:
 引理 mongePoint_reindex
-  条件: {m n : 自然数} (s : Simplex 实数 P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 实数 P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by
   simp_rw [mongePoint, circumcenter_reindex, centroid_def, reindex]
   obtain rfl : n = m := by simpa using Fintype.card_eq.2 ⟨e⟩
@@ -147,7 +147,7 @@ theorem mongePoint_map
 
 中文:
 定理 mongePoint_map
-  结论: {V₂ P₂ : 类型} [NormedAddCommGroup V₂] [InnerProductSpace 实数 V₂]
+  结论: {V₂ P₂ : 类型} [赋范交换加群 V₂] [内积空间 实数 V₂]
   证明: by
   simp_rw [mongePoint_eq_smul_vsub_vadd_circumcenter]
   rw [← Simplex.centroid]; rw [← Simplex.centroid]
@@ -178,7 +178,7 @@ theorem smul_mongePoint_vsub_circumcenter_eq_sum_vsub
 
 中文:
 定理 smul_mongePoint_vsub_circumcenter_eq_sum_vsub
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 2))
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 2))
   证明: by
   rw [mongePoint_eq_smul_vsub_vadd_circumcenter]; rw [vadd_vsub]; rw [← smul_assoc]
   simp only [Nat.cast_add, Nat.cast_ofNat, Nat.cast_one, Nat.add_one_sub_one, nsmul_eq_mul]
@@ -213,7 +213,7 @@ theorem mongePoint_mem_affineSpan
 
 中文:
 定理 mongePoint_mem_affineSpan
-  条件: {n : 自然数} (s : Simplex 实数 P n)
+  条件: {n : 自然数} (s : 单纯形 实数 P n)
   证明: smul_vsub_vadd_mem _ _ (centroid_mem_affineSpan_of_card_eq_add_one Real _ (card_fin (n + 1)))
     s.circumcenter_mem_affineSpan s.circumcenter_mem_affineSpan
 
@@ -242,7 +242,7 @@ theorem mongePoint_restrict
 
 中文:
 定理 mongePoint_restrict
-  结论: {n : 自然数} (s : Simplex 实数 P n) (S : AffineSubspace 实数 P)
+  结论: {n : 自然数} (s : 单纯形 实数 P n) (S : 仿射子空间 实数 P)
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).mongePoint = s.mongePoint := by
   have := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
@@ -273,7 +273,7 @@ theorem mongePoint_eq_of_range_eq
 
 中文:
 定理 mongePoint_eq_of_range_eq
-  结论: {n : 自然数} {s₁ s₂ : Simplex 实数 P n}
+  结论: {n : 自然数} {s₁ s₂ : 单纯形 实数 P n}
   证明: by
   simp_rw [mongePoint_eq_smul_vsub_vadd_circumcenter, centroid_eq_of_range_eq h,
     circumcenter_eq_of_range_eq h]
@@ -379,7 +379,7 @@ definition mongePointVSubFaceCentroidWeightsWithCircumcenter
 
 中文:
 定义 mongePointVSubFaceCentroidWeightsWithCircumcenter
-  签名: {n : 自然数} (i₁ i₂ : Fin (n + 3))
+  签名: {n : 自然数} (i₁ i₂ : 有限集 (n + 3))
 -/
 def mongePointVSubFaceCentroidWeightsWithCircumcenter {n : Nat} (i₁ i₂ : Fin (n + 3)) :
     PointsWithCircumcenterIndex (n + 2) -> Real
@@ -404,7 +404,7 @@ theorem mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub
 
 中文:
 定理 mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub
-  结论: {n : 自然数} {i₁ i₂ : Fin (n + 3)}
+  结论: {n : 自然数} {i₁ i₂ : 有限集 (n + 3)}
   证明: by
   ext i
   obtain i | i := i
@@ -448,7 +448,7 @@ theorem sum_mongePointVSubFaceCentroidWeightsWithCircumcenter
 
 中文:
 定理 sum_mongePointVSubFaceCentroidWeightsWithCircumcenter
-  结论: {n : 自然数} {i₁ i₂ : Fin (n + 3)}
+  结论: {n : 自然数} {i₁ i₂ : 有限集 (n + 3)}
   证明: by
   rw [mongePointVSubFaceCentroidWeightsWithCircumcenter_eq_sub h]
   simp_rw [Pi.sub_apply, sum_sub_distrib, sum_mongePointWeightsWithCircumcenter]
@@ -509,7 +509,7 @@ theorem inner_mongePoint_vsub_face_centroid_vsub
 
 中文:
 定理 inner_mongePoint_vsub_face_centroid_vsub
-  结论: {n : 自然数} (s : Simplex 实数 P (n + 2))
+  结论: {n : 自然数} (s : 单纯形 实数 P (n + 2))
   证明: by
   by_cases h : i₁ = i₂
   · simp [h]
@@ -561,7 +561,7 @@ definition mongePlane
 
 中文:
 定义 mongePlane
-  签名: {n : 自然数} (s : Simplex 实数 P (n + 2)) (i₁ i₂ : Fin (n + 3))
+  签名: {n : 自然数} (s : 单纯形 实数 P (n + 2)) (i₁ i₂ : 有限集 (n + 3))
   定义体: mk' (({i₁, i₂}ᶜ : Finset (Fin (n + 3))).centroid Real s.points) (Real ∙ (s.points i₁ -ᵥ s.points i₂))ᗮ ⊓
     affineSpan Real (Set.range s.points)
 
@@ -581,7 +581,7 @@ theorem mongePlane_def
 
 中文:
 定理 mongePlane_def
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 2)) (i₁ i₂ : Fin (n + 3))
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 2)) (i₁ i₂ : 有限集 (n + 3))
   证明: rfl
 -/
 theorem mongePlane_def {n : Nat} (s : Simplex Real P (n + 2)) (i₁ i₂ : Fin (n + 3)) :
@@ -609,7 +609,7 @@ lemma mongePlane_reindex
 
 中文:
 引理 mongePlane_reindex
-  结论: {m n : 自然数} (s : Simplex 实数 P (n + 2)) (e : Fin (n + 3) ≃ Fin (m + 3))
+  结论: {m n : 自然数} (s : 单纯形 实数 P (n + 2)) (e : 有限集 (n + 3) ≃ 有限集 (m + 3))
   证明: by
   obtain rfl : n = m := by simpa using Fintype.card_eq.2 ⟨e⟩
   simp_rw [mongePlane, reindex_points, reindex_range_points, Function.comp_apply, centroid_def,
@@ -655,7 +655,7 @@ theorem mongePlane_comm
 
 中文:
 定理 mongePlane_comm
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 2)) (i₁ i₂ : Fin (n + 3))
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 2)) (i₁ i₂ : 有限集 (n + 3))
   证明: by
   simp_rw [mongePlane_def]
   congr 3
@@ -694,7 +694,7 @@ theorem mongePoint_mem_mongePlane
 
 中文:
 定理 mongePoint_mem_mongePlane
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 2)) {i₁ i₂ : Fin (n + 3)}
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 2)) {i₁ i₂ : 有限集 (n + 3)}
   证明: by
   rw [mongePlane_def]; rw [mem_inf_iff]; rw [← vsub_right_mem_direction_iff_mem (self_mem_mk' _ _)]; rw [direction_mk']; rw [Submodule.mem_orthogonal']
   refine ⟨?_, s.mongePoint_mem_affineSpan⟩
@@ -723,7 +723,7 @@ theorem direction_mongePlane
 
 中文:
 定理 direction_mongePlane
-  条件: {n : 自然数} (s : Simplex 实数 P (n + 2)) {i₁ i₂ : Fin (n + 3)}
+  条件: {n : 自然数} (s : 单纯形 实数 P (n + 2)) {i₁ i₂ : 有限集 (n + 3)}
   证明: by
   rw [mongePlane_def]; rw [direction_inf_of_mem_inf s.mongePoint_mem_mongePlane]; rw [direction_mk']; rw [direction_affineSpan]
 
@@ -749,8 +749,8 @@ theorem eq_mongePoint_of_forall_mem_mongePlane
  
 
 中文:
-定理 eq_mongePoint_of_forall_mem_mongePlane
-  结论: {n : 自然数} {s : Simplex 实数 P (n + 2)} {i₁ : Fin (n + 3)}
+定理 eq_mongePoint_of_对任意_mem_mongePlane
+  结论: {n : 自然数} {s : 单纯形 实数 P (n + 2)} {i₁ : 有限集 (n + 3)}
   证明: by
   rw [← @vsub_eq_zero_iff_eq V]
   have h' : forall i₂, i₁ != i₂ -> p -ᵥ s.mongePoint in
@@ -847,7 +847,7 @@ lemma orthocenter_reindex
 
 中文:
 引理 orthocenter_reindex
-  条件: (t : Triangle 实数 P) (e : Fin 3 ≃ Fin 3)
+  条件: (t : Triangle 实数 P) (e : 有限集 3 ≃ 有限集 3)
   证明: t.mongePoint_reindex e
 -/
 @[simp] lemma orthocenter_reindex (t : Triangle Real P) (e : Fin 3 ≃ Fin 3) :
@@ -952,7 +952,7 @@ theorem altitude_eq_mongePlane
 
 中文:
 定理 altitude_eq_mongePlane
-  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : Fin 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
+  结论: (t : Triangle 实数 P) {i₁ i₂ i₃ : 有限集 3} (h₁₂ : i₁ != i₂) (h₁₃ : i₁ != i₃)
   证明: by
   have hs : ({i₂, i₃}ᶜ : Finset (Fin 3)) = {i₁} := by decide +revert
   have he : ({i₁}ᶜ : Set (Fin 3)) = {i₂, i₃} := by grind
@@ -981,7 +981,7 @@ theorem orthocenter_mem_altitude
 
 中文:
 定理 orthocenter_mem_altitude
-  条件: (t : Triangle 实数 P) {i₁ : Fin 3}
+  条件: (t : Triangle 实数 P) {i₁ : 有限集 3}
   证明: by
   obtain ⟨i₂, i₃, h₁₂, h₂₃, h₁₃⟩ : exists i₂ i₃, i₁ != i₂ ∧ i₂ != i₃ ∧ i₁ != i₃ := by
     decide +revert
@@ -1013,8 +1013,8 @@ theorem eq_orthocenter_of_forall_mem_altitude
   have ha : forall i, i₃ != i -> p in t.mongePlane 
 
 中文:
-定理 eq_orthocenter_of_forall_mem_altitude
-  结论: {t : Triangle 实数 P} {i₁ i₂ : Fin 3} {p : P}
+定理 eq_orthocenter_of_对任意_mem_altitude
+  结论: {t : Triangle 实数 P} {i₁ i₂ : 有限集 3} {p : P}
   证明: by
   obtain ⟨i₃, h₂₃, h₁₃⟩ : exists i₃, i₂ != i₃ ∧ i₁ != i₃ := by
     clear h₁ h₂
@@ -1051,7 +1051,7 @@ theorem dist_orthocenter_reflection_circumcenter
 
 中文:
 定理 dist_orthocenter_reflection_circumcenter
-  条件: (t : Triangle 实数 P) {i₁ i₂ : Fin 3} (h : i₁ != i₂)
+  条件: (t : Triangle 实数 P) {i₁ i₂ : 有限集 3} (h : i₁ != i₂)
   证明: by
   rw [← mul_self_inj_of_nonneg dist_nonneg t.circumradius_nonneg]; rw [t.reflection_circumcenter_eq_affineCombination_of_pointsWithCircumcenter h]; rw [t.orthocenter_eq_mongePoint]; rw [mongePoint_eq_affineCombination_of_pointsWithCircumcenter]; rw [dist_affineCombination t.pointsWithCircumcenter
 
@@ -1083,7 +1083,7 @@ theorem dist_orthocenter_reflection_circumcenter_finset
 
 中文:
 定理 dist_orthocenter_reflection_circumcenter_finset
-  结论: (t : Triangle 实数 P) {i₁ i₂ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ : 有限集 3}
   证明: by
   simp only [coe_insert, coe_singleton]
   exact dist_orthocenter_reflection_circumcenter _ h
@@ -1109,7 +1109,7 @@ theorem dist_circumcenter_reflection_orthocenter
 
 中文:
 定理 dist_circumcenter_reflection_orthocenter
-  条件: (t : Triangle 实数 P) {i₁ i₂ : Fin 3} (h : i₁ != i₂)
+  条件: (t : Triangle 实数 P) {i₁ i₂ : 有限集 3} (h : i₁ != i₂)
   证明: by
   rw [EuclideanGeometry.dist_reflection]; rw [dist_comm]; rw [dist_orthocenter_reflection_circumcenter t h]
 
@@ -1132,7 +1132,7 @@ theorem dist_circumcenter_reflection_orthocenter_finset
 
 中文:
 定理 dist_circumcenter_reflection_orthocenter_finset
-  结论: (t : Triangle 实数 P) {i₁ i₂ : Fin 3}
+  结论: (t : Triangle 实数 P) {i₁ i₂ : 有限集 3}
   证明: by
   simp only [coe_insert, coe_singleton]
   exact dist_circumcenter_reflection_orthocenter _ h
@@ -1160,7 +1160,7 @@ theorem affineSpan_orthocenter_point_le_altitude
 
 中文:
 定理 affineSpan_orthocenter_point_le_altitude
-  条件: (t : Triangle 实数 P) (i : Fin 3)
+  条件: (t : Triangle 实数 P) (i : 有限集 3)
   证明: by
   refine affineSpan_le_of_subset_coe ?_
   rw [Set.insert_subset_iff]; rw [Set.singleton_subset_iff]
@@ -1250,7 +1250,7 @@ theorem orthocenter_replace_orthocenter_eq_point
 
 中文:
 定理 orthocenter_replace_orthocenter_eq_point
-  结论: {t₁ t₂ : Triangle 实数 P} {i₁ i₂ i₃ j₁ j₂ j₃ : Fin 3}
+  结论: {t₁ t₂ : Triangle 实数 P} {i₁ i₂ i₃ j₁ j₂ j₃ : 有限集 3}
   证明: by
   refine (Triangle.eq_orthocenter_of_forall_mem_altitude hj₂₃ ?_ ?_).symm
   · rw [altitude_replace_orthocenter_eq_affineSpan hi₁₂ hi₁₃ hi₂₃ hj₁₂ hj₁₃ hj₂₃ h₁ h₂ h₃]
@@ -1291,7 +1291,7 @@ definition OrthocentricSystem
 
 中文:
 定义 OrthocentricSystem
-  签名: (s : Set P)
+  签名: (s : 集合 P)
   定义体: exists t : Triangle Real P,
     t.orthocenter ∉ Set.range t.points ∧ s = insert t.orthocenter (Set.range t.points)
 
@@ -1318,7 +1318,7 @@ theorem exists_of_range_subset_orthocentricSystem
     have h : forall i, i₁ 
 
 中文:
-定理 exists_of_range_subset_orthocentricSystem
+定理 存在_of_range_subset_orthocentricSystem
   结论: {t : Triangle 实数 P}
   证明: by
   by_cases h : t.orthocenter in Set.range p
@@ -1379,7 +1379,7 @@ theorem exists_dist_eq_circumradius_of_subset_insert_orthocenter
    
 
 中文:
-定理 exists_dist_eq_circumradius_of_subset_insert_orthocenter
+定理 存在_dist_eq_circumradius_of_subset_insert_orthocenter
   结论: {t : Triangle 实数 P}
   证明: by
   rcases exists_of_range_subset_orthocentricSystem ho hps hpi with
@@ -1432,7 +1432,7 @@ theorem OrthocentricSystem.affineIndependent
 
 中文:
 定理 OrthocentricSystem.affineIndependent
-  结论: {s : Set P} (ho : OrthocentricSystem s) {p : Fin 3 -> P}
+  结论: {s : 集合 P} (ho : OrthocentricSystem s) {p : 有限集 3 -> P}
   证明: by
   rcases ho with ⟨t, hto, hst⟩
   rw [hst] at hps
@@ -1464,7 +1464,7 @@ theorem affineSpan_of_orthocentricSystem
 
 中文:
 定理 affineSpan_of_orthocentricSystem
-  结论: {s : Set P} (ho : OrthocentricSystem s) {p : Fin 3 -> P}
+  结论: {s : 集合 P} (ho : OrthocentricSystem s) {p : 有限集 3 -> P}
   证明: by
   have ha := ho.affineIndependent hps hpi
   rcases ho with ⟨t, _, hts⟩
@@ -1507,8 +1507,8 @@ theorem OrthocentricSystem.exists_circumradius_eq
   have hs : Set.range t.points subs
 
 中文:
-定理 OrthocentricSystem.exists_circumradius_eq
-  条件: {s : Set P} (ho : OrthocentricSystem s)
+定理 OrthocentricSystem.存在_circumradius_eq
+  条件: {s : 集合 P} (ho : OrthocentricSystem s)
   证明: by
   rcases ho with ⟨t, hto, hts⟩
   use t.circumradius
@@ -1556,7 +1556,7 @@ theorem OrthocentricSystem.eq_insert_orthocenter
 
 中文:
 定理 OrthocentricSystem.eq_insert_orthocenter
-  结论: {s : Set P} (ho : OrthocentricSystem s)
+  结论: {s : 集合 P} (ho : OrthocentricSystem s)
   证明: by
   rcases ho with ⟨t₀, ht₀o, ht₀s⟩
   rw [ht₀s] at ht

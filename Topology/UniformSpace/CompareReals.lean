@@ -68,7 +68,7 @@ theorem Rat.uniformSpace_eq
     _root_.abs_sub_comm]
 
 中文:
-定理 Rat.uniformSpace_eq
+定理 有理数.uniformSpace_eq
   证明: by
   ext s
   rw [(AbsoluteValue.hasBasis_uniformity _).mem_iff]; rw [Metric.uniformity_basis_dist_rat.mem_iff]
@@ -102,7 +102,7 @@ definition rationalCauSeqPkg
 
 中文:
 定义 rationalCauSeqPkg
-  签名: : @AbstractCompletion Rat (@AbsoluteValue.abs Rat _).uniformSpace
+  签名: : @AbstractCompletion 有理数 (@绝对值.abs 有理数 _).uniformSpace
   定义体: @AbstractCompletion.mk
     (space := Real)
     (coe := ((↑) : Rat -> Real))
@@ -155,7 +155,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: : UniformSpace Q
+  签名: : 一致空间 Q
   定义体: fast_instance% (@AbsoluteValue.abs Rat _).uniformSpace
 
 Depends on / 依赖: AbsoluteValue, AbsoluteValue.abs, fast_instance, uniformSpace
@@ -172,8 +172,8 @@ definition BourbakiReal
   body: Completion Q deriving Inhabited
 
 中文:
-定义 BourbakiReal
-  签名: : Type
+定义 Bourbaki实数
+  签名: : 类型
   定义体: Completion Q deriving Inhabited
 
 Depends on / 依赖: Completion, Inhabited, deriving
@@ -191,7 +191,7 @@ instance Bourbaki.uniformSpace
 
 中文:
 实例 Bourbaki.uniformSpace
-  签名: : UniformSpace Bourbaki实数
+  签名: : 一致空间 Bourbaki实数
   定义体: fast_instance% Completion.uniformSpace Q
 
 Depends on / 依赖: Completion, Completion.uniformSpace, fast_instance, uniformSpace
@@ -245,7 +245,7 @@ theorem compare_uc
 
 中文:
 定理 compare_uc
-  结论: UniformContinuous compareEquiv
+  结论: 一致连续 compareEquiv
   证明: bourbakiPkg.uniformContinuous_compareEquiv rationalCauSeqPkg
 
 Depends on / 依赖: bourbakiPkg, bourbakiPkg.uniformContinuous_compareEquiv, rationalCauSeqPkg, uniformContinuous_compareEquiv
@@ -263,7 +263,7 @@ theorem compare_uc_symm
 
 中文:
 定理 compare_uc_symm
-  结论: UniformContinuous compareEquiv.symm
+  结论: 一致连续 compareEquiv.symm
   证明: bourbakiPkg.uniformContinuous_compareEquiv_symm rationalCauSeqPkg
 
 Depends on / 依赖: bourbakiPkg, bourbakiPkg.uniformContinuous_compareEquiv_symm, rationalCauSeqPkg, uniformContinuous_compareEquiv_symm

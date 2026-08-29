@@ -181,7 +181,7 @@ definition satisfyTokensFn
 
 中文:
 定义 satisfyTokensFn
-  签名: (p : Char -> 布尔) (errorMsg : String) (many := true)
+  签名: (p : Char -> 布尔值) (errorMsg : String) (many := true)
   定义体: fun c s =>
   let start := s.pos
   let s := takeWhile1Fn p errorMsg c s
@@ -407,7 +407,7 @@ definition _root_.Std.Format.mapStringsM
 
 中文:
 定义 _root_.Std.Format.mapStringsM
-  签名: {m} [Monad m] (f : Format) (f' : String -> m String)
+  签名: {m} [单子 m] (f : Format) (f' : String -> m String)
   定义体: match f with
 | .group f b => (.group · b) < > Std.Format.mapStringsM f f'
 | .tag t g => .tag t < > Std.Format.mapStringsM g f'

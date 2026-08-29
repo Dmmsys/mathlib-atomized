@@ -62,7 +62,7 @@ abbreviation Quiver.Star
   body: Σ v : U, u ⟶ v
 
 中文:
-缩写 Quiver.Star
+缩写 箭图.对合
   签名: (u : U)
   定义体: Σ v : U, u ⟶ v
 -/
@@ -78,7 +78,7 @@ abbreviation Quiver.Star.mk
   body: ⟨_, f⟩
 
 中文:
-缩写 Quiver.Star.mk
+缩写 箭图.对合.mk
   签名: {u v : U} (f : u ⟶ v)
   定义体: ⟨_, f⟩
 -/
@@ -94,7 +94,7 @@ abbreviation Quiver.Costar
   body: Σ u : U, u ⟶ v
 
 中文:
-缩写 Quiver.Costar
+缩写 箭图.Costar
   签名: (v : U)
   定义体: Σ u : U, u ⟶ v
 -/
@@ -110,7 +110,7 @@ abbreviation Quiver.Costar.mk
   body: ⟨_, f⟩
 
 中文:
-缩写 Quiver.Costar.mk
+缩写 箭图.Costar.mk
   签名: {u v : U} (f : u ⟶ v)
   定义体: ⟨_, f⟩
 -/
@@ -129,7 +129,7 @@ definition Prefunctor.star
   Quiver.Star.mk (φ.map F.2)
 
 中文:
-定义 Prefunctor.star
+定义 预函子.star
   签名: (u : U)
   定义体: fun F =>
   Quiver.Star.mk (φ.map F.2)
@@ -151,7 +151,7 @@ definition Prefunctor.costar
 @[simp]
 
 中文:
-定义 Prefunctor.costar
+定义 预函子.costar
   签名: (u : U)
   定义体: fun F =>
   Quiver.Costar.mk (φ.map F.2)
@@ -173,7 +173,7 @@ theorem Prefunctor.star_apply
 @[simp]
 
 中文:
-定理 Prefunctor.star_apply
+定理 预函子.star_apply
   条件: {u v : U} (e : u ⟶ v)
   证明: rfl
 
@@ -193,7 +193,7 @@ theorem Prefunctor.costar_apply
   proof: rfl
 
 中文:
-定理 Prefunctor.costar_apply
+定理 预函子.costar_apply
   条件: {u v : U} (e : u ⟶ v)
   证明: rfl
 -/
@@ -211,7 +211,7 @@ theorem Prefunctor.star_comp
   proof: rfl
 
 中文:
-定理 Prefunctor.star_comp
+定理 预函子.star_comp
   条件: (u : U)
   结论: (φ ⋙q ψ).star u = ψ.star (φ.obj u) ∘ φ.star u
   证明: rfl
@@ -229,7 +229,7 @@ theorem Prefunctor.costar_comp
   proof: rfl
 
 中文:
-定理 Prefunctor.costar_comp
+定理 预函子.costar_comp
   条件: (u : U)
   结论: (φ ⋙q ψ).costar u = ψ.costar (φ.obj u) ∘ φ.costar u
   证明: rfl
@@ -248,11 +248,11 @@ structure Prefunctor.IsCovering
     - costar_bijective : forall u, Bijective (φ.costar u)
 
 中文:
-结构 Prefunctor.IsCovering
+结构 预函子.是余vering
   参数: : 命题 where
   公理与运算 (2 个):
-    - star_bijective : 对任意 u, Bijective (φ.star u)
-    - costar_bijective : 对任意 u, Bijective (φ.costar u)
+    - star_bijective : 对任意 u, 双射 (φ.star u)
+    - costar_bijective : 对任意 u, 双射 (φ.costar u)
 -/
 protected structure Prefunctor.IsCovering : Prop where
   star_bijective : forall u, Bijective (φ.star u)
@@ -271,8 +271,8 @@ theorem Prefunctor.IsCovering.map_injective
   simpa using (hφ.star_bijective u).left this
 
 中文:
-定理 Prefunctor.IsCovering.map_injective
-  条件: (hφ : φ.IsCovering) {u v : U}
+定理 预函子.是余vering.map_injective
+  条件: (hφ : φ.是余vering) {u v : U}
   证明: by
   rintro f g he
   have : φ.star u (Quiver.Star.mk f) = φ.star u (Quiver.Star.mk g) := by simpa using he
@@ -297,9 +297,9 @@ theorem Prefunctor.IsCovering.comp
    fun _ => (hψ.costar_bijective _).comp (hφ.costar_bijective _)⟩
 
 中文:
-定理 Prefunctor.IsCovering.comp
-  条件: (hφ : φ.IsCovering) (hψ : ψ.IsCovering)
-  结论: (φ ⋙q ψ).IsCovering
+定理 预函子.是余vering.comp
+  条件: (hφ : φ.是余vering) (hψ : ψ.是余vering)
+  结论: (φ ⋙q ψ).是余vering
   证明: ⟨fun _ => (hψ.star_bijective _).comp (hφ.star_bijective _),
    fun _ => (hψ.costar_bijective _).comp (hφ.costar_bijective _)⟩
 
@@ -319,8 +319,8 @@ theorem Prefunctor.IsCovering.of_comp_right
    fun _ => (Bijective.of_comp_iff' (hψ.costar_bijective _) _).mp (hφψ.costar_bijective _)⟩
 
 中文:
-定理 Prefunctor.IsCovering.of_comp_right
-  条件: (hψ : ψ.IsCovering) (hφψ : (φ ⋙q ψ).IsCovering)
+定理 预函子.是余vering.of_comp_right
+  条件: (hψ : ψ.是余vering) (hφψ : (φ ⋙q ψ).是余vering)
   证明: ⟨fun _ => (Bijective.of_comp_iff' (hψ.star_bijective _) _).mp (hφψ.star_bijective _),
    fun _ => (Bijective.of_comp_iff' (hψ.costar_bijective _) _).mp (hφψ.costar_bijective _)⟩
 
@@ -343,8 +343,8 @@ theorem Prefunctor.IsCovering.of_comp_left
     (Bijective.of_comp_iff _ (hφ.costar_bijective u)).mp (hφψ.costar_bijective u)]
 
 中文:
-定理 Prefunctor.IsCovering.of_comp_left
-  结论: (hφ : φ.IsCovering) (hφψ : (φ ⋙q ψ).IsCovering)
+定理 预函子.是余vering.of_comp_left
+  结论: (hφ : φ.是余vering) (hφψ : (φ ⋙q ψ).是余vering)
   证明: by
   refine ⟨fun v => ?_, fun v => ?_⟩ <;> obtain ⟨u, rfl⟩ := φsur v
   exacts [(Bijective.of_comp_iff _ (hφ.star_bijective u)).mp (hφψ.star_bijective u),
@@ -367,7 +367,7 @@ definition Quiver.symmetrifyStar
   body: Equiv.sigmaSumDistrib _ _
 
 中文:
-定义 Quiver.symmetrifyStar
+定义 箭图.symmetrifyStar
   签名: (u : U)
   定义体: Equiv.sigmaSumDistrib _ _
 
@@ -386,7 +386,7 @@ definition Quiver.symmetrifyCostar
   body: Equiv.sigmaSumDistrib _ _
 
 中文:
-定义 Quiver.symmetrifyCostar
+定义 箭图.symmetrifyCostar
   签名: (u : U)
   定义体: Equiv.sigmaSumDistrib _ _
 
@@ -411,7 +411,7 @@ theorem Prefunctor.symmetrifyStar
     erw [Equiv.sigmaSumDistr
 
 中文:
-定理 Prefunctor.symmetrifyStar
+定理 预函子.symmetrifyStar
   条件: (u : U)
   证明: by
   rw [Equiv.eq_symm_comp (e := Quiver.symmetrifyStar (φ.obj u))]
@@ -448,7 +448,7 @@ theorem Prefunctor.symmetrifyCostar
     erw [Equiv.sigmaSu
 
 中文:
-定理 Prefunctor.symmetrifyCostar
+定理 预函子.symmetrifyCostar
   条件: (u : U)
   证明: by
   rw [Equiv.eq_symm_comp (e := Quiver.symmetrifyCostar (φ.obj u))]
@@ -481,8 +481,8 @@ theorem Prefunctor.IsCovering.symmetrify
   simp [φ.symmetrifyStar, φ.symmetrifyCostar, hφ.star_bijective u, hφ.costar_bijective u]
 
 中文:
-定理 Prefunctor.IsCovering.symmetrify
-  条件: (hφ : φ.IsCovering)
+定理 预函子.是余vering.symmetrify
+  条件: (hφ : φ.是余vering)
   证明: by
   refine ⟨fun u => ?_, fun u => ?_⟩ <;>
   simp [φ.symmetrifyStar, φ.symmetrifyCostar, hφ.star_bijective u, hφ.costar_bijective u]
@@ -501,7 +501,7 @@ abbreviation Quiver.PathStar
   body: Σ v : U, Path u v
 
 中文:
-缩写 Quiver.PathStar
+缩写 箭图.PathStar
   签名: (u : U)
   定义体: Σ v : U, Path u v
 -/
@@ -517,8 +517,8 @@ abbreviation Quiver.PathStar.mk
   body: ⟨_, p⟩
 
 中文:
-缩写 Quiver.PathStar.mk
-  签名: {u v : U} (p : Path u v)
+缩写 箭图.PathStar.mk
+  签名: {u v : U} (p : 道路 u v)
   定义体: ⟨_, p⟩
 -/
 protected abbrev Quiver.PathStar.mk {u v : U} (p : Path u v) : Quiver.PathStar u :=
@@ -536,7 +536,7 @@ definition Prefunctor.pathStar
 @[simp]
 
 中文:
-定义 Prefunctor.pathStar
+定义 预函子.pathStar
   签名: (u : U)
   定义体: fun p =>
   Quiver.PathStar.mk (φ.mapPath p.2)
@@ -556,8 +556,8 @@ theorem Prefunctor.pathStar_apply
   proof: rfl
 
 中文:
-定理 Prefunctor.pathStar_apply
-  条件: {u v : U} (p : Path u v)
+定理 预函子.pathStar_apply
+  条件: {u v : U} (p : 道路 u v)
   证明: rfl
 -/
 theorem Prefunctor.pathStar_apply {u v : U} (p : Path u v) :
@@ -582,8 +582,8 @@ theorem Prefunctor.pathStar_injective
       simp only [mapPath_cons, Sigma.mk.inj_iff] at h
 
 中文:
-定理 Prefunctor.pathStar_injective
-  条件: (hφ : 对任意 u, Injective (φ.star u)) (u : U)
+定理 预函子.pathStar_injective
+  条件: (hφ : 对任意 u, 单射 (φ.star u)) (u : U)
   证明: by
   dsimp +unfoldPartialApp [Prefunctor.pathStar, Quiver.PathStar.mk]
   rintro ⟨v₁, p₁⟩
@@ -658,8 +658,8 @@ theorem Prefunctor.pathStar_surjective
     obtain ⟨⟨u'', eu⟩, k
 
 中文:
-定理 Prefunctor.pathStar_surjective
-  条件: (hφ : 对任意 u, Surjective (φ.star u)) (u : U)
+定理 预函子.pathStar_surjective
+  条件: (hφ : 对任意 u, 满射 (φ.star u)) (u : U)
   证明: by
   dsimp +unfoldPartialApp [Prefunctor.pathStar, Quiver.PathStar.mk]
   rintro ⟨v, p⟩
@@ -705,8 +705,8 @@ theorem Prefunctor.pathStar_bijective
   proof: ⟨φ.pathStar_injective (fun u => (hφ u).1) _, φ.pathStar_surjective (fun u => (hφ u).2) _⟩
 
 中文:
-定理 Prefunctor.pathStar_bijective
-  条件: (hφ : 对任意 u, Bijective (φ.star u)) (u : U)
+定理 预函子.pathStar_bijective
+  条件: (hφ : 对任意 u, 双射 (φ.star u)) (u : U)
   证明: ⟨φ.pathStar_injective (fun u => (hφ u).1) _, φ.pathStar_surjective (fun u => (hφ u).2) _⟩
 
 Depends on / 依赖: pathStar_injective, pathStar_surjective
@@ -730,8 +730,8 @@ theorem pathStar_bijective
 
 中文:
 定理 pathStar_bijective
-  条件: (hφ : φ.IsCovering) (u : U)
-  结论: Bijective (φ.pathStar u)
+  条件: (hφ : φ.是余vering) (u : U)
+  结论: 双射 (φ.pathStar u)
   证明: φ.pathStar_bijective hφ.1 u
 -/
 protected theorem pathStar_bijective (hφ : φ.IsCovering) (u : U) : Bijective (φ.pathStar u) :=
@@ -760,7 +760,7 @@ definition Quiver.starEquivCostar
 @[simp]
 
 中文:
-定义 Quiver.starEquivCostar
+定义 箭图.starEquivCostar
   签名: (u : U)
   定义体: ⟨e.1, reverse e.2⟩
   invFun e := ⟨e.1, reverse e.2⟩
@@ -789,7 +789,7 @@ theorem Quiver.starEquivCostar_apply
 @[simp]
 
 中文:
-定理 Quiver.starEquivCostar_apply
+定理 箭图.starEquivCostar_apply
   条件: {u v : U} (e : u ⟶ v)
   证明: rfl
 
@@ -809,7 +809,7 @@ theorem Quiver.starEquivCostar_symm_apply
   proof: rfl
 
 中文:
-定理 Quiver.starEquivCostar_symm_apply
+定理 箭图.starEquivCostar_symm_apply
   条件: {u v : U} (e : u ⟶ v)
   证明: rfl
 -/
@@ -829,7 +829,7 @@ theorem Prefunctor.costar_conj_star
   ext ⟨v, f⟩ <;> simp
 
 中文:
-定理 Prefunctor.costar_conj_star
+定理 预函子.costar_conj_star
   条件: (u : U)
   证明: by
   ext ⟨v, f⟩ <;> simp
@@ -848,7 +848,7 @@ theorem Prefunctor.bijective_costar_iff_bijective_star
   rw [Prefunctor.costar_conj_star φ]; rw [EquivLike.comp_bijective]; rw [EquivLike.bijective_comp]
 
 中文:
-定理 Prefunctor.bijective_costar_iff_bijective_star
+定理 预函子.bijective_costar_iff_bijective_star
   条件: (u : U)
   证明: by
   rw [Prefunctor.costar_conj_star φ]; rw [EquivLike.comp_bijective]; rw [EquivLike.bijective_comp]
@@ -869,9 +869,9 @@ theorem Prefunctor.isCovering_of_bijective_star
   proof: ⟨h, fun u => (φ.bijective_costar_iff_bijective_star u).2 (h u)⟩
 
 中文:
-定理 Prefunctor.isCovering_of_bijective_star
-  条件: (h : 对任意 u, Bijective (φ.star u))
-  结论: φ.IsCovering
+定理 预函子.isCovering_of_bijective_star
+  条件: (h : 对任意 u, 双射 (φ.star u))
+  结论: φ.是余vering
   证明: ⟨h, fun u => (φ.bijective_costar_iff_bijective_star u).2 (h u)⟩
 
 Depends on / 依赖: bijective_costar_iff_bijective_star
@@ -888,8 +888,8 @@ theorem Prefunctor.isCovering_of_bijective_costar
   proof: ⟨fun u => (φ.bijective_costar_iff_bijective_star u).1 (h u), h⟩
 
 中文:
-定理 Prefunctor.isCovering_of_bijective_costar
-  条件: (h : 对任意 u, Bijective (φ.costar u))
+定理 预函子.isCovering_of_bijective_costar
+  条件: (h : 对任意 u, 双射 (φ.costar u))
   证明: ⟨fun u => (φ.bijective_costar_iff_bijective_star u).1 (h u), h⟩
 
 Depends on / 依赖: bijective_costar_iff_bijective_star

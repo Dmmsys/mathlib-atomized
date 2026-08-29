@@ -40,9 +40,9 @@ structure BoundedContinuousFunction
     - map_bounded' : exists C, forall x y, dist (toFun x) (toFun y) <= C
 
 中文:
-结构 BoundedContinuousFunction
-  参数: (α : 类型u) (β : 类型v) [TopologicalSpace α]
-  继承: ContinuousMap α β
+结构 有界连续函数
+  参数: (α : 类型u) (β : 类型v) [拓扑空间 α]
+  继承: 连续映射 α β
   公理与运算 (1 个):
     - map_bounded' : 存在 C, 对任意 x y, dist (toFun x) (toFun y) <= C
 -/
@@ -65,9 +65,9 @@ class BoundedContinuousMapClass
     - map_bounded((f : F)) : exists C, forall x y, dist (f x) (f y) <= C
 
 中文:
-类 BoundedContinuousMapClass
-  参数: (F : 类型) (α β : outParam 类型) [TopologicalSpace α]
-  继承: ContinuousMapClass F α β
+类 BoundedContinuous映射类
+  参数: (F : 类型) (α β : outParam 类型) [拓扑空间 α]
+  继承: 连续映射类 F α β
   公理与运算 (1 个):
     - map_bounded((f : F)) : 存在 C, 对任意 x y, dist (f x) (f y) <= C
 -/
@@ -100,7 +100,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (α ->ᵇ β) α β where
+  签名: : 函数状 (α ->ᵇ β) α β where
   定义体: f.toFun
   coe_injective f g h := by
     obtain ⟨⟨_, _⟩, _⟩ := f
@@ -127,7 +127,7 @@ instance instBoundedContinuousMapClass
 
 中文:
 实例 instBoundedContinuousMapClass
-  签名: : BoundedContinuousMapClass (α ->ᵇ β) α β where
+  签名: : BoundedContinuous映射类 (α ->ᵇ β) α β where
   定义体: f.continuous_toFun
   map_bounded f := f.map_bounded'
 
@@ -152,7 +152,7 @@ instance instCoeTC
 
 中文:
 实例 instCoeTC
-  签名: [FunLike F α β] [BoundedContinuousMapClass F α β]
+  签名: [函数状 F α β] [BoundedContinuous映射类 F α β]
   定义体: ⟨fun f =>
     { toFun := f
       continuous_toFun := map_continuous f
@@ -239,7 +239,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (f : α ->ᵇ β)
-  结论: Continuous f
+  结论: 连续 f
   证明: f.toContinuousMap.continuous
 
 @[ext]
@@ -321,7 +321,7 @@ theorem isBounded_image
 
 中文:
 定理 isBounded_image
-  条件: (f : α ->ᵇ β) (s : Set α)
+  条件: (f : α ->ᵇ β) (s : 集合 α)
   结论: IsBounded (f '' s)
   证明: f.isBounded_range.subset image_subset_range _ _
 
@@ -341,7 +341,7 @@ theorem eq_of_empty
 
 中文:
 定理 eq_of_empty
-  条件: [h : IsEmpty α] (f g : α ->ᵇ β)
+  条件: [h : 是空 α] (f g : α ->ᵇ β)
   结论: f = g
   证明: ext h.elim
 
@@ -400,7 +400,7 @@ definition mkOfCompact
 
 中文:
 定义 mkOfCompact
-  签名: [CompactSpace α] (f : C(α, β))
+  签名: [紧空间 α] (f : C(α, β))
   定义体: ⟨f, isBounded_range_iff.1 (isCompact_range f.continuous).isBounded⟩
 
 @[simp]
@@ -422,7 +422,7 @@ theorem mkOfCompact_apply
 
 中文:
 定理 mkOfCompact_apply
-  条件: [CompactSpace α] (f : C(α, β)) (a : α)
+  条件: [紧空间 α] (f : C(α, β)) (a : α)
   结论: mkOfCompact f a = f a
   证明: rfl
 -/
@@ -441,7 +441,7 @@ definition mkOfDiscrete
 
 中文:
 定义 mkOfDiscrete
-  签名: [DiscreteTopology α] (f : α -> β) (C : 实数) (h : 对任意 x y : α, dist (f x) (f y) <= C)
+  签名: [离散拓扑 α] (f : α -> β) (C : 实数) (h : 对任意 x y : α, dist (f x) (f y) <= C)
   定义体: ⟨⟨f, continuous_of_discreteTopology⟩, ⟨C, h⟩⟩
 
 Depends on / 依赖: continuous_of_discreteTopology
@@ -494,7 +494,7 @@ theorem dist_set_exists
     <;> apply mem_range_self
 
 中文:
-定理 dist_set_exists
+定理 dist_set_存在
   结论: 存在 C, 0 <= C ∧ 对任意 x : α, dist (f x) (g x) <= C
   证明: by
   rcases isBounded_iff.1 (f.isBounded_range.union g.isBounded_range) with ⟨C, hC⟩
@@ -583,7 +583,7 @@ theorem dist_le_iff_of_nonempty
 
 中文:
 定理 dist_le_iff_of_nonempty
-  条件: [Nonempty α]
+  条件: [非空 α]
   结论: dist f g <= C ↔ 对任意 x, dist (f x) (g x) <= C
   证明: ⟨fun h x => le_trans (dist_coe_le_dist x) h,
     fun w => (dist_le (le_trans dist_nonneg (w (Nonempty.some ‹_›)))).mpr w⟩
@@ -608,7 +608,7 @@ theorem dist_lt_of_nonempty_compact
 
 中文:
 定理 dist_lt_of_nonempty_compact
-  结论: [Nonempty α] [CompactSpace α]
+  结论: [非空 α] [紧空间 α]
   证明: by
   have c : Continuous fun x => dist (f x) (g x) := by fun_prop
   obtain ⟨x, -, le⟩ :=
@@ -644,7 +644,7 @@ theorem dist_lt_iff_of_compact
 
 中文:
 定理 dist_lt_iff_of_compact
-  条件: [CompactSpace α] (C0 : (0 : 实数) < C)
+  条件: [紧空间 α] (C0 : (0 : 实数) < C)
   证明: by
   fconstructor
   · intro w x
@@ -682,7 +682,7 @@ theorem dist_lt_iff_of_nonempty_compact
 
 中文:
 定理 dist_lt_iff_of_nonempty_compact
-  条件: [Nonempty α] [CompactSpace α]
+  条件: [非空 α] [紧空间 α]
   证明: ⟨fun w x => lt_of_le_of_lt (dist_coe_le_dist x) w, dist_lt_of_nonempty_compact⟩
 
 Depends on / 依赖: dist_coe_le_dist, dist_lt_of_nonempty_compact, lt_of_le_of_lt
@@ -706,7 +706,7 @@ instance instPseudoMetricSpace
 
 中文:
 实例 instPseudoMetricSpace
-  签名: : PseudoMetricSpace (α ->ᵇ β) where
+  签名: : 伪度量空间 (α ->ᵇ β) where
   定义体: le_antisymm ((dist_le le_rfl).2 fun x => by simp) dist_nonneg'
   dist_comm f g := by simp [dist_eq, dist_comm]
   dist_triangle _ _ _ := (dist_le (add_nonneg dist_nonneg' dist_nonneg')).2
@@ -732,7 +732,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: {β} [MetricSpace β]
+  签名: {β} [度量空间 β]
   定义体: by
     ext x
     exact eq_of_dist_eq_zero (le_antisymm (hfg ▸ dist_coe_le_dist _) dist_nonneg)
@@ -777,7 +777,7 @@ theorem nndist_set_exists
   proof: Subtype.exists.mpr dist_set_exists.imp fun _ ⟨ha, h⟩ => ⟨ha, h⟩
 
 中文:
-定理 nndist_set_exists
+定理 nndist_set_存在
   结论: 存在 C, 对任意 x : α, nndist (f x) (g x) <= C
   证明: Subtype.exists.mpr dist_set_exists.imp fun _ ⟨ha, h⟩ => ⟨ha, h⟩
 
@@ -818,7 +818,7 @@ theorem dist_zero_of_empty
 
 中文:
 定理 dist_zero_of_empty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: dist f g = 0
   证明: by
   rw [(ext isEmptyElim : f = g)]; rw [dist_self]
@@ -922,7 +922,7 @@ theorem tendsto_iff_tendstoUniformly
 
 中文:
 定理 tendsto_iff_tendstoUniformly
-  条件: {ι : 类型} {F : ι -> α ->ᵇ β} {f : α ->ᵇ β} {l : Filter ι}
+  条件: {ι : 类型} {F : ι -> α ->ᵇ β} {f : α ->ᵇ β} {l : 滤子 ι}
   证明: Iff.intro
     (fun h =>
       tendstoUniformly_iff.2 fun ε ε0 =>
@@ -965,7 +965,7 @@ theorem isInducing_coeFn
 
 中文:
 定理 isInducing_coeFn
-  结论: IsInducing (UniformFun.ofFun ∘ (⇑) : (α ->ᵇ β) -> α ->ᵤ β)
+  结论: 是Inducing (UniformFun.ofFun ∘ (⇑) : (α ->ᵇ β) -> α ->ᵤ β)
   证明: by
   rw [isInducing_iff_nhds]
   refine fun f => eq_of_forall_le_iff fun l => ?_
@@ -991,7 +991,7 @@ theorem isEmbedding_coeFn
 
 中文:
 定理 isEmbedding_coeFn
-  结论: IsEmbedding (UniformFun.ofFun ∘ (⇑) : (α ->ᵇ β) -> α ->ᵤ β)
+  结论: 是嵌入 (UniformFun.ofFun ∘ (⇑) : (α ->ᵇ β) -> α ->ᵤ β)
   证明: ⟨isInducing_coeFn, fun _ _ h => ext fun x => congr_fun h x⟩
 
 Depends on / 依赖: congr_fun, isInducing_coeFn
@@ -1046,8 +1046,8 @@ instance [Inhabited
   body: ⟨const α default⟩
 
 中文:
-实例 [Inhabited
-  签名: β] : Inhabited (α ->ᵇ β)
+实例 [可居
+  签名: β] : 可居 (α ->ᵇ β)
   定义体: ⟨const α default⟩
 -/
 instance [Inhabited β] : Inhabited (α ->ᵇ β) :=
@@ -1088,7 +1088,7 @@ theorem uniformContinuous_coe
 
 中文:
 定理 uniformContinuous_coe
-  结论: @UniformContinuous (α ->ᵇ β) (α -> β) _ _ (⇑)
+  结论: @一致连续 (α ->ᵇ β) (α -> β) _ _ (⇑)
   证明: uniformContinuous_pi.2 fun x => (lipschitz_eval_const x).uniformContinuous
 
 Depends on / 依赖: lipschitz_eval_const, uniformContinuous, uniformContinuous_pi
@@ -1106,7 +1106,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous fun (f : α ->ᵇ β) x => f x
+  结论: 连续 fun (f : α ->ᵇ β) x => f x
   证明: UniformContinuous.continuous uniformContinuous_coe
 
 Depends on / 依赖: UniformContinuous, UniformContinuous.continuous, continuous, uniformContinuous_coe
@@ -1125,7 +1125,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEval (α ->ᵇ β) α β
+  签名: 余ntinuousEval (α ->ᵇ β) α β
   定义体: continuous_prod_of_continuous_lipschitzWith _ 1
     (fun f => f.continuous) lipschitz_eval_const
 
@@ -1145,7 +1145,7 @@ instance :
 
 中文:
 实例 :
-  签名: ContinuousEvalConst (α ->ᵇ β) α β
+  签名: 余ntinuousEvalConst (α ->ᵇ β) α β
   定义体: inferInstance
 -/
 instance : ContinuousEvalConst (α ->ᵇ β) α β := inferInstance
@@ -1163,7 +1163,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace β]
+  签名: [完备空间 β]
   定义体: complete_of_cauchySeq_tendsto fun (f : Nat -> α ->ᵇ β) (hf : CauchySeq f) => by
     /- We have to show that `f n` converges to a bounded continuous function.
       For this, we prove pointwise convergence to define the limit, then check
@@ -1218,7 +1218,7 @@ definition compContinuous
 
 中文:
 定义 compContinuous
-  签名: {δ : 类型} [TopologicalSpace δ] (f : α ->ᵇ β) (g : C(δ, α))
+  签名: {δ : 类型} [拓扑空间 δ] (f : α ->ᵇ β) (g : C(δ, α))
   定义体: f.1.comp g
   map_bounded' := f.map_bounded'.imp fun _ hC _ _ => hC _ _
 
@@ -1241,7 +1241,7 @@ theorem coe_compContinuous
 
 中文:
 定理 coe_compContinuous
-  条件: {δ : 类型} [TopologicalSpace δ] (f : α ->ᵇ β) (g : C(δ, α))
+  条件: {δ : 类型} [拓扑空间 δ] (f : α ->ᵇ β) (g : C(δ, α))
   证明: rfl
 
 @[simp]
@@ -1260,7 +1260,7 @@ theorem compContinuous_apply
 
 中文:
 定理 compContinuous_apply
-  条件: {δ : 类型} [TopologicalSpace δ] (f : α ->ᵇ β) (g : C(δ, α)) (x : δ)
+  条件: {δ : 类型} [拓扑空间 δ] (f : α ->ᵇ β) (g : C(δ, α)) (x : δ)
   证明: rfl
 -/
 theorem compContinuous_apply {δ : Type*} [TopologicalSpace δ] (f : α ->ᵇ β) (g : C(δ, α)) (x : δ) :
@@ -1276,7 +1276,7 @@ theorem lipschitz_compContinuous
 
 中文:
 定理 lipschitz_compContinuous
-  条件: {δ : 类型} [TopologicalSpace δ] (g : C(δ, α))
+  条件: {δ : 类型} [拓扑空间 δ] (g : C(δ, α))
   证明: LipschitzWith.mk_one fun _ _ => (dist_le dist_nonneg).2 fun x => dist_coe_le_dist (g x)
 
 Depends on / 依赖: LipschitzWith, LipschitzWith.mk_one, dist_coe_le_dist, dist_le, dist_nonneg, mk_one
@@ -1295,7 +1295,7 @@ theorem continuous_compContinuous
 
 中文:
 定理 continuous_compContinuous
-  条件: {δ : 类型} [TopologicalSpace δ] (g : C(δ, α))
+  条件: {δ : 类型} [拓扑空间 δ] (g : C(δ, α))
   证明: (lipschitz_compContinuous g).continuous
 
 Depends on / 依赖: continuous, lipschitz_compContinuous
@@ -1316,7 +1316,7 @@ definition domRestrict
 
 中文:
 定义 domRestrict
-  签名: (f : α ->ᵇ β) (s : Set α)
+  签名: (f : α ->ᵇ β) (s : 集合 α)
   定义体: f.compContinuous (ContinuousMap.id _).restrict s
 
 @[simp]
@@ -1340,7 +1340,7 @@ theorem coe_domRestrict
 
 中文:
 定理 coe_domRestrict
-  条件: (f : α ->ᵇ β) (s : Set α)
+  条件: (f : α ->ᵇ β) (s : 集合 α)
   结论: ⇑(f.domRestrict s) = f ∘ (↑)
   证明: rfl
 
@@ -1364,7 +1364,7 @@ theorem domRestrict_apply
 
 中文:
 定理 domRestrict_apply
-  条件: (f : α ->ᵇ β) (s : Set α) (x : s)
+  条件: (f : α ->ᵇ β) (s : 集合 α) (x : s)
   结论: f.domRestrict s x = f x
   证明: rfl
 
@@ -1513,7 +1513,7 @@ definition codRestrict
 
 中文:
 定义 codRestrict
-  签名: (s : Set β) (f : α ->ᵇ β) (H : 对任意 x, f x in s)
+  签名: (s : 集合 β) (f : α ->ᵇ β) (H : 对任意 x, f x in s)
   定义体: ⟨⟨s.codRestrict f H, f.continuous.subtype_mk _⟩, f.bounded⟩
 
 Depends on / 依赖: bounded, codRestrict, continuous, f.bounded, f.continuous.subtype_mk, s.codRestrict, subtype_mk
@@ -1592,7 +1592,7 @@ theorem extend_of_empty
 
 中文:
 定理 extend_of_empty
-  条件: [IsEmpty α] (f : α ↪ δ) (g : α ->ᵇ β) (h : δ ->ᵇ β)
+  条件: [是空 α] (f : α ↪ δ) (g : α ->ᵇ β) (h : δ ->ᵇ β)
   结论: extend f g h = h
   证明: DFunLike.coe_injective Function.extend_of_isEmpty f g h
 
@@ -1665,7 +1665,7 @@ theorem isometry_extend
 中文:
 定理 isometry_extend
   条件: (f : α ↪ δ) (h : δ ->ᵇ β)
-  结论: Isometry fun g : α ->ᵇ β => extend f g h
+  结论: 等距 fun g : α ->ᵇ β => extend f g h
   证明: Isometry.of_dist_eq fun g₁ g₂ => by simp
 
 Depends on / 依赖: Isometry, Isometry.of_dist_eq, of_dist_eq
@@ -1689,7 +1689,7 @@ continuous_toFun := continuous_indicator (by simp [hs]) continuous_const.continu
 
 中文:
 定义 indicator
-  签名: (s : Set α) (hs : IsClopen s)
+  签名: (s : 集合 α) (hs : IsClopen s)
   定义体: s.indicator 1
 continuous_toFun := continuous_indicator (by simp [hs]) continuous_const.continuousOn
   map_bounded' := ⟨1, fun x y => by by_cases hx : x in s <;> by_cases hy : y in s <;> simp [hx, hy]⟩
@@ -1719,7 +1719,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (α ->ᵇ β)
+  签名: : 幺 (α ->ᵇ β)
   定义体: ⟨const α 1⟩
 
 @[to_additive (attr := simp)]
@@ -1760,7 +1760,7 @@ theorem mkOfCompact_one
 
 中文:
 定理 mkOfCompact_one
-  条件: [CompactSpace α]
+  条件: [紧空间 α]
   结论: mkOfCompact (1 : C(α, β)) = 1
   证明: rfl
 
@@ -1781,7 +1781,7 @@ theorem forall_coe_one_iff_one
 @[to_additive (attr := simp)]
 
 中文:
-定理 forall_coe_one_iff_one
+定理 对任意_coe_one_iff_one
   条件: (f : α ->ᵇ β)
   结论: (对任意 x, f x = 1) ↔ f = 1
   证明: (@DFunLike.ext_iff _ _ _ _ f 1).symm
@@ -1805,7 +1805,7 @@ theorem one_compContinuous
 
 中文:
 定理 one_compContinuous
-  条件: [TopologicalSpace γ] (f : C(γ, α))
+  条件: [拓扑空间 γ] (f : C(γ, α))
   结论: (1 : α ->ᵇ β).compContinuous f = 1
   证明: rfl
 -/
@@ -1833,7 +1833,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul R] [BoundedMul R] [ContinuousMul R]
+  签名: [乘法 R] [有界乘法 R] [连续乘法 R]
   定义体: { toFun := fun x => f x * g x
       continuous_toFun := f.continuous.mul g.continuous
       map_bounded' := mul_bounded_of_bounded_of_bounded (map_bounded f) (map_bounded g) }
@@ -1863,7 +1863,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul R] [BoundedMul R] [ContinuousMul R] (f g : α ->ᵇ R)
+  条件: [乘法 R] [有界乘法 R] [连续乘法 R] (f g : α ->ᵇ R)
   结论: ⇑(f * g) = f * g
   证明: rfl
 
@@ -1884,7 +1884,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [Mul R] [BoundedMul R] [ContinuousMul R] (f g : α ->ᵇ R) (x : α)
+  条件: [乘法 R] [有界乘法 R] [连续乘法 R] (f g : α ->ᵇ R) (x : α)
   证明: rfl
 
 @[deprecated "dont use `nsmulRec` directly" (since := "2026-03-06")]
@@ -1902,7 +1902,7 @@ theorem coe_nsmulRec
 
 中文:
 定理 coe_nsmulRec
-  结论: [PseudoMetricSpace β] [AddMonoid β] [BoundedAdd β] [ContinuousAdd β]
+  结论: [伪度量空间 β] [加法幺半群 β] [有界加法 β] [连续加法 β]
 -/
 theorem coe_nsmulRec [PseudoMetricSpace β] [AddMonoid β] [BoundedAdd β] [ContinuousAdd β]
     (f : α ->ᵇ β) : forall n, ⇑(nsmulRec n f) = n • ⇑f
@@ -1926,7 +1926,7 @@ obtain ⟨C, hC⟩ := Metric.isBounded_iff.mp isBounded_pow (isBounded_range f) 
 
 中文:
 实例 instPow
-  签名: [Monoid R] [BoundedMul R] [ContinuousMul R]
+  签名: [幺半群 R] [有界乘法 R] [连续乘法 R]
   定义体: { toFun := fun x => (f x) ^ n
       continuous_toFun := f.continuous.pow n
       map_bounded' := by
@@ -1958,7 +1958,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: [Monoid R] [BoundedMul R] [ContinuousMul R] (n : 自然数) (f : α ->ᵇ R)
+  条件: [幺半群 R] [有界乘法 R] [连续乘法 R] (n : 自然数) (f : α ->ᵇ R)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1979,7 +1979,7 @@ theorem pow_apply
 
 中文:
 定理 pow_apply
-  条件: [Monoid R] [BoundedMul R] [ContinuousMul R] (n : 自然数) (f : α ->ᵇ R) (x : α)
+  条件: [幺半群 R] [有界乘法 R] [连续乘法 R] (n : 自然数) (f : α ->ᵇ R) (x : α)
   证明: rfl
 
 @[to_additive]
@@ -2001,7 +2001,7 @@ instance instMonoid
 
 中文:
 实例 instMonoid
-  签名: [Monoid R] [BoundedMul R] [ContinuousMul R]
+  签名: [幺半群 R] [有界乘法 R] [连续乘法 R]
   定义体: fast_instance%
   Injective.monoid _ DFunLike.coe_injective rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -2025,7 +2025,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: [CommMonoid R] [BoundedMul R] [ContinuousMul R]
+  签名: [交换幺半群 R] [有界乘法 R] [连续乘法 R]
   定义体: fast_instance%
   Injective.commMonoid _ DFunLike.coe_injective rfl (fun _ _ => rfl) (fun _ _ => rfl)
 
@@ -2050,7 +2050,7 @@ definition coeFnMonoidHom
 
 中文:
 定义 coeFnMonoidHom
-  签名: [Monoid R] [BoundedMul R] [ContinuousMul R]
+  签名: [幺半群 R] [有界乘法 R] [连续乘法 R]
   定义体: (⇑)
   map_one' := coe_one
   map_mul' := coe_mul
@@ -2081,7 +2081,7 @@ definition toContinuousMapMonoidHom
 
 中文:
 定义 toContinuousMapMonoidHom
-  签名: [Monoid R] [BoundedMul R] [ContinuousMul R]
+  签名: [幺半群 R] [有界乘法 R] [连续乘法 R]
   定义体: toContinuousMap
   map_one' := rfl
   map_mul' := by
@@ -2114,7 +2114,7 @@ lemma coe_prod
 
 中文:
 引理 coe_prod
-  结论: {ι : 类型} (s : Finset ι) [CommMonoid R] [BoundedMul R] [ContinuousMul R]
+  结论: {ι : 类型} (s : 有限集 ι) [交换幺半群 R] [有界乘法 R] [连续乘法 R]
   证明: map_prod coeFnMonoidHom f s
 
 @[to_additive]
@@ -2138,7 +2138,7 @@ lemma prod_apply
 
 中文:
 引理 prod_apply
-  结论: {ι : 类型} (s : Finset ι) [CommMonoid R] [BoundedMul R] [ContinuousMul R]
+  结论: {ι : 类型} (s : 有限集 ι) [交换幺半群 R] [有界乘法 R] [连续乘法 R]
   证明: by simp
 
 @[to_additive]
@@ -2158,7 +2158,7 @@ instance instMulOneClass
 
 中文:
 实例 instMulOneClass
-  签名: [MulOneClass R] [BoundedMul R] [ContinuousMul R]
+  签名: [MulOne类 R] [有界乘法 R] [连续乘法 R]
   定义体: fast_instance% DFunLike.coe_injective.mulOneClass _ coe_one coe_mul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulOneClass, coe_injective, coe_mul, coe_one, fast_instance, mulOneClass
@@ -2182,7 +2182,7 @@ definition _root_.MonoidHom.compLeftContinuousBounded
   map_mul' _ _ := ext fun _ => g.map_mul _ _
 
 中文:
-定义 _root_.MonoidHom.compLeftContinuousBounded
+定义 _root_.幺半群态射.compLeftContinuousBounded
   签名: (α : 类型)
   定义体: f.comp g hg
   map_one' := ext fun _ => g.map_one
@@ -2215,7 +2215,7 @@ theorem mkOfCompact_add
 
 中文:
 定理 mkOfCompact_add
-  条件: [CompactSpace α] [Add β] [BoundedAdd β] [ContinuousAdd β] (f g : C(α, β))
+  条件: [紧空间 α] [加法 β] [有界加法 β] [连续加法 β] (f g : C(α, β))
   证明: rfl
 -/
 theorem mkOfCompact_add [CompactSpace α] [Add β] [BoundedAdd β] [ContinuousAdd β] (f g : C(α, β)) :
@@ -2231,7 +2231,7 @@ theorem add_compContinuous
 
 中文:
 定理 add_compContinuous
-  结论: [Add β] [BoundedAdd β] [ContinuousAdd β] [TopologicalSpace γ]
+  结论: [加法 β] [有界加法 β] [连续加法 β] [拓扑空间 γ]
   证明: rfl
 -/
 theorem add_compContinuous [Add β] [BoundedAdd β] [ContinuousAdd β] [TopologicalSpace γ]
@@ -2272,7 +2272,7 @@ instance instLipschitzAdd
 
 中文:
 实例 instLipschitzAdd
-  签名: : LipschitzAdd (α ->ᵇ β) where
+  签名: : Lipschitz加法 (α ->ᵇ β) where
   定义体: ⟨LipschitzAdd.C β, by
       have C_nonneg := (LipschitzAdd.C β).coe_nonneg
       rw [lipschitzWith_iff_dist_le_mul]
@@ -2314,7 +2314,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub (α ->ᵇ R) where
+  签名: : 减法 (α ->ᵇ R) where
   定义体: { toFun := fun x => (f x - g x),
       map_bounded' := sub_bounded_of_bounded_of_bounded f.map_bounded' g.map_bounded' }
 
@@ -2379,8 +2379,8 @@ instance [NatCast
 @[simp]
 
 中文:
-实例 [NatCast
-  签名: β] : 自然数Cast (α ->ᵇ β)
+实例 [自然数嵌入
+  签名: β] : 自然数嵌入 (α ->ᵇ β)
   定义体: ⟨fun n => BoundedContinuousFunction.const _ n⟩
 
 @[simp]
@@ -2401,7 +2401,7 @@ theorem natCast_apply
 
 中文:
 定理 natCast_apply
-  条件: [自然数Cast β] (n : 自然数) (x : α)
+  条件: [自然数嵌入 β] (n : 自然数) (x : α)
   结论: (n : α ->ᵇ β) x = n
   证明: rfl
 -/
@@ -2418,8 +2418,8 @@ instance [IntCast
 @[simp]
 
 中文:
-实例 [IntCast
-  签名: β] : 整数Cast (α ->ᵇ β)
+实例 [整数嵌入
+  签名: β] : 整数嵌入 (α ->ᵇ β)
   定义体: ⟨fun m => BoundedContinuousFunction.const _ m⟩
 
 @[simp]
@@ -2440,7 +2440,7 @@ theorem intCast_apply
 
 中文:
 定理 intCast_apply
-  条件: [整数Cast β] (m : 整数) (x : α)
+  条件: [整数嵌入 β] (m : 整数) (x : α)
   结论: (m : α ->ᵇ β) x = m
   证明: rfl
 -/
@@ -2460,7 +2460,7 @@ instance instSemiring
 
 中文:
 实例 instSemiring
-  签名: {R : 类型} [TopologicalSpace α] [PseudoMetricSpace R]
+  签名: {R : 类型} [拓扑空间 α] [伪度量空间 R]
   定义体: fast_instance%
   Injective.semiring _ DFunLike.coe_injective
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
@@ -2509,7 +2509,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul 𝕜 (α ->ᵇ β) where
+  签名: : 标量乘法 𝕜 (α ->ᵇ β) where
   定义体: { toContinuousMap := c • f.toContinuousMap
       map_bounded' :=
         let ⟨b, hb⟩ := f.bounded
@@ -2577,7 +2577,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: {𝕜' : 类型} [PseudoMetricSpace 𝕜'] [Zero 𝕜'] [SMul 𝕜' β]
+  签名: {𝕜' : 类型} [伪度量空间 𝕜'] [零 𝕜'] [标量乘法 𝕜' β]
   定义体: ext fun _ => smul_assoc ..
 
 Depends on / 依赖: smul_assoc
@@ -2597,7 +2597,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: {𝕜' : 类型} [PseudoMetricSpace 𝕜'] [Zero 𝕜'] [SMul 𝕜' β]
+  签名: {𝕜' : 类型} [伪度量空间 𝕜'] [零 𝕜'] [标量乘法 𝕜' β]
   定义体: ext fun _ => smul_comm ..
 
 Depends on / 依赖: smul_comm
@@ -2617,7 +2617,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul 𝕜ᵐᵒᵖ β] [IsCentralScalar 𝕜 β]
+  签名: [标量乘法 𝕜ᵐᵒᵖ β] [中心标量 𝕜 β]
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -2646,7 +2646,7 @@ instance instIsBoundedSMul
 
 中文:
 实例 instIsBoundedSMul
-  签名: : IsBoundedSMul 𝕜 (α ->ᵇ β) where
+  签名: : 是BoundedSMul 𝕜 (α ->ᵇ β) where
   定义体: by
     rw [dist_le (mul_nonneg dist_nonneg dist_nonneg)]
     intro x
@@ -2693,7 +2693,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: : MulAction 𝕜 (α ->ᵇ β)
+  签名: : 乘法作用 𝕜 (α ->ᵇ β)
   定义体: fast_instance%
   DFunLike.coe_injective.mulAction _ coe_smul
 
@@ -2720,7 +2720,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: : DistribMulAction 𝕜 (α ->ᵇ β)
+  签名: : 分配乘法作用 𝕜 (α ->ᵇ β)
   定义体: fast_instance%
   DFunLike.coe_injective.distribMulAction ⟨⟨_, coe_zero⟩, coe_add⟩ coe_smul
 
@@ -2748,7 +2748,7 @@ instance instModule
 
 中文:
 实例 instModule
-  签名: : Module 𝕜 (α ->ᵇ β)
+  签名: : 模 𝕜 (α ->ᵇ β)
   定义体: fast_instance%
   DFunLike.coe_injective.module _ ⟨⟨_, coe_zero⟩, coe_add⟩ coe_smul
 
@@ -2827,8 +2827,8 @@ theorem NNReal.upper_bound
   rwa [NNReal.nndist_zero_eq_val' (f x)] at key
 
 中文:
-定理 NNReal.upper_bound
-  条件: {α : 类型} [TopologicalSpace α] (f : α ->ᵇ 实数>=0) (x : α)
+定理 非负实数.upper_bound
+  条件: {α : 类型} [拓扑空间 α] (f : α ->ᵇ 实数>=0) (x : α)
   证明: by
   have key : nndist (f x) ((0 : α ->ᵇ Real>=0) x) <= nndist f 0 := @dist_coe_le_dist α Real>=0 _ _ f 0 x
   simp only [coe_zero, Pi.zero_apply] at key

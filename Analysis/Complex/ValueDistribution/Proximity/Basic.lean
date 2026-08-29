@@ -115,7 +115,7 @@ lemma proximity_zero_of_complexValued
 
 中文:
 引理 proximity_zero_of_complexValued
-  条件: {f : Complex -> Complex}
+  条件: {f : 复形 -> 复形}
   证明: by
   simp [proximity]
 
@@ -164,7 +164,7 @@ lemma proximity_congr_codiscreteWithin
 
 中文:
 引理 proximity_congr_codiscreteWithin
-  结论: {f g : Complex -> E} {a : WithTop E} {r : 实数}
+  结论: {f g : 复形 -> E} {a : WithTop E} {r : 实数}
   证明: by
   by_cases h : a = ⊤
   all_goals
@@ -193,7 +193,7 @@ lemma proximity_congr_codiscrete
 
 中文:
 引理 proximity_congr_codiscrete
-  结论: {f g : Complex -> E} {a : WithTop E} {r : 实数}
+  结论: {f g : 复形 -> E} {a : WithTop E} {r : 实数}
   证明: proximity_congr_codiscreteWithin (hfg.filter_mono (codiscreteWithin_mono (by tauto))) hr
 
 Depends on / 依赖: codiscreteWithin_mono, filter_mono, hfg.filter_mono, proximity_congr_codiscreteWithin
@@ -234,7 +234,7 @@ theorem proximity_inv
 
 中文:
 定理 proximity_inv
-  条件: {f : Complex -> Complex}
+  条件: {f : 复形 -> 复形}
   结论: proximity f⁻¹ ⊤ = proximity f 0
   证明: by
   simp [proximity_zero, proximity_top]
@@ -261,7 +261,7 @@ theorem proximity_sub_proximity_inv_eq_circleAverage
 
 中文:
 定理 proximity_sub_proximity_inv_eq_circleAverage
-  条件: {f : Complex -> Complex} (h₁f : Meromorphic f)
+  条件: {f : 复形 -> 复形} (h₁f : 亚纯 f)
   证明: by
   ext R
   simp only [proximity, ↓reduceDIte, Pi.inv_apply, norm_inv, Pi.sub_apply]
@@ -364,7 +364,7 @@ theorem continuous_proximity_top
 
 中文:
 定理 continuous_proximity_top
-  条件: (hf : Continuous f)
+  条件: (hf : 连续 f)
   证明: by
   simp only [proximity, reduceDIte]
   fun_prop
@@ -394,7 +394,7 @@ theorem proximity_sum_top_le
 
 中文:
 定理 proximity_sum_top_le
-  结论: [NormedSpace Complex E] {α : 类型} (s : Finset α) (f : α -> Complex -> E)
+  结论: [赋范空间 复形 E] {α : 类型} (s : 有限集 α) (f : α -> 复形 -> E)
   证明: by
   simp only [proximity_top, Finset.sum_apply]
   intro r
@@ -441,7 +441,7 @@ theorem proximity_add_top_le
 
 中文:
 定理 proximity_add_top_le
-  结论: [NormedSpace Complex E] {f₁ f₂ : Complex -> E} (h₁f₁ : Meromorphic f₁)
+  结论: [赋范空间 复形 E] {f₁ f₂ : 复形 -> E} (h₁f₁ : 亚纯 f₁)
   证明: by
   simpa using proximity_sum_top_le Finset.univ ![f₁, f₂]
     (fun i => by fin_cases i <;> aesop)
@@ -472,7 +472,7 @@ theorem proximity_mul_top_le
 
 中文:
 定理 proximity_mul_top_le
-  条件: {f₁ f₂ : Complex -> Complex} (h₁f₁ : Meromorphic f₁) (h₁f₂ : Meromorphic f₂)
+  条件: {f₁ f₂ : 复形 -> 复形} (h₁f₁ : 亚纯 f₁) (h₁f₂ : 亚纯 f₂)
   证明: by
   calc proximity (f₁ * f₂) ⊤
     _ = circleAverage (fun x => log⁺ (‖f₁ x‖ * ‖f₂ x‖)) 0 := by
@@ -523,7 +523,7 @@ theorem proximity_mul_zero_le
 
 中文:
 定理 proximity_mul_zero_le
-  条件: {f₁ f₂ : Complex -> Complex} (h₁f₁ : Meromorphic f₁) (h₁f₂ : Meromorphic f₂)
+  条件: {f₁ f₂ : 复形 -> 复形} (h₁f₁ : 亚纯 f₁) (h₁f₂ : 亚纯 f₂)
   证明: by
   calc proximity (f₁ * f₂) 0
     _ <= (proximity f₁⁻¹ ⊤) + (proximity f₂⁻¹ ⊤) := by
@@ -555,7 +555,7 @@ theorem proximity_pow_top
 
 中文:
 定理 proximity_pow_top
-  条件: {f : Complex -> Complex} {n : 自然数}
+  条件: {f : 复形 -> 复形} {n : 自然数}
   证明: by
   ext x
   simp [proximity, ← smul_eq_mul, circleAverage_fun_smul]
@@ -576,7 +576,7 @@ theorem proximity_pow_zero
 
 中文:
 定理 proximity_pow_zero
-  条件: {f : Complex -> Complex} {n : 自然数}
+  条件: {f : 复形 -> 复形} {n : 自然数}
   证明: by
   rw [← proximity_inv]; rw [← proximity_inv]; rw [← inv_pow]; rw [proximity_pow_top]
 -/

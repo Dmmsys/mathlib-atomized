@@ -38,7 +38,7 @@ instance :
 
 中文:
 实例 :
-  签名: PosPart A
+  签名: 正部 A
   定义体: cfcₙ (·⁺ : Real -> Real)
 -/
 noncomputable instance : PosPart A where
@@ -54,7 +54,7 @@ instance :
 
 中文:
 实例 :
-  签名: NegPart A
+  签名: 负部 A
   定义体: cfcₙ (·⁻ : Real -> Real)
 -/
 noncomputable instance : NegPart A where
@@ -1146,7 +1146,7 @@ lemma CStarAlgebra.linear_combination_nonneg
   rw [CFC.posPart_sub_negPart _ (ℜ x).2]; rw [← smul_sub]; rw [CFC.posPart_sub_negPart _ (ℑ x).2]; rw [realPart_add_I_smul_imaginaryPart x]
 
 中文:
-引理 CStarAlgebra.linear_combination_nonneg
+引理 CStar代数.linear_combination_nonneg
   条件: (x : A)
   证明: by
   rw [CFC.posPart_sub_negPart _ (ℜ x).2]; rw [← smul_sub]; rw [CFC.posPart_sub_negPart _ (ℑ x).2]; rw [realPart_add_I_smul_imaginaryPart x]
@@ -1174,8 +1174,8 @@ lemma CStarAlgebra.span_nonneg
     first | apply CFC.negPart_nonneg | apply CFC.posPart_nonneg
 
 中文:
-引理 CStarAlgebra.span_nonneg
-  结论: Submodule.span Complex {a : A | 0 <= a} = ⊤
+引理 CStar代数.span_nonneg
+  结论: 子模.span 复形 {a : A | 0 <= a} = ⊤
   证明: by
   refine eq_top_iff.mpr fun x _ => ?_
   rw [← CStarAlgebra.linear_combination_nonneg x]

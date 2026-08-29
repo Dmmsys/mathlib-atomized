@@ -168,7 +168,7 @@ lemma toFin_injective
 
 中文:
 引理 toFin_injective
-  结论: Function.Injective toFin
+  结论: 函数.单射 toFin
   证明: @eq_of_toFin_eq
 
 Depends on / 依赖: eq_of_toFin_eq
@@ -186,7 +186,7 @@ lemma toBitVec_injective
 
 中文:
 引理 toBitVec_injective
-  结论: Function.Injective toBitVec
+  结论: 函数.单射 toBitVec
   证明: @eq_of_toBitVec_eq
 
 Depends on / 依赖: eq_of_toBitVec_eq
@@ -205,7 +205,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid typeName
+  签名: : 交换幺半群 typeName
   定义体: Function.Injective.commMonoid toBitVec toBitVec_injective
           toBitVec_one (fun _ _ => toBitVec_mul) (fun _ _ => toBitVec_pow _ _)
 
@@ -233,7 +233,7 @@ instance instNonUnitalCommRing
 
 中文:
 实例 instNonUnitalCommRing
-  签名: : NonUnitalCommRing typeName
+  签名: : 非幺交换环 typeName
   定义体: Function.Injective.nonUnitalCommRing toBitVec toBitVec_injective
           toBitVec_zero (fun _ _ => toBitVec_add) (fun _ _ => toBitVec_mul) (fun _ => toBitVec_neg)
           (fun _ _ => toBitVec_sub)

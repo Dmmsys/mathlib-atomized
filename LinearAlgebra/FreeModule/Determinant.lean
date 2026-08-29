@@ -36,8 +36,8 @@ theorem LinearMap.det_zero''
   exact LinearMap.det_zero' (Module.Free.chooseBasis R M)
 
 中文:
-定理 LinearMap.det_zero''
-  结论: {R M : 类型} [CommRing R] [AddCommGroup M] [Module R M]
+定理 线性映射.det_zero''
+  结论: {R M : 类型} [交换环 R] [加法交换群 M] [模 R M]
   证明: by
   let : Nonempty (Module.Free.ChooseBasisIndex R M) := (Module.Free.chooseBasis R M).index_nonempty
   nontriviality R

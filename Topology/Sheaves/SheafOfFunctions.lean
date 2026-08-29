@@ -57,7 +57,7 @@ theorem toTypes_isSheaf
 中文:
 定理 toTypes_isSheaf
   条件: (T : X -> 类型)
-  结论: (presheafToTypes X T).IsSheaf
+  结论: (presheafToTypes X T).是层
   证明: isSheaf_of_isSheafUniqueGluing_types _ fun ι U sf hsf => by
   -- We use the sheaf condition in terms of unique gluing
   -- U is a family of open sets, indexed by `ι` and `sf` is a compatible family of sections.
@@ -107,7 +107,7 @@ theorem toType_isSheaf
 中文:
 定理 toType_isSheaf
   条件: (T : 类型)
-  结论: (presheafToType X T).IsSheaf
+  结论: (presheafToType X T).是层
   证明: toTypes_isSheaf X fun _ => T
 
 Depends on / 依赖: toTypes_isSheaf

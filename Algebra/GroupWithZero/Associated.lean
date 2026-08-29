@@ -34,7 +34,7 @@ definition Associated
 
 中文:
 定义 Associated
-  签名: [Monoid M] (x y : M)
+  签名: [幺半群 M] (x y : M)
   定义体: exists u : Mˣ, x * u = y
 -/
 def Associated [Monoid M] (x y : M) : Prop :=
@@ -60,7 +60,7 @@ theorem refl
 
 中文:
 定理 refl
-  条件: [Monoid M] (x : M)
+  条件: [幺半群 M] (x : M)
   结论: x ~ᵤ x
   证明: ⟨1, by simp⟩
 
@@ -83,7 +83,7 @@ theorem rfl
 
 中文:
 定理 rfl
-  条件: [Monoid M] {x : M}
+  条件: [幺半群 M] {x : M}
   结论: x ~ᵤ x
   证明: .refl x
 -/
@@ -101,7 +101,7 @@ instance [Monoid
 @[symm]
 
 中文:
-实例 [Monoid
+实例 [幺半群
   签名: M] : @Std.Refl M Associated
   定义体: ⟨Associated.refl⟩
 
@@ -123,7 +123,7 @@ theorem symm
 
 中文:
 定理 symm
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: 对任意 {x y : M}, x ~ᵤ y -> y ~ᵤ x
 -/
 protected theorem symm [Monoid M] : forall {x y : M}, x ~ᵤ y -> y ~ᵤ x
@@ -138,7 +138,7 @@ instance [Monoid
   body: ⟨fun _ _ => Associated.symm⟩
 
 中文:
-实例 [Monoid
+实例 [幺半群
   签名: M] : Std.Symm (α
   定义体: ⟨fun _ _ => Associated.symm⟩
 
@@ -160,7 +160,7 @@ theorem comm
 
 中文:
 定理 comm
-  条件: [Monoid M] {x y : M}
+  条件: [幺半群 M] {x y : M}
   结论: x ~ᵤ y ↔ y ~ᵤ x
   证明: ⟨Associated.symm, Associated.symm⟩
 
@@ -180,7 +180,7 @@ theorem trans
 
 中文:
 定理 trans
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: 对任意 {x y z : M}, x ~ᵤ y -> y ~ᵤ z -> x ~ᵤ z
 -/
 protected theorem trans [Monoid M] : forall {x y z : M}, x ~ᵤ y -> y ~ᵤ z -> x ~ᵤ z
@@ -195,8 +195,8 @@ instance [Monoid
   body: ⟨fun _ _ _ => Associated.trans⟩
 
 中文:
-实例 [Monoid
-  签名: M] : IsTrans M Associated
+实例 [幺半群
+  签名: M] : 是Trans M Associated
   定义体: ⟨fun _ _ _ => Associated.trans⟩
 
 Depends on / 依赖: Associated, Associated.trans
@@ -217,7 +217,7 @@ definition setoid
 
 中文:
 定义 setoid
-  签名: (M : 类型) [Monoid M]
+  签名: (M : 类型) [幺半群 M]
   定义体: Associated
   iseqv := ⟨Associated.refl, Associated.symm, Associated.trans⟩
 -/
@@ -238,7 +238,7 @@ theorem map
 
 中文:
 定理 map
-  结论: {M N : 类型} [Monoid M] [Monoid N] {F : 类型} [FunLike F M N] [MonoidHomClass F M N]
+  结论: {M N : 类型} [幺半群 M] [幺半群 N] {F : 类型} [函数状 F M N] [幺半群态射类 F M N]
   证明: by
   obtain ⟨u, ha⟩ := ha
   exact ⟨Units.map f u, by rw [← ha, map_mul, Units.coe_map, MonoidHom.coe_coe]⟩
@@ -265,7 +265,7 @@ theorem Associated.of_eq
 
 中文:
 定理 Associated.of_eq
-  条件: [Monoid M] {a b : M} (h : a = b)
+  条件: [幺半群 M] {a b : M} (h : a = b)
   结论: a ~ᵤ b
   证明: ⟨1, by rwa [Units.val_one, mul_one]⟩
 
@@ -284,7 +284,7 @@ theorem Associated.of_subsingleton
 
 中文:
 定理 Associated.of_subsingleton
-  条件: [Subsingleton M] [Monoid M] (a b : M)
+  条件: [子单例 M] [幺半群 M] (a b : M)
   证明: .of_eq (Subsingleton.elim ..)
 -/
 @[nontriviality] theorem Associated.of_subsingleton [Subsingleton M] [Monoid M] (a b : M) :
@@ -303,7 +303,7 @@ theorem unit_associated_one
 
 中文:
 定理 unit_associated_one
-  条件: [Monoid M] {u : Mˣ}
+  条件: [幺半群 M] {u : Mˣ}
   结论: (u : M) ~ᵤ 1
   证明: ⟨u⁻¹, Units.mul_inv u⟩
 
@@ -332,8 +332,8 @@ theorem associated_one_iff_isUnit
 
 中文:
 定理 associated_one_iff_isUnit
-  条件: [Monoid M] {a : M}
-  结论: (a : M) ~ᵤ 1 ↔ IsUnit a
+  条件: [幺半群 M] {a : M}
+  结论: (a : M) ~ᵤ 1 ↔ 是单位 a
   证明: Iff.intro
     (fun h =>
       let ⟨c, h⟩ := h.symm
@@ -367,7 +367,7 @@ theorem associated_zero_iff_eq_zero
 
 中文:
 定理 associated_zero_iff_eq_zero
-  条件: [MonoidWithZero M] (a : M)
+  条件: [带零幺半群 M] (a : M)
   结论: a ~ᵤ 0 ↔ a = 0
   证明: Iff.intro
     (fun h => by
@@ -395,7 +395,7 @@ theorem associated_one_of_mul_eq_one
 
 中文:
 定理 associated_one_of_mul_eq_one
-  条件: [CommMonoid M] {a : M} (b : M) (hab : a * b = 1)
+  条件: [交换幺半群 M] {a : M} (b : M) (hab : a * b = 1)
   结论: a ~ᵤ 1
   证明: show (Units.mkOfMulEqOne a b hab : M) ~ᵤ 1 from unit_associated_one
 
@@ -414,7 +414,7 @@ theorem associated_one_of_associated_mul_one
 
 中文:
 定理 associated_one_of_associated_mul_one
-  条件: [CommMonoid M] {a b : M}
+  条件: [交换幺半群 M] {a b : M}
   结论: a * b ~ᵤ 1 -> a ~ᵤ 1
 -/
 theorem associated_one_of_associated_mul_one [CommMonoid M] {a b : M} : a * b ~ᵤ 1 -> a ~ᵤ 1
@@ -431,7 +431,7 @@ theorem associated_mul_unit_left
 
 中文:
 定理 associated_mul_unit_left
-  条件: {N : 类型} [Monoid N] (a u : N) (hu : IsUnit u)
+  条件: {N : 类型} [幺半群 N] (a u : N) (hu : 是单位 u)
   证明: let ⟨u', hu⟩ := hu
   ⟨u'⁻¹, hu ▸ Units.mul_inv_cancel_right _ _⟩
 
@@ -454,7 +454,7 @@ theorem associated_unit_mul_left
 
 中文:
 定理 associated_unit_mul_left
-  条件: {N : 类型} [CommMonoid N] (a u : N) (hu : IsUnit u)
+  条件: {N : 类型} [交换幺半群 N] (a u : N) (hu : 是单位 u)
   证明: by
   rw [mul_comm]
   exact associated_mul_unit_left _ _ hu
@@ -476,7 +476,7 @@ theorem associated_mul_unit_right
 
 中文:
 定理 associated_mul_unit_right
-  条件: {N : 类型} [Monoid N] (a u : N) (hu : IsUnit u)
+  条件: {N : 类型} [幺半群 N] (a u : N) (hu : 是单位 u)
   证明: (associated_mul_unit_left a u hu).symm
 
 Depends on / 依赖: associated_mul_unit_left
@@ -495,7 +495,7 @@ theorem associated_unit_mul_right
 
 中文:
 定理 associated_unit_mul_right
-  条件: {N : 类型} [CommMonoid N] (a u : N) (hu : IsUnit u)
+  条件: {N : 类型} [交换幺半群 N] (a u : N) (hu : 是单位 u)
   证明: (associated_unit_mul_left a u hu).symm
 
 Depends on / 依赖: Finset, Finset.image, Finset.min, HomologicalComplex, HomologicalComplex.eval, IsStrictlyGE, IsZero, IsZero.iff_id_eq_zero, associated_unit_mul_left, eq_of_tgt, hom_ext, iff_id_eq_zero, isLimit, isLimitOfPreserves, isStrictlyGE_iff, isStrictlyGE_of_ge, isZero_of_isStrictlyGE, p.diag.obj, p.isLimit, p.prop_diag_obj
@@ -514,7 +514,7 @@ theorem associated_mul_isUnit_left_iff
 
 中文:
 定理 associated_mul_isUnit_left_iff
-  条件: {N : 类型} [Monoid N] {a u b : N} (hu : IsUnit u)
+  条件: {N : 类型} [幺半群 N] {a u b : N} (hu : 是单位 u)
   证明: ⟨(associated_mul_unit_right _ _ hu).trans, (associated_mul_unit_left _ _ hu).trans⟩
 
 Depends on / 依赖: Finset, Finset.image, Finset.min, HomologicalComplex, HomologicalComplex.eval, IsStrictlyGE, IsZero, IsZero.iff_id_eq_zero, associated_mul_unit_left, associated_mul_unit_right, eq_of_s, hom_ext, iff_id_eq_zero, isColimit, isColimitOfPreserves, isStrictlyGE_iff, isStrictlyGE_of_ge, isZero_of_isStrictlyGE, p.diag.obj, p.isColimit
@@ -535,7 +535,7 @@ theorem associated_isUnit_mul_left_iff
 
 中文:
 定理 associated_isUnit_mul_left_iff
-  条件: {N : 类型} [CommMonoid N] {u a b : N} (hu : IsUnit u)
+  条件: {N : 类型} [交换幺半群 N] {u a b : N} (hu : 是单位 u)
   证明: by
   rw [mul_comm]
   exact associated_mul_isUnit_left_iff hu
@@ -557,7 +557,7 @@ theorem associated_mul_isUnit_right_iff
 
 中文:
 定理 associated_mul_isUnit_right_iff
-  条件: {N : 类型} [Monoid N] {a b u : N} (hu : IsUnit u)
+  条件: {N : 类型} [幺半群 N] {a b u : N} (hu : 是单位 u)
   证明: Associated.comm.trans (associated_mul_isUnit_left_iff hu).trans Associated.comm
 
 Depends on / 依赖: Associated, Associated.comm, Associated.comm.trans, associated_mul_isUnit_left_iff
@@ -578,7 +578,7 @@ theorem associated_isUnit_mul_right_iff
 
 中文:
 定理 associated_isUnit_mul_right_iff
-  条件: {N : 类型} [CommMonoid N] {a u b : N} (hu : IsUnit u)
+  条件: {N : 类型} [交换幺半群 N] {a u b : N} (hu : 是单位 u)
   证明: Associated.comm.trans (associated_isUnit_mul_left_iff hu).trans Associated.comm
 
 @[simp]
@@ -602,7 +602,7 @@ theorem associated_mul_unit_left_iff
 
 中文:
 定理 associated_mul_unit_left_iff
-  条件: {N : 类型} [Monoid N] {a b : N} {u : Units N}
+  条件: {N : 类型} [幺半群 N] {a b : N} {u : 单位群 N}
   证明: associated_mul_isUnit_left_iff u.isUnit
 
 @[simp]
@@ -626,7 +626,7 @@ theorem associated_unit_mul_left_iff
 
 中文:
 定理 associated_unit_mul_left_iff
-  条件: {N : 类型} [CommMonoid N] {a b : N} {u : Units N}
+  条件: {N : 类型} [交换幺半群 N] {a b : N} {u : 单位群 N}
   证明: associated_isUnit_mul_left_iff u.isUnit
 
 @[simp]
@@ -650,7 +650,7 @@ theorem associated_mul_unit_right_iff
 
 中文:
 定理 associated_mul_unit_right_iff
-  条件: {N : 类型} [Monoid N] {a b : N} {u : Units N}
+  条件: {N : 类型} [幺半群 N] {a b : N} {u : 单位群 N}
   证明: associated_mul_isUnit_right_iff u.isUnit
 
 @[simp]
@@ -674,7 +674,7 @@ theorem associated_unit_mul_right_iff
 
 中文:
 定理 associated_unit_mul_right_iff
-  条件: {N : 类型} [CommMonoid N] {a b : N} {u : Units N}
+  条件: {N : 类型} [交换幺半群 N] {a b : N} {u : 单位群 N}
   证明: associated_isUnit_mul_right_iff u.isUnit
 
 @[gcongr]
@@ -700,7 +700,7 @@ theorem Associated.mul_left
 
 中文:
 定理 Associated.mul_left
-  条件: [Monoid M] (a : M) {b c : M} (h : b ~ᵤ c)
+  条件: [幺半群 M] (a : M) {b c : M} (h : b ~ᵤ c)
   结论: a * b ~ᵤ a * c
   证明: by
   obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_assoc _ _ _⟩
@@ -727,7 +727,7 @@ theorem Associated.mul_right
 
 中文:
 定理 Associated.mul_right
-  条件: [CommMonoid M] {a b : M} (h : a ~ᵤ b) (c : M)
+  条件: [交换幺半群 M] {a b : M} (h : a ~ᵤ b) (c : M)
   结论: a * c ~ᵤ b * c
   证明: by
   obtain ⟨d, rfl⟩ := h; exact ⟨d, mul_right_comm _ _ _⟩
@@ -752,7 +752,7 @@ theorem Associated.mul_mul
 
 中文:
 定理 Associated.mul_mul
-  结论: [CommMonoid M] {a₁ a₂ b₁ b₂ : M}
+  结论: [交换幺半群 M] {a₁ a₂ b₁ b₂ : M}
   证明: (h₁.mul_right _).trans (h₂.mul_left _)
 
 @[gcongr]
@@ -777,7 +777,7 @@ theorem Associated.pow_pow
 
 中文:
 定理 Associated.pow_pow
-  条件: [CommMonoid M] {a b : M} {n : 自然数} (h : a ~ᵤ b)
+  条件: [交换幺半群 M] {a b : M} {n : 自然数} (h : a ~ᵤ b)
   结论: a ^ n ~ᵤ b ^ n
   证明: by
   induction n with
@@ -803,7 +803,7 @@ theorem Associated.dvd
 
 中文:
 定理 Associated.dvd
-  条件: [Monoid M] {a b : M}
+  条件: [幺半群 M] {a b : M}
   结论: a ~ᵤ b -> a ∣ b
   证明: fun ⟨u, hu⟩ =>
   ⟨u, hu.symm⟩
@@ -822,7 +822,7 @@ theorem Associated.dvd'
 
 中文:
 定理 Associated.dvd'
-  条件: [Monoid M] {a b : M} (h : a ~ᵤ b)
+  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
   结论: b ∣ a
   证明: h.symm.dvd
 -/
@@ -840,7 +840,7 @@ theorem Associated.dvd_dvd
 
 中文:
 定理 Associated.dvd_dvd
-  条件: [Monoid M] {a b : M} (h : a ~ᵤ b)
+  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
   结论: a ∣ b ∧ b ∣ a
   证明: ⟨h.dvd, h.symm.dvd⟩
 -/
@@ -867,7 +867,7 @@ theorem associated_of_dvd_dvd
 
 中文:
 定理 associated_of_dvd_dvd
-  结论: [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
+  结论: [带零幺半群 M] [是左消去MulZero M] {a b : M}
   证明: by
   rcases hab with ⟨c, rfl⟩
   rcases hba with ⟨d, a_eq⟩
@@ -908,7 +908,7 @@ theorem dvd_dvd_iff_associated
 
 中文:
 定理 dvd_dvd_iff_associated
-  条件: [MonoidWithZero M] [IsLeftCancelMulZero M] {a b : M}
+  条件: [带零幺半群 M] [是左消去MulZero M] {a b : M}
   证明: ⟨fun ⟨h1, h2⟩ => associated_of_dvd_dvd h1 h2, Associated.dvd_dvd⟩
 
 Depends on / 依赖: Associated, Associated.dvd_dvd, associated_of_dvd_dvd, dvd_dvd
@@ -926,8 +926,8 @@ instance [MonoidWithZero
   body: fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
 
 中文:
-实例 [MonoidWithZero
-  签名: M] [IsLeftCancelMulZero M] [DecidableRel ((· ∣ ·) : M -> M -> 命题)] :
+实例 [带零幺半群
+  签名: M] [是左消去MulZero M] [DecidableRel ((· ∣ ·) : M -> M -> 命题)] :
   定义体: fun _ _ => decidable_of_iff _ dvd_dvd_iff_associated
 
 Depends on / 依赖: decidable_of_iff, dvd_dvd_iff_associated
@@ -947,7 +947,7 @@ theorem Associated.dvd_iff_dvd_left
 
 中文:
 定理 Associated.dvd_iff_dvd_left
-  条件: [Monoid M] {a b c : M} (h : a ~ᵤ b)
+  条件: [幺半群 M] {a b c : M} (h : a ~ᵤ b)
   结论: a ∣ c ↔ b ∣ c
   证明: let ⟨_, hu⟩ := h
   hu ▸ Units.mul_right_dvd.symm
@@ -970,7 +970,7 @@ theorem Associated.dvd_iff_dvd_right
 
 中文:
 定理 Associated.dvd_iff_dvd_right
-  条件: [Monoid M] {a b c : M} (h : b ~ᵤ c)
+  条件: [幺半群 M] {a b c : M} (h : b ~ᵤ c)
   结论: a ∣ b ↔ a ∣ c
   证明: let ⟨_, hu⟩ := h
   hu ▸ Units.dvd_mul_right.symm
@@ -994,7 +994,7 @@ theorem Associated.eq_zero_iff
 
 中文:
 定理 Associated.eq_zero_iff
-  条件: [MonoidWithZero M] {a b : M} (h : a ~ᵤ b)
+  条件: [带零幺半群 M] {a b : M} (h : a ~ᵤ b)
   结论: a = 0 ↔ b = 0
   证明: by
   obtain ⟨u, rfl⟩ := h
@@ -1017,7 +1017,7 @@ theorem Associated.ne_zero_iff
 
 中文:
 定理 Associated.ne_zero_iff
-  条件: [MonoidWithZero M] {a b : M} (h : a ~ᵤ b)
+  条件: [带零幺半群 M] {a b : M} (h : a ~ᵤ b)
   结论: a != 0 ↔ b != 0
   证明: not_congr h.eq_zero_iff
 
@@ -1042,7 +1042,7 @@ theorem Associated.prime
 
 中文:
 定理 Associated.prime
-  条件: [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q) (hp : Prime p)
+  条件: [带零交换幺半群 M] {p q : M} (h : p ~ᵤ q) (hp : 素 p)
   证明: ⟨h.ne_zero_iff.1 hp.ne_zero,
     let ⟨u, hu⟩ := h
     ⟨fun ⟨v, hv⟩ => hp.not_isUnit ⟨v * u⁻¹, by simp [hv, hu.symm]⟩, by
@@ -1077,7 +1077,7 @@ theorem prime_mul_iff
 
 中文:
 定理 prime_mul_iff
-  条件: [CommMonoidWithZero M] [IsCancelMulZero M] {x y : M}
+  条件: [带零交换幺半群 M] [是乘零消去 M] {x y : M}
   证明: by
   refine ⟨fun h => ?_, ?_⟩
   · rcases of_irreducible_mul h.irreducible with hx | hy
@@ -1112,7 +1112,7 @@ lemma prime_pow_iff
 
 中文:
 引理 prime_pow_iff
-  条件: [CommMonoidWithZero M] [IsCancelMulZero M] {p : M} {n : 自然数}
+  条件: [带零交换幺半群 M] [是乘零消去 M] {p : M} {n : 自然数}
   证明: by
   refine ⟨fun hp => ?_, fun ⟨hp, hn⟩ => by simpa [hn]⟩
   suffices n = 1 by simp_all
@@ -1144,8 +1144,8 @@ theorem Irreducible.dvd_iff
     · exact h.symm.dvd
 
 中文:
-定理 Irreducible.dvd_iff
-  条件: [Monoid M] {x y : M} (hx : Irreducible x)
+定理 不可约.dvd_iff
+  条件: [幺半群 M] {x y : M} (hx : 不可约 x)
   证明: by
   constructor
   · rintro ⟨z, hz⟩
@@ -1180,8 +1180,8 @@ theorem Irreducible.associated_of_dvd
   proof: ((q_irr.dvd_iff.mp dvd).resolve_left p_irr.not_isUnit).symm
 
 中文:
-定理 Irreducible.associated_of_dvd
-  结论: [Monoid M] {p q : M} (p_irr : Irreducible p)
+定理 不可约.associated_of_dvd
+  结论: [幺半群 M] {p q : M} (p_irr : 不可约 p)
   证明: ((q_irr.dvd_iff.mp dvd).resolve_left p_irr.not_isUnit).symm
 
 Depends on / 依赖: dvd_iff, not_isUnit, p_irr, p_irr.not_isUnit, q_irr, q_irr.dvd_iff.mp, resolve_left
@@ -1199,8 +1199,8 @@ theorem Irreducible.dvd_irreducible_iff_associated
   proof: ⟨Irreducible.associated_of_dvd pp qp, Associated.dvd⟩
 
 中文:
-定理 Irreducible.dvd_irreducible_iff_associated
-  结论: [Monoid M] {p q : M}
+定理 不可约.dvd_irreducible_iff_associated
+  结论: [幺半群 M] {p q : M}
   证明: ⟨Irreducible.associated_of_dvd pp qp, Associated.dvd⟩
 
 Depends on / 依赖: Associated, Associated.dvd, Irreducible, Irreducible.associated_of_dvd, associated_of_dvd
@@ -1218,8 +1218,8 @@ theorem Prime.associated_of_dvd
   proof: p_prime.irreducible.associated_of_dvd q_prime.irreducible dvd
 
 中文:
-定理 Prime.associated_of_dvd
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
+定理 素.associated_of_dvd
+  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
   证明: p_prime.irreducible.associated_of_dvd q_prime.irreducible dvd
 
 Depends on / 依赖: associated_of_dvd, irreducible, p_prime, p_prime.irreducible.associated_of_dvd, q_prime, q_prime.irreducible
@@ -1237,8 +1237,8 @@ theorem Prime.dvd_prime_iff_associated
   proof: pp.irreducible.dvd_irreducible_iff_associated qp.irreducible
 
 中文:
-定理 Prime.dvd_prime_iff_associated
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
+定理 素.dvd_prime_iff_associated
+  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
   证明: pp.irreducible.dvd_irreducible_iff_associated qp.irreducible
 
 Depends on / 依赖: dvd_irreducible_iff_associated, irreducible, pp.irreducible.dvd_irreducible_iff_associated, qp.irreducible
@@ -1258,8 +1258,8 @@ theorem Associated.prime_iff
 
 中文:
 定理 Associated.prime_iff
-  条件: [CommMonoidWithZero M] {p q : M} (h : p ~ᵤ q)
-  结论: Prime p ↔ Prime q
+  条件: [带零交换幺半群 M] {p q : M} (h : p ~ᵤ q)
+  结论: 素 p ↔ 素 q
   证明: ⟨h.prime, h.symm.prime⟩
 
 Depends on / 依赖: h.prime, h.symm.prime
@@ -1279,8 +1279,8 @@ theorem Associated.isUnit
 
 中文:
 定理 Associated.isUnit
-  条件: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  结论: IsUnit a -> IsUnit b
+  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
+  结论: 是单位 a -> 是单位 b
   证明: let ⟨u, hu⟩ := h
   fun ⟨v, hv⟩ => ⟨v * u, by simp [hv, hu.symm]⟩
 -/
@@ -1299,8 +1299,8 @@ theorem Associated.isUnit_iff
 
 中文:
 定理 Associated.isUnit_iff
-  条件: [Monoid M] {a b : M} (h : a ~ᵤ b)
-  结论: IsUnit a ↔ IsUnit b
+  条件: [幺半群 M] {a b : M} (h : a ~ᵤ b)
+  结论: 是单位 a ↔ 是单位 b
   证明: ⟨h.isUnit, h.symm.isUnit⟩
 
 Depends on / 依赖: h.isUnit, h.symm.isUnit, isUnit
@@ -1317,8 +1317,8 @@ theorem Irreducible.isUnit_iff_not_associated_of_dvd
   proof: ⟨fun hy hxy => hx.1 (hxy.symm.isUnit hy), (hx.dvd_iff.mp hy).resolve_right⟩
 
 中文:
-定理 Irreducible.isUnit_iff_not_associated_of_dvd
-  结论: [Monoid M]
+定理 不可约.isUnit_iff_not_associated_of_dvd
+  结论: [幺半群 M]
   证明: ⟨fun hy hxy => hx.1 (hxy.symm.isUnit hy), (hx.dvd_iff.mp hy).resolve_right⟩
 
 Depends on / 依赖: dvd_iff, hx.dvd_iff.mp, hxy.symm.isUnit, isUnit, resolve_right
@@ -1344,7 +1344,7 @@ theorem Associated.irreducible
 
 中文:
 定理 Associated.irreducible
-  条件: [Monoid M] {p q : M} (h : p ~ᵤ q) (hp : Irreducible p)
+  条件: [幺半群 M] {p q : M} (h : p ~ᵤ q) (hp : 不可约 p)
   证明: ⟨mt h.symm.isUnit hp.1,
     let ⟨u, hu⟩ := h
     fun a b hab =>
@@ -1375,7 +1375,7 @@ theorem Associated.irreducible_iff
 
 中文:
 定理 Associated.irreducible_iff
-  条件: [Monoid M] {p q : M} (h : p ~ᵤ q)
+  条件: [幺半群 M] {p q : M} (h : p ~ᵤ q)
   证明: ⟨h.irreducible, h.symm.irreducible⟩
 -/
 protected theorem Associated.irreducible_iff [Monoid M] {p q : M} (h : p ~ᵤ q) :
@@ -1398,7 +1398,7 @@ theorem Associated.of_mul_left
 
 中文:
 定理 Associated.of_mul_left
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M}
+  结论: [带零交换幺半群 M] [是乘零消去 M] {a b c d : M}
   证明: let ⟨u, hu⟩ := h
   let ⟨v, hv⟩ := Associated.symm h₁
   ⟨u * (v : Mˣ),
@@ -1430,7 +1430,7 @@ theorem Associated.of_mul_right
 
 中文:
 定理 Associated.of_mul_right
-  条件: [CommMonoidWithZero M] [IsCancelMulZero M] {a b c d : M}
+  条件: [带零交换幺半群 M] [是乘零消去 M] {a b c d : M}
   证明: by
   rw [mul_comm a]; rw [mul_comm c]; exact Associated.of_mul_left
 
@@ -1455,7 +1455,7 @@ theorem Associated.of_pow_associated_of_prime
 
 中文:
 定理 Associated.of_pow_associated_of_prime
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M]
+  结论: [带零交换幺半群 M] [是乘零消去 M]
   证明: by
   have : p₁ ∣ p₂ ^ k₂ := by
     rw [← h.dvd_iff_dvd_right]
@@ -1484,7 +1484,7 @@ theorem Associated.of_pow_associated_of_prime'
 
 中文:
 定理 Associated.of_pow_associated_of_prime'
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M]
+  结论: [带零交换幺半群 M] [是乘零消去 M]
   证明: (h.symm.of_pow_associated_of_prime hp₂ hp₁ hk₂).symm
 
 Depends on / 依赖: h.symm.of_pow_associated_of_prime, of_pow_associated_of_prime
@@ -1507,8 +1507,8 @@ lemma Irreducible.isRelPrime_iff_not_dvd
   exact (hp.dvd_iff.mp hdp).resolve_left hpn
 
 中文:
-引理 Irreducible.isRelPrime_iff_not_dvd
-  条件: [Monoid M] {p n : M} (hp : Irreducible p)
+引理 不可约.isRelPrime_iff_not_dvd
+  条件: [幺半群 M] {p n : M} (hp : 不可约 p)
   证明: by
   refine ⟨fun h contra => hp.not_isUnit (h dvd_rfl contra), fun hpn d hdp hdn => ?_⟩
   contrapose hpn
@@ -1533,8 +1533,8 @@ lemma Irreducible.dvd_or_isRelPrime
   proof: Classical.or_iff_not_imp_left.mpr hp.isRelPrime_iff_not_dvd.2
 
 中文:
-引理 Irreducible.dvd_or_isRelPrime
-  条件: [Monoid M] {p n : M} (hp : Irreducible p)
+引理 不可约.dvd_or_isRelPrime
+  条件: [幺半群 M] {p n : M} (hp : 不可约 p)
   证明: Classical.or_iff_not_imp_left.mpr hp.isRelPrime_iff_not_dvd.2
 
 Depends on / 依赖: Classical, Classical.or_iff_not_imp_left.mpr, hp.isRelPrime_iff_not_dvd, isRelPrime_iff_not_dvd, or_iff_not_imp_left
@@ -1580,7 +1580,7 @@ theorem associated_eq_eq
 
 中文:
 定理 associated_eq_eq
-  结论: (Associated : M -> M -> 命题) = Eq
+  结论: (Associated : M -> M -> 命题) = 相等
   证明: by
   ext
   rw [associated_iff_eq]
@@ -1602,7 +1602,7 @@ theorem prime_dvd_prime_iff_eq
 
 中文:
 定理 prime_dvd_prime_iff_eq
-  结论: {M : 类型} [CommMonoidWithZero M] [IsCancelMulZero M]
+  结论: {M : 类型} [带零交换幺半群 M] [是乘零消去 M]
   证明: by
   rw [pp.dvd_prime_iff_associated qp]; rw [← associated_eq_eq]
 
@@ -1631,7 +1631,7 @@ theorem eq_of_prime_pow_eq
 
 中文:
 定理 eq_of_prime_pow_eq
-  结论: (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₁)
+  结论: (hp₁ : 素 p₁) (hp₂ : 素 p₂) (hk₁ : 0 < k₁)
   证明: by
   rw [← associated_iff_eq] at h ⊢
   apply h.of_pow_associated_of_prime hp₁ hp₂ hk₁
@@ -1655,7 +1655,7 @@ theorem eq_of_prime_pow_eq'
 
 中文:
 定理 eq_of_prime_pow_eq'
-  结论: (hp₁ : Prime p₁) (hp₂ : Prime p₂) (hk₁ : 0 < k₂)
+  结论: (hp₁ : 素 p₁) (hp₂ : 素 p₂) (hk₁ : 0 < k₂)
   证明: by
   rw [← associated_iff_eq] at h ⊢
   apply h.of_pow_associated_of_prime' hp₁ hp₂ hk₁
@@ -1679,7 +1679,7 @@ abbreviation Associates
 
 中文:
 缩写 Associates
-  签名: (M : 类型) [Monoid M]
+  签名: (M : 类型) [幺半群 M]
   定义体: Quotient (Associated.setoid M)
 
 Depends on / 依赖: Associated, Associated.setoid, Quotient, setoid
@@ -1701,7 +1701,7 @@ abbreviation mk
 
 中文:
 缩写 mk
-  签名: {M : 类型} [Monoid M] (a : M)
+  签名: {M : 类型} [幺半群 M] (a : M)
   定义体: ⟦a⟧
 -/
 protected abbrev mk {M : Type*} [Monoid M] (a : M) : Associates M :=
@@ -1716,8 +1716,8 @@ instance [Monoid
   body: ⟨⟦1⟧⟩
 
 中文:
-实例 [Monoid
-  签名: M] : Inhabited (Associates M)
+实例 [幺半群
+  签名: M] : 可居 (Associates M)
   定义体: ⟨⟦1⟧⟩
 -/
 instance [Monoid M] : Inhabited (Associates M) :=
@@ -1734,7 +1734,7 @@ theorem mk_eq_mk_iff_associated
 
 中文:
 定理 mk_eq_mk_iff_associated
-  条件: [Monoid M] {a b : M}
+  条件: [幺半群 M] {a b : M}
   结论: Associates.mk a = Associates.mk b ↔ a ~ᵤ b
   证明: Iff.intro Quotient.exact Quot.sound
 
@@ -1754,7 +1754,7 @@ theorem quotient_mk_eq_mk
 
 中文:
 定理 quotient_mk_eq_mk
-  条件: [Monoid M] (a : M)
+  条件: [幺半群 M] (a : M)
   结论: ⟦a⟧ = Associates.mk a
   证明: rfl
 -/
@@ -1772,8 +1772,8 @@ theorem quot_mk_eq_mk
 
 中文:
 定理 quot_mk_eq_mk
-  条件: [Monoid M] (a : M)
-  结论: Quot.mk Setoid.r a = Associates.mk a
+  条件: [幺半群 M] (a : M)
+  结论: 商.mk 集合等价关系.r a = Associates.mk a
   证明: rfl
 -/
 theorem quot_mk_eq_mk [Monoid M] (a : M) : Quot.mk Setoid.r a = Associates.mk a :=
@@ -1793,8 +1793,8 @@ theorem quot_out
 
 中文:
 定理 quot_out
-  条件: [Monoid M] (a : Associates M)
-  结论: Associates.mk (Quot.out a) = a
+  条件: [幺半群 M] (a : Associates M)
+  结论: Associates.mk (商.out a) = a
   证明: by
   rw [← quot_mk_eq_mk]; rw [Quot.out_eq]
 
@@ -1815,8 +1815,8 @@ theorem mk_quot_out
 
 中文:
 定理 mk_quot_out
-  条件: [Monoid M] (a : M)
-  结论: Quot.out (Associates.mk a) ~ᵤ a
+  条件: [幺半群 M] (a : M)
+  结论: 商.out (Associates.mk a) ~ᵤ a
   证明: by
   rw [← Associates.mk_eq_mk_iff_associated]; rw [Associates.quot_out]
 
@@ -1834,8 +1834,8 @@ theorem forall_associated
   proof: Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
 
 中文:
-定理 forall_associated
-  条件: [Monoid M] {p : Associates M -> 命题}
+定理 对任意_associated
+  条件: [幺半群 M] {p : Associates M -> 命题}
   证明: Iff.intro (fun h _ => h _) fun h a => Quotient.inductionOn a h
 
 Depends on / 依赖: Iff.intro, Quotient, Quotient.inductionOn, inductionOn
@@ -1855,8 +1855,8 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  条件: [Monoid M]
-  结论: Function.Surjective (@Associates.mk M _)
+  条件: [幺半群 M]
+  结论: 函数.满射 (@Associates.mk M _)
   证明: forall_associated.2 fun a => ⟨a, rfl⟩
 
 Depends on / 依赖: forall_associated
@@ -1875,8 +1875,8 @@ instance [Monoid
 @[simp]
 
 中文:
-实例 [Monoid
-  签名: M] : One (Associates M)
+实例 [幺半群
+  签名: M] : 幺 (Associates M)
   定义体: ⟨⟦1⟧⟩
 
 @[simp]
@@ -1896,7 +1896,7 @@ theorem mk_one
 
 中文:
 定理 mk_one
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: Associates.mk (1 : M) = 1
   证明: rfl
 -/
@@ -1916,7 +1916,7 @@ theorem one_eq_mk_one
 
 中文:
 定理 one_eq_mk_one
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: (1 : Associates M) = Associates.mk 1
   证明: rfl
 
@@ -1938,8 +1938,8 @@ theorem mk_eq_one
 
 中文:
 定理 mk_eq_one
-  条件: [Monoid M] {a : M}
-  结论: Associates.mk a = 1 ↔ IsUnit a
+  条件: [幺半群 M] {a : M}
+  结论: Associates.mk a = 1 ↔ 是单位 a
   证明: by
   rw [← mk_one]; rw [mk_eq_mk_iff_associated]; rw [associated_one_iff_isUnit]
 
@@ -1957,8 +1957,8 @@ instance [Monoid
   body: ⟨1⟩
 
 中文:
-实例 [Monoid
-  签名: M] : Bot (Associates M)
+实例 [幺半群
+  签名: M] : 底元素 (Associates M)
   定义体: ⟨1⟩
 -/
 instance [Monoid M] : Bot (Associates M) :=
@@ -1975,7 +1975,7 @@ theorem bot_eq_one
 
 中文:
 定理 bot_eq_one
-  条件: [Monoid M]
+  条件: [幺半群 M]
   结论: (⊥ : Associates M) = 1
   证明: rfl
 -/
@@ -1992,8 +1992,8 @@ theorem exists_rep
   proof: Quot.exists_rep a
 
 中文:
-定理 exists_rep
-  条件: [Monoid M] (a : Associates M)
+定理 存在_rep
+  条件: [幺半群 M] (a : Associates M)
   结论: 存在 a0 : M, Associates.mk a0 = a
   证明: Quot.exists_rep a
 
@@ -2012,8 +2012,8 @@ instance [Monoid
 uniq := forall_associated.2 fun _ => mk_eq_one.2 isUnit_of_subsingleton _
 
 中文:
-实例 [Monoid
-  签名: M] [Subsingleton M] :
+实例 [幺半群
+  签名: M] [子单例 M] :
   定义体: 1
 uniq := forall_associated.2 fun _ => mk_eq_one.2 isUnit_of_subsingleton _
 -/
@@ -2033,8 +2033,8 @@ theorem mk_injective
 
 中文:
 定理 mk_injective
-  条件: [Monoid M] [Subsingleton Mˣ]
-  结论: Function.Injective (@Associates.mk M _)
+  条件: [幺半群 M] [子单例 Mˣ]
+  结论: 函数.单射 (@Associates.mk M _)
   证明: fun _ _ h => associated_iff_eq.mp (Associates.mk_eq_mk_iff_associated.mp h)
 
 Depends on / 依赖: Associates, Associates.mk_eq_mk_iff_associated.mp, associated_iff_eq, associated_iff_eq.mp, mk_eq_mk_iff_associated
@@ -2056,7 +2056,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (Associates M)
+  签名: : 乘法 (Associates M)
   定义体: ⟨Quotient.map₂ (· * ·) fun _ _ h₁ _ _ h₂ => h₁.mul_mul h₂⟩
 
 Depends on / 依赖: Quotient, Quotient.map, mul_mul
@@ -2098,7 +2098,7 @@ instance instCommMonoid
 
 中文:
 实例 instCommMonoid
-  签名: : CommMonoid (Associates M) where
+  签名: : 交换幺半群 (Associates M) where
   定义体: Quotient.inductionOn a' fun a => show ⟦a * 1⟧ = ⟦a⟧ by simp
   one_mul a' := Quotient.inductionOn a' fun a => show ⟦1 * a⟧ = ⟦a⟧ by simp
   mul_assoc a' b' c' :=
@@ -2130,7 +2130,7 @@ instance instPreorder
 
 中文:
 实例 instPreorder
-  签名: : Preorder (Associates M) where
+  签名: : 预序 (Associates M) where
   定义体: Dvd.dvd
   le_refl := dvd_refl
   le_trans _ _ _ := dvd_trans
@@ -2199,7 +2199,7 @@ theorem associated_map_mk
 
 中文:
 定理 associated_map_mk
-  结论: {f : Associates M ->* M} (hinv : Function.RightInverse f Associates.mk)
+  结论: {f : Associates M ->* M} (hinv : 函数.右逆 f Associates.mk)
   证明: Associates.mk_eq_mk_iff_associated.1 (hinv (Associates.mk a)).symm
 
 Depends on / 依赖: Associates, Associates.mk, Associates.mk_eq_mk_iff_associated, mk_eq_mk_iff_associated
@@ -2261,7 +2261,7 @@ exact Units.ext Quotient.sound associated_one_of_associated_mul_one Quotient.exa
 
 中文:
 实例 uniqueUnits
-  签名: : Unique (Associates M)ˣ where
+  签名: : 唯一 (Associates M)ˣ where
   定义体: by
     rintro ⟨a, b, hab, hba⟩
     induction a, b using Quotient.inductionOn₂ with | _ a b
@@ -2312,7 +2312,7 @@ theorem isUnit_iff_eq_one
 中文:
 定理 isUnit_iff_eq_one
   条件: (a : Associates M)
-  结论: IsUnit a ↔ a = 1
+  结论: 是单位 a ↔ a = 1
   证明: Iff.intro (fun ⟨_, h⟩ => h ▸ coe_unit_eq_one _) fun h => h.symm ▸ isUnit_one
 
 Depends on / 依赖: Iff.intro, coe_unit_eq_one, h.symm, isUnit_one
@@ -2333,7 +2333,7 @@ theorem isUnit_iff_eq_bot
 中文:
 定理 isUnit_iff_eq_bot
   条件: {a : Associates M}
-  结论: IsUnit a ↔ a = ⊥
+  结论: 是单位 a ↔ a = ⊥
   证明: by
   rw [Associates.isUnit_iff_eq_one]; rw [bot_eq_one]
 
@@ -2357,7 +2357,7 @@ theorem isUnit_mk
 中文:
 定理 isUnit_mk
   条件: {a : M}
-  结论: IsUnit (Associates.mk a) ↔ IsUnit a
+  结论: 是单位 (Associates.mk a) ↔ 是单位 a
   证明: calc
     IsUnit (Associates.mk a) ↔ a ~ᵤ 1 := by
       rw [isUnit_iff_eq_one]; rw [one_eq_mk_one]; rw [mk_eq_mk_iff_associated]
@@ -2409,7 +2409,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsBotOneClass (Associates M)
+  签名: 是BotOne类 (Associates M)
   定义体: Dvd.intro _ (one_mul a)
 
 Depends on / 依赖: Dvd.intro, one_mul
@@ -2429,7 +2429,7 @@ instance instOrderBot
 
 中文:
 实例 instOrderBot
-  签名: : OrderBot (Associates M) where
+  签名: : 有底序 (Associates M) where
   定义体: one_le
 
 @[deprecated _root_.one_le (since := "2026-05-07")]
@@ -2648,7 +2648,7 @@ theorem decompositionMonoid_iff
 
 中文:
 定理 decompositionMonoid_iff
-  结论: DecompositionMonoid (Associates M) ↔ DecompositionMonoid M
+  结论: 分解幺半群 (Associates M) ↔ 分解幺半群 M
   证明: by
   simp_rw [_root_.decompositionMonoid_iff, forall_associated, isPrimal_mk]
 
@@ -2669,7 +2669,7 @@ instance instDecompositionMonoid
 
 中文:
 实例 instDecompositionMonoid
-  签名: [DecompositionMonoid M]
+  签名: [分解幺半群 M]
   定义体: decompositionMonoid_iff.mpr ‹_›
 
 @[simp]
@@ -2712,8 +2712,8 @@ instance [Zero
   body: ⟨⟦0⟧⟩
 
 中文:
-实例 [Zero
-  签名: M] [Monoid M] : Zero (Associates M)
+实例 [零
+  签名: M] [幺半群 M] : 零 (Associates M)
   定义体: ⟨⟦0⟧⟩
 -/
 instance [Zero M] [Monoid M] : Zero (Associates M) :=
@@ -2728,8 +2728,8 @@ instance [Zero
   body: ⟨0⟩
 
 中文:
-实例 [Zero
-  签名: M] [Monoid M] : Top (Associates M)
+实例 [零
+  签名: M] [幺半群 M] : 顶元素 (Associates M)
   定义体: ⟨0⟩
 -/
 instance [Zero M] [Monoid M] : Top (Associates M) :=
@@ -2746,7 +2746,7 @@ theorem mk_zero
 
 中文:
 定理 mk_zero
-  条件: [Zero M] [Monoid M]
+  条件: [零 M] [幺半群 M]
   结论: Associates.mk (0 : M) = 0
   证明: rfl
 -/
@@ -2792,7 +2792,7 @@ theorem quot_out_zero
 
 中文:
 定理 quot_out_zero
-  结论: Quot.out (0 : Associates M) = 0
+  结论: 商.out (0 : Associates M) = 0
   证明: by rw [← mk_eq_zero, quot_out]
 
 Depends on / 依赖: mk_eq_zero, quot_out
@@ -2828,8 +2828,8 @@ instance [Nontrivial
   body: ⟨⟨1, 0, mk_ne_zero.2 one_ne_zero⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nontrivial (Associates M)
+实例 [非平凡
+  签名: M] : 非平凡 (Associates M)
   定义体: ⟨⟨1, 0, mk_ne_zero.2 one_ne_zero⟩⟩
 
 Depends on / 依赖: mk_ne_zero, one_ne_zero
@@ -2847,7 +2847,7 @@ theorem exists_non_zero_rep
   proof: Quotient.inductionOn a fun b nz => ⟨b, mt (congr_arg Quotient.mk'') nz, rfl⟩
 
 中文:
-定理 exists_non_zero_rep
+定理 存在_non_zero_rep
   条件: {a : Associates M}
   结论: a != 0 -> 存在 a0 : M, a0 != 0 ∧ Associates.mk a0 = a
   证明: Quotient.inductionOn a fun b nz => ⟨b, mt (congr_arg Quotient.mk'') nz, rfl⟩
@@ -2874,7 +2874,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: : CommMonoidWithZero (Associates M) where
+  签名: : 带零交换幺半群 (Associates M) where
   定义体: forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, zero_mul]
     mul_zero := forall_associated.2 fun a => by rw [← mk_zero, mk_mul_mk, mul_zero]
 
@@ -2895,7 +2895,7 @@ instance instOrderTop
 
 中文:
 实例 instOrderTop
-  签名: : OrderTop (Associates M) where
+  签名: : 有顶序 (Associates M) where
   定义体: 0
   le_top := dvd_zero
 -/
@@ -2929,7 +2929,7 @@ instance instBoundedOrder
 
 中文:
 实例 instBoundedOrder
-  签名: : BoundedOrder (Associates M) where
+  签名: : 有界序 (Associates M) where
 -/
 instance instBoundedOrder : BoundedOrder (Associates M) where
 
@@ -2963,8 +2963,8 @@ theorem Prime.le_or_le
 @[simp]
 
 中文:
-定理 Prime.le_or_le
-  条件: {p : Associates M} (hp : Prime p) {a b : Associates M} (h : p <= a * b)
+定理 素.le_or_le
+  条件: {p : Associates M} (hp : 素 p) {a b : Associates M} (h : p <= a * b)
   证明: hp.2.2 a b h
 
 @[simp]
@@ -2990,7 +2990,7 @@ theorem prime_mk
 中文:
 定理 prime_mk
   条件: {p : M}
-  结论: Prime (Associates.mk p) ↔ Prime p
+  结论: 素 (Associates.mk p) ↔ 素 p
   证明: by
   rw [Prime]; rw [_root_.Prime]; rw [forall_associated]
   simp only [forall_associated, mk_ne_zero, isUnit_mk, mk_mul_mk, mk_dvd_mk]
@@ -3026,7 +3026,7 @@ exact h _ _ .refl _
 中文:
 定理 irreducible_mk
   条件: {a : M}
-  结论: Irreducible (Associates.mk a) ↔ Irreducible a
+  结论: 不可约 (Associates.mk a) ↔ 不可约 a
   证明: by
   simp only [irreducible_iff, isUnit_mk, forall_associated, isUnit_mk, mk_mul_mk,
     mk_eq_mk_iff_associated, Associated.comm (x := a)]
@@ -3179,7 +3179,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder (Associates M) where
+  签名: : 偏序 (Associates M) where
   定义体: mk_surjective.forall₂.2 fun _a _b hab hba => mk_eq_mk_iff_associated.2
     associated_of_dvd_dvd (dvd_of_mk_le_mk hab) (dvd_of_mk_le_mk hba)
 
@@ -3204,7 +3204,7 @@ instance instIsCancelMulZero
 
 中文:
 实例 instIsCancelMulZero
-  签名: : IsCancelMulZero (Associates M)
+  签名: : 是乘零消去 (Associates M)
   定义体: @IsLeftCancelMulZero.to_isCancelMulZero _ _ _
   { mul_left_cancel_of_ne_zero := by
       rintro ⟨a⟩ ha ⟨b⟩ ⟨c⟩ h
@@ -3232,7 +3232,7 @@ theorem _root_.associates_irreducible_iff_prime
 
 中文:
 定理 _root_.associates_irreducible_iff_prime
-  条件: [DecompositionMonoid M] {p : Associates M}
+  条件: [分解幺半群 M] {p : Associates M}
   证明: irreducible_iff_prime
 
 Depends on / 依赖: irreducible_iff_prime
@@ -3250,7 +3250,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors (Associates M)
+  签名: 无零因子 (Associates M)
   定义体: by infer_instance
 
 Depends on / 依赖: infer_instance
@@ -3287,7 +3287,7 @@ theorem one_or_eq_of_le_of_prime
 
 中文:
 定理 one_or_eq_of_le_of_prime
-  条件: {p m : Associates M} (hp : Prime p) (hle : m <= p)
+  条件: {p m : Associates M} (hp : 素 p) (hle : m <= p)
   证明: by
   rcases mk_surjective p with ⟨p, rfl⟩
   rcases mk_surjective m with ⟨m, rfl⟩
@@ -3502,7 +3502,7 @@ theorem isUnit_of_associated_mul
 
 中文:
 定理 isUnit_of_associated_mul
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M] {p b : M}
+  结论: [带零交换幺半群 M] [是乘零消去 M] {p b : M}
   证明: by
   obtain ⟨a, ha⟩ := h
   refine .of_mul_eq_one a ((mul_right_inj' hp).mp ?_)
@@ -3530,7 +3530,7 @@ theorem DvdNotUnit.not_associated
 
 中文:
 定理 DvdNotUnit.not_associated
-  结论: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M}
+  结论: [带零交换幺半群 M] [是乘零消去 M] {p q : M}
   证明: by
   rintro ⟨a, rfl⟩
   obtain ⟨hp, x, hx, hx'⟩ := h
@@ -3564,7 +3564,7 @@ theorem dvd_prime_pow
 
 中文:
 定理 dvd_prime_pow
-  条件: [CommMonoidWithZero M] [IsCancelMulZero M] {p q : M} (hp : Prime p) (n : 自然数)
+  条件: [带零交换幺半群 M] [是乘零消去 M] {p q : M} (hp : 素 p) (n : 自然数)
   证明: by
   induction n generalizing q with
   | zero =>

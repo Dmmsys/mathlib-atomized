@@ -53,7 +53,7 @@ definition convexHull
 
 中文:
 定义 convexHull
-  签名: : ClosureOperator (Set E)
+  签名: : 闭包算子 (集合 E)
   定义体: .ofCompletePred (Convex 𝕜) fun _ => convex_sInter
 
 Depends on / 依赖: Convex, convex_sInter, ofCompletePred
@@ -90,7 +90,7 @@ theorem convex_convexHull
 
 中文:
 定理 convex_convexHull
-  结论: Convex 𝕜 (convexHull 𝕜 s)
+  结论: 凸 𝕜 (convexHull 𝕜 s)
   证明: (convexHull 𝕜).isClosed_closure s
 
 Depends on / 依赖: convexHull, isClosed_closure
@@ -108,8 +108,8 @@ theorem convexHull_eq_iInter
   simp [convexHull, iInter_subtype, iInter_and]
 
 中文:
-定理 convexHull_eq_iInter
-  结论: convexHull 𝕜 s = ⋂ (t : Set E) (_ : s subseteq t) (_ : Convex 𝕜 t), t
+定理 convexHull_eq_i整数er
+  结论: convexHull 𝕜 s = ⋂ (t : 集合 E) (_ : s subseteq t) (_ : 凸 𝕜 t), t
   证明: by
   simp [convexHull, iInter_subtype, iInter_and]
 
@@ -131,7 +131,7 @@ theorem mem_convexHull_iff
 
 中文:
 定理 mem_convexHull_iff
-  结论: x in convexHull 𝕜 s ↔ 对任意 t, s subseteq t -> Convex 𝕜 t -> x in t
+  结论: x in convexHull 𝕜 s ↔ 对任意 t, s subseteq t -> 凸 𝕜 t -> x in t
   证明: by
   simp_rw [convexHull_eq_iInter, mem_iInter]
 
@@ -150,7 +150,7 @@ theorem convexHull_min
 
 中文:
 定理 convexHull_min
-  结论: s subseteq t -> Convex 𝕜 t -> convexHull 𝕜 s subseteq t
+  结论: s subseteq t -> 凸 𝕜 t -> convexHull 𝕜 s subseteq t
   证明: (convexHull 𝕜).closure_min
 
 Depends on / 依赖: closure_min, convexHull
@@ -169,8 +169,8 @@ theorem Convex.convexHull_subset_iff
 @[mono, gcongr]
 
 中文:
-定理 Convex.convexHull_subset_iff
-  条件: (ht : Convex 𝕜 t)
+定理 凸.convexHull_subset_iff
+  条件: (ht : 凸 𝕜 t)
   结论: convexHull 𝕜 s subseteq t ↔ s subseteq t
   证明: (show (convexHull 𝕜).IsClosed t from ht).closure_le_iff
 
@@ -216,7 +216,7 @@ alias ⟨_, Convex.convexHull_eq⟩ := convexHull_eq_self
 
 中文:
 引理 convexHull_eq_self
-  结论: convexHull 𝕜 s = s ↔ Convex 𝕜 s
+  结论: convexHull 𝕜 s = s ↔ 凸 𝕜 s
   证明: (convexHull 𝕜).isClosed_iff.symm
 
 alias ⟨_, Convex.convexHull_eq⟩ := convexHull_eq_self
@@ -242,7 +242,7 @@ theorem convexHull_univ
 
 中文:
 定理 convexHull_univ
-  结论: convexHull 𝕜 (univ : Set E) = univ
+  结论: convexHull 𝕜 (univ : 集合 E) = univ
   证明: ClosureOperator.closure_top (convexHull 𝕜)
 
 @[simp]
@@ -265,7 +265,7 @@ theorem convexHull_empty
 
 中文:
 定理 convexHull_empty
-  结论: convexHull 𝕜 (∅ : Set E) = ∅
+  结论: convexHull 𝕜 (∅ : 集合 E) = ∅
   证明: convex_empty.convexHull_eq
 
 @[simp]
@@ -330,7 +330,7 @@ protected alias ⟨_, Set.Nonempty.convexHull⟩ := convexHull_nonempty_iff
 
 中文:
 定理 convexHull_nonempty_iff
-  结论: (convexHull 𝕜 s).Nonempty ↔ s.Nonempty
+  结论: (convexHull 𝕜 s).非空 ↔ s.非空
   证明: by
   rw [nonempty_iff_ne_empty]; rw [nonempty_iff_ne_empty]; rw [Ne]; rw [Ne]
   exact not_congr convexHull_eq_empty
@@ -382,7 +382,7 @@ theorem convexHull_singleton
 中文:
 定理 convexHull_singleton
   条件: (x : E)
-  结论: convexHull 𝕜 ({x} : Set E) = {x}
+  结论: convexHull 𝕜 ({x} : 集合 E) = {x}
   证明: (convex_singleton x).convexHull_eq
 
 Depends on / 依赖: convexHull_eq, convex_singleton
@@ -436,7 +436,7 @@ theorem convexHull_zero
 
 中文:
 定理 convexHull_zero
-  结论: convexHull 𝕜 (0 : Set E) = 0
+  结论: convexHull 𝕜 (0 : 集合 E) = 0
   证明: convexHull_singleton 0
 
 Depends on / 依赖: convexHull_singleton
@@ -479,7 +479,7 @@ theorem convexHull_pair
 
 中文:
 定理 convexHull_pair
-  条件: [IsOrderedRing 𝕜] (x y : E)
+  条件: [是Ordered环 𝕜] (x y : E)
   结论: convexHull 𝕜 {x, y} = segment 𝕜 x y
   证明: by
   refine (convexHull_min ?_ <| convex_segment _ _).antisymm
@@ -505,7 +505,7 @@ theorem convexHull_convexHull_union_left
 
 中文:
 定理 convexHull_convexHull_union_left
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   证明: ClosureOperator.closure_sup_closure_left _ _ _
 
 Depends on / 依赖: ClosureOperator, ClosureOperator.closure_sup_closure_left, closure_sup_closure_left
@@ -524,7 +524,7 @@ theorem convexHull_convexHull_union_right
 
 中文:
 定理 convexHull_convexHull_union_right
-  条件: (s t : Set E)
+  条件: (s t : 集合 E)
   证明: ClosureOperator.closure_sup_closure_right _ _ _
 
 Depends on / 依赖: ClosureOperator, ClosureOperator.closure_sup_closure_right, closure_sup_closure_right
@@ -553,8 +553,8 @@ theorem Convex.convex_remove_iff_notMem_convexHull_remove
       ⟨convexHull_min sdiff_s
 
 中文:
-定理 Convex.convex_remove_iff_notMem_convexHull_remove
-  条件: {s : Set E} (hs : Convex 𝕜 s) (x : E)
+定理 凸.convex_remove_iff_notMem_convexHull_remove
+  条件: {s : 集合 E} (hs : 凸 𝕜 s) (x : E)
   证明: by
   constructor
   · rintro hsx hx
@@ -600,8 +600,8 @@ theorem IsLinearMap.image_convexHull
       (convex_convexHull 𝕜 s).is_linear_image hf)
 
 中文:
-定理 IsLinearMap.image_convexHull
-  条件: {f : E -> F} (hf : IsLinearMap 𝕜 f) (s : Set E)
+定理 是线性映射.image_convexHull
+  条件: {f : E -> F} (hf : 是线性映射 𝕜 f) (s : 集合 E)
   证明: Set.Subset.antisymm
     (image_subset_iff.2 <|
       convexHull_min (image_subset_iff.1 <| subset_convexHull 𝕜 _)
@@ -629,8 +629,8 @@ theorem LinearMap.image_convexHull
   proof: f.isLinear.image_convexHull s
 
 中文:
-定理 LinearMap.image_convexHull
-  条件: (f : E ->ₗ[𝕜] F) (s : Set E)
+定理 线性映射.image_convexHull
+  条件: (f : E ->ₗ[𝕜] F) (s : 集合 E)
   证明: f.isLinear.image_convexHull s
 
 Depends on / 依赖: f.isLinear.image_convexHull, image_convexHull, isLinear
@@ -650,7 +650,7 @@ theorem convexHull_add_subset
 
 中文:
 定理 convexHull_add_subset
-  条件: {s t : Set E}
+  条件: {s t : 集合 E}
   证明: convexHull_min (add_subset_add (subset_convexHull _ _) (subset_convexHull _ _))
     (Convex.add (convex_convexHull 𝕜 s) (convex_convexHull 𝕜 t))
 
@@ -680,7 +680,7 @@ theorem convexHull_smul
 
 中文:
 定理 convexHull_smul
-  条件: (a : 𝕜) (s : Set E)
+  条件: (a : 𝕜) (s : 集合 E)
   结论: convexHull 𝕜 (a • s) = a • convexHull 𝕜 s
   证明: .symm (LinearMap.lsmul _ _ a).image_convexHull _
 
@@ -715,8 +715,8 @@ theorem AffineMap.image_convexHull
       ((convex_convexH
 
 中文:
-定理 AffineMap.image_convexHull
-  条件: (f : E ->ᵃ[𝕜] F) (s : Set E)
+定理 仿射映射.image_convexHull
+  条件: (f : E ->ᵃ[𝕜] F) (s : 集合 E)
   证明: by
   apply Set.Subset.antisymm
   · rw [Set.image_subset_iff]
@@ -751,8 +751,8 @@ theorem convexHull_subset_affineSpan
 
 中文:
 定理 convexHull_subset_affineSpan
-  条件: (s : Set E)
-  结论: convexHull 𝕜 s subseteq (affineSpan 𝕜 s : Set E)
+  条件: (s : 集合 E)
+  结论: convexHull 𝕜 s subseteq (affineSpan 𝕜 s : 集合 E)
   证明: convexHull_min (subset_affineSpan 𝕜 s) (affineSpan 𝕜 s).convex
 
 @[simp]
@@ -777,7 +777,7 @@ theorem affineSpan_convexHull
 
 中文:
 定理 affineSpan_convexHull
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: affineSpan 𝕜 (convexHull 𝕜 s) = affineSpan 𝕜 s
   证明: by
   refine le_antisymm ?_ (affineSpan_mono 𝕜 (subset_convexHull 𝕜 s))
@@ -804,7 +804,7 @@ theorem convexHull_neg
 
 中文:
 定理 convexHull_neg
-  条件: (s : Set E)
+  条件: (s : 集合 E)
   结论: convexHull 𝕜 (-s) = -convexHull 𝕜 s
   证明: by
   simp_rw [← image_neg_eq_neg]
@@ -827,7 +827,7 @@ lemma convexHull_vadd
 
 中文:
 引理 convexHull_vadd
-  条件: (x : E) (s : Set E)
+  条件: (x : E) (s : 集合 E)
   结论: convexHull 𝕜 (x +ᵥ s) = x +ᵥ convexHull 𝕜 s
   证明: .symm (AffineEquiv.constVAdd 𝕜 _ x).toAffineMap.image_convexHull s
 

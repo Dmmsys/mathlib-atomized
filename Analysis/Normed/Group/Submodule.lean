@@ -26,7 +26,7 @@ instance seminormedAddCommGroup
 
 中文:
 实例 seminormedAddCommGroup
-  签名: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E]
+  签名: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E]
   定义体: fast_instance% SeminormedAddCommGroup.induced _ _ s.subtype.toAddMonoidHom
 
 Depends on / 依赖: SeminormedAddCommGroup, SeminormedAddCommGroup.induced, fast_instance, induced, s.subtype.toAddMonoidHom, subtype, toAddMonoidHom
@@ -48,7 +48,7 @@ theorem coe_norm
 
 中文:
 定理 coe_norm
-  结论: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
+  结论: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E] {s : 子模 𝕜 E}
   证明: rfl
 -/
 theorem coe_norm [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
@@ -70,7 +70,7 @@ theorem norm_coe
 
 中文:
 定理 norm_coe
-  结论: [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
+  结论: [环 𝕜] [SeminormedAddComm群 E] [模 𝕜 E] {s : 子模 𝕜 E}
   证明: rfl
 -/
 theorem norm_coe [Ring 𝕜] [SeminormedAddCommGroup E] [Module 𝕜 E] {s : Submodule 𝕜 E}
@@ -88,7 +88,7 @@ instance normedAddCommGroup
 
 中文:
 实例 normedAddCommGroup
-  签名: [Ring 𝕜] [NormedAddCommGroup E] [Module 𝕜 E]
+  签名: [环 𝕜] [赋范交换加群 E] [模 𝕜 E]
   定义体: { Submodule.seminormedAddCommGroup s with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 
@@ -113,8 +113,8 @@ theorem LinearMap.continuous_domRestrict
   fun_prop
 
 中文:
-定理 LinearMap.continuous_domRestrict
-  结论: {R R' M M' : 类型} [Semiring R] [Semiring R']
+定理 线性映射.continuous_domRestrict
+  结论: {R R' M M' : 类型} [半环 R] [半环 R']
   证明: by
   rw [coe_domRestrict]
   fun_prop

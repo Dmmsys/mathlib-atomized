@@ -543,7 +543,7 @@ theorem equivalence_of_manyOneEquiv
 中文:
 定理 equivalence_of_manyOneEquiv
   条件: {α} [Primcodable α]
-  结论: Equivalence (@ManyOneEquiv α α _ _)
+  结论: 等价 (@ManyOneEquiv α α _ _)
   证明: ⟨manyOneEquiv_refl, fun {_ _} => ManyOneEquiv.symm, fun {_ _ _} => ManyOneEquiv.trans⟩
 
 @[refl]
@@ -630,7 +630,7 @@ theorem equivalence_of_oneOneEquiv
 中文:
 定理 equivalence_of_oneOneEquiv
   条件: {α} [Primcodable α]
-  结论: Equivalence (@OneOneEquiv α α _ _)
+  结论: 等价 (@OneOneEquiv α α _ _)
   证明: ⟨oneOneEquiv_refl, fun {_ _} => OneOneEquiv.symm, fun {_ _ _} => OneOneEquiv.trans⟩
 
 Depends on / 依赖: OneOneEquiv, OneOneEquiv.symm, OneOneEquiv.trans, oneOneEquiv_refl
@@ -668,7 +668,7 @@ theorem Equiv.Computable.symm
   proof: And.symm
 
 中文:
-定理 Equiv.Computable.symm
+定理 等价.可计算.symm
   条件: {α β} [Primcodable α] [Primcodable β] {e : α ≃ β}
   证明: And.symm
 
@@ -686,7 +686,7 @@ theorem Equiv.Computable.trans
   statement: {α β γ} [Primcodable α] [Primcodable β] [Primcodable γ] {e₁ : α ≃ β}
 
 中文:
-定理 Equiv.Computable.trans
+定理 等价.可计算.trans
   结论: {α β γ} [Primcodable α] [Primcodable β] [Primcodable γ] {e₁ : α ≃ β}
 -/
 theorem Equiv.Computable.trans {α β γ} [Primcodable α] [Primcodable β] [Primcodable γ] {e₁ : α ≃ β}
@@ -703,9 +703,9 @@ theorem Computable.eqv
   proof: ⟨Computable.encode, Computable.ofNat _⟩
 
 中文:
-定理 Computable.eqv
-  条件: (α) [Denumerable α]
-  结论: (Denumerable.eqv α).Computable
+定理 可计算.eqv
+  条件: (α) [可枚举 α]
+  结论: (可枚举.eqv α).可计算
   证明: ⟨Computable.encode, Computable.ofNat _⟩
 
 Depends on / 依赖: Computable, Computable.encode, Computable.ofNat, encode
@@ -722,8 +722,8 @@ theorem Computable.equiv₂
   proof: (Computable.eqv _).trans (Computable.eqv _).symm
 
 中文:
-定理 Computable.equiv₂
-  条件: (α β) [Denumerable α] [Denumerable β]
+定理 可计算.equiv₂
+  条件: (α β) [可枚举 α] [可枚举 β]
   证明: (Computable.eqv _).trans (Computable.eqv _).symm
 
 Depends on / 依赖: Computable, Computable.eqv
@@ -742,7 +742,7 @@ theorem OneOneEquiv.of_equiv
 
 中文:
 定理 OneOneEquiv.of_equiv
-  结论: {α β} [Primcodable α] [Primcodable β] {e : α ≃ β} (h : e.Computable)
+  结论: {α β} [Primcodable α] [Primcodable β] {e : α ≃ β} (h : e.可计算)
   证明: ⟨OneOneReducible.of_equiv _ h.1, OneOneReducible.of_equiv_symm _ h.2⟩
 
 Depends on / 依赖: OneOneReducible, OneOneReducible.of_equiv, OneOneReducible.of_equiv_symm, of_equiv, of_equiv_symm
@@ -761,7 +761,7 @@ theorem ManyOneEquiv.of_equiv
 
 中文:
 定理 ManyOneEquiv.of_equiv
-  结论: {α β} [Primcodable α] [Primcodable β] {e : α ≃ β} (h : e.Computable)
+  结论: {α β} [Primcodable α] [Primcodable β] {e : α ≃ β} (h : e.可计算)
   证明: (OneOneEquiv.of_equiv h).to_many_one
 
 Depends on / 依赖: OneOneEquiv, OneOneEquiv.of_equiv, of_equiv, to_many_one
@@ -935,7 +935,7 @@ theorem ULower.down_computable
 中文:
 定理 ULower.down_computable
   条件: {α} [Primcodable α]
-  结论: (ULower.equiv α).Computable
+  结论: (ULower.equiv α).可计算
   证明: ⟨Primrec.ulower_down.to_comp, Primrec.ulower_up.to_comp⟩
 
 Depends on / 依赖: DFinsupp, DFinsupp.Lex.wellFounded, InvImage, InvImage.wf, Primrec, Primrec.ulower_down.to_comp, Primrec.ulower_up.to_comp, lex_eq_invImage_dfinsupp_lex, to_comp, ulower_down, ulower_up, wellFounded
@@ -1068,8 +1068,8 @@ definition toNat
 @[simp]
 
 中文:
-定义 toNat
-  签名: (p : Set α)
+定义 to自然数
+  签名: (p : 集合 α)
   定义体: { n | p ((Encodable.decode (α := α) n).getD default) }
 
 @[simp]
@@ -1093,8 +1093,8 @@ theorem toNat_manyOneReducible
 @[simp]
 
 中文:
-定理 toNat_manyOneReducible
-  条件: {p : Set α}
+定理 to自然数_manyOneReducible
+  条件: {p : 集合 α}
   结论: to自然数 p <=₀ p
   证明: ⟨fun n => (Encodable.decode (α := α) n).getD default,
     Computable.option_getD Computable.decode (Computable.const _), fun _ => Iff.rfl⟩
@@ -1120,8 +1120,8 @@ theorem manyOneReducible_toNat
 @[simp]
 
 中文:
-定理 manyOneReducible_toNat
-  条件: {p : Set α}
+定理 manyOneReducible_to自然数
+  条件: {p : 集合 α}
   结论: p <=₀ to自然数 p
   证明: ⟨Encodable.encode, Computable.encode, by simp [toNat, Set.ofPred]⟩
 
@@ -1146,8 +1146,8 @@ theorem manyOneReducible_toNat_toNat
 @[simp]
 
 中文:
-定理 manyOneReducible_toNat_toNat
-  条件: {p : Set α} {q : Set β}
+定理 manyOneReducible_to自然数_to自然数
+  条件: {p : 集合 α} {q : 集合 β}
   结论: to自然数 p <=₀ to自然数 q ↔ p <=₀ q
   证明: ⟨fun h => manyOneReducible_toNat.trans (h.trans toNat_manyOneReducible), fun h =>
     toNat_manyOneReducible.trans (h.trans manyOneReducible_toNat)⟩
@@ -1173,8 +1173,8 @@ theorem toNat_manyOneEquiv
 @[simp]
 
 中文:
-定理 toNat_manyOneEquiv
-  条件: {p : Set α}
+定理 to自然数_manyOneEquiv
+  条件: {p : 集合 α}
   结论: ManyOneEquiv (to自然数 p) p
   证明: by simp [ManyOneEquiv]
 
@@ -1194,8 +1194,8 @@ theorem manyOneEquiv_toNat
   proof: by simp [ManyOneEquiv]
 
 中文:
-定理 manyOneEquiv_toNat
-  条件: (p : Set α) (q : Set β)
+定理 manyOneEquiv_to自然数
+  条件: (p : 集合 α) (q : 集合 β)
   证明: by simp [ManyOneEquiv]
 
 Depends on / 依赖: ManyOneEquiv
@@ -1213,7 +1213,7 @@ definition ManyOneDegree
 
 中文:
 定义 ManyOneDegree
-  签名: : Type
+  签名: : 类型
   定义体: Quotient (⟨ManyOneEquiv, equivalence_of_manyOneEquiv⟩ : Setoid (Set Nat))
 
 Depends on / 依赖: ManyOneEquiv, Quotient, Setoid, equivalence_of_manyOneEquiv
@@ -1275,7 +1275,7 @@ abbreviation liftOn
 
 中文:
 缩写 liftOn
-  签名: {φ} (d : ManyOneDegree) (f : Set 自然数 -> φ)
+  签名: {φ} (d : ManyOneDegree) (f : 集合 自然数 -> φ)
   定义体: Quotient.liftOn' d f h
 
 @[simp]
@@ -1295,7 +1295,7 @@ theorem liftOn_eq
 
 中文:
 定理 liftOn_eq
-  结论: {φ} (p : Set 自然数) (f : Set 自然数 -> φ)
+  结论: {φ} (p : 集合 自然数) (f : 集合 自然数 -> φ)
   证明: rfl
 -/
 protected theorem liftOn_eq {φ} (p : Set Nat) (f : Set Nat -> φ)
@@ -1322,7 +1322,7 @@ definition liftOn₂
 
 中文:
 定义 liftOn₂
-  签名: {φ} (d₁ d₂ : ManyOneDegree) (f : Set 自然数 -> Set 自然数 -> φ)
+  签名: {φ} (d₁ d₂ : ManyOneDegree) (f : 集合 自然数 -> 集合 自然数 -> φ)
   定义体: d₁.liftOn (fun p => d₂.liftOn (f p) fun _ _ hq => h _ _ _ _ (by rfl) hq)
     (by
       intro p₁ p₂ hp
@@ -1354,7 +1354,7 @@ theorem liftOn₂_eq
 
 中文:
 定理 liftOn₂_eq
-  结论: {φ} (p q : Set 自然数) (f : Set 自然数 -> Set 自然数 -> φ)
+  结论: {φ} (p q : 集合 自然数) (f : 集合 自然数 -> 集合 自然数 -> φ)
   证明: rfl
 -/
 protected theorem liftOn₂_eq {φ} (p q : Set Nat) (f : Set Nat -> Set Nat -> φ)
@@ -1399,7 +1399,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited ManyOneDegree
+  签名: : 可居 ManyOneDegree
   定义体: ⟨of (∅ : Set Nat)⟩
 -/
 instance instInhabited : Inhabited ManyOneDegree :=
@@ -1551,7 +1551,7 @@ instance instPartialOrder
 
 中文:
 实例 instPartialOrder
-  签名: : PartialOrder ManyOneDegree where
+  签名: : 偏序 ManyOneDegree where
   定义体: le_refl
   le_trans _ _ _ := le_trans
   le_antisymm _ _ := le_antisymm
@@ -1580,7 +1580,7 @@ instance instAdd
 
 中文:
 实例 instAdd
-  签名: : Add ManyOneDegree
+  签名: : 加法 ManyOneDegree
   定义体: ⟨fun d₁ d₂ =>
     d₁.liftOn₂ d₂ (fun a b => of (a oplus' b))
       (by
@@ -1621,7 +1621,7 @@ theorem add_of
 
 中文:
 定理 add_of
-  条件: (p : Set α) (q : Set β)
+  条件: (p : 集合 α) (q : 集合 β)
   结论: of (p oplus' q) = of p + of q
   证明: of_eq_of.mpr
     ⟨disjoin_manyOneReducible

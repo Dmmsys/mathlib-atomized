@@ -43,7 +43,7 @@ theorem inf_sup
 
 中文:
 定理 inf_sup
-  条件: {κ : ι -> 类型} (s : Finset ι) (t : 对任意 i, Finset (κ i)) (f : 对任意 i, κ i -> α)
+  条件: {κ : ι -> 类型} (s : 有限集 ι) (t : 对任意 i, 有限集 (κ i)) (f : 对任意 i, κ i -> α)
   证明: by
   induction s using Finset.induction with
   | empty => simp
@@ -92,7 +92,7 @@ theorem sup_inf
 
 中文:
 定理 sup_inf
-  条件: {κ : ι -> 类型} (s : Finset ι) (t : 对任意 i, Finset (κ i)) (f : 对任意 i, κ i -> α)
+  条件: {κ : ι -> 类型} (s : 有限集 ι) (t : 对任意 i, 有限集 (κ i)) (f : 对任意 i, κ i -> α)
   证明: @inf_sup αᵒᵈ _ _ _ _ _ _ _ _
 
 Depends on / 依赖: inf_sup

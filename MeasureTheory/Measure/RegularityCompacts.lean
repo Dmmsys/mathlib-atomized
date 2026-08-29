@@ -48,7 +48,7 @@ theorem innerRegularWRT_isCompact_closure_iff
 
 中文:
 定理 innerRegularWRT_isCompact_closure_iff
-  条件: [TopologicalSpace α] [R1Space α]
+  条件: [拓扑空间 α] [R1空间 α]
   证明: by
   constructor <;> intro h A hA r hr
   · rcases h hA r hr with ⟨K, ⟨hK1, hK2, hK3⟩⟩
@@ -123,7 +123,7 @@ lemma innerRegularWRT_isCompact_isClosed_iff
 
 中文:
 引理 innerRegularWRT_isCompact_isClosed_iff
-  条件: [TopologicalSpace α] [R1Space α]
+  条件: [拓扑空间 α] [R1空间 α]
   证明: innerRegularWRT_isCompact_isClosed_iff_innerRegularWRT_isCompact_closure.trans
     innerRegularWRT_isCompact_closure_iff
 
@@ -149,8 +149,8 @@ theorem innerRegularWRT_of_exists_compl_lt
     · refine (measure_mono fun x => ?_).trans_lt hK'_l
 
 中文:
-定理 innerRegularWRT_of_exists_compl_lt
-  结论: {p q : Set α -> 命题} (hpq : 对任意 A B, p A -> q B -> p (A inter B))
+定理 innerRegularWRT_of_存在_compl_lt
+  结论: {p q : 集合 α -> 命题} (hpq : 对任意 A B, p A -> q B -> p (A inter B))
   证明: by
   intro A hA r hr
   obtain ⟨K, hK, hK_subset, h_lt⟩ : exists K, p K ∧ K subseteq A ∧ μ (A \ K) < μ A - r := by
@@ -189,7 +189,7 @@ theorem innerRegularWRT_isCompact_closure_of_univ
 
 中文:
 定理 innerRegularWRT_isCompact_closure_of_univ
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   refine innerRegularWRT_of_exists_compl_lt (fun s t hs ht => ?_) hμ
   have : IsCompact (closure s inter t) := hs.inter_right ht
@@ -223,8 +223,8 @@ theorem exists_isCompact_closure_measure_compl_lt
   `n` of the `t n`-neighborhood of `seq 1, ..., seq (u 
 
 中文:
-定理 exists_isCompact_closure_measure_compl_lt
-  结论: [TopologicalSpace α]
+定理 存在_isCompact_closure_measure_compl_lt
+  结论: [拓扑空间 α]
   证明: by
   /-
   If α is empty, the result is trivial.
@@ -285,7 +285,7 @@ theorem innerRegularWRT_isCompact_closure
 
 中文:
 定理 innerRegularWRT_isCompact_closure
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: innerRegularWRT_isCompact_closure_of_univ
     (exists_isCompact_closure_measure_compl_lt P)
 
@@ -310,7 +310,7 @@ theorem innerRegularWRT_isCompact_isClosed
 
 中文:
 定理 innerRegularWRT_isCompact_isClosed
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   rw [innerRegularWRT_isCompact_isClosed_iff_innerRegularWRT_isCompact_closure]
   exact innerRegularWRT_isCompact_closure P
@@ -336,7 +336,7 @@ theorem innerRegularWRT_isCompact
 
 中文:
 定理 innerRegularWRT_isCompact
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   rw [← innerRegularWRT_isCompact_closure_iff]
   exact innerRegularWRT_isCompact_closure P
@@ -361,7 +361,7 @@ theorem innerRegularWRT_isCompact_isClosed_isOpen
 
 中文:
 定理 innerRegularWRT_isCompact_isClosed_isOpen
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: (innerRegularWRT_isCompact_isClosed P).trans
     (Measure.InnerRegularWRT.of_pseudoMetrizableSpace P)
 
@@ -385,7 +385,7 @@ theorem innerRegularWRT_isCompact_isOpen
 
 中文:
 定理 innerRegularWRT_isCompact_isOpen
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: (innerRegularWRT_isCompact P).trans
     (Measure.InnerRegularWRT.of_pseudoMetrizableSpace P)
 
@@ -412,7 +412,7 @@ instance instInnerRegularOfIsCompletelyPseudoMetrizableSpace
 
 中文:
 实例 instInnerRegularOfIsCompletelyPseudoMetrizableSpace
-  签名: [TopologicalSpace α]
+  签名: [拓扑空间 α]
   定义体: by
   suffices P.InnerRegularCompactLTTop from inferInstance
   refine ⟨Measure.InnerRegularWRT.measurableSet_of_isOpen ?_ ?_⟩
@@ -491,7 +491,7 @@ theorem innerRegular_isCompact_isClosed_measurableSet_of_finite
 
 中文:
 定理 innerRegular_isCompact_isClosed_measurableSet_of_finite
-  结论: [TopologicalSpace α]
+  结论: [拓扑空间 α]
   证明: by
   suffices P.InnerRegularWRT (fun s => IsCompact s ∧ IsClosed s)
       fun s => MeasurableSet s ∧ P s != ∞ by

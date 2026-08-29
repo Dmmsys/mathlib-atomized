@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE Cardinal.{u}
+  签名: LE 基数.{u}
   定义体: ⟨fun q₁ q₂ =>
     Quotient.liftOn₂ q₁ q₂ (fun α β => Nonempty <| α ↪ β) fun _ _ _ _ ⟨e₁⟩ ⟨e₂⟩ =>
       propext ⟨fun ⟨e⟩ => ⟨e.congr e₁ e₂⟩, fun ⟨e⟩ => ⟨e.congr e₁.symm e₂.symm⟩⟩⟩
@@ -116,7 +116,7 @@ instance partialOrder
 
 中文:
 实例 partialOrder
-  签名: : PartialOrder Cardinal.{u} where
+  签名: : 偏序 基数.{u} where
   定义体: by
     rintro ⟨α⟩
     exact ⟨Embedding.refl _⟩
@@ -154,7 +154,7 @@ instance linearOrder
 
 中文:
 实例 linearOrder
-  签名: : LinearOrder Cardinal.{u}
+  签名: : 线性序 基数.{u}
   定义体: { Cardinal.partialOrder with
     le_total := by
       rintro ⟨α⟩ ⟨β⟩
@@ -182,7 +182,7 @@ theorem le_def
 中文:
 定理 le_def
   条件: (α β : 类型u)
-  结论: #α <= #β ↔ Nonempty (α ↪ β)
+  结论: #α <= #β ↔ 非空 (α ↪ β)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -201,7 +201,7 @@ theorem mk_le_of_injective
 
 中文:
 定理 mk_le_of_injective
-  条件: {α β : 类型u} {f : α -> β} (hf : Injective f)
+  条件: {α β : 类型u} {f : α -> β} (hf : 单射 f)
   结论: #α <= #β
   证明: ⟨⟨f, hf⟩⟩
 -/
@@ -218,7 +218,7 @@ theorem _root_.Function.Embedding.cardinal_le
   proof: ⟨f⟩
 
 中文:
-定理 _root_.Function.Embedding.cardinal_le
+定理 _root_.函数.嵌入.cardinal_le
   条件: {α β : 类型u} (f : α ↪ β)
   结论: #α <= #β
   证明: ⟨f⟩
@@ -237,7 +237,7 @@ theorem mk_le_of_surjective
 
 中文:
 定理 mk_le_of_surjective
-  条件: {α β : 类型u} {f : α -> β} (hf : Surjective f)
+  条件: {α β : 类型u} {f : α -> β} (hf : 满射 f)
   结论: #β <= #α
   证明: ⟨Embedding.ofSurjective f hf⟩
 
@@ -257,9 +257,9 @@ theorem le_mk_iff_exists_set
     fun ⟨_, e⟩ => e ▸ ⟨⟨Subtype.val, fun _ _ => Subtype.ext⟩⟩⟩
 
 中文:
-定理 le_mk_iff_exists_set
-  条件: {c : Cardinal} {α : 类型u}
-  结论: c <= #α ↔ 存在 p : Set α, #p = c
+定理 le_mk_iff_存在_set
+  条件: {c : 基数} {α : 类型u}
+  结论: c <= #α ↔ 存在 p : 集合 α, #p = c
   证明: ⟨inductionOn c fun _ ⟨⟨f, hf⟩⟩ => ⟨Set.range f, (Equiv.ofInjective f hf).cardinal_eq.symm⟩,
     fun ⟨_, e⟩ => e ▸ ⟨⟨Subtype.val, fun _ _ => Subtype.ext⟩⟩⟩
 
@@ -281,7 +281,7 @@ theorem mk_subtype_le
 中文:
 定理 mk_subtype_le
   条件: {α : 类型u} (p : α -> 命题)
-  结论: #(Subtype p) <= #α
+  结论: #(子类型 p) <= #α
   证明: ⟨Embedding.subtype p⟩
 
 Depends on / 依赖: Embedding, Embedding.subtype, subtype
@@ -300,7 +300,7 @@ theorem mk_set_le
 
 中文:
 定理 mk_set_le
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: #s <= #α
   证明: mk_subtype_le (· in s)
 
@@ -321,8 +321,8 @@ theorem out_embedding
 
 中文:
 定理 out_embedding
-  条件: {c c' : Cardinal}
-  结论: c <= c' ↔ Nonempty (c.out ↪ c'.out)
+  条件: {c c' : 基数}
+  结论: c <= c' ↔ 非空 (c.out ↪ c'.out)
   证明: by
   conv_lhs => rw [← Cardinal.mk_out c, ← Cardinal.mk_out c', le_def]
 
@@ -342,7 +342,7 @@ theorem lift_mk_le
 
 中文:
 定理 lift_mk_le
-  条件: {α : 类型v} {β : Type w}
+  条件: {α : 类型v} {β : 类型 w}
   证明: ⟨fun ⟨f⟩ => ⟨Embedding.congr Equiv.ulift Equiv.ulift f⟩, fun ⟨f⟩ =>
     ⟨Embedding.congr Equiv.ulift.symm Equiv.ulift.symm f⟩⟩
 
@@ -365,7 +365,7 @@ theorem lift_mk_le'
 中文:
 定理 lift_mk_le'
   条件: {α : 类型u} {β : 类型v}
-  结论: lift.{v} #α <= lift.{u} #β ↔ Nonempty (α ↪ β)
+  结论: lift.{v} #α <= lift.{u} #β ↔ 非空 (α ↪ β)
   证明: lift_mk_le.{0}
 
 Depends on / 依赖: lift_mk_le
@@ -393,7 +393,7 @@ definition liftInitialSeg
 
 中文:
 定义 liftInitialSeg
-  签名: : Cardinal.{u} <=i Cardinal.{max u v}
+  签名: : 基数.{u} <=i 基数.{最大值 u v}
   定义体: by
   refine ⟨(OrderEmbedding.ofMapLEIff lift ?_).ltEmbedding, ?_⟩ <;> intro a b
   · refine inductionOn₂ a b fun _ _ => ?_
@@ -426,7 +426,7 @@ theorem mem_range_lift_of_le
 
 中文:
 定理 mem_range_lift_of_le
-  条件: {a : Cardinal.{u}} {b : Cardinal.{max u v}}
+  条件: {a : 基数.{u}} {b : 基数.{最大值 u v}}
   证明: liftInitialSeg.mem_range_of_le
 
 Depends on / 依赖: liftInitialSeg, liftInitialSeg.mem_range_of_le, mem_range_of_le
@@ -447,7 +447,7 @@ theorem lift_injective
 
 中文:
 定理 lift_injective
-  结论: Injective lift.{u, v}
+  结论: 单射 lift.{u, v}
   证明: liftInitialSeg.injective
 
 @[simp]
@@ -471,7 +471,7 @@ theorem lift_inj
 
 中文:
 定理 lift_inj
-  条件: {a b : Cardinal.{u}}
+  条件: {a b : 基数.{u}}
   结论: lift.{v, u} a = lift.{v, u} b ↔ a = b
   证明: lift_injective.eq_iff
 
@@ -496,7 +496,7 @@ theorem lift_le
 
 中文:
 定理 lift_le
-  条件: {a b : Cardinal.{v}}
+  条件: {a b : 基数.{v}}
   结论: lift.{u} a <= lift.{u} b ↔ a <= b
   证明: liftInitialSeg.le_iff_le
 
@@ -519,7 +519,7 @@ theorem lift_lt
 
 中文:
 定理 lift_lt
-  条件: {a b : Cardinal.{u}}
+  条件: {a b : 基数.{u}}
   结论: lift.{v, u} a < lift.{v, u} b ↔ a < b
   证明: liftInitialSeg.lt_iff_lt
 
@@ -538,7 +538,7 @@ theorem lift_strictMono
 
 中文:
 定理 lift_strictMono
-  结论: StrictMono lift
+  结论: 严格递增 lift
   证明: fun _ _ => lift_lt.2
 
 Depends on / 依赖: lift_lt
@@ -557,7 +557,7 @@ theorem lift_monotone
 
 中文:
 定理 lift_monotone
-  结论: Monotone lift
+  结论: 递增 lift
   证明: lift_strictMono.monotone
 
 @[simp]
@@ -581,8 +581,8 @@ theorem lift_min
 
 中文:
 定理 lift_min
-  条件: {a b : Cardinal}
-  结论: lift.{u, v} (min a b) = min (lift.{u, v} a) (lift.{u, v} b)
+  条件: {a b : 基数}
+  结论: lift.{u, v} (最小值 a b) = 最小值 (lift.{u, v} a) (lift.{u, v} b)
   证明: lift_monotone.map_min
 
 @[simp]
@@ -604,8 +604,8 @@ theorem lift_max
 
 中文:
 定理 lift_max
-  条件: {a b : Cardinal}
-  结论: lift.{u, v} (max a b) = max (lift.{u, v} a) (lift.{u, v} b)
+  条件: {a b : 基数}
+  结论: lift.{u, v} (最大值 a b) = 最大值 (lift.{u, v} a) (lift.{u, v} b)
   证明: lift_monotone.map_max
 
 Depends on / 依赖: lift_monotone, lift_monotone.map_max, map_max
@@ -625,7 +625,7 @@ theorem lift_umax_eq
 
 中文:
 定理 lift_umax_eq
-  条件: {a : Cardinal.{u}} {b : Cardinal.{v}}
+  条件: {a : 基数.{u}} {b : 基数.{v}}
   证明: by
   rw [← lift_lift.{v]; rw [w]; rw [u}]; rw [← lift_lift.{u]; rw [w]; rw [v}]; rw [lift_inj]
 
@@ -645,7 +645,7 @@ theorem le_lift_iff
 
 中文:
 定理 le_lift_iff
-  条件: {a : Cardinal.{u}} {b : Cardinal.{max u v}}
+  条件: {a : 基数.{u}} {b : 基数.{最大值 u v}}
   证明: liftInitialSeg.le_apply_iff
 
 Depends on / 依赖: le_apply_iff, liftInitialSeg, liftInitialSeg.le_apply_iff
@@ -664,7 +664,7 @@ theorem lt_lift_iff
 
 中文:
 定理 lt_lift_iff
-  条件: {a : Cardinal.{u}} {b : Cardinal.{max u v}}
+  条件: {a : 基数.{u}} {b : 基数.{最大值 u v}}
   证明: liftInitialSeg.lt_apply_iff
 
 Depends on / 依赖: liftInitialSeg, liftInitialSeg.lt_apply_iff, lt_apply_iff
@@ -689,7 +689,7 @@ theorem lift_eq_zero
 
 中文:
 定理 lift_eq_zero
-  条件: {a : Cardinal.{v}}
+  条件: {a : 基数.{v}}
   结论: lift.{u} a = 0 ↔ a = 0
   证明: lift_injective.eq_iff' lift_zero
 
@@ -712,8 +712,8 @@ theorem mk_fintype
 
 中文:
 定理 mk_fintype
-  条件: (α : 类型u) [h : Fintype α]
-  结论: #α = Fintype.card α
+  条件: (α : 类型u) [h : 有限类型 α]
+  结论: #α = 有限类型.card α
   证明: mk_congr (Fintype.equivOfCardEq (by simp))
 
 Depends on / 依赖: Fintype, Fintype.equivOfCardEq, equivOfCardEq, mk_congr
@@ -737,7 +737,7 @@ theorem cast_succ
 中文:
 定理 cast_succ
   条件: (n : 自然数)
-  结论: ((n + 1 : 自然数) : Cardinal.{u}) = n + 1
+  结论: ((n + 1 : 自然数) : 基数.{u}) = n + 1
   证明: by
   change #(ULift.{u} _) = #(ULift.{u} _) + 1
   rw [← mk_option]
@@ -764,7 +764,7 @@ add_comm a b := inductionOn₂ a b fun α β => mk_congr Equiv.sumComm α β
 
 中文:
 实例 commSemiring
-  签名: : CommSemiring Cardinal.{u} where
+  签名: : 交换半环 基数.{u} where
   定义体: inductionOn a fun α => mk_congr Equiv.emptySum _ α
 add_zero a := inductionOn a fun α => mk_congr Equiv.sumEmpty α _
 add_assoc a b c := inductionOn₃ a b c fun α β γ => mk_congr Equiv.sumAssoc α β γ
@@ -804,7 +804,7 @@ theorem mk_bool
 
 中文:
 定理 mk_bool
-  结论: #布尔 = 2
+  结论: #布尔值 = 2
   证明: by simp
 -/
 theorem mk_bool : #Bool = 2 := by simp
@@ -839,7 +839,7 @@ exact inductionOn₃ a b c fun α β γ => mk_congr Equiv.curry γ β α
 
 中文:
 定理 power_mul
-  条件: {a b c : Cardinal}
+  条件: {a b c : 基数}
   结论: a ^ (b * c) = (a ^ b) ^ c
   证明: by
   rw [mul_comm b c]
@@ -867,8 +867,8 @@ theorem power_natCast
 
 中文:
 定理 power_natCast
-  条件: (a : Cardinal.{u}) (n : 自然数)
-  结论: a ^ (↑n : Cardinal.{u}) = a ^ n
+  条件: (a : 基数.{u}) (n : 自然数)
+  结论: a ^ (↑n : 基数.{u}) = a ^ n
   证明: rfl
 
 @[simp]
@@ -890,7 +890,7 @@ theorem lift_eq_one
 
 中文:
 定理 lift_eq_one
-  条件: {a : Cardinal.{v}}
+  条件: {a : 基数.{v}}
   结论: lift.{u} a = 1 ↔ a = 1
   证明: lift_injective.eq_iff' lift_one
 
@@ -914,7 +914,7 @@ mk_congr Equiv.ulift.trans (Equiv.prodCongr Equiv.ulift Equiv.ulift).symm
 
 中文:
 定理 lift_mul
-  条件: (a b : Cardinal.{u})
+  条件: (a b : 基数.{u})
   结论: lift.{v} (a * b) = lift.{v} a * lift.{v} b
   证明: inductionOn₂ a b fun _ _ =>
 mk_congr Equiv.ulift.trans (Equiv.prodCongr Equiv.ulift Equiv.ulift).symm
@@ -960,7 +960,7 @@ theorem mk_set
 中文:
 定理 mk_set
   条件: {α : 类型u}
-  结论: #(Set α) = 2 ^ #α
+  结论: #(集合 α) = 2 ^ #α
   证明: by
   simp [← mk_congr (Equiv.ofBijective _ Set.ofPred_bijective), ← one_add_one_eq_two]
 
@@ -982,7 +982,7 @@ theorem mk_powerset
 
 中文:
 定理 mk_powerset
-  条件: {α : 类型u} (s : Set α)
+  条件: {α : 类型u} (s : 集合 α)
   结论: #(↥(𝒫 s)) = 2 ^ #(↥s)
   证明: (mk_congr (Equiv.Set.powerset s)).trans mk_set
 
@@ -1003,7 +1003,7 @@ theorem lift_two_power
 
 中文:
 定理 lift_two_power
-  条件: (a : Cardinal)
+  条件: (a : 基数)
   结论: lift.{v} (2 ^ a) = 2 ^ lift.{v} a
   证明: by
   simp [← one_add_one_eq_two]
@@ -1025,7 +1025,7 @@ instance orderBot
 
 中文:
 实例 orderBot
-  签名: : OrderBot Cardinal.{u} where
+  签名: : 有底序 基数.{u} where
   定义体: 0
   bot_le := by rintro ⟨α⟩; exact ⟨Embedding.ofIsEmpty⟩
 -/
@@ -1044,7 +1044,7 @@ theorem add_le_add'
 
 中文:
 定理 add_le_add'
-  结论: 对任意 {a b c d : Cardinal}, a <= b -> c <= d -> a + c <= b + d
+  结论: 对任意 {a b c d : 基数}, a <= b -> c <= d -> a + c <= b + d
   证明: by
   rintro ⟨α⟩ ⟨β⟩ ⟨γ⟩ ⟨δ⟩ ⟨e₁⟩ ⟨e₂⟩; exact ⟨e₁.sumMap e₂⟩
 -/
@@ -1061,7 +1061,7 @@ instance addLeftMono
 
 中文:
 实例 addLeftMono
-  签名: : AddLeftMono Cardinal
+  签名: : AddLeftMono 基数
   定义体: ⟨fun _ _ _ => add_le_add' le_rfl⟩
 
 Depends on / 依赖: add_le_add, le_rfl
@@ -1079,7 +1079,7 @@ instance addRightMono
 
 中文:
 实例 addRightMono
-  签名: : AddRightMono Cardinal
+  签名: : AddRightMono 基数
   定义体: ⟨fun _ _ _ h => add_le_add' h le_rfl⟩
 
 Depends on / 依赖: add_le_add, le_rfl
@@ -1103,7 +1103,7 @@ le_self_add a b := (add_zero a).ge.trans
 
 中文:
 实例 canonicallyOrderedAdd
-  签名: : CanonicallyOrderedAdd Cardinal.{u} where
+  签名: : 典范有序加法 基数.{u} where
   定义体: inductionOn₂ a b fun α β ⟨⟨f, hf⟩⟩ =>
       have : α oplus ((range f)ᶜ : Set β) ≃ β := by
         classical
@@ -1137,7 +1137,7 @@ theorem zero_le
 
 中文:
 定理 zero_le
-  条件: (a : Cardinal)
+  条件: (a : 基数)
   结论: 0 <= a
   证明: zero_le
 -/
@@ -1153,7 +1153,7 @@ instance isOrderedRing
 
 中文:
 实例 isOrderedRing
-  签名: : IsOrderedRing Cardinal.{u}
+  签名: : 是Ordered环 基数.{u}
   定义体: CanonicallyOrderedAdd.toIsOrderedRing
 
 Depends on / 依赖: CanonicallyOrderedAdd, CanonicallyOrderedAdd.toIsOrderedRing, toIsOrderedRing
@@ -1173,7 +1173,7 @@ instance noZeroDivisors
 
 中文:
 实例 noZeroDivisors
-  签名: : NoZeroDivisors Cardinal.{u} where
+  签名: : 无零因子 基数.{u} where
   定义体: fun {a b} =>
     inductionOn₂ a b fun α β => by
       simpa only [mul_def, mk_eq_zero_iff, isEmpty_prod] using id
@@ -1194,7 +1194,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoidWithZero Cardinal.{u}
+  签名: 带零交换幺半群 基数.{u}
   定义体: { Cardinal.commSemiring with }
 
 Depends on / 依赖: Cardinal, Cardinal.commSemiring, commSemiring
@@ -1213,7 +1213,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonoid Cardinal.{u}
+  签名: 交换幺半群 基数.{u}
   定义体: { Cardinal.commSemiring with }
 
 Depends on / 依赖: Cardinal, Cardinal.commSemiring, commSemiring
@@ -1236,8 +1236,8 @@ theorem zero_power_le
 
 中文:
 定理 zero_power_le
-  条件: (c : Cardinal.{u})
-  结论: (0 : Cardinal.{u}) ^ c <= 1
+  条件: (c : 基数.{u})
+  结论: (0 : 基数.{u}) ^ c <= 1
   证明: by
   by_cases h : c = 0
   · rw [h, power_zero]
@@ -1265,7 +1265,7 @@ theorem power_le_power_left
 
 中文:
 定理 power_le_power_left
-  结论: 对任意 {a b c : Cardinal}, a != 0 -> b <= c -> a ^ b <= a ^ c
+  结论: 对任意 {a b c : 基数}, a != 0 -> b <= c -> a ^ b <= a ^ c
   证明: by
   rintro ⟨α⟩ ⟨β⟩ ⟨γ⟩ hα ⟨e⟩
   let ⟨a⟩ := mk_ne_zero_iff.1 hα
@@ -1293,7 +1293,7 @@ theorem self_le_power
 
 中文:
 定理 self_le_power
-  条件: (a : Cardinal) {b : Cardinal} (hb : 1 <= b)
+  条件: (a : 基数) {b : 基数} (hb : 1 <= b)
   结论: a <= a ^ b
   证明: by
   rcases eq_or_ne a 0 with (rfl | ha)
@@ -1325,7 +1325,7 @@ theorem cantor
 
 中文:
 定理 cantor
-  条件: (a : Cardinal.{u})
+  条件: (a : 基数.{u})
   结论: a < 2 ^ a
   证明: by
   induction a using Cardinal.inductionOn with | _ α
@@ -1353,7 +1353,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoMaxOrder Cardinal.{u}
+  签名: NoMax序 基数.{u}
   定义体: ⟨_, cantor a⟩
 
 Depends on / 依赖: cantor
@@ -1371,7 +1371,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice Cardinal.{u}
+  签名: Distrib格 基数.{u}
   定义体: inferInstance
 -/
 instance : DistribLattice Cardinal.{u} := inferInstance
@@ -1390,8 +1390,8 @@ theorem power_le_max_power_one
 
 中文:
 定理 power_le_max_power_one
-  条件: {a b c : Cardinal} (h : b <= c)
-  结论: a ^ b <= max (a ^ c) 1
+  条件: {a b c : 基数} (h : b <= c)
+  结论: a ^ b <= 最大值 (a ^ c) 1
   证明: by
   by_cases ha : a = 0
   · simp [ha, zero_power_le]
@@ -1415,7 +1415,7 @@ theorem power_le_power_right
 
 中文:
 定理 power_le_power_right
-  条件: {a b c : Cardinal}
+  条件: {a b c : 基数}
   结论: a <= b -> a ^ c <= b ^ c
   证明: inductionOn₃ a b c fun _ _ _ ⟨e⟩ => ⟨Embedding.arrowCongrRight e⟩
 
@@ -1435,7 +1435,7 @@ theorem power_pos
 
 中文:
 定理 power_pos
-  条件: {a : Cardinal} (b : Cardinal) (ha : 0 < a)
+  条件: {a : 基数} (b : 基数) (ha : 0 < a)
   结论: 0 < a ^ b
   证明: (power_ne_zero _ ha.ne').bot_lt
 
@@ -1460,7 +1460,7 @@ theorem lt_wf
 
 中文:
 定理 lt_wf
-  结论: @WellFounded Cardinal.{u} (· < ·)
+  结论: @良基 基数.{u} (· < ·)
   证明: ⟨fun a =>
     by_contradiction fun h => by
       let ι := { c : Cardinal // ¬Acc (· < ·) c }
@@ -1491,7 +1491,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation Cardinal.{u}
+  签名: 良基关系 基数.{u}
   定义体: ⟨(· < ·), Cardinal.lt_wf⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lt_wf, lt_wf
@@ -1509,7 +1509,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedLT Cardinal.{u}
+  签名: WellFoundedLT 基数.{u}
   定义体: ⟨Cardinal.lt_wf⟩
 
 Depends on / 依赖: Cardinal, Cardinal.lt_wf, lt_wf
@@ -1529,7 +1529,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrderBot Cardinal
+  签名: 余nditionallyCompleteLinearOrderBot 基数
   定义体: WellFoundedLT.conditionallyCompleteLinearOrderBot _
 
 @[simp]
@@ -1550,7 +1550,7 @@ theorem sInf_empty
 
 中文:
 定理 sInf_empty
-  结论: sInf (∅ : Set Cardinal.{u}) = 0
+  结论: sInf (∅ : 集合 基数.{u}) = 0
   证明: dif_neg Set.not_nonempty_empty
 
 Depends on / 依赖: Set.not_nonempty_empty, dif_neg, not_nonempty_empty
@@ -1570,7 +1570,7 @@ instance :
 
 中文:
 实例 :
-  签名: SuccOrder Cardinal
+  签名: Succ序 基数
   定义体: .ofLinearWellFoundedLT _
 
 @[deprecated Order.succ_eq_csInf (since := "2026-03-21")]
@@ -1589,7 +1589,7 @@ theorem succ_def
 
 中文:
 定理 succ_def
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: succ c = sInf { c' | c < c' }
   证明: Order.succ_eq_csInf c
 
@@ -1610,7 +1610,7 @@ theorem succ_pos
 
 中文:
 定理 succ_pos
-  结论: 对任意 c : Cardinal, 0 < succ c
+  结论: 对任意 c : 基数, 0 < succ c
   证明: by simp
 
 @[simp]
@@ -1629,7 +1629,7 @@ theorem succ_ne_zero
 
 中文:
 定理 succ_ne_zero
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: succ c != 0
   证明: (succ_pos _).ne'
 
@@ -1658,7 +1658,7 @@ theorem add_one_le_of_lt
 
 中文:
 定理 add_one_le_of_lt
-  条件: {a b : Cardinal} (h : a < b)
+  条件: {a b : 基数} (h : a < b)
   结论: a + 1 <= b
   证明: by
   induction a, b using Cardinal.inductionOn₂ with | mk α β
@@ -1696,7 +1696,7 @@ theorem add_one_le_succ
 
 中文:
 定理 add_one_le_succ
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: c + 1 <= succ c
   证明: add_one_le_of_lt (lt_succ c)
 
@@ -1754,7 +1754,7 @@ theorem ne_zero_of_isSuccLimit
 
 中文:
 定理 ne_zero_of_isSuccLimit
-  条件: {c} (h : IsSuccLimit c)
+  条件: {c} (h : 是SuccLimit c)
   结论: c != 0
   证明: h.ne_bot
 
@@ -1773,7 +1773,7 @@ theorem isSuccPrelimit_zero
 
 中文:
 定理 isSuccPrelimit_zero
-  结论: IsSuccPrelimit (0 : Cardinal)
+  结论: IsSuccPrelimit (0 : 基数)
   证明: isSuccPrelimit_bot
 
 Depends on / 依赖: isSuccPrelimit_bot
@@ -1794,8 +1794,8 @@ theorem isSuccLimit_iff
 
 中文:
 定理 isSuccLimit_iff
-  条件: {c : Cardinal}
-  结论: IsSuccLimit c ↔ c != 0 ∧ IsSuccPrelimit c
+  条件: {c : 基数}
+  结论: 是SuccLimit c ↔ c != 0 ∧ IsSuccPrelimit c
   证明: isSuccLimit_iff_of_orderBot
 
 @[simp]
@@ -1814,7 +1814,7 @@ theorem not_isSuccLimit_zero
 
 中文:
 定理 not_isSuccLimit_zero
-  结论: ¬ IsSuccLimit (0 : Cardinal)
+  结论: ¬ 是SuccLimit (0 : 基数)
   证明: not_isSuccLimit_bot
 -/
 protected theorem not_isSuccLimit_zero : ¬ IsSuccLimit (0 : Cardinal) :=
@@ -1830,7 +1830,7 @@ definition IsStrongPrelimit
 
 中文:
 定义 IsStrongPrelimit
-  签名: (c : Cardinal)
+  签名: (c : 基数)
   定义体: forall ⦃x⦄, x < c -> 2 ^ x < c
 -/
 def IsStrongPrelimit (c : Cardinal) : Prop :=
@@ -1852,8 +1852,8 @@ structure IsStrongLimit
     - isStrongPrelimit : IsStrongPrelimit c
 
 中文:
-结构 IsStrongLimit
-  参数: (c : Cardinal)
+结构 是StrongLimit
+  参数: (c : 基数)
   公理与运算 (2 个):
     - ne_zero : c != 0
     - isStrongPrelimit : IsStrongPrelimit c
@@ -1894,9 +1894,9 @@ theorem IsStrongLimit.isSuccLimit
   exact ⟨hc.ne_zero, hc.isStrongPrelimit.isSuccPrelimit⟩
 
 中文:
-定理 IsStrongLimit.isSuccLimit
-  条件: {c} (hc : IsStrongLimit c)
-  结论: IsSuccLimit c
+定理 是StrongLimit.isSuccLimit
+  条件: {c} (hc : 是StrongLimit c)
+  结论: 是SuccLimit c
   证明: by
   rw [Cardinal.isSuccLimit_iff]
   exact ⟨hc.ne_zero, hc.isStrongPrelimit.isSuccPrelimit⟩
@@ -1915,8 +1915,8 @@ theorem IsStrongLimit.isSuccPrelimit
   proof: H.isSuccLimit.isSuccPrelimit
 
 中文:
-定理 IsStrongLimit.isSuccPrelimit
-  条件: {c} (H : IsStrongLimit c)
+定理 是StrongLimit.isSuccPrelimit
+  条件: {c} (H : 是StrongLimit c)
   结论: IsSuccPrelimit c
   证明: H.isSuccLimit.isSuccPrelimit
 -/
@@ -1985,7 +1985,7 @@ theorem not_isStrongLimit_zero
 
 中文:
 定理 not_isStrongLimit_zero
-  结论: ¬ IsStrongLimit (0 : Cardinal)
+  结论: ¬ 是StrongLimit (0 : 基数)
   证明: fun h => h.ne_zero rfl
 
 Depends on / 依赖: h.ne_zero, ne_zero
@@ -2007,8 +2007,8 @@ theorem lift_le_sum
 
 中文:
 定理 lift_le_sum
-  条件: {ι : 类型u} (f : ι -> Cardinal.{v}) (i)
-  结论: lift.{u, v} (f i) <= sum f
+  条件: {ι : 类型u} (f : ι -> 基数.{v}) (i)
+  结论: lift.{u, v} (f i) <= 求和 f
   证明: by
   rw [← Quotient.out_eq (f i)]
   exact ⟨⟨fun a => ⟨i, a.down⟩, fun a b h => by simpa using h⟩⟩
@@ -2031,8 +2031,8 @@ theorem le_sum
 
 中文:
 定理 le_sum
-  条件: {ι : 类型u} (f : ι -> Cardinal.{max u v}) (i)
-  结论: f i <= sum f
+  条件: {ι : 类型u} (f : ι -> 基数.{最大值 u v}) (i)
+  结论: f i <= 求和 f
   证明: by
   simpa [← lift_umax] using lift_le_sum f i
 
@@ -2052,8 +2052,8 @@ theorem iSup_le_sum
 
 中文:
 定理 iSup_le_sum
-  条件: {ι} (f : ι -> Cardinal)
-  结论: iSup f <= sum f
+  条件: {ι} (f : ι -> 基数)
+  结论: iSup f <= 求和 f
   证明: ciSup_le' le_sum _
 
 Depends on / 依赖: ciSup_le, le_sum
@@ -2079,8 +2079,8 @@ theorem sum_add_distrib
 
 中文:
 定理 sum_add_distrib
-  条件: {ι} (f g : ι -> Cardinal)
-  结论: sum (f + g) = sum f + sum g
+  条件: {ι} (f g : ι -> 基数)
+  结论: 求和 (f + g) = 求和 f + 求和 g
   证明: by
   have := mk_congr (Equiv.sigmaSumDistrib (Quotient.out ∘ f) (Quotient.out ∘ g))
   simp only [comp_apply, mk_sigma, mk_sum, mk_out, lift_id] at this
@@ -2108,7 +2108,7 @@ theorem sum_add_distrib'
 
 中文:
 定理 sum_add_distrib'
-  条件: {ι} (f g : ι -> Cardinal)
+  条件: {ι} (f g : ι -> 基数)
   证明: sum_add_distrib f g
 
 @[gcongr]
@@ -2132,8 +2132,8 @@ Classical.choice by have := H i; rwa [← Quot.out_eq (f i), ← Quot.out_eq (g 
 
 中文:
 定理 sum_le_sum
-  条件: {ι} (f g : ι -> Cardinal) (H : 对任意 i, f i <= g i)
-  结论: sum f <= sum g
+  条件: {ι} (f g : ι -> 基数) (H : 对任意 i, f i <= g i)
+  结论: 求和 f <= 求和 g
   证明: ⟨(Embedding.refl _).sigmaMap fun i =>
 Classical.choice by have := H i; rwa [← Quot.out_eq (f i), ← Quot.out_eq (g i)] at this⟩
 
@@ -2155,7 +2155,7 @@ theorem mk_le_mk_mul_of_mk_preimage_le
 
 中文:
 定理 mk_le_mk_mul_of_mk_preimage_le
-  条件: {c : Cardinal} (f : α -> β) (hf : 对任意 b : β, #(f ⁻¹' {b}) <= c)
+  条件: {c : 基数} (f : α -> β) (hf : 对任意 b : β, #(f ⁻¹' {b}) <= c)
   证明: by
   simpa only [← mk_congr (@Equiv.sigmaFiberEquiv α β f), mk_sigma, ← sum_const'] using!
     sum_le_sum _ _ hf
@@ -2184,7 +2184,7 @@ theorem lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le
 
 中文:
 定理 lift_mk_le_lift_mk_mul_of_lift_mk_preimage_le
-  结论: {α : 类型u} {β : 类型v} {c : Cardinal}
+  结论: {α : 类型u} {β : 类型v} {c : 基数}
   证明: (mk_le_mk_mul_of_mk_preimage_le fun x : ULift.{v} α => ULift.up.{u} (f x.1))
     ULift.forall.2 fun b =>
       (mk_congr <|
@@ -2229,7 +2229,7 @@ theorem nonempty_embedding_to_cardinal
 
 中文:
 定理 nonempty_embedding_to_cardinal
-  结论: Nonempty (α ↪ Cardinal.{u})
+  结论: 非空 (α ↪ 基数.{u})
   证明: (Embedding.total _ _).resolve_left fun ⟨⟨f, hf⟩⟩ =>
     let g : α -> Cardinal.{u} := invFun f
     let ⟨x, (hx : g x = 2 ^ sum g)⟩ := invFun_surjective hf (2 ^ sum g)
@@ -2255,7 +2255,7 @@ definition embeddingToCardinal
 
 中文:
 定义 embeddingToCardinal
-  签名: : α ↪ Cardinal.{u}
+  签名: : α ↪ 基数.{u}
   定义体: Classical.choice nonempty_embedding_to_cardinal
 
 Depends on / 依赖: Classical, Classical.choice, choice, nonempty_embedding_to_cardinal
@@ -2291,7 +2291,7 @@ instance WellOrderingRel.isWellOrder
 
 中文:
 实例 WellOrderingRel.isWellOrder
-  签名: : IsWellOrder α WellOrderingRel
+  签名: : 是良序 α WellOrderingRel
   定义体: (RelEmbedding.preimage _ _).isWellOrder
 
 Depends on / 依赖: RelEmbedding, RelEmbedding.preimage, isWellOrder, preimage
@@ -2308,8 +2308,8 @@ instance IsWellOrder.subtype_nonempty
   body: ⟨⟨WellOrderingRel, inferInstance⟩⟩
 
 中文:
-实例 IsWellOrder.subtype_nonempty
-  签名: : Nonempty { r // IsWellOrder α r }
+实例 是良序.subtype_nonempty
+  签名: : 非空 { r // 是良序 α r }
   定义体: ⟨⟨WellOrderingRel, inferInstance⟩⟩
 
 Depends on / 依赖: WellOrderingRel
@@ -2329,8 +2329,8 @@ theorem exists_wellFoundedLT
   exact ⟨linearOrderOfSTO WellOrderingRel, ⟨WellOrderingRel.isWellOrder.wf⟩⟩
 
 中文:
-定理 exists_wellFoundedLT
-  结论: 存在 (_ : LinearOrder α), WellFoundedLT α
+定理 存在_wellFoundedLT
+  结论: 存在 (_ : 线性序 α), WellFoundedLT α
   证明: by
   classical
   exact ⟨linearOrderOfSTO WellOrderingRel, ⟨WellOrderingRel.isWellOrder.wf⟩⟩
@@ -2357,8 +2357,8 @@ lemma exists_wellFoundedGT
 @[deprecated (since := "2026-04-12")] alias exists_wellOrder := exists_wellFoundedLT
 
 中文:
-引理 exists_wellFoundedGT
-  结论: 存在 (_ : LinearOrder α), WellFoundedGT α
+引理 存在_wellFoundedGT
+  结论: 存在 (_ : 线性序 α), WellFoundedGT α
   证明: by
   classical
   exact ⟨linearOrderOfSTO (Function.swap WellOrderingRel), ⟨WellOrderingRel.isWellOrder.wf⟩⟩
@@ -2388,7 +2388,7 @@ lemma exists_eq_of_iSup_eq_of_not_isSuccPrelimit
 @[deprecated exists_eq_ciSup_of_not_isSuccLimit (since := "2026-04-13")]
 
 中文:
-引理 exists_eq_of_iSup_eq_of_not_isSuccPrelimit
+引理 存在_eq_of_iSup_eq_of_not_isSuccPrelimit
   证明: by
   subst h
   exact exists_eq_ciSup_of_not_isSuccPrelimit hω
@@ -2415,7 +2415,7 @@ lemma exists_eq_of_iSup_eq_of_not_isSuccLimit
   exact exists_eq_ciSup_of_not_isSuccLimit hf hc
 
 中文:
-引理 exists_eq_of_iSup_eq_of_not_isSuccLimit
+引理 存在_eq_of_iSup_eq_of_not_isSuccLimit
   证明: by
   subst h
   exact exists_eq_ciSup_of_not_isSuccLimit hf hc
@@ -2450,8 +2450,8 @@ refine ⟨fun i => Classical.choice mk_ne_zero_iff.1 ?_⟩
 
 中文:
 定理 sum_lt_prod
-  条件: {ι} (f g : ι -> Cardinal) (H : 对任意 i, f i < g i)
-  结论: sum f < prod g
+  条件: {ι} (f g : ι -> 基数) (H : 对任意 i, f i < g i)
+  结论: 求和 f < 乘积 g
   证明: lt_of_not_ge fun ⟨F⟩ => by
     have : Inhabited (forall i : ι, (g i).out) := by
 refine ⟨fun i => Classical.choice mk_ne_zero_iff.1 ?_⟩
@@ -2494,8 +2494,8 @@ Classical.choice by have := H i; rwa [← mk_out (f i), ← mk_out (g i)] at thi
 
 中文:
 定理 prod_le_prod
-  条件: {ι} (f g : ι -> Cardinal) (H : 对任意 i, f i <= g i)
-  结论: prod f <= prod g
+  条件: {ι} (f g : ι -> 基数) (H : 对任意 i, f i <= g i)
+  结论: 乘积 f <= 乘积 g
   证明: ⟨Embedding.piCongrRight fun i =>
 Classical.choice by have := H i; rwa [← mk_out (f i), ← mk_out (g i)] at this⟩
 
@@ -2543,7 +2543,7 @@ theorem aleph0_le_lift
 
 中文:
 定理 aleph0_le_lift
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: ℵ₀ <= lift.{v} c ↔ ℵ₀ <= c
   证明: by
   simpa using lift_le (a := ℵ₀)
@@ -2570,7 +2570,7 @@ theorem lift_le_aleph0
 
 中文:
 定理 lift_le_aleph0
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: lift.{v} c <= ℵ₀ ↔ c <= ℵ₀
   证明: by
   simpa using lift_le (b := ℵ₀)
@@ -2597,7 +2597,7 @@ theorem aleph0_lt_lift
 
 中文:
 定理 aleph0_lt_lift
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: ℵ₀ < lift.{v} c ↔ ℵ₀ < c
   证明: by
   simpa using lift_lt (a := ℵ₀)
@@ -2624,7 +2624,7 @@ theorem lift_lt_aleph0
 
 中文:
 定理 lift_lt_aleph0
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: lift.{v} c < ℵ₀ ↔ c < ℵ₀
   证明: by
   simpa using lift_lt (b := ℵ₀)
@@ -2651,7 +2651,7 @@ theorem aleph0_eq_lift
 
 中文:
 定理 aleph0_eq_lift
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: ℵ₀ = lift.{v} c ↔ ℵ₀ = c
   证明: by
   simpa using lift_inj (a := ℵ₀)
@@ -2676,7 +2676,7 @@ theorem lift_eq_aleph0
 
 中文:
 定理 lift_eq_aleph0
-  条件: {c : Cardinal.{u}}
+  条件: {c : 基数.{u}}
   结论: lift.{v} c = ℵ₀ ↔ c = ℵ₀
   证明: by
   simp [eqComm]
@@ -2701,7 +2701,7 @@ theorem mk_fin
 中文:
 定理 mk_fin
   条件: (n : 自然数)
-  结论: #(Fin n) = n
+  结论: #(有限集 n) = n
   证明: by simp
 
 @[simp]
@@ -2723,7 +2723,7 @@ theorem lift_natCast
 中文:
 定理 lift_natCast
   条件: (n : 自然数)
-  结论: lift.{u} (n : Cardinal.{v}) = n
+  结论: lift.{u} (n : 基数.{v}) = n
   证明: by induction n <;> simp [*]
 
 @[simp]
@@ -2742,7 +2742,7 @@ theorem lift_ofNat
 @[simp]
 
 中文:
-定理 lift_ofNat
+定理 lift_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: lift_natCast n
 
@@ -2768,7 +2768,7 @@ theorem lift_eq_nat_iff
 
 中文:
 定理 lift_eq_nat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数}
+  条件: {a : 基数.{u}} {n : 自然数}
   结论: lift.{v} a = n ↔ a = n
   证明: lift_injective.eq_iff' (lift_natCast n)
 
@@ -2791,8 +2791,8 @@ theorem lift_eq_ofNat_iff
 @[simp]
 
 中文:
-定理 lift_eq_ofNat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 lift_eq_of自然数_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: lift_eq_nat_iff
 
 @[simp]
@@ -2817,7 +2817,7 @@ theorem nat_eq_lift_iff
 
 中文:
 定理 nat_eq_lift_iff
-  条件: {n : 自然数} {a : Cardinal.{u}}
+  条件: {n : 自然数} {a : 基数.{u}}
   证明: by
   rw [← lift_natCast.{v]; rw [u} n]; rw [lift_inj]
 
@@ -2843,7 +2843,7 @@ theorem zero_eq_lift_iff
 
 中文:
 定理 zero_eq_lift_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simp [eqComm]
 
@@ -2869,7 +2869,7 @@ theorem one_eq_lift_iff
 
 中文:
 定理 one_eq_lift_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simp [eqComm]
 
@@ -2893,8 +2893,8 @@ theorem ofNat_eq_lift_iff
 @[simp]
 
 中文:
-定理 ofNat_eq_lift_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 of自然数_eq_lift_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: nat_eq_lift_iff
 
 @[simp]
@@ -2920,7 +2920,7 @@ theorem lift_le_nat_iff
 
 中文:
 定理 lift_le_nat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数}
+  条件: {a : 基数.{u}} {n : 自然数}
   结论: lift.{v} a <= n ↔ a <= n
   证明: by
   rw [← lift_natCast.{v]; rw [u}]; rw [lift_le]
@@ -2946,7 +2946,7 @@ theorem lift_le_one_iff
 
 中文:
 定理 lift_le_one_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simpa using lift_le_nat_iff (n := 1)
 
@@ -2970,8 +2970,8 @@ theorem lift_le_ofNat_iff
 @[simp]
 
 中文:
-定理 lift_le_ofNat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 lift_le_of自然数_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: lift_le_nat_iff
 
 @[simp]
@@ -2997,7 +2997,7 @@ theorem nat_le_lift_iff
 
 中文:
 定理 nat_le_lift_iff
-  条件: {n : 自然数} {a : Cardinal.{u}}
+  条件: {n : 自然数} {a : 基数.{u}}
   结论: n <= lift.{v} a ↔ n <= a
   证明: by
   rw [← lift_natCast.{v]; rw [u}]; rw [lift_le]
@@ -3023,7 +3023,7 @@ theorem one_le_lift_iff
 
 中文:
 定理 one_le_lift_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simpa using nat_le_lift_iff (n := 1)
 
@@ -3047,8 +3047,8 @@ theorem ofNat_le_lift_iff
 @[simp]
 
 中文:
-定理 ofNat_le_lift_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 of自然数_le_lift_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: nat_le_lift_iff
 
 @[simp]
@@ -3074,7 +3074,7 @@ theorem lift_lt_nat_iff
 
 中文:
 定理 lift_lt_nat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数}
+  条件: {a : 基数.{u}} {n : 自然数}
   结论: lift.{v} a < n ↔ a < n
   证明: by
   rw [← lift_natCast.{v]; rw [u}]; rw [lift_lt]
@@ -3098,8 +3098,8 @@ theorem lift_lt_ofNat_iff
 @[simp]
 
 中文:
-定理 lift_lt_ofNat_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 lift_lt_of自然数_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: lift_lt_nat_iff
 
 @[simp]
@@ -3125,7 +3125,7 @@ theorem nat_lt_lift_iff
 
 中文:
 定理 nat_lt_lift_iff
-  条件: {n : 自然数} {a : Cardinal.{u}}
+  条件: {n : 自然数} {a : 基数.{u}}
   结论: n < lift.{v} a ↔ n < a
   证明: by
   rw [← lift_natCast.{v]; rw [u}]; rw [lift_lt]
@@ -3151,7 +3151,7 @@ theorem zero_lt_lift_iff
 
 中文:
 定理 zero_lt_lift_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simpa using nat_lt_lift_iff (n := 0)
 
@@ -3177,7 +3177,7 @@ theorem one_lt_lift_iff
 
 中文:
 定理 one_lt_lift_iff
-  条件: {a : Cardinal.{u}}
+  条件: {a : 基数.{u}}
   证明: by
   simpa using nat_lt_lift_iff (n := 1)
 
@@ -3199,8 +3199,8 @@ theorem ofNat_lt_lift_iff
   proof: nat_lt_lift_iff
 
 中文:
-定理 ofNat_lt_lift_iff
-  条件: {a : Cardinal.{u}} {n : 自然数} [n.AtLeastTwo]
+定理 of自然数_lt_lift_iff
+  条件: {a : 基数.{u}} {n : 自然数} [n.AtLeastTwo]
   证明: nat_lt_lift_iff
 
 Depends on / 依赖: nat_lt_lift_iff
@@ -3220,8 +3220,8 @@ theorem mk_coe_finset
 
 中文:
 定理 mk_coe_finset
-  条件: {α : 类型u} {s : Finset α}
-  结论: #s = ↑(Finset.card s)
+  条件: {α : 类型u} {s : 有限集 α}
+  结论: #s = ↑(有限集.card s)
   证明: by simp
 -/
 theorem mk_coe_finset {α : Type u} {s : Finset α} : #s = ↑(Finset.card s) := by simp
@@ -3237,8 +3237,8 @@ theorem card_le_of_finset
 
 中文:
 定理 card_le_of_finset
-  条件: {α} (s : Finset α)
-  结论: (s.card : Cardinal) <= #α
+  条件: {α} (s : 有限集 α)
+  结论: (s.card : 基数) <= #α
   证明: @mk_coe_finset _ s ▸ mk_set_le _
 
 Depends on / 依赖: mk_coe_finset, mk_set_le
@@ -3259,7 +3259,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero Cardinal
+  签名: 特征零 基数
   定义体: by
   refine ⟨fun a b h => ?_⟩
   rwa [← lift_mk_fin, ← lift_mk_fin, lift_inj, Cardinal.eq, ← Fintype.card_eq,

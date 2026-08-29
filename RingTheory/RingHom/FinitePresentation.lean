@@ -36,7 +36,7 @@ theorem finitePresentation_stableUnderComposition
 
 中文:
 定理 finitePresentation_stableUnderComposition
-  结论: StableUnderComposition @FinitePresentation
+  结论: StableUnderComposition @有限呈现
   证明: by
   introv R hf hg
   exact hg.comp hf
@@ -58,7 +58,7 @@ fun e => .of_surjective _ e.surjective by simpa using! Submodule.fg_bot
 
 中文:
 定理 finitePresentation_respectsIso
-  结论: RingHom.RespectsIso @RingHom.FinitePresentation
+  结论: 环态射.RespectsIso @环态射.有限呈现
   证明: finitePresentation_stableUnderComposition.respectsIso
 fun e => .of_surjective _ e.surjective by simpa using! Submodule.fg_bot
 
@@ -109,7 +109,7 @@ theorem finitePresentation_localizationPreserves
 
 中文:
 定理 finitePresentation_localizationPreserves
-  结论: LocalizationPreserves @FinitePresentation
+  结论: LocalizationPreserves @有限呈现
   证明: finitePresentation_isStableUnderBaseChange.localizationPreserves
 
 Depends on / 依赖: finitePresentation_isStableUnderBaseChange, finitePresentation_isStableUnderBaseChange.localizationPreserves, localizationPreserves
@@ -190,7 +190,7 @@ theorem finitePresentation_isLocal
 
 中文:
 定理 finitePresentation_isLocal
-  结论: 命题ertyIsLocal @FinitePresentation
+  结论: PropertyIsLocal @有限呈现
   证明: ⟨finitePresentation_localizationPreserves.away,
     finitePresentation_ofLocalizationSpanTarget,
     finitePresentation_ofLocalizationSpanTarget.ofLocalizationSpan

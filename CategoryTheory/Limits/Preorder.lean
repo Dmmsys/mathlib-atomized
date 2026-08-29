@@ -48,7 +48,7 @@ definition coneOfLowerBound
 
 中文:
 定义 coneOfLowerBound
-  签名: {x : C} (h : x in lowerBounds (Set.range F.obj))
+  签名: {x : C} (h : x in lowerBounds (集合.range F.obj))
   定义体: x
   π := { app i := homOfLE (h (Set.mem_range_self _)) }
 -/
@@ -68,8 +68,8 @@ lemma conePt_mem_lowerBounds
 
 中文:
 引理 conePt_mem_lowerBounds
-  条件: (c : Cone F)
-  结论: c.pt in lowerBounds (Set.range F.obj)
+  条件: (c : 锥 F)
+  结论: c.pt in lowerBounds (集合.range F.obj)
   证明: by
   intro x ⟨i, p⟩; rw [← p]; exact (c.π.app i).le
 -/
@@ -87,8 +87,8 @@ lemma isGLB_of_isLimit
 
 中文:
 引理 isGLB_of_isLimit
-  条件: {c : Cone F} (h : IsLimit c)
-  结论: IsGLB (Set.range F.obj) c.pt
+  条件: {c : 锥 F} (h : 是极限 c)
+  结论: IsGLB (集合.range F.obj) c.pt
   证明: ⟨(conePt_mem_lowerBounds F c), fun _ k => (h.lift (coneOfLowerBound F k)).le⟩
 
 Depends on / 依赖: coneOfLowerBound, conePt_mem_lowerBounds, h.lift
@@ -106,7 +106,7 @@ definition isLimitOfIsGLB
 
 中文:
 定义 isLimitOfIsGLB
-  签名: (c : Cone F) (h : IsGLB (Set.range F.obj) c.pt)
+  签名: (c : 锥 F) (h : IsGLB (集合.range F.obj) c.pt)
   定义体: (h.2 (conePt_mem_lowerBounds F d)).hom
 
 Depends on / 依赖: conePt_mem_lowerBounds
@@ -128,7 +128,7 @@ definition limitConeOfIsGLB
 
 中文:
 定义 limitConeOfIsGLB
-  签名: {pt : C} (h : IsGLB (Set.range F.obj) pt)
+  签名: {pt : C} (h : IsGLB (集合.range F.obj) pt)
   定义体: coneOfLowerBound _ h.1
   isLimit := isLimitOfIsGLB _ _ h
 
@@ -150,7 +150,7 @@ lemma hasLimit_iff_hasGLB
 
 中文:
 引理 hasLimit_iff_hasGLB
-  结论: HasLimit F ↔ 存在 x, IsGLB (Set.range F.obj) x
+  结论: 有极限 F ↔ 存在 x, IsGLB (集合.range F.obj) x
   证明: ⟨fun _ => ⟨_, isGLB_of_isLimit _ (limit.isLimit _)⟩,
     fun ⟨_, h⟩ => ⟨⟨limitConeOfIsGLB _ h⟩⟩⟩
 
@@ -173,7 +173,7 @@ definition coconeOfUpperBound
 
 中文:
 定义 coconeOfUpperBound
-  签名: {x : C} (h : x in upperBounds (Set.range F.obj))
+  签名: {x : C} (h : x in upperBounds (集合.range F.obj))
   定义体: x
   ι := { app i := homOfLE (h (Set.mem_range_self _)) }
 -/
@@ -193,8 +193,8 @@ lemma coconePt_mem_upperBounds
 
 中文:
 引理 coconePt_mem_upperBounds
-  条件: (c : Cocone F)
-  结论: c.pt in upperBounds (Set.range F.obj)
+  条件: (c : 余锥 F)
+  结论: c.pt in upperBounds (集合.range F.obj)
   证明: by
   intro x ⟨i, p⟩; rw [← p]; exact (c.ι.app i).le
 -/
@@ -212,8 +212,8 @@ lemma isLUB_of_isColimit
 
 中文:
 引理 isLUB_of_isColimit
-  条件: {c : Cocone F} (h : IsColimit c)
-  结论: IsLUB (Set.range F.obj) c.pt
+  条件: {c : 余锥 F} (h : 是余极限 c)
+  结论: IsLUB (集合.range F.obj) c.pt
   证明: ⟨(coconePt_mem_upperBounds F c), fun _ k => (h.desc (coconeOfUpperBound F k)).le⟩
 
 Depends on / 依赖: coconeOfUpperBound, coconePt_mem_upperBounds, h.desc
@@ -231,7 +231,7 @@ definition isColimitOfIsLUB
 
 中文:
 定义 isColimitOfIsLUB
-  签名: (c : Cocone F) (h : IsLUB (Set.range F.obj) c.pt)
+  签名: (c : 余锥 F) (h : IsLUB (集合.range F.obj) c.pt)
   定义体: (h.2 (coconePt_mem_upperBounds F d)).hom
 
 Depends on / 依赖: coconePt_mem_upperBounds
@@ -253,7 +253,7 @@ definition colimitCoconeOfIsLUB
 
 中文:
 定义 colimitCoconeOfIsLUB
-  签名: {pt : C} (h : IsLUB (Set.range F.obj) pt)
+  签名: {pt : C} (h : IsLUB (集合.range F.obj) pt)
   定义体: coconeOfUpperBound _ h.1
   isColimit := isColimitOfIsLUB _ _ h
 
@@ -302,8 +302,8 @@ definition _root_.CategoryTheory.Limits.IsTerminal.orderTop
   le_top Y := leOfHom (t.from Y)
 
 中文:
-定义 _root_.CategoryTheory.Limits.IsTerminal.orderTop
-  签名: {X : C} (t : IsTerminal X)
+定义 _root_.范畴论.Limits.是终止.orderTop
+  签名: {X : C} (t : 是终止 X)
   定义体: X
   le_top Y := leOfHom (t.from Y)
 -/
@@ -323,7 +323,7 @@ definition orderTopOfHasTerminal
 
 中文:
 定义 orderTopOfHasTerminal
-  签名: [HasTerminal C]
+  签名: [有终止 C]
   定义体: IsTerminal.orderTop terminalIsTerminal
 
 Depends on / 依赖: IsTerminal, IsTerminal.orderTop, orderTop, terminalIsTerminal
@@ -342,7 +342,7 @@ definition isTerminalTop
 
 中文:
 定义 isTerminalTop
-  签名: [OrderTop C]
+  签名: [有顶序 C]
   定义体: IsTerminal.ofUnique _
 
 Depends on / 依赖: IsTerminal, IsTerminal.ofUnique, ofUnique
@@ -363,7 +363,7 @@ definition _root_.CategoryTheory.Limits.IsInitial.orderBot
   bot_le Y := leOfHom (t.to Y)
 
 中文:
-定义 _root_.CategoryTheory.Limits.IsInitial.orderBot
+定义 _root_.范畴论.Limits.IsInitial.orderBot
   签名: {X : C} (t : IsInitial X)
   定义体: X
   bot_le Y := leOfHom (t.to Y)
@@ -403,7 +403,7 @@ definition isInitialBot
 
 中文:
 定义 isInitialBot
-  签名: [OrderBot C]
+  签名: [有底序 C]
   定义体: IsInitial.ofUnique _
 
 Depends on / 依赖: IsInitial, IsInitial.ofUnique, ofUnique
@@ -596,7 +596,7 @@ definition isLimitIInf
 
 中文:
 定义 isLimitIInf
-  签名: [CompleteLattice C] {ι : 类型} (X : ι -> C)
+  签名: [完备格 C] {ι : 类型} (X : ι -> C)
   定义体: isLimitOfIsGLB _ _ (by simp [isGLB_iInf])
 
 Depends on / 依赖: isGLB_iInf, isLimitOfIsGLB
@@ -615,7 +615,7 @@ definition isColimitISup
 
 中文:
 定义 isColimitISup
-  签名: [CompleteLattice C] {ι : 类型} (X : ι -> C)
+  签名: [完备格 C] {ι : 类型} (X : ι -> C)
   定义体: isColimitOfIsLUB _ _ (by simp [isLUB_iSup])
 
 Depends on / 依赖: isColimitOfIsLUB, isLUB_iSup

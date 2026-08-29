@@ -54,7 +54,7 @@ definition singleFunctors
 
 中文:
 定义 singleFunctors
-  签名: : SingleFunctors C (CochainComplex C 整数) 整数 where
+  签名: : SingleFunctors C (上链复形 C 整数) 整数 where
   定义体: single _ _ n
   shiftIso n a a' ha' := NatIso.ofComponents
     (fun X => Hom.isoOfComponents
@@ -163,7 +163,7 @@ definition CategoryTheory.Functor.mapCochainComplexSingleFunctor
   body: HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n
 
 中文:
-定义 CategoryTheory.Functor.mapCochainComplexSingleFunctor
+定义 范畴论.函子.mapCochainComplexSingleFunctor
   签名: (n : 整数)
   定义体: HomologicalComplex.singleMapHomologicalComplex F (ComplexShape.up Int) n
 
@@ -188,7 +188,7 @@ definition singleFunctors
 
 中文:
 定义 singleFunctors
-  签名: : SingleFunctors C (HomotopyCategory C (ComplexShape.up 整数)) 整数
+  签名: : SingleFunctors C (HomotopyCategory C (余mplexShape.up 整数)) 整数
   定义体: (CochainComplex.singleFunctors C).postcomp (HomotopyCategory.quotient _ _)
 
 Depends on / 依赖: CochainComplex, CochainComplex.singleFunctors, HomotopyCategory, HomotopyCategory.quotient, postcomp, quotient, singleFunctors

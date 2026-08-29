@@ -51,7 +51,7 @@ theorem toReal_add
   rfl
 
 中文:
-定理 toReal_add
+定理 to实数_add
   条件: (ha : a != ∞) (hb : b != ∞)
   结论: (a + b).to实数 = a.to实数 + b.to实数
   证明: by
@@ -76,7 +76,7 @@ theorem toReal_add_le
     else le_of_eq (toReal_add ha hb)
 
 中文:
-定理 toReal_add_le
+定理 to实数_add_le
   结论: (a + b).to实数 <= a.to实数 + b.to实数
   证明: if ha : a = ∞ then by simp only [ha, top_add, toReal_top, zero_add, toReal_nonneg]
   else
@@ -101,7 +101,7 @@ theorem ofReal_add
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← coe_add]; rw [coe_inj]; rw [Real.toNNReal_add hp hq]
 
 中文:
-定理 ofReal_add
+定理 of实数_add
   条件: {p q : 实数} (hp : 0 <= p) (hq : 0 <= q)
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [← coe_add]; rw [coe_inj]; rw [Real.toNNReal_add hp hq]
@@ -124,9 +124,9 @@ theorem ofReal_add_le
 @[simp]
 
 中文:
-定理 ofReal_add_le
+定理 of实数_add_le
   条件: {p q : 实数}
-  结论: ENN实数.of实数 (p + q) <= ENN实数.of实数 p + ENN实数.of实数 q
+  结论: 广义非负实数.of实数 (p + q) <= 广义非负实数.of实数 p + 广义非负实数.of实数 q
   证明: coe_le_coe.2 Real.toNNReal_add_le
 
 @[simp]
@@ -152,7 +152,7 @@ theorem toReal_le_toReal
 @[gcongr]
 
 中文:
-定理 toReal_le_toReal
+定理 to实数_le_to实数
   条件: (ha : a != ∞) (hb : b != ∞)
   结论: a.to实数 <= b.to实数 ↔ a <= b
   证明: by
@@ -178,7 +178,7 @@ theorem toReal_mono
   proof: (toReal_le_toReal (ne_top_of_le_ne_top hb h) hb).2 h
 
 中文:
-定理 toReal_mono
+定理 to实数_mono
   条件: (hb : b != ∞) (h : a <= b)
   结论: a.to实数 <= b.to实数
   证明: (toReal_le_toReal (ne_top_of_le_ne_top hb h) hb).2 h
@@ -203,7 +203,7 @@ theorem toReal_mono'
 @[simp]
 
 中文:
-定理 toReal_mono'
+定理 to实数_mono'
   条件: (h : a <= b) (ht : b = ∞ -> a = ∞)
   结论: a.to实数 <= b.to实数
   证明: by
@@ -236,7 +236,7 @@ theorem toReal_lt_toReal
 @[gcongr]
 
 中文:
-定理 toReal_lt_toReal
+定理 to实数_lt_to实数
   条件: (ha : a != ∞) (hb : b != ∞)
   结论: a.to实数 < b.to实数 ↔ a < b
   证明: by
@@ -264,7 +264,7 @@ theorem toReal_strict_mono
 @[gcongr]
 
 中文:
-定理 toReal_strict_mono
+定理 to实数_strict_mono
   条件: (hb : b != ∞) (h : a < b)
   结论: a.to实数 < b.to实数
   证明: (toReal_lt_toReal h.ne_top hb).2 h
@@ -287,7 +287,7 @@ theorem toNNReal_mono
   proof: toReal_mono hb h
 
 中文:
-定理 toNNReal_mono
+定理 toNN实数_mono
   条件: (hb : b != ∞) (h : a <= b)
   结论: a.toNN实数 <= b.toNN实数
   证明: toReal_mono hb h
@@ -309,7 +309,7 @@ theorem le_toNNReal_of_coe_le
 @[simp]
 
 中文:
-定理 le_toNNReal_of_coe_le
+定理 le_toNN实数_of_coe_le
   条件: (h : p <= a) (ha : a != ∞)
   结论: p <= a.toNN实数
   证明: @toNNReal_coe p ▸ toNNReal_mono ha h
@@ -334,7 +334,7 @@ theorem toNNReal_le_toNNReal
 @[gcongr]
 
 中文:
-定理 toNNReal_le_toNNReal
+定理 toNN实数_le_toNN实数
   条件: (ha : a != ∞) (hb : b != ∞)
   结论: a.toNN实数 <= b.toNN实数 ↔ a <= b
   证明: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_le_coe], toNNReal_mono hb⟩
@@ -360,7 +360,7 @@ theorem toNNReal_strict_mono
 @[simp]
 
 中文:
-定理 toNNReal_strict_mono
+定理 toNN实数_strict_mono
   条件: (hb : b != ∞) (h : a < b)
   结论: a.toNN实数 < b.toNN实数
   证明: by
@@ -384,7 +384,7 @@ theorem toNNReal_lt_toNNReal
   proof: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_lt_coe], toNNReal_strict_mono hb⟩
 
 中文:
-定理 toNNReal_lt_toNNReal
+定理 toNN实数_lt_toNN实数
   条件: (ha : a != ∞) (hb : b != ∞)
   结论: a.toNN实数 < b.toNN实数 ↔ a < b
   证明: ⟨fun h => by rwa [← coe_toNNReal ha, ← coe_toNNReal hb, coe_lt_coe], toNNReal_strict_mono hb⟩
@@ -404,7 +404,7 @@ theorem toNNReal_lt_of_lt_coe
   proof: @toNNReal_coe p ▸ toNNReal_strict_mono coe_ne_top h
 
 中文:
-定理 toNNReal_lt_of_lt_coe
+定理 toNN实数_lt_of_lt_coe
   条件: (h : a < p)
   结论: a.toNN实数 < p
   证明: @toNNReal_coe p ▸ toNNReal_strict_mono coe_ne_top h
@@ -425,7 +425,7 @@ theorem toReal_max
     simp only [h, ENNReal.toReal_mono hr h, max_eq_left]
 
 中文:
-定理 toReal_max
+定理 to实数_max
   条件: (hr : a != ∞) (hp : b != ∞)
   证明: (le_total a b).elim
     (fun h => by simp only [h, ENNReal.toReal_mono hp h, max_eq_right]) fun h => by
@@ -449,7 +449,7 @@ theorem toReal_min
     fun h => by simp only [h, ENNReal.toReal_mono hr h, min_eq_right]
 
 中文:
-定理 toReal_min
+定理 to实数_min
   条件: {a b : 实数>=0∞} (hr : a != ∞) (hp : b != ∞)
   证明: (le_total a b).elim (fun h => by simp only [h, ENNReal.toReal_mono hp h, min_eq_left])
     fun h => by simp only [h, ENNReal.toReal_mono hr h, min_eq_right]
@@ -471,7 +471,7 @@ theorem toReal_sup
   proof: toReal_max
 
 中文:
-定理 toReal_sup
+定理 to实数_sup
   条件: {a b : 实数>=0∞}
   结论: a != ∞ -> b != ∞ -> (a ⊔ b).to实数 = a.to实数 ⊔ b.to实数
   证明: toReal_max
@@ -491,7 +491,7 @@ theorem toReal_inf
   proof: toReal_min
 
 中文:
-定理 toReal_inf
+定理 to实数_inf
   条件: {a b : 实数>=0∞}
   结论: a != ∞ -> b != ∞ -> (a ⊓ b).to实数 = a.to实数 ⊓ b.to实数
   证明: toReal_min
@@ -511,7 +511,7 @@ theorem toNNReal_pos_iff
   induction a <;> simp
 
 中文:
-定理 toNNReal_pos_iff
+定理 toNN实数_pos_iff
   结论: 0 < a.toNN实数 ↔ 0 < a ∧ a < ∞
   证明: by
   induction a <;> simp
@@ -529,7 +529,7 @@ theorem toNNReal_pos
   proof: toNNReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
 
 中文:
-定理 toNNReal_pos
+定理 toNN实数_pos
   条件: {a : 实数>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
   结论: 0 < a.toNN实数
   证明: toNNReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
@@ -548,7 +548,7 @@ theorem toReal_pos_iff
   proof: NNReal.coe_pos.trans toNNReal_pos_iff
 
 中文:
-定理 toReal_pos_iff
+定理 to实数_pos_iff
   结论: 0 < a.to实数 ↔ 0 < a ∧ a < ∞
   证明: NNReal.coe_pos.trans toNNReal_pos_iff
 
@@ -569,7 +569,7 @@ theorem toReal_pos
 @[gcongr, bound]
 
 中文:
-定理 toReal_pos
+定理 to实数_pos
   条件: {a : 实数>=0∞} (ha₀ : a != 0) (ha_top : a != ∞)
   结论: 0 < a.to实数
   证明: toReal_pos_iff.mpr ⟨bot_lt_iff_ne_bot.mpr ha₀, lt_top_iff_ne_top.mpr ha_top⟩
@@ -593,9 +593,9 @@ theorem ofReal_le_ofReal
   simp [ENNReal.ofReal, Real.toNNReal_le_toNNReal h]
 
 中文:
-定理 ofReal_le_ofReal
+定理 of实数_le_of实数
   条件: {p q : 实数} (h : p <= q)
-  结论: ENN实数.of实数 p <= ENN实数.of实数 q
+  结论: 广义非负实数.of实数 p <= 广义非负实数.of实数 q
   证明: by
   simp [ENNReal.ofReal, Real.toNNReal_le_toNNReal h]
 
@@ -613,8 +613,8 @@ lemma ofReal_mono
   proof: fun _ _ => ENNReal.ofReal_le_ofReal
 
 中文:
-引理 ofReal_mono
-  结论: Monotone ENN实数.of实数
+引理 of实数_mono
+  结论: 递增 广义非负实数.of实数
   证明: fun _ _ => ENNReal.ofReal_le_ofReal
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal_le_ofReal, ofReal_le_ofReal
@@ -632,8 +632,8 @@ theorem ofReal_le_of_le_toReal
 @[simp]
 
 中文:
-定理 ofReal_le_of_le_toReal
-  条件: {a : 实数} {b : 实数>=0∞} (h : a <= ENN实数.to实数 b)
+定理 of实数_le_of_le_to实数
+  条件: {a : 实数} {b : 实数>=0∞} (h : a <= 广义非负实数.to实数 b)
   证明: (ofReal_le_ofReal h).trans ofReal_toReal_le
 
 @[simp]
@@ -655,7 +655,7 @@ theorem ofReal_le_ofReal_iff
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_le_coe]; rw [Real.toNNReal_le_toNNReal_iff h]
 
 中文:
-定理 ofReal_le_ofReal_iff
+定理 of实数_le_of实数_iff
   条件: {p q : 实数} (h : 0 <= q)
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_le_coe]; rw [Real.toNNReal_le_toNNReal_iff h]
@@ -678,9 +678,9 @@ lemma ofReal_le_ofReal_iff'
 @[simp, norm_cast]
 
 中文:
-引理 ofReal_le_ofReal_iff'
+引理 of实数_le_of实数_iff'
   条件: {p q : 实数}
-  结论: ENN实数.of实数 p <= .of实数 q ↔ p <= q ∨ p <= 0
+  结论: 广义非负实数.of实数 p <= .of实数 q ↔ p <= q ∨ p <= 0
   证明: coe_le_coe.trans Real.toNNReal_le_toNNReal_iff'
 
 @[simp, norm_cast]
@@ -702,9 +702,9 @@ lemma ofReal_le_coe
   simp [← ofReal_le_ofReal_iff]
 
 中文:
-引理 ofReal_le_coe
+引理 of实数_le_coe
   条件: {a : 实数} {b : 实数>=0}
-  结论: ENN实数.of实数 a <= b ↔ a <= b
+  结论: 广义非负实数.of实数 a <= b ↔ a <= b
   证明: by
   simp [← ofReal_le_ofReal_iff]
 
@@ -725,9 +725,9 @@ lemma ofReal_lt_ofReal_iff'
 @[simp]
 
 中文:
-引理 ofReal_lt_ofReal_iff'
+引理 of实数_lt_of实数_iff'
   条件: {p q : 实数}
-  结论: ENN实数.of实数 p < .of实数 q ↔ p < q ∧ 0 < q
+  结论: 广义非负实数.of实数 p < .of实数 q ↔ p < q ∧ 0 < q
   证明: coe_lt_coe.trans Real.toNNReal_lt_toNNReal_iff'
 
 @[simp]
@@ -750,7 +750,7 @@ theorem ofReal_eq_ofReal_iff
 @[simp]
 
 中文:
-定理 ofReal_eq_ofReal_iff
+定理 of实数_eq_of实数_iff
   条件: {p q : 实数} (hp : 0 <= p) (hq : 0 <= q)
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_inj]; rw [Real.toNNReal_eq_toNNReal_iff hp hq]
@@ -774,7 +774,7 @@ theorem ofReal_lt_ofReal_iff
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff h]
 
 中文:
-定理 ofReal_lt_ofReal_iff
+定理 of实数_lt_of实数_iff
   条件: {p q : 实数} (h : 0 < q)
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff h]
@@ -797,7 +797,7 @@ theorem ofReal_lt_ofReal_iff_of_nonneg
 @[simp]
 
 中文:
-定理 ofReal_lt_ofReal_iff_of_nonneg
+定理 of实数_lt_of实数_iff_of_nonneg
   条件: {p q : 实数} (hp : 0 <= p)
   证明: by
   rw [ENNReal.ofReal]; rw [ENNReal.ofReal]; rw [coe_lt_coe]; rw [Real.toNNReal_lt_toNNReal_iff_of_nonneg hp]
@@ -825,9 +825,9 @@ theorem ofReal_pos
 @[simp]
 
 中文:
-定理 ofReal_pos
+定理 of实数_pos
   条件: {p : 实数}
-  结论: 0 < ENN实数.of实数 p ↔ 0 < p
+  结论: 0 < 广义非负实数.of实数 p ↔ 0 < p
   证明: by simp [ENNReal.ofReal]
 
 @[bound] private alias ⟨_, Bound.ofReal_pos_of_pos⟩ := ofReal_pos
@@ -851,9 +851,9 @@ theorem ofReal_eq_zero
   proof: by simp [ENNReal.ofReal]
 
 中文:
-定理 ofReal_eq_zero
+定理 of实数_eq_zero
   条件: {p : 实数}
-  结论: ENN实数.of实数 p = 0 ↔ p <= 0
+  结论: 广义非负实数.of实数 p = 0 ↔ p <= 0
   证明: by simp [ENNReal.ofReal]
 
 Depends on / 依赖: ENNReal, ENNReal.ofReal, ofReal
@@ -870,9 +870,9 @@ lemma ofReal_min
   proof: ofReal_mono.map_min
 
 中文:
-引理 ofReal_min
+引理 of实数_min
   条件: (x y : 实数)
-  结论: ENN实数.of实数 (min x y) = min (.of实数 x) (.of实数 y)
+  结论: 广义非负实数.of实数 (最小值 x y) = 最小值 (.of实数 x) (.of实数 y)
   证明: ofReal_mono.map_min
 -/
 @[simp] lemma ofReal_min (x y : Real) : ENNReal.ofReal (min x y) = min (.ofReal x) (.ofReal y) :=
@@ -888,9 +888,9 @@ lemma ofReal_max
   proof: ofReal_mono.map_max
 
 中文:
-引理 ofReal_max
+引理 of实数_max
   条件: (x y : 实数)
-  结论: ENN实数.of实数 (max x y) = max (.of实数 x) (.of实数 y)
+  结论: 广义非负实数.of实数 (最大值 x y) = 最大值 (.of实数 x) (.of实数 y)
   证明: ofReal_mono.map_max
 -/
 @[simp] lemma ofReal_max (x y : Real) : ENNReal.ofReal (max x y) = max (.ofReal x) (.ofReal y) :=
@@ -909,9 +909,9 @@ theorem ofReal_ne_zero_iff
 @[simp]
 
 中文:
-定理 ofReal_ne_zero_iff
+定理 of实数_ne_zero_iff
   条件: {r : 实数}
-  结论: ENN实数.of实数 r != 0 ↔ 0 < r
+  结论: 广义非负实数.of实数 r != 0 ↔ 0 < r
   证明: by
   rw [← pos_iff_ne_zero]; rw [ENNReal.ofReal_pos]
 
@@ -937,9 +937,9 @@ alias ⟨_, ofReal_of_nonpos⟩ := ofReal_eq_zero
 @[simp]
 
 中文:
-定理 zero_eq_ofReal
+定理 zero_eq_of实数
   条件: {p : 实数}
-  结论: 0 = ENN实数.of实数 p ↔ p <= 0
+  结论: 0 = 广义非负实数.of实数 p ↔ p <= 0
   证明: eq_comm.trans ofReal_eq_zero
 
 alias ⟨_, ofReal_of_nonpos⟩ := ofReal_eq_zero
@@ -967,9 +967,9 @@ lemma ofReal_lt_natCast
 @[simp]
 
 中文:
-引理 ofReal_lt_natCast
+引理 of实数_lt_natCast
   条件: {p : 实数} {n : 自然数} (hn : n != 0)
-  结论: ENN实数.of实数 p < n ↔ p < n
+  结论: 广义非负实数.of实数 p < n ↔ p < n
   证明: by
   exact mod_cast ofReal_lt_ofReal_iff (Nat.cast_pos.2 hn.bot_lt)
 
@@ -994,9 +994,9 @@ lemma ofReal_lt_one
 @[simp]
 
 中文:
-引理 ofReal_lt_one
+引理 of实数_lt_one
   条件: {p : 实数}
-  结论: ENN实数.of实数 p < 1 ↔ p < 1
+  结论: 广义非负实数.of实数 p < 1 ↔ p < 1
   证明: by
   exact mod_cast ofReal_lt_natCast one_ne_zero
 
@@ -1019,7 +1019,7 @@ lemma ofReal_lt_ofNat
 @[simp]
 
 中文:
-引理 ofReal_lt_ofNat
+引理 of实数_lt_of自然数
   条件: {p : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: ofReal_lt_natCast (NeZero.ne n)
 
@@ -1045,9 +1045,9 @@ lemma natCast_le_ofReal
 @[simp]
 
 中文:
-引理 natCast_le_ofReal
+引理 natCast_le_of实数
   条件: {n : 自然数} {p : 实数} (hn : n != 0)
-  结论: n <= ENN实数.of实数 p ↔ n <= p
+  结论: n <= 广义非负实数.of实数 p ↔ n <= p
   证明: by
   simp only [← not_lt, ofReal_lt_natCast hn]
 
@@ -1072,9 +1072,9 @@ lemma one_le_ofReal
 @[simp]
 
 中文:
-引理 one_le_ofReal
+引理 one_le_of实数
   条件: {p : 实数}
-  结论: 1 <= ENN实数.of实数 p ↔ 1 <= p
+  结论: 1 <= 广义非负实数.of实数 p ↔ 1 <= p
   证明: by
   exact mod_cast natCast_le_ofReal one_ne_zero
 
@@ -1097,7 +1097,7 @@ lemma ofNat_le_ofReal
 @[simp, norm_cast]
 
 中文:
-引理 ofNat_le_ofReal
+引理 of自然数_le_of实数
   条件: {n : 自然数} [n.AtLeastTwo] {p : 实数}
   证明: natCast_le_ofReal (NeZero.ne n)
 
@@ -1122,9 +1122,9 @@ lemma ofReal_le_natCast
 @[simp]
 
 中文:
-引理 ofReal_le_natCast
+引理 of实数_le_natCast
   条件: {r : 实数} {n : 自然数}
-  结论: ENN实数.of实数 r <= n ↔ r <= n
+  结论: 广义非负实数.of实数 r <= n ↔ r <= n
   证明: coe_le_coe.trans Real.toNNReal_le_natCast
 
 @[simp]
@@ -1147,9 +1147,9 @@ lemma ofReal_le_one
 @[simp]
 
 中文:
-引理 ofReal_le_one
+引理 of实数_le_one
   条件: {r : 实数}
-  结论: ENN实数.of实数 r <= 1 ↔ r <= 1
+  结论: 广义非负实数.of实数 r <= 1 ↔ r <= 1
   证明: coe_le_coe.trans Real.toNNReal_le_one
 
 @[simp]
@@ -1171,7 +1171,7 @@ lemma ofReal_le_ofNat
 @[simp]
 
 中文:
-引理 ofReal_le_ofNat
+引理 of实数_le_of自然数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: ofReal_le_natCast
 
@@ -1196,9 +1196,9 @@ lemma natCast_lt_ofReal
 @[simp]
 
 中文:
-引理 natCast_lt_ofReal
+引理 natCast_lt_of实数
   条件: {n : 自然数} {r : 实数}
-  结论: n < ENN实数.of实数 r ↔ n < r
+  结论: n < 广义非负实数.of实数 r ↔ n < r
   证明: coe_lt_coe.trans Real.natCast_lt_toNNReal
 
 @[simp]
@@ -1221,9 +1221,9 @@ lemma one_lt_ofReal
 @[simp]
 
 中文:
-引理 one_lt_ofReal
+引理 one_lt_of实数
   条件: {r : 实数}
-  结论: 1 < ENN实数.of实数 r ↔ 1 < r
+  结论: 1 < 广义非负实数.of实数 r ↔ 1 < r
   证明: coe_lt_coe.trans Real.one_lt_toNNReal
 
 @[simp]
@@ -1244,7 +1244,7 @@ lemma ofNat_lt_ofReal
 @[simp]
 
 中文:
-引理 ofNat_lt_ofReal
+引理 of自然数_lt_of实数
   条件: {n : 自然数} [n.AtLeastTwo] {r : 实数}
   证明: natCast_lt_ofReal
 
@@ -1269,9 +1269,9 @@ lemma ofReal_eq_natCast
 @[simp]
 
 中文:
-引理 ofReal_eq_natCast
+引理 of实数_eq_natCast
   条件: {r : 实数} {n : 自然数} (h : n != 0)
-  结论: ENN实数.of实数 r = n ↔ r = n
+  结论: 广义非负实数.of实数 r = n ↔ r = n
   证明: ENNReal.coe_inj.trans Real.toNNReal_eq_natCast h
 
 @[simp]
@@ -1294,9 +1294,9 @@ lemma ofReal_eq_one
 @[simp]
 
 中文:
-引理 ofReal_eq_one
+引理 of实数_eq_one
   条件: {r : 实数}
-  结论: ENN实数.of实数 r = 1 ↔ r = 1
+  结论: 广义非负实数.of实数 r = 1 ↔ r = 1
   证明: ENNReal.coe_inj.trans Real.toNNReal_eq_one
 
 @[simp]
@@ -1316,7 +1316,7 @@ lemma ofReal_eq_ofNat
   proof: ofReal_eq_natCast (NeZero.ne n)
 
 中文:
-引理 ofReal_eq_ofNat
+引理 of实数_eq_of自然数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: ofReal_eq_natCast (NeZero.ne n)
 
@@ -1337,7 +1337,7 @@ theorem ofReal_le_iff_le_toReal
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_le_iff_le_coe
 
 中文:
-定理 ofReal_le_iff_le_toReal
+定理 of实数_le_iff_le_to实数
   条件: {a : 实数} {b : 实数>=0∞} (hb : b != ∞)
   证明: by
   lift b to Real>=0 using hb
@@ -1361,7 +1361,7 @@ theorem ofReal_lt_iff_lt_toReal
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.toNNReal_lt_iff_lt_coe ha
 
 中文:
-定理 ofReal_lt_iff_lt_toReal
+定理 of实数_lt_iff_lt_to实数
   条件: {a : 实数} {b : 实数>=0∞} (ha : 0 <= a) (hb : b != ∞)
   证明: by
   lift b to Real>=0 using hb
@@ -1385,9 +1385,9 @@ lemma coe_lt_ofReal
   simp [ENNReal.ofReal, Real.lt_toNNReal_iff_coe_lt]
 
 中文:
-引理 coe_lt_ofReal
+引理 coe_lt_of实数
   条件: {a : 实数>=0} {b : 实数}
-  结论: a < ENN实数.of实数 b ↔ a < b
+  结论: a < 广义非负实数.of实数 b ↔ a < b
   证明: by
   simp [ENNReal.ofReal, Real.lt_toNNReal_iff_coe_lt]
 -/
@@ -1404,9 +1404,9 @@ theorem ofReal_lt_coe_iff
   proof: (ofReal_lt_iff_lt_toReal ha coe_ne_top).trans by rw [coe_toReal]
 
 中文:
-定理 ofReal_lt_coe_iff
+定理 of实数_lt_coe_iff
   条件: {a : 实数} {b : 实数>=0} (ha : 0 <= a)
-  结论: ENN实数.of实数 a < b ↔ a < b
+  结论: 广义非负实数.of实数 a < b ↔ a < b
   证明: (ofReal_lt_iff_lt_toReal ha coe_ne_top).trans by rw [coe_toReal]
 
 Depends on / 依赖: coe_ne_top, coe_toReal, ofReal_lt_iff_lt_toReal
@@ -1425,7 +1425,7 @@ theorem le_ofReal_iff_toReal_le
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.le_toNNReal_iff_coe_le hb
 
 中文:
-定理 le_ofReal_iff_toReal_le
+定理 le_of实数_iff_to实数_le
   条件: {a : 实数>=0∞} {b : 实数} (ha : a != ∞) (hb : 0 <= b)
   证明: by
   lift a to Real>=0 using ha
@@ -1448,8 +1448,8 @@ theorem toReal_le_of_le_ofReal
   (le_ofReal_iff_toReal_le ha hb).1 h
 
 中文:
-定理 toReal_le_of_le_ofReal
-  条件: {a : 实数>=0∞} {b : 实数} (hb : 0 <= b) (h : a <= ENN实数.of实数 b)
+定理 to实数_le_of_le_of实数
+  条件: {a : 实数>=0∞} {b : 实数} (hb : 0 <= b) (h : a <= 广义非负实数.of实数 b)
   证明: have ha : a != ∞ := ne_top_of_le_ne_top ofReal_ne_top h
   (le_ofReal_iff_toReal_le ha hb).1 h
 
@@ -1471,7 +1471,7 @@ theorem lt_ofReal_iff_toReal_lt
   simpa [ENNReal.ofReal, ENNReal.toReal] using Real.lt_toNNReal_iff_coe_lt
 
 中文:
-定理 lt_ofReal_iff_toReal_lt
+定理 lt_of实数_iff_to实数_lt
   条件: {a : 实数>=0∞} {b : 实数} (ha : a != ∞)
   证明: by
   lift a to Real>=0 using ha
@@ -1496,9 +1496,9 @@ theorem toReal_lt_of_lt_ofReal
 @[simp]
 
 中文:
-定理 toReal_lt_of_lt_ofReal
-  条件: {b : 实数} (h : a < ENN实数.of实数 b)
-  结论: ENN实数.to实数 a < b
+定理 to实数_lt_of_lt_of实数
+  条件: {b : 实数} (h : a < 广义非负实数.of实数 b)
+  结论: 广义非负实数.to实数 a < b
   证明: (lt_ofReal_iff_toReal_lt h.ne_top).1 h
 
 @[simp]
@@ -1519,7 +1519,7 @@ theorem ofReal_mul
   simp only [ENNReal.ofReal, ← coe_mul, Real.toNNReal_mul hp]
 
 中文:
-定理 ofReal_mul
+定理 of实数_mul
   条件: {p q : 实数} (hp : 0 <= p)
   证明: by
   simp only [ENNReal.ofReal, ← coe_mul, Real.toNNReal_mul hp]
@@ -1542,7 +1542,7 @@ theorem ofReal_mul'
 @[simp]
 
 中文:
-定理 ofReal_mul'
+定理 of实数_mul'
   条件: {p q : 实数} (hq : 0 <= q)
   证明: by
   rw [mul_comm]; rw [ofReal_mul hq]; rw [mul_comm]
@@ -1566,7 +1566,7 @@ theorem ofReal_pow
   rw [ofReal_eq_coe_nnreal hp]; rw [← coe_pow]; rw [← ofReal_coe_nnreal]; rw [NNReal.coe_pow]; rw [NNReal.coe_mk]
 
 中文:
-定理 ofReal_pow
+定理 of实数_pow
   条件: {p : 实数} (hp : 0 <= p) (n : 自然数)
   证明: by
   rw [ofReal_eq_coe_nnreal hp]; rw [← coe_pow]; rw [← ofReal_coe_nnreal]; rw [NNReal.coe_pow]; rw [NNReal.coe_mk]
@@ -1590,9 +1590,9 @@ theorem ofReal_nsmul
 @[simp]
 
 中文:
-定理 ofReal_nsmul
+定理 of实数_nsmul
   条件: {x : 实数} {n : 自然数}
-  结论: ENN实数.of实数 (n • x) = n • ENN实数.of实数 x
+  结论: 广义非负实数.of实数 (n • x) = n • 广义非负实数.of实数 x
   证明: by
   simp only [nsmul_eq_mul, ← ofReal_natCast n, ← ofReal_mul n.cast_nonneg]
 
@@ -1614,7 +1614,7 @@ theorem toNNReal_mul
   proof: WithTop.untopD_zero_mul a b
 
 中文:
-定理 toNNReal_mul
+定理 toNN实数_mul
   条件: {a b : 实数>=0∞}
   结论: (a * b).toNN实数 = a.toNN实数 * b.toNN实数
   证明: WithTop.untopD_zero_mul a b
@@ -1634,9 +1634,9 @@ theorem toNNReal_mul_top
   proof: by simp
 
 中文:
-定理 toNNReal_mul_top
+定理 toNN实数_mul_top
   条件: (a : 实数>=0∞)
-  结论: ENN实数.toNN实数 (a * ∞) = 0
+  结论: 广义非负实数.toNN实数 (a * ∞) = 0
   证明: by simp
 -/
 theorem toNNReal_mul_top (a : Real>=0∞) : ENNReal.toNNReal (a * ∞) = 0 := by simp
@@ -1651,9 +1651,9 @@ theorem toNNReal_top_mul
   proof: by simp
 
 中文:
-定理 toNNReal_top_mul
+定理 toNN实数_top_mul
   条件: (a : 实数>=0∞)
-  结论: ENN实数.toNN实数 (∞ * a) = 0
+  结论: 广义非负实数.toNN实数 (∞ * a) = 0
   证明: by simp
 -/
 theorem toNNReal_top_mul (a : Real>=0∞) : ENNReal.toNNReal (∞ * a) = 0 := by simp
@@ -1672,7 +1672,7 @@ definition toNNRealHom
 @[simp]
 
 中文:
-定义 toNNRealHom
+定义 toNN实数Hom
   签名: : 实数>=0∞ ->*₀ 实数>=0 where
   定义体: ENNReal.toNNReal
   map_one' := toNNReal_coe _
@@ -1700,7 +1700,7 @@ theorem toNNReal_pow
   proof: toNNRealHom.map_pow a n
 
 中文:
-定理 toNNReal_pow
+定理 toNN实数_pow
   条件: (a : 实数>=0∞) (n : 自然数)
   结论: (a ^ n).toNN实数 = a.toNN实数 ^ n
   证明: toNNRealHom.map_pow a n
@@ -1721,7 +1721,7 @@ definition toRealHom
 @[simp]
 
 中文:
-定义 toRealHom
+定义 to实数Hom
   签名: : 实数>=0∞ ->*₀ 实数
   定义体: (.ofClass NNReal.toRealHom : Real>=0 ->*₀ Real).comp toNNRealHom
 
@@ -1742,7 +1742,7 @@ theorem toReal_mul
   proof: toRealHom.map_mul a b
 
 中文:
-定理 toReal_mul
+定理 to实数_mul
   结论: (a * b).to实数 = a.to实数 * b.to实数
   证明: toRealHom.map_mul a b
 
@@ -1763,7 +1763,7 @@ theorem toReal_nsmul
 @[simp]
 
 中文:
-定理 toReal_nsmul
+定理 to实数_nsmul
   条件: (a : 实数>=0∞) (n : 自然数)
   结论: (n • a).to实数 = n • a.to实数
   证明: by simp
@@ -1783,7 +1783,7 @@ theorem toReal_pow
   proof: toRealHom.map_pow a n
 
 中文:
-定理 toReal_pow
+定理 to实数_pow
   条件: (a : 实数>=0∞) (n : 自然数)
   结论: (a ^ n).to实数 = a.to实数 ^ n
   证明: toRealHom.map_pow a n
@@ -1803,7 +1803,7 @@ theorem toReal_ofReal_mul
   rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal h]
 
 中文:
-定理 toReal_ofReal_mul
+定理 to实数_of实数_mul
   条件: (c : 实数) (a : 实数>=0∞) (h : 0 <= c)
   证明: by
   rw [ENNReal.toReal_mul]; rw [ENNReal.toReal_ofReal h]
@@ -1825,9 +1825,9 @@ theorem toReal_mul_top
   rw [toReal_mul]; rw [toReal_top]; rw [mul_zero]
 
 中文:
-定理 toReal_mul_top
+定理 to实数_mul_top
   条件: (a : 实数>=0∞)
-  结论: ENN实数.to实数 (a * ∞) = 0
+  结论: 广义非负实数.to实数 (a * ∞) = 0
   证明: by
   rw [toReal_mul]; rw [toReal_top]; rw [mul_zero]
 
@@ -1848,9 +1848,9 @@ theorem toReal_top_mul
   exact toReal_mul_top _
 
 中文:
-定理 toReal_top_mul
+定理 to实数_top_mul
   条件: (a : 实数>=0∞)
-  结论: ENN实数.to实数 (∞ * a) = 0
+  结论: 广义非负实数.to实数 (∞ * a) = 0
   证明: by
   rw [mul_comm]
   exact toReal_mul_top _
@@ -1959,7 +1959,7 @@ theorem toReal_pos_iff_ne_top
     fun h => zero_lt_one.trans_le (p.dichotomy.resolve_left h)⟩
 
 中文:
-定理 toReal_pos_iff_ne_top
+定理 to实数_pos_iff_ne_top
   条件: (p : 实数>=0∞) [Fact (1 <= p)]
   结论: 0 < p.to实数 ↔ p != ∞
   证明: ⟨fun h hp =>

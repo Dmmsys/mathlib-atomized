@@ -37,7 +37,7 @@ definition fgSystem
 
 中文:
 定义 fgSystem
-  签名: (N₁ N₂ : {N : Submodule R M // N.FG}) (le : N₁ <= N₂)
+  签名: (N₁ N₂ : {N : 子模 R M // N.FG}) (le : N₁ <= N₂)
   定义体: Submodule.inclusion le
 
 Depends on / 依赖: Submodule, Submodule.inclusion, inclusion
@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDirectedOrder {N : Submodule R M // N.FG}
+  签名: IsDirectedOrder {N : 子模 R M // N.FG}
   定义体: ⟨⟨_, N₁.2.sup N₂.2⟩, Subtype.coe_le_coe.mp le_sup_left, Subtype.coe_le_coe.mp le_sup_right⟩
 
 Depends on / 依赖: Subtype, Subtype.coe_le_coe.mp, coe_le_coe, le_sup_left, le_sup_right
@@ -128,7 +128,7 @@ lemma equiv_comp_of
 
 中文:
 引理 equiv_comp_of
-  条件: (N : {N : Submodule R M // N.FG})
+  条件: (N : {N : 子模 R M // N.FG})
   证明: by
   ext; simp [equiv]
 -/

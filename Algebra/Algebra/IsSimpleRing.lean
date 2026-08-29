@@ -26,7 +26,7 @@ instance :
 
 中文:
 实例 :
-  签名: FaithfulSMul R A
+  签名: 忠实标量乘法 R A
   定义体: .2 RingHom.injective _ faithfulSMul_iff_algebraMap_injective R A
 
 Depends on / 依赖: RingHom, RingHom.injective, faithfulSMul_iff_algebraMap_injective, injective

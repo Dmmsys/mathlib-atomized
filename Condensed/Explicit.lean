@@ -272,7 +272,7 @@ theorem equalizerCondition_profinite
 
 中文:
 定理 equalizerCondition_profinite
-  条件: (X : Sheaf (coherentTopology Profinite.{u}) A)
+  条件: (X : 层 (coherentTopology Profinite.{u}) A)
   证明: .2 .mp X.property isSheaf_iff_preservesFiniteProducts_and_equalizerCondition X.obj
 
 Depends on / 依赖: X.obj, X.property, isSheaf_iff_preservesFiniteProducts_and_equalizerCondition, property
@@ -300,7 +300,7 @@ abbreviation ofSheafStonean
 
 中文:
 缩写 ofSheafStonean
-  签名: (F : Stonean.{u}ᵒᵖ ⥤ Type (u + 1))
+  签名: (F : Stonean.{u}ᵒᵖ ⥤ 类型 (u + 1))
   定义体: Condensed.ofSheafStonean F
 
 Depends on / 依赖: Condensed, Condensed.ofSheafStonean, ofSheafStonean
@@ -319,7 +319,7 @@ abbreviation ofSheafProfinite
 
 中文:
 缩写 ofSheafProfinite
-  签名: (F : Profinite.{u}ᵒᵖ ⥤ Type (u + 1))
+  签名: (F : Profinite.{u}ᵒᵖ ⥤ 类型 (u + 1))
   定义体: Condensed.ofSheafProfinite F hF
 
 Depends on / 依赖: Condensed, Condensed.ofSheafProfinite, ofSheafProfinite
@@ -338,7 +338,7 @@ abbreviation ofSheafCompHaus
 
 中文:
 缩写 ofSheafCompHaus
-  签名: (F : CompHaus.{u}ᵒᵖ ⥤ Type (u + 1))
+  签名: (F : CompHaus.{u}ᵒᵖ ⥤ 类型 (u + 1))
   定义体: Condensed.ofSheafCompHaus F hF
 
 Depends on / 依赖: Condensed, Condensed.ofSheafCompHaus, ofSheafCompHaus
@@ -365,7 +365,7 @@ abbreviation ofSheafStonean
 
 中文:
 缩写 ofSheafStonean
-  签名: (F : Stonean.{u}ᵒᵖ ⥤ ModuleCat.{u + 1} R)
+  签名: (F : Stonean.{u}ᵒᵖ ⥤ 模范畴.{u + 1} R)
   定义体: haveI : HasLimitsOfSize.{u, u + 1} (ModuleCat R) :=
     hasLimitsOfSizeShrink.{u, u + 1, u + 1, u + 1} _
   Condensed.ofSheafStonean F
@@ -390,7 +390,7 @@ abbreviation ofSheafProfinite
 
 中文:
 缩写 ofSheafProfinite
-  签名: (F : Profinite.{u}ᵒᵖ ⥤ ModuleCat.{u + 1} R)
+  签名: (F : Profinite.{u}ᵒᵖ ⥤ 模范畴.{u + 1} R)
   定义体: haveI : HasLimitsOfSize.{u, u + 1} (ModuleCat R) :=
     hasLimitsOfSizeShrink.{u, u + 1, u + 1, u + 1} _
   Condensed.ofSheafProfinite F hF
@@ -413,7 +413,7 @@ abbreviation ofSheafCompHaus
 
 中文:
 缩写 ofSheafCompHaus
-  签名: (F : CompHaus.{u}ᵒᵖ ⥤ ModuleCat.{u + 1} R)
+  签名: (F : CompHaus.{u}ᵒᵖ ⥤ 模范畴.{u + 1} R)
   定义体: Condensed.ofSheafCompHaus F hF
 
 Depends on / 依赖: Condensed, Condensed.ofSheafCompHaus, ofSheafCompHaus

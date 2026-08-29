@@ -134,7 +134,7 @@ theorem eqToHom_f'
 
 中文:
 定理 eqToHom_f'
-  结论: {X Y : DifferentialObject 整数 (GradedObjectWithShift b V)} (f : X ⟶ Y) {x y : β}
+  结论: {X Y : 微分对象 整数 (GradedObjectWithShift b V)} (f : X ⟶ Y) {x y : β}
   证明: by cases h; simp
 
 Depends on / 依赖: hasHomology
@@ -162,7 +162,7 @@ theorem d_eqToHom
 
 中文:
 定理 d_eqToHom
-  条件: (X : HomologicalComplex V (ComplexShape.up' b)) {x y z : β} (h : y = z)
+  条件: (X : 同调复形 V (余mplexShape.up' b)) {x y z : β} (h : y = z)
   证明: by cases h; simp
 -/
 theorem d_eqToHom (X : HomologicalComplex V (ComplexShape.up' b)) {x y z : β} (h : y = z) :

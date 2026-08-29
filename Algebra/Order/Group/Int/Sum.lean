@@ -43,7 +43,7 @@ lemma sum_le_sum_Ioc
 
 中文:
 引理 sum_le_sum_Ioc
-  条件: {s : Finset 整数} {c : 整数} (hs : 对任意 x in s, x <= c)
+  条件: {s : 有限集 整数} {c : 整数} (hs : 对任意 x in s, x <= c)
   证明: by
   set r := Ioc (c - #s) c
   calc
@@ -93,7 +93,7 @@ lemma sum_le_sum_range
 
 中文:
 引理 sum_le_sum_range
-  条件: {s : Finset 整数} {c : 整数} (hs : 对任意 x in s, x <= c)
+  条件: {s : 有限集 整数} {c : 整数} (hs : 对任意 x in s, x <= c)
   证明: by
   convert! sum_le_sum_Ioc hs
   refine sum_nbij (c - ·) ?_ ?_ ?_ (fun _ _ => rfl)
@@ -132,7 +132,7 @@ lemma sum_Ico_le_sum
 
 中文:
 引理 sum_Ico_le_sum
-  条件: {s : Finset 整数} {c : 整数} (hs : 对任意 x in s, c <= x)
+  条件: {s : 有限集 整数} {c : 整数} (hs : 对任意 x in s, c <= x)
   证明: by
   set r := Ico c (c + #s)
   calc
@@ -175,7 +175,7 @@ lemma sum_range_le_sum
 
 中文:
 引理 sum_range_le_sum
-  条件: {s : Finset 整数} {c : 整数} (hs : 对任意 x in s, c <= x)
+  条件: {s : 有限集 整数} {c : 整数} (hs : 对任意 x in s, c <= x)
   证明: by
   convert! sum_Ico_le_sum hs
   refine sum_nbij (c + ·) ?_ ?_ ?_ (fun _ _ => rfl)

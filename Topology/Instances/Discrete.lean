@@ -57,8 +57,8 @@ alias LinearOrder.bot_topologicalSpace_eq_generateFrom :=
   LinearOrder.bot_topologicalSpace_eq_preorderTopology
 
 中文:
-定理 LinearOrder.bot_topologicalSpace_eq_preorderTopology
-  结论: {α} [LinearOrder α] [PredOrder α]
+定理 线性序.bot_topologicalSpace_eq_preorderTopology
+  结论: {α} [线性序 α] [Pred序 α]
   证明: by
   let _ := Preorder.topology α
   have : OrderTopology α := ⟨rfl⟩
@@ -92,7 +92,7 @@ theorem discreteTopology_iff_orderTopology_of_pred_succ
 
 中文:
 定理 discreteTopology_iff_orderTopology_of_pred_succ
-  结论: [LinearOrder α] [PredOrder α]
+  结论: [线性序 α] [Pred序 α]
   证明: by
   refine ⟨fun h => ⟨?_⟩, fun h => .of_predOrder_succOrder⟩
   rw [h.eq_bot]; rw [LinearOrder.bot_topologicalSpace_eq_preorderTopology]
@@ -113,8 +113,8 @@ instance OrderTopology.of_discreteTopology
   body: discreteTopology_iff_orderTopology_of_pred_succ.mp ‹_›
 
 中文:
-实例 OrderTopology.of_discreteTopology
-  签名: [LinearOrder α] [PredOrder α] [SuccOrder α]
+实例 Order拓扑.of_discreteTopology
+  签名: [线性序 α] [Pred序 α] [Succ序 α]
   定义体: discreteTopology_iff_orderTopology_of_pred_succ.mp ‹_›
 
 Depends on / 依赖: discreteTopology_iff_orderTopology_of_pred_succ, discreteTopology_iff_orderTopology_of_pred_succ.mp
@@ -133,7 +133,7 @@ instance OrderTopology.of_linearLocallyFinite
   inferInstance
 
 中文:
-实例 OrderTopology.of_linearLocallyFinite
+实例 Order拓扑.of_linearLocallyFinite
   定义体: haveI := LinearLocallyFiniteOrder.succOrder α
   haveI := LinearLocallyFiniteOrder.predOrder α
   inferInstance

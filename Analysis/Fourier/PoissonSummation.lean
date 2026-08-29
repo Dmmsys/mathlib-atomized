@@ -59,8 +59,8 @@ theorem Real.fourierCoeff_tsum_comp_add
   let e : C(Real, Complex) := (fourier (-m)).comp ⟨((↑) : Real -> UnitAddCircle), continuous_quo
 
 中文:
-定理 Real.fourierCoeff_tsum_comp_add
-  结论: {f : C(实数, Complex)}
+定理 实数.fourierCoeff_tsum_comp_add
+  结论: {f : C(实数, 复形)}
   证明: by
   -- NB: This proof can be shortened somewhat by telescoping together some of the steps in the calc
   -- block, but I think it's more legible this way. We start with preliminaries about the integrand.
@@ -131,8 +131,8 @@ theorem Real.tsum_eq_tsum_fourier
   convert! (has_pointwise_sum_fourier_series_of_summ
 
 中文:
-定理 Real.tsum_eq_tsum_fourier
-  结论: {f : C(实数, Complex)}
+定理 实数.tsum_eq_tsum_fourier
+  结论: {f : C(实数, 复形)}
   证明: by
   let F : C(UnitAddCircle, Complex) :=
     ⟨(f.periodic_tsum_comp_add_zsmul 1).lift, continuous_coinduced_dom.mpr (map_continuous _)⟩
@@ -313,8 +313,8 @@ theorem Real.tsum_eq_tsum_fourier_of_rpow_decay_of_summable
     Int.tendsto_coe_cofinite)) hFf x
 
 中文:
-定理 Real.tsum_eq_tsum_fourier_of_rpow_decay_of_summable
-  结论: {f : 实数 -> Complex} (hc : Continuous f)
+定理 实数.tsum_eq_tsum_fourier_of_rpow_decay_of_summable
+  结论: {f : 实数 -> 复形} (hc : 连续 f)
   证明: Real.tsum_eq_tsum_fourier (fun K => summable_of_isBigO (Real.summable_abs_int_rpow hb)
     ((isBigO_norm_restrict_cocompact ⟨_, hc⟩ (zero_lt_one.trans hb) hf K).comp_tendsto
     Int.tendsto_coe_cofinite)) hFf x
@@ -339,8 +339,8 @@ theorem Real.tsum_eq_tsum_fourier_of_rpow_decay
     (Real.summable_abs_int_rpow hb) (hFf.comp_tendsto Int.tendsto_coe_cofinite)) x
 
 中文:
-定理 Real.tsum_eq_tsum_fourier_of_rpow_decay
-  结论: {f : 实数 -> Complex} (hc : Continuous f) {b : 实数}
+定理 实数.tsum_eq_tsum_fourier_of_rpow_decay
+  结论: {f : 实数 -> 复形} (hc : 连续 f) {b : 实数}
   证明: Real.tsum_eq_tsum_fourier_of_rpow_decay_of_summable hc hb hf (summable_of_isBigO
     (Real.summable_abs_int_rpow hb) (hFf.comp_tendsto Int.tendsto_coe_cofinite)) x
 
@@ -372,8 +372,8 @@ theorem SchwartzMap.tsum_eq_tsum_fourier
     (f.isBigO_cocompact_rpow (-2)) ((𝓕 f).isBigO_cocompact_rpow (-2))
 
 中文:
-定理 SchwartzMap.tsum_eq_tsum_fourier
-  条件: (f : 𝓢(实数, Complex)) (x : 实数)
+定理 Schwartz映射.tsum_eq_tsum_fourier
+  条件: (f : 𝓢(实数, 复形)) (x : 实数)
   证明: by
   -- We know that Schwartz functions are `O(‖x ^ (-b)‖)` for *every* `b`; for this argument we take
   -- `b = 2` and work with that.

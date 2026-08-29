@@ -48,7 +48,7 @@ instance [Precoherent
 
 中文:
 实例 [Precoherent
-  签名: C] [HasFiniteCoproducts C] : Preregular C where
+  签名: C] [有FiniteCoproducts C] : Preregular C where
   定义体: by
     have hp := Precoherent.pullback f PUnit (fun () => Z) (fun () => g)
     simp only [exists_const] at hp
@@ -86,7 +86,7 @@ instance [FinitaryPreExtensive
     have _ := FinitaryPreExte
 
 中文:
-实例 [FinitaryPreExtensive
+实例 [有限预广延
   签名: C] [Preregular C] : Precoherent C where
   定义体: by
     refine ⟨α, inferInstance, ?_⟩
@@ -135,7 +135,7 @@ theorem extensive_regular_generate_coherent
 
 中文:
 定理 extensive_regular_generate_coherent
-  条件: [Preregular C] [FinitaryPreExtensive C]
+  条件: [Preregular C] [有限预广延 C]
   证明: by
   ext B S
   refine ⟨fun h => ?_, fun h => ?_⟩

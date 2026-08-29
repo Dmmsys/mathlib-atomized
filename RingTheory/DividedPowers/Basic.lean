@@ -100,7 +100,7 @@ structure DividedPowers
     - dpow_zero : 对任意 {x} (_ : x in I), dpow 0 x = 1
     - dpow_one : 对任意 {x} (_ : x in I), dpow 1 x = x
     - dpow_mem : 对任意 {n x} (_ : n != 0) (_ : x in I), dpow n x in I
-    - dpow_add : 对任意 {n} {x y} (_ : x in I) (_ : y in I), dpow n (x + y) = (antidiagonal n).sum fun k => dpow k.1 x * dpow k.2 y
+    - dpow_add : 对任意 {n} {x y} (_ : x in I) (_ : y in I), dpow n (x + y) = (antidiagonal n).求和 fun k => dpow k.1 x * dpow k.2 y
     - dpow_mul : 对任意 {n} {a : A} {x} (_ : x in I), dpow n (a * x) = a ^ n * dpow n x
     - mul_dpow : 对任意 {m n} {x} (_ : x in I), dpow m x * dpow n x = choose (m + n) m * dpow (m + n) x
     - dpow_comp : 对任意 {m n x} (_ : n != 0) (_ : x in I), dpow m (dpow n x) = uniformBell m n * dpow (m * n) x
@@ -142,7 +142,7 @@ definition dividedPowersBot
 
 中文:
 定义 dividedPowersBot
-  签名: : DividedPowers (⊥ : Ideal A) where
+  签名: : DividedPowers (⊥ : 理想 A) where
   定义体: open scoped Classical in ite (a = 0 ∧ n = 0) 1 0
   dpow_null {n a} ha := by
     simp only [mem_bot] at ha
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (DividedPowers (⊥ : Ideal A))
+  签名: 可居 (DividedPowers (⊥ : 理想 A))
   定义体: ⟨dividedPowersBot A⟩
 -/
 noncomputable instance : Inhabited (DividedPowers (⊥ : Ideal A)) :=
@@ -574,7 +574,7 @@ theorem coincide_on_smul
 
 中文:
 定理 coincide_on_smul
-  条件: {J : Ideal A} (hJ : DividedPowers J) {n : 自然数} (ha : a in I • J)
+  条件: {J : 理想 A} (hJ : DividedPowers J) {n : 自然数} (ha : a in I • J)
   证明: by
   induction ha using Submodule.smul_induction_on' generalizing n with
   | smul a ha b hb =>
@@ -614,7 +614,7 @@ theorem prod_dpow
 
 中文:
 定理 prod_dpow
-  条件: {ι : 类型} {s : Finset ι} {n : ι -> 自然数} (ha : a in I)
+  条件: {ι : 类型} {s : 有限集 ι} {n : ι -> 自然数} (ha : a in I)
   证明: by
   classical
   induction s using Finset.induction with
@@ -658,7 +658,7 @@ theorem dpow_sum'
 
 中文:
 定理 dpow_sum'
-  结论: {M : 类型} [AddCommMonoid M] {I : AddSubmonoid M} (dpow : 自然数 -> M -> A)
+  结论: {M : 类型} [加法交换幺半群 M] {I : 加法子幺半群 M} (dpow : 自然数 -> M -> A)
   证明: by
   simp only [sum_antidiagonal_eq_sum_range_succ_mk] at dpow_add
   induction s using Finset.induction generalizing n with
@@ -734,7 +734,7 @@ theorem dpow_sum
 
 中文:
 定理 dpow_sum
-  条件: {s : Finset ι} {x : ι -> A} (hx : 对任意 i in s, x i in I) {n : 自然数}
+  条件: {s : 有限集 ι} {x : ι -> A} (hx : 对任意 i in s, x i in I) {n : 自然数}
   证明: dpow_sum' hI.dpow hI.dpow_zero hI.dpow_add hI.dpow_eval_zero hx
 
 Depends on / 依赖: config, config.maxArgs.getD, dpow_add, dpow_eval_zero, dpow_sum, dpow_zero, hI.dpow, hI.dpow_add, hI.dpow_eval_zero, hI.dpow_zero, maxArgs, numArgs
@@ -782,7 +782,7 @@ theorem dpow_linearCombination
 
 中文:
 定理 dpow_linearCombination
-  结论: {S : 类型} [CommSemiring S] [Algebra A S] {J : Ideal S}
+  结论: {S : 类型} [交换半环 S] [代数 A S] {J : 理想 S}
   证明: by
   rw [Finsupp.sum]; rw [hJ.dpow_sum (fun i hi => Submodule.smul_of_tower_mem J _ (hx i hi))]
   apply Finset.sum_congr rfl
@@ -824,7 +824,7 @@ theorem dpow_prod
 
 中文:
 定理 dpow_prod
-  结论: {ι : 类型} {r : ι -> A} {s : Finset ι} (hs : s.Nonempty)
+  结论: {ι : 类型} {r : ι -> A} {s : 有限集 ι} (hs : s.非空)
   证明: by
   classical
   induction s using Finset.induction with

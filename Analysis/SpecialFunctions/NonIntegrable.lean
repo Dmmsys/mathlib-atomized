@@ -175,7 +175,7 @@ theorem not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_filter
   exact not_integrableOn_of_tendsto_norm_atTop_of_deriv_isBigO_filter _ hl hd hf hfg
 
 中文:
-定理 not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_filter
+定理 not_interval整数egrable_of_tendsto_norm_atTop_of_deriv_isBigO_filter
   结论: {f : 实数 -> E} {g : 实数 -> F}
   证明: by
   rw [intervalIntegrable_iff']
@@ -204,7 +204,7 @@ theorem not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdif
       e
 
 中文:
-定理 not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdiff_singleton
+定理 not_interval整数egrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdiff_singleton
   证明: by
   obtain ⟨l, hl, hl', hle, hmem⟩ :
     exists l : Filter Real, TendstoIxxClass Icc l l ∧ l.NeBot ∧ l <= 𝓝 c ∧ [[a, b]] \ {c} in l := by
@@ -245,7 +245,7 @@ theorem not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_punctured
     (h_deriv.filter_mono this) (h_infty.mono_left this) (hg.mono this)
 
 中文:
-定理 not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_punctured
+定理 not_interval整数egrable_of_tendsto_norm_atTop_of_deriv_isBigO_punctured
   结论: {f : 实数 -> E}
   证明: have : 𝓝[[[a, b]] \ {c}] c <= 𝓝[!=] c := nhdsWithin_mono _ inter_subset_right
   not_intervalIntegrable_of_tendsto_norm_atTop_of_deriv_isBigO_within_sdiff_singleton hne hc
@@ -275,7 +275,7 @@ theorem not_intervalIntegrable_of_sub_inv_isBigO_punctured
     refine ten
 
 中文:
-定理 not_intervalIntegrable_of_sub_inv_isBigO_punctured
+定理 not_interval整数egrable_of_sub_inv_isBigO_punctured
   结论: {f : 实数 -> F} {a b c : 实数}
   证明: by
   have A : forallᶠ x in 𝓝[!=] c, HasDerivAt (fun x => Real.log (x - c)) (x - c)⁻¹ x := by
@@ -319,7 +319,7 @@ theorem intervalIntegrable_sub_inv_iff
 
 
 中文:
-定理 intervalIntegrable_sub_inv_iff
+定理 interval整数egrable_sub_inv_iff
   条件: {a b c : 实数}
   证明: by
   constructor
@@ -355,7 +355,7 @@ theorem intervalIntegrable_inv_iff
   simp only [← intervalIntegrable_sub_inv_iff, sub_zero]
 
 中文:
-定理 intervalIntegrable_inv_iff
+定理 interval整数egrable_inv_iff
   条件: {a b : 实数}
   证明: by
   simp only [← intervalIntegrable_sub_inv_iff, sub_zero]

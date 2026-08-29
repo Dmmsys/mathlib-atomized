@@ -62,8 +62,8 @@ definition IsAffine.finrank
   body: f.appTop.hom.finrank (S.isoSpec.hom s)
 
 中文:
-定义 IsAffine.finrank
-  签名: [IsAffine S] (f : X ⟶ S) (s : S)
+定义 是仿射.finrank
+  签名: [是仿射 S] (f : X ⟶ S) (s : S)
   定义体: f.appTop.hom.finrank (S.isoSpec.hom s)
 -/
 private def IsAffine.finrank [IsAffine S] (f : X ⟶ S) (s : S) : Nat :=
@@ -83,8 +83,8 @@ lemma IsAffine.finrank_of_isPullback
   rw [CommRingCat.finrank_eq_of_isPushout this f.flat_appTop f.finite_appTop (T.isoSpec.hom t)]; rw [← Scheme.Hom.comp_apply];
 
 中文:
-引理 IsAffine.finrank_of_isPullback
-  结论: [IsAffine S] [IsAffine T]
+引理 是仿射.finrank_of_isPullback
+  结论: [是仿射 S] [是仿射 T]
   证明: by
   subst hs
   have : IsAffine X := isAffine_of_isAffineHom f
@@ -112,8 +112,8 @@ lemma IsAffine.finrank_snd
   proof: finrank_of_isPullback f _ _ _ (.of_hasPullback _ _) _ _ rfl
 
 中文:
-引理 IsAffine.finrank_snd
-  结论: [IsAffine S] [IsAffine T]
+引理 是仿射.finrank_snd
+  结论: [是仿射 S] [是仿射 T]
   证明: finrank_of_isPullback f _ _ _ (.of_hasPullback _ _) _ _ rfl
 -/
 private lemma IsAffine.finrank_snd [IsAffine S] [IsAffine T]
@@ -133,8 +133,8 @@ lemma IsAffine.finrank_comp_left_of_isIso
   exact IsPullback.of_horiz_isIso (by simp)
 
 中文:
-引理 IsAffine.finrank_comp_left_of_isIso
-  结论: [IsAffine S]
+引理 是仿射.finrank_comp_left_of_isIso
+  结论: [是仿射 S]
   证明: by
   ext z
   apply finrank_of_isPullback g (f ≫ g) f (𝟙 _) _ _ _ rfl
@@ -161,8 +161,8 @@ definition Scheme.Hom.finrank
     (S.affineOpenCover.covers s).choose
 
 中文:
-定义 Scheme.Hom.finrank
-  签名: {X S : Scheme.{u}} (f : X ⟶ S) (s : S)
+定义 概形.态射.finrank
+  签名: {X S : 概形.{u}} (f : X ⟶ S) (s : S)
   定义体: IsAffine.finrank (pullback.snd f (S.affineOpenCover.f <| S.affineOpenCover.idx s))
     (S.affineOpenCover.covers s).choose
 
@@ -186,8 +186,8 @@ lemma Scheme.Hom.finrank_eq_finrank_snd_of_isAffine
   trans
 
 中文:
-引理 Scheme.Hom.finrank_eq_finrank_snd_of_isAffine
-  结论: (g : T ⟶ S) [IsAffine T] (t : T)
+引理 概形.态射.finrank_eq_finrank_snd_of_isAffine
+  结论: (g : T ⟶ S) [是仿射 T] (t : T)
   证明: by
   let i := S.affineOpenCover.f (S.affineOpenCover.idx (g t))
   obtain ⟨y, hyl, hyr⟩ := Scheme.Pullback.exists_preimage_pullback
@@ -222,8 +222,8 @@ lemma Scheme.Hom.finrank_eq_of_isAffine
   rw [show s = (𝟙 S : S ⟶ S) s from rfl]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [IsAffine.finrank_snd]
 
 中文:
-引理 Scheme.Hom.finrank_eq_of_isAffine
-  条件: [IsAffine S] [Flat f] [IsFinite f] (s : S)
+引理 概形.态射.finrank_eq_of_isAffine
+  条件: [是仿射 S] [平坦 f] [是有限 f] (s : S)
   证明: by
   rw [show s = (𝟙 S : S ⟶ S) s from rfl]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [IsAffine.finrank_snd]
 -/
@@ -248,8 +248,8 @@ lemma Scheme.Hom.finrank_SpecMap_eq_finrank
   have : f = (Scheme.ΓSpec
 
 中文:
-引理 Scheme.Hom.finrank_SpecMap_eq_finrank
-  结论: {R S : CommRingCat.{u}} {f : R ⟶ S} (hf₁ : f.hom.Finite)
+引理 概形.态射.finrank_SpecMap_eq_finrank
+  结论: {R S : 交换环范畴.{u}} {f : R ⟶ S} (hf₁ : f.hom.有限)
   证明: by
   simp only [← IsFinite.SpecMap_iff, ← Flat.SpecMap_iff] at hf₁ hf₂
   have hf₁ : (Spec.map f).appTop.hom.Finite := (Spec.map f).finite_appTop
@@ -291,8 +291,8 @@ lemma Scheme.Hom.finrank_SpecMap_algebraMap
   · simpa [RingHom.flat_algebraMap_iff]
 
 中文:
-引理 Scheme.Hom.finrank_SpecMap_algebraMap
-  结论: (R S : 类型u) [CommRing R] [CommRing S] [Algebra R S]
+引理 概形.态射.finrank_SpecMap_algebraMap
+  结论: (R S : 类型u) [交换环 R] [交换环 S] [代数 R S]
   证明: by
   rw [finrank_SpecMap_eq_finrank]
   · simp
@@ -326,7 +326,7 @@ lemma Scheme.Hom.finrank_comp_left_of_isIso
       asIso (pullback.snd f (pullback.fst g (S.aff
 
 中文:
-引理 Scheme.Hom.finrank_comp_left_of_isIso
+引理 概形.态射.finrank_comp_left_of_isIso
   结论: (f : X ⟶ Y) (g : Y ⟶ S)
   证明: by
   ext z
@@ -359,8 +359,8 @@ lemma Scheme.Hom.finrank_pullback_snd
   rw [← Scheme.Hom.comp_apply]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [← pullbackLeftPullbackSndIso_hom_snd f g i]; rw [← finrank_eq_of_isAffine]; rw [← finrank_eq_of_isAffine]; rw [finrank_comp
 
 中文:
-引理 Scheme.Hom.finrank_pullback_snd
-  结论: {Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+引理 概形.态射.finrank_pullback_snd
+  结论: {Z : 概形.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: by
   obtain ⟨R, i, _, y', rfl⟩ := Y.exists_Spec_apply_eq y
   rw [← Scheme.Hom.comp_apply]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [finrank_eq_finrank_snd_of_isAffine]; rw [← pullbackLeftPullbackSndIso_hom_snd f g i]; rw [← finrank_eq_of_isAffine]; rw [← finrank_eq_of_isAffine]; rw [finrank_comp
@@ -383,8 +383,8 @@ lemma Scheme.Hom.finrank_of_isPullback
   rw [← h.isoPullback_hom_snd]; rw [finrank_comp_left_of_isIso]; rw [finrank_pullback_snd]
 
 中文:
-引理 Scheme.Hom.finrank_of_isPullback
-  结论: {P X Y Z : Scheme.{u}} (fst : P ⟶ X) (snd : P ⟶ Y)
+引理 概形.态射.finrank_of_isPullback
+  结论: {P X Y Z : 概形.{u}} (fst : P ⟶ X) (snd : P ⟶ Y)
   证明: by
   rw [← h.isoPullback_hom_snd]; rw [finrank_comp_left_of_isIso]; rw [finrank_pullback_snd]
 
@@ -404,8 +404,8 @@ lemma Scheme.Hom.finrank_pullback_fst
   proof: finrank_of_isPullback (pullback.snd g f) _ _ _ (.flip <| .of_hasPullback _ _) y
 
 中文:
-引理 Scheme.Hom.finrank_pullback_fst
-  结论: {Z : Scheme.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
+引理 概形.态射.finrank_pullback_fst
+  结论: {Z : 概形.{u}} (f : X ⟶ Z) (g : Y ⟶ Z)
   证明: finrank_of_isPullback (pullback.snd g f) _ _ _ (.flip <| .of_hasPullback _ _) y
 
 Depends on / 依赖: finrank_of_isPullback, of_hasPullback, pullback, pullback.snd
@@ -511,8 +511,8 @@ lemma Scheme.Hom.finrank_eq_one_of_isIso
   rw [← finrank_pullback_snd]; rw [← Category.comp_id (pullback.snd f g)]; rw [finrank_comp_left_of_isIso]; rw [← Spec.map_id]; rw [finrank_SpecMap_eq_finrank]; rw [CommRingCat.hom_id]; rw [Pi.one
 
 中文:
-引理 Scheme.Hom.finrank_eq_one_of_isIso
-  条件: (f : X ⟶ Y) [IsIso f]
+引理 概形.态射.finrank_eq_one_of_isIso
+  条件: (f : X ⟶ Y) [是同构 f]
   结论: finrank f = 1
   证明: by
   ext y

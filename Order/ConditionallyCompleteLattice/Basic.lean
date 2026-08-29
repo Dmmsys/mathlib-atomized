@@ -60,8 +60,8 @@ instance [SupSet
       ↑(sSup ((fun (a : α) => (a : WithTop α)) ⁻¹' S : Set α)) else ⊤⟩
 
 中文:
-实例 [SupSet
-  签名: α] : SupSet (WithTop α)
+实例 [上确界集
+  签名: α] : 上确界集 (WithTop α)
   定义体: ⟨fun S =>
     if ⊤ in S then ⊤ else if BddAbove ((fun (a : α) => ↑a) ⁻¹' S : Set α) then
       ↑(sSup ((fun (a : α) => (a : WithTop α)) ⁻¹' S : Set α)) else ⊤⟩
@@ -87,7 +87,7 @@ instance instInfSet
 
 中文:
 实例 instInfSet
-  签名: [InfSet α]
+  签名: [下确界集 α]
   定义体: ⟨fun S => if S subseteq {⊤} ∨ ¬BddBelow S then ⊤ else ↑(sInf ((fun (a : α) => ↑a) ⁻¹' S : Set α))⟩
 
 @[to_dual]
@@ -110,7 +110,7 @@ theorem sSup_eq
 
 中文:
 定理 sSup_eq
-  结论: [SupSet α] {s : Set (WithTop α)} (hs : ⊤ ∉ s)
+  结论: [上确界集 α] {s : 集合 (WithTop α)} (hs : ⊤ ∉ s)
   证明: (if_neg hs).trans if_pos hs'
 
 @[to_dual]
@@ -134,7 +134,7 @@ theorem sInf_eq
 
 中文:
 定理 sInf_eq
-  条件: [InfSet α] {s : Set (WithTop α)} (hs : ¬s subseteq {⊤}) (h's : BddBelow s)
+  条件: [下确界集 α] {s : 集合 (WithTop α)} (hs : ¬s subseteq {⊤}) (h's : BddBelow s)
   证明: if_neg by simp [hs, h's]
 
 @[to_dual (attr := simp)]
@@ -159,8 +159,8 @@ theorem sInf_empty
 
 中文:
 定理 sInf_empty
-  条件: [InfSet α]
-  结论: sInf (∅ : Set (WithTop α)) = ⊤
+  条件: [下确界集 α]
+  结论: sInf (∅ : 集合 (WithTop α)) = ⊤
   证明: if_pos by simp
 
 @[to_dual (attr := simp)]
@@ -184,8 +184,8 @@ theorem sInf_singleton_top
 
 中文:
 定理 sInf_singleton_top
-  条件: [InfSet α]
-  结论: sInf ({⊤} : Set (WithTop α)) = ⊤
+  条件: [下确界集 α]
+  结论: sInf ({⊤} : 集合 (WithTop α)) = ⊤
   证明: if_pos .inl subset_rfl
 
 @[to_dual (attr := simp)]
@@ -209,7 +209,7 @@ theorem sSup_of_top_mem
 
 中文:
 定理 sSup_of_top_mem
-  条件: [SupSet α] {s : Set (WithTop α)} (h : ⊤ in s)
+  条件: [上确界集 α] {s : 集合 (WithTop α)} (h : ⊤ in s)
   结论: sSup s = ⊤
   证明: if_pos h
 
@@ -235,8 +235,8 @@ theorem sSup_singleton_top
 
 中文:
 定理 sSup_singleton_top
-  条件: [SupSet α]
-  结论: sSup ({⊤} : Set (WithTop α)) = ⊤
+  条件: [上确界集 α]
+  结论: sSup ({⊤} : 集合 (WithTop α)) = ⊤
   证明: by
   simp
 
@@ -261,7 +261,7 @@ theorem sSup_of_not_bddAbove
 
 中文:
 定理 sSup_of_not_bddAbove
-  结论: [SupSet α] {s : Set (WithTop α)}
+  结论: [上确界集 α] {s : 集合 (WithTop α)}
   证明: by
   by_cases hmem : ⊤ in s
   · exact sSup_of_top_mem hmem
@@ -290,7 +290,7 @@ theorem sInf_of_not_bddBelow
 
 中文:
 定理 sInf_of_not_bddBelow
-  条件: [InfSet α] {s : Set (WithTop α)} (h : ¬BddBelow s)
+  条件: [下确界集 α] {s : 集合 (WithTop α)} (h : ¬BddBelow s)
   证明: if_pos .inr h
 
 @[to_dual (attr := norm_cast)]
@@ -319,7 +319,7 @@ theorem coe_sSup'
 
 中文:
 定理 coe_sSup'
-  条件: [SupSet α] {s : Set α} (hs : BddAbove s)
+  条件: [上确界集 α] {s : 集合 α} (hs : BddAbove s)
   证明: by
   classical
   change _ = ite _ _ _
@@ -352,7 +352,7 @@ theorem sSup_empty
 
 中文:
 定理 sSup_empty
-  条件: (α : 类型) [CompleteLattice α]
+  条件: (α : 类型) [完备格 α]
   结论: (sSup ∅ : WithTop α) = ⊥
   证明: by
   rw [sSup_eq (by simp) (OrderTop.bddAbove _)]; rw [Set.preimage_empty]; rw [_root_.sSup_empty]; rw [coe_bot]
@@ -390,7 +390,7 @@ theorem WithTop.coe_sInf'
 
 中文:
 定理 WithTop.coe_sInf'
-  结论: [InfSet α] {s : Set α} (hs : s.Nonempty)
+  结论: [下确界集 α] {s : 集合 α} (hs : s.非空)
   证明: by
   classical
   obtain ⟨x, hx⟩ := hs
@@ -436,8 +436,8 @@ instance ConditionallyCompleteLinearOrder.toLinearOrder
     · rcases ConditionallyComp
 
 中文:
-实例 ConditionallyCompleteLinearOrder.toLinearOrder
-  签名: [h : ConditionallyCompleteLinearOrder α]
+实例 条件完备线性序.toLinearOrder
+  签名: [h : 条件完备线性序 α]
   定义体: by
     by_cases hab : a = b
     · simp [hab]
@@ -500,7 +500,7 @@ instance instConditionallyCompleteLattice
 
 中文:
 实例 instConditionallyCompleteLattice
-  签名: (α : 类型) [ConditionallyCompleteLattice α]
+  签名: (α : 类型) [条件完备格 α]
   定义体: ConditionallyCompleteLattice.isGLB_csInf (α := α)
   isGLB_csInf := ConditionallyCompleteLattice.isLUB_csSup (α := α)
 
@@ -538,7 +538,7 @@ theorem isLUB_csSup
 
 中文:
 定理 isLUB_csSup
-  条件: (hn : s.Nonempty) (hb : BddAbove s := by bddDefault)
+  条件: (hn : s.非空) (hb : BddAbove s := by bddDefault)
   结论: IsLUB s (sSup s)
   证明: ConditionallyCompleteLattice.isLUB_csSup _ hn hb
 
@@ -588,7 +588,7 @@ theorem csSup_le
 
 中文:
 定理 csSup_le
-  条件: (h₁ : s.Nonempty) (h₂ : 对任意 b in s, b <= a)
+  条件: (h₁ : s.非空) (h₂ : 对任意 b in s, b <= a)
   结论: sSup s <= a
   证明: (isLUB_csSup h₁ ⟨a, h₂⟩).2 h₂
 
@@ -638,7 +638,7 @@ theorem csSup_le_csSup
 
 中文:
 定理 csSup_le_csSup
-  条件: (ht : BddAbove t) (hs : s.Nonempty) (h : s subseteq t)
+  条件: (ht : BddAbove t) (hs : s.非空) (h : s subseteq t)
   结论: sSup s <= sSup t
   证明: csSup_le hs fun _ ha => le_csSup ht (h ha)
 
@@ -663,7 +663,7 @@ theorem le_csSup_iff
 
 中文:
 定理 le_csSup_iff
-  条件: (h : BddAbove s) (hs : s.Nonempty)
+  条件: (h : BddAbove s) (hs : s.非空)
   结论: a <= sSup s ↔ 对任意 b in upperBounds s, a <= b
   证明: ⟨fun h _ hb => le_trans h (csSup_le hs hb), fun hb => hb _ fun _ => le_csSup h⟩
 
@@ -686,7 +686,7 @@ theorem IsLUB.csSup_eq
 
 中文:
 定理 IsLUB.csSup_eq
-  条件: (H : IsLUB s a) (ne : s.Nonempty)
+  条件: (H : IsLUB s a) (ne : s.非空)
   结论: sSup s = a
   证明: (isLUB_csSup ne ⟨a, H.1⟩).unique H
 
@@ -714,7 +714,7 @@ theorem subset_Icc_csInf_csSup
 中文:
 定理 subset_Icc_csInf_csSup
   条件: (hb : BddBelow s) (ha : BddAbove s)
-  结论: s subseteq Icc (sInf s) (sSup s)
+  结论: s subseteq 闭区间 (sInf s) (sSup s)
   证明: fun _ hx => ⟨csInf_le hb hx, le_csSup ha hx⟩
 
 @[to_dual le_csInf_iff]
@@ -738,7 +738,7 @@ theorem csSup_le_iff
 
 中文:
 定理 csSup_le_iff
-  条件: (hb : BddAbove s) (hs : s.Nonempty)
+  条件: (hb : BddAbove s) (hs : s.非空)
   结论: sSup s <= a ↔ 对任意 b in s, b <= a
   证明: isLUB_le_iff (isLUB_csSup hs hb)
 
@@ -762,7 +762,7 @@ theorem csSup_lowerBounds_eq_csInf
 
 中文:
 定理 csSup_lowerBounds_eq_csInf
-  条件: {s : Set α} (h : BddBelow s) (hs : s.Nonempty)
+  条件: {s : 集合 α} (h : BddBelow s) (hs : s.非空)
   证明: (isLUB_csSup h <| hs.mono fun _ hx _ hy => hy hx).unique (isGLB_csInf hs h).isLUB
 
 @[to_dual]
@@ -786,7 +786,7 @@ theorem csSup_lowerBounds_range
 
 中文:
 定理 csSup_lowerBounds_range
-  条件: [Nonempty β] {f : β -> α} (hf : BddBelow (range f))
+  条件: [非空 β] {f : β -> α} (hf : BddBelow (range f))
   证明: csSup_lowerBounds_eq_csInf hf range_nonempty _
 
 @[to_dual notMem_of_csSup_lt]
@@ -809,7 +809,7 @@ theorem notMem_of_lt_csInf
 
 中文:
 定理 notMem_of_lt_csInf
-  条件: {x : α} {s : Set α} (h : x < sInf s) (hs : BddBelow s)
+  条件: {x : α} {s : 集合 α} (h : x < sInf s) (hs : BddBelow s)
   结论: x ∉ s
   证明: fun hx => lt_irrefl _ (h.trans_le (csInf_le hs hx))
 
@@ -836,8 +836,8 @@ theorem csSup_eq_of_forall_le_of_forall_lt_exists_gt
 lt_irrefl _ ha'.trans_le le_csSup ⟨b, H⟩ ha
 
 中文:
-定理 csSup_eq_of_forall_le_of_forall_lt_exists_gt
-  结论: (hs : s.Nonempty) (H : 对任意 a in s, a <= b)
+定理 csSup_eq_of_对任意_le_of_对任意_lt_存在_gt
+  结论: (hs : s.非空) (H : 对任意 a in s, a <= b)
   证明: (eq_of_le_of_not_lt (csSup_le hs H)) fun hb =>
     let ⟨_, ha, ha'⟩ := H' _ hb
 lt_irrefl _ ha'.trans_le le_csSup ⟨b, H⟩ ha
@@ -895,8 +895,8 @@ theorem exists_between_of_forall_le
 @[to_dual]
 
 中文:
-定理 exists_between_of_forall_le
-  结论: (sne : s.Nonempty) (tne : t.Nonempty)
+定理 存在_between_of_对任意_le
+  结论: (sne : s.非空) (tne : t.非空)
   证明: ⟨sInf t, fun x hx => le_csInf tne hst x hx, fun _ hy => csInf_le (sne.mono hst) hy⟩
 
 @[to_dual]
@@ -941,7 +941,7 @@ theorem csInf_le_csSup
 
 中文:
 定理 csInf_le_csSup
-  结论: (ne : s.Nonempty) (hb : BddBelow s := by bddDefault)
+  结论: (ne : s.非空) (hb : BddBelow s := by bddDefault)
   证明: isGLB_le_isLUB (isGLB_csInf ne hb) (isLUB_csSup ne ha) ne
 
 Depends on / 依赖: BddAbove, bddDefault, isGLB_csInf, isGLB_le_isLUB, isLUB_csSup
@@ -960,7 +960,7 @@ theorem csInf_le_csSup_of_nonempty_inter
 
 中文:
 定理 csInf_le_csSup_of_nonempty_inter
-  结论: (h : (s inter t).Nonempty) (hs : BddBelow s := by bddDefault)
+  结论: (h : (s inter t).非空) (hs : BddBelow s := by bddDefault)
   证明: isGLB_le_isLUB_of_nonempty_inter h (isGLB_csInf h.left hs) (isLUB_csSup h.right ht)
 
 Depends on / 依赖: BddAbove, bddDefault, h.left, h.right, isGLB_csInf, isGLB_le_isLUB_of_nonempty_inter, isLUB_csSup
@@ -984,7 +984,7 @@ theorem csSup_union
 
 中文:
 定理 csSup_union
-  条件: (hs : BddAbove s) (sne : s.Nonempty) (ht : BddAbove t) (tne : t.Nonempty)
+  条件: (hs : BddAbove s) (sne : s.非空) (ht : BddAbove t) (tne : t.非空)
   证明: ((isLUB_csSup sne hs).union (isLUB_csSup tne ht)).csSup_eq sne.inl
 
 Depends on / 依赖: csSup_eq, isLUB_csSup, sne.inl
@@ -1008,7 +1008,7 @@ theorem csSup_inter_le
 
 中文:
 定理 csSup_inter_le
-  条件: (hs : BddAbove s) (ht : BddAbove t) (hst : (s inter t).Nonempty)
+  条件: (hs : BddAbove s) (ht : BddAbove t) (hst : (s inter t).非空)
   证明: (csSup_le hst) fun _ hx => le_inf (le_csSup hs hx.1) (le_csSup ht hx.2)
 
 Depends on / 依赖: csSup_le, le_csSup, le_inf
@@ -1035,7 +1035,7 @@ theorem csSup_insert
 
 中文:
 定理 csSup_insert
-  条件: (hs : BddAbove s) (sne : s.Nonempty)
+  条件: (hs : BddAbove s) (sne : s.非空)
   结论: sSup (insert a s) = a ⊔ sSup s
   证明: ((isLUB_csSup sne hs).insert a).csSup_eq (insert_nonempty a s)
 
@@ -1060,8 +1060,8 @@ theorem csSup_Ico
 
 中文:
 定理 csSup_Ico
-  条件: [DenselyOrdered α] (h : a < b)
-  结论: sSup (Ico a b) = b
+  条件: [稠密序 α] (h : a < b)
+  结论: sSup (左闭右开区间 a b) = b
   证明: (isLUB_Ico h).csSup_eq (nonempty_Ico.2 h)
 
 @[to_dual (attr := simp)]
@@ -1086,8 +1086,8 @@ theorem csSup_Iio
 
 中文:
 定理 csSup_Iio
-  条件: [NoMinOrder α] [DenselyOrdered α]
-  结论: sSup (Iio a) = a
+  条件: [NoMin序 α] [稠密序 α]
+  结论: sSup (左无界右开区间 a) = a
   证明: csSup_eq_of_forall_le_of_forall_lt_exists_gt nonempty_Iio (fun _ => le_of_lt) fun w hw => by
     simpa [and_comm] using exists_between hw
 
@@ -1111,8 +1111,8 @@ theorem csSup_Ioo
 
 中文:
 定理 csSup_Ioo
-  条件: [DenselyOrdered α] (h : a < b)
-  结论: sSup (Ioo a b) = b
+  条件: [稠密序 α] (h : a < b)
+  结论: sSup (开区间 a b) = b
   证明: (isLUB_Ioo h).csSup_eq (nonempty_Ioo.2 h)
 
 Depends on / 依赖: csSup_eq, isLUB_Ioo, nonempty_Ioo
@@ -1129,8 +1129,8 @@ theorem csSup_eq_of_is_forall_le_of_forall_le_imp_ge
   proof: (csSup_le hs h_is_ub).antisymm ((h_b_le_ub _) fun _ => le_csSup ⟨b, h_is_ub⟩)
 
 中文:
-定理 csSup_eq_of_is_forall_le_of_forall_le_imp_ge
-  结论: (hs : s.Nonempty) (h_is_ub : 对任意 a in s, a <= b)
+定理 csSup_eq_of_is_对任意_le_of_对任意_le_imp_ge
+  结论: (hs : s.非空) (h_is_ub : 对任意 a in s, a <= b)
   证明: (csSup_le hs h_is_ub).antisymm ((h_b_le_ub _) fun _ => le_csSup ⟨b, h_is_ub⟩)
 
 Depends on / 依赖: antisymm, csSup_le, h_b_le_ub, h_is_ub, le_csSup
@@ -1155,7 +1155,7 @@ instance Pi.conditionallyCompleteLattice
     exact isGLB_csInf (image_nonempty.mpr hn) ((monotone_eval _).map_bddBel
 
 中文:
-实例 Pi.conditionallyCompleteLattice
+实例 依赖函数类型.conditionallyCompleteLattice
   签名: {ι : 类型} {α : ι -> 类型}
   定义体: isLUB_pi.mpr fun _ => by
     rw [sSup_apply_eq_sSup_image]
@@ -1198,8 +1198,8 @@ theorem exists_lt_of_lt_csSup
 @[to_dual csInf_lt_iff]
 
 中文:
-定理 exists_lt_of_lt_csSup
-  条件: (hs : s.Nonempty) (hb : b < sSup s)
+定理 存在_lt_of_lt_csSup
+  条件: (hs : s.非空) (hb : b < sSup s)
   结论: 存在 a in s, b < a
   证明: by
   contrapose! hb
@@ -1227,7 +1227,7 @@ theorem lt_csSup_iff
 
 中文:
 定理 lt_csSup_iff
-  条件: (hb : BddAbove s) (hs : s.Nonempty)
+  条件: (hb : BddAbove s) (hs : s.非空)
   结论: a < sSup s ↔ 存在 b in s, a < b
   证明: lt_isLUB_iff isLUB_csSup hs hb
 
@@ -1363,8 +1363,8 @@ theorem csSup_eq_csSup_of_forall_exists_le
   by_ca
 
 中文:
-定理 csSup_eq_csSup_of_forall_exists_le
-  结论: {s t : Set α}
+定理 csSup_eq_csSup_of_对任意_存在_le
+  结论: {s t : 集合 α}
   证明: by
   rcases eq_empty_or_nonempty s with rfl | s_ne
   · have : t = ∅ := eq_empty_of_forall_notMem (fun y yt => by simpa using ht y yt)
@@ -1427,7 +1427,7 @@ theorem csSup_union_le
 
 中文:
 定理 csSup_union_le
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   结论: sSup (s union t) <= sSup s ⊔ sSup t
   证明: by
   rcases s.eq_empty_or_nonempty with (rfl | hs)
@@ -1469,7 +1469,7 @@ lemma sSup_iUnion_Iic
 中文:
 引理 sSup_iUnion_Iic
   条件: (f : ι -> α)
-  结论: sSup (⋃ (i : ι), Iic (f i)) = ⨆ i, f i
+  结论: sSup (⋃ (i : ι), 左无界右闭区间 (f i)) = ⨆ i, f i
   证明: by
   apply csSup_eq_csSup_of_forall_exists_le
   · rintro x ⟨-, ⟨i, rfl⟩, hi⟩
@@ -1500,7 +1500,7 @@ theorem csSup_eq_top_of_top_mem
 
 中文:
 定理 csSup_eq_top_of_top_mem
-  条件: [OrderTop α] {s : Set α} (hs : ⊤ in s)
+  条件: [有顶序 α] {s : 集合 α} (hs : ⊤ in s)
   结论: sSup s = ⊤
   证明: eq_top_iff.2 le_csSup (OrderTop.bddAbove s) hs
 
@@ -1524,7 +1524,7 @@ theorem sInf_eq_argmin_on
 
 中文:
 定理 sInf_eq_argmin_on
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: sInf s = argminOn id s hs
   证明: IsLeast.csInf_eq ⟨argminOn_mem _ _ _, fun _ ha => argminOn_le id _ ha⟩
 
@@ -1546,7 +1546,7 @@ theorem isLeast_csInf
 
 中文:
 定理 isLeast_csInf
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: IsLeast s (sInf s)
   证明: by
   rw [sInf_eq_argmin_on hs]
@@ -1569,7 +1569,7 @@ theorem le_csInf_iff'
 
 中文:
 定理 le_csInf_iff'
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: b <= sInf s ↔ b in lowerBounds s
   证明: le_isGLB_iff (isLeast_csInf hs).isGLB
 
@@ -1589,7 +1589,7 @@ theorem csInf_mem
 
 中文:
 定理 csInf_mem
-  条件: (hs : s.Nonempty)
+  条件: (hs : s.非空)
   结论: sInf s in s
   证明: (isLeast_csInf hs).1
 
@@ -1614,7 +1614,7 @@ lemma csInf_eq_iff
 
 中文:
 引理 csInf_eq_iff
-  条件: (hs : s.Nonempty) (n : α)
+  条件: (hs : s.非空) (n : α)
   证明: by
   have : OrderBot α := WellFoundedLT.toOrderBot α
   constructor
@@ -1644,7 +1644,7 @@ theorem MonotoneOn.map_csInf
 
 中文:
 定理 MonotoneOn.map_csInf
-  结论: {β : 类型} [ConditionallyCompleteLattice β] {f : α -> β}
+  结论: {β : 类型} [条件完备格 β] {f : α -> β}
   证明: (hf.map_isLeast (isLeast_csInf hs)).csInf_eq.symm
 
 Depends on / 依赖: csInf_eq, csInf_eq.symm, hf.map_isLeast, isLeast_csInf, map_isLeast
@@ -1662,8 +1662,8 @@ theorem Monotone.map_csInf
   proof: (hf.map_isLeast (isLeast_csInf hs)).csInf_eq.symm
 
 中文:
-定理 Monotone.map_csInf
-  结论: {β : 类型} [ConditionallyCompleteLattice β] {f : α -> β}
+定理 递增.map_csInf
+  结论: {β : 类型} [条件完备格 β] {f : α -> β}
   证明: (hf.map_isLeast (isLeast_csInf hs)).csInf_eq.symm
 
 Depends on / 依赖: csInf_eq, csInf_eq.symm, hf.map_isLeast, isLeast_csInf, map_isLeast
@@ -1695,8 +1695,8 @@ theorem csInf_univ
 
 中文:
 定理 csInf_univ
-  条件: [ConditionallyCompleteLattice α] [OrderBot α]
-  结论: sInf (univ : Set α) = ⊥
+  条件: [条件完备格 α] [有底序 α]
+  结论: sInf (univ : 集合 α) = ⊥
   证明: isLeast_univ.csInf_eq
 
 Depends on / 依赖: csInf_eq, isLeast_univ, isLeast_univ.csInf_eq
@@ -1739,7 +1739,7 @@ theorem isLUB_csSup'
 
 中文:
 定理 isLUB_csSup'
-  条件: {s : Set α} (hs : BddAbove s)
+  条件: {s : 集合 α} (hs : BddAbove s)
   结论: IsLUB s (sSup s)
   证明: by
   rcases eq_empty_or_nonempty s with (rfl | hne)
@@ -1764,7 +1764,7 @@ theorem csSup_le_iff'
 
 中文:
 定理 csSup_le_iff'
-  条件: {s : Set α} (hs : BddAbove s) {a : α}
+  条件: {s : 集合 α} (hs : BddAbove s) {a : α}
   结论: sSup s <= a ↔ 对任意 x in s, x <= a
   证明: isLUB_le_iff (isLUB_csSup' hs)
 
@@ -1784,7 +1784,7 @@ theorem csSup_le'
 
 中文:
 定理 csSup_le'
-  条件: {s : Set α} {a : α} (h : a in upperBounds s)
+  条件: {s : 集合 α} {a : α} (h : a in upperBounds s)
   结论: sSup s <= a
   证明: (csSup_le_iff' ⟨a, h⟩).2 h
 
@@ -1825,7 +1825,7 @@ theorem le_csSup_iff'
 
 中文:
 定理 le_csSup_iff'
-  条件: {s : Set α} {a : α} (h : BddAbove s)
+  条件: {s : 集合 α} {a : α} (h : BddAbove s)
   证明: ⟨fun h _ hb => le_trans h (csSup_le' hb), fun hb => hb _ fun _ => le_csSup h⟩
 
 Depends on / 依赖: csSup_le, f.hom, le_csSup, le_trans
@@ -1844,7 +1844,7 @@ theorem le_csInf_iff''
 
 中文:
 定理 le_csInf_iff''
-  条件: {s : Set α} {a : α} (ne : s.Nonempty)
+  条件: {s : 集合 α} {a : α} (ne : s.非空)
   证明: le_csInf_iff (OrderBot.bddBelow _) ne
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, bddBelow, le_csInf_iff
@@ -1884,8 +1884,8 @@ theorem exists_lt_of_lt_csSup'
   exact csSup_le' h
 
 中文:
-定理 exists_lt_of_lt_csSup'
-  条件: {s : Set α} {a : α} (h : a < sSup s)
+定理 存在_lt_of_lt_csSup'
+  条件: {s : 集合 α} {a : α} (h : a < sSup s)
   结论: 存在 b in s, a < b
   证明: by
   contrapose! h
@@ -1910,7 +1910,7 @@ theorem notMem_of_lt_csInf'
 
 中文:
 定理 notMem_of_lt_csInf'
-  条件: {x : α} {s : Set α} (h : x < sInf s)
+  条件: {x : α} {s : 集合 α} (h : x < sInf s)
   结论: x ∉ s
   证明: notMem_of_lt_csInf h (OrderBot.bddBelow s)
 
@@ -1935,7 +1935,7 @@ theorem csInf_le_csInf'
 
 中文:
 定理 csInf_le_csInf'
-  条件: {s t : Set α} (h₁ : t.Nonempty) (h₂ : t subseteq s)
+  条件: {s t : 集合 α} (h₁ : t.非空) (h₂ : t subseteq s)
   结论: sInf s <= sInf t
   证明: csInf_le_csInf (OrderBot.bddBelow s) h₁ h₂
 
@@ -1962,7 +1962,7 @@ theorem csSup_le_csSup'
 
 中文:
 定理 csSup_le_csSup'
-  条件: {s t : Set α} (h₁ : BddAbove t) (h₂ : s subseteq t)
+  条件: {s t : 集合 α} (h₁ : BddAbove t) (h₂ : s subseteq t)
   结论: sSup s <= sSup t
   证明: by
   rcases eq_empty_or_nonempty s with rfl | h
@@ -2080,7 +2080,7 @@ theorem isLUB_sSup'
 
 中文:
 定理 isLUB_sSup'
-  结论: {β : 类型} [ConditionallyCompleteLattice β] {s : Set (WithTop β)}
+  结论: {β : 类型} [条件完备格 β] {s : 集合 (WithTop β)}
   证明: by
   classical
   constructor
@@ -2149,7 +2149,7 @@ theorem isLUB_sSup
 
 中文:
 定理 isLUB_sSup
-  条件: (s : Set (WithTop α))
+  条件: (s : 集合 (WithTop α))
   结论: IsLUB s (sSup s)
   证明: by
   rcases s.eq_empty_or_nonempty with rfl | hs
@@ -2187,7 +2187,7 @@ theorem isGLB_sInf'
 
 中文:
 定理 isGLB_sInf'
-  结论: {β : 类型} [ConditionallyCompleteLattice β] {s : Set (WithTop β)}
+  结论: {β : 类型} [条件完备格 β] {s : 集合 (WithTop β)}
   证明: by
   classical
   constructor
@@ -2258,7 +2258,7 @@ theorem isGLB_sInf
 
 中文:
 定理 isGLB_sInf
-  条件: (s : Set (WithTop α))
+  条件: (s : 集合 (WithTop α))
   结论: IsGLB s (sInf s)
   证明: by
   by_cases hs : BddBelow s
@@ -2285,7 +2285,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder (WithTop α)
+  签名: 完备线性序 (WithTop α)
   定义体: linearOrder
   __ := linearOrder.toBiheytingAlgebra
   isLUB_sSup := isLUB_sSup
@@ -2313,7 +2313,7 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: {s : Set α} (hb : BddAbove s)
+  条件: {s : 集合 α} (hb : BddAbove s)
   结论: ↑(sSup s) = (⨆ a in s, ↑a : WithTop α)
   证明: by
   rw [coe_sSup' hb]; rw [sSup_image]
@@ -2336,7 +2336,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: {s : Set α} (hs : s.Nonempty) (h's : BddBelow s)
+  条件: {s : 集合 α} (hs : s.非空) (h's : BddBelow s)
   证明: by
   rw [coe_sInf' hs h's]; rw [sInf_image]
 
@@ -2373,7 +2373,7 @@ theorem le_csSup_image
 
 中文:
 定理 le_csSup_image
-  条件: {s : Set α} {c : α} (hcs : c in s) (h_bdd : BddAbove s)
+  条件: {s : 集合 α} {c : α} (hcs : c in s) (h_bdd : BddAbove s)
   证明: le_csSup (map_bddAbove h_mono h_bdd) (mem_image_of_mem f hcs)
 
 @[to_dual le_csInf_image]
@@ -2395,7 +2395,7 @@ theorem csSup_image_le
 
 中文:
 定理 csSup_image_le
-  条件: {s : Set α} (hs : s.Nonempty) {B : α} (hB : B in upperBounds s)
+  条件: {s : 集合 α} (hs : s.非空) {B : α} (hB : B in upperBounds s)
   证明: csSup_le (Nonempty.image f hs) (h_mono.mem_upperBounds_image hB)
 
 Depends on / 依赖: Nonempty, Nonempty.image, csSup_le, h_mono, h_mono.mem_upperBounds_image, mem_upperBounds_image
@@ -2451,7 +2451,7 @@ lemma MonotoneOn.csInf_eq_of_subset_of_forall_exists_le
   simp only [mem_image, forall_exists_index, and_imp, foral
 
 中文:
-引理 MonotoneOn.csInf_eq_of_subset_of_forall_exists_le
+引理 MonotoneOn.csInf_eq_of_subset_of_对任意_存在_le
   证明: by
   obtain rfl | hs := Set.eq_empty_or_nonempty s
   · obtain rfl : t = ∅ := by simpa [Set.eq_empty_iff_forall_notMem] using h
@@ -2496,7 +2496,7 @@ exact hb'.trans h' (left_mem_Icc.mpr hab) hx hx.1
 
 中文:
 定理 MonotoneOn.sInf_image_Icc
-  结论: [Preorder α] [ConditionallyCompleteLattice β]
+  结论: [预序 α] [条件完备格 β]
   证明: by
   refine IsGLB.csInf_eq ?_ ((nonempty_Icc.mpr hab).image f)
   refine isGLB_iff_le_iff.mpr (fun b' => ⟨?_, ?_⟩)
@@ -2533,7 +2533,7 @@ theorem AntitoneOn.sInf_image_Icc
 
 中文:
 定理 AntitoneOn.sInf_image_Icc
-  结论: [Preorder α] [ConditionallyCompleteLattice β]
+  结论: [预序 α] [条件完备格 β]
   证明: by
   have : Icc a b = Icc (α := αᵒᵈ) (toDual b) (toDual a) := by rw [Icc_toDual]; rfl
   rw [this] at h' ⊢
@@ -2725,8 +2725,8 @@ instance [CompleteLattice
     s.eq_empty_or_nonempty.elim (by simp [·]) (le_csInf · hsa)⟩
 
 中文:
-实例 [CompleteLattice
-  签名: α] : CompleteLattice (WithTop α) where
+实例 [完备格
+  签名: α] : 完备格 (WithTop α) where
   定义体: ⟨fun _ => le_csSup (OrderTop.bddAbove _), fun _ has =>
     s.eq_empty_or_nonempty.elim (by simp [·, WithTop.sSup_empty]) (csSup_le · has)⟩
   isGLB_sInf s := ⟨fun _ => csInf_le (OrderBot.bddBelow _), fun _ hsa =>
@@ -2751,8 +2751,8 @@ instance [CompleteLinearOrder
   __ := show CompleteLattice (WithBot α) from inferInstance
 
 中文:
-实例 [CompleteLinearOrder
-  签名: α] : CompleteLinearOrder (WithBot α) where
+实例 [完备线性序
+  签名: α] : 完备线性序 (WithBot α) where
   定义体: WithBot.linearOrder
   __ := WithBot.linearOrder.toBiheytingAlgebra
   __ := show CompleteLattice (WithBot α) from inferInstance
@@ -2777,7 +2777,7 @@ csSup_of_not_bddAbove s := absurd OrderTop.bddAbove s
   csInf_of_not_bddBelow s h := by simp [h]
 
 中文:
-实例 [ConditionallyCompleteLinearOrder
+实例 [条件完备线性序
   签名: α] :
   定义体: inferInstance
   toDecidableEq := inferInstance
@@ -2808,7 +2808,7 @@ csInf_of_not_bddBelow s := absurd OrderBot.bddBelow s
   csSup_empty := WithBot.sSup_empty
 
 中文:
-实例 [ConditionallyCompleteLinearOrder
+实例 [条件完备线性序
   签名: α] :
   定义体: inferInstance
   toDecidableEq := inferInstance

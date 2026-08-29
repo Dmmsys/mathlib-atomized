@@ -109,8 +109,8 @@ theorem contentIdeal_eq_top_iff_forall_gaussNorm_eq_one
   simp [← not_iff_not, gaussNorm_lt_one_iff_contentIdeal_le, ideal_ne_top_iff_exists hR]
 
 中文:
-定理 contentIdeal_eq_top_iff_forall_gaussNorm_eq_one
-  条件: (hR : ¬IsField R)
+定理 contentIdeal_eq_top_iff_对任意_gaussNorm_eq_one
+  条件: (hR : ¬是域 R)
   证明: by
   convert_to _ ↔ forall (x : HeightOneSpectrum R), 1 <= gaussNorm (x.intAdicAbv hb) 1 p
   · grind [gaussNorm_intAdicAbv_le_one]
@@ -137,7 +137,7 @@ theorem isPrimitive_iff_forall_gaussNorm_eq_one
   rw [isPrimitive_iff_contentIdeal_eq_top]; rw [p.contentIdeal_eq_top_iff_forall_gaussNorm_eq_one hb hR]
 
 中文:
-定理 isPrimitive_iff_forall_gaussNorm_eq_one
+定理 isPrimitive_iff_对任意_gaussNorm_eq_one
   证明: by
   rw [isPrimitive_iff_contentIdeal_eq_top]; rw [p.contentIdeal_eq_top_iff_forall_gaussNorm_eq_one hb hR]
 

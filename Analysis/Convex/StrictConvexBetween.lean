@@ -330,7 +330,7 @@ definition affineIsometryOfStrictConvexSpace
 
 中文:
 定义 affineIsometryOfStrictConvexSpace
-  签名: (hi : Isometry f)
+  签名: (hi : 等距 f)
   定义体: { AffineMap.ofMapMidpoint f
       (fun x y => by
         apply eq_midpoint_of_dist_eq_half
@@ -362,7 +362,7 @@ lemma coe_affineIsometryOfStrictConvexSpace
 
 中文:
 引理 coe_affineIsometryOfStrictConvexSpace
-  条件: (hi : Isometry f)
+  条件: (hi : 等距 f)
   证明: rfl
 -/
 @[simp] lemma coe_affineIsometryOfStrictConvexSpace (hi : Isometry f) :
@@ -378,7 +378,7 @@ lemma affineIsometryOfStrictConvexSpace_apply
 
 中文:
 引理 affineIsometryOfStrictConvexSpace_apply
-  条件: (hi : Isometry f) (p : PF)
+  条件: (hi : 等距 f) (p : PF)
   证明: rfl
 -/
 @[simp] lemma affineIsometryOfStrictConvexSpace_apply (hi : Isometry f) (p : PF) :

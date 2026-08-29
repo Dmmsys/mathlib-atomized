@@ -157,7 +157,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: : TopologicalSpace (Πʳ i, [R i, A i]_[𝓕])
+  签名: : 拓扑空间 (Πʳ i, [R i, A i]_[𝓕])
   定义体: ⨆ (S : Set ι) (hS : 𝓕 <= 𝓟 S), .coinduced (inclusion R A hS)
     (.induced ((↑) : Πʳ i, [R i, A i]_[𝓟 S] -> Π i, R i) inferInstance)
 
@@ -231,7 +231,7 @@ theorem continuous_inclusion
 
 中文:
 定理 continuous_inclusion
-  条件: {𝓖 : Filter ι} (h : 𝓕 <= 𝓖)
+  条件: {𝓖 : 滤子 ι} (h : 𝓕 <= 𝓖)
   证明: by
   simp_rw [continuous_iff_coinduced_le, topologicalSpace, coinduced_iSup, coinduced_compose]
   exact iSup₂_le fun S hS => le_iSup₂_of_le S (le_trans h hS) le_rfl
@@ -252,8 +252,8 @@ instance [forall
   body: t0Space_of_injective_of_continuous DFunLike.coe_injective continuous_coe
 
 中文:
-实例 [forall
-  签名: i, T0Space (R i)] : T0Space (Πʳ i, [R i, A i]_[𝓕])
+实例 [对任意
+  签名: i, T0空间 (R i)] : T0空间 (Πʳ i, [R i, A i]_[𝓕])
   定义体: t0Space_of_injective_of_continuous DFunLike.coe_injective continuous_coe
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coe, t0Space_of_injective_of_continuous
@@ -270,8 +270,8 @@ instance [forall
   body: t1Space_of_injective_of_continuous DFunLike.coe_injective continuous_coe
 
 中文:
-实例 [forall
-  签名: i, T1Space (R i)] : T1Space (Πʳ i, [R i, A i]_[𝓕])
+实例 [对任意
+  签名: i, T1空间 (R i)] : T1空间 (Πʳ i, [R i, A i]_[𝓕])
   定义体: t1Space_of_injective_of_continuous DFunLike.coe_injective continuous_coe
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coe, t1Space_of_injective_of_continuous
@@ -288,8 +288,8 @@ instance [forall
   body: .of_injective_continuous DFunLike.coe_injective continuous_coe
 
 中文:
-实例 [forall
-  签名: i, T2Space (R i)] : T2Space (Πʳ i, [R i, A i]_[𝓕])
+实例 [对任意
+  签名: i, T2空间 (R i)] : T2空间 (Πʳ i, [R i, A i]_[𝓕])
   定义体: .of_injective_continuous DFunLike.coe_injective continuous_coe
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective, coe_injective, continuous_coe, of_injective_continuous
@@ -425,7 +425,7 @@ theorem continuous_rng_of_principal
 
 中文:
 定理 continuous_rng_of_principal
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: isEmbedding_coe_of_principal.continuous_iff
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe_of_principal, isEmbedding_coe_of_principal.continuous_iff
@@ -445,7 +445,7 @@ theorem continuous_rng_of_top
 
 中文:
 定理 continuous_rng_of_top
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: isEmbedding_coe_of_top.continuous_iff
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe_of_top, isEmbedding_coe_of_top.continuous_iff
@@ -465,7 +465,7 @@ theorem continuous_rng_of_bot
 
 中文:
 定理 continuous_rng_of_bot
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: isEmbedding_coe_of_bot.continuous_iff
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe_of_bot, isEmbedding_coe_of_bot.continuous_iff
@@ -484,8 +484,8 @@ lemma continuous_rng_of_principal_iff_forall
   proof: continuous_rng_of_principal.trans continuous_pi_iff
 
 中文:
-引理 continuous_rng_of_principal_iff_forall
-  结论: {X : 类型} [TopologicalSpace X]
+引理 continuous_rng_of_principal_iff_对任意
+  结论: {X : 类型} [拓扑空间 X]
   证明: continuous_rng_of_principal.trans continuous_pi_iff
 
 Depends on / 依赖: continuous_pi_iff, continuous_rng_of_principal, continuous_rng_of_principal.trans
@@ -565,7 +565,7 @@ theorem weaklyLocallyCompactSpace_of_principal
 
 中文:
 定理 weaklyLocallyCompactSpace_of_principal
-  结论: [对任意 i, WeaklyLocallyCompactSpace (R i)]
+  结论: [对任意 i, WeaklyLocallyCompact空间 (R i)]
   证明: fun x => by
     rw [le_principal_iff]; rw [mem_cofinite] at hS
     classical
@@ -611,8 +611,8 @@ instance [forall
     fun _ _ => isCompact_iff_compactSpace.mpr inferInstance
 
 中文:
-实例 [forall
-  签名: i, WeaklyLocallyCompactSpace (R i)] [hS
+实例 [对任意
+  签名: i, WeaklyLocallyCompact空间 (R i)] [hS
   定义体: weaklyLocallyCompactSpace_of_principal hS.out
     fun _ _ => isCompact_iff_compactSpace.mpr inferInstance
 
@@ -664,7 +664,7 @@ theorem continuous_dom
 
 中文:
 定理 continuous_dom
-  结论: {X : 类型} [TopologicalSpace X]
+  结论: {X : 类型} [拓扑空间 X]
   证明: by
   simp_rw +instances [topologicalSpace_eq_of_principal, continuous_iSup_dom,
     continuous_coinduced_dom]
@@ -687,7 +687,7 @@ theorem isEmbedding_inclusion_principal
 
 中文:
 定理 isEmbedding_inclusion_principal
-  条件: {S : Set ι} (hS : 𝓕 <= 𝓟 S)
+  条件: {S : 集合 ι} (hS : 𝓕 <= 𝓟 S)
   证明: .of_comp (continuous_inclusion hS) continuous_coe isEmbedding_coe_of_principal
 
 Depends on / 依赖: continuous_coe, continuous_inclusion, isEmbedding_coe_of_principal, of_comp
@@ -771,8 +771,8 @@ theorem isOpen_forall_imp_mem_of_principal
 include hAopen in
 
 中文:
-定理 isOpen_forall_imp_mem_of_principal
-  条件: {S : Set ι} (hS : cofinite <= 𝓟 S) {p : ι -> 命题}
+定理 isOpen_对任意_imp_mem_of_principal
+  条件: {S : 集合 ι} (hS : cofinite <= 𝓟 S) {p : ι -> 命题}
   证明: by
   rw [le_principal_iff] at hS
   convert!
@@ -812,8 +812,8 @@ theorem isOpen_forall_mem_of_principal
 include hAopen in
 
 中文:
-定理 isOpen_forall_mem_of_principal
-  条件: {S : Set ι} (hS : cofinite <= 𝓟 S)
+定理 isOpen_对任意_mem_of_principal
+  条件: {S : 集合 ι} (hS : cofinite <= 𝓟 S)
   证明: by
   convert! isOpen_forall_imp_mem_of_principal hAopen hS (p := fun _ => True)
   simp
@@ -841,7 +841,7 @@ theorem isOpen_forall_imp_mem
 include hAopen in
 
 中文:
-定理 isOpen_forall_imp_mem
+定理 isOpen_对任意_imp_mem
   条件: {p : ι -> 命题}
   证明: by
   simp_rw +instances [topologicalSpace_eq_iSup cofinite, isOpen_iSup_iff, isOpen_coinduced]
@@ -869,7 +869,7 @@ theorem isOpen_forall_mem
 include hAopen in
 
 中文:
-定理 isOpen_forall_mem
+定理 isOpen_对任意_mem
   证明: by
   simp_rw +instances [topologicalSpace_eq_iSup cofinite, isOpen_iSup_iff, isOpen_coinduced]
   exact fun S hS => isOpen_forall_mem_of_principal hAopen hS
@@ -899,7 +899,7 @@ include hAopen in
 
 中文:
 定理 isOpenEmbedding_inclusion_principal
-  条件: {S : Set ι} (hS : cofinite <= 𝓟 S)
+  条件: {S : 集合 ι} (hS : cofinite <= 𝓟 S)
   证明: isEmbedding_inclusion_principal hS
   isOpen_range := by
     rw [range_inclusion]
@@ -961,7 +961,7 @@ include hAopen in
 
 中文:
 定理 nhds_eq_map_inclusion
-  结论: {S : Set ι} (hS : cofinite <= 𝓟 S)
+  结论: {S : 集合 ι} (hS : cofinite <= 𝓟 S)
   证明: by
   rw [isOpenEmbedding_inclusion_principal hAopen hS |>.map_nhds_eq x]
 
@@ -1015,7 +1015,7 @@ theorem weaklyLocallyCompactSpace_of_cofinite
 
 中文:
 定理 weaklyLocallyCompactSpace_of_cofinite
-  结论: [对任意 i, WeaklyLocallyCompactSpace (R i)]
+  结论: [对任意 i, WeaklyLocallyCompact空间 (R i)]
   证明: fun x => by
     set S := {i | IsCompact (A i) ∧ x i in A i}
     have hS : cofinite <= 𝓟 S := le_principal_iff.mpr (hAcompact.and x.2)
@@ -1052,7 +1052,7 @@ include hAopen in
 
 中文:
 实例 [hAopen
-  签名: : Fact (对任意 i, IsOpen (A i))] [对任意 i, WeaklyLocallyCompactSpace (R i)]
+  签名: : Fact (对任意 i, 是开集 (A i))] [对任意 i, WeaklyLocallyCompact空间 (R i)]
   定义体: weaklyLocallyCompactSpace_of_cofinite hAopen.out
     .of_forall fun _ => isCompact_iff_compactSpace.mpr inferInstance
 
@@ -1084,7 +1084,7 @@ theorem continuous_dom_prod_right
 
 中文:
 定理 continuous_dom_prod_right
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
   refine ⟨fun H S hS => H.comp ((continuous_inclusion hS).prodMap continuous_id),
     fun H => ?_⟩
@@ -1130,7 +1130,7 @@ theorem continuous_dom_prod_left
 
 中文:
 定理 continuous_dom_prod_left
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
   refine ⟨fun H S hS => H.comp (continuous_id.prodMap (continuous_inclusion hS)),
     fun H => ?_⟩
@@ -1174,7 +1174,7 @@ theorem continuous_dom_prod
 
 中文:
 定理 continuous_dom_prod
-  结论: {R' : ι -> 类型} {A' : (i : ι) -> Set (R' i)}
+  结论: {R' : ι -> 类型} {A' : (i : ι) -> 集合 (R' i)}
   证明: by
   simp_rw [continuous_dom_prod_right hAopen, continuous_dom_prod_left hAopen']
   refine ⟨fun H S hS => H S hS S hS, fun H S hS T hT => ?_⟩
@@ -1217,7 +1217,7 @@ theorem continuous_dom_pi
 
 中文:
 定理 continuous_dom_pi
-  结论: {n : 类型} [Finite n] {X : 类型}
+  结论: {n : 类型} [有限 n] {X : 类型}
   证明: by
   refine ⟨by fun_prop, fun H => ?_⟩
   simp_rw [continuous_iff_continuousAt, ContinuousAt]
@@ -1287,7 +1287,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Inv (R i)] [对任意 i, InvMemClass (S i) (R i)] [对任意 i, ContinuousInv (R i)] :
+  签名: i, 取逆 (R i)] [对任意 i, InvMem类 (S i) (R i)] [对任意 i, 连续取逆 (R i)] :
   定义体: by
     rw [continuous_dom]
     intro T hT
@@ -1339,7 +1339,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Mul (R i)] [对任意 i, MulMemClass (S i) (R i)] [对任意 i, ContinuousMul (R i)] :
+  签名: i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)] [对任意 i, 连续乘法 (R i)] :
   定义体: let φ : Πʳ i, [R i, B i]_[𝓟 T] ->ₙ* Π i, R i :=
   { toFun := (↑)
     map_mul' := fun _ _ => rfl }
@@ -1372,7 +1372,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Group (R i)] [对任意 i, SubgroupClass (S i) (R i)] [对任意 i, IsTopologicalGroup (R i)] :
+  签名: i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)] [对任意 i, 是拓扑群 (R i)] :
 -/
 instance [Π i, Group (R i)] [forall i, SubgroupClass (S i) (R i)] [forall i, IsTopologicalGroup (R i)] :
     IsTopologicalGroup (Πʳ i, [R i, B i]_[𝓟 T]) where
@@ -1386,7 +1386,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)] [对任意 i, IsTopologicalRing (R i)] :
+  签名: i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)] [对任意 i, 是拓扑环 (R i)] :
 -/
 instance [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)] [forall i, IsTopologicalRing (R i)] :
     IsTopologicalRing (Πʳ i, [R i, B i]_[𝓟 T]) where
@@ -1405,7 +1405,7 @@ theorem nhds_zero_eq_map_ofPre
 
 中文:
 定理 nhds_zero_eq_map_ofPre
-  结论: [Π i, Zero (R i)] [对任意 i, ZeroMemClass (S i) (R i)]
+  结论: [Π i, 零 (R i)] [对任意 i, ZeroMem类 (S i) (R i)]
   证明: nhds_eq_map_inclusion hBopen hT 0
 
 Depends on / 依赖: hBopen, nhds_eq_map_inclusion
@@ -1425,7 +1425,7 @@ theorem nhds_zero_eq_map_structureMap
 
 中文:
 定理 nhds_zero_eq_map_structureMap
-  结论: [Π i, Zero (R i)] [对任意 i, ZeroMemClass (S i) (R i)]
+  结论: [Π i, 零 (R i)] [对任意 i, ZeroMem类 (S i) (R i)]
   证明: nhds_eq_map_structureMap hBopen 0
 
 Depends on / 依赖: hBopen, nhds_eq_map_structureMap
@@ -1454,7 +1454,7 @@ instance [Π
 
 中文:
 实例 [Π
-  签名: i, Mul (R i)] [对任意 i, MulMemClass (S i) (R i)] [对任意 i, ContinuousMul (R i)] :
+  签名: i, 乘法 (R i)] [对任意 i, MulMem类 (S i) (R i)] [对任意 i, 连续乘法 (R i)] :
   定义体: by
     rw [continuous_dom_prod hBopen.out hBopen.out]
     exact fun S hS => (continuous_inclusion hS).comp continuous_mul
@@ -1484,7 +1484,7 @@ instance continuousSMul
 
 中文:
 实例 continuousSMul
-  签名: {G : 类型} [TopologicalSpace G] [Π i, SMul G (R i)]
+  签名: {G : 类型} [拓扑空间 G] [Π i, 标量乘法 G (R i)]
   定义体: by
     rw [continuous_dom_prod_left hBopen.out]
     exact fun S hS => (continuous_inclusion hS).comp continuous_smul
@@ -1510,7 +1510,7 @@ instance isTopologicalGroup
 
 中文:
 实例 isTopologicalGroup
-  签名: [Π i, Group (R i)] [对任意 i, SubgroupClass (S i) (R i)]
+  签名: [Π i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)]
 -/
 instance isTopologicalGroup [Π i, Group (R i)] [forall i, SubgroupClass (S i) (R i)]
     [forall i, IsTopologicalGroup (R i)] :
@@ -1525,7 +1525,7 @@ instance isTopologicalRing
 
 中文:
 实例 isTopologicalRing
-  签名: [Π i, Ring (R i)] [对任意 i, SubringClass (S i) (R i)]
+  签名: [Π i, 环 (R i)] [对任意 i, 子环类 (S i) (R i)]
 -/
 instance isTopologicalRing [Π i, Ring (R i)] [forall i, SubringClass (S i) (R i)]
     [forall i, IsTopologicalRing (R i)] :
@@ -1550,7 +1550,7 @@ theorem locallyCompactSpace_of_group
 
 中文:
 定理 locallyCompactSpace_of_group
-  结论: [Π i, Group (R i)] [对任意 i, SubgroupClass (S i) (R i)]
+  结论: [Π i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)]
   证明: haveI : WeaklyLocallyCompactSpace (Πʳ i, [R i, B i]) :=
     weaklyLocallyCompactSpace_of_cofinite hBopen.out hBcompact
   inferInstance
@@ -1582,7 +1582,7 @@ locallyCompactS
 
 中文:
 实例 [Π
-  签名: i, Group (R i)] [对任意 i, SubgroupClass (S i) (R i)] [对任意 i, IsTopologicalGroup (R i)]
+  签名: i, 群 (R i)] [对任意 i, 子群类 (S i) (R i)] [对任意 i, 是拓扑群 (R i)]
   定义体: -- TODO: extract as a lemma
   haveI : forall i, WeaklyLocallyCompactSpace (R i) := fun i => .mk fun x =>
     ⟨x • (B i : Set (R i)), .smul _ (isCompact_iff_compactSpace.mpr inferInstance),
@@ -1632,7 +1632,7 @@ theorem mapAlong_continuous
 
 中文:
 定理 mapAlong_continuous
-  条件: (φ_cont : 对任意 j, Continuous (φ j))
+  条件: (φ_cont : 对任意 j, 连续 (φ j))
   证明: by
   rw [continuous_dom]
   intro S hS

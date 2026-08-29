@@ -63,7 +63,7 @@ structure DescentData
     - hom_comp(⦃Y) : C⦄ (q : Y ⟶ S) ⦃i₁ i₂ i₃ : ι⦄ (f₁ : Y ⟶ X i₁) (f₂ : Y ⟶ X i₂) (f₃ : Y ⟶ X i₃) (hf₁ : f₁ ≫ f i₁ = q) (hf₂ : f₂ ≫ f i₂ = q) (hf₃ : f₃ ≫ f i₃ = q) : hom q f₁ f₂ hf₁ hf₂ ≫ hom q f₂ f₃ hf₂ hf₃ = hom q f₁ f₃ hf₁ hf₃  [default: by cat_disch]
 
 中文:
-结构 DescentData
+结构 下降数据
   参数: where
   公理与运算 (5 个):
     - obj((i : ι)) : F.obj (.mk (op (X i)))
@@ -144,8 +144,8 @@ structure Hom
     - comm(⦃Y) : C⦄ (q : Y ⟶ S) ⦃i₁ i₂ : ι⦄ (f₁ : Y ⟶ X i₁) (f₂ : Y ⟶ X i₂) (hf₁ : f₁ ≫ f i₁ = q) (hf₂ : f₂ ≫ f i₂ = q) : (F.map f₁.op.toLoc).toFunctor.map (hom i₁) ≫ D₂.hom q f₁ f₂ = D₁.hom q f₁ f₂ ≫ (F.map f₂.op.toLoc).toFunctor.map (hom i₂)  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (D₁ D₂ : F.DescentData f)
+结构 态射
+  参数: (D₁ D₂ : F.下降数据 f)
   公理与运算 (2 个):
     - hom((i : ι)) : D₁.obj i ⟶ D₂.obj i
     - comm(⦃Y) : C⦄ (q : Y ⟶ S) ⦃i₁ i₂ : ι⦄ (f₁ : Y ⟶ X i₁) (f₂ : Y ⟶ X i₂) (hf₁ : f₁ ≫ f i₁ = q) (hf₂ : f₂ ≫ f i₂ = q) : (F.map f₁.op.toLoc).toFunctor.map (hom i₁) ≫ D₂.hom q f₁ f₂ = D₁.hom q f₁ f₂ ≫ (F.map f₂.op.toLoc).toFunctor.map (hom i₂)  [默认: by cat_disch]
@@ -176,7 +176,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (F.DescentData f)
+  签名: 范畴 (F.下降数据 f)
   定义体: Hom
   id D := { hom _ := 𝟙 _ }
   comp φ φ' := { hom i := φ.hom i ≫ φ'.hom i }
@@ -201,7 +201,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  结论: {D₁ D₂ : F.DescentData f} {φ φ' : D₁ ⟶ D₂}
+  结论: {D₁ D₂ : F.下降数据 f} {φ φ' : D₁ ⟶ D₂}
   证明: Hom.ext (funext h)
 
 @[simp]
@@ -226,8 +226,8 @@ lemma id_hom
 
 中文:
 引理 id_hom
-  条件: (D : F.DescentData f) (i : ι)
-  结论: Hom.hom (𝟙 D) i = 𝟙 _
+  条件: (D : F.下降数据 f) (i : ι)
+  结论: 态射.hom (𝟙 D) i = 𝟙 _
   证明: rfl
 
 @[simp, reassoc]
@@ -245,7 +245,7 @@ lemma comp_hom
 
 中文:
 引理 comp_hom
-  条件: {D₁ D₂ D₃ : F.DescentData f} (φ : D₁ ⟶ D₂) (φ' : D₂ ⟶ D₃) (i : ι)
+  条件: {D₁ D₂ D₃ : F.下降数据 f} (φ : D₁ ⟶ D₂) (φ' : D₂ ⟶ D₃) (i : ι)
   证明: rfl
 -/
 lemma comp_hom {D₁ D₂ D₃ : F.DescentData f} (φ : D₁ ⟶ D₂) (φ' : D₂ ⟶ D₃) (i : ι) :
@@ -308,7 +308,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {D₁ D₂ : F.DescentData f} (e : 对任意 (i : ι), D₁.obj i ≅ D₂.obj i)
+  签名: {D₁ D₂ : F.下降数据 f} (e : 对任意 (i : ι), D₁.obj i ≅ D₂.obj i)
   定义体: { hom i := (e i).hom }
   inv :=
     { hom i := (e i).inv
@@ -345,7 +345,7 @@ definition toDescentData
 
 中文:
 定义 toDescentData
-  签名: : F.obj (.mk (op S)) ⥤ F.DescentData f where
+  签名: : F.obj (.mk (op S)) ⥤ F.下降数据 f where
   定义体: .ofObj M
   map {M M'} φ := { hom i := (F.map (f i).op.toLoc).toFunctor.map φ }
 -/
@@ -373,7 +373,7 @@ definition pullFunctorObjHom
 
 中文:
 定义 pullFunctorObjHom
-  签名: (D : F.DescentData f)
+  签名: (D : F.下降数据 f)
   定义体: (F.mapComp (p' j₁).op.toLoc f₁.op.toLoc).inv.toNatTrans.app _ ≫
     D.hom (q ≫ p) (f₁ ≫ p' _) (f₂ ≫ p' _) (by simp [w, reassoc_of% hf₁])
       (by simp [w, reassoc_of% hf₂]) ≫
@@ -405,7 +405,7 @@ lemma pullFunctorObjHom_eq
 
 中文:
 引理 pullFunctorObjHom_eq
-  结论: (D : F.DescentData f)
+  结论: (D : F.下降数据 f)
   证明: by
   subst hq' hf₁' hf₂'
   simp [mapComp'_eq_mapComp, pullFunctorObjHom]
@@ -443,7 +443,7 @@ definition pullFunctorObj
 
 中文:
 定义 pullFunctorObj
-  签名: (D : F.DescentData f)
+  签名: (D : F.下降数据 f)
   定义体: (F.map (p' _).op.toLoc).toFunctor.obj (D.obj (α j))
   hom Y q j₁ j₂ f₁ f₂ hf₁ hf₂ := pullFunctorObjHom w _ _ _ _
   pullHom_hom Y' Y g q q' hq j₁ j₂ f₁ f₂ hf₁ hf₂ gf₁ gf₂ hgf₁ hgf₂ := by
@@ -496,7 +496,7 @@ definition pullFunctor
 
 中文:
 定义 pullFunctor
-  签名: : F.DescentData f ⥤ F.DescentData f' where
+  签名: : F.下降数据 f ⥤ F.下降数据 f' where
   定义体: pullFunctorObj w D
   map {D₁ D₂} φ :=
     { hom j := (F.map (p' j).op.toLoc).toFunctor.map (φ.hom (α j))
@@ -733,7 +733,7 @@ definition pullFunctorEquivalence
 
 中文:
 定义 pullFunctorEquivalence
-  签名: {S' : C} {ι' : Type t'} {X' : ι' -> C} {f' : 对任意 j, X' j ⟶ S'}
+  签名: {S' : C} {ι' : 类型 t'} {X' : ι' -> C} {f' : 对任意 j, X' j ⟶ S'}
   定义体: pullFunctor F w
   inverse := pullFunctor F w'
   unitIso :=
@@ -785,7 +785,7 @@ lemma exists_equivalence_of_sieve_eq
     obtain ⟨_
 
 中文:
-引理 exists_equivalence_of_sieve_eq
+引理 存在_equivalence_of_sieve_eq
   证明: by
   have h₁ (i' : ι') : exists (i : ι) (g' : X' i' ⟶ X i), g' ≫ f i = f' i' := by
     obtain ⟨_, _, _, ⟨i⟩, fac⟩ : Sieve.ofArrows X f (f' i') := by
@@ -967,10 +967,10 @@ structure IsPrestackFor
     - nonempty_fullyFaithful : Nonempty (F.toDescentData (fun (f : R.category) => f.obj.hom)).FullyFaithful
 
 中文:
-结构 IsPrestackFor
+结构 是PrestackFor
   参数: (R : Presieve S)
   公理与运算 (1 个):
-    - nonempty_fullyFaithful : Nonempty (F.toDescentData (fun (f : R.category) => f.obj.hom)).FullyFaithful
+    - nonempty_fullyFaithful : 非空 (F.toDescentData (fun (f : R.category) => f.obj.hom)).满忠实
 -/
 structure IsPrestackFor (R : Presieve S) : Prop where
   nonempty_fullyFaithful :
@@ -986,8 +986,8 @@ definition IsPrestackFor.fullyFaithful
   body: hF.nonempty_fullyFaithful.some
 
 中文:
-定义 IsPrestackFor.fullyFaithful
-  签名: {R : Presieve S} (hF : F.IsPrestackFor R)
+定义 是PrestackFor.fullyFaithful
+  签名: {R : Presieve S} (hF : F.是PrestackFor R)
   定义体: hF.nonempty_fullyFaithful.some
 
 Depends on / 依赖: hF.nonempty_fullyFaithful.some, nonempty_fullyFaithful
@@ -1091,10 +1091,10 @@ structure IsStackFor
     - isEquivalence : (F.toDescentData (fun (f : R.category) => f.obj.hom)).IsEquivalence
 
 中文:
-结构 IsStackFor
+结构 是StackFor
   参数: (R : Presieve S)
   公理与运算 (1 个):
-    - isEquivalence : (F.toDescentData (fun (f : R.category) => f.obj.hom)).IsEquivalence
+    - isEquivalence : (F.toDescentData (fun (f : R.category) => f.obj.hom)).是等价
 -/
 structure IsStackFor (R : Presieve S) : Prop where
   isEquivalence :
@@ -1112,8 +1112,8 @@ lemma IsStackFor.isPrestackFor
     exact .ofFullyFaithful _⟩
 
 中文:
-引理 IsStackFor.isPrestackFor
-  条件: {R : Presieve S} (h : F.IsStackFor R)
+引理 是StackFor.isPrestackFor
+  条件: {R : Presieve S} (h : F.是StackFor R)
   证明: ⟨by
     rw [isStackFor_iff] at h
     exact .ofFullyFaithful _⟩
@@ -1138,8 +1138,8 @@ lemma IsStackFor.essSurj
   infer_instance
 
 中文:
-引理 IsStackFor.essSurj
-  条件: {R : Presieve S} (h : F.IsStackFor R)
+引理 是StackFor.essSurj
+  条件: {R : Presieve S} (h : F.是StackFor R)
   证明: by
   have := h.isEquivalence
   infer_instance
@@ -1284,7 +1284,7 @@ lemma isPrestackFor_iff_isSheafFor
 
 中文:
 引理 isPrestackFor_iff_isSheafFor
-  条件: {S : C} (R : Sieve S)
+  条件: {S : C} (R : 筛 S)
   证明: by
   rw [isPrestackFor_iff]; rw [Functor.FullyFaithful.nonempty_iff_map_bijective]
   refine forall_congr' (fun M => forall_congr' (fun N => ?_))
@@ -1327,7 +1327,7 @@ lemma isPrestackFor_iff_isSheafFor'
 
 中文:
 引理 isPrestackFor_iff_isSheafFor'
-  条件: {S : C} (R : Sieve S)
+  条件: {S : C} (R : 筛 S)
   证明: by
   rw [isPrestackFor_iff_isSheafFor]
   refine ⟨fun h S₀ M N a => ?_, by tauto⟩
@@ -1369,7 +1369,7 @@ lemma IsPrestackFor.isSheafFor'
   simpa using hF M N a
 
 中文:
-引理 IsPrestackFor.isSheafFor'
+引理 是PrestackFor.isSheafFor'
   证明: by
   rw [isPrestackFor_iff_isSheafFor'] at hF
   obtain ⟨S, a, rfl⟩ := S.mk_surjective
@@ -1403,7 +1403,7 @@ definition fullyFaithfulToDescentData
 
 中文:
 定义 fullyFaithfulToDescentData
-  签名: [F.IsPrestack J] (hf : Sieve.ofArrows _ f in J S)
+  签名: [F.是Prestack J] (hf : 筛.ofArrows _ f in J S)
   定义体: Nonempty.some (by
     rw [← isPrestackFor_ofArrows_iff]; rw [← IsPrestackFor_generate_iff]; rw [isPrestackFor_iff_isSheafFor]
     intro M N
@@ -1434,7 +1434,7 @@ lemma isPrestackFor
 
 中文:
 引理 isPrestackFor
-  条件: [F.IsPrestack J] {S : C} (R : Presieve S) (hR : Sieve.generate R in J S)
+  条件: [F.是Prestack J] {S : C} (R : Presieve S) (hR : 筛.generate R in J S)
   证明: by
   rw [isPrestackFor_iff]
   exact ⟨F.fullyFaithfulToDescentData _ (by rwa [Sieve.ofArrows_category'])⟩
@@ -1456,7 +1456,7 @@ lemma isPrestackFor'
 
 中文:
 引理 isPrestackFor'
-  条件: [F.IsPrestack J] {S : C} (R : Sieve S) (hR : R in J S)
+  条件: [F.是Prestack J] {S : C} (R : 筛 S) (hR : R in J S)
   证明: F.isPrestackFor _ (by simpa)
 
 Depends on / 依赖: F.isPrestackFor, isPrestackFor
@@ -1478,7 +1478,7 @@ lemma IsPrestack.of_isPrestackFor
     apply (hF _ _ hS).isSheafFor'
 
 中文:
-引理 IsPrestack.of_isPrestackFor
+引理 是Prestack.of_isPrestackFor
   证明: by
     rw [isSheaf_iff_isSheaf_of_type]
     intro U S hS

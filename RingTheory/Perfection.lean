@@ -44,7 +44,7 @@ definition Perfection
 
 中文:
 定义 Perfection
-  签名: (α : 类型u₁) [Pow α 自然数] (p : 自然数)
+  签名: (α : 类型u₁) [幂 α 自然数] (p : 自然数)
   定义体: { f : Nat -> α // forall n, f (n + 1) ^ p = f n }
 
 @[deprecated (since := "2026-03-03")] alias Ring.Perfection := Perfection
@@ -73,7 +73,7 @@ alias _root_.Monoid.perfection := submonoid
 
 中文:
 定义 submonoid
-  签名: (M : 类型) [CommMonoid M] (p : 自然数)
+  签名: (M : 类型) [交换幺半群 M] (p : 自然数)
   定义体: { f | forall n, f (n + 1) ^ p = f n }
   one_mem' _ := one_pow _
   mul_mem' hf hg n := (mul_pow _ _ _).trans congr($(hf n) * $(hg n))
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: PerfectRing (Perfection M p) p
+  签名: 完美环 (Perfection M p) p
   定义体: Function.bijective_iff_has_inverse.mpr
     ⟨pthRootMonoidHom M p, fun x => by ext; simp, fun x => by ext; simp⟩
 
@@ -505,7 +505,7 @@ definition liftMonoidHom
 
 中文:
 定义 liftMonoidHom
-  签名: (p : 自然数) (M : 类型) [CommMonoid M] [PerfectRing M p]
+  签名: (p : 自然数) (M : 类型) [交换幺半群 M] [完美环 M p]
   定义体: { toFun r := ⟨fun n => f ((powMulEquiv M (p ^ n)).symm r), fun n => by
         rw [← map_pow]; rw [powMulEquiv_pow]; rw [pow_succ]; rw [MulAut.mul_def]; rw [MulEquiv.symm_trans_apply]; rw [powMulEquiv_symm_pow_p]; rw [← powMulEquiv_pow]⟩
       map_one' := extMonoid fun _ => by simp_rw [coeffMonoidHo
@@ -559,7 +559,7 @@ definition mapMonoidHom
 
 中文:
 定义 mapMonoidHom
-  签名: (p : 自然数) {M N : 类型} [CommMonoid M] [CommMonoid N] (φ : M ->* N)
+  签名: (p : 自然数) {M N : 类型} [交换幺半群 M] [交换幺半群 N] (φ : M ->* N)
   定义体: ⟨fun n => φ (f.coeffMonoidHom M p n), fun n => by rw [← map_pow, coeffMonoidHom_pow_p']⟩
   map_one' := by ext; simp
   map_mul' _ _ := by ext; simp
@@ -585,7 +585,7 @@ theorem coeffMonoidHom_mapMonoidHom
 
 中文:
 定理 coeffMonoidHom_mapMonoidHom
-  结论: (p : 自然数) {M N : 类型} [CommMonoid M] [CommMonoid N]
+  结论: (p : 自然数) {M N : 类型} [交换幺半群 M] [交换幺半群 N]
   证明: rfl
 -/
 theorem coeffMonoidHom_mapMonoidHom (p : Nat) {M N : Type*} [CommMonoid M] [CommMonoid N]
@@ -611,7 +611,7 @@ alias _root_.Ring.perfectionSubsemiring := subsemiring
 
 中文:
 定义 subsemiring
-  签名: (R : 类型) [CommSemiring R] (p : 自然数) [hp : Fact p.Prime] [CharP R p]
+  签名: (R : 类型) [交换半环 R] (p : 自然数) [hp : Fact p.素] [特征p R p]
   定义体: submonoid R p
   zero_mem' _ := zero_pow hp.1.ne_zero
   add_mem' hf hg n := (map_add (frobenius R p) _ _).trans congr($(hf n) + $(hg n))
@@ -642,7 +642,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring (Perfection R p)
+  签名: 交换半环 (Perfection R p)
   定义体: inferInstanceAs CommSemiring (subsemiring R p)
 
 Depends on / 依赖: CommSemiring, subsemiring
@@ -660,7 +660,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharP (Perfection R p) p
+  签名: 特征p (Perfection R p) p
   定义体: CharP.subsemiring _ _ (subsemiring R p)
 
 Depends on / 依赖: CharP.subsemiring, subsemiring
@@ -1031,7 +1031,7 @@ theorem pthRoot_frobenius
 
 中文:
 定理 pthRoot_frobenius
-  结论: (pthRoot R p).comp (frobenius _ p) = RingHom.id _
+  结论: (pthRoot R p).comp (frobenius _ p) = 环态射.id _
   证明: by
   ext; simp
 -/
@@ -1048,7 +1048,7 @@ theorem frobenius_pthRoot
 
 中文:
 定理 frobenius_pthRoot
-  结论: (frobenius _ p).comp (pthRoot R p) = RingHom.id _
+  结论: (frobenius _ p).comp (pthRoot R p) = 环态射.id _
   证明: pthRoot_frobenius
 
 Depends on / 依赖: pthRoot_frobenius
@@ -1122,7 +1122,7 @@ theorem coeff_surjective
 
 中文:
 定理 coeff_surjective
-  条件: (h : Function.Surjective (frobenius R p)) (n : 自然数)
+  条件: (h : 函数.满射 (frobenius R p)) (n : 自然数)
   证明: by
   intro x
   refine ⟨⟨fun m => if h : n <= m then ?_ else x ^ p ^ (n - m), ?_⟩, ?_⟩
@@ -1178,7 +1178,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (R : 类型u₁) [CommSemiring R] [CharP R p] [PerfectRing R p]
+  签名: (R : 类型u₁) [交换半环 R] [特征p R p] [完美环 R p]
   定义体: { toFun := fun r => ⟨fun n => f (((frobeniusEquiv R p).symm : R ->+* R)^[n] r),
         fun n => by rw [← f.map_pow, Function.iterate_succ_apply', RingHom.coe_coe,
           frobeniusEquiv_symm_pow_p]⟩
@@ -1214,7 +1214,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: {R : 类型u₁} [CommSemiring R] [CharP R p] [PerfectRing R p] {S : 类型u₂}
+  结论: {R : 类型u₁} [交换半环 R] [特征p R p] [完美环 R p] {S : 类型u₂}
   证明: (lift p R S).symm.injective RingHom.ext hfg
 
 Depends on / 依赖: RingHom, RingHom.ext, injective, symm.injective
@@ -1284,7 +1284,7 @@ alias _root_.Ring.perfectionSubring := subring
 
 中文:
 定义 subring
-  签名: (R : 类型) [CommRing R] (p : 自然数) [hp : Fact p.Prime] [CharP R p]
+  签名: (R : 类型) [交换环 R] (p : 自然数) [hp : Fact p.素] [特征p R p]
   定义体: subsemiring R p
   neg_mem' hf n := (map_neg (frobenius R p) _).trans congr(-$(hf n))
 
@@ -1313,7 +1313,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ring (Perfection R p)
+  签名: 环 (Perfection R p)
   定义体: inferInstanceAs Ring (subring R p)
 
 Depends on / 依赖: subring
@@ -1331,7 +1331,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (Perfection R p)
+  签名: 交换环 (Perfection R p)
   定义体: inferInstanceAs CommRing (subring R p)
 
 Depends on / 依赖: CommRing, subring
@@ -1353,7 +1353,7 @@ theorem coeff_mapMonoidHom
 
 中文:
 定理 coeff_mapMonoidHom
-  结论: {p : 自然数} [Fact p.Prime] {M N : 类型} [CommMonoid M] [CommRing N]
+  结论: {p : 自然数} [Fact p.素] {M N : 类型} [交换幺半群 M] [交换环 N]
   证明: rfl
 -/
 @[simp] theorem coeff_mapMonoidHom {p : Nat} [Fact p.Prime] {M N : Type*} [CommMonoid M] [CommRing N]
@@ -1375,8 +1375,8 @@ structure PerfectionMap
     - surjective : forall f : Nat -> R, (forall n, f (n + 1) ^ p = f n) -> exists x : P, forall n, π (((frobeniusEquiv P p).symm)^[n] x) = f n
 
 中文:
-结构 PerfectionMap
-  参数: (p : 自然数) [Fact p.Prime] {R : 类型u₁} [CommSemiring R] [CharP R p]
+结构 Perfection映射
+  参数: (p : 自然数) [Fact p.素] {R : 类型u₁} [交换半环 R] [特征p R p]
   公理与运算 (2 个):
     - injective : 对任意 ⦃x y : P⦄, (对任意 n, π (((frobeniusEquiv P p).symm)^[n] x) = π (((frobeniusEquiv P p).symm)^[n] y)) -> x = y
     - surjective : 对任意 f : 自然数 -> R, (对任意 n, f (n + 1) ^ p = f n) -> 存在 x : P, 对任意 n, π (((frobeniusEquiv P p).symm)^[n] x) = f n
@@ -1447,7 +1447,7 @@ theorem of
 
 中文:
 定理 of
-  结论: PerfectionMap p (Perfection.coeff R p 0)
+  结论: Perfection映射 p (Perfection.coeff R p 0)
   证明: mk' (RingEquiv.refl _) (Equiv.eq_symm_apply _).1 rfl
 
 Depends on / 依赖: Equiv.eq_symm_apply, RingEquiv, RingEquiv.refl, eq_symm_apply
@@ -1471,8 +1471,8 @@ Nat.recOn n rfl fun n ih => injective_pow_p R p by
 
 中文:
 定理 id
-  条件: [PerfectRing R p]
-  结论: PerfectionMap p (RingHom.id R)
+  条件: [完美环 R p]
+  结论: Perfection映射 p (环态射.id R)
   证明: { injective := fun _ _ hxy => hxy 0
     surjective := fun f hf =>
       ⟨f 0, fun n =>
@@ -1505,7 +1505,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: {π : P ->+* R} (m : PerfectionMap p π)
+  签名: {π : P ->+* R} (m : Perfection映射 p π)
   定义体: RingEquiv.ofBijective (Perfection.lift p P R π)
     ⟨fun _ _ hxy => m.injective fun n => (congr_arg (Perfection.coeff R p n) hxy :), fun f =>
       let ⟨x, hx⟩ := m.surjective f.1 f.2
@@ -1529,7 +1529,7 @@ theorem equiv_apply
 
 中文:
 定理 equiv_apply
-  条件: {π : P ->+* R} (m : PerfectionMap p π) (x : P)
+  条件: {π : P ->+* R} (m : Perfection映射 p π) (x : P)
   证明: rfl
 -/
 theorem equiv_apply {π : P ->+* R} (m : PerfectionMap p π) (x : P) :
@@ -1545,7 +1545,7 @@ theorem comp_equiv
 
 中文:
 定理 comp_equiv
-  条件: {π : P ->+* R} (m : PerfectionMap p π) (x : P)
+  条件: {π : P ->+* R} (m : Perfection映射 p π) (x : P)
   证明: rfl
 -/
 theorem comp_equiv {π : P ->+* R} (m : PerfectionMap p π) (x : P) :
@@ -1561,7 +1561,7 @@ theorem comp_equiv'
 
 中文:
 定理 comp_equiv'
-  条件: {π : P ->+* R} (m : PerfectionMap p π)
+  条件: {π : P ->+* R} (m : Perfection映射 p π)
   证明: RingHom.ext fun _ => rfl
 
 Depends on / 依赖: RingHom, RingHom.ext
@@ -1580,7 +1580,7 @@ theorem comp_symm_equiv
 
 中文:
 定理 comp_symm_equiv
-  条件: {π : P ->+* R} (m : PerfectionMap p π) (f : Perfection R p)
+  条件: {π : P ->+* R} (m : Perfection映射 p π) (f : Perfection R p)
   证明: (m.comp_equiv _).symm.trans congr_arg _ m.equiv.apply_symm_apply f
 
 Depends on / 依赖: apply_symm_apply, comp_equiv, congr_arg, m.comp_equiv, m.equiv.apply_symm_apply, symm.trans
@@ -1599,7 +1599,7 @@ theorem comp_symm_equiv'
 
 中文:
 定理 comp_symm_equiv'
-  条件: {π : P ->+* R} (m : PerfectionMap p π)
+  条件: {π : P ->+* R} (m : Perfection映射 p π)
   证明: RingHom.ext m.comp_symm_equiv
 
 Depends on / 依赖: RingHom, RingHom.ext, comp_symm_equiv, m.comp_symm_equiv
@@ -1631,7 +1631,7 @@ exact RingHom.ext fun x => m.equiv.injective (m.equiv.apply_symm_apply _).trans
 
 中文:
 定义 lift
-  签名: [PerfectRing R p] (S : 类型u₂) [CommSemiring S] [CharP S p] (P : 类型u₃)
+  签名: [完美环 R p] (S : 类型u₂) [交换半环 S] [特征p S p] (P : 类型u₃)
   定义体: RingHom.comp ↑m.equiv.symm Perfection.lift p R S f
   invFun f := π.comp f
   left_inv f := by
@@ -1668,7 +1668,7 @@ theorem hom_ext
 
 中文:
 定理 hom_ext
-  结论: [PerfectRing R p] {S : 类型u₂} [CommSemiring S] [CharP S p] {P : 类型u₃}
+  结论: [完美环 R p] {S : 类型u₂} [交换半环 S] [特征p S p] {P : 类型u₃}
   证明: (lift p R S P π m).symm.injective RingHom.ext hfg
 
 Depends on / 依赖: RingHom, RingHom.ext, injective, symm.injective
@@ -1694,7 +1694,7 @@ definition map
 
 中文:
 定义 map
-  签名: {π : P ->+* R} (_ : PerfectionMap p π) {σ : Q ->+* S} (n : PerfectionMap p σ)
+  签名: {π : P ->+* R} (_ : Perfection映射 p π) {σ : Q ->+* S} (n : Perfection映射 p σ)
   定义体: lift p P S Q σ n φ.comp π
 -/
 noncomputable def map {π : P ->+* R} (_ : PerfectionMap p π) {σ : Q ->+* S} (n : PerfectionMap p σ)
@@ -1711,7 +1711,7 @@ theorem comp_map
 
 中文:
 定理 comp_map
-  结论: {π : P ->+* R} (m : PerfectionMap p π) {σ : Q ->+* S} (n : PerfectionMap p σ)
+  结论: {π : P ->+* R} (m : Perfection映射 p π) {σ : Q ->+* S} (n : Perfection映射 p σ)
   证明: (lift p P S Q σ n).symm_apply_apply _
 
 Depends on / 依赖: symm_apply_apply
@@ -1730,7 +1730,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {π : P ->+* R} (m : PerfectionMap p π) {σ : Q ->+* S} (n : PerfectionMap p σ)
+  结论: {π : P ->+* R} (m : Perfection映射 p π) {σ : Q ->+* S} (n : Perfection映射 p σ)
   证明: RingHom.ext_iff.1 (comp_map p m n φ) x
 
 Depends on / 依赖: RingHom, RingHom.ext_iff, comp_map, ext_iff
@@ -1793,7 +1793,7 @@ instance [Fact
 
 中文:
 实例 [Fact
-  签名: p.Prime] [hvp
+  签名: p.素] [hvp
   定义体: CharP.quotient O p hvp.1
 
 Depends on / 依赖: CharP.quotient, quotient
@@ -1811,7 +1811,7 @@ instance [hp
 
 中文:
 实例 [hp
-  签名: : Fact p.Prime] [Fact (¬ IsUnit (p : O))] : Nontrivial (ModP O p)
+  签名: : Fact p.素] [Fact (¬ 是单位 (p : O))] : 非平凡 (ModP O p)
   定义体: CharP.nontrivial_of_char_ne_one hp.1.ne_one
 
 Depends on / 依赖: CharP.nontrivial_of_char_ne_one, ne_one, nontrivial_of_char_ne_one
@@ -1895,7 +1895,7 @@ Ideal.mem_span_singleton'.1 Ideal.Quotient.eq.1 Quotient.sound' Quotient.mk_out'
 
 中文:
 定理 preVal_mk
-  条件: {x : O} (hx : (Ideal.Quotient.mk _ x : ModP O p) != 0)
+  条件: {x : O} (hx : (理想.商.mk _ x : ModP O p) != 0)
   证明: by
   obtain ⟨r, hr⟩ : exists (a : O), a * (p : O) = (Ideal.Quotient.mk _ x).out - x :=
 Ideal.mem_span_singleton'.1 Ideal.Quotient.eq.1 Quotient.sound' Quotient.mk_out' _
@@ -2158,7 +2158,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing (PreTilt O p)
+  签名: 交换环 (PreTilt O p)
   定义体: inferInstanceAs CommRing Perfection _ _
 
 Depends on / 依赖: CommRing, Perfection
@@ -2176,7 +2176,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharP (PreTilt O p) p
+  签名: 特征p (PreTilt O p) p
   定义体: inferInstanceAs CharP (Perfection _ _) _
 
 Depends on / 依赖: Perfection
@@ -2194,7 +2194,7 @@ instance :
 
 中文:
 实例 :
-  签名: PerfectRing (PreTilt O p) p
+  签名: 完美环 (PreTilt O p) p
   定义体: inferInstanceAs PerfectRing (Perfection _ _) p
 
 Depends on / 依赖: PerfectRing, Perfection
@@ -2653,7 +2653,7 @@ definition val
 
 中文:
 定义 val
-  签名: : Valuation (PreTilt O p) 实数>=0 where
+  签名: : 赋值 (PreTilt O p) 实数>=0 where
   定义体: valAux K v O p
   map_one' := valAux_one hv
   map_mul' := valAux_mul hv
@@ -2729,7 +2729,7 @@ theorem isDomain
 
 中文:
 定理 isDomain
-  结论: IsDomain (PreTilt O p)
+  结论: 是整环 (PreTilt O p)
   证明: by
   have hp : Nat.Prime p := Fact.out
   have : Nontrivial (PreTilt O p) := ⟨(CharP.nontrivial_of_char_ne_one hp.ne_one).1⟩
@@ -2762,7 +2762,7 @@ definition Tilt
 
 中文:
 定义 Tilt
-  签名: [Fact p.Prime] [hvp : Fact (v p != 1)]
+  签名: [Fact p.素] [hvp : Fact (v p != 1)]
   定义体: have _ := Fact.mk mt hv.one_of_isUnit (map_natCast (algebraMap O K) p).symm ▸ hvp.1
   FractionRing (PreTilt O p)
 
@@ -2788,7 +2788,7 @@ inferInstanceAs Field (FractionRing (PreTilt O p))
 
 中文:
 实例 [Fact
-  签名: p.Prime] [hvp
+  签名: p.素] [hvp
   定义体: #adaptation_note /-- This type ascription was not needed prior to nightly-2026-05-17. -/
   haveI : Fact ¬IsUnit (p : O) :=
 Fact.mk mt hv.one_of_isUnit (map_natCast (algebraMap O K) p).symm ▸ hvp.1

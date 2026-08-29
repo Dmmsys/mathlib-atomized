@@ -54,10 +54,10 @@ structure Simplex
     - independent : AffineIndependent k points
 
 中文:
-结构 Simplex
+结构 单纯形
   参数: (n : 自然数)
   公理与运算 (2 个):
-    - points : Fin (n + 1) -> P
+    - points : 有限集 (n + 1) -> P
     - independent : AffineIndependent k points
 -/
 structure Simplex (n : Nat) where
@@ -118,7 +118,7 @@ theorem mkOfPoint_points
 
 中文:
 定理 mkOfPoint_points
-  条件: (p : P) (i : Fin 1)
+  条件: (p : P) (i : 有限集 1)
   结论: (mkOfPoint k p).points i = p
   证明: rfl
 
@@ -136,8 +136,8 @@ instance [Inhabited
   body: ⟨mkOfPoint k default⟩
 
 中文:
-实例 [Inhabited
-  签名: P] : Inhabited (Simplex k P 0)
+实例 [可居
+  签名: P] : 可居 (单纯形 k P 0)
   定义体: ⟨mkOfPoint k default⟩
 
 Depends on / 依赖: mkOfPoint
@@ -155,7 +155,7 @@ instance nonempty
 
 中文:
 实例 nonempty
-  签名: : Nonempty (Simplex k P 0)
+  签名: : 非空 (单纯形 k P 0)
   定义体: ⟨mkOfPoint k AddTorsor.nonempty.some⟩
 
 Depends on / 依赖: AddTorsor, AddTorsor.nonempty.some, mkOfPoint, nonempty
@@ -179,7 +179,7 @@ lemma range_mkOfPoint_points
 中文:
 引理 range_mkOfPoint_points
   条件: (p : P)
-  结论: Set.range (mkOfPoint k p).points = {p}
+  结论: 集合.range (mkOfPoint k p).points = {p}
   证明: by
   simp
 
@@ -207,7 +207,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {n : 自然数} {s1 s2 : Simplex k P n} (h : 对任意 i, s1.points i = s2.points i)
+  条件: {n : 自然数} {s1 s2 : 单纯形 k P n} (h : 对任意 i, s1.points i = s2.points i)
   结论: s1 = s2
   证明: by
   cases s1
@@ -236,7 +236,7 @@ definition face
 
 中文:
 定义 face
-  签名: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数} (h : #fs = m + 1)
+  签名: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数} (h : #fs = m + 1)
   定义体: ⟨s.points ∘ fs.orderEmbOfFin h, s.independent.comp_embedding (fs.orderEmbOfFin h).toEmbedding⟩
 
 Depends on / 依赖: comp_embedding, fs.orderEmbOfFin, independent, orderEmbOfFin, points, s.independent.comp_embedding, s.points, toEmbedding
@@ -255,7 +255,7 @@ theorem face_points
 
 中文:
 定理 face_points
-  结论: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数}
+  结论: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数}
   证明: rfl
 -/
 theorem face_points {n : Nat} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : Nat}
@@ -273,7 +273,7 @@ theorem face_points'
 
 中文:
 定理 face_points'
-  结论: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数}
+  结论: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数}
   证明: rfl
 -/
 theorem face_points' {n : Nat} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : Nat}
@@ -295,7 +295,7 @@ theorem face_eq_mkOfPoint
 
 中文:
 定理 face_eq_mkOfPoint
-  条件: {n : 自然数} (s : Simplex k P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   ext
   simp [Affine.Simplex.mkOfPoint_points, Affine.Simplex.face_points, Finset.orderEmbOfFin_singleton]
@@ -320,7 +320,7 @@ theorem range_face_points
 
 中文:
 定理 range_face_points
-  结论: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数}
+  结论: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数}
   证明: by
   rw [face_points']; rw [Set.range_comp]; rw [Finset.range_orderEmbOfFin]
 
@@ -340,7 +340,7 @@ lemma affineSpan_face_le
 
 中文:
 引理 affineSpan_face_le
-  结论: {n : 自然数} (s : Simplex k P n) {fs : Finset (Fin (n + 1))} {m : 自然数}
+  结论: {n : 自然数} (s : 单纯形 k P n) {fs : 有限集 (有限集 (n + 1))} {m : 自然数}
   证明: affineSpan_mono k (s.range_face_points h ▸ Set.image_subset_range _ _)
 
 Depends on / 依赖: Set.image_subset_range, affineSpan_mono, image_subset_range, range_face_points, s.range_face_points
@@ -362,7 +362,7 @@ lemma points_mem_affineSpan_face
 
 中文:
 引理 points_mem_affineSpan_face
-  结论: [Nontrivial k] {n : 自然数} (s : Simplex k P n)
+  结论: [非平凡 k] {n : 自然数} (s : 单纯形 k P n)
   证明: by
   rw [range_face_points]
   exact s.independent.mem_affineSpan_iff i fs
@@ -385,7 +385,7 @@ definition faceOpposite
 
 中文:
 定义 faceOpposite
-  签名: {n : 自然数} [NeZero n] (s : Simplex k P n) (i : Fin (n + 1))
+  签名: {n : 自然数} [NeZero n] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   定义体: s.face (fs := {i}ᶜ) (by simp [card_compl, NeZero.one_le])
 
 Depends on / 依赖: NeZero, NeZero.one_le, card_compl, one_le, s.face
@@ -404,7 +404,7 @@ lemma range_faceOpposite_points
 
 中文:
 引理 range_faceOpposite_points
-  条件: {n : 自然数} [NeZero n] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   simp [faceOpposite]
 -/
@@ -422,7 +422,7 @@ lemma affineSpan_faceOpposite_le
 
 中文:
 引理 affineSpan_faceOpposite_le
-  条件: {n : 自然数} [NeZero n] (s : Simplex k P n) (i : Fin (n + 1))
+  条件: {n : 自然数} [NeZero n] (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: s.affineSpan_face_le _
 
 Depends on / 依赖: affineSpan_face_le, s.affineSpan_face_le
@@ -443,7 +443,7 @@ lemma points_mem_affineSpan_faceOpposite
 
 中文:
 引理 points_mem_affineSpan_faceOpposite
-  结论: [Nontrivial k] {n : 自然数} [NeZero n] (s : Simplex k P n)
+  结论: [非平凡 k] {n : 自然数} [NeZero n] (s : 单纯形 k P n)
   证明: by
   rw [faceOpposite]; rw [s.points_mem_affineSpan_face]
   simp
@@ -468,7 +468,7 @@ lemma points_notMem_affineSpan_faceOpposite
 
 中文:
 引理 points_notMem_affineSpan_faceOpposite
-  结论: [Nontrivial k] {n : 自然数} [NeZero n] (s : Simplex k P n)
+  结论: [非平凡 k] {n : 自然数} [NeZero n] (s : 单纯形 k P n)
   证明: by
   rw [points_mem_affineSpan_faceOpposite]
   simp
@@ -491,7 +491,7 @@ lemma faceOpposite_point_eq_point_succAbove
 
 中文:
 引理 faceOpposite_point_eq_point_succAbove
-  结论: {n : 自然数} [NeZero n] (s : Simplex k P n)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 k P n)
   证明: by
   simp_rw [faceOpposite, face, comp_apply, Finset.orderEmbOfFin_compl_singleton_apply]
 
@@ -515,7 +515,7 @@ lemma faceOpposite_point_eq_point_rev
 
 中文:
 引理 faceOpposite_point_eq_point_rev
-  条件: (s : Simplex k P 1) (i : Fin 2) (n : Fin 1)
+  条件: (s : 单纯形 k P 1) (i : 有限集 2) (n : 有限集 1)
   证明: by
   have h : i.rev = Fin.succAbove i n := by decide +revert
   simp [h, faceOpposite_point_eq_point_succAbove]
@@ -537,7 +537,7 @@ lemma faceOpposite_point_eq_point_one
 
 中文:
 引理 faceOpposite_point_eq_point_one
-  条件: (s : Simplex k P 1) (n : Fin 1)
+  条件: (s : 单纯形 k P 1) (n : 有限集 1)
   证明: s.faceOpposite_point_eq_point_rev _ _
 
 Depends on / 依赖: ContinuousMul, ContinuousMul.measurableMul, SeparatelyContinuousMul, measurableMul
@@ -556,7 +556,7 @@ lemma faceOpposite_point_eq_point_zero
 
 中文:
 引理 faceOpposite_point_eq_point_zero
-  条件: (s : Simplex k P 1) (n : Fin 1)
+  条件: (s : 单纯形 k P 1) (n : 有限集 1)
   证明: s.faceOpposite_point_eq_point_rev _ _
 
 Depends on / 依赖: ContinuousSub, ContinuousSub.measurableSub, measurableSub
@@ -579,7 +579,7 @@ lemma mem_affineSpan_image_iff
 
 中文:
 引理 mem_affineSpan_image_iff
-  结论: [Nontrivial k] {n : 自然数} (s : Simplex k P n)
+  结论: [非平凡 k] {n : 自然数} (s : 单纯形 k P n)
   证明: s.independent.mem_affineSpan_iff _ _
 
 Depends on / 依赖: ContinuousInv, ContinuousInv.measurableInv, measurableInv
@@ -606,7 +606,7 @@ lemma affineCombination_mem_affineSpan_faceOpposite_iff
 
 中文:
 引理 affineCombination_mem_affineSpan_faceOpposite_iff
-  结论: {n : 自然数} [NeZero n] {s : Simplex k P n}
+  结论: {n : 自然数} [NeZero n] {s : 单纯形 k P n}
   证明: by
   refine ⟨fun h => ?_, fun h => ?_⟩
   · rw [range_faceOpposite_points] at h
@@ -649,7 +649,7 @@ definition map
 
 中文:
 定义 map
-  签名: {n : 自然数} (s : Affine.Simplex k P n) (f : P ->ᵃ[k] P₂) (hf : Function.Injective f)
+  签名: {n : 自然数} (s : 仿射.单纯形 k P n) (f : P ->ᵃ[k] P₂) (hf : 函数.单射 f)
   定义体: f ∘ s.points
   independent := s.independent.map' f hf
 
@@ -673,7 +673,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  条件: {n : 自然数} (s : Affine.Simplex k P n)
+  条件: {n : 自然数} (s : 仿射.单纯形 k P n)
   证明: ext fun _ => rfl
 -/
 theorem map_id {n : Nat} (s : Affine.Simplex k P n) :
@@ -692,7 +692,7 @@ theorem map_comp
 
 中文:
 定理 map_comp
-  结论: {n : 自然数} (s : Affine.Simplex k P n)
+  结论: {n : 自然数} (s : 仿射.单纯形 k P n)
   证明: ext fun _ => rfl
 
 @[simp]
@@ -716,7 +716,7 @@ theorem face_map
 
 中文:
 定理 face_map
-  结论: {n : 自然数} (s : Simplex k P n) (f : P ->ᵃ[k] P₂) (hf : Function.Injective f)
+  结论: {n : 自然数} (s : 单纯形 k P n) (f : P ->ᵃ[k] P₂) (hf : 函数.单射 f)
   证明: rfl
 
 @[simp]
@@ -739,7 +739,7 @@ theorem faceOpposite_map
 
 中文:
 定理 faceOpposite_map
-  结论: {n : 自然数} [NeZero n] (s : Simplex k P n) (f : P ->ᵃ[k] P₂)
+  结论: {n : 自然数} [NeZero n] (s : 单纯形 k P n) (f : P ->ᵃ[k] P₂)
   证明: rfl
 
 @[simp]
@@ -760,7 +760,7 @@ theorem map_mkOfPoint
 
 中文:
 定理 map_mkOfPoint
-  条件: (f : P ->ᵃ[k] P₂) (hf : Function.Injective f) (p : P)
+  条件: (f : P ->ᵃ[k] P₂) (hf : 函数.单射 f) (p : P)
   证明: rfl
 -/
 theorem map_mkOfPoint (f : P ->ᵃ[k] P₂) (hf : Function.Injective f) (p : P) :
@@ -779,7 +779,7 @@ definition reindex
 
 中文:
 定义 reindex
-  签名: {m n : 自然数} (s : Simplex k P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  签名: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   定义体: ⟨s.points ∘ e.symm, (affineIndependent_equiv e.symm).2 s.independent⟩
 
 Depends on / 依赖: affineIndependent_equiv, e.symm, independent, points, s.independent, s.points
@@ -800,8 +800,8 @@ theorem reindex_refl
 
 中文:
 定理 reindex_refl
-  条件: {n : 自然数} (s : Simplex k P n)
-  结论: s.reindex (Equiv.refl (Fin (n + 1))) = s
+  条件: {n : 自然数} (s : 单纯形 k P n)
+  结论: s.reindex (等价.refl (有限集 (n + 1))) = s
   证明: ext fun _ => rfl
 -/
 theorem reindex_refl {n : Nat} (s : Simplex k P n) : s.reindex (Equiv.refl (Fin (n + 1))) = s :=
@@ -819,7 +819,7 @@ theorem reindex_trans
 
 中文:
 定理 reindex_trans
-  结论: {n₁ n₂ n₃ : 自然数} (e₁₂ : Fin (n₁ + 1) ≃ Fin (n₂ + 1))
+  结论: {n₁ n₂ n₃ : 自然数} (e₁₂ : 有限集 (n₁ + 1) ≃ 有限集 (n₂ + 1))
   证明: rfl
 -/
 theorem reindex_trans {n₁ n₂ n₃ : Nat} (e₁₂ : Fin (n₁ + 1) ≃ Fin (n₂ + 1))
@@ -839,7 +839,7 @@ theorem reindex_reindex_symm
 
 中文:
 定理 reindex_reindex_symm
-  条件: {m n : 自然数} (s : Simplex k P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by rw [← reindex_trans, Equiv.self_trans_symm, reindex_refl]
 
 Depends on / 依赖: Equiv.self_trans_symm, GroupWithZero, T1Space, measurableInv, reindex_refl, reindex_trans, self_trans_symm
@@ -859,7 +859,7 @@ theorem reindex_symm_reindex
 
 中文:
 定理 reindex_symm_reindex
-  条件: {m n : 自然数} (s : Simplex k P m) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: by rw [← reindex_trans, Equiv.symm_trans_self, reindex_refl]
 
 Depends on / 依赖: ContinuousMul, ContinuousMul.measurableMul, Equiv.symm_trans_self, SecondCountableTopology, reindex_refl, reindex_trans, symm_trans_self
@@ -880,7 +880,7 @@ theorem reindex_range_points
 
 中文:
 定理 reindex_range_points
-  条件: {m n : 自然数} (s : Simplex k P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  条件: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   rw [reindex]; rw [Set.range_comp]; rw [Equiv.range_eq_univ]; rw [Set.image_univ]
 
@@ -900,7 +900,7 @@ theorem reindex_map
 
 中文:
 定理 reindex_map
-  结论: {m n : 自然数} (s : Simplex k P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  结论: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: rfl
 
 Depends on / 依赖: ContinuousSMul, ContinuousSMul.measurableSMul, TopologicalSpace
@@ -923,7 +923,7 @@ lemma range_face_reindex
 
 中文:
 引理 range_face_reindex
-  结论: {m n : 自然数} (s : Simplex k P m) (e : Fin (m + 1) ≃ Fin (n + 1))
+  结论: {m n : 自然数} (s : 单纯形 k P m) (e : 有限集 (m + 1) ≃ 有限集 (n + 1))
   证明: by
   simp only [range_face_points, reindex_points, Set.image_comp]
   simp
@@ -949,7 +949,7 @@ lemma range_faceOpposite_reindex
 
 中文:
 引理 range_faceOpposite_reindex
-  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : Simplex k P m)
+  结论: {m n : 自然数} [NeZero m] [NeZero n] (s : 单纯形 k P m)
   证明: by
   rw [faceOpposite]; rw [range_face_reindex]
   simp [Equiv.image_compl]
@@ -981,7 +981,7 @@ definition restrict
 
 中文:
 定义 restrict
-  签名: {n : 自然数} (s : Affine.Simplex k P n) (S : AffineSubspace k P)
+  签名: {n : 自然数} (s : 仿射.单纯形 k P n) (S : 仿射子空间 k P)
   定义体: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     Affine.Simplex (V := S.direction) k S n :=
   letI := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
@@ -1016,7 +1016,7 @@ theorem restrict_map_inclusion
 
 中文:
 定理 restrict_map_inclusion
-  结论: {n : 自然数} (s : Affine.Simplex k P n)
+  结论: {n : 自然数} (s : 仿射.单纯形 k P n)
   证明: Nonempty.map (AffineSubspace.inclusion hS₁) inferInstance
     letI := Nonempty.map (Set.inclusion hS₂) ‹_›
     (s.restrict S₁ hS₁).map (AffineSubspace.inclusion hS₂) (Set.inclusion_injective hS₂) =
@@ -1101,7 +1101,7 @@ theorem restrict_map_subtype
 
 中文:
 定理 restrict_map_subtype
-  条件: {n : 自然数} (s : Affine.Simplex k P n)
+  条件: {n : 自然数} (s : 仿射.单纯形 k P n)
   证明: rfl
 -/
 theorem restrict_map_subtype {n : Nat} (s : Affine.Simplex k P n) :
@@ -1120,7 +1120,7 @@ lemma restrict_reindex
 
 中文:
 引理 restrict_reindex
-  结论: {m n : 自然数} (s : Affine.Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  结论: {m n : 自然数} (s : 仿射.单纯形 k P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.reindex e).restrict S (s.reindex_range_points e ▸ hS) = (s.restrict S hS).reindex e :=
   rfl
@@ -1149,7 +1149,7 @@ lemma face_restrict
 
 中文:
 引理 face_restrict
-  结论: {n : 自然数} (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+  结论: {n : 自然数} (s : 仿射.单纯形 k P n) {S : 仿射子空间 k P}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).face h = (s.face h).restrict S ((s.affineSpan_face_le h).trans hS) := by
   let := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
@@ -1184,7 +1184,7 @@ lemma faceOpposite_restrict
 
 中文:
 引理 faceOpposite_restrict
-  结论: {n : 自然数} [NeZero n] (s : Affine.Simplex k P n) {S : AffineSubspace k P}
+  结论: {n : 自然数} [NeZero n] (s : 仿射.单纯形 k P n) {S : 仿射子空间 k P}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).faceOpposite i = (s.faceOpposite i).restrict S
       ((s.affineSpan_faceOpposite_le i).trans hS) :=
@@ -1222,8 +1222,8 @@ definition setInterior
     (∑ i, w i = 1) ∧ (forall i, w i in I) ∧ Finset.univ.affineCombination k s.points w = p}
 
 中文:
-定义 setInterior
-  签名: (I : Set k) {n : 自然数} (s : Simplex k P n)
+定义 set整数erior
+  签名: (I : 集合 k) {n : 自然数} (s : 单纯形 k P n)
   定义体: {p | exists w : Fin (n + 1) -> k,
     (∑ i, w i = 1) ∧ (forall i, w i in I) ∧ Finset.univ.affineCombination k s.points w = p}
 -/
@@ -1244,8 +1244,8 @@ lemma affineCombination_mem_setInterior_iff
   exact hw'01
 
 中文:
-引理 affineCombination_mem_setInterior_iff
-  结论: {I : Set k} {n : 自然数} {s : Simplex k P n}
+引理 affineCombination_mem_set整数erior_iff
+  结论: {I : 集合 k} {n : 自然数} {s : 单纯形 k P n}
   证明: by
   refine ⟨fun ⟨w', hw', hw'01, hww'⟩ => ?_, fun h => ⟨w, hw, h, rfl⟩⟩
   simp_rw [← (affineIndependent_iff_eq_of_fintype_affineCombination_eq k s.points).1
@@ -1276,8 +1276,8 @@ lemma setInterior_reindex
     rw [← Function.comp_id w]; rw [← e.self_comp_symm]; rw [← Function.comp_assoc]; rw [← Equiv.coe_toEmbedding]; rw [← Finset.univ.affineCombination_map e.symm.toEmbedding]; rw [map_univ_equ
 
 中文:
-引理 setInterior_reindex
-  结论: (I : Set k) {m n : 自然数} (s : Simplex k P n)
+引理 set整数erior_reindex
+  结论: (I : 集合 k) {m n : 自然数} (s : 单纯形 k P n)
   证明: by
   ext p
   refine ⟨fun ⟨w, hw, hwI, h⟩ => ?_, fun ⟨w, hw, hwI, h⟩ => ?_⟩
@@ -1311,8 +1311,8 @@ lemma setInterior_mono
   proof: fun _ ⟨w, hw, hw01, hww⟩ => ⟨w, hw, fun i => hij (hw01 i), hww⟩
 
 中文:
-引理 setInterior_mono
-  条件: {I J : Set k} (hij : I subseteq J) {n : 自然数} (s : Simplex k P n)
+引理 set整数erior_mono
+  条件: {I J : 集合 k} (hij : I subseteq J) {n : 自然数} (s : 单纯形 k P n)
   证明: fun _ ⟨w, hw, hw01, hww⟩ => ⟨w, hw, fun i => hij (hw01 i), hww⟩
 -/
 lemma setInterior_mono {I J : Set k} (hij : I subseteq J) {n : Nat} (s : Simplex k P n) :
@@ -1330,8 +1330,8 @@ lemma setInterior_subset_affineSpan
   exact affineCombination_mem_affineSpan_of_nonempty hw _
 
 中文:
-引理 setInterior_subset_affineSpan
-  条件: {I : Set k} {n : 自然数} {s : Simplex k P n}
+引理 set整数erior_subset_affineSpan
+  条件: {I : 集合 k} {n : 自然数} {s : 单纯形 k P n}
   证明: by
   rintro p ⟨w, hw, hi, rfl⟩
   exact affineCombination_mem_affineSpan_of_nonempty hw _
@@ -1357,8 +1357,8 @@ lemma setInterior_map
     rw [hw]; rw [Affine.Simplex.affineCombination_mem_setInterior_iff hw1]; rw [Simplex.map_points]; rw [← Finset.map_affi
 
 中文:
-引理 setInterior_map
-  结论: (I : Set k) {n : 自然数} (s : Simplex k P n) {f : P ->ᵃ[k] P₂}
+引理 set整数erior_map
+  结论: (I : 集合 k) {n : 自然数} (s : 单纯形 k P n) {f : P ->ᵃ[k] P₂}
   证明: by
   ext p
   rw [Set.mem_image]
@@ -1396,8 +1396,8 @@ lemma setInterior_restrict
   rw [← S.subtype_injective.image_injective.eq_iff]; rw [Set.image_preimage_eq_of_subset (s.setInteri
 
 中文:
-引理 setInterior_restrict
-  结论: (I : Set k) {n : 自然数} (s : Simplex k P n) {S : AffineSubspace k P}
+引理 set整数erior_restrict
+  结论: (I : 集合 k) {n : 自然数} (s : 单纯形 k P n) {S : 仿射子空间 k P}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).setInterior I = S.subtype ⁻¹' (s.setInterior I) := by
   let := Nonempty.map (AffineSubspace.inclusion hS) inferInstance
@@ -1426,7 +1426,7 @@ definition interior
 
 中文:
 定义 interior
-  签名: {n : 自然数} (s : Simplex k P n)
+  签名: {n : 自然数} (s : 单纯形 k P n)
   定义体: s.setInterior (Set.Ioo 0 1)
 -/
 protected def interior {n : Nat} (s : Simplex k P n) : Set P :=
@@ -1442,7 +1442,7 @@ lemma interior_reindex
 
 中文:
 引理 interior_reindex
-  条件: {m n : 自然数} (s : Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+  条件: {m n : 自然数} (s : 单纯形 k P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: s.setInterior_reindex _ _
 -/
 @[simp] lemma interior_reindex {m n : Nat} (s : Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1)) :
@@ -1459,7 +1459,7 @@ lemma affineCombination_mem_interior_iff
 
 中文:
 引理 affineCombination_mem_interior_iff
-  结论: {n : 自然数} {s : Simplex k P n} {w : Fin (n + 1) -> k}
+  结论: {n : 自然数} {s : 单纯形 k P n} {w : 有限集 (n + 1) -> k}
   证明: affineCombination_mem_setInterior_iff hw
 
 Depends on / 依赖: affineCombination_mem_setInterior_iff
@@ -1478,8 +1478,8 @@ definition closedInterior
   body: s.setInterior (Set.Icc 0 1)
 
 中文:
-定义 closedInterior
-  签名: {n : 自然数} (s : Simplex k P n)
+定义 closed整数erior
+  签名: {n : 自然数} (s : 单纯形 k P n)
   定义体: s.setInterior (Set.Icc 0 1)
 -/
 protected def closedInterior {n : Nat} (s : Simplex k P n) : Set P :=
@@ -1494,8 +1494,8 @@ lemma closedInterior_reindex
   proof: s.setInterior_reindex _ _
 
 中文:
-引理 closedInterior_reindex
-  条件: {m n : 自然数} (s : Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1))
+引理 closed整数erior_reindex
+  条件: {m n : 自然数} (s : 单纯形 k P n) (e : 有限集 (n + 1) ≃ 有限集 (m + 1))
   证明: s.setInterior_reindex _ _
 -/
 @[simp] lemma closedInterior_reindex {m n : Nat} (s : Simplex k P n) (e : Fin (n + 1) ≃ Fin (m + 1)) :
@@ -1511,8 +1511,8 @@ lemma affineCombination_mem_closedInterior_iff
   proof: affineCombination_mem_setInterior_iff hw
 
 中文:
-引理 affineCombination_mem_closedInterior_iff
-  结论: {n : 自然数} {s : Simplex k P n} {w : Fin (n + 1) -> k}
+引理 affineCombination_mem_closed整数erior_iff
+  结论: {n : 自然数} {s : 单纯形 k P n} {w : 有限集 (n + 1) -> k}
   证明: affineCombination_mem_setInterior_iff hw
 
 Depends on / 依赖: affineCombination_mem_setInterior_iff
@@ -1531,8 +1531,8 @@ lemma interior_subset_closedInterior
   proof: fun _ ⟨w, hw, hw01, hww⟩ => ⟨w, hw, fun i => ⟨(hw01 i).1.le, (hw01 i).2.le⟩, hww⟩
 
 中文:
-引理 interior_subset_closedInterior
-  条件: {n : 自然数} (s : Simplex k P n)
+引理 interior_subset_closed整数erior
+  条件: {n : 自然数} (s : 单纯形 k P n)
   证明: fun _ ⟨w, hw, hw01, hww⟩ => ⟨w, hw, fun i => ⟨(hw01 i).1.le, (hw01 i).2.le⟩, hww⟩
 
 Depends on / 依赖: MeasurableSpace, RCLike, RCLike.measurableSpace, measurableSpace
@@ -1553,7 +1553,7 @@ lemma point_notMem_interior
 
 中文:
 引理 point_notMem_interior
-  条件: {n : 自然数} (s : Simplex k P n) (i : Fin (n + 1))
+  条件: {n : 自然数} (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   rw [← Finset.univ.affineCombination_piSingle k s.points (Finset.mem_univ i)]; rw [affineCombination_mem_interior_iff (Fintype.sum_pi_single' _ _)]; rw [not_forall]
   exact ⟨i, by simp⟩
@@ -1577,8 +1577,8 @@ lemma point_mem_closedInterior
   obtain rfl | hj := eq_or_ne j i <;> simp_all
 
 中文:
-引理 point_mem_closedInterior
-  条件: [ZeroLEOneClass k] {n : 自然数} (s : Simplex k P n) (i : Fin (n + 1))
+引理 point_mem_closed整数erior
+  条件: [ZeroLEOne类 k] {n : 自然数} (s : 单纯形 k P n) (i : 有限集 (n + 1))
   证明: by
   rw [← Finset.univ.affineCombination_piSingle k s.points (Finset.mem_univ i)]; rw [affineCombination_mem_closedInterior_iff (Fintype.sum_pi_single' _ _)]
   intro j
@@ -1601,8 +1601,8 @@ lemma nonempty_closedInterior
   proof: ⟨s.points 0, s.point_mem_closedInterior 0⟩
 
 中文:
-引理 nonempty_closedInterior
-  条件: [ZeroLEOneClass k] {n : 自然数} (s : Simplex k P n)
+引理 nonempty_closed整数erior
+  条件: [ZeroLEOne类 k] {n : 自然数} (s : 单纯形 k P n)
   证明: ⟨s.points 0, s.point_mem_closedInterior 0⟩
 
 Depends on / 依赖: point_mem_closedInterior, points, s.point_mem_closedInterior, s.points
@@ -1623,8 +1623,8 @@ lemma interior_ssubset_closedInterior
     s.point_notMem_interior 0⟩
 
 中文:
-引理 interior_ssubset_closedInterior
-  条件: [ZeroLEOneClass k] {n : 自然数} (s : Simplex k P n)
+引理 interior_ssubset_closed整数erior
+  条件: [ZeroLEOne类 k] {n : 自然数} (s : 单纯形 k P n)
   证明: by
   rw [Set.ssubset_iff_exists]
   exact ⟨s.interior_subset_closedInterior, s.points 0, s.point_mem_closedInterior 0,
@@ -1649,8 +1649,8 @@ lemma closedInterior_subset_affineSpan
   exact affineCombination_mem_affineSpan_of_nonempty hw _
 
 中文:
-引理 closedInterior_subset_affineSpan
-  条件: {n : 自然数} {s : Simplex k P n}
+引理 closed整数erior_subset_affineSpan
+  条件: {n : 自然数} {s : 单纯形 k P n}
   证明: by
   rintro p ⟨w, hw, hi, rfl⟩
   exact affineCombination_mem_affineSpan_of_nonempty hw _
@@ -1679,7 +1679,7 @@ lemma interior_eq_empty
 
 中文:
 引理 interior_eq_empty
-  条件: (s : Simplex k P 0)
+  条件: (s : 单纯形 k P 0)
   结论: s.interior = ∅
   证明: by
   ext p
@@ -1714,8 +1714,8 @@ lemma closedInterior_eq_singleton
   · rintro
 
 中文:
-引理 closedInterior_eq_singleton
-  条件: [ZeroLEOneClass k] (s : Simplex k P 0)
+引理 closed整数erior_eq_singleton
+  条件: [ZeroLEOne类 k] (s : 单纯形 k P 0)
   证明: by
   ext p
   simp only [Simplex.closedInterior, Simplex.setInterior, Nat.reduceAdd, univ_unique,
@@ -1753,8 +1753,8 @@ lemma affineCombination_mem_setInterior_face_iff_mem
     have he' := s.independent.indicator_e
 
 中文:
-引理 affineCombination_mem_setInterior_face_iff_mem
-  结论: (I : Set k) {n : 自然数} (s : Simplex k P n)
+引理 affineCombination_mem_set整数erior_face_iff_mem
+  结论: (I : 集合 k) {n : 自然数} (s : 单纯形 k P n)
   证明: by
   refine ⟨fun hi => ?_, fun ⟨hii, hi0⟩ => ?_⟩
   · obtain ⟨w', hw', he⟩ := eq_affineCombination_of_mem_affineSpan_of_fintype
@@ -1802,7 +1802,7 @@ lemma affineCombination_mem_interior_face_iff_mem_Ioo
 
 中文:
 引理 affineCombination_mem_interior_face_iff_mem_Ioo
-  结论: {n : 自然数} (s : Simplex k P n)
+  结论: {n : 自然数} (s : 单纯形 k P n)
   证明: affineCombination_mem_setInterior_face_iff_mem _ _ _ hw
 
 Depends on / 依赖: affineCombination_mem_setInterior_face_iff_mem
@@ -1822,8 +1822,8 @@ lemma affineCombination_mem_closedInterior_face_iff_mem_Icc
   proof: affineCombination_mem_setInterior_face_iff_mem _ _ _ hw
 
 中文:
-引理 affineCombination_mem_closedInterior_face_iff_mem_Icc
-  结论: {n : 自然数} (s : Simplex k P n)
+引理 affineCombination_mem_closed整数erior_face_iff_mem_Icc
+  结论: {n : 自然数} (s : 单纯形 k P n)
   证明: affineCombination_mem_setInterior_face_iff_mem _ _ _ hw
 
 Depends on / 依赖: affineCombination_mem_setInterior_face_iff_mem
@@ -1849,7 +1849,7 @@ lemma affineCombination_mem_interior_face_iff_pos
 
 中文:
 引理 affineCombination_mem_interior_face_iff_pos
-  结论: [IsOrderedAddMonoid k] {n : 自然数}
+  结论: [是OrderedAdd幺半群 k] {n : 自然数}
   证明: by
   rw [s.affineCombination_mem_interior_face_iff_mem_Ioo h hw]
   refine ⟨by grind, fun ⟨hii, hi0⟩ => ⟨fun i hi => ⟨hii i hi, ?_⟩, hi0⟩⟩
@@ -1883,8 +1883,8 @@ lemma affineCombination_mem_closedInterior_face_iff_nonneg
   exact Finset.single_le_sum (fun t ht => (hii t ht)) hi
 
 中文:
-引理 affineCombination_mem_closedInterior_face_iff_nonneg
-  结论: [IsOrderedAddMonoid k] {n : 自然数}
+引理 affineCombination_mem_closed整数erior_face_iff_nonneg
+  结论: [是OrderedAdd幺半群 k] {n : 自然数}
   证明: by
   rw [s.affineCombination_mem_closedInterior_face_iff_mem_Icc h hw]
   refine ⟨by grind, fun ⟨hii, hi0⟩ => ⟨fun i hi => ⟨hii i hi, ?_⟩, hi0⟩⟩
@@ -1913,7 +1913,7 @@ lemma interior_map
 
 中文:
 引理 interior_map
-  条件: {n : 自然数} (s : Simplex k P n) {f : P ->ᵃ[k] P₂} (hf : Function.Injective f)
+  条件: {n : 自然数} (s : 单纯形 k P n) {f : P ->ᵃ[k] P₂} (hf : 函数.单射 f)
   证明: s.setInterior_map _ hf
 
 Depends on / 依赖: s.setInterior_map, setInterior_map
@@ -1931,8 +1931,8 @@ lemma closedInterior_map
   proof: s.setInterior_map _ hf
 
 中文:
-引理 closedInterior_map
-  条件: {n : 自然数} (s : Simplex k P n) {f : P ->ᵃ[k] P₂} (hf : Function.Injective f)
+引理 closed整数erior_map
+  条件: {n : 自然数} (s : 单纯形 k P n) {f : P ->ᵃ[k] P₂} (hf : 函数.单射 f)
   证明: s.setInterior_map _ hf
 
 Depends on / 依赖: s.setInterior_map, setInterior_map
@@ -1953,7 +1953,7 @@ lemma interior_restrict
 
 中文:
 引理 interior_restrict
-  结论: {n : 自然数} (s : Simplex k P n) {S : AffineSubspace k P}
+  结论: {n : 自然数} (s : 单纯形 k P n) {S : 仿射子空间 k P}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).interior = S.subtype ⁻¹' s.interior :=
   s.setInterior_restrict _ hS
@@ -1977,8 +1977,8 @@ lemma closedInterior_restrict
   s.setInterior_restrict _ hS
 
 中文:
-引理 closedInterior_restrict
-  结论: {n : 自然数} (s : Simplex k P n) {S : AffineSubspace k P}
+引理 closed整数erior_restrict
+  结论: {n : 自然数} (s : 单纯形 k P n) {S : 仿射子空间 k P}
   证明: Nonempty.map (AffineSubspace.inclusion hS) inferInstance
     (s.restrict S hS).closedInterior = S.subtype ⁻¹' s.closedInterior :=
   s.setInterior_restrict _ hS
@@ -2007,8 +2007,8 @@ affineSpan_mono k by simp
   rw [affineCombination_mem_closedInterior_fa
 
 中文:
-定理 closedInterior_face_subset_closedInterior
-  结论: [ZeroLEOneClass k] {n : 自然数} (s : Simplex k P n)
+定理 closed整数erior_face_subset_closed整数erior
+  结论: [ZeroLEOne类 k] {n : 自然数} (s : 单纯形 k P n)
   证明: by
   intro p hp
   have hp' : p in affineSpan k (Set.range s.points) :=
@@ -2050,8 +2050,8 @@ theorem point_mem_closedInterior_face_iff
 .ge hfs · obtain ⟨i, rfl⟩ : exists i, fs.orderEmbOfFin h i 
 
 中文:
-定理 point_mem_closedInterior_face_iff
-  结论: [Nontrivial k] [ZeroLEOneClass k] {n : 自然数}
+定理 point_mem_closed整数erior_face_iff
+  结论: [非平凡 k] [ZeroLEOne类 k] {n : 自然数}
   证明: by
   refine ⟨fun hj => ?_, fun hfs => ?_⟩
   · suffices s.points j in affineSpan k (s.points '' fs) by simpa
@@ -2085,8 +2085,8 @@ obtain ⟨a, ha⟩ := Classical.not_forall.mp Finset.eq_univ_iff_forall.not.mp h
   exact ⟨s.points a, s.point_mem_closedInterior a, fun hs => ha (by simpa using hs)⟩
 
 中文:
-定理 closedInterior_face_ssubset_closedInterior
-  结论: [Nontrivial k] [ZeroLEOneClass k] {n : 自然数}
+定理 closed整数erior_face_ssubset_closed整数erior
+  结论: [非平凡 k] [ZeroLEOne类 k] {n : 自然数}
   证明: by
 obtain ⟨a, ha⟩ := Classical.not_forall.mp Finset.eq_univ_iff_forall.not.mp hfs
   apply (Set.ssubset_iff_of_subset (s.closedInterior_face_subset_closedInterior h)).mpr
@@ -2115,7 +2115,7 @@ Set.mem_of_mem_of_subset hleft s.interior_subset_closedInterior.trans
   grind [affineCombination_mem_interior_iff, affineCombination_mem_closedInt
 
 中文:
-定理 disjoint_interior_closedInterior_face
+定理 disjoint_interior_closed整数erior_face
   结论: {n : 自然数}
   证明: by
   refine Set.disjoint_left.mpr fun p hleft hright => ?_
@@ -2147,8 +2147,8 @@ theorem point_mem_closedInterior_faceOpposite_iff
   simp [faceOpposite]
 
 中文:
-定理 point_mem_closedInterior_faceOpposite_iff
-  结论: [Nontrivial k] [ZeroLEOneClass k] {n : 自然数}
+定理 point_mem_closed整数erior_faceOpposite_iff
+  结论: [非平凡 k] [ZeroLEOne类 k] {n : 自然数}
   证明: by
   simp [faceOpposite]
 
@@ -2168,8 +2168,8 @@ theorem closedInterior_faceOpposite_subset_closedInterior
   proof: s.closedInterior_face_subset_closedInterior _
 
 中文:
-定理 closedInterior_faceOpposite_subset_closedInterior
-  结论: [ZeroLEOneClass k] {n : 自然数} [NeZero n]
+定理 closed整数erior_faceOpposite_subset_closed整数erior
+  结论: [ZeroLEOne类 k] {n : 自然数} [NeZero n]
   证明: s.closedInterior_face_subset_closedInterior _
 
 Depends on / 依赖: closedInterior_face_subset_closedInterior, s.closedInterior_face_subset_closedInterior
@@ -2188,8 +2188,8 @@ theorem closedInterior_faceOpposite_ssubset_closedInterior
   proof: s.closedInterior_face_ssubset_closedInterior (by simp) _
 
 中文:
-定理 closedInterior_faceOpposite_ssubset_closedInterior
-  结论: [Nontrivial k] [ZeroLEOneClass k] {n : 自然数}
+定理 closed整数erior_faceOpposite_ssubset_closed整数erior
+  结论: [非平凡 k] [ZeroLEOne类 k] {n : 自然数}
   证明: s.closedInterior_face_ssubset_closedInterior (by simp) _
 
 Depends on / 依赖: closedInterior_face_ssubset_closedInterior, s.closedInterior_face_ssubset_closedInterior
@@ -2208,7 +2208,7 @@ theorem disjoint_interior_closedInterior_faceOpposite
   proof: s.disjoint_interior_closedInterior_face (by simp) _
 
 中文:
-定理 disjoint_interior_closedInterior_faceOpposite
+定理 disjoint_interior_closed整数erior_faceOpposite
   结论: {n : 自然数} [NeZero n]
   证明: s.disjoint_interior_closedInterior_face (by simp) _
 
@@ -2240,8 +2240,8 @@ theorem closedInterior_eq_interior_union
     rw [affineCombination_mem_
 
 中文:
-定理 closedInterior_eq_interior_union
-  结论: [IsOrderedAddMonoid k] [ZeroLEOneClass k] {n : 自然数}
+定理 closed整数erior_eq_interior_union
+  结论: [是OrderedAdd幺半群 k] [ZeroLEOne类 k] {n : 自然数}
   证明: by
   apply Set.Subset.antisymm
   · intro p hp
@@ -2291,8 +2291,8 @@ theorem closedInterior_sdiff_interior
 alias closedInterior_diff_interior := closedInterior_sdiff_interior
 
 中文:
-定理 closedInterior_sdiff_interior
-  结论: [IsOrderedAddMonoid k] [ZeroLEOneClass k]
+定理 closed整数erior_sdiff_interior
+  结论: [是OrderedAdd幺半群 k] [ZeroLEOne类 k]
   证明: by
   simpa [closedInterior_eq_interior_union] using
     fun i => (s.disjoint_interior_closedInterior_faceOpposite i).symm

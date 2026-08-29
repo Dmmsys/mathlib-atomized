@@ -52,7 +52,7 @@ theorem MemLp.integrable_sq
 中文:
 定理 MemLp.integrable_sq
   条件: {f : α -> 实数} (h : MemLp f 2 μ)
-  结论: 整数egrable (fun x => f x ^ 2) μ
+  结论: 可积 (fun x => f x ^ 2) μ
   证明: by
   simpa [← memLp_one_iff_integrable] using h.norm_rpow two_ne_zero ENNReal.ofNat_ne_top
 
@@ -185,8 +185,8 @@ theorem Integrable.const_inner
 @[fun_prop]
 
 中文:
-定理 Integrable.const_inner
-  条件: (c : E) (hf : 整数egrable f μ)
+定理 可积.const_inner
+  条件: (c : E) (hf : 可积 f μ)
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢; exact hf.const_inner c
 
@@ -209,8 +209,8 @@ theorem Integrable.inner_const
   rw [← memLp_one_iff_integrable] at hf ⊢; exact hf.inner_const c
 
 中文:
-定理 Integrable.inner_const
-  条件: (hf : 整数egrable f μ) (c : E)
+定理 可积.inner_const
+  条件: (hf : 可积 f μ) (c : E)
   证明: by
   rw [← memLp_one_iff_integrable] at hf ⊢; exact hf.inner_const c
 
@@ -232,7 +232,7 @@ theorem _root_.integral_inner
 
 中文:
 定理 _root_.integral_inner
-  条件: {f : α -> E} (hf : 整数egrable f μ) (c : E)
+  条件: {f : α -> E} (hf : 可积 f μ) (c : E)
   证明: ((innerSL 𝕜 c).restrictScalars Real).integral_comp_comm hf
 
 Depends on / 依赖: innerSL, integral_comp_comm, restrictScalars
@@ -253,8 +253,8 @@ theorem _root_.integral_eq_zero_of_forall_integral_inner_eq_zero
   specialize hf_int (∫ x, f x ∂μ); rwa [integral_inner hf, inner_self_eq_zero] at hf_int
 
 中文:
-定理 _root_.integral_eq_zero_of_forall_integral_inner_eq_zero
-  结论: (f : α -> E) (hf : 整数egrable f μ)
+定理 _root_.integral_eq_zero_of_对任意_integral_inner_eq_zero
+  结论: (f : α -> E) (hf : 可积 f μ)
   证明: by
   specialize hf_int (∫ x, f x ∂μ); rwa [integral_inner hf, inner_self_eq_zero] at hf_int
 
@@ -364,7 +364,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inner 𝕜 (α ->₂[μ] E)
+  签名: 内积 𝕜 (α ->₂[μ] E)
   定义体: ⟨fun f g => ∫ a, ⟪f a, g a⟫ ∂μ⟩
 -/
 instance : Inner 𝕜 (α ->₂[μ] E) :=
@@ -507,7 +507,7 @@ theorem integrable_inner
 中文:
 定理 integrable_inner
   条件: (f g : α ->₂[μ] E)
-  结论: 整数egrable (fun x : α => ⟪f x, g x⟫) μ
+  结论: 可积 (fun x : α => ⟪f x, g x⟫) μ
   证明: (integrable_congr
         (AEEqFun.coeFn_mk (fun x => ⟪f x, g x⟫)
           ((Lp.aestronglyMeasurable f).inner (Lp.aestronglyMeasurable g)))).mp
@@ -594,7 +594,7 @@ instance innerProductSpace
 
 中文:
 实例 innerProductSpace
-  签名: : InnerProductSpace 𝕜 (α ->₂[μ] E) where
+  签名: : 内积空间 𝕜 (α ->₂[μ] E) where
   定义体: private norm_sq_eq_re_inner
   conj_inner_symm _ _ := by simp_rw [inner_def, ← integral_conj, inner_conj_symm]
   add_left := private add_left'
@@ -628,8 +628,8 @@ theorem inner_indicatorConstLp_eq_setIntegral_inner
   simpa
 
 中文:
-定理 inner_indicatorConstLp_eq_setIntegral_inner
-  结论: (f : Lp E 2 μ) (hs : MeasurableSet s) (c : E)
+定理 inner_indicatorConstLp_eq_set整数egral_inner
+  结论: (f : Lp E 2 μ) (hs : 可测集 s) (c : E)
   证明: by
   rw [inner_def]; rw [← integral_indicator hs]
   refine integral_congr_ae ((@indicatorConstLp_coeFn _ _ _ 2 μ _ s hs hμs c).mono fun x hx => ?_)
@@ -657,8 +657,8 @@ theorem inner_indicatorConstLp_eq_inner_setIntegral
   rw [← integral_inner (integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs)]; rw [L2.inner_indicatorConstLp_eq_setIntegral_inner]
 
 中文:
-定理 inner_indicatorConstLp_eq_inner_setIntegral
-  结论: [CompleteSpace E] [NormedSpace 实数 E]
+定理 inner_indicatorConstLp_eq_inner_set整数egral
+  结论: [完备空间 E] [赋范空间 实数 E]
   证明: by
   rw [← integral_inner (integrableOn_Lp_of_measure_ne_top f fact_one_le_two_ennreal.elim hμs)]; rw [L2.inner_indicatorConstLp_eq_setIntegral_inner]
 
@@ -682,7 +682,7 @@ theorem inner_indicatorConstLp_one
 
 中文:
 定理 inner_indicatorConstLp_one
-  条件: (hs : MeasurableSet s) (hμs : μ s != ∞) (f : Lp 𝕜 2 μ)
+  条件: (hs : 可测集 s) (hμs : μ s != ∞) (f : Lp 𝕜 2 μ)
   证明: by
   rw [L2.inner_indicatorConstLp_eq_inner_setIntegral 𝕜 hs hμs (1 : 𝕜) f]; simp
 
@@ -704,7 +704,7 @@ lemma inner_indicatorConstLp_indicatorConstLp
 
 中文:
 引理 inner_indicatorConstLp_indicatorConstLp
-  结论: [CompleteSpace E]
+  结论: [完备空间 E]
   证明: by
   let : InnerProductSpace Real E := InnerProductSpace.rclikeToReal 𝕜 E
   rw [inner_indicatorConstLp_eq_inner_setIntegral]; rw [setIntegral_indicatorConstLp hs]; rw [inner_smul_right_eq_smul]; rw [Set.inter_comm]
@@ -772,8 +772,8 @@ lemma _root_.MeasureTheory.posSemidef_matrix_measure_inter
   exact Matrix.posSemidef_gram _ _
 
 中文:
-引理 _root_.MeasureTheory.posSemidef_matrix_measure_inter
-  结论: {ι : 类型} [Finite ι] {s : ι -> (Set α)}
+引理 _root_.测度论.posSemidef_matrix_measure_inter
+  结论: {ι : 类型} [有限 ι] {s : ι -> (集合 α)}
   证明: by
   simp only [mv, ne_eq, hv, not_false_eq_true,
     ← real_inner_indicatorConstLp_one_indicatorConstLp_one]
@@ -816,7 +816,7 @@ theorem BoundedContinuousFunction.inner_toLp
   simp
 
 中文:
-定理 BoundedContinuousFunction.inner_toLp
+定理 有界连续函数.inner_toLp
   条件: (f g : α ->ᵇ 𝕜)
   证明: by
   apply integral_congr_ae
@@ -855,7 +855,7 @@ theorem ContinuousMap.inner_toLp
   simp
 
 中文:
-定理 ContinuousMap.inner_toLp
+定理 连续映射.inner_toLp
   条件: (f g : C(α, 𝕜))
   证明: by
   apply integral_congr_ae

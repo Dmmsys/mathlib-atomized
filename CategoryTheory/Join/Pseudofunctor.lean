@@ -381,7 +381,7 @@ mapComp F G := Cat.Hom.isoMk mapCompRight C F.toFunctor G.toFunctor
 
 中文:
 定义 pseudofunctorRight
-  签名: (C : 类型u₁) [Category.{v₁} C]
+  签名: (C : 类型u₁) [范畴.{v₁} C]
   定义体: Cat.of (C ⋆ D)
   map F := (mapPair (𝟭 C) F.toFunctor).toCatHom
   map₂ f := (mapWhiskerLeft (𝟭 C) f.toNatTrans).toCatHom₂
@@ -425,7 +425,7 @@ mapComp _ _ := Cat.Hom.isoMk mapCompLeft D _ _
 
 中文:
 定义 pseudofunctorLeft
-  签名: (D : 类型u₂) [Category.{v₂} D]
+  签名: (D : 类型u₂) [范畴.{v₂} D]
   定义体: Cat.of (C ⋆ D)
   map F := (mapPair F.toFunctor (𝟭 D)).toCatHom
   map₂ := (mapWhiskerRight ·.toNatTrans _ |>.toCatHom₂)

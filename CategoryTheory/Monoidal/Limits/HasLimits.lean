@@ -50,7 +50,7 @@ lemma HasColimit.whiskerLeft_isoOfNatIso_ι_hom
 @[reassoc (attr := simp)]
 
 中文:
-引理 HasColimit.whiskerLeft_isoOfNatIso_ι_hom
+引理 有余极限.whiskerLeft_isoOf自然数Iso_ι_hom
   条件: (w : F ≅ G) (j : J) {Q : C}
   证明: by
   simp [← MonoidalCategory.whiskerLeft_comp]
@@ -75,7 +75,7 @@ lemma HasColimit.isoOfNatIso_ι_hom_whiskerRight
   simp [← MonoidalCategory.comp_whiskerRight]
 
 中文:
-引理 HasColimit.isoOfNatIso_ι_hom_whiskerRight
+引理 有余极限.isoOf自然数Iso_ι_hom_whiskerRight
   条件: (w : F ≅ G) (j : J) {Q : C}
   证明: by
   simp [← MonoidalCategory.comp_whiskerRight]
@@ -100,7 +100,7 @@ lemma colimit.whiskerLeft_ι_desc
 
 中文:
 引理 colimit.whiskerLeft_ι_desc
-  条件: (c : Cocone F) (j : J) {Q : C}
+  条件: (c : 余锥 F) (j : J) {Q : C}
   证明: by
   simp [← MonoidalCategory.whiskerLeft_comp]
 
@@ -123,7 +123,7 @@ lemma colimit.ι_desc_whiskerRight
 
 中文:
 引理 colimit.ι_desc_whiskerRight
-  条件: (c : Cocone F) (j : J) {Q : C}
+  条件: (c : 余锥 F) (j : J) {Q : C}
   证明: by
   simp [← comp_whiskerRight]
 

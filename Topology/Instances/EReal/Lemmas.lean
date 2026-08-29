@@ -47,7 +47,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: IsEmbedding ((↑) : 实数 -> E实数)
+  结论: 是嵌入 ((↑) : 实数 -> E实数)
   证明: coe_strictMono.isEmbedding_of_ordConnected by rw [range_coe_eq_Ioo]; exact ordConnected_Ioo
 
 Depends on / 依赖: coe_strictMono, coe_strictMono.isEmbedding_of_ordConnected, isEmbedding_of_ordConnected, ordConnected_Ioo, range_coe_eq_Ioo
@@ -67,7 +67,7 @@ theorem isOpenEmbedding_coe
 
 中文:
 定理 isOpenEmbedding_coe
-  结论: IsOpenEmbedding ((↑) : 实数 -> E实数)
+  结论: 是开嵌入 ((↑) : 实数 -> E实数)
   证明: ⟨isEmbedding_coe, by simp only [range_coe_eq_Ioo, isOpen_Ioo]⟩
 
 @[norm_cast]
@@ -88,7 +88,7 @@ theorem tendsto_coe
 
 中文:
 定理 tendsto_coe
-  条件: {α : 类型} {f : Filter α} {m : α -> 实数} {a : 实数}
+  条件: {α : 类型} {f : 滤子 α} {m : α -> 实数} {a : 实数}
   证明: isEmbedding_coe.tendsto_nhds_iff.symm
 
 Depends on / 依赖: isEmbedding_coe, isEmbedding_coe.tendsto_nhds_iff.symm, tendsto_nhds_iff
@@ -107,7 +107,7 @@ theorem _root_.continuous_coe_real_ereal
 
 中文:
 定理 _root_.continuous_coe_real_ereal
-  结论: Continuous ((↑) : 实数 -> E实数)
+  结论: 连续 ((↑) : 实数 -> E实数)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -127,7 +127,7 @@ theorem continuous_coe_iff
 中文:
 定理 continuous_coe_iff
   条件: {f : α -> 实数}
-  结论: (Continuous fun a => (f a : E实数)) ↔ Continuous f
+  结论: (连续 fun a => (f a : E实数)) ↔ 连续 f
   证明: isEmbedding_coe.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, isEmbedding_coe, isEmbedding_coe.continuous_iff.symm
@@ -186,7 +186,7 @@ theorem tendsto_toReal
   exact tendsto_id
 
 中文:
-定理 tendsto_toReal
+定理 tendsto_to实数
   条件: {a : E实数} (ha : a != ⊤) (h'a : a != ⊥)
   证明: by
   lift a to Real using ⟨ha, h'a⟩
@@ -211,8 +211,8 @@ theorem continuousOn_toReal
   ContinuousAt.continuousWithinAt (tendsto_toReal (mt Or.inr ha) (mt Or.inl ha))
 
 中文:
-定理 continuousOn_toReal
-  结论: ContinuousOn E实数.to实数 ({⊥, ⊤}ᶜ : Set E实数)
+定理 continuousOn_to实数
+  结论: ContinuousOn E实数.to实数 ({⊥, ⊤}ᶜ : 集合 E实数)
   证明: fun _a ha =>
   ContinuousAt.continuousWithinAt (tendsto_toReal (mt Or.inr ha) (mt Or.inl ha))
 -/
@@ -230,8 +230,8 @@ definition neBotTopHomeomorphReal
   continuous_invFun := continuous_coe_real_ereal.subtype_mk _
 
 中文:
-定义 neBotTopHomeomorphReal
-  签名: : ({⊥, ⊤}ᶜ : Set E实数) ≃ₜ 实数 where
+定义 neBotTopHomeomorph实数
+  签名: : ({⊥, ⊤}ᶜ : 集合 E实数) ≃ₜ 实数 where
   定义体: neTopBotEquivReal
   continuous_toFun := continuousOn_iff_continuous_domRestrict.1 continuousOn_toReal
   continuous_invFun := continuous_coe_real_ereal.subtype_mk _
@@ -255,7 +255,7 @@ theorem isEmbedding_coe_ennreal
 
 中文:
 定理 isEmbedding_coe_ennreal
-  结论: IsEmbedding ((↑) : 实数>=0∞ -> E实数)
+  结论: 是嵌入 ((↑) : 实数>=0∞ -> E实数)
   证明: coe_ennreal_strictMono.isEmbedding_of_ordConnected by
     rw [range_coe_ennreal]; exact ordConnected_Ici
 
@@ -277,7 +277,7 @@ theorem isClosedEmbedding_coe_ennreal
 
 中文:
 定理 isClosedEmbedding_coe_ennreal
-  结论: IsClosedEmbedding ((↑) : 实数>=0∞ -> E实数)
+  结论: 是闭嵌入 ((↑) : 实数>=0∞ -> E实数)
   证明: ⟨isEmbedding_coe_ennreal, by rw [range_coe_ennreal]; exact isClosed_Ici⟩
 
 @[norm_cast]
@@ -298,7 +298,7 @@ theorem tendsto_coe_ennreal
 
 中文:
 定理 tendsto_coe_ennreal
-  条件: {α : 类型} {f : Filter α} {m : α -> 实数>=0∞} {a : 实数>=0∞}
+  条件: {α : 类型} {f : 滤子 α} {m : α -> 实数>=0∞} {a : 实数>=0∞}
   证明: isEmbedding_coe_ennreal.tendsto_nhds_iff.symm
 
 Depends on / 依赖: isEmbedding_coe_ennreal, isEmbedding_coe_ennreal.tendsto_nhds_iff.symm, tendsto_nhds_iff
@@ -317,7 +317,7 @@ theorem _root_.continuous_coe_ennreal_ereal
 
 中文:
 定理 _root_.continuous_coe_ennreal_ereal
-  结论: Continuous ((↑) : 实数>=0∞ -> E实数)
+  结论: 连续 ((↑) : 实数>=0∞ -> E实数)
   证明: isEmbedding_coe_ennreal.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe_ennreal, isEmbedding_coe_ennreal.continuous
@@ -360,7 +360,7 @@ nonrec theorem nhds_top_basis : (𝓝 (⊤ : EReal)).HasBasis (fun _ : Real => T
 
 中文:
 定理 nhds_top
-  结论: 𝓝 (⊤ : E实数) = ⨅ (a) (_ : a != ⊤), 𝓟 (Ioi a)
+  结论: 𝓝 (⊤ : E实数) = ⨅ (a) (_ : a != ⊤), 𝓟 (左开右无界区间 a)
   证明: nhds_top_order.trans by simp only [lt_top_iff_ne_top]
 
 nonrec theorem nhds_top_basis : (𝓝 (⊤ : EReal)).HasBasis (fun _ : Real => True) (Ioi ·) := by
@@ -389,7 +389,7 @@ theorem nhds_top'
 
 中文:
 定理 nhds_top'
-  结论: 𝓝 (⊤ : E实数) = ⨅ a : 实数, 𝓟 (Ioi ↑a)
+  结论: 𝓝 (⊤ : E实数) = ⨅ a : 实数, 𝓟 (左开右无界区间 ↑a)
   证明: nhds_top_basis.eq_iInf
 
 Depends on / 依赖: eq_iInf, nhds_top_basis, nhds_top_basis.eq_iInf
@@ -407,8 +407,8 @@ theorem mem_nhds_top_iff
 
 中文:
 定理 mem_nhds_top_iff
-  条件: {s : Set E实数}
-  结论: s in 𝓝 (⊤ : E实数) ↔ 存在 y : 实数, Ioi (y : E实数) subseteq s
+  条件: {s : 集合 E实数}
+  结论: s in 𝓝 (⊤ : E实数) ↔ 存在 y : 实数, 左开右无界区间 (y : E实数) subseteq s
   证明: nhds_top_basis.mem_iff.trans by simp only [true_and]
 
 Depends on / 依赖: mem_iff, nhds_top_basis, nhds_top_basis.mem_iff.trans, true_and
@@ -426,7 +426,7 @@ theorem tendsto_nhds_top_iff_real
 
 中文:
 定理 tendsto_nhds_top_iff_real
-  条件: {α : 类型} {m : α -> E实数} {f : Filter α}
+  条件: {α : 类型} {m : α -> E实数} {f : 滤子 α}
   证明: nhds_top_basis.tendsto_right_iff.trans by simp only [true_implies, mem_Ioi]
 
 Depends on / 依赖: mem_Ioi, nhds_top_basis, nhds_top_basis.tendsto_right_iff.trans, tendsto_right_iff, true_implies
@@ -445,7 +445,7 @@ theorem nhds_bot
 
 中文:
 定理 nhds_bot
-  结论: 𝓝 (⊥ : E实数) = ⨅ (a) (_ : a != ⊥), 𝓟 (Iio a)
+  结论: 𝓝 (⊥ : E实数) = ⨅ (a) (_ : a != ⊥), 𝓟 (左无界右开区间 a)
   证明: nhds_bot_order.trans by simp only [bot_lt_iff_ne_bot]
 
 Depends on / 依赖: bot_lt_iff_ne_bot, nhds_bot_order, nhds_bot_order.trans
@@ -467,7 +467,7 @@ theorem nhds_bot_basis
 
 中文:
 定理 nhds_bot_basis
-  结论: (𝓝 (⊥ : E实数)).HasBasis (fun _ : 实数 => True) (Iio ·)
+  结论: (𝓝 (⊥ : E实数)).有基 (fun _ : 实数 => 真) (左无界右开区间 ·)
   证明: by
   refine (_root_.nhds_bot_basis (α := EReal)).to_hasBasis (fun x hx => ?_)
     fun _ _ => ⟨_, bot_lt_coe _, Subset.rfl⟩
@@ -492,7 +492,7 @@ theorem nhds_bot'
 
 中文:
 定理 nhds_bot'
-  结论: 𝓝 (⊥ : E实数) = ⨅ a : 实数, 𝓟 (Iio ↑a)
+  结论: 𝓝 (⊥ : E实数) = ⨅ a : 实数, 𝓟 (左无界右开区间 ↑a)
   证明: nhds_bot_basis.eq_iInf
 
 Depends on / 依赖: eq_iInf, nhds_bot_basis, nhds_bot_basis.eq_iInf
@@ -511,8 +511,8 @@ theorem mem_nhds_bot_iff
 
 中文:
 定理 mem_nhds_bot_iff
-  条件: {s : Set E实数}
-  结论: s in 𝓝 (⊥ : E实数) ↔ 存在 y : 实数, Iio (y : E实数) subseteq s
+  条件: {s : 集合 E实数}
+  结论: s in 𝓝 (⊥ : E实数) ↔ 存在 y : 实数, 左无界右开区间 (y : E实数) subseteq s
   证明: nhds_bot_basis.mem_iff.trans by simp only [true_and]
 
 Depends on / 依赖: mem_iff, nhds_bot_basis, nhds_bot_basis.mem_iff.trans, true_and
@@ -530,7 +530,7 @@ theorem tendsto_nhds_bot_iff_real
 
 中文:
 定理 tendsto_nhds_bot_iff_real
-  条件: {α : 类型} {m : α -> E实数} {f : Filter α}
+  条件: {α : 类型} {m : α -> E实数} {f : 滤子 α}
   证明: nhds_bot_basis.tendsto_right_iff.trans by simp only [true_implies, mem_Iio]
 
 Depends on / 依赖: mem_Iio, nhds_bot_basis, nhds_bot_basis.tendsto_right_iff.trans, tendsto_right_iff, true_implies
@@ -643,7 +643,7 @@ lemma tendsto_coe_nhds_top_iff
 
 中文:
 引理 tendsto_coe_nhds_top_iff
-  条件: {f : α -> 实数} {l : Filter α}
+  条件: {f : α -> 实数} {l : 滤子 α}
   证明: by
   rw [tendsto_nhds_top_iff_real]; rw [atTop_basis_Ioi.tendsto_right_iff]; simp
 
@@ -666,7 +666,7 @@ omit [TopologicalSpace α] in
 
 中文:
 引理 tendsto_coe_atTop
-  结论: Tendsto 实数.toE实数 atTop (𝓝 ⊤)
+  结论: 收敛 实数.toE实数 atTop (𝓝 ⊤)
   证明: tendsto_coe_nhds_top_iff.2 tendsto_id
 
 omit [TopologicalSpace α] in
@@ -690,7 +690,7 @@ lemma tendsto_coe_nhds_bot_iff
 
 中文:
 引理 tendsto_coe_nhds_bot_iff
-  条件: {f : α -> 实数} {l : Filter α}
+  条件: {f : α -> 实数} {l : 滤子 α}
   证明: by
   rw [tendsto_nhds_bot_iff_real]; rw [atBot_basis_Iio.tendsto_right_iff]; simp
 
@@ -710,7 +710,7 @@ lemma tendsto_coe_atBot
 
 中文:
 引理 tendsto_coe_atBot
-  结论: Tendsto 实数.toE实数 atBot (𝓝 ⊥)
+  结论: 收敛 实数.toE实数 atBot (𝓝 ⊥)
   证明: tendsto_coe_nhds_bot_iff.2 tendsto_id
 
 Depends on / 依赖: tendsto_coe_nhds_bot_iff, tendsto_id
@@ -730,8 +730,8 @@ lemma tendsto_toReal_atTop
   exact tendsto_id
 
 中文:
-引理 tendsto_toReal_atTop
-  结论: Tendsto E实数.to实数 (𝓝[!=] ⊤) atTop
+引理 tendsto_to实数_atTop
+  结论: 收敛 E实数.to实数 (𝓝[!=] ⊤) atTop
   证明: by
   rw [nhdsWithin_top]; rw [tendsto_map'_iff]
   exact tendsto_id
@@ -753,8 +753,8 @@ lemma tendsto_toReal_atBot
   exact tendsto_id
 
 中文:
-引理 tendsto_toReal_atBot
-  结论: Tendsto E实数.to实数 (𝓝[!=] ⊥) atBot
+引理 tendsto_to实数_atBot
+  结论: 收敛 E实数.to实数 (𝓝[!=] ⊥) atBot
   证明: by
   rw [nhdsWithin_bot]; rw [tendsto_map'_iff]
   exact tendsto_id
@@ -781,8 +781,8 @@ lemma continuous_toENNReal
     exact toENNReal_coe (x := n) ▸ toENNReal_lt_toENNRe
 
 中文:
-引理 continuous_toENNReal
-  结论: Continuous E实数.toENN实数
+引理 continuous_toENN实数
+  结论: 连续 E实数.toENN实数
   证明: by
   refine continuous_iff_continuousAt.mpr fun x => ?_
   by_cases h_top : x = ⊤
@@ -823,8 +823,8 @@ lemma _root_.Continuous.ereal_toENNReal
 @[fun_prop]
 
 中文:
-引理 _root_.Continuous.ereal_toENNReal
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> E实数}
+引理 _root_.连续.ereal_toENN实数
+  结论: {α : 类型} [拓扑空间 α] {f : α -> E实数}
   证明: continuous_toENNReal.comp hf
 
 @[fun_prop]
@@ -848,8 +848,8 @@ lemma _root_.ContinuousOn.ereal_toENNReal
 @[fun_prop]
 
 中文:
-引理 _root_.ContinuousOn.ereal_toENNReal
-  结论: {α : 类型} [TopologicalSpace α] {s : Set α}
+引理 _root_.ContinuousOn.ereal_toENN实数
+  结论: {α : 类型} [拓扑空间 α] {s : 集合 α}
   证明: continuous_toENNReal.comp_continuousOn hf
 
 @[fun_prop]
@@ -873,8 +873,8 @@ lemma _root_.ContinuousWithinAt.ereal_toENNReal
 @[fun_prop]
 
 中文:
-引理 _root_.ContinuousWithinAt.ereal_toENNReal
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> E实数}
+引理 _root_.ContinuousWithinAt.ereal_toENN实数
+  结论: {α : 类型} [拓扑空间 α] {f : α -> E实数}
   证明: continuous_toENNReal.continuousAt.comp_continuousWithinAt hf
 
 @[fun_prop]
@@ -896,8 +896,8 @@ lemma _root_.ContinuousAt.ereal_toENNReal
   proof: continuous_toENNReal.continuousAt.comp hf
 
 中文:
-引理 _root_.ContinuousAt.ereal_toENNReal
-  结论: {α : 类型} [TopologicalSpace α] {f : α -> E实数}
+引理 _root_.ContinuousAt.ereal_toENN实数
+  结论: {α : 类型} [拓扑空间 α] {f : α -> E实数}
   证明: continuous_toENNReal.continuousAt.comp hf
 
 Depends on / 依赖: continuousAt, continuous_toENNReal, continuous_toENNReal.continuousAt.comp
@@ -2065,8 +2065,8 @@ theorem Tendsto.mul
   proof: (EReal.tendsto_mul h₁ h₂ h₃ h₄).comp (hma.prodMk_nhds hmb)
 
 中文:
-定理 Tendsto.mul
-  结论: {f : Filter α} {ma : α -> E实数} {mb : α -> E实数} {a b : E实数}
+定理 收敛.mul
+  结论: {f : 滤子 α} {ma : α -> E实数} {mb : α -> E实数} {a b : E实数}
   证明: (EReal.tendsto_mul h₁ h₂ h₃ h₄).comp (hma.prodMk_nhds hmb)
 -/
 protected theorem Tendsto.mul {f : Filter α} {ma : α -> EReal} {mb : α -> EReal} {a b : EReal}
@@ -2085,8 +2085,8 @@ theorem Tendsto.const_mul
     fun ha : a != 0 => EReal.Tendsto.mul tendsto_const_nhds hm (Or.inl ha) (Or.inl ha) h₁ h₂
 
 中文:
-定理 Tendsto.const_mul
-  结论: {f : Filter α} {m : α -> E实数} {a b : E实数}
+定理 收敛.const_mul
+  结论: {f : 滤子 α} {m : α -> E实数} {a b : E实数}
   证明: by_cases (fun (this : a = 0) => by simp [this, tendsto_const_nhds])
     fun ha : a != 0 => EReal.Tendsto.mul tendsto_const_nhds hm (Or.inl ha) (Or.inl ha) h₁ h₂
 -/
@@ -2106,8 +2106,8 @@ theorem Tendsto.mul_const
   simpa only [mul_comm] using EReal.Tendsto.const_mul hm h₁.symm h₂.symm
 
 中文:
-定理 Tendsto.mul_const
-  结论: {f : Filter α} {m : α -> E实数} {a b : E实数}
+定理 收敛.mul_const
+  结论: {f : 滤子 α} {m : α -> E实数} {a b : E实数}
   证明: by
   simpa only [mul_comm] using EReal.Tendsto.const_mul hm h₁.symm h₂.symm
 -/

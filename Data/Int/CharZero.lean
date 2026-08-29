@@ -37,7 +37,7 @@ theorem cast_div_charZero
 
 中文:
 定理 cast_div_charZero
-  条件: {k : 类型} [DivisionRing k] [CharZero k] {m n : 整数} (n_dvd : n ∣ m)
+  条件: {k : 类型} [除环 k] [特征零 k] {m n : 整数} (n_dvd : n ∣ m)
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp [Int.ediv_zero]
@@ -63,8 +63,8 @@ theorem cast_div_ofNat_charZero
   rw [cast_div_charZero (Int.ofNat_dvd.mpr n_dvd)]; rw [cast_natCast]; rw [cast_natCast]
 
 中文:
-定理 cast_div_ofNat_charZero
-  结论: {k : 类型} [DivisionRing k] [CharZero k] {m n : 自然数}
+定理 cast_div_of自然数_charZero
+  结论: {k : 类型} [除环 k] [特征零 k] {m n : 自然数}
   证明: by
   rw [cast_div_charZero (Int.ofNat_dvd.mpr n_dvd)]; rw [cast_natCast]; rw [cast_natCast]
 
@@ -85,8 +85,8 @@ theorem RingHom.injective_int
   proof: Subsingleton.elim (Int.castRingHom _) f ▸ Int.cast_injective
 
 中文:
-定理 RingHom.injective_int
-  条件: {α : 类型} [NonAssocRing α] (f : 整数 ->+* α) [CharZero α]
+定理 环态射.injective_int
+  条件: {α : 类型} [非结合环 α] (f : 整数 ->+* α) [特征零 α]
   证明: Subsingleton.elim (Int.castRingHom _) f ▸ Int.cast_injective
 
 Depends on / 依赖: Int.castRingHom, Int.cast_injective, Subsingleton, Subsingleton.elim, castRingHom, cast_injective

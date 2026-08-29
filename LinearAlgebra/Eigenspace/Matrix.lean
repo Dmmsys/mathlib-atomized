@@ -41,7 +41,7 @@ lemma hasEigenvector_toLin_diagonal
 
 中文:
 引理 hasEigenvector_toLin_diagonal
-  条件: (d : n -> R) (i : n) (b : Basis n R M)
+  条件: (d : n -> R) (i : n) (b : 基 n R M)
   证明: ⟨mem_eigenspace_iff.mpr by simp [diagonal], Basis.ne_zero b i⟩
 
 Depends on / 依赖: Basis.ne_zero, diagonal, mem_eigenspace_iff, mem_eigenspace_iff.mpr, ne_zero
@@ -88,7 +88,7 @@ hasEigenvalue_of_hasEigenvector hasEigenvector_toLin_diagonal d i b
 
 中文:
 引理 hasEigenvalue_toLin_diagonal_iff
-  结论: (d : n -> R) {μ : R} [IsDomain R] [IsTorsionFree R M]
+  结论: (d : n -> R) {μ : R} [是整环 R] [是无挠 R M]
   证明: by
   have (i : n) : HasEigenvalue (toLin b b (diagonal d)) (d i) :=
 hasEigenvalue_of_hasEigenvector hasEigenvector_toLin_diagonal d i b
@@ -132,7 +132,7 @@ lemma hasEigenvalue_toLin'_diagonal_iff
 
 中文:
 引理 hasEigenvalue_toLin'_diagonal_iff
-  条件: [IsDomain R] (d : n -> R) {μ : R}
+  条件: [是整环 R] (d : n -> R) {μ : R}
   证明: hasEigenvalue_toLin_diagonal_iff _ Pi.basisFun R n
 
 Depends on / 依赖: Pi.basisFun, basisFun, hasEigenvalue_toLin_diagonal_iff
@@ -160,7 +160,7 @@ lemma _root_.Module.End.HasEigenvalue.nonempty
 @[simp]
 
 中文:
-引理 _root_.Module.End.HasEigenvalue.nonempty
+引理 _root_.模.End.HasEigenvalue.nonempty
   证明: by
   rw [hasEigenvalue_iff] at hμ
   contrapose! hμ
@@ -239,7 +239,7 @@ lemma maxGenEigenspace_toLin_diagonal_eq_eigenspace
 
 中文:
 引理 maxGenEigenspace_toLin_diagonal_eq_eigenspace
-  条件: [IsDomain R]
+  条件: [是整环 R]
   证明: by
   refine le_antisymm (fun x hx => ?_) eigenspace_le_maxGenEigenspace
   obtain ⟨k, hk⟩ := (mem_maxGenEigenspace _ _ _).mp hx
@@ -277,7 +277,7 @@ lemma maxGenEigenspace_toLin'_diagonal_eq_eigenspace
 
 中文:
 引理 maxGenEigenspace_toLin'_diagonal_eq_eigenspace
-  条件: [IsDomain R]
+  条件: [是整环 R]
   证明: maxGenEigenspace_toLin_diagonal_eq_eigenspace d Pi.basisFun R n
 
 @[simp]
@@ -300,8 +300,8 @@ theorem _root_.LinearMap.spectrum_toMatrix
 @[simp]
 
 中文:
-定理 _root_.LinearMap.spectrum_toMatrix
-  条件: (f : M ->ₗ[R] M) (b : Basis n R M)
+定理 _root_.线性映射.spectrum_toMatrix
+  条件: (f : M ->ₗ[R] M) (b : 基 n R M)
   证明: AlgEquiv.spectrum_eq (LinearMap.toMatrixAlgEquiv b) f
 
 @[simp]
@@ -324,7 +324,7 @@ theorem _root_.LinearMap.spectrum_toMatrix'
 @[simp]
 
 中文:
-定理 _root_.LinearMap.spectrum_toMatrix'
+定理 _root_.线性映射.spectrum_toMatrix'
   条件: (f : (n -> R) ->ₗ[R] (n -> R))
   证明: AlgEquiv.spectrum_eq LinearMap.toMatrixAlgEquiv' f
 
@@ -349,7 +349,7 @@ theorem spectrum_toLin
 
 中文:
 定理 spectrum_toLin
-  条件: (A : Matrix n n R) (b : Basis n R M)
+  条件: (A : 矩阵 n n R) (b : 基 n R M)
   证明: AlgEquiv.spectrum_eq (Matrix.toLinAlgEquiv b) A
 
 @[simp]
@@ -372,7 +372,7 @@ theorem spectrum_toLin'
 
 中文:
 定理 spectrum_toLin'
-  条件: (A : Matrix n n R)
+  条件: (A : 矩阵 n n R)
   结论: spectrum R A.toLin' = spectrum R A
   证明: AlgEquiv.spectrum_eq Matrix.toLinAlgEquiv' A
 
@@ -396,7 +396,7 @@ lemma spectrum_diagonal
 
 中文:
 引理 spectrum_diagonal
-  条件: [Field R] (d : n -> R)
+  条件: [域 R] (d : n -> R)
   证明: by
   ext μ
   rw [← AlgEquiv.spectrum_eq (toLinAlgEquiv <| Pi.basisFun R n)]; rw [← hasEigenvalue_iff_mem_spectrum]

@@ -50,7 +50,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun { f : α -> β | Continuous f } fun _ => α -> β
+  签名: CoeFun { f : α -> β | 连续 f } fun _ => α -> β
   定义体: ⟨Subtype.val⟩
 
 Depends on / 依赖: Subtype, Subtype.val
@@ -80,7 +80,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: [Mul β] [ContinuousMul β]
+  签名: [乘法 β] [连续乘法 β]
   定义体: ⟨fun f g => ⟨f * g, continuous_mul.comp (f.continuous.prodMk g.continuous :)⟩⟩
 
 @[to_additive (attr := norm_cast, simp)]
@@ -104,7 +104,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  条件: [Mul β] [ContinuousMul β] (f g : C(α, β))
+  条件: [乘法 β] [连续乘法 β] (f g : C(α, β))
   结论: ⇑(f * g) = f * g
   证明: rfl
 
@@ -127,7 +127,7 @@ theorem mul_apply
 
 中文:
 定理 mul_apply
-  条件: [Mul β] [ContinuousMul β] (f g : C(α, β)) (x : α)
+  条件: [乘法 β] [连续乘法 β] (f g : C(α, β)) (x : α)
   结论: (f * g) x = f x * g x
   证明: rfl
 
@@ -147,7 +147,7 @@ theorem mul_comp
 
 中文:
 定理 mul_comp
-  条件: [Mul γ] [ContinuousMul γ] (f₁ f₂ : C(β, γ)) (g : C(α, β))
+  条件: [乘法 γ] [连续乘法 γ] (f₁ f₂ : C(β, γ)) (g : C(α, β))
   证明: rfl
 -/
 theorem mul_comp [Mul γ] [ContinuousMul γ] (f₁ f₂ : C(β, γ)) (g : C(α, β)) :
@@ -168,8 +168,8 @@ instance [One
 @[to_additive (attr := norm_cast, simp)]
 
 中文:
-实例 [One
-  签名: β] : One C(α, β)
+实例 [幺
+  签名: β] : 幺 C(α, β)
   定义体: ⟨const α 1⟩
 
 @[to_additive (attr := norm_cast, simp)]
@@ -191,7 +191,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  条件: [One β]
+  条件: [幺 β]
   结论: ⇑(1 : C(α, β)) = 1
   证明: rfl
 
@@ -214,7 +214,7 @@ theorem one_apply
 
 中文:
 定理 one_apply
-  条件: [One β] (x : α)
+  条件: [幺 β] (x : α)
   结论: (1 : C(α, β)) x = 1
   证明: rfl
 
@@ -237,7 +237,7 @@ theorem one_comp
 
 中文:
 定理 one_comp
-  条件: [One γ] (g : C(α, β))
+  条件: [幺 γ] (g : C(α, β))
   结论: (1 : C(β, γ)).comp g = 1
   证明: rfl
 
@@ -260,7 +260,7 @@ theorem comp_one
 
 中文:
 定理 comp_one
-  条件: [One β] (g : C(β, γ))
+  条件: [幺 β] (g : C(β, γ))
   结论: g.comp (1 : C(α, β)) = const α (g 1)
   证明: rfl
 
@@ -280,7 +280,7 @@ theorem const_one
 
 中文:
 定理 const_one
-  条件: [One β]
+  条件: [幺 β]
   结论: const α (1 : β) = 1
   证明: rfl
 -/
@@ -298,8 +298,8 @@ instance [NatCast
 @[simp, norm_cast]
 
 中文:
-实例 [NatCast
-  签名: β] : 自然数Cast C(α, β)
+实例 [自然数嵌入
+  签名: β] : 自然数嵌入 C(α, β)
   定义体: ⟨fun n => ContinuousMap.const _ n⟩
 
 @[simp, norm_cast]
@@ -323,7 +323,7 @@ theorem coe_natCast
 
 中文:
 定理 coe_natCast
-  条件: [自然数Cast β] (n : 自然数)
+  条件: [自然数嵌入 β] (n : 自然数)
   结论: ((n : C(α, β)) : α -> β) = n
   证明: rfl
 
@@ -344,7 +344,7 @@ theorem natCast_apply
 
 中文:
 定理 natCast_apply
-  条件: [自然数Cast β] (n : 自然数) (x : α)
+  条件: [自然数嵌入 β] (n : 自然数) (x : α)
   结论: (n : C(α, β)) x = n
   证明: rfl
 -/
@@ -363,8 +363,8 @@ instance [IntCast
 @[simp, norm_cast]
 
 中文:
-实例 [IntCast
-  签名: β] : 整数Cast C(α, β)
+实例 [整数嵌入
+  签名: β] : 整数嵌入 C(α, β)
   定义体: ⟨fun n => ContinuousMap.const _ n⟩
 
 @[simp, norm_cast]
@@ -388,7 +388,7 @@ theorem coe_intCast
 
 中文:
 定理 coe_intCast
-  条件: [整数Cast β] (n : 整数)
+  条件: [整数嵌入 β] (n : 整数)
   结论: ((n : C(α, β)) : α -> β) = n
   证明: rfl
 
@@ -409,7 +409,7 @@ theorem intCast_apply
 
 中文:
 定理 intCast_apply
-  条件: [整数Cast β] (n : 整数) (x : α)
+  条件: [整数嵌入 β] (n : 整数) (x : α)
   结论: (n : C(α, β)) x = n
   证明: rfl
 -/
@@ -431,7 +431,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: [Monoid β] [ContinuousMul β]
+  签名: [幺半群 β] [连续乘法 β]
   定义体: ⟨fun f n => ⟨(⇑f) ^ n, f.continuous.pow n⟩⟩
 
 @[to_additive (attr := norm_cast) (reorder := 7 8)]
@@ -455,7 +455,7 @@ theorem coe_pow
 
 中文:
 定理 coe_pow
-  条件: [Monoid β] [ContinuousMul β] (f : C(α, β)) (n : 自然数)
+  条件: [幺半群 β] [连续乘法 β] (f : C(α, β)) (n : 自然数)
   结论: ⇑(f ^ n) = (⇑f) ^ n
   证明: rfl
 
@@ -475,7 +475,7 @@ theorem pow_apply
 
 中文:
 定理 pow_apply
-  条件: [Monoid β] [ContinuousMul β] (f : C(α, β)) (n : 自然数) (x : α)
+  条件: [幺半群 β] [连续乘法 β] (f : C(α, β)) (n : 自然数) (x : α)
   证明: rfl
 -/
 theorem pow_apply [Monoid β] [ContinuousMul β] (f : C(α, β)) (n : Nat) (x : α) :
@@ -497,7 +497,7 @@ theorem pow_comp
 
 中文:
 定理 pow_comp
-  条件: [Monoid γ] [ContinuousMul γ] (f : C(β, γ)) (n : 自然数) (g : C(α, β))
+  条件: [幺半群 γ] [连续乘法 γ] (f : C(β, γ)) (n : 自然数) (g : C(α, β))
   证明: rfl
 -/
 theorem pow_comp [Monoid γ] [ContinuousMul γ] (f : C(β, γ)) (n : Nat) (g : C(α, β)) :
@@ -521,8 +521,8 @@ instance [Inv
 @[to_additive (attr := simp)]
 
 中文:
-实例 [Inv
-  签名: β] [ContinuousInv β] : Inv C(α, β) where inv f
+实例 [取逆
+  签名: β] [连续取逆 β] : 取逆 C(α, β) where inv f
   定义体: ⟨f⁻¹, f.continuous.inv⟩
 
 @[to_additive (attr := simp)]
@@ -545,7 +545,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  条件: [Inv β] [ContinuousInv β] (f : C(α, β))
+  条件: [取逆 β] [连续取逆 β] (f : C(α, β))
   结论: ⇑f⁻¹ = (⇑f)⁻¹
   证明: rfl
 
@@ -568,7 +568,7 @@ theorem inv_apply
 
 中文:
 定理 inv_apply
-  条件: [Inv β] [ContinuousInv β] (f : C(α, β)) (x : α)
+  条件: [取逆 β] [连续取逆 β] (f : C(α, β)) (x : α)
   结论: f⁻¹ x = (f x)⁻¹
   证明: rfl
 
@@ -588,7 +588,7 @@ theorem inv_comp
 
 中文:
 定理 inv_comp
-  条件: [Inv γ] [ContinuousInv γ] (f : C(β, γ)) (g : C(α, β))
+  条件: [取逆 γ] [连续取逆 γ] (f : C(β, γ)) (g : C(α, β))
   证明: rfl
 -/
 theorem inv_comp [Inv γ] [ContinuousInv γ] (f : C(β, γ)) (g : C(α, β)) :
@@ -609,8 +609,8 @@ instance [Div
 @[to_additive (attr := norm_cast, simp)]
 
 中文:
-实例 [Div
-  签名: β] [ContinuousDiv β] : Div C(α, β) where
+实例 [除法
+  签名: β] [余ntinuousDiv β] : 除法 C(α, β) where
   定义体: ⟨f / g, f.continuous.div' g.continuous⟩
 
 @[to_additive (attr := norm_cast, simp)]
@@ -634,7 +634,7 @@ theorem coe_div
 
 中文:
 定理 coe_div
-  条件: [Div β] [ContinuousDiv β] (f g : C(α, β))
+  条件: [除法 β] [余ntinuousDiv β] (f g : C(α, β))
   结论: ⇑(f / g) = f / g
   证明: rfl
 
@@ -657,7 +657,7 @@ theorem div_apply
 
 中文:
 定理 div_apply
-  条件: [Div β] [ContinuousDiv β] (f g : C(α, β)) (x : α)
+  条件: [除法 β] [余ntinuousDiv β] (f g : C(α, β)) (x : α)
   结论: (f / g) x = f x / g x
   证明: rfl
 
@@ -677,7 +677,7 @@ theorem div_comp
 
 中文:
 定理 div_comp
-  条件: [Div γ] [ContinuousDiv γ] (f g : C(β, γ)) (h : C(α, β))
+  条件: [除法 γ] [余ntinuousDiv γ] (f g : C(β, γ)) (h : C(α, β))
   证明: rfl
 -/
 theorem div_comp [Div γ] [ContinuousDiv γ] (f g : C(β, γ)) (h : C(α, β)) :
@@ -699,7 +699,7 @@ instance instZPow
 
 中文:
 实例 instZPow
-  签名: [Group β] [IsTopologicalGroup β]
+  签名: [群 β] [是拓扑群 β]
   定义体: ⟨(⇑f) ^ z, f.continuous.zpow z⟩
 
 @[to_additive (attr := norm_cast) (reorder := 7 8)]
@@ -723,7 +723,7 @@ theorem coe_zpow
 
 中文:
 定理 coe_zpow
-  条件: [Group β] [IsTopologicalGroup β] (f : C(α, β)) (z : 整数)
+  条件: [群 β] [是拓扑群 β] (f : C(α, β)) (z : 整数)
   结论: ⇑(f ^ z) = (⇑f) ^ z
   证明: rfl
 
@@ -743,7 +743,7 @@ theorem zpow_apply
 
 中文:
 定理 zpow_apply
-  条件: [Group β] [IsTopologicalGroup β] (f : C(α, β)) (z : 整数) (x : α)
+  条件: [群 β] [是拓扑群 β] (f : C(α, β)) (z : 整数) (x : α)
   证明: rfl
 -/
 theorem zpow_apply [Group β] [IsTopologicalGroup β] (f : C(α, β)) (z : Int) (x : α) :
@@ -765,7 +765,7 @@ theorem zpow_comp
 
 中文:
 定理 zpow_comp
-  条件: [Group γ] [IsTopologicalGroup γ] (f : C(β, γ)) (z : 整数) (g : C(α, β))
+  条件: [群 γ] [是拓扑群 γ] (f : C(β, γ)) (z : 整数) (g : C(α, β))
   证明: rfl
 -/
 theorem zpow_comp [Group γ] [IsTopologicalGroup γ] (f : C(β, γ)) (z : Int) (g : C(α, β)) :
@@ -803,7 +803,7 @@ definition continuousSubmonoid
 
 中文:
 定义 continuousSubmonoid
-  签名: (α : 类型) (β : 类型) [TopologicalSpace α] [TopologicalSpace β]
+  签名: (α : 类型) (β : 类型) [拓扑空间 α] [拓扑空间 β]
   定义体: { f : α -> β | Continuous f }
   one_mem' := @continuous_const _ _ _ _ 1
   mul_mem' fc gc := fc.mul gc
@@ -828,7 +828,7 @@ definition continuousSubgroup
 
 中文:
 定义 continuousSubgroup
-  签名: (α : 类型) (β : 类型) [TopologicalSpace α] [TopologicalSpace β] [Group β]
+  签名: (α : 类型) (β : 类型) [拓扑空间 α] [拓扑空间 β] [群 β]
   定义体: { continuousSubmonoid α β with inv_mem' := fun fc => Continuous.inv fc }
 
 Depends on / 依赖: Continuous, Continuous.inv, continuousSubmonoid, inv_mem
@@ -856,8 +856,8 @@ instance [Semigroup
 @[to_additive]
 
 中文:
-实例 [Semigroup
-  签名: β] [ContinuousMul β] : Semigroup C(α, β)
+实例 [半群
+  签名: β] [连续乘法 β] : 半群 C(α, β)
   定义体: fast_instance%
   coe_injective.semigroup _ coe_mul
 
@@ -881,8 +881,8 @@ instance [CommSemigroup
 @[to_additive]
 
 中文:
-实例 [CommSemigroup
-  签名: β] [ContinuousMul β] : CommSemigroup C(α, β)
+实例 [交换半群
+  签名: β] [连续乘法 β] : 交换半群 C(α, β)
   定义体: fast_instance%
   coe_injective.commSemigroup _ coe_mul
 
@@ -904,8 +904,8 @@ instance [MulOneClass
   coe_injective.mulOneClass _ coe_one coe_mul
 
 中文:
-实例 [MulOneClass
-  签名: β] [ContinuousMul β] : MulOneClass C(α, β)
+实例 [MulOne类
+  签名: β] [连续乘法 β] : MulOne类 C(α, β)
   定义体: fast_instance%
   coe_injective.mulOneClass _ coe_one coe_mul
 
@@ -924,8 +924,8 @@ instance [MulZeroClass
   coe_injective.mulZeroClass _ coe_zero coe_mul
 
 中文:
-实例 [MulZeroClass
-  签名: β] [ContinuousMul β] : MulZeroClass C(α, β)
+实例 [乘零类
+  签名: β] [连续乘法 β] : 乘零类 C(α, β)
   定义体: fast_instance%
   coe_injective.mulZeroClass _ coe_zero coe_mul
 
@@ -946,8 +946,8 @@ instance [SemigroupWithZero
 @[to_additive]
 
 中文:
-实例 [SemigroupWithZero
-  签名: β] [ContinuousMul β] : SemigroupWithZero C(α, β)
+实例 [带零半群
+  签名: β] [连续乘法 β] : 带零半群 C(α, β)
   定义体: fast_instance%
   coe_injective.semigroupWithZero _ coe_zero coe_mul
 
@@ -969,8 +969,8 @@ instance [Monoid
   coe_injective.monoid _ coe_one coe_mul coe_pow
 
 中文:
-实例 [Monoid
-  签名: β] [ContinuousMul β] : Monoid C(α, β)
+实例 [幺半群
+  签名: β] [连续乘法 β] : 幺半群 C(α, β)
   定义体: fast_instance%
   coe_injective.monoid _ coe_one coe_mul coe_pow
 
@@ -991,8 +991,8 @@ instance [MonoidWithZero
 @[to_additive]
 
 中文:
-实例 [MonoidWithZero
-  签名: β] [ContinuousMul β] : MonoidWithZero C(α, β)
+实例 [带零幺半群
+  签名: β] [连续乘法 β] : 带零幺半群 C(α, β)
   定义体: fast_instance%
   coe_injective.monoidWithZero _ coe_zero coe_one coe_mul coe_pow
 
@@ -1014,8 +1014,8 @@ instance [CommMonoid
   coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
 中文:
-实例 [CommMonoid
-  签名: β] [ContinuousMul β] : CommMonoid C(α, β)
+实例 [交换幺半群
+  签名: β] [连续乘法 β] : 交换幺半群 C(α, β)
   定义体: fast_instance%
   coe_injective.commMonoid _ coe_one coe_mul coe_pow
 
@@ -1036,8 +1036,8 @@ instance [CommMonoidWithZero
 @[to_additive]
 
 中文:
-实例 [CommMonoidWithZero
-  签名: β] [ContinuousMul β] : CommMonoidWithZero C(α, β)
+实例 [带零交换幺半群
+  签名: β] [连续乘法 β] : 带零交换幺半群 C(α, β)
   定义体: fast_instance%
   coe_injective.commMonoidWithZero _ coe_zero coe_one coe_mul coe_pow
 
@@ -1063,8 +1063,8 @@ instance [LocallyCompactSpace
       continuous_eval.c
 
 中文:
-实例 [LocallyCompactSpace
-  签名: α] [Mul β] [ContinuousMul β] : ContinuousMul C(α, β)
+实例 [局部紧空间
+  签名: α] [乘法 β] [连续乘法 β] : 连续乘法 C(α, β)
   定义体: ⟨by
     refine continuous_of_continuous_uncurry _ ?_
     have h1 : Continuous fun x : (C(α, β) × C(α, β)) × α => x.fst.fst x.snd :=
@@ -1098,7 +1098,7 @@ definition coeFnMonoidHom
 
 中文:
 定义 coeFnMonoidHom
-  签名: [Monoid β] [ContinuousMul β]
+  签名: [幺半群 β] [连续乘法 β]
   定义体: f
   map_one' := coe_one
   map_mul' := coe_mul
@@ -1125,8 +1125,8 @@ definition _root_.MonoidHom.compLeftContinuous
   map_mul' _ _ := ext fun _ => g.map_mul _ _
 
 中文:
-定义 _root_.MonoidHom.compLeftContinuous
-  签名: {γ : 类型} [Monoid β] [ContinuousMul β]
+定义 _root_.幺半群态射.compLeftContinuous
+  签名: {γ : 类型} [幺半群 β] [连续乘法 β]
   定义体: (⟨g, hg⟩ : C(β, γ)).comp f
   map_one' := ext fun _ => g.map_one
   map_mul' _ _ := ext fun _ => g.map_mul _ _
@@ -1155,7 +1155,7 @@ definition compMonoidHom'
 
 中文:
 定义 compMonoidHom'
-  签名: {γ : 类型} [TopologicalSpace γ] [MulOneClass γ] [ContinuousMul γ]
+  签名: {γ : 类型} [拓扑空间 γ] [MulOne类 γ] [连续乘法 γ]
   定义体: f.comp g
   map_one' := one_comp g
   map_mul' f₁ f₂ := mul_comp f₁ f₂ g
@@ -1183,7 +1183,7 @@ theorem coe_prod
 
 中文:
 定理 coe_prod
-  条件: [CommMonoid β] [ContinuousMul β] {ι : 类型} (s : Finset ι) (f : ι -> C(α, β))
+  条件: [交换幺半群 β] [连续乘法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C(α, β))
   证明: map_prod coeFnMonoidHom f s
 
 @[to_additive]
@@ -1207,7 +1207,7 @@ theorem prod_apply
 
 中文:
 定理 prod_apply
-  结论: [CommMonoid β] [ContinuousMul β] {ι : 类型} (s : Finset ι) (f : ι -> C(α, β))
+  结论: [交换幺半群 β] [连续乘法 β] {ι : 类型} (s : 有限集 ι) (f : ι -> C(α, β))
   证明: by simp
 
 @[to_additive]
@@ -1228,8 +1228,8 @@ instance [Group
 @[to_additive]
 
 中文:
-实例 [Group
-  签名: β] [IsTopologicalGroup β] : Group C(α, β)
+实例 [群
+  签名: β] [是拓扑群 β] : 群 C(α, β)
   定义体: fast_instance%
   coe_injective.group _ coe_one coe_mul coe_inv coe_div coe_pow coe_zpow
 
@@ -1254,7 +1254,7 @@ instance instCommGroupContinuousMap
 
 中文:
 实例 instCommGroupContinuousMap
-  签名: [CommGroup β] [IsTopologicalGroup β]
+  签名: [交换群 β] [是拓扑群 β]
   定义体: fast_instance%
   coe_injective.commGroup _ coe_one coe_mul coe_inv coe_div coe_pow coe_zpow
 
@@ -1282,8 +1282,8 @@ instance [CommGroup
     exact fun K hK =>
 
 中文:
-实例 [CommGroup
-  签名: β] [IsTopologicalGroup β] : IsTopologicalGroup C(α, β) where
+实例 [交换群
+  签名: β] [是拓扑群 β] : 是拓扑群 C(α, β) where
   定义体: by
     let : UniformSpace β := IsTopologicalGroup.rightUniformSpace β
     have : IsUniformGroup β := isUniformGroup_of_commGroup
@@ -1334,7 +1334,7 @@ theorem hasProd_apply
 
 中文:
 定理 hasProd_apply
-  结论: {γ : 类型} [CommMonoid β] [ContinuousMul β]
+  结论: {γ : 类型} [交换幺半群 β] [连续乘法 β]
   证明: by
   let ev : C(α, β) ->* β := (Pi.evalMonoidHom _ x).comp coeFnMonoidHom
   exact hf.map ev (continuous_eval_const x)
@@ -1362,7 +1362,7 @@ theorem multipliable_apply
 
 中文:
 定理 multipliable_apply
-  结论: [CommMonoid β] [ContinuousMul β] {γ : 类型} {f : γ -> C(α, β)}
+  结论: [交换幺半群 β] [连续乘法 β] {γ : 类型} {f : γ -> C(α, β)}
   证明: (hasProd_apply hf.hasProd x).multipliable
 
 @[to_additive]
@@ -1384,7 +1384,7 @@ theorem tprod_apply
 
 中文:
 定理 tprod_apply
-  结论: [T2Space β] [CommMonoid β] [ContinuousMul β] {γ : 类型} {f : γ -> C(α, β)}
+  结论: [T2空间 β] [交换幺半群 β] [连续乘法 β] {γ : 类型} {f : γ -> C(α, β)}
   证明: (hasProd_apply hf.hasProd x).tprod_eq
 
 Depends on / 依赖: hasProd, hasProd_apply, hf.hasProd, tprod_eq
@@ -1420,7 +1420,7 @@ definition continuousSubsemiring
 
 中文:
 定义 continuousSubsemiring
-  签名: (α : 类型) (R : 类型) [TopologicalSpace α] [TopologicalSpace R]
+  签名: (α : 类型) (R : 类型) [拓扑空间 α] [拓扑空间 R]
   定义体: { continuousAddSubmonoid α R, continuousSubmonoid α R with }
 
 Depends on / 依赖: continuousAddSubmonoid, continuousSubmonoid
@@ -1439,7 +1439,7 @@ definition continuousSubring
 
 中文:
 定义 continuousSubring
-  签名: (α : 类型) (R : 类型) [TopologicalSpace α] [TopologicalSpace R] [Ring R]
+  签名: (α : 类型) (R : 类型) [拓扑空间 α] [拓扑空间 R] [环 R]
   定义体: { continuousAddSubgroup α R, continuousSubsemiring α R with }
 
 Depends on / 依赖: continuousAddSubgroup, continuousSubsemiring
@@ -1499,7 +1499,7 @@ instance instRing
 
 中文:
 实例 instRing
-  签名: {α : 类型} {β : 类型} [TopologicalSpace α] [TopologicalSpace β] [Ring β]
+  签名: {α : 类型} {β : 类型} [拓扑空间 α] [拓扑空间 β] [环 β]
   定义体: fast_instance%
   coe_injective.ring _ coe_zero coe_one coe_add coe_mul coe_neg coe_sub coe_nsmul coe_zsmul coe_pow
     coe_natCast coe_intCast
@@ -1547,7 +1547,7 @@ definition _root_.RingHom.compLeftContinuous
   body: { g.toMonoidHom.compLeftContinuous α hg, g.toAddMonoidHom.compLeftContinuous α hg with }
 
 中文:
-定义 _root_.RingHom.compLeftContinuous
+定义 _root_.环态射.compLeftContinuous
   签名: (α : 类型) {β : 类型} {γ : 类型}
   定义体: { g.toMonoidHom.compLeftContinuous α hg, g.toAddMonoidHom.compLeftContinuous α hg with }
 -/
@@ -1570,7 +1570,7 @@ definition coeFnRingHom
 
 中文:
 定义 coeFnRingHom
-  签名: {α : 类型} {β : 类型} [TopologicalSpace α] [TopologicalSpace β] [Semiring β]
+  签名: {α : 类型} {β : 类型} [拓扑空间 α] [拓扑空间 β] [半环 β]
   定义体: { (coeFnMonoidHom : C(α, β) ->* _),
     (coeFnAddMonoidHom : C(α, β) ->+ _) with }
 
@@ -1614,7 +1614,7 @@ definition continuousSubmodule
 
 中文:
 定义 continuousSubmodule
-  签名: : Submodule R (α -> M)
+  签名: : 子模 R (α -> M)
   定义体: { continuousAddSubgroup α M with
     carrier := { f : α -> M | Continuous f }
     smul_mem' := fun c _ hf => hf.const_smul c }
@@ -1646,7 +1646,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul R M] [ContinuousConstSMul R M]
+  签名: [标量乘法 R M] [连续常数标量乘法 R M]
   定义体: ⟨fun r f => ⟨r • ⇑f, f.continuous.const_smul r⟩⟩
 
 @[to_additive]
@@ -1668,8 +1668,8 @@ instance [SMul
 @[to_additive]
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] : ContinuousConstSMul R C(α, M) where
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] : 连续常数标量乘法 R C(α, M) where
   定义体: continuous_postcomp ⟨_, continuous_const_smul r⟩
 
 @[to_additive]
@@ -1691,8 +1691,8 @@ instance [TopologicalSpace
 @[to_additive (attr := simp, norm_cast)]
 
 中文:
-实例 [TopologicalSpace
-  签名: R] [SMul R M] [ContinuousSMul R M] :
+实例 [拓扑空间
+  签名: R] [标量乘法 R M] [连续标量乘法 R M] :
   定义体: ⟨(continuous_postcomp ⟨_, continuous_smul⟩).comp continuous_prodMk_const⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -1717,7 +1717,7 @@ theorem coe_smul
 
 中文:
 定理 coe_smul
-  条件: [SMul R M] [ContinuousConstSMul R M] (c : R) (f : C(α, M))
+  条件: [标量乘法 R M] [连续常数标量乘法 R M] (c : R) (f : C(α, M))
   结论: ⇑(c • f) = c • ⇑f
   证明: rfl
 
@@ -1739,7 +1739,7 @@ theorem smul_apply
 
 中文:
 定理 smul_apply
-  条件: [SMul R M] [ContinuousConstSMul R M] (c : R) (f : C(α, M)) (a : α)
+  条件: [标量乘法 R M] [连续常数标量乘法 R M] (c : R) (f : C(α, M)) (a : α)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1761,7 +1761,7 @@ theorem smul_comp
 
 中文:
 定理 smul_comp
-  条件: [SMul R M] [ContinuousConstSMul R M] (r : R) (f : C(β, M)) (g : C(α, β))
+  条件: [标量乘法 R M] [连续常数标量乘法 R M] (r : R) (f : C(β, M)) (g : C(α, β))
   证明: rfl
 
 @[to_additive]
@@ -1780,8 +1780,8 @@ instance [SMul
   body: ext fun _ => smul_comm _ _ _
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] [SMul R₁ M] [ContinuousConstSMul R₁ M]
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] [标量乘法 R₁ M] [连续常数标量乘法 R₁ M]
   定义体: ext fun _ => smul_comm _ _ _
 
 Depends on / 依赖: smul_comm
@@ -1799,8 +1799,8 @@ instance [SMul
   body: ext fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] [SMul R₁ M] [ContinuousConstSMul R₁ M] [SMul R R₁]
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] [标量乘法 R₁ M] [连续常数标量乘法 R₁ M] [标量乘法 R R₁]
   定义体: ext fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: smul_assoc
@@ -1818,8 +1818,8 @@ instance [SMul
   body: ext fun _ => op_smul_eq_smul _ _
 
 中文:
-实例 [SMul
-  签名: R M] [SMul Rᵐᵒᵖ M] [ContinuousConstSMul R M] [IsCentralScalar R M] :
+实例 [标量乘法
+  签名: R M] [标量乘法 Rᵐᵒᵖ M] [连续常数标量乘法 R M] [中心标量 R M] :
   定义体: ext fun _ => op_smul_eq_smul _ _
 
 Depends on / 依赖: op_smul_eq_smul
@@ -1836,8 +1836,8 @@ instance [SMul
   body: ext fun _ => smul_mul_assoc ..
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] [Mul M] [ContinuousMul M] [IsScalarTower R M M] :
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] [乘法 M] [连续乘法 M] [标量塔 R M M] :
   定义体: ext fun _ => smul_mul_assoc ..
 
 Depends on / 依赖: smul_mul_assoc
@@ -1855,8 +1855,8 @@ instance [SMul
   body: ext fun _ => (mul_smul_comm ..).symm
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] [Mul M] [ContinuousMul M] [SMulCommClass R M M] :
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] [乘法 M] [连续乘法 M] [标量交换类 R M M] :
   定义体: ext fun _ => (mul_smul_comm ..).symm
 
 Depends on / 依赖: mul_smul_comm
@@ -1874,8 +1874,8 @@ instance [SMul
   body: ext fun _ => smul_comm (_ : M) ..
 
 中文:
-实例 [SMul
-  签名: R M] [ContinuousConstSMul R M] [Mul M] [ContinuousMul M] [SMulCommClass M R M] :
+实例 [标量乘法
+  签名: R M] [连续常数标量乘法 R M] [乘法 M] [连续乘法 M] [标量交换类 M R M] :
   定义体: ext fun _ => smul_comm (_ : M) ..
 
 Depends on / 依赖: smul_comm
@@ -1893,8 +1893,8 @@ instance [Monoid
   body: fast_instance% Function.Injective.mulAction _ coe_injective coe_smul
 
 中文:
-实例 [Monoid
-  签名: R] [MulAction R M] [ContinuousConstSMul R M] : MulAction R C(α, M)
+实例 [幺半群
+  签名: R] [乘法作用 R M] [连续常数标量乘法 R M] : 乘法作用 R C(α, M)
   定义体: fast_instance% Function.Injective.mulAction _ coe_injective coe_smul
 
 Depends on / 依赖: Function, Function.Injective.mulAction, Injective, coe_injective, coe_smul, fast_instance, mulAction
@@ -1912,8 +1912,8 @@ instance [Monoid
   Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
 
 中文:
-实例 [Monoid
-  签名: R] [AddMonoid M] [DistribMulAction R M] [ContinuousAdd M]
+实例 [幺半群
+  签名: R] [加法幺半群 M] [分配乘法作用 R M] [连续加法 M]
   定义体: fast_instance%
   Function.Injective.distribMulAction coeFnAddMonoidHom coe_injective coe_smul
 
@@ -1938,7 +1938,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module R C(α, M)
+  签名: : 模 R C(α, M)
   定义体: fast_instance%
   Function.Injective.module R coeFnAddMonoidHom coe_injective coe_smul
 
@@ -1962,8 +1962,8 @@ definition _root_.ContinuousLinearMap.compLeftContinuous
   map_smul' := fun c _ => ext fun _ => g.map_smul' c _
 
 中文:
-定义 _root_.ContinuousLinearMap.compLeftContinuous
-  签名: (α : 类型) [TopologicalSpace α]
+定义 _root_.连续线性映射.compLeftContinuous
+  签名: (α : 类型) [拓扑空间 α]
   定义体: g.toLinearMap.toAddMonoidHom.compLeftContinuous α g.continuous
   map_smul' := fun c _ => ext fun _ => g.map_smul' c _
 -/
@@ -1985,8 +1985,8 @@ definition _root_.ContinuousLinearMap.const
   map_smul' _ _ := rfl
 
 中文:
-定义 _root_.ContinuousLinearMap.const
-  签名: (α : 类型) [TopologicalSpace α]
+定义 _root_.连续线性映射.const
+  签名: (α : 类型) [拓扑空间 α]
   定义体: .const α m
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -2101,7 +2101,7 @@ definition continuousSubalgebra
 
 中文:
 定义 continuousSubalgebra
-  签名: : Subalgebra R (α -> A)
+  签名: : 子代数 R (α -> A)
   定义体: { continuousSubsemiring α A with
     carrier := { f : α -> A | Continuous f }
     algebraMap_mem' := fun r => (continuous_const : Continuous fun _ : α => algebraMap R A r) }
@@ -2134,7 +2134,7 @@ definition ContinuousMap.C
   map_add' c₁ c₂ := by ext _; exact (algebraMap R A).map_a
 
 中文:
-定义 ContinuousMap.C
+定义 连续映射.C
   签名: : R ->+* C(α, A) where
   定义体: fun c : R => ⟨fun _ : α => (algebraMap R A) c, continuous_const⟩
   map_one' := by ext _; exact (algebraMap R A).map_one
@@ -2162,9 +2162,9 @@ theorem ContinuousMap.C_apply
   proof: rfl
 
 中文:
-定理 ContinuousMap.C_apply
+定理 连续映射.C_apply
   条件: (r : R) (a : α)
-  结论: ContinuousMap.C r a = algebraMap R A r
+  结论: 连续映射.C r a = algebraMap R A r
   证明: rfl
 -/
 theorem ContinuousMap.C_apply (r : R) (a : α) : ContinuousMap.C r a = algebraMap R A r :=
@@ -2181,8 +2181,8 @@ instance ContinuousMap.algebra
   smul_def' c f := by ext x; exact Algebra.smul_def' _ _
 
 中文:
-实例 ContinuousMap.algebra
-  签名: : Algebra R C(α, A) where
+实例 连续映射.algebra
+  签名: : 代数 R C(α, A) where
   定义体: ContinuousMap.C
   commutes' c f := by ext x; exact Algebra.commutes' _ _
   smul_def' c f := by ext x; exact Algebra.smul_def' _ _
@@ -2209,8 +2209,8 @@ definition AlgHom.compLeftContinuous
     commutes' := fun _ => ContinuousMap.ext fun _ => g.commutes' _ }
 
 中文:
-定义 AlgHom.compLeftContinuous
-  签名: {α : 类型} [TopologicalSpace α] (g : A ->ₐ[R] A₂)
+定义 代数态射.compLeftContinuous
+  签名: {α : 类型} [拓扑空间 α] (g : A ->ₐ[R] A₂)
   定义体: { g.toRingHom.compLeftContinuous α hg with
     commutes' := fun _ => ContinuousMap.ext fun _ => g.commutes' _ }
 -/
@@ -2238,8 +2238,8 @@ definition ContinuousMap.compRightAlgHom
   commutes' _ := ext fun _ => rfl
 
 中文:
-定义 ContinuousMap.compRightAlgHom
-  签名: {α β : 类型} [TopologicalSpace α] [TopologicalSpace β]
+定义 连续映射.compRightAlgHom
+  签名: {α β : 类型} [拓扑空间 α] [拓扑空间 β]
   定义体: g.comp f
   map_zero' := ext fun _ => rfl
   map_add' _ _ := ext fun _ => rfl
@@ -2267,8 +2267,8 @@ theorem ContinuousMap.compRightAlgHom_continuous
   proof: continuous_precomp f
 
 中文:
-定理 ContinuousMap.compRightAlgHom_continuous
-  结论: {α β : 类型} [TopologicalSpace α]
+定理 连续映射.compRightAlgHom_continuous
+  结论: {α β : 类型} [拓扑空间 α]
   证明: continuous_precomp f
 
 Depends on / 依赖: continuous_precomp
@@ -2291,7 +2291,7 @@ definition ContinuousMap.coeFnAlgHom
     commutes' := fun _ => rfl }
 
 中文:
-定义 ContinuousMap.coeFnAlgHom
+定义 连续映射.coeFnAlgHom
   签名: : C(α, A) ->ₐ[R] α -> A
   定义体: { (ContinuousMap.coeFnRingHom : C(α, A) ->+* _) with
     commutes' := fun _ => rfl }
@@ -2313,8 +2313,8 @@ abbreviation Subalgebra.SeparatesPoints
   body: Set.SeparatesPoints ((fun f : C(α, A) => (f : α -> A)) '' (s : Set C(α, A)))
 
 中文:
-缩写 Subalgebra.SeparatesPoints
-  签名: (s : Subalgebra R C(α, A))
+缩写 子代数.SeparatesPoints
+  签名: (s : 子代数 R C(α, A))
   定义体: Set.SeparatesPoints ((fun f : C(α, A) => (f : α -> A)) '' (s : Set C(α, A)))
 
 Depends on / 依赖: SeparatesPoints, Set.SeparatesPoints
@@ -2335,7 +2335,7 @@ theorem Subalgebra.separatesPoints_monotone
 @[simp]
 
 中文:
-定理 Subalgebra.separatesPoints_monotone
+定理 子代数.separatesPoints_monotone
   证明: fun s s' r h x y n => by
   obtain ⟨f, m, w⟩ := h n
   rcases m with ⟨f, ⟨m, rfl⟩⟩
@@ -2387,8 +2387,8 @@ definition Set.SeparatesPointsStrongly
   body: forall (v : α -> 𝕜) (x y : α), exists f in s, (f x : 𝕜) = v x ∧ f y = v y
 
 中文:
-定义 Set.SeparatesPointsStrongly
-  签名: (s : Set C(α, 𝕜))
+定义 集合.SeparatesPointsStrongly
+  签名: (s : 集合 C(α, 𝕜))
   定义体: forall (v : α -> 𝕜) (x y : α), exists f in s, (f x : 𝕜) = v x ∧ f y = v y
 -/
 def Set.SeparatesPointsStrongly (s : Set C(α, 𝕜)) : Prop :=
@@ -2414,8 +2414,8 @@ theorem Subalgebra.SeparatesPoints.strongly
     ((b - a) * (f x - f y)⁻¹) • (algebraMap _ s 
 
 中文:
-定理 Subalgebra.SeparatesPoints.strongly
-  条件: {s : Subalgebra 𝕜 C(α, 𝕜)} (h : s.SeparatesPoints)
+定理 子代数.SeparatesPoints.strongly
+  条件: {s : 子代数 𝕜 C(α, 𝕜)} (h : s.SeparatesPoints)
   证明: fun v x y => by
   by_cases n : x = y
   · subst n
@@ -2463,8 +2463,8 @@ instance ContinuousMap.subsingleton_subalgebra
         simp only [mul_one, smul_eq_mul, algebraMap_apply]
 
 中文:
-实例 ContinuousMap.subsingleton_subalgebra
-  签名: (α : 类型) [TopologicalSpace α] (R : 类型)
+实例 连续映射.subsingleton_subalgebra
+  签名: (α : 类型) [拓扑空间 α] (R : 类型)
   定义体: ⟨fun s₁ s₂ => by
     cases isEmpty_or_nonempty α
     · have : Subsingleton C(α, R) := DFunLike.coe_injective.subsingleton
@@ -2521,7 +2521,7 @@ instance instSMul'
 
 中文:
 实例 instSMul'
-  签名: : SMul C(α, R) C(α, M)
+  签名: : 标量乘法 C(α, R) C(α, M)
   定义体: ⟨fun f g => ⟨fun x => f x • g x, Continuous.smul f.2 g.2⟩⟩
 
 Depends on / 依赖: Continuous, Continuous.smul
@@ -2579,7 +2579,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: [IsTopologicalSemiring R] [ContinuousAdd M]
+  签名: [是TopologicalSemiring R] [连续加法 M]
   定义体: by ext x; exact smul_add (c x) (f x) (g x)
   add_smul c₁ c₂ f := by ext x; exact add_smul (c₁ x) (c₂ x) (f x)
   mul_smul c₁ c₂ f := by ext x; exact mul_smul (c₁ x) (c₂ x) (f x)
@@ -2623,7 +2623,7 @@ definition ContinuousMap.evalAlgHom
   commutes' _ := rfl
 
 中文:
-定义 ContinuousMap.evalAlgHom
+定义 连续映射.evalAlgHom
   签名: (x : X)
   定义体: f x
   map_zero' := rfl
@@ -2659,7 +2659,7 @@ lemma curry_mul_apply
 
 中文:
 引理 curry_mul_apply
-  条件: [Mul Z] [ContinuousMul Z] (f g : C(X × Y, Z)) (x : X)
+  条件: [乘法 Z] [连续乘法 Z] (f g : C(X × Y, Z)) (x : X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2681,7 +2681,7 @@ lemma curry_div_apply
 
 中文:
 引理 curry_div_apply
-  条件: [Div Z] [ContinuousDiv Z] (f g : C(X × Y, Z)) (x : X)
+  条件: [除法 Z] [余ntinuousDiv Z] (f g : C(X × Y, Z)) (x : X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2703,7 +2703,7 @@ lemma curry_smul_apply
 
 中文:
 引理 curry_smul_apply
-  结论: {R : 类型} [SMul R Z] [ContinuousConstSMul R Z]
+  结论: {R : 类型} [标量乘法 R Z] [连续常数标量乘法 R Z]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2726,7 +2726,7 @@ lemma curry_inv_apply
 
 中文:
 引理 curry_inv_apply
-  条件: [Inv Z] [ContinuousInv Z] (f : C(X × Y, Z)) (x : X)
+  条件: [取逆 Z] [连续取逆 Z] (f : C(X × Y, Z)) (x : X)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2748,7 +2748,7 @@ lemma curry_pow_apply
 
 中文:
 引理 curry_pow_apply
-  结论: [Monoid Z] [ContinuousMul Z]
+  结论: [幺半群 Z] [连续乘法 Z]
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2769,7 +2769,7 @@ lemma curry_zpow_apply
 
 中文:
 引理 curry_zpow_apply
-  结论: [Group Z] [IsTopologicalGroup Z]
+  结论: [群 Z] [是拓扑群 Z]
   证明: rfl
 -/
 lemma curry_zpow_apply [Group Z] [IsTopologicalGroup Z]

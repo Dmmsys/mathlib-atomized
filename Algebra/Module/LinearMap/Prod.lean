@@ -40,7 +40,7 @@ theorem isLinearMap_add
 
 中文:
 定理 isLinearMap_add
-  条件: [AddCommMonoid M] [Module R M]
+  条件: [加法交换幺半群 M] [模 R M]
   证明: by
   apply IsLinearMap.mk
   · intro x y
@@ -71,7 +71,7 @@ theorem isLinearMap_sub
 
 中文:
 定理 isLinearMap_sub
-  条件: [AddCommGroup M] [Module R M]
+  条件: [加法交换群 M] [模 R M]
   证明: by
   apply IsLinearMap.mk
   · simp [add_comm, add_assoc, add_left_comm, sub_eq_add_neg]

@@ -63,7 +63,7 @@ instance hasDistribNeg
 
 中文:
 实例 hasDistribNeg
-  签名: [对任意 i, Mul (f i)] [对任意 i, HasDistribNeg (f i)]
+  签名: [对任意 i, 乘法 (f i)] [对任意 i, 有DistribNeg (f i)]
   定义体: funext fun _ => neg_mul _ _
   mul_neg _ _ := funext fun _ => mul_neg _ _
 
@@ -85,7 +85,7 @@ instance addMonoidWithOne
 
 中文:
 实例 addMonoidWithOne
-  签名: [对任意 i, AddMonoidWithOne (f i)]
+  签名: [对任意 i, 加法带幺幺半群 (f i)]
   定义体: n
   natCast_zero := funext fun _ => AddMonoidWithOne.natCast_zero
   natCast_succ n := funext fun _ => AddMonoidWithOne.natCast_succ n
@@ -109,7 +109,7 @@ instance addGroupWithOne
 
 中文:
 实例 addGroupWithOne
-  签名: [对任意 i, AddGroupWithOne (f i)]
+  签名: [对任意 i, 加法带幺群 (f i)]
   定义体: addGroup
   __ := addMonoidWithOne
   intCast n _ := n
@@ -135,7 +135,7 @@ instance nonUnitalNonAssocSemiring
 
 中文:
 实例 nonUnitalNonAssocSemiring
-  签名: [对任意 i, NonUnitalNonAssocSemiring <| f i]
+  签名: [对任意 i, 非幺非结合半环 <| f i]
   定义体: { Pi.distrib, Pi.addCommMonoid, Pi.mulZeroClass with }
 
 Depends on / 依赖: IsQuasiAffine, IsSeparated, Pi.addCommMonoid, Pi.distrib, Pi.mulZeroClass, X.IsQuasiAffine, X.IsSeparated, addCommMonoid, distrib, mulZeroClass
@@ -154,7 +154,7 @@ instance nonUnitalSemiring
 
 中文:
 实例 nonUnitalSemiring
-  签名: [对任意 i, NonUnitalSemiring <| f i]
+  签名: [对任意 i, 非幺半环 <| f i]
   定义体: { Pi.nonUnitalNonAssocSemiring, Pi.semigroupWithZero with }
 
 Depends on / 依赖: Pi.nonUnitalNonAssocSemiring, Pi.semigroupWithZero, nonUnitalNonAssocSemiring, semigroupWithZero
@@ -172,7 +172,7 @@ instance nonAssocSemiring
 
 中文:
 实例 nonAssocSemiring
-  签名: [对任意 i, NonAssocSemiring <| f i]
+  签名: [对任意 i, 非结合半环 <| f i]
   定义体: { Pi.nonUnitalNonAssocSemiring, Pi.mulZeroOneClass, Pi.addMonoidWithOne with }
 
 Depends on / 依赖: Pi.addMonoidWithOne, Pi.mulZeroOneClass, Pi.nonUnitalNonAssocSemiring, addMonoidWithOne, mulZeroOneClass, nonUnitalNonAssocSemiring
@@ -190,7 +190,7 @@ instance semiring
 
 中文:
 实例 semiring
-  签名: [对任意 i, Semiring <| f i]
+  签名: [对任意 i, 半环 <| f i]
   定义体: { Pi.nonUnitalSemiring, Pi.nonAssocSemiring, Pi.monoidWithZero with }
 
 Depends on / 依赖: Pi.monoidWithZero, Pi.nonAssocSemiring, Pi.nonUnitalSemiring, monoidWithZero, nonAssocSemiring, nonUnitalSemiring
@@ -208,7 +208,7 @@ instance nonUnitalCommSemiring
 
 中文:
 实例 nonUnitalCommSemiring
-  签名: [对任意 i, NonUnitalCommSemiring <| f i]
+  签名: [对任意 i, 非幺交换半环 <| f i]
   定义体: { Pi.nonUnitalSemiring, Pi.commSemigroup with }
 
 Depends on / 依赖: Pi.commSemigroup, Pi.nonUnitalSemiring, commSemigroup, nonUnitalSemiring
@@ -227,7 +227,7 @@ instance commSemiring
 
 中文:
 实例 commSemiring
-  签名: [对任意 i, CommSemiring <| f i]
+  签名: [对任意 i, 交换半环 <| f i]
   定义体: { Pi.semiring, Pi.commMonoid with }
 
 Depends on / 依赖: Pi.commMonoid, Pi.semiring, commMonoid, semiring
@@ -245,7 +245,7 @@ instance nonUnitalNonAssocRing
 
 中文:
 实例 nonUnitalNonAssocRing
-  签名: [对任意 i, NonUnitalNonAssocRing <| f i]
+  签名: [对任意 i, 非幺非结合环 <| f i]
   定义体: { Pi.addCommGroup, Pi.nonUnitalNonAssocSemiring with }
 
 Depends on / 依赖: Pi.addCommGroup, Pi.nonUnitalNonAssocSemiring, addCommGroup, nonUnitalNonAssocSemiring
@@ -264,7 +264,7 @@ instance nonUnitalRing
 
 中文:
 实例 nonUnitalRing
-  签名: [对任意 i, NonUnitalRing <| f i]
+  签名: [对任意 i, 非幺环 <| f i]
   定义体: { Pi.nonUnitalNonAssocRing, Pi.nonUnitalSemiring with }
 
 Depends on / 依赖: Pi.nonUnitalNonAssocRing, Pi.nonUnitalSemiring, nonUnitalNonAssocRing, nonUnitalSemiring
@@ -282,7 +282,7 @@ instance nonAssocRing
 
 中文:
 实例 nonAssocRing
-  签名: [对任意 i, NonAssocRing <| f i]
+  签名: [对任意 i, 非结合环 <| f i]
   定义体: { Pi.nonUnitalNonAssocRing, Pi.nonAssocSemiring, Pi.addGroupWithOne with }
 
 Depends on / 依赖: Pi.addGroupWithOne, Pi.nonAssocSemiring, Pi.nonUnitalNonAssocRing, addGroupWithOne, nonAssocSemiring, nonUnitalNonAssocRing
@@ -300,7 +300,7 @@ instance ring
 
 中文:
 实例 ring
-  签名: [对任意 i, Ring <| f i]
+  签名: [对任意 i, 环 <| f i]
   定义体: { Pi.semiring, Pi.addCommGroup, Pi.addGroupWithOne with }
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_isPullback, Pi.addCommGroup, Pi.addGroupWithOne, Pi.semiring, addCommGroup, addGroupWithOne, d.equifibered, equifibered, infer_instance, of_isPullback, semiring
@@ -318,7 +318,7 @@ instance nonUnitalCommRing
 
 中文:
 实例 nonUnitalCommRing
-  签名: [对任意 i, NonUnitalCommRing <| f i]
+  签名: [对任意 i, 非幺交换环 <| f i]
   定义体: { Pi.nonUnitalRing, Pi.commSemigroup with }
 
 Depends on / 依赖: Pi.commSemigroup, Pi.nonUnitalRing, commSemigroup, nonUnitalRing
@@ -336,7 +336,7 @@ instance commRing
 
 中文:
 实例 commRing
-  签名: [对任意 i, CommRing <| f i]
+  签名: [对任意 i, 交换环 <| f i]
   定义体: { Pi.ring, Pi.commSemiring with }
 
 Depends on / 依赖: Pi.commSemiring, Pi.ring, commSemiring
@@ -369,8 +369,8 @@ definition NonUnitalRingHom.pi
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom_apply :=
 
 中文:
-定义 NonUnitalRingHom.pi
-  签名: {f : I -> 类型} {γ : 类型} [对任意 i, NonUnitalNonAssocSemiring (f i)]
+定义 非幺环态射.pi
+  签名: {f : I -> 类型} {γ : 类型} [对任意 i, 非幺非结合半环 (f i)]
   定义体: { MulHom.pi fun i => (g i).toMulHom, AddMonoidHom.pi fun i => (g i).toAddMonoidHom with
     toFun := fun x b => g b x }
 
@@ -400,8 +400,8 @@ theorem NonUnitalRingHom.pi_injective
   NonUnitalRingHom.pi_injective
 
 中文:
-定理 NonUnitalRingHom.pi_injective
-  结论: {f : I -> 类型} {γ : 类型} [Nonempty I]
+定理 非幺环态射.pi_injective
+  结论: {f : I -> 类型} {γ : 类型} [非空 I]
   证明: MulHom.pi_injective (fun i => (g i).toMulHom) hg
 
 @[deprecated (since := "2026-05-30")] protected alias Pi.nonUnitalRingHom_injective :=
@@ -429,8 +429,8 @@ definition Pi.evalNonUnitalRingHom
   body: { Pi.evalMulHom f i, Pi.evalAddMonoidHom f i with }
 
 中文:
-定义 Pi.evalNonUnitalRingHom
-  签名: (f : I -> 类型v) [对任意 i, NonUnitalNonAssocSemiring (f i)] (i : I)
+定义 依赖函数类型.evalNonUnitalRingHom
+  签名: (f : I -> 类型v) [对任意 i, 非幺非结合半环 (f i)] (i : I)
   定义体: { Pi.evalMulHom f i, Pi.evalAddMonoidHom f i with }
 
 Depends on / 依赖: Pi.evalAddMonoidHom, Pi.evalMulHom, evalAddMonoidHom, evalMulHom
@@ -450,8 +450,8 @@ definition Pi.constNonUnitalRingHom
   body: { NonUnitalRingHom.pi fun _ => NonUnitalRingHom.id β with toFun := Function.const _ }
 
 中文:
-定义 Pi.constNonUnitalRingHom
-  签名: (α β : 类型) [NonUnitalNonAssocSemiring β]
+定义 依赖函数类型.constNonUnitalRingHom
+  签名: (α β : 类型) [非幺非结合半环 β]
   定义体: { NonUnitalRingHom.pi fun _ => NonUnitalRingHom.id β with toFun := Function.const _ }
 
 Depends on / 依赖: Function, Function.const, NonUnitalRingHom, NonUnitalRingHom.id, NonUnitalRingHom.pi
@@ -471,8 +471,8 @@ definition NonUnitalRingHom.compLeft
   body: { f.toMulHom.compLeft I, f.toAddMonoidHom.compLeft I with toFun := fun h => f ∘ h }
 
 中文:
-定义 NonUnitalRingHom.compLeft
-  签名: {α β : 类型} [NonUnitalNonAssocSemiring α]
+定义 非幺环态射.compLeft
+  签名: {α β : 类型} [非幺非结合半环 α]
   定义体: { f.toMulHom.compLeft I, f.toAddMonoidHom.compLeft I with toFun := fun h => f ∘ h }
 -/
 protected def NonUnitalRingHom.compLeft {α β : Type*} [NonUnitalNonAssocSemiring α]
@@ -503,8 +503,8 @@ definition RingHom.pi
 @[deprecated (since := "2026-05-30")] protected alias Pi.ringHom_apply := RingHom.pi_apply
 
 中文:
-定义 RingHom.pi
-  签名: {f : I -> 类型} {γ : 类型} [对任意 i, NonAssocSemiring (f i)]
+定义 环态射.pi
+  签名: {f : I -> 类型} {γ : 类型} [对任意 i, 非结合半环 (f i)]
   定义体: { MonoidHom.pi fun i => (g i).toMonoidHom, AddMonoidHom.pi fun i => (g i).toAddMonoidHom with
     toFun := fun x b => g b x }
 
@@ -530,8 +530,8 @@ theorem RingHom.pi_injective
 @[deprecated (since := "2026-05-30")] protected alias Pi.ringHom_injective := RingHom.pi_injective
 
 中文:
-定理 RingHom.pi_injective
-  结论: {f : I -> 类型} {γ : 类型} [Nonempty I] [对任意 i, NonAssocSemiring (f i)]
+定理 环态射.pi_injective
+  结论: {f : I -> 类型} {γ : 类型} [非空 I] [对任意 i, 非结合半环 (f i)]
   证明: MonoidHom.pi_injective (fun i => (g i).toMonoidHom) hg
 
 @[deprecated (since := "2026-05-30")] protected alias Pi.ringHom_injective := RingHom.pi_injective
@@ -557,8 +557,8 @@ definition Pi.evalRingHom
   body: { Pi.evalMonoidHom f i, Pi.evalAddMonoidHom f i with }
 
 中文:
-定义 Pi.evalRingHom
-  签名: (f : I -> 类型v) [对任意 i, NonAssocSemiring (f i)] (i : I)
+定义 依赖函数类型.evalRingHom
+  签名: (f : I -> 类型v) [对任意 i, 非结合半环 (f i)] (i : I)
   定义体: { Pi.evalMonoidHom f i, Pi.evalAddMonoidHom f i with }
 
 Depends on / 依赖: Pi.evalAddMonoidHom, Pi.evalMonoidHom, evalAddMonoidHom, evalMonoidHom
@@ -581,8 +581,8 @@ definition Pi.constRingHom
   body: { RingHom.pi fun _ => RingHom.id β with toFun := Function.const _ }
 
 中文:
-定义 Pi.constRingHom
-  签名: (α β : 类型) [NonAssocSemiring β]
+定义 依赖函数类型.constRingHom
+  签名: (α β : 类型) [非结合半环 β]
   定义体: { RingHom.pi fun _ => RingHom.id β with toFun := Function.const _ }
 
 Depends on / 依赖: Function, Function.const, RingHom, RingHom.id, RingHom.pi
@@ -602,8 +602,8 @@ definition RingHom.compLeft
   body: { f.toMonoidHom.compLeft I, f.toAddMonoidHom.compLeft I with toFun := fun h => f ∘ h }
 
 中文:
-定义 RingHom.compLeft
-  签名: {α β : 类型} [NonAssocSemiring α] [NonAssocSemiring β]
+定义 环态射.compLeft
+  签名: {α β : 类型} [非结合半环 α] [非结合半环 β]
   定义体: { f.toMonoidHom.compLeft I, f.toAddMonoidHom.compLeft I with toFun := fun h => f ∘ h }
 
 Depends on / 依赖: IsLocalRing, IsLocalRing.ResidueField, ResidueField, X.presheaf.stalk, presheaf

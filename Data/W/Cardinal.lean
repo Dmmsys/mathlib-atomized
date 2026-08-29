@@ -49,7 +49,7 @@ theorem cardinalMk_eq_sum_lift
 
 中文:
 定理 cardinalMk_eq_sum_lift
-  结论: #(WType β) = sum fun a => #(WType β) ^ lift.{u} #(β a)
+  结论: #(WType β) = 求和 fun a => #(WType β) ^ lift.{u} #(β a)
   证明: (mk_congr <| equivSigma β).trans by
     simp_rw [mk_sigma, mk_arrow]; rw [lift_id'.{v, u}, lift_umax.{v, u}]
 
@@ -75,7 +75,7 @@ theorem cardinalMk_le_of_le'
 
 中文:
 定理 cardinalMk_le_of_le'
-  结论: {κ : Cardinal.{max u v}}
+  结论: {κ : 基数.{最大值 u v}}
   证明: by
   induction κ using Cardinal.inductionOn with | _ γ
   simp_rw [← lift_umax.{v, u}] at hκ
@@ -113,7 +113,7 @@ cardinalMk_le_of_le'
 
 中文:
 定理 cardinalMk_le_max_aleph0_of_finite'
-  条件: [对任意 a, Finite (β a)]
+  条件: [对任意 a, 有限 (β a)]
   证明: (isEmpty_or_nonempty α).elim (fun _ => by simp)
     fun hn =>
     let m := max (lift.{v} #α) ℵ₀
@@ -161,7 +161,7 @@ theorem cardinalMk_eq_sum
 
 中文:
 定理 cardinalMk_eq_sum
-  结论: #(WType β) = sum (fun a : α => #(WType β) ^ #(β a))
+  结论: #(WType β) = 求和 (fun a : α => #(WType β) ^ #(β a))
   证明: cardinalMk_eq_sum_lift.trans by simp_rw [lift_id]
 
 Depends on / 依赖: DFinsupp, DFinsupp.single, cardinalMk_eq_sum_lift, cardinalMk_eq_sum_lift.trans, lift_id, simp_rw, single, x.sum
@@ -179,7 +179,7 @@ theorem cardinalMk_le_of_le
 
 中文:
 定理 cardinalMk_le_of_le
-  条件: {κ : Cardinal.{u}} (hκ : (sum fun a : α => κ ^ #(β a)) <= κ)
+  条件: {κ : 基数.{u}} (hκ : (求和 fun a : α => κ ^ #(β a)) <= κ)
   证明: cardinalMk_le_of_le' by simp_rw [lift_id]; exact hκ
 
 Depends on / 依赖: cardinalMk_le_of_le, lift_id, simp_rw
@@ -198,8 +198,8 @@ theorem cardinalMk_le_max_aleph0_of_finite
 
 中文:
 定理 cardinalMk_le_max_aleph0_of_finite
-  条件: [对任意 a, Finite (β a)]
-  结论: #(WType β) <= max #α ℵ₀
+  条件: [对任意 a, 有限 (β a)]
+  结论: #(WType β) <= 最大值 #α ℵ₀
   证明: cardinalMk_le_max_aleph0_of_finite'.trans_eq by rw [lift_id]
 
 Depends on / 依赖: cardinalMk_le_max_aleph0_of_finite, lift_id, trans_eq

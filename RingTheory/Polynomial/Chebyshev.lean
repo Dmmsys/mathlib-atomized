@@ -668,7 +668,7 @@ theorem degree_T
 
 中文:
 定理 degree_T
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 整数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 整数)
   结论: (T R n).degree = n.natAbs
   证明: by
   induction n using Chebyshev.induct' with
@@ -709,7 +709,7 @@ theorem natDegree_T
 
 中文:
 定理 natDegree_T
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 整数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 整数)
   结论: (T R n).natDegree = n.natAbs
   证明: natDegree_eq_of_degree_eq_some (degree_T R n)
 
@@ -739,7 +739,7 @@ theorem leadingCoeff_T
 
 中文:
 定理 leadingCoeff_T
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 整数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 整数)
   证明: by
   induction n using Chebyshev.induct' with
   | zero => simp
@@ -823,7 +823,7 @@ theorem T_ne_zero
 
 中文:
 定理 T_ne_zero
-  条件: (n : 整数) [IsDomain R] [NeZero (2 : R)]
+  条件: (n : 整数) [是整环 R] [NeZero (2 : R)]
   结论: T R n != 0
   证明: (T R n).degree_ne_bot.mp (by simp [degree_T R n])
 
@@ -843,7 +843,7 @@ definition chebyshevTsequence
 
 中文:
 定义 chebyshevTsequence
-  签名: [IsDomain R] [NeZero (2 : R)]
+  签名: [是整环 R] [NeZero (2 : R)]
   定义体: T R n
   degree_eq' n := by simp [degree_T]
 -/
@@ -1418,7 +1418,7 @@ theorem degree_U_natCast
 
 中文:
 定理 degree_U_natCast
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 自然数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 自然数)
   结论: (U R n).degree = n
   证明: by
   induction n using Nat.twoStepInduction with
@@ -1460,7 +1460,7 @@ theorem natDegree_U_natCast
 
 中文:
 定理 natDegree_U_natCast
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 自然数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 自然数)
   结论: (U R n).natDegree = n
   证明: natDegree_eq_of_degree_eq_some (degree_U_natCast R n)
 
@@ -1521,7 +1521,7 @@ theorem degree_U_of_ne_neg_one
 
 中文:
 定理 degree_U_of_ne_neg_one
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 整数) (hn : n != -1)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 整数) (hn : n != -1)
   证明: by
   obtain ⟨m, rfl | rfl⟩ := n.eq_nat_or_neg
   case inl => rw [degree_U_natCast R m]; norm_cast
@@ -1569,7 +1569,7 @@ theorem natDegree_U
 
 中文:
 定理 natDegree_U
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 整数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 整数)
   证明: by
   by_cases n = -1
   case pos hn => subst hn; simp
@@ -1604,7 +1604,7 @@ theorem leadingCoeff_U_natCast
 
 中文:
 定理 leadingCoeff_U_natCast
-  条件: [IsDomain R] [NeZero (2 : R)] (n : 自然数)
+  条件: [是整环 R] [NeZero (2 : R)] (n : 自然数)
   证明: by
   have : leadingCoeff (2 : R[X]) = 2 := by
     rw [← C_ofNat]; rw [leadingCoeff_C]
@@ -1686,7 +1686,7 @@ theorem U_ne_zero
 
 中文:
 定理 U_ne_zero
-  条件: (n : 整数) [IsDomain R] [NeZero (2 : R)] (hn : n != -1)
+  条件: (n : 整数) [是整环 R] [NeZero (2 : R)] (hn : n != -1)
   结论: U R n != 0
   证明: (U R n).degree_ne_bot.mp (by simp [degree_U_of_ne_neg_one R n hn])
 
@@ -1705,7 +1705,7 @@ theorem U_eq_zero_iff
 
 中文:
 定理 U_eq_zero_iff
-  条件: (n : 整数) [IsDomain R] [NeZero (2 : R)]
+  条件: (n : 整数) [是整环 R] [NeZero (2 : R)]
   证明: ⟨fun h => by contrapose! h; exact U_ne_zero R n h, fun h => by simp [h]⟩
 
 Depends on / 依赖: U_ne_zero, contrapose
@@ -1927,7 +1927,7 @@ theorem U_mem_span_T
 中文:
 定理 U_mem_span_T
   条件: (n : 自然数)
-  结论: U R n in Submodule.span 自然数 ((fun m : 自然数 => T R m) '' Set.Icc 0 n)
+  结论: U R n in 子模.span 自然数 ((fun m : 自然数 => T R m) '' 集合.闭区间 0 n)
   证明: by
   induction n using Nat.twoStepInduction with
   | zero => simp
@@ -2399,7 +2399,7 @@ theorem C_eq_two_mul_T_comp_half_mul_X
 
 中文:
 定理 C_eq_two_mul_T_comp_half_mul_X
-  条件: [Invertible (2 : R)] (n : 整数)
+  条件: [可逆 (2 : R)] (n : 整数)
   证明: by
   have := congr_arg (·.comp (Polynomial.C ⅟2 * X)) (C_comp_two_mul_X R n)
   simp_rw [comp_assoc, mul_comp, ofNat_comp, X_comp, ← mul_assoc, ← C_eq_natCast, ← C_mul,
@@ -2426,7 +2426,7 @@ theorem T_eq_half_mul_C_comp_two_mul_X
 
 中文:
 定理 T_eq_half_mul_C_comp_two_mul_X
-  条件: [Invertible (2 : R)] (n : 整数)
+  条件: [可逆 (2 : R)] (n : 整数)
   证明: by
   rw [C_comp_two_mul_X]; rw [← mul_assoc]; rw [← map_ofNat Polynomial.C 2]; rw [← map_mul]; rw [invOf_mul_self']; rw [map_one]; rw [one_mul]
 
@@ -2964,7 +2964,7 @@ theorem S_eq_U_comp_half_mul_X
 
 中文:
 定理 S_eq_U_comp_half_mul_X
-  条件: [Invertible (2 : R)] (n : 整数)
+  条件: [可逆 (2 : R)] (n : 整数)
   证明: by
   have := congr_arg (·.comp (Polynomial.C ⅟2 * X)) (S_comp_two_mul_X R n)
   simp_rw [comp_assoc, mul_comp, ofNat_comp, X_comp, ← mul_assoc, ← C_eq_natCast, ← C_mul,
@@ -3239,7 +3239,7 @@ theorem aeval_T
 
 中文:
 定理 aeval_T
-  条件: [Algebra R R'] (x : R') (n : 整数)
+  条件: [代数 R R'] (x : R') (n : 整数)
   结论: aeval x (T R n) = (T R' n).eval x
   证明: by
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [map_T]
@@ -3266,7 +3266,7 @@ theorem aeval_U
 
 中文:
 定理 aeval_U
-  条件: [Algebra R R'] (x : R') (n : 整数)
+  条件: [代数 R R'] (x : R') (n : 整数)
   结论: aeval x (U R n) = (U R' n).eval x
   证明: by
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [map_U]
@@ -3293,7 +3293,7 @@ theorem aeval_C
 
 中文:
 定理 aeval_C
-  条件: [Algebra R R'] (x : R') (n : 整数)
+  条件: [代数 R R'] (x : R') (n : 整数)
   结论: aeval x (C R n) = (C R' n).eval x
   证明: by
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [map_C]
@@ -3320,7 +3320,7 @@ theorem aeval_S
 
 中文:
 定理 aeval_S
-  条件: [Algebra R R'] (x : R') (n : 整数)
+  条件: [代数 R R'] (x : R') (n : 整数)
   结论: aeval x (S R n) = (S R' n).eval x
   证明: by
   rw [aeval_def]; rw [eval₂_eq_eval_map]; rw [map_S]
@@ -3346,7 +3346,7 @@ theorem algebraMap_eval_T
 
 中文:
 定理 algebraMap_eval_T
-  条件: [Algebra R R'] (x : R) (n : 整数)
+  条件: [代数 R R'] (x : R) (n : 整数)
   证明: by
   rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [aeval_T]
 
@@ -3372,7 +3372,7 @@ theorem algebraMap_eval_U
 
 中文:
 定理 algebraMap_eval_U
-  条件: [Algebra R R'] (x : R) (n : 整数)
+  条件: [代数 R R'] (x : R) (n : 整数)
   证明: by
   rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [aeval_U]
 
@@ -3398,7 +3398,7 @@ theorem algebraMap_eval_C
 
 中文:
 定理 algebraMap_eval_C
-  条件: [Algebra R R'] (x : R) (n : 整数)
+  条件: [代数 R R'] (x : R) (n : 整数)
   证明: by
   rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [aeval_C]
 
@@ -3422,7 +3422,7 @@ theorem algebraMap_eval_S
 
 中文:
 定理 algebraMap_eval_S
-  条件: [Algebra R R'] (x : R) (n : 整数)
+  条件: [代数 R R'] (x : R) (n : 整数)
   证明: by
   rw [← aeval_algebraMap_apply_eq_algebraMap_eval]; rw [aeval_S]
 
@@ -4112,7 +4112,7 @@ theorem iterate_derivative_T_eval_one_eq_div
 
 中文:
 定理 iterate_derivative_T_eval_one_eq_div
-  条件: [CharZero 𝔽] (n : 整数) (k : 自然数)
+  条件: [特征零 𝔽] (n : 整数) (k : 自然数)
   证明: by
   rw [eq_div_iff (Nat.cast_ne_zero.mpr (Finset.prod_ne_zero_iff.mpr (fun _ _ => by positivity)))]; rw [mul_comm]; rw [iterate_derivative_T_eval_one]
 
@@ -4134,7 +4134,7 @@ theorem iterate_derivative_U_eval_one_eq_div
 
 中文:
 定理 iterate_derivative_U_eval_one_eq_div
-  条件: [CharZero 𝔽] (n : 整数) (k : 自然数)
+  条件: [特征零 𝔽] (n : 整数) (k : 自然数)
   证明: by
   rw [eq_div_iff (Nat.cast_ne_zero.mpr (Finset.prod_ne_zero_iff.mpr (fun _ _ => by positivity)))]; rw [mul_comm]; rw [iterate_derivative_U_eval_one]
 

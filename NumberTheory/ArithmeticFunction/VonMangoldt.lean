@@ -226,7 +226,7 @@ theorem vonMangoldt_apply_prime
 
 中文:
 定理 vonMangoldt_apply_prime
-  条件: {p : 自然数} (hp : p.Prime)
+  条件: {p : 自然数} (hp : p.素)
   结论: Λ p = 实数.log p
   证明: by
   rw [vonMangoldt_apply]; rw [Prime.minFac_eq hp]; rw [if_pos hp.prime.isPrimePow]

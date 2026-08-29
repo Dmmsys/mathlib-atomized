@@ -226,7 +226,7 @@ theorem ramificationIdx'_bot
 
 中文:
 定理 ramificationIdx'_bot
-  结论: ramificationIdx' (⊥ : Ideal R) P = 0
+  结论: ramificationIdx' (⊥ : 理想 R) P = 0
   证明: dif_neg not_exists.mpr fun n hn => n.lt_succ_self.not_ge (hn _ (by simp))
 
 @[deprecated (since := "2026-07-01")] alias ramificationIdx_bot := ramificationIdx'_bot
@@ -275,7 +275,7 @@ theorem ramificationIdx'_bot'
 
 中文:
 定理 ramificationIdx'_bot'
-  条件: (hp : p != ⊥) (hf : Function.Injective f)
+  条件: (hp : p != ⊥) (hf : 函数.单射 f)
   证明: ramificationIdx'_of_not_le le_bot_iff.not.mpr (map_eq_bot_iff_of_injective hf).not.mpr hp
 
 @[deprecated (since := "2026-07-01")] alias ramificationIdx_bot' := ramificationIdx'_bot'
@@ -442,7 +442,7 @@ lemma ramificationIdx'_comap_eq
 
 中文:
 引理 ramificationIdx'_comap_eq
-  条件: (e : S ≃ₐ[R] S₁) (P : Ideal S₁)
+  条件: (e : S ≃ₐ[R] S₁) (P : 理想 S₁)
   证明: by
   dsimp only [ramificationIdx']
   congr 1
@@ -475,7 +475,7 @@ lemma ramificationIdx'_map_eq
 
 中文:
 引理 ramificationIdx'_map_eq
-  结论: {E : 类型} [EquivLike E S S₁] [AlgEquivClass E R S S₁]
+  结论: {E : 类型} [等价状 E S S₁] [代数等价类 E R S S₁]
   证明: by
   rw [show P.map e = _ from P.map_comap_of_equiv (RingEquivClass.toRingEquiv e : S ≃+* S₁)]
   exact p.ramificationIdx'_comap_eq (AlgEquivClass.toAlgEquiv e).symm P
@@ -596,7 +596,7 @@ exact le_antisymm h pow_le_self two_ne_zero
 
 中文:
 定理 ramificationIdx'_map_self_eq_one
-  结论: [IsDedekindDomain S]
+  结论: [是Dedekind整环 S]
   证明: by
   refine ramificationIdx'_spec (by simp) fun h => ?_
   have : map f p ^ 1 = (map f p) ^ 2 := by
@@ -636,7 +636,7 @@ exact comap_mono by rwa [← map_le_iff_le_comap]
 
 中文:
 定理 ramificationIdx'_le_ramificationIdx'
-  结论: {T : 类型} [CommRing T] [Algebra R T]
+  结论: {T : 类型} [交换环 T] [代数 R T]
   证明: by
   simp_rw [ramificationIdx', Ne] at *
   refine csSup_le_csSup' (h.imp_symm Nat.sSup_of_not_bddAbove) fun n hn => ?_
@@ -702,7 +702,7 @@ theorem ramificationIdx'_eq_multiplicity
 
 中文:
 定理 ramificationIdx'_eq_multiplicity
-  条件: (hp : map f p != ⊥) (hP : P.IsPrime)
+  条件: (hp : map f p != ⊥) (hP : P.是素)
   证明: by
   by_cases hP₂ : P = ⊥
   · rw [hP₂, ← Ideal.zero_eq_bot, multiplicity_zero_eq_zero_of_ne_zero _ hp]
@@ -754,7 +754,7 @@ theorem ramificationIdx'_ne_zero
 
 中文:
 定理 ramificationIdx'_ne_zero
-  条件: (hp0 : map f p != ⊥) (hP : P.IsPrime) (le : map f p <= P)
+  条件: (hp0 : map f p != ⊥) (hP : P.是素) (le : map f p <= P)
   证明: by
   have hP0 : P != ⊥ := by
     rintro rfl
@@ -791,7 +791,7 @@ map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _).mp hPp
 
 中文:
 定理 ramificationIdx'_ne_zero_of_liesOver
-  结论: [IsDomain R] [IsTorsionFree R S]
+  结论: [是整环 R] [是无挠 R S]
   证明: IsDedekindDomain.ramificationIdx'_ne_zero (map_ne_bot_of_ne_bot hp) hP
 map_le_iff_le_comap.mpr le_of_eq (liesOver_iff _ _).mp hPp
 
@@ -864,7 +864,7 @@ theorem ramificationIdx'_le_ramificationIdx'
 
 中文:
 定理 ramificationIdx'_le_ramificationIdx'
-  结论: [IsDomain R] [IsTorsionFree R S] {S₀ : 类型}
+  结论: [是整环 R] [是无挠 R S] {S₀ : 类型}
   证明: p.ramificationIdx'_le_ramificationIdx' P Q ((liesOver_iff ..).mp hP)
     ramificationIdx'_ne_zero_of_liesOver _ hp
 
@@ -894,7 +894,7 @@ theorem emultiplicity_map_eq_zero_of_ne
 
 中文:
 定理 emultiplicity_map_eq_zero_of_ne
-  结论: [IsDedekindDomain R] {v : Ideal R}
+  结论: [是Dedekind整环 R] {v : 理想 R}
   证明: by
   refine emultiplicity_eq_zero.2 fun h => hvp.symm ?_
   rw [Ideal.dvd_iff_le]; rw [Ideal.map_le_iff_le_comap]; rw [← under_def]; rw [← Ideal.over_def w v] at h
@@ -924,7 +924,7 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul_of_prime
 
 中文:
 定理 emultiplicity_map_eq_ramificationIdx'_mul_of_prime
-  结论: [IsDedekindDomain R]
+  结论: [是Dedekind整环 R]
   证明: by
   have hp_bot : p.map (algebraMap R S) != ⊥ := map_ne_bot_of_ne_bot hp.ne_zero
   by_cases hvp : v = p
@@ -961,7 +961,7 @@ theorem emultiplicity_map_eq_ramificationIdx'_mul
 
 中文:
 定理 emultiplicity_map_eq_ramificationIdx'_mul
-  结论: [IsDedekindDomain R]
+  结论: [是Dedekind整环 R]
   证明: by
   induction I using induction_on_prime with
   | h₁ => aesop
@@ -1015,7 +1015,7 @@ theorem ramificationIdx'_algebra_tower
 
 中文:
 定理 ramificationIdx'_algebra_tower
-  结论: [IsDedekindDomain S] [IsDedekindDomain T]
+  结论: [是Dedekind整环 S] [是Dedekind整环 T]
   证明: by
   have hf0 : map (algebraMap R S) p != ⊥ := by
     rw [IsScalarTower.algebraMap_eq R S T]; rw [← map_map] at hfg
@@ -1067,7 +1067,7 @@ theorem ramificationIdx'_algebra_tower'
 
 中文:
 定理 ramificationIdx'_algebra_tower'
-  结论: [IsDedekindDomain S] [IsDedekindDomain T] [IsDomain R]
+  结论: [是Dedekind整环 S] [是Dedekind整环 T] [是整环 R]
   证明: by
   obtain rfl | hp := eq_or_ne p ⊥
   · simp

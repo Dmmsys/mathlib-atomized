@@ -137,8 +137,8 @@ instance [forall
   body: (pi_iff _).mpr ‹_›
 
 中文:
-实例 [forall
-  签名: i, FormallyUnramified R (f i)] : FormallyUnramified R (Π i, f i)
+实例 [对任意
+  签名: i, 形式非分歧 R (f i)] : 形式非分歧 R (Π i, f i)
   定义体: (pi_iff _).mpr ‹_›
 
 Depends on / 依赖: pi_iff

@@ -104,7 +104,7 @@ instance isNoetherian_map
 
 中文:
 实例 isNoetherian_map
-  签名: {σ : R ->+* S} [RingHomSurjective σ] {s : Submodule R M}
+  签名: {σ : R ->+* S} [RingHomSurjective σ] {s : 子模 R M}
   定义体: isNoetherian_of_surjective (f.submoduleMap s) (by simp [LinearMap.submoduleMap])
 
 Depends on / 依赖: LinearMap, LinearMap.submoduleMap, f.submoduleMap, isNoetherian_of_surjective, submoduleMap
@@ -143,7 +143,7 @@ instance isNoetherian_quotient
 
 中文:
 实例 isNoetherian_quotient
-  签名: {A M : 类型} [Ring A] [AddCommGroup M] [SMul R A] [Module R M]
+  签名: {A M : 类型} [环 A] [加法交换群 M] [标量乘法 R A] [模 R M]
   定义体: isNoetherian_of_surjective ((Submodule.mkQ N).restrictScalars R)
     LinearMap.range_eq_top.mpr N.mkQ_surjective
 
@@ -183,7 +183,7 @@ theorem LinearEquiv.isNoetherian_iff
   proof: ⟨fun _ => isNoetherian_of_linearEquiv f, fun _ => isNoetherian_of_linearEquiv f.symm⟩
 
 中文:
-定理 LinearEquiv.isNoetherian_iff
+定理 线性等价.isNoetherian_iff
   结论: {σ : R ->+* S} {σ' : S ->+* R} [RingHomInvPair σ σ']
   证明: ⟨fun _ => isNoetherian_of_linearEquiv f, fun _ => isNoetherian_of_linearEquiv f.symm⟩
 
@@ -203,7 +203,7 @@ theorem isNoetherian_top_iff
 
 中文:
 定理 isNoetherian_top_iff
-  结论: IsNoetherian R (⊤ : Submodule R M) ↔ IsNoetherian R M
+  结论: 是Noether R (⊤ : 子模 R M) ↔ 是Noether R M
   证明: Submodule.topEquiv.isNoetherian_iff
 
 Depends on / 依赖: Submodule, Submodule.topEquiv.isNoetherian_iff, isNoetherian_iff, topEquiv
@@ -221,7 +221,7 @@ theorem isNoetherian_of_injective
 
 中文:
 定理 isNoetherian_of_injective
-  结论: [IsNoetherian S P] {σ : R ->+* S} {σ' : S ->+* R}
+  结论: [是Noether S P] {σ : R ->+* S} {σ' : S ->+* R}
   证明: isNoetherian_of_linearEquiv (LinearEquiv.ofInjective f hf).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, isNoetherian_of_linearEquiv, ofInjective
@@ -242,7 +242,7 @@ theorem fg_of_injective
 
 中文:
 定理 fg_of_injective
-  结论: [IsNoetherian S P] {N : Submodule R M} {σ : R ->+* S} {σ' : S ->+* R}
+  结论: [是Noether S P] {N : 子模 R M} {σ : R ->+* S} {σ' : S ->+* R}
   证明: haveI := isNoetherian_of_injective f hf
   IsNoetherian.noetherian N
 
@@ -285,8 +285,8 @@ theorem Finite.of_injective
   proof: ⟨fg_of_injective f hf⟩
 
 中文:
-定理 Finite.of_injective
-  结论: [IsNoetherian S N] {σ : R ->+* S} {σ' : S ->+* R}
+定理 有限.of_injective
+  结论: [是Noether S N] {σ : R ->+* S} {σ' : S ->+* R}
   证明: ⟨fg_of_injective f hf⟩
 -/
 theorem Finite.of_injective [IsNoetherian S N] {σ : R ->+* S} {σ' : S ->+* R}
@@ -314,7 +314,7 @@ theorem isNoetherian_of_ker_bot
 
 中文:
 定理 isNoetherian_of_ker_bot
-  结论: [IsNoetherian S P] {σ : R ->+* S} {σ' : S ->+* R}
+  结论: [是Noether S P] {σ : R ->+* S} {σ' : S ->+* R}
   证明: isNoetherian_of_linearEquiv (LinearEquiv.ofInjective f <| LinearMap.ker_eq_bot.mp hf).symm
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.ofInjective, LinearMap, LinearMap.ker_eq_bot.mp, isNoetherian_of_linearEquiv, ker_eq_bot, ofInjective
@@ -335,7 +335,7 @@ theorem fg_of_ker_bot
 
 中文:
 定理 fg_of_ker_bot
-  结论: [IsNoetherian S P] {N : Submodule R M} {σ : R ->+* S} {σ' : S ->+* R}
+  结论: [是Noether S P] {N : 子模 R M} {σ : R ->+* S} {σ' : S ->+* R}
   证明: haveI := isNoetherian_of_ker_bot f hf
   IsNoetherian.noetherian N
 
@@ -362,7 +362,7 @@ fun x ⟨_, hx2⟩ => ⟨x.1, Prod.ext rfl Eq.symm LinearMap.mem_ker.1 hx2⟩
 
 中文:
 实例 isNoetherian_prod
-  签名: [IsNoetherian R M] [IsNoetherian R N]
+  签名: [是Noether R M] [是Noether R N]
   定义体: ⟨fun s =>
 Submodule.fg_of_fg_map_of_fg_inf_ker (LinearMap.snd R M N) (noetherian _)
       have : s ⊓ LinearMap.ker (LinearMap.snd R M N) <= LinearMap.range (LinearMap.inl R M N) :=
@@ -390,7 +390,7 @@ instance isNoetherian_sup
 
 中文:
 实例 isNoetherian_sup
-  签名: (M₁ M₂ : Submodule R N) [IsNoetherian R M₁] [IsNoetherian R M₂]
+  签名: (M₁ M₂ : 子模 R N) [是Noether R M₁] [是Noether R M₂]
   定义体: by
   have := isNoetherian_range (M₁.subtype.coprod M₂.subtype)
   rwa [LinearMap.range_coprod, Submodule.range_subtype, Submodule.range_subtype] at this
@@ -445,7 +445,7 @@ instance isNoetherian_pi'
 
 中文:
 实例 isNoetherian_pi'
-  签名: [IsNoetherian R M]
+  签名: [是Noether R M]
   定义体: isNoetherian_pi
 
 Depends on / 依赖: isNoetherian_pi
@@ -499,7 +499,7 @@ theorem isNoetherian_of_range_eq_ker
 
 中文:
 定理 isNoetherian_of_range_eq_ker
-  结论: {P : 类型} [AddCommGroup P] [Module R P] [IsNoetherian R M]
+  结论: {P : 类型} [加法交换群 P] [模 R P] [是Noether R M]
   证明: isNoetherian_mk
     wellFounded_gt_exact_sequence
       (LinearMap.range f)
@@ -537,7 +537,7 @@ theorem isNoetherian_iff_submodule_quotient
 
 中文:
 定理 isNoetherian_iff_submodule_quotient
-  条件: (S : Submodule R N)
+  条件: (S : 子模 R N)
   证明: by
   refine ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨_, _⟩ => ?_⟩
   apply isNoetherian_of_range_eq_ker S.subtype S.mkQ
@@ -568,7 +568,7 @@ instance isNoetherian_linearMap_pi
 
 中文:
 实例 isNoetherian_linearMap_pi
-  签名: {ι : 类型} [Finite ι]
+  签名: {ι : 类型} [有限 ι]
   定义体: let _i : Fintype ι := Fintype.ofFinite ι; isNoetherian_of_linearEquiv (Module.piEquiv ι R M)
 
 Depends on / 依赖: Fintype, Fintype.ofFinite, Module, Module.piEquiv, isNoetherian_of_linearEquiv, ofFinite, piEquiv
@@ -589,7 +589,7 @@ instance isNoetherian_linearMap
 
 中文:
 实例 isNoetherian_linearMap
-  签名: : IsNoetherian R (N ->ₗ[R] M)
+  签名: : 是Noether R (N ->ₗ[R] M)
   定义体: by
   obtain ⟨n, f, hf⟩ := Module.Finite.exists_fin' R N
   let g : (N ->ₗ[R] M) ->ₗ[R] (Fin n -> R) ->ₗ[R] M := (LinearMap.llcomp R (Fin n -> R) N M).flip f
@@ -619,8 +619,8 @@ theorem IsNoetherian.induction
   proof: IsWellFounded.induction _ I hgt
 
 中文:
-定理 IsNoetherian.induction
-  结论: [IsNoetherian R M] {P : Submodule R M -> 命题}
+定理 是Noether.induction
+  结论: [是Noether R M] {P : 子模 R M -> 命题}
   证明: IsWellFounded.induction _ I hgt
 
 Depends on / 依赖: IsWellFounded, IsWellFounded.induction
@@ -641,8 +641,8 @@ theorem LinearMap.isNoetherian_iff_of_bijective
   exact ⟨fun _ => e.symm.strictMono.wellFoundedGT, fun _ => e.strictMono.wellFoundedGT⟩
 
 中文:
-定理 LinearMap.isNoetherian_iff_of_bijective
-  结论: {S P} [Semiring S] [AddCommMonoid P] [Module S P]
+定理 线性映射.isNoetherian_iff_of_bijective
+  结论: {S P} [半环 S] [加法交换幺半群 P] [模 S P]
   证明: by
   simp_rw [isNoetherian_iff']
   let e := Submodule.orderIsoMapComapOfBijective l hl
@@ -672,8 +672,8 @@ lemma Submodule.finite_ne_bot_of_iSupIndep
   proof: WellFoundedGT.finite_ne_bot_of_iSupIndep h
 
 中文:
-引理 Submodule.finite_ne_bot_of_iSupIndep
-  条件: {ι : 类型} {N : ι -> Submodule R M} (h : iSupIndep N)
+引理 子模.finite_ne_bot_of_iSupIndep
+  条件: {ι : 类型} {N : ι -> 子模 R M} (h : iSupIndep N)
   证明: WellFoundedGT.finite_ne_bot_of_iSupIndep h
 
 Depends on / 依赖: WellFoundedGT, WellFoundedGT.finite_ne_bot_of_iSupIndep, finite_ne_bot_of_iSupIndep
@@ -692,7 +692,7 @@ theorem LinearIndependent.finite_of_isNoetherian
 
 中文:
 定理 LinearIndependent.finite_of_isNoetherian
-  结论: [Nontrivial R] {ι} {v : ι -> M}
+  结论: [非平凡 R] {ι} {v : ι -> M}
   证明: WellFoundedGT.finite_of_iSupIndep hv.iSupIndep_span_singleton fun i _ => hv.ne_zero i (by simp_all)
 
 Depends on / 依赖: WellFoundedGT, WellFoundedGT.finite_of_iSupIndep, finite_of_iSupIndep, hv.iSupIndep_span_singleton, hv.ne_zero, iSupIndep_span_singleton, ne_zero
@@ -716,8 +716,8 @@ Infinite.not_finite WellFoundedGT.finite_of_iSupIndep
       fun i => (Submodule.ne_bot_iff _).mpr ⟨_, ⟨_, ⟨p, 
 
 中文:
-定理 IsNoetherian.subsingleton_of_injective
-  结论: {P : 类型} [AddCommMonoid P] [Module R P]
+定理 是Noether.subsingleton_of_injective
+  结论: {P : 类型} [加法交换幺半群 P] [模 R P]
   证明: subsingleton_of_forall_eq 0 fun p => by_contra fun _ =>
     have ⟨g, inj⟩ := LinearMap.exists_finsupp_nat_of_prod_injective inj
 Infinite.not_finite WellFoundedGT.finite_of_iSupIndep
@@ -744,7 +744,7 @@ theorem LinearIndependent.set_finite_of_isNoetherian
 
 中文:
 定理 LinearIndependent.set_finite_of_isNoetherian
-  结论: [Nontrivial R] {s : Set M}
+  结论: [非平凡 R] {s : 集合 M}
   证明: hi.finite_of_isNoetherian
 
 Depends on / 依赖: finite_of_isNoetherian, hi.finite_of_isNoetherian
@@ -770,7 +770,7 @@ theorem IsNoetherian.disjoint_partialSups_eventually_bot
   obtain ⟨n, w⟩ := monotone_stabilizes_iff_noetherian.mpr inferIn
 
 中文:
-定理 IsNoetherian.disjoint_partialSups_eventually_bot
+定理 是Noether.disjoint_partialSups_eventually_bot
   证明: by
   -- A little off-by-one cleanup first:
   suffices t : exists n : Nat, forall m, n <= m -> f (m + 1) = ⊥ by
@@ -816,7 +816,7 @@ theorem isNoetherian_of_submodule_of_noetherian
 
 中文:
 定理 isNoetherian_of_submodule_of_noetherian
-  结论: (R M) [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: (R M) [半环 R] [加法交换幺半群 M] [模 R M]
   证明: isNoetherian_mk ⟨OrderEmbedding.wellFounded (Submodule.MapSubtype.orderEmbedding N).dual h.wf⟩
 
 Depends on / 依赖: MapSubtype, OrderEmbedding, OrderEmbedding.wellFounded, Submodule, Submodule.MapSubtype.orderEmbedding, h.wf, isNoetherian_mk, orderEmbedding, wellFounded
@@ -835,7 +835,7 @@ theorem isNoetherian_of_tower
 
 中文:
 定理 isNoetherian_of_tower
-  结论: (R) {S M} [Semiring R] [Semiring S] [AddCommMonoid M] [SMul R S]
+  结论: (R) {S M} [半环 R] [半环 S] [加法交换幺半群 M] [标量乘法 R S]
   证明: isNoetherian_mk ⟨(Submodule.restrictScalarsEmbedding R S M).dual.wellFounded h.wf⟩
 
 Depends on / 依赖: Submodule, Submodule.restrictScalarsEmbedding, dual.wellFounded, h.wf, isNoetherian_mk, restrictScalarsEmbedding, wellFounded
@@ -877,7 +877,7 @@ theorem isNoetherian_of_fg_of_noetherian
 
 中文:
 定理 isNoetherian_of_fg_of_noetherian
-  结论: {R M} [Ring R] [AddCommGroup M] [Module R M]
+  结论: {R M} [环 R] [加法交换群 M] [模 R M]
   证明: haveI : Module.Finite R N := .of_fg hN; inferInstance
 
 Depends on / 依赖: Finite, Module, Module.Finite, of_fg
@@ -896,7 +896,7 @@ theorem isNoetherian_span_of_finite
 
 中文:
 定理 isNoetherian_span_of_finite
-  结论: (R) {M} [Ring R] [AddCommGroup M] [Module R M]
+  结论: (R) {M} [环 R] [加法交换群 M] [模 R M]
   证明: isNoetherian_of_fg_of_noetherian _ (Submodule.fg_def.mpr ⟨A, hA, rfl⟩)
 
 Depends on / 依赖: Submodule, Submodule.fg_def.mpr, fg_def, isNoetherian_of_fg_of_noetherian
@@ -914,8 +914,8 @@ theorem IsNoetherianRing.of_finite
   proof: isNoetherian_of_tower R inferInstance
 
 中文:
-定理 IsNoetherianRing.of_finite
-  结论: (R S) [Ring R] [Ring S] [Module R S] [IsScalarTower R S S]
+定理 是Noether环.of_finite
+  结论: (R S) [环 R] [环 S] [模 R S] [标量塔 R S S]
   证明: isNoetherian_of_tower R inferInstance
 
 Depends on / 依赖: isNoetherian_of_tower
@@ -934,7 +934,7 @@ theorem isNoetherianRing_of_surjective
 
 中文:
 定理 isNoetherianRing_of_surjective
-  结论: (R) [Semiring R] (S) [Semiring S] (f : R ->+* S)
+  结论: (R) [半环 R] (S) [半环 S] (f : R ->+* S)
   证明: isNoetherian_mk ⟨OrderEmbedding.wellFounded (Ideal.orderEmbeddingOfSurjective f hf).dual H.wf⟩
 
 Depends on / 依赖: H.wf, Ideal.orderEmbeddingOfSurjective, OrderEmbedding, OrderEmbedding.wellFounded, isNoetherian_mk, orderEmbeddingOfSurjective, wellFounded
@@ -953,7 +953,7 @@ instance isNoetherianRing_rangeS
 
 中文:
 实例 isNoetherianRing_rangeS
-  签名: {R} [Semiring R] {S} [Semiring S] (f : R ->+* S)
+  签名: {R} [半环 R] {S} [半环 S] (f : R ->+* S)
   定义体: isNoetherianRing_of_surjective R f.rangeS f.rangeSRestrict f.rangeSRestrict_surjective
 
 Depends on / 依赖: f.rangeS, f.rangeSRestrict, f.rangeSRestrict_surjective, isNoetherianRing_of_surjective, rangeS, rangeSRestrict, rangeSRestrict_surjective
@@ -972,7 +972,7 @@ instance isNoetherianRing_range
 
 中文:
 实例 isNoetherianRing_range
-  签名: {R} [Ring R] {S} [Ring S] (f : R ->+* S)
+  签名: {R} [环 R] {S} [环 S] (f : R ->+* S)
   定义体: isNoetherianRing_rangeS f
 
 Depends on / 依赖: ClosedSubmodule, ClosedSubmodule.carrier_eq_coe, IsComplete, IsComplete.completeSpace_coe, K.isClosed, carrier_eq_coe, completeSpace_coe, isClosed, isComplete, isNoetherianRing_rangeS
@@ -991,7 +991,7 @@ theorem isNoetherianRing_of_ringEquiv
 
 中文:
 定理 isNoetherianRing_of_ringEquiv
-  结论: (R) [Semiring R] {S} [Semiring S] (f : R ≃+* S)
+  结论: (R) [半环 R] {S} [半环 S] (f : R ≃+* S)
   证明: isNoetherianRing_of_surjective R S f.toRingHom f.toEquiv.surjective
 
 Depends on / 依赖: f.toEquiv.surjective, f.toRingHom, isNoetherianRing_of_surjective, surjective, toEquiv, toRingHom
@@ -1027,7 +1027,7 @@ theorem FG.of_le_of_isNoetherian
 
 中文:
 定理 FG.of_le_of_isNoetherian
-  条件: {S T : Submodule R M} [IsNoetherian R T] (hST : S <= T)
+  条件: {S T : 子模 R M} [是Noether R T] (hST : S <= T)
   结论: S.FG
   证明: isNoetherian_submodule.mp inferInstance _ hST
 
@@ -1049,7 +1049,7 @@ lemma FG.of_le
 
 中文:
 引理 FG.of_le
-  条件: [IsNoetherianRing R] {S T : Submodule R M} (hT : T.FG) (hST : S <= T)
+  条件: [是Noether环 R] {S T : 子模 R M} (hT : T.FG) (hST : S <= T)
   结论: S.FG
   证明: by
   rw [← Module.Finite.iff_fg] at hT
@@ -1071,7 +1071,7 @@ theorem FG.of_disjoint_of_isNoetherian_quotient
 
 中文:
 定理 FG.of_disjoint_of_isNoetherian_quotient
-  结论: {S T : Submodule R M} [IsNoetherian R (M ⧸ T)]
+  结论: {S T : 子模 R M} [是Noether R (M ⧸ T)]
   证明: Module.Finite.iff_fg.mp .of_injective (T.mkQ.domRestrict S) (by simp [hST])
 
 Depends on / 依赖: Finite, IsNoetherianRing, IsNoetherianRing.isClosed_ideal, Module, Module.Finite.iff_fg.mp, T.mkQ.domRestrict, domRestrict, iff_fg, isClosed_ideal, of_injective
@@ -1100,8 +1100,8 @@ theorem Module.exists_finite_presentation
   s
 
 中文:
-定理 Module.exists_finite_presentation
-  结论: [Small.{v} R] (M : 类型v) [AddCommGroup M] [Module R M]
+定理 模.存在_finite_presentation
+  结论: [Small.{v} R] (M : 类型v) [加法交换群 M] [模 R M]
   证明: by
   rcases Module.Finite.exists_fin' R M with ⟨m, f', hf'⟩
   let f := f'.comp ((Finsupp.mapRange.linearEquiv (Shrink.linearEquiv.{v} R R)).trans

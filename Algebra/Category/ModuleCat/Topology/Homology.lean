@@ -44,7 +44,7 @@ abbreviation ker
 
 中文:
 缩写 ker
-  签名: : TopModuleCat R
+  签名: : 顶元素模范畴 R
   定义体: .of R φ.hom.ker
 
 Depends on / 依赖: hom.ker
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mono (kerι φ)
+  签名: 单态射 (kerι φ)
   定义体: ConcreteCategory.mono_of_injective (kerι φ) Subtype.val_injective
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.mono_of_injective, Subtype, Subtype.val_injective, mono_of_injective, val_injective
@@ -131,7 +131,7 @@ definition isLimitKer
 
 中文:
 定义 isLimitKer
-  签名: : IsLimit (KernelFork.ofι (kerι φ) (kerι_comp φ))
+  签名: : 是极限 (核叉.ofι (kerι φ) (kerι_comp φ))
   定义体: isLimitAux (KernelFork.ofι (kerι φ) (kerι_comp φ))
     (fun s => ofHom <| (Fork.ι s).hom.codRestrict φ.hom.ker fun m => by
       rw [LinearMap.mem_ker]; rw [ContinuousLinearMap.coe_coe]; rw [← ConcreteCategory.comp_apply (Fork.ι s) φ]; rw [KernelFork.condition]; rw [hom_zero_apply])
@@ -160,7 +160,7 @@ abbreviation coker
 
 中文:
 缩写 coker
-  签名: : TopModuleCat R
+  签名: : 顶元素模范畴 R
   定义体: .of R (N ⧸ φ.hom.range)
 
 Depends on / 依赖: hom.range
@@ -201,7 +201,7 @@ lemma hom_cokerπ
 中文:
 引理 hom_cokerπ
   条件: (x)
-  结论: (cokerπ φ).hom x = Submodule.mkQ _ x
+  结论: (cokerπ φ).hom x = 子模.mkQ _ x
   证明: rfl
 -/
 lemma hom_cokerπ (x) : (cokerπ φ).hom x = Submodule.mkQ _ x := rfl
@@ -216,7 +216,7 @@ lemma cokerπ_surjective
 
 中文:
 引理 cokerπ_surjective
-  结论: Function.Surjective (cokerπ φ).hom
+  结论: 函数.满射 (cokerπ φ).hom
   证明: Submodule.mkQ_surjective _
 
 Depends on / 依赖: Submodule, Submodule.mkQ_surjective, mkQ_surjective
@@ -233,7 +233,7 @@ instance :
 
 中文:
 实例 :
-  签名: Epi (cokerπ φ)
+  签名: 满态射 (cokerπ φ)
   定义体: ConcreteCategory.epi_of_surjective (cokerπ φ) (cokerπ_surjective φ)
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.epi_of_surjective, epi_of_surjective
@@ -280,7 +280,7 @@ definition isColimitCoker
 
 中文:
 定义 isColimitCoker
-  签名: : IsColimit (CokernelCofork.ofπ (cokerπ φ) (comp_cokerπ φ))
+  签名: : 是余极限 (余核余叉.ofπ (cokerπ φ) (comp_cokerπ φ))
   定义体: isColimitAux (.ofπ (cokerπ φ) (comp_cokerπ φ))
   (fun s => ofHom <|
     { toLinearMap := φ.hom.range.liftQ s.π.hom.toLinearMap
@@ -319,7 +319,7 @@ instance :
 
 中文:
 实例 :
-  签名: CategoryWithHomology (TopModuleCat R)
+  签名: 带同调范畴 (顶元素模范畴 R)
   定义体: by
   constructor
   intro S

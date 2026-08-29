@@ -55,7 +55,7 @@ definition fiber
 
 中文:
 定义 fiber
-  签名: : C ⥤ Type w
+  签名: : C ⥤ 类型 w
   定义体: shrinkYoneda.{w} ⋙ (Functor.whiskeringLeft _ _ (Type w)).obj p.op ⋙ colim
 
 Depends on / 依赖: Functor, Functor.whiskeringLeft, p.op, shrinkYoneda, whiskeringLeft
@@ -133,8 +133,8 @@ lemma exists_of_fiberMk_eq_fiberMk
   simpa [shrinkYoneda_obj_map_shrinkYonedaObjObjEquiv_symm.{w}] using hg
 
 中文:
-引理 exists_of_fiberMk_eq_fiberMk
-  结论: [IsCofiltered N]
+引理 存在_of_fiberMk_eq_fiberMk
+  结论: [是余filtered N]
   证明: by
   obtain ⟨V, g, hg⟩ :=
     (Types.FilteredColimit.isColimit_eq_iff'
@@ -278,8 +278,8 @@ instance [IsCofiltered
     obtain ⟨W, g, hg⟩ := exists_of_fiberMk_e
 
 中文:
-实例 [IsCofiltered
-  签名: N] : (functor.{w} p).Initial
+实例 [是余filtered
+  签名: N] : (functor.{w} p).初始
   定义体: by
   refine Functor.initial_of_exists_of_isCofiltered _ ?_ ?_
   · rintro ⟨X, x⟩
@@ -311,7 +311,7 @@ instance [IsCofiltered
   body: initiallySmall_of_initial_of_initiallySmall (functor.{w} p)
 
 中文:
-实例 [IsCofiltered
+实例 [是余filtered
   签名: N] :
   定义体: initiallySmall_of_initial_of_initiallySmall (functor.{w} p)
 
@@ -330,7 +330,7 @@ instance [IsCofiltered
   body: IsCofiltered.of_initial (functor.{w} p)
 
 中文:
-实例 [IsCofiltered
+实例 [是余filtered
   签名: N] :
   定义体: IsCofiltered.of_initial (functor.{w} p)
 

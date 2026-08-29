@@ -49,7 +49,7 @@ definition IsPrimitive
   body: forall r : R, C r ∣ p -> IsUnit r
 
 中文:
-定义 IsPrimitive
+定义 是Primitive
   签名: (p : R[X])
   定义体: forall r : R, C r ∣ p -> IsUnit r
 
@@ -72,7 +72,7 @@ theorem isPrimitive_iff_isUnit_of_C_dvd
 中文:
 定理 isPrimitive_iff_isUnit_of_C_dvd
   条件: {p : R[X]}
-  结论: p.IsPrimitive ↔ 对任意 r : R, C r ∣ p -> IsUnit r
+  结论: p.是Primitive ↔ 对任意 r : R, C r ∣ p -> 是单位 r
   证明: Iff.rfl
 
 @[simp]
@@ -94,7 +94,7 @@ theorem isPrimitive_one
 
 中文:
 定理 isPrimitive_one
-  结论: IsPrimitive (1 : R[X])
+  结论: 是Primitive (1 : R[X])
   证明: fun _ h =>
   isUnit_C.mp (isUnit_of_dvd_one h)
 -/
@@ -115,7 +115,7 @@ theorem Monic.isPrimitive
 中文:
 定理 Monic.isPrimitive
   条件: {p : R[X]} (hp : p.Monic)
-  结论: p.IsPrimitive
+  结论: p.是Primitive
   证明: by
   rintro r ⟨q, h⟩
   exact .of_mul_eq_one (q.coeff p.natDegree) (by rwa [← coeff_C_mul, ← h])
@@ -138,8 +138,8 @@ theorem IsPrimitive.ne_zero
   exact (hp 0 (dvd_zero (C 0))).ne_zero rfl
 
 中文:
-定理 IsPrimitive.ne_zero
-  条件: [Nontrivial R] {p : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.ne_zero
+  条件: [非平凡 R] {p : R[X]} (hp : p.是Primitive)
   结论: p != 0
   证明: by
   rintro rfl
@@ -162,8 +162,8 @@ theorem isPrimitive_of_dvd
 
 中文:
 定理 isPrimitive_of_dvd
-  条件: {p q : R[X]} (hp : IsPrimitive p) (hq : q ∣ p)
-  结论: IsPrimitive q
+  条件: {p q : R[X]} (hp : 是Primitive p) (hq : q ∣ p)
+  结论: 是Primitive q
   证明: fun a ha => isPrimitive_iff_isUnit_of_C_dvd.mp hp a (dvd_trans ha hq)
 
 Depends on / 依赖: dvd_trans, isPrimitive_iff_isUnit_of_C_dvd, isPrimitive_iff_isUnit_of_C_dvd.mp
@@ -186,8 +186,8 @@ theorem _root_.Irreducible.isPrimitive
   simp [hq, Polynomial.natDegree_C_mul hr] at hp'
 
 中文:
-定理 _root_.Irreducible.isPrimitive
-  结论: [NoZeroDivisors R]
+定理 _root_.不可约.isPrimitive
+  结论: [无零因子 R]
   证明: by
   rintro r ⟨q, hq⟩
   suffices ¬IsUnit q by simpa using ((hp.2 hq).resolve_right this).map Polynomial.constantCoeff
@@ -220,8 +220,8 @@ theorem isPrimitive_iff_ne_zero
 
 中文:
 定理 isPrimitive_iff_ne_zero
-  条件: {F : 类型} [Field F] (p : F[X])
-  结论: p.IsPrimitive ↔ p != 0
+  条件: {F : 类型} [域 F] (p : F[X])
+  结论: p.是Primitive ↔ p != 0
   证明: ⟨IsPrimitive.ne_zero, fun h _ hrp => .mk0 _ fun hr => ne_zero_of_dvd_ne_zero h hrp hr ▸ C_0⟩
 
 Depends on / 依赖: IsPrimitive, IsPrimitive.ne_zero, ne_zero, ne_zero_of_dvd_ne_zero
@@ -485,7 +485,7 @@ theorem content_C_mul
 
 中文:
 定理 content_C_mul
-  条件: {R} [CommRing R] [StrongNormalizedGCDMonoid R] (r : R) (p : R[X])
+  条件: {R} [交换环 R] [StrongNormalizedGCD幺半群 R] (r : R) (p : R[X])
   证明: by
   by_cases h0 : r = 0; · simp [h0]
   rw [content]; rw [content]; rw [← Finset.gcd_mul_left]
@@ -821,7 +821,7 @@ theorem isPrimitive_iff_content_eq_one
 中文:
 定理 isPrimitive_iff_content_eq_one
   条件: {p : R[X]}
-  结论: p.IsPrimitive ↔ p.content = 1
+  结论: p.是Primitive ↔ p.content = 1
   证明: by
   rw [← normalize_content]; rw [normalize_eq_one]; rw [IsPrimitive]
   simp_rw [← dvd_content_iff_C_dvd]
@@ -844,8 +844,8 @@ theorem IsPrimitive.content_eq_one
   proof: isPrimitive_iff_content_eq_one.mp hp
 
 中文:
-定理 IsPrimitive.content_eq_one
-  条件: {p : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.content_eq_one
+  条件: {p : R[X]} (hp : p.是Primitive)
   结论: p.content = 1
   证明: isPrimitive_iff_content_eq_one.mp hp
 
@@ -943,7 +943,7 @@ theorem isPrimitive_primPart
 中文:
 定理 isPrimitive_primPart
   条件: (p : R[X])
-  结论: p.primPart.IsPrimitive
+  结论: p.primPart.是Primitive
   证明: by
   by_cases h : p = 0; · simp [h]
   rw [← content_eq_zero_iff] at h
@@ -993,7 +993,7 @@ theorem primPart_ne_zero
 
 中文:
 定理 primPart_ne_zero
-  条件: [Nontrivial R] (p : R[X])
+  条件: [非平凡 R] (p : R[X])
   结论: p.primPart != 0
   证明: p.isPrimitive_primPart.ne_zero
 
@@ -1055,8 +1055,8 @@ theorem IsPrimitive.primPart_eq
   rw [← one_mul p.primPart]; rw [← C_1]; rw [← hp.content_eq_one]; rw [← p.eq_C_content_mul_primPart]
 
 中文:
-定理 IsPrimitive.primPart_eq
-  条件: {p : R[X]} (hp : p.IsPrimitive)
+定理 是Primitive.primPart_eq
+  条件: {p : R[X]} (hp : p.是Primitive)
   结论: p.primPart = p
   证明: by
   rw [← one_mul p.primPart]; rw [← C_1]; rw [← hp.content_eq_one]; rw [← p.eq_C_content_mul_primPart]
@@ -1088,7 +1088,7 @@ theorem isUnit_primPart_C
 中文:
 定理 isUnit_primPart_C
   条件: (r : R)
-  结论: IsUnit (C r).primPart
+  结论: 是单位 (C r).primPart
   证明: by
   by_cases h0 : r = 0
   · simp [h0]
@@ -1152,7 +1152,7 @@ theorem aeval_primPart_eq_zero
 
 中文:
 定理 aeval_primPart_eq_zero
-  结论: {S : 类型} [Ring S] [IsDomain S] [Algebra R S]
+  结论: {S : 类型} [环 S] [是整环 S] [代数 R S]
   证明: by
   nontriviality S
   rw [eq_C_content_mul_primPart p]; rw [map_mul]; rw [aeval_C] at hp
@@ -1184,7 +1184,7 @@ theorem eval₂_primPart_eq_zero
 
 中文:
 定理 eval₂_primPart_eq_zero
-  结论: {S : 类型} [CommSemiring S] [IsDomain S] {f : R ->+* S}
+  结论: {S : 类型} [交换半环 S] [是整环 S] {f : R ->+* S}
   证明: by
   rw [eq_C_content_mul_primPart p]; rw [eval₂_mul]; rw [eval₂_C] at hp
   refine eq_zero_of_ne_zero_of_mul_left_eq_zero ?_ hp
@@ -1349,7 +1349,7 @@ theorem content_mul
 
 中文:
 定理 content_mul
-  条件: {R} [CommRing R] [StrongNormalizedGCDMonoid R] {p q : R[X]}
+  条件: {R} [交换环 R] [StrongNormalizedGCD幺半群 R] {p q : R[X]}
   证明: (associated_content_mul ..).eq_of_normalized normalize_content by simp [normalize_content]
 
 Depends on / 依赖: associated_content_mul, eq_of_normalized, normalize_content
@@ -1370,8 +1370,8 @@ theorem IsPrimitive.mul
   simp_rw [hp.content_eq_one, hq.content_eq_one, mul_one, isUnit_one]
 
 中文:
-定理 IsPrimitive.mul
-  条件: {p q : R[X]} (hp : p.IsPrimitive) (hq : q.IsPrimitive)
+定理 是Primitive.mul
+  条件: {p q : R[X]} (hp : p.是Primitive) (hq : q.是Primitive)
   证明: by
   rw [isPrimitive_iff_content_eq_one]; rw [← normalize_content]; rw [normalize_eq_one]
   refine (associated_content_mul p q).symm.isUnit ?_
@@ -1442,7 +1442,7 @@ theorem primPart_mul
 
 中文:
 定理 primPart_mul
-  条件: {R} [CommRing R] [StrongNormalizedGCDMonoid R] {p q : R[X]} (h0 : p * q != 0)
+  条件: {R} [交换环 R] [StrongNormalizedGCD幺半群 R] {p q : R[X]} (h0 : p * q != 0)
   证明: by
   rw [Ne]; rw [← content_eq_zero_iff]; rw [← C_eq_zero] at h0
   apply mul_left_cancel₀ h0
@@ -1474,8 +1474,8 @@ theorem IsPrimitive.dvd_primPart_iff_dvd
   exact .trans (by simp [hp.primPart_eq]) (associated_primPart_mul hq).symm.dvd
 
 中文:
-定理 IsPrimitive.dvd_primPart_iff_dvd
-  条件: {p q : R[X]} (hp : p.IsPrimitive) (hq : q != 0)
+定理 是Primitive.dvd_primPart_iff_dvd
+  条件: {p q : R[X]} (hp : p.是Primitive) (hq : q != 0)
   证明: by
   refine ⟨fun h => h.trans (Dvd.intro_left _ q.eq_C_content_mul_primPart.symm), fun h => ?_⟩
   rcases h with ⟨r, rfl⟩
@@ -1503,8 +1503,8 @@ theorem exists_primitive_lcm_of_isPrimitive
     refine ⟨r, rprim, fun s => ⟨?_, fun rs => ⟨pr
 
 中文:
-定理 exists_primitive_lcm_of_isPrimitive
-  条件: {p q : R[X]} (hp : p.IsPrimitive) (hq : q.IsPrimitive)
+定理 存在_primitive_lcm_of_isPrimitive
+  条件: {p q : R[X]} (hp : p.是Primitive) (hq : q.是Primitive)
   证明: by
   classical
     have h : exists (n : Nat) (r : R[X]), r.natDegree = n ∧ r.IsPrimitive ∧ p ∣ r ∧ q ∣ r :=
@@ -1612,7 +1612,7 @@ instance normalizedGcdMonoid
 
 中文:
 实例 normalizedGcdMonoid
-  签名: : NormalizedGCDMonoid R[X]
+  签名: : 正规化最大公约数幺半群 R[X]
   定义体: letI := Classical.decEq R
   normalizedGCDMonoidOfExistsLCM fun p q => by
     rcases exists_primitive_lcm_of_isPrimitive p.isPrimitive_primPart
@@ -1656,7 +1656,7 @@ theorem degree_gcd_le_left
 中文:
 定理 degree_gcd_le_left
   条件: {p : R[X]} (hp : p != 0) (q)
-  结论: (gcd p q).degree <= p.degree
+  结论: (最大公约数 p q).degree <= p.degree
   证明: by
   have := natDegree_le_iff_degree_le.mp (natDegree_le_of_dvd (gcd_dvd_left p q) hp)
   rwa [degree_eq_natDegree hp]
@@ -1681,7 +1681,7 @@ theorem degree_gcd_le_right
 中文:
 定理 degree_gcd_le_right
   条件: (p) {q : R[X]} (hq : q != 0)
-  结论: (gcd p q).degree <= q.degree
+  结论: (最大公约数 p q).degree <= q.degree
   证明: by
   rw [gcd_comm]
   exact degree_gcd_le_left hq p
@@ -1704,8 +1704,8 @@ instance [StrongNormalizedGCDMonoid
   __ : StrongNormalizationMonoid R[X] := inferInstance
 
 中文:
-实例 [StrongNormalizedGCDMonoid
-  签名: R] : StrongNormalizedGCDMonoid R[X] where
+实例 [StrongNormalizedGCD幺半群
+  签名: R] : StrongNormalizedGCD幺半群 R[X] where
   定义体: inferInstance
   __ : StrongNormalizationMonoid R[X] := inferInstance
 -/

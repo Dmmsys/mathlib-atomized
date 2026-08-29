@@ -100,7 +100,7 @@ definition functorToInterchange
   body: K ⋙ coyoneda ⋙ (whiskeringLeft _ _ _).obj (CostructuredArrow.proj _ _)
 
 中文:
-定义 functorToInterchange
+定义 functorTo整数erchange
   签名: : J ⥤ CostructuredArrow yoneda A ⥤ 类型u
   定义体: K ⋙ coyoneda ⋙ (whiskeringLeft _ _ _).obj (CostructuredArrow.proj _ _)
 
@@ -122,7 +122,7 @@ definition functorToInterchangeIso
 #adaptation_note
 
 中文:
-定义 functorToInterchangeIso
+定义 functorTo整数erchangeIso
   签名: : functorTo整数erchange A K ≅
   定义体: Iso.refl _
 
@@ -151,7 +151,7 @@ definition flipFunctorToInterchange
   body: Iso.refl _
 
 中文:
-定义 flipFunctorToInterchange
+定义 flipFunctorTo整数erchange
   签名: : (functorTo整数erchange A K).flip ≅
   定义体: Iso.refl _
 
@@ -198,7 +198,7 @@ definition iso
 
 中文:
 定义 iso
-  签名: [IsFiltered (CostructuredArrow yoneda A)]
+  签名: [是Filtered (CostructuredArrow yoneda A)]
   定义体: calc
   A.obj (limit K) ≅ (colimit (CostructuredArrow.proj yoneda A ⋙ yoneda)).obj (limit K) :=
       (IsColimit.coconePointUniqueUpToIso
@@ -251,7 +251,7 @@ theorem iso_hom
 
 中文:
 定理 iso_hom
-  条件: [IsFiltered (CostructuredArrow yoneda A)]
+  条件: [是Filtered (CostructuredArrow yoneda A)]
   结论: (iso A K).hom = limit.post K A
   证明: by
   -- We will have to use `ι_colimitLimitIso_limit_π` eventually, so let's start by
@@ -290,8 +290,8 @@ theorem isIso_post
 
 中文:
 定理 isIso_post
-  条件: [IsFiltered (CostructuredArrow yoneda A)]
-  结论: IsIso (limit.post K A)
+  条件: [是Filtered (CostructuredArrow yoneda A)]
+  结论: 是同构 (limit.post K A)
   证明: iso_hom A K ▸ inferInstance
 
 Depends on / 依赖: iso_hom

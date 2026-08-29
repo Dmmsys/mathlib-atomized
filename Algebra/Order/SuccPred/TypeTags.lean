@@ -28,7 +28,7 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
+实例 [预序
   签名: X] [h
   定义体: h
 -/
@@ -42,7 +42,7 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
+实例 [预序
   签名: X] [h
   定义体: h
 -/
@@ -57,7 +57,7 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
+实例 [预序
   签名: X] [h
   定义体: h
 -/
@@ -71,7 +71,7 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
+实例 [预序
   签名: X] [h
   定义体: h
 -/
@@ -86,8 +86,8 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
-  签名: X] [SuccOrder X] [h
+实例 [预序
+  签名: X] [Succ序 X] [h
   定义体: h
 -/
 instance [Preorder X] [SuccOrder X] [h : IsSuccArchimedean X] :
@@ -101,8 +101,8 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
-  签名: X] [SuccOrder X] [h
+实例 [预序
+  签名: X] [Succ序 X] [h
   定义体: h
 -/
 instance [Preorder X] [SuccOrder X] [h : IsSuccArchimedean X] :
@@ -117,8 +117,8 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
-  签名: X] [PredOrder X] [h
+实例 [预序
+  签名: X] [Pred序 X] [h
   定义体: h
 -/
 instance [Preorder X] [PredOrder X] [h : IsPredArchimedean X] :
@@ -132,8 +132,8 @@ instance [Preorder
   body: h
 
 中文:
-实例 [Preorder
-  签名: X] [PredOrder X] [h
+实例 [预序
+  签名: X] [Pred序 X] [h
   定义体: h
 -/
 instance [Preorder X] [PredOrder X] [h : IsPredArchimedean X] :
@@ -154,7 +154,7 @@ lemma succ_ofMul
 
 中文:
 引理 succ_ofMul
-  条件: [Preorder X] [SuccOrder X] (x : X)
+  条件: [预序 X] [Succ序 X] (x : X)
   结论: succ (ofMul x) = ofMul (succ x)
   证明: rfl
 -/
@@ -169,7 +169,7 @@ lemma succ_toMul
 
 中文:
 引理 succ_toMul
-  条件: [Preorder X] [SuccOrder X] (x : Additive X)
+  条件: [预序 X] [Succ序 X] (x : 加性 X)
   证明: rfl
 -/
 @[simp] lemma succ_toMul [Preorder X] [SuccOrder X] (x : Additive X) :
@@ -186,7 +186,7 @@ lemma succ_ofAdd
 
 中文:
 引理 succ_ofAdd
-  条件: [Preorder X] [SuccOrder X] (x : X)
+  条件: [预序 X] [Succ序 X] (x : X)
   结论: succ (ofAdd x) = ofAdd (succ x)
   证明: rfl
 -/
@@ -201,7 +201,7 @@ lemma succ_toAdd
 
 中文:
 引理 succ_toAdd
-  条件: [Preorder X] [SuccOrder X] (x : Multiplicative X)
+  条件: [预序 X] [Succ序 X] (x : Multiplicative X)
   证明: rfl
 -/
 @[simp] lemma succ_toAdd [Preorder X] [SuccOrder X] (x : Multiplicative X) :
@@ -220,7 +220,7 @@ lemma pred_ofMul
 
 中文:
 引理 pred_ofMul
-  条件: [Preorder X] [PredOrder X] (x : X)
+  条件: [预序 X] [Pred序 X] (x : X)
   结论: pred (ofMul x) = ofMul (pred x)
   证明: rfl
 @[simp]
@@ -238,7 +238,7 @@ lemma pred_toMul
 
 中文:
 引理 pred_toMul
-  条件: [Preorder X] [PredOrder X] (x : Additive X)
+  条件: [预序 X] [Pred序 X] (x : 加性 X)
   结论: pred x.toMul = (pred x).toMul
   证明: rfl
 -/
@@ -255,7 +255,7 @@ lemma pred_ofAdd
 
 中文:
 引理 pred_ofAdd
-  条件: [Preorder X] [PredOrder X] (x : X)
+  条件: [预序 X] [Pred序 X] (x : X)
   结论: pred (ofAdd x) = ofAdd (pred x)
   证明: rfl
 -/
@@ -270,7 +270,7 @@ lemma pred_toAdd
 
 中文:
 引理 pred_toAdd
-  条件: [Preorder X] [PredOrder X] (x : Multiplicative X)
+  条件: [预序 X] [Pred序 X] (x : Multiplicative X)
   证明: rfl
 -/
 @[simp] lemma pred_toAdd [Preorder X] [PredOrder X] (x : Multiplicative X) :

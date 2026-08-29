@@ -41,7 +41,7 @@ lemma aestronglyMeasurable_dirac
 
 中文:
 引理 aestronglyMeasurable_dirac
-  条件: [MeasurableSingletonClass α] {a : α} {f : α -> β}
+  条件: [MeasurableSingleton类 α] {a : α} {f : α -> β}
   证明: ⟨fun _ => f a, stronglyMeasurable_const, ae_eq_dirac f⟩
 
 Depends on / 依赖: ae_eq_dirac, stronglyMeasurable_const
@@ -58,7 +58,7 @@ theorem MeasureTheory.AEStronglyMeasurable.comp_measurePreserving
   proof: hg.comp_quasiMeasurePreserving hf.quasiMeasurePreserving
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.comp_measurePreserving
+定理 测度论.AEStronglyMeasurable.comp_measurePreserving
   证明: hg.comp_quasiMeasurePreserving hf.quasiMeasurePreserving
 
 Depends on / 依赖: comp_quasiMeasurePreserving, hf.quasiMeasurePreserving, hg.comp_quasiMeasurePreserving, quasiMeasurePreserving
@@ -79,7 +79,7 @@ theorem MeasureTheory.MeasurePreserving.aestronglyMeasurable_comp_iff
   rw [← hf.map_eq]; rw [h₂.aestronglyMeasurable_map_iff]
 
 中文:
-定理 MeasureTheory.MeasurePreserving.aestronglyMeasurable_comp_iff
+定理 测度论.保测.aestronglyMeasurable_comp_iff
   结论: {β : 类型}
   证明: by
   rw [← hf.map_eq]; rw [h₂.aestronglyMeasurable_map_iff]
@@ -157,7 +157,7 @@ theorem MeasureTheory.AEStronglyMeasurable.apply_continuousLinearMap
   proof: (ContinuousLinearMap.apply 𝕜 E v).continuous.comp_aestronglyMeasurable hφ
 
 中文:
-定理 MeasureTheory.AEStronglyMeasurable.apply_continuousLinearMap
+定理 测度论.AEStronglyMeasurable.apply_continuousLinearMap
   结论: {φ : α -> F ->L[𝕜] E}
   证明: (ContinuousLinearMap.apply 𝕜 E v).continuous.comp_aestronglyMeasurable hφ
 
@@ -177,7 +177,7 @@ theorem ContinuousLinearMap.aestronglyMeasurable_comp₂
   proof: L.continuous₂.comp_aestronglyMeasurable₂ hf hg
 
 中文:
-定理 ContinuousLinearMap.aestronglyMeasurable_comp₂
+定理 连续线性映射.aestronglyMeasurable_comp₂
   结论: (L : E ->L[𝕜] F ->L[𝕜] G) {f : α -> E}
   证明: L.continuous₂.comp_aestronglyMeasurable₂ hf hg
 
@@ -205,7 +205,7 @@ theorem aestronglyMeasurable_withDensity_iff
 
 中文:
 定理 aestronglyMeasurable_withDensity_iff
-  结论: {E : 类型} [NormedAddCommGroup E]
+  结论: {E : 类型} [赋范交换加群 E]
   证明: by
   constructor
   · rintro ⟨g', g'meas, hg'⟩

@@ -153,7 +153,7 @@ lemma weakPullback.exists_lift
   proof: ⟨weakPullback.lift h k, by simp⟩
 
 中文:
-引理 weakPullback.exists_lift
+引理 weakPullback.存在_lift
   结论: {W X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z) [HasWeakPullback f g]
   证明: ⟨weakPullback.lift h k, by simp⟩
 
@@ -441,7 +441,7 @@ definition IsWeakLimit.mk
   body: isWeakLimitAux _ lift fac_left fac_right
 
 中文:
-定义 IsWeakLimit.mk
+定义 是WeakLimit.mk
   签名: {W : C} {fst : W ⟶ X} {snd : W ⟶ Y} (eq : fst ≫ f = snd ≫ g)
   定义体: isWeakLimitAux _ lift fac_left fac_right
 
@@ -465,8 +465,8 @@ definition IsWeakLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 IsWeakLimit.lift
-  签名: {t : PullbackCone f g} (ht : IsWeakLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+定义 是WeakLimit.lift
+  签名: {t : PullbackCone f g} (ht : 是WeakLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   定义体: ht.lift PullbackCone.mk _ _ w
 
 @[reassoc (attr := simp)]
@@ -489,8 +489,8 @@ lemma IsWeakLimit.lift_fst
 @[reassoc (attr := simp)]
 
 中文:
-引理 IsWeakLimit.lift_fst
-  结论: {t : PullbackCone f g} (ht : IsWeakLimit t) {W : C} (h : W ⟶ X)
+引理 是WeakLimit.lift_fst
+  结论: {t : PullbackCone f g} (ht : 是WeakLimit t) {W : C} (h : W ⟶ X)
   证明: ht.fac _ _
 
 @[reassoc (attr := simp)]
@@ -511,8 +511,8 @@ lemma IsWeakLimit.lift_snd
   proof: ht.fac _ _
 
 中文:
-引理 IsWeakLimit.lift_snd
-  结论: {t : PullbackCone f g} (ht : IsWeakLimit t) {W : C} (h : W ⟶ X)
+引理 是WeakLimit.lift_snd
+  结论: {t : PullbackCone f g} (ht : 是WeakLimit t) {W : C} (h : W ⟶ X)
   证明: ht.fac _ _
 
 Depends on / 依赖: ht.fac
@@ -530,8 +530,8 @@ definition IsWeakLimit.lift'
   body: ⟨IsWeakLimit.lift ht h k w, by simp⟩
 
 中文:
-定义 IsWeakLimit.lift'
-  签名: {t : PullbackCone f g} (ht : IsWeakLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
+定义 是WeakLimit.lift'
+  签名: {t : PullbackCone f g} (ht : 是WeakLimit t) {W : C} (h : W ⟶ X) (k : W ⟶ Y)
   定义体: ⟨IsWeakLimit.lift ht h k w, by simp⟩
 
 Depends on / 依赖: IsWeakLimit, IsWeakLimit.lift
@@ -551,7 +551,7 @@ definition mkSelfIsWeakLimit
 
 中文:
 定义 mkSelfIsWeakLimit
-  签名: {t : PullbackCone f g} (ht : IsWeakLimit t)
+  签名: {t : PullbackCone f g} (ht : 是WeakLimit t)
   定义体: IsWeakLimit.ofIsoWeakLimit ht (PullbackCone.eta t)
 
 Depends on / 依赖: IsWeakLimit, IsWeakLimit.ofIsoWeakLimit, PullbackCone, PullbackCone.eta, ofIsoWeakLimit
@@ -623,7 +623,7 @@ theorem hasWeakLimit_cospan_of_hasLimit_pair_of_hasWeakLimit_parallelPair
 
 中文:
 定理 hasWeakLimit_cospan_of_hasLimit_pair_of_hasWeakLimit_parallelPair
-  结论: [HasLimit (pair X Y)]
+  结论: [有极限 (pair X Y)]
   证明: HasWeakLimit.mk
     { cone :=
         PullbackCone.mk (weakEqualizer.ι (prod.fst ≫ f) (prod.snd ≫ g) ≫ prod.fst)

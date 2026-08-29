@@ -102,7 +102,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Prequotient F)
+  签名: 可居 (Prequotient F)
   定义体: ⟨Prequotient.one⟩
 
 Depends on / 依赖: Prequotient, Prequotient.one
@@ -132,20 +132,20 @@ inductive Relation
     - mul_one: forall x, Relation (mul x one) x
 
 中文:
-归纳类型 Relation
+归纳类型 关系
   参数: : Prequotient F -> Prequotient F -> 命题 -- Make it an equivalence relation:
   构造子 (11 个):
-    - refl: 对任意 x, Relation x x
-    - symm: 对任意 (x y) (_ : Relation x y), Relation y x
-    - trans: 对任意 (x y z) (_ : Relation x y) (_ : Relation y z), Relation x z -- There's always a `map` relation
-    - map: 对任意 (j j' : J) (f : j ⟶ j') (x : F.obj j), Relation (Prequotient.of j' ((F.map f) x)) (Prequotient.of j x)
-    - mul: 对任意 (j) (x y : F.obj j), Relation (Prequotient.of j (x * y)) (mul (Prequotient.of j x) (Prequotient.of j y))
-    - one: 对任意 j, Relation (Prequotient.of j 1) one -- Then one relation per argument of each operation
-    - mul_1: 对任意 (x x' y) (_ : Relation x x'), Relation (mul x y) (mul x' y)
-    - mul_2: 对任意 (x y y') (_ : Relation y y'), Relation (mul x y) (mul x y')
-    - mul_assoc: 对任意 x y z, Relation (mul (mul x y) z) (mul x (mul y z))
-    - one_mul: 对任意 x, Relation (mul one x) x
-    - mul_one: 对任意 x, Relation (mul x one) x
+    - refl: 对任意 x, 关系 x x
+    - symm: 对任意 (x y) (_ : 关系 x y), 关系 y x
+    - trans: 对任意 (x y z) (_ : 关系 x y) (_ : 关系 y z), 关系 x z -- There's always a `map` relation
+    - map: 对任意 (j j' : J) (f : j ⟶ j') (x : F.obj j), 关系 (Prequotient.of j' ((F.map f) x)) (Prequotient.of j x)
+    - mul: 对任意 (j) (x y : F.obj j), 关系 (Prequotient.of j (x * y)) (mul (Prequotient.of j x) (Prequotient.of j y))
+    - one: 对任意 j, 关系 (Prequotient.of j 1) one -- Then one relation per argument of each operation
+    - mul_1: 对任意 (x x' y) (_ : 关系 x x'), 关系 (mul x y) (mul x' y)
+    - mul_2: 对任意 (x y y') (_ : 关系 y y'), 关系 (mul x y) (mul x y')
+    - mul_assoc: 对任意 x y z, 关系 (mul (mul x y) z) (mul x (mul y z))
+    - one_mul: 对任意 x, 关系 (mul one x) x
+    - mul_one: 对任意 x, 关系 (mul x one) x
 -/
 inductive Relation : Prequotient F -> Prequotient F -> Prop -- Make it an equivalence relation:
   | refl : forall x, Relation x x
@@ -177,7 +177,7 @@ instance colimitSetoid
 
 中文:
 实例 colimitSetoid
-  签名: : Setoid (Prequotient F) where
+  签名: : 集合等价关系 (Prequotient F) where
   定义体: Relation F
   iseqv := ⟨Relation.refl, Relation.symm _ _, Relation.trans _ _ _⟩
 
@@ -223,7 +223,7 @@ mul_one := Quotient.ind fun _ => Quotient.sound Relation.mul_one _
 
 中文:
 实例 monoidColimitType
-  签名: : Monoid (ColimitType F) where
+  签名: : 幺半群 (ColimitType F) where
   定义体: Quotient.mk _ one
   mul := Quotient.map₂ mul fun _ x' rx y _ ry =>
     Setoid.trans (Relation.mul_1 _ _ y rx) (Relation.mul_2 x' _ _ ry)
@@ -255,7 +255,7 @@ theorem quot_one
 
 中文:
 定理 quot_one
-  结论: Quot.mk Setoid.r one = (1 : ColimitType F)
+  结论: 商.mk 集合等价关系.r one = (1 : ColimitType F)
   证明: rfl
 
 @[simp]
@@ -278,7 +278,7 @@ theorem quot_mul
 中文:
 定理 quot_mul
   条件: (x y : Prequotient F)
-  结论: Quot.mk Setoid.r (mul x y) =
+  结论: 商.mk 集合等价关系.r (mul x y) =
   证明: rfl
 -/
 theorem quot_mul (x y : Prequotient F) : Quot.mk Setoid.r (mul x y) =
@@ -296,7 +296,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : MonCat
+  签名: : 幺半群范畴
   定义体: of (ColimitType F)
 
 Depends on / 依赖: ColimitType
@@ -422,7 +422,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit F
   ι := { app := coconeMorphism F }
 
@@ -443,7 +443,7 @@ definition descFunLift
 
 中文:
 定义 descFunLift
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
 -/
 def descFunLift (s : Cocone F) : Prequotient F -> s.pt
   | Prequotient.of j x => (s.ι.app j) x
@@ -470,7 +470,7 @@ definition descFun
 
 中文:
 定义 descFun
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
   定义体: by
   fapply Quot.lift
   · exact descFunLift F s
@@ -518,7 +518,7 @@ definition descMorphism
 
 中文:
 定义 descMorphism
-  签名: (s : Cocone F)
+  签名: (s : 余锥 F)
   定义体: ofHom
   { toFun := descFun F s
     map_one' := rfl
@@ -562,7 +562,7 @@ definition colimitIsColimit
 
 中文:
 定义 colimitIsColimit
-  签名: : IsColimit (colimitCocone F) where
+  签名: : 是余极限 (colimitCocone F) where
   定义体: descMorphism F s
   uniq s m w := by
     ext x
@@ -610,7 +610,7 @@ instance hasColimits_monCat
 
 中文:
 实例 hasColimits_monCat
-  签名: : HasColimits MonCat where
+  签名: : 有余极限 幺半群范畴 where
   定义体: { has_colimit := fun F =>
         HasColimit.mk
           { cocone := colimitCocone F

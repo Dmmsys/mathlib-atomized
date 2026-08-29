@@ -77,10 +77,10 @@ inductive FreeAddGroup.Red.Step
     - not: {L₁ L₂ x b} : FreeAddGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
 
 中文:
-归纳类型 FreeAddGroup.Red.Step
-  参数: : List (α × 布尔) -> List (α × 布尔) -> 命题
+归纳类型 自由加法群.Red.Step
+  参数: : 列表 (α × 布尔值) -> 列表 (α × 布尔值) -> 命题
   构造子 (1 个):
-    - not: {L₁ L₂ x b} : FreeAddGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
+    - not: {L₁ L₂ x b} : 自由加法群.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
 -/
 inductive FreeAddGroup.Red.Step : List (α × Bool) -> List (α × Bool) -> Prop
   | not {L₁ L₂ x b} : FreeAddGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
@@ -99,10 +99,10 @@ inductive FreeGroup.Red.Step
     - not: {L₁ L₂ x b} : FreeGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
 
 中文:
-归纳类型 FreeGroup.Red.Step
-  参数: : List (α × 布尔) -> List (α × 布尔) -> 命题
+归纳类型 自由群.Red.Step
+  参数: : 列表 (α × 布尔值) -> 列表 (α × 布尔值) -> 命题
   构造子 (1 个):
-    - not: {L₁ L₂ x b} : FreeGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
+    - not: {L₁ L₂ x b} : 自由群.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
 -/
 inductive FreeGroup.Red.Step : List (α × Bool) -> List (α × Bool) -> Prop
   | not {L₁ L₂ x b} : FreeGroup.Red.Step (L₁ ++ (x, b) :: (x, not b) :: L₂) (L₁ ++ L₂)
@@ -127,7 +127,7 @@ definition Red
 
 中文:
 定义 Red
-  签名: : List (α × 布尔) -> List (α × 布尔) -> 命题
+  签名: : 列表 (α × 布尔值) -> 列表 (α × 布尔值) -> 命题
   定义体: ReflTransGen Red.Step
 
 @[to_additive (attr := refl)]
@@ -194,7 +194,7 @@ theorem Step.length
 
 中文:
 定理 Step.length
-  结论: 对任意 {L₁ L₂ : List (α × 布尔)}, Step L₁ L₂ -> L₂.length + 2 = L₁.length
+  结论: 对任意 {L₁ L₂ : 列表 (α × 布尔值)}, Step L₁ L₂ -> L₂.length + 2 = L₁.length
 -/
 theorem Step.length : forall {L₁ L₂ : List (α × Bool)}, Step L₁ L₂ -> L₂.length + 2 = L₁.length
   | _, _, @Red.Step.not _ L1 L2 x b => by rw [List.length_append, List.length_append]; rfl
@@ -286,7 +286,7 @@ theorem Step.append_left
 
 中文:
 定理 Step.append_left
-  结论: 对任意 {L₁ L₂ L₃ : List (α × 布尔)}, Step L₂ L₃ -> Step (L₁ ++ L₂) (L₁ ++ L₃)
+  结论: 对任意 {L₁ L₂ L₃ : 列表 (α × 布尔值)}, Step L₂ L₃ -> Step (L₁ ++ L₂) (L₁ ++ L₃)
 -/
 theorem Step.append_left : forall {L₁ L₂ L₃ : List (α × Bool)}, Step L₂ L₃ -> Step (L₁ ++ L₂) (L₁ ++ L₃)
   | _, _, _, Red.Step.not => by rw [← List.append_assoc, ← List.append_assoc]; constructor
@@ -326,7 +326,7 @@ theorem Step.append_right
 
 中文:
 定理 Step.append_right
-  结论: 对任意 {L₁ L₂ L₃ : List (α × 布尔)}, Step L₁ L₂ -> Step (L₁ ++ L₃) (L₂ ++ L₃)
+  结论: 对任意 {L₁ L₂ L₃ : 列表 (α × 布尔值)}, Step L₁ L₂ -> Step (L₁ ++ L₃) (L₂ ++ L₃)
 -/
 theorem Step.append_right : forall {L₁ L₂ L₃ : List (α × Bool)}, Step L₁ L₂ -> Step (L₁ ++ L₃) (L₂ ++ L₃)
   | _, _, _, Red.Step.not => by simp
@@ -384,7 +384,7 @@ theorem Step.cons_left_iff
 
 中文:
 定理 Step.cons_left_iff
-  条件: {a : α} {b : 布尔}
+  条件: {a : α} {b : 布尔值}
   证明: by
   constructor
   · generalize hL : ((a, b) :: L₁ : List _) = L
@@ -416,7 +416,7 @@ theorem not_step_singleton
 
 中文:
 定理 not_step_singleton
-  结论: 对任意 {p : α × 布尔}, ¬Step [p] L
+  结论: 对任意 {p : α × 布尔值}, ¬Step [p] L
 -/
 theorem not_step_singleton : forall {p : α × Bool}, ¬Step [p] L
   | (a, b) => by simp [Step.cons_left_iff, not_step_nil]
@@ -435,7 +435,7 @@ theorem Step.cons_cons_iff
 
 中文:
 定理 Step.cons_cons_iff
-  结论: 对任意 {p : α × 布尔}, Step (p :: L₁) (p :: L₂) ↔ Step L₁ L₂
+  结论: 对任意 {p : α × 布尔值}, Step (p :: L₁) (p :: L₂) ↔ Step L₁ L₂
   证明: by
   simp +contextual [Step.cons_left_iff, iff_def, or_imp]
 
@@ -559,7 +559,7 @@ theorem church_rosser
 
 中文:
 定理 church_rosser
-  结论: Red L₁ L₂ -> Red L₁ L₃ -> Join Red L₂ L₃
+  结论: Red L₁ L₂ -> Red L₁ L₃ -> 并 Red L₂ L₃
   证明: Relation.church_rosser fun _ b c hab hac =>
     match b, c, Red.Step.diamond hab hac rfl with
     | b, _, Or.inl rfl => ⟨b, by rfl, by rfl⟩
@@ -1012,7 +1012,7 @@ theorem sizeof_of_step
 
 中文:
 定理 sizeof_of_step
-  结论: 对任意 {L₁ L₂ : List (α × 布尔)},
+  结论: 对任意 {L₁ L₂ : 列表 (α × 布尔值)},
 -/
 theorem sizeof_of_step : forall {L₁ L₂ : List (α × Bool)},
     Step L₁ L₂ -> sizeOf L₂ < sizeOf L₁
@@ -1106,7 +1106,7 @@ theorem equivalence_join_red
 
 中文:
 定理 equivalence_join_red
-  结论: Equivalence (Join (@Red α))
+  结论: 等价 (并 (@Red α))
   证明: equivalence_join_reflTransGen fun _ b c hab hac =>
     match b, c, Red.Step.diamond hab hac rfl with
     | b, _, Or.inl rfl => ⟨b, by rfl, by rfl⟩
@@ -1139,7 +1139,7 @@ theorem join_red_of_step
 中文:
 定理 join_red_of_step
   条件: (h : Red.Step L₁ L₂)
-  结论: Join Red L₁ L₂
+  结论: 并 Red L₁ L₂
   证明: by
   unfold Red
   exact le_join_of_refl L₁ L₂ h.to_red
@@ -1168,7 +1168,7 @@ theorem eqvGen_step_iff_join_red
 
 中文:
 定理 eqvGen_step_iff_join_red
-  结论: EqvGen Red.Step L₁ L₂ ↔ Join Red L₁ L₂
+  结论: EqvGen Red.Step L₁ L₂ ↔ 并 Red L₁ L₂
   证明: Iff.intro
     (fun h =>
       have : EqvGen (Join Red) L₁ L₂ := h.mono fun _ _ => join_red_of_step
@@ -1201,8 +1201,8 @@ definition IsReduced
   body: L.IsChain fun a b => a.1 = b.1 -> a.2 = b.2
 
 中文:
-定义 IsReduced
-  签名: (L : List (α × 布尔))
+定义 是既约
+  签名: (L : 列表 (α × 布尔值))
   定义体: L.IsChain fun a b => a.1 = b.1 -> a.2 = b.2
 
 Depends on / 依赖: IsChain, L.IsChain
@@ -1225,8 +1225,8 @@ theorem IsReduced.nil
 @[to_additive (attr := simp)]
 
 中文:
-定理 IsReduced.nil
-  结论: IsReduced ([] : List (α × 布尔))
+定理 是既约.nil
+  结论: 是既约 ([] : 列表 (α × 布尔值))
   证明: isChain_nil
 
 @[to_additive (attr := simp)]
@@ -1248,9 +1248,9 @@ theorem IsReduced.singleton
 @[to_additive (attr := simp)]
 
 中文:
-定理 IsReduced.singleton
-  条件: {a : α × 布尔}
-  结论: IsReduced [a]
+定理 是既约.singleton
+  条件: {a : α × 布尔值}
+  结论: 是既约 [a]
   证明: isChain_singleton a
 
 @[to_additive (attr := simp)]
@@ -1272,7 +1272,7 @@ theorem isReduced_cons_cons
 
 中文:
 定理 isReduced_cons_cons
-  条件: {a b : (α × 布尔)}
+  条件: {a b : (α × 布尔值)}
   证明: isChain_cons_cons
 
 @[to_additive]
@@ -1297,8 +1297,8 @@ theorem IsReduced.not_step
 @[to_additive]
 
 中文:
-定理 IsReduced.not_step
-  条件: (h : IsReduced L₁)
+定理 是既约.not_step
+  条件: (h : 是既约 L₁)
   结论: ¬ Red.Step L₁ L₂
   证明: fun step => by
   induction step
@@ -1320,7 +1320,7 @@ English:
 lemma IsReduced.of_forall_not_step
 
 中文:
-引理 IsReduced.of_forall_not_step
+引理 是既约.of_对任意_not_step
 -/
 lemma IsReduced.of_forall_not_step :
     forall {L₁ : List (α × Bool)}, (forall L₂, ¬ Red.Step L₁ L₂) -> IsReduced L₁
@@ -1349,7 +1349,7 @@ theorem isReduced_iff_not_step
 
 中文:
 定理 isReduced_iff_not_step
-  结论: IsReduced L₁ ↔ 对任意 L₂, ¬ Red.Step L₁ L₂ where
+  结论: 是既约 L₁ ↔ 对任意 L₂, ¬ Red.Step L₁ L₂ where
   证明: h.not_step
   mpr := .of_forall_not_step
 
@@ -1374,8 +1374,8 @@ theorem IsReduced.red_iff_eq
 @[to_additive]
 
 中文:
-定理 IsReduced.red_iff_eq
-  条件: (h : IsReduced L₁)
+定理 是既约.red_iff_eq
+  条件: (h : 是既约 L₁)
   结论: Red L₁ L₂ ↔ L₂ = L₁
   证明: Relation.reflTransGen_iff_eq fun _ => h.not_step
 
@@ -1398,8 +1398,8 @@ theorem IsReduced.append_overlap
 @[to_additive]
 
 中文:
-定理 IsReduced.append_overlap
-  结论: {L₁ L₂ L₃ : List (α × 布尔)} (h₁ : IsReduced (L₁ ++ L₂))
+定理 是既约.append_overlap
+  结论: {L₁ L₂ L₃ : 列表 (α × 布尔值)} (h₁ : 是既约 (L₁ ++ L₂))
   证明: IsChain.append_overlap h₁ h₂ hn
 
 @[to_additive]
@@ -1421,9 +1421,9 @@ theorem IsReduced.infix
   proof: IsChain.infix h h'
 
 中文:
-定理 IsReduced.infix
-  条件: (h : IsReduced L₂) (h' : L₁ <:+: L₂)
-  结论: IsReduced L₁
+定理 是既约.infix
+  条件: (h : 是既约 L₂) (h' : L₁ <:+: L₂)
+  结论: 是既约 L₁
   证明: IsChain.infix h h'
 
 Depends on / 依赖: IsChain, IsChain.infix
@@ -1472,7 +1472,7 @@ definition FreeGroup
   body: Quot @FreeGroup.Red.Step α
 
 中文:
-定义 FreeGroup
+定义 自由群
   签名: (α : 类型u)
   定义体: Quot @FreeGroup.Red.Step α
 
@@ -1499,7 +1499,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (L : List (α × 布尔))
+  签名: (L : 列表 (α × 布尔值))
   定义体: Quot.mk Red.Step L
 
 @[to_additive (attr := simp)]
@@ -1522,7 +1522,7 @@ theorem quot_mk_eq_mk
 
 中文:
 定理 quot_mk_eq_mk
-  结论: Quot.mk Red.Step L = mk L
+  结论: 商.mk Red.Step L = mk L
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1543,7 +1543,7 @@ theorem quot_lift_mk
 
 中文:
 定理 quot_lift_mk
-  结论: (β : 类型v) (f : List (α × 布尔) -> β)
+  结论: (β : 类型v) (f : 列表 (α × 布尔值) -> β)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1563,7 +1563,7 @@ theorem quot_liftOn_mk
 
 中文:
 定理 quot_liftOn_mk
-  结论: (β : 类型v) (f : List (α × 布尔) -> β)
+  结论: (β : 类型v) (f : 列表 (α × 布尔值) -> β)
   证明: rfl
 -/
 theorem quot_liftOn_mk (β : Type v) (f : List (α × Bool) -> β)
@@ -1584,7 +1584,7 @@ theorem quot_map_mk
 
 中文:
 定理 quot_map_mk
-  结论: (β : 类型v) (f : List (α × 布尔) -> List (β × 布尔))
+  结论: (β : 类型v) (f : 列表 (α × 布尔值) -> 列表 (β × 布尔值))
   证明: rfl
 
 @[to_additive]
@@ -1606,7 +1606,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (FreeGroup α)
+  签名: 幺 (自由群 α)
   定义体: ⟨mk []⟩
 
 @[to_additive]
@@ -1627,7 +1627,7 @@ theorem one_eq_mk
 
 中文:
 定理 one_eq_mk
-  结论: (1 : FreeGroup α) = mk []
+  结论: (1 : 自由群 α) = mk []
   证明: rfl
 
 @[to_additive]
@@ -1648,7 +1648,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (FreeGroup α)
+  签名: 可居 (自由群 α)
   定义体: ⟨1⟩
 
 @[to_additive]
@@ -1668,8 +1668,8 @@ instance [IsEmpty
 @[to_additive]
 
 中文:
-实例 [IsEmpty
-  签名: α] : Unique (FreeGroup α)
+实例 [是空
+  签名: α] : 唯一 (自由群 α)
   定义体: inferInstanceAs Unique (Quot _)
 
 @[to_additive]
@@ -1696,7 +1696,7 @@ fun _L₁ _L₂ H => Quot.inductionOn y fun _L₃ => Quot.sound Red.Step.append_
 
 中文:
 实例 :
-  签名: Mul (FreeGroup α)
+  签名: 乘法 (自由群 α)
   定义体: ⟨fun x y =>
     Quot.liftOn x
       (fun L₁ =>
@@ -1748,7 +1748,7 @@ definition invRev
 
 中文:
 定义 invRev
-  签名: (w : List (α × 布尔))
+  签名: (w : 列表 (α × 布尔值))
   定义体: (List.map (fun g : α × Bool => (g.1, not g.2)) w).reverse
 
 @[to_additive (attr := simp)]
@@ -1818,7 +1818,7 @@ theorem invRev_empty
 
 中文:
 定理 invRev_empty
-  结论: invRev ([] : List (α × 布尔)) = []
+  结论: invRev ([] : 列表 (α × 布尔值)) = []
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -1863,7 +1863,7 @@ theorem invRev_cons
 
 中文:
 定理 invRev_cons
-  条件: {a : (α × 布尔)}
+  条件: {a : (α × 布尔值)}
   结论: invRev (a :: L) = invRev L ++ invRev [a]
   证明: by
   simp [invRev]
@@ -1888,7 +1888,7 @@ theorem invRev_involutive
 
 中文:
 定理 invRev_involutive
-  结论: Function.Involutive (@invRev α)
+  结论: 函数.对合 (@invRev α)
   证明: fun _ => invRev_invRev
 
 @[to_additive]
@@ -1910,7 +1910,7 @@ theorem invRev_injective
 
 中文:
 定理 invRev_injective
-  结论: Function.Injective (@invRev α)
+  结论: 函数.单射 (@invRev α)
   证明: invRev_involutive.injective
 
 @[to_additive]
@@ -1933,7 +1933,7 @@ theorem invRev_surjective
 
 中文:
 定理 invRev_surjective
-  结论: Function.Surjective (@invRev α)
+  结论: 函数.满射 (@invRev α)
   证明: invRev_involutive.surjective
 
 @[to_additive]
@@ -1956,7 +1956,7 @@ theorem invRev_bijective
 
 中文:
 定理 invRev_bijective
-  结论: Function.Bijective (@invRev α)
+  结论: 函数.双射 (@invRev α)
   证明: invRev_involutive.bijective
 
 @[to_additive]
@@ -1983,7 +1983,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (FreeGroup α)
+  签名: 取逆 (自由群 α)
   定义体: ⟨Quot.map invRev
       (by
         intro a b h
@@ -2037,7 +2037,7 @@ theorem Red.Step.invRev
 
 中文:
 定理 Red.Step.invRev
-  条件: {L₁ L₂ : List (α × 布尔)} (h : Red.Step L₁ L₂)
+  条件: {L₁ L₂ : 列表 (α × 布尔值)} (h : Red.Step L₁ L₂)
   证明: by
   obtain ⟨a, b, x, y⟩ := h
   simp [FreeGroup.invRev]
@@ -2065,7 +2065,7 @@ theorem Red.invRev
 
 中文:
 定理 Red.invRev
-  条件: {L₁ L₂ : List (α × 布尔)} (h : Red L₁ L₂)
+  条件: {L₁ L₂ : 列表 (α × 布尔值)} (h : Red L₁ L₂)
   结论: Red (invRev L₁) (invRev L₂)
   证明: Relation.ReflTransGen.lift FreeGroup.invRev (fun _a _b => Red.Step.invRev) L₁ L₂ h
 
@@ -2141,7 +2141,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (FreeGroup α)
+  签名: 群 (自由群 α)
   定义体: by rintro ⟨L₁⟩ ⟨L₂⟩ ⟨L₃⟩; simp
   one_mul := by rintro ⟨L⟩; rfl
   mul_one := by rintro ⟨L⟩; simp [one_eq_mk]
@@ -2180,7 +2180,7 @@ theorem pow_mk
 中文:
 定理 pow_mk
   条件: (n : 自然数)
-  结论: mk L ^ n = mk (List.flatten <| List.replicate n L)
+  结论: mk L ^ n = mk (列表.flatten <| 列表.replicate n L)
   证明: match n with
   | 0 => rfl
   | n + 1 => by rw [pow_succ', pow_mk, mul_mk, List.replicate_succ, List.flatten_cons]
@@ -2228,7 +2228,7 @@ lemma induction_on
 
 中文:
 引理 induction_on
-  结论: {C : FreeGroup α -> 命题} (z : FreeGroup α) (C1 : C 1)
+  结论: {C : 自由群 α -> 命题} (z : 自由群 α) (C1 : C 1)
   证明: Quot.inductionOn z fun L => L.recOn C1 fun ⟨x, b⟩ _tl ih =>
     b.recOn (mul _ _ (inv_of _ <| of x) ih) (mul _ _ (of x) ih)
 -/
@@ -2261,7 +2261,7 @@ lemma ext_hom
 
 中文:
 引理 ext_hom
-  条件: {M : 类型} [Monoid M] (f g : FreeGroup α ->* M) (h : 对任意 a, f (of a) = g (of a))
+  条件: {M : 类型} [幺半群 M] (f g : 自由群 α ->* M) (h : 对任意 a, f (of a) = g (of a))
   证明: by
   ext x
   have this (x) : f (of x)⁻¹ = g (of x)⁻¹ := by
@@ -2296,7 +2296,7 @@ theorem Red.exact
 
 中文:
 定理 Red.exact
-  结论: mk L₁ = mk L₂ ↔ Join Red L₁ L₂
+  结论: mk L₁ = mk L₂ ↔ 并 Red L₁ L₂
   证明: calc
     mk L₁ = mk L₂ ↔ EqvGen Red.Step L₁ L₂ := Iff.intro Quot.eqvGen_exact Quot.eqvGen_sound
     _ ↔ Join Red L₁ L₂ := eqvGen_step_iff_join_red
@@ -2322,7 +2322,7 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  结论: Function.Injective (@of α)
+  结论: 函数.单射 (@of α)
   证明: fun _ _ H => by
   let ⟨L₁, hx, hy⟩ := Red.exact.1 H
   simp [Red.singleton_iff] at hx hy; simp_all
@@ -2353,7 +2353,7 @@ List.prod L.map fun x => cond x.2 (f x.1) (f x.1)⁻¹
 
 中文:
 定义 Lift.aux
-  签名: : List (α × 布尔) -> β
+  签名: : 列表 (α × 布尔值) -> β
   定义体: fun L =>
 List.prod L.map fun x => cond x.2 (f x.1) (f x.1)⁻¹
 
@@ -2405,7 +2405,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: : (α -> β) ≃ (FreeGroup α ->* β) where
+  签名: : (α -> β) ≃ (自由群 α ->* β) where
   定义体: MonoidHom.mk' (Quot.lift (Lift.aux f) fun _ _ => Red.Step.lift) by
       rintro ⟨L₁⟩ ⟨L₂⟩; simp [Lift.aux, List.prod_append]
   invFun g := g ∘ of
@@ -2437,7 +2437,7 @@ theorem lift_mk
 
 中文:
 定理 lift_mk
-  结论: lift f (mk L) = List.prod (L.map fun x => cond x.2 (f x.1) (f x.1)⁻¹)
+  结论: lift f (mk L) = 列表.乘积 (L.map fun x => cond x.2 (f x.1) (f x.1)⁻¹)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -2480,7 +2480,7 @@ theorem lift_unique
 
 中文:
 定理 lift_unique
-  条件: (g : FreeGroup α ->* β) (hg : 对任意 x, g (FreeGroup.of x) = f x) {x}
+  条件: (g : 自由群 α ->* β) (hg : 对任意 x, g (自由群.of x) = f x) {x}
   证明: DFunLike.congr_fun (lift.symm_apply_eq.mp (funext hg : g ∘ FreeGroup.of = f)) x
 
 @[to_additive]
@@ -2506,7 +2506,7 @@ theorem lift_of_eq_id
 中文:
 定理 lift_of_eq_id
   条件: (α)
-  结论: lift of = MonoidHom.id (FreeGroup α)
+  结论: lift of = 幺半群态射.id (自由群 α)
   证明: lift.apply_symm_apply (MonoidHom.id _)
 
 @[to_additive]
@@ -2530,8 +2530,8 @@ theorem lift_of_apply
 
 中文:
 定理 lift_of_apply
-  条件: (x : FreeGroup α)
-  结论: lift FreeGroup.of x = x
+  条件: (x : 自由群 α)
+  结论: lift 自由群.of x = x
   证明: DFunLike.congr_fun (lift_of_eq_id α) x
 
 @[to_additive]
@@ -2559,7 +2559,7 @@ theorem range_lift_le
 
 中文:
 定理 range_lift_le
-  条件: {s : Subgroup β} (H : Set.range f subseteq s)
+  条件: {s : 子群 β} (H : 集合.range f subseteq s)
   结论: (lift f).range <= s
   证明: by
   rintro _ ⟨⟨L⟩, rfl⟩
@@ -2594,7 +2594,7 @@ theorem range_lift_eq_closure
 
 中文:
 定理 range_lift_eq_closure
-  结论: (lift f).range = Subgroup.closure (Set.range f)
+  结论: (lift f).range = 子群.closure (集合.range f)
   证明: by
   apply le_antisymm (range_lift_le Subgroup.subset_closure)
   rw [Subgroup.closure_le]
@@ -2648,8 +2648,8 @@ theorem closure_eq_range
 
 中文:
 定理 closure_eq_range
-  条件: (s : Set β)
-  结论: Subgroup.closure s = (lift ((↑) : s -> β)).range
+  条件: (s : 集合 β)
+  结论: 子群.closure s = (lift ((↑) : s -> β)).range
   证明: by
   rw [FreeGroup.range_lift_eq_closure]; rw [Subtype.range_coe]
 
@@ -2701,7 +2701,7 @@ theorem lift_surjective_of_surjective
 
 中文:
 定理 lift_surjective_of_surjective
-  条件: (hf : Function.Surjective f)
+  条件: (hf : 函数.满射 f)
   证明: by
   rw [← MonoidHom.range_eq_top]; rw [range_lift_eq_closure]; rw [hf.range_eq]; rw [Subgroup.closure_univ]
 
@@ -2734,7 +2734,7 @@ definition map
 
 中文:
 定义 map
-  签名: : FreeGroup α ->* FreeGroup β
+  签名: : 自由群 α ->* 自由群 β
   定义体: MonoidHom.mk'
     (Quot.map (List.map fun x => (f x.1, x.2)) fun L₁ L₂ H => by cases H; simp)
     (by rintro ⟨L₁⟩ ⟨L₂⟩; simp)
@@ -2783,7 +2783,7 @@ theorem map.id
 
 中文:
 定理 map.id
-  条件: (x : FreeGroup α)
+  条件: (x : 自由群 α)
   结论: map id x = x
   证明: by rcases x with ⟨L⟩; simp [List.map_id']
 
@@ -2807,7 +2807,7 @@ theorem map.id'
 
 中文:
 定理 map.id'
-  条件: (x : FreeGroup α)
+  条件: (x : 自由群 α)
   结论: map (fun z => z) x = x
   证明: map.id x
 
@@ -2832,7 +2832,7 @@ theorem map.comp
 
 中文:
 定理 map.comp
-  条件: {γ : Type w} (f : α -> β) (g : β -> γ) (x)
+  条件: {γ : 类型 w} (f : α -> β) (g : β -> γ) (x)
   证明: by
   rcases x with ⟨L⟩; simp [Function.comp_def]
 
@@ -2885,7 +2885,7 @@ theorem map.unique
 
 中文:
 定理 map.unique
-  结论: (g : FreeGroup α ->* FreeGroup β)
+  结论: (g : 自由群 α ->* 自由群 β)
   证明: by
   rintro ⟨L⟩
   exact List.recOn L g.map_one fun ⟨x, b⟩ t (ih : g (FreeGroup.mk t) = map f (FreeGroup.mk t)) =>
@@ -2944,7 +2944,7 @@ theorem range_map
 
 中文:
 定理 range_map
-  结论: (map f).range = Subgroup.closure (of '' Set.range f)
+  结论: (map f).range = 子群.closure (of '' 集合.range f)
   证明: by
   rw [map_eq_lift]; rw [range_lift_eq_closure]; rw [Set.range_comp]
 
@@ -2969,8 +2969,8 @@ theorem map_surjective
 
 中文:
 定理 map_surjective
-  条件: (hf : Function.Surjective f)
-  结论: Function.Surjective (map f)
+  条件: (hf : 函数.满射 f)
+  结论: 函数.满射 (map f)
   证明: by
   rw [← MonoidHom.range_eq_top]; rw [range_map]; rw [hf.range_eq]; rw [Set.image_univ]; rw [closure_range_of]
 
@@ -2999,8 +2999,8 @@ theorem map_injective
 
 中文:
 定理 map_injective
-  条件: (hf : Function.Injective f)
-  结论: Function.Injective (map f)
+  条件: (hf : 函数.单射 f)
+  结论: 函数.单射 (map f)
   证明: by
   by_cases! h : IsEmpty α
   · exact Function.injective_of_subsingleton _
@@ -3033,8 +3033,8 @@ theorem map_bijective
 
 中文:
 定理 map_bijective
-  条件: (hf : Function.Bijective f)
-  结论: Function.Bijective (map f)
+  条件: (hf : 函数.双射 f)
+  结论: 函数.双射 (map f)
   证明: by
   exact ⟨map_injective hf.injective, map_surjective hf.surjective⟩
 
@@ -3094,7 +3094,7 @@ theorem freeGroupCongr_refl
 
 中文:
 定理 freeGroupCongr_refl
-  结论: freeGroupCongr (Equiv.refl α) = MulEquiv.refl _
+  结论: freeGroupCongr (等价.refl α) = 乘法等价.refl _
   证明: MulEquiv.ext map.id
 
 @[to_additive (attr := simp)]
@@ -3166,8 +3166,8 @@ definition prod
   body: lift id
 
 中文:
-定义 prod
-  签名: : FreeGroup α ->* α
+定义 乘积
+  签名: : 自由群 α ->* α
   定义体: lift id
 -/
 def prod : FreeGroup α ->* α :=
@@ -3188,7 +3188,7 @@ theorem prod_mk
 
 中文:
 定理 prod_mk
-  结论: prod (mk L) = List.prod (L.map fun x => cond x.2 x.1 x.1⁻¹)
+  结论: 乘积 (mk L) = 列表.乘积 (L.map fun x => cond x.2 x.1 x.1⁻¹)
   证明: rfl
 
 @[to_additive (attr := simp)]
@@ -3209,9 +3209,9 @@ theorem prod.of
 @[to_additive]
 
 中文:
-定理 prod.of
+定理 乘积.of
   条件: {x : α}
-  结论: prod (of x) = x
+  结论: 乘积 (of x) = x
   证明: lift_apply_of
 
 @[to_additive]
@@ -3234,9 +3234,9 @@ theorem prod.unique
 @[to_additive]
 
 中文:
-定理 prod.unique
-  条件: (g : FreeGroup α ->* α) (hg : 对任意 x, g (FreeGroup.of x) = x) {x}
-  结论: g x = prod x
+定理 乘积.unique
+  条件: (g : 自由群 α ->* α) (hg : 对任意 x, g (自由群.of x) = x) {x}
+  结论: g x = 乘积 x
   证明: lift_unique g hg
 
 @[to_additive]
@@ -3257,7 +3257,7 @@ theorem prod_surjective
 
 中文:
 定理 prod_surjective
-  结论: Function.Surjective (prod : FreeGroup α ->* α)
+  结论: 函数.满射 (乘积 : 自由群 α ->* α)
   证明: FreeGroup.lift_surjective_of_surjective Function.surjective_id
 
 Depends on / 依赖: FreeGroup, FreeGroup.lift_surjective_of_surjective, Function, Function.surjective_id, lift_surjective_of_surjective, surjective_id
@@ -3280,8 +3280,8 @@ theorem lift_eq_prod_map
 
 中文:
 定理 lift_eq_prod_map
-  条件: {β : 类型v} [Group β] {f : α -> β} {x}
-  结论: lift f x = prod (map f x)
+  条件: {β : 类型v} [群 β] {f : α -> β} {x}
+  结论: lift f x = 乘积 (map f x)
   证明: by
   rw [← lift_unique (prod.comp (map f)) (by simp)]; rw [MonoidHom.coe_comp]; rw [Function.comp_apply]
 
@@ -3303,7 +3303,7 @@ definition sum
   body: @prod (Multiplicative _) _ x
 
 中文:
-定义 sum
+定义 求和
   签名: : α
   定义体: @prod (Multiplicative _) _ x
 
@@ -3327,7 +3327,7 @@ theorem sum_mk
 
 中文:
 定理 sum_mk
-  结论: sum (mk L) = List.sum (L.map fun x => cond x.2 x.1 (-x.1))
+  结论: 求和 (mk L) = 列表.求和 (L.map fun x => cond x.2 x.1 (-x.1))
   证明: rfl
 
 @[simp]
@@ -3346,9 +3346,9 @@ theorem sum.of
   proof: @prod.of _ (_) _
 
 中文:
-定理 sum.of
+定理 求和.of
   条件: {x : α}
-  结论: sum (of x) = x
+  结论: 求和 (of x) = x
   证明: @prod.of _ (_) _
 
 Depends on / 依赖: prod.of
@@ -3370,8 +3370,8 @@ theorem sum.map_mul
 @[simp]
 
 中文:
-定理 sum.map_mul
-  结论: sum (x * y) = sum x + sum y
+定理 求和.map_mul
+  结论: 求和 (x * y) = 求和 x + 求和 y
   证明: (@prod (Multiplicative _) _).map_mul _ _
 
 @[simp]
@@ -3393,8 +3393,8 @@ theorem sum.map_one
 @[simp]
 
 中文:
-定理 sum.map_one
-  结论: sum (1 : FreeGroup α) = 0
+定理 求和.map_one
+  结论: 求和 (1 : 自由群 α) = 0
   证明: (@prod (Multiplicative _) _).map_one
 
 @[simp]
@@ -3414,8 +3414,8 @@ theorem sum.map_inv
   proof: (prod : FreeGroup (Multiplicative α) ->* Multiplicative α).map_inv _
 
 中文:
-定理 sum.map_inv
-  结论: sum x⁻¹ = -sum x
+定理 求和.map_inv
+  结论: 求和 x⁻¹ = -求和 x
   证明: (prod : FreeGroup (Multiplicative α) ->* Multiplicative α).map_inv _
 
 Depends on / 依赖: FreeGroup, Multiplicative, map_inv
@@ -3442,7 +3442,7 @@ abbreviation freeGroupEmptyEquivUnit
 
 中文:
 缩写 freeGroupEmptyEquivUnit
-  签名: : FreeGroup Empty ≃ Unit
+  签名: : 自由群 空 ≃ 单元
   定义体: Equiv.ofUnique (FreeGroup Empty) Unit
 
 Depends on / 依赖: Equiv.ofUnique, FreeGroup, ofUnique
@@ -3470,8 +3470,8 @@ definition freeGroupUnitEquivInt
   right_inv x :
 
 中文:
-定义 freeGroupUnitEquivInt
-  签名: : FreeGroup Unit ≃ 整数 where
+定义 freeGroupUnitEquiv整数
+  签名: : 自由群 单元 ≃ 整数 where
   定义体: sum (by
     revert x
     exact ↑(map fun _ => (1 : Int)))
@@ -3528,8 +3528,8 @@ definition equivIntOfUnique
     
 
 中文:
-定义 equivIntOfUnique
-  签名: [Unique α]
+定义 equiv整数OfUnique
+  签名: [唯一 α]
   定义体: sum (map 1 x)
   invFun x := of default ^ x
   left_inv x := by
@@ -3572,8 +3572,8 @@ definition mulEquivIntOfUnique
   map_mul' _ _ := by simp [equivIntOfUnique]
 
 中文:
-定义 mulEquivIntOfUnique
-  签名: [Unique α]
+定义 mulEquiv整数OfUnique
+  签名: [唯一 α]
   定义体: Multiplicative.ofAdd ∘ equivIntOfUnique
   invFun := equivIntOfUnique.symm ∘ Multiplicative.toAdd
   left_inv _ := by simp
@@ -3598,8 +3598,8 @@ instance [Unique
   body: ⟨of default, fun x => ⟨equivIntOfUnique x, equivIntOfUnique.left_inv x⟩⟩
 
 中文:
-实例 [Unique
-  签名: α] : IsCyclic (FreeGroup α)
+实例 [唯一
+  签名: α] : 是循环 (自由群 α)
   定义体: ⟨of default, fun x => ⟨equivIntOfUnique x, equivIntOfUnique.left_inv x⟩⟩
 
 Depends on / 依赖: equivIntOfUnique, equivIntOfUnique.left_inv, left_inv
@@ -3624,8 +3624,8 @@ definition _root_.FreeAddGroup.addEquivIntOfUnique
   right_inv x := by indu
 
 中文:
-定义 _root_.FreeAddGroup.addEquivIntOfUnique
-  签名: [Unique α]
+定义 _root_.自由加法群.addEquiv整数OfUnique
+  签名: [唯一 α]
   定义体: FreeAddGroup.sum (FreeAddGroup.map 1 x)
   invFun x := x • FreeAddGroup.of default
   left_inv x := by
@@ -3660,8 +3660,8 @@ instance [Unique
   ⟨_root_.FreeAddGroup.addEquivIntOfUnique x, _root_.FreeAddGroup.addEquivIntOfUnique.left_inv x⟩⟩
 
 中文:
-实例 [Unique
-  签名: α] : IsAddCyclic (FreeAddGroup α)
+实例 [唯一
+  签名: α] : 是加法循环 (自由加法群 α)
   定义体: ⟨FreeAddGroup.of default, fun x =>
   ⟨_root_.FreeAddGroup.addEquivIntOfUnique x, _root_.FreeAddGroup.addEquivIntOfUnique.left_inv x⟩⟩
 
@@ -3690,7 +3690,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monad FreeGroup.{u}
+  签名: 单子 自由群.{u}
   定义体: of
   map {_α _β f} := map f
   bind {_α _β x f} := lift f x
@@ -3717,7 +3717,7 @@ theorem map_pure
 中文:
 定理 map_pure
   条件: (f : α -> β) (x : α)
-  结论: f < > (pure x : FreeGroup α) = pure (f x)
+  结论: f < > (pure x : 自由群 α) = pure (f x)
   证明: map.of
 
 @[to_additive (attr := simp)]
@@ -3742,7 +3742,7 @@ theorem map_one
 中文:
 定理 map_one
   条件: (f : α -> β)
-  结论: f < > (1 : FreeGroup α) = 1
+  结论: f < > (1 : 自由群 α) = 1
   证明: (map f).map_one
 
 @[to_additive (attr := simp)]
@@ -3766,7 +3766,7 @@ theorem map_mul
 
 中文:
 定理 map_mul
-  条件: (f : α -> β) (x y : FreeGroup α)
+  条件: (f : α -> β) (x y : 自由群 α)
   结论: f < > (x * y) = f < > x * f < > y
   证明: (map f).map_mul x y
 
@@ -3791,7 +3791,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  条件: (f : α -> β) (x : FreeGroup α)
+  条件: (f : α -> β) (x : 自由群 α)
   结论: f < > x⁻¹ = (f <$> x)⁻¹
   证明: (map f).map_inv x
 
@@ -3816,7 +3816,7 @@ theorem pure_bind
 
 中文:
 定理 pure_bind
-  条件: (f : α -> FreeGroup β) (x)
+  条件: (f : α -> 自由群 β) (x)
   结论: pure x >>= f = f x
   证明: lift_apply_of
 
@@ -3841,7 +3841,7 @@ theorem one_bind
 
 中文:
 定理 one_bind
-  条件: (f : α -> FreeGroup β)
+  条件: (f : α -> 自由群 β)
   结论: 1 >>= f = 1
   证明: (lift f).map_one
 
@@ -3866,7 +3866,7 @@ theorem mul_bind
 
 中文:
 定理 mul_bind
-  条件: (f : α -> FreeGroup β) (x y : FreeGroup α)
+  条件: (f : α -> 自由群 β) (x y : 自由群 α)
   结论: x * y >>= f = (x >>= f) * (y >>= f)
   证明: (lift f).map_mul _ _
 
@@ -3891,7 +3891,7 @@ theorem inv_bind
 
 中文:
 定理 inv_bind
-  条件: (f : α -> FreeGroup β) (x : FreeGroup α)
+  条件: (f : α -> 自由群 β) (x : 自由群 α)
   结论: x⁻¹ >>= f = (x >>= f)⁻¹
   证明: (lift f).map_inv _
 
@@ -3919,7 +3919,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulMonad FreeGroup.{u}
+  签名: 合法单子 自由群.{u}
   定义体: LawfulMonad.mk'
   (id_map := fun x =>
     FreeGroup.induction_on x (map_one id) (fun x => map_pure id x) (fun x ih => by rw [map_inv, ih])

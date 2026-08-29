@@ -47,7 +47,7 @@ structure Edge
     - tgt_eq : X.map (δ₂ 0).op edge = x₁  [default: by cat_disch]
 
 中文:
-结构 Edge
+结构 边
   参数: (x₀ x₁ : X _⦋0⦌₂)
   公理与运算 (3 个):
     - edge : X _⦋1⦌₂
@@ -95,7 +95,7 @@ lemma exists_of_simplex
   proof: ⟨_, _, mk' s, rfl⟩
 
 中文:
-引理 exists_of_simplex
+引理 存在_of_simplex
   条件: (s : X _⦋1⦌₂)
   证明: ⟨_, _, mk' s, rfl⟩
 -/
@@ -145,7 +145,7 @@ definition map
 
 中文:
 定义 map
-  签名: {x₀ x₁ : X _⦋0⦌₂} (e : Edge x₀ x₁) (f : X ⟶ Y)
+  签名: {x₀ x₁ : X _⦋0⦌₂} (e : 边 x₀ x₁) (f : X ⟶ Y)
   定义体: f.app _ e.edge
   src_eq := by simp [← NatTrans.naturality_apply]
   tgt_eq := by simp [← NatTrans.naturality_apply]
@@ -194,7 +194,7 @@ instance [Subsingleton
   body: by ext; subsingleton
 
 中文:
-实例 [Subsingleton
+实例 [子单例
   签名: (X _⦋1⦌₂)] {x y
   定义体: by ext; subsingleton
 
@@ -224,7 +224,7 @@ structure CompStruct
     - d₁ : X.map (δ₂ 1).op simplex = e₀₂.edge  [default: by cat_disch]
 
 中文:
-结构 CompStruct
+结构 余mpStruct
   参数: {x₀ x₁ x₂ : X _⦋0⦌₂}
   公理与运算 (4 个):
     - simplex : X _⦋2⦌₂
@@ -262,7 +262,7 @@ lemma exists_of_simplex
   
 
 中文:
-引理 exists_of_simplex
+引理 存在_of_simplex
   条件: (s : X _⦋2⦌₂)
   证明: by
   refine ⟨X.map (Hom.tr (SimplexCategory.const _ _ 0)).op s,
@@ -305,7 +305,7 @@ definition idComp
 
 中文:
 定义 idComp
-  签名: {x y : X _⦋0⦌₂} (e : Edge x y)
+  签名: {x y : X _⦋0⦌₂} (e : 边 x y)
   定义体: X.map (σ₂ 0).op e.edge
   d₂ := by
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_zero]
@@ -350,7 +350,7 @@ definition compId
 
 中文:
 定义 compId
-  签名: {x y : X _⦋0⦌₂} (e : Edge x y)
+  签名: {x y : X _⦋0⦌₂} (e : 边 x y)
   定义体: X.map (σ₂ 1).op e.edge
   d₂ := by
     rw [← Functor.map_comp_apply]; rw [← op_comp]; rw [δ₂_two_comp_σ₂_one]

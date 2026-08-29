@@ -42,8 +42,8 @@ theorem FiniteField.Matrix.charpoly_pow_card
     rw
 
 中文:
-定理 FiniteField.Matrix.charpoly_pow_card
-  条件: {K : 类型} [Field K] [Fintype K] (M : Matrix n n K)
+定理 FiniteField.矩阵.charpoly_pow_card
+  条件: {K : 类型} [域 K] [有限类型 K] (M : 矩阵 n n K)
   证明: by
   cases (isEmpty_or_nonempty n).symm
   · obtain ⟨p, hp⟩ := CharP.exists K
@@ -88,7 +88,7 @@ theorem ZMod.charpoly_pow_card
 
 中文:
 定理 ZMod.charpoly_pow_card
-  条件: {p : 自然数} [Fact p.Prime] (M : Matrix n n (ZMod p))
+  条件: {p : 自然数} [Fact p.素] (M : 矩阵 n n (ZMod p))
   证明: by
   have h := FiniteField.Matrix.charpoly_pow_card M
   rwa [ZMod.card] at h
@@ -113,7 +113,7 @@ theorem FiniteField.trace_pow_card
 
 中文:
 定理 FiniteField.trace_pow_card
-  条件: {K : 类型} [Field K] [Fintype K] (M : Matrix n n K)
+  条件: {K : 类型} [域 K] [有限类型 K] (M : 矩阵 n n K)
   证明: by
   cases isEmpty_or_nonempty n
   · simp [Matrix.trace]
@@ -137,7 +137,7 @@ theorem ZMod.trace_pow_card
 
 中文:
 定理 ZMod.trace_pow_card
-  条件: {p : 自然数} [Fact p.Prime] (M : Matrix n n (ZMod p))
+  条件: {p : 自然数} [Fact p.素] (M : 矩阵 n n (ZMod p))
   证明: by have h := FiniteField.trace_pow_card M; rwa [ZMod.card] at h
 
 Depends on / 依赖: FiniteField, FiniteField.trace_pow_card, ZMod.card, trace_pow_card

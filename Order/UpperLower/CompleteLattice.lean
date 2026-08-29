@@ -45,7 +45,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (UpperSet α) α
+  签名: 集合状 (上集 α) α
   定义体: UpperSet.carrier
   coe_injective s t h := by cases s; cases t; congr
 
@@ -72,7 +72,7 @@ initialize_simps_projections LowerSet (carrier -> coe, as_prefix coe)
 
 中文:
 定义 Simps.coe
-  签名: (s : UpperSet α)
+  签名: (s : 上集 α)
   定义体: s
 
 initialize_simps_projections UpperSet (carrier -> coe, as_prefix coe)
@@ -99,8 +99,8 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {s t : UpperSet α}
-  结论: (s : Set α) = t -> s = t
+  条件: {s t : 上集 α}
+  结论: (s : 集合 α) = t -> s = t
   证明: SetLike.ext'
 
 @[to_dual (attr := simp)]
@@ -124,7 +124,7 @@ theorem carrier_eq_coe
 
 中文:
 定理 carrier_eq_coe
-  条件: (s : UpperSet α)
+  条件: (s : 上集 α)
   结论: s.carrier = s
   证明: rfl
 
@@ -147,8 +147,8 @@ lemma upper
 
 中文:
 引理 upper
-  条件: (s : UpperSet α)
-  结论: IsUpperSet (s : Set α)
+  条件: (s : 上集 α)
+  结论: 是上集 (s : 集合 α)
   证明: s.upper'
 
 @[to_dual (attr := simp, norm_cast)]
@@ -169,7 +169,7 @@ lemma coe_mk
 
 中文:
 引理 coe_mk
-  条件: (s : Set α) (hs)
+  条件: (s : 集合 α) (hs)
   结论: mk s hs = s
   证明: rfl
 
@@ -189,7 +189,7 @@ lemma mem_mk
 
 中文:
 引理 mem_mk
-  条件: {s : Set α} (hs) {a : α}
+  条件: {s : 集合 α} (hs) {a : α}
   结论: a in mk s hs ↔ a in s
   证明: Iff.rfl
 
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (UpperSet α)
+  签名: 最大值 (上集 α)
   定义体: ⟨fun s t => ⟨s inter t, s.upper.inter t.upper⟩⟩
 
 @[to_dual]
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (UpperSet α)
+  签名: 最小值 (上集 α)
   定义体: ⟨fun s t => ⟨s union t, s.upper.union t.upper⟩⟩
 
 @[to_dual]
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (UpperSet α)
+  签名: 顶元素 (上集 α)
   定义体: ⟨⟨∅, isUpperSet_empty⟩⟩
 
 @[to_dual]
@@ -281,7 +281,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (UpperSet α)
+  签名: 底元素 (上集 α)
   定义体: ⟨⟨univ, isUpperSet_univ⟩⟩
 
 @[to_dual]
@@ -304,7 +304,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (UpperSet α)
+  签名: 上确界集 (上集 α)
   定义体: ⟨fun S => ⟨⋂ s in S, ↑s, isUpperSet_iInter₂ fun s _ => s.upper⟩⟩
 
 @[to_dual]
@@ -325,7 +325,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (UpperSet α)
+  签名: 下确界集 (上集 α)
   定义体: ⟨fun S => ⟨⋃ s in S, ↑s, isUpperSet_iUnion₂ fun s _ => s.upper⟩⟩
 
 Depends on / 依赖: s.upper
@@ -343,7 +343,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (UpperSet α)
+  签名: 偏序 (上集 α)
   定义体: PartialOrder.lift _ (toDual.injective.comp SetLike.coe_injective)
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, SetLike, SetLike.coe_injective, coe_injective, injective, toDual, toDual.injective.comp
@@ -362,7 +362,7 @@ instance completeLattice
 
 中文:
 实例 completeLattice
-  签名: : CompleteLattice (UpperSet α)
+  签名: : 完备格 (上集 α)
   定义体: (toDual.injective.comp SetLike.coe_injective).completeLattice _
     .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl) rfl rfl
 
@@ -386,7 +386,7 @@ instance completelyDistribLattice
 
 中文:
 实例 completelyDistribLattice
-  签名: : CompletelyDistribLattice (UpperSet α)
+  签名: : 余mpletelyDistrib格 (上集 α)
   定义体: .ofMinimalAxioms
     (toDual.injective.comp SetLike.coe_injective).completelyDistribLatticeMinimalAxioms .of _
       (fun _ => rfl) (fun _ => rfl)
@@ -412,8 +412,8 @@ instance _root_.LowerSet.instPartialOrder
 @[to_dual existing]
 
 中文:
-实例 _root_.LowerSet.instPartialOrder
-  签名: : PartialOrder (LowerSet α)
+实例 _root_.下集.instPartialOrder
+  签名: : 偏序 (下集 α)
   定义体: PartialOrder.lift _ SetLike.coe_injective
 
 @[to_dual existing]
@@ -436,8 +436,8 @@ instance _root_.LowerSet.completeLattice
 @[to_dual existing]
 
 中文:
-实例 _root_.LowerSet.completeLattice
-  签名: : CompleteLattice (LowerSet α)
+实例 _root_.下集.completeLattice
+  签名: : 完备格 (下集 α)
   定义体: SetLike.coe_injective.completeLattice _
     .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ => rfl) rfl rfl
 
@@ -462,8 +462,8 @@ instance _root_.LowerSet.completelyDistribLattice
 @[to_dual]
 
 中文:
-实例 _root_.LowerSet.completelyDistribLattice
-  签名: : CompletelyDistribLattice (LowerSet α)
+实例 _root_.下集.completelyDistribLattice
+  签名: : 余mpletelyDistrib格 (下集 α)
   定义体: .ofMinimalAxioms SetLike.coe_injective.completelyDistribLatticeMinimalAxioms .of _
     (fun _ => rfl) (fun _ => rfl)
 
@@ -488,7 +488,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (UpperSet α)
+  签名: 可居 (上集 α)
   定义体: ⟨⊥⟩
 
 @[to_dual (attr := simp 1100, norm_cast)]
@@ -509,7 +509,7 @@ theorem coe_subset_coe
 
 中文:
 定理 coe_subset_coe
-  结论: (s : Set α) subseteq t ↔ t <= s
+  结论: (s : 集合 α) subseteq t ↔ t <= s
   证明: Iff.rfl
 
 @[to_dual (attr := simp 1100, norm_cast)]
@@ -532,7 +532,7 @@ lemma coe_ssubset_coe
 
 中文:
 引理 coe_ssubset_coe
-  结论: (s : Set α) ⊂ t ↔ t < s
+  结论: (s : 集合 α) ⊂ t ↔ t < s
   证明: Iff.rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -554,7 +554,7 @@ theorem coe_top
 
 中文:
 定理 coe_top
-  结论: ((⊤ : UpperSet α) : Set α) = ∅
+  结论: ((⊤ : 上集 α) : 集合 α) = ∅
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -575,7 +575,7 @@ theorem coe_bot
 
 中文:
 定理 coe_bot
-  结论: ((⊥ : UpperSet α) : Set α) = univ
+  结论: ((⊥ : 上集 α) : 集合 α) = univ
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -596,7 +596,7 @@ theorem coe_eq_univ
 
 中文:
 定理 coe_eq_univ
-  结论: (s : Set α) = univ ↔ s = ⊥
+  结论: (s : 集合 α) = univ ↔ s = ⊥
   证明: by simp [SetLike.ext'_iff]
 
 @[to_dual (attr := simp, norm_cast)]
@@ -618,7 +618,7 @@ theorem coe_eq_empty
 
 中文:
 定理 coe_eq_empty
-  结论: (s : Set α) = ∅ ↔ s = ⊤
+  结论: (s : 集合 α) = ∅ ↔ s = ⊤
   证明: by simp [SetLike.ext'_iff]
 
 @[to_dual (attr := simp, norm_cast)]
@@ -640,7 +640,7 @@ lemma coe_nonempty
 
 中文:
 引理 coe_nonempty
-  结论: (s : Set α).Nonempty ↔ s != ⊤
+  结论: (s : 集合 α).非空 ↔ s != ⊤
   证明: nonempty_iff_ne_empty.trans coe_eq_empty.not
 
 @[to_dual (attr := simp, norm_cast)]
@@ -664,8 +664,8 @@ theorem coe_sup
 
 中文:
 定理 coe_sup
-  条件: (s t : UpperSet α)
-  结论: (↑(s ⊔ t) : Set α) = (s : Set α) inter t
+  条件: (s t : 上集 α)
+  结论: (↑(s ⊔ t) : 集合 α) = (s : 集合 α) inter t
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -687,8 +687,8 @@ theorem coe_inf
 
 中文:
 定理 coe_inf
-  条件: (s t : UpperSet α)
-  结论: (↑(s ⊓ t) : Set α) = (s : Set α) union t
+  条件: (s t : 上集 α)
+  结论: (↑(s ⊓ t) : 集合 α) = (s : 集合 α) union t
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -710,8 +710,8 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: (S : Set (UpperSet α))
-  结论: (↑(sSup S) : Set α) = ⋂ s in S, ↑s
+  条件: (S : 集合 (上集 α))
+  结论: (↑(sSup S) : 集合 α) = ⋂ s in S, ↑s
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -733,8 +733,8 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (S : Set (UpperSet α))
-  结论: (↑(sInf S) : Set α) = ⋃ s in S, ↑s
+  条件: (S : 集合 (上集 α))
+  结论: (↑(sInf S) : 集合 α) = ⋃ s in S, ↑s
   证明: rfl
 
 @[to_dual (attr := simp, norm_cast)]
@@ -756,8 +756,8 @@ theorem coe_iSup
 
 中文:
 定理 coe_iSup
-  条件: (f : ι -> UpperSet α)
-  结论: (↑(⨆ i, f i) : Set α) = ⋂ i, f i
+  条件: (f : ι -> 上集 α)
+  结论: (↑(⨆ i, f i) : 集合 α) = ⋂ i, f i
   证明: by simp [iSup]
 
 @[to_dual (attr := simp, norm_cast)]
@@ -778,8 +778,8 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: (f : ι -> UpperSet α)
-  结论: (↑(⨅ i, f i) : Set α) = ⋃ i, f i
+  条件: (f : ι -> 上集 α)
+  结论: (↑(⨅ i, f i) : 集合 α) = ⋃ i, f i
   证明: by simp [iInf]
 
 @[to_dual (attr := norm_cast)]
@@ -799,7 +799,7 @@ theorem coe_iSup₂
 
 中文:
 定理 coe_iSup₂
-  条件: (f : 对任意 i, κ i -> UpperSet α)
+  条件: (f : 对任意 i, κ i -> 上集 α)
   证明: by simp
 
 @[to_dual (attr := norm_cast)]
@@ -820,7 +820,7 @@ theorem coe_iInf₂
 
 中文:
 定理 coe_iInf₂
-  条件: (f : 对任意 i, κ i -> UpperSet α)
+  条件: (f : 对任意 i, κ i -> 上集 α)
   证明: by simp
 
 @[to_dual (attr := simp)]
@@ -841,7 +841,7 @@ theorem notMem_top
 
 中文:
 定理 notMem_top
-  结论: a ∉ (⊤ : UpperSet α)
+  结论: a ∉ (⊤ : 上集 α)
   证明: id
 
 @[to_dual (attr := simp)]
@@ -862,7 +862,7 @@ theorem mem_bot
 
 中文:
 定理 mem_bot
-  结论: a in (⊥ : UpperSet α)
+  结论: a in (⊥ : 上集 α)
   证明: trivial
 
 @[to_dual (attr := simp)]
@@ -976,7 +976,7 @@ theorem mem_iSup_iff
 
 中文:
 定理 mem_iSup_iff
-  条件: {f : ι -> UpperSet α}
+  条件: {f : ι -> 上集 α}
   结论: (a in ⨆ i, f i) ↔ 对任意 i, a in f i
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_iSup]
@@ -1006,7 +1006,7 @@ theorem mem_iInf_iff
 
 中文:
 定理 mem_iInf_iff
-  条件: {f : ι -> UpperSet α}
+  条件: {f : ι -> 上集 α}
   结论: (a in ⨅ i, f i) ↔ 存在 i, a in f i
   证明: by
   rw [← SetLike.mem_coe]; rw [coe_iInf]
@@ -1035,7 +1035,7 @@ theorem mem_iSup₂_iff
 
 中文:
 定理 mem_iSup₂_iff
-  条件: {f : 对任意 i, κ i -> UpperSet α}
+  条件: {f : 对任意 i, κ i -> 上集 α}
   结论: (a in ⨆ (i) (j), f i j) ↔ 对任意 i j, a in f i j
   证明: by
   simp
@@ -1060,7 +1060,7 @@ theorem mem_iInf₂_iff
 
 中文:
 定理 mem_iInf₂_iff
-  条件: {f : 对任意 i, κ i -> UpperSet α}
+  条件: {f : 对任意 i, κ i -> 上集 α}
   结论: (a in ⨅ (i) (j), f i j) ↔ 存在 i j, a in f i j
   证明: by
   simp
@@ -1082,7 +1082,7 @@ theorem codisjoint_coe
 
 中文:
 定理 codisjoint_coe
-  结论: Codisjoint (s : Set α) t ↔ Disjoint s t
+  结论: Codisjoint (s : 集合 α) t ↔ Disjoint s t
   证明: by
   simp [disjoint_iff, codisjoint_iff, SetLike.ext'_iff]
 
@@ -1107,7 +1107,7 @@ definition compl
 
 中文:
 定义 compl
-  签名: (s : UpperSet α)
+  签名: (s : 上集 α)
   定义体: ⟨sᶜ, s.upper.compl⟩
 
 @[to_dual (attr := simp)]
@@ -1131,8 +1131,8 @@ theorem coe_compl
 
 中文:
 定理 coe_compl
-  条件: (s : UpperSet α)
-  结论: (s.compl : Set α) = (↑s)ᶜ
+  条件: (s : 上集 α)
+  结论: (s.compl : 集合 α) = (↑s)ᶜ
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1212,7 +1212,7 @@ theorem compl_sup
 
 中文:
 定理 compl_sup
-  条件: (s t : UpperSet α)
+  条件: (s t : 上集 α)
   结论: (s ⊔ t).compl = s.compl ⊔ t.compl
   证明: LowerSet.ext compl_inf
 
@@ -1235,7 +1235,7 @@ theorem compl_inf
 
 中文:
 定理 compl_inf
-  条件: (s t : UpperSet α)
+  条件: (s t : 上集 α)
   结论: (s ⊓ t).compl = s.compl ⊓ t.compl
   证明: LowerSet.ext compl_sup
 
@@ -1257,7 +1257,7 @@ theorem compl_top
 
 中文:
 定理 compl_top
-  结论: (⊤ : UpperSet α).compl = ⊤
+  结论: (⊤ : 上集 α).compl = ⊤
   证明: LowerSet.ext compl_empty
 
 @[to_dual (attr := simp)]
@@ -1278,7 +1278,7 @@ theorem compl_bot
 
 中文:
 定理 compl_bot
-  结论: (⊥ : UpperSet α).compl = ⊥
+  结论: (⊥ : 上集 α).compl = ⊥
   证明: LowerSet.ext compl_univ
 
 @[to_dual (attr := simp)]
@@ -1300,8 +1300,8 @@ theorem compl_sSup
 
 中文:
 定理 compl_sSup
-  条件: (S : Set (UpperSet α))
-  结论: (sSup S).compl = ⨆ s in S, UpperSet.compl s
+  条件: (S : 集合 (上集 α))
+  结论: (sSup S).compl = ⨆ s in S, 上集.compl s
   证明: LowerSet.ext by simp only [coe_compl, coe_sSup, compl_iInter₂, LowerSet.coe_iSup₂]
 
 @[to_dual (attr := simp)]
@@ -1323,8 +1323,8 @@ theorem compl_sInf
 
 中文:
 定理 compl_sInf
-  条件: (S : Set (UpperSet α))
-  结论: (sInf S).compl = ⨅ s in S, UpperSet.compl s
+  条件: (S : 集合 (上集 α))
+  结论: (sInf S).compl = ⨅ s in S, 上集.compl s
   证明: LowerSet.ext by simp only [coe_compl, coe_sInf, compl_iUnion₂, LowerSet.coe_iInf₂]
 
 @[to_dual (attr := simp)]
@@ -1346,7 +1346,7 @@ theorem compl_iSup
 
 中文:
 定理 compl_iSup
-  条件: (f : ι -> UpperSet α)
+  条件: (f : ι -> 上集 α)
   结论: (⨆ i, f i).compl = ⨆ i, (f i).compl
   证明: LowerSet.ext by simp only [coe_compl, coe_iSup, compl_iInter, LowerSet.coe_iSup]
 
@@ -1369,7 +1369,7 @@ theorem compl_iInf
 
 中文:
 定理 compl_iInf
-  条件: (f : ι -> UpperSet α)
+  条件: (f : ι -> 上集 α)
   结论: (⨅ i, f i).compl = ⨅ i, (f i).compl
   证明: LowerSet.ext by simp only [coe_compl, coe_iInf, compl_iUnion, LowerSet.coe_iInf]
 
@@ -1391,7 +1391,7 @@ theorem compl_iSup₂
 
 中文:
 定理 compl_iSup₂
-  条件: (f : 对任意 i, κ i -> UpperSet α)
+  条件: (f : 对任意 i, κ i -> 上集 α)
   证明: by simp
 
 @[to_dual]
@@ -1410,7 +1410,7 @@ theorem compl_iInf₂
 
 中文:
 定理 compl_iInf₂
-  条件: (f : 对任意 i, κ i -> UpperSet α)
+  条件: (f : 对任意 i, κ i -> 上集 α)
   证明: by simp
 -/
 theorem compl_iInf₂ (f : forall i, κ i -> UpperSet α) :
@@ -1432,7 +1432,7 @@ definition _root_.upperSetIsoLowerSet
 
 中文:
 定义 _root_.upperSetIsoLowerSet
-  签名: : UpperSet α ≃o LowerSet α where
+  签名: : 上集 α ≃o 下集 α where
   定义体: UpperSet.compl
   invFun := LowerSet.compl
   left_inv := UpperSet.compl_compl
@@ -1464,7 +1464,7 @@ instance total_le
 
 中文:
 实例 total_le
-  签名: : @Std.Total (UpperSet α) (· <= ·)
+  签名: : @Std.全 (上集 α) (· <= ·)
   定义体: ⟨fun s t => t.upper.total s.upper⟩
 
 Depends on / 依赖: s.upper, t.upper.total
@@ -1482,7 +1482,7 @@ instance instLinearOrder
 
 中文:
 实例 instLinearOrder
-  签名: : LinearOrder (UpperSet α)
+  签名: : 线性序 (上集 α)
   定义体: by
   classical exact Lattice.toLinearOrder _
 
@@ -1503,7 +1503,7 @@ instance instCompleteLinearOrder
 
 中文:
 实例 instCompleteLinearOrder
-  签名: : CompleteLinearOrder (UpperSet α)
+  签名: : 完备线性序 (上集 α)
   定义体: { completelyDistribLattice, instLinearOrder with }
 
 @[to_dual none]
@@ -1525,8 +1525,8 @@ instance _root_.LowerSet.total_le
 @[to_dual existing]
 
 中文:
-实例 _root_.LowerSet.total_le
-  签名: : @Std.Total (LowerSet α) (· <= ·)
+实例 _root_.下集.total_le
+  签名: : @Std.全 (下集 α) (· <= ·)
   定义体: ⟨fun s t => s.lower.total t.lower⟩
 
 @[to_dual existing]
@@ -1549,8 +1549,8 @@ instance _root_.LowerSet.instLinearOrder
 @[to_dual existing]
 
 中文:
-实例 _root_.LowerSet.instLinearOrder
-  签名: : LinearOrder (LowerSet α)
+实例 _root_.下集.instLinearOrder
+  签名: : 线性序 (下集 α)
   定义体: by
   classical exact Lattice.toLinearOrder _
 
@@ -1571,8 +1571,8 @@ instance _root_.LowerSet.instCompleteLinearOrder
   body: { LowerSet.completelyDistribLattice, LowerSet.instLinearOrder with }
 
 中文:
-实例 _root_.LowerSet.instCompleteLinearOrder
-  签名: : CompleteLinearOrder (LowerSet α)
+实例 _root_.下集.instCompleteLinearOrder
+  签名: : 完备线性序 (下集 α)
   定义体: { LowerSet.completelyDistribLattice, LowerSet.instLinearOrder with }
 
 Depends on / 依赖: LowerSet, LowerSet.completelyDistribLattice, LowerSet.instLinearOrder, completelyDistribLattice, instLinearOrder
@@ -1635,7 +1635,7 @@ theorem coe_map_apply
 
 中文:
 定理 coe_map_apply
-  条件: (f : α ≃o β) (s : UpperSet α)
+  条件: (f : α ≃o β) (s : 上集 α)
   结论: map f s = f '' s
   证明: rfl
 @[to_dual (attr := simp)]
@@ -1653,7 +1653,7 @@ theorem coe_map_symm_apply
 
 中文:
 定理 coe_map_symm_apply
-  条件: (f : α ≃o β) (s : UpperSet β)
+  条件: (f : α ≃o β) (s : 上集 β)
   结论: (map f).symm s = f ⁻¹' s
   证明: rfl
 -/
@@ -1780,7 +1780,7 @@ theorem coe_map
 
 中文:
 定理 coe_map
-  结论: (map f s : Set β) = f '' s
+  结论: (map f s : 集合 β) = f '' s
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -1799,7 +1799,7 @@ theorem compl_map
 
 中文:
 定理 compl_map
-  结论: (map f s).compl = LowerSet.map f s.compl
+  结论: (map f s).compl = 下集.map f s.compl
   证明: SetLike.coe_injective (Set.image_compl_eq f.bijective).symm
 
 Depends on / 依赖: Set.image_compl_eq, SetLike, SetLike.coe_injective, bijective, coe_injective, f.bijective, image_compl_eq

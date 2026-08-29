@@ -174,7 +174,7 @@ definition firstExpr?
 
 中文:
 定义 firstExpr?
-  签名: {α} (msg : MessageData) (f : Expr -> MetaM (Option α))
+  签名: {α} (msg : MessageData) (f : Expr -> MetaM (选项类型 α))
   定义体: do
   for (ppCtx, e) in msg.exprs do
     let a@(some _) ← ppCtx.runMetaM (f e) | continue

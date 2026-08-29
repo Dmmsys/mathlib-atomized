@@ -92,8 +92,8 @@ class IsJordan
     - rmul_comm_rmul_rmul : forall a b : A, b * a * (a * a) = b * (a * a) * a
 
 中文:
-类 IsJordan
-  参数: [Mul A]
+类 是Jordan
+  参数: [乘法 A]
   公理与运算 (5 个):
     - lmul_comm_rmul : 对任意 a b : A, a * b * a = a * (b * a)
     - lmul_lmul_comm_lmul : 对任意 a b : A, a * a * (a * b) = a * (a * a * b)
@@ -118,8 +118,8 @@ class IsCommJordan
     - lmul_comm_rmul_rmul : forall a b : A, a * b * (a * a) = a * (b * (a * a))
 
 中文:
-类 IsCommJordan
-  参数: [CommMagma A]
+类 是交换Jordan
+  参数: [交换原群 A]
   公理与运算 (1 个):
     - lmul_comm_rmul_rmul : 对任意 a b : A, a * b * (a * a) = a * (b * (a * a))
 -/
@@ -311,7 +311,7 @@ theorem two_nsmul_lie_lmul_lmul_add_eq_lie_lmul_lmul_add
 
 中文:
 定理 two_nsmul_lie_lmul_lmul_add_eq_lie_lmul_lmul_add
-  条件: [IsCommJordan A] (a b : A)
+  条件: [是交换Jordan A] (a b : A)
   证明: by
   suffices 2 • ⁅L a, L (a * b)⁆ + 2 • ⁅L b, L (b * a)⁆ + ⁅L b, L (a * a)⁆ + ⁅L a, L (b * b)⁆ = 0 by
     rwa [← sub_eq_zero, ← sub_sub, sub_eq_add_neg, sub_eq_add_neg, lie_skew, lie_skew, nsmul_add]

@@ -131,7 +131,7 @@ theorem le_prod_of_submultiplicative_on_pred_of_nonneg
 
 中文:
 定理 le_prod_of_submultiplicative_on_pred_of_nonneg
-  结论: {M : 类型} [CommMonoid M] (f : M -> R)
+  结论: {M : 类型} [交换幺半群 M] (f : M -> R)
   证明: by
   apply le_trans (Multiset.le_prod_of_submultiplicative_on_pred_of_nonneg f p h_nonneg h_one
     h_mul hp_mul _ ?_) (by simp [Multiset.map_map])
@@ -163,7 +163,7 @@ theorem le_prod_of_submultiplicative_of_nonneg
 
 中文:
 定理 le_prod_of_submultiplicative_of_nonneg
-  结论: {M : 类型} [CommMonoid M]
+  结论: {M : 类型} [交换幺半群 M]
   证明: le_trans (Multiset.le_prod_of_submultiplicative_of_nonneg f h_nonneg h_one h_mul _)
     (by simp [Multiset.map_map])
 
@@ -190,7 +190,7 @@ theorem sum_mul_self_eq_zero_iff
 
 中文:
 定理 sum_mul_self_eq_zero_iff
-  结论: [Semiring R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   rw [sum_eq_zero_iff_of_nonneg fun _ _ => mul_self_nonneg _]
   simp
@@ -215,7 +215,7 @@ lemma abs_prod
 
 中文:
 引理 abs_prod
-  条件: [CommRing R] [LinearOrder R] [IsStrictOrderedRing R] (s : Finset ι) (f : ι -> R)
+  条件: [交换环 R] [线性序 R] [是StrictOrdered环 R] (s : 有限集 ι) (f : ι -> R)
   证明: map_prod absHom _ _
 
 @[simp, norm_cast]
@@ -236,8 +236,8 @@ theorem PNat.coe_prod
   proof: map_prod PNat.coeMonoidHom _ _
 
 中文:
-定理 PNat.coe_prod
-  条件: {ι : 类型} (f : ι -> 自然数+) (s : Finset ι)
+定理 正自然数.coe_prod
+  条件: {ι : 类型} (f : ι -> 自然数+) (s : 有限集 ι)
   证明: map_prod PNat.coeMonoidHom _ _
 
 Depends on / 依赖: PNat.coeMonoidHom, coeMonoidHom, map_prod
@@ -259,8 +259,8 @@ lemma _root_.CanonicallyOrderedAdd.prod_pos
   proof: CanonicallyOrderedAdd.multiset_prod_pos.trans Multiset.forall_mem_map_iff
 
 中文:
-引理 _root_.CanonicallyOrderedAdd.prod_pos
-  条件: [NoZeroDivisors R] [Nontrivial R]
+引理 _root_.典范有序加法.prod_pos
+  条件: [无零因子 R] [非平凡 R]
   证明: CanonicallyOrderedAdd.multiset_prod_pos.trans Multiset.forall_mem_map_iff
 -/
 @[simp] lemma _root_.CanonicallyOrderedAdd.prod_pos [NoZeroDivisors R] [Nontrivial R] :
@@ -318,7 +318,7 @@ lemma sum_sq_le_sum_mul_sum_of_sq_le_mul
 
 中文:
 引理 sum_sq_le_sum_mul_sum_of_sq_le_mul
-  结论: [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [交换半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   obtain h | h := (sum_nonneg hg).eq_or_lt'
   · have ht' : ∑ i in s, r i = 0 := sum_eq_zero fun i hi => by
@@ -366,7 +366,7 @@ lemma sum_sq_le_sum_mul_sum_of_sq_eq_mul
 
 中文:
 引理 sum_sq_le_sum_mul_sum_of_sq_eq_mul
-  结论: [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [交换半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: sum_sq_le_sum_mul_sum_of_sq_le_mul s hf hg (fun i hi => (ht i hi).le)
 
 Depends on / 依赖: sum_sq_le_sum_mul_sum_of_sq_le_mul
@@ -388,7 +388,7 @@ lemma sum_mul_sq_le_sq_mul_sq
 
 中文:
 引理 sum_mul_sq_le_sq_mul_sq
-  结论: [CommSemiring R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [交换半环 R] [线性序 R] [是StrictOrdered环 R]
   证明: sum_sq_le_sum_mul_sum_of_sq_le_mul s
     (fun _ _ => sq_nonneg _) (fun _ _ => sq_nonneg _) (fun _ _ => (mul_pow ..).le)
 
@@ -415,7 +415,7 @@ theorem sq_sum_div_le_sum_sq_div
 
 中文:
 定理 sq_sum_div_le_sum_sq_div
-  结论: [Semifield R] [LinearOrder R] [IsStrictOrderedRing R]
+  结论: [半域 R] [线性序 R] [是StrictOrdered环 R]
   证明: by
   have hg' : forall i in s, 0 <= g i := fun i hi => (hg i hi).le
   have H : forall i in s, 0 <= f i ^ 2 / g i := fun i hi => div_nonneg (sq_nonneg _) (hg' i hi)
@@ -451,8 +451,8 @@ lemma AbsoluteValue.sum_le
   proof: Finset.le_sum_of_subadditive abv (map_zero _).le abv.add_le _ _
 
 中文:
-引理 AbsoluteValue.sum_le
-  结论: [Semiring R] [Semiring S] [PartialOrder S] [IsOrderedRing S]
+引理 绝对值.sum_le
+  结论: [半环 R] [半环 S] [偏序 S] [是Ordered环 S]
   证明: Finset.le_sum_of_subadditive abv (map_zero _).le abv.add_le _ _
 
 Depends on / 依赖: Finset, Finset.le_sum_of_subadditive, abv.add_le, add_le, le_sum_of_subadditive, map_zero
@@ -477,8 +477,8 @@ nonrec lemma AbsoluteValue.map_prod [CommSemiring R] [Nontrivial R]
   map_prod abv f
 
 中文:
-引理 IsAbsoluteValue.abv_sum
-  结论: [Semiring R] [Semiring S] [PartialOrder S] [IsOrderedRing S]
+引理 是绝对值.abv_sum
+  结论: [半环 R] [半环 S] [偏序 S] [是Ordered环 S]
   证明: (IsAbsoluteValue.toAbsoluteValue abv).sum_le _ _
 
 nonrec lemma AbsoluteValue.map_prod [CommSemiring R] [Nontrivial R]
@@ -509,8 +509,8 @@ lemma IsAbsoluteValue.map_prod
   proof: (IsAbsoluteValue.toAbsoluteValue abv).map_prod _ _
 
 中文:
-引理 IsAbsoluteValue.map_prod
-  结论: [CommSemiring R] [Nontrivial R]
+引理 是绝对值.map_prod
+  结论: [交换半环 R] [非平凡 R]
   证明: (IsAbsoluteValue.toAbsoluteValue abv).map_prod _ _
 
 Depends on / 依赖: IsAbsoluteValue, IsAbsoluteValue.toAbsoluteValue, map_prod, toAbsoluteValue

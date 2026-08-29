@@ -53,7 +53,7 @@ instance :
 
 中文:
 实例 :
-  签名: ZeroLEOneClass OrderType
+  签名: ZeroLEOne类 序型
   定义体: ⟨OrderType.zero_le _⟩
 
 Depends on / 依赖: OrderType, OrderType.zero_le, zero_le
@@ -78,7 +78,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add OrderType.{u}
+  签名: 加法 序型.{u}
   定义体: o₁ + o₂
 
 @[simp]
@@ -97,7 +97,7 @@ lemma type_lex_sum
 
 中文:
 引理 type_lex_sum
-  条件: (α : 类型u) (β : 类型v) [LinearOrder α] [LinearOrder β]
+  条件: (α : 类型u) (β : 类型v) [线性序 α] [线性序 β]
   证明: by simp [HAdd.hAdd]
 
 Depends on / 依赖: HAdd.hAdd
@@ -121,7 +121,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddMonoid OrderType.{u}
+  签名: 加法幺半群 序型.{u}
   定义体: inductionOn₃ o₁ o₂ o₃ fun α _ β _ γ _ => by
       simp only [← type_lex_sum, (OrderIso.sumLexAssoc α β γ).type_congr]
   zero_add o :=
@@ -163,7 +163,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul OrderType.{u}
+  签名: 乘法 序型.{u}
   定义体: o₁ * o₂
 
 @[simp]
@@ -182,7 +182,7 @@ lemma type_lex_prod
 
 中文:
 引理 type_lex_prod
-  条件: (α : 类型u) (β : 类型v) [LinearOrder α] [LinearOrder β]
+  条件: (α : 类型u) (β : 类型v) [线性序 α] [线性序 β]
   证明: by simp [HMul.hMul]
 
 Depends on / 依赖: HMul.hMul
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid OrderType.{u}
+  签名: 幺半群 序型.{u}
   定义体: inductionOn₃ o₁ o₂ o₃ fun α _ β _ γ _ => by
       simp only [← type_lex_prod]
       exact (Prod.Lex.prodLexAssoc γ β α).symm.type_congr
@@ -250,7 +250,7 @@ definition card
 
 中文:
 定义 card
-  签名: (o : OrderType)
+  签名: (o : 序型)
   定义体: o.liftOn (fun α _ => #α)
     fun _ _ _ _ hab => mk_congr (type_eq_type.mp hab).some.toEquiv
 
@@ -277,7 +277,7 @@ theorem card_type
 
 中文:
 定理 card_type
-  条件: {α : 类型u} [LinearOrder α]
+  条件: {α : 类型u} [线性序 α]
   结论: card (type α) = #α
   证明: by
   rw [card]; rw [liftOn_type]
@@ -302,7 +302,7 @@ theorem card_mono
 
 中文:
 定理 card_mono
-  条件: {o₁ o₂ : OrderType}
+  条件: {o₁ o₂ : 序型}
   结论: o₁ <= o₂ -> card o₁ <= card o₂
   证明: inductionOn₂ o₁ o₂ fun _ _ _ _ hle => by
     simp [card, (type_le_type_iff.mp hle).some.cardinal_le]
@@ -323,7 +323,7 @@ theorem card_monotone
 
 中文:
 定理 card_monotone
-  结论: Monotone card
+  结论: 递增 card
   证明: @card_mono
 
 Depends on / 依赖: card_mono
@@ -378,7 +378,7 @@ instance :
 
 中文:
 实例 :
-  签名: LeftDistribClass OrderType
+  签名: LeftDistrib类 序型
   定义体: by
     refine inductionOn₃ a b c (fun _ _ _ _ _ _ => ?_)
     simp only [← type_lex_prod, ← type_lex_sum]
@@ -402,7 +402,7 @@ definition eta
 
 中文:
 定义 eta
-  签名: : OrderType
+  签名: : 序型
   定义体: type Rat
 -/
 def eta : OrderType := type Rat
@@ -425,7 +425,7 @@ recommended_spelling "theta" for "θ" in [theta, «termθ»]
 
 中文:
 定义 theta
-  签名: : OrderType
+  签名: : 序型
   定义体: type Real
 
 @[inherit_doc]

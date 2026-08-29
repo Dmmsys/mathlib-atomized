@@ -30,7 +30,7 @@ map f := Frm.ofHom Opens.comap (Quiver.Hom.unop f).hom
 
 中文:
 定义 topCatOpToFrm
-  签名: : TopCatᵒᵖ ⥤ Frm where
+  签名: : TopCatᵒᵖ ⥤ 框架 where
   定义体: Frm.of (Opens (unop X : TopCat))
 map f := Frm.ofHom Opens.comap (Quiver.Hom.unop f).hom
 
@@ -53,7 +53,7 @@ Opens.comap_injective (β := (unop X).toTop) FrameHom.ext
 
 中文:
 实例 CompHausOpToFrame.faithful
-  签名: : (compHausToTop.op ⋙ topCatOpToFrm.{u}).Faithful
+  签名: : (compHausToTop.op ⋙ topCatOpToFrm.{u}).忠实
   定义体: ⟨fun {X _ _ _} h => Quiver.Hom.unop_inj ConcreteCategory.ext
 Opens.comap_injective (β := (unop X).toTop) FrameHom.ext
       CategoryTheory.congr_fun h⟩

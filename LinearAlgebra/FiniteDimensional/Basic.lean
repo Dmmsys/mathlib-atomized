@@ -64,7 +64,7 @@ theorem finrank_le_iff_rank_le
 
 中文:
 定理 finrank_le_iff_rank_le
-  条件: [FiniteDimensional K V] {n : 自然数}
+  条件: [有限维 K V] {n : 自然数}
   证明: by
   simp [← Cardinal.toNat_le_iff_le_of_lt_aleph0 (rank_lt_aleph0 K V), finrank]
 
@@ -85,7 +85,7 @@ theorem finrank_lt_iff_rank_lt
 
 中文:
 定理 finrank_lt_iff_rank_lt
-  条件: [FiniteDimensional K V] {n : 自然数}
+  条件: [有限维 K V] {n : 自然数}
   证明: by
   simp [← Cardinal.toNat_lt_iff_lt_of_lt_aleph0 (rank_lt_aleph0 K V), finrank]
 
@@ -105,7 +105,7 @@ theorem _root_.LinearIndependent.lt_aleph0_of_finiteDimensional
 
 中文:
 定理 _root_.LinearIndependent.lt_aleph0_of_finiteDimensional
-  结论: {ι : Type w} [FiniteDimensional K V]
+  结论: {ι : 类型 w} [有限维 K V]
   证明: h.lt_aleph0_of_finite
 
 Depends on / 依赖: h.lt_aleph0_of_finite, lt_aleph0_of_finite
@@ -129,8 +129,8 @@ theorem _root_.Submodule.eq_top_of_finrank_eq
   let i2 : Fintype (((↑
 
 中文:
-定理 _root_.Submodule.eq_top_of_finrank_eq
-  结论: [FiniteDimensional K V] {S : Submodule K V}
+定理 _root_.子模.eq_top_of_finrank_eq
+  结论: [有限维 K V] {S : 子模 K V}
   证明: by
   set bS := Basis.ofVectorSpace K S with bS_eq
   have : LinearIndepOn K id (Subtype.val '' Basis.ofVectorSpaceIndex K S) := by
@@ -175,7 +175,7 @@ theorem _root_.Submodule.exists_linearEquiv_restrict_eq
   refine M
 
 中文:
-定理 _root_.Submodule.exists_linearEquiv_restrict_eq
+定理 _root_.子模.存在_linearEquiv_restrict_eq
   证明: by
   obtain ⟨Q, hQ⟩ := Submodule.exists_isCompl W
   let eQ := W.prodEquivOfIsCompl Q hQ
@@ -219,8 +219,8 @@ theorem exists_relation_sum_zero_pos_coefficient_of_finrank_succ_lt_card
   exact ⟨f, sum, total, exists_pos_of_sum_zero_of_exists_nonzero f total nonzero⟩
 
 中文:
-定理 exists_relation_sum_zero_pos_coefficient_of_finrank_succ_lt_card
-  结论: [FiniteDimensional L W]
+定理 存在_relation_sum_zero_pos_coefficient_of_finrank_succ_lt_card
+  结论: [有限维 L W]
   证明: by
   obtain ⟨f, sum, total, nonzero⟩ :=
     Module.exists_nontrivial_relation_sum_zero_of_finrank_succ_lt_card h
@@ -257,7 +257,7 @@ definition basisSingleton
 
 中文:
 定义 basisSingleton
-  签名: (ι : 类型) [Unique ι] (h : finrank K V = 1) (v : V)
+  签名: (ι : 类型) [唯一 ι] (h : finrank K V = 1) (v : V)
   定义体: let b := Module.basisUnique ι h
   have h : b.repr v default != 0 := mt Module.basisUnique_repr_eq_zero_iff.mp hv
   Basis.ofRepr
@@ -305,7 +305,7 @@ theorem basisSingleton_apply
 
 中文:
 定理 basisSingleton_apply
-  结论: (ι : 类型) [Unique ι] (h : finrank K V = 1) (v : V) (hv : v != 0)
+  结论: (ι : 类型) [唯一 ι] (h : finrank K V = 1) (v : V) (hv : v != 0)
   证明: by
   cases Unique.uniq ‹Unique ι› i
   simp [basisSingleton]
@@ -330,7 +330,7 @@ theorem range_basisSingleton
 
 中文:
 定理 range_basisSingleton
-  条件: (ι : 类型) [Unique ι] (h : finrank K V = 1) (v : V) (hv : v != 0)
+  条件: (ι : 类型) [唯一 ι] (h : finrank K V = 1) (v : V) (hv : v != 0)
   证明: by rw [Set.range_unique, basisSingleton_apply]
 
 Depends on / 依赖: Set.range_unique, basisSingleton_apply, range_unique
@@ -355,8 +355,8 @@ theorem FiniteDimensional.of_rank_eq_nat
   proof: Module.finite_of_rank_eq_nat h
 
 中文:
-定理 FiniteDimensional.of_rank_eq_nat
-  条件: {n : 自然数} (h : Module.rank K V = n)
+定理 有限维.of_rank_eq_nat
+  条件: {n : 自然数} (h : 模.rank K V = n)
   证明: Module.finite_of_rank_eq_nat h
 
 Depends on / 依赖: Module, Module.finite_of_rank_eq_nat, finite_of_rank_eq_nat
@@ -375,9 +375,9 @@ theorem FiniteDimensional.of_rank_eq_zero
   proof: Module.finite_of_rank_eq_zero h
 
 中文:
-定理 FiniteDimensional.of_rank_eq_zero
-  条件: (h : Module.rank K V = 0)
-  结论: FiniteDimensional K V
+定理 有限维.of_rank_eq_zero
+  条件: (h : 模.rank K V = 0)
+  结论: 有限维 K V
   证明: Module.finite_of_rank_eq_zero h
 
 Depends on / 依赖: Module, Module.finite_of_rank_eq_zero, finite_of_rank_eq_zero
@@ -395,9 +395,9 @@ theorem FiniteDimensional.of_rank_eq_one
   proof: Module.finite_of_rank_eq_one h
 
 中文:
-定理 FiniteDimensional.of_rank_eq_one
-  条件: (h : Module.rank K V = 1)
-  结论: FiniteDimensional K V
+定理 有限维.of_rank_eq_one
+  条件: (h : 模.rank K V = 1)
+  结论: 有限维 K V
   证明: Module.finite_of_rank_eq_one h
 
 Depends on / 依赖: Module, Module.finite_of_rank_eq_one, finite_of_rank_eq_one
@@ -417,7 +417,7 @@ instance finiteDimensional_bot
 
 中文:
 实例 finiteDimensional_bot
-  签名: : FiniteDimensional K (⊥ : Submodule K V)
+  签名: : 有限维 K (⊥ : 子模 K V)
   定义体: .of_rank_eq_zero by simp
 
 Depends on / 依赖: of_rank_eq_zero
@@ -445,7 +445,7 @@ theorem finiteDimensional_of_le
 
 中文:
 定理 finiteDimensional_of_le
-  条件: {S₁ S₂ : Submodule K V} [FiniteDimensional K S₂] (h : S₁ <= S₂)
+  条件: {S₁ S₂ : 子模 K V} [有限维 K S₂] (h : S₁ <= S₂)
   证明: (isNoetherian_of_le h).finite
 
 Depends on / 依赖: finite, isNoetherian_of_le
@@ -464,7 +464,7 @@ instance finiteDimensional_inf_left
 
 中文:
 实例 finiteDimensional_inf_left
-  签名: (S₁ S₂ : Submodule K V) [FiniteDimensional K S₁]
+  签名: (S₁ S₂ : 子模 K V) [有限维 K S₁]
   定义体: finiteDimensional_of_le inf_le_left
 
 Depends on / 依赖: finiteDimensional_of_le, inf_le_left
@@ -483,7 +483,7 @@ instance finiteDimensional_inf_right
 
 中文:
 实例 finiteDimensional_inf_right
-  签名: (S₁ S₂ : Submodule K V) [FiniteDimensional K S₂]
+  签名: (S₁ S₂ : 子模 K V) [有限维 K S₂]
   定义体: finiteDimensional_of_le inf_le_right
 
 Depends on / 依赖: finiteDimensional_of_le, inf_le_right
@@ -502,7 +502,7 @@ instance finiteDimensional_sup
 
 中文:
 实例 finiteDimensional_sup
-  签名: (S₁ S₂ : Submodule K V) [h₁ : FiniteDimensional K S₁]
+  签名: (S₁ S₂ : 子模 K V) [h₁ : 有限维 K S₁]
   定义体: finite_sup _ _
 
 Depends on / 依赖: finite_sup
@@ -521,7 +521,7 @@ instance finiteDimensional_finset_sup
 
 中文:
 实例 finiteDimensional_finset_sup
-  签名: {ι : 类型} (s : Finset ι) (S : ι -> Submodule K V)
+  签名: {ι : 类型} (s : 有限集 ι) (S : ι -> 子模 K V)
   定义体: Submodule.finite_finset_sup _ _
 
 Depends on / 依赖: Submodule, Submodule.finite_finset_sup, finite_finset_sup
@@ -540,7 +540,7 @@ instance finiteDimensional_iSup
 
 中文:
 实例 finiteDimensional_iSup
-  签名: {ι : Sort*} [Finite ι] (S : ι -> Submodule K V)
+  签名: {ι : 类型层*} [有限 ι] (S : ι -> 子模 K V)
   定义体: Submodule.finite_iSup _
 
 Depends on / 依赖: Submodule, Submodule.finite_iSup, finite_iSup
@@ -567,7 +567,7 @@ instance finiteDimensional_finsupp
 
 中文:
 实例 finiteDimensional_finsupp
-  签名: {ι : 类型} [Finite ι] [FiniteDimensional K V]
+  签名: {ι : 类型} [有限 ι] [有限维 K V]
   定义体: Module.Finite.finsupp
 
 Depends on / 依赖: Finite, Module, Module.Finite.finsupp, finsupp
@@ -594,7 +594,7 @@ theorem eq_of_le_of_finrank_le
 
 中文:
 定理 eq_of_le_of_finrank_le
-  结论: {S₁ S₂ : Submodule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂)
+  结论: {S₁ S₂ : 子模 K V} [有限维 K S₂] (hle : S₁ <= S₂)
   证明: by
   rw [← LinearEquiv.finrank_eq (Submodule.comapSubtypeEquivOfLe hle)] at hd
   exact le_antisymm hle (Submodule.comap_subtype_eq_top.1
@@ -618,7 +618,7 @@ theorem eq_of_le_of_finrank_eq
 
 中文:
 定理 eq_of_le_of_finrank_eq
-  结论: {S₁ S₂ : Submodule K V} [FiniteDimensional K S₂] (hle : S₁ <= S₂)
+  结论: {S₁ S₂ : 子模 K V} [有限维 K S₂] (hle : S₁ <= S₂)
   证明: eq_of_le_of_finrank_le hle hd.ge
 
 Depends on / 依赖: eq_of_le_of_finrank_le, hd.ge
@@ -701,7 +701,7 @@ theorem surjective_of_injective
 
 中文:
 定理 surjective_of_injective
-  条件: [FiniteDimensional K V] {f : V ->ₗ[K] V} (hinj : Injective f)
+  条件: [有限维 K V] {f : V ->ₗ[K] V} (hinj : 单射 f)
   证明: by
   have h := rank_range_of_injective _ hinj
   rw [← finrank_eq_rank]; rw [← finrank_eq_rank]; rw [Nat.cast_inj] at h
@@ -725,7 +725,7 @@ theorem finiteDimensional_of_surjective
 
 中文:
 定理 finiteDimensional_of_surjective
-  结论: [FiniteDimensional K V] (f : V ->ₗ[K] V₂)
+  结论: [有限维 K V] (f : V ->ₗ[K] V₂)
   证明: Module.Finite.of_surjective f range_eq_top.1 hf
 
 Depends on / 依赖: Finite, Module, Module.Finite.of_surjective, of_surjective, range_eq_top
@@ -744,7 +744,7 @@ instance finiteDimensional_range
 
 中文:
 实例 finiteDimensional_range
-  签名: [FiniteDimensional K V] (f : V ->ₗ[K] V₂)
+  签名: [有限维 K V] (f : V ->ₗ[K] V₂)
   定义体: Module.Finite.range f
 
 Depends on / 依赖: Finite, Module, Module.Finite.range
@@ -767,7 +767,7 @@ theorem injective_iff_surjective
 
 中文:
 定理 injective_iff_surjective
-  条件: [FiniteDimensional K V] {f : V ->ₗ[K] V}
+  条件: [有限维 K V] {f : V ->ₗ[K] V}
   证明: ⟨surjective_of_injective, fun hsurj =>
     let ⟨g, hg⟩ := f.exists_rightInverse_of_surjective (range_eq_top.2 hsurj)
     have : Function.RightInverse g f := LinearMap.ext_iff.1 hg
@@ -797,7 +797,7 @@ lemma injOn_iff_surjOn
 
 中文:
 引理 injOn_iff_surjOn
-  结论: {p : Submodule K V} [FiniteDimensional K p]
+  结论: {p : 子模 K V} [有限维 K p]
   证明: by
   rw [Set.injOn_iff_injective]; rw [← Set.MapsTo.restrict_surjective_iff h]
   change Injective (f.domRestrict p) ↔ Surjective (f.restrict h)
@@ -823,7 +823,7 @@ theorem ker_eq_bot_iff_range_eq_top
 
 中文:
 定理 ker_eq_bot_iff_range_eq_top
-  条件: [FiniteDimensional K V] {f : V ->ₗ[K] V}
+  条件: [有限维 K V] {f : V ->ₗ[K] V}
   证明: by
   rw [range_eq_top]; rw [ker_eq_bot]; rw [injective_iff_surjective]
 
@@ -854,8 +854,8 @@ theorem _root_.IsField.of_isDomain_of_finite
   mul_inv_cancel {x} hx := (mulLeft K x).surjective_of_injective (mul_right_injective₀ hx) 1
 
 中文:
-定理 _root_.IsField.of_isDomain_of_finite
-  结论: (K L : 类型) [Field K] [CommRing L] [IsDomain L]
+定理 _root_.是域.of_isDomain_of_finite
+  结论: (K L : 类型) [域 K] [交换环 L] [是整环 L]
   证明: Nontrivial.exists_pair_ne
   mul_comm := mul_comm
   mul_inv_cancel {x} hx := (mulLeft K x).surjective_of_injective (mul_right_injective₀ hx) 1
@@ -886,7 +886,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStablyFiniteRing (Module.End R M)
+  签名: 是StablyFinite环 (模.End R M)
   定义体: by
   let e := (Module.Free.chooseBasis R M).repr ≪≫ₗ Finsupp.linearEquivFunOnFinite ..
   rw [RingEquiv.isStablyFiniteRing_iff e.conjRingEquiv]
@@ -910,8 +910,8 @@ theorem _root_.Module.End.injective_of_surjective
   injective_of_comp_eq_id _ _ (mul_eq_one_symm eq)
 
 中文:
-定理 _root_.Module.End.injective_of_surjective
-  条件: {f : Module.End R M} (hf : Surjective f)
+定理 _root_.模.End.injective_of_surjective
+  条件: {f : 模.End R M} (hf : 满射 f)
   证明: have ⟨_, eq⟩ := projective_lifting_property _ .id hf
   injective_of_comp_eq_id _ _ (mul_eq_one_symm eq)
 
@@ -959,7 +959,7 @@ theorem comap_eq_sup_ker_of_disjoint
 
 中文:
 定理 comap_eq_sup_ker_of_disjoint
-  结论: {p : Submodule K V} [FiniteDimensional K p] {f : V ->ₗ[K] V}
+  结论: {p : 子模 K V} [有限维 K p] {f : V ->ₗ[K] V}
   证明: by
   refine le_antisymm (fun x hx => ?_) (sup_le_iff.mpr ⟨h, ker_le_comap _⟩)
   obtain ⟨⟨y, hy⟩, hxy⟩ :=
@@ -991,7 +991,7 @@ theorem ker_comp_eq_of_commute_of_disjoint_ker
 
 中文:
 定理 ker_comp_eq_of_commute_of_disjoint_ker
-  结论: [FiniteDimensional K V] {f g : V ->ₗ[K] V}
+  结论: [有限维 K V] {f g : V ->ₗ[K] V}
   证明: by
   suffices forall x, f x = 0 -> f (g x) = 0 by rw [ker_comp, comap_eq_sup_ker_of_disjoint _ h']; simpa
   intro x hx
@@ -1023,7 +1023,7 @@ theorem ker_noncommProd_eq_of_supIndep_ker
 
 中文:
 定理 ker_noncommProd_eq_of_supIndep_ker
-  结论: [FiniteDimensional K V] {ι : 类型} {f : ι -> V ->ₗ[K] V}
+  结论: [有限维 K V] {ι : 类型} {f : ι -> V ->ₗ[K] V}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1074,7 +1074,7 @@ definition ofInjectiveEndo
 
 中文:
 定义 ofInjectiveEndo
-  签名: (f : V ->ₗ[K] V) (h_inj : Injective f)
+  签名: (f : V ->ₗ[K] V) (h_inj : 单射 f)
   定义体: LinearEquiv.ofBijective f ⟨h_inj, LinearMap.injective_iff_surjective.mp h_inj⟩
 
 @[simp]
@@ -1097,7 +1097,7 @@ theorem coe_ofInjectiveEndo
 
 中文:
 定理 coe_ofInjectiveEndo
-  条件: (f : V ->ₗ[K] V) (h_inj : Injective f)
+  条件: (f : V ->ₗ[K] V) (h_inj : 单射 f)
   证明: rfl
 
 @[simp]
@@ -1119,7 +1119,7 @@ theorem ofInjectiveEndo_right_inv
 
 中文:
 定理 ofInjectiveEndo_right_inv
-  条件: (f : V ->ₗ[K] V) (h_inj : Injective f)
+  条件: (f : V ->ₗ[K] V) (h_inj : 单射 f)
   证明: LinearMap.ext (ofInjectiveEndo f h_inj).apply_symm_apply
 
 @[simp]
@@ -1141,7 +1141,7 @@ theorem ofInjectiveEndo_left_inv
 
 中文:
 定理 ofInjectiveEndo_left_inv
-  条件: (f : V ->ₗ[K] V) (h_inj : Injective f)
+  条件: (f : V ->ₗ[K] V) (h_inj : 单射 f)
   证明: LinearMap.ext (ofInjectiveEndo f h_inj).symm_apply_apply
 
 Depends on / 依赖: LinearMap, LinearMap.ext, h_inj, ofInjectiveEndo, symm_apply_apply
@@ -1167,7 +1167,7 @@ definition ofInjectiveOfFinrankEq
 
 中文:
 定义 ofInjectiveOfFinrankEq
-  签名: (f : V ->ₗ[K] V') (hinj : Function.Injective f)
+  签名: (f : V ->ₗ[K] V') (hinj : 函数.单射 f)
   定义体: haveI : LinearMap.range f = ⊤ :=
     Submodule.eq_top_of_finrank_eq ((LinearMap.finrank_range_of_inj hinj).trans hrank)
   (ofInjective f hinj).trans (ofTop (LinearMap.range f) this)
@@ -1193,7 +1193,7 @@ lemma coe_ofInjectiveOfFinrankEq
 
 中文:
 引理 coe_ofInjectiveOfFinrankEq
-  结论: (f : V ->ₗ[K] V') (hinj : Function.Injective f)
+  结论: (f : V ->ₗ[K] V') (hinj : 函数.单射 f)
   证明: rfl
 -/
 lemma coe_ofInjectiveOfFinrankEq (f : V ->ₗ[K] V') (hinj : Function.Injective f)
@@ -1223,7 +1223,7 @@ theorem isUnit_iff_ker_eq_bot
 
 中文:
 定理 isUnit_iff_ker_eq_bot
-  条件: [FiniteDimensional K V] (f : V ->ₗ[K] V)
+  条件: [有限维 K V] (f : V ->ₗ[K] V)
   证明: by
   constructor
   · rintro ⟨u, rfl⟩
@@ -1257,7 +1257,7 @@ theorem isUnit_iff_range_eq_top
 
 中文:
 定理 isUnit_iff_range_eq_top
-  条件: [FiniteDimensional K V] (f : V ->ₗ[K] V)
+  条件: [有限维 K V] (f : V ->ₗ[K] V)
   证明: by
   rw [isUnit_iff_ker_eq_bot]; rw [ker_eq_bot_iff_range_eq_top]
 
@@ -1285,8 +1285,8 @@ theorem finrank_zero_iff_forall_zero
   proof: Module.finrank_zero_iff.trans (subsingleton_iff_forall_eq 0)
 
 中文:
-定理 finrank_zero_iff_forall_zero
-  条件: [FiniteDimensional K V]
+定理 finrank_zero_iff_对任意_zero
+  条件: [有限维 K V]
   结论: finrank K V = 0 ↔ 对任意 x : V, x = 0
   证明: Module.finrank_zero_iff.trans (subsingleton_iff_forall_eq 0)
 
@@ -1306,7 +1306,7 @@ definition basisOfFinrankZero
 
 中文:
 定义 basisOfFinrankZero
-  签名: [FiniteDimensional K V] {ι : 类型} [IsEmpty ι]
+  签名: [有限维 K V] {ι : 类型} [是空 ι]
   定义体: haveI : Subsingleton V := finrank_zero_iff.1 hV
   Basis.empty _
 
@@ -1333,8 +1333,8 @@ lemma FiniteDimensional.exists_mul_eq_one
   exact this 1
 
 中文:
-引理 FiniteDimensional.exists_mul_eq_one
-  结论: (F : 类型) {K : 类型} [Field F] [Ring K] [IsDomain K]
+引理 有限维.存在_mul_eq_one
+  结论: (F : 类型) {K : 类型} [域 F] [环 K] [是整环 K]
   证明: by
   have : Function.Surjective (LinearMap.mulLeft F x) :=
     LinearMap.injective_iff_surjective.1 fun y z => ((mul_right_inj' H).1 : x * y = x * z -> y = z)
@@ -1367,7 +1367,7 @@ if H : x = 0 then 0 else Classical.choose FiniteDimensional.exists_mul_eq_one F 
 
 中文:
 定义 divisionRingOfFiniteDimensional
-  签名: (F K : 类型) [Field F] [Ring K] [IsDomain K]
+  签名: (F K : 类型) [域 F] [环 K] [是整环 K]
   定义体: ‹IsDomain K›
   inv x :=
     letI := Classical.decEq K
@@ -1403,8 +1403,8 @@ lemma FiniteDimensional.isUnit
   proof: let _ := divisionRingOfFiniteDimensional F K; H.isUnit
 
 中文:
-引理 FiniteDimensional.isUnit
-  结论: (F : 类型) {K : 类型} [Field F] [Ring K] [IsDomain K]
+引理 有限维.isUnit
+  结论: (F : 类型) {K : 类型} [域 F] [环 K] [是整环 K]
   证明: let _ := divisionRingOfFiniteDimensional F K; H.isUnit
 
 Depends on / 依赖: H.isUnit, divisionRingOfFiniteDimensional, isUnit
@@ -1426,7 +1426,7 @@ definition fieldOfFiniteDimensional
 
 中文:
 定义 fieldOfFiniteDimensional
-  签名: (F K : 类型) [Field F] [h : CommRing K] [IsDomain K]
+  签名: (F K : 类型) [域 F] [h : 交换环 K] [是整环 K]
   定义体: { divisionRingOfFiniteDimensional F K with
     toCommRing := h }
 
@@ -1498,8 +1498,8 @@ theorem Submodule.isAtom_iff_finrank_eq_one
       exact ⟨v, mem_span_singl
 
 中文:
-定理 Submodule.isAtom_iff_finrank_eq_one
-  条件: {S : Submodule K V}
+定理 子模.isAtom_iff_finrank_eq_one
+  条件: {S : 子模 K V}
   证明: by
   refine ⟨fun hS => ?_, fun hS => ⟨by aesop, fun T hT => ?_⟩⟩
   · obtain ⟨v : V, hv : v in S, hv_ne : v != 0⟩ := S.ne_bot_iff.mp hS.ne_bot
@@ -1540,7 +1540,7 @@ lemma exists_smul_eq_of_finrank_eq_one
   exact mem_span_singleton.1 this
 
 中文:
-引理 exists_smul_eq_of_finrank_eq_one
+引理 存在_smul_eq_of_finrank_eq_one
   证明: by
   have : Submodule.span K {x} = ⊤ := by
     have : FiniteDimensional K V := .of_finrank_eq_succ h
@@ -1576,7 +1576,7 @@ exact Eq.symm eq_of_le_of_finrank_le (by simpa)
 
 中文:
 定理 eq_span_singleton_of_mem_of_finrank_eq_one
-  结论: {S : Submodule K V} {w : V}
+  结论: {S : 子模 K V} {w : V}
   证明: by
   have : FiniteDimensional K S := Module.finite_of_finrank_pos (by lia)
 exact Eq.symm eq_of_le_of_finrank_le (by simpa)
@@ -1600,8 +1600,8 @@ theorem Set.finrank_mono
   proof: Submodule.finrank_mono (span_mono h)
 
 中文:
-定理 Set.finrank_mono
-  条件: [FiniteDimensional K V] {s t : Set V} (h : s subseteq t)
+定理 集合.finrank_mono
+  条件: [有限维 K V] {s t : 集合 V} (h : s subseteq t)
   证明: Submodule.finrank_mono (span_mono h)
 
 Depends on / 依赖: Submodule, Submodule.finrank_mono, finrank_mono, span_mono
@@ -1683,7 +1683,7 @@ theorem surjective_of_nonzero_of_finrank_eq_one
 
 中文:
 定理 surjective_of_nonzero_of_finrank_eq_one
-  结论: {W A : 类型} [Semiring A] [Module A V]
+  结论: {W A : 类型} [半环 A] [模 A V]
   证明: by
   change Surjective (f.restrictScalars K)
   obtain ⟨v, n⟩ := DFunLike.ne_iff.mp w
@@ -1724,8 +1724,8 @@ alias ⟨FiniteDimensional.of_subalgebra_toSubmodule, FiniteDimensional.subalgeb
   Subalgebra.finiteDimensional_toSubmodule
 
 中文:
-定理 Subalgebra.finiteDimensional_toSubmodule
-  条件: {S : Subalgebra F E}
+定理 子代数.finiteDimensional_toSubmodule
+  条件: {S : 子代数 F E}
   证明: Iff.rfl
 
 alias ⟨FiniteDimensional.of_subalgebra_toSubmodule, FiniteDimensional.subalgebra_toSubmodule⟩ :=
@@ -1749,8 +1749,8 @@ instance FiniteDimensional.finiteDimensional_subalgebra
   body: FiniteDimensional.of_subalgebra_toSubmodule inferInstance
 
 中文:
-实例 FiniteDimensional.finiteDimensional_subalgebra
-  签名: [FiniteDimensional F E]
+实例 有限维.finiteDimensional_subalgebra
+  签名: [有限维 F E]
   定义体: FiniteDimensional.of_subalgebra_toSubmodule inferInstance
 
 Depends on / 依赖: FiniteDimensional, FiniteDimensional.of_subalgebra_toSubmodule, of_subalgebra_toSubmodule
@@ -1803,8 +1803,8 @@ theorem AlgHom.bijective
   proof: ⟨f.toRingHom.injective, f.toLinearMap.injective_iff_surjective.mp f.toRingHom.injective⟩
 
 中文:
-定理 AlgHom.bijective
-  结论: {K S : 类型} [Field K] [Ring S] [IsSimpleRing S]
+定理 代数态射.bijective
+  结论: {K S : 类型} [域 K] [环 S] [是单环 S]
   证明: ⟨f.toRingHom.injective, f.toLinearMap.injective_iff_surjective.mp f.toRingHom.injective⟩
 
 Depends on / 依赖: f.toLinearMap.injective_iff_surjective.mp, f.toRingHom.injective, injective, injective_iff_surjective, toLinearMap, toRingHom

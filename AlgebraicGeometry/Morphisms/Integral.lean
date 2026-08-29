@@ -43,11 +43,11 @@ class IsIntegralHom
     - isIntegral_app((f) (U : Y.Opens) (hU : IsAffineOpen U)) : (f.app U).hom.IsIntegral
 
 中文:
-类 IsIntegralHom
-  参数: {X Y : Scheme} (f : X ⟶ Y)
-  继承: IsAffineHom f
+类 是整态射
+  参数: {X Y : 概形} (f : X ⟶ Y)
+  继承: 是仿射态射 f
   公理与运算 (1 个):
-    - isIntegral_app((f) (U : Y.Opens) (hU : IsAffineOpen U)) : (f.app U).hom.Is整数egral
+    - isIntegral_app((f) (U : Y.Opens) (hU : 是仿射开集 U)) : (f.app U).hom.是整
 
 Depends on / 依赖: IsIntegralHom, IsIntegralHom.isIntegral_app, isIntegral_app
 -/
@@ -76,7 +76,7 @@ instance hasAffineProperty
 
 中文:
 实例 hasAffineProperty
-  签名: : HasAffine命题erty @Is整数egralHom
+  签名: : 有AffineProperty @是整态射
   定义体: by
   change HasAffineProperty @IsIntegralHom (affineAnd RingHom.IsIntegral)
   rw [HasAffineProperty.affineAnd_iff _ RingHom.isIntegral_respectsIso
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderComposition @Is整数egralHom
+  签名: 是StableUnderComposition @是整态射
   定义体: HasAffineProperty.affineAnd_isStableUnderComposition (Q := RingHom.IsIntegral) hasAffineProperty
     RingHom.isIntegral_stableUnderComposition
 
@@ -126,7 +126,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @Is整数egralHom
+  签名: 是StableUnderBaseChange @是整态射
   定义体: HasAffineProperty.affineAnd_isStableUnderBaseChange (Q := RingHom.IsIntegral) hasAffineProperty
     RingHom.isIntegral_respectsIso RingHom.isIntegral_isStableUnderBaseChange
 
@@ -149,7 +149,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative @Is整数egralHom
+  签名: 是Multiplicative @是整态射
   定义体: inferInstance
 -/
 instance : IsMultiplicative @IsIntegralHom where
@@ -181,7 +181,7 @@ instance :
 
 中文:
 实例 :
-  签名: Morphism命题erty.HasOfPostcomp命题erty @Is整数egralHom @IsSeparated
+  签名: MorphismProperty.有OfPostcompProperty @是整态射 @是分离
   定义体: MorphismProperty.hasOfPostcompProperty_iff_le_diagonal.mpr
     fun _ _ _ _ => inferInstanceAs (IsIntegralHom _)
 
@@ -201,7 +201,7 @@ lemma of_comp
 
 中文:
 引理 of_comp
-  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [Is整数egralHom (f ≫ g)] [IsSeparated g]
+  条件: (f : X ⟶ Y) (g : Y ⟶ Z) [是整态射 (f ≫ g)] [是分离 g]
   证明: MorphismProperty.of_postcomp _ _ g ‹_› ‹_›
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.of_postcomp, of_postcomp
@@ -219,7 +219,7 @@ lemma comp_iff
 
 中文:
 引理 comp_iff
-  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [Is整数egralHom g]
+  条件: {f : X ⟶ Y} {g : Y ⟶ Z} [是整态射 g]
   证明: ⟨fun _ => .of_comp f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: of_comp
@@ -243,7 +243,7 @@ lemma SpecMap_iff
 
 中文:
 引理 SpecMap_iff
-  条件: {R S : CommRingCat} {φ : R ⟶ S}
+  条件: {R S : 交换环范畴} {φ : R ⟶ S}
   证明: by
   have := RingHom.toMorphismProperty_respectsIso_iff.mp RingHom.isIntegral_respectsIso
   rw [HasAffineProperty.iff_of_isAffine (P := @IsIntegralHom)]; rw [and_iff_right]
@@ -269,7 +269,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMultiplicative @Is整数egralHom
+  签名: 是Multiplicative @是整态射
 -/
 instance : IsMultiplicative @IsIntegralHom where
 
@@ -320,7 +320,7 @@ lemma iff_universallyClosed_and_isAffineHom
 
 中文:
 引理 iff_universallyClosed_and_isAffineHom
-  条件: {X Y : Scheme.{u}} {f : X ⟶ Y}
+  条件: {X Y : 概形.{u}} {f : X ⟶ Y}
   证明: by
   refine ⟨fun _ => ⟨inferInstance, inferInstance⟩, fun ⟨H₁, H₂⟩ => ?_⟩
   clear * -

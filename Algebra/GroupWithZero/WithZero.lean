@@ -57,7 +57,7 @@ instance one
 
 中文:
 实例 one
-  签名: : One (WithZero α) where
+  签名: : 幺 (WithZero α) where
   定义体: ‹One α›
 -/
 instance one : One (WithZero α) where
@@ -93,7 +93,7 @@ lemma recZeroCoe_one
 
 中文:
 引理 recZeroCoe_one
-  条件: {M N : 类型} [One M] (f : M -> N) (z : N)
+  条件: {M N : 类型} [幺 M] (f : M -> N) (z : N)
   证明: rfl
 -/
 lemma recZeroCoe_one {M N : Type*} [One M] (f : M -> N) (z : N) :
@@ -117,7 +117,7 @@ instance instMulZeroClass
 
 中文:
 实例 instMulZeroClass
-  签名: : MulZeroClass (WithZero α) where
+  签名: : 乘零类 (WithZero α) where
   定义体: Option.map₂ (· * ·)
   zero_mul := Option.map₂_none_left (· * ·)
   mul_zero := Option.map₂_none_right (· * ·)
@@ -177,7 +177,7 @@ instance instNoZeroDivisors
 
 中文:
 实例 instNoZeroDivisors
-  签名: : NoZeroDivisors (WithZero α)
+  签名: : 无零因子 (WithZero α)
   定义体: ⟨Option.map₂_eq_none_iff.1⟩
 
 Depends on / 依赖: Option.map
@@ -196,7 +196,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: [Semigroup α]
+  签名: [半群 α]
   定义体: Option.map₂_assoc mul_assoc
 
 Depends on / 依赖: Option.map, mul_assoc
@@ -214,7 +214,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: [CommSemigroup α]
+  签名: [交换半群 α]
   定义体: Option.map₂_comm mul_comm
 
 Depends on / 依赖: Option.map, mul_comm
@@ -235,7 +235,7 @@ instance instMulZeroOneClass
 
 中文:
 实例 instMulZeroOneClass
-  签名: [MulOneClass α]
+  签名: [MulOne类 α]
   定义体: Option.map₂_left_identity one_mul
   mul_one := Option.map₂_right_identity mul_one
 
@@ -383,7 +383,7 @@ lemma lift'_surjective
 
 中文:
 引理 lift'_surjective
-  条件: {f : α ->* β} (hf : Surjective f)
+  条件: {f : α ->* β} (hf : 满射 f)
   证明: by
   intro b
   obtain ⟨a, rfl⟩ := hf b
@@ -466,7 +466,7 @@ lemma map'_id
 
 中文:
 引理 map'_id
-  结论: map' (MonoidHom.id β) = MonoidHom.id (WithZero β)
+  结论: map' (幺半群态射.id β) = 幺半群态射.id (WithZero β)
   证明: by
   ext x; induction x <;> rfl
 -/
@@ -531,7 +531,7 @@ alias ⟨_, map'_injective⟩ := map'_injective_iff
 中文:
 引理 map'_injective_iff
   条件: {f : α ->* β}
-  结论: Injective (map' f) ↔ Injective f
+  结论: 单射 (map' f) ↔ 单射 f
   证明: by
   simp [Injective, WithZero.forall]
 
@@ -565,7 +565,7 @@ alias ⟨_, map'_surjective⟩ := map'_surjective_i
 中文:
 引理 map'_surjective_iff
   条件: {f : α ->* β}
-  结论: Surjective (map' f) ↔ Surjective f
+  结论: 满射 (map' f) ↔ 满射 f
   证明: by
   simp only [Surjective, «forall»]
   refine ⟨fun h b => ?_, fun h => ⟨⟨0, by simp⟩, fun b => ?_⟩⟩
@@ -606,7 +606,7 @@ instance pow
 
 中文:
 实例 pow
-  签名: : Pow (WithZero α) 自然数 where
+  签名: : 幂 (WithZero α) 自然数 where
 -/
 instance pow : Pow (WithZero α) Nat where
   pow
@@ -649,7 +649,7 @@ instance instMonoidWithZero
 
 中文:
 实例 instMonoidWithZero
-  签名: [Monoid α]
+  签名: [幺半群 α]
   定义体: a ^ n
   npow_zero
     | 0 => rfl
@@ -677,7 +677,7 @@ instance instCommMonoidWithZero
 
 中文:
 实例 instCommMonoidWithZero
-  签名: [CommMonoid α]
+  签名: [交换幺半群 α]
   定义体: { WithZero.instMonoidWithZero, WithZero.instCommSemigroup with }
 
 Depends on / 依赖: WithZero, WithZero.instCommSemigroup, WithZero.instMonoidWithZero, instCommSemigroup, instMonoidWithZero
@@ -698,7 +698,7 @@ instance inv
 
 中文:
 实例 inv
-  签名: : Inv (WithZero α) where inv a
+  签名: : 取逆 (WithZero α) where inv a
   定义体: Option.map (·⁻¹) a
 
 Depends on / 依赖: Option.map
@@ -749,7 +749,7 @@ instance invOneClass
 
 中文:
 实例 invOneClass
-  签名: [InvOneClass α]
+  签名: [InvOne类 α]
   定义体: show ((1⁻¹ : α) : WithZero α) = 1 by simp
 
 Depends on / 依赖: WithZero
@@ -770,7 +770,7 @@ instance div
 
 中文:
 实例 div
-  签名: : Div (WithZero α) where div
+  签名: : 除法 (WithZero α) where div
   定义体: Option.map₂ (· / ·)
 
 Depends on / 依赖: Option.map
@@ -808,7 +808,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (WithZero α) 整数
+  签名: 幂 (WithZero α) 整数
 -/
 instance : Pow (WithZero α) Int where
   pow
@@ -855,7 +855,7 @@ instance instDivInvMonoid
 
 中文:
 实例 instDivInvMonoid
-  签名: [DivInvMonoid α]
+  签名: [除逆幺半群 α]
   定义体: a ^ n
   zpow_zero'
     | none => rfl
@@ -892,7 +892,7 @@ instance instDivInvOneMonoid
 
 中文:
 实例 instDivInvOneMonoid
-  签名: [DivInvOneMonoid α]
+  签名: [DivInvOne幺半群 α]
 -/
 instance instDivInvOneMonoid [DivInvOneMonoid α] : DivInvOneMonoid (WithZero α) where
 
@@ -924,7 +924,7 @@ instance instDivisionMonoid
 
 中文:
 实例 instDivisionMonoid
-  签名: [DivisionMonoid α]
+  签名: [Division幺半群 α]
 -/
 instance instDivisionMonoid [DivisionMonoid α] : DivisionMonoid (WithZero α) where
   mul_inv_rev
@@ -946,7 +946,7 @@ instance instDivisionCommMonoid
 
 中文:
 实例 instDivisionCommMonoid
-  签名: [DivisionCommMonoid α]
+  签名: [DivisionComm幺半群 α]
 -/
 instance instDivisionCommMonoid [DivisionCommMonoid α] : DivisionCommMonoid (WithZero α) where
 
@@ -967,7 +967,7 @@ instance instGroupWithZero
 
 中文:
 实例 instGroupWithZero
-  签名: : GroupWithZero (WithZero α) where
+  签名: : 带零群 (WithZero α) where
   定义体: WithZero.inv_zero
   mul_inv_cancel a ha := by
     lift a to α using ha
@@ -1021,8 +1021,8 @@ instance [Nontrivial
   body: unitsWithZeroEquiv.toEquiv.surjective.nontrivial
 
 中文:
-实例 [Nontrivial
-  签名: α] : Nontrivial (WithZero α)ˣ
+实例 [非平凡
+  签名: α] : 非平凡 (WithZero α)ˣ
   定义体: unitsWithZeroEquiv.toEquiv.surjective.nontrivial
 
 Depends on / 依赖: nontrivial, surjective, toEquiv, unitsWithZeroEquiv, unitsWithZeroEquiv.toEquiv.surjective.nontrivial
@@ -1068,7 +1068,7 @@ definition withZeroUnitsEquiv
 
 中文:
 定义 withZeroUnitsEquiv
-  签名: {G : 类型} [GroupWithZero G]
+  签名: {G : 类型} [带零群 G]
   定义体: WithZero.recZeroCoe 0 Units.val
   invFun a := if h : a = 0 then 0 else (Units.mk0 a h : Gˣ)
   left_inv := (by induction · <;> simp)
@@ -1097,7 +1097,7 @@ lemma withZeroUnitsEquiv_symm_apply_coe
 
 中文:
 引理 withZeroUnitsEquiv_symm_apply_coe
-  结论: {G : 类型} [GroupWithZero G]
+  结论: {G : 类型} [带零群 G]
   证明: by
   simp
 -/
@@ -1123,8 +1123,8 @@ definition _root_.MulEquiv.withZero
     by intro; simp, by i
 
 中文:
-定义 _root_.MulEquiv.withZero
-  签名: [Group β]
+定义 _root_.乘法等价.withZero
+  签名: [群 β]
   定义体: ⟨⟨map' e, map' e.symm, (by induction · <;> simp), (by induction · <;> simp)⟩,
     (by induction · <;> induction · <;> simp)⟩
   invFun e := ⟨⟨
@@ -1155,8 +1155,8 @@ abbreviation _root_.MulEquiv.unzero
   body: _root_.MulEquiv.withZero.symm e
 
 中文:
-缩写 _root_.MulEquiv.unzero
-  签名: [Group β] (e : WithZero α ≃* WithZero β)
+缩写 _root_.乘法等价.unzero
+  签名: [群 β] (e : WithZero α ≃* WithZero β)
   定义体: _root_.MulEquiv.withZero.symm e
 
 Depends on / 依赖: MulEquiv, _root_, _root_.MulEquiv.withZero.symm, withZero
@@ -1176,7 +1176,7 @@ instance instCommGroupWithZero
 
 中文:
 实例 instCommGroupWithZero
-  签名: [CommGroup α]
+  签名: [交换群 α]
 
 Depends on / 依赖: cancel_epi, cancel_mono, singleObjXSelf, single_map_f_self
 -/
@@ -1194,7 +1194,7 @@ instance instAddMonoidWithOne
 
 中文:
 实例 instAddMonoidWithOne
-  签名: [AddMonoidWithOne α]
+  签名: [加法带幺幺半群 α]
   定义体: if n = 0 then 0 else (n : α)
   natCast_zero := rfl
   natCast_succ n := by cases n <;> simp
@@ -1276,7 +1276,7 @@ lemma exp_injective
 
 中文:
 引理 exp_injective
-  结论: Injective (exp : M -> Mᵐ⁰)
+  结论: 单射 (exp : M -> Mᵐ⁰)
   证明: Multiplicative.ofAdd.injective.comp WithZero.coe_injective
 
 Depends on / 依赖: Multiplicative, Multiplicative.ofAdd.injective.comp, WithZero, WithZero.coe_injective, coe_injective, injective
@@ -1316,7 +1316,7 @@ definition expRecOn
 
 中文:
 定义 expRecOn
-  签名: {motive : Mᵐ⁰ -> Sort*} (x : Mᵐ⁰) (zero : motive 0) (exp : 对任意 a, motive (exp a))
+  签名: {motive : Mᵐ⁰ -> 类型层*} (x : Mᵐ⁰) (zero : motive 0) (exp : 对任意 a, motive (exp a))
   定义体: Option.recOn x zero exp
 
 Depends on / 依赖: Option.recOn
@@ -1334,7 +1334,7 @@ lemma expRecOn_zero
 
 中文:
 引理 expRecOn_zero
-  条件: {motive : Mᵐ⁰ -> Sort*} (zero : motive 0) (exp : 对任意 a, motive (exp a))
+  条件: {motive : Mᵐ⁰ -> 类型层*} (zero : motive 0) (exp : 对任意 a, motive (exp a))
   证明: rfl
 -/
 @[simp] lemma expRecOn_zero {motive : Mᵐ⁰ -> Sort*} (zero : motive 0) (exp : forall a, motive (exp a)) :
@@ -1350,7 +1350,7 @@ lemma expRecOn_exp
 
 中文:
 引理 expRecOn_exp
-  结论: {motive : Mᵐ⁰ -> Sort*} (x : M) (zero : motive 0)
+  结论: {motive : Mᵐ⁰ -> 类型层*} (x : M) (zero : motive 0)
   证明: rfl
 -/
 @[simp] lemma expRecOn_exp {motive : Mᵐ⁰ -> Sort*} (x : M) (zero : motive 0)
@@ -1862,7 +1862,7 @@ lemma map_eq_zero_iff
 
 中文:
 引理 map_eq_zero_iff
-  结论: {G₀ M₀ : 类型} [GroupWithZero G₀] [MulZeroOneClass M₀]
+  结论: {G₀ M₀ : 类型} [带零群 G₀] [乘零幺类 M₀]
   证明: by
   refine ⟨?_, by simp +contextual⟩
   contrapose!
@@ -1893,7 +1893,7 @@ lemma one_apply_val_unit
 
 中文:
 引理 one_apply_val_unit
-  结论: {M₀ N₀ : 类型} [MonoidWithZero M₀] [MulZeroOneClass N₀]
+  结论: {M₀ N₀ : 类型} [带零幺半群 M₀] [乘零幺类 N₀]
   证明: one_apply_of_ne_zero x.ne_zero
 
 Depends on / 依赖: ne_zero, one_apply_of_ne_zero, x.ne_zero
@@ -1918,7 +1918,7 @@ lemma apply_one_apply_eq
 
 中文:
 引理 apply_one_apply_eq
-  结论: {M₀ N₀ G₀ : 类型} [MulZeroOneClass M₀] [Nontrivial M₀] [NoZeroDivisors M₀]
+  结论: {M₀ N₀ G₀ : 类型} [乘零幺类 M₀] [非平凡 M₀] [无零因子 M₀]
   证明: by
   rcases eq_or_ne x 0 with rfl | hx
   · simp
@@ -1946,7 +1946,7 @@ lemma comp_one
 
 中文:
 引理 comp_one
-  结论: {M₀ N₀ G₀ : 类型} [MulZeroOneClass M₀] [Nontrivial M₀] [NoZeroDivisors M₀]
+  结论: {M₀ N₀ G₀ : 类型} [乘零幺类 M₀] [非平凡 M₀] [无零因子 M₀]
   证明: ext apply_one_apply_eq _
 
 Depends on / 依赖: apply_one_apply_eq

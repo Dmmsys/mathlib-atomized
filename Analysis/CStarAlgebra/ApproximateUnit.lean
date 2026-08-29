@@ -155,8 +155,8 @@ lemma Set.InvOn.one_sub_one_add_inv
   · simp [mul_assoc, ← mul_inv, mul_tsub
 
 中文:
-引理 Set.InvOn.one_sub_one_add_inv
-  结论: Set.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹)
+引理 集合.InvOn.one_sub_one_add_inv
+  结论: 集合.InvOn (fun x => 1 - (1 + x)⁻¹) (fun x => x * (1 - x)⁻¹)
   证明: by
   have : (fun x : Real>=0 => x * (1 + x)⁻¹) = fun x => 1 - (1 + x)⁻¹ := by
     ext x : 1
@@ -215,7 +215,7 @@ lemma CStarAlgebra.directedOn_nonneg_ball
     simp only [M
 
 中文:
-引理 CStarAlgebra.directedOn_nonneg_ball
+引理 CStar代数.directedOn_nonneg_ball
   证明: by
   let f : Real>=0 -> Real>=0 := fun x => 1 - (1 + x)⁻¹
   let g : Real>=0 -> Real>=0 := fun x => x * (1 - x)⁻¹
@@ -272,9 +272,9 @@ structure Filter.IsIncreasingApproximateUnit
     - eventually_norm : forallᶠ x in l, ‖x‖ <= 1
 
 中文:
-结构 Filter.IsIncreasingApproximateUnit
-  参数: (l : Filter A)
-  继承: l.IsApproximateUnit
+结构 滤子.是IncreasingApproximateUnit
+  参数: (l : 滤子 A)
+  继承: l.是ApproximateUnit
   公理与运算 (2 个):
     - eventually_nonneg : 对任意ᶠ x in l, 0 <= x
     - eventually_norm : 对任意ᶠ x in l, ‖x‖ <= 1
@@ -296,7 +296,7 @@ lemma eventually_nnnorm
 
 中文:
 引理 eventually_nnnorm
-  条件: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
+  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
   证明: hl.eventually_norm
 
 Depends on / 依赖: eventually_norm, hl.eventually_norm
@@ -315,7 +315,7 @@ lemma eventually_isSelfAdjoint
 
 中文:
 引理 eventually_isSelfAdjoint
-  条件: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
+  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
   证明: hl.eventually_nonneg.mp .of_forall fun _ => IsSelfAdjoint.of_nonneg
 
 Depends on / 依赖: IsSelfAdjoint, IsSelfAdjoint.of_nonneg, eventually_nonneg, hl.eventually_nonneg.mp, of_forall, of_nonneg
@@ -336,7 +336,7 @@ omit [StarOrderedRing A] in
 
 中文:
 引理 eventually_star_eq
-  条件: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
+  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
   证明: hl.eventually_isSelfAdjoint.mp .of_forall fun _ => IsSelfAdjoint.star_eq
 
 omit [StarOrderedRing A] in
@@ -359,7 +359,7 @@ lemma closedBall_mem
 
 中文:
 引理 closedBall_mem
-  条件: {l : Filter A} (hl : l.IsIncreasingApproximateUnit)
+  条件: {l : 滤子 A} (hl : l.是IncreasingApproximateUnit)
   证明: by
   simpa [Metric.closedBall] using! hl.eventually_norm
 
@@ -381,7 +381,7 @@ lemma pure_one
 
 中文:
 引理 pure_one
-  条件: (A : 类型) [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+  条件: (A : 类型) [CStar代数 A] [偏序 A] [StarOrdered环 A]
   证明: .pure_one A
   eventually_nonneg := by simp
   eventually_norm := by nontriviality A; simp
@@ -414,8 +414,8 @@ lemma tendsto_mul_right_of_forall_nonneg_tendsto
 exact tendsto_const_nhds.smul h (x i) (x i).2.1 by simp
 
 中文:
-引理 tendsto_mul_right_of_forall_nonneg_tendsto
-  结论: {l : Filter A}
+引理 tendsto_mul_right_of_对任意_nonneg_tendsto
+  结论: {l : 滤子 A}
   证明: by
   have : m in span Complex ({x | 0 <= x} inter ball 0 1) := by simp [span_nonneg_inter_unitBall]
   obtain ⟨n, c, x, rfl⟩ := mem_span_set'.mp this
@@ -452,7 +452,7 @@ lemma tendsto_mul_left_iff_tendsto_mul_right
 
 中文:
 引理 tendsto_mul_left_iff_tendsto_mul_right
-  条件: {l : Filter A} (hl : 对任意ᶠ x in l, IsSelfAdjoint x)
+  条件: {l : 滤子 A} (hl : 对任意ᶠ x in l, IsSelfAdjoint x)
   证明: by
   refine ⟨fun h m => ?_, fun h m => ?_⟩
   all_goals
@@ -506,7 +506,7 @@ definition approximateUnit
 
 中文:
 定义 approximateUnit
-  签名: : Filter A
+  签名: : 滤子 A
   定义体: (isBasis_nonneg_sections A).filter ⊓ 𝓟 (closedBall 0 1)
 
 Depends on / 依赖: closedBall, filter, isBasis_nonneg_sections
@@ -546,7 +546,7 @@ lemma nnnorm_sub_mul_self_le
 
 中文:
 引理 nnnorm_sub_mul_self_le
-  结论: {A : 类型} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+  结论: {A : 类型} [CStar代数 A] [偏序 A] [StarOrdered环 A]
   证明: by
   nth_rw 1 [← one_mul z]
   rw [← sqrt_sq c]; rw [le_sqrt_iff_sq_le]; rw [← sub_mul]; rw [sq]; rw [← CStarRing.nnnorm_star_mul_self]
@@ -584,7 +584,7 @@ lemma norm_sub_mul_self_le
 
 中文:
 引理 norm_sub_mul_self_le
-  结论: {A : 类型} [CStarAlgebra A] [PartialOrder A] [StarOrderedRing A]
+  结论: {A : 类型} [CStar代数 A] [偏序 A] [StarOrdered环 A]
   证明: nnnorm_sub_mul_self_le z hx₀ hy h (c := ⟨c, hc⟩)
 
 Depends on / 依赖: nnnorm_sub_mul_self_le

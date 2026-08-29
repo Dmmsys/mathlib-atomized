@@ -44,7 +44,7 @@ definition energy
 
 中文:
 定义 energy
-  签名: : Rat
+  签名: : 有理数
   定义体: ((∑ uv in P.parts.offDiag, G.edgeDensity uv.1 uv.2 ^ 2) : Rat) / (#P.parts : Rat) ^ 2
 
 Depends on / 依赖: G.edgeDensity, P.parts, P.parts.offDiag, edgeDensity, offDiag
@@ -122,7 +122,7 @@ theorem coe_energy
 
 中文:
 定理 coe_energy
-  条件: {𝕜 : 类型} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
+  条件: {𝕜 : 类型} [域 𝕜] [线性序 𝕜] [是StrictOrdered环 𝕜]
   证明: by
   rw [energy]; norm_cast
 

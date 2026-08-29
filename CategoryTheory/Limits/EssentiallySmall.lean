@@ -78,7 +78,7 @@ theorem hasProductsOfShape_of_small
 
 中文:
 定理 hasProductsOfShape_of_small
-  条件: (β : Type w₂) [Small.{w₁} β] [HasProducts.{w₁} C]
+  条件: (β : 类型 w₂) [Small.{w₁} β] [HasProducts.{w₁} C]
   证明: hasLimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
 
 Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.symm, equivShrink, equivalence, hasLimitsOfShape_of_equivalence
@@ -97,7 +97,7 @@ theorem hasCoproductsOfShape_of_small
 
 中文:
 定理 hasCoproductsOfShape_of_small
-  条件: (β : Type w₂) [Small.{w₁} β] [HasCoproducts.{w₁} C]
+  条件: (β : 类型 w₂) [Small.{w₁} β] [HasCoproducts.{w₁} C]
   证明: hasColimitsOfShape_of_equivalence Discrete.equivalence Equiv.symm equivShrink β
 
 Depends on / 依赖: Discrete, Discrete.equivalence, Equiv.symm, equivShrink, equivalence, hasColimitsOfShape_of_equivalence

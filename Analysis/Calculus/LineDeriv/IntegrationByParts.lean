@@ -70,7 +70,7 @@ lemma integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1
 
 中文:
 引理 integral_bilinear_hasLineDerivAt_right_eq_neg_left_of_integrable_aux1
-  结论: [SigmaFinite μ]
+  结论: [σ有限 μ]
   证明: calc
   ∫ x, B (f x) (g' x) ∂(μ.prod volume)
     = ∫ x, (∫ t, B (f (x, t)) (g' (x, t))) ∂μ := integral_prod _ hfg'

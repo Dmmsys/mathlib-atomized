@@ -54,8 +54,8 @@ theorem Subfunctor.isSeparated
   proof: fun _ S hS _ _ _ hx₁ hx₂ => Subtype.ext h S hS _ _ _ (hx₁.map G.ι) (hx₂.map G.ι)
 
 中文:
-定理 Subfunctor.isSeparated
-  条件: {J : GrothendieckTopology C} (h : Presieve.IsSeparated J F)
+定理 子函子.isSeparated
+  条件: {J : Grothendieck拓扑 C} (h : Presieve.是分离 J F)
   证明: fun _ S hS _ _ _ hx₁ hx₂ => Subtype.ext h S hS _ _ _ (hx₁.map G.ι) (hx₂.map G.ι)
 
 Depends on / 依赖: Subtype, Subtype.ext
@@ -80,8 +80,8 @@ definition Subfunctor.sheafify
     rwa [← comp_apply, ← Functor.map_comp]
 
 中文:
-定义 Subfunctor.sheafify
-  签名: : Subfunctor F where
+定义 子函子.sheafify
+  签名: : 子函子 F where
   定义体: { s | G.sieveOfSection s in J (unop U) }
   map := by
     rintro U V i s hs
@@ -116,7 +116,7 @@ theorem Subfunctor.le_sheafify
   exact G.map i.op hs
 
 中文:
-定理 Subfunctor.le_sheafify
+定理 子函子.le_sheafify
   结论: G <= G.sheafify J
   证明: by
   intro U s hs
@@ -155,8 +155,8 @@ theorem Subfunctor.eq_sheafify
   exact (congr_arg Subtype
 
 中文:
-定理 Subfunctor.eq_sheafify
-  条件: (h : Presieve.IsSheaf J F) (hG : Presieve.IsSheaf J G.toFunctor)
+定理 子函子.eq_sheafify
+  条件: (h : Presieve.是层 J F) (hG : Presieve.是层 J G.toFunctor)
   证明: by
   apply (G.le_sheafify J).antisymm
   intro U s hs
@@ -196,8 +196,8 @@ theorem Subfunctor.sheafify_isSheaf
   let x'' : Presieve.FamilyOfElements F S
 
 中文:
-定理 Subfunctor.sheafify_isSheaf
-  条件: (hF : Presieve.IsSheaf J F)
+定理 子函子.sheafify_isSheaf
+  条件: (hF : Presieve.是层 J F)
   证明: by
   refine (isSeparated _ hF.isSeparated).isSheaf fun U S hS x hx => ?_
   let S' := Sieve.bind S fun Y f hf => G.sieveOfSection (x f hf).1
@@ -249,8 +249,8 @@ theorem Subfunctor.eq_sheafify_iff
   proof: ⟨fun e => e.symm ▸ G.sheafify_isSheaf h, G.eq_sheafify h⟩
 
 中文:
-定理 Subfunctor.eq_sheafify_iff
-  条件: (h : Presieve.IsSheaf J F)
+定理 子函子.eq_sheafify_iff
+  条件: (h : Presieve.是层 J F)
   证明: ⟨fun e => e.symm ▸ G.sheafify_isSheaf h, G.eq_sheafify h⟩
 
 Depends on / 依赖: G.eq_sheafify, G.sheafify_isSheaf, e.symm, eq_sheafify, sheafify_isSheaf
@@ -271,8 +271,8 @@ theorem Subfunctor.isSheaf_iff
   exact ⟨Eq.ge, (G.le_sheafify J).antisymm⟩
 
 中文:
-定理 Subfunctor.isSheaf_iff
-  条件: (h : Presieve.IsSheaf J F)
+定理 子函子.isSheaf_iff
+  条件: (h : Presieve.是层 J F)
   证明: by
   rw [← G.eq_sheafify_iff h]
   change _ ↔ G.sheafify J <= G
@@ -296,8 +296,8 @@ theorem Subfunctor.sheafify_sheafify
   proof: ((Subfunctor.eq_sheafify_iff _ h).mpr <| G.sheafify_isSheaf h).symm
 
 中文:
-定理 Subfunctor.sheafify_sheafify
-  条件: (h : Presieve.IsSheaf J F)
+定理 子函子.sheafify_sheafify
+  条件: (h : Presieve.是层 J F)
   证明: ((Subfunctor.eq_sheafify_iff _ h).mpr <| G.sheafify_isSheaf h).symm
 
 Depends on / 依赖: G.sheafify_isSheaf, Subfunctor, Subfunctor.eq_sheafify_iff, eq_sheafify_iff, sheafify_isSheaf
@@ -324,8 +324,8 @@ definition Subfunctor.sheafifyLift
     refine (Presieve.IsSheafFor.valid_glue 
 
 中文:
-定义 Subfunctor.sheafifyLift
-  签名: (f : G.toFunctor ⟶ F') (h : Presieve.IsSheaf J F')
+定义 子函子.sheafifyLift
+  签名: (f : G.toFunctor ⟶ F') (h : Presieve.是层 J F')
   定义体: ↾fun s => (h (G.sieveOfSection s.1) s.prop).amalgamate
     (_) ((G.family_of_elements_compatible s.1).map f)
   naturality := by
@@ -374,8 +374,8 @@ theorem Subfunctor.to_sheafifyLift
     ((G.family_of_elements_compatible _).map _) _ _).t
 
 中文:
-定理 Subfunctor.to_sheafifyLift
-  条件: (f : G.toFunctor ⟶ F') (h : Presieve.IsSheaf J F')
+定理 子函子.to_sheafifyLift
+  条件: (f : G.toFunctor ⟶ F') (h : Presieve.是层 J F')
   证明: by
   ext U s
   apply (h _ ((Subfunctor.homOfLe (G.le_sheafify J)).app U s).prop).isSeparatedFor.ext
@@ -412,8 +412,8 @@ theorem Subfunctor.to_sheafify_lift_unique
   exact ConcreteCategory.congr_hom (congr_app e <| op V) ⟨_, hi⟩
 
 中文:
-定理 Subfunctor.to_sheafify_lift_unique
-  结论: (h : Presieve.IsSheaf J F')
+定理 子函子.to_sheafify_lift_unique
+  结论: (h : Presieve.是层 J F')
   证明: by
   ext U s
   apply (h _ s.prop).isSeparatedFor.ext
@@ -453,8 +453,8 @@ theorem Subfunctor.sheafify_le
   conv
 
 中文:
-定理 Subfunctor.sheafify_le
-  结论: (h : G <= G') (hF : Presieve.IsSheaf J F)
+定理 子函子.sheafify_le
+  结论: (h : G <= G') (hF : Presieve.是层 J F)
   证明: by
   intro U x hx
   convert! ((G.sheafifyLift (Subfunctor.homOfLe h) hG').app U ⟨x, hx⟩).2
@@ -494,7 +494,7 @@ definition Subfunctor.toRangeSheafify
   body: toRange f ≫ Subfunctor.homOfLe ((range f).le_sheafify J)
 
 中文:
-定义 Subfunctor.toRangeSheafify
+定义 子函子.toRangeSheafify
   签名: (f : F' ⟶ F)
   定义体: toRange f ≫ Subfunctor.homOfLe ((range f).le_sheafify J)
 
@@ -519,8 +519,8 @@ definition Sheaf.image
     exact F'.2⟩
 
 中文:
-定义 Sheaf.image
-  签名: {F F' : Sheaf J (Type w)} (f : F ⟶ F')
+定义 层.像
+  签名: {F F' : 层 J (类型 w)} (f : F ⟶ F')
   定义体: ⟨((Subfunctor.range f.1).sheafify J).toFunctor, by
     rw [isSheaf_iff_isSheaf_of_type]
     apply Subfunctor.sheafify_isSheaf
@@ -547,8 +547,8 @@ definition Sheaf.toImage
   body: ⟨Subfunctor.toRangeSheafify J f.1⟩
 
 中文:
-定义 Sheaf.toImage
-  签名: {F F' : Sheaf J (Type w)} (f : F ⟶ F')
+定义 层.toImage
+  签名: {F F' : 层 J (类型 w)} (f : F ⟶ F')
   定义体: ⟨Subfunctor.toRangeSheafify J f.1⟩
 
 Depends on / 依赖: Subfunctor, Subfunctor.toRangeSheafify, toRangeSheafify
@@ -567,8 +567,8 @@ definition Sheaf.imageι
   body: ⟨Subfunctor.ι _⟩
 
 中文:
-定义 Sheaf.imageι
-  签名: {F F' : Sheaf J (Type w)} (f : F ⟶ F')
+定义 层.imageι
+  签名: {F F' : 层 J (类型 w)} (f : F ⟶ F')
   定义体: ⟨Subfunctor.ι _⟩
 
 Depends on / 依赖: Subfunctor
@@ -590,8 +590,8 @@ theorem Sheaf.toImage_ι
   simp [Subfunctor.toRangeSheafify]
 
 中文:
-定理 Sheaf.toImage_ι
-  条件: {F F' : Sheaf J (Type w)} (f : F ⟶ F')
+定理 层.toImage_ι
+  条件: {F F' : 层 J (类型 w)} (f : F ⟶ F')
   证明: by
   ext1
   simp [Subfunctor.toRangeSheafify]
@@ -637,7 +637,7 @@ definition imageMonoFactorization
 
 中文:
 定义 imageMonoFactorization
-  签名: {F F' : Sheaf J (Type w)} (f : F ⟶ F')
+  签名: {F F' : 层 J (类型 w)} (f : F ⟶ F')
   定义体: Sheaf.image f
   m := Sheaf.imageι f
   e := Sheaf.toImage f
@@ -669,7 +669,7 @@ definition imageFactorization
 
 中文:
 定义 imageFactorization
-  签名: {F F' : Sheaf J (Type (max v u))} (f : F ⟶ F')
+  签名: {F F' : 层 J (类型 (最大值 v u))} (f : F ⟶ F')
   定义体: imageMonoFactorization f
   isImage :=
     { lift := fun I => by
@@ -714,7 +714,7 @@ instance :
 
 中文:
 实例 :
-  签名: Limits.HasImages (Sheaf J (Type max v u))
+  签名: Limits.有Images (层 J (类型 最大值 v u))
   定义体: ⟨fun f => ⟨⟨imageFactorization f⟩⟩⟩
 
 Depends on / 依赖: imageFactorization

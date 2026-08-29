@@ -45,7 +45,7 @@ theorem aeval_map_algebraMap
 
 中文:
 定理 aeval_map_algebraMap
-  条件: (x : σ -> B) (p : MvPolynomial σ R)
+  条件: (x : σ -> B) (p : 多元多项式 σ R)
   证明: by
   rw [aeval_def]; rw [aeval_def]; rw [eval₂_map]; rw [IsScalarTower.algebraMap_eq R A B]
 
@@ -77,7 +77,7 @@ theorem aeval_algebraMap_apply
 
 中文:
 定理 aeval_algebraMap_apply
-  条件: (x : σ -> A) (p : MvPolynomial σ R)
+  条件: (x : σ -> A) (p : 多元多项式 σ R)
   证明: by
   rw [aeval_def]; rw [aeval_def]; rw [← coe_eval₂Hom]; rw [← coe_eval₂Hom]; rw [map_eval₂Hom]; rw [←
     IsScalarTower.algebraMap_eq]; rw [Function.comp_def]
@@ -102,7 +102,7 @@ lemma aeval_C_comp_left
 
 中文:
 引理 aeval_C_comp_left
-  条件: {ι : 类型} (f : σ -> A) (p : MvPolynomial σ R)
+  条件: {ι : 类型} (f : σ -> A) (p : 多元多项式 σ R)
   证明: aeval_algebraMap_apply ..
 -/
 lemma aeval_C_comp_left {ι : Type*} (f : σ -> A) (p : MvPolynomial σ R) :
@@ -120,7 +120,7 @@ lemma aeval_algebraMap_eq_zero_iff
 
 中文:
 引理 aeval_algebraMap_eq_zero_iff
-  结论: [IsDomain A] [Module.IsTorsionFree A B] [Nontrivial B]
+  结论: [是整环 A] [模.是无挠 A B] [非平凡 B]
   证明: by
   rw [aeval_algebraMap_apply]; rw [Algebra.algebraMap_eq_smul_one]; rw [smul_eq_zero]; rw [iff_false_intro (one_ne_zero' B)]; rw [or_false]
 
@@ -141,7 +141,7 @@ theorem aeval_algebraMap_eq_zero_iff_of_injective
 
 中文:
 定理 aeval_algebraMap_eq_zero_iff_of_injective
-  结论: {x : σ -> A} {p : MvPolynomial σ R}
+  结论: {x : σ -> A} {p : 多元多项式 σ R}
   证明: by
   rw [aeval_algebraMap_apply]; rw [← (algebraMap A B).map_zero]; rw [h.eq_iff]
 
@@ -175,7 +175,7 @@ theorem mvPolynomial_aeval_coe
 
 中文:
 定理 mvPolynomial_aeval_coe
-  条件: (S : Subalgebra R A) (x : σ -> S) (p : MvPolynomial σ R)
+  条件: (S : 子代数 R A) (x : σ -> S) (p : 多元多项式 σ R)
   证明: by convert! aeval_algebraMap_apply A x p
 
 Depends on / 依赖: aeval_algebraMap_apply, convert

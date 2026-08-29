@@ -58,7 +58,7 @@ structure IsFaceOf
     - mem_of_smul_add_mem({x y : M} {a : R}) : x in C -> y in C -> 0 < a -> a • x + y in F -> x in F
 
 中文:
-结构 IsFaceOf
+结构 是FaceOf
   参数: (F C : PointedCone R M)
   公理与运算 (2 个):
     - le : F <= C
@@ -83,7 +83,7 @@ theorem mem_of_smul_add_smul_mem_left
 
 中文:
 定理 mem_of_smul_add_smul_mem_left
-  结论: {x y : M} {a b : R} (hF : F.IsFaceOf C) (hx : x in C)
+  结论: {x y : M} {a b : R} (hF : F.是FaceOf C) (hx : x in C)
   证明: hF.2 hx (smul_mem _ hb.le hy) ha h
 
 Depends on / 依赖: hb.le, smul_mem
@@ -103,7 +103,7 @@ theorem mem_of_smul_add_smul_mem_right
 
 中文:
 定理 mem_of_smul_add_smul_mem_right
-  结论: {x y : M} {a b : R} (hF : F.IsFaceOf C) (hx : x in C)
+  结论: {x y : M} {a b : R} (hF : F.是FaceOf C) (hx : x in C)
   证明: by
   apply hF.2 hy (smul_mem _ ha.le hx) hb; rwa [add_comm]
 
@@ -127,7 +127,7 @@ theorem refl
 中文:
 定理 refl
   条件: (C : PointedCone R M)
-  结论: C.IsFaceOf C
+  结论: C.是FaceOf C
   证明: ⟨fun _ a => a, fun hx _ _ _ => hx⟩
 -/
 protected theorem refl (C : PointedCone R M) : C.IsFaceOf C := ⟨fun _ a => a, fun hx _ _ _ => hx⟩
@@ -144,7 +144,7 @@ theorem rfl
 中文:
 定理 rfl
   条件: {C : PointedCone R M}
-  结论: C.IsFaceOf C
+  结论: C.是FaceOf C
   证明: .refl _
 -/
 protected theorem rfl {C : PointedCone R M} : C.IsFaceOf C := .refl _
@@ -159,7 +159,7 @@ theorem isFaceOf_iff_le
 
 中文:
 定理 isFaceOf_iff_le
-  条件: (h₁ : F₁.IsFaceOf C) (h₂ : F₂.IsFaceOf C)
+  条件: (h₁ : F₁.是FaceOf C) (h₂ : F₂.是FaceOf C)
   证明: ⟨IsFaceOf.le, fun h => ⟨h, fun hx hy ha hxy => h₁.2 (h₂.le hx) (h₂.le hy) ha hxy⟩⟩
 
 Depends on / 依赖: IsFaceOf, IsFaceOf.le
@@ -182,8 +182,8 @@ theorem isExtreme
 
 中文:
 定理 isExtreme
-  条件: (h : F.IsFaceOf C)
-  结论: IsExtreme R (C : Set M) F
+  条件: (h : F.是FaceOf C)
+  结论: 是Extreme R (C : 集合 M) F
   证明: by
   refine ⟨h.1, ?_⟩
   rintro _ xc _ yc _ zf ⟨_, _, a0, b0, -, rfl⟩
@@ -210,8 +210,8 @@ theorem inf
   · exact h₂.mem_of_smul_add_mem xc₂ yc₂ a0 hz₂
 
 中文:
-定理 inf
-  条件: (h₁ : F₁.IsFaceOf C₁) (h₂ : F₂.IsFaceOf C₂)
+定理 下确界
+  条件: (h₁ : F₁.是FaceOf C₁) (h₂ : F₂.是FaceOf C₂)
   证明: by
   use le_inf_iff.mpr ⟨Set.inter_subset_left.trans h₁.le, Set.inter_subset_right.trans h₂.le⟩
   simp only [mem_inf, and_imp]
@@ -238,8 +238,8 @@ theorem inf_left
 
 中文:
 定理 inf_left
-  条件: (h₁ : F₁.IsFaceOf C) (h₂ : F₂.IsFaceOf C)
-  结论: (F₁ ⊓ F₂).IsFaceOf C
+  条件: (h₁ : F₁.是FaceOf C) (h₂ : F₂.是FaceOf C)
+  结论: (F₁ ⊓ F₂).是FaceOf C
   证明: inf_idem C ▸ IsFaceOf.inf h₁ h₂
 
 Depends on / 依赖: IsFaceOf, IsFaceOf.inf, inf_idem
@@ -258,8 +258,8 @@ theorem inf_right
 
 中文:
 定理 inf_right
-  条件: (h₁ : F.IsFaceOf C₁) (h₂ : F.IsFaceOf C₂)
-  结论: F.IsFaceOf (C₁ ⊓ C₂)
+  条件: (h₁ : F.是FaceOf C₁) (h₂ : F.是FaceOf C₂)
+  结论: F.是FaceOf (C₁ ⊓ C₂)
   证明: inf_idem F ▸ IsFaceOf.inf h₁ h₂
 
 Depends on / 依赖: IsFaceOf, IsFaceOf.inf, inf_idem
@@ -281,7 +281,7 @@ theorem sInf
 
 中文:
 定理 sInf
-  条件: (F : Set (PointedCone R M)) (h : 对任意 f in F, f.IsFaceOf C)
+  条件: (F : 集合 (PointedCone R M)) (h : 对任意 f in F, f.是FaceOf C)
   证明: sm.1
   mem_of_smul_add_mem := by
     simp only [mem_inf, mem_sInf, and_imp]
@@ -308,7 +308,7 @@ theorem mem_of_add_mem_left
 
 中文:
 定理 mem_of_add_mem_left
-  结论: (hF : F.IsFaceOf C) {x y : M}
+  结论: (hF : F.是FaceOf C) {x y : M}
   证明: by
   nontriviality R using Module.subsingleton R M
   simpa [hxy] using hF.mem_of_smul_add_mem hx hy zero_lt_one
@@ -331,7 +331,7 @@ theorem mem_of_add_mem_right
 
 中文:
 定理 mem_of_add_mem_right
-  结论: (hF : F.IsFaceOf C) {x y : M}
+  结论: (hF : F.是FaceOf C) {x y : M}
   证明: by
   rw [add_comm x y] at hxy; exact mem_of_add_mem_left hF hy hx hxy
 
@@ -353,7 +353,7 @@ theorem add_mem_iff_mem
 
 中文:
 定理 add_mem_iff_mem
-  条件: (hF : F.IsFaceOf C) {x y : M} (hx : x in C) (hy : y in C)
+  条件: (hF : F.是FaceOf C) {x y : M} (hx : x in C) (hy : y in C)
   证明: by
   refine ⟨?_, fun ⟨hx, hy⟩ => F.add_mem hx hy⟩
   exact fun h => ⟨mem_of_add_mem_left hF hx hy h, mem_of_add_mem_right hF hx hy h⟩
@@ -377,7 +377,7 @@ theorem mem_of_sum_mem
 
 中文:
 定理 mem_of_sum_mem
-  结论: {ι : 类型} [Fintype ι] {f : ι -> M} (hF : F.IsFaceOf C)
+  结论: {ι : 类型} [有限类型 ι] {f : ι -> M} (hF : F.是FaceOf C)
   证明: by classical
   apply hF.mem_of_add_mem_left (hsC i) (sum_mem (fun j (_ : j in Finset.univ.erase i) => hsC j))
   simp [hs]
@@ -399,7 +399,7 @@ theorem sum_mem_iff_mem
 
 中文:
 定理 sum_mem_iff_mem
-  结论: {ι : 类型} [Fintype ι] {f : ι -> M} (hF : F.IsFaceOf C)
+  结论: {ι : 类型} [有限类型 ι] {f : ι -> M} (hF : F.是FaceOf C)
   证明: ⟨mem_of_sum_mem hF hsC, fun a => Submodule.sum_mem F fun c _ => a c⟩
 
 Depends on / 依赖: Submodule, Submodule.sum_mem, mem_of_sum_mem, sum_mem
@@ -422,7 +422,7 @@ theorem mem_of_sum_smul_mem
 
 中文:
 定理 mem_of_sum_smul_mem
-  结论: {ι : 类型} [Fintype ι] {f : ι -> M} {c : ι -> R}
+  结论: {ι : 类型} [有限类型 ι] {f : ι -> M} {c : ι -> R}
   证明: by classical
   rw [Finset.sum_eq_add_sum_sdiff_singleton i] at hs
   · refine hF.mem_of_smul_add_mem (hsC i) ?_ hci hs
@@ -454,8 +454,8 @@ theorem trans
 
 中文:
 定理 trans
-  条件: (h₁ : F₂.IsFaceOf F₁) (h₂ : F₁.IsFaceOf C)
-  结论: F₂.IsFaceOf C
+  条件: (h₁ : F₂.是FaceOf F₁) (h₂ : F₁.是FaceOf C)
+  结论: F₂.是FaceOf C
   证明: by
   refine ⟨h₁.1.trans h₂.1, fun hx hy ha hxy => h₁.2 (h₂.2 hx hy ha (h₁.le hxy)) ?_ ha hxy⟩
   exact h₂.mem_of_add_mem_right (smul_mem _ ha.le hx) hy (h₁.le hxy)
@@ -483,7 +483,7 @@ theorem map
 
 中文:
 定理 map
-  条件: (f : M ->ₗ[R] N) (hf : Function.Injective f) (hF : F.IsFaceOf C)
+  条件: (f : M ->ₗ[R] N) (hf : 函数.单射 f) (hF : F.是FaceOf C)
   证明: map_mono hF.le
   mem_of_smul_add_mem := by
     rintro _ _ a ⟨x, hx, rfl⟩ ⟨y, hy, rfl⟩ ha ⟨z, hz₁, hz₂⟩
@@ -510,7 +510,7 @@ theorem map_equiv
 
 中文:
 定理 map_equiv
-  条件: (e : M ≃ₗ[R] N) (hF : F.IsFaceOf C)
+  条件: (e : M ≃ₗ[R] N) (hF : F.是FaceOf C)
   证明: hF.map _ e.injective
 
 Depends on / 依赖: e.injective, hF.map, injective
@@ -535,7 +535,7 @@ theorem of_map_injective
 
 中文:
 定理 of_map_injective
-  结论: {f : M ->ₗ[R] N} (hf : Function.Injective f)
+  结论: {f : M ->ₗ[R] N} (hf : 函数.单射 f)
   证明: by
   obtain ⟨sub, hF⟩ := hc
   refine ⟨fun x xf => ?_, fun hx hy ha h => ?_⟩
@@ -572,8 +572,8 @@ theorem comap
 
 中文:
 定理 comap
-  条件: (f : N ->ₗ[R] M) (hF : F.IsFaceOf C)
-  结论: (F.comap f).IsFaceOf (C.comap f)
+  条件: (f : N ->ₗ[R] M) (hF : F.是FaceOf C)
+  结论: (F.comap f).是FaceOf (C.comap f)
   证明: by
   refine ⟨comap_mono hF.le, ?_⟩
   simp only [mem_comap, map_add, map_smul]
@@ -600,7 +600,7 @@ theorem of_comap_surjective
 
 中文:
 定理 of_comap_surjective
-  结论: {f : N ->ₗ[R] M} (hf : Function.Surjective f)
+  结论: {f : N ->ₗ[R] M} (hf : 函数.满射 f)
   证明: by
   refine ⟨fun x xF => ?_, fun {x y _} xC yC a0 h => ?_⟩
   · rw [← (hf x).choose_spec] at xF ⊢
@@ -634,7 +634,7 @@ theorem isFaceOf_map_iff
 
 中文:
 定理 isFaceOf_map_iff
-  条件: [AddCommGroup N] [Module R N] {f : M ->ₗ[R] N} (hf : Function.Injective f)
+  条件: [加法交换群 N] [模 R N] {f : M ->ₗ[R] N} (hf : 函数.单射 f)
   证明: ⟨IsFaceOf.of_map_injective hf, IsFaceOf.map _ hf⟩
 
 Depends on / 依赖: IsFaceOf, IsFaceOf.map, IsFaceOf.of_map_injective, of_map_injective
@@ -653,7 +653,7 @@ theorem isFaceOf_comap_iff
 
 中文:
 定理 isFaceOf_comap_iff
-  结论: [AddCommGroup N] [Module R N] {f : N ->ₗ[R] M}
+  结论: [加法交换群 N] [模 R N] {f : N ->ₗ[R] M}
   证明: ⟨IsFaceOf.of_comap_surjective hf, IsFaceOf.comap _⟩
 
 Depends on / 依赖: IsFaceOf, IsFaceOf.comap, IsFaceOf.of_comap_surjective, of_comap_surjective
@@ -715,7 +715,7 @@ lemma lineal
 中文:
 引理 lineal
   条件: (C : PointedCone R M)
-  结论: IsFaceOf C.lineal C
+  结论: 是FaceOf C.lineal C
   证明: by
   apply of_mem_of_add_mem_left (lineal_le C)
   intro _ _ xc yc xyf
@@ -741,7 +741,7 @@ lemma lineal_le
 
 中文:
 引理 lineal_le
-  条件: (hF : F.IsFaceOf C)
+  条件: (hF : F.是FaceOf C)
   结论: C.lineal <= F
   证明: fun _ hx => hF.mem_of_add_mem_left hx.1 hx.2 (by simp)
 
@@ -765,7 +765,7 @@ lemma lineal_congr
 
 中文:
 引理 lineal_congr
-  条件: (hF : F.IsFaceOf C)
+  条件: (hF : F.是FaceOf C)
   结论: F.lineal = C.lineal
   证明: by
   ext
@@ -799,7 +799,7 @@ theorem prod
   exact ⟨hF₁.mem_of_smul_add_mem xc₁ yc₁ a0 hab₁, hF₂.mem_of_sm
 
 中文:
-定理 prod
+定理 乘积
   结论: {C₁ F₁ : PointedCone R M} {C₂ F₂ : PointedCone R N}
   证明: by
   refine ⟨fun x hx => by simpa [mem_prod] using ⟨hF₁.le hx.1, hF₂.le hx.2⟩, ?_⟩

@@ -51,7 +51,7 @@ definition Disjoint
 
 中文:
 定义 Disjoint
-  签名: (f g : Perm α)
+  签名: (f g : 置换 α)
   定义体: forall x, f x = x ∨ g x = x
 -/
 def Disjoint (f g : Perm α) :=
@@ -87,7 +87,7 @@ instance Disjoint.stdSymm
 
 中文:
 实例 Disjoint.stdSymm
-  签名: : Std.Symm (α := Perm α) Disjoint where
+  签名: : Std.Symm (α := 置换 α) Disjoint where
   定义体: Disjoint.symm
 
 @[deprecated (since := "2026-06-10")] alias Disjoint.symmetric := Disjoint.stdSymm
@@ -172,7 +172,7 @@ theorem disjoint_one_left
 
 中文:
 定理 disjoint_one_left
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: Disjoint 1 f
   证明: fun _ => Or.inl rfl
 
@@ -194,7 +194,7 @@ theorem disjoint_one_right
 
 中文:
 定理 disjoint_one_right
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: Disjoint f 1
   证明: fun _ => Or.inr rfl
 
@@ -413,7 +413,7 @@ theorem disjoint_conj
 
 中文:
 定理 disjoint_conj
-  条件: (h : Perm α)
+  条件: (h : 置换 α)
   结论: Disjoint (h * f * h⁻¹) (h * g * h⁻¹) ↔ Disjoint f g
   证明: (h⁻¹).forall_congr fun {_} => by simp only [mul_apply, eq_inv_iff_eq]
 
@@ -433,7 +433,7 @@ theorem Disjoint.conj
 
 中文:
 定理 Disjoint.conj
-  条件: (H : Disjoint f g) (h : Perm α)
+  条件: (H : Disjoint f g) (h : 置换 α)
   结论: Disjoint (h * f * h⁻¹) (h * g * h⁻¹)
   证明: (disjoint_conj h).2 H
 
@@ -457,7 +457,7 @@ theorem disjoint_prod_right
 
 中文:
 定理 disjoint_prod_right
-  条件: (l : List (Perm α)) (h : 对任意 g in l, Disjoint f g)
+  条件: (l : 列表 (置换 α)) (h : 对任意 g in l, Disjoint f g)
   证明: by
   induction l with
   | nil => exact disjoint_one_right _
@@ -485,7 +485,7 @@ theorem disjoint_noncommProd_right
 
 中文:
 定理 disjoint_noncommProd_right
-  结论: {ι : 类型} {k : ι -> Perm α} {s : Finset ι}
+  结论: {ι : 类型} {k : ι -> 置换 α} {s : 有限集 ι}
   证明: noncommProd_induction s k hs g.Disjoint (fun _ _ => Disjoint.mul_right) (disjoint_one_right g) hg
 
 Depends on / 依赖: Disjoint, Disjoint.mul_right, disjoint_one_right, g.Disjoint, mul_right, noncommProd_induction
@@ -507,7 +507,7 @@ theorem disjoint_prod_perm
 
 中文:
 定理 disjoint_prod_perm
-  条件: {l₁ l₂ : List (Perm α)} (hl : l₁.Pairwise Disjoint) (hp : l₁ ~ l₂)
+  条件: {l₁ l₂ : 列表 (置换 α)} (hl : l₁.两两 Disjoint) (hp : l₁ ~ l₂)
   证明: hp.prod_eq' hl.imp Disjoint.commute
 
 Depends on / 依赖: Disjoint, Disjoint.commute, commute, hl.imp, hp.prod_eq, prod_eq
@@ -527,7 +527,7 @@ theorem nodup_of_pairwise_disjoint
 
 中文:
 定理 nodup_of_pairwise_disjoint
-  结论: {l : List (Perm α)} (h1 : (1 : Perm α) ∉ l)
+  结论: {l : 列表 (置换 α)} (h1 : (1 : 置换 α) ∉ l)
   证明: by
   grind [List.Pairwise.imp_of_mem, disjoint_refl_iff]
 
@@ -622,7 +622,7 @@ theorem Disjoint.mul_apply_eq_iff
 
 中文:
 定理 Disjoint.mul_apply_eq_iff
-  条件: {σ τ : Perm α} (hστ : Disjoint σ τ) {a : α}
+  条件: {σ τ : 置换 α} (hστ : Disjoint σ τ) {a : α}
   证明: by
   refine ⟨fun h => ?_, fun h => by rw [mul_apply, h.2, h.1]⟩
   rcases hστ a with hσ | hτ
@@ -649,7 +649,7 @@ theorem Disjoint.mul_eq_one_iff
 
 中文:
 定理 Disjoint.mul_eq_one_iff
-  条件: {σ τ : Perm α} (hστ : Disjoint σ τ)
+  条件: {σ τ : 置换 α} (hστ : Disjoint σ τ)
   证明: by
   simp_rw [Perm.ext_iff, one_apply, hστ.mul_apply_eq_iff, forall_and]
 
@@ -671,7 +671,7 @@ theorem Disjoint.zpow_disjoint_zpow
 
 中文:
 定理 Disjoint.zpow_disjoint_zpow
-  条件: {σ τ : Perm α} (hστ : Disjoint σ τ) (m n : 整数)
+  条件: {σ τ : 置换 α} (hστ : Disjoint σ τ) (m n : 整数)
   证明: fun x =>
   Or.imp (fun h => zpow_apply_eq_self_of_apply_eq_self h m)
     (fun h => zpow_apply_eq_self_of_apply_eq_self h n) (hστ x)
@@ -691,7 +691,7 @@ theorem Disjoint.pow_disjoint_pow
 
 中文:
 定理 Disjoint.pow_disjoint_pow
-  条件: {σ τ : Perm α} (hστ : Disjoint σ τ) (m n : 自然数)
+  条件: {σ τ : 置换 α} (hστ : Disjoint σ τ) (m n : 自然数)
   证明: hστ.zpow_disjoint_zpow m n
 
 Depends on / 依赖: zpow_disjoint_zpow
@@ -718,7 +718,7 @@ definition IsSwap
 
 中文:
 定义 IsSwap
-  签名: (f : Perm α)
+  签名: (f : 置换 α)
   定义体: exists x y, x != y ∧ f = swap x y
 
 @[simp]
@@ -738,7 +738,7 @@ theorem ofSubtype_swap_eq
 
 中文:
 定理 ofSubtype_swap_eq
-  条件: {p : α -> 命题} [DecidablePred p] (x y : Subtype p)
+  条件: {p : α -> 命题} [DecidablePred p] (x y : 子类型 p)
   证明: by
   grind [ofSubtype_apply_of_mem, ofSubtype_apply_of_not_mem]
 
@@ -762,7 +762,7 @@ theorem IsSwap.of_subtype_isSwap
 
 中文:
 定理 IsSwap.of_subtype_isSwap
-  结论: {p : α -> 命题} [DecidablePred p] {f : Perm (Subtype p)}
+  结论: {p : α -> 命题} [DecidablePred p] {f : 置换 (子类型 p)}
   证明: let ⟨⟨x, hx⟩, ⟨y, hy⟩, hxy⟩ := h
   ⟨x, y, by
     simp only [Ne, Subtype.ext_iff] at hxy
@@ -791,7 +791,7 @@ theorem ne_and_ne_of_swap_mul_apply_ne_self
 
 中文:
 定理 ne_and_ne_of_swap_mul_apply_ne_self
-  条件: {f : Perm α} {x y : α} (hy : (swap x (f x) * f) y != y)
+  条件: {f : 置换 α} {x y : α} (hy : (swap x (f x) * f) y != y)
   证明: by
   simp only [swap_apply_def, mul_apply, f.injective.eq_iff] at *
   grind
@@ -841,7 +841,7 @@ theorem set_support_apply_mem
 
 中文:
 定理 set_support_apply_mem
-  条件: {p : Perm α} {a : α}
+  条件: {p : 置换 α} {a : α}
   证明: by simp
 -/
 theorem set_support_apply_mem {p : Perm α} {a : α} :
@@ -917,7 +917,7 @@ theorem apply_pow_apply_eq_iff
 
 中文:
 定理 apply_pow_apply_eq_iff
-  条件: (f : Perm α) (n : 自然数) {x : α}
+  条件: (f : 置换 α) (n : 自然数) {x : α}
   证明: by
   rw [← mul_apply]; rw [Commute.self_pow f]; rw [mul_apply]; rw [apply_eq_iff_eq]
 
@@ -941,7 +941,7 @@ theorem apply_zpow_apply_eq_iff
 
 中文:
 定理 apply_zpow_apply_eq_iff
-  条件: (f : Perm α) (n : 整数) {x : α}
+  条件: (f : 置换 α) (n : 整数) {x : α}
   证明: by
   rw [← mul_apply]; rw [Commute.self_zpow f]; rw [mul_apply]; rw [apply_eq_iff_eq]
 
@@ -965,7 +965,7 @@ definition support
 
 中文:
 定义 support
-  签名: (f : Perm α)
+  签名: (f : 置换 α)
   定义体: {x | f x != x}
 
 @[simp]
@@ -1027,8 +1027,8 @@ theorem coe_support_eq_set_support
 
 中文:
 定理 coe_support_eq_set_support
-  条件: (f : Perm α)
-  结论: (f.support : Set α) = { x | f x != x }
+  条件: (f : 置换 α)
+  结论: (f.support : 集合 α) = { x | f x != x }
   证明: by
   ext
   simp
@@ -1055,7 +1055,7 @@ theorem support_eq_empty_iff
 
 中文:
 定理 support_eq_empty_iff
-  条件: {σ : Perm α}
+  条件: {σ : 置换 α}
   结论: σ.support = ∅ ↔ σ = 1
   证明: by
   simp_rw [Finset.ext_iff, mem_support, Finset.notMem_empty, iff_false, not_not,
@@ -1082,7 +1082,7 @@ theorem support_one
 
 中文:
 定理 support_one
-  结论: (1 : Perm α).support = ∅
+  结论: (1 : 置换 α).support = ∅
   证明: by rw [support_eq_empty_iff]
 
 @[simp]
@@ -1102,7 +1102,7 @@ theorem support_refl
 
 中文:
 定理 support_refl
-  结论: support (Equiv.refl α) = ∅
+  结论: support (等价.refl α) = ∅
   证明: support_one
 
 Depends on / 依赖: support_one
@@ -1144,7 +1144,7 @@ theorem mem_support_iff_of_commute
 
 中文:
 定理 mem_support_iff_of_commute
-  条件: {g c : Perm α} (hgc : Commute g c) (x : α)
+  条件: {g c : 置换 α} (hgc : Commute g c) (x : α)
   证明: by
   simp only [mem_support, not_iff_not, ← mul_apply]
   rw [← hgc]; rw [mul_apply]; rw [Equiv.apply_eq_iff_eq]
@@ -1171,7 +1171,7 @@ theorem support_mul_le
 
 中文:
 定理 support_mul_le
-  条件: (f g : Perm α)
+  条件: (f g : 置换 α)
   结论: (f * g).support <= f.support ⊔ g.support
   证明: fun x => by
   simp only [sup_eq_union]
@@ -1204,8 +1204,8 @@ theorem exists_mem_support_of_mem_support_prod
     grind
 
 中文:
-定理 exists_mem_support_of_mem_support_prod
-  结论: {l : List (Perm α)} {x : α}
+定理 存在_mem_support_of_mem_support_prod
+  结论: {l : 列表 (置换 α)} {x : α}
   证明: by
   contrapose! hx
   simp_rw [mem_support, not_not] at hx ⊢
@@ -1243,7 +1243,7 @@ theorem support_pow_le
 
 中文:
 定理 support_pow_le
-  条件: (σ : Perm α) (n : 自然数)
+  条件: (σ : 置换 α) (n : 自然数)
   结论: (σ ^ n).support <= σ.support
   证明: fun _ h1 =>
   mem_support.mpr fun h2 => mem_support.mp h1 (pow_apply_eq_self_of_apply_eq_self h2 n)
@@ -1266,7 +1266,7 @@ theorem support_inv
 
 中文:
 定理 support_inv
-  条件: (σ : Perm α)
+  条件: (σ : 置换 α)
   结论: support σ⁻¹ = σ.support
   证明: by
   simp_rw [Finset.ext_iff, mem_support, not_iff_not, inv_eq_iff_eq.trans eq_comm, imp_true_iff]
@@ -1311,7 +1311,7 @@ theorem isInvariant_of_support_le
 
 中文:
 定理 isInvariant_of_support_le
-  条件: {c : Perm α} {s : Finset α} (hcs : c.support <= s) (x : α)
+  条件: {c : 置换 α} {s : 有限集 α} (hcs : c.support <= s) (x : α)
   证明: by
   by_cases hx' : x in c.support
   · simp only [hcs hx', hcs (apply_mem_support.mpr hx')]
@@ -1345,7 +1345,7 @@ lemma ofSubtype_eq_iff
 
 中文:
 引理 ofSubtype_eq_iff
-  结论: {g c : Equiv.Perm α} {s : Finset α}
+  结论: {g c : 等价.置换 α} {s : 有限集 α}
   证明: by
   simp only [Equiv.ext_iff, subtypePerm_apply, Subtype.mk.injEq, Subtype.forall]
   constructor
@@ -1398,7 +1398,7 @@ theorem support_ofSubtype
 
 中文:
 定理 support_ofSubtype
-  条件: {p : α -> 命题} [DecidablePred p] (u : Perm (Subtype p))
+  条件: {p : α -> 命题} [DecidablePred p] (u : 置换 (子类型 p))
   证明: by
   ext x
   simp only [mem_support, ne_eq, Finset.mem_map, Function.Embedding.coe_subtype, Subtype.exists,
@@ -1429,7 +1429,7 @@ theorem mem_support_ofSubtype
 
 中文:
 定理 mem_support_ofSubtype
-  条件: {p : α -> 命题} [DecidablePred p] (x : α) (u : Perm (Subtype p))
+  条件: {p : α -> 命题} [DecidablePred p] (x : α) (u : 置换 (子类型 p))
   证明: by
   simp [support_ofSubtype]
 
@@ -1459,7 +1459,7 @@ theorem mem_support_of_mem_noncommProd_support
 
 中文:
 定理 mem_support_of_mem_noncommProd_support
-  结论: {α β : 类型} [DecidableEq β] [Fintype β]
+  结论: {α β : 类型} [DecidableEq β] [有限类型 β]
   证明: by
   contrapose! hx
   classical
@@ -1662,7 +1662,7 @@ theorem support_prod_of_pairwise_disjoint
 
 中文:
 定理 support_prod_of_pairwise_disjoint
-  条件: (l : List (Perm α)) (h : l.Pairwise Disjoint)
+  条件: (l : 列表 (置换 α)) (h : l.两两 Disjoint)
   证明: by
   induction l with
   | nil => simp
@@ -1699,7 +1699,7 @@ theorem support_noncommProd
 
 中文:
 定理 support_noncommProd
-  结论: {ι : 类型} {k : ι -> Perm α} {s : Finset ι}
+  结论: {ι : 类型} {k : ι -> 置换 α} {s : 有限集 ι}
   证明: by
   classical
   induction s using Finset.induction_on with
@@ -1745,8 +1745,8 @@ theorem support_prod_le
 
 中文:
 定理 support_prod_le
-  条件: (l : List (Perm α))
-  结论: l.prod.support <= (l.map support).foldr (· ⊔ ·) ⊥
+  条件: (l : 列表 (置换 α))
+  结论: l.乘积.support <= (l.map support).foldr (· ⊔ ·) ⊥
   证明: by
   induction l with
   | nil => simp
@@ -1779,7 +1779,7 @@ theorem support_zpow_le
 
 中文:
 定理 support_zpow_le
-  条件: (σ : Perm α) (n : 整数)
+  条件: (σ : 置换 α) (n : 整数)
   结论: (σ ^ n).support <= σ.support
   证明: fun _ h1 =>
   mem_support.mpr fun h2 => mem_support.mp h1 (zpow_apply_eq_self_of_apply_eq_self h2 n)
@@ -1857,7 +1857,7 @@ theorem support_swap_mul_swap
 
 中文:
 定理 support_swap_mul_swap
-  条件: {x y z : α} (h : List.Nodup [x, y, z])
+  条件: {x y z : α} (h : 列表.Nodup [x, y, z])
   证明: by
   simp only [List.not_mem_nil, and_true, List.mem_cons, not_false_iff, List.nodup_cons,
     and_self_iff, List.nodup_nil] at h
@@ -1904,7 +1904,7 @@ alias support_swap_mul
 
 中文:
 定理 support_swap_mul_ge_support_sdiff
-  条件: (f : Perm α) (x y : α)
+  条件: (f : 置换 α) (x y : α)
   证明: by
   intro
   simp only [and_imp, Perm.coe_mul, Function.comp_apply, Ne, mem_support, mem_insert, mem_sdiff,
@@ -1951,7 +1951,7 @@ theorem support_swap_mul_eq
 
 中文:
 定理 support_swap_mul_eq
-  条件: (f : Perm α) (x : α) (h : f (f x) != x)
+  条件: (f : 置换 α) (x : α) (h : f (f x) != x)
   证明: by
   by_cases hx : f x = x
   · simp [hx, sdiff_singleton_eq_erase, notMem_support.mpr hx, erase_eq_of_notMem, pull_end]
@@ -2066,7 +2066,7 @@ theorem eq_on_support_mem_disjoint
 
 中文:
 定理 eq_on_support_mem_disjoint
-  条件: {l : List (Perm α)} (h : f in l) (hl : l.Pairwise Disjoint)
+  条件: {l : 列表 (置换 α)} (h : f in l) (hl : l.两两 Disjoint)
   证明: by
   induction l with
   | nil => simp at h
@@ -2108,7 +2108,7 @@ theorem Disjoint.mono
 
 中文:
 定理 Disjoint.mono
-  结论: {x y : Perm α} (h : Disjoint f g) (hf : x.support <= f.support)
+  结论: {x y : 置换 α} (h : Disjoint f g) (hf : x.support <= f.support)
   证明: by
   rw [disjoint_iff_disjoint_support] at h ⊢
   exact h.mono hf hg
@@ -2132,7 +2132,7 @@ theorem support_le_prod_of_mem
 
 中文:
 定理 support_le_prod_of_mem
-  条件: {l : List (Perm α)} (h : f in l) (hl : l.Pairwise Disjoint)
+  条件: {l : 列表 (置换 α)} (h : f in l) (hl : l.两两 Disjoint)
   证明: by
   intro x hx
   rwa [mem_support, ← eq_on_support_mem_disjoint h hl _ hx, ← mem_support]
@@ -2169,7 +2169,7 @@ theorem support_extend_domain
 
 中文:
 定理 support_extend_domain
-  条件: (f : α ≃ Subtype p) {g : Perm α}
+  条件: (f : α ≃ 子类型 p) {g : 置换 α}
   证明: by
   ext b
   simp only [mem_map, Ne,
@@ -2207,7 +2207,7 @@ theorem card_support_extend_domain
 
 中文:
 定理 card_support_extend_domain
-  条件: (f : α ≃ Subtype p) {g : Perm α}
+  条件: (f : α ≃ 子类型 p) {g : 置换 α}
   证明: by simp
 -/
 theorem card_support_extend_domain (f : α ≃ Subtype p) {g : Perm α} :
@@ -2229,7 +2229,7 @@ theorem card_support_eq_zero
 
 中文:
 定理 card_support_eq_zero
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: #f.support = 0 ↔ f = 1
   证明: by
   rw [Finset.card_eq_zero]; rw [support_eq_empty_iff]
@@ -2255,7 +2255,7 @@ theorem one_lt_card_support_of_ne_one
 
 中文:
 定理 one_lt_card_support_of_ne_one
-  条件: {f : Perm α} (h : f != 1)
+  条件: {f : 置换 α} (h : f != 1)
   结论: 1 < #f.support
   证明: by
   simp_rw [one_lt_card_iff, mem_support, ← not_or]
@@ -2289,7 +2289,7 @@ theorem card_support_ne_one
 
 中文:
 定理 card_support_ne_one
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: #f.support != 1
   证明: by
   by_cases h : f = 1
@@ -2318,7 +2318,7 @@ theorem card_support_le_one
 
 中文:
 定理 card_support_le_one
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: #f.support <= 1 ↔ f = 1
   证明: by
   rw [le_iff_lt_or_eq]; rw [Nat.lt_succ_iff]; rw [Nat.le_zero]; rw [card_support_eq_zero]; rw [or_iff_not_imp_right]; rw [imp_iff_right f.card_support_ne_one]
@@ -2339,7 +2339,7 @@ theorem two_le_card_support_of_ne_one
 
 中文:
 定理 two_le_card_support_of_ne_one
-  条件: {f : Perm α} (h : f != 1)
+  条件: {f : 置换 α} (h : f != 1)
   结论: 2 <= #f.support
   证明: one_lt_card_support_of_ne_one h
 
@@ -2360,7 +2360,7 @@ theorem card_support_swap_mul
 
 中文:
 定理 card_support_swap_mul
-  条件: {f : Perm α} {x : α} (hx : f x != x)
+  条件: {f : 置换 α} {x : α} (hx : f x != x)
   证明: Finset.card_lt_card
     ⟨fun _ hz => (mem_support_swap_mul_imp_mem_support_ne hz).left, fun h =>
       absurd (h (mem_support.2 hx)) (mt mem_support.1 (by simp))⟩
@@ -2421,7 +2421,7 @@ theorem card_support_eq_two
 
 中文:
 定理 card_support_eq_two
-  条件: {f : Perm α}
+  条件: {f : 置换 α}
   结论: #f.support = 2 ↔ IsSwap f
   证明: by
   constructor <;> intro h
@@ -2502,7 +2502,7 @@ theorem card_support_prod_list_of_pairwise_disjoint
 
 中文:
 定理 card_support_prod_list_of_pairwise_disjoint
-  条件: {l : List (Perm α)} (h : l.Pairwise Disjoint)
+  条件: {l : 列表 (置换 α)} (h : l.两两 Disjoint)
   证明: by
   induction l with
   | nil => exact card_support_eq_zero.mpr rfl
@@ -2538,7 +2538,7 @@ theorem support_subtypePerm
 
 中文:
 定理 support_subtypePerm
-  条件: [DecidableEq α] {s : Finset α} (f : Perm α) (h)
+  条件: [DecidableEq α] {s : 有限集 α} (f : 置换 α) (h)
   证明: by
   ext; simp [Subtype.ext_iff]
 
@@ -2571,7 +2571,7 @@ theorem fixed_point_card_lt_of_ne_one
 
 中文:
 定理 fixed_point_card_lt_of_ne_one
-  条件: [DecidableEq α] [Fintype α] {σ : Perm α} (h : σ != 1)
+  条件: [DecidableEq α] [有限类型 α] {σ : 置换 α} (h : σ != 1)
   证明: by
   rw [Nat.lt_sub_iff_add_lt]; rw [← Nat.lt_sub_iff_add_lt']; rw [← Finset.card_compl]; rw [Finset.compl_filter]
   exact one_lt_card_support_of_ne_one h

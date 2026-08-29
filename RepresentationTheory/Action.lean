@@ -153,7 +153,7 @@ lemma _root_.Action.tensor_ρ_apply
   proof: rfl
 
 中文:
-引理 _root_.Action.tensor_ρ_apply
+引理 _root_.作用.tensor_ρ_apply
   条件: (g : G) (xy : (X otimes Y).V)
   证明: rfl
 -/
@@ -175,7 +175,7 @@ definition ε
 
 中文:
 定义 ε
-  签名: : (trivial k G k).整数ertwiningMap (linearize k G (MonoidalCategoryStruct.tensorUnit
+  签名: : (trivial k G k).整数ertwining映射 (linearize k G (幺半群范畴结构.tensorUnit
   定义体: MonoidAlgebra.uniqueLinearEquiv k PUnit
   isIntertwining' g := by ext1; simp [linearize_single _]
 
@@ -197,7 +197,7 @@ lemma ε_one
 
 中文:
 引理 ε_one
-  结论: ε k G 1 = .single PUnit.unit 1
+  结论: ε k G 1 = .single 命题单元.unit 1
   证明: by
   simp [← toLinearMap_apply, types_tensorUnit_def]
 
@@ -222,7 +222,7 @@ definition η
 
 中文:
 定义 η
-  签名: : (linearize k G (𝟙_ (Action (类型u) G))).整数ertwiningMap (trivial k G k) where
+  签名: : (linearize k G (𝟙_ (作用 (类型u) G))).整数ertwining映射 (trivial k G k) where
   定义体: (MonoidAlgebra.uniqueLinearEquiv k PUnit).toLinearMap
   isIntertwining' g := by ext; simp [linearize_single _]
 
@@ -244,7 +244,7 @@ lemma η_single
 
 中文:
 引理 η_single
-  条件: (x : PUnit)
+  条件: (x : 命题单元)
   结论: η k G (.single x 1) = 1
   证明: by
   simp [← toLinearMap_apply, types_tensorUnit_def]
@@ -307,7 +307,7 @@ definition μ
 
 中文:
 定义 μ
-  签名: : ((linearize k G X).tprod (linearize k G Y)).整数ertwiningMap (linearize k G (X otimes Y)) where
+  签名: : ((linearize k G X).tprod (linearize k G Y)).整数ertwining映射 (linearize k G (X otimes Y)) where
   定义体: (MonoidAlgebra.tensorEquiv k).toLinearMap
   isIntertwining' g := by ext; simp [linearize_single _]; rfl
 
@@ -370,7 +370,7 @@ lemma μ_comp_rTensor
 
 中文:
 引理 μ_comp_rTensor
-  条件: (f : X ⟶ Y) (Z : Action (Type w) G)
+  条件: (f : X ⟶ Y) (Z : 作用 (类型 w) G)
   证明: by
   ext; simp
 -/
@@ -390,7 +390,7 @@ lemma μ_comp_lTensor
 
 中文:
 引理 μ_comp_lTensor
-  条件: (f : X ⟶ Y) (Z : Action (Type w) G)
+  条件: (f : X ⟶ Y) (Z : 作用 (类型 w) G)
   证明: by
   ext; simp
 -/
@@ -499,7 +499,7 @@ definition δ
 
 中文:
 定义 δ
-  签名: : (linearize k G (X otimes Y)).整数ertwiningMap
+  签名: : (linearize k G (X otimes Y)).整数ertwining映射
   定义体: (MonoidAlgebra.tensorEquiv k).symm.toLinearMap
   isIntertwining' g := by
     ext; simp [linearize_single _, MonoidAlgebra.tensorEquiv_symm_single_eq_single_one_tmul]; rfl
@@ -619,7 +619,7 @@ unif_hint (X : Action (Type u) G) where ⊢ (X otimes 𝟙_ (Action (Type u) G))
 
 中文:
 引理 leftUnitor_δ
-  条件: (X : Action (类型u) G)
+  条件: (X : 作用 (类型u) G)
   结论: (lid k (linearize k G X)).symm.to整数ertwiningMap =
   证明: by
   ext
@@ -648,7 +648,7 @@ lemma rightUnitor_δ
 
 中文:
 引理 rightUnitor_δ
-  条件: (X : Action (类型u) G)
+  条件: (X : 作用 (类型u) G)
   结论: (rid k (linearize k G X)).symm.to整数ertwiningMap =
   证明: by
   ext; simp [δ_apply_single _]
@@ -715,7 +715,7 @@ lemma linearizeTrivial_def
 
 中文:
 引理 linearizeTrivial_def
-  条件: (X : Type w) (g : G)
+  条件: (X : 类型 w) (g : G)
   证明: by
   ext (x : X) : 2
   rw [LinearMap.comp_apply]; rw [LinearMap.id_comp]; rw [MonoidAlgebra.lsingle_apply]; rw [linearize_single]
@@ -742,7 +742,7 @@ definition linearizeTrivialIso
 
 中文:
 定义 linearizeTrivialIso
-  签名: (X : Type w)
+  签名: (X : 类型 w)
   定义体: .mk (.refl ..) fun g => by erw [linearizeTrivial_def, LinearMap.comp_id]
 
 Depends on / 依赖: LinearMap, LinearMap.comp_id, comp_id, linearizeTrivial_def
@@ -761,7 +761,7 @@ lemma linearizeTrivialIso_apply
 
 中文:
 引理 linearizeTrivialIso_apply
-  条件: {X : Type w} (f : k[(Action.trivial _ X).V])
+  条件: {X : 类型 w} (f : k[(作用.trivial _ X).V])
   证明: rfl
 -/
 lemma linearizeTrivialIso_apply {X : Type w} (f : k[(Action.trivial _ X).V]) :
@@ -777,7 +777,7 @@ lemma linearizeTrivialIso_symm_apply
 
 中文:
 引理 linearizeTrivialIso_symm_apply
-  条件: {X : Type w} (f : k[X])
+  条件: {X : 类型 w} (f : k[X])
   证明: rfl
 -/
 lemma linearizeTrivialIso_symm_apply {X : Type w} (f : k[X]) :
@@ -794,7 +794,7 @@ definition linearizeOfMulActionIso
 
 中文:
 定义 linearizeOfMulActionIso
-  签名: (H : Type w) [MulAction G H]
+  签名: (H : 类型 w) [乘法作用 G H]
   定义体: .mk (.refl ..) fun _ => rfl
 -/
 def linearizeOfMulActionIso (H : Type w) [MulAction G H] :

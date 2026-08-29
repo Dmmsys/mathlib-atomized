@@ -52,7 +52,7 @@ lemma epi_iff_locallySurjective_on_compHaus
 
 中文:
 引理 epi_iff_locallySurjective_on_compHaus
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: by
   rw [← isLocallySurjective_iff_epi']; rw [coherentTopology.isLocallySurjective_iff]; rw [regularTopology.isLocallySurjective_iff]
   simp_rw [((CompHaus.effectiveEpi_tfae _).out 0 2 :)]
@@ -86,7 +86,7 @@ lemma epi_iff_surjective_on_stonean
 
 中文:
 引理 epi_iff_surjective_on_stonean
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: by
   rw [← (StoneanCompHaus.equivalence A).inverse.epi_map_iff_epi]; rw [← Presheaf.coherentExtensiveEquivalence.functor.epi_map_iff_epi]; rw [← isLocallySurjective_iff_epi']
   exact extensiveTopology.isLocallySurjective_iff (D := A) _
@@ -114,7 +114,7 @@ lemma epi_iff_locallySurjective_on_compHaus
 
 中文:
 引理 epi_iff_locallySurjective_on_compHaus
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: Condensed.epi_iff_locallySurjective_on_compHaus _ f
 
 Depends on / 依赖: Condensed, Condensed.epi_iff_locallySurjective_on_compHaus, epi_iff_locallySurjective_on_compHaus
@@ -135,7 +135,7 @@ lemma epi_iff_surjective_on_stonean
 
 中文:
 引理 epi_iff_surjective_on_stonean
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: Condensed.epi_iff_surjective_on_stonean _ f
 
 Depends on / 依赖: Condensed, Condensed.epi_iff_surjective_on_stonean, epi_iff_surjective_on_stonean
@@ -160,7 +160,7 @@ lemma epi_iff_locallySurjective_on_compHaus
 
 中文:
 引理 epi_iff_locallySurjective_on_compHaus
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: Condensed.epi_iff_locallySurjective_on_compHaus _ f
 
 Depends on / 依赖: Condensed, Condensed.epi_iff_locallySurjective_on_compHaus, epi_iff_locallySurjective_on_compHaus
@@ -183,7 +183,7 @@ lemma epi_iff_surjective_on_stonean
 
 中文:
 引理 epi_iff_surjective_on_stonean
-  结论: Epi f ↔
+  结论: 满态射 f ↔
   证明: have : HasLimitsOfSize.{u, u + 1} (ModuleCat R) :=
     hasLimitsOfSizeShrink.{u, u + 1, u + 1, u + 1} _
   Condensed.epi_iff_surjective_on_stonean _ f

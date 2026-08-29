@@ -186,7 +186,7 @@ theorem norm_image_of_norm_eq_zero
 
 中文:
 定理 norm_image_of_norm_eq_zero
-  结论: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕) (hf : Continuous f)
+  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕) (hf : 连续 f)
   证明: by
   rw [← mem_closure_zero_iff_norm]; rw [← specializes_iff_mem_closure]; rw [← map_zero f] at *
   exact hx.map hf
@@ -212,8 +212,8 @@ theorem SemilinearMapClass.bound_of_shell_semi_normed
     ε_pos hc hf hx
 
 中文:
-定理 SemilinearMapClass.bound_of_shell_semi_normed
-  结论: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
+定理 半线性映射类.bound_of_shell_semi_normed
+  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
   证明: (normSeminorm 𝕜 E).bound_of_shell ((normSeminorm 𝕜₂ F).comp ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩)
     ε_pos hc hf hx
 
@@ -236,8 +236,8 @@ theorem SemilinearMapClass.bound_of_continuous
   ((normSeminorm 𝕜₂ F).comp φ).bound_of_continuous_normedSpace (continuous_norm.comp hf)
 
 中文:
-定理 SemilinearMapClass.bound_of_continuous
-  结论: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
+定理 半线性映射类.bound_of_continuous
+  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
   证明: let φ : E ->ₛₗ[σ₁₂] F := ⟨⟨f, map_add f⟩, map_smulₛₗ f⟩
   ((normSeminorm 𝕜₂ F).comp φ).bound_of_continuous_normedSpace (continuous_norm.comp hf)
 
@@ -257,8 +257,8 @@ theorem SemilinearMapClass.nnbound_of_continuous
   proof: let ⟨c, hc, hcf⟩ := SemilinearMapClass.bound_of_continuous f hf; ⟨⟨c, hc.le⟩, hc, hcf⟩
 
 中文:
-定理 SemilinearMapClass.nnbound_of_continuous
-  结论: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
+定理 半线性映射类.nnbound_of_continuous
+  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
   证明: let ⟨c, hc, hcf⟩ := SemilinearMapClass.bound_of_continuous f hf; ⟨⟨c, hc.le⟩, hc, hcf⟩
 
 Depends on / 依赖: SemilinearMapClass, SemilinearMapClass.bound_of_continuous, bound_of_continuous, hc.le
@@ -277,8 +277,8 @@ theorem SemilinearMapClass.ebound_of_continuous
 ⟨c, hc, fun x => ENNReal.coe_mono hcf x⟩
 
 中文:
-定理 SemilinearMapClass.ebound_of_continuous
-  结论: [SemilinearMapClass 𝓕 σ₁₂ E F] (f : 𝓕)
+定理 半线性映射类.ebound_of_continuous
+  结论: [半线性映射类 𝓕 σ₁₂ E F] (f : 𝓕)
   证明: let ⟨c, hc, hcf⟩ := SemilinearMapClass.nnbound_of_continuous f hf
 ⟨c, hc, fun x => ENNReal.coe_mono hcf x⟩
 
@@ -366,7 +366,7 @@ definition _root_.LinearIsometry.toSpanSingleton
   body: { LinearMap.toSpanSingleton 𝕜 E v with norm_map' := fun x => by simp [norm_smul, hv] }
 
 中文:
-定义 _root_.LinearIsometry.toSpanSingleton
+定义 _root_.线性等距.toSpanSingleton
   签名: {v : E} (hv : ‖v‖ = 1)
   定义体: { LinearMap.toSpanSingleton 𝕜 E v with norm_map' := fun x => by simp [norm_smul, hv] }
 
@@ -389,7 +389,7 @@ theorem _root_.LinearIsometry.toSpanSingleton_apply
 @[simp]
 
 中文:
-定理 _root_.LinearIsometry.toSpanSingleton_apply
+定理 _root_.线性等距.toSpanSingleton_apply
   条件: {v : E} (hv : ‖v‖ = 1) (a : 𝕜)
   证明: rfl
 
@@ -409,7 +409,7 @@ theorem _root_.LinearIsometry.coe_toSpanSingleton
   proof: rfl
 
 中文:
-定理 _root_.LinearIsometry.coe_toSpanSingleton
+定理 _root_.线性等距.coe_toSpanSingleton
   条件: {v : E} (hv : ‖v‖ = 1)
   证明: rfl
 -/
@@ -449,7 +449,7 @@ instance hasOpNorm
 
 中文:
 实例 hasOpNorm
-  签名: : Norm (E ->SL[σ₁₂] F)
+  签名: : 范数 (E ->SL[σ₁₂] F)
   定义体: ⟨opNorm⟩
 
 Depends on / 依赖: opNorm
@@ -681,7 +681,7 @@ theorem norm_id_le
 
 中文:
 定理 norm_id_le
-  结论: ‖ContinuousLinearMap.id 𝕜 E‖ <= 1
+  结论: ‖连续线性映射.id 𝕜 E‖ <= 1
   证明: opNorm_le_bound _ zero_le_one fun x => by simp
 
 Depends on / 依赖: opNorm_le_bound, zero_le_one
@@ -868,7 +868,7 @@ instance :
 
 中文:
 实例 :
-  签名: LocallyBoundedMapClass (E ->SL[σ₁₂] F) E F
+  签名: LocallyBounded映射类 (E ->SL[σ₁₂] F) E F
   定义体: by
     intro ℓ
     rw [Bornology.comap_cobounded_le_iff]
@@ -1021,7 +1021,7 @@ theorem opNorm_le_of_unit_norm
 
 中文:
 定理 opNorm_le_of_unit_norm
-  结论: [NormedAlgebra 实数 𝕜] {f : E ->SL[σ₁₂] F} {C : 实数}
+  结论: [赋范代数 实数 𝕜] {f : E ->SL[σ₁₂] F} {C : 实数}
   证明: by
   refine opNorm_le_bound' f hC fun x hx => ?_
   have H₁ : ‖algebraMap _ 𝕜 ‖x‖⁻¹ • x‖ = 1 := by simp [norm_smul, inv_mul_cancel₀ hx]
@@ -1076,8 +1076,8 @@ theorem norm_id
 
 中文:
 定理 norm_id
-  条件: [NontrivialTopology E]
-  结论: ‖ContinuousLinearMap.id 𝕜 E‖ = 1
+  条件: [非平凡拓扑 E]
+  结论: ‖连续线性映射.id 𝕜 E‖ = 1
   证明: le_antisymm norm_id_le by
     let ⟨x, hx⟩ := exists_norm_ne_zero E
     have := (ContinuousLinearMap.id 𝕜 E).ratio_le_opNorm x
@@ -1101,7 +1101,7 @@ instance normOneClass
 
 中文:
 实例 normOneClass
-  签名: [NontrivialTopology E]
+  签名: [非平凡拓扑 E]
   定义体: ⟨norm_id⟩
 
 Depends on / 依赖: norm_id
@@ -1120,7 +1120,7 @@ theorem opNorm_smul_le
 
 中文:
 定理 opNorm_smul_le
-  结论: {𝕜' : 类型} [DistribSMul 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F]
+  结论: {𝕜' : 类型} [分配标量乘法 𝕜' F] [标量交换类 𝕜₂ 𝕜' F]
   证明: (c • f).opNorm_le_bound (mul_nonneg (norm_nonneg _) (opNorm_nonneg _)) fun _ => by
     grw [smul_apply, norm_smul_le, mul_assoc, le_opNorm]
 
@@ -1234,7 +1234,7 @@ instance toPseudoMetricSpace
 
 中文:
 实例 toPseudoMetricSpace
-  签名: : PseudoMetricSpace (E ->SL[σ₁₂] F)
+  签名: : 伪度量空间 (E ->SL[σ₁₂] F)
   定义体: .replaceUniformity
   ContinuousLinearMap.seminorm.toSeminormedAddCommGroup.toPseudoMetricSpace uniformity_eq_seminorm
 
@@ -1252,7 +1252,7 @@ instance toSeminormedAddCommGroup
 
 中文:
 实例 toSeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (E ->SL[σ₁₂] F) where
+  签名: : SeminormedAddComm群 (E ->SL[σ₁₂] F) where
 -/
 instance toSeminormedAddCommGroup : SeminormedAddCommGroup (E ->SL[σ₁₂] F) where
 
@@ -1269,8 +1269,8 @@ theorem nnnorm_id
 
 中文:
 定理 nnnorm_id
-  条件: [NontrivialTopology E]
-  结论: ‖ContinuousLinearMap.id 𝕜 E‖₊ = 1
+  条件: [非平凡拓扑 E]
+  结论: ‖连续线性映射.id 𝕜 E‖₊ = 1
   证明: NNReal.eq norm_id
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_id
@@ -1288,7 +1288,7 @@ instance toNormedSpace
 
 中文:
 实例 toNormedSpace
-  签名: {𝕜' : 类型} [NormedField 𝕜'] [NormedSpace 𝕜' F] [SMulCommClass 𝕜₂ 𝕜' F]
+  签名: {𝕜' : 类型} [赋范域 𝕜'] [赋范空间 𝕜' F] [标量交换类 𝕜₂ 𝕜' F]
   定义体: ⟨opNorm_smul_le⟩
 
 Depends on / 依赖: opNorm_smul_le
@@ -1333,7 +1333,7 @@ instance toSeminormedRing
 
 中文:
 实例 toSeminormedRing
-  签名: : SeminormedRing (E ->L[𝕜] E)
+  签名: : Seminormed环 (E ->L[𝕜] E)
   定义体: { toSeminormedAddCommGroup, ring with norm_mul_le := opNorm_comp_le }
 
 Depends on / 依赖: norm_mul_le, opNorm_comp_le, toSeminormedAddCommGroup
@@ -1351,7 +1351,7 @@ instance toNormedAlgebra
 
 中文:
 实例 toNormedAlgebra
-  签名: : NormedAlgebra 𝕜 (E ->L[𝕜] E)
+  签名: : 赋范代数 𝕜 (E ->L[𝕜] E)
   定义体: { toNormedSpace, algebra with }
 
 Depends on / 依赖: algebra, toNormedSpace
@@ -1374,7 +1374,7 @@ theorem opNorm_subsingleton
 
 中文:
 定理 opNorm_subsingleton
-  条件: [Subsingleton E]
+  条件: [子单例 E]
   结论: ‖f‖ = 0
   证明: norm_of_subsingleton f
 
@@ -1398,7 +1398,7 @@ theorem homothety_norm
 
 中文:
 定理 homothety_norm
-  结论: [NontrivialTopology E] (f : E ->SL[σ₁₂] F) {a : 实数}
+  结论: [非平凡拓扑 E] (f : E ->SL[σ₁₂] F) {a : 实数}
   证明: by
   obtain ⟨x, hx⟩ := exists_norm_ne_zero E
   replace hx : 0 < ‖x‖ := lt_of_le_of_ne' (norm_nonneg _) hx
@@ -1523,7 +1523,7 @@ lemma norm_pi_le_of_le
 
 中文:
 引理 norm_pi_le_of_le
-  结论: {ι : 类型} [Fintype ι]
+  结论: {ι : 类型} [有限类型 ι]
   证明: by
   refine opNorm_le_bound _ hC (fun x => ?_)
   refine (pi_norm_le_iff_of_nonneg (by positivity)).mpr (fun i => ?_)
@@ -1640,7 +1640,7 @@ theorem norm_subtypeL_le
 
 中文:
 定理 norm_subtypeL_le
-  条件: (K : Submodule 𝕜 E)
+  条件: (K : 子模 𝕜 E)
   结论: ‖K.subtypeL‖ <= 1
   证明: K.subtypeₗᵢ.norm_toContinuousLinearMap_le
 

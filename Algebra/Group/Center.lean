@@ -57,8 +57,8 @@ structure IsAddCentral
     - right_assoc((a b : M)) : (a + b) + z = a + (b + z)
 
 中文:
-结构 IsAddCentral
-  参数: [Add M] (z : M)
+结构 是加法中心
+  参数: [加法 M] (z : M)
   公理与运算 (3 个):
     - comm((a : M)) : AddCommute z a
     - left_assoc((b c : M)) : z + (b + c) = (z + b) + c
@@ -86,8 +86,8 @@ structure IsMulCentral
     - right_assoc((a b : M)) : (a * b) * z = a * (b * z)
 
 中文:
-结构 IsMulCentral
-  参数: [Mul M] (z : M)
+结构 是MulCentral
+  参数: [乘法 M] (z : M)
   公理与运算 (3 个):
     - comm((a : M)) : Commute z a
     - left_assoc((b c : M)) : z * (b * c) = (z * b) * c
@@ -121,7 +121,7 @@ theorem mid_assoc
 
 中文:
 定理 mid_assoc
-  条件: {z : M} (h : IsMulCentral z) (a c)
+  条件: {z : M} (h : 是MulCentral z) (a c)
   结论: a * z * c = a * (z * c)
   证明: by
   rw [h.comm]; rw [← h.right_assoc]; rw [← h.comm]; rw [← h.left_assoc]; rw [h.comm]
@@ -143,7 +143,7 @@ theorem left_comm
 
 中文:
 定理 left_comm
-  条件: (h : IsMulCentral a) (b c)
+  条件: (h : 是MulCentral a) (b c)
   结论: a * (b * c) = b * (a * c)
   证明: by
   simp only [(h.comm _).eq, h.right_assoc]
@@ -165,7 +165,7 @@ theorem right_comm
 
 中文:
 定理 right_comm
-  条件: (h : IsMulCentral c) (a b)
+  条件: (h : 是MulCentral c) (a b)
   结论: a * b * c = a * c * b
   证明: by
   simp only [h.right_assoc, h.mid_assoc, (h.comm _).eq]
@@ -195,7 +195,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Set M
+  签名: : 集合 M
   定义体: { z | IsMulCentral z }
 
 Depends on / 依赖: IsMulCentral
@@ -218,7 +218,7 @@ definition centralizer
 
 中文:
 定义 centralizer
-  签名: : Set M
+  签名: : 集合 M
   定义体: {c | forall m in S, m * c = c * m}
 
 @[to_additive mem_addCenter_iff]
@@ -240,7 +240,7 @@ theorem mem_center_iff
 中文:
 定理 mem_center_iff
   条件: {z : M}
-  结论: z in center M ↔ IsMulCentral z
+  结论: z in center M ↔ 是MulCentral z
   证明: Iff.rfl
 
 @[to_additive mem_addCentralizer]
@@ -289,7 +289,7 @@ theorem mul_mem_center
 
 中文:
 定理 mul_mem_center
-  条件: {z₁ z₂ : M} (hz₁ : z₁ in Set.center M) (hz₂ : z₂ in Set.center M)
+  条件: {z₁ z₂ : M} (hz₁ : z₁ in 集合.center M) (hz₂ : z₂ in 集合.center M)
   证明: by
   simp only [commute_iff_eq, mem_center_iff, isMulCentral_iff] at *
   grind
@@ -317,8 +317,8 @@ lemma center_subset_centralizer
 
 中文:
 引理 center_subset_centralizer
-  条件: (S : Set M)
-  结论: Set.center M subseteq S.centralizer
+  条件: (S : 集合 M)
+  结论: 集合.center M subseteq S.centralizer
   证明: fun _ hx m _ => (hx.comm m).symm
 
 @[to_additive addCentralizer_union]
@@ -411,7 +411,7 @@ exact fun x hx y hy => hx y Set.subset_centralizer_centralizer hy
 
 中文:
 引理 centralizer_centralizer_centralizer
-  条件: (S : Set M)
+  条件: (S : 集合 M)
   证明: by
   refine Set.Subset.antisymm ?_ Set.subset_centralizer_centralizer
 exact fun x hx y hy => hx y Set.subset_centralizer_centralizer hy
@@ -438,7 +438,7 @@ instance decidableMemCentralizer
 
 中文:
 实例 decidableMemCentralizer
-  签名: [对任意 a : M, Decidable <| 对任意 b in S, b * a = a * b]
+  签名: [对任意 a : M, 可判定 <| 对任意 b in S, b * a = a * b]
   定义体: fun _ => decidable_of_iff' _ mem_centralizer_iff
 
 @[to_additive addCentralizer_addCentralizer_comm_of_comm]
@@ -483,7 +483,7 @@ theorem centralizer_empty
 
 中文:
 定理 centralizer_empty
-  结论: (∅ : Set M).centralizer = ⊤
+  结论: (∅ : 集合 M).centralizer = ⊤
   证明: by simp [centralizer]
 
 Depends on / 依赖: centralizer
@@ -507,7 +507,7 @@ theorem centralizer_prod
 
 中文:
 定理 centralizer_prod
-  结论: {N : 类型} [Mul N] {S : Set M} {T : Set N}
+  结论: {N : 类型} [乘法 N] {S : 集合 M} {T : 集合 N}
   证明: by
   ext
   simp only [mem_prod, mem_centralizer_iff, Prod.forall, Prod.mul_def]
@@ -538,7 +538,7 @@ theorem prod_centralizer_subset_centralizer_prod
 
 中文:
 定理 prod_centralizer_subset_centralizer_prod
-  条件: {N : 类型} [Mul N] (S : Set M) (T : Set N)
+  条件: {N : 类型} [乘法 N] (S : 集合 M) (T : 集合 N)
   证明: by
   simp_all [subset_def, mem_centralizer_iff]
 
@@ -562,7 +562,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  条件: {N : 类型} [Mul N]
+  条件: {N : 类型} [乘法 N]
   证明: by
   aesop (add simp [forall_and, commute_iff_eq, isMulCentral_iff, mem_center_iff])
 -/
@@ -589,7 +589,7 @@ theorem center_pi
 
 中文:
 定理 center_pi
-  条件: {ι : 类型} {A : ι -> 类型} [Π i, Mul (A i)]
+  条件: {ι : 类型} {A : ι -> 类型} [Π i, 乘法 (A i)]
   证明: by
   classical
   ext x
@@ -628,7 +628,7 @@ theorem _root_.Semigroup.mem_center_iff
 @[to_additive (attr := simp) add_mem_addCentralizer]
 
 中文:
-定理 _root_.Semigroup.mem_center_iff
+定理 _root_.半群.mem_center_iff
   条件: {z : M}
   证明: ⟨fun a g => by rw [IsMulCentral.comm a g],
   fun h => ⟨fun _ => (h _).symm, fun _ _ => (mul_assoc z _ _).symm, fun _ _ => mul_assoc _ _ z⟩ ⟩
@@ -680,7 +680,7 @@ theorem centralizer_eq_top_iff_subset
 
 中文:
 定理 centralizer_eq_top_iff_subset
-  结论: centralizer S = Set.univ ↔ S subseteq center M
+  结论: centralizer S = 集合.univ ↔ S subseteq center M
   证明: eq_top_iff.trans ⟨
     fun h _ hx => Semigroup.mem_center_iff.mpr fun _ => by rw [h trivial _ hx],
     fun h _ _ _ hm => (h hm).comm _⟩
@@ -727,7 +727,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: [对任意 a : M, Decidable <| 对任意 b : M, b * a = a * b]
+  签名: [对任意 a : M, 可判定 <| 对任意 b : M, b * a = a * b]
   定义体: fun _ => decidable_of_iff' _ (Semigroup.mem_center_iff)
 
 Depends on / 依赖: Semigroup, Semigroup.mem_center_iff, decidable_of_iff, mem_center_iff
@@ -804,7 +804,7 @@ theorem one_mem_center
 
 中文:
 定理 one_mem_center
-  结论: (1 : M) in Set.center M where
+  结论: (1 : M) in 集合.center M where
   证明: by rw [commute_iff_eq, one_mul, mul_one]
   left_assoc _ _ := by rw [one_mul, one_mul]
   right_assoc _ _ := by rw [mul_one, mul_one]
@@ -857,7 +857,7 @@ theorem subset_center_units
 
 中文:
 定理 subset_center_units
-  结论: ((↑) : Mˣ -> M) ⁻¹' center M subseteq Set.center Mˣ
+  结论: ((↑) : Mˣ -> M) ⁻¹' center M subseteq 集合.center Mˣ
   证明: fun _ ha => by
   rw [_root_.Semigroup.mem_center_iff]
   intro _
@@ -889,8 +889,8 @@ theorem units_inv_mem_center
 
 中文:
 定理 units_inv_mem_center
-  条件: {a : Mˣ} (ha : ↑a in Set.center M)
-  结论: ↑a⁻¹ in Set.center M
+  条件: {a : Mˣ} (ha : ↑a in 集合.center M)
+  结论: ↑a⁻¹ in 集合.center M
   证明: by
   rw [Semigroup.mem_center_iff] at *
   exact (Commute.units_inv_right <| ha ·)
@@ -917,8 +917,8 @@ theorem invOf_mem_center
 
 中文:
 定理 invOf_mem_center
-  条件: {a : M} [Invertible a] (ha : a in Set.center M)
-  结论: ⅟a in Set.center M
+  条件: {a : M} [可逆 a] (ha : a in 集合.center M)
+  结论: ⅟a in 集合.center M
   证明: by
   rw [Semigroup.mem_center_iff] at *
   exact (Commute.invOf_right <| ha ·)
@@ -951,8 +951,8 @@ theorem inv_mem_center
 
 中文:
 定理 inv_mem_center
-  条件: (ha : a in Set.center M)
-  结论: a⁻¹ in Set.center M
+  条件: (ha : a in 集合.center M)
+  结论: a⁻¹ in 集合.center M
   证明: by
   rw [_root_.Semigroup.mem_center_iff]
   intro _
@@ -981,8 +981,8 @@ theorem div_mem_center
 
 中文:
 定理 div_mem_center
-  条件: (ha : a in Set.center M) (hb : b in Set.center M)
-  结论: a / b in Set.center M
+  条件: (ha : a in 集合.center M) (hb : b in 集合.center M)
+  结论: a / b in 集合.center M
   证明: by
   rw [div_eq_mul_inv]
   exact mul_mem_center ha (inv_mem_center hb)

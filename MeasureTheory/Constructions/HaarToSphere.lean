@@ -56,7 +56,7 @@ definition toSphere
 
 中文:
 定义 toSphere
-  签名: (μ : Measure E)
+  签名: (μ : 测度 E)
   定义体: dim E • ((μ.comap (Subtype.val ∘ (homeomorphUnitSphereProd E).symm)).restrict
     (univ ×ˢ Iio ⟨1, mem_Ioi.2 one_pos⟩)).fst
 
@@ -80,7 +80,7 @@ theorem toSphere_apply_aux
 
 中文:
 定理 toSphere_apply_aux
-  条件: (s : Set (sphere (0 : E) 1)) (r : Ioi (0 : 实数))
+  条件: (s : 集合 (sphere (0 : E) 1)) (r : 左开右无界区间 (0 : 实数))
   证明: by
   rw [← image2_smul]; rw [image2_image_right]; rw [← Homeomorph.image_symm]; rw [image_image]; rw [← image_subtype_val_Ioi_Iio]; rw [image2_image_left]; rw [image2_swap]; rw [← image_prod]
   rfl
@@ -106,7 +106,7 @@ theorem toSphere_apply'
 
 中文:
 定理 toSphere_apply'
-  条件: {s : Set (sphere (0 : E) 1)} (hs : MeasurableSet s)
+  条件: {s : 集合 (sphere (0 : E) 1)} (hs : 可测集 s)
   证明: by
   rw [toSphere]; rw [smul_apply]; rw [fst_apply hs]; rw [restrict_apply (measurable_fst hs)]; rw [((MeasurableEmbedding.subtype_coe (measurableSet_singleton _).compl).comp
       (Homeomorph.measurableEmbedding _)).comap_apply]; rw [image_comp]; rw [Homeomorph.image_symm]; rw [univ_prod]; rw [← Se
@@ -153,7 +153,7 @@ instance toSphere.instIsOpenPosMeasure
 
 中文:
 实例 toSphere.instIsOpenPosMeasure
-  签名: [FiniteDimensional 实数 E] [μ.IsOpenPosMeasure]
+  签名: [有限维 实数 E] [μ.是OpenPosMeasure]
   定义体: by
     nontriviality E using not_nonempty_iff_eq_empty
     rintro U hUo hU
@@ -258,7 +258,7 @@ theorem toSphere_eq_zero_iff
 
 中文:
 定理 toSphere_eq_zero_iff
-  结论: μ.toSphere = 0 ↔ Subsingleton E
+  结论: μ.toSphere = 0 ↔ 子单例 E
   证明: μ.toSphere_eq_zero_iff_finrank.trans Module.finrank_zero_iff
 
 @[simp]
@@ -281,7 +281,7 @@ theorem toSphere_ne_zero
 
 中文:
 定理 toSphere_ne_zero
-  条件: [Nontrivial E]
+  条件: [非平凡 E]
   结论: μ.toSphere != 0
   证明: by
   simp [toSphere_eq_zero_iff, not_subsingleton]
@@ -304,7 +304,7 @@ measure_ball_lt_top.trans_le' measure_mono sdiff_subset
 
 中文:
 实例 :
-  签名: IsFiniteMeasure μ.toSphere
+  签名: 是有限测度 μ.toSphere
   定义体: by
     rw [toSphere_apply_univ']
 exact ENNReal.mul_lt_top (ENNReal.natCast_lt_top _)
@@ -348,7 +348,7 @@ lemma volumeIoiPow_apply_Iio
 
 中文:
 引理 volumeIoiPow_apply_Iio
-  条件: (n : 自然数) (x : Ioi (0 : 实数))
+  条件: (n : 自然数) (x : 左开右无界区间 (0 : 实数))
   证明: by
   have hr₀ : 0 <= x.1 := le_of_lt x.2
   rw [volumeIoiPow]; rw [withDensity_apply _ measurableSet_Iio]; rw [setLIntegral_subtype measurableSet_Ioi _ fun a : Real => .ofReal (a ^ n)]; rw [image_subtype_val_Ioi_Iio]; rw [restrict_congr_set Ioo_ae_eq_Ioc]; rw [← ofReal_integral_eq_lintegral_ofReal (i
@@ -614,7 +614,7 @@ theorem toSphereBallBound_mul_measureReal_unitBall_le_toSphere_ball
   simp
 
 中文:
-定理 toSphereBallBound_mul_measureReal_unitBall_le_toSphere_ball
+定理 toSphereBallBound_mul_measure实数_unitBall_le_toSphere_ball
   证明: by
   grw [Measure.real, Measure.real, ← toSphereBallBound_mul_measure_unitBall_le_toSphere_ball μ hε,
     ENNReal.toReal_mul, ENNReal.coe_toReal]

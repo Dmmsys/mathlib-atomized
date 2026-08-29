@@ -47,7 +47,7 @@ definition equivalenceMonoOver
 
 中文:
 定义 equivalenceMonoOver
-  签名: : Subfunctor F ≌ MonoOver F where
+  签名: : 子函子 F ≌ MonoOver F where
   定义体: { obj A := MonoOver.mk A.ι
       map {A B} f := MonoOver.homMk (Subfunctor.homOfLe (leOfHom f)) }
   inverse :=
@@ -85,7 +85,7 @@ lemma range_subobjectMk_ι
 
 中文:
 引理 range_subobjectMk_ι
-  条件: (A : Subfunctor F)
+  条件: (A : 子函子 F)
   证明: (((equivalenceMonoOver F).trans
     (ThinSkeleton.equivalence _).symm).unitIso.app A).to_eq.symm
 
@@ -141,7 +141,7 @@ definition orderIsoSubobject
 
 中文:
 定义 orderIsoSubobject
-  签名: : Subfunctor F ≃o Subobject F where
+  签名: : 子函子 F ≃o Subobject F where
   定义体: Subobject.mk A.ι
   invFun X := Subfunctor.range X.arrow
   left_inv A := by simp

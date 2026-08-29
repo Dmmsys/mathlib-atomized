@@ -52,7 +52,7 @@ definition finsupp
 
 中文:
 定义 finsupp
-  签名: (s : Finset ι) (t : ι -> Finset α)
+  签名: (s : 有限集 ι) (t : ι -> 有限集 α)
   定义体: (s.pi t).map ⟨indicator s, indicator_injective s⟩
 -/
 protected def finsupp (s : Finset ι) (t : ι -> Finset α) : Finset (ι ->₀ α) :=
@@ -77,7 +77,7 @@ theorem mem_finsupp_iff
 
 中文:
 定理 mem_finsupp_iff
-  条件: {t : ι -> Finset α}
+  条件: {t : ι -> 有限集 α}
   证明: by
   classical
   refine mem_map.trans ⟨?_, ?_⟩
@@ -124,7 +124,7 @@ theorem mem_finsupp_iff_of_support_subset
 
 中文:
 定理 mem_finsupp_iff_of_support_subset
-  条件: {t : ι ->₀ Finset α} (ht : t.support subseteq s)
+  条件: {t : ι ->₀ 有限集 α} (ht : t.support subseteq s)
   证明: by
   refine
     mem_finsupp_iff.trans
@@ -165,7 +165,7 @@ classical exact (card_map _).trans card_pi _ _
 
 中文:
 定理 card_finsupp
-  条件: (s : Finset ι) (t : ι -> Finset α)
+  条件: (s : 有限集 ι) (t : ι -> 有限集 α)
   结论: #(s.finsupp t) = ∏ i in s, #(t i)
   证明: by
 classical exact (card_map _).trans card_pi _ _
@@ -193,7 +193,7 @@ definition pi
 
 中文:
 定义 pi
-  签名: (f : ι ->₀ Finset α)
+  签名: (f : ι ->₀ 有限集 α)
   定义体: f.support.finsupp f
 
 @[simp]
@@ -217,7 +217,7 @@ theorem mem_pi
 
 中文:
 定理 mem_pi
-  条件: {f : ι ->₀ Finset α} {g : ι ->₀ α}
+  条件: {f : ι ->₀ 有限集 α} {g : ι ->₀ α}
   结论: g in f.pi ↔ 对任意 i, g i in f i
   证明: mem_finsupp_iff_of_support_subset Subset.refl _
 
@@ -242,8 +242,8 @@ theorem card_pi
 
 中文:
 定理 card_pi
-  条件: (f : ι ->₀ Finset α)
-  结论: #f.pi = f.prod fun i => #(f i)
+  条件: (f : ι ->₀ 有限集 α)
+  结论: #f.pi = f.乘积 fun i => #(f i)
   证明: by
   rw [pi]; rw [card_finsupp]
   exact Finset.prod_congr rfl fun i _ => by simp only [Pi.natCast_apply, Nat.cast_id]

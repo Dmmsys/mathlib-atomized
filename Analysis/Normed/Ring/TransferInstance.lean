@@ -35,7 +35,7 @@ abbreviation seminormedRing
 
 中文:
 缩写 seminormedRing
-  签名: [SeminormedRing β] (e : α ≃ β)
+  签名: [Seminormed环 β] (e : α ≃ β)
   定义体: letI := e.ring
   .induced α β e.ringEquiv
 -/
@@ -55,7 +55,7 @@ abbreviation normedRing
 
 中文:
 缩写 normedRing
-  签名: [NormedRing β] (e : α ≃ β)
+  签名: [赋范环 β] (e : α ≃ β)
   定义体: letI := e.ring
   .induced α β e.ringEquiv e.injective
 -/

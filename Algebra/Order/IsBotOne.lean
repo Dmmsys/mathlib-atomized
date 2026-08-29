@@ -24,8 +24,8 @@ class IsBotZeroClass
     - isBot_zero : IsBot (0 : α)
 
 中文:
-类 IsBotZeroClass
-  参数: (α : 类型) [LE α] [Zero α]
+类 是BotZero类
+  参数: (α : 类型) [LE α] [零 α]
   公理与运算 (1 个):
     - isBot_zero : IsBot (0 : α)
 -/
@@ -45,8 +45,8 @@ class IsBotOneClass
     - isBot_one : IsBot (1 : α)
 
 中文:
-类 IsBotOneClass
-  参数: (α : 类型) [LE α] [One α]
+类 是BotOne类
+  参数: (α : 类型) [LE α] [幺 α]
   公理与运算 (1 个):
     - isBot_one : IsBot (1 : α)
 -/
@@ -125,8 +125,8 @@ definition IsBotOneClass.toOrderBot
   bot_le _ := one_le
 
 中文:
-定义 IsBotOneClass.toOrderBot
-  签名: : OrderBot α where
+定义 是BotOne类.toOrderBot
+  签名: : 有底序 α where
   定义体: 1
   bot_le _ := one_le
 -/
@@ -255,7 +255,7 @@ alias bot_eq_zero'' := bot_eq_zero
 
 中文:
 定理 bot_eq_one
-  条件: [OrderBot α]
+  条件: [有底序 α]
   结论: (⊥ : α) = 1
   证明: isBot_one.eq_bot.symm
 
@@ -361,7 +361,7 @@ lemma one_notMem_iff
 
 中文:
 引理 one_notMem_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: 1 ∉ s ↔ 对任意 x in s, 1 < x
   证明: let := IsBotOneClass.toOrderBot α
   bot_notMem_iff
@@ -398,7 +398,7 @@ theorem one_min
 中文:
 定理 one_min
   条件: (a : α)
-  结论: min 1 a = 1
+  结论: 最小值 1 a = 1
   证明: by simp
 
 @[to_additive]
@@ -420,7 +420,7 @@ theorem min_one
 中文:
 定理 min_one
   条件: (a : α)
-  结论: min a 1 = 1
+  结论: 最小值 a 1 = 1
   证明: by simp
 
 @[to_additive]
@@ -442,7 +442,7 @@ theorem one_max
 中文:
 定理 one_max
   条件: (a : α)
-  结论: max 1 a = a
+  结论: 最大值 1 a = a
   证明: by simp
 
 @[to_additive]
@@ -464,7 +464,7 @@ theorem max_one
 中文:
 定理 max_one
   条件: (a : α)
-  结论: max a 1 = a
+  结论: 最大值 a 1 = a
   证明: by simp
 
 @[to_additive (attr := simp)]
@@ -487,7 +487,7 @@ theorem max_eq_one
 中文:
 定理 max_eq_one
   条件: {a b : α}
-  结论: max a b = 1 ↔ a = 1 ∧ b = 1
+  结论: 最大值 a b = 1 ↔ a = 1 ∧ b = 1
   证明: let := IsBotOneClass.toOrderBot α
   max_eq_bot
 
@@ -513,7 +513,7 @@ theorem min_eq_one
 中文:
 定理 min_eq_one
   条件: {a b : α}
-  结论: min a b = 1 ↔ a = 1 ∨ b = 1
+  结论: 最小值 a b = 1 ↔ a = 1 ∨ b = 1
   证明: let := IsBotOneClass.toOrderBot α
   min_eq_bot
 
@@ -539,7 +539,7 @@ theorem of_gt
 
 中文:
 定理 of_gt
-  条件: [Preorder α] [IsBotZeroClass α] (h : a < b)
+  条件: [预序 α] [是BotZero类 α] (h : a < b)
   结论: NeZero b
   证明: ⟨h.ne_zero⟩
 
@@ -559,7 +559,7 @@ theorem pos
 
 中文:
 定理 pos
-  条件: [PartialOrder α] [IsBotZeroClass α] (a : α) [NeZero a]
+  条件: [偏序 α] [是BotZero类 α] (a : α) [NeZero a]
   结论: 0 < a
   证明: NeZero.out.pos
 
@@ -585,7 +585,7 @@ theorem of_ge
 
 中文:
 定理 of_ge
-  条件: [PartialOrder α] [IsBotZeroClass α] [NeZero a] (h : a <= b)
+  条件: [偏序 α] [是BotZero类 α] [NeZero a] (h : a <= b)
   结论: NeZero b
   证明: ⟨((pos a).trans_le h).ne_zero⟩
 

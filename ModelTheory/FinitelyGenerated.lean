@@ -53,7 +53,7 @@ definition FG
 
 中文:
 定义 FG
-  签名: (N : L.Substructure M)
+  签名: (N : L.子结构 M)
   定义体: exists S : Finset M, closure L S = N
 
 Depends on / 依赖: Finset, closure
@@ -75,8 +75,8 @@ theorem fg_def
 
 中文:
 定理 fg_def
-  条件: {N : L.Substructure M}
-  结论: N.FG ↔ 存在 S : Set M, S.Finite ∧ closure L S = N
+  条件: {N : L.子结构 M}
+  结论: N.FG ↔ 存在 S : 集合 M, S.有限 ∧ closure L S = N
   证明: ⟨fun ⟨t, h⟩ => ⟨_, Finset.finite_toSet t, h⟩, by
     rintro ⟨t', h, rfl⟩
     rcases Finite.exists_finset_coe h with ⟨t, rfl⟩
@@ -106,8 +106,8 @@ theorem fg_iff_exists_fin_generating_family
     exact ⟨range s, finite_range s, hs⟩
 
 中文:
-定理 fg_iff_exists_fin_generating_family
-  条件: {N : L.Substructure M}
+定理 fg_iff_存在_fin_generating_family
+  条件: {N : L.子结构 M}
   证明: by
   rw [fg_def]
   constructor
@@ -139,7 +139,7 @@ theorem fg_bot
 
 中文:
 定理 fg_bot
-  结论: (⊥ : L.Substructure M).FG
+  结论: (⊥ : L.子结构 M).FG
   证明: ⟨∅, by rw [Finset.coe_empty, closure_empty]⟩
 
 Depends on / 依赖: Finset, Finset.coe_empty, closure_empty, coe_empty
@@ -157,7 +157,7 @@ instance instInhabited_fg
 
 中文:
 实例 instInhabited_fg
-  签名: : Inhabited { S : L.Substructure M // S.FG }
+  签名: : 可居 { S : L.子结构 M // S.FG }
   定义体: ⟨⊥, fg_bot⟩
 
 Depends on / 依赖: fg_bot
@@ -175,7 +175,7 @@ theorem fg_closure
 
 中文:
 定理 fg_closure
-  条件: {s : Set M} (hs : s.Finite)
+  条件: {s : 集合 M} (hs : s.有限)
   结论: FG (closure L s)
   证明: ⟨hs.toFinset, by rw [hs.coe_toFinset]⟩
 
@@ -196,7 +196,7 @@ theorem fg_closure_singleton
 中文:
 定理 fg_closure_singleton
   条件: (x : M)
-  结论: FG (closure L ({x} : Set M))
+  结论: FG (closure L ({x} : 集合 M))
   证明: fg_closure (finite_singleton x)
 
 Depends on / 依赖: fg_closure, finite_singleton
@@ -216,8 +216,8 @@ theorem FG.sup
   fg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
 
 中文:
-定理 FG.sup
-  条件: {N₁ N₂ : L.Substructure M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
+定理 FG.上确界
+  条件: {N₁ N₂ : L.子结构 M} (hN₁ : N₁.FG) (hN₂ : N₂.FG)
   结论: (N₁ ⊔ N₂).FG
   证明: let ⟨t₁, ht₁⟩ := fg_def.1 hN₁
   let ⟨t₂, ht₂⟩ := fg_def.1 hN₂
@@ -241,7 +241,7 @@ theorem FG.map
 
 中文:
 定理 FG.map
-  条件: {N : 类型} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.FG)
+  条件: {N : 类型} [L.结构 N] (f : M ->[L] N) {s : L.子结构 M} (hs : s.FG)
   证明: let ⟨t, ht⟩ := fg_def.1 hs
   fg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
 
@@ -269,7 +269,7 @@ theorem FG.of_map_embedding
 
 中文:
 定理 FG.of_map_embedding
-  结论: {N : 类型} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
+  结论: {N : 类型} [L.结构 N] (f : M ↪[L] N) {s : L.子结构 M}
   证明: by
   rcases hs with ⟨t, h⟩
   rw [fg_def]
@@ -306,7 +306,7 @@ theorem FG.of_finite
 
 中文:
 定理 FG.of_finite
-  条件: {s : L.Substructure M} [h : Finite s]
+  条件: {s : L.子结构 M} [h : 有限 s]
   结论: s.FG
   证明: ⟨Set.Finite.toFinset h, by simp only [Finite.coe_toFinset, closure_eq]⟩
 
@@ -330,8 +330,8 @@ theorem FG.finite
 
 中文:
 定理 FG.finite
-  条件: [L.IsRelational] {S : L.Substructure M} (h : S.FG)
-  结论: Finite S
+  条件: [L.IsRelational] {S : L.子结构 M} (h : S.FG)
+  结论: 有限 S
   证明: by
   obtain ⟨s, rfl⟩ := h
   have hs := s.finite_toSet
@@ -357,8 +357,8 @@ theorem fg_iff_finite
 
 中文:
 定理 fg_iff_finite
-  条件: [L.IsRelational] {S : L.Substructure M}
-  结论: S.FG ↔ Finite S
+  条件: [L.IsRelational] {S : L.子结构 M}
+  结论: S.FG ↔ 有限 S
   证明: ⟨FG.finite, fun _ => FG.of_finite⟩
 
 Depends on / 依赖: FG.finite, FG.of_finite, finite, of_finite
@@ -376,7 +376,7 @@ definition CG
 
 中文:
 定义 CG
-  签名: (N : L.Substructure M)
+  签名: (N : L.子结构 M)
   定义体: exists S : Set M, S.Countable ∧ closure L S = N
 
 Depends on / 依赖: Countable, S.Countable, closure
@@ -395,8 +395,8 @@ theorem cg_def
 
 中文:
 定理 cg_def
-  条件: {N : L.Substructure M}
-  结论: N.CG ↔ 存在 S : Set M, S.Countable ∧ closure L S = N
+  条件: {N : L.子结构 M}
+  结论: N.CG ↔ 存在 S : 集合 M, S.可数 ∧ closure L S = N
   证明: Iff.refl _
 
 Depends on / 依赖: Iff.refl
@@ -417,7 +417,7 @@ theorem FG.cg
 
 中文:
 定理 FG.cg
-  条件: {N : L.Substructure M} (h : N.FG)
+  条件: {N : L.子结构 M} (h : N.FG)
   结论: N.CG
   证明: by
   obtain ⟨s, hf, rfl⟩ := fg_def.1 h
@@ -447,8 +447,8 @@ theorem cg_iff_empty_or_exists_nat_generating_family
     refine Or.intro_right
 
 中文:
-定理 cg_iff_empty_or_exists_nat_generating_family
-  条件: {N : L.Substructure M}
+定理 cg_iff_empty_or_存在_nat_generating_family
+  条件: {N : L.子结构 M}
   证明: by
   rw [cg_def]
   constructor
@@ -493,7 +493,7 @@ theorem cg_bot
 
 中文:
 定理 cg_bot
-  结论: (⊥ : L.Substructure M).CG
+  结论: (⊥ : L.子结构 M).CG
   证明: fg_bot.cg
 
 Depends on / 依赖: fg_bot, fg_bot.cg
@@ -512,7 +512,7 @@ theorem cg_closure
 
 中文:
 定理 cg_closure
-  条件: {s : Set M} (hs : s.Countable)
+  条件: {s : 集合 M} (hs : s.可数)
   结论: CG (closure L s)
   证明: ⟨s, hs, rfl⟩
 -/
@@ -531,7 +531,7 @@ theorem cg_closure_singleton
 中文:
 定理 cg_closure_singleton
   条件: (x : M)
-  结论: CG (closure L ({x} : Set M))
+  结论: CG (closure L ({x} : 集合 M))
   证明: (fg_closure_singleton x).cg
 
 Depends on / 依赖: fg_closure_singleton
@@ -551,8 +551,8 @@ theorem CG.sup
   cg_def.2 ⟨t₁ union t₂, ht₁.1.union ht₂.1, by rw [closure_union, ht₁.2, ht₂.2]⟩
 
 中文:
-定理 CG.sup
-  条件: {N₁ N₂ : L.Substructure M} (hN₁ : N₁.CG) (hN₂ : N₂.CG)
+定理 CG.上确界
+  条件: {N₁ N₂ : L.子结构 M} (hN₁ : N₁.CG) (hN₂ : N₂.CG)
   结论: (N₁ ⊔ N₂).CG
   证明: let ⟨t₁, ht₁⟩ := cg_def.1 hN₁
   let ⟨t₂, ht₂⟩ := cg_def.1 hN₂
@@ -576,7 +576,7 @@ theorem CG.map
 
 中文:
 定理 CG.map
-  条件: {N : 类型} [L.Structure N] (f : M ->[L] N) {s : L.Substructure M} (hs : s.CG)
+  条件: {N : 类型} [L.结构 N] (f : M ->[L] N) {s : L.子结构 M} (hs : s.CG)
   证明: let ⟨t, ht⟩ := cg_def.1 hs
   cg_def.2 ⟨f '' t, ht.1.image _, by rw [closure_image, ht.2]⟩
 
@@ -605,7 +605,7 @@ theorem CG.of_map_embedding
 
 中文:
 定理 CG.of_map_embedding
-  结论: {N : 类型} [L.Structure N] (f : M ↪[L] N) {s : L.Substructure M}
+  结论: {N : 类型} [L.结构 N] (f : M ↪[L] N) {s : L.子结构 M}
   证明: by
   rcases hs with ⟨t, h1, h2⟩
   rw [cg_def]
@@ -644,7 +644,7 @@ theorem cg_iff_countable
 
 中文:
 定理 cg_iff_countable
-  条件: [Countable (Σ l, L.Functions l)] {s : L.Substructure M}
+  条件: [可数 (Σ l, L.函数 l)] {s : L.子结构 M}
   证明: by
   refine ⟨?_, fun h => ⟨s, h.to_set, s.closure_eq⟩⟩
   rintro ⟨s, h, rfl⟩
@@ -669,7 +669,7 @@ theorem cg_of_countable
 
 中文:
 定理 cg_of_countable
-  条件: {s : L.Substructure M} [h : Countable s]
+  条件: {s : L.子结构 M} [h : 可数 s]
   结论: s.CG
   证明: ⟨s, h.to_set, s.closure_eq⟩
 
@@ -699,7 +699,7 @@ class FG
 类 FG
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : (⊤ : L.Substructure M).FG
+    - out : (⊤ : L.子结构 M).FG
 -/
 class FG : Prop where
   out : (⊤ : L.Substructure M).FG
@@ -717,7 +717,7 @@ class CG
 类 CG
   参数: : 命题 where
   公理与运算 (1 个):
-    - out : (⊤ : L.Substructure M).CG
+    - out : (⊤ : L.子结构 M).CG
 -/
 class CG : Prop where
   out : (⊤ : L.Substructure M).CG
@@ -734,7 +734,7 @@ theorem fg_def
 
 中文:
 定理 fg_def
-  结论: FG L M ↔ (⊤ : L.Substructure M).FG
+  结论: FG L M ↔ (⊤ : L.子结构 M).FG
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem fg_def : FG L M ↔ (⊤ : L.Substructure M).FG :=
@@ -751,7 +751,7 @@ theorem fg_iff
 
 中文:
 定理 fg_iff
-  结论: FG L M ↔ 存在 S : Set M, S.Finite ∧ closure L S = (⊤ : L.Substructure M)
+  结论: FG L M ↔ 存在 S : 集合 M, S.有限 ∧ closure L S = (⊤ : L.子结构 M)
   证明: by
   rw [fg_def]; rw [Substructure.fg_def]
 
@@ -773,7 +773,7 @@ theorem FG.range
 
 中文:
 定理 FG.range
-  条件: {N : 类型} [L.Structure N] (h : FG L M) (f : M ->[L] N)
+  条件: {N : 类型} [L.结构 N] (h : FG L M) (f : M ->[L] N)
   结论: f.range.FG
   证明: by
   rw [Hom.range_eq_map]
@@ -798,7 +798,7 @@ theorem FG.map_of_surjective
 
 中文:
 定理 FG.map_of_surjective
-  结论: {N : 类型} [L.Structure N] (h : FG L M) (f : M ->[L] N)
+  结论: {N : 类型} [L.结构 N] (h : FG L M) (f : M ->[L] N)
   证明: by
   rw [← Hom.range_eq_top] at hs
   rw [fg_def]; rw [← hs]
@@ -831,7 +831,7 @@ theorem FG.countable_hom
 
 中文:
 定理 FG.countable_hom
-  条件: (N : 类型) [L.Structure N] [Countable N] (h : FG L M)
+  条件: (N : 类型) [L.结构 N] [可数 N] (h : FG L M)
   证明: by
   let ⟨S, finite_S, closure_S⟩ := fg_iff.1 h
   let g : (M ->[L] N) -> (S -> N) :=
@@ -868,7 +868,7 @@ instance FG.instCountable_hom
 
 中文:
 实例 FG.instCountable_hom
-  签名: (N : 类型) [L.Structure N] [Countable N] [h : FG L M]
+  签名: (N : 类型) [L.结构 N] [可数 N] [h : FG L M]
   定义体: FG.countable_hom N h
 
 Depends on / 依赖: FG.countable_hom, countable_hom
@@ -887,7 +887,7 @@ theorem FG.countable_embedding
 
 中文:
 定理 FG.countable_embedding
-  条件: (N : 类型) [L.Structure N] [Countable N] (_ : FG L M)
+  条件: (N : 类型) [L.结构 N] [可数 N] (_ : FG L M)
   证明: Function.Embedding.countable ⟨Embedding.toHom, Embedding.toHom_injective⟩
 
 Depends on / 依赖: Embedding, Embedding.toHom, Embedding.toHom_injective, Function, Function.Embedding.countable, countable, toHom_injective
@@ -906,7 +906,7 @@ instance Fg.instCountable_embedding
 
 中文:
 实例 Fg.instCountable_embedding
-  签名: (N : 类型) [L.Structure N]
+  签名: (N : 类型) [L.结构 N]
   定义体: FG.countable_embedding N h
 
 Depends on / 依赖: FG.countable_embedding, countable_embedding
@@ -927,7 +927,7 @@ theorem FG.of_finite
 
 中文:
 定理 FG.of_finite
-  条件: [Finite M]
+  条件: [有限 M]
   结论: FG L M
   证明: by
   simp only [fg_def, Substructure.FG.of_finite]
@@ -947,7 +947,7 @@ theorem FG.finite
 中文:
 定理 FG.finite
   条件: [L.IsRelational] (h : FG L M)
-  结论: Finite M
+  结论: 有限 M
   证明: Finite.of_finite_univ (Substructure.FG.finite (fg_def.1 h))
 -/
 theorem FG.finite [L.IsRelational] (h : FG L M) : Finite M :=
@@ -965,7 +965,7 @@ theorem fg_iff_finite
 中文:
 定理 fg_iff_finite
   条件: [L.IsRelational]
-  结论: FG L M ↔ Finite M
+  结论: FG L M ↔ 有限 M
   证明: ⟨FG.finite, fun _ => FG.of_finite⟩
 
 Depends on / 依赖: FG.finite, FG.of_finite, finite, of_finite
@@ -983,7 +983,7 @@ theorem cg_def
 
 中文:
 定理 cg_def
-  结论: CG L M ↔ (⊤ : L.Substructure M).CG
+  结论: CG L M ↔ (⊤ : L.子结构 M).CG
   证明: ⟨fun h => h.1, fun h => ⟨h⟩⟩
 -/
 theorem cg_def : CG L M ↔ (⊤ : L.Substructure M).CG :=
@@ -1000,7 +1000,7 @@ theorem cg_iff
 
 中文:
 定理 cg_iff
-  结论: CG L M ↔ 存在 S : Set M, S.Countable ∧ closure L S = (⊤ : L.Substructure M)
+  结论: CG L M ↔ 存在 S : 集合 M, S.可数 ∧ closure L S = (⊤ : L.子结构 M)
   证明: by
   rw [cg_def]; rw [Substructure.cg_def]
 
@@ -1022,7 +1022,7 @@ theorem CG.range
 
 中文:
 定理 CG.range
-  条件: {N : 类型} [L.Structure N] (h : CG L M) (f : M ->[L] N)
+  条件: {N : 类型} [L.结构 N] (h : CG L M) (f : M ->[L] N)
   结论: f.range.CG
   证明: by
   rw [Hom.range_eq_map]
@@ -1047,7 +1047,7 @@ theorem CG.map_of_surjective
 
 中文:
 定理 CG.map_of_surjective
-  结论: {N : 类型} [L.Structure N] (h : CG L M) (f : M ->[L] N)
+  结论: {N : 类型} [L.结构 N] (h : CG L M) (f : M ->[L] N)
   证明: by
   rw [← Hom.range_eq_top] at hs
   rw [cg_def]; rw [← hs]
@@ -1073,8 +1073,8 @@ theorem cg_iff_countable
 
 中文:
 定理 cg_iff_countable
-  条件: [Countable (Σ l, L.Functions l)]
-  结论: CG L M ↔ Countable M
+  条件: [可数 (Σ l, L.函数 l)]
+  结论: CG L M ↔ 可数 M
   证明: by
   rw [cg_def]; rw [Substructure.cg_iff_countable]; rw [topEquiv.toEquiv.countable_iff]
 
@@ -1095,7 +1095,7 @@ theorem cg_of_countable
 
 中文:
 定理 cg_of_countable
-  条件: [Countable M]
+  条件: [可数 M]
   结论: CG L M
   证明: by
   simp only [cg_def, Substructure.cg_of_countable]
@@ -1138,8 +1138,8 @@ theorem Equiv.fg_iff
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
 
 中文:
-定理 Equiv.fg_iff
-  条件: {N : 类型} [L.Structure N] (f : M ≃[L] N)
+定理 等价.fg_iff
+  条件: {N : 类型} [L.结构 N] (f : M ≃[L] N)
   证明: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
 
@@ -1167,9 +1167,9 @@ theorem Substructure.fg_iff_structure_fg
     exact h
 
 中文:
-定理 Substructure.fg_iff_structure_fg
-  条件: (S : L.Substructure M)
-  结论: S.FG ↔ Structure.FG L S
+定理 子结构.fg_iff_structure_fg
+  条件: (S : L.子结构 M)
+  结论: S.FG ↔ 结构.FG L S
   证明: by
   rw [Structure.fg_def]
   refine ⟨fun h => FG.of_map_embedding S.subtype ?_, fun h => ?_⟩
@@ -1200,8 +1200,8 @@ theorem Equiv.cg_iff
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
 
 中文:
-定理 Equiv.cg_iff
-  条件: {N : 类型} [L.Structure N] (f : M ≃[L] N)
+定理 等价.cg_iff
+  条件: {N : 类型} [L.结构 N] (f : M ≃[L] N)
   证明: ⟨fun h => h.map_of_surjective f.toHom f.toEquiv.surjective, fun h =>
     h.map_of_surjective f.symm.toHom f.toEquiv.symm.surjective⟩
 
@@ -1229,9 +1229,9 @@ theorem Substructure.cg_iff_structure_cg
     exact h
 
 中文:
-定理 Substructure.cg_iff_structure_cg
-  条件: (S : L.Substructure M)
-  结论: S.CG ↔ Structure.CG L S
+定理 子结构.cg_iff_structure_cg
+  条件: (S : L.子结构 M)
+  结论: S.CG ↔ 结构.CG L S
   证明: by
   rw [Structure.cg_def]
   refine ⟨fun h => CG.of_map_embedding S.subtype ?_, fun h => ?_⟩
@@ -1268,8 +1268,8 @@ theorem Substructure.countable_fg_substructures_of_countable
     exact congr_arg (closure L ∘ SetLike.c
 
 中文:
-定理 Substructure.countable_fg_substructures_of_countable
-  条件: [Countable M]
+定理 子结构.countable_fg_substructures_of_countable
+  条件: [可数 M]
   证明: by
   let g : { S : L.Substructure M // S.FG } -> Finset M :=
     fun S => Exists.choose S.prop
@@ -1301,8 +1301,8 @@ instance Substructure.instCountable_fg_substructures_of_countable
   body: countable_fg_substructures_of_countable
 
 中文:
-实例 Substructure.instCountable_fg_substructures_of_countable
-  签名: [Countable M]
+实例 子结构.instCountable_fg_substructures_of_countable
+  签名: [可数 M]
   定义体: countable_fg_substructures_of_countable
 
 Depends on / 依赖: countable_fg_substructures_of_countable

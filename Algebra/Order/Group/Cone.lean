@@ -32,9 +32,9 @@ class AddGroupConeClass
     - eq_zero_of_mem_of_neg_mem({C : S} {a : G}) : a in C -> -a in C -> a = 0
 
 中文:
-类 AddGroupConeClass
-  参数: (S : 类型) (G : outParam 类型) [AddCommGroup G] [SetLike S G]
-  继承: AddSubmonoidClass S G
+类 加法群锥类
+  参数: (S : 类型) (G : outParam 类型) [加法交换群 G] [集合状 S G]
+  继承: 加法子幺半群类 S G
   公理与运算 (1 个):
     - eq_zero_of_mem_of_neg_mem({C : S} {a : G}) : a in C -> -a in C -> a = 0
 -/
@@ -55,9 +55,9 @@ class GroupConeClass
     - eq_one_of_mem_of_inv_mem({C : S} {a : G}) : a in C -> a⁻¹ in C -> a = 1
 
 中文:
-类 GroupConeClass
-  参数: (S : 类型) (G : outParam 类型) [CommGroup G] [SetLike S G]
-  继承: SubmonoidClass S G
+类 群锥类
+  参数: (S : 类型) (G : outParam 类型) [交换群 G] [集合状 S G]
+  继承: 子幺半群类 S G
   公理与运算 (1 个):
     - eq_one_of_mem_of_inv_mem({C : S} {a : G}) : a in C -> a⁻¹ in C -> a = 1
 -/
@@ -79,9 +79,9 @@ structure AddGroupCone
     - eq_zero_of_mem_of_neg_mem'({a}) : a in carrier -> -a in carrier -> a = 0
 
 中文:
-结构 AddGroupCone
-  参数: (G : 类型) [AddCommGroup G]
-  继承: AddSubmonoid G
+结构 加法群锥
+  参数: (G : 类型) [加法交换群 G]
+  继承: 加法子幺半群 G
   公理与运算 (1 个):
     - eq_zero_of_mem_of_neg_mem'({a}) : a in carrier -> -a in carrier -> a = 0
 -/
@@ -104,9 +104,9 @@ structure GroupCone
     - eq_one_of_mem_of_inv_mem'({a}) : a in carrier -> a⁻¹ in carrier -> a = 1
 
 中文:
-结构 GroupCone
-  参数: (G : 类型) [CommGroup G]
-  继承: Submonoid G
+结构 群锥
+  参数: (G : 类型) [交换群 G]
+  继承: 子幺半群 G
   公理与运算 (1 个):
     - eq_one_of_mem_of_inv_mem'({a}) : a in carrier -> a⁻¹ in carrier -> a = 1
 -/
@@ -126,8 +126,8 @@ instance GroupCone.instSetLike
 @[to_additive]
 
 中文:
-实例 GroupCone.instSetLike
-  签名: (G : 类型) [CommGroup G]
+实例 群锥.instSetLike
+  签名: (G : 类型) [交换群 G]
   定义体: C.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.ext' h
 
@@ -157,8 +157,8 @@ initialize_simps_projections GroupCone (carrier -> coe, as_prefix coe)
 initialize_simps_projections AddGroupCone (carrier -> coe, as_prefix coe)
 
 中文:
-实例 GroupCone.instGroupConeClass
-  签名: (G : 类型) [CommGroup G]
+实例 群锥.instGroupConeClass
+  签名: (G : 类型) [交换群 G]
   定义体: C.mul_mem'
   one_mem {C} := C.one_mem'
   eq_one_of_mem_of_inv_mem {C} := C.eq_one_of_mem_of_inv_mem'
@@ -196,7 +196,7 @@ definition oneLE
 
 中文:
 定义 oneLE
-  签名: : GroupCone H where
+  签名: : 群锥 H where
   定义体: Submonoid.oneLE H
   eq_one_of_mem_of_inv_mem' {a} := by simpa using ge_antisymm
 
@@ -275,7 +275,7 @@ instance oneLE.hasMemOrInvMem
 
 中文:
 实例 oneLE.hasMemOrInvMem
-  签名: {H : 类型} [CommGroup H] [LinearOrder H] [IsOrderedMonoid H]
+  签名: {H : 类型} [交换群 H] [线性序 H] [是Ordered幺半群 H]
   定义体: by simpa using le_total 1
 
 Depends on / 依赖: le_total
@@ -305,8 +305,8 @@ abbreviation PartialOrder.mkOfGroupCone
 @[to_additive (attr := simp)]
 
 中文:
-缩写 PartialOrder.mkOfGroupCone
-  签名: [GroupConeClass S G]
+缩写 偏序.mkOfGroupCone
+  签名: [群锥类 S G]
   定义体: b / a in C
   le_refl a := by simp [one_mem]
   le_trans a b c nab nbc := by simpa using mul_mem nbc nab
@@ -332,8 +332,8 @@ lemma PartialOrder.mkOfGroupCone_le_iff
   proof: Iff.rfl
 
 中文:
-引理 PartialOrder.mkOfGroupCone_le_iff
-  结论: {S G : 类型} [CommGroup G] [SetLike S G]
+引理 偏序.mkOfGroupCone_le_iff
+  结论: {S G : 类型} [交换群 G] [集合状 S G]
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -354,7 +354,7 @@ abbreviation LinearOrder.mkOfGroupCone
   toDecidableLE _ := _
 
 中文:
-缩写 LinearOrder.mkOfGroupCone
+缩写 线性序.mkOfGroupCone
   定义体: PartialOrder.mkOfGroupCone C
   le_total a b := by simpa using mem_or_inv_mem C (b / a)
   toDecidableLE _ := _
@@ -382,8 +382,8 @@ lemma IsOrderedMonoid.mkOfCone
   { mul_le_mul_left := fun a b nab c => by simpa [· <= ·] using nab }
 
 中文:
-引理 IsOrderedMonoid.mkOfCone
-  条件: [GroupConeClass S G]
+引理 是Ordered幺半群.mkOfCone
+  条件: [群锥类 S G]
   证明: PartialOrder.mkOfGroupCone C
     IsOrderedMonoid G :=
   let _ : PartialOrder G := PartialOrder.mkOfGroupCone C

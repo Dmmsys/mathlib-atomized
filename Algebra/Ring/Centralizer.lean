@@ -56,7 +56,7 @@ theorem neg_mem_centralizer
 
 中文:
 定理 neg_mem_centralizer
-  条件: [Mul M] [HasDistribNeg M] (ha : a in centralizer S)
+  条件: [乘法 M] [有DistribNeg M] (ha : a in centralizer S)
   证明: fun c hc => by rw [mul_neg, ha c hc, neg_mul]
 
 Depends on / 依赖: mul_neg, neg_mul

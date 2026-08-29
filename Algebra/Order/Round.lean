@@ -167,7 +167,7 @@ theorem round_ofNat
 @[simp]
 
 中文:
-定理 round_ofNat
+定理 round_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: round (of自然数(n) : α) = of自然数(n)
   证明: round_natCast n
@@ -385,7 +385,7 @@ theorem round_add_ofNat
 @[simp]
 
 中文:
-定理 round_add_ofNat
+定理 round_add_of自然数
   条件: (x : α) (n : 自然数) [n.AtLeastTwo]
   证明: round_add_natCast x n
 
@@ -434,7 +434,7 @@ theorem round_sub_ofNat
 @[simp]
 
 中文:
-定理 round_sub_ofNat
+定理 round_sub_of自然数
   条件: (x : α) (n : 自然数) [n.AtLeastTwo]
   证明: round_sub_natCast x n
 
@@ -510,7 +510,7 @@ theorem round_ofNat_add
   proof: round_natCast_add x n
 
 中文:
-定理 round_ofNat_add
+定理 round_of自然数_add
   条件: (n : 自然数) [n.AtLeastTwo] (x : α)
   证明: round_natCast_add x n
 
@@ -538,7 +538,7 @@ theorem abs_sub_round_eq_min
 中文:
 定理 abs_sub_round_eq_min
   条件: (x : α)
-  结论: |x - round x| = min (fract x) (1 - fract x)
+  结论: |x - round x| = 最小值 (fract x) (1 - fract x)
   证明: by
   simp_rw [round, min_def_lt, two_mul, ← lt_tsub_iff_left]
   rcases lt_or_ge (fract x) (1 - fract x) with hx | hx
@@ -642,7 +642,7 @@ theorem round_eq_iff
 中文:
 定理 round_eq_iff
   条件: {x : α} {n : 整数}
-  结论: round x = n ↔ x in Ico (n - 1 / 2 : α) (n + 1 / 2)
+  结论: round x = n ↔ x in 左闭右开区间 (n - 1 / 2 : α) (n + 1 / 2)
   证明: by
   norm_num [round_eq, floor_eq_iff, ← lt_sub_iff_add_lt, add_sub_assoc]
 
@@ -711,7 +711,7 @@ theorem round_eq_zero_iff
 中文:
 定理 round_eq_zero_iff
   条件: {x : α}
-  结论: round x = 0 ↔ x in Ico (-(1 / 2)) ((1 : α) / 2)
+  结论: round x = 0 ↔ x in 左闭右开区间 (-(1 / 2)) ((1 : α) / 2)
   证明: by
   simp [round_eq_iff]
 
@@ -866,7 +866,7 @@ theorem map_round
 
 中文:
 定理 map_round
-  条件: (f : F) (hf : StrictMono f) (a : α)
+  条件: (f : F) (hf : 严格递增 f) (a : α)
   结论: round (f a) = round a
   证明: by
   simp_rw [round_eq, ← map_floor _ hf, map_add, one_div, map_inv₀, map_ofNat]

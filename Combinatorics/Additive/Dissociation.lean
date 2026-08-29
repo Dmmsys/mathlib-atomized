@@ -52,7 +52,7 @@ definition MulDissociated
 
 中文:
 定义 MulDissociated
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: {t : Finset α | ↑t subseteq s}.InjOn (∏ x in ·, x)
 
 Depends on / 依赖: Finset, subseteq
@@ -87,7 +87,7 @@ lemma MulDissociated.subset
 
 中文:
 引理 MulDissociated.subset
-  条件: {t : Set α} (hst : s subseteq t) (ht : MulDissociated t)
+  条件: {t : 集合 α} (hst : s subseteq t) (ht : MulDissociated t)
   证明: ht.mono fun _ => hst.trans'
 -/
 @[to_additive] lemma MulDissociated.subset {t : Set α} (hst : s subseteq t) (ht : MulDissociated t) :
@@ -106,7 +106,7 @@ lemma mulDissociated_empty
 
 中文:
 引理 mulDissociated_empty
-  结论: MulDissociated (∅ : Set α)
+  结论: MulDissociated (∅ : 集合 α)
   证明: by
   simp [MulDissociated, subset_empty_iff]
 
@@ -130,7 +130,7 @@ lemma mulDissociated_singleton
 
 中文:
 引理 mulDissociated_singleton
-  结论: MulDissociated ({a} : Set α) ↔ a != 1
+  结论: MulDissociated ({a} : 集合 α) ↔ a != 1
   证明: by
   simp [MulDissociated, ofPred_or, -subset_singleton_iff,
     Finset.coe_subset_singleton]
@@ -183,7 +183,7 @@ lemma not_mulDissociated_iff_exists_disjoint
     Finset.prod_sdiff_eq_prod_sdiff_iff.2 h⟩ <;> push_cast 
 
 中文:
-引理 not_mulDissociated_iff_exists_disjoint
+引理 not_mulDissociated_iff_存在_disjoint
   证明: by
   classical
   refine not_mulDissociated.trans
@@ -215,7 +215,7 @@ lemma MulEquiv.mulDissociated_preimage
     (Finset.map_injective _).eq_iff]
 
 中文:
-引理 MulEquiv.mulDissociated_preimage
+引理 乘法等价.mulDissociated_preimage
   条件: (e : β ≃* α)
   证明: by
   simp [MulDissociated, InjOn, ← e.finsetCongr.forall_congr_right, ← e.apply_eq_iff_eq,
@@ -275,7 +275,7 @@ definition mulSpan
 
 中文:
 定义 mulSpan
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: (Fintype.piFinset fun _a => ({-1, 0, 1} : Finset Int)).image fun ε => ∏ a in s, a ^ ε a
 
 @[to_additive (attr := simp)]
@@ -386,7 +386,7 @@ lemma exists_subset_mulSpan_card_le_of_forall_mulDissociated
   by_cases h
 
 中文:
-引理 exists_subset_mulSpan_card_le_of_forall_mulDissociated
+引理 存在_subset_mulSpan_card_le_of_对任意_mulDissociated
   证明: by
   classical
   obtain ⟨s', hs'⟩ :=

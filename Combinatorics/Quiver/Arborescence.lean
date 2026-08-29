@@ -48,11 +48,11 @@ class Arborescence
     - uniquePath : forall b : V, Unique (Path root b)
 
 中文:
-类 Arborescence
-  参数: (V : 类型u) [Quiver.{v} V]
+类 树形图
+  参数: (V : 类型u) [箭图.{v} V]
   公理与运算 (2 个):
     - root : V
-    - uniquePath : 对任意 b : V, Unique (Path root b)
+    - uniquePath : 对任意 b : V, 唯一 (道路 root b)
 -/
 class Arborescence (V : Type u) [Quiver.{v} V] : Type max u v where
   /-- The root of the arborescence. -/
@@ -70,7 +70,7 @@ definition root
 
 中文:
 定义 root
-  签名: (V : 类型u) [Quiver V] [Arborescence V]
+  签名: (V : 类型u) [箭图 V] [树形图 V]
   定义体: Arborescence.root
 
 Depends on / 依赖: Arborescence, Arborescence.root
@@ -104,7 +104,7 @@ definition arborescenceMk
 
 中文:
 定义 arborescenceMk
-  签名: {V : 类型u} [Quiver V] (r : V) (height : V -> 自然数)
+  签名: {V : 类型u} [箭图 V] (r : V) (height : V -> 自然数)
   定义体: r
   uniquePath b :=
     ⟨Classical.inhabited_of_nonempty (by
@@ -161,9 +161,9 @@ class RootedConnected
 
 中文:
 类 RootedConnected
-  参数: {V : 类型u} [Quiver V] (r : V)
+  参数: {V : 类型u} [箭图 V] (r : V)
   公理与运算 (1 个):
-    - nonempty_path : 对任意 b : V, Nonempty (Path r b)
+    - nonempty_path : 对任意 b : V, 非空 (道路 r b)
 -/
 class RootedConnected {V : Type u} [Quiver V] (r : V) : Prop where
   nonempty_path : forall b : V, Nonempty (Path r b)
@@ -203,7 +203,7 @@ theorem shortest_path_spec
 
 中文:
 定理 shortest_path_spec
-  条件: {a : V} (p : Path r a)
+  条件: {a : V} (p : 道路 r a)
   结论: (shortestPath r a).length <= p.length
   证明: not_lt.mp (WellFounded.not_lt_min (measure _).wf Set.univ trivial)
 
@@ -252,7 +252,7 @@ instance geodesicArborescence
 
 中文:
 实例 geodesicArborescence
-  签名: : Arborescence (geodesicSubtree r)
+  签名: : 树形图 (geodesicSubtree r)
   定义体: arborescenceMk r (fun a => (shortestPath r a).length)
     (by
       rintro a b ⟨e, p, h⟩

@@ -46,8 +46,8 @@ theorem IsGδ.compl_singleton
 
 中文:
 定理 IsGδ.compl_singleton
-  条件: (x : X) [T1Space X]
-  结论: IsGδ ({x}ᶜ : Set X)
+  条件: (x : X) [T1空间 X]
+  结论: IsGδ ({x}ᶜ : 集合 X)
   证明: isOpen_compl_singleton.isGδ
 
 Depends on / 依赖: isOpen_compl_singleton, isOpen_compl_singleton.isG
@@ -67,8 +67,8 @@ theorem Set.Countable.isGδ_compl
   exact .biInter hs fun x _ => .compl_singleton x
 
 中文:
-定理 Set.Countable.isGδ_compl
-  条件: {s : Set X} [T1Space X] (hs : s.Countable)
+定理 集合.可数.isGδ_compl
+  条件: {s : 集合 X} [T1空间 X] (hs : s.可数)
   结论: IsGδ sᶜ
   证明: by
   rw [← biUnion_of_singleton s]; rw [compl_iUnion₂]
@@ -90,8 +90,8 @@ theorem Set.Finite.isGδ_compl
   proof: hs.countable.isGδ_compl
 
 中文:
-定理 Set.Finite.isGδ_compl
-  条件: {s : Set X} [T1Space X] (hs : s.Finite)
+定理 集合.有限.isGδ_compl
+  条件: {s : 集合 X} [T1空间 X] (hs : s.有限)
   结论: IsGδ sᶜ
   证明: hs.countable.isGδ_compl
 
@@ -110,8 +110,8 @@ theorem Set.Subsingleton.isGδ_compl
   proof: hs.finite.isGδ_compl
 
 中文:
-定理 Set.Subsingleton.isGδ_compl
-  条件: {s : Set X} [T1Space X] (hs : s.Subsingleton)
+定理 集合.子单例.isGδ_compl
+  条件: {s : 集合 X} [T1空间 X] (hs : s.子单例)
   结论: IsGδ sᶜ
   证明: hs.finite.isGδ_compl
 
@@ -130,9 +130,9 @@ theorem Finset.isGδ_compl
   proof: s.finite_toSet.isGδ_compl
 
 中文:
-定理 Finset.isGδ_compl
-  条件: [T1Space X] (s : Finset X)
-  结论: IsGδ (sᶜ : Set X)
+定理 有限集.isGδ_compl
+  条件: [T1空间 X] (s : 有限集 X)
+  结论: IsGδ (sᶜ : 集合 X)
   证明: s.finite_toSet.isGδ_compl
 
 Depends on / 依赖: finite_toSet, s.finite_toSet.isG
@@ -153,7 +153,7 @@ theorem IsGδ.singleton
 
 中文:
 定理 IsGδ.singleton
-  条件: [FirstCountableTopology X] [T1Space X] (x : X)
+  条件: [第一可数拓扑 X] [T1空间 X] (x : X)
   证明: by
   rcases (nhds_basis_opens x).exists_antitone_subbasis with ⟨U, hU, h_basis⟩
   rw [← biInter_basis_nhds h_basis.toHasBasis]
@@ -174,8 +174,8 @@ theorem Set.Finite.isGδ
   proof: Finite.induction_on _ hs .empty fun _ _ => .union (.singleton _)
 
 中文:
-定理 Set.Finite.isGδ
-  条件: [FirstCountableTopology X] {s : Set X} [T1Space X] (hs : s.Finite)
+定理 集合.有限.isGδ
+  条件: [第一可数拓扑 X] {s : 集合 X} [T1空间 X] (hs : s.有限)
   证明: Finite.induction_on _ hs .empty fun _ _ => .union (.singleton _)
 
 Depends on / 依赖: Finite, Finite.induction_on, induction_on, singleton
@@ -198,11 +198,11 @@ class PerfectlyNormalSpace
     - closed_gdelta : forall ⦃h : Set X⦄, IsClosed h -> IsGδ h
 
 中文:
-类 PerfectlyNormalSpace
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: NormalSpace X
+类 PerfectlyNormal空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: 正规空间 X
   公理与运算 (1 个):
-    - closed_gdelta : 对任意 ⦃h : Set X⦄, IsClosed h -> IsGδ h
+    - closed_gdelta : 对任意 ⦃h : 集合 X⦄, 是闭集 h -> IsGδ h
 -/
 class PerfectlyNormalSpace (X : Type u) [TopologicalSpace X] : Prop extends NormalSpace X where
     closed_gdelta : forall ⦃h : Set X⦄, IsClosed h -> IsGδ h
@@ -224,7 +224,7 @@ theorem Disjoint.hasSeparatingCover_closed_gdelta_right
 
 中文:
 定理 Disjoint.hasSeparatingCover_closed_gdelta_right
-  结论: {s t : Set X} [NormalSpace X]
+  结论: {s t : 集合 X} [正规空间 X]
   证明: by
   obtain ⟨T, T_open, T_count, T_int⟩ := t_gd
   rcases T.eq_empty_or_nonempty with rfl | T_nonempty
@@ -283,8 +283,8 @@ theorem IsClosed.isGδ
   proof: PerfectlyNormalSpace.closed_gdelta hs
 
 中文:
-定理 IsClosed.isGδ
-  条件: [PerfectlyNormalSpace X] {s : Set X} (hs : IsClosed s)
+定理 是闭集.isGδ
+  条件: [PerfectlyNormal空间 X] {s : 集合 X} (hs : 是闭集 s)
   结论: IsGδ s
   证明: PerfectlyNormalSpace.closed_gdelta hs
 
@@ -314,8 +314,8 @@ theorem Topology.IsInducing.perfectlyNormalSpace
     ht.2 ▸ ht.1.isGδ.preimage he.continuous
 
 中文:
-定理 Topology.IsInducing.perfectlyNormalSpace
-  结论: [PerfectlyNormalSpace Y] {e : X -> Y}
+定理 拓扑.是Inducing.perfectlyNormalSpace
+  结论: [PerfectlyNormal空间 Y] {e : X -> Y}
   证明: he.completelyNormalSpace.toNormalSpace
   closed_gdelta _ hs := (he.isClosed_iff.1 hs).elim fun _ ht =>
     ht.2 ▸ ht.1.isGδ.preimage he.continuous
@@ -341,9 +341,9 @@ class T6Space
   (no additional axioms)
 
 中文:
-类 T6Space
-  参数: (X : 类型u) [TopologicalSpace X]
-  继承: T0Space X, PerfectlyNormalSpace X
+类 T6空间
+  参数: (X : 类型u) [拓扑空间 X]
+  继承: T0空间 X, PerfectlyNormal空间 X
   (无附加公理)
 -/
 class T6Space (X : Type u) [TopologicalSpace X] : Prop extends T0Space X, PerfectlyNormalSpace X
@@ -362,8 +362,8 @@ theorem Topology.IsEmbedding.t6Space
   toT0Space := he.t0Space
 
 中文:
-定理 Topology.IsEmbedding.t6Space
-  结论: [T6Space Y] {e : X -> Y}
+定理 拓扑.是嵌入.t6Space
+  结论: [T6空间 Y] {e : X -> Y}
   证明: he.perfectlyNormalSpace
   toT0Space := he.t0Space
 

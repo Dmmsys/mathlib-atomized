@@ -39,7 +39,7 @@ theorem _root_.IsSMulRegular.pi
 
 中文:
 定理 _root_.IsSMulRegular.pi
-  结论: {α : 类型} [对任意 i, SMul α <| f i] {k : α}
+  结论: {α : 类型} [对任意 i, 标量乘法 α <| f i] {k : α}
   证明: fun _ _ h =>
   funext fun i => hk i (congr_fun h i :)
 -/
@@ -61,7 +61,7 @@ instance module
 
 中文:
 实例 module
-  签名: (α) {r : Semiring α} {m : 对任意 i, AddCommMonoid <| f i} [对任意 i, Module α <| f i]
+  签名: (α) {r : 半环 α} {m : 对任意 i, 加法交换幺半群 <| f i} [对任意 i, 模 α <| f i]
   定义体: { Pi.distribMulAction _ with
     add_smul := fun _ _ _ => funext fun _ => add_smul _ _ _
     zero_smul := fun _ => funext fun _ => zero_smul α _ }
@@ -90,8 +90,8 @@ instance Function.module
   body: Pi.module _ _ _
 
 中文:
-实例 Function.module
-  签名: (α β : 类型) [Semiring α] [AddCommMonoid β] [Module α β]
+实例 函数.module
+  签名: (α β : 类型) [半环 α] [加法交换幺半群 β] [模 α β]
   定义体: Pi.module _ _ _
 
 Depends on / 依赖: Pi.module, module
@@ -119,7 +119,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: {g : I -> 类型} {r : 对任意 i, Semiring (f i)} {m : 对任意 i, AddCommMonoid (g i)}
+  签名: {g : I -> 类型} {r : 对任意 i, 半环 (f i)} {m : 对任意 i, 加法交换幺半群 (g i)}
   定义体: by
     intros
     ext1

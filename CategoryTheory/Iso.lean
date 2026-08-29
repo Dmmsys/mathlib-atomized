@@ -63,8 +63,8 @@ structure Iso
     - inv_hom_id : inv ≫ hom = 𝟙 Y  [default: by cat_disch]
 
 中文:
-结构 Iso
-  参数: {C : 类型u} [Category.{v} C] (X Y : C)
+结构 同构
+  参数: {C : 类型u} [范畴.{v} C] (X Y : C)
   公理与运算 (4 个):
     - hom : X ⟶ Y
     - inv : Y ⟶ X
@@ -233,7 +233,7 @@ theorem symm_bijective
 中文:
 定理 symm_bijective
   条件: {X Y : C}
-  结论: Function.Bijective (symm : (X ≅ Y) -> _)
+  结论: 函数.双射 (symm : (X ≅ Y) -> _)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm_eq, symm_symm_eq⟩
 
 @[simp]
@@ -276,7 +276,7 @@ theorem nonempty_iso_symm
 中文:
 定理 nonempty_iso_symm
   条件: (X Y : C)
-  结论: Nonempty (X ≅ Y) ↔ Nonempty (Y ≅ X)
+  结论: 非空 (X ≅ Y) ↔ 非空 (Y ≅ X)
   证明: ⟨fun h => ⟨h.some.symm⟩, fun h => ⟨h.some.symm⟩⟩
 
 Depends on / 依赖: h.some.symm
@@ -317,7 +317,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (X ≅ X)
+  签名: 可居 (X ≅ X)
   定义体: ⟨Iso.refl X⟩
 
 Depends on / 依赖: Iso.refl
@@ -338,7 +338,7 @@ theorem nonempty_iso_refl
 中文:
 定理 nonempty_iso_refl
   条件: (X : C)
-  结论: Nonempty (X ≅ X)
+  结论: 非空 (X ≅ X)
   证明: ⟨default⟩
 
 @[simp, grind =]
@@ -358,7 +358,7 @@ theorem refl_symm
 中文:
 定理 refl_symm
   条件: (X : C)
-  结论: (Iso.refl X).symm = Iso.refl X
+  结论: (同构.refl X).symm = 同构.refl X
   证明: rfl
 -/
 theorem refl_symm (X : C) : (Iso.refl X).symm = Iso.refl X := rfl
@@ -497,7 +497,7 @@ theorem refl_trans
 中文:
 定理 refl_trans
   条件: (α : X ≅ Y)
-  结论: Iso.refl X ≪≫ α = α
+  结论: 同构.refl X ≪≫ α = α
   证明: by ext; apply Category.id_comp
 
 @[simp]
@@ -521,7 +521,7 @@ theorem trans_refl
 中文:
 定理 trans_refl
   条件: (α : X ≅ Y)
-  结论: α ≪≫ Iso.refl Y = α
+  结论: α ≪≫ 同构.refl Y = α
   证明: by ext; apply Category.comp_id
 
 @[simp]
@@ -545,7 +545,7 @@ theorem symm_self_id
 中文:
 定理 symm_self_id
   条件: (α : X ≅ Y)
-  结论: α.symm ≪≫ α = Iso.refl Y
+  结论: α.symm ≪≫ α = 同构.refl Y
   证明: ext α.inv_hom_id
 
 @[simp]
@@ -570,7 +570,7 @@ theorem self_symm_id
 中文:
 定理 self_symm_id
   条件: (α : X ≅ Y)
-  结论: α ≪≫ α.symm = Iso.refl X
+  结论: α ≪≫ α.symm = 同构.refl X
   证明: ext α.hom_inv_id
 
 @[simp]
@@ -890,7 +890,7 @@ class IsIso
     - out : exists inv : Y ⟶ X, f ≫ inv = 𝟙 X ∧ inv ≫ f = 𝟙 Y
 
 中文:
-类 IsIso
+类 是同构
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
     - out : 存在 inv : Y ⟶ X, f ≫ inv = 𝟙 X ∧ inv ≫ f = 𝟙 Y
@@ -912,9 +912,9 @@ theorem IsIso.mk'
   proof: by simp_all only [and_comm]
 
 中文:
-定理 IsIso.mk'
+定理 是同构.mk'
   条件: {f : Y ⟶ X} (out : 存在 inv : X ⟶ Y, inv ≫ f = 𝟙 X ∧ f ≫ inv = 𝟙 Y)
-  结论: IsIso f where
+  结论: 是同构 f where
   证明: by simp_all only [and_comm]
 
 Depends on / 依赖: and_comm
@@ -934,7 +934,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (f : X ⟶ Y) [I : IsIso f]
+  签名: (f : X ⟶ Y) [I : 是同构 f]
   定义体: Classical.choose I.1
 
 Depends on / 依赖: Classical, Classical.choose
@@ -957,7 +957,7 @@ theorem hom_inv_id
 
 中文:
 定理 hom_inv_id
-  条件: (f : X ⟶ Y) [I : IsIso f]
+  条件: (f : X ⟶ Y) [I : 是同构 f]
   结论: f ≫ inv f = 𝟙 X
   证明: (Classical.choose_spec I.1).left
 
@@ -980,7 +980,7 @@ theorem inv_hom_id
 
 中文:
 定理 inv_hom_id
-  条件: (f : X ⟶ Y) [I : IsIso f]
+  条件: (f : X ⟶ Y) [I : 是同构 f]
   结论: inv f ≫ f = 𝟙 Y
   证明: (Classical.choose_spec I.1).right
 
@@ -1002,7 +1002,7 @@ instance Iso.isIso_hom
 @[to_dual existing isIso_hom]
 
 中文:
-实例 Iso.isIso_hom
+实例 同构.isIso_hom
   签名: (e : X ≅ Y)
   定义体: ⟨e.inv, by simp only [hom_inv_id], by simp⟩
 
@@ -1023,7 +1023,7 @@ instance Iso.isIso_inv
   body: e.symm.isIso_hom
 
 中文:
-实例 Iso.isIso_inv
+实例 同构.isIso_inv
   签名: (e : X ≅ Y)
   定义体: e.symm.isIso_hom
 
@@ -1047,7 +1047,7 @@ definition asIso
 
 中文:
 定义 asIso
-  签名: (f : X ⟶ Y) [IsIso f]
+  签名: (f : X ⟶ Y) [是同构 f]
   定义体: ⟨f, inv f, hom_inv_id f, inv_hom_id f⟩
 
 @[to_dual (attr := simp) asIso'_hom]
@@ -1071,7 +1071,7 @@ theorem asIso_hom
 
 中文:
 定理 asIso_hom
-  条件: (f : X ⟶ Y) [IsIso f]
+  条件: (f : X ⟶ Y) [是同构 f]
   结论: (asIso f).hom = f
   证明: rfl
 
@@ -1092,7 +1092,7 @@ theorem asIso_inv
 
 中文:
 定理 asIso_inv
-  条件: (f : X ⟶ Y) [IsIso f]
+  条件: (f : X ⟶ Y) [是同构 f]
   结论: (asIso f).inv = inv f
   证明: rfl
 -/
@@ -1122,7 +1122,7 @@ theorem inv_eq_of_hom_inv_id
 
 中文:
 定理 inv_eq_of_hom_inv_id
-  条件: {f : X ⟶ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X)
+  条件: {f : X ⟶ Y} [是同构 f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X)
   证明: by
   have := congrArg (inv f ≫ ·) hom_inv_id
   grind
@@ -1147,7 +1147,7 @@ theorem eq_inv_of_hom_inv_id
 
 中文:
 定理 eq_inv_of_hom_inv_id
-  条件: {f : X ⟶ Y} [IsIso f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X)
+  条件: {f : X ⟶ Y} [是同构 f] {g : Y ⟶ X} (hom_inv_id : f ≫ g = 𝟙 X)
   证明: (inv_eq_of_hom_inv_id hom_inv_id).symm
 
 Depends on / 依赖: hom_inv_id, inv_eq_of_hom_inv_id
@@ -1186,7 +1186,7 @@ instance inv_isIso
 
 中文:
 实例 inv_isIso
-  签名: [IsIso f]
+  签名: [是同构 f]
   定义体: (asIso f).isIso_inv
 
 @[to_dual self (reorder := X Z, f h, 8 9)]
@@ -1207,7 +1207,7 @@ instance comp_isIso
 
 中文:
 实例 comp_isIso
-  签名: [IsIso f] [IsIso h]
+  签名: [是同构 f] [是同构 h]
   定义体: (asIso f ≪≫ asIso h).isIso_hom
 
 Depends on / 依赖: isIso_hom
@@ -1233,8 +1233,8 @@ lemma comp_isIso'
 
 中文:
 引理 comp_isIso'
-  条件: (_ : IsIso f) (_ : IsIso h)
-  结论: IsIso (f ≫ h)
+  条件: (_ : 是同构 f) (_ : 是同构 h)
+  结论: 是同构 (f ≫ h)
   证明: inferInstance
 
 @[simp]
@@ -1285,7 +1285,7 @@ theorem inv_comp
 
 中文:
 定理 inv_comp
-  条件: [IsIso f] [IsIso h]
+  条件: [是同构 f] [是同构 h]
   结论: inv (f ≫ h) = inv h ≫ inv f
   证明: by
   apply inv_eq_of_hom_inv_id
@@ -1315,7 +1315,7 @@ theorem inv_inv
 
 中文:
 定理 inv_inv
-  条件: [IsIso f]
+  条件: [是同构 f]
   结论: inv (inv f) = f
   证明: by
   apply inv_eq_of_hom_inv_id
@@ -1344,7 +1344,7 @@ theorem Iso.inv_inv
 @[to_dual (attr := simp) comp_inv_eq]
 
 中文:
-定理 Iso.inv_inv
+定理 同构.inv_inv
   条件: (f : X ≅ Y)
   结论: inv f.inv = f.hom
   证明: by
@@ -1373,7 +1373,7 @@ theorem inv_comp_eq
 
 中文:
 定理 inv_comp_eq
-  条件: (α : X ⟶ Y) [IsIso α] {f : X ⟶ Z} {g : Y ⟶ Z}
+  条件: (α : X ⟶ Y) [是同构 α] {f : X ⟶ Z} {g : Y ⟶ Z}
   结论: inv α ≫ f = g ↔ f = α ≫ g
   证明: (asIso α).inv_comp_eq
 
@@ -1398,7 +1398,7 @@ theorem eq_inv_comp
 
 中文:
 定理 eq_inv_comp
-  条件: (α : X ⟶ Y) [IsIso α] {f : X ⟶ Z} {g : Y ⟶ Z}
+  条件: (α : X ⟶ Y) [是同构 α] {f : X ⟶ Z} {g : Y ⟶ Z}
   结论: g = inv α ≫ f ↔ α ≫ g = f
   证明: (asIso α).eq_inv_comp
 
@@ -1424,7 +1424,7 @@ theorem of_isIso_comp_left
 
 中文:
 定理 of_isIso_comp_left
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f] [IsIso (f ≫ g)]
+  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 f] [是同构 (f ≫ g)]
   证明: by
   rw [← id_comp g]; rw [← inv_hom_id f]; rw [assoc]
   infer_instance
@@ -1451,7 +1451,7 @@ theorem of_isIso_fac_left
 
 中文:
 定理 of_isIso_fac_left
-  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} {h : X ⟶ Z} [IsIso f]
+  结论: {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z} {h : X ⟶ Z} [是同构 f]
   证明: by
   rw [← w] at hh
   exact of_isIso_comp_left f g
@@ -1476,7 +1476,7 @@ theorem isIso_comp_left_iff
 
 中文:
 定理 isIso_comp_left_iff
-  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [IsIso f]
+  条件: {X Y Z : C} (f : X ⟶ Y) (g : Y ⟶ Z) [是同构 f]
   证明: ⟨fun _ => IsIso.of_isIso_comp_left f g, fun _ => inferInstance⟩
 
 Depends on / 依赖: IsIso.of_isIso_comp_left, of_isIso_comp_left
@@ -1503,7 +1503,7 @@ theorem eq_of_inv_eq_inv
 
 中文:
 定理 eq_of_inv_eq_inv
-  条件: {f g : X ⟶ Y} [IsIso f] [IsIso g] (p : inv f = inv g)
+  条件: {f g : X ⟶ Y} [是同构 f] [是同构 g] (p : inv f = inv g)
   结论: f = g
   证明: by
   apply (cancel_epi (inv f)).1
@@ -1530,8 +1530,8 @@ theorem IsIso.inv_eq_inv
 @[to_dual comp_hom_eq_id]
 
 中文:
-定理 IsIso.inv_eq_inv
-  条件: {f g : X ⟶ Y} [IsIso f] [IsIso g]
+定理 是同构.inv_eq_inv
+  条件: {f g : X ⟶ Y} [是同构 f] [是同构 g]
   结论: inv f = inv g ↔ f = g
   证明: Iso.inv_eq_inv (asIso f) (asIso g)
 
@@ -1556,7 +1556,7 @@ theorem hom_comp_eq_id
 
 中文:
 定理 hom_comp_eq_id
-  条件: (g : X ⟶ Y) [IsIso g] {f : Y ⟶ X}
+  条件: (g : X ⟶ Y) [是同构 g] {f : Y ⟶ X}
   结论: g ≫ f = 𝟙 X ↔ f = inv g
   证明: (asIso g).hom_comp_eq_id
 
@@ -1581,7 +1581,7 @@ theorem inv_comp_eq_id
 
 中文:
 定理 inv_comp_eq_id
-  条件: (g : X ⟶ Y) [IsIso g] {f : X ⟶ Y}
+  条件: (g : X ⟶ Y) [是同构 g] {f : X ⟶ Y}
   结论: inv g ≫ f = 𝟙 Y ↔ f = g
   证明: (asIso g).inv_comp_eq_id
 
@@ -1606,8 +1606,8 @@ theorem isIso_of_hom_comp_eq_id
 
 中文:
 定理 isIso_of_hom_comp_eq_id
-  条件: (g : X ⟶ Y) [IsIso g] {f : Y ⟶ X} (h : g ≫ f = 𝟙 X)
-  结论: IsIso f
+  条件: (g : X ⟶ Y) [是同构 g] {f : Y ⟶ X} (h : g ≫ f = 𝟙 X)
+  结论: 是同构 f
   证明: by
   rw [(hom_comp_eq_id _).mp h]
   infer_instance
@@ -1629,8 +1629,8 @@ lemma isIso_iff_of_thin
 
 中文:
 引理 isIso_iff_of_thin
-  条件: [Quiver.IsThin C] {X Y : C} (f : X ⟶ Y)
-  结论: IsIso f ↔ Nonempty (Y ⟶ X)
+  条件: [箭图.IsThin C] {X Y : C} (f : X ⟶ Y)
+  结论: 是同构 f ↔ 非空 (Y ⟶ X)
   证明: ⟨fun _ => ⟨inv f⟩, fun g => ⟨g.some, Subsingleton.elim _ _, Subsingleton.elim _ _⟩⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, g.some
@@ -1947,7 +1947,7 @@ theorem mapIso_refl
 中文:
 定理 mapIso_refl
   条件: (F : C ⥤ D) (X : C)
-  结论: F.mapIso (Iso.refl X) = Iso.refl (F.obj X)
+  结论: F.mapIso (同构.refl X) = 同构.refl (F.obj X)
   证明: Iso.ext F.map_id X
 
 @[to_dual self]
@@ -1970,7 +1970,7 @@ instance map_isIso
 
 中文:
 实例 map_isIso
-  签名: (F : C ⥤ D) (f : X ⟶ Y) [IsIso f]
+  签名: (F : C ⥤ D) (f : X ⟶ Y) [是同构 f]
   定义体: (F.mapIso (asIso f)).isIso_hom
 
 @[simp, push ←, to_dual self]
@@ -1996,7 +1996,7 @@ theorem map_inv
 
 中文:
 定理 map_inv
-  条件: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) [是同构 f]
   结论: F.map (inv f) = inv (F.map f)
   证明: by
   apply eq_inv_of_hom_inv_id
@@ -2021,7 +2021,7 @@ theorem map_hom_inv
 
 中文:
 定理 map_hom_inv
-  条件: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) [IsIso f]
+  条件: (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) [是同构 f]
   证明: by simp
 -/
 theorem map_hom_inv (F : C ⥤ D) {X Y : C} (f : X ⟶ Y) [IsIso f] :

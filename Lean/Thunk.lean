@@ -44,7 +44,7 @@ universe u v
 
 中文:
 定理 get_mk
-  条件: {α} (f : Unit -> α)
+  条件: {α} (f : 单元 -> α)
   结论: (Thunk.mk f).get = f ()
   证明: rfl
 
@@ -93,7 +93,7 @@ definition prod
   body: Thunk.mk fun _ => (a.get, b.get)
 
 中文:
-定义 prod
+定义 乘积
   签名: (a : Thunk α) (b : Thunk β)
   定义体: Thunk.mk fun _ => (a.get, b.get)
 
@@ -113,7 +113,7 @@ theorem prod_get_fst
 中文:
 定理 prod_get_fst
   条件: {a : Thunk α} {b : Thunk β}
-  结论: (prod a b).get.1 = a.get
+  结论: (乘积 a b).get.1 = a.get
   证明: rfl
 -/
 @[simp] theorem prod_get_fst {a : Thunk α} {b : Thunk β} : (prod a b).get.1 = a.get := rfl
@@ -129,7 +129,7 @@ theorem prod_get_snd
 中文:
 定理 prod_get_snd
   条件: {a : Thunk α} {b : Thunk β}
-  结论: (prod a b).get.2 = b.get
+  结论: (乘积 a b).get.2 = b.get
   证明: rfl
 -/
 @[simp] theorem prod_get_snd {a : Thunk α} {b : Thunk β} : (prod a b).get.2 = b.get := rfl
@@ -144,7 +144,7 @@ definition add
 
 中文:
 定义 add
-  签名: [Add α] (a b : Thunk α)
+  签名: [加法 α] (a b : Thunk α)
   定义体: Thunk.mk fun _ => a.get + b.get
 
 Depends on / 依赖: Thunk.mk, a.get, b.get
@@ -160,8 +160,8 @@ instance [Add
   body: ⟨add⟩
 
 中文:
-实例 [Add
-  签名: α] : Add (Thunk α)
+实例 [加法
+  签名: α] : 加法 (Thunk α)
   定义体: ⟨add⟩
 -/
 instance [Add α] : Add (Thunk α) := ⟨add⟩
@@ -177,7 +177,7 @@ theorem add_get
 
 中文:
 定理 add_get
-  条件: [Add α] {a b : Thunk α}
+  条件: [加法 α] {a b : Thunk α}
   结论: (a + b).get = a.get + b.get
   证明: rfl
 -/

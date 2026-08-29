@@ -331,8 +331,8 @@ instance [IsLocalRing
         simpa using h.symm
 
 中文:
-实例 [IsLocalRing
-  签名: R] : IsLocalRing (MvPowerSeries σ R)
+实例 [是局部环
+  签名: R] : 是局部环 (MvPowerSeries σ R)
   定义体: IsLocalRing.of_isUnit_or_isUnit_one_sub_self by
     intro φ
     obtain ⟨u, h⟩ | ⟨u, h⟩ := IsLocalRing.isUnit_or_isUnit_one_sub_self (constantCoeff φ) <;>
@@ -379,7 +379,7 @@ theorem map.isLocalHom
 
 中文:
 定理 map.isLocalHom
-  结论: IsLocalHom (map (σ := σ) f)
+  结论: 是Local态射 (map (σ := σ) f)
   证明: ⟨by
     rintro φ ⟨ψ, h⟩
     replace h := congr_arg constantCoeff h
@@ -433,7 +433,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (MvPowerSeries σ k)
+  签名: 取逆 (MvPowerSeries σ k)
   定义体: ⟨MvPowerSeries.inv⟩
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.inv
@@ -596,7 +596,7 @@ theorem invOfUnit_eq'
 
 中文:
 定理 invOfUnit_eq'
-  条件: (φ : MvPowerSeries σ k) (u : Units k) (h : constantCoeff φ = u)
+  条件: (φ : MvPowerSeries σ k) (u : 单位群 k) (h : constantCoeff φ = u)
   证明: by
   rw [← invOfUnit_eq φ (h.symm ▸ u.ne_zero)]
   apply congrArg (invOfUnit φ)
@@ -763,7 +763,7 @@ instance :
 
 中文:
 实例 :
-  签名: InvOneClass (MvPowerSeries σ k)
+  签名: InvOne类 (MvPowerSeries σ k)
   定义体: { (inferInstance : One (MvPowerSeries σ k)),
     (inferInstance : Inv (MvPowerSeries σ k)) with
     inv_one := by

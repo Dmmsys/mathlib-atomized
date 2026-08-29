@@ -50,7 +50,7 @@ definition center
 
 中文:
 定义 center
-  签名: : Submonoid M where
+  签名: : 子幺半群 M where
   定义体: Set.center M
   one_mem' := Set.one_mem_center
   mul_mem' := Set.mul_mem_center
@@ -77,7 +77,7 @@ theorem coe_center
 
 中文:
 定理 coe_center
-  结论: ↑(center M) = Set.center M
+  结论: ↑(center M) = 集合.center M
   证明: rfl
 
 @[to_additive (attr := simp) AddSubmonoid.center_toAddSubsemigroup]
@@ -96,7 +96,7 @@ theorem center_toSubsemigroup
 
 中文:
 定理 center_toSubsemigroup
-  结论: (center M).toSubsemigroup = Subsemigroup.center M
+  结论: (center M).toSubsemigroup = 子半群.center M
   证明: rfl
 -/
 theorem center_toSubsemigroup : (center M).toSubsemigroup = Subsemigroup.center M :=
@@ -131,7 +131,7 @@ abbreviation center.commMonoid'
 
 中文:
 缩写 center.commMonoid'
-  签名: : CommMonoid (center M)
+  签名: : 交换幺半群 (center M)
   定义体: { (center M).toMulOneClass, Subsemigroup.center.commSemigroup with }
 
 @[to_additive]
@@ -154,7 +154,7 @@ theorem center_prod
 
 中文:
 定理 center_prod
-  条件: {N : 类型} [MulOneClass N]
+  条件: {N : 类型} [MulOne类 N]
   证明: SetLike.coe_injective Set.center_prod
 
 @[to_additive]
@@ -174,7 +174,7 @@ theorem center_pi
 
 中文:
 定理 center_pi
-  条件: {ι : 类型} {M : ι -> 类型} [Π i, MulOneClass (M i)]
+  条件: {ι : 类型} {M : ι -> 类型} [Π i, MulOne类 (M i)]
   证明: SetLike.coe_injective Set.center_pi
 -/
 protected theorem center_pi {ι : Type*} {M : ι -> Type*} [Π i, MulOneClass (M i)] :
@@ -199,7 +199,7 @@ instance center.commMonoid
 
 中文:
 实例 center.commMonoid
-  签名: : CommMonoid (center M)
+  签名: : 交换幺半群 (center M)
   定义体: { (center M).toMonoid, Subsemigroup.center.commSemigroup with }
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.center.commSemigroup, center, commSemigroup, toMonoid
@@ -252,7 +252,7 @@ instance decidableMemCenter
 
 中文:
 实例 decidableMemCenter
-  签名: (a) [Decidable <| 对任意 b : M, b * a = a * b]
+  签名: (a) [可判定 <| 对任意 b : M, b * a = a * b]
   定义体: decidable_of_iff' _ mem_center_iff
 
 Depends on / 依赖: decidable_of_iff, mem_center_iff
@@ -272,7 +272,7 @@ instance center.smulCommClass_left
 
 中文:
 实例 center.smulCommClass_left
-  签名: : SMulCommClass (center M) M M where
+  签名: : 标量交换类 (center M) M M where
   定义体: Commute.left_comm (m.prop.comm x) y
 -/
 instance center.smulCommClass_left : SMulCommClass (center M) M M where
@@ -288,7 +288,7 @@ instance center.smulCommClass_right
 
 中文:
 实例 center.smulCommClass_right
-  签名: : SMulCommClass M (center M) M
+  签名: : 标量交换类 M (center M) M
   定义体: SMulCommClass.symm _ _ _
 -/
 instance center.smulCommClass_right : SMulCommClass M (center M) M :=
@@ -350,7 +350,7 @@ fun r => Units.ext by
 
 中文:
 定义 unitsCenterToCenterUnits
-  签名: [Monoid M]
+  签名: [幺半群 M]
   定义体: (Units.map (Submonoid.center M).subtype).codRestrict _
 fun u => Submonoid.mem_center_iff.mpr
 fun r => Units.ext by
@@ -377,7 +377,7 @@ theorem unitsCenterToCenterUnits_injective
 
 中文:
 定理 unitsCenterToCenterUnits_injective
-  条件: [Monoid M]
+  条件: [幺半群 M]
   证明: fun _a _b h => Units.ext Subtype.ext congr_arg (Units.val ∘ Subtype.val) h
 
 Depends on / 依赖: Subtype, Subtype.ext, Subtype.val, Units.ext, Units.val, congr_arg
@@ -404,8 +404,8 @@ theorem _root_.MulEquivClass.apply_mem_center
     [map_mul, e.symm_apply_apply, (hx.comm _).eq, (isMulCentral_iff _).mp hx, ← hx.right_comm])
 
 中文:
-定理 _root_.MulEquivClass.apply_mem_center
-  结论: {F} [EquivLike F M N] [Mul M] [Mul N]
+定理 _root_.乘法等价类.apply_mem_center
+  结论: {F} [等价状 F M N] [乘法 M] [乘法 N]
   证明: by
   let e := MulEquivClass.toMulEquiv e
   change e x in Set.center N
@@ -431,8 +431,8 @@ theorem _root_.MulEquivClass.apply_mem_center_iff
     MulEquivClass.apply_mem_center e⟩
 
 中文:
-定理 _root_.MulEquivClass.apply_mem_center_iff
-  结论: {F} [EquivLike F M N]
+定理 _root_.乘法等价类.apply_mem_center_iff
+  结论: {F} [等价状 F M N]
   证明: ⟨(by simpa using MulEquivClass.apply_mem_center (MulEquivClass.toMulEquiv e).symm ·),
     MulEquivClass.apply_mem_center e⟩
 -/
@@ -457,8 +457,8 @@ definition Subsemigroup.centerCongr
   map_mul' _ _ := Subtype.ext (map_mul ..)
 
 中文:
-定义 Subsemigroup.centerCongr
-  签名: [Mul M] [Mul N] (e : M ≃* N)
+定义 子半群.centerCongr
+  签名: [乘法 M] [乘法 N] (e : M ≃* N)
   定义体: ⟨e r, MulEquivClass.apply_mem_center e r.2⟩
   invFun s := ⟨e.symm s, MulEquivClass.apply_mem_center e.symm s.2⟩
   left_inv _ := Subtype.ext (e.left_inv _)
@@ -485,8 +485,8 @@ definition Submonoid.centerCongr
   body: Subsemigroup.centerCongr e
 
 中文:
-定义 Submonoid.centerCongr
-  签名: [MulOneClass M] [MulOneClass N] (e : M ≃* N)
+定义 子幺半群.centerCongr
+  签名: [MulOne类 M] [MulOne类 N] (e : M ≃* N)
   定义体: Subsemigroup.centerCongr e
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.centerCongr, centerCongr
@@ -505,7 +505,7 @@ theorem MulOpposite.op_mem_center_iff
 
 中文:
 定理 MulOpposite.op_mem_center_iff
-  条件: [Mul M] {x : M}
+  条件: [乘法 M] {x : M}
   证明: by
   simp_rw [Set.mem_center_iff, isMulCentral_iff, MulOpposite.forall, ← op_mul, op_inj]; aesop
 -/
@@ -523,7 +523,7 @@ theorem MulOpposite.unop_mem_center_iff
 
 中文:
 定理 MulOpposite.unop_mem_center_iff
-  条件: [Mul M] {x : Mᵐᵒᵖ}
+  条件: [乘法 M] {x : Mᵐᵒᵖ}
   证明: op_mem_center_iff.symm
 -/
 @[to_additive] theorem MulOpposite.unop_mem_center_iff [Mul M] {x : Mᵐᵒᵖ} :
@@ -544,8 +544,8 @@ definition Subsemigroup.centerToMulOpposite
   map_mul' r _ := Subtype.ext (congr_arg MulOpposite.op <| r.2.1 _)
 
 中文:
-定义 Subsemigroup.centerToMulOpposite
-  签名: [Mul M]
+定义 子半群.centerToMulOpposite
+  签名: [乘法 M]
   定义体: ⟨_, MulOpposite.op_mem_center_iff.mpr r.2⟩
   invFun r := ⟨_, MulOpposite.unop_mem_center_iff.mpr r.2⟩
   map_mul' r _ := Subtype.ext (congr_arg MulOpposite.op <| r.2.1 _)
@@ -569,8 +569,8 @@ definition Submonoid.centerToMulOpposite
   body: Subsemigroup.centerToMulOpposite
 
 中文:
-定义 Submonoid.centerToMulOpposite
-  签名: [MulOneClass M]
+定义 子幺半群.centerToMulOpposite
+  签名: [MulOne类 M]
   定义体: Subsemigroup.centerToMulOpposite
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.centerToMulOpposite, centerToMulOpposite

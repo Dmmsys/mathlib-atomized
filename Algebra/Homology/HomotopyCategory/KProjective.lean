@@ -47,10 +47,10 @@ class IsKProjective
     - nonempty_homotopy_zero({L : CochainComplex C Int} (f : K ⟶ L)) : L.Acyclic -> Nonempty (Homotopy f 0)
 
 中文:
-类 IsKProjective
-  参数: (K : CochainComplex C 整数)
+类 是KProjective
+  参数: (K : 上链复形 C 整数)
   公理与运算 (1 个):
-    - nonempty_homotopy_zero({L : CochainComplex C 整数} (f : K ⟶ L)) : L.Acyclic -> Nonempty (Homotopy f 0)
+    - nonempty_homotopy_zero({L : 上链复形 C 整数} (f : K ⟶ L)) : L.非循环 -> 非空 (同伦 f 0)
 
 Depends on / 依赖: IsKProjective, IsKProjective.nonempty_homotopy_zero, nonempty_homotopy_zero
 -/
@@ -77,8 +77,8 @@ lemma _root_.HomotopyEquiv.isKProjective
         (((IsKProjective.homotopyZero (e.hom ≫ f) hL).compLeft e.inv).trans (.ofEq (by simp)))⟩
 
 中文:
-引理 _root_.HomotopyEquiv.isKProjective
-  结论: {K₁ K₂ : CochainComplex C 整数}
+引理 _root_.同伦等价.isKProjective
+  结论: {K₁ K₂ : 上链复形 C 整数}
   证明: ⟨Homotopy.trans (Homotopy.trans (.ofEq (by simp))
       ((e.homotopyInvHomId.symm.compRight f).trans (.ofEq (by simp))))
         (((IsKProjective.homotopyZero (e.hom ≫ f) hL).compLeft e.inv).trans (.ofEq (by simp)))⟩
@@ -103,7 +103,7 @@ lemma isKProjective_of_iso
 
 中文:
 引理 isKProjective_of_iso
-  结论: {K₁ K₂ : CochainComplex C 整数} (e : K₁ ≅ K₂)
+  结论: {K₁ K₂ : 上链复形 C 整数} (e : K₁ ≅ K₂)
   证明: (HomotopyEquiv.ofIso e).isKProjective
 
 Depends on / 依赖: HomotopyEquiv, HomotopyEquiv.ofIso, isKProjective
@@ -123,7 +123,7 @@ lemma isKProjective_iff_of_iso
 
 中文:
 引理 isKProjective_iff_of_iso
-  条件: {K₁ K₂ : CochainComplex C 整数} (e : K₁ ≅ K₂)
+  条件: {K₁ K₂ : 上链复形 C 整数} (e : K₁ ≅ K₂)
   证明: ⟨fun _ => isKProjective_of_iso e, fun _ => isKProjective_of_iso e.symm⟩
 
 Depends on / 依赖: e.symm, isKProjective_of_iso
@@ -147,7 +147,7 @@ lemma isKProjective_iff_leftOrthogonal
 
 中文:
 引理 isKProjective_iff_leftOrthogonal
-  条件: (K : CochainComplex C 整数)
+  条件: (K : 上链复形 C 整数)
   证明: by
   refine ⟨fun _ L f hL => ?_,
       fun hK => ⟨fun {L} f hL => ⟨HomotopyCategory.homotopyOfEq _ _ ?_⟩⟩⟩
@@ -180,8 +180,8 @@ lemma IsKProjective.leftOrthogonal
   rwa [← isKProjective_iff_leftOrthogonal]
 
 中文:
-引理 IsKProjective.leftOrthogonal
-  条件: (K : CochainComplex C 整数) [K.IsKProjective]
+引理 是KProjective.leftOrthogonal
+  条件: (K : 上链复形 C 整数) [K.是KProjective]
   证明: by
   rwa [← isKProjective_iff_leftOrthogonal]
 
@@ -210,7 +210,7 @@ lemma isKProjective_shift_iff
 
 中文:
 引理 isKProjective_shift_iff
-  条件: (K : CochainComplex C 整数) (n : 整数)
+  条件: (K : 上链复形 C 整数) (n : 整数)
   证明: ⟨fun _ => isKProjective_of_iso (show K⟦n⟧⟦-n⟧ ≅ K from (shiftEquiv _ n).unitIso.symm.app K),
     fun _ => inferInstance⟩
 
@@ -233,7 +233,7 @@ lemma isKProjective_of_op
 
 中文:
 引理 isKProjective_of_op
-  结论: {K : CochainComplex C 整数}
+  结论: {K : 上链复形 C 整数}
   证明: ⟨homotopyUnop ((IsKInjective.homotopyZero
       ((opEquivalence C).functor.map f.op) (acyclic_op hL)).trans
         (.ofEq (by simp)))⟩
@@ -271,7 +271,7 @@ lemma isKProjective_of_projective
 
 中文:
 引理 isKProjective_of_projective
-  结论: (K : CochainComplex C 整数) (d : 整数)
+  结论: (K : 上链复形 C 整数) (d : 整数)
   证明: by
   let L := ((opEquivalence C).functor.obj (op K))
   have (n : Int) : Injective (L.X n) := by

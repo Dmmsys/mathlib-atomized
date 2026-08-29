@@ -79,7 +79,7 @@ lemma Orthonormal.of_isEmpty
 
 中文:
 引理 Orthonormal.of_isEmpty
-  条件: [IsEmpty ι] (v : ι -> E)
+  条件: [是空 ι] (v : ι -> E)
   结论: Orthonormal 𝕜 v
   证明: ⟨IsEmpty.elim ‹_›, Subsingleton.pairwise⟩
 
@@ -103,7 +103,7 @@ lemma orthonormal_vecCons_iff
 
 中文:
 引理 orthonormal_vecCons_iff
-  条件: {n : 自然数} {v : E} {vs : Fin n -> E}
+  条件: {n : 自然数} {v : E} {vs : 有限集 n -> E}
   证明: by
   simp_rw [Orthonormal, pairwise_fin_succ_iff_of_isSymm, Fin.forall_fin_succ]
   tauto
@@ -256,7 +256,7 @@ theorem orthonormal_subsingleton_iff
 
 中文:
 定理 orthonormal_subsingleton_iff
-  条件: [Subsingleton ι] {v : ι -> E}
+  条件: [子单例 ι] {v : ι -> E}
   证明: by
   simp [orthonormal_iff_ite, ← map_pow, pow_eq_one_iff_of_nonneg]
 
@@ -278,7 +278,7 @@ theorem orthonormal_subtype_iff_ite
 
 中文:
 定理 orthonormal_subtype_iff_ite
-  条件: [DecidableEq E] {s : Set E}
+  条件: [DecidableEq E] {s : 集合 E}
   证明: by
   rw [orthonormal_iff_ite]
   simp
@@ -329,7 +329,7 @@ theorem Orthonormal.inner_right_sum
 
 中文:
 定理 Orthonormal.inner_right_sum
-  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜) {s : Finset ι}
+  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜) {s : 有限集 ι}
   证明: by
   classical
   simp [inner_sum, inner_smul_right, orthonormal_iff_ite.mp hv, hi]
@@ -351,7 +351,7 @@ theorem Orthonormal.inner_right_fintype
 
 中文:
 定理 Orthonormal.inner_right_fintype
-  结论: [Fintype ι] {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜)
+  结论: [有限类型 ι] {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜)
   证明: hv.inner_right_sum l (Finset.mem_univ _)
 
 Depends on / 依赖: Finset, Finset.mem_univ, hv.inner_right_sum, inner_right_sum, mem_univ
@@ -391,7 +391,7 @@ theorem Orthonormal.inner_left_sum
 
 中文:
 定理 Orthonormal.inner_left_sum
-  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜) {s : Finset ι}
+  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜) {s : 有限集 ι}
   证明: by
   classical
   simp only [sum_inner, inner_smul_left, orthonormal_iff_ite.mp hv, hi, mul_boole,
@@ -415,7 +415,7 @@ theorem Orthonormal.inner_left_fintype
 
 中文:
 定理 Orthonormal.inner_left_fintype
-  结论: [Fintype ι] {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜)
+  结论: [有限类型 ι] {v : ι -> E} (hv : Orthonormal 𝕜 v) (l : ι -> 𝕜)
   证明: hv.inner_left_sum l (Finset.mem_univ _)
 
 Depends on / 依赖: Finset, Finset.mem_univ, hv.inner_left_sum, inner_left_sum, mem_univ
@@ -506,7 +506,7 @@ theorem Orthonormal.inner_left_right_finset
 
 中文:
 定理 Orthonormal.inner_left_right_finset
-  结论: {s : Finset ι} {v : ι -> E} (hv : Orthonormal 𝕜 v)
+  结论: {s : 有限集 ι} {v : ι -> E} (hv : Orthonormal 𝕜 v)
   证明: by
   classical
   simp [orthonormal_iff_ite.mp hv]
@@ -598,7 +598,7 @@ theorem orthonormal_subtype_range
 
 中文:
 定理 orthonormal_subtype_range
-  条件: {v : ι -> E} (hv : Function.Injective v)
+  条件: {v : ι -> E} (hv : 函数.单射 v)
   证明: by
   let f : ι ≃ Set.range v := Equiv.ofInjective v hv
   refine ⟨fun h => h.comp f f.injective, fun h => ?_⟩
@@ -645,7 +645,7 @@ theorem Orthonormal.inner_finsupp_eq_zero
 
 中文:
 定理 Orthonormal.inner_finsupp_eq_zero
-  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) {s : Set ι} {i : ι}
+  结论: {v : ι -> E} (hv : Orthonormal 𝕜 v) {s : 集合 ι} {i : ι}
   证明: by
   rw [Finsupp.mem_supported'] at hl
   simp only [hv.inner_left_finsupp, hl i hi, map_zero]
@@ -674,7 +674,7 @@ theorem Orthonormal.orthonormal_of_forall_eq_or_eq_neg
       neg_eq_zero] using hv
 
 中文:
-定理 Orthonormal.orthonormal_of_forall_eq_or_eq_neg
+定理 Orthonormal.orthonormal_of_对任意_eq_or_eq_neg
   结论: {v w : ι -> E} (hv : Orthonormal 𝕜 v)
   证明: by
   classical
@@ -713,7 +713,7 @@ theorem orthonormal_empty
 
 中文:
 定理 orthonormal_empty
-  结论: Orthonormal 𝕜 (fun x => x : (∅ : Set E) -> E)
+  结论: Orthonormal 𝕜 (fun x => x : (∅ : 集合 E) -> E)
   证明: by
   simp
 -/
@@ -739,7 +739,7 @@ theorem orthonormal_iUnion_of_directed
 
 中文:
 定理 orthonormal_iUnion_of_directed
-  结论: {η : 类型} {s : η -> Set E} (hs : Directed (· subseteq ·) s)
+  结论: {η : 类型} {s : η -> 集合 E} (hs : Directed (· subseteq ·) s)
   证明: by
   classical
   rw [orthonormal_subtype_iff_ite]
@@ -773,7 +773,7 @@ theorem orthonormal_sUnion_of_directed
 
 中文:
 定理 orthonormal_sUnion_of_directed
-  结论: {s : Set (Set E)} (hs : DirectedOn (· subseteq ·) s)
+  结论: {s : 集合 (集合 E)} (hs : DirectedOn (· subseteq ·) s)
   证明: by
   rw [Set.sUnion_eq_iUnion]; exact orthonormal_iUnion_of_directed hs.directed_val (by simpa using h)
 
@@ -799,8 +799,8 @@ theorem exists_maximal_orthonormal
 
 
 中文:
-定理 exists_maximal_orthonormal
-  条件: {s : Set E} (hs : Orthonormal 𝕜 (Subtype.val : s -> E))
+定理 存在_maximal_orthonormal
+  条件: {s : 集合 E} (hs : Orthonormal 𝕜 (子类型.val : s -> E))
   证明: by
   have := zorn_subset_nonempty { b | Orthonormal 𝕜 (Subtype.val : b -> E) } ?_ _ hs
   · obtain ⟨b, hb⟩ := this
@@ -835,7 +835,7 @@ definition basisOfOrthonormalOfCardEqFinrank
 
 中文:
 定义 basisOfOrthonormalOfCardEqFinrank
-  签名: [Fintype ι] [Nonempty ι] {v : ι -> E} (hv : Orthonormal 𝕜 v)
+  签名: [有限类型 ι] [非空 ι] {v : ι -> E} (hv : Orthonormal 𝕜 v)
   定义体: basisOfLinearIndependentOfCardEqFinrank hv.linearIndependent card_eq
 
 @[simp]
@@ -857,7 +857,7 @@ theorem coe_basisOfOrthonormalOfCardEqFinrank
 
 中文:
 定理 coe_basisOfOrthonormalOfCardEqFinrank
-  结论: [Fintype ι] [Nonempty ι] {v : ι -> E}
+  结论: [有限类型 ι] [非空 ι] {v : ι -> E}
   证明: coe_basisOfLinearIndependentOfCardEqFinrank _ _
 
 Depends on / 依赖: coe_basisOfLinearIndependentOfCardEqFinrank
@@ -922,7 +922,7 @@ theorem LinearIsometry.orthonormal_comp_iff
   classical simp_rw [orthonormal_iff_ite, Function.comp_apply, LinearIsometry.inner_map_map]
 
 中文:
-定理 LinearIsometry.orthonormal_comp_iff
+定理 线性等距.orthonormal_comp_iff
   条件: {v : ι -> E} (f : E ->ₗᵢ[𝕜] E')
   证明: by
   classical simp_rw [orthonormal_iff_ite, Function.comp_apply, LinearIsometry.inner_map_map]
@@ -980,7 +980,7 @@ theorem Orthonormal.mapLinearIsometryEquiv
 
 中文:
 定理 Orthonormal.mapLinearIsometryEquiv
-  结论: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+  结论: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   证明: hv.comp_linearIsometryEquiv f
 
 Depends on / 依赖: comp_linearIsometryEquiv, hv.comp_linearIsometryEquiv
@@ -1001,8 +1001,8 @@ definition LinearMap.isometryOfOrthonormal
 @[simp]
 
 中文:
-定义 LinearMap.isometryOfOrthonormal
-  签名: (f : E ->ₗ[𝕜] E') {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+定义 线性映射.isometryOfOrthonormal
+  签名: (f : E ->ₗ[𝕜] E') {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   定义体: f.isometryOfInner fun x y => by
     rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_finsupp_eq_sum_left]
 
@@ -1027,8 +1027,8 @@ theorem LinearMap.coe_isometryOfOrthonormal
 @[simp]
 
 中文:
-定理 LinearMap.coe_isometryOfOrthonormal
-  结论: (f : E ->ₗ[𝕜] E') {v : Basis ι 𝕜 E}
+定理 线性映射.coe_isometryOfOrthonormal
+  结论: (f : E ->ₗ[𝕜] E') {v : 基 ι 𝕜 E}
   证明: rfl
 
 @[simp]
@@ -1047,8 +1047,8 @@ theorem LinearMap.isometryOfOrthonormal_toLinearMap
   proof: rfl
 
 中文:
-定理 LinearMap.isometryOfOrthonormal_toLinearMap
-  结论: (f : E ->ₗ[𝕜] E') {v : Basis ι 𝕜 E}
+定理 线性映射.isometryOfOrthonormal_toLinearMap
+  结论: (f : E ->ₗ[𝕜] E') {v : 基 ι 𝕜 E}
   证明: rfl
 -/
 theorem LinearMap.isometryOfOrthonormal_toLinearMap (f : E ->ₗ[𝕜] E') {v : Basis ι 𝕜 E}
@@ -1067,8 +1067,8 @@ definition LinearEquiv.isometryOfOrthonormal
     rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_fin
 
 中文:
-定义 LinearEquiv.isometryOfOrthonormal
-  签名: (f : E ≃ₗ[𝕜] E') {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+定义 线性等价.isometryOfOrthonormal
+  签名: (f : E ≃ₗ[𝕜] E') {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   定义体: f.isometryOfInner fun x y => by
     rw [← LinearEquiv.coe_coe] at hf
     rw [← v.linearCombination_repr x]; rw [← v.linearCombination_repr y]; rw [← LinearEquiv.coe_coe f]; rw [Finsupp.apply_linearCombination]; rw [Finsupp.apply_linearCombination]; rw [hv.inner_finsupp_eq_sum_left]; rw [hf.inner_fin
@@ -1093,8 +1093,8 @@ theorem LinearEquiv.coe_isometryOfOrthonormal
 @[simp]
 
 中文:
-定理 LinearEquiv.coe_isometryOfOrthonormal
-  结论: (f : E ≃ₗ[𝕜] E') {v : Basis ι 𝕜 E}
+定理 线性等价.coe_isometryOfOrthonormal
+  结论: (f : E ≃ₗ[𝕜] E') {v : 基 ι 𝕜 E}
   证明: rfl
 
 @[simp]
@@ -1113,8 +1113,8 @@ theorem LinearEquiv.isometryOfOrthonormal_toLinearEquiv
   proof: rfl
 
 中文:
-定理 LinearEquiv.isometryOfOrthonormal_toLinearEquiv
-  结论: (f : E ≃ₗ[𝕜] E') {v : Basis ι 𝕜 E}
+定理 线性等价.isometryOfOrthonormal_toLinearEquiv
+  结论: (f : E ≃ₗ[𝕜] E') {v : 基 ι 𝕜 E}
   证明: rfl
 -/
 theorem LinearEquiv.isometryOfOrthonormal_toLinearEquiv (f : E ≃ₗ[𝕜] E') {v : Basis ι 𝕜 E}
@@ -1140,7 +1140,7 @@ definition Orthonormal.equiv
 
 中文:
 定义 Orthonormal.equiv
-  签名: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : Basis ι' 𝕜 E'}
+  签名: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : 基 ι' 𝕜 E'}
   定义体: (v.equiv v' e).isometryOfOrthonormal hv
     (by
       have h : v.equiv v' e ∘ v = v' ∘ e := by
@@ -1176,7 +1176,7 @@ theorem Orthonormal.equiv_toLinearEquiv
 
 中文:
 定理 Orthonormal.equiv_toLinearEquiv
-  结论: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+  结论: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   证明: rfl
 
 @[simp]
@@ -1199,7 +1199,7 @@ theorem Orthonormal.equiv_apply
 
 中文:
 定理 Orthonormal.equiv_apply
-  结论: {ι' : 类型} {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+  结论: {ι' : 类型} {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   证明: Basis.equiv_apply _ _ _ _
 
 @[simp]
@@ -1224,7 +1224,7 @@ theorem Orthonormal.equiv_trans
 
 中文:
 定理 Orthonormal.equiv_trans
-  结论: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : Basis ι' 𝕜 E'}
+  结论: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : 基 ι' 𝕜 E'}
   证明: v.ext_linearIsometryEquiv fun i => by
     simp only [LinearIsometryEquiv.trans_apply, Orthonormal.equiv_apply, e.coe_trans,
       Function.comp_apply]
@@ -1248,7 +1248,7 @@ theorem Orthonormal.map_equiv
 
 中文:
 定理 Orthonormal.map_equiv
-  结论: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : Basis ι' 𝕜 E'}
+  结论: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : 基 ι' 𝕜 E'}
   证明: v.map_equiv _ _
 
 Depends on / 依赖: map_equiv, v.map_equiv
@@ -1278,7 +1278,7 @@ theorem Orthonormal.equiv_refl
 
 中文:
 定理 Orthonormal.equiv_refl
-  条件: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v)
+  条件: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v)
   证明: v.ext_linearIsometryEquiv fun i => by
     simp only [Orthonormal.equiv_apply, Equiv.coe_refl, id, LinearIsometryEquiv.coe_refl]
 
@@ -1304,7 +1304,7 @@ theorem Orthonormal.equiv_symm
 
 中文:
 定理 Orthonormal.equiv_symm
-  结论: {v : Basis ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : Basis ι' 𝕜 E'}
+  结论: {v : 基 ι 𝕜 E} (hv : Orthonormal 𝕜 v) {v' : 基 ι' 𝕜 E'}
   证明: v'.ext_linearIsometryEquiv fun i =>
 (hv.equiv hv' e).injective by
       simp only [LinearIsometryEquiv.apply_symm_apply, Orthonormal.equiv_apply, e.apply_symm_apply]
@@ -1347,7 +1347,7 @@ theorem Orthonormal.sum_inner_products_le
 
 中文:
 定理 Orthonormal.sum_inner_products_le
-  条件: {s : Finset ι} (hv : Orthonormal 𝕜 v)
+  条件: {s : 有限集 ι} (hv : Orthonormal 𝕜 v)
   证明: by
   have h₂ :
     (∑ i in s, ∑ j in s, ⟪v i, x⟫ * ⟪x, v j⟫ * ⟪v j, v i⟫) = (∑ k in s, ⟪v k, x⟫ * ⟪x, v k⟫ : 𝕜) := by

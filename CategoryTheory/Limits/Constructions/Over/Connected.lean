@@ -82,7 +82,7 @@ definition raiseCone
 
 中文:
 定义 raiseCone
-  签名: [IsConnected J] {B : D} {F : J ⥤ CostructuredArrow K B}
+  签名: [是连通 J] {B : D} {F : J ⥤ CostructuredArrow K B}
   定义体: CostructuredArrow.mk
     (K.map (c.π.app (Classical.arbitrary J)) ≫ (F.obj (Classical.arbitrary J)).hom)
 π.app j := CostructuredArrow.homMk (c.π.app j) by
@@ -117,7 +117,7 @@ theorem mapCone_raiseCone
 
 中文:
 定理 mapCone_raiseCone
-  结论: [IsConnected J] {B : D} {F : J ⥤ CostructuredArrow K B}
+  结论: [是连通 J] {B : D} {F : J ⥤ CostructuredArrow K B}
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -144,7 +144,7 @@ definition isLimitRaiseCone
 
 中文:
 定义 isLimitRaiseCone
-  签名: [IsConnected J] {B : D} {F : J ⥤ CostructuredArrow K B}
+  签名: [是连通 J] {B : D} {F : J ⥤ CostructuredArrow K B}
   定义体: CostructuredArrow.homMk (t.lift ((CostructuredArrow.proj K B).mapCone s)) by
       simp [← Functor.map_comp_assoc]
   uniq s m K := by
@@ -181,7 +181,7 @@ instance [IsConnected
         makesLimit := CreatesConnected.isLimitRaiseCone t }
 
 中文:
-实例 [IsConnected
+实例 [是连通
   签名: J] {B
   定义体: createsLimitOfReflectsIso fun c t =>
       { liftedCone := CreatesConnected.raiseCone c
@@ -212,7 +212,7 @@ instance [IsConnected
     uniq 
 
 中文:
-实例 [IsConnected
+实例 [是连通
   签名: J] {B
   定义体: ⟨{
     lift s := (CostructuredArrow.proj K B).map (hc.lift (CreatesConnected.raiseCone s))
@@ -241,7 +241,7 @@ instance hasLimitsOfShape_of_isConnected
 
 中文:
 实例 hasLimitsOfShape_of_isConnected
-  签名: {B : D} [IsConnected J] [HasLimitsOfShape J C]
+  签名: {B : D} [是连通 J] [有形状极限 J C]
   定义体: hasLimit_of_created F (CostructuredArrow.proj K B)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, hasLimit_of_created
@@ -266,7 +266,7 @@ inferInstanceAs CreatesLimitsOfShape Jᵒᵖ
   createsColimitsOfShapeOfOp _ _
 
 中文:
-实例 [IsConnected
+实例 [是连通
   签名: J] {B
   定义体: letI : CreatesLimitsOfShape Jᵒᵖ (proj B K).op :=
 inferInstanceAs CreatesLimitsOfShape Jᵒᵖ
@@ -294,7 +294,7 @@ inferInstanceAs PreservesLimitsOfShape Jᵒᵖ
   apply preservesColimitsOfShape_of_op
 
 中文:
-实例 [IsConnected
+实例 [是连通
   签名: J] {B
   定义体: by
   have : PreservesLimitsOfShape Jᵒᵖ (proj B K).op :=
@@ -328,7 +328,7 @@ instance createsLimitsOfShapeForgetOfIsConnected
 
 中文:
 实例 createsLimitsOfShapeForgetOfIsConnected
-  签名: [IsConnected J] {B : C}
+  签名: [是连通 J] {B : C}
   定义体: inferInstanceAs CreatesLimitsOfShape J (CostructuredArrow.proj _ _)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, CreatesLimitsOfShape
@@ -347,7 +347,7 @@ instance preservesLimitsOfShape_forget_of_isConnected
 
 中文:
 实例 preservesLimitsOfShape_forget_of_isConnected
-  签名: [IsConnected J] {B : C}
+  签名: [是连通 J] {B : C}
   定义体: inferInstanceAs PreservesLimitsOfShape J (CostructuredArrow.proj _ _)
 
 Depends on / 依赖: CostructuredArrow, CostructuredArrow.proj, PreservesLimitsOfShape
@@ -366,7 +366,7 @@ instance hasLimitsOfShape_of_isConnected
 
 中文:
 实例 hasLimitsOfShape_of_isConnected
-  签名: {B : C} [IsConnected J] [HasLimitsOfShape J C]
+  签名: {B : C} [是连通 J] [有形状极限 J C]
   定义体: hasLimit_of_created F (forget B)
 
 Depends on / 依赖: forget, hasLimit_of_created
@@ -435,7 +435,7 @@ definition isLimitConePost
 
 中文:
 定义 isLimitConePost
-  签名: [IsCofilteredOrEmpty J] {F : J ⥤ C} {c : Cone F} (i : J) (hc : IsLimit c)
+  签名: [是余filteredOrEmpty J] {F : J ⥤ C} {c : 锥 F} (i : J) (hc : 是极限 c)
   定义体: isLimitOfReflects (Over.forget _)
     ((Functor.Initial.isLimitWhiskerEquiv (Over.forget i) c).symm hc)
 
@@ -467,7 +467,7 @@ instance createsColimitsOfShapeForgetOfIsConnected
 
 中文:
 实例 createsColimitsOfShapeForgetOfIsConnected
-  签名: [IsConnected J] {B : C}
+  签名: [是连通 J] {B : C}
   定义体: inferInstanceAs CreatesColimitsOfShape J (StructuredArrow.proj _ _)
 
 Depends on / 依赖: CreatesColimitsOfShape, StructuredArrow, StructuredArrow.proj
@@ -486,7 +486,7 @@ instance preservesColimitsOfShape_forget_of_isConnected
 
 中文:
 实例 preservesColimitsOfShape_forget_of_isConnected
-  签名: [IsConnected J] {B : C}
+  签名: [是连通 J] {B : C}
   定义体: inferInstanceAs PreservesColimitsOfShape J (StructuredArrow.proj _ _)
 
 Depends on / 依赖: PreservesColimitsOfShape, StructuredArrow, StructuredArrow.proj
@@ -505,7 +505,7 @@ instance hasColimitsOfShape_of_isConnected
 
 中文:
 实例 hasColimitsOfShape_of_isConnected
-  签名: {B : C} [IsConnected J] [HasColimitsOfShape J C]
+  签名: {B : C} [是连通 J] [有形状余极限 J C]
   定义体: hasColimit_of_created F (forget B)
 
 Depends on / 依赖: forget, hasColimit_of_created

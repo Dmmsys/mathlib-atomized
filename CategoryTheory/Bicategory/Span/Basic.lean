@@ -51,7 +51,7 @@ structure Span
     - wr : Wᵣ r
 
 中文:
-结构 Span
+结构 张成
   参数: (c c' : C)
   公理与运算 (5 个):
     - apex : C
@@ -86,8 +86,8 @@ structure Hom
     - hom_r : hom ≫ S₂.r = S₁.r  [default: by cat_disch]
 
 中文:
-结构 Hom
-  参数: (S₁ S₂ : Span Wₗ Wᵣ c c')
+结构 态射
+  参数: (S₁ S₂ : 张成 Wₗ Wᵣ c c')
   公理与运算 (3 个):
     - hom : S₁.apex ⟶ S₂.apex
     - hom_l : hom ≫ S₂.l = S₁.l  [默认: by cat_disch]
@@ -117,7 +117,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Span Wₗ Wᵣ c c')
+  签名: 范畴 (张成 Wₗ Wᵣ c c')
   定义体: Hom
   comp φ φ' := { hom := φ.hom ≫ φ'.hom }
   id S := { hom := 𝟙 _ }
@@ -143,7 +143,7 @@ lemma hom_ext
 
 中文:
 引理 hom_ext
-  条件: {S S' : Span Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom)
+  条件: {S S' : 张成 Wₗ Wᵣ c c'} {f g : S ⟶ S'} (h : f.hom = g.hom)
   证明: by
   cases f
   cases g
@@ -170,7 +170,7 @@ definition mkIso
 
 中文:
 定义 mkIso
-  签名: {S S' : Span Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex)
+  签名: {S S' : 张成 Wₗ Wᵣ c c'} (e : S.apex ≅ S'.apex)
   定义体: e.hom
   inv.hom := e.inv
 

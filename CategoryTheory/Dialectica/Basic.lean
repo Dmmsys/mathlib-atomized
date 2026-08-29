@@ -94,12 +94,12 @@ structure Hom
     - le : (Subobject.pullback π(π₁, F)).obj X.rel <= (Subobject.pullback (prod.map f (𝟙 _))).obj Y.rel
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : Dial C)
   公理与运算 (3 个):
     - f : X.src ⟶ Y.src
     - F : X.src ⨯ Y.tgt ⟶ X.tgt
-    - le : (Subobject.pullback π(π₁, F)).obj X.rel <= (Subobject.pullback (prod.map f (𝟙 _))).obj Y.rel
+    - le : (Subobject.pullback π(π₁, F)).obj X.rel <= (Subobject.pullback (乘积.map f (𝟙 _))).obj Y.rel
 -/
 @[ext] structure Hom (X Y : Dial C) where
   /-- Maps the sources -/
@@ -126,7 +126,7 @@ le_trans ?_ ((Subobject.pullback (prod.map F.f (𝟙 Z.tgt))).monotone G.le).tra
 
 中文:
 定理 comp_le_lemma
-  条件: {X Y Z : Dial C} (F : Dial.Hom X Y) (G : Dial.Hom Y Z)
+  条件: {X Y Z : Dial C} (F : Dial.态射 X Y) (G : Dial.态射 Y Z)
   证明: by
   refine
 le_trans ?_ ((Subobject.pullback (π(π₁, prod.map F.f (𝟙 _) ≫ G.F))).monotone F.le).trans
@@ -168,7 +168,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (Dial C)
+  签名: 范畴 (Dial C)
   定义体: Dial.Hom
   id X := {
     f := 𝟙 _

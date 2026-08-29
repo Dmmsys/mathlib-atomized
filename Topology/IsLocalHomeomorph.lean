@@ -170,7 +170,7 @@ theorem discreteTopology_image_iff
 
 中文:
 定理 discreteTopology_image_iff
-  条件: (h : IsLocalHomeomorphOn f s) (hs : IsOpen s)
+  条件: (h : IsLocalHomeomorphOn f s) (hs : 是开集 s)
   证明: by
   refine ⟨fun _ => h.discreteTopology_of_image, ?_⟩
   simp_rw [discreteTopology_iff_isOpen_singleton]
@@ -201,7 +201,7 @@ lemma isDiscrete_image_iff
 
 中文:
 引理 isDiscrete_image_iff
-  条件: (h : IsLocalHomeomorphOn f s) (hs : IsOpen s)
+  条件: (h : IsLocalHomeomorphOn f s) (hs : 是开集 s)
   证明: .mpr hs'.to_subtype⟩⟩ ⟨h.isDiscrete_of_image, fun hs' => ⟨h.discreteTopology_image_iff hs
 
 Depends on / 依赖: discreteTopology_image_iff, h.discreteTopology_image_iff, h.isDiscrete_of_image, isDiscrete_of_image, to_subtype
@@ -229,7 +229,7 @@ theorem mk
 
 中文:
 定理 mk
-  条件: (h : 对任意 x in s, 存在 e : OpenPartialHomeomorph X Y, x in e.source ∧ Set.EqOn f e e.source)
+  条件: (h : 对任意 x in s, 存在 e : OpenPartialHomeomorph X Y, x in e.source ∧ 集合.EqOn f e e.source)
   证明: by
   intro x hx
   obtain ⟨e, hx, he⟩ := h x hx
@@ -285,7 +285,7 @@ theorem mono
 
 中文:
 定理 mono
-  条件: {t : Set X} (hf : IsLocalHomeomorphOn f t) (hst : s subseteq t)
+  条件: {t : 集合 X} (hf : IsLocalHomeomorphOn f t) (hst : s subseteq t)
   结论: IsLocalHomeomorphOn f s
   证明: fun x hx => hf x (hst hx)
 -/
@@ -481,7 +481,7 @@ theorem Homeomorph.isLocalHomeomorph
   proof: fun _ => ⟨f.toOpenPartialHomeomorph, trivial, rfl⟩
 
 中文:
-定理 Homeomorph.isLocalHomeomorph
+定理 同胚.isLocalHomeomorph
   条件: (f : X ≃ₜ Y)
   结论: IsLocalHomeomorph f
   证明: fun _ => ⟨f.toOpenPartialHomeomorph, trivial, rfl⟩
@@ -559,8 +559,8 @@ theorem Topology.IsOpenEmbedding.isLocalHomeomorph
     ⟨_, Filter.univ_mem, hf.comp (Homeomorph.Set.univ X).isOpenEmbedding⟩
 
 中文:
-定理 Topology.IsOpenEmbedding.isLocalHomeomorph
-  条件: (hf : IsOpenEmbedding f)
+定理 拓扑.是开嵌入.isLocalHomeomorph
+  条件: (hf : 是开嵌入 f)
   结论: IsLocalHomeomorph f
   证明: isLocalHomeomorph_iff_isOpenEmbedding_restrict.mpr fun _ =>
     ⟨_, Filter.univ_mem, hf.comp (Homeomorph.Set.univ X).isOpenEmbedding⟩
@@ -627,7 +627,7 @@ theorem discreteTopology_iff_of_surjective
 
 中文:
 定理 discreteTopology_iff_of_surjective
-  条件: (h : IsLocalHomeomorph f) (hs : Function.Surjective f)
+  条件: (h : IsLocalHomeomorph f) (hs : 函数.满射 f)
   证明: by
   rw [← (Homeomorph.Set.univ Y).discreteTopology_iff]; rw [← hs.range_eq]; rw [h.discreteTopology_range_iff]
 
@@ -653,7 +653,7 @@ alias Homeomorph.isLocalHomeomorph := _root_.Homeomorph.isLocalHomeomorph
 
 中文:
 定理 mk
-  条件: (h : 对任意 x : X, 存在 e : OpenPartialHomeomorph X Y, x in e.source ∧ Set.EqOn f e e.source)
+  条件: (h : 对任意 x : X, 存在 e : OpenPartialHomeomorph X Y, x in e.source ∧ 集合.EqOn f e e.source)
   证明: isLocalHomeomorph_iff_isLocalHomeomorphOn_univ.mpr
     (IsLocalHomeomorphOn.mk f Set.univ fun x _hx => h x)
 
@@ -684,7 +684,7 @@ lemma isLocallyInjective
 中文:
 引理 isLocallyInjective
   条件: (hf : IsLocalHomeomorph f)
-  结论: IsLocallyInjective f
+  结论: 是LocallyInjective f
   证明: fun x => by obtain ⟨f, hx, rfl⟩ := hf x; exact ⟨f.source, f.open_source, hx, f.injOn⟩
 
 Depends on / 依赖: f.injOn, f.open_source, f.source, open_source, source
@@ -746,7 +746,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (hf : IsLocalHomeomorph f)
-  结论: Continuous f
+  结论: 连续 f
   证明: continuousOn_univ.mp hf.isLocalHomeomorphOn.continuousOn
 -/
 protected theorem continuous (hf : IsLocalHomeomorph f) : Continuous f :=
@@ -764,7 +764,7 @@ theorem isOpenMap
 中文:
 定理 isOpenMap
   条件: (hf : IsLocalHomeomorph f)
-  结论: IsOpenMap f
+  结论: 是开映射 f
   证明: IsOpenMap.of_nhds_le fun x => ge_of_eq (hf.map_nhds_eq x)
 -/
 protected theorem isOpenMap (hf : IsLocalHomeomorph f) : IsOpenMap f :=
@@ -800,7 +800,7 @@ theorem isOpenEmbedding_of_injective
 
 中文:
 定理 isOpenEmbedding_of_injective
-  条件: (hf : IsLocalHomeomorph f) (hi : f.Injective)
+  条件: (hf : IsLocalHomeomorph f) (hi : f.单射)
   证明: .of_continuous_injective_isOpenMap hf.continuous hi hf.isOpenMap
 
 Depends on / 依赖: continuous, hf.continuous, hf.isOpenMap, isOpenMap, of_continuous_injective_isOpenMap
@@ -819,7 +819,7 @@ definition toHomeomorphOfBijective
 
 中文:
 定义 toHomeomorphOfBijective
-  签名: (hf : IsLocalHomeomorph f) (hb : f.Bijective)
+  签名: (hf : IsLocalHomeomorph f) (hb : f.双射)
   定义体: (Equiv.ofBijective f hb).toHomeomorphOfContinuousOpen hf.continuous hf.isOpenMap
 
 Depends on / 依赖: Equiv.ofBijective, continuous, hf.continuous, hf.isOpenMap, isOpenMap, ofBijective, toHomeomorphOfContinuousOpen
@@ -838,7 +838,7 @@ theorem isOpenEmbedding_of_comp
 
 中文:
 定理 isOpenEmbedding_of_comp
-  结论: (hf : IsLocalHomeomorph g) (hgf : IsOpenEmbedding (g ∘ f))
+  结论: (hf : IsLocalHomeomorph g) (hgf : 是开嵌入 (g ∘ f))
   证明: (hgf.isLocalHomeomorph.of_comp hf cont).isOpenEmbedding_of_injective hgf.injective.of_comp
 
 Depends on / 依赖: hgf.injective.of_comp, hgf.isLocalHomeomorph.of_comp, injective, isLocalHomeomorph, isOpenEmbedding_of_injective, of_comp
@@ -867,7 +867,7 @@ theorem isTopologicalBasis
 中文:
 定理 isTopologicalBasis
   条件: (hf : IsLocalHomeomorph f)
-  结论: IsTopologicalBasis
+  结论: 是TopologicalBasis
   证明: by
   refine isTopologicalBasis_of_isOpen_of_nhds ?_ fun x U hx hU => ?_
   · rintro _ ⟨U, hU, s, hs, rfl⟩
@@ -980,7 +980,7 @@ lemma injOn_localInverseAt_target
 
 中文:
 引理 injOn_localInverseAt_target
-  结论: (hf.localInverseAt x).target.InjOn f
+  结论: (hf.localInverseAt x).target.单射限制 f
   证明: by
   rw [Set.EqOn.injOn_iff (f₂ := (hf.localInverseAt x).symm) (fun y _ => by simp)]
   exact (hf.localInverseAt x).symm.injOn

@@ -120,8 +120,8 @@ theorem InnerProductSpace.HarmonicOnNhd.exists_analyticOnNhd_ball_re_eq
   obtain ⟨F, hF
 
 中文:
-定理 InnerProductSpace.HarmonicOnNhd.exists_analyticOnNhd_ball_re_eq
-  结论: {z : Complex} {R : 实数}
+定理 内积空间.HarmonicOnNhd.存在_analyticOnNhd_ball_re_eq
+  结论: {z : 复形} {R : 实数}
   证明: by
   by_cases hR : R <= 0
   · simp [ball_eq_empty.2 hR]
@@ -182,8 +182,8 @@ theorem InnerProductSpace.HarmonicOnNhd.exists_analyticOnNhd_univ_re_eq
   have h₁F : forall z₁, HasDerivAt F (g
 
 中文:
-定理 InnerProductSpace.HarmonicOnNhd.exists_analyticOnNhd_univ_re_eq
-  结论: {f : Complex -> 实数}
+定理 内积空间.HarmonicOnNhd.存在_analyticOnNhd_univ_re_eq
+  结论: {f : 复形 -> 实数}
   证明: by
   let g := ofRealCLM ∘ (fderiv Real f · 1) - I • ofRealCLM ∘ (fderiv Real f · I)
   have hg : Differentiable Complex g :=

@@ -38,8 +38,8 @@ class AddOreSet
     - ore_eq : forall (r : R) (s : S), oreSubtra r s + r = oreMin r s + s
 
 中文:
-类 AddOreSet
-  参数: {R : 类型} [AddMonoid R] (S : AddSubmonoid R)
+类 加法OreSet
+  参数: {R : 类型} [加法幺半群 R] (S : 加法子幺半群 R)
   公理与运算 (4 个):
     - ore_right_cancel : 对任意 (r₁ r₂ : R) (s : S), r₁ + s = r₂ + s -> 存在 s' : S, s' + r₁ = s' + r₂
     - oreMin : R -> S -> R
@@ -81,7 +81,7 @@ class OreSet
 
 中文:
 类 OreSet
-  参数: {R : 类型} [Monoid R] (S : Submonoid R)
+  参数: {R : 类型} [幺半群 R] (S : 子幺半群 R)
   公理与运算 (4 个):
     - ore_right_cancel : 对任意 (r₁ r₂ : R) (s : S), r₁ * s = r₂ * s -> 存在 s' : S, s' * r₁ = s' * r₂
     - oreNum : R -> S -> R
@@ -237,7 +237,7 @@ instance oreSetBot
 
 中文:
 实例 oreSetBot
-  签名: : OreSet (⊥ : Submonoid R) where
+  签名: : OreSet (⊥ : 子幺半群 R) where
   定义体: ⟨s, by
       rcases s with ⟨s, hs⟩
       rw [Submonoid.mem_bot] at hs
@@ -291,7 +291,7 @@ lemma oreSetComm_oreNum
 
 中文:
 引理 oreSetComm_oreNum
-  条件: {R : 类型} [CommMonoid R] (S : Submonoid R) (r : R) (s : S)
+  条件: {R : 类型} [交换幺半群 R] (S : 子幺半群 R) (r : R) (s : S)
   证明: rfl
 
 @[to_additive (attr := simp) AddOreLocalization.addOreSetComm_oreSubtra]
@@ -310,7 +310,7 @@ lemma oreSetComm_oreDenom
 
 中文:
 引理 oreSetComm_oreDenom
-  条件: {R : 类型} [CommMonoid R] (S : Submonoid R) (r : R) (s : S)
+  条件: {R : 类型} [交换幺半群 R] (S : 子幺半群 R) (r : R) (s : S)
   证明: rfl
 
 Depends on / 依赖: CommSemiring, SymmetricAlgebra

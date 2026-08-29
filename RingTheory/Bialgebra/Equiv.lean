@@ -41,8 +41,8 @@ structure BialgEquiv
   (no additional axioms)
 
 中文:
-结构 BialgEquiv
-  参数: (R : 类型u) [CommSemiring R] (A : 类型v) (B : Type w)
+结构 Bialg等价
+  参数: (R : 类型u) [交换半环 R] (A : 类型v) (B : 类型 w)
   继承: A ≃ₗc[R] B, A ≃* B
   (无附加公理)
 -/
@@ -66,9 +66,9 @@ class BialgEquivClass
   (no additional axioms)
 
 中文:
-类 BialgEquivClass
-  参数: (F : 类型) (R A B : outParam 类型) [CommSemiring R]
-  继承: CoalgEquivClass F R A B, MulEquivClass F A B
+类 Bialg等价类
+  参数: (F : 类型) (R A B : outParam 类型) [交换半环 R]
+  继承: 余alg等价类 F R A B, 乘法等价类 F A B
   (无附加公理)
 -/
 class BialgEquivClass (F : Type*) (R A B : outParam Type*) [CommSemiring R]
@@ -223,7 +223,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Function.Injective (toEquiv : (A ≃ₐc[R] B) -> A ≃ B)
+  结论: 函数.单射 (toEquiv : (A ≃ₐc[R] B) -> A ≃ B)
   证明: fun ⟨_, _⟩ ⟨_, _⟩ h =>
     (BialgEquiv.mk.injEq _ _ _ _).mpr (CoalgEquiv.toEquiv_injective h)
 
@@ -266,7 +266,7 @@ theorem toBialgHom_injective
 
 中文:
 定理 toBialgHom_injective
-  结论: Function.Injective (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B)
+  结论: 函数.单射 (toBialgHom : (A ≃ₐc[R] B) -> A ->ₐc[R] B)
   证明: fun _ _ H => toEquiv_injective Equiv.ext BialgHom.congr_fun H
 
 Depends on / 依赖: BialgHom, BialgHom.congr_fun, Equiv.ext, congr_fun, toEquiv_injective
@@ -288,7 +288,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (A ≃ₐc[R] B) A B
+  签名: 等价状 (A ≃ₐc[R] B) A B
   定义体: f.toFun
   inv := fun f => f.invFun
   coe_injective' _ _ h _ := toBialgHom_injective (DFunLike.coe_injective h)
@@ -315,7 +315,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (A ≃ₐc[R] B) A B
+  签名: 函数状 (A ≃ₐc[R] B) A B
   定义体: DFunLike.coe
   coe_injective := DFunLike.coe_injective
 
@@ -339,7 +339,7 @@ instance :
 
 中文:
 实例 :
-  签名: BialgEquivClass (A ≃ₐc[R] B) R A B
+  签名: Bialg等价类 (A ≃ₐc[R] B) R A B
   定义体: (·.map_add')
   map_smulₛₗ := (·.map_smul')
   counit_comp := (·.counit_comp)
@@ -681,7 +681,7 @@ definition Simps.apply
 
 中文:
 定义 Simps.apply
-  签名: {R : 类型u} [CommSemiring R] {α : 类型v} {β : Type w}
+  签名: {R : 类型u} [交换半环 R] {α : 类型v} {β : 类型 w}
   定义体: f
 -/
 def Simps.apply {R : Type u} [CommSemiring R] {α : Type v} {β : Type w}
@@ -701,7 +701,7 @@ initialize_simps_projections BialgEquiv (toFun -> apply, invFun -> symm_apply)
 
 中文:
 定义 Simps.symm_apply
-  签名: {R : 类型} [CommSemiring R]
+  签名: {R : 类型} [交换半环 R]
   定义体: e.symm
 
 initialize_simps_projections BialgEquiv (toFun -> apply, invFun -> symm_apply)
@@ -752,7 +752,7 @@ theorem refl_toCoalgEquiv
 
 中文:
 定理 refl_toCoalgEquiv
-  结论: refl R A = CoalgEquiv.refl R A
+  结论: refl R A = 余alg等价.refl R A
   证明: rfl
 
 @[simp]
@@ -770,7 +770,7 @@ theorem refl_toBialgHom
 
 中文:
 定理 refl_toBialgHom
-  结论: refl R A = BialgHom.id R A
+  结论: refl R A = Bialg态射.id R A
   证明: rfl
 -/
 theorem refl_toBialgHom : refl R A = BialgHom.id R A :=
@@ -1121,7 +1121,7 @@ definition ofBialgHom
 
 中文:
 定义 ofBialgHom
-  签名: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = BialgHom.id R B)
+  签名: (f : A ->ₐc[R] B) (g : B ->ₐc[R] A) (h₁ : f.comp g = Bialg态射.id R B)
   定义体: f
   toFun := f
   invFun := g
@@ -1241,7 +1241,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: (f : A ->ₐc[R] B) (hf : Bijective f)
+  签名: (f : A ->ₐc[R] B) (hf : 双射 f)
   定义体: .ofAlgEquiv (.ofBijective (f : A ->ₐ[R] B) hf) (by ext; simp) (by ext; simp)
 
 @[simp]
@@ -1263,7 +1263,7 @@ lemma coe_ofBijective
 
 中文:
 引理 coe_ofBijective
-  条件: (f : A ->ₐc[R] B) (hf : Bijective f)
+  条件: (f : A ->ₐc[R] B) (hf : 双射 f)
   结论: (ofBijective f hf : A -> B) = f
   证明: rfl
 -/

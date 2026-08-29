@@ -52,9 +52,9 @@ class IsSerreClass
   (no additional axioms)
 
 中文:
-类 IsSerreClass
-  参数: : 命题 extends P.ContainsZero,
-  继承: P.ContainsZero, 
+类 是Serre类
+  参数: : 命题 extends P.余ntainsZero,
+  继承: P.余ntainsZero, 
   (无附加公理)
 -/
 class IsSerreClass : Prop extends P.ContainsZero,
@@ -74,7 +74,7 @@ instance :
 
 中文:
 实例 :
-  签名: (⊤ : Object命题erty C).IsSerreClass
+  签名: (⊤ : ObjectProperty C).是Serre类
 -/
 instance : (⊤ : ObjectProperty C).IsSerreClass where
 
@@ -87,7 +87,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsSerreClass (IsZero (C := C))
+  签名: 是Serre类 (是零 (C := C))
 -/
 instance : IsSerreClass (IsZero (C := C)) where
 
@@ -102,7 +102,7 @@ lemma prop_iff_of_shortExact
 
 中文:
 引理 prop_iff_of_shortExact
-  条件: {S : ShortComplex C} (hS : S.ShortExact)
+  条件: {S : 短复形 C} (hS : S.短正合)
   证明: ⟨fun h => ⟨P.prop_X₁_of_shortExact hS h, P.prop_X₃_of_shortExact hS h⟩,
     fun h => P.prop_X₂_of_shortExact hS h.1 h.2⟩
 
@@ -128,7 +128,7 @@ lemma prop_X₂_of_exact
 
 中文:
 引理 prop_X₂_of_exact
-  结论: {S : ShortComplex C} (hS : S.Exact)
+  结论: {S : 短复形 C} (hS : S.正合)
   证明: by
   let d := S.homologyData
   have := hS.epi_f' d.left

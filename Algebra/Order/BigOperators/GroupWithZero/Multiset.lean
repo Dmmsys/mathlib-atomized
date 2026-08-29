@@ -36,7 +36,7 @@ lemma prod_nonneg
 中文:
 引理 prod_nonneg
   条件: {s : Multiset R} (h : 对任意 a in s, 0 <= a)
-  结论: 0 <= s.prod
+  结论: 0 <= s.乘积
   证明: by
   cases s using Quotient.ind
   simp only [quot_mk_to_coe, mem_coe, prod_coe] at *
@@ -64,7 +64,7 @@ lemma one_le_prod
 中文:
 引理 one_le_prod
   条件: {s : Multiset R} (h : 对任意 a in s, 1 <= a)
-  结论: 1 <= s.prod
+  结论: 1 <= s.乘积
   证明: by
   cases s using Quotient.ind
   simp only [quot_mk_to_coe, mem_coe, prod_coe] at *
@@ -117,7 +117,7 @@ theorem prod_map_le_pow_card
 
 中文:
 定理 prod_map_le_pow_card
-  结论: {F L : 类型} [FunLike F L R] {f : F} {r : R} {t : Multiset L}
+  结论: {F L : 类型} [函数状 F L R] {f : F} {r : R} {t : Multiset L}
   证明: by
   induction t using Quotient.inductionOn
   simp_all [List.prod_map_le_pow_length₀]
@@ -208,7 +208,7 @@ lemma prod_pos
 中文:
 引理 prod_pos
   条件: {s : Multiset R} (h : 对任意 a in s, 0 < a)
-  结论: 0 < s.prod
+  结论: 0 < s.乘积
   证明: by
   cases s using Quotient.ind
   simp only [quot_mk_to_coe, mem_coe, prod_coe] at *

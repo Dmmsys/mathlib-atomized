@@ -77,8 +77,8 @@ instance [Nonempty
   body: Set.instNonemptyRange _
 
 中文:
-实例 [Nonempty
-  签名: (K ->+* Complex)] : Nonempty (InfinitePlace K)
+实例 [非空
+  签名: (K ->+* 复形)] : 非空 (InfinitePlace K)
   定义体: Set.instNonemptyRange _
 
 Depends on / 依赖: Set.instNonemptyRange, instNonemptyRange
@@ -97,7 +97,7 @@ definition InfinitePlace.mk
 
 中文:
 定义 InfinitePlace.mk
-  签名: (φ : K ->+* Complex)
+  签名: (φ : K ->+* 复形)
   定义体: ⟨place φ, ⟨φ, rfl⟩⟩
 -/
 noncomputable def InfinitePlace.mk (φ : K ->+* Complex) : InfinitePlace K :=
@@ -113,7 +113,7 @@ definition IsInfinitePlace
 
 中文:
 定义 IsInfinitePlace
-  签名: (w : AbsoluteValue K 实数)
+  签名: (w : 绝对值 K 实数)
   定义体: exists φ : K ->+* Complex, place φ = w
 -/
 def IsInfinitePlace (w : AbsoluteValue K Real) : Prop :=
@@ -151,7 +151,7 @@ lemma isInfinitePlace_iff
 
 中文:
 引理 isInfinitePlace_iff
-  条件: (v : AbsoluteValue K 实数)
+  条件: (v : 绝对值 K 实数)
   证明: ⟨fun H => ⟨⟨v, H⟩, rfl⟩, fun ⟨w, hw⟩ => hw ▸ w.isInfinitePlace⟩
 
 Depends on / 依赖: isInfinitePlace, w.isInfinitePlace
@@ -173,7 +173,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (InfinitePlace K) K 实数
+  签名: 函数状 (InfinitePlace K) K 实数
   定义体: w.1 x
   coe_injective _ _ h := Subtype.ext (AbsoluteValue.ext fun x => congr_fun h x)
 -/
@@ -235,7 +235,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZeroHomClass (InfinitePlace K) K 实数
+  签名: 带零幺半群态射类 (InfinitePlace K) K 实数
   定义体: w.1.map_mul _ _
   map_one w := w.1.map_one
   map_zero w := w.1.map_zero
@@ -259,7 +259,7 @@ instance :
 
 中文:
 实例 :
-  签名: NonnegHomClass (InfinitePlace K) K 实数
+  签名: Nonneg态射类 (InfinitePlace K) K 实数
   定义体: w.1.nonneg _
 
 @[simp]
@@ -281,7 +281,7 @@ theorem apply
 
 中文:
 定理 apply
-  条件: (φ : K ->+* Complex) (x : K)
+  条件: (φ : K ->+* 复形) (x : K)
   结论: (mk φ) x = ‖φ x‖
   证明: rfl
 -/
@@ -344,7 +344,7 @@ theorem mk_conjugate_eq
 
 中文:
 定理 mk_conjugate_eq
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   结论: mk (ComplexEmbedding.conjugate φ) = mk φ
   证明: by
   refine DFunLike.ext _ _ (fun x => ?_)
@@ -393,7 +393,7 @@ theorem embedding_injective
 
 中文:
 定理 embedding_injective
-  结论: (embedding (K := K)).Injective
+  结论: (embedding (K := K)).单射
   证明: fun _ _ h => by simpa using congr_arg mk h
 
 @[simp]
@@ -476,7 +476,7 @@ theorem eq_iff_eq
 中文:
 定理 eq_iff_eq
   条件: (x : K) (r : 实数)
-  结论: (对任意 w : InfinitePlace K, w x = r) ↔ 对任意 φ : K ->+* Complex, ‖φ x‖ = r
+  结论: (对任意 w : InfinitePlace K, w x = r) ↔ 对任意 φ : K ->+* 复形, ‖φ x‖ = r
   证明: ⟨fun hw φ => hw (mk φ), by rintro hφ ⟨w, ⟨φ, rfl⟩⟩; exact hφ φ⟩
 -/
 theorem eq_iff_eq (x : K) (r : Real) : (forall w : InfinitePlace K, w x = r) ↔ forall φ : K ->+* Complex, ‖φ x‖ = r :=
@@ -494,7 +494,7 @@ theorem le_iff_le
 中文:
 定理 le_iff_le
   条件: (x : K) (r : 实数)
-  结论: (对任意 w : InfinitePlace K, w x <= r) ↔ 对任意 φ : K ->+* Complex, ‖φ x‖ <= r
+  结论: (对任意 w : InfinitePlace K, w x <= r) ↔ 对任意 φ : K ->+* 复形, ‖φ x‖ <= r
   证明: ⟨fun hw φ => hw (mk φ), by rintro hφ ⟨w, ⟨φ, rfl⟩⟩; exact hφ φ⟩
 -/
 theorem le_iff_le (x : K) (r : Real) : (forall w : InfinitePlace K, w x <= r) ↔ forall φ : K ->+* Complex, ‖φ x‖ <= r :=
@@ -541,7 +541,7 @@ theorem mk_eq_iff
 
 中文:
 定理 mk_eq_iff
-  条件: {φ ψ : K ->+* Complex}
+  条件: {φ ψ : K ->+* 复形}
   结论: mk φ = mk ψ ↔ φ = ψ ∨ ComplexEmbedding.conjugate φ = ψ
   证明: by
   constructor
@@ -595,7 +595,7 @@ abbreviation LiesOver
 
 中文:
 缩写 LiesOver
-  签名: {L : 类型} [Field L] [Algebra K L]
+  签名: {L : 类型} [域 L] [代数 K L]
   定义体: w.val.LiesOver v.val
 -/
 protected abbrev LiesOver {L : Type*} [Field L] [Algebra K L]
@@ -611,7 +611,7 @@ definition IsReal
   body: exists φ : K ->+* Complex, ComplexEmbedding.IsReal φ ∧ mk φ = w
 
 中文:
-定义 IsReal
+定义 Is实数
   签名: (w : InfinitePlace K)
   定义体: exists φ : K ->+* Complex, ComplexEmbedding.IsReal φ ∧ mk φ = w
 
@@ -628,7 +628,7 @@ definition IsComplex
   body: exists φ : K ->+* Complex, ¬ComplexEmbedding.IsReal φ ∧ mk φ = w
 
 中文:
-定义 IsComplex
+定义 是复形
   签名: (w : InfinitePlace K)
   定义体: exists φ : K ->+* Complex, ¬ComplexEmbedding.IsReal φ ∧ mk φ = w
 
@@ -649,7 +649,7 @@ theorem embedding_mk_eq
 
 中文:
 定理 embedding_mk_eq
-  条件: (φ : K ->+* Complex)
+  条件: (φ : K ->+* 复形)
   证明: by
   rw [@eq_comm _ _ φ]; rw [@eq_comm _ _ (ComplexEmbedding.conjugate φ)]; rw [← mk_eq_iff]; rw [mk_embedding]
 
@@ -673,8 +673,8 @@ theorem embedding_mk_eq_of_isReal
   rwa [ComplexEmbedding.isReal_iff.mp h, or_self] at this
 
 中文:
-定理 embedding_mk_eq_of_isReal
-  条件: {φ : K ->+* Complex} (h : ComplexEmbedding.Is实数 φ)
+定理 embedding_mk_eq_of_is实数
+  条件: {φ : K ->+* 复形} (h : ComplexEmbedding.Is实数 φ)
   证明: by
   have := embedding_mk_eq φ
   rwa [ComplexEmbedding.isReal_iff.mp h, or_self] at this
@@ -698,7 +698,7 @@ theorem isReal_iff
   rwa [embedding_mk_eq_of_isReal hφ]
 
 中文:
-定理 isReal_iff
+定理 is实数_iff
   条件: {w : InfinitePlace K}
   证明: by
   refine ⟨?_, fun h => ⟨embedding w, h, mk_embedding w⟩⟩
@@ -765,7 +765,7 @@ theorem conjugate_embedding_eq_of_isReal
 @[simp]
 
 中文:
-定理 conjugate_embedding_eq_of_isReal
+定理 conjugate_embedding_eq_of_is实数
   条件: {w : InfinitePlace K} (h : Is实数 w)
   证明: ComplexEmbedding.isReal_iff.mpr (isReal_iff.mp h)
 
@@ -791,9 +791,9 @@ theorem not_isReal_iff_isComplex
 @[simp]
 
 中文:
-定理 not_isReal_iff_isComplex
+定理 not_is实数_iff_isComplex
   条件: {w : InfinitePlace K}
-  结论: ¬Is实数 w ↔ IsComplex w
+  结论: ¬Is实数 w ↔ 是复形 w
   证明: by
   rw [isComplex_iff]; rw [isReal_iff]
 
@@ -816,9 +816,9 @@ theorem not_isComplex_iff_isReal
   rw [isComplex_iff]; rw [isReal_iff]; rw [not_not]
 
 中文:
-定理 not_isComplex_iff_isReal
+定理 not_isComplex_iff_is实数
   条件: {w : InfinitePlace K}
-  结论: ¬IsComplex w ↔ Is实数 w
+  结论: ¬是复形 w ↔ Is实数 w
   证明: by
   rw [isComplex_iff]; rw [isReal_iff]; rw [not_not]
 
@@ -838,9 +838,9 @@ theorem isReal_or_isComplex
   rw [← not_isReal_iff_isComplex]; exact em _
 
 中文:
-定理 isReal_or_isComplex
+定理 is实数_or_isComplex
   条件: (w : InfinitePlace K)
-  结论: Is实数 w ∨ IsComplex w
+  结论: Is实数 w ∨ 是复形 w
   证明: by
   rw [← not_isReal_iff_isComplex]; exact em _
 
@@ -858,8 +858,8 @@ theorem ne_of_isReal_isComplex
   proof: fun h_eq => not_isReal_iff_isComplex.mpr h' (h_eq ▸ h)
 
 中文:
-定理 ne_of_isReal_isComplex
-  条件: {w w' : InfinitePlace K} (h : Is实数 w) (h' : IsComplex w')
+定理 ne_of_is实数_isComplex
+  条件: {w w' : InfinitePlace K} (h : Is实数 w) (h' : 是复形 w')
   证明: fun h_eq => not_isReal_iff_isComplex.mpr h' (h_eq ▸ h)
 
 Depends on / 依赖: h_eq, not_isReal_iff_isComplex, not_isReal_iff_isComplex.mpr
@@ -876,7 +876,7 @@ theorem disjoint_isReal_isComplex
   proof: Set.disjoint_iff.2 fun _ hw => not_isReal_iff_isComplex.2 hw.2 hw.1
 
 中文:
-定理 disjoint_isReal_isComplex
+定理 disjoint_is实数_isComplex
   证明: Set.disjoint_iff.2 fun _ hw => not_isReal_iff_isComplex.2 hw.2 hw.1
 
 Depends on / 依赖: Set.disjoint_iff, disjoint_iff, not_isReal_iff_isComplex
@@ -896,7 +896,7 @@ definition embedding_of_isReal
 @[simp]
 
 中文:
-定义 embedding_of_isReal
+定义 embedding_of_is实数
   签名: {w : InfinitePlace K} (hw : Is实数 w)
   定义体: ComplexEmbedding.IsReal.embedding (isReal_iff.mp hw)
 
@@ -917,7 +917,7 @@ theorem embedding_of_isReal_apply
   proof: ComplexEmbedding.IsReal.coe_embedding_apply (isReal_iff.mp hw) x
 
 中文:
-定理 embedding_of_isReal_apply
+定理 embedding_of_is实数_apply
   条件: {w : InfinitePlace K} (hw : Is实数 w) (x : K)
   证明: ComplexEmbedding.IsReal.coe_embedding_apply (isReal_iff.mp hw) x
 
@@ -939,7 +939,7 @@ theorem norm_embedding_of_isReal
 @[simp]
 
 中文:
-定理 norm_embedding_of_isReal
+定理 norm_embedding_of_is实数
   条件: {w : InfinitePlace K} (hw : Is实数 w) (x : K)
   证明: by
   rw [← norm_embedding_eq]; rw [← embedding_of_isReal_apply hw]; rw [Complex.norm_real]
@@ -965,8 +965,8 @@ theorem isReal_of_mk_isReal
   exact ⟨φ, h, rfl⟩
 
 中文:
-定理 isReal_of_mk_isReal
-  条件: {φ : K ->+* Complex} (h : Is实数 (mk φ))
+定理 is实数_of_mk_is实数
+  条件: {φ : K ->+* 复形} (h : Is实数 (mk φ))
   证明: by
   contrapose h
   rw [not_isReal_iff_isComplex]
@@ -989,8 +989,8 @@ lemma isReal_mk_iff
   proof: ⟨isReal_of_mk_isReal, fun H => ⟨_, H, rfl⟩⟩
 
 中文:
-引理 isReal_mk_iff
-  条件: {φ : K ->+* Complex}
+引理 is实数_mk_iff
+  条件: {φ : K ->+* 复形}
   证明: ⟨isReal_of_mk_isReal, fun H => ⟨_, H, rfl⟩⟩
 
 Depends on / 依赖: isReal_of_mk_isReal
@@ -1011,7 +1011,7 @@ lemma isComplex_mk_iff
 
 中文:
 引理 isComplex_mk_iff
-  条件: {φ : K ->+* Complex}
+  条件: {φ : K ->+* 复形}
   证明: not_isReal_iff_isComplex.symm.trans isReal_mk_iff.not
 
 @[simp]
@@ -1032,8 +1032,8 @@ theorem not_isReal_of_mk_isComplex
   proof: by rwa [← isComplex_mk_iff]
 
 中文:
-定理 not_isReal_of_mk_isComplex
-  条件: {φ : K ->+* Complex} (h : IsComplex (mk φ))
+定理 not_is实数_of_mk_isComplex
+  条件: {φ : K ->+* 复形} (h : 是复形 (mk φ))
   证明: by rwa [← isComplex_mk_iff]
 
 Depends on / 依赖: isComplex_mk_iff
@@ -1069,7 +1069,7 @@ theorem IsReal.mult_eq_one
   proof: if_pos hw
 
 中文:
-定理 IsReal.mult_eq_one
+定理 Is实数.mult_eq_one
   条件: {w : InfinitePlace K} (hw : Is实数 w)
   结论: mult w = 1
   证明: if_pos hw
@@ -1091,8 +1091,8 @@ theorem IsComplex.mult_eq_two
 @[simp]
 
 中文:
-定理 IsComplex.mult_eq_two
-  条件: {w : InfinitePlace K} (hw : IsComplex w)
+定理 是复形.mult_eq_two
+  条件: {w : InfinitePlace K} (hw : 是复形 w)
   结论: mult w = 2
   证明: if_neg (not_isReal_iff_isComplex.mpr hw)
 
@@ -1115,7 +1115,7 @@ theorem mult_isReal
 @[simp]
 
 中文:
-定理 mult_isReal
+定理 mult_is实数
   条件: (w : {w : InfinitePlace K // Is实数 w})
   证明: w.2.mult_eq_one
 
@@ -1138,7 +1138,7 @@ theorem mult_isComplex
 
 中文:
 定理 mult_isComplex
-  条件: (w : {w : InfinitePlace K // IsComplex w})
+  条件: (w : {w : InfinitePlace K // 是复形 w})
   证明: w.2.mult_eq_two
 
 Depends on / 依赖: mult_eq_two
@@ -1259,7 +1259,7 @@ theorem card_filter_mk_eq
 
 中文:
 定理 card_filter_mk_eq
-  条件: [NumberField K] (w : InfinitePlace K)
+  条件: [数域 K] (w : InfinitePlace K)
   结论: #{φ | mk φ = w} = mult w
   证明: by
   conv_lhs =>
@@ -1295,7 +1295,7 @@ instance noncomputable
 
 中文:
 实例 noncomputable
-  签名: instance fintype [NumberField K]
+  签名: instance fintype [数域 K]
   定义体: Set.fintypeRange _
 -/
 protected noncomputable instance fintype [NumberField K] :
@@ -1319,7 +1319,7 @@ theorem prod_eq_prod_mul_prod
 
 中文:
 定理 prod_eq_prod_mul_prod
-  条件: {α : 类型} [CommMonoid α] [NumberField K] (f : InfinitePlace K -> α)
+  条件: {α : 类型} [交换幺半群 α] [数域 K] (f : InfinitePlace K -> α)
   证明: by
   rw [← Equiv.prod_comp (Equiv.subtypeEquivRight (fun _ => not_isReal_iff_isComplex))]
   simp [Fintype.prod_subtype_mul_prod_subtype]
@@ -1346,7 +1346,7 @@ theorem sum_mult_eq
 
 中文:
 定理 sum_mult_eq
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: by
   classical
   rw [← Embeddings.card K Complex]; rw [Fintype.card]; rw [Finset.card_eq_sum_ones]; rw [← Finset.univ.sum_fiberwise
@@ -1379,7 +1379,7 @@ definition mkReal
   · exact ⟨⟨embedding w, isReal_iff.mp w.prop⟩, by simp⟩
 
 中文:
-定义 mkReal
+定义 mk实数
   签名: :
   定义体: by
   refine (Equiv.ofBijective (fun φ => ⟨mk φ, ?_⟩) ⟨fun φ ψ h => ?_, fun w => ?_⟩)
@@ -1433,8 +1433,8 @@ theorem mkReal_coe
 @[simp]
 
 中文:
-定理 mkReal_coe
-  条件: (φ : { φ : K ->+* Complex // ComplexEmbedding.Is实数 φ })
+定理 mk实数_coe
+  条件: (φ : { φ : K ->+* 复形 // ComplexEmbedding.Is实数 φ })
   证明: rfl
 
 @[simp]
@@ -1453,7 +1453,7 @@ theorem mkComplex_coe
 
 中文:
 定理 mkComplex_coe
-  条件: (φ : { φ : K ->+* Complex // ¬ComplexEmbedding.Is实数 φ })
+  条件: (φ : { φ : K ->+* 复形 // ¬ComplexEmbedding.Is实数 φ })
   证明: rfl
 -/
 theorem mkComplex_coe (φ : { φ : K ->+* Complex // ¬ComplexEmbedding.IsReal φ }) :
@@ -1553,7 +1553,7 @@ theorem _root_.NumberField.is_primitive_element_of_infinitePlace_lt
       rw [← norm_embedding_eq]; rw 
 
 中文:
-定理 _root_.NumberField.is_primitive_element_of_infinitePlace_lt
+定理 _root_.数域.is_primitive_element_of_infinitePlace_lt
   结论: {x : 𝓞 K}
   证明: by
   rw [Field.primitive_element_iff_algHom_eq_of_eval Rat Complex ?_ _ w.embedding.toRatAlgHom]
@@ -1606,7 +1606,7 @@ exact congr_arg IntermediateField.toSubalgebra
     NumberField.is_primitive_element_of_infinitePlace_lt h₁ h₂ h₃
 
 中文:
-定理 _root_.NumberField.adjoin_eq_top_of_infinitePlace_lt
+定理 _root_.数域.adjoin_eq_top_of_infinitePlace_lt
   结论: {x : 𝓞 K} {w : InfinitePlace K}
   证明: by
   rw [← IntermediateField.adjoin_simple_toSubalgebra_of_isAlgebraic (IsAlgebraic.of_finite Rat _)]
@@ -1633,7 +1633,7 @@ abbreviation nrRealPlaces
   body: card { w : InfinitePlace K // IsReal w }
 
 中文:
-缩写 nrRealPlaces
+缩写 nr实数Places
   定义体: card { w : InfinitePlace K // IsReal w }
 
 Depends on / 依赖: InfinitePlace, IsReal
@@ -1686,7 +1686,7 @@ theorem card_eq_nrRealPlaces_add_nrComplexPlaces
   exact (Fintype.card_of_subtype _ (fun w => ⟨fun _ => isReal_or_isComplex w, fun _ => by simp⟩)).symm
 
 中文:
-定理 card_eq_nrRealPlaces_add_nrComplexPlaces
+定理 card_eq_nr实数Places_add_nrComplexPlaces
   证明: by
   classical
   convert!
@@ -1805,7 +1805,7 @@ theorem nrComplexPlaces_eq_zero_of_finrank_eq_one
 
 中文:
 定理 nrComplexPlaces_eq_zero_of_finrank_eq_one
-  条件: (h : finrank Rat K = 1)
+  条件: (h : finrank 有理数 K = 1)
   证明: by linarith [card_add_two_mul_card_eq_rank K]
 
 Depends on / 依赖: card_add_two_mul_card_eq_rank
@@ -1824,8 +1824,8 @@ theorem nrRealPlaces_eq_one_of_finrank_eq_one
   rwa [nrComplexPlaces_eq_zero_of_finrank_eq_one h, h, mul_zero, add_zero] at this
 
 中文:
-定理 nrRealPlaces_eq_one_of_finrank_eq_one
-  条件: (h : finrank Rat K = 1)
+定理 nr实数Places_eq_one_of_finrank_eq_one
+  条件: (h : finrank 有理数 K = 1)
   证明: by
   have := card_add_two_mul_card_eq_rank K
   rwa [nrComplexPlaces_eq_zero_of_finrank_eq_one h, h, mul_zero, add_zero] at this
@@ -1851,8 +1851,8 @@ theorem nrRealPlaces_pos_of_odd_finrank
   exact even_two_mul (nrComplexPlaces K)
 
 中文:
-定理 nrRealPlaces_pos_of_odd_finrank
-  条件: (h : Odd (finrank Rat K))
+定理 nr实数Places_pos_of_odd_finrank
+  条件: (h : Odd (finrank 有理数 K))
   证明: by
   refine Nat.pos_of_ne_zero ?_
   by_contra hc
@@ -1889,8 +1889,8 @@ theorem nrRealPlaces_eq_zero_of_two_lt
     rw [← Complex.conj_eq_iff_im]; rw [← Number
 
 中文:
-定理 nrRealPlaces_eq_zero_of_two_lt
-  条件: (hk : 2 < k) (hζ : IsPrimitiveRoot ζ k)
+定理 nr实数Places_eq_zero_of_two_lt
+  条件: (hk : 2 < k) (hζ : 是PrimitiveRoot ζ k)
   证明: by
   refine (@Fintype.card_eq_zero_iff _ (_)).2 ⟨fun ⟨w, hwreal⟩ => ?_⟩
   rw [NumberField.InfinitePlace.isReal_iff] at hwreal
@@ -1949,7 +1949,7 @@ definition infinitePlace
 
 中文:
 定义 infinitePlace
-  签名: : InfinitePlace Rat
+  签名: : InfinitePlace 有理数
   定义体: .mk (Rat.castHom _)
 
 @[simp]
@@ -1973,7 +1973,7 @@ lemma infinitePlace_apply
 
 中文:
 引理 infinitePlace_apply
-  条件: (v : InfinitePlace Rat) (x : Rat)
+  条件: (v : InfinitePlace 有理数) (x : 有理数)
   结论: v x = |x|
   证明: by
   rw [NumberField.InfinitePlace.coe_apply]
@@ -1997,7 +1997,7 @@ instance :
 
 中文:
 实例 :
-  签名: Subsingleton (InfinitePlace Rat)
+  签名: 子单例 (InfinitePlace 有理数)
   定义体: by ext; simp
 -/
 instance : Subsingleton (InfinitePlace Rat) where
@@ -2013,7 +2013,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (InfinitePlace Rat)
+  签名: 唯一 (InfinitePlace 有理数)
   定义体: ⟨⟨infinitePlace⟩, fun _ => Subsingleton.elim _ infinitePlace⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, infinitePlace
@@ -2030,7 +2030,7 @@ lemma isReal_infinitePlace
   proof: ⟨Rat.castHom Complex, by ext; simp, rfl⟩
 
 中文:
-引理 isReal_infinitePlace
+引理 is实数_infinitePlace
   结论: InfinitePlace.Is实数 (infinitePlace)
   证明: ⟨Rat.castHom Complex, by ext; simp, rfl⟩
 
@@ -2060,7 +2060,7 @@ theorem map_ratCast
 
 中文:
 定理 map_ratCast
-  条件: (v : InfinitePlace K) (x : Rat)
+  条件: (v : InfinitePlace K) (x : 有理数)
   结论: v x = ‖x‖
   证明: by
   rcases v with ⟨_, _⟩
@@ -2161,7 +2161,7 @@ theorem eq_iff_isEquiv
 
 中文:
 定理 eq_iff_isEquiv
-  结论: w = v ↔ w.1.IsEquiv v.1
+  结论: w = v ↔ w.1.Is等价 v.1
   证明: by
   refine ⟨fun h => h ▸ .rfl, fun h => ?_⟩
   obtain ⟨t, _, h⟩ := w.1.isEquiv_iff_exists_rpow_eq.1 h
@@ -2188,7 +2188,7 @@ exact ⟨n, v.pos_iff.1 zero_lt_one.trans (by simpa), by simp [← coe_apply]; g
 
 中文:
 定理 isNontrivial
-  结论: v.1.IsNontrivial
+  结论: v.1.是非平凡
   证明: by
   obtain ⟨n, hn⟩ := exists_gt (1 : Nat)
 exact ⟨n, v.pos_iff.1 zero_lt_one.trans (by simpa), by simp [← coe_apply]; grind⟩
@@ -2212,7 +2212,7 @@ theorem denseRange_algebraMap_pi
 
 中文:
 定理 denseRange_algebraMap_pi
-  条件: [NumberField K]
+  条件: [数域 K]
   证明: AbsoluteValue.denseRange_algebraMap_pi (fun v => v.isNontrivial)
     fun _ _ h => (eq_iff_isEquiv (K := K)).not.mp h
 

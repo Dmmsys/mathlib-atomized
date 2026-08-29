@@ -239,7 +239,7 @@ definition tensorQuotientEquiv
 
 中文:
 定义 tensorQuotientEquiv
-  签名: (I : Ideal T)
+  签名: (I : 理想 T)
   定义体: letI g : (A otimes[R] T ⧸ LinearMap.range (AlgebraTensorModule.lTensor S A
       (I.subtype.restrictScalars R))) ≃ₗ[S]
       A otimes[R] T ⧸ (I.map (includeRight (A := A) (R := R))).restrictScalars S :=
@@ -275,7 +275,7 @@ lemma tensorQuotientEquiv_apply_tmul
 
 中文:
 引理 tensorQuotientEquiv_apply_tmul
-  条件: (I : Ideal T) (a : A) (t : T)
+  条件: (I : 理想 T) (a : A) (t : T)
   证明: rfl
 
 @[simp]
@@ -295,7 +295,7 @@ lemma tensorQuotientEquiv_symm_apply_tmul
 
 中文:
 引理 tensorQuotientEquiv_symm_apply_tmul
-  条件: (I : Ideal T) (a : A) (t : T)
+  条件: (I : 理想 T) (a : A) (t : T)
   证明: rfl
 
 Depends on / 依赖: Ideal.Quotient.mk, Quotient
@@ -319,7 +319,7 @@ Ideal.quotientEquiv _ _ (TensorProduct.comm R T A).toRingEquiv (I.map_map _ _).s
 
 中文:
 定义 quotientTensorEquiv
-  签名: (I : Ideal A)
+  签名: (I : 理想 A)
   定义体: (TensorProduct.comm R (A ⧸ I) T).toRingEquiv.trans
 (tensorQuotientEquiv (R := R) R A T I).toRingEquiv.trans
 Ideal.quotientEquiv _ _ (TensorProduct.comm R T A).toRingEquiv (I.map_map _ _).symm
@@ -349,7 +349,7 @@ lemma quotientTensorEquiv_apply_tmul
 
 中文:
 引理 quotientTensorEquiv_apply_tmul
-  条件: (I : Ideal A) (a : A) (t : T)
+  条件: (I : 理想 A) (a : A) (t : T)
   证明: rfl
 
 @[simp]
@@ -369,7 +369,7 @@ lemma quotientTensorEquiv_symm_apply_tmul
 
 中文:
 引理 quotientTensorEquiv_symm_apply_tmul
-  条件: (I : Ideal A) (a : A) (t : T)
+  条件: (I : 理想 A) (a : A) (t : T)
   证明: rfl
 
 Depends on / 依赖: Ideal.Quotient.mk, Quotient
@@ -393,8 +393,8 @@ lemma Ideal.subtype_rTensor_range
   exact LinearMap.exact_
 
 中文:
-引理 Ideal.subtype_rTensor_range
-  结论: {R : 类型} [CommRing R] (M : 类型) [AddCommGroup M] [Module R M]
+引理 理想.subtype_rTensor_range
+  结论: {R : 类型} [交换环 R] (M : 类型) [加法交换群 M] [模 R M]
   证明: by
   rw [← Submodule.ker_mkQ (I • (⊤ : Submodule R M))]; rw [LinearMap.range_comp]; rw [← Submodule.map_symm_eq_iff]; rw [← Submodule.comap_equiv_eq_map_symm]; rw [← LinearMap.ker_comp]; rw [← TensorProduct.quotTensorEquivQuotSMul_comp_mkQ_rTensor]; rw [LinearEquiv.ker_comp]
   exact LinearMap.exact_
@@ -431,7 +431,7 @@ definition Algebra.tensorQuotientTensorEquiv
       ((Ideal.Quotient.mkₐ _ _)
 
 中文:
-定义 Algebra.tensorQuotientTensorEquiv
+定义 代数.tensorQuotientTensorEquiv
   签名: (e : R' otimes[R] S)
   定义体: letI φ := Algebra.TensorProduct.rTensor S (Algebra.ofId R' R'')
   letI ψ : R'' otimes[R] S ->ₐ[R''] R'' otimes[R'] (R' otimes[R] S ⧸ Ideal.span {e}) :=
@@ -468,7 +468,7 @@ lemma Algebra.tensorQuotientTensorEquiv_tmul
   simp [Algebra.tensorQuotientTensorEquiv, ← Ideal.Quotient.mk_algebraMap, ← map_mul]
 
 中文:
-引理 Algebra.tensorQuotientTensorEquiv_tmul
+引理 代数.tensorQuotientTensorEquiv_tmul
   条件: (e : R' otimes[R] S) (a : R'') (b : R') (c : S)
   证明: by
   simp [Algebra.tensorQuotientTensorEquiv, ← Ideal.Quotient.mk_algebraMap, ← map_mul]
@@ -492,7 +492,7 @@ lemma Algebra.tensorQuotientTensorEquiv_symm_tmul
   simp [Algebra.tensorQuotientTensorEquiv]
 
 中文:
-引理 Algebra.tensorQuotientTensorEquiv_symm_tmul
+引理 代数.tensorQuotientTensorEquiv_symm_tmul
   条件: (e : R' otimes[R] S) (a : R'') (b : S)
   证明: by
   simp [Algebra.tensorQuotientTensorEquiv]

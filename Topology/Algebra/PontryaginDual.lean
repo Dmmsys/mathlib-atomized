@@ -66,8 +66,8 @@ instance [LocallyCompactSpace
   refine ContinuousMonoidHom.locallyCompact
 
 中文:
-实例 [LocallyCompactSpace
-  签名: H] : LocallyCompactSpace (PontryaginDual H)
+实例 [局部紧空间
+  签名: H] : 局部紧空间 (PontryaginDual H)
   定义体: by
   let Vn : Nat -> Set Circle := fun n => Circle.centeredArc (π / 2 ^ (n + 1))
   have hVn : forall n x, x in Vn n ↔ |Complex.arg x| < π / 2 ^ (n + 1) :=
@@ -118,7 +118,7 @@ for PontryaginDual A
 
 中文:
 实例 :
-  签名: CommGroup (PontryaginDual A)
+  签名: 交换群 (PontryaginDual A)
   定义体: inferInstanceAs (CommGroup (A ->ₜ* Circle))
 
 deriving instance
@@ -201,8 +201,8 @@ instance [CompactSpace
   have hVeq : V = ({1} : Set (Po
 
 中文:
-实例 [CompactSpace
-  签名: A] : DiscreteTopology (PontryaginDual A)
+实例 [紧空间
+  签名: A] : 离散拓扑 (PontryaginDual A)
   定义体: by
   let V : Set (PontryaginDual A) := {ψ | Set.MapsTo ψ Set.univ (Circle.centeredArc (π / 2))}
   have hVopen : IsOpen V := by
@@ -240,8 +240,8 @@ instance [DiscreteTopology
   body: finite_of_compact_of_discrete
 
 中文:
-实例 [DiscreteTopology
-  签名: A] [CompactSpace A] : Finite (PontryaginDual A)
+实例 [离散拓扑
+  签名: A] [紧空间 A] : 有限 (PontryaginDual A)
   定义体: finite_of_compact_of_discrete
 
 Depends on / 依赖: finite_of_compact_of_discrete
@@ -258,8 +258,8 @@ instance [DiscreteTopology
   body: .ofFinite _
 
 中文:
-实例 [DiscreteTopology
-  签名: A] [CompactSpace A] : Fintype (PontryaginDual A)
+实例 [离散拓扑
+  签名: A] [紧空间 A] : 有限类型 (PontryaginDual A)
   定义体: .ofFinite _
 
 Depends on / 依赖: ofFinite
@@ -382,7 +382,7 @@ definition mapHom
 
 中文:
 定义 mapHom
-  签名: [LocallyCompactSpace G]
+  签名: [局部紧空间 G]
   定义体: map
   map_one' := map_one
   map_mul' := map_mul

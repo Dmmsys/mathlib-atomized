@@ -48,7 +48,7 @@ definition divisor
 
 中文:
 定义 divisor
-  签名: (f : 𝕜 -> E) (U : Set 𝕜)
+  签名: (f : 𝕜 -> E) (U : 集合 𝕜)
   定义体: fun z => if MeromorphicOn f U ∧ z in U then (meromorphicOrderAt f z).untop₀ else 0
   supportWithinDomain' z hz := by
     by_contra h₂z
@@ -88,7 +88,7 @@ theorem divisor_def
 
 中文:
 定理 divisor_def
-  条件: (f : 𝕜 -> E) (U : Set 𝕜)
+  条件: (f : 𝕜 -> E) (U : 集合 𝕜)
   证明: rfl
 -/
 theorem divisor_def (f : 𝕜 -> E) (U : Set 𝕜) :
@@ -175,7 +175,7 @@ lemma _root_.divisor_sphere_support_finite
 
 中文:
 引理 _root_.divisor_sphere_support_finite
-  条件: [命题erSpace 𝕜] {f : 𝕜 -> E} {R : 实数} {c : 𝕜}
+  条件: [真空间 𝕜] {f : 𝕜 -> E} {R : 实数} {c : 𝕜}
   证明: (divisor f (sphere c R)).finiteSupport (isCompact_sphere c R)
 
 Depends on / 依赖: divisor, finiteSupport, isCompact_sphere, sphere
@@ -199,7 +199,7 @@ lemma divisor_support_finite_of_subset
 
 中文:
 引理 divisor_support_finite_of_subset
-  结论: {f : 𝕜 -> E} {V : Set 𝕜} (hf : MeromorphicOn f U)
+  结论: {f : 𝕜 -> E} {V : 集合 𝕜} (hf : MeromorphicOn f U)
   证明: by
   apply ((divisor f U).finiteSupport hU).subset
   intro b hb
@@ -228,7 +228,7 @@ lemma divisor_ball_support_finite
 
 中文:
 引理 divisor_ball_support_finite
-  结论: [命题erSpace 𝕜] {f : 𝕜 -> E} {R : 实数} {c : 𝕜}
+  结论: [真空间 𝕜] {f : 𝕜 -> E} {R : 实数} {c : 𝕜}
   证明: hf.divisor_support_finite_of_subset (isCompact_closedBall c R) ball_subset_closedBall
 
 Depends on / 依赖: ball_subset_closedBall, divisor_support_finite_of_subset, hf.divisor_support_finite_of_subset, isCompact_closedBall
@@ -513,7 +513,7 @@ theorem divisor_ofNat
   simp [Semiring.toGrindSemiring_ofNat 𝕜 n]
 
 中文:
-定理 divisor_ofNat
+定理 divisor_of自然数
   条件: (n : 自然数)
   证明: by
   convert! divisor_const (n : 𝕜)
@@ -547,7 +547,7 @@ theorem min_divisor_le_divisor_add
 
 中文:
 定理 min_divisor_le_divisor_add
-  结论: {f₁ f₂ : 𝕜 -> E} {z : 𝕜} {U : Set 𝕜} (hf₁ : MeromorphicOn f₁ U)
+  结论: {f₁ f₂ : 𝕜 -> E} {z : 𝕜} {U : 集合 𝕜} (hf₁ : MeromorphicOn f₁ U)
   证明: by
   by_cases! hz : z ∉ U
   · simp_all
@@ -593,7 +593,7 @@ theorem negPart_divisor_add_le_max
 
 中文:
 定理 negPart_divisor_add_le_max
-  结论: {f₁ f₂ : 𝕜 -> E} {U : Set 𝕜} (hf₁ : MeromorphicOn f₁ U)
+  结论: {f₁ f₂ : 𝕜 -> E} {U : 集合 𝕜} (hf₁ : MeromorphicOn f₁ U)
   证明: by
   intro z
   by_cases! hz : z ∉ U
@@ -634,7 +634,7 @@ theorem negPart_divisor_add_le_add
 
 中文:
 定理 negPart_divisor_add_le_add
-  结论: {f₁ f₂ : 𝕜 -> E} {U : Set 𝕜} (hf₁ : MeromorphicOn f₁ U)
+  结论: {f₁ f₂ : 𝕜 -> E} {U : 集合 𝕜} (hf₁ : MeromorphicOn f₁ U)
   证明: by
   calc (divisor (f₁ + f₂) U)⁻
     _ <= max (divisor f₁ U)⁻ (divisor f₂ U)⁻ :=
@@ -775,7 +775,7 @@ theorem divisor_prod
 
 中文:
 定理 divisor_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   classical
   induction s using Finset.induction with
@@ -818,7 +818,7 @@ theorem divisor_fun_prod
 
 中文:
 定理 divisor_fun_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   convert! divisor_prod h₁f h₂f
   exact (Finset.prod_apply _ s f).symm
@@ -1012,7 +1012,7 @@ theorem divisor_restrict
 
 中文:
 定理 divisor_restrict
-  条件: {f : 𝕜 -> E} {V : Set 𝕜} (hf : MeromorphicOn f U) (hV : V subseteq U)
+  条件: {f : 𝕜 -> E} {V : 集合 𝕜} (hf : MeromorphicOn f U) (hV : V subseteq U)
   证明: by
   ext x
   by_cases hx : x in V
@@ -1122,7 +1122,7 @@ lemma divisor_sub_const_of_ne
 
 中文:
 引理 divisor_sub_const_of_ne
-  条件: {U : Set 𝕜} {z₀ x : 𝕜} (hx : x != z₀)
+  条件: {U : 集合 𝕜} {z₀ x : 𝕜} (hx : x != z₀)
   结论: divisor (· - z₀) U x = 0
   证明: by
   by_cases hu : x in U
@@ -1159,7 +1159,7 @@ lemma divisor_sub_const_self
 
 中文:
 引理 divisor_sub_const_self
-  条件: {z₀ : 𝕜} {U : Set 𝕜} (h : z₀ in U)
+  条件: {z₀ : 𝕜} {U : 集合 𝕜} (h : z₀ in U)
   结论: divisor (· - z₀) U z₀ = 1
   证明: by
   rw [divisor_apply (show MeromorphicOn (· - z₀) U from fun_sub id <| const z₀) h]; rw [← untop₀_coe 1]

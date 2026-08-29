@@ -70,7 +70,7 @@ definition ScottContinuousOn
 
 中文:
 定义 ScottContinuousOn
-  签名: (D : Set (Set α)) (f : α -> β)
+  签名: (D : 集合 (集合 α)) (f : α -> β)
   定义体: forall ⦃d : Set α⦄, d in D -> d.Nonempty -> DirectedOn (· <= ·) d -> forall ⦃a⦄, IsLUB d a -> IsLUB (f '' d) (f a)
 
 Depends on / 依赖: DirectedOn, Nonempty, d.Nonempty
@@ -111,7 +111,7 @@ theorem ScottContinuousOn.monotone
 
 中文:
 定理 ScottContinuousOn.monotone
-  结论: (D : Set (Set α)) (hD : 对任意 a b : α, a <= b -> {a, b} in D)
+  结论: (D : 集合 (集合 α)) (hD : 对任意 a b : α, a <= b -> {a, b} in D)
   证明: by
   refine fun a b hab =>
     (h (hD a b hab) (insert_nonempty _ _) (directedOn_pair hab) ?_).1
@@ -168,7 +168,7 @@ lemma ScottContinuousOn.const
 中文:
 引理 ScottContinuousOn.const
   条件: (x : β)
-  结论: ScottContinuousOn D (Function.const α x)
+  结论: ScottContinuousOn D (函数.const α x)
   证明: by
   rintro s _ ⟨a⟩ _ _ _
   simp [IsLUB, IsLeast, upperBounds, lowerBounds]; grind
@@ -323,7 +323,7 @@ lemma ScottContinuousOn.fst
 中文:
 引理 ScottContinuousOn.fst
   条件: {D}
-  结论: ScottContinuousOn D (Prod.fst : α × β -> α)
+  结论: ScottContinuousOn D (积类型.fst : α × β -> α)
   证明: by
   intro d hd₁ hd₂ hd₃ a ha
   simp only [isLUB_prod] at ha
@@ -354,7 +354,7 @@ lemma ScottContinuousOn.snd
 中文:
 引理 ScottContinuousOn.snd
   条件: {D}
-  结论: ScottContinuousOn D (Prod.snd : α × β -> β)
+  结论: ScottContinuousOn D (积类型.snd : α × β -> β)
   证明: by
   intro d hd₁ hd₂ hd₃ a ha
   simp only [isLUB_prod] at ha
@@ -418,7 +418,7 @@ lemma ScottContinuous.scottContinuousOn
 
 中文:
 引理 ScottContinuous.scottContinuousOn
-  条件: {D : Set (Set α)}
+  条件: {D : 集合 (集合 α)}
   证明: fun h _ _ d₂ d₃ _ hda => h d₂ d₃ hda
 -/
 lemma ScottContinuous.scottContinuousOn {D : Set (Set α)} :
@@ -438,7 +438,7 @@ theorem ScottContinuous.monotone
 中文:
 定理 ScottContinuous.monotone
   条件: (h : ScottContinuous f)
-  结论: Monotone f
+  结论: 递增 f
   证明: h.scottContinuousOn.monotone univ (fun _ _ _ => mem_univ _)
 
 @[fun_prop, to_fun (attr := simp)]
@@ -484,7 +484,7 @@ lemma ScottContinuous.const
 中文:
 引理 ScottContinuous.const
   条件: (x : β)
-  结论: ScottContinuous (Function.const α x)
+  结论: ScottContinuous (函数.const α x)
   证明: by
   simp_rw [← scottContinuousOn_univ, ScottContinuousOn.const]
 
@@ -569,7 +569,7 @@ lemma ScottContinuous.fst
 
 中文:
 引理 ScottContinuous.fst
-  结论: ScottContinuous (Prod.fst : α × β -> α)
+  结论: ScottContinuous (积类型.fst : α × β -> α)
   证明: by
   simp_rw [← scottContinuousOn_univ, ScottContinuousOn.fst]
 
@@ -592,7 +592,7 @@ lemma ScottContinuous.snd
 
 中文:
 引理 ScottContinuous.snd
-  结论: ScottContinuous (Prod.snd : α × β -> β)
+  结论: ScottContinuous (积类型.snd : α × β -> β)
   证明: by
   simp_rw [← scottContinuousOn_univ, ScottContinuousOn.snd]
 
@@ -651,7 +651,7 @@ lemma ScottContinuousOn.sup₂
 
 中文:
 引理 ScottContinuousOn.sup₂
-  条件: {D : Set (Set (β × β))}
+  条件: {D : 集合 (集合 (β × β))}
   证明: ScottContinuous.sup₂.scottContinuousOn
 
 Depends on / 依赖: ScottContinuous, ScottContinuous.sup, scottContinuousOn

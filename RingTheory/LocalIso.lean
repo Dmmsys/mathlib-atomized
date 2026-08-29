@@ -49,10 +49,10 @@ class Algebra.IsLocalIso
     - exists_notMem_isStandardOpenImmersion((q : Ideal S) [q.IsPrime]) : exists g ∉ q, IsStandardOpenImmersion R (Localization.Away g)
 
 中文:
-类 Algebra.IsLocalIso
-  参数: (R S : 类型) [CommSemiring R] [CommSemiring S] [Algebra R S]
+类 代数.是LocalIso
+  参数: (R S : 类型) [交换半环 R] [交换半环 S] [代数 R S]
   公理与运算 (1 个):
-    - exists_notMem_isStandardOpenImmersion((q : Ideal S) [q.IsPrime]) : 存在 g ∉ q, IsStandardOpenImmersion R (Localization.Away g)
+    - exists_notMem_isStandardOpenImmersion((q : 理想 S) [q.是素]) : 存在 g ∉ q, 是StandardOpenImmersion R (Localization.Away g)
 -/
 class Algebra.IsLocalIso (R S : Type*) [CommSemiring R] [CommSemiring S] [Algebra R S] : Prop where
   exists_notMem_isStandardOpenImmersion (q : Ideal S) [q.IsPrime] :
@@ -78,7 +78,7 @@ lemma span_isStandardOpenImmersion_eq_top
 
 中文:
 引理 span_isStandardOpenImmersion_eq_top
-  条件: [Algebra.IsLocalIso R S]
+  条件: [代数.是LocalIso R S]
   证明: by
   by_contra hne
   obtain ⟨m, hm, hms⟩ := Ideal.exists_le_maximal _ hne
@@ -141,7 +141,7 @@ lemma of_span_range_eq_top
 
 中文:
 引理 of_span_range_eq_top
-  结论: {ι : 类型} (f : ι -> S) (h : Ideal.span (Set.range f) = ⊤)
+  结论: {ι : 类型} (f : ι -> S) (h : 理想.span (集合.range f) = ⊤)
   证明: by
   refine ⟨fun q hq => ?_⟩
   obtain ⟨i, hi⟩ : exists i, f i ∉ q := by
@@ -195,7 +195,7 @@ lemma of_span_eq_top
 
 中文:
 引理 of_span_eq_top
-  结论: {s : Set S} (h : Ideal.span s = ⊤)
+  结论: {s : 集合 S} (h : 理想.span s = ⊤)
   证明: by
   have heq : Ideal.span (Set.range fun i : s => i.1) = ⊤ := by simpa
   have (i : s) : IsLocalIso R (Localization.Away i.1) := h _ i.property
@@ -225,7 +225,7 @@ lemma pi_of_finite
 
 中文:
 引理 pi_of_finite
-  结论: {ι : 类型} (R : 类型) (S : ι -> 类型) [CommSemiring R]
+  结论: {ι : 类型} (R : 类型) (S : ι -> 类型) [交换半环 R]
   证明: by
   classical
   let (i : ι) : Algebra (forall i, S i) (S i) := (Pi.evalAlgHom R S i).toAlgebra
@@ -267,7 +267,7 @@ lemma trans
 
 中文:
 引理 trans
-  结论: [Algebra S T] [Algebra R T] [IsScalarTower R S T]
+  结论: [代数 S T] [代数 R T] [标量塔 R S T]
   证明: by
   -- The proof is purely formal given that open immersions are stable under composition.
   let s : Set S := {g : S | IsStandardOpenImmersion R (Localization.Away g)}
@@ -330,8 +330,8 @@ lemma of_algEquiv
 
 中文:
 引理 of_algEquiv
-  条件: [Algebra R T] (e : S ≃ₐ[R] T) [IsLocalIso R S]
-  结论: IsLocalIso R T
+  条件: [代数 R T] (e : S ≃ₐ[R] T) [是LocalIso R S]
+  结论: 是LocalIso R T
   证明: by
   algebraize [e.toAlgHom.toRingHom]
   have : IsStandardOpenImmersion S T := .of_bijective e.bijective
@@ -356,8 +356,8 @@ lemma iff_of_algEquiv
 
 中文:
 引理 iff_of_algEquiv
-  条件: [Algebra R T] (e : S ≃ₐ[R] T)
-  结论: IsLocalIso R S ↔ IsLocalIso R T
+  条件: [代数 R T] (e : S ≃ₐ[R] T)
+  结论: 是LocalIso R S ↔ 是LocalIso R T
   证明: ⟨fun _ => .of_algEquiv e, fun _ => .of_algEquiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_algEquiv
@@ -378,8 +378,8 @@ instance [Algebra
   simp only [Set.mem_ofPred_eq
 
 中文:
-实例 [Algebra
-  签名: R T] [IsLocalIso R S] : IsLocalIso T (T otimes[R] S)
+实例 [代数
+  签名: R T] [是LocalIso R S] : 是LocalIso T (T otimes[R] S)
   定义体: by
   rw [iff_span_isStandardOpenImmersion_eq_top]; rw [_root_.eq_top_iff]; rw [← Ideal.map_top Algebra.TensorProduct.includeRight]; rw [← span_isStandardOpenImmersion_eq_top R S]; rw [Ideal.map_le_iff_le_comap]; rw [Ideal.span_le]
   intro g hg

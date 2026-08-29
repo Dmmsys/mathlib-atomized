@@ -32,7 +32,7 @@ lemma ncard_Icc_nat
 中文:
 引理 ncard_Icc_nat
   条件: (a b : 自然数)
-  结论: (Icc a b).ncard = b + 1 - a
+  结论: (闭区间 a b).ncard = b + 1 - a
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Icc a b
 -/
@@ -52,7 +52,7 @@ lemma ncard_Ico_nat
 中文:
 引理 ncard_Ico_nat
   条件: (a b : 自然数)
-  结论: (Ico a b).ncard = b - a
+  结论: (左闭右开区间 a b).ncard = b - a
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Ico a b
 -/
@@ -72,7 +72,7 @@ lemma ncard_Ioc_nat
 中文:
 引理 ncard_Ioc_nat
   条件: (a b : 自然数)
-  结论: (Ioc a b).ncard = b - a
+  结论: (左开右闭区间 a b).ncard = b - a
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Ioc a b
 -/
@@ -92,7 +92,7 @@ lemma ncard_Ioo_nat
 中文:
 引理 ncard_Ioo_nat
   条件: (a b : 自然数)
-  结论: (Ioo a b).ncard = b - a - 1
+  结论: (开区间 a b).ncard = b - a - 1
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Ioo a b
 -/
@@ -132,7 +132,7 @@ lemma ncard_Iic_nat
 中文:
 引理 ncard_Iic_nat
   条件: (b : 自然数)
-  结论: (Iic b).ncard = b + 1
+  结论: (左无界右闭区间 b).ncard = b + 1
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Iic b
 -/
@@ -152,7 +152,7 @@ lemma ncard_Iio_nat
 中文:
 引理 ncard_Iio_nat
   条件: (b : 自然数)
-  结论: (Iio b).ncard = b
+  结论: (左无界右开区间 b).ncard = b
   证明: by
   simpa [← Set.ncard_coe_finset] using Nat.card_Iio b
 -/

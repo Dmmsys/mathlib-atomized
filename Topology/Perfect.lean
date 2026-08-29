@@ -74,8 +74,8 @@ theorem AccPt.nhds_inter
   exact h_acc
 
 中文:
-定理 AccPt.nhds_inter
-  条件: {x : α} {U : Set α} (h_acc : AccPt x (𝓟 C)) (hU : U in 𝓝 x)
+定理 聚点.nhds_inter
+  条件: {x : α} {U : 集合 α} (h_acc : 聚点 x (𝓟 C)) (hU : U in 𝓝 x)
   证明: by
   have : 𝓝[!=] x <= 𝓟 U := by
     rw [le_principal_iff]
@@ -103,7 +103,7 @@ definition Preperfect
 
 中文:
 定义 Preperfect
-  签名: (C : Set α)
+  签名: (C : 集合 α)
   定义体: forall x in C, AccPt x (𝓟 C)
 -/
 def Preperfect (C : Set α) : Prop :=
@@ -124,10 +124,10 @@ structure Perfect
     - acc : Preperfect C
 
 中文:
-结构 Perfect
-  参数: (C : Set α)
+结构 完美
+  参数: (C : 集合 α)
   公理与运算 (2 个):
-    - closed : IsClosed C
+    - closed : 是闭集 C
     - acc : Preperfect C
 -/
 structure Perfect (C : Set α) : Prop where
@@ -173,10 +173,10 @@ class PerfectSpace
     - univ_preperfect : Preperfect (Set.univ : Set α)
 
 中文:
-类 PerfectSpace
+类 完美空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - univ_preperfect : Preperfect (Set.univ : Set α)
+    - univ_preperfect : Preperfect (集合.univ : 集合 α)
 -/
 class PerfectSpace : Prop where
   univ_preperfect : Preperfect (Set.univ : Set α)
@@ -191,9 +191,9 @@ theorem PerfectSpace.univ_perfect
   proof: ⟨isClosed_univ, PerfectSpace.univ_preperfect⟩
 
 中文:
-定理 PerfectSpace.univ_perfect
-  条件: [PerfectSpace α]
-  结论: Perfect (Set.univ : Set α)
+定理 完美空间.univ_perfect
+  条件: [完美空间 α]
+  结论: 完美 (集合.univ : 集合 α)
   证明: ⟨isClosed_univ, PerfectSpace.univ_preperfect⟩
 
 Depends on / 依赖: PerfectSpace, PerfectSpace.univ_preperfect, isClosed_univ, univ_preperfect
@@ -218,7 +218,7 @@ theorem Preperfect.open_inter
 
 中文:
 定理 Preperfect.open_inter
-  条件: {U : Set α} (hC : Preperfect C) (hU : IsOpen U)
+  条件: {U : 集合 α} (hC : Preperfect C) (hU : 是开集 U)
   证明: by
   rintro x ⟨xU, xC⟩
   apply (hC _ xC).nhds_inter
@@ -251,7 +251,7 @@ theorem Preperfect.perfect_closure
 中文:
 定理 Preperfect.perfect_closure
   条件: (hC : Preperfect C)
-  结论: Perfect (closure C)
+  结论: 完美 (closure C)
   证明: by
   constructor; · exact isClosed_closure
   intro x hx
@@ -283,8 +283,8 @@ theorem IsOpen.preperfect
   simpa using PerfectSpace.univ_preperfect.open_inter hU
 
 中文:
-定理 IsOpen.preperfect
-  条件: [PerfectSpace α] {U : Set α} (hU : IsOpen U)
+定理 是开集.preperfect
+  条件: [完美空间 α] {U : 集合 α} (hU : 是开集 U)
   证明: by
   simpa using PerfectSpace.univ_preperfect.open_inter hU
 
@@ -303,8 +303,8 @@ theorem IsOpen.perfect_closure
   proof: hU.preperfect.perfect_closure
 
 中文:
-定理 IsOpen.perfect_closure
-  条件: [PerfectSpace α] {U : Set α} (hU : IsOpen U)
+定理 是开集.perfect_closure
+  条件: [完美空间 α] {U : 集合 α} (hU : 是开集 U)
   证明: hU.preperfect.perfect_closure
 
 Depends on / 依赖: hU.preperfect.perfect_closure, perfect_closure, preperfect
@@ -332,8 +332,8 @@ theorem preperfect_iff_perfect_closure
 
 中文:
 定理 preperfect_iff_perfect_closure
-  条件: [T1Space α]
-  结论: Preperfect C ↔ Perfect (closure C)
+  条件: [T1空间 α]
+  结论: Preperfect C ↔ 完美 (closure C)
   证明: by
   constructor <;> intro h
   · exact h.perfect_closure
@@ -374,8 +374,8 @@ theorem Perfect.closure_nhds_inter
   exact ⟨x, ⟨xU, xC⟩⟩
 
 中文:
-定理 Perfect.closure_nhds_inter
-  结论: {U : Set α} (hC : Perfect C) (x : α) (xC : x in C) (xU : x in U)
+定理 完美.closure_nhds_inter
+  结论: {U : 集合 α} (hC : 完美 C) (x : α) (xC : x in C) (xU : x in U)
   证明: by
   constructor
   · apply Preperfect.perfect_closure
@@ -410,8 +410,8 @@ theorem Perfect.splitting
   use 
 
 中文:
-定理 Perfect.splitting
-  条件: [T25Space α] (hC : Perfect C) (hnonempty : C.Nonempty)
+定理 完美.splitting
+  条件: [T25空间 α] (hC : 完美 C) (hnonempty : C.非空)
   证明: by
   obtain ⟨y, yC⟩ := hnonempty
   obtain ⟨x, xC, hxy⟩ : exists x in C, x != y := by
@@ -463,8 +463,8 @@ lemma IsPreconnected.preperfect_of_nontrivial
   · obtain 
 
 中文:
-引理 IsPreconnected.preperfect_of_nontrivial
-  结论: [T1Space α] {U : Set α} (hu : U.Nontrivial)
+引理 是预连通.preperfect_of_nontrivial
+  结论: [T1空间 α] {U : 集合 α} (hu : U.非平凡)
   证明: by
   intro x hx
   rw [isPreconnected_closed_iff] at h
@@ -510,8 +510,8 @@ instance [T1Space
   infer_instance
 
 中文:
-实例 [T1Space
-  签名: α] [ConnectedSpace α] [Nontrivial α] : PerfectSpace α
+实例 [T1空间
+  签名: α] [连通空间 α] [非平凡 α] : 完美空间 α
   定义体: by
   constructor
   apply isPreconnected_univ.preperfect_of_nontrivial
@@ -547,8 +547,8 @@ theorem exists_countable_union_perfect_of_isClosed
     · exact bct.mono (sep_subset _ _
 
 中文:
-定理 exists_countable_union_perfect_of_isClosed
-  结论: [SecondCountableTopology α]
+定理 存在_countable_union_perfect_of_isClosed
+  结论: [第二可数拓扑 α]
   证明: by
   obtain ⟨b, bct, _, bbasis⟩ := TopologicalSpace.exists_countable_basis α
   let v := { U in b | (U inter C).Countable }
@@ -614,8 +614,8 @@ theorem exists_perfect_nonempty_of_isClosed_of_not_countable
   exact subset_union_right
 
 中文:
-定理 exists_perfect_nonempty_of_isClosed_of_not_countable
-  结论: [SecondCountableTopology α]
+定理 存在_perfect_nonempty_of_isClosed_of_not_countable
+  结论: [第二可数拓扑 α]
   证明: by
   rcases exists_countable_union_perfect_of_isClosed hclosed with ⟨V, D, Vct, Dperf, VD⟩
   refine ⟨D, ⟨Dperf, ?_⟩⟩
@@ -661,8 +661,8 @@ theorem perfectSpace_iff_forall_not_isolated
   simp [perfectSpace_def, Preperfect, AccPt]
 
 中文:
-定理 perfectSpace_iff_forall_not_isolated
-  结论: PerfectSpace X ↔ 对任意 x : X, Filter.NeBot (𝓝[!=] x)
+定理 perfectSpace_iff_对任意_not_isolated
+  结论: 完美空间 X ↔ 对任意 x : X, 滤子.NeBot (𝓝[!=] x)
   证明: by
   simp [perfectSpace_def, Preperfect, AccPt]
 
@@ -680,8 +680,8 @@ instance PerfectSpace.not_isolated
   body: perfectSpace_iff_forall_not_isolated.mp ‹_› x
 
 中文:
-实例 PerfectSpace.not_isolated
-  签名: [PerfectSpace X] (x : X)
+实例 完美空间.not_isolated
+  签名: [完美空间 X] (x : X)
   定义体: perfectSpace_iff_forall_not_isolated.mp ‹_› x
 
 Depends on / 依赖: perfectSpace_iff_forall_not_isolated, perfectSpace_iff_forall_not_isolated.mp

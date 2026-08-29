@@ -63,9 +63,9 @@ class PolishSpace
   (no additional axioms)
 
 中文:
-类 PolishSpace
-  参数: (α : 类型) [h : TopologicalSpace α]
-  继承: SecondCountableTopology α, IsCompletelyMetrizableSpace α
+类 Polish空间
+  参数: (α : 类型) [h : 拓扑空间 α]
+  继承: 第二可数拓扑 α, 是余mpletelyMetrizable空间 α
   (无附加公理)
 -/
 class PolishSpace (α : Type*) [h : TopologicalSpace α] : Prop
@@ -83,8 +83,8 @@ instance [TopologicalSpace
   constructor
 
 中文:
-实例 [TopologicalSpace
-  签名: α] [SeparableSpace α] [IsCompletelyMetrizableSpace α] :
+实例 [拓扑空间
+  签名: α] [可分空间 α] [是余mpletelyMetrizable空间 α] :
   定义体: by
   let := upgradeIsCompletelyMetrizable α
   have := UniformSpace.secondCountable_of_separable α
@@ -110,8 +110,8 @@ theorem exists_nat_nat_continuous_surjective
   exists_nat_nat_continuous_surjective_of_completeSpace α
 
 中文:
-定理 exists_nat_nat_continuous_surjective
-  结论: (α : 类型) [TopologicalSpace α] [PolishSpace α]
+定理 存在_nat_nat_continuous_surjective
+  结论: (α : 类型) [拓扑空间 α] [Polish空间 α]
   证明: letI := upgradeIsCompletelyMetrizable α
   exists_nat_nat_continuous_surjective_of_completeSpace α
 
@@ -137,8 +137,8 @@ theorem _root_.Topology.IsClosedEmbedding.polishSpace
 
 
 中文:
-定理 _root_.Topology.IsClosedEmbedding.polishSpace
-  结论: [TopologicalSpace α] [TopologicalSpace β]
+定理 _root_.拓扑.是闭嵌入.polishSpace
+  结论: [拓扑空间 α] [拓扑空间 β]
   证明: by
   let := upgradeIsCompletelyMetrizable β
   let : MetricSpace α := hf.isEmbedding.comapMetricSpace f
@@ -169,8 +169,8 @@ theorem _root_.Equiv.polishSpace_induced
   (f.toHomeomorphOfIsInducing ⟨rfl⟩).isClosedEmbedding.polishSpace
 
 中文:
-定理 _root_.Equiv.polishSpace_induced
-  条件: [t : TopologicalSpace β] [PolishSpace β] (f : α ≃ β)
+定理 _root_.等价.polishSpace_induced
+  条件: [t : 拓扑空间 β] [Polish空间 β] (f : α ≃ β)
   证明: letI : TopologicalSpace α := t.induced f
   (f.toHomeomorphOfIsInducing ⟨rfl⟩).isClosedEmbedding.polishSpace
 
@@ -190,8 +190,8 @@ theorem _root_.IsClosed.polishSpace
   proof: hs.isClosedEmbedding_subtypeVal.polishSpace
 
 中文:
-定理 _root_.IsClosed.polishSpace
-  结论: [TopologicalSpace α] [PolishSpace α] {s : Set α}
+定理 _root_.是闭集.polishSpace
+  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
   证明: hs.isClosedEmbedding_subtypeVal.polishSpace
 
 Depends on / 依赖: hs.isClosedEmbedding_subtypeVal.polishSpace, isClosedEmbedding_subtypeVal, polishSpace
@@ -215,7 +215,7 @@ theorem _root_.CompletePseudometrizable.iInf
 
 中文:
 定理 _root_.CompletePseudometrizable.iInf
-  结论: {ι : 类型} [Countable ι]
+  结论: {ι : 类型} [可数 ι]
   证明: by
   choose u hcomp hcount hut using ht
   obtain rfl : t = fun i => (u i).toTopologicalSpace := (funext hut).symm
@@ -251,7 +251,7 @@ theorem iInf
 
 中文:
 定理 iInf
-  结论: {ι : 类型} [Countable ι] {t : ι -> TopologicalSpace α}
+  结论: {ι : 类型} [可数 ι] {t : ι -> 拓扑空间 α}
   证明: by
   rcases ht₀ with ⟨i₀, hi₀⟩
   rcases CompletePseudometrizable.iInf ⟨t i₀, letI := t i₀; haveI := ht i₀; inferInstance, hi₀⟩
@@ -285,8 +285,8 @@ theorem exists_polishSpace_forall_le
 .iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ Option.forall.2 ⟨p, h'm⟩⟩
 
 中文:
-定理 exists_polishSpace_forall_le
-  结论: {ι : 类型} [Countable ι] [t : TopologicalSpace α]
+定理 存在_polishSpace_对任意_le
+  结论: {ι : 类型} [可数 ι] [t : 拓扑空间 α]
   证明: ⟨⨅ i : Option ι, i.elim t m, fun i => iInf_le _ (some i), iInf_le _ none,
 .iInf ⟨none, Option.forall.2 ⟨le_rfl, hm⟩⟩ Option.forall.2 ⟨p, h'm⟩⟩
 
@@ -309,7 +309,7 @@ instance :
 
 中文:
 实例 :
-  签名: PolishSpace ENN实数
+  签名: Polish空间 广义非负实数
   定义体: ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace
 
 Depends on / 依赖: ENNReal, ENNReal.orderIsoUnitIntervalBirational.toHomeomorph.isClosedEmbedding.polishSpace, isClosedEmbedding, orderIsoUnitIntervalBirational, polishSpace, toHomeomorph
@@ -342,7 +342,7 @@ definition CompleteCopy
 
 中文:
 定义 CompleteCopy
-  签名: {α : 类型} [MetricSpace α] (s : Opens α)
+  签名: {α : 类型} [度量空间 α] (s : Opens α)
   定义体: s
 -/
 def CompleteCopy {α : Type*} [MetricSpace α] (s : Opens α) : Type _ := s
@@ -414,7 +414,7 @@ instance :
 
 中文:
 实例 :
-  签名: TopologicalSpace (CompleteCopy s)
+  签名: 拓扑空间 (CompleteCopy s)
   定义体: inferInstanceAs (TopologicalSpace s)
 
 Depends on / 依赖: TopologicalSpace
@@ -429,8 +429,8 @@ instance [SecondCountableTopology
   body: inferInstanceAs (SecondCountableTopology s)
 
 中文:
-实例 [SecondCountableTopology
-  签名: α] : SecondCountableTopology (CompleteCopy s)
+实例 [第二可数拓扑
+  签名: α] : 第二可数拓扑 (CompleteCopy s)
   定义体: inferInstanceAs (SecondCountableTopology s)
 
 Depends on / 依赖: SecondCountableTopology
@@ -447,7 +447,7 @@ instance :
 
 中文:
 实例 :
-  签名: T0Space (CompleteCopy s)
+  签名: T0空间 (CompleteCopy s)
   定义体: inferInstanceAs (T0Space s)
 
 Depends on / 依赖: T0Space
@@ -470,7 +470,7 @@ instance instMetricSpace
 
 中文:
 实例 instMetricSpace
-  签名: : MetricSpace (CompleteCopy s)
+  签名: : 度量空间 (CompleteCopy s)
   定义体: by
   refine @MetricSpace.ofT0PseudoMetricSpace (CompleteCopy s)
     (.ofDistTopology dist (fun _ => ?_) (fun _ _ => ?_) (fun x y z => ?_) fun t => ?_) _
@@ -521,7 +521,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace α]
+  签名: [完备空间 α]
   定义体: by
   refine Metric.complete_of_convergent_controlled_sequences ((1 / 2) ^ ·) (by simp) fun u hu => ?_
   have A : CauchySeq fun n => (u n).1 := by
@@ -572,8 +572,8 @@ theorem _root_.IsOpen.polishSpace
   exact inferInstanceAs (PolishSpace s.CompleteCopy)
 
 中文:
-定理 _root_.IsOpen.polishSpace
-  结论: {α : 类型} [TopologicalSpace α] [PolishSpace α] {s : Set α}
+定理 _root_.是开集.polishSpace
+  结论: {α : 类型} [拓扑空间 α] [Polish空间 α] {s : 集合 α}
   证明: by
   let := upgradeIsCompletelyMetrizable α
   lift s to Opens α using hs
@@ -605,7 +605,7 @@ definition IsClopenable
 
 中文:
 定义 IsClopenable
-  签名: [t : TopologicalSpace α] (s : Set α)
+  签名: [t : 拓扑空间 α] (s : 集合 α)
   定义体: exists t' : TopologicalSpace α, t' <= t ∧ @PolishSpace α t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s
 
 Depends on / 依赖: IsClosed, IsOpen, PolishSpace, TopologicalSpace
@@ -628,8 +628,8 @@ theorem _root_.IsClosed.isClopenable
   let 
 
 中文:
-定理 _root_.IsClosed.isClopenable
-  结论: [TopologicalSpace α] [PolishSpace α] {s : Set α}
+定理 _root_.是闭集.isClopenable
+  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
   证明: by
   /- Both sets `s` and `sᶜ` admit a Polish topology. So does their disjoint union `s ⊕ sᶜ`.
     Pulling back this topology by the canonical bijection with `α` gives the desired Polish
@@ -670,7 +670,7 @@ theorem IsClopenable.compl
 
 中文:
 定理 IsClopenable.compl
-  条件: [TopologicalSpace α] {s : Set α} (hs : IsClopenable s)
+  条件: [拓扑空间 α] {s : 集合 α} (hs : IsClopenable s)
   证明: by
   rcases hs with ⟨t, t_le, t_polish, h, h'⟩
   exact ⟨t, t_le, t_polish, @IsOpen.isClosed_compl α t s h', @IsClosed.isOpen_compl α t s h⟩
@@ -692,8 +692,8 @@ theorem _root_.IsOpen.isClopenable
   simpa using hs.isClosed_compl.isClopenable.compl
 
 中文:
-定理 _root_.IsOpen.isClopenable
-  结论: [TopologicalSpace α] [PolishSpace α] {s : Set α}
+定理 _root_.是开集.isClopenable
+  结论: [拓扑空间 α] [Polish空间 α] {s : 集合 α}
   证明: by
   simpa using hs.isClosed_compl.isClopenable.compl
 
@@ -722,7 +722,7 @@ theorem IsClopenable.iUnion
 
 中文:
 定理 IsClopenable.iUnion
-  结论: [t : TopologicalSpace α] [PolishSpace α] {s : 自然数 -> Set α}
+  结论: [t : 拓扑空间 α] [Polish空间 α] {s : 自然数 -> 集合 α}
   证明: by
   choose m mt m_polish _ m_open using hs
   obtain ⟨t', t'm, -, t'_polish⟩ :

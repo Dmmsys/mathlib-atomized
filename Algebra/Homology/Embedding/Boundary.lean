@@ -73,7 +73,7 @@ lemma boundaryGE
 
 中文:
 引理 boundaryGE
-  条件: {i' : ι'} {j : ι} (hj : c'.Rel i' (e.f j)) (hi' : 对任意 i, e.f i != i')
+  条件: {i' : ι'} {j : ι} (hj : c'.关系 i' (e.f j)) (hi' : 对任意 i, e.f i != i')
   证明: by
   constructor
   · simpa only [c'.prev_eq' hj] using hj
@@ -105,7 +105,7 @@ lemma not_boundaryGE_next
 
 中文:
 引理 not_boundaryGE_next
-  条件: [e.IsRelIff] {j k : ι} (hk : c.Rel j k)
+  条件: [e.是RelIff] {j k : ι} (hk : c.关系 j k)
   证明: by
   dsimp [BoundaryGE]
   simp only [not_and, not_forall, not_not]
@@ -135,7 +135,7 @@ lemma not_boundaryGE_next'
 
 中文:
 引理 not_boundaryGE_next'
-  条件: [e.IsRelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : c.next j = k)
+  条件: [e.是RelIff] {j k : ι} (hj : ¬ e.BoundaryGE j) (hk : c.next j = k)
   证明: by
   by_cases hjk : c.Rel j k
   · exact e.not_boundaryGE_next hjk
@@ -163,7 +163,7 @@ lemma BoundaryGE.notMem
 
 中文:
 引理 BoundaryGE.notMem
-  结论: {j : ι} (hj : e.BoundaryGE j) {i' : ι'} (hi' : c'.Rel i' (e.f j))
+  结论: {j : ι} (hj : e.BoundaryGE j) {i' : ι'} (hi' : c'.关系 i' (e.f j))
   证明: fun ha =>
   hj.2 a (by simpa only [ha] using hi')
 -/
@@ -188,7 +188,7 @@ lemma prev_f_of_not_boundaryGE
 
 中文:
 引理 prev_f_of_not_boundaryGE
-  结论: [e.IsRelIff] {i j : ι} (hij : c.prev j = i)
+  结论: [e.是RelIff] {i j : ι} (hij : c.prev j = i)
   证明: by
   by_cases hij' : c.Rel i j
   · exact c'.prev_eq' (by simpa only [e.rel_iff] using hij')
@@ -229,8 +229,8 @@ lemma BoundaryGE.false_of_isTruncLE
 
 中文:
 引理 BoundaryGE.false_of_isTruncLE
-  条件: {j : ι} (hj : e.BoundaryGE j) [e.IsTruncLE]
-  结论: False
+  条件: {j : ι} (hj : e.BoundaryGE j) [e.是TruncLE]
+  结论: 假
   证明: by
   obtain ⟨i, hi⟩ := e.mem_prev hj.1
   exact hj.2 i (by simpa only [hi] using hj.1)
@@ -272,7 +272,7 @@ lemma boundaryLE
 
 中文:
 引理 boundaryLE
-  条件: {k' : ι'} {j : ι} (hj : c'.Rel (e.f j) k') (hk' : 对任意 i, e.f i != k')
+  条件: {k' : ι'} {j : ι} (hj : c'.关系 (e.f j) k') (hk' : 对任意 i, e.f i != k')
   证明: by
   constructor
   · simpa only [c'.next_eq' hj] using hj
@@ -304,7 +304,7 @@ lemma not_boundaryLE_prev
 
 中文:
 引理 not_boundaryLE_prev
-  条件: [e.IsRelIff] {i j : ι} (hi : c.Rel i j)
+  条件: [e.是RelIff] {i j : ι} (hi : c.关系 i j)
   证明: by
   dsimp [BoundaryLE]
   simp only [not_and, not_forall, not_not]
@@ -334,7 +334,7 @@ lemma not_boundaryLE_prev'
 
 中文:
 引理 not_boundaryLE_prev'
-  条件: [e.IsRelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : c.prev j = i)
+  条件: [e.是RelIff] {i j : ι} (hj : ¬ e.BoundaryLE j) (hk : c.prev j = i)
   证明: by
   by_cases hij : c.Rel i j
   · exact e.not_boundaryLE_prev hij
@@ -362,7 +362,7 @@ lemma BoundaryLE.notMem
 
 中文:
 引理 BoundaryLE.notMem
-  结论: {j : ι} (hj : e.BoundaryLE j) {k' : ι'} (hk' : c'.Rel (e.f j) k')
+  结论: {j : ι} (hj : e.BoundaryLE j) {k' : ι'} (hk' : c'.关系 (e.f j) k')
   证明: fun ha =>
   hj.2 a (by simpa only [ha] using hk')
 -/
@@ -387,7 +387,7 @@ lemma next_f_of_not_boundaryLE
 
 中文:
 引理 next_f_of_not_boundaryLE
-  结论: [e.IsRelIff] {j k : ι} (hjk : c.next j = k)
+  结论: [e.是RelIff] {j k : ι} (hjk : c.next j = k)
   证明: by
   by_cases hjk' : c.Rel j k
   · exact c'.next_eq' (by simpa only [e.rel_iff] using hjk')
@@ -434,7 +434,7 @@ lemma next_f
 
 中文:
 引理 next_f
-  条件: [e.IsTruncGE] {j k : ι} (hjk : c.next j = k)
+  条件: [e.是TruncGE] {j k : ι} (hjk : c.next j = k)
   结论: c'.next (e.f j) = e.f k
   证明: by
   by_cases hj : c'.Rel (e.f j) (c'.next (e.f j))
@@ -471,7 +471,7 @@ lemma prev_f
 
 中文:
 引理 prev_f
-  条件: [e.IsTruncLE] {i j : ι} (hij : c.prev j = i)
+  条件: [e.是TruncLE] {i j : ι} (hij : c.prev j = i)
   结论: c'.prev (e.f j) = e.f i
   证明: e.op.next_f hij
 
@@ -494,8 +494,8 @@ lemma BoundaryLE.false_of_isTruncGE
 
 中文:
 引理 BoundaryLE.false_of_isTruncGE
-  条件: {j : ι} (hj : e.BoundaryLE j) [e.IsTruncGE]
-  结论: False
+  条件: {j : ι} (hj : e.BoundaryLE j) [e.是TruncGE]
+  结论: 假
   证明: by
   obtain ⟨k, hk⟩ := e.mem_next hj.1
   exact hj.2 k (by simpa only [hk] using hj.1)
@@ -568,7 +568,7 @@ lemma boundaryGE_embeddingUpIntGE_iff
       lia
 
 中文:
-引理 boundaryGE_embeddingUpIntGE_iff
+引理 boundaryGE_embeddingUp整数GE_iff
   条件: (p : 整数) (n : 自然数)
   证明: by
   constructor
@@ -626,7 +626,7 @@ lemma boundaryLE_embeddingUpIntLE_iff
       lia
 
 中文:
-引理 boundaryLE_embeddingUpIntLE_iff
+引理 boundaryLE_embeddingUp整数LE_iff
   条件: (p : 整数) (n : 自然数)
   证明: by
   constructor

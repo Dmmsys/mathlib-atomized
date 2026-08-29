@@ -36,7 +36,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preadditive Cᵒᵖ
+  签名: 预加性 Cᵒᵖ
   定义体: fast_instance% Equiv.addCommGroup (opEquiv X Y)
   add_comp _ _ _ f f' g := Quiver.Hom.unop_inj (Preadditive.comp_add _ _ _ g.unop f.unop f'.unop)
   comp_add _ _ _ f g g' := Quiver.Hom.unop_inj (Preadditive.add_comp _ _ _ g.unop g'.unop f.unop)
@@ -300,7 +300,7 @@ theorem unop_sum
 
 中文:
 定理 unop_sum
-  条件: (X Y : Cᵒᵖ) {ι : 类型} (s : Finset ι) (f : ι -> (X ⟶ Y))
+  条件: (X Y : Cᵒᵖ) {ι : 类型} (s : 有限集 ι) (f : ι -> (X ⟶ Y))
   证明: map_sum (unopHom X Y) _ _
 
 Depends on / 依赖: map_sum, unopHom
@@ -344,7 +344,7 @@ theorem op_sum
 
 中文:
 定理 op_sum
-  条件: (X Y : C) {ι : 类型} (s : Finset ι) (f : ι -> (X ⟶ Y))
+  条件: (X Y : C) {ι : 类型} (s : 有限集 ι) (f : ι -> (X ⟶ Y))
   证明: map_sum (opHom X Y) _ _
 
 Depends on / 依赖: map_sum
@@ -369,7 +369,7 @@ definition Preadditive.homSelfLinearEquivEndMulOpposite
   right_inv := by cat_disch
 
 中文:
-定义 Preadditive.homSelfLinearEquivEndMulOpposite
+定义 预加性.homSelfLinearEquivEndMulOpposite
   签名: (G : C)
   定义体: ⟨f⟩
   map_add' := by cat_disch
@@ -396,8 +396,8 @@ instance Functor.op_additive
   signature: (F : C ⥤ D) [F.Additive]
 
 中文:
-实例 Functor.op_additive
-  签名: (F : C ⥤ D) [F.Additive]
+实例 函子.op_additive
+  签名: (F : C ⥤ D) [F.加性]
 -/
 instance Functor.op_additive (F : C ⥤ D) [F.Additive] : F.op.Additive where
 
@@ -409,8 +409,8 @@ instance Functor.rightOp_additive
   signature: (F : Cᵒᵖ ⥤ D) [F.Additive]
 
 中文:
-实例 Functor.rightOp_additive
-  签名: (F : Cᵒᵖ ⥤ D) [F.Additive]
+实例 函子.rightOp_additive
+  签名: (F : Cᵒᵖ ⥤ D) [F.加性]
 -/
 instance Functor.rightOp_additive (F : Cᵒᵖ ⥤ D) [F.Additive] : F.rightOp.Additive where
 
@@ -422,8 +422,8 @@ instance Functor.leftOp_additive
   signature: (F : C ⥤ Dᵒᵖ) [F.Additive]
 
 中文:
-实例 Functor.leftOp_additive
-  签名: (F : C ⥤ Dᵒᵖ) [F.Additive]
+实例 函子.leftOp_additive
+  签名: (F : C ⥤ Dᵒᵖ) [F.加性]
 -/
 instance Functor.leftOp_additive (F : C ⥤ Dᵒᵖ) [F.Additive] : F.leftOp.Additive where
 
@@ -435,8 +435,8 @@ instance Functor.unop_additive
   signature: (F : Cᵒᵖ ⥤ Dᵒᵖ) [F.Additive]
 
 中文:
-实例 Functor.unop_additive
-  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [F.Additive]
+实例 函子.unop_additive
+  签名: (F : Cᵒᵖ ⥤ Dᵒᵖ) [F.加性]
 -/
 instance Functor.unop_additive (F : Cᵒᵖ ⥤ Dᵒᵖ) [F.Additive] : F.unop.Additive where
 

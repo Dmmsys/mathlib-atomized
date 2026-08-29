@@ -103,7 +103,7 @@ lemma isLimit_toPreOneHypercover_type_iff
 
 中文:
 引理 isLimit_toPreOneHypercover_type_iff
-  结论: (E : PreZeroHypercover.{w} S) [E.HasPullbacks]
+  结论: (E : PreZeroHypercover.{w} S) [E.有Pullbacks]
   证明: by
   rw [Multifork.isLimit_types_iff]; rw [Presieve.isSheafFor_ofArrows_iff_bijective_toCompabible]; rw [← Function.Bijective.of_comp_iff' (E.sectionsEquivOfHasPullbacks F).symm.bijective]
   rfl
@@ -135,8 +135,8 @@ lemma Precoverage.ZeroHypercover.Hom.isSheafFor_iff
   
 
 中文:
-引理 Precoverage.ZeroHypercover.Hom.isSheafFor_iff
-  结论: [Limits.HasPullbacks C] {K : Precoverage C}
+引理 Precoverage.ZeroHypercover.态射.isSheafFor_iff
+  结论: [Limits.有Pullbacks C] {K : Precoverage C}
   证明: by
   rw [Presieve.isSheafFor_iff_generate]
   apply Presieve.isSheafFor_subsieve_aux (S := .generate (.ofArrows 𝒰.X 𝒰.f))
@@ -182,7 +182,7 @@ structure IsStronglySeparatedFor
     - isSeparatedFor_sieve₁(⦃i j) : E.I₀⦄ ⦃W : C⦄ (p₁ : W ⟶ E.X i) (p₂ : W ⟶ E.X j) (h : p₁ ≫ E.f i = p₂ ≫ E.f j) : (E.sieve₁ p₁ p₂).arrows.IsSeparatedFor F
 
 中文:
-结构 IsStronglySeparatedFor
+结构 是StronglySeparatedFor
   参数: {X : C} (E : PreOneHypercover X) (F : Cᵒᵖ ⥤ 类型)
   公理与运算 (2 个):
     - isSeparatedFor_presieve₀ : E.presieve₀.IsSeparatedFor F
@@ -205,7 +205,7 @@ structure IsStronglySheafFor
     - isSeparatedFor_sieve₁(⦃i j) : E.I₀⦄ ⦃W : C⦄ (p₁ : W ⟶ E.X i) (p₂ : W ⟶ E.X j) (h : p₁ ≫ E.f i = p₂ ≫ E.f j) : (E.sieve₁ p₁ p₂).arrows.IsSeparatedFor F
 
 中文:
-结构 IsStronglySheafFor
+结构 是StronglySheafFor
   参数: {X : C} (E : PreOneHypercover X) (F : Cᵒᵖ ⥤ 类型)
   公理与运算 (2 个):
     - isSheafFor_presieve₀ : E.presieve₀.IsSheafFor F
@@ -227,8 +227,8 @@ lemma IsStronglySheafFor.isStronglySeparatedFor
   isSeparatedFor_sieve₁ _ _ _ p₁ p₂ w := h.isSeparatedFor_sieve₁ p₁ p₂ w
 
 中文:
-引理 IsStronglySheafFor.isStronglySeparatedFor
-  条件: (h : E.IsStronglySheafFor F)
+引理 是StronglySheafFor.isStronglySeparatedFor
+  条件: (h : E.是StronglySheafFor F)
   证明: h.isSheafFor_presieve₀.isSeparatedFor
   isSeparatedFor_sieve₁ _ _ _ p₁ p₂ w := h.isSeparatedFor_sieve₁ p₁ p₂ w
 
@@ -253,8 +253,8 @@ lemma IsStronglySeparatedFor.arrowsCompatible
   simp [hc]
 
 中文:
-引理 IsStronglySeparatedFor.arrowsCompatible
-  结论: (h : E.IsStronglySeparatedFor F)
+引理 是StronglySeparatedFor.arrowsCompatible
+  结论: (h : E.是StronglySeparatedFor F)
   证明: by
   rintro i₁ i₂ Z g₁ g₂ heq
   refine (h.isSeparatedFor_sieve₁ g₁ g₂ heq).ext fun W f ⟨T, u, h₁, h₂⟩ => ?_
@@ -286,8 +286,8 @@ definition IsStronglySheafFor.amalgamate
 @[simp]
 
 中文:
-定义 IsStronglySheafFor.amalgamate
-  签名: (h : E.IsStronglySheafFor F)
+定义 是StronglySheafFor.amalgamate
+  签名: (h : E.是StronglySheafFor F)
   定义体: (h.isSheafFor_presieve₀).amalgamate _
     ((h.isStronglySeparatedFor.arrowsCompatible x hc).familyOfElements_compatible)
 
@@ -314,8 +314,8 @@ lemma IsStronglySheafFor.map_amalgamate
   simp
 
 中文:
-引理 IsStronglySheafFor.map_amalgamate
-  结论: (h : E.IsStronglySheafFor F)
+引理 是StronglySheafFor.map_amalgamate
+  结论: (h : E.是StronglySheafFor F)
   证明: by
   rw [amalgamate]; rw [Presieve.IsSheafFor.valid_glue _ _ _ ⟨i⟩]
   simp
@@ -348,8 +348,8 @@ definition IsStronglySheafFor.isLimitMultifork
       ext; exact map_amalgamate _ _ _
 
 中文:
-定义 IsStronglySheafFor.isLimitMultifork
-  签名: (h : E.IsStronglySheafFor F)
+定义 是StronglySheafFor.isLimitMultifork
+  签名: (h : E.是StronglySheafFor F)
   定义体: by
   refine Nonempty.some ?_
   rw [Multifork.isLimit_types_iff]
@@ -384,8 +384,8 @@ lemma IsStronglySheafFor.isSheafFor_sieve_of_pullback
     simp only [← comp_apply, ← Functor
 
 中文:
-引理 IsStronglySheafFor.isSheafFor_sieve_of_pullback
-  结论: (h₁ : E.IsStronglySheafFor F)
+引理 是StronglySheafFor.isSheafFor_sieve_of_pullback
+  结论: (h₁ : E.是StronglySheafFor F)
   证明: by
   intro t ht
   choose s hs huniq using fun i => H i (t.pullback (E.f i)) (ht.pullback (E.f i))
@@ -440,8 +440,8 @@ lemma IsStronglySheafFor.isSheafFor_of_pullback
   exact h₁.isSheafFor_sieve_of_pullback h₂ H H'
 
 中文:
-引理 IsStronglySheafFor.isSheafFor_of_pullback
-  结论: (h₁ : E.IsStronglySheafFor F)
+引理 是StronglySheafFor.isSheafFor_of_pullback
+  结论: (h₁ : E.是StronglySheafFor F)
   证明: by
   rw [Presieve.isSheafFor_iff_generate]
   exact h₁.isSheafFor_sieve_of_pullback h₂ H H'
@@ -478,8 +478,8 @@ lemma isStronglySeparatedFor
 
 中文:
 引理 isStronglySeparatedFor
-  条件: (hf : Presieve.IsSeparated J F)
-  结论: E.IsStronglySeparatedFor F where
+  条件: (hf : Presieve.是分离 J F)
+  结论: E.是StronglySeparatedFor F where
   证明: by
     rw [Presieve.isSeparatedFor_iff_generate]
     exact hf _ E.mem₀
@@ -507,8 +507,8 @@ lemma isStronglySheafFor
 
 中文:
 引理 isStronglySheafFor
-  条件: (hf : Presieve.IsSheaf J F)
-  结论: E.IsStronglySheafFor F where
+  条件: (hf : Presieve.是层 J F)
+  结论: E.是StronglySheafFor F where
   证明: by
     rw [Presieve.isSheafFor_iff_generate]
     exact hf _ E.mem₀
@@ -536,7 +536,7 @@ lemma isSheafFor_sieve_of_pullback
 
 中文:
 引理 isSheafFor_sieve_of_pullback
-  结论: (hF : Presieve.IsSheaf J F) {S : Sieve X}
+  结论: (hF : Presieve.是层 J F) {S : 筛 X}
   证明: by
   refine (E.isStronglySheafFor hF).isSheafFor_sieve_of_pullback ?_ h₁ h₂
   intro Y f
@@ -565,7 +565,7 @@ lemma isSheafFor_of_pullback
 
 中文:
 引理 isSheafFor_of_pullback
-  结论: (hF : Presieve.IsSheaf J F) {R : Presieve X}
+  结论: (hF : Presieve.是层 J F) {R : Presieve X}
   证明: by
   rw [Presieve.isSheafFor_iff_generate]
   exact E.isSheafFor_sieve_of_pullback hF h₁ h₂

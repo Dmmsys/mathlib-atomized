@@ -113,7 +113,7 @@ theorem Algebra.Transcendental.rank_eq_cardinalMk
   simpa [← hx.lift_cardinalMk_eq_max_lift] using hx.lift_rank_eq_max_lift
 
 中文:
-定理 Algebra.Transcendental.rank_eq_cardinalMk
+定理 代数.超越.rank_eq_cardinalMk
   证明: by
   obtain ⟨ι, x, hx⟩ := exists_isTranscendenceBasis' F E
   have := hx.nonempty_iff_transcendental.2 ‹_›
@@ -142,7 +142,7 @@ theorem IntermediateField.rank_sup_le
   have : Algebra.Transcendental F ↥(A ⊔ B) := .rin
 
 中文:
-定理 IntermediateField.rank_sup_le
+定理 中间域.rank_sup_le
   证明: by
   by_cases hA : Algebra.IsAlgebraic F A
   · exact rank_sup_le_of_isAlgebraic A B (Or.inl hA)

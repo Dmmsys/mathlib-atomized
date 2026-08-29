@@ -39,8 +39,8 @@ class IsStableUnderRetracts
     - of_retract({X Y Z W : C} {f : X ⟶ Y} {g : Z ⟶ W} (h : RetractArrow f g) (hg : P g)) : P f
 
 中文:
-类 IsStableUnderRetracts
-  参数: (P : Morphism命题erty C)
+类 是StableUnderRetracts
+  参数: (P : MorphismProperty C)
   公理与运算 (1 个):
     - of_retract({X Y Z W : C} {f : X ⟶ Y} {g : Z ⟶ W} (h : RetractArrow f g) (hg : P g)) : P f
 -/
@@ -57,7 +57,7 @@ lemma of_retract
 
 中文:
 引理 of_retract
-  结论: {P : Morphism命题erty C} [P.IsStableUnderRetracts]
+  结论: {P : MorphismProperty C} [P.是StableUnderRetracts]
   证明: IsStableUnderRetracts.of_retract h hg
 
 Depends on / 依赖: IsStableUnderRetracts, IsStableUnderRetracts.of_retract, of_retract
@@ -82,8 +82,8 @@ instance IsStableUnderRetracts.monomorphisms
     rw [← cancel_mono h.i.left]; rw [← cancel_mono g]; rw [Category.assoc]; rw [Category.assoc]; rw [h.i_w]; rw [reassoc_of% w]⟩
 
 中文:
-实例 IsStableUnderRetracts.monomorphisms
-  签名: : (monomorphisms C).IsStableUnderRetracts where
+实例 是StableUnderRetracts.monomorphisms
+  签名: : (monomorphisms C).是StableUnderRetracts where
   定义体: ⟨fun α β w => by
     rw [← cancel_mono h.i.left]; rw [← cancel_mono g]; rw [Category.assoc]; rw [Category.assoc]; rw [h.i_w]; rw [reassoc_of% w]⟩
 
@@ -104,8 +104,8 @@ instance IsStableUnderRetracts.epimorphisms
     rw [← cancel_epi h.r.right]; rw [← cancel_epi g]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← h.r_w]; rw [Category.assoc]; rw [Category.assoc]; rw [w]⟩
 
 中文:
-实例 IsStableUnderRetracts.epimorphisms
-  签名: : (epimorphisms C).IsStableUnderRetracts where
+实例 是StableUnderRetracts.epimorphisms
+  签名: : (epimorphisms C).是StableUnderRetracts where
   定义体: ⟨fun α β w => by
     rw [← cancel_epi h.r.right]; rw [← cancel_epi g]; rw [← Category.assoc]; rw [← Category.assoc]; rw [← h.r_w]; rw [Category.assoc]; rw [Category.assoc]; rw [w]⟩
 
@@ -128,8 +128,8 @@ instance IsStableUnderRetracts.isomorphisms
     · rw [Category.assoc, Category.assoc, h.r_w, IsIso.inv_hom_id_assoc, h.retract_right]
 
 中文:
-实例 IsStableUnderRetracts.isomorphisms
-  签名: : (isomorphisms C).IsStableUnderRetracts where
+实例 是StableUnderRetracts.isomorphisms
+  签名: : (isomorphisms C).是StableUnderRetracts where
   定义体: by
     refine ⟨h.i.right ≫ inv g ≫ h.r.left, ?_, ?_⟩
     · rw [← h.i_w_assoc, IsIso.hom_inv_id_assoc, h.retract_left]
@@ -166,7 +166,7 @@ definition retracts
 
 中文:
 定义 retracts
-  签名: (P : Morphism命题erty C)
+  签名: (P : MorphismProperty C)
   定义体: fun _ _ f => exists (Z W : C) (g : Z ⟶ W) (_ : RetractArrow f g), P g
 
 Depends on / 依赖: RetractArrow
@@ -187,7 +187,7 @@ lemma le_retracts
 
 中文:
 引理 le_retracts
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   结论: P <= P.retracts
   证明: by
   intro X Y f hf
@@ -209,7 +209,7 @@ lemma retracts_monotone
 
 中文:
 引理 retracts_monotone
-  结论: Monotone (retracts (C := C))
+  结论: 递增 (retracts (C := C))
   证明: by
   intro _ _ h _ _ _ ⟨_, _, _, hg, hg'⟩
   exact ⟨_, _, _, hg, h _ hg'⟩
@@ -234,7 +234,7 @@ lemma isStableUnderRetracts_iff_retracts_le
 
 中文:
 引理 isStableUnderRetracts_iff_retracts_le
-  条件: (P : Morphism命题erty C)
+  条件: (P : MorphismProperty C)
   证明: by
   rw [isStableUnderRetracts_iff]
   constructor
@@ -267,7 +267,7 @@ lemma retracts_le
 
 中文:
 引理 retracts_le
-  条件: (P : Morphism命题erty C) [P.IsStableUnderRetracts]
+  条件: (P : MorphismProperty C) [P.是StableUnderRetracts]
   证明: by
   rwa [← isStableUnderRetracts_iff_retracts_le]
 
@@ -294,7 +294,7 @@ lemma retracts_le_iff
 
 中文:
 引理 retracts_le_iff
-  条件: {P Q : Morphism命题erty C} [Q.IsStableUnderRetracts]
+  条件: {P Q : MorphismProperty C} [Q.是StableUnderRetracts]
   证明: by
   constructor
   · exact le_trans P.le_retracts

@@ -101,8 +101,8 @@ instance [Inhabited
   signature: α] : forall b, Inhabited (Lists' α b)
 
 中文:
-实例 [Inhabited
-  签名: α] : 对任意 b, Inhabited (Lists' α b)
+实例 [可居
+  签名: α] : 对任意 b, 可居 (Lists' α b)
 -/
 instance [Inhabited α] : forall b, Inhabited (Lists' α b)
   | true => ⟨nil⟩
@@ -133,7 +133,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : 对任意 {b}, Lists' α b -> List (Lists α)
+  签名: : 对任意 {b}, Lists' α b -> 列表 (Lists α)
 -/
 def toList : forall {b}, Lists' α b -> List (Lists α)
   | _, atom _ => []
@@ -169,7 +169,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: : List (Lists α) -> Lists' α true
+  签名: : 列表 (Lists α) -> Lists' α true
 -/
 def ofList : List (Lists α) -> Lists' α true
   | [] => nil
@@ -189,7 +189,7 @@ theorem to_ofList
 
 中文:
 定理 to_ofList
-  条件: (l : List (Lists α))
+  条件: (l : 列表 (Lists α))
   结论: toList (ofList l) = l
   证明: by induction l <;> simp [*]
 
@@ -252,7 +252,7 @@ definition recOfList
 
 中文:
 定义 recOfList
-  签名: {motive : Lists' α true -> Sort*} (ofList : 对任意 l, motive (ofList l))
+  签名: {motive : Lists' α true -> 类型层*} (ofList : 对任意 l, motive (ofList l))
   定义体: fun l => cast (by simp) ofList (l.toList)
 
 Depends on / 依赖: l.toList, ofList, toList
@@ -274,11 +274,11 @@ inductive Lists.Equiv
     - antisymm: {l₁ l₂ : Lists' α true} : Lists'.Subset l₁ l₂ -> Lists'.Subset l₂ l₁ -> Lists.Equiv ⟨_, l₁⟩ ⟨_, l₂⟩
 
 中文:
-归纳类型 Lists.Equiv
+归纳类型 Lists.等价
   参数: : Lists α -> Lists α -> 命题
   构造子 (2 个):
-    - refl: (l) : Lists.Equiv l l
-    - antisymm: {l₁ l₂ : Lists' α true} : Lists'.Subset l₁ l₂ -> Lists'.Subset l₂ l₁ -> Lists.Equiv ⟨_, l₁⟩ ⟨_, l₂⟩
+    - refl: (l) : Lists.等价 l l
+    - antisymm: {l₁ l₂ : Lists' α true} : Lists'.子集 l₁ l₂ -> Lists'.子集 l₂ l₁ -> Lists.等价 ⟨_, l₁⟩ ⟨_, l₂⟩
 -/
   inductive Lists.Equiv : Lists α -> Lists α -> Prop
     | refl (l) : Lists.Equiv l l
@@ -296,11 +296,11 @@ inductive Lists'.Subset
     - cons: {a a' l l'} : Lists.Equiv a a' -> a' in Lists'.toList l' -> Lists'.Subset l l' -> Lists'.Subset (Lists'.cons a l) l'
 
 中文:
-归纳类型 Lists'.Subset
+归纳类型 Lists'.子集
   参数: : Lists' α true -> Lists' α true -> 命题
   构造子 (2 个):
-    - nil: {l} : Lists'.Subset Lists'.nil l
-    - cons: {a a' l l'} : Lists.Equiv a a' -> a' in Lists'.toList l' -> Lists'.Subset l l' -> Lists'.Subset (Lists'.cons a l) l'
+    - nil: {l} : Lists'.子集 Lists'.nil l
+    - cons: {a a' l l'} : Lists.等价 a a' -> a' in Lists'.toList l' -> Lists'.子集 l l' -> Lists'.子集 (Lists'.cons a l) l'
 -/
   inductive Lists'.Subset : Lists' α true -> Lists' α true -> Prop
     | nil {l} : Lists'.Subset Lists'.nil l
@@ -437,7 +437,7 @@ theorem ofList_subset
 
 中文:
 定理 ofList_subset
-  条件: {l₁ l₂ : List (Lists α)} (h : l₁ subseteq l₂)
+  条件: {l₁ l₂ : 列表 (Lists α)} (h : l₁ subseteq l₂)
   证明: by
   induction l₁ with
   | nil => exact Subset.nil
@@ -469,7 +469,7 @@ theorem Subset.refl
   rw [← Lists'.of_toList l]; exact ofList_subset (List.Subset.refl _)
 
 中文:
-定理 Subset.refl
+定理 子集.refl
   条件: {l : Lists' α true}
   结论: l subseteq l
   证明: by
@@ -631,7 +631,7 @@ definition toList
 
 中文:
 定义 toList
-  签名: : Lists α -> List (Lists α)
+  签名: : Lists α -> 列表 (Lists α)
 -/
 def toList : Lists α -> List (Lists α)
   | ⟨_, l⟩ => l.toList
@@ -662,7 +662,7 @@ definition ofList
 
 中文:
 定义 ofList
-  签名: (l : List (Lists α))
+  签名: (l : 列表 (Lists α))
   定义体: of' (Lists'.ofList l)
 
 Depends on / 依赖: ofList
@@ -681,7 +681,7 @@ theorem isList_toList
 
 中文:
 定理 isList_toList
-  条件: (l : List (Lists α))
+  条件: (l : 列表 (Lists α))
   结论: IsList (ofList l)
   证明: Eq.refl _
 
@@ -701,7 +701,7 @@ theorem to_ofList
 
 中文:
 定理 to_ofList
-  条件: (l : List (Lists α))
+  条件: (l : 列表 (Lists α))
   结论: toList (ofList l) = l
   证明: by simp [ofList, of']
 
@@ -734,7 +734,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Lists α)
+  签名: 可居 (Lists α)
   定义体: ⟨of' Lists'.nil⟩
 -/
 instance : Inhabited (Lists α) :=
@@ -795,7 +795,7 @@ definition inductionMut
 
 中文:
 定义 inductionMut
-  签名: (C : Lists α -> Sort*) (D : Lists' α true -> Sort*)
+  签名: (C : Lists α -> 类型层*) (D : Lists' α true -> 类型层*)
   定义体: by
   suffices forall {b} (l : Lists' α b),
       PProd (C ⟨_, l⟩)
@@ -889,7 +889,7 @@ theorem Equiv.antisymm_iff
   · exact ⟨h₁, h₂⟩
 
 中文:
-定理 Equiv.antisymm_iff
+定理 等价.antisymm_iff
   条件: {l₁ l₂ : Lists' α true}
   结论: of' l₁ ~ of' l₂ ↔ l₁ subseteq l₂ ∧ l₂ subseteq l₁
   证明: by
@@ -944,7 +944,7 @@ theorem Equiv.symm
   obtain - | ⟨h₁, h₂⟩ := h <;> [rfl; exact Equiv.antisymm h₂ h₁]
 
 中文:
-定理 Equiv.symm
+定理 等价.symm
   条件: {l₁ l₂ : Lists α} (h : l₁ ~ l₂)
   结论: l₂ ~ l₁
   证明: by
@@ -968,7 +968,7 @@ theorem Equiv.trans
   · intro l₁ IH l₂ l
 
 中文:
-定理 Equiv.trans
+定理 等价.trans
   结论: 对任意 {l₁ l₂ l₃ : Lists α}, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
   证明: by
   let trans := fun l₁ : Lists α => forall ⦃l₂ l₃⦄, l₁ ~ l₂ -> l₂ ~ l₃ -> l₁ ~ l₃
@@ -1014,7 +1014,7 @@ instance instSetoidLists
 
 中文:
 实例 instSetoidLists
-  签名: : Setoid (Lists α)
+  签名: : 集合等价关系 (Lists α)
   定义体: ⟨(· ~ ·), Equiv.refl, @Equiv.symm _, @Equiv.trans _⟩
 
 Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.trans
@@ -1093,8 +1093,8 @@ definition Equiv.decidable
      
 
 中文:
-定义 Equiv.decidable
-  签名: : 对任意 l₁ l₂ : Lists α, Decidable (l₁ ~ l₂)
+定义 等价.decidable
+  签名: : 对任意 l₁ l₂ : Lists α, 可判定 (l₁ ~ l₂)
   定义体: have : SizeOf.sizeOf l₁ + SizeOf.sizeOf l₂ <
             SizeOf.sizeOf (⟨true, l₁⟩ : Lists α) + SizeOf.sizeOf (⟨true, l₂⟩ : Lists α) := by
           decreasing_tactic
@@ -1143,8 +1143,8 @@ definition Subset.decidable
         Subse
 
 中文:
-定义 Subset.decidable
-  签名: : 对任意 l₁ l₂ : Lists' α true, Decidable (l₁ subseteq l₂)
+定义 子集.decidable
+  签名: : 对任意 l₁ l₂ : Lists' α true, 可判定 (l₁ subseteq l₂)
   定义体: have : sizeOf (⟨b, a⟩ : Lists α) < 1 + 1 + sizeOf a + sizeOf l₁ := by simp [sizeof_pos]
         mem.decidable ⟨b, a⟩ l₂
       haveI :=
@@ -1186,7 +1186,7 @@ definition mem.decidable
 
 中文:
 定义 mem.decidable
-  签名: : 对任意 (a : Lists α) (l : Lists' α true), Decidable (a in l)
+  签名: : 对任意 (a : Lists α) (l : Lists' α true), 可判定 (a in l)
   定义体: have : sizeOf (⟨_, b⟩ : Lists α) < 1 + 1 + sizeOf b + sizeOf l₂ := by simp [sizeof_pos]
         Equiv.decidable a ⟨_, b⟩
       haveI :=
@@ -1290,7 +1290,7 @@ theorem Subset.trans
   proof: subset_def.2 fun _ m₁ => mem_of_subset h₂ mem_of_subset' h₁ m₁
 
 中文:
-定理 Subset.trans
+定理 子集.trans
   条件: {l₁ l₂ l₃ : Lists' α true} (h₁ : l₁ subseteq l₂) (h₂ : l₂ subseteq l₃)
   结论: l₁ subseteq l₃
   证明: subset_def.2 fun _ m₁ => mem_of_subset h₂ mem_of_subset' h₁ m₁
@@ -1348,7 +1348,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Finsets α)
+  签名: 可居 (Finsets α)
   定义体: ⟨∅⟩
 -/
 instance : Inhabited (Finsets α) :=

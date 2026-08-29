@@ -70,7 +70,7 @@ lemma similar_iff_exists_edist_eq
   proof: Iff.rfl
 
 中文:
-引理 similar_iff_exists_edist_eq
+引理 similar_iff_存在_edist_eq
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -94,7 +94,7 @@ lemma similar_iff_exists_pairwise_edist_eq
     · exact h hi
 
 中文:
-引理 similar_iff_exists_pairwise_edist_eq
+引理 similar_iff_存在_pairwise_edist_eq
   证明: by
   rw [similar_iff_exists_edist_eq]
   refine ⟨?_, ?_⟩ <;> rintro ⟨r, hr, h⟩ <;> refine ⟨r, hr, fun i₁ i₂ => ?_⟩
@@ -313,7 +313,7 @@ lemma of_subsingleton_index
 
 中文:
 引理 of_subsingleton_index
-  条件: [Subsingleton ι]
+  条件: [子单例 ι]
   结论: v₁ ∼ v₂
   证明: Congruent.of_subsingleton_index.similar
 
@@ -337,7 +337,7 @@ lemma comp_left
 
 中文:
 引理 comp_left
-  条件: [FunLike F P₁ P₃] [DilationClass F P₁ P₃] (f : F) (h : v₁ ∼ v₂)
+  条件: [函数状 F P₁ P₃] [Dilation类 F P₁ P₃] (f : F) (h : v₁ ∼ v₂)
   证明: .trans ⟨Dilation.ratio f, Dilation.ratio_ne_zero f, fun _ _ => Dilation.edist_eq f _ _⟩ h
 
 Depends on / 依赖: Dilation, Dilation.edist_eq, Dilation.ratio, Dilation.ratio_ne_zero, edist_eq, ratio_ne_zero
@@ -359,7 +359,7 @@ lemma comp_right
 
 中文:
 引理 comp_right
-  条件: [FunLike F P₂ P₃] [DilationClass F P₂ P₃] (f : F) (h : v₁ ∼ v₂)
+  条件: [函数状 F P₂ P₃] [Dilation类 F P₂ P₃] (f : F) (h : v₁ ∼ v₂)
   结论: v₁ ∼ f ∘ v₂
   证明: .symm (h.symm.comp_left f)
 
@@ -384,7 +384,7 @@ lemma comp_left_iff
 
 中文:
 引理 comp_left_iff
-  条件: [FunLike F P₁ P₃] [DilationClass F P₁ P₃] (f : F)
+  条件: [函数状 F P₁ P₃] [Dilation类 F P₁ P₃] (f : F)
   结论: f ∘ v₁ ∼ v₂ ↔ v₁ ∼ v₂
   证明: ⟨.trans .comp_right f (.refl _), .comp_left f⟩
 
@@ -408,7 +408,7 @@ lemma comp_right_iff
 
 中文:
 引理 comp_right_iff
-  条件: [FunLike F P₂ P₃] [DilationClass F P₂ P₃] (f : F)
+  条件: [函数状 F P₂ P₃] [Dilation类 F P₂ P₃] (f : F)
   结论: v₁ ∼ f ∘ v₂ ↔ v₁ ∼ v₂
   证明: by
   rw [similar_comm]; rw [comp_left_iff]; rw [similar_comm]
@@ -440,7 +440,7 @@ lemma comp_isometry_left
 
 中文:
 引理 comp_isometry_left
-  条件: {f : P₁ -> P₃} (hf : Isometry f) (h : v₁ ∼ v₂)
+  条件: {f : P₁ -> P₃} (hf : 等距 f) (h : v₁ ∼ v₂)
   结论: f ∘ v₁ ∼ v₂
   证明: comp_left hf.toDilation h
 
@@ -462,7 +462,7 @@ lemma comp_isometry_right
 
 中文:
 引理 comp_isometry_right
-  条件: {f : P₂ -> P₃} (hf : Isometry f) (h : v₁ ∼ v₂)
+  条件: {f : P₂ -> P₃} (hf : 等距 f) (h : v₁ ∼ v₂)
   结论: v₁ ∼ f ∘ v₂
   证明: comp_right hf.toDilation h
 
@@ -487,7 +487,7 @@ lemma comp_isometry_left_iff
 
 中文:
 引理 comp_isometry_left_iff
-  条件: {f : P₁ -> P₃} (hf : Isometry f)
+  条件: {f : P₁ -> P₃} (hf : 等距 f)
   结论: f ∘ v₁ ∼ v₂ ↔ v₁ ∼ v₂
   证明: comp_left_iff hf.toDilation
 
@@ -510,7 +510,7 @@ lemma comp_isometry_right_iff
 
 中文:
 引理 comp_isometry_right_iff
-  条件: {f : P₂ -> P₃} (hf : Isometry f)
+  条件: {f : P₂ -> P₃} (hf : 等距 f)
   结论: v₁ ∼ f ∘ v₂ ↔ v₁ ∼ v₂
   证明: comp_right_iff hf.toDilation
 
@@ -641,7 +641,7 @@ lemma similar_iff_exists_nndist_eq
   fun _ _ => by { rw [edist_nndist, edist_nndist]; norm_cast }
 
 中文:
-引理 similar_iff_exists_nndist_eq
+引理 similar_iff_存在_nndist_eq
   证明: exists_congr fun _ => and_congr Iff.rfl forall₂_congr
   fun _ _ => by { rw [edist_nndist, edist_nndist]; norm_cast }
 
@@ -663,7 +663,7 @@ lemma similar_iff_exists_pairwise_nndist_eq
   exact_mod_cast Iff.rfl
 
 中文:
-引理 similar_iff_exists_pairwise_nndist_eq
+引理 similar_iff_存在_pairwise_nndist_eq
   证明: by
   simp_rw [similar_iff_exists_pairwise_edist_eq, edist_nndist]
   exact_mod_cast Iff.rfl
@@ -686,7 +686,7 @@ lemma similar_iff_exists_dist_eq
     fun _ _ => by { rw [dist_nndist, dist_nndist]; norm_cast })
 
 中文:
-引理 similar_iff_exists_dist_eq
+引理 similar_iff_存在_dist_eq
   证明: similar_iff_exists_nndist_eq.trans
   (exists_congr <| fun _ => and_congr Iff.rfl <| forall₂_congr <|
     fun _ _ => by { rw [dist_nndist, dist_nndist]; norm_cast })
@@ -710,7 +710,7 @@ lemma similar_iff_exists_pairwise_dist_eq
   exact_mod_cast Iff.rfl
 
 中文:
-引理 similar_iff_exists_pairwise_dist_eq
+引理 similar_iff_存在_pairwise_dist_eq
   证明: by
   simp_rw [similar_iff_exists_pairwise_nndist_eq, dist_nndist]
   exact_mod_cast Iff.rfl
@@ -735,7 +735,7 @@ lemma similar_iff_exists_pos_dist_eq
   grind
 
 中文:
-引理 similar_iff_exists_pos_dist_eq
+引理 similar_iff_存在_pos_dist_eq
   结论: Similar v₁ v₂ ↔
   证明: by
   rw [similar_iff_exists_dist_eq]
@@ -761,7 +761,7 @@ lemma similar_iff_exists_pos_pairwise_dist_eq
   grind
 
 中文:
-引理 similar_iff_exists_pos_pairwise_dist_eq
+引理 similar_iff_存在_pos_pairwise_dist_eq
   证明: by
   simp_rw [similar_iff_exists_pairwise_dist_eq]
   simp_rw [← pos_iff_ne_zero, NNReal.exists, ← NNReal.coe_pos, NNReal.coe_mk]

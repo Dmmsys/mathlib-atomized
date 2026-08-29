@@ -40,7 +40,7 @@ deriving instance OrderedSub, CanonicallyOrderedAdd for NNRat
 
 中文:
 实例 :
-  签名: IsStrictOrderedRing Rat>=0
+  签名: 是StrictOrdered环 有理数>=0
   定义体: Nonneg.isStrictOrderedRing
 
 deriving instance OrderedSub, CanonicallyOrderedAdd for NNRat

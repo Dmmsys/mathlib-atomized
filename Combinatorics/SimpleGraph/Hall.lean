@@ -58,7 +58,7 @@ abbreviation hall_subgraph
 
 中文:
 缩写 hall_subgraph
-  签名: {p : Set V} [DecidablePred (· in p)] (f : p -> V) (h₁ : 对任意 x : p, f x ∉ p)
+  签名: {p : 集合 V} [DecidablePred (· in p)] (f : p -> V) (h₁ : 对任意 x : p, f x ∉ p)
   定义体: p union Set.range f
   Adj v w :=
     if h : v in p then f ⟨v, h⟩ = w
@@ -104,8 +104,8 @@ theorem exists_isMatching_of_forall_ncard_le
     sim
 
 中文:
-定理 exists_isMatching_of_forall_ncard_le
-  结论: (h₁ : G.IsBipartiteWith p₁ p₂)
+定理 存在_isMatching_of_对任意_ncard_le
+  结论: (h₁ : G.是BipartiteWith p₁ p₂)
   证明: by
   classical
   obtain ⟨f, hf₁, hf₂⟩ := Finset.all_card_le_biUnion_card_iff_exists_injective
@@ -153,8 +153,8 @@ lemma union_eq_univ_of_forall_ncard_le
 have := h₁.mem_of_adj .mp (hf₂ x) G.mem_ne
 
 中文:
-引理 union_eq_univ_of_forall_ncard_le
-  结论: (h₁ : G.IsBipartiteWith p₁ p₂)
+引理 union_eq_univ_of_对任意_ncard_le
+  结论: (h₁ : G.是BipartiteWith p₁ p₂)
   证明: by
   classical
   obtain ⟨f, _, hf₂⟩ := Finset.all_card_le_biUnion_card_iff_exists_injective
@@ -193,8 +193,8 @@ lemma exists_bijective_of_forall_ncard_le
 isBipartiteWit
 
 中文:
-引理 exists_bijective_of_forall_ncard_le
-  结论: (h₁ : G.IsBipartiteWith p₁ p₂)
+引理 存在_bijective_of_对任意_ncard_le
+  结论: (h₁ : G.是BipartiteWith p₁ p₂)
   证明: by
   classical
   obtain ⟨f, hf₁, hf₂⟩ := Finset.all_card_le_biUnion_card_iff_exists_injective
@@ -241,7 +241,7 @@ theorem exists_isPerfectMatching_of_forall_ncard_le
     rw [Set.range_comp']; rw [hb₁.surjective.range_eq]; 
 
 中文:
-定理 exists_isPerfectMatching_of_forall_ncard_le
+定理 存在_isPerfectMatching_of_对任意_ncard_le
   证明: by
   classical
   obtain ⟨b, hb₁, hb₂⟩ := exists_bijective_of_forall_ncard_le h₁ h₂

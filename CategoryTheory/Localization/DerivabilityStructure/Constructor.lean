@@ -169,8 +169,8 @@ lemma mk'
 
 中文:
 引理 mk'
-  条件: [Φ.IsLocalizedEquivalence]
-  结论: Φ.IsRightDerivabilityStructure
+  条件: [Φ.是LocalizedEquivalence]
+  结论: Φ.是RightDerivabilityStructure
   证明: by
   rw [Φ.isRightDerivabilityStructure_iff (Φ.functor ⋙ W₂.Q) W₂.Q (𝟭 _)
     (Functor.rightUnitor _).symm]; rw [TwoSquare.guitartExact_iff_isConnected_downwards]
@@ -202,8 +202,8 @@ lemma IsLeftDerivabilityStructure.mk'
       w := Arrow.homMk R.w.right.op R.w.left.op (Quiver.Hom.unop_inj R.w
 
 中文:
-引理 IsLeftDerivabilityStructure.mk'
-  结论: (Φ : LocalizerMorphism W₁ W₂)
+引理 是LeftDerivabilityStructure.mk'
+  结论: (Φ : Localizer态射 W₁ W₂)
   证明: by
   rw [isLeftDerivabilityStructure_iff_op]
   have : Φ.op.arrow.HasRightResolutions := fun f => by

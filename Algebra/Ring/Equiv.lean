@@ -58,7 +58,7 @@ definition NonUnitalRingHom.inverse
   body: { (f : R ->+ S).inverse g h₁ h₂, (f : R ->ₙ* S).inverse g h₁ h₂ with toFun := g }
 
 中文:
-定义 NonUnitalRingHom.inverse
+定义 非幺环态射.inverse
   定义体: { (f : R ->+ S).inverse g h₁ h₂, (f : R ->ₙ* S).inverse g h₁ h₂ with toFun := g }
 -/
 @[simps] def NonUnitalRingHom.inverse
@@ -78,8 +78,8 @@ definition RingHom.inverse
     (f : R ->+ S).inverse g h₁ h₂ with toFun := g }
 
 中文:
-定义 RingHom.inverse
-  签名: [NonAssocSemiring R] [NonAssocSemiring S]
+定义 环态射.inverse
+  签名: [非结合半环 R] [非结合半环 S]
   定义体: { (f : OneHom R S).inverse g h₁,
     (f : MulHom R S).inverse g h₁ h₂,
     (f : R ->+ S).inverse g h₁ h₂ with toFun := g }
@@ -101,8 +101,8 @@ structure RingEquiv
   (no additional axioms)
 
 中文:
-结构 RingEquiv
-  参数: (R S : 类型) [Mul R] [Mul S] [Add R] [Add S]
+结构 环等价
+  参数: (R S : 类型) [乘法 R] [乘法 S] [加法 R] [加法 S]
   继承: R ≃ S, R ≃* S, R ≃+ S
   (无附加公理)
 -/
@@ -131,9 +131,9 @@ class RingEquivClass
     - map_add : forall (f : F) (a b), f (a + b) = f a + f b
 
 中文:
-类 RingEquivClass
-  参数: (F R S : 类型) [Mul R] [Add R] [Mul S] [Add S] [EquivLike F R S]
-  继承: MulEquivClass F R S
+类 环等价类
+  参数: (F R S : 类型) [乘法 R] [加法 R] [乘法 S] [加法 S] [等价状 F R S]
+  继承: 乘法等价类 F R S
   公理与运算 (1 个):
     - map_add : 对任意 (f : F) (a b), f (a + b) = f a + f b
 -/
@@ -177,7 +177,7 @@ definition toRingEquiv
 
 中文:
 定义 toRingEquiv
-  签名: [Mul α] [Add α] [Mul β] [Add β] [EquivLike F α β] [RingEquivClass F α β] (f : F)
+  签名: [乘法 α] [加法 α] [乘法 β] [加法 β] [等价状 F α β] [环等价类 F α β] (f : F)
   定义体: { (f : α ≃* β), (f : α ≃+ β) with }
 -/
 def toRingEquiv [Mul α] [Add α] [Mul β] [Add β] [EquivLike F α β] [RingEquivClass F α β] (f : F) :
@@ -212,7 +212,7 @@ instance :
 
 中文:
 实例 :
-  签名: EquivLike (R ≃+* S) R S
+  签名: 等价状 (R ≃+* S) R S
   定义体: f.toFun
   inv f := f.invFun
   coe_injective' e f h₁ h₂ := by
@@ -247,7 +247,7 @@ instance :
 
 中文:
 实例 :
-  签名: RingEquivClass (R ≃+* S) R S
+  签名: 环等价类 (R ≃+* S) R S
   定义体: f.map_add'
   map_mul f := f.map_mul'
 
@@ -555,7 +555,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (e : R ≃+* S)
-  结论: Function.Bijective e
+  结论: 函数.双射 e
   证明: EquivLike.bijective e
 -/
 protected theorem bijective (e : R ≃+* S) : Function.Bijective e :=
@@ -573,7 +573,7 @@ theorem injective
 中文:
 定理 injective
   条件: (e : R ≃+* S)
-  结论: Function.Injective e
+  结论: 函数.单射 e
   证明: EquivLike.injective e
 -/
 protected theorem injective (e : R ≃+* S) : Function.Injective e :=
@@ -591,7 +591,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (e : R ≃+* S)
-  结论: Function.Surjective e
+  结论: 函数.满射 e
   证明: EquivLike.surjective e
 -/
 protected theorem surjective (e : R ≃+* S) : Function.Surjective e :=
@@ -635,7 +635,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (R ≃+* R)
+  签名: 可居 (R ≃+* R)
   定义体: ⟨RingEquiv.refl R⟩
 
 @[simp]
@@ -660,7 +660,7 @@ theorem refl_apply
 中文:
 定理 refl_apply
   条件: (x : R)
-  结论: RingEquiv.refl R x = x
+  结论: 环等价.refl R x = x
   证明: rfl
 
 @[simp]
@@ -682,8 +682,8 @@ theorem coe_refl
 
 中文:
 定理 coe_refl
-  条件: (R : 类型) [Mul R] [Add R]
-  结论: ⇑(RingEquiv.refl R) = id
+  条件: (R : 类型) [乘法 R] [加法 R]
+  结论: ⇑(环等价.refl R) = id
   证明: rfl
 
 @[simp]
@@ -704,7 +704,7 @@ theorem coe_addEquiv_refl
 
 中文:
 定理 coe_addEquiv_refl
-  结论: (RingEquiv.refl R : R ≃+ R) = AddEquiv.refl R
+  结论: (环等价.refl R : R ≃+ R) = 加法等价.refl R
   证明: rfl
 
 @[simp]
@@ -723,7 +723,7 @@ theorem coe_mulEquiv_refl
 
 中文:
 定理 coe_mulEquiv_refl
-  结论: (RingEquiv.refl R : R ≃* R) = MulEquiv.refl R
+  结论: (环等价.refl R : R ≃* R) = 乘法等价.refl R
   证明: rfl
 -/
 theorem coe_mulEquiv_refl : (RingEquiv.refl R : R ≃* R) = MulEquiv.refl R :=
@@ -772,7 +772,7 @@ theorem invFun_eq_symm
 中文:
 定理 invFun_eq_symm
   条件: (f : R ≃+* S)
-  结论: EquivLike.inv f = f.symm
+  结论: 等价状.inv f = f.symm
   证明: rfl
 
 @[simp]
@@ -810,7 +810,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (RingEquiv.symm : (R ≃+* S) -> S ≃+* R)
+  结论: 函数.双射 (环等价.symm : (R ≃+* S) -> S ≃+* R)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 @[simp]
@@ -885,7 +885,7 @@ theorem symm_refl
 
 中文:
 定理 symm_refl
-  结论: (RingEquiv.refl R).symm = RingEquiv.refl R
+  结论: (环等价.refl R).symm = 环等价.refl R
   证明: rfl
 
 @[simp]
@@ -1019,7 +1019,7 @@ lemma image_symm_eq_preimage
 
 中文:
 引理 image_symm_eq_preimage
-  条件: (e : R ≃+* S) (s : Set S)
+  条件: (e : R ≃+* S) (s : 集合 S)
   结论: e.symm '' s = e ⁻¹' s
   证明: e.toEquiv.image_symm_eq_preimage _
 
@@ -1041,7 +1041,7 @@ lemma image_eq_preimage_symm
 
 中文:
 引理 image_eq_preimage_symm
-  条件: (e : R ≃+* S) (s : Set R)
+  条件: (e : R ≃+* S) (s : 集合 R)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toEquiv.image_eq_preimage_symm _
 
@@ -1337,7 +1337,7 @@ definition ofUnique
 
 中文:
 定义 ofUnique
-  签名: {M N} [Unique M] [Unique N] [Add M] [Mul M] [Add N] [Mul N]
+  签名: {M N} [唯一 M] [唯一 N] [加法 M] [乘法 M] [加法 N] [乘法 N]
   定义体: { AddEquiv.ofUnique, MulEquiv.ofUnique with }
 
 Depends on / 依赖: AddEquiv, AddEquiv.ofUnique, MulEquiv, MulEquiv.ofUnique, ofUnique
@@ -1371,7 +1371,7 @@ definition op
 
 中文:
 定义 op
-  签名: {α β} [Add α] [Mul α] [Add β] [Mul β]
+  签名: {α β} [加法 α] [乘法 α] [加法 β] [乘法 β]
   定义体: { AddEquiv.mulOp f.toAddEquiv, MulEquiv.op f.toMulEquiv with }
   invFun f := { AddEquiv.mulOp.symm f.toAddEquiv, MulEquiv.op.symm f.toMulEquiv with }
 -/
@@ -1392,7 +1392,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {α β} [Add α] [Mul α] [Add β] [Mul β]
+  签名: {α β} [加法 α] [乘法 α] [加法 β] [乘法 β]
   定义体: RingEquiv.op.symm
 -/
 protected def unop {α β} [Add α] [Mul α] [Add β] [Mul β] : αᵐᵒᵖ ≃+* βᵐᵒᵖ ≃ (α ≃+* β) :=
@@ -1411,7 +1411,7 @@ definition opOp
 
 中文:
 定义 opOp
-  签名: (R : 类型) [Add R] [Mul R]
+  签名: (R : 类型) [加法 R] [乘法 R]
   定义体: MulEquiv.opOp R
   map_add' _ _ := rfl
 
@@ -1573,7 +1573,7 @@ definition ofBijective
 
 中文:
 定义 ofBijective
-  签名: [NonUnitalRingHomClass F R S] (f : F) (hf : Function.Bijective f)
+  签名: [非幺环态射类 F R S] (f : F) (hf : 函数.双射 f)
   定义体: { Equiv.ofBijective f hf with
     map_mul' := map_mul f
     map_add' := map_add f }
@@ -1599,7 +1599,7 @@ theorem coe_ofBijective
 
 中文:
 定理 coe_ofBijective
-  条件: [NonUnitalRingHomClass F R S] (f : F) (hf : Function.Bijective f)
+  条件: [非幺环态射类 F R S] (f : F) (hf : 函数.双射 f)
   证明: rfl
 -/
 theorem coe_ofBijective [NonUnitalRingHomClass F R S] (f : F) (hf : Function.Bijective f) :
@@ -1618,7 +1618,7 @@ theorem ofBijective_apply
 
 中文:
 定理 ofBijective_apply
-  结论: [NonUnitalRingHomClass F R S] (f : F) (hf : Function.Bijective f)
+  结论: [非幺环态射类 F R S] (f : F) (hf : 函数.双射 f)
   证明: rfl
 
 @[simp]
@@ -1642,7 +1642,7 @@ exact (RingEquiv.ofBijective f hf).injective RingEquiv.apply_symm_apply ..
 
 中文:
 引理 ofBijective_symm_comp
-  条件: (f : R ->ₙ+* S) (hf : Function.Bijective f)
+  条件: (f : R ->ₙ+* S) (hf : 函数.双射 f)
   证明: by
   ext
 exact (RingEquiv.ofBijective f hf).injective RingEquiv.apply_symm_apply ..
@@ -1669,7 +1669,7 @@ exact (RingEquiv.ofBijective f hf).symm.injective RingEquiv.apply_symm_apply ..
 
 中文:
 引理 comp_ofBijective_symm
-  条件: (f : R ->ₙ+* S) (hf : Function.Bijective f)
+  条件: (f : R ->ₙ+* S) (hf : 函数.双射 f)
   证明: by
   ext
 exact (RingEquiv.ofBijective f hf).symm.injective RingEquiv.apply_symm_apply ..
@@ -1696,7 +1696,7 @@ definition piUnique
 
 中文:
 定义 piUnique
-  签名: {ι : 类型} (R : ι -> 类型) [Unique ι] [对任意 i, NonUnitalNonAssocSemiring (R i)]
+  签名: {ι : 类型} (R : ι -> 类型) [唯一 ι] [对任意 i, 非幺非结合半环 (R i)]
   定义体: Equiv.piUnique R
   map_add' _ _ := rfl
   map_mul' _ _ := rfl
@@ -1755,7 +1755,7 @@ definition piCongrRight
 
 中文:
 定义 piCongrRight
-  签名: {ι : 类型} {R S : ι -> 类型} [对任意 i, NonUnitalNonAssocSemiring (R i)]
+  签名: {ι : 类型} {R S : ι -> 类型} [对任意 i, 非幺非结合半环 (R i)]
   定义体: { @MulEquiv.piCongrRight ι R S _ _ fun i => (e i).toMulEquiv,
     @AddEquiv.piCongrRight ι R S _ _ fun i => (e i).toAddEquiv with
     toFun := fun x j => e j (x j)
@@ -1785,7 +1785,7 @@ theorem piCongrRight_refl
 
 中文:
 定理 piCongrRight_refl
-  条件: {ι : 类型} {R : ι -> 类型} [对任意 i, NonUnitalNonAssocSemiring (R i)]
+  条件: {ι : 类型} {R : ι -> 类型} [对任意 i, 非幺非结合半环 (R i)]
   证明: rfl
 
 @[simp]
@@ -1807,7 +1807,7 @@ theorem piCongrRight_symm
 
 中文:
 定理 piCongrRight_symm
-  结论: {ι : 类型} {R S : ι -> 类型} [对任意 i, NonUnitalNonAssocSemiring (R i)]
+  结论: {ι : 类型} {R S : ι -> 类型} [对任意 i, 非幺非结合半环 (R i)]
   证明: rfl
 
 @[simp]
@@ -1885,7 +1885,7 @@ theorem piCongrLeft'_symm
 
 中文:
 定理 piCongrLeft'_symm
-  条件: {R : 类型} [NonUnitalNonAssocSemiring R] (e : α ≃ β)
+  条件: {R : 类型} [非幺非结合半环 R] (e : α ≃ β)
   证明: by
   simp only [piCongrLeft', RingEquiv.symm, MulEquiv.symm, Equiv.piCongrLeft'_symm]
 
@@ -1966,7 +1966,7 @@ definition piMulOpposite
 
 中文:
 定义 piMulOpposite
-  签名: {ι : 类型} (S : ι -> 类型) [对任意 i, NonUnitalNonAssocSemiring (S i)]
+  签名: {ι : 类型} (S : ι -> 类型) [对任意 i, 非幺非结合半环 (S i)]
   定义体: .op (f.unop i)
   invFun f := .op fun i => (f i).unop
   left_inv _ := rfl
@@ -2005,7 +2005,7 @@ definition prodCongr
 
 中文:
 定义 prodCongr
-  签名: {R R' S S' : 类型} [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring R']
+  签名: {R R' S S' : 类型} [非幺非结合半环 R] [非幺非结合半环 R']
   定义体: Equiv.prodCongr f g
   map_mul' _ _ := by
     simp only [Equiv.toFun_as_coe, Equiv.prodCongr_apply, EquivLike.coe_coe,
@@ -2041,7 +2041,7 @@ theorem coe_prodCongr
 
 中文:
 定理 coe_prodCongr
-  结论: {R R' S S' : 类型} [NonUnitalNonAssocSemiring R]
+  结论: {R R' S S' : 类型} [非幺非结合半环 R]
   证明: rfl
 -/
 theorem coe_prodCongr {R R' S S' : Type*} [NonUnitalNonAssocSemiring R]
@@ -2064,7 +2064,7 @@ definition piOptionEquivProd
 
 中文:
 定义 piOptionEquivProd
-  签名: {ι : 类型} {R : Option ι -> 类型} [Π i, NonUnitalNonAssocSemiring (R i)]
+  签名: {ι : 类型} {R : 选项类型 ι -> 类型} [Π i, 非幺非结合半环 (R i)]
   定义体: Equiv.piOptionEquivProd
   map_add' _ _ := rfl
   map_mul' _ _ := rfl
@@ -2147,7 +2147,7 @@ theorem coe_monoidHom_refl
 
 中文:
 定理 coe_monoidHom_refl
-  结论: (RingEquiv.refl R : R ->* R) = MonoidHom.id R
+  结论: (环等价.refl R : R ->* R) = 幺半群态射.id R
   证明: rfl
 
 @[simp]
@@ -2166,7 +2166,7 @@ theorem coe_addMonoidHom_refl
 
 中文:
 定理 coe_addMonoidHom_refl
-  结论: (RingEquiv.refl R : R ->+ R) = AddMonoidHom.id R
+  结论: (环等价.refl R : R ->+ R) = 加法幺半群态射.id R
   证明: rfl
 -/
 theorem coe_addMonoidHom_refl : (RingEquiv.refl R : R ->+ R) = AddMonoidHom.id R :=
@@ -2189,7 +2189,7 @@ theorem coe_ringHom_refl
 
 中文:
 定理 coe_ringHom_refl
-  结论: (RingEquiv.refl R : R ->+* R) = RingHom.id R
+  结论: (环等价.refl R : R ->+* R) = 环态射.id R
   证明: rfl
 
 @[simp]
@@ -2210,7 +2210,7 @@ theorem coe_monoidHom_trans
 
 中文:
 定理 coe_monoidHom_trans
-  条件: [NonAssocSemiring S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
+  条件: [非结合半环 S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
   证明: rfl
 
 @[simp]
@@ -2230,7 +2230,7 @@ theorem coe_addMonoidHom_trans
 
 中文:
 定理 coe_addMonoidHom_trans
-  条件: [NonUnitalNonAssocSemiring S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
+  条件: [非幺非结合半环 S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
   证明: rfl
 -/
 theorem coe_addMonoidHom_trans [NonUnitalNonAssocSemiring S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S') :
@@ -2253,7 +2253,7 @@ theorem coe_ringHom_trans
 
 中文:
 定理 coe_ringHom_trans
-  条件: [NonAssocSemiring S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
+  条件: [非结合半环 S'] (e₁ : R ≃+* S) (e₂ : S ≃+* S')
   证明: rfl
 
 @[simp]
@@ -2277,7 +2277,7 @@ theorem comp_symm
 中文:
 定理 comp_symm
   条件: (e : R ≃+* S)
-  结论: (e : R ->+* S).comp (e.symm : S ->+* R) = RingHom.id S
+  结论: (e : R ->+* S).comp (e.symm : S ->+* R) = 环态射.id S
   证明: RingHom.ext e.apply_symm_apply
 
 @[simp]
@@ -2300,7 +2300,7 @@ theorem symm_comp
 中文:
 定理 symm_comp
   条件: (e : R ≃+* S)
-  结论: (e.symm : S ->+* R).comp (e : R ->+* S) = RingHom.id R
+  结论: (e.symm : S ->+* R).comp (e : R ->+* S) = 环态射.id R
   证明: RingHom.ext e.symm_apply_apply
 
 Depends on / 依赖: RingHom, RingHom.ext, e.symm_apply_apply, symm_apply_apply
@@ -2510,7 +2510,7 @@ theorem coe_nonUnitalRingHom_inj_iff
 
 中文:
 定理 coe_nonUnitalRingHom_inj_iff
-  结论: {R S : 类型} [NonUnitalNonAssocSemiring R]
+  结论: {R S : 类型} [非幺非结合半环 R]
   证明: ⟨fun h => by rw [h], fun h => ext NonUnitalRingHom.ext_iff.mp h⟩
 
 @[simp]
@@ -2696,7 +2696,7 @@ theorem toRingHom_injective
 
 中文:
 定理 toRingHom_injective
-  结论: Function.Injective (toRingHom : R ≃+* S -> R ->+* S)
+  结论: 函数.单射 (toRingHom : R ≃+* S -> R ->+* S)
   证明: fun _ _ h =>
   RingEquiv.ext (RingHom.ext_iff.1 h)
 
@@ -2760,7 +2760,7 @@ theorem coe_ringHom_inj_iff
 
 中文:
 定理 coe_ringHom_inj_iff
-  结论: {R S : 类型} [NonAssocSemiring R] [NonAssocSemiring S]
+  结论: {R S : 类型} [非结合半环 R] [非结合半环 S]
   证明: ⟨fun h => by rw [h], fun h => ext RingHom.ext_iff.mp h⟩
 
 Depends on / 依赖: RingHom, RingHom.ext_iff.mp, ext_iff
@@ -2895,7 +2895,7 @@ theorem toRingHom_refl
 
 中文:
 定理 toRingHom_refl
-  结论: (RingEquiv.refl R).toRingHom = RingHom.id R
+  结论: (环等价.refl R).toRingHom = 环态射.id R
   证明: rfl
 
 @[simp]
@@ -2916,7 +2916,7 @@ theorem toMonoidHom_refl
 
 中文:
 定理 toMonoidHom_refl
-  结论: (RingEquiv.refl R).toMonoidHom = MonoidHom.id R
+  结论: (环等价.refl R).toMonoidHom = 幺半群态射.id R
   证明: rfl
 
 @[simp]
@@ -2935,7 +2935,7 @@ theorem toAddMonoidHom_refl
 
 中文:
 定理 toAddMonoidHom_refl
-  结论: (RingEquiv.refl R).toAddMonoidHom = AddMonoidHom.id R
+  结论: (环等价.refl R).toAddMonoidHom = 加法幺半群态射.id R
   证明: rfl
 -/
 theorem toAddMonoidHom_refl : (RingEquiv.refl R).toAddMonoidHom = AddMonoidHom.id R :=
@@ -3079,7 +3079,7 @@ definition toRingEquiv
 
 中文:
 定义 toRingEquiv
-  签名: {R S F : 类型} [Add R] [Add S] [Mul R] [Mul S] [EquivLike F R S]
+  签名: {R S F : 类型} [加法 R] [加法 S] [乘法 R] [乘法 S] [等价状 F R S]
   定义体: { (f : R ≃* S).toEquiv, (f : R ≃* S), AddEquiv.mk' (f : R ≃* S).toEquiv H with }
 
 Depends on / 依赖: AddEquiv, AddEquiv.mk, toEquiv
@@ -3103,7 +3103,7 @@ definition toRingEquiv
 
 中文:
 定义 toRingEquiv
-  签名: {R S F : 类型} [Add R] [Add S] [Mul R] [Mul S] [EquivLike F R S]
+  签名: {R S F : 类型} [加法 R] [加法 S] [乘法 R] [乘法 S] [等价状 F R S]
   定义体: { (f : R ≃+ S).toEquiv, (f : R ≃+ S), MulEquiv.mk' (f : R ≃+ S).toEquiv H with }
 
 Depends on / 依赖: MulEquiv, MulEquiv.mk, toEquiv
@@ -3134,7 +3134,7 @@ theorem self_trans_symm
 中文:
 定理 self_trans_symm
   条件: (e : R ≃+* S)
-  结论: e.trans e.symm = RingEquiv.refl R
+  结论: e.trans e.symm = 环等价.refl R
   证明: ext e.left_inv
 
 @[simp]
@@ -3157,7 +3157,7 @@ theorem symm_trans_self
 中文:
 定理 symm_trans_self
   条件: (e : R ≃+* S)
-  结论: e.symm.trans e = RingEquiv.refl S
+  结论: e.symm.trans e = 环等价.refl S
   证明: ext e.right_inv
 
 Depends on / 依赖: e.right_inv, right_inv
@@ -3250,7 +3250,7 @@ definition ofRingHom
 
 中文:
 定义 ofRingHom
-  签名: (f : R ->+* S) (g : S ->+* R) (h₁ : f.comp g = RingHom.id S)
+  签名: (f : R ->+* S) (g : S ->+* R) (h₁ : f.comp g = 环态射.id S)
   定义体: { f with
     toFun := f
     invFun := g
@@ -3411,7 +3411,7 @@ theorem noZeroDivisors
 
 中文:
 定理 noZeroDivisors
-  结论: {A : 类型} (B : 类型) [MulZeroClass A] [MulZeroClass B]
+  结论: {A : 类型} (B : 类型) [乘零类 A] [乘零类 B]
   证明: e.injective.noZeroDivisors e (map_zero e) (map_mul e)
 -/
 protected theorem noZeroDivisors {A : Type*} (B : Type*) [MulZeroClass A] [MulZeroClass B]
@@ -3430,7 +3430,7 @@ theorem isDomain
 
 中文:
 定理 isDomain
-  结论: {A : 类型} (B : 类型) [Semiring A] [Semiring B] [IsDomain B]
+  结论: {A : 类型} (B : 类型) [半环 A] [半环 B] [是整环 B]
   证明: { e.injective.isLeftCancelMulZero e (map_zero e) (map_mul e),
     e.injective.isRightCancelMulZero e (map_zero e) (map_mul e) with
     exists_pair_ne := ⟨e.symm 0, e.symm 1, e.symm.injective.ne zero_ne_one⟩ }
@@ -3452,7 +3452,7 @@ theorem isDomain_iff
 
 中文:
 定理 isDomain_iff
-  条件: {A B : 类型} [Semiring A] [Semiring B] (e : A ≃* B)
+  条件: {A B : 类型} [半环 A] [半环 B] (e : A ≃* B)
   证明: e.symm.isDomain
   mpr _ := e.isDomain
 
@@ -3478,7 +3478,7 @@ theorem noZeroDivisors_iff
 中文:
 定理 noZeroDivisors_iff
   条件: (e : A ≃* B)
-  结论: NoZeroDivisors A ↔ NoZeroDivisors B where
+  结论: 无零因子 A ↔ 无零因子 B where
   证明: e.symm.noZeroDivisors
   mpr _ := e.noZeroDivisors
 
@@ -3501,7 +3501,7 @@ theorem isLeftCancelMulZero_iff
 中文:
 定理 isLeftCancelMulZero_iff
   条件: (e : A ≃* B)
-  结论: IsLeftCancelMulZero A ↔ IsLeftCancelMulZero B where
+  结论: 是左消去MulZero A ↔ 是左消去MulZero B where
   证明: e.symm.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
   mpr _ := e.injective.isLeftCancelMulZero _ (map_zero _) (map_mul _)
 
@@ -3546,7 +3546,7 @@ theorem isCancelMulZero_iff
 中文:
 定理 isCancelMulZero_iff
   条件: (e : A ≃* B)
-  结论: IsCancelMulZero A ↔ IsCancelMulZero B where
+  结论: 是乘零消去 A ↔ 是乘零消去 B where
   证明: e.symm.injective.isCancelMulZero _ (map_zero _) (map_mul _)
   mpr _ := e.injective.isCancelMulZero _ (map_zero _) (map_mul _)
 

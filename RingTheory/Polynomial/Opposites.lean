@@ -39,7 +39,7 @@ definition opRingEquiv
 
 中文:
 定义 opRingEquiv
-  签名: (R : 类型) [Semiring R]
+  签名: (R : 类型) [半环 R]
   定义体: ((toFinsuppIso R).op.trans <| AddMonoidAlgebra.opRingEquiv.trans <|
     AddMonoidAlgebra.mapDomainRingEquiv _ AddOpposite.opAddEquiv.symm).trans (toFinsuppIso _).symm
 
@@ -435,7 +435,7 @@ theorem isDomain_iff
 
 中文:
 定理 isDomain_iff
-  结论: IsDomain R[X] ↔ IsDomain R ∧ IsCancelAdd R
+  结论: 是整环 R[X] ↔ 是整环 R ∧ 是消去加法 R
   证明: by
   simp_rw [isDomain_iff_cancelMulZero_and_nontrivial, nontrivial_iff,
     Polynomial.isCancelMulZero_iff, and_right_comm]

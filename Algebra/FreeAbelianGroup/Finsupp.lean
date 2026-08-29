@@ -39,8 +39,8 @@ definition FreeAbelianGroup.toFinsupp
   body: FreeAbelianGroup.lift fun x => Finsupp.single x (1 : Int)
 
 中文:
-定义 FreeAbelianGroup.toFinsupp
-  签名: : FreeAbelianGroup X ->+ X ->₀ 整数
+定义 自由交换群.toFinsupp
+  签名: : 自由交换群 X ->+ X ->₀ 整数
   定义体: FreeAbelianGroup.lift fun x => Finsupp.single x (1 : Int)
 
 Depends on / 依赖: Finsupp, Finsupp.single, FreeAbelianGroup, FreeAbelianGroup.lift, single
@@ -57,8 +57,8 @@ definition Finsupp.toFreeAbelianGroup
   body: Finsupp.liftAddHom fun x => (smulAddHom Int (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
 
 中文:
-定义 Finsupp.toFreeAbelianGroup
-  签名: : (X ->₀ 整数) ->+ FreeAbelianGroup X
+定义 有限支撑.toFreeAbelianGroup
+  签名: : (X ->₀ 整数) ->+ 自由交换群 X
   定义体: Finsupp.liftAddHom fun x => (smulAddHom Int (FreeAbelianGroup X)).flip (FreeAbelianGroup.of x)
 
 Depends on / 依赖: Finsupp, Finsupp.liftAddHom, FreeAbelianGroup, FreeAbelianGroup.of, liftAddHom, smulAddHom
@@ -77,7 +77,7 @@ lemma FreeAbelianGroup.toFinsupp_of
   simp [toFinsupp]
 
 中文:
-引理 FreeAbelianGroup.toFinsupp_of
+引理 自由交换群.toFinsupp_of
   条件: (x : X)
   结论: toFinsupp (of x) = .single x 1
   证明: by
@@ -95,7 +95,7 @@ lemma Finsupp.toFreeAbelianGroup_single
   proof: by simp [toFreeAbelianGroup]
 
 中文:
-引理 Finsupp.toFreeAbelianGroup_single
+引理 有限支撑.toFreeAbelianGroup_single
   条件: (x : X) (n : 整数)
   证明: by simp [toFreeAbelianGroup]
 -/
@@ -116,7 +116,7 @@ theorem Finsupp.toFreeAbelianGroup_comp_singleAddHom
 @[simp]
 
 中文:
-定理 Finsupp.toFreeAbelianGroup_comp_singleAddHom
+定理 有限支撑.toFreeAbelianGroup_comp_singleAddHom
   条件: (x : X)
   证明: AddMonoidHom.ext toFreeAbelianGroup_single _
 
@@ -142,7 +142,7 @@ theorem FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup
 @[simp]
 
 中文:
-定理 FreeAbelianGroup.toFinsupp_comp_toFreeAbelianGroup
+定理 自由交换群.toFinsupp_comp_toFreeAbelianGroup
   证明: by
   ext
   simp
@@ -167,7 +167,7 @@ theorem Finsupp.toFreeAbelianGroup_comp_toFinsupp
 @[simp]
 
 中文:
-定理 Finsupp.toFreeAbelianGroup_comp_toFinsupp
+定理 有限支撑.toFreeAbelianGroup_comp_toFinsupp
   证明: by
   ext
   rw [toFreeAbelianGroup]; rw [toFinsupp]; rw [AddMonoidHom.comp_apply]; rw [lift_apply_of]; rw [liftAddHom_apply_single]; rw [AddMonoidHom.flip_apply]; rw [smulAddHom_apply]; rw [one_smul]; rw [AddMonoidHom.id_apply]
@@ -192,8 +192,8 @@ theorem Finsupp.toFreeAbelianGroup_toFinsupp
   rw [← AddMonoidHom.comp_apply]; rw [Finsupp.toFreeAbelianGroup_comp_toFinsupp]; rw [AddMonoidHom.id_apply]
 
 中文:
-定理 Finsupp.toFreeAbelianGroup_toFinsupp
-  条件: {X} (x : FreeAbelianGroup X)
+定理 有限支撑.toFreeAbelianGroup_toFinsupp
+  条件: {X} (x : 自由交换群 X)
   证明: by
   rw [← AddMonoidHom.comp_apply]; rw [Finsupp.toFreeAbelianGroup_comp_toFinsupp]; rw [AddMonoidHom.id_apply]
 
@@ -247,7 +247,7 @@ definition equivFinsupp
 
 中文:
 定义 equivFinsupp
-  签名: : FreeAbelianGroup X ≃+ (X ->₀ 整数) where
+  签名: : 自由交换群 X ≃+ (X ->₀ 整数) where
   定义体: toFinsupp
   invFun := toFreeAbelianGroup
   left_inv := toFreeAbelianGroup_toFinsupp
@@ -295,7 +295,7 @@ definition support
 
 中文:
 定义 support
-  签名: (a : FreeAbelianGroup X)
+  签名: (a : 自由交换群 X)
   定义体: a.toFinsupp.support
 
 @[simp]
@@ -319,7 +319,7 @@ theorem mem_support_iff
 
 中文:
 定理 mem_support_iff
-  条件: (x : X) (a : FreeAbelianGroup X)
+  条件: (x : X) (a : 自由交换群 X)
   结论: x in a.support ↔ coeff x a != 0
   证明: by
   rw [support]; rw [Finsupp.mem_support_iff]
@@ -346,7 +346,7 @@ theorem notMem_support_iff
 
 中文:
 定理 notMem_support_iff
-  条件: (x : X) (a : FreeAbelianGroup X)
+  条件: (x : X) (a : 自由交换群 X)
   结论: x ∉ a.support ↔ coeff x a = 0
   证明: by
   rw [support]; rw [Finsupp.notMem_support_iff]
@@ -374,7 +374,7 @@ theorem support_zero
 
 中文:
 定理 support_zero
-  结论: support (0 : FreeAbelianGroup X) = ∅
+  结论: support (0 : 自由交换群 X) = ∅
   证明: by
   simp only [support, Finsupp.support_zero, map_zero]
 
@@ -427,7 +427,7 @@ theorem support_neg
 
 中文:
 定理 support_neg
-  条件: (a : FreeAbelianGroup X)
+  条件: (a : 自由交换群 X)
   结论: support (-a) = support a
   证明: by
   simp only [support, map_neg, Finsupp.support_neg]
@@ -454,7 +454,7 @@ theorem support_zsmul
 
 中文:
 定理 support_zsmul
-  条件: (k : 整数) (h : k != 0) (a : FreeAbelianGroup X)
+  条件: (k : 整数) (h : k != 0) (a : 自由交换群 X)
   证明: by
   ext x
   simp [h]
@@ -479,7 +479,7 @@ theorem support_nsmul
 
 中文:
 定理 support_nsmul
-  条件: (k : 自然数) (h : k != 0) (a : FreeAbelianGroup X)
+  条件: (k : 自然数) (h : k != 0) (a : 自由交换群 X)
   证明: by
   apply support_zsmul k _ a
   exact mod_cast h
@@ -505,7 +505,7 @@ theorem support_add
 
 中文:
 定理 support_add
-  条件: (a b : FreeAbelianGroup X)
+  条件: (a b : 自由交换群 X)
   结论: support (a + b) subseteq a.support union b.support
   证明: by
   simp only [support, map_add]
@@ -528,7 +528,7 @@ theorem support_eq_empty
 
 中文:
 定理 support_eq_empty
-  条件: {a : FreeAbelianGroup X}
+  条件: {a : 自由交换群 X}
   结论: a.support = ∅ ↔ a = 0
   证明: Finsupp.support_eq_empty.trans (equivFinsupp X).map_eq_zero_iff
 -/
@@ -546,7 +546,7 @@ theorem nonempty_support_iff
 
 中文:
 定理 nonempty_support_iff
-  条件: {a : FreeAbelianGroup X}
+  条件: {a : 自由交换群 X}
   证明: by
   contrapose!; exact support_eq_empty
 -/
@@ -566,7 +566,7 @@ theorem card_support_eq_zero
 
 中文:
 定理 card_support_eq_zero
-  条件: {a : FreeAbelianGroup X}
+  条件: {a : 自由交换群 X}
   结论: a.support.card = 0 ↔ a = 0
   证明: by
   simp
@@ -586,7 +586,7 @@ theorem eq_sum_support_coeff_smul_of
 
 中文:
 定理 eq_sum_support_coeff_smul_of
-  条件: (a : FreeAbelianGroup X)
+  条件: (a : 自由交换群 X)
   证明: by
   conv_lhs => rw [← toFreeAbelianGroup_toFinsupp a, ← sum_single a.toFinsupp]
   simp [sum, support, coeff]

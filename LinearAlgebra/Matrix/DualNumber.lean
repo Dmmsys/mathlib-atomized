@@ -42,8 +42,8 @@ definition Matrix.dualNumberEquiv
       simp only [mul_apply, snd_sum, DualNumber.snd_mu
 
 中文:
-定义 Matrix.dualNumberEquiv
-  签名: : Matrix n n (DualNumber R) ≃ₐ[R] DualNumber (Matrix n n R) where
+定义 矩阵.dualNumberEquiv
+  签名: : 矩阵 n n (DualNumber R) ≃ₐ[R] DualNumber (矩阵 n n R) where
   定义体: ⟨of fun i j => (A i j).fst, of fun i j => (A i j).snd⟩
   invFun d := of fun i j => (d.fst i j, d.snd i j)
   map_mul' A B := by

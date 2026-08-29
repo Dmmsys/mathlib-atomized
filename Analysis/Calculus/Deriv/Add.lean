@@ -124,8 +124,8 @@ theorem HasDerivAt.add
   proof: HasDerivAtFilter.add hf hg
 
 中文:
-定理 HasDerivAt.add
-  条件: (hf : HasDerivAt f f' x) (hg : HasDerivAt g g' x)
+定理 在点处可导.add
+  条件: (hf : 在点处可导 f f' x) (hg : 在点处可导 g g' x)
   证明: HasDerivAtFilter.add hf hg
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.add
@@ -339,7 +339,7 @@ alias ⟨_, HasDerivAt.add_const⟩ := hasDerivAt_add_const_iff
 中文:
 定理 hasDerivAt_add_const_iff
   条件: (c : F)
-  结论: HasDerivAt (f · + c) f' x ↔ HasDerivAt f f' x
+  结论: 在点处可导 (f · + c) f' x ↔ 在点处可导 f f' x
   证明: hasDerivAtFilter_add_const_iff c
 
 alias ⟨_, HasDerivAt.add_const⟩ := hasDerivAt_add_const_iff
@@ -523,7 +523,7 @@ alias ⟨_, HasDerivAt.const_add⟩ := hasDerivAt_const_add_iff
 中文:
 定理 hasDerivAt_const_add_iff
   条件: (c : F)
-  结论: HasDerivAt (c + f ·) f' x ↔ HasDerivAt f f' x
+  结论: 在点处可导 (c + f ·) f' x ↔ 在点处可导 f f' x
   证明: hasDerivAtFilter_const_add_iff c
 
 alias ⟨_, HasDerivAt.const_add⟩ := hasDerivAt_const_add_iff
@@ -782,7 +782,7 @@ theorem HasDerivAtFilter.sum
   simp
 
 中文:
-定理 HasDerivAtFilter.sum
+定理 HasDerivAtFilter.求和
   条件: (h : 对任意 i in u, HasDerivAtFilter (A i) (A' i) L)
   证明: by
   convert! HasDerivAtFilter.fun_sum h
@@ -823,7 +823,7 @@ theorem HasStrictDerivAt.sum
   proof: HasDerivAtFilter.sum h
 
 中文:
-定理 HasStrictDerivAt.sum
+定理 HasStrictDerivAt.求和
   条件: (h : 对任意 i in u, HasStrictDerivAt (A i) (A' i) x)
   证明: HasDerivAtFilter.sum h
 
@@ -861,7 +861,7 @@ theorem HasDerivWithinAt.sum
   proof: HasDerivAtFilter.sum h
 
 中文:
-定理 HasDerivWithinAt.sum
+定理 HasDerivWithinAt.求和
   条件: (h : 对任意 i in u, HasDerivWithinAt (A i) (A' i) s x)
   证明: HasDerivAtFilter.sum h
 
@@ -880,8 +880,8 @@ theorem HasDerivAt.fun_sum
   proof: HasDerivAtFilter.fun_sum h
 
 中文:
-定理 HasDerivAt.fun_sum
-  条件: (h : 对任意 i in u, HasDerivAt (A i) (A' i) x)
+定理 在点处可导.fun_sum
+  条件: (h : 对任意 i in u, 在点处可导 (A i) (A' i) x)
   证明: HasDerivAtFilter.fun_sum h
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.fun_sum, fun_sum
@@ -899,8 +899,8 @@ theorem HasDerivAt.sum
   proof: HasDerivAtFilter.sum h
 
 中文:
-定理 HasDerivAt.sum
-  条件: (h : 对任意 i in u, HasDerivAt (A i) (A' i) x)
+定理 在点处可导.求和
+  条件: (h : 对任意 i in u, 在点处可导 (A i) (A' i) x)
   证明: HasDerivAtFilter.sum h
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.sum
@@ -1077,9 +1077,9 @@ theorem HasDerivAt.neg
 @[to_fun]
 
 中文:
-定理 HasDerivAt.neg
-  条件: (h : HasDerivAt f f' x)
-  结论: HasDerivAt (-f) (-f') x
+定理 在点处可导.neg
+  条件: (h : 在点处可导 f f' x)
+  结论: 在点处可导 (-f) (-f') x
   证明: HasDerivAtFilter.neg h
 
 @[to_fun]
@@ -1207,7 +1207,7 @@ theorem hasDerivAtFilter_neg
 
 中文:
 定理 hasDerivAtFilter_neg
-  结论: HasDerivAtFilter Neg.neg (-1) L
+  结论: HasDerivAtFilter 取负.neg (-1) L
   证明: HasDerivAtFilter.neg hasDerivAtFilter_id _
 
 Depends on / 依赖: HasDerivAtFilter, HasDerivAtFilter.neg, hasDerivAtFilter_id
@@ -1225,7 +1225,7 @@ theorem hasDerivWithinAt_neg
 
 中文:
 定理 hasDerivWithinAt_neg
-  结论: HasDerivWithinAt Neg.neg (-1) s x
+  结论: HasDerivWithinAt 取负.neg (-1) s x
   证明: hasDerivAtFilter_neg _
 
 Depends on / 依赖: hasDerivAtFilter_neg
@@ -1243,7 +1243,7 @@ theorem hasDerivAt_neg
 
 中文:
 定理 hasDerivAt_neg
-  结论: HasDerivAt Neg.neg (-1) x
+  结论: 在点处可导 取负.neg (-1) x
   证明: hasDerivAtFilter_neg _
 
 Depends on / 依赖: hasDerivAtFilter_neg
@@ -1261,7 +1261,7 @@ theorem hasDerivAt_neg'
 
 中文:
 定理 hasDerivAt_neg'
-  结论: HasDerivAt (fun x => -x) (-1) x
+  结论: 在点处可导 (fun x => -x) (-1) x
   证明: hasDerivAtFilter_neg _
 
 Depends on / 依赖: hasDerivAtFilter_neg
@@ -1279,7 +1279,7 @@ theorem hasStrictDerivAt_neg
 
 中文:
 定理 hasStrictDerivAt_neg
-  结论: HasStrictDerivAt Neg.neg (-1) x
+  结论: HasStrictDerivAt 取负.neg (-1) x
   证明: HasStrictDerivAt.neg hasStrictDerivAt_id _
 
 Depends on / 依赖: HasStrictDerivAt, HasStrictDerivAt.neg, hasStrictDerivAt_id
@@ -1299,7 +1299,7 @@ theorem deriv_neg
 
 中文:
 定理 deriv_neg
-  结论: deriv Neg.neg x = -1
+  结论: deriv 取负.neg x = -1
   证明: HasDerivAt.deriv (hasDerivAt_neg x)
 
 @[simp]
@@ -1322,7 +1322,7 @@ theorem deriv_neg'
 
 中文:
 定理 deriv_neg'
-  结论: deriv (Neg.neg : 𝕜 -> 𝕜) = fun _ => -1
+  结论: deriv (取负.neg : 𝕜 -> 𝕜) = fun _ => -1
   证明: funext deriv_neg
 
 @[simp]
@@ -1363,7 +1363,7 @@ theorem derivWithin_neg
 中文:
 定理 derivWithin_neg
   条件: (hxs : UniqueDiffWithinAt 𝕜 s x)
-  结论: derivWithin Neg.neg s x = -1
+  结论: derivWithin 取负.neg s x = -1
   证明: (hasDerivWithinAt_neg x s).derivWithin hxs
 
 Depends on / 依赖: derivWithin, hasDerivWithinAt_neg
@@ -1381,7 +1381,7 @@ theorem differentiable_neg
 
 中文:
 定理 differentiable_neg
-  结论: Differentiable 𝕜 (Neg.neg : 𝕜 -> 𝕜)
+  结论: 可微 𝕜 (取负.neg : 𝕜 -> 𝕜)
   证明: Differentiable.neg differentiable_id
 
 Depends on / 依赖: Differentiable, Differentiable.neg, differentiable_id
@@ -1399,7 +1399,7 @@ theorem differentiableOn_neg
 
 中文:
 定理 differentiableOn_neg
-  结论: DifferentiableOn 𝕜 (Neg.neg : 𝕜 -> 𝕜) s
+  结论: DifferentiableOn 𝕜 (取负.neg : 𝕜 -> 𝕜) s
   证明: DifferentiableOn.neg differentiableOn_id
 
 Depends on / 依赖: DifferentiableOn, DifferentiableOn.neg, differentiableOn_id
@@ -1526,8 +1526,8 @@ theorem HasDerivAt.sub
 @[to_fun]
 
 中文:
-定理 HasDerivAt.sub
-  条件: (hf : HasDerivAt f f' x) (hg : HasDerivAt g g' x)
+定理 在点处可导.sub
+  条件: (hf : 在点处可导 f f' x) (hg : 在点处可导 g g' x)
   证明: HasDerivAtFilter.sub hf hg
 
 @[to_fun]
@@ -1727,7 +1727,7 @@ alias ⟨_, HasDerivAt.sub_const⟩ := hasDerivAt_sub_const_iff
 中文:
 定理 hasDerivAt_sub_const_iff
   条件: (c : F)
-  结论: HasDerivAt (f · - c) f' x ↔ HasDerivAt f f' x
+  结论: 在点处可导 (f · - c) f' x ↔ 在点处可导 f f' x
   证明: hasDerivAtFilter_sub_const_iff c
 
 alias ⟨_, HasDerivAt.sub_const⟩ := hasDerivAt_sub_const_iff

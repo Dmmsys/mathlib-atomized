@@ -113,9 +113,9 @@ class FastSubsingleton
 
 中文:
 类 FastSubsingleton
-  参数: (α : Sort u)
+  参数: (α : 类型层 u)
   公理与运算 (1 个):
-    - [inst : Subsingleton α]
+    - [inst : 子单例 α]
 -/
 class FastSubsingleton (α : Sort u) : Prop where
   /-- The subsingleton instance. -/
@@ -132,9 +132,9 @@ class FastIsEmpty
 
 中文:
 类 FastIsEmpty
-  参数: (α : Sort u)
+  参数: (α : 类型层 u)
   公理与运算 (1 个):
-    - [inst : IsEmpty α]
+    - [inst : 是空 α]
 
 Depends on / 依赖: h.inst.allEq
 -/
@@ -152,7 +152,7 @@ theorem FastSubsingleton.elim
 
 中文:
 定理 FastSubsingleton.elim
-  条件: {α : Sort u} [h : FastSubsingleton α]
+  条件: {α : 类型层 u} [h : FastSubsingleton α]
   结论: (a b : α) -> a = b
   证明: h.inst.allEq
 -/
@@ -171,7 +171,7 @@ theorem FastSubsingleton.helim
 
 中文:
 定理 FastSubsingleton.helim
-  结论: {α β : Sort u} [FastSubsingleton α]
+  结论: {α β : 类型层 u} [FastSubsingleton α]
   证明: by
   have : Subsingleton α := FastSubsingleton.inst
   exact Subsingleton.helim h₂ a b
@@ -198,7 +198,7 @@ instance :
 
 中文:
 实例 :
-  签名: FastSubsingleton (Fin 1)
+  签名: FastSubsingleton (有限集 1)
   定义体: {}
 -/
 instance : FastSubsingleton (Fin 1) := {}
@@ -213,7 +213,7 @@ instance :
 
 中文:
 实例 :
-  签名: FastSubsingleton PUnit
+  签名: FastSubsingleton 命题单元
   定义体: {}
 -/
 instance : FastSubsingleton PUnit := {}
@@ -228,7 +228,7 @@ instance :
 
 中文:
 实例 :
-  签名: FastIsEmpty Empty
+  签名: FastIsEmpty 空
   定义体: {}
 -/
 instance : FastIsEmpty Empty := {}
@@ -243,7 +243,7 @@ instance :
 
 中文:
 实例 :
-  签名: FastIsEmpty False
+  签名: FastIsEmpty 假
   定义体: {}
 -/
 instance : FastIsEmpty False := {}
@@ -258,7 +258,7 @@ instance :
 
 中文:
 实例 :
-  签名: FastIsEmpty (Fin 0)
+  签名: FastIsEmpty (有限集 0)
   定义体: {}
 -/
 instance : FastIsEmpty (Fin 0) := {}
@@ -286,7 +286,7 @@ m
 
 中文:
 定义 withSubsingletonAsFast
-  签名: {α : Type} [Inhabited α] (mx : (Expr -> Expr) -> MetaM α)
+  签名: {α : 类型} [可居 α] (mx : (Expr -> Expr) -> MetaM α)
   定义体: do
   let insts1 := (← getLocalInstances).filter fun inst => inst.className == ``Subsingleton
   let insts2 := (← getLocalInstances).filter fun inst => inst.className == ``IsEmpty

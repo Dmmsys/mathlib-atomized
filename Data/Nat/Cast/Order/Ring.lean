@@ -38,7 +38,7 @@ theorem cast_nonneg
 
 中文:
 定理 cast_nonneg
-  条件: {α} [Semiring α] [PartialOrder α] [IsOrderedRing α] (n : 自然数)
+  条件: {α} [半环 α] [偏序 α] [是Ordered环 α] (n : 自然数)
   结论: 0 <= (n : α)
   证明: cast_nonneg' n
 
@@ -60,8 +60,8 @@ theorem ofNat_nonneg
 @[simp, norm_cast]
 
 中文:
-定理 ofNat_nonneg
-  条件: {α} [Semiring α] [PartialOrder α] [IsOrderedRing α] (n : 自然数) [n.AtLeastTwo]
+定理 of自然数_nonneg
+  条件: {α} [半环 α] [偏序 α] [是Ordered环 α] (n : 自然数) [n.AtLeastTwo]
   证明: ofNat_nonneg' n
 
 @[simp, norm_cast]
@@ -85,7 +85,7 @@ theorem cast_min
 
 中文:
 定理 cast_min
-  条件: {α} [Semiring α] [LinearOrder α] [IsStrictOrderedRing α] (m n : 自然数)
+  条件: {α} [半环 α] [线性序 α] [是StrictOrdered环 α] (m n : 自然数)
   证明: (@mono_cast α _).map_min
 
 @[simp, norm_cast]
@@ -107,7 +107,7 @@ theorem cast_max
 
 中文:
 定理 cast_max
-  条件: {α} [Semiring α] [LinearOrder α] [IsStrictOrderedRing α] (m n : 自然数)
+  条件: {α} [半环 α] [线性序 α] [是StrictOrdered环 α] (m n : 自然数)
   证明: (@mono_cast α _).map_max
 
 Depends on / 依赖: map_max, mono_cast
@@ -132,7 +132,7 @@ theorem cast_pos
 
 中文:
 定理 cast_pos
-  条件: {α} [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α] {n : 自然数}
+  条件: {α} [半环 α] [偏序 α] [是Ordered环 α] [非平凡 α] {n : 自然数}
   证明: cast_pos'
 
 Depends on / 依赖: cast_pos
@@ -152,7 +152,7 @@ theorem ofNat_pos'
   proof: cast_pos'.mpr (NeZero.pos n)
 
 中文:
-定理 ofNat_pos'
+定理 of自然数_pos'
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: 0 < (of自然数(n) : α)
   证明: cast_pos'.mpr (NeZero.pos n)
@@ -173,8 +173,8 @@ theorem ofNat_pos
   proof: ofNat_pos'
 
 中文:
-定理 ofNat_pos
-  结论: {α} [Semiring α] [PartialOrder α] [IsOrderedRing α] [Nontrivial α]
+定理 of自然数_pos
+  结论: {α} [半环 α] [偏序 α] [是Ordered环 α] [非平凡 α]
   证明: ofNat_pos'
 
 Depends on / 依赖: ofNat_pos
@@ -206,7 +206,7 @@ theorem cast_tsub
 
 中文:
 定理 cast_tsub
-  结论: [CommSemiring α] [PartialOrder α] [IsOrderedRing α] [CanonicallyOrderedAdd α]
+  结论: [交换半环 α] [偏序 α] [是Ordered环 α] [典范有序加法 α]
   证明: by
   rcases le_total m n with h | h
   · rw [Nat.sub_eq_zero_of_le h, cast_zero, tsub_eq_zero_of_le]
@@ -262,7 +262,7 @@ theorem abs_ofNat
   proof: abs_cast n
 
 中文:
-定理 abs_ofNat
+定理 abs_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: |(of自然数(n) : R)| = of自然数(n)
   证明: abs_cast n

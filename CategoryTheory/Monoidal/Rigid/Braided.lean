@@ -162,7 +162,7 @@ definition hasLeftDualOfHasRightDual
 
 中文:
 定义 hasLeftDualOfHasRightDual
-  签名: [HasRightDual X]
+  签名: [有RightDual X]
   定义体: Xᘁ
   exact := exactPairing_swap X Xᘁ
 -/
@@ -183,7 +183,7 @@ definition hasRightDualOfHasLeftDual
 
 中文:
 定义 hasRightDualOfHasLeftDual
-  签名: [HasLeftDual X]
+  签名: [有LeftDual X]
   定义体: ᘁX
   exact := exactPairing_swap ᘁX X
 -/
@@ -204,7 +204,7 @@ definition leftRigidCategoryOfRightRigidCategory
 
 中文:
 定义 leftRigidCategoryOfRightRigidCategory
-  签名: [RightRigidCategory C]
+  签名: [RightRigid范畴 C]
   定义体: hasLeftDualOfHasRightDual (X := X)
 
 Depends on / 依赖: hasLeftDualOfHasRightDual
@@ -225,7 +225,7 @@ definition rightRigidCategoryOfLeftRigidCategory
 
 中文:
 定义 rightRigidCategoryOfLeftRigidCategory
-  签名: [LeftRigidCategory C]
+  签名: [LeftRigid范畴 C]
   定义体: hasRightDualOfHasLeftDual (X := X)
 
 Depends on / 依赖: hasRightDualOfHasLeftDual
@@ -247,7 +247,7 @@ definition rigidCategoryOfRightRigidCategory
 
 中文:
 定义 rigidCategoryOfRightRigidCategory
-  签名: [RightRigidCategory C]
+  签名: [RightRigid范畴 C]
   定义体: inferInstance
   leftDual X := hasLeftDualOfHasRightDual (X := X)
 -/
@@ -269,7 +269,7 @@ definition rigidCategoryOfLeftRigidCategory
 
 中文:
 定义 rigidCategoryOfLeftRigidCategory
-  签名: [LeftRigidCategory C]
+  签名: [LeftRigid范畴 C]
   定义体: hasRightDualOfHasLeftDual (X := X)
   leftDual := inferInstance
 

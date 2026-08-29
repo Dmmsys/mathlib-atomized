@@ -77,8 +77,8 @@ instance Submodule.CoFG.topologicalClosure
   body: ‹s.CoFG›.of_le s.le_topologicalClosure
 
 中文:
-实例 Submodule.CoFG.topologicalClosure
-  签名: [Ring 𝕜] [Module 𝕜 E] [ContinuousAdd E]
+实例 子模.CoFG.topologicalClosure
+  签名: [环 𝕜] [模 𝕜 E] [连续加法 E]
   定义体: ‹s.CoFG›.of_le s.le_topologicalClosure
 
 Depends on / 依赖: le_topologicalClosure, of_le, s.CoFG, s.le_topologicalClosure
@@ -97,8 +97,8 @@ instance ContinuousLinearMap.instModuleFinite
     ContinuousLinearMap.coe_injective
 
 中文:
-实例 ContinuousLinearMap.instModuleFinite
-  签名: [CommRing 𝕜] [Module 𝕜 E] [Module.Finite 𝕜 E]
+实例 连续线性映射.instModuleFinite
+  签名: [交换环 𝕜] [模 𝕜 E] [模.有限 𝕜 E]
   定义体: .of_injective (ContinuousLinearMap.coeLM 𝕜 : (E ->L[𝕜] F) ->ₗ[𝕜] E ->ₗ[𝕜] F)
     ContinuousLinearMap.coe_injective
 
@@ -119,8 +119,8 @@ theorem ContinuousLinearMap.finiteDimensional
   proof: inferInstance
 
 中文:
-定理 ContinuousLinearMap.finiteDimensional
-  结论: [Field 𝕜] [Module 𝕜 E]
+定理 连续线性映射.finiteDimensional
+  结论: [域 𝕜] [模 𝕜 E]
   证明: inferInstance
 -/
 protected theorem ContinuousLinearMap.finiteDimensional [Field 𝕜] [Module 𝕜 E]
@@ -153,7 +153,7 @@ theorem unique_topology_of_t2
 
 中文:
 定理 unique_topology_of_t2
-  结论: {t : TopologicalSpace 𝕜} (h₁ : @IsTopologicalAddGroup 𝕜 t _)
+  结论: {t : 拓扑空间 𝕜} (h₁ : @是拓扑加群 𝕜 t _)
   证明: by
   -- Let `𝓣₀` denote the topology on `𝕜` induced by the norm, and `𝓣` be any T2 vector
   -- topology on `𝕜`. To show that `𝓣₀ = 𝓣`, it suffices to show that they have the same
@@ -224,7 +224,7 @@ theorem LinearMap.continuous_of_isClosed_ker
   · -- In the case where `l` is surjective, we factor it as `φ
 
 中文:
-定理 LinearMap.continuous_of_isClosed_ker
+定理 线性映射.continuous_of_isClosed_ker
   结论: (l : E ->ₗ[𝕜] 𝕜)
   证明: by
   -- `l` is either constant or surjective. If it is constant, the result is trivial.
@@ -285,7 +285,7 @@ theorem LinearMap.continuous_iff_isClosed_ker
   proof: ⟨fun h => isClosed_singleton.preimage h, l.continuous_of_isClosed_ker⟩
 
 中文:
-定理 LinearMap.continuous_iff_isClosed_ker
+定理 线性映射.continuous_iff_isClosed_ker
   条件: (l : E ->ₗ[𝕜] 𝕜)
   证明: ⟨fun h => isClosed_singleton.preimage h, l.continuous_of_isClosed_ker⟩
 
@@ -310,8 +310,8 @@ theorem LinearMap.continuous_of_nonzero_on_open
   rwa [hl.interior_compl] at this
 
 中文:
-定理 LinearMap.continuous_of_nonzero_on_open
-  结论: (l : E ->ₗ[𝕜] 𝕜) (s : Set E) (hs₁ : IsOpen s)
+定理 线性映射.continuous_of_nonzero_on_open
+  结论: (l : E ->ₗ[𝕜] 𝕜) (s : 集合 E) (hs₁ : 是开集 s)
   证明: by
   refine l.continuous_of_isClosed_ker (l.isClosed_or_dense_ker.resolve_right fun hl => ?_)
   rcases hs₂ with ⟨x, hx⟩
@@ -350,7 +350,7 @@ theorem continuous_equivFun_basis_aux
 
 中文:
 定理 continuous_equivFun_basis_aux
-  结论: [T2Space E] {ι : 类型v} [Finite ι]
+  结论: [T2空间 E] {ι : 类型v} [有限 ι]
   证明: by
   have := Fintype.ofFinite ι
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
@@ -429,7 +429,7 @@ lemma isModuleTopologyOfFiniteDimensional
 
 中文:
 引理 isModuleTopologyOfFiniteDimensional
-  条件: [T2Space E] [FiniteDimensional 𝕜 E]
+  条件: [T2空间 E] [有限维 𝕜 E]
   证明: -- for the proof, go to a model vector space `b → 𝕜` thanks to `continuous_equivFun_basis`, and
   -- use that it has the module topology
   let b := Basis.ofVectorSpace 𝕜 E
@@ -458,8 +458,8 @@ theorem LinearMap.continuous_of_finiteDimensional
   proof: IsModuleTopology.continuous_of_linearMap f
 
 中文:
-定理 LinearMap.continuous_of_finiteDimensional
-  结论: [T2Space E] [FiniteDimensional 𝕜 E]
+定理 线性映射.continuous_of_finiteDimensional
+  结论: [T2空间 E] [有限维 𝕜 E]
   证明: IsModuleTopology.continuous_of_linearMap f
 
 Depends on / 依赖: IsModuleTopology, IsModuleTopology.continuous_of_linearMap, continuous_of_linearMap
@@ -477,8 +477,8 @@ instance LinearMap.continuousLinearMapClassOfFiniteDimensional
   body: { LinearMap.semilinearMapClass with map_continuous := fun f => f.continuous_of_finiteDimensional }
 
 中文:
-实例 LinearMap.continuousLinearMapClassOfFiniteDimensional
-  签名: [T2Space E] [FiniteDimensional 𝕜 E]
+实例 线性映射.continuousLinearMapClassOfFiniteDimensional
+  签名: [T2空间 E] [有限维 𝕜 E]
   定义体: { LinearMap.semilinearMapClass with map_continuous := fun f => f.continuous_of_finiteDimensional }
 
 Depends on / 依赖: LinearMap, LinearMap.semilinearMapClass, continuous_of_finiteDimensional, f.continuous_of_finiteDimensional, map_continuous, semilinearMapClass
@@ -498,7 +498,7 @@ theorem continuous_equivFun_basis
 
 中文:
 定理 continuous_equivFun_basis
-  条件: [T2Space E] {ι : 类型} [Finite ι] (ξ : Basis ι 𝕜 E)
+  条件: [T2空间 E] {ι : 类型} [有限 ι] (ξ : 基 ι 𝕜 E)
   证明: haveI : FiniteDimensional 𝕜 E := ξ.finiteDimensional_of_finite
   ξ.equivFun.toLinearMap.continuous_of_finiteDimensional
 
@@ -556,8 +556,8 @@ definition _root_.Module.End.toContinuousLinearMap
 @[simp]
 
 中文:
-定义 _root_.Module.End.toContinuousLinearMap
-  签名: (E : 类型v) [NormedAddCommGroup E]
+定义 _root_.模.End.toContinuousLinearMap
+  签名: (E : 类型v) [赋范交换加群 E]
   定义体: { LinearMap.toContinuousLinearMap with
     map_mul' := fun _ _ => rfl
     commutes' := fun _ => rfl }
@@ -587,7 +587,7 @@ theorem coe_toContinuousLinearMap'
 中文:
 定理 coe_toContinuousLinearMap'
   条件: (f : E ->ₗ[𝕜] F')
-  结论: ⇑(LinearMap.toContinuousLinearMap f) = f
+  结论: ⇑(线性映射.toContinuousLinearMap f) = f
   证明: rfl
 
 @[simp]
@@ -666,7 +666,7 @@ theorem isOpenMap_of_finiteDimensional
 
 中文:
 定理 isOpenMap_of_finiteDimensional
-  条件: (f : F ->ₗ[𝕜] E) (hf : Function.Surjective f)
+  条件: (f : F ->ₗ[𝕜] E) (hf : 函数.满射 f)
   证明: IsModuleTopology.isOpenMap_of_surjective hf
 
 Depends on / 依赖: IsModuleTopology, IsModuleTopology.isOpenMap_of_surjective, isOpenMap_of_surjective
@@ -685,7 +685,7 @@ instance canLiftContinuousLinearMap
 
 中文:
 实例 canLiftContinuousLinearMap
-  签名: : CanLift (E ->ₗ[𝕜] F) (E ->L[𝕜] F) (↑) fun _ => True
+  签名: : CanLift (E ->ₗ[𝕜] F) (E ->L[𝕜] F) (↑) fun _ => 真
   定义体: ⟨fun f _ => ⟨LinearMap.toContinuousLinearMap f, rfl⟩⟩
 
 Depends on / 依赖: LinearMap, LinearMap.toContinuousLinearMap, toContinuousLinearMap
@@ -724,7 +724,7 @@ lemma _root_.ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap
   simp [ContinuousLinearMap.ext_iff, LinearMap.ext_iff]
 
 中文:
-引理 _root_.ContinuousLinearMap.toLinearMap_eq_iff_eq_toContinuousLinearMap
+引理 _root_.连续线性映射.toLinearMap_eq_iff_eq_toContinuousLinearMap
   结论: (g : E ->L[𝕜] E)
   证明: by
   simp [ContinuousLinearMap.ext_iff, LinearMap.ext_iff]
@@ -942,7 +942,7 @@ theorem FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq
   proof: (nonempty_linearEquiv_of_finrank_eq cond).map LinearEquiv.toContinuousLinearEquiv
 
 中文:
-定理 FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq
+定理 有限维.nonempty_continuousLinearEquiv_of_finrank_eq
   证明: (nonempty_linearEquiv_of_finrank_eq cond).map LinearEquiv.toContinuousLinearEquiv
 
 Depends on / 依赖: LinearEquiv, LinearEquiv.toContinuousLinearEquiv, nonempty_linearEquiv_of_finrank_eq, toContinuousLinearEquiv
@@ -960,7 +960,7 @@ theorem FiniteDimensional.nonempty_continuousLinearEquiv_iff_finrank_eq
     FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq h⟩
 
 中文:
-定理 FiniteDimensional.nonempty_continuousLinearEquiv_iff_finrank_eq
+定理 有限维.nonempty_continuousLinearEquiv_iff_finrank_eq
   证明: ⟨fun ⟨h⟩ => h.toLinearEquiv.finrank_eq, fun h =>
     FiniteDimensional.nonempty_continuousLinearEquiv_of_finrank_eq h⟩
 
@@ -980,7 +980,7 @@ definition ContinuousLinearEquiv.ofFinrankEq
   body: (LinearEquiv.ofFinrankEq E F cond).toContinuousLinearEquiv
 
 中文:
-定义 ContinuousLinearEquiv.ofFinrankEq
+定义 连续线性等价.ofFinrankEq
   签名: (cond : finrank 𝕜 E = finrank 𝕜 F)
   定义体: (LinearEquiv.ofFinrankEq E F cond).toContinuousLinearEquiv
 
@@ -1007,7 +1007,7 @@ definition constrL
 
 中文:
 定义 constrL
-  签名: (v : Basis ι 𝕜 E) (f : ι -> F)
+  签名: (v : 基 ι 𝕜 E) (f : ι -> F)
   定义体: haveI : FiniteDimensional 𝕜 E := v.finiteDimensional_of_finite
   LinearMap.toContinuousLinearMap (v.constr 𝕜 f)
 
@@ -1031,7 +1031,7 @@ theorem coe_constrL
 
 中文:
 定理 coe_constrL
-  条件: (v : Basis ι 𝕜 E) (f : ι -> F)
+  条件: (v : 基 ι 𝕜 E) (f : ι -> F)
   结论: (v.constrL f : E ->ₗ[𝕜] F) = v.constr 𝕜 f
   证明: rfl
 -/
@@ -1057,7 +1057,7 @@ definition equivFunL
 
 中文:
 定义 equivFunL
-  签名: (v : Basis ι 𝕜 E)
+  签名: (v : 基 ι 𝕜 E)
   定义体: { v.equivFun with
     continuous_toFun :=
       haveI : FiniteDimensional 𝕜 E := v.finiteDimensional_of_finite
@@ -1090,7 +1090,7 @@ lemma equivFunL_symm_apply_repr
 
 中文:
 引理 equivFunL_symm_apply_repr
-  条件: (v : Basis ι 𝕜 E) (x : E)
+  条件: (v : 基 ι 𝕜 E) (x : E)
   证明: v.equivFunL.symm_apply_apply x
 
 @[simp]
@@ -1114,7 +1114,7 @@ theorem constrL_apply
 
 中文:
 定理 constrL_apply
-  条件: {ι : 类型} [Fintype ι] (v : Basis ι 𝕜 E) (f : ι -> F) (e : E)
+  条件: {ι : 类型} [有限类型 ι] (v : 基 ι 𝕜 E) (f : ι -> F) (e : E)
   证明: v.constr_apply_fintype 𝕜 _ _
 
 @[simp 1100]
@@ -1137,7 +1137,7 @@ theorem constrL_basis
 
 中文:
 定理 constrL_basis
-  条件: (v : Basis ι 𝕜 E) (f : ι -> F) (i : ι)
+  条件: (v : 基 ι 𝕜 E) (f : ι -> F) (i : ι)
   结论: v.constrL f (v i) = f i
   证明: v.constr_basis 𝕜 _ _
 
@@ -1228,7 +1228,7 @@ theorem _root_.Matrix.toLin_finTwoProd_toContinuousLinearMap
   proof: ContinuousLinearMap.ext Matrix.toLin_finTwoProd_apply _ _ _ _
 
 中文:
-定理 _root_.Matrix.toLin_finTwoProd_toContinuousLinearMap
+定理 _root_.矩阵.toLin_finTwoProd_toContinuousLinearMap
   条件: (a b c d : 𝕜)
   证明: ContinuousLinearMap.ext Matrix.toLin_finTwoProd_apply _ _ _ _
 
@@ -1265,9 +1265,9 @@ theorem FiniteDimensional.complete
   exact (completeSpace_congr this).1 inferInstance
 
 中文:
-定理 FiniteDimensional.complete
-  条件: [FiniteDimensional 𝕜 E]
-  结论: CompleteSpace E
+定理 有限维.complete
+  条件: [有限维 𝕜 E]
+  结论: 完备空间 E
   证明: by
   set e := ContinuousLinearEquiv.ofFinrankEq (@finrank_fin_fun 𝕜 _ _ (finrank 𝕜 E)).symm
   have : IsUniformEmbedding e.toEquiv.symm := e.symm.isUniformEmbedding
@@ -1292,8 +1292,8 @@ theorem Submodule.complete_of_finiteDimensional
   completeSpace_coe_iff_isComplete.1 (FiniteDimensional.complete 𝕜 s)
 
 中文:
-定理 Submodule.complete_of_finiteDimensional
-  条件: (s : Submodule 𝕜 E) [FiniteDimensional 𝕜 s]
+定理 子模.complete_of_finiteDimensional
+  条件: (s : 子模 𝕜 E) [有限维 𝕜 s]
   证明: haveI : IsUniformAddGroup s := s.toAddSubgroup.isUniformAddGroup
   completeSpace_coe_iff_isComplete.1 (FiniteDimensional.complete 𝕜 s)
 
@@ -1322,7 +1322,7 @@ theorem Submodule.closed_of_finiteDimensional
   s.complete_of_finiteDimensional.isClosed
 
 中文:
-定理 Submodule.closed_of_finiteDimensional
+定理 子模.closed_of_finiteDimensional
   证明: letI := IsTopologicalAddGroup.rightUniformSpace E
   haveI : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   s.complete_of_finiteDimensional.isClosed
@@ -1346,7 +1346,7 @@ theorem Submodule.isClosed_mono_of_finiteDimensional_quotient
   exact (map s.mkQ t).closed_of_finiteDimensional.preimage continuous_quot_mk
 
 中文:
-定理 Submodule.isClosed_mono_of_finiteDimensional_quotient
+定理 子模.isClosed_mono_of_finiteDimensional_quotient
   证明: by
   rw [show t = comap s.mkQ (map s.mkQ t) by simpa]
   exact (map s.mkQ t).closed_of_finiteDimensional.preimage continuous_quot_mk
@@ -1370,7 +1370,7 @@ theorem Submodule.isClosed_sup_finiteDimensional
   exact (map s.mkQ t).closed_of_finiteDimensional.preimage continuous_quot_mk
 
 中文:
-定理 Submodule.isClosed_sup_finiteDimensional
+定理 子模.isClosed_sup_finiteDimensional
   证明: by
   rw [← comap_map_mkQ]
   exact (map s.mkQ t).closed_of_finiteDimensional.preimage continuous_quot_mk
@@ -1395,7 +1395,7 @@ have : FiniteDimensional 𝕜 t := .of_fg Submodule.CoFG.fg_of_isCompl s_compl_t
   exact Submodule.isClosed_sup_finiteDimensional _ _ h
 
 中文:
-定理 LinearMap.isClosed_range_of_isClosed_map_of_finiteDimensional_quotient
+定理 线性映射.isClosed_range_of_isClosed_map_of_finiteDimensional_quotient
   证明: by
   obtain ⟨t, s_compl_t⟩ := Submodule.exists_isCompl s
 have : FiniteDimensional 𝕜 t := .of_fg Submodule.CoFG.fg_of_isCompl s_compl_t inferInstance
@@ -1425,8 +1425,8 @@ theorem LinearMap.isClosedEmbedding_of_injective
       simpa [LinearMap.coe_range f] using (LinearMap.range f).closed_of_finiteDimensional }
 
 中文:
-定理 LinearMap.isClosedEmbedding_of_injective
-  结论: [T2Space E] [FiniteDimensional 𝕜 E] [T2Space F]
+定理 线性映射.isClosedEmbedding_of_injective
+  结论: [T2空间 E] [有限维 𝕜 E] [T2空间 F]
   证明: let g := LinearEquiv.ofInjective f (LinearMap.ker_eq_bot.mp hf)
   { IsEmbedding.subtypeVal.comp g.toContinuousLinearEquiv.toHomeomorph.isEmbedding with
     isClosed_range := by
@@ -1451,7 +1451,7 @@ theorem isClosedEmbedding_smul_left
 
 中文:
 定理 isClosedEmbedding_smul_left
-  条件: [T2Space E] {c : E} (hc : c != 0)
+  条件: [T2空间 E] {c : E} (hc : c != 0)
   证明: LinearMap.isClosedEmbedding_of_injective (LinearMap.ker_toSpanSingleton 𝕜 hc)
 
 Depends on / 依赖: LinearMap, LinearMap.isClosedEmbedding_of_injective, LinearMap.ker_toSpanSingleton, isClosedEmbedding_of_injective, ker_toSpanSingleton
@@ -1476,8 +1476,8 @@ theorem isClosedMap_smul_left
 
 中文:
 定理 isClosedMap_smul_left
-  条件: [T2Space E] (c : E)
-  结论: IsClosedMap fun x : 𝕜 => x • c
+  条件: [T2空间 E] (c : E)
+  结论: 是闭映射 fun x : 𝕜 => x • c
   证明: by
   by_cases hc : c = 0
   · simp_rw [hc, smul_zero]
@@ -1506,8 +1506,8 @@ alias ContinuousLinearMap.exists_right_inverse_of_surjective :=
   ContinuousLinearMap.exists_rightInverse_of_surjective
 
 中文:
-定理 ContinuousLinearMap.exists_rightInverse_of_surjective
-  结论: [T2Space F] [FiniteDimensional 𝕜 F]
+定理 连续线性映射.存在_rightInverse_of_surjective
+  结论: [T2空间 F] [有限维 𝕜 F]
   证明: let ⟨g, hg⟩ := (f : E ->ₗ[𝕜] F).exists_rightInverse_of_surjective hf
   ⟨LinearMap.toContinuousLinearMap g, ContinuousLinearMap.coe_inj.1 hg⟩
 
@@ -1536,8 +1536,8 @@ theorem ContinuousLinearMap.isQuotientMap_of_finiteDimensional
   .of_inverse g.continuous f.continuous (fun _ => congr($hg _))
 
 中文:
-定理 ContinuousLinearMap.isQuotientMap_of_finiteDimensional
-  结论: [T2Space F] [FiniteDimensional 𝕜 F]
+定理 连续线性映射.isQuotientMap_of_finiteDimensional
+  结论: [T2空间 F] [有限维 𝕜 F]
   证明: let ⟨g, hg⟩ := f.exists_rightInverse_of_surjective hf
   .of_inverse g.continuous f.continuous (fun _ => congr($hg _))
 
@@ -1560,8 +1560,8 @@ theorem ContinuousLinearMap.isStrictMap_of_finiteDimensional
   exact f.rangeRestrict.isQuotientMap_of_finiteDimensional (by simp)
 
 中文:
-定理 ContinuousLinearMap.isStrictMap_of_finiteDimensional
-  结论: [T2Space F] [FiniteDimensional 𝕜 F]
+定理 连续线性映射.isStrictMap_of_finiteDimensional
+  结论: [T2空间 F] [有限维 𝕜 F]
   证明: by
   rw [isStrictMap_iff_isQuotientMap_rangeFactorization]
   exact f.rangeRestrict.isQuotientMap_of_finiteDimensional (by simp)
@@ -1587,7 +1587,7 @@ SeparationQuotient.isInducing_mk.locallyCompactSpace
   let ⟨_, ⟨b⟩⟩ := Basis.exists_basis K (SeparationQuot
 
 中文:
-定理 LocallyCompactSpace.of_finiteDimensional_of_complete
+定理 局部紧空间.of_finiteDimensional_of_complete
   结论: (K V : 类型)
   证明: -- Reduce to `SeparationQuotient V`, which is a `T2Space`.
   suffices LocallyCompactSpace (SeparationQuotient V) from
@@ -1630,8 +1630,8 @@ theorem FiniteDimensional.of_totallyBounded_nhds_zero
     (c • U) ((set_smul_mem_nhds_zero_iff hc_ne).mpr hU_
 
 中文:
-定理 FiniteDimensional.of_totallyBounded_nhds_zero
-  结论: {U : Set Eᵤ} (hU_nhds : U in 𝓝 (0 : Eᵤ))
+定理 有限维.of_totallyBounded_nhds_zero
+  结论: {U : 集合 Eᵤ} (hU_nhds : U in 𝓝 (0 : Eᵤ))
   证明: by
   obtain ⟨c, hc0, hc1⟩ : exists c : 𝕜, 0 < ‖c‖ ∧ ‖c‖ < 1 := NormedField.exists_norm_lt 𝕜 zero_lt_one
   have hc_ne : c != 0 := norm_pos_iff.mp hc0
@@ -1693,8 +1693,8 @@ theorem FiniteDimensional.of_totallyBounded_nhds
   exact this ▸ hU_tb.image (uniformContinuous_id.sub uniformContinuous_const)
 
 中文:
-定理 FiniteDimensional.of_totallyBounded_nhds
-  结论: {x : Eᵤ} {U : Set Eᵤ} (hU_nhds : U in 𝓝 x)
+定理 有限维.of_totallyBounded_nhds
+  结论: {x : Eᵤ} {U : 集合 Eᵤ} (hU_nhds : U in 𝓝 x)
   证明: by
   replace hU_nhds : x +ᵥ (-x) +ᵥ U in 𝓝 x := by simpa
   rw [vadd_mem_nhds_self] at hU_nhds
@@ -1722,7 +1722,7 @@ theorem FiniteDimensional.of_exists_totallyBounded_nhds
   exact FiniteDimensional.of_totallyBounded_nhds (𝕜 := 𝕜) hU_nhds hU_tb
 
 中文:
-定理 FiniteDimensional.of_exists_totallyBounded_nhds
+定理 有限维.of_存在_totallyBounded_nhds
   证明: by
   rcases h with ⟨x, U, hU_nhds, hU_tb⟩
   exact FiniteDimensional.of_totallyBounded_nhds (𝕜 := 𝕜) hU_nhds hU_tb
@@ -1746,8 +1746,8 @@ theorem FiniteDimensional.of_locallyCompactSpace
   .of_totallyBounded_nhds_zero 𝕜 hU_nhds hU_compact.totallyBounded
 
 中文:
-定理 FiniteDimensional.of_locallyCompactSpace
-  条件: [WeaklyLocallyCompactSpace E]
+定理 有限维.of_locallyCompactSpace
+  条件: [WeaklyLocallyCompact空间 E]
   证明: let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup
   let ⟨_, hU_compact, hU_nhds⟩ := exists_compact_mem_nhds (0 : E)
@@ -1773,7 +1773,7 @@ theorem HasCompactSupport.eq_zero_or_finiteDimensional
 
 中文:
 定理 HasCompactSupport.eq_zero_or_finiteDimensional
-  结论: {X : 类型} [TopologicalSpace X] [Zero X]
+  结论: {X : 类型} [拓扑空间 X] [零 X]
   证明: (HasCompactSupport.eq_zero_or_locallyCompactSpace_of_addGroup hf h'f).imp_right fun h =>
     have : LocallyCompactSpace E := h; .of_locallyCompactSpace 𝕜
 
@@ -1796,7 +1796,7 @@ theorem HasCompactMulSupport.eq_one_or_finiteDimensional
 
 中文:
 定理 HasCompactMulSupport.eq_one_or_finiteDimensional
-  结论: {X : 类型} [TopologicalSpace X] [One X]
+  结论: {X : 类型} [拓扑空间 X] [幺 X]
   证明: have : T1Space (Additive X) := ‹_›
   HasCompactSupport.eq_zero_or_finiteDimensional 𝕜 (X := Additive X) hf h'f
 
@@ -1826,8 +1826,8 @@ theorem Submodule.IsCompl.isTopCompl_of_finiteDimensional_quotient
   simpa [φ] using this.symm
 
 中文:
-定理 Submodule.IsCompl.isTopCompl_of_finiteDimensional_quotient
-  结论: {p q : Submodule 𝕜 E}
+定理 子模.是补集.isTopCompl_of_finiteDimensional_quotient
+  结论: {p q : 子模 𝕜 E}
   证明: by
   let φ : E ⧸ p ->L[𝕜] q := (p.quotientEquivOfIsCompl q h).toLinearMap.toContinuousLinearMap
   have := (φ ∘L p.mkQL).isTopCompl_of_proj fun x => by simp [φ]
@@ -1853,8 +1853,8 @@ theorem Submodule.IsCompl.isTopCompl_of_isClosed_of_finiteDimensional
   exact (p.quotientEquivOfIsCompl q h).symm.finiteDimensional
 
 中文:
-定理 Submodule.IsCompl.isTopCompl_of_isClosed_of_finiteDimensional
-  结论: {p q : Submodule 𝕜 E}
+定理 子模.是补集.isTopCompl_of_isClosed_of_finiteDimensional
+  结论: {p q : 子模 𝕜 E}
   证明: by
   suffices FiniteDimensional 𝕜 (E ⧸ p) from h.isTopCompl_of_finiteDimensional_quotient hp
   exact (p.quotientEquivOfIsCompl q h).symm.finiteDimensional
@@ -1882,8 +1882,8 @@ alias Submodule.ClosedComplemented.of_quotient_finiteDimensional :=
   Submodule.ClosedComplemented.of_finiteDimensional_quot
 
 中文:
-定理 Submodule.ClosedComplemented.of_finiteDimensional_quotient
-  结论: {p : Submodule 𝕜 E}
+定理 子模.ClosedComplemented.of_finiteDimensional_quotient
+  结论: {p : 子模 𝕜 E}
   证明: by
   obtain ⟨q, hq⟩ : exists q, IsCompl p q := p.exists_isCompl
 .closedComplemented exact hq.isTopCompl_of_finiteDimensional_quotient hp
@@ -1915,7 +1915,7 @@ theorem Submodule.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
 .symm.closedComplemented exact C_compl_A.isTopCompl_of_finiteDimensional_quo
 
 中文:
-定理 Submodule.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
+定理 子模.ClosedComplemented.of_disjoint_of_finiteDimensional_quotient
   证明: by
   obtain ⟨C, B_le_C, C_compl_A⟩ := hAB.symm.exists_isCompl
   have C_cofg : FiniteDimensional 𝕜 (E ⧸ C) := CoFG.of_le B_le_C B_cofg
@@ -1946,7 +1946,7 @@ lemma Submodule.ClosedComplemented.of_finiteDimensional_of_le
 omit [IsTopologicalAddGroup F] [ContinuousSMul 𝕜 F] in
 
 中文:
-引理 Submodule.ClosedComplemented.of_finiteDimensional_of_le
+引理 子模.ClosedComplemented.of_finiteDimensional_of_le
   证明: by
   obtain ⟨p, hp⟩ := hA
   obtain ⟨C, hBC⟩ := B.exists_isCompl
@@ -1977,8 +1977,8 @@ theorem ContinuousLinearMap.ker_closedComplemented_of_finiteDimensional_range
   exact f.toLinearMap.quotKerEquivRange.symm.finiteDimensional
 
 中文:
-定理 ContinuousLinearMap.ker_closedComplemented_of_finiteDimensional_range
-  结论: [T2Space F]
+定理 连续线性映射.ker_closedComplemented_of_finiteDimensional_range
+  结论: [T2空间 F]
   证明: by
   suffices FiniteDimensional 𝕜 (E ⧸ f.ker) from .of_finiteDimensional_quotient f.isClosed_ker
   exact f.toLinearMap.quotKerEquivRange.symm.finiteDimensional

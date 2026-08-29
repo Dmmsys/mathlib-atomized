@@ -132,11 +132,11 @@ structure IsLocalFrameOn
     - contMDiffOn((i : ι)) : CMDiff[u] n (T% (s i))
 
 中文:
-结构 IsLocalFrameOn
-  参数: (s : ι -> (x : M) -> V x) (u : Set M)
+结构 是LocalFrameOn
+  参数: (s : ι -> (x : M) -> V x) (u : 集合 M)
   公理与运算 (3 个):
     - linearIndependent({x : M} (hx : x in u)) : LinearIndependent 𝕜 (s · x)
-    - generating({x : M} (hx : x in u)) : ⊤ <= Submodule.span 𝕜 (Set.range (s · x))
+    - generating({x : M} (hx : x in u)) : ⊤ <= 子模.span 𝕜 (集合.range (s · x))
     - contMDiffOn((i : ι)) : CMDiff[u] n (T% (s i))
 -/
 structure IsLocalFrameOn (s : ι -> (x : M) -> V x) (u : Set M) where
@@ -164,7 +164,7 @@ lemma congr
 
 中文:
 引理 congr
-  条件: (hs : IsLocalFrameOn I F n s u) (hs' : 对任意 i, 对任意 x, x in u -> s i x = s' i x)
+  条件: (hs : 是LocalFrameOn I F n s u) (hs' : 对任意 i, 对任意 x, x in u -> s i x = s' i x)
   证明: by
     intro x hx
     have := hs.linearIndependent hx
@@ -206,8 +206,8 @@ lemma mono
 
 中文:
 引理 mono
-  条件: (hs : IsLocalFrameOn I F n s u) (hu'u : u' subseteq u)
-  结论: IsLocalFrameOn I F n s u' where
+  条件: (hs : 是LocalFrameOn I F n s u) (hu'u : u' subseteq u)
+  结论: 是LocalFrameOn I F n s u' where
   证明: by
     intro x hx
     exact hs.linearIndependent (hu'u hx)
@@ -237,7 +237,7 @@ lemma contMDiffAt
 
 中文:
 引理 contMDiffAt
-  条件: (hs : IsLocalFrameOn I F n s u) (hu : IsOpen u) (hx : x in u) (i : ι)
+  条件: (hs : 是LocalFrameOn I F n s u) (hu : 是开集 u) (hx : x in u) (i : ι)
   证明: (hs.contMDiffOn i).contMDiffAt hu.mem_nhds hx
 
 Depends on / 依赖: contMDiffAt, contMDiffOn, hs.contMDiffOn, hu.mem_nhds, mem_nhds
@@ -258,7 +258,7 @@ definition toBasisAt
 
 中文:
 定义 toBasisAt
-  签名: (hs : IsLocalFrameOn I F n s u) (hx : x in u)
+  签名: (hs : 是LocalFrameOn I F n s u) (hx : x in u)
   定义体: Basis.mk (hs.linearIndependent hx) (hs.generating hx)
 
 @[simp]
@@ -280,7 +280,7 @@ lemma toBasisAt_coe
 
 中文:
 引理 toBasisAt_coe
-  条件: (hs : IsLocalFrameOn I F n s u) (hx : x in u) (i : ι)
+  条件: (hs : 是LocalFrameOn I F n s u) (hx : x in u) (i : ι)
   证明: by
   simpa only [toBasisAt] using Basis.mk_apply (hs.linearIndependent hx) (hs.generating hx) i
 
@@ -308,7 +308,7 @@ definition fintypeOfFiniteDimensional
 
 中文:
 定义 fintypeOfFiniteDimensional
-  签名: [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
+  签名: [向量丛 𝕜 F V] [有限维 𝕜 F]
   定义体: by
   have : FiniteDimensional 𝕜 (V x) := by
     let phi := (trivializationAt F V x).linearEquivAt 𝕜 x
@@ -338,7 +338,7 @@ definition coeff
 
 中文:
 定义 coeff
-  签名: (hs : IsLocalFrameOn I F n s u) (i : ι)
+  签名: (hs : 是LocalFrameOn I F n s u) (i : ι)
   定义体: fun x =>
   if hx : x in u then (hs.toBasisAt hx).coord i else 0
 -/
@@ -361,7 +361,7 @@ lemma coeff_apply_of_notMem
 
 中文:
 引理 coeff_apply_of_notMem
-  条件: (hs : IsLocalFrameOn I F n s u) (hx : x ∉ u) (i : ι)
+  条件: (hs : 是LocalFrameOn I F n s u) (hx : x ∉ u) (i : ι)
   证明: by
   simp [coeff, hx]
 
@@ -383,7 +383,7 @@ lemma coeff_apply_of_mem
 
 中文:
 引理 coeff_apply_of_mem
-  条件: (hs : IsLocalFrameOn I F n s u) (hx : x in u) (t : Π x : M, V x) (i : ι)
+  条件: (hs : 是LocalFrameOn I F n s u) (hx : x in u) (t : Π x : M, V x) (i : ι)
   证明: by
   simp [coeff, hx]
 -/
@@ -402,7 +402,7 @@ lemma coeff_sum_eq
 
 中文:
 引理 coeff_sum_eq
-  条件: [Fintype ι] (hs : IsLocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x in u)
+  条件: [有限类型 ι] (hs : 是LocalFrameOn I F n s u) (t : Π x : M, V x) (hx : x in u)
   证明: by
   simpa [coeff, hx] using (Basis.sum_repr (hs.toBasisAt hx) (t x)).symm
 
@@ -427,7 +427,7 @@ lemma eq_of_coeff_eq
 
 中文:
 引理 eq_of_coeff_eq
-  结论: [Finite ι] (hs : IsLocalFrameOn I F n s u) (hx : x in u)
+  结论: [有限 ι] (hs : 是LocalFrameOn I F n s u) (hx : x in u)
   证明: by
   let : Fintype ι := Fintype.ofFinite ι
   calc
@@ -457,7 +457,7 @@ lemma eventually_eq_sum_coeff_smul
 
 中文:
 引理 eventually_eq_sum_coeff_smul
-  结论: [Fintype ι]
+  结论: [有限类型 ι]
   证明: eventually_of_mem hu'' fun _ hx => hs.coeff_sum_eq _ hx
 
 Depends on / 依赖: coeff_sum_eq, eventually_of_mem, hs.coeff_sum_eq
@@ -480,7 +480,7 @@ lemma coeff_congr
 
 中文:
 引理 coeff_congr
-  条件: (hs : IsLocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι)
+  条件: (hs : 是LocalFrameOn I F n s u) (htt' : t x = t' x) (i : ι)
   证明: by
   by_cases hxe : x in u <;> simp [coeff, hxe, htt']
 -/
@@ -502,7 +502,7 @@ lemma coeff_eq_of_eq
 
 中文:
 引理 coeff_eq_of_eq
-  结论: (hs : IsLocalFrameOn I F n s u) (hs' : IsLocalFrameOn I F n s' u)
+  结论: (hs : 是LocalFrameOn I F n s u) (hs' : 是LocalFrameOn I F n s' u)
   证明: by
   by_cases hxe : x in u
   · simp [coeff, hxe]
@@ -531,7 +531,7 @@ lemma eq_iff_coeff
 
 中文:
 引理 eq_iff_coeff
-  结论: [VectorBundle 𝕜 F V] [FiniteDimensional 𝕜 F]
+  结论: [向量丛 𝕜 F V] [有限维 𝕜 F]
   证明: by
   let := fintypeOfFiniteDimensional hs hx
   exact ⟨fun h i => hs.coeff_congr h i, fun h => hs.eq_of_coeff_eq hx h⟩
@@ -561,7 +561,7 @@ lemma contMDiffOn_of_coeff
 
 中文:
 引理 contMDiffOn_of_coeff
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: by
   rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
   have := fintypeOfFiniteDimensional hs hx
@@ -598,7 +598,7 @@ exact almost.congr_of_eventuallyEq (hs.eventually_
 
 中文:
 引理 contMDiffAt_of_coeff
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: by
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
   have almost : CMDiffAt n (T% (fun x => ∑ i, ((LinearMap.piApply (hs.coeff i)) t) x • s i x)) x :=
@@ -627,7 +627,7 @@ lemma contMDiffAt_of_coeff_aux
 
 中文:
 引理 contMDiffAt_of_coeff_aux
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: by
   have := fintypeOfFiniteDimensional hs hx
   exact hs.contMDiffAt_of_coeff h (hu.mem_nhds hx)
@@ -659,7 +659,7 @@ lemma mdifferentiableOn_of_coeff
 
 中文:
 引理 mdifferentiableOn_of_coeff
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: by
   rcases u.eq_empty_or_nonempty with rfl | ⟨x, hx⟩; · simp
   have := fintypeOfFiniteDimensional hs hx
@@ -697,7 +697,7 @@ exact almost.congr_of_eventua
 
 中文:
 引理 mdifferentiableAt_of_coeff
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: by
   have := fintypeOfFiniteDimensional hs (mem_of_mem_nhds hu)
   have almost : MDiffAt (T% (fun x => ∑ i, hs.coeff i x (t x) • s i x)) x :=
@@ -726,7 +726,7 @@ lemma mdifferentiableAt_of_coeff_aux
 
 中文:
 引理 mdifferentiableAt_of_coeff_aux
-  结论: [FiniteDimensional 𝕜 F]
+  结论: [有限维 𝕜 F]
   证明: hs.mdifferentiableAt_of_coeff h (hu.mem_nhds hx)
 
 Depends on / 依赖: hs.mdifferentiableAt_of_coeff, hu.mem_nhds, mdifferentiableAt_of_coeff, mem_nhds
@@ -883,7 +883,7 @@ lemma isLocalFrameOn_localFrame_baseSet
 
 中文:
 引理 isLocalFrameOn_localFrame_baseSet
-  结论: IsLocalFrameOn I F n (e.localFrame b) e.baseSet where
+  结论: 是LocalFrameOn I F n (e.localFrame b) e.baseSet where
   证明: e.contMDiffOn_localFrame_baseSet _ b i
   linearIndependent := by
     intro x hx
@@ -1050,7 +1050,7 @@ alias eq_sum_localFrame_coeff_smul := eq_sum_localFrameCoeff_smul
 
 中文:
 引理 eq_sum_localFrameCoeff_smul
-  条件: [Fintype ι] (hx : x' in e.baseSet)
+  条件: [有限类型 ι] (hx : x' in e.baseSet)
   证明: (isLocalFrameOn_localFrame_baseSet I 1 e b).coeff_sum_eq s hx
 
 @[deprecated (since := "2026-07-26")]
@@ -1076,7 +1076,7 @@ lemma eventually_eq_localFrame_sum_coeff_smul
 
 中文:
 引理 eventually_eq_localFrame_sum_coeff_smul
-  条件: [Fintype ι] (hxe : x in e.baseSet)
+  条件: [有限类型 ι] (hxe : x in e.baseSet)
   证明: eventually_nhds_iff.mpr ⟨e.baseSet, fun _ => e.eq_sum_localFrameCoeff_smul, e.open_baseSet, hxe⟩
 
 Depends on / 依赖: baseSet, e.baseSet, e.eq_sum_localFrameCoeff_smul, e.open_baseSet, eq_sum_localFrameCoeff_smul, eventually_nhds_iff, eventually_nhds_iff.mpr, open_baseSet
@@ -1224,7 +1224,7 @@ alias contMDiffOn_localFrame_coeff := contMDiffOn_localFrameCoeff
 
 中文:
 引理 contMDiffOn_localFrameCoeff
-  结论: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
+  结论: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
   证明: fun _ hx => (contMDiffAt_localFrameCoeff b (ht' hx)
     (hs.contMDiffAt (ht.mem_nhds hx)) i).contMDiffWithinAt
 
@@ -1320,7 +1320,7 @@ alias contMDiffOn_iff_localFrame_coeff := contMDif
 
 中文:
 引理 contMDiffOn_iff_localFrameCoeff
-  条件: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
+  条件: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
   证明: by
   refine ⟨fun h i => contMDiffOn_localFrameCoeff b ht ht' h _, fun h x hx => ?_⟩
   exact (contMDiffAt_iff_localFrameCoeff b (ht' hx)).mpr
@@ -1438,7 +1438,7 @@ alias mdifferentiableOn_localFrame_coeff := mdifferentiableOn_localFrameCoeff
 
 中文:
 引理 mdifferentiableOn_localFrameCoeff
-  结论: (ht : IsOpen t) (ht' : t subseteq e.baseSet)
+  结论: (ht : 是开集 t) (ht' : t subseteq e.baseSet)
   证明: fun _ hx => (mdifferentiableAt_localFrameCoeff b (ht' hx)
     (hs.mdifferentiableAt (ht.mem_nhds hx)) i).mdifferentiableWithinAt
 

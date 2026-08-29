@@ -74,7 +74,7 @@ class IsAnisotropic
     - corootForm_coroot_ne_zero((i : ι)) : P.CorootForm (P.coroot i) (P.coroot i) != 0
 
 中文:
-类 IsAnisotropic
+类 是Anisotropic
   参数: : 命题 where
   公理与运算 (2 个):
     - rootForm_root_ne_zero((i : ι)) : P.RootForm (P.root i) (P.root i) != 0
@@ -94,8 +94,8 @@ instance [P.IsAnisotropic]
   corootForm_coroot_ne_zero := IsAnisotropic.rootForm_root_ne_zero (P := P)
 
 中文:
-实例 [P.IsAnisotropic]
-  签名: : P.flip.IsAnisotropic where
+实例 [P.是Anisotropic]
+  签名: : P.flip.是Anisotropic where
   定义体: IsAnisotropic.corootForm_coroot_ne_zero
   corootForm_coroot_ne_zero := IsAnisotropic.rootForm_root_ne_zero (P := P)
 
@@ -139,7 +139,7 @@ instance instIsAnisotropicOfIsCrystallographic
 
 中文:
 实例 instIsAnisotropicOfIsCrystallographic
-  签名: [CharZero R] [P.IsCrystallographic]
+  签名: [特征零 R] [P.IsCrystallographic]
   定义体: P.isAnisotropic_of_isValuedIn Int
 
 Depends on / 依赖: P.isAnisotropic_of_isValuedIn, isAnisotropic_of_isValuedIn
@@ -161,7 +161,7 @@ definition toInvariantForm
 
 中文:
 定义 toInvariantForm
-  签名: [P.IsAnisotropic]
+  签名: [P.是Anisotropic]
   定义体: P.RootForm
   symm := P.rootForm_symmetric
   ne_zero := IsAnisotropic.rootForm_root_ne_zero
@@ -187,7 +187,7 @@ lemma smul_coroot_eq_of_root_add_root_eq
 
 中文:
 引理 smul_coroot_eq_of_root_add_root_eq
-  结论: [P.IsAnisotropic] [IsDomain R] [IsTorsionFree R N]
+  结论: [P.是Anisotropic] [是整环 R] [是无挠 R N]
   证明: (m * m) * P.pairing i j + (m * n) * (P.pairing i j * P.pairing j i) + (n * n) * P.pairing j i
     Q • P.coroot k = m • P.pairing i j • P.coroot i + n • P.pairing j i • P.coroot j := by
   let B := P.toInvariantForm
@@ -255,7 +255,7 @@ lemma finrank_range_polarization_eq_finrank_span_coroot
 
 中文:
 引理 finrank_range_polarization_eq_finrank_span_coroot
-  条件: [P.IsAnisotropic]
+  条件: [P.是Anisotropic]
   证明: by
   apply (Submodule.finrank_mono (P.range_polarizationIn_le_span_coroot S)).antisymm
   have : IsReflexive R N := .of_isPerfPair P.flip.toLinearMap
@@ -297,7 +297,7 @@ lemma finrank_corootSpan_le
 
 中文:
 引理 finrank_corootSpan_le
-  条件: [P.IsAnisotropic]
+  条件: [P.是Anisotropic]
   证明: by
   rw [← finrank_range_polarization_eq_finrank_span_coroot]
   exact LinearMap.finrank_range_le (P.PolarizationIn S)
@@ -317,7 +317,7 @@ lemma finrank_corootSpan_eq
 
 中文:
 引理 finrank_corootSpan_eq
-  条件: [P.IsAnisotropic]
+  条件: [P.是Anisotropic]
   证明: le_antisymm (P.finrank_corootSpan_le S) (P.flip.finrank_corootSpan_le S)
 
 Depends on / 依赖: P.finrank_corootSpan_le, P.flip.finrank_corootSpan_le, finrank_corootSpan_le, le_antisymm
@@ -341,7 +341,7 @@ lemma polarizationIn_Injective
 
 中文:
 引理 polarizationIn_Injective
-  条件: [P.IsAnisotropic]
+  条件: [P.是Anisotropic]
   证明: by
   have : IsReflexive R M := .of_isPerfPair P.toLinearMap
   have : Module.IsTorsionFree S M := .trans_faithfulSMul S R M
@@ -374,8 +374,8 @@ lemma exists_coroot_ne
   exact Fintype.sum_eq_zero (fun a => (P.coroot'In S a) x • P.coroot a) fun i => by simp [h i]
 
 中文:
-引理 exists_coroot_ne
-  结论: [P.IsAnisotropic]
+引理 存在_coroot_ne
+  结论: [P.是Anisotropic]
   证明: by
   have hI := P.polarizationIn_Injective S
   have h := (map_ne_zero_iff (P.PolarizationIn S) hI).mpr hx
@@ -635,7 +635,7 @@ lemma rootForm_nondegenerate
 
 中文:
 引理 rootForm_nondegenerate
-  条件: [P.IsRootSystem]
+  条件: [P.是RootSystem]
   证明: by
   simpa [(rootForm_symmetric P).isRefl.nondegenerate_iff_separatingLeft,
     LinearMap.separatingLeft_iff_ker_eq_bot] using P.disjoint_rootSpan_ker_rootForm
@@ -771,7 +771,7 @@ instance :
 
 中文:
 实例 :
-  签名: P.IsBalanced
+  签名: P.是Balanced
   定义体: { isCompl_left := by
       simpa only [ker_rootForm_eq_dualAnnihilator] using! P.isCompl_rootSpan_ker_rootForm
     isCompl_right := by
@@ -1040,7 +1040,7 @@ lemma linearIndepOn_coroot_iff_aux
 
 中文:
 引理 linearIndepOn_coroot_iff_aux
-  条件: {s : Set ι} (h : LinearIndepOn R P.root s)
+  条件: {s : 集合 ι} (h : LinearIndepOn R P.root s)
   证明: by
   obtain ⟨f, hf⟩ : exists f : s -> Rˣ, forall i : s, P.coroot i = f i • P.PolarizationEquiv (P.root i) :=
     ⟨fun i => Units.mk0 (2 / P.RootForm (P.root i) (P.root i))
@@ -1068,7 +1068,7 @@ lemma linearIndepOn_coroot_iff
 
 中文:
 引理 linearIndepOn_coroot_iff
-  条件: {s : Set ι}
+  条件: {s : 集合 ι}
   证明: ⟨P.flip.linearIndepOn_coroot_iff_aux, P.linearIndepOn_coroot_iff_aux⟩
 -/
 @[simp] lemma linearIndepOn_coroot_iff {s : Set ι} :
@@ -1094,7 +1094,7 @@ instance instIsAnisotropicOfLinearOrderedCommRing
 
 中文:
 实例 instIsAnisotropicOfLinearOrderedCommRing
-  签名: : IsAnisotropic P
+  签名: : 是Anisotropic P
   定义体: P.isAnisotropic_of_isValuedIn R
 
 Depends on / 依赖: P.isAnisotropic_of_isValuedIn, isAnisotropic_of_isValuedIn
@@ -1222,7 +1222,7 @@ lemma rootForm_anisotropic
 
 中文:
 引理 rootForm_anisotropic
-  条件: [P.IsRootSystem]
+  条件: [P.是RootSystem]
   证明: fun x => P.eq_zero_of_mem_rootSpan_of_rootForm_self_eq_zero by simp
 
 Depends on / 依赖: P.eq_zero_of_mem_rootSpan_of_rootForm_self_eq_zero, eq_zero_of_mem_rootSpan_of_rootForm_self_eq_zero

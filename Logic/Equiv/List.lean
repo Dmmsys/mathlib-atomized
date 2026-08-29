@@ -69,7 +69,7 @@ definition encodeList
 
 中文:
 定义 encodeList
-  签名: : List α -> 自然数
+  签名: : 列表 α -> 自然数
 -/
 def encodeList : List α -> Nat
   | [] => 0
@@ -88,7 +88,7 @@ definition decodeList
 
 中文:
 定义 decodeList
-  签名: : 自然数 -> Option (List α)
+  签名: : 自然数 -> 选项类型 (列表 α)
   定义体: lt_succ_of_le h
 (· :: ·) < > decode (α := α) v₁ <*> decodeList v₂
 
@@ -117,7 +117,7 @@ theorem decodeList_encodeList_eq_self
 
 中文:
 定理 decodeList_encodeList_eq_self
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: decodeList (encodeList l) = some l
   证明: by
   induction l <;> simp [encodeList, decodeList, unpair_pair, encodek, *]
@@ -136,8 +136,8 @@ instance _root_.List.encodable
   body: ⟨encodeList, decodeList, decodeList_encodeList_eq_self⟩
 
 中文:
-实例 _root_.List.encodable
-  签名: : Encodable (List α)
+实例 _root_.列表.encodable
+  签名: : 可编码 (列表 α)
   定义体: ⟨encodeList, decodeList, decodeList_encodeList_eq_self⟩
 
 Depends on / 依赖: decodeList, decodeList_encodeList_eq_self, encodeList
@@ -158,8 +158,8 @@ instance _root_.List.countable
 @[simp]
 
 中文:
-实例 _root_.List.countable
-  签名: {α : 类型} [Countable α]
+实例 _root_.列表.countable
+  签名: {α : 类型} [可数 α]
   定义体: by
   have := Encodable.ofCountable α
   infer_instance
@@ -206,7 +206,7 @@ theorem encode_list_cons
 
 中文:
 定理 encode_list_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: rfl
 
 @[simp]
@@ -228,7 +228,7 @@ theorem decode_list_zero
 
 中文:
 定理 decode_list_zero
-  结论: decode (α := List α) 0 = some []
+  结论: decode (α := 列表 α) 0 = some []
   证明: show decodeList 0 = some [] by rw [decodeList]
 
 @[simp]
@@ -270,7 +270,7 @@ theorem length_le_encode
 
 中文:
 定理 length_le_encode
-  结论: 对任意 l : List α, length l <= encode l
+  结论: 对任意 l : 列表 α, length l <= encode l
 -/
 theorem length_le_encode : forall l : List α, length l <= encode l
   | [] => Nat.zero_le _
@@ -291,7 +291,7 @@ instance _root_.Multiset.countable
 
 中文:
 实例 _root_.Multiset.countable
-  签名: [Countable α]
+  签名: [可数 α]
   定义体: Quotient.countable
 
 Depends on / 依赖: Quotient, Quotient.countable, countable
@@ -308,8 +308,8 @@ instance _root_.Finset.countable
   body: Finset.val_injective.countable
 
 中文:
-实例 _root_.Finset.countable
-  签名: [Countable α]
+实例 _root_.有限集.countable
+  签名: [可数 α]
   定义体: Finset.val_injective.countable
 
 Depends on / 依赖: Finset, Finset.val_injective.countable, countable, val_injective
@@ -329,7 +329,7 @@ definition encodableOfList
 
 中文:
 定义 encodableOfList
-  签名: [DecidableEq α] (l : List α) (H : 对任意 x, x in l)
+  签名: [DecidableEq α] (l : 列表 α) (H : 对任意 x, x in l)
   定义体: ⟨fun a => idxOf a l, (l[·]?), fun _ => getElem?_idxOf (H _)⟩
 
 Depends on / 依赖: _idxOf, getElem
@@ -347,8 +347,8 @@ definition _root_.Fintype.truncEncodable
     Finset.univ.1 (fun l H => Trunc.mk <| encodableOfList l H) Finset.mem_univ
 
 中文:
-定义 _root_.Fintype.truncEncodable
-  签名: (α : 类型) [DecidableEq α] [Fintype α]
+定义 _root_.有限类型.truncEncodable
+  签名: (α : 类型) [DecidableEq α] [有限类型 α]
   定义体: @Quot.recOnSubsingleton _ _ (fun s : Multiset α => (forall x : α, x in s) -> Trunc (Encodable α)) _
     Finset.univ.1 (fun l H => Trunc.mk <| encodableOfList l H) Finset.mem_univ
 
@@ -372,8 +372,8 @@ definition _root_.Fintype.toEncodable
   classical exact (Fintype.truncEncodable α).out
 
 中文:
-定义 _root_.Fintype.toEncodable
-  签名: (α : 类型) [Fintype α]
+定义 _root_.有限类型.toEncodable
+  签名: (α : 类型) [有限类型 α]
   定义体: by
   classical exact (Fintype.truncEncodable α).out
 
@@ -446,7 +446,7 @@ instance denumerableList
 
 中文:
 实例 denumerableList
-  签名: : Denumerable (List α)
+  签名: : 可枚举 (列表 α)
   定义体: ⟨denumerable_list_aux⟩
 
 @[simp]
@@ -468,8 +468,8 @@ theorem list_ofNat_zero
 @[simp]
 
 中文:
-定理 list_ofNat_zero
-  结论: of自然数 (List α) 0 = []
+定理 list_of自然数_zero
+  结论: of自然数 (列表 α) 0 = []
   证明: by rw [← @encode_list_nil α, ofNat_encode]
 
 @[simp]
@@ -491,7 +491,7 @@ theorem list_ofNat_succ
       simp [decodeList, e, show decodeList v₂ = decode (α := List α) v₂ from rfl]
 
 中文:
-定理 list_ofNat_succ
+定理 list_of自然数_succ
   条件: (v : 自然数)
   证明: ofNat_of_decode
     show decodeList (succ v) = _ by
@@ -528,7 +528,7 @@ definition listUniqueEquiv
 
 中文:
 定义 listUniqueEquiv
-  签名: (α : 类型) [Unique α]
+  签名: (α : 类型) [唯一 α]
   定义体: List.length
   invFun n := List.replicate n default
   left_inv u := List.length_injective (by simp)
@@ -551,8 +551,8 @@ definition listNatEquivNat
   body: Denumerable.eqv _
 
 中文:
-定义 listNatEquivNat
-  签名: : List 自然数 ≃ 自然数
+定义 list自然数Equiv自然数
+  签名: : 列表 自然数 ≃ 自然数
   定义体: Denumerable.eqv _
 
 Depends on / 依赖: Denumerable, Denumerable.eqv
@@ -572,7 +572,7 @@ definition listEquivSelfOfEquivNat
     _ ≃ α := e.symm
 
 中文:
-定义 listEquivSelfOfEquivNat
+定义 listEquivSelfOfEquiv自然数
   签名: {α : 类型} (e : α ≃ 自然数)
   定义体: calc
     List α ≃ List Nat := listEquivOfEquiv e

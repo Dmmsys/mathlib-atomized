@@ -65,7 +65,7 @@ definition fintypeAffineCoords
 
 中文:
 定义 fintypeAffineCoords
-  签名: [Fintype ι]
+  签名: [有限类型 ι]
   定义体: (affineSpan k {(1 : k)}).comap (Fintype.linearCombination k (1 : ι -> k)).toAffineMap
 
 Depends on / 依赖: Fintype, Fintype.linearCombination, affineSpan, linearCombination, toAffineMap
@@ -84,7 +84,7 @@ lemma mem_fintypeAffineCoords_iff_sum
 
 中文:
 引理 mem_fintypeAffineCoords_iff_sum
-  条件: [Fintype ι] {w : ι -> k}
+  条件: [有限类型 ι] {w : ι -> k}
   证明: by
   simp [fintypeAffineCoords, Fintype.linearCombination_apply]
 
@@ -105,7 +105,7 @@ lemma AffineIndependent.injOn_affineCombination_fintypeAffineCoords
 
 中文:
 引理 AffineIndependent.injOn_affineCombination_fintypeAffineCoords
-  结论: [Fintype ι] {p : ι -> P}
+  结论: [有限类型 ι] {p : ι -> P}
   证明: fun w₁ hw₁ w₂ hw₂ he => (affineIndependent_iff_eq_of_fintype_affineCombination_eq k p).1
     h w₁ w₂ (mem_fintypeAffineCoords_iff_sum.1 hw₁) (mem_fintypeAffineCoords_iff_sum.1 hw₂) he
 
@@ -128,7 +128,7 @@ definition finsuppAffineCoords
 
 中文:
 定义 finsuppAffineCoords
-  签名: : AffineSubspace k (ι ->₀ k)
+  签名: : 仿射子空间 k (ι ->₀ k)
   定义体: (affineSpan k {(1 : k)}).comap (Finsupp.linearCombination k (1 : ι -> k)).toAffineMap
 
 Depends on / 依赖: Finsupp, Finsupp.linearCombination, affineSpan, linearCombination, toAffineMap
@@ -173,8 +173,8 @@ structure AffineBasis
     - tot' : affineSpan k (range toFun) = ⊤
 
 中文:
-结构 AffineBasis
-  参数: (ι : 类型u₁) (k : 类型u₂) {V : 类型u₃} (P : 类型u₄) [AddCommGroup V]
+结构 仿射基
+  参数: (ι : 类型u₁) (k : 类型u₂) {V : 类型u₃} (P : 类型u₄) [加法交换群 V]
   公理与运算 (3 个):
     - toFun : ι -> P
     - ind' : AffineIndependent k toFun
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (AffineBasis PUnit k PUnit)
+  签名: 可居 (仿射基 命题单元 k 命题单元)
   定义体: ⟨⟨id, affineIndependent_of_subsingleton k id, by simp⟩⟩
 
 Depends on / 依赖: affineIndependent_of_subsingleton
@@ -228,7 +228,7 @@ instance instFunLike
 
 中文:
 实例 instFunLike
-  签名: : FunLike (AffineBasis ι k P) ι P where
+  签名: : 函数状 (仿射基 ι k P) ι P where
   定义体: AffineBasis.toFun
   coe_injective f g h := by cases f; cases g; congr
 
@@ -252,7 +252,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {b₁ b₂ : AffineBasis ι k P} (h : (b₁ : ι -> P) = b₂)
+  条件: {b₁ b₂ : 仿射基 ι k P} (h : (b₁ : ι -> P) = b₂)
   结论: b₁ = b₂
   证明: DFunLike.coe_injective h
 
@@ -313,7 +313,7 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  结论: Nonempty ι
+  结论: 非空 ι
   证明: not_isEmpty_iff.mp fun hι => by
     simpa only [@range_eq_empty _ _ hι, AffineSubspace.span_empty, bot_ne_top] using b.tot
 -/
@@ -404,7 +404,7 @@ theorem reindex_refl
 
 中文:
 定理 reindex_refl
-  结论: b.reindex (Equiv.refl _) = b
+  结论: b.reindex (等价.refl _) = b
   证明: ext rfl
 -/
 theorem reindex_refl : b.reindex (Equiv.refl _) = b :=
@@ -677,7 +677,7 @@ theorem coord_apply_combination_of_mem
 
 中文:
 定理 coord_apply_combination_of_mem
-  条件: (hi : i in s) {w : ι -> k} (hw : s.sum w = 1)
+  条件: (hi : i in s) {w : ι -> k} (hw : s.求和 w = 1)
   证明: by
   classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_true,
       mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
@@ -709,7 +709,7 @@ theorem coord_apply_combination_of_notMem
 
 中文:
 定理 coord_apply_combination_of_notMem
-  条件: (hi : i ∉ s) {w : ι -> k} (hw : s.sum w = 1)
+  条件: (hi : i ∉ s) {w : ι -> k} (hw : s.求和 w = 1)
   证明: by
   classical simp only [coord_apply, hi, Finset.affineCombination_eq_linear_combination, if_false,
       mul_boole, hw, Function.comp_apply, smul_eq_mul, s.sum_ite_eq,
@@ -745,7 +745,7 @@ theorem sum_coord_apply_eq_one
 
 中文:
 定理 sum_coord_apply_eq_one
-  条件: [Fintype ι] (q : P)
+  条件: [有限类型 ι] (q : P)
   结论: ∑ i, b.coord i q = 1
   证明: by
   have hq : q in affineSpan k (range b) := by
@@ -785,7 +785,7 @@ theorem affineCombination_coord_eq_self
 
 中文:
 定理 affineCombination_coord_eq_self
-  条件: [Fintype ι] (q : P)
+  条件: [有限类型 ι] (q : P)
   证明: by
   have hq : q in affineSpan k (range b) := by
     rw [b.tot]
@@ -822,7 +822,7 @@ theorem linear_combination_coord_eq_self
 
 中文:
 定理 linear_combination_coord_eq_self
-  条件: [Fintype ι] (b : AffineBasis ι k V) (v : V)
+  条件: [有限类型 ι] (b : 仿射基 ι k V) (v : V)
   证明: by
   have hb := b.affineCombination_coord_eq_self v
   rwa [Finset.univ.affineCombination_eq_linear_combination _ _ (b.sum_coord_apply_eq_one v)] at hb
@@ -850,7 +850,7 @@ theorem ext_elem
 
 中文:
 定理 ext_elem
-  条件: [Finite ι] {q₁ q₂ : P} (h : 对任意 i, b.coord i q₁ = b.coord i q₂)
+  条件: [有限 ι] {q₁ q₂ : P} (h : 对任意 i, b.coord i q₁ = b.coord i q₂)
   结论: q₁ = q₂
   证明: by
   cases nonempty_fintype ι
@@ -887,7 +887,7 @@ theorem coe_coord_of_subsingleton_eq_one
 
 中文:
 定理 coe_coord_of_subsingleton_eq_one
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   结论: (b.coord i : P -> k) = 1
   证明: by
   ext q
@@ -935,8 +935,8 @@ theorem surjective_coord
 
 中文:
 定理 surjective_coord
-  条件: [Nontrivial ι] (i : ι)
-  结论: Function.Surjective b.coord i
+  条件: [非平凡 ι] (i : ι)
+  结论: 函数.满射 b.coord i
   证明: by
   classical
     intro x
@@ -1030,7 +1030,7 @@ instance instVAdd
 
 中文:
 实例 instVAdd
-  签名: : VAdd V (AffineBasis ι k P) where
+  签名: : 向量加法 V (仿射基 ι k P) where
   定义体: { toFun := x +ᵥ ⇑b,
       ind' := b.ind'.vadd,
       tot' := by rw [Pi.vadd_def, ← vadd_set_range, ← AffineSubspace.pointwise_vadd_span, b.tot,
@@ -1056,7 +1056,7 @@ lemma coe_vadd
 
 中文:
 引理 coe_vadd
-  条件: (v : V) (b : AffineBasis ι k P)
+  条件: (v : V) (b : 仿射基 ι k P)
   结论: ⇑(v +ᵥ b) = v +ᵥ ⇑b
   证明: rfl
 -/
@@ -1075,7 +1075,7 @@ lemma basisOf_vadd
 
 中文:
 引理 basisOf_vadd
-  条件: (v : V) (b : AffineBasis ι k P)
+  条件: (v : V) (b : 仿射基 ι k P)
   结论: (v +ᵥ b).basisOf = b.basisOf
   证明: by
   ext
@@ -1095,7 +1095,7 @@ instance instAddAction
 
 中文:
 实例 instAddAction
-  签名: : AddAction V (AffineBasis ι k P)
+  签名: : 加法作用 V (仿射基 ι k P)
   定义体: DFunLike.coe_injective.addAction _ coe_vadd
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.addAction, addAction, coe_injective, coe_vadd
@@ -1119,7 +1119,7 @@ lemma coord_vadd
 
 中文:
 引理 coord_vadd
-  条件: (v : V) (b : AffineBasis ι k P)
+  条件: (v : V) (b : 仿射基 ι k P)
   证明: by
   ext p
   simp only [coord, ne_eq, basisOf_vadd, coe_vadd, Pi.vadd_apply, Basis.coe_sumCoords,
@@ -1155,7 +1155,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: : SMul G (AffineBasis ι k V) where
+  签名: : 标量乘法 G (仿射基 ι k V) where
   定义体: { toFun := a • ⇑b,
       ind' := b.ind'.smul,
       tot' := by
@@ -1181,7 +1181,7 @@ lemma coe_smul
 
 中文:
 引理 coe_smul
-  条件: (a : G) (b : AffineBasis ι k V)
+  条件: (a : G) (b : 仿射基 ι k V)
   结论: ⇑(a • b) = a • ⇑b
   证明: rfl
 -/
@@ -1196,8 +1196,8 @@ instance [SMulCommClass
   body: DFunLike.ext _ _ fun _ => smul_comm _ _ _
 
 中文:
-实例 [SMulCommClass
-  签名: G G' V] : SMulCommClass G G' (AffineBasis ι k V) where
+实例 [标量交换类
+  签名: G G' V] : 标量交换类 G G' (仿射基 ι k V) where
   定义体: DFunLike.ext _ _ fun _ => smul_comm _ _ _
 
 Depends on / 依赖: DFunLike, DFunLike.ext, smul_comm
@@ -1214,8 +1214,8 @@ instance [SMul
   body: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
 
 中文:
-实例 [SMul
-  签名: G G'] [IsScalarTower G G' V] : IsScalarTower G G' (AffineBasis ι k V) where
+实例 [标量乘法
+  签名: G G'] [标量塔 G G' V] : 标量塔 G G' (仿射基 ι k V) where
   定义体: DFunLike.ext _ _ fun _ => smul_assoc _ _ _
 
 Depends on / 依赖: DFunLike, DFunLike.ext, smul_assoc
@@ -1233,7 +1233,7 @@ lemma basisOf_smul
 
 中文:
 引理 basisOf_smul
-  条件: (a : G) (b : AffineBasis ι k V) (i : ι)
+  条件: (a : G) (b : 仿射基 ι k V) (i : ι)
   证明: by ext j; simp [smul_sub]
 -/
 @[simp] lemma basisOf_smul (a : G) (b : AffineBasis ι k V) (i : ι) :
@@ -1249,7 +1249,7 @@ lemma reindex_smul
 
 中文:
 引理 reindex_smul
-  条件: (a : G) (b : AffineBasis ι k V) (e : ι ≃ ι')
+  条件: (a : G) (b : 仿射基 ι k V) (e : ι ≃ ι')
   证明: rfl
 -/
 @[simp] lemma reindex_smul (a : G) (b : AffineBasis ι k V) (e : ι ≃ ι') :
@@ -1267,7 +1267,7 @@ lemma coord_smul
 
 中文:
 引理 coord_smul
-  条件: (a : G) (b : AffineBasis ι k V) (i : ι)
+  条件: (a : G) (b : 仿射基 ι k V) (i : ι)
   证明: by
   ext v; simp [map_sub, coord]
 -/
@@ -1285,7 +1285,7 @@ instance instMulAction
 
 中文:
 实例 instMulAction
-  签名: : MulAction G (AffineBasis ι k V)
+  签名: : 乘法作用 G (仿射基 ι k V)
   定义体: DFunLike.coe_injective.mulAction _ coe_smul
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.mulAction, coe_injective, coe_smul, mulAction
@@ -1312,7 +1312,7 @@ theorem coord_apply_centroid
 
 中文:
 定理 coord_apply_centroid
-  结论: [CharZero k] (b : AffineBasis ι k P) {s : Finset ι} {i : ι}
+  结论: [特征零 k] (b : 仿射基 ι k P) {s : 有限集 ι} {i : ι}
   证明: by
   rw [Finset.centroid]; rw [b.coord_apply_combination_of_mem hi (s.sum_centroidWeights_eq_one_of_nonempty _ ⟨i]; rw [hi⟩)]; rw [Finset.centroidWeights]; rw [Function.const_apply]
 
@@ -1334,8 +1334,8 @@ theorem exists_affine_subbasis
   rw [Subtype.range_coe]; rw [h_tot]; rw [ht]
 
 中文:
-定理 exists_affine_subbasis
-  条件: {t : Set P} (ht : affineSpan k t = ⊤)
+定理 存在_affine_subbasis
+  条件: {t : 集合 P} (ht : affineSpan k t = ⊤)
   证明: by
   obtain ⟨s, hst, h_tot, h_ind⟩ := exists_affineIndependent k V t
   refine ⟨s, hst, ⟨(↑), h_ind, ?_⟩, rfl⟩
@@ -1361,8 +1361,8 @@ theorem exists_affineBasis
   ⟨s, hs⟩
 
 中文:
-定理 exists_affineBasis
-  结论: 存在 (s : Set P) (b : AffineBasis (↥s) k P), ⇑b = ((↑) : s -> P)
+定理 存在_affineBasis
+  结论: 存在 (s : 集合 P) (b : 仿射基 (↥s) k P), ⇑b = ((↑) : s -> P)
   证明: let ⟨s, _, hs⟩ := exists_affine_subbasis (AffineSubspace.span_univ k V P)
   ⟨s, hs⟩
 

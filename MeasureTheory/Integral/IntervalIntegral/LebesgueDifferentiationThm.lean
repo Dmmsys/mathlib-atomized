@@ -46,7 +46,7 @@ intervalIntegrable_iff.mpr
   have h {a b : Real} : ∫ (t : Real) in Ioc a b, f t = ∫ (t : Real) in Icc 
 
 中文:
-定理 LocallyIntegrable.ae_hasDerivAt_integral
+定理 Locally整数egrable.ae_hasDerivAt_integral
   条件: {f : 实数 -> E} (hf : Locally整数egrable f volume)
   证明: by
   have hg (x y : Real) : IntervalIntegrable f volume x y :=
@@ -98,7 +98,7 @@ theorem IntervalIntegrable.ae_hasDerivAt_integral
   have hg 
 
 中文:
-定理 IntervalIntegrable.ae_hasDerivAt_integral
+定理 整数erval整数egrable.ae_hasDerivAt_integral
   结论: {f : 实数 -> E} {a b : 实数}
   证明: by
   wlog hab : a <= b

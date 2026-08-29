@@ -52,9 +52,9 @@ theorem Int.isCoprime_iff_gcd_eq_one
     exact ⟨_, _, h⟩
 
 中文:
-定理 Int.isCoprime_iff_gcd_eq_one
+定理 整数.isCoprime_iff_gcd_eq_one
   条件: {m n : 整数}
-  结论: IsCoprime m n ↔ 整数.gcd m n = 1
+  结论: IsCoprime m n ↔ 整数.最大公约数 m n = 1
   证明: by
   constructor
   · rintro ⟨a, b, h⟩
@@ -111,7 +111,7 @@ theorem Nat.isCoprime_iff_coprime
 alias ⟨IsCoprime.natCoprime, Nat.Coprime.isCoprime⟩ := Nat.isCoprime_iff_coprime
 
 中文:
-定理 Nat.isCoprime_iff_coprime
+定理 自然数.isCoprime_iff_coprime
   条件: {m n : 自然数}
   结论: IsCoprime (m : 整数) n ↔ 自然数.Coprime m n
   证明: by
@@ -135,8 +135,8 @@ theorem Nat.Coprime.cast
   proof: mod_cast h.isCoprime.intCast
 
 中文:
-定理 Nat.Coprime.cast
-  条件: {R : 类型} [CommRing R] {a b : 自然数} (h : 自然数.Coprime a b)
+定理 自然数.Coprime.cast
+  条件: {R : 类型} [交换环 R] {a b : 自然数} (h : 自然数.Coprime a b)
   证明: mod_cast h.isCoprime.intCast
 
 Depends on / 依赖: h.isCoprime.intCast, intCast, isCoprime, mod_cast
@@ -155,8 +155,8 @@ theorem Rat.isCoprime_num_den
   proof: x.reduced.cast.of_isCoprime_of_dvd_left Int.dvd_natAbs_self
 
 中文:
-定理 Rat.isCoprime_num_den
-  条件: (x : Rat)
+定理 有理数.isCoprime_num_den
+  条件: (x : 有理数)
   结论: IsCoprime x.num x.den
   证明: x.reduced.cast.of_isCoprime_of_dvd_left Int.dvd_natAbs_self
 
@@ -177,7 +177,7 @@ theorem Int.isCoprime_gcdA
   rwa [mul_comm _ y, ← Int.gcd_eq_gcd_ab, Nat.cast_eq_one, ← Int.isCoprime_iff_gcd_eq_one]
 
 中文:
-定理 Int.isCoprime_gcdA
+定理 整数.isCoprime_gcdA
   条件: {x y : 整数} (h : IsCoprime x y)
   结论: IsCoprime (x.gcdA y) y
   证明: by
@@ -202,7 +202,7 @@ theorem Int.isCoprime_gcdB
   rwa [add_comm, mul_comm, ← Int.gcd_eq_gcd_ab, Nat.cast_eq_one, ← Int.isCoprime_iff_gcd_eq_one]
 
 中文:
-定理 Int.isCoprime_gcdB
+定理 整数.isCoprime_gcdB
   条件: {x y : 整数} (h : IsCoprime x y)
   结论: IsCoprime (x.gcdB y) x
   证明: by
@@ -226,7 +226,7 @@ theorem ne_zero_or_ne_zero_of_nat_coprime
 
 中文:
 定理 ne_zero_or_ne_zero_of_nat_coprime
-  结论: {A : 类型u} [CommRing A] [Nontrivial A] {a b : 自然数}
+  结论: {A : 类型u} [交换环 A] [非平凡 A] {a b : 自然数}
   证明: IsCoprime.ne_zero_or_ne_zero (R := A) by
     simpa only [map_natCast] using IsCoprime.map (Nat.Coprime.isCoprime h) (Int.castRingHom A)
 
@@ -395,7 +395,7 @@ theorem Finset.prod_dvd_of_coprime
 
 
 中文:
-定理 Finset.prod_dvd_of_coprime
+定理 有限集.prod_dvd_of_coprime
   证明: by
   classical
   induction t using Finset.induction_on with
@@ -433,8 +433,8 @@ theorem Fintype.prod_dvd_of_coprime
   proof: Finset.prod_dvd_of_coprime (Hs.set_pairwise _) fun i _ => Hs1 i
 
 中文:
-定理 Fintype.prod_dvd_of_coprime
-  结论: [Fintype I] (Hs : Pairwise (IsCoprime on s))
+定理 有限类型.prod_dvd_of_coprime
+  结论: [有限类型 I] (Hs : 两两 (IsCoprime on s))
   证明: Finset.prod_dvd_of_coprime (Hs.set_pairwise _) fun i _ => Hs1 i
 
 Depends on / 依赖: Finset, Finset.prod_dvd_of_coprime, Hs.set_pairwise, prod_dvd_of_coprime, set_pairwise
@@ -464,8 +464,8 @@ theorem exists_sum_eq_one_iff_pairwise_coprime
       exact
 
 中文:
-定理 exists_sum_eq_one_iff_pairwise_coprime
-  条件: [DecidableEq I] (h : t.Nonempty)
+定理 存在_sum_eq_one_iff_pairwise_coprime
+  条件: [DecidableEq I] (h : t.非空)
   证明: by
   induction h using Finset.Nonempty.cons_induction with
   | singleton =>
@@ -541,8 +541,8 @@ theorem exists_sum_eq_one_iff_pairwise_coprime'
   simp only [pairwise_subtype_iff_pairwise_finset', coe_univ, Set.pairwise_univ]
 
 中文:
-定理 exists_sum_eq_one_iff_pairwise_coprime'
-  条件: [Fintype I] [Nonempty I] [DecidableEq I]
+定理 存在_sum_eq_one_iff_pairwise_coprime'
+  条件: [有限类型 I] [非空 I] [DecidableEq I]
   证明: by
   convert! exists_sum_eq_one_iff_pairwise_coprime Finset.univ_nonempty (s := s) using 1
   simp only [pairwise_subtype_iff_pairwise_finset', coe_univ, Set.pairwise_univ]
@@ -892,7 +892,7 @@ theorem Finset.prod_dvd_of_isRelPrime
 Hs aux1 (Finset.mem_insert
 
 中文:
-定理 Finset.prod_dvd_of_isRelPrime
+定理 有限集.prod_dvd_of_isRelPrime
   证明: by
   classical
   exact Finset.induction_on t (fun _ _ => one_dvd z)
@@ -931,8 +931,8 @@ theorem Fintype.prod_dvd_of_isRelPrime
   proof: Finset.prod_dvd_of_isRelPrime (Hs.set_pairwise _) fun i _ => Hs1 i
 
 中文:
-定理 Fintype.prod_dvd_of_isRelPrime
-  结论: [Fintype I] (Hs : Pairwise (IsRelPrime on s))
+定理 有限类型.prod_dvd_of_isRelPrime
+  结论: [有限类型 I] (Hs : 两两 (IsRelPrime on s))
   证明: Finset.prod_dvd_of_isRelPrime (Hs.set_pairwise _) fun i _ => Hs1 i
 
 Depends on / 依赖: Finset, Finset.prod_dvd_of_isRelPrime, Hs.set_pairwise, prod_dvd_of_isRelPrime, set_pairwise

@@ -111,8 +111,8 @@ exact (isBoundedBilinearMap_comp.hasFDerivAt (c x, d x)).comp x hc.prodMk hd
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.clm_comp
-  条件: (hc : HasFDerivAt c c' x) (hd : HasFDerivAt d d' x)
+定理 在点处Fréchet可导.clm_comp
+  条件: (hc : 在点处Fréchet可导 c c' x) (hd : 在点处Fréchet可导 d d' x)
   证明: by
   -- `by exact` to solve unification issues.
 exact (isBoundedBilinearMap_comp.hasFDerivAt (c x, d x)).comp x hc.prodMk hd
@@ -207,8 +207,8 @@ theorem Differentiable.clm_comp
   proof: fun x => (hc x).clm_comp (hd x)
 
 中文:
-定理 Differentiable.clm_comp
-  条件: (hc : Differentiable 𝕜 c) (hd : Differentiable 𝕜 d)
+定理 可微.clm_comp
+  条件: (hc : 可微 𝕜 c) (hd : 可微 𝕜 d)
   证明: fun x => (hc x).clm_comp (hd x)
 
 Depends on / 依赖: clm_comp
@@ -333,8 +333,8 @@ theorem HasFDerivAt.clm_apply
 @[fun_prop]
 
 中文:
-定理 HasFDerivAt.clm_apply
-  条件: (hc : HasFDerivAt c c' x) (hu : HasFDerivAt u u' x)
+定理 在点处Fréchet可导.clm_apply
+  条件: (hc : 在点处Fréchet可导 c c' x) (hu : 在点处Fréchet可导 u u' x)
   证明: by
   -- `by exact` to solve unification issues.
   exact (isBoundedBilinearMap_apply.hasFDerivAt (c x, u x)).comp x (hc.prodMk hu)
@@ -427,8 +427,8 @@ theorem Differentiable.clm_apply
   proof: fun x => (hc x).clm_apply (hu x)
 
 中文:
-定理 Differentiable.clm_apply
-  条件: (hc : Differentiable 𝕜 c) (hu : Differentiable 𝕜 u)
+定理 可微.clm_apply
+  条件: (hc : 可微 𝕜 c) (hu : 可微 𝕜 u)
   证明: fun x => (hc x).clm_apply (hu x)
 
 Depends on / 依赖: clm_apply
@@ -551,8 +551,8 @@ theorem HasFDerivAt.continuousMultilinear_apply_const
   proof: (ContinuousMultilinearMap.apply 𝕜 M H u).hasFDerivAt.comp x hc
 
 中文:
-定理 HasFDerivAt.continuousMultilinear_apply_const
-  条件: (hc : HasFDerivAt c c' x) (u : 对任意 i, M i)
+定理 在点处Fréchet可导.continuousMultilinear_apply_const
+  条件: (hc : 在点处Fréchet可导 c c' x) (u : 对任意 i, M i)
   证明: (ContinuousMultilinearMap.apply 𝕜 M H u).hasFDerivAt.comp x hc
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.apply, hasFDerivAt, hasFDerivAt.comp
@@ -694,8 +694,8 @@ theorem Differentiable.continuousMultilinear_apply_const
   proof: fun x => (hc x).continuousMultilinear_apply_const u
 
 中文:
-定理 Differentiable.continuousMultilinear_apply_const
-  条件: (hc : Differentiable 𝕜 c) (u : 对任意 i, M i)
+定理 可微.continuousMultilinear_apply_const
+  条件: (hc : 可微 𝕜 c) (u : 对任意 i, M i)
   证明: fun x => (hc x).continuousMultilinear_apply_const u
 
 Depends on / 依赖: continuousMultilinear_apply_const
@@ -833,8 +833,8 @@ theorem HasFDerivAt.continuousAlternatingMap_apply_const
   proof: (ContinuousAlternatingMap.apply 𝕜 F G u).hasFDerivAt.comp x hc
 
 中文:
-定理 HasFDerivAt.continuousAlternatingMap_apply_const
-  条件: (hc : HasFDerivAt c c' x) (u : ι -> F)
+定理 在点处Fréchet可导.continuousAlternatingMap_apply_const
+  条件: (hc : 在点处Fréchet可导 c c' x) (u : ι -> F)
   证明: (ContinuousAlternatingMap.apply 𝕜 F G u).hasFDerivAt.comp x hc
 
 Depends on / 依赖: ContinuousAlternatingMap, ContinuousAlternatingMap.apply, hasFDerivAt, hasFDerivAt.comp
@@ -1026,8 +1026,8 @@ theorem Differentiable.continuousAlternatingMap_apply_const
   proof: fun x => (hc x).continuousAlternatingMap_apply_const u
 
 中文:
-定理 Differentiable.continuousAlternatingMap_apply_const
-  条件: (hc : Differentiable 𝕜 c) (u : ι -> F)
+定理 可微.continuousAlternatingMap_apply_const
+  条件: (hc : 可微 𝕜 c) (u : ι -> F)
   证明: fun x => (hc x).continuousAlternatingMap_apply_const u
 
 Depends on / 依赖: continuousAlternatingMap_apply_const

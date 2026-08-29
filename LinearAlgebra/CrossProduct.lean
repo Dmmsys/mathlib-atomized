@@ -65,7 +65,7 @@ definition crossProduct
 
 中文:
 定义 crossProduct
-  签名: : (Fin 3 -> R) ->ₗ[R] (Fin 3 -> R) ->ₗ[R] Fin 3 -> R
+  签名: : (有限集 3 -> R) ->ₗ[R] (有限集 3 -> R) ->ₗ[R] 有限集 3 -> R
   定义体: by
   apply LinearMap.mk₂ R fun a b : Fin 3 -> R =>
       ![a 1 * b 2 - a 2 * b 1, a 2 * b 0 - a 0 * b 2, a 0 * b 1 - a 1 * b 0]
@@ -105,7 +105,7 @@ theorem cross_apply
 
 中文:
 定理 cross_apply
-  条件: (a b : Fin 3 -> R)
+  条件: (a b : 有限集 3 -> R)
   证明: rfl
 -/
 theorem cross_apply (a b : Fin 3 -> R) :
@@ -130,7 +130,7 @@ alias neg_cross := cross_anticomm
 
 中文:
 定理 cross_anticomm
-  条件: (v w : Fin 3 -> R)
+  条件: (v w : 有限集 3 -> R)
   结论: -(v ⨯₃ w) = w ⨯₃ v
   证明: by
   simp [cross_apply, mul_comm]
@@ -161,7 +161,7 @@ theorem cross_anticomm'
 
 中文:
 定理 cross_anticomm'
-  条件: (v w : Fin 3 -> R)
+  条件: (v w : 有限集 3 -> R)
   结论: v ⨯₃ w + w ⨯₃ v = 0
   证明: by
   rw [add_eq_zero_iff_eq_neg]; rw [cross_anticomm]
@@ -186,7 +186,7 @@ theorem cross_self
 
 中文:
 定理 cross_self
-  条件: (v : Fin 3 -> R)
+  条件: (v : 有限集 3 -> R)
   结论: v ⨯₃ v = 0
   证明: by
   simp [cross_apply, mul_comm]
@@ -212,7 +212,7 @@ theorem dot_self_cross
 
 中文:
 定理 dot_self_cross
-  条件: (v w : Fin 3 -> R)
+  条件: (v w : 有限集 3 -> R)
   结论: v ⬝ᵥ v ⨯₃ w = 0
   证明: by
   rw [cross_apply]; rw [vec3_dotProduct]
@@ -240,7 +240,7 @@ theorem dot_cross_self
 
 中文:
 定理 dot_cross_self
-  条件: (v w : Fin 3 -> R)
+  条件: (v w : 有限集 3 -> R)
   结论: w ⬝ᵥ v ⨯₃ w = 0
   证明: by
   rw [← cross_anticomm]; rw [dotProduct_neg]; rw [dot_self_cross]; rw [neg_zero]
@@ -264,7 +264,7 @@ theorem triple_product_permutation
 
 中文:
 定理 triple_product_permutation
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   结论: u ⬝ᵥ v ⨯₃ w = v ⬝ᵥ w ⨯₃ u
   证明: by
   simp_rw [cross_apply, vec3_dotProduct]
@@ -293,8 +293,8 @@ theorem triple_product_eq_det
 
 中文:
 定理 triple_product_eq_det
-  条件: (u v w : Fin 3 -> R)
-  结论: u ⬝ᵥ v ⨯₃ w = Matrix.det ![u, v, w]
+  条件: (u v w : 有限集 3 -> R)
+  结论: u ⬝ᵥ v ⨯₃ w = 矩阵.det ![u, v, w]
   证明: by
   rw [vec3_dotProduct]; rw [cross_apply]; rw [det_fin_three]
   dsimp only [Matrix.cons_val]
@@ -320,7 +320,7 @@ theorem cross_dot_cross
 
 中文:
 定理 cross_dot_cross
-  条件: (u v w x : Fin 3 -> R)
+  条件: (u v w x : 有限集 3 -> R)
   证明: by
   simp_rw [cross_apply, vec3_dotProduct]
   dsimp only [Matrix.cons_val]
@@ -351,7 +351,7 @@ theorem leibniz_cross
 
 中文:
 定理 leibniz_cross
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   结论: u ⨯₃ (v ⨯₃ w) = u ⨯₃ v ⨯₃ w + v ⨯₃ (u ⨯₃ w)
   证明: by
   simp_rw [cross_apply, vec3_add]
@@ -382,7 +382,7 @@ definition Cross.lieRing
 
 中文:
 定义 Cross.lieRing
-  签名: : LieRing (Fin 3 -> R)
+  签名: : Lie环 (有限集 3 -> R)
   定义体: { Pi.addCommGroup with
     bracket := fun u v => u ⨯₃ v
     add_lie := LinearMap.map_add₂ _
@@ -413,7 +413,7 @@ theorem cross_cross
 
 中文:
 定理 cross_cross
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   结论: u ⨯₃ v ⨯₃ w = u ⨯₃ (v ⨯₃ w) - v ⨯₃ (u ⨯₃ w)
   证明: lie_lie u v w
 
@@ -433,7 +433,7 @@ theorem jacobi_cross
 
 中文:
 定理 jacobi_cross
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   结论: u ⨯₃ (v ⨯₃ w) + v ⨯₃ (w ⨯₃ u) + w ⨯₃ (u ⨯₃ v) = 0
   证明: lie_jacobi u v w
 
@@ -465,7 +465,7 @@ lemma crossProduct_ne_zero_iff_linearIndependent
 
 中文:
 引理 crossProduct_ne_zero_iff_linearIndependent
-  条件: {F : 类型} [Field F] {v w : Fin 3 -> F}
+  条件: {F : 类型} [域 F] {v w : 有限集 3 -> F}
   证明: by
   rw [not_iff_comm]
   by_cases hv : v = 0
@@ -517,7 +517,7 @@ theorem cross_cross_eq_smul_sub_smul
 
 中文:
 定理 cross_cross_eq_smul_sub_smul
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   证明: by
   simp_rw [cross_apply, vec3_dotProduct]
   ext i
@@ -553,7 +553,7 @@ theorem cross_cross_eq_smul_sub_smul'
 
 中文:
 定理 cross_cross_eq_smul_sub_smul'
-  条件: (u v w : Fin 3 -> R)
+  条件: (u v w : 有限集 3 -> R)
   证明: by
   simp_rw [cross_apply, vec3_dotProduct]
   ext i

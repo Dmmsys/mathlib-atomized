@@ -143,7 +143,7 @@ theorem norm_injOn_ray_left
 中文:
 定理 norm_injOn_ray_left
   条件: (hx : x != 0)
-  结论: { y | SameRay 实数 x y }.InjOn norm
+  结论: { y | SameRay 实数 x y }.单射限制 norm
   证明: by
   rintro y hy z hz h
   rcases hy.exists_nonneg_left hx with ⟨r, hr, rfl⟩
@@ -173,7 +173,7 @@ theorem norm_injOn_ray_right
 中文:
 定理 norm_injOn_ray_right
   条件: (hy : y != 0)
-  结论: { x | SameRay 实数 x y }.InjOn norm
+  结论: { x | SameRay 实数 x y }.单射限制 norm
   证明: by
   simpa only [SameRay.sameRay_comm] using norm_injOn_ray_left hy
 

@@ -135,7 +135,7 @@ definition swapFactors
 
 中文:
 定义 swapFactors
-  签名: [Fintype α] [LinearOrder α] (f : Perm α)
+  签名: [有限类型 α] [线性序 α] (f : 置换 α)
   定义体: swapFactorsAux ((@univ α _).sort) f fun {_ _} => (mem_sort _).2 (mem_univ _)
 
 Depends on / 依赖: mem_sort, mem_univ, swapFactorsAux
@@ -155,7 +155,7 @@ definition truncSwapFactors
 
 中文:
 定义 truncSwapFactors
-  签名: [Fintype α] (f : Perm α)
+  签名: [有限类型 α] (f : 置换 α)
   定义体: Quotient.recOnSubsingleton (@univ α _).1 (fun l h => Trunc.mk (swapFactorsAux l f (h _)))
     (show forall x, f x != x -> x in (@univ α _).1 from fun _ _ => mem_univ _)
 
@@ -188,7 +188,7 @@ theorem swap_induction_on
 
 中文:
 定理 swap_induction_on
-  结论: [Finite α] {motive : Perm α -> 命题} (f : Perm α)
+  结论: [有限 α] {motive : 置换 α -> 命题} (f : 置换 α)
   证明: by
   cases nonempty_fintype α
   obtain ⟨l, hl⟩ := (truncSwapFactors f).out
@@ -230,8 +230,8 @@ theorem mclosure_isSwap
 
 中文:
 定理 mclosure_isSwap
-  条件: [Finite α]
-  结论: Submonoid.closure { σ : Perm α | IsSwap σ } = ⊤
+  条件: [有限 α]
+  结论: 子幺半群.closure { σ : 置换 α | IsSwap σ } = ⊤
   证明: by
   cases nonempty_fintype α
   refine top_unique fun x _ => ?_
@@ -259,8 +259,8 @@ theorem closure_isSwap
 
 中文:
 定理 closure_isSwap
-  条件: [Finite α]
-  结论: Subgroup.closure { σ : Perm α | IsSwap σ } = ⊤
+  条件: [有限 α]
+  结论: 子群.closure { σ : 置换 α | IsSwap σ } = ⊤
   证明: Subgroup.closure_eq_top_of_mclosure_eq_top mclosure_isSwap
 
 Depends on / 依赖: Subgroup, Subgroup.closure_eq_top_of_mclosure_eq_top, closure_eq_top_of_mclosure_eq_top, mclosure_isSwap
@@ -333,7 +333,7 @@ theorem swap_induction_on'
 
 中文:
 定理 swap_induction_on'
-  结论: [Finite α] {motive : Perm α -> 命题} (f : Perm α) (one : motive 1)
+  结论: [有限 α] {motive : 置换 α -> 命题} (f : 置换 α) (one : motive 1)
   证明: inv_inv f ▸ swap_induction_on f⁻¹ one fun f => mul_swap f⁻¹
 
 Depends on / 依赖: EquivLike, EquivLike.comp_surjective, LinearEquiv, LinearEquiv.coe_coe, LinearMap, LinearMap.coe_comp, LinearMap.surjective_rangeRestrict, coe_coe, coe_comp, comp_surjective, inv_inv, mulMap, mul_swap, simp_rw, surjective_rangeRestrict, swap_induction_on
@@ -415,7 +415,7 @@ theorem mem_finPairsLT
 
 中文:
 定理 mem_finPairsLT
-  条件: {n : 自然数} {a : Σ _ : Fin n, Fin n}
+  条件: {n : 自然数} {a : Σ _ : 有限集 n, 有限集 n}
   结论: a in finPairsLT n ↔ a.2 < a.1
   证明: by
   simp only [finPairsLT, Fin.lt_def, true_and, mem_attachFin, mem_range, mem_univ,
@@ -439,7 +439,7 @@ definition signAux
 
 中文:
 定义 signAux
-  签名: {n : 自然数} (a : Perm (Fin n))
+  签名: {n : 自然数} (a : 置换 (有限集 n))
   定义体: ∏ x in finPairsLT n, if a x.1 <= a x.2 then -1 else 1
 
 @[simp]
@@ -465,7 +465,7 @@ theorem signAux_one
 中文:
 定理 signAux_one
   条件: (n : 自然数)
-  结论: signAux (1 : Perm (Fin n)) = 1
+  结论: signAux (1 : 置换 (有限集 n)) = 1
   证明: by
   unfold signAux
   conv => rhs; rw [← @Finset.prod_const_one _ _ (finPairsLT n)]
@@ -488,7 +488,7 @@ definition signBijAux
 
 中文:
 定义 signBijAux
-  签名: {n : 自然数} (f : Perm (Fin n)) (a : Σ _ : Fin n, Fin n)
+  签名: {n : 自然数} (f : 置换 (有限集 n)) (a : Σ _ : 有限集 n, 有限集 n)
   定义体: if _ : f a.2 < f a.1 then ⟨f a.1, f a.2⟩ else ⟨f a.2, f a.1⟩
 -/
 def signBijAux {n : Nat} (f : Perm (Fin n)) (a : Σ _ : Fin n, Fin n) : Σ _ : Fin n, Fin n :=
@@ -512,7 +512,7 @@ theorem signBijAux_injOn
 
 中文:
 定理 signBijAux_injOn
-  条件: {n : 自然数} {f : Perm (Fin n)}
+  条件: {n : 自然数} {f : 置换 (有限集 n)}
   证明: by
   rintro ⟨a₁, a₂⟩ ha ⟨b₁, b₂⟩ hb h
   dsimp [signBijAux] at h
@@ -554,7 +554,7 @@ mem_finPairsLT.2
 
 中文:
 定理 signBijAux_surj
-  条件: {n : 自然数} {f : Perm (Fin n)}
+  条件: {n : 自然数} {f : 置换 (有限集 n)}
   证明: fun ⟨a₁, a₂⟩ ha =>
     if hxa : f.symm a₂ < f.symm a₁ then
       ⟨⟨f.symm a₁, f.symm a₂⟩, mem_finPairsLT.2 hxa, by
@@ -597,7 +597,7 @@ theorem signBijAux_mem
 
 中文:
 定理 signBijAux_mem
-  条件: {n : 自然数} {f : Perm (Fin n)}
+  条件: {n : 自然数} {f : 置换 (有限集 n)}
   证明: fun ⟨a₁, a₂⟩ ha => by
     unfold signBijAux
     split_ifs with h
@@ -633,7 +633,7 @@ theorem signAux_inv
 
 中文:
 定理 signAux_inv
-  条件: {n : 自然数} (f : Perm (Fin n))
+  条件: {n : 自然数} (f : 置换 (有限集 n))
   结论: signAux f⁻¹ = signAux f
   证明: prod_nbij (signBijAux f⁻¹) signBijAux_mem signBijAux_injOn signBijAux_surj fun ⟨a, b⟩ hab => by
     by_cases h : f.symm b < f.symm a
@@ -669,7 +669,7 @@ theorem signAux_mul
 
 中文:
 定理 signAux_mul
-  条件: {n : 自然数} (f g : Perm (Fin n))
+  条件: {n : 自然数} (f g : 置换 (有限集 n))
   结论: signAux (f * g) = signAux f * signAux g
   证明: by
   rw [← signAux_inv g]
@@ -716,7 +716,7 @@ theorem signAux_swap_zero_one'
 中文:
 定理 signAux_swap_zero_one'
   条件: (n : 自然数)
-  结论: signAux (swap (0 : Fin (n + 2)) 1) = -1
+  结论: signAux (swap (0 : 有限集 (n + 2)) 1) = -1
   证明: show _ = ∏ x in {(⟨1, 0⟩ : Σ _ : Fin (n + 2), Fin (n + 2))},
       if (Equiv.swap 0 1) x.1 <= swap 0 1 x.2 then (-1 : Intˣ) else 1 by
     refine Eq.symm (prod_subset (fun ⟨x₁, x₂⟩ => by
@@ -789,7 +789,7 @@ theorem signAux_swap
 
 中文:
 定理 signAux_swap
-  结论: 对任意 {n : 自然数} {x y : Fin n} (_hxy : x != y), signAux (swap x y) = -1
+  结论: 对任意 {n : 自然数} {x y : 有限集 n} (_hxy : x != y), signAux (swap x y) = -1
   证明: by exact le_add_self
     rw [← isConj_iff_eq]; rw [← signAux_swap_zero_one h2n]
     exact (MonoidHom.mk' signAux signAux_mul).map_isConj
@@ -818,7 +818,7 @@ definition signAux2
 
 中文:
 定义 signAux2
-  签名: : List α -> Perm α -> 整数ˣ
+  签名: : 列表 α -> 置换 α -> 整数ˣ
 -/
 def signAux2 : List α -> Perm α -> Intˣ
   | [], _ => 1
@@ -894,7 +894,7 @@ definition signAux3
 
 中文:
 定义 signAux3
-  签名: [Finite α] (f : Perm α) {s : Multiset α}
+  签名: [有限 α] (f : 置换 α) {s : Multiset α}
   定义体: Quotient.hrecOn s (fun l _ => signAux2 l f) fun l₁ l₂ h => by
     rcases Finite.exists_equiv_fin α with ⟨n, ⟨e⟩⟩
     refine Function.hfunext (forall_congr fun _ => propext h.mem_iff) fun h₁ h₂ _ => ?_
@@ -924,7 +924,7 @@ theorem signAux3_mul_and_swap
 
 中文:
 定理 signAux3_mul_and_swap
-  条件: [Finite α] (f g : Perm α) (s : Multiset α) (hs : 对任意 x, x in s)
+  条件: [有限 α] (f g : 置换 α) (s : Multiset α) (hs : 对任意 x, x in s)
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin α
   induction s using Quotient.inductionOn with | _ l => ?_
@@ -968,7 +968,7 @@ theorem signAux3_symm_trans_trans
 
 中文:
 定理 signAux3_symm_trans_trans
-  结论: [Finite α] [DecidableEq β] [Finite β] (f : Perm α) (e : α ≃ β)
+  结论: [有限 α] [DecidableEq β] [有限 β] (f : 置换 α) (e : α ≃ β)
   证明: by
   induction t, s using Quotient.inductionOn₂
   change signAux2 _ _ = signAux2 _ _
@@ -997,7 +997,7 @@ definition sign
 
 中文:
 定义 sign
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: MonoidHom.mk' (fun f => signAux3 f mem_univ) fun f g => (signAux3_mul_and_swap f g _ mem_univ).1
 
 Depends on / 依赖: MonoidHom, MonoidHom.mk, mem_univ, signAux3, signAux3_mul_and_swap
@@ -1023,7 +1023,7 @@ theorem sign_mul
 
 中文:
 定理 sign_mul
-  条件: (f g : Perm α)
+  条件: (f g : 置换 α)
   结论: sign (f * g) = sign f * sign g
   证明: map_mul sign f g
 
@@ -1049,7 +1049,7 @@ theorem sign_trans
 
 中文:
 定理 sign_trans
-  条件: (f g : Perm α)
+  条件: (f g : 置换 α)
   结论: sign (f.trans g) = sign g * sign f
   证明: by
   rw [← mul_def]; rw [sign_mul]
@@ -1074,7 +1074,7 @@ theorem sign_one
 
 中文:
 定理 sign_one
-  结论: sign (1 : Perm α) = 1
+  结论: sign (1 : 置换 α) = 1
   证明: map_one sign
 
 @[simp]
@@ -1097,7 +1097,7 @@ theorem sign_refl
 
 中文:
 定理 sign_refl
-  结论: sign (Equiv.refl α) = 1
+  结论: sign (等价.refl α) = 1
   证明: map_one sign
 
 @[simp]
@@ -1122,7 +1122,7 @@ theorem sign_inv
 
 中文:
 定理 sign_inv
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   结论: sign f⁻¹ = sign f
   证明: by
   rw [map_inv sign f]; rw [Int.units_inv_eq_self]
@@ -1146,7 +1146,7 @@ theorem sign_symm
 
 中文:
 定理 sign_symm
-  条件: (e : Perm α)
+  条件: (e : 置换 α)
   结论: sign e.symm = sign e
   证明: sign_inv e
 
@@ -1214,7 +1214,7 @@ theorem IsSwap.sign_eq
 
 中文:
 定理 IsSwap.sign_eq
-  条件: {f : Perm α} (h : f.IsSwap)
+  条件: {f : 置换 α} (h : f.IsSwap)
   结论: sign f = -1
   证明: let ⟨_, _, hxy⟩ := h
   hxy.2.symm ▸ sign_swap hxy.1
@@ -1240,7 +1240,7 @@ theorem sign_symm_trans_trans
 
 中文:
 定理 sign_symm_trans_trans
-  条件: [DecidableEq β] [Fintype β] (f : Perm α) (e : α ≃ β)
+  条件: [DecidableEq β] [有限类型 β] (f : 置换 α) (e : α ≃ β)
   证明: signAux3_symm_trans_trans f e mem_univ mem_univ
 
 @[simp]
@@ -1262,7 +1262,7 @@ theorem sign_trans_trans_symm
 
 中文:
 定理 sign_trans_trans_symm
-  条件: [DecidableEq β] [Fintype β] (f : Perm β) (e : α ≃ β)
+  条件: [DecidableEq β] [有限类型 β] (f : 置换 β) (e : α ≃ β)
   证明: sign_symm_trans_trans f e.symm
 
 Depends on / 依赖: e.symm, sign_symm_trans_trans
@@ -1289,7 +1289,7 @@ theorem sign_prod_list_swap
 
 中文:
 定理 sign_prod_list_swap
-  条件: {l : List (Perm α)} (hl : 对任意 g in l, IsSwap g)
+  条件: {l : 列表 (置换 α)} (hl : 对任意 g in l, IsSwap g)
   证明: by
   have h₁ : l.map sign = List.replicate l.length (-1) :=
     List.eq_replicate_iff.2
@@ -1323,7 +1323,7 @@ theorem sign_abs
 
 中文:
 定理 sign_abs
-  条件: (f : Perm α)
+  条件: (f : 置换 α)
   证明: by
   rw [Int.abs_eq_natAbs]; rw [Int.units_natAbs]; rw [Nat.cast_one]
 
@@ -1348,8 +1348,8 @@ theorem sign_surjective
 
 中文:
 定理 sign_surjective
-  条件: [Nontrivial α]
-  结论: Function.Surjective (sign : Perm α -> 整数ˣ)
+  条件: [非平凡 α]
+  结论: 函数.满射 (sign : 置换 α -> 整数ˣ)
   证明: fun a =>
   (Int.units_eq_one_or a).elim (fun h => ⟨1, by simp [h]⟩) fun h =>
     let ⟨x, y, hxy⟩ := exists_pair_ne α
@@ -1376,7 +1376,7 @@ theorem eq_sign_of_surjective_hom
 
 中文:
 定理 eq_sign_of_surjective_hom
-  条件: {s : Perm α ->* 整数ˣ} (hs : Surjective s)
+  条件: {s : 置换 α ->* 整数ˣ} (hs : 满射 s)
   结论: s = sign
   证明: have : forall {f}, IsSwap f -> s f = -1 := fun {f} ⟨x, y, hxy, hxy'⟩ =>
     hxy'.symm ▸
@@ -1426,7 +1426,7 @@ theorem sign_subtypePerm
 
 中文:
 定理 sign_subtypePerm
-  结论: (f : Perm α) {p : α -> 命题} [DecidablePred p] (h₁ : 对任意 x, p (f x) ↔ p x)
+  结论: (f : 置换 α) {p : α -> 命题} [DecidablePred p] (h₁ : 对任意 x, p (f x) ↔ p x)
   证明: by
   let l := (truncSwapFactors (subtypePerm f h₁)).out
   have hl' : forall g' in l.1.map ofSubtype, IsSwap g' := fun g' hg' =>
@@ -1463,7 +1463,7 @@ have hg : g = (e.symm.trans f).trans e := Equiv.ext by simp [h]
 
 中文:
 定理 sign_eq_sign_of_equiv
-  结论: [DecidableEq β] [Fintype β] (f : Perm α) (g : Perm β) (e : α ≃ β)
+  结论: [DecidableEq β] [有限类型 β] (f : 置换 α) (g : 置换 β) (e : α ≃ β)
   证明: by
 have hg : g = (e.symm.trans f).trans e := Equiv.ext by simp [h]
   rw [hg]; rw [sign_symm_trans_trans]
@@ -1492,7 +1492,7 @@ theorem sign_bij
 
 中文:
 定理 sign_bij
-  结论: [DecidableEq β] [Fintype β] {f : Perm α} {g : Perm β} (i : 对任意 x : α, f x != x -> β)
+  结论: [DecidableEq β] [有限类型 β] {f : 置换 α} {g : 置换 β} (i : 对任意 x : α, f x != x -> β)
   证明: calc
     sign f = sign (subtypePerm f <| by simp : Perm { x // f x != x }) :=
       (sign_subtypePerm _ _ fun _ => id).symm
@@ -1540,7 +1540,7 @@ theorem prod_prodExtendRight
 
 中文:
 定理 prod_prodExtendRight
-  结论: {α : 类型} [DecidableEq α] (σ : α -> Perm β) {l : List α}
+  结论: {α : 类型} [DecidableEq α] (σ : α -> 置换 β) {l : 列表 α}
   证明: by
   ext ⟨a, b⟩ : 1
   -- We'll use induction on the list of elements,
@@ -1596,7 +1596,7 @@ theorem sign_prodExtendRight
 
 中文:
 定理 sign_prodExtendRight
-  条件: (a : α) (σ : Perm β)
+  条件: (a : α) (σ : 置换 β)
   结论: sign (prodExtendRight a σ) = sign σ
   证明: sign_bij (fun (ab : α × β) _ => ab.snd)
     (fun ⟨a', b⟩ hab _ => by simp [eq_of_prodExtendRight_ne hab])
@@ -1630,7 +1630,7 @@ theorem sign_prodCongrRight
 
 中文:
 定理 sign_prodCongrRight
-  条件: (σ : α -> Perm β)
+  条件: (σ : α -> 置换 β)
   结论: sign (prodCongrRight σ) = ∏ k, sign (σ k)
   证明: by
   obtain ⟨l, hl, mem_l⟩ := Finite.exists_univ_list α
@@ -1667,7 +1667,7 @@ theorem sign_prodCongrLeft
 
 中文:
 定理 sign_prodCongrLeft
-  条件: (σ : α -> Perm β)
+  条件: (σ : α -> 置换 β)
   结论: sign (prodCongrLeft σ) = ∏ k, sign (σ k)
   证明: by
   refine (sign_eq_sign_of_equiv _ _ (prodComm β α) ?_).trans (sign_prodCongrRight σ)
@@ -1695,7 +1695,7 @@ theorem sign_permCongr
 
 中文:
 定理 sign_permCongr
-  条件: (e : α ≃ β) (p : Perm α)
+  条件: (e : α ≃ β) (p : 置换 α)
   结论: sign (e.permCongr p) = sign p
   证明: sign_eq_sign_of_equiv _ _ e.symm (by simp)
 
@@ -1715,7 +1715,7 @@ theorem sign_trans_trans
 
 中文:
 定理 sign_trans_trans
-  条件: (f : β ≃ α) (p : Perm α) (g : α ≃ β)
+  条件: (f : β ≃ α) (p : 置换 α) (g : α ≃ β)
   证明: by
   rw [← sign_permCongr g]; rw [← sign_mul]; congr; ext; simp
 -/
@@ -1735,7 +1735,7 @@ theorem sign_equivCongr
 
 中文:
 定理 sign_equivCongr
-  条件: (f g : α ≃ β) (p : Perm α)
+  条件: (f g : α ≃ β) (p : 置换 α)
   证明: sign_trans_trans ..
 
 @[simp]
@@ -1763,7 +1763,7 @@ theorem sign_sumCongr
 
 中文:
 定理 sign_sumCongr
-  条件: (σa : Perm α) (σb : Perm β)
+  条件: (σa : 置换 α) (σb : 置换 β)
   结论: sign (sumCongr σa σb) = sign σa * sign σb
   证明: by
   suffices sign (sumCongr σa (1 : Perm β)) = sign σa ∧ sign (sumCongr (1 : Perm α) σb) = sign σb
@@ -1803,7 +1803,7 @@ theorem sign_subtypeCongr
 
 中文:
 定理 sign_subtypeCongr
-  结论: {p : α -> 命题} [DecidablePred p] (ep : Perm { a // p a })
+  结论: {p : α -> 命题} [DecidablePred p] (ep : 置换 { a // p a })
   证明: by
   simp [subtypeCongr]
 
@@ -1829,7 +1829,7 @@ theorem sign_extendDomain
 
 中文:
 定理 sign_extendDomain
-  条件: (e : Perm α) {p : β -> 命题} [DecidablePred p] (f : α ≃ Subtype p)
+  条件: (e : 置换 α) {p : β -> 命题} [DecidablePred p] (f : α ≃ 子类型 p)
   证明: by
   simp only [Equiv.Perm.extendDomain, sign_subtypeCongr, sign_permCongr, sign_refl, mul_one]
 
@@ -1852,7 +1852,7 @@ theorem sign_ofSubtype
 
 中文:
 定理 sign_ofSubtype
-  结论: {p : α -> 命题} [DecidablePred p] [Fintype (Subtype p)]
+  结论: {p : α -> 命题} [DecidablePred p] [有限类型 (子类型 p)]
   证明: sign_extendDomain f (Equiv.refl (Subtype p))
 
 Depends on / 依赖: Equiv.refl, Subtype, sign_extendDomain
@@ -1924,7 +1924,7 @@ lemma mem_ofSign
 
 中文:
 引理 mem_ofSign
-  条件: {s : 整数ˣ} {σ : Perm α}
+  条件: {s : 整数ˣ} {σ : 置换 α}
   结论: σ in ofSign s ↔ σ.sign = s
   证明: by
   rw [ofSign]; rw [mem_filter]; rw [and_iff_right (mem_univ σ)]
@@ -1949,7 +1949,7 @@ lemma ofSign_disjoint
 
 中文:
 引理 ofSign_disjoint
-  结论: _root_.Disjoint (ofSign 1 : Finset (Perm α)) (ofSign (-1))
+  结论: _root_.Disjoint (ofSign 1 : 有限集 (置换 α)) (ofSign (-1))
   证明: by
   rw [Finset.disjoint_iff_ne]
   rintro σ hσ τ hτ rfl

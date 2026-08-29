@@ -39,7 +39,7 @@ inductive coendRel
 归纳类型 coendRel
   参数: : (j : J) × (F.obj (op j)).obj j -> (j : J) × (F.obj (op j)).obj j -> 命题 where
   构造子 (1 个):
-    - mk: {j j' : J} (f : j ⟶ j') (x : (F.obj (op j')).obj j) : coendRel ⟨j, TypeCat.Hom.hom ((F.map f.op).app _) x⟩ ⟨j', TypeCat.Hom.hom ((F.obj _).map f) x⟩
+    - mk: {j j' : J} (f : j ⟶ j') (x : (F.obj (op j')).obj j) : coendRel ⟨j, TypeCat.态射.hom ((F.map f.op).app _) x⟩ ⟨j', TypeCat.态射.hom ((F.obj _).map f) x⟩
 -/
 inductive coendRel : (j : J) × (F.obj (op j)).obj j -> (j : J) × (F.obj (op j)).obj j -> Prop where
   | mk {j j' : J} (f : j ⟶ j') (x : (F.obj (op j')).obj j) :
@@ -91,7 +91,7 @@ abbreviation coend
 
 中文:
 缩写 coend
-  签名: : Type max w u
+  签名: : 类型 最大值 w u
   定义体: Quot (coendRel F)
 
 Depends on / 依赖: coendRel
@@ -173,7 +173,7 @@ definition cowedgeIsColimit
 
 中文:
 定义 cowedgeIsColimit
-  签名: : IsColimit (cowedge F) where
+  签名: : 是余极限 (cowedge F) where
   定义体: TypeCat.ofHom Quot.lift (fun x => Multicofork.π s x.fst x.snd) fun _ _ h => by
     cases h with | mk f x => exact ConcreteCategory.congr_hom (Cowedge.condition s f) _
   fac s := by rintro (_ | _) <;> cat_disch
@@ -200,7 +200,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChosenCoends.{v, u} (Type max w u)
+  签名: ChosenCoends.{v, u} (类型 最大值 w u)
   定义体: Types.cowedge
   isCoend := Types.cowedgeIsColimit
 
@@ -222,7 +222,7 @@ lemma Types.chosenCoend_def
 
 中文:
 引理 Types.chosenCoend_def
-  结论: chosenCoend F = Quot (coendRel F)
+  结论: chosenCoend F = 商 (coendRel F)
   证明: rfl
 -/
 lemma Types.chosenCoend_def : chosenCoend F = Quot (coendRel F) := rfl
@@ -256,7 +256,7 @@ lemma chosenCoend.desc_apply
 
 中文:
 引理 chosenCoend.desc_apply
-  结论: {X : Type max w u} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
+  结论: {X : 类型 最大值 w u} (f : 对任意 j, (F.obj (op j)).obj j ⟶ X)
   证明: rfl
 
 Depends on / 依赖: F.hasBiproduct_of_preserves, hasBiproduct_of_preserves
@@ -278,7 +278,7 @@ lemma chosenCoend.map_apply
 
 中文:
 引理 chosenCoend.map_apply
-  条件: {G : Jᵒᵖ ⥤ J ⥤ Type max w u} (f : F ⟶ G) (x : chosenCoend F)
+  条件: {G : Jᵒᵖ ⥤ J ⥤ 类型 最大值 w u} (f : F ⟶ G) (x : chosenCoend F)
   证明: rfl
 -/
 lemma chosenCoend.map_apply {G : Jᵒᵖ ⥤ J ⥤ Type max w u} (f : F ⟶ G) (x : chosenCoend F) :
@@ -308,7 +308,7 @@ abbreviation end_
 
 中文:
 缩写 end_
-  签名: : Type max w u
+  签名: : 类型 最大值 w u
   定义体: { x : forall j, (F.obj (op j)).obj j // forall ⦃i j : J⦄ (f : i ⟶ j),
       TypeCat.Hom.hom ((F.obj (op i)).map f) (x i) =
         TypeCat.Hom.hom ((F.map f.op).app j) (x j) }
@@ -397,7 +397,7 @@ definition wedgeIsLimit
 
 中文:
 定义 wedgeIsLimit
-  签名: : IsLimit (wedge F) where
+  签名: : 是极限 (wedge F) where
   定义体: TypeCat.ofHom fun x =>
     (⟨fun j : J => Multifork.ι s j x, fun _ _ f => by
       exact ConcreteCategory.congr_hom (Wedge.condition s f) x⟩ : end_ F)
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: ChosenEnds.{v, u} (Type max w u)
+  签名: ChosenEnds.{v, u} (类型 最大值 w u)
   定义体: Types.wedge
   isEnd := Types.wedgeIsLimit
 
@@ -490,7 +490,7 @@ lemma chosenEnd.lift_apply
 
 中文:
 引理 chosenEnd.lift_apply
-  结论: {X : Type max w u} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
+  结论: {X : 类型 最大值 w u} (f : 对任意 j, X ⟶ (F.obj (op j)).obj j)
   证明: rfl
 -/
 lemma chosenEnd.lift_apply {X : Type max w u} (f : forall j, X ⟶ (F.obj (op j)).obj j)
@@ -509,7 +509,7 @@ lemma chosenEnd.map_apply
 
 中文:
 引理 chosenEnd.map_apply
-  结论: {G : Jᵒᵖ ⥤ J ⥤ Type max w u} (f : F ⟶ G)
+  结论: {G : Jᵒᵖ ⥤ J ⥤ 类型 最大值 w u} (f : F ⟶ G)
   证明: rfl
 -/
 lemma chosenEnd.map_apply {G : Jᵒᵖ ⥤ J ⥤ Type max w u} (f : F ⟶ G)

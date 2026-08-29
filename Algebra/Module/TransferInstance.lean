@@ -42,7 +42,7 @@ lemma noZeroSMulDivisors
 
 中文:
 引理 noZeroSMulDivisors
-  条件: [Zero β] [SMul R β] [NoZeroSMulDivisors R β]
+  条件: [零 β] [标量乘法 R β] [无零标量乘因子 R β]
   证明: e.zero
     let := e.smul R
     NoZeroSMulDivisors R α := by
@@ -74,7 +74,7 @@ abbreviation module
 
 中文:
 缩写 module
-  签名: (e : α ≃ β) [AddCommMonoid β] [Module R β]
+  签名: (e : α ≃ β) [加法交换幺半群 β] [模 R β]
   定义体: Equiv.addCommMonoid e
     Module R α :=
   letI := Equiv.addCommMonoid e
@@ -110,7 +110,7 @@ definition linearEquiv
 
 中文:
 定义 linearEquiv
-  签名: (e : α ≃ β) [AddCommMonoid β] [Module R β]
+  签名: (e : α ≃ β) [加法交换幺半群 β] [模 R β]
   定义体: Equiv.addCommMonoid e
     letI := Equiv.module R e
     α ≃ₗ[R] β :=
@@ -149,7 +149,7 @@ lemma linearEquiv_apply
 
 中文:
 引理 linearEquiv_apply
-  条件: (a : α) [AddCommMonoid β] [Module R β]
+  条件: (a : α) [加法交换幺半群 β] [模 R β]
   证明: rfl
 
 @[simp]
@@ -170,7 +170,7 @@ lemma linearEquiv_symm_apply
 
 中文:
 引理 linearEquiv_symm_apply
-  条件: (b : β) [AddCommMonoid β] [Module R β]
+  条件: (b : β) [加法交换幺半群 β] [模 R β]
   证明: Equiv.addCommMonoid e
     letI := Equiv.module R e
     (e.linearEquiv R).symm b = e.symm b := rfl
@@ -197,7 +197,7 @@ lemma moduleIsTorsionFree
 
 中文:
 引理 moduleIsTorsionFree
-  结论: (e : α ≃ β) [AddCommMonoid β] [Module R β]
+  结论: (e : α ≃ β) [加法交换幺半群 β] [模 R β]
   证明: e.addCommMonoid
     let := e.module R
     Module.IsTorsionFree R α := by
@@ -229,7 +229,7 @@ abbreviation AddEquiv.module
   zero_smul := by simp [Equiv.smul_def]
 
 中文:
-缩写 AddEquiv.module
+缩写 加法等价.module
   签名: (e : α ≃+ β)
   定义体: e.toEquiv.smul A
   one_smul := by simp [Equiv.smul_def]
@@ -265,8 +265,8 @@ lemma LinearEquiv.isScalarTower
   apply e.symm.map_smul
 
 中文:
-引理 LinearEquiv.isScalarTower
-  结论: [Module R α] [Module R β] [IsScalarTower R A β]
+引理 线性等价.isScalarTower
+  结论: [模 R α] [模 R β] [标量塔 R A β]
   证明: e.toAddEquiv.module A
     IsScalarTower R A α := by
   let := e.toAddEquiv.module A
@@ -303,7 +303,7 @@ definition AddEquiv.linearEquiv
     map_smul' _ _ := e.apply_symm_apply _ }
 
 中文:
-定义 AddEquiv.linearEquiv
+定义 加法等价.linearEquiv
   签名: (e : α ≃+ β)
   定义体: e.module A
     α ≃ₗ[A] β :=

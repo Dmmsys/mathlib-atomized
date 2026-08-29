@@ -67,8 +67,8 @@ class HasPullbacksOfInclusions
     - [hasPullbackInl : forall {X Y Z : C} (f : Z ⟶ X ⨿ Y), HasPullback coprod.inl f]
 
 中文:
-类 HasPullbacksOfInclusions
-  参数: (C : 类型u) [Category.{v} C] [HasBinaryCoproducts C]
+类 有PullbacksOfInclusions
+  参数: (C : 类型u) [范畴.{v} C] [HasBinaryCoproducts C]
   公理与运算 (1 个):
     - [hasPullbackInl : 对任意 {X Y Z : C} (f : Z ⟶ X ⨿ Y), HasPullback coprod.inl f]
 -/
@@ -87,10 +87,10 @@ class PreservesPullbacksOfInclusions
     - [preservesPullbackInl : forall {X Y Z : C} (f : Z ⟶ X ⨿ Y), PreservesLimit (cospan coprod.inl f) F]
 
 中文:
-类 PreservesPullbacksOfInclusions
-  参数: {C : 类型} [Category* C] {D : 类型} [Category* D]
+类 保持PullbacksOfInclusions
+  参数: {C : 类型} [范畴* C] {D : 类型} [范畴* D]
   公理与运算 (1 个):
-    - [preservesPullbackInl : 对任意 {X Y Z : C} (f : Z ⟶ X ⨿ Y), PreservesLimit (cospan coprod.inl f) F]
+    - [preservesPullbackInl : 对任意 {X Y Z : C} (f : Z ⟶ X ⨿ Y), 保持极限 (cospan coprod.inl f) F]
 -/
 class PreservesPullbacksOfInclusions {C : Type*} [Category* C] {D : Type*} [Category* D]
     (F : C ⥤ D) [HasBinaryCoproducts C] where
@@ -110,12 +110,12 @@ class FinitaryPreExtensive
     - universal' : forall {X Y : C} (c : BinaryCofan X Y), IsColimit c -> IsUniversalColimit c
 
 中文:
-类 FinitaryPreExtensive
-  参数: (C : 类型u) [Category.{v} C]
+类 有限预广延
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (3 个):
-    - [hasFiniteCoproducts : HasFiniteCoproducts C]
-    - [hasPullbacksOfInclusions : HasPullbacksOfInclusions C]
-    - universal' : 对任意 {X Y : C} (c : BinaryCofan X Y), IsColimit c -> IsUniversalColimit c
+    - [hasFiniteCoproducts : 有FiniteCoproducts C]
+    - [hasPullbacksOfInclusions : 有PullbacksOfInclusions C]
+    - universal' : 对任意 {X Y : C} (c : BinaryCofan X Y), 是余极限 c -> IsUniversalColimit c
 -/
 class FinitaryPreExtensive (C : Type u) [Category.{v} C] : Prop where
   [hasFiniteCoproducts : HasFiniteCoproducts C]
@@ -138,12 +138,12 @@ class FinitaryExtensive
     - van_kampen' : forall {X Y : C} (c : BinaryCofan X Y), IsColimit c -> IsVanKampenColimit c
 
 中文:
-类 FinitaryExtensive
-  参数: (C : 类型u) [Category.{v} C]
+类 有限广延
+  参数: (C : 类型u) [范畴.{v} C]
   公理与运算 (3 个):
-    - [hasFiniteCoproducts : HasFiniteCoproducts C]
-    - [hasPullbacksOfInclusions : HasPullbacksOfInclusions C]
-    - van_kampen' : 对任意 {X Y : C} (c : BinaryCofan X Y), IsColimit c -> IsVanKampenColimit c
+    - [hasFiniteCoproducts : 有FiniteCoproducts C]
+    - [hasPullbacksOfInclusions : 有PullbacksOfInclusions C]
+    - van_kampen' : 对任意 {X Y : C} (c : BinaryCofan X Y), 是余极限 c -> IsVanKampenColimit c
 -/
 class FinitaryExtensive (C : Type u) [Category.{v} C] : Prop where
   [hasFiniteCoproducts : HasFiniteCoproducts C]
@@ -172,8 +172,8 @@ theorem FinitaryExtensive.vanKampen
   exact FinitaryExtensive.van_kampen' c hc
 
 中文:
-定理 FinitaryExtensive.vanKampen
-  结论: [FinitaryExtensive C] {F : Discrete WalkingPair ⥤ C}
+定理 有限广延.vanKampen
+  结论: [有限广延 C] {F : 离散 WalkingPair ⥤ C}
   证明: by
   let X := F.obj ⟨WalkingPair.left⟩
   let Y := F.obj ⟨WalkingPair.right⟩
@@ -376,8 +376,8 @@ theorem FinitaryExtensive.mono_inr_of_isColimit
   proof: BinaryCofan.mono_inr_of_isVanKampen (FinitaryExtensive.vanKampen c hc)
 
 中文:
-定理 FinitaryExtensive.mono_inr_of_isColimit
-  结论: [FinitaryExtensive C] {c : BinaryCofan X Y}
+定理 有限广延.mono_inr_of_isColimit
+  结论: [有限广延 C] {c : BinaryCofan X Y}
   证明: BinaryCofan.mono_inr_of_isVanKampen (FinitaryExtensive.vanKampen c hc)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mono_inr_of_isVanKampen, FinitaryExtensive, FinitaryExtensive.vanKampen, mono_inr_of_isVanKampen, vanKampen
@@ -395,8 +395,8 @@ theorem FinitaryExtensive.mono_inl_of_isColimit
   proof: FinitaryExtensive.mono_inr_of_isColimit (BinaryCofan.isColimitFlip hc)
 
 中文:
-定理 FinitaryExtensive.mono_inl_of_isColimit
-  结论: [FinitaryExtensive C] {c : BinaryCofan X Y}
+定理 有限广延.mono_inl_of_isColimit
+  结论: [有限广延 C] {c : BinaryCofan X Y}
   证明: FinitaryExtensive.mono_inr_of_isColimit (BinaryCofan.isColimitFlip hc)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.isColimitFlip, FinitaryExtensive, FinitaryExtensive.mono_inr_of_isColimit, isColimitFlip, mono_inr_of_isColimit
@@ -418,8 +418,8 @@ theorem FinitaryExtensive.isPullback_initial_to_binaryCofan
   proof: BinaryCofan.isPullback_initial_to_of_isVanKampen (FinitaryExtensive.vanKampen c hc)
 
 中文:
-定理 FinitaryExtensive.isPullback_initial_to_binaryCofan
-  结论: [FinitaryExtensive C]
+定理 有限广延.isPullback_initial_to_binaryCofan
+  结论: [有限广延 C]
   证明: BinaryCofan.isPullback_initial_to_of_isVanKampen (FinitaryExtensive.vanKampen c hc)
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.isPullback_initial_to_of_isVanKampen, FinitaryExtensive, FinitaryExtensive.vanKampen, isPullback_initial_to_of_isVanKampen, vanKampen
@@ -455,7 +455,7 @@ theorem finitaryExtensive_iff_of_isTerminal
 
 中文:
 定理 finitaryExtensive_iff_of_isTerminal
-  结论: (C : 类型u) [Category.{v} C] [HasFiniteCoproducts C]
+  结论: (C : 类型u) [范畴.{v} C] [有FiniteCoproducts C]
   证明: by
   refine ⟨fun H => H.van_kampen' c₀ hc₀, fun H => ?_⟩
   constructor
@@ -500,7 +500,7 @@ instance types.finitaryExtensive
 
 中文:
 实例 types.finitaryExtensive
-  签名: : FinitaryExtensive (类型u)
+  签名: : 有限广延 (类型u)
   定义体: by
   classical
   rw [finitaryExtensive_iff_of_isTerminal (Type u) PUnit Types.isTerminalPUnit _
@@ -604,7 +604,7 @@ definition finitaryExtensiveTopCatAux
 
 中文:
 定义 finitaryExtensiveTopCatAux
-  签名: (Z : TopCat.{u})
+  签名: (Z : 顶元素范畴.{u})
   定义体: by
   have h₁ : Set.range (TopCat.pullbackFst f (TopCat.binaryCofan (.of PUnit) (.of PUnit)).inl) =
       f ⁻¹' Set.range Sum.inl := by
@@ -654,7 +654,7 @@ instance finitaryExtensive_TopCat
 
 中文:
 实例 finitaryExtensive_TopCat
-  签名: : FinitaryExtensive TopCat.{u}
+  签名: : 有限广延 顶元素范畴.{u}
   定义体: by
   rw [finitaryExtensive_iff_of_isTerminal TopCat.{u} _ TopCat.isTerminalPUnit _
       (TopCat.binaryCofanIsColimit _ _)]
@@ -778,7 +778,7 @@ FinitaryExtensive.vanKampen _ isColimitOfPreserves _ hc⟩
 
 中文:
 实例 finitaryExtensive_functor
-  签名: [HasPullbacks C] [FinitaryExtensive C]
+  签名: [有Pullbacks C] [有限广延 C]
   定义体: haveI : HasFiniteCoproducts (D ⥤ C) := ⟨fun _ => Limits.functorCategoryHasColimitsOfShape⟩
   ⟨fun c hc => isVanKampenColimit_of_evaluation _ c fun _ =>
 FinitaryExtensive.vanKampen _ isColimitOfPreserves _ hc⟩
@@ -819,7 +819,7 @@ theorem finitaryExtensive_of_preserves_and_reflects
 
 中文:
 定理 finitaryExtensive_of_preserves_and_reflects
-  结论: (F : C ⥤ D) [FinitaryExtensive D]
+  结论: (F : C ⥤ D) [有限广延 D]
   证明: by
   constructor
   intro X Y c hc
@@ -858,7 +858,7 @@ theorem finitaryExtensive_of_preserves_and_reflects_isomorphism
 
 中文:
 定理 finitaryExtensive_of_preserves_and_reflects_isomorphism
-  结论: (F : C ⥤ D) [FinitaryExtensive D]
+  结论: (F : C ⥤ D) [有限广延 D]
   证明: by
   have : ReflectsLimitsOfShape WalkingCospan F := reflectsLimitsOfShape_of_reflectsIsomorphisms
   have : ReflectsColimitsOfShape (Discrete WalkingPair) F :=
@@ -899,8 +899,8 @@ theorem FinitaryPreExtensive.isUniversal_finiteCoproducts_Fin
     refi
 
 中文:
-定理 FinitaryPreExtensive.isUniversal_finiteCoproducts_Fin
-  结论: [FinitaryPreExtensive C] {n : 自然数}
+定理 有限预广延.isUniversal_finiteCoproducts_Fin
+  结论: [有限预广延 C] {n : 自然数}
   证明: by
   let f : Fin n -> C := F.obj ∘ Discrete.mk
   have : F = Discrete.functor f :=
@@ -943,8 +943,8 @@ theorem FinitaryPreExtensive.isUniversal_finiteCoproducts
   exact (IsColimit.whiskerEquivalenceEquiv (Discrete.equivalence e).symm) hc
 
 中文:
-定理 FinitaryPreExtensive.isUniversal_finiteCoproducts
-  结论: [FinitaryPreExtensive C] {ι : 类型}
+定理 有限预广延.isUniversal_finiteCoproducts
+  结论: [有限预广延 C] {ι : 类型}
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin ι
   apply (IsUniversalColimit.whiskerEquivalence_iff (Discrete.equivalence e).symm).mp
@@ -979,8 +979,8 @@ theorem FinitaryExtensive.isVanKampen_finiteCoproducts_Fin
     apply IsVanKampenC
 
 中文:
-定理 FinitaryExtensive.isVanKampen_finiteCoproducts_Fin
-  结论: [FinitaryExtensive C] {n : 自然数}
+定理 有限广延.isVanKampen_finiteCoproducts_Fin
+  结论: [有限广延 C] {n : 自然数}
   证明: by
   let f : Fin n -> C := F.obj ∘ Discrete.mk
   have : F = Discrete.functor f :=
@@ -1027,8 +1027,8 @@ theorem FinitaryExtensive.isVanKampen_finiteCoproducts
   exact (IsColimit.whiskerEquivalenceEquiv (Discrete.equivalence e).symm) hc
 
 中文:
-定理 FinitaryExtensive.isVanKampen_finiteCoproducts
-  结论: [FinitaryExtensive C] {ι : 类型}
+定理 有限广延.isVanKampen_finiteCoproducts
+  结论: [有限广延 C] {ι : 类型}
   证明: by
   obtain ⟨n, ⟨e⟩⟩ := Finite.exists_equiv_fin ι
   apply (IsVanKampenColimit.whiskerEquivalence_iff (Discrete.equivalence e).symm).mp
@@ -1064,8 +1064,8 @@ lemma FinitaryPreExtensive.hasPullbacks_of_is_coproduct
   { 
 
 中文:
-引理 FinitaryPreExtensive.hasPullbacks_of_is_coproduct
-  结论: [FinitaryPreExtensive C] {ι : 类型}
+引理 有限预广延.hasPullbacks_of_is_coproduct
+  结论: [有限预广延 C] {ι : 类型}
   证明: by
   classical
   let f : ι -> C := F.obj ∘ Discrete.mk
@@ -1123,8 +1123,8 @@ lemma FinitaryExtensive.mono_ι
   proof: mono_of_cofan_isVanKampen (isVanKampen_finiteCoproducts hc) _
 
 中文:
-引理 FinitaryExtensive.mono_ι
-  结论: [FinitaryExtensive C] {ι : 类型} [Finite ι] {F : Discrete ι ⥤ C}
+引理 有限广延.mono_ι
+  结论: [有限广延 C] {ι : 类型} [有限 ι] {F : 离散 ι ⥤ C}
   证明: mono_of_cofan_isVanKampen (isVanKampen_finiteCoproducts hc) _
 
 Depends on / 依赖: isVanKampen_finiteCoproducts, mono_of_cofan_isVanKampen
@@ -1143,7 +1143,7 @@ instance [FinitaryExtensive
   body: FinitaryExtensive.mono_ι (coproductIsCoproduct _) ⟨i⟩
 
 中文:
-实例 [FinitaryExtensive
+实例 [有限广延
   签名: C] {ι
   定义体: FinitaryExtensive.mono_ι (coproductIsCoproduct _) ⟨i⟩
 
@@ -1162,8 +1162,8 @@ lemma FinitaryExtensive.isPullback_initial_to
   proof: isPullback_initial_to_of_cofan_isVanKampen (isVanKampen_finiteCoproducts hc) i j e
 
 中文:
-引理 FinitaryExtensive.isPullback_initial_to
-  结论: [FinitaryExtensive C]
+引理 有限广延.isPullback_initial_to
+  结论: [有限广延 C]
   证明: isPullback_initial_to_of_cofan_isVanKampen (isVanKampen_finiteCoproducts hc) i j e
 
 Depends on / 依赖: isPullback_initial_to_of_cofan_isVanKampen, isVanKampen_finiteCoproducts
@@ -1184,8 +1184,8 @@ lemma FinitaryExtensive.isPullback_initial_to_sigma_ι
     (ne_of_apply_ne Discrete.as e)
 
 中文:
-引理 FinitaryExtensive.isPullback_initial_to_sigma_ι
-  结论: [FinitaryExtensive C] {ι : 类型} [Finite ι]
+引理 有限广延.isPullback_initial_to_sigma_ι
+  结论: [有限广延 C] {ι : 类型} [有限 ι]
   证明: FinitaryExtensive.isPullback_initial_to (coproductIsCoproduct _) ⟨i⟩ ⟨j⟩
     (ne_of_apply_ne Discrete.as e)
 
@@ -1216,8 +1216,8 @@ instance FinitaryPreExtensive.hasPullbacks_of_inclusions
   exact @IsColimit.ofPointIso (t := Cofan.mk Z i) (P := _) (i := hi)
 
 中文:
-实例 FinitaryPreExtensive.hasPullbacks_of_inclusions
-  签名: [FinitaryPreExtensive C] {X Z : C}
+实例 有限预广延.hasPullbacks_of_inclusions
+  签名: [有限预广延 C] {X Z : C}
   定义体: by
   apply FinitaryPreExtensive.hasPullbacks_of_is_coproduct (c := Cofan.mk Z i)
   exact @IsColimit.ofPointIso (t := Cofan.mk Z i) (P := _) (i := hi)
@@ -1245,8 +1245,8 @@ lemma FinitaryPreExtensive.isIso_sigmaDesc_fst
     ((Cofan.nonempty_isColimit_iff_isIso_sigmaDesc _).mpr
 
 中文:
-引理 FinitaryPreExtensive.isIso_sigmaDesc_fst
-  结论: [FinitaryPreExtensive C] {α : Type} [Finite α]
+引理 有限预广延.isIso_sigmaDesc_fst
+  结论: [有限预广延 C] {α : 类型} [有限 α]
   证明: by
   let c := (Cofan.mk _ ((fun _ => pullback.fst _ _) : (a : α) -> pullback f (π a) ⟶ _))
   apply c.nonempty_isColimit_iff_isIso_sigmaDesc.mp
@@ -1282,8 +1282,8 @@ let c : Cofan _ := Cofan.mk _ fun (p : ι × ι') =>
   refine IsUniversalColimit.nonempty_isColimit_prod_of_pullbackC
 
 中文:
-实例 FinitaryPreExtensive.isIso_sigmaDesc_map
-  签名: [HasPullbacks C] [FinitaryPreExtensive C]
+实例 有限预广延.isIso_sigmaDesc_map
+  签名: [有Pullbacks C] [有限预广延 C]
   定义体: by
 let c : Cofan _ := Cofan.mk _ fun (p : ι × ι') =>
       pullback.map (f p.1) (g p.2) (Sigma.desc f) (Sigma.desc g) (Sigma.ι _ p.1)
@@ -1327,8 +1327,8 @@ lemma FinitaryPreExtensive.isPullback_sigmaDesc
 Cofan.mk _ fun i => Sigma.ι _ i) (b := Cofan.mk _ fun i => Sigma.ι 
 
 中文:
-引理 FinitaryPreExtensive.isPullback_sigmaDesc
-  结论: [HasPullbacks C] [FinitaryPreExtensive C]
+引理 有限预广延.isPullback_sigmaDesc
+  结论: [有Pullbacks C] [有限预广延 C]
   证明: by
   convert!
     IsUniversalColimit.isPullback_prod_of_isColimit (d :=

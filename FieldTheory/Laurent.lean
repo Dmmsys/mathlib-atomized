@@ -346,7 +346,7 @@ theorem laurent_injective
 
 中文:
 定理 laurent_injective
-  结论: Function.Injective (laurent r)
+  结论: 函数.单射 (laurent r)
   证明: fun _ _ h => by
   simpa [laurent_laurent] using congr_arg (laurent (-r)) h
 

@@ -252,7 +252,7 @@ theorem MeromorphicOn.meromorphicNFAt_mem_codiscreteWithin
 
 中文:
 定理 MeromorphicOn.meromorphicNFAt_mem_codiscreteWithin
-  结论: {U : Set 𝕜}
+  结论: {U : 集合 𝕜}
   证明: by
   filter_upwards [hf.analyticAt_mem_codiscreteWithin] with _ ha
   exact ha.meromorphicNFAt
@@ -576,7 +576,7 @@ theorem meromorphicNFAt_prod
 
 中文:
 定理 meromorphicNFAt_prod
-  结论: {x : 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {x : 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   classical
   have h₃f {τ : ι} (h₁τ : τ in s) (h₂τ : τ ∉ {σ in s | f σ x = 0}) :
@@ -626,7 +626,7 @@ theorem meromorphicNFAt_fun_prod
 
 中文:
 定理 meromorphicNFAt_fun_prod
-  结论: {x : 𝕜} {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {x : 𝕜} {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   convert! meromorphicNFAt_prod h₁f h₂f
   exact (Finset.prod_apply _ s f).symm
@@ -906,7 +906,7 @@ theorem meromorphicNFAt_comp_iff_of_deriv_ne_zero
 
 中文:
 定理 meromorphicNFAt_comp_iff_of_deriv_ne_zero
-  结论: [CompleteSpace 𝕜] [CharZero 𝕜] {x : 𝕜}
+  结论: [完备空间 𝕜] [特征零 𝕜] {x : 𝕜}
   证明: by
   simp [meromorphicNFAt_iff_analyticAt_or, analyticAt_comp_iff_of_deriv_ne_zero hg hg',
     meromorphicAt_comp_iff_of_deriv_ne_zero hg hg',
@@ -1372,7 +1372,7 @@ definition MeromorphicNFOn
 
 中文:
 定义 MeromorphicNFOn
-  签名: (f : 𝕜 -> E) (U : Set 𝕜)
+  签名: (f : 𝕜 -> E) (U : 集合 𝕜)
   定义体: forall ⦃z⦄, z in U -> MeromorphicNFAt f z
 
 Depends on / 依赖: MeromorphicNFAt
@@ -1610,7 +1610,7 @@ theorem meromorphicNFOn_prod
 
 中文:
 定理 meromorphicNFOn_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: fun x hx => meromorphicNFAt_prod (h₁f · · hx) (h₂f x hx)
 
 Depends on / 依赖: meromorphicNFAt_prod
@@ -1633,7 +1633,7 @@ theorem meromorphicNFOn_fun_prod
 
 中文:
 定理 meromorphicNFOn_fun_prod
-  结论: {ι : 类型} {s : Finset ι} {f : ι -> 𝕜 -> 𝕜}
+  结论: {ι : 类型} {s : 有限集 ι} {f : ι -> 𝕜 -> 𝕜}
   证明: by
   convert! meromorphicNFOn_prod h₁f h₂f
   exact (Finset.prod_apply _ s f).symm
@@ -1681,7 +1681,7 @@ theorem MeromorphicNFOn.zpow
 
 中文:
 定理 MeromorphicNFOn.zpow
-  条件: {f : 𝕜 -> 𝕜} {n : 整数} {U : Set 𝕜} (hf : MeromorphicNFOn f U)
+  条件: {f : 𝕜 -> 𝕜} {n : 整数} {U : 集合 𝕜} (hf : MeromorphicNFOn f U)
   证明: fun _ hz => (hf hz).zpow
 -/
 theorem MeromorphicNFOn.zpow {f : 𝕜 -> 𝕜} {n : Int} {U : Set 𝕜} (hf : MeromorphicNFOn f U) :
@@ -1746,7 +1746,7 @@ theorem meromorphicNFOn_comp_add_const_iff_meromorphicNFOn
 
 中文:
 定理 meromorphicNFOn_comp_add_const_iff_meromorphicNFOn
-  条件: {c : 𝕜} {U : Set 𝕜}
+  条件: {c : 𝕜} {U : 集合 𝕜}
   证明: by
   refine ⟨fun h y hy => ?_, fun h y hy => ?_⟩
   · rw [add_singleton, mem_image] at hy
@@ -1779,7 +1779,7 @@ theorem meromorphicNFOn_comp_sub_const_iff_meromorphicNFOn
 
 中文:
 定理 meromorphicNFOn_comp_sub_const_iff_meromorphicNFOn
-  条件: {c : 𝕜} {U : Set 𝕜}
+  条件: {c : 𝕜} {U : 集合 𝕜}
   证明: by
   simp_rw [sub_eq_add_neg, meromorphicNFOn_comp_add_const_iff_meromorphicNFOn, neg_singleton]
 

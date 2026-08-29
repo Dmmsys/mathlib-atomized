@@ -88,10 +88,10 @@ class StandardBorelSpace
     - polish : exists _ : TopologicalSpace α, BorelSpace α ∧ PolishSpace α
 
 中文:
-类 StandardBorelSpace
-  参数: [MeasurableSpace α]
+类 StandardBorel空间
+  参数: [可测空间 α]
   公理与运算 (1 个):
-    - polish : 存在 _ : TopologicalSpace α, BorelSpace α ∧ PolishSpace α
+    - polish : 存在 _ : 拓扑空间 α, Borel空间 α ∧ Polish空间 α
 
 Depends on / 依赖: upgradeStandardBorel
 -/
@@ -110,8 +110,8 @@ class UpgradedStandardBorel
 
 中文:
 类 UpgradedStandardBorel
-  参数: extends MeasurableSpace α, TopologicalSpace α,
-  继承: MeasurableSpace α, TopologicalSpace α, 
+  参数: extends 可测空间 α, 拓扑空间 α,
+  继承: 可测空间 α, 拓扑空间 α, 
   (无附加公理)
 
 Depends on / 依赖: standard, upgradeStandardBorel
@@ -139,7 +139,7 @@ definition upgradeStandardBorel
 
 中文:
 定义 upgradeStandardBorel
-  签名: [MeasurableSpace α] [h : StandardBorelSpace α]
+  签名: [可测空间 α] [h : StandardBorel空间 α]
   定义体: by
   choose τ hb hp using h.polish
   constructor
@@ -162,7 +162,7 @@ theorem eq_borel_upgradeStandardBorel
 
 中文:
 定理 eq_borel_upgradeStandardBorel
-  条件: [MeasurableSpace α] [StandardBorelSpace α]
+  条件: [可测空间 α] [StandardBorel空间 α]
   证明: @BorelSpace.measurable_eq _ (upgradeStandardBorel α).toTopologicalSpace _
     (upgradeStandardBorel α).toBorelSpace
 
@@ -219,8 +219,8 @@ instance prod
   inferInstance
 
 中文:
-实例 prod
-  签名: [StandardBorelSpace α] [StandardBorelSpace β]
+实例 乘积
+  签名: [StandardBorel空间 α] [StandardBorel空间 β]
   定义体: letI := upgradeStandardBorel α
   letI := upgradeStandardBorel β
   inferInstance
@@ -243,7 +243,7 @@ instance pi_countable
 
 中文:
 实例 pi_countable
-  签名: {ι : 类型} [Countable ι] {α : ι -> 类型} [对任意 n, MeasurableSpace (α n)]
+  签名: {ι : 类型} [可数 ι] {α : ι -> 类型} [对任意 n, 可测空间 (α n)]
   定义体: letI := fun n => upgradeStandardBorel (α n)
   inferInstance
 
@@ -265,7 +265,7 @@ instance [StandardBorelSpace
   infer_instance
 
 中文:
-实例 [StandardBorelSpace
+实例 [StandardBorel空间
   签名: α] : MeasurableEq α
   定义体: by
   let := upgradeStandardBorel α
@@ -315,7 +315,7 @@ theorem analyticSet_empty
 
 中文:
 定理 analyticSet_empty
-  结论: AnalyticSet (∅ : Set α)
+  结论: AnalyticSet (∅ : 集合 α)
   证明: by
   rw [AnalyticSet]
   exact Or.inl rfl
@@ -344,7 +344,7 @@ theorem analyticSet_range_of_polishSpace
 
 中文:
 定理 analyticSet_range_of_polishSpace
-  结论: {β : 类型} [TopologicalSpace β] [PolishSpace β]
+  结论: {β : 类型} [拓扑空间 β] [Polish空间 β]
   证明: by
   cases isEmpty_or_nonempty β
   · rw [range_eq_empty]
@@ -380,8 +380,8 @@ theorem _root_.IsOpen.analyticSet_image
   exact analyticSet_range_of_polishSpace (f_cont.comp continuous_subtype_val)
 
 中文:
-定理 _root_.IsOpen.analyticSet_image
-  结论: {β : 类型} [TopologicalSpace β] [PolishSpace β]
+定理 _root_.是开集.analyticSet_image
+  结论: {β : 类型} [拓扑空间 β] [Polish空间 β]
   证明: by
   rw [image_eq_range]
   have : PolishSpace s := hs.polishSpace
@@ -413,8 +413,8 @@ theorem analyticSet_iff_exists_polishSpace_range
   · rintro ⟨β, h, h', f, f_cont, f_ran
 
 中文:
-定理 analyticSet_iff_exists_polishSpace_range
-  条件: {s : Set α}
+定理 analyticSet_iff_存在_polishSpace_range
+  条件: {s : 集合 α}
   证明: by
   constructor
   · intro h
@@ -461,7 +461,7 @@ theorem AnalyticSet.image_of_continuousOn
 
 中文:
 定理 AnalyticSet.image_of_continuousOn
-  结论: {β : 类型} [TopologicalSpace β] {s : Set α}
+  结论: {β : 类型} [拓扑空间 β] {s : 集合 α}
   证明: by
   rcases analyticSet_iff_exists_polishSpace_range.1 hs with ⟨γ, γtop, γpolish, g, g_cont, gs⟩
   have : f '' s = range (f ∘ g) := by rw [range_comp, gs]
@@ -493,7 +493,7 @@ theorem AnalyticSet.image_of_continuous
 
 中文:
 定理 AnalyticSet.image_of_continuous
-  结论: {β : 类型} [TopologicalSpace β] {s : Set α}
+  结论: {β : 类型} [拓扑空间 β] {s : 集合 α}
   证明: hs.image_of_continuousOn hf.continuousOn
 
 Depends on / 依赖: continuousOn, hf.continuousOn, hs.image_of_continuousOn, image_of_continuousOn
@@ -515,8 +515,8 @@ theorem AnalyticSet.iInter
     `t` of sequences `x n` for which `f n (x n)` is independent of `n`. The set `t` is Polish, an
 
 中文:
-定理 AnalyticSet.iInter
-  结论: [hι : Nonempty ι] [Countable ι] [T2Space α] {s : ι -> Set α}
+定理 AnalyticSet.i整数er
+  结论: [hι : 非空 ι] [可数 ι] [T2空间 α] {s : ι -> 集合 α}
   证明: by
   rcases hι with ⟨i₀⟩
   /- For the proof, write each `s n` as the continuous image under a map `f n` of a
@@ -578,7 +578,7 @@ theorem AnalyticSet.iUnion
 
 中文:
 定理 AnalyticSet.iUnion
-  条件: [Countable ι] {s : ι -> Set α} (hs : 对任意 n, AnalyticSet (s n))
+  条件: [可数 ι] {s : ι -> 集合 α} (hs : 对任意 n, AnalyticSet (s n))
   证明: by
   /- For the proof, write each `s n` as the continuous image under a map `f n` of a
     Polish space `β n`. The union space `γ = Σ n, β n` is also Polish, and the map `F : γ → α` which
@@ -613,8 +613,8 @@ theorem _root_.IsClosed.analyticSet
   exact analyticSet_range_of_polishSpace continuous_subtype_val
 
 中文:
-定理 _root_.IsClosed.analyticSet
-  条件: [PolishSpace α] {s : Set α} (hs : IsClosed s)
+定理 _root_.是闭集.analyticSet
+  条件: [Polish空间 α] {s : 集合 α} (hs : 是闭集 s)
   证明: by
   have : PolishSpace s := hs.polishSpace
   rw [← @Subtype.range_val α s]
@@ -642,8 +642,8 @@ theorem _root_.MeasurableSet.isClopenable
   · exact fun f _ _ hf => IsClopenable.iUnion hf
 
 中文:
-定理 _root_.MeasurableSet.isClopenable
-  结论: [PolishSpace α] [MeasurableSpace α] [BorelSpace α]
+定理 _root_.可测集.isClopenable
+  结论: [Polish空间 α] [可测空间 α] [Borel空间 α]
   证明: by
   revert s
   apply MeasurableSet.induction_on_open
@@ -674,8 +674,8 @@ theorem _root_.MeasurableSet.analyticSet
  
 
 中文:
-定理 _root_.MeasurableSet.analyticSet
-  结论: {α : 类型} [t : TopologicalSpace α] [PolishSpace α]
+定理 _root_.可测集.analyticSet
+  结论: {α : 类型} [t : 拓扑空间 α] [Polish空间 α]
   证明: by
   /- For a short proof (avoiding measurable induction), one sees `s` as a closed set for a finer
     topology `t'`. It is analytic for this topology. As the identity from `t'` to `t` is continuous
@@ -709,8 +709,8 @@ theorem _root_.Measurable.exists_continuous
     apply MeasurableSe
 
 中文:
-定理 _root_.Measurable.exists_continuous
-  结论: {α β : 类型} [t : TopologicalSpace α] [PolishSpace α]
+定理 _root_.可测.存在_continuous
+  结论: {α β : 类型} [t : 拓扑空间 α] [Polish空间 α]
   证明: by
   obtain ⟨b, b_count, -, hb⟩ :
       exists b : Set (Set (range f)), b.Countable ∧ ∅ ∉ b ∧ IsTopologicalBasis b :=
@@ -757,8 +757,8 @@ theorem _root_.MeasurableSet.analyticSet_image
   exact (hle _ hs).analyticSet.image_of_continuous hfc
 
 中文:
-定理 _root_.MeasurableSet.analyticSet_image
-  结论: {X Y : 类型} [MeasurableSpace X]
+定理 _root_.可测集.analyticSet_image
+  结论: {X Y : 类型} [可测空间 X]
   证明: by
   let := upgradeStandardBorel X
   rw [eq_borel_upgradeStandardBorel X] at hs
@@ -796,8 +796,8 @@ lemma AnalyticSet.preimage
   simp [eq_comm]
 
 中文:
-引理 AnalyticSet.preimage
-  结论: {X Y : 类型} [TopologicalSpace X] [TopologicalSpace Y]
+引理 AnalyticSet.原像
+  结论: {X Y : 类型} [拓扑空间 X] [拓扑空间 Y]
   证明: by
   rcases analyticSet_iff_exists_polishSpace_range.1 hs with ⟨Z, _, _, g, hg, rfl⟩
   have : IsClosed {x : X × Z | f x.1 = g x.2} := isClosed_eq hf.fst' hg.snd'
@@ -826,7 +826,7 @@ definition MeasurablySeparable
 
 中文:
 定义 MeasurablySeparable
-  签名: {α : 类型} [MeasurableSpace α] (s t : Set α)
+  签名: {α : 类型} [可测空间 α] (s t : 集合 α)
   定义体: exists u, s subseteq u ∧ Disjoint t u ∧ MeasurableSet u
 
 Depends on / 依赖: Disjoint, MeasurableSet, subseteq
@@ -852,7 +852,7 @@ theorem MeasurablySeparable.iUnion
 
 中文:
 定理 MeasurablySeparable.iUnion
-  结论: [Countable ι] {α : 类型} [MeasurableSpace α] {s t : ι -> Set α}
+  结论: [可数 ι] {α : 类型} [可测空间 α] {s t : ι -> 集合 α}
   证明: by
   choose u hsu htu hu using h
   refine ⟨⋃ m, ⋂ n, u m n, ?_, ?_, ?_⟩
@@ -892,7 +892,7 @@ theorem measurablySeparable_range_of_disjoint
 
 中文:
 定理 measurablySeparable_range_of_disjoint
-  结论: [T2Space α] [MeasurableSpace α]
+  结论: [T2空间 α] [可测空间 α]
   证明: by
   /- We follow [Kechris, *Classical Descriptive Set Theory* (Theorem 14.7)][kechris1995].
     If the ranges are not Borel-separated, then one can find two cylinders of length one whose
@@ -1025,7 +1025,7 @@ theorem AnalyticSet.measurablySeparable
 
 中文:
 定理 AnalyticSet.measurablySeparable
-  结论: [T2Space α] [MeasurableSpace α] [OpensMeasurableSpace α]
+  结论: [T2空间 α] [可测空间 α] [OpensMeasurable空间 α]
   证明: by
   rw [AnalyticSet] at hs ht
   rcases hs with (rfl | ⟨f, f_cont, rfl⟩)
@@ -1059,7 +1059,7 @@ theorem AnalyticSet.measurableSet_of_compl
 
 中文:
 定理 AnalyticSet.measurableSet_of_compl
-  结论: [T2Space α] [MeasurableSpace α] [OpensMeasurableSpace α]
+  结论: [T2空间 α] [可测空间 α] [OpensMeasurable空间 α]
   证明: by
   rcases hs.measurablySeparable hsc disjoint_compl_right with ⟨u, hsu, hdu, hmu⟩
   obtain rfl : s = u := hsu.antisymm (disjoint_compl_left_iff_subset.1 hdu)
@@ -1104,7 +1104,7 @@ theorem measurableSet_preimage_iff_of_surjective
 
 中文:
 定理 measurableSet_preimage_iff_of_surjective
-  结论: [CountablySeparated Z]
+  结论: [余untablySeparated Z]
   证明: by
   refine ⟨fun h => ?_, fun h => hf h⟩
   rcases exists_opensMeasurableSpace_of_countablySeparated Z with ⟨τ, _, _, _⟩
@@ -1137,7 +1137,7 @@ theorem map_measurableSpace_eq
 
 中文:
 定理 map_measurableSpace_eq
-  结论: [CountablySeparated Z]
+  结论: [余untablySeparated Z]
   证明: MeasurableSpace.ext fun _ => hf.measurableSet_preimage_iff_of_surjective hsurj
 
 Depends on / 依赖: MeasurableSpace, MeasurableSpace.ext, hf.measurableSet_preimage_iff_of_surjective, measurableSet_preimage_iff_of_surjective
@@ -1160,7 +1160,7 @@ theorem map_measurableSpace_eq_borel
 
 中文:
 定理 map_measurableSpace_eq_borel
-  结论: [SecondCountableTopology Y] {f : X -> Y} (hf : Measurable f)
+  结论: [第二可数拓扑 Y] {f : X -> Y} (hf : 可测 f)
   证明: by
   have d := hf.mono le_rfl OpensMeasurableSpace.borel_le
   let := borel Y; have : BorelSpace Y := ⟨rfl⟩
@@ -1184,7 +1184,7 @@ theorem borelSpace_codomain
 
 中文:
 定理 borelSpace_codomain
-  结论: [SecondCountableTopology Y] {f : X -> Y} (hf : Measurable f)
+  结论: [第二可数拓扑 Y] {f : X -> Y} (hf : 可测 f)
   证明: ⟨(hf.map_measurableSpace_eq hsurj).symm.trans hf.map_measurableSpace_eq_borel hsurj⟩
 
 Depends on / 依赖: hf.map_measurableSpace_eq, hf.map_measurableSpace_eq_borel, map_measurableSpace_eq, map_measurableSpace_eq_borel, symm.trans
@@ -1205,7 +1205,7 @@ theorem measurableSet_preimage_iff_preimage_val
 
 中文:
 定理 measurableSet_preimage_iff_preimage_val
-  结论: {f : X -> Z} [CountablySeparated (range f)]
+  结论: {f : X -> Z} [余untablySeparated (range f)]
   证明: have hf' : Measurable (rangeFactorization f) := by fun_prop
   hf'.measurableSet_preimage_iff_of_surjective (s := Subtype.val ⁻¹' s)
     rangeFactorization_surjective
@@ -1230,7 +1230,7 @@ theorem measurableSet_preimage_iff_inter_range
 
 中文:
 定理 measurableSet_preimage_iff_inter_range
-  结论: {f : X -> Z} [CountablySeparated (range f)]
+  结论: {f : X -> Z} [余untablySeparated (range f)]
   证明: by
   rw [hf.measurableSet_preimage_iff_preimage_val]; rw [inter_comm]; rw [← (MeasurableEmbedding.subtype_coe hr).measurableSet_image]; rw [Subtype.image_preimage_coe]
 
@@ -1271,7 +1271,7 @@ theorem measurable_comp_iff_of_surjective
 
 中文:
 定理 measurable_comp_iff_of_surjective
-  结论: [CountablySeparated Z]
+  结论: [余untablySeparated Z]
   证明: forall₂_congr fun s _ => measurableSet_preimage_iff_of_surjective hf hsurj (s := g ⁻¹' s)
 
 Depends on / 依赖: measurableSet_preimage_iff_of_surjective
@@ -1294,8 +1294,8 @@ theorem Continuous.map_eq_borel
   exact hf.measurable.map_measurableSpace_eq hsurj
 
 中文:
-定理 Continuous.map_eq_borel
-  结论: {X Y : 类型} [TopologicalSpace X] [PolishSpace X]
+定理 连续.map_eq_borel
+  结论: {X Y : 类型} [拓扑空间 X] [Polish空间 X]
   证明: by
   borelize Y
   exact hf.measurable.map_measurableSpace_eq hsurj
@@ -1320,8 +1320,8 @@ theorem Continuous.map_borel_eq
   exact hf.map_eq_borel hsurj
 
 中文:
-定理 Continuous.map_borel_eq
-  结论: {X Y : 类型} [TopologicalSpace X] [PolishSpace X]
+定理 连续.map_borel_eq
+  结论: {X Y : 类型} [拓扑空间 X] [Polish空间 X]
   证明: by
   borelize X
   exact hf.map_eq_borel hsurj
@@ -1343,8 +1343,8 @@ instance Quotient.borelSpace
   body: ⟨continuous_quotient_mk'.map_eq_borel Quotient.mk'_surjective⟩
 
 中文:
-实例 Quotient.borelSpace
-  签名: {X : 类型} [TopologicalSpace X] [PolishSpace X] [MeasurableSpace X]
+实例 商.borelSpace
+  签名: {X : 类型} [拓扑空间 X] [Polish空间 X] [可测空间 X]
   定义体: ⟨continuous_quotient_mk'.map_eq_borel Quotient.mk'_surjective⟩
 
 Depends on / 依赖: Quotient, Quotient.mk, _surjective, continuous_quotient_mk, map_eq_borel
@@ -1377,7 +1377,7 @@ instance CosetSpace.borelSpace
 
 中文:
 实例 CosetSpace.borelSpace
-  签名: {G : 类型} [TopologicalSpace G] [PolishSpace G] [Group G]
+  签名: {G : 类型} [拓扑空间 G] [Polish空间 G] [群 G]
   定义体: Quotient.borelSpace
 
 @[to_additive]
@@ -1398,8 +1398,8 @@ instance QuotientGroup.borelSpace
   body: ⟨continuous_mk.map_eq_borel mk_surjective⟩
 
 中文:
-实例 QuotientGroup.borelSpace
-  签名: {G : 类型} [TopologicalSpace G] [PolishSpace G] [Group G]
+实例 商群.borelSpace
+  签名: {G : 类型} [拓扑空间 G] [Polish空间 G] [群 G]
   定义体: ⟨continuous_mk.map_eq_borel mk_surjective⟩
 
 Depends on / 依赖: continuous_mk, continuous_mk.map_eq_borel, map_eq_borel, mk_surjective
@@ -1426,8 +1426,8 @@ theorem MeasureTheory.measurableSet_range_of_continuous_injective
     `q i j` separating t
 
 中文:
-定理 MeasureTheory.measurableSet_range_of_continuous_injective
-  结论: {β : 类型} [TopologicalSpace γ]
+定理 测度论.measurableSet_range_of_continuous_injective
+  结论: {β : 类型} [拓扑空间 γ]
   证明: by
   /- We follow [Fremlin, *Measure Theory* (volume 4, 423I)][fremlin_vol4].
     Let `b = {s i}` be a countable basis for `α`. When `s i` and `s j` are disjoint, their images
@@ -1593,7 +1593,7 @@ theorem IsClosed.measurableSet_image_of_continuousOn_injOn
   · rwa [injOn_iff_injective] at f_inj
 
 中文:
-定理 IsClosed.measurableSet_image_of_continuousOn_injOn
+定理 是闭集.measurableSet_image_of_continuousOn_injOn
   证明: by
   rw [image_eq_range]
   have : PolishSpace s := IsClosed.polishSpace hs
@@ -1632,8 +1632,8 @@ theorem MeasurableSet.image_of_continuousOn_injOn
       (f_cont.mono_dom t't) 
 
 中文:
-定理 MeasurableSet.image_of_continuousOn_injOn
-  结论: [OpensMeasurableSpace β]
+定理 可测集.image_of_continuousOn_injOn
+  结论: [OpensMeasurable空间 β]
   证明: by
   obtain ⟨t', t't, t'_polish, s_closed, _⟩ :
       exists t' : TopologicalSpace γ, t' <= tγ ∧ @PolishSpace γ t' ∧ IsClosed[t'] s ∧ IsOpen[t'] s :=
@@ -1670,7 +1670,7 @@ theorem MeasurableSet.image_of_measurable_injOn
   obtain ⟨
 
 中文:
-定理 MeasurableSet.image_of_measurable_injOn
+定理 可测集.image_of_measurable_injOn
   结论: {f : γ -> α}
   证明: by
   let := upgradeStandardBorel γ
@@ -1712,8 +1712,8 @@ theorem Continuous.measurableEmbedding
       hu.image_of_continuousOn_injOn f_cont.continuousOn f_inj.injOn }
 
 中文:
-定理 Continuous.measurableEmbedding
-  结论: [BorelSpace β]
+定理 连续.measurableEmbedding
+  结论: [Borel空间 β]
   证明: { injective := f_inj
     measurable := f_cont.measurable
     measurableSet_image' := fun _u hu =>
@@ -1746,7 +1746,7 @@ theorem ContinuousOn.measurableEmbedding
 
 中文:
 定理 ContinuousOn.measurableEmbedding
-  结论: [BorelSpace β]
+  结论: [Borel空间 β]
   证明: { injective := injOn_iff_injective.1 f_inj
     measurable := (continuousOn_iff_continuous_domRestrict.1 f_cont).measurable
     measurableSet_image' := by
@@ -1783,7 +1783,7 @@ theorem Measurable.measurableEmbedding
     measurableSet_image' := fun _u hu => hu.image_of_measurable_injOn f_meas f_inj.injOn }
 
 中文:
-定理 Measurable.measurableEmbedding
+定理 可测.measurableEmbedding
   结论: {f : γ -> α}
   证明: { injective := f_inj
     measurable := f_meas
@@ -1814,8 +1814,8 @@ theorem MeasureTheory.borel_eq_borel_of_le
   convert! e.measurableSet_image.2 hs
 
 中文:
-定理 MeasureTheory.borel_eq_borel_of_le
-  结论: {t t' : TopologicalSpace γ}
+定理 测度论.borel_eq_borel_of_le
+  结论: {t t' : 拓扑空间 γ}
   证明: by
   refine le_antisymm ?_ (borel_anti hle)
   intro s hs
@@ -1851,7 +1851,7 @@ theorem MeasureTheory.isClopenable_iff_measurableSet
     exists t' : Topo
 
 中文:
-定理 MeasureTheory.isClopenable_iff_measurableSet
+定理 测度论.isClopenable_iff_measurableSet
   证明: by
   -- we already know that a measurable set is clopenable. Conversely, assume that `s` is clopenable.
   refine ⟨fun hs => ?_, fun hs => hs.isClopenable⟩
@@ -1894,7 +1894,7 @@ theorem MeasurableSet.image_of_monotoneOn_of_continuousOn
   let u : Set β := {c | exis
 
 中文:
-定理 MeasurableSet.image_of_monotoneOn_of_continuousOn
+定理 可测集.image_of_monotoneOn_of_continuousOn
   证明: by
   /- We use that the image of a measurable set by a continuous injective map is measurable.
   Therefore, we need to remove the points where the map is not injective. There are only countably
@@ -1944,8 +1944,8 @@ theorem MeasurableSet.image_of_monotoneOn
   have : g '' t = g '' (
 
 中文:
-定理 MeasurableSet.image_of_monotoneOn
-  结论: [SecondCountableTopology β]
+定理 可测集.image_of_monotoneOn
+  结论: [第二可数拓扑 β]
   证明: by
   /- Since there are only countably many discontinuity points, the result follows by reduction to
   the continuous case, which we have already proved. -/
@@ -1982,8 +1982,8 @@ theorem MeasurableSet.image_of_antitoneOn
   proof: (ht.image_of_monotoneOn hg.dual_right :)
 
 中文:
-定理 MeasurableSet.image_of_antitoneOn
-  结论: [SecondCountableTopology β]
+定理 可测集.image_of_antitoneOn
+  结论: [第二可数拓扑 β]
   证明: (ht.image_of_monotoneOn hg.dual_right :)
 
 Depends on / 依赖: dual_right, hg.dual_right, ht.image_of_monotoneOn, image_of_monotoneOn
@@ -2009,8 +2009,8 @@ lemma MeasureTheory.measurableSet_tendsto_fun
   exact measurableSet_tendsto (𝓝 0) (fun n => (hf n).dist hg)
 
 中文:
-引理 MeasureTheory.measurableSet_tendsto_fun
-  结论: [MeasurableSpace γ] [Countable ι]
+引理 测度论.measurableSet_tendsto_fun
+  结论: [可测空间 γ] [可数 ι]
   证明: by
   let := TopologicalSpace.pseudoMetrizableSpacePseudoMetric γ
   simp_rw [tendsto_iff_dist_tendsto_zero (f := fun n => f n _)]
@@ -2046,8 +2046,8 @@ theorem MeasureTheory.measurableSet_exists_tendsto
   have : forall x, (map (f · x) l ×ˢ map (f · x) l).HasAntit
 
 中文:
-定理 MeasureTheory.measurableSet_exists_tendsto
-  结论: [TopologicalSpace γ]
+定理 测度论.measurableSet_存在_tendsto
+  结论: [拓扑空间 γ]
   证明: by
   rcases l.eq_or_neBot with rfl | hl
   · simp
@@ -2111,8 +2111,8 @@ theorem Measurable.tprod
   refine measurable_of_restrict_of_restrict_compl 
 
 中文:
-定理 Measurable.tprod
-  条件: {f : ι -> X -> E} (h : 对任意 i : ι, Measurable (f i))
+定理 可测.tprod
+  条件: {f : ι -> X -> E} (h : 对任意 i : ι, 可测 (f i))
   证明: by
   let E := { x | Multipliable (f · x) L }
   have hE : MeasurableSet E := measurableSet_exists_tendsto (by fun_prop)
@@ -2147,8 +2147,8 @@ theorem AEMeasurable.tprod
   filter_upwards [ae_all_iff.mpr hg_eq_f] with x h_eq using tprod_congr h_eq
 
 中文:
-定理 AEMeasurable.tprod
-  结论: {μ : MeasureTheory.Measure X} {f : ι -> X -> E}
+定理 几乎处处可测.tprod
+  结论: {μ : 测度论.测度 X} {f : ι -> X -> E}
   证明: by
   choose g hg_meas hg_eq_f using h
   use (fun x => ∏'[L] i, g i x), Measurable.tprod hg_meas
@@ -2188,8 +2188,8 @@ theorem Measurable.tprod'
   · exact measurable_of_tendsto_metrizable' L.filter (by fun_prop) hm.choose_spec
 
 中文:
-定理 Measurable.tprod'
-  条件: {f : ι -> X -> E} (h : 对任意 i : ι, Measurable (f i))
+定理 可测.tprod'
+  条件: {f : ι -> X -> E} (h : 对任意 i : ι, 可测 (f i))
   证明: by
   rw [tprod_def]; rw [finprod_def']
   split_ifs with hm
@@ -2231,8 +2231,8 @@ theorem AEMeasurable.tprod'
     · fun_pr
 
 中文:
-定理 AEMeasurable.tprod'
-  结论: {μ : MeasureTheory.Measure X} {f : ι -> X -> E}
+定理 几乎处处可测.tprod'
+  结论: {μ : 测度论.测度 X} {f : ι -> X -> E}
   证明: by
   rw [tprod_def]; rw [finprod_def']
   split_ifs with hm
@@ -2280,8 +2280,8 @@ theorem MeasurableSet.isClopenable'
   infer_instance
 
 中文:
-定理 MeasurableSet.isClopenable'
-  条件: {s : Set α} (hs : MeasurableSet s)
+定理 可测集.isClopenable'
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   let := upgradeStandardBorel α
   obtain ⟨t, hle, ht, s_clopen⟩ := hs.isClopenable
@@ -2313,8 +2313,8 @@ theorem MeasurableSet.standardBorel
   infer_instance
 
 中文:
-定理 MeasurableSet.standardBorel
-  条件: {s : Set α} (hs : MeasurableSet s)
+定理 可测集.standardBorel
+  条件: {s : 集合 α} (hs : 可测集 s)
   证明: by
   obtain ⟨_, _, _, s_closed, _⟩ := hs.isClopenable'
   have := s_closed.polishSpace
@@ -2349,7 +2349,7 @@ definition borelSchroederBernstein
 
 中文:
 定义 borelSchroederBernstein
-  签名: {f : α -> β} {g : β -> α} (fmeas : Measurable f)
+  签名: {f : α -> β} {g : β -> α} (fmeas : 可测 f)
   定义体: letI := upgradeStandardBorel α
   letI := upgradeStandardBorel β
   (fmeas.measurableEmbedding finj).schroederBernstein (gmeas.measurableEmbedding ginj)
@@ -2378,8 +2378,8 @@ definition measurableEquivNatBoolOfNotCountable
     MeasurableSpace.measurable_injection_n
 
 中文:
-定义 measurableEquivNatBoolOfNotCountable
-  签名: (h : ¬Countable α)
+定义 measurableEquiv自然数布尔OfNotCountable
+  签名: (h : ¬可数 α)
   定义体: by
   apply Nonempty.some
   let := upgradeStandardBorel α
@@ -2411,7 +2411,7 @@ definition measurableEquivOfNotCountable
 
 中文:
 定义 measurableEquivOfNotCountable
-  签名: (hα : ¬Countable α) (hβ : ¬Countable β)
+  签名: (hα : ¬可数 α) (hβ : ¬可数 β)
   定义体: (measurableEquivNatBoolOfNotCountable hα).trans (measurableEquivNatBoolOfNotCountable hβ).symm
 
 Depends on / 依赖: measurableEquivNatBoolOfNotCountable
@@ -2433,7 +2433,7 @@ definition Equiv.measurableEquiv
   rwa [e.countable_iff] at h
 
 中文:
-定义 Equiv.measurableEquiv
+定义 等价.measurableEquiv
   签名: (e : α ≃ β)
   定义体: by
   by_cases h : Countable α

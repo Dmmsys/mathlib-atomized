@@ -31,7 +31,7 @@ instance Prod.instStarOrderedRing
       rw [← closure_prod (Set.mem_range.2 ⟨0]; rw
 
 中文:
-实例 Prod.instStarOrderedRing
+实例 积类型.instStarOrderedRing
   定义体: Prod.forall.2 fun xa xy => Prod.forall.2 fun ya yb => by
     have :
         closure (Set.range fun s : α × β => star s * s) =

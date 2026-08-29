@@ -232,7 +232,7 @@ abbreviation tateComplex
 
 中文:
 缩写 tateComplex
-  签名: : CochainComplex (ModuleCat R) 整数
+  签名: : 上链复形 (模范畴 R) 整数
   定义体: CochainComplex.ConnectData.cochainComplex (tateComplexConnectData M)
 
 Depends on / 依赖: CochainComplex, CochainComplex.ConnectData.cochainComplex, ConnectData, cochainComplex, tateComplexConnectData
@@ -264,7 +264,7 @@ lemma tateComplex_d_ofNat
   proof: rfl
 
 中文:
-引理 tateComplex_d_ofNat
+引理 tateComplex_d_of自然数
   条件: (n : 自然数)
   证明: rfl
 -/
@@ -396,7 +396,7 @@ definition tateComplexFunctor
 
 中文:
 定义 tateComplexFunctor
-  签名: : Rep R G ⥤ CochainComplex (ModuleCat R) 整数 where
+  签名: : Rep R G ⥤ 上链复形 (模范畴 R) 整数 where
   定义体: tateComplex M
   map := tateComplex.map
   map_comp f g := by
@@ -462,7 +462,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tateComplexFunctor (R := R) (G := G)).PreservesZeroMorphisms
+  签名: (tateComplexFunctor (R := R) (G := G)).保持ZeroMorphisms
   定义体: by simp
 
 Depends on / 依赖: PreservesZeroMorphisms
@@ -515,7 +515,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tateComplexFunctor R G).PreservesZeroMorphisms
+  签名: (tateComplexFunctor R G).保持ZeroMorphisms
 -/
 instance : (tateComplexFunctor R G).PreservesZeroMorphisms where
 
@@ -534,7 +534,7 @@ lemma map_tateComplexFunctor_shortExact
 
 中文:
 引理 map_tateComplexFunctor_shortExact
-  条件: {S : ShortComplex (Rep R G)} (hS : S.ShortExact)
+  条件: {S : 短复形 (Rep R G)} (hS : S.短正合)
   证明: by
   simp only [HomologicalComplex.shortExact_iff_degreewise_shortExact , ← ShortComplex.map_comp]
   rintro (_ | _)
@@ -563,7 +563,7 @@ instance :
 
 中文:
 实例 :
-  签名: (tateComplexFunctor R G).Additive
+  签名: (tateComplexFunctor R G).加性
   定义体: tateComplex.map_add ..
 
 Depends on / 依赖: map_add, tateComplex, tateComplex.map_add
@@ -627,7 +627,7 @@ abbreviation δ
 
 中文:
 缩写 δ
-  签名: {S : ShortComplex (Rep R G)} (hS : S.ShortExact) (n : 整数)
+  签名: {S : 短复形 (Rep R G)} (hS : S.短正合) (n : 整数)
   定义体: (map_tateComplexFunctor_shortExact hS).δ n (n + 1) rfl
 
 Depends on / 依赖: map_tateComplexFunctor_shortExact
@@ -646,7 +646,7 @@ lemma map_δ
 
 中文:
 引理 map_δ
-  条件: {S : ShortComplex (Rep R G)} (hS : S.ShortExact) (n : 整数)
+  条件: {S : 短复形 (Rep R G)} (hS : S.短正合) (n : 整数)
   证明: (map_tateComplexFunctor_shortExact hS).comp_δ _ _ _
 
 Depends on / 依赖: map_tateComplexFunctor_shortExact
@@ -665,7 +665,7 @@ lemma δ_map
 
 中文:
 引理 δ_map
-  条件: {S : ShortComplex (Rep R G)} (hS : S.ShortExact) (n : 整数)
+  条件: {S : 短复形 (Rep R G)} (hS : S.短正合) (n : 整数)
   证明: (map_tateComplexFunctor_shortExact hS).δ_comp _ _ _
 
 Depends on / 依赖: map_tateComplexFunctor_shortExact
@@ -684,7 +684,7 @@ lemma exact₃
 
 中文:
 引理 exact₃
-  条件: {S : ShortComplex (Rep R G)} (hS : S.ShortExact) (n : 整数)
+  条件: {S : 短复形 (Rep R G)} (hS : S.短正合) (n : 整数)
   证明: (map_tateComplexFunctor_shortExact hS).homology_exact₃ ..
 
 Depends on / 依赖: map_tateComplexFunctor_shortExact
@@ -703,7 +703,7 @@ lemma exact₁
 
 中文:
 引理 exact₁
-  条件: {S : ShortComplex (Rep R G)} (hS : S.ShortExact) (n : 整数)
+  条件: {S : 短复形 (Rep R G)} (hS : S.短正合) (n : 整数)
   证明: (map_tateComplexFunctor_shortExact hS).homology_exact₁ ..
 
 Depends on / 依赖: map_tateComplexFunctor_shortExact
@@ -724,7 +724,7 @@ lemma δ_naturality
 
 中文:
 引理 δ_naturality
-  结论: {X1 X2 : ShortComplex (Rep R G)}
+  结论: {X1 X2 : 短复形 (Rep R G)}
   证明: HomologicalComplex.HomologySequence.δ_naturality
     ((tateComplexFunctor R G).mapShortComplex.map F)
     (map_tateComplexFunctor_shortExact hX1) (map_tateComplexFunctor_shortExact hX2) i (i + 1) rfl

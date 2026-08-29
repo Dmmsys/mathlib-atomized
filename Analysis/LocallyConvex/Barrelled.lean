@@ -91,10 +91,10 @@ class BarrelledSpace
     - continuous_of_lowerSemicontinuous : forall p : Seminorm 𝕜 E, LowerSemicontinuous p -> Continuous p
 
 中文:
-类 BarrelledSpace
-  参数: (𝕜 E : 类型) [SeminormedRing 𝕜] [AddGroup E] [SMul 𝕜 E]
+类 Barrelled空间
+  参数: (𝕜 E : 类型) [Seminormed环 𝕜] [加法群 E] [标量乘法 𝕜 E]
   公理与运算 (1 个):
-    - continuous_of_lowerSemicontinuous : 对任意 p : Seminorm 𝕜 E, LowerSemicontinuous p -> Continuous p
+    - continuous_of_lowerSemicontinuous : 对任意 p : 半范数 𝕜 E, LowerSemicontinuous p -> 连续 p
 -/
 class BarrelledSpace (𝕜 E : Type*) [SeminormedRing 𝕜] [AddGroup E] [SMul 𝕜 E]
     [TopologicalSpace E] : Prop where
@@ -110,8 +110,8 @@ theorem Seminorm.continuous_of_lowerSemicontinuous
   proof: BarrelledSpace.continuous_of_lowerSemicontinuous p hp
 
 中文:
-定理 Seminorm.continuous_of_lowerSemicontinuous
-  结论: {𝕜 E : 类型} [AddGroup E] [SMul 𝕜 E]
+定理 半范数.continuous_of_lowerSemicontinuous
+  结论: {𝕜 E : 类型} [加法群 E] [标量乘法 𝕜 E]
   证明: BarrelledSpace.continuous_of_lowerSemicontinuous p hp
 
 Depends on / 依赖: BarrelledSpace, BarrelledSpace.continuous_of_lowerSemicontinuous, continuous_of_lowerSemicontinuous
@@ -135,7 +135,7 @@ theorem Seminorm.continuous_iSup
   exact iSup_apply
 
 中文:
-定理 Seminorm.continuous_iSup
+定理 半范数.continuous_iSup
   证明: by
   rw [← Seminorm.coe_iSup_eq bdd]
   refine Seminorm.continuous_of_lowerSemicontinuous _ ?_
@@ -180,8 +180,8 @@ instance BaireSpace.instBarrelledSpace
     have h₁ : forall n : Nat, IsClosed (p.closedBall (0 : E) n) := fun n 
 
 中文:
-实例 BaireSpace.instBarrelledSpace
-  签名: [TopologicalSpace E] [IsTopologicalAddGroup E]
+实例 Baire空间.instBarrelledSpace
+  签名: [拓扑空间 E] [是拓扑加群 E]
   定义体: by
     -- Let `p` be a lower-semicontinuous seminorm on `E`.
     intro p hp
@@ -288,7 +288,7 @@ theorem PolynormableSpace.banach_steinhaus
   exact fun q x => H x q
 
 中文:
-定理 PolynormableSpace.banach_steinhaus
+定理 Polynormable空间.banach_steinhaus
   证明: by
   have hp := PolynormableSpace.withSeminorms 𝕜₂ F
   refine hp.banach_steinhaus ?_
@@ -375,7 +375,7 @@ abbreviation WithSeminorms.continuousLinearMapOfTendsto
 
 中文:
 缩写 WithSeminorms.continuousLinearMapOfTendsto
-  签名: [T2Space F] {l : Filter α}
+  签名: [T2空间 F] {l : 滤子 α}
   定义体: haveI : PolynormableSpace 𝕜₂ F := hq.toPolynormableSpace
   continuousLinearMapOfTendsto g h
 -/

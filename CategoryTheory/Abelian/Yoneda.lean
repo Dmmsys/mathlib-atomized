@@ -49,7 +49,7 @@ theorem preadditiveCoyonedaObj_map_surjective
 
 中文:
 定理 preadditiveCoyonedaObj_map_surjective
-  结论: {G : C} [Projective G] (hG : IsSeparator G) {X : C}
+  结论: {G : C} [投射 G] (hG : IsSeparator G) {X : C}
   证明: by
   rw [← Functor.coe_mapAddHom]; rw [← AddCommGrpCat.hom_ofHom (preadditiveCoyonedaObj G).mapAddHom]; rw [← AddCommGrpCat.epi_iff_surjective]
   let cm : ShortComplex C := ⟨kernel.ι p, p, by simp⟩
@@ -93,7 +93,7 @@ theorem full_comp_preadditiveCoyonedaObj
 
 中文:
 定理 full_comp_preadditiveCoyonedaObj
-  结论: [F.Full] {G : C} [Projective G] (hG : IsSeparator G)
+  结论: [F.满] {G : C} [投射 G] (hG : IsSeparator G)
   证明: by
     obtain ⟨p, _⟩ := hG₂ X
     obtain ⟨f, rfl⟩ := preadditiveCoyonedaObj_map_surjective hG p f

@@ -58,7 +58,7 @@ abbreviation G
 
 中文:
 缩写 G
-  签名: : MonCat
+  签名: : 幺半群范畴
   定义体: MonCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ GrpCat MonCat.{max v u})
 
 Depends on / 依赖: FilteredColimits, GrpCat, MonCat, MonCat.FilteredColimits.colimit, colimit
@@ -273,7 +273,7 @@ instance colimitInv
 
 中文:
 实例 colimitInv
-  签名: : Inv (G.{v, u} F) where
+  签名: : 取逆 (G.{v, u} F) where
   定义体: by
     refine Quot.lift (colimitInvAux.{v, u} F) ?_ x
     intro x y h
@@ -333,7 +333,7 @@ instance colimitGroup
 
 中文:
 实例 colimitGroup
-  签名: : Group (G.{v, u} F)
+  签名: : 群 (G.{v, u} F)
   定义体: { colimitInv.{v, u} F, (G.{v, u} F).str with
     inv_mul_cancel := fun x => by
       refine Quot.inductionOn x ?_; clear x; intro x
@@ -365,7 +365,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : GrpCat.{max v u}
+  签名: : 群范畴.{最大值 v u}
   定义体: GrpCat.of (G.{v, u} F)
 
 Depends on / 依赖: GrpCat, GrpCat.of
@@ -389,7 +389,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι.app J := GrpCat.ofHom ((MonCat.FilteredColimits.colimitCocone
     (F ⋙ forget₂ GrpCat MonCat)).ι.app J).hom
@@ -420,7 +420,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit (colimitCocone.{v, u} F)
+  签名: : 是余极限 (colimitCocone.{v, u} F)
   定义体: isColimitOfReflects (forget₂ _ MonCat)
     (MonCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ GrpCat MonCat))
 
@@ -513,7 +513,7 @@ abbreviation G
 
 中文:
 缩写 G
-  签名: : GrpCat.{max v u}
+  签名: : 群范畴.{最大值 v u}
   定义体: GrpCat.FilteredColimits.colimit.{v, u} (F ⋙ forget₂ CommGrpCat.{max v u} GrpCat.{max v u})
 
 @[to_additive]
@@ -536,7 +536,7 @@ instance colimitCommGroup
 
 中文:
 实例 colimitCommGroup
-  签名: : CommGroup.{max v u} (G.{v, u} F)
+  签名: : 交换群.{最大值 v u} (G.{v, u} F)
   定义体: { (G F).str,
     CommMonCat.FilteredColimits.colimitCommMonoid
       (F ⋙ forget₂ CommGrpCat CommMonCat.{max v u}) with }
@@ -561,7 +561,7 @@ definition colimit
 
 中文:
 定义 colimit
-  签名: : CommGrpCat
+  签名: : 交换群范畴
   定义体: CommGrpCat.of (G.{v, u} F)
 
 Depends on / 依赖: CommGrpCat, CommGrpCat.of
@@ -585,7 +585,7 @@ definition colimitCocone
 
 中文:
 定义 colimitCocone
-  签名: : Cocone F where
+  签名: : 余锥 F where
   定义体: colimit.{v, u} F
   ι.app J := CommGrpCat.ofHom
     ((GrpCat.FilteredColimits.colimitCocone (F ⋙ forget₂ CommGrpCat GrpCat)).ι.app J).hom
@@ -616,7 +616,7 @@ definition colimitCoconeIsColimit
 
 中文:
 定义 colimitCoconeIsColimit
-  签名: : IsColimit (colimitCocone.{v, u} F)
+  签名: : 是余极限 (colimitCocone.{v, u} F)
   定义体: isColimitOfReflects (forget₂ _ GrpCat)
     (GrpCat.FilteredColimits.colimitCoconeIsColimit (F ⋙ forget₂ CommGrpCat GrpCat))
 

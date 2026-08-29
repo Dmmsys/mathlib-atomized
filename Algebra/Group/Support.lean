@@ -38,7 +38,7 @@ theorem mulSupport_mul
 
 中文:
 定理 mulSupport_mul
-  条件: [MulOneClass M] (f g : α -> M)
+  条件: [MulOne类 M] (f g : α -> M)
   证明: mulSupport_binop_subset (· * ·) (one_mul _) f g
 
 @[to_additive]
@@ -64,7 +64,7 @@ theorem mulSupport_pow
 
 中文:
 定理 mulSupport_pow
-  条件: [Monoid M] (f : α -> M) (n : 自然数)
+  条件: [幺半群 M] (f : α -> M) (n : 自然数)
   证明: by
   induction n with
   | zero => simp [pow_zero]

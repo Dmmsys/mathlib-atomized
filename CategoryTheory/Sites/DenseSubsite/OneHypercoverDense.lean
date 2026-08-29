@@ -61,10 +61,10 @@ structure PreOneHypercoverDenseData
 结构 PreOneHypercoverDenseData
   参数: (S : C)
   公理与运算 (8 个):
-    - I₀ : Type w
+    - I₀ : 类型 w
     - X((i : I₀)) : C₀
     - f((i : I₀)) : F.obj (X i) ⟶ S
-    - I₁((i₁ i₂ : I₀)) : Type w
+    - I₁((i₁ i₂ : I₀)) : 类型 w
     - Y(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : C₀
     - p₁(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₁
     - p₂(⦃i₁ i₂) : I₀⦄ (j : I₁ i₁ i₂) : Y j ⟶ X i₂
@@ -144,7 +144,7 @@ abbreviation I₁'
 
 中文:
 缩写 I₁'
-  签名: : Type w
+  签名: : 类型 w
   定义体: Sigma (fun (i : data.I₀ × data.I₀) => data.I₁ i.1 i.2)
 
 Depends on / 依赖: data.I
@@ -345,10 +345,10 @@ class IsOneHypercoverDense
     - nonempty_oneHypercoverDenseData((X : C)) : Nonempty (OneHypercoverDenseData.{w} F J₀ J X)
 
 中文:
-类 IsOneHypercoverDense
+类 是OneHypercoverDense
   参数: : 命题 where
   公理与运算 (1 个):
-    - nonempty_oneHypercoverDenseData((X : C)) : Nonempty (OneHypercoverDenseData.{w} F J₀ J X)
+    - nonempty_oneHypercoverDenseData((X : C)) : 非空 (OneHypercoverDenseData.{w} F J₀ J X)
 -/
 class IsOneHypercoverDense : Prop where
   nonempty_oneHypercoverDenseData (X : C) :
@@ -391,7 +391,7 @@ lemma isDenseSubsite_of_isOneHypercoverDense
 
 中文:
 引理 isDenseSubsite_of_isOneHypercoverDense
-  结论: [F.IsLocallyFull J] [F.IsLocallyFaithful J]
+  结论: [F.是LocallyFull J] [F.是LocallyFaithful J]
   证明: ⟨fun X => by
     refine J.superset_covering ?_ (F.oneHypercoverDenseData J₀ J X).mem₀
     rintro Y _ ⟨_, a, _, h, rfl⟩
@@ -436,8 +436,8 @@ lemma IsOneHypercoverDense.of_hasPullbacks
       w 
 
 中文:
-引理 IsOneHypercoverDense.of_hasPullbacks
-  结论: [HasPullbacks C] [F.Full] [F.Faithful]
+引理 是OneHypercoverDense.of_hasPullbacks
+  结论: [有Pullbacks C] [F.满] [F.忠实]
   证明: by
     choose ι U f hf using hF
     exact ⟨{
@@ -632,7 +632,7 @@ definition sieve
 
 中文:
 定义 sieve
-  签名: : Sieve X₀ where
+  签名: : 筛 X₀ where
   定义体: Nonempty (SieveStruct data f g)
   downward_closed := by
     rintro Y₀ Z₀ g ⟨h⟩ p
@@ -853,7 +853,7 @@ lemma fac
 
 中文:
 引理 fac
-  条件: (a : S.Arrow)
+  条件: (a : S.箭头)
   证明: Multifork.IsLimit.hom_ext (hG _) (fun i =>
     Presheaf.IsSheaf.hom_ext hG₀
       ⟨_, cover_lift F J₀ _
@@ -1934,7 +1934,7 @@ lemma isSheaf
 
 中文:
 引理 isSheaf
-  结论: Presheaf.IsSheaf J (presheaf data G₀)
+  结论: 预层.是层 J (presheaf data G₀)
   证明: by
   rw [isSheaf_iff data]
   constructor
@@ -1971,7 +1971,7 @@ definition sheaf
 
 中文:
 定义 sheaf
-  签名: : Sheaf J A
+  签名: : 层 J A
   定义体: ⟨presheaf data G₀, isSheaf data G₀⟩
 
 Depends on / 依赖: isSheaf, presheaf
@@ -2013,7 +2013,7 @@ include data in
 
 中文:
 引理 essSurj
-  结论: EssSurj (sheafPushforwardContinuous F A J₀ J) where
+  结论: 本质满射 (sheafPushforwardContinuous F A J₀ J) where
   证明: ⟨_, ⟨essSurj.sheafIso data G₀⟩⟩
 
 include data in
@@ -2034,7 +2034,7 @@ lemma isEquivalence
 
 中文:
 引理 isEquivalence
-  结论: IsEquivalence (sheafPushforwardContinuous F A J₀ J) where
+  结论: 是等价 (sheafPushforwardContinuous F A J₀ J) where
   证明: essSurj A data
 
 Depends on / 依赖: essSurj

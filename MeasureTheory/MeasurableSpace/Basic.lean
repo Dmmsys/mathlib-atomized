@@ -73,7 +73,7 @@ definition map
 
 中文:
 定义 map
-  签名: (f : α -> β) (m : MeasurableSpace α)
+  签名: (f : α -> β) (m : 可测空间 α)
   定义体: MeasurableSet[m] f ⁻¹' s
   measurableSet_empty := m.measurableSet_empty
   measurableSet_compl _ hs := m.measurableSet_compl _ hs
@@ -98,8 +98,8 @@ lemma map_def
 
 中文:
 引理 map_def
-  条件: {s : Set β}
-  结论: MeasurableSet[m.map f] s ↔ MeasurableSet[m] (f ⁻¹' s)
+  条件: {s : 集合 β}
+  结论: 可测集[m.map f] s ↔ 可测集[m] (f ⁻¹' s)
   证明: Iff.rfl
 
 @[simp]
@@ -170,7 +170,7 @@ definition comap
 
 中文:
 定义 comap
-  签名: (f : α -> β) (m : MeasurableSpace β)
+  签名: (f : α -> β) (m : 可测空间 β)
   定义体: exists s', MeasurableSet[m] s' ∧ f ⁻¹' s' = s
   measurableSet_empty := ⟨∅, m.measurableSet_empty, rfl⟩
   measurableSet_compl := fun _ ⟨s', h₁, h₂⟩ => ⟨s'ᶜ, m.measurableSet_compl _ h₁, h₂ ▸ rfl⟩
@@ -196,7 +196,7 @@ lemma measurableSet_comap
 
 中文:
 引理 measurableSet_comap
-  条件: {m : MeasurableSpace β}
+  条件: {m : 可测空间 β}
   证明: .rfl
 -/
 lemma measurableSet_comap {m : MeasurableSpace β} :
@@ -214,7 +214,7 @@ theorem comap_eq_generateFrom
 
 中文:
 定理 comap_eq_generateFrom
-  条件: (m : MeasurableSpace β) (f : α -> β)
+  条件: (m : 可测空间 β) (f : α -> β)
   证明: (@generateFrom_measurableSet _ (.comap f m)).symm
 
 @[simp]
@@ -344,7 +344,7 @@ theorem monotone_map
 
 中文:
 定理 monotone_map
-  结论: Monotone (MeasurableSpace.map f)
+  结论: 递增 (可测空间.map f)
   证明: fun _ _ => map_mono
 
 Depends on / 依赖: map_mono
@@ -388,7 +388,7 @@ theorem monotone_comap
 
 中文:
 定理 monotone_comap
-  结论: Monotone (MeasurableSpace.comap g)
+  结论: 递增 (可测空间.comap g)
   证明: fun _ _ h => comap_mono h
 
 @[simp]
@@ -410,7 +410,7 @@ theorem comap_bot
 
 中文:
 定理 comap_bot
-  结论: (⊥ : MeasurableSpace α).comap g = ⊥
+  结论: (⊥ : 可测空间 α).comap g = ⊥
   证明: (gc_comap_map g).l_bot
 
 @[simp]
@@ -457,7 +457,7 @@ theorem comap_iSup
 
 中文:
 定理 comap_iSup
-  条件: {m : ι -> MeasurableSpace α}
+  条件: {m : ι -> 可测空间 α}
   结论: (⨆ i, m i).comap g = ⨆ i, (m i).comap g
   证明: (gc_comap_map g).l_iSup
 
@@ -481,7 +481,7 @@ theorem map_top
 
 中文:
 定理 map_top
-  结论: (⊤ : MeasurableSpace α).map f = ⊤
+  结论: (⊤ : 可测空间 α).map f = ⊤
   证明: (gc_comap_map f).u_top
 
 @[simp]
@@ -526,7 +526,7 @@ theorem map_iInf
 
 中文:
 定理 map_iInf
-  条件: {m : ι -> MeasurableSpace α}
+  条件: {m : ι -> 可测空间 α}
   结论: (⨅ i, m i).map f = ⨅ i, (m i).map f
   证明: (gc_comap_map f).u_iInf
 
@@ -585,7 +585,7 @@ theorem map_comap_eq_of_surjective
 
 中文:
 定理 map_comap_eq_of_surjective
-  条件: (hg : Function.Surjective g)
+  条件: (hg : 函数.满射 g)
   结论: (m.comap g).map g = m
   证明: by
   refine le_antisymm (fun S hS => ?_) le_map_comap
@@ -613,7 +613,7 @@ theorem map_const
 中文:
 定理 map_const
   条件: {m} (b : β)
-  结论: MeasurableSpace.map (fun _a : α => b) m = ⊤
+  结论: 可测空间.map (fun _a : α => b) m = ⊤
   证明: eq_top_iff.2 fun s _ => by rw [map_def]; by_cases h : b in s <;> simp [h]
 -/
 @[simp] theorem map_const {m} (b : β) : MeasurableSpace.map (fun _a : α => b) m = ⊤ :=
@@ -631,7 +631,7 @@ theorem comap_const
 中文:
 定理 comap_const
   条件: {m} (b : β)
-  结论: MeasurableSpace.comap (fun _a : α => b) m = ⊥
+  结论: 可测空间.comap (fun _a : α => b) m = ⊥
   证明: eq_bot_iff.2 by rintro _ ⟨s, -, rfl⟩; by_cases b in s <;> simp [*]
 -/
 @[simp] theorem comap_const {m} (b : β) : MeasurableSpace.comap (fun _a : α => b) m = ⊥ :=
@@ -650,7 +650,7 @@ generateFrom_le fun _t hts => GenerateMeasurable.basic _ mem_image_of_mem _ hts)
 
 中文:
 定理 comap_generateFrom
-  条件: {f : α -> β} {s : Set (Set β)}
+  条件: {f : α -> β} {s : 集合 (集合 β)}
   证明: le_antisymm
     (comap_le_iff_le_map.2 <|
 generateFrom_le fun _t hts => GenerateMeasurable.basic _ mem_image_of_mem _ hts)
@@ -683,7 +683,7 @@ alias ⟨Measurable.le_map, Measurable.of_le_map⟩ := measurable_iff_le_map
 
 中文:
 定理 measurable_iff_le_map
-  条件: {m₁ : MeasurableSpace α} {m₂ : MeasurableSpace β} {f : α -> β}
+  条件: {m₁ : 可测空间 α} {m₂ : 可测空间 β} {f : α -> β}
   证明: Iff.rfl
 
 alias ⟨Measurable.le_map, Measurable.of_le_map⟩ := measurable_iff_le_map
@@ -708,7 +708,7 @@ alias ⟨Measurable.comap_le, Measurable.of_comap_le⟩ := measurable_iff_comap_
 
 中文:
 定理 measurable_iff_comap_le
-  条件: {m₁ : MeasurableSpace α} {m₂ : MeasurableSpace β} {f : α -> β}
+  条件: {m₁ : 可测空间 α} {m₂ : 可测空间 β} {f : α -> β}
   证明: comap_le_iff_le_map.symm
 
 alias ⟨Measurable.comap_le, Measurable.of_comap_le⟩ := measurable_iff_comap_le
@@ -732,8 +732,8 @@ lemma MeasurableSpace.comap_le_comap_of_eq_comp
   exact MeasurableSpace.comap_mono mh.comap_le
 
 中文:
-引理 MeasurableSpace.comap_le_comap_of_eq_comp
-  结论: {mβ : MeasurableSpace β} {mγ : MeasurableSpace γ}
+引理 可测空间.comap_le_comap_of_eq_comp
+  结论: {mβ : 可测空间 β} {mγ : 可测空间 γ}
   证明: by
   rw [heq]; rw [← MeasurableSpace.comap_comp]
   exact MeasurableSpace.comap_mono mh.comap_le
@@ -757,8 +757,8 @@ theorem comap_measurable
 
 中文:
 定理 comap_measurable
-  条件: {m : MeasurableSpace β} (f : α -> β)
-  结论: Measurable[m.comap f] f
+  条件: {m : 可测空间 β} (f : α -> β)
+  结论: 可测[m.comap f] f
   证明: fun s hs => ⟨s, hs, rfl⟩
 -/
 theorem comap_measurable {m : MeasurableSpace β} (f : α -> β) : Measurable[m.comap f] f :=
@@ -775,7 +775,7 @@ lemma measurable_comap_iff
 
 中文:
 引理 measurable_comap_iff
-  结论: {mα : MeasurableSpace α} {mγ : MeasurableSpace γ}
+  结论: {mα : 可测空间 α} {mγ : 可测空间 γ}
   证明: by
   simp [measurable_iff_comap_le]
 
@@ -796,7 +796,7 @@ lemma measurable_comap_iff_right
 
 中文:
 引理 measurable_comap_iff_right
-  结论: {mβ : MeasurableSpace β} {mγ : MeasurableSpace γ} {g : α -> β}
+  结论: {mβ : 可测空间 β} {mγ : 可测空间 γ} {g : α -> β}
   证明: by
   rw [measurable_iff_le_map]; rw [measurable_iff_le_map]; rw [← map_comp]; rw [map_comap_eq_of_surjective hg]
 
@@ -815,8 +815,8 @@ theorem Measurable.mono
   proof: fun _t ht => ha _ hf hb _ ht
 
 中文:
-定理 Measurable.mono
-  结论: {ma ma' : MeasurableSpace α} {mb mb' : MeasurableSpace β} {f : α -> β}
+定理 可测.mono
+  结论: {ma ma' : 可测空间 α} {mb mb' : 可测空间 β} {f : α -> β}
   证明: fun _t ht => ha _ hf hb _ ht
 -/
 theorem Measurable.mono {ma ma' : MeasurableSpace α} {mb mb' : MeasurableSpace β} {f : α -> β}
@@ -832,8 +832,8 @@ lemma Measurable.iSup'
   proof: h.mono (le_iSup mα i₀) le_rfl
 
 中文:
-引理 Measurable.iSup'
-  结论: {mα : ι -> MeasurableSpace α} {_ : MeasurableSpace β} {f : α -> β} (i₀ : ι)
+引理 可测.iSup'
+  结论: {mα : ι -> 可测空间 α} {_ : 可测空间 β} {f : α -> β} (i₀ : ι)
   证明: h.mono (le_iSup mα i₀) le_rfl
 
 Depends on / 依赖: h.mono, le_iSup, le_rfl
@@ -852,8 +852,8 @@ lemma Measurable.sup_of_left
   proof: h.mono le_sup_left le_rfl
 
 中文:
-引理 Measurable.sup_of_left
-  结论: {mα mα' : MeasurableSpace α} {_ : MeasurableSpace β} {f : α -> β}
+引理 可测.sup_of_left
+  结论: {mα mα' : 可测空间 α} {_ : 可测空间 β} {f : α -> β}
   证明: h.mono le_sup_left le_rfl
 
 Depends on / 依赖: h.mono, le_rfl, le_sup_left
@@ -872,8 +872,8 @@ lemma Measurable.sup_of_right
   proof: h.mono le_sup_right le_rfl
 
 中文:
-引理 Measurable.sup_of_right
-  结论: {mα mα' : MeasurableSpace α} {_ : MeasurableSpace β} {f : α -> β}
+引理 可测.sup_of_right
+  结论: {mα mα' : 可测空间 α} {_ : 可测空间 β} {f : α -> β}
   证明: h.mono le_sup_right le_rfl
 
 Depends on / 依赖: h.mono, le_rfl, le_sup_right
@@ -894,8 +894,8 @@ theorem measurable_id''
 
 中文:
 定理 measurable_id''
-  条件: {m mα : MeasurableSpace α} (hm : m <= mα)
-  结论: @Measurable α α mα m id
+  条件: {m mα : 可测空间 α} (hm : m <= mα)
+  结论: @可测 α α mα m id
   证明: measurable_id.mono le_rfl hm
 
 Depends on / 依赖: le_rfl, measurable_id, measurable_id.mono
@@ -914,8 +914,8 @@ theorem measurable_from_top
 
 中文:
 定理 measurable_from_top
-  条件: [MeasurableSpace β] {f : α -> β}
-  结论: Measurable[⊤] f
+  条件: [可测空间 β] {f : α -> β}
+  结论: 可测[⊤] f
   证明: fun _ _ => trivial
 -/
 theorem measurable_from_top [MeasurableSpace β] {f : α -> β} : Measurable[⊤] f := fun _ _ => trivial
@@ -930,7 +930,7 @@ theorem measurable_generateFrom
 
 中文:
 定理 measurable_generateFrom
-  结论: [MeasurableSpace α] {s : Set (Set β)} {f : α -> β}
+  结论: [可测空间 α] {s : 集合 (集合 β)} {f : α -> β}
   证明: Measurable.of_le_map generateFrom_le h
 
 Depends on / 依赖: Measurable, Measurable.of_le_map, generateFrom_le, of_le_map
@@ -953,7 +953,7 @@ theorem measurableSet_generateFrom_of_mem_supClosure
 
 中文:
 定理 measurableSet_generateFrom_of_mem_supClosure
-  结论: {s : Set (Set α)} {t : Set α}
+  结论: {s : 集合 (集合 α)} {t : 集合 α}
   证明: by
   rcases ht with ⟨P, hP, PC, rfl⟩
   rw [Finset.sup'_eq_sup]; rw [Finset.sup_id_set_eq_sUnion]
@@ -989,9 +989,9 @@ theorem Subsingleton.measurable
 @[nontriviality, fun_prop]
 
 中文:
-定理 Subsingleton.measurable
-  条件: [Subsingleton α]
-  结论: Measurable f
+定理 子单例.measurable
+  条件: [子单例 α]
+  结论: 可测 f
   证明: fun _ _ =>
   @Subsingleton.measurableSet α _ _ _
 
@@ -1014,8 +1014,8 @@ theorem measurable_of_subsingleton_codomain
 
 中文:
 定理 measurable_of_subsingleton_codomain
-  条件: [Subsingleton β] (f : α -> β)
-  结论: Measurable f
+  条件: [子单例 β] (f : α -> β)
+  结论: 可测 f
   证明: fun s _ => Subsingleton.set_cases MeasurableSet.empty MeasurableSet.univ s
 
 @[to_additive (attr := fun_prop)]
@@ -1037,8 +1037,8 @@ theorem measurable_one
 
 中文:
 定理 measurable_one
-  条件: [One α]
-  结论: Measurable (1 : β -> α)
+  条件: [幺 α]
+  结论: 可测 (1 : β -> α)
   证明: @measurable_const _ _ _ _ 1
 
 Depends on / 依赖: measurable_const
@@ -1057,8 +1057,8 @@ theorem measurable_of_empty
 
 中文:
 定理 measurable_of_empty
-  条件: [IsEmpty α] (f : α -> β)
-  结论: Measurable f
+  条件: [是空 α] (f : α -> β)
+  结论: 可测 f
   证明: Subsingleton.measurable
 
 Depends on / 依赖: Subsingleton, Subsingleton.measurable, measurable
@@ -1077,8 +1077,8 @@ theorem measurable_of_empty_codomain
 
 中文:
 定理 measurable_of_empty_codomain
-  条件: [IsEmpty β] (f : α -> β)
-  结论: Measurable f
+  条件: [是空 β] (f : α -> β)
+  结论: 可测 f
   证明: measurable_of_subsingleton_codomain f
 
 Depends on / 依赖: measurable_of_subsingleton_codomain
@@ -1104,7 +1104,7 @@ theorem measurable_const'
 中文:
 定理 measurable_const'
   条件: {f : β -> α} (hf : 对任意 x y, f x = f y)
-  结论: Measurable f
+  结论: 可测 f
   证明: by
   nontriviality β
   inhabit β
@@ -1135,8 +1135,8 @@ theorem measurable_natCast
 
 中文:
 定理 measurable_natCast
-  条件: [自然数Cast α] (n : 自然数)
-  结论: Measurable (n : β -> α)
+  条件: [自然数嵌入 α] (n : 自然数)
+  结论: 可测 (n : β -> α)
   证明: @measurable_const α _ _ _ n
 
 @[fun_prop]
@@ -1158,8 +1158,8 @@ theorem measurable_intCast
 
 中文:
 定理 measurable_intCast
-  条件: [整数Cast α] (n : 整数)
-  结论: Measurable (n : β -> α)
+  条件: [整数嵌入 α] (n : 整数)
+  结论: 可测 (n : β -> α)
   证明: @measurable_const α _ _ _ n
 
 Depends on / 依赖: measurable_const
@@ -1178,7 +1178,7 @@ theorem measurable_of_countable
 
 中文:
 定理 measurable_of_countable
-  条件: [Countable α] [MeasurableSingletonClass α] (f : α -> β)
+  条件: [可数 α] [MeasurableSingleton类 α] (f : α -> β)
   证明: fun s _ =>
   (f ⁻¹' s).to_countable.measurableSet
 -/
@@ -1197,8 +1197,8 @@ theorem measurable_of_finite
 
 中文:
 定理 measurable_of_finite
-  条件: [Finite α] [MeasurableSingletonClass α] (f : α -> β)
-  结论: Measurable f
+  条件: [有限 α] [MeasurableSingleton类 α] (f : α -> β)
+  结论: 可测 f
   证明: measurable_of_countable f
 
 Depends on / 依赖: measurable_of_countable
@@ -1220,9 +1220,9 @@ theorem Measurable.iterate
   statement: forall n, Measurable f^[n]
 
 中文:
-定理 Measurable.iterate
-  条件: {f : α -> α} (hf : Measurable f)
-  结论: 对任意 n, Measurable f^[n]
+定理 可测.iterate
+  条件: {f : α -> α} (hf : 可测 f)
+  结论: 对任意 n, 可测 f^[n]
 -/
 theorem Measurable.iterate {f : α -> α} (hf : Measurable f) : forall n, Measurable f^[n]
   | 0 => measurable_id
@@ -1241,7 +1241,7 @@ theorem measurableSet_preimage
 
 中文:
 定理 measurableSet_preimage
-  条件: {t : Set β} (hf : Measurable f) (ht : MeasurableSet t)
+  条件: {t : 集合 β} (hf : 可测 f) (ht : 可测集 t)
   证明: hf ht
 -/
 theorem measurableSet_preimage {t : Set β} (hf : Measurable f) (ht : MeasurableSet t) :
@@ -1259,8 +1259,8 @@ theorem MeasurableSet.preimage
 @[fun_prop]
 
 中文:
-定理 MeasurableSet.preimage
-  条件: {t : Set β} (ht : MeasurableSet t) (hf : Measurable f)
+定理 可测集.原像
+  条件: {t : 集合 β} (ht : 可测集 t) (hf : 可测 f)
   证明: hf ht
 
 @[fun_prop]
@@ -1279,8 +1279,8 @@ theorem Measurable.piecewise
   proof: fun t ht => by simpa [piecewise_preimage] using hs.ite (hf ht) (hg ht)
 
 中文:
-定理 Measurable.piecewise
-  结论: {_ : DecidablePred (· in s)} (hs : MeasurableSet s)
+定理 可测.piecewise
+  结论: {_ : DecidablePred (· in s)} (hs : 可测集 s)
   证明: fun t ht => by simpa [piecewise_preimage] using hs.ite (hf ht) (hg ht)
 -/
 protected theorem Measurable.piecewise {_ : DecidablePred (· in s)} (hs : MeasurableSet s)
@@ -1298,8 +1298,8 @@ theorem Measurable.ite
 @[fun_prop]
 
 中文:
-定理 Measurable.ite
-  结论: {p : α -> 命题} {_ : DecidablePred p} (hp : MeasurableSet { a : α | p a })
+定理 可测.ite
+  结论: {p : α -> 命题} {_ : DecidablePred p} (hp : 可测集 { a : α | p a })
   证明: Measurable.piecewise hp hf hg
 
 @[fun_prop]
@@ -1320,8 +1320,8 @@ theorem Measurable.indicator
   proof: hf.piecewise hs measurable_const
 
 中文:
-定理 Measurable.indicator
-  条件: [Zero β] (hf : Measurable f) (hs : MeasurableSet s)
+定理 可测.indicator
+  条件: [零 β] (hf : 可测 f) (hs : 可测集 s)
   证明: hf.piecewise hs measurable_const
 
 Depends on / 依赖: hf.piecewise, measurable_const, piecewise
@@ -1347,7 +1347,7 @@ lemma measurable_indicator_const_iff
 
 中文:
 引理 measurable_indicator_const_iff
-  条件: [Zero β] [MeasurableSingletonClass β] (b : β) [NeZero b]
+  条件: [零 β] [MeasurableSingleton类 β] (b : β) [NeZero b]
   证明: by
   constructor <;> intro h
   · convert! h (MeasurableSet.singleton (0 : β)).compl
@@ -1378,7 +1378,7 @@ theorem measurableSet_mulSupport
 
 中文:
 定理 measurableSet_mulSupport
-  条件: [One β] [MeasurableSingletonClass β] (hf : Measurable f)
+  条件: [幺 β] [MeasurableSingleton类 β] (hf : 可测 f)
   证明: hf (measurableSet_singleton 1).compl
 
 Depends on / 依赖: measurableSet_singleton
@@ -1402,8 +1402,8 @@ theorem Measurable.measurable_of_countable_ne
   have : g ⁻¹' t inter { x : α | f x = g x } = f ⁻¹' t inter { x : α | f x = g
 
 中文:
-定理 Measurable.measurable_of_countable_ne
-  结论: [MeasurableSingletonClass α] (hf : Measurable f)
+定理 可测.measurable_of_countable_ne
+  结论: [MeasurableSingleton类 α] (hf : 可测 f)
   证明: by
   intro t ht
   have : g ⁻¹' t = g ⁻¹' t inter { x | f x = g x }ᶜ union g ⁻¹' t inter { x | f x = g x } := by
@@ -1439,7 +1439,7 @@ definition IsCountablySpanning
 
 中文:
 定义 IsCountablySpanning
-  签名: (C : Set (Set α))
+  签名: (C : 集合 (集合 α))
   定义体: exists s : Nat -> Set α, (forall n, s n in C) ∧ ⋃ n, s n = univ
 -/
 def IsCountablySpanning (C : Set (Set α)) : Prop :=
@@ -1455,7 +1455,7 @@ theorem isCountablySpanning_measurableSet
 
 中文:
 定理 isCountablySpanning_measurableSet
-  条件: [MeasurableSpace α]
+  条件: [可测空间 α]
   证明: ⟨fun _ => univ, fun _ => MeasurableSet.univ, iUnion_const _⟩
 
 Depends on / 依赖: MeasurableSet, MeasurableSet.univ, iUnion_const
@@ -1476,8 +1476,8 @@ lemma IsCountablySpanning.prod
   rw [iUnion_unpair_prod]; rw [h2s]; rw [h2t]; rw [univ_prod_univ]
 
 中文:
-引理 IsCountablySpanning.prod
-  结论: {C : Set (Set α)} {D : Set (Set β)} (hC : IsCountablySpanning C)
+引理 IsCountablySpanning.乘积
+  结论: {C : 集合 (集合 α)} {D : 集合 (集合 β)} (hC : IsCountablySpanning C)
   证明: by
   rcases hC, hD with ⟨⟨s, h1s, h2s⟩, t, h1t, h2t⟩
   refine ⟨fun n => s n.unpair.1 ×ˢ t n.unpair.2, fun n => mem_image2_of_mem (h1s _) (h1t _), ?_⟩

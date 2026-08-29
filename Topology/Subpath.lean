@@ -62,7 +62,7 @@ definition subpath
 
 中文:
 定义 subpath
-  签名: (γ : Path a b) (t₀ t₁ : I)
+  签名: (γ : 道路 a b) (t₀ t₁ : I)
   定义体: γ ∘ Icc.convexComb t₀ t₁
   source' := by simp
   target' := by simp
@@ -89,7 +89,7 @@ theorem symm_subpath
 
 中文:
 定理 symm_subpath
-  条件: (γ : Path a b) (t₀ t₁ : I)
+  条件: (γ : 道路 a b) (t₀ t₁ : I)
   结论: symm (γ.subpath t₀ t₁) = γ.subpath t₁ t₀
   证明: by
   ext s
@@ -121,7 +121,7 @@ lemma range_subpathAux
 中文:
 引理 range_subpathAux
   条件: (t₀ t₁ : I)
-  结论: range (Icc.convexComb t₀ t₁) = uIcc t₀ t₁
+  结论: range (闭区间.convexComb t₀ t₁) = uIcc t₀ t₁
   证明: by
   rw [range_eq_iff]
   constructor
@@ -160,7 +160,7 @@ theorem range_subpath
 
 中文:
 定理 range_subpath
-  条件: (γ : Path a b) (t₀ t₁ : I)
+  条件: (γ : 道路 a b) (t₀ t₁ : I)
   证明: by
   rw [← range_subpathAux]; rw [← range_comp]; rw [subpath]; rw [coe_mk']; rw [ContinuousMap.coe_mk]
 
@@ -181,7 +181,7 @@ lemma range_subpath_of_le
 
 中文:
 引理 range_subpath_of_le
-  条件: (γ : Path a b) (t₀ t₁ : I) (h : t₀ <= t₁)
+  条件: (γ : 道路 a b) (t₀ t₁ : I) (h : t₀ <= t₁)
   证明: by
   simp [h]
 -/
@@ -200,7 +200,7 @@ lemma range_subpath_of_ge
 
 中文:
 引理 range_subpath_of_ge
-  条件: (γ : Path a b) (t₀ t₁ : I) (h : t₁ <= t₀)
+  条件: (γ : 道路 a b) (t₀ t₁ : I) (h : t₁ <= t₀)
   证明: by
   simp [h]
 -/
@@ -223,8 +223,8 @@ theorem subpath_self
 
 中文:
 定理 subpath_self
-  条件: (γ : Path a b) (t : I)
-  结论: γ.subpath t t = Path.refl (γ t)
+  条件: (γ : 道路 a b) (t : I)
+  结论: γ.subpath t t = 道路.refl (γ t)
   证明: by
   ext s
   simp [subpath]
@@ -250,7 +250,7 @@ theorem subpath_zero_one
 
 中文:
 定理 subpath_zero_one
-  条件: (γ : Path a b)
+  条件: (γ : 道路 a b)
   结论: γ.subpath 0 1 = γ.cast γ.source γ.target
   证明: by
   ext s
@@ -275,7 +275,7 @@ theorem subpath_continuous_family
 
 中文:
 定理 subpath_continuous_family
-  条件: (γ : Path a b)
+  条件: (γ : 道路 a b)
   证明: Continuous.comp' (map_continuous γ) Set.Icc.continuous_convexComb_prod
 
 Depends on / 依赖: Continuous, Continuous.comp, Set.Icc.continuous_convexComb_prod, continuous_convexComb_prod, map_continuous
@@ -301,7 +301,7 @@ definition subpathTransSubpathRefl
 
 中文:
 定义 subpathTransSubpathRefl
-  签名: (γ : Path a b) (t₀ t₁ t₂ : I)
+  签名: (γ : 道路 a b) (t₀ t₁ t₂ : I)
   定义体: ((γ.subpath t₀ (Icc.convexComb t₁ t₂ x.1)).trans (γ.subpath _ t₂)) x.2
   continuous_toFun := by
     let γ₁ (t : I) := γ.subpath t₀ (Icc.convexComb t₁ t₂ t)
@@ -336,7 +336,7 @@ definition subpathTransSubpath
 
 中文:
 定义 subpathTransSubpath
-  签名: (γ : Path a b) (t₀ t₁ t₂ : I)
+  签名: (γ : 道路 a b) (t₀ t₁ t₂ : I)
   定义体: trans (subpathTransSubpathRefl γ t₀ t₁ t₂) (transRefl _)
 
 Depends on / 依赖: subpathTransSubpathRefl, transRefl
@@ -363,7 +363,7 @@ definition concat
 
 中文:
 定义 concat
-  签名: (p : Fin (n + 1) -> X) (F : (k : Fin n) -> Path (p k.castSucc) (p k.succ))
+  签名: (p : 有限集 (n + 1) -> X) (F : (k : 有限集 n) -> 道路 (p k.castSucc) (p k.succ))
   定义体: dfoldl n (fun i => Path (p 0) (p i)) (fun i ih => ih.trans (F i)) (refl (p 0))
 
 Depends on / 依赖: dfoldl, ih.trans
@@ -383,7 +383,7 @@ lemma concat_zero
 
 中文:
 引理 concat_zero
-  条件: (p : Fin 1 -> X) (F)
+  条件: (p : 有限集 1 -> X) (F)
   证明: by
   rw [concat]; rw [dfoldl_zero]
 -/
@@ -403,7 +403,7 @@ lemma concat_succ
 
 中文:
 引理 concat_succ
-  条件: (p : Fin (n + 2) -> X) (F)
+  条件: (p : 有限集 (n + 2) -> X) (F)
   证明: by
   rw [concat]; rw [dfoldl_succ_last]
   rfl
@@ -470,7 +470,7 @@ definition concat
 
 中文:
 定义 concat
-  签名: (p : Fin (n + 1) -> X) (F G : (k : Fin n) -> Path (p k.castSucc) (p k.succ))
+  签名: (p : 有限集 (n + 1) -> X) (F G : (k : 有限集 n) -> 道路 (p k.castSucc) (p k.succ))
   定义体: by
   induction n with
   | zero =>
@@ -507,7 +507,7 @@ definition concatSubpath
 
 中文:
 定义 concatSubpath
-  签名: (γ : Path a b) (t : Fin (n + 1) -> I)
+  签名: (γ : 道路 a b) (t : 有限集 (n + 1) -> I)
   定义体: by
   induction n with
   | zero =>
@@ -546,7 +546,7 @@ theorem concat_one
 
 中文:
 定理 concat_one
-  条件: (p : Fin 2 -> X) (F)
+  条件: (p : 有限集 2 -> X) (F)
   证明: by
   simpa [concat_succ] using ⟨Homotopy.reflTrans _⟩
 
@@ -567,7 +567,7 @@ theorem concat_two
 
 中文:
 定理 concat_two
-  条件: (p : Fin 3 -> X) (F)
+  条件: (p : 有限集 3 -> X) (F)
   证明: by
   simpa [concat_succ] using hcomp ⟨Homotopy.reflTrans _⟩ (refl _)
 
@@ -588,7 +588,7 @@ theorem concat_hcomp
 
 中文:
 定理 concat_hcomp
-  结论: (p : Fin (n + 1) -> X) (F G : (k : Fin n) -> Path (p k.castSucc) (p k.succ))
+  结论: (p : 有限集 (n + 1) -> X) (F G : (k : 有限集 n) -> 道路 (p k.castSucc) (p k.succ))
   证明: ⟨Homotopy.concat p F G (fun k => (h k).some)⟩
 
 Depends on / 依赖: Homotopy, Homotopy.concat, concat
@@ -609,7 +609,7 @@ theorem concat_subpath
 
 中文:
 定理 concat_subpath
-  条件: (γ : Path a b) (t : Fin (n + 1) -> I)
+  条件: (γ : 道路 a b) (t : 有限集 (n + 1) -> I)
   证明: ⟨Homotopy.concatSubpath γ t⟩
 
 Depends on / 依赖: Homotopy, Homotopy.concatSubpath, concatSubpath

@@ -33,9 +33,9 @@ structure Result
 
 中文:
 结构 Result
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (4 个):
-    - filtered : Option Html
+    - filtered : 选项类型 Html
     - unfiltered : Html
     - key : α
     - pattern : Html
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: Ord (Result α)
+  签名: 序 (Result α)
   定义体: ⟨(compare ·.key ·.key)⟩
 
 Depends on / 依赖: compare
@@ -100,10 +100,10 @@ structure SectionState
 
 中文:
 结构 SectionState
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (2 个):
-    - results : Array (Result α)  [默认: #[]]
-    - errors : Array Html  [默认: #[]]
+    - results : 数组 (Result α)  [默认: #[]]
+    - errors : 数组 Html  [默认: #[]]
 -/
 structure SectionState (α : Type) where
   /-- The results of the theorems that successfully applied. -/
@@ -135,7 +135,7 @@ definition Result.insertInArray
 
 中文:
 定义 Result.insertInArray
-  签名: (res : Result α) (arr : Array (Result α)) (isDup : α -> α -> MetaM 布尔)
+  签名: (res : Result α) (arr : 数组 (Result α)) (isDup : α -> α -> MetaM 布尔值)
   定义体: do
   if let some idx ← findDuplicate res arr then
     if res < arr[idx]! then

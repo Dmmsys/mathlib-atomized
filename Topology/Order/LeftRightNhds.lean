@@ -53,7 +53,7 @@ theorem TFAE_mem_nhdsGT
 
 中文:
 定理 TFAE_mem_nhdsGT
-  条件: {a b : α} (hab : a < b) (s : Set α)
+  条件: {a b : α} (hab : a < b) (s : 集合 α)
   证明: by
   tfae_have 1 ↔ 2 := by
     rw [nhdsWithin_Ioc_eq_nhdsGT hab]
@@ -97,8 +97,8 @@ theorem mem_nhdsGT_iff_exists_mem_Ioc_Ioo_subset
   proof: (TFAE_mem_nhdsGT hu' s).out 0 3
 
 中文:
-定理 mem_nhdsGT_iff_exists_mem_Ioc_Ioo_subset
-  条件: {a u' : α} {s : Set α} (hu' : a < u')
+定理 mem_nhdsGT_iff_存在_mem_Ioc_Ioo_subset
+  条件: {a u' : α} {s : 集合 α} (hu' : a < u')
   证明: (TFAE_mem_nhdsGT hu' s).out 0 3
 
 Depends on / 依赖: TFAE_mem_nhdsGT
@@ -116,8 +116,8 @@ theorem mem_nhdsGT_iff_exists_Ioo_subset'
   proof: (TFAE_mem_nhdsGT hu' s).out 0 4
 
 中文:
-定理 mem_nhdsGT_iff_exists_Ioo_subset'
-  条件: {a u' : α} {s : Set α} (hu' : a < u')
+定理 mem_nhdsGT_iff_存在_Ioo_subset'
+  条件: {a u' : α} {s : 集合 α} (hu' : a < u')
   证明: (TFAE_mem_nhdsGT hu' s).out 0 4
 
 Depends on / 依赖: TFAE_mem_nhdsGT
@@ -137,9 +137,9 @@ theorem nhdsGT_basis_of_exists_gt
   ⟨fun _ => mem_nhdsGT_iff_exists_Ioo_subset' h⟩
 
 中文:
-定理 nhdsGT_basis_of_exists_gt
+定理 nhdsGT_basis_of_存在_gt
   条件: {a : α} (h : 存在 b, a < b)
-  结论: (𝓝[>] a).HasBasis (a < ·) (Ioo a)
+  结论: (𝓝[>] a).有基 (a < ·) (开区间 a)
   证明: let ⟨_, h⟩ := h
   ⟨fun _ => mem_nhdsGT_iff_exists_Ioo_subset' h⟩
 
@@ -160,8 +160,8 @@ lemma nhdsGT_basis
 
 中文:
 引理 nhdsGT_basis
-  条件: [NoMaxOrder α] (a : α)
-  结论: (𝓝[>] a).HasBasis (a < ·) (Ioo a)
+  条件: [NoMax序 α] (a : α)
+  结论: (𝓝[>] a).有基 (a < ·) (开区间 a)
   证明: nhdsGT_basis_of_exists_gt exists_gt a
 
 Depends on / 依赖: exists_gt, nhdsGT_basis_of_exists_gt
@@ -182,8 +182,8 @@ lemma nhdsGT_basis_Ioc_of_exists_gt
     fun _ hac => mem_of_superset ((nhdsGT_basis_of_exists_gt h).mem_of_mem hac) Ioo_subset_Ioc_self
 
 中文:
-引理 nhdsGT_basis_Ioc_of_exists_gt
-  条件: [DenselyOrdered α] {a : α} (h : 存在 b, a < b)
+引理 nhdsGT_basis_Ioc_of_存在_gt
+  条件: [稠密序 α] {a : α} (h : 存在 b, a < b)
   证明: .to_hasBasis' nhdsGT_basis_of_exists_gt h
     (fun _ hac =>
       have ⟨b, hab, hbc⟩ := exists_between hac
@@ -210,7 +210,7 @@ lemma nhdsGT_basis_Ioc
 
 中文:
 引理 nhdsGT_basis_Ioc
-  条件: [DenselyOrdered α] [NoMaxOrder α] (a : α)
+  条件: [稠密序 α] [NoMax序 α] (a : α)
   证明: nhdsGT_basis_Ioc_of_exists_gt exists_gt a
 
 Depends on / 依赖: exists_gt, nhdsGT_basis_Ioc_of_exists_gt
@@ -263,8 +263,8 @@ theorem mem_nhdsGT_iff_exists_Ioo_subset
   mem_nhdsGT_iff_exists_Ioo_subset' hu'
 
 中文:
-定理 mem_nhdsGT_iff_exists_Ioo_subset
-  条件: [NoMaxOrder α] {a : α} {s : Set α}
+定理 mem_nhdsGT_iff_存在_Ioo_subset
+  条件: [NoMax序 α] {a : α} {s : 集合 α}
   证明: let ⟨_u', hu'⟩ := exists_gt a
   mem_nhdsGT_iff_exists_Ioo_subset' hu'
 
@@ -290,7 +290,7 @@ alias countable_setOf_isolated_right := countable_setOfPred_isolated_right
 
 中文:
 定理 countable_setOfPred_isolated_right
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   证明: by
   simp only [nhdsGT_eq_bot_iff, ofPred_or]
   exact (subsingleton_isTop α).countable.union countable_setOfPred_covBy_right
@@ -321,7 +321,7 @@ alias countable_setOf_isolated_left := countable_setOfPred_isolated_left
 
 中文:
 定理 countable_setOfPred_isolated_left
-  条件: [SecondCountableTopology α]
+  条件: [第二可数拓扑 α]
   证明: countable_setOfPred_isolated_right (α := αᵒᵈ)
 
 @[deprecated (since := "2026-07-09")]
@@ -350,7 +350,7 @@ theorem countable_setOfPred_isolated_right_within
 
 中文:
 定理 countable_setOfPred_isolated_right_within
-  条件: [SecondCountableTopology α] {s : Set α}
+  条件: [第二可数拓扑 α] {s : 集合 α}
   证明: by
   /- This does not follow from `countable_setOfPred_isolated_right`, which gives the result when `s`
   is the whole space, as one cannot use it inside the subspace since it doesn't have the order
@@ -411,7 +411,7 @@ alias countable_setOf_isolated_left_within := countable_setOfPred_isolated_left_
 
 中文:
 定理 countable_setOfPred_isolated_left_within
-  条件: [SecondCountableTopology α] {s : Set α}
+  条件: [第二可数拓扑 α] {s : 集合 α}
   证明: countable_setOfPred_isolated_right_within (α := αᵒᵈ)
 
 @[deprecated (since := "2026-07-09")]
@@ -442,8 +442,8 @@ theorem mem_nhdsGT_iff_exists_Ioc_subset
     exact ⟨u, au, Subset.trans Ioo_subset_Ioc_self as⟩
 
 中文:
-定理 mem_nhdsGT_iff_exists_Ioc_subset
-  条件: [NoMaxOrder α] [DenselyOrdered α] {a : α} {s : Set α}
+定理 mem_nhdsGT_iff_存在_Ioc_subset
+  条件: [NoMax序 α] [稠密序 α] {a : α} {s : 集合 α}
   证明: by
   rw [mem_nhdsGT_iff_exists_Ioo_subset]
   constructor
@@ -477,7 +477,7 @@ theorem TFAE_mem_nhdsLT
 
 中文:
 定理 TFAE_mem_nhdsLT
-  条件: {a b : α} (h : a < b) (s : Set α)
+  条件: {a b : α} (h : a < b) (s : 集合 α)
   证明: by -- 4 : `s` includes `(l, b)` for some `l < b`
   simpa using! TFAE_mem_nhdsGT h.dual (ofDual ⁻¹' s)
 
@@ -500,8 +500,8 @@ theorem mem_nhdsLT_iff_exists_mem_Ico_Ioo_subset
   proof: (TFAE_mem_nhdsLT hl' s).out 0 3
 
 中文:
-定理 mem_nhdsLT_iff_exists_mem_Ico_Ioo_subset
-  条件: {a l' : α} {s : Set α} (hl' : l' < a)
+定理 mem_nhdsLT_iff_存在_mem_Ico_Ioo_subset
+  条件: {a l' : α} {s : 集合 α} (hl' : l' < a)
   证明: (TFAE_mem_nhdsLT hl' s).out 0 3
 
 Depends on / 依赖: TFAE_mem_nhdsLT
@@ -519,8 +519,8 @@ theorem mem_nhdsLT_iff_exists_Ioo_subset'
   proof: (TFAE_mem_nhdsLT hl' s).out 0 4
 
 中文:
-定理 mem_nhdsLT_iff_exists_Ioo_subset'
-  条件: {a l' : α} {s : Set α} (hl' : l' < a)
+定理 mem_nhdsLT_iff_存在_Ioo_subset'
+  条件: {a l' : α} {s : 集合 α} (hl' : l' < a)
   证明: (TFAE_mem_nhdsLT hl' s).out 0 4
 
 Depends on / 依赖: TFAE_mem_nhdsLT
@@ -539,8 +539,8 @@ theorem mem_nhdsLT_iff_exists_Ioo_subset
   mem_nhdsLT_iff_exists_Ioo_subset' h
 
 中文:
-定理 mem_nhdsLT_iff_exists_Ioo_subset
-  条件: [NoMinOrder α] {a : α} {s : Set α}
+定理 mem_nhdsLT_iff_存在_Ioo_subset
+  条件: [NoMin序 α] {a : α} {s : 集合 α}
   证明: let ⟨_, h⟩ := exists_lt a
   mem_nhdsLT_iff_exists_Ioo_subset' h
 
@@ -562,8 +562,8 @@ theorem mem_nhdsLT_iff_exists_Ico_subset
   simpa using! this
 
 中文:
-定理 mem_nhdsLT_iff_exists_Ico_subset
-  条件: [NoMinOrder α] [DenselyOrdered α] {a : α} {s : Set α}
+定理 mem_nhdsLT_iff_存在_Ico_subset
+  条件: [NoMin序 α] [稠密序 α] {a : α} {s : 集合 α}
   证明: by
   have : ofDual ⁻¹' s in 𝓝[>] toDual a ↔ _ := mem_nhdsGT_iff_exists_Ioc_subset
   simpa using! this
@@ -586,9 +586,9 @@ theorem nhdsLT_basis_of_exists_lt
   ⟨fun _ => mem_nhdsLT_iff_exists_Ioo_subset' h⟩
 
 中文:
-定理 nhdsLT_basis_of_exists_lt
+定理 nhdsLT_basis_of_存在_lt
   条件: {a : α} (h : 存在 b, b < a)
-  结论: (𝓝[<] a).HasBasis (· < a) (Ioo · a)
+  结论: (𝓝[<] a).有基 (· < a) (开区间 · a)
   证明: let ⟨_, h⟩ := h
   ⟨fun _ => mem_nhdsLT_iff_exists_Ioo_subset' h⟩
 
@@ -609,8 +609,8 @@ theorem nhdsLT_basis
 
 中文:
 定理 nhdsLT_basis
-  条件: [NoMinOrder α] (a : α)
-  结论: (𝓝[<] a).HasBasis (· < a) (Ioo · a)
+  条件: [NoMin序 α] (a : α)
+  结论: (𝓝[<] a).有基 (· < a) (开区间 · a)
   证明: nhdsLT_basis_of_exists_lt exists_lt a
 
 Depends on / 依赖: exists_lt, nhdsLT_basis_of_exists_lt
@@ -631,8 +631,8 @@ lemma nhdsLT_basis_Ico_of_exists_lt
       fun _ hac => mem_of_superset ((nhdsLT_basis_of_exists_lt h).mem_of_mem hac) Ioo_subset_Ico_self
 
 中文:
-引理 nhdsLT_basis_Ico_of_exists_lt
-  条件: [DenselyOrdered α] {a : α} (h : 存在 b, b < a)
+引理 nhdsLT_basis_Ico_of_存在_lt
+  条件: [稠密序 α] {a : α} (h : 存在 b, b < a)
   证明: .to_hasBasis' nhdsLT_basis_of_exists_lt h
     (fun _ hac =>
       have ⟨b, hab, hbc⟩ := exists_between hac
@@ -659,7 +659,7 @@ lemma nhdsLT_basis_Ico
 
 中文:
 引理 nhdsLT_basis_Ico
-  条件: [DenselyOrdered α] [NoMinOrder α] (a : α)
+  条件: [稠密序 α] [NoMin序 α] (a : α)
   证明: nhdsLT_basis_Ico_of_exists_lt exists_lt a
 
 Depends on / 依赖: exists_lt, nhdsLT_basis_Ico_of_exists_lt
@@ -715,7 +715,7 @@ theorem TFAE_mem_nhdsGE
 
 中文:
 定理 TFAE_mem_nhdsGE
-  条件: {a b : α} (hab : a < b) (s : Set α)
+  条件: {a b : α} (hab : a < b) (s : 集合 α)
   证明: by
   tfae_have 1 ↔ 2 := by
     rw [nhdsWithin_Icc_eq_nhdsGE hab]
@@ -754,8 +754,8 @@ theorem mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset
   proof: (TFAE_mem_nhdsGE hu' s).out 0 3 (by simp) (by simp)
 
 中文:
-定理 mem_nhdsGE_iff_exists_mem_Ioc_Ico_subset
-  条件: {a u' : α} {s : Set α} (hu' : a < u')
+定理 mem_nhdsGE_iff_存在_mem_Ioc_Ico_subset
+  条件: {a u' : α} {s : 集合 α} (hu' : a < u')
   证明: (TFAE_mem_nhdsGE hu' s).out 0 3 (by simp) (by simp)
 
 Depends on / 依赖: TFAE_mem_nhdsGE
@@ -773,8 +773,8 @@ theorem mem_nhdsGE_iff_exists_Ico_subset'
   proof: (TFAE_mem_nhdsGE hu' s).out 0 4 (by simp) (by simp)
 
 中文:
-定理 mem_nhdsGE_iff_exists_Ico_subset'
-  条件: {a u' : α} {s : Set α} (hu' : a < u')
+定理 mem_nhdsGE_iff_存在_Ico_subset'
+  条件: {a u' : α} {s : 集合 α} (hu' : a < u')
   证明: (TFAE_mem_nhdsGE hu' s).out 0 4 (by simp) (by simp)
 
 Depends on / 依赖: TFAE_mem_nhdsGE
@@ -793,8 +793,8 @@ theorem mem_nhdsGE_iff_exists_Ico_subset
   mem_nhdsGE_iff_exists_Ico_subset' hu'
 
 中文:
-定理 mem_nhdsGE_iff_exists_Ico_subset
-  条件: [NoMaxOrder α] {a : α} {s : Set α}
+定理 mem_nhdsGE_iff_存在_Ico_subset
+  条件: [NoMax序 α] {a : α} {s : 集合 α}
   证明: let ⟨_, hu'⟩ := exists_gt a
   mem_nhdsGE_iff_exists_Ico_subset' hu'
 
@@ -816,8 +816,8 @@ theorem nhdsGE_basis_Ico
 
 中文:
 定理 nhdsGE_basis_Ico
-  条件: [NoMaxOrder α] (a : α)
-  结论: (𝓝[>=] a).HasBasis (fun u => a < u) (Ico a)
+  条件: [NoMax序 α] (a : α)
+  结论: (𝓝[>=] a).有基 (fun u => a < u) (左闭右开区间 a)
   证明: ⟨fun _ => mem_nhdsGE_iff_exists_Ico_subset⟩
 
 Depends on / 依赖: mem_nhdsGE_iff_exists_Ico_subset
@@ -837,7 +837,7 @@ theorem nhdsGE_basis_Icc
 
 中文:
 定理 nhdsGE_basis_Icc
-  条件: [NoMaxOrder α] [DenselyOrdered α] {a : α}
+  条件: [NoMax序 α] [稠密序 α] {a : α}
   证明: (nhdsGE_basis _).to_hasBasis
     (fun _u hu => (exists_between hu).imp fun _v hv => hv.imp_right Icc_subset_Ico_right) fun u hu =>
     ⟨u, hu, Ico_subset_Icc_self⟩
@@ -859,8 +859,8 @@ theorem mem_nhdsGE_iff_exists_Icc_subset
   proof: nhdsGE_basis_Icc.mem_iff
 
 中文:
-定理 mem_nhdsGE_iff_exists_Icc_subset
-  条件: [NoMaxOrder α] [DenselyOrdered α] {a : α} {s : Set α}
+定理 mem_nhdsGE_iff_存在_Icc_subset
+  条件: [NoMax序 α] [稠密序 α] {a : α} {s : 集合 α}
   证明: nhdsGE_basis_Icc.mem_iff
 
 Depends on / 依赖: mem_iff, nhdsGE_basis_Icc, nhdsGE_basis_Icc.mem_iff
@@ -881,7 +881,7 @@ theorem TFAE_mem_nhdsLE
 
 中文:
 定理 TFAE_mem_nhdsLE
-  条件: {a b : α} (h : a < b) (s : Set α)
+  条件: {a b : α} (h : a < b) (s : 集合 α)
   证明: by -- 4 : `s` includes `(l, b]` for some `l < b`
   simpa using! TFAE_mem_nhdsGE h.dual (ofDual ⁻¹' s)
 
@@ -904,8 +904,8 @@ theorem mem_nhdsLE_iff_exists_mem_Ico_Ioc_subset
   proof: (TFAE_mem_nhdsLE hl' s).out 0 3 (by simp) (by simp)
 
 中文:
-定理 mem_nhdsLE_iff_exists_mem_Ico_Ioc_subset
-  条件: {a l' : α} {s : Set α} (hl' : l' < a)
+定理 mem_nhdsLE_iff_存在_mem_Ico_Ioc_subset
+  条件: {a l' : α} {s : 集合 α} (hl' : l' < a)
   证明: (TFAE_mem_nhdsLE hl' s).out 0 3 (by simp) (by simp)
 
 Depends on / 依赖: TFAE_mem_nhdsLE
@@ -923,8 +923,8 @@ theorem mem_nhdsLE_iff_exists_Ioc_subset'
   proof: (TFAE_mem_nhdsLE hl' s).out 0 4 (by simp) (by simp)
 
 中文:
-定理 mem_nhdsLE_iff_exists_Ioc_subset'
-  条件: {a l' : α} {s : Set α} (hl' : l' < a)
+定理 mem_nhdsLE_iff_存在_Ioc_subset'
+  条件: {a l' : α} {s : 集合 α} (hl' : l' < a)
   证明: (TFAE_mem_nhdsLE hl' s).out 0 4 (by simp) (by simp)
 
 Depends on / 依赖: TFAE_mem_nhdsLE
@@ -943,8 +943,8 @@ theorem mem_nhdsLE_iff_exists_Ioc_subset
   mem_nhdsLE_iff_exists_Ioc_subset' hl'
 
 中文:
-定理 mem_nhdsLE_iff_exists_Ioc_subset
-  条件: [NoMinOrder α] {a : α} {s : Set α}
+定理 mem_nhdsLE_iff_存在_Ioc_subset
+  条件: [NoMin序 α] {a : α} {s : 集合 α}
   证明: let ⟨_, hl'⟩ := exists_lt a
   mem_nhdsLE_iff_exists_Ioc_subset' hl'
 
@@ -967,8 +967,8 @@ theorem mem_nhdsLE_iff_exists_Icc_subset
   _ ↔ exists l, l < a ∧ Icc l a subseteq s := by simp
 
 中文:
-定理 mem_nhdsLE_iff_exists_Icc_subset
-  结论: [NoMinOrder α] [DenselyOrdered α] {a : α}
+定理 mem_nhdsLE_iff_存在_Icc_subset
+  结论: [NoMin序 α] [稠密序 α] {a : α}
   证明: calc s in 𝓝[<=] a ↔ ofDual ⁻¹' s in 𝓝[>=] (toDual a) := Iff.rfl
   _ ↔ exists u : α, toDual a < toDual u ∧ Icc (toDual a) (toDual u) subseteq ofDual ⁻¹' s :=
     mem_nhdsGE_iff_exists_Icc_subset
@@ -993,7 +993,7 @@ theorem nhdsLE_basis_Icc
 
 中文:
 定理 nhdsLE_basis_Icc
-  条件: [NoMinOrder α] [DenselyOrdered α] {a : α}
+  条件: [NoMin序 α] [稠密序 α] {a : α}
   证明: ⟨fun _ => mem_nhdsLE_iff_exists_Icc_subset⟩
 
 Depends on / 依赖: mem_nhdsLE_iff_exists_Icc_subset
@@ -1065,7 +1065,7 @@ theorem orderTopology_of_nhds_mabs
 
 中文:
 定理 orderTopology_of_nhds_mabs
-  结论: {α : 类型} [TopologicalSpace α] [CommGroup α] [LinearOrder α]
+  结论: {α : 类型} [拓扑空间 α] [交换群 α] [线性序 α]
   证明: by
   refine ⟨TopologicalSpace.ext_nhds fun a => ?_⟩
   rw [h_nhds]
@@ -1098,7 +1098,7 @@ theorem LinearOrderedCommGroup.tendsto_nhds
 
 中文:
 定理 LinearOrderedCommGroup.tendsto_nhds
-  条件: {x : Filter β} {a : α}
+  条件: {x : 滤子 β} {a : α}
   证明: by
   simp [nhds_eq_iInf_mabs_div, mabs_div_comm a]
 
@@ -1151,8 +1151,8 @@ theorem Filter.Tendsto.mul_atTop'
   exact (hf.eventually (lt_mem_nhds hC')).mono fun x => le_of_lt
 
 中文:
-定理 Filter.Tendsto.mul_atTop'
-  条件: {C : α} (hf : Tendsto f l (𝓝 C)) (hg : Tendsto g l atTop)
+定理 滤子.收敛.mul_atTop'
+  条件: {C : α} (hf : 收敛 f l (𝓝 C)) (hg : 收敛 g l atTop)
   证明: by
   nontriviality α
   obtain ⟨C', hC'⟩ : exists C', C' < C := exists_lt C
@@ -1181,8 +1181,8 @@ theorem Filter.Tendsto.mul_atBot'
   proof: Filter.Tendsto.mul_atTop' (α := αᵒᵈ) hf hg
 
 中文:
-定理 Filter.Tendsto.mul_atBot'
-  条件: {C : α} (hf : Tendsto f l (𝓝 C)) (hg : Tendsto g l atBot)
+定理 滤子.收敛.mul_atBot'
+  条件: {C : α} (hf : 收敛 f l (𝓝 C)) (hg : 收敛 g l atBot)
   证明: Filter.Tendsto.mul_atTop' (α := αᵒᵈ) hf hg
 
 Depends on / 依赖: Filter, Filter.Tendsto.mul_atTop, Tendsto, mul_atTop
@@ -1206,8 +1206,8 @@ theorem Filter.Tendsto.atTop_mul'
   exact hg.mul_atTop' hf
 
 中文:
-定理 Filter.Tendsto.atTop_mul'
-  条件: {C : α} (hf : Tendsto f l atTop) (hg : Tendsto g l (𝓝 C))
+定理 滤子.收敛.atTop_mul'
+  条件: {C : α} (hf : 收敛 f l atTop) (hg : 收敛 g l (𝓝 C))
   证明: by
   conv in _ * _ => rw [mul_comm]
   exact hg.mul_atTop' hf
@@ -1236,8 +1236,8 @@ theorem Filter.Tendsto.atBot_mul'
 @[to_additive]
 
 中文:
-定理 Filter.Tendsto.atBot_mul'
-  条件: {C : α} (hf : Tendsto f l atBot) (hg : Tendsto g l (𝓝 C))
+定理 滤子.收敛.atBot_mul'
+  条件: {C : α} (hf : 收敛 f l atBot) (hg : 收敛 g l (𝓝 C))
   证明: by
   conv in _ * _ => rw [mul_comm]
   exact hg.mul_atBot' hf
@@ -1268,7 +1268,7 @@ theorem nhds_basis_mabs_div_lt
 
 中文:
 定理 nhds_basis_mabs_div_lt
-  条件: [NoMaxOrder α] (a : α)
+  条件: [NoMax序 α] (a : α)
   证明: by
   simp only [nhds_eq_iInf_mabs_div, mabs_div_comm (a := a)]
   refine hasBasis_biInf_principal' (fun x hx y hy => ?_) (exists_gt _)
@@ -1301,7 +1301,7 @@ theorem nhds_basis_Ioo_one_lt
 
 中文:
 定理 nhds_basis_Ioo_one_lt
-  条件: [NoMaxOrder α] (a : α)
+  条件: [NoMax序 α] (a : α)
   证明: by
   convert! nhds_basis_mabs_div_lt a
   simp only [Ioo, mabs_lt, ← div_lt_iff_lt_mul, inv_lt_div_iff_lt_mul, div_lt_comm]
@@ -1329,7 +1329,7 @@ theorem nhds_basis_Icc_one_lt
 
 中文:
 定理 nhds_basis_Icc_one_lt
-  条件: [NoMaxOrder α] [DenselyOrdered α] (a : α)
+  条件: [NoMax序 α] [稠密序 α] (a : α)
   证明: (nhds_basis_Ioo_one_lt a).to_hasBasis
     (fun _ε ε₁ => let ⟨δ, δ₁, δε⟩ := exists_between ε₁
       ⟨δ, δ₁, Icc_subset_Ioo (by gcongr) (by gcongr)⟩)
@@ -1357,7 +1357,7 @@ theorem nhds_basis_one_mabs_lt
 
 中文:
 定理 nhds_basis_one_mabs_lt
-  条件: [NoMaxOrder α]
+  条件: [NoMax序 α]
   证明: by
   simpa using nhds_basis_mabs_div_lt (1 : α)
 
@@ -1386,7 +1386,7 @@ theorem nhds_basis_Ioo_one_lt_of_one_lt
 
 中文:
 定理 nhds_basis_Ioo_one_lt_of_one_lt
-  条件: [NoMaxOrder α] {a : α} (ha : 1 < a)
+  条件: [NoMax序 α] {a : α} (ha : 1 < a)
   证明: (nhds_basis_Ioo_one_lt a).restrict fun ε hε =>
     ⟨min a ε, lt_min ha hε, min_le_left _ _, by gcongr <;> apply min_le_right⟩
 
@@ -1416,7 +1416,7 @@ lemma mem_nhdsGE
 
 中文:
 引理 mem_nhdsGE
-  条件: (hS : OrdConnected S) (hx : x in S) (hy : y in S) (hxy : x < y)
+  条件: (hS : 序连通 S) (hx : x in S) (hy : y in S) (hxy : x < y)
   结论: S in 𝓝[>=] x
   证明: mem_of_superset (Icc_mem_nhdsGE hxy) hS.out hx hy
 
@@ -1436,7 +1436,7 @@ lemma mem_nhdsGT
 
 中文:
 引理 mem_nhdsGT
-  条件: (hS : OrdConnected S) (hx : x in S) (hy : y in S) (hxy : x < y)
+  条件: (hS : 序连通 S) (hx : x in S) (hy : y in S) (hxy : x < y)
   结论: S in 𝓝[>] x
   证明: nhdsWithin_mono _ Ioi_subset_Ici_self hS.mem_nhdsGE hx hy hxy
 
@@ -1460,7 +1460,7 @@ lemma mem_nhdsLE
 
 中文:
 引理 mem_nhdsLE
-  条件: (hS : OrdConnected S) (hx : x in S) (hy : y in S) (hxy : x < y)
+  条件: (hS : 序连通 S) (hx : x in S) (hy : y in S) (hxy : x < y)
   结论: S in 𝓝[<=] y
   证明: hS.dual.mem_nhdsGE hy hx hxy
 
@@ -1480,7 +1480,7 @@ lemma mem_nhdsLT
 
 中文:
 引理 mem_nhdsLT
-  条件: (hS : OrdConnected S) (hx : x in S) (hy : y in S) (hxy : x < y)
+  条件: (hS : 序连通 S) (hx : x in S) (hy : y in S) (hxy : x < y)
   结论: S in 𝓝[<] y
   证明: hS.dual.mem_nhdsGT hy hx hxy
 

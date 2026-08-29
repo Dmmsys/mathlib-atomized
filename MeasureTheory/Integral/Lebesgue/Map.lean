@@ -40,7 +40,7 @@ theorem lintegral_map
 
 中文:
 定理 lintegral_map
-  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : Measurable f)
+  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : 可测 f)
   证明: by
   rw [lintegral_eq_iSup_eapprox_lintegral hf]
   simp only [← Function.comp_apply (f := f) (g := g)]
@@ -146,7 +146,7 @@ theorem lintegral_comp
 
 中文:
 定理 lintegral_comp
-  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : Measurable f)
+  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : 可测 f)
   证明: (lintegral_map hf hg).symm
 
 Depends on / 依赖: lintegral_map
@@ -165,7 +165,7 @@ theorem lintegral_comp'
 
 中文:
 定理 lintegral_comp'
-  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : AEMeasurable f (μ.map g))
+  结论: {f : β -> 实数>=0∞} {g : α -> β} (hf : 几乎处处可测 f (μ.map g))
   证明: (lintegral_map' hf hg).symm
 
 Depends on / 依赖: lintegral_map
@@ -184,8 +184,8 @@ theorem setLIntegral_map
   rw [restrict_map hg hs]; rw [lintegral_map hf hg]
 
 中文:
-定理 setLIntegral_map
-  结论: {f : β -> 实数>=0∞} {g : α -> β} {s : Set β}
+定理 setL整数egral_map
+  结论: {f : β -> 实数>=0∞} {g : α -> β} {s : 集合 β}
   证明: by
   rw [restrict_map hg hs]; rw [lintegral_map hf hg]
 
@@ -207,7 +207,7 @@ theorem lintegral_indicator_const_comp
 
 中文:
 定理 lintegral_indicator_const_comp
-  结论: {f : α -> β} {s : Set β}
+  结论: {f : α -> β} {s : 集合 β}
   证明: by
   rw [← lintegral_map (measurable_const.indicator hs) hf]; rw [lintegral_indicator_const hs]; rw [Measure.map_apply hf hs]
 
@@ -232,7 +232,7 @@ theorem _root_.MeasurableEmbedding.lintegral_map
     exact le_iSup_of_le (comp f₀ g hg.measurable) (by
 
 中文:
-定理 _root_.MeasurableEmbedding.lintegral_map
+定理 _root_.可测嵌入.lintegral_map
   结论: {g : α -> β}
   证明: by
   rw [lintegral]; rw [lintegral]
@@ -285,7 +285,7 @@ theorem lintegral_subtype_comap
 
 中文:
 定理 lintegral_subtype_comap
-  条件: {s : Set α} (hs : MeasurableSet s) (f : α -> 实数>=0∞)
+  条件: {s : 集合 α} (hs : 可测集 s) (f : α -> 实数>=0∞)
   证明: by
   rw [← (MeasurableEmbedding.subtype_coe hs).lintegral_map]; rw [map_comap_subtype_coe hs]
 
@@ -305,8 +305,8 @@ theorem setLIntegral_subtype
   rw [(MeasurableEmbedding.subtype_coe hs).restrict_comap]; rw [lintegral_subtype_comap hs]; rw [restrict_restrict hs]; rw [inter_eq_right.2 (Subtype.coe_image_subset _ _)]
 
 中文:
-定理 setLIntegral_subtype
-  条件: {s : Set α} (hs : MeasurableSet s) (t : Set s) (f : α -> 实数>=0∞)
+定理 setL整数egral_subtype
+  条件: {s : 集合 α} (hs : 可测集 s) (t : 集合 s) (f : α -> 实数>=0∞)
   证明: by
   rw [(MeasurableEmbedding.subtype_coe hs).restrict_comap]; rw [lintegral_subtype_comap hs]; rw [restrict_restrict hs]; rw [inter_eq_right.2 (Subtype.coe_image_subset _ _)]
 
@@ -335,7 +335,7 @@ include hg
 
 中文:
 定理 lintegral_map_equiv
-  条件: (f : β -> 实数>=0∞) (g : α ≃ᵐ β) (hg : MeasurePreserving g μ ν)
+  条件: (f : β -> 实数>=0∞) (g : α ≃ᵐ β) (hg : 保测 g μ ν)
   证明: by
   rw [← MeasureTheory.lintegral_map_equiv f g]; rw [hg.map_eq]
 
@@ -357,7 +357,7 @@ theorem lintegral_comp
 
 中文:
 定理 lintegral_comp
-  条件: {f : β -> 实数>=0∞} (hf : Measurable f)
+  条件: {f : β -> 实数>=0∞} (hf : 可测 f)
   证明: by rw [← hg.map_eq, lintegral_map hf hg.measurable]
 
 Depends on / 依赖: hg.map_eq, hg.measurable, lintegral_map, map_eq, measurable
@@ -375,7 +375,7 @@ theorem lintegral_comp_emb
 
 中文:
 定理 lintegral_comp_emb
-  条件: (hge : MeasurableEmbedding g) (f : β -> 实数>=0∞)
+  条件: (hge : 可测嵌入 g) (f : β -> 实数>=0∞)
   证明: by rw [← hg.map_eq, hge.lintegral_map]
 
 Depends on / 依赖: hg.map_eq, hge.lintegral_map, lintegral_map, map_eq
@@ -392,7 +392,7 @@ theorem setLIntegral_comp_preimage
   rw [← hg.map_eq]; rw [setLIntegral_map hs hf hg.measurable]
 
 中文:
-定理 setLIntegral_comp_preimage
+定理 setL整数egral_comp_preimage
   证明: by
   rw [← hg.map_eq]; rw [setLIntegral_map hs hf hg.measurable]
 
@@ -413,8 +413,8 @@ theorem setLIntegral_comp_preimage_emb
   rw [← hg.map_eq]; rw [hge.restrict_map]; rw [hge.lintegral_map]
 
 中文:
-定理 setLIntegral_comp_preimage_emb
-  条件: (hge : MeasurableEmbedding g) (f : β -> 实数>=0∞) (s : Set β)
+定理 setL整数egral_comp_preimage_emb
+  条件: (hge : 可测嵌入 g) (f : β -> 实数>=0∞) (s : 集合 β)
   证明: by
   rw [← hg.map_eq]; rw [hge.restrict_map]; rw [hge.lintegral_map]
 
@@ -434,8 +434,8 @@ theorem setLIntegral_comp_emb
   rw [← hg.setLIntegral_comp_preimage_emb hge]; rw [Set.preimage_image_eq _ hge.injective]
 
 中文:
-定理 setLIntegral_comp_emb
-  条件: (hge : MeasurableEmbedding g) (f : β -> 实数>=0∞) (s : Set α)
+定理 setL整数egral_comp_emb
+  条件: (hge : 可测嵌入 g) (f : β -> 实数>=0∞) (s : 集合 α)
   证明: by
   rw [← hg.setLIntegral_comp_preimage_emb hge]; rw [Set.preimage_image_eq _ hge.injective]
 

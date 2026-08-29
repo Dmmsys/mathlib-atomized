@@ -130,7 +130,7 @@ lemma arrowHomEquiv_apply_right_fst
 
 中文:
 引理 arrowHomEquiv_apply_right_fst
-  条件: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
+  条件: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
   证明: IsPullback.lift_fst _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -154,7 +154,7 @@ lemma arrowHomEquiv_apply_right_snd
 
 中文:
 引理 arrowHomEquiv_apply_right_snd
-  条件: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
+  条件: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
   证明: IsPullback.lift_snd _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -178,7 +178,7 @@ lemma inl_arrowHomEquiv_symm_apply_left
 
 中文:
 引理 inl_arrowHomEquiv_symm_apply_left
-  条件: (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π)
+  条件: (β : 箭头.mk f₂ ⟶ 箭头.mk sq₁₃.π)
   证明: IsPushout.inl_desc _ _ _ _
 
 @[reassoc (attr := simp)]
@@ -200,7 +200,7 @@ lemma inr_arrowHomEquiv_symm_apply_left
 
 中文:
 引理 inr_arrowHomEquiv_symm_apply_left
-  条件: (β : Arrow.mk f₂ ⟶ Arrow.mk sq₁₃.π)
+  条件: (β : 箭头.mk f₂ ⟶ 箭头.mk sq₁₃.π)
   证明: IsPushout.inr_desc _ _ _ _
 
 Depends on / 依赖: IsPushout, IsPushout.inr_desc, WalkingCospan, WalkingCospan.left, WalkingCospan.right, fac_left, fac_right, inr_desc, isLimitAux
@@ -232,7 +232,7 @@ definition liftStructEquiv
 
 中文:
 定义 liftStructEquiv
-  签名: (α : Arrow.mk sq₁₂.ι ⟶ Arrow.mk f₃)
+  签名: (α : 箭头.mk sq₁₂.ι ⟶ 箭头.mk f₃)
   定义体: { l := adj₂.homEquiv l.l
       fac_left := by
         have := l.fac_left

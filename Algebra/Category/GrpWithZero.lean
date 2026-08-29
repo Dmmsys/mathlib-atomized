@@ -35,12 +35,12 @@ structure GrpWithZero
     - [str : GroupWithZero carrier]
 
 中文:
-结构 GrpWithZero
+结构 带零群
   参数: where
   公理与运算 (3 个):
     - of : :
     - carrier : 类型
-    - [str : GroupWithZero carrier]
+    - [str : 带零群 carrier]
 -/
 structure GrpWithZero where
   /-- Construct a bundled `GrpWithZero` from a `GroupWithZero`. -/
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort GrpWithZero 类型
+  签名: CoeSort 带零群 类型
   定义体: ⟨carrier⟩
 
 Depends on / 依赖: carrier
@@ -81,7 +81,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited GrpWithZero
+  签名: 可居 带零群
   定义体: ⟨of (WithZero PUnit)⟩
 
 Depends on / 依赖: WithZero
@@ -101,7 +101,7 @@ instance :
 
 中文:
 实例 :
-  签名: LargeCategory.{u} GrpWithZero
+  签名: 大范畴.{u} 带零群
   定义体: MonoidWithZeroHom X Y
   id X := MonoidWithZeroHom.id X
   comp f g := g.comp f
@@ -124,7 +124,7 @@ instance groupWithZeroConcreteCategory
 
 中文:
 实例 groupWithZeroConcreteCategory
-  签名: : ConcreteCategory GrpWithZero (MonoidWithZeroHom · ·) where
+  签名: : 余ncrete范畴 带零群 (带零幺半群态射 · ·) where
   定义体: f
   ofHom f := f
 -/
@@ -144,7 +144,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {X Y : 类型u} [GroupWithZero X] [GroupWithZero Y]
+  签名: {X Y : 类型u} [带零群 X] [带零群 Y]
   定义体: ConcreteCategory.ofHom f
 
 @[simp]
@@ -169,8 +169,8 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  条件: {X : GrpWithZero}
-  结论: ConcreteCategory.hom (𝟙 X : X ⟶ X) = MonoidWithZeroHom.id X
+  条件: {X : 带零群}
+  结论: 余ncrete范畴.hom (𝟙 X : X ⟶ X) = 带零幺半群态射.id X
   证明: rfl
 
 @[simp]
@@ -188,7 +188,7 @@ lemma hom_comp
 
 中文:
 引理 hom_comp
-  条件: {X Y Z : GrpWithZero} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 带零群} {f : X ⟶ Y} {g : Y ⟶ Z}
   证明: rfl
 -/
 lemma hom_comp {X Y Z : GrpWithZero} {f : X ⟶ Y} {g : Y ⟶ Z} :
@@ -205,7 +205,7 @@ lemma coe_id
 
 中文:
 引理 coe_id
-  条件: {X : GrpWithZero}
+  条件: {X : 带零群}
   结论: (𝟙 X : X -> X) = id
   证明: rfl
 -/
@@ -222,7 +222,7 @@ lemma coe_comp
 
 中文:
 引理 coe_comp
-  条件: {X Y Z : GrpWithZero} {f : X ⟶ Y} {g : Y ⟶ Z}
+  条件: {X Y Z : 带零群} {f : X ⟶ Y} {g : Y ⟶ Z}
   结论: (f ≫ g : X -> Z) = g ∘ f
   证明: rfl
 -/
@@ -238,7 +238,7 @@ lemma forget_map
 
 中文:
 引理 forget_map
-  条件: {X Y : GrpWithZero} (f : X ⟶ Y)
+  条件: {X Y : 带零群} (f : X ⟶ Y)
   证明: rfl
 -/
 @[simp] lemma forget_map {X Y : GrpWithZero} (f : X ⟶ Y) :
@@ -256,7 +256,7 @@ instance hasForgetToBipointed
 
 中文:
 实例 hasForgetToBipointed
-  签名: : HasForget₂ GrpWithZero Bipointed where
+  签名: : 有Forget₂ 带零群 Bipointed where
   定义体: { obj := fun X => ⟨X, 0, 1⟩
         map := fun f => ⟨f, f.map_zero', f.map_one'⟩ }
 
@@ -278,7 +278,7 @@ instance hasForgetToMon
 
 中文:
 实例 hasForgetToMon
-  签名: : HasForget₂ GrpWithZero MonCat where
+  签名: : 有Forget₂ 带零群 幺半群范畴 where
   定义体: { obj := fun X => MonCat.of X
         map := fun f => MonCat.ofHom f.toMonoidHom }
 
@@ -307,8 +307,8 @@ definition Iso.mk
     exact e.apply_symm_apply _
 
 中文:
-定义 Iso.mk
-  签名: {α β : GrpWithZero.{u}} (e : α ≃* β)
+定义 同构.mk
+  签名: {α β : 带零群.{u}} (e : α ≃* β)
   定义体: ofHom (.ofClass e)
   inv := ofHom (.ofClass e.symm)
   hom_inv_id := by

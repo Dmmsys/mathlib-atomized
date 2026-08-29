@@ -52,7 +52,7 @@ instance [h
 
 中文:
 实例 [h
-  签名: : Nonempty W] : Nonempty (Push σ)
+  签名: : 非空 W] : 非空 (Push σ)
   定义体: h
 -/
 instance [h : Nonempty W] : Nonempty (Push σ) :=
@@ -69,7 +69,7 @@ inductive PushQuiver
 
 中文:
 归纳类型 PushQuiver
-  参数: {V : 类型u} [Quiver.{v} V] {W : 类型u₂} (σ : V -> W)
+  参数: {V : 类型u} [箭图.{v} V] {W : 类型u₂} (σ : V -> W)
   构造子 (1 个):
     - arrow: {X Y : V} (f : X ⟶ Y) : PushQuiver σ (σ X) (σ Y)
 -/
@@ -86,7 +86,7 @@ instance :
 
 中文:
 实例 :
-  签名: Quiver (Push σ)
+  签名: 箭图 (Push σ)
   定义体: ⟨PushQuiver σ⟩
 
 Depends on / 依赖: PushQuiver

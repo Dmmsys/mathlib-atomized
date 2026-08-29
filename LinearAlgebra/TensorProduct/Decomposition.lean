@@ -49,8 +49,8 @@ instance Decomposition.baseChange
     rw [← LinearMap.cancel_r
 
 中文:
-实例 Decomposition.baseChange
-  签名: : Decomposition fun i => (ℳ i).baseChange S
+实例 分解.baseChange
+  签名: : 分解 fun i => (ℳ i).baseChange S
   定义体: by
   refine .ofLinearMap _ (lmap (ℳ · |>.toBaseChange S) ∘ₗ
     (directSumRight R S S fun i => ℳ i).toLinearMap ∘ₗ
@@ -93,7 +93,7 @@ refine of_injective (β := fun i => S otimes[R] ℳ i) i this.injec
 中文:
 定理 toBaseChange_injective
   条件: (i : ι)
-  结论: Function.Injective ((ℳ i).toBaseChange S)
+  结论: 函数.单射 ((ℳ i).toBaseChange S)
   证明: fun x y h => by
   have := (Function.Bijective.of_comp_iff (lmap (ℳ · |>.toBaseChange S))
     (by rw [← LinearEquiv.coe_trans]; exact LinearEquiv.bijective _)).1
@@ -121,7 +121,7 @@ theorem toBaseChange_bijective
 中文:
 定理 toBaseChange_bijective
   条件: (i : ι)
-  结论: Function.Bijective ((ℳ i).toBaseChange S)
+  结论: 函数.双射 ((ℳ i).toBaseChange S)
   证明: ⟨toBaseChange_injective ℳ i, (ℳ i).toBaseChange_surjective S⟩
 
 Depends on / 依赖: toBaseChange_injective, toBaseChange_surjective
@@ -360,7 +360,7 @@ definition tensorDecomposition
 
 中文:
 定义 tensorDecomposition
-  签名: (N : 类型) [AddCommGroup N] [Module R N]
+  签名: (N : 类型) [加法交换群 N] [模 R N]
   定义体: (DirectSum.congrLinearEquiv <| decomposeTensorEquiv ℳ N)
     (directSumLeft R R (fun i => ℳ i) N <| (DirectSum.decomposeLinearEquiv ℳ).rTensor N x)
   left_inv x := by simp [coe_decomposeTensor_apply ℳ N _, ← LinearEquiv.symm_rTensor]

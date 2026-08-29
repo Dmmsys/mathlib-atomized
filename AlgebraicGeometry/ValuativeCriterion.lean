@@ -58,20 +58,20 @@ structure ValuativeCommSq
     - (commSq : CommSq i₁ (Spec.map (CommRingCat.ofHom (algebraMap R K))) f i₂)
 
 中文:
-结构 ValuativeCommSq
-  参数: {X Y : Scheme.{u}} (f : X ⟶ Y)
+结构 赋值交换方块
+  参数: {X Y : 概形.{u}} (f : X ⟶ Y)
   公理与运算 (11 个):
     - R : 类型u
-    - [commRing : CommRing R]
-    - [domain : IsDomain R]
-    - [valuationRing : ValuationRing R]
+    - [commRing : 交换环 R]
+    - [domain : 是整环 R]
+    - [valuationRing : 赋值环 R]
     - K : 类型u
-    - [field : Field K]
-    - [algebra : Algebra R K]
+    - [field : 域 K]
+    - [algebra : 代数 R K]
     - [isFractionRing : IsFractionRing R K]
     - (i₁ : Spec (.of K) ⟶ X)
     - (i₂ : Spec (.of R) ⟶ Y)
-    - (commSq : CommSq i₁ (Spec.map (CommRingCat.ofHom (algebraMap R K))) f i₂)
+    - (commSq : 交换Sq i₁ (Spec.map (交换环范畴.ofHom (algebraMap R K))) f i₂)
 -/
 structure ValuativeCommSq {X Y : Scheme.{u}} (f : X ⟶ Y) where
   /-- The valuation ring of a valuative commutative square. -/
@@ -106,7 +106,7 @@ definition ValuativeCriterion.Existence
 
 中文:
 定义 ValuativeCriterion.Existence
-  签名: : Morphism命题erty Scheme
+  签名: : MorphismProperty 概形
   定义体: fun _ _ f => forall S : ValuativeCommSq f, S.commSq.HasLift
 
 Depends on / 依赖: HasLift, S.commSq.HasLift, ValuativeCommSq, commSq
@@ -124,7 +124,7 @@ definition ValuativeCriterion.Uniqueness
 
 中文:
 定义 ValuativeCriterion.Uniqueness
-  签名: : Morphism命题erty Scheme
+  签名: : MorphismProperty 概形
   定义体: fun _ _ f => forall S : ValuativeCommSq f, Subsingleton S.commSq.LiftStruct
 
 Depends on / 依赖: LiftStruct, S.commSq.LiftStruct, Subsingleton, ValuativeCommSq, commSq
@@ -142,7 +142,7 @@ definition ValuativeCriterion
 
 中文:
 定义 ValuativeCriterion
-  签名: : Morphism命题erty Scheme
+  签名: : MorphismProperty 概形
   定义体: fun _ _ f => forall S : ValuativeCommSq f, Nonempty (Unique (S.commSq.LiftStruct))
 
 Depends on / 依赖: LiftStruct, Nonempty, S.commSq.LiftStruct, Unique, ValuativeCommSq, commSq
@@ -393,7 +393,7 @@ instance stableUnderBaseChange
 
 中文:
 实例 stableUnderBaseChange
-  签名: : ValuativeCriterion.Existence.IsStableUnderBaseChange
+  签名: : ValuativeCriterion.Existence.是StableUnderBaseChange
   定义体: by
   constructor
   intro Y' X X' Y Y'_to_Y f X'_to_X f' hP hf commSq
@@ -473,7 +473,7 @@ lemma UniversallyClosed.eq_valuativeCriterion
   rw [universallyClosed_eq_universallySpecializing]; rw [ValuativeCriterion.Existence.eq]
 
 中文:
-引理 UniversallyClosed.eq_valuativeCriterion
+引理 普遍闭.eq_valuativeCriterion
   证明: by
   rw [universallyClosed_eq_universallySpecializing]; rw [ValuativeCriterion.Existence.eq]
 
@@ -496,8 +496,8 @@ lemma UniversallyClosed.of_valuativeCriterion
   exact ⟨hf, ‹_›⟩
 
 中文:
-引理 UniversallyClosed.of_valuativeCriterion
-  结论: [QuasiCompact f]
+引理 普遍闭.of_valuativeCriterion
+  结论: [拟紧 f]
   证明: by
   rw [eq_valuativeCriterion]
   exact ⟨hf, ‹_›⟩
@@ -527,8 +527,8 @@ lemma IsSeparated.of_valuativeCriterion
     have hc : CommSq S.i₁ (Spec.map (CommRingCat.ofHom
 
 中文:
-引理 IsSeparated.of_valuativeCriterion
-  结论: [QuasiSeparated f]
+引理 是分离.of_valuativeCriterion
+  结论: [拟分离 f]
   证明: by
     suffices h : ValuativeCriterion.Existence (pullback.diagonal f) by
       have := UniversallyClosed.of_valuativeCriterion (pullback.diagonal f) h
@@ -585,8 +585,8 @@ lemma IsSeparated.valuativeCriterion
   have : IsClosedImmersion g := MorphismProperty.pullback_snd
 
 中文:
-引理 IsSeparated.valuativeCriterion
-  条件: [IsSeparated f]
+引理 是分离.valuativeCriterion
+  条件: [是分离 f]
   结论: ValuativeCriterion.Uniqueness f
   证明: by
   intro S
@@ -656,7 +656,7 @@ lemma IsSeparated.eq_valuativeCriterion
     fun ⟨H, _⟩ => .of_valuativeCriterion f H⟩
 
 中文:
-引理 IsSeparated.eq_valuativeCriterion
+引理 是分离.eq_valuativeCriterion
   证明: by
   ext X Y f
   exact ⟨fun _ => ⟨IsSeparated.valuativeCriterion f, inferInstance⟩,
@@ -688,7 +688,7 @@ lemma IsProper.eq_valuativeCriterion
   tauto
 
 中文:
-引理 IsProper.eq_valuativeCriterion
+引理 是真.eq_valuativeCriterion
   证明: by
   rw [isProper_eq]; rw [IsSeparated.eq_valuativeCriterion]; rw [ValuativeCriterion.eq]; rw [UniversallyClosed.eq_valuativeCriterion]
   simp_rw [inf_assoc]
@@ -719,8 +719,8 @@ lemma IsProper.of_valuativeCriterion
   exact ⟨⟨⟨‹_›, ‹_›⟩, ‹_›⟩, ‹_›⟩
 
 中文:
-引理 IsProper.of_valuativeCriterion
-  结论: [QuasiCompact f] [QuasiSeparated f] [LocallyOfFiniteType f]
+引理 是真.of_valuativeCriterion
+  结论: [拟紧 f] [拟分离 f] [局部有限型 f]
   证明: by
   rw [eq_valuativeCriterion]
   exact ⟨⟨⟨‹_›, ‹_›⟩, ‹_›⟩, ‹_›⟩

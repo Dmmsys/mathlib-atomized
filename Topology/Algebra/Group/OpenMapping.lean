@@ -131,7 +131,7 @@ theorem isOpenMap_smul_of_sigmaCompact
 中文:
 定理 isOpenMap_smul_of_sigmaCompact
   条件: (x : X)
-  结论: IsOpenMap (fun (g : G) => g • x)
+  结论: 是开映射 (fun (g : G) => g • x)
   证明: by
   /- We have already proved the theorem around the basepoint of the orbit, in
   `smul_singleton_mem_nhds_of_sigmaCompact`. The general statement follows around an arbitrary
@@ -170,7 +170,7 @@ theorem MonoidHom.isOpenMap_of_sigmaCompact
   exact isOpenMap_smul_of_sigmaCom
 
 中文:
-定理 MonoidHom.isOpenMap_of_sigmaCompact
+定理 幺半群态射.isOpenMap_of_sigmaCompact
   证明: by
   let A : MulAction G H := MulAction.compHom _ f
   have : ContinuousSMul G H := continuousSMul_compHom h'f

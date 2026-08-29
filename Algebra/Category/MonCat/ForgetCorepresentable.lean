@@ -46,7 +46,7 @@ definition uliftMultiplesHom
 
 中文:
 定义 uliftMultiplesHom
-  签名: (M : 类型u) [AddMonoid M]
+  签名: (M : 类型u) [加法幺半群 M]
   定义体: (multiplesHom _).trans AddEquiv.ulift.symm.addMonoidHomCongrLeftEquiv
 
 Depends on / 依赖: AddEquiv, AddEquiv.ulift.symm.addMonoidHomCongrLeftEquiv, addMonoidHomCongrLeftEquiv, multiplesHom
@@ -67,7 +67,7 @@ definition uliftPowersHom
 
 中文:
 定义 uliftPowersHom
-  签名: (M : 类型u) [Monoid M]
+  签名: (M : 类型u) [幺半群 M]
   定义体: (powersHom _).trans MulEquiv.ulift.symm.monoidHomCongrLeftEquiv
 
 Depends on / 依赖: MulEquiv, MulEquiv.ulift.symm.monoidHomCongrLeftEquiv, monoidHomCongrLeftEquiv, powersHom
@@ -85,7 +85,7 @@ definition MonCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftPowersHom M.carrier).symm).toIso
 
 中文:
-定义 MonCat.coyonedaObjIsoForget
+定义 幺半群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftPowersHom M.carrier).symm).toIso
@@ -108,7 +108,7 @@ definition CommMonCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftPowersHom M.carrier).symm).toIso
 
 中文:
-定义 CommMonCat.coyonedaObjIsoForget
+定义 交换幺半群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftPowersHom M.carrier).symm).toIso
@@ -130,7 +130,7 @@ definition AddMonCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftMultiplesHom M.carrier).symm).toIso
 
 中文:
-定义 AddMonCat.coyonedaObjIsoForget
+定义 加法幺半群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftMultiplesHom M.carrier).symm).toIso
@@ -152,7 +152,7 @@ definition AddCommMonCat.coyonedaObjIsoForget
     (ConcreteCategory.homEquiv.trans (uliftMultiplesHom M.carrier).symm).toIso
 
 中文:
-定义 AddCommMonCat.coyonedaObjIsoForget
+定义 加法交换幺半群范畴.coyonedaObjIsoForget
   签名: :
   定义体: NatIso.ofComponents fun M =>
     (ConcreteCategory.homEquiv.trans (uliftMultiplesHom M.carrier).symm).toIso
@@ -173,7 +173,7 @@ instance MonCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' MonCat.coyonedaObjIsoForget
 
 中文:
-实例 MonCat.forget_isCorepresentable
+实例 幺半群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' MonCat.coyonedaObjIsoForget
 
@@ -192,7 +192,7 @@ instance CommMonCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' CommMonCat.coyonedaObjIsoForget
 
 中文:
-实例 CommMonCat.forget_isCorepresentable
+实例 交换幺半群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' CommMonCat.coyonedaObjIsoForget
 
@@ -211,7 +211,7 @@ instance AddMonCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' AddMonCat.coyonedaObjIsoForget
 
 中文:
-实例 AddMonCat.forget_isCorepresentable
+实例 加法幺半群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' AddMonCat.coyonedaObjIsoForget
 
@@ -230,7 +230,7 @@ instance AddCommMonCat.forget_isCorepresentable
   body: Functor.IsCorepresentable.mk' AddCommMonCat.coyonedaObjIsoForget
 
 中文:
-实例 AddCommMonCat.forget_isCorepresentable
+实例 加法交换幺半群范畴.forget_isCorepresentable
   签名: :
   定义体: Functor.IsCorepresentable.mk' AddCommMonCat.coyonedaObjIsoForget
 

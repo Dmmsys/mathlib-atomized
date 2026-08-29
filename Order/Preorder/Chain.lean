@@ -56,7 +56,7 @@ definition IsChain
 
 中文:
 定义 IsChain
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: s.Pairwise fun x y => x ≺ y ∨ y ≺ x
 
 Depends on / 依赖: Algebra, Algebra.algebraMapSubmonoid_isUnit_le_isUnit, IsLocalization, IsLocalization.of_le_isUnit, Pairwise, algebraMapSubmonoid_isUnit_le_isUnit, of_le_isUnit, s.Pairwise
@@ -74,7 +74,7 @@ definition SuperChain
 
 中文:
 定义 SuperChain
-  签名: (s t : Set α)
+  签名: (s t : 集合 α)
   定义体: IsChain r t ∧ s ⊂ t
 
 Depends on / 依赖: IsChain
@@ -92,7 +92,7 @@ definition IsMaxChain
 
 中文:
 定义 IsMaxChain
-  签名: (s : Set α)
+  签名: (s : 集合 α)
   定义体: IsChain r s ∧ forall ⦃t⦄, IsChain r t -> s subseteq t -> s = t
 
 Depends on / 依赖: IsChain, subseteq
@@ -143,8 +143,8 @@ theorem Set.Subsingleton.isChain
   proof: hs.pairwise _
 
 中文:
-定理 Set.Subsingleton.isChain
-  条件: (hs : s.Subsingleton)
+定理 集合.子单例.isChain
+  条件: (hs : s.子单例)
   结论: IsChain r s
   证明: hs.pairwise _
 
@@ -221,7 +221,7 @@ theorem isChain_of_trichotomous
 
 中文:
 定理 isChain_of_trichotomous
-  条件: [Std.Trichotomous r] (s : Set α)
+  条件: [Std.三歧 r] (s : 集合 α)
   结论: IsChain r s
   证明: fun a _ b _ hab => (trichotomous_of r a b).imp_right fun h => h.resolve_left hab
 
@@ -285,7 +285,7 @@ theorem isChain_univ_iff
 
 中文:
 定理 isChain_univ_iff
-  结论: IsChain r (univ : Set α) ↔ Std.Trichotomous r
+  结论: IsChain r (univ : 集合 α) ↔ Std.三歧 r
   证明: by
   refine ⟨fun h => ⟨fun a b => ?_⟩, fun h => @isChain_of_trichotomous _ _ h univ⟩
   have : a != b -> (r a b ∨ r b a) := h trivial trivial
@@ -332,7 +332,7 @@ theorem IsChain.preimage
   grind
 
 中文:
-定理 IsChain.preimage
+定理 IsChain.原像
   结论: (r : α -> α -> 命题) (s : β -> β -> 命题) (f : α -> β)
   证明: by
   intro _ ha _ hb hne
@@ -358,7 +358,7 @@ lemma isChain_union
 
 中文:
 引理 isChain_union
-  条件: {s t : Set α}
+  条件: {s t : 集合 α}
   证明: by
   have : Std.Symm fun a b => a ≺ b ∨ b ≺ a := { symm _ _ := Or.symm }
   rw [IsChain]; rw [IsChain]; rw [IsChain]; rw [pairwise_union_of_symm]
@@ -379,8 +379,8 @@ lemma Monotone.isChain_image
   proof: hs.image_of_map_rel _ _ _ (fun _ _ a => hf a)
 
 中文:
-引理 Monotone.isChain_image
-  结论: [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
+引理 递增.isChain_image
+  结论: [预序 α] [预序 β] {s : 集合 α} {f : α -> β}
   证明: hs.image_of_map_rel _ _ _ (fun _ _ a => hf a)
 
 Depends on / 依赖: hs.image_of_map_rel, image_of_map_rel
@@ -400,8 +400,8 @@ theorem Monotone.isChain_range
   exact hf.isChain_image (isChain_of_trichotomous _)
 
 中文:
-定理 Monotone.isChain_range
-  条件: [LinearOrder α] [Preorder β] {f : α -> β} (hf : Monotone f)
+定理 递增.isChain_range
+  条件: [线性序 α] [预序 β] {f : α -> β} (hf : 递增 f)
   证明: by
   rw [← image_univ]
   exact hf.isChain_image (isChain_of_trichotomous _)
@@ -422,8 +422,8 @@ lemma Antitone.isChain_image
   proof: hf.dual_left.isChain_image hs.symm
 
 中文:
-引理 Antitone.isChain_image
-  结论: [Preorder α] [Preorder β] {s : Set α} {f : α -> β}
+引理 递减.isChain_image
+  结论: [预序 α] [预序 β] {s : 集合 α} {f : α -> β}
   证明: hf.dual_left.isChain_image hs.symm
 
 Depends on / 依赖: dual_left, hf.dual_left.isChain_image, hs.symm, isChain_image
@@ -441,8 +441,8 @@ theorem Antitone.isChain_range
   proof: hf.dual_left.isChain_range
 
 中文:
-定理 Antitone.isChain_range
-  条件: [LinearOrder α] [Preorder β] {f : α -> β} (hf : Antitone f)
+定理 递减.isChain_range
+  条件: [线性序 α] [预序 β] {f : α -> β} (hf : 递减 f)
   证明: hf.dual_left.isChain_range
 
 Depends on / 依赖: dual_left, hf.dual_left.isChain_range, isChain_range
@@ -462,7 +462,7 @@ theorem IsChain.lt_of_le
 
 中文:
 定理 IsChain.lt_of_le
-  条件: [PartialOrder α] {s : Set α} (h : IsChain (· <= ·) s)
+  条件: [偏序 α] {s : 集合 α} (h : IsChain (· <= ·) s)
   证明: fun _a ha _b hb hne =>
   (h ha hb hne).imp hne.lt_of_le hne.lt_of_le'
 -/
@@ -481,7 +481,7 @@ theorem IsChain.diff
 
 中文:
 定理 IsChain.diff
-  条件: {s t : Set α} (h : IsChain r s)
+  条件: {s t : 集合 α} (h : IsChain r s)
   结论: IsChain r (s \ t)
   证明: h.mono Set.sdiff_subset
 -/
@@ -499,7 +499,7 @@ theorem isChain_preimage_subtypeVal
 
 中文:
 定理 isChain_preimage_subtypeVal
-  条件: (s t : Set α)
+  条件: (s t : 集合 α)
   证明: by
   simp [IsChain, Set.Pairwise]
 
@@ -521,7 +521,7 @@ theorem isChain_coe_univ_iff
 
 中文:
 定理 isChain_coe_univ_iff
-  条件: {s : Set α}
+  条件: {s : 集合 α}
   结论: @IsChain ↑s (r · ·) univ ↔ IsChain r s
   证明: by
   simpa using isChain_preimage_subtypeVal s univ
@@ -546,8 +546,8 @@ theorem IsChain.image
 @[deprecated IsChain.image (since := "2026-02-26")]
 
 中文:
-定理 IsChain.image
-  条件: [FunLike F α β] [RelHomClass F r r'] (hs : IsChain r s) (φ : F)
+定理 IsChain.像
+  条件: [函数状 F α β] [关系态射类 F r r'] (hs : IsChain r s) (φ : F)
   证明: hs.image_of_map_rel _ _ _ (fun _ _ h => map_rel φ h)
 
 @[deprecated IsChain.image (since := "2026-02-26")]
@@ -591,7 +591,7 @@ theorem IsChain.preimage_relEmbedding
 
 中文:
 定理 IsChain.preimage_relEmbedding
-  条件: {t : Set β} (ht : IsChain r' t) (φ : r ↪r r')
+  条件: {t : 集合 β} (ht : IsChain r' t) (φ : r ↪r r')
   证明: ht.preimage _ _ _ φ.injective (fun _ _ h => φ.map_rel_iff.mp h)
 
 @[deprecated IsChain.image (since := "2026-02-26")]
@@ -633,7 +633,7 @@ theorem IsChain.preimage_relIso
 
 中文:
 定理 IsChain.preimage_relIso
-  条件: {t : Set β} (hs : IsChain r' t) (φ : r ≃r r')
+  条件: {t : 集合 β} (hs : IsChain r' t) (φ : r ≃r r')
   证明: hs.preimage_relEmbedding φ.toRelEmbedding
 
 Depends on / 依赖: hs.preimage_relEmbedding, preimage_relEmbedding, toRelEmbedding
@@ -714,7 +714,7 @@ theorem IsChain.preimage_embedding
 
 中文:
 定理 IsChain.preimage_embedding
-  条件: [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ↪o β)
+  条件: [LE α] [LE β] {t : 集合 β} (ht : IsChain (· <= ·) t) (φ : α ↪o β)
   证明: preimage_relEmbedding ht _
 
 Depends on / 依赖: preimage_relEmbedding
@@ -793,7 +793,7 @@ theorem IsChain.preimage_iso
 
 中文:
 定理 IsChain.preimage_iso
-  条件: [LE α] [LE β] {t : Set β} (ht : IsChain (· <= ·) t) (φ : α ≃o β)
+  条件: [LE α] [LE β] {t : 集合 β} (ht : IsChain (· <= ·) t) (φ : α ≃o β)
   证明: preimage_relEmbedding ht _
 
 Depends on / 依赖: preimage_relEmbedding
@@ -812,7 +812,7 @@ theorem IsChain.preimage_iso_iff
 
 中文:
 定理 IsChain.preimage_iso_iff
-  条件: [LE α] [LE β] {t : Set β} {φ : α ≃o β}
+  条件: [LE α] [LE β] {t : 集合 β} {φ : α ≃o β}
   证明: ⟨fun h => (φ.image_preimage t).subst (h.image φ), fun h => h.preimage_iso _⟩
 
 Depends on / 依赖: h.image, h.preimage_iso, image_preimage, preimage_iso
@@ -881,7 +881,7 @@ theorem IsChain.directed
 
 中文:
 定理 IsChain.directed
-  条件: {f : β -> α} {c : Set β} (h : IsChain (f ⁻¹'o r) c)
+  条件: {f : β -> α} {c : 集合 β} (h : IsChain (f ⁻¹'o r) c)
   证明: fun ⟨a, ha⟩ ⟨b, hb⟩ =>
     (by_cases fun hab : a = b => by
       simp only [hab, exists_prop, and_self_iff, Subtype.exists]
@@ -909,8 +909,8 @@ theorem IsChain.exists3
   exact ⟨z', mem5, _root_.trans H1 H3, _root_.trans H2 H3, H4⟩
 
 中文:
-定理 IsChain.exists3
-  结论: (hchain : IsChain r s) [IsTrans α r] {a b c} (mem1 : a in s) (mem2 : b in s)
+定理 IsChain.存在3
+  结论: (hchain : IsChain r s) [是Trans α r] {a b c} (mem1 : a in s) (mem2 : b in s)
   证明: by
   rcases directedOn_iff_directed.mpr (IsChain.directed hchain) a mem1 b mem2 with ⟨z, mem4, H1, H2⟩
   rcases directedOn_iff_directed.mpr (IsChain.directed hchain) z mem4 c mem3 with
@@ -943,7 +943,7 @@ definition IsChain.linearOrder
 
 中文:
 定义 IsChain.linearOrder
-  签名: [PartialOrder α] [DecidableLE α] {s : Set α} (hs : IsChain (· <= ·) s)
+  签名: [偏序 α] [DecidableLE α] {s : 集合 α} (hs : IsChain (· <= ·) s)
   定义体: by
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     exact hs.total ha hb
@@ -971,7 +971,7 @@ lemma IsChain.le_of_not_gt
 
 中文:
 引理 IsChain.le_of_not_gt
-  结论: [Preorder α] (hs : IsChain (· <= ·) s)
+  结论: [预序 α] (hs : IsChain (· <= ·) s)
   证明: by
   cases hs.total hx hy with
   | inr h' => exact h'
@@ -995,7 +995,7 @@ lemma IsChain.not_lt
 
 中文:
 引理 IsChain.not_lt
-  结论: [Preorder α] (hs : IsChain (· <= ·) s)
+  结论: [预序 α] (hs : IsChain (· <= ·) s)
   证明: ⟨(hs.le_of_not_gt hx hy ·), fun h h' => h'.not_ge h⟩
 
 Depends on / 依赖: hs.le_of_not_gt, le_of_not_gt, not_ge
@@ -1014,7 +1014,7 @@ lemma IsChain.lt_of_not_ge
 
 中文:
 引理 IsChain.lt_of_not_ge
-  结论: [Preorder α] (hs : IsChain (· <= ·) s)
+  结论: [预序 α] (hs : IsChain (· <= ·) s)
   证明: (hs.total hx hy).elim (h · |>.elim) (lt_of_le_not_ge · h)
 
 Depends on / 依赖: hs.total, lt_of_le_not_ge
@@ -1033,7 +1033,7 @@ lemma IsChain.not_le
 
 中文:
 引理 IsChain.not_le
-  结论: [Preorder α] (hs : IsChain (· <= ·) s)
+  结论: [预序 α] (hs : IsChain (· <= ·) s)
   证明: ⟨(hs.lt_of_not_ge hx hy ·), fun h h' => h'.not_gt h⟩
 
 Depends on / 依赖: hs.lt_of_not_ge, lt_of_not_ge, not_gt
@@ -1091,7 +1091,7 @@ theorem IsMaxChain.bot_mem
 
 中文:
 定理 IsMaxChain.bot_mem
-  条件: [LE α] [OrderBot α] (h : IsMaxChain (· <= ·) s)
+  条件: [LE α] [有底序 α] (h : IsMaxChain (· <= ·) s)
   结论: ⊥ in s
   证明: (h.2 (h.1.insert fun _ _ _ => Or.inl bot_le) <| subset_insert _ _).symm ▸ mem_insert _ _
 
@@ -1111,7 +1111,7 @@ theorem IsMaxChain.top_mem
 
 中文:
 定理 IsMaxChain.top_mem
-  条件: [LE α] [OrderTop α] (h : IsMaxChain (· <= ·) s)
+  条件: [LE α] [有顶序 α] (h : IsMaxChain (· <= ·) s)
   结论: ⊤ in s
   证明: (h.2 (h.1.insert fun _ _ _ => Or.inr le_top) <| subset_insert _ _).symm ▸ mem_insert _ _
 
@@ -1132,8 +1132,8 @@ lemma IsMaxChain.image
     exact hc.2 (ht.image e.symm) ((e.toEquiv.subset_symm_image _ _).2 hf)
 
 中文:
-引理 IsMaxChain.image
-  条件: {s : β -> β -> 命题} (e : r ≃r s) {c : Set α} (hc : IsMaxChain r c)
+引理 IsMaxChain.像
+  条件: {s : β -> β -> 命题} (e : r ≃r s) {c : 集合 α} (hc : IsMaxChain r c)
   证明: hc.isChain.image e
   right t ht hf := by
     rw [← e.coe_fn_toEquiv]; rw [← e.toEquiv.eq_preimage_iff_image_eq]; rw [← Equiv.image_symm_eq_preimage]
@@ -1165,7 +1165,7 @@ theorem IsMaxChain.isEmpty_iff
 中文:
 定理 IsMaxChain.isEmpty_iff
   条件: (h : IsMaxChain r s)
-  结论: IsEmpty α ↔ s = ∅
+  结论: 是空 α ↔ s = ∅
   证明: by
   refine ⟨fun _ => s.eq_empty_of_isEmpty, fun h' => ?_⟩
   constructor
@@ -1192,7 +1192,7 @@ theorem IsMaxChain.nonempty_iff
 中文:
 定理 IsMaxChain.nonempty_iff
   条件: (h : IsMaxChain r s)
-  结论: Nonempty α ↔ s.Nonempty
+  结论: 非空 α ↔ s.非空
   证明: not_iff_not.mp by simpa [Set.not_nonempty_iff_eq_empty] using h.isEmpty_iff
 -/
 protected theorem IsMaxChain.nonempty_iff (h : IsMaxChain r s) : Nonempty α ↔ s.Nonempty :=
@@ -1231,7 +1231,7 @@ definition SuccChain
 
 中文:
 定义 SuccChain
-  签名: (r : α -> α -> 命题) (s : Set α)
+  签名: (r : α -> α -> 命题) (s : 集合 α)
   定义体: if h : exists t, IsChain r s ∧ SuperChain r s t then h.choose else s
 
 Depends on / 依赖: IsChain, SuperChain, h.choose
@@ -1364,10 +1364,10 @@ structure Flag
     - max_chain' : forall ⦃s⦄, IsChain (· <= ·) s -> carrier subseteq s -> carrier = s
 
 中文:
-结构 Flag
+结构 旗
   参数: (α : 类型) [LE α]
   公理与运算 (3 个):
-    - carrier : Set α
+    - carrier : 集合 α
     - Chain' : IsChain (· <= ·) carrier
     - max_chain' : 对任意 ⦃s⦄, IsChain (· <= ·) s -> carrier subseteq s -> carrier = s
 -/
@@ -1399,7 +1399,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (Flag α) α
+  签名: 集合状 (旗 α) α
   定义体: carrier
   coe_injective s t h := by
     cases s
@@ -1427,7 +1427,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (Flag α)
+  签名: 偏序 (旗 α)
   定义体: .ofSetLike (Flag α) α
 
 @[ext]
@@ -1447,7 +1447,7 @@ theorem ext
 
 中文:
 定理 ext
-  结论: (s : Set α) = t -> s = t
+  结论: (s : 集合 α) = t -> s = t
   证明: SetLike.ext'
 
 Depends on / 依赖: SetLike, SetLike.ext
@@ -1467,7 +1467,7 @@ theorem mem_coe_iff
 
 中文:
 定理 mem_coe_iff
-  结论: a in (s : Set α) ↔ a in s
+  结论: a in (s : 集合 α) ↔ a in s
   证明: Iff.rfl
 
 @[simp]
@@ -1491,8 +1491,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (s : Set α) (h₁ h₂)
-  结论: (mk s h₁ h₂ : Set α) = s
+  条件: (s : 集合 α) (h₁ h₂)
+  结论: (mk s h₁ h₂ : 集合 α) = s
   证明: rfl
 
 @[simp]
@@ -1512,8 +1512,8 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (s : Flag α)
-  结论: mk (s : Set α) s.Chain' s.max_chain' = s
+  条件: (s : 旗 α)
+  结论: mk (s : 集合 α) s.链' s.max_chain' = s
   证明: ext rfl
 -/
 theorem mk_coe (s : Flag α) : mk (s : Set α) s.Chain' s.max_chain' = s :=
@@ -1530,8 +1530,8 @@ theorem chain_le
 
 中文:
 定理 chain_le
-  条件: (s : Flag α)
-  结论: IsChain (· <= ·) (s : Set α)
+  条件: (s : 旗 α)
+  结论: IsChain (· <= ·) (s : 集合 α)
   证明: s.Chain'
 
 Depends on / 依赖: s.Chain
@@ -1550,8 +1550,8 @@ theorem maxChain
 
 中文:
 定理 maxChain
-  条件: (s : Flag α)
-  结论: IsMaxChain (· <= ·) (s : Set α)
+  条件: (s : 旗 α)
+  结论: IsMaxChain (· <= ·) (s : 集合 α)
   证明: ⟨s.chain_le, s.max_chain'⟩
 -/
 protected theorem maxChain (s : Flag α) : IsMaxChain (· <= ·) (s : Set α) :=
@@ -1568,7 +1568,7 @@ theorem top_mem
 
 中文:
 定理 top_mem
-  条件: [OrderTop α] (s : Flag α)
+  条件: [有顶序 α] (s : 旗 α)
   结论: (⊤ : α) in s
   证明: s.maxChain.top_mem
 
@@ -1588,7 +1588,7 @@ theorem bot_mem
 
 中文:
 定理 bot_mem
-  条件: [OrderBot α] (s : Flag α)
+  条件: [有底序 α] (s : 旗 α)
   结论: (⊥ : α) in s
   证明: s.maxChain.bot_mem
 
@@ -1609,7 +1609,7 @@ definition ofIsMaxChain
 
 中文:
 定义 ofIsMaxChain
-  签名: (c : Set α) (hc : IsMaxChain (· <= ·) c)
+  签名: (c : 集合 α) (hc : IsMaxChain (· <= ·) c)
   定义体: ⟨c, hc.isChain, hc.2⟩
 
 @[simp, norm_cast]
@@ -1630,7 +1630,7 @@ lemma coe_ofIsMaxChain
 
 中文:
 引理 coe_ofIsMaxChain
-  条件: (c : Set α) (hc)
+  条件: (c : 集合 α) (hc)
   结论: ofIsMaxChain c hc = c
   证明: rfl
 -/
@@ -1653,7 +1653,7 @@ theorem le_or_le
 
 中文:
 定理 le_or_le
-  条件: (s : Flag α) (ha : a in s) (hb : b in s)
+  条件: (s : 旗 α) (ha : a in s) (hb : b in s)
   结论: a <= b ∨ b <= a
   证明: s.chain_le.total ha hb
 -/
@@ -1669,7 +1669,7 @@ instance [OrderTop
   body: Subtype.orderTop s.top_mem
 
 中文:
-实例 [OrderTop
+实例 [有顶序
   签名: α] (s
   定义体: Subtype.orderTop s.top_mem
 
@@ -1687,7 +1687,7 @@ instance [OrderBot
   body: Subtype.orderBot s.bot_mem
 
 中文:
-实例 [OrderBot
+实例 [有底序
   签名: α] (s
   定义体: Subtype.orderBot s.bot_mem
 
@@ -1705,7 +1705,7 @@ instance [BoundedOrder
   body: Subtype.boundedOrder s.bot_mem s.top_mem
 
 中文:
-实例 [BoundedOrder
+实例 [有界序
   签名: α] (s
   定义体: Subtype.boundedOrder s.bot_mem s.top_mem
 
@@ -1726,7 +1726,7 @@ Set.ne_insert_of_notMem _ ‹_›
 s.maxChain.2 (s.chain_le.insert fun c hc _ => hb hc) Set.subset_insert _ _⟩
 
 中文:
-引理 mem_iff_forall_le_or_ge
+引理 mem_iff_对任意_le_or_ge
   结论: a in s ↔ 对任意 ⦃b⦄, b in s -> a <= b ∨ b <= a
   证明: ⟨fun ha b => s.le_or_le ha, fun hb =>
     of_not_not fun ha =>
@@ -1779,7 +1779,7 @@ lemma coe_map
 
 中文:
 引理 coe_map
-  条件: (e : α ≃o β) (s : Flag α)
+  条件: (e : α ≃o β) (s : 旗 α)
   结论: ↑(map e s) = e '' s
   证明: rfl
 -/
@@ -1819,8 +1819,8 @@ theorem chain_lt
 
 中文:
 定理 chain_lt
-  条件: (s : Flag α)
-  结论: IsChain (· < ·) (s : Set α)
+  条件: (s : 旗 α)
+  结论: IsChain (· < ·) (s : 集合 α)
   证明: s.chain_le.lt_of_le
 
 Depends on / 依赖: chain_le, lt_of_le, s.chain_le.lt_of_le
@@ -1869,8 +1869,8 @@ instance [LinearOrder
 uniq s := SetLike.coe_injective s.3 (isChain_of_trichotomous _) subset_univ _
 
 中文:
-实例 [LinearOrder
-  签名: α] : Unique (Flag α) where
+实例 [线性序
+  签名: α] : 唯一 (旗 α) where
   定义体: ⟨univ, isChain_of_trichotomous _, fun s _ => s.subset_univ.antisymm'⟩
 uniq s := SetLike.coe_injective s.3 (isChain_of_trichotomous _) subset_univ _
 

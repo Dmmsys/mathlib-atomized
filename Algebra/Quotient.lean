@@ -49,10 +49,10 @@ class HasQuotient
     - Quotient((A)) : B -> Type max u v
 
 中文:
-类 HasQuotient
+类 有商
   参数: (A : outParam <| 类型u) (B : 类型v)
   公理与运算 (1 个):
-    - Quotient((A)) : B -> Type max u v
+    - Quotient((A)) : B -> 类型 最大值 u v
 -/
 class HasQuotient (A : outParam <| Type u) (B : Type v) where
   /-- `HasQuotient.Quotient A b` (denoted as `A ⧸ b`) is the quotient of the type `A` by `b`. -/

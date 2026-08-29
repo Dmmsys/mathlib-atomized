@@ -72,8 +72,8 @@ theorem trans
 
 中文:
 定理 trans
-  条件: [Flat R S] [Flat S M]
-  结论: Flat R M
+  条件: [平坦 R S] [平坦 S M]
+  结论: 平坦 R M
   证明: by
   rw [Flat.iff_lTensor_injectiveₛ]
   introv
@@ -104,7 +104,7 @@ lemma ulift_left_iff
 
 中文:
 引理 ulift_left_iff
-  结论: Flat (ULift.{t} R) M ↔ Flat R M
+  结论: 平坦 (类型层提升.{t} R) M ↔ 平坦 R M
   证明: by
   refine ⟨fun h => .trans _ (ULift R) _, fun h => ?_⟩
   have : Module.Flat (ULift.{t} R) R := .of_ulift
@@ -131,7 +131,7 @@ lemma ulift_right_iff
 
 中文:
 引理 ulift_right_iff
-  结论: Flat R (ULift.{t} M) ↔ Flat R M
+  结论: 平坦 R (类型层提升.{t} M) ↔ 平坦 R M
   证明: Flat.equiv_iff ULift.moduleEquiv
 
 Depends on / 依赖: Flat.equiv_iff, ULift.moduleEquiv, equiv_iff, moduleEquiv
@@ -164,7 +164,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [Flat R M]
+  签名: [平坦 R M]
   定义体: inferInstance
 -/
 instance baseChange [Flat R M] : Flat S (S otimes[R] M) := inferInstance
@@ -179,7 +179,7 @@ theorem isBaseChange
 
 中文:
 定理 isBaseChange
-  结论: [Flat R M] (N : Type t) [AddCommMonoid N] [Module R N] [Module S N]
+  结论: [平坦 R M] (N : 类型 t) [加法交换幺半群 N] [模 R N] [模 S N]
   证明: of_linearEquiv (IsBaseChange.equiv h).symm
 
 Depends on / 依赖: IsBaseChange, IsBaseChange.equiv, of_linearEquiv
@@ -211,7 +211,7 @@ instance localizedModule
 
 中文:
 实例 localizedModule
-  签名: [Flat R M] (S : Submonoid R)
+  签名: [平坦 R M] (S : 子幺半群 R)
   定义体: by
   apply Flat.isBaseChange (R := R) (S := Localization S)
     (f := LocalizedModule.mkLinearMap S M)
@@ -239,7 +239,7 @@ theorem of_isLocalizedModule
 
 中文:
 定理 of_isLocalizedModule
-  结论: [Flat R M] (S : Submonoid R) [IsLocalization S Rp]
+  结论: [平坦 R M] (S : 子幺半群 R) [是Localization S Rp]
   证明: by
   fapply Flat.isBaseChange (R := R) (M := M) (S := Rp) (N := Mp)
   exact (isLocalizedModule_iff_isBaseChange S Rp f).mp h

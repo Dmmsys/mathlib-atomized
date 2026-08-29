@@ -172,7 +172,7 @@ lemma forall_mem_image2
   proof: by grind
 
 中文:
-引理 forall_mem_image2
+引理 对任意_mem_image2
   条件: {p : γ -> 命题}
   证明: by grind
 -/
@@ -190,7 +190,7 @@ lemma exists_mem_image2
 @[simp]
 
 中文:
-引理 exists_mem_image2
+引理 存在_mem_image2
   条件: {p : γ -> 命题}
   证明: by grind
 
@@ -211,7 +211,7 @@ theorem image2_subset_iff
 
 中文:
 定理 image2_subset_iff
-  条件: {u : Set γ}
+  条件: {u : 集合 γ}
   结论: image2 f s t subseteq u ↔ 对任意 x in s, 对任意 y in t, f x y in u
   证明: forall_mem_image2
 
@@ -292,7 +292,7 @@ lemma image_uncurry_prod
 
 中文:
 引理 image_uncurry_prod
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   结论: uncurry f '' s ×ˢ t = image2 f s t
   证明: image_prod _
 -/
@@ -309,7 +309,7 @@ lemma image2_mk_eq_prod
 
 中文:
 引理 image2_mk_eq_prod
-  结论: image2 Prod.mk s t = s ×ˢ t
+  结论: image2 积类型.mk s t = s ×ˢ t
   证明: ext by simp
 -/
 @[simp] lemma image2_mk_eq_prod : image2 Prod.mk s t = s ×ˢ t := ext by simp
@@ -327,7 +327,7 @@ lemma image2_curry
 
 中文:
 引理 image2_curry
-  条件: (f : α × β -> γ) (s : Set α) (t : Set β)
+  条件: (f : α × β -> γ) (s : 集合 α) (t : 集合 β)
   证明: by
   simp [← image_uncurry_prod, uncurry]
 
@@ -349,7 +349,7 @@ theorem image2_swap
 
 中文:
 定理 image2_swap
-  条件: (s : Set α) (t : Set β)
+  条件: (s : 集合 α) (t : 集合 β)
   结论: image2 f s t = image2 (fun a b => f b a) t s
   证明: by
   grind
@@ -496,8 +496,8 @@ theorem Nonempty.image2
 @[simp]
 
 中文:
-定理 Nonempty.image2
-  结论: s.Nonempty -> t.Nonempty -> (image2 f s t).Nonempty
+定理 非空.image2
+  结论: s.非空 -> t.非空 -> (image2 f s t).非空
   证明: fun ⟨_, ha⟩ ⟨_, hb⟩ => ⟨_, mem_image2_of_mem ha hb⟩
 
 @[simp]
@@ -518,7 +518,7 @@ theorem image2_nonempty_iff
 
 中文:
 定理 image2_nonempty_iff
-  结论: (image2 f s t).Nonempty ↔ s.Nonempty ∧ t.Nonempty
+  结论: (image2 f s t).非空 ↔ s.非空 ∧ t.非空
   证明: ⟨fun ⟨_, a, ha, b, hb, _⟩ => ⟨⟨a, ha⟩, b, hb⟩, fun h => h.1.image2 h.2⟩
 
 Depends on / 依赖: image2
@@ -536,9 +536,9 @@ theorem Nonempty.of_image2_left
   proof: (image2_nonempty_iff.1 h).1
 
 中文:
-定理 Nonempty.of_image2_left
-  条件: (h : (Set.image2 f s t).Nonempty)
-  结论: s.Nonempty
+定理 非空.of_image2_left
+  条件: (h : (集合.image2 f s t).非空)
+  结论: s.非空
   证明: (image2_nonempty_iff.1 h).1
 
 Depends on / 依赖: image2_nonempty_iff
@@ -558,9 +558,9 @@ theorem Nonempty.of_image2_right
 @[simp]
 
 中文:
-定理 Nonempty.of_image2_right
-  条件: (h : (Set.image2 f s t).Nonempty)
-  结论: t.Nonempty
+定理 非空.of_image2_right
+  条件: (h : (集合.image2 f s t).非空)
+  结论: t.非空
   证明: (image2_nonempty_iff.1 h).2
 
 @[simp]
@@ -605,8 +605,8 @@ theorem Subsingleton.image2
   apply (hs.prod ht).image
 
 中文:
-定理 Subsingleton.image2
-  条件: (hs : s.Subsingleton) (ht : t.Subsingleton) (f : α -> β -> γ)
+定理 子单例.image2
+  条件: (hs : s.子单例) (ht : t.子单例) (f : α -> β -> γ)
   证明: by
   rw [← image_prod]
   apply (hs.prod ht).image
@@ -936,7 +936,7 @@ theorem image2_left
 
 中文:
 定理 image2_left
-  条件: (h : t.Nonempty)
+  条件: (h : t.非空)
   结论: image2 (fun x _ => x) s t = s
   证明: by
   simp [nonempty_def.mp h, Set.ext_iff]
@@ -961,7 +961,7 @@ theorem image2_right
 
 中文:
 定理 image2_right
-  条件: (h : s.Nonempty)
+  条件: (h : s.非空)
   结论: image2 (fun _ y => y) s t = t
   证明: by
   simp [nonempty_def.mp h, Set.ext_iff]
@@ -1361,7 +1361,7 @@ lemma image2_left_identity
 
 中文:
 引理 image2_left_identity
-  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (t : Set β)
+  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (t : 集合 β)
   证明: by
   rw [image2_singleton_left]; rw [show f a = id from funext h]; rw [image_id]
 
@@ -1382,7 +1382,7 @@ lemma image2_right_identity
 
 中文:
 引理 image2_right_identity
-  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (s : Set α)
+  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (s : 集合 α)
   证明: by
   rw [image2_singleton_right]; rw [funext h]; rw [image_id']
 
@@ -1447,7 +1447,7 @@ theorem image2_inter_union_subset
 
 中文:
 定理 image2_inter_union_subset
-  条件: {f : α -> α -> β} {s t : Set α} (hf : 对任意 a b, f a b = f b a)
+  条件: {f : α -> α -> β} {s t : 集合 α} (hf : 对任意 a b, f a b = f b a)
   证明: by
   grw [inter_comm, image2_inter_union_subset_union, image2_comm hf, union_self]
 
@@ -1469,7 +1469,7 @@ theorem image2_union_inter_subset
 
 中文:
 定理 image2_union_inter_subset
-  条件: {f : α -> α -> β} {s t : Set α} (hf : 对任意 a b, f a b = f b a)
+  条件: {f : α -> α -> β} {s t : 集合 α} (hf : 对任意 a b, f a b = f b a)
   证明: by
   rw [image2_comm hf]
   exact image2_inter_union_subset hf

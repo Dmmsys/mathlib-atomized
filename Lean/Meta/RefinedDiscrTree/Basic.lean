@@ -181,7 +181,7 @@ definition keysAsPattern
 
 中文:
 定义 keysAsPattern
-  签名: (keys : Array Key)
+  签名: (keys : 数组 Key)
   定义体: do
 .run keys.toList let (msg, keys) ← go (paren := false)
   if !keys.isEmpty then
@@ -272,10 +272,10 @@ structure ExprInfo
   参数: where
   公理与运算 (5 个):
     - expr : Expr
-    - bvars : List FVarId  [默认: []]
+    - bvars : 列表 FVarId  [默认: []]
     - lctx : LocalContext
     - localInsts : LocalInstances
-    - cfg : Config
+    - cfg : 余nfig
 -/
 structure ExprInfo where
   /-- The expression -/
@@ -305,7 +305,7 @@ definition mkExprInfo
 
 中文:
 定义 mkExprInfo
-  签名: (expr : Expr) (bvars : List FVarId)
+  签名: (expr : Expr) (bvars : 列表 FVarId)
   定义体: return {
     expr, bvars,
     lctx := ← getLCtx
@@ -395,11 +395,11 @@ structure LazyEntry
 结构 LazyEntry
   参数: where
   公理与运算 (5 个):
-    - previous : Option ExprInfo  [默认: none]
-    - stack : List StackEntry  [默认: []]
+    - previous : 选项类型 ExprInfo  [默认: none]
+    - stack : 列表 StackEntry  [默认: []]
     - mctx : MetavarContext
-    - labelledStars? : Option (Array MVarId)
-    - computedKeys : List Key  [默认: []]
+    - labelledStars? : 选项类型 (数组 MVarId)
+    - computedKeys : 列表 Key  [默认: []]
 -/
 structure LazyEntry where
   /--
@@ -450,7 +450,7 @@ definition mkInitLazyEntry
 
 中文:
 定义 mkInitLazyEntry
-  签名: (labelledStars : 布尔)
+  签名: (labelledStars : 布尔值)
   定义体: return {
     mctx := ← getMCtx
     labelledStars? := if labelledStars then some #[] else none
@@ -540,9 +540,9 @@ structure Trie
 
 中文:
 结构 Trie
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (1 个):
-    - node : : values : Array α star : Option TrieIndex labelledStars : Std.HashMap 自然数 TrieIndex children : Std.HashMap Key TrieIndex pending : Array (LazyEntry × α)
+    - node : : values : 数组 α star : 选项类型 TrieIndex labelledStars : Std.HashMap 自然数 TrieIndex children : Std.HashMap Key TrieIndex pending : 数组 (LazyEntry × α)
 -/
 structure Trie (α : Type) where
   node ::
@@ -575,10 +575,10 @@ structure RefinedDiscrTree
 
 中文:
 结构 RefinedDiscrTree
-  参数: (α : Type)
+  参数: (α : 类型)
   公理与运算 (2 个):
     - root : Std.HashMap Key TrieIndex  [默认: {}]
-    - tries : Array (Trie α)  [默认: #[]]
+    - tries : 数组 (Trie α)  [默认: #[]]
 -/
 structure RefinedDiscrTree (α : Type) where
   /-- `Trie`s at the root based of the `Key`. -/

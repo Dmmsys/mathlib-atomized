@@ -32,7 +32,7 @@ abbreviation topologicalSpace
 
 中文:
 缩写 topologicalSpace
-  签名: [TopologicalSpace β] (e : α ≃ β)
+  签名: [拓扑空间 β] (e : α ≃ β)
   定义体: .induced e.toFun ‹_›
 -/
 protected abbrev topologicalSpace [TopologicalSpace β] (e : α ≃ β) :
@@ -58,7 +58,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: [TopologicalSpace β] (e : α ≃ β)
+  签名: [拓扑空间 β] (e : α ≃ β)
   定义体: e.topologicalSpace
     α ≃ₜ β :=
   letI := e.topologicalSpace

@@ -124,7 +124,7 @@ theorem IsPretransitive.of_surjective_map
 @[to_additive]
 
 中文:
-定理 IsPretransitive.of_surjective_map
+定理 是Pretransitive.of_surjective_map
   结论: {φ : M -> N} {f : α ->ₑ[φ] β}
   证明: by
   apply MulAction.IsPretransitive.mk

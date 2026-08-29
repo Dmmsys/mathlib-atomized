@@ -44,7 +44,7 @@ definition IsSMulRegular
 
 中文:
 定义 IsSMulRegular
-  签名: [SMul R M] (c : R)
+  签名: [标量乘法 R M] (c : R)
   定义体: Function.Injective ((c • ·) : M -> M)
 
 Depends on / 依赖: Function, Function.Injective, Injective
@@ -63,7 +63,7 @@ theorem IsLeftRegular.isSMulRegular
 
 中文:
 定理 IsLeftRegular.isSMulRegular
-  条件: [Mul R] {c : R} (h : IsLeftRegular c)
+  条件: [乘法 R] {c : R} (h : IsLeftRegular c)
   结论: IsSMulRegular R c
   证明: h
 -/
@@ -81,7 +81,7 @@ theorem isLeftRegular_iff
 
 中文:
 定理 isLeftRegular_iff
-  条件: [Mul R] {a : R}
+  条件: [乘法 R] {a : R}
   结论: IsLeftRegular a ↔ IsSMulRegular R a
   证明: Iff.rfl
 
@@ -100,7 +100,7 @@ theorem IsRightRegular.isSMulRegular
 
 中文:
 定理 IsRightRegular.isSMulRegular
-  条件: [Mul R] {c : R} (h : IsRightRegular c)
+  条件: [乘法 R] {c : R} (h : IsRightRegular c)
   证明: h
 -/
 theorem IsRightRegular.isSMulRegular [Mul R] {c : R} (h : IsRightRegular c) :
@@ -117,7 +117,7 @@ theorem isRightRegular_iff
 
 中文:
 定理 isRightRegular_iff
-  条件: [Mul R] {a : R}
+  条件: [乘法 R] {a : R}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -140,7 +140,7 @@ protected alias ⟨IsSMulRegular.of_map, IsSMulRegular.map⟩ := isSMulRegular_m
 
 中文:
 引理 isSMulRegular_map
-  条件: [SMul R M] [SMul S M] (f : R -> S) (smul : 对任意 m : M, f a • m = a • m)
+  条件: [标量乘法 R M] [标量乘法 S M] (f : R -> S) (smul : 对任意 m : M, f a • m = a • m)
   证明: by simp [IsSMulRegular, smul]
 
 protected alias ⟨IsSMulRegular.of_map, IsSMulRegular.map⟩ := isSMulRegular_map
@@ -170,7 +170,7 @@ theorem natAbs_iff
 
 中文:
 定理 natAbs_iff
-  条件: [SubtractionMonoid M] {n : 整数}
+  条件: [Subtraction幺半群 M] {n : 整数}
   证明: by
   simp_rw [IsSMulRegular, Function.Injective]
   conv_rhs => rw [← n.sign_mul_natAbs]
@@ -275,7 +275,7 @@ theorem isLeftRegular
 
 中文:
 定理 isLeftRegular
-  条件: [Mul R] {a : R} (h : IsSMulRegular R a)
+  条件: [乘法 R] {a : R} (h : IsSMulRegular R a)
   结论: IsLeftRegular a
   证明: h
 -/
@@ -292,7 +292,7 @@ theorem isRightRegular
 
 中文:
 定理 isRightRegular
-  条件: [Mul R] {a : R} (h : IsSMulRegular R (MulOpposite.op a))
+  条件: [乘法 R] {a : R} (h : IsSMulRegular R (MulOpposite.op a))
   证明: h
 -/
 theorem isRightRegular [Mul R] {a : R} (h : IsSMulRegular R (MulOpposite.op a)) :
@@ -309,7 +309,7 @@ theorem mul
 
 中文:
 定理 mul
-  条件: [Mul R] [IsScalarTower R R M] (ra : IsSMulRegular M a) (rb : IsSMulRegular M b)
+  条件: [乘法 R] [标量塔 R R M] (ra : IsSMulRegular M a) (rb : IsSMulRegular M b)
   证明: ra.smul rb
 
 Depends on / 依赖: ra.smul
@@ -332,7 +332,7 @@ theorem of_mul
 
 中文:
 定理 of_mul
-  条件: [Mul R] [IsScalarTower R R M] (ab : IsSMulRegular M (a * b))
+  条件: [乘法 R] [标量塔 R R M] (ab : IsSMulRegular M (a * b))
   证明: by
   rw [← smul_eq_mul] at ab
   exact ab.of_smul _
@@ -357,7 +357,7 @@ theorem mul_iff_right
 
 中文:
 定理 mul_iff_right
-  条件: [Mul R] [IsScalarTower R R M] (ha : IsSMulRegular M a)
+  条件: [乘法 R] [标量塔 R R M] (ha : IsSMulRegular M a)
   证明: ⟨of_mul, ha.mul⟩
 
 Depends on / 依赖: ha.mul, of_mul
@@ -381,7 +381,7 @@ theorem mul_and_mul_iff
 
 中文:
 定理 mul_and_mul_iff
-  条件: [Mul R] [IsScalarTower R R M]
+  条件: [乘法 R] [标量塔 R R M]
   证明: by
   refine ⟨?_, ?_⟩
   · rintro ⟨ab, ba⟩
@@ -571,7 +571,7 @@ theorem subsingleton
 中文:
 定理 subsingleton
   条件: (h : IsSMulRegular M (0 : R))
-  结论: Subsingleton M
+  结论: 子单例 M
   证明: ⟨fun a b => h (by dsimp only [Function.comp_def]; repeat' rw [MulActionWithZero.zero_smul])⟩
 -/
 protected theorem subsingleton (h : IsSMulRegular M (0 : R)) : Subsingleton M :=
@@ -587,7 +587,7 @@ theorem zero_iff_subsingleton
 
 中文:
 定理 zero_iff_subsingleton
-  结论: IsSMulRegular M (0 : R) ↔ Subsingleton M
+  结论: IsSMulRegular M (0 : R) ↔ 子单例 M
   证明: ⟨fun h => h.subsingleton, fun H a b _ => @Subsingleton.elim _ H a b⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, h.subsingleton, subsingleton
@@ -608,7 +608,7 @@ theorem not_zero_iff
 
 中文:
 定理 not_zero_iff
-  结论: ¬IsSMulRegular M (0 : R) ↔ Nontrivial M
+  结论: ¬IsSMulRegular M (0 : R) ↔ 非平凡 M
   证明: by
   rw [nontrivial_iff]; rw [not_iff_comm]; rw [zero_iff_subsingleton]; rw [subsingleton_iff]
   push Not
@@ -632,7 +632,7 @@ theorem zero
 
 中文:
 定理 zero
-  条件: [sM : Subsingleton M]
+  条件: [sM : 子单例 M]
   结论: IsSMulRegular M (0 : R)
   证明: zero_iff_subsingleton.mpr sM
 
@@ -652,7 +652,7 @@ theorem not_zero
 
 中文:
 定理 not_zero
-  条件: [nM : Nontrivial M]
+  条件: [nM : 非平凡 M]
   结论: ¬IsSMulRegular M (0 : R)
   证明: not_zero_iff.mpr nM
 
@@ -711,7 +711,7 @@ theorem isSMulRegular_of_group
 
 中文:
 定理 isSMulRegular_of_group
-  条件: [MulAction G R] (g : G)
+  条件: [乘法作用 G R] (g : G)
   结论: IsSMulRegular R g
   证明: by
   intro x y h
@@ -739,7 +739,7 @@ theorem Units.isSMulRegular
   proof: IsSMulRegular.of_mul_eq_one a.inv_val
 
 中文:
-定理 Units.isSMulRegular
+定理 单位群.isSMulRegular
   条件: (a : Rˣ)
   结论: IsSMulRegular M (a : R)
   证明: IsSMulRegular.of_mul_eq_one a.inv_val
@@ -761,8 +761,8 @@ theorem IsUnit.isSMulRegular
   exact a.isSMulRegular M
 
 中文:
-定理 IsUnit.isSMulRegular
-  条件: (ua : IsUnit a)
+定理 是单位.isSMulRegular
+  条件: (ua : 是单位 a)
   结论: IsSMulRegular M a
   证明: by
   rcases ua with ⟨a, rfl⟩
@@ -788,7 +788,7 @@ lemma IsSMulRegular.right_eq_zero_of_smul
 
 中文:
 引理 IsSMulRegular.right_eq_zero_of_smul
-  结论: [Zero M] [SMulZeroClass R M]
+  结论: [零 M] [SMulZero类 R M]
   证明: h1 (h2.trans (smul_zero r).symm)
 -/
 protected lemma IsSMulRegular.right_eq_zero_of_smul [Zero M] [SMulZeroClass R M]
@@ -810,7 +810,7 @@ alias ⟨_, IsSMulRegular.of_right_eq_zero_of_smul⟩ := isSMulRegular_iff_right
 
 中文:
 引理 isSMulRegular_iff_right_eq_zero_of_smul
-  条件: [AddGroup M] [DistribSMul R M] {r : R}
+  条件: [加法群 M] [分配标量乘法 R M] {r : R}
   证明: h.right_eq_zero_of_smul
 mpr h m₁ m₂ eq := sub_eq_zero.mp h _ by simp_rw [smul_sub, eq, sub_self]
 
@@ -835,8 +835,8 @@ lemma Equiv.isSMulRegular_congr
 (iff_of_eq <| congrArg _ <| funext h).trans e.injective_comp _
 
 中文:
-引理 Equiv.isSMulRegular_congr
-  结论: {R S M M'} [SMul R M] [SMul S M'] {e : M ≃ M'}
+引理 等价.isSMulRegular_congr
+  结论: {R S M M'} [标量乘法 R M] [标量乘法 S M'] {e : M ≃ M'}
   证明: (e.comp_injective _).symm.trans
 (iff_of_eq <| congrArg _ <| funext h).trans e.injective_comp _
 

@@ -67,7 +67,7 @@ definition AdjoinRoot
 
 中文:
 定义 AdjoinRoot
-  签名: [CommRing R] (f : R[X])
+  签名: [交换环 R] (f : R[X])
   定义体: Polynomial R ⧸ (span {f} : Ideal R[X])
 
 Depends on / 依赖: Polynomial
@@ -93,7 +93,7 @@ instance instSMulAdjoinRoot
 
 中文:
 实例 instSMulAdjoinRoot
-  签名: [DistribSMul S R] [IsScalarTower S R R]
+  签名: [分配标量乘法 S R] [标量塔 S R R]
   定义体: inferInstanceAs SMul S (_ ⧸ _)
 -/
 instance instSMulAdjoinRoot [DistribSMul S R] [IsScalarTower S R R] : SMul S (AdjoinRoot f) :=
@@ -111,7 +111,7 @@ __ : CommRing (AdjoinRoot f) := inferInstanceAs CommRing (_ ⧸ _)
 
 中文:
 实例 :
-  签名: CommRing (AdjoinRoot f)
+  签名: 交换环 (AdjoinRoot f)
   定义体: letI := instSMulAdjoinRoot (S := Nat) (R := R); (· • ·)
   zsmul := letI := instSMulAdjoinRoot (S := Int) (R := R); (· • ·)
 __ : CommRing (AdjoinRoot f) := inferInstanceAs CommRing (_ ⧸ _)
@@ -132,8 +132,8 @@ instance [DistribSMul
   body: inferInstanceAs DistribSMul S (_ ⧸ _)
 
 中文:
-实例 [DistribSMul
-  签名: S R] [IsScalarTower S R R] : DistribSMul S (AdjoinRoot f)
+实例 [分配标量乘法
+  签名: S R] [标量塔 S R R] : 分配标量乘法 S (AdjoinRoot f)
   定义体: inferInstanceAs DistribSMul S (_ ⧸ _)
 
 Depends on / 依赖: DistribSMul
@@ -174,8 +174,8 @@ theorem nontrivial
 
 中文:
 定理 nontrivial
-  条件: [IsDomain R] (h : degree f != 0)
-  结论: Nontrivial (AdjoinRoot f)
+  条件: [是整环 R] (h : degree f != 0)
+  结论: 非平凡 (AdjoinRoot f)
   证明: by
   simp only [AdjoinRoot, Quotient.nontrivial_iff, Ne, span_singleton_eq_top,
     Polynomial.isUnit_iff, not_exists, not_and]
@@ -261,7 +261,7 @@ theorem smul_mk
 
 中文:
 定理 smul_mk
-  条件: [DistribSMul S R] [IsScalarTower S R R] (a : S) (x : R[X])
+  条件: [分配标量乘法 S R] [标量塔 S R R] (a : S) (x : R[X])
   证明: rfl
 -/
 theorem smul_mk [DistribSMul S R] [IsScalarTower S R R] (a : S) (x : R[X]) :
@@ -278,7 +278,7 @@ theorem smul_of
 
 中文:
 定理 smul_of
-  条件: [DistribSMul S R] [IsScalarTower S R R] (a : S) (x : R)
+  条件: [分配标量乘法 S R] [标量塔 S R R] (a : S) (x : R)
   证明: by rw [of, RingHom.comp_apply, RingHom.comp_apply, smul_mk, smul_C]
 
 Depends on / 依赖: RingHom, RingHom.comp_apply, comp_apply, smul_C, smul_mk
@@ -306,7 +306,7 @@ instance isScalarTower_right
 
 中文:
 实例 isScalarTower_right
-  签名: [DistribSMul S R] [IsScalarTower S R R]
+  签名: [分配标量乘法 S R] [标量塔 S R R]
   定义体: inferInstanceAs IsScalarTower S (_ ⧸ _) (_ ⧸ _)
 
 Depends on / 依赖: IsScalarTower
@@ -324,8 +324,8 @@ instance [Monoid
   body: inferInstanceAs DistribMulAction S (_ ⧸ _)
 
 中文:
-实例 [Monoid
-  签名: S] [DistribMulAction S R] [IsScalarTower S R R] (f
+实例 [幺半群
+  签名: S] [分配乘法作用 S R] [标量塔 S R R] (f
   定义体: inferInstanceAs DistribMulAction S (_ ⧸ _)
 
 Depends on / 依赖: DistribMulAction
@@ -345,8 +345,8 @@ instance [CommSemiring
   body: inferInstanceAs Algebra S (_ ⧸ _)
 
 中文:
-实例 [CommSemiring
-  签名: S] [Algebra S R] : Algebra S (AdjoinRoot f)
+实例 [交换半环
+  签名: S] [代数 S R] : 代数 S (AdjoinRoot f)
   定义体: inferInstanceAs Algebra S (_ ⧸ _)
 
 Depends on / 依赖: Algebra
@@ -435,7 +435,7 @@ theorem algebraMap_eq'
 
 中文:
 定理 algebraMap_eq'
-  条件: [CommSemiring S] [Algebra S R]
+  条件: [交换半环 S] [代数 S R]
   证明: rfl
 -/
 theorem algebraMap_eq' [CommSemiring S] [Algebra S R] :
@@ -452,7 +452,7 @@ instance finiteType
 
 中文:
 实例 finiteType
-  签名: [CommSemiring S] [Algebra S R] [FiniteType S R]
+  签名: [交换半环 S] [代数 S R] [有限型 S R]
   定义体: inferInstanceAs FiniteType S (_ ⧸ (_ : Ideal R[X]))
 
 Depends on / 依赖: FiniteType
@@ -471,7 +471,7 @@ instance finitePresentation
 
 中文:
 实例 finitePresentation
-  签名: [CommRing S] [Algebra S R] [FinitePresentation S R]
+  签名: [交换环 S] [代数 S R] [有限呈现 S R]
   定义体: .quotient (Submodule.fg_span_singleton f)
 
 Depends on / 依赖: Submodule, Submodule.fg_span_singleton, fg_span_singleton, quotient
@@ -642,7 +642,7 @@ theorem algHom_ext
 
 中文:
 定理 algHom_ext
-  结论: [Semiring S] [Algebra R S] {g₁ g₂ : AdjoinRoot f ->ₐ[R] S}
+  结论: [半环 S] [代数 R S] {g₁ g₂ : AdjoinRoot f ->ₐ[R] S}
   证明: Ideal.Quotient.algHom_ext R Polynomial.algHom_ext h
 
 @[simp]
@@ -823,7 +823,7 @@ theorem aeval_eq_of_algebra
 
 中文:
 定理 aeval_eq_of_algebra
-  条件: [CommRing S] [Algebra R S] (f : S[X]) (p : R[X])
+  条件: [交换环 S] [代数 R S] (f : S[X]) (p : R[X])
   证明: by
   induction p using Polynomial.induction_on with
   | C a =>
@@ -885,7 +885,7 @@ theorem adjoinRoot_eq_top
 
 中文:
 定理 adjoinRoot_eq_top
-  结论: Algebra.adjoin R ({root f} : Set (AdjoinRoot f)) = ⊤
+  结论: 代数.adjoin R ({root f} : 集合 (AdjoinRoot f)) = ⊤
   证明: by
   refine Algebra.eq_top_iff.2 fun x => ?_
   induction x using AdjoinRoot.induction_on with
@@ -957,7 +957,7 @@ theorem isAlgebraic_root
 中文:
 定理 isAlgebraic_root
   条件: (hf : f != 0)
-  结论: IsAlgebraic R (root f)
+  结论: 是代数 R (root f)
   证明: ⟨f, hf, eval₂_root f⟩
 -/
 theorem isAlgebraic_root (hf : f != 0) : IsAlgebraic R (root f) :=
@@ -981,7 +981,7 @@ theorem of.injective_of_degree_ne_zero
 
 中文:
 定理 of.injective_of_degree_ne_zero
-  条件: [IsDomain R] (hf : f.degree != 0)
+  条件: [是整环 R] (hf : f.degree != 0)
   证明: by
   rw [injective_iff_map_eq_zero]
   intro p hp
@@ -1364,7 +1364,7 @@ theorem algHom_subsingleton
 
 中文:
 定理 algHom_subsingleton
-  条件: {S : 类型} [CommRing S] [Algebra R S] {r : R}
+  条件: {S : 类型} [交换环 S] [代数 R S] {r : R}
   证明: ⟨fun f g =>
     algHom_ext
       (@inv_unique _ _ (algebraMap R S r) _ _
@@ -1397,8 +1397,8 @@ theorem isDomain_of_prime
 
 中文:
 定理 isDomain_of_prime
-  条件: (hf : Prime f)
-  结论: IsDomain (AdjoinRoot f)
+  条件: (hf : 素 f)
+  结论: 是整环 (AdjoinRoot f)
   证明: (Ideal.Quotient.isDomain_iff_prime (span {f} : Ideal R[X])).mpr
     (Ideal.span_singleton_prime hf.ne_zero).mpr hf
 
@@ -1419,7 +1419,7 @@ theorem noZeroSMulDivisors_of_prime_of_degree_ne_zero
 
 中文:
 定理 noZeroSMulDivisors_of_prime_of_degree_ne_zero
-  结论: [IsDomain R] (hf : Prime f)
+  结论: [是整环 R] (hf : 素 f)
   证明: haveI := isDomain_of_prime hf
   isTorsionFree_iff_algebraMap_injective.mpr (of.injective_of_degree_ne_zero hf')
 
@@ -1952,7 +1952,7 @@ instance span_maximal_of_irreducible
 
 中文:
 实例 span_maximal_of_irreducible
-  签名: [Fact (Irreducible f)]
+  签名: [Fact (不可约 f)]
   定义体: PrincipalIdealRing.isMaximal_of_irreducible Fact.out
 
 Depends on / 依赖: Fact.out, PrincipalIdealRing, PrincipalIdealRing.isMaximal_of_irreducible, isMaximal_of_irreducible
@@ -1970,7 +1970,7 @@ instance instGroupWithZero
 
 中文:
 实例 instGroupWithZero
-  签名: [Fact (Irreducible f)]
+  签名: [Fact (不可约 f)]
   定义体: fast_instance% Quotient.groupWithZero (span {f} : Ideal K[X])
 
 Depends on / 依赖: Quotient, Quotient.groupWithZero, fast_instance, groupWithZero
@@ -1997,7 +1997,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: [Fact (Irreducible f)]
+  签名: [Fact (不可约 f)]
   定义体: instCommRing _
   __ := instGroupWithZero
   nnqsmul := (· • ·)
@@ -2039,7 +2039,7 @@ theorem coe_injective
 中文:
 定理 coe_injective
   条件: (h : degree f != 0)
-  结论: Function.Injective ((↑) : K -> AdjoinRoot f)
+  结论: 函数.单射 ((↑) : K -> AdjoinRoot f)
   证明: have := AdjoinRoot.nontrivial f h
   (of f).injective
 
@@ -2060,8 +2060,8 @@ theorem coe_injective'
 
 中文:
 定理 coe_injective'
-  条件: [Fact (Irreducible f)]
-  结论: Function.Injective ((↑) : K -> AdjoinRoot f)
+  条件: [Fact (不可约 f)]
+  结论: 函数.单射 ((↑) : K -> AdjoinRoot f)
   证明: (of f).injective
 
 Depends on / 依赖: injective
@@ -2081,7 +2081,7 @@ theorem mul_div_root_cancel
 
 中文:
 定理 mul_div_root_cancel
-  条件: [Fact (Irreducible f)]
+  条件: [Fact (不可约 f)]
   证明: (isRoot_root _).mul_div_eq
 
 Depends on / 依赖: isRoot_root, mul_div_eq
@@ -2103,8 +2103,8 @@ instance [CommRing
   body: Ideal.Quotient.isNoetherianRing _
 
 中文:
-实例 [CommRing
-  签名: R] [IsNoetherianRing R] {f
+实例 [交换环
+  签名: R] [是Noether环 R] {f
   定义体: Ideal.Quotient.isNoetherianRing _
 
 Depends on / 依赖: Ideal.Quotient.isNoetherianRing, Quotient, isNoetherianRing
@@ -2128,9 +2128,9 @@ theorem isIntegral_root'
   proof: ⟨g, hg, eval₂_root g⟩
 
 中文:
-定理 isIntegral_root'
+定理 is整数egral_root'
   条件: (hg : g.Monic)
-  结论: Is整数egral R (root g)
+  结论: 是整 R (root g)
   证明: ⟨g, hg, eval₂_root g⟩
 -/
 theorem isIntegral_root' (hg : g.Monic) : IsIntegral R (root g) :=
@@ -2202,7 +2202,7 @@ theorem mk_leftInverse
 中文:
 定理 mk_leftInverse
   条件: (hg : g.Monic)
-  结论: Function.LeftInverse (mk g) (modByMonicHom hg)
+  结论: 函数.左逆 (mk g) (modByMonicHom hg)
   证明: by
   intro f
   induction f using AdjoinRoot.induction_on
@@ -2227,7 +2227,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk g)
+  结论: 函数.满射 (mk g)
   证明: Ideal.Quotient.mk_surjective
 
 Depends on / 依赖: Ideal.Quotient.mk_surjective, Quotient, mk_surjective
@@ -2297,7 +2297,7 @@ theorem powerBasisAux'_repr_symm_apply
 
 中文:
 定理 powerBasisAux'_repr_symm_apply
-  条件: (hg : g.Monic) (c : Fin g.natDegree ->₀ R)
+  条件: (hg : g.Monic) (c : 有限集 g.natDegree ->₀ R)
   证明: rfl
 -/
 theorem powerBasisAux'_repr_symm_apply (hg : g.Monic) (c : Fin g.natDegree ->₀ R) :
@@ -2317,7 +2317,7 @@ theorem powerBasisAux'_repr_apply_to_fun
 
 中文:
 定理 powerBasisAux'_repr_apply_to_fun
-  条件: (hg : g.Monic) (f : AdjoinRoot g) (i : Fin g.natDegree)
+  条件: (hg : g.Monic) (f : AdjoinRoot g) (i : 有限集 g.natDegree)
   证明: rfl
 -/
 theorem powerBasisAux'_repr_apply_to_fun (hg : g.Monic) (f : AdjoinRoot g) (i : Fin g.natDegree) :
@@ -2382,9 +2382,9 @@ lemma _root_.Polynomial.Monic.free_adjoinRoot
   proof: .of_basis (powerBasis' hg).basis
 
 中文:
-引理 _root_.Polynomial.Monic.free_adjoinRoot
+引理 _root_.多项式.Monic.free_adjoinRoot
   条件: (hg : g.Monic)
-  结论: Module.Free R (AdjoinRoot g)
+  结论: 模.自由 R (AdjoinRoot g)
   证明: .of_basis (powerBasis' hg).basis
 
 Depends on / 依赖: of_basis, powerBasis
@@ -2402,9 +2402,9 @@ lemma _root_.Polynomial.Monic.finite_adjoinRoot
   proof: .of_basis (powerBasis' hg).basis
 
 中文:
-引理 _root_.Polynomial.Monic.finite_adjoinRoot
+引理 _root_.多项式.Monic.finite_adjoinRoot
   条件: (hg : g.Monic)
-  结论: Module.Finite R (AdjoinRoot g)
+  结论: 模.有限 R (AdjoinRoot g)
   证明: .of_basis (powerBasis' hg).basis
 
 Depends on / 依赖: of_basis, powerBasis
@@ -2421,7 +2421,7 @@ lemma _root_.Polynomial.Monic.free_quotient
   proof: hg.free_adjoinRoot
 
 中文:
-引理 _root_.Polynomial.Monic.free_quotient
+引理 _root_.多项式.Monic.free_quotient
   条件: (hg : g.Monic)
   证明: hg.free_adjoinRoot
 
@@ -2440,7 +2440,7 @@ lemma _root_.Polynomial.Monic.finite_quotient
   proof: hg.finite_adjoinRoot
 
 中文:
-引理 _root_.Polynomial.Monic.finite_quotient
+引理 _root_.多项式.Monic.finite_quotient
   条件: (hg : g.Monic)
   证明: hg.finite_adjoinRoot
 
@@ -2462,9 +2462,9 @@ theorem isIntegral_root
   proof: (isAlgebraic_root hf).isIntegral
 
 中文:
-定理 isIntegral_root
+定理 is整数egral_root
   条件: (hf : f != 0)
-  结论: Is整数egral K (root f)
+  结论: 是整 K (root f)
   证明: (isAlgebraic_root hf).isIntegral
 
 Depends on / 依赖: isAlgebraic_root, isIntegral
@@ -2692,7 +2692,7 @@ definition Minpoly.toAdjoin
 
 中文:
 定义 Minpoly.toAdjoin
-  签名: : AdjoinRoot (minpoly R x) ->ₐ[R] adjoin R ({x} : Set S)
+  签名: : AdjoinRoot (minpoly R x) ->ₐ[R] adjoin R ({x} : 集合 S)
   定义体: liftAlgHom _ (Algebra.ofId R <| adjoin R {x}) ⟨x, self_mem_adjoin_singleton R x⟩
     (by change aeval _ _ = _; simp [← Subalgebra.coe_eq_zero, aeval_subalgebra_coe])
 
@@ -2750,7 +2750,7 @@ theorem Minpoly.toAdjoin.surjective
 
 中文:
 定理 Minpoly.toAdjoin.surjective
-  结论: Function.Surjective (Minpoly.toAdjoin R x)
+  结论: 函数.满射 (Minpoly.toAdjoin R x)
   证明: by
   rw [← AlgHom.range_eq_top]; rw [_root_.eq_top_iff]; rw [← adjoin_adjoin_coe_preimage]
   exact adjoin_le fun ⟨y₁, y₂⟩ h => ⟨mk (minpoly R x) X, by simpa using h.symm⟩
@@ -3100,7 +3100,7 @@ definition Polynomial.quotQuotEquivComm
       rw [map_span]; rw [Set.image_singleton]; rw [RingEquiv.coe_toRingHom]; rw [polynomialQuotientEquivQuotient
 
 中文:
-定义 Polynomial.quotQuotEquivComm
+定义 多项式.quotQuotEquivComm
   签名: :
   定义体: quotientEquiv (span ({f.map (Ideal.Quotient.mk I)} : Set (Polynomial (R ⧸ I))))
     (span {Ideal.Quotient.mk (I.map Polynomial.C) f}) (polynomialQuotientEquivQuotientPolynomial I)
@@ -3131,7 +3131,7 @@ theorem Polynomial.quotQuotEquivComm_mk
 @[simp]
 
 中文:
-定理 Polynomial.quotQuotEquivComm_mk
+定理 多项式.quotQuotEquivComm_mk
   条件: (p : R[X])
   证明: by
   simp only [Polynomial.quotQuotEquivComm, quotientEquiv_mk,
@@ -3160,7 +3160,7 @@ theorem Polynomial.quotQuotEquivComm_symm_mk_mk
     polynomialQuotientEquivQuotientPolynomial_symm_mk]
 
 中文:
-定理 Polynomial.quotQuotEquivComm_symm_mk_mk
+定理 多项式.quotQuotEquivComm_symm_mk_mk
   条件: (p : R[X])
   证明: by
   simp only [Polynomial.quotQuotEquivComm, quotientEquiv_symm_mk,
@@ -3274,7 +3274,7 @@ definition quotEquivQuotMap
 
 中文:
 定义 quotEquivQuotMap
-  签名: (f : R[X]) (I : Ideal R)
+  签名: (f : R[X]) (I : 理想 R)
   定义体: AlgEquiv.ofRingEquiv
     (show forall x, (quotAdjoinRootEquivQuotPolynomialQuot I f) (algebraMap R _ x) = algebraMap R _ x
       from fun x => by
@@ -3309,7 +3309,7 @@ theorem quotEquivQuotMap_apply_mk
 
 中文:
 定理 quotEquivQuotMap_apply_mk
-  条件: (f g : R[X]) (I : Ideal R)
+  条件: (f g : R[X]) (I : 理想 R)
   证明: by
   rw [AdjoinRoot.quotEquivQuotMap_apply]; rw [AdjoinRoot.quotAdjoinRootEquivQuotPolynomialQuot_mk_of]
 
@@ -3332,7 +3332,7 @@ theorem quotEquivQuotMap_symm_apply_mk
 
 中文:
 定理 quotEquivQuotMap_symm_apply_mk
-  条件: (f g : R[X]) (I : Ideal R)
+  条件: (f g : R[X]) (I : 理想 R)
   证明: by
   rw [AdjoinRoot.quotEquivQuotMap_symm_apply]; rw [AdjoinRoot.quotAdjoinRootEquivQuotPolynomialQuot_symm_mk_mk]
 
@@ -3410,7 +3410,7 @@ lemma tensorAlgEquiv_root
 
 中文:
 引理 tensorAlgEquiv_root
-  条件: (p : S[X]) (q : Polynomial (T otimes[R] S)) (h)
+  条件: (p : S[X]) (q : 多项式 (T otimes[R] S)) (h)
   证明: by simp [tensorAlgEquiv]
 -/
 @[simp] lemma tensorAlgEquiv_root (p : S[X]) (q : Polynomial (T otimes[R] S)) (h) :
@@ -3426,7 +3426,7 @@ lemma tensorAlgEquiv_of
 
 中文:
 引理 tensorAlgEquiv_of
-  条件: (p : S[X]) (q : Polynomial (T otimes[R] S)) (h) {x : S}
+  条件: (p : S[X]) (q : 多项式 (T otimes[R] S)) (h) {x : S}
   证明: by simp [tensorAlgEquiv]
 -/
 @[simp] lemma tensorAlgEquiv_of (p : S[X]) (q : Polynomial (T otimes[R] S)) (h) {x : S} :
@@ -3461,7 +3461,7 @@ definition quotientEquivQuotientMinpolyMap
 
 中文:
 定义 quotientEquivQuotientMinpolyMap
-  签名: (pb : PowerBasis R S) (I : Ideal R)
+  签名: (pb : PowerBasis R S) (I : 理想 R)
   定义体: (ofRingEquiv
         (show forall x,
             (Ideal.quotientEquiv _ (Ideal.map (AdjoinRoot.of (minpoly R pb.gen)) I)
@@ -3499,7 +3499,7 @@ theorem quotientEquivQuotientMinpolyMap_apply_mk
 
 中文:
 定理 quotientEquivQuotientMinpolyMap_apply_mk
-  条件: (pb : PowerBasis R S) (I : Ideal R) (g : R[X])
+  条件: (pb : PowerBasis R S) (I : 理想 R) (g : R[X])
   证明: by
   rw [PowerBasis.quotientEquivQuotientMinpolyMap]; rw [AlgEquiv.trans_apply]; rw [AlgEquiv.ofRingEquiv_apply]; rw [quotientEquiv_mk]; rw [AlgEquiv.coe_ringEquiv]; rw [AdjoinRoot.equiv'_symm_apply]; rw [PowerBasis.lift_aeval]; rw [AdjoinRoot.aeval_eq]; rw [AdjoinRoot.quotEquivQuotMap_apply_mk]
 
@@ -3525,7 +3525,7 @@ theorem quotientEquivQuotientMinpolyMap_symm_apply_mk
 
 中文:
 定理 quotientEquivQuotientMinpolyMap_symm_apply_mk
-  结论: (pb : PowerBasis R S) (I : Ideal R)
+  结论: (pb : PowerBasis R S) (I : 理想 R)
   证明: by
   simp [quotientEquivQuotientMinpolyMap, aeval_def]
 
@@ -3555,7 +3555,7 @@ theorem Irreducible.exists_dvd_monic_irreducible_of_isIntegral
   exact ⟨_, minpoly.monic h2, minpoly.irreducible h2, dvd_of_mul_right_dvd h3⟩
 
 中文:
-定理 Irreducible.exists_dvd_monic_irreducible_of_isIntegral
+定理 不可约.存在_dvd_monic_irreducible_of_is整数egral
   结论: {K L : 类型}
   证明: by
   have := Fact.mk hf
@@ -3588,7 +3588,7 @@ lemma Polynomial.Monic.exists_splits_map.{u}
   obtain ⟨q, hq⟩ : X - C (AdjoinRoot.roo
 
 中文:
-引理 Polynomial.Monic.exists_splits_map.{u}
+引理 多项式.Monic.存在_splits_map.{u}
   证明: by
   induction hn : p.natDegree using Nat.strong_induction_on generalizing R with | h n IH =>
   by_cases hpu : IsUnit p

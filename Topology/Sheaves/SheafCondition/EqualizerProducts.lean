@@ -67,7 +67,7 @@ definition piInters
   body: ∏ᶜ fun p : ι × ι => F.obj (op (U p.1 ⊓ U p.2))
 
 中文:
-定义 piInters
+定义 pi整数ers
   签名: : C
   定义体: ∏ᶜ fun p : ι × ι => F.obj (op (U p.1 ⊓ U p.2))
 
@@ -177,7 +177,7 @@ theorem piInters.hom_ext
   proof: limit.hom_ext w
 
 中文:
-定理 piInters.hom_ext
+定理 pi整数ers.hom_ext
   证明: limit.hom_ext w
 -/
 @[ext] theorem piInters.hom_ext
@@ -251,7 +251,7 @@ definition fork
 
 中文:
 定义 fork
-  签名: : Fork.{v} (leftRes F U) (rightRes F U)
+  签名: : 叉.{v} (leftRes F U) (rightRes F U)
   定义体: Fork.ofι _ (w F U)
 
 @[simp]
@@ -373,7 +373,7 @@ definition piInters.isoOfIso
   body: Pi.mapIso fun _ => α.app _
 
 中文:
-定义 piInters.isoOfIso
+定义 pi整数ers.isoOfIso
   签名: (α : F ≅ G)
   定义体: Pi.mapIso fun _ => α.app _
 
@@ -489,7 +489,7 @@ definition IsSheafEqualizerProducts
 
 中文:
 定义 IsSheafEqualizerProducts
-  签名: (F : Presheaf.{v', v, u} C X)
+  签名: (F : 预层.{v', v, u} C X)
   定义体: forall ⦃ι : Type v'⦄ (U : ι -> Opens X), Nonempty (IsLimit (SheafConditionEqualizerProducts.fork F U))
 
 Depends on / 依赖: IsLimit, Nonempty, SheafConditionEqualizerProducts, SheafConditionEqualizerProducts.fork
@@ -530,7 +530,7 @@ definition coneEquivFunctorObj
 
 中文:
 定义 coneEquivFunctorObj
-  签名: (c : Cone ((diagram U).op ⋙ F))
+  签名: (c : 锥 ((diagram U).op ⋙ F))
   定义体: c.pt
   π :=
     { app := fun Z =>
@@ -643,7 +643,7 @@ definition coneEquivInverseObj
 
 中文:
 定义 coneEquivInverseObj
-  签名: (c : Limits.Cone (SheafConditionEqualizerProducts.diagram F U))
+  签名: (c : Limits.锥 (SheafConditionEqualizerProducts.diagram F U))
   定义体: c.pt
   π :=
     { app := by
@@ -782,7 +782,7 @@ definition coneEquivUnitIsoApp
 
 中文:
 定义 coneEquivUnitIsoApp
-  签名: (c : Cone ((diagram U).op ⋙ F))
+  签名: (c : 锥 ((diagram U).op ⋙ F))
   定义体: { hom := 𝟙 _
       w := fun j => by
         induction j with | op j => ?_
@@ -1034,7 +1034,7 @@ definition isLimitSheafConditionForkOfIsLimitMapCone
 
 中文:
 定义 isLimitSheafConditionForkOfIsLimitMapCone
-  签名: (Q : IsLimit (F.mapCone (cocone U).op))
+  签名: (Q : 是极限 (F.mapCone (cocone U).op))
   定义体: IsLimit.ofIsoLimit ((IsLimit.ofConeEquiv (coneEquiv F U)).symm Q)
     { hom :=
         { hom := 𝟙 _
@@ -1097,7 +1097,7 @@ theorem isSheaf_iff_isSheafEqualizerProducts
 
 中文:
 定理 isSheaf_iff_isSheafEqualizerProducts
-  条件: (F : Presheaf C X)
+  条件: (F : 预层 C X)
   证明: (isSheaf_iff_isSheafPairwiseIntersections F).trans
     Iff.intro (fun h _ U => ⟨isLimitSheafConditionForkOfIsLimitMapCone F U (h U).some⟩) fun h _ U =>
       ⟨isLimitMapConeOfIsLimitSheafConditionFork F U (h U).some⟩

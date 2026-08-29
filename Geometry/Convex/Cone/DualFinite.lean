@@ -80,7 +80,7 @@ lemma DualFG.exists_fg_dual
   obtain ⟨s, hs⟩ := hC; exact ⟨_, Submodule.fg_span s.finite_toSet, by simp [hs]⟩
 
 中文:
-引理 DualFG.exists_fg_dual
+引理 DualFG.存在_fg_dual
   条件: {C : PointedCone R N} (hC : C.DualFG p)
   证明: by
   obtain ⟨s, hs⟩ := hC; exact ⟨_, Submodule.fg_span s.finite_toSet, by simp [hs]⟩
@@ -103,7 +103,7 @@ lemma DualFG.iff_exists_fg_dual
     use s; simp
 
 中文:
-引理 DualFG.iff_exists_fg_dual
+引理 DualFG.iff_存在_fg_dual
   条件: {C : PointedCone R N}
   证明: h.exists_fg_dual
   mpr := by
@@ -159,7 +159,7 @@ lemma DualFG.dual_of_finset
 
 中文:
 引理 DualFG.dual_of_finset
-  条件: (s : Finset M)
+  条件: (s : 有限集 M)
   结论: (dual p s).DualFG p
   证明: by use s
 -/
@@ -179,7 +179,7 @@ lemma DualFG.dual_of_finite
 
 中文:
 引理 DualFG.dual_of_finite
-  条件: {s : Set M} (hs : s.Finite)
+  条件: {s : 集合 M} (hs : s.有限)
   结论: (dual p s).DualFG p
   证明: by
   use hs.toFinset
@@ -234,7 +234,7 @@ lemma DualFG.inf
   use S union T; rw [Finset.coe_union, dual_union]
 
 中文:
-引理 DualFG.inf
+引理 DualFG.下确界
   条件: {C D : PointedCone R N} (hC : C.DualFG p) (hD : D.DualFG p)
   证明: by classical
   obtain ⟨S, rfl⟩ := hC; obtain ⟨T, rfl⟩ := hD

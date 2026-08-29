@@ -78,7 +78,7 @@ abbreviation IdealFilter
 
 中文:
 缩写 IdealFilter
-  签名: (A : 类型) [Ring A]
+  签名: (A : 类型) [环 A]
   定义体: Order.PFilter (Ideal A)
 
 Depends on / 依赖: Order.PFilter, PFilter
@@ -99,10 +99,10 @@ class IsUniform
     - colon_mem({I : Ideal A} (hI : I in F) (a : A)) : I.colon {a} in F
 
 中文:
-类 IsUniform
+类 是一致
   参数: (F : IdealFilter A)
   公理与运算 (1 个):
-    - colon_mem({I : Ideal A} (hI : I in F) (a : A)) : I.colon {a} in F
+    - colon_mem({I : 理想 A} (hI : I in F) (a : A)) : I.colon {a} in F
 -/
 class IsUniform (F : IdealFilter A) : Prop where
   /-- **Axiom T3.** See [stenstrom1975]. -/
@@ -134,7 +134,7 @@ definition IsTorsion
   body: forall m : M, IsTorsionElem F m
 
 中文:
-定义 IsTorsion
+定义 是挠
   签名: (F : IdealFilter A)
   定义体: forall m : M, IsTorsionElem F m
 
@@ -154,7 +154,7 @@ definition IsTorsionQuot
 
 中文:
 定义 IsTorsionQuot
-  签名: (F : IdealFilter A) (L K : Ideal A)
+  签名: (F : IdealFilter A) (L K : 理想 A)
   定义体: forall k in K, exists I in F, I <= L.colon {k}
 
 Depends on / 依赖: L.colon
@@ -178,7 +178,7 @@ lemma isTorsionQuot_inter_left_iff
 
 中文:
 引理 isTorsionQuot_inter_left_iff
-  条件: {F : IdealFilter A} {L K : Ideal A}
+  条件: {F : IdealFilter A} {L K : 理想 A}
   证明: by
   constructor <;>
   · intro h k hk
@@ -209,7 +209,7 @@ lemma isTorsion_def
 
 中文:
 引理 isTorsion_def
-  条件: (F : IdealFilter A) (M : 类型) [AddCommMonoid M] [Module A M]
+  条件: (F : IdealFilter A) (M : 类型) [加法交换幺半群 M] [模 A M]
   证明: Iff.rfl
 -/
 @[simp] lemma isTorsion_def (F : IdealFilter A) (M : Type*) [AddCommMonoid M] [Module A M] :
@@ -226,7 +226,7 @@ lemma isTorsionQuot_def
 
 中文:
 引理 isTorsionQuot_def
-  条件: {F : IdealFilter A} {L K : Ideal A}
+  条件: {F : IdealFilter A} {L K : 理想 A}
   证明: Iff.rfl
 -/
 @[simp] lemma isTorsionQuot_def {F : IdealFilter A} {L K : Ideal A} :
@@ -246,7 +246,7 @@ lemma isTorsionQuot_self
 
 中文:
 引理 isTorsionQuot_self
-  条件: (F : IdealFilter A) (I : Ideal A)
+  条件: (F : IdealFilter A) (I : 理想 A)
   证明: by
   intro x hx
   obtain ⟨J, hJ⟩ := F.nonempty
@@ -306,7 +306,7 @@ lemma IsTorsionQuot.mono
 
 中文:
 引理 IsTorsionQuot.mono
-  结论: {F : IdealFilter A} {I J K L : Ideal A} (hIK : IsTorsionQuot F I K)
+  结论: {F : IdealFilter A} {I J K L : 理想 A} (hIK : IsTorsionQuot F I K)
   证明: (hIK.mono_left hIJ).anti_right hLK
 
 Depends on / 依赖: anti_right, hIK.mono_left, mono_left
@@ -328,7 +328,7 @@ lemma IsTorsionQuot.inf
   exact ⟨_, F.inf_mem hI'F hJ'F, (inf_le_inf hI'x hJ'x).trans Submodule.inf_colon.ge⟩
 
 中文:
-引理 IsTorsionQuot.inf
+引理 IsTorsionQuot.下确界
   结论: {F : IdealFilter A}
   证明: by
   intro x hx
@@ -419,11 +419,11 @@ class IsGabriel
     - gabriel_closed((I : Ideal A) (h : exists J in F, forall x in J, I.colon {x} in F)) : I in F
 
 中文:
-类 IsGabriel
+类 是Gabriel
   参数: (F : IdealFilter A)
-  继承: F.IsUniform
+  继承: F.是一致
   公理与运算 (1 个):
-    - gabriel_closed((I : Ideal A) (h : 存在 J in F, 对任意 x in J, I.colon {x} in F)) : I in F
+    - gabriel_closed((I : 理想 A) (h : 存在 J in F, 对任意 x in J, I.colon {x} in F)) : I in F
 -/
 class IsGabriel (F : IdealFilter A) extends F.IsUniform where
   /-- **Axiom T4.** See [stenstrom1975]. -/
@@ -451,7 +451,7 @@ theorem isGabriel_iff
 中文:
 定理 isGabriel_iff
   条件: (F : IdealFilter A)
-  结论: F.IsGabriel ↔ F.IsUniform ∧ F • F = F
+  结论: F.是Gabriel ↔ F.是一致 ∧ F • F = F
   证明: by
   constructor
   · intro hF

@@ -50,7 +50,7 @@ inductive WalkingPair
 
 中文:
 归纳类型 WalkingPair
-  参数: : Type
+  参数: : 类型
   构造子 (2 个):
     - left: 
     - right: 
@@ -186,8 +186,8 @@ definition WalkingPair.equivBool
 @[simp]
 
 中文:
-定义 WalkingPair.equivBool
-  签名: : WalkingPair ≃ 布尔 where
+定义 WalkingPair.equiv布尔
+  签名: : WalkingPair ≃ 布尔值 where
   定义体: Bool.recOn b right left
   left_inv j := by cases j <;> rfl
   right_inv b := by cases b <;> rfl
@@ -217,7 +217,7 @@ theorem WalkingPair.equivBool_apply_left
 @[simp]
 
 中文:
-定理 WalkingPair.equivBool_apply_left
+定理 WalkingPair.equiv布尔_apply_left
   结论: WalkingPair.equiv布尔 left = true
   证明: rfl
 
@@ -238,7 +238,7 @@ theorem WalkingPair.equivBool_apply_right
 @[simp]
 
 中文:
-定理 WalkingPair.equivBool_apply_right
+定理 WalkingPair.equiv布尔_apply_right
   结论: WalkingPair.equiv布尔 right = false
   证明: rfl
 
@@ -261,7 +261,7 @@ theorem WalkingPair.equivBool_symm_apply_true
 @[simp]
 
 中文:
-定理 WalkingPair.equivBool_symm_apply_true
+定理 WalkingPair.equiv布尔_symm_apply_true
   结论: WalkingPair.equiv布尔.symm true = left
   证明: rfl
 
@@ -280,7 +280,7 @@ theorem WalkingPair.equivBool_symm_apply_false
   proof: rfl
 
 中文:
-定理 WalkingPair.equivBool_symm_apply_false
+定理 WalkingPair.equiv布尔_symm_apply_false
   结论: WalkingPair.equiv布尔.symm false = right
   证明: rfl
 -/
@@ -535,7 +535,7 @@ definition diagramIsoPair
 
 中文:
 定义 diagramIsoPair
-  签名: (F : Discrete WalkingPair ⥤ C)
+  签名: (F : 离散 WalkingPair ⥤ C)
   定义体: mapPairIso (Iso.refl _) (Iso.refl _)
 
 Depends on / 依赖: Iso.refl, mapPairIso
@@ -713,7 +713,7 @@ definition BinaryFan.IsLimit.mk
     fun _ _ h => uniq _ _ _ (h ⟨WalkingPair.left⟩) (h ⟨WalkingPair.right⟩)
 
 中文:
-定义 BinaryFan.IsLimit.mk
+定义 BinaryFan.是极限.mk
   签名: {X Y : C} (s : BinaryFan X Y)
   定义体: Limits.IsLimit.mk (fun t => lift (BinaryFan.fst t) (BinaryFan.snd t))
     (by
@@ -748,8 +748,8 @@ theorem BinaryFan.IsLimit.hom_ext
   proof: h.hom_ext fun j => Discrete.recOn j fun j => WalkingPair.casesOn j h₁ h₂
 
 中文:
-定理 BinaryFan.IsLimit.hom_ext
-  结论: {W X Y : C} {s : BinaryFan X Y} (h : IsLimit s) {f g : W ⟶ s.pt}
+定理 BinaryFan.是极限.hom_ext
+  结论: {W X Y : C} {s : BinaryFan X Y} (h : 是极限 s) {f g : W ⟶ s.pt}
   证明: h.hom_ext fun j => Discrete.recOn j fun j => WalkingPair.casesOn j h₁ h₂
 
 Depends on / 依赖: Discrete, Discrete.recOn, WalkingPair, WalkingPair.casesOn, casesOn, h.hom_ext, hom_ext
@@ -898,7 +898,7 @@ definition BinaryCofan.IsColimit.mk
     fun _ _ h => uniq _ _ _ (h ⟨WalkingPair.left⟩) (h ⟨WalkingPair.right⟩)
 
 中文:
-定义 BinaryCofan.IsColimit.mk
+定义 BinaryCofan.是余极限.mk
   签名: {X Y : C} (s : BinaryCofan X Y)
   定义体: Limits.IsColimit.mk (fun t => desc (BinaryCofan.inl t) (BinaryCofan.inr t))
     (by
@@ -933,8 +933,8 @@ theorem BinaryCofan.IsColimit.hom_ext
   proof: h.hom_ext fun j => Discrete.recOn j fun j => WalkingPair.casesOn j h₁ h₂
 
 中文:
-定理 BinaryCofan.IsColimit.hom_ext
-  结论: {W X Y : C} {s : BinaryCofan X Y} (h : IsColimit s)
+定理 BinaryCofan.是余极限.hom_ext
+  结论: {W X Y : C} {s : BinaryCofan X Y} (h : 是余极限 s)
   证明: h.hom_ext fun j => Discrete.recOn j fun j => WalkingPair.casesOn j h₁ h₂
 
 Depends on / 依赖: Discrete, Discrete.recOn, WalkingPair, WalkingPair.casesOn, casesOn, h.hom_ext, hom_ext
@@ -1210,8 +1210,8 @@ definition BinaryFan.IsLimit.lift
 @[reassoc (attr := simp)]
 
 中文:
-定义 BinaryFan.IsLimit.lift
-  签名: {W : C} {s : BinaryFan X Y} (h : IsLimit s) (f : W ⟶ X) (g : W ⟶ Y)
+定义 BinaryFan.是极限.lift
+  签名: {W : C} {s : BinaryFan X Y} (h : 是极限 s) (f : W ⟶ X) (g : W ⟶ Y)
   定义体: h.lift (BinaryFan.mk f g)
 
 @[reassoc (attr := simp)]
@@ -1234,8 +1234,8 @@ lemma BinaryFan.IsLimit.lift_fst
 @[reassoc (attr := simp)]
 
 中文:
-引理 BinaryFan.IsLimit.lift_fst
-  结论: {W : C} {s : BinaryFan X Y} (h : IsLimit s)
+引理 BinaryFan.是极限.lift_fst
+  结论: {W : C} {s : BinaryFan X Y} (h : 是极限 s)
   证明: h.fac (BinaryFan.mk f g) _
 
 @[reassoc (attr := simp)]
@@ -1257,8 +1257,8 @@ lemma BinaryFan.IsLimit.lift_snd
   proof: h.fac (BinaryFan.mk f g) _
 
 中文:
-引理 BinaryFan.IsLimit.lift_snd
-  结论: {W : C} {s : BinaryFan X Y} (h : IsLimit s)
+引理 BinaryFan.是极限.lift_snd
+  结论: {W : C} {s : BinaryFan X Y} (h : 是极限 s)
   证明: h.fac (BinaryFan.mk f g) _
 
 Depends on / 依赖: BinaryFan, BinaryFan.mk, h.fac
@@ -1281,8 +1281,8 @@ definition BinaryFan.IsLimit.lift'
   body: ⟨h.lift BinaryFan.mk f g, h.fac _ _, h.fac _ _⟩
 
 中文:
-定义 BinaryFan.IsLimit.lift'
-  签名: {W X Y : C} {s : BinaryFan X Y} (h : IsLimit s) (f : W ⟶ X)
+定义 BinaryFan.是极限.lift'
+  签名: {W X Y : C} {s : BinaryFan X Y} (h : 是极限 s) (f : W ⟶ X)
   定义体: ⟨h.lift BinaryFan.mk f g, h.fac _ _, h.fac _ _⟩
 
 Depends on / 依赖: BinaryFan, BinaryFan.mk, h.fac, h.lift
@@ -1302,8 +1302,8 @@ definition BinaryCofan.IsColimit.desc
 @[reassoc (attr := simp)]
 
 中文:
-定义 BinaryCofan.IsColimit.desc
-  签名: {W : C} {s : BinaryCofan X Y} (h : IsColimit s)
+定义 BinaryCofan.是余极限.desc
+  签名: {W : C} {s : BinaryCofan X Y} (h : 是余极限 s)
   定义体: h.desc (BinaryCofan.mk f g)
 
 @[reassoc (attr := simp)]
@@ -1327,8 +1327,8 @@ lemma BinaryCofan.IsColimit.inl_desc
 @[reassoc (attr := simp)]
 
 中文:
-引理 BinaryCofan.IsColimit.inl_desc
-  结论: {W : C} {s : BinaryCofan X Y} (h : IsColimit s)
+引理 BinaryCofan.是余极限.inl_desc
+  结论: {W : C} {s : BinaryCofan X Y} (h : 是余极限 s)
   证明: h.fac (BinaryCofan.mk f g) _
 
 @[reassoc (attr := simp)]
@@ -1350,8 +1350,8 @@ lemma BinaryCofan.IsColimit.inr_desc
   proof: h.fac (BinaryCofan.mk f g) _
 
 中文:
-引理 BinaryCofan.IsColimit.inr_desc
-  结论: {W : C} {s : BinaryCofan X Y} (h : IsColimit s)
+引理 BinaryCofan.是余极限.inr_desc
+  结论: {W : C} {s : BinaryCofan X Y} (h : 是余极限 s)
   证明: h.fac (BinaryCofan.mk f g) _
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mk, h.fac
@@ -1374,8 +1374,8 @@ definition BinaryCofan.IsColimit.desc'
   body: ⟨h.desc BinaryCofan.mk f g, h.fac _ _, h.fac _ _⟩
 
 中文:
-定义 BinaryCofan.IsColimit.desc'
-  签名: {W X Y : C} {s : BinaryCofan X Y} (h : IsColimit s) (f : X ⟶ W)
+定义 BinaryCofan.是余极限.desc'
+  签名: {W X Y : C} {s : BinaryCofan X Y} (h : 是余极限 s) (f : X ⟶ W)
   定义体: ⟨h.desc BinaryCofan.mk f g, h.fac _ _, h.fac _ _⟩
 
 Depends on / 依赖: BinaryCofan, BinaryCofan.mk, h.desc, h.fac
@@ -1398,7 +1398,7 @@ definition BinaryFan.isLimitFlip
 
 中文:
 定义 BinaryFan.isLimitFlip
-  签名: {X Y : C} {c : BinaryFan X Y} (hc : IsLimit c)
+  签名: {X Y : C} {c : BinaryFan X Y} (hc : 是极限 c)
   定义体: BinaryFan.isLimitMk (fun s => IsLimit.lift hc s.snd s.fst) (fun _ => hc.fac _ _)
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryFan.IsLimit.hom_ext hc
@@ -1437,7 +1437,7 @@ theorem BinaryFan.isLimit_iff_isIso_fst
 
 中文:
 定理 BinaryFan.isLimit_iff_isIso_fst
-  条件: {X Y : C} (h : IsTerminal Y) (c : BinaryFan X Y)
+  条件: {X Y : C} (h : 是终止 Y) (c : BinaryFan X Y)
   证明: by
   constructor
   · rintro ⟨H⟩
@@ -1482,7 +1482,7 @@ theorem BinaryFan.isLimit_iff_isIso_snd
 
 中文:
 定理 BinaryFan.isLimit_iff_isIso_snd
-  条件: {X Y : C} (h : IsTerminal X) (c : BinaryFan X Y)
+  条件: {X Y : C} (h : 是终止 X) (c : BinaryFan X Y)
   证明: by
   refine Iff.trans ?_ (BinaryFan.isLimit_iff_isIso_fst h (BinaryFan.mk c.snd c.fst))
   exact
@@ -1574,7 +1574,7 @@ definition BinaryCofan.isColimitFlip
 
 中文:
 定义 BinaryCofan.isColimitFlip
-  签名: {X Y : C} {c : BinaryCofan X Y} (hc : IsColimit c)
+  签名: {X Y : C} {c : BinaryCofan X Y} (hc : 是余极限 c)
   定义体: BinaryCofan.isColimitMk (fun s => IsColimit.desc hc s.inr s.inl) (fun _ => hc.fac _ _)
     (fun _ => hc.fac _ _) fun s _ e₁ e₂ =>
     BinaryCofan.IsColimit.hom_ext hc
@@ -1776,7 +1776,7 @@ abbreviation prod
   body: limit (pair X Y)
 
 中文:
-缩写 prod
+缩写 乘积
   签名: (X Y : C) [HasBinaryProduct X Y]
   定义体: limit (pair X Y)
 -/
@@ -1816,7 +1816,7 @@ abbreviation prod.fst
   body: limit.π (pair X Y) ⟨WalkingPair.left⟩
 
 中文:
-缩写 prod.fst
+缩写 乘积.fst
   签名: {X Y : C} [HasBinaryProduct X Y]
   定义体: limit.π (pair X Y) ⟨WalkingPair.left⟩
 
@@ -1834,7 +1834,7 @@ abbreviation prod.snd
   body: limit.π (pair X Y) ⟨WalkingPair.right⟩
 
 中文:
-缩写 prod.snd
+缩写 乘积.snd
   签名: {X Y : C} [HasBinaryProduct X Y]
   定义体: limit.π (pair X Y) ⟨WalkingPair.right⟩
 
@@ -1961,7 +1961,7 @@ theorem prod.hom_ext
 @[ext 1100]
 
 中文:
-定理 prod.hom_ext
+定理 乘积.hom_ext
   结论: {W X Y : C} [HasBinaryProduct X Y] {f g : W ⟶ X ⨯ Y}
   证明: BinaryFan.IsLimit.hom_ext (limit.isLimit _) h₁ h₂
 
@@ -2002,7 +2002,7 @@ abbreviation prod.lift
   body: limit.lift _ (BinaryFan.mk f g)
 
 中文:
-缩写 prod.lift
+缩写 乘积.lift
   签名: {W X Y : C} [HasBinaryProduct X Y]
   定义体: limit.lift _ (BinaryFan.mk f g)
 
@@ -2083,7 +2083,7 @@ theorem prod.lift_fst
 @[reassoc]
 
 中文:
-定理 prod.lift_fst
+定理 乘积.lift_fst
   条件: {W X Y : C} [HasBinaryProduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   证明: limit.lift_π _ _
 
@@ -2107,7 +2107,7 @@ theorem prod.lift_snd
 @[reassoc]
 
 中文:
-定理 prod.lift_snd
+定理 乘积.lift_snd
   条件: {W X Y : C} [HasBinaryProduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   证明: limit.lift_π _ _
 
@@ -2172,7 +2172,7 @@ instance prod.mono_lift_of_mono_left
   body: mono_of_mono_fac prod.lift_fst _ _
 
 中文:
-实例 prod.mono_lift_of_mono_left
+实例 乘积.mono_lift_of_mono_left
   签名: {W X Y : C} [HasBinaryProduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: mono_of_mono_fac prod.lift_fst _ _
 
@@ -2191,7 +2191,7 @@ instance prod.mono_lift_of_mono_right
   body: mono_of_mono_fac prod.lift_snd _ _
 
 中文:
-实例 prod.mono_lift_of_mono_right
+实例 乘积.mono_lift_of_mono_right
   签名: {W X Y : C} [HasBinaryProduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: mono_of_mono_fac prod.lift_snd _ _
 
@@ -2248,7 +2248,7 @@ definition prod.lift'
   body: ⟨prod.lift f g, prod.lift_fst _ _, prod.lift_snd _ _⟩
 
 中文:
-定义 prod.lift'
+定义 乘积.lift'
   签名: {W X Y : C} [HasBinaryProduct X Y] (f : W ⟶ X) (g : W ⟶ Y)
   定义体: ⟨prod.lift f g, prod.lift_fst _ _, prod.lift_snd _ _⟩
 
@@ -2286,7 +2286,7 @@ definition prod.map
   body: limMap (mapPair f g)
 
 中文:
-定义 prod.map
+定义 乘积.map
   签名: {W X Y Z : C} [HasBinaryProduct W X] [HasBinaryProduct Y Z]
   定义体: limMap (mapPair f g)
 
@@ -2333,7 +2333,7 @@ theorem prod.comp_lift
   proof: by ext <;> simp
 
 中文:
-定理 prod.comp_lift
+定理 乘积.comp_lift
   条件: {V W X Y : C} [HasBinaryProduct X Y] (f : V ⟶ W) (g : W ⟶ X) (h : W ⟶ Y)
   证明: by ext <;> simp
 -/
@@ -2351,7 +2351,7 @@ theorem prod.comp_diag
 @[reassoc (attr := simp)]
 
 中文:
-定理 prod.comp_diag
+定理 乘积.comp_diag
   条件: {X Y : C} [HasBinaryProduct Y Y] (f : X ⟶ Y)
   证明: by simp
 
@@ -2372,7 +2372,7 @@ theorem prod.map_fst
 @[reassoc (attr := simp)]
 
 中文:
-定理 prod.map_fst
+定理 乘积.map_fst
   结论: {W X Y Z : C} [HasBinaryProduct W X] [HasBinaryProduct Y Z] (f : W ⟶ Y)
   证明: limMap_π _ _
 
@@ -2394,7 +2394,7 @@ theorem prod.map_snd
 @[simp]
 
 中文:
-定理 prod.map_snd
+定理 乘积.map_snd
   结论: {W X Y Z : C} [HasBinaryProduct W X] [HasBinaryProduct Y Z] (f : W ⟶ Y)
   证明: limMap_π _ _
 
@@ -2416,9 +2416,9 @@ theorem prod.map_id_id
   ext <;> simp
 
 中文:
-定理 prod.map_id_id
+定理 乘积.map_id_id
   条件: {X Y : C} [HasBinaryProduct X Y]
-  结论: prod.map (𝟙 X) (𝟙 Y) = 𝟙 _
+  结论: 乘积.map (𝟙 X) (𝟙 Y) = 𝟙 _
   证明: by
   ext <;> simp
 -/
@@ -2436,7 +2436,7 @@ theorem prod.lift_fst_snd
   proof: by ext <;> simp
 
 中文:
-定理 prod.lift_fst_snd
+定理 乘积.lift_fst_snd
   条件: {X Y : C} [HasBinaryProduct X Y]
   证明: by ext <;> simp
 -/
@@ -2456,7 +2456,7 @@ theorem prod.lift_map
 @[simp]
 
 中文:
-定理 prod.lift_map
+定理 乘积.lift_map
   结论: {V W X Y Z : C} [HasBinaryProduct W X] [HasBinaryProduct Y Z] (f : V ⟶ W)
   证明: by ext <;> simp
 
@@ -2478,7 +2478,7 @@ theorem prod.lift_fst_comp_snd_comp
   simp
 
 中文:
-定理 prod.lift_fst_comp_snd_comp
+定理 乘积.lift_fst_comp_snd_comp
   结论: {W X Y Z : C} [HasBinaryProduct W Y] [HasBinaryProduct X Z]
   证明: by
   rw [← prod.lift_map]
@@ -2504,7 +2504,7 @@ theorem prod.map_map
   proof: by ext <;> simp
 
 中文:
-定理 prod.map_map
+定理 乘积.map_map
   结论: {A₁ A₂ A₃ B₁ B₂ B₃ : C} [HasBinaryProduct A₁ B₁] [HasBinaryProduct A₂ B₂]
   证明: by ext <;> simp
 -/
@@ -2525,7 +2525,7 @@ theorem prod.map_swap
 @[reassoc]
 
 中文:
-定理 prod.map_swap
+定理 乘积.map_swap
   结论: {A B X Y : C} (f : A ⟶ B) (g : X ⟶ Y)
   证明: by simp
 
@@ -2547,7 +2547,7 @@ theorem prod.map_comp_id
 @[reassoc]
 
 中文:
-定理 prod.map_comp_id
+定理 乘积.map_comp_id
   结论: {X Y Z W : C} (f : X ⟶ Y) (g : Y ⟶ Z) [HasBinaryProduct X W]
   证明: by simp
 
@@ -2567,7 +2567,7 @@ theorem prod.map_id_comp
   proof: by simp
 
 中文:
-定理 prod.map_id_comp
+定理 乘积.map_id_comp
   结论: {X Y Z W : C} (f : X ⟶ Y) (g : Y ⟶ Z) [HasBinaryProduct W X]
   证明: by simp
 -/
@@ -2588,7 +2588,7 @@ definition prod.mapIso
   inv := prod.map f.inv g.inv
 
 中文:
-定义 prod.mapIso
+定义 乘积.mapIso
   签名: {W X Y Z : C} [HasBinaryProduct W X] [HasBinaryProduct Y Z] (f : W ≅ Y)
   定义体: prod.map f.hom g.hom
   inv := prod.map f.inv g.inv
@@ -2635,8 +2635,8 @@ instance prod.map_mono
 @[reassoc]
 
 中文:
-实例 prod.map_mono
-  签名: {C : 类型} [Category* C] {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Mono f]
+实例 乘积.map_mono
+  签名: {C : 类型} [范畴* C] {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [单态射 f]
   定义体: ⟨fun i₁ i₂ h => by
     ext
     · rw [← cancel_mono f]
@@ -2669,7 +2669,7 @@ theorem prod.diag_map
 @[reassoc]
 
 中文:
-定理 prod.diag_map
+定理 乘积.diag_map
   条件: {X Y : C} (f : X ⟶ Y) [HasBinaryProduct X X] [HasBinaryProduct Y Y]
   证明: by simp
 
@@ -2690,7 +2690,7 @@ theorem prod.diag_map_fst_snd
 @[reassoc]
 
 中文:
-定理 prod.diag_map_fst_snd
+定理 乘积.diag_map_fst_snd
   条件: {X Y : C} [HasBinaryProduct X Y] [HasBinaryProduct (X ⨯ Y) (X ⨯ Y)]
   证明: by simp
 
@@ -2709,8 +2709,8 @@ theorem prod.diag_map_fst_snd_comp
   proof: by simp
 
 中文:
-定理 prod.diag_map_fst_snd_comp
-  结论: [HasLimitsOfShape (Discrete WalkingPair) C] {X X' Y Y' : C}
+定理 乘积.diag_map_fst_snd_comp
+  结论: [有形状极限 (离散 WalkingPair) C] {X X' Y Y' : C}
   证明: by simp
 -/
 theorem prod.diag_map_fst_snd_comp [HasLimitsOfShape (Discrete WalkingPair) C] {X X' Y Y' : C}
@@ -3049,7 +3049,7 @@ instance coprod.map_epi
 
 中文:
 实例 coprod.map_epi
-  签名: {C : 类型} [Category* C] {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [Epi f]
+  签名: {C : 类型} [范畴* C] {W X Y Z : C} (f : W ⟶ Y) (g : X ⟶ Z) [满态射 f]
   定义体: ⟨fun i₁ i₂ h => by
     ext
     · rw [← cancel_epi f]
@@ -3124,7 +3124,7 @@ theorem coprod.map_comp_inl_inr_codiag
 
 中文:
 定理 coprod.map_comp_inl_inr_codiag
-  结论: [HasColimitsOfShape (Discrete WalkingPair) C] {X X' Y Y' : C}
+  结论: [有形状余极限 (离散 WalkingPair) C] {X X' Y Y' : C}
   证明: by simp
 -/
 theorem coprod.map_comp_inl_inr_codiag [HasColimitsOfShape (Discrete WalkingPair) C] {X X' Y Y' : C}
@@ -3183,7 +3183,7 @@ theorem hasBinaryProducts_of_hasLimit_pair
 
 中文:
 定理 hasBinaryProducts_of_hasLimit_pair
-  条件: [对任意 {X Y : C}, HasLimit (pair X Y)]
+  条件: [对任意 {X Y : C}, 有极限 (pair X Y)]
   证明: { has_limit := fun F => hasLimit_of_iso (diagramIsoPair F).symm }
 
 Depends on / 依赖: diagramIsoPair, fun_, hasLimit_of_iso, has_limit
@@ -3204,7 +3204,7 @@ noncomputable section
 
 中文:
 定理 hasBinaryCoproducts_of_hasColimit_pair
-  条件: [对任意 {X Y : C}, HasColimit (pair X Y)]
+  条件: [对任意 {X Y : C}, 有余极限 (pair X Y)]
   证明: { has_colimit := fun F => hasColimit_of_iso (diagramIsoPair F) }
 
 noncomputable section
@@ -3232,7 +3232,7 @@ definition prod.braiding
   inv := prod.lift prod.snd prod.fst
 
 中文:
-定义 prod.braiding
+定义 乘积.braiding
   签名: (P Q : C) [HasBinaryProduct P Q] [HasBinaryProduct Q P]
   定义体: prod.lift prod.snd prod.fst
   inv := prod.lift prod.snd prod.fst
@@ -3277,7 +3277,7 @@ theorem prod.symmetry'
   proof: (prod.braiding _ _).hom_inv_id
 
 中文:
-定理 prod.symmetry'
+定理 乘积.symmetry'
   条件: (P Q : C) [HasBinaryProduct P Q] [HasBinaryProduct Q P]
   证明: (prod.braiding _ _).hom_inv_id
 
@@ -3298,7 +3298,7 @@ theorem prod.symmetry
   proof: (prod.braiding _ _).hom_inv_id
 
 中文:
-定理 prod.symmetry
+定理 乘积.symmetry
   条件: (P Q : C) [HasBinaryProduct P Q] [HasBinaryProduct Q P]
   证明: (prod.braiding _ _).hom_inv_id
 
@@ -3321,7 +3321,7 @@ definition prod.associator
   inv := prod.lift (prod.lift prod.fst (prod.snd ≫ prod.fst)) (prod.snd ≫ prod.snd)
 
 中文:
-定义 prod.associator
+定义 乘积.associator
   签名: [HasBinaryProducts C] (P Q R : C)
   定义体: prod.lift (prod.fst ≫ prod.fst) (prod.lift (prod.fst ≫ prod.snd) prod.snd)
   inv := prod.lift (prod.lift prod.fst (prod.snd ≫ prod.fst)) (prod.snd ≫ prod.snd)
@@ -3346,7 +3346,7 @@ theorem prod.pentagon
 @[reassoc]
 
 中文:
-定理 prod.pentagon
+定理 乘积.pentagon
   条件: [HasBinaryProducts C] (W X Y Z : C)
   证明: by
   simp
@@ -3370,7 +3370,7 @@ theorem prod.associator_naturality
   simp
 
 中文:
-定理 prod.associator_naturality
+定理 乘积.associator_naturality
   结论: [HasBinaryProducts C] {X₁ X₂ X₃ Y₁ Y₂ Y₃ : C} (f₁ : X₁ ⟶ Y₁)
   证明: by
   simp
@@ -3400,7 +3400,7 @@ definition prod.leftUnitor
   inv_hom_id := by simp
 
 中文:
-定义 prod.leftUnitor
+定义 乘积.leftUnitor
   签名: (P : C) [HasBinaryProduct (⊤_ C) P]
   定义体: prod.snd
   inv := prod.lift (terminal.from P) (𝟙 _)
@@ -3432,7 +3432,7 @@ definition prod.rightUnitor
 @[reassoc]
 
 中文:
-定义 prod.rightUnitor
+定义 乘积.rightUnitor
   签名: (P : C) [HasBinaryProduct P (⊤_ C)]
   定义体: prod.fst
   inv := prod.lift (𝟙 _) (terminal.from P)
@@ -3461,7 +3461,7 @@ theorem prod.leftUnitor_hom_naturality
 @[reassoc]
 
 中文:
-定理 prod.leftUnitor_hom_naturality
+定理 乘积.leftUnitor_hom_naturality
   条件: [HasBinaryProducts C] (f : X ⟶ Y)
   证明: prod.map_snd _ _
 
@@ -3486,7 +3486,7 @@ theorem prod.leftUnitor_inv_naturality
 @[reassoc]
 
 中文:
-定理 prod.leftUnitor_inv_naturality
+定理 乘积.leftUnitor_inv_naturality
   条件: [HasBinaryProducts C] (f : X ⟶ Y)
   证明: by
   rw [Iso.inv_comp_eq]; rw [← Category.assoc]; rw [Iso.eq_comp_inv]; rw [prod.leftUnitor_hom_naturality]
@@ -3511,7 +3511,7 @@ theorem prod.rightUnitor_hom_naturality
 @[reassoc]
 
 中文:
-定理 prod.rightUnitor_hom_naturality
+定理 乘积.rightUnitor_hom_naturality
   条件: [HasBinaryProducts C] (f : X ⟶ Y)
   证明: prod.map_fst _ _
 
@@ -3556,7 +3556,7 @@ theorem prod.triangle
   ext <;> simp
 
 中文:
-定理 prod.triangle
+定理 乘积.triangle
   条件: [HasBinaryProducts C] (X Y : C)
   证明: by
   ext <;> simp
@@ -3851,7 +3851,7 @@ definition prod.functor
     { app := fun T => prod.map f (𝟙 T) }
 
 中文:
-定义 prod.functor
+定义 乘积.functor
   签名: : C ⥤ C ⥤ C where
   定义体: { obj := fun Y => X ⨯ Y
       map := fun {_ _} => prod.map (𝟙 X) }
@@ -3877,7 +3877,7 @@ definition prod.functorLeftComp
   body: NatIso.ofComponents (prod.associator _ _)
 
 中文:
-定义 prod.functorLeftComp
+定义 乘积.functorLeftComp
   签名: (X Y : C)
   定义体: NatIso.ofComponents (prod.associator _ _)
 
@@ -4168,7 +4168,7 @@ theorem prodComparison_fst
 
 中文:
 定理 prodComparison_fst
-  结论: prodComparison F A B ≫ prod.fst = F.map prod.fst
+  结论: prodComparison F A B ≫ 乘积.fst = F.map 乘积.fst
   证明: prod.lift_fst _ _
 
 @[reassoc (attr := simp)]
@@ -4189,7 +4189,7 @@ theorem prodComparison_snd
 
 中文:
 定理 prodComparison_snd
-  结论: prodComparison F A B ≫ prod.snd = F.map prod.snd
+  结论: prodComparison F A B ≫ 乘积.snd = F.map 乘积.snd
   证明: prod.lift_snd _ _
 
 Depends on / 依赖: lift_snd, prod.lift_snd
@@ -4272,7 +4272,7 @@ definition prodComparisonNatTrans
 @[reassoc]
 
 中文:
-定义 prodComparisonNatTrans
+定义 prodComparison自然数Trans
   签名: [HasBinaryProducts C] [HasBinaryProducts D] (F : C ⥤ D) (A : C)
   定义体: prodComparison F A B
   naturality f := by simp [prodComparison_natural]
@@ -4299,7 +4299,7 @@ theorem inv_prodComparison_map_fst
 
 中文:
 定理 inv_prodComparison_map_fst
-  条件: [IsIso (prodComparison F A B)]
+  条件: [是同构 (prodComparison F A B)]
   证明: by simp [IsIso.inv_comp_eq]
 
 @[reassoc]
@@ -4320,7 +4320,7 @@ theorem inv_prodComparison_map_snd
 
 中文:
 定理 inv_prodComparison_map_snd
-  条件: [IsIso (prodComparison F A B)]
+  条件: [是同构 (prodComparison F A B)]
   证明: by simp [IsIso.inv_comp_eq]
 
 Depends on / 依赖: IsIso.inv_comp_eq, inv_comp_eq
@@ -4341,7 +4341,7 @@ theorem prodComparison_inv_natural
 
 中文:
 定理 prodComparison_inv_natural
-  结论: (f : A ⟶ A') (g : B ⟶ B') [IsIso (prodComparison F A B)]
+  结论: (f : A ⟶ A') (g : B ⟶ B') [是同构 (prodComparison F A B)]
   证明: by
   rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [prodComparison_natural]
 
@@ -4369,7 +4369,7 @@ definition prodComparisonNatIso
   apply NatIso.isIso_of_isIso_app
 
 中文:
-定义 prodComparisonNatIso
+定义 prodComparison自然数Iso
   签名: [HasBinaryProducts C] [HasBinaryProducts D] (A : C)
   定义体: by
   refine { @asIso _ _ _ _ _ (?_) with hom := prodComparisonNatTrans F A }
@@ -4525,7 +4525,7 @@ definition coprodComparisonNatTrans
 @[reassoc]
 
 中文:
-定义 coprodComparisonNatTrans
+定义 coprodComparison自然数Trans
   签名: [HasBinaryCoproducts C] [HasBinaryCoproducts D] (F : C ⥤ D) (A : C)
   定义体: coprodComparison F A B
   naturality f := by simp [coprodComparison_natural]
@@ -4552,7 +4552,7 @@ theorem map_inl_inv_coprodComparison
 
 中文:
 定理 map_inl_inv_coprodComparison
-  条件: [IsIso (coprodComparison F A B)]
+  条件: [是同构 (coprodComparison F A B)]
   证明: by simp
 
 @[reassoc]
@@ -4571,7 +4571,7 @@ theorem map_inr_inv_coprodComparison
 
 中文:
 定理 map_inr_inv_coprodComparison
-  条件: [IsIso (coprodComparison F A B)]
+  条件: [是同构 (coprodComparison F A B)]
   证明: by simp
 -/
 theorem map_inr_inv_coprodComparison [IsIso (coprodComparison F A B)] :
@@ -4590,7 +4590,7 @@ theorem coprodComparison_inv_natural
 
 中文:
 定理 coprodComparison_inv_natural
-  结论: (f : A ⟶ A') (g : B ⟶ B') [IsIso (coprodComparison F A B)]
+  结论: (f : A ⟶ A') (g : B ⟶ B') [是同构 (coprodComparison F A B)]
   证明: by
   rw [IsIso.eq_comp_inv]; rw [Category.assoc]; rw [IsIso.inv_comp_eq]; rw [coprodComparison_natural]
 
@@ -4616,7 +4616,7 @@ definition coprodComparisonNatIso
   body: { @asIso _ _ _ _ _ (NatIso.isIso_of_isIso_app ..) with hom := coprodComparisonNatTrans F A }
 
 中文:
-定义 coprodComparisonNatIso
+定义 coprodComparison自然数Iso
   签名: [HasBinaryCoproducts C] [HasBinaryCoproducts D] (A : C)
   定义体: { @asIso _ _ _ _ _ (NatIso.isIso_of_isIso_app ..) with hom := coprodComparisonNatTrans F A }
 
@@ -4874,8 +4874,8 @@ definition BinaryFan.IsLimit.op
       (BinaryFan.IsLimit.hom_ext hc (by simp [← h₁]) (by simp [← h₂])))
 
 中文:
-定义 BinaryFan.IsLimit.op
-  签名: {c : BinaryFan X Y} (hc : IsLimit c)
+定义 BinaryFan.是极限.op
+  签名: {c : BinaryFan X Y} (hc : 是极限 c)
   定义体: BinaryCofan.isColimitMk (fun s => (hc.lift s.unop).op)
     (fun _ => Quiver.Hom.unop_inj (by simp)) (fun _ => Quiver.Hom.unop_inj (by simp))
     (fun s m h₁ h₂ => Quiver.Hom.unop_inj
@@ -4900,8 +4900,8 @@ definition BinaryCofan.IsColimit.op
       (BinaryCofan.IsColimit.hom_ext hc (by simp [← h₁]) (by simp [← h₂])))
 
 中文:
-定义 BinaryCofan.IsColimit.op
-  签名: {c : BinaryCofan X Y} (hc : IsColimit c)
+定义 BinaryCofan.是余极限.op
+  签名: {c : BinaryCofan X Y} (hc : 是余极限 c)
   定义体: BinaryFan.isLimitMk (fun s => (hc.desc s.unop).op)
     (fun _ => Quiver.Hom.unop_inj (by simp)) (fun _ => Quiver.Hom.unop_inj (by simp))
     (fun s m h₁ h₂ => Quiver.Hom.unop_inj
@@ -4926,8 +4926,8 @@ definition BinaryFan.IsLimit.unop
       (BinaryFan.IsLimit.hom_ext hc (by simp [← h₁]) (by simp [← h₂])))
 
 中文:
-定义 BinaryFan.IsLimit.unop
-  签名: {c : BinaryFan (op X) (op Y)} (hc : IsLimit c)
+定义 BinaryFan.是极限.unop
+  签名: {c : BinaryFan (op X) (op Y)} (hc : 是极限 c)
   定义体: BinaryCofan.isColimitMk (fun s => (hc.lift s.op).unop)
     (fun _ => Quiver.Hom.op_inj (by simp)) (fun _ => Quiver.Hom.op_inj (by simp))
     (fun s m h₁ h₂ => Quiver.Hom.op_inj
@@ -4953,8 +4953,8 @@ definition BinaryCofan.IsColimit.unop
       (BinaryCofan.IsColimit.hom_ext hc (by simp [← h₁]) (by simp [← h₂])))
 
 中文:
-定义 BinaryCofan.IsColimit.unop
-  签名: {c : BinaryCofan (op X) (op Y)} (hc : IsColimit c)
+定义 BinaryCofan.是余极限.unop
+  签名: {c : BinaryCofan (op X) (op Y)} (hc : 是余极限 c)
   定义体: BinaryFan.isLimitMk (fun s => (hc.desc s.op).unop)
     (fun _ => Quiver.Hom.op_inj (by simp)) (fun _ => Quiver.Hom.op_inj (by simp))
     (fun s m h₁ h₂ => Quiver.Hom.op_inj
@@ -5041,8 +5041,8 @@ definition IsLimit.binaryFanSwap
     cases j <;> exact w
 
 中文:
-定义 IsLimit.binaryFanSwap
-  签名: (I : IsLimit s)
+定义 是极限.binaryFanSwap
+  签名: (I : 是极限 s)
   定义体: I.lift (BinaryFan.swap t)
   fac t := by rintro ⟨⟨⟩⟩ <;> simp
   uniq t m w := by
@@ -5101,7 +5101,7 @@ definition BinaryFan.braiding
 
 中文:
 定义 BinaryFan.braiding
-  签名: (P : IsLimit s) (Q : IsLimit t)
+  签名: (P : 是极限 s) (Q : 是极限 t)
   定义体: P.conePointUniqueUpToIso Q.binaryFanSwap
 
 @[reassoc (attr := simp)]
@@ -5216,7 +5216,7 @@ definition BinaryFan.assoc
 
 中文:
 定义 BinaryFan.assoc
-  签名: (Q : IsLimit sYZ) (s : BinaryFan sXY.pt Z)
+  签名: (Q : 是极限 sYZ) (s : BinaryFan sXY.pt Z)
   定义体: mk (s.fst ≫ sXY.fst) (Q.lift (mk (s.fst ≫ sXY.snd) s.snd))
 
 @[simp]
@@ -5239,7 +5239,7 @@ lemma BinaryFan.assoc_fst
 
 中文:
 引理 BinaryFan.assoc_fst
-  条件: (Q : IsLimit sYZ) (s : BinaryFan sXY.pt Z)
+  条件: (Q : 是极限 sYZ) (s : BinaryFan sXY.pt Z)
   证明: rfl
 
 @[simp]
@@ -5258,7 +5258,7 @@ lemma BinaryFan.assoc_snd
 
 中文:
 引理 BinaryFan.assoc_snd
-  条件: (Q : IsLimit sYZ) (s : BinaryFan sXY.pt Z)
+  条件: (Q : 是极限 sYZ) (s : BinaryFan sXY.pt Z)
   证明: rfl
 -/
 lemma BinaryFan.assoc_snd (Q : IsLimit sYZ) (s : BinaryFan sXY.pt Z) :
@@ -5276,7 +5276,7 @@ definition BinaryFan.assocInv
 
 中文:
 定义 BinaryFan.assocInv
-  签名: (P : IsLimit sXY) (s : BinaryFan X sYZ.pt)
+  签名: (P : 是极限 sXY) (s : BinaryFan X sYZ.pt)
   定义体: BinaryFan.mk (IsLimit.lift P s.fst (s.snd ≫ sYZ.fst)) (s.snd ≫ sYZ.snd)
 
 @[simp]
@@ -5299,7 +5299,7 @@ lemma BinaryFan.assocInv_fst
 
 中文:
 引理 BinaryFan.assocInv_fst
-  条件: (P : IsLimit sXY) (s : BinaryFan X sYZ.pt)
+  条件: (P : 是极限 sXY) (s : BinaryFan X sYZ.pt)
   证明: rfl
 
 @[simp]
@@ -5318,7 +5318,7 @@ lemma BinaryFan.assocInv_snd
 
 中文:
 引理 BinaryFan.assocInv_snd
-  条件: (P : IsLimit sXY) (s : BinaryFan X sYZ.pt)
+  条件: (P : 是极限 sXY) (s : BinaryFan X sYZ.pt)
   证明: rfl
 -/
 lemma BinaryFan.assocInv_snd (P : IsLimit sXY) (s : BinaryFan X sYZ.pt) :
@@ -5349,8 +5349,8 @@ definition IsLimit.assoc
       · replace w 
 
 中文:
-定义 IsLimit.assoc
-  签名: (P : IsLimit sXY) (Q : IsLimit sYZ) {s : BinaryFan sXY.pt Z}
+定义 是极限.assoc
+  签名: (P : 是极限 sXY) (Q : 是极限 sYZ) {s : BinaryFan sXY.pt Z}
   定义体: R.lift (BinaryFan.assocInv P t)
   fac t := by
     rintro ⟨⟨⟩⟩
@@ -5398,7 +5398,7 @@ abbreviation BinaryFan.associator
 
 中文:
 缩写 BinaryFan.associator
-  签名: (P : IsLimit sXY) (Q : IsLimit sYZ) {s : BinaryFan sXY.pt Z}
+  签名: (P : 是极限 sXY) (Q : 是极限 sYZ) {s : BinaryFan sXY.pt Z}
   定义体: (P.assoc Q R).conePointUniqueUpToIso S
 
 Depends on / 依赖: P.assoc, conePointUniqueUpToIso
@@ -5418,7 +5418,7 @@ abbreviation BinaryFan.associatorOfLimitCone
 
 中文:
 缩写 BinaryFan.associatorOfLimitCone
-  签名: (L : 对任意 X Y : C, LimitCone (pair X Y)) (X Y Z : C)
+  签名: (L : 对任意 X Y : C, 极限锥 (pair X Y)) (X Y Z : C)
   定义体: associator (L X Y).isLimit (L Y Z).isLimit (L (L X Y).cone.pt Z).isLimit
     (L X (L Y Z).cone.pt).isLimit
 
@@ -5453,7 +5453,7 @@ inv := Q.lift BinaryFan.mk (P.lift ⟨_, fun x => x.as.elim, fun {x} => x.as.eli
 
 中文:
 定义 BinaryFan.leftUnitor
-  签名: {X : C} {s : Cone (Functor.empty.{0} C)} (P : IsLimit s)
+  签名: {X : C} {s : 锥 (函子.empty.{0} C)} (P : 是极限 s)
   定义体: t.snd
 inv := Q.lift BinaryFan.mk (P.lift ⟨_, fun x => x.as.elim, fun {x} => x.as.elim⟩) (𝟙 _)
   hom_inv_id := by
@@ -5496,7 +5496,7 @@ inv := Q.lift BinaryFan.mk (𝟙 _) P.lift ⟨_, fun x => x.as.elim, fun {x} => 
 
 中文:
 定义 BinaryFan.rightUnitor
-  签名: {X : C} {s : Cone (Functor.empty.{0} C)} (P : IsLimit s)
+  签名: {X : C} {s : 锥 (函子.empty.{0} C)} (P : 是极限 s)
   定义体: t.fst
 inv := Q.lift BinaryFan.mk (𝟙 _) P.lift ⟨_, fun x => x.as.elim, fun {x} => x.as.elim⟩
   hom_inv_id := by

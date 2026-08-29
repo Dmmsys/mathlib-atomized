@@ -34,7 +34,7 @@ instance :
 
 中文:
 实例 :
-  签名: CartesianMonoidalCategory LightProfinite.{u}
+  签名: CartesianMonoidal范畴 LightProfinite.{u}
   定义体: cartesianMonoidalCategory
 
 Depends on / 依赖: cartesianMonoidalCategory

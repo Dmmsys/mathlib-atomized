@@ -83,7 +83,7 @@ theorem pushforward_cover_iff_cover_pullback
 
 中文:
 定理 pushforward_cover_iff_cover_pullback
-  条件: [G.Full] [G.Faithful] {X : C} (S : Sieve X)
+  条件: [G.满] [G.忠实] {X : C} (S : 筛 X)
   证明: by
   constructor
   · intro hS
@@ -120,7 +120,7 @@ theorem coverPreserving_restrictedTopology
 
 中文:
 定理 coverPreserving_restrictedTopology
-  结论: CoverPreserving (G.restrictedTopology K) K G where
+  结论: 余verPreserving (G.restrictedTopology K) K G where
   证明: by
     rw [Functor.restrictedTopology] at hS
     induction hS with
@@ -186,7 +186,7 @@ alias mem_inducedTopology_sieves_iff := mem_restrictedTopology_iff
 
 中文:
 引理 mem_restrictedTopology_iff
-  条件: {X : C} {S : Sieve X}
+  条件: {X : C} {S : 筛 X}
   证明: ⟨fun hS => (G.coverPreserving_restrictedTopology K).cover_preserve hS,
     G.mem_restrictedTopology_of_functorPushforward_mem⟩
 
@@ -215,7 +215,7 @@ instance :
 
 中文:
 实例 :
-  签名: G.IsCocontinuous (G.restrictedTopology K) K
+  签名: G.是余continuous (G.restrictedTopology K) K
   定义体: by
     apply G.mem_restrictedTopology_of_functorPushforward_mem
     exact LocallyCoverDense.functorPushforward_functorPullback_mem ⟨_, hS⟩
@@ -251,7 +251,7 @@ lemma mem_inducedTopology_iff_of_isCoverDense
 
 中文:
 引理 mem_inducedTopology_iff_of_isCoverDense
-  条件: [G.IsCoverDense K] {X : C} (S : Sieve X)
+  条件: [G.是余verDense K] {X : C} (S : 筛 X)
   证明: by
   simp [← restrictedTopology_eq_inducedTopology]
 
@@ -383,7 +383,7 @@ lemma toGrothendieck_comap_eq_restrictedTopology
 
 中文:
 引理 toGrothendieck_comap_eq_restrictedTopology
-  结论: [F.Faithful] [F.Full]
+  结论: [F.忠实] [F.满]
   证明: by
   have : F.LocallyCoverDense K.toGrothendieck :=
     K.locallyCoverDense_of_map_functorPullback_mem F H

@@ -79,7 +79,7 @@ theorem RespectsIso.cancel_left_isIso
 
 中文:
 定理 RespectsIso.cancel_left_isIso
-  结论: (hP : RespectsIso @P) {R S T : CommRingCat} (f : R ⟶ S)
+  结论: (hP : RespectsIso @P) {R S T : 交换环范畴} (f : R ⟶ S)
   证明: ⟨fun H => by
     convert! hP.2 (f ≫ g).hom (asIso f).symm.commRingCatIsoToRingEquiv H
     simp [← CommRingCat.hom_comp], hP.2 g.hom (asIso f).commRingCatIsoToRingEquiv⟩
@@ -105,7 +105,7 @@ theorem RespectsIso.cancel_right_isIso
 
 中文:
 定理 RespectsIso.cancel_right_isIso
-  结论: (hP : RespectsIso @P) {R S T : CommRingCat} (f : R ⟶ S)
+  结论: (hP : RespectsIso @P) {R S T : 交换环范畴} (f : R ⟶ S)
   证明: ⟨fun H => by
     convert! hP.1 (f ≫ g).hom (asIso g).symm.commRingCatIsoToRingEquiv H
     simp [← CommRingCat.hom_comp],
@@ -137,7 +137,7 @@ theorem RespectsIso.isLocalization_away_iff
 
 中文:
 定理 RespectsIso.isLocalization_away_iff
-  结论: (hP : RingHom.RespectsIso @P) {R S : 类型u}
+  结论: (hP : 环态射.RespectsIso @P) {R S : 类型u}
   证明: by
   let e₁ : R' ≃+* Localization.Away r :=
     (IsLocalization.algEquiv (Submonoid.powers r) _ _).toRingEquiv
@@ -251,7 +251,7 @@ theorem StableUnderComposition.respectsIso
 
 中文:
 定理 StableUnderComposition.respectsIso
-  结论: (hP : RingHom.StableUnderComposition @P)
+  结论: (hP : 环态射.StableUnderComposition @P)
   证明: by
   constructor
   · introv H
@@ -315,7 +315,7 @@ definition IsStableUnderBaseChange
         forall [Algebra.IsPushout R S R' S'], P (algebraMap R S) -> P (algebra
 
 中文:
-定义 IsStableUnderBaseChange
+定义 是StableUnderBaseChange
   签名: : 命题
   定义体: forall (R S R' S') [CommRing R] [CommRing S] [CommRing R'] [CommRing S'],
     forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
@@ -346,7 +346,7 @@ theorem IsStableUnderBaseChange.mk
     exact ext' fun x y
 
 中文:
-定理 IsStableUnderBaseChange.mk
+定理 是StableUnderBaseChange.mk
   结论: (h₁ : RespectsIso @P)
   证明: by
   introv R h H
@@ -385,8 +385,8 @@ lemma IsStableUnderBaseChange.tensorProduct
   hP _ _ _ _ h
 
 中文:
-引理 IsStableUnderBaseChange.tensorProduct
-  结论: (hP : RingHom.IsStableUnderBaseChange P)
+引理 是StableUnderBaseChange.tensorProduct
+  结论: (hP : 环态射.是StableUnderBaseChange P)
   证明: -- This only works because the `Algebra.TensorProduct.rightAlgebra` instance is present here.
   hP _ _ _ _ h
 
@@ -414,8 +414,8 @@ theorem IsStableUnderBaseChange.pushout_inl
   dsimp only [CommRingCat.pushoutCocone_inl, Pu
 
 中文:
-定理 IsStableUnderBaseChange.pushout_inl
-  结论: (hP : RingHom.IsStableUnderBaseChange @P)
+定理 是StableUnderBaseChange.pushout_inl
+  结论: (hP : 环态射.是StableUnderBaseChange @P)
   证明: by
   let := f.hom.toAlgebra
   let := g.hom.toAlgebra
@@ -447,8 +447,8 @@ lemma IsStableUnderBaseChange.and
   exact ⟨hP R S R' S' h.1, hQ R S R' S' h.2⟩
 
 中文:
-引理 IsStableUnderBaseChange.and
-  结论: (hP : IsStableUnderBaseChange P)
+引理 是StableUnderBaseChange.and
+  结论: (hP : 是StableUnderBaseChange P)
   证明: by
   introv R _ h
   exact ⟨hP R S R' S' h.1, hQ R S R' S' h.2⟩
@@ -476,7 +476,7 @@ definition toMorphismProperty
 
 中文:
 定义 toMorphismProperty
-  签名: : Morphism命题erty CommRingCat
+  签名: : MorphismProperty 交换环范畴
   定义体: fun _ _ f => P f.hom
 
 Depends on / 依赖: f.hom
@@ -572,7 +572,7 @@ lemma RespectsIso.arrow_mk_iso_iff
 
 中文:
 引理 RespectsIso.arrow_mk_iso_iff
-  结论: (hQ : RingHom.RespectsIso P) {A B A' B' : CommRingCat}
+  结论: (hQ : 环态射.RespectsIso P) {A B A' B' : 交换环范畴}
   证明: by
   have : (toMorphismProperty P).RespectsIso := by
     rwa [← toMorphismProperty_respectsIso_iff]
@@ -611,7 +611,7 @@ definition CodescendsAlong
         Q (algebraMap R R') -
 
 中文:
-定义 CodescendsAlong
+定义 余descendsAlong
   签名: : 命题
   定义体: forall ⦃R S R' S' : Type u⦄ [CommRing R] [CommRing S] [CommRing R'] [CommRing S'],
   forall [Algebra R S] [Algebra R R'] [Algebra R S'] [Algebra S S'] [Algebra R' S'],
@@ -645,7 +645,7 @@ lemma CodescendsAlong.mk
   exact h₁.1 _ _ H
 
 中文:
-引理 CodescendsAlong.mk
+引理 余descendsAlong.mk
   结论: (h₁ : RespectsIso P)
   证明: by
   introv R h hQ H
@@ -683,8 +683,8 @@ lemma CodescendsAlong.algebraMap_tensorProduct
   hPQ h H
 
 中文:
-引理 CodescendsAlong.algebraMap_tensorProduct
-  结论: (hPQ : CodescendsAlong P Q)
+引理 余descendsAlong.algebraMap_tensorProduct
+  结论: (hPQ : 余descendsAlong P Q)
   证明: let _ : Algebra T (S otimes[R] T) := Algebra.TensorProduct.rightAlgebra
   hPQ h H
 
@@ -707,8 +707,8 @@ lemma CodescendsAlong.includeRight
   apply hPQ h H
 
 中文:
-引理 CodescendsAlong.includeRight
-  结论: (hPQ : CodescendsAlong P Q) (h : Q (algebraMap R T))
+引理 余descendsAlong.includeRight
+  结论: (hPQ : 余descendsAlong P Q) (h : Q (algebraMap R T))
   证明: by
   let _ : Algebra T (S otimes[R] T) := Algebra.TensorProduct.rightAlgebra
   apply hPQ h H
@@ -732,8 +732,8 @@ lemma CodescendsAlong.and
   proof: fun _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ h₁ h₂ => ⟨hP h₁ h₂.1, hP' h₁ h₂.2⟩
 
 中文:
-引理 CodescendsAlong.and
-  条件: (hP : CodescendsAlong P Q) (hP' : CodescendsAlong P' Q)
+引理 余descendsAlong.and
+  条件: (hP : 余descendsAlong P Q) (hP' : 余descendsAlong P' Q)
   证明: fun _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ h₁ h₂ => ⟨hP h₁ h₂.1, hP' h₁ h₂.2⟩
 -/
 lemma CodescendsAlong.and (hP : CodescendsAlong P Q) (hP' : CodescendsAlong P' Q) :
@@ -754,7 +754,7 @@ definition HasEqualizers
 
 中文:
 定义 HasEqualizers
-  签名: (P : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题)
+  签名: (P : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题)
   定义体: forall {R S T : Type u} [CommRing R] [CommRing S] [CommRing T] [Algebra R S] [Algebra R T]
     (f g : S ->ₐ[R] T), P (algebraMap R S) -> P (algebraMap R T) ->
       P (algebraMap R (AlgHom.equalizer f g))
@@ -794,8 +794,8 @@ definition HasFiniteProducts
     (forall i, P (algebraMap R (S i))) -> P (algebraMap R (Π i, S i))
 
 中文:
-定义 HasFiniteProducts
-  签名: (P : 对任意 {R S : 类型u} [CommRing R] [CommRing S], (R ->+* S) -> 命题)
+定义 有FiniteProducts
+  签名: (P : 对任意 {R S : 类型u} [交换环 R] [交换环 S], (R ->+* S) -> 命题)
   定义体: forall {R : Type u} [CommRing R] {ι : Type u} [_root_.Finite ι] (S : ι -> Type u) [forall i, CommRing (S i)]
     [forall i, Algebra R (S i)],
     (forall i, P (algebraMap R (S i))) -> P (algebraMap R (Π i, S i))
@@ -816,8 +816,8 @@ lemma HasFiniteProducts.and
   proof: fun _ _ _ hS => ⟨hP _ fun i => (hS i).1, hQ _ fun i => (hS i).2⟩
 
 中文:
-引理 HasFiniteProducts.and
-  条件: (hP : HasFiniteProducts P) (hQ : HasFiniteProducts Q)
+引理 有FiniteProducts.and
+  条件: (hP : 有FiniteProducts P) (hQ : 有FiniteProducts Q)
   证明: fun _ _ _ hS => ⟨hP _ fun i => (hS i).1, hQ _ fun i => (hS i).2⟩
 -/
 lemma HasFiniteProducts.and (hP : HasFiniteProducts P) (hQ : HasFiniteProducts Q) :

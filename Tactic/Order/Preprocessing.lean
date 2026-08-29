@@ -36,7 +36,7 @@ lemma not_lt_of_not_le
 
 中文:
 引理 not_lt_of_not_le
-  条件: {α : 类型u} [Preorder α] {x y : α} (h : ¬(x <= y))
+  条件: {α : 类型u} [预序 α] {x y : α} (h : ¬(x <= y))
   结论: ¬(x < y)
   证明: (h ·.le)
 -/
@@ -53,7 +53,7 @@ lemma le_of_not_lt_le
 
 中文:
 引理 le_of_not_lt_le
-  条件: {α : 类型u} [Preorder α] {x y : α} (h1 : ¬(x < y)) (h2 : x <= y)
+  条件: {α : 类型u} [预序 α] {x y : α} (h1 : ¬(x < y)) (h2 : x <= y)
   证明: not_lt_iff_le_imp_ge.mp h1 h2
 
 Depends on / 依赖: not_lt_iff_le_imp_ge, not_lt_iff_le_imp_ge.mp
@@ -73,7 +73,7 @@ inductive OrderType
     - lin: | part | pre
 
 中文:
-归纳类型 OrderType
+归纳类型 序型
   构造子 (1 个):
     - lin: | part | pre
 -/
@@ -90,7 +90,7 @@ instance :
 
 中文:
 实例 :
-  签名: ToString OrderType
+  签名: ToString 序型
 -/
 instance : ToString OrderType where
   toString
@@ -152,7 +152,7 @@ definition replaceBotTop
 
 中文:
 定义 replaceBotTop
-  签名: (facts : Array AtomicFact)
+  签名: (facts : 数组 AtomicFact)
   定义体: do
   let mut res : Array AtomicFact := #[]
   for fact in facts do
@@ -204,7 +204,7 @@ res := res.push .le lhs rhs (← mkAppM
 
 中文:
 定义 preprocessFactsPreorder
-  签名: (facts : Array AtomicFact)
+  签名: (facts : 数组 AtomicFact)
   定义体: do
   let mut res : Array AtomicFact := #[]
   for fact in facts do
@@ -249,7 +249,7 @@ res := res.push .ne lhs rhs (← mkAppM ``n
 
 中文:
 定义 preprocessFactsPartial
-  签名: (facts : Array AtomicFact)
+  签名: (facts : 数组 AtomicFact)
   定义体: do
   let mut res : Array AtomicFact := #[]
   for fact in facts do
@@ -308,7 +308,7 @@ res := res.push .ne lhs rhs (← mkAppM ``n
 
 中文:
 定义 preprocessFactsLinear
-  签名: (facts : Array AtomicFact)
+  签名: (facts : 数组 AtomicFact)
   定义体: do
   let mut res : Array AtomicFact := #[]
   for fact in facts do
@@ -364,7 +364,7 @@ definition preprocessFacts
 
 中文:
 定义 preprocessFacts
-  签名: (facts : Array AtomicFact) (orderType : OrderType)
+  签名: (facts : 数组 AtomicFact) (orderType : 序型)
   定义体: match orderType with
   | .pre => preprocessFactsPreorder facts
   | .part => preprocessFactsPartial facts

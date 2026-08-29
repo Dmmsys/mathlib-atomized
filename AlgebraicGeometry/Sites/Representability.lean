@@ -83,7 +83,7 @@ definition glueData
 
 中文:
 定义 glueData
-  签名: : GlueData where
+  签名: : 粘合数据 where
   定义体: ι
   U := X
   V := fun (i, j) => (hf i).rep.pullback (f j)
@@ -141,7 +141,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOpenImmersion (toGlued hf i)
+  签名: 是开浸入 (toGlued hf i)
   定义体: inferInstanceAs (IsOpenImmersion ((glueData hf).ι i))
 
 Depends on / 依赖: IsOpenImmersion, glueData
@@ -251,7 +251,7 @@ lemma yonedaGluedToSheaf_app_comp
 
 中文:
 引理 yonedaGluedToSheaf_app_comp
-  条件: {V U : Scheme.{u}} (γ : V ⟶ U) (α : U ⟶ (glueData hf).glued)
+  条件: {V U : 概形.{u}} (γ : V ⟶ U) (α : U ⟶ (glueData hf).glued)
   证明: ConcreteCategory.congr_hom ((yonedaGluedToSheaf hf).hom.naturality γ.op) α
 
 Depends on / 依赖: ConcreteCategory, ConcreteCategory.congr_hom, congr_hom, hom.naturality, naturality, yonedaGluedToSheaf
@@ -273,8 +273,8 @@ instance [Presheaf.IsLocallySurjective
       (yonedaGluedToSheaf hf).hom = Sigma.desc f by cat_disch)
 
 中文:
-实例 [Presheaf.IsLocallySurjective
-  签名: Scheme.zariskiTopology (Sigma.desc f)] :
+实例 [预层.是LocallySurjective
+  签名: 概形.zariskiTopology (依赖和类型.desc f)] :
   定义体: Presheaf.isLocallySurjective_of_isLocallySurjective_fac _
     (show Sigma.desc (fun i => yoneda.map (toGlued hf i)) ≫
       (yonedaGluedToSheaf hf).hom = Sigma.desc f by cat_disch)
@@ -305,7 +305,7 @@ lemma comp_toGlued_eq
 
 中文:
 引理 comp_toGlued_eq
-  结论: {U : Scheme} {i j : ι} (a : U ⟶ X i) (b : U ⟶ X j)
+  结论: {U : 概形} {i j : ι} (a : U ⟶ X i) (b : U ⟶ X j)
   证明: by
   rw [← (hf i).rep.lift'_fst a b h]; rw [assoc]
   conv_rhs => rw [← (hf i).rep.lift'_snd a b h, assoc]
@@ -357,7 +357,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sheaf.IsLocallyInjective (yonedaGluedToSheaf hf)
+  签名: 层.是LocallyInjective (yonedaGluedToSheaf hf)
   定义体: by
     rintro ⟨U⟩ (α β : U ⟶ _) h
     replace h : (yonedaGluedToSheaf hf).hom.app _ α = (yonedaGluedToSheaf hf).hom.app _ β := h
@@ -397,7 +397,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso (yonedaGluedToSheaf hf)
+  签名: 是同构 (yonedaGluedToSheaf hf)
   定义体: by
   rw [← Sheaf.isLocallyBijective_iff_isIso (yonedaGluedToSheaf hf)]
   constructor <;> infer_instance
@@ -450,7 +450,7 @@ include hf in
 
 中文:
 定义 representableBy
-  签名: : F.1.RepresentableBy (glueData hf).glued
+  签名: : F.1.可表示 (glueData hf).glued
   定义体: Functor.representableByEquiv.symm ((sheafToPresheaf _ _).mapIso (yonedaIsoSheaf hf))
 
 
@@ -483,7 +483,7 @@ theorem isRepresentable
 
 中文:
 定理 isRepresentable
-  结论: F.1.IsRepresentable
+  结论: F.1.是Representable
   证明: ⟨_, ⟨representableBy hf⟩⟩
 
 Depends on / 依赖: representableBy

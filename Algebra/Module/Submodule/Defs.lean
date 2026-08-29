@@ -45,9 +45,9 @@ structure Submodule
   (no additional axioms)
 
 中文:
-结构 Submodule
-  参数: (R : 类型u) (M : 类型v) [Semiring R] [AddCommMonoid M] [Module R M]
-  继承: AddSubmonoid M, SubMulAction R M
+结构 子模
+  参数: (R : 类型u) (M : 类型v) [半环 R] [加法交换幺半群 M] [模 R M]
+  继承: 加法子幺半群 M, SubMul作用 R M
   (无附加公理)
 -/
 structure Submodule (R : Type u) (M : Type v) [Semiring R] [AddCommMonoid M] [Module R M] : Type v
@@ -74,7 +74,7 @@ instance setLike
 
 中文:
 实例 setLike
-  签名: : SetLike (Submodule R M) M where
+  签名: : 集合状 (子模 R M) M where
   定义体: s.carrier
   coe_injective p q h := by cases p; cases q; congr; exact SetLike.coe_injective h
 
@@ -96,7 +96,7 @@ initialize_simps_projections Submodule (carrier -> coe, as_prefix coe)
 
 中文:
 实例 :
-  签名: PartialOrder (Submodule R M)
+  签名: 偏序 (子模 R M)
   定义体: .ofSetLike (Submodule R M) M
 
 initialize_simps_projections Submodule (carrier -> coe, as_prefix coe)
@@ -118,7 +118,7 @@ lemma carrier_eq_coe
 
 中文:
 引理 carrier_eq_coe
-  条件: (s : Submodule R M)
+  条件: (s : 子模 R M)
   结论: s.carrier = s
   证明: rfl
 -/
@@ -139,7 +139,7 @@ definition ofClass
 
 中文:
 定义 ofClass
-  签名: {S R M : 类型} [Semiring R] [AddCommMonoid M] [Module R M] [SetLike S M]
+  签名: {S R M : 类型} [半环 R] [加法交换幺半群 M] [模 R M] [集合状 S M]
   定义体: s
   add_mem' := add_mem
   zero_mem' := zero_mem _
@@ -170,7 +170,7 @@ definition ofLinearComb
 
 中文:
 定义 ofLinearComb
-  签名: (C : Set M) (nonempty : C.Nonempty)
+  签名: (C : 集合 M) (nonempty : C.非空)
   定义体: C
   zero_mem' := by
     obtain ⟨x, hx⟩ := nonempty
@@ -208,7 +208,7 @@ instance addSubmonoidClass
 
 中文:
 实例 addSubmonoidClass
-  签名: : AddSubmonoidClass (Submodule R M) M where
+  签名: : 加法子幺半群类 (子模 R M) M where
   定义体: AddSubmonoid.zero_mem' _
   add_mem := AddSubsemigroup.add_mem' _
 
@@ -230,7 +230,7 @@ instance smulMemClass
 
 中文:
 实例 smulMemClass
-  签名: : SMulMemClass (Submodule R M) R M where
+  签名: : SMulMem类 (子模 R M) R M where
   定义体: SubMulAction.smul_mem' s.toSubMulAction c h
 
 @[simp]
@@ -252,7 +252,7 @@ theorem mem_toAddSubmonoid
 
 中文:
 定理 mem_toAddSubmonoid
-  条件: (p : Submodule R M) (x : M)
+  条件: (p : 子模 R M) (x : M)
   结论: x in p.toAddSubmonoid ↔ x in p
   证明: Iff.rfl
 
@@ -277,8 +277,8 @@ theorem mem_mk
 
 中文:
 定理 mem_mk
-  条件: {S : AddSubmonoid M} {x : M} (h)
-  结论: x in (⟨S, h⟩ : Submodule R M) ↔ x in S
+  条件: {S : 加法子幺半群 M} {x : M} (h)
+  结论: x in (⟨S, h⟩ : 子模 R M) ↔ x in S
   证明: Iff.rfl
 
 @[simp]
@@ -300,8 +300,8 @@ theorem coe_set_mk
 
 中文:
 定理 coe_set_mk
-  条件: (S : AddSubmonoid M) (h)
-  结论: ((⟨S, h⟩ : Submodule R M) : Set M) = S
+  条件: (S : 加法子幺半群 M) (h)
+  结论: ((⟨S, h⟩ : 子模 R M) : 集合 M) = S
   证明: rfl
 -/
 theorem coe_set_mk (S : AddSubmonoid M) (h) : ((⟨S, h⟩ : Submodule R M) : Set M) = S :=
@@ -321,7 +321,7 @@ theorem eta
 中文:
 定理 eta
   条件: (h)
-  结论: ({ p with smul_mem' := h } : Submodule R M) = p
+  结论: ({ p with smul_mem' := h } : 子模 R M) = p
   证明: rfl
 
 @[simp]
@@ -342,7 +342,7 @@ theorem mk_le_mk
 
 中文:
 定理 mk_le_mk
-  条件: {S S' : AddSubmonoid M} (h h')
+  条件: {S S' : 加法子幺半群 M} (h h')
   证明: Iff.rfl
 
 @[ext]
@@ -390,7 +390,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (p : Submodule R M) (s : Set M) (hs : s = ↑p)
+  签名: (p : 子模 R M) (s : 集合 M) (hs : s = ↑p)
   定义体: s
   zero_mem' := by simp [hs]
   add_mem' := hs.symm ▸ p.add_mem'
@@ -413,7 +413,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (S : Submodule R M) (s : Set M) (hs : s = ↑S)
+  条件: (S : 子模 R M) (s : 集合 M) (hs : s = ↑S)
   结论: S.copy s hs = S
   证明: SetLike.coe_injective hs
 
@@ -434,7 +434,7 @@ theorem toAddSubmonoid_injective
 
 中文:
 定理 toAddSubmonoid_injective
-  结论: Injective (toAddSubmonoid : Submodule R M -> AddSubmonoid M)
+  结论: 单射 (toAddSubmonoid : 子模 R M -> 加法子幺半群 M)
   证明: fun p q h => SetLike.ext'_iff.2 (show (p.toAddSubmonoid : Set M) = q from SetLike.ext'_iff.1 h)
 
 @[simp]
@@ -479,8 +479,8 @@ theorem coe_toAddSubmonoid
 
 中文:
 定理 coe_toAddSubmonoid
-  条件: (p : Submodule R M)
-  结论: (p.toAddSubmonoid : Set M) = p
+  条件: (p : 子模 R M)
+  结论: (p.toAddSubmonoid : 集合 M) = p
   证明: rfl
 -/
 theorem coe_toAddSubmonoid (p : Submodule R M) : (p.toAddSubmonoid : Set M) = p :=
@@ -496,7 +496,7 @@ theorem toSubMulAction_injective
 
 中文:
 定理 toSubMulAction_injective
-  结论: Injective (toSubMulAction : Submodule R M -> SubMulAction R M)
+  结论: 单射 (toSubMulAction : 子模 R M -> SubMul作用 R M)
   证明: fun p q h => SetLike.ext'_iff.2 (show (p.toSubMulAction : Set M) = q from SetLike.ext'_iff.1 h)
 
 Depends on / 依赖: SetLike, SetLike.ext, _iff, p.toSubMulAction, toSubMulAction
@@ -538,8 +538,8 @@ theorem coe_toSubMulAction
 
 中文:
 定理 coe_toSubMulAction
-  条件: (p : Submodule R M)
-  结论: (p.toSubMulAction : Set M) = p
+  条件: (p : 子模 R M)
+  结论: (p.toSubMulAction : 集合 M) = p
   证明: rfl
 -/
 theorem coe_toSubMulAction (p : Submodule R M) : (p.toSubMulAction : Set M) = p :=
@@ -555,7 +555,7 @@ instance decidableEq
 
 中文:
 实例 decidableEq
-  签名: : DecidableEq (Submodule R M)
+  签名: : DecidableEq (子模 R M)
   定义体: Classical.typeDecidableEq _
 
 Depends on / 依赖: Classical, Classical.typeDecidableEq, typeDecidableEq
@@ -588,7 +588,7 @@ definition toModule'
 
 中文:
 定义 toModule'
-  签名: (S R' R A : 类型) [Semiring R] [NonUnitalNonAssocSemiring A]
+  签名: (S R' R A : 类型) [半环 R] [非幺非结合半环 A]
   定义体: haveI : SMulMemClass S R' A := SMulMemClass.ofIsScalarTower S R' R A
   SMulMemClass.toModule s
 
@@ -626,7 +626,7 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  结论: x in p.carrier ↔ x in (p : Set M)
+  结论: x in p.carrier ↔ x in (p : 集合 M)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -700,7 +700,7 @@ theorem smul_of_tower_mem
 
 中文:
 定理 smul_of_tower_mem
-  条件: [SMul S R] [SMul S M] [IsScalarTower S R M] (r : S) (h : x in p)
+  条件: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] (r : S) (h : x in p)
   证明: p.toSubMulAction.smul_of_tower_mem r h
 
 @[simp]
@@ -724,7 +724,7 @@ theorem smul_mem_iff'
 
 中文:
 定理 smul_mem_iff'
-  条件: [Group G] [MulAction G M] [SMul G R] [IsScalarTower G R M] (g : G)
+  条件: [群 G] [乘法作用 G M] [标量乘法 G R] [标量塔 G R M] (g : G)
   证明: p.toSubMulAction.smul_mem_iff' g
 
 @[simp]
@@ -749,7 +749,7 @@ lemma smul_mem_iff''
 
 中文:
 引理 smul_mem_iff''
-  条件: [Invertible r]
+  条件: [可逆 r]
   证明: by
   refine ⟨fun h => ?_, p.smul_mem r⟩
   rw [← invOf_smul_smul r x]
@@ -774,7 +774,7 @@ lemma smul_mem_iff_of_isUnit
 
 中文:
 引理 smul_mem_iff_of_isUnit
-  条件: (hr : IsUnit r)
+  条件: (hr : 是单位 r)
   证明: let _ : Invertible r := hr.invertible
   smul_mem_iff'' p
 
@@ -795,7 +795,7 @@ instance add
 
 中文:
 实例 add
-  签名: : Add p
+  签名: : 加法 p
   定义体: ⟨fun x y => ⟨x.1 + y.1, add_mem x.2 y.2⟩⟩
 
 Depends on / 依赖: add_mem
@@ -813,7 +813,7 @@ instance zero
 
 中文:
 实例 zero
-  签名: : Zero p
+  签名: : 零 p
   定义体: ⟨⟨0, zero_mem _⟩⟩
 
 Depends on / 依赖: zero_mem
@@ -831,7 +831,7 @@ instance inhabited
 
 中文:
 实例 inhabited
-  签名: : Inhabited p
+  签名: : 可居 p
   定义体: ⟨0⟩
 -/
 instance inhabited : Inhabited p :=
@@ -847,7 +847,7 @@ instance smul
 
 中文:
 实例 smul
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: ⟨fun c x => ⟨c • x.1, smul_of_tower_mem _ c x.2⟩⟩
 
 Depends on / 依赖: smul_of_tower_mem
@@ -865,7 +865,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: p.toSubMulAction.isScalarTower
 
 Depends on / 依赖: isScalarTower, p.toSubMulAction.isScalarTower, toSubMulAction
@@ -883,7 +883,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: {S' : 类型} [SMul S R] [SMul S M] [SMul S' R] [SMul S' M] [SMul S S']
+  签名: {S' : 类型} [标量乘法 S R] [标量乘法 S M] [标量乘法 S' R] [标量乘法 S' M] [标量乘法 S S']
   定义体: p.toSubMulAction.isScalarTower'
 
 Depends on / 依赖: isScalarTower, p.toSubMulAction.isScalarTower, toSubMulAction
@@ -904,7 +904,7 @@ theorem nonempty
 
 中文:
 定理 nonempty
-  结论: (p : Set M).Nonempty
+  结论: (p : 集合 M).非空
   证明: ⟨0, p.zero_mem⟩
 
 @[simp]
@@ -1040,7 +1040,7 @@ theorem coe_smul_of_tower
 
 中文:
 定理 coe_smul_of_tower
-  条件: [SMul S R] [SMul S M] [IsScalarTower S R M] (r : S) (x : p)
+  条件: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] (r : S) (x : p)
   证明: rfl
 
 @[norm_cast]
@@ -1098,7 +1098,7 @@ instance addCommMonoid
 
 中文:
 实例 addCommMonoid
-  签名: : AddCommMonoid p
+  签名: : 加法交换幺半群 p
   定义体: AddSubmonoidClass.toAddCommMonoid p
 
 Depends on / 依赖: AddSubmonoidClass, AddSubmonoidClass.toAddCommMonoid, toAddCommMonoid
@@ -1120,7 +1120,7 @@ instance module'
 
 中文:
 实例 module'
-  签名: [Semiring S] [SMul S R] [Module S M] [IsScalarTower S R M]
+  签名: [半环 S] [标量乘法 S R] [模 S M] [标量塔 S R M]
   定义体: fast_instance%
   { (show MulAction S p from p.toSubMulAction.mulAction') with
     smul_zero := fun a => by ext; simp
@@ -1148,7 +1148,7 @@ instance module
 
 中文:
 实例 module
-  签名: : Module R p
+  签名: : 模 R p
   定义体: p.module'
 
 Depends on / 依赖: module, p.module
@@ -1175,7 +1175,7 @@ instance addSubgroupClass
 
 中文:
 实例 addSubgroupClass
-  签名: [Module R M]
+  签名: [模 R M]
   定义体: { Submodule.addSubmonoidClass with neg_mem := fun p {_} => p.toSubMulAction.neg_mem }
 
 Depends on / 依赖: Submodule, Submodule.addSubmonoidClass, addSubmonoidClass, neg_mem, p.toSubMulAction.neg_mem, toSubMulAction
@@ -1215,7 +1215,7 @@ definition toAddSubgroup
 
 中文:
 定义 toAddSubgroup
-  签名: : AddSubgroup M
+  签名: : 加法子群 M
   定义体: { p.toAddSubmonoid with neg_mem' := fun {_} => p.neg_mem }
 
 @[simp]
@@ -1236,7 +1236,7 @@ theorem coe_toAddSubgroup
 
 中文:
 定理 coe_toAddSubgroup
-  结论: (p.toAddSubgroup : Set M) = p
+  结论: (p.toAddSubgroup : 集合 M) = p
   证明: rfl
 -/
 theorem coe_toAddSubgroup : (p.toAddSubgroup : Set M) = p :=
@@ -1269,7 +1269,7 @@ theorem toAddSubgroup_injective
 
 中文:
 定理 toAddSubgroup_injective
-  结论: Injective (toAddSubgroup : Submodule R M -> AddSubgroup M)
+  结论: 单射 (toAddSubgroup : 子模 R M -> 加法子群 M)
 -/
 theorem toAddSubgroup_injective : Injective (toAddSubgroup : Submodule R M -> AddSubgroup M)
   | _, _, h => SetLike.ext (SetLike.ext_iff.1 h :)
@@ -1446,7 +1446,7 @@ instance addCommGroup
 
 中文:
 实例 addCommGroup
-  签名: : AddCommGroup p
+  签名: : 加法交换群 p
   定义体: AddSubgroupClass.toAddCommGroup p
 
 Depends on / 依赖: AddSubgroupClass, AddSubgroupClass.toAddCommGroup, toAddCommGroup

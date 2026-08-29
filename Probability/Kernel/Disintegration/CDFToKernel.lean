@@ -75,13 +75,13 @@ structure IsRatCondKernelCDF
     - setIntegral((a : α) {s : Set β} (_hs : MeasurableSet s) (q : Rat)) : ∫ b in s, f (a, b) q ∂(ν a) = (κ a).real (s ×ˢ Iic (q : Real))
 
 中文:
-结构 IsRatCondKernelCDF
-  参数: (f : α × β -> Rat -> 实数) (κ : Kernel α (β × 实数)) (ν : Kernel α β)
+结构 是RatCondKernelCDF
+  参数: (f : α × β -> 有理数 -> 实数) (κ : 核 α (β × 实数)) (ν : 核 α β)
   公理与运算 (4 个):
-    - measurable : Measurable f
-    - isRatStieltjesPoint_ae((a : α)) : 对任意ᵐ b ∂(ν a), IsRatStieltjesPoint f (a, b)
-    - integrable((a : α) (q : Rat)) : 整数egrable (fun b => f (a, b) q) (ν a)
-    - setIntegral((a : α) {s : Set β} (_hs : MeasurableSet s) (q : Rat)) : ∫ b in s, f (a, b) q ∂(ν a) = (κ a).real (s ×ˢ Iic (q : 实数))
+    - measurable : 可测 f
+    - isRatStieltjesPoint_ae((a : α)) : 对任意ᵐ b ∂(ν a), 是RatStieltjesPoint f (a, b)
+    - integrable((a : α) (q : 有理数)) : 可积 (fun b => f (a, b) q) (ν a)
+    - setIntegral((a : α) {s : 集合 β} (_hs : 可测集 s) (q : 有理数)) : ∫ b in s, f (a, b) q ∂(ν a) = (κ a).real (s ×ˢ 左无界右闭区间 (q : 实数))
 -/
 structure IsRatCondKernelCDF (f : α × β -> Rat -> Real) (κ : Kernel α (β × Real)) (ν : Kernel α β) :
     Prop where
@@ -101,8 +101,8 @@ lemma IsRatCondKernelCDF.mono
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.mono
 
 中文:
-引理 IsRatCondKernelCDF.mono
-  条件: (hf : IsRatCondKernelCDF f κ ν) (a : α)
+引理 是RatCondKernelCDF.mono
+  条件: (hf : 是RatCondKernelCDF f κ ν) (a : α)
   证明: by
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.mono
 
@@ -122,8 +122,8 @@ lemma IsRatCondKernelCDF.tendsto_atTop_one
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.tendsto_atTop_one
 
 中文:
-引理 IsRatCondKernelCDF.tendsto_atTop_one
-  条件: (hf : IsRatCondKernelCDF f κ ν) (a : α)
+引理 是RatCondKernelCDF.tendsto_atTop_one
+  条件: (hf : 是RatCondKernelCDF f κ ν) (a : α)
   证明: by
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.tendsto_atTop_one
 
@@ -143,8 +143,8 @@ lemma IsRatCondKernelCDF.tendsto_atBot_zero
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.tendsto_atBot_zero
 
 中文:
-引理 IsRatCondKernelCDF.tendsto_atBot_zero
-  条件: (hf : IsRatCondKernelCDF f κ ν) (a : α)
+引理 是RatCondKernelCDF.tendsto_atBot_zero
+  条件: (hf : 是RatCondKernelCDF f κ ν) (a : α)
   证明: by
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.tendsto_atBot_zero
 
@@ -164,8 +164,8 @@ lemma IsRatCondKernelCDF.iInf_rat_gt_eq
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.iInf_rat_gt_eq
 
 中文:
-引理 IsRatCondKernelCDF.iInf_rat_gt_eq
-  条件: (hf : IsRatCondKernelCDF f κ ν) (a : α)
+引理 是RatCondKernelCDF.iInf_rat_gt_eq
+  条件: (hf : 是RatCondKernelCDF f κ ν) (a : α)
   证明: by
   filter_upwards [hf.isRatStieltjesPoint_ae a] with b hb using hb.iInf_rat_gt_eq
 
@@ -187,7 +187,7 @@ lemma stieltjesOfMeasurableRat_ae_eq
 
 中文:
 引理 stieltjesOfMeasurableRat_ae_eq
-  条件: (hf : IsRatCondKernelCDF f κ ν) (a : α) (q : Rat)
+  条件: (hf : 是RatCondKernelCDF f κ ν) (a : α) (q : 有理数)
   证明: by
   filter_upwards [hf.isRatStieltjesPoint_ae a] with a ha
   rw [stieltjesOfMeasurableRat_eq]; rw [toRatCDF_of_isRatStieltjesPoint ha]
@@ -210,8 +210,8 @@ lemma setIntegral_stieltjesOfMeasurableRat_rat
   filter_upwards [stieltjesOfMeasurableRat_ae_eq hf a q] with b hb using fun _ => hb
 
 中文:
-引理 setIntegral_stieltjesOfMeasurableRat_rat
-  结论: (hf : IsRatCondKernelCDF f κ ν) (a : α) (q : Rat)
+引理 set整数egral_stieltjesOfMeasurableRat_rat
+  结论: (hf : 是RatCondKernelCDF f κ ν) (a : α) (q : 有理数)
   证明: by
   rw [setIntegral_congr_ae hs (g := fun b => f (a]; rw [b) q) ?_]; rw [hf.setIntegral a hs]
   filter_upwards [stieltjesOfMeasurableRat_ae_eq hf a q] with b hb using fun _ => hb
@@ -240,8 +240,8 @@ lemma setLIntegral_stieltjesOfMeasurableRat_rat
   · exact ae_of_all _ (fun x => stieltjesOfM
 
 中文:
-引理 setLIntegral_stieltjesOfMeasurableRat_rat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+引理 setL整数egral_stieltjesOfMeasurableRat_rat
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   rw [← ofReal_integral_eq_lintegral_ofReal]
   · rw [setIntegral_stieltjesOfMeasurableRat_rat hf a q hs, ofReal_measureReal]
@@ -278,8 +278,8 @@ lemma setLIntegral_stieltjesOfMeasurableRat
     suffices κ a
 
 中文:
-引理 setLIntegral_stieltjesOfMeasurableRat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+引理 setL整数egral_stieltjesOfMeasurableRat
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   -- We have the result for `x : ℚ` thanks to `setLIntegral_stieltjesOfMeasurableRat_rat`.
   -- We use a monotone convergence argument to extend it to the reals.
@@ -355,7 +355,7 @@ lemma lintegral_stieltjesOfMeasurableRat
 
 中文:
 引理 lintegral_stieltjesOfMeasurableRat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   rw [← setLIntegral_univ]; rw [setLIntegral_stieltjesOfMeasurableRat hf _ _ MeasurableSet.univ]
 
@@ -384,7 +384,7 @@ lemma integrable_stieltjesOfMeasurableRat
 
 中文:
 引理 integrable_stieltjesOfMeasurableRat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   have : (fun b => stieltjesOfMeasurableRat f hf.measurable (a, b) x)
       = fun b => (ENNReal.ofReal (stieltjesOfMeasurableRat f hf.measurable (a, b) x)).toReal := by
@@ -426,8 +426,8 @@ lemma setIntegral_stieltjesOfMeasurableRat
   · exac
 
 中文:
-引理 setIntegral_stieltjesOfMeasurableRat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+引理 set整数egral_stieltjesOfMeasurableRat
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   rw [← ENNReal.ofReal_eq_ofReal_iff]; rw [ofReal_measureReal]
   rotate_left
@@ -461,7 +461,7 @@ lemma integral_stieltjesOfMeasurableRat
 
 中文:
 引理 integral_stieltjesOfMeasurableRat
-  结论: [IsFiniteKernel κ] (hf : IsRatCondKernelCDF f κ ν)
+  结论: [是FiniteKernel κ] (hf : 是RatCondKernelCDF f κ ν)
   证明: by
   rw [← setIntegral_univ]; rw [setIntegral_stieltjesOfMeasurableRat hf _ _ MeasurableSet.univ]
 
@@ -496,17 +496,17 @@ structure IsRatCondKernelCDFAux
     - setIntegral((a : α) {A : Set β} (_hA : MeasurableSet A) (q : Rat)) : ∫ c in A, f (a, c) q ∂(ν a) = (κ a).real (A ×ˢ Iic ↑q)
 
 中文:
-结构 IsRatCondKernelCDFAux
-  参数: (f : α × β -> Rat -> 实数) (κ : Kernel α (β × 实数)) (ν : Kernel α β)
+结构 是RatCondKernelCDFAux
+  参数: (f : α × β -> 有理数 -> 实数) (κ : 核 α (β × 实数)) (ν : 核 α β)
   公理与运算 (8 个):
-    - measurable : Measurable f
-    - mono'((a : α) {q r : Rat} (_hqr : q <= r)) : 对任意ᵐ c ∂(ν a), f (a, c) q <= f (a, c) r
-    - nonneg'((a : α) (q : Rat)) : 对任意ᵐ c ∂(ν a), 0 <= f (a, c) q
-    - le_one'((a : α) (q : Rat)) : 对任意ᵐ c ∂(ν a), f (a, c) q <= 1
-    - tendsto_integral_of_antitone((a : α) (seq : 自然数 -> Rat) (_hs : Antitone seq) (_hs_tendsto : Tendsto seq atTop atBot)) : Tendsto (fun m => ∫ c, f (a, c) (seq m) ∂(ν a)) atTop (𝓝 0)
-    - tendsto_integral_of_monotone((a : α) (seq : 自然数 -> Rat) (_hs : Monotone seq) (_hs_tendsto : Tendsto seq atTop atTop)) : Tendsto (fun m => ∫ c, f (a, c) (seq m) ∂(ν a)) atTop (𝓝 ((ν a).real univ))
-    - integrable((a : α) (q : Rat)) : 整数egrable (fun c => f (a, c) q) (ν a)
-    - setIntegral((a : α) {A : Set β} (_hA : MeasurableSet A) (q : Rat)) : ∫ c in A, f (a, c) q ∂(ν a) = (κ a).real (A ×ˢ Iic ↑q)
+    - measurable : 可测 f
+    - mono'((a : α) {q r : 有理数} (_hqr : q <= r)) : 对任意ᵐ c ∂(ν a), f (a, c) q <= f (a, c) r
+    - nonneg'((a : α) (q : 有理数)) : 对任意ᵐ c ∂(ν a), 0 <= f (a, c) q
+    - le_one'((a : α) (q : 有理数)) : 对任意ᵐ c ∂(ν a), f (a, c) q <= 1
+    - tendsto_integral_of_antitone((a : α) (seq : 自然数 -> 有理数) (_hs : 递减 seq) (_hs_tendsto : 收敛 seq atTop atBot)) : 收敛 (fun m => ∫ c, f (a, c) (seq m) ∂(ν a)) atTop (𝓝 0)
+    - tendsto_integral_of_monotone((a : α) (seq : 自然数 -> 有理数) (_hs : 递增 seq) (_hs_tendsto : 收敛 seq atTop atTop)) : 收敛 (fun m => ∫ c, f (a, c) (seq m) ∂(ν a)) atTop (𝓝 ((ν a).real univ))
+    - integrable((a : α) (q : 有理数)) : 可积 (fun c => f (a, c) q) (ν a)
+    - setIntegral((a : α) {A : 集合 β} (_hA : 可测集 A) (q : 有理数)) : ∫ c in A, f (a, c) q ∂(ν a) = (κ a).real (A ×ˢ 左无界右闭区间 ↑q)
 -/
 structure IsRatCondKernelCDFAux (f : α × β -> Rat -> Real) (κ : Kernel α (β × Real)) (ν : Kernel α β) :
     Prop where
@@ -542,8 +542,8 @@ lemma IsRatCondKernelCDFAux.measurable_right
   exact (h q).comp measurable_prodMk_left
 
 中文:
-引理 IsRatCondKernelCDFAux.measurable_right
-  条件: (hf : IsRatCondKernelCDFAux f κ ν) (a : α) (q : Rat)
+引理 是RatCondKernelCDFAux.measurable_right
+  条件: (hf : 是RatCondKernelCDFAux f κ ν) (a : α) (q : 有理数)
   证明: by
   let h := hf.measurable
   rw [measurable_pi_iff] at h
@@ -569,8 +569,8 @@ lemma IsRatCondKernelCDFAux.mono
   exact fun _ _ hqr => hf.mono' a hqr
 
 中文:
-引理 IsRatCondKernelCDFAux.mono
-  条件: (hf : IsRatCondKernelCDFAux f κ ν) (a : α)
+引理 是RatCondKernelCDFAux.mono
+  条件: (hf : 是RatCondKernelCDFAux f κ ν) (a : α)
   证明: by
   unfold Monotone
   simp_rw [ae_all_iff]
@@ -593,8 +593,8 @@ lemma IsRatCondKernelCDFAux.nonneg
   proof: ae_all_iff.mpr hf.nonneg' a
 
 中文:
-引理 IsRatCondKernelCDFAux.nonneg
-  条件: (hf : IsRatCondKernelCDFAux f κ ν) (a : α)
+引理 是RatCondKernelCDFAux.nonneg
+  条件: (hf : 是RatCondKernelCDFAux f κ ν) (a : α)
   证明: ae_all_iff.mpr hf.nonneg' a
 
 Depends on / 依赖: ae_all_iff, ae_all_iff.mpr, hf.nonneg, nonneg
@@ -611,8 +611,8 @@ lemma IsRatCondKernelCDFAux.le_one
   proof: ae_all_iff.mpr hf.le_one' a
 
 中文:
-引理 IsRatCondKernelCDFAux.le_one
-  条件: (hf : IsRatCondKernelCDFAux f κ ν) (a : α)
+引理 是RatCondKernelCDFAux.le_one
+  条件: (hf : 是RatCondKernelCDFAux f κ ν) (a : α)
   证明: ae_all_iff.mpr hf.le_one' a
 
 Depends on / 依赖: ae_all_iff, ae_all_iff.mpr, hf.le_one, le_one
@@ -635,8 +635,8 @@ lemma IsRatCondKernelCDFAux.tendsto_zero_of_antitone
   · fil
 
 中文:
-引理 IsRatCondKernelCDFAux.tendsto_zero_of_antitone
-  结论: (hf : IsRatCondKernelCDFAux f κ ν)
+引理 是RatCondKernelCDFAux.tendsto_zero_of_antitone
+  结论: (hf : 是RatCondKernelCDFAux f κ ν)
   证明: by
   refine tendsto_of_integral_tendsto_of_antitone ?_ (integrable_const _) ?_ ?_ ?_
   · exact fun n => hf.integrable a (seq n)
@@ -672,8 +672,8 @@ lemma IsRatCondKernelCDFAux.tendsto_one_of_monotone
   · filter_upwards [hf.mono a] with t ht using
 
 中文:
-引理 IsRatCondKernelCDFAux.tendsto_one_of_monotone
-  结论: (hf : IsRatCondKernelCDFAux f κ ν)
+引理 是RatCondKernelCDFAux.tendsto_one_of_monotone
+  结论: (hf : 是RatCondKernelCDFAux f κ ν)
   证明: by
   refine tendsto_of_integral_tendsto_of_monotone ?_ (integrable_const _) ?_ ?_ ?_
   · exact fun n => hf.integrable a (seq n)
@@ -708,8 +708,8 @@ lemma IsRatCondKernelCDFAux.tendsto_atTop_one
   filter_upwards [hf.tendsto_one_of_monotone a Nat.cast Nat.mono_
 
 中文:
-引理 IsRatCondKernelCDFAux.tendsto_atTop_one
-  结论: (hf : IsRatCondKernelCDFAux f κ ν) [IsFiniteKernel ν]
+引理 是RatCondKernelCDFAux.tendsto_atTop_one
+  结论: (hf : 是RatCondKernelCDFAux f κ ν) [是FiniteKernel ν]
   证明: by
   suffices forallᵐ t ∂(ν a), Tendsto (fun (n : Nat) => f (a, t) n) atTop (𝓝 1) by
     filter_upwards [this, hf.mono a] with t ht h_mono
@@ -743,8 +743,8 @@ lemma IsRatCondKernelCDFAux.tendsto_atBot_zero
     filter_upwards [this, hf.mono a] with t ht h_m
 
 中文:
-引理 IsRatCondKernelCDFAux.tendsto_atBot_zero
-  结论: (hf : IsRatCondKernelCDFAux f κ ν) [IsFiniteKernel ν]
+引理 是RatCondKernelCDFAux.tendsto_atBot_zero
+  结论: (hf : 是RatCondKernelCDFAux f κ ν) [是FiniteKernel ν]
   证明: by
   suffices forallᵐ t ∂(ν a), Tendsto (fun q : Rat => f (a, t) (-q)) atTop (𝓝 0) by
     filter_upwards [this] with t ht
@@ -779,8 +779,8 @@ lemma IsRatCondKernelCDFAux.bddBelow_range
   simp [mem_lowerBounds, hc]
 
 中文:
-引理 IsRatCondKernelCDFAux.bddBelow_range
-  条件: (hf : IsRatCondKernelCDFAux f κ ν) (a : α)
+引理 是RatCondKernelCDFAux.bddBelow_range
+  条件: (hf : 是RatCondKernelCDFAux f κ ν) (a : α)
   证明: by
   filter_upwards [hf.nonneg a] with c hc
   refine fun q => ⟨0, ?_⟩
@@ -808,8 +808,8 @@ lemma IsRatCondKernelCDFAux.integrable_iInf_rat_gt
   filter_upwards [hf.bddBelow_range a, hf
 
 中文:
-引理 IsRatCondKernelCDFAux.integrable_iInf_rat_gt
-  结论: (hf : IsRatCondKernelCDFAux f κ ν)
+引理 是RatCondKernelCDFAux.integrable_iInf_rat_gt
+  结论: (hf : 是RatCondKernelCDFAux f κ ν)
   证明: by
   rw [← memLp_one_iff_integrable]
   refine ⟨(Measurable.iInf fun i => hf.measurable_right a _).aestronglyMeasurable, ?_⟩
@@ -853,8 +853,8 @@ lemma _root_.MeasureTheory.Measure.iInf_rat_gt_prod_Iic
 · e
 
 中文:
-引理 _root_.MeasureTheory.Measure.iInf_rat_gt_prod_Iic
-  结论: {ρ : Measure (α × 实数)} [IsFiniteMeasure ρ]
+引理 _root_.测度论.测度.iInf_rat_gt_prod_Iic
+  结论: {ρ : 测度 (α × 实数)} [是有限测度 ρ]
   证明: by
   rw [← Monotone.measure_iInter]
   · rw [← prod_iInter]
@@ -899,8 +899,8 @@ lemma IsRatCondKernelCDFAux.setIntegral_iInf_rat_gt
       · exact (hf.integrable_iInf_rat_gt _ _).integrableO
 
 中文:
-引理 IsRatCondKernelCDFAux.setIntegral_iInf_rat_gt
-  结论: (hf : IsRatCondKernelCDFAux f κ ν)
+引理 是RatCondKernelCDFAux.set整数egral_iInf_rat_gt
+  结论: (hf : 是RatCondKernelCDFAux f κ ν)
   证明: by
   refine le_antisymm ?_ ?_
   · have h : forall r : Ioi q, ∫ t in A, ⨅ r' : Ioi q, f (a, t) r' ∂(ν a)
@@ -950,8 +950,8 @@ lemma IsRatCondKernelCDFAux.iInf_rat_gt_eq
     rw [hf.setIntegral _ hs]; rw [hf.setIntegral_iInf_
 
 中文:
-引理 IsRatCondKernelCDFAux.iInf_rat_gt_eq
-  结论: (hf : IsRatCondKernelCDFAux f κ ν) [IsFiniteKernel κ]
+引理 是RatCondKernelCDFAux.iInf_rat_gt_eq
+  结论: (hf : 是RatCondKernelCDFAux f κ ν) [是FiniteKernel κ]
   证明: by
   rw [ae_all_iff]
   refine fun q => ae_eq_of_forall_setIntegral_eq_of_sigmaFinite (μ := ν a) ?_ ?_ ?_
@@ -984,8 +984,8 @@ lemma IsRatCondKernelCDFAux.isRatStieltjesPoint_ae
   exact ⟨h_mono, ht_top, ht_bot, ht_iInf⟩
 
 中文:
-引理 IsRatCondKernelCDFAux.isRatStieltjesPoint_ae
-  结论: (hf : IsRatCondKernelCDFAux f κ ν)
+引理 是RatCondKernelCDFAux.isRatStieltjesPoint_ae
+  结论: (hf : 是RatCondKernelCDFAux f κ ν)
   证明: by
   filter_upwards [hf.tendsto_atTop_one a, hf.tendsto_atBot_zero a,
     hf.iInf_rat_gt_eq a, hf.mono a] with t ht_top ht_bot ht_iInf h_mono
@@ -1012,8 +1012,8 @@ lemma IsRatCondKernelCDFAux.isRatCondKernelCDF
   setIntegral := hf.setIntegral
 
 中文:
-引理 IsRatCondKernelCDFAux.isRatCondKernelCDF
-  结论: (hf : IsRatCondKernelCDFAux f κ ν) [IsFiniteKernel κ]
+引理 是RatCondKernelCDFAux.isRatCondKernelCDF
+  结论: (hf : 是RatCondKernelCDFAux f κ ν) [是FiniteKernel κ]
   证明: hf.measurable
   isRatStieltjesPoint_ae := hf.isRatStieltjesPoint_ae
   integrable := hf.integrable
@@ -1049,14 +1049,14 @@ structure IsCondKernelCDF
     - setIntegral((a : α) {s : Set β} (_hs : MeasurableSet s) (x : Real)) : ∫ b in s, f (a, b) x ∂(ν a) = (κ a).real (s ×ˢ Iic x)
 
 中文:
-结构 IsCondKernelCDF
-  参数: (f : α × β -> StieltjesFunction 实数) (κ : Kernel α (β × 实数))
+结构 是余ndKernelCDF
+  参数: (f : α × β -> Stieltjes函数 实数) (κ : 核 α (β × 实数))
   公理与运算 (5 个):
-    - measurable((x : 实数)) : Measurable fun p => f p x
-    - integrable((a : α) (x : 实数)) : 整数egrable (fun b => f (a, b) x) (ν a)
-    - tendsto_atTop_one((p : α × β)) : Tendsto (f p) atTop (𝓝 1)
-    - tendsto_atBot_zero((p : α × β)) : Tendsto (f p) atBot (𝓝 0)
-    - setIntegral((a : α) {s : Set β} (_hs : MeasurableSet s) (x : 实数)) : ∫ b in s, f (a, b) x ∂(ν a) = (κ a).real (s ×ˢ Iic x)
+    - measurable((x : 实数)) : 可测 fun p => f p x
+    - integrable((a : α) (x : 实数)) : 可积 (fun b => f (a, b) x) (ν a)
+    - tendsto_atTop_one((p : α × β)) : 收敛 (f p) atTop (𝓝 1)
+    - tendsto_atBot_zero((p : α × β)) : 收敛 (f p) atBot (𝓝 0)
+    - setIntegral((a : α) {s : 集合 β} (_hs : 可测集 s) (x : 实数)) : ∫ b in s, f (a, b) x ∂(ν a) = (κ a).real (s ×ˢ 左无界右闭区间 x)
 -/
 structure IsCondKernelCDF (f : α × β -> StieltjesFunction Real) (κ : Kernel α (β × Real))
     (ν : Kernel α β) : Prop where
@@ -1077,8 +1077,8 @@ lemma IsCondKernelCDF.nonneg
   proof: Monotone.le_of_tendsto (f p).mono (hf.tendsto_atBot_zero p) x
 
 中文:
-引理 IsCondKernelCDF.nonneg
-  条件: (hf : IsCondKernelCDF f κ ν) (p : α × β) (x : 实数)
+引理 是余ndKernelCDF.nonneg
+  条件: (hf : 是余ndKernelCDF f κ ν) (p : α × β) (x : 实数)
   结论: 0 <= f p x
   证明: Monotone.le_of_tendsto (f p).mono (hf.tendsto_atBot_zero p) x
 
@@ -1097,8 +1097,8 @@ lemma IsCondKernelCDF.le_one
   proof: Monotone.ge_of_tendsto (f p).mono (hf.tendsto_atTop_one p) x
 
 中文:
-引理 IsCondKernelCDF.le_one
-  条件: (hf : IsCondKernelCDF f κ ν) (p : α × β) (x : 实数)
+引理 是余ndKernelCDF.le_one
+  条件: (hf : 是余ndKernelCDF f κ ν) (p : α × β) (x : 实数)
   结论: f p x <= 1
   证明: Monotone.ge_of_tendsto (f p).mono (hf.tendsto_atTop_one p) x
 
@@ -1116,7 +1116,7 @@ lemma IsCondKernelCDF.integral
   rw [← hf.setIntegral _ MeasurableSet.univ]; rw [Measure.restrict_univ]
 
 中文:
-引理 IsCondKernelCDF.integral
+引理 是余ndKernelCDF.integral
   证明: by
   rw [← hf.setIntegral _ MeasurableSet.univ]; rw [Measure.restrict_univ]
 
@@ -1138,8 +1138,8 @@ lemma IsCondKernelCDF.setLIntegral
     (ae_of_all _ (fun _ => hf.nonneg _ _))]; rw [hf.setIntegral a hs x]; rw [ofReal_measureReal]
 
 中文:
-引理 IsCondKernelCDF.setLIntegral
-  结论: [IsFiniteKernel κ]
+引理 是余ndKernelCDF.setL整数egral
+  结论: [是FiniteKernel κ]
   证明: by
   rw [← ofReal_integral_eq_lintegral_ofReal (hf.integrable a x).restrict
     (ae_of_all _ (fun _ => hf.nonneg _ _))]; rw [hf.setIntegral a hs x]; rw [ofReal_measureReal]
@@ -1163,8 +1163,8 @@ lemma IsCondKernelCDF.lintegral
   rw [← hf.setLIntegral _ MeasurableSet.univ]; rw [Measure.restrict_univ]
 
 中文:
-引理 IsCondKernelCDF.lintegral
-  结论: [IsFiniteKernel κ]
+引理 是余ndKernelCDF.lintegral
+  结论: [是FiniteKernel κ]
   证明: by
   rw [← hf.setLIntegral _ MeasurableSet.univ]; rw [Measure.restrict_univ]
 
@@ -1189,7 +1189,7 @@ lemma isCondKernelCDF_stieltjesOfMeasurableRat
 
 中文:
 引理 isCondKernelCDF_stieltjesOfMeasurableRat
-  结论: {f : α × β -> Rat -> 实数} (hf : IsRatCondKernelCDF f κ ν)
+  结论: {f : α × β -> 有理数 -> 实数} (hf : 是RatCondKernelCDF f κ ν)
   证明: measurable_stieltjesOfMeasurableRat hf.measurable
   integrable := integrable_stieltjesOfMeasurableRat hf
   tendsto_atTop_one := tendsto_stieltjesOfMeasurableRat_atTop hf.measurable
@@ -1228,8 +1228,8 @@ definition IsCondKernelCDF.toKernel
     hf.tendsto_atBot_zero hf.tendsto_atTop_one
 
 中文:
-定义 IsCondKernelCDF.toKernel
-  签名: (f : α × β -> StieltjesFunction 实数) (hf : IsCondKernelCDF f κ ν)
+定义 是余ndKernelCDF.toKernel
+  签名: (f : α × β -> Stieltjes函数 实数) (hf : 是余ndKernelCDF f κ ν)
   定义体: (f p).measure
   measurable' := StieltjesFunction.measurable_measure hf.measurable
     hf.tendsto_atBot_zero hf.tendsto_atTop_one
@@ -1251,8 +1251,8 @@ lemma IsCondKernelCDF.toKernel_apply
   proof: rfl
 
 中文:
-引理 IsCondKernelCDF.toKernel_apply
-  条件: {hf : IsCondKernelCDF f κ ν} (p : α × β)
+引理 是余ndKernelCDF.toKernel_apply
+  条件: {hf : 是余ndKernelCDF f κ ν} (p : α × β)
   证明: rfl
 -/
 lemma IsCondKernelCDF.toKernel_apply {hf : IsCondKernelCDF f κ ν} (p : α × β) :
@@ -1268,7 +1268,7 @@ instance instIsMarkovKernel_toKernel
 
 中文:
 实例 instIsMarkovKernel_toKernel
-  签名: {hf : IsCondKernelCDF f κ ν}
+  签名: {hf : 是余ndKernelCDF f κ ν}
   定义体: ⟨fun _ => (f _).isProbabilityMeasure (hf.tendsto_atBot_zero _) (hf.tendsto_atTop_one _)⟩
 
 Depends on / 依赖: hf.tendsto_atBot_zero, hf.tendsto_atTop_one, isProbabilityMeasure, tendsto_atBot_zero, tendsto_atTop_one
@@ -1288,8 +1288,8 @@ lemma IsCondKernelCDF.toKernel_Iic
   simp
 
 中文:
-引理 IsCondKernelCDF.toKernel_Iic
-  条件: {hf : IsCondKernelCDF f κ ν} (p : α × β) (x : 实数)
+引理 是余ndKernelCDF.toKernel_Iic
+  条件: {hf : 是余ndKernelCDF f κ ν} (p : α × β) (x : 实数)
   证明: by
   rw [IsCondKernelCDF.toKernel_apply p]; rw [(f p).measure_Iic (hf.tendsto_atBot_zero p)]
   simp
@@ -1318,8 +1318,8 @@ lemma setLIntegral_toKernel_Iic
   exact hf.setLIntegral _ hs _
 
 中文:
-引理 setLIntegral_toKernel_Iic
-  结论: [IsFiniteKernel κ] (hf : IsCondKernelCDF f κ ν)
+引理 setL整数egral_toKernel_Iic
+  结论: [是FiniteKernel κ] (hf : 是余ndKernelCDF f κ ν)
   证明: by
   simp_rw [IsCondKernelCDF.toKernel_Iic]
   exact hf.setLIntegral _ hs _
@@ -1346,8 +1346,8 @@ lemma setLIntegral_toKernel_univ
   have h_dir_prod : Directed (fun x y => x subseteq y) fun q : Rat =>
 
 中文:
-引理 setLIntegral_toKernel_univ
-  结论: [IsFiniteKernel κ] (hf : IsCondKernelCDF f κ ν)
+引理 setL整数egral_toKernel_univ
+  结论: [是FiniteKernel κ] (hf : 是余ndKernelCDF f κ ν)
   证明: by
   rw [← Real.iUnion_Iic_rat]; rw [prod_iUnion]
   have h_dir : Directed (fun x y => x subseteq y) fun q : Rat => Iic (q : Real) := by
@@ -1387,7 +1387,7 @@ lemma lintegral_toKernel_univ
 
 中文:
 引理 lintegral_toKernel_univ
-  条件: [IsFiniteKernel κ] (hf : IsCondKernelCDF f κ ν) (a : α)
+  条件: [是FiniteKernel κ] (hf : 是余ndKernelCDF f κ ν) (a : α)
   证明: by
   rw [← setLIntegral_univ]; rw [setLIntegral_toKernel_univ hf a MeasurableSet.univ]; rw [univ_prod_univ]
 
@@ -1411,8 +1411,8 @@ lemma setLIntegral_toKernel_prod
     using MeasurableSpace.induction_on_inter (borel_eq_generateFrom_Iic Real
 
 中文:
-引理 setLIntegral_toKernel_prod
-  结论: [IsFiniteKernel κ] (hf : IsCondKernelCDF f κ ν)
+引理 setL整数egral_toKernel_prod
+  结论: [是FiniteKernel κ] (hf : 是余ndKernelCDF f κ ν)
   证明: by
   -- `setLIntegral_toKernel_Iic` gives the result for `t = Iic x`. These sets form a
   -- π-system that generates the Borel σ-algebra, hence we can get the same equality for any
@@ -1476,7 +1476,7 @@ lemma lintegral_toKernel_mem
 
 中文:
 引理 lintegral_toKernel_mem
-  结论: [IsFiniteKernel κ] (hf : IsCondKernelCDF f κ ν)
+  结论: [是FiniteKernel κ] (hf : 是余ndKernelCDF f κ ν)
   证明: by
   -- `setLIntegral_toKernel_prod` gives the result for sets of the form `t₁ × t₂`. These
   -- sets form a π-system that generates the product σ-algebra, hence we can get the same equality
@@ -1561,7 +1561,7 @@ lemma compProd_toKernel
 
 中文:
 引理 compProd_toKernel
-  条件: [IsFiniteKernel κ] [IsSFiniteKernel ν] (hf : IsCondKernelCDF f κ ν)
+  条件: [是FiniteKernel κ] [是SFiniteKernel ν] (hf : 是余ndKernelCDF f κ ν)
   证明: by
   ext a s hs
   rw [Kernel.compProd_apply hs]; rw [lintegral_toKernel_mem hf a hs]

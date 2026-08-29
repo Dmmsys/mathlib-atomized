@@ -46,8 +46,8 @@ theorem exists_continuousOn_eqOn_exp_comp
     ⟨U.
 
 中文:
-定理 exists_continuousOn_eqOn_exp_comp
-  结论: (hUc : IsSimplyConnected U) (hUo : IsOpen U)
+定理 存在_continuousOn_eqOn_exp_comp
+  结论: (hUc : IsSimplyConnected U) (hUo : 是开集 U)
   证明: by
   classical
   have := hUc.simplyConnectedSpace
@@ -100,8 +100,8 @@ theorem exists_continuousOn_pow_eq
     
 
 中文:
-定理 exists_continuousOn_pow_eq
-  结论: (hUc : IsSimplyConnected U) (hUo : IsOpen U)
+定理 存在_continuousOn_pow_eq
+  结论: (hUc : IsSimplyConnected U) (hUo : 是开集 U)
   证明: by
   classical
   rcases exists_continuousOn_eqOn_exp_comp hUc hUo hgc hU₀ with ⟨f, hfc, hf⟩
@@ -143,7 +143,7 @@ theorem exists_continuousOn_pow_eq
     simpa only [← coe
 
 中文:
-定理 exists_continuousOn_pow_eq
+定理 存在_continuousOn_pow_eq
   证明: by
   rcases exists_continuousOn_pow_eq hUc hUo
     (continuous_coe.comp_continuousOn hgc)

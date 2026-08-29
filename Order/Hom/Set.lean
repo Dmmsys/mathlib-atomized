@@ -44,7 +44,7 @@ definition sumEquiv
 
 中文:
 定义 sumEquiv
-  签名: : Set (α oplus β) ≃o Set α × Set β where
+  签名: : 集合 (α oplus β) ≃o 集合 α × 集合 β where
   定义体: (Sum.inl ⁻¹' s, Sum.inr ⁻¹' s)
   invFun s := Sum.inl '' s.1 union Sum.inr '' s.2
   left_inv s := image_preimage_inl_union_image_preimage_inr s
@@ -75,7 +75,7 @@ theorem sumEquiv_symm_apply
 
 中文:
 定理 sumEquiv_symm_apply
-  条件: {s : Set α × Set β}
+  条件: {s : 集合 α × 集合 β}
   证明: rfl
 -/
 theorem sumEquiv_symm_apply {s : Set α × Set β} :
@@ -91,8 +91,8 @@ theorem MapsTo.sumElim
   rintro (a | b) <;> aesop
 
 中文:
-定理 MapsTo.sumElim
-  结论: {f : α -> γ} {g : β -> γ} {s : Set α × Set β} {t : Set γ}
+定理 映射到.sumElim
+  结论: {f : α -> γ} {g : β -> γ} {s : 集合 α × 集合 β} {t : 集合 γ}
   证明: by
   rintro (a | b) <;> aesop
 -/
@@ -111,8 +111,8 @@ theorem InjOn.sumElim
   rintro (a₁ | b₁) h₁ (a₂ | b₂) h₂ heq <;> aesop
 
 中文:
-定理 InjOn.sumElim
-  结论: {f : α -> γ} {g : β -> γ} {s : Set α × Set β}
+定理 单射限制.sumElim
+  结论: {f : α -> γ} {g : β -> γ} {s : 集合 α × 集合 β}
   证明: by
   rintro (a₁ | b₁) h₁ (a₂ | b₂) h₂ heq <;> aesop
 -/
@@ -143,7 +143,7 @@ theorem range_eq
 中文:
 定理 range_eq
   条件: (e : α ≃o β)
-  结论: Set.range e = Set.univ
+  结论: 集合.range e = 集合.univ
   证明: e.surjective.range_eq
 
 @[simp]
@@ -167,7 +167,7 @@ theorem symm_image_image
 
 中文:
 定理 symm_image_image
-  条件: (e : α ≃o β) (s : Set α)
+  条件: (e : α ≃o β) (s : 集合 α)
   结论: e.symm '' e '' s = s
   证明: e.toEquiv.symm_image_image s
 
@@ -190,7 +190,7 @@ theorem image_symm_image
 
 中文:
 定理 image_symm_image
-  条件: (e : α ≃o β) (s : Set β)
+  条件: (e : α ≃o β) (s : 集合 β)
   结论: e '' e.symm '' s = s
   证明: e.toEquiv.image_symm_image s
 
@@ -212,7 +212,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (e : α ≃o β) (s : Set α)
+  条件: (e : α ≃o β) (s : 集合 α)
   结论: e '' s = e.symm ⁻¹' s
   证明: e.toEquiv.image_eq_preimage_symm s
 
@@ -237,7 +237,7 @@ theorem preimage_symm_preimage
 
 中文:
 定理 preimage_symm_preimage
-  条件: (e : α ≃o β) (s : Set α)
+  条件: (e : α ≃o β) (s : 集合 α)
   结论: e ⁻¹' e.symm ⁻¹' s = s
   证明: e.toEquiv.preimage_symm_preimage s
 
@@ -262,7 +262,7 @@ theorem symm_preimage_preimage
 
 中文:
 定理 symm_preimage_preimage
-  条件: (e : α ≃o β) (s : Set β)
+  条件: (e : α ≃o β) (s : 集合 β)
   结论: e.symm ⁻¹' e ⁻¹' s = s
   证明: e.toEquiv.symm_preimage_preimage s
 
@@ -287,7 +287,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  条件: (e : α ≃o β) (s : Set β)
+  条件: (e : α ≃o β) (s : 集合 β)
   结论: e '' e ⁻¹' s = s
   证明: e.toEquiv.image_preimage s
 
@@ -310,7 +310,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: (e : α ≃o β) (s : Set α)
+  条件: (e : α ≃o β) (s : 集合 α)
   结论: e ⁻¹' e '' s = s
   证明: e.toEquiv.preimage_image s
 
@@ -338,7 +338,7 @@ definition setCongr
 
 中文:
 定义 setCongr
-  签名: (s t : Set α) (h : s = t)
+  签名: (s t : 集合 α) (h : s = t)
   定义体: Equiv.setCongr h
   map_rel_iff' := Iff.rfl
 
@@ -359,8 +359,8 @@ definition Set.univ
   map_rel_iff' := Iff.rfl
 
 中文:
-定义 Set.univ
-  签名: : (Set.univ : Set α) ≃o α where
+定义 集合.univ
+  签名: : (集合.univ : 集合 α) ≃o α where
   定义体: Equiv.Set.univ α
   map_rel_iff' := Iff.rfl
 -/
@@ -405,7 +405,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def StrictMonoOn.orderIso {α β} [LinearOrder α] [Preorder β] (f : α -> β)
+  签名: def StrictMonoOn.orderIso {α β} [线性序 α] [预序 β] (f : α -> β)
   定义体: hf.injOn.bijOn_image.equiv _
   map_rel_iff' := hf.le_iff_le (Subtype.property _) (Subtype.property _)
 -/
@@ -541,7 +541,7 @@ lemma OrderEmbedding.range_inj
 
 中文:
 引理 OrderEmbedding.range_inj
-  条件: [LinearOrder α] [WellFoundedLT α] [Preorder β] {f g : α ↪o β}
+  条件: [线性序 α] [WellFoundedLT α] [预序 β] {f g : α ↪o β}
   证明: by
   rw [f.strictMono.range_inj g.strictMono]; rw [DFunLike.coe_fn_eq]
 
@@ -568,7 +568,7 @@ instance subsingleton_of_wellFoundedLT
 
 中文:
 实例 subsingleton_of_wellFoundedLT
-  签名: [LinearOrder α] [WellFoundedLT α] [Preorder β]
+  签名: [线性序 α] [WellFoundedLT α] [预序 β]
   定义体: by
   refine ⟨fun f g => ?_⟩
   rw [OrderIso.ext_iff]; rw [← coe_toOrderEmbedding]; rw [← coe_toOrderEmbedding]; rw [DFunLike.coe_fn_eq]; rw [← OrderEmbedding.range_inj]; rw [coe_toOrderEmbedding]; rw [coe_toOrderEmbedding]; rw [range_eq]; rw [range_eq]
@@ -593,7 +593,7 @@ instance subsingleton_of_wellFoundedLT'
 
 中文:
 实例 subsingleton_of_wellFoundedLT'
-  签名: [LinearOrder β] [WellFoundedLT β] [Preorder α]
+  签名: [线性序 β] [WellFoundedLT β] [预序 α]
   定义体: by
   refine ⟨fun f g => ?_⟩
   change f.symm.symm = g.symm.symm
@@ -617,7 +617,7 @@ instance unique_of_wellFoundedLT
 
 中文:
 实例 unique_of_wellFoundedLT
-  签名: [LinearOrder α] [WellFoundedLT α]
+  签名: [线性序 α] [WellFoundedLT α]
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -637,7 +637,7 @@ instance subsingleton_of_wellFoundedGT
 
 中文:
 实例 subsingleton_of_wellFoundedGT
-  签名: [LinearOrder α] [WellFoundedGT α] [Preorder β]
+  签名: [线性序 α] [WellFoundedGT α] [预序 β]
   定义体: by
   refine ⟨fun f g => ?_⟩
   change f.dual.dual = g.dual.dual
@@ -664,7 +664,7 @@ instance subsingleton_of_wellFoundedGT'
 
 中文:
 实例 subsingleton_of_wellFoundedGT'
-  签名: [LinearOrder β] [WellFoundedGT β] [Preorder α]
+  签名: [线性序 β] [WellFoundedGT β] [预序 α]
   定义体: by
   refine ⟨fun f g => ?_⟩
   change f.dual.dual = g.dual.dual
@@ -688,7 +688,7 @@ instance unique_of_wellFoundedGT
 
 中文:
 实例 unique_of_wellFoundedGT
-  签名: [LinearOrder α] [WellFoundedGT α]
+  签名: [线性序 α] [WellFoundedGT α]
   定义体: Unique.mk' _
 
 Depends on / 依赖: Unique, Unique.mk
@@ -709,8 +709,8 @@ definition Iic
   map_rel_iff' := by simp
 
 中文:
-定义 Iic
-  签名: [Lattice α] [Lattice β] (e : α ≃o β) (x : α)
+定义 左无界右闭区间
+  签名: [格 α] [格 β] (e : α ≃o β) (x : α)
   定义体: ⟨e y, (map_le_map_iff _).mpr y.property⟩
   invFun y := ⟨e.symm y, e.symm_apply_le.mpr y.property⟩
   left_inv y := by simp
@@ -739,8 +739,8 @@ definition Ici
   map_rel_iff' := by simp
 
 中文:
-定义 Ici
-  签名: [Lattice α] [Lattice β] (e : α ≃o β) (x : α)
+定义 左闭右无界区间
+  签名: [格 α] [格 β] (e : α ≃o β) (x : α)
   定义体: ⟨e y, (map_le_map_iff _).mpr y.property⟩
   invFun y := ⟨e.symm y, e.le_symm_apply.mpr y.property⟩
   left_inv y := by simp
@@ -769,8 +769,8 @@ definition Icc
   map_rel_iff' := by simp
 
 中文:
-定义 Icc
-  签名: [Lattice α] [Lattice β] (e : α ≃o β) (x y : α)
+定义 闭区间
+  签名: [格 α] [格 β] (e : α ≃o β) (x y : α)
   定义体: ⟨e z, by simp only [mem_Icc, map_le_map_iff]; exact z.property⟩
   invFun z := ⟨e.symm z, by simp only [mem_Icc, e.le_symm_apply, e.symm_apply_le]; exact z.property⟩
   left_inv y := by simp
@@ -833,7 +833,7 @@ theorem compl_strictAnti
 
 中文:
 定理 compl_strictAnti
-  结论: StrictAnti (compl : α -> α)
+  结论: 严格递减 (compl : α -> α)
   证明: (OrderIso.compl α).strictMono
 
 Depends on / 依赖: OrderIso, OrderIso.compl, strictMono
@@ -851,7 +851,7 @@ theorem compl_antitone
 
 中文:
 定理 compl_antitone
-  结论: Antitone (compl : α -> α)
+  结论: 递减 (compl : α -> α)
   证明: (OrderIso.compl α).monotone
 
 Depends on / 依赖: OrderIso, OrderIso.compl, monotone

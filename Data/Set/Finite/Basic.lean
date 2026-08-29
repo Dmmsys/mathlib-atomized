@@ -66,8 +66,8 @@ protected alias ⟨Finite.nonempty_fintype, _⟩ := finite_def
 
 中文:
 定理 finite_def
-  条件: {s : Set α}
-  结论: s.Finite ↔ Nonempty (Fintype s)
+  条件: {s : 集合 α}
+  结论: s.有限 ↔ 非空 (有限类型 s)
   证明: finite_iff_nonempty_fintype s
 
 protected alias ⟨Finite.nonempty_fintype, _⟩ := finite_def
@@ -89,9 +89,9 @@ theorem Finite.ofFinset
   proof: have := Fintype.ofFinset s H; p.toFinite
 
 中文:
-定理 Finite.ofFinset
-  条件: {p : Set α} (s : Finset α) (H : 对任意 x, x in s ↔ x in p)
-  结论: p.Finite
+定理 有限.ofFinset
+  条件: {p : 集合 α} (s : 有限集 α) (H : 对任意 x, x in s ↔ x in p)
+  结论: p.有限
   证明: have := Fintype.ofFinset s H; p.toFinite
 -/
 protected theorem Finite.ofFinset {p : Set α} (s : Finset α) (H : forall x, x in s ↔ x in p) : p.Finite :=
@@ -113,7 +113,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Finite.fintype {s : Set α} (h : s.Finite)
+  签名: def 有限.fintype {s : 集合 α} (h : s.有限)
   定义体: h.nonempty_fintype.some
 -/
 protected noncomputable def Finite.fintype {s : Set α} (h : s.Finite) : Fintype s :=
@@ -129,7 +129,7 @@ definition noncomputable
 
 中文:
 定义 noncomputable
-  签名: def Finite.toFinset {s : Set α} (h : s.Finite)
+  签名: def 有限.toFinset {s : 集合 α} (h : s.有限)
   定义体: @Set.toFinset _ _ h.fintype
 -/
 protected noncomputable def Finite.toFinset {s : Set α} (h : s.Finite) : Finset α :=
@@ -147,8 +147,8 @@ theorem Finite.toFinset_eq_toFinset
 @[simp]
 
 中文:
-定理 Finite.toFinset_eq_toFinset
-  条件: {s : Set α} [Fintype s] (h : s.Finite)
+定理 有限.toFinset_eq_toFinset
+  条件: {s : 集合 α} [有限类型 s] (h : s.有限)
   证明: by
   rw [Finite.toFinset]; rw [Subsingleton.elim h.fintype]
 
@@ -172,7 +172,7 @@ theorem toFinite_toFinset
 
 中文:
 定理 toFinite_toFinset
-  条件: (s : Set α) [Fintype s]
+  条件: (s : 集合 α) [有限类型 s]
   结论: s.toFinite.toFinset = s.toFinset
   证明: s.toFinite.toFinset_eq_toFinset
 
@@ -192,8 +192,8 @@ theorem Finite.exists_finset
   exact ⟨s.toFinset, fun _ => mem_toFinset⟩
 
 中文:
-定理 Finite.exists_finset
-  条件: {s : Set α} (h : s.Finite)
+定理 有限.存在_finset
+  条件: {s : 集合 α} (h : s.有限)
   证明: by
   cases h.nonempty_fintype
   exact ⟨s.toFinset, fun _ => mem_toFinset⟩
@@ -217,9 +217,9 @@ theorem Finite.exists_finset_coe
   exact ⟨s.toFinset, s.coe_toFinset⟩
 
 中文:
-定理 Finite.exists_finset_coe
-  条件: {s : Set α} (h : s.Finite)
-  结论: 存在 s' : Finset α, ↑s' = s
+定理 有限.存在_finset_coe
+  条件: {s : 集合 α} (h : s.有限)
+  结论: 存在 s' : 有限集 α, ↑s' = s
   证明: by
   cases h.nonempty_fintype
   exact ⟨s.toFinset, s.coe_toFinset⟩
@@ -240,7 +240,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift (Set α) (Finset α) (↑) Set.Finite
+  签名: CanLift (集合 α) (有限集 α) (↑) 集合.有限
   定义体: hs.exists_finset_coe
 
 Depends on / 依赖: exists_finset_coe, hs.exists_finset_coe
@@ -288,7 +288,7 @@ theorem coe_toFinset
 
 中文:
 定理 coe_toFinset
-  结论: (hs.toFinset : Set α) = s
+  结论: (hs.toFinset : 集合 α) = s
   证明: @coe_toFinset _ _ hs.fintype
 
 @[simp]
@@ -308,7 +308,7 @@ theorem toFinset_nonempty
 
 中文:
 定理 toFinset_nonempty
-  结论: hs.toFinset.Nonempty ↔ s.Nonempty
+  结论: hs.toFinset.非空 ↔ s.非空
   证明: by
   rw [← Finset.coe_nonempty]; rw [Finite.coe_toFinset]
 -/
@@ -389,7 +389,7 @@ theorem toFinset_subset
 
 中文:
 定理 toFinset_subset
-  条件: {t : Finset α}
+  条件: {t : 有限集 α}
   结论: hs.toFinset subseteq t ↔ s subseteq t
   证明: by
   rw [← Finset.coe_subset]; rw [Finite.coe_toFinset]
@@ -416,7 +416,7 @@ theorem toFinset_ssubset
 
 中文:
 定理 toFinset_ssubset
-  条件: {t : Finset α}
+  条件: {t : 有限集 α}
   结论: hs.toFinset ⊂ t ↔ s ⊂ t
   证明: by
   rw [← Finset.coe_ssubset]; rw [Finite.coe_toFinset]
@@ -443,7 +443,7 @@ theorem subset_toFinset
 
 中文:
 定理 subset_toFinset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s subseteq ht.toFinset ↔ ↑s subseteq t
   证明: by
   rw [← Finset.coe_subset]; rw [Finite.coe_toFinset]
@@ -470,7 +470,7 @@ theorem ssubset_toFinset
 
 中文:
 定理 ssubset_toFinset
-  条件: {s : Finset α}
+  条件: {s : 有限集 α}
   结论: s ⊂ ht.toFinset ↔ ↑s ⊂ t
   证明: by
   rw [← Finset.coe_ssubset]; rw [Finite.coe_toFinset]
@@ -558,7 +558,7 @@ nonrec theorem disjoint_toFinset {hs : s.Finite} {ht : t.Finite} :
 
 中文:
 定理 toFinset_ofPred
-  结论: [Fintype α] (p : α -> 命题) [DecidablePred p]
+  结论: [有限类型 α] (p : α -> 命题) [DecidablePred p]
   证明: by simp
 
 @[deprecated (since := "2026-07-09")] protected alias toFinset_setOf := Set.Finite.toFinset_ofPred
@@ -590,7 +590,7 @@ theorem toFinset_inter
 
 中文:
 定理 toFinset_inter
-  结论: [DecidableEq α] (hs : s.Finite) (ht : t.Finite)
+  结论: [DecidableEq α] (hs : s.有限) (ht : t.有限)
   证明: by
   ext
   simp
@@ -612,7 +612,7 @@ theorem toFinset_union
 
 中文:
 定理 toFinset_union
-  结论: [DecidableEq α] (hs : s.Finite) (ht : t.Finite)
+  结论: [DecidableEq α] (hs : s.有限) (ht : t.有限)
   证明: by
   ext
   simp
@@ -636,7 +636,7 @@ theorem toFinset_sdiff
 
 中文:
 定理 toFinset_sdiff
-  结论: [DecidableEq α] (hs : s.Finite) (ht : t.Finite)
+  结论: [DecidableEq α] (hs : s.有限) (ht : t.有限)
   证明: by
   ext
   simp
@@ -663,7 +663,7 @@ theorem toFinset_symmDiff
 
 中文:
 定理 toFinset_symmDiff
-  结论: [DecidableEq α] (hs : s.Finite) (ht : t.Finite)
+  结论: [DecidableEq α] (hs : s.有限) (ht : t.有限)
   证明: by
   ext
   simp [mem_symmDiff, Finset.mem_symmDiff]
@@ -685,7 +685,7 @@ theorem toFinset_compl
 
 中文:
 定理 toFinset_compl
-  条件: [DecidableEq α] [Fintype α] (hs : s.Finite) (h : sᶜ.Finite)
+  条件: [DecidableEq α] [有限类型 α] (hs : s.有限) (h : sᶜ.有限)
   证明: by
   ext
   simp
@@ -708,7 +708,7 @@ theorem toFinset_univ
 
 中文:
 定理 toFinset_univ
-  条件: [Fintype α] (h : (Set.univ : Set α).Finite)
+  条件: [有限类型 α] (h : (集合.univ : 集合 α).有限)
   证明: by
   simp
 
@@ -730,7 +730,7 @@ theorem toFinset_eq_empty
 
 中文:
 定理 toFinset_eq_empty
-  条件: {h : s.Finite}
+  条件: {h : s.有限}
   结论: h.toFinset = ∅ ↔ s = ∅
   证明: @toFinset_eq_empty _ _ h.fintype
 -/
@@ -751,7 +751,7 @@ theorem toFinset_empty
 
 中文:
 定理 toFinset_empty
-  条件: (h : (∅ : Set α).Finite)
+  条件: (h : (∅ : 集合 α).有限)
   结论: h.toFinset = ∅
   证明: by
   simp
@@ -772,7 +772,7 @@ theorem toFinset_eq_univ
 
 中文:
 定理 toFinset_eq_univ
-  条件: [Fintype α] {h : s.Finite}
+  条件: [有限类型 α] {h : s.有限}
   证明: @toFinset_eq_univ _ _ _ h.fintype
 -/
 protected theorem toFinset_eq_univ [Fintype α] {h : s.Finite} :
@@ -791,7 +791,7 @@ theorem toFinset_image
 
 中文:
 定理 toFinset_image
-  条件: [DecidableEq β] (f : α -> β) (hs : s.Finite) (h : (f '' s).Finite)
+  条件: [DecidableEq β] (f : α -> β) (hs : s.有限) (h : (f '' s).有限)
   证明: by
   ext
   simp
@@ -815,7 +815,7 @@ theorem toFinset_range
 
 中文:
 定理 toFinset_range
-  条件: [DecidableEq α] [Fintype β] (f : β -> α) (h : (range f).Finite)
+  条件: [DecidableEq α] [有限类型 β] (f : β -> α) (h : (range f).有限)
   证明: by
   ext
   simp
@@ -840,8 +840,8 @@ theorem toFinset_nontrivial
 
 中文:
 定理 toFinset_nontrivial
-  条件: (h : s.Finite)
-  结论: h.toFinset.Nontrivial ↔ s.Nontrivial
+  条件: (h : s.有限)
+  结论: h.toFinset.非平凡 ↔ s.非平凡
   证明: by
   rw [Finset.Nontrivial]; rw [h.coe_toFinset]
 -/
@@ -867,7 +867,7 @@ instance fintypeUniv
 
 中文:
 实例 fintypeUniv
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: Fintype.ofEquiv α (Equiv.Set.univ α).symm
 
 Depends on / 依赖: Equiv.Set.univ, Fintype, Fintype.ofEquiv, ofEquiv
@@ -886,7 +886,7 @@ instance fintypeTop
 
 中文:
 实例 fintypeTop
-  签名: [Fintype α]
+  签名: [有限类型 α]
   定义体: inferInstanceAs (Fintype (univ : Set α))
 
 Depends on / 依赖: Fintype
@@ -905,7 +905,7 @@ definition fintypeOfFiniteUniv
 
 中文:
 定义 fintypeOfFiniteUniv
-  签名: (H : (univ (α := α)).Finite)
+  签名: (H : (univ (α := α)).有限)
   定义体: @Fintype.ofEquiv _ (univ : Set α) H.fintype (Equiv.Set.univ _)
 
 Depends on / 依赖: Finite, Fintype
@@ -923,7 +923,7 @@ instance fintypeUnion
 
 中文:
 实例 fintypeUnion
-  签名: [DecidableEq α] (s t : Set α) [Fintype s] [Fintype t]
+  签名: [DecidableEq α] (s t : 集合 α) [有限类型 s] [有限类型 t]
   定义体: Fintype.ofFinset (s.toFinset union t.toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, t.toFinset, toFinset
@@ -942,7 +942,7 @@ instance fintypeSep
 
 中文:
 实例 fintypeSep
-  签名: (s : Set α) (p : α -> 命题) [Fintype s] [DecidablePred p]
+  签名: (s : 集合 α) (p : α -> 命题) [有限类型 s] [DecidablePred p]
   定义体: Fintype.ofFinset {a in s.toFinset | p a} by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, toFinset
@@ -960,8 +960,8 @@ instance fintypeInter
   body: Fintype.ofFinset (s.toFinset inter t.toFinset) by simp
 
 中文:
-实例 fintypeInter
-  签名: (s t : Set α) [DecidableEq α] [Fintype s] [Fintype t]
+实例 fintype整数er
+  签名: (s t : 集合 α) [DecidableEq α] [有限类型 s] [有限类型 t]
   定义体: Fintype.ofFinset (s.toFinset inter t.toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, t.toFinset, toFinset
@@ -979,8 +979,8 @@ instance fintypeInterOfLeft
   body: Fintype.ofFinset {a in s.toFinset | a in t} by simp
 
 中文:
-实例 fintypeInterOfLeft
-  签名: (s t : Set α) [Fintype s] [DecidablePred (· in t)]
+实例 fintype整数erOfLeft
+  签名: (s t : 集合 α) [有限类型 s] [DecidablePred (· in t)]
   定义体: Fintype.ofFinset {a in s.toFinset | a in t} by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, toFinset
@@ -998,8 +998,8 @@ instance fintypeInterOfRight
   body: Fintype.ofFinset {a in t.toFinset | a in s} by simp [and_comm]
 
 中文:
-实例 fintypeInterOfRight
-  签名: (s t : Set α) [Fintype t] [DecidablePred (· in s)]
+实例 fintype整数erOfRight
+  签名: (s t : 集合 α) [有限类型 t] [DecidablePred (· in s)]
   定义体: Fintype.ofFinset {a in t.toFinset | a in s} by simp [and_comm]
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, and_comm, ofFinset, t.toFinset, toFinset
@@ -1022,7 +1022,7 @@ definition fintypeSubset
 
 中文:
 定义 fintypeSubset
-  签名: (s : Set α) {t : Set α} [Fintype s] [DecidablePred (· in t)] (h : t subseteq s)
+  签名: (s : 集合 α) {t : 集合 α} [有限类型 s] [DecidablePred (· in t)] (h : t subseteq s)
   定义体: by
   rw [← inter_eq_self_of_subset_right h]
   apply Set.fintypeInterOfLeft
@@ -1044,7 +1044,7 @@ instance fintypeDiff
 
 中文:
 实例 fintypeDiff
-  签名: [DecidableEq α] (s t : Set α) [Fintype s] [Fintype t]
+  签名: [DecidableEq α] (s t : 集合 α) [有限类型 s] [有限类型 t]
   定义体: Fintype.ofFinset (s.toFinset \ t.toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, t.toFinset, toFinset
@@ -1063,7 +1063,7 @@ instance fintypeDiffLeft
 
 中文:
 实例 fintypeDiffLeft
-  签名: (s t : Set α) [Fintype s] [DecidablePred (· in t)]
+  签名: (s t : 集合 α) [有限类型 s] [DecidablePred (· in t)]
   定义体: Set.fintypeSep s (· in tᶜ)
 
 Depends on / 依赖: Set.fintypeSep, fintypeSep
@@ -1082,7 +1082,7 @@ instance fintypeEmpty
 
 中文:
 实例 fintypeEmpty
-  签名: : Fintype (∅ : Set α)
+  签名: : 有限类型 (∅ : 集合 α)
   定义体: Fintype.ofFinset ∅ by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset
@@ -1118,7 +1118,7 @@ instance fintypeInsert
 
 中文:
 实例 fintypeInsert
-  签名: (a : α) (s : Set α) [DecidableEq α] [Fintype s]
+  签名: (a : α) (s : 集合 α) [DecidableEq α] [有限类型 s]
   定义体: Fintype.ofFinset (insert a s.toFinset) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, insert, ofFinset, s.toFinset, toFinset
@@ -1140,7 +1140,7 @@ definition fintypeInsertOfNotMem
 
 中文:
 定义 fintypeInsertOfNotMem
-  签名: {a : α} (s : Set α) [Fintype s] (h : a ∉ s)
+  签名: {a : α} (s : 集合 α) [有限类型 s] (h : a ∉ s)
   定义体: Fintype.ofFinset ⟨a ::ₘ s.toFinset.1, s.toFinset.nodup.cons (by simp [h])⟩ by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, I.symm, ofFinset, s.toFinset, s.toFinset.nodup.cons, toFinset
@@ -1161,7 +1161,7 @@ definition fintypeInsertOfMem
 
 中文:
 定义 fintypeInsertOfMem
-  签名: {a : α} (s : Set α) [Fintype s] (h : a in s)
+  签名: {a : α} (s : 集合 α) [有限类型 s] (h : a in s)
   定义体: Fintype.ofFinset s.toFinset by simp [h]
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset, toFinset
@@ -1191,7 +1191,7 @@ instance fintypeImage
 
 中文:
 实例 fintypeImage
-  签名: [DecidableEq β] (s : Set α) (f : α -> β) [Fintype s]
+  签名: [DecidableEq β] (s : 集合 α) (f : α -> β) [有限类型 s]
   定义体: Fintype.ofFinset (s.toFinset.image f) by simp
 
 Depends on / 依赖: Fintype, Fintype.ofFinset, ofFinset, s.toFinset.image, toFinset
@@ -1213,7 +1213,7 @@ definition fintypeOfFintypeImage
 
 中文:
 定义 fintypeOfFintypeImage
-  签名: (s : Set α) {f : α -> β} {g} (I : IsPartialInv f g) [Fintype (f '' s)]
+  签名: (s : 集合 α) {f : α -> β} {g} (I : IsPartialInv f g) [有限类型 (f '' s)]
   定义体: Fintype.ofFinset ⟨_, (f '' s).toFinset.2.filterMap g injective_of_isPartialInv_right I⟩
     (by simp [I.eq])
 
@@ -1252,7 +1252,7 @@ instance fintypeLTNat
   body: Fintype.ofFinset (Finset.range n) by simp
 
 中文:
-实例 fintypeLTNat
+实例 fintypeLT自然数
   签名: (n : 自然数)
   定义体: Fintype.ofFinset (Finset.range n) by simp
 
@@ -1271,7 +1271,7 @@ instance fintypeLENat
   simpa [Nat.lt_succ_iff] using Set.fintypeLTNat (n + 1)
 
 中文:
-实例 fintypeLENat
+实例 fintypeLE自然数
   签名: (n : 自然数)
   定义体: by
   simpa [Nat.lt_succ_iff] using Set.fintypeLTNat (n + 1)
@@ -1293,7 +1293,7 @@ definition Nat.fintypeIio
   body: Set.fintypeLTNat n
 
 中文:
-定义 Nat.fintypeIio
+定义 自然数.fintypeIio
   签名: (n : 自然数)
   定义体: Set.fintypeLTNat n
 
@@ -1312,7 +1312,7 @@ instance fintypeMemFinset
 
 中文:
 实例 fintypeMemFinset
-  签名: (s : Finset α)
+  签名: (s : 有限集 α)
   定义体: Finset.fintypeCoeSort s
 
 Depends on / 依赖: Finset, Finset.fintypeCoeSort, fintypeCoeSort
@@ -1342,8 +1342,8 @@ theorem finite_toSet
 
 中文:
 定理 finite_toSet
-  条件: (s : Finset α)
-  结论: (s : Set α).Finite
+  条件: (s : 有限集 α)
+  结论: (s : 集合 α).有限
   证明: Set.toFinite _
 
 Depends on / 依赖: Set.toFinite, toFinite
@@ -1363,7 +1363,7 @@ theorem finite_toSet_toFinset
 
 中文:
 定理 finite_toSet_toFinset
-  条件: (s : Finset α)
+  条件: (s : 有限集 α)
   结论: s.finite_toSet.toFinset = s
   证明: by
   rw [toFinite_toFinset]; rw [toFinset_coe]
@@ -1383,8 +1383,8 @@ lemma «forall»
   mpr h s := by simpa using h s s.finite_toSet
 
 中文:
-引理 «forall»
-  条件: {p : Finset α -> 命题}
+引理 «对任意»
+  条件: {p : 有限集 α -> 命题}
   证明: h _
   mpr h s := by simpa using h s s.finite_toSet
 -/
@@ -1403,8 +1403,8 @@ lemma «exists»
   mpr := fun ⟨s, hs, hs'⟩ => ⟨hs.toFinset, hs'⟩
 
 中文:
-引理 «exists»
-  条件: {p : Finset α -> 命题}
+引理 «存在»
+  条件: {p : 有限集 α -> 命题}
   证明: fun ⟨s, hs⟩ => ⟨s, s.finite_toSet, by simpa⟩
   mpr := fun ⟨s, hs, hs'⟩ => ⟨hs.toFinset, hs'⟩
 -/
@@ -1427,8 +1427,8 @@ lemma mem_range_coe_iff
 
 中文:
 引理 mem_range_coe_iff
-  条件: {s : Set α}
-  结论: s in Set.range ((↑) : Finset α -> Set α) ↔ s.Finite where
+  条件: {s : 集合 α}
+  结论: s in 集合.range ((↑) : 有限集 α -> 集合 α) ↔ s.有限 where
   证明: by
     rintro ⟨t, rfl⟩
     simp
@@ -1462,7 +1462,7 @@ theorem finite_toSet
 中文:
 定理 finite_toSet
   条件: (s : Multiset α)
-  结论: { x | x in s }.Finite
+  结论: { x | x in s }.有限
   证明: by
   classical simpa only [← Multiset.mem_toFinset] using! s.toFinset.finite_toSet
 
@@ -1509,9 +1509,9 @@ theorem List.finite_toSet
   proof: (show Multiset α from ⟦l⟧).finite_toSet
 
 中文:
-定理 List.finite_toSet
-  条件: (l : List α)
-  结论: { x | x in l }.Finite
+定理 列表.finite_toSet
+  条件: (l : 列表 α)
+  结论: { x | x in l }.有限
   证明: (show Multiset α from ⟦l⟧).finite_toSet
 
 Depends on / 依赖: Multiset, finite_toSet
@@ -1533,7 +1533,7 @@ definition OrderIso.finsetSetFinite
 
 中文:
 定义 OrderIso.finsetSetFinite
-  签名: : Finset α ≃o {s : Set α // s.Finite} where
+  签名: : 有限集 α ≃o {s : 集合 α // s.有限} where
   定义体: ⟨s, s.finite_toSet⟩
   invFun s := s.2.toFinset
   left_inv _ := by simp
@@ -1557,7 +1557,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedLT {s : Set α // s.Finite}
+  签名: WellFoundedLT {s : 集合 α // s.有限}
   定义体: OrderIso.finsetSetFinite.symm.toOrderEmbedding.wellFoundedLT
 -/
 instance : WellFoundedLT {s : Set α // s.Finite} :=
@@ -1600,7 +1600,7 @@ instance finite_union
 
 中文:
 实例 finite_union
-  签名: (s t : Set α) [Finite s] [Finite t]
+  签名: (s t : 集合 α) [有限 s] [有限 t]
   定义体: by
   cases nonempty_fintype s
   cases nonempty_fintype t
@@ -1628,7 +1628,7 @@ instance finite_sep
 
 中文:
 实例 finite_sep
-  签名: (s : Set α) (p : α -> 命题) [Finite s]
+  签名: (s : 集合 α) (p : α -> 命题) [有限 s]
   定义体: by
   cases nonempty_fintype s
   classical
@@ -1654,8 +1654,8 @@ theorem subset
 
 中文:
 定理 subset
-  条件: (s : Set α) {t : Set α} [Finite s] (h : t subseteq s)
-  结论: Finite t
+  条件: (s : 集合 α) {t : 集合 α} [有限 s] (h : t subseteq s)
+  结论: 有限 t
   证明: by
   rw [← sep_eq_of_subset h]
   infer_instance
@@ -1674,7 +1674,7 @@ instance finite_inter_of_right
 
 中文:
 实例 finite_inter_of_right
-  签名: (s t : Set α) [Finite t]
+  签名: (s t : 集合 α) [有限 t]
   定义体: Finite.Set.subset t inter_subset_right
 
 Depends on / 依赖: Finite, Finite.Set.subset, inter_subset_right, subset
@@ -1692,7 +1692,7 @@ instance finite_inter_of_left
 
 中文:
 实例 finite_inter_of_left
-  签名: (s t : Set α) [Finite s]
+  签名: (s t : 集合 α) [有限 s]
   定义体: Finite.Set.subset s inter_subset_left
 
 Depends on / 依赖: Finite, Finite.Set.subset, inter_subset_left, subset
@@ -1710,7 +1710,7 @@ instance finite_diff
 
 中文:
 实例 finite_diff
-  签名: (s t : Set α) [Finite s]
+  签名: (s t : 集合 α) [有限 s]
   定义体: Finite.Set.subset s sdiff_subset
 
 Depends on / 依赖: Finite, Finite.Set.subset, sdiff_subset, subset
@@ -1728,7 +1728,7 @@ instance finite_insert
 
 中文:
 实例 finite_insert
-  签名: (a : α) (s : Set α) [Finite s]
+  签名: (a : α) (s : 集合 α) [有限 s]
   定义体: Finite.Set.finite_union {a} s
 
 Depends on / 依赖: Finite, Finite.Set.finite_union, finite_union
@@ -1749,7 +1749,7 @@ instance finite_image
 
 中文:
 实例 finite_image
-  签名: (s : Set α) (f : α -> β) [Finite s]
+  签名: (s : 集合 α) (f : α -> β) [有限 s]
   定义体: by
   cases nonempty_fintype s
   classical
@@ -1789,9 +1789,9 @@ theorem Finite.of_subsingleton
   proof: s.toFinite
 
 中文:
-定理 Finite.of_subsingleton
-  条件: [Subsingleton α] (s : Set α)
-  结论: s.Finite
+定理 有限.of_subsingleton
+  条件: [子单例 α] (s : 集合 α)
+  结论: s.有限
   证明: s.toFinite
 
 Depends on / 依赖: s.toFinite, toFinite
@@ -1810,8 +1810,8 @@ theorem finite_univ
 
 中文:
 定理 finite_univ
-  条件: [Finite α]
-  结论: (@univ α).Finite
+  条件: [有限 α]
+  结论: (@univ α).有限
   证明: Set.toFinite _
 -/
 @[simp] theorem finite_univ [Finite α] : (@univ α).Finite := Set.toFinite _
@@ -1828,7 +1828,7 @@ alias ⟨_root_.Finite.of_finite_univ, _⟩ := finite_univ_iff
 
 中文:
 定理 finite_univ_iff
-  结论: (@univ α).Finite ↔ Finite α
+  结论: (@univ α).有限 ↔ 有限 α
   证明: (Equiv.Set.univ α).finite_iff
 
 alias ⟨_root_.Finite.of_finite_univ, _⟩ := finite_univ_iff
@@ -1851,9 +1851,9 @@ theorem Finite.subset
   exact Finite.Set.subset _ ht
 
 中文:
-定理 Finite.subset
-  条件: {s : Set α} (hs : s.Finite) {t : Set α} (ht : t subseteq s)
-  结论: t.Finite
+定理 有限.subset
+  条件: {s : 集合 α} (hs : s.有限) {t : 集合 α} (ht : t subseteq s)
+  结论: t.有限
   证明: by
   have := hs.to_subtype
   exact Finite.Set.subset _ ht
@@ -1876,9 +1876,9 @@ theorem Finite.union
   apply toFinite
 
 中文:
-定理 Finite.union
-  条件: (hs : s.Finite) (ht : t.Finite)
-  结论: (s union t).Finite
+定理 有限.union
+  条件: (hs : s.有限) (ht : t.有限)
+  结论: (s union t).有限
   证明: by
   rw [Set.Finite] at hs ht
   apply toFinite
@@ -1901,9 +1901,9 @@ theorem Finite.finite_of_compl
   exact hs.union hsc
 
 中文:
-定理 Finite.finite_of_compl
-  条件: {s : Set α} (hs : s.Finite) (hsc : sᶜ.Finite)
-  结论: Finite α
+定理 有限.finite_of_compl
+  条件: {s : 集合 α} (hs : s.有限) (hsc : sᶜ.有限)
+  结论: 有限 α
   证明: by
   rw [← finite_univ_iff]; rw [← union_compl_self s]
   exact hs.union hsc
@@ -1924,9 +1924,9 @@ theorem Finite.sup
   proof: Finite.union
 
 中文:
-定理 Finite.sup
-  条件: {s t : Set α}
-  结论: s.Finite -> t.Finite -> (s ⊔ t).Finite
+定理 有限.上确界
+  条件: {s t : 集合 α}
+  结论: s.有限 -> t.有限 -> (s ⊔ t).有限
   证明: Finite.union
 
 Depends on / 依赖: Finite, Finite.union
@@ -1944,9 +1944,9 @@ theorem Finite.sep
   proof: hs.subset sep_subset _ _
 
 中文:
-定理 Finite.sep
-  条件: {s : Set α} (hs : s.Finite) (p : α -> 命题)
-  结论: { a in s | p a }.Finite
+定理 有限.sep
+  条件: {s : 集合 α} (hs : s.有限) (p : α -> 命题)
+  结论: { a in s | p a }.有限
   证明: hs.subset sep_subset _ _
 
 Depends on / 依赖: hs.subset, sep_subset, subset
@@ -1964,9 +1964,9 @@ theorem Finite.inter_of_left
   proof: hs.subset inter_subset_left
 
 中文:
-定理 Finite.inter_of_left
-  条件: {s : Set α} (hs : s.Finite) (t : Set α)
-  结论: (s inter t).Finite
+定理 有限.inter_of_left
+  条件: {s : 集合 α} (hs : s.有限) (t : 集合 α)
+  结论: (s inter t).有限
   证明: hs.subset inter_subset_left
 
 Depends on / 依赖: hs.subset, inter_subset_left, subset
@@ -1984,9 +1984,9 @@ theorem Finite.inter_of_right
   proof: hs.subset inter_subset_right
 
 中文:
-定理 Finite.inter_of_right
-  条件: {s : Set α} (hs : s.Finite) (t : Set α)
-  结论: (t inter s).Finite
+定理 有限.inter_of_right
+  条件: {s : 集合 α} (hs : s.有限) (t : 集合 α)
+  结论: (t inter s).有限
   证明: hs.subset inter_subset_right
 
 Depends on / 依赖: hs.subset, inter_subset_right, subset
@@ -2004,9 +2004,9 @@ theorem Finite.inf_of_left
   proof: h.inter_of_left t
 
 中文:
-定理 Finite.inf_of_left
-  条件: {s : Set α} (h : s.Finite) (t : Set α)
-  结论: (s ⊓ t).Finite
+定理 有限.inf_of_left
+  条件: {s : 集合 α} (h : s.有限) (t : 集合 α)
+  结论: (s ⊓ t).有限
   证明: h.inter_of_left t
 
 Depends on / 依赖: h.inter_of_left, inter_of_left
@@ -2024,9 +2024,9 @@ theorem Finite.inf_of_right
   proof: h.inter_of_right t
 
 中文:
-定理 Finite.inf_of_right
-  条件: {s : Set α} (h : s.Finite) (t : Set α)
-  结论: (t ⊓ s).Finite
+定理 有限.inf_of_right
+  条件: {s : 集合 α} (h : s.有限) (t : 集合 α)
+  结论: (t ⊓ s).有限
   证明: h.inter_of_right t
 
 Depends on / 依赖: h.inter_of_right, inter_of_right
@@ -2044,9 +2044,9 @@ lemma Infinite.mono
   proof: mt fun ht => ht.subset h
 
 中文:
-引理 Infinite.mono
-  条件: {s t : Set α} (h : s subseteq t)
-  结论: s.Infinite -> t.Infinite
+引理 无限.mono
+  条件: {s t : 集合 α} (h : s subseteq t)
+  结论: s.无限 -> t.无限
   证明: mt fun ht => ht.subset h
 -/
 protected lemma Infinite.mono {s t : Set α} (h : s subseteq t) : s.Infinite -> t.Infinite :=
@@ -2064,9 +2064,9 @@ theorem Finite.sdiff
 @[deprecated (since := "2026-06-03")] alias Finite.diff := Finite.sdiff
 
 中文:
-定理 Finite.sdiff
-  条件: (hs : s.Finite)
-  结论: (s \ t).Finite
+定理 有限.sdiff
+  条件: (hs : s.有限)
+  结论: (s \ t).有限
   证明: hs.subset sdiff_subset
 
 @[deprecated (since := "2026-06-03")] alias Finite.diff := Finite.sdiff
@@ -2089,9 +2089,9 @@ theorem Finite.of_sdiff
 @[simp]
 
 中文:
-定理 Finite.of_sdiff
-  条件: {s t : Set α} (hd : (s \ t).Finite) (ht : t.Finite)
-  结论: s.Finite
+定理 有限.of_sdiff
+  条件: {s t : 集合 α} (hd : (s \ t).有限) (ht : t.有限)
+  结论: s.有限
   证明: (hd.union ht).subset subset_sdiff_union _ _
 
 @[deprecated (since := "2026-06-03")] alias Finite.of_diff := Finite.of_sdiff
@@ -2116,9 +2116,9 @@ lemma Finite.symmDiff
   proof: hs.sdiff.union ht.sdiff
 
 中文:
-引理 Finite.symmDiff
-  条件: (hs : s.Finite) (ht : t.Finite)
-  结论: (s ∆ t).Finite
+引理 有限.symmDiff
+  条件: (hs : s.有限) (ht : t.有限)
+  结论: (s ∆ t).有限
   证明: hs.sdiff.union ht.sdiff
 
 Depends on / 依赖: hs.sdiff.union, ht.sdiff
@@ -2138,9 +2138,9 @@ lemma Finite.symmDiff_congr
 @[simp, grind .]
 
 中文:
-引理 Finite.symmDiff_congr
-  条件: (hst : (s ∆ t).Finite)
-  结论: (s ∆ u).Finite ↔ (t ∆ u).Finite where
+引理 有限.symmDiff_congr
+  条件: (hst : (s ∆ t).有限)
+  结论: (s ∆ u).有限 ↔ (t ∆ u).有限 where
   证明: (hst.union hsu).subset (symmDiff_comm s t ▸ symmDiff_triangle ..)
   mpr htu := (hst.union htu).subset (symmDiff_triangle ..)
 
@@ -2163,7 +2163,7 @@ theorem finite_empty
 
 中文:
 定理 finite_empty
-  结论: (∅ : Set α).Finite
+  结论: (∅ : 集合 α).有限
   证明: toFinite _
 
 Depends on / 依赖: toFinite
@@ -2185,9 +2185,9 @@ theorem Infinite.nonempty
 @[simp]
 
 中文:
-定理 Infinite.nonempty
-  条件: {s : Set α} (h : s.Infinite)
-  结论: s.Nonempty
+定理 无限.nonempty
+  条件: {s : 集合 α} (h : s.无限)
+  结论: s.非空
   证明: nonempty_iff_ne_empty.2 by
     rintro rfl
     exact h finite_empty
@@ -2212,7 +2212,7 @@ theorem finite_singleton
 中文:
 定理 finite_singleton
   条件: (a : α)
-  结论: ({a} : Set α).Finite
+  结论: ({a} : 集合 α).有限
   证明: toFinite _
 
 Depends on / 依赖: toFinite
@@ -2230,9 +2230,9 @@ theorem Finite.insert
   proof: (finite_singleton a).union hs
 
 中文:
-定理 Finite.insert
-  条件: (a : α) {s : Set α} (hs : s.Finite)
-  结论: (insert a s).Finite
+定理 有限.insert
+  条件: (a : α) {s : 集合 α} (hs : s.有限)
+  结论: (insert a s).有限
   证明: (finite_singleton a).union hs
 -/
 protected theorem Finite.insert (a : α) {s : Set α} (hs : s.Finite) : (insert a s).Finite :=
@@ -2249,7 +2249,7 @@ lemma finite_insert
 
 中文:
 引理 finite_insert
-  结论: (insert a s).Finite ↔ s.Finite where
+  结论: (insert a s).有限 ↔ s.有限 where
   证明: hs.subset subset_insert ..
   mpr := .insert _
 -/
@@ -2269,9 +2269,9 @@ theorem Finite.image
   apply toFinite
 
 中文:
-定理 Finite.image
-  条件: {s : Set α} (f : α -> β) (hs : s.Finite)
-  结论: (f '' s).Finite
+定理 有限.像
+  条件: {s : 集合 α} (f : α -> β) (hs : s.有限)
+  结论: (f '' s).有限
   证明: by
   have := hs.to_subtype
   apply toFinite
@@ -2291,8 +2291,8 @@ lemma Finite.of_surjOn
   proof: (hs.image _).subset hf
 
 中文:
-引理 Finite.of_surjOn
-  条件: {s : Set α} {t : Set β} (f : α -> β) (hf : SurjOn f s t) (hs : s.Finite)
+引理 有限.of_surjOn
+  条件: {s : 集合 α} {t : 集合 β} (f : α -> β) (hf : 满射限制 f s t) (hs : s.有限)
   证明: (hs.image _).subset hf
 
 Depends on / 依赖: hs.image, subset
@@ -2310,9 +2310,9 @@ theorem Finite.map
   proof: Finite.image
 
 中文:
-定理 Finite.map
-  条件: {α β} {s : Set α}
-  结论: 对任意 f : α -> β, s.Finite -> (f <$> s).Finite
+定理 有限.map
+  条件: {α β} {s : 集合 α}
+  结论: 对任意 f : α -> β, s.有限 -> (f <$> s).有限
   证明: Finite.image
 
 Depends on / 依赖: Finite, Finite.image
@@ -2330,8 +2330,8 @@ theorem Finite.of_finite_image
   .of_injective _ hi.bijOn_image.bijective.injective
 
 中文:
-定理 Finite.of_finite_image
-  条件: {s : Set α} {f : α -> β} (h : (f '' s).Finite) (hi : Set.InjOn f s)
+定理 有限.of_finite_image
+  条件: {s : 集合 α} {f : α -> β} (h : (f '' s).有限) (hi : 集合.单射限制 f s)
   证明: have := h.to_subtype
   .of_injective _ hi.bijOn_image.bijective.injective
 
@@ -2351,8 +2351,8 @@ theorem Finite.of_injOn
   proof: .of_finite_image (ht.subset (image_subset_iff.mpr hm)) hi
 
 中文:
-定理 Finite.of_injOn
-  结论: {f : α -> β} {s : Set α} {t : Set β} (hm : MapsTo f s t) (hi : InjOn f s)
+定理 有限.of_injOn
+  结论: {f : α -> β} {s : 集合 α} {t : 集合 β} (hm : 映射到 f s t) (hi : 单射限制 f s)
   证明: .of_finite_image (ht.subset (image_subset_iff.mpr hm)) hi
 
 Depends on / 依赖: ht.subset, image_subset_iff, image_subset_iff.mpr, of_finite_image, subset
@@ -2370,8 +2370,8 @@ theorem BijOn.finite_iff_finite
   proof: ⟨fun h1 => h1.of_surjOn _ h.2.2, fun h1 => h1.of_injOn h.1 h.2.1⟩
 
 中文:
-定理 BijOn.finite_iff_finite
-  条件: {f : α -> β} {s : Set α} {t : Set β} (h : BijOn f s t)
+定理 双射限制.finite_iff_finite
+  条件: {f : α -> β} {s : 集合 α} {t : 集合 β} (h : 双射限制 f s t)
   证明: ⟨fun h1 => h1.of_surjOn _ h.2.2, fun h1 => h1.of_injOn h.1 h.2.1⟩
 
 Depends on / 依赖: h1.of_injOn, h1.of_surjOn, of_injOn, of_surjOn
@@ -2396,8 +2396,8 @@ theorem finite_of_finite_preimage
 
 中文:
 定理 finite_of_finite_preimage
-  条件: (h : (f ⁻¹' s).Finite) (hs : s subseteq range f)
-  结论: s.Finite
+  条件: (h : (f ⁻¹' s).有限) (hs : s subseteq range f)
+  结论: s.有限
   证明: by
   rw [← image_preimage_eq_of_subset hs]
   exact Finite.image f h
@@ -2418,9 +2418,9 @@ theorem Finite.of_preimage
   proof: hf.image_preimage s ▸ h.image _
 
 中文:
-定理 Finite.of_preimage
-  条件: (h : (f ⁻¹' s).Finite) (hf : Surjective f)
-  结论: s.Finite
+定理 有限.of_preimage
+  条件: (h : (f ⁻¹' s).有限) (hf : 满射 f)
+  结论: s.有限
   证明: hf.image_preimage s ▸ h.image _
 
 Depends on / 依赖: h.image, hf.image_preimage, image_preimage
@@ -2438,9 +2438,9 @@ theorem Finite.preimage
   proof: (h.subset (image_preimage_subset f s)).of_finite_image I
 
 中文:
-定理 Finite.preimage
-  条件: (I : Set.InjOn f (f ⁻¹' s)) (h : s.Finite)
-  结论: (f ⁻¹' s).Finite
+定理 有限.原像
+  条件: (I : 集合.单射限制 f (f ⁻¹' s)) (h : s.有限)
+  结论: (f ⁻¹' s).有限
   证明: (h.subset (image_preimage_subset f s)).of_finite_image I
 
 Depends on / 依赖: h.subset, image_preimage_subset, of_finite_image, subset
@@ -2458,9 +2458,9 @@ lemma Infinite.preimage
   proof: fun h => hs finite_of_finite_preimage h hf
 
 中文:
-引理 Infinite.preimage
-  条件: (hs : s.Infinite) (hf : s subseteq range f)
-  结论: (f ⁻¹' s).Infinite
+引理 无限.原像
+  条件: (hs : s.无限) (hf : s subseteq range f)
+  结论: (f ⁻¹' s).无限
   证明: fun h => hs finite_of_finite_preimage h hf
 -/
 protected lemma Infinite.preimage (hs : s.Infinite) (hf : s subseteq range f) : (f ⁻¹' s).Infinite :=
@@ -2476,9 +2476,9 @@ lemma Infinite.preimage'
   proof: (hs.preimage inter_subset_right).mono preimage_mono inter_subset_left
 
 中文:
-引理 Infinite.preimage'
-  条件: (hs : (s inter range f).Infinite)
-  结论: (f ⁻¹' s).Infinite
+引理 无限.原像'
+  条件: (hs : (s inter range f).无限)
+  结论: (f ⁻¹' s).无限
   证明: (hs.preimage inter_subset_right).mono preimage_mono inter_subset_left
 
 Depends on / 依赖: hs.preimage, inter_subset_left, inter_subset_right, le_top, mod_cast, preimage, preimage_mono
@@ -2496,9 +2496,9 @@ theorem Finite.preimage_embedding
   proof: h.preimage fun _ _ _ _ h' => f.injective h'
 
 中文:
-定理 Finite.preimage_embedding
-  条件: {s : Set β} (f : α ↪ β) (h : s.Finite)
-  结论: (f ⁻¹' s).Finite
+定理 有限.preimage_embedding
+  条件: {s : 集合 β} (f : α ↪ β) (h : s.有限)
+  结论: (f ⁻¹' s).有限
   证明: h.preimage fun _ _ _ _ h' => f.injective h'
 
 Depends on / 依赖: f.injective, h.preimage, injective, le_top, mod_cast, preimage
@@ -2520,7 +2520,7 @@ theorem finite_lt_nat
 中文:
 定理 finite_lt_nat
   条件: (n : 自然数)
-  结论: Set.Finite { i | i < n }
+  结论: 集合.有限 { i | i < n }
   证明: toFinite _
 
 Depends on / 依赖: LEInfty, toFinite
@@ -2540,7 +2540,7 @@ theorem finite_le_nat
 中文:
 定理 finite_le_nat
   条件: (n : 自然数)
-  结论: Set.Finite { i | i <= n }
+  结论: 集合.有限 { i | i <= n }
   证明: toFinite _
 
 Depends on / 依赖: toFinite
@@ -2564,8 +2564,8 @@ theorem Finite.surjOn_iff_bijOn_of_mapsTo
   exact hm.restrict_inj.mp (Finite.injective_iff_surjective.mpr <| hm.restrict_surjective_iff.mpr h)
 
 中文:
-定理 Finite.surjOn_iff_bijOn_of_mapsTo
-  条件: (hs : s.Finite) (hm : MapsTo f s s)
+定理 有限.surjOn_iff_bijOn_of_mapsTo
+  条件: (hs : s.有限) (hm : 映射到 f s s)
   证明: by
   refine ⟨fun h => ⟨hm, ?_, h⟩, BijOn.surjOn⟩
   have : Finite s := finite_coe_iff.mpr hs
@@ -2591,8 +2591,8 @@ theorem Finite.injOn_iff_bijOn_of_mapsTo
   exact hm.restrict_surjective_iff.mp (Finite.injective_iff_surjective.mp <| hm.restrict_inj.mpr h)
 
 中文:
-定理 Finite.injOn_iff_bijOn_of_mapsTo
-  条件: (hs : s.Finite) (hm : MapsTo f s s)
+定理 有限.injOn_iff_bijOn_of_mapsTo
+  条件: (hs : s.有限) (hm : 映射到 f s s)
   证明: by
   refine ⟨fun h => ⟨hm, h, ?_⟩, BijOn.injOn⟩
   have : Finite s := finite_coe_iff.mpr hs
@@ -2619,8 +2619,8 @@ theorem finite_mem_finset
 
 中文:
 定理 finite_mem_finset
-  条件: (s : Finset α)
-  结论: { a | a in s }.Finite
+  条件: (s : 有限集 α)
+  结论: { a | a in s }.有限
   证明: toFinite _
 
 Depends on / 依赖: IsManifold, IsManifold.of_le, le_top, of_le, toFinite
@@ -2638,9 +2638,9 @@ theorem Subsingleton.finite
   proof: h.induction_on finite_empty finite_singleton
 
 中文:
-定理 Subsingleton.finite
-  条件: {s : Set α} (h : s.Subsingleton)
-  结论: s.Finite
+定理 子单例.finite
+  条件: {s : 集合 α} (h : s.子单例)
+  结论: s.有限
   证明: h.induction_on finite_empty finite_singleton
 
 Depends on / 依赖: finite_empty, finite_singleton, h.induction_on, induction_on
@@ -2658,9 +2658,9 @@ theorem Infinite.nontrivial
   proof: not_subsingleton_iff.1 mt Subsingleton.finite hs
 
 中文:
-定理 Infinite.nontrivial
-  条件: {s : Set α} (hs : s.Infinite)
-  结论: s.Nontrivial
+定理 无限.nontrivial
+  条件: {s : 集合 α} (hs : s.无限)
+  结论: s.非平凡
   证明: not_subsingleton_iff.1 mt Subsingleton.finite hs
 
 Depends on / 依赖: Subsingleton, Subsingleton.finite, finite, not_subsingleton_iff
@@ -2679,7 +2679,7 @@ theorem finite_preimage_inl_and_inr
 
 中文:
 定理 finite_preimage_inl_and_inr
-  条件: {s : Set (α oplus β)}
+  条件: {s : 集合 (α oplus β)}
   证明: ⟨fun h => image_preimage_inl_union_image_preimage_inr s ▸ (h.1.image _).union (h.2.image _),
     fun h => ⟨h.preimage Sum.inl_injective.injOn, h.preimage Sum.inr_injective.injOn⟩⟩
 
@@ -2700,8 +2700,8 @@ theorem exists_finite_iff_finset
     ⟨s, s.finite_toSet, hs⟩⟩
 
 中文:
-定理 exists_finite_iff_finset
-  条件: {p : Set α -> 命题}
+定理 存在_finite_iff_finset
+  条件: {p : 集合 α -> 命题}
   证明: ⟨fun ⟨_, hs, hps⟩ => ⟨hs.toFinset, hs.coe_toFinset.symm ▸ hps⟩, fun ⟨s, hs⟩ =>
     ⟨s, s.finite_toSet, hs⟩⟩
 
@@ -2725,8 +2725,8 @@ theorem exists_subset_image_finite_and
   aesop
 
 中文:
-定理 exists_subset_image_finite_and
-  条件: {f : α -> β} {s : Set α} {p : Set β -> 命题}
+定理 存在_subset_image_finite_and
+  条件: {f : α -> β} {s : 集合 α} {p : 集合 β -> 命题}
   证明: by
   classical
   simp_rw [@and_comm ((_ : Set _) subseteq _), and_assoc, exists_finite_iff_finset, @and_comm (p _),
@@ -2752,7 +2752,7 @@ theorem finite_range_ite
 
 中文:
 定理 finite_range_ite
-  结论: {p : α -> 命题} [DecidablePred p] {f g : α -> β} (hf : (range f).Finite)
+  结论: {p : α -> 命题} [DecidablePred p] {f g : α -> β} (hf : (range f).有限)
   证明: (hf.union hg).subset range_ite_subset
 
 Depends on / 依赖: hf.union, range_ite_subset, subset
@@ -2773,7 +2773,7 @@ theorem finite_range_const
 中文:
 定理 finite_range_const
   条件: {c : β}
-  结论: (range fun _ : α => c).Finite
+  结论: (range fun _ : α => c).有限
   证明: (finite_singleton c).subset range_const_subset
 
 Depends on / 依赖: finite_singleton, range_const_subset, subset
@@ -2795,8 +2795,8 @@ instance Finite.inhabited
 @[simp]
 
 中文:
-实例 Finite.inhabited
-  签名: : Inhabited { s : Set α // s.Finite }
+实例 有限.inhabited
+  签名: : 可居 { s : 集合 α // s.有限 }
   定义体: ⟨⟨∅, finite_empty⟩⟩
 
 @[simp]
@@ -2819,8 +2819,8 @@ theorem finite_union
 
 中文:
 定理 finite_union
-  条件: {s t : Set α}
-  结论: (s union t).Finite ↔ s.Finite ∧ t.Finite
+  条件: {s t : 集合 α}
+  结论: (s union t).有限 ↔ s.有限 ∧ t.有限
   证明: ⟨fun h => ⟨h.subset subset_union_left, h.subset subset_union_right⟩, fun ⟨hs, ht⟩ =>
     hs.union ht⟩
 
@@ -2841,8 +2841,8 @@ theorem finite_image_iff
 
 中文:
 定理 finite_image_iff
-  条件: {s : Set α} {f : α -> β} (hi : InjOn f s)
-  结论: (f '' s).Finite ↔ s.Finite
+  条件: {s : 集合 α} {f : α -> β} (hi : 单射限制 f s)
+  结论: (f '' s).有限 ↔ s.有限
   证明: ⟨fun h => h.of_finite_image hi, Finite.image _⟩
 
 Depends on / 依赖: Finite, Finite.image, h.of_finite_image, of_finite_image
@@ -2862,8 +2862,8 @@ lemma finite_range_iff
 
 中文:
 引理 finite_range_iff
-  条件: {f : α -> β} (hf : f.Injective)
-  结论: (range f).Finite ↔ Finite α
+  条件: {f : α -> β} (hf : f.单射)
+  结论: (range f).有限 ↔ 有限 α
   证明: by
   simpa [finite_univ_iff] using finite_image_iff (s := univ) hf.injOn
 
@@ -2882,7 +2882,7 @@ theorem univ_finite_iff_nonempty_fintype
 
 中文:
 定理 univ_finite_iff_nonempty_fintype
-  结论: (univ : Set α).Finite ↔ Nonempty (Fintype α)
+  结论: (univ : 集合 α).有限 ↔ 非空 (有限类型 α)
   证明: ⟨fun h => ⟨fintypeOfFiniteUniv h⟩, fun ⟨_i⟩ => finite_univ⟩
 
 Depends on / 依赖: finite_univ, fintypeOfFiniteUniv
@@ -2902,8 +2902,8 @@ theorem Finite.toFinset_singleton
 @[simp]
 
 中文:
-定理 Finite.toFinset_singleton
-  条件: {a : α} (ha : ({a} : Set α).Finite := finite_singleton _)
+定理 有限.toFinset_singleton
+  条件: {a : α} (ha : ({a} : 集合 α).有限 := finite_singleton _)
   证明: Set.toFinite_toFinset _
 
 @[simp]
@@ -2924,8 +2924,8 @@ theorem Finite.toFinset_insert
   proof: Finset.ext by simp
 
 中文:
-定理 Finite.toFinset_insert
-  条件: [DecidableEq α] {s : Set α} {a : α} (hs : (insert a s).Finite)
+定理 有限.toFinset_insert
+  条件: [DecidableEq α] {s : 集合 α} {a : α} (hs : (insert a s).有限)
   证明: Finset.ext by simp
 
 Depends on / 依赖: Finset, Finset.ext
@@ -2943,8 +2943,8 @@ theorem Finite.toFinset_insert'
   proof: Finite.toFinset_insert _
 
 中文:
-定理 Finite.toFinset_insert'
-  条件: [DecidableEq α] {a : α} {s : Set α} (hs : s.Finite)
+定理 有限.toFinset_insert'
+  条件: [DecidableEq α] {a : α} {s : 集合 α} (hs : s.有限)
   证明: Finite.toFinset_insert _
 
 Depends on / 依赖: Finite, Finite.toFinset_insert, toFinset_insert
@@ -2966,8 +2966,8 @@ x.casesOn (fun _ => Or.inl rfl) fun _ hx => Or.inr mem_image_of_mem _ hx⟩
 
 中文:
 定理 finite_option
-  条件: {s : Set (Option α)}
-  结论: s.Finite ↔ { x : α | some x in s }.Finite
+  条件: {s : 集合 (选项类型 α)}
+  结论: s.有限 ↔ { x : α | some x in s }.有限
   证明: ⟨fun h => h.preimage_embedding Embedding.some, fun h =>
     ((h.image some).insert none).subset fun x =>
 x.casesOn (fun _ => Or.inl rfl) fun _ hx => Or.inr mem_image_of_mem _ hx⟩
@@ -2998,8 +2998,8 @@ theorem Finite.induction_on
   | cons a s ha ih => simpa using @insert a s ha (Set.toFinite _) (ih _)
 
 中文:
-定理 Finite.induction_on
-  结论: {motive : 对任意 s : Set α, s.Finite -> 命题} (s : Set α) (hs : s.Finite)
+定理 有限.induction_on
+  结论: {motive : 对任意 s : 集合 α, s.有限 -> 命题} (s : 集合 α) (hs : s.有限)
   证明: by
   lift s to Finset α using hs
   induction s using Finset.cons_induction_on with
@@ -3038,8 +3038,8 @@ theorem Finite.induction_on_subset
   exact insert haS.1 haS.2 has (hCs haS.2)
 
 中文:
-定理 Finite.induction_on_subset
-  结论: {motive : 对任意 s : Set α, s.Finite -> 命题} (s : Set α)
+定理 有限.induction_on_subset
+  结论: {motive : 对任意 s : 集合 α, s.有限 -> 命题} (s : 集合 α)
   证明: by
   refine Set.Finite.induction_on (motive := fun t _ => forall hts : t subseteq s, motive t (hs.subset hts)) s hs
     (fun _ => empty) ?_ .rfl
@@ -3078,8 +3078,8 @@ theorem seq_of_forall_finite_exists
   convert! hc (u '' Iio n) ((finite_l
 
 中文:
-定理 seq_of_forall_finite_exists
-  结论: {γ : 类型} {P : γ -> Set γ -> 命题}
+定理 seq_of_对任意_finite_存在
+  结论: {γ : 类型} {P : γ -> 集合 γ -> 命题}
   证明: by
   have : Nonempty γ := (h ∅ finite_empty).nonempty
   choose! c hc using h
@@ -3114,7 +3114,7 @@ theorem card_empty
 
 中文:
 定理 card_empty
-  结论: Fintype.card (∅ : Set α) = 0
+  结论: 有限类型.card (∅ : 集合 α) = 0
   证明: rfl
 -/
 theorem card_empty : Fintype.card (∅ : Set α) = 0 :=
@@ -3132,7 +3132,7 @@ theorem card_fintypeInsertOfNotMem
 
 中文:
 定理 card_fintypeInsertOfNotMem
-  条件: {a : α} (s : Set α) [Fintype s] (h : a ∉ s)
+  条件: {a : α} (s : 集合 α) [有限类型 s] (h : a ∉ s)
   证明: by
   simp [Fintype.card_ofFinset]
 
@@ -3153,7 +3153,7 @@ theorem card_insert
 
 中文:
 定理 card_insert
-  结论: {a : α} (s : Set α) [Fintype s] (h : a ∉ s)
+  结论: {a : α} (s : 集合 α) [有限类型 s] (h : a ∉ s)
   证明: by
   rw [← card_fintypeInsertOfNotMem s h]; congr!
 
@@ -3179,7 +3179,7 @@ theorem card_image_of_inj_on
 
 中文:
 定理 card_image_of_inj_on
-  结论: {s : Set α} [Fintype s] {f : α -> β} [Fintype (f '' s)]
+  结论: {s : 集合 α} [有限类型 s] {f : α -> β} [有限类型 (f '' s)]
   证明: haveI := Classical.propDecidable
   calc
     Fintype.card (f '' s) = (s.toFinset.image f).card := Fintype.card_of_finset' _ (by simp)
@@ -3212,7 +3212,7 @@ theorem card_image_of_injective
 
 中文:
 定理 card_image_of_injective
-  结论: (s : Set α) [Fintype s] {f : α -> β} [Fintype (f '' s)]
+  结论: (s : 集合 α) [有限类型 s] {f : α -> β} [有限类型 (f '' s)]
   证明: card_image_of_inj_on fun _ _ _ _ h => H h
 
 @[simp]
@@ -3236,7 +3236,7 @@ theorem card_singleton
 中文:
 定理 card_singleton
   条件: (a : α)
-  结论: Fintype.card ({a} : Set α) = 1
+  结论: 有限类型.card ({a} : 集合 α) = 1
   证明: rfl
 -/
 theorem card_singleton (a : α) : Fintype.card ({a} : Set α) = 1 :=
@@ -3253,7 +3253,7 @@ theorem card_lt_card
 
 中文:
 定理 card_lt_card
-  条件: {s t : Set α} [Fintype s] [Fintype t] (h : s ⊂ t)
+  条件: {s t : 集合 α} [有限类型 s] [有限类型 t] (h : s ⊂ t)
   证明: Fintype.card_lt_of_injective_not_surjective (Set.inclusion h.1) (Set.inclusion_injective h.1)
     fun hst => (ssubset_iff_subset_ne.1 h).2 (eq_of_inclusion_surjective hst)
 
@@ -3274,7 +3274,7 @@ theorem card_le_card
 
 中文:
 定理 card_le_card
-  条件: {s t : Set α} [Fintype s] [Fintype t] (hsub : s subseteq t)
+  条件: {s t : 集合 α} [有限类型 s] [有限类型 t] (hsub : s subseteq t)
   证明: Fintype.card_le_of_injective (Set.inclusion hsub) (Set.inclusion_injective hsub)
 
 Depends on / 依赖: Fintype, Fintype.card_le_of_injective, Set.inclusion, Set.inclusion_injective, card_le_of_injective, inclusion, inclusion_injective
@@ -3293,7 +3293,7 @@ theorem eq_of_subset_of_card_le
 
 中文:
 定理 eq_of_subset_of_card_le
-  结论: {s t : Set α} [Fintype s] [Fintype t] (hsub : s subseteq t)
+  结论: {s t : 集合 α} [有限类型 s] [有限类型 t] (hsub : s subseteq t)
   证明: (eq_or_ssubset_of_subset hsub).elim id fun h => absurd hcard not_le_of_gt card_lt_card h
 
 Depends on / 依赖: absurd, card_lt_card, eq_or_ssubset_of_subset, not_le_of_gt
@@ -3312,7 +3312,7 @@ theorem card_range_of_injective
 
 中文:
 定理 card_range_of_injective
-  条件: [Fintype α] {f : α -> β} (hf : Injective f) [Fintype (range f)]
+  条件: [有限类型 α] {f : α -> β} (hf : 单射 f) [有限类型 (range f)]
   证明: Eq.symm Fintype.card_congr Equiv.ofInjective f hf
 
 Depends on / 依赖: Eq.symm, Equiv.ofInjective, Fintype, Fintype.card_congr, card_congr, ofInjective
@@ -3330,8 +3330,8 @@ theorem Finite.card_toFinset
   proof: Eq.symm Fintype.card_of_finset' _ fun _ => h.mem_toFinset
 
 中文:
-定理 Finite.card_toFinset
-  条件: {s : Set α} [Fintype s] (h : s.Finite)
+定理 有限.card_toFinset
+  条件: {s : 集合 α} [有限类型 s] (h : s.有限)
   证明: Eq.symm Fintype.card_of_finset' _ fun _ => h.mem_toFinset
 
 Depends on / 依赖: Eq.symm, Fintype, Fintype.card_of_finset, card_of_finset, h.mem_toFinset, mem_toFinset
@@ -3352,7 +3352,7 @@ theorem card_ne_eq
 
 中文:
 定理 card_ne_eq
-  条件: [Fintype α] (a : α) [Fintype { x : α | x != a }]
+  条件: [有限类型 α] (a : α) [有限类型 { x : α | x != a }]
   证明: by
   have := Classical.decEq α
   rw [← toFinset_card]; rw [toFinset_ofPred]; rw [Finset.filter_ne']; rw [Finset.card_erase_of_mem (Finset.mem_univ _)]; rw [Finset.card_univ]
@@ -3379,7 +3379,7 @@ theorem infinite_univ_iff
 
 中文:
 定理 infinite_univ_iff
-  结论: (@univ α).Infinite ↔ Infinite α
+  结论: (@univ α).无限 ↔ 无限 α
   证明: by
   rw [Set.Infinite]; rw [finite_univ_iff]; rw [not_finite_iff_infinite]
 
@@ -3399,8 +3399,8 @@ theorem infinite_univ
 
 中文:
 定理 infinite_univ
-  条件: [h : Infinite α]
-  结论: (@univ α).Infinite
+  条件: [h : 无限 α]
+  结论: (@univ α).无限
   证明: infinite_univ_iff.2 h
 
 Depends on / 依赖: infinite_univ_iff
@@ -3419,8 +3419,8 @@ lemma Infinite.exists_notMem_finite
 by_contra! h; exact hs ht.subset h
 
 中文:
-引理 Infinite.exists_notMem_finite
-  条件: (hs : s.Infinite) (ht : t.Finite)
+引理 无限.存在_notMem_finite
+  条件: (hs : s.无限) (ht : t.有限)
   结论: 存在 a, a in s ∧ a ∉ t
   证明: by
 by_contra! h; exact hs ht.subset h
@@ -3440,8 +3440,8 @@ lemma Infinite.exists_notMem_finset
   proof: hs.exists_notMem_finite t.finite_toSet
 
 中文:
-引理 Infinite.exists_notMem_finset
-  条件: (hs : s.Infinite) (t : Finset α)
+引理 无限.存在_notMem_finset
+  条件: (hs : s.无限) (t : 有限集 α)
   结论: 存在 a in s, a ∉ t
   证明: hs.exists_notMem_finite t.finite_toSet
 -/
@@ -3462,8 +3462,8 @@ lemma Finite.exists_notMem
   by_contra! h; exact infinite_univ (hs.subset fun a _ => h _)
 
 中文:
-引理 Finite.exists_notMem
-  条件: (hs : s.Finite)
+引理 有限.存在_notMem
+  条件: (hs : s.有限)
   结论: 存在 a, a ∉ s
   证明: by
   by_contra! h; exact infinite_univ (hs.subset fun a _ => h _)
@@ -3483,8 +3483,8 @@ lemma _root_.Finset.exists_notMem
   proof: s.finite_toSet.exists_notMem
 
 中文:
-引理 _root_.Finset.exists_notMem
-  条件: (s : Finset α)
+引理 _root_.有限集.存在_notMem
+  条件: (s : 有限集 α)
   结论: 存在 a, a ∉ s
   证明: s.finite_toSet.exists_notMem
 
@@ -3503,8 +3503,8 @@ definition Infinite.natEmbedding
   body: h.to_subtype.natEmbedding
 
 中文:
-定义 Infinite.natEmbedding
-  签名: (s : Set α) (h : s.Infinite)
+定义 无限.natEmbedding
+  签名: (s : 集合 α) (h : s.无限)
   定义体: h.to_subtype.natEmbedding
 -/
 noncomputable def Infinite.natEmbedding (s : Set α) (h : s.Infinite) : Nat ↪ s :=
@@ -3519,8 +3519,8 @@ theorem Infinite.exists_subset_card_eq
   proof: ⟨((Finset.range n).map (hs.natEmbedding _)).map (Embedding.subtype _), by simp⟩
 
 中文:
-定理 Infinite.exists_subset_card_eq
-  条件: {s : Set α} (hs : s.Infinite) (n : 自然数)
+定理 无限.存在_subset_card_eq
+  条件: {s : 集合 α} (hs : s.无限) (n : 自然数)
   证明: ⟨((Finset.range n).map (hs.natEmbedding _)).map (Embedding.subtype _), by simp⟩
 -/
 theorem Infinite.exists_subset_card_eq {s : Set α} (hs : s.Infinite) (n : Nat) :
@@ -3539,8 +3539,8 @@ theorem infinite_of_finite_compl
 
 中文:
 定理 infinite_of_finite_compl
-  条件: [Infinite α] {s : Set α} (hs : sᶜ.Finite)
-  结论: s.Infinite
+  条件: [无限 α] {s : 集合 α} (hs : sᶜ.有限)
+  结论: s.无限
   证明: fun h =>
   Set.infinite_univ (α := α) (by simpa using hs.union h)
 -/
@@ -3558,9 +3558,9 @@ theorem Finite.infinite_compl
   Set.infinite_univ (α := α) (by simpa using hs.union h)
 
 中文:
-定理 Finite.infinite_compl
-  条件: [Infinite α] {s : Set α} (hs : s.Finite)
-  结论: sᶜ.Infinite
+定理 有限.infinite_compl
+  条件: [无限 α] {s : 集合 α} (hs : s.有限)
+  结论: sᶜ.无限
   证明: fun h =>
   Set.infinite_univ (α := α) (by simpa using hs.union h)
 -/
@@ -3578,8 +3578,8 @@ theorem Infinite.sdiff
 @[deprecated (since := "2026-06-03")] alias Infinite.diff := Infinite.sdiff
 
 中文:
-定理 Infinite.sdiff
-  条件: {s t : Set α} (hs : s.Infinite) (ht : t.Finite)
+定理 无限.sdiff
+  条件: {s t : 集合 α} (hs : s.无限) (ht : t.有限)
   证明: fun h => hs h.of_sdiff ht
 
 @[deprecated (since := "2026-06-03")] alias Infinite.diff := Infinite.sdiff
@@ -3606,8 +3606,8 @@ alias Infinite.inter_of_finite_diff := Infinite.inter_of_finite_sdiff
 @[simp]
 
 中文:
-引理 Infinite.inter_of_finite_sdiff
-  结论: {α : 类型} {s t : Set α} (hs : s.Infinite)
+引理 无限.inter_of_finite_sdiff
+  结论: {α : 类型} {s t : 集合 α} (hs : s.无限)
   证明: by
   simpa using hs.sdiff ht
 
@@ -3638,8 +3638,8 @@ theorem infinite_union
 
 中文:
 定理 infinite_union
-  条件: {s t : Set α}
-  结论: (s union t).Infinite ↔ s.Infinite ∨ t.Infinite
+  条件: {s t : 集合 α}
+  结论: (s union t).无限 ↔ s.无限 ∨ t.无限
   证明: by
   simp only [Set.Infinite, finite_union, not_and_or]
 
@@ -3658,9 +3658,9 @@ theorem Infinite.of_image
   proof: mt (Finite.image f) hs
 
 中文:
-定理 Infinite.of_image
-  条件: (f : α -> β) {s : Set α} (hs : (f '' s).Infinite)
-  结论: s.Infinite
+定理 无限.of_image
+  条件: (f : α -> β) {s : 集合 α} (hs : (f '' s).无限)
+  结论: s.无限
   证明: mt (Finite.image f) hs
 
 Depends on / 依赖: Finite, Finite.image
@@ -3678,7 +3678,7 @@ theorem infinite_image_iff
 
 中文:
 定理 infinite_image_iff
-  条件: {s : Set α} {f : α -> β} (hi : InjOn f s)
+  条件: {s : 集合 α} {f : α -> β} (hi : 单射限制 f s)
   证明: not_congr finite_image_iff hi
 
 Depends on / 依赖: finite_image_iff, not_congr
@@ -3701,8 +3701,8 @@ protected alias ⟨_, Infinite.image⟩ := infinite_image_iff
 
 中文:
 定理 infinite_range_iff
-  条件: {f : α -> β} (hf : Injective f)
-  结论: (range f).Infinite ↔ Infinite α
+  条件: {f : α -> β} (hf : 单射 f)
+  结论: (range f).无限 ↔ 无限 α
   证明: by
   simpa using (finite_range_iff hf).not
 
@@ -3725,7 +3725,7 @@ theorem infinite_of_injOn_mapsTo
 
 中文:
 定理 infinite_of_injOn_mapsTo
-  结论: {s : Set α} {t : Set β} {f : α -> β} (hi : InjOn f s)
+  结论: {s : 集合 α} {t : 集合 β} {f : α -> β} (hi : 单射限制 f s)
   证明: ((infinite_image_iff hi).2 hs).mono (mapsTo_iff_image_subset.mp hm)
 
 Depends on / 依赖: infinite_image_iff, mapsTo_iff_image_subset, mapsTo_iff_image_subset.mp
@@ -3745,8 +3745,8 @@ theorem Infinite.exists_ne_map_eq_of_mapsTo
   exact infinite_of_injOn_mapsTo (fun x hx y hy => not_imp_not.1 (ht x hx y hy)) hf hs
 
 中文:
-定理 Infinite.exists_ne_map_eq_of_mapsTo
-  结论: {s : Set α} {t : Set β} {f : α -> β} (hs : s.Infinite)
+定理 无限.存在_ne_map_eq_of_mapsTo
+  结论: {s : 集合 α} {t : 集合 β} {f : α -> β} (hs : s.无限)
   证明: by
   contrapose! ht
   exact infinite_of_injOn_mapsTo (fun x hx y hy => not_imp_not.1 (ht x hx y hy)) hf hs
@@ -3770,7 +3770,7 @@ theorem infinite_range_of_injective
 
 中文:
 定理 infinite_range_of_injective
-  条件: [Infinite α] {f : α -> β} (hi : Injective f)
+  条件: [无限 α] {f : α -> β} (hi : 单射 f)
   证明: by
   rw [← image_univ]; rw [infinite_image_iff hi.injOn]
   exact infinite_univ
@@ -3793,8 +3793,8 @@ theorem infinite_of_injective_forall_mem
   exact (infinite_range_of_injective hi).mono hf
 
 中文:
-定理 infinite_of_injective_forall_mem
-  结论: [Infinite α] {s : Set β} {f : α -> β} (hi : Injective f)
+定理 infinite_of_injective_对任意_mem
+  结论: [无限 α] {s : 集合 β} {f : α -> β} (hi : 单射 f)
   证明: by
   rw [← range_subset_iff] at hf
   exact (infinite_range_of_injective hi).mono hf
@@ -3823,7 +3823,7 @@ theorem not_injOn_infinite_finite_image
 
 中文:
 定理 not_injOn_infinite_finite_image
-  结论: {f : α -> β} {s : Set α} (h_inf : s.Infinite)
+  结论: {f : α -> β} {s : 集合 α} (h_inf : s.无限)
   证明: by
   have : Finite (f '' s) := finite_coe_iff.mpr h_fin
   have : Infinite s := infinite_coe_iff.mpr h_inf
@@ -3878,9 +3878,9 @@ lemma exists_card_eq
     exact ⟨insert a s, card_insert_of_notMem ha⟩
 
 中文:
-引理 exists_card_eq
-  条件: [Infinite α]
-  结论: 对任意 n : 自然数, 存在 s : Finset α, s.card = n
+引理 存在_card_eq
+  条件: [无限 α]
+  结论: 对任意 n : 自然数, 存在 s : 有限集 α, s.card = n
   证明: exists_card_eq n
     obtain ⟨a, ha⟩ := s.exists_notMem
     exact ⟨insert a s, card_insert_of_notMem ha⟩
@@ -3907,7 +3907,7 @@ lemma exists_subset_injOn_image_eq_of_surjOn
   simpa [← Finset.coe_inj]
 
 中文:
-引理 exists_subset_injOn_image_eq_of_surjOn
+引理 存在_subset_injOn_image_eq_of_surjOn
   结论: [DecidableEq β] {f : α -> β}
   证明: by
   obtain ⟨u, hus, hf, himg⟩ := hfs.exists_subset_injOn_image_eq
@@ -3942,9 +3942,9 @@ lemma Finite.of_forall_not_lt_lt
   simpa [hne] using eq_or_eq_or_eq_of_forall_not_lt_lt h z x y
 
 中文:
-引理 Finite.of_forall_not_lt_lt
-  条件: (h : 对任意 ⦃x y z : α⦄, x < y -> y < z -> False)
-  结论: Finite α
+引理 有限.of_对任意_not_lt_lt
+  条件: (h : 对任意 ⦃x y z : α⦄, x < y -> y < z -> 假)
+  结论: 有限 α
   证明: by
   nontriviality α
   rcases exists_pair_ne α with ⟨x, y, hne⟩
@@ -3968,8 +3968,8 @@ lemma Set.finite_of_forall_not_lt_lt
   proof: @Set.toFinite _ s Finite.of_forall_not_lt_lt by simpa only [SetCoe.forall'] using! h
 
 中文:
-引理 Set.finite_of_forall_not_lt_lt
-  条件: (h : 对任意 x in s, 对任意 y in s, 对任意 z in s, x < y -> y < z -> False)
+引理 集合.finite_of_对任意_not_lt_lt
+  条件: (h : 对任意 x in s, 对任意 y in s, 对任意 z in s, x < y -> y < z -> 假)
   证明: @Set.toFinite _ s Finite.of_forall_not_lt_lt by simpa only [SetCoe.forall'] using! h
 
 Depends on / 依赖: Finite, Finite.of_forall_not_lt_lt, Set.toFinite, SetCoe, SetCoe.forall, of_forall_not_lt_lt, toFinite

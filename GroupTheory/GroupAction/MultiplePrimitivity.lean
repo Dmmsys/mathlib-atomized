@@ -94,7 +94,7 @@ theorem isPreprimitive_ofFixingSubgroup_conj_iff
 
 中文:
 定理 isPreprimitive_ofFixingSubgroup_conj_iff
-  条件: {s : Set α} {g : G}
+  条件: {s : 集合 α} {g : G}
   证明: isPreprimitive_congr
     (fixingSubgroupEquivFixingSubgroup rfl).surjective
     conjMap_ofFixingSubgroup_bijective
@@ -122,7 +122,7 @@ theorem isPreprimitive_fixingSubgroup_insert_iff
 
 中文:
 定理 isPreprimitive_fixingSubgroup_insert_iff
-  条件: {a : α} {t : Set (ofStabilizer G a)}
+  条件: {a : α} {t : 集合 (ofStabilizer G a)}
   证明: isPreprimitive_congr (fixingSubgroupInsertEquiv a t).surjective
     ofFixingSubgroup_insert_map_bijective
 
@@ -152,10 +152,10 @@ class _root_.AddAction.IsMultiplyPreprimitive
     - isPreprimitive_ofFixingAddSubgroup((M n) {s : Set α} (hs : s.encard + 1 = n)) : AddAction.IsPreprimitive (fixingAddSubgroup M s) (SubAddAction.ofFixingAddSubgroup M s)
 
 中文:
-类 _root_.AddAction.IsMultiplyPreprimitive
+类 _root_.加法作用.是MultiplyPreprimitive
   公理与运算 (2 个):
-    - isMultiplyPretransitive((M α n)) : AddAction.IsMultiplyPretransitive M α n
-    - isPreprimitive_ofFixingAddSubgroup((M n) {s : Set α} (hs : s.encard + 1 = n)) : AddAction.IsPreprimitive (fixingAddSubgroup M s) (SubAddAction.ofFixingAddSubgroup M s)
+    - isMultiplyPretransitive((M α n)) : 加法作用.IsMultiplyPretransitive M α n
+    - isPreprimitive_ofFixingAddSubgroup((M n) {s : 集合 α} (hs : s.encard + 1 = n)) : 加法作用.是Preprimitive (fixingAddSubgroup M s) (SubAdd作用.ofFixingAddSubgroup M s)
 -/
 class _root_.AddAction.IsMultiplyPreprimitive
     (M α : Type*) [AddGroup M] [AddAction M α] (n : Nat) where
@@ -182,11 +182,11 @@ class IsMultiplyPreprimitive
     - isPreprimitive_ofFixingSubgroup((M n) {s : Set α} (hs : s.encard + 1 = n)) : IsPreprimitive (fixingSubgroup M s) (ofFixingSubgroup M s)
 
 中文:
-类 IsMultiplyPreprimitive
-  参数: (M α : 类型) [Group M] [MulAction M α] (n : 自然数)
+类 是MultiplyPreprimitive
+  参数: (M α : 类型) [群 M] [乘法作用 M α] (n : 自然数)
   公理与运算 (2 个):
     - isMultiplyPretransitive((M α n)) : IsMultiplyPretransitive M α n
-    - isPreprimitive_ofFixingSubgroup((M n) {s : Set α} (hs : s.encard + 1 = n)) : IsPreprimitive (fixingSubgroup M s) (ofFixingSubgroup M s)
+    - isPreprimitive_ofFixingSubgroup((M n) {s : 集合 α} (hs : s.encard + 1 = n)) : 是Preprimitive (fixingSubgroup M s) (ofFixingSubgroup M s)
 -/
 class IsMultiplyPreprimitive (M α : Type*) [Group M] [MulAction M α] (n : Nat) where
   /-- An `n`-preprimitive action is `n`-pretransitive. -/
@@ -216,7 +216,7 @@ theorem is_zero_preprimitive
 
 中文:
 定理 is_zero_preprimitive
-  结论: IsMultiplyPreprimitive M α 0 where
+  结论: 是MultiplyPreprimitive M α 0 where
   证明: MulAction.is_zero_pretransitive
   isPreprimitive_ofFixingSubgroup hs := by simp at hs
 
@@ -575,7 +575,7 @@ theorem IsMultiplyPreprimitive.of_bijective_map
         rw [← hs']; 
 
 中文:
-定理 IsMultiplyPreprimitive.of_bijective_map
+定理 是MultiplyPreprimitive.of_bijective_map
   证明: IsPretransitive.of_embedding hf.surjective
   isPreprimitive_ofFixingSubgroup {t} ht := by
     let s := f ⁻¹' t

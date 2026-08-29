@@ -47,11 +47,11 @@ class PreservesHomology
     - preservesCokernels(⦃X Y) : C⦄ (f : X ⟶ Y) : PreservesColimit (parallelPair f 0) F  [default: by infer_instance]
 
 中文:
-类 PreservesHomology
-  参数: (F : C ⥤ D) [PreservesZeroMorphisms F]
+类 保持同调
+  参数: (F : C ⥤ D) [保持ZeroMorphisms F]
   公理与运算 (2 个):
-    - preservesKernels(⦃X Y) : C⦄ (f : X ⟶ Y) : PreservesLimit (parallelPair f 0) F  [默认: by infer_instance]
-    - preservesCokernels(⦃X Y) : C⦄ (f : X ⟶ Y) : PreservesColimit (parallelPair f 0) F  [默认: by infer_instance]
+    - preservesKernels(⦃X Y) : C⦄ (f : X ⟶ Y) : 保持极限 (parallelPair f 0) F  [默认: by infer_instance]
+    - preservesCokernels(⦃X Y) : C⦄ (f : X ⟶ Y) : 保持余极限 (parallelPair f 0) F  [默认: by infer_instance]
 
 Depends on / 依赖: infer_instance
 -/
@@ -74,8 +74,8 @@ lemma PreservesHomology.preservesKernel
   proof: PreservesHomology.preservesKernels _
 
 中文:
-引理 PreservesHomology.preservesKernel
-  条件: [F.PreservesHomology] {X Y : C} (f : X ⟶ Y)
+引理 保持同调.preservesKernel
+  条件: [F.保持同调] {X Y : C} (f : X ⟶ Y)
   证明: PreservesHomology.preservesKernels _
 
 Depends on / 依赖: PreservesHomology, PreservesHomology.preservesKernels, preservesKernels
@@ -93,8 +93,8 @@ lemma PreservesHomology.preservesCokernel
   proof: PreservesHomology.preservesCokernels _
 
 中文:
-引理 PreservesHomology.preservesCokernel
-  条件: [F.PreservesHomology] {X Y : C} (f : X ⟶ Y)
+引理 保持同调.preservesCokernel
+  条件: [F.保持同调] {X Y : C} (f : X ⟶ Y)
   证明: PreservesHomology.preservesCokernels _
 
 Depends on / 依赖: PreservesHomology, PreservesHomology.preservesCokernels, preservesCokernels
@@ -136,11 +136,11 @@ class IsPreservedBy
     - f' : PreservesColimit (parallelPair h.f' 0) F
 
 中文:
-类 IsPreservedBy
-  参数: [F.PreservesZeroMorphisms]
+类 是PreservedBy
+  参数: [F.保持ZeroMorphisms]
   公理与运算 (2 个):
-    - g : PreservesLimit (parallelPair S.g 0) F
-    - f' : PreservesColimit (parallelPair h.f' 0) F
+    - g : 保持极限 (parallelPair S.g 0) F
+    - f' : 保持余极限 (parallelPair h.f' 0) F
 -/
 class IsPreservedBy [F.PreservesZeroMorphisms] : Prop where
   /-- the functor preserves the kernel of `S.g : S.X₂ ⟶ S.X₃`. -/
@@ -161,7 +161,7 @@ instance isPreservedBy_of_preservesHomology
 
 中文:
 实例 isPreservedBy_of_preservesHomology
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: Functor.PreservesHomology.preservesKernel _ _
   f' := Functor.PreservesHomology.preservesCokernel _ _
 
@@ -184,8 +184,8 @@ lemma IsPreservedBy.hg
   proof: @IsPreservedBy.g _ _ _ _ _ _ _ h F _ _
 
 中文:
-引理 IsPreservedBy.hg
-  结论: PreservesLimit (parallelPair S.g 0) F
+引理 是PreservedBy.hg
+  结论: 保持极限 (parallelPair S.g 0) F
   证明: @IsPreservedBy.g _ _ _ _ _ _ _ h F _ _
 
 Depends on / 依赖: IsPreservedBy, IsPreservedBy.g, leibniz_lie, y.val
@@ -202,8 +202,8 @@ lemma IsPreservedBy.hf'
   proof: IsPreservedBy.f'
 
 中文:
-引理 IsPreservedBy.hf'
-  结论: PreservesColimit (parallelPair h.f' 0) F
+引理 是PreservedBy.hf'
+  结论: 保持余极限 (parallelPair h.f' 0) F
   证明: IsPreservedBy.f'
 
 Depends on / 依赖: IsPreservedBy, IsPreservedBy.f
@@ -344,11 +344,11 @@ class IsPreservedBy
     - g' : PreservesLimit (parallelPair h.g' 0) F
 
 中文:
-类 IsPreservedBy
-  参数: [F.PreservesZeroMorphisms]
+类 是PreservedBy
+  参数: [F.保持ZeroMorphisms]
   公理与运算 (2 个):
-    - f : PreservesColimit (parallelPair S.f 0) F
-    - g' : PreservesLimit (parallelPair h.g' 0) F
+    - f : 保持余极限 (parallelPair S.f 0) F
+    - g' : 保持极限 (parallelPair h.g' 0) F
 -/
 class IsPreservedBy [F.PreservesZeroMorphisms] : Prop where
   /-- the functor preserves the cokernel of `S.f : S.X₁ ⟶ S.X₂`. -/
@@ -369,7 +369,7 @@ instance isPreservedBy_of_preservesHomology
 
 中文:
 实例 isPreservedBy_of_preservesHomology
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: Functor.PreservesHomology.preservesCokernel F _
   g' := Functor.PreservesHomology.preservesKernel F _
 
@@ -392,8 +392,8 @@ lemma IsPreservedBy.hf
   proof: @IsPreservedBy.f _ _ _ _ _ _ _ h F _ _
 
 中文:
-引理 IsPreservedBy.hf
-  结论: PreservesColimit (parallelPair S.f 0) F
+引理 是PreservedBy.hf
+  结论: 保持余极限 (parallelPair S.f 0) F
   证明: @IsPreservedBy.f _ _ _ _ _ _ _ h F _ _
 
 Depends on / 依赖: IsPreservedBy, IsPreservedBy.f
@@ -410,8 +410,8 @@ lemma IsPreservedBy.hg'
   proof: @IsPreservedBy.g' _ _ _ _ _ _ _ h F _ _
 
 中文:
-引理 IsPreservedBy.hg'
-  结论: PreservesLimit (parallelPair h.g' 0) F
+引理 是PreservedBy.hg'
+  结论: 保持极限 (parallelPair h.g' 0) F
   证明: @IsPreservedBy.g' _ _ _ _ _ _ _ h F _ _
 
 Depends on / 依赖: IsPreservedBy, IsPreservedBy.g
@@ -555,8 +555,8 @@ definition HomologyData.map
   comm := by simpa only [F.map_comp] using! F.congr_map h.comm
 
 中文:
-定义 HomologyData.map
-  签名: (h : S.HomologyData) (F : C ⥤ D) [F.PreservesZeroMorphisms]
+定义 同调数据.map
+  签名: (h : S.同调数据) (F : C ⥤ D) [F.保持ZeroMorphisms]
   定义体: h.left.map F
   right := h.right.map F
   iso := F.mapIso h.iso
@@ -586,8 +586,8 @@ definition HomologyMapData.map
   right := ψ.right.map F
 
 中文:
-定义 HomologyMapData.map
-  签名: {φ : S₁ ⟶ S₂} {h₁ : S₁.HomologyData} {h₂ : S₂.HomologyData}
+定义 同调映射数据.map
+  签名: {φ : S₁ ⟶ S₂} {h₁ : S₁.同调数据} {h₂ : S₂.同调数据}
   定义体: ψ.left.map F
   right := ψ.right.map F
 
@@ -619,7 +619,7 @@ lemma map_leftRightHomologyComparison'
 
 中文:
 引理 map_leftRightHomologyComparison'
-  结论: (F : C ⥤ D) [F.PreservesZeroMorphisms]
+  结论: (F : C ⥤ D) [F.保持ZeroMorphisms]
   证明: by
   apply Cofork.IsColimit.hom_ext (hₗ.map F).hπ
   apply Fork.IsLimit.hom_ext (hᵣ.map F).hι
@@ -660,10 +660,10 @@ class PreservesLeftHomologyOf
     - isPreservedBy : forall (h : S.LeftHomologyData), h.IsPreservedBy F
 
 中文:
-类 PreservesLeftHomologyOf
+类 保持LeftHomologyOf
   参数: : 命题 where
   公理与运算 (1 个):
-    - isPreservedBy : 对任意 (h : S.LeftHomologyData), h.IsPreservedBy F
+    - isPreservedBy : 对任意 (h : S.LeftHomologyData), h.是PreservedBy F
 -/
 class PreservesLeftHomologyOf : Prop where
   /-- the functor preserves all the left homology data of the short complex -/
@@ -679,10 +679,10 @@ class PreservesRightHomologyOf
     - isPreservedBy : forall (h : S.RightHomologyData), h.IsPreservedBy F
 
 中文:
-类 PreservesRightHomologyOf
+类 保持RightHomologyOf
   参数: : 命题 where
   公理与运算 (1 个):
-    - isPreservedBy : 对任意 (h : S.RightHomologyData), h.IsPreservedBy F
+    - isPreservedBy : 对任意 (h : S.RightHomologyData), h.是PreservedBy F
 -/
 class PreservesRightHomologyOf : Prop where
   /-- the functor preserves all the right homology data of the short complex -/
@@ -697,8 +697,8 @@ instance PreservesHomology.preservesLeftHomologyOf
   body: ⟨inferInstance⟩
 
 中文:
-实例 PreservesHomology.preservesLeftHomologyOf
-  签名: [F.PreservesHomology]
+实例 保持同调.preservesLeftHomologyOf
+  签名: [F.保持同调]
   定义体: ⟨inferInstance⟩
 -/
 instance PreservesHomology.preservesLeftHomologyOf [F.PreservesHomology] :
@@ -713,8 +713,8 @@ instance PreservesHomology.preservesRightHomologyOf
   body: ⟨inferInstance⟩
 
 中文:
-实例 PreservesHomology.preservesRightHomologyOf
-  签名: [F.PreservesHomology]
+实例 保持同调.preservesRightHomologyOf
+  签名: [F.保持同调]
   定义体: ⟨inferInstance⟩
 -/
 instance PreservesHomology.preservesRightHomologyOf [F.PreservesHomology] :
@@ -736,8 +736,8 @@ lemma PreservesLeftHomologyOf.mk'
           
 
 中文:
-引理 PreservesLeftHomologyOf.mk'
-  条件: (h : S.LeftHomologyData) [h.IsPreservedBy F]
+引理 保持LeftHomologyOf.mk'
+  条件: (h : S.LeftHomologyData) [h.是PreservedBy F]
   证明: { g := ShortComplex.LeftHomologyData.IsPreservedBy.hg h F
       f' := by
         have := ShortComplex.LeftHomologyData.IsPreservedBy.hf' h F
@@ -772,8 +772,8 @@ lemma PreservesRightHomologyOf.mk'
       
 
 中文:
-引理 PreservesRightHomologyOf.mk'
-  条件: (h : S.RightHomologyData) [h.IsPreservedBy F]
+引理 保持RightHomologyOf.mk'
+  条件: (h : S.RightHomologyData) [h.是PreservedBy F]
   证明: { f := ShortComplex.RightHomologyData.IsPreservedBy.hf h F
       g' := by
         have := ShortComplex.RightHomologyData.IsPreservedBy.hg' h F
@@ -811,7 +811,7 @@ instance LeftHomologyData.isPreservedBy_of_preserves
 
 中文:
 实例 LeftHomologyData.isPreservedBy_of_preserves
-  签名: [F.PreservesLeftHomologyOf S]
+  签名: [F.保持LeftHomologyOf S]
   定义体: Functor.PreservesLeftHomologyOf.isPreservedBy _
 
 Depends on / 依赖: Functor, Functor.PreservesLeftHomologyOf.isPreservedBy, PreservesLeftHomologyOf, isPreservedBy
@@ -830,7 +830,7 @@ instance RightHomologyData.isPreservedBy_of_preserves
 
 中文:
 实例 RightHomologyData.isPreservedBy_of_preserves
-  签名: [F.PreservesRightHomologyOf S]
+  签名: [F.保持RightHomologyOf S]
   定义体: Functor.PreservesRightHomologyOf.isPreservedBy _
 
 Depends on / 依赖: Functor, Functor.PreservesRightHomologyOf.isPreservedBy, PreservesRightHomologyOf, isPreservedBy
@@ -851,7 +851,7 @@ instance hasLeftHomology_of_preserves
 
 中文:
 实例 hasLeftHomology_of_preserves
-  签名: [S.HasLeftHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有LeftHomology] [F.保持LeftHomologyOf S]
   定义体: HasLeftHomology.mk' (S.leftHomologyData.map F)
 
 Depends on / 依赖: HasLeftHomology, HasLeftHomology.mk, S.leftHomologyData.map, leftHomologyData
@@ -872,7 +872,7 @@ instance hasLeftHomology_of_preserves'
 
 中文:
 实例 hasLeftHomology_of_preserves'
-  签名: [S.HasLeftHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有LeftHomology] [F.保持LeftHomologyOf S]
   定义体: by
   dsimp; infer_instance
 
@@ -892,7 +892,7 @@ instance hasRightHomology_of_preserves
 
 中文:
 实例 hasRightHomology_of_preserves
-  签名: [S.HasRightHomology] [F.PreservesRightHomologyOf S]
+  签名: [S.有RightHomology] [F.保持RightHomologyOf S]
   定义体: HasRightHomology.mk' (S.rightHomologyData.map F)
 
 Depends on / 依赖: HasRightHomology, HasRightHomology.mk, S.rightHomologyData.map, rightHomologyData
@@ -913,7 +913,7 @@ instance hasRightHomology_of_preserves'
 
 中文:
 实例 hasRightHomology_of_preserves'
-  签名: [S.HasRightHomology] [F.PreservesRightHomologyOf S]
+  签名: [S.有RightHomology] [F.保持RightHomologyOf S]
   定义体: by
   dsimp; infer_instance
 
@@ -933,7 +933,7 @@ instance hasHomology_of_preserves
 
 中文:
 实例 hasHomology_of_preserves
-  签名: [S.HasHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有同调] [F.保持LeftHomologyOf S]
   定义体: HasHomology.mk' (S.homologyData.map F)
 
 Depends on / 依赖: HasHomology, HasHomology.mk, S.homologyData.map, homologyData
@@ -955,7 +955,7 @@ instance hasHomology_of_preserves'
 
 中文:
 实例 hasHomology_of_preserves'
-  签名: [S.HasHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有同调] [F.保持LeftHomologyOf S]
   定义体: by
   dsimp; infer_instance
 
@@ -992,7 +992,7 @@ lemma map_cyclesMap'
 
 中文:
 引理 map_cyclesMap'
-  结论: F.map (ShortComplex.cyclesMap' φ hl₁ hl₂) =
+  结论: F.map (短复形.cyclesMap' φ hl₁ hl₂) =
   证明: by
   have γ : ShortComplex.LeftHomologyMapData φ hl₁ hl₂ := default
   rw [γ.cyclesMap'_eq]; rw [(γ.map F).cyclesMap'_eq]; rw [ShortComplex.LeftHomologyMapData.map_φK]
@@ -1016,7 +1016,7 @@ lemma map_leftHomologyMap'
 
 中文:
 引理 map_leftHomologyMap'
-  结论: F.map (ShortComplex.leftHomologyMap' φ hl₁ hl₂) =
+  结论: F.map (短复形.leftHomologyMap' φ hl₁ hl₂) =
   证明: by
   have γ : ShortComplex.LeftHomologyMapData φ hl₁ hl₂ := default
   rw [γ.leftHomologyMap'_eq]; rw [(γ.map F).leftHomologyMap'_eq]; rw [ShortComplex.LeftHomologyMapData.map_φH]
@@ -1046,7 +1046,7 @@ lemma map_opcyclesMap'
 
 中文:
 引理 map_opcyclesMap'
-  结论: F.map (ShortComplex.opcyclesMap' φ hr₁ hr₂) =
+  结论: F.map (短复形.opcyclesMap' φ hr₁ hr₂) =
   证明: by
   have γ : ShortComplex.RightHomologyMapData φ hr₁ hr₂ := default
   rw [γ.opcyclesMap'_eq]; rw [(γ.map F).opcyclesMap'_eq]; rw [ShortComplex.RightHomologyMapData.map_φQ]
@@ -1070,7 +1070,7 @@ lemma map_rightHomologyMap'
 
 中文:
 引理 map_rightHomologyMap'
-  结论: F.map (ShortComplex.rightHomologyMap' φ hr₁ hr₂) =
+  结论: F.map (短复形.rightHomologyMap' φ hr₁ hr₂) =
   证明: by
   have γ : ShortComplex.RightHomologyMapData φ hr₁ hr₂ := default
   rw [γ.rightHomologyMap'_eq]; rw [(γ.map F).rightHomologyMap'_eq]; rw [ShortComplex.RightHomologyMapData.map_φH]
@@ -1092,7 +1092,7 @@ lemma HomologyData.map_homologyMap'
   proof: LeftHomologyData.map_leftHomologyMap' _ _ _ _
 
 中文:
-引理 HomologyData.map_homologyMap'
+引理 同调数据.map_homologyMap'
   证明: LeftHomologyData.map_leftHomologyMap' _ _ _ _
 
 Depends on / 依赖: LeftHomologyData, LeftHomologyData.map_leftHomologyMap, map_leftHomologyMap
@@ -1116,7 +1116,7 @@ definition mapCyclesIso
 
 中文:
 定义 mapCyclesIso
-  签名: [S.HasLeftHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有LeftHomology] [F.保持LeftHomologyOf S]
   定义体: (S.leftHomologyData.map F).cyclesIso
 
 @[reassoc (attr := simp)]
@@ -1139,7 +1139,7 @@ lemma mapCyclesIso_hom_iCycles
 
 中文:
 引理 mapCyclesIso_hom_iCycles
-  条件: [S.HasLeftHomology] [F.PreservesLeftHomologyOf S]
+  条件: [S.有LeftHomology] [F.保持LeftHomologyOf S]
   证明: by
   apply LeftHomologyData.cyclesIso_hom_comp_i
 
@@ -1159,7 +1159,7 @@ definition mapLeftHomologyIso
 
 中文:
 定义 mapLeftHomologyIso
-  签名: [S.HasLeftHomology] [F.PreservesLeftHomologyOf S]
+  签名: [S.有LeftHomology] [F.保持LeftHomologyOf S]
   定义体: (S.leftHomologyData.map F).leftHomologyIso
 
 Depends on / 依赖: S.leftHomologyData.map, leftHomologyData, leftHomologyIso
@@ -1178,7 +1178,7 @@ definition mapOpcyclesIso
 
 中文:
 定义 mapOpcyclesIso
-  签名: [S.HasRightHomology] [F.PreservesRightHomologyOf S]
+  签名: [S.有RightHomology] [F.保持RightHomologyOf S]
   定义体: (S.rightHomologyData.map F).opcyclesIso
 
 Depends on / 依赖: S.rightHomologyData.map, opcyclesIso, rightHomologyData
@@ -1197,7 +1197,7 @@ definition mapRightHomologyIso
 
 中文:
 定义 mapRightHomologyIso
-  签名: [S.HasRightHomology] [F.PreservesRightHomologyOf S]
+  签名: [S.有RightHomology] [F.保持RightHomologyOf S]
   定义体: (S.rightHomologyData.map F).rightHomologyIso
 
 Depends on / 依赖: S.rightHomologyData.map, rightHomologyData, rightHomologyIso
@@ -1216,7 +1216,7 @@ definition mapHomologyIso
 
 中文:
 定义 mapHomologyIso
-  签名: [S.HasHomology] [(S.map F).HasHomology]
+  签名: [S.有同调] [(S.map F).有同调]
   定义体: (S.homologyData.left.map F).homologyIso
 
 Depends on / 依赖: S.homologyData.left.map, homologyData, homologyIso
@@ -1236,7 +1236,7 @@ definition mapHomologyIso'
 
 中文:
 定义 mapHomologyIso'
-  签名: [S.HasHomology] [(S.map F).HasHomology]
+  签名: [S.有同调] [(S.map F).有同调]
   定义体: (S.homologyData.right.map F).homologyIso ≪≫ F.mapIso S.homologyData.right.homologyIso.symm
 
 Depends on / 依赖: F.mapIso, S.homologyData.right.homologyIso.symm, S.homologyData.right.map, homologyData, homologyIso, mapIso
@@ -1264,7 +1264,7 @@ lemma LeftHomologyData.mapCyclesIso_eq
 
 中文:
 引理 LeftHomologyData.mapCyclesIso_eq
-  结论: [S.HasLeftHomology]
+  结论: [S.有LeftHomology]
   证明: by
   ext
   dsimp [mapCyclesIso, cyclesIso]
@@ -1297,7 +1297,7 @@ lemma LeftHomologyData.mapLeftHomologyIso_eq
 
 中文:
 引理 LeftHomologyData.mapLeftHomologyIso_eq
-  结论: [S.HasLeftHomology]
+  结论: [S.有LeftHomology]
   证明: by
   ext
   dsimp [mapLeftHomologyIso, leftHomologyIso]
@@ -1330,7 +1330,7 @@ lemma RightHomologyData.mapOpcyclesIso_eq
 
 中文:
 引理 RightHomologyData.mapOpcyclesIso_eq
-  结论: [S.HasRightHomology]
+  结论: [S.有RightHomology]
   证明: by
   ext
   dsimp [mapOpcyclesIso, opcyclesIso]
@@ -1363,7 +1363,7 @@ lemma RightHomologyData.mapRightHomologyIso_eq
 
 中文:
 引理 RightHomologyData.mapRightHomologyIso_eq
-  结论: [S.HasRightHomology]
+  结论: [S.有RightHomology]
   证明: by
   ext
   dsimp [mapRightHomologyIso, rightHomologyIso]
@@ -1399,7 +1399,7 @@ lemma LeftHomologyData.mapHomologyIso_eq
 
 中文:
 引理 LeftHomologyData.mapHomologyIso_eq
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   ext
   dsimp only [mapHomologyIso, homologyIso, ShortComplex.leftHomologyIso,
@@ -1435,7 +1435,7 @@ lemma RightHomologyData.mapHomologyIso'_eq
 
 中文:
 引理 RightHomologyData.mapHomologyIso'_eq
-  结论: [S.HasHomology]
+  结论: [S.有同调]
   证明: by
   ext
   dsimp only [Iso.trans, Iso.symm, Iso.refl, Functor.mapIso, mapHomologyIso', homologyIso,
@@ -1468,7 +1468,7 @@ lemma mapCyclesIso_hom_naturality
 
 中文:
 引理 mapCyclesIso_hom_naturality
-  结论: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  结论: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   dsimp only [cyclesMap, mapCyclesIso, LeftHomologyData.cyclesIso, cyclesMapIso', Iso.refl]
   simp only [LeftHomologyData.map_cyclesMap', Functor.mapShortComplex_obj, ← cyclesMap'_comp,
@@ -1497,7 +1497,7 @@ lemma mapCyclesIso_inv_naturality
 
 中文:
 引理 mapCyclesIso_inv_naturality
-  结论: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  结论: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   rw [← cancel_epi (S₁.mapCyclesIso F).hom]; rw [← mapCyclesIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 
@@ -1526,7 +1526,7 @@ lemma mapLeftHomologyIso_hom_naturality
 
 中文:
 引理 mapLeftHomologyIso_hom_naturality
-  结论: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  结论: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   dsimp only [leftHomologyMap, mapLeftHomologyIso, LeftHomologyData.leftHomologyIso,
     leftHomologyMapIso', Iso.refl]
@@ -1557,7 +1557,7 @@ lemma mapLeftHomologyIso_inv_naturality
 
 中文:
 引理 mapLeftHomologyIso_inv_naturality
-  结论: [S₁.HasLeftHomology] [S₂.HasLeftHomology]
+  结论: [S₁.有LeftHomology] [S₂.有LeftHomology]
   证明: by
   rw [← cancel_epi (S₁.mapLeftHomologyIso F).hom]; rw [← mapLeftHomologyIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 
@@ -1586,7 +1586,7 @@ lemma mapOpcyclesIso_hom_naturality
 
 中文:
 引理 mapOpcyclesIso_hom_naturality
-  结论: [S₁.HasRightHomology] [S₂.HasRightHomology]
+  结论: [S₁.有RightHomology] [S₂.有RightHomology]
   证明: by
   dsimp only [opcyclesMap, mapOpcyclesIso, RightHomologyData.opcyclesIso,
     opcyclesMapIso', Iso.refl]
@@ -1617,7 +1617,7 @@ lemma mapOpcyclesIso_inv_naturality
 
 中文:
 引理 mapOpcyclesIso_inv_naturality
-  结论: [S₁.HasRightHomology] [S₂.HasRightHomology]
+  结论: [S₁.有RightHomology] [S₂.有RightHomology]
   证明: by
   rw [← cancel_epi (S₁.mapOpcyclesIso F).hom]; rw [← mapOpcyclesIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 
@@ -1646,7 +1646,7 @@ lemma mapRightHomologyIso_hom_naturality
 
 中文:
 引理 mapRightHomologyIso_hom_naturality
-  结论: [S₁.HasRightHomology] [S₂.HasRightHomology]
+  结论: [S₁.有RightHomology] [S₂.有RightHomology]
   证明: by
   dsimp only [rightHomologyMap, mapRightHomologyIso, RightHomologyData.rightHomologyIso,
     rightHomologyMapIso', Iso.refl]
@@ -1677,7 +1677,7 @@ lemma mapRightHomologyIso_inv_naturality
 
 中文:
 引理 mapRightHomologyIso_inv_naturality
-  结论: [S₁.HasRightHomology] [S₂.HasRightHomology]
+  结论: [S₁.有RightHomology] [S₂.有RightHomology]
   证明: by
   rw [← cancel_epi (S₁.mapRightHomologyIso F).hom]; rw [← mapRightHomologyIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 
@@ -1707,7 +1707,7 @@ lemma mapHomologyIso_hom_naturality
 
 中文:
 引理 mapHomologyIso_hom_naturality
-  结论: [S₁.HasHomology] [S₂.HasHomology]
+  结论: [S₁.有同调] [S₂.有同调]
   证明: by
   dsimp only [homologyMap, homologyMap', mapHomologyIso, LeftHomologyData.homologyIso,
     LeftHomologyData.leftHomologyIso, leftHomologyMapIso', leftHomologyIso,
@@ -1740,7 +1740,7 @@ lemma mapHomologyIso_inv_naturality
 
 中文:
 引理 mapHomologyIso_inv_naturality
-  结论: [S₁.HasHomology] [S₂.HasHomology]
+  结论: [S₁.有同调] [S₂.有同调]
   证明: by
   rw [← cancel_epi (S₁.mapHomologyIso F).hom]; rw [← mapHomologyIso_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 
@@ -1771,7 +1771,7 @@ lemma mapHomologyIso'_hom_naturality
 
 中文:
 引理 mapHomologyIso'_hom_naturality
-  结论: [S₁.HasHomology] [S₂.HasHomology]
+  结论: [S₁.有同调] [S₂.有同调]
   证明: by
   dsimp only [Iso.trans, Iso.symm, Functor.mapIso, mapHomologyIso']
   simp only [← RightHomologyData.rightHomologyIso_hom_naturality_assoc _
@@ -1803,7 +1803,7 @@ lemma mapHomologyIso'_inv_naturality
 
 中文:
 引理 mapHomologyIso'_inv_naturality
-  结论: [S₁.HasHomology] [S₂.HasHomology]
+  结论: [S₁.有同调] [S₂.有同调]
   证明: by
   rw [← cancel_epi (S₁.mapHomologyIso' F).hom]; rw [← mapHomologyIso'_hom_naturality_assoc]; rw [Iso.hom_inv_id]; rw [comp_id]; rw [Iso.hom_inv_id_assoc]
 -/
@@ -1833,7 +1833,7 @@ lemma mapHomologyIso'_eq_mapHomologyIso
 
 中文:
 引理 mapHomologyIso'_eq_mapHomologyIso
-  结论: [S.HasHomology] [F.PreservesLeftHomologyOf S]
+  结论: [S.有同调] [F.保持LeftHomologyOf S]
   证明: by
   ext
   rw [S.homologyData.left.mapHomologyIso_eq F]; rw [S.homologyData.right.mapHomologyIso'_eq F]
@@ -1936,8 +1936,8 @@ definition HomologyMapData.natTransApp
   right := RightHomologyMapData.natTransApp h.right τ
 
 中文:
-定义 HomologyMapData.natTransApp
-  签名: (h : HomologyData S) (τ : F ⟶ G)
+定义 同调映射数据.natTransApp
+  签名: (h : 同调数据 S) (τ : F ⟶ G)
   定义体: LeftHomologyMapData.natTransApp h.left τ
   right := RightHomologyMapData.natTransApp h.right τ
 
@@ -1959,8 +1959,8 @@ lemma homologyMap_mapNatTrans
   proof: (LeftHomologyMapData.natTransApp S.homologyData.left τ).homologyMap_eq
 
 中文:
-引理 homologyMap_mapNatTrans
-  条件: [S.HasHomology] (τ : F ⟶ G)
+引理 homologyMap_map自然数Trans
+  条件: [S.有同调] (τ : F ⟶ G)
   证明: (LeftHomologyMapData.natTransApp S.homologyData.left τ).homologyMap_eq
 
 Depends on / 依赖: LeftHomologyMapData, LeftHomologyMapData.natTransApp, S.homologyData.left, homologyData, homologyMap_eq, natTransApp
@@ -1987,7 +1987,7 @@ definition cyclesFunctorIso
 
 中文:
 定义 cyclesFunctorIso
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: NatIso.ofComponents (fun S => S.mapCyclesIso F)
     (fun f => ShortComplex.mapCyclesIso_hom_naturality f F)
 
@@ -2010,7 +2010,7 @@ definition leftHomologyFunctorIso
 
 中文:
 定义 leftHomologyFunctorIso
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: NatIso.ofComponents (fun S => S.mapLeftHomologyIso F)
     (fun f => ShortComplex.mapLeftHomologyIso_hom_naturality f F)
 
@@ -2033,7 +2033,7 @@ definition opcyclesFunctorIso
 
 中文:
 定义 opcyclesFunctorIso
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: NatIso.ofComponents (fun S => S.mapOpcyclesIso F)
     (fun f => ShortComplex.mapOpcyclesIso_hom_naturality f F)
 
@@ -2056,7 +2056,7 @@ definition rightHomologyFunctorIso
 
 中文:
 定义 rightHomologyFunctorIso
-  签名: [F.PreservesHomology]
+  签名: [F.保持同调]
   定义体: NatIso.ofComponents (fun S => S.mapRightHomologyIso F)
     (fun f => ShortComplex.mapRightHomologyIso_hom_naturality f F)
 
@@ -2452,7 +2452,7 @@ lemma NatTrans.app_homology
   rw [ShortComplex.homologyMap_mapNatTrans]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [Iso.inv_hom_id_assoc]
 
 中文:
-引理 NatTrans.app_homology
+引理 自然变换.app_homology
   结论: {F G : C ⥤ D} (τ : F ⟶ G)
   证明: by
   rw [ShortComplex.homologyMap_mapNatTrans]; rw [assoc]; rw [assoc]; rw [Iso.inv_hom_id]; rw [comp_id]; rw [Iso.inv_hom_id_assoc]

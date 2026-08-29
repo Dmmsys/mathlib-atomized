@@ -45,7 +45,7 @@ lemma prod_eq_fold
 
 中文:
 引理 prod_eq_fold
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: ∏ i in s, f i = s.fold (β := M) (· * ·) 1 f
   证明: rfl
 
@@ -290,7 +290,7 @@ theorem prod_image
 
 中文:
 定理 prod_image
-  条件: [DecidableEq ι] {s : Finset κ} {g : κ -> ι}
+  条件: [DecidableEq ι] {s : 有限集 κ} {g : κ -> ι}
   证明: fold_image
 
 @[to_additive]
@@ -316,7 +316,7 @@ lemma prod_attach
 
 中文:
 引理 prod_attach
-  条件: (s : Finset ι) (f : ι -> M)
+  条件: (s : 有限集 ι) (f : ι -> M)
   结论: ∏ x in s.attach, f x = ∏ x in s, f x
   证明: by
   classical rw [← prod_image Subtype.coe_injective.injOn, attach_image_val]
@@ -344,7 +344,7 @@ theorem prod_congr
 中文:
 定理 prod_congr
   条件: (h : s₁ = s₂)
-  结论: (对任意 x in s₂, f x = g x) -> s₁.prod f = s₂.prod g
+  结论: (对任意 x in s₂, f x = g x) -> s₁.乘积 f = s₂.乘积 g
   证明: by
   rw [h]; exact fold_congr
 
@@ -396,7 +396,7 @@ lemma prod_eq_one_iff
 
 中文:
 引理 prod_eq_one_iff
-  条件: [Subsingleton Mˣ]
+  条件: [子单例 Mˣ]
   结论: ∏ i in s, f i = 1 ↔ 对任意 i in s, f i = 1
   证明: by
   induction s using Finset.cons_induction <;> simp [*]
@@ -457,7 +457,7 @@ theorem prod_disjiUnion
 
 中文:
 定理 prod_disjiUnion
-  条件: (s : Finset κ) (t : κ -> Finset ι) (h)
+  条件: (s : 有限集 κ) (t : κ -> 有限集 ι) (h)
   证明: by
   refine Eq.trans ?_ (fold_disjiUnion h)
   dsimp [Finset.prod, Multiset.prod, Multiset.fold, Finset.disjUnion, Finset.fold]
@@ -565,7 +565,7 @@ lemma prod_filter_not_mul_prod_filter
 
 中文:
 引理 prod_filter_not_mul_prod_filter
-  结论: (s : Finset ι) (p : ι -> 命题) [DecidablePred p]
+  结论: (s : 有限集 ι) (p : ι -> 命题) [DecidablePred p]
   证明: by
   rw [mul_comm]; rw [prod_filter_mul_prod_filter_not]
 
@@ -618,8 +618,8 @@ theorem _root_.IsCompl.prod_mul_prod
     classical rw [Finset.disjUnion_eq_union, ← Finset.sup_eq_union, h.sup_eq_top]; rfl
 
 中文:
-定理 _root_.IsCompl.prod_mul_prod
-  条件: [Fintype ι] {s t : Finset ι} (h : IsCompl s t) (f : ι -> M)
+定理 _root_.是补集.prod_mul_prod
+  条件: [有限类型 ι] {s t : 有限集 ι} (h : 是补集 s t) (f : ι -> M)
   证明: (Finset.prod_disjUnion h.disjoint).symm.trans by
     classical rw [Finset.disjUnion_eq_union, ← Finset.sup_eq_union, h.sup_eq_top]; rfl
 
@@ -646,7 +646,7 @@ lemma prod_mul_prod_compl
 
 中文:
 引理 prod_mul_prod_compl
-  条件: [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι -> M)
+  条件: [有限类型 ι] [DecidableEq ι] (s : 有限集 ι) (f : ι -> M)
   证明: IsCompl.prod_mul_prod isCompl_compl f
 
 @[to_additive]
@@ -670,7 +670,7 @@ lemma prod_compl_mul_prod
 
 中文:
 引理 prod_compl_mul_prod
-  条件: [Fintype ι] [DecidableEq ι] (s : Finset ι) (f : ι -> M)
+  条件: [有限类型 ι] [DecidableEq ι] (s : 有限集 ι) (f : ι -> M)
   证明: (@isCompl_compl _ s _).symm.prod_mul_prod f
 
 @[to_additive]
@@ -778,7 +778,7 @@ theorem prod_disjSum
 
 中文:
 定理 prod_disjSum
-  条件: (s : Finset ι) (t : Finset κ) (f : ι oplus κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι oplus κ -> M)
   证明: by
   rw [← map_inl_disjUnion_map_inr]; rw [prod_disjUnion]; rw [prod_map]; rw [prod_map]
   rfl
@@ -806,7 +806,7 @@ lemma prod_sum_eq_prod_toLeft_mul_prod_toRight
 
 中文:
 引理 prod_sum_eq_prod_toLeft_mul_prod_toRight
-  条件: (s : Finset (ι oplus κ)) (f : ι oplus κ -> M)
+  条件: (s : 有限集 (ι oplus κ)) (f : ι oplus κ -> M)
   证明: by
   rw [← Finset.toLeft_disjSum_toRight (u := s)]; rw [Finset.prod_disjSum]; rw [Finset.toLeft_disjSum]; rw [Finset.toRight_disjSum]
 
@@ -829,7 +829,7 @@ theorem prod_sumElim
 
 中文:
 定理 prod_sumElim
-  条件: (s : Finset ι) (t : Finset κ) (f : ι -> M) (g : κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (f : ι -> M) (g : κ -> M)
   证明: by simp
 -/
 theorem prod_sumElim (s : Finset ι) (t : Finset κ) (f : ι -> M) (g : κ -> M) :
@@ -852,7 +852,7 @@ theorem prod_biUnion
 
 中文:
 定理 prod_biUnion
-  结论: [DecidableEq ι] {s : Finset κ} {t : κ -> Finset ι}
+  结论: [DecidableEq ι] {s : 有限集 κ} {t : κ -> 有限集 ι}
   证明: by
   rw [← disjiUnion_eq_biUnion _ _ hs]; rw [prod_disjiUnion]
 
@@ -879,7 +879,7 @@ prod_subset (image_subset_iff.2 hest) by simpa using h'
 
 中文:
 引理 prod_of_injOn
-  结论: (e : ι -> κ) (he : Set.InjOn e s) (hest : Set.MapsTo e s t)
+  结论: (e : ι -> κ) (he : 集合.单射限制 e s) (hest : 集合.映射到 e s t)
   证明: by
   classical
 exact (prod_nbij e (fun a => mem_image_of_mem e) he (by simp [Set.surjOn_image]) h).trans
@@ -913,7 +913,7 @@ lemma prod_fiberwise_eq_prod_filter
 
 中文:
 引理 prod_fiberwise_eq_prod_filter
-  条件: (s : Finset ι) (t : Finset κ) (g : ι -> κ) (f : ι -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (g : ι -> κ) (f : ι -> M)
   证明: by
   rw [← prod_disjiUnion]; rw [disjiUnion_filter_eq]
   #adaptation_note /-- 2025-09-12 (kmill) copied from private lemma pairwiseDisjoint_fibers -/
@@ -948,7 +948,7 @@ lemma prod_fiberwise_eq_prod_filter'
 
 中文:
 引理 prod_fiberwise_eq_prod_filter'
-  条件: (s : Finset ι) (t : Finset κ) (g : ι -> κ) (f : κ -> M)
+  条件: (s : 有限集 ι) (t : 有限集 κ) (g : ι -> κ) (f : κ -> M)
   证明: by
   calc
     _ = ∏ j in t, ∏ i in s with g i = j, f (g i) :=
@@ -1047,7 +1047,7 @@ lemma prod_fiberwise
 
 中文:
 引理 prod_fiberwise
-  条件: (s : Finset ι) (g : ι -> κ) (f : ι -> M)
+  条件: (s : 有限集 ι) (g : ι -> κ) (f : ι -> M)
   证明: prod_fiberwise_of_maps_to (fun _ _ => mem_univ _) _
 
 @[to_additive]
@@ -1069,7 +1069,7 @@ lemma prod_fiberwise'
 
 中文:
 引理 prod_fiberwise'
-  条件: (s : Finset ι) (g : ι -> κ) (f : κ -> M)
+  条件: (s : 有限集 ι) (g : ι -> κ) (f : κ -> M)
   证明: prod_fiberwise_of_maps_to' (fun _ _ => mem_univ _) _
 
 Depends on / 依赖: mem_univ, prod_fiberwise_of_maps_to
@@ -1094,7 +1094,7 @@ lemma prod_diag
 
 中文:
 引理 prod_diag
-  条件: (s : Finset ι) (f : ι × ι -> M)
+  条件: (s : 有限集 ι) (f : ι × ι -> M)
   证明: by
   simp [diag]
 
@@ -1122,7 +1122,7 @@ theorem prod_image'
 
 中文:
 定理 prod_image'
-  结论: [DecidableEq ι] {s : Finset κ} {g : κ -> ι} (h : κ -> M)
+  结论: [DecidableEq ι] {s : 有限集 κ} {g : κ -> ι} (h : κ -> M)
   证明: calc
     ∏ a in s.image g, f a = ∏ a in s.image g, ∏ j in s with g j = a, h j :=
       (prod_congr rfl) fun _a hx =>
@@ -1234,7 +1234,7 @@ theorem prod_filter_ne_one
 
 中文:
 定理 prod_filter_ne_one
-  条件: (s : Finset ι) [对任意 x, Decidable (f x != 1)]
+  条件: (s : 有限集 ι) [对任意 x, 可判定 (f x != 1)]
   证明: prod_filter_of_ne fun _ _ => id
 
 @[to_additive]
@@ -1301,7 +1301,7 @@ theorem prod_eq_single_of_mem
 
 中文:
 定理 prod_eq_single_of_mem
-  结论: {s : Finset ι} {f : ι -> M} (a : ι) (h : a in s)
+  结论: {s : 有限集 ι} {f : ι -> M} (a : ι) (h : a in s)
   证明: by
   calc
     ∏ x in s, f x = ∏ x in {a}, f x := by
@@ -1341,7 +1341,7 @@ theorem prod_eq_single
 
 中文:
 定理 prod_eq_single
-  结论: {s : Finset ι} {f : ι -> M} (a : ι) (h₀ : 对任意 b in s, b != a -> f b = 1)
+  结论: {s : 有限集 ι} {f : ι -> M} (a : ι) (h₀ : 对任意 b in s, b != a -> f b = 1)
   证明: haveI := Classical.decEq ι
   by_cases (prod_eq_single_of_mem a · h₀) fun this =>
 (prod_congr rfl fun b hb => h₀ b hb <| by rintro rfl; exact this hb).trans
@@ -1372,7 +1372,7 @@ lemma prod_ite_mem_eq
 
 中文:
 引理 prod_ite_mem_eq
-  条件: [Fintype ι] (s : Finset ι) (f : ι -> M) [DecidablePred (· in s)]
+  条件: [有限类型 ι] (s : 有限集 ι) (f : ι -> M) [DecidablePred (· in s)]
   证明: by
   rw [← Finset.prod_filter]; congr; grind
 
@@ -1401,7 +1401,7 @@ lemma prod_eq_ite
 
 中文:
 引理 prod_eq_ite
-  结论: [DecidableEq ι] {s : Finset ι} {f : ι -> M} (a : ι)
+  结论: [DecidableEq ι] {s : 有限集 ι} {f : ι -> M} (a : ι)
   证明: by
   by_cases h : a in s
   · simp [Finset.prod_eq_single_of_mem a h h₀, h]
@@ -1488,7 +1488,7 @@ lemma prod_congr_of_eq_on_inter
 
 中文:
 引理 prod_congr_of_eq_on_inter
-  结论: {ι M : 类型} {s₁ s₂ : Finset ι} {f g : ι -> M} [CommMonoid M]
+  结论: {ι M : 类型} {s₁ s₂ : 有限集 ι} {f g : ι -> M} [交换幺半群 M]
   证明: by
   classical
   conv_lhs => rw [← sdiff_union_inter s₁ s₂, prod_union_eq_right (by simp_all)]
@@ -1526,7 +1526,7 @@ theorem prod_eq_mul_of_mem
 
 中文:
 定理 prod_eq_mul_of_mem
-  结论: {s : Finset ι} {f : ι -> M} (a b : ι) (ha : a in s) (hb : b in s)
+  结论: {s : 有限集 ι} {f : ι -> M} (a b : ι) (ha : a in s) (hb : b in s)
   证明: by
   have := Classical.decEq ι; let s' := ({a, b} : Finset ι)
   have hu : s' subseteq s := by grind
@@ -1564,7 +1564,7 @@ theorem prod_eq_mul
 
 中文:
 定理 prod_eq_mul
-  结论: {s : Finset ι} {f : ι -> M} (a b : ι) (hn : a != b)
+  结论: {s : 有限集 ι} {f : ι -> M} (a b : ι) (hn : a != b)
   证明: by
   have := Classical.decEq ι; by_cases h₁ : a in s <;> by_cases h₂ : b in s
   · exact prod_eq_mul_of_mem a b h₁ h₂ hn h₀
@@ -1667,7 +1667,7 @@ theorem prod_subtype_map_embedding
 
 中文:
 定理 prod_subtype_map_embedding
-  结论: {p : ι -> 命题} {s : Finset { x // p x }} {f : { x // p x } -> M}
+  结论: {p : ι -> 命题} {s : 有限集 { x // p x }} {f : { x // p x } -> M}
   证明: by
   rw [Finset.prod_map]
   exact Finset.prod_congr rfl h
@@ -1716,8 +1716,8 @@ theorem prod_finset_coe
 
 中文:
 定理 prod_finset_coe
-  条件: (f : ι -> M) (s : Finset ι)
-  结论: (∏ i : (s : Set ι), f i) = ∏ i in s, f i
+  条件: (f : ι -> M) (s : 有限集 ι)
+  结论: (∏ i : (s : 集合 ι), f i) = ∏ i in s, f i
   证明: prod_coe_sort s f
 
 Depends on / 依赖: prod_coe_sort
@@ -1743,7 +1743,7 @@ theorem prod_subtype
 
 中文:
 定理 prod_subtype
-  结论: {p : ι -> 命题} {F : Fintype (Subtype p)} (s : Finset ι) (h : 对任意 x, x in s ↔ p x)
+  结论: {p : ι -> 命题} {F : 有限类型 (子类型 p)} (s : 有限集 ι) (h : 对任意 x, x in s ↔ p x)
   证明: by
   obtain rfl : p = (· in s) := by simp [h]
   rw [← prod_coe_sort]
@@ -1771,7 +1771,7 @@ theorem prod_set_coe
 
 中文:
 定理 prod_set_coe
-  条件: (s : Set ι) [Fintype s]
+  条件: (s : 集合 ι) [有限类型 s]
   结论: (∏ i : s, f i) = ∏ i in s.toFinset, f i
   证明: (Finset.prod_subtype s.toFinset (fun _ => Set.mem_toFinset) f).symm
 
@@ -1801,7 +1801,7 @@ theorem prod_congr_set
 
 中文:
 定理 prod_congr_set
-  结论: [Fintype ι] (s : Set ι) [DecidablePred (· in s)] (f : ι -> M) (g : s -> M)
+  结论: [有限类型 ι] (s : 集合 ι) [DecidablePred (· in s)] (f : ι -> M) (g : s -> M)
   证明: by
   rw [← prod_subset s.toFinset.subset_univ (by simpa)]; rw [prod_subtype (p := (· in s)) _ (by simp)]
   congr! with ⟨x, h⟩
@@ -1828,7 +1828,7 @@ theorem prod_extend_by_one
 
 中文:
 定理 prod_extend_by_one
-  条件: [DecidableEq ι] (s : Finset ι) (f : ι -> M)
+  条件: [DecidableEq ι] (s : 有限集 ι) (f : ι -> M)
   证明: (prod_congr rfl) fun _i hi => if_pos hi
 
 Depends on / 依赖: if_pos, prod_congr
@@ -1856,7 +1856,7 @@ theorem prod_eq_prod_extend
 中文:
 定理 prod_eq_prod_extend
   条件: (f : s -> M)
-  结论: ∏ x, f x = ∏ x in s, Subtype.val.extend f 1 x
+  结论: ∏ x, f x = ∏ x in s, 子类型.val.extend f 1 x
   证明: by
   rw [univ_eq_attach]; rw [← Finset.prod_attach s]
   congr with ⟨x, hx⟩
@@ -1890,7 +1890,7 @@ theorem prod_bij_ne_one
 
 中文:
 定理 prod_bij_ne_one
-  结论: {s : Finset ι} {t : Finset κ} {f : ι -> M} {g : κ -> M}
+  结论: {s : 有限集 ι} {t : 有限集 κ} {f : ι -> M} {g : κ -> M}
   证明: by
   classical
   calc
@@ -1938,7 +1938,7 @@ theorem exists_ne_one_of_prod_ne_one
 @[to_additive]
 
 中文:
-定理 exists_ne_one_of_prod_ne_one
+定理 存在_ne_one_of_prod_ne_one
   条件: (h : ∏ x in s, f x != 1)
   结论: 存在 a in s, f a != 1
   证明: by
@@ -2135,7 +2135,7 @@ theorem prod_list_map_count
 
 中文:
 定理 prod_list_map_count
-  条件: [DecidableEq ι] (l : List ι) (f : ι -> M)
+  条件: [DecidableEq ι] (l : 列表 ι) (f : ι -> M)
   证明: by
   induction l with
   | nil => simp only [map_nil, prod_nil, count_nil, pow_zero, prod_const_one]
@@ -2175,7 +2175,7 @@ theorem prod_list_count
 
 中文:
 定理 prod_list_count
-  条件: [DecidableEq M] (s : List M)
+  条件: [DecidableEq M] (s : 列表 M)
   证明: by simpa using prod_list_map_count s id
 
 @[to_additive]
@@ -2200,7 +2200,7 @@ theorem prod_list_count_of_subset
 
 中文:
 定理 prod_list_count_of_subset
-  结论: [DecidableEq M] (m : List M) (s : Finset M)
+  结论: [DecidableEq M] (m : 列表 M) (s : 有限集 M)
   证明: by
   rw [prod_list_count]
   refine prod_subset hs fun x _ hx => ?_
@@ -2233,7 +2233,7 @@ theorem prod_multiset_map_count
 
 中文:
 定理 prod_multiset_map_count
-  结论: [DecidableEq ι] (s : Multiset ι) {M : 类型} [CommMonoid M]
+  结论: [DecidableEq ι] (s : Multiset ι) {M : 类型} [交换幺半群 M]
   证明: by
   refine Quot.induction_on s fun l => ?_
   simp [prod_list_map_count l f]
@@ -2291,7 +2291,7 @@ theorem prod_multiset_count_of_subset
 
 中文:
 定理 prod_multiset_count_of_subset
-  结论: [DecidableEq M] (m : Multiset M) (s : Finset M)
+  结论: [DecidableEq M] (m : Multiset M) (s : 有限集 M)
   证明: by
   revert hs
   refine Quot.induction_on m fun l => ?_
@@ -2489,7 +2489,7 @@ lemma prod_pow_eq_pow_sum
 
 中文:
 引理 prod_pow_eq_pow_sum
-  条件: (s : Finset ι) (f : ι -> 自然数) (a : M)
+  条件: (s : 有限集 ι) (f : ι -> 自然数) (a : M)
   证明: cons_induction (by simp) (fun _ _ _ _ => by simp [prod_cons, sum_cons, pow_add, *]) s
 
 @[to_additive]
@@ -2652,7 +2652,7 @@ theorem prod_partition
 
 中文:
 定理 prod_partition
-  条件: (R : Setoid ι) [DecidableRel R.r]
+  条件: (R : 集合等价关系 ι) [DecidableRel R.r]
   证明: by
   refine (Finset.prod_image' f fun x _hx => ?_).symm
   rfl
@@ -2682,7 +2682,7 @@ theorem prod_cancels_of_partition_cancels
 
 中文:
 定理 prod_cancels_of_partition_cancels
-  结论: (R : Setoid ι) [DecidableRel R]
+  结论: (R : 集合等价关系 ι) [DecidableRel R]
   证明: by
   rw [prod_partition R]; rw [← Finset.prod_eq_one]
   intro xbar xbar_in_s
@@ -2720,7 +2720,7 @@ theorem eq_of_card_le_one_of_prod_eq
 
 中文:
 定理 eq_of_card_le_one_of_prod_eq
-  结论: {s : Finset ι} (hc : #s <= 1) {f : ι -> M} {b : M}
+  结论: {s : 有限集 ι} (hc : #s <= 1) {f : ι -> M} {b : M}
   证明: by
   intro x hx
   by_cases hc0 : #s = 0
@@ -2759,7 +2759,7 @@ theorem mul_prod_erase
 
 中文:
 定理 mul_prod_erase
-  条件: [DecidableEq ι] (s : Finset ι) (f : ι -> M) {a : ι} (h : a in s)
+  条件: [DecidableEq ι] (s : 有限集 ι) (f : ι -> M) {a : ι} (h : a in s)
   证明: by
   rw [← prod_insert (notMem_erase a s)]; rw [insert_erase h]
 
@@ -2781,7 +2781,7 @@ theorem prod_erase_mul
 
 中文:
 定理 prod_erase_mul
-  条件: [DecidableEq ι] (s : Finset ι) (f : ι -> M) {a : ι} (h : a in s)
+  条件: [DecidableEq ι] (s : 有限集 ι) (f : ι -> M) {a : ι} (h : a in s)
   证明: by rw [mul_comm, mul_prod_erase s f h]
 
 Depends on / 依赖: RingHom, RingHom.toAlgebra, Subalgebra, Subalgebra.inclusion, inclusion, inf_le_right, mul_comm, mul_prod_erase, toAlgebra, toRingHom
@@ -2808,7 +2808,7 @@ theorem prod_erase
 
 中文:
 定理 prod_erase
-  条件: [DecidableEq ι] (s : Finset ι) {f : ι -> M} {a : ι} (h : f a = 1)
+  条件: [DecidableEq ι] (s : 有限集 ι) {f : ι -> M} {a : ι} (h : f a = 1)
   证明: by
   rw [← sdiff_singleton_eq_erase]
   refine prod_subset sdiff_subset fun x hx hnx => ?_
@@ -2838,7 +2838,7 @@ theorem prod_erase_lt_of_one_lt
 
 中文:
 定理 prod_erase_lt_of_one_lt
-  结论: {κ : 类型} [DecidableEq ι] [CommMonoid κ] [LT κ]
+  结论: {κ : 类型} [DecidableEq ι] [交换幺半群 κ] [LT κ]
   证明: by
   conv in ∏ m in s, f m => rw [← Finset.insert_erase hd]
   rw [Finset.prod_insert (Finset.notMem_erase d s)]
@@ -2877,7 +2877,7 @@ theorem eq_one_of_prod_eq_one
 
 中文:
 定理 eq_one_of_prod_eq_one
-  结论: {s : Finset ι} {f : ι -> M} {a : ι} (hp : ∏ x in s, f x = 1)
+  结论: {s : 有限集 ι} {f : ι -> M} {a : ι} (hp : ∏ x in s, f x = 1)
   证明: by
   intro x hx
   classical
@@ -2919,8 +2919,8 @@ lemma prod_mul_eq_prod_mul_of_exists
 @[to_additive]
 
 中文:
-引理 prod_mul_eq_prod_mul_of_exists
-  结论: {s : Finset ι} {f : ι -> M} {b₁ b₂ : M}
+引理 prod_mul_eq_prod_mul_of_存在
+  结论: {s : 有限集 ι} {f : ι -> M} {b₁ b₂ : M}
   证明: by
   classical
   rw [← insert_erase ha]
@@ -2958,7 +2958,7 @@ theorem prod_biUnion_of_pairwise_eq_one
 
 中文:
 定理 prod_biUnion_of_pairwise_eq_one
-  结论: [DecidableEq ι] {s : Finset κ} {t : κ -> Finset ι}
+  结论: [DecidableEq ι] {s : 有限集 κ} {t : κ -> 有限集 ι}
   证明: by
   classical
   let t' k := (t k).filter (fun i => f i != 1)
@@ -3002,7 +3002,7 @@ lemma prod_filter_of_pairwise_eq_one
 
 中文:
 引理 prod_filter_of_pairwise_eq_one
-  结论: [DecidableEq ι] {f : κ -> ι} {g : ι -> M} {n : κ} {I : Finset κ}
+  结论: [DecidableEq ι] {f : κ -> ι} {g : ι -> M} {n : κ} {I : 有限集 κ}
   证明: by
   classical
   have h j (hj : j in {i in I | f i = f n}.erase n) : g (f j) = 1 := by
@@ -3040,7 +3040,7 @@ lemma prod_image_of_pairwise_eq_one
 
 中文:
 引理 prod_image_of_pairwise_eq_one
-  结论: [DecidableEq ι] {f : κ -> ι} {g : ι -> M} {I : Finset κ}
+  结论: [DecidableEq ι] {f : κ -> ι} {g : ι -> M} {I : 有限集 κ}
   证明: by
   rw [prod_image']
   exact fun n hnI => (prod_filter_of_pairwise_eq_one hnI hf).symm
@@ -3075,7 +3075,7 @@ refine prod_image_of_pairwise_eq_one hf_disj.imp fun i j hdisj hfij => ?_
 
 中文:
 引理 prod_image_of_disjoint
-  结论: [DecidableEq ι] [PartialOrder ι] [OrderBot ι] {f : κ -> ι} {g : ι -> M}
+  结论: [DecidableEq ι] [偏序 ι] [有底序 ι] {f : κ -> ι} {g : ι -> M}
   证明: by
 refine prod_image_of_pairwise_eq_one hf_disj.imp fun i j hdisj hfij => ?_
   rw [Function.onFun]; rw [← hfij]; rw [disjoint_self] at hdisj
@@ -3104,7 +3104,7 @@ theorem prod_unique_nonempty
 
 中文:
 定理 prod_unique_nonempty
-  条件: [Unique ι] (s : Finset ι) (f : ι -> M) (h : s.Nonempty)
+  条件: [唯一 ι] (s : 有限集 ι) (f : ι -> M) (h : s.非空)
   证明: by
   rw [h.eq_singleton_default]; rw [Finset.prod_singleton]
 
@@ -3152,7 +3152,7 @@ theorem prod_map_equiv
 中文:
 定理 prod_map_equiv
   条件: (e : ι ≃ κ)
-  结论: (s.map e).prod (f ∘ e.symm) = s.prod f
+  结论: (s.map e).乘积 (f ∘ e.symm) = s.乘积 f
   证明: by simp
 
 @[to_additive]
@@ -3172,7 +3172,7 @@ theorem prod_comp_equiv
 中文:
 定理 prod_comp_equiv
   条件: {f : κ -> M} (e : ι ≃ κ)
-  结论: s.prod (f ∘ e) = (s.map e).prod f
+  结论: s.乘积 (f ∘ e) = (s.map e).乘积 f
   证明: by simp
 -/
 theorem prod_comp_equiv {f : κ -> M} (e : ι ≃ κ) : s.prod (f ∘ e) = (s.map e).prod f := by simp
@@ -3479,7 +3479,7 @@ lemma sum_range_tsub
 
 中文:
 引理 sum_range_tsub
-  条件: {f : 自然数 -> M} (h : Monotone f) (n : 自然数)
+  条件: {f : 自然数 -> M} (h : 递增 f) (n : 自然数)
   证明: by
   apply sum_range_induction
   case base => apply tsub_eq_of_eq_add; rw [zero_add]
@@ -3511,7 +3511,7 @@ lemma sum_tsub_distrib
 
 中文:
 引理 sum_tsub_distrib
-  条件: (s : Finset ι) {f g : ι -> M} (hfg : 对任意 x in s, g x <= f x)
+  条件: (s : 有限集 ι) {f g : ι -> M} (hfg : 对任意 x in s, g x <= f x)
   证明: Multiset.sum_map_tsub _ hfg
 
 Depends on / 依赖: Multiset, Multiset.sum_map_tsub, sum_map_tsub
@@ -3534,7 +3534,7 @@ lemma card_eq_sum_ones
 
 中文:
 引理 card_eq_sum_ones
-  条件: (s : Finset ι)
+  条件: (s : 有限集 ι)
   结论: #s = ∑ _ in s, 1
   证明: by simp
 -/
@@ -3578,7 +3578,7 @@ lemma sum_card_fiberwise_eq_card_filter
 
 中文:
 引理 sum_card_fiberwise_eq_card_filter
-  结论: {κ : 类型} [DecidableEq κ] (s : Finset ι) (t : Finset κ)
+  结论: {κ : 类型} [DecidableEq κ] (s : 有限集 ι) (t : 有限集 κ)
   证明: by
   simpa only [card_eq_sum_ones] using sum_fiberwise_eq_sum_filter _ _ _ _
 
@@ -3601,7 +3601,7 @@ theorem card_disjiUnion
 
 中文:
 定理 card_disjiUnion
-  条件: (s : Finset ι) (t : ι -> Finset M) (h)
+  条件: (s : 有限集 ι) (t : ι -> 有限集 M) (h)
   证明: Multiset.card_bind _ _
 
 Depends on / 依赖: Multiset, Multiset.card_bind, card_bind
@@ -3620,7 +3620,7 @@ theorem card_biUnion
 
 中文:
 定理 card_biUnion
-  条件: [DecidableEq M] {t : ι -> Finset M} (h : (s : Set ι).PairwiseDisjoint t)
+  条件: [DecidableEq M] {t : ι -> 有限集 M} (h : (s : 集合 ι).PairwiseDisjoint t)
   证明: by simpa using sum_biUnion h (M := Nat) (f := 1)
 
 Depends on / 依赖: sum_biUnion
@@ -3643,7 +3643,7 @@ theorem card_biUnion_le
 
 中文:
 定理 card_biUnion_le
-  条件: [DecidableEq M] {s : Finset ι} {t : ι -> Finset M}
+  条件: [DecidableEq M] {s : 有限集 ι} {t : ι -> 有限集 M}
   证明: haveI := Classical.decEq ι
   Finset.induction_on s (by simp) fun a s has ih =>
     calc
@@ -3673,7 +3673,7 @@ theorem card_eq_sum_card_fiberwise
 
 中文:
 定理 card_eq_sum_card_fiberwise
-  结论: [DecidableEq M] {f : ι -> M} {s : Finset ι} {t : Finset M}
+  结论: [DecidableEq M] {f : ι -> M} {s : 有限集 ι} {t : 有限集 M}
   证明: by
   simp only [card_eq_sum_ones, sum_fiberwise_of_maps_to H]
 
@@ -3693,7 +3693,7 @@ theorem card_eq_sum_card_image
 
 中文:
 定理 card_eq_sum_card_image
-  条件: [DecidableEq M] (f : ι -> M) (s : Finset ι)
+  条件: [DecidableEq M] (f : ι -> M) (s : 有限集 ι)
   证明: card_eq_sum_card_fiberwise fun _ => mem_image_of_mem _
 
 Depends on / 依赖: card_eq_sum_card_fiberwise, mem_image_of_mem
@@ -3726,7 +3726,7 @@ lemma prod_of_injective
 
 中文:
 引理 prod_of_injective
-  结论: (e : ι -> κ) (he : Injective e) (f : ι -> M) (g : κ -> M)
+  结论: (e : ι -> κ) (he : 单射 e) (f : ι -> M) (g : κ -> M)
   证明: prod_of_injOn e he.injOn (by simp) (by simpa using h') (fun i _ => h i)
 
 @[to_additive]
@@ -3816,7 +3816,7 @@ theorem prod_unique
 
 中文:
 定理 prod_unique
-  条件: [Unique ι] (f : ι -> M)
+  条件: [唯一 ι] (f : ι -> M)
   结论: ∏ x : ι, f x = f default
   证明: by
   rw [univ_unique]; rw [prod_singleton]
@@ -3842,7 +3842,7 @@ theorem prod_subsingleton
 
 中文:
 定理 prod_subsingleton
-  条件: [Subsingleton ι] (f : ι -> M) (a : ι)
+  条件: [子单例 ι] (f : ι -> M) (a : ι)
   结论: ∏ x : ι, f x = f a
   证明: by
   have : Unique ι := uniqueOfSubsingleton a
@@ -3868,7 +3868,7 @@ theorem prod_Prop
 中文:
 定理 prod_Prop
   条件: (f : 命题 -> M)
-  结论: ∏ p, f p = f True * f False
+  结论: ∏ p, f p = f 真 * f 假
   证明: by simp
 
 @[to_additive]
@@ -3922,7 +3922,7 @@ lemma prod_subset
 
 中文:
 引理 prod_subset
-  条件: {s : Finset ι} {f : ι -> M} (h : 对任意 i, f i != 1 -> i in s)
+  条件: {s : 有限集 ι} {f : ι -> M} (h : 对任意 i, f i != 1 -> i in s)
   证明: Finset.prod_subset s.subset_univ by simpa [not_imp_comm (a := _ in s)]
 -/
 @[to_additive] lemma prod_subset {s : Finset ι} {f : ι -> M} (h : forall i, f i != 1 -> i in s) :
@@ -3948,7 +3948,7 @@ theorem prod_toFinset
 
 中文:
 定理 prod_toFinset
-  条件: {M : 类型} [DecidableEq ι] [CommMonoid M] (f : ι -> M)
+  条件: {M : 类型} [DecidableEq ι] [交换幺半群 M] (f : ι -> M)
   证明: List.nodup_cons.mp hl
     simp [Finset.prod_insert (mt List.mem_toFinset.mp notMem), prod_toFinset _ hl]
 
@@ -3975,7 +3975,7 @@ theorem sum_toFinset_count_eq_length
 
 中文:
 定理 sum_toFinset_count_eq_length
-  条件: [DecidableEq ι] (l : List ι)
+  条件: [DecidableEq ι] (l : 列表 ι)
   证明: by
   simpa [List.map_const'] using (Finset.sum_list_map_count l fun _ => (1 : Nat)).symm
 
@@ -4003,7 +4003,7 @@ lemma mem_sum
 
 中文:
 引理 mem_sum
-  条件: {a : M} {s : Finset ι} {m : ι -> Multiset M}
+  条件: {a : M} {s : 有限集 ι} {m : ι -> Multiset M}
   证明: by
   induction s using Finset.cons_induction with grind
 
@@ -4030,7 +4030,7 @@ lemma prod_map_prod
 
 中文:
 引理 prod_map_prod
-  条件: {α : 类型} [CommMonoid M] {m : Multiset ι} {s : Finset α} {f : ι -> α -> M}
+  条件: {α : 类型} [交换幺半群 M] {m : Multiset ι} {s : 有限集 α} {f : ι -> α -> M}
   证明: by
   classical
   induction s using Finset.induction with
@@ -4085,7 +4085,7 @@ lemma sum_count_eq_card
 
 中文:
 引理 sum_count_eq_card
-  条件: {s : Finset ι} {m : Multiset ι} (hms : 对任意 a in m, a in s)
+  条件: {s : 有限集 ι} {m : Multiset ι} (hms : 对任意 a in m, a in s)
   证明: by
   rw [← toFinset_sum_count_eq]; rw [← Finset.sum_filter_ne_zero]
   congr with a
@@ -4138,7 +4138,7 @@ theorem exists_smul_of_dvd_count
   
 
 中文:
-定理 exists_smul_of_dvd_count
+定理 存在_smul_of_dvd_count
   结论: (s : Multiset ι) {k : 自然数}
   证明: by
   use ∑ a in s.toFinset, (s.count a / k) • {a}
@@ -4175,7 +4175,7 @@ theorem prod_sum
 
 中文:
 定理 prod_sum
-  条件: {ι : 类型} [CommMonoid M] (f : ι -> Multiset M) (s : Finset ι)
+  条件: {ι : 类型} [交换幺半群 M] (f : ι -> Multiset M) (s : 有限集 ι)
   证明: by
   induction s using Finset.cons_induction with grind
 
@@ -4202,8 +4202,8 @@ lemma IsUnit.multisetProd_iff
 @[to_additive (attr := simp)]
 
 中文:
-引理 IsUnit.multisetProd_iff
-  条件: [CommMonoid M] {s : Multiset M}
+引理 是单位.multisetProd_iff
+  条件: [交换幺半群 M] {s : Multiset M}
   证明: by
   induction s using Multiset.induction with
   | empty => simp
@@ -4232,8 +4232,8 @@ lemma IsUnit.prod_iff
 @[to_additive]
 
 中文:
-引理 IsUnit.prod_iff
-  条件: [CommMonoid M] {f : ι -> M}
+引理 是单位.prod_iff
+  条件: [交换幺半群 M] {f : ι -> M}
   证明: by
   induction s using Finset.cons_induction with grind
 
@@ -4255,8 +4255,8 @@ lemma IsUnit.prod_univ_iff
   proof: by simp
 
 中文:
-引理 IsUnit.prod_univ_iff
-  条件: [Fintype ι] [CommMonoid M] {f : ι -> M}
+引理 是单位.prod_univ_iff
+  条件: [有限类型 ι] [交换幺半群 M] {f : ι -> M}
   证明: by simp
 -/
 lemma IsUnit.prod_univ_iff [Fintype ι] [CommMonoid M] {f : ι -> M} :
@@ -4275,8 +4275,8 @@ theorem Int.natAbs_sum_le
 alias nat_abs_sum_le := Int.natAbs_sum_le
 
 中文:
-定理 Int.natAbs_sum_le
-  条件: (s : Finset ι) (f : ι -> 整数)
+定理 整数.natAbs_sum_le
+  条件: (s : 有限集 ι) (f : ι -> 整数)
   证明: by
   induction s using Finset.cons_induction with grind
 

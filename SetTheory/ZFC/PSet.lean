@@ -46,10 +46,10 @@ inductive PSet
     - mk: (α : Type u) (A : α -> PSet) : PSet
 
 中文:
-归纳类型 PSet
-  参数: : Type (u + 1)
+归纳类型 命题集合
+  参数: : 类型 (u + 1)
   构造子 (1 个):
-    - mk: (α : 类型u) (A : α -> PSet) : PSet
+    - mk: (α : 类型u) (A : α -> 命题集合) : 命题集合
 -/
 inductive PSet : Type (u + 1)
   | mk (α : Type u) (A : α -> PSet) : PSet
@@ -64,8 +64,8 @@ definition «Type»
   signature: : PSet -> Type u
 
 中文:
-定义 «Type»
-  签名: : PSet -> 类型u
+定义 «类型»
+  签名: : 命题集合 -> 类型u
 -/
 def «Type» : PSet -> Type u
   | ⟨α, _⟩ => α
@@ -79,7 +79,7 @@ definition Func
 
 中文:
 定义 Func
-  签名: : 对任意 x : PSet, x.Type -> PSet
+  签名: : 对任意 x : 命题集合, x.类型 -> 命题集合
 -/
 def Func : forall x : PSet, x.Type -> PSet
   | ⟨_, A⟩ => A
@@ -99,7 +99,7 @@ theorem mk_type
 中文:
 定理 mk_type
   条件: (α A)
-  结论: «Type» ⟨α, A⟩ = α
+  结论: «类型» ⟨α, A⟩ = α
   证明: rfl
 
 @[simp]
@@ -140,7 +140,7 @@ theorem eta
 
 中文:
 定理 eta
-  结论: 对任意 x : PSet, mk x.Type x.Func = x
+  结论: 对任意 x : 命题集合, mk x.类型 x.Func = x
 -/
 theorem eta : forall x : PSet, mk x.Type x.Func = x
   | ⟨_, _⟩ => rfl
@@ -153,8 +153,8 @@ definition Equiv
   signature: : PSet -> PSet -> Prop
 
 中文:
-定义 Equiv
-  签名: : PSet -> PSet -> 命题
+定义 等价
+  签名: : 命题集合 -> 命题集合 -> 命题
 -/
 def Equiv : PSet -> PSet -> Prop
   | ⟨_, A⟩, ⟨_, B⟩ => (forall a, exists b, Equiv (A a) (B b)) ∧ (forall b, exists a, Equiv (A a) (B b))
@@ -183,9 +183,9 @@ theorem Equiv.exists_left
   proof: (equiv_iff.1 h).1
 
 中文:
-定理 Equiv.exists_left
-  条件: {x y : PSet} (h : Equiv x y)
-  结论: 对任意 i, 存在 j, Equiv (x.Func i) (y.Func j)
+定理 等价.存在_left
+  条件: {x y : 命题集合} (h : 等价 x y)
+  结论: 对任意 i, 存在 j, 等价 (x.Func i) (y.Func j)
   证明: (equiv_iff.1 h).1
 
 Depends on / 依赖: equiv_iff
@@ -205,9 +205,9 @@ theorem Equiv.exists_right
 @[refl]
 
 中文:
-定理 Equiv.exists_right
-  条件: {x y : PSet} (h : Equiv x y)
-  结论: 对任意 j, 存在 i, Equiv (x.Func i) (y.Func j)
+定理 等价.存在_right
+  条件: {x y : 命题集合} (h : 等价 x y)
+  结论: 对任意 j, 存在 i, 等价 (x.Func i) (y.Func j)
   证明: (equiv_iff.1 h).2
 
 @[refl]
@@ -226,8 +226,8 @@ theorem Equiv.refl
   statement: forall x, Equiv x x
 
 中文:
-定理 Equiv.refl
-  结论: 对任意 x, Equiv x x
+定理 等价.refl
+  结论: 对任意 x, 等价 x x
 -/
 protected theorem Equiv.refl : forall x, Equiv x x
   | ⟨_, _⟩ => ⟨fun a => ⟨a, Equiv.refl _⟩, fun a => ⟨a, Equiv.refl _⟩⟩
@@ -242,9 +242,9 @@ theorem Equiv.rfl
   proof: Equiv.refl x
 
 中文:
-定理 Equiv.rfl
+定理 等价.rfl
   条件: {x}
-  结论: Equiv x x
+  结论: 等价 x x
   证明: Equiv.refl x
 -/
 protected theorem Equiv.rfl {x} : Equiv x x :=
@@ -267,8 +267,8 @@ theorem Equiv.euc
 @[symm]
 
 中文:
-定理 Equiv.euc
-  结论: 对任意 {x y z}, Equiv x y -> Equiv z y -> Equiv x z
+定理 等价.euc
+  结论: 对任意 {x y z}, 等价 x y -> 等价 z y -> 等价 x z
   证明: αβ a
         let ⟨c, bc⟩ := βγ b
         ⟨c, Equiv.euc ab bc⟩,
@@ -301,9 +301,9 @@ theorem Equiv.symm
   proof: (Equiv.refl y).euc
 
 中文:
-定理 Equiv.symm
+定理 等价.symm
   条件: {x y}
-  结论: Equiv x y -> Equiv y x
+  结论: 等价 x y -> 等价 y x
   证明: (Equiv.refl y).euc
 -/
 protected theorem Equiv.symm {x y} : Equiv x y -> Equiv y x :=
@@ -321,9 +321,9 @@ theorem Equiv.comm
 @[trans]
 
 中文:
-定理 Equiv.comm
+定理 等价.comm
   条件: {x y}
-  结论: Equiv x y ↔ Equiv y x
+  结论: 等价 x y ↔ 等价 y x
   证明: ⟨Equiv.symm, Equiv.symm⟩
 
 @[trans]
@@ -342,9 +342,9 @@ theorem Equiv.trans
   proof: h1.euc h2.symm
 
 中文:
-定理 Equiv.trans
-  条件: {x y z} (h1 : Equiv x y) (h2 : Equiv y z)
-  结论: Equiv x z
+定理 等价.trans
+  条件: {x y z} (h1 : 等价 x y) (h2 : 等价 y z)
+  结论: 等价 x z
   证明: h1.euc h2.symm
 -/
 protected theorem Equiv.trans {x y z} (h1 : Equiv x y) (h2 : Equiv y z) : Equiv x z :=
@@ -361,8 +361,8 @@ theorem equiv_of_isEmpty
 
 中文:
 定理 equiv_of_isEmpty
-  条件: (x y : PSet) [IsEmpty x.Type] [IsEmpty y.Type]
-  结论: Equiv x y
+  条件: (x y : 命题集合) [是空 x.类型] [是空 y.类型]
+  结论: 等价 x y
   证明: equiv_iff.2 by simp
 -/
 protected theorem equiv_of_isEmpty (x y : PSet) [IsEmpty x.Type] [IsEmpty y.Type] : Equiv x y :=
@@ -378,7 +378,7 @@ instance setoid
 
 中文:
 实例 setoid
-  签名: : Setoid PSet
+  签名: : 集合等价关系 命题集合
   定义体: ⟨PSet.Equiv, Equiv.refl, Equiv.symm, Equiv.trans⟩
 
 Depends on / 依赖: Equiv.refl, Equiv.symm, Equiv.trans, PSet.Equiv
@@ -395,8 +395,8 @@ definition Subset
   body: forall a, exists b, Equiv (x.Func a) (y.Func b)
 
 中文:
-定义 Subset
-  签名: (x y : PSet)
+定义 子集
+  签名: (x y : 命题集合)
   定义体: forall a, exists b, Equiv (x.Func a) (y.Func b)
 -/
 protected def Subset (x y : PSet) : Prop :=
@@ -412,7 +412,7 @@ instance :
 
 中文:
 实例 :
-  签名: LE PSet
+  签名: LE 命题集合
   定义体: ⟨PSet.Subset⟩
 
 Depends on / 依赖: PSet.Subset, Subset
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder PSet
+  签名: 预序 命题集合
   定义体: ⟨a, Equiv.refl _⟩
   le_trans x y z hxy hyz a := by
     obtain ⟨b, hb⟩ := hxy a
@@ -464,8 +464,8 @@ theorem Equiv.ext
         ⟨a, Equiv.symm h⟩⟩⟩
 
 中文:
-定理 Equiv.ext
-  结论: 对任意 x y : PSet, Equiv x y ↔ x subseteq y ∧ y subseteq x
+定理 等价.ext
+  结论: 对任意 x y : 命题集合, 等价 x y ↔ x subseteq y ∧ y subseteq x
   证明: βα b
         ⟨a, Equiv.symm h⟩⟩,
       fun ⟨αβ, βα⟩ =>
@@ -499,8 +499,8 @@ theorem Subset.congr_left
       ⟨c, Equiv.trans ab bc⟩⟩
 
 中文:
-定理 Subset.congr_left
-  结论: 对任意 {x y z : PSet}, Equiv x y -> (x subseteq z ↔ y subseteq z)
+定理 子集.congr_left
+  结论: 对任意 {x y z : 命题集合}, 等价 x y -> (x subseteq z ↔ y subseteq z)
   证明: βα b
       let ⟨c, ac⟩ := αγ a
       ⟨c, (Equiv.symm ba).trans ac⟩,
@@ -537,8 +537,8 @@ theorem Subset.congr_right
 @[deprecated "This is now a syntactic equality" (since := "2026-03-18"), nolint synTaut]
 
 中文:
-定理 Subset.congr_right
-  结论: 对任意 {x y z : PSet}, Equiv x y -> (z subseteq x ↔ z subseteq y)
+定理 子集.congr_right
+  结论: 对任意 {x y z : 命题集合}, 等价 x y -> (z subseteq x ↔ z subseteq y)
   证明: γα c
       let ⟨b, ab⟩ := αβ a
       ⟨b, ca.trans ab⟩,
@@ -574,7 +574,7 @@ theorem le_def
 
 中文:
 定理 le_def
-  条件: (x y : PSet)
+  条件: (x y : 命题集合)
   结论: x <= y ↔ x subseteq y
   证明: Iff.rfl
 
@@ -597,7 +597,7 @@ theorem lt_def
 
 中文:
 定理 lt_def
-  条件: (x y : PSet)
+  条件: (x y : 命题集合)
   结论: x < y ↔ x ⊂ y
   证明: Iff.rfl
 
@@ -616,7 +616,7 @@ definition Mem
 
 中文:
 定义 Mem
-  签名: (y x : PSet.{u})
+  签名: (y x : 命题集合.{u})
   定义体: exists b, Equiv x (y.Func b)
 -/
 protected def Mem (y x : PSet.{u}) : Prop :=
@@ -632,7 +632,7 @@ instance :
 
 中文:
 实例 :
-  签名: Membership PSet PSet
+  签名: Membership 命题集合 命题集合
   定义体: ⟨PSet.Mem⟩
 
 Depends on / 依赖: PSet.Mem
@@ -651,8 +651,8 @@ theorem mem_def
 
 中文:
 定理 mem_def
-  条件: {x y : PSet}
-  结论: x in y ↔ 存在 b, Equiv x (y.Func b)
+  条件: {x y : 命题集合}
+  结论: x in y ↔ 存在 b, 等价 x (y.Func b)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -671,7 +671,7 @@ theorem Mem.mk
 
 中文:
 定理 Mem.mk
-  条件: {α : 类型u} (A : α -> PSet) (a : α)
+  条件: {α : 类型u} (A : α -> 命题集合) (a : α)
   结论: A a in mk α A
   证明: ⟨a, Equiv.refl (A a)⟩
 
@@ -691,7 +691,7 @@ theorem func_mem
 
 中文:
 定理 func_mem
-  条件: (x : PSet) (i : x.Type)
+  条件: (x : 命题集合) (i : x.类型)
   结论: x.Func i in x
   证明: Mem.mk _ _
 
@@ -710,7 +710,7 @@ theorem Mem.ext
 
 中文:
 定理 Mem.ext
-  结论: 对任意 {x y : PSet.{u}}, (对任意 w : PSet.{u}, w in x ↔ w in y) -> Equiv x y
+  结论: 对任意 {x y : 命题集合.{u}}, (对任意 w : 命题集合.{u}, w in x ↔ w in y) -> 等价 x y
   证明: (h (B b)).2 (Mem.mk B b)
       ⟨a, ha.symm⟩⟩
 
@@ -736,7 +736,7 @@ theorem Mem.congr_right
 
 中文:
 定理 Mem.congr_right
-  结论: 对任意 {x y : PSet.{u}}, Equiv x y -> 对任意 {w : PSet.{u}}, w in x ↔ w in y
+  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> 对任意 {w : 命题集合.{u}}, w in x ↔ w in y
   证明: αβ a
       ⟨b, ha.trans hb⟩,
       fun ⟨b, hb⟩ =>
@@ -768,8 +768,8 @@ theorem equiv_iff_mem
 
 中文:
 定理 equiv_iff_mem
-  条件: {x y : PSet.{u}}
-  结论: Equiv x y ↔ 对任意 {w : PSet.{u}}, w in x ↔ w in y
+  条件: {x y : 命题集合.{u}}
+  结论: 等价 x y ↔ 对任意 {w : 命题集合.{u}}, w in x ↔ w in y
   证明: ⟨Mem.congr_right,
     match x, y with
     | ⟨_, A⟩, ⟨_, B⟩ => fun h =>
@@ -796,7 +796,7 @@ theorem Mem.congr_left
 
 中文:
 定理 Mem.congr_left
-  结论: 对任意 {x y : PSet.{u}}, Equiv x y -> 对任意 {w : PSet.{u}}, x in w ↔ y in w
+  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> 对任意 {w : 命题集合.{u}}, x in w ↔ y in w
 -/
 theorem Mem.congr_left : forall {x y : PSet.{u}}, Equiv x y -> forall {w : PSet.{u}}, x in w ↔ y in w
   | _, _, h, ⟨_, _⟩ => ⟨fun ⟨a, ha⟩ => ⟨a, h.symm.trans ha⟩, fun ⟨a, ha⟩ => ⟨a, h.trans ha⟩⟩
@@ -811,7 +811,7 @@ theorem mem_of_subset
 
 中文:
 定理 mem_of_subset
-  条件: {x y z : PSet}
+  条件: {x y z : 命题集合}
   结论: x subseteq y -> z in x -> z in y
 -/
 theorem mem_of_subset {x y z : PSet} : x subseteq y -> z in x -> z in y
@@ -828,7 +828,7 @@ theorem subset_iff
 
 中文:
 定理 subset_iff
-  条件: {x y : PSet}
+  条件: {x y : 命题集合}
   结论: x subseteq y ↔ 对任意 ⦃z⦄, z in x -> z in y
   证明: ⟨fun h _ => mem_of_subset h, fun h a => h (Mem.mk _ a)⟩
 
@@ -850,7 +850,7 @@ theorem mem_wf_aux
 
 中文:
 定理 mem_wf_aux
-  结论: 对任意 {x y : PSet.{u}}, Equiv x y -> Acc (· in ·) y
+  结论: 对任意 {x y : 命题集合.{u}}, 等价 x y -> Acc (· in ·) y
   证明: H.exists_right b
       have H := ha.trans hc.symm
       rw [mk_func] at H
@@ -875,7 +875,7 @@ theorem mem_wf
 
 中文:
 定理 mem_wf
-  结论: @WellFounded PSet (· in ·)
+  结论: @良基 命题集合 (· in ·)
   证明: ⟨fun x => mem_wf_aux Equiv.refl x⟩
 
 Depends on / 依赖: Equiv.refl, PseudoEMetricSpace, PseudoMetricSpace, PseudoMetricSpace.toPseudoEMetricSpace, mem_wf_aux, toPseudoEMetricSpace
@@ -893,7 +893,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsWellFounded PSet (· in ·)
+  签名: 是良基 命题集合 (· in ·)
   定义体: ⟨mem_wf⟩
 
 Depends on / 依赖: mem_wf
@@ -911,7 +911,7 @@ instance :
 
 中文:
 实例 :
-  签名: WellFoundedRelation PSet
+  签名: 良基关系 命题集合
   定义体: ⟨_, mem_wf⟩
 
 Depends on / 依赖: mem_wf
@@ -930,7 +930,7 @@ theorem mem_asymm
 
 中文:
 定理 mem_asymm
-  条件: {x y : PSet}
+  条件: {x y : 命题集合}
   结论: x in y -> y ∉ x
   证明: asymm_of (· in ·)
 
@@ -950,7 +950,7 @@ theorem mem_irrefl
 
 中文:
 定理 mem_irrefl
-  条件: (x : PSet)
+  条件: (x : 命题集合)
   结论: x ∉ x
   证明: irrefl_of (· in ·) x
 
@@ -970,7 +970,7 @@ theorem not_subset_of_mem
 
 中文:
 定理 not_subset_of_mem
-  条件: {x y : PSet} (h : x in y)
+  条件: {x y : 命题集合} (h : x in y)
   结论: ¬ y subseteq x
   证明: fun h' => mem_irrefl _ mem_of_subset h' h
 
@@ -990,7 +990,7 @@ theorem notMem_of_subset
 
 中文:
 定理 notMem_of_subset
-  条件: {x y : PSet} (h : x subseteq y)
+  条件: {x y : 命题集合} (h : x subseteq y)
   结论: y ∉ x
   证明: imp_not_comm.2 not_subset_of_mem h
 
@@ -1011,7 +1011,7 @@ definition toSet
 
 中文:
 定义 toSet
-  签名: (u : PSet.{u})
+  签名: (u : 命题集合.{u})
   定义体: { x | x in u }
 
 @[simp]
@@ -1031,7 +1031,7 @@ theorem mem_toSet
 
 中文:
 定理 mem_toSet
-  条件: (a u : PSet.{u})
+  条件: (a u : 命题集合.{u})
   结论: a in u.toSet ↔ a in u
   证明: Iff.rfl
 
@@ -1049,8 +1049,8 @@ definition Nonempty
   body: u.toSet.Nonempty
 
 中文:
-定义 Nonempty
-  签名: (u : PSet)
+定义 非空
+  签名: (u : 命题集合)
   定义体: u.toSet.Nonempty
 -/
 protected def Nonempty (u : PSet) : Prop :=
@@ -1067,8 +1067,8 @@ theorem nonempty_def
 
 中文:
 定理 nonempty_def
-  条件: (u : PSet)
-  结论: u.Nonempty ↔ 存在 x, x in u
+  条件: (u : 命题集合)
+  结论: u.非空 ↔ 存在 x, x in u
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1089,8 +1089,8 @@ theorem nonempty_of_mem
 
 中文:
 定理 nonempty_of_mem
-  条件: {x u : PSet} (h : x in u)
-  结论: u.Nonempty
+  条件: {x u : 命题集合} (h : x in u)
+  结论: u.非空
   证明: ⟨x, h⟩
 
 @[simp]
@@ -1110,8 +1110,8 @@ theorem nonempty_toSet_iff
 
 中文:
 定理 nonempty_toSet_iff
-  条件: {u : PSet}
-  结论: u.toSet.Nonempty ↔ u.Nonempty
+  条件: {u : 命题集合}
+  结论: u.toSet.非空 ↔ u.非空
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1130,8 +1130,8 @@ theorem nonempty_type_iff_nonempty
 
 中文:
 定理 nonempty_type_iff_nonempty
-  条件: {x : PSet}
-  结论: Nonempty x.Type ↔ PSet.Nonempty x
+  条件: {x : 命题集合}
+  结论: 非空 x.类型 ↔ 命题集合.非空 x
   证明: ⟨fun ⟨i⟩ => ⟨_, func_mem _ i⟩, fun ⟨_, j, _⟩ => ⟨j⟩⟩
 
 Depends on / 依赖: func_mem
@@ -1150,8 +1150,8 @@ theorem nonempty_of_nonempty_type
 
 中文:
 定理 nonempty_of_nonempty_type
-  条件: (x : PSet) [h : Nonempty x.Type]
-  结论: PSet.Nonempty x
+  条件: (x : 命题集合) [h : 非空 x.类型]
+  结论: 命题集合.非空 x
   证明: nonempty_type_iff_nonempty.1 h
 
 Depends on / 依赖: nonempty_type_iff_nonempty
@@ -1169,9 +1169,9 @@ theorem Equiv.eq
   proof: equiv_iff_mem.trans .symm Set.ext_iff
 
 中文:
-定理 Equiv.eq
-  条件: {x y : PSet}
-  结论: Equiv x y ↔ toSet x = toSet y
+定理 等价.eq
+  条件: {x y : 命题集合}
+  结论: 等价 x y ↔ toSet x = toSet y
   证明: equiv_iff_mem.trans .symm Set.ext_iff
 
 Depends on / 依赖: Set.ext_iff, equiv_iff_mem, equiv_iff_mem.trans, ext_iff
@@ -1189,7 +1189,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe PSet (Set PSet)
+  签名: Coe 命题集合 (集合 命题集合)
   定义体: ⟨toSet⟩
 -/
 instance : Coe PSet (Set PSet) :=
@@ -1205,7 +1205,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: : PSet
+  签名: : 命题集合
   定义体: ⟨_, PEmpty.elim⟩
 -/
 protected def empty : PSet :=
@@ -1221,7 +1221,7 @@ instance :
 
 中文:
 实例 :
-  签名: EmptyCollection PSet
+  签名: EmptyCollection 命题集合
   定义体: ⟨PSet.empty⟩
 
 Depends on / 依赖: PSet.empty
@@ -1239,7 +1239,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited PSet
+  签名: 可居 命题集合
   定义体: ⟨∅⟩
 -/
 instance : Inhabited PSet :=
@@ -1255,7 +1255,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsEmpty («Type» ∅)
+  签名: 是空 («类型» ∅)
   定义体: ⟨PEmpty.elim⟩
 
 Depends on / 依赖: PEmpty, PEmpty.elim
@@ -1276,7 +1276,7 @@ theorem empty_def
 
 中文:
 定理 empty_def
-  结论: (∅ : PSet) = ⟨_, PEmpty.elim⟩
+  结论: (∅ : 命题集合) = ⟨_, 命题空.elim⟩
   证明: by
   simp [EmptyCollection.emptyCollection, PSet.empty]
 
@@ -1301,8 +1301,8 @@ theorem notMem_empty
 
 中文:
 定理 notMem_empty
-  条件: (x : PSet.{u})
-  结论: x ∉ (∅ : PSet.{u})
+  条件: (x : 命题集合.{u})
+  结论: x ∉ (∅ : 命题集合.{u})
   证明: IsEmpty.exists_iff.1
 
 @[simp]
@@ -1346,8 +1346,8 @@ theorem empty_subset
 
 中文:
 定理 empty_subset
-  条件: (x : PSet.{u})
-  结论: (∅ : PSet) subseteq x
+  条件: (x : 命题集合.{u})
+  结论: (∅ : 命题集合) subseteq x
   证明: fun x => x.elim
 
 @[simp]
@@ -1367,7 +1367,7 @@ theorem not_nonempty_empty
 
 中文:
 定理 not_nonempty_empty
-  结论: ¬PSet.Nonempty ∅
+  结论: ¬命题集合.非空 ∅
   证明: by simp [PSet.Nonempty]
 
 Depends on / 依赖: Nonempty, PSet.Nonempty
@@ -1385,8 +1385,8 @@ theorem equiv_empty
 
 中文:
 定理 equiv_empty
-  条件: (x : PSet) [IsEmpty x.Type]
-  结论: Equiv x ∅
+  条件: (x : 命题集合) [是空 x.类型]
+  结论: 等价 x ∅
   证明: PSet.equiv_of_isEmpty x _
 -/
 protected theorem equiv_empty (x : PSet) [IsEmpty x.Type] : Equiv x ∅ :=
@@ -1402,7 +1402,7 @@ definition insert
 
 中文:
 定义 insert
-  签名: (x y : PSet)
+  签名: (x y : 命题集合)
   定义体: ⟨Option y.Type, fun o => Option.casesOn o x y.Func⟩
 -/
 protected def insert (x y : PSet) : PSet :=
@@ -1418,7 +1418,7 @@ instance :
 
 中文:
 实例 :
-  签名: Insert PSet PSet
+  签名: Insert 命题集合 命题集合
   定义体: ⟨PSet.insert⟩
 
 Depends on / 依赖: PSet.insert, insert
@@ -1436,7 +1436,7 @@ instance :
 
 中文:
 实例 :
-  签名: Singleton PSet PSet
+  签名: 单例 命题集合 命题集合
   定义体: ⟨fun s => insert s ∅⟩
 
 Depends on / 依赖: insert
@@ -1454,7 +1454,7 @@ instance :
 
 中文:
 实例 :
-  签名: LawfulSingleton PSet PSet
+  签名: LawfulSingleton 命题集合 命题集合
   定义体: ⟨fun _ => rfl⟩
 -/
 instance : LawfulSingleton PSet PSet :=
@@ -1473,7 +1473,7 @@ theorem mem_insert_iff
 
 中文:
 定理 mem_insert_iff
-  结论: 对任意 {x y z : PSet.{u}}, x in insert y z ↔ Equiv x y ∨ x in z
+  结论: 对任意 {x y z : 命题集合.{u}}, x in insert y z ↔ 等价 x y ∨ x in z
 -/
 theorem mem_insert_iff : forall {x y z : PSet.{u}}, x in insert y z ↔ Equiv x y ∨ x in z
   | x, y, ⟨α, A⟩ =>
@@ -1498,7 +1498,7 @@ theorem mem_insert
 
 中文:
 定理 mem_insert
-  条件: (x y : PSet)
+  条件: (x y : 命题集合)
   结论: x in insert x y
   证明: mem_insert_iff.2 Or.inl Equiv.rfl
 
@@ -1520,7 +1520,7 @@ theorem mem_insert_of_mem
 
 中文:
 定理 mem_insert_of_mem
-  条件: {y z : PSet} (x) (h : z in y)
+  条件: {y z : 命题集合} (x) (h : z in y)
   结论: z in insert x y
   证明: mem_insert_iff.2 Or.inr h
 
@@ -1544,8 +1544,8 @@ theorem mem_singleton
 
 中文:
 定理 mem_singleton
-  条件: {x y : PSet}
-  结论: x in ({y} : PSet) ↔ Equiv x y
+  条件: {x y : 命题集合}
+  结论: x in ({y} : 命题集合) ↔ 等价 x y
   证明: mem_insert_iff.trans
     ⟨fun o => Or.rec id (fun n => absurd n (notMem_empty _)) o, Or.inl⟩
 
@@ -1567,8 +1567,8 @@ theorem mem_pair
 
 中文:
 定理 mem_pair
-  条件: {x y z : PSet}
-  结论: x in ({y, z} : PSet) ↔ Equiv x y ∨ Equiv x z
+  条件: {x y z : 命题集合}
+  结论: x in ({y, z} : 命题集合) ↔ 等价 x y ∨ 等价 x z
   证明: by
   simp
 -/
@@ -1583,8 +1583,8 @@ definition ofNat
   signature: : Nat -> PSet
 
 中文:
-定义 ofNat
-  签名: : 自然数 -> PSet
+定义 of自然数
+  签名: : 自然数 -> 命题集合
 -/
 def ofNat : Nat -> PSet
   | 0 => ∅
@@ -1600,7 +1600,7 @@ definition omega
 
 中文:
 定义 omega
-  签名: : PSet
+  签名: : 命题集合
   定义体: ⟨ULift Nat, fun n => ofNat n.down⟩
 
 Depends on / 依赖: n.down
@@ -1618,7 +1618,7 @@ definition sep
 
 中文:
 定义 sep
-  签名: (p : PSet -> 命题) (x : PSet)
+  签名: (p : 命题集合 -> 命题) (x : 命题集合)
   定义体: ⟨{ a // p (x.Func a) }, fun y => x.Func y.1⟩
 -/
 protected def sep (p : PSet -> Prop) (x : PSet) : PSet :=
@@ -1634,7 +1634,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sep PSet PSet
+  签名: Sep 命题集合 命题集合
   定义体: ⟨PSet.sep⟩
 
 Depends on / 依赖: PSet.sep
@@ -1651,7 +1651,7 @@ theorem mem_sep
 
 中文:
 定理 mem_sep
-  条件: {p : PSet -> 命题} (H : 对任意 x y, Equiv x y -> p x -> p y)
+  条件: {p : 命题集合 -> 命题} (H : 对任意 x y, 等价 x y -> p x -> p y)
 -/
 theorem mem_sep {p : PSet -> Prop} (H : forall x y, Equiv x y -> p x -> p y) :
     forall {x y : PSet}, y in PSet.sep p x ↔ y in x ∧ p y
@@ -1671,7 +1671,7 @@ definition powerset
 
 中文:
 定义 powerset
-  签名: (x : PSet)
+  签名: (x : 命题集合)
   定义体: ⟨Set x.Type, fun p => ⟨p, fun y => x.Func y.1⟩⟩
 
 @[simp]
@@ -1694,7 +1694,7 @@ theorem mem_powerset
 
 中文:
 定理 mem_powerset
-  结论: 对任意 {x y : PSet}, y in powerset x ↔ y subseteq x
+  结论: 对任意 {x y : 命题集合}, y in powerset x ↔ y subseteq x
   证明: βα b
         ⟨⟨a, b, ba⟩, ba⟩,
         fun ⟨_, b, ba⟩ => ⟨b, ba⟩⟩⟩
@@ -1721,8 +1721,8 @@ prefix:110 "⋃₀ " => sUnion
 @[simp]
 
 中文:
-定义 sUnion
-  签名: (a : PSet)
+定义 集合并集
+  签名: (a : 命题集合)
   定义体: ⟨Σ x, (a.Func x).Type, fun ⟨x, y⟩ => (a.Func x).Func y⟩
 
 @[inherit_doc]
@@ -1758,7 +1758,7 @@ theorem mem_sUnion
 
 中文:
 定理 mem_sUnion
-  结论: 对任意 {x y : PSet.{u}}, y in ⋃₀ x ↔ 存在 z in x, y in z
+  结论: 对任意 {x y : 命题集合.{u}}, y in ⋃₀ x ↔ 存在 z in x, y in z
   证明: Mem.mk (A a).Func c
       ⟨_, Mem.mk _ _, (Mem.congr_left e).2 (by rwa [eta] at this)⟩,
       fun ⟨⟨β, B⟩, ⟨a, (e : Equiv (mk β B) (A a))⟩, ⟨b, yb⟩⟩ => by
@@ -1798,7 +1798,7 @@ theorem toSet_sUnion
 
 中文:
 定理 toSet_sUnion
-  条件: (x : PSet.{u})
+  条件: (x : 命题集合.{u})
   结论: (⋃₀ x).toSet = ⋃₀ (toSet '' x.toSet)
   证明: by
   ext
@@ -1817,8 +1817,8 @@ definition image
   body: ⟨x.Type, f ∘ x.Func⟩
 
 中文:
-定义 image
-  签名: (f : PSet.{u} -> PSet.{u}) (x : PSet.{u})
+定义 像
+  签名: (f : 命题集合.{u} -> 命题集合.{u}) (x : 命题集合.{u})
   定义体: ⟨x.Type, f ∘ x.Func⟩
 
 Depends on / 依赖: x.Func, x.Type
@@ -1835,7 +1835,7 @@ theorem mem_image
 
 中文:
 定理 mem_image
-  条件: {f : PSet.{u} -> PSet.{u}} (H : 对任意 x y, Equiv x y -> Equiv (f x) (f y))
+  条件: {f : 命题集合.{u} -> 命题集合.{u}} (H : 对任意 x y, 等价 x y -> 等价 (f x) (f y))
 -/
 theorem mem_image {f : PSet.{u} -> PSet.{u}} (H : forall x y, Equiv x y -> Equiv (f x) (f y)) :
     forall {x y : PSet.{u}}, y in image f x ↔ exists z in x, Equiv y (f z)
@@ -1851,7 +1851,7 @@ definition Lift
 
 中文:
 定义 Lift
-  签名: : PSet.{u} -> PSet.{max u v}
+  签名: : 命题集合.{u} -> 命题集合.{最大值 u v}
 -/
 protected def Lift : PSet.{u} -> PSet.{max u v}
   | ⟨α, A⟩ => ⟨ULift.{v, u} α, fun ⟨x⟩ => PSet.Lift (A x)⟩
@@ -1868,7 +1868,7 @@ definition embed
 
 中文:
 定义 embed
-  签名: : PSet.{max (u + 1) v}
+  签名: : 命题集合.{最大值 (u + 1) v}
   定义体: ⟨ULift.{v, u + 1} PSet, fun ⟨x⟩ => PSet.Lift.{u, max (u + 1) v} x⟩
 
 Depends on / 依赖: PSet.Lift
@@ -1887,7 +1887,7 @@ theorem lift_mem_embed
 
 中文:
 定理 lift_mem_embed
-  结论: 对任意 x : PSet.{u}, PSet.Lift.{u, max (u + 1) v} x in embed.{u, v}
+  结论: 对任意 x : 命题集合.{u}, 命题集合.Lift.{u, 最大值 (u + 1) v} x in embed.{u, v}
   证明: fun x =>
   ⟨⟨x⟩, Equiv.rfl⟩
 -/

@@ -120,7 +120,7 @@ definition flexible?
 
 中文:
 定义 flexible?
-  签名: : Syntax -> 布尔
+  签名: : Syntax -> 布尔值
 -/
 def flexible? : Syntax -> Bool
   | .node _ ``Lean.Parser.Tactic.simp #[_, _, _, only?, _, _] => only?[0].getAtomVal != "only"
@@ -204,8 +204,8 @@ structure TacticData
     - ci : ContextInfo
     - mctxBefore : MetavarContext
     - mctxAfter : MetavarContext
-    - goalsTargetedBy : List MVarId
-    - goalsCreatedBy : List MVarId
+    - goalsTargetedBy : 列表 MVarId
+    - goalsCreatedBy : 列表 MVarId
 -/
 structure TacticData where
   /-- The tactic syntax -/
@@ -348,7 +348,7 @@ definition getStained
 
 中文:
 定义 getStained
-  签名: (stx : Syntax) (all? : Syntax -> 布尔 := fun _ => false)
+  签名: (stx : Syntax) (all? : Syntax -> 布尔值 := fun _ => false)
   定义体: match stx with
     | stx@(.node _ ``Lean.Parser.Tactic.location loc) =>
       if all? stx then {} else (loc.map toStained).foldl (·.union) {}
@@ -375,7 +375,7 @@ definition getStained!
 
 中文:
 定义 getStained!
-  签名: (stx : Syntax) (all? : Syntax -> 布尔 := fun _ => false)
+  签名: (stx : Syntax) (all? : Syntax -> 布尔值 := fun _ => false)
   定义体: let out := getStained stx all?
   if out.size == 0 then {.goal} else out
 -/
@@ -542,7 +542,7 @@ definition usesGoal?
 
 中文:
 定义 usesGoal?
-  签名: : SyntaxNodeKind -> 布尔
+  签名: : SyntaxNodeKind -> 布尔值
 -/
 def usesGoal? : SyntaxNodeKind -> Bool
   | ``Lean.Parser.Tactic.cases => false
@@ -676,7 +676,7 @@ structure StainData
     - stx : Syntax
     - ci : ContextInfo
     - mctx : MetavarContext
-    - goals : List MVarId
+    - goals : 列表 MVarId
 -/
 structure StainData where
   /-- The stained location -/

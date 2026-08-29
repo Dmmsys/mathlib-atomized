@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: GroupWithZero (ConjAct G₀)
+  签名: 带零群 (ConjAct G₀)
   定义体: inferInstanceAs GroupWithZero G₀
 
 Depends on / 依赖: GroupWithZero
@@ -78,7 +78,7 @@ instance mulAction₀
 
 中文:
 实例 mulAction₀
-  签名: : MulAction (ConjAct G₀) G₀ where
+  签名: : 乘法作用 (ConjAct G₀) G₀ where
   定义体: by simp [smul_def]
   mul_smul := by simp [smul_def, mul_assoc]
 
@@ -98,7 +98,7 @@ instance smulCommClass₀
 
 中文:
 实例 smulCommClass₀
-  签名: [SMul α G₀] [SMulCommClass α G₀ G₀] [IsScalarTower α G₀ G₀]
+  签名: [标量乘法 α G₀] [标量交换类 α G₀ G₀] [标量塔 α G₀ G₀]
   定义体: by rw [smul_def, smul_def, mul_smul_comm, smul_mul_assoc]
 
 Depends on / 依赖: mul_smul_comm, smul_def, smul_mul_assoc
@@ -118,7 +118,7 @@ instance smulCommClass₀'
 
 中文:
 实例 smulCommClass₀'
-  签名: [SMul α G₀] [SMulCommClass G₀ α G₀] [IsScalarTower α G₀ G₀]
+  签名: [标量乘法 α G₀] [标量交换类 G₀ α G₀] [标量塔 α G₀ G₀]
   定义体: haveI := SMulCommClass.symm G₀ α G₀
   .symm ..
 

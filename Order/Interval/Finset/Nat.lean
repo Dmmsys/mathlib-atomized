@@ -45,7 +45,7 @@ instance instLocallyFiniteOrder
 
 中文:
 实例 instLocallyFiniteOrder
-  签名: : LocallyFiniteOrder 自然数 where
+  签名: : 局部有限序 自然数 where
   定义体: ⟨List.range' a (b + 1 - a), List.nodup_range'⟩
   finsetIco a b := ⟨List.range' a (b - a), List.nodup_range'⟩
   finsetIoc a b := ⟨List.range' (a + 1) (b - a), List.nodup_range'⟩
@@ -76,7 +76,7 @@ instance :
 
 中文:
 实例 :
-  签名: Unique (Iic 0)
+  签名: 唯一 (左无界右闭区间 0)
   定义体: by
   rw [← Nat.bot_eq_zero]
   infer_instance
@@ -97,7 +97,7 @@ theorem Icc_eq_range'
 
 中文:
 定理 Icc_eq_range'
-  结论: Icc a b = ⟨List.range' a (b + 1 - a), List.nodup_range'⟩
+  结论: 闭区间 a b = ⟨列表.range' a (b + 1 - a), 列表.nodup_range'⟩
   证明: rfl
 -/
 theorem Icc_eq_range' : Icc a b = ⟨List.range' a (b + 1 - a), List.nodup_range'⟩ :=
@@ -113,7 +113,7 @@ theorem Ico_eq_range'
 
 中文:
 定理 Ico_eq_range'
-  结论: Ico a b = ⟨List.range' a (b - a), List.nodup_range'⟩
+  结论: 左闭右开区间 a b = ⟨列表.range' a (b - a), 列表.nodup_range'⟩
   证明: rfl
 -/
 theorem Ico_eq_range' : Ico a b = ⟨List.range' a (b - a), List.nodup_range'⟩ :=
@@ -129,7 +129,7 @@ theorem Ioc_eq_range'
 
 中文:
 定理 Ioc_eq_range'
-  结论: Ioc a b = ⟨List.range' (a + 1) (b - a), List.nodup_range'⟩
+  结论: 左开右闭区间 a b = ⟨列表.range' (a + 1) (b - a), 列表.nodup_range'⟩
   证明: rfl
 -/
 theorem Ioc_eq_range' : Ioc a b = ⟨List.range' (a + 1) (b - a), List.nodup_range'⟩ :=
@@ -145,7 +145,7 @@ theorem Ioo_eq_range'
 
 中文:
 定理 Ioo_eq_range'
-  结论: Ioo a b = ⟨List.range' (a + 1) (b - a - 1), List.nodup_range'⟩
+  结论: 开区间 a b = ⟨列表.range' (a + 1) (b - a - 1), 列表.nodup_range'⟩
   证明: rfl
 -/
 theorem Ioo_eq_range' : Ioo a b = ⟨List.range' (a + 1) (b - a - 1), List.nodup_range'⟩ :=
@@ -178,7 +178,7 @@ theorem Iio_eq_range
 
 中文:
 定理 Iio_eq_range
-  结论: Iio a = range a
+  结论: 左无界右开区间 a = range a
   证明: by
   grind
 
@@ -199,7 +199,7 @@ theorem Ico_zero_eq_range
 
 中文:
 定理 Ico_zero_eq_range
-  结论: Ico 0 a = range a
+  结论: 左闭右开区间 0 a = range a
   证明: by
   rw [← Nat.bot_eq_zero]; rw [← Iio_eq_Ico]; rw [Iio_eq_range]
 
@@ -221,7 +221,7 @@ lemma range_eq_Icc_zero_sub_one
 中文:
 引理 range_eq_Icc_zero_sub_one
   条件: (n : 自然数) (hn : n != 0)
-  结论: range n = Icc 0 (n - 1)
+  结论: range n = 闭区间 0 (n - 1)
   证明: by
   grind
 -/
@@ -237,8 +237,8 @@ theorem _root_.Finset.range_eq_Ico
   proof: (Ico_zero_eq_range a).symm
 
 中文:
-定理 _root_.Finset.range_eq_Ico
-  结论: range a = Ico 0 a
+定理 _root_.有限集.range_eq_Ico
+  结论: range a = 左闭右开区间 0 a
   证明: (Ico_zero_eq_range a).symm
 
 Depends on / 依赖: Ico_zero_eq_range
@@ -259,7 +259,7 @@ theorem range_succ_eq_Icc_zero
 中文:
 定理 range_succ_eq_Icc_zero
   条件: (n : 自然数)
-  结论: range (n + 1) = Icc 0 n
+  结论: range (n + 1) = 闭区间 0 n
   证明: by
   rw [range_eq_Icc_zero_sub_one _ (Nat.add_one_ne_zero _)]; rw [Nat.add_sub_cancel_right]
 
@@ -282,7 +282,7 @@ theorem range_succ_eq_Iic
 中文:
 定理 range_succ_eq_Iic
   条件: (n : 自然数)
-  结论: range (n + 1) = Iic n
+  结论: range (n + 1) = 左无界右闭区间 n
   证明: by
   rw [range_succ_eq_Icc_zero]
   rfl
@@ -303,7 +303,7 @@ lemma card_Icc
 
 中文:
 引理 card_Icc
-  结论: #(Icc a b) = b + 1 - a
+  结论: #(闭区间 a b) = b + 1 - a
   证明: List.length_range' ..
 -/
 @[simp] lemma card_Icc : #(Icc a b) = b + 1 - a := List.length_range' ..
@@ -317,7 +317,7 @@ lemma card_Ico
 
 中文:
 引理 card_Ico
-  结论: #(Ico a b) = b - a
+  结论: #(左闭右开区间 a b) = b - a
   证明: List.length_range' ..
 -/
 @[simp] lemma card_Ico : #(Ico a b) = b - a := List.length_range' ..
@@ -331,7 +331,7 @@ lemma card_Ioc
 
 中文:
 引理 card_Ioc
-  结论: #(Ioc a b) = b - a
+  结论: #(左开右闭区间 a b) = b - a
   证明: List.length_range' ..
 -/
 @[simp] lemma card_Ioc : #(Ioc a b) = b - a := List.length_range' ..
@@ -347,7 +347,7 @@ lemma card_Ioo
 
 中文:
 引理 card_Ioo
-  结论: #(Ioo a b) = b - a - 1
+  结论: #(开区间 a b) = b - a - 1
   证明: List.length_range' ..
 
 @[simp]
@@ -390,7 +390,7 @@ lemma card_Iic
 
 中文:
 引理 card_Iic
-  结论: #(Iic b) = b + 1
+  结论: #(左无界右闭区间 b) = b + 1
   证明: by rw [Iic_eq_Icc, card_Icc, Nat.bot_eq_zero, Nat.sub_zero]
 
 @[simp]
@@ -410,7 +410,7 @@ theorem card_Iio
 
 中文:
 定理 card_Iio
-  结论: #(Iio b) = b
+  结论: #(左无界右开区间 b) = b
   证明: by rw [Iio_eq_Ico, card_Ico, Nat.bot_eq_zero, Nat.sub_zero]
 
 Depends on / 依赖: Iio_eq_Ico, Nat.bot_eq_zero, Nat.sub_zero, bot_eq_zero, card_Ico, sub_zero
@@ -432,7 +432,7 @@ theorem Ico_succ_singleton
 
 中文:
 定理 Ico_succ_singleton
-  结论: Ico a (a + 1) = {a}
+  结论: 左闭右开区间 a (a + 1) = {a}
   证明: by grind
 
 @[simp]
@@ -457,7 +457,7 @@ theorem Ico_pred_singleton
 中文:
 定理 Ico_pred_singleton
   条件: {a : 自然数} (h : 0 < a)
-  结论: Ico (a - 1) a = {a - 1}
+  结论: 左闭右开区间 (a - 1) a = {a - 1}
   证明: by
   ext x
   rw [mem_Ico]; rw [mem_singleton]
@@ -483,7 +483,7 @@ theorem Ioc_succ_singleton
 
 中文:
 定理 Ioc_succ_singleton
-  结论: Ioc b (b + 1) = {b + 1}
+  结论: 左开右闭区间 b (b + 1) = {b + 1}
   证明: by grind
 -/
 theorem Ioc_succ_singleton : Ioc b (b + 1) = {b + 1} := by grind
@@ -500,7 +500,7 @@ lemma mem_Ioc_succ
 
 中文:
 引理 mem_Ioc_succ
-  结论: a in Ioc b (b + 1) ↔ a = b + 1
+  结论: a in 左开右闭区间 b (b + 1) ↔ a = b + 1
   证明: by simp
 -/
 lemma mem_Ioc_succ : a in Ioc b (b + 1) ↔ a = b + 1 := by simp
@@ -516,7 +516,7 @@ lemma mem_Ioc_succ'
 
 中文:
 引理 mem_Ioc_succ'
-  条件: (a : Ioc b (b + 1))
+  条件: (a : 左开右闭区间 b (b + 1))
   结论: a = ⟨b + 1, mem_Ioc.2 (by lia)⟩
   证明: Subtype.val_inj.1 (mem_Ioc_succ.1 a.2)
 
@@ -604,7 +604,7 @@ theorem Ico_succ_left_eq_erase_Ico
 
 中文:
 定理 Ico_succ_left_eq_erase_Ico
-  结论: Ico a.succ b = erase (Ico a b) a
+  结论: 左闭右开区间 a.succ b = erase (左闭右开区间 a b) a
   证明: by
   ext x
   simp_rw [mem_erase, mem_Ico]
@@ -632,7 +632,7 @@ theorem Ico_succ_right_eq_insert_Ico
 中文:
 定理 Ico_succ_right_eq_insert_Ico
   条件: (h : a <= b)
-  结论: Ico a b.succ = insert b (Ico a b)
+  结论: 左闭右开区间 a b.succ = insert b (左闭右开区间 a b)
   证明: by
   ext x
   simp_rw [mem_insert, mem_Ico]
@@ -665,7 +665,7 @@ theorem mod_injOn_Ico
 中文:
 定理 mod_injOn_Ico
   条件: (n a : 自然数)
-  结论: Set.InjOn (· % a) (Finset.Ico n (n + a))
+  结论: 集合.单射限制 (· % a) (有限集.左闭右开区间 n (n + a))
   证明: by
   induction n with
   | zero =>
@@ -724,7 +724,7 @@ theorem image_Ico_mod
 中文:
 定理 image_Ico_mod
   条件: (n a : 自然数)
-  结论: (Ico n (n + a)).image (· % a) = range a
+  结论: (左闭右开区间 n (n + a)).像 (· % a) = range a
   证明: by
   obtain rfl | ha := eq_or_ne a 0
   · rw [range_zero, add_zero, Ico_self, image_empty]
@@ -814,7 +814,7 @@ lemma toFinset_range'_1
 中文:
 引理 toFinset_range'_1
   条件: (a b : 自然数)
-  结论: (List.range' a b).toFinset = Ico a (a + b)
+  结论: (列表.range' a b).toFinset = 左闭右开区间 a (a + b)
   证明: by
   ext x
   rw [List.mem_toFinset]; rw [List.mem_range'_1]; rw [Finset.mem_Ico]
@@ -839,7 +839,7 @@ lemma toFinset_range'_1_1
 中文:
 引理 toFinset_range'_1_1
   条件: (a : 自然数)
-  结论: (List.range' 1 a).toFinset = Icc 1 a
+  结论: (列表.range' 1 a).toFinset = 闭区间 1 a
   证明: by
   ext x
   rw [List.mem_toFinset]; rw [List.mem_range'_1]; rw [add_comm]; rw [Nat.lt_succ_iff]; rw [Finset.mem_Icc]
@@ -862,7 +862,7 @@ lemma toFinset_range
 中文:
 引理 toFinset_range
   条件: (a : 自然数)
-  结论: (List.range a).toFinset = Finset.range a
+  结论: (列表.range a).toFinset = 有限集.range a
   证明: by
   ext x
   rw [List.mem_toFinset]; rw [List.mem_range]; rw [Finset.mem_range]
@@ -966,7 +966,7 @@ theorem Nat.decreasing_induction_of_not_bddAbove
 @[elab_as_elim]
 
 中文:
-定理 Nat.decreasing_induction_of_not_bddAbove
+定理 自然数.decreasing_induction_of_not_bddAbove
   结论: (h : 对任意 n, P (n + 1) -> P n)
   证明: let ⟨_, hm, hl⟩ := not_bddAbove_iff.1 hP n
   decreasingInduction (fun _ _ => h _) hm hl.le
@@ -998,7 +998,7 @@ lemma Nat.strong_decreasing_induction
     specialize @hb (n + b + 1) (fun m hm => hn _ _)
 
 中文:
-引理 Nat.strong_decreasing_induction
+引理 自然数.strong_decreasing_induction
   结论: (base : 存在 n, 对任意 m > n, P m) (step : 对任意 n, (对任意 m > n, P m) -> P n)
   证明: by
   apply Nat.decreasing_induction_of_not_bddAbove (P := fun n => forall m >= n, P m) _ _ n n le_rfl
@@ -1032,7 +1032,7 @@ theorem Nat.decreasing_induction_of_infinite
   proof: Nat.decreasing_induction_of_not_bddAbove h (mt BddAbove.finite hP) n
 
 中文:
-定理 Nat.decreasing_induction_of_infinite
+定理 自然数.decreasing_induction_of_infinite
   证明: Nat.decreasing_induction_of_not_bddAbove h (mt BddAbove.finite hP) n
 
 Depends on / 依赖: BddAbove, BddAbove.finite, Nat.decreasing_induction_of_not_bddAbove, decreasing_induction_of_not_bddAbove, finite
@@ -1055,7 +1055,7 @@ theorem Nat.cauchy_induction'
   exact hl.not_ge (hm hy hl.le)
 
 中文:
-定理 Nat.cauchy_induction'
+定理 自然数.cauchy_induction'
   结论: (seed : 自然数) (h : 对任意 n, P (n + 1) -> P n) (hs : P seed)
   证明: by
   apply Nat.decreasing_induction_of_infinite h fun hf => _
@@ -1083,7 +1083,7 @@ theorem Nat.cauchy_induction
   proof: seed.cauchy_induction' h hs (fun x hl hx => ⟨f x, hf x hl hx⟩) n
 
 中文:
-定理 Nat.cauchy_induction
+定理 自然数.cauchy_induction
   结论: (h : 对任意 n, P (n + 1) -> P n) (seed : 自然数) (hs : P seed) (f : 自然数 -> 自然数)
   证明: seed.cauchy_induction' h hs (fun x hl hx => ⟨f x, hf x hl hx⟩) n
 
@@ -1106,7 +1106,7 @@ theorem Nat.cauchy_induction_mul
   rw [one_mul]
 
 中文:
-定理 Nat.cauchy_induction_mul
+定理 自然数.cauchy_induction_mul
   结论: (h : 对任意 (n : 自然数), P (n + 1) -> P n) (k seed : 自然数) (hk : 1 < k)
   证明: by
   apply Nat.cauchy_induction h _ hs (k * ·) fun x hl hP => ⟨_, hm x hl hP⟩
@@ -1132,7 +1132,7 @@ theorem Nat.cauchy_induction_two_mul
   proof: Nat.cauchy_induction_mul h 2 seed Nat.one_lt_two hs hm n
 
 中文:
-定理 Nat.cauchy_induction_two_mul
+定理 自然数.cauchy_induction_two_mul
   结论: (h : 对任意 n, P (n + 1) -> P n) (seed : 自然数) (hs : P seed.succ)
   证明: Nat.cauchy_induction_mul h 2 seed Nat.one_lt_two hs hm n
 
@@ -1153,8 +1153,8 @@ theorem Nat.pow_imp_self_of_one_lt
 (fun x hx => pow_one x ▸ hx) fun n _ hn x hx => hpow x hn _ (pow_mul x k n).subst hx
 
 中文:
-定理 Nat.pow_imp_self_of_one_lt
-  结论: {M} [Monoid M] (k : 自然数) (hk : 1 < k)
+定理 自然数.pow_imp_self_of_one_lt
+  结论: {M} [幺半群 M] (k : 自然数) (hk : 1 < k)
   证明: k.cauchy_induction_mul (fun n ih x hx => ih x <| (hmul _ x hx).elim
     (fun h => by rwa [_root_.pow_succ]) fun h => by rwa [_root_.pow_succ']) 0 hk
 (fun x hx => pow_one x ▸ hx) fun n _ hn x hx => hpow x hn _ (pow_mul x k n).subst hx

@@ -59,7 +59,7 @@ theorem mono_snd_of_is_pullback_of_mono
 
 中文:
 定理 mono_snd_of_is_pullback_of_mono
-  条件: {t : PullbackCone f g} (ht : IsLimit t) [Mono f]
+  条件: {t : PullbackCone f g} (ht : 是极限 t) [单态射 f]
   证明: by
   refine ⟨fun {W} h k i => IsLimit.hom_ext ht ?_ i⟩
   rw [← cancel_mono f]; rw [Category.assoc]; rw [Category.assoc]; rw [condition]
@@ -86,7 +86,7 @@ theorem mono_fst_of_is_pullback_of_mono
 
 中文:
 定理 mono_fst_of_is_pullback_of_mono
-  条件: {t : PullbackCone f g} (ht : IsLimit t) [Mono g]
+  条件: {t : PullbackCone f g} (ht : 是极限 t) [单态射 g]
   证明: by
   refine ⟨fun {W} h k i => IsLimit.hom_ext ht i ?_⟩
   rw [← cancel_mono g]; rw [Category.assoc]; rw [Category.assoc]; rw [← condition]
@@ -112,7 +112,7 @@ definition isLimitMkIdId
 
 中文:
 定义 isLimitMkIdId
-  签名: (f : X ⟶ Y) [Mono f]
+  签名: (f : X ⟶ Y) [单态射 f]
   定义体: IsLimit.mk _ (fun s => s.fst) (fun _ => Category.comp_id _)
     (fun s => by rw [← cancel_mono f, Category.comp_id, s.condition]) fun s m m₁ _ => by
     simpa using m₁
@@ -136,7 +136,7 @@ theorem mono_of_isLimitMkIdId
 
 中文:
 定理 mono_of_isLimitMkIdId
-  条件: (f : X ⟶ Y) (t : IsLimit (mk (𝟙 X) (𝟙 X) rfl : PullbackCone f f))
+  条件: (f : X ⟶ Y) (t : 是极限 (mk (𝟙 X) (𝟙 X) rfl : PullbackCone f f))
   证明: ⟨fun {Z} g h eq => by
     rcases PullbackCone.IsLimit.lift' t _ _ eq with ⟨_, rfl, rfl⟩
     rfl⟩
@@ -165,7 +165,7 @@ definition isLimitOfFactors
 
 中文:
 定义 isLimitOfFactors
-  签名: (f : X ⟶ Z) (g : Y ⟶ Z) (h : W ⟶ Z) [Mono h] (x : X ⟶ W) (y : Y ⟶ W)
+  签名: (f : X ⟶ Z) (g : Y ⟶ Z) (h : W ⟶ Z) [单态射 h] (x : X ⟶ W) (y : Y ⟶ W)
   定义体: PullbackCone.isLimitAux' _ fun t =>
     have : fst t ≫ x ≫ h = snd t ≫ y ≫ h := by -- Porting note: reassoc workaround
       rw [← Category.assoc]; rw [← Category.assoc]
@@ -211,7 +211,7 @@ definition isLimitOfCompMono
 
 中文:
 定义 isLimitOfCompMono
-  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [Mono i] (s : PullbackCone f g)
+  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [单态射 i] (s : PullbackCone f g)
   定义体: by
   apply PullbackCone.isLimitAux'
   intro s
@@ -253,7 +253,7 @@ instance pullback.fst_of_mono
 
 中文:
 实例 pullback.fst_of_mono
-  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} [HasPullback f g] [Mono g]
+  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} [HasPullback f g] [单态射 g]
   定义体: PullbackCone.mono_fst_of_is_pullback_of_mono (limit.isLimit _)
 
 Depends on / 依赖: PullbackCone, PullbackCone.mono_fst_of_is_pullback_of_mono, isLimit, limit.isLimit, mono_fst_of_is_pullback_of_mono
@@ -272,7 +272,7 @@ instance pullback.snd_of_mono
 
 中文:
 实例 pullback.snd_of_mono
-  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} [HasPullback f g] [Mono f]
+  签名: {X Y Z : C} {f : X ⟶ Z} {g : Y ⟶ Z} [HasPullback f g] [单态射 f]
   定义体: PullbackCone.mono_snd_of_is_pullback_of_mono (limit.isLimit _)
 
 Depends on / 依赖: PullbackCone, PullbackCone.mono_snd_of_is_pullback_of_mono, isLimit, limit.isLimit, mono_snd_of_is_pullback_of_mono
@@ -295,7 +295,7 @@ instance mono_pullback_to_prod
 
 中文:
 实例 mono_pullback_to_prod
-  签名: {C : 类型} [Category* C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
+  签名: {C : 类型} [范畴* C] {X Y Z : C} (f : X ⟶ Z) (g : Y ⟶ Z)
   定义体: ⟨fun {W} i₁ i₂ h => by
     ext
     · simpa using congrArg (fun f => f ≫ prod.fst) h
@@ -321,7 +321,7 @@ definition pullbackIsPullbackOfCompMono
 
 中文:
 定义 pullbackIsPullbackOfCompMono
-  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [Mono i]
+  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [单态射 i]
   定义体: PullbackCone.isLimitOfCompMono f g i _ (limit.isLimit (cospan f g))
 
 Depends on / 依赖: PullbackCone, PullbackCone.isLimitOfCompMono, cospan, isLimit, isLimitOfCompMono, limit.isLimit
@@ -343,7 +343,7 @@ instance hasPullback_of_comp_mono
 
 中文:
 实例 hasPullback_of_comp_mono
-  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [Mono i] [HasPullback f g]
+  签名: (f : X ⟶ W) (g : Y ⟶ W) (i : W ⟶ Z) [单态射 i] [HasPullback f g]
   定义体: ⟨⟨⟨_, pullbackIsPullbackOfCompMono f g i⟩⟩⟩
 
 Depends on / 依赖: pullbackIsPullbackOfCompMono
@@ -498,7 +498,7 @@ theorem PullbackCone.fst_eq_snd_of_mono_eq
 
 中文:
 定理 PullbackCone.fst_eq_snd_of_mono_eq
-  条件: {f : X ⟶ Y} [Mono f] (t : PullbackCone f f)
+  条件: {f : X ⟶ Y} [单态射 f] (t : PullbackCone f f)
   证明: (cancel_mono f).1 t.condition
 
 Depends on / 依赖: cancel_mono, condition, t.condition
@@ -571,7 +571,7 @@ lemma PullbackCone.isIso_fst_of_mono_of_isLimit
 
 中文:
 引理 PullbackCone.isIso_fst_of_mono_of_isLimit
-  条件: {t : PullbackCone f f} (ht : IsLimit t)
+  条件: {t : PullbackCone f f} (ht : 是极限 t)
   证明: by
   refine ⟨⟨PullbackCone.IsLimit.lift ht (𝟙 _) (𝟙 _) (by simp), ?_, by simp⟩⟩
   apply PullbackCone.IsLimit.hom_ext ht
@@ -598,7 +598,7 @@ lemma PullbackCone.isIso_snd_of_mono_of_isLimit
 
 中文:
 引理 PullbackCone.isIso_snd_of_mono_of_isLimit
-  条件: {t : PullbackCone f f} (ht : IsLimit t)
+  条件: {t : PullbackCone f f} (ht : 是极限 t)
   证明: t.fst_eq_snd_of_mono_eq ▸ t.isIso_fst_of_mono_of_isLimit ht
 
 Depends on / 依赖: fst_eq_snd_of_mono_eq, isIso_fst_of_mono_of_isLimit, t.fst_eq_snd_of_mono_eq, t.isIso_fst_of_mono_of_isLimit
@@ -617,7 +617,7 @@ instance isIso_fst_of_mono
 
 中文:
 实例 isIso_fst_of_mono
-  签名: : IsIso (pullback.fst f f)
+  签名: : 是同构 (pullback.fst f f)
   定义体: PullbackCone.isIso_fst_of_mono_of_isLimit (getLimitCone (cospan f f)).isLimit
 
 Depends on / 依赖: PullbackCone, PullbackCone.isIso_fst_of_mono_of_isLimit, cospan, getLimitCone, isIso_fst_of_mono_of_isLimit, isLimit
@@ -635,7 +635,7 @@ instance isIso_snd_of_mono
 
 中文:
 实例 isIso_snd_of_mono
-  签名: : IsIso (pullback.snd f f)
+  签名: : 是同构 (pullback.snd f f)
   定义体: PullbackCone.isIso_snd_of_mono_of_isLimit (getLimitCone (cospan f f)).isLimit
 
 Depends on / 依赖: PullbackCone, PullbackCone.isIso_snd_of_mono_of_isLimit, cospan, getLimitCone, isIso_snd_of_mono_of_isLimit, isLimit
@@ -658,7 +658,7 @@ theorem epi_inr_of_is_pushout_of_epi
 
 中文:
 定理 epi_inr_of_is_pushout_of_epi
-  条件: {t : PushoutCocone f g} (ht : IsColimit t) [Epi f]
+  条件: {t : PushoutCocone f g} (ht : 是余极限 t) [满态射 f]
   证明: ⟨fun {W} h k i => IsColimit.hom_ext ht (by simp [← cancel_epi f, t.condition_assoc, i]) i⟩
 
 Depends on / 依赖: IsColimit, IsColimit.hom_ext, cancel_epi, condition_assoc, hom_ext, t.condition_assoc
@@ -677,7 +677,7 @@ theorem epi_inl_of_is_pushout_of_epi
 
 中文:
 定理 epi_inl_of_is_pushout_of_epi
-  条件: {t : PushoutCocone f g} (ht : IsColimit t) [Epi g]
+  条件: {t : PushoutCocone f g} (ht : 是余极限 t) [满态射 g]
   证明: ⟨fun {W} h k i => IsColimit.hom_ext ht i (by simp [← cancel_epi g, ← t.condition_assoc, i])⟩
 
 Depends on / 依赖: IsColimit, IsColimit.hom_ext, cancel_epi, condition_assoc, hom_ext, t.condition_assoc
@@ -698,7 +698,7 @@ definition isColimitMkIdId
 
 中文:
 定义 isColimitMkIdId
-  签名: (f : X ⟶ Y) [Epi f]
+  签名: (f : X ⟶ Y) [满态射 f]
   定义体: IsColimit.mk _ (fun s => s.inl) (fun _ => Category.id_comp _)
     (fun s => by rw [← cancel_epi f, Category.id_comp, s.condition]) fun s m m₁ _ => by
     simpa using m₁
@@ -751,7 +751,7 @@ definition isColimitOfFactors
 
 中文:
 定义 isColimitOfFactors
-  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W) [Epi h] (x : W ⟶ Y) (y : W ⟶ Z)
+  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : X ⟶ W) [满态射 h] (x : W ⟶ Y) (y : W ⟶ Z)
   定义体: by -- Porting note: working around reassoc
       rw [← Category.assoc]; apply congrArg (· ≫ inl s) hhx
     have reassoc₂ : h ≫ y ≫ inr s = g ≫ inr s := by
@@ -800,7 +800,7 @@ definition isColimitOfEpiComp
 
 中文:
 定义 isColimitOfEpiComp
-  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [Epi h] (s : PushoutCocone f g)
+  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [满态射 h] (s : PushoutCocone f g)
   定义体: by
   apply PushoutCocone.isColimitAux'
   intro s
@@ -840,7 +840,7 @@ instance pushout.inl_of_epi
 
 中文:
 实例 pushout.inl_of_epi
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} [HasPushout f g] [Epi g]
+  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} [HasPushout f g] [满态射 g]
   定义体: PushoutCocone.epi_inl_of_is_pushout_of_epi (colimit.isColimit _)
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.epi_inl_of_is_pushout_of_epi, colimit, colimit.isColimit, epi_inl_of_is_pushout_of_epi, isColimit
@@ -859,7 +859,7 @@ instance pushout.inr_of_epi
 
 中文:
 实例 pushout.inr_of_epi
-  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} [HasPushout f g] [Epi f]
+  签名: {X Y Z : C} {f : X ⟶ Y} {g : X ⟶ Z} [HasPushout f g] [满态射 f]
   定义体: PushoutCocone.epi_inr_of_is_pushout_of_epi (colimit.isColimit _)
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.epi_inr_of_is_pushout_of_epi, colimit, colimit.isColimit, epi_inr_of_is_pushout_of_epi, isColimit
@@ -882,7 +882,7 @@ instance epi_coprod_to_pushout
 
 中文:
 实例 epi_coprod_to_pushout
-  签名: {C : 类型} [Category* C] {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
+  签名: {C : 类型} [范畴* C] {X Y Z : C} (f : X ⟶ Y) (g : X ⟶ Z)
   定义体: ⟨fun {W} i₁ i₂ h => by
     ext
     · simpa using congrArg (fun f => coprod.inl ≫ f) h
@@ -908,7 +908,7 @@ definition pushoutIsPushoutOfEpiComp
 
 中文:
 定义 pushoutIsPushoutOfEpiComp
-  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [Epi h]
+  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [满态射 h]
   定义体: PushoutCocone.isColimitOfEpiComp f g h _ (colimit.isColimit (span f g))
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isColimitOfEpiComp, colimit, colimit.isColimit, isColimit, isColimitOfEpiComp
@@ -929,7 +929,7 @@ instance hasPushout_of_epi_comp
 
 中文:
 实例 hasPushout_of_epi_comp
-  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [Epi h] [HasPushout f g]
+  签名: (f : X ⟶ Y) (g : X ⟶ Z) (h : W ⟶ X) [满态射 h] [HasPushout f g]
   定义体: ⟨⟨⟨_, pushoutIsPushoutOfEpiComp f g h⟩⟩⟩
 
 Depends on / 依赖: pushoutIsPushoutOfEpiComp
@@ -1108,7 +1108,7 @@ theorem PushoutCocone.inl_eq_inr_of_epi_eq
 
 中文:
 定理 PushoutCocone.inl_eq_inr_of_epi_eq
-  条件: {f : X ⟶ Y} [Epi f] (t : PushoutCocone f f)
+  条件: {f : X ⟶ Y} [满态射 f] (t : PushoutCocone f f)
   证明: (cancel_epi f).1 t.condition
 
 Depends on / 依赖: cancel_epi, condition, t.condition
@@ -1175,7 +1175,7 @@ lemma PushoutCocone.isIso_inl_of_epi_of_isColimit
 
 中文:
 引理 PushoutCocone.isIso_inl_of_epi_of_isColimit
-  条件: {t : PushoutCocone f f} (ht : IsColimit t)
+  条件: {t : PushoutCocone f f} (ht : 是余极限 t)
   证明: by
   refine ⟨⟨PushoutCocone.IsColimit.desc ht (𝟙 _) (𝟙 _) (by simp), by simp, ?_⟩⟩
   apply PushoutCocone.IsColimit.hom_ext ht
@@ -1202,7 +1202,7 @@ lemma PushoutCocone.isIso_inr_of_epi_of_isColimit
 
 中文:
 引理 PushoutCocone.isIso_inr_of_epi_of_isColimit
-  条件: {t : PushoutCocone f f} (ht : IsColimit t)
+  条件: {t : PushoutCocone f f} (ht : 是余极限 t)
   证明: t.inl_eq_inr_of_epi_eq ▸ t.isIso_inl_of_epi_of_isColimit ht
 
 Depends on / 依赖: h.mem_incl_app, inl_eq_inr_of_epi_eq, isIso_inl_of_epi_of_isColimit, mem_incl_app, t.inl_eq_inr_of_epi_eq, t.isIso_inl_of_epi_of_isColimit
@@ -1221,7 +1221,7 @@ instance isIso_inl_of_epi
 
 中文:
 实例 isIso_inl_of_epi
-  签名: : IsIso (pushout.inl f f)
+  签名: : 是同构 (pushout.inl f f)
   定义体: PushoutCocone.isIso_inl_of_epi_of_isColimit (getColimitCocone (span f f)).isColimit
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isIso_inl_of_epi_of_isColimit, getColimitCocone, isColimit, isIso_inl_of_epi_of_isColimit
@@ -1239,7 +1239,7 @@ instance isIso_inr_of_epi
 
 中文:
 实例 isIso_inr_of_epi
-  签名: : IsIso (pushout.inr f f)
+  签名: : 是同构 (pushout.inr f f)
   定义体: PushoutCocone.isIso_inr_of_epi_of_isColimit (getColimitCocone (span f f)).isColimit
 
 Depends on / 依赖: PushoutCocone, PushoutCocone.isIso_inr_of_epi_of_isColimit, getColimitCocone, isColimit, isIso_inr_of_epi_of_isColimit

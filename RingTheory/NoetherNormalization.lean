@@ -121,7 +121,7 @@ lemma t1_comp_t1_neg
 中文:
 引理 t1_comp_t1_neg
   条件: (c : k)
-  结论: (T1 f c).comp (T1 f (-c)) = AlgHom.id _ _
+  结论: (T1 f c).comp (T1 f (-c)) = 代数态射.id _ _
   证明: by
   rw [comp_aeval]; rw [← MvPolynomial.aeval_X_left]
   ext i v
@@ -377,9 +377,9 @@ exact (monic_of_isUnit_leadingCoeff_inv_smul u).quotient_isIntegral
 Submodule.smul_of_tower_mem _ u.unit⁻¹.val mem_map_of_mem _ mem_map_of_mem _ fi
 
 中文:
-引理 hom1_isIntegral
+引理 hom1_is整数egral
   条件: (fne : f != 0) (fi : f in I)
-  结论: (hom1 f I).Is整数egral
+  结论: (hom1 f I).是整
   证明: by
   obtain u := T_leadingcoeff_isUnit f fne
 exact (monic_of_isUnit_leadingCoeff_inv_smul u).quotient_isIntegral
@@ -493,9 +493,9 @@ lemma hom2_isIntegral
 _ _ isIntegral_of_surjective _ (eqv2 f I).surjective
 
 中文:
-引理 hom2_isIntegral
+引理 hom2_is整数egral
   条件: (fne : f != 0) (fi : f in I)
-  结论: (hom2 f I).Is整数egral
+  结论: (hom2 f I).是整
   证明: ((hom1_isIntegral f I fne fi).trans _ _ <| isIntegral_of_surjective _ (eqv1 f I).surjective).trans
 _ _ isIntegral_of_surjective _ (eqv2 f I).surjective
 -/
@@ -527,8 +527,8 @@ theorem exists_integral_inj_algHom_of_quotient
 have ne : coeff 0 (a - b) !
 
 中文:
-定理 exists_integral_inj_algHom_of_quotient
-  结论: (I : Ideal (MvPolynomial (Fin n) k))
+定理 存在_integral_inj_algHom_of_quotient
+  结论: (I : 理想 (多元多项式 (有限集 n) k))
   证明: by
   induction n with
   | zero =>
@@ -594,8 +594,8 @@ theorem exists_integral_inj_algHom_of_fg
   simp only [AlgHom.coe_comp, AlgEquiv.coe_to
 
 中文:
-定理 exists_integral_inj_algHom_of_fg
-  结论: 存在 s, 存在 g : (MvPolynomial (Fin s) k) ->ₐ[k] R,
+定理 存在_integral_inj_algHom_of_fg
+  结论: 存在 s, 存在 g : (多元多项式 (有限集 s) k) ->ₐ[k] R,
   证明: by
   obtain ⟨n, f, fsurj⟩ := Algebra.FiniteType.iff_quotient_mvPolynomial''.mp fin
   set ϕ := quotientKerAlgEquivOfSurjective fsurj
@@ -629,8 +629,8 @@ theorem exists_finite_inj_algHom_of_fg
   exact ⟨s, g, in
 
 中文:
-定理 exists_finite_inj_algHom_of_fg
-  结论: 存在 s, 存在 g : (MvPolynomial (Fin s) k) ->ₐ[k] R,
+定理 存在_finite_inj_algHom_of_fg
+  结论: 存在 s, 存在 g : (多元多项式 (有限集 s) k) ->ₐ[k] R,
   证明: by
   obtain ⟨s, g, ⟨inj, int⟩⟩ := exists_integral_inj_algHom_of_fg k R
   have h : algebraMap k R = g.toRingHom.comp (algebraMap k (MvPolynomial (Fin s) k)) := by

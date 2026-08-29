@@ -46,8 +46,8 @@ structure AddConstMap
     - map_add_const'((x : G)) : toFun (x + a) = toFun x + b
 
 中文:
-结构 AddConstMap
-  参数: (G H : 类型) [Add G] [Add H] (a : G) (b : H)
+结构 加法余nst映射
+  参数: (G H : 类型) [加法 G] [加法 H] (a : G) (b : H)
   公理与运算 (2 个):
     - toFun : G -> H
     - map_add_const'((x : G)) : toFun (x + a) = toFun x + b
@@ -72,8 +72,8 @@ class AddConstMapClass
     - map_add_const((f : F) (x : G)) : f (x + a) = f x + b
 
 中文:
-类 AddConstMapClass
-  参数: (F : 类型) (G H : outParam 类型) [Add G] [Add H]
+类 加法余nst映射类
+  参数: (F : 类型) (G H : outParam 类型) [加法 G] [加法 H]
   公理与运算 (1 个):
     - map_add_const((f : F) (x : G)) : f (x + a) = f x + b
 -/
@@ -107,7 +107,7 @@ theorem semiconj
 
 中文:
 定理 semiconj
-  条件: [Add G] [Add H] [AddConstMapClass F G H a b] (f : F)
+  条件: [加法 G] [加法 H] [加法余nst映射类 F G H a b] (f : F)
   证明: map_add_const f
 
 @[scoped simp]
@@ -130,7 +130,7 @@ theorem map_add_nsmul
 
 中文:
 定理 map_add_nsmul
-  结论: [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+  结论: [加法幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H a b]
   证明: by
   simpa using (AddConstMapClass.semiconj f).iterate_right n x
 
@@ -153,7 +153,7 @@ theorem map_add_nat'
 
 中文:
 定理 map_add_nat'
-  结论: [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: by simp [← map_add_nsmul]
 
 Depends on / 依赖: map_add_nsmul
@@ -173,7 +173,7 @@ theorem map_add_one
 
 中文:
 定理 map_add_one
-  结论: [AddMonoidWithOne G] [Add H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺幺半群 G] [加法 H] [加法余nst映射类 F G H 1 b]
   证明: map_add_const f x
 
 @[scoped simp]
@@ -193,8 +193,8 @@ theorem map_add_ofNat'
   proof: map_add_nat' f x n
 
 中文:
-定理 map_add_ofNat'
-  结论: [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+定理 map_add_of自然数'
+  结论: [加法带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: map_add_nat' f x n
 
 Depends on / 依赖: map_add_nat
@@ -214,7 +214,7 @@ theorem map_add_nat
 
 中文:
 定理 map_add_nat
-  结论: [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 -/
 theorem map_add_nat [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
@@ -231,8 +231,8 @@ theorem map_add_ofNat
 @[scoped simp]
 
 中文:
-定理 map_add_ofNat
-  结论: [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+定理 map_add_of自然数
+  结论: [加法带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: map_add_nat f x n
 
 @[scoped simp]
@@ -255,7 +255,7 @@ theorem map_const
 
 中文:
 定理 map_const
-  条件: [AddZeroClass G] [Add H] [AddConstMapClass F G H a b] (f : F)
+  条件: [加法零类 G] [加法 H] [加法余nst映射类 F G H a b] (f : F)
   证明: by
   simpa using map_add_const f 0
 
@@ -277,7 +277,7 @@ theorem map_one
 
 中文:
 定理 map_one
-  条件: [AddZeroClass G] [One G] [Add H] [AddConstMapClass F G H 1 b] (f : F)
+  条件: [加法零类 G] [幺 G] [加法 H] [加法余nst映射类 F G H 1 b] (f : F)
   证明: map_const f
 
 @[scoped simp]
@@ -302,7 +302,7 @@ theorem map_nsmul_const
 
 中文:
 定理 map_nsmul_const
-  结论: [AddMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+  结论: [加法幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H a b]
   证明: by
   simpa using map_add_nsmul f 0 n
 
@@ -326,7 +326,7 @@ theorem map_nat'
 
 中文:
 定理 map_nat'
-  结论: [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   simpa using map_add_nat' f 0 n
 
@@ -345,8 +345,8 @@ theorem map_ofNat'
   proof: map_nat' f n
 
 中文:
-定理 map_ofNat'
-  结论: [AddMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+定理 map_of自然数'
+  结论: [加法带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: map_nat' f n
 
 Depends on / 依赖: map_nat
@@ -366,7 +366,7 @@ theorem map_nat
 
 中文:
 定理 map_nat
-  结论: [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 -/
 theorem map_nat [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
@@ -383,8 +383,8 @@ theorem map_ofNat
 @[scoped simp]
 
 中文:
-定理 map_ofNat
-  结论: [AddMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+定理 map_of自然数
+  结论: [加法带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: map_nat f n
 
 @[scoped simp]
@@ -407,7 +407,7 @@ theorem map_const_add
 
 中文:
 定理 map_const_add
-  结论: [AddCommMagma G] [Add H] [AddConstMapClass F G H a b]
+  结论: [加法交换原群 G] [加法 H] [加法余nst映射类 F G H a b]
   证明: by
   rw [add_comm]; rw [map_add_const]
 
@@ -429,7 +429,7 @@ theorem map_one_add
 
 中文:
 定理 map_one_add
-  结论: [AddCommMonoidWithOne G] [Add H] [AddConstMapClass F G H 1 b]
+  结论: [加法交换带幺幺半群 G] [加法 H] [加法余nst映射类 F G H 1 b]
   证明: map_const_add f x
 
 @[scoped simp]
@@ -453,7 +453,7 @@ theorem map_nsmul_add
 
 中文:
 定理 map_nsmul_add
-  结论: [AddCommMonoid G] [AddMonoid H] [AddConstMapClass F G H a b]
+  结论: [加法交换幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H a b]
   证明: by
   rw [add_comm]; rw [map_add_nsmul]
 
@@ -477,7 +477,7 @@ theorem map_nat_add'
 
 中文:
 定理 map_nat_add'
-  结论: [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+  结论: [加法交换带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   simpa using map_nsmul_add f n x
 
@@ -496,8 +496,8 @@ theorem map_ofNat_add'
   proof: map_nat_add' f n x
 
 中文:
-定理 map_ofNat_add'
-  结论: [AddCommMonoidWithOne G] [AddMonoid H] [AddConstMapClass F G H 1 b]
+定理 map_of自然数_add'
+  结论: [加法交换带幺幺半群 G] [加法幺半群 H] [加法余nst映射类 F G H 1 b]
   证明: map_nat_add' f n x
 
 Depends on / 依赖: map_nat_add
@@ -517,7 +517,7 @@ theorem map_nat_add
 
 中文:
 定理 map_nat_add
-  结论: [AddCommMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法交换带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 -/
 theorem map_nat_add [AddCommMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
@@ -534,8 +534,8 @@ theorem map_ofNat_add
 @[scoped simp]
 
 中文:
-定理 map_ofNat_add
-  结论: [AddCommMonoidWithOne G] [AddMonoidWithOne H] [AddConstMapClass F G H 1 1]
+定理 map_of自然数_add
+  结论: [加法交换带幺幺半群 G] [加法带幺幺半群 H] [加法余nst映射类 F G H 1 1]
   证明: map_nat_add f n x
 
 @[scoped simp]
@@ -561,7 +561,7 @@ theorem map_sub_nsmul
 
 中文:
 定理 map_sub_nsmul
-  结论: [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法群 G] [加法群 H] [加法余nst映射类 F G H a b]
   证明: by
   conv_rhs => rw [← sub_add_cancel x (n • a), map_add_nsmul, add_sub_cancel_right]
 
@@ -585,7 +585,7 @@ theorem map_sub_const
 
 中文:
 定理 map_sub_const
-  结论: [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法群 G] [加法群 H] [加法余nst映射类 F G H a b]
   证明: by
   simpa using map_sub_nsmul f x 1
 
@@ -607,7 +607,7 @@ theorem map_sub_one
 
 中文:
 定理 map_sub_one
-  结论: [AddGroup G] [One G] [AddGroup H] [AddConstMapClass F G H 1 b]
+  结论: [加法群 G] [幺 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: map_sub_const f x
 
 @[scoped simp]
@@ -632,7 +632,7 @@ theorem map_sub_nat'
 
 中文:
 定理 map_sub_nat'
-  结论: [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺群 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   simpa using map_sub_nsmul f x n
 
@@ -656,8 +656,8 @@ theorem map_sub_ofNat'
 @[scoped simp]
 
 中文:
-定理 map_sub_ofNat'
-  结论: [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+定理 map_sub_of自然数'
+  结论: [加法带幺群 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: map_sub_nat' f x n
 
 @[scoped simp]
@@ -679,7 +679,7 @@ theorem map_add_zsmul
 
 中文:
 定理 map_add_zsmul
-  结论: [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法群 G] [加法群 H] [加法余nst映射类 F G H a b]
 -/
 theorem map_add_zsmul [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
     (f : F) (x : G) : forall n : Int, f (x + n • a) = f x + n • b
@@ -700,7 +700,7 @@ theorem map_zsmul_const
 
 中文:
 定理 map_zsmul_const
-  结论: [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法群 G] [加法群 H] [加法余nst映射类 F G H a b]
   证明: by
   simpa using map_add_zsmul f 0 n
 
@@ -724,7 +724,7 @@ theorem map_add_int'
 
 中文:
 定理 map_add_int'
-  结论: [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺群 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   rw [← map_add_zsmul f x n]; rw [zsmul_one]
 
@@ -746,7 +746,7 @@ theorem map_add_int
 
 中文:
 定理 map_add_int
-  结论: [AddGroupWithOne G] [AddGroupWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法带幺群 G] [加法带幺群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 
 @[scoped simp]
@@ -768,7 +768,7 @@ theorem map_sub_zsmul
 
 中文:
 定理 map_sub_zsmul
-  结论: [AddGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法群 G] [加法群 H] [加法余nst映射类 F G H a b]
   证明: by
   simpa [sub_eq_add_neg] using map_add_zsmul f x (-n)
 
@@ -792,7 +792,7 @@ theorem map_sub_int'
 
 中文:
 定理 map_sub_int'
-  结论: [AddGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+  结论: [加法带幺群 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   rw [← map_sub_zsmul]; rw [zsmul_one]
 
@@ -814,7 +814,7 @@ theorem map_sub_int
 
 中文:
 定理 map_sub_int
-  结论: [AddGroupWithOne G] [AddGroupWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法带幺群 G] [加法带幺群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 
 @[scoped simp]
@@ -836,7 +836,7 @@ theorem map_zsmul_add
 
 中文:
 定理 map_zsmul_add
-  结论: [AddCommGroup G] [AddGroup H] [AddConstMapClass F G H a b]
+  结论: [加法交换群 G] [加法群 H] [加法余nst映射类 F G H a b]
   证明: by
   rw [add_comm]; rw [map_add_zsmul]
 
@@ -860,7 +860,7 @@ theorem map_int_add'
 
 中文:
 定理 map_int_add'
-  结论: [AddCommGroupWithOne G] [AddGroup H] [AddConstMapClass F G H 1 b]
+  结论: [加法交换带幺群 G] [加法群 H] [加法余nst映射类 F G H 1 b]
   证明: by
   rw [← map_zsmul_add]; rw [zsmul_one]
 
@@ -880,7 +880,7 @@ theorem map_int_add
 
 中文:
 定理 map_int_add
-  结论: [AddCommGroupWithOne G] [AddGroupWithOne H] [AddConstMapClass F G H 1 1]
+  结论: [加法交换带幺群 G] [加法带幺群 H] [加法余nst映射类 F G H 1 1]
   证明: by simp
 -/
 theorem map_int_add [AddCommGroupWithOne G] [AddGroupWithOne H] [AddConstMapClass F G H 1 1]
@@ -896,7 +896,7 @@ theorem map_fract
 
 中文:
 定理 map_fract
-  结论: {R : 类型} [Ring R] [LinearOrder R] [FloorRing R] [AddGroup H]
+  结论: {R : 类型} [环 R] [线性序 R] [Floor环 R] [加法群 H]
   证明: map_sub_int' ..
 
 Depends on / 依赖: map_sub_int
@@ -923,7 +923,7 @@ theorem rel_map_of_Icc
 
 中文:
 定理 rel_map_of_Icc
-  结论: [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G]
+  结论: [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G]
   证明: fun x y hxy => by
   replace hR := hR.elim
   have ha' : 0 <= a := ha.le
@@ -984,7 +984,7 @@ theorem monotone_iff_Icc
 
 中文:
 定理 monotone_iff_Icc
-  结论: [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G]
+  结论: [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G] [阿基米德 G]
   证明: ⟨(Monotone.monotoneOn · _), fun hf => monotone_iff_forall_lt.2
     AddConstMapClass.rel_map_of_Icc ha fun _x hx _y hy hxy => hf hx hy hxy.le⟩
 
@@ -1007,7 +1007,7 @@ theorem antitone_iff_Icc
 
 中文:
 定理 antitone_iff_Icc
-  结论: [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G]
+  结论: [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G] [阿基米德 G]
   证明: monotone_iff_Icc (H := Hᵒᵈ) ha l
 
 Depends on / 依赖: monotone_iff_Icc
@@ -1028,7 +1028,7 @@ theorem strictMono_iff_Icc
 
 中文:
 定理 strictMono_iff_Icc
-  结论: [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G]
+  结论: [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G] [阿基米德 G]
   证明: ⟨(StrictMono.strictMonoOn · _), AddConstMapClass.rel_map_of_Icc ha⟩
 
 Depends on / 依赖: AddConstMapClass, AddConstMapClass.rel_map_of_Icc, StrictMono, StrictMono.strictMonoOn, rel_map_of_Icc, strictMonoOn
@@ -1049,7 +1049,7 @@ theorem strictAnti_iff_Icc
 
 中文:
 定理 strictAnti_iff_Icc
-  结论: [AddCommGroup G] [LinearOrder G] [IsOrderedAddMonoid G] [Archimedean G]
+  结论: [加法交换群 G] [线性序 G] [是OrderedAdd幺半群 G] [阿基米德 G]
   证明: strictMono_iff_Icc (H := Hᵒᵈ) ha l
 
 Depends on / 依赖: strictMono_iff_Icc
@@ -1082,7 +1082,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (G ->+c[a, b] H) G H
+  签名: 函数状 (G ->+c[a, b] H) G H
   定义体: AddConstMap.toFun
   coe_injective | ⟨_, _⟩, ⟨_, _⟩, rfl => rfl
 
@@ -1151,7 +1151,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddConstMapClass (G ->+c[a, b] H) G H a b
+  签名: 加法余nst映射类 (G ->+c[a, b] H) G H a b
   定义体: f.map_add_const'
 
 Depends on / 依赖: f.map_add_const, map_add_const
@@ -1214,7 +1214,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (G ->+c[a, a] G)
+  签名: 可居 (G ->+c[a, a] G)
   定义体: ⟨.id⟩
 -/
 instance : Inhabited (G ->+c[a, a] G) := ⟨.id⟩
@@ -1231,7 +1231,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: {K : 类型} [Add K] {c : K} (g : H ->+c[b, c] K) (f : G ->+c[a, b] H)
+  签名: {K : 类型} [加法 K] {c : K} (g : H ->+c[b, c] K) (f : G ->+c[a, b] H)
   定义体: ⟨g ∘ f, by simp⟩
 -/
 def comp {K : Type*} [Add K] {c : K} (g : H ->+c[b, c] K) (f : G ->+c[a, b] H) :
@@ -1312,7 +1312,7 @@ theorem coe_vadd
 
 中文:
 定理 coe_vadd
-  条件: {K : 类型} [VAdd K H] [VAddAssocClass K H H] (c : K) (f : G ->+c[a, b] H)
+  条件: {K : 类型} [向量加法 K H] [VAddAssoc类 K H H] (c : K) (f : G ->+c[a, b] H)
   证明: rfl
 -/
 theorem coe_vadd {K : Type*} [VAdd K H] [VAddAssocClass K H H] (c : K) (f : G ->+c[a, b] H) :
@@ -1334,7 +1334,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (G ->+c[a, a] G)
+  签名: 乘法 (G ->+c[a, a] G)
   定义体: ⟨comp⟩
 -/
 instance : Mul (G ->+c[a, a] G) := ⟨comp⟩
@@ -1348,7 +1348,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (G ->+c[a, a] G)
+  签名: 幺 (G ->+c[a, a] G)
   定义体: ⟨.id⟩
 -/
 instance : One (G ->+c[a, a] G) := ⟨.id⟩
@@ -1363,7 +1363,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow (G ->+c[a, a] G) 自然数
+  签名: 幂 (G ->+c[a, a] G) 自然数
   定义体: ⟨f^[n], Commute.iterate_left (AddConstMapClass.semiconj f) _⟩
 
 Depends on / 依赖: AddConstMapClass, AddConstMapClass.semiconj, Commute, Commute.iterate_left, iterate_left, semiconj
@@ -1381,7 +1381,7 @@ instance :
 
 中文:
 实例 :
-  签名: Monoid (G ->+c[a, a] G)
+  签名: 幺半群 (G ->+c[a, a] G)
   定义体: DFunLike.coe_injective.monoid (M₂ := Function.End G) _ rfl (fun _ _ => rfl) fun _ _ => rfl
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.monoid, Function, Function.End, coe_injective, monoid
@@ -1499,7 +1499,7 @@ definition toEnd
 
 中文:
 定义 toEnd
-  签名: : (G ->+c[a, a] G) ->* Function.End G where
+  签名: : (G ->+c[a, a] G) ->* 函数.End G where
   定义体: DFunLike.coe
   map_mul' _ _ := rfl
   map_one' := rfl
@@ -1540,7 +1540,7 @@ definition smul
 
 中文:
 定义 smul
-  签名: [DistribSMul K H] (c : K) (f : G ->+c[a, b] H)
+  签名: [分配标量乘法 K H] (c : K) (f : G ->+c[a, b] H)
   定义体: c • ⇑f
   map_add_const' x := by simp [smul_add]
 -/
@@ -1646,7 +1646,7 @@ definition mkFract
 
 中文:
 定义 mkFract
-  签名: : (Ico (0 : R) 1 -> G) ≃ (R ->+c[1, a] G) where
+  签名: : (左闭右开区间 (0 : R) 1 -> G) ≃ (R ->+c[1, a] G) where
   定义体: ⟨fun x => f ⟨Int.fract x, Int.fract_nonneg _, Int.fract_lt_one _⟩ + ⌊x⌋ • a, fun x => by
     simp [add_one_zsmul, add_assoc]⟩
   invFun f x := f x

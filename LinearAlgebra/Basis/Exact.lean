@@ -149,8 +149,8 @@ lemma Submodule.top_le_span_of_exact_of_retraction
   rwa [Set.Sum.elim_range, Set.range_comp, Set.range_comp, ← Set.image_union, hab, Set.image_univ]
 
 中文:
-引理 Submodule.top_le_span_of_exact_of_retraction
-  结论: (hg : Function.Surjective g)
+引理 子模.top_le_span_of_exact_of_retraction
+  结论: (hg : 函数.满射 g)
   证明: by
   apply top_le_span_of_aux hs hfg (Sum.elim (v ∘ a) (v ∘ b)) hg hsa hlib
   simp only [codisjoint_iff, Set.sup_eq_union, Set.top_eq_univ] at hab
@@ -179,8 +179,8 @@ definition Module.Basis.ofSplitExact
 @[simp]
 
 中文:
-定义 Module.Basis.ofSplitExact
-  签名: (hg : Function.Surjective g) (v : Basis ι R M)
+定义 模.基.ofSplitExact
+  签名: (hg : 函数.满射 g) (v : 基 ι R M)
   定义体: .mk (v.linearIndependent.linearIndependent_of_exact_of_retraction hs hfg hainj hsa)
     (Submodule.top_le_span_of_exact_of_retraction hs hfg hg hsa hlib hab (by rw [v.span_eq]))
 
@@ -207,8 +207,8 @@ lemma Module.Basis.ofSplitExact_apply
   simp [ofSplitExact]
 
 中文:
-引理 Module.Basis.ofSplitExact_apply
-  结论: (hg : Function.Surjective g) (v : Basis ι R M)
+引理 模.基.ofSplitExact_apply
+  结论: (hg : 函数.满射 g) (v : 基 ι R M)
   证明: by
   simp [ofSplitExact]
 
@@ -239,7 +239,7 @@ lemma Submodule.projectionOnto_comp_surjective_of_exact
   exact 
 
 中文:
-引理 Submodule.projectionOnto_comp_surjective_of_exact
+引理 子模.projectionOnto_comp_surjective_of_exact
   证明: by
   rw [← Set.surjOn_univ]; rw [LinearMap.coe_comp]; rw [Set.surjOn_comp_iff]; rw [Set.image_univ]
   rw [← LinearMap.coe_range]; rw [← Submodule.top_coe (R := R)]; rw [surjOn_iff_le_map]; rw [← hfg.linearMap_ker_eq]
@@ -277,7 +277,7 @@ lemma Submodule.projectionOnto_comp_bijective_of_exact
   Submodule.linearPro
 
 中文:
-引理 Submodule.projectionOnto_comp_bijective_of_exact
+引理 子模.projectionOnto_comp_bijective_of_exact
   证明: by
   refine ⟨?_, Submodule.projectionOnto_comp_surjective_of_exact hfg _ hmap⟩
   rwa [LinearMap.coe_comp, Set.InjOn.injective_iff ↑(LinearMap.range f) _ subset_rfl]
@@ -311,7 +311,7 @@ lemma LinearMap.linearProjOfIsCompl_comp_bijective_of_exact
   · exact Submodule.projectionOnto_comp_bijective_of_exact hfg hf h hker hmap
 
 中文:
-引理 LinearMap.linearProjOfIsCompl_comp_bijective_of_exact
+引理 线性映射.linearProjOfIsCompl_comp_bijective_of_exact
   证明: by
   rw [LinearMap.linearProjOfIsCompl]; rw [LinearMap.comp_assoc]; rw [LinearMap.coe_comp]; rw [Function.Bijective.of_comp_iff]
   · exact (LinearEquiv.ofInjective i hi).symm.bijective

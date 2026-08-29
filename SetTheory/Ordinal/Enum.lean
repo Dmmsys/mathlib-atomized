@@ -46,7 +46,7 @@ termination_by o
 
 中文:
 定义 enumOrd
-  签名: (s : Set Ordinal.{u}) (o : Ordinal.{u})
+  签名: (s : 集合 序数.{u}) (o : 序数.{u})
   定义体: sInf (s inter { b | forall c, c < o -> enumOrd s c < b })
 termination_by o
 
@@ -70,7 +70,7 @@ theorem enumOrd_le_of_forall_lt
   exact csInf_le' ⟨ha, H⟩
 
 中文:
-定理 enumOrd_le_of_forall_lt
+定理 enumOrd_le_of_对任意_lt
   条件: (ha : a in s) (H : 对任意 b < o, enumOrd s b < a)
   结论: enumOrd s o <= a
   证明: by
@@ -97,7 +97,7 @@ theorem enumOrd_nonempty
 
 中文:
 定理 enumOrd_nonempty
-  条件: (hs : ¬ BddAbove s) (o : Ordinal)
+  条件: (hs : ¬ BddAbove s) (o : 序数)
   证明: by
   rw [not_bddAbove_iff] at hs
   obtain ⟨a, ha⟩ := bddAbove_of_small (s := enumOrd s '' Iio o)
@@ -123,7 +123,7 @@ theorem enumOrd_mem_aux
 
 中文:
 定理 enumOrd_mem_aux
-  条件: (hs : ¬ BddAbove s) (o : Ordinal)
+  条件: (hs : ¬ BddAbove s) (o : 序数)
   证明: by
   rw [enumOrd]
   exact csInf_mem (enumOrd_nonempty hs o)
@@ -144,7 +144,7 @@ theorem enumOrd_mem
 
 中文:
 定理 enumOrd_mem
-  条件: (hs : ¬ BddAbove s) (o : Ordinal)
+  条件: (hs : ¬ BddAbove s) (o : 序数)
   结论: enumOrd s o in s
   证明: (enumOrd_mem_aux hs o).1
 
@@ -165,7 +165,7 @@ theorem enumOrd_strictMono
 中文:
 定理 enumOrd_strictMono
   条件: (hs : ¬ BddAbove s)
-  结论: StrictMono (enumOrd s)
+  结论: 严格递增 (enumOrd s)
   证明: fun a b => (enumOrd_mem_aux hs b).2 a
 
 Depends on / 依赖: enumOrd_mem_aux
@@ -185,7 +185,7 @@ theorem enumOrd_injective
 中文:
 定理 enumOrd_injective
   条件: (hs : ¬ BddAbove s)
-  结论: Function.Injective (enumOrd s)
+  结论: 函数.单射 (enumOrd s)
   证明: (enumOrd_strictMono hs).injective
 
 Depends on / 依赖: enumOrd_strictMono, injective
@@ -204,7 +204,7 @@ theorem enumOrd_inj
 
 中文:
 定理 enumOrd_inj
-  条件: (hs : ¬ BddAbove s) {a b : Ordinal}
+  条件: (hs : ¬ BddAbove s) {a b : 序数}
   结论: enumOrd s a = enumOrd s b ↔ a = b
   证明: (enumOrd_injective hs).eq_iff
 
@@ -223,7 +223,7 @@ theorem enumOrd_le_enumOrd
 
 中文:
 定理 enumOrd_le_enumOrd
-  条件: (hs : ¬ BddAbove s) {a b : Ordinal}
+  条件: (hs : ¬ BddAbove s) {a b : 序数}
   证明: (enumOrd_strictMono hs).le_iff_le
 
 Depends on / 依赖: enumOrd_strictMono, le_iff_le
@@ -242,7 +242,7 @@ theorem enumOrd_lt_enumOrd
 
 中文:
 定理 enumOrd_lt_enumOrd
-  条件: (hs : ¬ BddAbove s) {a b : Ordinal}
+  条件: (hs : ¬ BddAbove s) {a b : 序数}
   证明: (enumOrd_strictMono hs).lt_iff_lt
 
 Depends on / 依赖: enumOrd_strictMono, lt_iff_lt
@@ -384,7 +384,7 @@ theorem enumOrd_surjective
 
 中文:
 定理 enumOrd_surjective
-  条件: (hs : ¬ BddAbove s) {b : Ordinal} (hb : b in s)
+  条件: (hs : ¬ BddAbove s) {b : 序数} (hb : b in s)
   证明: by
   rwa [← range_enumOrd hs] at hb
 
@@ -409,7 +409,7 @@ termination_by a => a
 
 中文:
 定理 enumOrd_le_of_subset
-  条件: {t : Set Ordinal} (hs : ¬ BddAbove s) (hst : s subseteq t)
+  条件: {t : 集合 序数} (hs : ¬ BddAbove s) (hst : s subseteq t)
   证明: by
   intro a
   rw [enumOrd]; rw [enumOrd]
@@ -442,7 +442,7 @@ theorem eq_enumOrd
 
 中文:
 定理 eq_enumOrd
-  条件: (f : Ordinal -> Ordinal) (hs : ¬ BddAbove s)
+  条件: (f : 序数 -> 序数) (hs : ¬ BddAbove s)
   证明: by
   constructor
   · rintro rfl
@@ -471,7 +471,7 @@ theorem enumOrd_range
 
 中文:
 定理 enumOrd_range
-  条件: {f : Ordinal -> Ordinal} (hf : StrictMono f)
+  条件: {f : 序数 -> 序数} (hf : 严格递增 f)
   结论: enumOrd (range f) = f
   证明: (eq_enumOrd _ hf.not_bddAbove_range_of_wellFoundedLT).2 ⟨hf, rfl⟩
 
@@ -495,7 +495,7 @@ theorem isNormal_enumOrd
 
 中文:
 定理 isNormal_enumOrd
-  条件: (H : 对任意 t subseteq s, t.Nonempty -> BddAbove t -> sSup t in s) (hs : ¬ BddAbove s)
+  条件: (H : 对任意 t subseteq s, t.非空 -> BddAbove t -> sSup t in s) (hs : ¬ BddAbove s)
   证明: by
   refine isNormal_iff.2 ⟨enumOrd_strictMono hs, fun o ho a ha => ?_⟩
   trans ⨆ b : Iio o, enumOrd s b
@@ -530,7 +530,7 @@ theorem enumOrd_univ
 
 中文:
 定理 enumOrd_univ
-  结论: enumOrd Set.univ = id
+  结论: enumOrd 集合.univ = id
   证明: by
   rw [← range_id]
   exact enumOrd_range strictMono_id
@@ -568,7 +568,7 @@ definition enumOrdOrderIso
 
 中文:
 定义 enumOrdOrderIso
-  签名: (s : Set Ordinal) (hs : ¬ BddAbove s)
+  签名: (s : 集合 序数) (hs : ¬ BddAbove s)
   定义体: StrictMono.orderIsoOfSurjective (fun o => ⟨_, enumOrd_mem hs o⟩) (enumOrd_strictMono hs) fun s =>
     let ⟨a, ha⟩ := enumOrd_surjective hs s.prop
     ⟨a, Subtype.ext ha⟩

@@ -42,8 +42,8 @@ definition LieSubmodule.IsUcsLimit
   body: exists k, forall l, k <= l -> (⊥ : LieSubmodule R L M).ucs l = N
 
 中文:
-定义 LieSubmodule.IsUcsLimit
-  签名: {M : 类型} [AddCommGroup M] [Module R M] [LieRingModule L M]
+定义 Lie子模.IsUcsLimit
+  签名: {M : 类型} [加法交换群 M] [模 R M] [Lie环模 L M]
   定义体: exists k, forall l, k <= l -> (⊥ : LieSubmodule R L M).ucs l = N
 
 Depends on / 依赖: LieSubmodule
@@ -65,10 +65,10 @@ class IsCartanSubalgebra
     - self_normalizing : H.normalizer = H
 
 中文:
-类 IsCartanSubalgebra
+类 是Cartan子代数
   参数: : 命题 where
   公理与运算 (2 个):
-    - nilpotent : LieRing.IsNilpotent H
+    - nilpotent : Lie环.是幂零 H
     - self_normalizing : H.normalizer = H
 -/
 class IsCartanSubalgebra : Prop where
@@ -86,8 +86,8 @@ instance [H.IsCartanSubalgebra]
 @[simp]
 
 中文:
-实例 [H.IsCartanSubalgebra]
-  签名: : LieRing.IsNilpotent H
+实例 [H.是Cartan子代数]
+  签名: : Lie环.是幂零 H
   定义体: IsCartanSubalgebra.nilpotent
 
 @[simp]
@@ -111,7 +111,7 @@ theorem normalizer_eq_self_of_isCartanSubalgebra
 
 中文:
 定理 normalizer_eq_self_of_isCartanSubalgebra
-  条件: (H : LieSubalgebra R L) [H.IsCartanSubalgebra]
+  条件: (H : Lie子代数 R L) [H.是Cartan子代数]
   证明: by
   rw [← LieSubmodule.toSubmodule_inj]; rw [coe_normalizer_eq_normalizer]; rw [IsCartanSubalgebra.self_normalizing]; rw [coe_toLieSubmodule]
 
@@ -137,7 +137,7 @@ theorem ucs_eq_self_of_isCartanSubalgebra
 
 中文:
 定理 ucs_eq_self_of_isCartanSubalgebra
-  条件: (H : LieSubalgebra R L) [H.IsCartanSubalgebra] (k : 自然数)
+  条件: (H : Lie子代数 R L) [H.是Cartan子代数] (k : 自然数)
   证明: by
   induction k with
   | zero => simp
@@ -166,7 +166,7 @@ theorem isCartanSubalgebra_iff_isUcsLimit
 
 中文:
 定理 isCartanSubalgebra_iff_isUcsLimit
-  结论: H.IsCartanSubalgebra ↔ H.toLieSubmodule.IsUcsLimit
+  结论: H.是Cartan子代数 ↔ H.toLieSubmodule.IsUcsLimit
   证明: by
   constructor
   · intro h
@@ -217,7 +217,7 @@ lemma ne_bot_of_isCartanSubalgebra
 
 中文:
 引理 ne_bot_of_isCartanSubalgebra
-  条件: [Nontrivial L] (H : LieSubalgebra R L) [H.IsCartanSubalgebra]
+  条件: [非平凡 L] (H : Lie子代数 R L) [H.是Cartan子代数]
   证明: by
   intro e
   obtain ⟨x, hx⟩ := exists_ne (0 : L)
@@ -256,7 +256,7 @@ theorem LieIdeal.normalizer_eq_top
 
 中文:
 定理 LieIdeal.normalizer_eq_top
-  结论: {R : 类型u} {L : 类型v} [CommRing R] [LieRing L]
+  结论: {R : 类型u} {L : 类型v} [交换环 R] [Lie环 L]
   证明: by
   ext x
   simpa only [LieSubalgebra.mem_normalizer_iff, LieSubalgebra.mem_top, iff_true] using!
@@ -282,8 +282,8 @@ instance LieAlgebra.top_isCartanSubalgebra_of_nilpotent
   self_normalizing := by rw [← top_toLieSubalgebra, normalizer_eq_top, top_toLieSubalgebra]
 
 中文:
-实例 LieAlgebra.top_isCartanSubalgebra_of_nilpotent
-  签名: [LieRing.IsNilpotent L]
+实例 Lie代数.top_isCartanSubalgebra_of_nilpotent
+  签名: [Lie环.是幂零 L]
   定义体: inferInstance
   self_normalizing := by rw [← top_toLieSubalgebra, normalizer_eq_top, top_toLieSubalgebra]
 -/

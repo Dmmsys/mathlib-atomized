@@ -44,7 +44,7 @@ theorem MeasureTheory.aemeasurable_of_exist_almost_disjoint_supersets
     by_cases H : p in s ∧ q in s ∧ p
 
 中文:
-定理 MeasureTheory.aemeasurable_of_exist_almost_disjoint_supersets
+定理 测度论.aemeasurable_of_exist_almost_disjoint_supersets
   结论: {α : 类型}
   证明: by
   classical
@@ -138,8 +138,8 @@ theorem ENNReal.aemeasurable_of_exist_almost_disjoint_supersets
   apply MeasureTheory.aemeasurable_of_exist_almost_disjoint_supersets 
 
 中文:
-定理 ENNReal.aemeasurable_of_exist_almost_disjoint_supersets
-  结论: {α : 类型} {m : MeasurableSpace α}
+定理 广义非负实数.aemeasurable_of_exist_almost_disjoint_supersets
+  结论: {α : 类型} {m : 可测空间 α}
   证明: by
   obtain ⟨s, s_count, s_dense, _, s_top⟩ :
     exists s : Set Real>=0∞, s.Countable ∧ Dense s ∧ 0 ∉ s ∧ ∞ ∉ s :=

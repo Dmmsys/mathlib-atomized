@@ -92,8 +92,8 @@ theorem instT0Space
 
 中文:
 定理 instT0Space
-  条件: [T0Space R]
-  结论: T0Space (PowerSeries R)
+  条件: [T0空间 R]
+  结论: T0空间 (幂级数 R)
   证明: inferInstance
 -/
 theorem instT0Space [T0Space R] : T0Space (PowerSeries R) :=
@@ -112,8 +112,8 @@ theorem instT2Space
 
 中文:
 定理 instT2Space
-  条件: [T2Space R]
-  结论: T2Space (PowerSeries R)
+  条件: [T2空间 R]
+  结论: T2空间 (幂级数 R)
   证明: inferInstance
 -/
 theorem instT2Space [T2Space R] : T2Space (PowerSeries R) :=
@@ -130,8 +130,8 @@ theorem continuous_coeff
 
 中文:
 定理 continuous_coeff
-  条件: [Semiring R] (d : 自然数)
-  结论: Continuous (PowerSeries.coeff (R := R) d)
+  条件: [半环 R] (d : 自然数)
+  结论: 连续 (幂级数.coeff (R := R) d)
   证明: continuous_pi_iff.mp continuous_id (Finsupp.single () d)
 -/
 theorem continuous_coeff [Semiring R] (d : Nat) : Continuous (PowerSeries.coeff (R := R) d) :=
@@ -148,8 +148,8 @@ theorem continuous_constantCoeff
 
 中文:
 定理 continuous_constantCoeff
-  条件: [Semiring R]
-  结论: Continuous (constantCoeff (R := R))
+  条件: [半环 R]
+  结论: 连续 (constantCoeff (R := R))
   证明: coeff_zero_eq_constantCoeff (R := R) ▸ continuous_coeff R 0
 -/
 theorem continuous_constantCoeff [Semiring R] : Continuous (constantCoeff (R := R)) :=
@@ -173,7 +173,7 @@ theorem tendsto_iff_coeff_tendsto
 
 中文:
 定理 tendsto_iff_coeff_tendsto
-  结论: [Semiring R] {ι : 类型}
+  结论: [半环 R] {ι : 类型}
   证明: by
   rw [MvPowerSeries.WithPiTopology.tendsto_iff_coeff_tendsto]
   apply (Finsupp.uniqueLinearEquiv Nat Nat ()).toEquiv.forall_congr
@@ -212,7 +212,7 @@ theorem tendsto_trunc_atTop
 
 中文:
 定理 tendsto_trunc_atTop
-  条件: [CommSemiring R] (f : R⟦X⟧)
+  条件: [交换半环 R] (f : R⟦X⟧)
   证明: by
   rw [tendsto_iff_coeff_tendsto]
   intro d
@@ -237,7 +237,7 @@ mem_closure_of_tendsto (tendsto_trunc_atTop R f) .of_forall fun _ => Set.mem_ran
 
 中文:
 定理 denseRange_toPowerSeries
-  条件: [CommSemiring R]
+  条件: [交换半环 R]
   证明: fun f =>
 mem_closure_of_tendsto (tendsto_trunc_atTop R f) .of_forall fun _ => Set.mem_range_self _
 -/
@@ -257,7 +257,7 @@ theorem instIsTopologicalSemiring
 
 中文:
 定理 instIsTopologicalSemiring
-  条件: [Semiring R] [IsTopologicalSemiring R]
+  条件: [半环 R] [是TopologicalSemiring R]
   证明: inferInstance
 -/
 theorem instIsTopologicalSemiring [Semiring R] [IsTopologicalSemiring R] :
@@ -276,7 +276,7 @@ theorem instIsTopologicalRing
 
 中文:
 定理 instIsTopologicalRing
-  条件: [Ring R] [IsTopologicalRing R]
+  条件: [环 R] [是拓扑环 R]
   证明: inferInstance
 -/
 theorem instIsTopologicalRing [Ring R] [IsTopologicalRing R] :
@@ -365,7 +365,7 @@ refine summable_of_hasFiniteSupport (Set.finite_Iic i).subset ?_
 
 中文:
 定理 summable_of_tendsto_order_atTop_nhds_top
-  结论: [LinearOrder ι] [LocallyFiniteOrderBot ι]
+  结论: [线性序 ι] [LocallyFiniteOrderBot ι]
   证明: by
   rcases isEmpty_or_nonempty ι with hempty | hempty
   · apply summable_empty
@@ -403,7 +403,7 @@ theorem summable_pow_of_constantCoeff_eq_zero
 
 中文:
 定理 summable_pow_of_constantCoeff_eq_zero
-  条件: {f : PowerSeries R} (h : f.constantCoeff = 0)
+  条件: {f : 幂级数 R} (h : f.constantCoeff = 0)
   证明: MvPowerSeries.WithPiTopology.summable_pow_of_constantCoeff_eq_zero h
 
 Depends on / 依赖: MvPowerSeries, MvPowerSeries.WithPiTopology.summable_pow_of_constantCoeff_eq_zero, WithPiTopology, summable_pow_of_constantCoeff_eq_zero
@@ -579,7 +579,7 @@ theorem tprod_one_sub_X_pow_ne_zero
 
 中文:
 定理 tprod_one_sub_X_pow_ne_zero
-  条件: [T2Space R] [Nontrivial R]
+  条件: [T2空间 R] [非平凡 R]
   证明: by
   by_contra! h
   obtain h := PowerSeries.ext_iff.mp h 0
@@ -621,7 +621,7 @@ theorem uniformContinuous_coeff
 
 中文:
 定理 uniformContinuous_coeff
-  条件: [Semiring R] (d : 自然数)
+  条件: [半环 R] (d : 自然数)
   证明: uniformContinuous_pi.mp uniformContinuous_id (Finsupp.single () d)
 
 Depends on / 依赖: Finsupp, Finsupp.single, single, uniformContinuous_id, uniformContinuous_pi, uniformContinuous_pi.mp
@@ -642,7 +642,7 @@ theorem instCompleteSpace
 
 中文:
 定理 instCompleteSpace
-  条件: [CompleteSpace R]
+  条件: [完备空间 R]
   证明: inferInstance
 -/
 theorem instCompleteSpace [CompleteSpace R] :
@@ -661,7 +661,7 @@ theorem instIsUniformAddGroup
 
 中文:
 定理 instIsUniformAddGroup
-  条件: [AddGroup R] [IsUniformAddGroup R]
+  条件: [加法群 R] [是UniformAdd群 R]
   证明: inferInstance
 
 Depends on / 依赖: CompHausLike, CompHausLike.finiteCoproduct.isColimit, Discrete, Discrete.functor, Discrete.mk, Discrete.natIsoFunctor.symm, F.obj, PreservesColimit, TopCat, TopCat.sigmaCofanIsColimit, compHausLikeToTop, finiteCoproduct, functor, isColimit, isColimitMapCoconeCofanMkEquiv, natIsoFunctor, preservesColimit_of_iso_diagram, preservesColimit_of_preserves_colimit_cocone, sigmaCofanIsColimit
@@ -695,8 +695,8 @@ theorem continuous_C
 
 中文:
 定理 continuous_C
-  条件: [Semiring R]
-  结论: Continuous (C (R := R))
+  条件: [半环 R]
+  结论: 连续 (C (R := R))
   证明: MvPowerSeries.WithPiTopology.continuous_C
 
 Depends on / 依赖: PreservesFiniteCoproducts, compHausLikeToTop, preservesFiniteCoproducts_of_reflects_of_preserves, toCompHausLike
@@ -714,7 +714,7 @@ theorem isTopologicallyNilpotent_of_constantCoeff_isNilpotent
 
 中文:
 定理 isTopologicallyNilpotent_of_constantCoeff_isNilpotent
-  结论: [CommSemiring R]
+  结论: [交换半环 R]
   证明: MvPowerSeries.WithPiTopology.isTopologicallyNilpotent_of_constantCoeff_isNilpotent hf
 -/
 theorem isTopologicallyNilpotent_of_constantCoeff_isNilpotent [CommSemiring R]
@@ -732,7 +732,7 @@ theorem isTopologicallyNilpotent_of_constantCoeff_zero
 
 中文:
 定理 isTopologicallyNilpotent_of_constantCoeff_zero
-  结论: [CommSemiring R]
+  结论: [交换半环 R]
   证明: MvPowerSeries.WithPiTopology.isTopologicallyNilpotent_of_constantCoeff_zero hf
 -/
 theorem isTopologicallyNilpotent_of_constantCoeff_zero [CommSemiring R]
@@ -787,7 +787,7 @@ theorem hasSum_of_monomials_self
 
 中文:
 定理 hasSum_of_monomials_self
-  条件: (f : PowerSeries R)
+  条件: (f : 幂级数 R)
   证明: by
   rw [← (Finsupp.uniqueLinearEquiv Nat Nat ()).toEquiv.hasSum_iff]
   convert! MvPowerSeries.WithPiTopology.hasSum_of_monomials_self f
@@ -815,7 +815,7 @@ theorem as_tsum
 
 中文:
 定理 as_tsum
-  条件: [T2Space R] (f : PowerSeries R)
+  条件: [T2空间 R] (f : 幂级数 R)
   证明: (HasSum.tsum_eq (hasSum_of_monomials_self f)).symm
 
 Depends on / 依赖: HasSum, HasSum.tsum_eq, hasSum_of_monomials_self, tsum_eq

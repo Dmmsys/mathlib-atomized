@@ -41,11 +41,11 @@ structure IsFundamentalSeq
     - isCofinal_range : IsCofinal (range f)
 
 中文:
-结构 IsFundamentalSeq
-  参数: (f : Iio a -> Iio o)
+结构 是FundamentalSeq
+  参数: (f : 左无界右开区间 a -> 左无界右开区间 o)
   公理与运算 (3 个):
     - le_ord_cof : a <= o.cof.ord
-    - strictMono : StrictMono f
+    - strictMono : 严格递增 f
     - isCofinal_range : IsCofinal (range f)
 -/
 structure IsFundamentalSeq (f : Iio a -> Iio o) : Prop where
@@ -80,7 +80,7 @@ theorem iSup_add_one_eq
 
 中文:
 定理 iSup_add_one_eq
-  条件: (hf : IsFundamentalSeq f)
+  条件: (hf : 是FundamentalSeq f)
   结论: ⨆ i, (f i).1 + 1 = o
   证明: by
   apply le_antisymm
@@ -118,7 +118,7 @@ theorem ord_cof
 
 中文:
 定理 ord_cof
-  条件: (hf : IsFundamentalSeq f)
+  条件: (hf : 是FundamentalSeq f)
   结论: o.cof.ord = a
   证明: by
   apply hf.le_ord_cof.antisymm'
@@ -147,7 +147,7 @@ theorem iSup_eq
 
 中文:
 定理 iSup_eq
-  条件: (hf : IsFundamentalSeq f) (ha : 1 < a)
+  条件: (hf : 是FundamentalSeq f) (ha : 1 < a)
   结论: ⨆ i, (f i).1 = o
   证明: by
   rw [← iSup_Iio_add_one hf.strictMono]; rw [hf.iSup_add_one_eq]
@@ -177,7 +177,7 @@ theorem id
 中文:
 定理 id
   条件: (ho : o <= o.cof.ord)
-  结论: IsFundamentalSeq (o := o) id where
+  结论: 是FundamentalSeq (o := o) id where
   证明: strictMono_id
   isCofinal_range := by simp
   le_ord_cof := ho
@@ -200,8 +200,8 @@ theorem zero
 
 中文:
 定理 zero
-  条件: (f : Iio 0 -> Iio 0)
-  结论: IsFundamentalSeq f where
+  条件: (f : 左无界右开区间 0 -> 左无界右开区间 0)
+  结论: 是FundamentalSeq f where
   证明: by simp
   le_ord_cof := by simp
   isCofinal_range := .of_isEmpty
@@ -224,7 +224,7 @@ theorem add_one
 
 中文:
 定理 add_one
-  条件: (o : Ordinal)
+  条件: (o : 序数)
   证明: by simp
   le_ord_cof := by simp
   isCofinal_range := by simp [IsTop]
@@ -249,7 +249,7 @@ theorem comp
 
 中文:
 定理 comp
-  条件: (hf : IsFundamentalSeq f) (hg : IsFundamentalSeq g)
+  条件: (hf : 是FundamentalSeq f) (hg : 是FundamentalSeq g)
   证明: hf.strictMono.comp hg.strictMono
   le_ord_cof := by rw [hf.ord_cof, ← hg.ord_cof]; exact a.ord_cof_le
   isCofinal_range := by
@@ -281,7 +281,7 @@ theorem comp_isNormal
 
 中文:
 定理 comp_isNormal
-  结论: {g : Ordinal -> Ordinal} (hg : IsNormal g) (hf : IsFundamentalSeq f)
+  结论: {g : 序数 -> 序数} (hg : 是正规 g) (hf : 是FundamentalSeq f)
   证明: hg.strictMono.comp hf.strictMono
   le_ord_cof := by rw [cof_map_of_isNormal hg ho, hf.ord_cof]
   isCofinal_range := by
@@ -324,9 +324,9 @@ let g := (OrderIso.setCongr _ _ (congrArg _ hs'.symm)).trans
   rw [range_comp']; rw [OrderIso.map_isCofinal_iff]; r
 
 中文:
-定理 exists_isFundamentalSeq
+定理 存在_isFundamentalSeq
   条件: (ha : o.cof.ord = a)
-  结论: 存在 f : Iio a -> Iio o, IsFundamentalSeq f
+  结论: 存在 f : 左无界右开区间 a -> 左无界右开区间 o, 是FundamentalSeq f
   证明: by
   subst ha
   obtain ⟨s, hs, hs'⟩ := exists_ord_cof_eq o.ToType
@@ -363,7 +363,7 @@ definition IsFundamentalSequence
 
 中文:
 定义 IsFundamentalSequence
-  签名: (a o : Ordinal.{u}) (f : 对任意 b < o, Ordinal.{u})
+  签名: (a o : 序数.{u}) (f : 对任意 b < o, 序数.{u})
   定义体: o <= a.cof.ord ∧ (forall {i j} (hi hj), i < j -> f i hi < f j hj) ∧ blsub.{u, u} o f = a
 
 Depends on / 依赖: a.cof.ord
@@ -522,7 +522,7 @@ theorem zero
 
 中文:
 定理 zero
-  条件: {f : 对任意 b < (0 : Ordinal), Ordinal}
+  条件: {f : 对任意 b < (0 : 序数), 序数}
   结论: IsFundamentalSequence 0 0 f
   证明: ⟨by rw [cof_zero, ord_zero], @fun i _ hi => (not_lt_zero hi).elim, blsub_zero f⟩
 
@@ -582,7 +582,7 @@ theorem monotone
 
 中文:
 定理 monotone
-  结论: (hf : IsFundamentalSequence a o f) {i j : Ordinal} (hi : i < o)
+  结论: (hf : IsFundamentalSequence a o f) {i j : 序数} (hi : i < o)
   证明: by
   rcases lt_or_eq_of_le hij with (hij | rfl)
   · exact (hf.2.1 hi hj hij).le
@@ -615,7 +615,7 @@ theorem trans
 
 中文:
 定理 trans
-  结论: {a o o' : Ordinal.{u}} {f : 对任意 b < o, Ordinal.{u}} (hf : IsFundamentalSequence a o f)
+  结论: {a o o' : 序数.{u}} {f : 对任意 b < o, 序数.{u}} (hf : IsFundamentalSequence a o f)
   证明: by
   refine ⟨?_, @fun i j _ _ h => hf.2.1 _ _ (hg.2.1 _ _ h), ?_⟩
   · rw [hf.cof_eq]
@@ -650,7 +650,7 @@ theorem lt
 
 中文:
 定理 lt
-  结论: {a o : Ordinal} {s : Π p < o, Ordinal}
+  结论: {a o : 序数} {s : Π p < o, 序数}
   证明: h.blsub_eq ▸ lt_blsub s p hp
 -/
 protected theorem lt {a o : Ordinal} {s : Π p < o, Ordinal}
@@ -677,8 +677,8 @@ theorem exists_fundamental_sequence
   let hrr' : r' ↪r r := Subrel.relEmbedding
 
 中文:
-定理 exists_fundamental_sequence
-  条件: (a : Ordinal.{u})
+定理 存在_fundamental_sequence
+  条件: (a : 序数.{u})
   证明: by
   suffices h : exists o f, IsFundamentalSequence a o f by
     rcases h with ⟨o, f, hf⟩
@@ -736,7 +736,7 @@ theorem IsFundamentalSequence.of_isNormal
 
 中文:
 定理 IsFundamentalSequence.of_isNormal
-  结论: {f : Ordinal.{u} -> Ordinal.{u}} (hf : IsNormal f)
+  结论: {f : 序数.{u} -> 序数.{u}} (hf : 是正规 f)
   证明: by
   refine ⟨?_, @fun i j _ _ h => hf.strictMono (hg.2.1 _ _ h), ?_⟩
   · grind [Ordinal.IsFundamentalSequence, cof_map_of_isNormal]

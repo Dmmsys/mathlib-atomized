@@ -293,7 +293,7 @@ theorem exists_prime_lt_and_le_two_mul_eventually
   -- We n
 
 中文:
-定理 exists_prime_lt_and_le_two_mul_eventually
+定理 存在_prime_lt_and_le_two_mul_eventually
   条件: (n : 自然数) (n_large : 512 <= n)
   证明: by
   have no_prime : 4 ^ n < n * n.centralBinom :=
@@ -328,8 +328,8 @@ theorem exists_prime_lt_and_le_two_mul_succ
   grind
 
 中文:
-定理 exists_prime_lt_and_le_two_mul_succ
-  结论: {n} (q) {p : 自然数} (prime_p : 自然数.Prime p)
+定理 存在_prime_lt_and_le_two_mul_succ
+  结论: {n} (q) {p : 自然数} (prime_p : 自然数.素 p)
   证明: by
   grind
 -/
@@ -353,7 +353,7 @@ theorem exists_prime_lt_and_le_two_mul
   replace h : n < 521 := h.trans_lt (by norm
 
 中文:
-定理 exists_prime_lt_and_le_two_mul
+定理 存在_prime_lt_and_le_two_mul
   条件: (n : 自然数) (hn0 : n != 0)
   证明: by
   -- Split into cases whether `n` is large or small

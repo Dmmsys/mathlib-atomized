@@ -61,7 +61,7 @@ lemma tendstoLocallyUniformly_of_forall_tendsto
  
 
 中文:
-引理 tendstoLocallyUniformly_of_forall_tendsto
+引理 tendstoLocallyUniformly_of_对任意_tendsto
   证明: by
   refine (atTop : Filter ι).eq_or_neBot.elim (fun h => ?eq_bot) (fun _ => ?_)
   case eq_bot => simp [h, tendstoLocallyUniformly_iff_forall_tendsto]
@@ -104,8 +104,8 @@ lemma tendstoLocallyUniformlyOn_of_forall_tendsto
     (fun _ _ h x => hF_mono _ x.2 h) hf.domRestrict (fun x => h_tendsto x x.2)
 
 中文:
-引理 tendstoLocallyUniformlyOn_of_forall_tendsto
-  结论: {s : Set α}
+引理 tendstoLocallyUniformlyOn_of_对任意_tendsto
+  结论: {s : 集合 α}
   证明: by
   rw [tendstoLocallyUniformlyOn_iff_tendstoLocallyUniformly_comp_coe]
   exact tendstoLocallyUniformly_of_forall_tendsto (hF_cont · |>.domRestrict)
@@ -131,8 +131,8 @@ lemma tendstoUniformly_of_forall_tendsto
     tendstoLocallyUniformly_of_forall_tendsto hF_cont hF_mono hf h_tendsto
 
 中文:
-引理 tendstoUniformly_of_forall_tendsto
-  结论: [CompactSpace α] (hF_cont : 对任意 i, Continuous (F i))
+引理 tendstoUniformly_of_对任意_tendsto
+  结论: [紧空间 α] (hF_cont : 对任意 i, 连续 (F i))
   证明: tendstoLocallyUniformly_iff_tendstoUniformly_of_compactSpace.mp
     tendstoLocallyUniformly_of_forall_tendsto hF_cont hF_mono hf h_tendsto
 
@@ -154,8 +154,8 @@ lemma tendstoUniformlyOn_of_forall_tendsto
     tendstoLocallyUniformlyOn_of_forall_tendsto hF_cont hF_mono hf h_tendsto
 
 中文:
-引理 tendstoUniformlyOn_of_forall_tendsto
-  结论: {s : Set α} (hs : IsCompact s)
+引理 tendstoUniformlyOn_of_对任意_tendsto
+  结论: {s : 集合 α} (hs : 是紧集 s)
   证明: .mp tendstoLocallyUniformlyOn_iff_tendstoUniformlyOn_of_compact hs
     tendstoLocallyUniformlyOn_of_forall_tendsto hF_cont hF_mono hf h_tendsto
 
@@ -180,7 +180,7 @@ lemma tendstoLocallyUniformly_of_forall_tendsto
   proof: Monotone.tendstoLocallyUniformly_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 中文:
-引理 tendstoLocallyUniformly_of_forall_tendsto
+引理 tendstoLocallyUniformly_of_对任意_tendsto
   证明: Monotone.tendstoLocallyUniformly_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 Depends on / 依赖: Monotone, Monotone.tendstoLocallyUniformly_of_forall_tendsto, hF_anti, hF_cont, h_tendsto, tendstoLocallyUniformly_of_forall_tendsto
@@ -200,8 +200,8 @@ lemma tendstoLocallyUniformlyOn_of_forall_tendsto
   proof: Monotone.tendstoLocallyUniformlyOn_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 中文:
-引理 tendstoLocallyUniformlyOn_of_forall_tendsto
-  结论: {s : Set α}
+引理 tendstoLocallyUniformlyOn_of_对任意_tendsto
+  结论: {s : 集合 α}
   证明: Monotone.tendstoLocallyUniformlyOn_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 Depends on / 依赖: Monotone, Monotone.tendstoLocallyUniformlyOn_of_forall_tendsto, hF_anti, hF_cont, h_tendsto, tendstoLocallyUniformlyOn_of_forall_tendsto
@@ -221,8 +221,8 @@ lemma tendstoUniformly_of_forall_tendsto
   proof: Monotone.tendstoUniformly_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 中文:
-引理 tendstoUniformly_of_forall_tendsto
-  结论: [CompactSpace α] (hF_cont : 对任意 i, Continuous (F i))
+引理 tendstoUniformly_of_对任意_tendsto
+  结论: [紧空间 α] (hF_cont : 对任意 i, 连续 (F i))
   证明: Monotone.tendstoUniformly_of_forall_tendsto (G := Gᵒᵈ) hF_cont hF_anti hf h_tendsto
 
 Depends on / 依赖: Monotone, Monotone.tendstoUniformly_of_forall_tendsto, hF_anti, hF_cont, h_tendsto, tendstoUniformly_of_forall_tendsto
@@ -241,8 +241,8 @@ lemma tendstoUniformlyOn_of_forall_tendsto
   proof: Monotone.tendstoUniformlyOn_of_forall_tendsto (G := Gᵒᵈ) hs hF_cont hF_anti hf h_tendsto
 
 中文:
-引理 tendstoUniformlyOn_of_forall_tendsto
-  结论: {s : Set α} (hs : IsCompact s)
+引理 tendstoUniformlyOn_of_对任意_tendsto
+  结论: {s : 集合 α} (hs : 是紧集 s)
   证明: Monotone.tendstoUniformlyOn_of_forall_tendsto (G := Gᵒᵈ) hs hF_cont hF_anti hf h_tendsto
 
 Depends on / 依赖: Monotone, Monotone.tendstoUniformlyOn_of_forall_tendsto, hF_anti, hF_cont, h_tendsto, tendstoUniformlyOn_of_forall_tendsto
@@ -272,7 +272,7 @@ lemma tendsto_of_monotone_of_pointwise
 
 中文:
 引理 tendsto_of_monotone_of_pointwise
-  结论: (hF_mono : Monotone F)
+  结论: (hF_mono : 递增 F)
   证明: tendsto_of_tendstoLocallyUniformly
     hF_mono.tendstoLocallyUniformly_of_forall_tendsto (F · |>.continuous) f.continuous h_tendsto
 
@@ -294,7 +294,7 @@ lemma tendsto_of_antitone_of_pointwise
 
 中文:
 引理 tendsto_of_antitone_of_pointwise
-  结论: (hF_anti : Antitone F)
+  结论: (hF_anti : 递减 F)
   证明: tendsto_of_monotone_of_pointwise (G := Gᵒᵈ) hF_anti h_tendsto
 
 Depends on / 依赖: hF_anti, h_tendsto, tendsto_of_monotone_of_pointwise

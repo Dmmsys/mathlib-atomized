@@ -37,8 +37,8 @@ instance Additive.vadd
   body: (a.toMul • ·)
 
 中文:
-实例 Additive.vadd
-  签名: [SMul α β]
+实例 加性.vadd
+  签名: [标量乘法 α β]
   定义体: (a.toMul • ·)
 
 Depends on / 依赖: a.toMul
@@ -55,7 +55,7 @@ instance Multiplicative.smul
 
 中文:
 实例 Multiplicative.smul
-  签名: [VAdd α β]
+  签名: [向量加法 α β]
   定义体: (a.toAdd +ᵥ ·)
 
 Depends on / 依赖: a.toAdd
@@ -73,7 +73,7 @@ lemma toMul_smul
 
 中文:
 引理 toMul_smul
-  条件: [SMul α β] (a : Additive α) (b : β)
+  条件: [标量乘法 α β] (a : 加性 α) (b : β)
   结论: (a.toMul : α) • b = a +ᵥ b
   证明: rfl
 -/
@@ -90,7 +90,7 @@ lemma ofMul_vadd
 
 中文:
 引理 ofMul_vadd
-  条件: [SMul α β] (a : α) (b : β)
+  条件: [标量乘法 α β] (a : α) (b : β)
   结论: ofMul a +ᵥ b = a • b
   证明: rfl
 -/
@@ -107,7 +107,7 @@ lemma toAdd_vadd
 
 中文:
 引理 toAdd_vadd
-  条件: [VAdd α β] (a : Multiplicative α) (b : β)
+  条件: [向量加法 α β] (a : Multiplicative α) (b : β)
   结论: (a.toAdd : α) +ᵥ b = a • b
   证明: rfl
 -/
@@ -125,7 +125,7 @@ lemma ofAdd_smul
 
 中文:
 引理 ofAdd_smul
-  条件: [VAdd α β] (a : α) (b : β)
+  条件: [向量加法 α β] (a : α) (b : β)
   结论: ofAdd a • b = a +ᵥ b
   证明: rfl
 -/
@@ -141,8 +141,8 @@ instance Additive.addAction
   add_vadd := mul_smul (α := α)
 
 中文:
-实例 Additive.addAction
-  签名: [Monoid α] [MulAction α β]
+实例 加性.addAction
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: MulAction.one_smul
   add_vadd := mul_smul (α := α)
 
@@ -163,7 +163,7 @@ instance Multiplicative.mulAction
 
 中文:
 实例 Multiplicative.mulAction
-  签名: [AddMonoid α] [AddAction α β]
+  签名: [加法幺半群 α] [加法作用 α β]
   定义体: AddAction.zero_vadd
   mul_smul := add_vadd (G := α)
 
@@ -183,8 +183,8 @@ instance Additive.vaddCommClass
   body: ⟨@smul_comm α β _ _ _ _⟩
 
 中文:
-实例 Additive.vaddCommClass
-  签名: [SMul α γ] [SMul β γ] [SMulCommClass α β γ]
+实例 加性.vaddCommClass
+  签名: [标量乘法 α γ] [标量乘法 β γ] [标量交换类 α β γ]
   定义体: ⟨@smul_comm α β _ _ _ _⟩
 
 Depends on / 依赖: smul_comm
@@ -203,7 +203,7 @@ instance Multiplicative.smulCommClass
 
 中文:
 实例 Multiplicative.smulCommClass
-  签名: [VAdd α γ] [VAdd β γ] [VAddCommClass α β γ]
+  签名: [向量加法 α γ] [向量加法 β γ] [VAddComm类 α β γ]
   定义体: ⟨@vadd_comm α β _ _ _ _⟩
 
 Depends on / 依赖: vadd_comm

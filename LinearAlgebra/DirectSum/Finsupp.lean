@@ -699,7 +699,7 @@ theorem Finsupp.linearCombination_one_tmul
   ext; simp [smul_tmul']
 
 中文:
-定理 Finsupp.linearCombination_one_tmul
+定理 有限支撑.linearCombination_one_tmul
   条件: [DecidableEq ι] {v : ι -> M}
   证明: by
   ext; simp [smul_tmul']

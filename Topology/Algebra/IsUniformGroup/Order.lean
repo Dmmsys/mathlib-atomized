@@ -43,7 +43,7 @@ lemma TendstoUniformlyOn.eventually_forall_lt
   have hf2 := hf (fun x => -x.1 + x.2 < -u + v) ⟨_, (isOpen_gt' (-u + v)).mem_nhds (by simp
 
 中文:
-引理 TendstoUniformlyOn.eventually_forall_lt
+引理 TendstoUniformlyOn.eventually_对任意_lt
   结论: {u v : β} (huv : u < v)
   证明: by
   simp only [tendstoUniformlyOn_iff_tendsto, uniformity_eq_comap_neg_add_nhds_zero,
@@ -74,7 +74,7 @@ lemma TendstoUniformlyOn.eventually_forall_le
   filter_upwards [hf.eventually_forall_lt huv hg] with i hi x hx using (hi x hx).le
 
 中文:
-引理 TendstoUniformlyOn.eventually_forall_le
+引理 TendstoUniformlyOn.eventually_对任意_le
   结论: {u v : β} (huv : u < v)
   证明: by
   filter_upwards [hf.eventually_forall_lt huv hg] with i hi x hx using (hi x hx).le

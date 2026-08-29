@@ -92,11 +92,11 @@ structure Copy
     - injective' : Injective toHom
 
 中文:
-结构 Copy
-  参数: (A : SimpleGraph α) (B : SimpleGraph β)
+结构 余py
+  参数: (A : 简单图 α) (B : 简单图 β)
   公理与运算 (2 个):
     - toHom : A ->g B
-    - injective' : Injective toHom
+    - injective' : 单射 toHom
 -/
 structure Copy (A : SimpleGraph α) (B : SimpleGraph β) where
   /-- A copy gives rise to a homomorphism. -/
@@ -112,8 +112,8 @@ abbreviation Hom.toCopy
   body: .mk f h
 
 中文:
-缩写 Hom.toCopy
-  签名: (f : A ->g B) (h : Injective f)
+缩写 态射.toCopy
+  签名: (f : A ->g B) (h : 单射 f)
   定义体: .mk f h
 -/
 abbrev Hom.toCopy (f : A ->g B) (h : Injective f) : Copy A B := .mk f h
@@ -127,7 +127,7 @@ abbreviation Embedding.toCopy
   body: f.toHom.toCopy f.injective
 
 中文:
-缩写 Embedding.toCopy
+缩写 嵌入.toCopy
   签名: (f : A ↪g B)
   定义体: f.toHom.toCopy f.injective
 
@@ -144,7 +144,7 @@ abbreviation Iso.toCopy
   body: f.toEmbedding.toCopy
 
 中文:
-缩写 Iso.toCopy
+缩写 同构.toCopy
   签名: (f : A ≃g B)
   定义体: f.toEmbedding.toCopy
 
@@ -165,7 +165,7 @@ instance :
 
 中文:
 实例 :
-  签名: FunLike (Copy A B) α β
+  签名: 函数状 (余py A B) α β
   定义体: DFunLike.coe f.toHom
   coe_injective f g h := by obtain ⟨⟨_, _⟩, _⟩ := f; congr!
 
@@ -186,8 +186,8 @@ lemma injective
 
 中文:
 引理 injective
-  条件: (f : Copy A B)
-  结论: Injective f.toHom
+  条件: (f : 余py A B)
+  结论: 单射 f.toHom
   证明: f.injective'
 
 Depends on / 依赖: f.injective, injective
@@ -205,7 +205,7 @@ lemma ext
 
 中文:
 引理 ext
-  条件: {f g : Copy A B}
+  条件: {f g : 余py A B}
   结论: (对任意 a, f a = g a) -> f = g
   证明: DFunLike.ext _ _
 -/
@@ -222,7 +222,7 @@ lemma coe_toHom
 
 中文:
 引理 coe_toHom
-  条件: (f : Copy A B)
+  条件: (f : 余py A B)
   结论: ⇑f.toHom = f
   证明: rfl
 -/
@@ -238,7 +238,7 @@ lemma toHom_apply
 
 中文:
 引理 toHom_apply
-  条件: (f : Copy A B) (a : α)
+  条件: (f : 余py A B) (a : α)
   结论: ⇑f.toHom a = f a
   证明: rfl
 -/
@@ -256,7 +256,7 @@ lemma coe_mk
 中文:
 引理 coe_mk
   条件: (f : A ->g B) (hf)
-  结论: ⇑(.mk f hf : Copy A B) = f
+  结论: ⇑(.mk f hf : 余py A B) = f
   证明: rfl
 -/
 @[simp] lemma coe_mk (f : A ->g B) (hf) : ⇑(.mk f hf : Copy A B) = f := rfl
@@ -272,7 +272,7 @@ definition mapEdgeSet
 
 中文:
 定义 mapEdgeSet
-  签名: (f : Copy A B)
+  签名: (f : 余py A B)
   定义体: f.toHom.mapEdgeSet
   inj' := Hom.mapEdgeSet.injective f.toHom f.injective
 
@@ -295,7 +295,7 @@ definition mapNeighborSet
 
 中文:
 定义 mapNeighborSet
-  签名: (f : Copy A B) (a : α)
+  签名: (f : 余py A B) (a : α)
   定义体: ⟨f v, f.toHom.apply_mem_neighborSet v.prop⟩
   inj' _ _ h := by
     rw [Subtype.mk_eq_mk] at h ⊢
@@ -320,7 +320,7 @@ definition toEmbedding
 
 中文:
 定义 toEmbedding
-  签名: (f : Copy A B)
+  签名: (f : 余py A B)
   定义体: ⟨f, f.injective⟩
 
 Depends on / 依赖: f.injective, injective
@@ -337,7 +337,7 @@ definition id
 
 中文:
 定义 id
-  签名: (G : SimpleGraph V)
+  签名: (G : 简单图 V)
   定义体: ⟨Hom.id, Function.injective_id⟩
 -/
 @[refl] def id (G : SimpleGraph V) : Copy G G := ⟨Hom.id, Function.injective_id⟩
@@ -372,7 +372,7 @@ definition comp
 
 中文:
 定义 comp
-  签名: (g : Copy B C) (f : Copy A B)
+  签名: (g : 余py B C) (f : 余py A B)
   定义体: by
   use g.toHom.comp f.toHom
   rw [Hom.coe_comp]
@@ -399,7 +399,7 @@ theorem comp_apply
 
 中文:
 定理 comp_apply
-  条件: (g : Copy B C) (f : Copy A B) (a : α)
+  条件: (g : 余py B C) (f : 余py A B) (a : α)
   结论: g.comp f a = g (f a)
   证明: RelHom.comp_apply g.toHom f.toHom a
 
@@ -420,7 +420,7 @@ definition ofLE
 
 中文:
 定义 ofLE
-  签名: (G₁ G₂ : SimpleGraph V) (h : G₁ <= G₂)
+  签名: (G₁ G₂ : 简单图 V) (h : G₁ <= G₂)
   定义体: ⟨Hom.ofLE h, Function.injective_id⟩
 
 @[simp, norm_cast]
@@ -441,7 +441,7 @@ theorem coe_comp
 
 中文:
 定理 coe_comp
-  条件: (g : Copy B C) (f : Copy A B)
+  条件: (g : 余py B C) (f : 余py A B)
   结论: ⇑(g.comp f) = g ∘ f
   证明: by ext; simp
 -/
@@ -510,7 +510,7 @@ definition induce
 
 中文:
 定义 induce
-  签名: (G : SimpleGraph V) (s : Set V)
+  签名: (G : 简单图 V) (s : 集合 V)
   定义体: (Embedding.induce s).toCopy
 
 Depends on / 依赖: Embedding, Embedding.induce, induce, toCopy
@@ -547,7 +547,7 @@ definition isoSubgraphMap
 
 中文:
 定义 isoSubgraphMap
-  签名: (f : Copy A B) (A' : A.Subgraph)
+  签名: (f : 余py A B) (A' : A.子图)
   定义体: by
   use Equiv.Set.image f.toHom _ f.injective
   simp_rw [Subgraph.map_verts, Equiv.Set.image_apply, Subgraph.coe_adj, Subgraph.map_adj,
@@ -571,7 +571,7 @@ abbreviation toSubgraph
 
 中文:
 缩写 toSubgraph
-  签名: (f : Copy A B)
+  签名: (f : 余py A B)
   定义体: .map f.toHom ⊤
 
 Depends on / 依赖: f.toHom
@@ -588,7 +588,7 @@ definition isoToSubgraph
 
 中文:
 定义 isoToSubgraph
-  签名: (f : Copy A B)
+  签名: (f : 余py A B)
   定义体: (f.isoSubgraphMap ⊤).comp Subgraph.topIso.symm
 
 Depends on / 依赖: Subgraph, Subgraph.topIso.symm, f.isoSubgraphMap, isoSubgraphMap, topIso
@@ -657,8 +657,8 @@ instance [Subsingleton
   body: DFunLike.coe_injective.subsingleton
 
 中文:
-实例 [Subsingleton
-  签名: (V -> W)] : Subsingleton (G.Copy H)
+实例 [子单例
+  签名: (V -> W)] : 子单例 (G.余py H)
   定义体: DFunLike.coe_injective.subsingleton
 
 Depends on / 依赖: DFunLike, DFunLike.coe_injective.subsingleton, coe_injective, subsingleton
@@ -677,8 +677,8 @@ instance [Fintype
   }
 
 中文:
-实例 [Fintype
-  签名: {f : G ->g H // Injective f}] : Fintype (G.Copy H)
+实例 [有限类型
+  签名: {f : G ->g H // 单射 f}] : 有限类型 (G.余py H)
   定义体: .ofEquiv {f : G ->g H // Injective f} {
     toFun f := ⟨f.1, f.2⟩
     invFun f := ⟨f.1, f.2⟩
@@ -705,7 +705,7 @@ definition topEmbedding
 
 中文:
 定义 topEmbedding
-  签名: (f : Copy (⊤ : SimpleGraph α) G)
+  签名: (f : 余py (⊤ : 简单图 α) G)
   定义体: { f.toEmbedding with
     map_rel_iff' := fun {v w} => ⟨fun h => by simpa using h.ne, f.toHom.map_adj⟩}
 
@@ -726,8 +726,8 @@ definition Subgraph.coeCopy
   body: G'.hom.toCopy hom_injective
 
 中文:
-定义 Subgraph.coeCopy
-  签名: (G' : G.Subgraph)
+定义 子图.coeCopy
+  签名: (G' : G.子图)
   定义体: G'.hom.toCopy hom_injective
 
 Depends on / 依赖: hom.toCopy, hom_injective, toCopy
@@ -768,7 +768,7 @@ abbreviation IsContained
 
 中文:
 缩写 IsContained
-  签名: (A : SimpleGraph α) (B : SimpleGraph β)
+  签名: (A : 简单图 α) (B : 简单图 β)
   定义体: Nonempty (Copy A B)
 
 @[inherit_doc] scoped infixl:50 " ⊑ " => SimpleGraph.IsContained
@@ -790,7 +790,7 @@ theorem IsContained.refl
 
 中文:
 定理 IsContained.refl
-  条件: (G : SimpleGraph V)
+  条件: (G : 简单图 V)
   结论: G ⊑ G
   证明: ⟨.id G⟩
 -/
@@ -882,7 +882,7 @@ alias IsContained.trans_le := IsContained.mono_right
 
 中文:
 引理 IsContained.mono_right
-  条件: {B' : SimpleGraph β} (h_isub : A ⊑ B) (h_sub : B <= B')
+  条件: {B' : 简单图 β} (h_isub : A ⊑ B) (h_sub : B <= B')
   结论: A ⊑ B'
   证明: h_isub.trans IsContained.of_le h_sub
 
@@ -911,7 +911,7 @@ alias IsContained.trans_le' := IsContained.mono_left
 
 中文:
 引理 IsContained.mono_left
-  条件: {A' : SimpleGraph α} (h_sub : A <= A') (h_isub : A' ⊑ B)
+  条件: {A' : 简单图 α} (h_sub : A <= A') (h_isub : A' ⊑ B)
   结论: A ⊑ B
   证明: (IsContained.of_le h_sub).trans h_isub
 
@@ -1005,7 +1005,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder (SimpleGraph α) IsContained
+  签名: 是预序 (简单图 α) IsContained
   定义体: .refl
   trans _ _ _ := .trans
 -/
@@ -1042,7 +1042,7 @@ lemma IsContained.of_isEmpty
 
 中文:
 引理 IsContained.of_isEmpty
-  条件: [IsEmpty α]
+  条件: [是空 α]
   结论: A ⊑ B
   证明: ⟨⟨isEmptyElim, fun {a} => isEmptyElim a⟩, isEmptyElim⟩
 
@@ -1064,7 +1064,7 @@ protected alias IsContained.bot := bot_isContained_iff_card_le
 
 中文:
 引理 bot_isContained_iff_card_le
-  条件: [Fintype α] [Fintype β]
+  条件: [有限类型 α] [有限类型 β]
   证明: ⟨fun ⟨f⟩ => Fintype.card_le_of_embedding f.toEmbedding,
     fun h => ⟨Copy.bot (Function.Embedding.nonempty_of_card_le h).some⟩⟩
 
@@ -1089,8 +1089,8 @@ lemma Subgraph.coe_isContained
   proof: ⟨G'.coeCopy⟩
 
 中文:
-引理 Subgraph.coe_isContained
-  条件: (G' : G.Subgraph)
+引理 子图.coe_isContained
+  条件: (G' : G.子图)
   结论: G'.coe ⊑ G
   证明: ⟨G'.coeCopy⟩
 
@@ -1110,7 +1110,7 @@ alias ⟨IsContained.exists_iso_subgraph, IsContained.of_exists_iso_subgraph⟩ 
   isContained_iff_exists_iso_subgraph
 
 中文:
-定理 isContained_iff_exists_iso_subgraph
+定理 isContained_iff_存在_iso_subgraph
   证明: fun ⟨f⟩ => ⟨.map f.toHom ⊤, ⟨f.isoToSubgraph⟩⟩
   mpr := fun ⟨B', ⟨e⟩⟩ => B'.coe_isContained.trans' ⟨e.toCopy⟩
 
@@ -1138,8 +1138,8 @@ theorem Copy.degree_le
     Fintype.card_le_of_injective _ (f.mapNeighborSet v).injective
 
 中文:
-定理 Copy.degree_le
-  结论: (f : Copy G H) (v : V) [Fintype <| G.neighborSet v]
+定理 余py.degree_le
+  结论: (f : 余py G H) (v : V) [有限类型 <| G.neighborSet v]
   证明: by
   simpa [card_neighborSet_eq_degree] using
     Fintype.card_le_of_injective _ (f.mapNeighborSet v).injective
@@ -1166,8 +1166,8 @@ theorem Copy.maxDegree_mono
 @[deprecated (since := "2026-05-20")] alias Copy.max_degree_le := Copy.maxDegree_mono
 
 中文:
-定理 Copy.maxDegree_mono
-  结论: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
+定理 余py.maxDegree_mono
+  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: by
   cases isEmpty_or_nonempty V
   · simp
@@ -1203,7 +1203,7 @@ theorem IsContained.maxDegree_mono
 
 中文:
 定理 IsContained.maxDegree_mono
-  结论: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
+  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: by
   have ⟨f⟩ := h
   exact f.maxDegree_mono
@@ -1232,7 +1232,7 @@ lemma maxDegree_mono
 
 中文:
 引理 maxDegree_mono
-  结论: {H : SimpleGraph V} [Fintype V] [DecidableRel G.Adj] [DecidableRel H.Adj]
+  结论: {H : 简单图 V} [有限类型 V] [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: .maxDegree_mono IsContained.of_le hle
 
 Depends on / 依赖: IsContained, IsContained.of_le, maxDegree_mono, of_le
@@ -1258,8 +1258,8 @@ theorem Copy.minDegree_mono
 @[deprecated (since := "2026-05-20")] alias Copy.minDegree_le := Copy.minDegree_mono
 
 中文:
-定理 Copy.minDegree_mono
-  结论: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
+定理 余py.minDegree_mono
+  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: by
   cases isEmpty_or_nonempty W
   · have := Function.isEmpty f
@@ -1294,8 +1294,8 @@ theorem Hom.minDegree_mono
 @[deprecated (since := "2026-05-20")] alias Hom.minDegree_le := Hom.minDegree_mono
 
 中文:
-定理 Hom.minDegree_mono
-  结论: [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel H.Adj]
+定理 态射.minDegree_mono
+  结论: [有限类型 V] [有限类型 W] [DecidableRel G.伴随] [DecidableRel H.伴随]
   证明: Copy.minDegree_mono (f := ⟨f, hf.injective⟩) hf.surjective
 
 @[deprecated (since := "2026-05-20")] alias Hom.minDegree_le := Hom.minDegree_mono
@@ -1324,7 +1324,7 @@ degree_induce_of_neighborSet_subset .trans h] G
 
 中文:
 定理 maxDegree_induce_of_support_subset
-  结论: [Fintype V] [DecidableRel G.Adj] {s : Set V}
+  结论: [有限类型 V] [DecidableRel G.伴随] {s : 集合 V}
   证明: by
 apply le_antisymm Copy.maxDegree_mono .toCopy Embedding.induce s
   refine G.maxDegree_le_of_forall_degree_le _ fun v => ?_
@@ -1357,8 +1357,8 @@ abbreviation Free
   body: ¬A ⊑ B
 
 中文:
-缩写 Free
-  签名: (A : SimpleGraph α) (B : SimpleGraph β)
+缩写 自由
+  签名: (A : 简单图 α) (B : 简单图 β)
   定义体: ¬A ⊑ B
 -/
 abbrev Free (A : SimpleGraph α) (B : SimpleGraph β) := ¬A ⊑ B
@@ -1373,7 +1373,7 @@ lemma not_free
 
 中文:
 引理 not_free
-  结论: ¬A.Free B ↔ A ⊑ B
+  结论: ¬A.自由 B ↔ A ⊑ B
   证明: not_not
 
 Depends on / 依赖: not_not
@@ -1392,7 +1392,7 @@ theorem free_congr
 中文:
 定理 free_congr
   条件: (e₁ : A ≃g H) (e₂ : B ≃g G)
-  结论: A.Free B ↔ H.Free G
+  结论: A.自由 B ↔ H.自由 G
   证明: (isContained_congr e₁ e₂).not
 
 Depends on / 依赖: isContained_congr
@@ -1414,7 +1414,7 @@ alias ⟨_, Free.congr_left⟩ := free_congr_left
 中文:
 引理 free_congr_left
   条件: (e₁ : A ≃g B)
-  结论: A.Free C ↔ B.Free C
+  结论: A.自由 C ↔ B.自由 C
   证明: free_congr e₁ .refl
 
 alias ⟨_, Free.congr_left⟩ := free_congr_left
@@ -1439,7 +1439,7 @@ alias ⟨_, Free.congr_right⟩ := free_congr_right
 中文:
 引理 free_congr_right
   条件: (e₂ : B ≃g C)
-  结论: A.Free B ↔ A.Free C
+  结论: A.自由 B ↔ A.自由 C
   证明: free_congr .refl e₂
 
 alias ⟨_, Free.congr_right⟩ := free_congr_right
@@ -1467,7 +1467,7 @@ lemma free_bot
 中文:
 引理 free_bot
   条件: (h : A != ⊥)
-  结论: A.Free (⊥ : SimpleGraph β)
+  结论: A.自由 (⊥ : 简单图 β)
   证明: by
   rw [← edgeSet_nonempty] at h
   intro ⟨f, hf⟩
@@ -1507,7 +1507,7 @@ definition IsIndContained
 
 中文:
 定义 IsIndContained
-  签名: (G : SimpleGraph V) (H : SimpleGraph W)
+  签名: (G : 简单图 V) (H : 简单图 W)
   定义体: Nonempty (G ↪g H)
 
 @[inherit_doc] scoped infixl:50 " ⊴ " => SimpleGraph.IsIndContained
@@ -1528,8 +1528,8 @@ lemma Copy.isContained
   proof: ⟨f⟩
 
 中文:
-引理 Copy.isContained
-  条件: (f : Copy G H)
+引理 余py.isContained
+  条件: (f : 余py G H)
   结论: G ⊑ H
   证明: ⟨f⟩
 -/
@@ -1545,7 +1545,7 @@ lemma Embedding.isIndContained
   proof: ⟨f⟩
 
 中文:
-引理 Embedding.isIndContained
+引理 嵌入.isIndContained
   条件: (f : G ↪g H)
   结论: G ⊴ H
   证明: ⟨f⟩
@@ -1562,7 +1562,7 @@ lemma Embedding.isContained
   proof: f.toCopy.isContained
 
 中文:
-引理 Embedding.isContained
+引理 嵌入.isContained
   条件: (f : G ↪g H)
   结论: G ⊑ H
   证明: f.toCopy.isContained
@@ -1594,7 +1594,7 @@ lemma Iso.isContained
   proof: e.toCopy.isContained
 
 中文:
-引理 Iso.isContained
+引理 同构.isContained
   条件: (e : G ≃g H)
   结论: G ⊑ H
   证明: e.toCopy.isContained
@@ -1611,7 +1611,7 @@ lemma Iso.isContained'
   proof: e.symm.isContained
 
 中文:
-引理 Iso.isContained'
+引理 同构.isContained'
   条件: (e : G ≃g H)
   结论: H ⊑ G
   证明: e.symm.isContained
@@ -1628,7 +1628,7 @@ lemma Iso.isIndContained
   proof: e.toEmbedding.isIndContained
 
 中文:
-引理 Iso.isIndContained
+引理 同构.isIndContained
   条件: (e : G ≃g H)
   结论: G ⊴ H
   证明: e.toEmbedding.isIndContained
@@ -1645,7 +1645,7 @@ lemma Iso.isIndContained'
   proof: e.symm.isIndContained
 
 中文:
-引理 Iso.isIndContained'
+引理 同构.isIndContained'
   条件: (e : G ≃g H)
   结论: H ⊴ G
   证明: e.symm.isIndContained
@@ -1663,8 +1663,8 @@ lemma Subgraph.IsInduced.isIndContained
      map_rel_iff' := hG'.adj.symm }⟩
 
 中文:
-引理 Subgraph.IsInduced.isIndContained
-  条件: {G' : G.Subgraph} (hG' : G'.IsInduced)
+引理 子图.是Induced.isIndContained
+  条件: {G' : G.子图} (hG' : G'.是Induced)
   证明: ⟨{ toFun := (↑)
      inj' := Subtype.coe_injective
      map_rel_iff' := hG'.adj.symm }⟩
@@ -1686,7 +1686,7 @@ lemma IsIndContained.refl
 
 中文:
 引理 IsIndContained.refl
-  条件: (G : SimpleGraph V)
+  条件: (G : 简单图 V)
   结论: G ⊴ G
   证明: ⟨Embedding.refl⟩
 -/
@@ -1731,7 +1731,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsPreorder (SimpleGraph α) IsIndContained
+  签名: 是预序 (简单图 α) IsIndContained
   定义体: .refl
   trans _ _ _ := .trans
 -/
@@ -1770,7 +1770,7 @@ lemma IsIndContained.of_isEmpty
 
 中文:
 引理 IsIndContained.of_isEmpty
-  条件: [IsEmpty V]
+  条件: [是空 V]
   结论: G ⊴ H
   证明: ⟨{ toFun := isEmptyElim
      inj' := isEmptyElim
@@ -1799,7 +1799,7 @@ lemma isIndContained_iff_exists_iso_subgraph
 alias ⟨IsIndContained.exists_iso_subgraph, IsIndContained.of_
 
 中文:
-引理 isIndContained_iff_exists_iso_subgraph
+引理 isIndContained_iff_存在_iso_subgraph
   证明: by
   constructor
   · rintro ⟨f⟩
@@ -1833,8 +1833,8 @@ theorem isIndContained_iff_exists_iso_induce
   proof: ⟨fun ⟨f⟩ => ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ => ⟨.comp (.induce s) f⟩⟩
 
 中文:
-定理 isIndContained_iff_exists_iso_induce
-  结论: G ⊴ H ↔ 存在 s, Nonempty (G ≃g H.induce s)
+定理 isIndContained_iff_存在_iso_induce
+  结论: G ⊴ H ↔ 存在 s, 非空 (G ≃g H.induce s)
   证明: ⟨fun ⟨f⟩ => ⟨Set.range f, ⟨f.isoInduceRange⟩⟩, fun ⟨s, ⟨f⟩⟩ => ⟨.comp (.induce s) f⟩⟩
 
 Depends on / 依赖: Set.range, f.isoInduceRange, induce, isoInduceRange
@@ -1868,8 +1868,8 @@ theorem isContained_top_iff
 
 中文:
 定理 isContained_top_iff
-  条件: {G : SimpleGraph V}
-  结论: G ⊑ completeGraph W ↔ Nonempty (V ↪ W)
+  条件: {G : 简单图 V}
+  结论: G ⊑ completeGraph W ↔ 非空 (V ↪ W)
   证明: ⟨(⟨·.some.toEmbedding⟩), (.trans (.of_le le_top) ⟨Embedding.completeGraph ·.some |>.toCopy⟩)⟩
 
 Depends on / 依赖: Embedding, Embedding.completeGraph, completeGraph, le_top, of_le, some.toEmbedding, toCopy, toEmbedding
@@ -1887,7 +1887,7 @@ theorem top_isIndContained_top_iff
 
 中文:
 定理 top_isIndContained_top_iff
-  结论: completeGraph V ⊴ completeGraph W ↔ Nonempty (V ↪ W)
+  结论: completeGraph V ⊴ completeGraph W ↔ 非空 (V ↪ W)
   证明: ⟨(⟨·.some.toEmbedding⟩), (⟨.completeGraph ·.some⟩)⟩
 
 Depends on / 依赖: completeGraph, some.toEmbedding, toEmbedding
@@ -1946,7 +1946,7 @@ theorem isContained_iff_exists_le_comap
   proof: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ => ⟨⟨f, (h ·)⟩, f.injective⟩⟩
 
 中文:
-定理 isContained_iff_exists_le_comap
+定理 isContained_iff_存在_le_comap
   结论: H ⊑ G ↔ 存在 (f : W ↪ V), H <= G.comap f
   证明: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.toHom.le_comap⟩, fun ⟨f, h⟩ => ⟨⟨f, (h ·)⟩, f.injective⟩⟩
 
@@ -1964,7 +1964,7 @@ theorem isIndContained_iff_exists_comap_eq
   proof: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ => ⟨f, h ▸ .rfl⟩⟩
 
 中文:
-定理 isIndContained_iff_exists_comap_eq
+定理 isIndContained_iff_存在_comap_eq
   结论: H ⊴ G ↔ 存在 (f : W ↪ V), G.comap f = H
   证明: ⟨fun ⟨f⟩ => ⟨f.toEmbedding, f.comap_eq⟩, fun ⟨f, h⟩ => ⟨f, h ▸ .rfl⟩⟩
 
@@ -1996,7 +1996,7 @@ definition labelledCopyCount
 
 中文:
 定义 labelledCopyCount
-  签名: (G : SimpleGraph V) (H : SimpleGraph W)
+  签名: (G : 简单图 V) (H : 简单图 W)
   定义体: by
   classical exact Fintype.card (Copy H G)
 
@@ -2017,7 +2017,7 @@ lemma labelledCopyCount_of_isEmpty
 
 中文:
 引理 labelledCopyCount_of_isEmpty
-  条件: [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W)
+  条件: [是空 W] (G : 简单图 V) (H : 简单图 W)
   证明: by
   convert! Fintype.card_unique
   exact { default := ⟨default, isEmptyElim⟩, uniq := fun _ => Subsingleton.elim _ _ }
@@ -2038,7 +2038,7 @@ lemma labelledCopyCount_eq_zero
 
 中文:
 引理 labelledCopyCount_eq_zero
-  结论: G.labelledCopyCount H = 0 ↔ H.Free G
+  结论: G.labelledCopyCount H = 0 ↔ H.自由 G
   证明: by
   simp [labelledCopyCount, Fintype.card_eq_zero_iff]
 -/
@@ -2079,7 +2079,7 @@ definition copyCount
 
 中文:
 定义 copyCount
-  签名: (G : SimpleGraph V) (H : SimpleGraph W)
+  签名: (G : 简单图 V) (H : 简单图 W)
   定义体: by
   classical exact #{G' : G.Subgraph | Nonempty (H ≃g G'.coe)}
 
@@ -2102,7 +2102,7 @@ lemma copyCount_eq_card_image_copyToSubgraph
 
 中文:
 引理 copyCount_eq_card_image_copyToSubgraph
-  结论: [Fintype {f : H ->g G // Injective f}]
+  结论: [有限类型 {f : H ->g G // 单射 f}]
   证明: by
   rw [copyCount]
   congr
@@ -2131,7 +2131,7 @@ lemma copyCount_eq_zero
 
 中文:
 引理 copyCount_eq_zero
-  结论: G.copyCount H = 0 ↔ H.Free G
+  结论: G.copyCount H = 0 ↔ H.自由 G
   证明: by
   simp [copyCount, Free, -nonempty_subtype, isContained_iff_exists_iso_subgraph,
     filter_eq_empty_iff]
@@ -2173,7 +2173,7 @@ lemma copyCount_le_labelledCopyCount
 
 中文:
 引理 copyCount_le_labelledCopyCount
-  条件: [Fintype W]
+  条件: [有限类型 W]
   结论: G.copyCount H <= G.labelledCopyCount H
   证明: by
   classical rw [copyCount_eq_card_image_copyToSubgraph]; exact card_image_le
@@ -2204,8 +2204,8 @@ lemma copyCount_bot
 
 中文:
 引理 copyCount_bot
-  条件: (G : SimpleGraph V)
-  结论: copyCount G (⊥ : SimpleGraph V) = 1
+  条件: (G : 简单图 V)
+  结论: copyCount G (⊥ : 简单图 V) = 1
   证明: by
   classical
   rw [copyCount]
@@ -2247,7 +2247,7 @@ copyCount_pos.2 .of_isEmpty
 
 中文:
 引理 copyCount_of_isEmpty
-  条件: [IsEmpty W] (G : SimpleGraph V) (H : SimpleGraph W)
+  条件: [是空 W] (G : 简单图 V) (H : 简单图 W)
   证明: by
   cases nonempty_fintype W
 exact (copyCount_le_labelledCopyCount.trans_eq <| labelledCopyCount_of_isEmpty ..).antisymm
@@ -2292,7 +2292,7 @@ lemma aux
 
 中文:
 引理 aux
-  条件: (hH : H != ⊥) {G' : G.Subgraph}
+  条件: (hH : H != ⊥) {G' : G.子图}
   证明: by
   obtain ⟨e, he⟩ := edgeSet_nonempty.2 hH
   rw [← Subgraph.image_coe_edgeSet_coe]
@@ -2348,8 +2348,8 @@ lemma killCopies_bot
 
 中文:
 引理 killCopies_bot
-  条件: (G : SimpleGraph V)
-  结论: G.killCopies (⊥ : SimpleGraph W) = G
+  条件: (G : 简单图 V)
+  结论: G.killCopies (⊥ : 简单图 W) = G
   证明: by
   rw [killCopies]; exact dif_pos rfl
 -/
@@ -2367,7 +2367,7 @@ lemma killCopies_of_ne_bot
 
 中文:
 引理 killCopies_of_ne_bot
-  条件: (hH : H != ⊥) (G : SimpleGraph V)
+  条件: (hH : H != ⊥) (G : 简单图 V)
   证明: by
   rw [killCopies]; exact dif_neg hH
 -/
@@ -2393,7 +2393,7 @@ lemma killCopies_eq_left
 中文:
 引理 killCopies_eq_left
   条件: (hH : H != ⊥)
-  结论: G.killCopies H = G ↔ H.Free G
+  结论: G.killCopies H = G ↔ H.自由 G
   证明: by
   simp only [killCopies_of_ne_bot hH, Set.disjoint_left, isContained_iff_exists_iso_subgraph,
     @forall_comm _ G.Subgraph, deleteEdges_eq_self, Set.mem_iUnion,
@@ -2423,8 +2423,8 @@ lemma Free.killCopies_eq_left
   · exact (killCopies_eq_left hH).2 hHG
 
 中文:
-引理 Free.killCopies_eq_left
-  条件: (hHG : H.Free G)
+引理 自由.killCopies_eq_left
+  条件: (hHG : H.自由 G)
   结论: G.killCopies H = G
   证明: by
   obtain rfl | hH := eq_or_ne H ⊥
@@ -2456,7 +2456,7 @@ lemma free_killCopies
 中文:
 引理 free_killCopies
   条件: (hH : H != ⊥)
-  结论: H.Free (G.killCopies H)
+  结论: H.自由 (G.killCopies H)
   证明: by
   rw [killCopies_of_ne_bot hH]; rw [deleteEdges]; rw [Free]; rw [isContained_iff_exists_iso_subgraph]
   rintro ⟨G', hHG'⟩
@@ -2503,7 +2503,7 @@ instance killCopies.edgeSet.instFintype
 
 中文:
 实例 killCopies.edgeSet.instFintype
-  签名: : Fintype (G.killCopies H).edgeSet
+  签名: : 有限类型 (G.killCopies H).edgeSet
   定义体: .ofInjective (Set.inclusion <| edgeSet_mono killCopies_le_left) Set.inclusion_injective _
 
 Depends on / 依赖: Set.inclusion, Set.inclusion_injective, edgeSet_mono, inclusion, inclusion_injective, killCopies_le_left, ofInjective
@@ -2528,7 +2528,7 @@ lemma le_card_edgeFinset_killCopies
 
 中文:
 引理 le_card_edgeFinset_killCopies
-  条件: [Fintype V]
+  条件: [有限类型 V]
   证明: by
   classical
   obtain rfl | hH := eq_or_ne H ⊥
@@ -2569,7 +2569,7 @@ lemma le_card_edgeFinset_killCopies_add_copyCount
 
 中文:
 引理 le_card_edgeFinset_killCopies_add_copyCount
-  条件: [Fintype V]
+  条件: [有限类型 V]
   证明: tsub_le_iff_right.1 le_card_edgeFinset_killCopies
 
 Depends on / 依赖: le_card_edgeFinset_killCopies, tsub_le_iff_right

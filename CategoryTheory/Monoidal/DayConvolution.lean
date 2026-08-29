@@ -71,12 +71,12 @@ class DayConvolution
     - isPointwiseLeftKanExtensionUnit((F G)) : (Functor.LeftExtension.mk (convolution) unit).IsPointwiseLeftKanExtension
 
 中文:
-类 DayConvolution
+类 Day卷积
   参数: (F G : C ⥤ V)
   公理与运算 (3 个):
     - convolution : C ⥤ V
     - unit((F) (G)) : F ⊠ G ⟶ tensor C ⋙ convolution
-    - isPointwiseLeftKanExtensionUnit((F G)) : (Functor.LeftExtension.mk (convolution) unit).IsPointwiseLeftKanExtension
+    - isPointwiseLeftKanExtensionUnit((F G)) : (函子.LeftExtension.mk (convolution) unit).IsPointwiseLeftKanExtension
 -/
 class DayConvolution (F G : C ⥤ V) where
   /-- The chosen convolution between the functors. Denoted `F ⊛ G`. -/
@@ -109,7 +109,7 @@ instance leftKanExtension
 
 中文:
 实例 leftKanExtension
-  签名: [DayConvolution F G]
+  签名: [Day卷积 F G]
   定义体: .isLeftKanExtension isPointwiseLeftKanExtensionUnit F G
 
 Depends on / 依赖: isLeftKanExtension, isPointwiseLeftKanExtensionUnit
@@ -132,7 +132,7 @@ definition uniqueUpToIso
 
 中文:
 定义 uniqueUpToIso
-  签名: (h : DayConvolution F G) (h' : DayConvolution F G)
+  签名: (h : Day卷积 F G) (h' : Day卷积 F G)
   定义体: Functor.leftKanExtensionUnique h.convolution h.unit h'.convolution h'.unit
 
 @[reassoc (attr := simp)]
@@ -157,7 +157,7 @@ lemma unit_uniqueUpToIso_hom
 
 中文:
 引理 unit_uniqueUpToIso_hom
-  条件: (h : DayConvolution F G) (h' : DayConvolution F G)
+  条件: (h : Day卷积 F G) (h' : Day卷积 F G)
   证明: by
   simp [uniqueUpToIso]
 
@@ -181,7 +181,7 @@ lemma unit_uniqueUpToIso_inv
 
 中文:
 引理 unit_uniqueUpToIso_inv
-  条件: (h : DayConvolution F G) (h' : DayConvolution F G)
+  条件: (h : Day卷积 F G) (h' : Day卷积 F G)
   证明: by
   simp [uniqueUpToIso]
 
@@ -420,7 +420,7 @@ instance :
 
 中文:
 实例 :
-  签名: (F ⊠ G ⊛ H).IsLeftKanExtension
+  签名: (F ⊠ G ⊛ H).是LeftKanExtension
   定义体: (isPointwiseLeftKanExtensionExtensionUnitRight _ _ _ <|
     isPointwiseLeftKanExtensionUnit G H).isLeftKanExtension
 
@@ -442,7 +442,7 @@ instance :
 
 中文:
 实例 :
-  签名: ((F ⊛ G) ⊠ H).IsLeftKanExtension
+  签名: ((F ⊛ G) ⊠ H).是LeftKanExtension
   定义体: (isPointwiseLeftKanExtensionExtensionUnitLeft _ _ _ <|
     isPointwiseLeftKanExtensionUnit F G).isLeftKanExtension
 
@@ -867,7 +867,7 @@ class DayConvolutionUnit
   参数: (F : C ⥤ V)
   公理与运算 (2 个):
     - can : 𝟙_ V ⟶ F.obj (𝟙_ C)
-    - isPointwiseLeftKanExtensionCan : Functor.LeftExtension.mk F ({ app _ := can } : Functor.fromPUnit.{0} (𝟙_ V) ⟶ Functor.fromPUnit.{0} (𝟙_ C) ⋙ F) |>.IsPointwiseLeftKanExtension
+    - isPointwiseLeftKanExtensionCan : 函子.LeftExtension.mk F ({ app _ := can } : 函子.fromPUnit.{0} (𝟙_ V) ⟶ 函子.fromPUnit.{0} (𝟙_ C) ⋙ F) |>.IsPointwiseLeftKanExtension
 
 Depends on / 依赖: Functor, Functor.fromPUnit, fromPUnit
 -/
@@ -897,7 +897,7 @@ abbreviation φ
 
 中文:
 缩写 φ
-  签名: : Functor.fromPUnit.{0} (𝟙_ V) ⟶ Functor.fromPUnit.{0} (𝟙_ C) ⋙ U where
+  签名: : 函子.fromPUnit.{0} (𝟙_ V) ⟶ 函子.fromPUnit.{0} (𝟙_ C) ⋙ U where
   定义体: can
 
 Depends on / 依赖: cat_disch, hom_ext, isPullback, isPullback.hom_ext, isPullback.lift, pullHom
@@ -950,7 +950,7 @@ instance :
 
 中文:
 实例 :
-  签名: (F ⊠ U).IsLeftKanExtension extensionUnitRight U (φ U) F
+  签名: (F ⊠ U).是LeftKanExtension extensionUnitRight U (φ U) F
   定义体: isPointwiseLeftKanExtensionExtensionUnitRight
 .isLeftKanExtension U (φ U) F isPointwiseLeftKanExtensionCan
 
@@ -971,7 +971,7 @@ instance :
 
 中文:
 实例 :
-  签名: (U ⊠ F).IsLeftKanExtension extensionUnitLeft U (φ U) F
+  签名: (U ⊠ F).是LeftKanExtension extensionUnitLeft U (φ U) F
   定义体: isPointwiseLeftKanExtensionExtensionUnitLeft
 .isLeftKanExtension U (φ U) F isPointwiseLeftKanExtensionCan
 
@@ -997,7 +997,7 @@ definition corepresentableByLeft
 
 中文:
 定义 corepresentableByLeft
-  签名: [DayConvolution U F]
+  签名: [Day卷积 U F]
   定义体: .trans Functor.homEquivOfIsLeftKanExtension _ (DayConvolution.unit U F) _
       Functor.homEquivOfIsLeftKanExtension _ (extensionUnitLeft U (φ U) F) _
   homEquiv_comp := by aesop
@@ -1031,7 +1031,7 @@ definition corepresentableByRight
 
 中文:
 定义 corepresentableByRight
-  签名: [DayConvolution F U]
+  签名: [Day卷积 F U]
   定义体: .trans Functor.homEquivOfIsLeftKanExtension _ (DayConvolution.unit F U) _
       Functor.homEquivOfIsLeftKanExtension _ (extensionUnitRight U (φ U) F) _
   homEquiv_comp := by aesop
@@ -1176,7 +1176,7 @@ definition leftUnitor
 
 中文:
 定义 leftUnitor
-  签名: [DayConvolution U F]
+  签名: [Day卷积 U F]
   定义体: .uniqueUpToIso .ofIso (leftUnitorCorepresentingIso F) corepresentableByLeft U F
  Functor.corepresentableByEquiv.symm (.refl _)
 
@@ -1197,7 +1197,7 @@ definition rightUnitor
 
 中文:
 定义 rightUnitor
-  签名: [DayConvolution F U]
+  签名: [Day卷积 F U]
   定义体: .uniqueUpToIso .ofIso (rightUnitorCorepresentingIso F) corepresentableByRight U F
  Functor.corepresentableByEquiv.symm (.refl _)
 
@@ -1313,7 +1313,7 @@ lemma leftUnitor_naturality
 
 中文:
 引理 leftUnitor_naturality
-  条件: {G : C ⥤ V} [DayConvolution U G] (f : F ⟶ G)
+  条件: {G : C ⥤ V} [Day卷积 U G] (f : F ⟶ G)
   证明: by
   apply Functor.hom_ext_of_isLeftKanExtension _ (DayConvolution.unit _ _) _
   apply Functor.hom_ext_of_isLeftKanExtension _ (extensionUnitLeft U (φ U) F) _
@@ -1439,7 +1439,7 @@ lemma rightUnitor_naturality
 
 中文:
 引理 rightUnitor_naturality
-  条件: {G : C ⥤ V} [DayConvolution G U] (f : F ⟶ G)
+  条件: {G : C ⥤ V} [Day卷积 G U] (f : F ⟶ G)
   证明: by
   apply Functor.hom_ext_of_isLeftKanExtension _ (DayConvolution.unit _ _) _
   apply Functor.hom_ext_of_isLeftKanExtension _ (extensionUnitRight U (φ U) F) _
@@ -1492,7 +1492,7 @@ lemma DayConvolution.triangle
       (α := extensionUnitLeft (F ⊠ U) (extensionUnitRight U (DayConvolu
 
 中文:
-引理 DayConvolution.triangle
+引理 Day卷积.triangle
   结论: (F G U : C ⥤ V) [DayConvolutionUnit U]
   证明: by
   apply Functor.hom_ext_of_isLeftKanExtension _ (DayConvolution.unit _ _) _
@@ -1562,10 +1562,10 @@ class LawfulDayConvolutionMonoidalCategoryStruct
   公理与运算 (12 个):
     - ι((C V D)) : D ⥤ C ⥤ V
     - convolutionExtensionUnit((C) (V) (d d' : D)) : ι.obj d ⊠ ι.obj d' ⟶ tensor C ⋙ ι.obj (d otimes d')
-    - isPointwiseLeftKanExtensionConvolutionExtensionUnit((d d' : D)) : (Functor.LeftExtension.mk _ <| convolutionExtensionUnit d d').IsPointwiseLeftKanExtension
+    - isPointwiseLeftKanExtensionConvolutionExtensionUnit((d d' : D)) : (函子.LeftExtension.mk _ <| convolutionExtensionUnit d d').IsPointwiseLeftKanExtension
     - unitUnit((C) (V) (D)) : 𝟙_ V ⟶ (ι.obj <| 𝟙_ D).obj (𝟙_ C)
-    - isPointwiseLeftKanExtensionUnitUnit((C) (V) (D)) : Functor.LeftExtension.mk _ ({ app _ := unitUnit } : Functor.fromPUnit.{0} (𝟙_ V) ⟶ Functor.fromPUnit.{0} (𝟙_ C) ⋙ (ι.obj <| 𝟙_ D)) |>.IsPointwiseLeftKanExtension
-    - faithful_ι : ι.Faithful  [默认: by infer_instance]
+    - isPointwiseLeftKanExtensionUnitUnit((C) (V) (D)) : 函子.LeftExtension.mk _ ({ app _ := unitUnit } : 函子.fromPUnit.{0} (𝟙_ V) ⟶ 函子.fromPUnit.{0} (𝟙_ C) ⋙ (ι.obj <| 𝟙_ D)) |>.IsPointwiseLeftKanExtension
+    - faithful_ι : ι.忠实  [默认: by infer_instance]
     - convolutionExtensionUnit_comp_ι_map_tensorHom_app((C) (V) {d₁ d₂ d₁' d₂' : D} (f₁ : d₁ ⟶ d₁') (f₂ : d₂ ⟶ d₂') (x y : C)) : (convolutionExtensionUnit d₁ d₂).app (x, y) ≫ (ι.map (f₁ otimesₘ f₂)).app (x otimes y) = ((ι.map f₁).app x otimesₘ (ι.map f₂).app y) ≫ (convolutionExtensionUnit d₁' d₂').app (x, y)
     - convolutionExtensionUnit_comp_ι_map_whiskerLeft_app((V) (d₁ : D) {d₂ d₂' : D} (f₂ : d₂ ⟶ d₂') (x y : C)) : (convolutionExtensionUnit d₁ d₂).app (x, y) ≫ (ι.map (d₁ ◁ f₂)).app (x otimes y) = ((ι.obj d₁).obj x ◁ (ι.map f₂).app y) ≫ (convolutionExtensionUnit d₁ d₂').app (x, y)
     - convolutionExtensionUnit_comp_ι_map_whiskerRight_app((C) (V) {d₁ d₁' : D} (f₁ : d₁ ⟶ d₁') (d₂ : D) (x y : C)) : (convolutionExtensionUnit d₁ d₂).app (x, y) ≫ (ι.map (f₁ ▷ d₂)).app (x otimes y) = ((ι.map f₁).app x ▷ (ι.obj d₂).obj y) ≫ (convolutionExtensionUnit d₁' d₂).app (x, y)
@@ -2119,9 +2119,9 @@ class InducedLawfulDayConvolutionMonoidalCategoryStructCore
 类 InducedLawfulDayConvolutionMonoidalCategoryStructCore
   公理与运算 (8 个):
     - ι((C V D)) : D ⥤ C ⥤ V
-    - fullyFaithulι : ι.FullyFaithful
+    - fullyFaithulι : ι.满忠实
     - tensorObj((C) (V)) : D -> D -> D
-    - convolutions' : 对任意 (d d' : D), DayConvolution (ι.obj d) (ι.obj d')
+    - convolutions' : 对任意 (d d' : D), Day卷积 (ι.obj d) (ι.obj d')
     - tensorObjIsoConvolution((C) (V)) : 对任意 (d d' : D), ι.obj (tensorObj d d') ≅ (convolutions' d d').convolution
     - convolutionUnitApp((V)) : 对任意 (d d' : D) (x y : C), (ι.obj d).obj x otimes (ι.obj d').obj y ⟶ (ι.obj (tensorObj d d')).obj (x otimes y)  [默认: fun d d' x y => (convolutions' d d').unit.app (x, y) ≫ (tens]
     - convolutionUnitApp_eq((V)) : 对任意 (d d' : D) (x y : C), convolutionUnitApp d d' x y = (convolutions' d d').unit.app (x, y) ≫ (tensorObjIsoConvolution d d').inv.app (x otimes y)  [默认: by cat_disch]
@@ -2279,7 +2279,7 @@ abbreviation mkMonoidalCategoryStruct
 
 中文:
 缩写 mkMonoidalCategoryStruct
-  签名: : MonoidalCategoryStruct D where
+  签名: : 幺半群范畴结构 D where
   定义体: tensorObj C V
   tensorHom := tensorHom
   tensorUnit := tensorUnit C V D
@@ -2607,7 +2607,7 @@ definition monoidalOfHasDayConvolutions
 
 中文:
 定义 monoidalOfHasDayConvolutions
-  签名: : MonoidalCategory D
+  签名: : 幺半群范畴 D
   定义体: letI induced : InducedLawfulDayConvolutionMonoidalCategoryStructCore C V D :=
     .ofHasDayConvolutions ι ffι essImageDayConvolution essImageDayConvolutionUnit
   letI := induced.mkMonoidalCategoryStruct

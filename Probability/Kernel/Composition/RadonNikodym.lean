@@ -55,7 +55,7 @@ lemma rnDeriv_measure_compProd_left_of_ac
 
 中文:
 引理 rnDeriv_measure_compProd_left_of_ac
-  结论: (hμν : μ ≪ ν) (κ : Kernel α β)
+  结论: (hμν : μ ≪ ν) (κ : 核 α β)
   证明: by
   refine ae_eq_of_forall_setLIntegral_eq_of_sigmaFinite (by fun_prop) (by fun_prop) fun s hs _ => ?_
   have h_key t₁ t₂ : MeasurableSet t₁ -> MeasurableSet t₂ ->
@@ -106,7 +106,7 @@ lemma rnDeriv_compProd_withDensity_rnDeriv
 
 中文:
 引理 rnDeriv_compProd_withDensity_rnDeriv
-  结论: (μ ν : Measure α) (κ η : Kernel α β)
+  结论: (μ ν : 测度 α) (κ η : 核 α β)
   证明: by
   conv_rhs => rw [Measure.haveLebesgueDecomposition_add μ ν]
   rw [Measure.compProd_add_left]
@@ -145,7 +145,7 @@ lemma rnDeriv_measure_compProd_left
 
 中文:
 引理 rnDeriv_measure_compProd_left
-  结论: (μ ν : Measure α) (κ : Kernel α β)
+  结论: (μ ν : 测度 α) (κ : 核 α β)
   证明: by
   calc (μ otimesₘ κ).rnDeriv (ν otimesₘ κ)
   _ =ᵐ[ν otimesₘ κ] (ν.withDensity (μ.rnDeriv ν) otimesₘ κ).rnDeriv (ν otimesₘ κ) :=
@@ -181,7 +181,7 @@ lemma rnDeriv_compProd
 
 中文:
 引理 rnDeriv_compProd
-  结论: [IsFiniteMeasure μ] [IsFiniteKernel κ] [IsFiniteKernel η]
+  结论: [是有限测度 μ] [是FiniteKernel κ] [是FiniteKernel η]
   证明: by
   refine Filter.EventuallyEq.trans (Measure.rnDeriv_mul_rnDeriv h_ac).symm ?_
   filter_upwards [rnDeriv_measure_compProd_left μ ν η] with p hp

@@ -45,7 +45,7 @@ abbreviation extensionUnitLeft
 
 中文:
 缩写 extensionUnitLeft
-  签名: : H ⊠ K ⟶ L.prod (𝟭 E) ⋙ H' ⊠ K
+  签名: : H ⊠ K ⟶ L.乘积 (𝟭 E) ⋙ H' ⊠ K
   定义体: (externalProductBifunctor D E V).map (α ×ₘ K.leftUnitor.inv)
 
 Depends on / 依赖: E.sieve, K.leftUnitor.inv, Sieve.pullback_id, cat_disch, condition, externalProductBifunctor, leftUnitor, pullback, pullback.condition, pullback_id
@@ -63,7 +63,7 @@ abbreviation extensionUnitRight
 
 中文:
 缩写 extensionUnitRight
-  签名: : K ⊠ H ⟶ (𝟭 E).prod L ⋙ K ⊠ H'
+  签名: : K ⊠ H ⟶ (𝟭 E).乘积 L ⋙ K ⊠ H'
   定义体: (externalProductBifunctor E D V).map (K.leftUnitor.inv ×ₘ α)
 
 Depends on / 依赖: K.leftUnitor.inv, externalProductBifunctor, leftUnitor

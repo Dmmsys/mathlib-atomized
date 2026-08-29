@@ -53,8 +53,8 @@ class SMulMemClass
     - smul_mem : forall {s : S} (r : R) {m : M}, m in s -> r • m in s
 
 中文:
-类 SMulMemClass
-  参数: (S : 类型) (R : outParam 类型) (M : 类型) [SMul R M] [SetLike S M]
+类 SMulMem类
+  参数: (S : 类型) (R : outParam 类型) (M : 类型) [标量乘法 R M] [集合状 S M]
   公理与运算 (1 个):
     - smul_mem : 对任意 {s : S} (r : R) {m : M}, m in s -> r • m in s
 -/
@@ -73,8 +73,8 @@ class VAddMemClass
     - vadd_mem : forall {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in s
 
 中文:
-类 VAddMemClass
-  参数: (S : 类型) (R : outParam 类型) (M : 类型) [VAdd R M] [SetLike S M]
+类 VAddMem类
+  参数: (S : 类型) (R : outParam 类型) (M : 类型) [向量加法 R M] [集合状 S M]
   公理与运算 (1 个):
     - vadd_mem : 对任意 {s : S} (r : R) {m : M}, m in s -> r +ᵥ m in s
 
@@ -98,8 +98,8 @@ lemma AddSubmonoidClass.nsmulMemClass
   proof: nsmul_mem hx n
 
 中文:
-引理 AddSubmonoidClass.nsmulMemClass
-  结论: {S M : 类型} [AddMonoid M] [SetLike S M]
+引理 加法子幺半群类.nsmulMemClass
+  结论: {S M : 类型} [加法幺半群 M] [集合状 S M]
   证明: nsmul_mem hx n
 
 Depends on / 依赖: nsmul_mem
@@ -117,8 +117,8 @@ lemma AddSubgroupClass.zsmulMemClass
   proof: zsmul_mem hx n
 
 中文:
-引理 AddSubgroupClass.zsmulMemClass
-  结论: {S M : 类型} [SubNegMonoid M] [SetLike S M]
+引理 加法子群类.zsmulMemClass
+  结论: {S M : 类型} [SubNeg幺半群 M] [集合状 S M]
   证明: zsmul_mem hx n
 
 Depends on / 依赖: zsmul_mem
@@ -160,8 +160,8 @@ theorem _root_.SMulMemClass.ofIsScalarTower
   proof: { smul_mem := fun m a ha => smul_one_smul N m a ▸ SMulMemClass.smul_mem _ ha }
 
 中文:
-定理 _root_.SMulMemClass.ofIsScalarTower
-  结论: (S M N α : 类型) [SetLike S α]
+定理 _root_.SMulMem类.ofIsScalarTower
+  结论: (S M N α : 类型) [集合状 S α]
   证明: { smul_mem := fun m a ha => smul_one_smul N m a ▸ SMulMemClass.smul_mem _ ha }
 -/
 @[to_additive] theorem _root_.SMulMemClass.ofIsScalarTower (S M N α : Type*) [SetLike S α]
@@ -179,7 +179,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [Mul M] [MulMemClass S M] [IsScalarTower R M M]
+  签名: [乘法 M] [MulMem类 S M] [标量塔 R M M]
   定义体: Subtype.ext smul_assoc r (x : M) (y : M)
 
 Depends on / 依赖: Subtype, Subtype.ext, smul_assoc
@@ -200,7 +200,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [Mul M] [MulMemClass S M] [SMulCommClass R M M]
+  签名: [乘法 M] [MulMem类 S M] [标量交换类 R M M]
   定义体: Subtype.ext smul_comm r (x : M) (y : M)
 
 @[to_additive (attr := simp, norm_cast)]
@@ -290,8 +290,8 @@ theorem forall_smul_mem_iff
   proof: ⟨fun h => by simpa using h 1, fun h a => SMulMemClass.smul_mem a h⟩
 
 中文:
-定理 forall_smul_mem_iff
-  结论: {R M S : 类型} [Monoid R] [MulAction R M] [SetLike S M]
+定理 对任意_smul_mem_iff
+  结论: {R M S : 类型} [幺半群 R] [乘法作用 R M] [集合状 S M]
   证明: ⟨fun h => by simpa using h 1, fun h a => SMulMemClass.smul_mem a h⟩
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, smul_mem
@@ -314,7 +314,7 @@ theorem smul_subset_self
 
 中文:
 定理 smul_subset_self
-  结论: {S R M : 类型} [SetLike S M] [SMul R M] [SMulMemClass S R M]
+  结论: {S R M : 类型} [集合状 S M] [标量乘法 R M] [SMulMem类 S R M]
   证明: by
   rintro _ ⟨x, hx, rfl⟩
   simpa using SMulMemClass.smul_mem (r : R) hx
@@ -341,7 +341,7 @@ theorem units_smul
 
 中文:
 定理 units_smul
-  结论: {S R M : 类型} [SetLike S M] [Monoid R] [MulAction R M] [SMulMemClass S R M]
+  结论: {S R M : 类型} [集合状 S M] [幺半群 R] [乘法作用 R M] [SMulMem类 S R M]
   证明: by
   apply subset_antisymm (smul_subset_self _ s)
   rintro x hx
@@ -455,10 +455,10 @@ structure SubAddAction
     - vadd_mem' : forall (c : R) {x : M}, x in carrier -> c +ᵥ x in carrier
 
 中文:
-结构 SubAddAction
-  参数: (R : 类型u) (M : 类型v) [VAdd R M]
+结构 SubAdd作用
+  参数: (R : 类型u) (M : 类型v) [向量加法 R M]
   公理与运算 (2 个):
-    - carrier : Set M
+    - carrier : 集合 M
     - vadd_mem' : 对任意 (c : R) {x : M}, x in carrier -> c +ᵥ x in carrier
 -/
 structure SubAddAction (R : Type u) (M : Type v) [VAdd R M] : Type v where
@@ -480,10 +480,10 @@ structure SubMulAction
     - smul_mem' : forall (c : R) {x : M}, x in carrier -> c • x in carrier
 
 中文:
-结构 SubMulAction
-  参数: (R : 类型u) (M : 类型v) [SMul R M]
+结构 SubMul作用
+  参数: (R : 类型u) (M : 类型v) [标量乘法 R M]
   公理与运算 (2 个):
-    - carrier : Set M
+    - carrier : 集合 M
     - smul_mem' : 对任意 (c : R) {x : M}, x in carrier -> c • x in carrier
 -/
 structure SubMulAction (R : Type u) (M : Type v) [SMul R M] : Type v where
@@ -507,7 +507,7 @@ instance :
 
 中文:
 实例 :
-  签名: SetLike (SubMulAction R M) M
+  签名: 集合状 (SubMul作用 R M) M
   定义体: ⟨SubMulAction.carrier, fun p q h => by cases p; cases q; congr⟩
 
 Depends on / 依赖: SubMulAction, SubMulAction.carrier, carrier
@@ -527,7 +527,7 @@ instance :
 
 中文:
 实例 :
-  签名: PartialOrder (SubMulAction R M)
+  签名: 偏序 (SubMul作用 R M)
   定义体: .ofSetLike (SubMulAction R M) M
 
 @[to_additive]
@@ -547,7 +547,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulMemClass (SubMulAction R M) R M
+  签名: SMulMem类 (SubMul作用 R M) R M
   定义体: smul_mem' _
 
 @[to_additive (attr := simp)]
@@ -570,8 +570,8 @@ theorem mem_carrier
 
 中文:
 定理 mem_carrier
-  条件: {p : SubMulAction R M} {x : M}
-  结论: x in p.carrier ↔ x in (p : Set M)
+  条件: {p : SubMul作用 R M} {x : M}
+  结论: x in p.carrier ↔ x in (p : 集合 M)
   证明: Iff.rfl
 
 @[to_additive (attr := ext)]
@@ -593,7 +593,7 @@ theorem ext
 
 中文:
 定理 ext
-  条件: {p q : SubMulAction R M} (h : 对任意 x, x in p ↔ x in q)
+  条件: {p q : SubMul作用 R M} (h : 对任意 x, x in p ↔ x in q)
   结论: p = q
   证明: SetLike.ext h
 
@@ -619,7 +619,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
+  签名: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
   定义体: s
   smul_mem' := hs.symm ▸ p.smul_mem'
 
@@ -643,8 +643,8 @@ theorem coe_copy
 
 中文:
 定理 coe_copy
-  条件: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
-  结论: (p.copy s hs : Set M) = s
+  条件: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
+  结论: (p.copy s hs : 集合 M) = s
   证明: rfl
 
 @[to_additive]
@@ -666,7 +666,7 @@ theorem copy_eq
 
 中文:
 定理 copy_eq
-  条件: (p : SubMulAction R M) (s : Set M) (hs : s = ↑p)
+  条件: (p : SubMul作用 R M) (s : 集合 M) (hs : s = ↑p)
   结论: p.copy s hs = p
   证明: SetLike.coe_injective hs
 
@@ -690,7 +690,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (SubMulAction R M)
+  签名: 底元素 (SubMul作用 R M)
   定义体: ⟨⟨∅, by simp⟩⟩
 
 @[to_additive]
@@ -711,7 +711,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (SubMulAction R M)
+  签名: 可居 (SubMul作用 R M)
   定义体: ⟨⊥⟩
 
 @[to_additive]
@@ -732,7 +732,7 @@ instance :
 
 中文:
 实例 :
-  签名: Top (SubMulAction R M)
+  签名: 顶元素 (SubMul作用 R M)
   定义体: ⟨⟨Set.univ, by simp⟩⟩
 
 @[to_additive]
@@ -755,7 +755,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (SubMulAction R M)
+  签名: 最大值 (SubMul作用 R M)
   定义体: ⟨fun s t => ⟨s union t, by aesop⟩⟩
 
 @[to_additive]
@@ -776,7 +776,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (SubMulAction R M)
+  签名: 最小值 (SubMul作用 R M)
   定义体: ⟨fun s t => ⟨s inter t, by aesop⟩⟩
 
 @[to_additive]
@@ -797,7 +797,7 @@ instance :
 
 中文:
 实例 :
-  签名: SupSet (SubMulAction R M)
+  签名: 上确界集 (SubMul作用 R M)
   定义体: ⟨fun S => ⟨⋃ s in S, s, by aesop⟩⟩
 
 @[to_additive]
@@ -818,7 +818,7 @@ instance :
 
 中文:
 实例 :
-  签名: InfSet (SubMulAction R M)
+  签名: 下确界集 (SubMul作用 R M)
   定义体: ⟨fun S => ⟨⋂ s in S, ↑s, by aesop⟩⟩
 
 @[to_additive]
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLattice (SubMulAction R M)
+  签名: 完备格 (SubMul作用 R M)
   定义体: SetLike.coe_injective.completeLattice _ .rfl .rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl)
     (fun _ => rfl) rfl rfl
 
@@ -867,7 +867,7 @@ theorem mem_iSup
 
 中文:
 定理 mem_iSup
-  条件: {ι : Sort*} {p : ι -> SubMulAction R M} {x : M}
+  条件: {ι : 类型层*} {p : ι -> SubMul作用 R M} {x : M}
   证明: by
   change x in ⋃ s in Set.range p, s ↔ _
   simp
@@ -894,7 +894,7 @@ theorem mem_iInf
 
 中文:
 定理 mem_iInf
-  条件: {ι : Sort*} {p : ι -> SubMulAction R M} {x : M}
+  条件: {ι : 类型层*} {p : ι -> SubMul作用 R M} {x : M}
   证明: by
   change x in ⋂ s in Set.range p, s ↔ _
   simp
@@ -952,7 +952,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R p
+  签名: 标量乘法 R p
   定义体: ⟨c • x.1, smul_mem _ c x.2⟩
 
 Depends on / 依赖: smul_mem
@@ -1052,7 +1052,7 @@ theorem subtype_eq_val
 
 中文:
 定理 subtype_eq_val
-  结论: (SubMulAction.subtype p : p -> M) = Subtype.val
+  结论: (SubMul作用.subtype p : p -> M) = 子类型.val
   证明: rfl
 -/
 theorem subtype_eq_val : (SubMulAction.subtype p : p -> M) = Subtype.val :=
@@ -1139,7 +1139,7 @@ theorem coe_subtype
 
 中文:
 定理 coe_subtype
-  结论: (SMulMemClass.subtype S' : S' -> M) = Subtype.val
+  结论: (SMulMem类.subtype S' : S' -> M) = 子类型.val
   证明: rfl
 -/
 protected theorem coe_subtype : (SMulMemClass.subtype S' : S' -> M) = Subtype.val :=
@@ -1199,7 +1199,7 @@ instance smul'
 
 中文:
 实例 smul'
-  签名: : SMul S p where smul c x
+  签名: : 标量乘法 S p where smul c x
   定义体: ⟨c • x.1, smul_of_tower_mem _ c x.2⟩
 
 @[to_additive]
@@ -1221,7 +1221,7 @@ instance isScalarTower
 
 中文:
 实例 isScalarTower
-  签名: : IsScalarTower S R p where
+  签名: : 标量塔 S R p where
   定义体: Subtype.ext smul_assoc s r (x : M)
 
 @[to_additive]
@@ -1244,7 +1244,7 @@ instance isScalarTower'
 
 中文:
 实例 isScalarTower'
-  签名: {S' : 类型} [SMul S' R] [SMul S' S] [SMul S' M] [IsScalarTower S' R M]
+  签名: {S' : 类型} [标量乘法 S' R] [标量乘法 S' S] [标量乘法 S' M] [标量塔 S' R M]
   定义体: Subtype.ext smul_assoc s r (x : M)
 
 @[to_additive (attr := norm_cast, simp)]
@@ -1291,7 +1291,7 @@ theorem smul_mem_iff'
 
 中文:
 定理 smul_mem_iff'
-  结论: {G} [Group G] [SMul G R] [MulAction G M] [IsScalarTower G R M] (g : G)
+  结论: {G} [群 G] [标量乘法 G R] [乘法作用 G M] [标量塔 G R M] (g : G)
   证明: ⟨fun h => inv_smul_smul g x ▸ p.smul_of_tower_mem g⁻¹ h, p.smul_of_tower_mem g⟩
 
 @[to_additive]
@@ -1313,7 +1313,7 @@ instance isCentralScalar
 
 中文:
 实例 isCentralScalar
-  签名: [SMul Sᵐᵒᵖ R] [SMul Sᵐᵒᵖ M] [IsScalarTower Sᵐᵒᵖ R M]
+  签名: [标量乘法 Sᵐᵒᵖ R] [标量乘法 Sᵐᵒᵖ M] [标量塔 Sᵐᵒᵖ R M]
   定义体: Subtype.ext op_smul_eq_smul r (x : M)
 
 Depends on / 依赖: Quotient, Submodule, Submodule.Quotient.mk_surjective, Subtype, Subtype.ext, mk_surjective, op_smul_eq_smul, small_of_surjective
@@ -1345,7 +1345,7 @@ mul_smul c₁ c₂ x := Subtype.ext mul_smul c₁ c₂ (x : M)
 
 中文:
 实例 mulAction'
-  签名: : MulAction S p where
+  签名: : 乘法作用 S p where
   定义体: Subtype.ext one_smul _ (x : M)
 mul_smul c₁ c₂ x := Subtype.ext mul_smul c₁ c₂ (x : M)
 
@@ -1368,7 +1368,7 @@ instance mulAction
 
 中文:
 实例 mulAction
-  签名: : MulAction R p
+  签名: : 乘法作用 R p
   定义体: p.mulAction'
 
 Depends on / 依赖: mulAction, p.mulAction
@@ -1392,7 +1392,7 @@ theorem val_image_orbit
 
 中文:
 定理 val_image_orbit
-  条件: {p : SubMulAction R M} (m : p)
+  条件: {p : SubMul作用 R M} (m : p)
   证明: (Set.range_comp _ _).symm
 
 @[to_additive]
@@ -1417,7 +1417,7 @@ theorem val_preimage_orbit
 
 中文:
 定理 val_preimage_orbit
-  条件: {p : SubMulAction R M} (m : p)
+  条件: {p : SubMul作用 R M} (m : p)
   证明: by
   rw [← val_image_orbit]; rw [Subtype.val_injective.preimage_image]
 
@@ -1441,7 +1441,7 @@ lemma mem_orbit_subMul_iff
 
 中文:
 引理 mem_orbit_subMul_iff
-  条件: {p : SubMulAction R M} {x m : p}
+  条件: {p : SubMul作用 R M} {x m : p}
   证明: by
   rw [← val_preimage_orbit]; rw [Set.mem_preimage]
 
@@ -1465,7 +1465,7 @@ theorem stabilizer_of_subMul.submonoid
 
 中文:
 定理 stabilizer_of_subMul.submonoid
-  条件: {p : SubMulAction R M} (m : p)
+  条件: {p : SubMul作用 R M} (m : p)
   证明: by
   ext
   simp only [MulAction.mem_stabilizerSubmonoid_iff, ← SubMulAction.val_smul, SetLike.coe_eq_coe]
@@ -1497,7 +1497,7 @@ lemma orbitRel_of_subMul
 
 中文:
 引理 orbitRel_of_subMul
-  条件: (p : SubMulAction R M)
+  条件: (p : SubMul作用 R M)
   证明: by
   refine Setoid.ext_iff.2 (fun x y => ?_)
   rw [Setoid.comap_rel]
@@ -1525,7 +1525,7 @@ theorem stabilizer_of_subMul
 
 中文:
 定理 stabilizer_of_subMul
-  条件: {p : SubMulAction R M} (m : p)
+  条件: {p : SubMul作用 R M} (m : p)
   证明: by
   rw [← Subgroup.toSubmonoid_inj]
   exact stabilizer_of_subMul.submonoid m
@@ -1551,7 +1551,7 @@ instance :
 
 中文:
 实例 :
-  签名: Compl (SubMulAction R M)
+  签名: 补集 (SubMul作用 R M)
   定义体: ⟨sᶜ, by simp⟩
 
 @[to_additive]
@@ -1571,8 +1571,8 @@ theorem compl_def
 
 中文:
 定理 compl_def
-  条件: (s : SubMulAction R M)
-  结论: sᶜ.carrier = (s : Set M)ᶜ
+  条件: (s : SubMul作用 R M)
+  结论: sᶜ.carrier = (s : 集合 M)ᶜ
   证明: rfl
 -/
 theorem compl_def (s : SubMulAction R M) : sᶜ.carrier = (s : Set M)ᶜ := rfl
@@ -1597,7 +1597,7 @@ theorem zero_mem
 
 中文:
 定理 zero_mem
-  条件: (h : (p : Set M).Nonempty)
+  条件: (h : (p : 集合 M).非空)
   结论: (0 : M) in p
   证明: let ⟨x, hx⟩ := h
   zero_smul R (x : M) ▸ p.smul_mem 0 hx
@@ -1618,7 +1618,7 @@ instance [n_empty
 
 中文:
 实例 [n_empty
-  签名: : Nonempty p] : Zero p where
+  签名: : 非空 p] : 零 p where
   定义体: ⟨0, n_empty.elim fun x => p.zero_mem ⟨x, x.prop⟩⟩
 
 Depends on / 依赖: n_empty, n_empty.elim, p.zero_mem, x.prop, zero_mem
@@ -1701,7 +1701,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg p
+  签名: 取负 p
   定义体: ⟨fun x => ⟨-x.1, neg_mem _ x.2⟩⟩
 
 @[simp, norm_cast]
@@ -1779,7 +1779,7 @@ definition inclusion
 
 中文:
 定义 inclusion
-  签名: (s : SubMulAction M α)
+  签名: (s : SubMul作用 M α)
 
 Depends on / 依赖: Subtype, Subtype.val
 -/
@@ -1802,7 +1802,7 @@ theorem inclusion.toFun_eq_coe
 
 中文:
 定理 inclusion.toFun_eq_coe
-  条件: (s : SubMulAction M α)
+  条件: (s : SubMul作用 M α)
   证明: rfl
 
 @[to_additive]
@@ -1823,7 +1823,7 @@ theorem inclusion.coe_eq
 
 中文:
 定理 inclusion.coe_eq
-  条件: (s : SubMulAction M α)
+  条件: (s : SubMul作用 M α)
   证明: rfl
 
 @[to_additive]
@@ -1846,7 +1846,7 @@ lemma image_inclusion
 
 中文:
 引理 image_inclusion
-  条件: (s : SubMulAction M α)
+  条件: (s : SubMul作用 M α)
   证明: by
   rw [inclusion.coe_eq]
   exact Subtype.range_coe
@@ -1871,7 +1871,7 @@ lemma inclusion_injective
 
 中文:
 引理 inclusion_injective
-  条件: (s : SubMulAction M α)
+  条件: (s : SubMul作用 M α)
   证明: Subtype.val_injective
 
 Depends on / 依赖: Subtype, Subtype.val_injective, val_injective
@@ -1897,7 +1897,7 @@ definition nonZeroSubMul
 
 中文:
 定义 nonZeroSubMul
-  签名: : SubMulAction Rˣ M where
+  签名: : SubMul作用 Rˣ M where
   定义体: { x : M | x != 0 }
   smul_mem' := by simp [Units.smul_def]
 -/
@@ -1917,7 +1917,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Rˣ { x : M // x != 0 }
+  签名: 乘法作用 Rˣ { x : M // x != 0 }
   定义体: inferInstanceAs MulAction Rˣ (nonZeroSubMul R M)
 
 @[simp]
@@ -1982,7 +1982,7 @@ lemma smul_mem_fixedPoints_of_normal
 
 中文:
 引理 smul_mem_fixedPoints_of_normal
-  结论: [hH : H.Normal]
+  结论: [hH : H.正规]
   证明: by
   intro h
   rw [Subgroup.smul_def]; rw [← inv_smul_eq_iff]; rw [smul_smul]; rw [smul_smul]
@@ -2010,7 +2010,7 @@ definition fixedPointsSubMulOfNormal
 
 中文:
 定义 fixedPointsSubMulOfNormal
-  签名: [hH : H.Normal]
+  签名: [hH : H.正规]
   定义体: MulAction.fixedPoints H α
   smul_mem' := smul_mem_fixedPoints_of_normal
 
@@ -2032,7 +2032,7 @@ instance [hH
 
 中文:
 实例 [hH
-  签名: : H.Normal] : MulAction G (MulAction.fixedPoints H α)
+  签名: : H.正规] : 乘法作用 G (乘法作用.fixedPoints H α)
   定义体: inferInstanceAs MulAction G fixedPointsSubMulOfNormal
 
 @[simp]
@@ -2053,7 +2053,7 @@ lemma coe_smul_fixedPoints_of_normal
 
 中文:
 引理 coe_smul_fixedPoints_of_normal
-  结论: [hH : H.Normal]
+  结论: [hH : H.正规]
   证明: rfl
 -/
 lemma coe_smul_fixedPoints_of_normal [hH : H.Normal]

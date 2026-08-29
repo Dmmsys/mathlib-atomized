@@ -49,8 +49,8 @@ theorem Kernel.measure_eq_zero_or_one_or_top_of_indepSet_self
   rw [← one_mul (κ a (
 
 中文:
-定理 Kernel.measure_eq_zero_or_one_or_top_of_indepSet_self
-  结论: {t : Set Ω}
+定理 核.measure_eq_zero_or_one_or_top_of_indepSet_self
+  结论: {t : 集合 Ω}
   证明: by
   specialize h_indep t t (measurableSet_generateFrom (Set.mem_singleton t))
     (measurableSet_generateFrom (Set.mem_singleton t))
@@ -88,7 +88,7 @@ theorem measure_eq_zero_or_one_or_top_of_indepSet_self
 
 中文:
 定理 measure_eq_zero_or_one_or_top_of_indepSet_self
-  结论: {t : Set Ω}
+  结论: {t : 集合 Ω}
   证明: by
   simpa only [ae_dirac_eq, Filter.eventually_pure]
     using! Kernel.measure_eq_zero_or_one_or_top_of_indepSet_self h_indep
@@ -111,8 +111,8 @@ theorem Kernel.measure_eq_zero_or_one_of_indepSet_self'
   simpa only [measure_ne_top (κ a), or_false] using h_0_1_top
 
 中文:
-定理 Kernel.measure_eq_zero_or_one_of_indepSet_self'
-  结论: (h : 对任意ᵐ a ∂μα, IsFiniteMeasure (κ a))
+定理 核.measure_eq_zero_or_one_of_indepSet_self'
+  结论: (h : 对任意ᵐ a ∂μα, 是有限测度 (κ a))
   证明: by
   filter_upwards [measure_eq_zero_or_one_or_top_of_indepSet_self h_indep, h] with a h_0_1_top h'
   simpa only [measure_ne_top (κ a), or_false] using h_0_1_top
@@ -134,8 +134,8 @@ theorem Kernel.measure_eq_zero_or_one_of_indepSet_self
   proof: Kernel.measure_eq_zero_or_one_of_indepSet_self' (ae_of_all μα h) h_indep
 
 中文:
-定理 Kernel.measure_eq_zero_or_one_of_indepSet_self
-  结论: [h : 对任意 a, IsFiniteMeasure (κ a)] {t : Set Ω}
+定理 核.measure_eq_zero_or_one_of_indepSet_self
+  结论: [h : 对任意 a, 是有限测度 (κ a)] {t : 集合 Ω}
   证明: Kernel.measure_eq_zero_or_one_of_indepSet_self' (ae_of_all μα h) h_indep
 
 Depends on / 依赖: Kernel, Kernel.measure_eq_zero_or_one_of_indepSet_self, ae_of_all, h_indep, measure_eq_zero_or_one_of_indepSet_self
@@ -155,8 +155,8 @@ lemma Kernel.measure_eq_zero_or_one_of_indep_self
     (indep_of_indep_of_le hm (generateFrom_singleton_le ht) (generateFrom_singleton_le ht))
 
 中文:
-引理 Kernel.measure_eq_zero_or_one_of_indep_self
-  结论: [h : 对任意 a, IsFiniteMeasure (κ a)]
+引理 核.measure_eq_zero_or_one_of_indep_self
+  结论: [h : 对任意 a, 是有限测度 (κ a)]
   证明: measure_eq_zero_or_one_of_indepSet_self
     (indep_of_indep_of_le hm (generateFrom_singleton_le ht) (generateFrom_singleton_le ht))
 
@@ -180,7 +180,7 @@ theorem measure_eq_zero_or_one_of_indepSet_self
 
 中文:
 定理 measure_eq_zero_or_one_of_indepSet_self
-  结论: [IsFiniteMeasure μ] {t : Set Ω}
+  结论: [是有限测度 μ] {t : 集合 Ω}
   证明: by
   simpa only [ae_dirac_eq, Filter.eventually_pure]
     using! Kernel.measure_eq_zero_or_one_of_indepSet_self h_indep
@@ -203,7 +203,7 @@ lemma measure_eq_zero_or_one_of_indep_self
 
 中文:
 引理 measure_eq_zero_or_one_of_indep_self
-  结论: [IsFiniteMeasure μ] (hm : Indep m m μ)
+  结论: [是有限测度 μ] (hm : Indep m m μ)
   证明: by
   simpa using Kernel.measure_eq_zero_or_one_of_indep_self hm ht
 
@@ -257,8 +257,8 @@ theorem Kernel.indep_biSup_compl
   proof: indep_iSup_of_disjoint h_le h_indep disjoint_compl_right
 
 中文:
-定理 Kernel.indep_biSup_compl
-  条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα) (t : Set ι)
+定理 核.indep_biSup_compl
+  条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα) (t : 集合 ι)
   证明: indep_iSup_of_disjoint h_le h_indep disjoint_compl_right
 
 Depends on / 依赖: disjoint_compl_right, h_indep, h_le, indep_iSup_of_disjoint
@@ -277,7 +277,7 @@ theorem indep_biSup_compl
 
 中文:
 定理 indep_biSup_compl
-  条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s μ) (t : Set ι)
+  条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s μ) (t : 集合 ι)
   证明: Kernel.indep_biSup_compl h_le h_indep t
 
 Depends on / 依赖: Kernel, Kernel.indep_biSup_compl, h_indep, h_le, indep_biSup_compl
@@ -296,7 +296,7 @@ theorem condIndep_biSup_compl
 
 中文:
 定理 condIndep_biSup_compl
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_biSup_compl h_le h_indep t
 
 Depends on / 依赖: Kernel, Kernel.indep_biSup_compl, h_indep, h_le, indep_biSup_compl
@@ -325,7 +325,7 @@ theorem Kernel.indep_biSup_limsup
   exact eventually_of_mem (hf t ht) le_iSup₂
 
 中文:
-定理 Kernel.indep_biSup_limsup
+定理 核.indep_biSup_limsup
   结论: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: by
   refine indep_of_indep_of_le_right (indep_biSup_compl h_le h_indep t) ?_
@@ -372,7 +372,7 @@ theorem condIndep_biSup_limsup
 
 中文:
 定理 condIndep_biSup_limsup
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_biSup_limsup h_le h_indep hf ht
 
 Depends on / 依赖: Kernel, Kernel.indep_biSup_limsup, h_indep, h_le, indep_biSup_limsup
@@ -400,7 +400,7 @@ theorem Kernel.indep_iSup_directed_limsup
   apply i
 
 中文:
-定理 Kernel.indep_iSup_directed_limsup
+定理 核.indep_iSup_directed_limsup
   结论: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: by
   rcases eq_or_ne μα 0 with rfl | hμ
@@ -461,7 +461,7 @@ theorem condIndep_iSup_directed_limsup
 
 中文:
 定理 condIndep_iSup_directed_limsup
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_iSup_directed_limsup h_le h_indep hf hns hnsp
 
 Depends on / 依赖: Kernel, Kernel.indep_iSup_directed_limsup, h_indep, h_le, indep_iSup_directed_limsup
@@ -489,7 +489,7 @@ theorem Kernel.indep_iSup_limsup
   have : Nonempty (exis
 
 中文:
-定理 Kernel.indep_iSup_limsup
+定理 核.indep_iSup_limsup
   结论: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: by
   suffices (⨆ a, ⨆ n in ns a, s n) = ⨆ n, s n by
@@ -544,7 +544,7 @@ theorem condIndep_iSup_limsup
 
 中文:
 定理 condIndep_iSup_limsup
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_iSup_limsup h_le h_indep hf hns hnsp hns_univ
 
 Depends on / 依赖: Kernel, Kernel.indep_iSup_limsup, h_indep, h_le, hns_univ, indep_iSup_limsup
@@ -565,7 +565,7 @@ theorem Kernel.indep_limsup_self
   proof: indep_of_indep_of_le_left (indep_iSup_limsup h_le h_indep hf hns hnsp hns_univ) limsup_le_iSup
 
 中文:
-定理 Kernel.indep_limsup_self
+定理 核.indep_limsup_self
   结论: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: indep_of_indep_of_le_left (indep_iSup_limsup h_le h_indep hf hns hnsp hns_univ) limsup_le_iSup
 
@@ -606,7 +606,7 @@ theorem condIndep_limsup_self
 
 中文:
 定理 condIndep_limsup_self
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_limsup_self h_le h_indep hf hns hnsp hns_univ
 
 Depends on / 依赖: Kernel, Kernel.indep_limsup_self, h_indep, h_le, hns_univ, indep_limsup_self
@@ -631,7 +631,7 @@ theorem Kernel.measure_zero_or_one_of_measurableSet_limsup
   filter_upwards [h_indep.ae_isProbabilityMeasure] with a ha using by infer_instance
 
 中文:
-定理 Kernel.measure_zero_or_one_of_measurableSet_limsup
+定理 核.measure_zero_or_one_of_measurableSet_limsup
   结论: (h_le : 对任意 n, s n <= m0)
   证明: by
   apply measure_eq_zero_or_one_of_indepSet_self' ?_
@@ -694,7 +694,7 @@ theorem condExp_zero_or_one_of_measurableSet_limsup
 
 中文:
 定理 condExp_zero_or_one_of_measurableSet_limsup
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: by
   have h := ae_of_ae_trim hm
     (Kernel.measure_zero_or_one_of_measurableSet_limsup h_le h_indep hf hns hnsp hns_univ ht_tail)
@@ -737,7 +737,7 @@ theorem Kernel.indep_limsup_atTop_self
     obtain ⟨b, hb⟩ : exists b, a < b 
 
 中文:
-定理 Kernel.indep_limsup_atTop_self
+定理 核.indep_limsup_atTop_self
   条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: by
   let ns : ι -> Set ι := Set.Iic
@@ -792,7 +792,7 @@ theorem condIndep_limsup_atTop_self
 
 中文:
 定理 condIndep_limsup_atTop_self
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_limsup_atTop_self h_le h_indep
 
 Depends on / 依赖: Kernel, Kernel.indep_limsup_atTop_self, h_indep, h_le, indep_limsup_atTop_self
@@ -815,7 +815,7 @@ theorem Kernel.measure_zero_or_one_of_measurableSet_limsup_atTop
   filter_upwards [h_indep.ae_isProbabilityMeasure] with a ha using by infer_instance
 
 中文:
-定理 Kernel.measure_zero_or_one_of_measurableSet_limsup_atTop
+定理 核.measure_zero_or_one_of_measurableSet_limsup_atTop
   结论: (h_le : 对任意 n, s n <= m0)
   证明: by
   apply measure_eq_zero_or_one_of_indepSet_self' ?_
@@ -866,7 +866,7 @@ theorem condExp_zero_or_one_of_measurableSet_limsup_atTop
 
 中文:
 定理 condExp_zero_or_one_of_measurableSet_limsup_atTop
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: condExp_eq_zero_or_one_of_condIndepSet_self hm (limsup_le_iSup.trans (iSup_le h_le) t ht_tail)
     ((condIndep_limsup_atTop_self hm h_le h_indep).condIndepSet_of_measurableSet ht_tail ht_tail)
 
@@ -900,7 +900,7 @@ theorem Kernel.indep_limsup_atBot_self
     obtain ⟨b, hb⟩ : exists b, b < a 
 
 中文:
-定理 Kernel.indep_limsup_atBot_self
+定理 核.indep_limsup_atBot_self
   条件: (h_le : 对任意 n, s n <= m0) (h_indep : iIndep s κ μα)
   证明: by
   let ns : ι -> Set ι := Set.Ici
@@ -954,7 +954,7 @@ theorem condIndep_limsup_atBot_self
 
 中文:
 定理 condIndep_limsup_atBot_self
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: Kernel.indep_limsup_atBot_self h_le h_indep
 
 Depends on / 依赖: Kernel, Kernel.indep_limsup_atBot_self, h_indep, h_le, indep_limsup_atBot_self
@@ -977,7 +977,7 @@ theorem Kernel.measure_zero_or_one_of_measurableSet_limsup_atBot
   filter_upwards [h_indep.ae_isProbabilityMeasure] with a ha using by infer_instance
 
 中文:
-定理 Kernel.measure_zero_or_one_of_measurableSet_limsup_atBot
+定理 核.measure_zero_or_one_of_measurableSet_limsup_atBot
   结论: (h_le : 对任意 n, s n <= m0)
   证明: by
   apply measure_eq_zero_or_one_of_indepSet_self' ?_
@@ -1028,7 +1028,7 @@ theorem condExp_zero_or_one_of_measurableSet_limsup_atBot
 
 中文:
 定理 condExp_zero_or_one_of_measurableSet_limsup_atBot
-  结论: [StandardBorelSpace Ω]
+  结论: [StandardBorel空间 Ω]
   证明: condExp_eq_zero_or_one_of_condIndepSet_self hm (limsup_le_iSup.trans (iSup_le h_le) t ht_tail)
     ((condIndep_limsup_atBot_self hm h_le h_indep).condIndepSet_of_measurableSet ht_tail ht_tail)
 

@@ -65,8 +65,8 @@ theorem iSup_bool_eq
 
 中文:
 定理 iSup_bool_eq
-  条件: {f : 布尔 -> α}
-  结论: ⨆ b : 布尔, f b = f true ⊔ f false
+  条件: {f : 布尔值 -> α}
+  结论: ⨆ b : 布尔值, f b = f true ⊔ f false
   证明: by
   rw [iSup]; rw [Bool.range_eq]; rw [sSup_pair]; rw [sup_comm]
 
@@ -91,7 +91,7 @@ theorem sup_eq_iSup
 中文:
 定理 sup_eq_iSup
   条件: (x y : α)
-  结论: x ⊔ y = ⨆ b : 布尔, cond b x y
+  结论: x ⊔ y = ⨆ b : 布尔值, cond b x y
   证明: by
   rw [iSup_bool_eq]; rw [Bool.cond_true]; rw [Bool.cond_false]
 
@@ -150,8 +150,8 @@ theorem Monotone.iSup_nat_add
   proof: le_antisymm (iSup_le fun i => le_iSup _ (i + k)) iSup_mono fun i => hf Nat.le_add_right i k
 
 中文:
-定理 Monotone.iSup_nat_add
-  条件: {f : 自然数 -> α} (hf : Monotone f) (k : 自然数)
+定理 递增.iSup_nat_add
+  条件: {f : 自然数 -> α} (hf : 递增 f) (k : 自然数)
   结论: ⨆ n, f (n + k) = ⨆ n, f n
   证明: le_antisymm (iSup_le fun i => le_iSup _ (i + k)) iSup_mono fun i => hf Nat.le_add_right i k
 
@@ -170,8 +170,8 @@ theorem Antitone.iInf_nat_add
   proof: hf.dual_right.iSup_nat_add k
 
 中文:
-定理 Antitone.iInf_nat_add
-  条件: {f : 自然数 -> α} (hf : Antitone f) (k : 自然数)
+定理 递减.iInf_nat_add
+  条件: {f : 自然数 -> α} (hf : 递减 f) (k : 自然数)
   结论: ⨅ n, f (n + k) = ⨅ n, f n
   证明: hf.dual_right.iSup_nat_add k
 
@@ -410,7 +410,7 @@ lemma biInf_sup_le_biInf_sup
 
 中文:
 引理 biInf_sup_le_biInf_sup
-  条件: (f : β -> α) (s : Set β) (a : α)
+  条件: (f : β -> α) (s : 集合 β) (a : α)
   证明: le_iInf₂ fun _ hi => sup_le_sup_right (biInf_le f hi) a
 
 @[to_dual biSup_inf_le_inf_biSup]
@@ -434,7 +434,7 @@ lemma sup_biInf_le_biInf_sup
 
 中文:
 引理 sup_biInf_le_biInf_sup
-  条件: (f : β -> α) (s : Set β) (a : α)
+  条件: (f : β -> α) (s : 集合 β) (a : α)
   证明: le_iInf₂ fun _ hi => sup_le_sup_left (biInf_le f hi) a
 
 @[to_dual le_iSup_inf_iSup]
@@ -483,7 +483,7 @@ theorem disjoint_sSup_left
 
 中文:
 定理 disjoint_sSup_left
-  条件: {a : Set α} {b : α} (d : Disjoint (sSup a) b) {i} (hi : i in a)
+  条件: {a : 集合 α} {b : α} (d : Disjoint (sSup a) b) {i} (hi : i in a)
   证明: disjoint_iff_inf_le.mpr (iSup₂_le_iff.1 (iSup_inf_le_sSup_inf.trans d.le_bot) i hi :)
 
 @[to_dual]
@@ -507,7 +507,7 @@ theorem disjoint_sSup_right
 
 中文:
 定理 disjoint_sSup_right
-  条件: {a : Set α} {b : α} (d : Disjoint b (sSup a)) {i} (hi : i in a)
+  条件: {a : 集合 α} {b : α} (d : Disjoint b (sSup a)) {i} (hi : i in a)
   证明: disjoint_iff_inf_le.mpr (iSup₂_le_iff.mp (iSup_inf_le_inf_sSup.trans d.le_bot) i hi :)
 
 @[to_dual]
@@ -532,7 +532,7 @@ lemma disjoint_of_sSup_disjoint_of_le_of_le
 
 中文:
 引理 disjoint_of_sSup_disjoint_of_le_of_le
-  结论: {a b : α} {c d : Set α} (hs : 对任意 e in c, e <= a)
+  结论: {a b : α} {c d : 集合 α} (hs : 对任意 e in c, e <= a)
   证明: by
   grind
 
@@ -553,7 +553,7 @@ lemma disjoint_of_sSup_disjoint
 
 中文:
 引理 disjoint_of_sSup_disjoint
-  结论: {a b : Set α} (hd : Disjoint (sSup a) (sSup b))
+  结论: {a b : 集合 α} (hd : Disjoint (sSup a) (sSup b))
   证明: disjoint_of_sSup_disjoint_of_le_of_le (fun _ hc => le_sSup hc) (fun _ hc => le_sSup hc) hd he
 
 Depends on / 依赖: disjoint_of_sSup_disjoint_of_le_of_le, le_sSup
@@ -581,7 +581,7 @@ instance supSet
 
 中文:
 实例 supSet
-  签名: [SupSet α]
+  签名: [上确界集 α]
   定义体: ULift.up (sSup <| ULift.up ⁻¹' s)
 
 @[to_dual]
@@ -604,8 +604,8 @@ theorem down_sSup
 
 中文:
 定理 down_sSup
-  条件: [SupSet α] (s : Set (ULift.{v} α))
-  结论: (sSup s).down = sSup (ULift.up ⁻¹' s)
+  条件: [上确界集 α] (s : 集合 (类型层提升.{v} α))
+  结论: (sSup s).down = sSup (类型层提升.up ⁻¹' s)
   证明: rfl
 
 @[to_dual]
@@ -626,8 +626,8 @@ theorem up_sSup
 
 中文:
 定理 up_sSup
-  条件: [SupSet α] (s : Set α)
-  结论: up (sSup s) = sSup (ULift.down ⁻¹' s)
+  条件: [上确界集 α] (s : 集合 α)
+  结论: up (sSup s) = sSup (类型层提升.down ⁻¹' s)
   证明: rfl
 
 @[to_dual]
@@ -649,7 +649,7 @@ theorem down_iSup
 
 中文:
 定理 down_iSup
-  条件: [SupSet α] (f : ι -> ULift.{v} α)
+  条件: [上确界集 α] (f : ι -> 类型层提升.{v} α)
   结论: (⨆ i, f i).down = ⨆ i, (f i).down
   证明: congr_arg sSup (preimage_eq_iff_eq_image ULift.up_bijective).mpr
     Eq.symm (range_comp _ _).symm
@@ -674,7 +674,7 @@ theorem up_iSup
 
 中文:
 定理 up_iSup
-  条件: [SupSet α] (f : ι -> α)
+  条件: [上确界集 α] (f : ι -> α)
   结论: up (⨆ i, f i) = ⨆ i, up (f i)
   证明: congr_arg ULift.up (down_iSup _).symm
 
@@ -695,7 +695,7 @@ instance instCompleteLattice
 
 中文:
 实例 instCompleteLattice
-  签名: [CompleteLattice α]
+  签名: [完备格 α]
   定义体: ULift.down_injective.completeLattice _ .rfl .rfl down_sup down_inf
     (fun s => by rw [sSup_eq_iSup', down_iSup, iSup_subtype''])
     (fun s => by rw [sInf_eq_iInf', down_iInf, iInf_subtype'']) down_top down_bot
@@ -729,7 +729,7 @@ instance instCompleteLinearOrder
 
 中文:
 实例 instCompleteLinearOrder
-  签名: : CompleteLinearOrder PUnit where
+  签名: : 完备线性序 命题单元 where
   定义体: instBooleanAlgebra
   __ := instLinearOrder
   sSup := fun _ => unit

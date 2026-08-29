@@ -39,7 +39,7 @@ lemma avgRisk_countable
 
 中文:
 引理 avgRisk_countable
-  条件: [Countable Θ] [MeasurableSingletonClass Θ]
+  条件: [可数 Θ] [MeasurableSingleton类 Θ]
   证明: by
   simp [avgRisk, lintegral_countable']
 
@@ -60,7 +60,7 @@ lemma avgRisk_fintype
 
 中文:
 引理 avgRisk_fintype
-  条件: [Fintype Θ] [MeasurableSingletonClass Θ]
+  条件: [有限类型 Θ] [MeasurableSingleton类 Θ]
   证明: by
   simp [avgRisk, lintegral_fintype]
 
@@ -85,7 +85,7 @@ lemma avgRisk_countable'
 
 中文:
 引理 avgRisk_countable'
-  条件: [Countable 𝓨] [MeasurableSingletonClass 𝓨] (hℓ : Measurable ℓ)
+  条件: [可数 𝓨] [MeasurableSingleton类 𝓨] (hℓ : 可测 ℓ)
   证明: by
   simp only [avgRisk, lintegral_countable']
   rw [lintegral_tsum]
@@ -114,7 +114,7 @@ lemma avgRisk_fintype'
 
 中文:
 引理 avgRisk_fintype'
-  条件: [Fintype 𝓨] [MeasurableSingletonClass 𝓨] (hℓ : Measurable ℓ)
+  条件: [有限类型 𝓨] [MeasurableSingleton类 𝓨] (hℓ : 可测 ℓ)
   证明: by
   rw [avgRisk_countable' hℓ]; rw [tsum_fintype]
 
@@ -135,7 +135,7 @@ lemma bayesRisk_countable
 
 中文:
 引理 bayesRisk_countable
-  条件: [Countable Θ] [MeasurableSingletonClass Θ]
+  条件: [可数 Θ] [MeasurableSingleton类 Θ]
   证明: by
   simp [bayesRisk, avgRisk_countable]
 
@@ -157,7 +157,7 @@ lemma bayesRisk_fintype
 
 中文:
 引理 bayesRisk_fintype
-  条件: [Fintype Θ] [MeasurableSingletonClass Θ]
+  条件: [有限类型 Θ] [MeasurableSingleton类 Θ]
   证明: by
   simp [bayesRisk, avgRisk_fintype]
 
@@ -179,7 +179,7 @@ lemma bayesRisk_countable'
 
 中文:
 引理 bayesRisk_countable'
-  条件: [Countable 𝓨] [MeasurableSingletonClass 𝓨] (hℓ : Measurable ℓ)
+  条件: [可数 𝓨] [MeasurableSingleton类 𝓨] (hℓ : 可测 ℓ)
   证明: by
   simp [bayesRisk, avgRisk_countable' hℓ]
 
@@ -201,7 +201,7 @@ lemma bayesRisk_fintype'
 
 中文:
 引理 bayesRisk_fintype'
-  条件: [Fintype 𝓨] [MeasurableSingletonClass 𝓨] (hℓ : Measurable ℓ)
+  条件: [有限类型 𝓨] [MeasurableSingleton类 𝓨] (hℓ : 可测 ℓ)
   证明: by
   simp [bayesRisk, avgRisk_fintype' hℓ]
 
@@ -225,7 +225,7 @@ lemma avgRisk_const_of_countable
 
 中文:
 引理 avgRisk_const_of_countable
-  结论: [Countable 𝓨] [MeasurableSingletonClass 𝓨]
+  结论: [可数 𝓨] [MeasurableSingleton类 𝓨]
   证明: by
   simp [avgRisk_countable' hℓ]
 
@@ -247,7 +247,7 @@ lemma avgRisk_const_of_fintype
 
 中文:
 引理 avgRisk_const_of_fintype
-  结论: [Fintype 𝓨] [MeasurableSingletonClass 𝓨]
+  结论: [有限类型 𝓨] [MeasurableSingleton类 𝓨]
   证明: by
   simp [avgRisk_fintype' hℓ]
 

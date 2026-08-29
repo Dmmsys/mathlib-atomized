@@ -36,8 +36,8 @@ lemma MonotoneOn.mapsTo_Ici
 
 中文:
 引理 MonotoneOn.mapsTo_Ici
-  条件: (h : MonotoneOn f (Ici a))
-  结论: MapsTo f (Ici a) (Ici (f a))
+  条件: (h : MonotoneOn f (左闭右无界区间 a))
+  结论: 映射到 f (左闭右无界区间 a) (左闭右无界区间 (f a))
   证明: fun _ _ => by aesop
 -/
 lemma MonotoneOn.mapsTo_Ici (h : MonotoneOn f (Ici a)) : MapsTo f (Ici a) (Ici (f a)) :=
@@ -54,8 +54,8 @@ lemma MonotoneOn.mapsTo_Iic
 
 中文:
 引理 MonotoneOn.mapsTo_Iic
-  条件: (h : MonotoneOn f (Iic b))
-  结论: MapsTo f (Iic b) (Iic (f b))
+  条件: (h : MonotoneOn f (左无界右闭区间 b))
+  结论: 映射到 f (左无界右闭区间 b) (左无界右闭区间 (f b))
   证明: fun _ _ => by aesop
 -/
 lemma MonotoneOn.mapsTo_Iic (h : MonotoneOn f (Iic b)) : MapsTo f (Iic b) (Iic (f b)) :=
@@ -73,8 +73,8 @@ lemma MonotoneOn.mapsTo_Icc
 
 中文:
 引理 MonotoneOn.mapsTo_Icc
-  条件: (h : MonotoneOn f (Icc a b))
-  结论: MapsTo f (Icc a b) (Icc (f a) (f b))
+  条件: (h : MonotoneOn f (闭区间 a b))
+  结论: 映射到 f (闭区间 a b) (闭区间 (f a) (f b))
   证明: fun _c hc =>
     ⟨h (left_mem_Icc.2 <| hc.1.trans hc.2) hc hc.1, h hc (right_mem_Icc.2 <| hc.1.trans hc.2) hc.2⟩
 
@@ -95,8 +95,8 @@ lemma AntitoneOn.mapsTo_Ici
 
 中文:
 引理 AntitoneOn.mapsTo_Ici
-  条件: (h : AntitoneOn f (Ici a))
-  结论: MapsTo f (Ici a) (Iic (f a))
+  条件: (h : AntitoneOn f (左闭右无界区间 a))
+  结论: 映射到 f (左闭右无界区间 a) (左无界右闭区间 (f a))
   证明: fun _ _ => by aesop
 -/
 lemma AntitoneOn.mapsTo_Ici (h : AntitoneOn f (Ici a)) : MapsTo f (Ici a) (Iic (f a)) :=
@@ -113,8 +113,8 @@ lemma AntitoneOn.mapsTo_Iic
 
 中文:
 引理 AntitoneOn.mapsTo_Iic
-  条件: (h : AntitoneOn f (Iic b))
-  结论: MapsTo f (Iic b) (Ici (f b))
+  条件: (h : AntitoneOn f (左无界右闭区间 b))
+  结论: 映射到 f (左无界右闭区间 b) (左闭右无界区间 (f b))
   证明: fun _ _ => by aesop
 -/
 lemma AntitoneOn.mapsTo_Iic (h : AntitoneOn f (Iic b)) : MapsTo f (Iic b) (Ici (f b)) :=
@@ -132,8 +132,8 @@ lemma AntitoneOn.mapsTo_Icc
 
 中文:
 引理 AntitoneOn.mapsTo_Icc
-  条件: (h : AntitoneOn f (Icc a b))
-  结论: MapsTo f (Icc a b) (Icc (f b) (f a))
+  条件: (h : AntitoneOn f (闭区间 a b))
+  结论: 映射到 f (闭区间 a b) (闭区间 (f b) (f a))
   证明: fun _c hc =>
     ⟨h hc (right_mem_Icc.2 <| hc.1.trans hc.2) hc.2, h (left_mem_Icc.2 <| hc.1.trans hc.2) hc hc.1⟩
 
@@ -154,8 +154,8 @@ lemma StrictMonoOn.mapsTo_Ioi
 
 中文:
 引理 StrictMonoOn.mapsTo_Ioi
-  条件: (h : StrictMonoOn f (Ici a))
-  结论: MapsTo f (Ioi a) (Ioi (f a))
+  条件: (h : StrictMonoOn f (左闭右无界区间 a))
+  结论: 映射到 f (左开右无界区间 a) (左开右无界区间 (f a))
   证明: fun _c hc => h le_rfl hc.le hc
 
 Depends on / 依赖: hc.le, le_rfl
@@ -174,8 +174,8 @@ lemma StrictMonoOn.mapsTo_Iio
 
 中文:
 引理 StrictMonoOn.mapsTo_Iio
-  条件: (h : StrictMonoOn f (Iic b))
-  结论: MapsTo f (Iio b) (Iio (f b))
+  条件: (h : StrictMonoOn f (左无界右闭区间 b))
+  结论: 映射到 f (左无界右开区间 b) (左无界右开区间 (f b))
   证明: fun _c hc => h hc.le le_rfl hc
 
 Depends on / 依赖: hc.le, le_rfl
@@ -195,7 +195,7 @@ lemma StrictMonoOn.mapsTo_Ioo
 
 中文:
 引理 StrictMonoOn.mapsTo_Ioo
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: fun _c hc =>
     ⟨h (left_mem_Icc.2 (hc.1.trans hc.2).le) (Ioo_subset_Icc_self hc) hc.1,
      h (Ioo_subset_Icc_self hc) (right_mem_Icc.2 (hc.1.trans hc.2).le) hc.2⟩
@@ -219,8 +219,8 @@ lemma StrictAntiOn.mapsTo_Ioi
 
 中文:
 引理 StrictAntiOn.mapsTo_Ioi
-  条件: (h : StrictAntiOn f (Ici a))
-  结论: MapsTo f (Ioi a) (Iio (f a))
+  条件: (h : StrictAntiOn f (左闭右无界区间 a))
+  结论: 映射到 f (左开右无界区间 a) (左无界右开区间 (f a))
   证明: fun _c hc => h le_rfl hc.le hc
 
 Depends on / 依赖: hc.le, le_rfl
@@ -239,8 +239,8 @@ lemma StrictAntiOn.mapsTo_Iio
 
 中文:
 引理 StrictAntiOn.mapsTo_Iio
-  条件: (h : StrictAntiOn f (Iic b))
-  结论: MapsTo f (Iio b) (Ioi (f b))
+  条件: (h : StrictAntiOn f (左无界右闭区间 b))
+  结论: 映射到 f (左无界右开区间 b) (左开右无界区间 (f b))
   证明: fun _c hc => h hc.le le_rfl hc
 
 Depends on / 依赖: hc.le, le_rfl
@@ -260,7 +260,7 @@ lemma StrictAntiOn.mapsTo_Ioo
 
 中文:
 引理 StrictAntiOn.mapsTo_Ioo
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: fun _c hc =>
     ⟨h (Ioo_subset_Icc_self hc) (right_mem_Icc.2 (hc.1.trans hc.2).le) hc.2,
      h (left_mem_Icc.2 (hc.1.trans hc.2).le) (Ioo_subset_Icc_self hc) hc.1⟩
@@ -283,9 +283,9 @@ lemma Monotone.mapsTo_Ici
   proof: (h.monotoneOn _).mapsTo_Ici
 
 中文:
-引理 Monotone.mapsTo_Ici
-  条件: (h : Monotone f)
-  结论: MapsTo f (Ici a) (Ici (f a))
+引理 递增.mapsTo_Ici
+  条件: (h : 递增 f)
+  结论: 映射到 f (左闭右无界区间 a) (左闭右无界区间 (f a))
   证明: (h.monotoneOn _).mapsTo_Ici
 
 Depends on / 依赖: h.monotoneOn, mapsTo_Ici, monotoneOn
@@ -303,9 +303,9 @@ lemma Monotone.mapsTo_Iic
   proof: (h.monotoneOn _).mapsTo_Iic
 
 中文:
-引理 Monotone.mapsTo_Iic
-  条件: (h : Monotone f)
-  结论: MapsTo f (Iic b) (Iic (f b))
+引理 递增.mapsTo_Iic
+  条件: (h : 递增 f)
+  结论: 映射到 f (左无界右闭区间 b) (左无界右闭区间 (f b))
   证明: (h.monotoneOn _).mapsTo_Iic
 
 Depends on / 依赖: h.monotoneOn, mapsTo_Iic, monotoneOn
@@ -323,9 +323,9 @@ lemma Monotone.mapsTo_Icc
   proof: (h.monotoneOn _).mapsTo_Icc
 
 中文:
-引理 Monotone.mapsTo_Icc
-  条件: (h : Monotone f)
-  结论: MapsTo f (Icc a b) (Icc (f a) (f b))
+引理 递增.mapsTo_Icc
+  条件: (h : 递增 f)
+  结论: 映射到 f (闭区间 a b) (闭区间 (f a) (f b))
   证明: (h.monotoneOn _).mapsTo_Icc
 
 Depends on / 依赖: h.monotoneOn, mapsTo_Icc, monotoneOn
@@ -343,9 +343,9 @@ lemma Antitone.mapsTo_Ici
   proof: (h.antitoneOn _).mapsTo_Ici
 
 中文:
-引理 Antitone.mapsTo_Ici
-  条件: (h : Antitone f)
-  结论: MapsTo f (Ici a) (Iic (f a))
+引理 递减.mapsTo_Ici
+  条件: (h : 递减 f)
+  结论: 映射到 f (左闭右无界区间 a) (左无界右闭区间 (f a))
   证明: (h.antitoneOn _).mapsTo_Ici
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, mapsTo_Ici
@@ -363,9 +363,9 @@ lemma Antitone.mapsTo_Iic
   proof: (h.antitoneOn _).mapsTo_Iic
 
 中文:
-引理 Antitone.mapsTo_Iic
-  条件: (h : Antitone f)
-  结论: MapsTo f (Iic b) (Ici (f b))
+引理 递减.mapsTo_Iic
+  条件: (h : 递减 f)
+  结论: 映射到 f (左无界右闭区间 b) (左闭右无界区间 (f b))
   证明: (h.antitoneOn _).mapsTo_Iic
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, mapsTo_Iic
@@ -383,9 +383,9 @@ lemma Antitone.mapsTo_Icc
   proof: (h.antitoneOn _).mapsTo_Icc
 
 中文:
-引理 Antitone.mapsTo_Icc
-  条件: (h : Antitone f)
-  结论: MapsTo f (Icc a b) (Icc (f b) (f a))
+引理 递减.mapsTo_Icc
+  条件: (h : 递减 f)
+  结论: 映射到 f (闭区间 a b) (闭区间 (f b) (f a))
   证明: (h.antitoneOn _).mapsTo_Icc
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, mapsTo_Icc
@@ -403,9 +403,9 @@ lemma StrictMono.mapsTo_Ioi
   proof: (h.strictMonoOn _).mapsTo_Ioi
 
 中文:
-引理 StrictMono.mapsTo_Ioi
-  条件: (h : StrictMono f)
-  结论: MapsTo f (Ioi a) (Ioi (f a))
+引理 严格递增.mapsTo_Ioi
+  条件: (h : 严格递增 f)
+  结论: 映射到 f (左开右无界区间 a) (左开右无界区间 (f a))
   证明: (h.strictMonoOn _).mapsTo_Ioi
 
 Depends on / 依赖: h.strictMonoOn, mapsTo_Ioi, strictMonoOn
@@ -423,9 +423,9 @@ lemma StrictMono.mapsTo_Iio
   proof: (h.strictMonoOn _).mapsTo_Iio
 
 中文:
-引理 StrictMono.mapsTo_Iio
-  条件: (h : StrictMono f)
-  结论: MapsTo f (Iio b) (Iio (f b))
+引理 严格递增.mapsTo_Iio
+  条件: (h : 严格递增 f)
+  结论: 映射到 f (左无界右开区间 b) (左无界右开区间 (f b))
   证明: (h.strictMonoOn _).mapsTo_Iio
 
 Depends on / 依赖: h.strictMonoOn, mapsTo_Iio, strictMonoOn
@@ -443,9 +443,9 @@ lemma StrictMono.mapsTo_Ioo
   proof: (h.strictMonoOn _).mapsTo_Ioo
 
 中文:
-引理 StrictMono.mapsTo_Ioo
-  条件: (h : StrictMono f)
-  结论: MapsTo f (Ioo a b) (Ioo (f a) (f b))
+引理 严格递增.mapsTo_Ioo
+  条件: (h : 严格递增 f)
+  结论: 映射到 f (开区间 a b) (开区间 (f a) (f b))
   证明: (h.strictMonoOn _).mapsTo_Ioo
 
 Depends on / 依赖: h.strictMonoOn, mapsTo_Ioo, strictMonoOn
@@ -463,9 +463,9 @@ lemma StrictAnti.mapsTo_Ioi
   proof: (h.strictAntiOn _).mapsTo_Ioi
 
 中文:
-引理 StrictAnti.mapsTo_Ioi
-  条件: (h : StrictAnti f)
-  结论: MapsTo f (Ioi a) (Iio (f a))
+引理 严格递减.mapsTo_Ioi
+  条件: (h : 严格递减 f)
+  结论: 映射到 f (左开右无界区间 a) (左无界右开区间 (f a))
   证明: (h.strictAntiOn _).mapsTo_Ioi
 
 Depends on / 依赖: h.strictAntiOn, mapsTo_Ioi, strictAntiOn
@@ -483,9 +483,9 @@ lemma StrictAnti.mapsTo_Iio
   proof: (h.strictAntiOn _).mapsTo_Iio
 
 中文:
-引理 StrictAnti.mapsTo_Iio
-  条件: (h : StrictAnti f)
-  结论: MapsTo f (Iio b) (Ioi (f b))
+引理 严格递减.mapsTo_Iio
+  条件: (h : 严格递减 f)
+  结论: 映射到 f (左无界右开区间 b) (左开右无界区间 (f b))
   证明: (h.strictAntiOn _).mapsTo_Iio
 
 Depends on / 依赖: h.strictAntiOn, mapsTo_Iio, strictAntiOn
@@ -503,9 +503,9 @@ lemma StrictAnti.mapsTo_Ioo
   proof: (h.strictAntiOn _).mapsTo_Ioo
 
 中文:
-引理 StrictAnti.mapsTo_Ioo
-  条件: (h : StrictAnti f)
-  结论: MapsTo f (Ioo a b) (Ioo (f b) (f a))
+引理 严格递减.mapsTo_Ioo
+  条件: (h : 严格递减 f)
+  结论: 映射到 f (开区间 a b) (开区间 (f b) (f a))
   证明: (h.strictAntiOn _).mapsTo_Ioo
 
 Depends on / 依赖: h.strictAntiOn, mapsTo_Ioo, strictAntiOn
@@ -524,8 +524,8 @@ lemma MonotoneOn.image_Ici_subset
 
 中文:
 引理 MonotoneOn.image_Ici_subset
-  条件: (h : MonotoneOn f (Ici a))
-  结论: f '' Ici a subseteq Ici (f a)
+  条件: (h : MonotoneOn f (左闭右无界区间 a))
+  结论: f '' 左闭右无界区间 a subseteq 左闭右无界区间 (f a)
   证明: h.mapsTo_Ici.image_subset
 
 Depends on / 依赖: h.mapsTo_Ici.image_subset, image_subset, mapsTo_Ici
@@ -544,8 +544,8 @@ lemma MonotoneOn.image_Iic_subset
 
 中文:
 引理 MonotoneOn.image_Iic_subset
-  条件: (h : MonotoneOn f (Iic b))
-  结论: f '' Iic b subseteq Iic (f b)
+  条件: (h : MonotoneOn f (左无界右闭区间 b))
+  结论: f '' 左无界右闭区间 b subseteq 左无界右闭区间 (f b)
   证明: h.mapsTo_Iic.image_subset
 
 Depends on / 依赖: h.mapsTo_Iic.image_subset, image_subset, mapsTo_Iic
@@ -564,8 +564,8 @@ lemma MonotoneOn.image_Icc_subset
 
 中文:
 引理 MonotoneOn.image_Icc_subset
-  条件: (h : MonotoneOn f (Icc a b))
-  结论: f '' Icc a b subseteq Icc (f a) (f b)
+  条件: (h : MonotoneOn f (闭区间 a b))
+  结论: f '' 闭区间 a b subseteq 闭区间 (f a) (f b)
   证明: h.mapsTo_Icc.image_subset
 
 Depends on / 依赖: h.mapsTo_Icc.image_subset, image_subset, mapsTo_Icc
@@ -584,8 +584,8 @@ lemma AntitoneOn.image_Ici_subset
 
 中文:
 引理 AntitoneOn.image_Ici_subset
-  条件: (h : AntitoneOn f (Ici a))
-  结论: f '' Ici a subseteq Iic (f a)
+  条件: (h : AntitoneOn f (左闭右无界区间 a))
+  结论: f '' 左闭右无界区间 a subseteq 左无界右闭区间 (f a)
   证明: h.mapsTo_Ici.image_subset
 
 Depends on / 依赖: h.mapsTo_Ici.image_subset, image_subset, mapsTo_Ici
@@ -604,8 +604,8 @@ lemma AntitoneOn.image_Iic_subset
 
 中文:
 引理 AntitoneOn.image_Iic_subset
-  条件: (h : AntitoneOn f (Iic b))
-  结论: f '' Iic b subseteq Ici (f b)
+  条件: (h : AntitoneOn f (左无界右闭区间 b))
+  结论: f '' 左无界右闭区间 b subseteq 左闭右无界区间 (f b)
   证明: h.mapsTo_Iic.image_subset
 
 Depends on / 依赖: h.mapsTo_Iic.image_subset, image_subset, mapsTo_Iic
@@ -624,8 +624,8 @@ lemma AntitoneOn.image_Icc_subset
 
 中文:
 引理 AntitoneOn.image_Icc_subset
-  条件: (h : AntitoneOn f (Icc a b))
-  结论: f '' Icc a b subseteq Icc (f b) (f a)
+  条件: (h : AntitoneOn f (闭区间 a b))
+  结论: f '' 闭区间 a b subseteq 闭区间 (f b) (f a)
   证明: h.mapsTo_Icc.image_subset
 
 Depends on / 依赖: h.mapsTo_Icc.image_subset, image_subset, mapsTo_Icc
@@ -644,8 +644,8 @@ lemma StrictMonoOn.image_Ioi_subset
 
 中文:
 引理 StrictMonoOn.image_Ioi_subset
-  条件: (h : StrictMonoOn f (Ici a))
-  结论: f '' Ioi a subseteq Ioi (f a)
+  条件: (h : StrictMonoOn f (左闭右无界区间 a))
+  结论: f '' 左开右无界区间 a subseteq 左开右无界区间 (f a)
   证明: h.mapsTo_Ioi.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioi.image_subset, image_subset, mapsTo_Ioi
@@ -664,8 +664,8 @@ lemma StrictMonoOn.image_Iio_subset
 
 中文:
 引理 StrictMonoOn.image_Iio_subset
-  条件: (h : StrictMonoOn f (Iic b))
-  结论: f '' Iio b subseteq Iio (f b)
+  条件: (h : StrictMonoOn f (左无界右闭区间 b))
+  结论: f '' 左无界右开区间 b subseteq 左无界右开区间 (f b)
   证明: h.mapsTo_Iio.image_subset
 
 Depends on / 依赖: h.mapsTo_Iio.image_subset, image_subset, mapsTo_Iio
@@ -683,7 +683,7 @@ lemma StrictMonoOn.image_Ioo_subset
 
 中文:
 引理 StrictMonoOn.image_Ioo_subset
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: h.mapsTo_Ioo.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioo.image_subset, image_subset, mapsTo_Ioo
@@ -702,8 +702,8 @@ lemma StrictAntiOn.image_Ioi_subset
 
 中文:
 引理 StrictAntiOn.image_Ioi_subset
-  条件: (h : StrictAntiOn f (Ici a))
-  结论: f '' Ioi a subseteq Iio (f a)
+  条件: (h : StrictAntiOn f (左闭右无界区间 a))
+  结论: f '' 左开右无界区间 a subseteq 左无界右开区间 (f a)
   证明: h.mapsTo_Ioi.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioi.image_subset, image_subset, mapsTo_Ioi
@@ -722,8 +722,8 @@ lemma StrictAntiOn.image_Iio_subset
 
 中文:
 引理 StrictAntiOn.image_Iio_subset
-  条件: (h : StrictAntiOn f (Iic b))
-  结论: f '' Iio b subseteq Ioi (f b)
+  条件: (h : StrictAntiOn f (左无界右闭区间 b))
+  结论: f '' 左无界右开区间 b subseteq 左开右无界区间 (f b)
   证明: h.mapsTo_Iio.image_subset
 
 Depends on / 依赖: h.mapsTo_Iio.image_subset, image_subset, mapsTo_Iio
@@ -741,7 +741,7 @@ lemma StrictAntiOn.image_Ioo_subset
 
 中文:
 引理 StrictAntiOn.image_Ioo_subset
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: h.mapsTo_Ioo.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioo.image_subset, image_subset, mapsTo_Ioo
@@ -759,9 +759,9 @@ lemma Monotone.image_Ici_subset
   proof: (h.monotoneOn _).image_Ici_subset
 
 中文:
-引理 Monotone.image_Ici_subset
-  条件: (h : Monotone f)
-  结论: f '' Ici a subseteq Ici (f a)
+引理 递增.image_Ici_subset
+  条件: (h : 递增 f)
+  结论: f '' 左闭右无界区间 a subseteq 左闭右无界区间 (f a)
   证明: (h.monotoneOn _).image_Ici_subset
 
 Depends on / 依赖: h.monotoneOn, image_Ici_subset, monotoneOn
@@ -779,9 +779,9 @@ lemma Monotone.image_Iic_subset
   proof: (h.monotoneOn _).image_Iic_subset
 
 中文:
-引理 Monotone.image_Iic_subset
-  条件: (h : Monotone f)
-  结论: f '' Iic b subseteq Iic (f b)
+引理 递增.image_Iic_subset
+  条件: (h : 递增 f)
+  结论: f '' 左无界右闭区间 b subseteq 左无界右闭区间 (f b)
   证明: (h.monotoneOn _).image_Iic_subset
 
 Depends on / 依赖: h.monotoneOn, image_Iic_subset, monotoneOn
@@ -799,9 +799,9 @@ lemma Monotone.image_Icc_subset
   proof: (h.monotoneOn _).image_Icc_subset
 
 中文:
-引理 Monotone.image_Icc_subset
-  条件: (h : Monotone f)
-  结论: f '' Icc a b subseteq Icc (f a) (f b)
+引理 递增.image_Icc_subset
+  条件: (h : 递增 f)
+  结论: f '' 闭区间 a b subseteq 闭区间 (f a) (f b)
   证明: (h.monotoneOn _).image_Icc_subset
 
 Depends on / 依赖: h.monotoneOn, image_Icc_subset, monotoneOn
@@ -819,9 +819,9 @@ lemma Antitone.image_Ici_subset
   proof: (h.antitoneOn _).image_Ici_subset
 
 中文:
-引理 Antitone.image_Ici_subset
-  条件: (h : Antitone f)
-  结论: f '' Ici a subseteq Iic (f a)
+引理 递减.image_Ici_subset
+  条件: (h : 递减 f)
+  结论: f '' 左闭右无界区间 a subseteq 左无界右闭区间 (f a)
   证明: (h.antitoneOn _).image_Ici_subset
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, image_Ici_subset
@@ -839,9 +839,9 @@ lemma Antitone.image_Iic_subset
   proof: (h.antitoneOn _).image_Iic_subset
 
 中文:
-引理 Antitone.image_Iic_subset
-  条件: (h : Antitone f)
-  结论: f '' Iic b subseteq Ici (f b)
+引理 递减.image_Iic_subset
+  条件: (h : 递减 f)
+  结论: f '' 左无界右闭区间 b subseteq 左闭右无界区间 (f b)
   证明: (h.antitoneOn _).image_Iic_subset
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, image_Iic_subset
@@ -859,9 +859,9 @@ lemma Antitone.image_Icc_subset
   proof: (h.antitoneOn _).image_Icc_subset
 
 中文:
-引理 Antitone.image_Icc_subset
-  条件: (h : Antitone f)
-  结论: f '' Icc a b subseteq Icc (f b) (f a)
+引理 递减.image_Icc_subset
+  条件: (h : 递减 f)
+  结论: f '' 闭区间 a b subseteq 闭区间 (f b) (f a)
   证明: (h.antitoneOn _).image_Icc_subset
 
 Depends on / 依赖: antitoneOn, h.antitoneOn, image_Icc_subset
@@ -879,9 +879,9 @@ lemma StrictMono.image_Ioi_subset
   proof: (h.strictMonoOn _).image_Ioi_subset
 
 中文:
-引理 StrictMono.image_Ioi_subset
-  条件: (h : StrictMono f)
-  结论: f '' Ioi a subseteq Ioi (f a)
+引理 严格递增.image_Ioi_subset
+  条件: (h : 严格递增 f)
+  结论: f '' 左开右无界区间 a subseteq 左开右无界区间 (f a)
   证明: (h.strictMonoOn _).image_Ioi_subset
 
 Depends on / 依赖: h.strictMonoOn, image_Ioi_subset, strictMonoOn
@@ -899,9 +899,9 @@ lemma StrictMono.image_Iio_subset
   proof: (h.strictMonoOn _).image_Iio_subset
 
 中文:
-引理 StrictMono.image_Iio_subset
-  条件: (h : StrictMono f)
-  结论: f '' Iio b subseteq Iio (f b)
+引理 严格递增.image_Iio_subset
+  条件: (h : 严格递增 f)
+  结论: f '' 左无界右开区间 b subseteq 左无界右开区间 (f b)
   证明: (h.strictMonoOn _).image_Iio_subset
 
 Depends on / 依赖: h.strictMonoOn, image_Iio_subset, strictMonoOn
@@ -919,9 +919,9 @@ lemma StrictMono.image_Ioo_subset
   proof: (h.strictMonoOn _).image_Ioo_subset
 
 中文:
-引理 StrictMono.image_Ioo_subset
-  条件: (h : StrictMono f)
-  结论: f '' Ioo a b subseteq Ioo (f a) (f b)
+引理 严格递增.image_Ioo_subset
+  条件: (h : 严格递增 f)
+  结论: f '' 开区间 a b subseteq 开区间 (f a) (f b)
   证明: (h.strictMonoOn _).image_Ioo_subset
 
 Depends on / 依赖: h.strictMonoOn, image_Ioo_subset, strictMonoOn
@@ -939,9 +939,9 @@ lemma StrictAnti.image_Ioi_subset
   proof: (h.strictAntiOn _).image_Ioi_subset
 
 中文:
-引理 StrictAnti.image_Ioi_subset
-  条件: (h : StrictAnti f)
-  结论: f '' Ioi a subseteq Iio (f a)
+引理 严格递减.image_Ioi_subset
+  条件: (h : 严格递减 f)
+  结论: f '' 左开右无界区间 a subseteq 左无界右开区间 (f a)
   证明: (h.strictAntiOn _).image_Ioi_subset
 
 Depends on / 依赖: h.strictAntiOn, image_Ioi_subset, strictAntiOn
@@ -959,9 +959,9 @@ lemma StrictAnti.image_Iio_subset
   proof: (h.strictAntiOn _).image_Iio_subset
 
 中文:
-引理 StrictAnti.image_Iio_subset
-  条件: (h : StrictAnti f)
-  结论: f '' Iio b subseteq Ioi (f b)
+引理 严格递减.image_Iio_subset
+  条件: (h : 严格递减 f)
+  结论: f '' 左无界右开区间 b subseteq 左开右无界区间 (f b)
   证明: (h.strictAntiOn _).image_Iio_subset
 
 Depends on / 依赖: h.strictAntiOn, image_Iio_subset, strictAntiOn
@@ -979,9 +979,9 @@ lemma StrictAnti.image_Ioo_subset
   proof: (h.strictAntiOn _).image_Ioo_subset
 
 中文:
-引理 StrictAnti.image_Ioo_subset
-  条件: (h : StrictAnti f)
-  结论: f '' Ioo a b subseteq Ioo (f b) (f a)
+引理 严格递减.image_Ioo_subset
+  条件: (h : 严格递减 f)
+  结论: f '' 开区间 a b subseteq 开区间 (f b) (f a)
   证明: (h.strictAntiOn _).image_Ioo_subset
 
 Depends on / 依赖: h.strictAntiOn, image_Ioo_subset, strictAntiOn
@@ -1005,7 +1005,7 @@ lemma StrictMonoOn.mapsTo_Ico
 
 中文:
 引理 StrictMonoOn.mapsTo_Ico
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: fun _c hc => ⟨h.monotoneOn (left_mem_Icc.2 <| hc.1.trans hc.2.le) (Ico_subset_Icc_self hc) hc.1,
     h (Ico_subset_Icc_self hc) (right_mem_Icc.2 <| hc.1.trans hc.2.le) hc.2⟩
 
@@ -1027,7 +1027,7 @@ lemma StrictMonoOn.mapsTo_Ioc
 
 中文:
 引理 StrictMonoOn.mapsTo_Ioc
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: fun _c hc => ⟨h (left_mem_Icc.2 <| hc.1.le.trans hc.2) (Ioc_subset_Icc_self hc) hc.1,
     h.monotoneOn (Ioc_subset_Icc_self hc) (right_mem_Icc.2 <| hc.1.le.trans hc.2) hc.2⟩
 
@@ -1049,7 +1049,7 @@ lemma StrictAntiOn.mapsTo_Ico
 
 中文:
 引理 StrictAntiOn.mapsTo_Ico
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: fun _c hc => ⟨h (Ico_subset_Icc_self hc) (right_mem_Icc.2 <| hc.1.trans hc.2.le) hc.2,
     h.antitoneOn (left_mem_Icc.2 <| hc.1.trans hc.2.le) (Ico_subset_Icc_self hc) hc.1⟩
 
@@ -1071,7 +1071,7 @@ lemma StrictAntiOn.mapsTo_Ioc
 
 中文:
 引理 StrictAntiOn.mapsTo_Ioc
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: fun _c hc => ⟨h.antitoneOn (Ioc_subset_Icc_self hc) (right_mem_Icc.2 <| hc.1.le.trans hc.2) hc.2,
     h (left_mem_Icc.2 <| hc.1.le.trans hc.2) (Ioc_subset_Icc_self hc) hc.1⟩
 
@@ -1092,9 +1092,9 @@ lemma StrictMono.mapsTo_Ico
   proof: (h.strictMonoOn _).mapsTo_Ico
 
 中文:
-引理 StrictMono.mapsTo_Ico
-  条件: (h : StrictMono f)
-  结论: MapsTo f (Ico a b) (Ico (f a) (f b))
+引理 严格递增.mapsTo_Ico
+  条件: (h : 严格递增 f)
+  结论: 映射到 f (左闭右开区间 a b) (左闭右开区间 (f a) (f b))
   证明: (h.strictMonoOn _).mapsTo_Ico
 
 Depends on / 依赖: h.strictMonoOn, mapsTo_Ico, strictMonoOn
@@ -1112,9 +1112,9 @@ lemma StrictMono.mapsTo_Ioc
   proof: (h.strictMonoOn _).mapsTo_Ioc
 
 中文:
-引理 StrictMono.mapsTo_Ioc
-  条件: (h : StrictMono f)
-  结论: MapsTo f (Ioc a b) (Ioc (f a) (f b))
+引理 严格递增.mapsTo_Ioc
+  条件: (h : 严格递增 f)
+  结论: 映射到 f (左开右闭区间 a b) (左开右闭区间 (f a) (f b))
   证明: (h.strictMonoOn _).mapsTo_Ioc
 
 Depends on / 依赖: h.strictMonoOn, mapsTo_Ioc, strictMonoOn
@@ -1132,9 +1132,9 @@ lemma StrictAnti.mapsTo_Ico
   proof: (h.strictAntiOn _).mapsTo_Ico
 
 中文:
-引理 StrictAnti.mapsTo_Ico
-  条件: (h : StrictAnti f)
-  结论: MapsTo f (Ico a b) (Ioc (f b) (f a))
+引理 严格递减.mapsTo_Ico
+  条件: (h : 严格递减 f)
+  结论: 映射到 f (左闭右开区间 a b) (左开右闭区间 (f b) (f a))
   证明: (h.strictAntiOn _).mapsTo_Ico
 
 Depends on / 依赖: h.strictAntiOn, mapsTo_Ico, strictAntiOn
@@ -1152,9 +1152,9 @@ lemma StrictAnti.mapsTo_Ioc
   proof: (h.strictAntiOn _).mapsTo_Ioc
 
 中文:
-引理 StrictAnti.mapsTo_Ioc
-  条件: (h : StrictAnti f)
-  结论: MapsTo f (Ioc a b) (Ico (f b) (f a))
+引理 严格递减.mapsTo_Ioc
+  条件: (h : 严格递减 f)
+  结论: 映射到 f (左开右闭区间 a b) (左闭右开区间 (f b) (f a))
   证明: (h.strictAntiOn _).mapsTo_Ioc
 
 Depends on / 依赖: h.strictAntiOn, mapsTo_Ioc, strictAntiOn
@@ -1172,7 +1172,7 @@ lemma StrictMonoOn.image_Ico_subset
 
 中文:
 引理 StrictMonoOn.image_Ico_subset
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: h.mapsTo_Ico.image_subset
 
 Depends on / 依赖: h.mapsTo_Ico.image_subset, image_subset, mapsTo_Ico
@@ -1190,7 +1190,7 @@ lemma StrictMonoOn.image_Ioc_subset
 
 中文:
 引理 StrictMonoOn.image_Ioc_subset
-  条件: (h : StrictMonoOn f (Icc a b))
+  条件: (h : StrictMonoOn f (闭区间 a b))
   证明: h.mapsTo_Ioc.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioc.image_subset, image_subset, mapsTo_Ioc
@@ -1209,7 +1209,7 @@ lemma StrictAntiOn.image_Ico_subset
 
 中文:
 引理 StrictAntiOn.image_Ico_subset
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: h.mapsTo_Ico.image_subset
 
 Depends on / 依赖: h.mapsTo_Ico.image_subset, image_subset, mapsTo_Ico
@@ -1227,7 +1227,7 @@ lemma StrictAntiOn.image_Ioc_subset
 
 中文:
 引理 StrictAntiOn.image_Ioc_subset
-  条件: (h : StrictAntiOn f (Icc a b))
+  条件: (h : StrictAntiOn f (闭区间 a b))
   证明: h.mapsTo_Ioc.image_subset
 
 Depends on / 依赖: h.mapsTo_Ioc.image_subset, image_subset, mapsTo_Ioc
@@ -1245,9 +1245,9 @@ lemma StrictMono.image_Ico_subset
   proof: (h.strictMonoOn _).image_Ico_subset
 
 中文:
-引理 StrictMono.image_Ico_subset
-  条件: (h : StrictMono f)
-  结论: f '' Ico a b subseteq Ico (f a) (f b)
+引理 严格递增.image_Ico_subset
+  条件: (h : 严格递增 f)
+  结论: f '' 左闭右开区间 a b subseteq 左闭右开区间 (f a) (f b)
   证明: (h.strictMonoOn _).image_Ico_subset
 
 Depends on / 依赖: h.strictMonoOn, image_Ico_subset, strictMonoOn
@@ -1265,9 +1265,9 @@ lemma StrictMono.image_Ioc_subset
   proof: (h.strictMonoOn _).image_Ioc_subset
 
 中文:
-引理 StrictMono.image_Ioc_subset
-  条件: (h : StrictMono f)
-  结论: f '' Ioc a b subseteq Ioc (f a) (f b)
+引理 严格递增.image_Ioc_subset
+  条件: (h : 严格递增 f)
+  结论: f '' 左开右闭区间 a b subseteq 左开右闭区间 (f a) (f b)
   证明: (h.strictMonoOn _).image_Ioc_subset
 
 Depends on / 依赖: h.strictMonoOn, image_Ioc_subset, strictMonoOn
@@ -1285,9 +1285,9 @@ lemma StrictAnti.image_Ico_subset
   proof: (h.strictAntiOn _).image_Ico_subset
 
 中文:
-引理 StrictAnti.image_Ico_subset
-  条件: (h : StrictAnti f)
-  结论: f '' Ico a b subseteq Ioc (f b) (f a)
+引理 严格递减.image_Ico_subset
+  条件: (h : 严格递减 f)
+  结论: f '' 左闭右开区间 a b subseteq 左开右闭区间 (f b) (f a)
   证明: (h.strictAntiOn _).image_Ico_subset
 
 Depends on / 依赖: h.strictAntiOn, image_Ico_subset, strictAntiOn
@@ -1305,9 +1305,9 @@ lemma StrictAnti.image_Ioc_subset
   proof: (h.strictAntiOn _).image_Ioc_subset
 
 中文:
-引理 StrictAnti.image_Ioc_subset
-  条件: (h : StrictAnti f)
-  结论: f '' Ioc a b subseteq Ico (f b) (f a)
+引理 严格递减.image_Ioc_subset
+  条件: (h : 严格递减 f)
+  结论: f '' 左开右闭区间 a b subseteq 左闭右开区间 (f b) (f a)
   证明: (h.strictAntiOn _).image_Ioc_subset
 
 Depends on / 依赖: h.strictAntiOn, image_Ioc_subset, strictAntiOn
@@ -1375,7 +1375,7 @@ lemma preimage_subtype_val_Ici
 中文:
 引理 preimage_subtype_val_Ici
   条件: (a : {x // p x})
-  结论: (↑) ⁻¹' (Ici a.1) = Ici a
+  结论: (↑) ⁻¹' (左闭右无界区间 a.1) = 左闭右无界区间 a
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Ici (a : {x // p x}) : (↑) ⁻¹' (Ici a.1) = Ici a := rfl
@@ -1391,7 +1391,7 @@ lemma preimage_subtype_val_Iic
 中文:
 引理 preimage_subtype_val_Iic
   条件: (a : {x // p x})
-  结论: (↑) ⁻¹' (Iic a.1) = Iic a
+  结论: (↑) ⁻¹' (左无界右闭区间 a.1) = 左无界右闭区间 a
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Iic (a : {x // p x}) : (↑) ⁻¹' (Iic a.1) = Iic a := rfl
@@ -1407,7 +1407,7 @@ lemma preimage_subtype_val_Ioi
 中文:
 引理 preimage_subtype_val_Ioi
   条件: (a : {x // p x})
-  结论: (↑) ⁻¹' (Ioi a.1) = Ioi a
+  结论: (↑) ⁻¹' (左开右无界区间 a.1) = 左开右无界区间 a
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Ioi (a : {x // p x}) : (↑) ⁻¹' (Ioi a.1) = Ioi a := rfl
@@ -1423,7 +1423,7 @@ lemma preimage_subtype_val_Iio
 中文:
 引理 preimage_subtype_val_Iio
   条件: (a : {x // p x})
-  结论: (↑) ⁻¹' (Iio a.1) = Iio a
+  结论: (↑) ⁻¹' (左无界右开区间 a.1) = 左无界右开区间 a
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Iio (a : {x // p x}) : (↑) ⁻¹' (Iio a.1) = Iio a := rfl
@@ -1439,7 +1439,7 @@ lemma preimage_subtype_val_Icc
 中文:
 引理 preimage_subtype_val_Icc
   条件: (a b : {x // p x})
-  结论: (↑) ⁻¹' (Icc a.1 b) = Icc a b
+  结论: (↑) ⁻¹' (闭区间 a.1 b) = 闭区间 a b
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Icc (a b : {x // p x}) : (↑) ⁻¹' (Icc a.1 b) = Icc a b := rfl
@@ -1455,7 +1455,7 @@ lemma preimage_subtype_val_Ico
 中文:
 引理 preimage_subtype_val_Ico
   条件: (a b : {x // p x})
-  结论: (↑) ⁻¹' (Ico a.1 b) = Ico a b
+  结论: (↑) ⁻¹' (左闭右开区间 a.1 b) = 左闭右开区间 a b
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Ico (a b : {x // p x}) : (↑) ⁻¹' (Ico a.1 b) = Ico a b := rfl
@@ -1471,7 +1471,7 @@ lemma preimage_subtype_val_Ioc
 中文:
 引理 preimage_subtype_val_Ioc
   条件: (a b : {x // p x})
-  结论: (↑) ⁻¹' (Ioc a.1 b) = Ioc a b
+  结论: (↑) ⁻¹' (左开右闭区间 a.1 b) = 左开右闭区间 a b
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Ioc (a b : {x // p x}) : (↑) ⁻¹' (Ioc a.1 b) = Ioc a b := rfl
@@ -1487,7 +1487,7 @@ lemma preimage_subtype_val_Ioo
 中文:
 引理 preimage_subtype_val_Ioo
   条件: (a b : {x // p x})
-  结论: (↑) ⁻¹' (Ioo a.1 b) = Ioo a b
+  结论: (↑) ⁻¹' (开区间 a.1 b) = 开区间 a b
   证明: rfl
 -/
 @[simp] lemma preimage_subtype_val_Ioo (a b : {x // p x}) : (↑) ⁻¹' (Ioo a.1 b) = Ioo a b := rfl
@@ -1662,8 +1662,8 @@ lemma image_subtype_val_Ici_Iic
 
 中文:
 引理 image_subtype_val_Ici_Iic
-  条件: {a : α} (b : Ici a)
-  结论: Subtype.val '' Iic b = Icc a b
+  条件: {a : α} (b : 左闭右无界区间 a)
+  结论: 子类型.val '' 左无界右闭区间 b = 闭区间 a b
   证明: (Subtype.image_preimage_val (Ici a) (Iic b.1)).trans Ici_inter_Iic
 
 @[simp]
@@ -1687,8 +1687,8 @@ lemma image_subtype_val_Ici_Iio
 
 中文:
 引理 image_subtype_val_Ici_Iio
-  条件: {a : α} (b : Ici a)
-  结论: Subtype.val '' Iio b = Ico a b
+  条件: {a : α} (b : 左闭右无界区间 a)
+  结论: 子类型.val '' 左无界右开区间 b = 左闭右开区间 a b
   证明: (Subtype.image_preimage_val (Ici a) (Iio b.1)).trans Ici_inter_Iio
 
 @[simp]
@@ -1712,8 +1712,8 @@ lemma image_subtype_val_Ici_Ici
 
 中文:
 引理 image_subtype_val_Ici_Ici
-  条件: {a : α} (b : Ici a)
-  结论: Subtype.val '' Ici b = Ici b.1
+  条件: {a : α} (b : 左闭右无界区间 a)
+  结论: 子类型.val '' 左闭右无界区间 b = 左闭右无界区间 b.1
   证明: (Subtype.image_preimage_val (Ici a) (Ici b.1)).trans inter_eq_right.2 Ici_subset_Ici.2 b.2
 
 @[simp]
@@ -1737,8 +1737,8 @@ lemma image_subtype_val_Ici_Ioi
 
 中文:
 引理 image_subtype_val_Ici_Ioi
-  条件: {a : α} (b : Ici a)
-  结论: Subtype.val '' Ioi b = Ioi b.1
+  条件: {a : α} (b : 左闭右无界区间 a)
+  结论: 子类型.val '' 左开右无界区间 b = 左开右无界区间 b.1
   证明: (Subtype.image_preimage_val (Ici a) (Ioi b.1)).trans inter_eq_right.2 Ioi_subset_Ici b.2
 
 @[simp]
@@ -1762,8 +1762,8 @@ lemma image_subtype_val_Iic_Ici
 
 中文:
 引理 image_subtype_val_Iic_Ici
-  条件: {a : α} (b : Iic a)
-  结论: Subtype.val '' Ici b = Icc b.1 a
+  条件: {a : α} (b : 左无界右闭区间 a)
+  结论: 子类型.val '' 左闭右无界区间 b = 闭区间 b.1 a
   证明: (Subtype.image_preimage_val (Iic a) (Ici b)).trans inter_comm _ _
 
 @[simp]
@@ -1787,8 +1787,8 @@ lemma image_subtype_val_Iic_Ioi
 
 中文:
 引理 image_subtype_val_Iic_Ioi
-  条件: {a : α} (b : Iic a)
-  结论: Subtype.val '' Ioi b = Ioc b.1 a
+  条件: {a : α} (b : 左无界右闭区间 a)
+  结论: 子类型.val '' 左开右无界区间 b = 左开右闭区间 b.1 a
   证明: (Subtype.image_preimage_val (Iic a) (Ioi b)).trans inter_comm _ _
 
 @[simp]
@@ -1812,8 +1812,8 @@ lemma image_subtype_val_Iic_Iic
 
 中文:
 引理 image_subtype_val_Iic_Iic
-  条件: {a : α} (b : Iic a)
-  结论: Subtype.val '' Iic b = Iic b.1
+  条件: {a : α} (b : 左无界右闭区间 a)
+  结论: 子类型.val '' 左无界右闭区间 b = 左无界右闭区间 b.1
   证明: image_subtype_val_Ici_Ici (α := αᵒᵈ) _
 
 @[simp]
@@ -1837,8 +1837,8 @@ lemma image_subtype_val_Iic_Iio
 
 中文:
 引理 image_subtype_val_Iic_Iio
-  条件: {a : α} (b : Iic a)
-  结论: Subtype.val '' Iio b = Iio b.1
+  条件: {a : α} (b : 左无界右闭区间 a)
+  结论: 子类型.val '' 左无界右开区间 b = 左无界右开区间 b.1
   证明: image_subtype_val_Ici_Ioi (α := αᵒᵈ) _
 
 @[simp]
@@ -1862,8 +1862,8 @@ lemma image_subtype_val_Ioi_Ici
 
 中文:
 引理 image_subtype_val_Ioi_Ici
-  条件: {a : α} (b : Ioi a)
-  结论: Subtype.val '' Ici b = Ici b.1
+  条件: {a : α} (b : 左开右无界区间 a)
+  结论: 子类型.val '' 左闭右无界区间 b = 左闭右无界区间 b.1
   证明: (Subtype.image_preimage_val (Ioi a) (Ici b.1)).trans inter_eq_right.2 Ici_subset_Ioi.2 b.2
 
 @[simp]
@@ -1887,8 +1887,8 @@ lemma image_subtype_val_Ioi_Iic
 
 中文:
 引理 image_subtype_val_Ioi_Iic
-  条件: {a : α} (b : Ioi a)
-  结论: Subtype.val '' Iic b = Ioc a b
+  条件: {a : α} (b : 左开右无界区间 a)
+  结论: 子类型.val '' 左无界右闭区间 b = 左开右闭区间 a b
   证明: (Subtype.image_preimage_val (Ioi a) (Iic b.1)).trans Ioi_inter_Iic
 
 @[simp]
@@ -1912,8 +1912,8 @@ lemma image_subtype_val_Ioi_Ioi
 
 中文:
 引理 image_subtype_val_Ioi_Ioi
-  条件: {a : α} (b : Ioi a)
-  结论: Subtype.val '' Ioi b = Ioi b.1
+  条件: {a : α} (b : 左开右无界区间 a)
+  结论: 子类型.val '' 左开右无界区间 b = 左开右无界区间 b.1
   证明: (Subtype.image_preimage_val (Ioi a) (Ioi b.1)).trans inter_eq_right.2 Ioi_subset_Ioi b.2.le
 
 @[simp]
@@ -1937,8 +1937,8 @@ lemma image_subtype_val_Ioi_Iio
 
 中文:
 引理 image_subtype_val_Ioi_Iio
-  条件: {a : α} (b : Ioi a)
-  结论: Subtype.val '' Iio b = Ioo a b
+  条件: {a : α} (b : 左开右无界区间 a)
+  结论: 子类型.val '' 左无界右开区间 b = 开区间 a b
   证明: (Subtype.image_preimage_val (Ioi a) (Iio b.1)).trans Ioi_inter_Iio
 
 @[simp]
@@ -1962,8 +1962,8 @@ lemma image_subtype_val_Iio_Ici
 
 中文:
 引理 image_subtype_val_Iio_Ici
-  条件: {a : α} (b : Iio a)
-  结论: Subtype.val '' Ici b = Ico b.1 a
+  条件: {a : α} (b : 左无界右开区间 a)
+  结论: 子类型.val '' 左闭右无界区间 b = 左闭右开区间 b.1 a
   证明: (Subtype.image_preimage_val (Iio a) (Ici b)).trans inter_comm _ _
 
 @[simp]
@@ -1987,8 +1987,8 @@ lemma image_subtype_val_Iio_Iic
 
 中文:
 引理 image_subtype_val_Iio_Iic
-  条件: {a : α} (b : Iio a)
-  结论: Subtype.val '' Iic b = Iic b.1
+  条件: {a : α} (b : 左无界右开区间 a)
+  结论: 子类型.val '' 左无界右闭区间 b = 左无界右闭区间 b.1
   证明: image_subtype_val_Ioi_Ici (α := αᵒᵈ) _
 
 @[simp]
@@ -2012,8 +2012,8 @@ lemma image_subtype_val_Iio_Ioi
 
 中文:
 引理 image_subtype_val_Iio_Ioi
-  条件: {a : α} (b : Iio a)
-  结论: Subtype.val '' Ioi b = Ioo b.1 a
+  条件: {a : α} (b : 左无界右开区间 a)
+  结论: 子类型.val '' 左开右无界区间 b = 开区间 b.1 a
   证明: (Subtype.image_preimage_val (Iio a) (Ioi b)).trans inter_comm _ _
 
 @[simp]
@@ -2037,8 +2037,8 @@ lemma image_subtype_val_Iio_Iio
 
 中文:
 引理 image_subtype_val_Iio_Iio
-  条件: {a : α} (b : Iio a)
-  结论: Subtype.val '' Iio b = Iio b.1
+  条件: {a : α} (b : 左无界右开区间 a)
+  结论: 子类型.val '' 左无界右开区间 b = 左无界右开区间 b.1
   证明: image_subtype_val_Ioi_Ioi (α := αᵒᵈ) _
 
 @[simp]
@@ -2062,8 +2062,8 @@ lemma image_subtype_val_Icc_Ici
 
 中文:
 引理 image_subtype_val_Icc_Ici
-  条件: {a b : α} (c : Icc a b)
-  结论: Subtype.val '' Ici c = Icc c.1 b
+  条件: {a b : α} (c : 闭区间 a b)
+  结论: 子类型.val '' 左闭右无界区间 c = 闭区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans
 
 @[simp]
@@ -2087,8 +2087,8 @@ lemma image_subtype_val_Icc_Iic
 
 中文:
 引理 image_subtype_val_Icc_Iic
-  条件: {a b : α} (c : Icc a b)
-  结论: Subtype.val '' Iic c = Icc a c
+  条件: {a b : α} (c : 闭区间 a b)
+  结论: 子类型.val '' 左无界右闭区间 c = 闭区间 a c
   证明: image_subtype_val_Ixx_Iix c (le_trans · c.2.2)
 
 @[simp]
@@ -2112,8 +2112,8 @@ lemma image_subtype_val_Icc_Ioi
 
 中文:
 引理 image_subtype_val_Icc_Ioi
-  条件: {a b : α} (c : Icc a b)
-  结论: Subtype.val '' Ioi c = Ioc c.1 b
+  条件: {a b : α} (c : 闭区间 a b)
+  结论: 子类型.val '' 左开右无界区间 c = 左开右闭区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c (c.2.1.trans <| le_of_lt ·)
 
 @[simp]
@@ -2137,8 +2137,8 @@ lemma image_subtype_val_Icc_Iio
 
 中文:
 引理 image_subtype_val_Icc_Iio
-  条件: {a b : α} (c : Icc a b)
-  结论: Subtype.val '' Iio c = Ico a c
+  条件: {a b : α} (c : 闭区间 a b)
+  结论: 子类型.val '' 左无界右开区间 c = 左闭右开区间 a c
   证明: image_subtype_val_Ixx_Iix c fun h => (le_of_lt h).trans c.2.2
 
 @[simp]
@@ -2162,8 +2162,8 @@ lemma image_subtype_val_Ico_Ici
 
 中文:
 引理 image_subtype_val_Ico_Ici
-  条件: {a b : α} (c : Ico a b)
-  结论: Subtype.val '' Ici c = Ico c.1 b
+  条件: {a b : α} (c : 左闭右开区间 a b)
+  结论: 子类型.val '' 左闭右无界区间 c = 左闭右开区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans
 
 @[simp]
@@ -2187,8 +2187,8 @@ lemma image_subtype_val_Ico_Iic
 
 中文:
 引理 image_subtype_val_Ico_Iic
-  条件: {a b : α} (c : Ico a b)
-  结论: Subtype.val '' Iic c = Icc a c
+  条件: {a b : α} (c : 左闭右开区间 a b)
+  结论: 子类型.val '' 左无界右闭区间 c = 闭区间 a c
   证明: image_subtype_val_Ixx_Iix c (lt_of_le_of_lt · c.2.2)
 
 @[simp]
@@ -2212,8 +2212,8 @@ lemma image_subtype_val_Ico_Ioi
 
 中文:
 引理 image_subtype_val_Ico_Ioi
-  条件: {a b : α} (c : Ico a b)
-  结论: Subtype.val '' Ioi c = Ioo c.1 b
+  条件: {a b : α} (c : 左闭右开区间 a b)
+  结论: 子类型.val '' 左开右无界区间 c = 开区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c (c.2.1.trans <| le_of_lt ·)
 
 @[simp]
@@ -2237,8 +2237,8 @@ lemma image_subtype_val_Ico_Iio
 
 中文:
 引理 image_subtype_val_Ico_Iio
-  条件: {a b : α} (c : Ico a b)
-  结论: Subtype.val '' Iio c = Ico a c
+  条件: {a b : α} (c : 左闭右开区间 a b)
+  结论: 子类型.val '' 左无界右开区间 c = 左闭右开区间 a c
   证明: image_subtype_val_Ixx_Iix c (lt_trans · c.2.2)
 
 @[simp]
@@ -2262,8 +2262,8 @@ lemma image_subtype_val_Ioc_Ici
 
 中文:
 引理 image_subtype_val_Ioc_Ici
-  条件: {a b : α} (c : Ioc a b)
-  结论: Subtype.val '' Ici c = Icc c.1 b
+  条件: {a b : α} (c : 左开右闭区间 a b)
+  结论: 子类型.val '' 左闭右无界区间 c = 闭区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans_le
 
 @[simp]
@@ -2287,8 +2287,8 @@ lemma image_subtype_val_Ioc_Iic
 
 中文:
 引理 image_subtype_val_Ioc_Iic
-  条件: {a b : α} (c : Ioc a b)
-  结论: Subtype.val '' Iic c = Ioc a c
+  条件: {a b : α} (c : 左开右闭区间 a b)
+  结论: 子类型.val '' 左无界右闭区间 c = 左开右闭区间 a c
   证明: image_subtype_val_Ixx_Iix c (le_trans · c.2.2)
 
 @[simp]
@@ -2312,8 +2312,8 @@ lemma image_subtype_val_Ioc_Ioi
 
 中文:
 引理 image_subtype_val_Ioc_Ioi
-  条件: {a b : α} (c : Ioc a b)
-  结论: Subtype.val '' Ioi c = Ioc c.1 b
+  条件: {a b : α} (c : 左开右闭区间 a b)
+  结论: 子类型.val '' 左开右无界区间 c = 左开右闭区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans
 
 @[simp]
@@ -2337,8 +2337,8 @@ lemma image_subtype_val_Ioc_Iio
 
 中文:
 引理 image_subtype_val_Ioc_Iio
-  条件: {a b : α} (c : Ioc a b)
-  结论: Subtype.val '' Iio c = Ioo a c
+  条件: {a b : α} (c : 左开右闭区间 a b)
+  结论: 子类型.val '' 左无界右开区间 c = 开区间 a c
   证明: image_subtype_val_Ixx_Iix c fun h => (le_of_lt h).trans c.2.2
 
 @[simp]
@@ -2362,8 +2362,8 @@ lemma image_subtype_val_Ioo_Ici
 
 中文:
 引理 image_subtype_val_Ioo_Ici
-  条件: {a b : α} (c : Ioo a b)
-  结论: Subtype.val '' Ici c = Ico c.1 b
+  条件: {a b : α} (c : 开区间 a b)
+  结论: 子类型.val '' 左闭右无界区间 c = 左闭右开区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans_le
 
 @[simp]
@@ -2387,8 +2387,8 @@ lemma image_subtype_val_Ioo_Iic
 
 中文:
 引理 image_subtype_val_Ioo_Iic
-  条件: {a b : α} (c : Ioo a b)
-  结论: Subtype.val '' Iic c = Ioc a c
+  条件: {a b : α} (c : 开区间 a b)
+  结论: 子类型.val '' 左无界右闭区间 c = 左开右闭区间 a c
   证明: image_subtype_val_Ixx_Iix c (lt_of_le_of_lt · c.2.2)
 
 @[simp]
@@ -2412,8 +2412,8 @@ lemma image_subtype_val_Ioo_Ioi
 
 中文:
 引理 image_subtype_val_Ioo_Ioi
-  条件: {a b : α} (c : Ioo a b)
-  结论: Subtype.val '' Ioi c = Ioo c.1 b
+  条件: {a b : α} (c : 开区间 a b)
+  结论: 子类型.val '' 左开右无界区间 c = 开区间 c.1 b
   证明: image_subtype_val_Ixx_Ixi c c.2.1.trans
 
 @[simp]
@@ -2435,8 +2435,8 @@ lemma image_subtype_val_Ioo_Iio
 
 中文:
 引理 image_subtype_val_Ioo_Iio
-  条件: {a b : α} (c : Ioo a b)
-  结论: Subtype.val '' Iio c = Ioo a c
+  条件: {a b : α} (c : 开区间 a b)
+  结论: 子类型.val '' 左无界右开区间 c = 开区间 a c
   证明: image_subtype_val_Ixx_Iix c (lt_trans · c.2.2)
 
 Depends on / 依赖: image_subtype_val_Ixx_Iix, lt_trans
@@ -2461,7 +2461,7 @@ lemma directedOn_le_Iic
 中文:
 引理 directedOn_le_Iic
   条件: (b : α)
-  结论: DirectedOn (· <= ·) (Iic b)
+  结论: DirectedOn (· <= ·) (左无界右闭区间 b)
   证明: fun _x hx _y hy => ⟨b, le_rfl, hx, hy⟩
 
 Depends on / 依赖: le_rfl
@@ -2481,7 +2481,7 @@ lemma directedOn_le_Icc
 中文:
 引理 directedOn_le_Icc
   条件: (a b : α)
-  结论: DirectedOn (· <= ·) (Icc a b)
+  结论: DirectedOn (· <= ·) (闭区间 a b)
   证明: fun _x hx _y hy => ⟨b, right_mem_Icc.2 hx.1.trans hx.2, hx.2, hy.2⟩
 
 Depends on / 依赖: right_mem_Icc
@@ -2501,7 +2501,7 @@ lemma directedOn_le_Ioc
 中文:
 引理 directedOn_le_Ioc
   条件: (a b : α)
-  结论: DirectedOn (· <= ·) (Ioc a b)
+  结论: DirectedOn (· <= ·) (左开右闭区间 a b)
   证明: fun _x hx _y hy => ⟨b, right_mem_Ioc.2 hx.1.trans_le hx.2, hx.2, hy.2⟩
 
 Depends on / 依赖: right_mem_Ioc, trans_le
@@ -2521,7 +2521,7 @@ lemma directedOn_ge_Ici
 中文:
 引理 directedOn_ge_Ici
   条件: (a : α)
-  结论: DirectedOn (· >= ·) (Ici a)
+  结论: DirectedOn (· >= ·) (左闭右无界区间 a)
   证明: fun _x hx _y hy => ⟨a, le_rfl, hx, hy⟩
 
 Depends on / 依赖: le_rfl
@@ -2541,7 +2541,7 @@ lemma directedOn_ge_Icc
 中文:
 引理 directedOn_ge_Icc
   条件: (a b : α)
-  结论: DirectedOn (· >= ·) (Icc a b)
+  结论: DirectedOn (· >= ·) (闭区间 a b)
   证明: fun _x hx _y hy => ⟨a, left_mem_Icc.2 hx.1.trans hx.2, hx.1, hy.1⟩
 
 Depends on / 依赖: left_mem_Icc
@@ -2561,7 +2561,7 @@ lemma directedOn_ge_Ico
 中文:
 引理 directedOn_ge_Ico
   条件: (a b : α)
-  结论: DirectedOn (· >= ·) (Ico a b)
+  结论: DirectedOn (· >= ·) (左闭右开区间 a b)
   证明: fun _x hx _y hy => ⟨a, left_mem_Ico.2 hx.1.trans_lt hx.2, hx.1, hy.1⟩
 
 Depends on / 依赖: left_mem_Ico, trans_lt

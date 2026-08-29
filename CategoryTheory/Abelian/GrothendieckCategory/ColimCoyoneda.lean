@@ -83,7 +83,7 @@ definition g
 
 中文:
 定义 g
-  签名: : (Functor.const _).obj X ⟶ Under.forget j₀ ⋙ Y where
+  签名: : (函子.const _).obj X ⟶ Under.forget j₀ ⋙ Y where
   定义体: y ≫ Y.map t.hom
   naturality t₁ t₂ f := by
     dsimp
@@ -156,8 +156,8 @@ lemma epi_f
 
 中文:
 引理 epi_f
-  条件: [IsFiltered J]
-  结论: Epi (f y)
+  条件: [是Filtered J]
+  结论: 满态射 (f y)
   证明: by
   exact (colim.exact_mapShortComplex
     ((ShortComplex.mk _ _ (kernel.condition (g y))).exact_of_f_is_kernel
@@ -322,7 +322,7 @@ definition F
 
 中文:
 定义 F
-  签名: [Mono c.ι]
+  签名: [单态射 c.ι]
   定义体: MonoOver.mk ((pullback.snd c.ι ((Functor.const _).map z)).app j)
   map {j j'} f := MonoOver.homMk ((pullback c.ι ((Functor.const _).map z)).map f)
 
@@ -343,7 +343,7 @@ definition f
 
 中文:
 定义 f
-  签名: : colimit (pullback c.ι ((Functor.const J).map z)) ⟶ X
+  签名: : colimit (pullback c.ι ((函子.const J).map z)) ⟶ X
   定义体: colimit.desc _ (Cocone.mk X
     { app j := (pullback.snd c.ι ((Functor.const _).map z)).app j })
 
@@ -397,8 +397,8 @@ lemma isIso_f
 
 中文:
 引理 isIso_f
-  条件: [IsFiltered J]
-  结论: IsIso (f z)
+  条件: [是Filtered J]
+  结论: 是同构 (f z)
   证明: by
   refine ((MorphismProperty.isomorphisms C).arrow_mk_iso_iff ?_).1
     (MorphismProperty.of_isPullback
@@ -437,8 +437,8 @@ lemma epi_f
 
 中文:
 引理 epi_f
-  条件: [IsFiltered J]
-  结论: Epi (f z)
+  条件: [是Filtered J]
+  结论: 满态射 (f z)
   证明: by
   have := isIso_f hc z
   infer_instance
@@ -471,7 +471,7 @@ lemma surjectivity
 
 中文:
 引理 surjectivity
-  结论: [对任意 (j j' : J) (φ : j ⟶ j'), Mono (Y.map φ)]
+  结论: [对任意 (j j' : J) (φ : j ⟶ j'), 单态射 (Y.map φ)]
   证明: by
   have := isFiltered_of_isCardinalFiltered J κ
   have := hc.mono_ι_app_of_isFiltered

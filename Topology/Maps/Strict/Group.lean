@@ -112,7 +112,7 @@ definition _root_.ContinuousMulEquiv.quotientKerEquivRange
   __ := (f.isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp hf).homeomorph
 
 中文:
-定义 _root_.ContinuousMulEquiv.quotientKerEquivRange
+定义 _root_.连续乘法等价.quotientKerEquivRange
   定义体: QuotientGroup.quotientKerEquivRange f
   __ := (f.isStrictMap_iff_isHomeomorph_quotientKerEquivRange.mp hf).homeomorph
 

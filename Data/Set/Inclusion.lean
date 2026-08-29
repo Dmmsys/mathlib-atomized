@@ -46,7 +46,7 @@ theorem inclusion_self
 中文:
 定理 inclusion_self
   条件: (x : s)
-  结论: inclusion Subset.rfl x = x
+  结论: inclusion 子集.rfl x = x
   证明: rfl
 -/
 theorem inclusion_self (x : s) : inclusion Subset.rfl x = x :=
@@ -84,7 +84,7 @@ theorem inclusion_eq_subtype_map
 中文:
 定理 inclusion_eq_subtype_map
   条件: (h : s subseteq t)
-  结论: inclusion h = Subtype.map id h
+  结论: inclusion h = 子类型.map id h
   证明: rfl
 
 @[simp]
@@ -168,7 +168,7 @@ theorem inclusion_comp_inclusion
 
 中文:
 定理 inclusion_comp_inclusion
-  条件: {α} {s t u : Set α} (hst : s subseteq t) (htu : t subseteq u)
+  条件: {α} {s t u : 集合 α} (hst : s subseteq t) (htu : t subseteq u)
   证明: funext (inclusion_inclusion hst htu)
 
 @[simp]
@@ -210,7 +210,7 @@ theorem val_comp_inclusion
 中文:
 定理 val_comp_inclusion
   条件: (h : s subseteq t)
-  结论: Subtype.val ∘ inclusion h = Subtype.val
+  结论: 子类型.val ∘ inclusion h = 子类型.val
   证明: rfl
 -/
 theorem val_comp_inclusion (h : s subseteq t) : Subtype.val ∘ inclusion h = Subtype.val :=
@@ -228,7 +228,7 @@ theorem inclusion_injective
 中文:
 定理 inclusion_injective
   条件: (h : s subseteq t)
-  结论: (inclusion h).Injective
+  结论: (inclusion h).单射
   证明: Subtype.map_injective h injective_id
 
 Depends on / 依赖: Subtype, Subtype.map_injective, injective_id, map_injective
@@ -266,7 +266,7 @@ theorem eq_of_inclusion_surjective
 
 中文:
 定理 eq_of_inclusion_surjective
-  结论: {s t : Set α} {h : s subseteq t}
+  结论: {s t : 集合 α} {h : s subseteq t}
   证明: h.antisymm fun x hx => by grind [h_surj ⟨x, hx⟩]
 
 Depends on / 依赖: antisymm, h.antisymm, h_surj
@@ -285,7 +285,7 @@ theorem inclusion_le_inclusion
 
 中文:
 定理 inclusion_le_inclusion
-  条件: [LE α] {s t : Set α} (h : s subseteq t) {x y : s}
+  条件: [LE α] {s t : 集合 α} (h : s subseteq t) {x y : s}
   证明: .rfl
 -/
 theorem inclusion_le_inclusion [LE α] {s t : Set α} (h : s subseteq t) {x y : s} :
@@ -301,7 +301,7 @@ theorem inclusion_lt_inclusion
 
 中文:
 定理 inclusion_lt_inclusion
-  条件: [LT α] {s t : Set α} (h : s subseteq t) {x y : s}
+  条件: [LT α] {s t : 集合 α} (h : s subseteq t) {x y : s}
   证明: .rfl
 -/
 theorem inclusion_lt_inclusion [LT α] {s t : Set α} (h : s subseteq t) {x y : s} :

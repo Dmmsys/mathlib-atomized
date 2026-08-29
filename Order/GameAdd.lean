@@ -168,7 +168,7 @@ theorem gameAdd_le_lex
 
 中文:
 定理 gameAdd_le_lex
-  结论: GameAdd rα rβ <= Prod.Lex rα rβ
+  结论: GameAdd rα rβ <= 积类型.Lex rα rβ
   证明: fun _ _ h =>
   h.rec (Prod.Lex.left _ _) (Prod.Lex.right _)
 -/
@@ -184,7 +184,7 @@ theorem rprod_le_transGen_gameAdd
 
 中文:
 定理 rprod_le_transGen_gameAdd
-  结论: RProd rα rβ <= Relation.TransGen (GameAdd rα rβ)
+  结论: RProd rα rβ <= 关系.TransGen (GameAdd rα rβ)
 -/
 theorem rprod_le_transGen_gameAdd : RProd rα rβ <= Relation.TransGen (GameAdd rα rβ)
   | _, _, h => h.rec (by
@@ -235,8 +235,8 @@ theorem WellFounded.prod_gameAdd
   proof: ⟨fun ⟨a, b⟩ => (hα.apply a).prod_gameAdd (hβ.apply b)⟩
 
 中文:
-定理 WellFounded.prod_gameAdd
-  条件: (hα : WellFounded rα) (hβ : WellFounded rβ)
+定理 良基.prod_gameAdd
+  条件: (hα : 良基 rα) (hβ : 良基 rβ)
   证明: ⟨fun ⟨a, b⟩ => (hα.apply a).prod_gameAdd (hβ.apply b)⟩
 
 Depends on / 依赖: prod_gameAdd
@@ -263,7 +263,7 @@ definition GameAdd.recursion
 
 中文:
 定义 GameAdd.recursion
-  签名: {C : α -> β -> Sort*} (hα : WellFounded rα) (hβ : WellFounded rβ)
+  签名: {C : α -> β -> 类型层*} (hα : 良基 rα) (hβ : 良基 rβ)
   定义体: @WellFounded.fix (α × β) (fun x => C x.1 x.2) _ (hα.prod_gameAdd hβ)
     (fun ⟨x₁, x₂⟩ IH' => IH x₁ x₂ fun a' b' => IH' ⟨a', b'⟩) ⟨a, b⟩
 
@@ -291,7 +291,7 @@ theorem GameAdd.recursion_eq
 
 中文:
 定理 GameAdd.recursion_eq
-  结论: {C : α -> β -> Sort*} (hα : WellFounded rα) (hβ : WellFounded rβ)
+  结论: {C : α -> β -> 类型层*} (hα : 良基 rα) (hβ : 良基 rβ)
   证明: WellFounded.fix_eq _ _ _
 
 @[deprecated (since := "2026-03-13")] alias GameAdd.fix_eq := GameAdd.recursion_eq
@@ -419,8 +419,8 @@ theorem _root_.Prod.GameAdd.to_sym2
   proof: gameAdd_iff.2 Or.inl h
 
 中文:
-定理 _root_.Prod.GameAdd.to_sym2
-  条件: {a₁ a₂ b₁ b₂ : α} (h : Prod.GameAdd rα rα (a₁, b₁) (a₂, b₂))
+定理 _root_.积类型.GameAdd.to_sym2
+  条件: {a₁ a₂ b₁ b₂ : α} (h : 积类型.GameAdd rα rα (a₁, b₁) (a₂, b₂))
   证明: gameAdd_iff.2 Or.inl h
 
 Depends on / 依赖: Or.inl, gameAdd_iff
@@ -586,9 +586,9 @@ theorem WellFounded.sym2_gameAdd
   proof: ⟨fun i => Sym2.inductionOn i fun x y => (h.apply x).sym2_gameAdd (h.apply y)⟩
 
 中文:
-定理 WellFounded.sym2_gameAdd
-  条件: (h : WellFounded rα)
-  结论: WellFounded (Sym2.GameAdd rα)
+定理 良基.sym2_gameAdd
+  条件: (h : 良基 rα)
+  结论: 良基 (Sym2.GameAdd rα)
   证明: ⟨fun i => Sym2.inductionOn i fun x y => (h.apply x).sym2_gameAdd (h.apply y)⟩
 
 Depends on / 依赖: Sym2.inductionOn, h.apply, inductionOn, sym2_gameAdd
@@ -617,7 +617,7 @@ definition GameAdd.recursion
 
 中文:
 定义 GameAdd.recursion
-  签名: {C : α -> α -> Sort*} (hr : WellFounded rα)
+  签名: {C : α -> α -> 类型层*} (hr : 良基 rα)
   定义体: @WellFounded.fix (α × α) (fun x => C x.1 x.2)
     (fun x y => Prod.GameAdd rα rα x y ∨ Prod.GameAdd rα rα x.swap y)
     (by simpa [← Sym2.gameAdd_iff] using hr.sym2_gameAdd.onFun)
@@ -647,7 +647,7 @@ theorem GameAdd.recursion_eq
 
 中文:
 定理 GameAdd.recursion_eq
-  结论: {C : α -> α -> Sort*} (hr : WellFounded rα)
+  结论: {C : α -> α -> 类型层*} (hr : 良基 rα)
   证明: WellFounded.fix_eq ..
 
 @[deprecated (since := "2026-03-13")] alias GameAdd.fix_eq := GameAdd.recursion_eq

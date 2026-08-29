@@ -218,7 +218,7 @@ definition revInductionOn
 
 中文:
 定义 revInductionOn
-  签名: {C : 对任意 {n : 自然数}, Vector α n -> Sort*} {n : 自然数} (v : Vector α n)
+  签名: {C : 对任意 {n : 自然数}, Vector α n -> 类型层*} {n : 自然数} (v : Vector α n)
   定义体: cast (by simp) inductionOn
     (C := fun v => C v.reverse)
     v.reverse
@@ -256,7 +256,7 @@ cast (by simp) snoc xs.reverse ys.reverse x y r)
 
 中文:
 定义 revInductionOn₂
-  签名: {C : 对任意 {n : 自然数}, Vector α n -> Vector β n -> Sort*} {n : 自然数}
+  签名: {C : 对任意 {n : 自然数}, Vector α n -> Vector β n -> 类型层*} {n : 自然数}
   定义体: cast (by simp) inductionOn₂
     (C := fun v w => C v.reverse w.reverse)
     v.reverse
@@ -294,7 +294,7 @@ definition revCasesOn
 
 中文:
 定义 revCasesOn
-  签名: {C : 对任意 {n : 自然数}, Vector α n -> Sort*} {n : 自然数} (v : Vector α n)
+  签名: {C : 对任意 {n : 自然数}, Vector α n -> 类型层*} {n : 自然数} (v : Vector α n)
   定义体: revInductionOn v nil fun xs x _ => snoc xs x
 
 Depends on / 依赖: revInductionOn

@@ -50,7 +50,7 @@ abbreviation GeneralLinearGroup
 
 中文:
 缩写 GeneralLinearGroup
-  签名: (n : 类型u) (R : 类型v) [DecidableEq n] [Fintype n] [Semiring R]
+  签名: (n : 类型u) (R : 类型v) [DecidableEq n] [有限类型 n] [半环 R]
   定义体: (Matrix n n R)ˣ
 
 @[inherit_doc] notation "GL" => GeneralLinearGroup
@@ -78,7 +78,7 @@ definition scalar
 
 中文:
 定义 scalar
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: Units.map (Matrix.scalar n).toMonoidHom
 
 Depends on / 依赖: Matrix, Matrix.scalar, Units.map, scalar, toMonoidHom
@@ -100,7 +100,7 @@ instance instCoeFun
 
 中文:
 实例 instCoeFun
-  签名: [Semiring R]
+  签名: [半环 R]
   定义体: (A : Matrix n n R)
 
 @[simp]
@@ -122,8 +122,8 @@ lemma coe_scalar
 
 中文:
 引理 coe_scalar
-  条件: [Semiring R] (u : Rˣ)
-  结论: ↑(scalar n u) = Matrix.scalar n u.1
+  条件: [半环 R] (u : Rˣ)
+  结论: ↑(scalar n u) = 矩阵.scalar n u.1
   证明: rfl
 -/
 lemma coe_scalar [Semiring R] (u : Rˣ) : ↑(scalar n u) = Matrix.scalar n u.1 := rfl
@@ -206,7 +206,7 @@ lemma det_ne_zero
 
 中文:
 引理 det_ne_zero
-  条件: [Nontrivial R] (g : GL n R)
+  条件: [非平凡 R] (g : GL n R)
   结论: g.val.det != 0
   证明: g.det.ne_zero
 
@@ -232,7 +232,7 @@ theorem det_scalar
 中文:
 定理 det_scalar
   条件: (u : Rˣ)
-  结论: det (scalar n u) = u ^ Fintype.card n
+  结论: det (scalar n u) = u ^ 有限类型.card n
   证明: by
   ext
   simp
@@ -258,8 +258,8 @@ lemma det_surjective
 
 中文:
 引理 det_surjective
-  条件: [Nonempty n]
-  结论: Function.Surjective (det : GL n R -> Rˣ)
+  条件: [非空 n]
+  结论: 函数.满射 (det : GL n R -> Rˣ)
   证明: fun r => by
   obtain ⟨i⟩ := ‹Nonempty n›
   refine ⟨⟨diagonal fun j => if j = i then r else 1, diagonal fun j => if j = i then r⁻¹.1 else 1,
@@ -288,7 +288,7 @@ definition toLin
 
 中文:
 定义 toLin
-  签名: : GL n R ≃* LinearMap.GeneralLinearGroup R (n -> R)
+  签名: : GL n R ≃* 线性映射.GeneralLinearGroup R (n -> R)
   定义体: Units.mapEquiv toLinAlgEquiv'.toMulEquiv
 
 Depends on / 依赖: Units.mapEquiv, mapEquiv, toLinAlgEquiv, toMulEquiv
@@ -325,7 +325,7 @@ lemma toLin'_apply
 
 中文:
 引理 toLin'_apply
-  结论: {V : 类型} [AddCommGroup V] [Module R V]
+  结论: {V : 类型} [加法交换群 V] [模 R V]
   证明: by
   simp [toLin', toLin, Fintype.linearCombination_apply, MulEquiv.trans_apply]
 -/
@@ -346,7 +346,7 @@ definition mk'
 
 中文:
 定义 mk'
-  签名: (A : Matrix n n R) (_ : Invertible (Matrix.det A))
+  签名: (A : 矩阵 n n R) (_ : 可逆 (矩阵.det A))
   定义体: unitOfDetInvertible A
 
 Depends on / 依赖: unitOfDetInvertible
@@ -366,7 +366,7 @@ definition mk''
 
 中文:
 定义 mk''
-  签名: (A : Matrix n n R) (h : IsUnit (Matrix.det A))
+  签名: (A : 矩阵 n n R) (h : 是单位 (矩阵.det A))
   定义体: nonsingInvUnit A h
 
 Depends on / 依赖: nonsingInvUnit
@@ -386,7 +386,7 @@ definition mkOfDetNeZero
 
 中文:
 定义 mkOfDetNeZero
-  签名: {K : 类型} [Field K] (A : Matrix n n K) (h : Matrix.det A != 0)
+  签名: {K : 类型} [域 K] (A : 矩阵 n n K) (h : 矩阵.det A != 0)
   定义体: mk' A (invertibleOfNonzero h)
 
 Depends on / 依赖: invertibleOfNonzero
@@ -406,7 +406,7 @@ theorem ext_iff
 中文:
 定理 ext_iff
   条件: (A B : GL n R)
-  结论: A = B ↔ 对任意 i j, (A : Matrix n n R) i j = (B : Matrix n n R) i j
+  结论: A = B ↔ 对任意 i j, (A : 矩阵 n n R) i j = (B : 矩阵 n n R) i j
   证明: Units.ext_iff.trans Matrix.ext_iff.symm
 
 Depends on / 依赖: Matrix, Matrix.ext_iff.symm, Units.ext_iff.trans, ext_iff
@@ -426,7 +426,7 @@ theorem ext
 中文:
 定理 ext
   条件: ⦃A B
-  结论: GL n R⦄ (h : 对任意 i j, (A : Matrix n n R) i j = (B : Matrix n n R) i j) : A = B
+  结论: GL n R⦄ (h : 对任意 i j, (A : 矩阵 n n R) i j = (B : 矩阵 n n R) i j) : A = B
   证明: Units.ext Matrix.ext h
 
 Depends on / 依赖: Matrix, Matrix.ext, Units.ext
@@ -451,7 +451,7 @@ theorem coe_mul
 
 中文:
 定理 coe_mul
-  结论: ↑(A * B) = (↑A : Matrix n n R) * (↑B : Matrix n n R)
+  结论: ↑(A * B) = (↑A : 矩阵 n n R) * (↑B : 矩阵 n n R)
   证明: rfl
 
 @[simp]
@@ -470,7 +470,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ↑(1 : GL n R) = (1 : Matrix n n R)
+  结论: ↑(1 : GL n R) = (1 : 矩阵 n n R)
   证明: rfl
 -/
 theorem coe_one : ↑(1 : GL n R) = (1 : Matrix n n R) :=
@@ -489,7 +489,7 @@ theorem coe_inv
 
 中文:
 定理 coe_inv
-  结论: ↑A⁻¹ = (↑A : Matrix n n R)⁻¹
+  结论: ↑A⁻¹ = (↑A : 矩阵 n n R)⁻¹
   证明: letI := A.invertible
   invOf_eq_nonsing_inv (↑A : Matrix n n R)
 
@@ -514,7 +514,7 @@ theorem coe_toLin
 
 中文:
 定理 coe_toLin
-  结论: (toLin A : (n -> R) ->ₗ[R] n -> R) = Matrix.mulVecLin A
+  结论: (toLin A : (n -> R) ->ₗ[R] n -> R) = 矩阵.mulVecLin A
   证明: rfl
 
 @[simp]
@@ -535,7 +535,7 @@ theorem toLin_apply
 中文:
 定理 toLin_apply
   条件: (v : n -> R)
-  结论: (toLin A : _ -> n -> R) v = Matrix.mulVecLin A v
+  结论: (toLin A : _ -> n -> R) v = 矩阵.mulVecLin A v
   证明: rfl
 -/
 theorem toLin_apply (v : n -> R) : (toLin A : _ -> n -> R) v = Matrix.mulVecLin A v :=
@@ -581,7 +581,7 @@ theorem map_id
 
 中文:
 定理 map_id
-  结论: map (RingHom.id R) = MonoidHom.id (GL n R)
+  结论: map (环态射.id R) = 幺半群态射.id (GL n R)
   证明: rfl
 
 @[simp]
@@ -731,7 +731,7 @@ lemma map_det
 中文:
 引理 map_det
   条件: (g : GL n R)
-  结论: Matrix.GeneralLinearGroup.det (map f g) =
+  结论: 矩阵.GeneralLinearGroup.det (map f g) =
   证明: by
   ext
   simp only [map,
@@ -864,7 +864,7 @@ lemma map_scalar
 中文:
 引理 map_scalar
   条件: (u : Rˣ)
-  结论: map f (scalar n u) = scalar n (Units.map f u)
+  结论: map f (scalar n u) = scalar n (单位群.map f u)
   证明: by
   ext
   simp [Matrix.diagonal_apply]
@@ -916,8 +916,8 @@ theorem _root_.Matrix.IsUnit.kronecker
   proof: .isUnit GeneralLinearGroup.kronecker hx.unit hy.unit
 
 中文:
-定理 _root_.Matrix.IsUnit.kronecker
-  结论: {x : Matrix n n R} {y : Matrix m m R}
+定理 _root_.矩阵.是单位.kronecker
+  结论: {x : 矩阵 n n R} {y : 矩阵 m m R}
   证明: .isUnit GeneralLinearGroup.kronecker hx.unit hy.unit
 
 Depends on / 依赖: GeneralLinearGroup, GeneralLinearGroup.kronecker, hx.unit, hy.unit, isUnit, kronecker
@@ -947,7 +947,7 @@ definition toGL
 
 中文:
 定义 toGL
-  签名: : Matrix.SpecialLinearGroup n R ->* Matrix.GeneralLinearGroup n R where
+  签名: : 矩阵.SpecialLinearGroup n R ->* 矩阵.GeneralLinearGroup n R where
   定义体: ⟨↑A, ↑A⁻¹, congr_arg (·.1) (mul_inv_cancel A), congr_arg (·.1) (inv_mul_cancel A)⟩
   map_one' := Units.ext rfl
   map_mul' _ _ := Units.ext rfl
@@ -1059,7 +1059,7 @@ lemma coe_GL_coe_matrix
 中文:
 引理 coe_GL_coe_matrix
   条件: (g : SpecialLinearGroup n R)
-  结论: ((toGL g) : Matrix n n R) = g
+  结论: ((toGL g) : 矩阵 n n R) = g
   证明: rfl
 -/
 lemma coe_GL_coe_matrix (g : SpecialLinearGroup n R) : ((toGL g) : Matrix n n R) = g := rfl
@@ -1077,7 +1077,7 @@ definition mapGL
 
 中文:
 定义 mapGL
-  签名: : Matrix.SpecialLinearGroup n R ->* Matrix.GeneralLinearGroup n S
+  签名: : 矩阵.SpecialLinearGroup n R ->* 矩阵.GeneralLinearGroup n S
   定义体: toGL.comp (map (algebraMap R S))
 
 @[simp]
@@ -1099,7 +1099,7 @@ lemma mapGL_inj
 
 中文:
 引理 mapGL_inj
-  条件: [FaithfulSMul R S] (g g' : SpecialLinearGroup n R)
+  条件: [忠实标量乘法 R S] (g g' : SpecialLinearGroup n R)
   证明: by
   simp [mapGL, ext_iff]
 
@@ -1121,7 +1121,7 @@ lemma mapGL_injective
 
 中文:
 引理 mapGL_injective
-  条件: [FaithfulSMul R S]
+  条件: [忠实标量乘法 R S]
   证明: fun a b => by simp
 
 @[simp]
@@ -1167,7 +1167,7 @@ lemma map_mapGL
 
 中文:
 引理 map_mapGL
-  结论: {T : 类型} [CommRing T] [Algebra R T] [Algebra S T] [IsScalarTower R S T]
+  结论: {T : 类型} [交换环 T] [代数 R T] [代数 S T] [标量塔 R S T]
   证明: by
   ext
   simp [IsScalarTower.algebraMap_apply R S T]
@@ -1226,7 +1226,7 @@ definition GLPos
 
 中文:
 定义 GLPos
-  签名: : Subgroup (GL n R)
+  签名: : 子群 (GL n R)
   定义体: (Units.posSubgroup R).comap GeneralLinearGroup.det
 
 @[inherit_doc] scoped[MatrixGroups] notation "GL(" n ", " R ")" "⁺" => GLPos (Fin n) R
@@ -1253,7 +1253,7 @@ theorem mem_glpos
 中文:
 定理 mem_glpos
   条件: (A : GL n R)
-  结论: A in GLPos n R ↔ 0 < (Matrix.GeneralLinearGroup.det A : R)
+  结论: A in GLPos n R ↔ 0 < (矩阵.GeneralLinearGroup.det A : R)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1273,7 +1273,7 @@ theorem GLPos.det_ne_zero
 中文:
 定理 GLPos.det_ne_zero
   条件: (A : GLPos n R)
-  结论: ((A : GL n R) : Matrix n n R).det != 0
+  结论: ((A : GL n R) : 矩阵 n n R).det != 0
   证明: ne_of_gt A.prop
 
 Depends on / 依赖: A.prop, ne_of_gt
@@ -1304,7 +1304,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (GLPos n R)
+  签名: 取负 (GLPos n R)
   定义体: ⟨fun g =>
     ⟨-g, by
       rw [mem_glpos]; rw [GeneralLinearGroup.val_det_apply]; rw [Units.val_neg]; rw [det_neg]; rw [(Fact.out (p := Even <| Fintype.card n)).neg_one_pow]; rw [one_mul]
@@ -1358,7 +1358,7 @@ theorem GLPos.coe_neg
 中文:
 定理 GLPos.coe_neg
   条件: (g : GLPos n R)
-  结论: (↑(-g) : GL n R) = -((g : GL n R) : Matrix n n R)
+  结论: (↑(-g) : GL n R) = -((g : GL n R) : 矩阵 n n R)
   证明: rfl
 
 @[simp]
@@ -1394,7 +1394,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg (GLPos n R)
+  签名: 有DistribNeg (GLPos n R)
   定义体: Subtype.coe_injective.hasDistribNeg _ GLPos.coe_neg_GL (GLPos n R).coe_mul
 
 Depends on / 依赖: GLPos.coe_neg_GL, Subtype, Subtype.coe_injective.hasDistribNeg, coe_injective, coe_mul, coe_neg_GL, hasDistribNeg
@@ -1465,7 +1465,7 @@ theorem toGLPos_injective
 
 中文:
 定理 toGLPos_injective
-  结论: Function.Injective (toGLPos : SpecialLinearGroup n R -> GLPos n R)
+  结论: 函数.单射 (toGLPos : SpecialLinearGroup n R -> GLPos n R)
   证明: -- Porting note: had to rewrite this to hint the correct types to Lean
   -- (It can't find the coercion GLPos n R → Matrix n n R)
   Function.Injective.of_comp

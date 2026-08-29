@@ -39,7 +39,7 @@ instance CategoryTheory.Bundled.structure
   body: M.str
 
 中文:
-实例 CategoryTheory.Bundled.structure
+实例 范畴论.打包.structure
   签名: {L : FirstOrder.Language.{u, v}}
   定义体: M.str
 -/
@@ -66,7 +66,7 @@ definition bundledInduced
 
 中文:
 定义 bundledInduced
-  签名: : CategoryTheory.Bundled.{w'} L.Structure
+  签名: : 范畴论.打包.{w'} L.结构
   定义体: ⟨N, g.inducedStructure⟩
 
 Depends on / 依赖: g.inducedStructure, inducedStructure
@@ -114,7 +114,7 @@ instance equivSetoid
 
 中文:
 实例 equivSetoid
-  签名: : Setoid (CategoryTheory.Bundled L.Structure) where
+  签名: : 集合等价关系 (范畴论.打包 L.结构) where
   定义体: Nonempty (M ≃[L] N)
   iseqv :=
     ⟨fun M => ⟨Equiv.refl L M⟩, fun {_ _} => Nonempty.map Equiv.symm, fun {_ _} _ =>
@@ -148,10 +148,10 @@ structure ModelType
 结构 ModelType
   参数: where
   公理与运算 (4 个):
-    - Carrier : Type w
-    - [struc : L.Structure Carrier]
+    - Carrier : 类型 w
+    - [struc : L.结构 Carrier]
     - [is_model : T.Model Carrier]
-    - [nonempty' : Nonempty Carrier]
+    - [nonempty' : 非空 Carrier]
 
 Depends on / 依赖: _assoc, lift_lift, monotone_principal, monotone_principal.comp
 -/
@@ -180,7 +180,7 @@ instance instCoeSort
 
 中文:
 实例 instCoeSort
-  签名: : CoeSort T.ModelType (Type w)
+  签名: : CoeSort T.ModelType (类型 w)
   定义体: ⟨ModelType.Carrier⟩
 
 Depends on / 依赖: Carrier, ModelType, ModelType.Carrier, lift_assoc
@@ -200,7 +200,7 @@ definition of
 
 中文:
 定义 of
-  签名: (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M]
+  签名: (M : 类型 w) [L.结构 M] [M ⊨ T] [非空 M]
   定义体: ⟨M⟩
 
 @[simp]
@@ -222,8 +222,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: (M : Type w) [L.Structure M] [M ⊨ T] [Nonempty M]
-  结论: (of T M : Type w) = M
+  条件: (M : 类型 w) [L.结构 M] [M ⊨ T] [非空 M]
+  结论: (of T M : 类型 w) = M
   证明: rfl
 
 Depends on / 依赖: lift_lift_same_eq_lift, monotone_principal, monotone_principal.comp
@@ -263,7 +263,7 @@ instance instInhabited
 
 中文:
 实例 instInhabited
-  签名: : Inhabited (ModelType.{u, v, w} (∅ : L.Theory))
+  签名: : 可居 (ModelType.{u, v, w} (∅ : L.Theory))
   定义体: ⟨ModelType.of _ PUnit⟩
 
 Depends on / 依赖: ModelType, ModelType.of, Nonempty, f.lift, lift_neBot_iff, monotone_principal, monotone_principal.comp, principal_neBot_iff
@@ -289,7 +289,7 @@ definition equivInduced
 
 中文:
 定义 equivInduced
-  签名: {M : ModelType.{u, v, w} T} {N : Type w'} (e : M ≃ N)
+  签名: {M : ModelType.{u, v, w} T} {N : 类型 w'} (e : M ≃ N)
   定义体: N
   struc := e.inducedStructure
   is_model := @StrongHomClass.theory_model L M N _ e.inducedStructure T
@@ -316,7 +316,7 @@ instance of_small
 
 中文:
 实例 of_small
-  签名: (M : Type w) [Nonempty M] [L.Structure M] [M ⊨ T] [h : Small.{w'} M]
+  签名: (M : 类型 w) [非空 M] [L.结构 M] [M ⊨ T] [h : Small.{w'} M]
   定义体: h
 
 Depends on / 依赖: inf_principal, lift_iInf
@@ -408,7 +408,7 @@ definition defaultExpansion
 
 中文:
 定义 defaultExpansion
-  签名: {L' : Language} {φ : L ->ᴸ L'} (h : φ.Injective)
+  签名: {L' : Language} {φ : L ->ᴸ L'} (h : φ.单射)
   定义体: M
   struc := φ.defaultExpansion M
   nonempty' := M.nonempty'
@@ -437,7 +437,7 @@ instance leftStructure
 
 中文:
 实例 leftStructure
-  签名: {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType)
+  签名: {L' : Language} {T : (L.求和 L').Theory} (M : T.ModelType)
   定义体: (LHom.sumInl : L ->ᴸ L.sum L').reduct M
 
 Depends on / 依赖: L.sum, LHom.sumInl, reduct, sumInl
@@ -455,7 +455,7 @@ instance rightStructure
 
 中文:
 实例 rightStructure
-  签名: {L' : Language} {T : (L.sum L').Theory} (M : T.ModelType)
+  签名: {L' : Language} {T : (L.求和 L').Theory} (M : T.ModelType)
   定义体: (LHom.sumInr : L' ->ᴸ L.sum L').reduct M
 
 Depends on / 依赖: L.sum, LHom.sumInr, reduct, sumInr
@@ -520,7 +520,7 @@ definition Model.bundled
 
 中文:
 定义 Model.bundled
-  签名: {M : Type w} [LM : L.Structure M] [ne : Nonempty M] (h : M ⊨ T)
+  签名: {M : 类型 w} [LM : L.结构 M] [ne : 非空 M] (h : M ⊨ T)
   定义体: @ModelType.of L T M LM h ne
 
 @[simp]
@@ -542,8 +542,8 @@ theorem coe_of
 
 中文:
 定理 coe_of
-  条件: {M : Type w} [L.Structure M] [Nonempty M] (h : M ⊨ T)
-  结论: (h.bundled : Type w) = M
+  条件: {M : 类型 w} [L.结构 M] [非空 M] (h : M ⊨ T)
+  结论: (h.bundled : 类型 w) = M
   证明: rfl
 -/
 theorem coe_of {M : Type w} [L.Structure M] [Nonempty M] (h : M ⊨ T) : (h.bundled : Type w) = M :=
@@ -564,7 +564,7 @@ definition ElementarilyEquivalent.toModel
 
 中文:
 定义 ElementarilyEquivalent.toModel
-  签名: {M : T.ModelType} {N : 类型} [LN : L.Structure N]
+  签名: {M : T.ModelType} {N : 类型} [LN : L.结构 N]
   定义体: N
   struc := LN
   nonempty' := h.nonempty

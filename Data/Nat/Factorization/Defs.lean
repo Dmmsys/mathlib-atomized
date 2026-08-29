@@ -98,7 +98,7 @@ theorem factorization_def
 
 中文:
 定理 factorization_def
-  条件: (n : 自然数) {p : 自然数} (pp : p.Prime)
+  条件: (n : 自然数) {p : 自然数} (pp : p.素)
   结论: n.factorization p = padicVal自然数 p n
   证明: by
   simpa [factorization] using absurd pp
@@ -192,8 +192,8 @@ theorem Prime.factorization_pos_of_dvd
   rwa [← primeFactorsList_count_eq, count_pos_iff, mem_primeFactorsList_iff_dvd hn hp]
 
 中文:
-定理 Prime.factorization_pos_of_dvd
-  条件: {n p : 自然数} (hp : p.Prime) (hn : n != 0) (h : p ∣ n)
+定理 素.factorization_pos_of_dvd
+  条件: {n p : 自然数} (hp : p.素) (hn : n != 0) (h : p ∣ n)
   证明: by
   rwa [← primeFactorsList_count_eq, count_pos_iff, mem_primeFactorsList_iff_dvd hn hp]
 
@@ -214,7 +214,7 @@ theorem multiplicity_eq_factorization
 
 中文:
 定理 multiplicity_eq_factorization
-  条件: {n p : 自然数} (pp : p.Prime) (hn : n != 0)
+  条件: {n p : 自然数} (pp : p.素) (hn : n != 0)
   证明: by
   simp [factorization, pp, padicValNat_def' pp.ne_one hn]
 
@@ -246,7 +246,7 @@ alias factorization_prod_pow_eq_self := prod_factorization_pow_eq_self
 中文:
 定理 prod_factorization_pow_eq_self
   条件: {n : 自然数} (hn : n != 0)
-  结论: n.factorization.prod (· ^ ·) = n
+  结论: n.factorization.乘积 (· ^ ·) = n
   证明: by
   rw [factorization_eq_primeFactorsList_multiset n]
   simp only [← prod_toMultiset, Multiset.prod_coe, Multiset.toFinsupp_toMultiset]
@@ -320,7 +320,7 @@ theorem factorization_inj
 
 中文:
 定理 factorization_inj
-  结论: Set.InjOn factorization { x : 自然数 | x != 0 }
+  结论: 集合.单射限制 factorization { x : 自然数 | x != 0 }
   证明: fun a ha b hb h =>
   eq_of_factorization_eq ha hb fun p => by simp [h]
 
@@ -408,7 +408,7 @@ theorem factorization_eq_zero_of_not_prime
 
 中文:
 定理 factorization_eq_zero_of_not_prime
-  条件: (n : 自然数) {p : 自然数} (hp : ¬p.Prime)
+  条件: (n : 自然数) {p : 自然数} (hp : ¬p.素)
   证明: by simp [factorization_eq_zero_iff, hp]
 
 @[simp]
@@ -593,7 +593,7 @@ theorem factorization_prod
 
 中文:
 定理 factorization_prod
-  条件: {α : 类型} {S : Finset α} {g : α -> 自然数} (hS : 对任意 x in S, g x != 0)
+  条件: {α : 类型} {S : 有限集 α} {g : α -> 自然数} (hS : 对任意 x in S, g x != 0)
   证明: by
   classical
     refine Finset.induction_on' S ?_ ?_
@@ -669,8 +669,8 @@ theorem Prime.factorization
   rw [← primeFactorsList_count_eq]; rw [primeFactorsList_prime hp]; rw [single_apply]; rw [count_singleton']; rw [if_congr eq_comm] <;> rfl
 
 中文:
-定理 Prime.factorization
-  条件: {p : 自然数} (hp : Prime p)
+定理 素.factorization
+  条件: {p : 自然数} (hp : 素 p)
   结论: p.factorization = single p 1
   证明: by
   ext q
@@ -691,8 +691,8 @@ theorem Prime.factorization_pow
   simp [hp]
 
 中文:
-定理 Prime.factorization_pow
-  条件: {p k : 自然数} (hp : Prime p)
+定理 素.factorization_pow
+  条件: {p k : 自然数} (hp : 素 p)
   结论: (p ^ k).factorization = single p k
   证明: by
   simp [hp]
@@ -713,7 +713,7 @@ theorem pow_succ_factorization_not_dvd
 
 中文:
 定理 pow_succ_factorization_not_dvd
-  条件: {n p : 自然数} (hn : n != 0) (hp : p.Prime)
+  条件: {n p : 自然数} (hn : n != 0) (hp : p.素)
   证明: by
   intro h
   rw [← factorization_le_iff_dvd (pow_ne_zero _ hp.ne_zero) hn] at h
@@ -771,7 +771,7 @@ theorem prod_pow_factorization_eq_self
 
 中文:
 定理 prod_pow_factorization_eq_self
-  条件: (hf : 对任意 p in f.support, Prime p)
+  条件: (hf : 对任意 p in f.support, 素 p)
   证明: by
   rw [Finsupp.prod]; rw [factorization_prod (pow_ne_zero _ <| hf · · |>.ne_zero)]; rw [sum_congr rfl (hf · · |>.factorization_pow)]
   exact sum_single f
@@ -795,7 +795,7 @@ theorem eq_factorization_iff
 
 中文:
 定理 eq_factorization_iff
-  条件: (hn : n != 0) (hf : 对任意 p in f.support, Prime p)
+  条件: (hn : n != 0) (hf : 对任意 p in f.support, 素 p)
   证明: by
   constructor <;> rintro rfl
   exacts [prod_factorization_pow_eq_self hn, prod_pow_factorization_eq_self hf |>.symm]
@@ -843,7 +843,7 @@ theorem prod_pow_dvd_of_le_factorization
 中文:
 定理 prod_pow_dvd_of_le_factorization
   条件: (hf : f <= n.factorization)
-  结论: f.prod (· ^ ·) ∣ n
+  结论: f.乘积 (· ^ ·) ∣ n
   证明: by
   rcases eq_or_ne n 0 with (rfl | hn)
   · simp
@@ -896,7 +896,7 @@ theorem dvd_iff_exists_le_factorization
   rwa [hprod, factorization_prod_pow_eq_self_of_le_factorization hle]
 
 中文:
-定理 dvd_iff_exists_le_factorization
+定理 dvd_iff_存在_le_factorization
   条件: {d : 自然数} (hd : d != 0) (hn : n != 0)
   证明: by
   rw [← factorization_le_iff_dvd hd hn]
@@ -927,7 +927,7 @@ right_inv := fun ⟨_, hf⟩ => Subtype.ext
 
 中文:
 定义 factorizationEquiv
-  签名: : 自然数+ ≃ { f : 自然数 ->₀ 自然数 // 对任意 p in f.support, Prime p } where
+  签名: : 自然数+ ≃ { f : 自然数 ->₀ 自然数 // 对任意 p in f.support, 素 p } where
   定义体: fun ⟨n, _⟩ => ⟨n.factorization, fun _ => prime_of_mem_primeFactors⟩
   invFun := fun ⟨f, hf⟩ =>
     ⟨f.prod _, prod_pow_pos_of_zero_notMem_support fun H => not_prime_zero (hf 0 H)⟩

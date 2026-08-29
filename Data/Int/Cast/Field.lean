@@ -46,7 +46,7 @@ theorem cast_neg_natCast
 
 中文:
 定理 cast_neg_natCast
-  条件: {R} [DivisionRing R] (n : 自然数)
+  条件: {R} [除环 R] (n : 自然数)
   结论: ((-n : 整数) : R) = -n
   证明: by simp
 
@@ -68,7 +68,7 @@ theorem cast_div
 
 中文:
 定理 cast_div
-  条件: [DivisionRing α] {m n : 整数} (n_dvd : n ∣ m) (hn : (n : α) != 0)
+  条件: [除环 α] {m n : 整数} (n_dvd : n ∣ m) (hn : (n : α) != 0)
   证明: by
   rcases n_dvd with ⟨k, rfl⟩
   have : n != 0 := by rintro rfl; simp at hn

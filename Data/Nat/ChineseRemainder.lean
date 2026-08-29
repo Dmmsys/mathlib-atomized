@@ -49,7 +49,7 @@ lemma modEq_list_prod_iff
 
 中文:
 引理 modEq_list_prod_iff
-  条件: {a b} {l : List 自然数} (co : l.Pairwise Coprime)
+  条件: {a b} {l : 列表 自然数} (co : l.两两 Coprime)
   证明: by
   induction l with
   | nil => simp [modEq_one]
@@ -92,7 +92,7 @@ lemma modEq_list_map_prod_iff
 
 中文:
 引理 modEq_list_map_prod_iff
-  条件: {a b} {s : ι -> 自然数} {l : List ι} (co : l.Pairwise (Coprime on s))
+  条件: {a b} {s : ι -> 自然数} {l : 列表 ι} (co : l.两两 (Coprime on s))
   证明: by
   induction l with
   | nil => simp [modEq_one]
@@ -138,7 +138,7 @@ definition chineseRemainderOfList
 
 中文:
 定义 chineseRemainderOfList
-  签名: : (l : List ι) -> l.Pairwise (Coprime on s) ->
+  签名: : (l : 列表 ι) -> l.两两 (Coprime on s) ->
   定义体: by
       simp only [coprime_list_prod_right_iff, List.mem_map, forall_exists_index, and_imp,
         forall_apply_eq_imp_iff₂]
@@ -199,7 +199,7 @@ theorem chineseRemainderOfList_lt_prod
 
 中文:
 定理 chineseRemainderOfList_lt_prod
-  结论: (l : List ι)
+  结论: (l : 列表 ι)
   证明: by
   cases l with
   | nil => simp
@@ -247,7 +247,7 @@ theorem chineseRemainderOfList_modEq_unique
 
 中文:
 定理 chineseRemainderOfList_modEq_unique
-  结论: (l : List ι)
+  结论: (l : 列表 ι)
   证明: by
   induction l with
   | nil => simp [modEq_one]
@@ -289,7 +289,7 @@ theorem chineseRemainderOfList_perm
 
 中文:
 定理 chineseRemainderOfList_perm
-  结论: {l l' : List ι} (hl : l.Perm l')
+  结论: {l l' : 列表 ι} (hl : l.置换 l')
   证明: by
   let z := chineseRemainderOfList a s l' (co.perm hl coprime_comm.mpr)
   have hlp : (l.map s).prod = (l'.map s).prod := List.Perm.prod_eq (List.Perm.map s hl)
@@ -406,7 +406,7 @@ definition chineseRemainderOfFinset
 
 中文:
 定义 chineseRemainderOfFinset
-  签名: (t : Finset ι)
+  签名: (t : 有限集 ι)
   定义体: by
   simpa using chineseRemainderOfMultiset a s t.nodup (by simpa using hs) (by simpa using pp)
 
@@ -429,7 +429,7 @@ theorem chineseRemainderOfFinset_lt_prod
 
 中文:
 定理 chineseRemainderOfFinset_lt_prod
-  结论: {t : Finset ι}
+  结论: {t : 有限集 ι}
   证明: by
   simpa [chineseRemainderOfFinset] using
     chineseRemainderOfMultiset_lt_prod a s t.nodup (by simpa using hs) (by simpa using pp)

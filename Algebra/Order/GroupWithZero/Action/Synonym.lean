@@ -37,8 +37,8 @@ instance [Zero
   body: inferInstanceAs SMulZeroClass G₀ M₀
 
 中文:
-实例 [Zero
-  签名: M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ᵒᵈ M₀
+实例 [零
+  签名: M₀] [SMulZero类 G₀ M₀] : SMulZero类 G₀ᵒᵈ M₀
   定义体: inferInstanceAs SMulZeroClass G₀ M₀
 
 Depends on / 依赖: SMulZeroClass
@@ -55,8 +55,8 @@ instance [Zero
   body: inferInstanceAs SMulZeroClass G₀ M₀
 
 中文:
-实例 [Zero
-  签名: M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ M₀ᵒᵈ
+实例 [零
+  签名: M₀] [SMulZero类 G₀ M₀] : SMulZero类 G₀ M₀ᵒᵈ
   定义体: inferInstanceAs SMulZeroClass G₀ M₀
 -/
 instance [Zero M₀] [SMulZeroClass G₀ M₀] : SMulZeroClass G₀ M₀ᵒᵈ :=
@@ -71,8 +71,8 @@ instance [Zero
   body: inferInstanceAs SMulWithZero G₀ M₀
 
 中文:
-实例 [Zero
-  签名: G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ᵒᵈ M₀
+实例 [零
+  签名: G₀] [零 M₀] [带零标量乘法 G₀ M₀] : 带零标量乘法 G₀ᵒᵈ M₀
   定义体: inferInstanceAs SMulWithZero G₀ M₀
 -/
 instance [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ᵒᵈ M₀ :=
@@ -87,8 +87,8 @@ instance [Zero
   body: inferInstanceAs SMulWithZero G₀ M₀
 
 中文:
-实例 [Zero
-  签名: G₀] [Zero M₀] [SMulWithZero G₀ M₀] : SMulWithZero G₀ M₀ᵒᵈ
+实例 [零
+  签名: G₀] [零 M₀] [带零标量乘法 G₀ M₀] : 带零标量乘法 G₀ M₀ᵒᵈ
   定义体: inferInstanceAs SMulWithZero G₀ M₀
 
 Depends on / 依赖: SMulWithZero
@@ -105,8 +105,8 @@ instance [AddZeroClass
   body: inferInstanceAs DistribSMul G₀ M₀
 
 中文:
-实例 [AddZeroClass
-  签名: M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ᵒᵈ M₀
+实例 [加法零类
+  签名: M₀] [分配标量乘法 G₀ M₀] : 分配标量乘法 G₀ᵒᵈ M₀
   定义体: inferInstanceAs DistribSMul G₀ M₀
 -/
 instance [AddZeroClass M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ᵒᵈ M₀ :=
@@ -121,8 +121,8 @@ instance [AddZeroClass
   body: inferInstanceAs DistribSMul G₀ M₀
 
 中文:
-实例 [AddZeroClass
-  签名: M₀] [DistribSMul G₀ M₀] : DistribSMul G₀ M₀ᵒᵈ
+实例 [加法零类
+  签名: M₀] [分配标量乘法 G₀ M₀] : 分配标量乘法 G₀ M₀ᵒᵈ
   定义体: inferInstanceAs DistribSMul G₀ M₀
 
 Depends on / 依赖: DistribSMul
@@ -139,8 +139,8 @@ instance [Monoid
   body: inferInstanceAs DistribMulAction G₀ M₀
 
 中文:
-实例 [Monoid
-  签名: G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ᵒᵈ M₀
+实例 [幺半群
+  签名: G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀] : 分配乘法作用 G₀ᵒᵈ M₀
   定义体: inferInstanceAs DistribMulAction G₀ M₀
 -/
 instance [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ᵒᵈ M₀ :=
@@ -155,8 +155,8 @@ instance [Monoid
   body: inferInstanceAs DistribMulAction G₀ M₀
 
 中文:
-实例 [Monoid
-  签名: G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀] : DistribMulAction G₀ M₀ᵒᵈ
+实例 [幺半群
+  签名: G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀] : 分配乘法作用 G₀ M₀ᵒᵈ
   定义体: inferInstanceAs DistribMulAction G₀ M₀
 
 Depends on / 依赖: DistribMulAction
@@ -173,8 +173,8 @@ instance [MonoidWithZero
   body: inferInstanceAs MulActionWithZero G₀ M₀
 
 中文:
-实例 [MonoidWithZero
-  签名: G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
+实例 [带零幺半群
+  签名: G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀] :
   定义体: inferInstanceAs MulActionWithZero G₀ M₀
 -/
 instance [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
@@ -189,8 +189,8 @@ instance [MonoidWithZero
   body: inferInstanceAs MulActionWithZero G₀ M₀
 
 中文:
-实例 [MonoidWithZero
-  签名: G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
+实例 [带零幺半群
+  签名: G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀] :
   定义体: inferInstanceAs MulActionWithZero G₀ M₀
 -/
 instance [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀] :
@@ -210,7 +210,7 @@ instance instSMulWithZero
 
 中文:
 实例 instSMulWithZero
-  签名: [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀]
+  签名: [零 G₀] [零 M₀] [带零标量乘法 G₀ M₀]
   定义体: inferInstanceAs SMulWithZero G₀ M₀
 
 Depends on / 依赖: SMulWithZero
@@ -228,7 +228,7 @@ instance instSMulWithZero'
 
 中文:
 实例 instSMulWithZero'
-  签名: [Zero G₀] [Zero M₀] [SMulWithZero G₀ M₀]
+  签名: [零 G₀] [零 M₀] [带零标量乘法 G₀ M₀]
   定义体: inferInstanceAs SMulWithZero G₀ M₀
 
 Depends on / 依赖: SMulWithZero
@@ -246,7 +246,7 @@ instance instDistribSMul
 
 中文:
 实例 instDistribSMul
-  签名: [AddZeroClass M₀] [DistribSMul G₀ M₀]
+  签名: [加法零类 M₀] [分配标量乘法 G₀ M₀]
   定义体: inferInstanceAs DistribSMul G₀ M₀
 
 Depends on / 依赖: DistribSMul
@@ -264,7 +264,7 @@ instance instDistribSMul'
 
 中文:
 实例 instDistribSMul'
-  签名: [AddZeroClass M₀] [DistribSMul G₀ M₀]
+  签名: [加法零类 M₀] [分配标量乘法 G₀ M₀]
   定义体: inferInstanceAs DistribSMul G₀ M₀
 
 Depends on / 依赖: DistribSMul
@@ -282,7 +282,7 @@ instance instDistribMulAction
 
 中文:
 实例 instDistribMulAction
-  签名: [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀]
+  签名: [幺半群 G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀]
   定义体: inferInstanceAs DistribMulAction G₀ M₀
 
 Depends on / 依赖: DistribMulAction
@@ -300,7 +300,7 @@ instance instDistribMulAction'
 
 中文:
 实例 instDistribMulAction'
-  签名: [Monoid G₀] [AddMonoid M₀] [DistribMulAction G₀ M₀]
+  签名: [幺半群 G₀] [加法幺半群 M₀] [分配乘法作用 G₀ M₀]
   定义体: inferInstanceAs DistribMulAction G₀ M₀
 
 Depends on / 依赖: DistribMulAction
@@ -318,7 +318,7 @@ instance instMulActionWithZero
 
 中文:
 实例 instMulActionWithZero
-  签名: [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀]
+  签名: [带零幺半群 G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀]
   定义体: inferInstanceAs MulActionWithZero G₀ M₀
 
 Depends on / 依赖: CovariantClass, Group.covconv, MulActionWithZero, covconv
@@ -336,7 +336,7 @@ instance instMulActionWithZero'
 
 中文:
 实例 instMulActionWithZero'
-  签名: [MonoidWithZero G₀] [AddMonoid M₀] [MulActionWithZero G₀ M₀]
+  签名: [带零幺半群 G₀] [加法幺半群 M₀] [带零乘法作用 G₀ M₀]
   定义体: inferInstanceAs MulActionWithZero G₀ M₀
 
 Depends on / 依赖: MulActionWithZero

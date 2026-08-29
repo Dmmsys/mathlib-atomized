@@ -50,7 +50,7 @@ class Presieve.regular
 类 Presieve.regular
   参数: {X : C} (R : Presieve X)
   公理与运算 (1 个):
-    - single_epi : 存在 (Y : C) (f : Y ⟶ X), R = Presieve.ofArrows (fun (_ : Unit) => Y) (fun (_ : Unit) => f) ∧ EffectiveEpi f
+    - single_epi : 存在 (Y : C) (f : Y ⟶ X), R = Presieve.ofArrows (fun (_ : 单元) => Y) (fun (_ : 单元) => f) ∧ 有效满态射 f
 -/
 class Presieve.regular {X : C} (R : Presieve X) : Prop where
   /-- `R` consists of a single epimorphism. -/
@@ -700,7 +700,7 @@ refine fun x hx => ⟨F.map (Projective.factorThru (𝟙 _) f).op x (), fun _ =>
 
 中文:
 引理 isSheafFor_regular_of_projective
-  结论: {X : C} (S : Presieve X) [S.regular] [Projective X]
+  结论: {X : C} (S : Presieve X) [S.regular] [投射 X]
   证明: by
   obtain ⟨Y, f, rfl, hf⟩ := Presieve.regular.single_epi (R := S)
   rw [isSheafFor_arrows_iff]
@@ -729,7 +729,7 @@ theorem isSheaf_of_projective
 
 中文:
 定理 isSheaf_of_projective
-  条件: (F : Cᵒᵖ ⥤ D) [Preregular C] [对任意 (X : C), Projective X]
+  条件: (F : Cᵒᵖ ⥤ D) [Preregular C] [对任意 (X : C), 投射 X]
   证明: fun _ => (isSheaf_coverage _ _).mpr fun S ⟨_, h⟩ => have : S.regular := ⟨_, h⟩
     isSheafFor_regular_of_projective _ _
 

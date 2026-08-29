@@ -47,10 +47,10 @@ class GeometricallyConnected
     - geometrically_connectedSpace : geometrically (ConnectedSpace ·) f
 
 中文:
-类 GeometricallyConnected
+类 几何连通
   参数: (f : X ⟶ Y)
   公理与运算 (1 个):
-    - geometrically_connectedSpace : geometrically (ConnectedSpace ·) f
+    - geometrically_connectedSpace : geometrically (连通空间 ·) f
 -/
 class GeometricallyConnected (f : X ⟶ Y) : Prop where
   geometrically_connectedSpace : geometrically (ConnectedSpace ·) f
@@ -64,7 +64,7 @@ lemma GeometricallyConnected.eq_geometrically
   ext; exact geometricallyConnected_iff _
 
 中文:
-引理 GeometricallyConnected.eq_geometrically
+引理 几何连通.eq_geometrically
   证明: by
   ext; exact geometricallyConnected_iff _
 
@@ -84,7 +84,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStableUnderBaseChange @GeometricallyConnected
+  签名: 是StableUnderBaseChange @几何连通
   定义体: GeometricallyConnected.eq_geometrically ▸ inferInstance
 
 Depends on / 依赖: GeometricallyConnected, GeometricallyConnected.eq_geometrically, eq_geometrically
@@ -102,8 +102,8 @@ instance [GeometricallyConnected
   body: MorphismProperty.pullback_fst f g inferInstance
 
 中文:
-实例 [GeometricallyConnected
-  签名: g] : GeometricallyConnected (pullback.fst f g)
+实例 [几何连通
+  签名: g] : 几何连通 (pullback.fst f g)
   定义体: MorphismProperty.pullback_fst f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_fst, pullback_fst
@@ -121,8 +121,8 @@ instance [GeometricallyConnected
   body: MorphismProperty.pullback_snd f g inferInstance
 
 中文:
-实例 [GeometricallyConnected
-  签名: f] : GeometricallyConnected (pullback.snd f g)
+实例 [几何连通
+  签名: f] : 几何连通 (pullback.snd f g)
   定义体: MorphismProperty.pullback_snd f g inferInstance
 
 Depends on / 依赖: MorphismProperty, MorphismProperty.pullback_snd, pullback_snd
@@ -155,8 +155,8 @@ lemma Scheme.Hom.isConnected_preimage_singleton
   exact isConnected_univ.image _ (f.fiberι _).continuous.continuousOn
 
 中文:
-引理 Scheme.Hom.isConnected_preimage_singleton
-  条件: [GeometricallyConnected f] (x : S)
+引理 概形.态射.isConnected_preimage_singleton
+  条件: [几何连通 f] (x : S)
   证明: by
   rw [← f.range_fiberι]; rw [← Set.image_univ]
   exact isConnected_univ.image _ (f.fiberι _).continuous.continuousOn
@@ -180,8 +180,8 @@ lemma Scheme.Hom.isConnected_preimage
   exact (hf.isQuotientMap f.continuous f.surjective).isCoinducing
 
 中文:
-引理 Scheme.Hom.isConnected_preimage
-  结论: [GeometricallyConnected f] (hf : IsOpenMap f)
+引理 概形.态射.isConnected_preimage
+  结论: [几何连通 f] (hf : 是开映射 f)
   证明: by
   refine Topology.IsCoinducing.isConnected_preimage_of_isClosed f.isConnected_preimage_singleton
     ?_ hs' hs
@@ -209,8 +209,8 @@ definition Scheme.Hom.connectedComponentsHomeomorph
     f.isConnected_preimage_singleton
 
 中文:
-定义 Scheme.Hom.connectedComponentsHomeomorph
-  签名: [GeometricallyConnected f] (hf : IsOpenMap f)
+定义 概形.态射.connectedComponentsHomeomorph
+  签名: [几何连通 f] (hf : 是开映射 f)
   定义体: (hf.isQuotientMap f.continuous f.surjective).isCoinducing.connectedComponentsHomeomorph
     f.isConnected_preimage_singleton
 
@@ -231,8 +231,8 @@ lemma GeometricallyConnected.connectedSpace
   simpa [connectedSpace_iff_univ] using f.isConnected_preimage hf isConnected_univ
 
 中文:
-引理 GeometricallyConnected.connectedSpace
-  结论: [GeometricallyConnected f] [ConnectedSpace S]
+引理 几何连通.connectedSpace
+  结论: [几何连通 f] [连通空间 S]
   证明: by
   simpa [connectedSpace_iff_univ] using f.isConnected_preimage hf isConnected_univ
 
@@ -252,7 +252,7 @@ lemma GeometricallyConnected.connectedSpace_of_subsingleton
   GeometricallyConnected.connectedSpace (f := f) fun _ _ => isOpen_discrete _
 
 中文:
-引理 GeometricallyConnected.connectedSpace_of_subsingleton
+引理 几何连通.connectedSpace_of_subsingleton
   证明: have : ConnectedSpace S := ⟨‹_›⟩
   GeometricallyConnected.connectedSpace (f := f) fun _ _ => isOpen_discrete _
 
@@ -272,8 +272,8 @@ instance [GeometricallyConnected
   body: GeometricallyConnected.connectedSpace (pullback.snd _ _) (pullback.snd f g).isOpenMap
 
 中文:
-实例 [GeometricallyConnected
-  签名: f] [UniversallyOpen f] [ConnectedSpace Y] :
+实例 [几何连通
+  签名: f] [普遍开 f] [连通空间 Y] :
   定义体: GeometricallyConnected.connectedSpace (pullback.snd _ _) (pullback.snd f g).isOpenMap
 
 Depends on / 依赖: GeometricallyConnected, GeometricallyConnected.connectedSpace, connectedSpace, isOpenMap, pullback, pullback.snd
@@ -291,8 +291,8 @@ instance [GeometricallyConnected
   body: GeometricallyConnected.connectedSpace (pullback.fst _ _) (pullback.fst f g).isOpenMap
 
 中文:
-实例 [GeometricallyConnected
-  签名: g] [UniversallyOpen g] [ConnectedSpace X] :
+实例 [几何连通
+  签名: g] [普遍开 g] [连通空间 X] :
   定义体: GeometricallyConnected.connectedSpace (pullback.fst _ _) (pullback.fst f g).isOpenMap
 
 Depends on / 依赖: GeometricallyConnected, GeometricallyConnected.connectedSpace, connectedSpace, isOpenMap, pullback, pullback.fst
@@ -310,7 +310,7 @@ lemma GeometricallyConnected.iff_geometricallyConnected_fiber
   simp only [eq_geometrically, ← geometrically_iff_forall_fiberToSpecResidueField]
 
 中文:
-引理 GeometricallyConnected.iff_geometricallyConnected_fiber
+引理 几何连通.iff_geometricallyConnected_fiber
   证明: by
   simp only [eq_geometrically, ← geometrically_iff_forall_fiberToSpecResidueField]
 
@@ -331,7 +331,7 @@ lemma GeometricallyConnected.comp
   infer_instance
 
 中文:
-引理 GeometricallyConnected.comp
+引理 几何连通.comp
   证明: by
   refine ⟨geometrically_iff_of_isClosedUnderIsomorphisms.mpr fun K _ x => ?_⟩
   rw [← (pullbackRightPullbackFstIso g x f).hom.homeomorph.connectedSpace_iff]

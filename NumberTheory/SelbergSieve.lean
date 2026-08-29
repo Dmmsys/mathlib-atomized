@@ -63,16 +63,16 @@ structure BoundingSieve
 结构 BoundingSieve
   参数: where
   公理与运算 (10 个):
-    - support : Finset 自然数
+    - support : 有限集 自然数
     - prodPrimes : 自然数
     - prodPrimes_squarefree : Squarefree prodPrimes
     - weights : 自然数 -> 实数
     - weights_nonneg : 对任意 n : 自然数, 0 <= weights n
     - totalMass : 实数
     - nu : ArithmeticFunction 实数
-    - nu_mult : nu.IsMultiplicative
-    - nu_pos_of_prime : 对任意 p : 自然数, p.Prime -> p ∣ prodPrimes -> 0 < nu p
-    - nu_lt_one_of_prime : 对任意 p : 自然数, p.Prime -> p ∣ prodPrimes -> nu p < 1
+    - nu_mult : nu.是Multiplicative
+    - nu_pos_of_prime : 对任意 p : 自然数, p.素 -> p ∣ prodPrimes -> 0 < nu p
+    - nu_lt_one_of_prime : 对任意 p : 自然数, p.素 -> p ∣ prodPrimes -> nu p < 1
 -/
 structure BoundingSieve where
   /-- The set of natural numbers that is to be sifted. The fundamental lemma yields an upper bound
@@ -108,7 +108,7 @@ structure SelbergSieve
     - one_le_level : 1 <= level
 
 中文:
-结构 SelbergSieve
+结构 Selberg筛
   参数: extends BoundingSieve
   继承: BoundingSieve
   公理与运算 (2 个):
@@ -154,7 +154,7 @@ theorem one_le_y
 
 中文:
 定理 one_le_y
-  条件: {s : SelbergSieve}
+  条件: {s : Selberg筛}
   结论: 1 <= s.level
   证明: s.one_le_level
 
@@ -825,7 +825,7 @@ theorem selbergTerms_isMultiplicative
 
 中文:
 定理 selbergTerms_isMultiplicative
-  结论: ArithmeticFunction.IsMultiplicative s.selbergTerms
+  结论: ArithmeticFunction.是Multiplicative s.selbergTerms
   证明: by
   unfold selbergTerms
   arith_mult

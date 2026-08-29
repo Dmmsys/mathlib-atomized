@@ -35,10 +35,10 @@ class ProperConstVAdd
     - isProperMap_vadd((c : M)) : IsProperMap ((c +ᵥ ·) : X -> X)
 
 中文:
-类 ProperConstVAdd
-  参数: (M X : 类型) [VAdd M X] [TopologicalSpace X]
+类 正常数向量加法
+  参数: (M X : 类型) [向量加法 M X] [拓扑空间 X]
   公理与运算 (1 个):
-    - isProperMap_vadd((c : M)) : Is命题erMap ((c +ᵥ ·) : X -> X)
+    - isProperMap_vadd((c : M)) : 是真映射 ((c +ᵥ ·) : X -> X)
 -/
 class ProperConstVAdd (M X : Type*) [VAdd M X] [TopologicalSpace X] : Prop where
   /-- `(c +ᵥ ·)` is a proper map. -/
@@ -58,10 +58,10 @@ class ProperConstSMul
     - isProperMap_smul((c : M)) : IsProperMap ((c • ·) : X -> X)
 
 中文:
-类 ProperConstSMul
-  参数: (M X : 类型) [SMul M X] [TopologicalSpace X]
+类 正常数标量乘法
+  参数: (M X : 类型) [标量乘法 M X] [拓扑空间 X]
   公理与运算 (1 个):
-    - isProperMap_smul((c : M)) : Is命题erMap ((c • ·) : X -> X)
+    - isProperMap_smul((c : M)) : 是真映射 ((c • ·) : X -> X)
 -/
 class ProperConstSMul (M X : Type*) [SMul M X] [TopologicalSpace X] : Prop where
   /-- `(c • ·)` is a proper map. -/
@@ -79,7 +79,7 @@ theorem isProperMap_smul
 
 中文:
 定理 isProperMap_smul
-  结论: {M : 类型} (c : M) (X : 类型) [SMul M X] [TopologicalSpace X]
+  结论: {M : 类型} (c : M) (X : 类型) [标量乘法 M X] [拓扑空间 X]
   证明: h.1 c
 -/
 theorem isProperMap_smul {M : Type*} (c : M) (X : Type*) [SMul M X] [TopologicalSpace X]
@@ -98,8 +98,8 @@ theorem IsCompact.preimage_smul
 @[to_additive]
 
 中文:
-定理 IsCompact.preimage_smul
-  结论: {M X : 类型} [SMul M X] [TopologicalSpace X]
+定理 是紧集.preimage_smul
+  结论: {M X : 类型} [标量乘法 M X] [拓扑空间 X]
   证明: (isProperMap_smul c X).isCompact_preimage hs
 
 @[to_additive]

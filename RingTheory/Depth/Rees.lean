@@ -59,7 +59,7 @@ lemma smul_top_quotSMulTop_ne_top_of_smul_top_ne_top
 
 中文:
 引理 smul_top_quotSMulTop_ne_top_of_smul_top_ne_top
-  结论: {M : 类型} [AddCommGroup M]
+  结论: {M : 类型} [加法交换群 M]
   证明: by
   by_contra eq
   absurd congrArg (Submodule.comap (Submodule.mkQ _)) eq
@@ -96,8 +96,8 @@ lemma exists_isRegular_of_exists_subsingleton_ext
     -- use `Ext N M 0` v
 
 中文:
-引理 exists_isRegular_of_exists_subsingleton_ext
-  结论: [Small.{v} R] [IsNoetherianRing R] (I : Ideal R)
+引理 存在_isRegular_of_存在_subsingleton_ext
+  结论: [Small.{v} R] [是Noether环 R] (I : 理想 R)
   证明: by
   induction n generalizing M with
   | zero =>
@@ -163,8 +163,8 @@ lemma subsingleton_ext_of_exists_isRegular
     | a :: r
 
 中文:
-引理 subsingleton_ext_of_exists_isRegular
-  结论: [Small.{v} R] [IsNoetherianRing R] (I : Ideal R)
+引理 subsingleton_ext_of_存在_isRegular
+  结论: [Small.{v} R] [是Noether环 R] (I : 理想 R)
   证明: by
   generalize len : rs.length = n
   induction n generalizing M rs with
@@ -240,8 +240,8 @@ lemma exists_isRegular_tfae
   have suppQ : Module.support R (Shrink.{v} (R ⧸ I)) = PrimeSpectrum.zeroLocus I 
 
 中文:
-引理 exists_isRegular_tfae
-  结论: [Small.{v} R] [IsNoetherianRing R] (I : Ideal R) (n : 自然数)
+引理 存在_isRegular_tfae
+  结论: [Small.{v} R] [是Noether环 R] (I : 理想 R) (n : 自然数)
   证明: by
   -- two main implications `3 → 4` and `4 → 1` are separated out, the rest are trivial
   have ntrQ : Nontrivial (R ⧸ I) := by

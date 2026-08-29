@@ -70,7 +70,7 @@ definition kleinFour
 
 中文:
 定义 kleinFour
-  签名: : Subgroup (alternatingGroup α)
+  签名: : 子群 (alternatingGroup α)
   定义体: Subgroup.closure {g : alternatingGroup α | (g : Equiv.Perm α).cycleType = {2, 2}}
 
 Depends on / 依赖: Equiv.Perm, Subgroup, Subgroup.closure, alternatingGroup, closure, cycleType
@@ -95,7 +95,7 @@ theorem mem_kleinFour_of_order_two_pow
 
 中文:
 定理 mem_kleinFour_of_order_two_pow
-  结论: (hα4 : 自然数.card α = 4) {g : Perm α}
+  结论: (hα4 : 自然数.card α = 4) {g : 置换 α}
   证明: by
   rw [mem_alternatingGroup]; rw [sign_of_cycleType] at hg0
   have h1 : g.cycleType.sum <= 4 := by

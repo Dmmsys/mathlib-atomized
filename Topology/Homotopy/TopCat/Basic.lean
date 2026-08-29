@@ -35,7 +35,7 @@ abbreviation Homotopy
   body: ContinuousMap.Homotopy f.hom g.hom
 
 中文:
-缩写 Homotopy
+缩写 同伦
   签名: (f g : X ⟶ Y)
   定义体: ContinuousMap.Homotopy f.hom g.hom
 
@@ -57,7 +57,7 @@ definition h
 
 中文:
 定义 h
-  签名: (H : Homotopy f₀ f₁)
+  签名: (H : 同伦 f₀ f₁)
   定义体: (β_ _ _).hom ≫ ofHom (H.toContinuousMap.comp (ContinuousMap.prodMap I.homeomorph (.id _)))
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.prodMap, H.toContinuousMap.comp, I.homeomorph, homeomorph, prodMap, toContinuousMap
@@ -239,7 +239,7 @@ abbreviation comp
 
 中文:
 缩写 comp
-  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
+  签名: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
   定义体: ContinuousMap.Homotopy.comp G F
 
 Depends on / 依赖: ContinuousMap, ContinuousMap.Homotopy.comp, Homotopy
@@ -263,7 +263,7 @@ lemma h_comp
 
 中文:
 引理 h_comp
-  条件: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : Homotopy g₀ g₁) (F : Homotopy f₀ f₁)
+  条件: {f₀ f₁ : X ⟶ Y} {g₀ g₁ : Y ⟶ Z} (G : 同伦 g₀ g₁) (F : 同伦 f₀ f₁)
   证明: by
   ext
   simp

@@ -202,7 +202,7 @@ lemma schwartz_zippel_sum_degreeOf
 
 中文:
 引理 schwartz_zippel_sum_degreeOf
-  结论: {n} {p : MvPolynomial (Fin n) R} (hp : p != 0)
+  结论: {n} {p : 多元多项式 (有限集 n) R} (hp : p != 0)
   证明: by
   calc
     _ <= p.support.sup fun s => ∑ i, (s i / #(S i) : Rat>=0) := schwartz_zippel_sup_sum hp S
@@ -235,7 +235,7 @@ lemma schwartz_zippel_totalDegree
 
 中文:
 引理 schwartz_zippel_totalDegree
-  条件: {n} {p : MvPolynomial (Fin n) R} (hp : p != 0) (S : Finset R)
+  条件: {n} {p : 多元多项式 (有限集 n) R} (hp : p != 0) (S : 有限集 R)
   证明: calc
     _ = #{f in piFinset fun _ => S | eval f p = 0} / (∏ i : Fin n, #S : Rat>=0) := by simp
     _ <= p.support.sup fun s => ∑ i, (s i / #S : Rat>=0) := schwartz_zippel_sup_sum hp _

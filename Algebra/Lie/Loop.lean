@@ -115,7 +115,7 @@ instance [DecidableEq
 
 中文:
 实例 [DecidableEq
-  签名: A] [AddCommMonoid A] :
+  签名: A] [加法交换幺半群 A] :
   定义体: by
     rw [decomposeTensor_apply] at hi hj ⊢
     obtain ⟨xi, rfl⟩ := hi
@@ -253,7 +253,7 @@ definition residuePairing
 
 中文:
 定义 residuePairing
-  签名: [AddCommGroup A] [DistribSMul A R] [SMulCommClass A R R]
+  签名: [加法交换群 A] [分配标量乘法 A R] [标量交换类 A R R]
   定义体: letI F := toFinsupp R A L
     { toFun g := (F g).sum fun a v => a • Φ (F f (-a)) v
       map_add' x y := by
@@ -303,7 +303,7 @@ definition twoCochainOfBilinear
 
 中文:
 定义 twoCochainOfBilinear
-  签名: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
+  签名: [交换环 A] [是加法无挠 R] [代数 A R]
   定义体: (residuePairing R A L Φ).compr₂ (TrivialLieModule.equiv R (loopAlgebra R A L) R).symm
   property := by
     refine Cohomology.mem_twoCochain_iff.mpr fun f => ?_
@@ -345,7 +345,7 @@ lemma twoCochainOfBilinear_apply_apply
 
 中文:
 引理 twoCochainOfBilinear_apply_apply
-  结论: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
+  结论: [交换环 A] [是加法无挠 R] [代数 A R]
   证明: rfl
 -/
 lemma twoCochainOfBilinear_apply_apply [CommRing A] [IsAddTorsionFree R] [Algebra A R]
@@ -374,7 +374,7 @@ definition twoCocycleOfBilinear
 
 中文:
 定义 twoCocycleOfBilinear
-  签名: [CommRing A] [IsAddTorsionFree R] [Algebra A R]
+  签名: [交换环 A] [是加法无挠 R] [代数 A R]
   定义体: twoCochainOfBilinear R A L Φ hΦs
   property := by
     apply (LieModule.Cohomology.mem_twoCocycle_iff ..).mpr

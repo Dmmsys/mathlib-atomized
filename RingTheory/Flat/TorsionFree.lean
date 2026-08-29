@@ -62,7 +62,7 @@ lemma isSMulRegular_of_isRegular
 
 中文:
 引理 isSMulRegular_of_isRegular
-  条件: {r : R} (hr : IsRegular r) [Flat R M]
+  条件: {r : R} (hr : 是正则 r) [平坦 R M]
   证明: by
   -- `r ∈ R⁰` implies that `toSpanSingleton R R r`, i.e. `(r * ⬝) : R → R` is injective
   -- Flatness implies that corresponding map `R ⊗[R] M →ₗ[R] R ⊗[R] M` is injective
@@ -95,7 +95,7 @@ instance isTorsionFree
 
 中文:
 实例 isTorsionFree
-  签名: [Flat R M]
+  签名: [平坦 R M]
   定义体: ⟨fun _ hr => isSMulRegular_of_isRegular hr⟩
 
 Depends on / 依赖: isSMulRegular_of_isRegular
@@ -125,7 +125,7 @@ lemma isSMulRegular_of_nonZeroDivisors
 
 中文:
 引理 isSMulRegular_of_nonZeroDivisors
-  条件: {r : R} (hr : r in R⁰) [Flat R M]
+  条件: {r : R} (hr : r in R⁰) [平坦 R M]
   结论: IsSMulRegular M r
   证明: by
   apply isSMulRegular_of_isRegular
@@ -153,7 +153,7 @@ theorem torsion_eq_bot
 
 中文:
 定理 torsion_eq_bot
-  条件: [Flat R M]
+  条件: [平坦 R M]
   结论: torsion R M = ⊥
   证明: by
   rw [eq_bot_iff]
@@ -190,7 +190,7 @@ theorem flat_iff_torsion_eq_bot_of_isBezout
 
 中文:
 定理 flat_iff_torsion_eq_bot_of_isBezout
-  条件: [IsBezout R] [IsDomain R]
+  条件: [是Bezout R] [是整环 R]
   证明: by
   -- one way is true in general
   refine ⟨fun _ => torsion_eq_bot, ?_⟩
@@ -242,7 +242,7 @@ theorem flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
 
 中文:
 定理 flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
-  结论: [IsDomain R]
+  结论: [是整环 R]
   证明: by
   refine ⟨fun _ => Flat.torsion_eq_bot, fun h => ?_⟩
   apply flat_of_localized_maximal
@@ -275,8 +275,8 @@ theorem _root_.IsDedekindDomain.flat_iff_torsion_eq_bot
   exact fun P => inferInstance
 
 中文:
-定理 _root_.IsDedekindDomain.flat_iff_torsion_eq_bot
-  条件: [IsDedekindDomain R]
+定理 _root_.是Dedekind整环.flat_iff_torsion_eq_bot
+  条件: [是Dedekind整环 R]
   证明: by
   apply flat_iff_torsion_eq_bot_of_valuationRing_localization_isMaximal
   exact fun P => inferInstance
@@ -299,8 +299,8 @@ instance [IsDedekindDomain
   infer_instance
 
 中文:
-实例 [IsDedekindDomain
-  签名: R] [IsTorsionFree R M] : Flat R M
+实例 [是Dedekind整环
+  签名: R] [是无挠 R M] : 平坦 R M
   定义体: by
   rw [IsDedekindDomain.flat_iff_torsion_eq_bot]; rw [← Submodule.isTorsionFree_iff_torsion_eq_bot]
   infer_instance

@@ -45,7 +45,7 @@ definition basisFreeMonoid
 
 中文:
 定义 basisFreeMonoid
-  签名: : Basis (FreeMonoid X) R (FreeAlgebra R X)
+  签名: : 基 (自由幺半群 X) R (FreeAlgebra R X)
   定义体: Finsupp.basisSingleOne.map
     (equivMonoidAlgebraFreeMonoid.toLinearEquiv.trans <| MonoidAlgebra.coeffLinearEquiv _).symm
 
@@ -65,7 +65,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module.Free R (FreeAlgebra R X)
+  签名: 模.自由 R (FreeAlgebra R X)
   定义体: .of_equiv equivMonoidAlgebraFreeMonoid.symm.toLinearEquiv
 
 Depends on / 依赖: equivMonoidAlgebraFreeMonoid, equivMonoidAlgebraFreeMonoid.symm.toLinearEquiv, of_equiv, toLinearEquiv
@@ -86,7 +86,7 @@ theorem rank_eq
 
 中文:
 定理 rank_eq
-  条件: [CommRing R] [Nontrivial R]
+  条件: [交换环 R] [非平凡 R]
   证明: by
   rw [← (Basis.mk_eq_rank'.{_]; rw [_]; rw [_]; rw [u} (basisFreeMonoid R X)).trans (Cardinal.lift_id _)]; rw [Cardinal.lift_umax.{v]; rw [u}]; rw [FreeMonoid]
 
@@ -115,8 +115,8 @@ theorem Algebra.rank_adjoin_le
   rw [FreeAlgebra.rank_eq]; rw [l
 
 中文:
-定理 Algebra.rank_adjoin_le
-  结论: {R : 类型u} {S : 类型v} [CommRing R] [Ring S] [Algebra R S]
+定理 代数.rank_adjoin_le
+  结论: {R : 类型u} {S : 类型v} [交换环 R] [环 S] [代数 R S]
   证明: by
   rw [adjoin_eq_range_freeAlgebra_lift]
   cases subsingleton_or_nontrivial R

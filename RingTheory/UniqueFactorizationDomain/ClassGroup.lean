@@ -46,7 +46,7 @@ lemma isPrincipal_of_exists_mul_ne_zero_isPrincipal
   have : exists T : Finset R, (T : Set R) subseteq K 
 
 中文:
-引理 isPrincipal_of_exists_mul_ne_zero_isPrincipal
+引理 isPrincipal_of_存在_mul_ne_zero_isPrincipal
   证明: by
   let : NormalizedGCDMonoid R := Classical.arbitrary _
   obtain ⟨K, hJK0, hK⟩ := hJ
@@ -119,7 +119,7 @@ theorem isPrincipal_of_isUnit_fractionalIdeal
 
 中文:
 定理 isPrincipal_of_isUnit_fractionalIdeal
-  结论: (I : Ideal R)
+  结论: (I : 理想 R)
   证明: by
   obtain ⟨a, K, ha0, h⟩ := exists_eq_spanSingleton_mul (I : FractionalIdeal R⁰ (FractionRing R))⁻¹
   have hIK : I * K = Ideal.span ({a} : Set R) :=
@@ -197,7 +197,7 @@ instance subsingleton_classGroup
 
 中文:
 实例 subsingleton_classGroup
-  签名: : Subsingleton (ClassGroup R)
+  签名: : 子单例 (ClassGroup R)
   定义体: by
   refine subsingleton_of_forall_eq 1 ?_
   intro x

@@ -58,8 +58,8 @@ class AddAction.IsPretransitive
     - exists_vadd_eq : forall x y : α, exists g : M, g +ᵥ x = y
 
 中文:
-类 AddAction.IsPretransitive
-  参数: (M α : 类型) [VAdd M α]
+类 加法作用.是Pretransitive
+  参数: (M α : 类型) [向量加法 M α]
   公理与运算 (1 个):
     - exists_vadd_eq : 对任意 x y : α, 存在 g : M, g +ᵥ x = y
 -/
@@ -80,8 +80,8 @@ class MulAction.IsPretransitive
     - exists_smul_eq : forall x y : α, exists g : M, g • x = y
 
 中文:
-类 MulAction.IsPretransitive
-  参数: (M α : 类型) [SMul M α]
+类 乘法作用.是Pretransitive
+  参数: (M α : 类型) [标量乘法 M α]
   公理与运算 (1 个):
     - exists_smul_eq : 对任意 x y : α, 存在 g : M, g • x = y
 -/
@@ -99,7 +99,7 @@ instance MulAction.instIsPretransitiveOfSubsingleton
     simp only [one_smul, Subsingleton.elim x y] ⟩
 
 中文:
-实例 MulAction.instIsPretransitiveOfSubsingleton
+实例 乘法作用.instIsPretransitiveOfSubsingleton
   定义体: ⟨1, by
     simp only [one_smul, Subsingleton.elim x y] ⟩
 
@@ -127,7 +127,7 @@ lemma exists_smul_eq
 @[to_additive]
 
 中文:
-引理 exists_smul_eq
+引理 存在_smul_eq
   条件: (x y : α)
   结论: 存在 m : M, m • x = y
   证明: IsPretransitive.exists_smul_eq x y
@@ -151,7 +151,7 @@ lemma surjective_smul
 中文:
 引理 surjective_smul
   条件: (x : α)
-  结论: Surjective fun c : M => c • x
+  结论: 满射 fun c : M => c • x
   证明: exists_smul_eq M x
 
 Depends on / 依赖: exists_smul_eq
@@ -169,8 +169,8 @@ instance Regular.isPretransitive
   body: ⟨fun x y => ⟨y * x⁻¹, inv_mul_cancel_right _ _⟩⟩
 
 中文:
-实例 Regular.isPretransitive
-  签名: [Group G]
+实例 正则.isPretransitive
+  签名: [群 G]
   定义体: ⟨fun x y => ⟨y * x⁻¹, inv_mul_cancel_right _ _⟩⟩
 
 Depends on / 依赖: inv_mul_cancel_right
@@ -189,8 +189,8 @@ instance Regular.isPretransitive_mulOpposite
   body: ⟨fun x y => ⟨.op (x⁻¹ * y), mul_inv_cancel_left _ _⟩⟩
 
 中文:
-实例 Regular.isPretransitive_mulOpposite
-  签名: [Group G]
+实例 正则.isPretransitive_mulOpposite
+  签名: [群 G]
   定义体: ⟨fun x y => ⟨.op (x⁻¹ * y), mul_inv_cancel_left _ _⟩⟩
 
 Depends on / 依赖: mul_inv_cancel_left
@@ -216,8 +216,8 @@ lemma IsPretransitive.of_orbit
   exact ⟨h * g⁻¹, by simp [mul_smul]⟩
 
 中文:
-引理 IsPretransitive.of_orbit
-  结论: {X : 类型} [Group G] [MulAction G X] {x₀ : X}
+引理 是Pretransitive.of_orbit
+  结论: {X : 类型} [群 G] [乘法作用 G X] {x₀ : X}
   证明: by
   constructor
   intro x y
@@ -250,8 +250,8 @@ lemma IsPretransitive.of_smul_eq
   proof: (exists_smul_eq x y).elim fun m h => ⟨f m, hf.trans h⟩
 
 中文:
-引理 IsPretransitive.of_smul_eq
-  结论: {M N α : 类型} [SMul M α] [SMul N α] [IsPretransitive M α]
+引理 是Pretransitive.of_smul_eq
+  结论: {M N α : 类型} [标量乘法 M α] [标量乘法 N α] [是Pretransitive M α]
   证明: (exists_smul_eq x y).elim fun m h => ⟨f m, hf.trans h⟩
 
 Depends on / 依赖: exists_smul_eq, hf.trans
@@ -274,8 +274,8 @@ lemma MulAction.IsPretransitive.of_isScalarTower
   proof: of_smul_eq (fun x : M => x • 1) (smul_one_smul N _ _)
 
 中文:
-引理 MulAction.IsPretransitive.of_isScalarTower
-  结论: (M : 类型) {N α : 类型} [Monoid N] [SMul M N]
+引理 乘法作用.是Pretransitive.of_isScalarTower
+  结论: (M : 类型) {N α : 类型} [幺半群 N] [标量乘法 M N]
   证明: of_smul_eq (fun x : M => x • 1) (smul_one_smul N _ _)
 
 Depends on / 依赖: of_smul_eq, smul_one_smul
@@ -301,8 +301,8 @@ instance Additive.addAction_isPretransitive
   body: ⟨@MulAction.exists_smul_eq α _ _ _⟩
 
 中文:
-实例 Additive.addAction_isPretransitive
-  签名: [Monoid α] [MulAction α β]
+实例 加性.addAction_isPretransitive
+  签名: [幺半群 α] [乘法作用 α β]
   定义体: ⟨@MulAction.exists_smul_eq α _ _ _⟩
 
 Depends on / 依赖: MulAction, MulAction.exists_smul_eq, exists_smul_eq
@@ -321,7 +321,7 @@ instance Multiplicative.mulAction_isPretransitive
 
 中文:
 实例 Multiplicative.mulAction_isPretransitive
-  签名: [AddMonoid α] [AddAction α β]
+  签名: [加法幺半群 α] [加法作用 α β]
   定义体: ⟨@AddAction.exists_vadd_eq α _ _ _⟩
 
 Depends on / 依赖: AddAction, AddAction.exists_vadd_eq, exists_vadd_eq

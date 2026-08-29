@@ -129,7 +129,7 @@ instance :
 
 中文:
 实例 :
-  签名: EnoughProjectives CompHaus
+  签名: 有足够投射 CompHaus
   定义体: ⟨projectivePresentation X⟩
 
 Depends on / 依赖: projectivePresentation

@@ -90,7 +90,7 @@ associator_eq _ _ _ := AlgCat.hom_ext _ Algebra.TensorProduct.ext
 leftUnitor_eq _ :
 
 中文:
-定义 MonoidalCategory.inducingFunctorData
+定义 幺半群范畴.inducingFunctorData
   签名: :
   定义体: Iso.refl _
   whiskerLeft_eq _ _ _ _ := by ext; rfl
@@ -125,7 +125,7 @@ instance instMonoidalCategory
 
 中文:
 实例 instMonoidalCategory
-  签名: : MonoidalCategory (BialgCat R)
+  签名: : 幺半群范畴 (Bialg范畴 R)
   定义体: Monoidal.induced (forget₂ _ (AlgCat R)) (MonoidalCategory.inducingFunctorData R)
 
 Depends on / 依赖: AlgCat, Monoidal, Monoidal.induced, MonoidalCategory, MonoidalCategory.inducingFunctorData, induced, inducingFunctorData
@@ -142,7 +142,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (BialgCat R) (AlgCat R)).Monoidal
+  签名: (forget₂ (Bialg范畴 R) (Alg范畴 R)).幺半群
 -/
 noncomputable instance : (forget₂ (BialgCat R) (AlgCat R)).Monoidal where
 
@@ -159,7 +159,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget₂ (BialgCat R) (CoalgCat R)).Monoidal
+  签名: (forget₂ (Bialg范畴 R) (余alg范畴 R)).幺半群
   定义体: Functor.CoreMonoidal.toMonoidal {
     εIso := Iso.refl _
     μIso _ _ := Iso.refl _ }

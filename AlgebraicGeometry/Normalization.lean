@@ -58,7 +58,7 @@ definition normalizationDiagram
 
 中文:
 定义 normalizationDiagram
-  签名: : Y.Opensᵒᵖ ⥤ CommRingCat where
+  签名: : Y.Opensᵒᵖ ⥤ 交换环范畴 where
   定义体: letI := (f.app U.unop).hom.toAlgebra
     .of (integralClosure Γ(Y, U.unop) Γ(X, f ⁻¹ᵁ U.unop))
   map {V U} i :=
@@ -208,7 +208,7 @@ instance :
 
 中文:
 实例 :
-  签名: (f.normalizationGlueData.functor ⋙ Scheme.forget).IsLocallyDirected
+  签名: (f.normalizationGlueData.functor ⋙ 概形.forget).是LocallyDirected
   定义体: Cover.RelativeGluingData.instIsLocallyDirectedI₀CompFunctorForgetOfIsThin ..
 
 Depends on / 依赖: Cover.RelativeGluingData.instIsLocallyDirectedI, RelativeGluingData
@@ -228,7 +228,7 @@ definition normalization
 
 中文:
 定义 normalization
-  签名: : Scheme
+  签名: : 概形
   定义体: f.normalizationGlueData.glued
 
 Depends on / 依赖: f.normalizationGlueData.glued, normalizationGlueData
@@ -454,7 +454,7 @@ instance :
 
 中文:
 实例 :
-  签名: Is整数egralHom f.fromNormalization
+  签名: 是整态射 f.fromNormalization
   定义体: by
   rw [IsZariskiLocalAtTarget.iff_of_iSup_eq_top (P := @IsIntegralHom) _
     (iSup_affineOpens_eq_top _)]
@@ -499,7 +499,7 @@ definition normalizationObjIso
 
 中文:
 定义 normalizationObjIso
-  签名: {U : Y.Opens} (hU : IsAffineOpen U)
+  签名: {U : Y.Opens} (hU : 是仿射开集 U)
   定义体: (f.app U).hom.toAlgebra
     Γ(f.normalization, f.fromNormalization ⁻¹ᵁ U) ≅
       .of (integralClosure Γ(Y, U) Γ(X, f ⁻¹ᵁ U)) :=
@@ -588,7 +588,7 @@ lemma fromNormalization_app
 
 中文:
 引理 fromNormalization_app
-  条件: {U : Y.Opens} (hU : IsAffineOpen U)
+  条件: {U : Y.Opens} (hU : 是仿射开集 U)
   证明: by
   let := (f.app U).hom.toAlgebra
   have : IsIso (((normalizationOpenCover f).f ⟨U, hU⟩).app (f.fromNormalization ⁻¹ᵁ U)) :=
@@ -628,7 +628,7 @@ lemma normalizationObjIso_hom_val
 
 中文:
 引理 normalizationObjIso_hom_val
-  条件: {U : Y.Opens} (hU : IsAffineOpen U)
+  条件: {U : Y.Opens} (hU : 是仿射开集 U)
   证明: (f.app U).hom.toAlgebra
     (f.normalizationObjIso hU).hom ≫ CommRingCat.ofHom (Subalgebra.val _).toRingHom =
     f.toNormalization.appLE _ _ (by simp [← Scheme.Hom.comp_preimage]) := by
@@ -663,8 +663,8 @@ instance [IsIntegralHom
       Hom.opensRange_pul
 
 中文:
-实例 [IsIntegralHom
-  签名: f] : IsIso f.toNormalization
+实例 [是整态射
+  签名: f] : 是同构 f.toNormalization
   定义体: by
   refine (IsZariskiLocalAtTarget.iff_of_openCover (P := .isomorphisms _)
     f.normalizationOpenCover).mpr fun U => ?_
@@ -708,8 +708,8 @@ instance [IsAffineHom
     infer_instance
 
 中文:
-实例 [IsAffineHom
-  签名: f] : IsAffineHom f.toNormalization
+实例 [是仿射态射
+  签名: f] : 是仿射态射 f.toNormalization
   定义体: by
   apply MorphismProperty.of_postcomp (W := @IsAffineHom) (W' := @IsSeparated) _ f.fromNormalization
   · infer_instance
@@ -739,7 +739,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiCompact f.toNormalization
+  签名: 拟紧 f.toNormalization
   定义体: by
   apply MorphismProperty.of_postcomp (W := @QuasiCompact)
       (W' := @QuasiSeparated) _ f.fromNormalization
@@ -772,7 +772,7 @@ instance :
 
 中文:
 实例 :
-  签名: QuasiSeparated f.toNormalization
+  签名: 拟分离 f.toNormalization
   定义体: by
   suffices QuasiSeparated (Hom.toNormalization f ≫ Hom.fromNormalization f) from
     .of_comp _ f.fromNormalization
@@ -840,7 +840,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsDominant f.toNormalization
+  签名: 是Dominant f.toNormalization
   定义体: by
   have := congr(($(f.ker_toNormalization).support : Set f.normalization))
   rw [IdealSheafData.support_bot]; rw [Scheme.Hom.support_ker]; rw [TopologicalSpace.Closeds.coe_top] at this
@@ -869,8 +869,8 @@ instance [IsReduced
     dsimp [normalizationOpenCover, normalizationGlueDat
 
 中文:
-实例 [IsReduced
-  签名: X] : IsReduced f.normalization
+实例 [是既约
+  签名: X] : 是既约 f.normalization
   定义体: have (i : _) : IsReduced ((normalizationOpenCover f).X i) := by
     have : _root_.IsReduced ((normalizationDiagram f).obj (.op i.1)) :=
       let := (f.app i.1).hom.toAlgebra
@@ -903,8 +903,8 @@ instance [IsIntegral
   isIntegral_of_irreducibleSpac
 
 中文:
-实例 [IsIntegral
-  签名: X] : Is整数egral f.normalization
+实例 [是整
+  签名: X] : 是整 f.normalization
   定义体: have : IrreducibleSpace f.normalization := by
     rw [irreducibleSpace_def]
     convert!
@@ -1087,7 +1087,7 @@ lemma normalization.hom_ext
 
 中文:
 引理 normalization.hom_ext
-  结论: (f₁ f₂ : f.normalization ⟶ T) (g : T ⟶ Y) [IsAffineHom g]
+  结论: (f₁ f₂ : f.normalization ⟶ T) (g : T ⟶ Y) [是仿射态射 g]
   证明: by
   apply f.normalizationOpenCover.hom_ext _ _ fun U => ?_
   let := (f.app U.1).hom.toAlgebra
@@ -1467,8 +1467,8 @@ instance [Smooth
   obtain ⟨_, ⟨V, hV, rfl⟩, hxV, hVU : V <= g ⁻¹ᵁ U⟩ :
 
 中文:
-实例 [Smooth
-  签名: g] : IsIso (f.normalizationPullback g)
+实例 [光滑
+  签名: g] : 是同构 (f.normalizationPullback g)
   定义体: by
   apply IsZariskiLocalAtTarget.of_forall_exists_morphismRestrict (P := .isomorphisms _) fun x => ?_
   obtain ⟨_, ⟨U, hU, rfl⟩, hxU, -⟩ := S.isBasis_affineOpens.exists_subset_of_mem_open

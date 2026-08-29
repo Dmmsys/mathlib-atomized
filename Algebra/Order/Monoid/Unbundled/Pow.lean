@@ -128,7 +128,7 @@ theorem pow_right_monotone
 中文:
 定理 pow_right_monotone
   条件: (ha : 1 <= a)
-  结论: Monotone fun n : 自然数 => a ^ n
+  结论: 递增 fun n : 自然数 => a ^ n
   证明: monotone_nat_of_le_succ fun n => by rw [pow_succ]; exact le_mul_of_one_le_right' ha
 
 Depends on / 依赖: le_mul_of_one_le_right, monotone_nat_of_le_succ, pow_succ
@@ -256,7 +256,7 @@ theorem pow_right_strictMono'
 中文:
 定理 pow_right_strictMono'
   条件: (ha : 1 < a)
-  结论: StrictMono ((a ^ ·) : 自然数 -> M)
+  结论: 严格递增 ((a ^ ·) : 自然数 -> M)
   证明: strictMono_nat_of_lt_succ fun n => by rw [pow_succ]; exact lt_mul_of_one_lt_right' (a ^ n) ha
 
 @[to_additive (attr := gcongr) nsmul_lt_nsmul_left]
@@ -420,9 +420,9 @@ theorem StrictMono.pow_const
   statement: forall {n : Nat}, n != 0 -> StrictMono (f · ^ n)
 
 中文:
-定理 StrictMono.pow_const
-  条件: (hf : StrictMono f)
-  结论: 对任意 {n : 自然数}, n != 0 -> StrictMono (f · ^ n)
+定理 严格递增.pow_const
+  条件: (hf : 严格递增 f)
+  结论: 对任意 {n : 自然数}, n != 0 -> 严格递增 (f · ^ n)
 -/
 theorem StrictMono.pow_const (hf : StrictMono f) : forall {n : Nat}, n != 0 -> StrictMono (f · ^ n)
   | 0, hn => (hn rfl).elim
@@ -446,7 +446,7 @@ theorem pow_left_strictMono
 中文:
 定理 pow_left_strictMono
   条件: (hn : n != 0)
-  结论: StrictMono (· ^ n : M -> M)
+  结论: 严格递增 (· ^ n : M -> M)
   证明: strictMono_id.pow_const hn
 
 @[to_additive (attr := mono, gcongr) nsmul_lt_nsmul_right]
@@ -512,9 +512,9 @@ theorem Monotone.pow_const
   statement: forall n : Nat, Monotone fun a => f a ^ n
 
 中文:
-定理 Monotone.pow_const
-  条件: {f : β -> M} (hf : Monotone f)
-  结论: 对任意 n : 自然数, Monotone fun a => f a ^ n
+定理 递增.pow_const
+  条件: {f : β -> M} (hf : 递增 f)
+  结论: 对任意 n : 自然数, 递增 fun a => f a ^ n
 -/
 theorem Monotone.pow_const {f : β -> M} (hf : Monotone f) : forall n : Nat, Monotone fun a => f a ^ n
   | 0 => by simpa using monotone_const
@@ -535,7 +535,7 @@ theorem pow_left_mono
 中文:
 定理 pow_left_mono
   条件: (n : 自然数)
-  结论: Monotone fun a : M => a ^ n
+  结论: 递增 fun a : M => a ^ n
   证明: monotone_id.pow_const _
 
 Depends on / 依赖: monotone_id, monotone_id.pow_const, pow_const
@@ -818,7 +818,7 @@ theorem min_lt_of_mul_lt_sq
 中文:
 定理 min_lt_of_mul_lt_sq
   条件: {a b c : M} (h : a * b < c ^ 2)
-  结论: min a b < c
+  结论: 最小值 a b < c
   证明: by
   simpa using min_lt_max_of_mul_lt_mul (h.trans_eq <| pow_two _)
 
@@ -843,7 +843,7 @@ theorem lt_max_of_sq_lt_mul
 中文:
 定理 lt_max_of_sq_lt_mul
   条件: {a b c : M} (h : a ^ 2 < b * c)
-  结论: a < max b c
+  结论: a < 最大值 b c
   证明: by
   simpa using min_lt_max_of_mul_lt_mul ((pow_two _).symm.trans_lt h)
 
@@ -908,7 +908,7 @@ theorem min_le_of_mul_le_sq
 中文:
 定理 min_le_of_mul_le_sq
   条件: {a b c : M} (h : a * b <= c ^ 2)
-  结论: min a b <= c
+  结论: 最小值 a b <= c
   证明: by
   simpa using min_le_max_of_mul_le_mul (h.trans_eq <| pow_two _)
 
@@ -933,7 +933,7 @@ theorem le_max_of_sq_le_mul
 中文:
 定理 le_max_of_sq_le_mul
   条件: {a b c : M} (h : a ^ 2 <= b * c)
-  结论: a <= max b c
+  结论: a <= 最大值 b c
   证明: by
   simpa using min_le_max_of_mul_le_mul ((pow_two _).symm.trans_le h)
 
@@ -1027,7 +1027,7 @@ instance [MulLeftStrictMono
 
 中文:
 实例 [MulLeftStrictMono
-  签名: M] [MulRightStrictMono M] : IsMulTorsionFree M where
+  签名: M] [MulRightStrictMono M] : 是MulTorsionFree M where
   定义体: (pow_left_strictMono hn).injective
 
 Depends on / 依赖: injective, pow_left_strictMono

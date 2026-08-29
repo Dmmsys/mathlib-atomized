@@ -41,11 +41,11 @@ structure UnitDistEmbedding
     - unit_dist({u v} (ha : G.Adj u v)) : dist (p u) (p v) = 1
 
 中文:
-结构 UnitDistEmbedding
+结构 UnitDist嵌入
   参数: where
   公理与运算 (2 个):
     - p : V ↪ E
-    - unit_dist({u v} (ha : G.Adj u v)) : dist (p u) (p v) = 1
+    - unit_dist({u v} (ha : G.伴随 u v)) : dist (p u) (p v) = 1
 -/
 structure UnitDistEmbedding where
   /-- The embedding itself (position of vertices) -/
@@ -90,7 +90,7 @@ definition subsingleton
 
 中文:
 定义 subsingleton
-  签名: [Subsingleton V] (x : E)
+  签名: [子单例 V] (x : E)
   定义体: ⟨fun _ => x, Function.injective_of_subsingleton _⟩
   unit_dist {u v} ha := by
     have := Subsingleton.elim u v ▸ ha
@@ -119,7 +119,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (f : H.Copy G)
+  签名: (f : H.余py G)
   定义体: f.toEmbedding.trans U.p
   unit_dist ha := U.unit_dist (f.toHom.map_adj ha)
 

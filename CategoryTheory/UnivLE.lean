@@ -36,7 +36,7 @@ theorem UnivLE.ofEssSurj
 
 中文:
 定理 UnivLE.ofEssSurj
-  条件: (w : (uliftFunctor.{u, v} : 类型v ⥤ Type max u v).EssSurj)
+  条件: (w : (uliftFunctor.{u, v} : 类型v ⥤ 类型 最大值 u v).本质满射)
   证明: by
     obtain ⟨a', m⟩ := w.mem_essImage α
     obtain ⟨m'⟩ := m
@@ -60,8 +60,8 @@ instance EssSurj.ofUnivLE
   body: ⟨Shrink α, ⟨Equiv.toIso (Equiv.ulift.trans (equivShrink α).symm)⟩⟩
 
 中文:
-实例 EssSurj.ofUnivLE
-  签名: [UnivLE.{max u v, v}]
+实例 本质满射.ofUnivLE
+  签名: [UnivLE.{最大值 u v, v}]
   定义体: ⟨Shrink α, ⟨Equiv.toIso (Equiv.ulift.trans (equivShrink α).symm)⟩⟩
 
 Depends on / 依赖: Equiv.toIso, Equiv.ulift.trans, Shrink, equivShrink
@@ -96,8 +96,8 @@ instance [UnivLE.{max
   signature: u v, v}] : uliftFunctor.{u, v}.IsEquivalence where
 
 中文:
-实例 [UnivLE.{max
-  签名: u v, v}] : uliftFunctor.{u, v}.IsEquivalence where
+实例 [UnivLE.{最大值
+  签名: u v, v}] : uliftFunctor.{u, v}.是等价 where
 -/
 instance [UnivLE.{max u v, v}] : uliftFunctor.{u, v}.IsEquivalence where
 
@@ -111,7 +111,7 @@ definition UnivLE.witness
 
 中文:
 定义 UnivLE.witness
-  签名: [UnivLE.{max u v, v}]
+  签名: [UnivLE.{最大值 u v, v}]
   定义体: uliftFunctor.{v, u} ⋙ (uliftFunctor.{u, v}).inv
 
 Depends on / 依赖: uliftFunctor
@@ -128,8 +128,8 @@ instance [UnivLE.{max
   body: inferInstanceAs Functor.Faithful (_ ⋙ _)
 
 中文:
-实例 [UnivLE.{max
-  签名: u v, v}] : UnivLE.witness.{u, v}.Faithful
+实例 [UnivLE.{最大值
+  签名: u v, v}] : UnivLE.witness.{u, v}.忠实
   定义体: inferInstanceAs Functor.Faithful (_ ⋙ _)
 
 Depends on / 依赖: Faithful, Functor, Functor.Faithful
@@ -146,8 +146,8 @@ instance [UnivLE.{max
   body: inferInstanceAs Functor.Full (_ ⋙ _)
 
 中文:
-实例 [UnivLE.{max
-  签名: u v, v}] : UnivLE.witness.{u, v}.Full
+实例 [UnivLE.{最大值
+  签名: u v, v}] : UnivLE.witness.{u, v}.满
   定义体: inferInstanceAs Functor.Full (_ ⋙ _)
 
 Depends on / 依赖: Functor, Functor.Full

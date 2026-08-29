@@ -79,7 +79,7 @@ definition algSpec
 
 中文:
 定义 algSpec
-  签名: : (CommAlgCat R)ᵒᵖ ⥤ Over (Spec R)
+  签名: : (交换Alg范畴 R)ᵒᵖ ⥤ Over (Spec R)
   定义体: (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 -/
 @[implicit_reducible] def algSpec : (CommAlgCat R)ᵒᵖ ⥤ Over (Spec R) :=
@@ -97,7 +97,7 @@ definition algΓ
 
 中文:
 定义 algΓ
-  签名: : Over (Spec R) ⥤ (CommAlgCat R)ᵒᵖ
+  签名: : Over (Spec R) ⥤ (交换Alg范畴 R)ᵒᵖ
   定义体: Over.post Γ.rightOp ⋙ Over.map (ΓSpecIso R).inv.op ⋙
     (Over.opEquivOpUnder R).functor ⋙ (commAlgCatEquivUnder R).inverse.op
 -/
@@ -116,7 +116,7 @@ instance preservesLimitsOfSize_algSpec
 
 中文:
 实例 preservesLimitsOfSize_algSpec
-  签名: : PreservesLimitsOfSize.{w, v} (algSpec R)
+  签名: : 保持LimitsOfSize.{w, v} (algSpec R)
   定义体: inferInstanceAs PreservesLimitsOfSize.{w, v}
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
@@ -138,7 +138,7 @@ instance preservesColimitsOfSize_algΓ
 
 中文:
 实例 preservesColimitsOfSize_algΓ
-  签名: : PreservesColimitsOfSize.{w, v} (algΓ R)
+  签名: : 保持余limitsOfSize.{w, v} (algΓ R)
   定义体: by
   unfold algΓ; infer_instance
 
@@ -157,7 +157,7 @@ lemma algSpec_obj_hom
 
 中文:
 引理 algSpec_obj_hom
-  条件: (X : (CommAlgCat R)ᵒᵖ)
+  条件: (X : (交换Alg范畴 R)ᵒᵖ)
   证明: rfl
 -/
 @[simp] lemma algSpec_obj_hom (X : (CommAlgCat R)ᵒᵖ) :
@@ -173,7 +173,7 @@ lemma algSpec_map_left
 
 中文:
 引理 algSpec_map_left
-  条件: {X Y : (CommAlgCat R)ᵒᵖ} (f : X ⟶ Y)
+  条件: {X Y : (交换Alg范畴 R)ᵒᵖ} (f : X ⟶ Y)
   证明: rfl
 -/
 @[simp] lemma algSpec_map_left {X Y : (CommAlgCat R)ᵒᵖ} (f : X ⟶ Y) :
@@ -232,7 +232,7 @@ lemma prodComparison_algSpec_left
 
 中文:
 引理 prodComparison_algSpec_left
-  条件: (X Y : (CommAlgCat R)ᵒᵖ)
+  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
   证明: rfl
 
 @[simp]
@@ -255,7 +255,7 @@ lemma prodComparisonIso_algSpec_inv_left
 
 中文:
 引理 prodComparisonIso_algSpec_inv_left
-  条件: (X Y : (CommAlgCat R)ᵒᵖ)
+  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
   证明: by
   have : (Over.forget (Spec R)).mapIso (prodComparisonIso (algSpec R) X Y) =
       (pullbackSpecIso R X.unop Y.unop).symm :=
@@ -289,7 +289,7 @@ instance braidedAlgSpec
 
 中文:
 实例 braidedAlgSpec
-  签名: : (algSpec R).Braided
+  签名: : (algSpec R).辫
   定义体: .copy (.ofChosenFiniteProducts _)
     (Over.homMk <| 𝟙 <| Spec R)
     (fun X Y => Over.homMk (pullbackSpecIso R X.unop Y.unop).hom)
@@ -324,7 +324,7 @@ lemma ε_algSpec_left
 
 中文:
 引理 ε_algSpec_left
-  结论: (LaxMonoidal.ε (algSpec R)).left = 𝟙 (Spec R)
+  结论: (松弛幺半群.ε (algSpec R)).left = 𝟙 (Spec R)
   证明: rfl
 -/
 @[simp] lemma ε_algSpec_left : (LaxMonoidal.ε (algSpec R)).left = 𝟙 (Spec R) := rfl
@@ -338,7 +338,7 @@ lemma η_algSpec_left
 
 中文:
 引理 η_algSpec_left
-  结论: (OplaxMonoidal.η (algSpec R)).left = 𝟙 (Spec R)
+  结论: (反松弛幺半群.η (algSpec R)).left = 𝟙 (Spec R)
   证明: rfl
 -/
 @[simp] lemma η_algSpec_left : (OplaxMonoidal.η (algSpec R)).left = 𝟙 (Spec R) := rfl
@@ -353,7 +353,7 @@ lemma δ_algSpec_left
 
 中文:
 引理 δ_algSpec_left
-  条件: (X Y : (CommAlgCat R)ᵒᵖ)
+  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
   证明: rfl
 -/
 @[simp] lemma δ_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) :
@@ -369,7 +369,7 @@ lemma μ_algSpec_left
 
 中文:
 引理 μ_algSpec_left
-  条件: (X Y : (CommAlgCat R)ᵒᵖ)
+  条件: (X Y : (交换Alg范畴 R)ᵒᵖ)
   证明: rfl
 -/
 @[simp] lemma μ_algSpec_left (X Y : (CommAlgCat R)ᵒᵖ) :
@@ -386,7 +386,7 @@ instance algSpec.instFull
 
 中文:
 实例 algSpec.instFull
-  签名: : (algSpec R).Full
+  签名: : (algSpec R).满
   定义体: inferInstanceAs Functor.Full
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
@@ -407,7 +407,7 @@ instance algSpec.instFaithful
 
 中文:
 实例 algSpec.instFaithful
-  签名: : (algSpec R).Faithful
+  签名: : (algSpec R).忠实
   定义体: inferInstanceAs Functor.Faithful
     (commAlgCatEquivUnder R).op.functor ⋙ (Over.opEquivOpUnder R).inverse ⋙ Over.post Scheme.Spec
 
@@ -428,7 +428,7 @@ definition algSpec.fullyFaithful
 
 中文:
 定义 algSpec.fullyFaithful
-  签名: : (algSpec R).FullyFaithful
+  签名: : (algSpec R).满忠实
   定义体: ((commAlgCatEquivUnder R).op.trans (Over.opEquivOpUnder R).symm).fullyFaithfulFunctor.comp
     Spec.fullyFaithful.over _
 
@@ -449,7 +449,7 @@ abbreviation bialgSpec
 
 中文:
 缩写 bialgSpec
-  签名: : (CommBialgCat R)ᵒᵖ ⥤ Mon (Over <| Spec R)
+  签名: : (交换Bialg范畴 R)ᵒᵖ ⥤ 幺半群 (Over <| Spec R)
   定义体: (commBialgCatEquivComonCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapMon
 
 Depends on / 依赖: algSpec, commBialgCatEquivComonCommAlgCat, functor, functor.leftOp, leftOp, mapMon
@@ -467,7 +467,7 @@ instance bialgSpec.instFull
 
 中文:
 实例 bialgSpec.instFull
-  签名: : (bialgSpec R).Full
+  签名: : (bialgSpec R).满
   定义体: inferInstance
 -/
 instance bialgSpec.instFull : (bialgSpec R).Full := inferInstance
@@ -482,7 +482,7 @@ instance bialgSpec.instFaithful
 
 中文:
 实例 bialgSpec.instFaithful
-  签名: : (bialgSpec R).Faithful
+  签名: : (bialgSpec R).忠实
   定义体: inferInstance
 -/
 instance bialgSpec.instFaithful : (bialgSpec R).Faithful := inferInstance
@@ -497,7 +497,7 @@ definition bialgSpec.fullyFaithful
 
 中文:
 定义 bialgSpec.fullyFaithful
-  签名: : (bialgSpec R).FullyFaithful
+  签名: : (bialgSpec R).满忠实
   定义体: (commBialgCatEquivComonCommAlgCat R).fullyFaithfulFunctor.leftOp.comp algSpec.fullyFaithful.mapMon
 
 Depends on / 依赖: algSpec, algSpec.fullyFaithful.mapMon, commBialgCatEquivComonCommAlgCat, fullyFaithful, fullyFaithfulFunctor, fullyFaithfulFunctor.leftOp.comp, leftOp, mapMon
@@ -516,7 +516,7 @@ abbreviation hopfSpec
 
 中文:
 缩写 hopfSpec
-  签名: : (CommHopfAlgCat R)ᵒᵖ ⥤ Grp (Over <| Spec R)
+  签名: : (交换HopfAlg范畴 R)ᵒᵖ ⥤ 群 (Over <| Spec R)
   定义体: (commHopfAlgCatEquivCogrpCommAlgCat R).functor.leftOp ⋙ (algSpec R).mapGrp
 
 Depends on / 依赖: algSpec, commHopfAlgCatEquivCogrpCommAlgCat, functor, functor.leftOp, leftOp, mapGrp
@@ -534,7 +534,7 @@ instance hopfSpec.instFull
 
 中文:
 实例 hopfSpec.instFull
-  签名: : (hopfSpec R).Full
+  签名: : (hopfSpec R).满
   定义体: inferInstance
 -/
 instance hopfSpec.instFull : (hopfSpec R).Full := inferInstance
@@ -549,7 +549,7 @@ instance hopfSpec.instFaithful
 
 中文:
 实例 hopfSpec.instFaithful
-  签名: : (hopfSpec R).Faithful
+  签名: : (hopfSpec R).忠实
   定义体: inferInstance
 -/
 instance hopfSpec.instFaithful : (hopfSpec R).Faithful := inferInstance
@@ -565,7 +565,7 @@ definition hopfSpec.fullyFaithful
 
 中文:
 定义 hopfSpec.fullyFaithful
-  签名: : (hopfSpec R).FullyFaithful
+  签名: : (hopfSpec R).满忠实
   定义体: (commHopfAlgCatEquivCogrpCommAlgCat R).fullyFaithfulFunctor.leftOp.comp
     algSpec.fullyFaithful.mapGrp
 
@@ -593,7 +593,7 @@ instance specOverSpec
 
 中文:
 实例 specOverSpec
-  签名: [Algebra R A]
+  签名: [代数 R A]
   定义体: Spec.map CommRingCat.ofHom algebraMap ..
 
 Depends on / 依赖: CommRingCat, CommRingCat.ofHom, Spec.map, algebraMap
@@ -613,7 +613,7 @@ instance locallyOfFiniteType_specOverSpec
 
 中文:
 实例 locallyOfFiniteType_specOverSpec
-  签名: [Algebra R A] [Algebra.FiniteType R A]
+  签名: [代数 R A] [代数.有限型 R A]
   定义体: by
   rw [specOverSpec_over]; rw [HasRingHomProperty.Spec_iff (P := @LocallyOfFiniteType)]
   simpa [RingHom.finiteType_algebraMap]
@@ -637,7 +637,7 @@ instance instMonObjSpecAsOverSpec
 
 中文:
 实例 instMonObjSpecAsOverSpec
-  签名: [Bialgebra R A]
+  签名: [双代数 R A]
   定义体: ((bialgSpec R).obj <| .op <| .of R A).mon
 
 Depends on / 依赖: bialgSpec
@@ -657,7 +657,7 @@ lemma one_spec_asOver_spec
 
 中文:
 引理 one_spec_asOver_spec
-  条件: [Bialgebra R A]
+  条件: [双代数 R A]
   证明: rfl
 
 Depends on / 依赖: asOver
@@ -679,7 +679,7 @@ lemma one_spec_asOver_spec_left
 
 中文:
 引理 one_spec_asOver_spec_left
-  条件: [Bialgebra R A]
+  条件: [双代数 R A]
   证明: rfl
 -/
 lemma one_spec_asOver_spec_left [Bialgebra R A] :
@@ -696,7 +696,7 @@ lemma mul_spec_asOver_spec_left
 
 中文:
 引理 mul_spec_asOver_spec_left
-  条件: [Bialgebra R A]
+  条件: [双代数 R A]
   证明: rfl
 -/
 lemma mul_spec_asOver_spec_left [Bialgebra R A] :
@@ -720,7 +720,7 @@ instance isCommMonObj_spec_asOver_spec
 
 中文:
 实例 isCommMonObj_spec_asOver_spec
-  签名: [Bialgebra R A] [IsCocomm R A]
+  签名: [双代数 R A] [是余comm R A]
   定义体: by
     ext
     have := congr((pullbackSpecIso R A A).hom ≫ ((bialgSpec R).map <| .op <| CommBialgCat.ofHom <|
@@ -765,7 +765,7 @@ instance instGrpObjSpecAsOverSpec
 
 中文:
 实例 instGrpObjSpecAsOverSpec
-  签名: [HopfAlgebra R A]
+  签名: [Hopf代数 R A]
   定义体: instMonObjSpecAsOverSpec
   __ := ((hopfSpec R).obj <| .op <| .of R A).grp
 
@@ -784,7 +784,7 @@ instance instCommGrpObjSpecAsOverSpec
 
 中文:
 实例 instCommGrpObjSpecAsOverSpec
-  签名: [HopfAlgebra R A] [IsCocomm R A]
+  签名: [Hopf代数 R A] [是余comm R A]
 -/
 instance instCommGrpObjSpecAsOverSpec [HopfAlgebra R A] [IsCocomm R A] :
     CommGrpObj ((Spec A).asOver (Spec R)) where
@@ -810,7 +810,7 @@ definition Spec.mapMulEquiv
 
 中文:
 定义 Spec.mapMulEquiv
-  签名: {R S T : 类型u} [CommRing R] [CommRing S] [CommRing T] [Bialgebra R S]
+  签名: {R S T : 类型u} [交换环 R] [交换环 S] [交换环 T] [双代数 R S]
   定义体: (Spec.map (CommRingCat.ofHom f.ofConv.toRingHom)).asOver _
   invFun f := ⟨(Spec.preimage f.left).hom, by
     suffices CommRingCat.ofHom (algebraMap R S) ≫ Spec.preimage f.left =
@@ -862,7 +862,7 @@ definition algΓAlgSpecAdjunction
 
 中文:
 定义 algΓAlgSpecAdjunction
-  签名: (R : CommRingCat.{u})
+  签名: (R : 交换环范畴.{u})
   定义体: by
   have overAdjunction := Over.postAdjunctionRight (Y := .op <| R) ΓSpec.adjunction
   have overEquivAlg := ((Over.opEquivOpUnder R).trans (commAlgCatEquivUnder R).op.symm).toAdjunction
@@ -891,7 +891,7 @@ instance [X.Over
 
 中文:
 实例 [X.Over
-  签名: (Spec R)] [IsAffine X] : Algebra R Γ(X, ⊤)
+  签名: (Spec R)] [是仿射 X] : 代数 R Γ(X, ⊤)
   定义体: ((commAlgCatEquivUnder R).inverse.obj <|
     .mk (Spec.fullyFaithful.preimage <| X.isoSpec.inv ≫ X ↘ Spec R).unop).algebra
 
@@ -911,7 +911,7 @@ lemma algebraMap_presheafObj
 
 中文:
 引理 algebraMap_presheafObj
-  条件: [X.Over (Spec R)] [IsAffine X]
+  条件: [X.Over (Spec R)] [是仿射 X]
   证明: rfl
 -/
 lemma algebraMap_presheafObj [X.Over (Spec R)] [IsAffine X] :
@@ -929,7 +929,7 @@ instance [X.Over
 
 中文:
 实例 [X.Over
-  签名: (Spec R)] [IsAffine X] : X.toSpecΓ.IsOver (Spec R) where
+  签名: (Spec R)] [是仿射 X] : X.toSpecΓ.是Over (Spec R) where
 -/
 instance [X.Over (Spec R)] [IsAffine X] : X.toSpecΓ.IsOver (Spec R) where
 
@@ -943,7 +943,7 @@ instance [X.Over
 
 中文:
 实例 [X.Over
-  签名: (Spec R)] [IsAffine X] : X.isoSpec.hom.IsOver (Spec R)
+  签名: (Spec R)] [是仿射 X] : X.isoSpec.hom.是Over (Spec R)
   定义体: inferInstanceAs (X.toSpecΓ.IsOver (Spec R))
 
 Depends on / 依赖: IsOver, X.toSpec
@@ -966,7 +966,7 @@ instance [M.Over
 
 中文:
 实例 [M.Over
-  签名: (Spec R)] [MonObj (M.asOver (Spec R))] [IsAffine M] :
+  签名: (Spec R)] [MonObj (M.asOver (Spec R))] [是仿射 M] :
   定义体: by
   have : MonObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(M, ⊤)) :=
 .ofIso M.isoSpec.asOver (Spec R)
@@ -999,7 +999,7 @@ instance [G.Over
 
 中文:
 实例 [G.Over
-  签名: (Spec R)] [GrpObj (G.asOver (Spec R))] [IsAffine G] :
+  签名: (Spec R)] [GrpObj (G.asOver (Spec R))] [是仿射 G] :
   定义体: by
   have : GrpObj ((algSpec R).obj <| .op <| CommAlgCat.of R Γ(G, ⊤)) :=
 .ofIso G.isoSpec.asOver (Spec R)
@@ -1032,7 +1032,7 @@ definition pullbackSpecIso'
 
 中文:
 定义 pullbackSpecIso'
-  签名: [Algebra R T]
+  签名: [代数 R T]
   定义体: pullbackSpecIso ..
 
 Depends on / 依赖: pullbackSpecIso
@@ -1058,7 +1058,7 @@ lemma pullbackSpecIso'_symmetry
 
 中文:
 引理 pullbackSpecIso'_symmetry
-  条件: [Algebra R T]
+  条件: [代数 R T]
   证明: by
   simp_rw [Iso.trans_hom, ← Iso.eq_comp_inv, Category.assoc, ← Iso.inv_comp_eq]
   ext
@@ -1098,7 +1098,7 @@ instance [Algebra
     exact (pullbackSpecIso_inv_fst ..).symm
 
 中文:
-实例 [Algebra
+实例 [代数
   签名: R T] :
   定义体: by
     rw [← cancel_epi (pullbackSymmetry .. ≪≫ pullbackSpecIso' ..).inv]; rw [Scheme.canonicallyOverPullback_over]; rw [Iso.inv_hom_id_assoc]; rw [Iso.trans_inv]; rw [Category.assoc]; rw [pullbackSymmetry_inv_comp_snd]
@@ -1138,7 +1138,7 @@ lemma μ_pullback_left_fst
 
 中文:
 引理 μ_pullback_left_fst
-  条件: [Algebra R T]
+  条件: [代数 R T]
   证明: by
   simp
   ext <;> simp
@@ -1197,7 +1197,7 @@ instance [Bialgebra
         AlgHom.toUnder, Under.homMk_right, Bialgebra.Tensor
 
 中文:
-实例 [Bialgebra
+实例 [双代数
   签名: R T] :
   定义体: by
     ext
@@ -1269,7 +1269,7 @@ lemma essImage_algSpec
 中文:
 引理 essImage_algSpec
   条件: {G : Over <| Spec R}
-  结论: (algSpec R).essImage G ↔ IsAffine G.left
+  结论: (algSpec R).essImage G ↔ 是仿射 G.left
   证明: by
   simp [algSpec, Functor.essImage_overPost (F := Scheme.Spec)]
 
@@ -1291,7 +1291,7 @@ lemma essImage_bialgSpec
 
 中文:
 引理 essImage_bialgSpec
-  条件: {G : Mon <| Over <| Spec R}
+  条件: {G : 幺半群 <| Over <| Spec R}
   证明: by simp
 -/
 lemma essImage_bialgSpec {G : Mon <| Over <| Spec R} :
@@ -1310,7 +1310,7 @@ lemma essImage_hopfSpec
 
 中文:
 引理 essImage_hopfSpec
-  条件: {G : Grp <| Over <| Spec R}
+  条件: {G : 群 <| Over <| Spec R}
   证明: by simp
 -/
 lemma essImage_hopfSpec {G : Grp <| Over <| Spec R} :

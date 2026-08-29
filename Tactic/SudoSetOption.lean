@@ -34,7 +34,7 @@ definition setOption
 
 中文:
 定义 setOption
-  签名: {m : Type -> Type} [Monad m] [MonadError m]
+  签名: {m : 类型 -> 类型} [单子 m] [MonadError m]
   定义体: do
   let val ← match val with
 | Syntax.ident _ _ `true _ => pure DataValue.ofBool true

@@ -35,7 +35,7 @@ definition arg
 
 中文:
 定义 arg
-  签名: (x : Complex)
+  签名: (x : 复形)
   定义体: if 0 <= x.re then Real.arcsin (x.im / ‖x‖)
   else if 0 <= x.im then Real.arcsin ((-x).im / ‖x‖) + π else Real.arcsin ((-x).im / ‖x‖) - π
 
@@ -59,7 +59,7 @@ theorem sin_arg
 
 中文:
 定理 sin_arg
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: 实数.sin (arg x) = x.im / ‖x‖
   证明: by
   unfold arg; split_ifs <;>
@@ -94,7 +94,7 @@ theorem cos_arg
 
 中文:
 定理 cos_arg
-  条件: {x : Complex} (hx : x != 0)
+  条件: {x : 复形} (hx : x != 0)
   结论: 实数.cos (arg x) = x.re / ‖x‖
   证明: by
   rw [arg]
@@ -144,7 +144,7 @@ theorem norm_mul_exp_arg_mul_I
 
 中文:
 定理 norm_mul_exp_arg_mul_I
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: ‖x‖ * exp (arg x * I) = x
   证明: by
   rcases eq_or_ne x 0 with (rfl | hx)
@@ -177,8 +177,8 @@ theorem norm_mul_cos_add_sin_mul_I
 
 中文:
 定理 norm_mul_cos_add_sin_mul_I
-  条件: (x : Complex)
-  结论: (‖x‖ * (cos (arg x) + sin (arg x) * I) : Complex) = x
+  条件: (x : 复形)
+  结论: (‖x‖ * (cos (arg x) + sin (arg x) * I) : 复形) = x
   证明: by
   rw [← exp_mul_I]; rw [norm_mul_exp_arg_mul_I]
 
@@ -204,7 +204,7 @@ lemma norm_mul_cos_arg
 
 中文:
 引理 norm_mul_cos_arg
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: ‖x‖ * 实数.cos (arg x) = x.re
   证明: by
   simpa [-norm_mul_cos_add_sin_mul_I] using! congr_arg re (norm_mul_cos_add_sin_mul_I x)
@@ -229,7 +229,7 @@ lemma norm_mul_sin_arg
 
 中文:
 引理 norm_mul_sin_arg
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: ‖x‖ * 实数.sin (arg x) = x.im
   证明: by
   simpa [-norm_mul_cos_add_sin_mul_I] using! congr_arg im (norm_mul_cos_add_sin_mul_I x)
@@ -258,7 +258,7 @@ theorem norm_eq_one_iff
 
 中文:
 定理 norm_eq_one_iff
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: ‖z‖ = 1 ↔ 存在 θ : 实数, exp (θ * I) = z
   证明: by
   refine ⟨fun hz => ⟨arg z, ?_⟩, ?_⟩
@@ -293,7 +293,7 @@ theorem range_exp_mul_I
 
 中文:
 定理 range_exp_mul_I
-  结论: (Set.range fun x : 实数 => exp (x * I)) = Metric.sphere 0 1
+  结论: (集合.range fun x : 实数 => exp (x * I)) = Metric.sphere 0 1
   证明: by
   ext x
   simp only [mem_sphere_zero_iff_norm, norm_eq_one_iff, Set.mem_range]
@@ -318,7 +318,7 @@ theorem arg_mul_cos_add_sin_mul_I
 
 中文:
 定理 arg_mul_cos_add_sin_mul_I
-  条件: {r : 实数} (hr : 0 < r) {θ : 实数} (hθ : θ in Set.Ioc (-π) π)
+  条件: {r : 实数} (hr : 0 < r) {θ : 实数} (hθ : θ in 集合.左开右闭区间 (-π) π)
   证明: by
   simp only [arg, norm_mul, norm_cos_add_sin_mul_I, Complex.norm_of_nonneg hr.le, mul_one]
   simp only [re_ofReal_mul, im_ofReal_mul, neg_im, ← ofReal_cos, ← ofReal_sin, ←
@@ -362,7 +362,7 @@ theorem arg_cos_add_sin_mul_I
 
 中文:
 定理 arg_cos_add_sin_mul_I
-  条件: {θ : 实数} (hθ : θ in Set.Ioc (-π) π)
+  条件: {θ : 实数} (hθ : θ in 集合.左开右闭区间 (-π) π)
   结论: arg (cos θ + sin θ * I) = θ
   证明: by
   rw [← one_mul (_ + _)]; rw [← ofReal_one]; rw [arg_mul_cos_add_sin_mul_I zero_lt_one hθ]
@@ -391,7 +391,7 @@ theorem arg_exp
 
 中文:
 定理 arg_exp
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: arg (exp z) = toIocMod 实数.two_pi_pos (-π) z.im
   证明: by
   convert!
@@ -468,7 +468,7 @@ theorem ext_norm_arg
 
 中文:
 定理 ext_norm_arg
-  条件: {x y : Complex} (h₁ : ‖x‖ = ‖y‖) (h₂ : x.arg = y.arg)
+  条件: {x y : 复形} (h₁ : ‖x‖ = ‖y‖) (h₂ : x.arg = y.arg)
   结论: x = y
   证明: by
   rw [← norm_mul_exp_arg_mul_I x]; rw [← norm_mul_exp_arg_mul_I y]; rw [h₁]; rw [h₂]
@@ -489,7 +489,7 @@ theorem ext_norm_arg_iff
 
 中文:
 定理 ext_norm_arg_iff
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   结论: x = y ↔ ‖x‖ = ‖y‖ ∧ arg x = arg y
   证明: ⟨fun h => h ▸ ⟨rfl, rfl⟩, and_imp.2 ext_norm_arg⟩
 
@@ -515,8 +515,8 @@ theorem arg_mem_Ioc
 
 中文:
 定理 arg_mem_Ioc
-  条件: (z : Complex)
-  结论: arg z in Set.Ioc (-π) π
+  条件: (z : 复形)
+  结论: arg z in 集合.左开右闭区间 (-π) π
   证明: by
   have hπ : 0 < π := Real.pi_pos
   rcases eq_or_ne z 0 with (rfl | hz)
@@ -553,7 +553,7 @@ theorem toIocMod_arg
 
 中文:
 定理 toIocMod_arg
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: toIocMod 实数.two_pi_pos (-π) z.arg = z.arg
   证明: by
   simpa [toIocMod_eq_self, two_mul] using z.arg_mem_Ioc
@@ -576,7 +576,7 @@ theorem range_arg
 
 中文:
 定理 range_arg
-  结论: Set.range arg = Set.Ioc (-π) π
+  结论: 集合.range arg = 集合.左开右闭区间 (-π) π
   证明: (Set.range_subset_iff.2 arg_mem_Ioc).antisymm fun _ hx => ⟨_, arg_cos_add_sin_mul_I hx⟩
 
 Depends on / 依赖: Set.range_subset_iff, antisymm, arg_cos_add_sin_mul_I, arg_mem_Ioc, range_subset_iff
@@ -595,7 +595,7 @@ theorem arg_le_pi
 
 中文:
 定理 arg_le_pi
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: arg x <= π
   证明: (arg_mem_Ioc x).2
 
@@ -615,7 +615,7 @@ theorem neg_pi_lt_arg
 
 中文:
 定理 neg_pi_lt_arg
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: -π < arg x
   证明: (arg_mem_Ioc x).1
 
@@ -636,7 +636,7 @@ theorem arg_lt_arg_add_two_pi
 
 中文:
 定理 arg_lt_arg_add_two_pi
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: x.arg < y.arg + 2 * π
   证明: by
   grind [arg_le_pi x, neg_pi_lt_arg y]
@@ -658,7 +658,7 @@ theorem abs_arg_sub_arg_lt
 
 中文:
 定理 abs_arg_sub_arg_lt
-  条件: (x y : Complex)
+  条件: (x y : 复形)
   结论: |x.arg - y.arg| < 2 * π
   证明: by
   grind [arg_lt_arg_add_two_pi x y, arg_lt_arg_add_two_pi y x]
@@ -681,7 +681,7 @@ theorem abs_arg_le_pi
 
 中文:
 定理 abs_arg_le_pi
-  条件: (z : Complex)
+  条件: (z : 复形)
   结论: |arg z| <= π
   证明: abs_le.2 ⟨(neg_pi_lt_arg z).le, arg_le_pi z⟩
 
@@ -712,7 +712,7 @@ theorem arg_nonneg_iff
 
 中文:
 定理 arg_nonneg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: 0 <= arg z ↔ 0 <= z.im
   证明: by
   rcases eq_or_ne z 0 with (rfl | h₀); · simp
@@ -748,7 +748,7 @@ theorem arg_neg_iff
 
 中文:
 定理 arg_neg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z < 0 ↔ z.im < 0
   证明: lt_iff_lt_of_le_iff_le arg_nonneg_iff
 
@@ -771,7 +771,7 @@ theorem arg_real_mul
 
 中文:
 定理 arg_real_mul
-  条件: (x : Complex) {r : 实数} (hr : 0 < r)
+  条件: (x : 复形) {r : 实数} (hr : 0 < r)
   结论: arg (r * x) = arg x
   证明: by
   rcases eq_or_ne x 0 with (rfl | hx); · rw [mul_zero]
@@ -796,7 +796,7 @@ theorem arg_mul_real
 
 中文:
 定理 arg_mul_real
-  条件: {r : 实数} (hr : 0 < r) (x : Complex)
+  条件: {r : 实数} (hr : 0 < r) (x : 复形)
   结论: arg (x * r) = arg x
   证明: mul_comm x r ▸ arg_real_mul x hr
 
@@ -819,7 +819,7 @@ theorem arg_eq_arg_iff
 
 中文:
 定理 arg_eq_arg_iff
-  条件: {x y : Complex} (hx : x != 0) (hy : y != 0)
+  条件: {x y : 复形} (hx : x != 0) (hy : y != 0)
   证明: by
   simp only [ext_norm_arg_iff, norm_mul, norm_div, norm_real, norm_norm,
     div_mul_cancel₀ _ (norm_ne_zero_iff.mpr hx), true_and]
@@ -864,7 +864,7 @@ lemma arg_div_self
 
 中文:
 引理 arg_div_self
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: arg (x / x) = 0
   证明: by
   obtain rfl | hx := eq_or_ne x 0 <;> simp [*]
@@ -953,7 +953,7 @@ theorem tan_arg
 
 中文:
 定理 tan_arg
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: 实数.tan (arg x) = x.im / x.re
   证明: by
   by_cases h : x = 0
@@ -979,7 +979,7 @@ theorem arg_ofReal_of_nonneg
 @[simp, norm_cast]
 
 中文:
-定理 arg_ofReal_of_nonneg
+定理 arg_of实数_of_nonneg
   条件: {x : 实数} (hx : 0 <= x)
   结论: arg x = 0
   证明: by simp [arg, hx]
@@ -1026,7 +1026,7 @@ lemma ofNat_arg
   proof: natCast_arg
 
 中文:
-引理 ofNat_arg
+引理 of自然数_arg
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: arg of自然数(n) = 0
   证明: natCast_arg
@@ -1053,7 +1053,7 @@ theorem arg_eq_zero_iff
 
 中文:
 定理 arg_eq_zero_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = 0 ↔ 0 <= z.re ∧ z.im = 0
   证明: by
   refine ⟨fun h => ?_, ?_⟩
@@ -1086,7 +1086,7 @@ lemma arg_eq_zero_iff_zero_le
 
 中文:
 引理 arg_eq_zero_iff_zero_le
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = 0 ↔ 0 <= z
   证明: by
   rw [arg_eq_zero_iff]; rw [eq_comm]; rw [nonneg_iff]
@@ -1117,7 +1117,7 @@ theorem arg_eq_pi_iff
 
 中文:
 定理 arg_eq_pi_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = π ↔ z.re < 0 ∧ z.im = 0
   证明: by
   by_cases h₀ : z = 0
@@ -1157,7 +1157,7 @@ lemma arg_eq_pi_iff_lt_zero
 
 中文:
 引理 arg_eq_pi_iff_lt_zero
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = π ↔ z < 0
   证明: arg_eq_pi_iff
 
@@ -1177,7 +1177,7 @@ theorem arg_lt_pi_iff
 
 中文:
 定理 arg_lt_pi_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z < π ↔ 0 <= z.re ∨ z.im != 0
   证明: by
   rw [(arg_le_pi z).lt_iff_ne]; rw [not_iff_comm]; rw [not_or]; rw [not_le]; rw [Classical.not_not]; rw [arg_eq_pi_iff]
@@ -1197,7 +1197,7 @@ theorem arg_ofReal_of_neg
   proof: arg_eq_pi_iff.2 ⟨hx, rfl⟩
 
 中文:
-定理 arg_ofReal_of_neg
+定理 arg_of实数_of_neg
   条件: {x : 实数} (hx : x < 0)
   结论: arg x = π
   证明: arg_eq_pi_iff.2 ⟨hx, rfl⟩
@@ -1226,7 +1226,7 @@ theorem arg_eq_pi_div_two_iff
 
 中文:
 定理 arg_eq_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = π / 2 ↔ z.re = 0 ∧ 0 < z.im
   证明: by
   by_cases h₀ : z = 0; · simp [h₀, Real.pi_div_two_pos.ne]
@@ -1270,7 +1270,7 @@ theorem arg_eq_neg_pi_div_two_iff
 
 中文:
 定理 arg_eq_neg_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z = -(π / 2) ↔ z.re = 0 ∧ z.im < 0
   证明: by
   by_cases h₀ : z = 0; · simp [h₀, Real.pi_ne_zero]
@@ -1307,7 +1307,7 @@ theorem arg_of_re_nonneg
 
 中文:
 定理 arg_of_re_nonneg
-  条件: {x : Complex} (hx : 0 <= x.re)
+  条件: {x : 复形} (hx : 0 <= x.re)
   结论: arg x = 实数.arcsin (x.im / ‖x‖)
   证明: if_pos hx
 
@@ -1327,7 +1327,7 @@ theorem arg_of_re_neg_of_im_nonneg
 
 中文:
 定理 arg_of_re_neg_of_im_nonneg
-  条件: {x : Complex} (hx_re : x.re < 0) (hx_im : 0 <= x.im)
+  条件: {x : 复形} (hx_re : x.re < 0) (hx_im : 0 <= x.im)
   证明: by
   simp only [arg, hx_re.not_ge, hx_im, if_true, if_false]
 
@@ -1348,7 +1348,7 @@ theorem arg_of_re_neg_of_im_neg
 
 中文:
 定理 arg_of_re_neg_of_im_neg
-  条件: {x : Complex} (hx_re : x.re < 0) (hx_im : x.im < 0)
+  条件: {x : 复形} (hx_re : x.re < 0) (hx_im : x.im < 0)
   证明: by
   simp only [arg, hx_re.not_ge, hx_im.not_ge, if_false]
 
@@ -1369,7 +1369,7 @@ theorem arg_of_im_nonneg_of_ne_zero
 
 中文:
 定理 arg_of_im_nonneg_of_ne_zero
-  条件: {z : Complex} (h₁ : 0 <= z.im) (h₂ : z != 0)
+  条件: {z : 复形} (h₁ : 0 <= z.im) (h₂ : z != 0)
   证明: by
   rw [← cos_arg h₂]; rw [Real.arccos_cos (arg_nonneg_iff.2 h₁) (arg_le_pi _)]
 
@@ -1390,7 +1390,7 @@ theorem arg_of_im_pos
 
 中文:
 定理 arg_of_im_pos
-  条件: {z : Complex} (hz : 0 < z.im)
+  条件: {z : 复形} (hz : 0 < z.im)
   结论: arg z = 实数.arccos (z.re / ‖z‖)
   证明: arg_of_im_nonneg_of_ne_zero hz.le fun h => hz.ne' h.symm ▸ rfl
 
@@ -1413,7 +1413,7 @@ theorem arg_of_im_neg
 
 中文:
 定理 arg_of_im_neg
-  条件: {z : Complex} (hz : z.im < 0)
+  条件: {z : 复形} (hz : z.im < 0)
   结论: arg z = -实数.arccos (z.re / ‖z‖)
   证明: by
   have h₀ : z != 0 := mt (congr_arg im) hz.ne
@@ -1444,7 +1444,7 @@ theorem arg_conj
 
 中文:
 定理 arg_conj
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: arg (conj x) = if arg x = π then π else -arg x
   证明: by
   simp_rw [arg_eq_pi_iff, arg, neg_im, conj_im, conj_re, norm_conj, neg_div, neg_neg,
@@ -1486,7 +1486,7 @@ theorem arg_inv
 
 中文:
 定理 arg_inv
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: arg x⁻¹ = if arg x = π then π else -arg x
   证明: by
   rw [← arg_conj]; rw [inv_def]; rw [mul_comm]
@@ -1513,7 +1513,7 @@ lemma abs_arg_inv
 
 中文:
 引理 abs_arg_inv
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: |x⁻¹.arg| = |x.arg|
   证明: by rw [arg_inv]; split_ifs <;> simp [*]
 -/
@@ -1538,7 +1538,7 @@ lemma norm_eq_one_iff'
 
 中文:
 引理 norm_eq_one_iff'
-  结论: ‖x‖ = 1 ↔ 存在 θ in Set.Ioc (-π) π, exp (θ * I) = x
+  结论: ‖x‖ = 1 ↔ 存在 θ in 集合.左开右闭区间 (-π) π, exp (θ * I) = x
   证明: by
   rw [norm_eq_one_iff]
   constructor
@@ -1574,7 +1574,7 @@ lemma image_exp_Ioc_eq_sphere
 
 中文:
 引理 image_exp_Ioc_eq_sphere
-  结论: (fun θ : 实数 => exp (θ * I)) '' Set.Ioc (-π) π = sphere 0 1
+  结论: (fun θ : 实数 => exp (θ * I)) '' 集合.左开右闭区间 (-π) π = sphere 0 1
   证明: by
   ext; simpa using norm_eq_one_iff'.symm
 
@@ -1600,7 +1600,7 @@ theorem arg_le_pi_div_two_iff
 
 中文:
 定理 arg_le_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z <= π / 2 ↔ 0 <= re z ∨ im z < 0
   证明: by
   rcases le_or_gt 0 (re z) with hre | hre
@@ -1643,7 +1643,7 @@ theorem neg_pi_div_two_le_arg_iff
 
 中文:
 定理 neg_pi_div_two_le_arg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: -(π / 2) <= arg z ↔ 0 <= re z ∨ 0 <= im z
   证明: by
   rcases le_or_gt 0 (re z) with hre | hre
@@ -1685,7 +1685,7 @@ lemma neg_pi_div_two_lt_arg_iff
 
 中文:
 引理 neg_pi_div_two_lt_arg_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: -(π / 2) < arg z ↔ 0 < re z ∨ 0 <= im z
   证明: by
   rw [lt_iff_le_and_ne]; rw [neg_pi_div_two_le_arg_iff]; rw [ne_comm]; rw [Ne]; rw [arg_eq_neg_pi_div_two_iff]
@@ -1719,7 +1719,7 @@ lemma arg_lt_pi_div_two_iff
 
 中文:
 引理 arg_lt_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: arg z < π / 2 ↔ 0 < re z ∨ im z < 0 ∨ z = 0
   证明: by
   rw [lt_iff_le_and_ne]; rw [arg_le_pi_div_two_iff]; rw [Ne]; rw [arg_eq_pi_div_two_iff]
@@ -1754,7 +1754,7 @@ theorem abs_arg_le_pi_div_two_iff
 
 中文:
 定理 abs_arg_le_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |arg z| <= π / 2 ↔ 0 <= re z
   证明: by
   rw [abs_le]; rw [arg_le_pi_div_two_iff]; rw [neg_pi_div_two_le_arg_iff]; rw [← or_and_left]; rw [← not_le]; rw [and_not_self_iff]; rw [or_false]
@@ -1784,7 +1784,7 @@ theorem abs_arg_lt_pi_div_two_iff
 
 中文:
 定理 abs_arg_lt_pi_div_two_iff
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: |arg z| < π / 2 ↔ 0 < re z ∨ z = 0
   证明: by
   rw [abs_lt]; rw [arg_lt_pi_div_two_iff]; rw [neg_pi_div_two_lt_arg_iff]; rw [← or_and_left]
@@ -1817,7 +1817,7 @@ theorem arg_conj_coe_angle
 
 中文:
 定理 arg_conj_coe_angle
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: (arg (conj x) : 实数.Angle) = -arg x
   证明: by
   by_cases h : arg x = π <;> simp [arg_conj, h]
@@ -1842,7 +1842,7 @@ theorem arg_inv_coe_angle
 
 中文:
 定理 arg_inv_coe_angle
-  条件: (x : Complex)
+  条件: (x : 复形)
   结论: (arg x⁻¹ : 实数.Angle) = -arg x
   证明: by
   by_cases h : arg x = π <;> simp [arg_inv, h]
@@ -1865,7 +1865,7 @@ theorem arg_neg_eq_arg_sub_pi_of_im_pos
 
 中文:
 定理 arg_neg_eq_arg_sub_pi_of_im_pos
-  条件: {x : Complex} (hi : 0 < x.im)
+  条件: {x : 复形} (hi : 0 < x.im)
   结论: arg (-x) = arg x - π
   证明: by
   rw [arg_of_im_pos hi]; rw [arg_of_im_neg (show (-x).im < 0 from Left.neg_neg_iff.2 hi)]
@@ -1890,7 +1890,7 @@ theorem arg_neg_eq_arg_add_pi_of_im_neg
 
 中文:
 定理 arg_neg_eq_arg_add_pi_of_im_neg
-  条件: {x : Complex} (hi : x.im < 0)
+  条件: {x : 复形} (hi : x.im < 0)
   结论: arg (-x) = arg x + π
   证明: by
   rw [arg_of_im_neg hi]; rw [arg_of_im_pos (show 0 < (-x).im from Left.neg_pos_iff.2 hi)]
@@ -1918,7 +1918,7 @@ theorem arg_neg_eq_arg_sub_pi_iff
 
 中文:
 定理 arg_neg_eq_arg_sub_pi_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   证明: by
   rcases lt_trichotomy x.im 0 with (hi | hi | hi)
   · simp [hi, hi.ne, hi.not_gt, arg_neg_eq_arg_add_pi_of_im_neg, sub_eq_add_neg, ←
@@ -1959,7 +1959,7 @@ theorem arg_neg_eq_arg_add_pi_iff
 
 中文:
 定理 arg_neg_eq_arg_add_pi_iff
-  条件: {x : Complex}
+  条件: {x : 复形}
   证明: by
   rcases lt_trichotomy x.im 0 with (hi | hi | hi)
   · simp [hi, arg_neg_eq_arg_add_pi_of_im_neg]
@@ -2001,7 +2001,7 @@ theorem arg_neg_coe_angle
 
 中文:
 定理 arg_neg_coe_angle
-  条件: {x : Complex} (hx : x != 0)
+  条件: {x : 复形} (hx : x != 0)
   结论: (arg (-x) : 实数.Angle) = arg x + π
   证明: by
   rcases lt_trichotomy x.im 0 with (hi | hi | hi)
@@ -2172,7 +2172,7 @@ theorem arg_mul_coe_angle
 
 中文:
 定理 arg_mul_coe_angle
-  条件: {x y : Complex} (hx : x != 0) (hy : y != 0)
+  条件: {x y : 复形} (hx : x != 0) (hy : y != 0)
   证明: by
   convert!
     arg_mul_cos_add_sin_mul_I_coe_angle (mul_pos (norm_pos_iff.mpr hx) (norm_pos_iff.mpr hy))
@@ -2203,7 +2203,7 @@ theorem arg_div_coe_angle
 
 中文:
 定理 arg_div_coe_angle
-  条件: {x y : Complex} (hx : x != 0) (hy : y != 0)
+  条件: {x y : 复形} (hx : x != 0) (hy : y != 0)
   证明: by
   rw [div_eq_mul_inv]; rw [arg_mul_coe_angle hx (inv_ne_zero hy)]; rw [arg_inv_coe_angle]; rw [sub_eq_add_neg]
 
@@ -2228,7 +2228,7 @@ theorem arg_pow_coe_angle
 
 中文:
 定理 arg_pow_coe_angle
-  条件: (x : Complex) (n : 自然数)
+  条件: (x : 复形) (n : 自然数)
   证明: by
   obtain rfl | x0 := eq_or_ne x 0
   · by_cases n0 : n = 0 <;> simp [n0]
@@ -2261,7 +2261,7 @@ theorem arg_zpow_coe_angle
 
 中文:
 定理 arg_zpow_coe_angle
-  条件: (x : Complex) (n : 整数)
+  条件: (x : 复形) (n : 整数)
   证明: by
   match n with
   | Int.ofNat m => simp [arg_pow_coe_angle]
@@ -2290,8 +2290,8 @@ theorem arg_coe_angle_toReal_eq_arg
   exact arg_mem_Ioc _
 
 中文:
-定理 arg_coe_angle_toReal_eq_arg
-  条件: (z : Complex)
+定理 arg_coe_angle_to实数_eq_arg
+  条件: (z : 复形)
   结论: (arg z : 实数.Angle).to实数 = arg z
   证明: by
   rw [Real.Angle.toReal_coe_eq_self_iff_mem_Ioc]
@@ -2315,8 +2315,8 @@ theorem arg_coe_angle_eq_iff_eq_toReal
 @[simp]
 
 中文:
-定理 arg_coe_angle_eq_iff_eq_toReal
-  条件: {z : Complex} {θ : 实数.Angle}
+定理 arg_coe_angle_eq_iff_eq_to实数
+  条件: {z : 复形} {θ : 实数.Angle}
   证明: by
   rw [← Real.Angle.toReal_inj]; rw [arg_coe_angle_toReal_eq_arg]
 
@@ -2341,7 +2341,7 @@ theorem arg_coe_angle_eq_iff
 
 中文:
 定理 arg_coe_angle_eq_iff
-  条件: {x y : Complex}
+  条件: {x y : 复形}
   结论: (arg x : 实数.Angle) = arg y ↔ arg x = arg y
   证明: by
   simp_rw [← Real.Angle.toReal_inj, arg_coe_angle_toReal_eq_arg]
@@ -2364,7 +2364,7 @@ alias ⟨_, arg_mul⟩ := arg_mul_eq_add_arg_iff
 
 中文:
 引理 arg_mul_eq_add_arg_iff
-  条件: {x y : Complex} (hx₀ : x != 0) (hy₀ : y != 0)
+  条件: {x y : 复形} (hx₀ : x != 0) (hy₀ : y != 0)
   证明: by
   rw [← arg_coe_angle_toReal_eq_arg]; rw [arg_mul_coe_angle hx₀ hy₀]; rw [← Real.Angle.coe_add]; rw [Real.Angle.toReal_coe_eq_self_iff_mem_Ioc]
 
@@ -2393,7 +2393,7 @@ lemma mem_slitPlane_iff_arg
 
 中文:
 引理 mem_slitPlane_iff_arg
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: z in slitPlane ↔ z.arg != π ∧ z != 0
   证明: by
   simp only [mem_slitPlane_iff_not_le_zero, le_iff_lt_or_eq, ne_eq, arg_eq_pi_iff_lt_zero, not_or]
@@ -2414,7 +2414,7 @@ lemma slitPlane_arg_ne_pi
 
 中文:
 引理 slitPlane_arg_ne_pi
-  条件: {z : Complex} (hz : z in slitPlane)
+  条件: {z : 复形} (hz : z in slitPlane)
   结论: z.arg != 实数.pi
   证明: (mem_slitPlane_iff_arg.mp hz).1
 
@@ -2435,7 +2435,7 @@ theorem exp_mem_slitPlane
 
 中文:
 定理 exp_mem_slitPlane
-  条件: {z : Complex}
+  条件: {z : 复形}
   结论: exp z in slitPlane ↔ toIocMod 实数.two_pi_pos (-π) z.im != π
   证明: by
   simp [mem_slitPlane_iff_arg, arg_exp]
@@ -2656,7 +2656,7 @@ theorem tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
 
 中文:
 定理 tendsto_arg_nhdsWithin_im_neg_of_re_neg_of_im_zero
-  结论: {z : Complex} (hre : z.re < 0)
+  结论: {z : 复形} (hre : z.re < 0)
   证明: by
   suffices H : Tendsto (fun x : Complex => Real.arcsin ((-x).im / ‖x‖) - π)
       (𝓝[{ z : Complex | z.im < 0 }] z) (𝓝 (-π)) by
@@ -2697,7 +2697,7 @@ theorem continuousWithinAt_arg_of_re_neg_of_im_zero
 
 中文:
 定理 continuousWithinAt_arg_of_re_neg_of_im_zero
-  条件: {z : Complex} (hre : z.re < 0) (him : z.im = 0)
+  条件: {z : 复形} (hre : z.re < 0) (him : z.im = 0)
   证明: by
   have : arg =ᶠ[𝓝[{ z : Complex | 0 <= z.im }] z] fun x => Real.arcsin ((-x).im / ‖x‖) + π := by
     have : forallᶠ x : Complex in 𝓝 z, x.re < 0 := continuous_re.tendsto z (gt_mem_nhds hre)
@@ -2735,7 +2735,7 @@ theorem tendsto_arg_nhdsWithin_im_nonneg_of_re_neg_of_im_zero
 
 中文:
 定理 tendsto_arg_nhdsWithin_im_nonneg_of_re_neg_of_im_zero
-  结论: {z : Complex} (hre : z.re < 0)
+  结论: {z : 复形} (hre : z.re < 0)
   证明: by
   simpa only [arg_eq_pi_iff.2 ⟨hre, him⟩] using
     (continuousWithinAt_arg_of_re_neg_of_im_zero hre him).tendsto
@@ -2765,7 +2765,7 @@ theorem continuousAt_arg_coe_angle
 中文:
 定理 continuousAt_arg_coe_angle
   条件: (h : x != 0)
-  结论: ContinuousAt ((↑) ∘ arg : Complex -> 实数.Angle) x
+  结论: ContinuousAt ((↑) ∘ arg : 复形 -> 实数.Angle) x
   证明: by
   by_cases hs : x in slitPlane
   · exact Real.Angle.continuous_coe.continuousAt.comp (continuousAt_arg hs)

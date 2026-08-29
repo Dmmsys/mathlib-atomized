@@ -36,7 +36,7 @@ definition toOpenPartialHomeomorph
 
 中文:
 定义 toOpenPartialHomeomorph
-  签名: (hf : ContDiffAt 𝕂 n f a) (hf' : HasFDerivAt f (f' : E ->L[𝕂] F) a)
+  签名: (hf : ContDiffAt 𝕂 n f a) (hf' : 在点处Fréchet可导 f (f' : E ->L[𝕂] F) a)
   定义体: (hf.hasStrictFDerivAt' hf' hn).toOpenPartialHomeomorph f
 
 Depends on / 依赖: hasStrictFDerivAt, hf.hasStrictFDerivAt, toOpenPartialHomeomorph
@@ -116,7 +116,7 @@ definition localInverse
 
 中文:
 定义 localInverse
-  签名: (hf : ContDiffAt 𝕂 n f a) (hf' : HasFDerivAt f (f' : E ->L[𝕂] F) a)
+  签名: (hf : ContDiffAt 𝕂 n f a) (hf' : 在点处Fréchet可导 f (f' : E ->L[𝕂] F) a)
   定义体: (hf.hasStrictFDerivAt' hf' hn).localInverse f f' a
 
 Depends on / 依赖: hasStrictFDerivAt, hf.hasStrictFDerivAt, localInverse

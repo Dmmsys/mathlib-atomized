@@ -141,7 +141,7 @@ using X_pow
 
 中文:
 引理 X_pow_sub_C_eq_prod
-  结论: {R : 类型} [CommRing R] [IsDomain R]
+  结论: {R : 类型} [交换环 R] [是整环 R]
   证明: by
   let K := FractionRing R
   let i := algebraMap R K
@@ -263,7 +263,7 @@ theorem X_pow_sub_C_irreducible_iff_forall_prime_of_odd
     X_pow_sub_C_irreducible_of_odd hn⟩
 
 中文:
-定理 X_pow_sub_C_irreducible_iff_forall_prime_of_odd
+定理 X_pow_sub_C_irreducible_iff_对任意_prime_of_odd
   条件: {n : 自然数} (hn : Odd n) {a : K}
   证明: ⟨fun e _ hp hpn => pow_ne_of_irreducible_X_pow_sub_C e hpn hp.ne_one,
     X_pow_sub_C_irreducible_of_odd hn⟩
@@ -382,8 +382,8 @@ theorem Polynomial.separable_X_pow_sub_C_of_irreducible
   rw [mem_primitiveRoots (Nat.pos_of_ne_zero <| ne_zero_of_irreducibl
 
 中文:
-定理 Polynomial.separable_X_pow_sub_C_of_irreducible
-  结论: (X ^ n - C a).Separable
+定理 多项式.separable_X_pow_sub_C_of_irreducible
+  结论: (X ^ n - C a).可分
   证明: by
   let := Fact.mk H
   let : Algebra K K[n√a] := inferInstance
@@ -740,7 +740,7 @@ definition adjoinRootXPowSubCEquiv
 
 中文:
 定义 adjoinRootXPowSubCEquiv
-  签名: (hζ : (primitiveRoots n K).Nonempty) (H : Irreducible (X ^ n - C a))
+  签名: (hζ : (primitiveRoots n K).非空) (H : 不可约 (X ^ n - C a))
   定义体: .ofBijective (AdjoinRoot.liftAlgHom (X ^ n - C a) (Algebra.ofId _ _) α (by simp [hα])) by
     have := Fact.mk H
     let := isSplittingField_AdjoinRoot_X_pow_sub_C hζ H
@@ -816,7 +816,7 @@ lemma Algebra.adjoin_root_eq_top_of_isSplittingField
     (adjoinRootXPowSubCEquiv hζ H hα).symm.surjective]; rw [AlgHom.map_adjoin]; rw [Set.image_s
 
 中文:
-引理 Algebra.adjoin_root_eq_top_of_isSplittingField
+引理 代数.adjoin_root_eq_top_of_isSplittingField
   证明: by
   apply Subalgebra.map_injective (B := K[n√a]) (f := (adjoinRootXPowSubCEquiv hζ H hα).symm)
     (adjoinRootXPowSubCEquiv hζ H hα).symm.injective
@@ -843,7 +843,7 @@ lemma IntermediateField.adjoin_root_eq_top_of_isSplittingField
   exact (Algebra.adjoin_root_eq_top_of_isSplittingField hζ H hα).symm
 
 中文:
-引理 IntermediateField.adjoin_root_eq_top_of_isSplittingField
+引理 中间域.adjoin_root_eq_top_of_isSplittingField
   证明: by
   refine (IntermediateField.eq_adjoin_of_eq_algebra_adjoin _ _ _ ?_).symm
   exact (Algebra.adjoin_root_eq_top_of_isSplittingField hζ H hα).symm
@@ -1031,7 +1031,7 @@ definition autEquivZmod
 
 中文:
 定义 autEquivZmod
-  签名: [NeZero n] {ζ : K} (hζ : IsPrimitiveRoot ζ n)
+  签名: [NeZero n] {ζ : K} (hζ : 是PrimitiveRoot ζ n)
   定义体: haveI hn := ne_zero_of_irreducible_X_pow_sub_C H
   (autEquivRootsOfUnity ⟨ζ, (mem_primitiveRoots <| Nat.pos_of_ne_zero hn).mpr hζ⟩ H L).trans
     ((MulEquiv.subgroupCongr (IsPrimitiveRoot.zpowers_eq (hζ.isUnit_unit' hn)).symm).trans
@@ -1062,7 +1062,7 @@ include hα in
 
 中文:
 引理 autEquivZmod_symm_apply_intCast
-  条件: [NeZero n] {ζ : K} (hζ : IsPrimitiveRoot ζ n) (m : 整数)
+  条件: [NeZero n] {ζ : K} (hζ : 是PrimitiveRoot ζ n) (m : 整数)
   证明: by
   have hn := Nat.pos_iff_ne_zero.mpr (ne_zero_of_irreducible_X_pow_sub_C H)
   rw [← autEquivRootsOfUnity_smul ⟨ζ]; rw [(mem_primitiveRoots hn).mpr hζ⟩ H L hα]
@@ -1092,7 +1092,7 @@ include hζ H in
 
 中文:
 引理 autEquivZmod_symm_apply_natCast
-  条件: [NeZero n] {ζ : K} (hζ : IsPrimitiveRoot ζ n) (m : 自然数)
+  条件: [NeZero n] {ζ : K} (hζ : 是PrimitiveRoot ζ n) (m : 自然数)
   证明: by
   simpa only [Int.cast_natCast, zpow_natCast] using autEquivZmod_symm_apply_intCast H L hα hζ m
 
@@ -1121,7 +1121,7 @@ include hζ H in
 中文:
 引理 isCyclic_of_isSplittingField_X_pow_sub_C
   条件: [NeZero n]
-  结论: IsCyclic Gal(L/K)
+  结论: 是循环 Gal(L/K)
   证明: have hn := Nat.pos_iff_ne_zero.mpr (ne_zero_of_irreducible_X_pow_sub_C H)
   isCyclic_of_surjective _
     (autEquivZmod H _ <| (mem_primitiveRoots hn).mp hζ.choose_spec).symm.surjective
@@ -1148,7 +1148,7 @@ include hζ H in
 
 中文:
 引理 isGalois_of_isSplittingField_X_pow_sub_C
-  结论: IsGalois K L
+  结论: 是Galois K L
   证明: IsGalois.of_separable_splitting_field (separable_X_pow_sub_C_of_irreducible hζ a H)
 
 include hζ H in
@@ -1174,7 +1174,7 @@ lemma finrank_of_isSplittingField_X_pow_sub_C
 
 中文:
 引理 finrank_of_isSplittingField_X_pow_sub_C
-  结论: Module.finrank K L = n
+  结论: 模.finrank K L = n
   证明: by
   have := Polynomial.IsSplittingField.finiteDimensional L (X ^ n - C a)
   have := isGalois_of_isSplittingField_X_pow_sub_C hζ H L
@@ -1220,8 +1220,8 @@ lemma exists_root_adjoin_eq_top_of_isCyclic
   -- Since the minimal polynomial of `σ` over `K` is `Xⁿ -
 
 中文:
-引理 exists_root_adjoin_eq_top_of_isCyclic
-  条件: [IsGalois K L] [IsCyclic Gal(L/K)]
+引理 存在_root_adjoin_eq_top_of_isCyclic
+  条件: [是Galois K L] [是循环 Gal(L/K)]
   证明: by
   -- Let `ζ` be an `n`-th root of unity, and `σ` be a generator of `Gal(L/K)`.
   have ⟨ζ, hζ⟩ := hK
@@ -1363,7 +1363,7 @@ lemma isCyclic_tfae
 
 中文:
 引理 isCyclic_tfae
-  结论: (K L) [Field K] [Field L] [Algebra K L] [FiniteDimensional K L]
+  结论: (K L) [域 K] [域 L] [代数 K L] [有限维 K L]
   证明: by
   have : NeZero (Module.finrank K L) := NeZero.of_pos finrank_pos
   tfae_have 1 -> 3

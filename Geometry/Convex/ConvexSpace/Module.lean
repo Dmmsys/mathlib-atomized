@@ -53,8 +53,8 @@ definition ConvexSpace.ofModule
       mul_smul, Finsupp.smul_sum]
 
 中文:
-定义 ConvexSpace.ofModule
-  签名: : ConvexSpace R M where
+定义 凸空间.ofModule
+  签名: : 凸空间 R M where
   定义体: w.weights.sum fun m r => r • m
   sConvexComb_single := by simp
   assoc := by
@@ -80,7 +80,7 @@ instance convexSpaceSelf
 
 中文:
 实例 convexSpaceSelf
-  签名: : ConvexSpace R R
+  签名: : 凸空间 R R
   定义体: .ofModule
 
 Depends on / 依赖: ofModule
@@ -98,10 +98,10 @@ class IsModuleConvexSpace
     - sConvexComb_eq_sum((w : StdSimplex R M)) : w.sConvexComb = w.weights.sum fun m r => r • m
 
 中文:
-类 IsModuleConvexSpace
+类 是ModuleConvex空间
   参数: : 命题 where
   公理与运算 (1 个):
-    - sConvexComb_eq_sum((w : StdSimplex R M)) : w.sConvexComb = w.weights.sum fun m r => r • m
+    - sConvexComb_eq_sum((w : 标准单纯形 R M)) : w.sConvexComb = w.weights.求和 fun m r => r • m
 -/
 class IsModuleConvexSpace : Prop where
   sConvexComb_eq_sum (w : StdSimplex R M) : w.sConvexComb = w.weights.sum fun m r => r • m
@@ -122,8 +122,8 @@ lemma IsModuleConvexSpace.ofModule
   proof: rfl
 
 中文:
-引理 IsModuleConvexSpace.ofModule
-  结论: IsModuleConvexSpace R M where
+引理 是ModuleConvex空间.ofModule
+  结论: 是ModuleConvex空间 R M where
   证明: rfl
 -/
 protected lemma IsModuleConvexSpace.ofModule : IsModuleConvexSpace R M where
@@ -139,7 +139,7 @@ instance isModuleConvexSpace_self
 
 中文:
 实例 isModuleConvexSpace_self
-  签名: : IsModuleConvexSpace R R
+  签名: : 是ModuleConvex空间 R R
   定义体: .ofModule
 
 Depends on / 依赖: ofModule
@@ -163,7 +163,7 @@ lemma iConvexComb_eq_sum
 
 中文:
 引理 iConvexComb_eq_sum
-  条件: (w : StdSimplex R I) (f : I -> M)
+  条件: (w : 标准单纯形 R I) (f : I -> M)
   证明: by
   simp [iConvexComb, sConvexComb_eq_sum, Finsupp.sum_mapDomain_index, add_smul]
 
@@ -206,8 +206,8 @@ lemma IsAffineMap.map_sum_weights
   simpa using hf.map_iConvexComb w g
 
 中文:
-引理 IsAffineMap.map_sum_weights
-  条件: (hf : IsAffineMap R f) (w : StdSimplex R I) (g : I -> M)
+引理 是仿射映射.map_sum_weights
+  条件: (hf : 是仿射映射 R f) (w : 标准单纯形 R I) (g : I -> M)
   证明: by
   simpa using hf.map_iConvexComb w g
 
@@ -227,8 +227,8 @@ lemma IsAffineMap.map_smul_add_smul
   simpa using hf.map_convexCombPair ha hb hab x y
 
 中文:
-引理 IsAffineMap.map_smul_add_smul
-  结论: (hf : IsAffineMap R f) (ha : 0 <= a) (hb : 0 <= b)
+引理 是仿射映射.map_smul_add_smul
+  结论: (hf : 是仿射映射 R f) (ha : 0 <= a) (hb : 0 <= b)
   证明: by
   simpa using hf.map_convexCombPair ha hb hab x y
 
@@ -253,7 +253,7 @@ exact AddSubmonoidClass.finsuppSum_mem _ _ _ fun m hm => SMulMemClass.smul_mem _
 中文:
 引理 isConvexSet_coe
   条件: (S : F)
-  结论: IsConvexSet R (S : Set M)
+  结论: IsConvexSet R (S : 集合 M)
   证明: by
   refine .of_sConvexComb_mem fun w hw => ?_
   rw [sConvexComb_eq_sum]
@@ -277,7 +277,7 @@ lemma subtypeVal_submodule_sConvexComb
 
 中文:
 引理 subtypeVal_submodule_sConvexComb
-  条件: (S : F) (w : StdSimplex R S)
+  条件: (S : F) (w : 标准单纯形 R S)
   证明: rfl
 -/
 lemma subtypeVal_submodule_sConvexComb (S : F) (w : StdSimplex R S) :
@@ -293,7 +293,7 @@ lemma subtypeVal_submodule_iConvexComb
 
 中文:
 引理 subtypeVal_submodule_iConvexComb
-  条件: (S : F) (w : StdSimplex R I) (f : I -> S)
+  条件: (S : F) (w : 标准单纯形 R I) (f : I -> S)
   证明: subtypeVal_iConvexComb ..
 
 Depends on / 依赖: subtypeVal_iConvexComb
@@ -332,7 +332,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsModuleConvexSpace R (M × N)
+  签名: 是ModuleConvex空间 R (M × N)
   定义体: by ext <;> simp [Finsupp.sum, Prod.fst_sum, Prod.snd_sum]
 
 Depends on / 依赖: Finsupp, Finsupp.sum, Prod.fst_sum, Prod.snd_sum, fst_sum, snd_sum
@@ -360,9 +360,9 @@ lemma IsAffineMap.add
     simp [hf.map_sum_weights, hg.map_sum_weights, Finsupp.sum_mapDomain_index, add_smul]
 
 中文:
-引理 IsAffineMap.add
-  条件: (hf : IsAffineMap R f) (hg : IsAffineMap R g)
-  结论: IsAffineMap R (f + g) where
+引理 是仿射映射.add
+  条件: (hf : 是仿射映射 R f) (hg : 是仿射映射 R g)
+  结论: 是仿射映射 R (f + g) where
   证明: by
     simp [hf.map_sum_weights, hg.map_sum_weights, Finsupp.sum_mapDomain_index, add_smul]
 
@@ -405,8 +405,8 @@ lemma StdSimplex.isAffineMap_weights
   proof: by simp [sConvexComb_eq_sum, Finsupp.sum_mapDomain_index, add_smul]
 
 中文:
-引理 StdSimplex.isAffineMap_weights
-  结论: IsAffineMap R (weights (R := R) (M := I)) where
+引理 标准单纯形.isAffineMap_weights
+  结论: 是仿射映射 R (weights (R := R) (M := I)) where
   证明: by simp [sConvexComb_eq_sum, Finsupp.sum_mapDomain_index, add_smul]
 -/
 lemma StdSimplex.isAffineMap_weights : IsAffineMap R (weights (R := R) (M := I)) where
@@ -432,9 +432,9 @@ lemma IsAffineMap.neg
 @[to_fun (attr := fun_prop)]
 
 中文:
-引理 IsAffineMap.neg
-  条件: (hf : IsAffineMap R f)
-  结论: IsAffineMap R (-f) where
+引理 是仿射映射.neg
+  条件: (hf : 是仿射映射 R f)
+  结论: 是仿射映射 R (-f) where
   证明: by simp [hf.map_sum_weights, Finsupp.sum_mapDomain_index, add_smul]
 
 @[to_fun (attr := fun_prop)]
@@ -456,9 +456,9 @@ lemma IsAffineMap.sub
   simpa [sub_eq_add_neg] using hf.add hg.neg
 
 中文:
-引理 IsAffineMap.sub
-  条件: (hf : IsAffineMap R f) (hg : IsAffineMap R g)
-  结论: IsAffineMap R (f - g)
+引理 是仿射映射.sub
+  条件: (hf : 是仿射映射 R f) (hg : 是仿射映射 R g)
+  结论: 是仿射映射 R (f - g)
   证明: by
   simpa [sub_eq_add_neg] using hf.add hg.neg
 

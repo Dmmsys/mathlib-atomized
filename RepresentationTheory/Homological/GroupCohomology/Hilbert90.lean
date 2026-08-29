@@ -154,7 +154,7 @@ uniq := fun a => H1_induction_on a fun x => (H1π_eq_zero_iff _).2 by
 
 中文:
 实例 H1ofAutOnUnitsUnique
-  签名: : Unique (H1 (Rep.ofAlgebraAutOnUnits K L)) where
+  签名: : 唯一 (H1 (Rep.ofAlgebraAutOnUnits K L)) where
   定义体: 0
 uniq := fun a => H1_induction_on a fun x => (H1π_eq_zero_iff _).2 by
     refine (coboundariesOfIsMulCoboundary₁ ?_).2
@@ -219,8 +219,8 @@ theorem exists_div_of_norm_eq_one
   let xu : Lˣ := (Al
 
 中文:
-定理 exists_div_of_norm_eq_one
-  结论: (hg : 对任意 x, x in Subgroup.zpowers g) {x : L}
+定理 存在_div_of_norm_eq_one
+  结论: (hg : 对任意 x, x in 子群.zpowers g) {x : L}
   证明: by
   suffices H : forall x, Algebra.norm K x = 1 -> exists y : Lˣ, g y / y = x by
     have hxinv : Algebra.norm K x⁻¹ = 1 := by simp [Algebra.norm_inv, hx]
@@ -281,8 +281,8 @@ lemma exists_mul_galRestrict_of_norm_eq_one
     IsIntegralClosure.isL
 
 中文:
-引理 exists_mul_galRestrict_of_norm_eq_one
-  结论: (hg : 对任意 x, x in Subgroup.zpowers g) {η : B}
+引理 存在_mul_galRestrict_of_norm_eq_one
+  结论: (hg : 对任意 x, x in 子群.zpowers g) {η : B}
   证明: by
   have : Module.IsTorsionFree A L := by
     rw [Module.isTorsionFree_iff_algebraMap_injective]; rw [IsScalarTower.algebraMap_eq A K L]

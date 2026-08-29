@@ -36,7 +36,7 @@ theorem int_not_isCoprime_helper
 
 中文:
 定理 int_not_isCoprime_helper
-  结论: (x y : 整数) (d : 自然数) (hd : 整数.gcd x y = d)
+  结论: (x y : 整数) (d : 自然数) (hd : 整数.最大公约数 x y = d)
   证明: by
   rw [Int.isCoprime_iff_gcd_eq_one]; rw [hd]
   exact Nat.ne_of_beq_eq_false h
@@ -56,7 +56,7 @@ theorem isInt_isCoprime
   statement: {x y nx ny : Int} ->
 
 中文:
-定理 isInt_isCoprime
+定理 is整数_isCoprime
   结论: {x y nx ny : 整数} ->
 -/
 theorem isInt_isCoprime : {x y nx ny : Int} ->
@@ -71,7 +71,7 @@ theorem isInt_not_isCoprime
   statement: {x y nx ny : Int} ->
 
 中文:
-定理 isInt_not_isCoprime
+定理 is整数_not_isCoprime
   结论: {x y nx ny : 整数} ->
 -/
 theorem isInt_not_isCoprime : {x y nx ny : Int} ->
@@ -93,7 +93,7 @@ definition proveIntIsCoprime
     Sum.inr q(int_not_isCoprime_helper $ex $ey $ed $pf $h)
 
 中文:
-定义 proveIntIsCoprime
+定义 prove整数IsCoprime
   签名: (ex ey : Q(整数))
   定义体: let ⟨ed, pf⟩ := proveIntGCD ex ey
   if ed.natLit! = 1 then
@@ -134,7 +134,7 @@ definition evalIntIsCoprime
     have p
 
 中文:
-定义 evalIntIsCoprime
+定义 eval整数IsCoprime
   签名: : NormNumExt where eval {_ _} e
   定义体: do
   let .app (.app _ (x : Q(Int))) (y : Q(Int)) ← Meta.whnfR e | failure

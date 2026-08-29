@@ -49,7 +49,7 @@ theorem prime_pow_coprime_prod_of_coprime_insert
 
 中文:
 定理 prime_pow_coprime_prod_of_coprime_insert
-  结论: [DecidableEq α] {s : Finset α} (i : α -> 自然数) (p : α)
+  结论: [DecidableEq α] {s : 有限集 α} (i : α -> 自然数) (p : α)
   证明: by
   have hp := is_prime _ (Finset.mem_insert_self _ _)
   refine (isRelPrime_iff_no_prime_factors <| pow_ne_zero _ hp.ne_zero).mpr ?_
@@ -99,7 +99,7 @@ theorem induction_on_prime_power
 
 中文:
 定理 induction_on_prime_power
-  结论: {P : α -> 命题} (s : Finset α) (i : α -> 自然数)
+  结论: {P : α -> 命题} (s : 有限集 α) (i : α -> 自然数)
   证明: by
   let := Classical.decEq α
   induction s using Finset.induction_on with
@@ -150,7 +150,7 @@ theorem induction_on_coprime
 
 中文:
 定理 induction_on_coprime
-  结论: {P : α -> 命题} (a : α) (h0 : P 0) (h1 : 对任意 {x}, IsUnit x -> P x)
+  结论: {P : α -> 命题} (a : α) (h0 : P 0) (h1 : 对任意 {x}, 是单位 x -> P x)
   证明: by
   let := Classical.decEq α
   have P_of_associated : forall {x y}, Associated x y -> P x -> P y := by
@@ -197,7 +197,7 @@ theorem multiplicative_prime_power
 
 中文:
 定理 multiplicative_prime_power
-  结论: {f : α -> β} (s : Finset α) (i j : α -> 自然数)
+  结论: {f : α -> β} (s : 有限集 α) (i j : α -> 自然数)
   证明: by
   let := Classical.decEq α
   induction s using Finset.induction_on with

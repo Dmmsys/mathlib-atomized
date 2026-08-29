@@ -118,7 +118,7 @@ lemma pow_add_mul_le_add_pow_of_sq_nonneg
 
 中文:
 引理 pow_add_mul_le_add_pow_of_sq_nonneg
-  结论: [CommSemiring R] [PartialOrder R] [IsOrderedRing R]
+  结论: [交换半环 R] [偏序 R] [是Ordered环 R]
   证明: (Commute.all a b).pow_add_mul_le_add_pow_of_sq_nonneg ha Hsq Hsq' H n
 
 Depends on / 依赖: Commute, Commute.all, pow_add_mul_le_add_pow_of_sq_nonneg
@@ -138,7 +138,7 @@ lemma Commute.pow_add_mul_le_add_pow
 
 中文:
 引理 Commute.pow_add_mul_le_add_pow
-  结论: [Semiring R] [LinearOrder R] [IsOrderedRing R]
+  结论: [半环 R] [线性序 R] [是Ordered环 R]
   证明: Hcomm.pow_add_mul_le_add_pow_of_sq_nonneg ha (sq_nonneg _) (sq_nonneg _) H n
 
 Depends on / 依赖: Hcomm.pow_add_mul_le_add_pow_of_sq_nonneg, pow_add_mul_le_add_pow_of_sq_nonneg, sq_nonneg
@@ -158,7 +158,7 @@ lemma pow_add_mul_le_add_pow
 
 中文:
 引理 pow_add_mul_le_add_pow
-  结论: [CommSemiring R] [LinearOrder R] [IsOrderedRing R] [ExistsAddOfLE R]
+  结论: [交换半环 R] [线性序 R] [是Ordered环 R] [ExistsAddOfLE R]
   证明: (Commute.all a b).pow_add_mul_le_add_pow ha H n
 
 Depends on / 依赖: Commute, Commute.all, pow_add_mul_le_add_pow
@@ -178,7 +178,7 @@ lemma one_add_le_pow_of_two_add_nonneg
 
 中文:
 引理 one_add_le_pow_of_two_add_nonneg
-  结论: [Semiring R] [LinearOrder R] [IsOrderedRing R]
+  结论: [半环 R] [线性序 R] [是Ordered环 R]
   证明: one_add_mul_le_pow_of_sq_nonneg (sq_nonneg _) (sq_nonneg _) H _
 
 Depends on / 依赖: one_add_mul_le_pow_of_sq_nonneg, sq_nonneg

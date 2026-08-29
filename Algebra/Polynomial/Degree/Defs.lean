@@ -442,7 +442,7 @@ theorem natDegree_eq_of_degree_eq
 
 中文:
 定理 natDegree_eq_of_degree_eq
-  条件: [Semiring S] {q : S[X]} (h : degree p = degree q)
+  条件: [半环 S] {q : S[X]} (h : degree p = degree q)
   证明: by unfold natDegree; rw [h]
 
 Depends on / 依赖: natDegree
@@ -485,7 +485,7 @@ theorem degree_mono
 
 中文:
 定理 degree_mono
-  条件: [Semiring S] {f : R[X]} {g : S[X]} (h : f.support subseteq g.support)
+  条件: [半环 S] {f : R[X]} {g : S[X]} (h : f.support subseteq g.support)
   证明: Finset.sup_mono h
 
 Depends on / 依赖: Finset, Finset.sup_mono, sup_mono
@@ -586,7 +586,7 @@ theorem natDegree_le_natDegree
 
 中文:
 定理 natDegree_le_natDegree
-  条件: [Semiring S] {q : S[X]} (hpq : p.degree <= q.degree)
+  条件: [半环 S] {q : S[X]} (hpq : p.degree <= q.degree)
   证明: WithBot.giUnbotDBot.gc.monotone_l hpq
 
 @[simp]
@@ -784,7 +784,7 @@ theorem natDegree_ofNat
   proof: natDegree_natCast _
 
 中文:
-定理 natDegree_ofNat
+定理 natDegree_of自然数
   条件: (n : 自然数) [自然数.AtLeastTwo n]
   证明: natDegree_natCast _
 
@@ -1573,7 +1573,7 @@ theorem degree_add_le
 中文:
 定理 degree_add_le
   条件: (p q : R[X])
-  结论: degree (p + q) <= max (degree p) (degree q)
+  结论: degree (p + q) <= 最大值 (degree p) (degree q)
   证明: by
   simpa only [degree, ← support_toFinsupp, toFinsupp_add]
     using! AddMonoidAlgebra.sup_support_coeff_add_le _ _ _
@@ -1635,7 +1635,7 @@ theorem natDegree_add_le
 中文:
 定理 natDegree_add_le
   条件: (p q : R[X])
-  结论: natDegree (p + q) <= max (natDegree p) (natDegree q)
+  结论: natDegree (p + q) <= 最大值 (natDegree p) (natDegree q)
   证明: by
   rcases le_max_iff.1 (degree_add_le p q) with h | h <;> simp [natDegree_le_natDegree h]
 
@@ -1864,7 +1864,7 @@ theorem degree_update_le
 中文:
 定理 degree_update_le
   条件: (p : R[X]) (n : 自然数) (a : R)
-  结论: degree (p.update n a) <= max (degree p) n
+  结论: degree (p.update n a) <= 最大值 (degree p) n
   证明: by
   classical
   rw [degree]; rw [support_update]
@@ -1898,7 +1898,7 @@ theorem degree_sum_le
 
 中文:
 定理 degree_sum_le
-  条件: (s : Finset ι) (f : ι -> R[X])
+  条件: (s : 有限集 ι) (f : ι -> R[X])
   证明: Finset.cons_induction_on s (by simp)
     fun a s has ih =>
     calc
@@ -2258,7 +2258,7 @@ theorem Monic.ne_zero
 
 中文:
 定理 Monic.ne_zero
-  条件: [Nontrivial R] {p : R[X]} (hp : p.Monic)
+  条件: [非平凡 R] {p : R[X]} (hp : p.Monic)
   证明: by
   rintro rfl
   simp [Monic] at hp
@@ -2306,7 +2306,7 @@ lemma Monic.ne_zero_of_C
 
 中文:
 引理 Monic.ne_zero_of_C
-  条件: [Nontrivial R] {c : R} (hc : Monic (C c))
+  条件: [非平凡 R] {c : R} (hc : Monic (C c))
   结论: c != 0
   证明: by
   rintro rfl
@@ -2608,7 +2608,7 @@ theorem degree_sub_le
 中文:
 定理 degree_sub_le
   条件: (p q : R[X])
-  结论: degree (p - q) <= max (degree p) (degree q)
+  结论: degree (p - q) <= 最大值 (degree p) (degree q)
   证明: by
   simpa only [degree_neg q] using! degree_add_le p (-q)
 
@@ -2649,7 +2649,7 @@ theorem natDegree_sub_le
 中文:
 定理 natDegree_sub_le
   条件: (p q : R[X])
-  结论: natDegree (p - q) <= max (natDegree p) (natDegree q)
+  结论: natDegree (p - q) <= 最大值 (natDegree p) (natDegree q)
   证明: by
   simpa only [← natDegree_neg q] using! natDegree_add_le p (-q)
 

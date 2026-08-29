@@ -134,7 +134,7 @@ definition triangleOfDegreewiseSplit
 
 中文:
 定义 triangleOfDegreewiseSplit
-  签名: : Triangle (CochainComplex C 整数)
+  签名: : Triangle (上链复形 C 整数)
   定义体: Triangle.mk S.f S.g (homOfDegreewiseSplit S σ)
 
 Depends on / 依赖: Triangle, Triangle.mk, homOfDegreewiseSplit
@@ -423,7 +423,7 @@ definition triangleRotateShortComplex
 
 中文:
 定义 triangleRotateShortComplex
-  签名: : ShortComplex (CochainComplex C 整数)
+  签名: : 短复形 (上链复形 C 整数)
   定义体: ShortComplex.mk (triangle φ).rotate.mor₁ (triangle φ).rotate.mor₂ (by simp)
 
 Depends on / 依赖: ShortComplex, ShortComplex.mk, rotate, rotate.mor, triangle

@@ -60,7 +60,7 @@ theorem PiToModule.fromMatrix_apply
 
 中文:
 定理 PiToModule.fromMatrix_apply
-  条件: [DecidableEq ι] (A : Matrix ι ι R) (w : ι -> R)
+  条件: [DecidableEq ι] (A : 矩阵 ι ι R) (w : ι -> R)
   证明: rfl
 -/
 theorem PiToModule.fromMatrix_apply [DecidableEq ι] (A : Matrix ι ι R) (w : ι -> R) :
@@ -79,7 +79,7 @@ theorem PiToModule.fromMatrix_apply_single_one
 
 中文:
 定理 PiToModule.fromMatrix_apply_single_one
-  条件: [DecidableEq ι] (A : Matrix ι ι R) (j : ι)
+  条件: [DecidableEq ι] (A : 矩阵 ι ι R) (j : ι)
   证明: by
   rw [PiToModule.fromMatrix_apply]; rw [Fintype.linearCombination_apply]; rw [Matrix.mulVec_single]
   simp_rw [MulOpposite.op_one, one_smul, col_apply]
@@ -101,7 +101,7 @@ definition PiToModule.fromEnd
 
 中文:
 定义 PiToModule.fromEnd
-  签名: : Module.End R M ->ₗ[R] (ι -> R) ->ₗ[R] M
+  签名: : 模.End R M ->ₗ[R] (ι -> R) ->ₗ[R] M
   定义体: LinearMap.lcomp _ _ (Fintype.linearCombination R b)
 
 Depends on / 依赖: Fintype, Fintype.linearCombination, LinearMap, LinearMap.lcomp, linearCombination
@@ -119,7 +119,7 @@ theorem PiToModule.fromEnd_apply
 
 中文:
 定理 PiToModule.fromEnd_apply
-  条件: (f : Module.End R M) (w : ι -> R)
+  条件: (f : 模.End R M) (w : ι -> R)
   证明: rfl
 -/
 theorem PiToModule.fromEnd_apply (f : Module.End R M) (w : ι -> R) :
@@ -137,7 +137,7 @@ theorem PiToModule.fromEnd_apply_single_one
 
 中文:
 定理 PiToModule.fromEnd_apply_single_one
-  条件: [DecidableEq ι] (f : Module.End R M) (i : ι)
+  条件: [DecidableEq ι] (f : 模.End R M) (i : ι)
   证明: by
   rw [PiToModule.fromEnd_apply]; rw [Fintype.linearCombination_apply_single]; rw [one_smul]
 
@@ -163,7 +163,7 @@ theorem PiToModule.fromEnd_injective
 
 中文:
 定理 PiToModule.fromEnd_injective
-  条件: (hb : Submodule.span R (Set.range b) = ⊤)
+  条件: (hb : 子模.span R (集合.range b) = ⊤)
   证明: by
   intro x y e
   ext m
@@ -196,8 +196,8 @@ definition Matrix.Represents
   body: PiToModule.fromMatrix R b A = PiToModule.fromEnd R b f
 
 中文:
-定义 Matrix.Represents
-  签名: (A : Matrix ι ι R) (f : Module.End R M)
+定义 矩阵.Represents
+  签名: (A : 矩阵 ι ι R) (f : 模.End R M)
   定义体: PiToModule.fromMatrix R b A = PiToModule.fromEnd R b f
 
 Depends on / 依赖: PiToModule, PiToModule.fromEnd, PiToModule.fromMatrix, fromEnd, fromMatrix
@@ -216,8 +216,8 @@ theorem Matrix.Represents.congr_fun
   proof: LinearMap.congr_fun h x
 
 中文:
-定理 Matrix.Represents.congr_fun
-  结论: {A : Matrix ι ι R} {f : Module.End R M} (h : A.Represents b f)
+定理 矩阵.Represents.congr_fun
+  结论: {A : 矩阵 ι ι R} {f : 模.End R M} (h : A.Represents b f)
   证明: LinearMap.congr_fun h x
 
 Depends on / 依赖: LinearMap, LinearMap.congr_fun, congr_fun
@@ -235,8 +235,8 @@ theorem Matrix.represents_iff
   proof: ⟨fun e x => e.congr_fun x, fun H => LinearMap.ext fun x => H x⟩
 
 中文:
-定理 Matrix.represents_iff
-  条件: {A : Matrix ι ι R} {f : Module.End R M}
+定理 矩阵.represents_iff
+  条件: {A : 矩阵 ι ι R} {f : 模.End R M}
   证明: ⟨fun e x => e.congr_fun x, fun H => LinearMap.ext fun x => H x⟩
 
 Depends on / 依赖: LinearMap, LinearMap.ext, congr_fun, e.congr_fun
@@ -263,8 +263,8 @@ theorem Matrix.represents_iff'
       PiToM
 
 中文:
-定理 Matrix.represents_iff'
-  条件: {A : Matrix ι ι R} {f : Module.End R M}
+定理 矩阵.represents_iff'
+  条件: {A : 矩阵 ι ι R} {f : 模.End R M}
   证明: by
   constructor
   · intro h i
@@ -304,8 +304,8 @@ theorem Matrix.Represents.mul
   rfl
 
 中文:
-定理 Matrix.Represents.mul
-  结论: {A A' : Matrix ι ι R} {f f' : Module.End R M} (h : A.Represents b f)
+定理 矩阵.Represents.mul
+  结论: {A A' : 矩阵 ι ι R} {f f' : 模.End R M} (h : A.Represents b f)
   证明: by
   delta Matrix.Represents PiToModule.fromMatrix
   rw [LinearMap.comp_apply]; rw [AlgEquiv.toLinearMap_apply]; rw [map_mul]
@@ -338,8 +338,8 @@ theorem Matrix.Represents.one
   rfl
 
 中文:
-定理 Matrix.Represents.one
-  结论: (1 : Matrix ι ι R).Represents b 1
+定理 矩阵.Represents.one
+  结论: (1 : 矩阵 ι ι R).Represents b 1
   证明: by
   delta Matrix.Represents PiToModule.fromMatrix
   rw [LinearMap.comp_apply]; rw [AlgEquiv.toLinearMap_apply]; rw [map_one]
@@ -364,8 +364,8 @@ theorem Matrix.Represents.add
   delta Matrix.Represents at h h' ⊢; rw [map_add, map_add, h, h']
 
 中文:
-定理 Matrix.Represents.add
-  结论: {A A' : Matrix ι ι R} {f f' : Module.End R M} (h : A.Represents b f)
+定理 矩阵.Represents.add
+  结论: {A A' : 矩阵 ι ι R} {f f' : 模.End R M} (h : A.Represents b f)
   证明: by
   delta Matrix.Represents at h h' ⊢; rw [map_add, map_add, h, h']
 
@@ -386,8 +386,8 @@ theorem Matrix.Represents.zero
   rw [map_zero]; rw [map_zero]
 
 中文:
-定理 Matrix.Represents.zero
-  结论: (0 : Matrix ι ι R).Represents b 0
+定理 矩阵.Represents.zero
+  结论: (0 : 矩阵 ι ι R).Represents b 0
   证明: by
   delta Matrix.Represents
   rw [map_zero]; rw [map_zero]
@@ -409,8 +409,8 @@ theorem Matrix.Represents.smul
   rw [map_smul]; rw [map_smul]; rw [h]
 
 中文:
-定理 Matrix.Represents.smul
-  结论: {A : Matrix ι ι R} {f : Module.End R M} (h : A.Represents b f)
+定理 矩阵.Represents.smul
+  结论: {A : 矩阵 ι ι R} {f : 模.End R M} (h : A.Represents b f)
   证明: by
   delta Matrix.Represents at h ⊢
   rw [map_smul]; rw [map_smul]; rw [h]
@@ -432,7 +432,7 @@ theorem Matrix.Represents.algebraMap
   simpa only [Algebra.algebraMap_eq_smul_one] using Matrix.Represents.one.smul r
 
 中文:
-定理 Matrix.Represents.algebraMap
+定理 矩阵.Represents.algebraMap
   条件: (r : R)
   证明: by
   simpa only [Algebra.algebraMap_eq_smul_one] using Matrix.Represents.one.smul r
@@ -452,8 +452,8 @@ theorem Matrix.Represents.eq
   proof: PiToModule.fromEnd_injective R b hb (h.symm.trans h')
 
 中文:
-定理 Matrix.Represents.eq
-  结论: (hb : Submodule.span R (Set.range b) = ⊤)
+定理 矩阵.Represents.eq
+  结论: (hb : 子模.span R (集合.range b) = ⊤)
   证明: PiToModule.fromEnd_injective R b hb (h.symm.trans h')
 
 Depends on / 依赖: PiToModule, PiToModule.fromEnd_injective, fromEnd_injective, h.symm.trans
@@ -479,8 +479,8 @@ definition Matrix.isRepresentation
   algebraMap_mem' r := ⟨algebraMap _ _ r, .a
 
 中文:
-定义 Matrix.isRepresentation
-  签名: : Subalgebra R (Matrix ι ι R) where
+定义 矩阵.isRepresentation
+  签名: : 子代数 R (矩阵 ι ι R) where
   定义体: { A | exists f : Module.End R M, A.Represents b f }
   mul_mem' := fun ⟨f₁, e₁⟩ ⟨f₂, e₂⟩ => ⟨f₁ * f₂, e₁.mul e₂⟩
   one_mem' := ⟨1, Matrix.Represents.one⟩
@@ -514,7 +514,7 @@ definition Matrix.isRepresentation.toEnd
   map_add' A₁ A₂ 
 
 中文:
-定义 Matrix.isRepresentation.toEnd
+定义 矩阵.isRepresentation.toEnd
   签名: :
   定义体: A.2.choose
   map_one' := (1 : Matrix.isRepresentation R b).2.choose_spec.eq hb Matrix.Represents.one
@@ -541,8 +541,8 @@ theorem Matrix.isRepresentation.toEnd_represents
   proof: A.2.choose_spec
 
 中文:
-定理 Matrix.isRepresentation.toEnd_represents
-  条件: (A : Matrix.isRepresentation R b)
+定理 矩阵.isRepresentation.toEnd_represents
+  条件: (A : 矩阵.isRepresentation R b)
   证明: A.2.choose_spec
 
 Depends on / 依赖: choose_spec
@@ -560,8 +560,8 @@ theorem Matrix.isRepresentation.eq_toEnd_of_represents
   proof: A.2.choose_spec.eq hb h
 
 中文:
-定理 Matrix.isRepresentation.eq_toEnd_of_represents
-  结论: (A : Matrix.isRepresentation R b)
+定理 矩阵.isRepresentation.eq_toEnd_of_represents
+  结论: (A : 矩阵.isRepresentation R b)
   证明: A.2.choose_spec.eq hb h
 
 Depends on / 依赖: choose_spec, choose_spec.eq
@@ -587,8 +587,8 @@ theorem Matrix.isRepresentation.toEnd_exists_mem_ideal
     rw [Matrix
 
 中文:
-定理 Matrix.isRepresentation.toEnd_exists_mem_ideal
-  结论: (f : Module.End R M) (I : Ideal R)
+定理 矩阵.isRepresentation.toEnd_存在_mem_ideal
+  结论: (f : 模.End R M) (I : 理想 R)
   证明: by
   have : forall x, f x in LinearMap.range (Ideal.finsuppTotal ι M I b) := by
     rw [Ideal.range_finsuppTotal]; rw [hb]
@@ -629,7 +629,7 @@ theorem Matrix.isRepresentation.toEnd_surjective
   exact ⟨M, e⟩
 
 中文:
-定理 Matrix.isRepresentation.toEnd_surjective
+定理 矩阵.isRepresentation.toEnd_surjective
   证明: by
   intro f
   obtain ⟨M, e, -⟩ := Matrix.isRepresentation.toEnd_exists_mem_ideal R b hb f ⊤ (by simp)
@@ -659,7 +659,7 @@ theorem LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_z
     have : Submodule.span R (Set.range ((↑) : s -> M)) = ⊤ := by simp [h
 
 中文:
-定理 LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero
+定理 线性映射.存在_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero
   证明: by
   classical
     cases subsingleton_or_nontrivial R
@@ -704,7 +704,7 @@ theorem LinearMap.exists_monic_and_natDegree_eq_and_aeval_eq_zero
     fun _ h => h.imp_right (And.imp_right And.right)
 
 中文:
-定理 LinearMap.exists_monic_and_natDegree_eq_and_aeval_eq_zero
+定理 线性映射.存在_monic_and_natDegree_eq_and_aeval_eq_zero
   证明: (LinearMap.exists_monic_and_natDegree_eq_and_coeff_mem_pow_and_aeval_eq_zero R f ⊤ (by simp)).imp
     fun _ h => h.imp_right (And.imp_right And.right)
 
@@ -727,8 +727,8 @@ theorem LinearMap.exists_monic_and_aeval_eq_zero
     fun _ h => h.imp_right And.right
 
 中文:
-定理 LinearMap.exists_monic_and_aeval_eq_zero
-  条件: [Module.Finite R M] (f : Module.End R M)
+定理 线性映射.存在_monic_and_aeval_eq_zero
+  条件: [模.有限 R M] (f : 模.End R M)
   证明: (LinearMap.exists_monic_and_natDegree_eq_and_aeval_eq_zero R f).imp
     fun _ h => h.imp_right And.right
 

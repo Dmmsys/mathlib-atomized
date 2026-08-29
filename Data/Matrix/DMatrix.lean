@@ -95,7 +95,7 @@ definition map
 
 中文:
 定义 map
-  签名: (M : DMatrix m n α) {β : m -> n -> Type w} (f : 对任意 ⦃i j⦄, α i j -> β i j)
+  签名: (M : DMatrix m n α) {β : m -> n -> 类型 w} (f : 对任意 ⦃i j⦄, α i j -> β i j)
   定义体: fun i j => f (M i j)
 
 @[simp]
@@ -116,7 +116,7 @@ theorem map_apply
 
 中文:
 定理 map_apply
-  结论: {M : DMatrix m n α} {β : m -> n -> Type w} {f : 对任意 ⦃i j⦄, α i j -> β i j} {i : m}
+  结论: {M : DMatrix m n α} {β : m -> n -> 类型 w} {f : 对任意 ⦃i j⦄, α i j -> β i j} {i : m}
   证明: rfl
 
 @[simp]
@@ -135,7 +135,7 @@ theorem map_map
 
 中文:
 定理 map_map
-  结论: {M : DMatrix m n α} {β : m -> n -> Type w} {γ : m -> n -> Type z}
+  结论: {M : DMatrix m n α} {β : m -> n -> 类型 w} {γ : m -> n -> 类型 z}
   证明: by ext; simp
 -/
 theorem map_map {M : DMatrix m n α} {β : m -> n -> Type w} {γ : m -> n -> Type z}
@@ -196,8 +196,8 @@ instance [forall
   body: inferInstanceAs Inhabited forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Inhabited (α i j)] : Inhabited (DMatrix m n α)
+实例 [对任意
+  签名: i j, 可居 (α i j)] : 可居 (DMatrix m n α)
   定义体: inferInstanceAs Inhabited forall i j, α i j
 
 Depends on / 依赖: Inhabited
@@ -214,8 +214,8 @@ instance [forall
   body: inferInstanceAs Add forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Add (α i j)] : Add (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法 (α i j)] : 加法 (DMatrix m n α)
   定义体: inferInstanceAs Add forall i j, α i j
 -/
 instance [forall i j, Add (α i j)] : Add (DMatrix m n α) :=
@@ -230,8 +230,8 @@ instance [forall
   body: inferInstanceAs AddSemigroup forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddSemigroup (α i j)] : AddSemigroup (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法半群 (α i j)] : 加法半群 (DMatrix m n α)
   定义体: inferInstanceAs AddSemigroup forall i j, α i j
 
 Depends on / 依赖: AddSemigroup
@@ -248,8 +248,8 @@ instance [forall
   body: inferInstanceAs AddCommSemigroup forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddCommSemigroup (α i j)] : AddCommSemigroup (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法交换半群 (α i j)] : 加法交换半群 (DMatrix m n α)
   定义体: inferInstanceAs AddCommSemigroup forall i j, α i j
 
 Depends on / 依赖: AddCommSemigroup
@@ -266,8 +266,8 @@ instance [forall
   body: inferInstanceAs Zero forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Zero (α i j)] : Zero (DMatrix m n α)
+实例 [对任意
+  签名: i j, 零 (α i j)] : 零 (DMatrix m n α)
   定义体: inferInstanceAs Zero forall i j, α i j
 -/
 instance [forall i j, Zero (α i j)] : Zero (DMatrix m n α) :=
@@ -282,8 +282,8 @@ instance [forall
   body: inferInstanceAs AddMonoid forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddMonoid (α i j)] : AddMonoid (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法幺半群 (α i j)] : 加法幺半群 (DMatrix m n α)
   定义体: inferInstanceAs AddMonoid forall i j, α i j
 
 Depends on / 依赖: AddMonoid
@@ -300,8 +300,8 @@ instance [forall
   body: inferInstanceAs AddCommMonoid forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddCommMonoid (α i j)] : AddCommMonoid (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法交换幺半群 (α i j)] : 加法交换幺半群 (DMatrix m n α)
   定义体: inferInstanceAs AddCommMonoid forall i j, α i j
 
 Depends on / 依赖: AddCommMonoid
@@ -318,8 +318,8 @@ instance [forall
   body: inferInstanceAs Neg forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Neg (α i j)] : Neg (DMatrix m n α)
+实例 [对任意
+  签名: i j, 取负 (α i j)] : 取负 (DMatrix m n α)
   定义体: inferInstanceAs Neg forall i j, α i j
 -/
 instance [forall i j, Neg (α i j)] : Neg (DMatrix m n α) :=
@@ -334,8 +334,8 @@ instance [forall
   body: inferInstanceAs Sub forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Sub (α i j)] : Sub (DMatrix m n α)
+实例 [对任意
+  签名: i j, 减法 (α i j)] : 减法 (DMatrix m n α)
   定义体: inferInstanceAs Sub forall i j, α i j
 -/
 instance [forall i j, Sub (α i j)] : Sub (DMatrix m n α) :=
@@ -350,8 +350,8 @@ instance [forall
   body: inferInstanceAs AddGroup forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddGroup (α i j)] : AddGroup (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法群 (α i j)] : 加法群 (DMatrix m n α)
   定义体: inferInstanceAs AddGroup forall i j, α i j
 
 Depends on / 依赖: AddGroup
@@ -368,8 +368,8 @@ instance [forall
   body: inferInstanceAs AddCommGroup forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, AddCommGroup (α i j)] : AddCommGroup (DMatrix m n α)
+实例 [对任意
+  签名: i j, 加法交换群 (α i j)] : 加法交换群 (DMatrix m n α)
   定义体: inferInstanceAs AddCommGroup forall i j, α i j
 
 Depends on / 依赖: AddCommGroup
@@ -386,8 +386,8 @@ instance [forall
   body: inferInstanceAs Unique forall i j, α i j
 
 中文:
-实例 [forall
-  签名: i j, Unique (α i j)] : Unique (DMatrix m n α)
+实例 [对任意
+  签名: i j, 唯一 (α i j)] : 唯一 (DMatrix m n α)
   定义体: inferInstanceAs Unique forall i j, α i j
 
 Depends on / 依赖: Unique
@@ -406,8 +406,8 @@ instance [forall
 @[simp]
 
 中文:
-实例 [forall
-  签名: i j, Subsingleton (α i j)] : Subsingleton (DMatrix m n α)
+实例 [对任意
+  签名: i j, 子单例 (α i j)] : 子单例 (DMatrix m n α)
   定义体: inferInstanceAs Subsingleton forall i j, α i j
 
 @[simp]
@@ -431,7 +431,7 @@ theorem zero_apply
 
 中文:
 定理 zero_apply
-  条件: [对任意 i j, Zero (α i j)] (i j)
+  条件: [对任意 i j, 零 (α i j)] (i j)
   结论: (0 : DMatrix m n α) i j = 0
   证明: rfl
 
@@ -453,7 +453,7 @@ theorem neg_apply
 
 中文:
 定理 neg_apply
-  条件: [对任意 i j, Neg (α i j)] (M : DMatrix m n α) (i j)
+  条件: [对任意 i j, 取负 (α i j)] (M : DMatrix m n α) (i j)
   结论: (-M) i j = -M i j
   证明: rfl
 
@@ -475,7 +475,7 @@ theorem add_apply
 
 中文:
 定理 add_apply
-  条件: [对任意 i j, Add (α i j)] (M N : DMatrix m n α) (i j)
+  条件: [对任意 i j, 加法 (α i j)] (M N : DMatrix m n α) (i j)
   结论: (M + N) i j = M i j + N i j
   证明: rfl
 
@@ -498,7 +498,7 @@ theorem sub_apply
 
 中文:
 定理 sub_apply
-  条件: [对任意 i j, Sub (α i j)] (M N : DMatrix m n α) (i j)
+  条件: [对任意 i j, 减法 (α i j)] (M N : DMatrix m n α) (i j)
   结论: (M - N) i j = M i j - N i j
   证明: rfl
 
@@ -518,7 +518,7 @@ theorem map_zero
 
 中文:
 定理 map_zero
-  结论: [对任意 i j, Zero (α i j)] {β : m -> n -> Type w} [对任意 i j, Zero (β i j)]
+  结论: [对任意 i j, 零 (α i j)] {β : m -> n -> 类型 w} [对任意 i j, 零 (β i j)]
   证明: by ext; simp [h]
 -/
 theorem map_zero [forall i j, Zero (α i j)] {β : m -> n -> Type w} [forall i j, Zero (β i j)]
@@ -536,7 +536,7 @@ theorem map_add
 
 中文:
 定理 map_add
-  结论: [对任意 i j, AddMonoid (α i j)] {β : m -> n -> Type w} [对任意 i j, AddMonoid (β i j)]
+  结论: [对任意 i j, 加法幺半群 (α i j)] {β : m -> n -> 类型 w} [对任意 i j, 加法幺半群 (β i j)]
   证明: by
   ext; simp
 -/
@@ -556,7 +556,7 @@ theorem map_sub
 
 中文:
 定理 map_sub
-  结论: [对任意 i j, AddGroup (α i j)] {β : m -> n -> Type w} [对任意 i j, AddGroup (β i j)]
+  结论: [对任意 i j, 加法群 (α i j)] {β : m -> n -> 类型 w} [对任意 i j, 加法群 (β i j)]
   证明: by
   ext; simp
 -/
@@ -577,7 +577,7 @@ instance subsingleton_of_empty_left
 
 中文:
 实例 subsingleton_of_empty_left
-  签名: [IsEmpty m]
+  签名: [是空 m]
   定义体: ⟨fun M N => by
     ext i
     exact isEmptyElim i⟩
@@ -599,7 +599,7 @@ instance subsingleton_of_empty_right
 
 中文:
 实例 subsingleton_of_empty_right
-  签名: [IsEmpty n]
+  签名: [是空 n]
   定义体: ⟨fun M N => by ext i j; exact isEmptyElim j⟩
 
 Depends on / 依赖: isEmptyElim
@@ -622,8 +622,8 @@ definition AddMonoidHom.mapDMatrix
 @[simp]
 
 中文:
-定义 AddMonoidHom.mapDMatrix
-  签名: [对任意 i j, AddMonoid (α i j)] {β : m -> n -> Type w}
+定义 加法幺半群态射.mapDMatrix
+  签名: [对任意 i j, 加法幺半群 (α i j)] {β : m -> n -> 类型 w}
   定义体: M.map fun i j => @f i j
   map_zero' := by simp
   map_add' := DMatrix.map_add f
@@ -648,8 +648,8 @@ theorem AddMonoidHom.mapDMatrix_apply
   proof: rfl
 
 中文:
-定理 AddMonoidHom.mapDMatrix_apply
-  结论: [对任意 i j, AddMonoid (α i j)] {β : m -> n -> Type w}
+定理 加法幺半群态射.mapDMatrix_apply
+  结论: [对任意 i j, 加法幺半群 (α i j)] {β : m -> n -> 类型 w}
   证明: rfl
 -/
 theorem AddMonoidHom.mapDMatrix_apply [forall i j, AddMonoid (α i j)] {β : m -> n -> Type w}

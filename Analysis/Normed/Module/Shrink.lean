@@ -29,8 +29,8 @@ instance [SeminormedAddCommGroup
   body: (equivShrink α).symm.seminormedAddCommGroup
 
 中文:
-实例 [SeminormedAddCommGroup
-  签名: α] : SeminormedAddCommGroup (Shrink.{v} α)
+实例 [SeminormedAddComm群
+  签名: α] : SeminormedAddComm群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.seminormedAddCommGroup
 
 Depends on / 依赖: equivShrink, seminormedAddCommGroup, symm.seminormedAddCommGroup
@@ -47,8 +47,8 @@ instance [NormedAddCommGroup
   body: (equivShrink α).symm.normedAddCommGroup
 
 中文:
-实例 [NormedAddCommGroup
-  签名: α] : NormedAddCommGroup (Shrink.{v} α)
+实例 [赋范交换加群
+  签名: α] : 赋范交换加群 (Shrink.{v} α)
   定义体: (equivShrink α).symm.normedAddCommGroup
 -/
 instance [NormedAddCommGroup α] : NormedAddCommGroup (Shrink.{v} α) :=
@@ -63,8 +63,8 @@ instance [SeminormedAddCommGroup
   body: (equivShrink α).symm.normedSpace 𝕜
 
 中文:
-实例 [SeminormedAddCommGroup
-  签名: α] [NormedSpace 𝕜 α] : NormedSpace 𝕜 (Shrink.{v} α)
+实例 [SeminormedAddComm群
+  签名: α] [赋范空间 𝕜 α] : 赋范空间 𝕜 (Shrink.{v} α)
   定义体: (equivShrink α).symm.normedSpace 𝕜
 
 Depends on / 依赖: equivShrink, normedSpace, symm.normedSpace

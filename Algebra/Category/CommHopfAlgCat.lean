@@ -37,13 +37,13 @@ structure CommHopfAlgCat
     - [hopfAlgebra : HopfAlgebra R X]
 
 中文:
-结构 CommHopfAlgCat
-  参数: (R : 类型u) [CommRing R]
+结构 交换HopfAlg范畴
+  参数: (R : 类型u) [交换环 R]
   公理与运算 (4 个):
     - of((R)) : :
     - X : 类型v
-    - [commRing : CommRing X]
-    - [hopfAlgebra : HopfAlgebra R X]
+    - [commRing : 交换环 X]
+    - [hopfAlgebra : Hopf代数 R X]
 -/
 structure CommHopfAlgCat (R : Type u) [CommRing R] where
   /-- Turn an unbundled `R`-Hopf algebra into the corresponding object in the category of
@@ -72,7 +72,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeSort (CommHopfAlgCat R) (类型v)
+  签名: CoeSort (交换HopfAlg范畴 R) (类型v)
   定义体: ⟨CommHopfAlgCat.X⟩
 
 Depends on / 依赖: CommHopfAlgCat, CommHopfAlgCat.X
@@ -93,7 +93,7 @@ lemma coe_of
 
 中文:
 引理 coe_of
-  条件: (X : 类型v) [CommRing X] [HopfAlgebra R X]
+  条件: (X : 类型v) [交换环 X] [Hopf代数 R X]
   结论: (of R X : 类型v) = X
   证明: rfl
 -/
@@ -112,8 +112,8 @@ structure Hom
     - hom' : A ->ₐc[R] B
 
 中文:
-结构 Hom
-  参数: (A B : CommHopfAlgCat.{v} R)
+结构 态射
+  参数: (A B : 交换HopfAlg范畴.{v} R)
   公理与运算 (2 个):
     - mk : :
     - hom' : A ->ₐc[R] B
@@ -135,7 +135,7 @@ instance :
 
 中文:
 实例 :
-  签名: Category (CommHopfAlgCat.{v} R)
+  签名: 范畴 (交换HopfAlg范畴.{v} R)
   定义体: Hom A B
   id A := ⟨.id R A⟩
   comp f g := ⟨g.hom'.comp f.hom'⟩
@@ -156,7 +156,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConcreteCategory (CommHopfAlgCat.{v} R) (· ->ₐc[R] ·)
+  签名: 余ncrete范畴 (交换HopfAlg范畴.{v} R) (· ->ₐc[R] ·)
   定义体: Hom.hom'
   ofHom := Hom.mk
 
@@ -175,8 +175,8 @@ abbreviation Hom.hom
   body: ConcreteCategory.hom (C := CommHopfAlgCat R) f
 
 中文:
-缩写 Hom.hom
-  签名: (f : Hom A B)
+缩写 态射.hom
+  签名: (f : 态射 A B)
   定义体: ConcreteCategory.hom (C := CommHopfAlgCat R) f
 -/
 abbrev Hom.hom (f : Hom A B) := ConcreteCategory.hom (C := CommHopfAlgCat R) f
@@ -191,7 +191,7 @@ abbreviation ofHom
 
 中文:
 缩写 ofHom
-  签名: {_ : CommRing X} {_ : CommRing Y} {_ : HopfAlgebra R X} {_ : HopfAlgebra R Y}
+  签名: {_ : 交换环 X} {_ : 交换环 Y} {_ : Hopf代数 R X} {_ : Hopf代数 R Y}
   定义体: ConcreteCategory.ofHom (C := CommHopfAlgCat R) f
 
 Depends on / 依赖: CommHopfAlgCat, ConcreteCategory, ConcreteCategory.ofHom
@@ -210,8 +210,8 @@ definition Hom.Simps.hom
 initialize_simps_projections Hom (hom' -> hom)
 
 中文:
-定义 Hom.Simps.hom
-  签名: (A B : CommHopfAlgCat.{v} R) (f : Hom A B)
+定义 态射.Simps.hom
+  签名: (A B : 交换HopfAlg范畴.{v} R) (f : 态射 A B)
   定义体: f.hom
 
 initialize_simps_projections Hom (hom' -> hom)
@@ -231,7 +231,7 @@ lemma hom_id
 
 中文:
 引理 hom_id
-  结论: (𝟙 A : A ⟶ A).hom = AlgHom.id R A
+  结论: (𝟙 A : A ⟶ A).hom = 代数态射.id R A
   证明: rfl
 -/
 @[simp] lemma hom_id : (𝟙 A : A ⟶ A).hom = AlgHom.id R A := rfl
@@ -247,7 +247,7 @@ lemma id_apply
 
 中文:
 引理 id_apply
-  条件: (A : CommHopfAlgCat.{v} R) (a : A)
+  条件: (A : 交换HopfAlg范畴.{v} R) (a : A)
   结论: (𝟙 A : A ⟶ A) a = a
   证明: by simp
 -/
@@ -434,7 +434,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (CommHopfAlgCat R)
+  签名: 可居 (交换HopfAlg范畴 R)
   定义体: ⟨of R R⟩
 -/
 instance : Inhabited (CommHopfAlgCat R) := ⟨of R R⟩
@@ -450,8 +450,8 @@ lemma forget_obj
 
 中文:
 引理 forget_obj
-  条件: (A : CommHopfAlgCat.{v} R)
-  结论: (forget (CommHopfAlgCat.{v} R)).obj A = A
+  条件: (A : 交换HopfAlg范畴.{v} R)
+  结论: (forget (交换HopfAlg范畴.{v} R)).obj A = A
   证明: rfl
 -/
 lemma forget_obj (A : CommHopfAlgCat.{v} R) : (forget (CommHopfAlgCat.{v} R)).obj A = A := rfl
@@ -466,7 +466,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommRing ((forget (CommHopfAlgCat R)).obj A)
+  签名: 交换环 ((forget (交换HopfAlg范畴 R)).obj A)
   定义体: inferInstanceAs CommRing A
 
 Depends on / 依赖: CommRing
@@ -483,7 +483,7 @@ instance :
 
 中文:
 实例 :
-  签名: HopfAlgebra R ((forget (CommHopfAlgCat R)).obj A)
+  签名: Hopf代数 R ((forget (交换HopfAlg范畴 R)).obj A)
   定义体: inferInstanceAs HopfAlgebra R A
 
 Depends on / 依赖: HopfAlgebra
@@ -501,7 +501,7 @@ instance hasForgetToCommBialgCat
 
 中文:
 实例 hasForgetToCommBialgCat
-  签名: : HasForget₂ (CommHopfAlgCat.{v} R) (CommBialgCat.{v} R) where
+  签名: : 有Forget₂ (交换HopfAlg范畴.{v} R) (交换Bialg范畴.{v} R) where
   定义体: .of R A
   forget₂.map f := CommBialgCat.ofHom f.hom
 -/
@@ -519,7 +519,7 @@ lemma forget₂_commBialgCat_obj
 
 中文:
 引理 forget₂_commBialgCat_obj
-  条件: (A : CommHopfAlgCat.{v} R)
+  条件: (A : 交换HopfAlg范畴.{v} R)
   证明: rfl
 -/
 @[simp] lemma forget₂_commBialgCat_obj (A : CommHopfAlgCat.{v} R) :
@@ -555,7 +555,7 @@ definition ofIsoSelf
 
 中文:
 定义 ofIsoSelf
-  签名: (A : CommHopfAlgCat.{v} R)
+  签名: (A : 交换HopfAlg范畴.{v} R)
   定义体: 𝟙 A
   inv := 𝟙 A
 -/
@@ -577,7 +577,7 @@ definition isoMk
 
 中文:
 定义 isoMk
-  签名: {X Y : 类型v} {_ : CommRing X} {_ : CommRing Y} {_ : HopfAlgebra R X}
+  签名: {X Y : 类型v} {_ : 交换环 X} {_ : 交换环 Y} {_ : Hopf代数 R X}
   定义体: ofHom (e : X ->ₐc[R] Y)
   inv := ofHom (e.symm : Y ->ₐc[R] X)
 -/
@@ -660,7 +660,7 @@ instance reflectsIsomorphisms_forget
 
 中文:
 实例 reflectsIsomorphisms_forget
-  签名: : (forget (CommHopfAlgCat.{u} R)).ReflectsIsomorphisms where
+  签名: : (forget (交换HopfAlg范畴.{u} R)).反映同构 where
   定义体: by
     let i := asIso ((forget (CommHopfAlgCat.{u} R)).map f)
     let e : X ≃ₐc[R] Y := { f.hom, i.toEquiv with }
@@ -693,8 +693,8 @@ instance CommAlgCat.grpObjOpOf
 
 
 中文:
-实例 CommAlgCat.grpObjOpOf
-  签名: {A : 类型u} [CommRing A] [HopfAlgebra R A]
+实例 交换Alg范畴.grpObjOpOf
+  签名: {A : 类型u} [交换环 A] [Hopf代数 R A]
   定义体: (CommAlgCat.ofHom <| antipodeAlgHom R A).op
   left_inv := by
     ext x
@@ -739,8 +739,8 @@ lemma CommAlgCat.inv_op_of_unop_hom
   proof: rfl
 
 中文:
-引理 CommAlgCat.inv_op_of_unop_hom
-  条件: {A : 类型u} [CommRing A] [HopfAlgebra R A]
+引理 交换Alg范畴.inv_op_of_unop_hom
+  条件: {A : 类型u} [交换环 A] [Hopf代数 R A]
   证明: rfl
 -/
 lemma CommAlgCat.inv_op_of_unop_hom {A : Type u} [CommRing A] [HopfAlgebra R A] :
@@ -771,7 +771,7 @@ inverse.map {A B} f := CommHopfAlgCat.ofHom .ofAlgHom f.unop.hom.hom.unop.hom
 
 中文:
 定义 commHopfAlgCatEquivCogrpCommAlgCat
-  签名: : CommHopfAlgCat R ≌ (Grp (CommAlgCat R)ᵒᵖ)ᵒᵖ where
+  签名: : 交换HopfAlg范畴 R ≌ (群 (交换Alg范畴 R)ᵒᵖ)ᵒᵖ where
   定义体: op .mk op .of R A
 functor.map {A B} f := op .mk .mk' op CommAlgCat.ofHom f.hom
   inverse.obj A := .of R A.unop.X.unop

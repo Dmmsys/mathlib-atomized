@@ -76,7 +76,7 @@ definition rTensorAlgEquiv
 
 中文:
 定义 rTensorAlgEquiv
-  签名: : S otimes[R] MvPolynomial σ N ≃ₐ[S] MvPolynomial σ (S otimes[R] N)
+  签名: : S otimes[R] 多元多项式 σ N ≃ₐ[S] 多元多项式 σ (S otimes[R] N)
   定义体: AddMonoidAlgebra.rTensorEquivAlgEquiv R ..
 
 @[deprecated (since := "2026-06-18")] alias rTensorAlgHom := rTensorAlgEquiv
@@ -102,7 +102,7 @@ lemma coeff_rTensorAlgEquiv_tmul
 
 中文:
 引理 coeff_rTensorAlgEquiv_tmul
-  条件: (s : S) (p : MvPolynomial σ N) (d : σ ->₀ 自然数)
+  条件: (s : S) (p : 多元多项式 σ N) (d : σ ->₀ 自然数)
   证明: by
   simp [rTensorAlgEquiv, coeff, MvPolynomial, ← tmul_eq_smul_one_tmul]
 
@@ -149,7 +149,7 @@ lemma rTensorAlgEquiv_apply
 
 中文:
 引理 rTensorAlgEquiv_apply
-  条件: (x : N otimes[R] MvPolynomial σ S)
+  条件: (x : N otimes[R] 多元多项式 σ S)
   证明: rfl
 -/
 lemma rTensorAlgEquiv_apply (x : N otimes[R] MvPolynomial σ S) :
@@ -165,7 +165,7 @@ definition scalarRTensorAlgEquiv
 
 中文:
 定义 scalarRTensorAlgEquiv
-  签名: : N otimes[R] MvPolynomial σ R ≃ₐ[N] MvPolynomial σ N
+  签名: : N otimes[R] 多元多项式 σ R ≃ₐ[N] 多元多项式 σ N
   定义体: AddMonoidAlgebra.scalarTensorEquiv R N
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.scalarTensorEquiv, scalarTensorEquiv
@@ -212,7 +212,7 @@ lemma algebraTensorAlgEquiv_tmul
 
 中文:
 引理 algebraTensorAlgEquiv_tmul
-  条件: (a : A) (p : MvPolynomial σ R)
+  条件: (a : A) (p : 多元多项式 σ R)
   证明: AddMonoidAlgebra.scalarTensorEquiv_tmul ..
 
 @[simp]
@@ -308,7 +308,7 @@ lemma algebraTensorAlgEquiv_symm_map
 
 中文:
 引理 algebraTensorAlgEquiv_symm_map
-  条件: (x : MvPolynomial σ R)
+  条件: (x : 多元多项式 σ R)
   证明: DFunLike.congr_fun (algebraTensorAlgEquiv_symm_comp_aeval R A) x
 
 Depends on / 依赖: DFunLike, DFunLike.congr_fun, algebraTensorAlgEquiv_symm_comp_aeval, congr_fun
@@ -333,7 +333,7 @@ lemma aeval_one_tmul
 
 中文:
 引理 aeval_one_tmul
-  条件: (f : σ -> S) (p : MvPolynomial σ R)
+  条件: (f : σ -> S) (p : 多元多项式 σ R)
   证明: by
   induction p using MvPolynomial.induction_on with
   | C a =>
@@ -516,7 +516,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R S (MvPolynomial σ R) (MvPolynomial σ S)
+  签名: 代数.是推出 R S (多元多项式 σ R) (多元多项式 σ S)
   定义体: AddMonoidAlgebra.instIsPushout
 
 Depends on / 依赖: AddMonoidAlgebra, AddMonoidAlgebra.instIsPushout, instIsPushout
@@ -534,7 +534,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra.IsPushout R (MvPolynomial σ R) S (MvPolynomial σ S)
+  签名: 代数.是推出 R (多元多项式 σ R) S (多元多项式 σ S)
   定义体: .symm inferInstance
 -/
 instance : Algebra.IsPushout R (MvPolynomial σ R) S (MvPolynomial σ S) := .symm inferInstance

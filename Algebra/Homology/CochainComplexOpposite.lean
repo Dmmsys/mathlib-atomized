@@ -41,8 +41,8 @@ definition embeddingUpIntDownInt
   rel := by simp
 
 中文:
-定义 embeddingUpIntDownInt
-  签名: : (up 整数).Embedding (down 整数) where
+定义 embeddingUp整数Down整数
+  签名: : (up 整数).嵌入 (down 整数) where
   定义体: -n
   injective_f _ _ := by simp
   rel := by simp
@@ -63,7 +63,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingUp整数Down整数.IsRelIff
+  签名: embeddingUp整数Down整数.是RelIff
   定义体: by dsimp; lia
 -/
 instance : embeddingUpIntDownInt.IsRelIff where
@@ -83,8 +83,8 @@ definition embeddingDownIntUpInt
   rel := by dsimp; lia
 
 中文:
-定义 embeddingDownIntUpInt
-  签名: : (down 整数).Embedding (up 整数) where
+定义 embeddingDown整数Up整数
+  签名: : (down 整数).嵌入 (up 整数) where
   定义体: -n
   injective_f _ _ := by simp
   rel := by dsimp; lia
@@ -105,7 +105,7 @@ instance :
 
 中文:
 实例 :
-  签名: embeddingDown整数Up整数.IsRelIff
+  签名: embeddingDown整数Up整数.是RelIff
   定义体: by dsimp; lia
 -/
 instance : embeddingDownIntUpInt.IsRelIff where
@@ -173,7 +173,7 @@ definition opEquivalence
 
 中文:
 定义 opEquivalence
-  签名: [HasZeroMorphisms C]
+  签名: [有ZeroMorphisms C]
   定义体: (HomologicalComplex.opEquivalence C (.up Int)).trans
     (ChainComplex.cochainComplexEquivalence _)
 
@@ -216,7 +216,7 @@ definition homotopyOp
 
 中文:
 定义 homotopyOp
-  签名: (h : Homotopy f g)
+  签名: (h : 同伦 f g)
   定义体: (h.hom (-q) (-p)).op
   zero p q hpq := by
     rw [h.zero]; rw [op_zero]
@@ -268,7 +268,7 @@ lemma homotopyOp_hom_eq
 
 中文:
 引理 homotopyOp_hom_eq
-  结论: (h : Homotopy f g)
+  结论: (h : 同伦 f g)
   证明: by
   obtain rfl : p' = -p := by lia
   obtain rfl : q' = -q := by lia
@@ -304,7 +304,7 @@ definition homotopyUnop
 
 中文:
 定义 homotopyUnop
-  签名: (h : Homotopy ((opEquivalence C).functor.map f.op)
+  签名: (h : 同伦 ((opEquivalence C).functor.map f.op)
   定义体: (K.XIsoOfEq (by simp)).hom ≫ (h.hom (-q) (-p)).unop ≫ (L.XIsoOfEq (by simp)).hom
   zero p q hpq := by
     rw [h.zero]; rw [unop_zero]; rw [zero_comp]; rw [comp_zero]
@@ -399,7 +399,7 @@ definition homotopyOpEquiv
 
 中文:
 定义 homotopyOpEquiv
-  签名: {K L : CochainComplex C 整数} {f g : K ⟶ L}
+  签名: {K L : 上链复形 C 整数} {f g : K ⟶ L}
   定义体: homotopyOp h
   invFun h := homotopyUnop h
   left_inv h := by
@@ -442,7 +442,7 @@ lemma exactAt_op
 
 中文:
 引理 exactAt_op
-  结论: {K : CochainComplex C 整数} {n : 整数} (hK : K.ExactAt n)
+  结论: {K : 上链复形 C 整数} {n : 整数} (hK : K.ExactAt n)
   证明: by
   obtain rfl : n = -m := by lia
   rw [HomologicalComplex.exactAt_iff' _ (m - 1) m (m + 1) (by simp) (by simp)]; rw [← ShortComplex.exact_unop_iff]
@@ -469,7 +469,7 @@ lemma acyclic_op
 
 中文:
 引理 acyclic_op
-  条件: {K : CochainComplex C 整数} (hK : K.Acyclic)
+  条件: {K : 上链复形 C 整数} (hK : K.非循环)
   证明: fun n => exactAt_op (hK (-n)) n
 
 Depends on / 依赖: exactAt_op

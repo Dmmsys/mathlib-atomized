@@ -104,7 +104,7 @@ theorem continuousWithinAt_toIcoDiv_Ici
 
 中文:
 定理 continuousWithinAt_toIcoDiv_Ici
-  结论: ContinuousWithinAt (toIcoDiv hp a) (Ici x) x
+  结论: ContinuousWithinAt (toIcoDiv hp a) (左闭右无界区间 x) x
   证明: .mono_right pure_le_nhds _ Filter.tendsto_pure.mpr (eventuallyEq_toIcoDiv_nhdsGE hp a x)
 
 Depends on / 依赖: Filter, Filter.tendsto_pure.mpr, eventuallyEq_toIcoDiv_nhdsGE, mono_right, pure_le_nhds, tendsto_pure
@@ -148,7 +148,7 @@ theorem continuousWithinAt_toIocDiv_Iic
 
 中文:
 定理 continuousWithinAt_toIocDiv_Iic
-  结论: ContinuousWithinAt (toIocDiv hp a) (Iic x) x
+  结论: ContinuousWithinAt (toIocDiv hp a) (左无界右闭区间 x) x
   证明: .mono_right pure_le_nhds _ Filter.tendsto_pure.mpr (eventuallyEq_toIocDiv_nhdsLE hp a x)
 
 Depends on / 依赖: Filter, Filter.tendsto_pure.mpr, eventuallyEq_toIocDiv_nhdsLE, mono_right, pure_le_nhds, tendsto_pure
@@ -170,7 +170,7 @@ alias continuous_right_toIcoMod := continuousWithinAt_toIcoMod_Ici
 
 中文:
 定理 continuousWithinAt_toIcoMod_Ici
-  结论: ContinuousWithinAt (toIcoMod hp a) (Ici x) x
+  结论: ContinuousWithinAt (toIcoMod hp a) (左闭右无界区间 x) x
   证明: continuousWithinAt_id.sub
     (continuousWithinAt_toIcoDiv_Ici hp a x).smul continuousWithinAt_const
 
@@ -200,7 +200,7 @@ alias continuous_left_toIocMod := continuousWithinAt_toIocMod_Iic
 
 中文:
 定理 continuousWithinAt_toIocMod_Iic
-  结论: ContinuousWithinAt (toIocMod hp a) (Iic x) x
+  结论: ContinuousWithinAt (toIocMod hp a) (左无界右闭区间 x) x
   证明: continuousWithinAt_id.sub
     (continuousWithinAt_toIocDiv_Iic hp a x).smul continuousWithinAt_const
 
@@ -491,7 +491,7 @@ abbreviation AddCircle
 
 中文:
 缩写 AddCircle
-  签名: [AddCommGroup 𝕜] (p : 𝕜)
+  签名: [加法交换群 𝕜] (p : 𝕜)
   定义体: 𝕜 ⧸ zmultiples p
 
 Depends on / 依赖: zmultiples
@@ -693,7 +693,7 @@ theorem continuous_mk'
 
 中文:
 定理 continuous_mk'
-  条件: [TopologicalSpace 𝕜]
+  条件: [拓扑空间 𝕜]
   证明: continuous_coinduced_rng
 -/
 protected theorem continuous_mk' [TopologicalSpace 𝕜] :
@@ -860,7 +860,7 @@ theorem finite_torsion
 中文:
 定理 finite_torsion
   条件: {n : 自然数} (hn : 0 < n)
-  结论: { u : AddCircle p | n • u = 0 }.Finite
+  结论: { u : AddCircle p | n • u = 0 }.有限
   证明: finite_torsion_of_isSMulRegular _ _ .of_right_eq_zero_of_smul fun _ => by simp [hn.ne']
 
 Depends on / 依赖: finite_torsion_of_isSMulRegular, hn.ne, of_right_eq_zero_of_smul
@@ -947,7 +947,7 @@ definition equivIco
 
 中文:
 定义 equivIco
-  签名: : AddCircle p ≃ Ico a (a + p)
+  签名: : AddCircle p ≃ 左闭右开区间 a (a + p)
   定义体: QuotientAddGroup.equivIcoMod hp.out a
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.equivIcoMod, equivIcoMod, hp.out
@@ -965,7 +965,7 @@ definition equivIoc
 
 中文:
 定义 equivIoc
-  签名: : AddCircle p ≃ Ioc a (a + p)
+  签名: : AddCircle p ≃ 左开右闭区间 a (a + p)
   定义体: QuotientAddGroup.equivIocMod hp.out a
 
 Depends on / 依赖: QuotientAddGroup, QuotientAddGroup.equivIocMod, equivIocMod, hp.out
@@ -1023,7 +1023,7 @@ theorem equivIco_coe_eq
 
 中文:
 定理 equivIco_coe_eq
-  条件: {x : 𝕜} (hx : x in Ico a (a + p))
+  条件: {x : 𝕜} (hx : x in 左闭右开区间 a (a + p))
   结论: (equivIco p a) x = ⟨x, hx⟩
   证明: by
   rw [← Equiv.eq_symm_apply]; rw [equivIco]; rw [QuotientAddGroup.equivIcoMod_symm_apply]
@@ -1047,7 +1047,7 @@ theorem equivIoc_coe_eq
 
 中文:
 定理 equivIoc_coe_eq
-  条件: {x : 𝕜} (hx : x in Ioc a (a + p))
+  条件: {x : 𝕜} (hx : x in 左开右闭区间 a (a + p))
   结论: (equivIoc p a) x = ⟨x, hx⟩
   证明: by
   rw [← Equiv.eq_symm_apply]; rw [equivIoc]; rw [QuotientAddGroup.equivIocMod_symm_apply]
@@ -1115,7 +1115,7 @@ lemma equivIco_coe_of_mem
 
 中文:
 引理 equivIco_coe_of_mem
-  条件: {y : 𝕜} (hy : y in Ico a (a + p))
+  条件: {y : 𝕜} (hy : y in 左闭右开区间 a (a + p))
   证明: by
   have : equivIco p a y = ⟨y, hy⟩ := (equivIco p a).right_inv ⟨y, hy⟩
   simp [this]
@@ -1139,7 +1139,7 @@ lemma equivIoc_coe_of_mem
 
 中文:
 引理 equivIoc_coe_of_mem
-  条件: {y : 𝕜} (hy : y in Ioc a (a + p))
+  条件: {y : 𝕜} (hy : y in 左开右闭区间 a (a + p))
   证明: by
   have : equivIoc p a y = ⟨y, hy⟩ := (equivIoc p a).right_inv ⟨y, hy⟩
   simp [this]
@@ -1166,7 +1166,7 @@ theorem coe_eq_coe_iff_of_mem_Ico
 
 中文:
 定理 coe_eq_coe_iff_of_mem_Ico
-  条件: {x y : 𝕜} (hx : x in Ico a (a + p)) (hy : y in Ico a (a + p))
+  条件: {x y : 𝕜} (hx : x in 左闭右开区间 a (a + p)) (hy : y in 左闭右开区间 a (a + p))
   证明: by
   refine ⟨fun h => ?_, by tauto⟩
   suffices (⟨x, hx⟩ : Ico a (a + p)) = ⟨y, hy⟩ by exact Subtype.mk.inj this
@@ -1199,7 +1199,7 @@ lemma coe_eq_coe_iff_of_mem_Ioc
 
 中文:
 引理 coe_eq_coe_iff_of_mem_Ioc
-  条件: {x y : 𝕜} (hx : x in Ioc a (a + p)) (hy : y in Ioc a (a + p))
+  条件: {x y : 𝕜} (hx : x in 左开右闭区间 a (a + p)) (hy : y in 左开右闭区间 a (a + p))
   证明: by
   refine ⟨fun h => ?_, by tauto⟩
   suffices (⟨x, hx⟩ : Ioc a (a + p)) = ⟨y, hy⟩ by exact Subtype.mk.inj this
@@ -1228,7 +1228,7 @@ theorem liftIco_coe_apply
 
 中文:
 定理 liftIco_coe_apply
-  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in Ico a (a + p))
+  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in 左闭右开区间 a (a + p))
   证明: by
   simp [liftIco, equivIco_coe_eq hx]
 
@@ -1249,7 +1249,7 @@ theorem liftIoc_coe_apply
 
 中文:
 定理 liftIoc_coe_apply
-  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in Ioc a (a + p))
+  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in 左开右闭区间 a (a + p))
   证明: by
   simp [liftIoc, equivIoc_coe_eq hx]
 
@@ -1333,7 +1333,7 @@ lemma eq_coe_Ico
 中文:
 引理 eq_coe_Ico
   条件: (a : AddCircle p)
-  结论: 存在 b in Ico 0 p, ↑b = a
+  结论: 存在 b in 左闭右开区间 0 p, ↑b = a
   证明: by
   let b := QuotientAddGroup.equivIcoMod hp.out 0 a
   exact ⟨b.1, by simpa only [zero_add] using b.2,
@@ -1361,7 +1361,7 @@ lemma eq_coe_Ioc
 中文:
 引理 eq_coe_Ioc
   条件: (a : AddCircle p)
-  结论: 存在 b in Ioc 0 p, ↑b = a
+  结论: 存在 b in 左开右闭区间 0 p, ↑b = a
   证明: by
   let b := QuotientAddGroup.equivIocMod hp.out 0 a
   exact ⟨b.1, by simpa only [zero_add] using b.2,
@@ -1387,7 +1387,7 @@ lemma coe_eq_zero_iff_of_mem_Ico
 
 中文:
 引理 coe_eq_zero_iff_of_mem_Ico
-  条件: (ha : a in Ico 0 p)
+  条件: (ha : a in 左闭右开区间 0 p)
   证明: by
   have h0 : 0 in Ico 0 (0 + p) := by simpa [zero_add, left_mem_Ico] using hp.out
   have ha' : a in Ico 0 (0 + p) := by rwa [zero_add]
@@ -1420,7 +1420,7 @@ theorem continuous_equivIco_symm
 
 中文:
 定理 continuous_equivIco_symm
-  结论: Continuous (equivIco p a).symm
+  结论: 连续 (equivIco p a).symm
   证明: continuous_quotient_mk'.comp continuous_subtype_val
 
 @[continuity]
@@ -1441,7 +1441,7 @@ theorem continuous_equivIoc_symm
 
 中文:
 定理 continuous_equivIoc_symm
-  结论: Continuous (equivIoc p a).symm
+  结论: 连续 (equivIoc p a).symm
   证明: continuous_quotient_mk'.comp continuous_subtype_val
 
 Depends on / 依赖: continuous_quotient_mk, continuous_subtype_val
@@ -1527,7 +1527,7 @@ definition openPartialHomeomorphCoe
 
 中文:
 定义 openPartialHomeomorphCoe
-  签名: [DiscreteTopology (zmultiples p)]
+  签名: [离散拓扑 (zmultiples p)]
   定义体: (↑)
   invFun := fun x => equivIco p a x
   source := Ioo a (a + p)
@@ -1581,7 +1581,7 @@ theorem coe_image_Ico_eq
 
 中文:
 定理 coe_image_Ico_eq
-  结论: ((↑) : 𝕜 -> AddCircle p) '' Ico a (a + p) = univ
+  结论: ((↑) : 𝕜 -> AddCircle p) '' 左闭右开区间 a (a + p) = univ
   证明: by
   rw [image_eq_range]
   exact (equivIco p a).symm.range_eq_univ
@@ -1607,7 +1607,7 @@ theorem coe_image_Ioc_eq
 
 中文:
 定理 coe_image_Ioc_eq
-  结论: ((↑) : 𝕜 -> AddCircle p) '' Ioc a (a + p) = univ
+  结论: ((↑) : 𝕜 -> AddCircle p) '' 左开右闭区间 a (a + p) = univ
   证明: by
   rw [image_eq_range]
   exact (equivIoc p a).symm.range_eq_univ
@@ -1631,7 +1631,7 @@ theorem coe_image_Icc_eq
 
 中文:
 定理 coe_image_Icc_eq
-  结论: ((↑) : 𝕜 -> AddCircle p) '' Icc a (a + p) = univ
+  结论: ((↑) : 𝕜 -> AddCircle p) '' 闭区间 a (a + p) = univ
   证明: eq_top_mono (image_mono Ico_subset_Icc_self) coe_image_Ico_eq _ _
 
 Depends on / 依赖: Ico_subset_Icc_self, coe_image_Ico_eq, eq_top_mono, image_mono
@@ -2045,7 +2045,7 @@ theorem addOrderOf_div_of_gcd_eq_one
 
 中文:
 定理 addOrderOf_div_of_gcd_eq_one
-  条件: {m n : 自然数} (hn : 0 < n) (h : m.gcd n = 1)
+  条件: {m n : 自然数} (hn : 0 < n) (h : m.最大公约数 n = 1)
   证明: by
   convert! gcd_mul_addOrderOf_div_eq p m hn
   rw [h]; rw [one_mul]
@@ -2072,7 +2072,7 @@ theorem addOrderOf_div_of_gcd_eq_one'
 
 中文:
 定理 addOrderOf_div_of_gcd_eq_one'
-  条件: {m : 整数} {n : 自然数} (hn : 0 < n) (h : m.natAbs.gcd n = 1)
+  条件: {m : 整数} {n : 自然数} (hn : 0 < n) (h : m.natAbs.最大公约数 n = 1)
   证明: by
   cases m
   · simp only [Int.ofNat_eq_natCast, Int.cast_natCast, Int.natAbs_natCast] at h ⊢
@@ -2105,7 +2105,7 @@ theorem addOrderOf_coe_rat
 
 中文:
 定理 addOrderOf_coe_rat
-  条件: {q : Rat}
+  条件: {q : 有理数}
   结论: addOrderOf (↑(↑q * p) : AddCircle p) = q.den
   证明: by
   have : (↑(q.den : Int) : 𝕜) != 0 := by
@@ -2219,7 +2219,7 @@ theorem exists_gcd_eq_one_of_isOfFinAddOrder
   ⟨m, hg, hl, he⟩
 
 中文:
-定理 exists_gcd_eq_one_of_isOfFinAddOrder
+定理 存在_gcd_eq_one_of_isOfFinAddOrder
   条件: {u : AddCircle p} (h : IsOfFinAddOrder u)
   证明: let ⟨m, hl, hg, he⟩ := (addOrderOf_eq_pos_iff h.addOrderOf_pos).1 rfl
   ⟨m, hg, hl, he⟩
@@ -2244,7 +2244,7 @@ lemma not_isOfFinAddOrder_iff_forall_rat_ne_div
   grind
 
 中文:
-引理 not_isOfFinAddOrder_iff_forall_rat_ne_div
+引理 not_isOfFinAddOrder_iff_对任意_rat_ne_div
   条件: {a : 𝕜}
   证明: by
   simp +contextual [← QuotientAddGroup.mk_zsmul, mul_comm (Int.cast _), mem_zmultiples_iff,
@@ -2271,7 +2271,7 @@ lemma isOfFinAddOrder_iff_exists_rat_eq_div
   simpa using not_isOfFinAddOrder_iff_forall_rat_ne_div.not_right
 
 中文:
-引理 isOfFinAddOrder_iff_exists_rat_eq_div
+引理 isOfFinAddOrder_iff_存在_rat_eq_div
   条件: {a : 𝕜}
   证明: by
   simpa using not_isOfFinAddOrder_iff_forall_rat_ne_div.not_right
@@ -2395,7 +2395,7 @@ inductive EndpointIdent
 
 中文:
 归纳类型 EndpointIdent
-  参数: : Icc a (a + p) -> Icc a (a + p) -> 命题
+  参数: : 闭区间 a (a + p) -> 闭区间 a (a + p) -> 命题
   构造子 (1 个):
     - mk: 
 -/
@@ -2426,7 +2426,7 @@ Quot.ind by
 
 中文:
 定义 equivIccQuot
-  签名: : 𝕋 ≃ Quot (EndpointIdent p a) where
+  签名: : 𝕋 ≃ 商 (EndpointIdent p a) where
   定义体: Quot.mk _ inclusion Ico_subset_Icc_self (equivIco _ _ x)
   invFun x :=
 Quot.liftOn x (↑) by
@@ -2532,7 +2532,7 @@ definition homeoIccQuot
 
 中文:
 定义 homeoIccQuot
-  签名: [TopologicalSpace 𝕜] [OrderTopology 𝕜]
+  签名: [拓扑空间 𝕜] [Order拓扑 𝕜]
   定义体: equivIccQuot p a
   continuous_toFun := by
     simp_rw [isQuotientMap_quotient_mk'.continuous_iff, continuous_iff_continuousAt,
@@ -2664,7 +2664,7 @@ theorem liftIco_zero_coe_apply
 
 中文:
 定理 liftIco_zero_coe_apply
-  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in Ico 0 p)
+  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in 左闭右开区间 0 p)
   结论: liftIco p 0 f ↑x = f x
   证明: liftIco_coe_apply (by rwa [zero_add])
 
@@ -2684,7 +2684,7 @@ theorem liftIoc_zero_coe_apply
 
 中文:
 定理 liftIoc_zero_coe_apply
-  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in Ioc 0 p)
+  条件: {f : 𝕜 -> B} {x : 𝕜} (hx : x in 左开右闭区间 0 p)
   结论: liftIoc p 0 f ↑x = f x
   证明: liftIoc_coe_apply (by rwa [zero_add])
 
@@ -2708,7 +2708,7 @@ theorem liftIco_continuous
 
 中文:
 定理 liftIco_continuous
-  结论: [TopologicalSpace B] {f : 𝕜 -> B} (hf : f a = f (a + p))
+  结论: [拓扑空间 B] {f : 𝕜 -> B} (hf : f a = f (a + p))
   证明: by
   rw [liftIco_eq_lift_Icc hf]
   refine Continuous.comp ?_ (homeoIccQuot p a).continuous_toFun
@@ -2732,7 +2732,7 @@ theorem liftIco_zero_continuous
 
 中文:
 定理 liftIco_zero_continuous
-  结论: [TopologicalSpace B] {f : 𝕜 -> B} (hf : f 0 = f p)
+  结论: [拓扑空间 B] {f : 𝕜 -> B} (hf : f 0 = f p)
   证明: liftIco_continuous (by rwa [zero_add] : f 0 = f (0 + p)) (by rwa [zero_add])
 
 Depends on / 依赖: liftIco_continuous, zero_add
@@ -2754,7 +2754,7 @@ theorem liftIoc_continuous
 
 中文:
 定理 liftIoc_continuous
-  结论: [TopologicalSpace B] {f : 𝕜 -> B} (hf : f a = f (a + p))
+  结论: [拓扑空间 B] {f : 𝕜 -> B} (hf : f a = f (a + p))
   证明: by
   rw [liftIoc_eq_lift_Icc hf]
   refine Continuous.comp ?_ (homeoIccQuot p a).continuous_toFun
@@ -2778,7 +2778,7 @@ theorem liftIoc_zero_continuous
 
 中文:
 定理 liftIoc_zero_continuous
-  结论: [TopologicalSpace B] {f : 𝕜 -> B} (hf : f 0 = f p)
+  结论: [拓扑空间 B] {f : 𝕜 -> B} (hf : f 0 = f p)
   证明: liftIoc_continuous (by rwa [zero_add] : f 0 = f (0 + p)) (by rwa [zero_add])
 
 Depends on / 依赖: liftIoc_continuous, zero_add

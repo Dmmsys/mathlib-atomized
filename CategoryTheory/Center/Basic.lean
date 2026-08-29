@@ -174,7 +174,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsMulCommutative (CatCenter C)
+  签名: 是MulCommutative (CatCenter C)
   定义体: by
     ext X
     rw [mul_app' x y]; rw [mul_app y x]

@@ -119,7 +119,7 @@ definition useLoop
 
 中文:
 定义 useLoop
-  签名: (eager : 布尔) (gs : List MVarId) (args : List Term) (acc insts : List MVarId)
+  签名: (eager : 布尔值) (gs : 列表 MVarId) (args : 列表 项) (acc insts : 列表 MVarId)
   定义体: do
   trace[tactic.use] "gs = {gs}\nargs = {args}\nacc = {acc}"
   match gs, args with
@@ -182,7 +182,7 @@ discard inst.withContext observing? do inst.assign (← synthInstance (← inst.
 
 中文:
 定义 runUse
-  签名: (eager : 布尔) (discharger : TacticM Unit) (args : List Term)
+  签名: (eager : 布尔值) (discharger : TacticM 单元) (args : 列表 项)
   定义体: do
   let egoals ← focus do
     let (egoals, acc, insts) ← useLoop eager (← getGoals) args [] []
@@ -247,7 +247,7 @@ definition mkUseDischarger
 
 中文:
 定义 mkUseDischarger
-  签名: (discharger? : Option (TSyntax ``Parser.Tactic.discharger))
+  签名: (discharger? : 选项类型 (TSyntax ``Parser.Tactic.discharger))
   定义体: do
   let discharger ←
     if let some disch := discharger? then

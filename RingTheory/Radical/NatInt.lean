@@ -46,7 +46,7 @@ lemma UniqueFactorizationMonoid.primeFactors_eq_natPrimeFactors
   convert! List.toFinset_coe _
 
 中文:
-引理 UniqueFactorizationMonoid.primeFactors_eq_natPrimeFactors
+引理 唯一分解幺半群.primeFactors_eq_natPrimeFactors
   证明: by
   ext n : 1
   rw [primeFactors]; rw [Nat.factors_eq]; rw [Nat.primeFactors]
@@ -321,7 +321,7 @@ lemma UniqueFactorizationMonoid.primeFactors_eq_primeFactors_natAbs
   · lift p to Nat
 
 中文:
-引理 UniqueFactorizationMonoid.primeFactors_eq_primeFactors_natAbs
+引理 唯一分解幺半群.primeFactors_eq_primeFactors_natAbs
   证明: by
   obtain rfl | hz := eq_or_ne z 0; · simp
   ext p

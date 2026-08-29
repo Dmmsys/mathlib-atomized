@@ -229,7 +229,7 @@ theorem Submartingale.upcrossings_ae_lt_top'
 
 中文:
 定理 Submartingale.upcrossings_ae_lt_top'
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   refine ae_lt_top (hf.stronglyAdapted.measurable_upcrossings hab) ?_
   have := hf.mul_lintegral_upcrossings_le_lintegral_pos_part a b
@@ -281,7 +281,7 @@ theorem Submartingale.upcrossings_ae_lt_top
 
 中文:
 定理 Submartingale.upcrossings_ae_lt_top
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   simp only [ae_all_iff, eventually_imp_distrib_left]
   rintro a b hab
@@ -307,8 +307,8 @@ theorem Submartingale.exists_ae_tendsto_of_bdd
   exact tendsto_of_uncrossing_lt_top h₂ h₁
 
 中文:
-定理 Submartingale.exists_ae_tendsto_of_bdd
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+定理 Submartingale.存在_ae_tendsto_of_bdd
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   filter_upwards [hf.upcrossings_ae_lt_top hbdd, ae_bdd_liminf_atTop_of_eLpNorm_bdd one_ne_zero
     (fun n => (hf.stronglyMeasurable n).measurable.mono (ℱ.le n) le_rfl) hbdd] with ω h₁ h₂
@@ -336,8 +336,8 @@ theorem Submartingale.exists_ae_trim_tendsto_of_bdd
       fun n => (hf.stronglyMeasurable n).measurable.mono (le_sSup ⟨n, rfl⟩) le_rfl
 
 中文:
-定理 Submartingale.exists_ae_trim_tendsto_of_bdd
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+定理 Submartingale.存在_ae_trim_tendsto_of_bdd
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   let := (⨆ n, ℱ n)
   rw [ae_iff]; rw [trim_measurableSet_eq]
@@ -373,7 +373,7 @@ theorem Submartingale.ae_tendsto_limitProcess
 
 中文:
 定理 Submartingale.ae_tendsto_limitProcess
-  结论: [IsFiniteMeasure μ] (hf : Submartingale f ℱ μ)
+  结论: [是有限测度 μ] (hf : Submartingale f ℱ μ)
   证明: by
   classical
   suffices
@@ -545,7 +545,7 @@ theorem Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable
   hf.ae_tendsto_limitProcess hR
 
 中文:
-定理 Submartingale.ae_tendsto_limitProcess_of_uniformIntegrable
+定理 Submartingale.ae_tendsto_limitProcess_of_uniform整数egrable
   结论: (hf : Submartingale f ℱ μ)
   证明: let ⟨_, hR⟩ := hunif.2.2
   hf.ae_tendsto_limitProcess hR
@@ -571,8 +571,8 @@ theorem Martingale.eq_condExp_of_tendsto_eLpNorm
     haveI hint : forall m, Integrable (f
 
 中文:
-定理 Martingale.eq_condExp_of_tendsto_eLpNorm
-  结论: {μ : Measure Ω} (hf : Martingale f ℱ μ)
+定理 鞅.eq_condExp_of_tendsto_eLpNorm
+  结论: {μ : 测度 Ω} (hf : 鞅 f ℱ μ)
   证明: by
   rw [← sub_ae_eq_zero]; rw [← eLpNorm_eq_zero_iff (((hf.stronglyMeasurable n).mono (ℱ.le _)).sub
     (stronglyMeasurable_condExp.mono (ℱ.le _))).aestronglyMeasurable one_ne_zero]
@@ -607,8 +607,8 @@ theorem Martingale.ae_eq_condExp_limitProcess
     (hf.submartingale.tendsto_eLpNorm_one_limitProcess hbdd) n
 
 中文:
-定理 Martingale.ae_eq_condExp_limitProcess
-  结论: (hf : Martingale f ℱ μ)
+定理 鞅.ae_eq_condExp_limitProcess
+  结论: (hf : 鞅 f ℱ μ)
   证明: let ⟨_, hR⟩ := hbdd.2.2
   hf.eq_condExp_of_tendsto_eLpNorm ((memLp_limitProcess_of_eLpNorm_bdd hbdd.1 hR).integrable le_rfl)
     (hf.submartingale.tendsto_eLpNorm_one_limitProcess hbdd) n
@@ -636,8 +636,8 @@ theorem Integrable.tendsto_ae_condExp
     (memLp_limitPro
 
 中文:
-定理 Integrable.tendsto_ae_condExp
-  结论: (hg : 整数egrable g μ)
+定理 可积.tendsto_ae_condExp
+  结论: (hg : 可积 g μ)
   证明: by
   have hle : ⨆ n, ℱ n <= m0 := sSup_le fun m ⟨n, hn⟩ => hn ▸ ℱ.le _
   have hunif : UniformIntegrable (fun n => μ[g | ℱ n]) 1 μ :=
@@ -706,8 +706,8 @@ theorem Integrable.tendsto_eLpNorm_condExp
       (fun n => (stronglyMeasurable_condE
 
 中文:
-定理 Integrable.tendsto_eLpNorm_condExp
-  结论: (hg : 整数egrable g μ)
+定理 可积.tendsto_eLpNorm_condExp
+  结论: (hg : 可积 g μ)
   证明: tendsto_Lp_finite_of_tendstoInMeasure le_rfl ENNReal.one_ne_top
     (fun n => (stronglyMeasurable_condExp.mono (ℱ.le n)).aestronglyMeasurable)
     (memLp_one_iff_integrable.2 hg) hg.uniformIntegrable_condExp_filtration.2.1

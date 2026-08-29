@@ -53,7 +53,7 @@ definition adjoinOne
 
 中文:
 定义 adjoinOne
-  签名: : Semigrp.{u} ⥤ MonCat.{u} where
+  签名: : 半群.{u} ⥤ 幺半群范畴.{u} where
   定义体: MonCat.of (WithOne S)
   map f := ofHom (WithOne.mapMulHom f.hom)
   map_id _ := MonCat.hom_ext WithOne.mapMulHom_id
@@ -81,7 +81,7 @@ instance hasForgetToSemigroup
 
 中文:
 实例 hasForgetToSemigroup
-  签名: : HasForget₂ MonCat Semigrp where
+  签名: : 有Forget₂ 幺半群范畴 半群 where
   定义体: { obj := fun M => Semigrp.of M
       map f := Semigrp.ofHom f.hom.toMulHom }
 
@@ -110,7 +110,7 @@ definition adjoinOneAdj
 
 中文:
 定义 adjoinOneAdj
-  签名: : adjoinOne ⊣ forget₂ MonCat.{u} Semigrp.{u}
+  签名: : adjoinOne ⊣ forget₂ 幺半群范畴.{u} 半群.{u}
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv X Y :=
         ConcreteCategory.homEquiv.trans (WithOne.lift.symm.trans
@@ -146,7 +146,7 @@ definition free
 
 中文:
 定义 free
-  签名: : 类型u ⥤ MonCat.{u} where
+  签名: : 类型u ⥤ 幺半群范畴.{u} where
   定义体: MonCat.of (FreeMonoid α)
   map f := ofHom (FreeMonoid.map f)
   map_id _ := MonCat.hom_ext (FreeMonoid.hom_eq fun _ => rfl)
@@ -176,7 +176,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : free ⊣ forget MonCat.{u}
+  签名: : free ⊣ forget 幺半群范畴.{u}
   定义体: Adjunction.mkOfHomEquiv
     -- The hint `(C := MonCat)` below speeds up the declaration by 10 times.
     { homEquiv X Y := (ConcreteCategory.homEquiv (C := MonCat)).trans (FreeMonoid.lift.symm.trans
@@ -202,7 +202,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget MonCat.{u}).IsRightAdjoint
+  签名: (forget 幺半群范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : (forget MonCat.{u}).IsRightAdjoint :=
@@ -227,7 +227,7 @@ definition free
 
 中文:
 定义 free
-  签名: : 类型u ⥤ AddCommMonCat.{u} where
+  签名: : 类型u ⥤ 加法交换幺半群范畴.{u} where
   定义体: .of (α ->₀ Nat)
   map f := ofHom (Finsupp.mapDomain.addMonoidHom f)
 -/
@@ -252,7 +252,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : free ⊣ forget AddCommMonCat.{u} where
+  签名: : free ⊣ forget 加法交换幺半群范畴.{u} where
   定义体: { app X := ↾fun i => Finsupp.single i 1 }
   counit :=
   { app M := ofHom (Finsupp.liftAddHom (multiplesHom M))
@@ -276,7 +276,7 @@ instance :
 
 中文:
 实例 :
-  签名: free.IsLeftAdjoint
+  签名: free.是左伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : free.IsLeftAdjoint := ⟨_, ⟨adj⟩⟩
@@ -291,7 +291,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget AddCommMonCat.{u}).IsRightAdjoint
+  签名: (forget 加法交换幺半群范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : (forget AddCommMonCat.{u}).IsRightAdjoint := ⟨_, ⟨adj⟩⟩
@@ -310,7 +310,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget CommMonCat.{u}).IsRightAdjoint
+  签名: (forget 交换幺半群范畴.{u}).是右伴随
   定义体: ⟨_, ⟨AddCommMonCat.adj.comp AddCommMonCat.equivalence.toAdjunction⟩⟩
 
 Depends on / 依赖: AddCommMonCat, AddCommMonCat.adj.comp, AddCommMonCat.equivalence.toAdjunction, equivalence, toAdjunction

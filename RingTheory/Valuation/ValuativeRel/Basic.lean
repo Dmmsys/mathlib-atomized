@@ -89,7 +89,7 @@ class ValuativeRel
 
 中文:
 类 ValuativeRel
-  参数: (R : 类型) [Semiring R]
+  参数: (R : 类型) [半环 R]
   公理与运算 (8 个):
     - vle : R -> R -> 命题
     - vle_total((x y)) : vle x y ∨ vle y x
@@ -130,7 +130,7 @@ class Compatible
     - vle_iff_le((x y : R)) : x <=ᵥ y ↔ v x <= v y
 
 中文:
-类 Compatible
+类 余mpatible
   参数: [ValuativeRel R]
   公理与运算 (1 个):
     - vle_iff_le((x y : R)) : x <=ᵥ y ↔ v x <= v y
@@ -151,7 +151,7 @@ class ValuativePreorder
 
 中文:
 类 ValuativePreorder
-  参数: (R : 类型) [Semiring R] [ValuativeRel R] [Preorder R]
+  参数: (R : 类型) [半环 R] [ValuativeRel R] [预序 R]
   公理与运算 (1 个):
     - vle_iff_le((x y : R)) : x <=ᵥ y ↔ x <= y
 -/
@@ -1346,7 +1346,7 @@ definition posSubmonoid
 
 中文:
 定义 posSubmonoid
-  签名: : Submonoid R where
+  签名: : 子幺半群 R where
   定义体: { x | 0 <ᵥ x }
   mul_mem' := zero_vlt_mul
   one_mem' := zero_vlt_one
@@ -1486,7 +1486,7 @@ definition valueSetoid
 
 中文:
 定义 valueSetoid
-  签名: : Setoid (R × posSubmonoid R) where
+  签名: : 集合等价关系 (R × posSubmonoid R) where
   定义体: fun (x, s) (y, t) => x * t <=ᵥ y * s ∧ y * s <=ᵥ x * t
   iseqv := {
     refl ru := ⟨vle_refl _, vle_refl _⟩
@@ -1642,7 +1642,7 @@ definition ValueGroupWithZero.lift
 
 中文:
 定义 ValueGroupWithZero.lift
-  签名: {α : Sort*} (f : R -> posSubmonoid R -> α)
+  签名: {α : 类型层*} (f : R -> posSubmonoid R -> α)
   定义体: Quotient.lift (fun (x, y) => f x y) (fun (x, t) (y, s) ⟨h₁, h₂⟩ => hf x y s t h₁ h₂) t
 
 @[simp] protected
@@ -1665,7 +1665,7 @@ theorem ValueGroupWithZero.lift_mk
 
 中文:
 定理 ValueGroupWithZero.lift_mk
-  结论: {α : Sort*} (f : R -> posSubmonoid R -> α)
+  结论: {α : 类型层*} (f : R -> posSubmonoid R -> α)
   证明: rfl
 -/
 theorem ValueGroupWithZero.lift_mk {α : Sort*} (f : R -> posSubmonoid R -> α)
@@ -1688,7 +1688,7 @@ definition ValueGroupWithZero.lift₂
 
 中文:
 定义 ValueGroupWithZero.lift₂
-  签名: {α : Sort*} (f : R -> posSubmonoid R -> R -> posSubmonoid R -> α)
+  签名: {α : 类型层*} (f : R -> posSubmonoid R -> R -> posSubmonoid R -> α)
   定义体: Quotient.lift₂ (fun (x, t) (y, s) => f x t y s)
     (fun (x, t) (z, v) (y, s) (w, u) ⟨h₁, h₂⟩ ⟨h₃, h₄⟩ => hf x y z w s t u v h₁ h₂ h₃ h₄) t₁ t₂
 
@@ -1715,7 +1715,7 @@ lemma ValueGroupWithZero.lift₂_mk
 
 中文:
 引理 ValueGroupWithZero.lift₂_mk
-  结论: {α : Sort*} (f : R -> posSubmonoid R -> R -> posSubmonoid R -> α)
+  结论: {α : 类型层*} (f : R -> posSubmonoid R -> R -> posSubmonoid R -> α)
   证明: rfl
 -/
 lemma ValueGroupWithZero.lift₂_mk {α : Sort*} (f : R -> posSubmonoid R -> R -> posSubmonoid R -> α)
@@ -1756,7 +1756,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (ValueGroupWithZero R)
+  签名: 零 (ValueGroupWithZero R)
   定义体: .mk 0 1
 
 @[simp]
@@ -1824,7 +1824,7 @@ instance :
 
 中文:
 实例 :
-  签名: One (ValueGroupWithZero R)
+  签名: 幺 (ValueGroupWithZero R)
   定义体: .mk 1 1
 
 @[simp]
@@ -1914,7 +1914,7 @@ theorem ValueGroupWithZero.lift_zero
 
 中文:
 定理 ValueGroupWithZero.lift_zero
-  结论: {α : Sort*} (f : R -> posSubmonoid R -> α)
+  结论: {α : 类型层*} (f : R -> posSubmonoid R -> α)
   证明: rfl
 
 @[simp]
@@ -1935,7 +1935,7 @@ theorem ValueGroupWithZero.lift_one
 
 中文:
 定理 ValueGroupWithZero.lift_one
-  结论: {α : Sort*} (f : R -> posSubmonoid R -> α)
+  结论: {α : 类型层*} (f : R -> posSubmonoid R -> α)
   证明: rfl
 
 Depends on / 依赖: arbitrarily, chosen
@@ -1961,7 +1961,7 @@ instance :
 
 中文:
 实例 :
-  签名: Mul (ValueGroupWithZero R)
+  签名: 乘法 (ValueGroupWithZero R)
   定义体: ValueGroupWithZero.lift₂ (fun a b c d => .mk (a * c) (b * d)) by
     intro x y z w t s u v h₁ h₂ h₃ h₄
     apply ValueGroupWithZero.sound
@@ -2014,7 +2014,7 @@ theorem ValueGroupWithZero.lift_mul
 
 中文:
 定理 ValueGroupWithZero.lift_mul
-  结论: {α : 类型} [Mul α] (f : R -> posSubmonoid R -> α)
+  结论: {α : 类型} [乘法 α] (f : R -> posSubmonoid R -> α)
   证明: by
   induction a using ValueGroupWithZero.ind
   induction b using ValueGroupWithZero.ind
@@ -2048,7 +2048,7 @@ mul_one := ValueGroupWithZero.ind by simp [← ValueGroupWithZero.m
 
 中文:
 实例 :
-  签名: CommMonoidWithZero (ValueGroupWithZero R)
+  签名: 带零交换幺半群 (ValueGroupWithZero R)
   定义体: by
     induction a using ValueGroupWithZero.ind
     induction b using ValueGroupWithZero.ind
@@ -2193,7 +2193,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder (ValueGroupWithZero R)
+  签名: 线性序 (ValueGroupWithZero R)
   定义体: ValueGroupWithZero.ind fun _ _ => .rfl
   le_trans a b c hab hbc := by
     induction a using ValueGroupWithZero.ind with | mk a₁ a₂
@@ -2283,7 +2283,7 @@ instance :
 
 中文:
 实例 :
-  签名: Bot (ValueGroupWithZero R)
+  签名: 底元素 (ValueGroupWithZero R)
   定义体: 0
 -/
 instance : Bot (ValueGroupWithZero R) where
@@ -2316,7 +2316,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot (ValueGroupWithZero R)
+  签名: 有底序 (ValueGroupWithZero R)
   定义体: ValueGroupWithZero.ind fun x y => by
     rw [ValueGroupWithZero.bot_eq_zero]; rw [← ValueGroupWithZero.mk_zero 1]; rw [ValueGroupWithZero.mk_le_mk]
     simp
@@ -2344,7 +2344,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedMonoid (ValueGroupWithZero R)
+  签名: 是Ordered幺半群 (ValueGroupWithZero R)
   定义体: by
     induction a using ValueGroupWithZero.ind
     induction b using ValueGroupWithZero.ind
@@ -2382,7 +2382,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv (ValueGroupWithZero R)
+  签名: 取逆 (ValueGroupWithZero R)
   定义体: ValueGroupWithZero.lift (fun x s => by
     classical exact if h : x <=ᵥ 0 then 0 else .mk s ⟨x, h⟩) <| by
     intro x y t s h₁ h₂
@@ -2449,7 +2449,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedCommGroupWithZero (ValueGroupWithZero R)
+  签名: 带零LinearOrderedComm群 (ValueGroupWithZero R)
   定义体: bot_le
   exists_pair_ne := by
     refine ⟨0, 1, fun h => ?_⟩
@@ -2501,7 +2501,7 @@ definition valuation
 
 中文:
 定义 valuation
-  签名: : Valuation R (ValueGroupWithZero R) where
+  签名: : 赋值 R (ValueGroupWithZero R) where
   定义体: ValueGroupWithZero.mk r 1
   map_zero' := rfl
   map_one' := rfl
@@ -2529,7 +2529,7 @@ instance :
 
 中文:
 实例 :
-  签名: (valuation R).Compatible
+  签名: (valuation R).余mpatible
   定义体: by simp [valuation]
 
 @[simp]
@@ -2550,7 +2550,7 @@ lemma ValueGroupWithZero.lift_valuation
 
 中文:
 引理 ValueGroupWithZero.lift_valuation
-  结论: {α : Sort*} (f : R -> posSubmonoid R -> α)
+  结论: {α : 类型层*} (f : R -> posSubmonoid R -> α)
   证明: rfl
 -/
 lemma ValueGroupWithZero.lift_valuation {α : Sort*} (f : R -> posSubmonoid R -> α)
@@ -2681,7 +2681,7 @@ lemma _root_.Valuation.Compatible.ofValuation
   ⟨fun _ _ => Iff.rfl⟩
 
 中文:
-引理 _root_.Valuation.Compatible.ofValuation
+引理 _root_.赋值.余mpatible.ofValuation
   证明: ValuativeRel.ofValuation v -- letI so that instance is inlined directly in declaration
     Valuation.Compatible v :=
   letI := ValuativeRel.ofValuation v
@@ -2944,7 +2944,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semiring (WithPreorder R)
+  签名: 半环 (WithPreorder R)
   定义体: inferInstanceAs (Semiring R)
 
 Depends on / 依赖: Semiring
@@ -2965,7 +2965,7 @@ instance :
 
 中文:
 实例 :
-  签名: Preorder (WithPreorder R)
+  签名: 预序 (WithPreorder R)
   定义体: x <=ᵥ y
   le_refl _ := vle_refl _
   le_trans _ _ _ := vle_trans
@@ -3050,7 +3050,7 @@ definition supp
 
 中文:
 定义 supp
-  签名: : Ideal R where
+  签名: : 理想 R where
   定义体: { x | x <=ᵥ 0 }
   add_mem' ha hb := vle_add ha hb
   zero_mem' := vle_refl _
@@ -3074,7 +3074,7 @@ instance :
 
 中文:
 实例 :
-  签名: (supp R).IsTwoSided
+  签名: (supp R).是TwoSided
   定义体: by simpa [supp] using mul_vle_mul_left h _
 
 @[simp]
@@ -3116,7 +3116,7 @@ lemma supp_eq_valuation_supp
 
 中文:
 引理 supp_eq_valuation_supp
-  条件: {R : 类型} [CommRing R] [ValuativeRel R]
+  条件: {R : 类型} [交换环 R] [ValuativeRel R]
   证明: by
   ext
   simpa using valuation_eq_zero_iff.symm
@@ -3144,7 +3144,7 @@ instance :
 
 中文:
 实例 :
-  签名: (supp R).IsPrime
+  签名: (supp R).是素
   定义体: by
     rw [Ideal.ne_top_iff_one]
     exact not_vle_one_zero
@@ -3639,7 +3639,7 @@ structure RankLeOneStruct
   参数: where
   公理与运算 (2 个):
     - emb : ValueGroupWithZero R ->*₀ 实数>=0
-    - strictMono : StrictMono emb
+    - strictMono : 严格递增 emb
 -/
 structure RankLeOneStruct where
   /-- The embedding of the value group-with-zero into the nonnegative reals. -/
@@ -3657,10 +3657,10 @@ class IsRankLeOne
     - nonempty : Nonempty (RankLeOneStruct R)
 
 中文:
-类 IsRankLeOne
+类 是秩不超过一
   参数: where
   公理与运算 (1 个):
-    - nonempty : Nonempty (RankLeOneStruct R)
+    - nonempty : 非空 (RankLeOneStruct R)
 -/
 class IsRankLeOne where
   nonempty : Nonempty (RankLeOneStruct R)
@@ -3676,7 +3676,7 @@ class IsNontrivial
     - condition : exists γ : ValueGroupWithZero R, γ != 0 ∧ γ != 1
 
 中文:
-类 IsNontrivial
+类 是非平凡
   参数: where
   公理与运算 (1 个):
     - condition : 存在 γ : ValueGroupWithZero R, γ != 0 ∧ γ != 1
@@ -3697,8 +3697,8 @@ lemma IsNontrivial.exists_lt_one
   · exact ⟨γ⁻¹, by simpa [zero_lt_iff], by simp [inv_lt_one_iff₀, h0, h1]⟩
 
 中文:
-引理 IsNontrivial.exists_lt_one
-  条件: [IsNontrivial R]
+引理 是非平凡.存在_lt_one
+  条件: [是非平凡 R]
   证明: by
   obtain ⟨γ, h0, h1⟩ := IsNontrivial.condition (R := R)
   obtain h1 | h1 := lt_or_lt_iff_ne.mpr h1
@@ -3814,7 +3814,7 @@ lemma ValueGroupWithZero.mk_eq_valuation
 
 中文:
 引理 ValueGroupWithZero.mk_eq_valuation
-  结论: {K : 类型} [DivisionRing K] [ValuativeRel K]
+  结论: {K : 类型} [除环 K] [ValuativeRel K]
   证明: by
   rw [Valuation.map_div]; rw [ValueGroupWithZero.mk_eq_div]
 
@@ -3837,7 +3837,7 @@ lemma exists_valuation_div_valuation_eq
   simp [valuation, div_eq_mul_inv, ValueGroupWithZero.inv_mk (b : R) 1 b.prop]
 
 中文:
-引理 exists_valuation_div_valuation_eq
+引理 存在_valuation_div_valuation_eq
   条件: (γ : ValueGroupWithZero R)
   证明: by
   induction γ using ValueGroupWithZero.ind with | mk a b
@@ -3867,7 +3867,7 @@ lemma exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq
   use a, b
 
 中文:
-引理 exists_valuation_posSubmonoid_div_valuation_posSubmonoid_eq
+引理 存在_valuation_posSubmonoid_div_valuation_posSubmonoid_eq
   条件: (γ : (ValueGroupWithZero R)ˣ)
   证明: by
   obtain ⟨a, b, hab⟩ := exists_valuation_div_valuation_eq γ.val
@@ -3899,7 +3899,7 @@ theorem valuation_surjective
 
 中文:
 定理 valuation_surjective
-  条件: {K : 类型} [DivisionRing K] [ValuativeRel K]
+  条件: {K : 类型} [除环 K] [ValuativeRel K]
   证明: ValueGroupWithZero.ind (ValueGroupWithZero.mk_eq_valuation · · ▸ ⟨_, rfl⟩)
 
 Depends on / 依赖: ValueGroupWithZero, ValueGroupWithZero.ind, ValueGroupWithZero.mk_eq_valuation, mk_eq_valuation
@@ -3921,7 +3921,7 @@ class IsDiscrete
     - has_maximal_element : exists γ : ValueGroupWithZero R, γ < 1 ∧ (forall δ : ValueGroupWithZero R, δ < 1 -> δ <= γ)
 
 中文:
-类 IsDiscrete
+类 是离散
   参数: where
   公理与运算 (1 个):
     - has_maximal_element : 存在 γ : ValueGroupWithZero R, γ < 1 ∧ (对任意 δ : ValueGroupWithZero R, δ < 1 -> δ <= γ)
@@ -3945,7 +3945,7 @@ definition uniformizer
 
 中文:
 定义 uniformizer
-  签名: [IsDiscrete R]
+  签名: [是离散 R]
   定义体: IsDiscrete.has_maximal_element.choose
 
 Depends on / 依赖: IsDiscrete, IsDiscrete.has_maximal_element.choose, has_maximal_element
@@ -3963,7 +3963,7 @@ lemma uniformizer_lt_one
 
 中文:
 引理 uniformizer_lt_one
-  条件: [IsDiscrete R]
+  条件: [是离散 R]
   证明: IsDiscrete.has_maximal_element.choose_spec.1
 
 Depends on / 依赖: IsDiscrete, IsDiscrete.has_maximal_element.choose_spec, choose_spec, has_maximal_element
@@ -3982,7 +3982,7 @@ lemma le_uniformizer_iff
 
 中文:
 引理 le_uniformizer_iff
-  条件: [IsDiscrete R] {a : ValueGroupWithZero R}
+  条件: [是离散 R] {a : ValueGroupWithZero R}
   证明: ⟨fun h => h.trans_lt uniformizer_lt_one,
     IsDiscrete.has_maximal_element.choose_spec.2 a⟩
 
@@ -4007,7 +4007,7 @@ lemma uniformizer_pos
 
 中文:
 引理 uniformizer_pos
-  条件: [IsDiscrete R] [IsNontrivial R]
+  条件: [是离散 R] [是非平凡 R]
   证明: by
   obtain ⟨γ, hγ, hγ'⟩ := IsNontrivial.exists_lt_one (R := R)
   exact hγ.trans_le (le_uniformizer_iff.mpr hγ')
@@ -4032,7 +4032,7 @@ lemma uniformizer_ne_zero
 
 中文:
 引理 uniformizer_ne_zero
-  条件: [IsDiscrete R] [IsNontrivial R]
+  条件: [是离散 R] [是非平凡 R]
   证明: uniformizer_pos.ne'
 
 Depends on / 依赖: uniformizer_pos, uniformizer_pos.ne
@@ -4055,7 +4055,7 @@ lemma uniformizer_inv_le_iff
 
 中文:
 引理 uniformizer_inv_le_iff
-  条件: [IsDiscrete R] [IsNontrivial R] {a : ValueGroupWithZero R}
+  条件: [是离散 R] [是非平凡 R] {a : ValueGroupWithZero R}
   证明: by
   by_cases ha : a = 0
   · simp [ha]
@@ -4100,7 +4100,7 @@ definition embed
 
 中文:
 定义 embed
-  签名: [v.Compatible]
+  签名: [v.余mpatible]
   定义体: ValueGroupWithZero.lift
 (fun r s => (restrict₀ (.ofClass v) r / (restrict₀ (.ofClass v) s))) by
     intro x y r s
@@ -4145,7 +4145,7 @@ lemma embed_mk
 
 中文:
 引理 embed_mk
-  条件: [v.Compatible] (x : R) (s : posSubmonoid R)
+  条件: [v.余mpatible] (x : R) (s : posSubmonoid R)
   证明: rfl
 -/
 lemma embed_mk [v.Compatible] (x : R) (s : posSubmonoid R) :
@@ -4178,7 +4178,7 @@ lemma embed_valuation_eq_restrict₀
 
 中文:
 引理 embed_valuation_eq_restrict₀
-  条件: [v.Compatible] (x : R)
+  条件: [v.余mpatible] (x : R)
   证明: by
   convert! embed_mk v x 1
   simp
@@ -4247,8 +4247,8 @@ lemma embed_strictMono
 
 中文:
 引理 embed_strictMono
-  条件: [v.Compatible]
-  结论: StrictMono (embed v)
+  条件: [v.余mpatible]
+  结论: 严格递增 (embed v)
   证明: by
   intro a b h
   obtain ⟨a, r, rfl⟩ := exists_valuation_div_valuation_eq a
@@ -4305,7 +4305,7 @@ theorem orderMonoidIso_embed
 
 中文:
 定理 orderMonoidIso_embed
-  结论: [v.Compatible] {Γ' : 类型} [LinearOrderedCommGroupWithZero Γ']
+  结论: [v.余mpatible] {Γ' : 类型} [带零LinearOrderedComm群 Γ']
   证明: by
   simp only [embed, coe_mk, ZeroHom.coe_mk]
   induction x using ValueGroupWithZero.ind with
@@ -4340,7 +4340,7 @@ definition orderMonoidIso
 
 中文:
 定义 orderMonoidIso
-  签名: [v.Compatible]
+  签名: [v.余mpatible]
   定义体: embed v
   invFun x := embedding ((isEquiv v (valuation R)).orderMonoidIso x)
   left_inv x := by simp
@@ -4371,7 +4371,7 @@ lemma orderMonoidIso_mk
 
 中文:
 引理 orderMonoidIso_mk
-  条件: [v.Compatible] (x : R) (s : posSubmonoid R)
+  条件: [v.余mpatible] (x : R) (s : posSubmonoid R)
   证明: rfl
 -/
 lemma orderMonoidIso_mk [v.Compatible] (x : R) (s : posSubmonoid R) :
@@ -4391,7 +4391,7 @@ lemma orderMonoidIso_valuation_eq_restrict₀
 
 中文:
 引理 orderMonoidIso_valuation_eq_restrict₀
-  条件: [v.Compatible] (x : R)
+  条件: [v.余mpatible] (x : R)
   证明: embed_valuation_eq_restrict₀ v x
 -/
 lemma orderMonoidIso_valuation_eq_restrict₀ [v.Compatible] (x : R) :
@@ -4431,8 +4431,8 @@ lemma orderMonoidIso_strictMono
 
 中文:
 引理 orderMonoidIso_strictMono
-  条件: [v.Compatible]
-  结论: StrictMono (orderMonoidIso v)
+  条件: [v.余mpatible]
+  结论: 严格递增 (orderMonoidIso v)
   证明: embed_strictMono v
 
 Depends on / 依赖: embed_strictMono
@@ -4450,7 +4450,7 @@ lemma leftInverse_embedding_orderMonoidIso
 
 中文:
 引理 leftInverse_embedding_orderMonoidIso
-  结论: Function.LeftInverse embedding
+  结论: 函数.左逆 embedding
   证明: embedding_orderMonoidIso_valuation_eq
 
 Depends on / 依赖: embedding_orderMonoidIso_valuation_eq
@@ -4495,7 +4495,7 @@ lemma valuation_lt_symm_orderMonoidIso
 
 中文:
 引理 valuation_lt_symm_orderMonoidIso
-  条件: [v.Compatible] (γ : ValueGroup₀ (.ofClass v)) (x : R)
+  条件: [v.余mpatible] (γ : ValueGroup₀ (.ofClass v)) (x : R)
   证明: calc
     _ ↔ orderMonoidIso v _ < orderMonoidIso v _ := (map_lt_map_iff (orderMonoidIso v)).symm
     _ ↔ _ := by simp [v.restrict_def x]
@@ -4522,7 +4522,7 @@ lemma restrict_lt_orderMonoidIso
 
 中文:
 引理 restrict_lt_orderMonoidIso
-  条件: [v.Compatible] (γ : ValueGroupWithZero R) (x : R)
+  条件: [v.余mpatible] (γ : ValueGroupWithZero R) (x : R)
   证明: by
   simpa using (valuation_lt_symm_orderMonoidIso v (orderMonoidIso v γ) x).symm
 
@@ -4542,7 +4542,7 @@ lemma one_apply_posSubmonoid
 
 中文:
 引理 one_apply_posSubmonoid
-  结论: [Nontrivial R] [NoZeroDivisors R] [DecidablePred fun x : R => x = 0]
+  结论: [非平凡 R] [无零因子 R] [DecidablePred fun x : R => x = 0]
   证明: Valuation.one_apply_of_ne_zero (by simp)
 
 Depends on / 依赖: Valuation, Valuation.one_apply_of_ne_zero, one_apply_of_ne_zero
@@ -4564,7 +4564,7 @@ class ValuativeExtension
 
 中文:
 类 ValuativeExtension
-  参数: (A B : 类型) [CommSemiring A] [Semiring B] [ValuativeRel A]
+  参数: (A B : 类型) [交换半环 A] [半环 B] [ValuativeRel A]
   公理与运算 (1 个):
     - vle_iff_vle((a b : A)) : algebraMap A B a <=ᵥ algebraMap A B b ↔ a <=ᵥ b
 -/
@@ -4753,7 +4753,7 @@ lemma mapValueGroupWithZero_strictMono
 
 中文:
 引理 mapValueGroupWithZero_strictMono
-  结论: StrictMono (mapValueGroupWithZero A B)
+  结论: 严格递增 (mapValueGroupWithZero A B)
   证明: embedding_strictMono.comp (embed_strictMono _)
 
 Depends on / 依赖: embed_strictMono, embedding_strictMono, embedding_strictMono.comp
@@ -4774,9 +4774,9 @@ lemma _root_.ValuativeRel.IsRankLeOne.of_valuativeExtension
   exact ⟨⟨f.comp (mapValueGroupWithZero _ _), hf.comp mapValueGroupWithZero_strictMono⟩⟩
 
 中文:
-引理 _root_.ValuativeRel.IsRankLeOne.of_valuativeExtension
-  条件: [IsRankLeOne B]
-  结论: IsRankLeOne A
+引理 _root_.ValuativeRel.是秩不超过一.of_valuativeExtension
+  条件: [是秩不超过一 B]
+  结论: 是秩不超过一 A
   证明: by
   obtain ⟨⟨f, hf⟩⟩ := IsRankLeOne.nonempty (R := B)
   exact ⟨⟨f.comp (mapValueGroupWithZero _ _), hf.comp mapValueGroupWithZero_strictMono⟩⟩
@@ -4806,7 +4806,7 @@ instance [IsRankLeOne
   exact .comap f.toMonoidHom hf
 
 中文:
-实例 [IsRankLeOne
+实例 [是秩不超过一
   签名: R] : MulArchimedean (ValueGroupWithZero R)
   定义体: by
   obtain ⟨⟨f, hf⟩⟩ := IsRankLeOne.nonempty (R := R)

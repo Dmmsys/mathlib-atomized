@@ -46,7 +46,7 @@ theorem adjoin_restrictScalars
 
 中文:
 定理 adjoin_restrictScalars
-  结论: (C D E : 类型) [CommSemiring C] [CommSemiring D] [CommSemiring E]
+  结论: (C D E : 类型) [交换半环 C] [交换半环 D] [交换半环 E]
   证明: by
   suffices
     Set.range (algebraMap D E) =
@@ -82,7 +82,7 @@ theorem adjoin_res_eq_adjoin_res
 
 中文:
 定理 adjoin_res_eq_adjoin_res
-  结论: (C D E F : 类型) [CommSemiring C] [CommSemiring D]
+  结论: (C D E F : 类型) [交换半环 C] [交换半环 D]
   证明: by
   rw [adjoin_restrictScalars C E]; rw [adjoin_restrictScalars C D]; rw [← hS]; rw [← hT]; rw [← Algebra.adjoin_image]; rw [← Algebra.adjoin_image]; rw [← AlgHom.coe_toRingHom]; rw [← AlgHom.coe_toRingHom]; rw [IsScalarTower.coe_toAlgHom]; rw [IsScalarTower.coe_toAlgHom]; rw [← adjoin_union_eq_adj
 
@@ -115,8 +115,8 @@ theorem Algebra.fg_trans'
     rw [Finset.coe_union]; rw [Finset.coe_image]; rw [Algebra.adjoin_algebraMap_image_union_eq_adjoin_adjoin]; rw [hs]; rw [Algebra.adjoin_top]; rw [ht]; rw [Subalgebra.restrictScalars_to
 
 中文:
-定理 Algebra.fg_trans'
-  结论: {R S A : 类型} [CommSemiring R] [CommSemiring S] [Semiring A]
+定理 代数.fg_trans'
+  结论: {R S A : 类型} [交换半环 R] [交换半环 S] [半环 A]
   证明: by
   classical
   rcases hRS with ⟨s, hs⟩
@@ -166,8 +166,8 @@ theorem exists_subalgebra_of_fg
     forall xi in x, xi in span (Algebra.adjoin A (↑s : Set B)) (↑(insert 1 y : 
 
 中文:
-定理 exists_subalgebra_of_fg
-  条件: (hAC : (⊤ : Subalgebra A C).FG) (hBC : (⊤ : Submodule B C).FG)
+定理 存在_subalgebra_of_fg
+  条件: (hAC : (⊤ : 子代数 A C).FG) (hBC : (⊤ : 子模 B C).FG)
   证明: by
   obtain ⟨x, hx⟩ := hAC
   obtain ⟨y, hy⟩ := hBC
@@ -254,7 +254,7 @@ Subalgebra.fg_of_submodule_fg
 
 中文:
 定理 fg_of_fg_of_fg
-  结论: [IsNoetherianRing A] (hAC : (⊤ : Subalgebra A C).FG)
+  结论: [是Noether环 A] (hAC : (⊤ : 子代数 A C).FG)
   证明: let ⟨B₀, hAB₀, hB₀C⟩ := exists_subalgebra_of_fg A B C hAC hBC
 Algebra.fg_trans' (B₀.fg_top.2 hAB₀)
 Subalgebra.fg_of_submodule_fg

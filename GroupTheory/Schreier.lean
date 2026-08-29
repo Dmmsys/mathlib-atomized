@@ -54,7 +54,7 @@ theorem card_dvd_exponent_pow_rank
 
 中文:
 定理 card_dvd_exponent_pow_rank
-  结论: 自然数.card G ∣ Monoid.exponent G ^ Group.rank G
+  结论: 自然数.card G ∣ 幺半群.exponent G ^ 群.rank G
   证明: by
   classical
   obtain ⟨S, hS1, hS2⟩ := Group.rank_spec G
@@ -260,7 +260,7 @@ theorem closure_mul_image_eq_top'
 
 中文:
 定理 closure_mul_image_eq_top'
-  结论: [DecidableEq G] {R S : Finset G}
+  结论: [DecidableEq G] {R S : 有限集 G}
   证明: by
   rw [Finset.coe_image]; rw [Finset.coe_mul]
   exact closure_mul_image_eq_top hR hR1 hS
@@ -292,8 +292,8 @@ theorem exists_finset_card_le_mul
   replace hR : IsComplement (H : Set G) R := by rwa [Set
 
 中文:
-定理 exists_finset_card_le_mul
-  条件: [FiniteIndex H] {S : Finset G} (hS : closure (S : Set G) = ⊤)
+定理 存在_finset_card_le_mul
+  条件: [FiniteIndex H] {S : 有限集 G} (hS : closure (S : 集合 G) = ⊤)
   证明: by
   let := H.fintypeQuotientOfFiniteIndex
   have : DecidableEq G := Classical.decEq G
@@ -341,7 +341,7 @@ instance fg_of_index_ne_zero
 
 中文:
 实例 fg_of_index_ne_zero
-  签名: [hG : Group.FG G] [FiniteIndex H]
+  签名: [hG : 群.FG G] [FiniteIndex H]
   定义体: by
   obtain ⟨S, hS⟩ := hG.1
   obtain ⟨T, -, hT⟩ := exists_finset_card_le_mul H hS
@@ -371,7 +371,7 @@ theorem rank_le_index_mul_rank
 
 中文:
 定理 rank_le_index_mul_rank
-  条件: [hG : Group.FG G] [FiniteIndex H]
+  条件: [hG : 群.FG G] [FiniteIndex H]
   证明: by
   have := H.fg_of_index_ne_zero
   obtain ⟨S, hS₀, hS⟩ := Group.rank_spec G
@@ -411,7 +411,7 @@ theorem card_commutator_dvd_index_center_pow
 
 中文:
 定理 card_commutator_dvd_index_center_pow
-  条件: [Finite (commutatorSet G)]
+  条件: [有限 (commutatorSet G)]
   证明: by
   -- First handle the case when `Z(G)` has infinite index and `[G : Z(G)]` is defined to be `0`
   by_cases hG : (center G).index = 0
@@ -480,7 +480,7 @@ theorem card_commutator_le_of_finite_commutatorSet
 
 中文:
 定理 card_commutator_le_of_finite_commutatorSet
-  条件: [Finite (commutatorSet G)]
+  条件: [有限 (commutatorSet G)]
   证明: by
   have h1 := index_center_le_pow (closureCommutatorRepresentatives G)
   have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
@@ -517,8 +517,8 @@ instance [Finite
   exact FiniteIndex.index_ne_zero (eq_zero_of_pow_eq_zero h2)
 
 中文:
-实例 [Finite
-  签名: (commutatorSet G)] : Finite (_root_.commutator G)
+实例 [有限
+  签名: (commutatorSet G)] : 有限 (_root_.commutator G)
   定义体: by
   have h2 := card_commutator_dvd_index_center_pow (closureCommutatorRepresentatives G)
   refine Nat.finite_of_card_ne_zero fun h => ?_

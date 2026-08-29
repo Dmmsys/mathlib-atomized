@@ -36,7 +36,7 @@ definition UnitDisc
 
 中文:
 定义 UnitDisc
-  签名: : Type
+  签名: : 类型
   定义体: Subsemigroup.unitBall Complex deriving TopologicalSpace
 
 Depends on / 依赖: Subsemigroup, Subsemigroup.unitBall, TopologicalSpace, deriving, unitBall
@@ -57,7 +57,7 @@ definition UnitClosedDisc
 
 中文:
 定义 UnitClosedDisc
-  签名: : Type
+  签名: : 类型
   定义体: Submonoid.unitClosedBall Complex deriving TopologicalSpace
 
 @[inherit_doc] scoped[Complex.UnitDisc] notation "𝔻" => Complex.UnitDisc
@@ -85,7 +85,7 @@ definition coe
 
 中文:
 定义 coe
-  签名: : 𝔻 -> Complex
+  签名: : 𝔻 -> 复形
   定义体: Subtype.val
 -/
 @[coe] protected def coe : 𝔻 -> Complex := Subtype.val
@@ -100,7 +100,7 @@ instance instCommSemigroup
 
 中文:
 实例 instCommSemigroup
-  签名: : CommSemigroup UnitDisc
+  签名: : 交换半群 UnitDisc
   定义体: inferInstanceAs CommSemigroup (ball _ _)
 
 Depends on / 依赖: CommSemigroup
@@ -117,7 +117,7 @@ instance instSemigroupWithZero
 
 中文:
 实例 instSemigroupWithZero
-  签名: : SemigroupWithZero UnitDisc
+  签名: : 带零半群 UnitDisc
   定义体: inferInstanceAs SemigroupWithZero (ball _ _)
 
 Depends on / 依赖: SemigroupWithZero
@@ -135,7 +135,7 @@ instance instIsCancelMulZero
 
 中文:
 实例 instIsCancelMulZero
-  签名: : IsCancelMulZero UnitDisc
+  签名: : 是乘零消去 UnitDisc
   定义体: inferInstanceAs IsCancelMulZero (ball _ _)
 
 Depends on / 依赖: IsCancelMulZero
@@ -153,7 +153,7 @@ instance instHasDistribNeg
 
 中文:
 实例 instHasDistribNeg
-  签名: : HasDistribNeg UnitDisc
+  签名: : 有DistribNeg UnitDisc
   定义体: inferInstanceAs HasDistribNeg (ball _ _)
 
 Depends on / 依赖: HasDistribNeg
@@ -173,7 +173,7 @@ instance instCoe
 
 中文:
 实例 instCoe
-  签名: : Coe UnitDisc Complex
+  签名: : Coe UnitDisc 复形
   定义体: ⟨UnitDisc.coe⟩
 
 @[ext]
@@ -195,7 +195,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : 𝔻 -> Complex)
+  结论: 单射 ((↑) : 𝔻 -> 复形)
   证明: Subtype.coe_injective
 
 @[simp, norm_cast]
@@ -220,7 +220,7 @@ theorem coe_inj
 中文:
 定理 coe_inj
   条件: {z w : 𝔻}
-  结论: (z : Complex) = w ↔ z = w
+  结论: (z : 复形) = w ↔ z = w
   证明: Subtype.val_inj
 
 @[fun_prop]
@@ -242,7 +242,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: Topology.IsEmbedding ((↑) : 𝔻 -> Complex)
+  结论: 拓扑.是嵌入 ((↑) : 𝔻 -> 复形)
   证明: .subtypeVal
 
 @[fun_prop]
@@ -262,7 +262,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : 𝔻 -> Complex)
+  结论: 连续 ((↑) : 𝔻 -> 复形)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -281,7 +281,7 @@ theorem norm_lt_one
 中文:
 定理 norm_lt_one
   条件: (z : 𝔻)
-  结论: ‖(z : Complex)‖ < 1
+  结论: ‖(z : 复形)‖ < 1
   证明: mem_ball_zero_iff.1 z.2
 
 Depends on / 依赖: mem_ball_zero_iff
@@ -301,7 +301,7 @@ theorem norm_ne_one
 中文:
 定理 norm_ne_one
   条件: (z : 𝔻)
-  结论: ‖(z : Complex)‖ != 1
+  结论: ‖(z : 复形)‖ != 1
   证明: z.norm_lt_one.ne
 
 Depends on / 依赖: norm_lt_one, z.norm_lt_one.ne
@@ -323,7 +323,7 @@ theorem sq_norm_lt_one
 中文:
 定理 sq_norm_lt_one
   条件: (z : 𝔻)
-  结论: ‖(z : Complex)‖ ^ 2 < 1
+  结论: ‖(z : 复形)‖ ^ 2 < 1
   证明: by
   rw [sq_lt_one_iff_abs_lt_one]; rw [abs_norm]
   exact z.norm_lt_one
@@ -371,7 +371,7 @@ theorem coe_ne_one
 中文:
 定理 coe_ne_one
   条件: (z : 𝔻)
-  结论: (z : Complex) != 1
+  结论: (z : 复形) != 1
   证明: ne_of_apply_ne (‖·‖) by simp [z.norm_ne_one]
 
 Depends on / 依赖: ne_of_apply_ne, norm_ne_one, z.norm_ne_one
@@ -391,7 +391,7 @@ theorem coe_ne_neg_one
 中文:
 定理 coe_ne_neg_one
   条件: (z : 𝔻)
-  结论: (z : Complex) != -1
+  结论: (z : 复形) != -1
   证明: ne_of_apply_ne (‖·‖) by simpa [norm_neg] using z.norm_ne_one
 
 Depends on / 依赖: ne_of_apply_ne, norm_ne_one, norm_neg, z.norm_ne_one
@@ -413,7 +413,7 @@ theorem one_add_coe_ne_zero
 中文:
 定理 one_add_coe_ne_zero
   条件: (z : 𝔻)
-  结论: (1 + z : Complex) != 0
+  结论: (1 + z : 复形) != 0
   证明: mt neg_eq_iff_add_eq_zero.2 z.coe_ne_neg_one.symm
 
 @[simp, norm_cast]
@@ -438,7 +438,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (z w : 𝔻)
-  结论: ↑(z * w) = (z * w : Complex)
+  结论: ↑(z * w) = (z * w : 复形)
   证明: rfl
 
 @[simp, norm_cast]
@@ -459,7 +459,7 @@ theorem coe_neg
 中文:
 定理 coe_neg
   条件: (z : 𝔻)
-  结论: ↑(-z) = (-z : Complex)
+  结论: ↑(-z) = (-z : 复形)
   证明: rfl
 -/
 theorem coe_neg (z : 𝔻) : ↑(-z) = (-z : Complex) := rfl
@@ -474,7 +474,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (z : Complex) (hz : ‖z‖ < 1)
+  签名: (z : 复形) (hz : ‖z‖ < 1)
   定义体: ⟨z, mem_ball_zero_iff.2 hz⟩
 
 Depends on / 依赖: mem_ball_zero_iff
@@ -492,7 +492,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift Complex 𝔻 (↑) (‖·‖ < 1)
+  签名: CanLift 复形 𝔻 (↑) (‖·‖ < 1)
   定义体: ⟨mk z hz, rfl⟩
 -/
 instance : CanLift Complex 𝔻 (↑) (‖·‖ < 1) where
@@ -512,7 +512,7 @@ definition casesOn
 
 中文:
 定义 casesOn
-  签名: {motive : 𝔻 -> Sort*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝔻)
+  签名: {motive : 𝔻 -> 类型层*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝔻)
   定义体: mk z z.norm_lt_one
 
 @[simp]
@@ -534,7 +534,7 @@ theorem casesOn_mk
 
 中文:
 定理 casesOn_mk
-  条件: {motive : 𝔻 -> Sort*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ < 1)
+  条件: {motive : 𝔻 -> 类型层*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : 复形} (hz : ‖z‖ < 1)
   证明: rfl
 
 @[simp]
@@ -557,8 +557,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (z : Complex) (hz : ‖z‖ < 1)
-  结论: (mk z hz : Complex) = z
+  条件: (z : 复形) (hz : ‖z‖ < 1)
+  结论: (mk z hz : 复形) = z
   证明: rfl
 
 @[simp]
@@ -580,7 +580,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (z : 𝔻) (hz : ‖(z : Complex)‖ < 1 := z.norm_lt_one)
+  条件: (z : 𝔻) (hz : ‖(z : 复形)‖ < 1 := z.norm_lt_one)
   结论: mk z hz = z
   证明: Subtype.eta _ _
 
@@ -603,7 +603,7 @@ theorem mk_inj
 
 中文:
 定理 mk_inj
-  条件: {z w : Complex} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1)
+  条件: {z w : 复形} (hz : ‖z‖ < 1) (hw : ‖w‖ < 1)
   结论: mk z hz = mk w hw ↔ z = w
   证明: Subtype.mk_eq_mk
 
@@ -622,7 +622,7 @@ theorem «forall»
   proof: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_lt_one⟩
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : 𝔻 -> 命题}
   结论: (对任意 z, p z) ↔ 对任意 z hz, p (mk z hz)
   证明: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_lt_one⟩
@@ -642,7 +642,7 @@ theorem «exists»
 @[simp]
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : 𝔻 -> 命题}
   结论: (存在 z, p z) ↔ 存在 z hz, p (mk z hz)
   证明: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_lt_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
@@ -666,7 +666,7 @@ theorem mk_neg
 
 中文:
 定理 mk_neg
-  条件: (z : Complex) (hz : ‖-z‖ < 1)
+  条件: (z : 复形) (hz : ‖-z‖ < 1)
   结论: mk (-z) hz = -mk z (norm_neg z ▸ hz)
   证明: rfl
 
@@ -688,7 +688,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ((0 : 𝔻) : Complex) = 0
+  结论: ((0 : 𝔻) : 复形) = 0
   证明: rfl
 
 @[simp]
@@ -709,7 +709,7 @@ theorem coe_eq_zero
 中文:
 定理 coe_eq_zero
   条件: {z : 𝔻}
-  结论: (z : Complex) = 0 ↔ z = 0
+  结论: (z : 复形) = 0 ↔ z = 0
   证明: coe_injective.eq_iff' coe_zero
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_zero, eq_iff
@@ -743,7 +743,7 @@ theorem mk_eq_zero
 
 中文:
 定理 mk_eq_zero
-  条件: {z : Complex} (hz : ‖z‖ < 1)
+  条件: {z : 复形} (hz : ‖z‖ < 1)
   结论: mk z hz = 0 ↔ z = 0
   证明: by simp [← coe_inj]
 -/
@@ -759,7 +759,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 𝔻
+  签名: 可居 𝔻
   定义体: ⟨0⟩
 -/
 instance : Inhabited 𝔻 :=
@@ -775,7 +775,7 @@ instance instMulActionCircle
 
 中文:
 实例 instMulActionCircle
-  签名: : MulAction Circle 𝔻
+  签名: : 乘法作用 Circle 𝔻
   定义体: inferInstanceAs MulAction (sphere _ _) (ball _ _)
 
 Depends on / 依赖: MulAction, sphere
@@ -793,7 +793,7 @@ instance instIsScalarTower_circle_circle
 
 中文:
 实例 instIsScalarTower_circle_circle
-  签名: : IsScalarTower Circle Circle 𝔻
+  签名: : 标量塔 Circle Circle 𝔻
   定义体: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (ball _ _)
 
 Depends on / 依赖: IsScalarTower, sphere
@@ -811,7 +811,7 @@ instance instIsScalarTower_circle
 
 中文:
 实例 instIsScalarTower_circle
-  签名: : IsScalarTower Circle 𝔻 𝔻
+  签名: : 标量塔 Circle 𝔻 𝔻
   定义体: inferInstanceAs IsScalarTower (sphere _ _) (ball _ _) (ball _ _)
 
 Depends on / 依赖: IsScalarTower, sphere
@@ -829,7 +829,7 @@ instance instSMulCommClass_circle_left
 
 中文:
 实例 instSMulCommClass_circle_left
-  签名: : SMulCommClass Circle 𝔻 𝔻
+  签名: : 标量交换类 Circle 𝔻 𝔻
   定义体: inferInstanceAs SMulCommClass (sphere _ _) (ball _ _) (ball _ _)
 
 Depends on / 依赖: SMulCommClass, sphere
@@ -849,7 +849,7 @@ instance instSMulCommClass_circle_right
 
 中文:
 实例 instSMulCommClass_circle_right
-  签名: : SMulCommClass 𝔻 Circle 𝔻
+  签名: : 标量交换类 𝔻 Circle 𝔻
   定义体: SMulCommClass.symm _ _ _
 
 @[simp, norm_cast]
@@ -875,7 +875,7 @@ alias coe_smul_circle := coe_circle_smul
 中文:
 定理 coe_circle_smul
   条件: (z : Circle) (w : 𝔻)
-  结论: ↑(z • w) = (z * w : Complex)
+  结论: ↑(z • w) = (z * w : 复形)
   证明: rfl
 
 @[deprecated (since := "2026-01-06")]
@@ -899,7 +899,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow UnitDisc 自然数+
+  签名: 幂 UnitDisc 自然数+
   定义体: ⟨z ^ (n : Nat), by simp [pow_lt_one_iff_of_nonneg, z.norm_lt_one]⟩
 
 @[simp, norm_cast]
@@ -924,7 +924,7 @@ theorem coe_pow
 中文:
 定理 coe_pow
   条件: (z : 𝔻) (n : 自然数+)
-  结论: ((z ^ n : 𝔻) : Complex) = z ^ (n : 自然数)
+  结论: ((z ^ n : 𝔻) : 复形) = z ^ (n : 自然数)
   证明: rfl
 
 @[fun_prop]
@@ -948,7 +948,7 @@ theorem continuous_pow
 中文:
 定理 continuous_pow
   条件: (n : 自然数+)
-  结论: Continuous (· ^ n : 𝔻 -> 𝔻)
+  结论: 连续 (· ^ n : 𝔻 -> 𝔻)
   证明: by
   simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
   fun_prop
@@ -1090,7 +1090,7 @@ theorem re_coe
 中文:
 定理 re_coe
   条件: (z : 𝔻)
-  结论: (z : Complex).re = z.re
+  结论: (z : 复形).re = z.re
   证明: rfl
 
 @[simp, norm_cast]
@@ -1113,7 +1113,7 @@ theorem im_coe
 中文:
 定理 im_coe
   条件: (z : 𝔻)
-  结论: (z : Complex).im = z.im
+  结论: (z : 复形).im = z.im
   证明: rfl
 
 @[simp]
@@ -1202,7 +1202,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star 𝔻
+  签名: 对合 𝔻
   定义体: mk (conj z) (norm_conj z).symm ▸ z.norm_lt_one
 
 Depends on / 依赖: norm_conj, norm_lt_one, z.norm_lt_one
@@ -1244,7 +1244,7 @@ alias coe_conj := coe_star
 中文:
 定理 coe_star
   条件: (z : 𝔻)
-  结论: (↑(star z) : Complex) = conj ↑z
+  结论: (↑(star z) : 复形) = conj ↑z
   证明: rfl
 
 @[deprecated (since := "2026-01-06")]
@@ -1470,7 +1470,7 @@ definition coe
 
 中文:
 定义 coe
-  签名: : 𝕔𝔻 -> Complex
+  签名: : 𝕔𝔻 -> 复形
   定义体: Subtype.val
 -/
 @[coe] protected def coe : 𝕔𝔻 -> Complex := Subtype.val
@@ -1485,7 +1485,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonoidWithZero 𝕔𝔻
+  签名: 带零幺半群 𝕔𝔻
   定义体: inferInstanceAs MonoidWithZero (closedBall _ _)
 
 Depends on / 依赖: MonoidWithZero, closedBall
@@ -1502,7 +1502,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsCancelMulZero 𝕔𝔻
+  签名: 是乘零消去 𝕔𝔻
   定义体: inferInstanceAs IsCancelMulZero (closedBall _ _)
 
 Depends on / 依赖: IsCancelMulZero, closedBall
@@ -1520,7 +1520,7 @@ instance :
 
 中文:
 实例 :
-  签名: HasDistribNeg 𝕔𝔻
+  签名: 有DistribNeg 𝕔𝔻
   定义体: inferInstanceAs HasDistribNeg (closedBall _ _)
 
 Depends on / 依赖: HasDistribNeg, closedBall
@@ -1540,7 +1540,7 @@ instance :
 
 中文:
 实例 :
-  签名: Coe 𝕔𝔻 Complex
+  签名: Coe 𝕔𝔻 复形
   定义体: ⟨UnitClosedDisc.coe⟩
 
 @[ext]
@@ -1562,7 +1562,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : 𝕔𝔻 -> Complex)
+  结论: 单射 ((↑) : 𝕔𝔻 -> 复形)
   证明: Subtype.coe_injective
 
 @[simp, norm_cast]
@@ -1587,7 +1587,7 @@ theorem coe_inj
 中文:
 定理 coe_inj
   条件: {z w : 𝕔𝔻}
-  结论: (z : Complex) = w ↔ z = w
+  结论: (z : 复形) = w ↔ z = w
   证明: Subtype.val_inj
 
 @[fun_prop]
@@ -1609,7 +1609,7 @@ theorem isEmbedding_coe
 
 中文:
 定理 isEmbedding_coe
-  结论: Topology.IsEmbedding ((↑) : 𝕔𝔻 -> Complex)
+  结论: 拓扑.是嵌入 ((↑) : 𝕔𝔻 -> 复形)
   证明: .subtypeVal
 
 @[fun_prop]
@@ -1629,7 +1629,7 @@ theorem continuous_coe
 
 中文:
 定理 continuous_coe
-  结论: Continuous ((↑) : 𝕔𝔻 -> Complex)
+  结论: 连续 ((↑) : 𝕔𝔻 -> 复形)
   证明: isEmbedding_coe.continuous
 
 Depends on / 依赖: continuous, isEmbedding_coe, isEmbedding_coe.continuous
@@ -1648,7 +1648,7 @@ theorem norm_le_one
 中文:
 定理 norm_le_one
   条件: (z : 𝕔𝔻)
-  结论: ‖(z : Complex)‖ <= 1
+  结论: ‖(z : 复形)‖ <= 1
   证明: mem_closedBall_zero_iff.1 z.2
 
 Depends on / 依赖: mem_closedBall_zero_iff
@@ -1670,7 +1670,7 @@ theorem sq_norm_lt_one
 中文:
 定理 sq_norm_lt_one
   条件: (z : 𝕔𝔻)
-  结论: ‖(z : Complex)‖ ^ 2 <= 1
+  结论: ‖(z : 复形)‖ ^ 2 <= 1
   证明: by
   rw [sq_le_one_iff_abs_le_one]; rw [abs_norm]
   exact z.norm_le_one
@@ -1725,7 +1725,7 @@ theorem coe_mul
 中文:
 定理 coe_mul
   条件: (z w : 𝕔𝔻)
-  结论: ↑(z * w) = (z * w : Complex)
+  结论: ↑(z * w) = (z * w : 复形)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1746,7 +1746,7 @@ theorem coe_neg
 中文:
 定理 coe_neg
   条件: (z : 𝕔𝔻)
-  结论: ↑(-z) = (-z : Complex)
+  结论: ↑(-z) = (-z : 复形)
   证明: rfl
 -/
 theorem coe_neg (z : 𝕔𝔻) : ↑(-z) = (-z : Complex) := rfl
@@ -1761,7 +1761,7 @@ definition mk
 
 中文:
 定义 mk
-  签名: (z : Complex) (hz : ‖z‖ <= 1)
+  签名: (z : 复形) (hz : ‖z‖ <= 1)
   定义体: ⟨z, mem_closedBall_zero_iff.2 hz⟩
 
 Depends on / 依赖: mem_closedBall_zero_iff
@@ -1779,7 +1779,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanLift Complex 𝕔𝔻 (↑) (‖·‖ <= 1)
+  签名: CanLift 复形 𝕔𝔻 (↑) (‖·‖ <= 1)
   定义体: ⟨mk z hz, rfl⟩
 -/
 instance : CanLift Complex 𝕔𝔻 (↑) (‖·‖ <= 1) where
@@ -1799,7 +1799,7 @@ definition casesOn
 
 中文:
 定义 casesOn
-  签名: {motive : 𝕔𝔻 -> Sort*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝕔𝔻)
+  签名: {motive : 𝕔𝔻 -> 类型层*} (mk : 对任意 z hz, motive (.mk z hz)) (z : 𝕔𝔻)
   定义体: mk z z.norm_le_one
 
 @[simp]
@@ -1821,7 +1821,7 @@ theorem casesOn_mk
 
 中文:
 定理 casesOn_mk
-  条件: {motive : 𝕔𝔻 -> Sort*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : Complex} (hz : ‖z‖ <= 1)
+  条件: {motive : 𝕔𝔻 -> 类型层*} (mk' : 对任意 z hz, motive (.mk z hz)) {z : 复形} (hz : ‖z‖ <= 1)
   证明: rfl
 
 @[simp]
@@ -1844,8 +1844,8 @@ theorem coe_mk
 
 中文:
 定理 coe_mk
-  条件: (z : Complex) (hz : ‖z‖ <= 1)
-  结论: (mk z hz : Complex) = z
+  条件: (z : 复形) (hz : ‖z‖ <= 1)
+  结论: (mk z hz : 复形) = z
   证明: rfl
 
 @[simp]
@@ -1867,7 +1867,7 @@ theorem mk_coe
 
 中文:
 定理 mk_coe
-  条件: (z : 𝕔𝔻) (hz : ‖(z : Complex)‖ <= 1 := z.norm_le_one)
+  条件: (z : 𝕔𝔻) (hz : ‖(z : 复形)‖ <= 1 := z.norm_le_one)
   结论: mk z hz = z
   证明: Subtype.eta _ _
 
@@ -1890,7 +1890,7 @@ theorem mk_inj
 
 中文:
 定理 mk_inj
-  条件: {z w : Complex} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1)
+  条件: {z w : 复形} (hz : ‖z‖ <= 1) (hw : ‖w‖ <= 1)
   结论: mk z hz = mk w hw ↔ z = w
   证明: Subtype.mk_eq_mk
 
@@ -1909,7 +1909,7 @@ theorem «forall»
   proof: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_le_one⟩
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : 𝕔𝔻 -> 命题}
   结论: (对任意 z, p z) ↔ 对任意 z hz, p (mk z hz)
   证明: ⟨fun h z hz => h (mk z hz), fun h z => h z z.norm_le_one⟩
@@ -1929,7 +1929,7 @@ theorem «exists»
 @[simp]
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : 𝕔𝔻 -> 命题}
   结论: (存在 z, p z) ↔ 存在 z hz, p (mk z hz)
   证明: ⟨fun ⟨z, hz⟩ => ⟨z, z.norm_le_one, hz⟩, fun ⟨z, hz, h⟩ => ⟨mk z hz, h⟩⟩
@@ -1953,7 +1953,7 @@ theorem mk_neg
 
 中文:
 定理 mk_neg
-  条件: (z : Complex) (hz : ‖-z‖ <= 1)
+  条件: (z : 复形) (hz : ‖-z‖ <= 1)
   结论: mk (-z) hz = -mk z (norm_neg z ▸ hz)
   证明: rfl
 
@@ -1975,7 +1975,7 @@ theorem coe_zero
 
 中文:
 定理 coe_zero
-  结论: ((0 : 𝕔𝔻) : Complex) = 0
+  结论: ((0 : 𝕔𝔻) : 复形) = 0
   证明: rfl
 
 @[simp]
@@ -1996,7 +1996,7 @@ theorem coe_eq_zero
 中文:
 定理 coe_eq_zero
   条件: {z : 𝕔𝔻}
-  结论: (z : Complex) = 0 ↔ z = 0
+  结论: (z : 复形) = 0 ↔ z = 0
   证明: coe_injective.eq_iff' coe_zero
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_zero, eq_iff
@@ -2032,7 +2032,7 @@ theorem mk_eq_zero
 
 中文:
 定理 mk_eq_zero
-  条件: {z : Complex} (hz : ‖z‖ <= 1)
+  条件: {z : 复形} (hz : ‖z‖ <= 1)
   结论: mk z hz = 0 ↔ z = 0
   证明: by simp [← coe_inj]
 
@@ -2053,7 +2053,7 @@ theorem coe_one
 
 中文:
 定理 coe_one
-  结论: ((1 : 𝕔𝔻) : Complex) = 1
+  结论: ((1 : 𝕔𝔻) : 复形) = 1
   证明: rfl
 
 @[simp]
@@ -2074,7 +2074,7 @@ theorem coe_eq_one
 中文:
 定理 coe_eq_one
   条件: {z : 𝕔𝔻}
-  结论: (z : Complex) = 1 ↔ z = 1
+  结论: (z : 复形) = 1 ↔ z = 1
   证明: coe_injective.eq_iff' coe_one
 
 Depends on / 依赖: coe_injective, coe_injective.eq_iff, coe_one, eq_iff
@@ -2108,7 +2108,7 @@ theorem mk_eq_one
 
 中文:
 定理 mk_eq_one
-  条件: {z : Complex} (hz : ‖z‖ <= 1)
+  条件: {z : 复形} (hz : ‖z‖ <= 1)
   结论: mk z hz = 1 ↔ z = 1
   证明: by simp [← coe_inj]
 -/
@@ -2124,7 +2124,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 𝕔𝔻
+  签名: 可居 𝕔𝔻
   定义体: ⟨0⟩
 -/
 instance : Inhabited 𝕔𝔻 :=
@@ -2140,7 +2140,7 @@ instance :
 
 中文:
 实例 :
-  签名: MulAction Circle 𝕔𝔻
+  签名: 乘法作用 Circle 𝕔𝔻
   定义体: inferInstanceAs MulAction (sphere _ _) (closedBall _ _)
 
 Depends on / 依赖: MulAction, closedBall, sphere
@@ -2158,7 +2158,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower Circle Circle 𝕔𝔻
+  签名: 标量塔 Circle Circle 𝕔𝔻
   定义体: inferInstanceAs IsScalarTower (sphere _ _) (sphere _ _) (closedBall _ _)
 
 Depends on / 依赖: IsScalarTower, closedBall, sphere
@@ -2176,7 +2176,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsScalarTower Circle 𝕔𝔻 𝕔𝔻
+  签名: 标量塔 Circle 𝕔𝔻 𝕔𝔻
   定义体: isScalarTower_sphere_closedBall_closedBall
 
 Depends on / 依赖: isScalarTower_sphere_closedBall_closedBall
@@ -2194,7 +2194,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass Circle 𝕔𝔻 𝕔𝔻
+  签名: 标量交换类 Circle 𝕔𝔻 𝕔𝔻
   定义体: instSMulCommClass_sphere_closedBall_closedBall
 
 Depends on / 依赖: instSMulCommClass_sphere_closedBall_closedBall
@@ -2212,7 +2212,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass 𝕔𝔻 Circle 𝕔𝔻
+  签名: 标量交换类 𝕔𝔻 Circle 𝕔𝔻
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -2230,7 +2230,7 @@ instance instMulActionClosedBall
 
 中文:
 实例 instMulActionClosedBall
-  签名: : MulAction 𝕔𝔻 𝔻
+  签名: : 乘法作用 𝕔𝔻 𝔻
   定义体: inferInstanceAs MulAction (closedBall _ _) (ball _ _)
 
 Depends on / 依赖: MulAction, closedBall
@@ -2267,7 +2267,7 @@ instance instIsScalarTower_closedBall
 
 中文:
 实例 instIsScalarTower_closedBall
-  签名: : IsScalarTower 𝕔𝔻 𝔻 𝔻
+  签名: : 标量塔 𝕔𝔻 𝔻 𝔻
   定义体: inferInstanceAs IsScalarTower (closedBall _ _) (ball _ _) (ball _ _)
 
 Depends on / 依赖: IsScalarTower, closedBall
@@ -2285,7 +2285,7 @@ instance instSMulCommClass_closedBall_left
 
 中文:
 实例 instSMulCommClass_closedBall_left
-  签名: : SMulCommClass 𝕔𝔻 𝔻 𝔻
+  签名: : 标量交换类 𝕔𝔻 𝔻 𝔻
   定义体: ⟨fun _ _ _ => Subtype.ext mul_left_comm _ _ _⟩
 
 Depends on / 依赖: Subtype, Subtype.ext, mul_left_comm
@@ -2303,7 +2303,7 @@ instance instSMulCommClass_closedBall_right
 
 中文:
 实例 instSMulCommClass_closedBall_right
-  签名: : SMulCommClass 𝔻 𝕔𝔻 𝔻
+  签名: : 标量交换类 𝔻 𝕔𝔻 𝔻
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -2321,7 +2321,7 @@ instance instSMulCommClass_circle_closedBall
 
 中文:
 实例 instSMulCommClass_circle_closedBall
-  签名: : SMulCommClass Circle 𝕔𝔻 𝔻
+  签名: : 标量交换类 Circle 𝕔𝔻 𝔻
   定义体: inferInstanceAs SMulCommClass (sphere _ _) (closedBall _ _) (ball _ _)
 
 Depends on / 依赖: SMulCommClass, closedBall, sphere
@@ -2341,7 +2341,7 @@ instance instSMulCommClass_closedBall_circle
 
 中文:
 实例 instSMulCommClass_closedBall_circle
-  签名: : SMulCommClass 𝕔𝔻 Circle 𝔻
+  签名: : 标量交换类 𝕔𝔻 Circle 𝔻
   定义体: SMulCommClass.symm _ _ _
 
 @[simp, norm_cast]
@@ -2369,7 +2369,7 @@ alias coe_smul_closedBall := coe_closedBall_smul
 中文:
 定理 coe_closedBall_smul
   条件: (z : 𝕔𝔻) (w : 𝔻)
-  结论: ↑(z • w) = (z * w : Complex)
+  结论: ↑(z • w) = (z * w : 复形)
   证明: rfl
 
 @[deprecated (since := "2026-01-06")]
@@ -2396,7 +2396,7 @@ theorem coe_circle_smul
 中文:
 定理 coe_circle_smul
   条件: (z : Circle) (w : 𝕔𝔻)
-  结论: ↑(z • w) = (z * w : Complex)
+  结论: ↑(z • w) = (z * w : 复形)
   证明: rfl
 -/
 theorem coe_circle_smul (z : Circle) (w : 𝕔𝔻) : ↑(z • w) = (z * w : Complex) :=
@@ -2412,7 +2412,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMulCommClass 𝕔𝔻 Circle 𝕔𝔻
+  签名: 标量交换类 𝕔𝔻 Circle 𝕔𝔻
   定义体: SMulCommClass.symm _ _ _
 
 Depends on / 依赖: SMulCommClass, SMulCommClass.symm
@@ -2432,7 +2432,7 @@ instance :
 
 中文:
 实例 :
-  签名: Pow 𝕔𝔻 自然数
+  签名: 幂 𝕔𝔻 自然数
   定义体: ⟨z ^ n, by simp [pow_le_one₀ (norm_nonneg _) z.norm_le_one]⟩
 
 @[simp, norm_cast]
@@ -2457,7 +2457,7 @@ theorem coe_pow
 中文:
 定理 coe_pow
   条件: (z : 𝕔𝔻) (n : 自然数)
-  结论: ((z ^ n : 𝕔𝔻) : Complex) = z ^ (n : 自然数)
+  结论: ((z ^ n : 𝕔𝔻) : 复形) = z ^ (n : 自然数)
   证明: rfl
 
 @[fun_prop]
@@ -2479,7 +2479,7 @@ theorem continuous_pow
 中文:
 定理 continuous_pow
   条件: (n : 自然数)
-  结论: Continuous (· ^ n : 𝕔𝔻 -> 𝕔𝔻)
+  结论: 连续 (· ^ n : 𝕔𝔻 -> 𝕔𝔻)
   证明: by
   simp only [isEmbedding_coe.continuous_iff, Function.comp_def, coe_pow]
   fun_prop
@@ -2569,7 +2569,7 @@ theorem re_coe
 中文:
 定理 re_coe
   条件: (z : 𝕔𝔻)
-  结论: (z : Complex).re = z.re
+  结论: (z : 复形).re = z.re
   证明: rfl
 
 @[simp, norm_cast]
@@ -2592,7 +2592,7 @@ theorem im_coe
 中文:
 定理 im_coe
   条件: (z : 𝕔𝔻)
-  结论: (z : Complex).im = z.im
+  结论: (z : 复形).im = z.im
   证明: rfl
 
 @[simp]
@@ -2681,7 +2681,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star 𝕔𝔻
+  签名: 对合 𝕔𝔻
   定义体: mk (conj z) (norm_conj z).symm ▸ z.norm_le_one
 
 Depends on / 依赖: norm_conj, norm_le_one, z.norm_le_one
@@ -2703,7 +2703,7 @@ theorem coe_star
 中文:
 定理 coe_star
   条件: (z : 𝕔𝔻)
-  结论: (↑(star z) : Complex) = conj ↑z
+  结论: (↑(star z) : 复形) = conj ↑z
   证明: rfl
 
 @[simp]

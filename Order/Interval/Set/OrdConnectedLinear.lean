@@ -42,7 +42,7 @@ lemma Set.Nonempty.ordConnected_iff_of_bdd
     (I.Icc_subset (h₀.csInf_mem h₄) (h₀.csSup_mem h₄)), fun h₃ => h₃ ▸ ordConnected_Icc⟩
 
 中文:
-引理 Set.Nonempty.ordConnected_iff_of_bdd
+引理 集合.非空.ordConnected_iff_of_bdd
   证明: have h₄ : I.Finite := h₁.finite_of_bddAbove h₂
   ⟨fun _ => le_antisymm (subset_Icc_csInf_csSup h₁ h₂)
     (I.Icc_subset (h₀.csInf_mem h₄) (h₀.csSup_mem h₄)), fun h₃ => h₃ ▸ ordConnected_Icc⟩
@@ -66,8 +66,8 @@ lemma Set.Nonempty.ordConnected_iff_of_bdd'
   proof: h₀.ordConnected_iff_of_bdd (OrderBot.bddBelow I) (OrderTop.bddAbove I)
 
 中文:
-引理 Set.Nonempty.ordConnected_iff_of_bdd'
-  结论: [ConditionallyCompleteLinearOrder α]
+引理 集合.非空.ordConnected_iff_of_bdd'
+  结论: [条件完备线性序 α]
   证明: h₀.ordConnected_iff_of_bdd (OrderBot.bddBelow I) (OrderTop.bddAbove I)
 
 Depends on / 依赖: OrderBot, OrderBot.bddBelow, OrderTop, OrderTop.bddAbove, bddAbove, bddBelow, ordConnected_iff_of_bdd
@@ -93,8 +93,8 @@ lemma Set.ordConnected_iff_disjoint_Ioo_empty
 exact fun contra => hxy contr
 
 中文:
-引理 Set.ordConnected_iff_disjoint_Ioo_empty
-  条件: [LinearOrder α] [LocallyFiniteOrder α]
+引理 集合.ordConnected_iff_disjoint_Ioo_empty
+  条件: [线性序 α] [局部有限序 α]
   证明: by
   simp_rw [← Set.subset_compl_iff_disjoint_right]
   refine ⟨fun h' x hx y hy hxy => ?_, fun h' => ordConnected_of_Ioo fun x hx y hy hxy z hz => ?_⟩
@@ -136,8 +136,8 @@ lemma Set.Nonempty.eq_Icc_iff_nat
   simp [← h₀.ordConnected_iff_of_bdd (OrderBot.bddBelow I) h₂, ordConnected_iff_disjoint_Ioo_empty]
 
 中文:
-引理 Set.Nonempty.eq_Icc_iff_nat
-  结论: {I : Set 自然数}
+引理 集合.非空.eq_Icc_iff_nat
+  结论: {I : 集合 自然数}
   证明: by
   simp [← h₀.ordConnected_iff_of_bdd (OrderBot.bddBelow I) h₂, ordConnected_iff_disjoint_Ioo_empty]
 
@@ -158,8 +158,8 @@ lemma Set.Nonempty.eq_Icc_iff_int
   simp [← h₀.ordConnected_iff_of_bdd h₁ h₂, ordConnected_iff_disjoint_Ioo_empty]
 
 中文:
-引理 Set.Nonempty.eq_Icc_iff_int
-  结论: {I : Set 整数}
+引理 集合.非空.eq_Icc_iff_int
+  结论: {I : 集合 整数}
   证明: by
   simp [← h₀.ordConnected_iff_of_bdd h₁ h₂, ordConnected_iff_disjoint_Ioo_empty]
 

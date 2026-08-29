@@ -84,7 +84,7 @@ lemma of_isMonoidalLeftDistrib
 
 中文:
 引理 of_isMonoidalLeftDistrib
-  条件: [IsMonoidalLeftDistrib C]
+  条件: [是MonoidalLeftDistrib C]
   结论: IsCartesianDistributive C
   证明: letI : BraidedCategory C := Nonempty.some inferInstance
   SymmetricCategory.isMonoidalDistrib_of_isMonoidalLeftDistrib

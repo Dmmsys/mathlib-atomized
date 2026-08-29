@@ -38,7 +38,7 @@ theorem linearIndependent_of_top_le_span_of_card_le_finrank
 
 中文:
 定理 linearIndependent_of_top_le_span_of_card_le_finrank
-  结论: {ι : 类型} [Fintype ι] {b : ι -> M}
+  结论: {ι : 类型} [有限类型 ι] {b : ι -> M}
   证明: by
   rw [← Finsupp.range_linearCombination]; rw [top_le_iff]; rw [LinearMap.range_eq_top] at spans
   have := Module.Finite.of_surjective _ spans
@@ -67,7 +67,7 @@ theorem linearIndependent_of_top_le_span_of_card_eq_finrank
 
 中文:
 定理 linearIndependent_of_top_le_span_of_card_eq_finrank
-  结论: {ι : 类型} [Fintype ι] {b : ι -> M}
+  结论: {ι : 类型} [有限类型 ι] {b : ι -> M}
   证明: linearIndependent_of_top_le_span_of_card_le_finrank spans card_eq.le
 
 Depends on / 依赖: card_eq, card_eq.le, linearIndependent_of_top_le_span_of_card_le_finrank
@@ -91,7 +91,7 @@ refine (LinearMap.linearIndependent_iff_of_injOn _ (subtype_injective _).injOn).
 
 中文:
 定理 linearIndependent_iff_card_eq_finrank_span
-  条件: [Nontrivial R] {ι} [Fintype ι] {b : ι -> M}
+  条件: [非平凡 R] {ι} [有限类型 ι] {b : ι -> M}
   证明: (finrank_span_eq_card h).symm
   mpr hc := by
 refine (LinearMap.linearIndependent_iff_of_injOn _ (subtype_injective _).injOn).mpr
@@ -120,7 +120,7 @@ theorem linearIndependent_iff_card_le_finrank_span
 
 中文:
 定理 linearIndependent_iff_card_le_finrank_span
-  条件: [Nontrivial R] {ι} [Fintype ι] {b : ι -> M}
+  条件: [非平凡 R] {ι} [有限类型 ι] {b : ι -> M}
   证明: by
   rw [linearIndependent_iff_card_eq_finrank_span]; rw [(finrank_range_le_card _).ge_iff_eq']
 
@@ -142,7 +142,7 @@ definition basisOfTopLeSpanOfCardEqFinrank
 
 中文:
 定义 basisOfTopLeSpanOfCardEqFinrank
-  签名: {ι : 类型} [Fintype ι] (b : ι -> M)
+  签名: {ι : 类型} [有限类型 ι] (b : ι -> M)
   定义体: Basis.mk (linearIndependent_of_top_le_span_of_card_eq_finrank le_span card_eq) le_span
 
 @[simp]
@@ -164,7 +164,7 @@ theorem coe_basisOfTopLeSpanOfCardEqFinrank
 
 中文:
 定理 coe_basisOfTopLeSpanOfCardEqFinrank
-  结论: {ι : 类型} [Fintype ι] (b : ι -> M)
+  结论: {ι : 类型} [有限类型 ι] (b : ι -> M)
   证明: Basis.coe_mk _ _
 
 Depends on / 依赖: Basis.coe_mk, coe_mk
@@ -189,7 +189,7 @@ definition finsetBasisOfTopLeSpanOfCardEqFinrank
 
 中文:
 定义 finsetBasisOfTopLeSpanOfCardEqFinrank
-  签名: {s : Finset M}
+  签名: {s : 有限集 M}
   定义体: basisOfTopLeSpanOfCardEqFinrank ((↑) : ↥(s : Set M) -> M)
     ((@Subtype.range_coe_subtype _ fun x => x in s).symm ▸ le_span)
     (_root_.trans (Fintype.card_coe _) card_eq)
@@ -216,7 +216,7 @@ definition setBasisOfTopLeSpanOfCardEqFinrank
 
 中文:
 定义 setBasisOfTopLeSpanOfCardEqFinrank
-  签名: {s : Set M} [Fintype s]
+  签名: {s : 集合 M} [有限类型 s]
   定义体: basisOfTopLeSpanOfCardEqFinrank ((↑) : s -> M) ((@Subtype.range_coe_subtype _ s).symm ▸ le_span)
     (_root_.trans s.toFinset_card.symm card_eq)
 

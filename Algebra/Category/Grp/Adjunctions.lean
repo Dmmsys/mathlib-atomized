@@ -63,7 +63,7 @@ definition free
 
 中文:
 定义 free
-  签名: : 类型u ⥤ AddCommGrpCat where
+  签名: : 类型u ⥤ 加法交换群范畴 where
   定义体: of (FreeAbelianGroup α)
   map f := ofHom (FreeAbelianGroup.map f)
 
@@ -88,7 +88,7 @@ theorem free_obj_coe
 中文:
 定理 free_obj_coe
   条件: {α : 类型u}
-  结论: (free.obj α : 类型u) = FreeAbelianGroup α
+  结论: (free.obj α : 类型u) = 自由交换群 α
   证明: rfl
 -/
 theorem free_obj_coe {α : Type u} : (free.obj α : Type u) = FreeAbelianGroup α :=
@@ -107,7 +107,7 @@ theorem free_map_coe
 
 中文:
 定理 free_map_coe
-  条件: {α β : 类型u} {f : α ⟶ β} (x : FreeAbelianGroup α)
+  条件: {α β : 类型u} {f : α ⟶ β} (x : 自由交换群 α)
   证明: rfl
 -/
 theorem free_map_coe {α β : Type u} {f : α ⟶ β} (x : FreeAbelianGroup α) :
@@ -130,7 +130,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : free ⊣ forget AddCommGrpCat.{u}
+  签名: : free ⊣ forget 加法交换群范畴.{u}
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv X Y := by
         refine ConcreteCategory.homEquiv.trans (Equiv.trans ?_ TypeCat.homEquiv.symm)
@@ -162,7 +162,7 @@ instance :
 
 中文:
 实例 :
-  签名: free.{u}.IsLeftAdjoint
+  签名: free.{u}.是左伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : free.{u}.IsLeftAdjoint :=
@@ -178,7 +178,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget AddCommGrpCat.{u}).IsRightAdjoint
+  签名: (forget 加法交换群范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : (forget AddCommGrpCat.{u}).IsRightAdjoint :=
@@ -210,7 +210,7 @@ instance :
 
 中文:
 实例 :
-  签名: (free.{u}).PreservesMonomorphisms
+  签名: (free.{u}).保持Monomorphisms
   定义体: by
     by_cases! hX : IsEmpty X
     · constructor
@@ -250,7 +250,7 @@ definition free
 
 中文:
 定义 free
-  签名: : 类型u ⥤ GrpCat where
+  签名: : 类型u ⥤ 群范畴 where
   定义体: of (FreeGroup α)
   map f := ofHom (FreeGroup.map f)
 
@@ -277,7 +277,7 @@ definition adj
 
 中文:
 定义 adj
-  签名: : free ⊣ forget GrpCat.{u}
+  签名: : free ⊣ forget 群范畴.{u}
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv X Y :=
         ConcreteCategory.homEquiv.trans
@@ -312,7 +312,7 @@ instance :
 
 中文:
 实例 :
-  签名: (forget GrpCat.{u}).IsRightAdjoint
+  签名: (forget 群范畴.{u}).是右伴随
   定义体: ⟨_, ⟨adj⟩⟩
 -/
 instance : (forget GrpCat.{u}).IsRightAdjoint :=
@@ -340,7 +340,7 @@ definition abelianize
 
 中文:
 定义 abelianize
-  签名: : GrpCat.{u} ⥤ CommGrpCat.{u} where
+  签名: : 群范畴.{u} ⥤ 交换群范畴.{u} where
   定义体: CommGrpCat.of (Abelianization G)
   map f := CommGrpCat.ofHom (Abelianization.lift (Abelianization.of.comp f.hom))
   map_id := by
@@ -383,7 +383,7 @@ definition abelianizeAdj
 
 中文:
 定义 abelianizeAdj
-  签名: : abelianize ⊣ forget₂ CommGrpCat.{u} GrpCat.{u}
+  签名: : abelianize ⊣ forget₂ 交换群范畴.{u} 群范畴.{u}
   定义体: Adjunction.mkOfHomEquiv
     { homEquiv := fun _ _ => ((ConcreteCategory.homEquiv (C := CommGrpCat)).trans
         Abelianization.lift.symm).trans
@@ -425,8 +425,8 @@ map f := GrpCat.ofHom Units.map f.hom
   map_comp _ _ := GrpCat.ext fun _ => Units.ext rfl
 
 中文:
-定义 MonCat.units
-  签名: : MonCat.{u} ⥤ GrpCat.{u} where
+定义 幺半群范畴.units
+  签名: : 幺半群范畴.{u} ⥤ 群范畴.{u} where
   定义体: GrpCat.of Rˣ
 map f := GrpCat.ofHom Units.map f.hom
   map_id _ := GrpCat.ext fun _ => Units.ext rfl
@@ -457,8 +457,8 @@ definition GrpCat.forget₂MonAdj
     { app X := MonCat.ofHom (U
 
 中文:
-定义 GrpCat.forget₂MonAdj
-  签名: : forget₂ GrpCat MonCat ⊣ MonCat.units.{u}
+定义 群范畴.forget₂MonAdj
+  签名: : forget₂ 群范畴 幺半群范畴 ⊣ 幺半群范畴.units.{u}
   定义体: Adjunction.mk' {
   homEquiv _ Y :=
     { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
@@ -492,7 +492,7 @@ instance :
 
 中文:
 实例 :
-  签名: MonCat.units.{u}.IsRightAdjoint
+  签名: 幺半群范畴.units.{u}.是右伴随
   定义体: ⟨_, ⟨GrpCat.forget₂MonAdj⟩⟩
 
 Depends on / 依赖: GrpCat, GrpCat.forget
@@ -514,8 +514,8 @@ map f := CommGrpCat.ofHom Units.map f.hom
   map_comp _ _ := CommGrpCat.ext fun _ => Units.ext rfl
 
 中文:
-定义 CommMonCat.units
-  签名: : CommMonCat.{u} ⥤ CommGrpCat.{u} where
+定义 交换幺半群范畴.units
+  签名: : 交换幺半群范畴.{u} ⥤ 交换群范畴.{u} where
   定义体: CommGrpCat.of Rˣ
 map f := CommGrpCat.ofHom Units.map f.hom
   map_id _ := CommGrpCat.ext fun _ => Units.ext rfl
@@ -544,8 +544,8 @@ definition CommGrpCat.forget₂CommMonAdj
     unit.naturality _ _ 
 
 中文:
-定义 CommGrpCat.forget₂CommMonAdj
-  签名: : forget₂ CommGrpCat CommMonCat ⊣ CommMonCat.units.{u}
+定义 交换群范畴.forget₂CommMonAdj
+  签名: : forget₂ 交换群范畴 交换幺半群范畴 ⊣ 交换幺半群范畴.units.{u}
   定义体: Adjunction.mk' {
     homEquiv := fun _ Y =>
       { toFun f := ofHom (MonoidHom.toHomUnits f.hom)
@@ -582,7 +582,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommMonCat.units.{u}.IsRightAdjoint
+  签名: 交换幺半群范畴.units.{u}.是右伴随
   定义体: ⟨_, ⟨CommGrpCat.forget₂CommMonAdj⟩⟩
 
 Depends on / 依赖: CommGrpCat, CommGrpCat.forget

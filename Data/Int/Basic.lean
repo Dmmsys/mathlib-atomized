@@ -39,7 +39,7 @@ instance instNontrivial
 
 中文:
 实例 instNontrivial
-  签名: : Nontrivial 整数
+  签名: : 非平凡 整数
   定义体: ⟨⟨0, 1, Int.zero_ne_one⟩⟩
 
 Depends on / 依赖: Int.zero_ne_one, zero_ne_one
@@ -55,8 +55,8 @@ lemma ofNat_injective
   proof: @Int.ofNat.inj
 
 中文:
-引理 ofNat_injective
-  结论: Function.Injective of自然数
+引理 of自然数_injective
+  结论: 函数.单射 of自然数
   证明: @Int.ofNat.inj
 -/
 @[simp] lemma ofNat_injective : Function.Injective ofNat := @Int.ofNat.inj
@@ -114,7 +114,7 @@ lemma natAbs_surjective
 
 中文:
 引理 natAbs_surjective
-  结论: natAbs.Surjective
+  结论: natAbs.满射
   证明: fun n => ⟨n, natAbs_natCast n⟩
 
 Depends on / 依赖: natAbs_natCast
@@ -136,7 +136,7 @@ lemma pow_right_injective
 中文:
 引理 pow_right_injective
   条件: (h : 1 < a.natAbs)
-  结论: ((a ^ ·) : 自然数 -> 整数).Injective
+  结论: ((a ^ ·) : 自然数 -> 整数).单射
   证明: by
   refine (?_ : (natAbs ∘ (a ^ · : Nat -> Int)).Injective).of_comp
   convert! Nat.pow_right_injective h using 2
@@ -160,7 +160,7 @@ theorem ofNat_dvd_natCast
   proof: natCast_dvd_natCast
 
 中文:
-定理 ofNat_dvd_natCast
+定理 of自然数_dvd_natCast
   条件: {x y : 自然数}
   结论: (of自然数(x) : 整数) ∣ (y : 整数) ↔ Of自然数.of自然数 x ∣ y
   证明: natCast_dvd_natCast
@@ -178,7 +178,7 @@ theorem natCast_dvd_ofNat
   proof: natCast_dvd_natCast
 
 中文:
-定理 natCast_dvd_ofNat
+定理 natCast_dvd_of自然数
   条件: {x y : 自然数}
   结论: (x : 整数) ∣ (of自然数(y) : 整数) ↔ x ∣ Of自然数.of自然数 y
   证明: natCast_dvd_natCast
@@ -302,7 +302,7 @@ theorem gcd_emod
 中文:
 定理 gcd_emod
   条件: (m n : 整数)
-  结论: (m % n).gcd n = m.gcd n
+  结论: (m % n).最大公约数 n = m.最大公约数 n
   证明: by
   conv_rhs => rw [← m.emod_add_mul_ediv n, gcd_add_mul_left_left]
 

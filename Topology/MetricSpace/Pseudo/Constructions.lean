@@ -38,8 +38,8 @@ abbreviation PseudoMetricSpace.induced
   uniformity_dist := (uniformity_basis_dist.comap 
 
 中文:
-缩写 PseudoMetricSpace.induced
-  签名: {α β} (f : α -> β) (m : PseudoMetricSpace β)
+缩写 伪度量空间.induced
+  签名: {α β} (f : α -> β) (m : 伪度量空间 β)
   定义体: dist (f x) (f y)
   dist_self _ := dist_self _
   dist_comm _ _ := dist_comm _ _
@@ -76,8 +76,8 @@ definition Topology.IsInducing.comapPseudoMetricSpace
   body: .replaceTopology (.induced f m) hf.eq_induced
 
 中文:
-定义 Topology.IsInducing.comapPseudoMetricSpace
-  签名: {α β : 类型} [TopologicalSpace α]
+定义 拓扑.是Inducing.comapPseudoMetricSpace
+  签名: {α β : 类型} [拓扑空间 α]
   定义体: .replaceTopology (.induced f m) hf.eq_induced
 
 Depends on / 依赖: eq_induced, hf.eq_induced, induced, replaceTopology
@@ -99,8 +99,8 @@ definition IsUniformInducing.comapPseudoMetricSpace
   body: .replaceUniformity (.induced f m) h.comap_uniformity.symm
 
 中文:
-定义 IsUniformInducing.comapPseudoMetricSpace
-  签名: {α β} [UniformSpace α] [m : PseudoMetricSpace β]
+定义 是UniformInducing.comapPseudoMetricSpace
+  签名: {α β} [一致空间 α] [m : 伪度量空间 β]
   定义体: .replaceUniformity (.induced f m) h.comap_uniformity.symm
 
 Depends on / 依赖: comap_uniformity, h.comap_uniformity.symm, induced, replaceUniformity
@@ -123,7 +123,7 @@ instance pseudoMetricSpace
 
 中文:
 实例 pseudoMetricSpace
-  签名: : PseudoMetricSpace (Subtype p)
+  签名: : 伪度量空间 (子类型 p)
   定义体: PseudoMetricSpace.induced Subtype.val ‹_›
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.induced, Subtype, Subtype.val, induced
@@ -142,7 +142,7 @@ lemma dist_eq
 
 中文:
 引理 dist_eq
-  条件: (x y : Subtype p)
+  条件: (x y : 子类型 p)
   结论: dist x y = dist (x : α) y
   证明: rfl
 -/
@@ -161,7 +161,7 @@ lemma nndist_eq
 
 中文:
 引理 nndist_eq
-  条件: (x y : Subtype p)
+  条件: (x y : 子类型 p)
   结论: nndist x y = nndist (x : α) y
   证明: rfl
 
@@ -184,7 +184,7 @@ theorem preimage_ball
 中文:
 定理 preimage_ball
   条件: (a : {a // p a}) (r : 实数)
-  结论: Subtype.val ⁻¹' (ball a.1 r) = ball a r
+  结论: 子类型.val ⁻¹' (ball a.1 r) = ball a r
   证明: rfl
 
 @[simp]
@@ -279,7 +279,7 @@ instance instPseudoMetricSpace
 
 中文:
 实例 instPseudoMetricSpace
-  签名: : PseudoMetricSpace αᵐᵒᵖ
+  签名: : 伪度量空间 αᵐᵒᵖ
   定义体: PseudoMetricSpace.induced MulOpposite.unop ‹_›
 
 @[to_additive (attr := simp)]
@@ -387,7 +387,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace 实数>=0
+  签名: 伪度量空间 实数>=0
   定义体: inferInstanceAs PseudoMetricSpace (Subtype _)
 
 Depends on / 依赖: PseudoMetricSpace, Subtype
@@ -405,7 +405,7 @@ lemma NNReal.dist_eq
   proof: rfl
 
 中文:
-引理 NNReal.dist_eq
+引理 非负实数.dist_eq
   条件: (a b : 实数>=0)
   结论: dist a b = |(a : 实数) - b|
   证明: rfl
@@ -427,9 +427,9 @@ lemma NNReal.nndist_eq
 @[simp]
 
 中文:
-引理 NNReal.nndist_eq
+引理 非负实数.nndist_eq
   条件: (a b : 实数>=0)
-  结论: nndist a b = max (a - b) (b - a)
+  结论: nndist a b = 最大值 (a - b) (b - a)
   证明: eq_of_forall_ge_iff fun _ => by
     simp only [max_le_iff, tsub_le_iff_right (α := Real>=0)]
     simp only [← NNReal.coe_le_coe, coe_nndist, dist_eq, abs_sub_le_iff,
@@ -459,7 +459,7 @@ lemma NNReal.nndist_zero_eq_val
 @[simp]
 
 中文:
-引理 NNReal.nndist_zero_eq_val
+引理 非负实数.nndist_zero_eq_val
   条件: (z : 实数>=0)
   结论: nndist 0 z = z
   证明: by
@@ -485,7 +485,7 @@ lemma NNReal.nndist_zero_eq_val'
   exact NNReal.nndist_zero_eq_val z
 
 中文:
-引理 NNReal.nndist_zero_eq_val'
+引理 非负实数.nndist_zero_eq_val'
   条件: (z : 实数>=0)
   结论: nndist z 0 = z
   证明: by
@@ -512,7 +512,7 @@ lemma NNReal.le_add_nndist
   exact le_of_abs_le (dist_eq a b).ge
 
 中文:
-引理 NNReal.le_add_nndist
+引理 非负实数.le_add_nndist
   条件: (a b : 实数>=0)
   结论: a <= b + nndist a b
   证明: by
@@ -538,7 +538,7 @@ lemma NNReal.ball_zero_eq_Ico'
   proof: by ext x; simp
 
 中文:
-引理 NNReal.ball_zero_eq_Ico'
+引理 非负实数.ball_zero_eq_Ico'
   条件: (c : 实数>=0)
   证明: by ext x; simp
 -/
@@ -558,7 +558,7 @@ lemma NNReal.ball_zero_eq_Ico
   simp [c_pos]
 
 中文:
-引理 NNReal.ball_zero_eq_Ico
+引理 非负实数.ball_zero_eq_Ico
   条件: (c : 实数)
   证明: by
   by_cases! c_pos : 0 < c
@@ -584,7 +584,7 @@ lemma NNReal.closedBall_zero_eq_Icc'
   proof: by ext x; simp
 
 中文:
-引理 NNReal.closedBall_zero_eq_Icc'
+引理 非负实数.closedBall_zero_eq_Icc'
   条件: (c : 实数>=0)
   证明: by ext x; simp
 -/
@@ -602,7 +602,7 @@ lemma NNReal.closedBall_zero_eq_Icc
   simp [Real.toNNReal, c_nn]
 
 中文:
-引理 NNReal.closedBall_zero_eq_Icc
+引理 非负实数.closedBall_zero_eq_Icc
   条件: {c : 实数} (c_nn : 0 <= c)
   证明: by
   convert! NNReal.closedBall_zero_eq_Icc' (NNReal.mk c c_nn)
@@ -630,7 +630,7 @@ instance :
 
 中文:
 实例 :
-  签名: PseudoMetricSpace (ULift β)
+  签名: 伪度量空间 (类型层提升 β)
   定义体: fast_instance% PseudoMetricSpace.induced ULift.down ‹_›
 
 Depends on / 依赖: PseudoMetricSpace, PseudoMetricSpace.induced, ULift.down, fast_instance, induced
@@ -649,7 +649,7 @@ lemma dist_eq
 
 中文:
 引理 dist_eq
-  条件: (x y : ULift β)
+  条件: (x y : 类型层提升 β)
   结论: dist x y = dist x.down y.down
   证明: rfl
 -/
@@ -666,7 +666,7 @@ lemma nndist_eq
 
 中文:
 引理 nndist_eq
-  条件: (x y : ULift β)
+  条件: (x y : 类型层提升 β)
   结论: nndist x y = nndist x.down y.down
   证明: rfl
 -/
@@ -684,7 +684,7 @@ lemma dist_up_up
 中文:
 引理 dist_up_up
   条件: (x y : β)
-  结论: dist (ULift.up x) (ULift.up y) = dist x y
+  结论: dist (类型层提升.up x) (类型层提升.up y) = dist x y
   证明: rfl
 -/
 @[simp] lemma dist_up_up (x y : β) : dist (ULift.up x) (ULift.up y) = dist x y := rfl
@@ -701,7 +701,7 @@ lemma nndist_up_up
 中文:
 引理 nndist_up_up
   条件: (x y : β)
-  结论: nndist (ULift.up x) (ULift.up y) = nndist x y
+  结论: nndist (类型层提升.up x) (类型层提升.up y) = nndist x y
   证明: rfl
 -/
 @[simp] lemma nndist_up_up (x y : β) : nndist (ULift.up x) (ULift.up y) = nndist x y := rfl
@@ -725,8 +725,8 @@ instance Prod.pseudoMetricSpaceMax
     simp only [← isBounded_image_fst_and_snd, isBou
 
 中文:
-实例 Prod.pseudoMetricSpaceMax
-  签名: : PseudoMetricSpace (α × β)
+实例 积类型.pseudoMetricSpaceMax
+  签名: : 伪度量空间 (α × β)
   定义体: let i := PseudoEMetricSpace.toPseudoMetricSpaceOfDist
     (fun x y : α × β => dist x.1 y.1 ⊔ dist x.2 y.2)
     (fun x y => by positivity) fun x y => by
@@ -758,9 +758,9 @@ lemma Prod.dist_eq
 @[simp]
 
 中文:
-引理 Prod.dist_eq
+引理 积类型.dist_eq
   条件: {x y : α × β}
-  结论: dist x y = max (dist x.1 y.1) (dist x.2 y.2)
+  结论: dist x y = 最大值 (dist x.1 y.1) (dist x.2 y.2)
   证明: rfl
 
 @[simp]
@@ -915,7 +915,7 @@ lemma uniformContinuous_dist
 
 中文:
 引理 uniformContinuous_dist
-  结论: UniformContinuous fun p : α × α => dist p.1 p.2
+  结论: 一致连续 fun p : α × α => dist p.1 p.2
   证明: Metric.uniformContinuous_iff.2 fun ε ε0 =>
     ⟨ε / 2, half_pos ε0, fun {a b} h =>
       calc dist (dist a.1 a.2) (dist b.1 b.2) <= dist a.1 b.1 + dist a.2 b.2 :=
@@ -945,8 +945,8 @@ lemma UniformContinuous.dist
 @[continuity]
 
 中文:
-引理 UniformContinuous.dist
-  结论: [UniformSpace β] {f g : β -> α} (hf : UniformContinuous f)
+引理 一致连续.dist
+  结论: [一致空间 β] {f g : β -> α} (hf : 一致连续 f)
   证明: uniformContinuous_dist.comp (hf.prodMk hg)
 
 @[continuity]
@@ -968,7 +968,7 @@ lemma continuous_dist
 
 中文:
 引理 continuous_dist
-  结论: Continuous fun p : α × α => dist p.1 p.2
+  结论: 连续 fun p : α × α => dist p.1 p.2
   证明: uniformContinuous_dist.continuous
 
 @[continuity, fun_prop]
@@ -987,8 +987,8 @@ lemma Continuous.dist
   proof: continuous_dist.comp₂ hf hg
 
 中文:
-引理 Continuous.dist
-  结论: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
+引理 连续.dist
+  结论: [拓扑空间 β] {f g : β -> α} (hf : 连续 f)
   证明: continuous_dist.comp₂ hf hg
 -/
 protected lemma Continuous.dist [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
@@ -1004,8 +1004,8 @@ lemma Filter.Tendsto.dist
   proof: (continuous_dist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 中文:
-引理 Filter.Tendsto.dist
-  结论: {f g : β -> α} {x : Filter β} {a b : α}
+引理 滤子.收敛.dist
+  结论: {f g : β -> α} {x : 滤子 β} {a b : α}
   证明: (continuous_dist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 -/
 protected lemma Filter.Tendsto.dist {f g : β -> α} {x : Filter β} {a b : α}
@@ -1025,7 +1025,7 @@ continuous_iff_continuousAt.2 fun _ => tendsto_iff_dist_tendsto_zero.2
 
 中文:
 引理 continuous_iff_continuous_dist
-  条件: [TopologicalSpace β] {f : β -> α}
+  条件: [拓扑空间 β] {f : β -> α}
   证明: ⟨fun h => h.fst'.dist h.snd', fun h =>
 continuous_iff_continuousAt.2 fun _ => tendsto_iff_dist_tendsto_zero.2
 (h.comp (.prodMk_left _)).tendsto' _ _ dist_self _⟩
@@ -1048,7 +1048,7 @@ lemma uniformContinuous_nndist
 
 中文:
 引理 uniformContinuous_nndist
-  结论: UniformContinuous fun p : α × α => nndist p.1 p.2
+  结论: 一致连续 fun p : α × α => nndist p.1 p.2
   证明: uniformContinuous_dist.subtype_mk _
 
 Depends on / 依赖: subtype_mk, uniformContinuous_dist, uniformContinuous_dist.subtype_mk
@@ -1065,8 +1065,8 @@ lemma UniformContinuous.nndist
   proof: uniformContinuous_nndist.comp (hf.prodMk hg)
 
 中文:
-引理 UniformContinuous.nndist
-  结论: [UniformSpace β] {f g : β -> α} (hf : UniformContinuous f)
+引理 一致连续.nndist
+  结论: [一致空间 β] {f g : β -> α} (hf : 一致连续 f)
   证明: uniformContinuous_nndist.comp (hf.prodMk hg)
 -/
 protected lemma UniformContinuous.nndist [UniformSpace β] {f g : β -> α} (hf : UniformContinuous f)
@@ -1085,7 +1085,7 @@ lemma continuous_nndist
 
 中文:
 引理 continuous_nndist
-  结论: Continuous fun p : α × α => nndist p.1 p.2
+  结论: 连续 fun p : α × α => nndist p.1 p.2
   证明: uniformContinuous_nndist.continuous
 
 @[fun_prop]
@@ -1105,8 +1105,8 @@ lemma Continuous.nndist
   proof: continuous_nndist.comp₂ hf hg
 
 中文:
-引理 Continuous.nndist
-  结论: [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
+引理 连续.nndist
+  结论: [拓扑空间 β] {f g : β -> α} (hf : 连续 f)
   证明: continuous_nndist.comp₂ hf hg
 -/
 protected lemma Continuous.nndist [TopologicalSpace β] {f g : β -> α} (hf : Continuous f)
@@ -1122,8 +1122,8 @@ lemma Filter.Tendsto.nndist
   proof: (continuous_nndist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 
 中文:
-引理 Filter.Tendsto.nndist
-  结论: {f g : β -> α} {x : Filter β} {a b : α}
+引理 滤子.收敛.nndist
+  结论: {f g : β -> α} {x : 滤子 β} {a b : α}
   证明: (continuous_nndist.tendsto (a, b)).comp (hf.prodMk_nhds hg)
 -/
 protected lemma Filter.Tendsto.nndist {f g : β -> α} {x : Filter β} {a b : α}

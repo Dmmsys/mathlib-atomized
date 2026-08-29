@@ -62,7 +62,7 @@ definition NNReal
   body: { r : Real // 0 <= r }
 
 中文:
-定义 NNReal
+定义 非负实数
   定义体: { r : Real // 0 <= r }
 -/
 def NNReal := { r : Real // 0 <= r }
@@ -80,7 +80,7 @@ definition toReal
   body: Subtype.val
 
 中文:
-定义 toReal
+定义 to实数
   签名: : 实数>=0 -> 实数
   定义体: Subtype.val
 -/
@@ -128,7 +128,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 实数>=0
+  签名: 零 实数>=0
   定义体: ⟨.mk 0 le_rfl⟩
 
 Depends on / 依赖: le_rfl
@@ -144,7 +144,7 @@ instance :
 
 中文:
 实例 :
-  签名: One 实数>=0
+  签名: 幺 实数>=0
   定义体: ⟨.mk 1 zero_le_one⟩
 
 Depends on / 依赖: zero_le_one
@@ -168,7 +168,7 @@ deriving instance
 
 中文:
 实例 :
-  签名: Bot 实数>=0
+  签名: 底元素 实数>=0
   定义体: ⟨0⟩
 
 deriving instance
@@ -207,7 +207,7 @@ instance :
 
 中文:
 实例 :
-  签名: NNRatCast 实数>=0
+  签名: 非负有理数嵌入 实数>=0
   定义体: ⟨r, r.cast_nonneg⟩
 
 Depends on / 依赖: cast_nonneg, r.cast_nonneg
@@ -224,7 +224,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv 实数>=0
+  签名: 取逆 实数>=0
   定义体: .mk (x : Real)⁻¹ (inv_nonneg.mpr x.2)
 
 Depends on / 依赖: inv_nonneg, inv_nonneg.mpr
@@ -242,7 +242,7 @@ instance :
 
 中文:
 实例 :
-  签名: Div 实数>=0
+  签名: 除法 实数>=0
   定义体: .mk ((x : Real) / (y : Real)) (div_nonneg x.2 y.2)
 
 Depends on / 依赖: div_nonneg
@@ -260,7 +260,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul Rat>=0 实数>=0
+  签名: 标量乘法 有理数>=0 实数>=0
   定义体: .mk (x • (y : Real)) (by rw [NNRat.smul_def]; exact mul_nonneg x.cast_nonneg y.2)
 
 Depends on / 依赖: NNRat.smul_def, cast_nonneg, mul_nonneg, smul_def, x.cast_nonneg
@@ -278,7 +278,7 @@ instance zpow
 
 中文:
 实例 zpow
-  签名: : Pow 实数>=0 整数 where
+  签名: : 幂 实数>=0 整数 where
   定义体: .mk ((x : Real) ^ n) (zpow_nonneg x.2 _)
 
 Depends on / 依赖: zpow_nonneg
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Semifield 实数>=0
+  签名: 半域 实数>=0
   定义体: fast_instance%
   Function.Injective.semifield toReal Subtype.val_injective
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl) (fun _ _ => rfl)
@@ -322,7 +322,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing 实数>=0
+  签名: 是Ordered环 实数>=0
   定义体: Nonneg.isOrderedRing
 
 Depends on / 依赖: Nonneg, Nonneg.isOrderedRing, isOrderedRing
@@ -340,7 +340,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsStrictOrderedRing 实数>=0
+  签名: 是StrictOrdered环 实数>=0
   定义体: Nonneg.isStrictOrderedRing
 
 Depends on / 依赖: Nonneg, Nonneg.isStrictOrderedRing, isStrictOrderedRing
@@ -361,7 +361,7 @@ example {p q : Real>=0} (h1p : 0 < p) (h2p : p <= q) : q⁻¹ <= p⁻¹ := by
 
 中文:
 实例 :
-  签名: LinearOrderedCommGroupWithZero 实数>=0
+  签名: 带零LinearOrderedComm群 实数>=0
   定义体: h.2
 
 example {p q : Real>=0} (h1p : 0 < p) (h2p : p <= q) : q⁻¹ <= p⁻¹ := by
@@ -385,7 +385,7 @@ lemma mk_coe
 中文:
 引理 mk_coe
   条件: (a : 实数>=0) (ha : 0 <= (a : 实数))
-  结论: NN实数.mk (a : 实数) ha = a
+  结论: 非负实数.mk (a : 实数) ha = a
   证明: rfl
 -/
 @[simp] lemma mk_coe (a : Real>=0) (ha : 0 <= (a : Real)) : NNReal.mk (a : Real) ha = a := rfl
@@ -475,7 +475,7 @@ theorem «forall»
   proof: Subtype.forall
 
 中文:
-定理 «forall»
+定理 «对任意»
   条件: {p : 实数>=0 -> 命题}
   证明: Subtype.forall
 -/
@@ -492,7 +492,7 @@ theorem «exists»
   proof: Subtype.exists
 
 中文:
-定理 «exists»
+定理 «存在»
   条件: {p : 实数>=0 -> 命题}
   证明: Subtype.exists
 -/
@@ -509,7 +509,7 @@ definition _root_.Real.toNNReal
   body: .mk (max r 0) (le_max_right _ _)
 
 中文:
-定义 _root_.Real.toNNReal
+定义 _root_.实数.toNN实数
   签名: (r : 实数)
   定义体: .mk (max r 0) (le_max_right _ _)
 
@@ -528,7 +528,7 @@ theorem _root_.Real.coe_toNNReal
   proof: max_eq_left hr
 
 中文:
-定理 _root_.Real.coe_toNNReal
+定理 _root_.实数.coe_toNN实数
   条件: (r : 实数) (hr : 0 <= r)
   结论: (实数.toNN实数 r : 实数) = r
   证明: max_eq_left hr
@@ -549,7 +549,7 @@ theorem _root_.Real.toNNReal_of_nonneg
   simp_rw [Real.toNNReal, max_eq_left hr]
 
 中文:
-定理 _root_.Real.toNNReal_of_nonneg
+定理 _root_.实数.toNN实数_of_nonneg
   条件: {r : 实数} (hr : 0 <= r)
   结论: r.toNN实数 = .mk r hr
   证明: by
@@ -570,7 +570,7 @@ theorem _root_.Real.le_coe_toNNReal
   proof: le_max_left r 0
 
 中文:
-定理 _root_.Real.le_coe_toNNReal
+定理 _root_.实数.le_coe_toNN实数
   条件: (r : 实数)
   结论: r <= 实数.toNN实数 r
   证明: le_max_left r 0
@@ -606,7 +606,7 @@ lemma not_toReal_neg
   proof: r.coe_nonneg.not_gt
 
 中文:
-引理 not_toReal_neg
+引理 not_to实数_neg
   条件: {r : 实数>=0}
   结论: ¬ r.to实数 < 0
   证明: r.coe_nonneg.not_gt
@@ -690,7 +690,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : 实数>=0 -> 实数)
+  结论: 单射 ((↑) : 实数>=0 -> 实数)
   证明: Subtype.coe_injective
 -/
 protected theorem coe_injective : Injective ((↑) : Real>=0 -> Real) := Subtype.coe_injective
@@ -754,7 +754,7 @@ lemma mk_zero
 
 中文:
 引理 mk_zero
-  结论: NN实数.mk 0 le_rfl = 0
+  结论: 非负实数.mk 0 le_rfl = 0
   证明: rfl
 -/
 @[simp] lemma mk_zero : NNReal.mk 0 le_rfl = 0 := rfl
@@ -770,7 +770,7 @@ lemma mk_one
 
 中文:
 引理 mk_one
-  结论: NN实数.mk 1 zero_le_one = 1
+  结论: 非负实数.mk 1 zero_le_one = 1
   证明: rfl
 
 @[simp, norm_cast]
@@ -984,7 +984,7 @@ definition toRealHom
   map_add' := NNReal.coe_add
 
 中文:
-定义 toRealHom
+定义 to实数Hom
   签名: : 实数>=0 ->+* 实数 where
   定义体: (↑)
   map_one' := NNReal.coe_one
@@ -1008,7 +1008,7 @@ theorem coe_toRealHom
   proof: rfl
 
 中文:
-定理 coe_toRealHom
+定理 coe_to实数Hom
   结论: ⇑to实数Hom = to实数
   证明: rfl
 -/
@@ -1035,7 +1035,7 @@ theorem smul_def
 
 中文:
 定理 smul_def
-  条件: {M : 类型} [SMul 实数 M] (c : 实数>=0) (x : M)
+  条件: {M : 类型} [标量乘法 实数 M] (c : 实数>=0) (x : M)
   结论: c • x = (c : 实数) • x
   证明: rfl
 -/
@@ -1055,7 +1055,7 @@ instance smulCommClass_left
 
 中文:
 实例 smulCommClass_left
-  签名: {M N : 类型} [MulAction 实数 N] [SMul M N] [SMulCommClass 实数 M N]
+  签名: {M N : 类型} [乘法作用 实数 N] [标量乘法 M N] [标量交换类 实数 M N]
   定义体: smul_comm (r : Real)
 
 Depends on / 依赖: smul_comm
@@ -1073,7 +1073,7 @@ instance smulCommClass_right
 
 中文:
 实例 smulCommClass_right
-  签名: {M N : 类型} [MulAction 实数 N] [SMul M N] [SMulCommClass M 实数 N]
+  签名: {M N : 类型} [乘法作用 实数 N] [标量乘法 M N] [标量交换类 M 实数 N]
   定义体: smul_comm m (r : Real)
 
 Depends on / 依赖: smul_comm
@@ -1179,7 +1179,7 @@ lemma coe_nnqsmul
 
 中文:
 引理 coe_nnqsmul
-  条件: (q : Rat>=0) (x : 实数>=0)
+  条件: (q : 有理数>=0) (x : 实数>=0)
   结论: ↑(q • x) = (q • x : 实数)
   证明: rfl
 
@@ -1223,7 +1223,7 @@ theorem coe_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 coe_ofNat
+定理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ((of自然数(n) : 实数>=0) : 实数) = of自然数(n)
   证明: rfl
@@ -1246,7 +1246,7 @@ theorem coe_ofScientific
 
 中文:
 定理 coe_ofScientific
-  条件: (m : 自然数) (s : 布尔) (e : 自然数)
+  条件: (m : 自然数) (s : 布尔值) (e : 自然数)
   证明: rfl
 
 @[simp, norm_cast]
@@ -1401,7 +1401,7 @@ lemma coe_mono
 
 中文:
 引理 coe_mono
-  结论: Monotone ((↑) : 实数>=0 -> 实数)
+  结论: 递增 ((↑) : 实数>=0 -> 实数)
   证明: fun _ _ => NNReal.coe_le_coe.2
 -/
 @[gcongr, mono] lemma coe_mono : Monotone ((↑) : Real>=0 -> Real) := fun _ _ => NNReal.coe_le_coe.2
@@ -1418,8 +1418,8 @@ theorem _root_.Real.toNNReal_monotone
 @[gcongr]
 
 中文:
-定理 _root_.Real.toNNReal_monotone
-  结论: Monotone 实数.toNN实数
+定理 _root_.实数.toNN实数_monotone
+  结论: 递增 实数.toNN实数
   证明: fun _ _ h =>
   max_le_max_right _ h
 
@@ -1441,7 +1441,7 @@ theorem _root_.Real.toNNReal_mono
 @[simp]
 
 中文:
-定理 _root_.Real.toNNReal_mono
+定理 _root_.实数.toNN实数_mono
   条件: {r₁ r₂ : 实数} (h : r₁ <= r₂)
   结论: r₁.toNN实数 <= r₂.toNN实数
   证明: Real.toNNReal_monotone h
@@ -1464,7 +1464,7 @@ theorem _root_.Real.toNNReal_coe
 @[simp]
 
 中文:
-定理 _root_.Real.toNNReal_coe
+定理 _root_.实数.toNN实数_coe
   条件: {r : 实数>=0}
   结论: 实数.toNN实数 r = r
   证明: NNReal.eq max_eq_left r.2
@@ -1491,7 +1491,7 @@ theorem mk_natCast
 中文:
 定理 mk_natCast
   条件: (n : 自然数)
-  结论: NN实数.mk (n : 实数) (n.cast_nonneg) = n
+  结论: 非负实数.mk (n : 实数) (n.cast_nonneg) = n
   证明: NNReal.eq (NNReal.coe_natCast n).symm
 
 @[simp]
@@ -1516,7 +1516,7 @@ theorem _root_.Real.toNNReal_natCast
 @[simp]
 
 中文:
-定理 _root_.Real.toNNReal_natCast
+定理 _root_.实数.toNN实数_natCast
   条件: (n : 自然数)
   结论: 实数.toNN实数 n = n
   证明: NNReal.eq by simp [Real.coe_toNNReal]
@@ -1542,7 +1542,7 @@ theorem _root_.Real.toNNReal_ofNat
   proof: Real.toNNReal_natCast n
 
 中文:
-定理 _root_.Real.toNNReal_ofNat
+定理 _root_.实数.toNN实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   证明: Real.toNNReal_natCast n
 
@@ -1563,7 +1563,7 @@ definition gi
 
 中文:
 定义 gi
-  签名: : GaloisInsertion 实数.toNN实数 (↑)
+  签名: : Galois嵌入 实数.toNN实数 (↑)
   定义体: GaloisInsertion.monotoneIntro NNReal.coe_mono Real.toNNReal_monotone Real.le_coe_toNNReal
     fun _ => Real.toNNReal_coe
 
@@ -1611,7 +1611,7 @@ instance instPosSMulStrictMono
 
 中文:
 实例 instPosSMulStrictMono
-  签名: {α} [Preorder α] [MulAction 实数 α] [PosSMulStrictMono 实数 α]
+  签名: {α} [预序 α] [乘法作用 实数 α] [正标量乘严格递增 实数 α]
   定义体: (smul_lt_smul_of_pos_left ha (coe_pos.2 hr) :)
 
 Depends on / 依赖: coe_pos, smul_lt_smul_of_pos_left
@@ -1630,7 +1630,7 @@ instance instSMulPosStrictMono
 
 中文:
 实例 instSMulPosStrictMono
-  签名: {α} [Zero α] [Preorder α] [MulAction 实数 α] [SMulPosStrictMono 实数 α]
+  签名: {α} [零 α] [预序 α] [乘法作用 实数 α] [标量乘正严格递增 实数 α]
   定义体: (smul_lt_smul_of_pos_right (coe_lt_coe.2 hr) ha :)
 
 Depends on / 依赖: coe_lt_coe, smul_lt_smul_of_pos_right
@@ -1681,7 +1681,7 @@ theorem orderIsoIccZeroCoe_apply_coe_coe
 
 中文:
 定理 orderIsoIccZeroCoe_apply_coe_coe
-  条件: (a : 实数>=0) (b : Set.Icc (0 : 实数) a)
+  条件: (a : 实数>=0) (b : 集合.闭区间 (0 : 实数) a)
   证明: rfl
 
 @[simp]
@@ -1701,7 +1701,7 @@ theorem orderIsoIccZeroCoe_symm_apply_coe
 
 中文:
 定理 orderIsoIccZeroCoe_symm_apply_coe
-  条件: (a : 实数>=0) (b : Set.Iic a)
+  条件: (a : 实数>=0) (b : 集合.左无界右闭区间 a)
   证明: rfl
 -/
 theorem orderIsoIccZeroCoe_symm_apply_coe (a : Real>=0) (b : Set.Iic a) :
@@ -1718,7 +1718,7 @@ theorem coe_image
 
 中文:
 定理 coe_image
-  条件: {s : Set 实数>=0}
+  条件: {s : 集合 实数>=0}
   证明: Subtype.coe_image
 
 Depends on / 依赖: Subtype, Subtype.coe_image, coe_image
@@ -1742,7 +1742,7 @@ show y <= max b 0 from le_max_of_le_left hb Set.mem_image_of_mem _ hys⟩)
 
 中文:
 定理 bddAbove_coe
-  条件: {s : Set 实数>=0}
+  条件: {s : 集合 实数>=0}
   结论: BddAbove (((↑) : 实数>=0 -> 实数) '' s) ↔ BddAbove s
   证明: Iff.intro
     (fun ⟨b, hb⟩ =>
@@ -1770,7 +1770,7 @@ theorem bddBelow_coe
 
 中文:
 定理 bddBelow_coe
-  条件: (s : Set 实数>=0)
+  条件: (s : 集合 实数>=0)
   结论: BddBelow (((↑) : 实数>=0 -> 实数) '' s)
   证明: ⟨0, fun _ ⟨q, _, eq⟩ => eq ▸ q.2⟩
 -/
@@ -1789,7 +1789,7 @@ instance :
 
 中文:
 实例 :
-  签名: ConditionallyCompleteLinearOrderBot 实数>=0
+  签名: 余nditionallyCompleteLinearOrderBot 实数>=0
   定义体: fast_instance% Nonneg.conditionallyCompleteLinearOrderBot 0
 
 @[norm_cast]
@@ -1820,7 +1820,7 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: (s : Set 实数>=0)
+  条件: (s : 集合 实数>=0)
   结论: (↑(sSup s) : 实数) = sSup (((↑) : 实数>=0 -> 实数) '' s)
   证明: by
   rcases Set.eq_empty_or_nonempty s with rfl | hs
@@ -1864,7 +1864,7 @@ theorem coe_iSup
 
 中文:
 定理 coe_iSup
-  条件: {ι : Sort*} (s : ι -> 实数>=0)
+  条件: {ι : 类型层*} (s : ι -> 实数>=0)
   结论: (↑(⨆ i, s i) : 实数) = ⨆ i, ↑(s i)
   证明: by
   rw [iSup]; rw [iSup]; rw [coe_sSup]; rw [← Set.range_comp]; rfl
@@ -1895,7 +1895,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: (s : Set 实数>=0)
+  条件: (s : 集合 实数>=0)
   结论: (↑(sInf s) : 实数) = sInf (((↑) : 实数>=0 -> 实数) '' s)
   证明: by
   rcases Set.eq_empty_or_nonempty s with rfl | hs
@@ -1932,7 +1932,7 @@ theorem sInf_empty
 
 中文:
 定理 sInf_empty
-  结论: sInf (∅ : Set 实数>=0) = 0
+  结论: sInf (∅ : 集合 实数>=0) = 0
   证明: by
   rw [← coe_eq_zero]; rw [coe_sInf]; rw [Set.image_empty]; rw [Real.sInf_empty]
 
@@ -1956,7 +1956,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} (s : ι -> 实数>=0)
+  条件: {ι : 类型层*} (s : ι -> 实数>=0)
   结论: (↑(⨅ i, s i) : 实数) = ⨅ i, ↑(s i)
   证明: by
   rw [iInf]; rw [iInf]; rw [coe_sInf]; rw [← Set.range_comp]; rfl
@@ -2025,7 +2025,7 @@ have : 0 <= (q : Real) := le_trans a.2 le_of_lt haq
     fun ⟨_, _, haq, hqb⟩ => lt_trans h
 
 中文:
-定理 lt_iff_exists_rat_btwn
+定理 lt_iff_存在_rat_btwn
   条件: (a b : 实数>=0)
   证明: Iff.intro
     (fun h : (↑a : Real) < (↑b : Real) =>
@@ -2121,7 +2121,7 @@ theorem coe_max
 中文:
 定理 coe_max
   条件: (x y : 实数>=0)
-  结论: ((max x y : 实数>=0) : 实数) = max (x : 实数) (y : 实数)
+  结论: ((最大值 x y : 实数>=0) : 实数) = 最大值 (x : 实数) (y : 实数)
   证明: NNReal.coe_mono.map_max
 
 @[simp, norm_cast]
@@ -2146,7 +2146,7 @@ theorem coe_min
 中文:
 定理 coe_min
   条件: (x y : 实数>=0)
-  结论: ((min x y : 实数>=0) : 实数) = min (x : 实数) (y : 实数)
+  结论: ((最小值 x y : 实数>=0) : 实数) = 最小值 (x : 实数) (y : 实数)
   证明: NNReal.coe_mono.map_min
 
 @[simp]
@@ -2185,7 +2185,7 @@ instance instIsStrictOrderedModule
 
 中文:
 实例 instIsStrictOrderedModule
-  签名: {M : 类型} [AddCommMonoid M] [PartialOrder M]
+  签名: {M : 类型} [加法交换幺半群 M] [偏序 M]
   定义体: inferInstanceAs IsStrictOrderedModule (Subtype _) M
 
 Depends on / 依赖: IsStrictOrderedModule, Subtype
@@ -2215,9 +2215,9 @@ theorem coe_toNNReal'
 @[simp]
 
 中文:
-定理 coe_toNNReal'
+定理 coe_toNN实数'
   条件: (r : 实数)
-  结论: (实数.toNN实数 r : 实数) = max r 0
+  结论: (实数.toNN实数 r : 实数) = 最大值 r 0
   证明: rfl
 
 @[simp]
@@ -2237,7 +2237,7 @@ theorem toNNReal_zero
 @[simp]
 
 中文:
-定理 toNNReal_zero
+定理 toNN实数_zero
   结论: 实数.toNN实数 0 = 0
   证明: NNReal.eq coe_toNNReal _ le_rfl
 
@@ -2259,7 +2259,7 @@ theorem toNNReal_one
 @[simp]
 
 中文:
-定理 toNNReal_one
+定理 toNN实数_one
   结论: 实数.toNN实数 1 = 1
   证明: NNReal.eq coe_toNNReal _ zero_le_one
 
@@ -2283,7 +2283,7 @@ theorem toNNReal_pos
 @[simp]
 
 中文:
-定理 toNNReal_pos
+定理 toNN实数_pos
   条件: {r : 实数}
   结论: 0 < 实数.toNN实数 r ↔ 0 < r
   证明: by
@@ -2308,7 +2308,7 @@ theorem toNNReal_eq_zero
   simpa [-toNNReal_pos] using not_iff_not.2 (@toNNReal_pos r)
 
 中文:
-定理 toNNReal_eq_zero
+定理 toNN实数_eq_zero
   条件: {r : 实数}
   结论: 实数.toNN实数 r = 0 ↔ r <= 0
   证明: by
@@ -2329,7 +2329,7 @@ theorem toNNReal_of_nonpos
   proof: toNNReal_eq_zero.2
 
 中文:
-定理 toNNReal_of_nonpos
+定理 toNN实数_of_nonpos
   条件: {r : 实数}
   结论: r <= 0 -> 实数.toNN实数 r = 0
   证明: toNNReal_eq_zero.2
@@ -2352,7 +2352,7 @@ lemma toNNReal_eq_iff_eq_coe
 @[simp]
 
 中文:
-引理 toNNReal_eq_iff_eq_coe
+引理 toNN实数_eq_iff_eq_coe
   条件: {r : 实数} {p : 实数>=0} (hp : p != 0)
   结论: r.toNN实数 = p ↔ r = p
   证明: ⟨fun h => h ▸ (coe_toNNReal _ <| not_lt.1 fun hlt => hp <| h ▸ toNNReal_of_nonpos hlt.le).symm,
@@ -2379,7 +2379,7 @@ lemma toNNReal_eq_one
 @[simp]
 
 中文:
-引理 toNNReal_eq_one
+引理 toNN实数_eq_one
   条件: {r : 实数}
   结论: r.toNN实数 = 1 ↔ r = 1
   证明: toNNReal_eq_iff_eq_coe one_ne_zero
@@ -2403,7 +2403,7 @@ lemma toNNReal_eq_natCast
 @[simp]
 
 中文:
-引理 toNNReal_eq_natCast
+引理 toNN实数_eq_natCast
   条件: {r : 实数} {n : 自然数} (hn : n != 0)
   结论: r.toNN实数 = n ↔ r = n
   证明: mod_cast toNNReal_eq_iff_eq_coe Nat.cast_ne_zero.2 hn
@@ -2427,7 +2427,7 @@ lemma toNNReal_eq_ofNat
 @[simp]
 
 中文:
-引理 toNNReal_eq_ofNat
+引理 toNN实数_eq_of自然数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: toNNReal_eq_natCast (NeZero.ne n)
 
@@ -2451,7 +2451,7 @@ theorem toNNReal_le_toNNReal_iff
 @[simp]
 
 中文:
-定理 toNNReal_le_toNNReal_iff
+定理 toNN实数_le_toNN实数_iff
   条件: {r p : 实数} (hp : 0 <= p)
   证明: by simp [← NNReal.coe_le_coe, hp]
 
@@ -2476,7 +2476,7 @@ lemma toNNReal_le_one
 @[simp]
 
 中文:
-引理 toNNReal_le_one
+引理 toNN实数_le_one
   条件: {r : 实数}
   结论: r.toNN实数 <= 1 ↔ r <= 1
   证明: by
@@ -2503,7 +2503,7 @@ lemma one_lt_toNNReal
 @[simp]
 
 中文:
-引理 one_lt_toNNReal
+引理 one_lt_toNN实数
   条件: {r : 实数}
   结论: 1 < r.toNN实数 ↔ 1 < r
   证明: by
@@ -2530,7 +2530,7 @@ lemma toNNReal_le_natCast
 @[simp]
 
 中文:
-引理 toNNReal_le_natCast
+引理 toNN实数_le_natCast
   条件: {r : 实数} {n : 自然数}
   结论: r.toNN实数 <= n ↔ r <= n
   证明: by
@@ -2557,7 +2557,7 @@ lemma natCast_lt_toNNReal
 @[simp]
 
 中文:
-引理 natCast_lt_toNNReal
+引理 natCast_lt_toNN实数
   条件: {r : 实数} {n : 自然数}
   结论: n < r.toNN实数 ↔ n < r
   证明: by
@@ -2582,7 +2582,7 @@ lemma toNNReal_le_ofNat
 @[simp]
 
 中文:
-引理 toNNReal_le_ofNat
+引理 toNN实数_le_of自然数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: toNNReal_le_natCast
 
@@ -2606,7 +2606,7 @@ lemma ofNat_lt_toNNReal
 @[simp]
 
 中文:
-引理 ofNat_lt_toNNReal
+引理 of自然数_lt_toNN实数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: natCast_lt_toNNReal
 
@@ -2630,7 +2630,7 @@ theorem toNNReal_eq_toNNReal_iff
 @[simp]
 
 中文:
-定理 toNNReal_eq_toNNReal_iff
+定理 toNN实数_eq_toNN实数_iff
   条件: {r p : 实数} (hr : 0 <= r) (hp : 0 <= p)
   证明: by simp [← coe_inj, hr, hp]
 
@@ -2652,7 +2652,7 @@ theorem toNNReal_lt_toNNReal_iff'
   proof: NNReal.coe_lt_coe.symm.trans max_lt_max_left_iff
 
 中文:
-定理 toNNReal_lt_toNNReal_iff'
+定理 toNN实数_lt_toNN实数_iff'
   条件: {r p : 实数}
   结论: 实数.toNN实数 r < 实数.toNN实数 p ↔ r < p ∧ 0 < p
   证明: NNReal.coe_lt_coe.symm.trans max_lt_max_left_iff
@@ -2671,7 +2671,7 @@ theorem toNNReal_lt_toNNReal_iff
   proof: toNNReal_lt_toNNReal_iff'.trans (and_iff_left h)
 
 中文:
-定理 toNNReal_lt_toNNReal_iff
+定理 toNN实数_lt_toNN实数_iff
   条件: {r p : 实数} (h : 0 < p)
   证明: toNNReal_lt_toNNReal_iff'.trans (and_iff_left h)
 
@@ -2691,7 +2691,7 @@ theorem lt_of_toNNReal_lt
   proof: (Real.toNNReal_lt_toNNReal_iff <| Real.toNNReal_pos.1 (ne_bot_of_gt h).bot_lt).1 h
 
 中文:
-定理 lt_of_toNNReal_lt
+定理 lt_of_toNN实数_lt
   条件: {r p : 实数} (h : r.toNN实数 < p.toNN实数)
   结论: r < p
   证明: (Real.toNNReal_lt_toNNReal_iff <| Real.toNNReal_pos.1 (ne_bot_of_gt h).bot_lt).1 h
@@ -2710,7 +2710,7 @@ theorem toNNReal_lt_toNNReal_iff_of_nonneg
   proof: toNNReal_lt_toNNReal_iff'.trans ⟨And.left, fun h => ⟨h, lt_of_le_of_lt hr h⟩⟩
 
 中文:
-定理 toNNReal_lt_toNNReal_iff_of_nonneg
+定理 toNN实数_lt_toNN实数_iff_of_nonneg
   条件: {r p : 实数} (hr : 0 <= r)
   证明: toNNReal_lt_toNNReal_iff'.trans ⟨And.left, fun h => ⟨h, lt_of_le_of_lt hr h⟩⟩
 
@@ -2731,7 +2731,7 @@ lemma toNNReal_le_toNNReal_iff'
   simp_rw [← not_lt, toNNReal_lt_toNNReal_iff', not_and_or]
 
 中文:
-引理 toNNReal_le_toNNReal_iff'
+引理 toNN实数_le_toNN实数_iff'
   条件: {r p : 实数}
   结论: r.toNN实数 <= p.toNN实数 ↔ r <= p ∨ r <= 0
   证明: by
@@ -2755,7 +2755,7 @@ lemma toNNReal_le_toNNReal_iff_of_pos
 @[simp]
 
 中文:
-引理 toNNReal_le_toNNReal_iff_of_pos
+引理 toNN实数_le_toNN实数_iff_of_pos
   条件: {r p : 实数} (hr : 0 < r)
   结论: r.toNN实数 <= p.toNN实数 ↔ r <= p
   证明: by
@@ -2782,7 +2782,7 @@ lemma one_le_toNNReal
 @[simp]
 
 中文:
-引理 one_le_toNNReal
+引理 one_le_toNN实数
   条件: {r : 实数}
   结论: 1 <= r.toNN实数 ↔ 1 <= r
   证明: by
@@ -2808,7 +2808,7 @@ lemma toNNReal_lt_one
 @[simp]
 
 中文:
-引理 toNNReal_lt_one
+引理 toNN实数_lt_one
   条件: {r : 实数}
   结论: r.toNN实数 < 1 ↔ r < 1
   证明: by simp only [← not_le, one_le_toNNReal]
@@ -2833,7 +2833,7 @@ lemma natCastle_toNNReal'
 @[simp]
 
 中文:
-引理 natCastle_toNNReal'
+引理 natCastle_toNN实数'
   条件: {n : 自然数} {r : 实数}
   结论: ↑n <= r.toNN实数 ↔ n <= r ∨ n = 0
   证明: by
@@ -2858,7 +2858,7 @@ lemma toNNReal_lt_natCast'
   simpa [pos_iff_ne_zero] using toNNReal_lt_toNNReal_iff' (r := r) (p := n)
 
 中文:
-引理 toNNReal_lt_natCast'
+引理 toNN实数_lt_natCast'
   条件: {n : 自然数} {r : 实数}
   结论: r.toNN实数 < n ↔ r < n ∧ n != 0
   证明: by
@@ -2879,7 +2879,7 @@ lemma natCast_le_toNNReal
   proof: by simp [hn]
 
 中文:
-引理 natCast_le_toNNReal
+引理 natCast_le_toNN实数
   条件: {n : 自然数} {r : 实数} (hn : n != 0)
   结论: ↑n <= r.toNN实数 ↔ n <= r
   证明: by simp [hn]
@@ -2898,7 +2898,7 @@ lemma toNNReal_lt_natCast
 @[simp]
 
 中文:
-引理 toNNReal_lt_natCast
+引理 toNN实数_lt_natCast
   条件: {r : 实数} {n : 自然数} (hn : n != 0)
   结论: r.toNN实数 < n ↔ r < n
   证明: by simp [hn]
@@ -2919,7 +2919,7 @@ lemma toNNReal_lt_ofNat
 @[simp]
 
 中文:
-引理 toNNReal_lt_ofNat
+引理 toNN实数_lt_of自然数
   条件: {r : 实数} {n : 自然数} [n.AtLeastTwo]
   证明: toNNReal_lt_natCast (NeZero.ne n)
 
@@ -2943,7 +2943,7 @@ lemma ofNat_le_toNNReal
 @[simp]
 
 中文:
-引理 ofNat_le_toNNReal
+引理 of自然数_le_toNN实数
   条件: {n : 自然数} {r : 实数} [n.AtLeastTwo]
   证明: natCast_le_toNNReal (NeZero.ne n)
 
@@ -2965,7 +2965,7 @@ theorem toNNReal_add
   proof: NNReal.eq by simp [hr, hp, add_nonneg]
 
 中文:
-定理 toNNReal_add
+定理 toNN实数_add
   条件: {r p : 实数} (hr : 0 <= r) (hp : 0 <= p)
   证明: NNReal.eq by simp [hr, hp, add_nonneg]
 
@@ -2984,7 +2984,7 @@ theorem toNNReal_add_toNNReal
   proof: (Real.toNNReal_add hr hp).symm
 
 中文:
-定理 toNNReal_add_toNNReal
+定理 toNN实数_add_toNN实数
   条件: {r p : 实数} (hr : 0 <= r) (hp : 0 <= p)
   证明: (Real.toNNReal_add hr hp).symm
 
@@ -3004,7 +3004,7 @@ theorem toNNReal_le_toNNReal
   proof: Real.toNNReal_mono h
 
 中文:
-定理 toNNReal_le_toNNReal
+定理 toNN实数_le_toNN实数
   条件: {r p : 实数} (h : r <= p)
   结论: 实数.toNN实数 r <= 实数.toNN实数 p
   证明: Real.toNNReal_mono h
@@ -3024,7 +3024,7 @@ theorem toNNReal_add_le
   proof: NNReal.coe_le_coe.1 max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) NNReal.zero_le_coe
 
 中文:
-定理 toNNReal_add_le
+定理 toNN实数_add_le
   条件: {r p : 实数}
   结论: 实数.toNN实数 (r + p) <= 实数.toNN实数 r + 实数.toNN实数 p
   证明: NNReal.coe_le_coe.1 max_le (add_le_add (le_max_left _ _) (le_max_left _ _)) NNReal.zero_le_coe
@@ -3044,7 +3044,7 @@ theorem toNNReal_le_iff_le_coe
   proof: NNReal.gi.gc r p
 
 中文:
-定理 toNNReal_le_iff_le_coe
+定理 toNN实数_le_iff_le_coe
   条件: {r : 实数} {p : 实数>=0}
   结论: toNN实数 r <= p ↔ r <= ↑p
   证明: NNReal.gi.gc r p
@@ -3065,7 +3065,7 @@ theorem le_toNNReal_iff_coe_le
   rw [← NNReal.coe_le_coe]; rw [Real.coe_toNNReal p hp]
 
 中文:
-定理 le_toNNReal_iff_coe_le
+定理 le_toNN实数_iff_coe_le
   条件: {r : 实数>=0} {p : 实数} (hp : 0 <= p)
   结论: r <= 实数.toNN实数 p ↔ ↑r <= p
   证明: by
@@ -3087,7 +3087,7 @@ theorem le_toNNReal_iff_coe_le'
     simp only [(hp.trans_le r.coe_nonneg).not_ge, toNNReal_eq_zero.2 hp.le, hr.not_ge]
 
 中文:
-定理 le_toNNReal_iff_coe_le'
+定理 le_toNN实数_iff_coe_le'
   条件: {r : 实数>=0} {p : 实数} (hr : 0 < r)
   结论: r <= 实数.toNN实数 p ↔ ↑r <= p
   证明: (le_or_gt 0 p).elim le_toNNReal_iff_coe_le fun hp => by
@@ -3110,7 +3110,7 @@ theorem toNNReal_lt_iff_lt_coe
   rw [← NNReal.coe_lt_coe]; rw [Real.coe_toNNReal r ha]
 
 中文:
-定理 toNNReal_lt_iff_lt_coe
+定理 toNN实数_lt_iff_lt_coe
   条件: {r : 实数} {p : 实数>=0} (ha : 0 <= r)
   结论: 实数.toNN实数 r < p ↔ r < ↑p
   证明: by
@@ -3131,7 +3131,7 @@ theorem lt_toNNReal_iff_coe_lt
   proof: lt_iff_lt_of_le_iff_le toNNReal_le_iff_le_coe
 
 中文:
-定理 lt_toNNReal_iff_coe_lt
+定理 lt_toNN实数_iff_coe_lt
   条件: {r : 实数>=0} {p : 实数}
   结论: r < 实数.toNN实数 p ↔ ↑r < p
   证明: lt_iff_lt_of_le_iff_le toNNReal_le_iff_le_coe
@@ -3152,7 +3152,7 @@ theorem toNNReal_pow
   rw [← coe_inj]; rw [NNReal.coe_pow]; rw [Real.coe_toNNReal _ (pow_nonneg hx _)]; rw [Real.coe_toNNReal x hx]
 
 中文:
-定理 toNNReal_pow
+定理 toNN实数_pow
   条件: {x : 实数} (hx : 0 <= x) (n : 自然数)
   结论: (x ^ n).toNN实数 = x.toNN实数 ^ n
   证明: by
@@ -3174,7 +3174,7 @@ theorem toNNReal_zpow
   rw [← coe_inj]; rw [NNReal.coe_zpow]; rw [Real.coe_toNNReal _ (zpow_nonneg hx _)]; rw [Real.coe_toNNReal x hx]
 
 中文:
-定理 toNNReal_zpow
+定理 toNN实数_zpow
   条件: {x : 实数} (hx : 0 <= x) (n : 整数)
   结论: (x ^ n).toNN实数 = x.toNN实数 ^ n
   证明: by
@@ -3194,7 +3194,7 @@ theorem toNNReal_mul
   proof: NNReal.eq by simp [mul_max_of_nonneg, hp]
 
 中文:
-定理 toNNReal_mul
+定理 toNN实数_mul
   条件: {p q : 实数} (hp : 0 <= p)
   证明: NNReal.eq by simp [mul_max_of_nonneg, hp]
 
@@ -3324,7 +3324,7 @@ example : OrderedSub Real>=0 := by infer_instance
 中文:
 定理 coe_sub_def
   条件: {r p : 实数>=0}
-  结论: ↑(r - p) = max (r - p : 实数) 0
+  结论: ↑(r - p) = 最大值 (r - p : 实数) 0
   证明: rfl
 
 example : OrderedSub Real>=0 := by infer_instance
@@ -3353,7 +3353,7 @@ theorem inv_mk
 中文:
 定理 inv_mk
   条件: {r : 实数} (hr : 0 <= r)
-  结论: (NN实数.mk r hr)⁻¹ = .mk (r⁻¹) (inv_nonneg.2 hr)
+  结论: (非负实数.mk r hr)⁻¹ = .mk (r⁻¹) (inv_nonneg.2 hr)
   证明: rfl
 
 @[simp]
@@ -3536,7 +3536,7 @@ theorem le_of_forall_lt_one_mul_le
 
 
 中文:
-定理 le_of_forall_lt_one_mul_le
+定理 le_of_对任意_lt_one_mul_le
   条件: {x y : 实数>=0} (h : 对任意 a < 1, a * x <= y)
   结论: x <= y
   证明: le_of_forall_lt_imp_le_of_dense fun a ha => by
@@ -3600,7 +3600,7 @@ theorem _root_.Real.toNNReal_inv
   · rw [toNNReal_eq_zero.mpr hx, inv_zero, toNNReal_eq_zero.mpr (inv_nonpos.mpr hx)]
 
 中文:
-定理 _root_.Real.toNNReal_inv
+定理 _root_.实数.toNN实数_inv
   条件: {x : 实数}
   结论: 实数.toNN实数 x⁻¹ = (实数.toNN实数 x)⁻¹
   证明: by
@@ -3627,7 +3627,7 @@ theorem _root_.Real.toNNReal_div
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← Real.toNNReal_inv]; rw [← Real.toNNReal_mul hx]
 
 中文:
-定理 _root_.Real.toNNReal_div
+定理 _root_.实数.toNN实数_div
   条件: {x y : 实数} (hx : 0 <= x)
   证明: by
   rw [div_eq_mul_inv]; rw [div_eq_mul_inv]; rw [← Real.toNNReal_inv]; rw [← Real.toNNReal_mul hx]
@@ -3648,7 +3648,7 @@ theorem _root_.Real.toNNReal_div'
   rw [div_eq_inv_mul]; rw [div_eq_inv_mul]; rw [Real.toNNReal_mul (inv_nonneg.2 hy)]; rw [Real.toNNReal_inv]
 
 中文:
-定理 _root_.Real.toNNReal_div'
+定理 _root_.实数.toNN实数_div'
   条件: {x y : 实数} (hy : 0 <= y)
   证明: by
   rw [div_eq_inv_mul]; rw [div_eq_inv_mul]; rw [Real.toNNReal_mul (inv_nonneg.2 hy)]; rw [Real.toNNReal_inv]
@@ -3710,7 +3710,7 @@ lemma exists_nat_pos_inv_lt
   proof: b.toReal.exists_nat_pos_inv_lt hb
 
 中文:
-引理 exists_nat_pos_inv_lt
+引理 存在_nat_pos_inv_lt
   条件: {b : 实数>=0} (hb : 0 < b)
   证明: b.toReal.exists_nat_pos_inv_lt hb
 
@@ -3762,7 +3762,7 @@ nonrec theorem sSup_of_not_bddAbove {s : Set Real>=0} (hs : ¬BddAbove s) : SupS
   grind [csSup_of_not_bddAbove, csSup_empty, bot_eq_zero']
 
 中文:
-定理 le_toNNReal_of_coe_le
+定理 le_toNN实数_of_coe_le
   条件: {x : 实数>=0} {y : 实数} (h : ↑x <= y)
   结论: x <= y.toNN实数
   证明: (le_toNNReal_iff_coe_le <| x.2.trans h).2 h
@@ -3809,7 +3809,7 @@ theorem iSup_empty
 
 中文:
 定理 iSup_empty
-  条件: [IsEmpty ι] (f : ι -> 实数>=0)
+  条件: [是空 ι] (f : ι -> 实数>=0)
   结论: ⨆ i, f i = 0
   证明: ciSup_of_empty f
 
@@ -3829,7 +3829,7 @@ theorem iInf_empty
 
 中文:
 定理 iInf_empty
-  条件: [IsEmpty ι] (f : ι -> 实数>=0)
+  条件: [是空 ι] (f : ι -> 实数>=0)
   结论: ⨅ i, f i = 0
   证明: by
   rw [_root_.iInf_of_isEmpty]; rw [sInf_empty]
@@ -3883,7 +3883,7 @@ theorem iInf_const_zero
 
 中文:
 定理 iInf_const_zero
-  条件: {α : Sort*}
+  条件: {α : 类型层*}
   结论: ⨅ _ : α, (0 : 实数>=0) = 0
   证明: by
   rw [← coe_inj]; rw [coe_iInf]
@@ -3916,8 +3916,8 @@ theorem preimage_coe_nnreal_real
 
 中文:
 定理 preimage_coe_nnreal_real
-  条件: (h : s.OrdConnected)
-  结论: ((↑) ⁻¹' s : Set 实数>=0).OrdConnected
+  条件: (h : s.序连通)
+  结论: ((↑) ⁻¹' s : 集合 实数>=0).序连通
   证明: h.preimage_mono NNReal.coe_mono
 
 Depends on / 依赖: NNReal, NNReal.coe_mono, coe_mono, h.preimage_mono, preimage_mono
@@ -3937,8 +3937,8 @@ theorem image_coe_nnreal_real
 
 中文:
 定理 image_coe_nnreal_real
-  条件: (h : t.OrdConnected)
-  结论: ((↑) '' t : Set 实数).OrdConnected
+  条件: (h : t.序连通)
+  结论: ((↑) '' t : 集合 实数).序连通
   证明: ⟨forall_mem_image.2 fun x hx =>
       forall_mem_image.2 fun _y hy z hz => ⟨⟨z, x.2.trans hz.1⟩, h.out hx hy hz, rfl⟩⟩
 
@@ -3965,9 +3965,9 @@ theorem image_real_toNNReal
     rw [toNNRea
 
 中文:
-定理 image_real_toNNReal
-  条件: (h : s.OrdConnected)
-  结论: (实数.toNN实数 '' s).OrdConnected
+定理 image_real_toNN实数
+  条件: (h : s.序连通)
+  结论: (实数.toNN实数 '' s).序连通
   证明: by
   refine ⟨forall_mem_image.2 fun x hx => forall_mem_image.2 fun y hy z hz => ?_⟩
   rcases le_total y 0 with hy₀ | hy₀
@@ -3997,9 +3997,9 @@ theorem preimage_real_toNNReal
   proof: h.preimage_mono Real.toNNReal_monotone
 
 中文:
-定理 preimage_real_toNNReal
-  条件: (h : t.OrdConnected)
-  结论: (实数.toNN实数 ⁻¹' t).OrdConnected
+定理 preimage_real_toNN实数
+  条件: (h : t.序连通)
+  结论: (实数.toNN实数 ⁻¹' t).序连通
   证明: h.preimage_mono Real.toNNReal_monotone
 
 Depends on / 依赖: Real.toNNReal_monotone, h.preimage_mono, preimage_mono, toNNReal_monotone
@@ -4122,7 +4122,7 @@ theorem coe_toNNReal_le
   proof: max_le (le_abs_self _) (abs_nonneg _)
 
 中文:
-定理 coe_toNNReal_le
+定理 coe_toNN实数_le
   条件: (x : 实数)
   结论: (toNN实数 x : 实数) <= |x|
   证明: max_le (le_abs_self _) (abs_nonneg _)
@@ -4142,7 +4142,7 @@ lemma toNNReal_abs
   proof: NNReal.coe_injective by simp
 
 中文:
-引理 toNNReal_abs
+引理 toNN实数_abs
   条件: (x : 实数)
   结论: |x|.toNN实数 = nnabs x
   证明: NNReal.coe_injective by simp
@@ -4175,7 +4175,7 @@ lemma nnabs_ofNat
   proof: by simp
 
 中文:
-引理 nnabs_ofNat
+引理 nnabs_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: nnabs of自然数(n) = of自然数(n)
   证明: by simp
@@ -4370,8 +4370,8 @@ theorem NNReal.exists_lt_of_strictMono
         fun h0 => (Units.ne_zero g) ((map_eq_zero f).mp
 
 中文:
-定理 NNReal.exists_lt_of_strictMono
-  结论: [h : Nontrivial Γ₀ˣ] {f : Γ₀ ->*₀ 实数>=0} (hf : StrictMono f)
+定理 非负实数.存在_lt_of_strictMono
+  结论: [h : 非平凡 Γ₀ˣ] {f : Γ₀ ->*₀ 实数>=0} (hf : 严格递增 f)
   证明: by
   obtain ⟨g, hg1⟩ := (nontrivial_iff_exists_ne (1 : Γ₀ˣ)).mp h
   set u : Γ₀ˣ := if g < 1 then g else g⁻¹ with hu
@@ -4413,8 +4413,8 @@ theorem Real.exists_lt_of_strictMono
   exact NNReal.exists_lt_of_strictMono hf hs
 
 中文:
-定理 Real.exists_lt_of_strictMono
-  结论: [h : Nontrivial Γ₀ˣ] {f : Γ₀ ->*₀ 实数>=0} (hf : StrictMono f)
+定理 实数.存在_lt_of_strictMono
+  结论: [h : 非平凡 Γ₀ˣ] {f : Γ₀ ->*₀ 实数>=0} (hf : 严格递增 f)
   证明: by
   set s : NNReal := ⟨r, le_of_lt hr⟩
   have hs : 0 < s := hr

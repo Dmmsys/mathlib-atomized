@@ -936,9 +936,9 @@ theorem norm_exp_I_mul_ofReal_sub_one_le
     _ = _ := by rw [abs_div, Nat.abs_ofNat, Real.norm_eq_abs]; ring
 
 中文:
-定理 norm_exp_I_mul_ofReal_sub_one_le
+定理 norm_exp_I_mul_of实数_sub_one_le
   条件: {x : 实数}
-  结论: ‖.exp (.I * x) - (1 : Complex)‖ <= ‖x‖
+  结论: ‖.exp (.I * x) - (1 : 复形)‖ <= ‖x‖
   证明: by
   rw [Complex.norm_exp_I_mul_ofReal_sub_one]
   calc
@@ -967,9 +967,9 @@ theorem enorm_exp_I_mul_ofReal_sub_one_le
   exact ENNReal.ofReal_le_ofReal norm_exp_I_mul_ofReal_sub_one_le
 
 中文:
-定理 enorm_exp_I_mul_ofReal_sub_one_le
+定理 enorm_exp_I_mul_of实数_sub_one_le
   条件: {x : 实数}
-  结论: ‖.exp (.I * x) - (1 : Complex)‖ₑ <= ‖x‖ₑ
+  结论: ‖.exp (.I * x) - (1 : 复形)‖ₑ <= ‖x‖ₑ
   证明: by
   iterate 2 rw [← enorm_norm, Real.enorm_of_nonneg (norm_nonneg _)]
   exact ENNReal.ofReal_le_ofReal norm_exp_I_mul_ofReal_sub_one_le
@@ -991,9 +991,9 @@ theorem nnnorm_exp_I_mul_ofReal_sub_one_le
   rw [← ENNReal.coe_le_coe]; exact enorm_exp_I_mul_ofReal_sub_one_le
 
 中文:
-定理 nnnorm_exp_I_mul_ofReal_sub_one_le
+定理 nnnorm_exp_I_mul_of实数_sub_one_le
   条件: {x : 实数}
-  结论: ‖.exp (.I * x) - (1 : Complex)‖₊ <= ‖x‖₊
+  结论: ‖.exp (.I * x) - (1 : 复形)‖₊ <= ‖x‖₊
   证明: by
   rw [← ENNReal.coe_le_coe]; exact enorm_exp_I_mul_ofReal_sub_one_le
 

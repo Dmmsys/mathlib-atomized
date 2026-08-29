@@ -41,7 +41,7 @@ definition normalMono
 
 中文:
 定义 normalMono
-  签名: (_ : Mono f)
+  签名: (_ : 单态射 f)
   定义体: equivalenceReflectsNormalMono (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
     ModuleCat.normalMono _ inferInstance
 
@@ -64,7 +64,7 @@ definition normalEpi
 
 中文:
 定义 normalEpi
-  签名: (_ : Epi f)
+  签名: (_ : 满态射 f)
   定义体: equivalenceReflectsNormalEpi (forget₂ (ModuleCat.{u} Int) AddCommGrpCat.{u}).inv
     ModuleCat.normalEpi _ inferInstance
 
@@ -85,7 +85,7 @@ instance :
 
 中文:
 实例 :
-  签名: Abelian AddCommGrpCat.{u}
+  签名: 交换 加法交换群范畴.{u}
   定义体: ⟨normalMono f hf⟩
   normalEpiOfEpi f hf := ⟨normalEpi f hf⟩
 

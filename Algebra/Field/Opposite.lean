@@ -31,7 +31,7 @@ instance instNNRatCast
 
 中文:
 实例 instNNRatCast
-  签名: [NNRatCast α]
+  签名: [非负有理数嵌入 α]
   定义体: ⟨fun q => op q⟩
 -/
 @[to_additive] instance instNNRatCast [NNRatCast α] : NNRatCast αᵐᵒᵖ := ⟨fun q => op q⟩
@@ -47,7 +47,7 @@ instance instRatCast
 
 中文:
 实例 instRatCast
-  签名: [RatCast α]
+  签名: [有理数嵌入 α]
   定义体: ⟨fun q => op q⟩
 
 @[to_additive (attr := simp, norm_cast)]
@@ -68,7 +68,7 @@ lemma op_nnratCast
 
 中文:
 引理 op_nnratCast
-  条件: [NNRatCast α] (q : Rat>=0)
+  条件: [非负有理数嵌入 α] (q : 有理数>=0)
   结论: op (q : α) = q
   证明: rfl
 
@@ -90,7 +90,7 @@ lemma unop_nnratCast
 
 中文:
 引理 unop_nnratCast
-  条件: [NNRatCast α] (q : Rat>=0)
+  条件: [非负有理数嵌入 α] (q : 有理数>=0)
   结论: unop (q : αᵐᵒᵖ) = q
   证明: rfl
 
@@ -112,7 +112,7 @@ lemma op_ratCast
 
 中文:
 引理 op_ratCast
-  条件: [RatCast α] (q : Rat)
+  条件: [有理数嵌入 α] (q : 有理数)
   结论: op (q : α) = q
   证明: rfl
 
@@ -132,7 +132,7 @@ lemma unop_ratCast
 
 中文:
 引理 unop_ratCast
-  条件: [RatCast α] (q : Rat)
+  条件: [有理数嵌入 α] (q : 有理数)
   结论: unop (q : αᵐᵒᵖ) = q
   证明: rfl
 -/
@@ -153,7 +153,7 @@ nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast,
 
 中文:
 实例 instDivisionSemiring
-  签名: [DivisionSemiring α]
+  签名: [除半环 α]
   定义体: instSemiring
   __ := instGroupWithZero
   nnqsmul := _
@@ -186,7 +186,7 @@ ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div,
 
 中文:
 实例 instDivisionRing
-  签名: [DivisionRing α]
+  签名: [除环 α]
   定义体: instRing
   __ := instDivisionSemiring
   qsmul := _
@@ -215,7 +215,7 @@ instance instSemifield
 
 中文:
 实例 instSemifield
-  签名: [Semifield α]
+  签名: [半域 α]
   定义体: instCommSemiring
   __ := instDivisionSemiring
 
@@ -236,7 +236,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: [Field α]
+  签名: [域 α]
   定义体: instCommRing
   __ := instDivisionRing
 
@@ -265,7 +265,7 @@ nnratCast_def q := unop_injective by rw [unop_nnratCast, unop_div, unop_natCast,
 
 中文:
 实例 instDivisionSemiring
-  签名: [DivisionSemiring α]
+  签名: [除半环 α]
   定义体: instSemiring
   __ := instGroupWithZero
   nnqsmul := _
@@ -298,7 +298,7 @@ ratCast_def q := unop_injective by rw [unop_ratCast, Rat.cast_def, unop_div, uno
 
 中文:
 实例 instDivisionRing
-  签名: [DivisionRing α]
+  签名: [除环 α]
   定义体: instRing
   __ := instDivisionSemiring
   qsmul := _
@@ -327,7 +327,7 @@ instance instSemifield
 
 中文:
 实例 instSemifield
-  签名: [Semifield α]
+  签名: [半域 α]
   定义体: instCommSemiring
   __ := instDivisionSemiring
 
@@ -348,7 +348,7 @@ instance instField
 
 中文:
 实例 instField
-  签名: [Field α]
+  签名: [域 α]
   定义体: instCommRing
   __ := instDivisionRing
 

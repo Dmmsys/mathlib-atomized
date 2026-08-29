@@ -50,8 +50,8 @@ lemma exists_epi_from_isCardinalPresentable
       infe
 
 中文:
-引理 exists_epi_from_isCardinalPresentable
-  条件: (X : SSet.{u}) [X.Finite]
+引理 存在_epi_from_isCardinalPresentable
+  条件: (X : SSet.{u}) [X.有限]
   证明: by
   refine ⟨∐ (fun (s : X.N) => Δ[s.dim]), inferInstance, ?_,
     Sigma.desc (fun s => yonedaEquiv.symm s.simplex), ?_⟩

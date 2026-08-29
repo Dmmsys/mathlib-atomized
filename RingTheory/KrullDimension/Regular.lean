@@ -46,7 +46,7 @@ lemma exists_ltSeries_support_isMaximal_last_of_ltSeries_support
   · use q
 
 中文:
-引理 exists_ltSeries_support_isMaximal_last_of_ltSeries_support
+引理 存在_ltSeries_support_isMaximal_last_of_ltSeries_support
   条件: (q : LTSeries (support R M))
   证明: by
   obtain ⟨m, hmm, hm⟩ := exists_le_maximal _ q.last.1.2.1
@@ -368,7 +368,7 @@ lemma _root_.ringKrullDim_le_ringKrullDim_add_card
 
 中文:
 引理 _root_.ringKrullDim_le_ringKrullDim_add_card
-  结论: {S : Finset R}
+  结论: {S : 有限集 R}
   证明: by
   apply ringKrullDim_le_ringKrullDim_quotient_add_card
   rwa [IsLocalRing.ringJacobson_eq_maximalIdeal]
@@ -399,7 +399,7 @@ lemma _root_.ringKrullDim_le_ringKrullDim_add_spanFinrank
 
 中文:
 引理 _root_.ringKrullDim_le_ringKrullDim_add_spanFinrank
-  条件: {I : Ideal R} (h : I != ⊤)
+  条件: {I : 理想 R} (h : I != ⊤)
   证明: by
   apply ringKrullDim_le_ringKrullDim_quotient_add_spanFinrank
   rw [IsLocalRing.ringJacobson_eq_maximalIdeal]
@@ -543,7 +543,7 @@ theorem supportDim_add_length_eq_supportDim_of_isRegular
 
 中文:
 定理 supportDim_add_length_eq_supportDim_of_isRegular
-  条件: (rs : List R) (reg : IsRegular M rs)
+  条件: (rs : 列表 R) (reg : 是正则 M rs)
   证明: by
   induction rs generalizing M with
   | nil =>
@@ -581,7 +581,7 @@ lemma _root_.ringKrullDim_add_length_eq_ringKrullDim_of_isRegular
 
 中文:
 引理 _root_.ringKrullDim_add_length_eq_ringKrullDim_of_isRegular
-  结论: (rs : List R)
+  结论: (rs : 列表 R)
   证明: by
   have eq : ofList rs = ofList rs • (⊤ : Ideal R) := by simp
   rw [ringKrullDim_eq_of_ringEquiv (quotientEquivAlgOfEq R eq).toRingEquiv]; rw [← supportDim_quotient_eq_ringKrullDim]; rw [← supportDim_self_eq_ringKrullDim]

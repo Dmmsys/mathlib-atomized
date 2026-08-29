@@ -60,7 +60,7 @@ definition mapBifunctorHomologicalComplexObj
 
 中文:
 定义 mapBifunctorHomologicalComplexObj
-  签名: (K₁ : HomologicalComplex C₁ c₁)
+  签名: (K₁ : 同调复形 C₁ c₁)
   定义体: HomologicalComplex₂.ofGradedObject c₁ c₂
       (((GradedObject.mapBifunctor F I₁ I₂).obj K₁.X).obj K₂.X)
       (fun i₁ i₁' i₂ => (F.map (K₁.d i₁ i₁')).app (K₂.X i₂))
@@ -203,7 +203,7 @@ abbreviation mapBifunctor
 
 中文:
 缩写 mapBifunctor
-  签名: : HomologicalComplex D c
+  签名: : 同调复形 D c
   定义体: (((F.mapBifunctorHomologicalComplex c₁ c₂).obj K₁).obj K₂).total c
 
 Depends on / 依赖: F.mapBifunctorHomologicalComplex, mapBifunctorHomologicalComplex
@@ -327,7 +327,7 @@ lemma ι_mapBifunctorDesc
 
 中文:
 引理 ι_mapBifunctorDesc
-  条件: (i₁ : I₁) (i₂ : I₂) (h : ComplexShape.π c₁ c₂ c ⟨i₁, i₂⟩ = j)
+  条件: (i₁ : I₁) (i₂ : I₂) (h : 余mplexShape.π c₁ c₂ c ⟨i₁, i₂⟩ = j)
   证明: by
   apply HomologicalComplex₂.ι_totalDesc
 -/
@@ -472,7 +472,7 @@ lemma d₁_eq_zero
 
 中文:
 引理 d₁_eq_zero
-  条件: (h : ¬ c₁.Rel i₁ (c₁.next i₁))
+  条件: (h : ¬ c₁.关系 i₁ (c₁.next i₁))
   证明: HomologicalComplex₂.d₁_eq_zero _ _ _ _ _ h
 -/
 lemma d₁_eq_zero (h : ¬ c₁.Rel i₁ (c₁.next i₁)) :
@@ -489,7 +489,7 @@ lemma d₂_eq_zero
 
 中文:
 引理 d₂_eq_zero
-  条件: (h : ¬ c₂.Rel i₂ (c₂.next i₂))
+  条件: (h : ¬ c₂.关系 i₂ (c₂.next i₂))
   证明: HomologicalComplex₂.d₂_eq_zero _ _ _ _ _ h
 -/
 lemma d₂_eq_zero (h : ¬ c₂.Rel i₂ (c₂.next i₂)) :
@@ -506,7 +506,7 @@ lemma d₁_eq_zero'
 
 中文:
 引理 d₁_eq_zero'
-  结论: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J)
+  结论: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (j : J)
   证明: HomologicalComplex₂.d₁_eq_zero' _ _ h _ _ h'
 -/
 lemma d₁_eq_zero' {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J)
@@ -524,7 +524,7 @@ lemma d₂_eq_zero'
 
 中文:
 引理 d₂_eq_zero'
-  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J)
+  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (j : J)
   证明: HomologicalComplex₂.d₂_eq_zero' _ _ _ h _ h'
 -/
 lemma d₂_eq_zero' (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J)
@@ -542,7 +542,7 @@ lemma d₁_eq'
 
 中文:
 引理 d₁_eq'
-  条件: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J)
+  条件: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (j : J)
   证明: HomologicalComplex₂.d₁_eq' _ _ h _ _
 -/
 lemma d₁_eq' {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J) :
@@ -560,7 +560,7 @@ lemma d₂_eq'
 
 中文:
 引理 d₂_eq'
-  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J)
+  条件: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (j : J)
   证明: HomologicalComplex₂.d₂_eq' _ _ _ h _
 -/
 lemma d₂_eq' (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J) :
@@ -578,7 +578,7 @@ lemma d₁_eq
 
 中文:
 引理 d₁_eq
-  结论: {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J)
+  结论: {i₁ i₁' : I₁} (h : c₁.关系 i₁ i₁') (i₂ : I₂) (j : J)
   证明: HomologicalComplex₂.d₁_eq _ _ h _ _ h'
 -/
 lemma d₁_eq {i₁ i₁' : I₁} (h : c₁.Rel i₁ i₁') (i₂ : I₂) (j : J)
@@ -597,7 +597,7 @@ lemma d₂_eq
 
 中文:
 引理 d₂_eq
-  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J)
+  结论: (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.关系 i₂ i₂') (j : J)
   证明: HomologicalComplex₂.d₂_eq _ _ _ h _ h'
 -/
 lemma d₂_eq (i₁ : I₁) {i₂ i₂' : I₂} (h : c₂.Rel i₂ i₂') (j : J)

@@ -49,10 +49,10 @@ class Free
     - exists_basis((R M)) : Nonempty (I : Type v) × Basis I R M
 
 中文:
-类 Free
-  参数: (R : 类型u) (M : 类型v) [Semiring R] [AddCommMonoid M] [Module R M]
+类 自由
+  参数: (R : 类型u) (M : 类型v) [半环 R] [加法交换幺半群 M] [模 R M]
   公理与运算 (1 个):
-    - exists_basis((R M)) : Nonempty (I : 类型v) × Basis I R M
+    - exists_basis((R M)) : 非空 (I : 类型v) × 基 I R M
 -/
 class Free (R : Type u) (M : Type v) [Semiring R] [AddCommMonoid M] [Module R M] : Prop where
 exists_basis (R M) : Nonempty (I : Type v) × Basis I R M
@@ -67,9 +67,9 @@ lemma Free.exists_set
   proof: let ⟨_I, b⟩ := exists_basis R M; ⟨Set.range b, ⟨b.reindexRange⟩⟩
 
 中文:
-引理 Free.exists_set
-  条件: [Free R M]
-  结论: 存在 S : Set M, Nonempty (Basis S R M)
+引理 自由.存在_set
+  条件: [自由 R M]
+  结论: 存在 S : 集合 M, 非空 (基 S R M)
   证明: let ⟨_I, b⟩ := exists_basis R M; ⟨Set.range b, ⟨b.reindexRange⟩⟩
 
 Depends on / 依赖: Set.range, b.reindexRange, exists_basis, reindexRange
@@ -87,7 +87,7 @@ theorem free_iff_set
 
 中文:
 定理 free_iff_set
-  结论: Free R M ↔ 存在 S : Set M, Nonempty (Basis S R M)
+  结论: 自由 R M ↔ 存在 S : 集合 M, 非空 (基 S R M)
   证明: ⟨fun _ => Free.exists_set .., fun ⟨S, hS⟩ => ⟨nonempty_sigma.2 ⟨S, hS⟩⟩⟩
 
 Depends on / 依赖: Free.exists_set, exists_set, nonempty_sigma
@@ -109,7 +109,7 @@ theorem free_def
 中文:
 定理 free_def
   条件: [Small.{w, v} M]
-  结论: Free R M ↔ 存在 I : Type w, Nonempty (Basis I R M) where
+  结论: 自由 R M ↔ 存在 I : 类型 w, 非空 (基 I R M) where
   证明: ⟨Shrink (Set.range h.exists_basis.some.2),
       ⟨(Basis.reindexRange h.exists_basis.some.2).reindex (equivShrink _)⟩⟩
   mpr h := ⟨(nonempty_sigma.2 h).map fun ⟨_, b⟩ => ⟨Set.range b, b.reindexRange⟩⟩
@@ -134,9 +134,9 @@ theorem Free.of_basis
   proof: (free_def R M).2 ⟨Set.range b, ⟨b.reindexRange⟩⟩
 
 中文:
-定理 Free.of_basis
-  条件: {ι : Type w} (b : Basis ι R M)
-  结论: Free R M
+定理 自由.of_basis
+  条件: {ι : 类型 w} (b : 基 ι R M)
+  结论: 自由 R M
   证明: (free_def R M).2 ⟨Set.range b, ⟨b.reindexRange⟩⟩
 
 Depends on / 依赖: Set.range, b.reindexRange, free_def, reindexRange
@@ -163,7 +163,7 @@ definition ChooseBasisIndex
 
 中文:
 定义 ChooseBasisIndex
-  签名: : Type _
+  签名: : 类型 _
   定义体: ((Module.free_iff_set R M).mp ‹_›).choose
 
 Depends on / 依赖: Module, Module.free_iff_set, free_iff_set
@@ -198,7 +198,7 @@ definition chooseBasis
 
 中文:
 定义 chooseBasis
-  签名: : Basis (ChooseBasisIndex R M) R M
+  签名: : 基 (ChooseBasisIndex R M) R M
   定义体: ((Module.free_iff_set R M).mp ‹_›).choose_spec.some
 
 Depends on / 依赖: Module, Module.free_iff_set, choose_spec, choose_spec.some, free_iff_set
@@ -216,7 +216,7 @@ definition constr
 
 中文:
 定义 constr
-  签名: {S : Type z} [Semiring S] [Module S N] [SMulCommClass R S N]
+  签名: {S : 类型 z} [半环 S] [模 S N] [标量交换类 R S N]
   定义体: Basis.constr (chooseBasis R M) S
 
 Depends on / 依赖: Basis.constr, chooseBasis, constr
@@ -238,8 +238,8 @@ instance [Nontrivial
   body: (Module.Free.chooseBasis R M).index_nonempty
 
 中文:
-实例 [Nontrivial
-  签名: M] : Nonempty (Module.Free.ChooseBasisIndex R M)
+实例 [非平凡
+  签名: M] : 非空 (模.自由.ChooseBasisIndex R M)
   定义体: (Module.Free.chooseBasis R M).index_nonempty
 
 Depends on / 依赖: Module, Module.Free.chooseBasis, chooseBasis, index_nonempty
@@ -258,8 +258,8 @@ theorem infinite
 
 中文:
 定理 infinite
-  条件: [Infinite R] [Nontrivial M]
-  结论: Infinite M
+  条件: [无限 R] [非平凡 M]
+  结论: 无限 M
   证明: (Equiv.infinite_iff (chooseBasis R M).repr.toEquiv).mpr Finsupp.infinite_of_right
 
 Depends on / 依赖: Equiv.infinite_iff, Finsupp, Finsupp.infinite_of_right, chooseBasis, infinite_iff, infinite_of_right, repr.toEquiv, toEquiv
@@ -276,8 +276,8 @@ instance [Nontrivial
   body: .of_injective _ (chooseBasis R M).repr.symm.injective
 
 中文:
-实例 [Nontrivial
-  签名: M] : FaithfulSMul R M
+实例 [非平凡
+  签名: M] : 忠实标量乘法 R M
   定义体: .of_injective _ (chooseBasis R M).repr.symm.injective
 
 Depends on / 依赖: chooseBasis, injective, of_injective, repr.symm.injective
@@ -303,7 +303,7 @@ lemma of_equiv
 
 中文:
 引理 of_equiv
-  结论: {R R' M M' : 类型} [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: {R R' M M' : 类型} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: by
   let e₁ : R ≃+* R' := RingHomInvPair.toRingEquiv σ σ'
   let I := Module.Free.ChooseBasisIndex R M
@@ -339,7 +339,7 @@ theorem of_equiv'
 
 中文:
 定理 of_equiv'
-  结论: {P : 类型v} [AddCommMonoid P] [Module R P] (_ : Module.Free R P)
+  结论: {P : 类型v} [加法交换幺半群 P] [模 R P] (_ : 模.自由 R P)
   证明: of_equiv e
 
 Depends on / 依赖: of_equiv
@@ -361,7 +361,7 @@ lemma iff_of_equiv
 
 中文:
 引理 iff_of_equiv
-  结论: {R R' M M'} [Semiring R] [AddCommMonoid M] [Module R M]
+  结论: {R R' M M'} [半环 R] [加法交换幺半群 M] [模 R M]
   证明: ⟨fun _ => of_equiv e₂, fun _ => of_equiv e₂.symm⟩
 
 @[deprecated (since := "2026-02-14")] alias of_ringEquiv := of_equiv
@@ -412,7 +412,7 @@ instance self
 
 中文:
 实例 self
-  签名: : Module.Free R R
+  签名: : 模.自由 R R
   定义体: of_basis (Basis.singleton Unit R)
 
 Depends on / 依赖: Basis.singleton, of_basis, singleton
@@ -430,7 +430,7 @@ instance ulift
 
 中文:
 实例 ulift
-  签名: : Free R (ULift M)
+  签名: : 自由 R (类型层提升 M)
   定义体: of_equiv ULift.moduleEquiv.symm
 
 Depends on / 依赖: ULift.moduleEquiv.symm, moduleEquiv, of_equiv
@@ -454,8 +454,8 @@ lemma of_subsingleton'
 
 中文:
 引理 of_subsingleton'
-  条件: [Subsingleton R]
-  结论: Module.Free R N
+  条件: [子单例 R]
+  结论: 模.自由 R N
   证明: letI := Module.subsingleton R N
   Module.Free.of_subsingleton R N
 
@@ -488,7 +488,7 @@ theorem repr_algebraMap
 
 中文:
 定理 repr_algebraMap
-  条件: {ι : 类型} {B : Basis ι R S} {i : ι} (hBi : B i = 1) (r : R)
+  条件: {ι : 类型} {B : 基 ι R S} {i : ι} (hBi : B i = 1) (r : R)
   证明: by
   ext j; simp [Algebra.algebraMap_eq_smul_one, ← hBi]
 

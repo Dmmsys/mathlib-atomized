@@ -55,7 +55,7 @@ instance instOne
 
 中文:
 实例 instOne
-  签名: : One (对任意 i, M i) where one _
+  签名: : 幺 (对任意 i, M i) where one _
   定义体: 1
 
 @[to_additive (attr := simp high)]
@@ -111,7 +111,7 @@ lemma _root_.Function.const_one
   proof: rfl
 
 中文:
-引理 _root_.Function.const_one
+引理 _root_.函数.const_one
   结论: const α (1 : M) = 1
   证明: rfl
 -/
@@ -168,7 +168,7 @@ instance instMul
 
 中文:
 实例 instMul
-  签名: : Mul (对任意 i, M i) where mul f g i
+  签名: : 乘法 (对任意 i, M i) where mul f g i
   定义体: f i * g i
 
 @[to_additive (attr := simp)]
@@ -230,7 +230,7 @@ lemma _root_.Function.const_mul
 @[to_additive]
 
 中文:
-引理 _root_.Function.const_mul
+引理 _root_.函数.const_mul
   条件: (a b : M)
   结论: const ι a * const ι b = const ι (a * b)
   证明: rfl
@@ -275,7 +275,7 @@ instance instInv
 
 中文:
 实例 instInv
-  签名: : Inv (对任意 i, G i) where inv f i
+  签名: : 取逆 (对任意 i, G i) where inv f i
   定义体: (f i)⁻¹
 
 @[to_additive (attr := simp)]
@@ -337,7 +337,7 @@ lemma _root_.Function.const_inv
 @[to_additive]
 
 中文:
-引理 _root_.Function.const_inv
+引理 _root_.函数.const_inv
   条件: (a : G)
   结论: (const ι a)⁻¹ = const ι a⁻¹
   证明: rfl
@@ -381,7 +381,7 @@ instance instDiv
 
 中文:
 实例 instDiv
-  签名: : Div (对任意 i, G i) where div f g i
+  签名: : 除法 (对任意 i, G i) where div f g i
   定义体: f i / g i
 
 @[to_additive (attr := simp)]
@@ -463,7 +463,7 @@ lemma _root_.Function.const_div
   proof: rfl
 
 中文:
-引理 _root_.Function.const_div
+引理 _root_.函数.const_div
   条件: (a b : G)
   结论: const ι a / const ι b = const ι (a / b)
   证明: rfl
@@ -489,7 +489,7 @@ instance instPow
 
 中文:
 实例 instPow
-  签名: : Pow (对任意 i, M i) α where pow f a i
+  签名: : 幂 (对任意 i, M i) α where pow f a i
   定义体: f i ^ a
 
 @[to_additive (attr := simp, to_additive) (reorder := 5 6) smul_apply]
@@ -551,7 +551,7 @@ lemma _root_.Function.const_pow
 @[to_additive (attr := to_additive) (reorder := 6 7) smul_comp]
 
 中文:
-引理 _root_.Function.const_pow
+引理 _root_.函数.const_pow
   条件: (a : M) (b : α)
   结论: const ι a ^ b = const ι (a ^ b)
   证明: rfl
@@ -596,7 +596,7 @@ instance :
 
 中文:
 实例 :
-  签名: Star (对任意 i, R i)
+  签名: 对合 (对任意 i, R i)
   定义体: star (x i)
 
 @[simp]

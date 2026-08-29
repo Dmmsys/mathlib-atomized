@@ -44,7 +44,7 @@ definition sym2
 
 中文:
 定义 sym2
-  签名: : List α -> List (Sym2 α)
+  签名: : 列表 α -> 列表 (Sym2 α)
 -/
 protected def sym2 : List α -> List (Sym2 α)
   | [] => []
@@ -63,7 +63,7 @@ theorem sym2_map
 
 中文:
 定理 sym2_map
-  条件: (f : α -> β) (xs : List α)
+  条件: (f : α -> β) (xs : 列表 α)
   证明: by
   induction xs with
   | nil => simp [List.sym2]
@@ -91,7 +91,7 @@ theorem mem_sym2_cons_iff
 
 中文:
 定理 mem_sym2_cons_iff
-  条件: {x : α} {xs : List α} {z : Sym2 α}
+  条件: {x : α} {xs : 列表 α} {z : Sym2 α}
   证明: by
   simp only [List.sym2, map_cons, cons_append, mem_cons, mem_append, mem_map]
   simp only [eq_comm]
@@ -118,7 +118,7 @@ theorem sym2_eq_nil_iff
 
 中文:
 定理 sym2_eq_nil_iff
-  条件: {xs : List α}
+  条件: {xs : 列表 α}
   结论: xs.sym2 = [] ↔ xs = []
   证明: by
   cases xs <;> simp [List.sym2]
@@ -148,7 +148,7 @@ theorem left_mem_of_mk_mem_sym2
 
 中文:
 定理 left_mem_of_mk_mem_sym2
-  结论: {xs : List α} {a b : α}
+  结论: {xs : 列表 α} {a b : α}
   证明: by
   induction xs with
   | nil => exact (not_mem_nil h).elim
@@ -189,7 +189,7 @@ theorem right_mem_of_mk_mem_sym2
 
 中文:
 定理 right_mem_of_mk_mem_sym2
-  结论: {xs : List α} {a b : α}
+  结论: {xs : 列表 α} {a b : α}
   证明: by
   rw [Sym2.eq_swap] at h
   exact left_mem_of_mk_mem_sym2 h
@@ -216,7 +216,7 @@ theorem mk_mem_sym2
 
 中文:
 定理 mk_mem_sym2
-  条件: {xs : List α} {a b : α} (ha : a in xs) (hb : b in xs)
+  条件: {xs : 列表 α} {a b : α} (ha : a in xs) (hb : b in xs)
   证明: by
   induction xs with
   | nil => simp at ha
@@ -249,7 +249,7 @@ theorem mk_mem_sym2_iff
 
 中文:
 定理 mk_mem_sym2_iff
-  条件: {xs : List α} {a b : α}
+  条件: {xs : 列表 α} {a b : α}
   证明: by
   constructor
   · intro h
@@ -279,7 +279,7 @@ theorem mem_sym2_iff
 
 中文:
 定理 mem_sym2_iff
-  条件: {xs : List α} {z : Sym2 α}
+  条件: {xs : 列表 α} {z : Sym2 α}
   证明: by
   refine z.ind (fun a b => ?_)
   simp [mk_mem_sym2_iff]
@@ -303,7 +303,7 @@ lemma setOfPred_mem_sym2
 
 中文:
 引理 setOfPred_mem_sym2
-  条件: {xs : List α}
+  条件: {xs : 列表 α}
   证明: Set.ext fun z => z.ind fun a b => by simp [mk_mem_sym2_iff]
 
 @[deprecated (since := "2026-07-09")] alias setOf_mem_sym2 := setOfPred_mem_sym2
@@ -337,7 +337,7 @@ theorem Nodup.sym2
 
 中文:
 定理 Nodup.sym2
-  条件: {xs : List α} (h : xs.Nodup)
+  条件: {xs : 列表 α} (h : xs.Nodup)
   结论: xs.sym2.Nodup
   证明: by
   induction xs with
@@ -394,7 +394,7 @@ theorem map_mk_sublist_sym2
 
 中文:
 定理 map_mk_sublist_sym2
-  条件: (x : α) (xs : List α) (h : x in xs)
+  条件: (x : α) (xs : 列表 α) (h : x in xs)
   证明: by
   induction xs with
   | nil => simp
@@ -440,7 +440,7 @@ theorem map_mk_disjoint_sym2
 
 中文:
 定理 map_mk_disjoint_sym2
-  条件: (x : α) (xs : List α) (h : x ∉ xs)
+  条件: (x : α) (xs : 列表 α) (h : x ∉ xs)
   证明: by
   induction xs with
   | nil => simp
@@ -472,7 +472,7 @@ theorem dedup_sym2
 
 中文:
 定理 dedup_sym2
-  条件: [DecidableEq α] (xs : List α)
+  条件: [DecidableEq α] (xs : 列表 α)
   结论: xs.sym2.dedup = xs.dedup.sym2
   证明: by
   induction xs with
@@ -520,8 +520,8 @@ theorem Perm.sym2
     -- Explicit permutation to speed up
 
 中文:
-定理 Perm.sym2
-  条件: {xs ys : List α} (h : xs ~ ys)
+定理 置换.sym2
+  条件: {xs ys : 列表 α} (h : xs ~ ys)
   证明: by
   induction h with
   | nil => rfl
@@ -568,8 +568,8 @@ theorem Sublist.sym2
     exact cons_cons _ (append (Sublist.map _ h) ih)
 
 中文:
-定理 Sublist.sym2
-  条件: {xs ys : List α} (h : xs <+ ys)
+定理 子表.sym2
+  条件: {xs ys : 列表 α} (h : xs <+ ys)
   结论: xs.sym2 <+ ys.sym2
   证明: by
   induction h with
@@ -604,7 +604,7 @@ theorem Subperm.sym2
 
 中文:
 定理 Subperm.sym2
-  条件: {xs ys : List α} (h : xs <+~ ys)
+  条件: {xs ys : 列表 α} (h : xs <+~ ys)
   结论: xs.sym2 <+~ ys.sym2
   证明: by
   obtain ⟨xs', hx, h⟩ := h
@@ -629,7 +629,7 @@ theorem length_sym2
 
 中文:
 定理 length_sym2
-  条件: {xs : List α}
+  条件: {xs : 列表 α}
   结论: xs.sym2.length = 自然数.choose (xs.length + 1) 2
   证明: by
   induction xs with
@@ -658,7 +658,7 @@ definition sym
 
 中文:
 定义 sym
-  签名: : (n : 自然数) -> List α -> List (Sym α n)
+  签名: : (n : 自然数) -> 列表 α -> 列表 (Sym α n)
 -/
 protected def sym : (n : Nat) -> List α -> List (Sym α n)
   | 0, _ => [.nil]
@@ -744,7 +744,7 @@ theorem sym_map
 
 中文:
 定理 sym_map
-  条件: {β : 类型} (f : α -> β) (n : 自然数) (xs : List α)
+  条件: {β : 类型} (f : α -> β) (n : 自然数) (xs : 列表 α)
   证明: match n, xs with
   | 0, _ => by simp only [List.sym]; rfl
   | n + 1, [] => by simp [List.sym]
@@ -785,8 +785,8 @@ theorem Sublist.sym
     rw [List.sym]; rw [List.s
 
 中文:
-定理 Sublist.sym
-  条件: (n : 自然数) {xs ys : List α} (h : xs <+ ys)
+定理 子表.sym
+  条件: (n : 自然数) {xs ys : 列表 α} (h : xs <+ ys)
   结论: xs.sym n <+ ys.sym n
   证明: match n, h with
   | 0, _ => by simp [List.sym]
@@ -852,7 +852,7 @@ theorem mem_of_mem_of_mem_sym
 
 中文:
 定理 mem_of_mem_of_mem_sym
-  结论: {n : 自然数} {xs : List α} {a : α} {z : Sym α n}
+  结论: {n : 自然数} {xs : 列表 α} {a : α} {z : Sym α n}
   证明: match n, xs with
   | 0, xs => by
     cases Sym.eq_nil_of_card_zero z
@@ -895,7 +895,7 @@ theorem first_mem_of_cons_mem_sym
 
 中文:
 定理 first_mem_of_cons_mem_sym
-  结论: {xs : List α} {n : 自然数} {a : α} {z : Sym α n}
+  结论: {xs : 列表 α} {n : 自然数} {a : α} {z : Sym α n}
   证明: mem_of_mem_of_mem_sym (Sym.mem_cons_self a z) h
 
 Depends on / 依赖: Sym.mem_cons_self, mem_cons_self, mem_of_mem_of_mem_sym
@@ -925,7 +925,7 @@ theorem Nodup.sym
 
 中文:
 定理 Nodup.sym
-  条件: (n : 自然数) {xs : List α} (h : xs.Nodup)
+  条件: (n : 自然数) {xs : 列表 α} (h : xs.Nodup)
   结论: (xs.sym n).Nodup
   证明: match n, xs with
   | 0, _ => by simp [List.sym]
@@ -972,7 +972,7 @@ theorem length_sym
 
 中文:
 定理 length_sym
-  条件: {n : 自然数} {xs : List α}
+  条件: {n : 自然数} {xs : 列表 α}
   证明: match n, xs with
   | 0, _ => by rw [List.sym, Nat.multichoose]; rfl
   | n + 1, [] => by simp [List.sym]

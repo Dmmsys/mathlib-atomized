@@ -46,7 +46,7 @@ theorem not_isLocalRing_def
 
 中文:
 定理 not_isLocalRing_def
-  结论: {R : 类型} [Semiring R] {a b : R} (ha : ¬IsUnit a) (hb : ¬IsUnit b)
+  结论: {R : 类型} [半环 R] {a b : R} (ha : ¬是单位 a) (hb : ¬是单位 b)
   证明: fun _ => hb (isUnit_or_isUnit_of_add_one hab).resolve_left ha
 
 Depends on / 依赖: isUnit_or_isUnit_of_add_one, resolve_left
@@ -71,7 +71,7 @@ theorem not_isLocalRing_of_nontrivial_pi
 
 中文:
 定理 not_isLocalRing_of_nontrivial_pi
-  结论: {ι : 类型} [Nontrivial ι] (R : ι -> 类型)
+  结论: {ι : 类型} [非平凡 ι] (R : ι -> 类型)
   证明: by
   classical
   let ⟨i₁, i₂, hi⟩ := exists_pair_ne ι
@@ -106,7 +106,7 @@ theorem not_isLocalRing_of_prod_of_nontrivial
 
 中文:
 定理 not_isLocalRing_of_prod_of_nontrivial
-  结论: (R₁ R₂ : 类型) [Semiring R₁] [Semiring R₂]
+  结论: (R₁ R₂ : 类型) [半环 R₁] [半环 R₂]
   证明: have ha : ¬IsUnit ((1, 0) : R₁ × R₂) :=
     fun h => not_isUnit_zero (M₀ := R₁) (by simpa using h.map (RingHom.snd R₁ R₂))
   have hb : ¬IsUnit ((0, 1) : R₁ × R₂) :=
@@ -139,7 +139,7 @@ theorem not_isLocalRing_tfae
 
 中文:
 定理 not_isLocalRing_tfae
-  条件: {R : 类型} [CommSemiring R] [Nontrivial R]
+  条件: {R : 类型} [交换半环 R] [非平凡 R]
   证明: by
   tfae_have 1 -> 2
   | h => not_subsingleton_iff_nontrivial.mp fun _ => h of_singleton_maximalSpectrum
@@ -177,8 +177,8 @@ let f := e.toRingHom.comp Ideal.Quotient.mk (m₁ ⊓ m₂)
   use R
 
 中文:
-定理 exists_surjective_of_not_isLocalRing.{u}
-  结论: {R : 类型u} [CommRing R] [Nontrivial R]
+定理 存在_surjective_of_not_isLocalRing.{u}
+  结论: {R : 类型u} [交换环 R] [非平凡 R]
   证明: by
   /- get two different maximal ideals and project on the product of quotients -/
   obtain ⟨m₁, m₂, _, _, hm₁m₂⟩ := (not_isLocalRing_tfae.out 0 2).mp h

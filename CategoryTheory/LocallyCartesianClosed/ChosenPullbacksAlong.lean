@@ -99,7 +99,7 @@ definition ofHasPullbacksAlong
 
 中文:
 定义 ofHasPullbacksAlong
-  签名: {Y X : C} (f : Y ⟶ X) [HasPullbacksAlong f]
+  签名: {Y X : C} (f : Y ⟶ X) [有PullbacksAlong f]
   定义体: Over.pullback f
   mapPullbackAdj := Over.mapPullbackAdj f
 
@@ -404,7 +404,7 @@ definition cartesianMonoidalCategoryToUnit
 
 中文:
 定义 cartesianMonoidalCategoryToUnit
-  签名: [CartesianMonoidalCategory C] {X : C} (f : X ⟶ 𝟙_ C)
+  签名: [CartesianMonoidal范畴 C] {X : C} (f : X ⟶ 𝟙_ C)
   定义体: Over.mk (snd Y.left X)
   pullback.map {Y Z} g := Over.homMk (g.left ▷ X)
   mapPullbackAdj.unit.app T := Over.homMk (lift (𝟙 _) (T.hom))
@@ -436,7 +436,7 @@ definition cartesianMonoidalCategoryFst
 
 中文:
 定义 cartesianMonoidalCategoryFst
-  签名: [CartesianMonoidalCategory C] (X Y : C)
+  签名: [CartesianMonoidal范畴 C] (X Y : C)
   定义体: Over.mk (Z.hom ▷ Y)
   pullback.map g := Over.homMk (g.left ▷ Y)
   mapPullbackAdj.unit.app T := Over.homMk (lift (𝟙 _) (T.hom ≫ snd _ _))
@@ -468,7 +468,7 @@ definition cartesianMonoidalCategorySnd
 
 中文:
 定义 cartesianMonoidalCategorySnd
-  签名: [CartesianMonoidalCategory C] (X Y : C)
+  签名: [CartesianMonoidal范畴 C] (X Y : C)
   定义体: Over.mk (X ◁ Z.hom)
   pullback.map g := Over.homMk (X ◁ g.left)
   mapPullbackAdj.unit.app T := Over.homMk (lift (T.hom ≫ fst _ _) (𝟙 _))
@@ -945,7 +945,7 @@ theorem isPullback
 
 中文:
 定理 isPullback
-  结论: IsPullback (fst f g) (snd f g) f g where
+  结论: 是拉回 (fst f g) (snd f g) f g where
   证明: condition
   isLimit' := ⟨isLimitPullbackCone f g⟩
 
@@ -996,7 +996,7 @@ instance hasPullbackAlong
 
 中文:
 实例 hasPullbackAlong
-  签名: : HasPullbacksAlong g
+  签名: : 有PullbacksAlong g
   定义体: fun f => (isPullback f g).hasPullback
 
 Depends on / 依赖: hasPullback, isPullback

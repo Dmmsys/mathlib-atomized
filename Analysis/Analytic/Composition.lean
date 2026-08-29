@@ -108,7 +108,7 @@ definition applyComposition
 
 中文:
 定义 applyComposition
-  签名: (p : FormalMultilinearSeries 𝕜 E F) {n : 自然数} (c : Composition n)
+  签名: (p : FormalMultilinearSeries 𝕜 E F) {n : 自然数} (c : 余mposition n)
   定义体: fun v i => p (c.blocksFun i) (v ∘ c.embedding i)
 
 Depends on / 依赖: blocksFun, c.blocksFun, c.embedding, embedding
@@ -245,7 +245,7 @@ theorem applyComposition_update
 
 中文:
 定理 applyComposition_update
-  结论: (p : FormalMultilinearSeries 𝕜 E F) {n : 自然数} (c : Composition n)
+  结论: (p : FormalMultilinearSeries 𝕜 E F) {n : 自然数} (c : 余mposition n)
   证明: by
   ext k
   by_cases h : k = c.index j
@@ -324,7 +324,7 @@ theorem applyComposition_apply_prod
 
 中文:
 定理 applyComposition_apply_prod
-  结论: {H : 类型} [CommRing H] [Algebra 𝕜 H] [TopologicalSpace H]
+  结论: {H : 类型} [交换环 H] [代数 𝕜 H] [拓扑空间 H]
   证明: by
   rfl
 -/
@@ -358,7 +358,7 @@ continuous_pi fun _ => (coe_continuous _).comp continuous_pi fun
 
 中文:
 定义 compAlongComposition
-  签名: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : Composition n)
+  签名: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : 余mposition n)
   定义体: MultilinearMap.mk' (fun v => f (p.applyComposition c v))
       (fun v i x y => by simp only [applyComposition_update, map_update_add])
       (fun v i c x => by simp only [applyComposition_update, map_update_smul])
@@ -389,7 +389,7 @@ theorem compAlongComposition_apply
 
 中文:
 定理 compAlongComposition_apply
-  结论: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : Composition n)
+  结论: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : 余mposition n)
   证明: rfl
 -/
 theorem compAlongComposition_apply {n : Nat} (p : FormalMultilinearSeries 𝕜 E F) (c : Composition n)
@@ -654,7 +654,7 @@ theorem compAlongComposition_bound
 
 中文:
 定理 compAlongComposition_bound
-  结论: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : Composition n)
+  结论: {n : 自然数} (p : FormalMultilinearSeries 𝕜 E F) (c : 余mposition n)
   证明: calc
     ‖f.compAlongComposition p c v‖ = ‖f (p.applyComposition c v)‖ := rfl
     _ <= ‖f‖ * ∏ i, ‖p.applyComposition c v i‖ := ContinuousMultilinearMap.le_opNorm _ _
@@ -760,7 +760,7 @@ theorem id_apply_zero
 
 中文:
 定理 id_apply_zero
-  条件: (x : E) (v : Fin 0 -> E)
+  条件: (x : E) (v : 有限集 0 -> E)
   证明: rfl
 -/
 @[simp] theorem id_apply_zero (x : E) (v : Fin 0 -> E) :
@@ -779,7 +779,7 @@ theorem id_apply_one
 
 中文:
 定理 id_apply_one
-  条件: (x : E) (v : Fin 1 -> E)
+  条件: (x : E) (v : 有限集 1 -> E)
   结论: (FormalMultilinearSeries.id 𝕜 E x) 1 v = v 0
   证明: rfl
 -/
@@ -798,7 +798,7 @@ theorem id_apply_one'
 
 中文:
 定理 id_apply_one'
-  条件: (x : E) {n : 自然数} (h : n = 1) (v : Fin n -> E)
+  条件: (x : E) {n : 自然数} (h : n = 1) (v : 有限集 n -> E)
   证明: by
   subst n
   apply id_apply_one
@@ -928,7 +928,7 @@ theorem id_comp
 
 中文:
 定理 id_comp
-  条件: (p : FormalMultilinearSeries 𝕜 E F) (v0 : Fin 0 -> E)
+  条件: (p : FormalMultilinearSeries 𝕜 E F) (v0 : 有限集 0 -> E)
   证明: by
   ext1 n
   obtain rfl | n_pos := n.eq_zero_or_pos
@@ -981,7 +981,7 @@ theorem id_comp'
 
 中文:
 定理 id_comp'
-  条件: (p : FormalMultilinearSeries 𝕜 E F) (x : F) (v0 : Fin 0 -> E) (h : x = p 0 v0)
+  条件: (p : FormalMultilinearSeries 𝕜 E F) (x : F) (v0 : 有限集 0 -> E) (h : x = p 0 v0)
   证明: by
   simp [h]
 -/
@@ -1164,7 +1164,7 @@ theorem mem_compPartialSumSource_iff
 
 中文:
 定理 mem_compPartialSumSource_iff
-  条件: (m M N : 自然数) (i : Σ n, Fin n -> 自然数)
+  条件: (m M N : 自然数) (i : Σ n, 有限集 n -> 自然数)
   证明: by
   simp only [compPartialSumSource, Finset.mem_Ico, Fintype.mem_piFinset, Finset.mem_sigma]
 
@@ -1192,7 +1192,7 @@ definition compChangeOfVariables
 
 中文:
 定义 compChangeOfVariables
-  签名: (m M N : 自然数) (i : Σ n, Fin n -> 自然数) (hi : i in compPartialSumSource m M N)
+  签名: (m M N : 自然数) (i : Σ n, 有限集 n -> 自然数) (hi : i in compPartialSumSource m M N)
   定义体: by
   rcases i with ⟨n, f⟩
   rw [mem_compPartialSumSource_iff] at hi
@@ -1226,7 +1226,7 @@ theorem compChangeOfVariables_length
 
 中文:
 定理 compChangeOfVariables_length
-  结论: (m M N : 自然数) {i : Σ n, Fin n -> 自然数}
+  结论: (m M N : 自然数) {i : Σ n, 有限集 n -> 自然数}
   证明: by
   rcases i with ⟨k, blocks_fun⟩
   dsimp [compChangeOfVariables]
@@ -1254,7 +1254,7 @@ theorem compChangeOfVariables_blocksFun
 
 中文:
 定理 compChangeOfVariables_blocksFun
-  结论: (m M N : 自然数) {i : Σ n, Fin n -> 自然数}
+  结论: (m M N : 自然数) {i : Σ n, 有限集 n -> 自然数}
   证明: by
   rcases i with ⟨n, f⟩
   dsimp [Composition.blocksFun, Composition.blocks, compChangeOfVariables]
@@ -1371,7 +1371,7 @@ theorem mem_compPartialSumTarget_iff
 
 中文:
 定理 mem_compPartialSumTarget_iff
-  条件: {m M N : 自然数} {a : Σ n, Composition n}
+  条件: {m M N : 自然数} {a : Σ n, 余mposition n}
   证明: by
   simp [compPartialSumTarget, compPartialSumTargetSet]
 
@@ -1398,7 +1398,7 @@ theorem compChangeOfVariables_sum
 
 中文:
 定理 compChangeOfVariables_sum
-  结论: {α : 类型} [AddCommMonoid α] (m M N : 自然数)
+  结论: {α : 类型} [加法交换幺半群 α] (m M N : 自然数)
   证明: by
   apply Finset.sum_bij (compChangeOfVariables m M N)
   -- We should show that the correspondence we have set up is indeed a bijection
@@ -1740,7 +1740,7 @@ theorem AnalyticWithinAt.comp
 
 中文:
 定理 AnalyticWithinAt.comp
-  结论: {g : F -> G} {f : E -> F} {x : E} {t : Set F} {s : Set E}
+  结论: {g : F -> G} {f : E -> F} {x : E} {t : 集合 F} {s : 集合 E}
   证明: by
   let ⟨_q, hq⟩ := hg
   let ⟨_p, hp⟩ := hf
@@ -1767,7 +1767,7 @@ theorem AnalyticWithinAt.comp_of_eq
 
 中文:
 定理 AnalyticWithinAt.comp_of_eq
-  结论: {g : F -> G} {f : E -> F} {y : F} {x : E} {t : Set F} {s : Set E}
+  结论: {g : F -> G} {f : E -> F} {y : F} {x : E} {t : 集合 F} {s : 集合 E}
   证明: by
   rw [← hy] at hg
   exact hg.comp hf h
@@ -1791,7 +1791,7 @@ lemma AnalyticOn.comp
 
 中文:
 引理 AnalyticOn.comp
-  结论: {f : F -> G} {g : E -> F} {s : Set F}
+  结论: {f : F -> G} {g : E -> F} {s : 集合 F}
   证明: fun x m => (hf _ (h m)).comp (hg x m) h
 -/
 lemma AnalyticOn.comp {f : F -> G} {g : E -> F} {s : Set F}
@@ -1876,7 +1876,7 @@ theorem AnalyticAt.comp_analyticWithinAt
 
 中文:
 定理 AnalyticAt.comp_analyticWithinAt
-  结论: {g : F -> G} {f : E -> F} {x : E} {s : Set E}
+  结论: {g : F -> G} {f : E -> F} {x : E} {s : 集合 E}
   证明: by
   rw [← analyticWithinAt_univ] at hg
   exact hg.comp hf (Set.mapsTo_univ _ _)
@@ -1901,7 +1901,7 @@ theorem AnalyticAt.comp_analyticWithinAt_of_eq
 
 中文:
 定理 AnalyticAt.comp_analyticWithinAt_of_eq
-  结论: {g : F -> G} {f : E -> F} {x : E} {y : F} {s : Set E}
+  结论: {g : F -> G} {f : E -> F} {x : E} {y : F} {s : 集合 E}
   证明: by
   rw [← h] at hg
   exact hg.comp_analyticWithinAt hf
@@ -1924,7 +1924,7 @@ theorem AnalyticOnNhd.comp'
 
 中文:
 定理 AnalyticOnNhd.comp'
-  结论: {s : Set E} {g : F -> G} {f : E -> F} (hg : AnalyticOnNhd 𝕜 g (s.image f))
+  结论: {s : 集合 E} {g : F -> G} {f : E -> F} (hg : AnalyticOnNhd 𝕜 g (s.像 f))
   证明: fun z hz => (hg (f z) (Set.mem_image_of_mem f hz)).comp (hf z hz)
 
 Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem
@@ -1943,7 +1943,7 @@ theorem AnalyticOnNhd.comp
 
 中文:
 定理 AnalyticOnNhd.comp
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F}
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F}
   证明: comp' (mono hg (Set.mapsTo_iff_image_subset.mp st)) hf
 
 Depends on / 依赖: Set.mapsTo_iff_image_subset.mp, mapsTo_iff_image_subset
@@ -1963,7 +1963,7 @@ lemma AnalyticOnNhd.comp_analyticOn
 
 中文:
 引理 AnalyticOnNhd.comp_analyticOn
-  结论: {f : F -> G} {g : E -> F} {s : Set F}
+  结论: {f : F -> G} {g : E -> F} {s : 集合 F}
   证明: fun x m => (hf _ (h m)).comp_analyticWithinAt (hg x m)
 
 Depends on / 依赖: comp_analyticWithinAt
@@ -2107,7 +2107,7 @@ theorem CPolynomialOn.comp'
 
 中文:
 定理 CPolynomialOn.comp'
-  结论: {s : Set E} {g : F -> G} {f : E -> F} (hg : CPolynomialOn 𝕜 g (s.image f))
+  结论: {s : 集合 E} {g : F -> G} {f : E -> F} (hg : CPolynomialOn 𝕜 g (s.像 f))
   证明: fun z hz => (hg (f z) (Set.mem_image_of_mem f hz)).comp (hf z hz)
 
 Depends on / 依赖: Set.mem_image_of_mem, mem_image_of_mem
@@ -2126,7 +2126,7 @@ theorem CPolynomialOn.comp
 
 中文:
 定理 CPolynomialOn.comp
-  结论: {s : Set E} {t : Set F} {g : F -> G} {f : E -> F}
+  结论: {s : 集合 E} {t : 集合 F} {g : F -> G} {f : E -> F}
   证明: comp' (mono hg (Set.mapsTo_iff_image_subset.mp st)) hf
 
 Depends on / 依赖: Set.mapsTo_iff_image_subset.mp, mapsTo_iff_image_subset
@@ -2213,7 +2213,7 @@ theorem sigma_composition_eq_iff
 
 中文:
 定理 sigma_composition_eq_iff
-  条件: (i j : Σ a : Composition n, Composition a.length)
+  条件: (i j : Σ a : 余mposition n, 余mposition a.length)
   证明: by
   refine ⟨by rintro rfl; exact ⟨rfl, rfl⟩, ?_⟩
   rcases i with ⟨a, b⟩
@@ -2308,7 +2308,7 @@ definition gather
 
 中文:
 定义 gather
-  签名: (a : Composition n) (b : Composition a.length)
+  签名: (a : 余mposition n) (b : 余mposition a.length)
   定义体: (a.blocks.splitWrtComposition b).map sum
   blocks_pos := by
     rw [forall_mem_map]
@@ -2347,7 +2347,7 @@ theorem length_gather
 
 中文:
 定理 length_gather
-  条件: (a : Composition n) (b : Composition a.length)
+  条件: (a : 余mposition n) (b : 余mposition a.length)
   证明: show (map List.sum (a.blocks.splitWrtComposition b)).length = b.blocks.length by
     rw [length_map]; rw [length_splitWrtComposition]
 
@@ -2376,7 +2376,7 @@ definition sigmaCompositionAux
 
 中文:
 定义 sigmaCompositionAux
-  签名: (a : Composition n) (b : Composition a.length)
+  签名: (a : 余mposition n) (b : 余mposition a.length)
   定义体: (a.blocks.splitWrtComposition b)[i.val]'(by
       rw [length_splitWrtComposition]; rw [← length_gather]; exact i.2)
   blocks_pos {i} hi :=
@@ -2411,7 +2411,7 @@ theorem length_sigmaCompositionAux
 
 中文:
 定理 length_sigmaCompositionAux
-  结论: (a : Composition n) (b : Composition a.length)
+  结论: (a : 余mposition n) (b : 余mposition a.length)
   证明: show List.length ((splitWrtComposition a.blocks b)[i.1]) = blocksFun b i by
     rw [getElem_map_rev List.length]; rw [getElem_of_eq (map_length_splitWrtComposition _ _)]; rw [blocksFun]; rw [get_eq_getElem]
 
@@ -2436,7 +2436,7 @@ theorem blocksFun_sigmaCompositionAux
 
 中文:
 定理 blocksFun_sigmaCompositionAux
-  结论: (a : Composition n) (b : Composition a.length)
+  结论: (a : 余mposition n) (b : 余mposition a.length)
   证明: by
   unfold sigmaCompositionAux
   rw [blocksFun]; rw [get_eq_getElem]; rw [getElem_of_eq (getElem_splitWrtComposition _ _ _ _)]; rw [getElem_drop]; rw [getElem_take]; rfl
@@ -2471,7 +2471,7 @@ theorem sizeUpTo_sizeUpTo_add
 
 中文:
 定理 sizeUpTo_sizeUpTo_add
-  结论: (a : Composition n) (b : Composition a.length) {i j : 自然数}
+  结论: (a : 余mposition n) (b : 余mposition a.length) {i j : 自然数}
   证明: by
   induction j with
   | zero =>

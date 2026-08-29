@@ -28,8 +28,8 @@ instance PosSMulMono.nnrat_of_rat
     exact smul_le_smul_of_nonneg_left (α := Rat) ha hq
 
 中文:
-实例 PosSMulMono.nnrat_of_rat
-  签名: [Preorder α] [MulAction Rat α] [MulAction Rat>=0 α]
+实例 正标量乘递增.nnrat_of_rat
+  签名: [预序 α] [乘法作用 有理数 α] [乘法作用 有理数>=0 α]
   定义体: by
     rw [← NNRat.cast_smul_eq_nnqsmul Rat]; rw [← NNRat.cast_smul_eq_nnqsmul Rat]
     exact smul_le_smul_of_nonneg_left (α := Rat) ha hq
@@ -54,8 +54,8 @@ instance PosSMulStrictMono.nnrat_of_rat
     exact smul_lt_smul_of_pos_left (α := Rat) ha hq
 
 中文:
-实例 PosSMulStrictMono.nnrat_of_rat
-  签名: [Preorder α] [MulAction Rat>=0 α] [MulAction Rat α]
+实例 正标量乘严格递增.nnrat_of_rat
+  签名: [预序 α] [乘法作用 有理数>=0 α] [乘法作用 有理数 α]
   定义体: by
     rw [← NNRat.cast_smul_eq_nnqsmul Rat]; rw [← NNRat.cast_smul_eq_nnqsmul Rat]
     exact smul_lt_smul_of_pos_left (α := Rat) ha hq
@@ -84,7 +84,7 @@ lemma abs_nnqsmul
 
 中文:
 引理 abs_nnqsmul
-  条件: [DistribMulAction Rat>=0 α] [PosSMulMono Rat>=0 α] (q : Rat>=0) (a : α)
+  条件: [分配乘法作用 有理数>=0 α] [正标量乘递增 有理数>=0 α] (q : 有理数>=0) (a : α)
   证明: by
   obtain ha | ha := le_total a 0 <;>
     simp [*, abs_of_nonneg, abs_of_nonpos, smul_nonneg, smul_nonpos_of_nonneg_of_nonpos]
@@ -110,7 +110,7 @@ rw [NNRat.smul_def]; rw [NNRat.smul_def]; exact mul_lt_mul_of_pos_left hab NNRat
 
 中文:
 实例 LinearOrderedSemifield.toPosSMulStrictMono_rat
-  签名: : PosSMulStrictMono Rat>=0 α where
+  签名: : 正标量乘严格递增 有理数>=0 α where
   定义体: by
 rw [NNRat.smul_def]; rw [NNRat.smul_def]; exact mul_lt_mul_of_pos_left hab NNRat.cast_pos.2 hq
 
@@ -136,7 +136,7 @@ rw [Rat.smul_def]; rw [Rat.smul_def]; exact mul_lt_mul_of_pos_left hab Rat.cast_
 
 中文:
 实例 LinearOrderedField.toPosSMulStrictMono_rat
-  签名: : PosSMulStrictMono Rat α where
+  签名: : 正标量乘严格递增 有理数 α where
   定义体: by
 rw [Rat.smul_def]; rw [Rat.smul_def]; exact mul_lt_mul_of_pos_left hab Rat.cast_pos.2 hq
 

@@ -74,7 +74,7 @@ instance main_pair_coreflexive
 
 中文:
 实例 main_pair_coreflexive
-  签名: (A : adj.toComonad.Coalgebra)
+  签名: (A : adj.toComonad.余algebra)
   定义体: by
   apply IsCoreflexivePair.mk' (G.map (adj.counit.app _)) _ _
   · rw [← G.map_comp, ← G.map_id]
@@ -102,7 +102,7 @@ instance main_pair_F_cosplit
 
 中文:
 实例 main_pair_F_cosplit
-  签名: (A : adj.toComonad.Coalgebra)
+  签名: (A : adj.toComonad.余algebra)
   定义体: ⟨_, _, ⟨beckSplitEqualizer A⟩⟩
 
 Depends on / 依赖: beckSplitEqualizer
@@ -122,7 +122,7 @@ definition comparisonRightAdjointObj
 
 中文:
 定义 comparisonRightAdjointObj
-  签名: (A : adj.toComonad.Coalgebra)
+  签名: (A : adj.toComonad.余algebra)
   定义体: equalizer (G.map A.a) (adj.unit.app _)
 
 Depends on / 依赖: G.map, adj.unit.app, equalizer
@@ -152,7 +152,7 @@ definition comparisonRightAdjointHomEquiv
 
 中文:
 定义 comparisonRightAdjointHomEquiv
-  签名: (A : adj.toComonad.Coalgebra) (B : C)
+  签名: (A : adj.toComonad.余algebra) (B : C)
   定义体: by
         refine equalizer.lift (adj.homEquiv _ _ f.f) ?_
         simp only [Adjunction.toComonad_coe, Functor.comp_obj, Adjunction.homEquiv_unit,
@@ -290,7 +290,7 @@ definition counitFork
 
 中文:
 定义 counitFork
-  签名: (A : adj.toComonad.Coalgebra)
+  签名: (A : adj.toComonad.余algebra)
   定义体: Fork.ofι (F.map (equalizer.ι (G.map A.a) (adj.unit.app (G.obj A.A))))
     (by rw [← F.map_comp, equalizer.condition, F.map_comp])
 
@@ -315,7 +315,7 @@ theorem unitFork_ι
 
 中文:
 定理 unitFork_ι
-  结论: (A : adj.toComonad.Coalgebra)
+  结论: (A : adj.toComonad.余algebra)
   证明: rfl
 -/
 theorem unitFork_ι (A : adj.toComonad.Coalgebra)
@@ -384,7 +384,7 @@ definition counitLimitOfPreservesEqualizer
 
 中文:
 定义 counitLimitOfPreservesEqualizer
-  签名: (A : adj.toComonad.Coalgebra)
+  签名: (A : adj.toComonad.余algebra)
   定义体: isLimitOfHasEqualizerOfPreservesLimit F _ _
 -/
 def counitLimitOfPreservesEqualizer (A : adj.toComonad.Coalgebra)
@@ -497,7 +497,7 @@ definition createsFSplitEqualizersOfComonadic
 
 中文:
 定义 createsFSplitEqualizersOfComonadic
-  签名: [ComonadicLeftAdjoint F] ⦃A B⦄ (f g : A ⟶ B)
+  签名: [余monadicLeftAdjoint F] ⦃A B⦄ (f g : A ⟶ B)
   定义体: by
   apply +allowSynthFailures comonadicCreatesLimitOfPreservesLimit
   all_goals
@@ -527,7 +527,7 @@ class HasEqualizerOfIsCosplitPair
     - out : forall {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], HasEqualizer f g
 
 中文:
-类 HasEqualizerOfIsCosplitPair
+类 有EqualizerOfIsCosplitPair
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
     - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], HasEqualizer f g
@@ -545,7 +545,7 @@ instance [HasEqualizerOfIsCosplitPair
   body: fun _ => HasEqualizerOfIsCosplitPair.out F _ _
 
 中文:
-实例 [HasEqualizerOfIsCosplitPair
+实例 [有EqualizerOfIsCosplitPair
   签名: F] : 对任意 (A
   定义体: fun _ => HasEqualizerOfIsCosplitPair.out F _ _
 
@@ -566,10 +566,10 @@ class PreservesLimitOfIsCosplitPair
     - out : forall {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], PreservesLimit (parallelPair f g) F
 
 中文:
-类 PreservesLimitOfIsCosplitPair
+类 保持LimitOfIsCosplitPair
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], PreservesLimit (parallelPair f g) F
+    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], 保持极限 (parallelPair f g) F
 -/
 class PreservesLimitOfIsCosplitPair (F : C ⥤ D) where
   /-- If `f, g` is an `F`-cosplit pair, then `F` preserves limits of `parallelPair f g`. -/
@@ -587,7 +587,7 @@ instance [PreservesLimitOfIsCosplitPair
   body: fun _ => PreservesLimitOfIsCosplitPair.out _ _
 
 中文:
-实例 [PreservesLimitOfIsCosplitPair
+实例 [保持LimitOfIsCosplitPair
   签名: F] : 对任意 (A
   定义体: fun _ => PreservesLimitOfIsCosplitPair.out _ _
 
@@ -610,7 +610,7 @@ class ReflectsLimitOfIsCosplitPair
 类 ReflectsLimitOfIsCosplitPair
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], ReflectsLimit (parallelPair f g) F
+    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], 反映极限 (parallelPair f g) F
 -/
 class ReflectsLimitOfIsCosplitPair (F : C ⥤ D) where
   /-- If `f, g` is an `F`-cosplit pair, then `F` reflects limits for `parallelPair f g`. -/
@@ -661,7 +661,7 @@ definition comonadicOfHasPreservesReflectsFSplitEqualizers
 
 中文:
 定义 comonadicOfHasPreservesReflectsFSplitEqualizers
-  签名: [HasEqualizerOfIsCosplitPair F]
+  签名: [有EqualizerOfIsCosplitPair F]
   定义体: G
   adj := adj
   eqv := by
@@ -713,7 +713,7 @@ class CreatesLimitOfIsCosplitPair
 类 CreatesLimitOfIsCosplitPair
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], CreatesLimit (parallelPair f g) F
+    - out : 对任意 {A B} (f g : A ⟶ B) [F.IsCosplitPair f g], 创造极限 (parallelPair f g) F
 
 Depends on / 依赖: Limits, Limits.Types.limit_ext, limit_ext
 -/
@@ -801,7 +801,7 @@ definition comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms
 
 中文:
 定义 comonadicOfHasPreservesFSplitEqualizersOfReflectsIsomorphisms
-  签名: [F.ReflectsIsomorphisms]
+  签名: [F.反映同构]
   定义体: by
   have : ReflectsLimitOfIsCosplitPair F := ⟨fun f g _ => by
     have := HasEqualizerOfIsCosplitPair.out F f g
@@ -834,10 +834,10 @@ class PreservesLimitOfIsCoreflexivePair
     - out : forall ⦃A B⦄ (f g : A ⟶ B) [IsCoreflexivePair f g], PreservesLimit (parallelPair f g) F
 
 中文:
-类 PreservesLimitOfIsCoreflexivePair
+类 保持LimitOfIsCoreflexivePair
   参数: (F : C ⥤ D)
   公理与运算 (1 个):
-    - out : 对任意 ⦃A B⦄ (f g : A ⟶ B) [IsCoreflexivePair f g], PreservesLimit (parallelPair f g) F
+    - out : 对任意 ⦃A B⦄ (f g : A ⟶ B) [是余reflexivePair f g], 保持极限 (parallelPair f g) F
 -/
 class PreservesLimitOfIsCoreflexivePair (F : C ⥤ D) where
   /-- `f, g` is a coreflexive pair, then `F` preserves limits of `parallelPair f g`. -/
@@ -855,8 +855,8 @@ instance [PreservesLimitOfIsCoreflexivePair
   body: fun _ => PreservesLimitOfIsCoreflexivePair.out _ _
 
 中文:
-实例 [PreservesLimitOfIsCoreflexivePair
-  签名: F] : 对任意 X : Coalgebra adj.toComonad,
+实例 [保持LimitOfIsCoreflexivePair
+  签名: F] : 对任意 X : 余algebra adj.toComonad,
   定义体: fun _ => PreservesLimitOfIsCoreflexivePair.out _ _
 
 Depends on / 依赖: PreservesLimitOfIsCoreflexivePair, PreservesLimitOfIsCoreflexivePair.out

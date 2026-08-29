@@ -238,7 +238,7 @@ definition natTransOpCyclesToCycles
 
 中文:
 定义 natTransOpCyclesToCycles
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: K.opcyclesToCycles i j
 
 Depends on / 依赖: K.opcyclesToCycles, opcyclesToCycles
@@ -268,7 +268,7 @@ definition composableArrows₃
 
 中文:
 定义 composableArrows₃
-  签名: [K.HasHomology i] [K.HasHomology j]
+  签名: [K.有同调 i] [K.有同调 j]
   定义体: ComposableArrows.mk₃ (K.homologyι i) (K.opcyclesToCycles i j) (K.homologyπ j)
 
 Depends on / 依赖: ComposableArrows, ComposableArrows.mk, K.homology, K.opcyclesToCycles, opcyclesToCycles
@@ -290,8 +290,8 @@ instance [K.HasHomology
   infer_instance
 
 中文:
-实例 [K.HasHomology
-  签名: i] [K.HasHomology j] :
+实例 [K.有同调
+  签名: i] [K.有同调 j] :
   定义体: by
   dsimp
   infer_instance
@@ -319,8 +319,8 @@ instance [K.HasHomology
 include hij in
 
 中文:
-实例 [K.HasHomology
-  签名: i] [K.HasHomology j] :
+实例 [K.有同调
+  签名: i] [K.有同调 j] :
   定义体: by
   -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
   dsimp [-Fin.reduceFinMk]
@@ -353,7 +353,7 @@ lemma composableArrows₃_exact
 
 中文:
 引理 composableArrows₃_exact
-  条件: [CategoryWithHomology C]
+  条件: [带同调范畴 C]
   证明: by
   let S := ShortComplex.mk (K.homologyι i) (K.opcyclesToCycles i j) (by simp)
   let S' := ShortComplex.mk (K.homologyι i) (K.fromOpcycles i j) (by simp)
@@ -412,7 +412,7 @@ definition composableArrows₃Functor
 
 中文:
 定义 composableArrows₃Functor
-  签名: [CategoryWithHomology C]
+  签名: [带同调范畴 C]
   定义体: composableArrows₃ K i j
   map {K L} φ := ComposableArrows.homMk₃ (homologyMap φ i) (opcyclesMap φ i) (cyclesMap φ j)
     -- Disable `Fin.reduceFinMk`, otherwise `Precomp.obj_succ` does not fire. (https://github.com/leanprover-community/mathlib4/issues/27382)
@@ -451,7 +451,7 @@ lemma opcycles_right_exact
 
 中文:
 引理 opcycles_right_exact
-  结论: (S : ShortComplex (HomologicalComplex C c)) (hS : S.Exact) [Epi S.g]
+  结论: (S : 短复形 (同调复形 C c)) (hS : S.正合) [满态射 S.g]
   证明: by
   have : Epi (ShortComplex.map S (eval C c i)).g := by dsimp; infer_instance
   have hj := (hS.map (HomologicalComplex.eval C c i)).gIsCokernel
@@ -498,7 +498,7 @@ lemma cycles_left_exact
 
 中文:
 引理 cycles_left_exact
-  结论: (S : ShortComplex (HomologicalComplex C c)) (hS : S.Exact) [Mono S.f]
+  结论: (S : 短复形 (同调复形 C c)) (hS : S.正合) [单态射 S.f]
   证明: by
   have : Mono (ShortComplex.map S (eval C c i)).f := by dsimp; infer_instance
   have hi := (hS.map (HomologicalComplex.eval C c i)).fIsKernel
@@ -554,7 +554,7 @@ definition snakeInput
 
 中文:
 定义 snakeInput
-  签名: (hS : S.ShortExact) (i j : ι) (hij : c.Rel i j)
+  签名: (hS : S.短正合) (i j : ι) (hij : c.关系 i j)
   定义体: (homologyFunctor C c i).mapShortComplex.obj S
   L₁ := (opcyclesFunctor C c i).mapShortComplex.obj S
   L₂ := (cyclesFunctor C c j).mapShortComplex.obj S
@@ -650,7 +650,7 @@ lemma δ_comp
 
 中文:
 引理 δ_comp
-  结论: hS.δ i j hij ≫ HomologicalComplex.homologyMap S.f j = 0
+  结论: hS.δ i j hij ≫ 同调复形.homologyMap S.f j = 0
   证明: (snakeInput hS i j hij).δ_L₃_f
 
 @[reassoc (attr := simp)]
@@ -671,7 +671,7 @@ lemma comp_δ
 
 中文:
 引理 comp_δ
-  结论: HomologicalComplex.homologyMap S.g i ≫ hS.δ i j hij = 0
+  结论: 同调复形.homologyMap S.g i ≫ hS.δ i j hij = 0
   证明: (snakeInput hS i j hij).L₀_g_δ
 
 Depends on / 依赖: infer_instance, karoubi, snakeInput
@@ -689,7 +689,7 @@ lemma homology_exact₁
 
 中文:
 引理 homology_exact₁
-  结论: (ShortComplex.mk _ _ (δ_comp hS i j hij)).Exact
+  结论: (短复形.mk _ _ (δ_comp hS i j hij)).正合
   证明: (snakeInput hS i j hij).L₂'_exact
 
 Depends on / 依赖: NatTrans, NatTrans.retractArrowApp, X.retract, _exact, epimorphisms, epimorphisms.infer_property, infer_property, karoubi, of_retract, retract, retractArrowApp, snakeInput
@@ -715,7 +715,7 @@ lemma homology_exact₂
 
 中文:
 引理 homology_exact₂
-  结论: (ShortComplex.mk (HomologicalComplex.homologyMap S.f i)
+  结论: (短复形.mk (同调复形.homologyMap S.f i)
   证明: by
   by_cases h : c.Rel i (c.next i)
   · exact (snakeInput hS i _ h).L₀_exact
@@ -750,7 +750,7 @@ lemma homology_exact₃
 
 中文:
 引理 homology_exact₃
-  结论: (ShortComplex.mk _ _ (comp_δ hS i j hij)).Exact
+  结论: (短复形.mk _ _ (comp_δ hS i j hij)).正合
   证明: (snakeInput hS i j hij).L₁'_exact
 
 Depends on / 依赖: _exact, snakeInput
@@ -836,8 +836,8 @@ theorem mono_δ
 
 中文:
 定理 mono_δ
-  条件: (hi : IsZero (S.X₂.homology i))
-  结论: Mono (hS.δ i j hij)
+  条件: (hi : 是零 (S.X₂.homology i))
+  结论: 单态射 (hS.δ i j hij)
   证明: (HomologicalComplex.HomologySequence.snakeInput _ _ _ _).mono_δ hi
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.HomologySequence.snakeInput, HomologySequence, snakeInput
@@ -856,8 +856,8 @@ theorem epi_δ
 
 中文:
 定理 epi_δ
-  条件: (hj : IsZero (S.X₂.homology j))
-  结论: Epi (hS.δ i j hij)
+  条件: (hj : 是零 (S.X₂.homology j))
+  结论: 满态射 (hS.δ i j hij)
   证明: (HomologicalComplex.HomologySequence.snakeInput _ _ _ _).epi_δ hj
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.HomologySequence.snakeInput, HomologySequence, snakeInput
@@ -875,7 +875,7 @@ theorem isIso_δ
 
 中文:
 定理 isIso_δ
-  条件: (hi : IsZero (S.X₂.homology i)) (hj : IsZero (S.X₂.homology j))
+  条件: (hi : 是零 (S.X₂.homology i)) (hj : 是零 (S.X₂.homology j))
   证明: (HomologicalComplex.HomologySequence.snakeInput _ _ _ _).isIso_δ hi hj
 
 Depends on / 依赖: HomologicalComplex, HomologicalComplex.HomologySequence.snakeInput, HomologySequence, snakeInput
@@ -894,7 +894,7 @@ definition δIso
 
 中文:
 定义 δIso
-  签名: (hi : IsZero (S.X₂.homology i)) (hj : IsZero (S.X₂.homology j))
+  签名: (hi : 是零 (S.X₂.homology i)) (hj : 是零 (S.X₂.homology j))
   定义体: @asIso _ _ _ _ (hS.δ i j hij) (hS.isIso_δ i j hij hi hj)
 
 Depends on / 依赖: hS.isIso_

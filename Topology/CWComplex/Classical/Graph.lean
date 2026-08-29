@@ -45,7 +45,7 @@ definition CWComplex.OneSkeletonGraph
 
 中文:
 定义 CWComplex.OneSkeletonGraph
-  签名: (C : Set X) [CWComplex C]
+  签名: (C : 集合 X) [CWComplex C]
   定义体: univ
   edgeSet := univ
   IsLink e x y := cellFrontier 1 e = closedCell 0 x union closedCell 0 y
@@ -108,7 +108,7 @@ lemma exists_isLoopAt_iff
   rw [union_self]
 
 中文:
-引理 exists_isLoopAt_iff
+引理 存在_isLoopAt_iff
   条件: (e : cell C 1)
   结论: (存在 x : cell C 0, (OneSkeletonGraph C).IsLoopAt e x) ↔
   证明: by
@@ -138,7 +138,7 @@ lemma exists_isLoopAt_iff_subsingleton
 obtain rfl : x = y := RelCWComplex.injective_map_zero C (hxy ▸ h) (b
 
 中文:
-引理 exists_isLoopAt_iff_subsingleton
+引理 存在_isLoopAt_iff_subsingleton
   条件: (e : cell C 1)
   证明: by
   rw [exists_isLoopAt_iff]
@@ -169,7 +169,7 @@ lemma not_exists_isLoopAt_iff_nontrivial
 @[simp]
 
 中文:
-引理 not_exists_isLoopAt_iff_nontrivial
+引理 not_存在_isLoopAt_iff_nontrivial
   条件: (e : cell C 1)
   证明: (exists_isLoopAt_iff_subsingleton e).not.trans not_subsingleton_iff
 
@@ -194,7 +194,7 @@ lemma adj_iff
 中文:
 引理 adj_iff
   条件: (x y : cell C 0)
-  结论: (OneSkeletonGraph C).Adj x y ↔
+  结论: (OneSkeletonGraph C).伴随 x y ↔
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl

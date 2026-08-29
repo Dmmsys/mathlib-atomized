@@ -57,7 +57,7 @@ lemma δ₀Iter_apply
 
 中文:
 引理 δ₀Iter_apply
-  条件: (i : 自然数) {n m : 自然数} (j : Fin (n + 1)) (hi : n + i = m := by lia)
+  条件: (i : 自然数) {n m : 自然数} (j : 有限集 (n + 1)) (hi : n + i = m := by lia)
   证明: rfl
 
 @[simp]
@@ -180,7 +180,7 @@ lemma δ₀Iter_δ
 
 中文:
 引理 δ₀Iter_δ
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 2))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 2))
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   ext
@@ -219,7 +219,7 @@ lemma δ₀Iter_δ'
 
 中文:
 引理 δ₀Iter_δ'
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数}
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数}
   证明: by
   induction j generalizing n m with
   | zero =>
@@ -262,7 +262,7 @@ lemma δ₀Iter_σ
 
 中文:
 引理 δ₀Iter_σ
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1))
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   ext
@@ -304,7 +304,7 @@ lemma δ₀Iter_σ'
 
 中文:
 引理 δ₀Iter_σ'
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1))
   证明: by
   induction i generalizing n m with
   | zero =>
@@ -628,7 +628,7 @@ lemma δ_σ₀Iter
 
 中文:
 引理 δ_σ₀Iter
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数} (h : m + (j + 1) = n + 1 := by lia)
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数} (h : m + (j + 1) = n + 1 := by lia)
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   ext
@@ -679,7 +679,7 @@ lemma δ_σ₀Iter'
 
 中文:
 引理 δ_σ₀Iter'
-  结论: {n : 自然数} (i : Fin (n + 2)) (j : 自然数) {m : 自然数}
+  结论: {n : 自然数} (i : 有限集 (n + 2)) (j : 自然数) {m : 自然数}
   证明: by
   induction j generalizing n m with
   | zero =>
@@ -726,7 +726,7 @@ lemma σ_σ₀Iter
 
 中文:
 引理 σ_σ₀Iter
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1)) (hi : n + i = m := by lia)
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1)) (hi : n + i = m := by lia)
   证明: by
   refine ConcreteCategory.hom_ext _ _ (fun k => ?_)
   ext
@@ -777,7 +777,7 @@ lemma σ_σ₀Iter'
 
 中文:
 引理 σ_σ₀Iter'
-  结论: (i : 自然数) {n m : 自然数} (j : Fin (m + 1)) (j' : Fin (n + 1))
+  结论: (i : 自然数) {n m : 自然数} (j : 有限集 (m + 1)) (j' : 有限集 (n + 1))
   证明: by
   induction i generalizing n m with
   | zero =>

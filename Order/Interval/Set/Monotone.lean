@@ -35,7 +35,7 @@ theorem antitone_Ici
 
 中文:
 定理 antitone_Ici
-  结论: Antitone (Ici : α -> Set α)
+  结论: 递减 (左闭右无界区间 : α -> 集合 α)
   证明: fun _ _ => Ici_subset_Ici.2
 
 Depends on / 依赖: Ici_subset_Ici
@@ -52,7 +52,7 @@ theorem monotone_Iic
 
 中文:
 定理 monotone_Iic
-  结论: Monotone (Iic : α -> Set α)
+  结论: 递增 (左无界右闭区间 : α -> 集合 α)
   证明: fun _ _ => Iic_subset_Iic.2
 
 Depends on / 依赖: Iic_subset_Iic
@@ -69,7 +69,7 @@ theorem antitone_Ioi
 
 中文:
 定理 antitone_Ioi
-  结论: Antitone (Ioi : α -> Set α)
+  结论: 递减 (左开右无界区间 : α -> 集合 α)
   证明: fun _ _ => Ioi_subset_Ioi
 
 Depends on / 依赖: Ioi_subset_Ioi
@@ -86,7 +86,7 @@ theorem monotone_Iio
 
 中文:
 定理 monotone_Iio
-  结论: Monotone (Iio : α -> Set α)
+  结论: 递增 (左无界右开区间 : α -> 集合 α)
   证明: fun _ _ => Iio_subset_Iio
 
 Depends on / 依赖: Iio_subset_Iio
@@ -103,9 +103,9 @@ theorem Monotone.Ici
   proof: antitone_Ici.comp_monotone hf
 
 中文:
-定理 Monotone.Ici
-  条件: (hf : Monotone f)
-  结论: Antitone fun x => Ici (f x)
+定理 递增.左闭右无界区间
+  条件: (hf : 递增 f)
+  结论: 递减 fun x => 左闭右无界区间 (f x)
   证明: antitone_Ici.comp_monotone hf
 -/
 protected theorem Monotone.Ici (hf : Monotone f) : Antitone fun x => Ici (f x) :=
@@ -121,9 +121,9 @@ theorem MonotoneOn.Ici
   proof: antitone_Ici.comp_monotoneOn hf
 
 中文:
-定理 MonotoneOn.Ici
+定理 MonotoneOn.左闭右无界区间
   条件: (hf : MonotoneOn f s)
-  结论: AntitoneOn (fun x => Ici (f x)) s
+  结论: AntitoneOn (fun x => 左闭右无界区间 (f x)) s
   证明: antitone_Ici.comp_monotoneOn hf
 -/
 protected theorem MonotoneOn.Ici (hf : MonotoneOn f s) : AntitoneOn (fun x => Ici (f x)) s :=
@@ -139,9 +139,9 @@ theorem Antitone.Ici
   proof: antitone_Ici.comp hf
 
 中文:
-定理 Antitone.Ici
-  条件: (hf : Antitone f)
-  结论: Monotone fun x => Ici (f x)
+定理 递减.左闭右无界区间
+  条件: (hf : 递减 f)
+  结论: 递增 fun x => 左闭右无界区间 (f x)
   证明: antitone_Ici.comp hf
 -/
 protected theorem Antitone.Ici (hf : Antitone f) : Monotone fun x => Ici (f x) :=
@@ -157,9 +157,9 @@ theorem AntitoneOn.Ici
   proof: antitone_Ici.comp_antitoneOn hf
 
 中文:
-定理 AntitoneOn.Ici
+定理 AntitoneOn.左闭右无界区间
   条件: (hf : AntitoneOn f s)
-  结论: MonotoneOn (fun x => Ici (f x)) s
+  结论: MonotoneOn (fun x => 左闭右无界区间 (f x)) s
   证明: antitone_Ici.comp_antitoneOn hf
 -/
 protected theorem AntitoneOn.Ici (hf : AntitoneOn f s) : MonotoneOn (fun x => Ici (f x)) s :=
@@ -175,9 +175,9 @@ theorem Monotone.Iic
   proof: monotone_Iic.comp hf
 
 中文:
-定理 Monotone.Iic
-  条件: (hf : Monotone f)
-  结论: Monotone fun x => Iic (f x)
+定理 递增.左无界右闭区间
+  条件: (hf : 递增 f)
+  结论: 递增 fun x => 左无界右闭区间 (f x)
   证明: monotone_Iic.comp hf
 -/
 protected theorem Monotone.Iic (hf : Monotone f) : Monotone fun x => Iic (f x) :=
@@ -193,9 +193,9 @@ theorem MonotoneOn.Iic
   proof: monotone_Iic.comp_monotoneOn hf
 
 中文:
-定理 MonotoneOn.Iic
+定理 MonotoneOn.左无界右闭区间
   条件: (hf : MonotoneOn f s)
-  结论: MonotoneOn (fun x => Iic (f x)) s
+  结论: MonotoneOn (fun x => 左无界右闭区间 (f x)) s
   证明: monotone_Iic.comp_monotoneOn hf
 -/
 protected theorem MonotoneOn.Iic (hf : MonotoneOn f s) : MonotoneOn (fun x => Iic (f x)) s :=
@@ -211,9 +211,9 @@ theorem Antitone.Iic
   proof: monotone_Iic.comp_antitone hf
 
 中文:
-定理 Antitone.Iic
-  条件: (hf : Antitone f)
-  结论: Antitone fun x => Iic (f x)
+定理 递减.左无界右闭区间
+  条件: (hf : 递减 f)
+  结论: 递减 fun x => 左无界右闭区间 (f x)
   证明: monotone_Iic.comp_antitone hf
 -/
 protected theorem Antitone.Iic (hf : Antitone f) : Antitone fun x => Iic (f x) :=
@@ -229,9 +229,9 @@ theorem AntitoneOn.Iic
   proof: monotone_Iic.comp_antitoneOn hf
 
 中文:
-定理 AntitoneOn.Iic
+定理 AntitoneOn.左无界右闭区间
   条件: (hf : AntitoneOn f s)
-  结论: AntitoneOn (fun x => Iic (f x)) s
+  结论: AntitoneOn (fun x => 左无界右闭区间 (f x)) s
   证明: monotone_Iic.comp_antitoneOn hf
 -/
 protected theorem AntitoneOn.Iic (hf : AntitoneOn f s) : AntitoneOn (fun x => Iic (f x)) s :=
@@ -247,9 +247,9 @@ theorem Monotone.Ioi
   proof: antitone_Ioi.comp_monotone hf
 
 中文:
-定理 Monotone.Ioi
-  条件: (hf : Monotone f)
-  结论: Antitone fun x => Ioi (f x)
+定理 递增.左开右无界区间
+  条件: (hf : 递增 f)
+  结论: 递减 fun x => 左开右无界区间 (f x)
   证明: antitone_Ioi.comp_monotone hf
 -/
 protected theorem Monotone.Ioi (hf : Monotone f) : Antitone fun x => Ioi (f x) :=
@@ -265,9 +265,9 @@ theorem MonotoneOn.Ioi
   proof: antitone_Ioi.comp_monotoneOn hf
 
 中文:
-定理 MonotoneOn.Ioi
+定理 MonotoneOn.左开右无界区间
   条件: (hf : MonotoneOn f s)
-  结论: AntitoneOn (fun x => Ioi (f x)) s
+  结论: AntitoneOn (fun x => 左开右无界区间 (f x)) s
   证明: antitone_Ioi.comp_monotoneOn hf
 -/
 protected theorem MonotoneOn.Ioi (hf : MonotoneOn f s) : AntitoneOn (fun x => Ioi (f x)) s :=
@@ -283,9 +283,9 @@ theorem Antitone.Ioi
   proof: antitone_Ioi.comp hf
 
 中文:
-定理 Antitone.Ioi
-  条件: (hf : Antitone f)
-  结论: Monotone fun x => Ioi (f x)
+定理 递减.左开右无界区间
+  条件: (hf : 递减 f)
+  结论: 递增 fun x => 左开右无界区间 (f x)
   证明: antitone_Ioi.comp hf
 -/
 protected theorem Antitone.Ioi (hf : Antitone f) : Monotone fun x => Ioi (f x) :=
@@ -301,9 +301,9 @@ theorem AntitoneOn.Ioi
   proof: antitone_Ioi.comp_antitoneOn hf
 
 中文:
-定理 AntitoneOn.Ioi
+定理 AntitoneOn.左开右无界区间
   条件: (hf : AntitoneOn f s)
-  结论: MonotoneOn (fun x => Ioi (f x)) s
+  结论: MonotoneOn (fun x => 左开右无界区间 (f x)) s
   证明: antitone_Ioi.comp_antitoneOn hf
 -/
 protected theorem AntitoneOn.Ioi (hf : AntitoneOn f s) : MonotoneOn (fun x => Ioi (f x)) s :=
@@ -319,9 +319,9 @@ theorem Monotone.Iio
   proof: monotone_Iio.comp hf
 
 中文:
-定理 Monotone.Iio
-  条件: (hf : Monotone f)
-  结论: Monotone fun x => Iio (f x)
+定理 递增.左无界右开区间
+  条件: (hf : 递增 f)
+  结论: 递增 fun x => 左无界右开区间 (f x)
   证明: monotone_Iio.comp hf
 -/
 protected theorem Monotone.Iio (hf : Monotone f) : Monotone fun x => Iio (f x) :=
@@ -337,9 +337,9 @@ theorem MonotoneOn.Iio
   proof: monotone_Iio.comp_monotoneOn hf
 
 中文:
-定理 MonotoneOn.Iio
+定理 MonotoneOn.左无界右开区间
   条件: (hf : MonotoneOn f s)
-  结论: MonotoneOn (fun x => Iio (f x)) s
+  结论: MonotoneOn (fun x => 左无界右开区间 (f x)) s
   证明: monotone_Iio.comp_monotoneOn hf
 -/
 protected theorem MonotoneOn.Iio (hf : MonotoneOn f s) : MonotoneOn (fun x => Iio (f x)) s :=
@@ -355,9 +355,9 @@ theorem Antitone.Iio
   proof: monotone_Iio.comp_antitone hf
 
 中文:
-定理 Antitone.Iio
-  条件: (hf : Antitone f)
-  结论: Antitone fun x => Iio (f x)
+定理 递减.左无界右开区间
+  条件: (hf : 递减 f)
+  结论: 递减 fun x => 左无界右开区间 (f x)
   证明: monotone_Iio.comp_antitone hf
 -/
 protected theorem Antitone.Iio (hf : Antitone f) : Antitone fun x => Iio (f x) :=
@@ -373,9 +373,9 @@ theorem AntitoneOn.Iio
   proof: monotone_Iio.comp_antitoneOn hf
 
 中文:
-定理 AntitoneOn.Iio
+定理 AntitoneOn.左无界右开区间
   条件: (hf : AntitoneOn f s)
-  结论: AntitoneOn (fun x => Iio (f x)) s
+  结论: AntitoneOn (fun x => 左无界右开区间 (f x)) s
   证明: monotone_Iio.comp_antitoneOn hf
 -/
 protected theorem AntitoneOn.Iio (hf : AntitoneOn f s) : AntitoneOn (fun x => Iio (f x)) s :=
@@ -390,8 +390,8 @@ theorem Monotone.Icc
   proof: hf.Ici.inter hg.Iic
 
 中文:
-定理 Monotone.Icc
-  条件: (hf : Monotone f) (hg : Antitone g)
+定理 递增.闭区间
+  条件: (hf : 递增 f) (hg : 递减 g)
   证明: hf.Ici.inter hg.Iic
 -/
 protected theorem Monotone.Icc (hf : Monotone f) (hg : Antitone g) :
@@ -407,7 +407,7 @@ theorem MonotoneOn.Icc
   proof: hf.Ici.inter hg.Iic
 
 中文:
-定理 MonotoneOn.Icc
+定理 MonotoneOn.闭区间
   条件: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
   证明: hf.Ici.inter hg.Iic
 -/
@@ -424,8 +424,8 @@ theorem Antitone.Icc
   proof: hf.Ici.inter hg.Iic
 
 中文:
-定理 Antitone.Icc
-  条件: (hf : Antitone f) (hg : Monotone g)
+定理 递减.闭区间
+  条件: (hf : 递减 f) (hg : 递增 g)
   证明: hf.Ici.inter hg.Iic
 -/
 protected theorem Antitone.Icc (hf : Antitone f) (hg : Monotone g) :
@@ -441,7 +441,7 @@ theorem AntitoneOn.Icc
   proof: hf.Ici.inter hg.Iic
 
 中文:
-定理 AntitoneOn.Icc
+定理 AntitoneOn.闭区间
   条件: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
   证明: hf.Ici.inter hg.Iic
 -/
@@ -458,8 +458,8 @@ theorem Monotone.Ico
   proof: hf.Ici.inter hg.Iio
 
 中文:
-定理 Monotone.Ico
-  条件: (hf : Monotone f) (hg : Antitone g)
+定理 递增.左闭右开区间
+  条件: (hf : 递增 f) (hg : 递减 g)
   证明: hf.Ici.inter hg.Iio
 -/
 protected theorem Monotone.Ico (hf : Monotone f) (hg : Antitone g) :
@@ -475,7 +475,7 @@ theorem MonotoneOn.Ico
   proof: hf.Ici.inter hg.Iio
 
 中文:
-定理 MonotoneOn.Ico
+定理 MonotoneOn.左闭右开区间
   条件: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
   证明: hf.Ici.inter hg.Iio
 -/
@@ -492,8 +492,8 @@ theorem Antitone.Ico
   proof: hf.Ici.inter hg.Iio
 
 中文:
-定理 Antitone.Ico
-  条件: (hf : Antitone f) (hg : Monotone g)
+定理 递减.左闭右开区间
+  条件: (hf : 递减 f) (hg : 递增 g)
   证明: hf.Ici.inter hg.Iio
 -/
 protected theorem Antitone.Ico (hf : Antitone f) (hg : Monotone g) :
@@ -509,7 +509,7 @@ theorem AntitoneOn.Ico
   proof: hf.Ici.inter hg.Iio
 
 中文:
-定理 AntitoneOn.Ico
+定理 AntitoneOn.左闭右开区间
   条件: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
   证明: hf.Ici.inter hg.Iio
 -/
@@ -526,8 +526,8 @@ theorem Monotone.Ioc
   proof: hf.Ioi.inter hg.Iic
 
 中文:
-定理 Monotone.Ioc
-  条件: (hf : Monotone f) (hg : Antitone g)
+定理 递增.左开右闭区间
+  条件: (hf : 递增 f) (hg : 递减 g)
   证明: hf.Ioi.inter hg.Iic
 -/
 protected theorem Monotone.Ioc (hf : Monotone f) (hg : Antitone g) :
@@ -543,7 +543,7 @@ theorem MonotoneOn.Ioc
   proof: hf.Ioi.inter hg.Iic
 
 中文:
-定理 MonotoneOn.Ioc
+定理 MonotoneOn.左开右闭区间
   条件: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
   证明: hf.Ioi.inter hg.Iic
 -/
@@ -560,8 +560,8 @@ theorem Antitone.Ioc
   proof: hf.Ioi.inter hg.Iic
 
 中文:
-定理 Antitone.Ioc
-  条件: (hf : Antitone f) (hg : Monotone g)
+定理 递减.左开右闭区间
+  条件: (hf : 递减 f) (hg : 递增 g)
   证明: hf.Ioi.inter hg.Iic
 -/
 protected theorem Antitone.Ioc (hf : Antitone f) (hg : Monotone g) :
@@ -577,7 +577,7 @@ theorem AntitoneOn.Ioc
   proof: hf.Ioi.inter hg.Iic
 
 中文:
-定理 AntitoneOn.Ioc
+定理 AntitoneOn.左开右闭区间
   条件: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
   证明: hf.Ioi.inter hg.Iic
 -/
@@ -594,8 +594,8 @@ theorem Monotone.Ioo
   proof: hf.Ioi.inter hg.Iio
 
 中文:
-定理 Monotone.Ioo
-  条件: (hf : Monotone f) (hg : Antitone g)
+定理 递增.开区间
+  条件: (hf : 递增 f) (hg : 递减 g)
   证明: hf.Ioi.inter hg.Iio
 -/
 protected theorem Monotone.Ioo (hf : Monotone f) (hg : Antitone g) :
@@ -611,7 +611,7 @@ theorem MonotoneOn.Ioo
   proof: hf.Ioi.inter hg.Iio
 
 中文:
-定理 MonotoneOn.Ioo
+定理 MonotoneOn.开区间
   条件: (hf : MonotoneOn f s) (hg : AntitoneOn g s)
   证明: hf.Ioi.inter hg.Iio
 -/
@@ -628,8 +628,8 @@ theorem Antitone.Ioo
   proof: hf.Ioi.inter hg.Iio
 
 中文:
-定理 Antitone.Ioo
-  条件: (hf : Antitone f) (hg : Monotone g)
+定理 递减.开区间
+  条件: (hf : 递减 f) (hg : 递增 g)
   证明: hf.Ioi.inter hg.Iio
 -/
 protected theorem Antitone.Ioo (hf : Antitone f) (hg : Monotone g) :
@@ -645,7 +645,7 @@ theorem AntitoneOn.Ioo
   proof: hf.Ioi.inter hg.Iio
 
 中文:
-定理 AntitoneOn.Ioo
+定理 AntitoneOn.开区间
   条件: (hf : AntitoneOn f s) (hg : MonotoneOn g s)
   证明: hf.Ioi.inter hg.Iio
 -/
@@ -672,7 +672,7 @@ theorem iUnion_Ioo_of_mono_of_isGLB_of_isLUB
 
 中文:
 定理 iUnion_Ioo_of_mono_of_isGLB_of_isLUB
-  结论: (hf : Antitone f) (hg : Monotone g)
+  结论: (hf : 递减 f) (hg : 递增 g)
   证明: calc
     ⋃ x, Ioo (f x) (g x) = (⋃ x, Ioi (f x)) inter ⋃ x, Iio (g x) :=
       iUnion_inter_of_monotone hf.Ioi hg.Iio
@@ -706,7 +706,7 @@ hψ _ (succ_le_iff_of_not_isMax ha').1 ha
 
 中文:
 定理 strictMonoOn_Iic_of_lt_succ
-  结论: [SuccOrder α] [IsSuccArchimedean α] {n : α}
+  结论: [Succ序 α] [是SuccArchimedean α] {n : α}
   证明: strictMonoOn_of_lt_succ ordConnected_Iic fun _a ha' _ ha =>
 hψ _ (succ_le_iff_of_not_isMax ha').1 ha
 
@@ -728,7 +728,7 @@ theorem strictAntiOn_Iic_of_succ_lt
 
 中文:
 定理 strictAntiOn_Iic_of_succ_lt
-  结论: [SuccOrder α] [IsSuccArchimedean α] {n : α}
+  结论: [Succ序 α] [是SuccArchimedean α] {n : α}
   证明: fun i hi j hj hij =>
   @strictMonoOn_Iic_of_lt_succ α βᵒᵈ _ _ ψ _ _ n hψ i hi j hj hij
 -/
@@ -747,7 +747,7 @@ theorem strictMonoOn_Ici_of_pred_lt
 
 中文:
 定理 strictMonoOn_Ici_of_pred_lt
-  结论: [PredOrder α] [IsPredArchimedean α] {n : α}
+  结论: [Pred序 α] [是PredArchimedean α] {n : α}
   证明: fun i hi j hj hij =>
   @strictMonoOn_Iic_of_lt_succ αᵒᵈ βᵒᵈ _ _ ψ _ _ n hψ j hj i hi hij
 -/
@@ -766,7 +766,7 @@ theorem strictAntiOn_Ici_of_lt_pred
 
 中文:
 定理 strictAntiOn_Ici_of_lt_pred
-  结论: [PredOrder α] [IsPredArchimedean α] {n : α}
+  结论: [Pred序 α] [是PredArchimedean α] {n : α}
   证明: fun i hi j hj hij =>
   @strictAntiOn_Iic_of_succ_lt αᵒᵈ βᵒᵈ _ _ ψ _ _ n hψ j hj i hi hij
 -/
@@ -801,7 +801,7 @@ theorem StrictMonoOn.Iic_id_le
 
 中文:
 定理 StrictMonoOn.Iic_id_le
-  结论: [SuccOrder α] [IsSuccArchimedean α] [OrderBot α] {n : α} {φ : α -> α}
+  结论: [Succ序 α] [是SuccArchimedean α] [有底序 α] {n : α} {φ : α -> α}
   证明: by
   revert hφ
   refine
@@ -842,7 +842,7 @@ theorem StrictMonoOn.Ici_le_id
 
 中文:
 定理 StrictMonoOn.Ici_le_id
-  结论: [PredOrder α] [IsPredArchimedean α] [OrderTop α] {n : α} {φ : α -> α}
+  结论: [Pred序 α] [是PredArchimedean α] [有顶序 α] {n : α} {φ : α -> α}
   证明: StrictMonoOn.Iic_id_le (α := αᵒᵈ) fun _ hi _ hj hij => hφ hj hi hij
 
 Depends on / 依赖: Iic_id_le, StrictMonoOn, StrictMonoOn.Iic_id_le

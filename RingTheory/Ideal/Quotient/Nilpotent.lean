@@ -25,8 +25,8 @@ theorem Ideal.isRadical_iff_quotient_reduced
   exact RingHom.ker_isRadical_iff_reduced_of_surjective Quotient.mk_surjective
 
 中文:
-定理 Ideal.isRadical_iff_quotient_reduced
-  条件: {R : 类型} [CommRing R] (I : Ideal R)
+定理 理想.isRadical_iff_quotient_reduced
+  条件: {R : 类型} [交换环 R] (I : 理想 R)
   证明: by
   conv_lhs => rw [← @Ideal.mk_ker R _ I]
   exact RingHom.ker_isRadical_iff_reduced_of_surjective Quotient.mk_surjective
@@ -58,8 +58,8 @@ theorem Ideal.IsNilpotent.induction_on
     have := subsingl
 
 中文:
-定理 Ideal.IsNilpotent.induction_on
-  结论: (hI : IsNilpotent I)
+定理 理想.是幂零.induction_on
+  结论: (hI : 是幂零 I)
   证明: by
   obtain ⟨n, hI : I ^ n = ⊥⟩ := hI
   induction n using Nat.strong_induction_on generalizing S with | _ n H
@@ -120,8 +120,8 @@ refine ⟨?_, fun h => h.map Ideal.Quotient.mk I⟩
               (Ideal.quotEquivOfEq (sup
 
 中文:
-定理 IsNilpotent.isUnit_quotient_mk_iff
-  结论: {R : 类型} [CommRing R] {I : Ideal R}
+定理 是幂零.isUnit_quotient_mk_iff
+  结论: {R : 类型} [交换环 R] {I : 理想 R}
   证明: by
 refine ⟨?_, fun h => h.map Ideal.Quotient.mk I⟩
   revert x
@@ -177,7 +177,7 @@ theorem Ideal.Quotient.isUnit_mk_pow_iff_isUnit_mk
     simp [← Ideal.map_pow]
 
 中文:
-定理 Ideal.Quotient.isUnit_mk_pow_iff_isUnit_mk
+定理 理想.商.isUnit_mk_pow_iff_isUnit_mk
   条件: {x : S} {n : 自然数} (hn : n != 0)
   证明: by
   rw [← IsNilpotent.isUnit_quotient_mk_iff (I := Ideal.map (Ideal.Quotient.mk (I ^ n)) I)]
@@ -208,8 +208,8 @@ theorem Ideal.Quotient.isUnit_mk_pow_iff_notMem
   exact Ideal.Quotient.eq_zero_iff_mem.not
 
 中文:
-定理 Ideal.Quotient.isUnit_mk_pow_iff_notMem
-  条件: [I.IsMaximal] {n : 自然数} (hn : n != 0) {x : S}
+定理 理想.商.isUnit_mk_pow_iff_notMem
+  条件: [I.是极大] {n : 自然数} (hn : n != 0) {x : S}
   证明: by
   let := Ideal.Quotient.field I
   rw [isUnit_mk_pow_iff_isUnit_mk I hn]; rw [isUnit_iff_ne_zero]
@@ -236,8 +236,8 @@ theorem Ideal.Quotient.isUnit_mk_pow_of_notMem
   exact (isUnit_mk_pow_iff_notMem I hn).mpr hx
 
 中文:
-定理 Ideal.Quotient.isUnit_mk_pow_of_notMem
-  条件: [I.IsMaximal] {n : 自然数} {x : S} (hx : x ∉ I)
+定理 理想.商.isUnit_mk_pow_of_notMem
+  条件: [I.是极大] {n : 自然数} {x : S} (hx : x ∉ I)
   证明: by
   by_cases! hn : n = 0
   · rw [pow_eq_top_iff.mpr (Or.inr hn)]

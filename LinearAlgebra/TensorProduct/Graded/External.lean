@@ -87,7 +87,7 @@ definition gradedCommAux
 
 中文:
 定义 gradedCommAux
-  签名: : DirectSum _ 𝒜ℬ ->ₗ[R] DirectSum _ ℬ𝒜
+  签名: : 直和 _ 𝒜ℬ ->ₗ[R] 直和 _ ℬ𝒜
   定义体: DirectSum.toModule R _ _ fun i =>
     have o := DirectSum.lof R _ ℬ𝒜 (i.2, i.1)
     have s : Intˣ := ((-1 : Intˣ) ^ (i.1 * i.2 : ι) : Intˣ)
@@ -323,7 +323,7 @@ theorem gradedComm_tmul_one
 
 中文:
 定理 gradedComm_tmul_one
-  条件: [GradedMonoid.GOne ℬ] (a : ⨁ i, 𝒜 i)
+  条件: [分次幺半群.GOne ℬ] (a : ⨁ i, 𝒜 i)
   证明: gradedComm_tmul_of_zero _ _ _ _ _
 
 Depends on / 依赖: gradedComm_tmul_of_zero
@@ -344,7 +344,7 @@ theorem gradedComm_one_tmul
 
 中文:
 定理 gradedComm_one_tmul
-  条件: [GradedMonoid.GOne 𝒜] (b : ⨁ i, ℬ i)
+  条件: [分次幺半群.GOne 𝒜] (b : ⨁ i, ℬ i)
   证明: gradedComm_of_zero_tmul _ _ _ _ _
 
 @[simp]
@@ -367,7 +367,7 @@ theorem gradedComm_one
 
 中文:
 定理 gradedComm_one
-  条件: [DirectSum.GSemiring 𝒜] [DirectSum.GSemiring ℬ]
+  条件: [直和.GSemiring 𝒜] [直和.GSemiring ℬ]
   结论: gradedComm R 𝒜 ℬ 1 = 1
   证明: gradedComm_one_tmul _ _ _ _
 
@@ -386,7 +386,7 @@ theorem gradedComm_tmul_algebraMap
 
 中文:
 定理 gradedComm_tmul_algebraMap
-  结论: [DirectSum.GSemiring ℬ] [DirectSum.GAlgebra R ℬ]
+  结论: [直和.GSemiring ℬ] [直和.G代数 R ℬ]
   证明: gradedComm_tmul_of_zero _ _ _ _ _
 
 Depends on / 依赖: gradedComm_tmul_of_zero
@@ -406,7 +406,7 @@ theorem gradedComm_algebraMap_tmul
 
 中文:
 定理 gradedComm_algebraMap_tmul
-  结论: [DirectSum.GSemiring 𝒜] [DirectSum.GAlgebra R 𝒜]
+  结论: [直和.GSemiring 𝒜] [直和.G代数 R 𝒜]
   证明: gradedComm_of_zero_tmul _ _ _ _ _
 
 Depends on / 依赖: gradedComm_of_zero_tmul
@@ -426,7 +426,7 @@ theorem gradedComm_algebraMap
 
 中文:
 定理 gradedComm_algebraMap
-  结论: [DirectSum.GSemiring 𝒜] [DirectSum.GSemiring ℬ]
+  结论: [直和.GSemiring 𝒜] [直和.GSemiring ℬ]
   证明: (gradedComm_algebraMap_tmul R 𝒜 ℬ r 1).trans (Algebra.TensorProduct.algebraMap_apply' r).symm
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.algebraMap_apply, TensorProduct, algebraMap_apply, gradedComm_algebraMap_tmul
@@ -637,7 +637,7 @@ theorem gradedMul_assoc
 
 中文:
 定理 gradedMul_assoc
-  条件: (x y z : DirectSum _ 𝒜 otimes[R] DirectSum _ ℬ)
+  条件: (x y z : 直和 _ 𝒜 otimes[R] 直和 _ ℬ)
   证明: by
   let mA := gradedMul R 𝒜 ℬ
     -- restate as an equality of morphisms so that we can use `ext`
@@ -685,7 +685,7 @@ theorem gradedComm_gradedMul
 
 中文:
 定理 gradedComm_gradedMul
-  条件: (x y : DirectSum _ 𝒜 otimes[R] DirectSum _ ℬ)
+  条件: (x y : 直和 _ 𝒜 otimes[R] 直和 _ ℬ)
   证明: by
   suffices (gradedMul R 𝒜 ℬ).compr₂ (gradedComm R 𝒜 ℬ).toLinearMap
       = (gradedMul R ℬ 𝒜 ∘ₗ (gradedComm R 𝒜 ℬ).toLinearMap).compl₂

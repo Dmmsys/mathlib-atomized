@@ -83,7 +83,7 @@ definition sublists'Aux
 
 中文:
 定义 sublists'Aux
-  签名: (a : α) (r₁ r₂ : List (List α))
+  签名: (a : α) (r₁ r₂ : 列表 (列表 α))
   定义体: r₁.foldl (init := r₂) fun r l => r ++ [a :: l]
 -/
 def sublists'Aux (a : α) (r₁ r₂ : List (List α)) : List (List α) :=
@@ -106,7 +106,7 @@ theorem sublists'Aux_eq_array_foldl
 中文:
 定理 sublists'Aux_eq_array_foldl
   条件: (a : α)
-  结论: 对任意 (r₁ r₂ : List (List α)),
+  结论: 对任意 (r₁ r₂ : 列表 (列表 α)),
   证明: by
   intro r₁ r₂
   rw [sublists'Aux]; rw [Array.foldl_toList]
@@ -136,7 +136,7 @@ theorem sublists'_eq_sublists'Aux
 
 中文:
 定理 sublists'_eq_sublists'Aux
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   simp only [sublists', sublists'Aux_eq_array_foldl]
   rw [← List.foldr_hom Array.toList]
@@ -163,8 +163,8 @@ theorem sublists'Aux_eq_map
 
 中文:
 定理 sublists'Aux_eq_map
-  条件: (a : α) (r₁ : List (List α))
-  结论: 对任意 (r₂ : List (List α)),
+  条件: (a : α) (r₁ : 列表 (列表 α))
+  结论: 对任意 (r₂ : 列表 (列表 α)),
   证明: List.reverseRecOn r₁ (fun _ => by simp [sublists'Aux]) fun r₁ l ih r₂ => by
     rw [map_append]; rw [map_singleton]; rw [← append_assoc]; rw [← ih]; rw [sublists'Aux]; rw [foldl_append]; rw [foldl]
     simp [sublists'Aux]
@@ -191,7 +191,7 @@ theorem sublists'_cons
 
 中文:
 定理 sublists'_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: by
   simp [sublists'_eq_sublists'Aux, foldr_cons, sublists'Aux_eq_map]
 
@@ -222,7 +222,7 @@ theorem mem_sublists'
 
 中文:
 定理 mem_sublists'
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: s in sublists' t ↔ s <+ t
   证明: by
   induction t generalizing s with
@@ -262,7 +262,7 @@ theorem length_sublists'
 
 中文:
 定理 length_sublists'
-  结论: 对任意 l : List α, length (sublists' l) = 2 ^ length l
+  结论: 对任意 l : 列表 α, length (sublists' l) = 2 ^ length l
 -/
 theorem length_sublists' : forall l : List α, length (sublists' l) = 2 ^ length l
   | [] => rfl
@@ -320,7 +320,7 @@ definition sublistsAux
 
 中文:
 定义 sublistsAux
-  签名: (a : α) (r : List (List α))
+  签名: (a : α) (r : 列表 (列表 α))
   定义体: r.foldl (init := []) fun r l => r ++ [l, a :: l]
 
 Depends on / 依赖: r.foldl
@@ -407,7 +407,7 @@ theorem sublists_append
 
 中文:
 定理 sublists_append
-  条件: (l₁ l₂ : List α)
+  条件: (l₁ l₂ : 列表 α)
   证明: by
   simp only [sublists, foldr_append]
   induction l₁ with
@@ -441,7 +441,7 @@ theorem sublists_cons
 
 中文:
 定理 sublists_cons
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: show sublists ([a] ++ l) = _ by
   rw [sublists_append]
   simp only [sublists_singleton, map_cons, bind_eq_flatMap, nil_append, cons_append, map_nil]
@@ -468,7 +468,7 @@ theorem sublists_concat
 
 中文:
 定理 sublists_concat
-  条件: (l : List α) (a : α)
+  条件: (l : 列表 α) (a : α)
   证明: by
   rw [sublists_append]; rw [sublists_singleton]; rw [bind_eq_flatMap]; rw [flatMap_cons]; rw [flatMap_cons]; rw [flatMap_nil]; rw [map_id'' append_nil]; rw [append_nil]
 
@@ -494,7 +494,7 @@ theorem sublists_reverse
 
 中文:
 定理 sublists_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublists (reverse l) = map reverse (sublists' l)
   证明: by
   induction l with
@@ -524,7 +524,7 @@ theorem sublists_eq_sublists'
 
 中文:
 定理 sublists_eq_sublists'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublists l = map reverse (sublists' (reverse l))
   证明: by
   rw [← sublists_reverse]; rw [reverse_reverse]
@@ -546,7 +546,7 @@ theorem sublists'_reverse
 
 中文:
 定理 sublists'_reverse
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublists' (reverse l) = map reverse (sublists l)
   证明: by
   simp only [sublists_eq_sublists', map_map, map_id'' reverse_reverse, Function.comp_def]
@@ -568,7 +568,7 @@ theorem sublists'_eq_sublists
 
 中文:
 定理 sublists'_eq_sublists
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublists' l = map reverse (sublists (reverse l))
   证明: by
   rw [← sublists'_reverse]; rw [reverse_reverse]
@@ -593,7 +593,7 @@ theorem mem_sublists
 
 中文:
 定理 mem_sublists
-  条件: {s t : List α}
+  条件: {s t : 列表 α}
   结论: s in sublists t ↔ s <+ t
   证明: by
   rw [← reverse_sublist]; rw [← mem_sublists']; rw [sublists'_reverse]; rw [mem_map_of_injective reverse_injective]
@@ -618,7 +618,7 @@ theorem length_sublists
 
 中文:
 定理 length_sublists
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: length (sublists l) = 2 ^ length l
   证明: by
   simp only [sublists_eq_sublists', length_map, length_sublists', length_reverse]
@@ -645,7 +645,7 @@ singleton_sublist.2 mem_map.2 ⟨[], mem_sublists.2 (nil_sublist _), by rfl⟩).
 
 中文:
 定理 map_pure_sublist_sublists
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: map pure l <+ sublists l
   证明: by
   induction l using reverseRecOn <;> simp only [map, map_append, sublists_concat]
@@ -676,7 +676,7 @@ definition sublistsLenAux
 
 中文:
 定义 sublistsLenAux
-  签名: : 自然数 -> List α -> (List α -> β) -> List β -> List β
+  签名: : 自然数 -> 列表 α -> (列表 α -> β) -> 列表 β -> 列表 β
 -/
 def sublistsLenAux : Nat -> List α -> (List α -> β) -> List β -> List β
   | 0, _, f, r => f [] :: r
@@ -693,7 +693,7 @@ definition sublistsLen
 
 中文:
 定义 sublistsLen
-  签名: (n : 自然数) (l : List α)
+  签名: (n : 自然数) (l : 列表 α)
   定义体: sublistsLenAux n l id []
 
 Depends on / 依赖: sublistsLenAux
@@ -731,7 +731,7 @@ theorem sublistsLenAux_eq
 
 中文:
 定理 sublistsLenAux_eq
-  条件: (l : List α) (n) (f : List α -> β) (r)
+  条件: (l : 列表 α) (n) (f : 列表 α -> β) (r)
   证明: by
   rw [sublistsLen]; rw [← sublistsLenAux_append]; rfl
 
@@ -753,7 +753,7 @@ theorem sublistsLenAux_zero
 
 中文:
 定理 sublistsLenAux_zero
-  条件: (l : List α) (f : List α -> β) (r)
+  条件: (l : 列表 α) (f : 列表 α -> β) (r)
   证明: by cases l <;> rfl
 
 @[simp]
@@ -775,7 +775,7 @@ theorem sublistsLen_zero
 
 中文:
 定理 sublistsLen_zero
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublistsLen 0 l = [[]]
   证明: sublistsLenAux_zero _ _ _
 
@@ -847,7 +847,7 @@ theorem sublistsLen_one
 
 中文:
 定理 sublistsLen_one
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublistsLen 1 l = l.reverse.map ([·])
   证明: l.rec (by rw [sublistsLen_succ_nil, reverse_nil, map_nil]) fun a s ih => by
     rw [sublistsLen_succ_cons]; rw [ih]; rw [reverse_cons]; rw [map_append]; rw [sublistsLen_zero]; rfl
@@ -916,7 +916,7 @@ theorem sublistsLen_sublist_of_sublist
 
 中文:
 定理 sublistsLen_sublist_of_sublist
-  条件: (n) {l₁ l₂ : List α} (h : l₁ <+ l₂)
+  条件: (n) {l₁ l₂ : 列表 α} (h : l₁ <+ l₂)
   证明: by
   induction n generalizing l₁ l₂ with | zero => simp | succ n IHn => ?_
   induction h with
@@ -978,7 +978,7 @@ theorem mem_sublistsLen_self
 
 中文:
 定理 mem_sublistsLen_self
-  条件: {l l' : List α} (h : l' <+ l)
+  条件: {l l' : 列表 α} (h : l' <+ l)
   证明: by
   induction h with
   | slnil => simp
@@ -1019,7 +1019,7 @@ theorem mem_sublistsLen
 
 中文:
 定理 mem_sublistsLen
-  条件: {n} {l l' : List α}
+  条件: {n} {l l' : 列表 α}
   证明: ⟨fun h =>
     ⟨mem_sublists'.1 ((sublistsLen_sublist_sublists' _ _).subset h), length_of_sublistsLen h⟩,
     fun ⟨h₁, h₂⟩ => h₂ ▸ mem_sublistsLen_self h₁⟩
@@ -1046,7 +1046,7 @@ theorem sublistsLen_of_length_lt
 
 中文:
 定理 sublistsLen_of_length_lt
-  条件: {n} {l : List α} (h : l.length < n)
+  条件: {n} {l : 列表 α} (h : l.length < n)
   结论: sublistsLen n l = []
   证明: eq_nil_iff_forall_not_mem.mpr fun _ =>
     mem_sublistsLen.not.mpr fun ⟨hs, hl⟩ => (h.trans_eq hl.symm).not_ge (Sublist.length_le hs)
@@ -1069,7 +1069,7 @@ theorem sublistsLen_length
 
 中文:
 定理 sublistsLen_length
-  结论: 对任意 l : List α, sublistsLen l.length l = [l]
+  结论: 对任意 l : 列表 α, sublistsLen l.length l = [l]
 -/
 theorem sublistsLen_length : forall l : List α, sublistsLen l.length l = [l]
   | [] => rfl
@@ -1087,7 +1087,7 @@ theorem Pairwise.sublists'
   given: {R}
 
 中文:
-定理 Pairwise.sublists'
+定理 两两.sublists'
   条件: {R}
 -/
 theorem Pairwise.sublists' {R} :
@@ -1115,7 +1115,7 @@ theorem pairwise_sublists
 
 中文:
 定理 pairwise_sublists
-  条件: {R} {l : List α} (H : Pairwise R l)
+  条件: {R} {l : 列表 α} (H : 两两 R l)
   证明: by
   have := (pairwise_reverse.2 H).sublists'
   rwa [sublists'_reverse, pairwise_map] at this
@@ -1144,7 +1144,7 @@ theorem nodup_sublists
 
 中文:
 定理 nodup_sublists
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Nodup (sublists l) ↔ Nodup l
   证明: ⟨fun h => (h.sublist (map_pure_sublist_sublists _)).of_map _, fun h =>
     (pairwise_sublists h).imp @fun l₁ l₂ h => by simpa using h.to_ne⟩
@@ -1174,7 +1174,7 @@ protected alias ⟨Nodup.of_sublists', _⟩ := nodup_sublists'
 
 中文:
 定理 nodup_sublists'
-  条件: {l : List α}
+  条件: {l : 列表 α}
   结论: Nodup (sublists' l) ↔ Nodup l
   证明: by
   rw [sublists'_eq_sublists]; rw [nodup_map_iff reverse_injective]; rw [nodup_sublists]; rw [nodup_reverse]
@@ -1206,7 +1206,7 @@ theorem nodup_sublistsLen
 
 中文:
 定理 nodup_sublistsLen
-  条件: (n : 自然数) {l : List α} (h : Nodup l)
+  条件: (n : 自然数) {l : 列表 α} (h : Nodup l)
   结论: (sublistsLen n l).Nodup
   证明: by
   have : Pairwise (· != ·) l.sublists' := Pairwise.imp
@@ -1231,7 +1231,7 @@ theorem sublists_map
 中文:
 定理 sublists_map
   条件: (f : α -> β)
-  结论: 对任意 (l : List α),
+  结论: 对任意 (l : 列表 α),
 -/
 theorem sublists_map (f : α -> β) : forall (l : List α),
     sublists (map f l) = map (map f) (sublists l)
@@ -1251,7 +1251,7 @@ theorem sublists'_map
 中文:
 定理 sublists'_map
   条件: (f : α -> β)
-  结论: 对任意 (l : List α),
+  结论: 对任意 (l : 列表 α),
 -/
 theorem sublists'_map (f : α -> β) : forall (l : List α),
     sublists' (map f l) = map (map f) (sublists' l)
@@ -1275,7 +1275,7 @@ theorem sublists_perm_sublists'
 
 中文:
 定理 sublists_perm_sublists'
-  条件: (l : List α)
+  条件: (l : 列表 α)
   结论: sublists l ~ sublists' l
   证明: by
   rw [← map_get_finRange l]; rw [sublists_map]; rw [sublists'_map]
@@ -1314,8 +1314,8 @@ theorem Sublist.sublists'
 @[simp]
 
 中文:
-定理 Sublist.sublists'
-  结论: {l₁ l₂ : List α}
+定理 子表.sublists'
+  结论: {l₁ l₂ : 列表 α}
   证明: by
   induction sublist with
   | slnil => exact .refl _
@@ -1354,7 +1354,7 @@ mp sublist := mem_sublists'.mp sublist.subset mem_sublists'.mpr .refl _
 
 中文:
 定理 sublists'_sublist_sublists'_iff
-  条件: {l₁ l₂ : List α}
+  条件: {l₁ l₂ : 列表 α}
   证明: Sublist.sublists'
 mp sublist := mem_sublists'.mp sublist.subset mem_sublists'.mpr .refl _
 -/
@@ -1373,7 +1373,7 @@ theorem subperm_of_sublists'_subperm_sublists'
 
 中文:
 定理 subperm_of_sublists'_subperm_sublists'
-  结论: {l₁ l₂ : List α}
+  结论: {l₁ l₂ : 列表 α}
   证明: Sublist.subperm mem_sublists'.mp subperm.subset mem_sublists'.mpr .refl _
 
 Depends on / 依赖: Sublist, Sublist.subperm, mem_sublists, subperm, subperm.subset, subset
@@ -1394,7 +1394,7 @@ theorem sublists_cons_perm_append
 
 中文:
 定理 sublists_cons_perm_append
-  条件: (a : α) (l : List α)
+  条件: (a : α) (l : 列表 α)
   证明: Perm.trans (sublists_perm_sublists' _) by
   rw [sublists'_cons]
   exact Perm.append (sublists_perm_sublists' _).symm (Perm.map _ (sublists_perm_sublists' _).symm)
@@ -1425,7 +1425,7 @@ theorem revzip_sublists
 
 中文:
 定理 revzip_sublists
-  条件: (l l₁ l₂ : List α) (h : (l₁, l₂) in revzip l.sublists)
+  条件: (l l₁ l₂ : 列表 α) (h : (l₁, l₂) in revzip l.sublists)
   结论: l₁ ++ l₂ ~ l
   证明: by
   rw [revzip] at h
@@ -1473,7 +1473,7 @@ theorem revzip_sublists'
 
 中文:
 定理 revzip_sublists'
-  条件: (l l₁ l₂ : List α) (h : (l₁, l₂) in revzip l.sublists')
+  条件: (l l₁ l₂ : 列表 α) (h : (l₁, l₂) in revzip l.sublists')
   结论: l₁ ++ l₂ ~ l
   证明: by
   rw [revzip] at h
@@ -1516,7 +1516,7 @@ theorem range_bind_sublistsLen_perm
 
 中文:
 定理 range_bind_sublistsLen_perm
-  条件: (l : List α)
+  条件: (l : 列表 α)
   证明: by
   induction l with
   | nil => simp [range_succ]

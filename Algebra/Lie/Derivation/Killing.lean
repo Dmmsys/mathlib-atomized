@@ -54,7 +54,7 @@ lemma killingForm_restrict_range_ad
 
 中文:
 引理 killingForm_restrict_range_ad
-  条件: [Module.Finite R L]
+  条件: [模.有限 R L]
   证明: by
   rw [← (ad_isIdealMorphism R L).eq]; rw [← LieIdeal.killingForm_eq]
   rfl
@@ -84,7 +84,7 @@ definition rangeAdOrthogonal
 
 中文:
 定义 rangeAdOrthogonal
-  签名: : LieSubmodule R L (LieDerivation R L L) where
+  签名: : Lie子模 R L (LieDerivation R L L) where
   定义体: 𝕀ᗮ
   lie_mem := by
     intro x D hD
@@ -196,7 +196,7 @@ instance instIsKilling_range_ad
 
 中文:
 实例 instIsKilling_range_ad
-  签名: : LieAlgebra.IsKilling R 𝕀
+  签名: : Lie代数.是Killing R 𝕀
   定义体: (LieEquiv.ofInjective (ad R L) (injective_ad_of_center_eq_bot <| by simp)).isKilling
 
 Depends on / 依赖: LieEquiv, LieEquiv.ofInjective, injective_ad_of_center_eq_bot, isKilling, ofInjective
@@ -275,7 +275,7 @@ lemma exists_eq_ad
   exact Submodule.mem_top
 
 中文:
-引理 exists_eq_ad
+引理 存在_eq_ad
   条件: (D : 𝔻)
   结论: 存在 x, ad R L x = D
   证明: by

@@ -182,7 +182,7 @@ theorem weight_eq_sum
 
 中文:
 定理 weight_eq_sum
-  条件: [Fintype σ] (f : σ ->₀ R)
+  条件: [有限类型 σ] (f : σ ->₀ R)
   结论: weight w f = ∑ i, f i • w i
   证明: by
   rw [weight_apply]; rw [f.sum_fintype (fun i c => c • w i) fun _ => zero_smul _ _]
@@ -224,7 +224,7 @@ theorem nonTorsionWeight_of
 
 中文:
 定理 nonTorsionWeight_of
-  条件: [IsDomain R] [IsTorsionFree R M] (hw : 对任意 i : σ, w i != 0)
+  条件: [是整环 R] [是无挠 R M] (hw : 对任意 i : σ, w i != 0)
   证明: by
     rw [smul_eq_zero]; rw [or_iff_not_imp_right] at h
     exact h (hw s)
@@ -251,7 +251,7 @@ theorem NonTorsionWeight.ne_zero
 
 中文:
 定理 NonTorsionWeight.ne_zero
-  条件: [Nontrivial R] [NonTorsionWeight R w] (s : σ)
+  条件: [非平凡 R] [NonTorsionWeight R w] (s : σ)
   证明: fun h => by
   rw [← one_smul R (w s)] at h
   apply zero_ne_one.symm (α := R)
@@ -484,7 +484,7 @@ theorem finite_of_nat_weight_le
 
 中文:
 定理 finite_of_nat_weight_le
-  条件: [Finite σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
+  条件: [有限 σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
   证明: by
   classical
   set fg := Finset.antidiagonal (Finsupp.equivFunOnFinite.symm (Function.const σ n)) with hfg
@@ -522,7 +522,7 @@ theorem finite_of_nat_weight_lt
 
 中文:
 定理 finite_of_nat_weight_lt
-  条件: [Finite σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
+  条件: [有限 σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
   证明: Set.Finite.subset (finite_of_nat_weight_le w hw n) (by grind)
 
 Depends on / 依赖: Finite, Set.Finite.subset, finite_of_nat_weight_le, subset
@@ -541,7 +541,7 @@ theorem finite_of_nat_weight_eq
 
 中文:
 定理 finite_of_nat_weight_eq
-  条件: [Finite σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
+  条件: [有限 σ] (w : σ -> 自然数) (hw : 对任意 x, w x != 0) (n : 自然数)
   证明: Set.Finite.subset (finite_of_nat_weight_le w hw n) (by grind)
 
 Depends on / 依赖: Finite, Set.Finite.subset, finite_of_nat_weight_le, subset
@@ -609,7 +609,7 @@ theorem degree_eq_sum
 
 中文:
 定理 degree_eq_sum
-  条件: [Fintype σ] (f : σ ->₀ R)
+  条件: [有限类型 σ] (f : σ ->₀ R)
   结论: f.degree = ∑ i, f i
   证明: by
   rw [degree_apply]; rw [Finset.sum_subset] <;> simp
@@ -634,7 +634,7 @@ theorem degree_single
 中文:
 定理 degree_single
   条件: (a : σ) (r : R)
-  结论: (Finsupp.single a r).degree = r
+  结论: (有限支撑.single a r).degree = r
   证明: Finsupp.sum_single_index (h := fun _ => id) rfl
 
 Depends on / 依赖: Finsupp, Finsupp.sum_single_index, sum_single_index
@@ -712,7 +712,7 @@ theorem degree_eq_weight_one
 
 中文:
 定理 degree_eq_weight_one
-  条件: {R : 类型} [Semiring R]
+  条件: {R : 类型} [半环 R]
   证明: by
   ext d
   simp [weight_apply, smul_eq_mul, mul_one]
@@ -738,7 +738,7 @@ theorem finite_of_degree_le
 
 中文:
 定理 finite_of_degree_le
-  条件: [Finite σ] (n : 自然数)
+  条件: [有限 σ] (n : 自然数)
   证明: by
   simp_rw [degree_eq_weight_one]
   refine finite_of_nat_weight_le (Function.const σ 1) ?_ n
@@ -765,8 +765,8 @@ lemma finite_of_degree_lt
 
 中文:
 引理 finite_of_degree_lt
-  条件: [Finite σ] (n : 自然数)
-  结论: {f : σ ->₀ 自然数 | degree f < n}.Finite
+  条件: [有限 σ] (n : 自然数)
+  结论: {f : σ ->₀ 自然数 | degree f < n}.有限
   证明: Set.Finite.subset (finite_of_degree_le n) (by grind)
 
 Depends on / 依赖: Finite, Set.Finite.subset, finite_of_degree_le, subset
@@ -785,8 +785,8 @@ lemma finite_of_degree_eq
 
 中文:
 引理 finite_of_degree_eq
-  条件: [Finite σ] (n : 自然数)
-  结论: {f : σ ->₀ 自然数 | f.degree = n}.Finite
+  条件: [有限 σ] (n : 自然数)
+  结论: {f : σ ->₀ 自然数 | f.degree = n}.有限
   证明: Set.Finite.subset (finite_of_degree_le n) (by grind)
 
 Depends on / 依赖: Finite, Set.Finite.subset, finite_of_degree_le, subset
@@ -845,7 +845,7 @@ alias degree_mapDomain_eq_of_subsingletonAddUnits := degree_mapDomain
 
 中文:
 定理 degree_mapDomain
-  条件: {τ : 类型} (f : σ -> τ) [AddCommMonoid M] (x : σ ->₀ M)
+  条件: {τ : 类型} (f : σ -> τ) [加法交换幺半群 M] (x : σ ->₀ M)
   证明: by
   simp [mapDomain, sum]
   dsimp [degree_apply]
@@ -877,7 +877,7 @@ theorem degree_comapDomain_le_of_canonicallyOrderedAdd
 
 中文:
 定理 degree_comapDomain_le_of_canonicallyOrderedAdd
-  结论: {τ : 类型} {f : σ -> τ} [AddCommMonoid M]
+  结论: {τ : 类型} {f : σ -> τ} [加法交换幺半群 M]
   证明: by
   classical
   simpa [degree, comapDomain, Finset.sum_preimage' f x.support hf x] using
@@ -903,7 +903,7 @@ lemma degree_mono
 
 中文:
 引理 degree_mono
-  条件: {R : 类型} [AddCommMonoid R] [PartialOrder R] [CanonicallyOrderedAdd R]
+  条件: {R : 类型} [加法交换幺半群 R] [偏序 R] [典范有序加法 R]
   证明: fun _ _ e =>
     (Finset.sum_le_sum_of_subset (support_mono e)).trans (Finset.sum_le_sum fun _ _ => e _)
 -/
@@ -928,7 +928,7 @@ lemma exists_le_degree_eq
     exact ⟨g + .single i 1, add_le_add_right (by simp; grind) _, by simp⟩
 
 中文:
-引理 exists_le_degree_eq
+引理 存在_le_degree_eq
   条件: {σ : 类型} (f : σ ->₀ 自然数) (n : 自然数) (hn : n <= f.degree)
   证明: by
   induction n with
@@ -967,7 +967,7 @@ lemma degree_preimage_add
 
 中文:
 引理 degree_preimage_add
-  条件: {σ : 类型} (s t : Set 自然数)
+  条件: {σ : 类型} (s t : 集合 自然数)
   证明: by
   refine (Set.preimage_add_preimage_subset ..).antisymm' ?_
   rintro f ⟨m, hm, n, hn, e : m + n = _⟩
@@ -998,7 +998,7 @@ lemma degree_preimage_nsmul
 
 中文:
 引理 degree_preimage_nsmul
-  条件: {σ : 类型} (s : Set 自然数) (n : 自然数) (hn : n != 0)
+  条件: {σ : 类型} (s : 集合 自然数) (n : 自然数) (hn : n != 0)
   证明: by
   obtain (_ | n) := n; · contradiction
   induction n <;> simp_all [succ_nsmul, degree_preimage_add]
@@ -1029,7 +1029,7 @@ lemma nsmul_single_one_image
 
 中文:
 引理 nsmul_single_one_image
-  条件: {α : 类型} {n : 自然数} {s : Set α}
+  条件: {α : 类型} {n : 自然数} {s : 集合 α}
   证明: by
   classical
   induction n with
@@ -1074,7 +1074,7 @@ theorem image_pow_eq_finsuppProd_image
 
 中文:
 定理 image_pow_eq_finsuppProd_image
-  条件: {α β : 类型} [CommMonoid β] {f : α -> β} {n} {s : Set α}
+  条件: {α β : 类型} [交换幺半群 β] {f : α -> β} {n} {s : 集合 α}
   证明: by
   classical
   suffices forall (s : Set (α ->₀ Nat)), ((·.prod (f · ^ ·)) '' s) ^ n = (·.prod (f · ^ ·)) '' (n • s) by

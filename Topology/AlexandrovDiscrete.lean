@@ -46,9 +46,9 @@ class AlexandrovDiscrete
 
 中文:
 类 AlexandrovDiscrete
-  参数: (α : 类型) [TopologicalSpace α]
+  参数: (α : 类型) [拓扑空间 α]
   公理与运算 (1 个):
-    - isOpen_sInter : 对任意 S : Set (Set α), (对任意 s in S, IsOpen s) -> IsOpen (⋂₀ S)
+    - isOpen_sInter : 对任意 S : 集合 (集合 α), (对任意 s in S, 是开集 s) -> 是开集 (⋂₀ S)
 -/
 class AlexandrovDiscrete (α : Type*) [TopologicalSpace α] : Prop where
   /-- The intersection of a family of open sets is an open set. Use `isOpen_sInter` in the root
@@ -93,8 +93,8 @@ instance IndiscreteTopology.toAlexandrovDiscrete
   body: by grind [isOpen_iff]
 
 中文:
-实例 IndiscreteTopology.toAlexandrovDiscrete
-  签名: [IndiscreteTopology α]
+实例 Indiscrete拓扑.toAlexandrovDiscrete
+  签名: [Indiscrete拓扑 α]
   定义体: by grind [isOpen_iff]
 
 Depends on / 依赖: isOpen_iff
@@ -111,8 +111,8 @@ instance DiscreteTopology.toAlexandrovDiscrete
   body: isOpen_discrete _
 
 中文:
-实例 DiscreteTopology.toAlexandrovDiscrete
-  签名: [DiscreteTopology α]
+实例 离散拓扑.toAlexandrovDiscrete
+  签名: [离散拓扑 α]
   定义体: isOpen_discrete _
 
 Depends on / 依赖: isOpen_discrete
@@ -129,8 +129,8 @@ instance Finite.toAlexandrovDiscrete
   body: (toFinite S).isOpen_sInter
 
 中文:
-实例 Finite.toAlexandrovDiscrete
-  签名: [Finite α]
+实例 有限.toAlexandrovDiscrete
+  签名: [有限 α]
   定义体: (toFinite S).isOpen_sInter
 
 Depends on / 依赖: isOpen_sInter, toFinite
@@ -150,8 +150,8 @@ lemma isOpen_sInter
   proof: AlexandrovDiscrete.isOpen_sInter _
 
 中文:
-引理 isOpen_sInter
-  结论: (对任意 s in S, IsOpen s) -> IsOpen (⋂₀ S)
+引理 isOpen_s整数er
+  结论: (对任意 s in S, 是开集 s) -> 是开集 (⋂₀ S)
   证明: AlexandrovDiscrete.isOpen_sInter _
 
 Depends on / 依赖: AlexandrovDiscrete, AlexandrovDiscrete.isOpen_sInter, isOpen_sInter
@@ -168,9 +168,9 @@ lemma isOpen_iInter
   proof: isOpen_sInter forall_mem_range.2 hf
 
 中文:
-引理 isOpen_iInter
-  条件: (hf : 对任意 i, IsOpen (f i))
-  结论: IsOpen (⋂ i, f i)
+引理 isOpen_i整数er
+  条件: (hf : 对任意 i, 是开集 (f i))
+  结论: 是开集 (⋂ i, f i)
   证明: isOpen_sInter forall_mem_range.2 hf
 
 Depends on / 依赖: forall_mem_range, isOpen_sInter
@@ -187,8 +187,8 @@ lemma isOpen_iInter₂
   proof: isOpen_iInter fun _ => isOpen_iInter hf _
 
 中文:
-引理 isOpen_iInter₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsOpen (f i j))
+引理 isOpen_i整数er₂
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, 是开集 (f i j))
   证明: isOpen_iInter fun _ => isOpen_iInter hf _
 
 Depends on / 依赖: isOpen_iInter
@@ -208,8 +208,8 @@ lemma isClosed_sUnion
 
 中文:
 引理 isClosed_sUnion
-  条件: (hS : 对任意 s in S, IsClosed s)
-  结论: IsClosed (⋃₀ S)
+  条件: (hS : 对任意 s in S, 是闭集 s)
+  结论: 是闭集 (⋃₀ S)
   证明: alexandrovDiscrete_iff_isClosed.mp inferInstance S hS
 
 Depends on / 依赖: alexandrovDiscrete_iff_isClosed, alexandrovDiscrete_iff_isClosed.mp
@@ -228,8 +228,8 @@ lemma isClosed_iUnion
 
 中文:
 引理 isClosed_iUnion
-  条件: (hf : 对任意 i, IsClosed (f i))
-  结论: IsClosed (⋃ i, f i)
+  条件: (hf : 对任意 i, 是闭集 (f i))
+  结论: 是闭集 (⋃ i, f i)
   证明: isClosed_sUnion forall_mem_range.2 hf
 
 Depends on / 依赖: forall_mem_range, isClosed_sUnion
@@ -247,7 +247,7 @@ lemma isClosed_iUnion₂
 
 中文:
 引理 isClosed_iUnion₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsClosed (f i j))
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, 是闭集 (f i j))
   证明: isClosed_iUnion fun _ => isClosed_iUnion hf _
 
 Depends on / 依赖: isClosed_iUnion
@@ -266,7 +266,7 @@ lemma isClopen_sInter
   proof: ⟨isClosed_sInter fun s hs => (hS s hs).1, isOpen_sInter fun s hs => (hS s hs).2⟩
 
 中文:
-引理 isClopen_sInter
+引理 isClopen_s整数er
   条件: (hS : 对任意 s in S, IsClopen s)
   结论: IsClopen (⋂₀ S)
   证明: ⟨isClosed_sInter fun s hs => (hS s hs).1, isOpen_sInter fun s hs => (hS s hs).2⟩
@@ -286,7 +286,7 @@ lemma isClopen_iInter
   proof: ⟨isClosed_iInter fun i => (hf i).1, isOpen_iInter fun i => (hf i).2⟩
 
 中文:
-引理 isClopen_iInter
+引理 isClopen_i整数er
   条件: (hf : 对任意 i, IsClopen (f i))
   结论: IsClopen (⋂ i, f i)
   证明: ⟨isClosed_iInter fun i => (hf i).1, isOpen_iInter fun i => (hf i).2⟩
@@ -305,8 +305,8 @@ lemma isClopen_iInter₂
   proof: isClopen_iInter fun _ => isClopen_iInter hf _
 
 中文:
-引理 isClopen_iInter₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsClopen (f i j))
+引理 isClopen_i整数er₂
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, IsClopen (f i j))
   证明: isClopen_iInter fun _ => isClopen_iInter hf _
 
 Depends on / 依赖: isClopen_iInter
@@ -365,7 +365,7 @@ lemma isClopen_iUnion₂
 
 中文:
 引理 isClopen_iUnion₂
-  条件: {f : 对任意 i, κ i -> Set α} (hf : 对任意 i j, IsClopen (f i j))
+  条件: {f : 对任意 i, κ i -> 集合 α} (hf : 对任意 i j, IsClopen (f i j))
   证明: isClopen_iUnion fun _ => isClopen_iUnion hf _
 
 Depends on / 依赖: isClopen_iUnion
@@ -385,8 +385,8 @@ lemma interior_iInter
     isOpen_interior).antisymm' <| subset_iInter fun _ => interior_mono <| iInter_subset _ _
 
 中文:
-引理 interior_iInter
-  条件: (f : ι -> Set α)
+引理 interior_i整数er
+  条件: (f : ι -> 集合 α)
   结论: interior (⋂ i, f i) = ⋂ i, interior (f i)
   证明: (interior_maximal (iInter_mono fun _ => interior_subset) <| isOpen_iInter fun _ =>
     isOpen_interior).antisymm' <| subset_iInter fun _ => interior_mono <| iInter_subset _ _
@@ -408,8 +408,8 @@ lemma interior_sInter
   simp_rw [sInter_eq_biInter, interior_iInter]
 
 中文:
-引理 interior_sInter
-  条件: (S : Set (Set α))
+引理 interior_s整数er
+  条件: (S : 集合 (集合 α))
   结论: interior (⋂₀ S) = ⋂ s in S, interior s
   证明: by
   simp_rw [sInter_eq_biInter, interior_iInter]
@@ -431,7 +431,7 @@ lemma closure_iUnion
 
 中文:
 引理 closure_iUnion
-  条件: (f : ι -> Set α)
+  条件: (f : ι -> 集合 α)
   结论: closure (⋃ i, f i) = ⋃ i, closure (f i)
   证明: compl_injective by
     simpa only [← interior_compl, compl_iUnion] using interior_iInter fun i => (f i)ᶜ
@@ -454,7 +454,7 @@ lemma closure_sUnion
 
 中文:
 引理 closure_sUnion
-  条件: (S : Set (Set α))
+  条件: (S : 集合 (集合 α))
   结论: closure (⋃₀ S) = ⋃ s in S, closure s
   证明: by
   simp_rw [sUnion_eq_biUnion, closure_iUnion]
@@ -479,8 +479,8 @@ lemma Topology.IsInducing.alexandrovDiscrete
     simp_rw [preimage_iInter, htU, sInter_eq_biInter]
 
 中文:
-引理 Topology.IsInducing.alexandrovDiscrete
-  条件: [AlexandrovDiscrete α] {f : β -> α} (h : IsInducing f)
+引理 拓扑.是Inducing.alexandrovDiscrete
+  条件: [AlexandrovDiscrete α] {f : β -> α} (h : 是Inducing f)
   证明: by
     simp_rw [h.isOpen_iff] at hS ⊢
     choose U hU htU using hS
@@ -509,8 +509,8 @@ lemma AlexandrovDiscrete.sup
     ⟨@isOpen_sInter _ t₁ _ _ fun _s hs => (hS _ hs).1, isOpen_sInter fun _s hs => (hS _ hs).2⟩
 
 中文:
-引理 AlexandrovDiscrete.sup
-  结论: {t₁ t₂ : TopologicalSpace α} (_ : @AlexandrovDiscrete α t₁)
+引理 AlexandrovDiscrete.上确界
+  结论: {t₁ t₂ : 拓扑空间 α} (_ : @AlexandrovDiscrete α t₁)
   证明: @AlexandrovDiscrete.mk α (t₁ ⊔ t₂) fun _S hS =>
     ⟨@isOpen_sInter _ t₁ _ _ fun _s hs => (hS _ hs).1, isOpen_sInter fun _s hs => (hS _ hs).2⟩
 
@@ -535,7 +535,7 @@ lemma alexandrovDiscrete_iSup
 
 中文:
 引理 alexandrovDiscrete_iSup
-  条件: {t : ι -> TopologicalSpace α} (_ : 对任意 i, @AlexandrovDiscrete α (t i))
+  条件: {t : ι -> 拓扑空间 α} (_ : 对任意 i, @AlexandrovDiscrete α (t i))
   证明: @AlexandrovDiscrete.mk α (⨆ i, t i)
     fun _S hS => isOpen_iSup_iff.2
       fun i => @isOpen_sInter _ (t i) _ _
@@ -565,7 +565,7 @@ lemma isOpen_nhdsKer
 
 中文:
 引理 isOpen_nhdsKer
-  结论: IsOpen (nhdsKer s)
+  结论: 是开集 (nhdsKer s)
   证明: by
   rw [nhdsKer_def]; exact isOpen_sInter fun _ => And.left
 -/
@@ -599,7 +599,7 @@ lemma nhdsKer_eq_iff_isOpen
 
 中文:
 引理 nhdsKer_eq_iff_isOpen
-  结论: nhdsKer s = s ↔ IsOpen s
+  结论: nhdsKer s = s ↔ 是开集 s
   证明: ⟨fun h => h ▸ isOpen_nhdsKer, IsOpen.nhdsKer_eq⟩
 -/
 @[simp] lemma nhdsKer_eq_iff_isOpen : nhdsKer s = s ↔ IsOpen s :=
@@ -616,7 +616,7 @@ lemma nhdsKer_subset_iff_isOpen
 
 中文:
 引理 nhdsKer_subset_iff_isOpen
-  结论: nhdsKer s subseteq s ↔ IsOpen s
+  结论: nhdsKer s subseteq s ↔ 是开集 s
   证明: by
   simp only [nhdsKer_eq_iff_isOpen.symm, Subset.antisymm_iff, subset_nhdsKer, and_true]
 -/
@@ -634,7 +634,7 @@ lemma nhdsKer_subset_iff
 
 中文:
 引理 nhdsKer_subset_iff
-  结论: nhdsKer s subseteq t ↔ 存在 U, IsOpen U ∧ s subseteq U ∧ U subseteq t
+  结论: nhdsKer s subseteq t ↔ 存在 U, 是开集 U ∧ s subseteq U ∧ U subseteq t
   证明: ⟨fun h => ⟨nhdsKer s, isOpen_nhdsKer, subset_nhdsKer, h⟩,
     fun ⟨_U, hU, hsU, hUt⟩ => (nhdsKer_minimal hsU hU).trans hUt⟩
 
@@ -692,7 +692,7 @@ lemma gc_nhdsKer_interior
 
 中文:
 引理 gc_nhdsKer_interior
-  结论: GaloisConnection (nhdsKer : Set α -> Set α) interior
+  结论: GaloisConnection (nhdsKer : 集合 α -> 集合 α) interior
   证明: fun s t => by simp [nhdsKer_subset_iff, subset_interior_iff]
 
 Depends on / 依赖: nhdsKer_subset_iff, subset_interior_iff
@@ -712,7 +712,7 @@ lemma principal_nhdsKer
 
 中文:
 引理 principal_nhdsKer
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: 𝓟 (nhdsKer s) = 𝓝ˢ s
   证明: by
   rw [← nhdsSet_nhdsKer]; rw [isOpen_nhdsKer.nhdsSet_eq]
@@ -752,7 +752,7 @@ lemma nhdsSet_basis_nhdsKer
 
 中文:
 引理 nhdsSet_basis_nhdsKer
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: principal_nhdsKer s ▸ hasBasis_principal (nhdsKer s)
 
 Depends on / 依赖: PartialOrder, PartialOrder.lift, UniformSpace, UniformSpace.ext, hasBasis_principal, nhdsKer, principal_nhdsKer
@@ -793,8 +793,8 @@ lemma isOpen_iff_forall_specializes
 omit [AlexandrovDiscrete α] in
 
 中文:
-引理 isOpen_iff_forall_specializes
-  结论: IsOpen s ↔ 对任意 x y, x ⤳ y -> y in s -> x in s
+引理 isOpen_iff_对任意_specializes
+  结论: 是开集 s ↔ 对任意 x y, x ⤳ y -> y in s -> x in s
   证明: by
   simp only [← nhdsKer_subset_iff_isOpen, Set.subset_def, mem_nhdsKer_iff_specializes, exists_imp,
     and_imp, @forall_comm (_ ⤳ _)]
@@ -878,7 +878,7 @@ instance AlexandrovDiscrete.toFirstCountable
 
 中文:
 实例 AlexandrovDiscrete.toFirstCountable
-  签名: : FirstCountableTopology α where
+  签名: : 第一可数拓扑 α where
   定义体: ⟨{nhdsKer {a}}, countable_singleton _, by simp⟩
 
 Depends on / 依赖: countable_singleton, nhdsKer
@@ -898,7 +898,7 @@ isOpen_nhdsKer.mem_nhds subset_nhdsKer mem_singleton _,
 
 中文:
 实例 AlexandrovDiscrete.toLocallyCompactSpace
-  签名: : LocallyCompactSpace α where
+  签名: : 局部紧空间 α where
   定义体: ⟨nhdsKer {a},
 isOpen_nhdsKer.mem_nhds subset_nhdsKer mem_singleton _,
       nhdsKer_singleton_subset_iff_mem_nhds.2 hU, isCompact_singleton.nhdsKer⟩
@@ -919,7 +919,7 @@ instance Subtype.instAlexandrovDiscrete
   body: IsInducing.subtypeVal.alexandrovDiscrete
 
 中文:
-实例 Subtype.instAlexandrovDiscrete
+实例 子类型.instAlexandrovDiscrete
   签名: {p : α -> 命题}
   定义体: IsInducing.subtypeVal.alexandrovDiscrete
 
@@ -937,8 +937,8 @@ instance Quotient.instAlexandrovDiscrete
   body: alexandrovDiscrete_coinduced
 
 中文:
-实例 Quotient.instAlexandrovDiscrete
-  签名: {s : Setoid α}
+实例 商.instAlexandrovDiscrete
+  签名: {s : 集合等价关系 α}
   定义体: alexandrovDiscrete_coinduced
 
 Depends on / 依赖: alexandrovDiscrete_coinduced
@@ -955,7 +955,7 @@ instance Sum.instAlexandrovDiscrete
   body: alexandrovDiscrete_coinduced.sup alexandrovDiscrete_coinduced
 
 中文:
-实例 Sum.instAlexandrovDiscrete
+实例 和.instAlexandrovDiscrete
   签名: : AlexandrovDiscrete (α oplus β)
   定义体: alexandrovDiscrete_coinduced.sup alexandrovDiscrete_coinduced
 
@@ -973,8 +973,8 @@ instance Sigma.instAlexandrovDiscrete
   body: alexandrovDiscrete_iSup fun _ => alexandrovDiscrete_coinduced
 
 中文:
-实例 Sigma.instAlexandrovDiscrete
-  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, TopologicalSpace (X i)]
+实例 依赖和类型.instAlexandrovDiscrete
+  签名: {ι : 类型} {X : ι -> 类型} [对任意 i, 拓扑空间 (X i)]
   定义体: alexandrovDiscrete_iSup fun _ => alexandrovDiscrete_coinduced
 
 Depends on / 依赖: alexandrovDiscrete_coinduced, alexandrovDiscrete_iSup
@@ -994,7 +994,7 @@ instance Prod.instAlexandrovDiscrete
     prod_principal_principal, nhdsKer_pair, forall_true_iff]
 
 中文:
-实例 Prod.instAlexandrovDiscrete
+实例 积类型.instAlexandrovDiscrete
   签名: : AlexandrovDiscrete (α × β)
   定义体: by
   simp_rw [alexandrovDiscrete_iff_nhds, Prod.forall, nhds_prod_eq, ← principal_nhdsKer_singleton,
@@ -1017,8 +1017,8 @@ instance Pi.instAlexandrovDiscreteOfFinite
     pi_principal, nhdsKer_singleton_pi, forall_true_iff]
 
 中文:
-实例 Pi.instAlexandrovDiscreteOfFinite
-  签名: {ι : 类型} [Finite ι] {X : ι -> 类型}
+实例 依赖函数类型.instAlexandrovDiscreteOfFinite
+  签名: {ι : 类型} [有限 ι] {X : ι -> 类型}
   定义体: by
   simp_rw [alexandrovDiscrete_iff_nhds, nhds_pi, ← principal_nhdsKer_singleton,
     pi_principal, nhdsKer_singleton_pi, forall_true_iff]

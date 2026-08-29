@@ -141,7 +141,7 @@ definition op
 
 中文:
 定义 op
-  签名: (X : HomologicalComplex V c)
+  签名: (X : 同调复形 V c)
   定义体: op (X.X i)
   d i j := (X.d j i).op
   shape i j hij := by rw [X.shape j i hij, op_zero]
@@ -168,7 +168,7 @@ definition opSymm
 
 中文:
 定义 opSymm
-  签名: (X : HomologicalComplex V c.symm)
+  签名: (X : 同调复形 V c.symm)
   定义体: op (X.X i)
   d i j := (X.d j i).op
   shape i j hij := by rw [X.shape j i hij, op_zero]
@@ -195,7 +195,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: (X : HomologicalComplex Vᵒᵖ c)
+  签名: (X : 同调复形 Vᵒᵖ c)
   定义体: unop (X.X i)
   d i j := (X.d j i).unop
   shape i j hij := by rw [X.shape j i hij, unop_zero]
@@ -222,7 +222,7 @@ definition unopSymm
 
 中文:
 定义 unopSymm
-  签名: (X : HomologicalComplex Vᵒᵖ c.symm)
+  签名: (X : 同调复形 Vᵒᵖ c.symm)
   定义体: unop (X.X i)
   d i j := (X.d j i).unop
   shape i j hij := by rw [X.shape j i hij, unop_zero]
@@ -252,7 +252,7 @@ definition opFunctor
 
 中文:
 定义 opFunctor
-  签名: : (HomologicalComplex V c)ᵒᵖ ⥤ HomologicalComplex Vᵒᵖ c.symm where
+  签名: : (同调复形 V c)ᵒᵖ ⥤ 同调复形 Vᵒᵖ c.symm where
   定义体: (unop X).op
   map f :=
     { f := fun i => (f.unop.f i).op
@@ -280,7 +280,7 @@ definition opInverse
 
 中文:
 定义 opInverse
-  签名: : HomologicalComplex Vᵒᵖ c.symm ⥤ (HomologicalComplex V c)ᵒᵖ where
+  签名: : 同调复形 Vᵒᵖ c.symm ⥤ (同调复形 V c)ᵒᵖ where
   定义体: op X.unopSymm
   map f := Quiver.Hom.op
     { f := fun i => (f.f i).unop
@@ -312,7 +312,7 @@ definition opUnitIso
 
 中文:
 定义 opUnitIso
-  签名: : 𝟭 (HomologicalComplex V c)ᵒᵖ ≅ opFunctor V c ⋙ opInverse V c
+  签名: : 𝟭 (同调复形 V c)ᵒᵖ ≅ opFunctor V c ⋙ opInverse V c
   定义体: NatIso.ofComponents
     (fun X =>
       (HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _) fun i j _ => by
@@ -349,7 +349,7 @@ definition opCounitIso
 
 中文:
 定义 opCounitIso
-  签名: : opInverse V c ⋙ opFunctor V c ≅ 𝟭 (HomologicalComplex Vᵒᵖ c.symm)
+  签名: : opInverse V c ⋙ opFunctor V c ≅ 𝟭 (同调复形 Vᵒᵖ c.symm)
   定义体: NatIso.ofComponents
     fun X => HomologicalComplex.Hom.isoOfComponents fun _ => Iso.refl _
 
@@ -381,7 +381,7 @@ definition opEquivalence
 
 中文:
 定义 opEquivalence
-  签名: : (HomologicalComplex V c)ᵒᵖ ≌ HomologicalComplex Vᵒᵖ c.symm where
+  签名: : (同调复形 V c)ᵒᵖ ≌ 同调复形 Vᵒᵖ c.symm where
   定义体: opFunctor V c
   inverse := opInverse V c
   unitIso := opUnitIso V c
@@ -415,7 +415,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opFunctor V c).IsEquivalence
+  签名: (opFunctor V c).是等价
   定义体: (opEquivalence V c).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, opEquivalence
@@ -431,7 +431,7 @@ instance :
 
 中文:
 实例 :
-  签名: (opInverse V c).IsEquivalence
+  签名: (opInverse V c).是等价
   定义体: (opEquivalence V c).isEquivalence_inverse
 
 Depends on / 依赖: isEquivalence_inverse, opEquivalence
@@ -454,7 +454,7 @@ definition unopFunctor
 
 中文:
 定义 unopFunctor
-  签名: : (HomologicalComplex Vᵒᵖ c)ᵒᵖ ⥤ HomologicalComplex V c.symm where
+  签名: : (同调复形 Vᵒᵖ c)ᵒᵖ ⥤ 同调复形 V c.symm where
   定义体: (unop X).unop
   map f :=
     { f := fun i => (f.unop.f i).unop
@@ -482,7 +482,7 @@ definition unopInverse
 
 中文:
 定义 unopInverse
-  签名: : HomologicalComplex V c.symm ⥤ (HomologicalComplex Vᵒᵖ c)ᵒᵖ where
+  签名: : 同调复形 V c.symm ⥤ (同调复形 Vᵒᵖ c)ᵒᵖ where
   定义体: op X.opSymm
   map f := Quiver.Hom.op
     { f := fun i => (f.f i).op
@@ -514,7 +514,7 @@ definition unopUnitIso
 
 中文:
 定义 unopUnitIso
-  签名: : 𝟭 (HomologicalComplex Vᵒᵖ c)ᵒᵖ ≅ unopFunctor V c ⋙ unopInverse V c
+  签名: : 𝟭 (同调复形 Vᵒᵖ c)ᵒᵖ ≅ unopFunctor V c ⋙ unopInverse V c
   定义体: NatIso.ofComponents
     (fun X =>
       (HomologicalComplex.Hom.isoOfComponents (fun _ => Iso.refl _) fun i j _ => by
@@ -551,7 +551,7 @@ definition unopCounitIso
 
 中文:
 定义 unopCounitIso
-  签名: : unopInverse V c ⋙ unopFunctor V c ≅ 𝟭 (HomologicalComplex V c.symm)
+  签名: : unopInverse V c ⋙ unopFunctor V c ≅ 𝟭 (同调复形 V c.symm)
   定义体: NatIso.ofComponents
     fun X => HomologicalComplex.Hom.isoOfComponents fun _ => Iso.refl _
 
@@ -582,7 +582,7 @@ definition unopEquivalence
 
 中文:
 定义 unopEquivalence
-  签名: : (HomologicalComplex Vᵒᵖ c)ᵒᵖ ≌ HomologicalComplex V c.symm where
+  签名: : (同调复形 Vᵒᵖ c)ᵒᵖ ≌ 同调复形 V c.symm where
   定义体: unopFunctor V c
   inverse := unopInverse V c
   unitIso := unopUnitIso V c
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unopFunctor V c).IsEquivalence
+  签名: (unopFunctor V c).是等价
   定义体: (unopEquivalence V c).isEquivalence_functor
 
 Depends on / 依赖: isEquivalence_functor, unopEquivalence
@@ -630,7 +630,7 @@ instance :
 
 中文:
 实例 :
-  签名: (unopInverse V c).IsEquivalence
+  签名: (unopInverse V c).是等价
   定义体: (unopEquivalence V c).isEquivalence_inverse
 
 Depends on / 依赖: isEquivalence_inverse, unopEquivalence
@@ -795,7 +795,7 @@ lemma ExactAt.op
 
 中文:
 引理 ExactAt.op
-  条件: {K : HomologicalComplex V c} {i : ι} (h : K.ExactAt i)
+  条件: {K : 同调复形 V c} {i : ι} (h : K.ExactAt i)
   证明: ShortComplex.Exact.op h
 
 Depends on / 依赖: ShortComplex, ShortComplex.Exact.op
@@ -816,7 +816,7 @@ lemma ExactAt.unop
 
 中文:
 引理 ExactAt.unop
-  条件: {K : HomologicalComplex Vᵒᵖ c} {i : ι} (h : K.ExactAt i)
+  条件: {K : 同调复形 Vᵒᵖ c} {i : ι} (h : K.ExactAt i)
   证明: ShortComplex.Exact.unop h
 
 @[simp]
@@ -838,7 +838,7 @@ lemma exactAt_op_iff
 
 中文:
 引理 exactAt_op_iff
-  条件: (K : HomologicalComplex V c) {i : ι}
+  条件: (K : 同调复形 V c) {i : ι}
   证明: ⟨fun h => h.unop, fun h => h.op⟩
 
 Depends on / 依赖: h.op, h.unop
@@ -856,8 +856,8 @@ lemma Acyclic.op
   proof: fun i => (h i).op
 
 中文:
-引理 Acyclic.op
-  条件: {K : HomologicalComplex V c} (h : K.Acyclic)
+引理 非循环.op
+  条件: {K : 同调复形 V c} (h : K.非循环)
   证明: fun i => (h i).op
 -/
 lemma Acyclic.op {K : HomologicalComplex V c} (h : K.Acyclic) :
@@ -875,8 +875,8 @@ lemma Acyclic.unop
 @[simp]
 
 中文:
-引理 Acyclic.unop
-  条件: {K : HomologicalComplex Vᵒᵖ c} (h : K.Acyclic)
+引理 非循环.unop
+  条件: {K : 同调复形 Vᵒᵖ c} (h : K.非循环)
   证明: fun i => (h i).unop
 
 @[simp]
@@ -896,7 +896,7 @@ lemma acyclic_op_iff
 
 中文:
 引理 acyclic_op_iff
-  条件: (K : HomologicalComplex V c)
+  条件: (K : 同调复形 V c)
   证明: ⟨fun h => h.unop, fun h => h.op⟩
 
 Depends on / 依赖: h.op, h.unop
@@ -915,7 +915,7 @@ definition homologyOp
 
 中文:
 定义 homologyOp
-  签名: (K : HomologicalComplex V c) (i : ι) [K.HasHomology i]
+  签名: (K : 同调复形 V c) (i : ι) [K.有同调 i]
   定义体: (K.sc i).homologyOpIso
 
 Depends on / 依赖: K.sc, homologyOpIso
@@ -934,7 +934,7 @@ definition homologyUnop
 
 中文:
 定义 homologyUnop
-  签名: (K : HomologicalComplex Vᵒᵖ c) (i : ι) [K.HasHomology i]
+  签名: (K : 同调复形 Vᵒᵖ c) (i : ι) [K.有同调 i]
   定义体: (K.unop.homologyOp i).unop
 
 Depends on / 依赖: K.unop.homologyOp, homologyOp
@@ -1193,7 +1193,7 @@ definition cyclesOpNatIso
     (fun _ => cyclesOpIso_hom_naturality _ _)
 
 中文:
-定义 cyclesOpNatIso
+定义 cyclesOp自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun K => (unop K).cyclesOpIso i)
     (fun _ => cyclesOpIso_hom_naturality _ _)
@@ -1215,7 +1215,7 @@ definition opcyclesOpNatIso
     (fun _ => opcyclesOpIso_hom_naturality _ _)
 
 中文:
-定义 opcyclesOpNatIso
+定义 opcyclesOp自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun K => (unop K).opcyclesOpIso i)
     (fun _ => opcyclesOpIso_hom_naturality _ _)
@@ -1237,7 +1237,7 @@ definition homologyOpNatIso
     (fun _ => homologyOp_hom_naturality _ _)
 
 中文:
-定义 homologyOpNatIso
+定义 homologyOp自然数Iso
   签名: :
   定义体: NatIso.ofComponents (fun K => (unop K).homologyOp i)
     (fun _ => homologyOp_hom_naturality _ _)
@@ -1268,7 +1268,7 @@ instance opFunctor_additive
 
 中文:
 实例 opFunctor_additive
-  签名: : (@opFunctor ι V _ c _).Additive where
+  签名: : (@opFunctor ι V _ c _).加性 where
 -/
 instance opFunctor_additive : (@opFunctor ι V _ c _).Additive where
 
@@ -1281,7 +1281,7 @@ instance unopFunctor_additive
 
 中文:
 实例 unopFunctor_additive
-  签名: : (@unopFunctor ι V _ c _).Additive where
+  签名: : (@unopFunctor ι V _ c _).加性 where
 -/
 instance unopFunctor_additive : (@unopFunctor ι V _ c _).Additive where
 
@@ -1314,7 +1314,7 @@ definition op
 
 中文:
 定义 op
-  签名: {F G : HomologicalComplex V c} {φ₁ φ₂ : F ⟶ G} (h : Homotopy φ₁ φ₂)
+  签名: {F G : 同调复形 V c} {φ₁ φ₂ : F ⟶ G} (h : 同伦 φ₁ φ₂)
   定义体: (h.hom j i).op
   zero i j hij := Quiver.Hom.unop_inj (h.zero _ _ hij)
   comm n := Quiver.Hom.unop_inj (by
@@ -1355,7 +1355,7 @@ definition unop
 
 中文:
 定义 unop
-  签名: {F G : HomologicalComplex Vᵒᵖ c} {φ₁ φ₂ : F ⟶ G} (h : Homotopy φ₁ φ₂)
+  签名: {F G : 同调复形 Vᵒᵖ c} {φ₁ φ₂ : F ⟶ G} (h : 同伦 φ₁ φ₂)
   定义体: (h.hom j i).unop
   zero i j hij := Quiver.Hom.op_inj (h.zero _ _ hij)
   comm n := Quiver.Hom.op_inj (by

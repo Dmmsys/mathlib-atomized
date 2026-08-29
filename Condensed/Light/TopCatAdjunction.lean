@@ -68,7 +68,7 @@ abbreviation toTopCat
 
 中文:
 缩写 toTopCat
-  签名: : TopCat.{u}
+  签名: : 顶元素范畴.{u}
   定义体: TopCat.of (X.obj.obj ⟨LightProfinite.of PUnit⟩)
 
 Depends on / 依赖: LightProfinite, LightProfinite.of, TopCat, TopCat.of, X.obj.obj
@@ -168,7 +168,7 @@ definition _root_.lightCondSetToTopCat
 
 中文:
 定义 _root_.lightCondSetToTopCat
-  签名: : LightCondSet.{u} ⥤ TopCat.{u} where
+  签名: : LightCondSet.{u} ⥤ 顶元素范畴.{u} where
   定义体: X.toTopCat
   map f := toTopCatMap f
 
@@ -193,7 +193,7 @@ definition topCatAdjunctionCounit
 
 中文:
 定义 topCatAdjunctionCounit
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: TopCat.ofHom
   { toFun x := x.1 PUnit.unit
     continuous_toFun := by
@@ -221,7 +221,7 @@ definition topCatAdjunctionCounitEquiv
 
 中文:
 定义 topCatAdjunctionCounitEquiv
-  签名: (X : TopCat.{u})
+  签名: (X : 顶元素范畴.{u})
   定义体: topCatAdjunctionCounit X
   invFun x := ContinuousMap.const _ x
 
@@ -241,7 +241,7 @@ lemma topCatAdjunctionCounit_bijective
 
 中文:
 引理 topCatAdjunctionCounit_bijective
-  条件: (X : TopCat.{u})
+  条件: (X : 顶元素范畴.{u})
   证明: (topCatAdjunctionCounitEquiv X).bijective
 
 Depends on / 依赖: bijective, topCatAdjunctionCounitEquiv
@@ -344,7 +344,7 @@ instance :
 
 中文:
 实例 :
-  签名: topCatToLightCondSet.Faithful
+  签名: topCatToLightCondSet.忠实
   定义体: topCatAdjunction.faithful_R_of_epi_counit_app
 
 Depends on / 依赖: Int.inductionOn, faithful_R_of_epi_counit_app, inductionOn, topCatAdjunction, topCatAdjunction.faithful_R_of_epi_counit_app
@@ -441,7 +441,7 @@ definition sequentialAdjunctionHomeo
 
 中文:
 定义 sequentialAdjunctionHomeo
-  签名: (X : TopCat.{0}) [SequentialSpace X]
+  签名: (X : 顶元素范畴.{0}) [Sequential空间 X]
   定义体: topCatAdjunctionCounitEquiv X
   continuous_invFun := by
     apply SeqContinuous.continuous
@@ -498,7 +498,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsIso sequentialAdjunction.{0}.counit
+  签名: 是同构 sequentialAdjunction.{0}.counit
   定义体: by
   rw [NatTrans.isIso_iff_isIso_app]
   intro X

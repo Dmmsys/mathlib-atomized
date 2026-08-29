@@ -66,7 +66,7 @@ definition intervalGapsWithin
 
 中文:
 定义 intervalGapsWithin
-  签名: (i : Fin (k + 1))
+  签名: (i : 有限集 (k + 1))
   定义体: (fst, snd) where
   /-- The first coordinate of `F.intervalGapsWithin h a b i` is `a` if `i = 0`,
   `y (i - 1)` otherwise. -/
@@ -230,7 +230,7 @@ theorem intervalGapsWithin_mapsTo
 
 中文:
 定理 intervalGapsWithin_mapsTo
-  结论: (Set.Iio k).MapsTo
+  结论: (集合.左无界右开区间 k).映射到
   证明: by
   intro j hj
   rw [mem_Iio] at hj
@@ -263,7 +263,7 @@ theorem intervalGapsWithin_injOn
 
 中文:
 定理 intervalGapsWithin_injOn
-  结论: (Set.Iio k).InjOn
+  结论: (集合.左无界右开区间 k).单射限制
   证明: by
   intro j hj j' hj' hjj'
   rw [mem_Iio] at hj hj'
@@ -296,7 +296,7 @@ theorem intervalGapsWithin_surjOn
 
 中文:
 定理 intervalGapsWithin_surjOn
-  结论: (Set.Iio k).SurjOn
+  结论: (集合.左无界右开区间 k).满射限制
   证明: by
   intro z hz
   rw [← F.range_orderEmbOfFin h (α := α ×ₗ α)] at hz

@@ -281,7 +281,7 @@ theorem charpoly_mem_lifts
 
 中文:
 定理 charpoly_mem_lifts
-  条件: [Fintype G] (b : B)
+  条件: [有限类型 G] (b : B)
   证明: (charpoly G b).lifts_iff_coeff_lifts.mpr fun n => isInvariant _ (smul_coeff_charpoly b n)
 
 Depends on / 依赖: charpoly, isInvariant, lifts_iff_coeff_lifts, lifts_iff_coeff_lifts.mpr, smul_coeff_charpoly
@@ -305,9 +305,9 @@ theorem isIntegral
   exact ⟨p, hp2, by rw [← eval_map, hp1, eval_charpoly]⟩
 
 中文:
-定理 isIntegral
-  条件: [Finite G]
-  结论: Algebra.Is整数egral A B
+定理 is整数egral
+  条件: [有限 G]
+  结论: 代数.是整 A B
   证明: by
   cases nonempty_fintype G
   refine ⟨fun b => ?_⟩
@@ -340,8 +340,8 @@ theorem exists_smul_of_under_eq
     suffices h : exists g in Fi
 
 中文:
-定理 exists_smul_of_under_eq
-  结论: [Finite G] [SMulCommClass G A B]
+定理 存在_smul_of_under_eq
+  结论: [有限 G] [标量交换类 G A B]
   证明: by
   cases nonempty_fintype G
   have : forall (P Q : Ideal B) [P.IsPrime] [Q.IsPrime], P.under A = Q.under A ->
@@ -387,7 +387,7 @@ theorem orbit_eq_primesOver
 
 中文:
 定理 orbit_eq_primesOver
-  结论: [Finite G] [SMulCommClass G A B] (P : Ideal A) (Q : Ideal B)
+  结论: [有限 G] [标量交换类 G A B] (P : 理想 A) (Q : 理想 B)
   证明: by
   refine Set.ext fun R => ⟨fun ⟨g, hg⟩ => hg ▸ ⟨hQ.smul g, hP.smul g⟩, fun h => ?_⟩
   have : R.IsPrime := h.1
@@ -556,7 +556,7 @@ theorem fixed_of_fixed1_aux3
 
 中文:
 定理 fixed_of_fixed1_aux3
-  结论: [NoZeroDivisors B] {b : B} {i j : 自然数} {p : Polynomial A}
+  结论: [无零因子 B] {b : B} {i j : 自然数} {p : 多项式 A}
   证明: by
   by_cases ha : b = 0
   · rw [ha, map_zero]
@@ -593,7 +593,7 @@ theorem fixed_of_fixed1
 
 中文:
 定理 fixed_of_fixed1
-  结论: [Module.IsTorsionFree (B ⧸ Q) L] (f : Gal(L/K)) (b : B ⧸ Q)
+  结论: [模.是无挠 (B ⧸ Q) L] (f : Gal(L/K)) (b : B ⧸ Q)
   证明: by
   cases nonempty_fintype G
   obtain ⟨b₀, rfl⟩ := Ideal.Quotient.mk_surjective b
@@ -647,7 +647,7 @@ omit [Finite G] [Q.IsPrime] [Algebra.IsInvariant A B G] in
 
 中文:
 定义 IsFractionRing.stabilizerHom
-  签名: : MulAction.stabilizer G Q ->* Gal(L/K)
+  签名: : 乘法作用.stabilizer G Q ->* Gal(L/K)
   定义体: MonoidHom.comp (IsFractionRing.fieldEquivOfAlgEquivHom K L) (Ideal.Quotient.stabilizerHom Q P G)
 
 omit [Finite G] [Q.IsPrime] [Algebra.IsInvariant A B G] in
@@ -673,7 +673,7 @@ omit [Finite G] [Q.IsPrime] [Algebra.IsInvariant A B G] in
 
 中文:
 定理 IsFractionRing.stabilizerHom_apply_apply_mk
-  条件: (σ : MulAction.stabilizer G Q) (x : B)
+  条件: (σ : 乘法作用.stabilizer G Q) (x : B)
   证明: by
   simp [IsFractionRing.stabilizerHom, MulAction.subgroup_smul_def]
 
@@ -798,7 +798,7 @@ theorem Ideal.Quotient.stabilizerHom_surjective
   rw [IsFractionRing.stabilizerHom]; rw [MonoidHom.co
 
 中文:
-定理 Ideal.Quotient.stabilizerHom_surjective
+定理 理想.商.stabilizerHom_surjective
   证明: by
   have : P.IsPrime := Ideal.over_def Q P ▸ Ideal.IsPrime.under A Q
   let _ := FractionRing.liftAlgebra (A ⧸ P) (FractionRing (B ⧸ Q))
@@ -855,7 +855,7 @@ theorem IsFractionRing.stabilizerQuotientInertiaEquiv_mk
 
 中文:
 定理 IsFractionRing.stabilizerQuotientInertiaEquiv_mk
-  条件: (g : MulAction.stabilizer G Q)
+  条件: (g : 乘法作用.stabilizer G Q)
   证明: rfl
 -/
 theorem IsFractionRing.stabilizerQuotientInertiaEquiv_mk (g : MulAction.stabilizer G Q) :
@@ -873,7 +873,7 @@ definition Ideal.Quotient.stabilizerQuotientInertiaEquiv
 @[simp]
 
 中文:
-定义 Ideal.Quotient.stabilizerQuotientInertiaEquiv
+定义 理想.商.stabilizerQuotientInertiaEquiv
   签名: :
   定义体: QuotientGroup.liftEquiv (N := Q.inertia (MulAction.stabilizer G Q))
     (stabilizerHom_surjective G P Q) (ker_stabilizerHom Q P G).symm
@@ -898,8 +898,8 @@ theorem Ideal.Quotient.stabilizerQuotientInertiaEquiv_mk
   proof: rfl
 
 中文:
-定理 Ideal.Quotient.stabilizerQuotientInertiaEquiv_mk
-  条件: (g : MulAction.stabilizer G Q)
+定理 理想.商.stabilizerQuotientInertiaEquiv_mk
+  条件: (g : 乘法作用.stabilizer G Q)
   证明: rfl
 -/
 theorem Ideal.Quotient.stabilizerQuotientInertiaEquiv_mk (g : MulAction.stabilizer G Q) :
@@ -929,7 +929,7 @@ lemma Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
     exact ⟨(e.symm.toAlgHom.comp (Subalgebra.inclusion this)).comp (σ.comp f)
 
 中文:
-引理 Ideal.Quotient.exists_algHom_fixedPoint_quotient_under
+引理 理想.商.存在_algHom_fixedPoint_quotient_under
   证明: by
   let f : (B ⧸ Q) ->ₐ[A ⧸ P] k := IsScalarTower.toAlgHom _ _ _
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
@@ -983,7 +983,7 @@ lemma Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under
   obtain ⟨τ₂, h₂⟩ := Ideal.Quotient.exists_algHom_fixedPoint_quotie
 
 中文:
-引理 Ideal.Quotient.exists_algEquiv_fixedPoint_quotient_under
+引理 理想.商.存在_algEquiv_fixedPoint_quotient_under
   证明: by
   let f : (B ⧸ Q) ->ₐ[A ⧸ P] k := IsScalarTower.toAlgHom _ _ _
   have hf : Function.Injective f := FaithfulSMul.algebraMap_injective _ _
@@ -1040,9 +1040,9 @@ theorem isInvariant_of_isIntegral
   have : Nontrivial B := (IsFractio
 
 中文:
-定理 isInvariant_of_isIntegral
-  条件: [Algebra.Is整数egral A B]
-  结论: Algebra.IsInvariant K L G
+定理 isInvariant_of_is整数egral
+  条件: [代数.是整 A B]
+  结论: 代数.是不变 K L G
   证明: by
   refine ⟨fun x h => ?_⟩
   have hc (a : A) : (algebraMap K L) (algebraMap A K a) = (algebraMap B L) (algebraMap A B a) := by
@@ -1084,8 +1084,8 @@ theorem isInvariant
 
 中文:
 定理 isInvariant
-  条件: [Finite G]
-  结论: Algebra.IsInvariant K L G
+  条件: [有限 G]
+  结论: 代数.是不变 K L G
   证明: have := hAB.isIntegral
   isInvariant_of_isIntegral G A B K L
 

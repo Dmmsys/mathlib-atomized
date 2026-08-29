@@ -45,7 +45,7 @@ lemma Module.FinitePresentation.exists_basis_localizedModule_powers
   let e' := IsLocalize
 
 中文:
-引理 Module.FinitePresentation.exists_basis_localizedModule_powers
+引理 模.有限呈现.存在_basis_localizedModule_powers
   证明: by
   have : Module.FinitePresentation R (I ->₀ R) := Module.finitePresentation_of_projective _ _
   obtain ⟨r, hr, e, he⟩ := Module.FinitePresentation.exists_lift_equiv_of_isLocalizedModule S f
@@ -99,7 +99,7 @@ lemma Module.FinitePresentation.exists_free_localizedModule_powers
   have := (sho
 
 中文:
-引理 Module.FinitePresentation.exists_free_localizedModule_powers
+引理 模.有限呈现.存在_free_localizedModule_powers
   证明: by
   let I := Module.Free.ChooseBasisIndex Rₛ M'
   let b : Basis I Rₛ M' := Module.Free.chooseBasis Rₛ M'

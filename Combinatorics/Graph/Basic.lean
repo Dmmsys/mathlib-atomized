@@ -92,12 +92,12 @@ structure Graph
     - left_mem_of_isLink : forall ⦃e x y⦄, IsLink e x y -> x in vertexSet  [default: by grind]
 
 中文:
-结构 Graph
+结构 图
   参数: (α β : 类型)
   公理与运算 (7 个):
-    - vertexSet : Set α
+    - vertexSet : 集合 α
     - IsLink : β -> α -> α -> 命题
-    - edgeSet : Set β  [默认: {e | exists x y, IsLink e x y}]
+    - edgeSet : 集合 β  [默认: {e | exists x y, IsLink e x y}]
     - isLink_symm : 对任意 ⦃e⦄, e in edgeSet -> Std.Symm (IsLink e)
     - eq_or_eq_of_isLink_of_isLink : 对任意 ⦃e x y v w⦄, IsLink e x y -> IsLink e v w -> x = v ∨ x = w
     - edge_mem_iff_exists_isLink : 对任意 e, e in edgeSet ↔ 存在 x y, IsLink e x y  [默认: by exact fun _ => Iff.rfl]
@@ -274,7 +274,7 @@ lemma exists_isLink_of_mem_edgeSet
   proof: (edge_mem_iff_exists_isLink ..).1 h
 
 中文:
-引理 exists_isLink_of_mem_edgeSet
+引理 存在_isLink_of_mem_edgeSet
   条件: (h : e in E(G))
   结论: 存在 x y, G.IsLink e x y
   证明: (edge_mem_iff_exists_isLink ..).1 h
@@ -296,7 +296,7 @@ lemma edgeSet_eq_setOfPred_exists_isLink
 alias edgeSet_eq_setOf_exists_isLink := edgeSet_eq_setOfPred_exists_isLink
 
 中文:
-引理 edgeSet_eq_setOfPred_exists_isLink
+引理 edgeSet_eq_setOfPred_存在_isLink
   结论: E(G) = {e | 存在 x y, G.IsLink e x y}
   证明: Set.ext G.edge_mem_iff_exists_isLink
 
@@ -508,7 +508,7 @@ definition Inc
 
 中文:
 定义 Inc
-  签名: (G : Graph α β) (e : β) (x : α)
+  签名: (G : 图 α β) (e : β) (x : α)
   定义体: exists y, G.IsLink e x y
 
 Depends on / 依赖: G.IsLink, IsLink
@@ -832,7 +832,7 @@ lemma inc_eq_inc_iff_isLink_eq_isLink
 
 中文:
 引理 inc_eq_inc_iff_isLink_eq_isLink
-  条件: {G₁ G₂ : Graph α β}
+  条件: {G₁ G₂ : 图 α β}
   证明: by
   constructor <;> rintro h
   · ext x y
@@ -860,7 +860,7 @@ definition IsLoopAt
 
 中文:
 定义 IsLoopAt
-  签名: (G : Graph α β) (e : β) (x : α)
+  签名: (G : 图 α β) (e : β) (x : α)
   定义体: G.IsLink e x x
 
 @[simp]
@@ -981,7 +981,7 @@ definition IsNonloopAt
 
 中文:
 定义 IsNonloopAt
-  签名: (G : Graph α β) (e : β) (x : α)
+  签名: (G : 图 α β) (e : β) (x : α)
   定义体: exists y != x, G.IsLink e x y
 
 Depends on / 依赖: G.IsLink, IsLink
@@ -1171,8 +1171,8 @@ definition Adj
 @[symm]
 
 中文:
-定义 Adj
-  签名: (G : Graph α β) (x y : α)
+定义 伴随
+  签名: (G : 图 α β) (x y : α)
   定义体: exists e, G.IsLink e x y
 
 @[symm]
@@ -1192,9 +1192,9 @@ lemma Adj.symm
   proof: ⟨_, h.choose_spec.symm⟩
 
 中文:
-引理 Adj.symm
-  条件: (h : G.Adj x y)
-  结论: G.Adj y x
+引理 伴随.symm
+  条件: (h : G.伴随 x y)
+  结论: G.伴随 y x
   证明: ⟨_, h.choose_spec.symm⟩
 -/
 protected lemma Adj.symm (h : G.Adj x y) : G.Adj y x :=
@@ -1210,7 +1210,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Symm G.Adj
+  签名: Std.Symm G.伴随
   定义体: Adj.symm
 
 Depends on / 依赖: Adj.symm
@@ -1230,7 +1230,7 @@ lemma adj_comm
 中文:
 引理 adj_comm
   条件: (x y)
-  结论: G.Adj x y ↔ G.Adj y x
+  结论: G.伴随 x y ↔ G.伴随 y x
   证明: ⟨.symm, .symm⟩
 -/
 lemma adj_comm (x y) : G.Adj x y ↔ G.Adj y x :=
@@ -1247,8 +1247,8 @@ lemma Adj.left_mem
   proof: h.choose_spec.left_mem
 
 中文:
-引理 Adj.left_mem
-  条件: (h : G.Adj x y)
+引理 伴随.left_mem
+  条件: (h : G.伴随 x y)
   结论: x in V(G)
   证明: h.choose_spec.left_mem
 
@@ -1268,8 +1268,8 @@ lemma Adj.right_mem
   proof: h.symm.left_mem
 
 中文:
-引理 Adj.right_mem
-  条件: (h : G.Adj x y)
+引理 伴随.right_mem
+  条件: (h : G.伴随 x y)
   结论: y in V(G)
   证明: h.symm.left_mem
 
@@ -1290,7 +1290,7 @@ lemma IsLink.adj
 中文:
 引理 IsLink.adj
   条件: (h : G.IsLink e x y)
-  结论: G.Adj x y
+  结论: G.伴随 x y
   证明: ⟨e, h⟩
 -/
 lemma IsLink.adj (h : G.IsLink e x y) : G.Adj x y :=
@@ -1313,7 +1313,7 @@ lemma mk_eq_self
 
 中文:
 引理 mk_eq_self
-  条件: (G : Graph α β) {E : Set β} (hE : 对任意 e, e in E ↔ 存在 x y, G.IsLink e x y)
+  条件: (G : 图 α β) {E : 集合 β} (hE : 对任意 e, e in E ↔ 存在 x y, G.IsLink e x y)
   证明: by
   obtain rfl : E = E(G) := by simp [Set.ext_iff, hE, G.edge_mem_iff_exists_isLink]
   cases G with | _ _ _ _ _ _ h _ => simp
@@ -1348,7 +1348,7 @@ lemma ext
 
 中文:
 引理 ext
-  结论: {G₁ G₂ : Graph α β} (hV : V(G₁) = V(G₂))
+  结论: {G₁ G₂ : 图 α β} (hV : V(G₁) = V(G₂))
   证明: by
   rw [← G₁.mk_eq_self G₁.edge_mem_iff_exists_isLink]; rw [← G₂.mk_eq_self G₂.edge_mem_iff_exists_isLink]
   convert! rfl using 2
@@ -1374,7 +1374,7 @@ lemma ext_inc
 
 中文:
 引理 ext_inc
-  条件: {G₁ G₂ : Graph α β} (hV : V(G₁) = V(G₂)) (h : 对任意 e x, G₁.Inc e x ↔ G₂.Inc e x)
+  条件: {G₁ G₂ : 图 α β} (hV : V(G₁) = V(G₂)) (h : 对任意 e x, G₁.Inc e x ↔ G₂.Inc e x)
   证明: Graph.ext hV fun _ _ _ => by simp_rw [isLink_iff_inc, h]
 
 Depends on / 依赖: Graph.ext, isLink_iff_inc, simp_rw
@@ -1407,7 +1407,7 @@ definition copy
 
 中文:
 定义 copy
-  签名: (G : Graph α β) {vertexSet : Set α} {edgeSet : Set β} {IsLink : β -> α -> α -> 命题}
+  签名: (G : 图 α β) {vertexSet : 集合 α} {edgeSet : 集合 β} {IsLink : β -> α -> α -> 命题}
   定义体: vertexSet
   edgeSet := edgeSet
   IsLink := IsLink
@@ -1453,7 +1453,7 @@ lemma copy_eq
 
 中文:
 引理 copy_eq
-  结论: (G : Graph α β) {V : Set α} {E : Set β} {IsLink : β -> α -> α -> 命题}
+  结论: (G : 图 α β) {V : 集合 α} {E : 集合 β} {IsLink : β -> α -> α -> 命题}
   证明: by
   ext <;> simp_all [copy]
 -/
@@ -1601,8 +1601,8 @@ definition Compatible
   body: forall ⦃e⦄, e in E(G) -> e in E(H) -> forall x y, G.IsLink e x y ↔ H.IsLink e x y
 
 中文:
-定义 Compatible
-  签名: (G H : Graph α β)
+定义 余mpatible
+  签名: (G H : 图 α β)
   定义体: forall ⦃e⦄, e in E(G) -> e in E(H) -> forall x y, G.IsLink e x y ↔ H.IsLink e x y
 
 Depends on / 依赖: G.IsLink, H.IsLink, IsLink
@@ -1619,8 +1619,8 @@ lemma Compatible.isLink_congr
   proof: h heG heH x y
 
 中文:
-引理 Compatible.isLink_congr
-  条件: (heG : e in E(G)) (heH : e in E(H)) (h : G.Compatible H) {x y : α}
+引理 余mpatible.isLink_congr
+  条件: (heG : e in E(G)) (heH : e in E(H)) (h : G.余mpatible H) {x y : α}
   证明: h heG heH x y
 -/
 lemma Compatible.isLink_congr (heG : e in E(G)) (heH : e in E(H)) (h : G.Compatible H) {x y : α} :
@@ -1639,9 +1639,9 @@ lemma Compatible.refl
 @[simp]
 
 中文:
-引理 Compatible.refl
-  条件: (G : Graph α β)
-  结论: G.Compatible G
+引理 余mpatible.refl
+  条件: (G : 图 α β)
+  结论: G.余mpatible G
   证明: fun _ _ _ _ _ => .rfl
 
 @[simp]
@@ -1660,9 +1660,9 @@ lemma Compatible.rfl
   proof: .refl _
 
 中文:
-引理 Compatible.rfl
-  条件: {G : Graph α β}
-  结论: G.Compatible G
+引理 余mpatible.rfl
+  条件: {G : 图 α β}
+  结论: G.余mpatible G
   证明: .refl _
 -/
 lemma Compatible.rfl {G : Graph α β} : G.Compatible G := .refl _
@@ -1679,7 +1679,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Refl (Compatible : Graph α β -> Graph α β -> 命题)
+  签名: Std.Refl (余mpatible : 图 α β -> 图 α β -> 命题)
   定义体: .rfl
 
 @[symm]
@@ -1698,9 +1698,9 @@ lemma Compatible.symm
   proof: fun _ heH heG x y => (h heG heH x y).symm
 
 中文:
-引理 Compatible.symm
-  条件: (h : G.Compatible H)
-  结论: H.Compatible G
+引理 余mpatible.symm
+  条件: (h : G.余mpatible H)
+  结论: H.余mpatible G
   证明: fun _ heH heG x y => (h heG heH x y).symm
 -/
 lemma Compatible.symm (h : G.Compatible H) : H.Compatible G :=
@@ -1716,7 +1716,7 @@ instance :
 
 中文:
 实例 :
-  签名: Std.Symm (Compatible : Graph α β -> Graph α β -> 命题)
+  签名: Std.Symm (余mpatible : 图 α β -> 图 α β -> 命题)
   定义体: Compatible.symm
 
 Depends on / 依赖: Compatible, Compatible.symm
@@ -1734,7 +1734,7 @@ lemma IsLink.of_compatible
 
 中文:
 引理 IsLink.of_compatible
-  条件: (hGH : G.Compatible H) (heH : e in E(H)) (h : G.IsLink e x y)
+  条件: (hGH : G.余mpatible H) (heH : e in E(H)) (h : G.IsLink e x y)
   证明: (hGH h.edge_mem heH x y).mp h
 
 Depends on / 依赖: edge_mem, h.edge_mem
@@ -1753,9 +1753,9 @@ lemma Compatible.of_disjoint_edgeSet
   proof: .elim fun _ heG heH _ _ => h.notMem_of_mem_left heG heH
 
 中文:
-引理 Compatible.of_disjoint_edgeSet
+引理 余mpatible.of_disjoint_edgeSet
   条件: (h : Disjoint E(G) E(H))
-  结论: Compatible G H
+  结论: 余mpatible G H
   证明: .elim fun _ heG heH _ _ => h.notMem_of_mem_left heG heH
 
 Depends on / 依赖: h.notMem_of_mem_left, notMem_of_mem_left
@@ -1776,7 +1776,7 @@ lemma Inc.of_compatible
 
 中文:
 引理 Inc.of_compatible
-  条件: (hGH : G.Compatible H) (heH : e in E(H)) (h : G.Inc e x)
+  条件: (hGH : G.余mpatible H) (heH : e in E(H)) (h : G.Inc e x)
   结论: H.Inc e x
   证明: by
   obtain ⟨y, hy⟩ := h
@@ -1798,7 +1798,7 @@ lemma IsLoopAt.of_compatible
 
 中文:
 引理 IsLoopAt.of_compatible
-  条件: (hGH : G.Compatible H) (heH : e in E(H)) (h : G.IsLoopAt e x)
+  条件: (hGH : G.余mpatible H) (heH : e in E(H)) (h : G.IsLoopAt e x)
   证明: IsLink.of_compatible hGH heH h
 
 Depends on / 依赖: IsLink, IsLink.of_compatible, of_compatible
@@ -1819,7 +1819,7 @@ lemma IsNonloopAt.of_compatible
 
 中文:
 引理 IsNonloopAt.of_compatible
-  条件: (hGH : G.Compatible H) (heH : e in E(H)) (h : G.IsNonloopAt e x)
+  条件: (hGH : G.余mpatible H) (heH : e in E(H)) (h : G.IsNonloopAt e x)
   证明: by
   obtain ⟨y, hne, hy⟩ := h
   exact ⟨y, hne, hy.of_compatible hGH heH⟩
@@ -1850,7 +1850,7 @@ definition noEdge
 
 中文:
 定义 noEdge
-  签名: (vertexSet : Set α) (β : 类型)
+  签名: (vertexSet : 集合 α) (β : 类型)
   定义体: vertexSet
   edgeSet := ∅
   IsLink _ _ _ := False
@@ -1878,7 +1878,7 @@ theorem noEdge_isLink
 
 中文:
 定理 noEdge_isLink
-  条件: (vertexSet : Set α) (β : 类型) (e : β) (x y : α)
+  条件: (vertexSet : 集合 α) (β : 类型) (e : β) (x y : α)
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1941,7 +1941,7 @@ definition banana
 
 中文:
 定义 banana
-  签名: (u v : α) (edgeSet : Set β)
+  签名: (u v : α) (edgeSet : 集合 β)
   定义体: {u, v}
   edgeSet := edgeSet
   IsLink e x y := e in edgeSet ∧ ((x = u ∧ y = v) ∨ (x = v ∧ y = u))
@@ -1996,7 +1996,7 @@ lemma banana_comm
 
 中文:
 引理 banana_comm
-  条件: (u v : α) (edgeSet : Set β)
+  条件: (u v : α) (edgeSet : 集合 β)
   结论: banana u v edgeSet = banana v u edgeSet
   证明: Graph.ext_inc (pair_comm ..) by simp [or_comm]
 
@@ -2078,7 +2078,7 @@ lemma banana_adj
 
 中文:
 引理 banana_adj
-  结论: (banana u v edgeSet).Adj x y ↔ edgeSet.Nonempty ∧ s(x, y) = s(u, v)
+  结论: (banana u v edgeSet).伴随 x y ↔ edgeSet.非空 ∧ s(x, y) = s(u, v)
   证明: by
   simp only [Adj, banana_isLink, exists_and_right, Sym2.eq, Sym2.rel_iff', Prod.mk.injEq,
     Prod.swap_prod_mk, and_congr_left_iff]
@@ -2105,7 +2105,7 @@ lemma banana_empty
 
 中文:
 引理 banana_empty
-  结论: banana u v ∅ = Graph.noEdge {u, v} β
+  结论: banana u v ∅ = 图.noEdge {u, v} β
   证明: by
   ext <;> simp
 -/
@@ -2124,7 +2124,7 @@ abbreviation bouquet
 
 中文:
 缩写 bouquet
-  签名: (v : α) (edgeSet : Set β)
+  签名: (v : α) (edgeSet : 集合 β)
   定义体: banana v v edgeSet
 
 Depends on / 依赖: banana, edgeSet
@@ -2145,7 +2145,7 @@ lemma vertexSet_bouquet
 
 中文:
 引理 vertexSet_bouquet
-  条件: (v : α) (edgeSet : Set β)
+  条件: (v : α) (edgeSet : 集合 β)
   结论: V(bouquet v edgeSet) = {v}
   证明: by simp
 
@@ -2167,7 +2167,7 @@ lemma bouquet_isLink
 
 中文:
 引理 bouquet_isLink
-  条件: (v : α) (edgeSet : Set β)
+  条件: (v : α) (edgeSet : 集合 β)
   证明: by simp
 -/
 lemma bouquet_isLink (v : α) (edgeSet : Set β) :
@@ -2183,7 +2183,7 @@ lemma bouquet_inc
 
 中文:
 引理 bouquet_inc
-  条件: (v : α) (edgeSet : Set β)
+  条件: (v : α) (edgeSet : 集合 β)
   证明: by simp
 -/
 lemma bouquet_inc (v : α) (edgeSet : Set β) :
@@ -2199,7 +2199,7 @@ lemma bouquet_adj
 
 中文:
 引理 bouquet_adj
-  条件: (v : α) (edgeSet : Set β)
+  条件: (v : α) (edgeSet : 集合 β)
   证明: by simp
 -/
 lemma bouquet_adj (v : α) (edgeSet : Set β) :
@@ -2215,7 +2215,7 @@ lemma bouquet_isLoopAt
 
 中文:
 引理 bouquet_isLoopAt
-  条件: (v : α) (edgeSet : Set β)
+  条件: (v : α) (edgeSet : 集合 β)
   证明: by simp
 -/
 lemma bouquet_isLoopAt (v : α) (edgeSet : Set β) :
@@ -2257,7 +2257,7 @@ lemma eq_bouquet_of_subsingleton
 
 中文:
 引理 eq_bouquet_of_subsingleton
-  条件: (hv : v in V(G)) (hss : V(G).Subsingleton)
+  条件: (hv : v in V(G)) (hss : V(G).子单例)
   证明: by
   have hrw := hss.eq_singleton_of_mem hv
   refine Graph.ext_inc (by simpa) fun e x => ⟨fun h => ?_, fun h => ?_⟩
@@ -2309,8 +2309,8 @@ lemma exists_eq_bouquet
   proof: ⟨_, _, eq_bouquet_of_subsingleton hne.some_mem hss⟩
 
 中文:
-引理 exists_eq_bouquet
-  条件: (hne : V(G).Nonempty) (hss : V(G).Subsingleton)
+引理 存在_eq_bouquet
+  条件: (hne : V(G).非空) (hss : V(G).子单例)
   结论: 存在 x F, G = bouquet x F
   证明: ⟨_, _, eq_bouquet_of_subsingleton hne.some_mem hss⟩
 

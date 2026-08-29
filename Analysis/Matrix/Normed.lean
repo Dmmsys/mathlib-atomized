@@ -86,7 +86,7 @@ definition seminormedAddCommGroup
 
 中文:
 定义 seminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (Matrix m n α)
+  签名: : SeminormedAddComm群 (矩阵 m n α)
   定义体: fast_instance% Pi.seminormedAddCommGroup
 -/
 protected def seminormedAddCommGroup : SeminormedAddCommGroup (Matrix m n α) :=
@@ -105,7 +105,7 @@ theorem norm_def
 
 中文:
 定理 norm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖A‖ = ‖fun i j => A i j‖
   证明: rfl
 -/
@@ -122,7 +122,7 @@ lemma norm_eq_sup_sup_nnnorm
 
 中文:
 引理 norm_eq_sup_sup_nnnorm
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: by
   simp_rw [Matrix.norm_def, Pi.norm_def, Pi.nnnorm_def]
 
@@ -143,7 +143,7 @@ theorem nnnorm_def
 
 中文:
 定理 nnnorm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖A‖₊ = ‖fun i j => A i j‖₊
   证明: rfl
 -/
@@ -161,7 +161,7 @@ theorem norm_le_iff
 
 中文:
 定理 norm_le_iff
-  条件: {r : 实数} (hr : 0 <= r) {A : Matrix m n α}
+  条件: {r : 实数} (hr : 0 <= r) {A : 矩阵 m n α}
   结论: ‖A‖ <= r ↔ 对任意 i j, ‖A i j‖ <= r
   证明: by
   simp_rw [norm_def, pi_norm_le_iff_of_nonneg hr]
@@ -183,7 +183,7 @@ theorem nnnorm_le_iff
 
 中文:
 定理 nnnorm_le_iff
-  条件: {r : 实数>=0} {A : Matrix m n α}
+  条件: {r : 实数>=0} {A : 矩阵 m n α}
   结论: ‖A‖₊ <= r ↔ 对任意 i j, ‖A i j‖₊ <= r
   证明: by
   simp_rw [nnnorm_def, pi_nnnorm_le_iff]
@@ -205,7 +205,7 @@ theorem norm_lt_iff
 
 中文:
 定理 norm_lt_iff
-  条件: {r : 实数} (hr : 0 < r) {A : Matrix m n α}
+  条件: {r : 实数} (hr : 0 < r) {A : 矩阵 m n α}
   结论: ‖A‖ < r ↔ 对任意 i j, ‖A i j‖ < r
   证明: by
   simp_rw [norm_def, pi_norm_lt_iff hr]
@@ -226,7 +226,7 @@ theorem nnnorm_lt_iff
 
 中文:
 定理 nnnorm_lt_iff
-  条件: {r : 实数>=0} (hr : 0 < r) {A : Matrix m n α}
+  条件: {r : 实数>=0} (hr : 0 < r) {A : 矩阵 m n α}
   证明: by
   simp_rw [nnnorm_def, pi_nnnorm_lt_iff hr]
 
@@ -247,7 +247,7 @@ theorem norm_entry_le_entrywise_sup_norm
 
 中文:
 定理 norm_entry_le_entrywise_sup_norm
-  条件: (A : Matrix m n α) {i : m} {j : n}
+  条件: (A : 矩阵 m n α) {i : m} {j : n}
   结论: ‖A i j‖ <= ‖A‖
   证明: (norm_le_pi_norm (A i) j).trans (norm_le_pi_norm A i)
 
@@ -269,7 +269,7 @@ theorem nnnorm_entry_le_entrywise_sup_nnnorm
 
 中文:
 定理 nnnorm_entry_le_entrywise_sup_nnnorm
-  条件: (A : Matrix m n α) {i : m} {j : n}
+  条件: (A : 矩阵 m n α) {i : m} {j : n}
   结论: ‖A i j‖₊ <= ‖A‖₊
   证明: (nnnorm_le_pi_nnnorm (A i) j).trans (nnnorm_le_pi_nnnorm A i)
 
@@ -294,7 +294,7 @@ theorem nnnorm_map_eq
 
 中文:
 定理 nnnorm_map_eq
-  条件: (A : Matrix m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖₊ = ‖a‖₊)
+  条件: (A : 矩阵 m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖₊ = ‖a‖₊)
   证明: by
   simp only [nnnorm_def, Pi.nnnorm_def, Matrix.map_apply, hf]
 
@@ -320,7 +320,7 @@ theorem norm_map_eq
 
 中文:
 定理 norm_map_eq
-  条件: (A : Matrix m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖ = ‖a‖)
+  条件: (A : 矩阵 m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖ = ‖a‖)
   结论: ‖A.map f‖ = ‖A‖
   证明: (congr_arg ((↑) : Real>=0 -> Real) <| nnnorm_map_eq A f fun a => Subtype.ext <| hf a :)
 
@@ -345,7 +345,7 @@ theorem nnnorm_transpose
 
 中文:
 定理 nnnorm_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖Aᵀ‖₊ = ‖A‖₊
   证明: Finset.sup_comm _ _ _
 
@@ -370,7 +370,7 @@ theorem norm_transpose
 
 中文:
 定理 norm_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖Aᵀ‖ = ‖A‖
   证明: congr_arg ((↑) : Real>=0 -> Real) nnnorm_transpose A
 
@@ -394,7 +394,7 @@ theorem nnnorm_conjTranspose
 
 中文:
 定理 nnnorm_conjTranspose
-  条件: [StarAddMonoid α] [NormedStarGroup α] (A : Matrix m n α)
+  条件: [StarAdd幺半群 α] [NormedStar群 α] (A : 矩阵 m n α)
   证明: (nnnorm_map_eq _ _ nnnorm_star).trans A.nnnorm_transpose
 
 @[simp]
@@ -417,7 +417,7 @@ theorem norm_conjTranspose
 
 中文:
 定理 norm_conjTranspose
-  条件: [StarAddMonoid α] [NormedStarGroup α] (A : Matrix m n α)
+  条件: [StarAdd幺半群 α] [NormedStar群 α] (A : 矩阵 m n α)
   结论: ‖Aᴴ‖ = ‖A‖
   证明: congr_arg ((↑) : Real>=0 -> Real) nnnorm_conjTranspose A
 
@@ -437,8 +437,8 @@ instance [StarAddMonoid
 @[simp]
 
 中文:
-实例 [StarAddMonoid
-  签名: α] [NormedStarGroup α] : NormedStarGroup (Matrix m m α)
+实例 [StarAdd幺半群
+  签名: α] [NormedStar群 α] : NormedStar群 (矩阵 m m α)
   定义体: ⟨(le_of_eq <| norm_conjTranspose ·)⟩
 
 @[simp]
@@ -630,8 +630,8 @@ instance [Nonempty
   body: ⟨(norm_diagonal _).trans norm_one⟩
 
 中文:
-实例 [Nonempty
-  签名: n] [DecidableEq n] [One α] [NormOneClass α] : NormOneClass (Matrix n n α)
+实例 [非空
+  签名: n] [DecidableEq n] [幺 α] [NormOne类 α] : NormOne类 (矩阵 n n α)
   定义体: ⟨(norm_diagonal _).trans norm_one⟩
 
 Depends on / 依赖: norm_diagonal, norm_one
@@ -655,7 +655,7 @@ definition normedAddCommGroup
 
 中文:
 定义 normedAddCommGroup
-  签名: [NormedAddCommGroup α]
+  签名: [赋范交换加群 α]
   定义体: fast_instance% Pi.normedAddCommGroup
 -/
 protected def normedAddCommGroup [NormedAddCommGroup α] : NormedAddCommGroup (Matrix m n α) :=
@@ -675,7 +675,7 @@ theorem isBoundedSMul
 
 中文:
 定理 isBoundedSMul
-  结论: [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
+  结论: [Seminormed环 R] [SeminormedAddComm群 α] [模 R α]
   证明: Pi.instIsBoundedSMul
 -/
 protected theorem isBoundedSMul [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
@@ -692,7 +692,7 @@ theorem normSMulClass
 
 中文:
 定理 normSMulClass
-  结论: [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
+  结论: [Seminormed环 R] [SeminormedAddComm群 α] [模 R α]
   证明: Pi.instNormSMulClass
 -/
 protected theorem normSMulClass [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
@@ -715,7 +715,7 @@ definition normedSpace
 
 中文:
 定义 normedSpace
-  签名: : NormedSpace R (Matrix m n α)
+  签名: : 赋范空间 R (矩阵 m n α)
   定义体: fast_instance% Pi.normedSpace
 -/
 protected def normedSpace : NormedSpace R (Matrix m n α) :=
@@ -762,7 +762,7 @@ definition linftyOpSeminormedAddCommGroup
 
 中文:
 定义 linftyOpSeminormedAddCommGroup
-  签名: [SeminormedAddCommGroup α]
+  签名: [SeminormedAddComm群 α]
   定义体: fast_instance%
   @Pi.seminormedAddCommGroup m _ _ (fun _ => PiLp.seminormedAddCommGroupToPi 1 (fun _ : n => α))
 -/
@@ -786,7 +786,7 @@ definition linftyOpNormedAddCommGroup
 
 中文:
 定义 linftyOpNormedAddCommGroup
-  签名: [NormedAddCommGroup α]
+  签名: [赋范交换加群 α]
   定义体: fast_instance%
   @Pi.normedAddCommGroup m _ _ (fun _ => PiLp.normedAddCommGroupToPi 1 (fun _ : n => α))
 -/
@@ -859,7 +859,7 @@ definition linftyOpNormedSpace
 
 中文:
 定义 linftyOpNormedSpace
-  签名: [NormedField R] [SeminormedAddCommGroup α] [NormedSpace R α]
+  签名: [赋范域 R] [SeminormedAddComm群 α] [赋范空间 R α]
   定义体: letI := PiLp.seminormedAddCommGroupToPi 1 (fun _ : n => α)
   letI := PiLp.normedSpaceSeminormedAddCommGroupToPi (R := R) 1 (fun _ : n => α)
   inferInstanceAs (NormedSpace R (m -> n -> α))
@@ -886,7 +886,7 @@ theorem linfty_opNorm_def
 
 中文:
 定理 linfty_opNorm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: by
   change ‖fun i => toLp 1 (A i)‖ = _
   simp [Pi.norm_def, PiLp.nnnorm_eq_of_L1]
@@ -910,7 +910,7 @@ theorem linfty_opNNNorm_def
 
 中文:
 定理 linfty_opNNNorm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: Subtype.ext linfty_opNorm_def A
 
 @[simp]
@@ -1111,7 +1111,7 @@ theorem linfty_opNNNorm_mul
 
 中文:
 定理 linfty_opNNNorm_mul
-  条件: (A : Matrix l m α) (B : Matrix m n α)
+  条件: (A : 矩阵 l m α) (B : 矩阵 m n α)
   结论: ‖A * B‖₊ <= ‖A‖₊ * ‖B‖₊
   证明: by
   simp_rw [linfty_opNNNorm_def, Matrix.mul_apply]
@@ -1151,7 +1151,7 @@ theorem linfty_opNorm_mul
 
 中文:
 定理 linfty_opNorm_mul
-  条件: (A : Matrix l m α) (B : Matrix m n α)
+  条件: (A : 矩阵 l m α) (B : 矩阵 m n α)
   结论: ‖A * B‖ <= ‖A‖ * ‖B‖
   证明: linfty_opNNNorm_mul _ _
 
@@ -1173,7 +1173,7 @@ theorem linfty_opNNNorm_mulVec
 
 中文:
 定理 linfty_opNNNorm_mulVec
-  条件: (A : Matrix l m α) (v : m -> α)
+  条件: (A : 矩阵 l m α) (v : m -> α)
   结论: ‖A *ᵥ v‖₊ <= ‖A‖₊ * ‖v‖₊
   证明: by
   rw [← linfty_opNNNorm_replicateCol (ι := Fin 1) (A *ᵥ v)]; rw [← linfty_opNNNorm_replicateCol v (ι := Fin 1)]
@@ -1196,7 +1196,7 @@ theorem linfty_opNorm_mulVec
 
 中文:
 定理 linfty_opNorm_mulVec
-  条件: (A : Matrix l m α) (v : m -> α)
+  条件: (A : 矩阵 l m α) (v : m -> α)
   结论: ‖A *ᵥ v‖ <= ‖A‖ * ‖v‖
   证明: linfty_opNNNorm_mulVec _ _
 
@@ -1222,7 +1222,7 @@ definition linftyOpNonUnitalSemiNormedRing
 
 中文:
 定义 linftyOpNonUnitalSemiNormedRing
-  签名: [NonUnitalSeminormedRing α]
+  签名: [非幺Seminormed环 α]
   定义体: { Matrix.linftyOpSeminormedAddCommGroup, Matrix.instNonUnitalRing with
     norm_mul_le := linfty_opNorm_mul }
 -/
@@ -1241,7 +1241,7 @@ instance linfty_opNormOneClass
 
 中文:
 实例 linfty_opNormOneClass
-  签名: [SeminormedRing α] [NormOneClass α] [DecidableEq n] [Nonempty n]
+  签名: [Seminormed环 α] [NormOne类 α] [DecidableEq n] [非空 n]
   定义体: (linfty_opNorm_diagonal _).trans norm_one
 
 Depends on / 依赖: linfty_opNorm_diagonal, norm_one
@@ -1263,7 +1263,7 @@ definition linftyOpSemiNormedRing
 
 中文:
 定义 linftyOpSemiNormedRing
-  签名: [SeminormedRing α] [DecidableEq n]
+  签名: [Seminormed环 α] [DecidableEq n]
   定义体: { Matrix.linftyOpNonUnitalSemiNormedRing, Matrix.instRing with }
 -/
 protected def linftyOpSemiNormedRing [SeminormedRing α] [DecidableEq n] :
@@ -1285,7 +1285,7 @@ definition linftyOpNonUnitalNormedRing
 
 中文:
 定义 linftyOpNonUnitalNormedRing
-  签名: [NonUnitalNormedRing α]
+  签名: [非幺赋范环 α]
   定义体: { Matrix.linftyOpNonUnitalSemiNormedRing with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 -/
@@ -1309,7 +1309,7 @@ definition linftyOpNormedRing
 
 中文:
 定义 linftyOpNormedRing
-  签名: [NormedRing α] [DecidableEq n]
+  签名: [赋范环 α] [DecidableEq n]
   定义体: { Matrix.linftyOpSemiNormedRing with
     eq_of_dist_eq_zero := eq_of_dist_eq_zero }
 -/
@@ -1331,7 +1331,7 @@ definition linftyOpNormedAlgebra
 
 中文:
 定义 linftyOpNormedAlgebra
-  签名: [NormedField R] [SeminormedRing α] [NormedAlgebra R α]
+  签名: [赋范域 R] [Seminormed环 α] [赋范代数 R α]
   定义体: { Matrix.linftyOpNormedSpace, Matrix.instAlgebra with }
 -/
 protected def linftyOpNormedAlgebra [NormedField R] [SeminormedRing α] [NormedAlgebra R α]
@@ -1445,7 +1445,7 @@ lemma linfty_opNNNorm_eq_opNNNorm
 
 中文:
 引理 linfty_opNNNorm_eq_opNNNorm
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: by
   rw [ContinuousLinearMap.opNNNorm_eq_of_bounds _ (linfty_opNNNorm_mulVec _) fun N hN => ?_]
   rw [linfty_opNNNorm_def]
@@ -1486,7 +1486,7 @@ lemma linfty_opNorm_eq_opNorm
 
 中文:
 引理 linfty_opNorm_eq_opNorm
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: congr_arg NNReal.toReal (linfty_opNNNorm_eq_opNNNorm A)
 
 Depends on / 依赖: NNReal, NNReal.toReal, congr_arg, linfty_opNNNorm_eq_opNNNorm, toReal
@@ -1580,7 +1580,7 @@ definition frobeniusSeminormedAddCommGroup
 
 中文:
 定义 frobeniusSeminormedAddCommGroup
-  签名: [SeminormedAddCommGroup α]
+  签名: [SeminormedAddComm群 α]
   定义体: fast_instance%
   @PiLp.seminormedAddCommGroupToPi 2 _ _ _ _ (fun _ => PiLp.seminormedAddCommGroupToPi 2 _)
 
@@ -1605,7 +1605,7 @@ definition frobeniusNormedAddCommGroup
 
 中文:
 定义 frobeniusNormedAddCommGroup
-  签名: [NormedAddCommGroup α]
+  签名: [赋范交换加群 α]
   定义体: fast_instance% @PiLp.normedAddCommGroupToPi 2 _ _ _ _ (fun _ => PiLp.normedAddCommGroupToPi 2 _)
 
 Depends on / 依赖: PiLp.normedAddCommGroupToPi, fast_instance, normedAddCommGroupToPi
@@ -1627,7 +1627,7 @@ theorem frobeniusIsBoundedSMul
 
 中文:
 定理 frobeniusIsBoundedSMul
-  结论: [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
+  结论: [Seminormed环 R] [SeminormedAddComm群 α] [模 R α]
   证明: letI := PiLp.seminormedAddCommGroupToPi 2 (fun _ : n => α)
   letI := PiLp.isBoundedSMulSeminormedAddCommGroupToPi (R := R) 2 (fun _ : n => α)
   PiLp.isBoundedSMulSeminormedAddCommGroupToPi 2 _
@@ -1655,7 +1655,7 @@ theorem frobeniusNormSMulClass
 
 中文:
 定理 frobeniusNormSMulClass
-  结论: [SeminormedRing R] [SeminormedAddCommGroup α] [Module R α]
+  结论: [Seminormed环 R] [SeminormedAddComm群 α] [模 R α]
   证明: letI := PiLp.seminormedAddCommGroupToPi 2 (fun _ : n => α)
   letI := PiLp.normSMulClassSeminormedAddCommGroupToPi (R := R) 2 (fun _ : n => α)
   PiLp.normSMulClassSeminormedAddCommGroupToPi 2 _
@@ -1686,7 +1686,7 @@ definition frobeniusNormedSpace
 
 中文:
 定义 frobeniusNormedSpace
-  签名: [NormedField R] [SeminormedAddCommGroup α] [NormedSpace R α]
+  签名: [赋范域 R] [SeminormedAddComm群 α] [赋范空间 R α]
   定义体: fast_instance%
   letI := PiLp.seminormedAddCommGroupToPi 2 (fun _ : n => α)
   letI := PiLp.normedSpaceSeminormedAddCommGroupToPi (R := R) 2 (fun _ : n => α)
@@ -1717,7 +1717,7 @@ theorem frobenius_nnnorm_def
 
 中文:
 定理 frobenius_nnnorm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: by
   change ‖toLp 2 fun i => toLp 2 fun j => A i j‖₊ = _
   simp_rw [PiLp.nnnorm_eq_of_L2, NNReal.sq_sqrt, NNReal.sqrt_eq_rpow, NNReal.rpow_two]
@@ -1741,7 +1741,7 @@ theorem frobenius_norm_def
 
 中文:
 定理 frobenius_norm_def
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   证明: (congr_arg ((↑) : Real>=0 -> Real) (frobenius_nnnorm_def A)).trans by simp [NNReal.coe_sum]
 
 @[simp]
@@ -1765,7 +1765,7 @@ theorem frobenius_nnnorm_map_eq
 
 中文:
 定理 frobenius_nnnorm_map_eq
-  条件: (A : Matrix m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖₊ = ‖a‖₊)
+  条件: (A : 矩阵 m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖₊ = ‖a‖₊)
   证明: by simp_rw [frobenius_nnnorm_def, Matrix.map_apply, hf]
 
 @[simp]
@@ -1788,7 +1788,7 @@ theorem frobenius_norm_map_eq
 
 中文:
 定理 frobenius_norm_map_eq
-  条件: (A : Matrix m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖ = ‖a‖)
+  条件: (A : 矩阵 m n α) (f : α -> β) (hf : 对任意 a, ‖f a‖ = ‖a‖)
   证明: (congr_arg ((↑) : Real>=0 -> Real) <| frobenius_nnnorm_map_eq A f fun a => Subtype.ext <| hf a :)
 
 @[simp]
@@ -1815,7 +1815,7 @@ theorem frobenius_nnnorm_transpose
 
 中文:
 定理 frobenius_nnnorm_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖Aᵀ‖₊ = ‖A‖₊
   证明: by
   rw [frobenius_nnnorm_def]; rw [frobenius_nnnorm_def]; rw [Finset.sum_comm]
@@ -1843,7 +1843,7 @@ theorem frobenius_norm_transpose
 
 中文:
 定理 frobenius_norm_transpose
-  条件: (A : Matrix m n α)
+  条件: (A : 矩阵 m n α)
   结论: ‖Aᵀ‖ = ‖A‖
   证明: congr_arg ((↑) : Real>=0 -> Real) frobenius_nnnorm_transpose A
 
@@ -1867,7 +1867,7 @@ theorem frobenius_nnnorm_conjTranspose
 
 中文:
 定理 frobenius_nnnorm_conjTranspose
-  条件: [StarAddMonoid α] [NormedStarGroup α] (A : Matrix m n α)
+  条件: [StarAdd幺半群 α] [NormedStar群 α] (A : 矩阵 m n α)
   证明: (frobenius_nnnorm_map_eq _ _ nnnorm_star).trans A.frobenius_nnnorm_transpose
 
 @[simp]
@@ -1889,7 +1889,7 @@ theorem frobenius_norm_conjTranspose
 
 中文:
 定理 frobenius_norm_conjTranspose
-  条件: [StarAddMonoid α] [NormedStarGroup α] (A : Matrix m n α)
+  条件: [StarAdd幺半群 α] [NormedStar群 α] (A : 矩阵 m n α)
   证明: congr_arg ((↑) : Real>=0 -> Real) frobenius_nnnorm_conjTranspose A
 
 Depends on / 依赖: congr_arg, frobenius_nnnorm_conjTranspose
@@ -1910,7 +1910,7 @@ instance frobenius_normedStarGroup
 
 中文:
 实例 frobenius_normedStarGroup
-  签名: [StarAddMonoid α] [NormedStarGroup α]
+  签名: [StarAdd幺半群 α] [NormedStar群 α]
   定义体: ⟨(le_of_eq <| frobenius_norm_conjTranspose ·)⟩
 
 @[simp]
@@ -2104,7 +2104,7 @@ theorem frobenius_nnnorm_one
 
 中文:
 定理 frobenius_nnnorm_one
-  条件: [DecidableEq n] [SeminormedAddCommGroup α] [One α]
+  条件: [DecidableEq n] [SeminormedAddComm群 α] [幺 α]
   证明: by
   calc
     ‖(diagonal 1 : Matrix n n α)‖₊
@@ -2143,7 +2143,7 @@ theorem frobenius_nnnorm_mul
 
 中文:
 定理 frobenius_nnnorm_mul
-  条件: (A : Matrix l m α) (B : Matrix m n α)
+  条件: (A : 矩阵 l m α) (B : 矩阵 m n α)
   结论: ‖A * B‖₊ <= ‖A‖₊ * ‖B‖₊
   证明: by
   simp_rw [frobenius_nnnorm_def, Matrix.mul_apply]
@@ -2173,7 +2173,7 @@ theorem frobenius_norm_mul
 
 中文:
 定理 frobenius_norm_mul
-  条件: (A : Matrix l m α) (B : Matrix m n α)
+  条件: (A : 矩阵 l m α) (B : 矩阵 m n α)
   结论: ‖A * B‖ <= ‖A‖ * ‖B‖
   证明: frobenius_nnnorm_mul A B
 
@@ -2224,7 +2224,7 @@ definition frobeniusNormedAlgebra
 
 中文:
 定义 frobeniusNormedAlgebra
-  签名: [DecidableEq m] [NormedField R] [NormedAlgebra R α]
+  签名: [DecidableEq m] [赋范域 R] [赋范代数 R α]
   定义体: { Matrix.frobeniusNormedSpace, Matrix.instAlgebra with }
 
 Depends on / 依赖: Matrix, Matrix.frobeniusNormedSpace, Matrix.instAlgebra, frobeniusNormedSpace, instAlgebra

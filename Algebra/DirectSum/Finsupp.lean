@@ -140,7 +140,7 @@ theorem lmap_finsuppLEquivDirectSum_eq
 
 中文:
 定理 lmap_finsuppLEquivDirectSum_eq
-  结论: {N : 类型} [AddCommMonoid N] [Module R N]
+  结论: {N : 类型} [加法交换幺半群 N] [模 R N]
   证明: by
   ext i
   rfl

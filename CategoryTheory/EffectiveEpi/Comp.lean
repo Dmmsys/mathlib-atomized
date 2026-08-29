@@ -130,8 +130,8 @@ instance IsSplitEpi.EffectiveEpi
   infer_instance
 
 中文:
-实例 IsSplitEpi.EffectiveEpi
-  签名: {B X : C} (f : X ⟶ B) [IsSplitEpi f]
+实例 是分裂满态射.有效满态射
+  签名: {B X : C} (f : X ⟶ B) [是分裂满态射 f]
   定义体: by
   rw [← Category.comp_id f]
   infer_instance
@@ -156,7 +156,7 @@ definition effectiveEpiFamilyStructOfComp
 
 中文:
 定义 effectiveEpiFamilyStructOfComp
-  签名: {C : 类型} [Category* C]
+  签名: {C : 类型} [范畴* C]
   定义体: EffectiveEpiFamily.desc _ (fun i => g i ≫ f i)
     (fun i => g i ≫ φ i) (fun {T} i₁ i₂ g₁ g₂ eq =>
       by simpa [assoc] using h i₁ i₂ (g₁ ≫ g i₁) (g₂ ≫ g i₂) (by simpa [assoc] using eq))

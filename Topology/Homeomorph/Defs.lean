@@ -51,12 +51,12 @@ structure Homeomorph
     - continuous_invFun : Continuous invFun  [default: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 中文:
-结构 Homeomorph
-  参数: (X : 类型) (Y : 类型) [TopologicalSpace X] [TopologicalSpace Y]
+结构 同胚
+  参数: (X : 类型) (Y : 类型) [拓扑空间 X] [拓扑空间 Y]
   继承: X ≃ Y
   公理与运算 (2 个):
-    - continuous_toFun : Continuous toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
-    - continuous_invFun : Continuous invFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
+    - continuous_toFun : 连续 toFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
+    - continuous_invFun : 连续 invFun  [默认: by first | fun_prop | eta_expand; dsimp; fun_prop | skip]
 
 Depends on / 依赖: eta_expand, fun_prop
 -/
@@ -86,7 +86,7 @@ theorem toEquiv_injective
 
 中文:
 定理 toEquiv_injective
-  结论: Function.Injective (toEquiv : X ≃ₜ Y -> X ≃ Y)
+  结论: 函数.单射 (toEquiv : X ≃ₜ Y -> X ≃ Y)
 -/
 theorem toEquiv_injective : Function.Injective (toEquiv : X ≃ₜ Y -> X ≃ Y)
   | ⟨_, _, _⟩, ⟨_, _, _⟩, rfl => rfl
@@ -105,7 +105,7 @@ coe_injective' _ _ H _ := toEquiv_injective DFunLike.ext' H
 
 中文:
 实例 :
-  签名: EquivLike (X ≃ₜ Y) X Y
+  签名: 等价状 (X ≃ₜ Y) X Y
   定义体: h.toEquiv
   inv h := h.toEquiv.symm
   left_inv h := h.left_inv
@@ -133,7 +133,7 @@ theorem homeomorph_mk_coe
 中文:
 定理 homeomorph_mk_coe
   条件: (a : X ≃ Y) (b c)
-  结论: (Homeomorph.mk a b c : X -> Y) = a
+  结论: (同胚.mk a b c : X -> Y) = a
   证明: rfl
 -/
 @[simp] theorem homeomorph_mk_coe (a : X ≃ Y) (b c) : (Homeomorph.mk a b c : X -> Y) = a :=
@@ -149,7 +149,7 @@ definition empty
 
 中文:
 定义 empty
-  签名: [IsEmpty X] [IsEmpty Y]
+  签名: [是空 X] [是空 Y]
   定义体: Equiv.equivOfIsEmpty X Y
 -/
 protected def empty [IsEmpty X] [IsEmpty Y] : X ≃ₜ Y where
@@ -206,7 +206,7 @@ theorem symm_bijective
 
 中文:
 定理 symm_bijective
-  结论: Function.Bijective (Homeomorph.symm : (X ≃ₜ Y) -> Y ≃ₜ X)
+  结论: 函数.双射 (同胚.symm : (X ≃ₜ Y) -> Y ≃ₜ X)
   证明: Function.bijective_iff_has_inverse.mpr ⟨_, symm_symm, symm_symm⟩
 
 Depends on / 依赖: Function, Function.bijective_iff_has_inverse.mpr, bijective_iff_has_inverse, symm_symm
@@ -319,7 +319,7 @@ definition refl
 
 中文:
 定义 refl
-  签名: (X : 类型) [TopologicalSpace X]
+  签名: (X : 类型) [拓扑空间 X]
   定义体: Equiv.refl X
 -/
 protected def refl (X : Type*) [TopologicalSpace X] : X ≃ₜ X where
@@ -432,7 +432,7 @@ theorem refl_symm
 
 中文:
 定理 refl_symm
-  结论: (Homeomorph.refl X).symm = Homeomorph.refl X
+  结论: (同胚.refl X).symm = 同胚.refl X
   证明: rfl
 
 @[continuity, fun_prop]
@@ -453,7 +453,7 @@ theorem continuous
 中文:
 定理 continuous
   条件: (h : X ≃ₜ Y)
-  结论: Continuous h
+  结论: 连续 h
   证明: h.continuous_toFun
 -/
 protected theorem continuous (h : X ≃ₜ Y) : Continuous h :=
@@ -475,7 +475,7 @@ theorem continuous_symm
 中文:
 定理 continuous_symm
   条件: (h : X ≃ₜ Y)
-  结论: Continuous h.symm
+  结论: 连续 h.symm
   证明: h.continuous_invFun
 
 @[simp]
@@ -590,7 +590,7 @@ theorem self_trans_symm
 中文:
 定理 self_trans_symm
   条件: (h : X ≃ₜ Y)
-  结论: h.trans h.symm = Homeomorph.refl X
+  结论: h.trans h.symm = 同胚.refl X
   证明: by
   ext
   apply symm_apply_apply
@@ -620,7 +620,7 @@ theorem symm_trans_self
 中文:
 定理 symm_trans_self
   条件: (h : X ≃ₜ Y)
-  结论: h.symm.trans h = Homeomorph.refl Y
+  结论: h.symm.trans h = 同胚.refl Y
   证明: by
   ext
   apply apply_symm_apply
@@ -652,7 +652,7 @@ instance :
 
 中文:
 实例 :
-  签名: Group (X ≃ₜ X)
+  签名: 群 (X ≃ₜ X)
   定义体: g.trans f
   mul_assoc f g h := rfl
   one := .refl X
@@ -748,7 +748,7 @@ theorem bijective
 中文:
 定理 bijective
   条件: (h : X ≃ₜ Y)
-  结论: Function.Bijective h
+  结论: 函数.双射 h
   证明: h.toEquiv.bijective
 -/
 protected theorem bijective (h : X ≃ₜ Y) : Function.Bijective h :=
@@ -766,7 +766,7 @@ theorem injective
 中文:
 定理 injective
   条件: (h : X ≃ₜ Y)
-  结论: Function.Injective h
+  结论: 函数.单射 h
   证明: h.toEquiv.injective
 -/
 protected theorem injective (h : X ≃ₜ Y) : Function.Injective h :=
@@ -784,7 +784,7 @@ theorem surjective
 中文:
 定理 surjective
   条件: (h : X ≃ₜ Y)
-  结论: Function.Surjective h
+  结论: 函数.满射 h
   证明: h.toEquiv.surjective
 -/
 protected theorem surjective (h : X ≃ₜ Y) : Function.Surjective h :=
@@ -808,7 +808,7 @@ definition changeInv
 
 中文:
 定义 changeInv
-  签名: (f : X ≃ₜ Y) (g : Y -> X) (hg : Function.RightInverse g f)
+  签名: (f : X ≃ₜ Y) (g : Y -> X) (hg : 函数.右逆 g f)
   定义体: haveI : g = f.symm := (f.left_inv.eq_rightInverse hg).symm
   { toFun := f
     invFun := g
@@ -905,7 +905,7 @@ theorem image_symm
 中文:
 定理 image_symm
   条件: (h : X ≃ₜ Y)
-  结论: image h.symm = preimage h
+  结论: 像 h.symm = 原像 h
   证明: funext h.symm.toEquiv.image_eq_preimage_symm
 
 Depends on / 依赖: h.symm.toEquiv.image_eq_preimage_symm, image_eq_preimage_symm, toEquiv
@@ -927,7 +927,7 @@ theorem preimage_symm
 中文:
 定理 preimage_symm
   条件: (h : X ≃ₜ Y)
-  结论: preimage h.symm = image h
+  结论: 原像 h.symm = 像 h
   证明: (funext h.toEquiv.image_eq_preimage_symm).symm
 
 @[simp]
@@ -951,7 +951,7 @@ theorem image_preimage
 
 中文:
 定理 image_preimage
-  条件: (h : X ≃ₜ Y) (s : Set Y)
+  条件: (h : X ≃ₜ Y) (s : 集合 Y)
   结论: h '' h ⁻¹' s = s
   证明: h.toEquiv.image_preimage s
 
@@ -974,7 +974,7 @@ theorem preimage_image
 
 中文:
 定理 preimage_image
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h ⁻¹' h '' s = s
   证明: h.toEquiv.preimage_image s
 
@@ -994,7 +994,7 @@ theorem image_eq_preimage_symm
 
 中文:
 定理 image_eq_preimage_symm
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h '' s = h.symm ⁻¹' s
   证明: h.toEquiv.image_eq_preimage_symm s
 
@@ -1014,7 +1014,7 @@ lemma image_compl
 
 中文:
 引理 image_compl
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h '' (sᶜ) = (h '' s)ᶜ
   证明: h.toEquiv.image_compl s
 
@@ -1035,7 +1035,7 @@ lemma isInducing
 中文:
 引理 isInducing
   条件: (h : X ≃ₜ Y)
-  结论: IsInducing h
+  结论: 是Inducing h
   证明: .of_comp h.continuous h.symm.continuous by simp only [symm_comp_self, IsInducing.id]
 
 Depends on / 依赖: IsInducing, IsInducing.id, continuous, h.continuous, h.symm.continuous, of_comp, symm_comp_self
@@ -1055,7 +1055,7 @@ theorem induced_eq
 中文:
 定理 induced_eq
   条件: (h : X ≃ₜ Y)
-  结论: TopologicalSpace.induced h ‹_› = ‹_›
+  结论: 拓扑空间.induced h ‹_› = ‹_›
   证明: h.isInducing.1.symm
 
 Depends on / 依赖: h.isInducing, isInducing
@@ -1075,7 +1075,7 @@ theorem isQuotientMap
 中文:
 定理 isQuotientMap
   条件: (h : X ≃ₜ Y)
-  结论: IsQuotientMap h
+  结论: 是商映射 h
   证明: IsQuotientMap.of_comp h.symm.continuous h.continuous by
     simp only [self_comp_symm, IsQuotientMap.id]
 
@@ -1097,7 +1097,7 @@ theorem coinduced_eq
 中文:
 定理 coinduced_eq
   条件: (h : X ≃ₜ Y)
-  结论: TopologicalSpace.coinduced h ‹_› = ‹_›
+  结论: 拓扑空间.coinduced h ‹_› = ‹_›
   证明: h.isQuotientMap.isCoinducing.eq_coinduced.symm
 
 Depends on / 依赖: eq_coinduced, h.isQuotientMap.isCoinducing.eq_coinduced.symm, isCoinducing, isQuotientMap
@@ -1117,7 +1117,7 @@ theorem isEmbedding
 中文:
 定理 isEmbedding
   条件: (h : X ≃ₜ Y)
-  结论: IsEmbedding h
+  结论: 是嵌入 h
   证明: ⟨h.isInducing, h.injective⟩
 
 Depends on / 依赖: h.injective, h.isInducing, injective, isInducing
@@ -1135,8 +1135,8 @@ theorem discreteTopology
 
 中文:
 定理 discreteTopology
-  条件: [DiscreteTopology X] (h : X ≃ₜ Y)
-  结论: DiscreteTopology Y
+  条件: [离散拓扑 X] (h : X ≃ₜ Y)
+  结论: 离散拓扑 Y
   证明: h.symm.isEmbedding.discreteTopology
 -/
 protected theorem discreteTopology [DiscreteTopology X] (h : X ≃ₜ Y) : DiscreteTopology Y :=
@@ -1154,7 +1154,7 @@ theorem discreteTopology_iff
 中文:
 定理 discreteTopology_iff
   条件: (h : X ≃ₜ Y)
-  结论: DiscreteTopology X ↔ DiscreteTopology Y
+  结论: 离散拓扑 X ↔ 离散拓扑 Y
   证明: ⟨fun _ => h.discreteTopology, fun _ => h.symm.discreteTopology⟩
 
 Depends on / 依赖: discreteTopology, h.discreteTopology, h.symm.discreteTopology
@@ -1172,7 +1172,7 @@ theorem indiscreteTopology
 
 中文:
 定理 indiscreteTopology
-  条件: [IndiscreteTopology X] (h : X ≃ₜ Y)
+  条件: [Indiscrete拓扑 X] (h : X ≃ₜ Y)
   证明: h.symm.isInducing.indiscreteTopology
 -/
 protected theorem indiscreteTopology [IndiscreteTopology X] (h : X ≃ₜ Y) :
@@ -1191,7 +1191,7 @@ theorem indiscreteTopology_iff
 中文:
 定理 indiscreteTopology_iff
   条件: (h : X ≃ₜ Y)
-  结论: IndiscreteTopology X ↔ IndiscreteTopology Y
+  结论: Indiscrete拓扑 X ↔ Indiscrete拓扑 Y
   证明: ⟨fun _ => h.indiscreteTopology, fun _ => h.symm.indiscreteTopology⟩
 
 Depends on / 依赖: h.indiscreteTopology, h.symm.indiscreteTopology, indiscreteTopology
@@ -1209,7 +1209,7 @@ theorem nontrivialTopology
 
 中文:
 定理 nontrivialTopology
-  条件: [NontrivialTopology X] (h : X ≃ₜ Y)
+  条件: [非平凡拓扑 X] (h : X ≃ₜ Y)
   证明: h.isInducing.nontrivialTopology
 -/
 protected theorem nontrivialTopology [NontrivialTopology X] (h : X ≃ₜ Y) :
@@ -1230,7 +1230,7 @@ theorem nontrivialTopology_iff
 中文:
 定理 nontrivialTopology_iff
   条件: (h : X ≃ₜ Y)
-  结论: NontrivialTopology X ↔ NontrivialTopology Y
+  结论: 非平凡拓扑 X ↔ 非平凡拓扑 Y
   证明: ⟨fun _ => h.nontrivialTopology, fun _ => h.symm.nontrivialTopology⟩
 
 @[simp]
@@ -1254,8 +1254,8 @@ theorem isOpen_preimage
 
 中文:
 定理 isOpen_preimage
-  条件: (h : X ≃ₜ Y) {s : Set Y}
-  结论: IsOpen (h ⁻¹' s) ↔ IsOpen s
+  条件: (h : X ≃ₜ Y) {s : 集合 Y}
+  结论: 是开集 (h ⁻¹' s) ↔ 是开集 s
   证明: h.isQuotientMap.isOpen_preimage
 
 @[simp]
@@ -1278,8 +1278,8 @@ theorem isOpen_image
 
 中文:
 定理 isOpen_image
-  条件: (h : X ≃ₜ Y) {s : Set X}
-  结论: IsOpen (h '' s) ↔ IsOpen s
+  条件: (h : X ≃ₜ Y) {s : 集合 X}
+  结论: 是开集 (h '' s) ↔ 是开集 s
   证明: by
   rw [← preimage_symm]; rw [isOpen_preimage]
 
@@ -1300,7 +1300,7 @@ theorem isOpenMap
 中文:
 定理 isOpenMap
   条件: (h : X ≃ₜ Y)
-  结论: IsOpenMap h
+  结论: 是开映射 h
   证明: fun _ => h.isOpen_image.2
 -/
 protected theorem isOpenMap (h : X ≃ₜ Y) : IsOpenMap h := fun _ => h.isOpen_image.2
@@ -1319,7 +1319,7 @@ theorem isOpenQuotientMap
 中文:
 定理 isOpenQuotientMap
   条件: (h : X ≃ₜ Y)
-  结论: IsOpenQuotientMap h
+  结论: 是OpenQuotient映射 h
   证明: ⟨h.surjective, h.continuous, h.isOpenMap⟩
 
 @[simp]
@@ -1342,8 +1342,8 @@ theorem isClosed_preimage
 
 中文:
 定理 isClosed_preimage
-  条件: (h : X ≃ₜ Y) {s : Set Y}
-  结论: IsClosed (h ⁻¹' s) ↔ IsClosed s
+  条件: (h : X ≃ₜ Y) {s : 集合 Y}
+  结论: 是闭集 (h ⁻¹' s) ↔ 是闭集 s
   证明: by
   simp only [← isOpen_compl_iff, ← preimage_compl, isOpen_preimage]
 
@@ -1367,8 +1367,8 @@ theorem isClosed_image
 
 中文:
 定理 isClosed_image
-  条件: (h : X ≃ₜ Y) {s : Set X}
-  结论: IsClosed (h '' s) ↔ IsClosed s
+  条件: (h : X ≃ₜ Y) {s : 集合 X}
+  结论: 是闭集 (h '' s) ↔ 是闭集 s
   证明: by
   rw [← preimage_symm]; rw [isClosed_preimage]
 
@@ -1389,7 +1389,7 @@ theorem isClosedMap
 中文:
 定理 isClosedMap
   条件: (h : X ≃ₜ Y)
-  结论: IsClosedMap h
+  结论: 是闭映射 h
   证明: fun _ => h.isClosed_image.2
 -/
 protected theorem isClosedMap (h : X ≃ₜ Y) : IsClosedMap h := fun _ => h.isClosed_image.2
@@ -1406,7 +1406,7 @@ theorem isOpenEmbedding
 中文:
 定理 isOpenEmbedding
   条件: (h : X ≃ₜ Y)
-  结论: IsOpenEmbedding h
+  结论: 是开嵌入 h
   证明: .of_isEmbedding_isOpenMap h.isEmbedding h.isOpenMap
 
 Depends on / 依赖: h.isEmbedding, h.isOpenMap, isEmbedding, isOpenMap, of_isEmbedding_isOpenMap
@@ -1426,7 +1426,7 @@ theorem isClosedEmbedding
 中文:
 定理 isClosedEmbedding
   条件: (h : X ≃ₜ Y)
-  结论: IsClosedEmbedding h
+  结论: 是闭嵌入 h
   证明: .of_isEmbedding_isClosedMap h.isEmbedding h.isClosedMap
 
 Depends on / 依赖: h.isClosedMap, h.isEmbedding, isClosedMap, isEmbedding, of_isEmbedding_isClosedMap
@@ -1445,7 +1445,7 @@ theorem preimage_closure
 
 中文:
 定理 preimage_closure
-  条件: (h : X ≃ₜ Y) (s : Set Y)
+  条件: (h : X ≃ₜ Y) (s : 集合 Y)
   结论: h ⁻¹' closure s = closure (h ⁻¹' s)
   证明: h.isOpenMap.preimage_closure_eq_closure_preimage h.continuous _
 
@@ -1466,7 +1466,7 @@ theorem image_closure
 
 中文:
 定理 image_closure
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h '' closure s = closure (h '' s)
   证明: by
   rw [← preimage_symm]; rw [preimage_closure]
@@ -1487,7 +1487,7 @@ theorem preimage_interior
 
 中文:
 定理 preimage_interior
-  条件: (h : X ≃ₜ Y) (s : Set Y)
+  条件: (h : X ≃ₜ Y) (s : 集合 Y)
   结论: h ⁻¹' interior s = interior (h ⁻¹' s)
   证明: h.isOpenMap.preimage_interior_eq_interior_preimage h.continuous _
 
@@ -1508,7 +1508,7 @@ theorem image_interior
 
 中文:
 定理 image_interior
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h '' interior s = interior (h '' s)
   证明: by
   rw [← preimage_symm]; rw [preimage_interior]
@@ -1529,7 +1529,7 @@ theorem preimage_frontier
 
 中文:
 定理 preimage_frontier
-  条件: (h : X ≃ₜ Y) (s : Set Y)
+  条件: (h : X ≃ₜ Y) (s : 集合 Y)
   结论: h ⁻¹' frontier s = frontier (h ⁻¹' s)
   证明: h.isOpenMap.preimage_frontier_eq_frontier_preimage h.continuous _
 
@@ -1552,7 +1552,7 @@ theorem image_frontier
 
 中文:
 定理 image_frontier
-  条件: (h : X ≃ₜ Y) (s : Set X)
+  条件: (h : X ≃ₜ Y) (s : 集合 X)
   结论: h '' frontier s = frontier (h '' s)
   证明: by
   rw [← preimage_symm]; rw [preimage_frontier]
@@ -1579,7 +1579,7 @@ theorem comp_continuous_iff
 中文:
 定理 comp_continuous_iff
   条件: (h : X ≃ₜ Y) {f : Z -> X}
-  结论: Continuous (h ∘ f) ↔ Continuous f
+  结论: 连续 (h ∘ f) ↔ 连续 f
   证明: h.isInducing.continuous_iff.symm
 
 @[simp]
@@ -1602,7 +1602,7 @@ theorem comp_continuous_iff'
 中文:
 定理 comp_continuous_iff'
   条件: (h : X ≃ₜ Y) {f : Y -> Z}
-  结论: Continuous (f ∘ h) ↔ Continuous f
+  结论: 连续 (f ∘ h) ↔ 连续 f
   证明: h.isQuotientMap.continuous_iff.symm
 
 Depends on / 依赖: continuous_iff, h.isQuotientMap.continuous_iff.symm, isQuotientMap
@@ -1671,7 +1671,7 @@ theorem comp_isOpenMap_iff
 中文:
 定理 comp_isOpenMap_iff
   条件: (h : X ≃ₜ Y) {f : Z -> X}
-  结论: IsOpenMap (h ∘ f) ↔ IsOpenMap f
+  结论: 是开映射 (h ∘ f) ↔ 是开映射 f
   证明: by
   refine ⟨?_, fun hf => h.isOpenMap.comp hf⟩
   intro hf
@@ -1705,7 +1705,7 @@ theorem comp_isOpenMap_iff'
 中文:
 定理 comp_isOpenMap_iff'
   条件: (h : X ≃ₜ Y) {f : Y -> Z}
-  结论: IsOpenMap (f ∘ h) ↔ IsOpenMap f
+  结论: 是开映射 (f ∘ h) ↔ 是开映射 f
   证明: by
   refine ⟨?_, fun hf => hf.comp h.isOpenMap⟩
   intro hf
@@ -1783,7 +1783,7 @@ definition homeomorphOfUnique
 
 中文:
 定义 homeomorphOfUnique
-  签名: [Unique X] [Unique Y]
+  签名: [唯一 X] [唯一 Y]
   定义体: { Equiv.ofUnique X Y with }
 
 @[simp]
@@ -1932,7 +1932,7 @@ definition toHomeomorph
 
 中文:
 定义 toHomeomorph
-  签名: (e : X ≃ Y) (he : 对任意 s, IsOpen (e ⁻¹' s) ↔ IsOpen s)
+  签名: (e : X ≃ Y) (he : 对任意 s, 是开集 (e ⁻¹' s) ↔ 是开集 s)
   定义体: e
   continuous_toFun := continuous_def.2 fun _ => (he _).2
   continuous_invFun := continuous_def.2 fun s => by simpa using (he (e.symm ⁻¹' s)).1
@@ -2036,7 +2036,7 @@ continuous_invFun := hf.continuous_iff.2 by simpa using continuous_id }
 
 中文:
 定义 toHomeomorphOfIsInducing
-  签名: (f : X ≃ Y) (hf : IsInducing f)
+  签名: (f : X ≃ Y) (hf : 是Inducing f)
   定义体: { f with
     continuous_toFun := hf.continuous
 continuous_invFun := hf.continuous_iff.2 by simpa using continuous_id }
@@ -2058,7 +2058,7 @@ lemma toHomeomorphOfIsInducing_apply
 
 中文:
 引理 toHomeomorphOfIsInducing_apply
-  条件: (f : X ≃ Y) (hf : IsInducing f)
+  条件: (f : X ≃ Y) (hf : 是Inducing f)
   证明: rfl
 -/
 @[simp] lemma toHomeomorphOfIsInducing_apply (f : X ≃ Y) (hf : IsInducing f) :
@@ -2074,7 +2074,7 @@ lemma toHomeomorphOfIsInducing_symm_apply
 
 中文:
 引理 toHomeomorphOfIsInducing_symm_apply
-  条件: (f : X ≃ Y) (hf : IsInducing f)
+  条件: (f : X ≃ Y) (hf : 是Inducing f)
   证明: rfl
 -/
 @[simp] lemma toHomeomorphOfIsInducing_symm_apply (f : X ≃ Y) (hf : IsInducing f) :
@@ -2095,7 +2095,7 @@ definition toHomeomorphOfContinuousOpen
 
 中文:
 定义 toHomeomorphOfContinuousOpen
-  签名: (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsOpenMap e)
+  签名: (e : X ≃ Y) (h₁ : 连续 e) (h₂ : 是开映射 e)
   定义体: e.toHomeomorphOfIsInducing
 .toIsInducing IsOpenEmbedding.of_continuous_injective_isOpenMap h₁ e.injective h₂
 
@@ -2120,7 +2120,7 @@ theorem toHomeomorphOfContinuousOpen_apply
 
 中文:
 定理 toHomeomorphOfContinuousOpen_apply
-  条件: (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsOpenMap e)
+  条件: (e : X ≃ Y) (h₁ : 连续 e) (h₂ : 是开映射 e)
   证明: rfl
 
 @[simp]
@@ -2139,7 +2139,7 @@ theorem toHomeomorphOfContinuousOpen_symm_apply
 
 中文:
 定理 toHomeomorphOfContinuousOpen_symm_apply
-  条件: (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsOpenMap e)
+  条件: (e : X ≃ Y) (h₁ : 连续 e) (h₂ : 是开映射 e)
   证明: rfl
 -/
 theorem toHomeomorphOfContinuousOpen_symm_apply (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsOpenMap e) :
@@ -2160,7 +2160,7 @@ definition toHomeomorphOfContinuousClosed
 
 中文:
 定义 toHomeomorphOfContinuousClosed
-  签名: (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsClosedMap e)
+  签名: (e : X ≃ Y) (h₁ : 连续 e) (h₂ : 是闭映射 e)
   定义体: e.toHomeomorphOfIsInducing
 .toIsInducing IsClosedEmbedding.of_continuous_injective_isClosedMap h₁ e.injective h₂
 
@@ -2185,7 +2185,7 @@ theorem toHomeomorphOfContinuousClosed_apply
 
 中文:
 定理 toHomeomorphOfContinuousClosed_apply
-  条件: (e : X ≃ Y) (h₁ : Continuous e) (h₂ : IsClosedMap e)
+  条件: (e : X ≃ Y) (h₁ : 连续 e) (h₂ : 是闭映射 e)
   证明: rfl
 
 @[simp]
@@ -2219,7 +2219,7 @@ definition toHomeomorphOfDiscrete
 
 中文:
 定义 toHomeomorphOfDiscrete
-  签名: [DiscreteTopology X] [DiscreteTopology Y] (e : X ≃ Y)
+  签名: [离散拓扑 X] [离散拓扑 Y] (e : X ≃ Y)
   定义体: e.toHomeomorph (by simp)
 
 Depends on / 依赖: e.toHomeomorph, toHomeomorph
@@ -2240,11 +2240,11 @@ class HomeomorphClass
     - inv_continuous : forall (f : F), Continuous (h.inv f)
 
 中文:
-类 HomeomorphClass
+类 同胚类
   参数: (F : 类型) (A B : outParam 类型)
   公理与运算 (2 个):
-    - map_continuous : 对任意 (f : F), Continuous f
-    - inv_continuous : 对任意 (f : F), Continuous (h.inv f)
+    - map_continuous : 对任意 (f : F), 连续 f
+    - inv_continuous : 对任意 (f : F), 连续 (h.inv f)
 -/
 class HomeomorphClass (F : Type*) (A B : outParam Type*)
     [TopologicalSpace A] [TopologicalSpace B] [h : EquivLike F A B] : Prop where
@@ -2272,7 +2272,7 @@ definition toHomeomorph
 
 中文:
 定义 toHomeomorph
-  签名: [h : HomeomorphClass F α β] (f : F)
+  签名: [h : 同胚类 F α β] (f : F)
   定义体: { (f : α ≃ β) with
     continuous_toFun := h.map_continuous f
     continuous_invFun := h.inv_continuous f }
@@ -2298,7 +2298,7 @@ theorem coe_coe
 
 中文:
 定理 coe_coe
-  条件: [h : HomeomorphClass F α β] (f : F)
+  条件: [h : 同胚类 F α β] (f : F)
   结论: ⇑(h.toHomeomorph f) = ⇑f
   证明: rfl
 -/
@@ -2313,7 +2313,7 @@ instance [HomeomorphClass
   body: ⟨HomeomorphClass.toHomeomorph⟩
 
 中文:
-实例 [HomeomorphClass
+实例 [同胚类
   签名: F α β] : CoeOut F (α ≃ₜ β)
   定义体: ⟨HomeomorphClass.toHomeomorph⟩
 
@@ -2333,8 +2333,8 @@ theorem toHomeomorph_injective
 
 中文:
 定理 toHomeomorph_injective
-  条件: [HomeomorphClass F α β]
-  结论: Function.Injective ((↑) : F -> α ≃ₜ β)
+  条件: [同胚类 F α β]
+  结论: 函数.单射 ((↑) : F -> α ≃ₜ β)
   证明: fun _ _ e => DFunLike.ext _ _ fun a => congr_arg (fun e : α ≃ₜ β => e.toFun a) e
 
 Depends on / 依赖: DFunLike, DFunLike.ext, congr_arg, e.toFun
@@ -2351,8 +2351,8 @@ instance [HomeomorphClass
   body: map_continuous f
 
 中文:
-实例 [HomeomorphClass
-  签名: F α β] : ContinuousMapClass F α β where
+实例 [同胚类
+  签名: F α β] : 连续映射类 F α β where
   定义体: map_continuous f
 
 Depends on / 依赖: map_continuous
@@ -2371,7 +2371,7 @@ instance :
 
 中文:
 实例 :
-  签名: HomeomorphClass (α ≃ₜ β) α β
+  签名: 同胚类 (α ≃ₜ β) α β
   定义体: e.continuous_toFun
   inv_continuous e := e.continuous_invFun
 
@@ -2399,12 +2399,12 @@ structure IsHomeomorph
     - bijective : Function.Bijective f
 
 中文:
-结构 IsHomeomorph
+结构 是同胚
   参数: (f : X -> Y)
   公理与运算 (3 个):
-    - continuous : Continuous f
-    - isOpenMap : IsOpenMap f
-    - bijective : Function.Bijective f
+    - continuous : 连续 f
+    - isOpenMap : 是开映射 f
+    - bijective : 函数.双射 f
 
 Depends on / 依赖: bijective, continuous, h.bijective, h.continuous, h.isOpenMap, isOpenMap
 -/
@@ -2423,9 +2423,9 @@ theorem Homeomorph.isHomeomorph
   proof: ⟨h.continuous, h.isOpenMap, h.bijective⟩
 
 中文:
-定理 Homeomorph.isHomeomorph
+定理 同胚.isHomeomorph
   条件: (h : X ≃ₜ Y)
-  结论: IsHomeomorph h
+  结论: 是同胚 h
   证明: ⟨h.continuous, h.isOpenMap, h.bijective⟩
 -/
 protected theorem Homeomorph.isHomeomorph (h : X ≃ₜ Y) : IsHomeomorph h :=
@@ -2448,7 +2448,7 @@ definition homeomorph
 
 中文:
 定义 homeomorph
-  签名: (f : X -> Y) (hf : IsHomeomorph f)
+  签名: (f : X -> Y) (hf : 是同胚 f)
   定义体: hf.1
   continuous_invFun :=
 .continuous_symm_iff.2 hf.isOpenMap Equiv.ofBijective f hf.bijective
@@ -2471,8 +2471,8 @@ lemma injective
 
 中文:
 引理 injective
-  条件: (hf : IsHomeomorph f)
-  结论: Function.Injective f
+  条件: (hf : 是同胚 f)
+  结论: 函数.单射 f
   证明: hf.bijective.injective
 -/
 protected lemma injective (hf : IsHomeomorph f) : Function.Injective f := hf.bijective.injective
@@ -2487,8 +2487,8 @@ lemma surjective
 
 中文:
 引理 surjective
-  条件: (hf : IsHomeomorph f)
-  结论: Function.Surjective f
+  条件: (hf : 是同胚 f)
+  结论: 函数.满射 f
   证明: hf.bijective.surjective
 -/
 protected lemma surjective (hf : IsHomeomorph f) : Function.Surjective f := hf.bijective.surjective
@@ -2503,7 +2503,7 @@ lemma id
 
 中文:
 引理 id
-  结论: IsHomeomorph (@id X)
+  结论: 是同胚 (@id X)
   证明: ⟨continuous_id, .id, Function.bijective_id⟩
 -/
 protected lemma id : IsHomeomorph (@id X) := ⟨continuous_id, .id, Function.bijective_id⟩
@@ -2518,7 +2518,7 @@ theorem image_interior
 
 中文:
 定理 image_interior
-  条件: (hf : IsHomeomorph f) (s : Set X)
+  条件: (hf : 是同胚 f) (s : 集合 X)
   证明: hf.homeomorph.image_interior s
 
 Depends on / 依赖: hf.homeomorph.image_interior, homeomorph, image_interior
@@ -2536,7 +2536,7 @@ theorem image_closure
 
 中文:
 定理 image_closure
-  条件: (hf : IsHomeomorph f) (s : Set X)
+  条件: (hf : 是同胚 f) (s : 集合 X)
   证明: hf.homeomorph.image_closure s
 
 Depends on / 依赖: hf.homeomorph.image_closure, homeomorph, image_closure
@@ -2554,7 +2554,7 @@ theorem image_frontier
 
 中文:
 定理 image_frontier
-  条件: (hf : IsHomeomorph f) (s : Set X)
+  条件: (hf : 是同胚 f) (s : 集合 X)
   证明: hf.homeomorph.image_frontier s
 
 Depends on / 依赖: hf.homeomorph.image_frontier, homeomorph, image_frontier
@@ -2573,8 +2573,8 @@ lemma comp
 
 中文:
 引理 comp
-  条件: {g : Y -> Z} (hg : IsHomeomorph g) (hf : IsHomeomorph f)
-  结论: IsHomeomorph (g ∘ f)
+  条件: {g : Y -> Z} (hg : 是同胚 g) (hf : 是同胚 f)
+  结论: 是同胚 (g ∘ f)
   证明: ⟨hg.1.comp hf.1, hg.2.comp hf.2, hg.3.comp hf.3⟩
 -/
 lemma comp {g : Y -> Z} (hg : IsHomeomorph g) (hf : IsHomeomorph f) : IsHomeomorph (g ∘ f) :=
@@ -2597,7 +2597,7 @@ theorem image_interior_preimage_comp
 
 中文:
 定理 image_interior_preimage_comp
-  条件: (e : X -> Y) (he : IsHomeomorph e) (f : Y -> Z) (s : Set Z)
+  条件: (e : X -> Y) (he : 是同胚 e) (f : Y -> Z) (s : 集合 Z)
   证明: by
   simp only [Set.preimage_comp, Set.image_comp, he.image_interior,
     Set.image_preimage_eq _ he.surjective]
@@ -2622,7 +2622,7 @@ theorem image_frontier_preimage_comp
 
 中文:
 定理 image_frontier_preimage_comp
-  条件: (e : X -> Y) (he : IsHomeomorph e) (f : Y -> Z) (s : Set Z)
+  条件: (e : X -> Y) (he : 是同胚 e) (f : Y -> Z) (s : 集合 Z)
   证明: by
   simp only [Set.preimage_comp, Set.image_comp, he.image_frontier,
     Set.image_preimage_eq _ he.surjective]
@@ -2647,7 +2647,7 @@ theorem image_closure_preimage_comp
 
 中文:
 定理 image_closure_preimage_comp
-  条件: (e : X -> Y) (he : IsHomeomorph e) (f : Y -> Z) (s : Set Z)
+  条件: (e : X -> Y) (he : 是同胚 e) (f : Y -> Z) (s : 集合 Z)
   证明: by
   simp only [Set.preimage_comp, Set.image_comp, he.image_closure,
     Set.image_preimage_eq _ he.surjective]

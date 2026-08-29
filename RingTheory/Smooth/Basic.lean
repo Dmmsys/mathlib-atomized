@@ -78,11 +78,11 @@ class FormallySmooth
     - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
 
 中文:
-类 FormallySmooth
+类 形式光滑
   参数: : 命题 where
   公理与运算 (2 个):
-    - projective_kaehlerDifferential : Module.Projective A Ω[A⁄R]
-    - subsingleton_h1Cotangent : Subsingleton (H1Cotangent R A)
+    - projective_kaehlerDifferential : 模.投射 A Ω[A⁄R]
+    - subsingleton_h1Cotangent : 子单例 (H1Cotangent R A)
 -/
 class FormallySmooth : Prop where
   projective_kaehlerDifferential : Module.Projective A Ω[A⁄R]
@@ -109,8 +109,8 @@ lemma FormallySmooth.comp_surjective
   obtain ⟨l, hl⟩ := ((P.toExtension.e
 
 中文:
-引理 FormallySmooth.comp_surjective
-  条件: [FormallySmooth R A] (I : Ideal B) (hI : I ^ 2 = ⊥)
+引理 形式光滑.comp_surjective
+  条件: [形式光滑 R A] (I : 理想 B) (hI : I ^ 2 = ⊥)
   证明: by
   intro f
   let P : Algebra.Generators R A A := Generators.self R A
@@ -206,7 +206,7 @@ theorem exists_lift
     let : ((B ⧸ I) ⧸ J.map (Ideal.Quotient.mk I)) ≃
 
 中文:
-定理 exists_lift
+定理 存在_lift
   证明: by
   revert g
   change Function.Surjective (Ideal.Quotient.mkₐ R I).comp
@@ -250,7 +250,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
+  签名: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
   定义体: (FormallySmooth.exists_lift I hI g).choose
 
 @[simp]
@@ -274,7 +274,7 @@ theorem comp_lift
 
 中文:
 定理 comp_lift
-  结论: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
+  结论: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
   证明: (FormallySmooth.exists_lift I hI g).choose_spec
 
 @[simp]
@@ -296,7 +296,7 @@ theorem mk_lift
 
 中文:
 定理 mk_lift
-  结论: [FormallySmooth R A] (I : Ideal B) (hI : IsNilpotent I)
+  结论: [形式光滑 R A] (I : 理想 B) (hI : 是幂零 I)
   证明: AlgHom.congr_fun (FormallySmooth.comp_lift I hI g :) x
 
 Depends on / 依赖: AlgHom, AlgHom.congr_fun, FormallySmooth, FormallySmooth.comp_lift, comp_lift, congr_fun
@@ -317,7 +317,7 @@ definition liftOfSurjective
 
 中文:
 定义 liftOfSurjective
-  签名: [FormallySmooth R A] (f : A ->ₐ[R] C)
+  签名: [形式光滑 R A] (f : A ->ₐ[R] C)
   定义体: FormallySmooth.lift _ hg' ((Ideal.quotientKerAlgEquivOfSurjective hg).symm.toAlgHom.comp f)
 
 Depends on / 依赖: FormallySmooth, FormallySmooth.lift, Ideal.quotientKerAlgEquivOfSurjective, quotientKerAlgEquivOfSurjective, symm.toAlgHom.comp, toAlgHom
@@ -344,7 +344,7 @@ theorem liftOfSurjective_apply
 
 中文:
 定理 liftOfSurjective_apply
-  结论: [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
+  结论: [形式光滑 R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
   证明: by
   apply (Ideal.quotientKerAlgEquivOfSurjective hg).symm.injective
   conv_rhs => rw [← AlgEquiv.coe_toAlgHom, ← AlgHom.comp_apply,
@@ -375,7 +375,7 @@ theorem comp_liftOfSurjective
 
 中文:
 定理 comp_liftOfSurjective
-  结论: [FormallySmooth R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
+  结论: [形式光滑 R A] (f : A ->ₐ[R] C) (g : B ->ₐ[R] C)
   证明: AlgHom.ext (FormallySmooth.liftOfSurjective_apply f g hg hg')
 
 Depends on / 依赖: AlgHom, AlgHom.ext, FormallySmooth, FormallySmooth.liftOfSurjective_apply, liftOfSurjective_apply
@@ -395,7 +395,7 @@ instance [EssFiniteType
 
 中文:
 实例 [EssFiniteType
-  签名: R A] [FormallySmooth R A] : Module.FinitePresentation A Ω[A⁄R]
+  签名: R A] [形式光滑 R A] : 模.有限呈现 A Ω[A⁄R]
   定义体: Module.finitePresentation_of_projective A Ω[A⁄R]
 
 Depends on / 依赖: Module, Module.finitePresentation_of_projective, finitePresentation_of_projective
@@ -428,7 +428,7 @@ definition homInfinitesimal
 
 中文:
 定义 homInfinitesimal
-  签名: (P₁ P₂ : Extension R A) [FormallySmooth R P₁.Ring]
+  签名: (P₁ P₂ : 扩张 R A) [形式光滑 R P₁.环]
   定义体: letI lift : P₁.Ring ->ₐ[R] P₂.infinitesimal.Ring := FormallySmooth.liftOfSurjective
     (IsScalarTower.toAlgHom R P₁.Ring A)
     (IsScalarTower.toAlgHom R P₂.infinitesimal.Ring A)
@@ -475,7 +475,7 @@ definition H1Cotangent.equivOfFormallySmooth
 
 中文:
 定义 H1Cotangent.equivOfFormallySmooth
-  签名: (P₁ P₂ : Extension R A)
+  签名: (P₁ P₂ : 扩张 R A)
   定义体: .ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₁) ≪≫ₗ
     H1Cotangent.equiv (Extension.homInfinitesimal _ _) (Extension.homInfinitesimal _ _)
     ≪≫ₗ .symm (.ofBijective _ (H1Cotangent.map_toInfinitesimal_bijective P₂))
@@ -504,7 +504,7 @@ lemma H1Cotangent.equivOfFormallySmooth_toLinearMap
 
 中文:
 引理 H1Cotangent.equivOfFormallySmooth_toLinearMap
-  结论: {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
+  结论: {P₁ P₂ : 扩张 R A} (f : P₁.态射 P₂)
   证明: by
   ext1 x
   refine (LinearEquiv.symm_apply_eq _).mpr ?_
@@ -534,7 +534,7 @@ lemma H1Cotangent.equivOfFormallySmooth_apply
 
 中文:
 引理 H1Cotangent.equivOfFormallySmooth_apply
-  结论: {P₁ P₂ : Extension R A} (f : P₁.Hom P₂)
+  结论: {P₁ P₂ : 扩张 R A} (f : P₁.态射 P₂)
   证明: by
   rw [← equivOfFormallySmooth_toLinearMap]; rw [LinearEquiv.coe_coe]
 
@@ -555,7 +555,7 @@ lemma H1Cotangent.equivOfFormallySmooth_symm
 
 中文:
 引理 H1Cotangent.equivOfFormallySmooth_symm
-  结论: (P₁ P₂ : Extension R A)
+  结论: (P₁ P₂ : 扩张 R A)
   证明: rfl
 
 Depends on / 依赖: exists_compact_mem_nhds, isCompact_univ_pi, set_pi_mem_nhds, toFinite, univ.toFinite
@@ -579,7 +579,7 @@ definition equivH1CotangentOfFormallySmooth
 
 中文:
 定义 equivH1CotangentOfFormallySmooth
-  签名: (P : Extension R A) [FormallySmooth R P.Ring]
+  签名: (P : 扩张 R A) [形式光滑 R P.环]
   定义体: haveI : FormallySmooth R (Generators.self R A).toExtension.Ring :=
     inferInstanceAs (FormallySmooth R (MvPolynomial _ _))
   H1Cotangent.equivOfFormallySmooth _ _
@@ -707,7 +707,7 @@ theorem _root_.Algebra.Extension.formallySmooth_iff_split_injection
     exact ⟨(e.comp l).extendScalarsOfSurjective P.algebraMa
 
 中文:
-定理 _root_.Algebra.Extension.formallySmooth_iff_split_injection
+定理 _root_.代数.扩张.formallySmooth_iff_split_injection
   证明: by
   refine (Algebra.FormallySmooth.iff_split_injection P.algebraMap_surjective).trans ?_
   let e : P.ker.Cotangent ≃ₗ[P.Ring] P.Cotangent :=
@@ -745,7 +745,7 @@ theorem iff_split_surjection
 
 中文:
 定理 iff_split_surjection
-  条件: (f : P ->ₐ[R] A) (hf : Function.Surjective f)
+  条件: (f : P ->ₐ[R] A) (hf : 函数.满射 f)
   证明: by
   let := f.toAlgebra
   rw [iff_split_injection hf]; rw [← nonempty_subtype]; rw [← nonempty_subtype]; rw [(retractionKerCotangentToTensorEquivSection hf).nonempty_congr]
@@ -772,7 +772,7 @@ theorem of_split
 
 中文:
 定理 of_split
-  结论: (f : P ->ₐ[R] A) (g : A ->ₐ[R] P ⧸ RingHom.ker f.toRingHom ^ 2)
+  结论: (f : P ->ₐ[R] A) (g : A ->ₐ[R] P ⧸ 环态射.ker f.toRingHom ^ 2)
   证明: by
   refine (iff_split_surjection f fun x => ?_).mpr ⟨g, h⟩
   obtain ⟨y, hy⟩ := Ideal.Quotient.mk_surjective (g x)
@@ -870,8 +870,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [FormallySmooth R A] (e : A ≃ₐ[R] B)
-  结论: FormallySmooth R B
+  条件: [形式光滑 R A] (e : A ≃ₐ[R] B)
+  结论: 形式光滑 R B
   证明: (iff_split_surjection e.toAlgHom e.surjective).mpr
     ⟨(Ideal.Quotient.mkₐ _ _).comp e.symm, AlgHom.ext e.apply_symm_apply⟩
 
@@ -893,7 +893,7 @@ theorem iff_of_equiv
 中文:
 定理 iff_of_equiv
   条件: (e : A ≃ₐ[R] B)
-  结论: FormallySmooth R A ↔ FormallySmooth R B
+  结论: 形式光滑 R A ↔ 形式光滑 R B
   证明: ⟨fun _ => of_equiv e, fun _ => of_equiv e.symm⟩
 
 Depends on / 依赖: e.symm, of_equiv
@@ -916,7 +916,7 @@ instance polynomial
 
 中文:
 实例 polynomial
-  签名: (R : 类型) [CommRing R]
+  签名: (R : 类型) [交换环 R]
   定义体: .of_equiv (MvPolynomial.uniqueAlgEquiv.{_, 0} R PUnit)
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.uniqueAlgEquiv, of_equiv, uniqueAlgEquiv
@@ -934,7 +934,7 @@ instance :
 
 中文:
 实例 :
-  签名: FormallySmooth R R
+  签名: 形式光滑 R R
   定义体: .of_equiv (MvPolynomial.isEmptyAlgEquiv R Empty)
 
 Depends on / 依赖: LocallyCompactPair, LocallyCompactSpace, MvPolynomial, MvPolynomial.isEmptyAlgEquiv, isEmptyAlgEquiv, of_equiv
@@ -965,8 +965,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [FormallySmooth R A] [FormallySmooth A B]
-  结论: FormallySmooth R B
+  条件: [形式光滑 R A] [形式光滑 A B]
+  结论: 形式光滑 R B
   证明: by
   refine .of_comp_surjective fun C _ _ I hI f => ?_
   obtain ⟨f', e⟩ := FormallySmooth.comp_surjective _ _ I hI (f.comp (IsScalarTower.toAlgHom R A B))
@@ -999,7 +999,7 @@ lemma of_restrictScalars
 
 中文:
 引理 of_restrictScalars
-  条件: [FormallyUnramified R A] [FormallySmooth R B]
+  条件: [形式非分歧 R A] [形式光滑 R B]
   证明: by
   refine iff_comp_surjective.mpr fun C _ _ I hI f => ?_
   algebraize [(algebraMap A C).comp (algebraMap R A)]
@@ -1044,7 +1044,7 @@ lemma iff_of_surjective
 
 中文:
 引理 iff_of_surjective
-  条件: (h : Function.Surjective (algebraMap R A))
+  条件: (h : 函数.满射 (algebraMap R A))
   证明: by
   rw [Algebra.FormallySmooth.iff_split_surjection (Algebra.ofId R A) h]
   constructor
@@ -1092,8 +1092,8 @@ instance [FormallySmooth
   · exact FormallySmooth.lift I ⟨2, hI⟩ ((f.rest
 
 中文:
-实例 [FormallySmooth
-  签名: R A] : FormallySmooth B (B otimes[R] A)
+实例 [形式光滑
+  签名: R A] : 形式光滑 B (B otimes[R] A)
   定义体: by
   refine .of_comp_surjective fun C _ _ I hI f => ?_
   let := ((algebraMap B C).comp (algebraMap R B)).toAlgebra
@@ -1143,7 +1143,7 @@ theorem of_isLocalization
 
 中文:
 定理 of_isLocalization
-  结论: FormallySmooth R Rₘ
+  结论: 形式光滑 R Rₘ
   证明: by
   refine .of_comp_surjective fun Q _ _ I e f => ?_
   have : forall x : M, IsUnit (algebraMap R Q x) := by
@@ -1180,7 +1180,7 @@ instance [FormallySmooth
   .comp _ A _
 
 中文:
-实例 [FormallySmooth
+实例 [形式光滑
   签名: R A] (M
   定义体: have : FormallySmooth A (Localization M) := of_isLocalization M
   .comp _ A _
@@ -1209,8 +1209,8 @@ theorem localization_base
 
 中文:
 定理 localization_base
-  条件: [FormallySmooth R Sₘ]
-  结论: FormallySmooth Rₘ Sₘ
+  条件: [形式光滑 R Sₘ]
+  结论: 形式光滑 Rₘ Sₘ
   证明: by
   refine .of_comp_surjective fun Q _ _ I e f => ?_
   let := ((algebraMap Rₘ Q).comp (algebraMap R Rₘ)).toAlgebra
@@ -1254,8 +1254,8 @@ theorem localization_map
 
 中文:
 定理 localization_map
-  条件: [FormallySmooth R A]
-  结论: FormallySmooth Rₘ Sₘ
+  条件: [形式光滑 R A]
+  结论: 形式光滑 Rₘ Sₘ
   证明: by
   have : FormallySmooth A Sₘ := FormallySmooth.of_isLocalization (M.map (algebraMap R A))
   have : FormallySmooth R Sₘ := FormallySmooth.comp R A Sₘ
@@ -1292,11 +1292,11 @@ class Smooth
     - finitePresentation : FinitePresentation R A  [default: by infer_instance]
 
 中文:
-类 Smooth
-  参数: [CommRing R] (A : 类型u) [CommRing A] [Algebra R A]
+类 光滑
+  参数: [交换环 R] (A : 类型u) [交换环 A] [代数 R A]
   公理与运算 (2 个):
-    - formallySmooth : FormallySmooth R A  [默认: by infer_instance]
-    - finitePresentation : FinitePresentation R A  [默认: by infer_instance]
+    - formallySmooth : 形式光滑 R A  [默认: by infer_instance]
+    - finitePresentation : 有限呈现 R A  [默认: by infer_instance]
 
 Depends on / 依赖: FinitePresentation, finitePresentation, infer_instance
 -/
@@ -1325,8 +1325,8 @@ theorem of_equiv
 
 中文:
 定理 of_equiv
-  条件: [Smooth R A] (e : A ≃ₐ[R] B)
-  结论: Smooth R B where
+  条件: [光滑 R A] (e : A ≃ₐ[R] B)
+  结论: 光滑 R B where
   证明: FormallySmooth.of_equiv e
   finitePresentation := FinitePresentation.equiv e
 
@@ -1348,8 +1348,8 @@ theorem of_isLocalization_Away
 
 中文:
 定理 of_isLocalization_Away
-  条件: (r : R) [IsLocalization.Away r A]
-  结论: Smooth R A where
+  条件: (r : R) [是Localization.Away r A]
+  结论: 光滑 R A where
   证明: Algebra.FormallySmooth.of_isLocalization (Submonoid.powers r)
   finitePresentation := IsLocalization.Away.finitePresentation r
 
@@ -1375,8 +1375,8 @@ theorem comp
 
 中文:
 定理 comp
-  条件: [Algebra A B] [IsScalarTower R A B] [Smooth R A] [Smooth A B]
-  结论: Smooth R B where
+  条件: [代数 A B] [标量塔 R A B] [光滑 R A] [光滑 A B]
+  结论: 光滑 R B where
   证明: FormallySmooth.comp R A B
   finitePresentation := FinitePresentation.trans R A B
 
@@ -1395,7 +1395,7 @@ instance baseChange
 
 中文:
 实例 baseChange
-  签名: [Smooth R A]
+  签名: [光滑 R A]
 -/
 instance baseChange [Smooth R A] : Smooth B (B otimes[R] A) where
 

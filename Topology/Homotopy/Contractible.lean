@@ -52,7 +52,7 @@ theorem nullhomotopic_of_constant
 中文:
 定理 nullhomotopic_of_constant
   条件: (y : Y)
-  结论: Nullhomotopic (ContinuousMap.const X y)
+  结论: Nullhomotopic (连续映射.const X y)
   证明: ⟨y, by rfl⟩
 -/
 theorem nullhomotopic_of_constant (y : Y) : Nullhomotopic (ContinuousMap.const X y) :=
@@ -122,10 +122,10 @@ class ContractibleSpace
     - hequiv_unit' : Nonempty (X ≃ₕ Unit)
 
 中文:
-类 ContractibleSpace
-  参数: (X : 类型) [TopologicalSpace X]
+类 余ntractible空间
+  参数: (X : 类型) [拓扑空间 X]
   公理与运算 (1 个):
-    - hequiv_unit' : Nonempty (X ≃ₕ Unit)
+    - hequiv_unit' : 非空 (X ≃ₕ 单元)
 -/
 class ContractibleSpace (X : Type*) [TopologicalSpace X] : Prop where
   hequiv_unit' : Nonempty (X ≃ₕ Unit)
@@ -139,8 +139,8 @@ theorem ContractibleSpace.hequiv_unit
   proof: ContractibleSpace.hequiv_unit'
 
 中文:
-定理 ContractibleSpace.hequiv_unit
-  条件: (X : 类型) [TopologicalSpace X] [ContractibleSpace X]
+定理 余ntractible空间.hequiv_unit
+  条件: (X : 类型) [拓扑空间 X] [余ntractible空间 X]
   证明: ContractibleSpace.hequiv_unit'
 
 Depends on / 依赖: ContractibleSpace, ContractibleSpace.hequiv_unit, hequiv_unit
@@ -162,7 +162,7 @@ theorem id_nullhomotopic
 
 中文:
 定理 id_nullhomotopic
-  条件: (X : 类型) [TopologicalSpace X] [ContractibleSpace X]
+  条件: (X : 类型) [拓扑空间 X] [余ntractible空间 X]
   证明: by
   obtain ⟨hv⟩ := ContractibleSpace.hequiv_unit X
   use hv.invFun ()
@@ -198,7 +198,7 @@ theorem contractible_iff_id_nullhomotopic
 
 中文:
 定理 contractible_iff_id_nullhomotopic
-  条件: (Y : 类型) [TopologicalSpace Y]
+  条件: (Y : 类型) [拓扑空间 Y]
   证明: by
   constructor
   · intro
@@ -241,8 +241,8 @@ theorem ContinuousMap.HomotopyEquiv.contractibleSpace
   proof: ⟨(ContractibleSpace.hequiv_unit Y).map e.trans⟩
 
 中文:
-定理 ContinuousMap.HomotopyEquiv.contractibleSpace
-  条件: [ContractibleSpace Y] (e : X ≃ₕ Y)
+定理 连续映射.同伦等价.contractibleSpace
+  条件: [余ntractible空间 Y] (e : X ≃ₕ Y)
   证明: ⟨(ContractibleSpace.hequiv_unit Y).map e.trans⟩
 -/
 protected theorem ContinuousMap.HomotopyEquiv.contractibleSpace [ContractibleSpace Y] (e : X ≃ₕ Y) :
@@ -258,7 +258,7 @@ theorem ContinuousMap.HomotopyEquiv.contractibleSpace_iff
   proof: ⟨fun _ => e.symm.contractibleSpace, fun _ => e.contractibleSpace⟩
 
 中文:
-定理 ContinuousMap.HomotopyEquiv.contractibleSpace_iff
+定理 连续映射.同伦等价.contractibleSpace_iff
   条件: (e : X ≃ₕ Y)
   证明: ⟨fun _ => e.symm.contractibleSpace, fun _ => e.contractibleSpace⟩
 -/
@@ -275,8 +275,8 @@ theorem Homeomorph.contractibleSpace
   proof: e.toHomotopyEquiv.contractibleSpace
 
 中文:
-定理 Homeomorph.contractibleSpace
-  条件: [ContractibleSpace Y] (e : X ≃ₜ Y)
+定理 同胚.contractibleSpace
+  条件: [余ntractible空间 Y] (e : X ≃ₜ Y)
   证明: e.toHomotopyEquiv.contractibleSpace
 -/
 protected theorem Homeomorph.contractibleSpace [ContractibleSpace Y] (e : X ≃ₜ Y) :
@@ -292,7 +292,7 @@ theorem Homeomorph.contractibleSpace_iff
   proof: e.toHomotopyEquiv.contractibleSpace_iff
 
 中文:
-定理 Homeomorph.contractibleSpace_iff
+定理 同胚.contractibleSpace_iff
   条件: (e : X ≃ₜ Y)
   证明: e.toHomotopyEquiv.contractibleSpace_iff
 -/
@@ -311,8 +311,8 @@ lemma homotopic_of_indiscrete
 
 中文:
 引理 homotopic_of_indiscrete
-  条件: [IndiscreteTopology Y] (f g : C(X, Y))
-  结论: f.Homotopic g
+  条件: [Indiscrete拓扑 Y] (f g : C(X, Y))
+  结论: f.同伦 g
   证明: ⟨⟨fun (t, a) => if t = 0 then f a else g a, continuous_of_indiscreteTopology⟩, by simp, by simp⟩
 
 Depends on / 依赖: continuous_of_indiscreteTopology
@@ -333,7 +333,7 @@ lemma nullhomotopic_of_indiscrete
 
 中文:
 引理 nullhomotopic_of_indiscrete
-  条件: [Nonempty Y] [IndiscreteTopology Y] (f : C(X, Y))
+  条件: [非空 Y] [Indiscrete拓扑 Y] (f : C(X, Y))
   证明: by
   inhabit Y
   use default
@@ -359,8 +359,8 @@ instance [Nonempty
   ⟨⟨(Homeomorph.homeomorphOfUnique Y Unit).toHomotopyEquiv⟩⟩
 
 中文:
-实例 [Nonempty
-  签名: Y] [Subsingleton Y] : ContractibleSpace Y
+实例 [非空
+  签名: Y] [子单例 Y] : 余ntractible空间 Y
   定义体: let ⟨_⟩ := nonempty_unique Y
   ⟨⟨(Homeomorph.homeomorphOfUnique Y Unit).toHomotopyEquiv⟩⟩
 
@@ -379,8 +379,8 @@ instance [Nonempty
   body: (contractible_iff_id_nullhomotopic Y).mpr (nullhomotopic_of_indiscrete _)
 
 中文:
-实例 [Nonempty
-  签名: Y] [IndiscreteTopology Y] : ContractibleSpace Y
+实例 [非空
+  签名: Y] [Indiscrete拓扑 Y] : 余ntractible空间 Y
   定义体: (contractible_iff_id_nullhomotopic Y).mpr (nullhomotopic_of_indiscrete _)
 
 Depends on / 依赖: contractible_iff_id_nullhomotopic, nullhomotopic_of_indiscrete
@@ -402,7 +402,7 @@ theorem hequiv
 
 中文:
 定理 hequiv
-  条件: [ContractibleSpace X] [ContractibleSpace Y]
+  条件: [余ntractible空间 X] [余ntractible空间 Y]
   证明: by
   rcases ContractibleSpace.hequiv_unit' (X := X) with ⟨h⟩
   rcases ContractibleSpace.hequiv_unit' (X := Y) with ⟨h'⟩
@@ -434,8 +434,8 @@ instance [ContractibleSpace
   exact (Homeomorph.prodUnique Unit Unit).toHomotopyEquiv
 
 中文:
-实例 [ContractibleSpace
-  签名: X] [ContractibleSpace Y] : ContractibleSpace (X × Y)
+实例 [余ntractible空间
+  签名: X] [余ntractible空间 Y] : 余ntractible空间 (X × Y)
   定义体: by
   obtain ⟨hX⟩ := hequiv_unit' (X := X)
   obtain ⟨hY⟩ := hequiv_unit' (X := Y)

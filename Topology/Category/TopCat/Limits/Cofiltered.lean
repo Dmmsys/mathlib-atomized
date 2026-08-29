@@ -55,7 +55,7 @@ theorem isTopologicalBasis_cofiltered_limit
 
 中文:
 定理 isTopologicalBasis_cofiltered_limit
-  结论: (hC : IsLimit C) (T : 对任意 j, Set (Set (F.obj j)))
+  结论: (hC : 是极限 C) (T : 对任意 j, 集合 (集合 (F.obj j)))
   证明: by
   classical
   convert! IsTopologicalBasis.iInf_induced hT fun j (x : C.pt) => C.π.app j x using 1

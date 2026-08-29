@@ -79,7 +79,7 @@ theorem disjoint_of_subsingleton
 
 中文:
 定理 disjoint_of_subsingleton
-  条件: [Subsingleton α]
+  条件: [子单例 α]
   结论: Disjoint a b
   证明: fun x _ _ => le_of_eq (Subsingleton.elim x ⊥)
 
@@ -915,7 +915,7 @@ theorem Disjoint.right_lt_sup_of_left_ne_bot
 
 中文:
 定理 Disjoint.right_lt_sup_of_left_ne_bot
-  结论: [SemilatticeSup α] [OrderBot α] {a b : α}
+  结论: [SemilatticeSup α] [有底序 α] {a b : α}
   证明: le_sup_right.lt_of_ne fun eq => ha (le_bot_iff.mp <| h le_rfl <| sup_eq_right.mp eq.symm)
 
 Depends on / 依赖: eq.symm, le_bot_iff, le_bot_iff.mp, le_rfl, le_sup_right, le_sup_right.lt_of_ne, lt_of_ne, sup_eq_right, sup_eq_right.mp
@@ -1209,7 +1209,7 @@ theorem Disjoint.dual
 
 中文:
 定理 Disjoint.dual
-  条件: [PartialOrder α] [OrderBot α] {a b : α}
+  条件: [偏序 α] [有底序 α] {a b : α}
   证明: id
 
 @[to_dual (attr := simp, grind =)]
@@ -1231,7 +1231,7 @@ theorem disjoint_toDual_iff
 
 中文:
 定理 disjoint_toDual_iff
-  条件: [PartialOrder α] [OrderTop α] {a b : α}
+  条件: [偏序 α] [有顶序 α] {a b : α}
   证明: Iff.rfl
 
 @[to_dual (attr := simp, grind =)]
@@ -1253,7 +1253,7 @@ theorem disjoint_ofDual_iff
 
 中文:
 定理 disjoint_ofDual_iff
-  条件: [PartialOrder α] [OrderBot α] {a b : αᵒᵈ}
+  条件: [偏序 α] [有底序 α] {a b : αᵒᵈ}
   证明: Iff.rfl
 
 Depends on / 依赖: Iff.rfl
@@ -1307,8 +1307,8 @@ structure IsCompl
     - codisjoint : Codisjoint x y
 
 中文:
-结构 IsCompl
-  参数: [PartialOrder α] [BoundedOrder α] (x y : α)
+结构 是补集
+  参数: [偏序 α] [有界序 α] (x y : α)
   公理与运算 (2 个):
     - disjoint : Disjoint x y
     - codisjoint : Codisjoint x y
@@ -1335,7 +1335,7 @@ theorem isCompl_iff
 
 中文:
 定理 isCompl_iff
-  条件: [PartialOrder α] [BoundedOrder α] {a b : α}
+  条件: [偏序 α] [有界序 α] {a b : α}
   证明: ⟨fun h => ⟨h.1, h.2⟩, fun h => ⟨h.1, h.2⟩⟩
 -/
 theorem isCompl_iff [PartialOrder α] [BoundedOrder α] {a b : α} :
@@ -1362,8 +1362,8 @@ theorem symm
 
 中文:
 定理 symm
-  条件: (h : IsCompl x y)
-  结论: IsCompl y x
+  条件: (h : 是补集 x y)
+  结论: 是补集 y x
   证明: ⟨h.1.symm, h.2.symm⟩
 
 @[grind =]
@@ -1382,7 +1382,7 @@ lemma _root_.isCompl_comm
 
 中文:
 引理 _root_.isCompl_comm
-  结论: IsCompl x y ↔ IsCompl y x
+  结论: 是补集 x y ↔ 是补集 y x
   证明: ⟨IsCompl.symm, IsCompl.symm⟩
 
 Depends on / 依赖: IsCompl, IsCompl.symm
@@ -1400,8 +1400,8 @@ theorem dual
 
 中文:
 定理 dual
-  条件: (h : IsCompl x y)
-  结论: IsCompl (toDual x) (toDual y)
+  条件: (h : 是补集 x y)
+  结论: 是补集 (toDual x) (toDual y)
   证明: ⟨h.2, h.1⟩
 -/
 theorem dual (h : IsCompl x y) : IsCompl (toDual x) (toDual y) :=
@@ -1418,8 +1418,8 @@ theorem ofDual
 
 中文:
 定理 ofDual
-  条件: {a b : αᵒᵈ} (h : IsCompl a b)
-  结论: IsCompl (ofDual a) (ofDual b)
+  条件: {a b : αᵒᵈ} (h : 是补集 a b)
+  结论: 是补集 (ofDual a) (ofDual b)
   证明: ⟨h.2, h.1⟩
 -/
 theorem ofDual {a b : αᵒᵈ} (h : IsCompl a b) : IsCompl (ofDual a) (ofDual b) :=
@@ -1446,7 +1446,7 @@ theorem of_le
 中文:
 定理 of_le
   条件: (h₁ : x ⊓ y <= ⊥) (h₂ : ⊤ <= x ⊔ y)
-  结论: IsCompl x y
+  结论: 是补集 x y
   证明: ⟨by grind [disjoint_iff_inf_le], by grind [codisjoint_iff_le_sup]⟩
 
 @[to_dual self (reorder := h₁ h₂)]
@@ -1471,7 +1471,7 @@ theorem of_eq
 中文:
 定理 of_eq
   条件: (h₁ : x ⊓ y = ⊥) (h₂ : x ⊔ y = ⊤)
-  结论: IsCompl x y
+  结论: 是补集 x y
   证明: ⟨disjoint_iff.mpr h₁, codisjoint_iff.mpr h₂⟩
 
 @[to_dual]
@@ -1493,7 +1493,7 @@ theorem inf_eq_bot
 
 中文:
 定理 inf_eq_bot
-  条件: (h : IsCompl x y)
+  条件: (h : 是补集 x y)
   结论: x ⊓ y = ⊥
   证明: h.disjoint.eq_bot
 
@@ -1521,7 +1521,7 @@ theorem inf_left_le_of_le_sup_right
 
 中文:
 定理 inf_left_le_of_le_sup_right
-  条件: (h : IsCompl x y) (hle : a <= b ⊔ y)
+  条件: (h : 是补集 x y) (hle : a <= b ⊔ y)
   结论: a ⊓ x <= b
   证明: calc
     a ⊓ x <= (b ⊔ y) ⊓ x := inf_le_inf hle le_rfl
@@ -1549,7 +1549,7 @@ theorem le_sup_right_iff_inf_left_le
 
 中文:
 定理 le_sup_right_iff_inf_left_le
-  条件: {a b} (h : IsCompl x y)
+  条件: {a b} (h : 是补集 x y)
   结论: a <= b ⊔ y ↔ a ⊓ x <= b
   证明: ⟨h.inf_left_le_of_le_sup_right, h.symm.dual.inf_left_le_of_le_sup_right⟩
 
@@ -1570,7 +1570,7 @@ theorem inf_left_eq_bot_iff
 
 中文:
 定理 inf_left_eq_bot_iff
-  条件: (h : IsCompl y z)
+  条件: (h : 是补集 y z)
   结论: x ⊓ y = ⊥ ↔ x <= z
   证明: by
   rw [← le_bot_iff]; rw [← h.le_sup_right_iff_inf_left_le]; rw [bot_sup_eq]
@@ -1591,7 +1591,7 @@ theorem inf_right_eq_bot_iff
 
 中文:
 定理 inf_right_eq_bot_iff
-  条件: (h : IsCompl y z)
+  条件: (h : 是补集 y z)
   结论: x ⊓ z = ⊥ ↔ x <= y
   证明: h.symm.inf_left_eq_bot_iff
 
@@ -1613,7 +1613,7 @@ theorem disjoint_left_iff
 
 中文:
 定理 disjoint_left_iff
-  条件: (h : IsCompl y z)
+  条件: (h : 是补集 y z)
   结论: Disjoint x y ↔ x <= z
   证明: by
   rw [disjoint_iff]
@@ -1636,7 +1636,7 @@ theorem disjoint_right_iff
 
 中文:
 定理 disjoint_right_iff
-  条件: (h : IsCompl y z)
+  条件: (h : 是补集 y z)
   结论: Disjoint x z ↔ x <= y
   证明: h.symm.disjoint_left_iff
 
@@ -1656,7 +1656,7 @@ theorem le_left_iff
 
 中文:
 定理 le_left_iff
-  条件: (h : IsCompl x y)
+  条件: (h : 是补集 x y)
   结论: z <= x ↔ Disjoint z y
   证明: h.disjoint_right_iff.symm
 
@@ -1676,7 +1676,7 @@ theorem le_right_iff
 
 中文:
 定理 le_right_iff
-  条件: (h : IsCompl x y)
+  条件: (h : 是补集 x y)
   结论: z <= y ↔ Disjoint z x
   证明: h.symm.le_left_iff
 
@@ -1696,7 +1696,7 @@ theorem left_le_iff
 
 中文:
 定理 left_le_iff
-  条件: (h : IsCompl x y)
+  条件: (h : 是补集 x y)
   结论: x <= z ↔ Codisjoint z y
   证明: h.dual.le_left_iff
 
@@ -1716,7 +1716,7 @@ theorem right_le_iff
 
 中文:
 定理 right_le_iff
-  条件: (h : IsCompl x y)
+  条件: (h : 是补集 x y)
   结论: y <= z ↔ Codisjoint z x
   证明: h.symm.left_le_iff
 
@@ -1735,8 +1735,8 @@ theorem Antitone
   proof: h'.right_le_iff.2 h.symm.codisjoint.mono_right hx
 
 中文:
-定理 Antitone
-  条件: {x' y'} (h : IsCompl x y) (h' : IsCompl x' y') (hx : x <= x')
+定理 递减
+  条件: {x' y'} (h : 是补集 x y) (h' : 是补集 x' y') (hx : x <= x')
   结论: y' <= y
   证明: h'.right_le_iff.2 h.symm.codisjoint.mono_right hx
 -/
@@ -1754,7 +1754,7 @@ theorem right_unique
 
 中文:
 定理 right_unique
-  条件: (hxy : IsCompl x y) (hxz : IsCompl x z)
+  条件: (hxy : 是补集 x y) (hxz : 是补集 x z)
   结论: y = z
   证明: le_antisymm (hxz.Antitone hxy <| le_refl x) (hxy.Antitone hxz <| le_refl x)
 
@@ -1774,7 +1774,7 @@ theorem left_unique
 
 中文:
 定理 left_unique
-  条件: (hxz : IsCompl x z) (hyz : IsCompl y z)
+  条件: (hxz : 是补集 x z) (hyz : 是补集 y z)
   结论: x = y
   证明: hxz.symm.right_unique hyz.symm
 
@@ -1798,8 +1798,8 @@ theorem sup_inf
 
 中文:
 定理 sup_inf
-  条件: {x' y'} (h : IsCompl x y) (h' : IsCompl x' y')
-  结论: IsCompl (x ⊔ x') (y ⊓ y')
+  条件: {x' y'} (h : 是补集 x y) (h' : 是补集 x' y')
+  结论: 是补集 (x ⊔ x') (y ⊓ y')
   证明: of_eq
     (by rw [inf_sup_right, ← inf_assoc, h.inf_eq_bot, bot_inf_eq, bot_sup_eq, inf_left_comm,
       h'.inf_eq_bot, inf_bot_eq])
@@ -1826,8 +1826,8 @@ theorem inf_sup
 
 中文:
 定理 inf_sup
-  条件: {x' y'} (h : IsCompl x y) (h' : IsCompl x' y')
-  结论: IsCompl (x ⊓ x') (y ⊔ y')
+  条件: {x' y'} (h : 是补集 x y) (h' : 是补集 x' y')
+  结论: 是补集 (x ⊓ x') (y ⊔ y')
   证明: (h.symm.sup_inf h'.symm).symm
 
 Depends on / 依赖: h.symm.sup_inf, sup_inf
@@ -1861,7 +1861,7 @@ theorem disjoint_iff
 
 中文:
 定理 disjoint_iff
-  条件: [OrderBot α] [OrderBot β] {x y : α × β}
+  条件: [有底序 α] [有底序 β] {x y : α × β}
   证明: by
   constructor
   · intro h
@@ -1896,7 +1896,7 @@ theorem codisjoint_iff
 
 中文:
 定理 codisjoint_iff
-  条件: [OrderTop α] [OrderTop β] {x y : α × β}
+  条件: [有顶序 α] [有顶序 β] {x y : α × β}
   证明: @Prod.disjoint_iff αᵒᵈ βᵒᵈ _ _ _ _ _ _
 
 @[grind =]
@@ -1917,7 +1917,7 @@ theorem isCompl_iff
 
 中文:
 定理 isCompl_iff
-  条件: [BoundedOrder α] [BoundedOrder β] {x y : α × β}
+  条件: [有界序 α] [有界序 β] {x y : α × β}
   证明: by
   simp_rw [isCompl_iff, Prod.disjoint_iff, Prod.codisjoint_iff, and_and_and_comm]
 -/
@@ -1944,7 +1944,7 @@ theorem isCompl_toDual_iff
 
 中文:
 定理 isCompl_toDual_iff
-  结论: IsCompl (toDual a) (toDual b) ↔ IsCompl a b
+  结论: 是补集 (toDual a) (toDual b) ↔ 是补集 a b
   证明: ⟨IsCompl.ofDual, IsCompl.dual⟩
 
 @[simp, grind =]
@@ -1967,7 +1967,7 @@ theorem isCompl_ofDual_iff
 中文:
 定理 isCompl_ofDual_iff
   条件: {a b : αᵒᵈ}
-  结论: IsCompl (ofDual a) (ofDual b) ↔ IsCompl a b
+  结论: 是补集 (ofDual a) (ofDual b) ↔ 是补集 a b
   证明: ⟨IsCompl.dual, IsCompl.ofDual⟩
 
 Depends on / 依赖: IsCompl, IsCompl.dual, IsCompl.ofDual, ofDual
@@ -1985,7 +1985,7 @@ theorem isCompl_bot_top
 
 中文:
 定理 isCompl_bot_top
-  结论: IsCompl (⊥ : α) ⊤
+  结论: 是补集 (⊥ : α) ⊤
   证明: IsCompl.of_eq (bot_inf_eq _) (sup_top_eq _)
 
 Depends on / 依赖: IsCompl, IsCompl.of_eq, bot_inf_eq, of_eq, sup_top_eq
@@ -2003,7 +2003,7 @@ theorem isCompl_top_bot
 
 中文:
 定理 isCompl_top_bot
-  结论: IsCompl (⊤ : α) ⊥
+  结论: 是补集 (⊤ : α) ⊥
   证明: IsCompl.of_eq (inf_bot_eq _) (top_sup_eq _)
 
 Depends on / 依赖: IsCompl, IsCompl.of_eq, inf_bot_eq, of_eq, top_sup_eq
@@ -2022,7 +2022,7 @@ theorem eq_top_of_isCompl_bot
 
 中文:
 定理 eq_top_of_isCompl_bot
-  条件: (h : IsCompl x ⊥)
+  条件: (h : 是补集 x ⊥)
   结论: x = ⊤
   证明: by rw [← sup_bot_eq x, h.sup_eq_top]
 
@@ -2041,7 +2041,7 @@ theorem eq_top_of_bot_isCompl
 
 中文:
 定理 eq_top_of_bot_isCompl
-  条件: (h : IsCompl ⊥ x)
+  条件: (h : 是补集 ⊥ x)
   结论: x = ⊤
   证明: eq_top_of_isCompl_bot h.symm
 
@@ -2061,7 +2061,7 @@ theorem eq_bot_of_isCompl_top
 
 中文:
 定理 eq_bot_of_isCompl_top
-  条件: (h : IsCompl x ⊤)
+  条件: (h : 是补集 x ⊤)
   结论: x = ⊥
   证明: eq_top_of_isCompl_bot h.dual
 
@@ -2081,7 +2081,7 @@ theorem eq_bot_of_top_isCompl
 
 中文:
 定理 eq_bot_of_top_isCompl
-  条件: (h : IsCompl ⊤ x)
+  条件: (h : 是补集 ⊤ x)
   结论: x = ⊥
   证明: eq_top_of_bot_isCompl h.dual
 
@@ -2165,7 +2165,7 @@ theorem IsComplemented.sup
   proof: fun ⟨a', ha⟩ ⟨b', hb⟩ => ⟨a' ⊓ b', ha.sup_inf hb⟩
 
 中文:
-定理 IsComplemented.sup
+定理 IsComplemented.上确界
   结论: IsComplemented a -> IsComplemented b -> IsComplemented (a ⊔ b)
   证明: fun ⟨a', ha⟩ ⟨b', hb⟩ => ⟨a' ⊓ b', ha.sup_inf hb⟩
 
@@ -2183,7 +2183,7 @@ theorem IsComplemented.inf
   proof: fun ⟨a', ha⟩ ⟨b', hb⟩ => ⟨a' ⊔ b', ha.inf_sup hb⟩
 
 中文:
-定理 IsComplemented.inf
+定理 IsComplemented.下确界
   结论: IsComplemented a -> IsComplemented b -> IsComplemented (a ⊓ b)
   证明: fun ⟨a', ha⟩ ⟨b', hb⟩ => ⟨a' ⊔ b', ha.inf_sup hb⟩
 
@@ -2204,10 +2204,10 @@ class ComplementedLattice
     - exists_isCompl : forall a : α, exists b : α, IsCompl a b
 
 中文:
-类 ComplementedLattice
-  参数: (α) [Lattice α] [BoundedOrder α]
+类 有补格
+  参数: (α) [格 α] [有界序 α]
   公理与运算 (1 个):
-    - exists_isCompl : 对任意 a : α, 存在 b : α, IsCompl a b
+    - exists_isCompl : 对任意 a : α, 存在 b : α, 是补集 a b
 -/
 class ComplementedLattice (α) [Lattice α] [BoundedOrder α] : Prop where
   /-- In a `ComplementedLattice`, every element admits a complement. -/
@@ -2223,7 +2223,7 @@ lemma complementedLattice_iff
 
 中文:
 引理 complementedLattice_iff
-  条件: (α) [Lattice α] [BoundedOrder α]
+  条件: (α) [格 α] [有界序 α]
   证明: ⟨fun ⟨h⟩ => h, fun h => ⟨h⟩⟩
 -/
 lemma complementedLattice_iff (α) [Lattice α] [BoundedOrder α] :
@@ -2245,7 +2245,7 @@ lemma Subsingleton.instComplementedLattice
   exact codisjoint_top_right
 
 中文:
-引理 Subsingleton.instComplementedLattice
+引理 子单例.instComplementedLattice
   证明: by
   refine ⟨fun a => ⟨⊥, disjoint_bot_right, ?_⟩⟩
   rw [Subsingleton.elim ⊥ ⊤]
@@ -2275,7 +2275,7 @@ instance :
 
 中文:
 实例 :
-  签名: ComplementedLattice αᵒᵈ
+  签名: 有补格 αᵒᵈ
   定义体: ⟨fun a =>
     let ⟨b, hb⟩ := exists_isCompl (show α from a)
     ⟨b, hb.dual⟩⟩
@@ -2300,7 +2300,7 @@ abbreviation Complementeds
 
 中文:
 缩写 Complementeds
-  签名: (α : 类型) [Lattice α] [BoundedOrder α]
+  签名: (α : 类型) [格 α] [有界序 α]
   定义体: {a : α // IsComplemented a}
 
 Depends on / 依赖: IsComplemented
@@ -2343,7 +2343,7 @@ theorem coe_injective
 
 中文:
 定理 coe_injective
-  结论: Injective ((↑) : Complementeds α -> α)
+  结论: 单射 ((↑) : Complementeds α -> α)
   证明: Subtype.coe_injective
 
 @[simp, norm_cast]
@@ -2422,7 +2422,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder (Complementeds α)
+  签名: 有界序 (Complementeds α)
   定义体: Subtype.boundedOrder isComplemented_bot isComplemented_top
 
 @[simp, norm_cast]
@@ -2508,7 +2508,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited (Complementeds α)
+  签名: 可居 (Complementeds α)
   定义体: ⟨⊥⟩
 -/
 instance : Inhabited (Complementeds α) := ⟨⊥⟩
@@ -2527,7 +2527,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max (Complementeds α)
+  签名: 最大值 (Complementeds α)
   定义体: ⟨fun a b => ⟨a ⊔ b, a.2.sup b.2⟩⟩
 -/
 instance : Max (Complementeds α) :=
@@ -2545,7 +2545,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min (Complementeds α)
+  签名: 最小值 (Complementeds α)
   定义体: ⟨fun a b => ⟨a ⊓ b, a.2.inf b.2⟩⟩
 
 @[simp, norm_cast]
@@ -2647,7 +2647,7 @@ instance :
 
 中文:
 实例 :
-  签名: DistribLattice (Complementeds α)
+  签名: Distrib格 (Complementeds α)
   定义体: Complementeds.coe_injective.distribLattice _ .rfl .rfl coe_sup coe_inf
 
 @[simp, norm_cast]
@@ -2719,7 +2719,7 @@ theorem isCompl_coe
 
 中文:
 定理 isCompl_coe
-  结论: IsCompl (a : α) b ↔ IsCompl a b
+  结论: 是补集 (a : α) b ↔ 是补集 a b
   证明: by
   simp_rw [isCompl_iff, disjoint_coe, codisjoint_coe]
 
@@ -2738,7 +2738,7 @@ instance :
 
 中文:
 实例 :
-  签名: ComplementedLattice (Complementeds α)
+  签名: 有补格 (Complementeds α)
   定义体: ⟨fun ⟨a, b, h⟩ => ⟨⟨b, a, h.symm⟩, isCompl_coe.1 h⟩⟩
 
 Depends on / 依赖: h.symm, isCompl_coe

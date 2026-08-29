@@ -52,7 +52,7 @@ definition Icc
   body: (Finset.Icc a b).val
 
 中文:
-定义 Icc
+定义 闭区间
   签名: (a b : α)
   定义体: (Finset.Icc a b).val
 
@@ -69,7 +69,7 @@ definition Ico
   body: (Finset.Ico a b).val
 
 中文:
-定义 Ico
+定义 左闭右开区间
   签名: (a b : α)
   定义体: (Finset.Ico a b).val
 
@@ -86,7 +86,7 @@ definition Ioc
   body: (Finset.Ioc a b).val
 
 中文:
-定义 Ioc
+定义 左开右闭区间
   签名: (a b : α)
   定义体: (Finset.Ioc a b).val
 
@@ -103,7 +103,7 @@ definition Ioo
   body: (Finset.Ioo a b).val
 
 中文:
-定义 Ioo
+定义 开区间
   签名: (a b : α)
   定义体: (Finset.Ioo a b).val
 
@@ -121,7 +121,7 @@ lemma mem_Icc
 
 中文:
 引理 mem_Icc
-  结论: x in Icc a b ↔ a <= x ∧ x <= b
+  结论: x in 闭区间 a b ↔ a <= x ∧ x <= b
   证明: by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
 -/
 @[simp] lemma mem_Icc : x in Icc a b ↔ a <= x ∧ x <= b := by rw [Icc, ← Finset.mem_def, Finset.mem_Icc]
@@ -136,7 +136,7 @@ lemma mem_Ico
 
 中文:
 引理 mem_Ico
-  结论: x in Ico a b ↔ a <= x ∧ x < b
+  结论: x in 左闭右开区间 a b ↔ a <= x ∧ x < b
   证明: by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
 -/
 @[simp] lemma mem_Ico : x in Ico a b ↔ a <= x ∧ x < b := by rw [Ico, ← Finset.mem_def, Finset.mem_Ico]
@@ -151,7 +151,7 @@ lemma mem_Ioc
 
 中文:
 引理 mem_Ioc
-  结论: x in Ioc a b ↔ a < x ∧ x <= b
+  结论: x in 左开右闭区间 a b ↔ a < x ∧ x <= b
   证明: by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
 -/
 @[simp] lemma mem_Ioc : x in Ioc a b ↔ a < x ∧ x <= b := by rw [Ioc, ← Finset.mem_def, Finset.mem_Ioc]
@@ -166,7 +166,7 @@ lemma mem_Ioo
 
 中文:
 引理 mem_Ioo
-  结论: x in Ioo a b ↔ a < x ∧ x < b
+  结论: x in 开区间 a b ↔ a < x ∧ x < b
   证明: by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
 -/
 @[simp] lemma mem_Ioo : x in Ioo a b ↔ a < x ∧ x < b := by rw [Ioo, ← Finset.mem_def, Finset.mem_Ioo]
@@ -186,7 +186,7 @@ definition Ici
   body: (Finset.Ici a).val
 
 中文:
-定义 Ici
+定义 左闭右无界区间
   签名: (a : α)
   定义体: (Finset.Ici a).val
 
@@ -203,7 +203,7 @@ definition Ioi
   body: (Finset.Ioi a).val
 
 中文:
-定义 Ioi
+定义 左开右无界区间
   签名: (a : α)
   定义体: (Finset.Ioi a).val
 
@@ -221,7 +221,7 @@ lemma mem_Ici
 
 中文:
 引理 mem_Ici
-  结论: x in Ici a ↔ a <= x
+  结论: x in 左闭右无界区间 a ↔ a <= x
   证明: by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
 -/
 @[simp] lemma mem_Ici : x in Ici a ↔ a <= x := by rw [Ici, ← Finset.mem_def, Finset.mem_Ici]
@@ -236,7 +236,7 @@ lemma mem_Ioi
 
 中文:
 引理 mem_Ioi
-  结论: x in Ioi a ↔ a < x
+  结论: x in 左开右无界区间 a ↔ a < x
   证明: by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
 -/
 @[simp] lemma mem_Ioi : x in Ioi a ↔ a < x := by rw [Ioi, ← Finset.mem_def, Finset.mem_Ioi]
@@ -255,7 +255,7 @@ definition Iic
   body: (Finset.Iic b).val
 
 中文:
-定义 Iic
+定义 左无界右闭区间
   签名: (b : α)
   定义体: (Finset.Iic b).val
 
@@ -272,7 +272,7 @@ definition Iio
   body: (Finset.Iio b).val
 
 中文:
-定义 Iio
+定义 左无界右开区间
   签名: (b : α)
   定义体: (Finset.Iio b).val
 
@@ -290,7 +290,7 @@ lemma mem_Iic
 
 中文:
 引理 mem_Iic
-  结论: x in Iic b ↔ x <= b
+  结论: x in 左无界右闭区间 b ↔ x <= b
   证明: by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
 -/
 @[simp] lemma mem_Iic : x in Iic b ↔ x <= b := by rw [Iic, ← Finset.mem_def, Finset.mem_Iic]
@@ -305,7 +305,7 @@ lemma mem_Iio
 
 中文:
 引理 mem_Iio
-  结论: x in Iio b ↔ x < b
+  结论: x in 左无界右开区间 b ↔ x < b
   证明: by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
 -/
 @[simp] lemma mem_Iio : x in Iio b ↔ x < b := by rw [Iio, ← Finset.mem_def, Finset.mem_Iio]
@@ -326,7 +326,7 @@ theorem nodup_Icc
 
 中文:
 定理 nodup_Icc
-  结论: (Icc a b).Nodup
+  结论: (闭区间 a b).Nodup
   证明: Finset.nodup _
 
 Depends on / 依赖: Finset, Finset.nodup
@@ -344,7 +344,7 @@ theorem nodup_Ico
 
 中文:
 定理 nodup_Ico
-  结论: (Ico a b).Nodup
+  结论: (左闭右开区间 a b).Nodup
   证明: Finset.nodup _
 
 Depends on / 依赖: Finset, Finset.nodup
@@ -362,7 +362,7 @@ theorem nodup_Ioc
 
 中文:
 定理 nodup_Ioc
-  结论: (Ioc a b).Nodup
+  结论: (左开右闭区间 a b).Nodup
   证明: Finset.nodup _
 
 Depends on / 依赖: Finset, Finset.nodup
@@ -382,7 +382,7 @@ theorem nodup_Ioo
 
 中文:
 定理 nodup_Ioo
-  结论: (Ioo a b).Nodup
+  结论: (开区间 a b).Nodup
   证明: Finset.nodup _
 
 @[simp]
@@ -406,7 +406,7 @@ theorem Icc_eq_zero_iff
 
 中文:
 定理 Icc_eq_zero_iff
-  结论: Icc a b = 0 ↔ ¬a <= b
+  结论: 闭区间 a b = 0 ↔ ¬a <= b
   证明: by
   rw [Icc]; rw [Finset.val_eq_zero]; rw [Finset.Icc_eq_empty_iff]
 
@@ -431,7 +431,7 @@ theorem Ico_eq_zero_iff
 
 中文:
 定理 Ico_eq_zero_iff
-  结论: Ico a b = 0 ↔ ¬a < b
+  结论: 左闭右开区间 a b = 0 ↔ ¬a < b
   证明: by
   rw [Ico]; rw [Finset.val_eq_zero]; rw [Finset.Ico_eq_empty_iff]
 
@@ -456,7 +456,7 @@ theorem Ioc_eq_zero_iff
 
 中文:
 定理 Ioc_eq_zero_iff
-  结论: Ioc a b = 0 ↔ ¬a < b
+  结论: 左开右闭区间 a b = 0 ↔ ¬a < b
   证明: by
   rw [Ioc]; rw [Finset.val_eq_zero]; rw [Finset.Ioc_eq_empty_iff]
 
@@ -488,8 +488,8 @@ alias ⟨_, Ioc_eq_zero⟩ := Ioc_eq_zero_iff
 
 中文:
 定理 Ioo_eq_zero_iff
-  条件: [DenselyOrdered α]
-  结论: Ioo a b = 0 ↔ ¬a < b
+  条件: [稠密序 α]
+  结论: 开区间 a b = 0 ↔ ¬a < b
   证明: by
   rw [Ioo]; rw [Finset.val_eq_zero]; rw [Finset.Ioo_eq_empty_iff]
 
@@ -527,7 +527,7 @@ theorem Ioo_eq_zero
 中文:
 定理 Ioo_eq_zero
   条件: (h : ¬a < b)
-  结论: Ioo a b = 0
+  结论: 开区间 a b = 0
   证明: eq_zero_iff_forall_notMem.2 fun _x hx => h ((mem_Ioo.1 hx).1.trans (mem_Ioo.1 hx).2)
 
 @[simp]
@@ -552,7 +552,7 @@ theorem Icc_eq_zero_of_lt
 中文:
 定理 Icc_eq_zero_of_lt
   条件: (h : b < a)
-  结论: Icc a b = 0
+  结论: 闭区间 a b = 0
   证明: Icc_eq_zero h.not_ge
 
 @[simp]
@@ -577,7 +577,7 @@ theorem Ico_eq_zero_of_le
 中文:
 定理 Ico_eq_zero_of_le
   条件: (h : b <= a)
-  结论: Ico a b = 0
+  结论: 左闭右开区间 a b = 0
   证明: Ico_eq_zero h.not_gt
 
 @[simp]
@@ -602,7 +602,7 @@ theorem Ioc_eq_zero_of_le
 中文:
 定理 Ioc_eq_zero_of_le
   条件: (h : b <= a)
-  结论: Ioc a b = 0
+  结论: 左开右闭区间 a b = 0
   证明: Ioc_eq_zero h.not_gt
 
 @[simp]
@@ -625,7 +625,7 @@ theorem Ioo_eq_zero_of_le
 中文:
 定理 Ioo_eq_zero_of_le
   条件: (h : b <= a)
-  结论: Ioo a b = 0
+  结论: 开区间 a b = 0
   证明: Ioo_eq_zero h.not_gt
 
 Depends on / 依赖: Ioo_eq_zero, h.not_gt, not_gt
@@ -645,7 +645,7 @@ theorem Ico_self
 
 中文:
 定理 Ico_self
-  结论: Ico a a = 0
+  结论: 左闭右开区间 a a = 0
   证明: by rw [Ico, Finset.Ico_self, Finset.empty_val]
 
 Depends on / 依赖: Finset, Finset.Ico_self, Finset.empty_val, Ico_self, empty_val
@@ -662,7 +662,7 @@ theorem Ioc_self
 
 中文:
 定理 Ioc_self
-  结论: Ioc a a = 0
+  结论: 左开右闭区间 a a = 0
   证明: by rw [Ioc, Finset.Ioc_self, Finset.empty_val]
 
 Depends on / 依赖: Finset, Finset.Ioc_self, Finset.empty_val, Ioc_self, empty_val
@@ -679,7 +679,7 @@ theorem Ioo_self
 
 中文:
 定理 Ioo_self
-  结论: Ioo a a = 0
+  结论: 开区间 a a = 0
   证明: by rw [Ioo, Finset.Ioo_self, Finset.empty_val]
 
 Depends on / 依赖: Finset, Finset.Ioo_self, Finset.empty_val, Function, Function.RightInverse.surjective, GradedRing, GradedRing.projZeroRingHom, Ioo_self, RightInverse, _apply_coe, empty_val, projZeroRingHom, surjective
@@ -698,7 +698,7 @@ theorem left_mem_Icc
 
 中文:
 定理 left_mem_Icc
-  结论: a in Icc a b ↔ a <= b
+  结论: a in 闭区间 a b ↔ a <= b
   证明: Finset.left_mem_Icc
 
 Depends on / 依赖: Finset, Finset.left_mem_Icc, left_mem_Icc
@@ -716,7 +716,7 @@ theorem left_mem_Ico
 
 中文:
 定理 left_mem_Ico
-  结论: a in Ico a b ↔ a < b
+  结论: a in 左闭右开区间 a b ↔ a < b
   证明: Finset.left_mem_Ico
 
 Depends on / 依赖: Finset, Finset.left_mem_Ico, left_mem_Ico
@@ -734,7 +734,7 @@ theorem right_mem_Icc
 
 中文:
 定理 right_mem_Icc
-  结论: b in Icc a b ↔ a <= b
+  结论: b in 闭区间 a b ↔ a <= b
   证明: Finset.right_mem_Icc
 
 Depends on / 依赖: Finset, Finset.right_mem_Icc, right_mem_Icc
@@ -752,7 +752,7 @@ theorem right_mem_Ioc
 
 中文:
 定理 right_mem_Ioc
-  结论: b in Ioc a b ↔ a < b
+  结论: b in 左开右闭区间 a b ↔ a < b
   证明: Finset.right_mem_Ioc
 
 Depends on / 依赖: Finset, Finset.right_mem_Ioc, right_mem_Ioc
@@ -770,7 +770,7 @@ theorem left_notMem_Ioc
 
 中文:
 定理 left_notMem_Ioc
-  结论: a ∉ Ioc a b
+  结论: a ∉ 左开右闭区间 a b
   证明: Finset.left_notMem_Ioc
 
 Depends on / 依赖: Finset, Finset.left_notMem_Ioc, left_notMem_Ioc
@@ -788,7 +788,7 @@ theorem left_notMem_Ioo
 
 中文:
 定理 left_notMem_Ioo
-  结论: a ∉ Ioo a b
+  结论: a ∉ 开区间 a b
   证明: Finset.left_notMem_Ioo
 
 Depends on / 依赖: Finset, Finset.left_notMem_Ioo, left_notMem_Ioo
@@ -806,7 +806,7 @@ theorem right_notMem_Ico
 
 中文:
 定理 right_notMem_Ico
-  结论: b ∉ Ico a b
+  结论: b ∉ 左闭右开区间 a b
   证明: Finset.right_notMem_Ico
 
 Depends on / 依赖: Finset, Finset.right_notMem_Ico, right_notMem_Ico
@@ -824,7 +824,7 @@ theorem right_notMem_Ioo
 
 中文:
 定理 right_notMem_Ioo
-  结论: b ∉ Ioo a b
+  结论: b ∉ 开区间 a b
   证明: Finset.right_notMem_Ioo
 
 Depends on / 依赖: Finset, Finset.right_notMem_Ioo, right_notMem_Ioo
@@ -989,7 +989,7 @@ theorem Icc_self
 中文:
 定理 Icc_self
   条件: (a : α)
-  结论: Icc a a = {a}
+  结论: 闭区间 a a = {a}
   证明: by rw [Icc, Finset.Icc_self, Finset.singleton_val]
 
 Depends on / 依赖: Finset, Finset.Icc_self, Finset.singleton_val, Icc_self, singleton_val
@@ -1011,7 +1011,7 @@ theorem Ico_cons_right
 中文:
 定理 Ico_cons_right
   条件: (h : a <= b)
-  结论: b ::ₘ Ico a b = Icc a b
+  结论: b ::ₘ 左闭右开区间 a b = 闭区间 a b
   证明: by
   classical
     rw [Ico]; rw [← Finset.insert_val_of_notMem right_notMem_Ico]; rw [Finset.Ico_insert_right h]
@@ -1039,7 +1039,7 @@ theorem Ioo_cons_left
 中文:
 定理 Ioo_cons_left
   条件: (h : a < b)
-  结论: a ::ₘ Ioo a b = Ico a b
+  结论: a ::ₘ 开区间 a b = 左闭右开区间 a b
   证明: by
   classical
     rw [Ioo]; rw [← Finset.insert_val_of_notMem left_notMem_Ioo]; rw [Finset.Ioo_insert_left h]
@@ -1068,7 +1068,7 @@ theorem Ico_disjoint_Ico
 中文:
 定理 Ico_disjoint_Ico
   条件: {a b c d : α} (h : b <= c)
-  结论: Disjoint (Ico a b) (Ico c d)
+  结论: Disjoint (左闭右开区间 a b) (左闭右开区间 c d)
   证明: disjoint_left.mpr fun hab hbc => by
     rw [mem_Ico] at hab hbc
     exact hab.2.not_ge (h.trans hbc.1)
@@ -1095,7 +1095,7 @@ theorem Ico_inter_Ico_of_le
 中文:
 定理 Ico_inter_Ico_of_le
   条件: [DecidableEq α] {a b c d : α} (h : b <= c)
-  结论: Ico a b inter Ico c d = 0
+  结论: 左闭右开区间 a b inter 左闭右开区间 c d = 0
   证明: Multiset.inter_eq_zero_iff_disjoint.2 Ico_disjoint_Ico h
 
 Depends on / 依赖: Ico_disjoint_Ico, Multiset, Multiset.inter_eq_zero_iff_disjoint, inter_eq_zero_iff_disjoint
@@ -1139,7 +1139,7 @@ theorem card_Ico_eq_card_Icc_sub_one
 中文:
 定理 card_Ico_eq_card_Icc_sub_one
   条件: (a b : α)
-  结论: card (Ico a b) = card (Icc a b) - 1
+  结论: card (左闭右开区间 a b) = card (闭区间 a b) - 1
   证明: Finset.card_Ico_eq_card_Icc_sub_one _ _
 
 Depends on / 依赖: Finset, Finset.card_Ico_eq_card_Icc_sub_one, card_Ico_eq_card_Icc_sub_one
@@ -1159,7 +1159,7 @@ theorem card_Ioc_eq_card_Icc_sub_one
 中文:
 定理 card_Ioc_eq_card_Icc_sub_one
   条件: (a b : α)
-  结论: card (Ioc a b) = card (Icc a b) - 1
+  结论: card (左开右闭区间 a b) = card (闭区间 a b) - 1
   证明: Finset.card_Ioc_eq_card_Icc_sub_one _ _
 
 Depends on / 依赖: Finset, Finset.card_Ioc_eq_card_Icc_sub_one, card_Ioc_eq_card_Icc_sub_one
@@ -1179,7 +1179,7 @@ theorem card_Ioo_eq_card_Ico_sub_one
 中文:
 定理 card_Ioo_eq_card_Ico_sub_one
   条件: (a b : α)
-  结论: card (Ioo a b) = card (Ico a b) - 1
+  结论: card (开区间 a b) = card (左闭右开区间 a b) - 1
   证明: Finset.card_Ioo_eq_card_Ico_sub_one _ _
 
 Depends on / 依赖: Finset, Finset.card_Ioo_eq_card_Ico_sub_one, card_Ioo_eq_card_Ico_sub_one
@@ -1199,7 +1199,7 @@ theorem card_Ioo_eq_card_Icc_sub_two
 中文:
 定理 card_Ioo_eq_card_Icc_sub_two
   条件: (a b : α)
-  结论: card (Ioo a b) = card (Icc a b) - 2
+  结论: card (开区间 a b) = card (闭区间 a b) - 2
   证明: Finset.card_Ioo_eq_card_Icc_sub_two _ _
 
 Depends on / 依赖: Finset, Finset.card_Ioo_eq_card_Icc_sub_two, card_Ioo_eq_card_Icc_sub_two
@@ -1266,7 +1266,7 @@ theorem Ico_inter_Ico
 
 中文:
 定理 Ico_inter_Ico
-  结论: Ico a b inter Ico c d = Ico (max a c) (min b d)
+  结论: 左闭右开区间 a b inter 左闭右开区间 c d = 左闭右开区间 (最大值 a c) (最小值 b d)
   证明: by
   rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.inter_val]; rw [Finset.Ico_inter_Ico]
 
@@ -1293,7 +1293,7 @@ theorem Ico_filter_lt
 中文:
 定理 Ico_filter_lt
   条件: (a b c : α)
-  结论: ((Ico a b).filter fun x => x < c) = Ico a (min b c)
+  结论: ((左闭右开区间 a b).filter fun x => x < c) = 左闭右开区间 a (最小值 b c)
   证明: by
   rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_lt]
 
@@ -1320,7 +1320,7 @@ theorem Ico_filter_le
 中文:
 定理 Ico_filter_le
   条件: (a b c : α)
-  结论: ((Ico a b).filter fun x => c <= x) = Ico (max a c) b
+  结论: ((左闭右开区间 a b).filter fun x => c <= x) = 左闭右开区间 (最大值 a c) b
   证明: by
   rw [Ico]; rw [Ico]; rw [← Finset.filter_val]; rw [Finset.Ico_filter_le]
 
@@ -1347,7 +1347,7 @@ theorem Ico_sub_Ico_left
 中文:
 定理 Ico_sub_Ico_left
   条件: (a b c : α)
-  结论: Ico a b - Ico a c = Ico (max a c) b
+  结论: 左闭右开区间 a b - 左闭右开区间 a c = 左闭右开区间 (最大值 a c) b
   证明: by
   rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_left]
 
@@ -1372,7 +1372,7 @@ theorem Ico_sub_Ico_right
 中文:
 定理 Ico_sub_Ico_right
   条件: (a b c : α)
-  结论: Ico a b - Ico c b = Ico a (min b c)
+  结论: 左闭右开区间 a b - 左闭右开区间 c b = 左闭右开区间 a (最小值 b c)
   证明: by
   rw [Ico]; rw [Ico]; rw [Ico]; rw [← Finset.sdiff_val]; rw [Finset.Ico_sdiff_Ico_right]
 

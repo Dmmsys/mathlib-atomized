@@ -107,7 +107,7 @@ structure InductionObj
 结构 InductionObj
   参数: where
   公理与运算 (1 个):
-    - val : Fin n -> R[X]
+    - val : 有限集 n -> R[X]
 -/
 private structure InductionObj where
   /-- The underlying family of polynomials of an induction object. -/
@@ -125,7 +125,7 @@ instance :
 
 中文:
 实例 :
-  签名: CoeFun (InductionObj R n) (fun _ => Fin n -> R[X])
+  签名: CoeFun (InductionObj R n) (fun _ => 有限集 n -> R[X])
   定义体: ⟨InductionObj.val⟩
 -/
 private instance : CoeFun (InductionObj R n) (fun _ => Fin n -> R[X]) := ⟨InductionObj.val⟩
@@ -183,7 +183,7 @@ lemma coeff_mem_coeffSubmodule
 
 中文:
 引理 coeff_mem_coeffSubmodule
-  条件: {i : Fin n} {d : 自然数}
+  条件: {i : 有限集 n} {d : 自然数}
   证明: Submodule.subset_span .inr Set.mem_iUnion.2 ⟨i, Set.mem_range_self _⟩
 -/
 private lemma coeff_mem_coeffSubmodule {i : Fin n} {d : Nat} :
@@ -504,7 +504,7 @@ lemma induction_aux
 
 中文:
 引理 induction_aux
-  结论: (R : 类型) [CommRing R] [Algebra R₀ R]
+  结论: (R : 类型) [交换环 R] [代数 R₀ R]
   证明: by
   set q₁ := IsScalarTower.toAlgHom R₀ R (Away c)
   set q₂ := Ideal.Quotient.mkₐ R₀ (.span {c})
@@ -823,7 +823,7 @@ lemma chevalley_polynomialC
 
 中文:
 引理 chevalley_polynomialC
-  结论: {R : 类型} [CommRing R] (M : Submodule 整数 R) (hM : 1 in M)
+  结论: {R : 类型} [交换环 R] (M : 子模 整数 R) (hM : 1 in M)
   证明: by
   choose f hf₁ hf₂ hf₃ using fun C : BasicConstructibleSetData R[X] => statement (R₀ := Int) ⟨C.g⟩ C.f
   refine ⟨S.biUnion f, ?_, ?_⟩
@@ -1245,7 +1245,7 @@ definition numBound
 
 中文:
 定义 numBound
-  签名: (k m n : 自然数) (d : Multiset (Fin m))
+  签名: (k m n : 自然数) (d : Multiset (有限集 m))
   定义体: MvPolynomialC.numBound (k + n) (1 + (d.map Fin.val).count ·) m
 
 Depends on / 依赖: Fin.val, MvPolynomialC, MvPolynomialC.numBound, d.map, numBound
@@ -1263,7 +1263,7 @@ definition degBound
 
 中文:
 定义 degBound
-  签名: (k m n : 自然数) (d : Multiset (Fin m))
+  签名: (k m n : 自然数) (d : Multiset (有限集 m))
   定义体: MvPolynomialC.degBound (k + n) (1 + (d.map Fin.val).count ·) m
 
 Depends on / 依赖: Fin.val, MvPolynomialC, MvPolynomialC.degBound, d.map, degBound

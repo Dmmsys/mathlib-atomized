@@ -31,7 +31,7 @@ theorem C_dvd_iff_zmod
 
 中文:
 定理 C_dvd_iff_zmod
-  条件: (n : 自然数) (φ : MvPolynomial σ 整数)
+  条件: (n : 自然数) (φ : 多元多项式 σ 整数)
   证明: C_dvd_iff_map_hom_eq_zero _ _ (CharP.intCast_eq_zero_iff (ZMod n) n) _
 
 Depends on / 依赖: C_dvd_iff_map_hom_eq_zero, CharP.intCast_eq_zero_iff, intCast_eq_zero_iff
@@ -60,7 +60,7 @@ theorem frobenius_zmod
 
 中文:
 定理 frobenius_zmod
-  条件: (f : MvPolynomial σ (ZMod p))
+  条件: (f : 多元多项式 σ (ZMod p))
   结论: frobenius _ p f = expand p f
   证明: by
   apply induction_on f
@@ -89,7 +89,7 @@ theorem expand_zmod
 
 中文:
 定理 expand_zmod
-  条件: (f : MvPolynomial σ (ZMod p))
+  条件: (f : 多元多项式 σ (ZMod p))
   结论: expand p f = f ^ p
   证明: (frobenius_zmod _).symm
 
@@ -124,7 +124,7 @@ definition indicator
 
 中文:
 定义 indicator
-  签名: [CommRing K] (a : σ -> K)
+  签名: [交换环 K] (a : σ -> K)
   定义体: ∏ n, (1 - (X n - C (a n)) ^ (Fintype.card K - 1))
 
 Depends on / 依赖: Fintype, Fintype.card
@@ -317,7 +317,7 @@ definition evalₗ
 
 中文:
 定义 evalₗ
-  签名: [CommSemiring K]
+  签名: [交换半环 K]
   定义体: eval e p
   map_add' p q := by ext x; simp
   map_smul' a p := by ext e; simp
@@ -347,7 +347,7 @@ theorem map_restrict_dom_evalₗ
 
 中文:
 定理 map_restrict_dom_evalₗ
-  结论: (restrictDegree σ K (Fintype.card K - 1)).map (evalₗ K σ) = ⊤
+  结论: (restrictDegree σ K (有限类型.card K - 1)).map (evalₗ K σ) = ⊤
   证明: by
   cases nonempty_fintype σ
   refine top_unique (SetLike.le_def.2 fun e _ => mem_map.2 ?_)
@@ -396,7 +396,7 @@ definition R
 
 中文:
 定义 R
-  签名: [CommRing K]
+  签名: [交换环 K]
   定义体: restrictDegree σ K (Fintype.card K - 1)
 
 Depends on / 依赖: Fintype, Fintype.card, restrictDegree
@@ -414,8 +414,8 @@ instance [CommRing
   body: inferInstanceAs (AddCommGroup (restrictDegree σ K (Fintype.card K - 1)))
 
 中文:
-实例 [CommRing
-  签名: K] : AddCommGroup (R σ K)
+实例 [交换环
+  签名: K] : 加法交换群 (R σ K)
   定义体: inferInstanceAs (AddCommGroup (restrictDegree σ K (Fintype.card K - 1)))
 
 Depends on / 依赖: AddCommGroup, Fintype, Fintype.card, restrictDegree
@@ -432,8 +432,8 @@ instance [CommRing
   body: inferInstanceAs (Module K (restrictDegree σ K (Fintype.card K - 1)))
 
 中文:
-实例 [CommRing
-  签名: K] : Module K (R σ K)
+实例 [交换环
+  签名: K] : 模 K (R σ K)
   定义体: inferInstanceAs (Module K (restrictDegree σ K (Fintype.card K - 1)))
 
 Depends on / 依赖: Fintype, Fintype.card, Module, restrictDegree
@@ -450,8 +450,8 @@ instance [CommRing
   body: inferInstanceAs (Inhabited (restrictDegree σ K (Fintype.card K - 1)))
 
 中文:
-实例 [CommRing
-  签名: K] : Inhabited (R σ K)
+实例 [交换环
+  签名: K] : 可居 (R σ K)
   定义体: inferInstanceAs (Inhabited (restrictDegree σ K (Fintype.card K - 1)))
 
 Depends on / 依赖: Fintype, Fintype.card, Inhabited, restrictDegree
@@ -469,7 +469,7 @@ definition evalᵢ
 
 中文:
 定义 evalᵢ
-  签名: [CommRing K]
+  签名: [交换环 K]
   定义体: (evalₗ K σ).comp (restrictDegree σ K (Fintype.card K - 1)).subtype
 
 Depends on / 依赖: Fintype, Fintype.card, restrictDegree, subtype
@@ -519,8 +519,8 @@ theorem rank_R
 
 中文:
 定理 rank_R
-  条件: [Fintype σ]
-  结论: Module.rank K (R σ K) = Fintype.card (σ -> K)
+  条件: [有限类型 σ]
+  结论: 模.rank K (R σ K) = 有限类型.card (σ -> K)
   证明: calc
     Module.rank K (R σ K) =
         Module.rank K (↥{ s : σ ->₀ Nat | forall n : σ, s n <= Fintype.card K - 1 } ->₀ K) :=
@@ -560,8 +560,8 @@ instance [Finite
   simpa only [rank_R] using Cardinal.natCast_lt_aleph0
 
 中文:
-实例 [Finite
-  签名: σ] : FiniteDimensional K (R σ K)
+实例 [有限
+  签名: σ] : 有限维 K (R σ K)
   定义体: by
   cases nonempty_fintype σ
   rw [FiniteDimensional]; rw [← IsNoetherian.iff_fg]; rw [IsNoetherian.iff_rank_lt_aleph0]
@@ -586,8 +586,8 @@ theorem finrank_R
 
 中文:
 定理 finrank_R
-  条件: [Fintype σ]
-  结论: Module.finrank K (R σ K) = Fintype.card (σ -> K)
+  条件: [有限类型 σ]
+  结论: 模.finrank K (R σ K) = 有限类型.card (σ -> K)
   证明: Module.finrank_eq_of_rank_eq (rank_R σ K)
 
 Depends on / 依赖: Module, Module.finrank_eq_of_rank_eq, finrank_eq_of_rank_eq, rank_R
@@ -609,7 +609,7 @@ theorem range_evalᵢ
 
 中文:
 定理 range_evalᵢ
-  条件: [Finite σ]
+  条件: [有限 σ]
   结论: range (evalᵢ σ K) = ⊤
   证明: by
   rw [evalᵢ]; rw [LinearMap.range_comp]; rw [range_subtype]
@@ -636,7 +636,7 @@ theorem ker_evalₗ
 
 中文:
 定理 ker_evalₗ
-  条件: [Finite σ]
+  条件: [有限 σ]
   结论: ker (evalᵢ σ K) = ⊥
   证明: by
   cases nonempty_fintype σ
@@ -664,7 +664,7 @@ show p'.1 = (0 : R σ K).1 from congr_arg _ by rwa [ker_evalₗ, mem_bot] at thi
 
 中文:
 定理 eq_zero_of_eval_eq_zero
-  结论: [Finite σ] (p : MvPolynomial σ K) (h : 对任意 v : σ -> K, eval v p = 0)
+  结论: [有限 σ] (p : 多元多项式 σ K) (h : 对任意 v : σ -> K, eval v p = 0)
   证明: let p' : R σ K := ⟨p, hp⟩
   have : p' in ker (evalᵢ σ K) := funext h
 show p'.1 = (0 : R σ K).1 from congr_arg _ by rwa [ker_evalₗ, mem_bot] at this

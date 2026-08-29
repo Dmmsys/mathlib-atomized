@@ -100,7 +100,7 @@ theorem kroneckerTMulLinearEquiv_tmul
 
 中文:
 定理 kroneckerTMulLinearEquiv_tmul
-  条件: (a : Matrix l m M) (b : Matrix n p N)
+  条件: (a : 矩阵 l m M) (b : 矩阵 n p N)
   证明: rfl
 
 @[simp]
@@ -122,7 +122,7 @@ theorem kroneckerTMulLinearEquiv_symm_kroneckerTMul
 
 中文:
 定理 kroneckerTMulLinearEquiv_symm_kroneckerTMul
-  条件: (a : Matrix l m M) (b : Matrix n p N)
+  条件: (a : 矩阵 l m M) (b : 矩阵 n p N)
   证明: by
   simp [LinearEquiv.symm_apply_eq]
 
@@ -171,7 +171,7 @@ theorem kroneckerTMulLinearEquiv_one
 
 中文:
 定理 kroneckerTMulLinearEquiv_one
-  条件: [Module S A] [IsScalarTower R S A]
+  条件: [模 S A] [标量塔 R S A]
   证明: by simp [Algebra.TensorProduct.one_def]
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.one_def, TensorProduct, one_def
@@ -194,7 +194,7 @@ theorem kroneckerTMulLinearEquiv_mul
 
 中文:
 定理 kroneckerTMulLinearEquiv_mul
-  条件: [Module S A] [IsScalarTower R S A]
+  条件: [模 S A] [标量塔 R S A]
   证明: .map_mul_iff.2 by (kroneckerTMulLinearEquiv m m n n R S A B).toLinearMap.restrictScalars R
     ext : 10
     simp [single_kroneckerTMul_single, mul_kroneckerTMul_mul]
@@ -219,7 +219,7 @@ definition kroneckerLinearEquiv
 
 中文:
 定义 kroneckerLinearEquiv
-  签名: : Matrix l m R otimes[R] Matrix n p R ≃ₗ[R] Matrix (l × n) (m × p) R
+  签名: : 矩阵 l m R otimes[R] 矩阵 n p R ≃ₗ[R] 矩阵 (l × n) (m × p) R
   定义体: (kroneckerTMulLinearEquiv l m n p R R R R).trans (TensorProduct.lid R R).mapMatrix
 
 Depends on / 依赖: TensorProduct, TensorProduct.lid, kroneckerTMulLinearEquiv, mapMatrix
@@ -239,7 +239,7 @@ theorem kroneckerLinearEquiv_tmul
 
 中文:
 定理 kroneckerLinearEquiv_tmul
-  条件: (x : Matrix l m R) (y : Matrix n p R)
+  条件: (x : 矩阵 l m R) (y : 矩阵 n p R)
   证明: rfl
 -/
 @[simp] theorem kroneckerLinearEquiv_tmul (x : Matrix l m R) (y : Matrix n p R) :
@@ -255,7 +255,7 @@ theorem kroneckerLinearEquiv_symm_kronecker
 
 中文:
 定理 kroneckerLinearEquiv_symm_kronecker
-  条件: (x : Matrix l m R) (y : Matrix n p R)
+  条件: (x : 矩阵 l m R) (y : 矩阵 n p R)
   证明: by simp [LinearEquiv.symm_apply_eq]
 -/
 @[simp] theorem kroneckerLinearEquiv_symm_kronecker (x : Matrix l m R) (y : Matrix n p R) :
@@ -282,7 +282,7 @@ definition toFunBilinear
 
 中文:
 定义 toFunBilinear
-  签名: : A ->ₗ[R] Matrix n n R ->ₗ[R] Matrix n n A
+  签名: : A ->ₗ[R] 矩阵 n n R ->ₗ[R] 矩阵 n n A
   定义体: (Algebra.lsmul R R (Matrix n n A)).toLinearMap.compl₂ (Algebra.linearMap R A).mapMatrix
 
 @[simp]
@@ -303,7 +303,7 @@ theorem toFunBilinear_apply
 
 中文:
 定理 toFunBilinear_apply
-  条件: (a : A) (m : Matrix n n R)
+  条件: (a : A) (m : 矩阵 n n R)
   证明: rfl
 -/
 theorem toFunBilinear_apply (a : A) (m : Matrix n n R) :
@@ -320,7 +320,7 @@ definition toFunLinear
 
 中文:
 定义 toFunLinear
-  签名: : A otimes[R] Matrix n n R ->ₗ[R] Matrix n n A
+  签名: : A otimes[R] 矩阵 n n R ->ₗ[R] 矩阵 n n A
   定义体: TensorProduct.lift (toFunBilinear n R A)
 
 Depends on / 依赖: TensorProduct, TensorProduct.lift, toFunBilinear
@@ -347,7 +347,7 @@ definition toFunAlgHom
 
 中文:
 定义 toFunAlgHom
-  签名: : A otimes[R] Matrix n n R ->ₐ[R] Matrix n n A
+  签名: : A otimes[R] 矩阵 n n R ->ₐ[R] 矩阵 n n A
   定义体: algHomOfLinearMapTensorProduct (toFunLinear n R A)
     (by
       intros
@@ -383,7 +383,7 @@ theorem toFunAlgHom_apply
 
 中文:
 定理 toFunAlgHom_apply
-  条件: (a : A) (m : Matrix n n R)
+  条件: (a : A) (m : 矩阵 n n R)
   证明: rfl
 -/
 theorem toFunAlgHom_apply (a : A) (m : Matrix n n R) :
@@ -401,7 +401,7 @@ definition invFun
 
 中文:
 定义 invFun
-  签名: (M : Matrix n n A)
+  签名: (M : 矩阵 n n A)
   定义体: ∑ p : n × n, M p.1 p.2 otimesₜ single p.1 p.2 1
 
 @[simp]
@@ -447,7 +447,7 @@ theorem invFun_add
 
 中文:
 定理 invFun_add
-  条件: (M N : Matrix n n A)
+  条件: (M N : 矩阵 n n A)
   证明: by
   simp [invFun, add_tmul, Finset.sum_add_distrib]
 
@@ -473,7 +473,7 @@ theorem invFun_smul
 
 中文:
 定理 invFun_smul
-  条件: (a : A) (M : Matrix n n A)
+  条件: (a : A) (M : 矩阵 n n A)
   证明: by
   simp [invFun, Finset.mul_sum]
 
@@ -502,7 +502,7 @@ theorem invFun_algebraMap
 
 中文:
 定理 invFun_algebraMap
-  条件: (M : Matrix n n R)
+  条件: (M : 矩阵 n n R)
   结论: invFun n R A (M.map (algebraMap R A)) = 1 otimesₜ M
   证明: by
   dsimp [invFun]
@@ -535,7 +535,7 @@ theorem right_inv
 
 中文:
 定理 right_inv
-  条件: (M : Matrix n n A)
+  条件: (M : 矩阵 n n A)
   结论: (toFunAlgHom n R A) (invFun n R A M) = M
   证明: by
   simp only [invFun, map_sum, toFunAlgHom_apply]
@@ -568,7 +568,7 @@ theorem left_inv
 
 中文:
 定理 left_inv
-  条件: (M : A otimes[R] Matrix n n R)
+  条件: (M : A otimes[R] 矩阵 n n R)
   结论: invFun n R A (toFunAlgHom n R A M) = M
   证明: by
   induction M with
@@ -601,7 +601,7 @@ definition equiv
 
 中文:
 定义 equiv
-  签名: : A otimes[R] Matrix n n R ≃ Matrix n n A where
+  签名: : A otimes[R] 矩阵 n n R ≃ 矩阵 n n A where
   定义体: toFunAlgHom n R A
   invFun := invFun n R A
   left_inv := left_inv n R A
@@ -629,7 +629,7 @@ definition matrixEquivTensor
 
 中文:
 定义 matrixEquivTensor
-  签名: : Matrix n n A ≃ₐ[R] A otimes[R] Matrix n n R
+  签名: : 矩阵 n n A ≃ₐ[R] A otimes[R] 矩阵 n n R
   定义体: AlgEquiv.symm { MatrixEquivTensor.toFunAlgHom n R A, MatrixEquivTensor.equiv n R A with }
 
 Depends on / 依赖: AlgEquiv, AlgEquiv.symm, MatrixEquivTensor, MatrixEquivTensor.equiv, MatrixEquivTensor.toFunAlgHom, toFunAlgHom
@@ -650,7 +650,7 @@ theorem matrixEquivTensor_apply
 
 中文:
 定理 matrixEquivTensor_apply
-  条件: (M : Matrix n n A)
+  条件: (M : 矩阵 n n A)
   证明: rfl
 -/
 theorem matrixEquivTensor_apply (M : Matrix n n A) :
@@ -698,7 +698,7 @@ theorem matrixEquivTensor_apply_symm
 
 中文:
 定理 matrixEquivTensor_apply_symm
-  条件: (a : A) (M : Matrix n n R)
+  条件: (a : A) (M : 矩阵 n n R)
   证明: rfl
 -/
 theorem matrixEquivTensor_apply_symm (a : A) (M : Matrix n n R) :
@@ -752,7 +752,7 @@ theorem kroneckerTMulAlgEquiv_apply
 
 中文:
 定理 kroneckerTMulAlgEquiv_apply
-  条件: (x : Matrix m m A otimes[R] Matrix n n B)
+  条件: (x : 矩阵 m m A otimes[R] 矩阵 n n B)
   证明: rfl
 
 @[simp]
@@ -772,7 +772,7 @@ theorem kroneckerTMulAlgEquiv_symm_apply
 
 中文:
 定理 kroneckerTMulAlgEquiv_symm_apply
-  条件: (x : Matrix (m × n) (m × n) (A otimes[R] B))
+  条件: (x : 矩阵 (m × n) (m × n) (A otimes[R] B))
   证明: rfl
 -/
 theorem kroneckerTMulAlgEquiv_symm_apply (x : Matrix (m × n) (m × n) (A otimes[R] B)) :
@@ -837,7 +837,7 @@ theorem kroneckerTMulStarAlgEquiv_apply
 
 中文:
 定理 kroneckerTMulStarAlgEquiv_apply
-  条件: (x : Matrix m m A otimes[R] Matrix n n B)
+  条件: (x : 矩阵 m m A otimes[R] 矩阵 n n B)
   证明: rfl
 -/
 @[simp] theorem kroneckerTMulStarAlgEquiv_apply (x : Matrix m m A otimes[R] Matrix n n B) :
@@ -855,7 +855,7 @@ theorem kroneckerTMulStarAlgEquiv_symm_apply
 
 中文:
 定理 kroneckerTMulStarAlgEquiv_symm_apply
-  条件: (x : Matrix (m × n) (m × n) (A otimes[R] B))
+  条件: (x : 矩阵 (m × n) (m × n) (A otimes[R] B))
   证明: rfl
 -/
 @[simp] theorem kroneckerTMulStarAlgEquiv_symm_apply (x : Matrix (m × n) (m × n) (A otimes[R] B)) :
@@ -876,7 +876,7 @@ definition kroneckerAlgEquiv
 
 中文:
 定义 kroneckerAlgEquiv
-  签名: : (Matrix m m R otimes[R] Matrix n n R) ≃ₐ[R] Matrix (m × n) (m × n) R
+  签名: : (矩阵 m m R otimes[R] 矩阵 n n R) ≃ₐ[R] 矩阵 (m × n) (m × n) R
   定义体: (kroneckerTMulAlgEquiv m n R R R R).trans (Algebra.TensorProduct.lid R R).mapMatrix
 
 Depends on / 依赖: Algebra, Algebra.TensorProduct.lid, TensorProduct, kroneckerTMulAlgEquiv, mapMatrix
@@ -908,7 +908,7 @@ theorem kroneckerAlgEquiv_apply
 
 中文:
 定理 kroneckerAlgEquiv_apply
-  条件: (x : Matrix m m R otimes Matrix n n R)
+  条件: (x : 矩阵 m m R otimes 矩阵 n n R)
   证明: rfl
 -/
 @[simp] theorem kroneckerAlgEquiv_apply (x : Matrix m m R otimes Matrix n n R) :
@@ -924,7 +924,7 @@ theorem kroneckerAlgEquiv_symm_apply
 
 中文:
 定理 kroneckerAlgEquiv_symm_apply
-  条件: (x : Matrix (m × n) (m × n) R)
+  条件: (x : 矩阵 (m × n) (m × n) R)
   证明: rfl
 -/
 @[simp] theorem kroneckerAlgEquiv_symm_apply (x : Matrix (m × n) (m × n) R) :
@@ -944,7 +944,7 @@ definition kroneckerStarAlgEquiv
 
 中文:
 定义 kroneckerStarAlgEquiv
-  签名: [StarRing R]
+  签名: [对合环 R]
   定义体: .ofAlgEquiv (kroneckerAlgEquiv m n R)
   fun x => x.induction_on (by simp)
     (by simp [star_eq_conjTranspose, conjTranspose_kronecker])
@@ -969,7 +969,7 @@ theorem toAlgEquiv_kroneckerStarAlgEquiv
 
 中文:
 定理 toAlgEquiv_kroneckerStarAlgEquiv
-  条件: [StarRing R]
+  条件: [对合环 R]
   证明: rfl
 -/
 @[simp] theorem toAlgEquiv_kroneckerStarAlgEquiv [StarRing R] :
@@ -985,7 +985,7 @@ theorem kroneckerStarAlgEquiv_apply
 
 中文:
 定理 kroneckerStarAlgEquiv_apply
-  条件: [StarRing R] (x : Matrix m m R otimes Matrix n n R)
+  条件: [对合环 R] (x : 矩阵 m m R otimes 矩阵 n n R)
   证明: rfl
 -/
 @[simp] theorem kroneckerStarAlgEquiv_apply [StarRing R] (x : Matrix m m R otimes Matrix n n R) :
@@ -1001,7 +1001,7 @@ theorem kroneckerStarAlgEquiv_symm_apply
 
 中文:
 定理 kroneckerStarAlgEquiv_symm_apply
-  条件: [StarRing R] (x : Matrix (m × n) (m × n) R)
+  条件: [对合环 R] (x : 矩阵 (m × n) (m × n) R)
   证明: rfl
 -/
 @[simp] theorem kroneckerStarAlgEquiv_symm_apply [StarRing R] (x : Matrix (m × n) (m × n) R) :

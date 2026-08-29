@@ -94,7 +94,7 @@ definition mkZifyContext
 
 中文:
 定义 mkZifyContext
-  签名: (simpArgs : Option (Syntax.TSepArray `Lean.Parser.Tactic.simpStar ","))
+  签名: (simpArgs : 选项类型 (Syntax.TSepArray `Lean.Parser.Tactic.simpStar ","))
   定义体: do
 .getD #[] let args := simpArgs.map (·.getElems)
   mkSimpContext
@@ -158,7 +158,7 @@ definition zifyProof
 
 中文:
 定义 zifyProof
-  签名: (simpArgs : Option (Syntax.TSepArray `Lean.Parser.Tactic.simpStar ","))
+  签名: (simpArgs : 选项类型 (Syntax.TSepArray `Lean.Parser.Tactic.simpStar ","))
   定义体: do
   let ctx_result ← mkZifyContext simpArgs
   let (r, _) ← simp prop ctx_result.ctx
@@ -209,7 +209,7 @@ theorem Nat.cast_sub_of_add_le
   proof: Nat.cast_sub (m.le_add_right k |>.trans h)
 
 中文:
-定理 Nat.cast_sub_of_add_le
+定理 自然数.cast_sub_of_add_le
   条件: {m n k} (h : m + k <= n)
   证明: Nat.cast_sub (m.le_add_right k |>.trans h)
 
@@ -227,7 +227,7 @@ theorem Nat.cast_sub_of_lt
   proof: Nat.cast_sub h.le
 
 中文:
-定理 Nat.cast_sub_of_lt
+定理 自然数.cast_sub_of_lt
   条件: {m n} (h : m < n)
   证明: Nat.cast_sub h.le
 -/

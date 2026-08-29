@@ -43,7 +43,7 @@ definition integer
 
 中文:
 定义 integer
-  签名: : Subring R where
+  签名: : 子环 R where
   定义体: { x | v x <= 1 }
   one_mem' := le_of_eq v.map_one
   mul_mem' {x y} hx hy := by simp only [Set.mem_ofPred_eq, map_mul, mul_le_one' hx hy]
@@ -96,10 +96,10 @@ structure Integers
     - exists_of_le_one : forall ⦃r⦄, v r <= 1 -> exists x, algebraMap O R x = r
 
 中文:
-结构 Integers
+结构 整数egers
   参数: : 命题 where
   公理与运算 (3 个):
-    - hom_inj : Function.Injective (algebraMap O R)
+    - hom_inj : 函数.单射 (algebraMap O R)
     - map_le_one : 对任意 x, v (algebraMap O R x) <= 1
     - exists_of_le_one : 对任意 ⦃r⦄, v r <= 1 -> 存在 x, algebraMap O R x = r
 -/
@@ -119,7 +119,7 @@ instance :
 
 中文:
 实例 :
-  签名: Algebra v.integer R
+  签名: 代数 v.integer R
   定义体: inferInstance
 -/
 instance : Algebra v.integer R :=
@@ -166,7 +166,7 @@ le_antisymm (H _) by
 
 中文:
 定理 one_of_isUnit'
-  条件: {x : O} (hx : IsUnit x) (H : 对任意 x, v (algebraMap O R x) <= 1)
+  条件: {x : O} (hx : 是单位 x) (H : 对任意 x, v (algebraMap O R x) <= 1)
   证明: let ⟨u, hu⟩ := hx
 le_antisymm (H _) by
     grw [← v.map_one, ← (algebraMap O R).map_one, ← u.mul_inv, ← mul_one (v (algebraMap O R x)), hu,
@@ -192,7 +192,7 @@ theorem one_of_isUnit
 
 中文:
 定理 one_of_isUnit
-  条件: (hv : 整数egers v O) {x : O} (hx : IsUnit x)
+  条件: (hv : 整数egers v O) {x : O} (hx : 是单位 x)
   结论: v (algebraMap O R x) = 1
   证明: one_of_isUnit' hx hv.map_le_one
 
@@ -217,7 +217,7 @@ theorem isUnit_of_one
 
 中文:
 定理 isUnit_of_one
-  结论: (hv : 整数egers v O) {x : O} (hx : IsUnit (algebraMap O R x))
+  结论: (hv : 整数egers v O) {x : O} (hx : 是单位 (algebraMap O R x))
   证明: let ⟨u, hu⟩ := hx
   have h1 : v u <= 1 := hu.symm ▸ hv.2 x
   have h2 : v (u⁻¹ : Rˣ) <= 1 := by
@@ -283,7 +283,7 @@ lemma nontrivial_iff
 中文:
 引理 nontrivial_iff
   条件: (hv : v.整数egers O)
-  结论: Nontrivial O ↔ Nontrivial R
+  结论: 非平凡 O ↔ 非平凡 R
   证明: by
   constructor <;> intro h
   · exact hv.hom_inj.nontrivial
@@ -315,8 +315,8 @@ theorem IsTrivialOn.of_le_one
   proof: Valuation.Integers.one_of_isUnit' (IsUnit.mk0 a ha) hle
 
 中文:
-定理 IsTrivialOn.of_le_one
-  结论: {k : 类型} [Field k] [Algebra k R] (v : Valuation R Γ₀)
+定理 是TrivialOn.of_le_one
+  结论: {k : 类型} [域 k] [代数 k R] (v : 赋值 R Γ₀)
   证明: Valuation.Integers.one_of_isUnit' (IsUnit.mk0 a ha) hle
 
 Depends on / 依赖: Integers, IsUnit, IsUnit.mk0, Valuation, Valuation.Integers.one_of_isUnit, one_of_isUnit
@@ -335,7 +335,7 @@ lemma integers_nontrivial
 
 中文:
 引理 integers_nontrivial
-  条件: (v : Valuation R Γ₀)
+  条件: (v : 赋值 R Γ₀)
   证明: (Valuation.integer.integers v).nontrivial_iff
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers, nontrivial_iff
@@ -448,7 +448,7 @@ theorem isUnit_of_one'
 中文:
 定理 isUnit_of_one'
   条件: (hv : 整数egers v O) {x : O} (hvx : v (algebraMap O F x) = 1)
-  结论: IsUnit x
+  结论: 是单位 x
   证明: by
   refine isUnit_of_one hv (IsUnit.mk0 _ ?_) hvx
   simp only [← v.ne_zero_iff, hvx, ne_eq, one_ne_zero, not_false_eq_true]
@@ -488,7 +488,7 @@ lemma valuation_irreducible_lt_one
 
 中文:
 引理 valuation_irreducible_lt_one
-  条件: (hv : 整数egers v O) {ϖ : O} (h : Irreducible ϖ)
+  条件: (hv : 整数egers v O) {ϖ : O} (h : 不可约 ϖ)
   证明: lt_of_le_of_ne (hv.map_le_one ϖ) (mt hv.isUnit_iff_valuation_eq_one.mpr h.not_isUnit)
 
 Depends on / 依赖: h.not_isUnit, hv.isUnit_iff_valuation_eq_one.mpr, hv.map_le_one, isUnit_iff_valuation_eq_one, lt_of_le_of_ne, map_le_one, not_isUnit
@@ -555,7 +555,7 @@ lemma valuation_irreducible_pos
 
 中文:
 引理 valuation_irreducible_pos
-  条件: (hv : 整数egers v O) {ϖ : O} (h : Irreducible ϖ)
+  条件: (hv : 整数egers v O) {ϖ : O} (h : 不可约 ϖ)
   证明: hv.valuation_pos_iff_ne_zero.mpr h.ne_zero
 
 Depends on / 依赖: h.ne_zero, hv.valuation_pos_iff_ne_zero.mpr, ne_zero, valuation_pos_iff_ne_zero
@@ -723,8 +723,8 @@ lemma isPrincipal_iff_exists_isGreatest
       obt
 
 中文:
-引理 isPrincipal_iff_exists_isGreatest
-  条件: (hv : 整数egers v O) {I : Ideal O}
+引理 isPrincipal_iff_存在_isGreatest
+  条件: (hv : 整数egers v O) {I : 理想 O}
   证明: by
   constructor <;> rintro ⟨x, hx⟩
   · refine ⟨(v ∘ algebraMap O F) x, ?_, ?_⟩
@@ -771,8 +771,8 @@ lemma isPrincipal_iff_exists_eq_setOfPred_valuation_le
     · exact hx.right (
 
 中文:
-引理 isPrincipal_iff_exists_eq_setOfPred_valuation_le
-  条件: (hv : 整数egers v O) {I : Ideal O}
+引理 isPrincipal_iff_存在_eq_setOfPred_valuation_le
+  条件: (hv : 整数egers v O) {I : 理想 O}
   证明: by
   rw [isPrincipal_iff_exists_isGreatest hv]
   constructor <;> rintro ⟨x, hx⟩
@@ -824,7 +824,7 @@ lemma not_denselyOrdered_of_isPrincipalIdealRing
 
 中文:
 引理 not_denselyOrdered_of_isPrincipalIdealRing
-  条件: [IsPrincipalIdealRing O] (hv : 整数egers v O)
+  条件: [是主理想环 O] (hv : 整数egers v O)
   证明: by
   intro H
   -- nonunits as an ideal isn't defined here, nor shown to be equivalent to `v x < 1`
@@ -875,9 +875,9 @@ theorem Integer.not_isUnit_iff_valuation_lt_one
   exacts [and_iff_right x.2, integer.integers v]
 
 中文:
-定理 Integer.not_isUnit_iff_valuation_lt_one
+定理 整数eger.not_isUnit_iff_valuation_lt_one
   条件: {x : v.integer}
-  结论: ¬IsUnit x ↔ v x < 1
+  结论: ¬是单位 x ↔ v x < 1
   证明: by
   rw [← not_le]; rw [not_iff_not]; rw [isUnit_iff_valuation_eq_one (F := F) (Γ₀ := Γ₀)]; rw [le_antisymm_iff]
   exacts [and_iff_right x.2, integer.integers v]
@@ -900,7 +900,7 @@ lemma v_irreducible_lt_one
 
 中文:
 引理 v_irreducible_lt_one
-  条件: {ϖ : v.integer} (h : Irreducible ϖ)
+  条件: {ϖ : v.integer} (h : 不可约 ϖ)
   证明: (Valuation.integer.integers v).valuation_irreducible_lt_one h
 
 Depends on / 依赖: Valuation, Valuation.integer.integers, integer, integers, valuation_irreducible_lt_one
@@ -920,7 +920,7 @@ lemma v_irreducible_pos
 
 中文:
 引理 v_irreducible_pos
-  条件: {ϖ : v.integer} (h : Irreducible ϖ)
+  条件: {ϖ : v.integer} (h : 不可约 ϖ)
   结论: 0 < v ϖ
   证明: (Valuation.integer.integers v).valuation_irreducible_pos h
 
@@ -1025,7 +1025,7 @@ lemma leSubmodule_monotone
 
 中文:
 引理 leSubmodule_monotone
-  结论: Monotone (leSubmodule v)
+  结论: 递增 (leSubmodule v)
   证明: leAddSubgroup_monotone v
 
 Depends on / 依赖: leAddSubgroup_monotone
@@ -1043,7 +1043,7 @@ lemma ltSubmodule_monotone
 
 中文:
 引理 ltSubmodule_monotone
-  结论: Monotone (ltSubmodule v)
+  结论: 递增 (ltSubmodule v)
   证明: ltAddSubgroup_monotone v
 
 Depends on / 依赖: ltAddSubgroup_monotone
@@ -1128,7 +1128,7 @@ lemma leSubmodule_zero
 
 中文:
 引理 leSubmodule_zero
-  条件: (K : 类型) [Field K] (v : Valuation K Γ₀)
+  条件: (K : 类型) [域 K] (v : 赋值 K Γ₀)
   证明: by
   ext; simp
 -/
@@ -1151,7 +1151,7 @@ lemma leSubmodule_v_le_of_mem
 
 中文:
 引理 leSubmodule_v_le_of_mem
-  结论: {K : 类型} [Field K] (v : Valuation K Γ₀)
+  结论: {K : 类型} [域 K] (v : 赋值 K Γ₀)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx0
   · simp
@@ -1180,7 +1180,7 @@ lemma ltSubmodule_v_le_of_mem
 
 中文:
 引理 ltSubmodule_v_le_of_mem
-  结论: {K : 类型} [Field K] {v : Valuation K Γ₀}
+  结论: {K : 类型} [域 K] {v : 赋值 K Γ₀}
   证明: (leSubmodule_v_le_of_mem v hx).trans' (ltSubmodule_le_leSubmodule _ _)
 
 Depends on / 依赖: leSubmodule_v_le_of_mem, ltSubmodule_le_leSubmodule
@@ -1261,7 +1261,7 @@ lemma leIdeal_mono
 
 中文:
 引理 leIdeal_mono
-  结论: Monotone (leIdeal v)
+  结论: 递增 (leIdeal v)
   证明: fun _ _ h _ => h.trans'
 
 Depends on / 依赖: h.trans
@@ -1279,7 +1279,7 @@ lemma ltIdeal_mono
 
 中文:
 引理 ltIdeal_mono
-  结论: Monotone (ltIdeal v)
+  结论: 递增 (ltIdeal v)
   证明: fun _ _ h _ => (Units.val_le_val.mpr h).trans_lt'
 
 Depends on / 依赖: Units.val_le_val.mpr, trans_lt, val_le_val
@@ -1364,7 +1364,7 @@ lemma leIdeal_zero
 
 中文:
 引理 leIdeal_zero
-  条件: (K : 类型) [Field K] (v : Valuation K Γ₀)
+  条件: (K : 类型) [域 K] (v : 赋值 K Γ₀)
   证明: by
   ext; simp
 -/
@@ -1382,7 +1382,7 @@ lemma leSubmodule_comap_algebraMap_eq_leIdeal
 
 中文:
 引理 leSubmodule_comap_algebraMap_eq_leIdeal
-  条件: {K : 类型} [Field K] (v : Valuation K Γ₀) (γ : Γ₀)
+  条件: {K : 类型} [域 K] (v : 赋值 K Γ₀) (γ : Γ₀)
   证明: Submodule.ext fun _ => Iff.rfl
 
 Depends on / 依赖: Iff.rfl, Submodule, Submodule.ext
@@ -1412,7 +1412,7 @@ lemma leIdeal_map_algebraMap_eq_leSubmodule_min
 
 中文:
 引理 leIdeal_map_algebraMap_eq_leSubmodule_min
-  结论: {K : 类型} [Field K] (v : Valuation K Γ₀)
+  结论: {K : 类型} [域 K] (v : 赋值 K Γ₀)
   证明: by
   ext x
   simp only [Submodule.mem_map, mem_leIdeal_iff, Algebra.linearMap_apply, mem_leSubmodule_iff]
@@ -1462,7 +1462,7 @@ lemma leIdeal_v_le_of_mem
 
 中文:
 引理 leIdeal_v_le_of_mem
-  结论: {K : 类型} [Field K] (v : Valuation K Γ₀)
+  结论: {K : 类型} [域 K] (v : 赋值 K Γ₀)
   证明: by
   rcases eq_or_ne x 0 with rfl | hx0
   · simp
@@ -1493,7 +1493,7 @@ lemma ltIdeal_v_le_of_mem
 
 中文:
 引理 ltIdeal_v_le_of_mem
-  结论: {K : 类型} [Field K] {v : Valuation K Γ₀}
+  结论: {K : 类型} [域 K] {v : 赋值 K Γ₀}
   证明: (leIdeal_v_le_of_mem v hx).trans' (ltIdeal_le_leIdeal _ _)
 
 Depends on / 依赖: leIdeal_v_le_of_mem, ltIdeal_le_leIdeal

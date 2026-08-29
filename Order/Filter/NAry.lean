@@ -50,7 +50,7 @@ definition map₂
 
 中文:
 定义 map₂
-  签名: (m : α -> β -> γ) (f : Filter α) (g : Filter β)
+  签名: (m : α -> β -> γ) (f : 滤子 α) (g : 滤子 β)
   定义体: ((f ×ˢ g).map (uncurry m)).copy { s | exists u in f, exists v in g, image2 m u v subseteq s } fun _ => by
     simp only [mem_map, mem_prod_iff, image2_subset_iff, prod_subset_iff]; rfl
 
@@ -112,7 +112,7 @@ theorem map_prod_eq_map₂
 
 中文:
 定理 map_prod_eq_map₂
-  条件: (m : α -> β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α -> β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: by
   rw [map₂]; rw [copy_eq]; rw [uncurry_def]
 
@@ -134,7 +134,7 @@ theorem map_prod_eq_map₂'
 
 中文:
 定理 map_prod_eq_map₂'
-  条件: (m : α × β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α × β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: map_prod_eq_map₂ m.curry f g
 
 @[simp]
@@ -158,8 +158,8 @@ theorem map₂_mk_eq_prod
 
 中文:
 定理 map₂_mk_eq_prod
-  条件: (f : Filter α) (g : Filter β)
-  结论: map₂ Prod.mk f g = f ×ˢ g
+  条件: (f : 滤子 α) (g : 滤子 β)
+  结论: map₂ 积类型.mk f g = f ×ˢ g
   证明: by
   simp only [← map_prod_eq_map₂, map_id']
 
@@ -178,7 +178,7 @@ lemma HasBasis.map₂
   simpa only [← map_prod_eq_map₂, ← image_prod] using (hf.prod hg).map _
 
 中文:
-引理 HasBasis.map₂
+引理 有基.map₂
   结论: {ι ι' : 类型} {p : ι -> 命题} {q : ι' -> 命题} {s t}
   证明: by
   simpa only [← map_prod_eq_map₂, ← image_prod] using (hf.prod hg).map _
@@ -268,7 +268,7 @@ theorem le_map₂_iff
 
 中文:
 定理 le_map₂_iff
-  条件: {h : Filter γ}
+  条件: {h : 滤子 γ}
   证明: ⟨fun H _ hs _ ht => H image2_mem_map₂ hs ht, fun H _ ⟨_, hs, _, ht, hu⟩ =>
     mem_of_superset (H hs ht) hu⟩
 
@@ -585,7 +585,7 @@ theorem map₂_swap
 
 中文:
 定理 map₂_swap
-  条件: (m : α -> β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α -> β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: by
   rw [← map_prod_eq_map₂]; rw [prod_comm]; rw [map_map]; rw [← map_prod_eq_map₂]; rw [Function.comp_def]
   simp
@@ -724,7 +724,7 @@ theorem map₂_curry
 
 中文:
 定理 map₂_curry
-  条件: (m : α × β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α × β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: (map_prod_eq_map₂' _ _ _).symm
 
 @[simp]
@@ -744,7 +744,7 @@ theorem map_uncurry_prod
 
 中文:
 定理 map_uncurry_prod
-  条件: (m : α -> β -> γ) (f : Filter α) (g : Filter β)
+  条件: (m : α -> β -> γ) (f : 滤子 α) (g : 滤子 β)
   证明: (map₂_curry (uncurry m) f g).symm
 
 Depends on / 依赖: uncurry
@@ -1128,7 +1128,7 @@ theorem map₂_left_identity
 
 中文:
 定理 map₂_left_identity
-  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (l : Filter β)
+  条件: {f : α -> β -> β} {a : α} (h : 对任意 b, f a b = b) (l : 滤子 β)
   证明: by rw [map₂_pure_left, show f a = id from funext h, map_id]
 
 Depends on / 依赖: map_id
@@ -1146,7 +1146,7 @@ theorem map₂_right_identity
 
 中文:
 定理 map₂_right_identity
-  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (l : Filter α)
+  条件: {f : α -> β -> α} {b : β} (h : 对任意 a, f a b = a) (l : 滤子 α)
   证明: by rw [map₂_pure_right, funext h, map_id']
 
 Depends on / 依赖: map_id

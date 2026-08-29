@@ -46,10 +46,10 @@ class RelCWComplex.FiniteDimensional.{u}
     - eventually_isEmpty_cell : forallᶠ n in Filter.atTop, IsEmpty (cell C n)
 
 中文:
-类 RelCWComplex.FiniteDimensional.{u}
-  参数: {X : 类型u} [TopologicalSpace X] (C : Set X) {D : Set X}
+类 RelCWComplex.有限维.{u}
+  参数: {X : 类型u} [拓扑空间 X] (C : 集合 X) {D : 集合 X}
   公理与运算 (1 个):
-    - eventually_isEmpty_cell : 对任意ᶠ n in Filter.atTop, IsEmpty (cell C n)
+    - eventually_isEmpty_cell : 对任意ᶠ n in 滤子.atTop, 是空 (cell C n)
 
 Depends on / 依赖: FiniteDimensional, RelCWComplex, RelCWComplex.FiniteDimensional.eventually_isEmpty_cell, eventually_isEmpty_cell
 -/
@@ -71,10 +71,10 @@ class RelCWComplex.FiniteType.{u}
     - finite_cell((n : Nat)) : Finite (cell C n)
 
 中文:
-类 RelCWComplex.FiniteType.{u}
-  参数: {X : 类型u} [TopologicalSpace X] (C : Set X) {D : Set X}
+类 RelCWComplex.有限型.{u}
+  参数: {X : 类型u} [拓扑空间 X] (C : 集合 X) {D : 集合 X}
   公理与运算 (1 个):
-    - finite_cell((n : 自然数)) : Finite (cell C n)
+    - finite_cell((n : 自然数)) : 有限 (cell C n)
 
 Depends on / 依赖: FiniteType, RelCWComplex, RelCWComplex.FiniteType.finite_cell, finite_cell
 -/
@@ -95,9 +95,9 @@ class RelCWComplex.Finite
   (no additional axioms)
 
 中文:
-类 RelCWComplex.Finite
-  参数: {X : 类型} [TopologicalSpace X] (C : Set X) {D : Set X}
-  继承: FiniteDimensional C, FiniteType C
+类 RelCWComplex.有限
+  参数: {X : 类型} [拓扑空间 X] (C : 集合 X) {D : 集合 X}
+  继承: 有限维 C, 有限型 C
   (无附加公理)
 -/
 class RelCWComplex.Finite {X : Type*} [TopologicalSpace X] (C : Set X) {D : Set X}
@@ -117,7 +117,7 @@ lemma RelCWComplex.finite_of_finiteDimensional_finiteType
 
 中文:
 引理 RelCWComplex.finite_of_finiteDimensional_finiteType
-  结论: [FiniteDimensional C]
+  结论: [有限维 C]
   证明: FiniteDimensional.eventually_isEmpty_cell
   finite_cell n := FiniteType.finite_cell n
 
@@ -156,7 +156,7 @@ definition RelCWComplex.mkFiniteType.{u}
 
 中文:
 定义 RelCWComplex.mkFiniteType.{u}
-  签名: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  签名: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   定义体: cell
   map := map
   source_eq := source_eq
@@ -214,7 +214,7 @@ lemma RelCWComplex.finiteType_mkFiniteType.{u}
 
 中文:
 引理 RelCWComplex.finiteType_mkFiniteType.{u}
-  结论: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  结论: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   证明: mkFiniteType C D cell map finite_cell source_eq continuousOn continuousOn_symm
       pairwiseDisjoint' disjointBase' mapsTo closed' isClosedBase union'
     FiniteType C :=
@@ -267,7 +267,7 @@ definition CWComplex.mkFiniteType.{u}
 
 中文:
 定义 CWComplex.mkFiniteType.{u}
-  签名: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  签名: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   定义体: cell
   map := map
   source_eq := source_eq
@@ -320,7 +320,7 @@ lemma CWComplex.finiteType_mkFiniteType.{u}
 
 中文:
 引理 CWComplex.finiteType_mkFiniteType.{u}
-  结论: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  结论: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   证明: mkFiniteType C cell map finite_cell source_eq continuousOn continuousOn_symm
       pairwiseDisjoint' mapsTo closed' union'
     FiniteType C :=
@@ -373,7 +373,7 @@ definition RelCWComplex.mkFinite.{u}
 
 中文:
 定义 RelCWComplex.mkFinite.{u}
-  签名: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  签名: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   定义体: cell
   map := map
   source_eq := source_eq
@@ -447,7 +447,7 @@ lemma RelCWComplex.finite_mkFinite.{u}
 
 中文:
 引理 RelCWComplex.finite_mkFinite.{u}
-  结论: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  结论: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   证明: mkFinite C D cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
       continuousOn_symm pairwiseDisjoint' disjointBase' mapsTo isClosedBase union'
     Finite C :=
@@ -501,7 +501,7 @@ definition CWComplex.mkFinite.{u}
 
 中文:
 定义 CWComplex.mkFinite.{u}
-  签名: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  签名: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   定义体: (RelCWComplex.mkFinite C ∅
   (cell := cell)
   (map := map)
@@ -556,7 +556,7 @@ lemma CWComplex.finite_mkFinite.{u}
 
 中文:
 引理 CWComplex.finite_mkFinite.{u}
-  结论: {X : 类型u} [TopologicalSpace X] (C : Set X)
+  结论: {X : 类型u} [拓扑空间 X] (C : 集合 X)
   证明: mkFinite C cell map eventually_isEmpty_cell finite_cell source_eq continuousOn
       continuousOn_symm pairwiseDisjoint' mapsTo union'
     Finite C :=
@@ -609,8 +609,8 @@ lemma RelCWComplex.finite_of_finite_cells
 
 中文:
 引理 RelCWComplex.finite_of_finite_cells
-  条件: (finite : _root_.Finite (Σ n, cell C n))
-  结论: Finite C where
+  条件: (finite : _root_.有限 (Σ n, cell C n))
+  结论: 有限 C where
   证明: by
     simp only [Filter.eventually_atTop]
     cases isEmpty_or_nonempty (Σ n, cell C n)
@@ -664,8 +664,8 @@ lemma RelCWComplex.finite_cells_of_finite
 
 中文:
 引理 RelCWComplex.finite_cells_of_finite
-  条件: [finite : Finite C]
-  结论: _root_.Finite (Σ n, cell C n)
+  条件: [finite : 有限 C]
+  结论: _root_.有限 (Σ n, cell C n)
   证明: by
   -- We show that there is a bijection between `Σ n, cell C n` and
   -- `Σ (m : {m : ℕ // m < n}), cell C m`.
@@ -706,7 +706,7 @@ lemma RelCWComplex.finite_iff_finite_cells
 
 中文:
 引理 RelCWComplex.finite_iff_finite_cells
-  结论: Finite C ↔ _root_.Finite (Σ n, cell C n)
+  结论: 有限 C ↔ _root_.有限 (Σ n, cell C n)
   证明: ⟨fun h => finite_cells_of_finite (finite := h), finite_of_finite_cells⟩
 
 Depends on / 依赖: finite, finite_cells_of_finite, finite_of_finite_cells

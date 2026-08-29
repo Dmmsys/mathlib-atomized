@@ -41,8 +41,8 @@ instance Submodule.innerProductSpace
   body: fast_instance% .induced W.subtype
 
 中文:
-实例 Submodule.innerProductSpace
-  签名: (W : Submodule 𝕜 E)
+实例 子模.innerProductSpace
+  签名: (W : 子模 𝕜 E)
   定义体: fast_instance% .induced W.subtype
 
 Depends on / 依赖: W.subtype, fast_instance, induced, subtype
@@ -62,8 +62,8 @@ theorem Submodule.coe_inner
   proof: rfl
 
 中文:
-定理 Submodule.coe_inner
-  条件: (W : Submodule 𝕜 E) (x y : W)
+定理 子模.coe_inner
+  条件: (W : 子模 𝕜 E) (x y : W)
   结论: ⟪x, y⟫ = ⟪(x : E), ↑y⟫
   证明: rfl
 -/
@@ -80,7 +80,7 @@ theorem Orthonormal.codRestrict
 
 中文:
 定理 Orthonormal.codRestrict
-  结论: {ι : 类型} {v : ι -> E} (hv : Orthonormal 𝕜 v) (s : Submodule 𝕜 E)
+  结论: {ι : 类型} {v : ι -> E} (hv : Orthonormal 𝕜 v) (s : 子模 𝕜 E)
   证明: s.subtypeₗᵢ.orthonormal_comp_iff.mp hv
 
 Depends on / 依赖: orthonormal_comp_iff, orthonormal_comp_iff.mp, s.subtype
@@ -136,7 +136,7 @@ definition OrthogonalFamily
 
 中文:
 定义 OrthogonalFamily
-  签名: (G : ι -> 类型) [对任意 i, SeminormedAddCommGroup (G i)]
+  签名: (G : ι -> 类型) [对任意 i, SeminormedAddComm群 (G i)]
   定义体: Pairwise fun i j => forall v : G i, forall w : G j, ⟪V i v, V j w⟫ = 0
 
 Depends on / 依赖: Pairwise
@@ -257,7 +257,7 @@ theorem OrthogonalFamily.inner_right_fintype
 
 中文:
 定理 OrthogonalFamily.inner_right_fintype
-  条件: [Fintype ι] (l : 对任意 i, G i) (i : ι) (v : G i)
+  条件: [有限类型 ι] (l : 对任意 i, G i) (i : ι) (v : G i)
   证明: by
   classical
   calc
@@ -306,7 +306,7 @@ theorem OrthogonalFamily.norm_sum
 
 中文:
 定理 OrthogonalFamily.norm_sum
-  条件: (l : 对任意 i, G i) (s : Finset ι)
+  条件: (l : 对任意 i, G i) (s : 有限集 ι)
   证明: by
   have : ((‖∑ i in s, V i (l i)‖ : Real) : 𝕜) ^ 2 = ∑ i in s, ((‖l i‖ : Real) : 𝕜) ^ 2 := by
     simp only [← inner_self_eq_norm_sq_to_K, hV.inner_sum]
@@ -330,7 +330,7 @@ theorem OrthogonalFamily.comp
 
 中文:
 定理 OrthogonalFamily.comp
-  条件: {γ : 类型} {f : γ -> ι} (hf : Function.Injective f)
+  条件: {γ : 类型} {f : γ -> ι} (hf : 函数.单射 f)
   证明: fun _i _j hij v w => hV (hf.ne hij) v w
 
 Depends on / 依赖: hf.ne
@@ -403,7 +403,7 @@ theorem OrthogonalFamily.norm_sq_sdiff_sum
 
 中文:
 定理 OrthogonalFamily.norm_sq_sdiff_sum
-  条件: [DecidableEq ι] (f : 对任意 i, G i) (s₁ s₂ : Finset ι)
+  条件: [DecidableEq ι] (f : 对任意 i, G i) (s₁ s₂ : 有限集 ι)
   证明: by
   rw [← Finset.sum_sdiff_sub_sum_sdiff]; rw [sub_eq_add_neg]; rw [← Finset.sum_neg_distrib]
   let F : forall i, G i := fun i => if i in s₁ then f i else -f i
@@ -459,7 +459,7 @@ theorem OrthogonalFamily.summable_iff_norm_sq_summable
 
 中文:
 定理 OrthogonalFamily.summable_iff_norm_sq_summable
-  条件: [CompleteSpace E] (f : 对任意 i, G i)
+  条件: [完备空间 E] (f : 对任意 i, G i)
   证明: by
   classical
     simp only [summable_iff_cauchySeq_finset, NormedAddCommGroup.cauchySeq_iff, norm_neg_add,
@@ -547,7 +547,7 @@ theorem OrthogonalFamily.independent
 
 中文:
 定理 OrthogonalFamily.independent
-  结论: {V : ι -> Submodule 𝕜 E}
+  结论: {V : ι -> 子模 𝕜 E}
   证明: by
   classical
   apply iSupIndep_of_dfinsupp_lsum_injective
@@ -589,8 +589,8 @@ theorem DirectSum.IsInternal.collectedBasis_orthonormal
   simpa only [hV_sum.collectedBasis_coe] using! hV.orthonormal_sigma_orthonormal hv_family
 
 中文:
-定理 DirectSum.IsInternal.collectedBasis_orthonormal
-  结论: [DecidableEq ι] {V : ι -> Submodule 𝕜 E}
+定理 直和.Is整数ernal.collectedBasis_orthonormal
+  结论: [DecidableEq ι] {V : ι -> 子模 𝕜 E}
   证明: by
   simpa only [hV_sum.collectedBasis_coe] using! hV.orthonormal_sigma_orthonormal hv_family
 

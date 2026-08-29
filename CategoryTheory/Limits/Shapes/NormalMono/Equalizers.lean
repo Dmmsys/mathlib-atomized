@@ -47,7 +47,7 @@ KernelFork.IsLimit.lift' i (kernel.ι (prod.lift f g))
 
 中文:
 引理 pullback_of_mono
-  条件: {X Y Z : C} (a : X ⟶ Z) (b : Y ⟶ Z) [Mono a] [Mono b]
+  条件: {X Y Z : C} (a : X ⟶ Z) (b : Y ⟶ Z) [单态射 a] [单态射 b]
   证明: let ⟨P, f, haf, i⟩ := normalMonoOfMono a
   let ⟨Q, g, hbg, i'⟩ := normalMonoOfMono b
   let ⟨a', ha'⟩ :=
@@ -129,7 +129,7 @@ abbreviation P
 
 中文:
 缩写 P
-  签名: {X Y : C} (f g : X ⟶ Y) [Mono (prod.lift (𝟙 X) f)] [Mono (prod.lift (𝟙 X) g)]
+  签名: {X Y : C} (f g : X ⟶ Y) [单态射 (乘积.lift (𝟙 X) f)] [单态射 (乘积.lift (𝟙 X) g)]
   定义体: pullback (prod.lift (𝟙 X) f) (prod.lift (𝟙 X) g)
 -/
 private abbrev P {X Y : C} (f g : X ⟶ Y) [Mono (prod.lift (𝟙 X) f)] [Mono (prod.lift (𝟙 X) g)] :
@@ -153,7 +153,7 @@ lemma hasLimit_parallelPair
 中文:
 引理 hasLimit_parallelPair
   条件: {X Y : C} (f g : X ⟶ Y)
-  结论: HasLimit (parallelPair f g)
+  结论: 有极限 (parallelPair f g)
   证明: have huv : (pullback.fst _ _ : P f g ⟶ X) = pullback.snd _ _ :=
     calc
 (pullback.fst _ _ : P f g ⟶ X) = pullback.fst _ _ ≫ 𝟙 _ := Eq.symm Category.comp_id _
@@ -276,7 +276,7 @@ lemma preservesEpimorphisms_of_preservesCokernels
 
 中文:
 引理 preservesEpimorphisms_of_preservesCokernels
-  结论: (F : D ⥤ C) [F.PreservesZeroMorphisms]
+  结论: (F : D ⥤ C) [F.保持ZeroMorphisms]
   证明: epi_of_zero_cokernel _ _ IsColimit.equivIsoColimit (mapZeroCokernelCofork F f)
     (cokernel.zeroCokernelCofork f).mapIsColimit (cokernel.isColimitCoconeZeroCocone f) F
 
@@ -315,7 +315,7 @@ CokernelCofork.IsColimit.desc' i (cokernel.π (coprod.desc f g))
 
 中文:
 引理 pushout_of_epi
-  条件: {X Y Z : C} (a : X ⟶ Y) (b : X ⟶ Z) [Epi a] [Epi b]
+  条件: {X Y Z : C} (a : X ⟶ Y) (b : X ⟶ Z) [满态射 a] [满态射 b]
   证明: let ⟨P, f, hfa, i⟩ := normalEpiOfEpi a
   let ⟨Q, g, hgb, i'⟩ := normalEpiOfEpi b
   let ⟨a', ha'⟩ :=
@@ -408,7 +408,7 @@ abbreviation Q
 
 中文:
 缩写 Q
-  签名: {X Y : C} (f g : X ⟶ Y) [Epi (coprod.desc (𝟙 Y) f)] [Epi (coprod.desc (𝟙 Y) g)]
+  签名: {X Y : C} (f g : X ⟶ Y) [满态射 (coprod.desc (𝟙 Y) f)] [满态射 (coprod.desc (𝟙 Y) g)]
   定义体: pushout (coprod.desc (𝟙 Y) f) (coprod.desc (𝟙 Y) g)
 -/
 private abbrev Q {X Y : C} (f g : X ⟶ Y) [Epi (coprod.desc (𝟙 Y) f)] [Epi (coprod.desc (𝟙 Y) g)] :
@@ -432,7 +432,7 @@ lemma hasColimit_parallelPair
 中文:
 引理 hasColimit_parallelPair
   条件: {X Y : C} (f g : X ⟶ Y)
-  结论: HasColimit (parallelPair f g)
+  结论: 有余极限 (parallelPair f g)
   证明: have huv : (pushout.inl _ _ : Y ⟶ Q f g) = pushout.inr _ _ :=
     calc
 (pushout.inl _ _ : Y ⟶ Q f g) = 𝟙 _ ≫ pushout.inl _ _ := Eq.symm Category.id_comp _
@@ -560,7 +560,7 @@ lemma preservesMonomorphisms_of_preservesKernels
 
 中文:
 引理 preservesMonomorphisms_of_preservesKernels
-  结论: (F : D ⥤ C) [F.PreservesZeroMorphisms]
+  结论: (F : D ⥤ C) [F.保持ZeroMorphisms]
   证明: mono_of_zero_kernel _ _ IsLimit.equivIsoLimit (mapZeroKernelFork F f)
     (kernel.zeroKernelFork f).mapIsLimit (kernel.isLimitConeZeroCone f) F
 

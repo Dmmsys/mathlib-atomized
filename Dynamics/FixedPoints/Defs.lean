@@ -117,7 +117,7 @@ theorem fixedPoints_id
 
 中文:
 定理 fixedPoints_id
-  结论: fixedPoints (@id α) = Set.univ
+  结论: fixedPoints (@id α) = 集合.univ
   证明: Set.ext fun _ => by simpa using isFixedPt_id _
 
 @[simp]
@@ -164,7 +164,7 @@ theorem fixedPoints_subset_range
 
 中文:
 定理 fixedPoints_subset_range
-  结论: fixedPoints f subseteq Set.range f
+  结论: fixedPoints f subseteq 集合.range f
   证明: fun x hx => ⟨x, hx⟩
 -/
 theorem fixedPoints_subset_range : fixedPoints f subseteq Set.range f := fun x hx => ⟨x, hx⟩

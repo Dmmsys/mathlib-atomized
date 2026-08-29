@@ -61,7 +61,7 @@ theorem isBoundedUnder_of
 
 中文:
 定理 isBoundedUnder_of
-  条件: {f : Filter β} {u : β -> α}
+  条件: {f : 滤子 β} {u : β -> α}
   结论: (存在 b, 对任意 x, r (u x) b) -> f.IsBoundedUnder r u
 -/
 theorem isBoundedUnder_of {f : Filter β} {u : β -> α} : (exists b, forall x, r (u x) b) -> f.IsBoundedUnder r u
@@ -77,7 +77,7 @@ theorem isBounded_bot
 
 中文:
 定理 isBounded_bot
-  结论: IsBounded r ⊥ ↔ Nonempty α
+  结论: IsBounded r ⊥ ↔ 非空 α
   证明: by simp [IsBounded, exists_true_iff_nonempty]
 
 Depends on / 依赖: IsBounded, exists_true_iff_nonempty
@@ -113,7 +113,7 @@ theorem isBounded_principal
 
 中文:
 定理 isBounded_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   结论: IsBounded r (𝓟 s) ↔ 存在 t, 对任意 x in s, r x t
   证明: by
   simp [IsBounded]
@@ -135,7 +135,7 @@ theorem isBounded_sup
 
 中文:
 定理 isBounded_sup
-  条件: [IsTrans α r] [IsDirected α r]
+  条件: [是Trans α r] [是Directed α r]
   证明: directed_of r b₁ b₂
     ⟨b, eventually_sup.mpr
       ⟨h₁.mono fun _ h => _root_.trans h rb₁b, h₂.mono fun _ h => _root_.trans h rb₂b⟩⟩
@@ -177,7 +177,7 @@ theorem IsBoundedUnder.mono
 
 中文:
 定理 IsBoundedUnder.mono
-  条件: {f g : Filter β} {u : β -> α} (h : f <= g)
+  条件: {f g : 滤子 β} {u : β -> α} (h : f <= g)
   证明: fun hg => IsBounded.mono (map_mono h) hg
 
 @[to_dual mono_ge]
@@ -200,7 +200,7 @@ exact fun b hb => (eventually_map.1 hb).mp hv.mono fun x => le_trans
 
 中文:
 定理 IsBoundedUnder.mono_le
-  结论: [Preorder β] {l : Filter α} {u v : α -> β}
+  结论: [预序 β] {l : 滤子 α} {u v : α -> β}
   证明: by
   apply hu.imp
 exact fun b hb => (eventually_map.1 hb).mp hv.mono fun x => le_trans
@@ -223,7 +223,7 @@ theorem isBoundedUnder_const
 
 中文:
 定理 isBoundedUnder_const
-  条件: [Std.Refl r] {l : Filter β} {a : α}
+  条件: [Std.Refl r] {l : 滤子 β} {a : α}
   结论: IsBoundedUnder r l fun _ => a
   证明: ⟨a, eventually_map.2 Eventually.of_forall fun _ => refl _⟩
 
@@ -256,7 +256,7 @@ theorem IsBoundedUnder.comp
 
 中文:
 定理 IsBoundedUnder.comp
-  结论: {l : Filter γ} {q : β -> β -> 命题} {u : γ -> α} {v : α -> β}
+  结论: {l : 滤子 γ} {q : β -> β -> 命题} {u : γ -> α} {v : α -> β}
 -/
 theorem IsBoundedUnder.comp {l : Filter γ} {q : β -> β -> Prop} {u : γ -> α} {v : α -> β}
     (hv : forall a₀ a₁, r a₀ a₁ -> q (v a₀) (v a₁)) : l.IsBoundedUnder r u -> l.IsBoundedUnder q (v ∘ u)
@@ -291,7 +291,7 @@ lemma Tendsto.isBoundedUnder_comp
   proof: isBoundedUnder_map_iff.mp (𝓕_bounded.mono φ_tendsto)
 
 中文:
-引理 Tendsto.isBoundedUnder_comp
+引理 收敛.isBoundedUnder_comp
   结论: {ι κ X : 类型} {r : X -> X -> 命题} {f : ι -> X} {φ : κ -> ι}
   证明: isBoundedUnder_map_iff.mp (𝓕_bounded.mono φ_tendsto)
 
@@ -419,7 +419,7 @@ lemma _root_.BddAbove.isBoundedUnder_of_range
 
 中文:
 引理 _root_.BddAbove.isBoundedUnder_of_range
-  条件: (hu : BddAbove (Set.range u))
+  条件: (hu : BddAbove (集合.range u))
   证明: BddAbove.isBoundedUnder (s := univ) f.univ_mem (by simpa)
 
 @[to_dual ge_of_finite]
@@ -440,7 +440,7 @@ lemma IsBoundedUnder.le_of_finite
 
 中文:
 引理 IsBoundedUnder.le_of_finite
-  结论: [Nonempty α] [IsDirectedOrder α] [Finite β]
+  结论: [非空 α] [IsDirectedOrder α] [有限 β]
   证明: (Set.toFinite _).bddAbove.isBoundedUnder_of_range
 
 Depends on / 依赖: Set.toFinite, bddAbove, bddAbove.isBoundedUnder_of_range, isBoundedUnder_of_range, toFinite
@@ -463,8 +463,8 @@ theorem _root_.Monotone.isBoundedUnder_le_comp
 @[to_dual isBoundedUnder_ge_comp]
 
 中文:
-定理 _root_.Monotone.isBoundedUnder_le_comp
-  结论: [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
+定理 _root_.递增.isBoundedUnder_le_comp
+  结论: [预序 α] [预序 β] {l : 滤子 γ} {u : γ -> α}
   证明: hl.comp hv
 
 @[to_dual isBoundedUnder_ge_comp]
@@ -488,8 +488,8 @@ theorem _root_.Antitone.isBoundedUnder_le_comp
 @[to_dual]
 
 中文:
-定理 _root_.Antitone.isBoundedUnder_le_comp
-  结论: [Preorder α] [Preorder β] {l : Filter γ} {u : γ -> α}
+定理 _root_.递减.isBoundedUnder_le_comp
+  结论: [预序 α] [预序 β] {l : 滤子 γ} {u : γ -> α}
   证明: hl.comp (swap hv)
 
 @[to_dual]
@@ -519,7 +519,7 @@ theorem not_isBoundedUnder_of_tendsto_atTop
 
 中文:
 定理 not_isBoundedUnder_of_tendsto_atTop
-  结论: [Preorder β] [NoMaxOrder β] {f : α -> β} {l : Filter α}
+  结论: [预序 β] [NoMax序 β] {f : α -> β} {l : 滤子 α}
   证明: by
   rintro ⟨b, hb⟩
   rw [eventually_map] at hb
@@ -558,7 +558,7 @@ theorem IsBoundedUnder.bddAbove_range_of_cofinite
 
 中文:
 定理 IsBoundedUnder.bddAbove_range_of_cofinite
-  结论: [Preorder β] [IsDirectedOrder β] {f : α -> β}
+  结论: [预序 β] [IsDirectedOrder β] {f : α -> β}
   证明: by
   rcases hf with ⟨b, hb⟩
   have : Nonempty β := ⟨b⟩
@@ -589,7 +589,7 @@ theorem IsBoundedUnder.bddAbove_range
 
 中文:
 定理 IsBoundedUnder.bddAbove_range
-  结论: [Preorder β] [IsDirectedOrder β] {f : 自然数 -> β}
+  结论: [预序 β] [IsDirectedOrder β] {f : 自然数 -> β}
   证明: by
   rw [← Nat.cofinite_eq_atTop] at hf
   exact hf.bddAbove_range_of_cofinite
@@ -614,7 +614,7 @@ theorem IsCobounded.mk
 
 中文:
 定理 IsCobounded.mk
-  条件: [IsTrans α r] (a : α) (h : 对任意 s in f, 存在 x in s, r a x)
+  条件: [是Trans α r] (a : α) (h : 对任意 s in f, 存在 x in s, r a x)
   结论: f.IsCobounded r
   证明: ⟨a, fun _ s =>
     let ⟨_, h₁, h₂⟩ := h _ s
@@ -641,7 +641,7 @@ theorem IsBounded.isCobounded_flip
 
 中文:
 定理 IsBounded.isCobounded_flip
-  条件: [IsTrans α r] [NeBot f]
+  条件: [是Trans α r] [NeBot f]
   结论: f.IsBounded r -> f.IsCobounded (flip r)
   证明: (ha.and hb).exists
       show r b a from _root_.trans rbx rxa⟩
@@ -667,7 +667,7 @@ theorem IsBounded.isCobounded_le
 
 中文:
 定理 IsBounded.isCobounded_le
-  条件: [Preorder α] [NeBot f] (h : f.IsBounded (fun x1 x2 => x2 <= x1))
+  条件: [预序 α] [NeBot f] (h : f.IsBounded (fun x1 x2 => x2 <= x1))
   证明: h.isCobounded_flip
 
 Depends on / 依赖: h.isCobounded_flip, isCobounded_flip
@@ -688,7 +688,7 @@ theorem IsBoundedUnder.isCoboundedUnder_flip
 
 中文:
 定理 IsBoundedUnder.isCoboundedUnder_flip
-  结论: {u : γ -> α} {l : Filter γ} [IsTrans α r] [NeBot l]
+  结论: {u : γ -> α} {l : 滤子 γ} [是Trans α r] [NeBot l]
   证明: h.isCobounded_flip
 
 @[to_dual isCoboundedUnder_ge]
@@ -712,7 +712,7 @@ theorem IsBoundedUnder.isCoboundedUnder_le
 
 中文:
 定理 IsBoundedUnder.isCoboundedUnder_le
-  结论: {u : γ -> α} {l : Filter γ} [Preorder α] [NeBot l]
+  结论: {u : γ -> α} {l : 滤子 γ} [预序 α] [NeBot l]
   证明: h.isCoboundedUnder_flip
 
 @[to_dual isCoboundedUnder_ge_of_eventually_le]
@@ -736,7 +736,7 @@ lemma isCoboundedUnder_le_of_eventually_le
 
 中文:
 引理 isCoboundedUnder_le_of_eventually_le
-  结论: [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
+  结论: [预序 α] (l : 滤子 ι) [NeBot l] {f : ι -> α} {x : α}
   证明: IsBoundedUnder.isCoboundedUnder_le ⟨x, hf⟩
 
 @[to_dual isCoboundedUnder_ge_of_le]
@@ -759,7 +759,7 @@ lemma isCoboundedUnder_le_of_le
 
 中文:
 引理 isCoboundedUnder_le_of_le
-  结论: [Preorder α] (l : Filter ι) [NeBot l] {f : ι -> α} {x : α}
+  结论: [预序 α] (l : 滤子 ι) [NeBot l] {f : ι -> α} {x : α}
   证明: isCoboundedUnder_le_of_eventually_le l (Eventually.of_forall hf)
 
 Depends on / 依赖: Eventually, Eventually.of_forall, isCoboundedUnder_le_of_eventually_le, of_forall
@@ -799,7 +799,7 @@ theorem isCobounded_top
 
 中文:
 定理 isCobounded_top
-  结论: IsCobounded r ⊤ ↔ Nonempty α
+  结论: IsCobounded r ⊤ ↔ 非空 α
   证明: by
   simp +contextual [IsCobounded,
     exists_true_iff_nonempty]
@@ -820,7 +820,7 @@ theorem isCobounded_principal
 
 中文:
 定理 isCobounded_principal
-  条件: (s : Set α)
+  条件: (s : 集合 α)
   证明: by simp [IsCobounded]
 
 Depends on / 依赖: IsCobounded
@@ -865,7 +865,7 @@ lemma IsCobounded.frequently_ge
 
 中文:
 引理 IsCobounded.frequently_ge
-  条件: [LinearOrder α] [NeBot f] (cobdd : IsCobounded (· <= ·) f)
+  条件: [线性序 α] [NeBot f] (cobdd : IsCobounded (· <= ·) f)
   证明: by
   obtain ⟨t, ht⟩ := cobdd
   rcases isBot_or_exists_lt t with tbot | ⟨t', ht'⟩
@@ -905,7 +905,7 @@ lemma IsCobounded.of_frequently_ge
 
 中文:
 引理 IsCobounded.of_frequently_ge
-  条件: [LinearOrder α] {l : α} (freq_ge : 存在ᶠ x in f, l <= x)
+  条件: [线性序 α] {l : α} (freq_ge : 存在ᶠ x in f, l <= x)
   证明: by
   rcases isBot_or_exists_lt l with lbot | ⟨l', hl'⟩
   · exact ⟨l, fun x _ => lbot x⟩
@@ -938,7 +938,7 @@ lemma IsCoboundedUnder.frequently_ge
 
 中文:
 引理 IsCoboundedUnder.frequently_ge
-  结论: [LinearOrder α] {f : Filter ι} [NeBot f] {u : ι -> α}
+  结论: [线性序 α] {f : 滤子 ι} [NeBot f] {u : ι -> α}
   证明: IsCobounded.frequently_ge h
 
 @[to_dual of_frequently_le]
@@ -961,7 +961,7 @@ lemma IsCoboundedUnder.of_frequently_ge
 
 中文:
 引理 IsCoboundedUnder.of_frequently_ge
-  结论: [LinearOrder α] {f : Filter ι} {u : ι -> α}
+  结论: [线性序 α] {f : 滤子 ι} {u : ι -> α}
   证明: IsCobounded.of_frequently_ge freq_ge
 
 Depends on / 依赖: IsCobounded, IsCobounded.of_frequently_ge, freq_ge, of_frequently_ge
@@ -997,7 +997,7 @@ lemma isBoundedUnder_sum
 
 中文:
 引理 isBoundedUnder_sum
-  结论: {κ : 类型} [AddCommMonoid R] {r : R -> R -> 命题}
+  结论: {κ : 类型} [加法交换幺半群 R] {r : R -> R -> 命题}
   证明: by
   induction s using Finset.cons_induction
   case empty =>
@@ -1042,7 +1042,7 @@ lemma isBoundedUnder_le_add
 
 中文:
 引理 isBoundedUnder_le_add
-  结论: [Add R] [AddLeftMono R] [AddRightMono R]
+  结论: [加法 R] [AddLeftMono R] [AddRightMono R]
   证明: by
   obtain ⟨U, hU⟩ := u_bdd_le
   obtain ⟨V, hV⟩ := v_bdd_le
@@ -1074,7 +1074,7 @@ lemma isBoundedUnder_le_sum
 
 中文:
 引理 isBoundedUnder_le_sum
-  结论: {κ : 类型} [AddCommMonoid R] [AddLeftMono R] [AddRightMono R]
+  结论: {κ : 类型} [加法交换幺半群 R] [AddLeftMono R] [AddRightMono R]
   证明: fun h => isBoundedUnder_sum (fun _ _ => isBoundedUnder_le_add) le_rfl s h
 
 Depends on / 依赖: isBoundedUnder_le_add, isBoundedUnder_sum, le_rfl
@@ -1146,7 +1146,7 @@ lemma isBoundedUnder_le_mul_of_nonneg
 
 中文:
 引理 isBoundedUnder_le_mul_of_nonneg
-  结论: [Preorder α] [Mul α] [Zero α] [PosMulMono α]
+  结论: [预序 α] [乘法 α] [零 α] [正乘递增 α]
   证明: by
   obtain ⟨U, hU⟩ := h₂.eventually_le
   obtain ⟨V, hV⟩ := h₄.eventually_le
@@ -1189,7 +1189,7 @@ lemma isCoboundedUnder_ge_mul_of_nonneg
 
 中文:
 引理 isCoboundedUnder_ge_mul_of_nonneg
-  结论: [LinearOrder α] [Mul α] [Zero α] [PosMulMono α]
+  结论: [线性序 α] [乘法 α] [零 α] [正乘递增 α]
   证明: by
   obtain ⟨U, hU⟩ := h₂.eventually_le
   obtain ⟨V, hV⟩ := h₄.frequently_le
@@ -1231,7 +1231,7 @@ theorem isBounded_le_atBot
 
 中文:
 定理 isBounded_le_atBot
-  结论: (atBot : Filter α).IsBounded (· <= ·)
+  结论: (atBot : 滤子 α).IsBounded (· <= ·)
   证明: ‹Nonempty α›.elim fun a => ⟨a, eventually_le_atBot _⟩
 
 @[to_dual isBoundedUnder_ge_atTop]
@@ -1254,8 +1254,8 @@ theorem Tendsto.isBoundedUnder_le_atBot
 @[to_dual]
 
 中文:
-定理 Tendsto.isBoundedUnder_le_atBot
-  条件: (h : Tendsto u f atBot)
+定理 收敛.isBoundedUnder_le_atBot
+  条件: (h : 收敛 u f atBot)
   结论: f.IsBoundedUnder (· <= ·) u
   证明: isBounded_le_atBot.mono h
 
@@ -1321,7 +1321,7 @@ theorem isCobounded_le_of_bot
 
 中文:
 定理 isCobounded_le_of_bot
-  条件: [LE α] [OrderBot α] {f : Filter α}
+  条件: [LE α] [有底序 α] {f : 滤子 α}
   结论: f.IsCobounded (· <= ·)
   证明: ⟨⊥, fun _ _ => bot_le⟩
 
@@ -1346,7 +1346,7 @@ theorem isBounded_le_of_top
 
 中文:
 定理 isBounded_le_of_top
-  条件: [LE α] [OrderTop α] {f : Filter α}
+  条件: [LE α] [有顶序 α] {f : 滤子 α}
   结论: f.IsBounded (· <= ·)
   证明: ⟨⊤, Eventually.of_forall fun _ => le_top⟩
 
@@ -1369,7 +1369,7 @@ theorem _root_.OrderIso.isBoundedUnder_le_comp
 
 中文:
 定理 _root_.OrderIso.isBoundedUnder_le_comp
-  结论: [LE α] [LE β] (e : α ≃o β) {l : Filter γ}
+  结论: [LE α] [LE β] (e : α ≃o β) {l : 滤子 γ}
   证明: (Function.Surjective.exists e.surjective).trans
     exists_congr fun a => by simp only [eventually_map, e.le_iff_le]
 
@@ -1394,7 +1394,7 @@ theorem isBoundedUnder_le_inv
 
 中文:
 定理 isBoundedUnder_le_inv
-  结论: [CommGroup α] [Preorder α] [IsOrderedMonoid α]
+  结论: [交换群 α] [预序 α] [是Ordered幺半群 α]
   证明: (OrderIso.inv α).isBoundedUnder_ge_comp
 
 @[to_additive (attr := simp)]
@@ -1419,7 +1419,7 @@ theorem isBoundedUnder_ge_inv
 
 中文:
 定理 isBoundedUnder_ge_inv
-  结论: [CommGroup α] [Preorder α] [IsOrderedMonoid α]
+  结论: [交换群 α] [预序 α] [是Ordered幺半群 α]
   证明: (OrderIso.inv α).isBoundedUnder_le_comp
 
 @[to_dual]
@@ -1440,8 +1440,8 @@ theorem IsBoundedUnder.sup
   given: [SemilatticeSup α] {f : Filter β} {u v : β -> α}
 
 中文:
-定理 IsBoundedUnder.sup
-  条件: [SemilatticeSup α] {f : Filter β} {u v : β -> α}
+定理 IsBoundedUnder.上确界
+  条件: [SemilatticeSup α] {f : 滤子 β} {u v : β -> α}
 -/
 theorem IsBoundedUnder.sup [SemilatticeSup α] {f : Filter β} {u v : β -> α} :
     f.IsBoundedUnder (· <= ·) u ->
@@ -1464,7 +1464,7 @@ h.mono_le Eventually.of_forall fun _ => le_sup_right⟩,
 
 中文:
 定理 isBoundedUnder_le_sup
-  条件: [SemilatticeSup α] {f : Filter β} {u v : β -> α}
+  条件: [SemilatticeSup α] {f : 滤子 β} {u v : β -> α}
   证明: ⟨fun h =>
 ⟨h.mono_le Eventually.of_forall fun _ => le_sup_left,
 h.mono_le Eventually.of_forall fun _ => le_sup_right⟩,
@@ -1490,7 +1490,7 @@ theorem isBoundedUnder_le_abs
 
 中文:
 定理 isBoundedUnder_le_abs
-  结论: [AddCommGroup α] [LinearOrder α] [IsOrderedAddMonoid α]
+  结论: [加法交换群 α] [线性序 α] [是OrderedAdd幺半群 α]
   证明: isBoundedUnder_le_sup.trans and_congr Iff.rfl isBoundedUnder_le_neg
 
 Depends on / 依赖: Iff.rfl, and_congr, isBoundedUnder_le_neg, isBoundedUnder_le_sup, isBoundedUnder_le_sup.trans
@@ -1535,8 +1535,8 @@ theorem Monotone.isBoundedUnder_le_comp_iff
 @[to_dual isBoundedUnder
 
 中文:
-定理 Monotone.isBoundedUnder_le_comp_iff
-  结论: [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
+定理 递增.isBoundedUnder_le_comp_iff
+  结论: [非空 β] [线性序 β] [预序 γ] [NoMax序 γ]
   证明: by
   refine ⟨?_, fun h => h.isBoundedUnder (α := β) hg⟩
   rintro ⟨c, hc⟩; rw [eventually_map] at hc
@@ -1565,8 +1565,8 @@ theorem Antitone.isBoundedUnder_le_comp_iff
   proof: hg.dual_right.isBoundedUnder_ge_comp_iff hg'
 
 中文:
-定理 Antitone.isBoundedUnder_le_comp_iff
-  结论: [Nonempty β] [LinearOrder β] [Preorder γ] [NoMaxOrder γ]
+定理 递减.isBoundedUnder_le_comp_iff
+  结论: [非空 β] [线性序 β] [预序 γ] [NoMax序 γ]
   证明: hg.dual_right.isBoundedUnder_ge_comp_iff hg'
 
 Depends on / 依赖: dual_right, hg.dual_right.isBoundedUnder_ge_comp_iff, isBoundedUnder_ge_comp_iff
@@ -1598,7 +1598,7 @@ theorem isCoboundedUnder_le_max
 
 中文:
 定理 isCoboundedUnder_le_max
-  结论: [LinearOrder β] {f : Filter α} {u v : α -> β}
+  结论: [线性序 β] {f : 滤子 α} {u v : α -> β}
   证明: by
   rcases h with (h' | h') <;>
   · rcases h' with ⟨b, hb⟩
@@ -1645,7 +1645,7 @@ theorem isBoundedUnder_le_finset_sup'
 
 中文:
 定理 isBoundedUnder_le_finset_sup'
-  结论: [LinearOrder β] [Nonempty β] {f : Filter α} {F : ι -> α -> β}
+  结论: [线性序 β] [非空 β] {f : 滤子 α} {F : ι -> α -> β}
   证明: by
   choose! m hm using h
   use sup' s hs m
@@ -1690,7 +1690,7 @@ theorem isCoboundedUnder_le_finset_sup'
 
 中文:
 定理 isCoboundedUnder_le_finset_sup'
-  结论: [LinearOrder β] {f : Filter α} {F : ι -> α -> β}
+  结论: [线性序 β] {f : 滤子 α} {F : ι -> α -> β}
   证明: by
   rcases h with ⟨i, i_s, b, hb⟩
   use b
@@ -1731,7 +1731,7 @@ theorem isBoundedUnder_le_finset_sup
 
 中文:
 定理 isBoundedUnder_le_finset_sup
-  结论: [LinearOrder β] [OrderBot β] {f : Filter α} {F : ι -> α -> β}
+  结论: [线性序 β] [有底序 β] {f : 滤子 α} {F : ι -> α -> β}
   证明: by
   choose! m hm using h
   use sup s m
@@ -1773,8 +1773,8 @@ exact lt_irrefl (f l) lt_of_le_of_lt (f_incr <| not_lt.mp con) hz
 @[to_dual frequently_ge_map_of_frequently_le]
 
 中文:
-引理 Monotone.frequently_ge_map_of_frequently_ge
-  结论: {f : R -> S} (f_incr : Monotone f)
+引理 递增.frequently_ge_map_of_frequently_ge
+  结论: {f : R -> S} (f_incr : 递增 f)
   证明: by
   refine fun ev => freq_ge ?_
   simp only [not_le] at ev freq_ge ⊢
@@ -1807,8 +1807,8 @@ lemma Antitone.frequently_le_map_of_frequently_ge
 @[to_dual isCoboundedUnder_ge_of_isCobounded]
 
 中文:
-引理 Antitone.frequently_le_map_of_frequently_ge
-  结论: {f : R -> S} (f_decr : Antitone f)
+引理 递减.frequently_le_map_of_frequently_ge
+  结论: {f : R -> S} (f_decr : 递减 f)
   证明: Monotone.frequently_ge_map_of_frequently_ge (S := Sᵒᵈ) f_decr frbdd
 
 @[to_dual isCoboundedUnder_ge_of_isCobounded]
@@ -1834,8 +1834,8 @@ exact IsCobounded.of_frequently_ge f_incr.frequently_ge_map_of_frequently_ge hl
 @[to_dual isCoboundedUnder_ge_of_isCobounded]
 
 中文:
-引理 Monotone.isCoboundedUnder_le_of_isCobounded
-  结论: {f : R -> S} (f_incr : Monotone f)
+引理 递增.isCoboundedUnder_le_of_isCobounded
+  结论: {f : R -> S} (f_incr : 递增 f)
   证明: by
   obtain ⟨l, hl⟩ := IsCobounded.frequently_ge cobdd
 exact IsCobounded.of_frequently_ge f_incr.frequently_ge_map_of_frequently_ge hl
@@ -1862,8 +1862,8 @@ lemma Antitone.isCoboundedUnder_le_of_isCobounded
 exact IsCobounded.of_frequently_ge f_decr.frequently_ge_map_of_frequently_le hl
 
 中文:
-引理 Antitone.isCoboundedUnder_le_of_isCobounded
-  结论: {f : R -> S} (f_decr : Antitone f)
+引理 递减.isCoboundedUnder_le_of_isCobounded
+  结论: {f : R -> S} (f_decr : 递减 f)
   证明: by
   obtain ⟨l, hl⟩ := IsCobounded.frequently_le cobdd
 exact IsCobounded.of_frequently_ge f_decr.frequently_ge_map_of_frequently_le hl

@@ -163,7 +163,7 @@ lemma exists_hom
   obt
 
 中文:
-引理 exists_hom
+引理 存在_hom
   条件: (n m : 整数) (hnm : n + 1 = m := by lia)
   证明: by
   have : Epi π := Cofork.IsColimit.epi hQ

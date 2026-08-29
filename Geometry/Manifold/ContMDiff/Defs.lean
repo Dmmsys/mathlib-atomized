@@ -83,7 +83,7 @@ definition ContDiffWithinAtProp
 
 中文:
 定义 ContDiffWithinAtProp
-  签名: (n : 自然数∞ω) (f : H -> H') (s : Set H) (x : H)
+  签名: (n : 自然数∞ω) (f : H -> H') (s : 集合 H) (x : H)
   定义体: ContDiffWithinAt 𝕜 n (I' ∘ f ∘ I.symm) (I.symm ⁻¹' s inter range I) (I x)
 
 Depends on / 依赖: AddCommGroup, ContDiffWithinAt, I.symm, Module, Module.complexToReal, complexToReal
@@ -103,7 +103,7 @@ theorem contDiffWithinAtProp_self_source
 
 中文:
 定理 contDiffWithinAtProp_self_source
-  条件: {f : E -> H'} {s : Set E} {x : E}
+  条件: {f : E -> H'} {s : 集合 E} {x : E}
   证明: by
   simp_rw [ContDiffWithinAtProp, modelWithCornersSelf_coe, range_id, inter_univ,
     modelWithCornersSelf_coe_symm, CompTriple.comp_eq, preimage_id_eq, id_eq]
@@ -125,7 +125,7 @@ theorem contDiffWithinAtProp_self
 
 中文:
 定理 contDiffWithinAtProp_self
-  条件: {f : E -> E'} {s : Set E} {x : E}
+  条件: {f : E -> E'} {s : 集合 E} {x : E}
   证明: contDiffWithinAtProp_self_source
 
 Depends on / 依赖: contDiffWithinAtProp_self_source
@@ -144,7 +144,7 @@ theorem contDiffWithinAtProp_self_target
 
 中文:
 定理 contDiffWithinAtProp_self_target
-  条件: {f : H -> E'} {s : Set H} {x : H}
+  条件: {f : H -> E'} {s : 集合 H} {x : H}
   证明: Iff.rfl
 
 Depends on / 依赖: AddCommGroup, Iff.rfl, Module, SMulCommClass, SMulCommClass.complexToReal, complexToReal
@@ -284,7 +284,7 @@ theorem contDiffWithinAtProp_id
 中文:
 定理 contDiffWithinAtProp_id
   条件: (x : H)
-  结论: ContDiffWithinAt命题 I I n id univ x
+  结论: ContDiffWithinAtProp I I n id univ x
   证明: by
   simp only [ContDiffWithinAtProp, id_comp, preimage_univ, univ_inter]
   have : ContDiffWithinAt 𝕜 n id (range I) (I x) := contDiff_id.contDiffAt.contDiffWithinAt
@@ -312,7 +312,7 @@ definition ContMDiffWithinAt
 
 中文:
 定义 ContMDiffWithinAt
-  签名: (n : 自然数∞ω) (f : M -> M') (s : Set M) (x : M)
+  签名: (n : 自然数∞ω) (f : M -> M') (s : 集合 M) (x : M)
   定义体: LiftPropWithinAt (ContDiffWithinAtProp I I' n) f s x
 
 Depends on / 依赖: ContDiffWithinAtProp, LiftPropWithinAt
@@ -372,7 +372,7 @@ definition ContMDiffOn
 
 中文:
 定义 ContMDiffOn
-  签名: (n : 自然数∞ω) (f : M -> M') (s : Set M)
+  签名: (n : 自然数∞ω) (f : M -> M') (s : 集合 M)
   定义体: forall x in s, ContMDiffWithinAt I I' n f s x
 
 Depends on / 依赖: ContMDiffWithinAt
@@ -902,7 +902,7 @@ theorem contMDiffWithinAt_iff_target_of_mem_source
 
 中文:
 定理 contMDiffWithinAt_iff_target_of_mem_source
-  结论: [IsManifold I' n M']
+  结论: [是流形 I' n M']
   证明: contMDiffWithinAt_iff_target_of_mem_maximalAtlas (chart_mem_maximalAtlas _) hy
 
 Depends on / 依赖: chart_mem_maximalAtlas, contMDiffWithinAt_iff_target_of_mem_maximalAtlas
@@ -924,7 +924,7 @@ theorem contMDiffAt_iff_target_of_mem_source
 
 中文:
 定理 contMDiffAt_iff_target_of_mem_source
-  结论: [IsManifold I' n M']
+  结论: [是流形 I' n M']
   证明: by
   rw [ContMDiffAt]; rw [contMDiffWithinAt_iff_target_of_mem_source hy]; rw [continuousWithinAt_univ]; rw [ContMDiffAt]
 
@@ -1062,7 +1062,7 @@ theorem contMDiffWithinAt_iff_of_mem_source
 
 中文:
 定理 contMDiffWithinAt_iff_of_mem_source
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: contMDiffWithinAt_iff_of_mem_maximalAtlas (chart_mem_maximalAtlas x)
     (chart_mem_maximalAtlas y) hx hy
 
@@ -1094,7 +1094,7 @@ theorem contMDiffWithinAt_iff_of_mem_source'
 
 中文:
 定理 contMDiffWithinAt_iff_of_mem_source'
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: by
   refine (contMDiffWithinAt_iff_of_mem_source hx hy).trans ?_
   rw [← extChartAt_source I] at hx
@@ -1133,7 +1133,7 @@ theorem contMDiffAt_iff_of_mem_source
 
 中文:
 定理 contMDiffAt_iff_of_mem_source
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: (contMDiffWithinAt_iff_of_mem_source hx hy).trans by
     rw [continuousWithinAt_univ]; rw [preimage_univ]; rw [univ_inter]
 
@@ -1210,7 +1210,7 @@ theorem contMDiffOn_iff_of_subset_source
 
 中文:
 定理 contMDiffOn_iff_of_subset_source
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: contMDiffOn_iff_of_mem_maximalAtlas (chart_mem_maximalAtlas x) (chart_mem_maximalAtlas y) hs
     h2s
 
@@ -1238,7 +1238,7 @@ theorem contMDiffOn_iff_of_subset_source'
 
 中文:
 定理 contMDiffOn_iff_of_subset_source'
-  结论: [IsManifold I n M] [IsManifold I' n M']
+  结论: [是流形 I n M] [是流形 I' n M']
   证明: by
   rw [extChartAt_source] at hs h2s
   exact contMDiffOn_iff_of_mem_maximalAtlas' (chart_mem_maximalAtlas x)
@@ -1272,7 +1272,7 @@ theorem contMDiffOn_iff
 
 中文:
 定理 contMDiffOn_iff
-  条件: [IsManifold I n M] [IsManifold I' n M']
+  条件: [是流形 I n M] [是流形 I' n M']
   证明: by
   constructor
   · intro h
@@ -1369,7 +1369,7 @@ theorem contMDiffOn_iff_target
 
 中文:
 定理 contMDiffOn_iff_target
-  条件: [IsManifold I n M] [IsManifold I' n M']
+  条件: [是流形 I n M] [是流形 I' n M']
   证明: by
   simp only [contMDiffOn_iff, ModelWithCorners.source_eq, chartAt_self_eq,
     OpenPartialHomeomorph.refl_partialEquiv, PartialEquiv.refl_trans, extChartAt,
@@ -1408,7 +1408,7 @@ theorem contMDiff_iff
 
 中文:
 定理 contMDiff_iff
-  条件: [IsManifold I n M] [IsManifold I' n M']
+  条件: [是流形 I n M] [是流形 I' n M']
   证明: by
   simp [← contMDiffOn_univ, contMDiffOn_iff, continuousOn_univ]
 
@@ -1435,7 +1435,7 @@ theorem contMDiff_iff_target
 
 中文:
 定理 contMDiff_iff_target
-  条件: [IsManifold I n M] [IsManifold I' n M']
+  条件: [是流形 I n M] [是流形 I' n M']
   证明: by
   rw [← contMDiffOn_univ]; rw [contMDiffOn_iff_target]
   simp [continuousOn_univ]
@@ -1622,7 +1622,7 @@ theorem ContMDiff.continuous
 中文:
 定理 ContMDiff.continuous
   条件: (hf : ContMDiff I I' n f)
-  结论: Continuous f
+  结论: 连续 f
   证明: continuous_iff_continuousAt.2 fun x => (hf x).continuousAt
 
 Depends on / 依赖: continuousAt, continuous_iff_continuousAt
@@ -2490,7 +2490,7 @@ theorem Filter.EventuallyEq.contMDiffWithinAt_iff
   proof: (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_congr_iff_of_eventuallyEq h₁ hx
 
 中文:
-定理 Filter.EventuallyEq.contMDiffWithinAt_iff
+定理 滤子.EventuallyEq.contMDiffWithinAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝[s] x] f) (hx : f₁ x = f x)
   证明: (contDiffWithinAt_localInvariantProp n).liftPropWithinAt_congr_iff_of_eventuallyEq h₁ hx
 
@@ -2528,7 +2528,7 @@ theorem Filter.EventuallyEq.contMDiffAt_iff
   proof: (contDiffWithinAt_localInvariantProp n).liftPropAt_congr_iff_of_eventuallyEq h₁
 
 中文:
-定理 Filter.EventuallyEq.contMDiffAt_iff
+定理 滤子.EventuallyEq.contMDiffAt_iff
   条件: (h₁ : f₁ =ᶠ[𝓝 x] f)
   证明: (contDiffWithinAt_localInvariantProp n).liftPropAt_congr_iff_of_eventuallyEq h₁
 
@@ -2673,7 +2673,7 @@ theorem contMDiff_of_locally_contMDiffOn
 
 中文:
 定理 contMDiff_of_locally_contMDiffOn
-  条件: (h : 对任意 x, 存在 u, IsOpen u ∧ x in u ∧ ContMDiffOn I I' n f u)
+  条件: (h : 对任意 x, 存在 u, 是开集 u ∧ x in u ∧ ContMDiffOn I I' n f u)
   证明: (contDiffWithinAt_localInvariantProp n).liftProp_of_locally_liftPropOn h
 
 Depends on / 依赖: contDiffWithinAt_localInvariantProp, liftProp_of_locally_liftPropOn

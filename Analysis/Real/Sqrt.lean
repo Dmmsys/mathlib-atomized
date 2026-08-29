@@ -314,7 +314,7 @@ lemma sqrt_mul_le_max
 
 中文:
 引理 sqrt_mul_le_max
-  结论: sqrt (x * y) <= max x y
+  结论: sqrt (x * y) <= 最大值 x y
   证明: by
   rw [sqrt_le_iff_le_sq]; rw [sq]; gcongr <;> simp
 
@@ -418,7 +418,7 @@ theorem continuous_sqrt
 
 中文:
 定理 continuous_sqrt
-  结论: Continuous sqrt
+  结论: 连续 sqrt
   证明: sqrt.continuous
 
 Depends on / 依赖: continuous, sqrt.continuous
@@ -494,7 +494,7 @@ theorem coe_sqrt
 中文:
 定理 coe_sqrt
   条件: {x : 实数>=0}
-  结论: (NN实数.sqrt x : 实数) = √(x : 实数)
+  结论: (非负实数.sqrt x : 实数) = √(x : 实数)
   证明: by
   rw [Real.sqrt]; rw [Real.toNNReal_coe]
 
@@ -518,7 +518,7 @@ theorem continuous_sqrt
 
 中文:
 定理 continuous_sqrt
-  结论: Continuous (√· : 实数 -> 实数)
+  结论: 连续 (√· : 实数 -> 实数)
   证明: by unfold sqrt; fun_prop
 
 @[simp]
@@ -595,7 +595,7 @@ lemma tendsto_sqrt_atTop
 
 中文:
 引理 tendsto_sqrt_atTop
-  结论: Tendsto (√·) atTop atTop
+  结论: 收敛 (√·) atTop atTop
   证明: map_sqrt_atTop.le
 
 Depends on / 依赖: map_sqrt_atTop, map_sqrt_atTop.le
@@ -1079,7 +1079,7 @@ theorem sqrt_monotone
 
 中文:
 定理 sqrt_monotone
-  结论: Monotone 实数.sqrt
+  结论: 递增 实数.sqrt
   证明: fun _ _ => sqrt_le_sqrt
 
 Depends on / 依赖: sqrt_le_sqrt
@@ -1099,7 +1099,7 @@ theorem strictMonoOn_sqrt
 
 中文:
 定理 strictMonoOn_sqrt
-  结论: StrictMonoOn sqrt (Ici 0)
+  结论: StrictMonoOn sqrt (左闭右无界区间 0)
   证明: fun _ ha _ _ h => (sqrt_lt_sqrt_iff ha).mpr h
 
 @[gcongr, bound]
@@ -1470,7 +1470,7 @@ theorem sq_sqrt'
 
 中文:
 定理 sq_sqrt'
-  结论: √x ^ 2 = max x 0
+  结论: √x ^ 2 = 最大值 x 0
   证明: by
   rcases lt_trichotomy x 0 with _ | _ | _ <;> grind [sqrt_eq_zero', sq_sqrt]
 
@@ -2231,7 +2231,7 @@ convert! congr_arg NNReal.toReal map_prod NNReal.sqrtHom (Real.toNNReal ∘ x) s
 
 中文:
 定理 sqrt_prod
-  条件: {ι : 类型} (s : Finset ι) {x : ι -> 实数} (hx : 对任意 i in s, 0 <= x i)
+  条件: {ι : 类型} (s : 有限集 ι) {x : ι -> 实数} (hx : 对任意 i in s, 0 <= x i)
   证明: by
 convert! congr_arg NNReal.toReal map_prod NNReal.sqrtHom (Real.toNNReal ∘ x) s <;>
     simp +contextual [-map_prod, NNReal.sqrtHom, hx]
@@ -2258,8 +2258,8 @@ theorem Filter.Tendsto.sqrt
   proof: (continuous_sqrt.tendsto _).comp h
 
 中文:
-定理 Filter.Tendsto.sqrt
-  条件: {f : α -> 实数} {l : Filter α} {x : 实数} (h : Tendsto f l (𝓝 x))
+定理 滤子.收敛.sqrt
+  条件: {f : α -> 实数} {l : 滤子 α} {x : 实数} (h : 收敛 f l (𝓝 x))
   证明: (continuous_sqrt.tendsto _).comp h
 
 Depends on / 依赖: continuous_sqrt, continuous_sqrt.tendsto, tendsto
@@ -2312,9 +2312,9 @@ theorem Continuous.sqrt
   proof: continuous_sqrt.comp h
 
 中文:
-定理 Continuous.sqrt
-  条件: (h : Continuous f)
-  结论: Continuous fun x => √(f x)
+定理 连续.sqrt
+  条件: (h : 连续 f)
+  结论: 连续 fun x => √(f x)
   证明: continuous_sqrt.comp h
 
 Depends on / 依赖: continuous_sqrt, continuous_sqrt.comp
@@ -2336,7 +2336,7 @@ lemma sum_mul_le_sqrt_mul_sqrt
 
 中文:
 引理 sum_mul_le_sqrt_mul_sqrt
-  条件: (s : Finset ι) (f g : ι -> 实数>=0)
+  条件: (s : 有限集 ι) (f g : ι -> 实数>=0)
   证明: (le_sqrt_iff_sq_le.2 <| sum_mul_sq_le_sq_mul_sq _ _ _).trans_eq sqrt_mul _ _
 
 Depends on / 依赖: le_sqrt_iff_sq_le, sqrt_mul, sum_mul_sq_le_sq_mul_sq, trans_eq
@@ -2356,7 +2356,7 @@ lemma sum_sqrt_mul_sqrt_le
 
 中文:
 引理 sum_sqrt_mul_sqrt_le
-  条件: (s : Finset ι) (f g : ι -> 实数>=0)
+  条件: (s : 有限集 ι) (f g : ι -> 实数>=0)
   证明: by
   simpa [*] using sum_mul_le_sqrt_mul_sqrt _ (fun x => sqrt (f x)) (fun x => sqrt (g x))
 
@@ -2383,7 +2383,7 @@ lemma sum_mul_le_sqrt_mul_sqrt
 
 中文:
 引理 sum_mul_le_sqrt_mul_sqrt
-  条件: (s : Finset ι) (f g : ι -> 实数)
+  条件: (s : 有限集 ι) (f g : ι -> 实数)
   证明: (le_sqrt_of_sq_le <| sum_mul_sq_le_sq_mul_sq _ _ _).trans_eq sqrt_mul
     (sum_nonneg fun _ _ => by positivity) _
 
@@ -2405,7 +2405,7 @@ lemma sum_sqrt_mul_sqrt_le
 
 中文:
 引理 sum_sqrt_mul_sqrt_le
-  条件: (s : Finset ι) (hf : 对任意 i, 0 <= f i) (hg : 对任意 i, 0 <= g i)
+  条件: (s : 有限集 ι) (hf : 对任意 i, 0 <= f i) (hg : 对任意 i, 0 <= g i)
   证明: by
   simpa [*] using sum_mul_le_sqrt_mul_sqrt _ (fun x => √(f x)) (fun x => √(g x))
 

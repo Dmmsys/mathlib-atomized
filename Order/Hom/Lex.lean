@@ -52,7 +52,7 @@ definition sumLexComplLeft
 
 中文:
 定义 sumLexComplLeft
-  签名: : Sum.Lex (Subrel r (r · x)) (Subrel r (¬ r · x)) ≃r r where
+  签名: : 和.Lex (Subrel r (r · x)) (Subrel r (¬ r · x)) ≃r r where
   定义体: .sumCompl (r · x)
   map_rel_iff' := by
     rintro (⟨a, ha⟩ | ⟨a, ha⟩) (⟨b, hb⟩ | ⟨b, hb⟩)
@@ -89,7 +89,7 @@ theorem sumLexComplLeft_apply
 中文:
 定理 sumLexComplLeft_apply
   条件: (a)
-  结论: sumLexComplLeft r x a = Equiv.sumCompl (r · x) a
+  结论: sumLexComplLeft r x a = 等价.sumCompl (r · x) a
   证明: rfl
 
 @[simp]
@@ -110,7 +110,7 @@ theorem sumLexComplLeft_symm_apply
 中文:
 定理 sumLexComplLeft_symm_apply
   条件: (a)
-  结论: sumLexComplLeft r x a = Equiv.sumCompl (r · x) a
+  结论: sumLexComplLeft r x a = 等价.sumCompl (r · x) a
   证明: rfl
 -/
 theorem sumLexComplLeft_symm_apply (a) : sumLexComplLeft r x a = Equiv.sumCompl (r · x) a :=
@@ -135,7 +135,7 @@ definition sumLexComplRight
 
 中文:
 定义 sumLexComplRight
-  签名: : Sum.Lex (Subrel r (¬ r x ·)) (Subrel r (r x)) ≃r r where
+  签名: : 和.Lex (Subrel r (¬ r x ·)) (Subrel r (r x)) ≃r r where
   定义体: (Equiv.sumComm _ _).trans .sumCompl (r x)
   map_rel_iff' := by
     rintro (⟨a, ha⟩ | ⟨a, ha⟩) (⟨b, hb⟩ | ⟨b, hb⟩)
@@ -172,7 +172,7 @@ theorem sumLexComplRight_apply
 中文:
 定理 sumLexComplRight_apply
   条件: (a)
-  结论: sumLexComplRight r x a = Equiv.sumCompl (r x) a.swap
+  结论: sumLexComplRight r x a = 等价.sumCompl (r x) a.swap
   证明: rfl
 
 @[simp]
@@ -193,7 +193,7 @@ theorem sumLexComplRight_symm_apply
 中文:
 定理 sumLexComplRight_symm_apply
   条件: (a)
-  结论: sumLexComplRight r x a = Equiv.sumCompl (r x) a.swap
+  结论: sumLexComplRight r x a = 等价.sumCompl (r x) a.swap
   证明: rfl
 -/
 theorem sumLexComplRight_symm_apply (a) : sumLexComplRight r x a = Equiv.sumCompl (r x) a.swap :=
@@ -221,7 +221,7 @@ definition sumLexIioIci
 
 中文:
 定义 sumLexIioIci
-  签名: : Iio x oplusₗ Ici x ≃o α
+  签名: : 左无界右开区间 x oplusₗ 左闭右无界区间 x ≃o α
   定义体: (sumLexCongr (refl _) (setCongr (Ici x) {y | ¬ y < x} (by ext; simp))).trans
     ofRelIsoLT (RelIso.sumLexComplLeft (· < ·) x)
 
@@ -247,8 +247,8 @@ theorem sumLexIioIci_apply_inl
 
 中文:
 定理 sumLexIioIci_apply_inl
-  条件: (a : Iio x)
-  结论: sumLexIioIci x (toLex <| Sum.inl a) = a
+  条件: (a : 左无界右开区间 x)
+  结论: sumLexIioIci x (toLex <| 和.inl a) = a
   证明: rfl
 
 @[simp]
@@ -268,8 +268,8 @@ theorem sumLexIioIci_apply_inr
 
 中文:
 定理 sumLexIioIci_apply_inr
-  条件: (a : Ici x)
-  结论: sumLexIioIci x (toLex <| Sum.inr a) = a
+  条件: (a : 左闭右无界区间 x)
+  结论: sumLexIioIci x (toLex <| 和.inr a) = a
   证明: rfl
 
 Depends on / 依赖: f.toRingHom.comp, g.toRingHom, toRingHom
@@ -337,8 +337,8 @@ theorem sumLexIioIci_symm_apply_Iio
 
 中文:
 定理 sumLexIioIci_symm_apply_Iio
-  条件: (a : Iio x)
-  结论: (sumLexIioIci x).symm a = toLex (Sum.inl a)
+  条件: (a : 左无界右开区间 x)
+  结论: (sumLexIioIci x).symm a = toLex (和.inl a)
   证明: sumLexIioIci_symm_apply_of_lt a.2
 
 @[simp]
@@ -360,8 +360,8 @@ theorem sumLexIioIci_symm_apply_Ici
 
 中文:
 定理 sumLexIioIci_symm_apply_Ici
-  条件: (a : Ici x)
-  结论: (sumLexIioIci x).symm a = toLex (Sum.inr a)
+  条件: (a : 左闭右无界区间 x)
+  结论: (sumLexIioIci x).symm a = toLex (和.inr a)
   证明: sumLexIioIci_symm_apply_of_ge a.2
 
 Depends on / 依赖: sumLexIioIci_symm_apply_of_ge
@@ -383,7 +383,7 @@ definition sumLexIicIoi
 
 中文:
 定义 sumLexIicIoi
-  签名: : Iic x oplusₗ Ioi x ≃o α
+  签名: : 左无界右闭区间 x oplusₗ 左开右无界区间 x ≃o α
   定义体: (sumLexCongr (setCongr (Iic x) {y | ¬ x < y} (by ext; simp)) (refl _)).trans
     ofRelIsoLT (RelIso.sumLexComplRight (· < ·) x)
 
@@ -409,8 +409,8 @@ theorem sumLexIicIoi_apply_inl
 
 中文:
 定理 sumLexIicIoi_apply_inl
-  条件: (a : Iic x)
-  结论: sumLexIicIoi x (toLex <| Sum.inl a) = a
+  条件: (a : 左无界右闭区间 x)
+  结论: sumLexIicIoi x (toLex <| 和.inl a) = a
   证明: rfl
 
 @[simp]
@@ -430,8 +430,8 @@ theorem sumLexIicIoi_apply_inr
 
 中文:
 定理 sumLexIicIoi_apply_inr
-  条件: (a : Ioi x)
-  结论: sumLexIicIoi x (toLex <| Sum.inr a) = a
+  条件: (a : 左开右无界区间 x)
+  结论: sumLexIicIoi x (toLex <| 和.inr a) = a
   证明: rfl
 -/
 theorem sumLexIicIoi_apply_inr (a : Ioi x) : sumLexIicIoi x (toLex <| Sum.inr a) = a :=
@@ -497,8 +497,8 @@ theorem sumLexIicIoi_symm_apply_Iic
 
 中文:
 定理 sumLexIicIoi_symm_apply_Iic
-  条件: (a : Iic x)
-  结论: (sumLexIicIoi x).symm a = Sum.inl a
+  条件: (a : 左无界右闭区间 x)
+  结论: (sumLexIicIoi x).symm a = 和.inl a
   证明: sumLexIicIoi_symm_apply_of_le a.2
 
 @[simp]
@@ -520,8 +520,8 @@ theorem sumLexIicIoi_symm_apply_Ioi
 
 中文:
 定理 sumLexIicIoi_symm_apply_Ioi
-  条件: (a : Ioi x)
-  结论: (sumLexIicIoi x).symm a = Sum.inr a
+  条件: (a : 左开右无界区间 x)
+  结论: (sumLexIicIoi x).symm a = 和.inr a
   证明: sumLexIicIoi_symm_apply_of_lt a.2
 
 Depends on / 依赖: sumLexIicIoi_symm_apply_of_lt
@@ -552,7 +552,7 @@ definition prodUnique
 
 中文:
 定义 prodUnique
-  签名: [PartialOrder α] [Preorder β] [Unique β]
+  签名: [偏序 α] [预序 β] [唯一 β]
   定义体: (ofLex x).1
   invFun x := toLex (x, default)
   left_inv x := x.rec fun (a, b) => by simpa using Unique.default_eq b
@@ -580,7 +580,7 @@ theorem prodUnique_apply
 
 中文:
 定理 prodUnique_apply
-  条件: [PartialOrder α] [Preorder β] [Unique β] (x : α ×ₗ β)
+  条件: [偏序 α] [预序 β] [唯一 β] (x : α ×ₗ β)
   证明: rfl
 -/
 theorem prodUnique_apply [PartialOrder α] [Preorder β] [Unique β] (x : α ×ₗ β) :
@@ -603,7 +603,7 @@ definition uniqueProd
 
 中文:
 定义 uniqueProd
-  签名: [Preorder α] [Unique α] [LE β]
+  签名: [预序 α] [唯一 α] [LE β]
   定义体: (ofLex x).2
   invFun x := toLex (default, x)
   left_inv x := x.rec fun (a, b) => by simpa using Unique.default_eq a
@@ -633,7 +633,7 @@ theorem uniqueProd_apply
 
 中文:
 定理 uniqueProd_apply
-  条件: [Preorder α] [Unique α] [LE β] (x : α ×ₗ β)
+  条件: [预序 α] [唯一 α] [LE β] (x : α ×ₗ β)
   证明: rfl
 -/
 theorem uniqueProd_apply [Preorder α] [Unique α] [LE β] (x : α ×ₗ β) :
@@ -718,7 +718,7 @@ definition prodLexCongr
 
 中文:
 定义 prodLexCongr
-  签名: {α β γ δ : 类型} [Preorder α] [Preorder β]
+  签名: {α β γ δ : 类型} [预序 α] [预序 β]
   定义体: ofLex.trans ((Equiv.prodCongr ea eb).trans toLex)
   map_rel_iff' := by simp [Prod.Lex.le_iff]
 

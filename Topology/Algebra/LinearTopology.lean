@@ -99,10 +99,10 @@ class _root_.IsLinearTopology
     - hasBasis_submodule' : (𝓝 (0 : M)).HasBasis (fun N : Submodule R M => (N : Set M) in 𝓝 0) (fun N : Submodule R M => (N : Set M))
 
 中文:
-类 _root_.IsLinearTopology
+类 _root_.是线性拓扑
   参数: where
   公理与运算 (1 个):
-    - hasBasis_submodule' : (𝓝 (0 : M)).HasBasis (fun N : Submodule R M => (N : Set M) in 𝓝 0) (fun N : Submodule R M => (N : Set M))
+    - hasBasis_submodule' : (𝓝 (0 : M)).有基 (fun N : 子模 R M => (N : 集合 M) in 𝓝 0) (fun N : 子模 R M => (N : 集合 M))
 -/
 class _root_.IsLinearTopology where
   hasBasis_submodule' : (𝓝 (0 : M)).HasBasis
@@ -120,8 +120,8 @@ lemma hasBasis_submodule
 
 中文:
 引理 hasBasis_submodule
-  条件: [IsLinearTopology R M]
-  结论: (𝓝 (0 : M)).HasBasis
+  条件: [是线性拓扑 R M]
+  结论: (𝓝 (0 : M)).有基
   证明: IsLinearTopology.hasBasis_submodule'
 
 Depends on / 依赖: IsLinearTopology, IsLinearTopology.hasBasis_submodule, hasBasis_submodule
@@ -143,7 +143,7 @@ lemma hasBasis_open_submodule
 
 中文:
 引理 hasBasis_open_submodule
-  条件: [ContinuousAdd M] [IsLinearTopology R M]
+  条件: [连续加法 M] [是线性拓扑 R M]
   证明: .congr hasBasis_submodule R
     (fun N => ⟨N.toAddSubgroup.isOpen_of_mem_nhds, fun hN => hN.mem_nhds (zero_mem N)⟩)
     (fun _ _ => rfl)
@@ -175,7 +175,7 @@ lemma mk_of_hasBasis'
 
 中文:
 引理 mk_of_hasBasis'
-  结论: {ι : Sort*} {S : 类型} [SetLike S M]
+  结论: {ι : 类型层*} {S : 类型} [集合状 S M]
   证明: h.to_hasBasis
     (fun i hi => ⟨
       { carrier := s i,
@@ -213,7 +213,7 @@ lemma mk_of_hasBasis
 
 中文:
 引理 mk_of_hasBasis
-  结论: {ι : Sort*} {S : 类型} [SetLike S M]
+  结论: {ι : 类型层*} {S : 类型} [集合状 S M]
   证明: mk_of_hasBasis' R h fun _ => SMulMemClass.smul_mem
 
 Depends on / 依赖: SMulMemClass, SMulMemClass.smul_mem, mk_of_hasBasis, smul_mem
@@ -253,7 +253,7 @@ theorem _root_.isLinearTopology_iff_hasBasis_open_submodule
 
 中文:
 定理 _root_.isLinearTopology_iff_hasBasis_open_submodule
-  条件: [ContinuousAdd M]
+  条件: [连续加法 M]
   证明: ⟨fun _ => hasBasis_open_submodule R, fun h => .mk_of_hasBasis R h⟩
 
 Depends on / 依赖: hasBasis_open_submodule, mk_of_hasBasis
@@ -275,8 +275,8 @@ instance [DiscreteTopology
   mk_of_hasBasis R this
 
 中文:
-实例 [DiscreteTopology
-  签名: M] : IsLinearTopology R M
+实例 [离散拓扑
+  签名: M] : 是线性拓扑 R M
   定义体: have : HasBasis (𝓝 0 : Filter M) (fun _ => True) (fun (_ : Unit) => (⊥ : Submodule R M)) := by
     rw [nhds_discrete]
     exact hasBasis_pure _
@@ -306,7 +306,7 @@ lemma hasBasis_subbimodule
 
 中文:
 引理 hasBasis_subbimodule
-  条件: [IsLinearTopology R M] [IsLinearTopology R' M]
+  条件: [是线性拓扑 R M] [是线性拓扑 R' M]
   证明: by
   -- Start from a neighborhood `V`. It contains some open sub-`R`-module `I`.
 .to_hasBasis (fun I hI => ?_) refine IsLinearTopology.hasBasis_submodule R
@@ -380,7 +380,7 @@ lemma hasBasis_open_subbimodule
 
 中文:
 引理 hasBasis_open_subbimodule
-  条件: [ContinuousAdd M] [IsLinearTopology R M] [IsLinearTopology R' M]
+  条件: [连续加法 M] [是线性拓扑 R M] [是线性拓扑 R' M]
   证明: .congr hasBasis_subbimodule R R'
     (fun N => and_congr_left' ⟨N.isOpen_of_mem_nhds, fun hN => hN.mem_nhds (zero_mem N)⟩)
     (fun _ _ => rfl)
@@ -413,7 +413,7 @@ theorem tendsto_smul_zero
 
 中文:
 定理 tendsto_smul_zero
-  结论: [IsLinearTopology R M] {ι : 类型} {f : Filter ι}
+  结论: [是线性拓扑 R M] {ι : 类型} {f : 滤子 ι}
   证明: by
   rw [hasBasis_submodule R |>.tendsto_right_iff] at ha ⊢
   intro I hI
@@ -445,8 +445,8 @@ theorem _root_.IsCentralScalar.isLinearTopology_iff
       fun S r m hm => unop_smul_eq_smul r m ▸ S.smul_mem _ hm
 
 中文:
-定理 _root_.IsCentralScalar.isLinearTopology_iff
-  条件: [Module Rᵐᵒᵖ M] [IsCentralScalar R M]
+定理 _root_.中心标量.isLinearTopology_iff
+  条件: [模 Rᵐᵒᵖ M] [中心标量 R M]
   证明: by
   constructor <;> intro H
   · exact mk_of_hasBasis' R (IsLinearTopology.hasBasis_submodule Rᵐᵒᵖ)
@@ -480,7 +480,7 @@ theorem hasBasis_ideal
 
 中文:
 定理 hasBasis_ideal
-  条件: [IsLinearTopology R R]
+  条件: [是线性拓扑 R R]
   证明: hasBasis_submodule R
 
 Depends on / 依赖: hasBasis_submodule
@@ -499,7 +499,7 @@ theorem hasBasis_open_ideal
 
 中文:
 定理 hasBasis_open_ideal
-  条件: [ContinuousAdd R] [IsLinearTopology R R]
+  条件: [连续加法 R] [是线性拓扑 R R]
   证明: hasBasis_open_submodule R
 
 Depends on / 依赖: hasBasis_open_submodule
@@ -536,7 +536,7 @@ theorem _root_.isLinearTopology_iff_hasBasis_open_ideal
 
 中文:
 定理 _root_.isLinearTopology_iff_hasBasis_open_ideal
-  条件: [IsTopologicalRing R]
+  条件: [是拓扑环 R]
   证明: isLinearTopology_iff_hasBasis_open_submodule
 
 Depends on / 依赖: isLinearTopology_iff_hasBasis_open_submodule
@@ -556,7 +556,7 @@ theorem hasBasis_right_ideal
 
 中文:
 定理 hasBasis_right_ideal
-  条件: [IsLinearTopology Rᵐᵒᵖ R]
+  条件: [是线性拓扑 Rᵐᵒᵖ R]
   证明: hasBasis_submodule Rᵐᵒᵖ
 
 Depends on / 依赖: hasBasis_submodule
@@ -581,7 +581,7 @@ lemma hasBasis_twoSidedIdeal
 
 中文:
 引理 hasBasis_twoSidedIdeal
-  条件: [IsLinearTopology R R] [IsLinearTopology Rᵐᵒᵖ R]
+  条件: [是线性拓扑 R R] [是线性拓扑 Rᵐᵒᵖ R]
   证明: .to_hasBasis hasBasis_subbimodule R Rᵐᵒᵖ
     (fun I ⟨hI, hRI, hRI'⟩ => ⟨.mk' I (zero_mem _) add_mem neg_mem (hRI _ _) (hRI' _ _),
       by simpa using hI, by simp⟩)
@@ -611,7 +611,7 @@ lemma hasBasis_open_twoSidedIdeal
 
 中文:
 引理 hasBasis_open_twoSidedIdeal
-  结论: [ContinuousAdd R]
+  结论: [连续加法 R]
   证明: hasBasis_twoSidedIdeal.congr
     (fun I => ⟨I.asIdeal.toAddSubgroup.isOpen_of_mem_nhds, fun hI => hI.mem_nhds (zero_mem I)⟩)
     (fun _ _ => rfl)
@@ -663,7 +663,7 @@ theorem _root_.isLinearTopology_iff_hasBasis_open_twoSidedIdeal
 
 中文:
 定理 _root_.isLinearTopology_iff_hasBasis_open_twoSidedIdeal
-  条件: [ContinuousAdd R]
+  条件: [连续加法 R]
   证明: ⟨fun ⟨_, _⟩ => hasBasis_open_twoSidedIdeal, fun h =>
     ⟨.mk_of_hasBasis' R h fun I r x hx => I.mul_mem_left r x hx,
       .mk_of_hasBasis' Rᵐᵒᵖ h fun I r x hx => I.mul_mem_right x r.unop hx⟩⟩
@@ -687,7 +687,7 @@ theorem tendsto_mul_zero_of_left
 
 中文:
 定理 tendsto_mul_zero_of_left
-  结论: [IsLinearTopology Rᵐᵒᵖ R] {ι : 类型} {f : Filter ι}
+  结论: [是线性拓扑 Rᵐᵒᵖ R] {ι : 类型} {f : 滤子 ι}
   证明: tendsto_smul_zero (R := Rᵐᵒᵖ) _ _ ha
 
 Depends on / 依赖: tendsto_smul_zero
@@ -707,7 +707,7 @@ theorem tendsto_mul_zero_of_right
 
 中文:
 定理 tendsto_mul_zero_of_right
-  结论: [IsLinearTopology R R] {ι : 类型} {f : Filter ι}
+  结论: [是线性拓扑 R R] {ι : 类型} {f : 滤子 ι}
   证明: tendsto_smul_zero (R := R) _ _ hb
 
 Depends on / 依赖: tendsto_smul_zero

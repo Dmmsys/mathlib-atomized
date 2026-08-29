@@ -300,7 +300,7 @@ lemma pullback_equalizer
 
 中文:
 引理 pullback_equalizer
-  条件: {W : C} (h : W ⟶ X) [HasPullbacks C]
+  条件: {W : C} (h : W ⟶ X) [有Pullbacks C]
   证明: by
   refine skeletal _ ⟨iso_of_both_ways (homOfFactors ?_) (homOfFactors ?_)⟩
   · apply equalizerSubobject_factors
@@ -571,7 +571,7 @@ definition kernelSubobjectMap
 
 中文:
 定义 kernelSubobjectMap
-  签名: (sq : Arrow.mk f ⟶ Arrow.mk f')
+  签名: (sq : 箭头.mk f ⟶ 箭头.mk f')
   定义体: Subobject.factorThru _ ((kernelSubobject f).arrow ≫ sq.left)
     (kernelSubobject_factors _ _ (by simp))
 
@@ -600,7 +600,7 @@ theorem kernelSubobjectMap_arrow
 
 中文:
 定理 kernelSubobjectMap_arrow
-  条件: (sq : Arrow.mk f ⟶ Arrow.mk f')
+  条件: (sq : 箭头.mk f ⟶ 箭头.mk f')
   证明: by
   simp [kernelSubobjectMap]
 
@@ -622,7 +622,7 @@ theorem kernelSubobjectMap_id
 
 中文:
 定理 kernelSubobjectMap_id
-  结论: kernelSubobjectMap (𝟙 (Arrow.mk f)) = 𝟙 _
+  结论: kernelSubobjectMap (𝟙 (箭头.mk f)) = 𝟙 _
   证明: by cat_disch
 
 Depends on / 依赖: cat_disch
@@ -667,7 +667,7 @@ theorem kernel_map_comp_kernelSubobjectIso_inv
 
 中文:
 定理 kernel_map_comp_kernelSubobjectIso_inv
-  条件: (sq : Arrow.mk f ⟶ Arrow.mk f')
+  条件: (sq : 箭头.mk f ⟶ 箭头.mk f')
   证明: by cat_disch
 
 @[reassoc]
@@ -690,7 +690,7 @@ theorem kernelSubobjectIso_comp_kernel_map
 
 中文:
 定理 kernelSubobjectIso_comp_kernel_map
-  条件: (sq : Arrow.mk f ⟶ Arrow.mk f')
+  条件: (sq : 箭头.mk f ⟶ 箭头.mk f')
   证明: by
   simp [← Iso.comp_inv_eq, kernel_map_comp_kernelSubobjectIso_inv]
 
@@ -733,7 +733,7 @@ instance isIso_kernelSubobject_zero_arrow
 
 中文:
 实例 isIso_kernelSubobject_zero_arrow
-  签名: : IsIso (kernelSubobject (0 : X ⟶ Y)).arrow
+  签名: : 是同构 (kernelSubobject (0 : X ⟶ Y)).arrow
   定义体: (isIso_arrow_iff_eq_top _).mpr (by simp)
 
 Depends on / 依赖: isIso_arrow_iff_eq_top
@@ -773,7 +773,7 @@ definition kernelSubobjectIsoComp
 
 中文:
 定义 kernelSubobjectIsoComp
-  签名: {X' : C} (f : X' ⟶ X) [IsIso f] (g : X ⟶ Y) [HasKernel g]
+  签名: {X' : C} (f : X' ⟶ X) [是同构 f] (g : X ⟶ Y) [HasKernel g]
   定义体: kernelSubobjectIso _ ≪≫ kernelIsIsoComp f g ≪≫ (kernelSubobjectIso _).symm
 
 @[simp]
@@ -798,7 +798,7 @@ theorem kernelSubobjectIsoComp_hom_arrow
 
 中文:
 定理 kernelSubobjectIsoComp_hom_arrow
-  条件: {X' : C} (f : X' ⟶ X) [IsIso f] (g : X ⟶ Y) [HasKernel g]
+  条件: {X' : C} (f : X' ⟶ X) [是同构 f] (g : X ⟶ Y) [HasKernel g]
   证明: by
   simp [kernelSubobjectIsoComp]
 
@@ -823,7 +823,7 @@ theorem kernelSubobjectIsoComp_inv_arrow
 
 中文:
 定理 kernelSubobjectIsoComp_inv_arrow
-  条件: {X' : C} (f : X' ⟶ X) [IsIso f] (g : X ⟶ Y) [HasKernel g]
+  条件: {X' : C} (f : X' ⟶ X) [是同构 f] (g : X ⟶ Y) [HasKernel g]
   证明: by
   simp [kernelSubobjectIsoComp]
 
@@ -865,7 +865,7 @@ theorem kernelSubobject_comp_mono
 
 中文:
 定理 kernelSubobject_comp_mono
-  条件: (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [Mono h]
+  条件: (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [单态射 h]
   证明: le_antisymm (le_kernelSubobject _ _ ((cancel_mono h).mp (by simp))) (kernelSubobject_comp_le f h)
 
 Depends on / 依赖: cancel_mono, kernelSubobject_comp_le, le_antisymm, le_kernelSubobject
@@ -887,7 +887,7 @@ instance kernelSubobject_comp_mono_isIso
 
 中文:
 实例 kernelSubobject_comp_mono_isIso
-  签名: (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [Mono h]
+  签名: (f : X ⟶ Y) [HasKernel f] {Z : C} (h : Y ⟶ Z) [单态射 h]
   定义体: by
   rw [ofLE_mk_le_mk_of_comm (kernelCompMono f h).inv]
   · infer_instance
@@ -920,7 +920,7 @@ definition cokernelOrderHom
 
 中文:
 定义 cokernelOrderHom
-  签名: [HasCokernels C] (X : C)
+  签名: [有余kernels C] (X : C)
   定义体: Subobject.lift (fun _ f _ => Subobject.mk (cokernel.π f).op)
       (by
         rintro A B f g hf hg i rfl
@@ -970,7 +970,7 @@ definition kernelOrderHom
 
 中文:
 定义 kernelOrderHom
-  签名: [HasKernels C] (X : C)
+  签名: [有Kernels C] (X : C)
   定义体: Subobject.lift (fun _ f _ => Subobject.mk (kernel.ι f.unop))
       (by
         rintro A B f g hf hg i rfl
@@ -1037,7 +1037,7 @@ definition imageSubobjectIso
 
 中文:
 定义 imageSubobjectIso
-  签名: : (imageSubobject f : C) ≅ image f
+  签名: : (imageSubobject f : C) ≅ 像 f
   定义体: Subobject.underlyingIso (image.ι f)
 
 @[reassoc (attr := simp)]
@@ -1117,7 +1117,7 @@ instance [HasEqualizers
 
 中文:
 实例 [HasEqualizers
-  签名: C] : Epi (factorThruImageSubobject f)
+  签名: C] : 满态射 (factorThruImageSubobject f)
   定义体: by
   dsimp [factorThruImageSubobject]
   apply epi_comp
@@ -1161,7 +1161,7 @@ theorem imageSubobject_arrow_comp_eq_zero
 
 中文:
 定理 imageSubobject_arrow_comp_eq_zero
-  结论: [HasZeroMorphisms C] {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}
+  结论: [有ZeroMorphisms C] {X Y Z : C} {f : X ⟶ Y} {g : Y ⟶ Z}
   证明: zero_of_epi_comp (factorThruImageSubobject f) by simp [h]
 
 Depends on / 依赖: factorThruImageSubobject, zero_of_epi_comp
@@ -1255,7 +1255,7 @@ theorem imageSubobject_comp_le
 
 中文:
 定理 imageSubobject_comp_le
-  条件: {X' : C} (h : X' ⟶ X) (f : X ⟶ Y) [HasImage f] [HasImage (h ≫ f)]
+  条件: {X' : C} (h : X' ⟶ X) (f : X ⟶ Y) [有像 f] [有像 (h ≫ f)]
   证明: Subobject.mk_le_mk_of_comm (image.preComp h f) (by simp)
 
 Depends on / 依赖: Subobject, Subobject.mk_le_mk_of_comm, image.preComp, mk_le_mk_of_comm, preComp
@@ -1338,7 +1338,7 @@ instance imageSubobject_comp_le_epi_of_epi
 
 中文:
 实例 imageSubobject_comp_le_epi_of_epi
-  签名: {X' : C} (h : X' ⟶ X) [Epi h] (f : X ⟶ Y) [HasImage f]
+  签名: {X' : C} (h : X' ⟶ X) [满态射 h] (f : X ⟶ Y) [有像 f]
   定义体: by
   rw [ofLE_mk_le_mk_of_comm (image.preComp h f)]
   · infer_instance
@@ -1370,7 +1370,7 @@ definition imageSubobjectCompIso
 
 中文:
 定义 imageSubobjectCompIso
-  签名: (f : X ⟶ Y) [HasImage f] {Y' : C} (h : Y ⟶ Y') [IsIso h]
+  签名: (f : X ⟶ Y) [有像 f] {Y' : C} (h : Y ⟶ Y') [是同构 h]
   定义体: imageSubobjectIso _ ≪≫ (image.compIso _ _).symm ≪≫ (imageSubobjectIso _).symm
 
 @[reassoc (attr := simp)]
@@ -1395,7 +1395,7 @@ theorem imageSubobjectCompIso_hom_arrow
 
 中文:
 定理 imageSubobjectCompIso_hom_arrow
-  条件: (f : X ⟶ Y) [HasImage f] {Y' : C} (h : Y ⟶ Y') [IsIso h]
+  条件: (f : X ⟶ Y) [有像 f] {Y' : C} (h : Y ⟶ Y') [是同构 h]
   证明: by
   simp [imageSubobjectCompIso]
 
@@ -1420,7 +1420,7 @@ theorem imageSubobjectCompIso_inv_arrow
 
 中文:
 定理 imageSubobjectCompIso_inv_arrow
-  条件: (f : X ⟶ Y) [HasImage f] {Y' : C} (h : Y ⟶ Y') [IsIso h]
+  条件: (f : X ⟶ Y) [有像 f] {Y' : C} (h : Y ⟶ Y') [是同构 h]
   证明: by
   simp [imageSubobjectCompIso]
 
@@ -1444,7 +1444,7 @@ theorem imageSubobject_mono
 
 中文:
 定理 imageSubobject_mono
-  条件: (f : X ⟶ Y) [Mono f]
+  条件: (f : X ⟶ Y) [单态射 f]
   结论: imageSubobject f = Subobject.mk f
   证明: eq_of_comm (imageSubobjectIso f ≪≫ imageMonoIsoSource f ≪≫ (underlyingIso f).symm) (by simp)
 
@@ -1464,7 +1464,7 @@ theorem imageSubobject_iso_comp
 
 中文:
 定理 imageSubobject_iso_comp
-  结论: [HasEqualizers C] {X' : C} (h : X' ⟶ X) [IsIso h] (f : X ⟶ Y)
+  结论: [HasEqualizers C] {X' : C} (h : X' ⟶ X) [是同构 h] (f : X ⟶ Y)
   证明: le_antisymm (imageSubobject_comp_le h f)
     (Subobject.mk_le_mk_of_comm (inv (image.preComp h f)) (by simp))
 
@@ -1491,7 +1491,7 @@ theorem imageSubobject_le
 
 中文:
 定理 imageSubobject_le
-  结论: {A B : C} {X : Subobject B} (f : A ⟶ B) [HasImage f] (h : A ⟶ X)
+  结论: {A B : C} {X : Subobject B} (f : A ⟶ B) [有像 f] (h : A ⟶ X)
   证明: Subobject.le_of_comm
     ((imageSubobjectIso f).hom ≫
       image.lift
@@ -1522,7 +1522,7 @@ theorem imageSubobject_le_mk
 
 中文:
 定理 imageSubobject_le_mk
-  结论: {A B : C} {X : C} (g : X ⟶ B) [Mono g] (f : A ⟶ B) [HasImage f]
+  结论: {A B : C} {X : C} (g : X ⟶ B) [单态射 g] (f : A ⟶ B) [有像 f]
   证明: imageSubobject_le f (h ≫ (Subobject.underlyingIso g).inv) (by simp [w])
 
 Depends on / 依赖: Subobject, Subobject.underlyingIso, imageSubobject_le, underlyingIso
@@ -1543,7 +1543,7 @@ definition imageSubobjectMap
 
 中文:
 定义 imageSubobjectMap
-  签名: {W X Y Z : C} {f : W ⟶ X} [HasImage f] {g : Y ⟶ Z} [HasImage g]
+  签名: {W X Y Z : C} {f : W ⟶ X} [有像 f] {g : Y ⟶ Z} [有像 g]
   定义体: (imageSubobjectIso f).hom ≫ image.map sq ≫ (imageSubobjectIso g).inv
 
 #adaptation_note
@@ -1574,7 +1574,7 @@ theorem imageSubobjectMap_arrow
 
 中文:
 定理 imageSubobjectMap_arrow
-  结论: {W X Y Z : C} {f : W ⟶ X} [HasImage f] {g : Y ⟶ Z} [HasImage g]
+  结论: {W X Y Z : C} {f : W ⟶ X} [有像 f] {g : Y ⟶ Z} [有像 g]
   证明: by
   simp only [imageSubobjectMap, Category.assoc, Arrow.mk_left, Arrow.mk_right,
     Arrow.mk_hom, imageSubobject_arrow']
@@ -1604,7 +1604,7 @@ theorem image_map_comp_imageSubobjectIso_inv
 
 中文:
 定理 image_map_comp_imageSubobjectIso_inv
-  结论: {W X Y Z : C} {f : W ⟶ X} [HasImage f] {g : Y ⟶ Z}
+  结论: {W X Y Z : C} {f : W ⟶ X} [有像 f] {g : Y ⟶ Z}
   证明: by
   ext
   simpa using image.map_ι sq
@@ -1630,7 +1630,7 @@ theorem imageSubobjectIso_comp_image_map
 
 中文:
 定理 imageSubobjectIso_comp_image_map
-  结论: {W X Y Z : C} {f : W ⟶ X} [HasImage f] {g : Y ⟶ Z}
+  结论: {W X Y Z : C} {f : W ⟶ X} [有像 f] {g : Y ⟶ Z}
   证明: by
   simp [imageSubobjectMap]
 

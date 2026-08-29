@@ -59,7 +59,7 @@ instance :
 
 中文:
 实例 :
-  签名: (lim (J := J) (C := C)).LaxMonoidal
+  签名: (lim (J := J) (C := C)).松弛幺半群
   定义体: Functor.LaxMonoidal.ofTensorHom
     (ε :=
       limit.lift _

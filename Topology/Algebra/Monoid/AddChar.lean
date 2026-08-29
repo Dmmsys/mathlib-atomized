@@ -26,7 +26,7 @@ refine DFunLike.coe_injective hdr.equalizer hκ₁ hκ₂ (funext fun n => ?_)
 
 中文:
 引理 DenseRange.addChar_eq_of_eval_one_eq
-  结论: {A M : 类型} [TopologicalSpace A] [AddMonoidWithOne A]
+  结论: {A M : 类型} [拓扑空间 A] [加法带幺幺半群 A]
   证明: by
 refine DFunLike.coe_injective hdr.equalizer hκ₁ hκ₂ (funext fun n => ?_)
   simp only [Function.comp_apply, ← nsmul_one, h, AddChar.map_nsmul_eq_pow]

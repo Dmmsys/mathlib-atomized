@@ -32,7 +32,7 @@ theorem invOf_pos
 
 中文:
 定理 invOf_pos
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: 0 < ⅟a ↔ 0 < a
   证明: haveI : 0 < a * ⅟a := by simp only [mul_invOf_self, zero_lt_one]
   ⟨fun h => pos_of_mul_pos_left this h.le, fun h => pos_of_mul_pos_right this h.le⟩
@@ -59,7 +59,7 @@ theorem invOf_nonpos
 
 中文:
 定理 invOf_nonpos
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: ⅟a <= 0 ↔ a <= 0
   证明: by simp only [← not_lt, invOf_pos]
 
@@ -84,7 +84,7 @@ theorem invOf_nonneg
 
 中文:
 定理 invOf_nonneg
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: 0 <= ⅟a ↔ 0 <= a
   证明: haveI : 0 < a * ⅟a := by simp only [mul_invOf_self, zero_lt_one]
   ⟨fun h => (pos_of_mul_pos_left this h).le, fun h => (pos_of_mul_pos_right this h).le⟩
@@ -111,7 +111,7 @@ theorem invOf_lt_zero
 
 中文:
 定理 invOf_lt_zero
-  条件: [Invertible a]
+  条件: [可逆 a]
   结论: ⅟a < 0 ↔ a < 0
   证明: by simp only [← not_le, invOf_nonneg]
 
@@ -135,7 +135,7 @@ theorem invOf_le_one
 
 中文:
 定理 invOf_le_one
-  条件: [Invertible a] (h : 1 <= a)
+  条件: [可逆 a] (h : 1 <= a)
   结论: ⅟a <= 1
   证明: mul_invOf_self a ▸ le_mul_of_one_le_left (invOf_nonneg.2 <| zero_le_one.trans h) h
 
@@ -158,7 +158,7 @@ theorem invOf_lt_one
 
 中文:
 定理 invOf_lt_one
-  条件: [Invertible a] (h : 1 < a)
+  条件: [可逆 a] (h : 1 < a)
   结论: ⅟a < 1
   证明: mul_invOf_self a ▸ lt_mul_of_one_lt_left (invOf_pos.2 <| one_pos.trans h) h
 
@@ -178,7 +178,7 @@ theorem pos_invOf_of_invertible_cast
 
 中文:
 定理 pos_invOf_of_invertible_cast
-  条件: (n : 自然数) [Invertible (n : R)]
+  条件: (n : 自然数) [可逆 (n : R)]
   结论: 0 < ⅟(n : R)
   证明: invOf_pos.2 Nat.cast_pos.2 pos_of_invertible_cast (R := R) n
 

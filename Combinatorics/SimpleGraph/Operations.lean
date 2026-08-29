@@ -49,7 +49,7 @@ definition replaceVertex
 
 中文:
 定义 replaceVertex
-  签名: : SimpleGraph V where
+  签名: : 简单图 V where
   定义体: if v = t then if w = t then False else G.Adj s w
                       else if w = t then G.Adj v s else G.Adj v w
   symm.symm v w := by split_ifs <;> simp [adj_comm]
@@ -71,7 +71,7 @@ lemma not_adj_replaceVertex_same
 
 中文:
 引理 not_adj_replaceVertex_same
-  结论: ¬(G.replaceVertex s t).Adj s t
+  结论: ¬(G.replaceVertex s t).伴随 s t
   证明: by simp [replaceVertex]
 
 Depends on / 依赖: replaceVertex
@@ -168,7 +168,7 @@ theorem edgeSet_replaceVertex_of_not_adj
 
 中文:
 定理 edgeSet_replaceVertex_of_not_adj
-  条件: (hn : ¬G.Adj s t)
+  条件: (hn : ¬G.伴随 s t)
   结论: (G.replaceVertex s t).edgeSet =
   证明: by
   ext e; refine e.inductionOn ?_
@@ -197,7 +197,7 @@ theorem edgeSet_replaceVertex_of_adj
 
 中文:
 定理 edgeSet_replaceVertex_of_adj
-  条件: (ha : G.Adj s t)
+  条件: (ha : G.伴随 s t)
   结论: (G.replaceVertex s t).edgeSet =
   证明: by
   ext e; refine e.inductionOn ?_
@@ -224,7 +224,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableRel (G.replaceVertex s t).Adj
+  签名: DecidableRel (G.replaceVertex s t).伴随
   定义体: inferInstanceAs DecidableRel (mk _ _ _).Adj
 
 Depends on / 依赖: DecidableRel
@@ -245,7 +245,7 @@ theorem edgeFinset_replaceVertex_of_not_adj
 
 中文:
 定理 edgeFinset_replaceVertex_of_not_adj
-  条件: (hn : ¬G.Adj s t)
+  条件: (hn : ¬G.伴随 s t)
   结论: (G.replaceVertex s t).edgeFinset =
   证明: by
   apply Finset.coe_injective
@@ -274,7 +274,7 @@ theorem edgeFinset_replaceVertex_of_adj
 
 中文:
 定理 edgeFinset_replaceVertex_of_adj
-  条件: (ha : G.Adj s t)
+  条件: (ha : G.伴随 s t)
   结论: (G.replaceVertex s t).edgeFinset =
   证明: by
   apply Finset.coe_injective
@@ -341,7 +341,7 @@ theorem card_edgeFinset_replaceVertex_of_not_adj
 
 中文:
 定理 card_edgeFinset_replaceVertex_of_not_adj
-  条件: (hn : ¬G.Adj s t)
+  条件: (hn : ¬G.伴随 s t)
   证明: by
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
   rw [G.edgeFinset_replaceVertex_of_not_adj hn]; rw [card_union_of_disjoint G.disjoint_sdiff_neighborFinset_image]; rw [card_sdiff_of_subset inc]; rw [← Nat.sub_add_comm card_le_card inc]; rw 
@@ -371,7 +371,7 @@ theorem card_edgeFinset_replaceVertex_of_adj
 
 中文:
 定理 card_edgeFinset_replaceVertex_of_adj
-  条件: (ha : G.Adj s t)
+  条件: (ha : G.伴随 s t)
   证明: by
   have inc : G.incidenceFinset t subseteq G.edgeFinset := by simp [incidenceFinset, incidenceSet_subset]
   rw [G.edgeFinset_replaceVertex_of_adj ha]; rw [card_sdiff_of_subset (by simp [ha]),
@@ -407,7 +407,7 @@ definition edge
 
 中文:
 定义 edge
-  签名: : SimpleGraph V
+  签名: : 简单图 V
   定义体: fromEdgeSet {s(s, t)}
 
 @[grind =]
@@ -430,7 +430,7 @@ lemma edge_adj
 中文:
 引理 edge_adj
   条件: (v w : V)
-  结论: (edge s t).Adj v w ↔ (v = s ∧ w = t ∨ v = t ∧ w = s) ∧ v != w
+  结论: (edge s t).伴随 v w ↔ (v = s ∧ w = t ∨ v = t ∧ w = s) ∧ v != w
   证明: by
   rw [edge]; rw [fromEdgeSet_adj]; rw [Set.mem_singleton_iff]; rw [Sym2.eq_iff]
 
@@ -452,7 +452,7 @@ lemma adj_edge
 中文:
 引理 adj_edge
   条件: {v w : V}
-  结论: (edge s t).Adj v w ↔ s(s, t) = s(v, w) ∧ v != w
+  结论: (edge s t).伴随 v w ↔ s(s, t) = s(v, w) ∧ v != w
   证明: by
   grind
 -/
@@ -508,7 +508,7 @@ instance :
 
 中文:
 实例 :
-  签名: DecidableRel (edge s t).Adj
+  签名: DecidableRel (edge s t).伴随
   定义体: fun _ _ => by
   rw [edge_adj]; infer_instance
 
@@ -566,7 +566,7 @@ lemma lt_sup_edge
 
 中文:
 引理 lt_sup_edge
-  条件: (hne : s != t) (hn : ¬ G.Adj s t)
+  条件: (hne : s != t) (hn : ¬ G.伴随 s t)
   结论: G < G ⊔ edge s t
   证明: left_lt_sup.2 fun h => hn h (edge_adj ..).mpr ⟨Or.inl ⟨rfl, rfl⟩, hne⟩
 
@@ -593,7 +593,7 @@ lemma edge_le_iff
 中文:
 引理 edge_le_iff
   条件: {v w : V}
-  结论: edge v w <= G ↔ v = w ∨ G.Adj v w
+  结论: edge v w <= G ↔ v = w ∨ G.伴随 v w
   证明: by
   obtain h | h := eq_or_ne v w
   · simp [h]
@@ -682,7 +682,7 @@ lemma sup_edge_of_adj
 
 中文:
 引理 sup_edge_of_adj
-  条件: (h : G.Adj s t)
+  条件: (h : G.伴随 s t)
   结论: G ⊔ edge s t = G
   证明: by
   simp [h]
@@ -700,7 +700,7 @@ lemma deleteEdges_edge
 
 中文:
 引理 deleteEdges_edge
-  条件: {u v : V} {s : Set (Sym2 V)} (h : s(u, v) in s)
+  条件: {u v : V} {s : 集合 (Sym2 V)} (h : s(u, v) in s)
   证明: by simp [edge, Set.sdiff_subset_iff, h]
 -/
 @[simp] lemma deleteEdges_edge {u v : V} {s : Set (Sym2 V)} (h : s(u, v) in s) :
@@ -721,7 +721,7 @@ lemma disjoint_edge
 中文:
 引理 disjoint_edge
   条件: {u v : V}
-  结论: Disjoint G (edge u v) ↔ ¬G.Adj u v
+  结论: Disjoint G (edge u v) ↔ ¬G.伴随 u v
   证明: by
   rcases eq_or_ne u v with rfl | h
   · simp [edge_self_eq_bot]
@@ -746,7 +746,7 @@ lemma sdiff_edge
 
 中文:
 引理 sdiff_edge
-  条件: {u v : V} (h : ¬G.Adj u v)
+  条件: {u v : V} (h : ¬G.伴随 u v)
   结论: G \ edge u v = G
   证明: by
   simp [disjoint_edge, h]
@@ -794,7 +794,7 @@ theorem sSup_edge_eq
 
 中文:
 定理 sSup_edge_eq
-  结论: sSup { edge u v | (u : V) (v : V) (_ : G.Adj u v) } = G
+  结论: sSup { edge u v | (u : V) (v : V) (_ : G.伴随 u v) } = G
   证明: by
   refine .trans ?_ G.biSup_fromEdgeSet_singleton_eq
   simp_rw [edge, ← iSup_subtype'', iSup, Set.range, Subtype.exists, Sym2.exists, mem_edgeSet]
@@ -816,8 +816,8 @@ theorem Subgraph.spanningCoe_sup_edge_le
   grind [adj_congr_of_sym2]
 
 中文:
-定理 Subgraph.spanningCoe_sup_edge_le
-  条件: {H : Subgraph (G ⊔ edge s t)} (h : ¬ H.Adj s t)
+定理 子图.spanningCoe_sup_edge_le
+  条件: {H : 子图 (G ⊔ edge s t)} (h : ¬ H.伴随 s t)
   证明: by
   intro v w hvw
   grind [adj_congr_of_sym2]
@@ -842,7 +842,7 @@ instance :
 
 中文:
 实例 :
-  签名: Fintype (edge s t).edgeSet
+  签名: 有限类型 (edge s t).edgeSet
   定义体: by rw [edge]; infer_instance
 
 Depends on / 依赖: infer_instance
@@ -861,7 +861,7 @@ theorem edgeFinset_sup_edge
 
 中文:
 定理 edgeFinset_sup_edge
-  条件: [Fintype (edgeSet (G ⊔ edge s t))] (hn : ¬G.Adj s t) (h : s != t)
+  条件: [有限类型 (edgeSet (G ⊔ edge s t))] (hn : ¬G.伴随 s t) (h : s != t)
   证明: by
   classical
   simp [edgeFinset, edgeSet_edge_of_ne h]
@@ -884,7 +884,7 @@ theorem card_edgeFinset_sup_edge
 
 中文:
 定理 card_edgeFinset_sup_edge
-  条件: [Fintype (edgeSet (G ⊔ edge s t))] (hn : ¬G.Adj s t) (h : s != t)
+  条件: [有限类型 (edgeSet (G ⊔ edge s t))] (hn : ¬G.伴随 s t) (h : s != t)
   证明: by
   rw [G.edgeFinset_sup_edge hn h]; rw [card_cons]
 

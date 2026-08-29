@@ -114,7 +114,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [CompleteSpace 𝕜] [CompleteSpace A]
+  签名: [完备空间 𝕜] [完备空间 A]
   定义体: .mpr completeSpace_congr (uniformEquiv_unitization_addEquiv_prod 𝕜 A).isUniformEmbedding
     inferInstance
 
@@ -231,7 +231,7 @@ lemma unitization_isometry_inr
 
 中文:
 引理 unitization_isometry_inr
-  结论: Isometry fun x : A => toLp 1 (x : Unitization 𝕜 A)
+  结论: 等距 fun x : A => toLp 1 (x : Unitization 𝕜 A)
   证明: AddMonoidHomClass.isometry_of_norm
     ((WithLp.linearEquiv 1 𝕜 (Unitization 𝕜 A)).symm.comp <| Unitization.inrHom 𝕜 𝕜 A)
     unitization_norm_inr
@@ -257,7 +257,7 @@ instance instUnitizationRing
 
 中文:
 实例 instUnitizationRing
-  签名: : Ring (WithLp 1 (Unitization 𝕜 A))
+  签名: : 环 (WithLp 1 (Unitization 𝕜 A))
   定义体: (WithLp.equiv 1 (Unitization 𝕜 A)).ring
 
 @[simp]
@@ -321,7 +321,7 @@ definition unitizationAlgEquiv
 
 中文:
 定义 unitizationAlgEquiv
-  签名: (R : 类型) [CommSemiring R] [Algebra R 𝕜] [DistribMulAction R A]
+  签名: (R : 类型) [交换半环 R] [代数 R 𝕜] [分配乘法作用 R A]
   定义体: WithLp.linearEquiv _ R _
   map_mul' _ _ := rfl
   map_add' _ _ := rfl
@@ -355,7 +355,7 @@ instance instUnitizationNormedRing
 
 中文:
 实例 instUnitizationNormedRing
-  签名: : NormedRing (WithLp 1 (Unitization 𝕜 A)) where
+  签名: : 赋范环 (WithLp 1 (Unitization 𝕜 A)) where
   定义体: dist_eq_norm_neg_add
   norm_mul_le x y := by
     simp_rw [unitization_norm_def, add_mul, mul_add, unitization_mul, fst_mul, snd_mul]

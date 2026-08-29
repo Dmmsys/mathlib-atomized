@@ -168,7 +168,7 @@ local postfix:90 "/ₙ" => z
 
 中文:
 定义 z
-  签名: {n : 自然数} (k : Fin (n + 1))
+  签名: {n : 自然数} (k : 有限集 (n + 1))
   定义体: ⟨(k : Real) / n, by simp [div_nonneg, div_le_one_of_le₀, k.is_le]⟩
 
 local postfix:90 "/ₙ" => z
@@ -192,7 +192,7 @@ lemma z_zero
 中文:
 引理 z_zero
   条件: {n : 自然数}
-  结论: (0 : Fin (n + 1))/ₙ = 0
+  结论: (0 : 有限集 (n + 1))/ₙ = 0
   证明: by simp [z]
 -/
 @[simp] lemma z_zero {n : Nat} : (0 : Fin (n + 1))/ₙ = 0 := by simp [z]
@@ -235,7 +235,7 @@ theorem probability
 中文:
 定理 probability
   条件: (n : 自然数) (x : I)
-  结论: (∑ k : Fin (n + 1), bernstein n k x) = 1
+  结论: (∑ k : 有限集 (n + 1), bernstein n k x) = 1
   证明: by
   have := bernsteinPolynomial.sum Real n
   apply_fun fun p => Polynomial.aeval (x : Real) p at this
@@ -419,7 +419,7 @@ theorem bernsteinApproximation_uniform
 
 中文:
 定理 bernsteinApproximation_uniform
-  条件: [LocallyConvexSpace 实数 E] (f : C(I, E))
+  条件: [LocallyConvex空间 实数 E] (f : C(I, E))
   证明: by
   let : UniformSpace E := IsTopologicalAddGroup.rightUniformSpace E
   have : IsUniformAddGroup E := isUniformAddGroup_of_addCommGroup

@@ -102,7 +102,7 @@ theorem hasConstantSpeedOnWith_of_subsingleton
 
 中文:
 定理 hasConstantSpeedOnWith_of_subsingleton
-  结论: (f : 实数 -> E) {s : Set 实数} (hs : s.Subsingleton)
+  结论: (f : 实数 -> E) {s : 集合 实数} (hs : s.子单例)
   证明: by
   rintro x hx y hy; cases hs hx hy
   rw [eVariationOn.subsingleton f (fun y hy z hz => hs hy.1 hz.1 : (s inter Icc x x).Subsingleton)]
@@ -214,7 +214,7 @@ theorem HasConstantSpeedOnWith.union
 
 中文:
 定理 HasConstantSpeedOnWith.union
-  结论: {t : Set 实数} (hfs : HasConstantSpeedOnWith f s l)
+  结论: {t : 集合 实数} (hfs : HasConstantSpeedOnWith f s l)
   证明: by
   rw [hasConstantSpeedOnWith_iff_ordered] at hfs hft ⊢
   rintro z (zs | zt) y (ys | yt) zy
@@ -279,7 +279,7 @@ theorem HasConstantSpeedOnWith.Icc_Icc
 
 中文:
 定理 HasConstantSpeedOnWith.Icc_Icc
-  结论: {x y z : 实数} (hfs : HasConstantSpeedOnWith f (Icc x y) l)
+  结论: {x y z : 实数} (hfs : HasConstantSpeedOnWith f (闭区间 x y) l)
   证明: by
   rcases le_total x y with (xy | yx)
   · rcases le_total y z with (yz | zy)
@@ -405,7 +405,7 @@ definition HasUnitSpeedOn
 
 中文:
 定义 HasUnitSpeedOn
-  签名: (f : 实数 -> E) (s : Set 实数)
+  签名: (f : 实数 -> E) (s : 集合 实数)
   定义体: HasConstantSpeedOnWith f s 1
 
 Depends on / 依赖: HasConstantSpeedOnWith
@@ -423,7 +423,7 @@ theorem HasUnitSpeedOn.union
 
 中文:
 定理 HasUnitSpeedOn.union
-  结论: {t : Set 实数} {x : 实数} (hfs : HasUnitSpeedOn f s)
+  结论: {t : 集合 实数} {x : 实数} (hfs : HasUnitSpeedOn f s)
   证明: HasConstantSpeedOnWith.union hfs hft hs ht
 
 Depends on / 依赖: HasConstantSpeedOnWith, HasConstantSpeedOnWith.union
@@ -443,7 +443,7 @@ theorem HasUnitSpeedOn.Icc_Icc
 
 中文:
 定理 HasUnitSpeedOn.Icc_Icc
-  结论: {x y z : 实数} (hfs : HasUnitSpeedOn f (Icc x y))
+  结论: {x y z : 实数} (hfs : HasUnitSpeedOn f (闭区间 x y))
   证明: HasConstantSpeedOnWith.Icc_Icc hfs hft
 
 Depends on / 依赖: HasConstantSpeedOnWith, HasConstantSpeedOnWith.Icc_Icc, Icc_Icc
@@ -533,7 +533,7 @@ definition naturalParameterization
 
 中文:
 定义 naturalParameterization
-  签名: (f : α -> E) (s : Set α) (a : α)
+  签名: (f : α -> E) (s : 集合 α) (a : α)
   定义体: f ∘ @Function.invFunOn _ _ ⟨a⟩ (variationOnFromTo f s a) s
 
 Depends on / 依赖: Function, Function.invFunOn, invFunOn, variationOnFromTo
@@ -556,7 +556,7 @@ theorem edist_naturalParameterization_eq_zero
 
 中文:
 定理 edist_naturalParameterization_eq_zero
-  结论: {f : α -> E} {s : Set α}
+  结论: {f : α -> E} {s : 集合 α}
   证明: by
   dsimp only [naturalParameterization]
   have : Nonempty α := ⟨a⟩
@@ -591,7 +591,7 @@ theorem has_unit_speed_naturalParameterization
 
 中文:
 定理 has_unit_speed_naturalParameterization
-  结论: (f : α -> E) {s : Set α}
+  结论: (f : α -> E) {s : 集合 α}
   证明: by
   dsimp only [HasUnitSpeedOn]
   rw [hasConstantSpeedOnWith_iff_ordered]

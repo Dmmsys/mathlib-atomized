@@ -114,7 +114,7 @@ lemma toClosedBall_divisor
 
 中文:
 引理 toClosedBall_divisor
-  条件: {r : 实数} {f : Complex -> Complex} (h : Meromorphic f)
+  条件: {r : 实数} {f : 复形 -> 复形} (h : 亚纯 f)
   证明: by
   simp_all [locallyFinsuppWithin.toClosedBall]
 
@@ -136,7 +136,7 @@ lemma toClosedBall_support_subset_closedBall
 
 中文:
 引理 toClosedBall_support_subset_closedBall
-  结论: {E : 类型} [NormedAddCommGroup E] {r : 实数}
+  结论: {E : 类型} [赋范交换加群 E] {r : 实数}
   证明: by
   simp_all [toClosedBall, restrict_apply]
 
@@ -168,7 +168,7 @@ definition logCounting
 
 中文:
 定义 logCounting
-  签名: {E : 类型} [NormedAddCommGroup E] [命题erSpace E]
+  签名: {E : 类型} [赋范交换加群 E] [真空间 E]
   定义体: fun r => ∑ᶠ z, D.toClosedBall r z * log (r * ‖z‖⁻¹) + (D 0) * log r
   map_zero' := by aesop
   map_add' D₁ D₂ := by
@@ -214,7 +214,7 @@ lemma logCounting_eval_zero
 
 中文:
 引理 logCounting_eval_zero
-  结论: {E : 类型} [NormedAddCommGroup E] [命题erSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [真空间 E]
   证明: by
   simp [logCounting]
 -/
@@ -239,7 +239,7 @@ lemma logCounting_single_eq_log_sub_const
 
 中文:
 引理 logCounting_single_eq_log_sub_const
-  结论: [DecidableEq E] [命题erSpace E] {e : E} {r : 实数}
+  结论: [DecidableEq E] [真空间 E] {e : E} {r : 实数}
   证明: by
   simp only [logCounting, AddMonoidHom.coe_mk, ZeroHom.coe_mk]
   rw [finsum_eq_sum_of_support_subset _ (s := (finite_singleton e).toFinset)
@@ -277,7 +277,7 @@ lemma logCounting_even
 
 中文:
 引理 logCounting_even
-  条件: [命题erSpace E] (D : locallyFinsupp E 整数)
+  条件: [真空间 E] (D : locallyFinsupp E 整数)
   证明: fun r => by simp [logCounting, toClosedBall, restrict_apply]
 
 Depends on / 依赖: logCounting, restrict_apply, toClosedBall
@@ -301,7 +301,7 @@ lemma logCounting_mono
 
 中文:
 引理 logCounting_mono
-  条件: [命题erSpace E] {D : locallyFinsupp E 整数} (hD : 0 <= D)
+  条件: [真空间 E] {D : locallyFinsupp E 整数} (hD : 0 <= D)
   证明: by
   intro a ha b hb _
   simp_all only [mem_Ioi, logCounting, AddMonoidHom.coe_mk, ZeroHom.coe_mk]
@@ -364,7 +364,7 @@ lemma logCounting_strictMono
 
 中文:
 引理 logCounting_strictMono
-  结论: [DecidableEq E] [命题erSpace E] {D : locallyFinsupp E 整数} {e : E}
+  结论: [DecidableEq E] [真空间 E] {D : locallyFinsupp E 整数} {e : E}
   证明: by
   rw [(by aesop : logCounting D = logCounting (single e 1) + logCounting (D - single e 1))]
   apply StrictMonoOn.add_monotone
@@ -409,7 +409,7 @@ add_nonneg (finsum_nonneg this) mul_nonneg (by simpa using h 0) (log_nonneg hr)
 
 中文:
 定理 logCounting_nonneg
-  结论: {E : 类型} [NormedAddCommGroup E] [命题erSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [真空间 E]
   证明: by
   have h₃r : 0 < r := by linarith
   suffices forall z, 0 <= toClosedBall r f z * log (r * ‖z‖⁻¹) from
@@ -449,7 +449,7 @@ theorem logCounting_le
 
 中文:
 定理 logCounting_le
-  结论: {E : 类型} [NormedAddCommGroup E] [命题erSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [真空间 E]
   证明: by
   rw [← sub_nonneg] at h ⊢
   simpa using logCounting_nonneg h hr
@@ -473,7 +473,7 @@ theorem logCounting_eventuallyLE
 
 中文:
 定理 logCounting_eventuallyLE
-  结论: {E : 类型} [NormedAddCommGroup E] [命题erSpace E]
+  结论: {E : 类型} [赋范交换加群 E] [真空间 E]
   证明: by
   filter_upwards [eventually_ge_atTop 1] using fun _ hr => logCounting_le h hr
 
@@ -535,7 +535,7 @@ lemma _root_.locallyFinsuppWithin.logCounting_divisor
 
 中文:
 引理 _root_.locallyFinsuppWithin.logCounting_divisor
-  条件: {f : Complex -> Complex}
+  条件: {f : 复形 -> 复形}
   证明: by
   simp [logCounting, ← locallyFinsuppWithin.logCounting.map_sub]
 
@@ -819,7 +819,7 @@ theorem logCounting_congr_codiscrete
 
 中文:
 定理 logCounting_congr_codiscrete
-  条件: [NormedSpace Complex E] {f g : Complex -> E} (hfg : f =ᶠ[codiscrete Complex] g)
+  条件: [赋范空间 复形 E] {f g : 复形 -> E} (hfg : f =ᶠ[codiscrete 复形] g)
   证明: by
   ext a : 1
   by_cases h : a = ⊤
@@ -877,7 +877,7 @@ theorem logCounting_add_analyticOn
 
 中文:
 定理 logCounting_add_analyticOn
-  条件: (hf : Meromorphic f) (hg : AnalyticOn 𝕜 g univ)
+  条件: (hf : 亚纯 f) (hg : AnalyticOn 𝕜 g univ)
   证明: by
   simp only [logCounting, ↓reduceDIte]
   rw [hf.meromorphicOn.negPart_divisor_add_of_analyticNhdOn_right
@@ -902,7 +902,7 @@ theorem logCounting_add_const
 
 中文:
 定理 logCounting_add_const
-  条件: (hf : Meromorphic f)
+  条件: (hf : 亚纯 f)
   证明: by
   apply logCounting_add_analyticOn hf analyticOn_const
 -/
@@ -921,7 +921,7 @@ theorem logCounting_sub_const
 
 中文:
 定理 logCounting_sub_const
-  条件: (hf : Meromorphic f)
+  条件: (hf : 亚纯 f)
   证明: by
   simpa [sub_eq_add_neg] using! logCounting_add_const hf
 -/
@@ -947,7 +947,7 @@ theorem logCounting_add_top_le
 
 中文:
 定理 logCounting_add_top_le
-  结论: {f₁ f₂ : 𝕜 -> E} {r : 实数} (h₁f₁ : Meromorphic f₁)
+  结论: {f₁ f₂ : 𝕜 -> E} {r : 实数} (h₁f₁ : 亚纯 f₁)
   证明: by
   simp only [logCounting, ↓reduceDIte]
   rw [← locallyFinsuppWithin.logCounting.map_add]
@@ -975,7 +975,7 @@ theorem logCounting_add_top_eventuallyLE
 
 中文:
 定理 logCounting_add_top_eventuallyLE
-  结论: {f₁ f₂ : 𝕜 -> E} (h₁f₁ : Meromorphic f₁)
+  结论: {f₁ f₂ : 𝕜 -> E} (h₁f₁ : 亚纯 f₁)
   证明: by
   filter_upwards [eventually_ge_atTop 1] using fun _ hr => logCounting_add_top_le h₁f₁ h₁f₂ hr
 
@@ -1005,7 +1005,7 @@ theorem logCounting_sum_top_le
 
 中文:
 定理 logCounting_sum_top_le
-  结论: {α : 类型} (s : Finset α) (f : α -> 𝕜 -> E) {r : 实数}
+  结论: {α : 类型} (s : 有限集 α) (f : α -> 𝕜 -> E) {r : 实数}
   证明: by
   classical
   induction s using Finset.induction with
@@ -1046,7 +1046,7 @@ theorem logCounting_sum_top_eventuallyLE
 
 中文:
 定理 logCounting_sum_top_eventuallyLE
-  结论: {α : 类型} (s : Finset α) (f : α -> 𝕜 -> E)
+  结论: {α : 类型} (s : 有限集 α) (f : α -> 𝕜 -> E)
   证明: by
   filter_upwards [eventually_ge_atTop 1] using fun _ hr => logCounting_sum_top_le s f h₁f hr
 
@@ -1184,7 +1184,7 @@ theorem logCounting_pow_zero
 
 中文:
 定理 logCounting_pow_zero
-  条件: {f : 𝕜 -> 𝕜} {n : 自然数} (hf : Meromorphic f)
+  条件: {f : 𝕜 -> 𝕜} {n : 自然数} (hf : 亚纯 f)
   证明: by
   simp [logCounting, divisor_fun_pow hf.meromorphicOn n]
 -/
@@ -1203,7 +1203,7 @@ theorem logCounting_pow_top
 
 中文:
 定理 logCounting_pow_top
-  条件: {f : 𝕜 -> 𝕜} {n : 自然数} (hf : Meromorphic f)
+  条件: {f : 𝕜 -> 𝕜} {n : 自然数} (hf : 亚纯 f)
   证明: by
   simp [logCounting, divisor_pow hf.meromorphicOn n]
 -/
@@ -1236,7 +1236,7 @@ theorem Function.locallyFinsuppWithin.logCounting_divisor_eq_circleAverage_sub_c
     all_goals aesop
 
 中文:
-定理 Function.locallyFinsuppWithin.logCounting_divisor_eq_circleAverage_sub_const
+定理 函数.locallyFinsuppWithin.logCounting_divisor_eq_circleAverage_sub_const
   结论: {R : 实数}
   证明: by
   have h₁f : MeromorphicOn f (closedBall 0 |R|) := by tauto

@@ -111,7 +111,7 @@ structure CalcParams
   参数: extends SelectInsertParams
   继承: SelectInsertParams
   公理与运算 (2 个):
-    - isFirst : 布尔
+    - isFirst : 布尔值
     - indent : 自然数
 -/
 structure CalcParams extends SelectInsertParams where
@@ -138,7 +138,7 @@ definition suggestSteps
 
 中文:
 定义 suggestSteps
-  签名: (pos : Array Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams)
+  签名: (pos : 数组 Lean.SubExpr.GoalsLocation) (goalType : Expr) (params : CalcParams)
   定义体: do
   let subexprPos := getGoalLocations pos
   let some (rel, lhs, rhs) ← Lean.Elab.Term.getCalcRelation? goalType |

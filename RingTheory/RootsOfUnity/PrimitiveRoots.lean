@@ -71,7 +71,7 @@ structure IsPrimitiveRoot
     - dvd_of_pow_eq_one : forall l : Nat, ζ ^ l = 1 -> k ∣ l
 
 中文:
-结构 IsPrimitiveRoot
+结构 是PrimitiveRoot
   参数: (ζ : M) (k : 自然数)
   公理与运算 (2 个):
     - pow_eq_one : ζ ^ k = 1
@@ -92,8 +92,8 @@ definition IsPrimitiveRoot.toRootsOfUnity
   body: rootsOfUnity.mkOfPowEq μ h.pow_eq_one
 
 中文:
-定义 IsPrimitiveRoot.toRootsOfUnity
-  签名: {μ : M} {n : 自然数} [NeZero n] (h : IsPrimitiveRoot μ n)
+定义 是PrimitiveRoot.toRootsOfUnity
+  签名: {μ : M} {n : 自然数} [NeZero n] (h : 是PrimitiveRoot μ n)
   定义体: rootsOfUnity.mkOfPowEq μ h.pow_eq_one
 
 Depends on / 依赖: h.pow_eq_one, mkOfPowEq, pow_eq_one, rootsOfUnity, rootsOfUnity.mkOfPowEq
@@ -117,7 +117,7 @@ definition primitiveRoots
 
 中文:
 定义 primitiveRoots
-  签名: (k : 自然数) (R : 类型) [CommRing R] [IsDomain R]
+  签名: (k : 自然数) (R : 类型) [交换环 R] [是整环 R]
   定义体: {ζ in (nthRoots k (1 : R)).toFinset | IsPrimitiveRoot ζ k}
 
 Depends on / 依赖: IsPrimitiveRoot, nthRoots, toFinset
@@ -146,7 +146,7 @@ theorem mem_primitiveRoots
 中文:
 定理 mem_primitiveRoots
   条件: {ζ : R} (h0 : 0 < k)
-  结论: ζ in primitiveRoots k R ↔ IsPrimitiveRoot ζ k
+  结论: ζ in primitiveRoots k R ↔ 是PrimitiveRoot ζ k
   证明: by
   classical
   rw [primitiveRoots]; rw [mem_filter]; rw [Multiset.mem_toFinset]; rw [mem_nthRoots h0]; rw [and_iff_right_iff_imp]
@@ -256,8 +256,8 @@ theorem of_subsingleton
 
 中文:
 定理 of_subsingleton
-  条件: [Subsingleton M] (x : M)
-  结论: IsPrimitiveRoot x 1
+  条件: [子单例 M] (x : M)
+  结论: 是PrimitiveRoot x 1
   证明: ⟨Subsingleton.elim _ _, fun _ _ => one_dvd _⟩
 
 Depends on / 依赖: Subsingleton, Subsingleton.elim, one_dvd
@@ -277,7 +277,7 @@ theorem pow_eq_one_iff_dvd
 
 中文:
 定理 pow_eq_one_iff_dvd
-  条件: (h : IsPrimitiveRoot ζ k) (l : 自然数)
+  条件: (h : 是PrimitiveRoot ζ k) (l : 自然数)
   结论: ζ ^ l = 1 ↔ k ∣ l
   证明: ⟨h.dvd_of_pow_eq_one l, by
     rintro ⟨i, rfl⟩; simp only [pow_mul, h.pow_eq_one, one_pow]⟩
@@ -299,8 +299,8 @@ theorem isUnit
 
 中文:
 定理 isUnit
-  条件: (h : IsPrimitiveRoot ζ k) (h0 : k != 0)
-  结论: IsUnit ζ
+  条件: (h : 是PrimitiveRoot ζ k) (h0 : k != 0)
+  结论: 是单位 ζ
   证明: .of_mul_eq_one (ζ ^ (k - 1)) by rw [← pow_succ', Nat.sub_one_add_one h0, h.pow_eq_one]
 
 Depends on / 依赖: Nat.sub_one_add_one, h.pow_eq_one, of_mul_eq_one, pow_eq_one, pow_succ, sub_one_add_one
@@ -319,7 +319,7 @@ theorem isOfFinOrder
 
 中文:
 定理 isOfFinOrder
-  条件: (h : IsPrimitiveRoot ζ k) (h0 : k != 0)
+  条件: (h : 是PrimitiveRoot ζ k) (h0 : k != 0)
   结论: IsOfFinOrder ζ
   证明: ⟨k, Nat.ne_zero_iff_zero_lt.mp h0, (isPeriodicPt_mul_iff_pow_eq_one _).mpr h.pow_eq_one⟩
 
@@ -339,7 +339,7 @@ theorem pow_ne_one_of_pos_of_lt
 
 中文:
 定理 pow_ne_one_of_pos_of_lt
-  条件: (h : IsPrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k)
+  条件: (h : 是PrimitiveRoot ζ k) (h0 : l != 0) (hl : l < k)
   结论: ζ ^ l != 1
   证明: mt (Nat.le_of_dvd (Nat.pos_iff_ne_zero.mpr h0) ∘ h.dvd_of_pow_eq_one _) not_le_of_gt hl
 
@@ -359,7 +359,7 @@ theorem ne_one
 
 中文:
 定理 ne_one
-  条件: (h : IsPrimitiveRoot ζ k) (hk : 1 < k)
+  条件: (h : 是PrimitiveRoot ζ k) (hk : 1 < k)
   结论: ζ != 1
   证明: h.pow_ne_one_of_pos_of_lt one_ne_zero hk ∘ (pow_one ζ).trans
 
@@ -386,7 +386,7 @@ theorem pow_inj
 
 中文:
 定理 pow_inj
-  条件: (h : IsPrimitiveRoot ζ k) ⦃i j
+  条件: (h : 是PrimitiveRoot ζ k) ⦃i j
   结论: 自然数⦄ (hi : i < k) (hj : j < k) (H : ζ ^ i = ζ ^ j) :
   证明: by
   wlog hij : i <= j generalizing i j
@@ -422,7 +422,7 @@ theorem one
 
 中文:
 定理 one
-  结论: IsPrimitiveRoot (1 : M) 1
+  结论: 是PrimitiveRoot (1 : M) 1
   证明: { pow_eq_one := pow_one _
     dvd_of_pow_eq_one := fun _ _ => one_dvd _ }
 
@@ -450,7 +450,7 @@ theorem one_right_iff
 
 中文:
 定理 one_right_iff
-  结论: IsPrimitiveRoot ζ 1 ↔ ζ = 1
+  结论: 是PrimitiveRoot ζ 1 ↔ ζ = 1
   证明: by
   constructor
   · intro h; rw [← pow_one ζ, h.pow_eq_one]
@@ -478,7 +478,7 @@ theorem one_left_iff
 
 中文:
 定理 one_left_iff
-  结论: IsPrimitiveRoot (1 : M) k ↔ k = 1
+  结论: 是PrimitiveRoot (1 : M) k ↔ k = 1
   证明: ⟨fun h => Nat.dvd_one.mp (h.dvd_of_pow_eq_one 1 (one_pow _)), fun e => e ▸ one⟩
 
 @[simp]
@@ -503,7 +503,7 @@ theorem coe_submonoidClass_iff
 
 中文:
 定理 coe_submonoidClass_iff
-  结论: {M B : 类型} [CommMonoid M] [SetLike B M] [SubmonoidClass B M]
+  结论: {M B : 类型} [交换幺半群 M] [集合状 B M] [子幺半群类 B M]
   证明: by
   simp_rw [iff_def]
   norm_cast
@@ -531,7 +531,7 @@ theorem coe_units_iff
 中文:
 定理 coe_units_iff
   条件: {ζ : Mˣ}
-  结论: IsPrimitiveRoot (ζ : M) k ↔ IsPrimitiveRoot ζ k
+  结论: 是PrimitiveRoot (ζ : M) k ↔ 是PrimitiveRoot ζ k
   证明: by
   simp only [iff_def, Units.ext_iff, Units.val_pow_eq_pow_val, Units.val_one]
 
@@ -550,7 +550,7 @@ lemma isUnit_unit
 
 中文:
 引理 isUnit_unit
-  条件: {ζ : M} {n} (hn) (hζ : IsPrimitiveRoot ζ n)
+  条件: {ζ : M} {n} (hn) (hζ : 是PrimitiveRoot ζ n)
   证明: coe_units_iff.mp hζ
 
 Depends on / 依赖: coe_units_iff, coe_units_iff.mp
@@ -568,7 +568,7 @@ lemma isUnit_unit'
 
 中文:
 引理 isUnit_unit'
-  条件: {ζ : G} {n} (hn) (hζ : IsPrimitiveRoot ζ n)
+  条件: {ζ : G} {n} (hn) (hζ : 是PrimitiveRoot ζ n)
   证明: coe_units_iff.mp hζ
 
 Depends on / 依赖: coe_units_iff, coe_units_iff.mp
@@ -594,7 +594,7 @@ theorem pow_of_coprime
 
 中文:
 定理 pow_of_coprime
-  条件: (h : IsPrimitiveRoot ζ k) (i : 自然数) (hi : i.Coprime k)
+  条件: (h : 是PrimitiveRoot ζ k) (i : 自然数) (hi : i.Coprime k)
   证明: by
   by_cases h0 : k = 0
   · subst k; simp_all only [pow_one, Nat.coprime_zero_right]
@@ -630,7 +630,7 @@ theorem pow_of_prime
 
 中文:
 定理 pow_of_prime
-  条件: (h : IsPrimitiveRoot ζ k) {p : 自然数} (hprime : 自然数.Prime p) (hdiv : ¬p ∣ k)
+  条件: (h : 是PrimitiveRoot ζ k) {p : 自然数} (hprime : 自然数.素 p) (hdiv : ¬p ∣ k)
   证明: h.pow_of_coprime p (hprime.coprime_iff_not_dvd.2 hdiv)
 
 Depends on / 依赖: coprime_iff_not_dvd, h.pow_of_coprime, hprime, hprime.coprime_iff_not_dvd, pow_of_coprime
@@ -657,7 +657,7 @@ theorem pow_iff_coprime
 
 中文:
 定理 pow_iff_coprime
-  条件: (h : IsPrimitiveRoot ζ k) (h0 : 0 < k) (i : 自然数)
+  条件: (h : 是PrimitiveRoot ζ k) (h0 : 0 < k) (i : 自然数)
   证明: by
   refine ⟨fun hi => ?_, h.pow_of_coprime i⟩
   obtain ⟨a, ha⟩ := i.gcd_dvd_left k
@@ -694,7 +694,7 @@ theorem orderOf
 中文:
 定理 orderOf
   条件: (ζ : M)
-  结论: IsPrimitiveRoot ζ (orderOf ζ)
+  结论: 是PrimitiveRoot ζ (orderOf ζ)
   证明: ⟨pow_orderOf_eq_one ζ, fun _ => orderOf_dvd_of_pow_eq_one⟩
 -/
 protected theorem orderOf (ζ : M) : IsPrimitiveRoot ζ (orderOf ζ) :=
@@ -711,7 +711,7 @@ theorem unique
 
 中文:
 定理 unique
-  条件: {ζ : M} (hk : IsPrimitiveRoot ζ k) (hl : IsPrimitiveRoot ζ l)
+  条件: {ζ : M} (hk : 是PrimitiveRoot ζ k) (hl : 是PrimitiveRoot ζ l)
   结论: k = l
   证明: Nat.dvd_antisymm (hk.2 _ hl.1) (hl.2 _ hk.1)
 
@@ -731,7 +731,7 @@ theorem eq_orderOf
 
 中文:
 定理 eq_orderOf
-  条件: (h : IsPrimitiveRoot ζ k)
+  条件: (h : 是PrimitiveRoot ζ k)
   结论: k = orderOf ζ
   证明: h.unique (IsPrimitiveRoot.orderOf ζ)
 
@@ -779,7 +779,7 @@ fun h hk => h.symm hk.unique IsPrimitiveRoot.orderOf ζ⟩
 
 中文:
 定理 not_iff
-  结论: ¬IsPrimitiveRoot ζ k ↔ orderOf ζ != k
+  结论: ¬是PrimitiveRoot ζ k ↔ orderOf ζ != k
   证明: ⟨fun h hk => h hk ▸ IsPrimitiveRoot.orderOf ζ,
 fun h hk => h.symm hk.unique IsPrimitiveRoot.orderOf ζ⟩
 -/
@@ -797,7 +797,7 @@ theorem iff_orderOf
 
 中文:
 定理 iff_orderOf
-  结论: IsPrimitiveRoot ζ k ↔ orderOf ζ = k
+  结论: 是PrimitiveRoot ζ k ↔ orderOf ζ = k
   证明: not_iff_not.mp IsPrimitiveRoot.not_iff
 -/
 protected theorem iff_orderOf : IsPrimitiveRoot ζ k ↔ orderOf ζ = k :=
@@ -818,7 +818,7 @@ theorem pow_mul_pow_lcm
 
 中文:
 定理 pow_mul_pow_lcm
-  结论: {ζ' : M} {k' : 自然数} (hζ : IsPrimitiveRoot ζ k) (hζ' : IsPrimitiveRoot ζ' k')
+  结论: {ζ' : M} {k' : 自然数} (hζ : 是PrimitiveRoot ζ k) (hζ' : 是PrimitiveRoot ζ' k')
   证明: by
   convert! IsPrimitiveRoot.orderOf _
   convert!
@@ -852,7 +852,7 @@ theorem pow_of_dvd
 
 中文:
 定理 pow_of_dvd
-  条件: (h : IsPrimitiveRoot ζ k) {p : 自然数} (hp : p != 0) (hdiv : p ∣ k)
+  条件: (h : 是PrimitiveRoot ζ k) {p : 自然数} (hp : p != 0) (hdiv : p ∣ k)
   证明: by
   rw [h.eq_orderOf] at hdiv ⊢
   rw [← orderOf_pow_of_dvd hp hdiv]
@@ -875,8 +875,8 @@ theorem exists_pow_eq_pow_two_mul
   proof: _root_.exists_pow_eq_pow_two_mul h.pow_eq_one hk n
 
 中文:
-定理 exists_pow_eq_pow_two_mul
-  条件: (h : IsPrimitiveRoot ζ k) (hk : Odd k) (n : 自然数)
+定理 存在_pow_eq_pow_two_mul
+  条件: (h : 是PrimitiveRoot ζ k) (hk : Odd k) (n : 自然数)
   证明: _root_.exists_pow_eq_pow_two_mul h.pow_eq_one hk n
 
 Depends on / 依赖: _root_, _root_.exists_pow_eq_pow_two_mul, exists_pow_eq_pow_two_mul, h.pow_eq_one, pow_eq_one
@@ -895,7 +895,7 @@ theorem mem_rootsOfUnity
 
 中文:
 定理 mem_rootsOfUnity
-  条件: {ζ : Mˣ} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : Mˣ} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: h.pow_eq_one
 -/
 protected theorem mem_rootsOfUnity {ζ : Mˣ} {n : Nat} (h : IsPrimitiveRoot ζ n) :
@@ -916,7 +916,7 @@ exact Nat.dvd_of_mul_dvd_mul_left (Nat.pos_of_mul_pos_right hn) h.dvd_of_pow_eq_
 
 中文:
 定理 pow
-  条件: {n : 自然数} {a b : 自然数} (hn : 0 < n) (h : IsPrimitiveRoot ζ n) (hprod : n = a * b)
+  条件: {n : 自然数} {a b : 自然数} (hn : 0 < n) (h : 是PrimitiveRoot ζ n) (hprod : n = a * b)
   证明: by
   subst n
   simp only [iff_def, ← pow_mul, h.pow_eq_one, true_and]
@@ -945,7 +945,7 @@ lemma injOn_pow
 
 中文:
 引理 injOn_pow
-  条件: {n : 自然数} {ζ : M} (hζ : IsPrimitiveRoot ζ n)
+  条件: {n : 自然数} {ζ : M} (hζ : 是PrimitiveRoot ζ n)
   证明: by
   intro i hi j hj e
   rw [Finset.coe_range]; rw [Set.mem_Iio] at hi hj
@@ -970,7 +970,7 @@ lemma exists_pos
     exact ⟨k, Nat.pos_iff_ne_zero.mpr hk, hζ⟩, .orderOf _⟩
 
 中文:
-引理 exists_pos
+引理 存在_pos
   条件: {k : 自然数} (hζ : ζ ^ k = 1) (hk : k != 0)
   证明: ⟨orderOf ζ, by
     rw [gt_iff_lt]; rw [orderOf_pos_iff]; rw [isOfFinOrder_iff_pow_eq_one]
@@ -993,8 +993,8 @@ lemma existsUnique
   proof: ⟨_, .orderOf _, fun _ hl => unique hl (.orderOf _)⟩
 
 中文:
-引理 existsUnique
-  结论: 存在! k, IsPrimitiveRoot ζ k
+引理 存在Unique
+  结论: 存在! k, 是PrimitiveRoot ζ k
   证明: ⟨_, .orderOf _, fun _ hl => unique hl (.orderOf _)⟩
 
 Depends on / 依赖: orderOf, unique
@@ -1049,7 +1049,7 @@ theorem map_of_injective
 
 中文:
 定理 map_of_injective
-  条件: [MonoidHomClass F M N] (h : IsPrimitiveRoot ζ k) (hf : Injective f)
+  条件: [幺半群态射类 F M N] (h : 是PrimitiveRoot ζ k) (hf : 单射 f)
   证明: by rw [← map_pow, h.pow_eq_one, map_one]
   dvd_of_pow_eq_one := by
     rw [h.eq_orderOf]
@@ -1084,7 +1084,7 @@ theorem of_map_of_injective
 
 中文:
 定理 of_map_of_injective
-  结论: [MonoidHomClass F M N] (h : IsPrimitiveRoot (f ζ) k)
+  结论: [幺半群态射类 F M N] (h : 是PrimitiveRoot (f ζ) k)
   证明: by apply_fun f; rw [map_pow, map_one, h.pow_eq_one]
   dvd_of_pow_eq_one := by
     rw [h.eq_orderOf]
@@ -1115,7 +1115,7 @@ theorem map_iff_of_injective
 
 中文:
 定理 map_iff_of_injective
-  条件: [MonoidHomClass F M N] (hf : Injective f)
+  条件: [幺半群态射类 F M N] (hf : 单射 f)
   证明: ⟨fun h => h.of_map_of_injective hf, fun h => h.map_of_injective hf⟩
 
 Depends on / 依赖: h.map_of_injective, h.of_map_of_injective, map_of_injective, of_map_of_injective
@@ -1143,8 +1143,8 @@ theorem zero
 
 中文:
 定理 zero
-  条件: [Nontrivial M₀]
-  结论: IsPrimitiveRoot (0 : M₀) 0
+  条件: [非平凡 M₀]
+  结论: 是PrimitiveRoot (0 : M₀) 0
   证明: ⟨pow_zero 0, fun l hl => by simpa [zero_pow_eq] using hl⟩
 
 Depends on / 依赖: pow_zero, zero_pow_eq
@@ -1163,7 +1163,7 @@ theorem ne_zero
 
 中文:
 定理 ne_zero
-  条件: [Nontrivial M₀] {ζ : M₀} (h : IsPrimitiveRoot ζ k)
+  条件: [非平凡 M₀] {ζ : M₀} (h : 是PrimitiveRoot ζ k)
   结论: k != 0 -> ζ != 0
   证明: mt fun hn => h.unique (hn.symm ▸ IsPrimitiveRoot.zero)
 -/
@@ -1187,7 +1187,7 @@ lemma injOn_pow_mul
 
 中文:
 引理 injOn_pow_mul
-  条件: {n : 自然数} {ζ : M₀} (hζ : IsPrimitiveRoot ζ n) {α : M₀} (hα : α != 0)
+  条件: {n : 自然数} {ζ : M₀} (hζ : 是PrimitiveRoot ζ n) {α : M₀} (hα : α != 0)
   证明: fun i hi j hj e =>
     hζ.injOn_pow hi hj (by simpa [mul_eq_mul_right_iff, or_iff_left hα] using e)
 
@@ -1216,7 +1216,7 @@ theorem zpow_eq_one
 
 中文:
 定理 zpow_eq_one
-  条件: (h : IsPrimitiveRoot ζ k)
+  条件: (h : 是PrimitiveRoot ζ k)
   结论: ζ ^ (k : 整数) = 1
   证明: by
   exact_mod_cast h.pow_eq_one
@@ -1244,7 +1244,7 @@ theorem zpow_eq_one_iff_dvd
 
 中文:
 定理 zpow_eq_one_iff_dvd
-  条件: (h : IsPrimitiveRoot ζ k) (l : 整数)
+  条件: (h : 是PrimitiveRoot ζ k) (l : 整数)
   结论: ζ ^ l = 1 ↔ (k : 整数) ∣ l
   证明: by
   by_cases h0 : 0 <= l
@@ -1283,8 +1283,8 @@ theorem inv
 
 中文:
 定理 inv
-  条件: (h : IsPrimitiveRoot ζ k)
-  结论: IsPrimitiveRoot ζ⁻¹ k
+  条件: (h : 是PrimitiveRoot ζ k)
+  结论: 是PrimitiveRoot ζ⁻¹ k
   证明: { pow_eq_one := by simp only [h.pow_eq_one, inv_one, inv_pow]
     dvd_of_pow_eq_one := by
       intro l hl
@@ -1313,7 +1313,7 @@ theorem inv_iff
 
 中文:
 定理 inv_iff
-  结论: IsPrimitiveRoot ζ⁻¹ k ↔ IsPrimitiveRoot ζ k
+  结论: 是PrimitiveRoot ζ⁻¹ k ↔ 是PrimitiveRoot ζ k
   证明: ⟨fun h => inv_inv ζ ▸ inv h, fun h => inv h⟩
 
 Depends on / 依赖: inv_inv
@@ -1339,7 +1339,7 @@ theorem zpow_of_gcd_eq_one
 
 中文:
 定理 zpow_of_gcd_eq_one
-  条件: (h : IsPrimitiveRoot ζ k) (i : 整数) (hi : i.gcd k = 1)
+  条件: (h : 是PrimitiveRoot ζ k) (i : 整数) (hi : i.最大公约数 k = 1)
   证明: by
   by_cases h0 : 0 <= i
   · lift i to Nat using h0
@@ -1380,7 +1380,7 @@ theorem sub_one_ne_zero
 
 中文:
 定理 sub_one_ne_zero
-  条件: (hn : 1 < n) (hζ : IsPrimitiveRoot ζ n)
+  条件: (hn : 1 < n) (hζ : 是PrimitiveRoot ζ n)
   结论: ζ - 1 != 0
   证明: sub_ne_zero.mpr hζ.ne_one hn
 
@@ -1401,7 +1401,7 @@ theorem isRoot
 
 中文:
 定理 isRoot
-  条件: (hζ : IsPrimitiveRoot ζ n)
+  条件: (hζ : 是PrimitiveRoot ζ n)
   结论: (X ^ n - 1 : R[X]).IsRoot ζ
   证明: by
   simp [hζ.pow_eq_one]
@@ -1424,7 +1424,7 @@ theorem isRoot_of_dvd
 
 中文:
 定理 isRoot_of_dvd
-  条件: (hζ : IsPrimitiveRoot ζ n)
+  条件: (hζ : 是PrimitiveRoot ζ n)
   结论: n ∣ n' -> (X ^ n' - 1 : R[X]).IsRoot ζ
   证明: by
   rintro ⟨k, rfl⟩
@@ -1487,7 +1487,7 @@ theorem neZero'
 
 中文:
 定理 neZero'
-  条件: {n : 自然数} [NeZero n] (hζ : IsPrimitiveRoot ζ n)
+  条件: {n : 自然数} [NeZero n] (hζ : 是PrimitiveRoot ζ n)
   结论: NeZero ((n : 自然数) : R)
   证明: by
   let p := ringChar R
@@ -1532,7 +1532,7 @@ theorem eq_neg_one_of_two_right
 
 中文:
 定理 eq_neg_one_of_two_right
-  条件: [NoZeroDivisors R] {ζ : R} (h : IsPrimitiveRoot ζ 2)
+  条件: [无零因子 R] {ζ : R} (h : 是PrimitiveRoot ζ 2)
   结论: ζ = -1
   证明: (sq_eq_one_iff.mp h.pow_eq_one).resolve_left ne_one h one_lt_two
 
@@ -1553,7 +1553,7 @@ theorem neg_one
 
 中文:
 定理 neg_one
-  条件: (p : 自然数) [Nontrivial R] [h : CharP R p] (hp : p != 2)
+  条件: (p : 自然数) [非平凡 R] [h : 特征p R p] (hp : p != 2)
   证明: by
   convert! IsPrimitiveRoot.orderOf (-1 : R)
   rw [orderOf_neg_one]; rw [if_neg <| by rwa [ringChar.eq_iff.mpr h]]
@@ -1577,7 +1577,7 @@ theorem geom_sum_eq_zero
 
 中文:
 定理 geom_sum_eq_zero
-  条件: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
+  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
   证明: by
   refine eq_zero_of_ne_zero_of_mul_left_eq_zero (sub_ne_zero_of_ne (hζ.ne_one hk).symm) ?_
   rw [mul_neg_geom_sum]; rw [hζ.pow_eq_one]; rw [sub_self]
@@ -1600,7 +1600,7 @@ theorem isRoot_geom_sum
 
 中文:
 定理 isRoot_geom_sum
-  条件: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
+  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
   证明: by
   simp [geom_sum_eq_zero hζ hk]
 
@@ -1621,7 +1621,7 @@ theorem pow_sub_one_eq
 
 中文:
 定理 pow_sub_one_eq
-  条件: [IsDomain R] {ζ : R} (hζ : IsPrimitiveRoot ζ k) (hk : 1 < k)
+  条件: [是整环 R] {ζ : R} (hζ : 是PrimitiveRoot ζ k) (hk : 1 < k)
   证明: by
   rw [eq_neg_iff_add_eq_zero]; rw [add_comm]; rw [← sum_range_succ]; rw [← Nat.succ_eq_add_one]; rw [Nat.succ_pred_eq_of_pos (pos_of_gt hk)]; rw [hζ.geom_sum_eq_zero hk]
 
@@ -1646,7 +1646,7 @@ definition zmodEquivZPowers
 
 中文:
 定义 zmodEquivZPowers
-  签名: (h : IsPrimitiveRoot ζ k)
+  签名: (h : 是PrimitiveRoot ζ k)
   定义体: AddEquiv.ofBijective
     (AddMonoidHom.liftOfRightInverse (Int.castAddHom <| ZMod k) _ ZMod.intCast_rightInverse
       ⟨{ toFun := fun i => Additive.ofMul (⟨_, i, rfl⟩ : Subgroup.zpowers ζ)
@@ -1851,7 +1851,7 @@ theorem zpowers_eq
 
 中文:
 定理 zpowers_eq
-  条件: {k : 自然数} [NeZero k] {ζ : Rˣ} (h : IsPrimitiveRoot ζ k)
+  条件: {k : 自然数} [NeZero k] {ζ : Rˣ} (h : 是PrimitiveRoot ζ k)
   证明: by
   apply Subgroup.eq_of_le_of_card_ge (Subgroup.zpowers_le_of_mem h.pow_eq_one)
   calc
@@ -1882,7 +1882,7 @@ lemma map_rootsOfUnity
 
 中文:
 引理 map_rootsOfUnity
-  结论: {S F} [CommRing S] [IsDomain S] [FunLike F R S] [MonoidHomClass F R S]
+  结论: {S F} [交换环 S] [是整环 S] [函数状 F R S] [幺半群态射类 F R S]
   证明: by
   let : CommMonoid Sˣ := inferInstance
   replace hζ := hζ.isUnit_unit NeZero.out
@@ -1914,7 +1914,7 @@ definition _root_.rootsOfUnityEquivOfPrimitiveRoots
 
 中文:
 定义 _root_.rootsOfUnityEquivOfPrimitiveRoots
-  签名: {S F} [CommRing S] [IsDomain S]
+  签名: {S F} [交换环 S] [是整环 S]
   定义体: (Subgroup.equivMapOfInjective _ (Units.map f) (Units.map_injective hf)).trans
     (MulEquiv.subgroupCongr <|
       ((mem_primitiveRoots <| NeZero.pos n).mp hζ.choose_spec).map_rootsOfUnity hf)
@@ -1970,7 +1970,7 @@ theorem eq_pow_of_mem_rootsOfUnity
 
 中文:
 定理 eq_pow_of_mem_rootsOfUnity
-  结论: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
+  结论: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : 是PrimitiveRoot ζ k)
   证明: by
   obtain ⟨n, rfl⟩ : exists n : Int, ζ ^ n = ξ := by rwa [← h.zpowers_eq] at hξ
   have hk0 : (0 : Int) < k := mod_cast NeZero.pos k
@@ -2009,7 +2009,7 @@ exact h.eq_pow_of_mem_rootsOfUnity (mem_rootsOfUnity' k ξ).mpr hξ
 
 中文:
 定理 eq_pow_of_pow_eq_one
-  结论: {k : 自然数} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
+  结论: {k : 自然数} [NeZero k] {ζ ξ : R} (h : 是PrimitiveRoot ζ k)
   证明: by
   lift ζ to Rˣ using h.isUnit NeZero.out
 lift ξ to Rˣ using .of_pow_eq_one hξ NeZero.ne k
@@ -2044,7 +2044,7 @@ theorem isPrimitiveRoot_iff'
 
 中文:
 定理 isPrimitiveRoot_iff'
-  条件: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : IsPrimitiveRoot ζ k)
+  条件: {k : 自然数} [NeZero k] {ζ ξ : Rˣ} (h : 是PrimitiveRoot ζ k)
   证明: by
   constructor
   · intro hξ
@@ -2080,7 +2080,7 @@ theorem isPrimitiveRoot_iff
 
 中文:
 定理 isPrimitiveRoot_iff
-  条件: {k : 自然数} [NeZero k] {ζ ξ : R} (h : IsPrimitiveRoot ζ k)
+  条件: {k : 自然数} [NeZero k] {ζ ξ : R} (h : 是PrimitiveRoot ζ k)
   证明: by
   constructor
   · intro hξ
@@ -2119,7 +2119,7 @@ theorem nthRoots_eq
 
 中文:
 定理 nthRoots_eq
-  条件: {n : 自然数} {ζ : R} (hζ : IsPrimitiveRoot ζ n) {α a : R} (e : α ^ n = a)
+  条件: {n : 自然数} {ζ : R} (hζ : 是PrimitiveRoot ζ n) {α a : R} (e : α ^ n = a)
   证明: by
   obtain (rfl | hn) := n.eq_zero_or_pos; · simp
   by_cases hα : α = 0
@@ -2167,7 +2167,7 @@ theorem adjoin_pair_eq
 
 中文:
 定理 adjoin_pair_eq
-  结论: (S : 类型) [CommSemiring S] [Algebra S R] {ζ₁ ζ₂ : R} {k₁ : 自然数} {k₂ : 自然数}
+  结论: (S : 类型) [交换半环 S] [代数 S R] {ζ₁ ζ₂ : R} {k₁ : 自然数} {k₂ : 自然数}
   证明: by
   have : NeZero (k₁.lcm k₂) := ⟨Nat.lcm_ne_zero hk₁ hk₂⟩
   refine le_antisymm (Algebra.adjoin_le ?_) (Algebra.adjoin_le ?_)
@@ -2212,7 +2212,7 @@ theorem card_nthRoots
 
 中文:
 定理 card_nthRoots
-  条件: {n : 自然数} {ζ : R} (hζ : IsPrimitiveRoot ζ n) (a : R)
+  条件: {n : 自然数} {ζ : R} (hζ : 是PrimitiveRoot ζ n) (a : R)
   证明: by
   split_ifs with h
   · obtain ⟨α, hα⟩ := h
@@ -2243,7 +2243,7 @@ theorem card_rootsOfUnity'
 
 中文:
 定理 card_rootsOfUnity'
-  条件: {n : 自然数} [NeZero n] (h : IsPrimitiveRoot ζ n)
+  条件: {n : 自然数} [NeZero n] (h : 是PrimitiveRoot ζ n)
   证明: by
   rw [← h.zpowers_eq]; rw [Nat.card_zpowers]; rw [h.eq_orderOf]
 
@@ -2266,7 +2266,7 @@ theorem card_rootsOfUnity
 
 中文:
 定理 card_rootsOfUnity
-  条件: {ζ : R} {n : 自然数} [NeZero n] (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} [NeZero n] (h : 是PrimitiveRoot ζ n)
   证明: by
   obtain ⟨ζ, hζ⟩ := h.isUnit NeZero.out
   rw [← hζ]; rw [IsPrimitiveRoot.coe_units_iff] at h
@@ -2293,7 +2293,7 @@ lemma _root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot
   use ζ
 
 中文:
-引理 _root_.card_rootsOfUnity_eq_iff_exists_isPrimitiveRoot
+引理 _root_.card_rootsOfUnity_eq_iff_存在_isPrimitiveRoot
   条件: {n : 自然数} [NeZero n]
   证明: by
   refine ⟨fun h => ?_, fun ⟨ζ, hζ⟩ => hζ.card_rootsOfUnity⟩
@@ -2321,7 +2321,7 @@ theorem card_nthRoots_one
 
 中文:
 定理 card_nthRoots_one
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: by
   rw [card_nthRoots h]; rw [if_pos ⟨ζ]; rw [h.pow_eq_one⟩]
 
@@ -2348,7 +2348,7 @@ theorem nthRoots_nodup
 
 中文:
 定理 nthRoots_nodup
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n) {a : R} (ha : a != 0)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n) {a : R} (ha : a != 0)
   证明: by
   obtain (rfl | hn) := n.eq_zero_or_pos; · simp
   by_cases! h : exists α, α ^ n = a
@@ -2382,7 +2382,7 @@ theorem nthRoots_one_nodup
 
 中文:
 定理 nthRoots_one_nodup
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: h.nthRoots_nodup one_ne_zero
 
 Depends on / 依赖: h.nthRoots_nodup, nthRoots_nodup, one_ne_zero
@@ -2404,7 +2404,7 @@ theorem card_nthRootsFinset
 
 中文:
 定理 card_nthRootsFinset
-  条件: {ζ : R} {n : 自然数} (h : IsPrimitiveRoot ζ n)
+  条件: {ζ : R} {n : 自然数} (h : 是PrimitiveRoot ζ n)
   证明: by
   classical
   rw [nthRootsFinset]; rw [← Multiset.toFinset_eq (nthRoots_one_nodup h)]; rw [card_mk]; rw [h.card_nthRoots_one]
@@ -2438,7 +2438,7 @@ theorem card_primitiveRoots
 
 中文:
 定理 card_primitiveRoots
-  条件: {ζ : R} {k : 自然数} (h : IsPrimitiveRoot ζ k)
+  条件: {ζ : R} {k : 自然数} (h : 是PrimitiveRoot ζ k)
   证明: by
   by_cases h0 : k = 0
   · simp [h0]
@@ -2798,7 +2798,7 @@ theorem nthRootsFinset_eq_of_prime
 
 中文:
 定理 nthRootsFinset_eq_of_prime
-  条件: [DecidableEq R] (hp : p.Prime)
+  条件: [DecidableEq R] (hp : p.素)
   证明: by
   simp [nthRoots_one_eq_biUnion_primitiveRoots, hp.divisors]
 
@@ -2820,7 +2820,7 @@ theorem mem_nthRootsFinset_iff_of_prime
 
 中文:
 定理 mem_nthRootsFinset_iff_of_prime
-  条件: (hp : p.Prime) {η : R}
+  条件: (hp : p.素) {η : R}
   证明: by
   classical
   simp [nthRootsFinset_eq_of_prime hp, mem_primitiveRoots hp.pos, or_comm]
@@ -2842,7 +2842,7 @@ theorem isPrimitiveRoot_of_mem_nthRootsFinset
 
 中文:
 定理 isPrimitiveRoot_of_mem_nthRootsFinset
-  结论: (hp : p.Prime) {η : R}
+  结论: (hp : p.素) {η : R}
   证明: ((mem_nthRootsFinset_iff_of_prime hp).1 hη).resolve_right hne1
 
 Depends on / 依赖: mem_nthRootsFinset_iff_of_prime, resolve_right
@@ -2861,7 +2861,7 @@ theorem mem_primitiveRoots_of_mem_nthRootsFinset
 
 中文:
 定理 mem_primitiveRoots_of_mem_nthRootsFinset
-  结论: (hp : p.Prime) {η : R}
+  结论: (hp : p.素) {η : R}
   证明: (mem_primitiveRoots hp.pos).2 (isPrimitiveRoot_of_mem_nthRootsFinset hp hη hne1)
 
 Depends on / 依赖: hp.pos, isPrimitiveRoot_of_mem_nthRootsFinset, mem_primitiveRoots
@@ -2889,8 +2889,8 @@ lemma IsCyclic.exists_apply_ne_one
     rw [← hζ.eq_orderOf]; rw [orderOf_eq_card_of_forall_mem_zpowers hg]; rw [Nat.card_eq_fintype_ca
 
 中文:
-引理 IsCyclic.exists_apply_ne_one
-  结论: {G G' : 类型} [Group G] [IsCyclic G] [Finite G]
+引理 是循环.存在_apply_ne_one
+  结论: {G G' : 类型} [群 G] [是循环 G] [有限 G]
   证明: by
   let inst : Fintype G := Fintype.ofFinite _
   obtain ⟨ζ, hζ⟩ := hG'
@@ -2938,8 +2938,8 @@ lemma ZMod.exists_monoidHom_apply_ne_one
     by simp only [ne_eq, ofAdd_eq_on
 
 中文:
-引理 ZMod.exists_monoidHom_apply_ne_one
-  结论: {M : 类型} [CommMonoid M] {n : 自然数} [NeZero n]
+引理 ZMod.存在_monoidHom_apply_ne_one
+  结论: {M : 类型} [交换幺半群 M] {n : 自然数} [NeZero n]
   证明: by
   obtain ⟨ζ, hζ⟩ := hG
   have hc : n = Nat.card (Multiplicative (ZMod n)) := by

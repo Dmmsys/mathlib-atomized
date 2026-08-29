@@ -33,8 +33,8 @@ definition LocallyFinite
   body: forall x : X, exists t in 𝓝 x, { i | (f i inter t).Nonempty }.Finite
 
 中文:
-定义 LocallyFinite
-  签名: (f : ι -> Set X)
+定义 局部有限
+  签名: (f : ι -> 集合 X)
   定义体: forall x : X, exists t in 𝓝 x, { i | (f i inter t).Nonempty }.Finite
 
 Depends on / 依赖: Finite, Nonempty
@@ -54,8 +54,8 @@ theorem locallyFinite_of_finite
 
 中文:
 定理 locallyFinite_of_finite
-  条件: [Finite ι] (f : ι -> Set X)
-  结论: LocallyFinite f
+  条件: [有限 ι] (f : ι -> 集合 X)
+  结论: 局部有限 f
   证明: fun _ =>
   ⟨univ, univ_mem, toFinite _⟩
 -/
@@ -76,8 +76,8 @@ theorem point_finite
 
 中文:
 定理 point_finite
-  条件: (hf : LocallyFinite f) (x : X)
-  结论: { b | x in f b }.Finite
+  条件: (hf : 局部有限 f) (x : X)
+  结论: { b | x in f b }.有限
   证明: let ⟨_t, hxt, ht⟩ := hf x
   ht.subset fun _b hb => ⟨x, hb, mem_of_mem_nhds hxt⟩
 
@@ -100,8 +100,8 @@ theorem subset
 
 中文:
 定理 subset
-  条件: (hf : LocallyFinite f) (hg : 对任意 i, g i subseteq f i)
-  结论: LocallyFinite g
+  条件: (hf : 局部有限 f) (hg : 对任意 i, g i subseteq f i)
+  结论: 局部有限 g
   证明: fun a =>
   let ⟨t, ht₁, ht₂⟩ := hf a
 ⟨t, ht₁, ht₂.subset fun i hi => hi.mono inter_subset_inter (hg i) Subset.rfl⟩
@@ -123,7 +123,7 @@ refine ⟨t, htx, htf.preimage ?_⟩
 
 中文:
 定理 comp_injOn
-  条件: {g : ι' -> ι} (hf : LocallyFinite f) (hg : InjOn g { i | (f (g i)).Nonempty })
+  条件: {g : ι' -> ι} (hf : 局部有限 f) (hg : 单射限制 g { i | (f (g i)).非空 })
   证明: fun x => by
   let ⟨t, htx, htf⟩ := hf x
 refine ⟨t, htx, htf.preimage ?_⟩
@@ -147,7 +147,7 @@ theorem comp_injective
 
 中文:
 定理 comp_injective
-  条件: {g : ι' -> ι} (hf : LocallyFinite f) (hg : Injective g)
+  条件: {g : ι' -> ι} (hf : 局部有限 f) (hg : 单射 g)
   证明: hf.comp_injOn hg.injOn
 
 Depends on / 依赖: comp_injOn, hf.comp_injOn, hg.injOn
@@ -167,7 +167,7 @@ theorem of_comp_surjective
 
 中文:
 定理 of_comp_surjective
-  条件: {g : ι' -> ι} (hg : Surjective g) (hfg : LocallyFinite (f ∘ g))
+  条件: {g : ι' -> ι} (hg : 满射 g) (hfg : 局部有限 (f ∘ g))
   证明: by
   simpa only [comp_def, surjInv_eq hg] using hfg.comp_injective (injective_surjInv hg)
 
@@ -188,8 +188,8 @@ theorem on_range
 
 中文:
 定理 on_range
-  条件: (hf : LocallyFinite f)
-  结论: LocallyFinite ((↑) : range f -> Set X)
+  条件: (hf : 局部有限 f)
+  结论: 局部有限 ((↑) : range f -> 集合 X)
   证明: of_comp_surjective rangeFactorization_surjective hf
 
 Depends on / 依赖: of_comp_surjective, rangeFactorization_surjective
@@ -230,7 +230,7 @@ theorem eventually_smallSets
 
 中文:
 定理 eventually_smallSets
-  条件: (hf : LocallyFinite f) (x : X)
+  条件: (hf : 局部有限 f) (x : X)
   证明: locallyFinite_iff_smallSets.mp hf x
 -/
 protected theorem eventually_smallSets (hf : LocallyFinite f) (x : X) :
@@ -247,8 +247,8 @@ theorem exists_mem_basis
   ⟨i, hpi, hi Subset.rfl⟩
 
 中文:
-定理 exists_mem_basis
-  结论: {ι' : Sort*} (hf : LocallyFinite f) {p : ι' -> 命题} {s : ι' -> Set X}
+定理 存在_mem_basis
+  结论: {ι' : 类型层*} (hf : 局部有限 f) {p : ι' -> 命题} {s : ι' -> 集合 X}
   证明: let ⟨i, hpi, hi⟩ := hb.smallSets.eventually_iff.mp (hf.eventually_smallSets x)
   ⟨i, hpi, hi Subset.rfl⟩
 
@@ -275,7 +275,7 @@ theorem nhdsWithin_iUnion
 
 中文:
 定理 nhdsWithin_iUnion
-  条件: (hf : LocallyFinite f) (a : X)
+  条件: (hf : 局部有限 f) (a : X)
   证明: by
   rcases hf a with ⟨U, haU, hfin⟩
   refine le_antisymm ?_ (Monotone.le_map_iSup fun _ _ => nhdsWithin_mono _)
@@ -315,7 +315,7 @@ theorem continuousOn_iUnion'
 
 中文:
 定理 continuousOn_iUnion'
-  结论: {g : X -> Y} (hf : LocallyFinite f)
+  结论: {g : X -> Y} (hf : 局部有限 f)
   证明: by
   rintro x -
   rw [ContinuousWithinAt]; rw [hf.nhdsWithin_iUnion]; rw [tendsto_iSup]
@@ -350,7 +350,7 @@ theorem continuousOn_iUnion
 
 中文:
 定理 continuousOn_iUnion
-  结论: {g : X -> Y} (hf : LocallyFinite f) (h_cl : 对任意 i, IsClosed (f i))
+  结论: {g : X -> Y} (hf : 局部有限 f) (h_cl : 对任意 i, 是闭集 (f i))
   证明: hf.continuousOn_iUnion' fun i x hx => h_cont i x (h_cl i).closure_subset hx
 
 Depends on / 依赖: closure_subset, continuousOn_iUnion, h_cl, h_cont, hf.continuousOn_iUnion
@@ -369,7 +369,7 @@ theorem continuous'
 
 中文:
 定理 continuous'
-  结论: {g : X -> Y} (hf : LocallyFinite f) (h_cov : ⋃ i, f i = univ)
+  结论: {g : X -> Y} (hf : 局部有限 f) (h_cov : ⋃ i, f i = univ)
   证明: continuousOn_univ.1 h_cov ▸ hf.continuousOn_iUnion' hc
 -/
 protected theorem continuous' {g : X -> Y} (hf : LocallyFinite f) (h_cov : ⋃ i, f i = univ)
@@ -387,7 +387,7 @@ theorem continuous
 
 中文:
 定理 continuous
-  结论: {g : X -> Y} (hf : LocallyFinite f) (h_cov : ⋃ i, f i = univ)
+  结论: {g : X -> Y} (hf : 局部有限 f) (h_cov : ⋃ i, f i = univ)
   证明: continuousOn_univ.1 h_cov ▸ hf.continuousOn_iUnion h_cl h_cont
 -/
 protected theorem continuous {g : X -> Y} (hf : LocallyFinite f) (h_cov : ⋃ i, f i = univ)
@@ -411,8 +411,8 @@ theorem closure
 
 中文:
 定理 closure
-  条件: (hf : LocallyFinite f)
-  结论: LocallyFinite fun i => closure (f i)
+  条件: (hf : 局部有限 f)
+  结论: 局部有限 fun i => closure (f i)
   证明: by
   intro x
   rcases hf x with ⟨s, hsx, hsf⟩
@@ -440,7 +440,7 @@ theorem closure_iUnion
 
 中文:
 定理 closure_iUnion
-  条件: (h : LocallyFinite f)
+  条件: (h : 局部有限 f)
   结论: closure (⋃ i, f i) = ⋃ i, closure (f i)
   证明: by
   ext x
@@ -463,7 +463,7 @@ theorem isClosed_iUnion
 
 中文:
 定理 isClosed_iUnion
-  条件: (hf : LocallyFinite f) (hc : 对任意 i, IsClosed (f i))
+  条件: (hf : 局部有限 f) (hc : 对任意 i, 是闭集 (f i))
   证明: by
   simp only [← closure_eq_iff_isClosed, hf.closure_iUnion, (hc _).closure_eq]
 
@@ -486,8 +486,8 @@ theorem iInter_compl_mem_nhds
   exact (hf.comp_injective Subtype.val_injective).isClosed_iUnion fun i => hc _
 
 中文:
-定理 iInter_compl_mem_nhds
-  条件: (hf : LocallyFinite f) (hc : 对任意 i, IsClosed (f i)) (x : X)
+定理 i整数er_compl_mem_nhds
+  条件: (hf : 局部有限 f) (hc : 对任意 i, 是闭集 (f i)) (x : X)
   证明: by
   refine IsOpen.mem_nhds ?_ (mem_iInter₂.2 fun i => id)
   suffices IsClosed (⋃ i : { i // x ∉ f i }, f i) by
@@ -517,8 +517,8 @@ fun x n hn y hy => by_contra fun hne => hn.lt.not_ge hN x ⟨y, hne, hy⟩
   replace hN : forall (x), forall n >= N x + 1, forall y in U x, f n y 
 
 中文:
-定理 exists_forall_eventually_eq_prod
-  结论: {π : X -> Sort*} {f : 自然数 -> 对任意 x : X, π x}
+定理 存在_对任意_eventually_eq_prod
+  结论: {π : X -> 类型层*} {f : 自然数 -> 对任意 x : X, π x}
   证明: by
   choose U hUx hU using hf
   choose N hN using fun x => (hU x).bddAbove
@@ -554,8 +554,8 @@ theorem exists_forall_eventually_atTop_eventually_eq'
   proof: hf.exists_forall_eventually_eq_prod.imp fun _F hF x => (hF x).curry
 
 中文:
-定理 exists_forall_eventually_atTop_eventually_eq'
-  结论: {π : X -> Sort*} {f : 自然数 -> 对任意 x : X, π x}
+定理 存在_对任意_eventually_atTop_eventually_eq'
+  结论: {π : X -> 类型层*} {f : 自然数 -> 对任意 x : X, π x}
   证明: hf.exists_forall_eventually_eq_prod.imp fun _F hF x => (hF x).curry
 
 Depends on / 依赖: exists_forall_eventually_eq_prod, hf.exists_forall_eventually_eq_prod.imp
@@ -574,7 +574,7 @@ theorem exists_forall_eventually_atTop_eventuallyEq
   proof: hf.exists_forall_eventually_atTop_eventually_eq'
 
 中文:
-定理 exists_forall_eventually_atTop_eventuallyEq
+定理 存在_对任意_eventually_atTop_eventuallyEq
   结论: {f : 自然数 -> X -> α}
   证明: hf.exists_forall_eventually_atTop_eventually_eq'
 
@@ -597,7 +597,7 @@ theorem preimage_continuous
 
 中文:
 定理 preimage_continuous
-  条件: {g : Y -> X} (hf : LocallyFinite f) (hg : Continuous g)
+  条件: {g : Y -> X} (hf : 局部有限 f) (hg : 连续 g)
   证明: fun x =>
   let ⟨s, hsx, hs⟩ := hf (g x)
   ⟨g ⁻¹' s, hg.continuousAt hsx, hs.subset fun _ ⟨y, hy⟩ => ⟨g y, hy⟩⟩
@@ -618,8 +618,8 @@ theorem prod_right
 
 中文:
 定理 prod_right
-  条件: (hf : LocallyFinite f) (g : ι -> Set Y)
-  结论: LocallyFinite (fun i => f i ×ˢ g i)
+  条件: (hf : 局部有限 f) (g : ι -> 集合 Y)
+  结论: 局部有限 (fun i => f i ×ˢ g i)
   证明: (hf.preimage_continuous continuous_fst).subset fun _ => prod_subset_preimage_fst _ _
 
 Depends on / 依赖: continuous_fst, hf.preimage_continuous, preimage_continuous, prod_subset_preimage_fst, subset
@@ -637,7 +637,7 @@ theorem prod_left
 
 中文:
 定理 prod_left
-  条件: {g : ι -> Set Y} (hg : LocallyFinite g) (f : ι -> Set X)
+  条件: {g : ι -> 集合 Y} (hg : 局部有限 g) (f : ι -> 集合 X)
   证明: (hg.preimage_continuous continuous_snd).subset fun _ => prod_subset_preimage_snd _ _
 
 Depends on / 依赖: continuous_snd, hg.preimage_continuous, preimage_continuous, prod_subset_preimage_snd, subset
@@ -660,9 +660,9 @@ theorem Equiv.locallyFinite_comp_iff
     fun h => h.comp_injective e.injective⟩
 
 中文:
-定理 Equiv.locallyFinite_comp_iff
+定理 等价.locallyFinite_comp_iff
   条件: (e : ι' ≃ ι)
-  结论: LocallyFinite (f ∘ e) ↔ LocallyFinite f
+  结论: 局部有限 (f ∘ e) ↔ 局部有限 f
   证明: ⟨fun h => by simpa only [comp_def, e.apply_symm_apply] using h.comp_injective e.symm.injective,
     fun h => h.comp_injective e.injective⟩
 
@@ -684,7 +684,7 @@ theorem locallyFinite_sum
 
 中文:
 定理 locallyFinite_sum
-  条件: {f : ι oplus ι' -> Set X}
+  条件: {f : ι oplus ι' -> 集合 X}
   证明: by
   simp only [locallyFinite_iff_smallSets, ← forall_and, ← finite_preimage_inl_and_inr,
     preimage_ofPred_eq, (· ∘ ·), eventually_and]
@@ -705,8 +705,8 @@ theorem LocallyFinite.sumElim
   proof: locallyFinite_sum.mpr ⟨hf, hg⟩
 
 中文:
-定理 LocallyFinite.sumElim
-  条件: {g : ι' -> Set X} (hf : LocallyFinite f) (hg : LocallyFinite g)
+定理 局部有限.sumElim
+  条件: {g : ι' -> 集合 X} (hf : 局部有限 f) (hg : 局部有限 g)
   证明: locallyFinite_sum.mpr ⟨hf, hg⟩
 
 Depends on / 依赖: locallyFinite_sum, locallyFinite_sum.mpr
@@ -728,7 +728,7 @@ theorem locallyFinite_option
 
 中文:
 定理 locallyFinite_option
-  条件: {f : Option ι -> Set X}
+  条件: {f : 选项类型 ι -> 集合 X}
   证明: by
   rw [← (Equiv.optionEquivSumPUnit.{0]; rw [_} ι).symm.locallyFinite_comp_iff]; rw [locallyFinite_sum]
   simp only [locallyFinite_of_finite, and_true]
@@ -751,8 +751,8 @@ theorem LocallyFinite.option_elim'
   proof: locallyFinite_option.2 hf
 
 中文:
-定理 LocallyFinite.option_elim'
-  条件: (hf : LocallyFinite f) (s : Set X)
+定理 局部有限.option_elim'
+  条件: (hf : 局部有限 f) (s : 集合 X)
   证明: locallyFinite_option.2 hf
 
 Depends on / 依赖: locallyFinite_option
@@ -773,8 +773,8 @@ theorem LocallyFinite.eventually_subset
   exact not_imp_not.mp (hy i) hi
 
 中文:
-定理 LocallyFinite.eventually_subset
-  结论: {s : ι -> Set X}
+定理 局部有限.eventually_subset
+  结论: {s : ι -> 集合 X}
   证明: by
   filter_upwards [hs.iInter_compl_mem_nhds hs' x] with y hy i hi
   push _ in _ at hy

@@ -62,7 +62,7 @@ theorem hasProd_powerSeriesMk_card_restricted
 
 中文:
 定理 hasProd_powerSeriesMk_card_restricted
-  结论: [IsTopologicalSemiring R]
+  结论: [是TopologicalSemiring R]
   证明: by
   convert! hasProd_genFun (fun i c => if p i then (1 : R) else 0) using 1
   · ext1 i
@@ -103,7 +103,7 @@ theorem multipliable_powerSeriesMk_card_restricted
 
 中文:
 定理 multipliable_powerSeriesMk_card_restricted
-  结论: [IsTopologicalSemiring R]
+  结论: [是TopologicalSemiring R]
   证明: (hasProd_powerSeriesMk_card_restricted R p).multipliable
 
 Depends on / 依赖: hasProd_powerSeriesMk_card_restricted, multipliable
@@ -123,7 +123,7 @@ theorem powerSeriesMk_card_restricted_eq_tprod
 
 中文:
 定理 powerSeriesMk_card_restricted_eq_tprod
-  结论: [IsTopologicalSemiring R]
+  结论: [是TopologicalSemiring R]
   证明: (hasProd_powerSeriesMk_card_restricted R p).tprod_eq.symm
 
 Depends on / 依赖: hasProd_powerSeriesMk_card_restricted, tprod_eq, tprod_eq.symm
@@ -248,7 +248,7 @@ theorem aux_mul_one_sub_X_pow
 
 中文:
 定理 aux_mul_one_sub_X_pow
-  条件: [IsTopologicalRing R] {m : 自然数} (hm : 0 < m)
+  条件: [是拓扑环 R] {m : 自然数} (hm : 0 < m)
   证明: by
   nontriviality R
   rw [← (multipliable_powerSeriesMk_card_restricted R (¬ m ∣ ·)).tprod_mul

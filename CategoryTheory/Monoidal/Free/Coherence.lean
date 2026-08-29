@@ -812,7 +812,7 @@ instance subsingleton_hom
 
 中文:
 实例 subsingleton_hom
-  签名: : Quiver.IsThin (F C)
+  签名: : 箭图.IsThin (F C)
   定义体: fun X Y =>
   ⟨fun f g => by
     have hfg : (fullNormalize C).map f = (fullNormalize C).map g := Subsingleton.elim _ _
@@ -874,7 +874,7 @@ instance :
 
 中文:
 实例 :
-  签名: Groupoid.{u} (F C)
+  签名: 群胚.{u} (F C)
   定义体: { (inferInstance : Category (F C)) with
     inv := Quotient.lift (fun f => ⟦inverseAux f⟧) (by cat_disch) }
 

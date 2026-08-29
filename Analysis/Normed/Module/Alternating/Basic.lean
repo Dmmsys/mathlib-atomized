@@ -45,7 +45,7 @@ instance ContinuousAlternatingMap.instContinuousEval
   body: .of_continuous_forget continuous_toContinuousMultilinearMap
 
 中文:
-实例 ContinuousAlternatingMap.instContinuousEval
+实例 余ntinuousAlternating映射.instContinuousEval
   签名: {𝕜 ι E F : 类型}
   定义体: .of_continuous_forget continuous_toContinuousMultilinearMap
 
@@ -84,7 +84,7 @@ theorem norm_map_coord_zero
 
 中文:
 定理 norm_map_coord_zero
-  结论: (f : E [⋀^ι]->ₗ[𝕜] F) (hf : Continuous f)
+  结论: (f : E [⋀^ι]->ₗ[𝕜] F) (hf : 连续 f)
   证明: f.1.norm_map_coord_zero hf hi
 
 Depends on / 依赖: norm_map_coord_zero
@@ -127,7 +127,7 @@ theorem bound_of_shell_of_continuous
 
 中文:
 定理 bound_of_shell_of_continuous
-  结论: (f : E [⋀^ι]->ₗ[𝕜] F) (hfc : Continuous f)
+  结论: (f : E [⋀^ι]->ₗ[𝕜] F) (hfc : 连续 f)
   证明: f.1.bound_of_shell_of_continuous hfc (fun _ => hε) (fun _ => hc) hf m
 
 Depends on / 依赖: bound_of_shell_of_continuous
@@ -147,8 +147,8 @@ theorem exists_bound_of_continuous
   proof: f.1.exists_bound_of_continuous hf
 
 中文:
-定理 exists_bound_of_continuous
-  条件: (f : E [⋀^ι]->ₗ[𝕜] F) (hf : Continuous f)
+定理 存在_bound_of_continuous
+  条件: (f : E [⋀^ι]->ₗ[𝕜] F) (hf : 连续 f)
   证明: f.1.exists_bound_of_continuous hf
 
 Depends on / 依赖: exists_bound_of_continuous
@@ -297,7 +297,7 @@ instance instSeminormedAddCommGroup
 
 中文:
 实例 instSeminormedAddCommGroup
-  签名: : SeminormedAddCommGroup (E [⋀^ι]->L[𝕜] F) where
+  签名: : SeminormedAddComm群 (E [⋀^ι]->L[𝕜] F) where
   定义体: .induced toContinuousMultilinearMap inferInstance
   __ := SeminormedAddCommGroup.induced _ _ (toMultilinearAddHom : E [⋀^ι]->L[𝕜] F ->+ _)
   norm f := ‖f.toContinuousMultilinearMap‖
@@ -540,7 +540,7 @@ theorem le_opNorm_mul_pow_of_le
 
 中文:
 定理 le_opNorm_mul_pow_of_le
-  条件: {n} (f : E [⋀^Fin n]->L[𝕜] F) {m b} (hm : ‖m‖ <= b)
+  条件: {n} (f : E [⋀^有限集 n]->L[𝕜] F) {m b} (hm : ‖m‖ <= b)
   证明: f.1.le_opNorm_mul_pow_of_le hm
 
 Depends on / 依赖: le_opNorm_mul_pow_of_le
@@ -757,7 +757,7 @@ theorem opNorm_prod
 中文:
 定理 opNorm_prod
   条件: (f : E [⋀^ι]->L[𝕜] F) (g : E [⋀^ι]->L[𝕜] G)
-  结论: ‖f.prod g‖ = max (‖f‖) (‖g‖)
+  结论: ‖f.乘积 g‖ = 最大值 (‖f‖) (‖g‖)
   证明: f.1.opNorm_prod g.1
 
 Depends on / 依赖: opNorm_prod
@@ -775,7 +775,7 @@ theorem opNNNorm_pi
 
 中文:
 定理 opNNNorm_pi
-  结论: {ι' : 类型} [Fintype ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddCommGroup (F i')]
+  结论: {ι' : 类型} [有限类型 ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddComm群 (F i')]
   证明: ContinuousMultilinearMap.opNNNorm_pi fun i => (f i).1
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.opNNNorm_pi, opNNNorm_pi
@@ -794,7 +794,7 @@ theorem opNorm_pi
 
 中文:
 定理 opNorm_pi
-  结论: {ι' : 类型} [Fintype ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddCommGroup (F i')]
+  结论: {ι' : 类型} [有限类型 ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddComm群 (F i')]
   证明: ContinuousMultilinearMap.opNorm_pi fun i => (f i).1
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.opNorm_pi, opNorm_pi
@@ -813,7 +813,7 @@ instance instNormedSpace
 
 中文:
 实例 instNormedSpace
-  签名: {𝕜' : 类型} [NormedField 𝕜'] [NormedSpace 𝕜' F] [SMulCommClass 𝕜 𝕜' F]
+  签名: {𝕜' : 类型} [赋范域 𝕜'] [赋范空间 𝕜' F] [标量交换类 𝕜 𝕜' F]
   定义体: ⟨fun c f => f.1.opNorm_smul_le c⟩
 
 Depends on / 依赖: opNorm_smul_le
@@ -834,7 +834,7 @@ theorem norm_ofSubsingleton
 
 中文:
 定理 norm_ofSubsingleton
-  条件: [Subsingleton ι] (i : ι) (f : E ->L[𝕜] F)
+  条件: [子单例 ι] (i : ι) (f : E ->L[𝕜] F)
   证明: ContinuousMultilinearMap.norm_ofSubsingleton i f
 -/
 @[simp] theorem norm_ofSubsingleton [Subsingleton ι] (i : ι) (f : E ->L[𝕜] F) :
@@ -851,7 +851,7 @@ theorem nnnorm_ofSubsingleton
 
 中文:
 定理 nnnorm_ofSubsingleton
-  条件: [Subsingleton ι] (i : ι) (f : E ->L[𝕜] F)
+  条件: [子单例 ι] (i : ι) (f : E ->L[𝕜] F)
   证明: NNReal.eq norm_ofSubsingleton i f
 -/
 @[simp] theorem nnnorm_ofSubsingleton [Subsingleton ι] (i : ι) (f : E ->L[𝕜] F) :
@@ -873,7 +873,7 @@ definition ofSubsingletonLIE
 
 中文:
 定义 ofSubsingletonLIE
-  签名: [Subsingleton ι] (i : ι)
+  签名: [子单例 ι] (i : ι)
   定义体: ofSubsingleton 𝕜 E F i
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -897,7 +897,7 @@ theorem norm_ofSubsingleton_id_le
 
 中文:
 定理 norm_ofSubsingleton_id_le
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   证明: ContinuousMultilinearMap.norm_ofSubsingleton_id_le ..
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.norm_ofSubsingleton_id_le, norm_ofSubsingleton_id_le
@@ -916,7 +916,7 @@ theorem nnnorm_ofSubsingleton_id_le
 
 中文:
 定理 nnnorm_ofSubsingleton_id_le
-  条件: [Subsingleton ι] (i : ι)
+  条件: [子单例 ι] (i : ι)
   证明: ContinuousMultilinearMap.nnnorm_ofSubsingleton_id_le ..
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.nnnorm_ofSubsingleton_id_le, nnnorm_ofSubsingleton_id_le
@@ -938,7 +938,7 @@ theorem norm_constOfIsEmpty
 
 中文:
 定理 norm_constOfIsEmpty
-  条件: [IsEmpty ι] (x : F)
+  条件: [是空 ι] (x : F)
   结论: ‖constOfIsEmpty 𝕜 E ι x‖ = ‖x‖
   证明: ContinuousMultilinearMap.norm_constOfIsEmpty _ _ _
 -/
@@ -956,7 +956,7 @@ theorem nnnorm_constOfIsEmpty
 
 中文:
 定理 nnnorm_constOfIsEmpty
-  条件: [IsEmpty ι] (x : F)
+  条件: [是空 ι] (x : F)
   结论: ‖constOfIsEmpty 𝕜 E ι x‖₊ = ‖x‖₊
   证明: NNReal.eq norm_constOfIsEmpty _ _ _
 -/
@@ -982,7 +982,7 @@ definition constOfIsEmptyLIE
 
 中文:
 定义 constOfIsEmptyLIE
-  签名: [IsEmpty ι]
+  签名: [是空 ι]
   定义体: constOfIsEmpty _ _ _
   invFun f := f 0
   left_inv x := by simp
@@ -1052,7 +1052,7 @@ definition piLIE
 
 中文:
 定义 piLIE
-  签名: {ι' : 类型} [Fintype ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddCommGroup (F i')]
+  签名: {ι' : 类型} [有限类型 ι'] {F : ι' -> 类型} [对任意 i', SeminormedAddComm群 (F i')]
   定义体: piLinearEquiv
   norm_map' := opNorm_pi
 
@@ -1169,7 +1169,7 @@ theorem AlternatingMap.mkContinuous_norm_le
   proof: f.toMultilinearMap.mkContinuous_norm_le hC H
 
 中文:
-定理 AlternatingMap.mkContinuous_norm_le
+定理 交错映射.mkContinuous_norm_le
   结论: (f : E [⋀^ι]->ₗ[𝕜] F) {C : 实数} (hC : 0 <= C)
   证明: f.toMultilinearMap.mkContinuous_norm_le hC H
 
@@ -1190,7 +1190,7 @@ theorem AlternatingMap.mkContinuous_norm_le'
     apply le_max_left
 
 中文:
-定理 AlternatingMap.mkContinuous_norm_le'
+定理 交错映射.mkContinuous_norm_le'
   结论: (f : E [⋀^ι]->ₗ[𝕜] F) {C : 实数}
   证明: ContinuousMultilinearMap.opNorm_le_bound (le_max_right _ _) fun m => (H m).trans by
     gcongr
@@ -1260,7 +1260,7 @@ theorem LinearIsometry.norm_compContinuousAlternatingMap
   proof: g.norm_compContinuousMultilinearMap f.1
 
 中文:
-定理 LinearIsometry.norm_compContinuousAlternatingMap
+定理 线性等距.norm_compContinuousAlternatingMap
   条件: (g : F ->ₗᵢ[𝕜] G) (f : E [⋀^ι]->L[𝕜] F)
   证明: g.norm_compContinuousMultilinearMap f.1
 
@@ -1317,7 +1317,7 @@ change Continuous
 
 中文:
 定理 continuous_compContinuousLinearMapCLM
-  条件: [Finite ι]
+  条件: [有限 ι]
   证明: by
   rcases nonempty_fintype ι
   refine UniformConvergenceCLM.isUniformInducing_postcomp (.id 𝕜)
@@ -1450,7 +1450,7 @@ lemma fderivCompContinuousLinearMap_of_isEmpty
 
 中文:
 引理 fderivCompContinuousLinearMap_of_isEmpty
-  条件: [IsEmpty ι]
+  条件: [是空 ι]
   证明: by
   ext; simp
 -/
@@ -1753,7 +1753,7 @@ toContinuousMultilinearMap_injective norm_eq_zero.mp hf
 
 中文:
 实例 instNormedAddCommGroup
-  签名: : NormedAddCommGroup (E [⋀^ι]->L[𝕜] F)
+  签名: : 赋范交换加群 (E [⋀^ι]->L[𝕜] F)
   定义体: NormedAddCommGroup.ofSeparation fun _f hf =>
 toContinuousMultilinearMap_injective norm_eq_zero.mp hf
 
@@ -1774,7 +1774,7 @@ theorem norm_ofSubsingleton_id
 
 中文:
 定理 norm_ofSubsingleton_id
-  条件: [Subsingleton ι] [Nontrivial F] (i : ι)
+  条件: [子单例 ι] [非平凡 F] (i : ι)
   证明: ContinuousMultilinearMap.norm_ofSubsingleton_id 𝕜 F i
 
 Depends on / 依赖: ContinuousMultilinearMap, ContinuousMultilinearMap.norm_ofSubsingleton_id, norm_ofSubsingleton_id
@@ -1794,7 +1794,7 @@ theorem nnnorm_ofSubsingleton_id
 
 中文:
 定理 nnnorm_ofSubsingleton_id
-  条件: [Subsingleton ι] [Nontrivial F] (i : ι)
+  条件: [子单例 ι] [非平凡 F] (i : ι)
   证明: NNReal.eq norm_ofSubsingleton_id ..
 
 Depends on / 依赖: NNReal, NNReal.eq, norm_ofSubsingleton_id

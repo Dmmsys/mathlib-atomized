@@ -36,7 +36,7 @@ theorem prod_insertNone
 
 中文:
 定理 prod_insertNone
-  条件: (f : Option α -> M) (s : Finset α)
+  条件: (f : 选项类型 α -> M) (s : 有限集 α)
   证明: by simp [insertNone]
 
 @[to_additive]
@@ -59,7 +59,7 @@ theorem mul_prod_eq_prod_insertNone
 
 中文:
 定理 mul_prod_eq_prod_insertNone
-  条件: (f : α -> M) (x : M) (s : Finset α)
+  条件: (f : α -> M) (x : M) (s : 有限集 α)
   证明: (prod_insertNone (fun i => i.elim x f) _).symm
 
 @[to_additive]
@@ -86,7 +86,7 @@ theorem prod_eraseNone
 
 中文:
 定理 prod_eraseNone
-  条件: (f : α -> M) (s : Finset (Option α))
+  条件: (f : α -> M) (s : 有限集 (选项类型 α))
   证明: by
   classical calc
       ∏ x in eraseNone s, f x = ∏ x in (eraseNone s).map Embedding.some, Option.elim' 1 f x :=

@@ -115,7 +115,7 @@ structure Hom
     - fiber : (F.map base.toLoc).toFunctor.obj X.fiber ⟶ Y.fiber
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : ∫ F)
   公理与运算 (2 个):
     - base : X.base ⟶ Y.base
@@ -185,7 +185,7 @@ lemma Hom.ext
   cat_disch
 
 中文:
-引理 Hom.ext
+引理 态射.ext
   结论: (f g : a ⟶ b) (hfg₁ : f.base = g.base)
   证明: by
   cases f; cases g
@@ -208,7 +208,7 @@ lemma Hom.ext_iff
   mpr := fun ⟨hfg₁, hfg₂⟩ => Hom.ext f g hfg₁ hfg₂
 
 中文:
-引理 Hom.ext_iff
+引理 态射.ext_iff
   条件: (f g : a ⟶ b)
   证明: by subst hfg; simp
   mpr := fun ⟨hfg₁, hfg₂⟩ => Hom.ext f g hfg₁ hfg₂
@@ -231,7 +231,7 @@ lemma Hom.congr
   simp
 
 中文:
-引理 Hom.congr
+引理 态射.congr
   条件: {a b : ∫ F} {f g : a ⟶ b} (h : f = g)
   证明: by
   subst h
@@ -265,7 +265,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (∫ F) where
+  签名: : 范畴 (∫ F) where
   定义体: Pseudofunctor.Grothendieck.categoryStruct
   id_comp {a b} f := by
     ext
@@ -541,7 +541,7 @@ structure CoGrothendieck
     - fiber : F.obj ⟨op base⟩
 
 中文:
-结构 CoGrothendieck
+结构 余Grothendieck
   参数: (F : LocallyDiscrete 𝒮ᵒᵖ ⥤ᵖ Cat.{v₂, u₂})
   公理与运算 (2 个):
     - base : 𝒮
@@ -571,7 +571,7 @@ structure Hom
     - fiber : X.fiber ⟶ (F.map base.op.toLoc).toFunctor.obj Y.fiber
 
 中文:
-结构 Hom
+结构 态射
   参数: (X Y : ∫ᶜ F)
   公理与运算 (2 个):
     - base : X.base ⟶ Y.base
@@ -641,7 +641,7 @@ lemma Hom.ext
   cat_disch
 
 中文:
-引理 Hom.ext
+引理 态射.ext
   结论: (f g : a ⟶ b) (hfg₁ : f.base = g.base)
   证明: by
   cases f; cases g
@@ -664,7 +664,7 @@ lemma Hom.ext_iff
   mpr := fun ⟨hfg₁, hfg₂⟩ => Hom.ext f g hfg₁ hfg₂
 
 中文:
-引理 Hom.ext_iff
+引理 态射.ext_iff
   条件: (f g : a ⟶ b)
   证明: ⟨by rw [hfg], by simp [hfg]⟩
   mpr := fun ⟨hfg₁, hfg₂⟩ => Hom.ext f g hfg₁ hfg₂
@@ -684,7 +684,7 @@ lemma Hom.congr
   simp [h]
 
 中文:
-引理 Hom.congr
+引理 态射.congr
   条件: {a b : ∫ᶜ F} {f g : a ⟶ b} (h : f = g)
   证明: by
   simp [h]
@@ -716,7 +716,7 @@ instance category
 
 中文:
 实例 category
-  签名: : Category (∫ᶜ F) where
+  签名: : 范畴 (∫ᶜ F) where
   定义体: Pseudofunctor.CoGrothendieck.categoryStruct
   id_comp {a b} f := by
     ext

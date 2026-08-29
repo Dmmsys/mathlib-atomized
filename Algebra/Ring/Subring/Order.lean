@@ -37,7 +37,7 @@ instance toIsOrderedRing
 
 中文:
 实例 toIsOrderedRing
-  签名: [IsOrderedRing R] (s : S)
+  签名: [是Ordered环 R] (s : S)
   定义体: Function.Injective.isOrderedRing Subtype.val rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl
 
 Depends on / 依赖: Function, Function.Injective.isOrderedRing, Injective, Subtype, Subtype.val, U.unop, isOrderedRing, sectionsSubmodule, toAddCommGroup, toAddSubgroup, toAddSubgroup.toAddCommGroup
@@ -56,7 +56,7 @@ instance toIsStrictOrderedRing
 
 中文:
 实例 toIsStrictOrderedRing
-  签名: [IsStrictOrderedRing R] (s : S)
+  签名: [是StrictOrdered环 R] (s : S)
   定义体: Function.Injective.isStrictOrderedRing Subtype.val
     rfl rfl (fun _ _ => rfl) (fun _ _ => rfl) .rfl .rfl
 
@@ -77,7 +77,7 @@ definition orderedSubtype
 
 中文:
 定义 orderedSubtype
-  签名: (s : Subring R)
+  签名: (s : 子环 R)
   定义体: s.subtype
   monotone' := fun _ _ h => h
 
@@ -98,8 +98,8 @@ lemma orderedSubtype_coe
 
 中文:
 引理 orderedSubtype_coe
-  条件: (s : Subring R)
-  结论: Subring.orderedSubtype s = Subring.subtype s
+  条件: (s : 子环 R)
+  结论: 子环.orderedSubtype s = 子环.subtype s
   证明: rfl
 
 Depends on / 依赖: U.unop, algebra, sectionsSubalgebra

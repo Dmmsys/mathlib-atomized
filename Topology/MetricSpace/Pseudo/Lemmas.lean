@@ -31,7 +31,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTopology 实数
+  签名: Order拓扑 实数
   定义体: orderTopology_of_nhds_abs fun x => by
     simp only [nhds_basis_ball.eq_biInf, ball, Real.dist_eq, abs_sub_comm]
 
@@ -52,9 +52,9 @@ lemma Real.singleton_eq_inter_Icc
   simp [Icc_eq_closedBall, biInter_basis_nhds Metric.nhds_basis_closedBall]
 
 中文:
-引理 Real.singleton_eq_inter_Icc
+引理 实数.singleton_eq_inter_Icc
   条件: (b : 实数)
-  结论: {b} = ⋂ (r > 0), Icc (b - r) (b + r)
+  结论: {b} = ⋂ (r > 0), 闭区间 (b - r) (b + r)
   证明: by
   simp [Icc_eq_closedBall, biInter_basis_nhds Metric.nhds_basis_closedBall]
 
@@ -73,7 +73,7 @@ lemma squeeze_zero'
 
 中文:
 引理 squeeze_zero'
-  结论: {α} {f g : α -> 实数} {t₀ : Filter α} (hf : 对任意ᶠ t in t₀, 0 <= f t)
+  结论: {α} {f g : α -> 实数} {t₀ : 滤子 α} (hf : 对任意ᶠ t in t₀, 0 <= f t)
   证明: tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds g0 hf hft
 
 Depends on / 依赖: tendsto_const_nhds, tendsto_of_tendsto_of_tendsto_of_le_of_le
@@ -92,7 +92,7 @@ lemma squeeze_zero
 
 中文:
 引理 squeeze_zero
-  结论: {α} {f g : α -> 实数} {t₀ : Filter α} (hf : 对任意 t, 0 <= f t) (hft : 对任意 t, f t <= g t)
+  结论: {α} {f g : α -> 实数} {t₀ : 滤子 α} (hf : 对任意 t, 0 <= f t) (hft : 对任意 t, f t <= g t)
   证明: squeeze_zero' (Eventually.of_forall hf) (Eventually.of_forall hft) g0
 
 Depends on / 依赖: Eventually, Eventually.of_forall, of_forall, squeeze_zero
@@ -114,7 +114,7 @@ lemma eventually_closedBall_subset
 
 中文:
 引理 eventually_closedBall_subset
-  条件: {x : α} {u : Set α} (hu : u in 𝓝 x)
+  条件: {x : α} {u : 集合 α} (hu : u in 𝓝 x)
   证明: by
   obtain ⟨ε, εpos, hε⟩ : exists ε, 0 < ε ∧ closedBall x ε subseteq u := nhds_basis_closedBall.mem_iff.1 hu
   have : Iic ε in 𝓝 (0 : Real) := Iic_mem_nhds εpos
@@ -140,7 +140,7 @@ lemma tendsto_closedBall_smallSets
 中文:
 引理 tendsto_closedBall_smallSets
   条件: (x : α)
-  结论: Tendsto (closedBall x) (𝓝 0) (𝓝 x).smallSets
+  结论: 收敛 (closedBall x) (𝓝 0) (𝓝 x).smallSets
   证明: tendsto_smallSets_iff.2 fun _ => eventually_closedBall_subset
 
 Depends on / 依赖: eventually_closedBall_subset, tendsto_smallSets_iff
@@ -159,7 +159,7 @@ lemma eventually_ball_subset
 
 中文:
 引理 eventually_ball_subset
-  条件: {x : α} {u : Set α} (hu : u in 𝓝 x)
+  条件: {x : α} {u : 集合 α} (hu : u in 𝓝 x)
   结论: 对任意ᶠ r in 𝓝 (0 : 实数), ball x r subseteq u
   证明: (eventually_closedBall_subset hu).mono fun _r hr => ball_subset_closedBall.trans hr
 
@@ -181,7 +181,7 @@ lemma isClosed_closedBall
 
 中文:
 引理 isClosed_closedBall
-  结论: IsClosed (closedBall x ε)
+  结论: 是闭集 (closedBall x ε)
   证明: isClosed_le (by fun_prop) continuous_const
 
 Depends on / 依赖: continuous_const, fun_prop, isClosed_le
@@ -200,7 +200,7 @@ lemma isClosed_sphere
 
 中文:
 引理 isClosed_sphere
-  结论: IsClosed (sphere x ε)
+  结论: 是闭集 (sphere x ε)
   证明: isClosed_eq (by fun_prop) continuous_const
 
 @[simp]
@@ -347,7 +347,7 @@ lemma eventually_isCompact_closedBall
 
 中文:
 引理 eventually_isCompact_closedBall
-  条件: [WeaklyLocallyCompactSpace α] (x : α)
+  条件: [WeaklyLocallyCompact空间 α] (x : α)
   证明: by
   rcases exists_compact_mem_nhds x with ⟨s, s_compact, hs⟩
   filter_upwards [eventually_closedBall_subset hs] with r hr
@@ -373,8 +373,8 @@ lemma exists_isCompact_closedBall
   simpa only [and_comm] using (this.and self_mem_nhdsWithin).exists
 
 中文:
-引理 exists_isCompact_closedBall
-  条件: [WeaklyLocallyCompactSpace α] (x : α)
+引理 存在_isCompact_closedBall
+  条件: [WeaklyLocallyCompact空间 α] (x : α)
   证明: by
   have : forallᶠ r in 𝓝[>] 0, IsCompact (closedBall x r) :=
     eventually_nhdsWithin_of_eventually_nhds (eventually_isCompact_closedBall x)
@@ -400,7 +400,7 @@ theorem biInter_gt_closedBall
   simp [forall_gt_imp_ge_iff_le_of_dense]
 
 中文:
-定理 biInter_gt_closedBall
+定理 bi整数er_gt_closedBall
   条件: (x : α) (r : 实数)
   结论: ⋂ r' > r, closedBall x r' = closedBall x r
   证明: by
@@ -425,7 +425,7 @@ theorem biInter_gt_ball
   simp [forall_gt_iff_le]
 
 中文:
-定理 biInter_gt_ball
+定理 bi整数er_gt_ball
   条件: (x : α) (r : 实数)
   结论: ⋂ r' > r, ball x r' = closedBall x r
   证明: by
@@ -508,7 +508,7 @@ theorem lebesgue_number_lemma_of_metric
 
 中文:
 定理 lebesgue_number_lemma_of_metric
-  结论: {s : Set α} {ι : Sort*} {c : ι -> Set α} (hs : IsCompact s)
+  结论: {s : 集合 α} {ι : 类型层*} {c : ι -> 集合 α} (hs : 是紧集 s)
   证明: by
   simpa only [ball, UniformSpace.ball, preimage_ofPred_eq, dist_comm]
     using uniformity_basis_dist.lebesgue_number_lemma hs hc₁ hc₂
@@ -531,7 +531,7 @@ theorem lebesgue_number_lemma_of_metric_sUnion
 
 中文:
 定理 lebesgue_number_lemma_of_metric_sUnion
-  结论: {s : Set α} {c : Set (Set α)} (hs : IsCompact s)
+  结论: {s : 集合 α} {c : 集合 (集合 α)} (hs : 是紧集 s)
   证明: by
   rw [sUnion_eq_iUnion] at hc₂; simpa using lebesgue_number_lemma_of_metric hs (by simpa) hc₂
 

@@ -40,8 +40,8 @@ lemma IsPushout.hasLiftingProperty
       h.hom_ext (by rw [h.inl_desc_assoc, sq.w]) (by rw [h.in
 
 中文:
-引理 IsPushout.hasLiftingProperty
-  结论: (h : IsPushout s f g t)
+引理 是推出.hasLiftingProperty
+  结论: (h : 是推出 s f g t)
   证明: fun {u v} sq => by
     have w : (s ≫ u) ≫ g' = f ≫ (t ≫ v) := by
       rw [← Category.assoc]; rw [← h.w]; rw [Category.assoc]; rw [Category.assoc]; rw [sq.w]
@@ -71,8 +71,8 @@ lemma IsPullback.hasLiftingProperty
       h.hom_ext (by rw [Category.assoc, h.lift_fst, CommSq.fac_left]
 
 中文:
-引理 IsPullback.hasLiftingProperty
-  结论: (h : IsPullback s f g t)
+引理 是拉回.hasLiftingProperty
+  结论: (h : 是拉回 s f g t)
   证明: fun {u v} sq => by
     have w : (u ≫ s) ≫ g = f' ≫ v ≫ t := by
       rw [Category.assoc]; rw [h.toCommSq.w]; rw [← Category.assoc]; rw [← Category.assoc]; rw [sq.w]

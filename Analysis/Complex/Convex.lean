@@ -38,7 +38,7 @@ lemma convexHull_reProdIm
 
 中文:
 引理 convexHull_reProdIm
-  条件: (s t : Set 实数)
+  条件: (s t : 集合 实数)
   证明: calc
     convexHull Real (equivRealProdLm ⁻¹' (s ×ˢ t)) = equivRealProdLm ⁻¹' convexHull Real (s ×ˢ t) := by
       simpa only [← LinearEquiv.image_symm_eq_preimage]
@@ -66,7 +66,7 @@ lemma starConvex_slitPlane
 
 中文:
 引理 starConvex_slitPlane
-  条件: {z : Complex} (hz : 0 < z)
+  条件: {z : 复形} (hz : 0 < z)
   结论: StarConvex 实数 z slitPlane
   证明: Complex.compl_Iic_zero ▸ starConvex_compl_Iic hz
 
@@ -85,7 +85,7 @@ lemma starConvex_ofReal_slitPlane
   proof: starConvex_slitPlane zero_lt_real.2 hx
 
 中文:
-引理 starConvex_ofReal_slitPlane
+引理 starConvex_of实数_slitPlane
   条件: {x : 实数} (hx : 0 < x)
   结论: StarConvex 实数 ↑x slitPlane
   证明: starConvex_slitPlane zero_lt_real.2 hx
@@ -128,7 +128,7 @@ theorem convex_halfSpace_re_lt
 
 中文:
 定理 convex_halfSpace_re_lt
-  结论: Convex 实数 { c : Complex | c.re < r }
+  结论: 凸 实数 { c : 复形 | c.re < r }
   证明: convex_halfSpace_lt (.mk add_re smul_re) _
 
 Depends on / 依赖: add_re, convex_halfSpace_lt, smul_re
@@ -145,7 +145,7 @@ theorem convex_halfSpace_re_le
 
 中文:
 定理 convex_halfSpace_re_le
-  结论: Convex 实数 { c : Complex | c.re <= r }
+  结论: 凸 实数 { c : 复形 | c.re <= r }
   证明: convex_halfSpace_le (.mk add_re smul_re) _
 
 Depends on / 依赖: add_re, convex_halfSpace_le, smul_re
@@ -162,7 +162,7 @@ theorem convex_halfSpace_re_gt
 
 中文:
 定理 convex_halfSpace_re_gt
-  结论: Convex 实数 { c : Complex | r < c.re }
+  结论: 凸 实数 { c : 复形 | r < c.re }
   证明: convex_halfSpace_gt (.mk add_re smul_re) _
 
 Depends on / 依赖: add_re, convex_halfSpace_gt, smul_re
@@ -179,7 +179,7 @@ theorem convex_halfSpace_re_ge
 
 中文:
 定理 convex_halfSpace_re_ge
-  结论: Convex 实数 { c : Complex | r <= c.re }
+  结论: 凸 实数 { c : 复形 | r <= c.re }
   证明: convex_halfSpace_ge (.mk add_re smul_re) _
 
 Depends on / 依赖: add_re, convex_halfSpace_ge, smul_re
@@ -196,7 +196,7 @@ theorem convex_halfSpace_im_lt
 
 中文:
 定理 convex_halfSpace_im_lt
-  结论: Convex 实数 { c : Complex | c.im < r }
+  结论: 凸 实数 { c : 复形 | c.im < r }
   证明: convex_halfSpace_lt (.mk add_im smul_im) _
 
 Depends on / 依赖: add_im, convex_halfSpace_lt, smul_im
@@ -213,7 +213,7 @@ theorem convex_halfSpace_im_le
 
 中文:
 定理 convex_halfSpace_im_le
-  结论: Convex 实数 { c : Complex | c.im <= r }
+  结论: 凸 实数 { c : 复形 | c.im <= r }
   证明: convex_halfSpace_le (.mk add_im smul_im) _
 
 Depends on / 依赖: add_im, convex_halfSpace_le, smul_im
@@ -230,7 +230,7 @@ theorem convex_halfSpace_im_gt
 
 中文:
 定理 convex_halfSpace_im_gt
-  结论: Convex 实数 { c : Complex | r < c.im }
+  结论: 凸 实数 { c : 复形 | r < c.im }
   证明: convex_halfSpace_gt (.mk add_im smul_im) _
 
 Depends on / 依赖: add_im, convex_halfSpace_gt, smul_im
@@ -247,7 +247,7 @@ theorem convex_halfSpace_im_ge
 
 中文:
 定理 convex_halfSpace_im_ge
-  结论: Convex 实数 { c : Complex | r <= c.im }
+  结论: 凸 实数 { c : 复形 | r <= c.im }
   证明: convex_halfSpace_ge (.mk add_im smul_im) _
 
 Depends on / 依赖: add_im, convex_halfSpace_ge, smul_im
@@ -269,7 +269,7 @@ lemma isConnected_of_upperHalfPlane
 
 中文:
 引理 isConnected_of_upperHalfPlane
-  结论: {r} {s : Set Complex} (hs₁ : {z | r < z.im} subseteq s)
+  结论: {r} {s : 集合 复形} (hs₁ : {z | r < z.im} subseteq s)
   证明: by
   refine .subset_closure ?_ hs₁ (by simpa only [closure_setOfPred_lt_im] using hs₂)
   exact (convex_halfSpace_im_gt r).isConnected ⟨(r + 1) * I, by simp⟩
@@ -293,7 +293,7 @@ lemma isConnected_of_lowerHalfPlane
 
 中文:
 引理 isConnected_of_lowerHalfPlane
-  结论: {r} {s : Set Complex} (hs₁ : {z | z.im < r} subseteq s)
+  结论: {r} {s : 集合 复形} (hs₁ : {z | z.im < r} subseteq s)
   证明: by
   refine .subset_closure ?_ hs₁ (by simpa only [closure_setOfPred_im_lt] using hs₂)
   exact (convex_halfSpace_im_lt r).isConnected ⟨(r - 1) * I, by simp⟩
@@ -319,7 +319,7 @@ lemma rectangle_eq_convexHull
 
 中文:
 引理 rectangle_eq_convexHull
-  条件: (z w : Complex)
+  条件: (z w : 复形)
   证明: by
   simp_rw [Rectangle, ← segment_eq_uIcc, ← convexHull_pair, ← convexHull_reProdIm,
     ← preimage_equivRealProd_prod, insert_prod, singleton_prod, image_pair, insert_union,
@@ -345,8 +345,8 @@ lemma Convex.rectangle_subset
   simpa only [rectangle_eq_convexHull] using convexHull_min (by grind) U_convex
 
 中文:
-引理 Convex.rectangle_subset
-  结论: {U : Set Complex} (U_convex : Convex 实数 U) {z w : Complex} (hz : z in U)
+引理 凸.rectangle_subset
+  结论: {U : 集合 复形} (U_convex : 凸 实数 U) {z w : 复形} (hz : z in U)
   证明: by
   simpa only [rectangle_eq_convexHull] using convexHull_min (by grind) U_convex
 
@@ -374,7 +374,7 @@ instance :
 
 中文:
 实例 :
-  签名: PathConnectedSpace Complexˣ
+  签名: 道路连通空间 Complexˣ
   定义体: have : PathConnectedSpace { z : Complex // z != 0 } :=
     (isPathConnected_iff_pathConnectedSpace (F := {0}ᶜ)).mp (by
       convert!

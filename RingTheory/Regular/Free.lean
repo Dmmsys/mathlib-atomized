@@ -35,7 +35,7 @@ instance [Module.Free
     Ideal.Quotient.mk_surjective).symm
 
 中文:
-实例 [Module.Free
+实例 [模.自由
   签名: R M] (x
   定义体: Module.Free.of_equiv ((QuotSMulTop.equivQuotTensor x M).extendScalarsOfSurjective
     Ideal.Quotient.mk_surjective).symm
@@ -61,8 +61,8 @@ lemma Module.free_quotSMulTop_iff_free
 
 
 中文:
-引理 Module.free_quotSMulTop_iff_free
-  结论: [Module.FinitePresentation R M] {x : R}
+引理 模.free_quotSMulTop_iff_free
+  结论: [模.有限呈现 R M] {x : R}
   证明: by
   refine ⟨fun free => ?_, fun free => inferInstance⟩
   have := Module.Finite.of_restrictScalars_finite R (R ⧸ Ideal.span {x}) (QuotSMulTop x M)

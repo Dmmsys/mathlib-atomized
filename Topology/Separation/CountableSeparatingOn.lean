@@ -34,7 +34,7 @@ instance [TopologicalSpace
   exact ((isBasis_countableBasis _).inseparable_iff.2 h).eq
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: X] {s
   定义体: by
   suffices HasCountableSeparatingOn s IsOpen univ from .of_subtype fun _ => isOpen_induced_iff.1
@@ -62,7 +62,7 @@ instance [TopologicalSpace
 fun x hx y hy h => hS x hx y hy fun _U hU => not_iff_not.1 h _ (mem_image_of_mem _ hU)⟩
 
 中文:
-实例 [TopologicalSpace
+实例 [拓扑空间
   签名: X] {s
   定义体: let ⟨S, hSc, hSo, hS⟩ := h.1
   ⟨compl '' S, hSc.image _, forall_mem_image.2 fun U hU => (hSo U hU).isClosed_compl,

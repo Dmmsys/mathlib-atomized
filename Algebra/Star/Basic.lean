@@ -55,8 +55,8 @@ class StarMemClass
     - star_mem : forall {s : S} {r : R}, r in s -> star r in s
 
 中文:
-类 StarMemClass
-  参数: (S R : 类型) [Star R] [SetLike S R]
+类 StarMem类
+  参数: (S R : 类型) [对合 R] [集合状 S R]
   公理与运算 (1 个):
     - star_mem : 对任意 {s : S} {r : R}, r in s -> star r in s
 
@@ -84,7 +84,7 @@ instance instStar
 
 中文:
 实例 instStar
-  签名: : Star s where
+  签名: : 对合 s where
   定义体: ⟨star (r : R), star_mem r.prop⟩
 
 Depends on / 依赖: r.prop, star_mem
@@ -124,9 +124,9 @@ class InvolutiveStar
 中文:
 类 InvolutiveStar
   参数: (R : 类型u)
-  继承: Star R
+  继承: 对合 R
   公理与运算 (1 个):
-    - star_involutive : Function.Involutive star
+    - star_involutive : 函数.对合 star
 -/
 class InvolutiveStar (R : Type u) extends Star R where
   /-- Involutive condition. -/
@@ -165,7 +165,7 @@ lemma star_mem_iff
 
 中文:
 引理 star_mem_iff
-  结论: {S : 类型} [SetLike S R] [InvolutiveStar R] [StarMemClass S R]
+  结论: {S : 类型} [集合状 S R] [InvolutiveStar R] [StarMem类 S R]
   证明: ⟨fun h => star_star x ▸ star_mem h, fun h => star_mem h⟩
 
 Depends on / 依赖: star_mem, star_star
@@ -188,7 +188,7 @@ theorem star_injective
 中文:
 定理 star_injective
   条件: [InvolutiveStar R]
-  结论: Function.Injective (star : R -> R)
+  结论: 函数.单射 (star : R -> R)
   证明: Function.Involutive.injective star_involutive
 
 @[aesop 5% (rule_sets := [SetLike!])]
@@ -211,7 +211,7 @@ theorem mem_of_star_mem
 
 中文:
 定理 mem_of_star_mem
-  结论: {S R : 类型} [InvolutiveStar R] [SetLike S R] [StarMemClass S R]
+  结论: {S R : 类型} [InvolutiveStar R] [集合状 S R] [StarMem类 S R]
   证明: by rw [← star_star r]; exact star_mem hr
 
 @[simp]
@@ -257,7 +257,7 @@ definition Equiv.Perm.star
 @[simp]
 
 中文:
-定义 Equiv.Perm.star
+定义 等价.置换.star
   签名: [InvolutiveStar R]
   定义体: star
   invFun := star
@@ -280,7 +280,7 @@ theorem Equiv.Perm.symm_star
   proof: rfl
 
 中文:
-定理 Equiv.Perm.symm_star
+定理 等价.置换.symm_star
   条件: [InvolutiveStar R]
   证明: rfl
 -/
@@ -359,7 +359,7 @@ class TrivialStar
 
 中文:
 类 TrivialStar
-  参数: (R : 类型u) [Star R]
+  参数: (R : 类型u) [对合 R]
   公理与运算 (1 个):
     - star_trivial : 对任意 r : R, star r = r
 -/
@@ -383,7 +383,7 @@ class StarMul
 
 中文:
 类 StarMul
-  参数: (R : 类型u) [Mul R]
+  参数: (R : 类型u) [乘法 R]
   继承: InvolutiveStar R
   公理与运算 (1 个):
     - star_mul : 对任意 r s : R, star (r * s) = star s * star r
@@ -544,7 +544,7 @@ theorem star_mul'
 
 中文:
 定理 star_mul'
-  条件: [CommMagma R] [StarMul R] (x y : R)
+  条件: [交换原群 R] [StarMul R] (x y : R)
   结论: star (x * y) = star x * star y
   证明: (star_mul x y).trans (mul_comm _ _)
 
@@ -567,7 +567,7 @@ definition starMulEquiv
 
 中文:
 定义 starMulEquiv
-  签名: [Mul R] [StarMul R]
+  签名: [乘法 R] [StarMul R]
   定义体: { (InvolutiveStar.star_involutive.toPerm star).trans opEquiv with
     toFun := fun x => MulOpposite.op (star x)
     map_mul' := fun x y => by simp only [star_mul, op_mul] }
@@ -593,7 +593,7 @@ definition starMulAut
 
 中文:
 定义 starMulAut
-  签名: [CommSemigroup R] [StarMul R]
+  签名: [交换半群 R] [StarMul R]
   定义体: { InvolutiveStar.star_involutive.toPerm star with
     toFun := star
     map_mul' := star_mul' }
@@ -620,7 +620,7 @@ theorem star_one
 
 中文:
 定理 star_one
-  条件: [MulOneClass R] [StarMul R]
+  条件: [MulOne类 R] [StarMul R]
   结论: star (1 : R) = 1
   证明: op_injective (starMulEquiv : R ≃* Rᵐᵒᵖ).map_one.trans op_one.symm
 
@@ -644,8 +644,8 @@ lemma Pi.star_mulSingle
 @[simp]
 
 中文:
-引理 Pi.star_mulSingle
-  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, MulOneClass (R i)]
+引理 依赖函数类型.star_mulSingle
+  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, MulOne类 (R i)]
   证明: by
   ext; exact apply_mulSingle (fun _ => star) (fun _ => star_one _) ..
 
@@ -672,7 +672,7 @@ theorem star_pow
 
 中文:
 定理 star_pow
-  条件: [Monoid R] [StarMul R] (x : R) (n : 自然数)
+  条件: [幺半群 R] [StarMul R] (x : R) (n : 自然数)
   结论: star (x ^ n) = star x ^ n
   证明: op_injective
     ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_pow x n).trans (op_pow (star x) n).symm
@@ -699,7 +699,7 @@ theorem star_inv
 
 中文:
 定理 star_inv
-  条件: [Group R] [StarMul R] (x : R)
+  条件: [群 R] [StarMul R] (x : R)
   结论: star x⁻¹ = (star x)⁻¹
   证明: op_injective ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_inv x).trans (op_inv (star x)).symm
 
@@ -723,7 +723,7 @@ theorem star_zpow
 
 中文:
 定理 star_zpow
-  条件: [Group R] [StarMul R] (x : R) (z : 整数)
+  条件: [群 R] [StarMul R] (x : R) (z : 整数)
   结论: star (x ^ z) = star x ^ z
   证明: op_injective
     ((starMulEquiv : R ≃* Rᵐᵒᵖ).toMonoidHom.map_zpow x z).trans (op_zpow (star x) z).symm
@@ -747,7 +747,7 @@ theorem star_div
 
 中文:
 定理 star_div
-  条件: [CommGroup R] [StarMul R] (x y : R)
+  条件: [交换群 R] [StarMul R] (x y : R)
   结论: star (x / y) = star x / star y
   证明: map_div (starMulAut : R ≃* R) _ _
 
@@ -768,7 +768,7 @@ abbreviation starMulOfComm
 
 中文:
 缩写 starMulOfComm
-  签名: {R : 类型} [CommMonoid R]
+  签名: {R : 类型} [交换幺半群 R]
   定义体: x
   star_involutive _ := rfl
   star_mul := mul_comm
@@ -793,7 +793,7 @@ theorem star_id_of_comm
 
 中文:
 定理 star_id_of_comm
-  条件: {R : 类型} [CommMonoid R] {x : R}
+  条件: {R : 类型} [交换幺半群 R] {x : R}
   结论: star x = x
   证明: rfl
 -/
@@ -813,8 +813,8 @@ class StarAddMonoid
     - star_add : forall r s : R, star (r + s) = star r + star s
 
 中文:
-类 StarAddMonoid
-  参数: (R : 类型u) [AddMonoid R]
+类 StarAdd幺半群
+  参数: (R : 类型u) [加法幺半群 R]
   继承: InvolutiveStar R
   公理与运算 (1 个):
     - star_add : 对任意 r s : R, star (r + s) = star r + star s
@@ -842,7 +842,7 @@ definition starAddEquiv
 
 中文:
 定义 starAddEquiv
-  签名: [AddMonoid R] [StarAddMonoid R]
+  签名: [加法幺半群 R] [StarAdd幺半群 R]
   定义体: Equiv.Perm.star
   map_add' := star_add
 
@@ -867,7 +867,7 @@ theorem toEquiv_starAddEquiv
 
 中文:
 定理 toEquiv_starAddEquiv
-  条件: [AddMonoid R] [StarAddMonoid R]
+  条件: [加法幺半群 R] [StarAdd幺半群 R]
   证明: rfl
 
 @[simp]
@@ -887,7 +887,7 @@ theorem symm_starAddEquiv
 
 中文:
 定理 symm_starAddEquiv
-  条件: [AddMonoid R] [StarAddMonoid R]
+  条件: [加法幺半群 R] [StarAdd幺半群 R]
   证明: rfl
 -/
 theorem symm_starAddEquiv [AddMonoid R] [StarAddMonoid R] :
@@ -909,7 +909,7 @@ theorem star_zero
 
 中文:
 定理 star_zero
-  条件: [AddMonoid R] [StarAddMonoid R]
+  条件: [加法幺半群 R] [StarAdd幺半群 R]
   结论: star (0 : R) = 0
   证明: (starAddEquiv : R ≃+ R).map_zero
 
@@ -933,8 +933,8 @@ lemma Pi.star_single
 @[simp]
 
 中文:
-引理 Pi.star_single
-  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, AddMonoid (R i)]
+引理 依赖函数类型.star_single
+  结论: {ι : 类型} {R : ι -> 类型} [DecidableEq ι] [对任意 i, 加法幺半群 (R i)]
   证明: by
   ext; exact apply_single (fun _ => star) (fun _ => star_zero _) ..
 
@@ -958,7 +958,7 @@ theorem star_eq_zero
 
 中文:
 定理 star_eq_zero
-  条件: [AddMonoid R] [StarAddMonoid R] {x : R}
+  条件: [加法幺半群 R] [StarAdd幺半群 R] {x : R}
   结论: star x = 0 ↔ x = 0
   证明: starAddEquiv.map_eq_zero_iff (M := R)
 
@@ -981,7 +981,7 @@ theorem star_ne_zero
 
 中文:
 定理 star_ne_zero
-  条件: [AddMonoid R] [StarAddMonoid R] {x : R}
+  条件: [加法幺半群 R] [StarAdd幺半群 R] {x : R}
   结论: star x != 0 ↔ x != 0
   证明: by
   simp only [ne_eq, star_eq_zero]
@@ -1007,7 +1007,7 @@ theorem star_neg
 
 中文:
 定理 star_neg
-  条件: [AddGroup R] [StarAddMonoid R] (r : R)
+  条件: [加法群 R] [StarAdd幺半群 R] (r : R)
   结论: star (-r) = -star r
   证明: (starAddEquiv : R ≃+ R).map_neg _
 
@@ -1030,7 +1030,7 @@ theorem star_sub
 
 中文:
 定理 star_sub
-  条件: [AddGroup R] [StarAddMonoid R] (r s : R)
+  条件: [加法群 R] [StarAdd幺半群 R] (r s : R)
   结论: star (r - s) = star r - star s
   证明: (starAddEquiv : R ≃+ R).map_sub _ _
 
@@ -1050,7 +1050,7 @@ theorem star_nsmul
 
 中文:
 定理 star_nsmul
-  条件: [AddMonoid R] [StarAddMonoid R] (n : 自然数) (x : R)
+  条件: [加法幺半群 R] [StarAdd幺半群 R] (n : 自然数) (x : R)
   结论: star (n • x) = n • star x
   证明: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_nsmul _ _
 
@@ -1070,7 +1070,7 @@ theorem star_zsmul
 
 中文:
 定理 star_zsmul
-  条件: [AddGroup R] [StarAddMonoid R] (n : 整数) (x : R)
+  条件: [加法群 R] [StarAdd幺半群 R] (n : 整数) (x : R)
   结论: star (n • x) = n • star x
   证明: (starAddEquiv : R ≃+ R).toAddMonoidHom.map_zsmul _ _
 
@@ -1090,8 +1090,8 @@ class StarRing
     - star_add : forall r s : R, star (r + s) = star r + star s
 
 中文:
-类 StarRing
-  参数: (R : 类型u) [NonUnitalNonAssocSemiring R]
+类 对合环
+  参数: (R : 类型u) [非幺非结合半环 R]
   继承: StarMul R
   公理与运算 (1 个):
     - star_add : 对任意 r s : R, star (r + s) = star r + star s
@@ -1119,7 +1119,7 @@ definition starRingEquiv
 
 中文:
 定义 starRingEquiv
-  签名: [NonUnitalNonAssocSemiring R] [StarRing R]
+  签名: [非幺非结合半环 R] [对合环 R]
   定义体: { starAddEquiv.trans (MulOpposite.opAddEquiv : R ≃+ Rᵐᵒᵖ), starMulEquiv with
     toFun := fun x => MulOpposite.op (star x) }
 
@@ -1145,7 +1145,7 @@ theorem star_natCast
 
 中文:
 定理 star_natCast
-  条件: [NonAssocSemiring R] [StarRing R] (n : 自然数)
+  条件: [非结合半环 R] [对合环 R] (n : 自然数)
   结论: star (n : R) = n
   证明: (congr_arg unop (map_natCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) n)).trans (unop_natCast _)
 
@@ -1166,8 +1166,8 @@ theorem star_ofNat
   proof: star_natCast _
 
 中文:
-定理 star_ofNat
-  条件: [NonAssocSemiring R] [StarRing R] (n : 自然数) [n.AtLeastTwo]
+定理 star_of自然数
+  条件: [非结合半环 R] [对合环 R] (n : 自然数) [n.AtLeastTwo]
   证明: star_natCast _
 
 Depends on / 依赖: star_natCast
@@ -1190,7 +1190,7 @@ theorem star_intCast
 
 中文:
 定理 star_intCast
-  条件: [NonAssocRing R] [StarRing R] (z : 整数)
+  条件: [非结合环 R] [对合环 R] (z : 整数)
   结论: star (z : R) = z
   证明: (congr_arg unop <| map_intCast (starRingEquiv : R ≃+* Rᵐᵒᵖ) z).trans (unop_intCast _)
 
@@ -1312,8 +1312,8 @@ instance RingHom.involutiveStar
     simp only [RingHom.coe_comp, Function.comp_apply, starRingEnd_self_apply]
 
 中文:
-实例 RingHom.involutiveStar
-  签名: {S : 类型} [NonAssocSemiring S]
+实例 环态射.involutiveStar
+  签名: {S : 类型} [非结合半环 S]
   定义体: { star := fun f => RingHom.comp (starRingEnd R) f }
   star_involutive := by
     intro
@@ -1338,8 +1338,8 @@ theorem RingHom.star_def
   proof: rfl
 
 中文:
-定理 RingHom.star_def
-  条件: {S : 类型} [NonAssocSemiring S] (f : S ->+* R)
+定理 环态射.star_def
+  条件: {S : 类型} [非结合半环 S] (f : S ->+* R)
   证明: rfl
 -/
 theorem RingHom.star_def {S : Type*} [NonAssocSemiring S] (f : S ->+* R) :
@@ -1354,8 +1354,8 @@ theorem RingHom.star_apply
   proof: rfl
 
 中文:
-定理 RingHom.star_apply
-  条件: {S : 类型} [NonAssocSemiring S] (f : S ->+* R) (s : S)
+定理 环态射.star_apply
+  条件: {S : 类型} [非结合半环 S] (f : S ->+* R) (s : S)
   证明: rfl
 -/
 theorem RingHom.star_apply {S : Type*} [NonAssocSemiring S] (f : S ->+* R) (s : S) :
@@ -1401,7 +1401,7 @@ theorem star_inv₀
 
 中文:
 定理 star_inv₀
-  条件: [GroupWithZero R] [StarMul R] (x : R)
+  条件: [带零群 R] [StarMul R] (x : R)
   结论: star x⁻¹ = (star x)⁻¹
   证明: op_injective (map_inv₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x).trans (op_inv (star x)).symm
 
@@ -1424,7 +1424,7 @@ theorem star_zpow₀
 
 中文:
 定理 star_zpow₀
-  条件: [GroupWithZero R] [StarMul R] (x : R) (z : 整数)
+  条件: [带零群 R] [StarMul R] (x : R) (z : 整数)
   结论: star (x ^ z) = star x ^ z
   证明: op_injective (map_zpow₀ (starMulEquiv : R ≃* Rᵐᵒᵖ) x z).trans (op_zpow (star x) z).symm
 
@@ -1448,7 +1448,7 @@ theorem star_div₀
 
 中文:
 定理 star_div₀
-  条件: [CommGroupWithZero R] [StarMul R] (x y : R)
+  条件: [带零交换群 R] [StarMul R] (x y : R)
   结论: star (x / y) = star x / star y
   证明: by
   apply op_injective
@@ -1471,7 +1471,7 @@ abbreviation starRingOfComm
 
 中文:
 缩写 starRingOfComm
-  签名: {R : 类型} [CommSemiring R]
+  签名: {R : 类型} [交换半环 R]
   定义体: { starMulOfComm with
     star_add := fun _ _ => rfl }
 
@@ -1490,8 +1490,8 @@ instance Nat.instStarRing
   body: starRingOfComm
 
 中文:
-实例 Nat.instStarRing
-  签名: : StarRing 自然数
+实例 自然数.instStarRing
+  签名: : 对合环 自然数
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm
@@ -1506,8 +1506,8 @@ instance Int.instStarRing
   body: starRingOfComm
 
 中文:
-实例 Int.instStarRing
-  签名: : StarRing 整数
+实例 整数.instStarRing
+  签名: : 对合环 整数
   定义体: starRingOfComm
 
 Depends on / 依赖: starRingOfComm
@@ -1522,7 +1522,7 @@ instance Nat.instTrivialStar
   body: ⟨fun _ => rfl⟩
 
 中文:
-实例 Nat.instTrivialStar
+实例 自然数.instTrivialStar
   签名: : TrivialStar 自然数
   定义体: ⟨fun _ => rfl⟩
 -/
@@ -1536,7 +1536,7 @@ instance Int.instTrivialStar
   body: ⟨fun _ => rfl⟩
 
 中文:
-实例 Int.instTrivialStar
+实例 整数.instTrivialStar
   签名: : TrivialStar 整数
   定义体: ⟨fun _ => rfl⟩
 -/
@@ -1552,8 +1552,8 @@ class StarModule
     - star_smul : forall (r : R) (a : A), star (r • a) = star r • star a
 
 中文:
-类 StarModule
-  参数: (R : 类型u) (A : 类型v) [Star R] [Star A] [SMul R A]
+类 对合模
+  参数: (R : 类型u) (A : 类型v) [对合 R] [对合 A] [标量乘法 R A]
   公理与运算 (1 个):
     - star_smul : 对任意 (r : R) (a : A), star (r • a) = star r • star a
 -/
@@ -1575,7 +1575,7 @@ instance StarMul.toStarModule
 
 中文:
 实例 StarMul.toStarModule
-  签名: [CommMonoid R] [StarMul R]
+  签名: [交换幺半群 R] [StarMul R]
   定义体: ⟨star_mul'⟩
 
 Depends on / 依赖: star_mul
@@ -1592,8 +1592,8 @@ instance StarAddMonoid.toStarModuleNat
   body: star_nsmul
 
 中文:
-实例 StarAddMonoid.toStarModuleNat
-  签名: {α} [AddMonoid α] [StarAddMonoid α]
+实例 StarAdd幺半群.toStarModule自然数
+  签名: {α} [加法幺半群 α] [StarAdd幺半群 α]
   定义体: star_nsmul
 
 Depends on / 依赖: star_nsmul
@@ -1610,8 +1610,8 @@ instance StarAddMonoid.toStarModuleInt
   body: star_zsmul
 
 中文:
-实例 StarAddMonoid.toStarModuleInt
-  签名: {α} [AddGroup α] [StarAddMonoid α]
+实例 StarAdd幺半群.toStarModule整数
+  签名: {α} [加法群 α] [StarAdd幺半群 α]
   定义体: star_zsmul
 
 Depends on / 依赖: star_zsmul
@@ -1630,8 +1630,8 @@ instance [CommSemiring
   body: ⟨RingHom.ext star_star, RingHom.ext star_star⟩
 
 中文:
-实例 [CommSemiring
-  签名: R] [StarRing R] : RingHomInvPair (starRingEnd R) (starRingEnd R)
+实例 [交换半环
+  签名: R] [对合环 R] : RingHomInvPair (starRingEnd R) (starRingEnd R)
   定义体: ⟨RingHom.ext star_star, RingHom.ext star_star⟩
 
 Depends on / 依赖: RingHom, RingHom.ext, star_star
@@ -1653,8 +1653,8 @@ class StarHomClass
     - map_star : forall (f : F) (r : R), f (star r) = star (f r)
 
 中文:
-类 StarHomClass
-  参数: (F : 类型) (R S : outParam 类型) [Star R] [Star S] [FunLike F R S]
+类 对合态射类
+  参数: (F : 类型) (R S : outParam 类型) [对合 R] [对合 S] [函数状 F R S]
   公理与运算 (1 个):
     - map_star : 对任意 (f : F) (r : R), f (star r) = star (f r)
 -/
@@ -1768,9 +1768,9 @@ theorem IsUnit.star
   statement: IsUnit a -> IsUnit (star a)
 
 中文:
-定理 IsUnit.star
-  条件: [Monoid R] [StarMul R] {a : R}
-  结论: IsUnit a -> IsUnit (star a)
+定理 是单位.star
+  条件: [幺半群 R] [StarMul R] {a : R}
+  结论: 是单位 a -> 是单位 (star a)
 -/
 protected theorem IsUnit.star [Monoid R] [StarMul R] {a : R} : IsUnit a -> IsUnit (star a)
   | ⟨u, hu⟩ => ⟨Star.star u, hu ▸ rfl⟩
@@ -1789,8 +1789,8 @@ theorem isUnit_star
 
 中文:
 定理 isUnit_star
-  条件: [Monoid R] [StarMul R] {a : R}
-  结论: IsUnit (star a) ↔ IsUnit a
+  条件: [幺半群 R] [StarMul R] {a : R}
+  结论: 是单位 (star a) ↔ 是单位 a
   证明: ⟨fun h => star_star a ▸ h.star, IsUnit.star⟩
 
 @[grind _=_]
@@ -1814,8 +1814,8 @@ theorem Ring.inverse_star
   rw [Ring.inverse_non_unit _ ha]; rw [Ring.inverse_non_unit _ (mt isUnit_star.mp ha)]; rw [star_zero]
 
 中文:
-定理 Ring.inverse_star
-  条件: [Semiring R] [StarRing R] (a : R)
+定理 环.inverse_star
+  条件: [半环 R] [对合环 R] (a : R)
   证明: by
   by_cases ha : IsUnit a
   · obtain ⟨u, rfl⟩ := ha
@@ -1842,8 +1842,8 @@ instance Invertible.star
   mul_invOf_self := by rw [← star_mul, invOf_mul_self, star_one]
 
 中文:
-实例 Invertible.star
-  签名: {R : 类型} [MulOneClass R] [StarMul R] (r : R) [Invertible r]
+实例 可逆.star
+  签名: {R : 类型} [MulOne类 R] [StarMul R] (r : R) [可逆 r]
   定义体: Star.star (⅟r)
   invOf_mul_self := by rw [← star_mul, mul_invOf_self, star_one]
   mul_invOf_self := by rw [← star_mul, invOf_mul_self, star_one]
@@ -1866,7 +1866,7 @@ theorem star_invOf
 
 中文:
 定理 star_invOf
-  结论: {R : 类型} [Monoid R] [StarMul R] (r : R) [Invertible r]
+  结论: {R : 类型} [幺半群 R] [StarMul R] (r : R) [可逆 r]
   证明: by
   rw [← mul_one (star (⅟r))]; rw [← mul_invOf_self (star r)]; rw [← mul_assoc]; rw [← star_mul]
   simp
@@ -1890,7 +1890,7 @@ theorem IsLeftRegular.star
 
 中文:
 定理 IsLeftRegular.star
-  条件: [Mul R] [StarMul R] {x : R} (hx : IsLeftRegular x)
+  条件: [乘法 R] [StarMul R] {x : R} (hx : IsLeftRegular x)
   证明: fun a b h => star_injective hx by simpa using congr_arg Star.star h
 -/
 protected theorem IsLeftRegular.star [Mul R] [StarMul R] {x : R} (hx : IsLeftRegular x) :
@@ -1907,7 +1907,7 @@ theorem IsRightRegular.star
 
 中文:
 定理 IsRightRegular.star
-  条件: [Mul R] [StarMul R] {x : R} (hx : IsRightRegular x)
+  条件: [乘法 R] [StarMul R] {x : R} (hx : IsRightRegular x)
   证明: fun a b h => star_injective hx by simpa using congr_arg Star.star h
 -/
 protected theorem IsRightRegular.star [Mul R] [StarMul R] {x : R} (hx : IsRightRegular x) :
@@ -1925,8 +1925,8 @@ theorem IsRegular.star
 @[simp]
 
 中文:
-定理 IsRegular.star
-  条件: [Mul R] [StarMul R] {x : R} (hx : IsRegular x)
+定理 是正则.star
+  条件: [乘法 R] [StarMul R] {x : R} (hx : 是正则 x)
   证明: ⟨hx.right.star, hx.left.star⟩
 
 @[simp]
@@ -1948,7 +1948,7 @@ theorem isRightRegular_star_iff
 
 中文:
 定理 isRightRegular_star_iff
-  条件: [Mul R] [StarMul R] {x : R}
+  条件: [乘法 R] [StarMul R] {x : R}
   证明: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
 
 @[simp]
@@ -1972,7 +1972,7 @@ theorem isLeftRegular_star_iff
 
 中文:
 定理 isLeftRegular_star_iff
-  条件: [Mul R] [StarMul R] {x : R}
+  条件: [乘法 R] [StarMul R] {x : R}
   证明: ⟨fun h => star_star x ▸ h.star, (·.star)⟩
 
 @[simp]
@@ -1995,7 +1995,7 @@ theorem isRegular_star_iff
 
 中文:
 定理 isRegular_star_iff
-  条件: [Mul R] [StarMul R] {x : R}
+  条件: [乘法 R] [StarMul R] {x : R}
   证明: by
   rw [isRegular_iff]; rw [isRegular_iff]; rw [isRightRegular_star_iff]; rw [isLeftRegular_star_iff]; rw [and_comm]
 
@@ -2021,7 +2021,7 @@ abbreviation involutiveStar
 
 中文:
 缩写 involutiveStar
-  签名: [Star R] [InvolutiveStar S] (hf : Injective f)
+  签名: [对合 R] [InvolutiveStar S] (hf : 单射 f)
   定义体: hf by rw [star, star, star_star]
 -/
 protected abbrev involutiveStar [Star R] [InvolutiveStar S] (hf : Injective f)
@@ -2039,7 +2039,7 @@ star_mul x y := hf by rw [star, mul, star_mul, mul, star, star]
 
 中文:
 缩写 starMul
-  签名: [Star R] [Mul R] [Mul S] [StarMul S] (hf : Injective f)
+  签名: [对合 R] [乘法 R] [乘法 S] [StarMul S] (hf : 单射 f)
   定义体: hf.involutiveStar _ star
 star_mul x y := hf by rw [star, mul, star_mul, mul, star, star]
 -/
@@ -2060,7 +2060,7 @@ star_add x y := hf by rw [star, add, star_add, add, star, star]
 
 中文:
 缩写 starAddMonoid
-  签名: [Star R] [AddMonoid R] [AddMonoid S] [StarAddMonoid S]
+  签名: [对合 R] [加法幺半群 R] [加法幺半群 S] [StarAdd幺半群 S]
   定义体: hf.involutiveStar f star
 star_add x y := hf by rw [star, add, star_add, add, star, star]
 -/
@@ -2080,7 +2080,7 @@ abbreviation starRing
 
 中文:
 缩写 starRing
-  签名: [Star R] [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
+  签名: [对合 R] [非幺非结合半环 R] [非幺非结合半环 S]
   定义体: { hf.starMul f star mul, hf.starAddMonoid f star add with }
 -/
 protected abbrev starRing [Star R] [NonUnitalNonAssocSemiring R] [NonUnitalNonAssocSemiring S]
@@ -2099,7 +2099,7 @@ lemma starModule
 
 中文:
 引理 starModule
-  结论: (𝕜 : 类型) [Star 𝕜] [SMul 𝕜 R]
+  结论: (𝕜 : 类型) [对合 𝕜] [标量乘法 𝕜 R]
   证明: hf by rw [star, smul, star_smul, smul, star]
 -/
 protected lemma starModule (𝕜 : Type*) [Star 𝕜] [SMul 𝕜 R]
@@ -2123,8 +2123,8 @@ instance [Star
 @[simp]
 
 中文:
-实例 [Star
-  签名: R] : Star Rᵐᵒᵖ where star r
+实例 [对合
+  签名: R] : 对合 Rᵐᵒᵖ where star r
   定义体: op (star r.unop)
 
 @[simp]
@@ -2147,7 +2147,7 @@ theorem unop_star
 
 中文:
 定理 unop_star
-  条件: [Star R] (r : Rᵐᵒᵖ)
+  条件: [对合 R] (r : Rᵐᵒᵖ)
   结论: unop (star r) = star (unop r)
   证明: rfl
 
@@ -2168,7 +2168,7 @@ theorem op_star
 
 中文:
 定理 op_star
-  条件: [Star R] (r : R)
+  条件: [对合 R] (r : R)
   结论: op (star r) = star (op r)
   证明: rfl
 -/
@@ -2202,7 +2202,7 @@ instance [Mul
   body: unop_injective (star_mul y.unop x.unop)
 
 中文:
-实例 [Mul
+实例 [乘法
   签名: R] [StarMul R] : StarMul Rᵐᵒᵖ where
   定义体: unop_injective (star_mul y.unop x.unop)
 
@@ -2220,8 +2220,8 @@ instance [AddMonoid
   body: unop_injective (star_add x.unop y.unop)
 
 中文:
-实例 [AddMonoid
-  签名: R] [StarAddMonoid R] : StarAddMonoid Rᵐᵒᵖ where
+实例 [加法幺半群
+  签名: R] [StarAdd幺半群 R] : StarAdd幺半群 Rᵐᵒᵖ where
   定义体: unop_injective (star_add x.unop y.unop)
 
 Depends on / 依赖: AtLeastTwo, Nat.AtLeastTwo.prop.trans, Nat.div_pos_iff, Nat.pow_le_pow_left, Nat.sub_le_sub_right, W.natDegree_pre, div_pos_iff, pow_le_pow_left, simp_rw, split_ifs, star_add, sub_le_sub_right, true_and, unop_injective, x.unop, y.unop, zero_lt_two
@@ -2238,8 +2238,8 @@ instance [NonUnitalSemiring
   body: unop_injective (star_add x.unop y.unop)
 
 中文:
-实例 [NonUnitalSemiring
-  签名: R] [StarRing R] : StarRing Rᵐᵒᵖ where
+实例 [非幺半环
+  签名: R] [对合环 R] : 对合环 Rᵐᵒᵖ where
   定义体: unop_injective (star_add x.unop y.unop)
 
 Depends on / 依赖: star_add, unop_injective, x.unop, y.unop
@@ -2263,7 +2263,7 @@ instance StarSemigroup.toOpposite_starModule
 
 中文:
 实例 StarSemigroup.toOpposite_starModule
-  签名: [CommMonoid R] [StarMul R]
+  签名: [交换幺半群 R] [StarMul R]
   定义体: ⟨fun r s => star_mul' s r.unop⟩
 
 Depends on / 依赖: W.natDegree_pre, _pos, ne_zero_of_natDegree_gt, r.unop, star_mul

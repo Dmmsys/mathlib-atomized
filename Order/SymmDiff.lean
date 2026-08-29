@@ -75,7 +75,7 @@ definition symmDiff
 
 中文:
 定义 symmDiff
-  签名: [Max α] [SDiff α] (a b : α)
+  签名: [最大值 α] [对称差 α] (a b : α)
   定义体: a \ b ⊔ b \ a
 
 Depends on / 依赖: DirectSum, DirectSum.mk_apply_of_mem, DirectSum.mk_apply_of_notMem, Finset, Finset.image, Submodule, Submodule.coe_zero, Subtype, Subtype.coe_mk, coe_mk, coe_zero, decompose, mk_apply_of_mem, mk_apply_of_notMem, support, weight, weightedHomogeneousComponent_eq_zero_of_notMem
@@ -103,7 +103,7 @@ theorem symmDiff_def
 
 中文:
 定理 symmDiff_def
-  条件: [Max α] [SDiff α] (a b : α)
+  条件: [最大值 α] [对称差 α] (a b : α)
   结论: a ∆ b = a \ b ⊔ b \ a
   证明: rfl
 -/
@@ -173,8 +173,8 @@ theorem Bool.symmDiff_eq_xor
   proof: by decide
 
 中文:
-定理 Bool.symmDiff_eq_xor
-  结论: 对任意 p q : 布尔, p ∆ q = xor p q
+定理 布尔值.symmDiff_eq_xor
+  结论: 对任意 p q : 布尔值, p ∆ q = xor p q
   证明: by decide
 
 Depends on / 依赖: MvPolynomial, MvPolynomial.decompose, _apply, decompose
@@ -264,7 +264,7 @@ instance symmDiff_isCommutative
 
 中文:
 实例 symmDiff_isCommutative
-  签名: : Std.Commutative (α := α) (· ∆ ·)
+  签名: : Std.交换 (α := α) (· ∆ ·)
   定义体: ⟨symmDiff_comm⟩
 
 @[to_dual (attr := simp)]
@@ -975,8 +975,8 @@ theorem IsCompl.symmDiff_eq_top
   rw [h.eq_hnot]; rw [hnot_symmDiff_self]
 
 中文:
-定理 IsCompl.symmDiff_eq_top
-  条件: {a b : α} (h : IsCompl a b)
+定理 是补集.symmDiff_eq_top
+  条件: {a b : α} (h : 是补集 a b)
   结论: a ∆ b = ⊤
   证明: by
   rw [h.eq_hnot]; rw [hnot_symmDiff_self]
@@ -1378,7 +1378,7 @@ instance symmDiff_isAssociative
 
 中文:
 实例 symmDiff_isAssociative
-  签名: : Std.Associative (α := α) (· ∆ ·)
+  签名: : Std.结合 (α := α) (· ∆ ·)
   定义体: ⟨symmDiff_assoc⟩
 -/
 instance symmDiff_isAssociative : Std.Associative (α := α) (· ∆ ·) :=
@@ -1522,7 +1522,7 @@ theorem symmDiff_left_involutive
 中文:
 定理 symmDiff_left_involutive
   条件: (a : α)
-  结论: Involutive (· ∆ a)
+  结论: 对合 (· ∆ a)
   证明: symmDiff_symmDiff_cancel_right _
 
 Depends on / 依赖: symmDiff_symmDiff_cancel_right
@@ -1542,7 +1542,7 @@ theorem symmDiff_right_involutive
 中文:
 定理 symmDiff_right_involutive
   条件: (a : α)
-  结论: Involutive (a ∆ ·)
+  结论: 对合 (a ∆ ·)
   证明: symmDiff_symmDiff_cancel_left _
 
 Depends on / 依赖: symmDiff_symmDiff_cancel_left
@@ -1562,7 +1562,7 @@ theorem symmDiff_left_injective
 中文:
 定理 symmDiff_left_injective
   条件: (a : α)
-  结论: Injective (· ∆ a)
+  结论: 单射 (· ∆ a)
   证明: Function.Involutive.injective (symmDiff_left_involutive a)
 
 Depends on / 依赖: Function, Function.Involutive.injective, Involutive, injective, symmDiff_left_involutive
@@ -1582,7 +1582,7 @@ theorem symmDiff_right_injective
 中文:
 定理 symmDiff_right_injective
   条件: (a : α)
-  结论: Injective (a ∆ ·)
+  结论: 单射 (a ∆ ·)
   证明: Function.Involutive.injective (symmDiff_right_involutive _)
 
 Depends on / 依赖: Function, Function.Involutive.injective, Involutive, injective, symmDiff_right_involutive
@@ -1602,7 +1602,7 @@ theorem symmDiff_left_surjective
 中文:
 定理 symmDiff_left_surjective
   条件: (a : α)
-  结论: Surjective (· ∆ a)
+  结论: 满射 (· ∆ a)
   证明: Function.Involutive.surjective (symmDiff_left_involutive _)
 
 Depends on / 依赖: Function, Function.Involutive.surjective, Involutive, surjective, symmDiff_left_involutive
@@ -1622,7 +1622,7 @@ theorem symmDiff_right_surjective
 中文:
 定理 symmDiff_right_surjective
   条件: (a : α)
-  结论: Surjective (a ∆ ·)
+  结论: 满射 (a ∆ ·)
   证明: Function.Involutive.surjective (symmDiff_right_involutive _)
 
 Depends on / 依赖: Function, Function.Involutive.surjective, Involutive, surjective, symmDiff_right_involutive
@@ -2025,7 +2025,7 @@ instance bihimp_isAssociative
 
 中文:
 实例 bihimp_isAssociative
-  签名: : Std.Associative (α := α) (· ⇔ ·)
+  签名: : Std.结合 (α := α) (· ⇔ ·)
   定义体: ⟨bihimp_assoc⟩
 -/
 instance bihimp_isAssociative : Std.Associative (α := α) (· ⇔ ·) :=
@@ -2163,7 +2163,7 @@ theorem bihimp_left_involutive
 中文:
 定理 bihimp_left_involutive
   条件: (a : α)
-  结论: Involutive (· ⇔ a)
+  结论: 对合 (· ⇔ a)
   证明: bihimp_bihimp_cancel_right _
 
 Depends on / 依赖: bihimp_bihimp_cancel_right
@@ -2183,7 +2183,7 @@ theorem bihimp_right_involutive
 中文:
 定理 bihimp_right_involutive
   条件: (a : α)
-  结论: Involutive (a ⇔ ·)
+  结论: 对合 (a ⇔ ·)
   证明: bihimp_bihimp_cancel_left _
 
 Depends on / 依赖: bihimp_bihimp_cancel_left
@@ -2203,7 +2203,7 @@ theorem bihimp_left_injective
 中文:
 定理 bihimp_left_injective
   条件: (a : α)
-  结论: Injective (· ⇔ a)
+  结论: 单射 (· ⇔ a)
   证明: @symmDiff_left_injective αᵒᵈ _ _
 
 Depends on / 依赖: symmDiff_left_injective
@@ -2223,7 +2223,7 @@ theorem bihimp_right_injective
 中文:
 定理 bihimp_right_injective
   条件: (a : α)
-  结论: Injective (a ⇔ ·)
+  结论: 单射 (a ⇔ ·)
   证明: @symmDiff_right_injective αᵒᵈ _ _
 
 Depends on / 依赖: symmDiff_right_injective
@@ -2243,7 +2243,7 @@ theorem bihimp_left_surjective
 中文:
 定理 bihimp_left_surjective
   条件: (a : α)
-  结论: Surjective (· ⇔ a)
+  结论: 满射 (· ⇔ a)
   证明: @symmDiff_left_surjective αᵒᵈ _ _
 
 Depends on / 依赖: symmDiff_left_surjective
@@ -2263,7 +2263,7 @@ theorem bihimp_right_surjective
 中文:
 定理 bihimp_right_surjective
   条件: (a : α)
-  结论: Surjective (a ⇔ ·)
+  结论: 满射 (a ⇔ ·)
   证明: @symmDiff_right_surjective αᵒᵈ _ _
 
 Depends on / 依赖: symmDiff_right_surjective
@@ -2581,7 +2581,7 @@ theorem symmDiff_eq_top
 
 中文:
 定理 symmDiff_eq_top
-  结论: a ∆ b = ⊤ ↔ IsCompl a b
+  结论: a ∆ b = ⊤ ↔ 是补集 a b
   证明: by
   rw [symmDiff_eq']; rw [← compl_inf]; rw [inf_eq_top_iff]; rw [compl_eq_top]; rw [isCompl_iff]; rw [disjoint_iff]; rw [codisjoint_iff]; rw [and_comm]
 
@@ -2606,7 +2606,7 @@ theorem bihimp_eq_bot
 
 中文:
 定理 bihimp_eq_bot
-  结论: a ⇔ b = ⊥ ↔ IsCompl a b
+  结论: a ⇔ b = ⊥ ↔ 是补集 a b
   证明: by
   rw [bihimp_eq']; rw [← compl_sup]; rw [sup_eq_bot_iff]; rw [compl_eq_bot]; rw [isCompl_iff]; rw [disjoint_iff]; rw [codisjoint_iff]
 
@@ -2813,7 +2813,7 @@ theorem symmDiff_fst
 
 中文:
 定理 symmDiff_fst
-  结论: [GeneralizedCoheytingAlgebra α] [GeneralizedCoheytingAlgebra β]
+  结论: [GeneralizedCoheyting代数 α] [GeneralizedCoheyting代数 β]
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -2833,7 +2833,7 @@ theorem symmDiff_snd
 
 中文:
 定理 symmDiff_snd
-  结论: [GeneralizedCoheytingAlgebra α] [GeneralizedCoheytingAlgebra β]
+  结论: [GeneralizedCoheyting代数 α] [GeneralizedCoheyting代数 β]
   证明: rfl
 -/
 theorem symmDiff_snd [GeneralizedCoheytingAlgebra α] [GeneralizedCoheytingAlgebra β]
@@ -2860,7 +2860,7 @@ theorem symmDiff_def
 
 中文:
 定理 symmDiff_def
-  条件: [对任意 i, GeneralizedCoheytingAlgebra (π i)] (a b : 对任意 i, π i)
+  条件: [对任意 i, GeneralizedCoheyting代数 (π i)] (a b : 对任意 i, π i)
   证明: rfl
 
 @[to_dual (attr := simp)]
@@ -2880,7 +2880,7 @@ theorem symmDiff_apply
 
 中文:
 定理 symmDiff_apply
-  条件: [对任意 i, GeneralizedCoheytingAlgebra (π i)] (a b : 对任意 i, π i) (i : ι)
+  条件: [对任意 i, GeneralizedCoheyting代数 (π i)] (a b : 对任意 i, π i) (i : ι)
   证明: rfl
 -/
 theorem symmDiff_apply [forall i, GeneralizedCoheytingAlgebra (π i)] (a b : forall i, π i) (i : ι) :

@@ -52,10 +52,10 @@ class IsHausdorff
     - haus' : forall x : M, (forall n : Nat, x ≡ 0 [SMOD (I ^ n • ⊤ : Submodule R M)]) -> x = 0
 
 中文:
-类 IsHausdorff
+类 是豪斯多夫
   参数: : 命题 where
   公理与运算 (1 个):
-    - haus' : 对任意 x : M, (对任意 n : 自然数, x ≡ 0 [SMOD (I ^ n • ⊤ : Submodule R M)]) -> x = 0
+    - haus' : 对任意 x : M, (对任意 n : 自然数, x ≡ 0 [SMOD (I ^ n • ⊤ : 子模 R M)]) -> x = 0
 -/
 class IsHausdorff : Prop where
   haus' : forall x : M, (forall n : Nat, x ≡ 0 [SMOD (I ^ n • ⊤ : Submodule R M)]) -> x = 0
@@ -70,10 +70,10 @@ class IsPrecomplete
     - prec' : forall f : Nat -> M, (forall {m n}, m <= n -> f m ≡ f n [SMOD (I ^ m • ⊤ : Submodule R M)]) -> exists L : M, forall n, f n ≡ L [SMOD (I ^ n • ⊤ : Submodule R M)]
 
 中文:
-类 IsPrecomplete
+类 是Precomplete
   参数: : 命题 where
   公理与运算 (1 个):
-    - prec' : 对任意 f : 自然数 -> M, (对任意 {m n}, m <= n -> f m ≡ f n [SMOD (I ^ m • ⊤ : Submodule R M)]) -> 存在 L : M, 对任意 n, f n ≡ L [SMOD (I ^ n • ⊤ : Submodule R M)]
+    - prec' : 对任意 f : 自然数 -> M, (对任意 {m n}, m <= n -> f m ≡ f n [SMOD (I ^ m • ⊤ : 子模 R M)]) -> 存在 L : M, 对任意 n, f n ≡ L [SMOD (I ^ n • ⊤ : 子模 R M)]
 -/
 class IsPrecomplete : Prop where
   prec' : forall f : Nat -> M, (forall {m n}, m <= n -> f m ≡ f n [SMOD (I ^ m • ⊤ : Submodule R M)]) ->
@@ -91,9 +91,9 @@ class IsAdicComplete
   (no additional axioms)
 
 中文:
-类 IsAdicComplete
-  参数: : 命题 extends IsHausdorff I M, IsPrecomplete I M
-  继承: IsHausdorff I M, IsPrecomplete I M
+类 是AdicComplete
+  参数: : 命题 extends 是豪斯多夫 I M, 是Precomplete I M
+  继承: 是豪斯多夫 I M, 是Precomplete I M
   (无附加公理)
 -/
 class IsAdicComplete : Prop extends IsHausdorff I M, IsPrecomplete I M
@@ -109,8 +109,8 @@ theorem IsHausdorff.haus
   proof: IsHausdorff.haus'
 
 中文:
-定理 IsHausdorff.haus
-  条件: (_ : IsHausdorff I M)
+定理 是豪斯多夫.haus
+  条件: (_ : 是豪斯多夫 I M)
   证明: IsHausdorff.haus'
 
 Depends on / 依赖: IsHausdorff, IsHausdorff.haus
@@ -149,8 +149,8 @@ theorem IsHausdorff.eq_iff_smodEq
   simpa [SModEq.sub_mem] using h
 
 中文:
-定理 IsHausdorff.eq_iff_smodEq
-  条件: [IsHausdorff I M] {x y : M}
+定理 是豪斯多夫.eq_iff_smodEq
+  条件: [是豪斯多夫 I M] {x y : M}
   证明: by
   refine ⟨fun h _ => h ▸ rfl, fun h => ?_⟩
   rw [← sub_eq_zero]
@@ -177,8 +177,8 @@ theorem IsHausdorff.map_algebraMap_iff
     restrictScalars_map_smul_eq]
 
 中文:
-定理 IsHausdorff.map_algebraMap_iff
-  结论: [CommRing S] [Module S M] [Algebra R S]
+定理 是豪斯多夫.map_algebraMap_iff
+  结论: [交换环 S] [模 S M] [代数 R S]
   证明: by
   simp [isHausdorff_iff, ← Ideal.map_pow, ← SModEq.restrictScalars R,
     restrictScalars_map_smul_eq]
@@ -205,8 +205,8 @@ theorem IsHausdorff.of_map
     rw [AddS
 
 中文:
-定理 IsHausdorff.of_map
-  结论: [CommRing S] [Module S M] {J : Ideal S} [Algebra R S]
+定理 是豪斯多夫.of_map
+  结论: [交换环 S] [模 S M] {J : 理想 S} [代数 R S]
   证明: by
   refine ⟨fun x h => IsHausdorff.haus ‹_› x fun n => ?_⟩
   apply SModEq.of_toAddSubgroup_le
@@ -248,8 +248,8 @@ theorem IsHausdorff.funext
   exact h n m
 
 中文:
-定理 IsHausdorff.funext
-  结论: {M : 类型} [IsHausdorff I N] {f g : M -> N}
+定理 是豪斯多夫.funext
+  结论: {M : 类型} [是豪斯多夫 I N] {f g : M -> N}
   证明: by
   ext m
   rw [IsHausdorff.eq_iff_smodEq (I := I)]
@@ -282,8 +282,8 @@ theorem IsHausdorff.StrictMono.funext
   exact h n m
 
 中文:
-定理 IsHausdorff.StrictMono.funext
-  结论: {M : 类型} [IsHausdorff I N] {f g : M -> N} {a : 自然数 -> 自然数}
+定理 是豪斯多夫.严格递增.funext
+  结论: {M : 类型} [是豪斯多夫 I N] {f g : M -> N} {a : 自然数 -> 自然数}
   证明: by
   ext m
   rw [IsHausdorff.eq_iff_smodEq (I := I)]
@@ -315,8 +315,8 @@ theorem IsHausdorff.funext'
   simpa using! h n r
 
 中文:
-定理 IsHausdorff.funext'
-  结论: {R S : 类型} [CommRing S] (I : Ideal S) [IsHausdorff I S]
+定理 是豪斯多夫.funext'
+  结论: {R S : 类型} [交换环 S] (I : 理想 S) [是豪斯多夫 I S]
   证明: by
   ext r
   rw [IsHausdorff.eq_iff_smodEq (I := I)]
@@ -347,8 +347,8 @@ theorem IsHausdorff.StrictMono.funext'
   simpa using! h n m
 
 中文:
-定理 IsHausdorff.StrictMono.funext'
-  结论: {R S : 类型} [CommRing S] (I : Ideal S) [IsHausdorff I S]
+定理 是豪斯多夫.严格递增.funext'
+  结论: {R S : 类型} [交换环 S] (I : 理想 S) [是豪斯多夫 I S]
   证明: by
   ext m
   rw [IsHausdorff.eq_iff_smodEq (I := I)]
@@ -376,8 +376,8 @@ theorem IsPrecomplete.prec
   proof: IsPrecomplete.prec' _
 
 中文:
-定理 IsPrecomplete.prec
-  条件: (_ : IsPrecomplete I M) {f : 自然数 -> M}
+定理 是Precomplete.prec
+  条件: (_ : 是Precomplete I M) {f : 自然数 -> M}
   证明: IsPrecomplete.prec' _
 
 Depends on / 依赖: IsPrecomplete, IsPrecomplete.prec
@@ -416,8 +416,8 @@ theorem IsPrecomplete.map_algebraMap_iff
     restrictScalars_map_smul_eq]
 
 中文:
-定理 IsPrecomplete.map_algebraMap_iff
-  结论: [CommRing S] [Module S M] [Algebra R S]
+定理 是Precomplete.map_algebraMap_iff
+  结论: [交换环 S] [模 S M] [代数 R S]
   证明: by
   simp [isPrecomplete_iff, ← Ideal.map_pow, ← SModEq.restrictScalars R,
     restrictScalars_map_smul_eq]
@@ -441,7 +441,7 @@ abbreviation Hausdorffification
 
 中文:
 缩写 Hausdorffification
-  签名: : Type _
+  签名: : 类型 _
   定义体: M ⧸ (⨅ n : Nat, I ^ n • ⊤ : Submodule R M)
 
 Depends on / 依赖: Submodule
@@ -477,7 +477,7 @@ definition AdicCompletion
 
 中文:
 定义 AdicCompletion
-  签名: : Type _
+  签名: : 类型 _
   定义体: { f : forall n : Nat, M ⧸ (I ^ n • ⊤ : Submodule R M) //
     forall {m n} (hmn : m <= n), AdicCompletion.transitionMap I M hmn (f n) = f m }
 
@@ -499,7 +499,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : IsHausdorff (⊥ : Ideal R) M
+  签名: : 是豪斯多夫 (⊥ : 理想 R) M
   定义体: ⟨fun x hx => by simpa only [pow_one ⊥, bot_smul, SModEq.bot] using hx 1⟩
 
 Depends on / 依赖: SModEq, SModEq.bot, bot_smul, pow_one
@@ -521,8 +521,8 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: (h : IsHausdorff (⊤ : Ideal R) M)
-  结论: Subsingleton M
+  条件: (h : 是豪斯多夫 (⊤ : 理想 R) M)
+  结论: 子单例 M
   证明: ⟨fun x y => eq_of_sub_eq_zero h.haus (x - y) fun n => by
     rw [Ideal.top_pow]; rw [top_smul]
     exact SModEq.top⟩
@@ -549,8 +549,8 @@ theorem iInf_pow_smul
 
 中文:
 定理 iInf_pow_smul
-  条件: (h : IsHausdorff I M)
-  结论: (⨅ n : 自然数, I ^ n • ⊤ : Submodule R M) = ⊥
+  条件: (h : 是豪斯多夫 I M)
+  结论: (⨅ n : 自然数, I ^ n • ⊤ : 子模 R M) = ⊥
   证明: eq_bot_iff.2 fun x hx =>
 (mem_bot _).2 h.haus x fun n => SModEq.zero.2 (mem_iInf fun n : Nat => I ^ n • ⊤).1 hx n
 
@@ -618,7 +618,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsHausdorff I (Hausdorffification I M)
+  签名: 是豪斯多夫 I (Hausdorffification I M)
   定义体: ⟨fun x => Quotient.inductionOn' x fun x hx =>
 (Quotient.mk_eq_zero _).2 (mem_iInf _).2 fun n => by
       have := comap_map_mkQ (⨅ n : Nat, I ^ n • ⊤ : Submodule R M) (I ^ n • ⊤)
@@ -741,7 +741,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : IsPrecomplete (⊥ : Ideal R) M
+  签名: : 是Precomplete (⊥ : 理想 R) M
   定义体: by
   refine ⟨fun f hf => ⟨f 1, fun n => ?_⟩⟩
   rcases n with - | n
@@ -773,7 +773,7 @@ instance top
 
 中文:
 实例 top
-  签名: : IsPrecomplete (⊤ : Ideal R) M
+  签名: : 是Precomplete (⊤ : 理想 R) M
   定义体: ⟨fun f _ =>
     ⟨0, fun n => by
       rw [Ideal.top_pow]; rw [top_smul]
@@ -808,7 +808,7 @@ definition submodule
 
 中文:
 定义 submodule
-  签名: : Submodule R (对任意 n : 自然数, M ⧸ (I ^ n • ⊤ : Submodule R M)) where
+  签名: : 子模 R (对任意 n : 自然数, M ⧸ (I ^ n • ⊤ : 子模 R M)) where
   定义体: { f | forall {m n} (hmn : m <= n), AdicCompletion.transitionMap I M hmn (f n) = f m }
   zero_mem' hmn := by rw [Pi.zero_apply, Pi.zero_apply, map_zero]
   add_mem' hf hg m n hmn := by
@@ -834,7 +834,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (AdicCompletion I M)
+  签名: 零 (AdicCompletion I M)
   定义体: ⟨0, by simp⟩
 -/
 instance : Zero (AdicCompletion I M) where
@@ -850,7 +850,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (AdicCompletion I M)
+  签名: 加法 (AdicCompletion I M)
   定义体: ⟨x.val + y.val, by simp [x.property, y.property]⟩
 
 Depends on / 依赖: property, x.property, x.val, y.property, y.val
@@ -868,7 +868,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (AdicCompletion I M)
+  签名: 取负 (AdicCompletion I M)
   定义体: ⟨- x.val, by simp [x.property]⟩
 
 Depends on / 依赖: property, x.property, x.val
@@ -886,7 +886,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (AdicCompletion I M)
+  签名: 减法 (AdicCompletion I M)
   定义体: ⟨x.val - y.val, by simp [x.property, y.property]⟩
 
 Depends on / 依赖: property, x.property, x.val, y.property, y.val
@@ -904,7 +904,7 @@ instance instSMul
 
 中文:
 实例 instSMul
-  签名: [SMul S R] [SMul S M] [IsScalarTower S R M]
+  签名: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M]
   定义体: ⟨r • x.val, by simp [x.property]⟩
 
 Depends on / 依赖: property, x.property, x.val
@@ -1057,7 +1057,7 @@ lemma val_smul
 
 中文:
 引理 val_smul
-  条件: [SMul S R] [SMul S M] [IsScalarTower S R M] (s : S) (f : AdicCompletion I M)
+  条件: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] (s : S) (f : AdicCompletion I M)
   证明: rfl
 -/
 lemma val_smul [SMul S R] [SMul S M] [IsScalarTower S R M] (s : S) (f : AdicCompletion I M) :
@@ -1075,7 +1075,7 @@ lemma val_smul_apply
 
 中文:
 引理 val_smul_apply
-  结论: [SMul S R] [SMul S M] [IsScalarTower S R M] (s : S) (f : AdicCompletion I M)
+  结论: [标量乘法 S R] [标量乘法 S M] [标量塔 S R M] (s : S) (f : AdicCompletion I M)
   证明: rfl
 
 @[ext]
@@ -1117,7 +1117,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (AdicCompletion I M)
+  签名: 加法交换群 (AdicCompletion I M)
   定义体: let f : AdicCompletion I M -> forall n, M ⧸ (I ^ n • ⊤ : Submodule R M) := Subtype.val
   Subtype.val_injective.addCommGroup f rfl val_add val_neg val_sub (fun _ _ => val_smul ..)
     (fun _ _ => val_smul ..)
@@ -1140,8 +1140,8 @@ instance [Semiring
   Subtype.val_injective.module S f val_smul
 
 中文:
-实例 [Semiring
-  签名: S] [SMul S R] [Module S M] [IsScalarTower S R M] :
+实例 [半环
+  签名: S] [标量乘法 S R] [模 S M] [标量塔 S R M] :
   定义体: let f : AdicCompletion I M ->+ forall n, M ⧸ (I ^ n • ⊤ : Submodule R M) :=
     { toFun := Subtype.val, map_zero' := rfl, map_add' := fun _ _ => rfl }
   Subtype.val_injective.module S f val_smul
@@ -1164,7 +1164,7 @@ instance instIsScalarTower
 
 中文:
 实例 instIsScalarTower
-  签名: [SMul S T] [SMul S R] [SMul T R] [SMul S M] [SMul T M]
+  签名: [标量乘法 S T] [标量乘法 S R] [标量乘法 T R] [标量乘法 S M] [标量乘法 T M]
   定义体: by ext; simp [val_smul]
 
 Depends on / 依赖: val_smul
@@ -1184,7 +1184,7 @@ instance instSMulCommClass
 
 中文:
 实例 instSMulCommClass
-  签名: [SMul S R] [SMul T R] [SMul S M] [SMul T M]
+  签名: [标量乘法 S R] [标量乘法 T R] [标量乘法 S M] [标量乘法 T M]
   定义体: by ext; simp [val_smul, smul_comm]
 
 Depends on / 依赖: smul_comm, val_smul
@@ -1204,7 +1204,7 @@ instance instIsCentralScalar
 
 中文:
 实例 instIsCentralScalar
-  签名: [SMul S R] [SMul Sᵐᵒᵖ R] [SMul S M] [SMul Sᵐᵒᵖ M]
+  签名: [标量乘法 S R] [标量乘法 Sᵐᵒᵖ R] [标量乘法 S M] [标量乘法 Sᵐᵒᵖ M]
   定义体: by ext; simp [val_smul, op_smul_eq_smul]
 
 Depends on / 依赖: op_smul_eq_smul, val_smul
@@ -1228,7 +1228,7 @@ definition incl
 
 中文:
 定义 incl
-  签名: : AdicCompletion I M ->ₗ[R] (对任意 n, M ⧸ (I ^ n • ⊤ : Submodule R M)) where
+  签名: : AdicCompletion I M ->ₗ[R] (对任意 n, M ⧸ (I ^ n • ⊤ : 子模 R M)) where
   定义体: x.val
   map_add' _ _ := rfl
   map_smul' _ _ := rfl
@@ -1254,7 +1254,7 @@ lemma val_sum
 
 中文:
 引理 val_sum
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> AdicCompletion I M)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> AdicCompletion I M)
   证明: by
   simp_rw [← funext (incl_apply _ _ _), map_sum]
 
@@ -1274,7 +1274,7 @@ lemma val_sum_apply
 
 中文:
 引理 val_sum_apply
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> AdicCompletion I M) (n : 自然数)
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> AdicCompletion I M) (n : 自然数)
   证明: by simp
 -/
 lemma val_sum_apply {ι : Type*} (s : Finset ι) (f : ι -> AdicCompletion I M) (n : Nat) :
@@ -1323,7 +1323,7 @@ theorem of_apply
 中文:
 定理 of_apply
   条件: (x : M) (n : 自然数)
-  结论: (of I M x).1 n = mkQ (I ^ n • ⊤ : Submodule R M) x
+  结论: (of I M x).1 n = mkQ (I ^ n • ⊤ : 子模 R M) x
   证明: rfl
 -/
 theorem of_apply (x : M) (n : Nat) : (of I M x).1 n = mkQ (I ^ n • ⊤ : Submodule R M) x :=
@@ -1405,7 +1405,7 @@ theorem eval_of
 中文:
 定理 eval_of
   条件: (n : 自然数) (x : M)
-  结论: eval I M n (of I M x) = mkQ (I ^ n • ⊤ : Submodule R M) x
+  结论: eval I M n (of I M x) = mkQ (I ^ n • ⊤ : 子模 R M) x
   证明: rfl
 
 @[simp]
@@ -1447,7 +1447,7 @@ theorem eval_surjective
 中文:
 定理 eval_surjective
   条件: (n : 自然数)
-  结论: Function.Surjective (eval I M n)
+  结论: 函数.满射 (eval I M n)
   证明: fun x =>
   Quotient.inductionOn' x fun x => ⟨of I M x, rfl⟩
 
@@ -1469,7 +1469,7 @@ theorem range_eval
 中文:
 定理 range_eval
   条件: (n : 自然数)
-  结论: LinearMap.range (eval I M n) = ⊤
+  结论: 线性映射.range (eval I M n) = ⊤
   证明: LinearMap.range_eq_top.2 (eval_surjective I M n)
 
 Depends on / 依赖: LinearMap, LinearMap.range_eq_top, eval_surjective, range_eq_top
@@ -1496,7 +1496,7 @@ exact SModEq.zero.2 smul_mem_smul hr mem_top
 
 中文:
 实例 :
-  签名: IsHausdorff I (AdicCompletion I M)
+  签名: 是豪斯多夫 I (AdicCompletion I M)
   定义体: ext fun n => by
     refine smul_induction_on (SModEq.zero.1 <| h n) (fun r hr x _ => ?_) (fun x y hx hy => ?_)
     · simp only [val_smul_apply, val_zero]
@@ -1589,7 +1589,7 @@ definition AdicCauchySequence
 
 中文:
 定义 AdicCauchySequence
-  签名: : Type _
+  签名: : 类型 _
   定义体: { f : Nat -> M // IsAdicCauchy I M f }
 
 Depends on / 依赖: IsAdicCauchy
@@ -1617,7 +1617,7 @@ definition submodule
 
 中文:
 定义 submodule
-  签名: : Submodule R (自然数 -> M) where
+  签名: : 子模 R (自然数 -> M) where
   定义体: { f | IsAdicCauchy I M f }
   add_mem' := by
     intro f g hf hg m n hmn
@@ -1653,7 +1653,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero (AdicCauchySequence I M)
+  签名: 零 (AdicCauchySequence I M)
   定义体: ⟨0, fun _ => rfl⟩
 -/
 instance : Zero (AdicCauchySequence I M) where
@@ -1669,7 +1669,7 @@ instance :
 
 中文:
 实例 :
-  签名: Add (AdicCauchySequence I M)
+  签名: 加法 (AdicCauchySequence I M)
   定义体: ⟨x.val + y.val, fun hmn => SModEq.add (x.property hmn) (y.property hmn)⟩
 
 Depends on / 依赖: SModEq, SModEq.add, property, x.property, x.val, y.property, y.val
@@ -1687,7 +1687,7 @@ instance :
 
 中文:
 实例 :
-  签名: Neg (AdicCauchySequence I M)
+  签名: 取负 (AdicCauchySequence I M)
   定义体: ⟨- x.val, fun hmn => SModEq.neg (x.property hmn)⟩
 
 Depends on / 依赖: SModEq, SModEq.neg, property, x.property, x.val
@@ -1705,7 +1705,7 @@ instance :
 
 中文:
 实例 :
-  签名: Sub (AdicCauchySequence I M)
+  签名: 减法 (AdicCauchySequence I M)
   定义体: ⟨x.val - y.val, fun hmn => SModEq.sub (x.property hmn) (y.property hmn)⟩
 
 Depends on / 依赖: SModEq, SModEq.sub, property, x.property, x.val, y.property, y.val
@@ -1723,7 +1723,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 自然数 (AdicCauchySequence I M)
+  签名: 标量乘法 自然数 (AdicCauchySequence I M)
   定义体: ⟨n • x.val, fun hmn => SModEq.nsmul (x.property hmn) n⟩
 
 Depends on / 依赖: SModEq, SModEq.nsmul, property, x.property, x.val
@@ -1741,7 +1741,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul 整数 (AdicCauchySequence I M)
+  签名: 标量乘法 整数 (AdicCauchySequence I M)
   定义体: ⟨n • x.val, fun hmn => SModEq.zsmul (x.property hmn) n⟩
 
 Depends on / 依赖: SModEq, SModEq.zsmul, property, x.property, x.val
@@ -1762,7 +1762,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommGroup (AdicCauchySequence I M)
+  签名: 加法交换群 (AdicCauchySequence I M)
   定义体: by
   let f : AdicCauchySequence I M -> (Nat -> M) := Subtype.val
   apply Subtype.val_injective.addCommGroup f rfl (fun _ _ => rfl) (fun _ => rfl) (fun _ _ => rfl)
@@ -1785,7 +1785,7 @@ instance :
 
 中文:
 实例 :
-  签名: SMul R (AdicCauchySequence I M)
+  签名: 标量乘法 R (AdicCauchySequence I M)
   定义体: ⟨r • x.val, fun hmn => SModEq.smul (x.property hmn) r⟩
 
 Depends on / 依赖: SModEq, SModEq.smul, property, x.property, x.val
@@ -1805,7 +1805,7 @@ instance :
 
 中文:
 实例 :
-  签名: Module R (AdicCauchySequence I M)
+  签名: 模 R (AdicCauchySequence I M)
   定义体: let f : AdicCauchySequence I M ->+ (Nat -> M) :=
     { toFun := Subtype.val, map_zero' := rfl, map_add' := fun _ _ => rfl }
   Subtype.val_injective.module R f (fun _ _ => rfl)
@@ -2127,7 +2127,7 @@ theorem mk_surjective
 
 中文:
 定理 mk_surjective
-  结论: Function.Surjective (mk I M)
+  结论: 函数.满射 (mk I M)
   证明: by
   intro x
   choose a ha using fun n => Submodule.Quotient.mk_surjective _ (x.val n)
@@ -2190,7 +2190,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  签名: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   定义体: fun x => ⟨fun n => f n x, fun hkl => LinearMap.congr_fun (h hkl) x⟩
   map_add' x y := by
     simp only [map_add]
@@ -2227,7 +2227,7 @@ lemma eval_lift
 
 中文:
 引理 eval_lift
-  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   证明: rfl
 
 @[simp]
@@ -2248,7 +2248,7 @@ lemma eval_lift_apply
 
 中文:
 引理 eval_lift_apply
-  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   证明: rfl
 -/
 lemma eval_lift_apply (f : forall (n : Nat), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
@@ -2281,7 +2281,7 @@ theorem of_injective_iff
 
 中文:
 定理 of_injective_iff
-  结论: Function.Injective (of I M) ↔ IsHausdorff I M
+  结论: 函数.单射 (of I M) ↔ 是豪斯多夫 I M
   证明: by
   constructor
   · refine fun h => ⟨fun x hx => h ?_⟩
@@ -2323,8 +2323,8 @@ theorem of_injective
 
 中文:
 定理 of_injective
-  条件: [IsHausdorff I M]
-  结论: Function.Injective (of I M)
+  条件: [是豪斯多夫 I M]
+  结论: 函数.单射 (of I M)
   证明: of_injective_iff.mpr ‹_›
 
 @[simp]
@@ -2346,7 +2346,7 @@ theorem of_inj
 
 中文:
 定理 of_inj
-  条件: [IsHausdorff I M] {a b : M}
+  条件: [是豪斯多夫 I M] {a b : M}
   结论: of I M a = of I M b ↔ a = b
   证明: (of_injective I M).eq_iff
 
@@ -2375,7 +2375,7 @@ theorem of_surjective_iff
 
 中文:
 定理 of_surjective_iff
-  结论: Function.Surjective (of I M) ↔ IsPrecomplete I M
+  结论: 函数.满射 (of I M) ↔ 是Precomplete I M
   证明: by
   constructor
   · refine fun h => ⟨fun f hmn => ?_⟩
@@ -2417,8 +2417,8 @@ theorem of_surjective
 
 中文:
 定理 of_surjective
-  条件: [IsPrecomplete I M]
-  结论: Function.Surjective (of I M)
+  条件: [是Precomplete I M]
+  结论: 函数.满射 (of I M)
   证明: of_surjective_iff.mpr ‹_›
 
 Depends on / 依赖: of_surjective_iff, of_surjective_iff.mpr
@@ -2439,7 +2439,7 @@ theorem of_bijective_iff
 
 中文:
 定理 of_bijective_iff
-  结论: Function.Bijective (of I M) ↔ IsAdicComplete I M
+  结论: 函数.双射 (of I M) ↔ 是AdicComplete I M
   证明: ⟨fun h =>
     { toIsHausdorff := of_injective_iff.mp h.1,
       toIsPrecomplete := of_surjective_iff.mp h.2 },
@@ -2467,7 +2467,7 @@ theorem of_bijective
 
 中文:
 定理 of_bijective
-  结论: Function.Bijective (of I M)
+  结论: 函数.双射 (of I M)
   证明: of_bijective_iff.mpr ‹_›
 
 Depends on / 依赖: of_bijective_iff, of_bijective_iff.mpr
@@ -2634,7 +2634,7 @@ theorem map_algebraMap_iff
 
 中文:
 定理 map_algebraMap_iff
-  结论: [CommRing S] [Module S M] [Algebra R S]
+  结论: [交换环 S] [模 S M] [代数 R S]
   证明: by
   simp [isAdicComplete_iff, IsPrecomplete.map_algebraMap_iff, IsHausdorff.map_algebraMap_iff]
 
@@ -2662,7 +2662,7 @@ definition lift
 
 中文:
 定义 lift
-  签名: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  签名: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   定义体: (ofLinearEquiv I N).symm ∘ₗ AdicCompletion.lift I f h
 
 @[simp]
@@ -2687,7 +2687,7 @@ theorem of_lift
 
 中文:
 定理 of_lift
-  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   证明: by
   simp [lift]
 
@@ -2710,7 +2710,7 @@ theorem of_comp_lift
 
 中文:
 定理 of_comp_lift
-  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : Submodule R N))
+  结论: (f : 对任意 (n : 自然数), M ->ₗ[R] N ⧸ (I ^ n • ⊤ : 子模 R N))
   证明: by
   ext1; simp
 -/
@@ -3089,7 +3089,7 @@ instance bot
 
 中文:
 实例 bot
-  签名: : IsAdicComplete (⊥ : Ideal R) M where
+  签名: : 是AdicComplete (⊥ : 理想 R) M where
 
 Depends on / 依赖: subsingleton
 -/
@@ -3106,8 +3106,8 @@ theorem subsingleton
 
 中文:
 定理 subsingleton
-  条件: (h : IsAdicComplete (⊤ : Ideal R) M)
-  结论: Subsingleton M
+  条件: (h : 是AdicComplete (⊤ : 理想 R) M)
+  结论: 子单例 M
   证明: h.1.subsingleton
 -/
 protected theorem subsingleton (h : IsAdicComplete (⊤ : Ideal R) M) : Subsingleton M :=
@@ -3136,8 +3136,8 @@ theorem le_jacobson_bot
 
 中文:
 定理 le_jacobson_bot
-  条件: [IsAdicComplete I R]
-  结论: I <= (⊥ : Ideal R).jacobson
+  条件: [是AdicComplete I R]
+  结论: I <= (⊥ : 理想 R).jacobson
   证明: by
   intro x hx
   rw [← Ideal.neg_mem_iff]; rw [Ideal.mem_jacobson_bot]

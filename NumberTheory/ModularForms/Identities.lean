@@ -39,7 +39,7 @@ theorem vAdd_apply_of_mem_strictPeriods
 
 中文:
 定理 vAdd_apply_of_mem_strictPeriods
-  结论: {Γ : Subgroup (GL (Fin 2) 实数)} {k : 整数}
+  结论: {Γ : 子群 (GL (有限集 2) 实数)} {k : 整数}
   证明: by
   rw [← congr_fun (slash_action_eqn f _ <| Γ.mem_strictPeriods_iff.mp hH) τ]
   suffices GeneralLinearGroup.upperRightHom h • τ = h +ᵥ τ by
@@ -73,7 +73,7 @@ theorem vAdd_width_periodic
 
 中文:
 定理 vAdd_width_periodic
-  条件: (N : 自然数) (k n : 整数) (f : SlashInvariantForm (Gamma N) k) (z : ℍ)
+  条件: (N : 自然数) (k n : 整数) (f : 斜不变形式 (Gamma N) k) (z : ℍ)
   证明: by
   apply vAdd_apply_of_mem_strictPeriods
   simp [strictPeriods_Gamma, AddSubgroup.mem_zmultiples_iff, mul_comm]
@@ -97,7 +97,7 @@ theorem T_zpow_width_invariant
 
 中文:
 定理 T_zpow_width_invariant
-  条件: (N : 自然数) (k n : 整数) (f : SlashInvariantForm (Gamma N) k) (z : ℍ)
+  条件: (N : 自然数) (k n : 整数) (f : 斜不变形式 (Gamma N) k) (z : ℍ)
   证明: by
   rw [modular_T_zpow_smul z (N * n)]
   simpa only [Int.cast_mul, Int.cast_natCast] using vAdd_width_periodic N k n f z
@@ -122,7 +122,7 @@ lemma slash_S_apply
 
 中文:
 引理 slash_S_apply
-  条件: (f : ℍ -> Complex) (k : 整数) (z : ℍ)
+  条件: (f : ℍ -> 复形) (k : 整数) (z : ℍ)
   证明: by
   rw [SL_slash_apply]; rw [modular_S_smul]
   simp [ModularGroup.S, denom]
@@ -154,7 +154,7 @@ theorem slash_action_generators
 
 中文:
 定理 slash_action_generators
-  结论: {f : ℍ -> Complex} {Γ : Subgroup (GL (Fin 2) 实数)}
+  结论: {f : ℍ -> 复形} {Γ : 子群 (GL (有限集 2) 实数)}
   证明: by
   constructor <;> intro h γ hγ
   · exact h γ (hΓ ▸ Subgroup.mem_closure_of_mem hγ)

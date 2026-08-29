@@ -41,8 +41,8 @@ theorem nrRealPlaces_eq_zero
   apply (IsCyclotomicExtension.zeta_spec n Rat K).nrRealPlaces_eq_zero_of_two_lt hn
 
 中文:
-定理 nrRealPlaces_eq_zero
-  条件: [IsCyclotomicExtension {n} Rat K] (hn : 2 < n)
+定理 nr实数Places_eq_zero
+  条件: [是CyclotomicExtension {n} 有理数 K] (hn : 2 < n)
   证明: IsCyclotomicExtension.numberField {n} Rat K
     nrRealPlaces K = 0 := by
   have := IsCyclotomicExtension.numberField {n} Rat K
@@ -68,7 +68,7 @@ exact nrRealPlaces_eq_zero_iff.mp nrRealPlaces_eq_zero K hn
 
 中文:
 定理 isTotallyComplex
-  条件: [IsCyclotomicExtension {n} Rat K] (hn : 2 < n)
+  条件: [是CyclotomicExtension {n} 有理数 K] (hn : 2 < n)
   证明: by
   have := IsCyclotomicExtension.numberField {n} Rat K
 exact nrRealPlaces_eq_zero_iff.mp nrRealPlaces_eq_zero K hn
@@ -98,7 +98,7 @@ theorem nrComplexPlaces_eq_totient_div_two
 
 中文:
 定理 nrComplexPlaces_eq_totient_div_two
-  条件: [h : IsCyclotomicExtension {n} Rat K]
+  条件: [h : 是CyclotomicExtension {n} 有理数 K]
   证明: IsCyclotomicExtension.numberField {n} Rat K
     nrComplexPlaces K = φ n / 2 := by
   have := IsCyclotomicExtension.numberField {n} Rat K

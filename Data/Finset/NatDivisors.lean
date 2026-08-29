@@ -34,7 +34,7 @@ lemma Nat.divisors_mul
   simp only [and_assoc, and_comm, and_left_comm]
 
 中文:
-引理 Nat.divisors_mul
+引理 自然数.divisors_mul
   条件: (m n : 自然数)
   结论: divisors (m * n) = divisors m * divisors n
   证明: by
@@ -64,8 +64,8 @@ definition Nat.divisorsHom
   map_one' := divisors_one
 
 中文:
-定义 Nat.divisorsHom
-  签名: : 自然数 ->* Finset 自然数 where
+定义 自然数.divisorsHom
+  签名: : 自然数 ->* 有限集 自然数 where
   定义体: Nat.divisors
   map_mul' := divisors_mul
   map_one' := divisors_one
@@ -88,8 +88,8 @@ lemma Nat.Prime.divisors_sq
   simp [divisors_prime_pow hp, range_add_one]
 
 中文:
-引理 Nat.Prime.divisors_sq
-  条件: {p : 自然数} (hp : p.Prime)
+引理 自然数.素.divisors_sq
+  条件: {p : 自然数} (hp : p.素)
   结论: (p ^ 2).divisors = {p ^ 2, p, 1}
   证明: by
   simp [divisors_prime_pow hp, range_add_one]
@@ -109,9 +109,9 @@ lemma List.nat_divisors_prod
   proof: map_list_prod Nat.divisorsHom l
 
 中文:
-引理 List.nat_divisors_prod
-  条件: (l : List 自然数)
-  结论: divisors l.prod = (l.map divisors).prod
+引理 列表.nat_divisors_prod
+  条件: (l : 列表 自然数)
+  结论: divisors l.乘积 = (l.map divisors).乘积
   证明: map_list_prod Nat.divisorsHom l
 
 Depends on / 依赖: Nat.divisorsHom, divisorsHom, map_list_prod
@@ -131,7 +131,7 @@ lemma Multiset.nat_divisors_prod
 中文:
 引理 Multiset.nat_divisors_prod
   条件: (s : Multiset 自然数)
-  结论: divisors s.prod = (s.map divisors).prod
+  结论: divisors s.乘积 = (s.map divisors).乘积
   证明: map_multiset_prod Nat.divisorsHom s
 
 Depends on / 依赖: Nat.divisorsHom, divisorsHom, map_multiset_prod
@@ -148,8 +148,8 @@ lemma Finset.nat_divisors_prod
   proof: map_prod Nat.divisorsHom f s
 
 中文:
-引理 Finset.nat_divisors_prod
-  条件: {ι : 类型} (s : Finset ι) (f : ι -> 自然数)
+引理 有限集.nat_divisors_prod
+  条件: {ι : 类型} (s : 有限集 ι) (f : ι -> 自然数)
   证明: map_prod Nat.divisorsHom f s
 
 Depends on / 依赖: Nat.divisorsHom, divisorsHom, map_prod
@@ -174,7 +174,7 @@ suffices dm₁ = dm₂ from Prod.ext this by
 .dvd_o
 
 中文:
-定理 Nat.Coprime.mul_injOn_divisors
+定理 自然数.Coprime.mul_injOn_divisors
   条件: {m n : 自然数} (hmn : m.Coprime n)
   证明: by
   rintro ⟨dm₁, dn₁⟩ h₁ ⟨dm₂, dn₂⟩ h₂ hd
@@ -211,7 +211,7 @@ theorem Nat.Coprime.divisors_mul
   _ = _ := by rw [Finset.map_eq_image, Finset.image_image]; rfl
 
 中文:
-定理 Nat.Coprime.divisors_mul
+定理 自然数.Coprime.divisors_mul
   条件: {m n : 自然数} (hmn : m.Coprime n)
   证明: calc
   _ = ((divisors m ×ˢ divisors n).attach.image Subtype.val).image fun p => p.1 * p.2 := by

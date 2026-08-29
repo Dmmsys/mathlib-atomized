@@ -43,8 +43,8 @@ definition Ordinal.univ
   body: lift.{v, u + 1} (typeLT Ordinal)
 
 中文:
-定义 Ordinal.univ
-  签名: : Ordinal.{max (u + 1) v}
+定义 序数.univ
+  签名: : 序数.{最大值 (u + 1) v}
   定义体: lift.{v, u + 1} (typeLT Ordinal)
 
 Depends on / 依赖: Ordinal, typeLT
@@ -67,8 +67,8 @@ definition Cardinal.univ
   body: lift.{v, u + 1} #Ordinal
 
 中文:
-定义 Cardinal.univ
-  签名: : Cardinal.{max (u + 1) v}
+定义 基数.univ
+  签名: : 基数.{最大值 (u + 1) v}
   定义体: lift.{v, u + 1} #Ordinal
 
 Depends on / 依赖: Ordinal
@@ -93,7 +93,7 @@ theorem type_lt_ordinal
 
 中文:
 定理 type_lt_ordinal
-  结论: typeLT Ordinal = univ.{u, u + 1}
+  结论: typeLT 序数 = univ.{u, u + 1}
   证明: (lift_id _).symm
 
 @[deprecated type_lt_ordinal (since := "2026-03-20")]
@@ -116,7 +116,7 @@ theorem univ_id
 
 中文:
 定理 univ_id
-  结论: univ.{u, u + 1} = typeLT Ordinal
+  结论: univ.{u, u + 1} = typeLT 序数
   证明: lift_id _
 
 @[simp]
@@ -137,7 +137,7 @@ theorem lift_univ
 
 中文:
 定理 lift_univ
-  结论: lift.{w} univ.{u, v} = univ.{u, max v w}
+  结论: lift.{w} univ.{u, v} = univ.{u, 最大值 v w}
   证明: lift_lift _
 
 Depends on / 依赖: lift_lift
@@ -155,7 +155,7 @@ theorem univ_umax
 
 中文:
 定理 univ_umax
-  结论: univ.{u, max (u + 1) v} = univ.{u, v}
+  结论: univ.{u, 最大值 (u + 1) v} = univ.{u, v}
   证明: congr_fun lift_umax _
 
 Depends on / 依赖: congr_fun, lift_umax
@@ -180,7 +180,7 @@ definition liftPrincipalSeg
 
 中文:
 定义 liftPrincipalSeg
-  签名: : Ordinal.{u} <i Ordinal.{max (u + 1) v}
+  签名: : 序数.{u} <i 序数.{最大值 (u + 1) v}
   定义体: ⟨liftInitialSeg.{max (u + 1) v, u}, univ.{u, v}, by
     refine fun b => inductionOn b ?_; intro β s _
     rw [univ]; rw [← lift_umax]; constructor <;> intro h
@@ -273,7 +273,7 @@ theorem liftPrincipalSeg_top'
 
 中文:
 定理 liftPrincipalSeg_top'
-  结论: liftPrincipalSeg.{u, u + 1}.top = typeLT Ordinal
+  结论: liftPrincipalSeg.{u, u + 1}.top = typeLT 序数
   证明: by
   simp
 
@@ -293,7 +293,7 @@ theorem card_univ
 
 中文:
 定理 card_univ
-  结论: card univ.{u, v} = Cardinal.univ.{u, v}
+  结论: card univ.{u, v} = 基数.univ.{u, v}
   证明: rfl
 -/
 theorem card_univ : card univ.{u, v} = Cardinal.univ.{u, v} :=
@@ -318,7 +318,7 @@ theorem mk_ordinal
 
 中文:
 定理 mk_ordinal
-  结论: #Ordinal = univ.{u, u + 1}
+  结论: #序数 = univ.{u, u + 1}
   证明: (lift_id _).symm
 
 @[deprecated mk_ordinal (since := "2026-04-22")]
@@ -341,7 +341,7 @@ theorem univ_id
 
 中文:
 定理 univ_id
-  结论: univ.{u, u + 1} = #Ordinal
+  结论: univ.{u, u + 1} = #序数
   证明: lift_id _
 
 @[simp]
@@ -362,7 +362,7 @@ theorem lift_univ
 
 中文:
 定理 lift_univ
-  结论: lift.{w} univ.{u, v} = univ.{u, max v w}
+  结论: lift.{w} univ.{u, v} = univ.{u, 最大值 v w}
   证明: lift_lift _
 
 Depends on / 依赖: lift_lift
@@ -380,7 +380,7 @@ theorem univ_umax
 
 中文:
 定理 univ_umax
-  结论: univ.{u, max (u + 1) v} = univ.{u, v}
+  结论: univ.{u, 最大值 (u + 1) v} = univ.{u, v}
   证明: congr_fun lift_umax _
 
 Depends on / 依赖: congr_fun, lift_umax
@@ -401,7 +401,7 @@ theorem lift_lt_univ
 
 中文:
 定理 lift_lt_univ
-  条件: (c : Cardinal)
+  条件: (c : 基数)
   结论: lift.{u + 1, u} c < univ.{u, u + 1}
   证明: by
   simpa only [Ordinal.liftPrincipalSeg_coe, lift_ord, lift_succ, ord_le, Order.succ_le_iff] using!
@@ -429,8 +429,8 @@ theorem lift_lt_univ'
 
 中文:
 定理 lift_lt_univ'
-  条件: (c : Cardinal)
-  结论: lift.{max (u + 1) v, u} c < univ.{u, v}
+  条件: (c : 基数)
+  结论: lift.{最大值 (u + 1) v, u} c < univ.{u, v}
   证明: by
   have := lift_lt.{_, max (u + 1) v}.2 (lift_lt_univ c)
   rw [lift_lift]; rw [lift_univ]; rw [univ_umax.{u]; rw [v}] at this
@@ -556,7 +556,7 @@ refine le_antisymm (ord_card_le _) le_of_forall_lt fun o h => lt_ord.2 ?_
 
 中文:
 定理 ord_univ
-  结论: ord univ.{u, v} = Ordinal.univ.{u, v}
+  结论: ord univ.{u, v} = 序数.univ.{u, v}
   证明: by
 refine le_antisymm (ord_card_le _) le_of_forall_lt fun o h => lt_ord.2 ?_
   have := Ordinal.liftPrincipalSeg.mem_range_of_rel_top (by simpa using h)
@@ -627,7 +627,7 @@ theorem lt_univ'
 中文:
 定理 lt_univ'
   条件: {c}
-  结论: c < univ.{u, v} ↔ 存在 c', c = lift.{max (u + 1) v, u} c'
+  结论: c < univ.{u, v} ↔ 存在 c', c = lift.{最大值 (u + 1) v, u} c'
   证明: ⟨fun h => by
     let ⟨a, h', e⟩ := lt_lift_iff.1 h
     rw [mk_ordinal] at h'
@@ -652,8 +652,8 @@ theorem IsStrongLimit.univ
   proof: ⟨univ_ne_zero, fun c h => let ⟨w, h⟩ := lt_univ'.1 h; lt_univ'.2 ⟨2 ^ w, by simp [h]⟩⟩
 
 中文:
-定理 IsStrongLimit.univ
-  结论: IsStrongLimit univ.{u, v}
+定理 是StrongLimit.univ
+  结论: 是StrongLimit univ.{u, v}
   证明: ⟨univ_ne_zero, fun c h => let ⟨w, h⟩ := lt_univ'.1 h; lt_univ'.2 ⟨2 ^ w, by simp [h]⟩⟩
 
 Depends on / 依赖: lt_univ, univ_ne_zero

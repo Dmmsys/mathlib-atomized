@@ -107,7 +107,7 @@ definition ENNReal
 scoped[ENNReal] notation "Real>=0∞" => ENNReal
 
 中文:
-定义 ENNReal
+定义 广义非负实数
   定义体: WithTop Real>=0
 
 @[inherit_doc]
@@ -136,7 +136,7 @@ definition ofNNReal
   body: WithTop.some
 
 中文:
-定义 ofNNReal
+定义 ofNN实数
   签名: : 实数>=0 -> 实数>=0∞
   定义体: WithTop.some
 -/
@@ -169,7 +169,7 @@ instance :
 
 中文:
 实例 :
-  签名: Zero 实数>=0∞
+  签名: 零 实数>=0∞
   定义体: ⟨ofNNReal 0⟩
 
 Depends on / 依赖: ofNNReal
@@ -185,7 +185,7 @@ instance :
 
 中文:
 实例 :
-  签名: One 实数>=0∞
+  签名: 幺 实数>=0∞
   定义体: ⟨ofNNReal 1⟩
 
 Depends on / 依赖: ofNNReal
@@ -206,7 +206,7 @@ deriving instance Top, LE, PartialOrder, Add, AddCommMonoidWithOne, SemilatticeS
 
 中文:
 实例 :
-  签名: Bot 实数>=0∞
+  签名: 底元素 实数>=0∞
   定义体: ⟨0⟩
 
 example : (0 : Real>=0∞) = ⊥ := by with_reducible_and_instances rfl
@@ -231,7 +231,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderBot 实数>=0∞
+  签名: 有底序 实数>=0∞
   定义体: inferInstanceAs (OrderBot (WithTop Real>=0))
 
 Depends on / 依赖: OrderBot, WithTop
@@ -248,7 +248,7 @@ instance :
 
 中文:
 实例 :
-  签名: OrderTop 实数>=0∞
+  签名: 有顶序 实数>=0∞
   定义体: inferInstanceAs (OrderTop (WithTop Real>=0))
 
 Depends on / 依赖: OrderTop, WithTop
@@ -265,7 +265,7 @@ instance :
 
 中文:
 实例 :
-  签名: BoundedOrder 实数>=0∞
+  签名: 有界序 实数>=0∞
   定义体: inferInstanceAs (BoundedOrder (WithTop Real>=0))
 
 Depends on / 依赖: BoundedOrder, WithTop
@@ -282,7 +282,7 @@ instance :
 
 中文:
 实例 :
-  签名: CharZero 实数>=0∞
+  签名: 特征零 实数>=0∞
   定义体: inferInstanceAs (CharZero (WithTop Real>=0))
 
 Depends on / 依赖: CharZero, WithTop
@@ -299,7 +299,7 @@ instance :
 
 中文:
 实例 :
-  签名: Min 实数>=0∞
+  签名: 最小值 实数>=0∞
   定义体: SemilatticeInf.toMin
 
 Depends on / 依赖: SemilatticeInf, SemilatticeInf.toMin
@@ -316,7 +316,7 @@ instance :
 
 中文:
 实例 :
-  签名: Max 实数>=0∞
+  签名: 最大值 实数>=0∞
   定义体: SemilatticeSup.toMax
 
 Depends on / 依赖: SemilatticeSup, SemilatticeSup.toMax
@@ -333,7 +333,7 @@ instance :
 
 中文:
 实例 :
-  签名: CommSemiring 实数>=0∞
+  签名: 交换半环 实数>=0∞
   定义体: inferInstanceAs (CommSemiring (WithTop Real>=0))
 
 Depends on / 依赖: CommSemiring, WithTop
@@ -351,7 +351,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedRing 实数>=0∞
+  签名: 是Ordered环 实数>=0∞
   定义体: inferInstanceAs (IsOrderedRing (WithTop Real>=0))
 
 Depends on / 依赖: IsOrderedRing, WithTop
@@ -369,7 +369,7 @@ instance :
 
 中文:
 实例 :
-  签名: CanonicallyOrderedAdd 实数>=0∞
+  签名: 典范有序加法 实数>=0∞
   定义体: inferInstanceAs (CanonicallyOrderedAdd (WithTop Real>=0))
 
 Depends on / 依赖: CanonicallyOrderedAdd, WithTop
@@ -387,7 +387,7 @@ instance :
 
 中文:
 实例 :
-  签名: NoZeroDivisors 实数>=0∞
+  签名: 无零因子 实数>=0∞
   定义体: inferInstanceAs (NoZeroDivisors (WithTop Real>=0))
 
 Depends on / 依赖: NoZeroDivisors, WithTop
@@ -405,7 +405,7 @@ instance :
 
 中文:
 实例 :
-  签名: CompleteLinearOrder 实数>=0∞
+  签名: 完备线性序 实数>=0∞
   定义体: inferInstanceAs (CompleteLinearOrder (WithTop Real>=0))
 
 Depends on / 依赖: CompleteLinearOrder, WithTop
@@ -423,7 +423,7 @@ instance :
 
 中文:
 实例 :
-  签名: DenselyOrdered 实数>=0∞
+  签名: 稠密序 实数>=0∞
   定义体: inferInstanceAs (DenselyOrdered (WithTop Real>=0))
 
 Depends on / 依赖: DenselyOrdered, WithTop
@@ -440,7 +440,7 @@ instance :
 
 中文:
 实例 :
-  签名: AddCommMonoid 实数>=0∞
+  签名: 加法交换幺半群 实数>=0∞
   定义体: inferInstanceAs (AddCommMonoid (WithTop Real>=0))
 
 Depends on / 依赖: AddCommMonoid, WithTop
@@ -458,7 +458,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrder 实数>=0∞
+  签名: 线性序 实数>=0∞
   定义体: inferInstanceAs (LinearOrder (WithTop Real>=0))
 
 Depends on / 依赖: LinearOrder, WithTop
@@ -476,7 +476,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedAddMonoid 实数>=0∞
+  签名: 是OrderedAdd幺半群 实数>=0∞
   定义体: inferInstanceAs (IsOrderedAddMonoid (WithTop Real>=0))
 
 Depends on / 依赖: IsOrderedAddMonoid, WithTop
@@ -494,7 +494,7 @@ instance instSub
 
 中文:
 实例 instSub
-  签名: : Sub 实数>=0∞
+  签名: : 减法 实数>=0∞
   定义体: inferInstanceAs (Sub (WithTop Real>=0))
 
 Depends on / 依赖: WithTop
@@ -528,7 +528,7 @@ instance :
 
 中文:
 实例 :
-  签名: LinearOrderedAddCommMonoidWithTop 实数>=0∞
+  签名: LinearOrderedAddComm幺半群带顶 实数>=0∞
   定义体: inferInstanceAs (LinearOrderedAddCommMonoidWithTop (WithTop Real>=0))
 
 Depends on / 依赖: LinearOrderedAddCommMonoidWithTop, WithTop
@@ -547,7 +547,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inv 实数>=0∞
+  签名: 取逆 实数>=0∞
   定义体: ⟨fun a => sInf { b | 1 <= a * b }⟩
 -/
 noncomputable instance : Inv Real>=0∞ := ⟨fun a => sInf { b | 1 <= a * b }⟩
@@ -561,7 +561,7 @@ instance :
 
 中文:
 实例 :
-  签名: DivInvMonoid 实数>=0∞
+  签名: 除逆幺半群 实数>=0∞
 -/
 noncomputable instance : DivInvMonoid Real>=0∞ where
 
@@ -577,7 +577,7 @@ instance :
 
 中文:
 实例 :
-  签名: IsOrderedMonoid 实数>=0∞
+  签名: 是Ordered幺半群 实数>=0∞
   定义体: mul_le_mul_left
 
 Depends on / 依赖: mul_le_mul_left
@@ -596,7 +596,7 @@ uniq a := AddUnits.ext nonpos_iff_eq_zero.1 by rw [← a.add_neg]; exact le_self
 
 中文:
 实例 :
-  签名: Unique (AddUnits 实数>=0∞)
+  签名: 唯一 (加法单位群 实数>=0∞)
   定义体: 0
 uniq a := AddUnits.ext nonpos_iff_eq_zero.1 by rw [← a.add_neg]; exact le_self_add
 -/
@@ -614,7 +614,7 @@ instance :
 
 中文:
 实例 :
-  签名: Inhabited 实数>=0∞
+  签名: 可居 实数>=0∞
   定义体: ⟨0⟩
 -/
 instance : Inhabited Real>=0∞ := ⟨0⟩
@@ -631,7 +631,7 @@ definition recTopCoe
 
 中文:
 定义 recTopCoe
-  签名: {C : 实数>=0∞ -> Sort*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x) (x : 实数>=0∞)
+  签名: {C : 实数>=0∞ -> 类型层*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x) (x : 实数>=0∞)
   定义体: WithTop.recTopCoe top coe x
 
 Depends on / 依赖: WithTop, WithTop.recTopCoe, recTopCoe
@@ -649,7 +649,7 @@ lemma recTopCoe_top
 
 中文:
 引理 recTopCoe_top
-  条件: {C : 实数>=0∞ -> Sort*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x)
+  条件: {C : 实数>=0∞ -> 类型层*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x)
   证明: rfl
 -/
 @[simp] lemma recTopCoe_top {C : Real>=0∞ -> Sort*} (top : C ∞) (coe : forall x : Real>=0, C x) :
@@ -664,8 +664,8 @@ lemma recTopCoe_ofNNReal
   proof: rfl
 
 中文:
-引理 recTopCoe_ofNNReal
-  条件: {C : 实数>=0∞ -> Sort*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x) (x : 实数>=0)
+引理 recTopCoe_ofNN实数
+  条件: {C : 实数>=0∞ -> 类型层*} (top : C ∞) (coe : 对任意 x : 实数>=0, C x) (x : 实数>=0)
   证明: rfl
 -/
 @[simp] lemma recTopCoe_ofNNReal {C : Real>=0∞ -> Sort*} (top : C ∞) (coe : forall x : Real>=0, C x) (x : Real>=0) :
@@ -715,7 +715,7 @@ theorem some_eq_coe
 中文:
 定理 some_eq_coe
   条件: (a : 实数>=0)
-  结论: (Option.some a : 实数>=0∞) = (↑a : 实数>=0∞)
+  结论: (选项类型.some a : 实数>=0∞) = (↑a : 实数>=0∞)
   证明: rfl
 -/
 @[simp] theorem some_eq_coe (a : Real>=0) : (Option.some a : Real>=0∞) = (↑a : Real>=0∞) := rfl
@@ -747,7 +747,7 @@ lemma coe_injective
 
 中文:
 引理 coe_injective
-  结论: Injective ((↑) : 实数>=0 -> 实数>=0∞)
+  结论: 单射 ((↑) : 实数>=0 -> 实数>=0∞)
   证明: WithTop.coe_injective
 
 Depends on / 依赖: WithTop, WithTop.coe_injective, coe_injective
@@ -796,7 +796,7 @@ theorem range_coe'
 
 中文:
 定理 range_coe'
-  结论: range ofNN实数 = Iio ∞
+  结论: range ofNN实数 = 左无界右开区间 ∞
   证明: WithTop.range_coe
 
 Depends on / 依赖: WithTop, WithTop.range_coe, range_coe
@@ -831,7 +831,7 @@ instance :
 
 中文:
 实例 :
-  签名: NNRatCast 实数>=0∞
+  签名: 非负有理数嵌入 实数>=0∞
   定义体: ofNNReal r
 
 @[norm_cast]
@@ -853,7 +853,7 @@ theorem coe_nnratCast
 
 中文:
 定理 coe_nnratCast
-  条件: (q : Rat>=0)
+  条件: (q : 有理数>=0)
   结论: ↑(q : 实数>=0) = (q : 实数>=0∞)
   证明: rfl
 -/
@@ -868,7 +868,7 @@ definition toNNReal
   body: WithTop.untopD 0
 
 中文:
-定义 toNNReal
+定义 toNN实数
   签名: : 实数>=0∞ -> 实数>=0
   定义体: WithTop.untopD 0
 -/
@@ -883,7 +883,7 @@ definition toReal
   body: a.toNNReal
 
 中文:
-定义 toReal
+定义 to实数
   签名: (a : 实数>=0∞)
   定义体: a.toNNReal
 -/
@@ -898,7 +898,7 @@ definition ofReal
   body: r.toNNReal
 
 中文:
-定义 ofReal
+定义 of实数
   签名: (r : 实数)
   定义体: r.toNNReal
 -/
@@ -916,7 +916,7 @@ lemma toNNReal_coe
 @[simp]
 
 中文:
-引理 toNNReal_coe
+引理 toNN实数_coe
   条件: (r : 实数>=0)
   结论: (r : 实数>=0∞).toNN实数 = r
   证明: rfl
@@ -934,7 +934,7 @@ theorem coe_toNNReal
   statement: forall {a : Real>=0∞}, a != ∞ -> ↑a.toNNReal = a
 
 中文:
-定理 coe_toNNReal
+定理 coe_toNN实数
   结论: 对任意 {a : 实数>=0∞}, a != ∞ -> ↑a.toNN实数 = a
 -/
 theorem coe_toNNReal : forall {a : Real>=0∞}, a != ∞ -> ↑a.toNNReal = a
@@ -955,7 +955,7 @@ theorem coe_comp_toNNReal_comp
 @[simp]
 
 中文:
-定理 coe_comp_toNNReal_comp
+定理 coe_comp_toNN实数_comp
   条件: {ι : 类型} {f : ι -> 实数>=0∞} (hf : 对任意 x, f x != ∞)
   证明: by
   ext x
@@ -984,9 +984,9 @@ theorem ofReal_toReal
 @[simp]
 
 中文:
-定理 ofReal_toReal
+定理 of实数_to实数
   条件: {a : 实数>=0∞} (h : a != ∞)
-  结论: ENN实数.of实数 a.to实数 = a
+  结论: 广义非负实数.of实数 a.to实数 = a
   证明: by
   simp [ENNReal.toReal, ENNReal.ofReal, h]
 
@@ -1008,9 +1008,9 @@ theorem toReal_ofReal
   proof: max_eq_left h
 
 中文:
-定理 toReal_ofReal
+定理 to实数_of实数
   条件: {r : 实数} (h : 0 <= r)
-  结论: (ENN实数.of实数 r).to实数 = r
+  结论: (广义非负实数.of实数 r).to实数 = r
   证明: max_eq_left h
 
 Depends on / 依赖: max_eq_left
@@ -1028,9 +1028,9 @@ theorem toReal_ofReal'
   proof: rfl
 
 中文:
-定理 toReal_ofReal'
+定理 to实数_of实数'
   条件: {r : 实数}
-  结论: (ENN实数.of实数 r).to实数 = max r 0
+  结论: (广义非负实数.of实数 r).to实数 = 最大值 r 0
   证明: rfl
 -/
 theorem toReal_ofReal' {r : Real} : (ENNReal.ofReal r).toReal = max r 0 := rfl
@@ -1043,7 +1043,7 @@ theorem coe_toNNReal_le_self
   statement: forall {a : Real>=0∞}, ↑a.toNNReal <= a
 
 中文:
-定理 coe_toNNReal_le_self
+定理 coe_toNN实数_le_self
   结论: 对任意 {a : 实数>=0∞}, ↑a.toNN实数 <= a
 -/
 theorem coe_toNNReal_le_self : forall {a : Real>=0∞}, ↑a.toNNReal <= a
@@ -1063,7 +1063,7 @@ theorem coe_nnreal_eq
 中文:
 定理 coe_nnreal_eq
   条件: (r : 实数>=0)
-  结论: (r : 实数>=0∞) = ENN实数.of实数 r
+  结论: (r : 实数>=0∞) = 广义非负实数.of实数 r
   证明: by
   rw [ENNReal.ofReal]; rw [Real.toNNReal_coe]
 
@@ -1081,7 +1081,7 @@ theorem ofReal_eq_coe_nnreal
   proof: (coe_nnreal_eq ⟨x, h⟩).symm
 
 中文:
-定理 ofReal_eq_coe_nnreal
+定理 of实数_eq_coe_nnreal
   条件: {x : 实数} (h : 0 <= x)
   证明: (coe_nnreal_eq ⟨x, h⟩).symm
 
@@ -1101,9 +1101,9 @@ theorem ofNNReal_toNNReal
   proof: rfl
 
 中文:
-定理 ofNNReal_toNNReal
+定理 ofNN实数_toNN实数
   条件: (x : 实数)
-  结论: (实数.toNN实数 x : 实数>=0∞) = ENN实数.of实数 x
+  结论: (实数.toNN实数 x : 实数>=0∞) = 广义非负实数.of实数 x
   证明: rfl
 -/
 theorem ofNNReal_toNNReal (x : Real) : (Real.toNNReal x : Real>=0∞) = ENNReal.ofReal x := rfl
@@ -1117,8 +1117,8 @@ theorem ofReal_coe_nnreal
   proof: (coe_nnreal_eq p).symm
 
 中文:
-定理 ofReal_coe_nnreal
-  结论: ENN实数.of实数 p = p
+定理 of实数_coe_nnreal
+  结论: 广义非负实数.of实数 p = p
   证明: (coe_nnreal_eq p).symm
 -/
 @[simp] theorem ofReal_coe_nnreal : ENNReal.ofReal p = p := (coe_nnreal_eq p).symm
@@ -1163,7 +1163,7 @@ theorem toReal_nonneg
   proof: a.toNNReal.2
 
 中文:
-定理 toReal_nonneg
+定理 to实数_nonneg
   条件: {a : 实数>=0∞}
   结论: 0 <= a.to实数
   证明: a.toNNReal.2
@@ -1180,7 +1180,7 @@ theorem coe_toNNReal_eq_toReal
   proof: rfl
 
 中文:
-定理 coe_toNNReal_eq_toReal
+定理 coe_toNN实数_eq_to实数
   条件: (z : 实数>=0∞)
   结论: (z.toNN实数 : 实数) = z.to实数
   证明: rfl
@@ -1198,7 +1198,7 @@ theorem toNNReal_toReal_eq
   ext; simp [coe_toNNReal_eq_toReal]
 
 中文:
-定理 toNNReal_toReal_eq
+定理 toNN实数_to实数_eq
   条件: (z : 实数>=0∞)
   结论: z.to实数.toNN实数 = z.toNN实数
   证明: by
@@ -1216,7 +1216,7 @@ theorem toNNReal_top
   proof: rfl
 
 中文:
-定理 toNNReal_top
+定理 toNN实数_top
   结论: ∞.toNN实数 = 0
   证明: rfl
 -/
@@ -1231,7 +1231,7 @@ theorem toReal_top
   proof: rfl
 
 中文:
-定理 toReal_top
+定理 to实数_top
   结论: ∞.to实数 = 0
   证明: rfl
 -/
@@ -1246,7 +1246,7 @@ theorem toReal_one
   proof: rfl
 
 中文:
-定理 toReal_one
+定理 to实数_one
   结论: (1 : 实数>=0∞).to实数 = 1
   证明: rfl
 -/
@@ -1261,7 +1261,7 @@ theorem toNNReal_one
   proof: rfl
 
 中文:
-定理 toNNReal_one
+定理 toNN实数_one
   结论: (1 : 实数>=0∞).toNN实数 = 1
   证明: rfl
 -/
@@ -1277,7 +1277,7 @@ theorem coe_toReal
   proof: rfl
 
 中文:
-定理 coe_toReal
+定理 coe_to实数
   条件: (r : 实数>=0)
   结论: (r : 实数>=0∞).to实数 = r
   证明: rfl
@@ -1293,7 +1293,7 @@ theorem toNNReal_zero
   proof: rfl
 
 中文:
-定理 toNNReal_zero
+定理 toNN实数_zero
   结论: (0 : 实数>=0∞).toNN实数 = 0
   证明: rfl
 -/
@@ -1308,7 +1308,7 @@ theorem toReal_zero
   proof: rfl
 
 中文:
-定理 toReal_zero
+定理 to实数_zero
   结论: (0 : 实数>=0∞).to实数 = 0
   证明: rfl
 -/
@@ -1323,8 +1323,8 @@ theorem ofReal_zero
   proof: by simp [ENNReal.ofReal]
 
 中文:
-定理 ofReal_zero
-  结论: ENN实数.of实数 (0 : 实数) = 0
+定理 of实数_zero
+  结论: 广义非负实数.of实数 (0 : 实数) = 0
   证明: by simp [ENNReal.ofReal]
 -/
 @[simp] theorem ofReal_zero : ENNReal.ofReal (0 : Real) = 0 := by simp [ENNReal.ofReal]
@@ -1338,8 +1338,8 @@ theorem ofReal_one
   proof: by simp [ENNReal.ofReal]
 
 中文:
-定理 ofReal_one
-  结论: ENN实数.of实数 (1 : 实数) = (1 : 实数>=0∞)
+定理 of实数_one
+  结论: 广义非负实数.of实数 (1 : 实数) = (1 : 实数>=0∞)
   证明: by simp [ENNReal.ofReal]
 -/
 @[simp] theorem ofReal_one : ENNReal.ofReal (1 : Real) = (1 : Real>=0∞) := by simp [ENNReal.ofReal]
@@ -1354,9 +1354,9 @@ theorem ofReal_toReal_le
   proof: if ha : a = ∞ then ha.symm ▸ le_top else le_of_eq (ofReal_toReal ha)
 
 中文:
-定理 ofReal_toReal_le
+定理 of实数_to实数_le
   条件: {a : 实数>=0∞}
-  结论: ENN实数.of实数 a.to实数 <= a
+  结论: 广义非负实数.of实数 a.to实数 <= a
   证明: if ha : a = ∞ then ha.symm ▸ le_top else le_of_eq (ofReal_toReal ha)
 
 Depends on / 依赖: ha.symm, le_of_eq, le_top, ofReal_toReal
@@ -1374,7 +1374,7 @@ theorem forall_ennreal
   proof: WithTop.forall.trans and_comm
 
 中文:
-定理 forall_ennreal
+定理 对任意_ennreal
   条件: {p : 实数>=0∞ -> 命题}
   结论: (对任意 a, p a) ↔ (对任意 r : 实数>=0, p r) ∧ p ∞
   证明: WithTop.forall.trans and_comm
@@ -1394,7 +1394,7 @@ theorem forall_ne_top
   proof: WithTop.forall_ne_top
 
 中文:
-定理 forall_ne_top
+定理 对任意_ne_top
   条件: {p : 实数>=0∞ -> 命题}
   结论: (对任意 x != ∞, p x) ↔ 对任意 x : 实数>=0, p x
   证明: WithTop.forall_ne_top
@@ -1414,7 +1414,7 @@ theorem exists_ne_top
   proof: WithTop.exists_ne_top
 
 中文:
-定理 exists_ne_top
+定理 存在_ne_top
   条件: {p : 实数>=0∞ -> 命题}
   结论: (存在 x != ∞, p x) ↔ 存在 x : 实数>=0, p x
   证明: WithTop.exists_ne_top
@@ -1434,7 +1434,7 @@ theorem toNNReal_eq_zero_iff
   proof: WithTop.untopD_eq_self_iff
 
 中文:
-定理 toNNReal_eq_zero_iff
+定理 toNN实数_eq_zero_iff
   条件: (x : 实数>=0∞)
   结论: x.toNN实数 = 0 ↔ x = 0 ∨ x = ∞
   证明: WithTop.untopD_eq_self_iff
@@ -1455,7 +1455,7 @@ theorem toReal_eq_zero_iff
   simp [ENNReal.toReal, toNNReal_eq_zero_iff]
 
 中文:
-定理 toReal_eq_zero_iff
+定理 to实数_eq_zero_iff
   条件: (x : 实数>=0∞)
   结论: x.to实数 = 0 ↔ x = 0 ∨ x = ∞
   证明: by
@@ -1475,7 +1475,7 @@ theorem toNNReal_ne_zero
   proof: a.toNNReal_eq_zero_iff.not.trans not_or
 
 中文:
-定理 toNNReal_ne_zero
+定理 toNN实数_ne_zero
   结论: a.toNN实数 != 0 ↔ a != 0 ∧ a != ∞
   证明: a.toNNReal_eq_zero_iff.not.trans not_or
 
@@ -1493,7 +1493,7 @@ theorem toReal_ne_zero
   proof: a.toReal_eq_zero_iff.not.trans not_or
 
 中文:
-定理 toReal_ne_zero
+定理 to实数_ne_zero
   结论: a.to实数 != 0 ↔ a != 0 ∧ a != ∞
   证明: a.toReal_eq_zero_iff.not.trans not_or
 
@@ -1513,7 +1513,7 @@ theorem toNNReal_eq_one_iff
   proof: WithTop.untopD_eq_iff.trans by simp
 
 中文:
-定理 toNNReal_eq_one_iff
+定理 toNN实数_eq_one_iff
   条件: (x : 实数>=0∞)
   结论: x.toNN实数 = 1 ↔ x = 1
   证明: WithTop.untopD_eq_iff.trans by simp
@@ -1534,7 +1534,7 @@ theorem toReal_eq_one_iff
   rw [ENNReal.toReal]; rw [NNReal.coe_eq_one]; rw [ENNReal.toNNReal_eq_one_iff]
 
 中文:
-定理 toReal_eq_one_iff
+定理 to实数_eq_one_iff
   条件: (x : 实数>=0∞)
   结论: x.to实数 = 1 ↔ x = 1
   证明: by
@@ -1554,7 +1554,7 @@ theorem toNNReal_ne_one
   proof: a.toNNReal_eq_one_iff.not
 
 中文:
-定理 toNNReal_ne_one
+定理 toNN实数_ne_one
   结论: a.toNN实数 != 1 ↔ a != 1
   证明: a.toNNReal_eq_one_iff.not
 
@@ -1574,7 +1574,7 @@ theorem toReal_ne_one
 @[simp, aesop (rule_sets := [finiteness]) safe apply]
 
 中文:
-定理 toReal_ne_one
+定理 to实数_ne_one
   结论: a.to实数 != 1 ↔ a != 1
   证明: a.toReal_eq_one_iff.not
 
@@ -1648,9 +1648,9 @@ theorem ofReal_ne_top
   proof: coe_ne_top
 
 中文:
-定理 ofReal_ne_top
+定理 of实数_ne_top
   条件: {r : 实数}
-  结论: ENN实数.of实数 r != ∞
+  结论: 广义非负实数.of实数 r != ∞
   证明: coe_ne_top
 
 Depends on / 依赖: coe_ne_top
@@ -1667,9 +1667,9 @@ theorem ofReal_lt_top
   proof: coe_lt_top
 
 中文:
-定理 ofReal_lt_top
+定理 of实数_lt_top
   条件: {r : 实数}
-  结论: ENN实数.of实数 r < ∞
+  结论: 广义非负实数.of实数 r < ∞
   证明: coe_lt_top
 -/
 @[simp] theorem ofReal_lt_top {r : Real} : ENNReal.ofReal r < ∞ := coe_lt_top
@@ -1686,9 +1686,9 @@ theorem top_ne_ofReal
 @[simp]
 
 中文:
-定理 top_ne_ofReal
+定理 top_ne_of实数
   条件: {r : 实数}
-  结论: ∞ != ENN实数.of实数 r
+  结论: ∞ != 广义非负实数.of实数 r
   证明: top_ne_coe
 
 @[simp]
@@ -1709,8 +1709,8 @@ theorem ofReal_toReal_eq_iff
 @[simp]
 
 中文:
-定理 ofReal_toReal_eq_iff
-  结论: ENN实数.of实数 a.to实数 = a ↔ a != ⊤
+定理 of实数_to实数_eq_iff
+  结论: 广义非负实数.of实数 a.to实数 = a ↔ a != ⊤
   证明: ⟨fun h => by
     rw [← h]
     exact ofReal_ne_top, ofReal_toReal⟩
@@ -1739,9 +1739,9 @@ theorem toReal_ofReal_eq_iff
 @[simp, aesop (rule_sets := [finiteness]) safe apply] theorem zero_ne_top : 0 != ∞ := coe_ne_top
 
 中文:
-定理 toReal_ofReal_eq_iff
+定理 to实数_of实数_eq_iff
   条件: {a : 实数}
-  结论: (ENN实数.of实数 a).to实数 = a ↔ 0 <= a
+  结论: (广义非负实数.of实数 a).to实数 = a ↔ 0 <= a
   证明: ⟨fun h => by
     rw [← h]
     exact toReal_nonneg, toReal_ofReal⟩
@@ -1860,7 +1860,7 @@ theorem coe_mono
 
 中文:
 定理 coe_mono
-  结论: Monotone ofNN实数
+  结论: 递增 ofNN实数
   证明: fun _ _ => coe_le_coe.2
 
 Depends on / 依赖: coe_le_coe
@@ -1877,7 +1877,7 @@ theorem coe_strictMono
 
 中文:
 定理 coe_strictMono
-  结论: StrictMono ofNN实数
+  结论: 严格递增 ofNN实数
   证明: fun _ _ => coe_lt_coe.2
 
 Depends on / 依赖: coe_lt_coe
@@ -2076,7 +2076,7 @@ theorem coe_ofNat
   proof: rfl
 
 中文:
-定理 coe_ofNat
+定理 coe_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
   结论: ((of自然数(n) : 实数>=0) : 实数>=0∞) = of自然数(n)
   证明: rfl
@@ -2109,7 +2109,7 @@ theorem toNNReal_eq_toNNReal_iff
   proof: WithTop.untopD_eq_untopD_iff
 
 中文:
-定理 toNNReal_eq_toNNReal_iff
+定理 toNN实数_eq_toNN实数_iff
   条件: (x y : 实数>=0∞)
   证明: WithTop.untopD_eq_untopD_iff
 
@@ -2129,7 +2129,7 @@ theorem toReal_eq_toReal_iff
   simp only [ENNReal.toReal, NNReal.coe_inj, toNNReal_eq_toNNReal_iff]
 
 中文:
-定理 toReal_eq_toReal_iff
+定理 to实数_eq_to实数_iff
   条件: (x y : 实数>=0∞)
   证明: by
   simp only [ENNReal.toReal, NNReal.coe_inj, toNNReal_eq_toNNReal_iff]
@@ -2150,7 +2150,7 @@ theorem toNNReal_eq_toNNReal_iff'
   simp only [ENNReal.toNNReal_eq_toNNReal_iff x y, hx, hy, and_false, false_and, or_false]
 
 中文:
-定理 toNNReal_eq_toNNReal_iff'
+定理 toNN实数_eq_toNN实数_iff'
   条件: {x y : 实数>=0∞} (hx : x != ⊤) (hy : y != ⊤)
   证明: by
   simp only [ENNReal.toNNReal_eq_toNNReal_iff x y, hx, hy, and_false, false_and, or_false]
@@ -2171,7 +2171,7 @@ theorem toReal_eq_toReal_iff'
   simp only [ENNReal.toReal, NNReal.coe_inj, toNNReal_eq_toNNReal_iff' hx hy]
 
 中文:
-定理 toReal_eq_toReal_iff'
+定理 to实数_eq_to实数_iff'
   条件: {x y : 实数>=0∞} (hx : x != ⊤) (hy : y != ⊤)
   证明: by
   simp only [ENNReal.toReal, NNReal.coe_inj, toNNReal_eq_toNNReal_iff' hx hy]
@@ -2265,7 +2265,7 @@ left_inv := fun x => Subtype.ext coe_toNNReal x.2
   right_inv := toNNReal_coe
 
 中文:
-定义 neTopEquivNNReal
+定义 neTopEquivNN实数
   签名: : { a | a != ∞ } ≃ 实数>=0 where
   定义体: ENNReal.toNNReal x
   invFun x := ⟨x, coe_ne_top⟩
@@ -2291,7 +2291,7 @@ theorem cinfi_ne_top
 
 中文:
 定理 cinfi_ne_top
-  条件: [InfSet α] (f : 实数>=0∞ -> α)
+  条件: [下确界集 α] (f : 实数>=0∞ -> α)
   结论: ⨅ x : { x // x != ∞ }, f x = ⨅ x : 实数>=0, f x
   证明: Eq.symm neTopEquivNNReal.symm.surjective.iInf_congr _ fun _ => rfl
 
@@ -2310,7 +2310,7 @@ theorem iInf_ne_top
 
 中文:
 定理 iInf_ne_top
-  条件: [CompleteLattice α] (f : 实数>=0∞ -> α)
+  条件: [完备格 α] (f : 实数>=0∞ -> α)
   证明: by rw [iInf_subtype', cinfi_ne_top]
 
 Depends on / 依赖: cinfi_ne_top, iInf_subtype
@@ -2329,7 +2329,7 @@ theorem csupr_ne_top
 
 中文:
 定理 csupr_ne_top
-  条件: [SupSet α] (f : 实数>=0∞ -> α)
+  条件: [上确界集 α] (f : 实数>=0∞ -> α)
   结论: ⨆ x : { x // x != ∞ }, f x = ⨆ x : 实数>=0, f x
   证明: @cinfi_ne_top αᵒᵈ _ _
 
@@ -2348,7 +2348,7 @@ theorem iSup_ne_top
 
 中文:
 定理 iSup_ne_top
-  条件: [CompleteLattice α] (f : 实数>=0∞ -> α)
+  条件: [完备格 α] (f : 实数>=0∞ -> α)
   证明: @iInf_ne_top αᵒᵈ _ _
 
 Depends on / 依赖: iInf_ne_top
@@ -2367,7 +2367,7 @@ theorem iInf_ennreal
 
 中文:
 定理 iInf_ennreal
-  条件: {α : 类型} [CompleteLattice α] {f : 实数>=0∞ -> α}
+  条件: {α : 类型} [完备格 α] {f : 实数>=0∞ -> α}
   证明: (iInf_option f).trans (inf_comm _ _)
 
 Depends on / 依赖: iInf_option, inf_comm
@@ -2386,7 +2386,7 @@ theorem iSup_ennreal
 
 中文:
 定理 iSup_ennreal
-  条件: {α : 类型} [CompleteLattice α] {f : 实数>=0∞ -> α}
+  条件: {α : 类型} [完备格 α] {f : 实数>=0∞ -> α}
   证明: @iInf_ennreal αᵒᵈ _ _
 
 Depends on / 依赖: iInf_ennreal
@@ -2408,7 +2408,7 @@ definition ofNNRealHom
   map_add' _ _ := coe_add _ _
 
 中文:
-定义 ofNNRealHom
+定义 ofNN实数Hom
   签名: : 实数>=0 ->+* 实数>=0∞ where
   定义体: WithTop.some
   map_one' := coe_one
@@ -2434,7 +2434,7 @@ theorem coe_ofNNRealHom
   proof: rfl
 
 中文:
-定理 coe_ofNNRealHom
+定理 coe_ofNN实数Hom
   结论: ⇑ofNN实数Hom = WithTop.some
   证明: rfl
 
@@ -2600,9 +2600,9 @@ lemma ofReal_natCast
   proof: by simp [ENNReal.ofReal]
 
 中文:
-引理 ofReal_natCast
+引理 of实数_natCast
   条件: (n : 自然数)
-  结论: ENN实数.of实数 n = n
+  结论: 广义非负实数.of实数 n = n
   证明: by simp [ENNReal.ofReal]
 -/
 @[simp, norm_cast] lemma ofReal_natCast (n : Nat) : ENNReal.ofReal n = n := by simp [ENNReal.ofReal]
@@ -2619,9 +2619,9 @@ theorem ofReal_ofNat
 @[simp, aesop (rule_sets := [finiteness]) safe apply]
 
 中文:
-定理 ofReal_ofNat
+定理 of实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ENN实数.of实数 of自然数(n) = of自然数(n)
+  结论: 广义非负实数.of实数 of自然数(n) = of自然数(n)
   证明: ofReal_natCast n
 
 @[simp, aesop (rule_sets := [finiteness]) safe apply]
@@ -2683,7 +2683,7 @@ lemma ofNat_ne_top
 @[simp]
 
 中文:
-引理 ofNat_ne_top
+引理 of自然数_ne_top
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) != ∞
   证明: natCast_ne_top n
@@ -2705,7 +2705,7 @@ lemma ofNat_lt_top
   proof: natCast_lt_top n
 
 中文:
-引理 ofNat_lt_top
+引理 of自然数_lt_top
   条件: {n : 自然数} [自然数.AtLeastTwo n]
   结论: of自然数(n) < ∞
   证明: natCast_lt_top n
@@ -2741,7 +2741,7 @@ theorem top_ne_ofNat
   proof: ofNat_ne_top.symm
 
 中文:
-定理 top_ne_ofNat
+定理 top_ne_of自然数
   条件: {n : 自然数} [n.AtLeastTwo]
   结论: ∞ != of自然数(n)
   证明: ofNat_ne_top.symm
@@ -2760,7 +2760,7 @@ lemma natCast_le_ofNNReal
   proof: by simp [← coe_le_coe]
 
 中文:
-引理 natCast_le_ofNNReal
+引理 natCast_le_ofNN实数
   结论: (n : 实数>=0∞) <= r ↔ n <= r
   证明: by simp [← coe_le_coe]
 
@@ -2776,7 +2776,7 @@ lemma ofNNReal_le_natCast
   proof: by simp [← coe_le_coe]
 
 中文:
-引理 ofNNReal_le_natCast
+引理 ofNN实数_le_natCast
   结论: r <= (n : 实数>=0∞) ↔ r <= n
   证明: by simp [← coe_le_coe]
 -/
@@ -2792,7 +2792,7 @@ lemma ofNNReal_add_natCast
   proof: rfl
 
 中文:
-引理 ofNNReal_add_natCast
+引理 ofNN实数_add_natCast
   条件: (r : 实数>=0) (n : 自然数)
   结论: ofNN实数 (r + n) = r + n
   证明: rfl
@@ -2808,7 +2808,7 @@ lemma ofNNReal_natCast_add
   proof: rfl
 
 中文:
-引理 ofNNReal_natCast_add
+引理 ofNN实数_natCast_add
   条件: (n : 自然数) (r : 实数>=0)
   结论: ofNN实数 (n + r) = n + r
   证明: rfl
@@ -2825,7 +2825,7 @@ lemma ofNNReal_sub_natCast
   proof: rfl
 
 中文:
-引理 ofNNReal_sub_natCast
+引理 ofNN实数_sub_natCast
   条件: (r : 实数>=0) (n : 自然数)
   结论: ofNN实数 (r - n) = r - n
   证明: rfl
@@ -2841,7 +2841,7 @@ lemma ofNNReal_natCast_sub
   proof: rfl
 
 中文:
-引理 ofNNReal_natCast_sub
+引理 ofNN实数_natCast_sub
   条件: (n : 自然数) (r : 实数>=0)
   结论: ofNN实数 (n - r) = n - r
   证明: rfl
@@ -2879,7 +2879,7 @@ theorem toNNReal_natCast
   rw [← ENNReal.coe_natCast n]; rw [ENNReal.toNNReal_coe]
 
 中文:
-定理 toNNReal_natCast
+定理 toNN实数_natCast
   条件: (n : 自然数)
   结论: (n : 实数>=0∞).toNN实数 = n
   证明: by
@@ -2902,9 +2902,9 @@ theorem toNNReal_ofNat
 @[simp, norm_cast]
 
 中文:
-定理 toNNReal_ofNat
+定理 toNN实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ENN实数.toNN实数 of自然数(n) = of自然数(n)
+  结论: 广义非负实数.toNN实数 of自然数(n) = of自然数(n)
   证明: toNNReal_natCast n
 
 @[simp, norm_cast]
@@ -2926,7 +2926,7 @@ theorem toReal_natCast
   rw [← ENNReal.ofReal_natCast n]; rw [ENNReal.toReal_ofReal (Nat.cast_nonneg _)]
 
 中文:
-定理 toReal_natCast
+定理 to实数_natCast
   条件: (n : 自然数)
   结论: (n : 实数>=0∞).to实数 = n
   证明: by
@@ -2947,9 +2947,9 @@ theorem toReal_ofNat
   proof: toReal_natCast n
 
 中文:
-定理 toReal_ofNat
+定理 to实数_of自然数
   条件: (n : 自然数) [n.AtLeastTwo]
-  结论: ENN实数.to实数 of自然数(n) = of自然数(n)
+  结论: 广义非负实数.to实数 of自然数(n) = of自然数(n)
   证明: toReal_natCast n
 -/
 @[simp] theorem toReal_ofNat (n : Nat) [n.AtLeastTwo] : ENNReal.toReal ofNat(n) = ofNat(n) :=
@@ -2965,7 +2965,7 @@ lemma toNNReal_natCast_eq_toNNReal
   rw [Real.toNNReal_of_nonneg (by positivity)]; rw [ENNReal.toNNReal_natCast]; rw [mk_natCast]
 
 中文:
-引理 toNNReal_natCast_eq_toNNReal
+引理 toNN实数_natCast_eq_toNN实数
   条件: (n : 自然数)
   证明: by
   rw [Real.toNNReal_of_nonneg (by positivity)]; rw [ENNReal.toNNReal_natCast]; rw [mk_natCast]
@@ -3019,7 +3019,7 @@ theorem lt_iff_exists_coe
   proof: WithTop.lt_iff_exists_coe
 
 中文:
-定理 lt_iff_exists_coe
+定理 lt_iff_存在_coe
   结论: a < b ↔ 存在 p : 实数>=0, a = p ∧ ↑p < b
   证明: WithTop.lt_iff_exists_coe
 
@@ -3042,7 +3042,7 @@ theorem toReal_le_coe_of_le_coe
 @[deprecated max_eq_zero (since := "2026-05-07")]
 
 中文:
-定理 toReal_le_coe_of_le_coe
+定理 to实数_le_coe_of_le_coe
   条件: {a : 实数>=0∞} {b : 实数>=0} (h : a <= b)
   结论: a.to实数 <= b
   证明: by
@@ -3070,7 +3070,7 @@ theorem max_eq_zero_iff
 
 中文:
 定理 max_eq_zero_iff
-  结论: max a b = 0 ↔ a = 0 ∧ b = 0
+  结论: 最大值 a b = 0 ↔ a = 0 ∧ b = 0
   证明: max_eq_bot
 
 @[deprecated min_eq_zero (since := "2026-05-07")]
@@ -3092,7 +3092,7 @@ theorem min_eq_zero_iff
 
 中文:
 定理 min_eq_zero_iff
-  结论: min a b = 0 ↔ a = 0 ∨ b = 0
+  结论: 最小值 a b = 0 ↔ a = 0 ∨ b = 0
   证明: min_eq_bot
 
 @[deprecated zero_max (since := "2026-05-07")]
@@ -3114,7 +3114,7 @@ theorem max_zero_left
 
 中文:
 定理 max_zero_left
-  结论: max 0 a = a
+  结论: 最大值 0 a = a
   证明: max_eq_right zero_le
 
 @[deprecated max_zero (since := "2026-05-07")]
@@ -3135,7 +3135,7 @@ theorem max_zero_right
 
 中文:
 定理 max_zero_right
-  结论: max a 0 = a
+  结论: 最大值 a 0 = a
   证明: max_eq_left zero_le
 
 Depends on / 依赖: max_eq_left, zero_le
@@ -3156,7 +3156,7 @@ theorem lt_iff_exists_rat_btwn
     exact ⟨q, hq0, coe_lt_coe.2 pq, lt_trans (coe_lt
 
 中文:
-定理 lt_iff_exists_rat_btwn
+定理 lt_iff_存在_rat_btwn
   证明: ⟨fun h => by
     rcases lt_iff_exists_coe.1 h with ⟨p, rfl, _⟩
     rcases exists_between h with ⟨c, pc, cb⟩
@@ -3187,7 +3187,7 @@ theorem lt_iff_exists_real_btwn
     fun ⟨_, _, qa, qb⟩ => lt_trans qa qb⟩
 
 中文:
-定理 lt_iff_exists_real_btwn
+定理 lt_iff_存在_real_btwn
   证明: ⟨fun h =>
     let ⟨q, q0, aq, qb⟩ := ENNReal.lt_iff_exists_rat_btwn.1 h
     ⟨q, Rat.cast_nonneg.2 q0, aq, qb⟩,
@@ -3211,7 +3211,7 @@ theorem lt_iff_exists_nnreal_btwn
   proof: WithTop.lt_iff_exists_coe_btwn
 
 中文:
-定理 lt_iff_exists_nnreal_btwn
+定理 lt_iff_存在_nnreal_btwn
   结论: a < b ↔ 存在 r : 实数>=0, a < r ∧ (r : 实数>=0∞) < b
   证明: WithTop.lt_iff_exists_coe_btwn
 
@@ -3235,7 +3235,7 @@ theorem lt_iff_exists_add_pos_lt
   rwa [← coe_add, add_tsub_cancel_of_le ac.le]
 
 中文:
-定理 lt_iff_exists_add_pos_lt
+定理 lt_iff_存在_add_pos_lt
   结论: a < b ↔ 存在 r : 实数>=0, 0 < r ∧ a + r < b
   证明: by
   refine ⟨fun hab => ?_, fun ⟨r, _, hr⟩ => lt_of_le_of_lt le_self_add hr⟩
@@ -3268,7 +3268,7 @@ theorem le_of_forall_pos_le_add
   exact ⟨r, hr0, h.trans_le le_top, hr⟩
 
 中文:
-定理 le_of_forall_pos_le_add
+定理 le_of_对任意_pos_le_add
   条件: (h : 对任意 ε : 实数>=0, 0 < ε -> b < ∞ -> a <= b + ε)
   结论: a <= b
   证明: by
@@ -3336,7 +3336,7 @@ theorem exists_nat_gt
 @[simp]
 
 中文:
-定理 exists_nat_gt
+定理 存在_nat_gt
   条件: {r : 实数>=0∞} (h : r != ∞)
   结论: 存在 n : 自然数, r < n
   证明: by
@@ -3367,7 +3367,7 @@ theorem iUnion_Iio_coe_nat
 
 中文:
 定理 iUnion_Iio_coe_nat
-  结论: ⋃ n : 自然数, Iio (n : 实数>=0∞) = {∞}ᶜ
+  结论: ⋃ n : 自然数, 左无界右开区间 (n : 实数>=0∞) = {∞}ᶜ
   证明: by
   ext x
   rw [mem_iUnion]
@@ -3396,7 +3396,7 @@ theorem iUnion_Iic_coe_nat
 
 中文:
 定理 iUnion_Iic_coe_nat
-  结论: ⋃ n : 自然数, Iic (n : 实数>=0∞) = {∞}ᶜ
+  结论: ⋃ n : 自然数, 左无界右闭区间 (n : 实数>=0∞) = {∞}ᶜ
   证明: Subset.antisymm (iUnion_subset fun n _x hx => ne_top_of_le_ne_top (natCast_ne_top n) hx)
     iUnion_Iio_coe_nat ▸ iUnion_mono fun _ => Iio_subset_Iic_self
 
@@ -3422,7 +3422,7 @@ theorem iUnion_Ioc_coe_nat
 
 中文:
 定理 iUnion_Ioc_coe_nat
-  结论: ⋃ n : 自然数, Ioc a n = Ioi a \ {∞}
+  结论: ⋃ n : 自然数, 左开右闭区间 a n = 左开右无界区间 a \ {∞}
   证明: by
   simp only [← Ioi_inter_Iic, ← inter_iUnion, iUnion_Iic_coe_nat, sdiff_eq]
 
@@ -3447,7 +3447,7 @@ theorem iUnion_Ioo_coe_nat
 
 中文:
 定理 iUnion_Ioo_coe_nat
-  结论: ⋃ n : 自然数, Ioo a n = Ioi a \ {∞}
+  结论: ⋃ n : 自然数, 开区间 a n = 左开右无界区间 a \ {∞}
   证明: by
   simp only [← Ioi_inter_Iio, ← inter_iUnion, iUnion_Iio_coe_nat, sdiff_eq]
 
@@ -3472,7 +3472,7 @@ theorem iUnion_Icc_coe_nat
 
 中文:
 定理 iUnion_Icc_coe_nat
-  结论: ⋃ n : 自然数, Icc a n = Ici a \ {∞}
+  结论: ⋃ n : 自然数, 闭区间 a n = 左闭右无界区间 a \ {∞}
   证明: by
   simp only [← Ici_inter_Iic, ← inter_iUnion, iUnion_Iic_coe_nat, sdiff_eq]
 
@@ -3497,7 +3497,7 @@ theorem iUnion_Ico_coe_nat
 
 中文:
 定理 iUnion_Ico_coe_nat
-  结论: ⋃ n : 自然数, Ico a n = Ici a \ {∞}
+  结论: ⋃ n : 自然数, 左闭右开区间 a n = 左闭右无界区间 a \ {∞}
   证明: by
   simp only [← Ici_inter_Iio, ← inter_iUnion, iUnion_Iio_coe_nat, sdiff_eq]
 
@@ -3521,8 +3521,8 @@ theorem iInter_Ici_coe_nat
 @[simp]
 
 中文:
-定理 iInter_Ici_coe_nat
-  结论: ⋂ n : 自然数, Ici (n : 实数>=0∞) = {∞}
+定理 i整数er_Ici_coe_nat
+  结论: ⋂ n : 自然数, 左闭右无界区间 (n : 实数>=0∞) = {∞}
   证明: by
   simp only [← compl_Iio, ← compl_iUnion, iUnion_Iio_coe_nat, compl_compl]
 
@@ -3546,8 +3546,8 @@ theorem iInter_Ioi_coe_nat
 @[simp, norm_cast]
 
 中文:
-定理 iInter_Ioi_coe_nat
-  结论: ⋂ n : 自然数, Ioi (n : 实数>=0∞) = {∞}
+定理 i整数er_Ioi_coe_nat
+  结论: ⋂ n : 自然数, 左开右无界区间 (n : 实数>=0∞) = {∞}
   证明: by
   simp only [← compl_Iic, ← compl_iUnion, iUnion_Iic_coe_nat, compl_compl]
 
@@ -3573,7 +3573,7 @@ theorem coe_min
 中文:
 定理 coe_min
   条件: (r p : 实数>=0)
-  结论: ((min r p : 实数>=0) : 实数>=0∞) = min (r : 实数>=0∞) p
+  结论: ((最小值 r p : 实数>=0) : 实数>=0∞) = 最小值 (r : 实数>=0∞) p
   证明: rfl
 
 @[simp, norm_cast]
@@ -3593,7 +3593,7 @@ theorem coe_max
 中文:
 定理 coe_max
   条件: (r p : 实数>=0)
-  结论: ((max r p : 实数>=0) : 实数>=0∞) = max (r : 实数>=0∞) p
+  结论: ((最大值 r p : 实数>=0) : 实数>=0∞) = 最大值 (r : 实数>=0∞) p
   证明: rfl
 -/
 theorem coe_max (r p : Real>=0) : ((max r p : Real>=0) : Real>=0∞) = max (r : Real>=0∞) p := rfl
@@ -3614,7 +3614,7 @@ theorem le_of_top_imp_top_of_toNNReal_le
 @[simp]
 
 中文:
-定理 le_of_top_imp_top_of_toNNReal_le
+定理 le_of_top_imp_top_of_toNN实数_le
   结论: {a b : 实数>=0∞} (h : a = ⊤ -> b = ⊤)
   证明: by
   by_contra! hlt
@@ -3646,7 +3646,7 @@ theorem abs_toReal
   proof: by cases x <;> simp
 
 中文:
-定理 abs_toReal
+定理 abs_to实数
   条件: {x : 实数>=0∞}
   结论: |x.to实数| = x.to实数
   证明: by cases x <;> simp
@@ -3669,7 +3669,7 @@ theorem coe_sSup
 
 中文:
 定理 coe_sSup
-  条件: {s : Set 实数>=0}
+  条件: {s : 集合 实数>=0}
   结论: BddAbove s -> (↑(sSup s) : 实数>=0∞) = ⨆ a in s, ↑a
   证明: WithTop.coe_sSup
 
@@ -3689,7 +3689,7 @@ theorem coe_sInf
 
 中文:
 定理 coe_sInf
-  条件: {s : Set 实数>=0} (hs : s.Nonempty)
+  条件: {s : 集合 实数>=0} (hs : s.非空)
   结论: (↑(sInf s) : 实数>=0∞) = ⨅ a in s, ↑a
   证明: WithTop.coe_sInf hs (OrderBot.bddBelow s)
 
@@ -3710,7 +3710,7 @@ theorem coe_iSup
 
 中文:
 定理 coe_iSup
-  条件: {ι : Sort*} {f : ι -> 实数>=0} (hf : BddAbove (range f))
+  条件: {ι : 类型层*} {f : ι -> 实数>=0} (hf : BddAbove (range f))
   证明: WithTop.coe_iSup _ hf
 
 @[norm_cast]
@@ -3733,7 +3733,7 @@ theorem coe_iInf
 
 中文:
 定理 coe_iInf
-  条件: {ι : Sort*} [Nonempty ι] (f : ι -> 实数>=0)
+  条件: {ι : 类型层*} [非空 ι] (f : ι -> 实数>=0)
   结论: (↑(iInf f) : 实数>=0∞) = ⨅ a, ↑(f a)
   证明: WithTop.coe_iInf (OrderBot.bddBelow _)
 
@@ -3753,7 +3753,7 @@ theorem coe_mem_upperBounds
 
 中文:
 定理 coe_mem_upperBounds
-  条件: {s : Set 实数>=0}
+  条件: {s : 集合 实数>=0}
   证明: by
   simp +contextual [upperBounds, forall_mem_image, -mem_image, *]
 
@@ -3805,7 +3805,7 @@ lemma iInf_coe_eq_top
 
 中文:
 引理 iInf_coe_eq_top
-  结论: ⨅ i, (f i : 实数>=0∞) = ⊤ ↔ IsEmpty ι
+  结论: ⨅ i, (f i : 实数>=0∞) = ⊤ ↔ 是空 ι
   证明: WithTop.iInf_coe_eq_top
 
 Depends on / 依赖: WithTop, WithTop.iInf_coe_eq_top, iInf_coe_eq_top
@@ -3821,7 +3821,7 @@ lemma iInf_coe_lt_top
 
 中文:
 引理 iInf_coe_lt_top
-  结论: ⨅ i, (f i : 实数>=0∞) < ⊤ ↔ Nonempty ι
+  结论: ⨅ i, (f i : 实数>=0∞) < ⊤ ↔ 非空 ι
   证明: WithTop.iInf_coe_lt_top
 
 Depends on / 依赖: WithTop, WithTop.iInf_coe_lt_top, iInf_coe_lt_top
@@ -3853,8 +3853,8 @@ theorem preimage_coe_nnreal_ennreal
 
 中文:
 定理 preimage_coe_nnreal_ennreal
-  条件: (h : u.OrdConnected)
-  结论: ((↑) ⁻¹' u : Set 实数>=0).OrdConnected
+  条件: (h : u.序连通)
+  结论: ((↑) ⁻¹' u : 集合 实数>=0).序连通
   证明: h.preimage_mono ENNReal.coe_mono
 
 Depends on / 依赖: ENNReal, ENNReal.coe_mono, coe_mono, h.preimage_mono, preimage_mono
@@ -3877,8 +3877,8 @@ theorem image_coe_nnreal_ennreal
 
 中文:
 定理 image_coe_nnreal_ennreal
-  条件: (h : t.OrdConnected)
-  结论: ((↑) '' t : Set 实数>=0∞).OrdConnected
+  条件: (h : t.序连通)
+  结论: ((↑) '' t : 集合 实数>=0∞).序连通
   证明: by
   refine ⟨forall_mem_image.2 fun x hx => forall_mem_image.2 fun y hy z hz => ?_⟩
   rcases ENNReal.le_coe_iff.1 hz.2 with ⟨z, rfl, -⟩
@@ -3901,9 +3901,9 @@ theorem preimage_ennreal_ofReal
   proof: h.preimage_coe_nnreal_ennreal.preimage_real_toNNReal
 
 中文:
-定理 preimage_ennreal_ofReal
-  条件: (h : u.OrdConnected)
-  结论: (ENN实数.of实数 ⁻¹' u).OrdConnected
+定理 preimage_ennreal_of实数
+  条件: (h : u.序连通)
+  结论: (广义非负实数.of实数 ⁻¹' u).序连通
   证明: h.preimage_coe_nnreal_ennreal.preimage_real_toNNReal
 
 Depends on / 依赖: h.preimage_coe_nnreal_ennreal.preimage_real_toNNReal, preimage_coe_nnreal_ennreal, preimage_real_toNNReal
@@ -3922,9 +3922,9 @@ theorem image_ennreal_ofReal
   simpa only [image_image] using! h.image_real_toNNReal.image_coe_nnreal_ennreal
 
 中文:
-定理 image_ennreal_ofReal
-  条件: (h : s.OrdConnected)
-  结论: (ENN实数.of实数 '' s).OrdConnected
+定理 image_ennreal_of实数
+  条件: (h : s.序连通)
+  结论: (广义非负实数.of实数 '' s).序连通
   证明: by
   simpa only [image_image] using! h.image_real_toNNReal.image_coe_nnreal_ennreal
 

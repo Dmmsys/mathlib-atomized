@@ -96,8 +96,8 @@ instance [T2Space
   body: UniformConvergenceCLM.t2Space _ _ _ Set.sUnion_finite_eq_univ
 
 中文:
-实例 [T2Space
-  签名: F] : T2Space (E ->SLₚₜ[σ] F)
+实例 [T2空间
+  签名: F] : T2空间 (E ->SLₚₜ[σ] F)
   定义体: UniformConvergenceCLM.t2Space _ _ _ Set.sUnion_finite_eq_univ
 
 Depends on / 依赖: Set.sUnion_finite_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.t2Space, sUnion_finite_eq_univ, t2Space
@@ -115,7 +115,7 @@ instance continuousEvalConst
 
 中文:
 实例 continuousEvalConst
-  签名: : ContinuousEvalConst (E ->SLₚₜ[σ] F) E F
+  签名: : 余ntinuousEvalConst (E ->SLₚₜ[σ] F) E F
   定义体: UniformConvergenceCLM.continuousEvalConst _ _ _ Set.sUnion_finite_eq_univ
 
 Depends on / 依赖: Set.sUnion_finite_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.continuousEvalConst, continuousEvalConst, sUnion_finite_eq_univ
@@ -192,7 +192,7 @@ theorem isEmbedding_coeFn
 
 中文:
 定理 isEmbedding_coeFn
-  结论: IsEmbedding ((↑) : (E ->SLₚₜ[σ] F) -> (E -> F))
+  结论: 是嵌入 ((↑) : (E ->SLₚₜ[σ] F) -> (E -> F))
   证明: let _ : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   have _ : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
 .isEmbedding PointwiseConvergenceCLM.isUniformEmbedding_coeFn σ E F
@@ -212,8 +212,8 @@ theorem tendsto_iff_forall_tendsto
   simp [(PointwiseConvergenceCLM.isEmbedding_coeFn σ E F).tendsto_nhds_iff, tendsto_pi_nhds]
 
 中文:
-定理 tendsto_iff_forall_tendsto
-  条件: {p : Filter ι} {a : ι -> E ->SLₚₜ[σ] F} {a₀ : E ->SLₚₜ[σ] F}
+定理 tendsto_iff_对任意_tendsto
+  条件: {p : 滤子 ι} {a : ι -> E ->SLₚₜ[σ] F} {a₀ : E ->SLₚₜ[σ] F}
   证明: by
   simp [(PointwiseConvergenceCLM.isEmbedding_coeFn σ E F).tendsto_nhds_iff, tendsto_pi_nhds]
 
@@ -236,7 +236,7 @@ definition coeLMₛₗ
 
 中文:
 定义 coeLMₛₗ
-  签名: [ContinuousConstSMul 𝕜₂ F]
+  签名: [连续常数标量乘法 𝕜₂ F]
   定义体: ContinuousLinearMap.coeLMₛₗ σ
 
 Depends on / 依赖: ContinuousLinearMap, ContinuousLinearMap.coeLM
@@ -259,7 +259,7 @@ definition coeLM
 
 中文:
 定义 coeLM
-  签名: [ContinuousConstSMul 𝕜 F]
+  签名: [连续常数标量乘法 𝕜 F]
   定义体: ContinuousLinearMap.coeLM 𝕜
 
 #adaptation_note
@@ -285,7 +285,7 @@ definition evalCLM
 
 中文:
 定义 evalCLM
-  签名: [ContinuousConstSMul 𝕜₂ F] (a : E)
+  签名: [连续常数标量乘法 𝕜₂ F] (a : E)
   定义体: (coeLMₛₗ σ E F).flip a
   cont := continuous_eval_const a
 -/
@@ -330,7 +330,7 @@ definition precomp
 
 中文:
 定义 precomp
-  签名: [ContinuousConstSMul 𝕜₃ G] (L : E ->SL[σ] F)
+  签名: [连续常数标量乘法 𝕜₃ G] (L : E ->SL[σ] F)
   定义体: f.comp L
   __ := ContinuousLinearMap.precompUniformConvergenceCLM G {(S : Set E) | Finite S}
     {(S : Set F) | Finite S} L (fun S hS => letI : Finite S := hS; Finite.Set.finite_image _ _)
@@ -357,7 +357,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: [ContinuousConstSMul 𝕜₂ F] [ContinuousConstSMul 𝕜₃ G] (L : F ->SL[τ] G)
+  签名: [连续常数标量乘法 𝕜₂ F] [连续常数标量乘法 𝕜₃ G] (L : F ->SL[τ] G)
   定义体: L.comp f
   __ := ContinuousLinearMap.postcompUniformConvergenceCLM {(S : Set E) | Finite S} L
 
@@ -382,8 +382,8 @@ definition _root_.ContinuousLinearMap.toPointwiseConvergenceCLM
     (fun _ => Set.Finite.isVonNBounded)
 
 中文:
-定义 _root_.ContinuousLinearMap.toPointwiseConvergenceCLM
-  签名: [ContinuousSMul 𝕜₁ E]
+定义 _root_.连续线性映射.toPointwiseConvergenceCLM
+  签名: [连续标量乘法 𝕜₁ E]
   定义体: LinearMap.id
   cont := _root_.ContinuousLinearMap.toUniformConvergenceCLM_continuous σ F _
     (fun _ => Set.Finite.isVonNBounded)

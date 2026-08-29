@@ -42,8 +42,8 @@ instance [IsSimpleRing
   use x, 0, hx
 
 中文:
-实例 [IsSimpleRing
-  签名: R] : Nontrivial R
+实例 [是单环
+  签名: R] : 非平凡 R
   定义体: by
   obtain ⟨x, _, hx⟩ := SetLike.exists_of_lt (bot_lt_top : (⊥ : TwoSidedIdeal R) < ⊤)
   use x, 0, hx
@@ -66,7 +66,7 @@ lemma one_mem_of_ne_bot
 
 中文:
 引理 one_mem_of_ne_bot
-  结论: {A : 类型} [NonAssocRing A] [IsSimpleRing A] (I : TwoSidedIdeal A)
+  结论: {A : 类型} [非结合环 A] [是单环 A] (I : TwoSided理想 A)
   证明: (eq_bot_or_eq_top I).resolve_left hI ▸ ⟨⟩
 
 Depends on / 依赖: eq_bot_or_eq_top, resolve_left
@@ -85,7 +85,7 @@ lemma one_mem_of_ne_zero_mem
 
 中文:
 引理 one_mem_of_ne_zero_mem
-  结论: {A : 类型} [NonAssocRing A] [IsSimpleRing A] (I : TwoSidedIdeal A)
+  结论: {A : 类型} [非结合环 A] [是单环 A] (I : TwoSided理想 A)
   证明: one_mem_of_ne_bot I (by rintro rfl; exact hx hxI)
 
 Depends on / 依赖: one_mem_of_ne_bot
@@ -104,7 +104,7 @@ lemma of_eq_bot_or_eq_top
 
 中文:
 引理 of_eq_bot_or_eq_top
-  条件: [Nontrivial R] (h : 对任意 I : TwoSidedIdeal R, I = ⊥ ∨ I = ⊤)
+  条件: [非平凡 R] (h : 对任意 I : TwoSided理想 R, I = ⊥ ∨ I = ⊤)
   证明: h
 -/
 lemma of_eq_bot_or_eq_top [Nontrivial R] (h : forall I : TwoSidedIdeal R, I = ⊥ ∨ I = ⊤) :
@@ -124,8 +124,8 @@ instance _root_.DivisionRing.isSimpleRing
     simpa [inv_mul_cancel₀ hx2] using I.mul_mem_left x⁻¹ _ hx1
 
 中文:
-实例 _root_.DivisionRing.isSimpleRing
-  签名: (A : 类型) [DivisionRing A]
+实例 _root_.除环.isSimpleRing
+  签名: (A : 类型) [除环 A]
   定义体: .of_eq_bot_or_eq_top fun I => by
     rw [or_iff_not_imp_left]; rw [← I.one_mem_iff]
     intro H
@@ -178,7 +178,7 @@ theorem _root_.RingHom.injective
 universe u in
 
 中文:
-定理 _root_.RingHom.injective
+定理 _root_.环态射.injective
   证明: .resolve_right fun r => not_subsingleton _ r injective_ringHom_or_subsingleton_codomain f
 
 universe u in
@@ -203,7 +203,7 @@ lemma iff_injective_ringHom_or_subsingleton_codomain
 
 中文:
 引理 iff_injective_ringHom_or_subsingleton_codomain
-  条件: (R : 类型u) [NonAssocRing R] [Nontrivial R]
+  条件: (R : 类型u) [非结合环 R] [非平凡 R]
   证明: injective_ringHom_or_subsingleton_codomain
 .imp mpr H := of_eq_bot_or_eq_top fun I => H I.ringCon.mk'
     (fun h => le_antisymm
@@ -234,7 +234,7 @@ lemma iff_injective_ringHom
 
 中文:
 引理 iff_injective_ringHom
-  条件: (R : 类型u) [NonAssocRing R] [Nontrivial R]
+  条件: (R : 类型u) [非结合环 R] [非平凡 R]
   证明: .trans iff_injective_ringHom_or_subsingleton_codomain R
 .resolve_right (by simpa [not_subsingleton_iff_nontrivial]), ⟨fun H _ _ _ f => H f
 .recOn Or.inr fun _ => Or.inl H f⟩ fun H S _ f => subsingleton_or_nontrivial S
@@ -257,8 +257,8 @@ instance [IsSimpleRing
   body: ⟨TwoSidedIdeal.opOrderIso.symm.isSimpleOrder⟩
 
 中文:
-实例 [IsSimpleRing
-  签名: R] : IsSimpleRing Rᵐᵒᵖ
+实例 [是单环
+  签名: R] : 是单环 Rᵐᵒᵖ
   定义体: ⟨TwoSidedIdeal.opOrderIso.symm.isSimpleOrder⟩
 
 Depends on / 依赖: TwoSidedIdeal, TwoSidedIdeal.opOrderIso.symm.isSimpleOrder, isSimpleOrder, opOrderIso

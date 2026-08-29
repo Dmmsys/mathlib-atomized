@@ -75,7 +75,7 @@ instance topologicalSpace
 
 中文:
 实例 topologicalSpace
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 F] [是拓扑加群 F]
   定义体: fast_instance% UniformConvergenceCLM.instTopologicalSpace σ F { S | IsVonNBounded 𝕜₁ S }
 
 Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.instTopologicalSpace, fast_instance, instTopologicalSpace
@@ -94,7 +94,7 @@ instance topologicalAddGroup
 
 中文:
 实例 topologicalAddGroup
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 F] [是拓扑加群 F]
   定义体: UniformConvergenceCLM.instIsTopologicalAddGroup σ F _
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instIsTopologicalAddGroup, instIsTopologicalAddGroup
@@ -113,7 +113,7 @@ instance continuousSMul
 
 中文:
 实例 continuousSMul
-  签名: [RingHomSurjective σ] [RingHomIsometric σ] [TopologicalSpace F]
+  签名: [RingHomSurjective σ] [RingHomIsometric σ] [拓扑空间 F]
   定义体: UniformConvergenceCLM.continuousSMul σ F { S | IsVonNBounded 𝕜₁ S } fun _ hs => hs
 
 Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.continuousSMul, continuousSMul
@@ -132,7 +132,7 @@ instance uniformSpace
 
 中文:
 实例 uniformSpace
-  签名: [UniformSpace F] [IsUniformAddGroup F]
+  签名: [一致空间 F] [是UniformAdd群 F]
   定义体: fast_instance% UniformConvergenceCLM.instUniformSpace σ F { S | IsVonNBounded 𝕜₁ S }
 
 Depends on / 依赖: IsVonNBounded, UniformConvergenceCLM, UniformConvergenceCLM.instUniformSpace, fast_instance, instUniformSpace
@@ -150,7 +150,7 @@ instance isUniformAddGroup
 
 中文:
 实例 isUniformAddGroup
-  签名: [UniformSpace F] [IsUniformAddGroup F]
+  签名: [一致空间 F] [是UniformAdd群 F]
   定义体: UniformConvergenceCLM.instIsUniformAddGroup σ F _
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instIsUniformAddGroup, instIsUniformAddGroup
@@ -169,7 +169,7 @@ instance instContinuousEvalConst
 
 中文:
 实例 instContinuousEvalConst
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  签名: [拓扑空间 F] [是拓扑加群 F]
   定义体: UniformConvergenceCLM.continuousEvalConst σ F _ Bornology.sUnion_isVonNBounded_eq_univ
 
 Depends on / 依赖: Bornology, Bornology.sUnion_isVonNBounded_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.continuousEvalConst, continuousEvalConst, sUnion_isVonNBounded_eq_univ
@@ -188,7 +188,7 @@ instance instT2Space
 
 中文:
 实例 instT2Space
-  签名: [TopologicalSpace F] [IsTopologicalAddGroup F] [ContinuousSMul 𝕜₁ E]
+  签名: [拓扑空间 F] [是拓扑加群 F] [连续标量乘法 𝕜₁ E]
   定义体: UniformConvergenceCLM.t2Space σ F _ Bornology.sUnion_isVonNBounded_eq_univ
 
 Depends on / 依赖: Bornology, Bornology.sUnion_isVonNBounded_eq_univ, UniformConvergenceCLM, UniformConvergenceCLM.t2Space, sUnion_isVonNBounded_eq_univ, t2Space
@@ -209,7 +209,7 @@ theorem hasBasis_nhds_zero_of_basis
 
 中文:
 定理 hasBasis_nhds_zero_of_basis
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: UniformConvergenceCLM.hasBasis_nhds_zero_of_basis σ F { S | IsVonNBounded 𝕜₁ S }
     ⟨∅, isVonNBounded_empty 𝕜₁ E⟩
     (directedOn_of_sup_mem fun _ _ => IsVonNBounded.union) h
@@ -232,7 +232,7 @@ theorem hasBasis_nhds_zero
 
 中文:
 定理 hasBasis_nhds_zero
-  条件: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  条件: [拓扑空间 F] [是拓扑加群 F]
   证明: ContinuousLinearMap.hasBasis_nhds_zero_of_basis (𝓝 0).basis_sets
 -/
 protected theorem hasBasis_nhds_zero [TopologicalSpace F] [IsTopologicalAddGroup F] :
@@ -251,7 +251,7 @@ theorem isUniformEmbedding_toUniformOnFun
 
 中文:
 定理 isUniformEmbedding_toUniformOnFun
-  条件: [UniformSpace F] [IsUniformAddGroup F]
+  条件: [一致空间 F] [是UniformAdd群 F]
   证明: UniformConvergenceCLM.isUniformEmbedding_coeFn ..
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformEmbedding_coeFn, isUniformEmbedding_coeFn
@@ -290,7 +290,7 @@ instance continuousConstSMul
 
 中文:
 实例 continuousConstSMul
-  签名: {M : 类型} [Monoid M] [DistribMulAction M F] [SMulCommClass 𝕜₂ M F]
+  签名: {M : 类型} [幺半群 M] [分配乘法作用 M F] [标量交换类 𝕜₂ M F]
   定义体: UniformConvergenceCLM.instContinuousConstSMul σ F _ _
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.instContinuousConstSMul, instContinuousConstSMul
@@ -310,7 +310,7 @@ theorem nhds_zero_eq_of_basis
 
 中文:
 定理 nhds_zero_eq_of_basis
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: UniformConvergenceCLM.nhds_zero_eq_of_basis _ _ _ h
 -/
 protected theorem nhds_zero_eq_of_basis [TopologicalSpace F] [IsTopologicalAddGroup F]
@@ -330,7 +330,7 @@ theorem nhds_zero_eq
 
 中文:
 定理 nhds_zero_eq
-  条件: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  条件: [拓扑空间 F] [是拓扑加群 F]
   证明: UniformConvergenceCLM.nhds_zero_eq ..
 -/
 protected theorem nhds_zero_eq [TopologicalSpace F] [IsTopologicalAddGroup F] :
@@ -349,7 +349,7 @@ theorem eventually_nhds_zero_mapsTo
 
 中文:
 定理 eventually_nhds_zero_mapsTo
-  结论: [TopologicalSpace F] [IsTopologicalAddGroup F]
+  结论: [拓扑空间 F] [是拓扑加群 F]
   证明: UniformConvergenceCLM.eventually_nhds_zero_mapsTo _ hs hu
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.eventually_nhds_zero_mapsTo, eventually_nhds_zero_mapsTo
@@ -369,7 +369,7 @@ theorem isVonNBounded_image2_apply
 
 中文:
 定理 isVonNBounded_image2_apply
-  结论: {R : 类型} [SeminormedRing R]
+  结论: {R : 类型} [Seminormed环 R]
   证明: UniformConvergenceCLM.isVonNBounded_image2_apply hS hs
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isVonNBounded_image2_apply, isVonNBounded_image2_apply
@@ -391,7 +391,7 @@ theorem isVonNBounded_iff
 
 中文:
 定理 isVonNBounded_iff
-  结论: {R : 类型} [NormedDivisionRing R]
+  结论: {R : 类型} [NormedDivision环 R]
   证明: UniformConvergenceCLM.isVonNBounded_iff
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isVonNBounded_iff, isVonNBounded_iff
@@ -414,7 +414,7 @@ theorem completeSpace
 
 中文:
 定理 completeSpace
-  结论: [UniformSpace F] [IsUniformAddGroup F] [ContinuousSMul 𝕜₂ F] [CompleteSpace F]
+  结论: [一致空间 F] [是UniformAdd群 F] [连续标量乘法 𝕜₂ F] [完备空间 F]
   证明: UniformConvergenceCLM.completeSpace _ _ h sUnion_isVonNBounded_eq_univ
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.completeSpace, completeSpace, sUnion_isVonNBounded_eq_univ
@@ -434,7 +434,7 @@ instance instCompleteSpace
 
 中文:
 实例 instCompleteSpace
-  签名: [IsTopologicalAddGroup E] [ContinuousSMul 𝕜₁ E] [SequentialSpace E]
+  签名: [是拓扑加群 E] [连续标量乘法 𝕜₁ E] [Sequential空间 E]
   定义体: completeSpace .of_seq fun _ _ h => (h.isVonNBounded_range 𝕜₁).insert _
 
 Depends on / 依赖: completeSpace, h.isVonNBounded_range, insert, isVonNBounded_range, of_seq
@@ -454,7 +454,7 @@ theorem isUniformInducing_postcomp
 
 中文:
 定理 isUniformInducing_postcomp
-  结论: [UniformSpace F] [IsUniformAddGroup F]
+  结论: [一致空间 F] [是UniformAdd群 F]
   证明: UniformConvergenceCLM.isUniformInducing_postcomp _ f hf _
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformInducing_postcomp, isUniformInducing_postcomp
@@ -474,7 +474,7 @@ theorem isUniformEmbedding_postcomp
 
 中文:
 定理 isUniformEmbedding_postcomp
-  结论: [UniformSpace F] [IsUniformAddGroup F]
+  结论: [一致空间 F] [是UniformAdd群 F]
   证明: UniformConvergenceCLM.isUniformEmbedding_postcomp _ f hf _
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.isUniformEmbedding_postcomp, isUniformEmbedding_postcomp
@@ -500,7 +500,7 @@ theorem isInducing_postcomp
 
 中文:
 定理 isInducing_postcomp
-  结论: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
+  结论: [是拓扑加群 F] [是拓扑加群 G]
   证明: letI : UniformSpace F := IsTopologicalAddGroup.rightUniformSpace F
   haveI : IsUniformAddGroup F := isUniformAddGroup_of_addCommGroup
   letI : UniformSpace G := IsTopologicalAddGroup.rightUniformSpace G
@@ -528,7 +528,7 @@ theorem isEmbedding_postcomp
 
 中文:
 定理 isEmbedding_postcomp
-  结论: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G]
+  结论: [是拓扑加群 F] [是拓扑加群 G]
   证明: .mk (isInducing_postcomp f hf.isInducing) fun _ _ => f.cancel_left hf.injective
 
 Depends on / 依赖: cancel_left, f.cancel_left, hf.injective, hf.isInducing, injective, isInducing, isInducing_postcomp
@@ -556,7 +556,7 @@ definition precomp
 
 中文:
 定义 precomp
-  签名: [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G] [RingHomSurjective σ]
+  签名: [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G] [RingHomSurjective σ]
   定义体: f.comp L
   __ := precompUniformConvergenceCLM G { S | IsVonNBounded 𝕜₁ S } { S | IsVonNBounded 𝕜₂ S } L
     (fun _ hS => hS.image L)
@@ -586,7 +586,7 @@ definition postcomp
 
 中文:
 定义 postcomp
-  签名: [IsTopologicalAddGroup F] [IsTopologicalAddGroup G] [ContinuousConstSMul 𝕜₃ G]
+  签名: [是拓扑加群 F] [是拓扑加群 G] [连续常数标量乘法 𝕜₃ G]
   定义体: L.comp f
   __ := postcompUniformConvergenceCLM { S | IsVonNBounded 𝕜₁ S } L
 
@@ -608,7 +608,7 @@ lemma toUniformConvergenceCLM_continuous
 
 中文:
 引理 toUniformConvergenceCLM_continuous
-  结论: [IsTopologicalAddGroup F]
+  结论: [是拓扑加群 F]
   证明: continuous_id_of_le UniformConvergenceCLM.topologicalSpace_mono _ _ h
 
 Depends on / 依赖: UniformConvergenceCLM, UniformConvergenceCLM.topologicalSpace_mono, continuous_id_of_le, topologicalSpace_mono
@@ -969,7 +969,7 @@ lemma toBilinForm_injective
 
 中文:
 引理 toBilinForm_injective
-  结论: (toBilinForm (𝕜 := 𝕜) (E := E)).Injective
+  结论: (toBilinForm (𝕜 := 𝕜) (E := E)).单射
   证明: toLinearMap₁₂_injective
 
 Depends on / 依赖: Injective
@@ -1518,7 +1518,7 @@ theorem conjContinuousAlgEquiv_trans
 
 中文:
 定理 conjContinuousAlgEquiv_trans
-  结论: [IsTopologicalAddGroup E] [ContinuousConstSMul 𝕜 E]
+  结论: [是拓扑加群 E] [连续常数标量乘法 𝕜 E]
   证明: rfl
 -/
 theorem conjContinuousAlgEquiv_trans [IsTopologicalAddGroup E] [ContinuousConstSMul 𝕜 E]

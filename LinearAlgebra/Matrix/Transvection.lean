@@ -134,7 +134,7 @@ theorem updateRow_eq_transvection
 
 中文:
 定理 updateRow_eq_transvection
-  条件: [Finite n] (c : R)
+  条件: [有限 n] (c : R)
   证明: by
   cases nonempty_fintype n
   ext a b
@@ -205,7 +205,7 @@ theorem transvection_mul_apply_same
 
 中文:
 定理 transvection_mul_apply_same
-  条件: {m : 类型} (b : m) (c : R) (M : Matrix n m R)
+  条件: {m : 类型} (b : m) (c : R) (M : 矩阵 n m R)
   证明: by simp [transvection, Matrix.add_mul]
 
 @[simp]
@@ -229,7 +229,7 @@ theorem mul_transvection_apply_same
 
 中文:
 定理 mul_transvection_apply_same
-  条件: {m : 类型} (a : m) (c : R) (M : Matrix m n R)
+  条件: {m : 类型} (a : m) (c : R) (M : 矩阵 m n R)
   证明: by
   simp [transvection, Matrix.mul_add, mul_comm]
 
@@ -328,7 +328,7 @@ structure TransvectionStruct
     - c : R
 
 中文:
-结构 TransvectionStruct
+结构 平换结构
   参数: where
   公理与运算 (3 个):
     - (i(j) : n)
@@ -351,8 +351,8 @@ instance [Nontrivial
   exact ⟨⟨x, y, hxy, 0⟩⟩
 
 中文:
-实例 [Nontrivial
-  签名: n] : Nonempty (TransvectionStruct n R)
+实例 [非平凡
+  签名: n] : 非空 (平换结构 n R)
   定义体: by
   choose x y hxy using exists_pair_ne n
   exact ⟨⟨x, y, hxy, 0⟩⟩
@@ -379,7 +379,7 @@ definition toMatrix
 
 中文:
 定义 toMatrix
-  签名: (t : TransvectionStruct n R)
+  签名: (t : 平换结构 n R)
   定义体: transvection t.i t.j t.c
 
 @[simp]
@@ -425,7 +425,7 @@ theorem det
 
 中文:
 定理 det
-  条件: [Fintype n] (t : TransvectionStruct n R)
+  条件: [有限类型 n] (t : 平换结构 n R)
   结论: det t.toMatrix = 1
   证明: det_transvection_of_ne _ _ t.hij _
 
@@ -448,7 +448,7 @@ theorem det_toMatrix_prod
 
 中文:
 定理 det_toMatrix_prod
-  条件: [Fintype n] (L : List (TransvectionStruct n R))
+  条件: [有限类型 n] (L : 列表 (平换结构 n R))
   证明: by
   induction L with
   | nil => simp
@@ -476,7 +476,7 @@ definition inv
 
 中文:
 定义 inv
-  签名: (t : TransvectionStruct n R)
+  签名: (t : 平换结构 n R)
   定义体: t.i
   j := t.j
   hij := t.hij
@@ -505,7 +505,7 @@ theorem inv_mul
 
 中文:
 定理 inv_mul
-  条件: (t : TransvectionStruct n R)
+  条件: (t : 平换结构 n R)
   结论: t.inv.toMatrix * t.toMatrix = 1
   证明: by
   rcases t with ⟨_, _, t_hij⟩
@@ -530,7 +530,7 @@ theorem mul_inv
 
 中文:
 定理 mul_inv
-  条件: (t : TransvectionStruct n R)
+  条件: (t : 平换结构 n R)
   结论: t.toMatrix * t.inv.toMatrix = 1
   证明: by
   rcases t with ⟨_, _, t_hij⟩
@@ -560,7 +560,7 @@ theorem reverse_inv_prod_mul_prod
 
 中文:
 定理 reverse_inv_prod_mul_prod
-  条件: (L : List (TransvectionStruct n R))
+  条件: (L : 列表 (平换结构 n R))
   证明: by
   induction L with
   | nil => simp
@@ -603,7 +603,7 @@ theorem prod_mul_reverse_inv_prod
 
 中文:
 定理 prod_mul_reverse_inv_prod
-  条件: (L : List (TransvectionStruct n R))
+  条件: (L : 列表 (平换结构 n R))
   证明: by
   induction L with
   | nil => simp
@@ -641,7 +641,7 @@ theorem isUnit_prod_comp_inverse
 
 中文:
 定理 isUnit_prod_comp_inverse
-  条件: (L : List (TransvectionStruct n R))
+  条件: (L : 列表 (平换结构 n R))
   证明: by
   refine IsUnit.of_mul_eq_one (L.reverse.map toMatrix).prod ?_
   rw [← reverse_inv_prod_mul_prod L.reverse]; rw [L.reverse_reverse]
@@ -665,8 +665,8 @@ theorem _root_.Matrix.mem_range_scalar_of_commute_transvectionStruct
   simpa [transvection, mul_add, add_mul] using! (hM ⟨i, j, hij, 1⟩).eq
 
 中文:
-定理 _root_.Matrix.mem_range_scalar_of_commute_transvectionStruct
-  结论: {M : Matrix n n R}
+定理 _root_.矩阵.mem_range_scalar_of_commute_transvectionStruct
+  结论: {M : 矩阵 n n R}
   证明: by
   refine mem_range_scalar_of_commute_single ?_
   intro i j hij
@@ -695,8 +695,8 @@ theorem _root_.Matrix.mem_range_scalar_iff_commute_transvectionStruct
   rw [smul_single]; rw [smul_eq_mul]; rw [mul_one]
 
 中文:
-定理 _root_.Matrix.mem_range_scalar_iff_commute_transvectionStruct
-  条件: {M : Matrix n n R}
+定理 _root_.矩阵.mem_range_scalar_iff_commute_transvectionStruct
+  条件: {M : 矩阵 n n R}
   证明: by
   refine ⟨fun h t => ?_, mem_range_scalar_of_commute_transvectionStruct⟩
   rw [mem_range_scalar_iff_commute_single] at h
@@ -731,7 +731,7 @@ definition sumInl
 
 中文:
 定义 sumInl
-  签名: (t : TransvectionStruct n R)
+  签名: (t : 平换结构 n R)
   定义体: inl t.i
   j := inl t.j
   hij := by simp [t.hij]
@@ -760,7 +760,7 @@ theorem toMatrix_sumInl
 
 中文:
 定理 toMatrix_sumInl
-  条件: (t : TransvectionStruct n R)
+  条件: (t : 平换结构 n R)
   证明: by
   cases t
   ext a b
@@ -798,7 +798,7 @@ theorem sumInl_toMatrix_prod_mul
 
 中文:
 定理 sumInl_toMatrix_prod_mul
-  结论: [Fintype n] [Fintype p] (M : Matrix n n R)
+  结论: [有限类型 n] [有限类型 p] (M : 矩阵 n n R)
   证明: by
   induction L with
   | nil => simp
@@ -830,7 +830,7 @@ theorem mul_sumInl_toMatrix_prod
 
 中文:
 定理 mul_sumInl_toMatrix_prod
-  结论: [Fintype n] [Fintype p] (M : Matrix n n R)
+  结论: [有限类型 n] [有限类型 p] (M : 矩阵 n n R)
   证明: by
   induction L generalizing M N with
   | nil => simp
@@ -861,7 +861,7 @@ definition reindexEquiv
 
 中文:
 定义 reindexEquiv
-  签名: (e : n ≃ p) (t : TransvectionStruct n R)
+  签名: (e : n ≃ p) (t : 平换结构 n R)
   定义体: e t.i
   j := e t.j
   hij := by simp [t.hij]
@@ -890,7 +890,7 @@ theorem toMatrix_reindexEquiv
 
 中文:
 定理 toMatrix_reindexEquiv
-  条件: (e : n ≃ p) (t : TransvectionStruct n R)
+  条件: (e : n ≃ p) (t : 平换结构 n R)
   证明: by
   rcases t with ⟨t_i, t_j, _⟩
   ext a b
@@ -921,7 +921,7 @@ theorem toMatrix_reindexEquiv_prod
 
 中文:
 定理 toMatrix_reindexEquiv_prod
-  条件: (e : n ≃ p) (L : List (TransvectionStruct n R))
+  条件: (e : n ≃ p) (L : 列表 (平换结构 n R))
   证明: by
   induction L with
   | nil => simp
@@ -972,7 +972,7 @@ transvection (inl i) (inr unit) -M (inl i) (inr unit) / M (inr unit) (inr unit)
 
 中文:
 定义 listTransvecCol
-  签名: : List (Matrix (Fin r oplus Unit) (Fin r oplus Unit) 𝕜)
+  签名: : 列表 (矩阵 (有限集 r oplus 单元) (有限集 r oplus 单元) 𝕜)
   定义体: List.ofFn fun i : Fin r =>
 transvection (inl i) (inr unit) -M (inl i) (inr unit) / M (inr unit) (inr unit)
 
@@ -995,7 +995,7 @@ transvection (inr unit) (inl i) -M (inr unit) (inl i) / M (inr unit) (inr unit)
 
 中文:
 定义 listTransvecRow
-  签名: : List (Matrix (Fin r oplus Unit) (Fin r oplus Unit) 𝕜)
+  签名: : 列表 (矩阵 (有限集 r oplus 单元) (有限集 r oplus 单元) 𝕜)
   定义体: List.ofFn fun i : Fin r =>
 transvection (inr unit) (inl i) -M (inr unit) (inl i) / M (inr unit) (inr unit)
 
@@ -1114,7 +1114,7 @@ theorem listTransvecCol_mul_last_row_drop
 
 中文:
 定理 listTransvecCol_mul_last_row_drop
-  条件: (i : Fin r oplus Unit) {k : 自然数} (hk : k <= r)
+  条件: (i : 有限集 r oplus 单元) {k : 自然数} (hk : k <= r)
   证明: by
   induction hk using Nat.decreasingInduction with
   | of_succ n hn IH =>
@@ -1148,7 +1148,7 @@ theorem listTransvecCol_mul_last_row
 
 中文:
 定理 listTransvecCol_mul_last_row
-  条件: (i : Fin r oplus Unit)
+  条件: (i : 有限集 r oplus 单元)
   证明: by
   simpa using listTransvecCol_mul_last_row_drop M i zero_le
 
@@ -1178,7 +1178,7 @@ theorem listTransvecCol_mul_last_col
 
 中文:
 定理 listTransvecCol_mul_last_col
-  条件: (hM : M (inr unit) (inr unit) != 0) (i : Fin r)
+  条件: (hM : M (inr unit) (inr unit) != 0) (i : 有限集 r)
   证明: by
   suffices H :
     forall k : Nat,
@@ -1256,7 +1256,7 @@ theorem mul_listTransvecRow_last_col_take
 
 中文:
 定理 mul_listTransvecRow_last_col_take
-  条件: (i : Fin r oplus Unit) {k : 自然数} (hk : k <= r)
+  条件: (i : 有限集 r oplus 单元) {k : 自然数} (hk : k <= r)
   证明: by
   induction k with
   | zero => simp only [Matrix.mul_one, List.prod_nil, List.take, Matrix.mul_one]
@@ -1300,7 +1300,7 @@ theorem mul_listTransvecRow_last_col
 
 中文:
 定理 mul_listTransvecRow_last_col
-  条件: (i : Fin r oplus Unit)
+  条件: (i : 有限集 r oplus 单元)
   证明: by
   have A : (listTransvecRow M).length = r := by simp [listTransvecRow]
   rw [← List.take_length (l := listTransvecRow M)]; rw [A]
@@ -1331,7 +1331,7 @@ theorem mul_listTransvecRow_last_row
 
 中文:
 定理 mul_listTransvecRow_last_row
-  条件: (hM : M (inr unit) (inr unit) != 0) (i : Fin r)
+  条件: (hM : M (inr unit) (inr unit) != 0) (i : 有限集 r)
   证明: by
   suffices H :
     forall k : Nat,
@@ -1509,7 +1509,7 @@ theorem exists_isTwoBlockDiagonal_of_ne_zero
       ⟨inr unit, inl i, by simp,
 
 中文:
-定理 exists_isTwoBlockDiagonal_of_ne_zero
+定理 存在_isTwoBlockDiagonal_of_ne_zero
   条件: (hM : M (inr unit) (inr unit) != 0)
   证明: by
   let L : List (TransvectionStruct (Fin r oplus Unit) 𝕜) :=
@@ -1550,7 +1550,7 @@ theorem exists_isTwoBlockDiagonal_list_transvec_mul_mul_list_transvec
   -- when the last coefficient is zero 
 
 中文:
-定理 exists_isTwoBlockDiagonal_list_transvec_mul_mul_list_transvec
+定理 存在_isTwoBlockDiagonal_list_transvec_mul_mul_list_transvec
   证明: by
   by_cases H : IsTwoBlockDiagonal M
   · refine ⟨List.nil, List.nil, by simpa using H⟩
@@ -1614,7 +1614,7 @@ theorem exists_list_transvec_mul_mul_list_transvec_eq_diagonal_induction
     ⟨L₀.map (sumInl Unit) ++ 
 
 中文:
-定理 exists_list_transvec_mul_mul_list_transvec_eq_diagonal_induction
+定理 存在_list_transvec_mul_mul_list_transvec_eq_diagonal_induction
   证明: by
   rcases exists_isTwoBlockDiagonal_list_transvec_mul_mul_list_transvec M with ⟨L₁, L₁', hM⟩
   let M' := (L₁.map toMatrix).prod * M * (L₁'.map toMatrix).prod
@@ -1668,8 +1668,8 @@ theorem reindex_exists_list_transvec_mul_mul_list_transvec_eq_diagonal
   simp
 
 中文:
-定理 reindex_exists_list_transvec_mul_mul_list_transvec_eq_diagonal
-  结论: (M : Matrix p p 𝕜)
+定理 reindex_存在_list_transvec_mul_mul_list_transvec_eq_diagonal
+  结论: (M : 矩阵 p p 𝕜)
   证明: by
   rcases H with ⟨L₀, L₀', D₀, h₀⟩
   refine ⟨L₀.map (reindexEquiv e.symm), L₀'.map (reindexEquiv e.symm), D₀ ∘ e, ?_⟩
@@ -1711,8 +1711,8 @@ theorem exists_list_transvec_mul_mul_list_transvec_eq_diagonal_aux
     refine ⟨List.nil, List.nil, f
 
 中文:
-定理 exists_list_transvec_mul_mul_list_transvec_eq_diagonal_aux
-  结论: (n : Type) [Fintype n]
+定理 存在_list_transvec_mul_mul_list_transvec_eq_diagonal_aux
+  结论: (n : 类型) [有限类型 n]
   证明: by
   suffices forall cn, Fintype.card n = cn ->
       exists (L L' : List (TransvectionStruct n 𝕜)) (D : n -> 𝕜),
@@ -1761,8 +1761,8 @@ theorem exists_list_transvec_mul_mul_list_transvec_eq_diagonal
   apply exists_list_transvec_mul_mul_list_transvec_eq_diagonal_aux
 
 中文:
-定理 exists_list_transvec_mul_mul_list_transvec_eq_diagonal
-  条件: (M : Matrix n n 𝕜)
+定理 存在_list_transvec_mul_mul_list_transvec_eq_diagonal
+  条件: (M : 矩阵 n n 𝕜)
   证明: by
   have e : n ≃ Fin (Fintype.card n) := Fintype.equivOfCardEq (by simp)
   apply reindex_exists_list_transvec_mul_mul_list_transvec_eq_diagonal M e
@@ -1792,8 +1792,8 @@ theorem exists_list_transvec_mul_diagonal_mul_list_transvec
       
 
 中文:
-定理 exists_list_transvec_mul_diagonal_mul_list_transvec
-  条件: (M : Matrix n n 𝕜)
+定理 存在_list_transvec_mul_diagonal_mul_list_transvec
+  条件: (M : 矩阵 n n 𝕜)
   证明: by
   rcases exists_list_transvec_mul_mul_list_transvec_eq_diagonal M with ⟨L, L', D, h⟩
   refine ⟨L.reverse.map TransvectionStruct.inv, L'.reverse.map TransvectionStruct.inv, D, ?_⟩
@@ -1838,7 +1838,7 @@ theorem diagonal_transvection_induction
 
 中文:
 定理 diagonal_transvection_induction
-  结论: (P : Matrix n n 𝕜 -> 命题) (M : Matrix n n 𝕜)
+  结论: (P : 矩阵 n n 𝕜 -> 命题) (M : 矩阵 n n 𝕜)
   证明: by
   rcases exists_list_transvec_mul_diagonal_mul_list_transvec M with ⟨L, L', D, h⟩
   have PD : P (diagonal D) := hdiag D (by simp [h])
@@ -1894,7 +1894,7 @@ theorem diagonal_transvection_induction_of_det_ne_zero
 
 中文:
 定理 diagonal_transvection_induction_of_det_ne_zero
-  结论: (P : Matrix n n 𝕜 -> 命题) (M : Matrix n n 𝕜)
+  结论: (P : 矩阵 n n 𝕜 -> 命题) (M : 矩阵 n n 𝕜)
   证明: by
   let Q : Matrix n n 𝕜 -> Prop := fun N => det N != 0 ∧ P N
   have : Q M := by
